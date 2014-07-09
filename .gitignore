@@ -4,8 +4,10 @@
 # Project files
 .anjuta*
 
-# Build folder
+# Build files
 build
+rock_tmp
+.libs
 
 # Object files
 *.o
@@ -24,6 +26,7 @@ build
 *.dylib
 
 # Executables
+Boolean
 *.exe
 *.out
 *.app
