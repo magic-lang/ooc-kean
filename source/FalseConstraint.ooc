@@ -14,18 +14,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+ 
+import ./Constraint
 
-import ../source/Fixture
 
-Boolean: class extends Fixture {
-	init: func () {
-		super("Boolean")
-		this add("true is true", func() { expect(true, is true) })
-		this add("false is true", func() { expect(false, is true) })
-		this add("true", func() { expect(true) })
-		this add("false", func() { expect(false) })
-		this add("true is not true", func() { expect(true, is not true) })
-		this add("false is not true", func() { expect(false, is not true) })
+FalseConstraint : class extends Constraint {
+	init: func()
+	verify: func(value : Object) -> Bool {
+		!(value as Cell<Bool> get())
 	}
 }
-Boolean new() run()

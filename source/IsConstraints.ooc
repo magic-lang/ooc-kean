@@ -15,11 +15,24 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import TrueConstraint
+import TrueConstraint, FalseConstraint, NotModifier
 
-Constraints : class {
+IsConstraints : class {
 	init: func()
 	true ::= TrueConstraint new ()
+	false ::= FalseConstraint new ()
+//	nan ::= NanConstraint new ()
+//	empty ::= EmptyConstraint new ()
+//	unique ::= UniqueConstraint new ()
+	not ::= NotModifier new ()
+//	equal ::= EqualModifier new ()
+//	same ::= SameModifier new ()
+//	greater ::= greaterModifier new ()
+//	at ::= AtModifier new ()
+//	less ::= LessModifier new ()
+//	instance
+//	assignable
+	
 /*
 	is equal to
 	is same as

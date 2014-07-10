@@ -16,7 +16,7 @@
  */
  
 import ./Constraint
-import ./Constraints
+import ./IsConstraints
 import ./Test
 import structs/ArrayList
 import ./TestFailedException
@@ -48,7 +48,7 @@ Fixture: abstract class {
 		(result ? " done" : " failed") println()
 		exit(result ? 0 : 1)
 	}
-	is::= static Constraints new()
+	is::= static IsConstraints new()
 	expect: static func (value: Object, constraint : Constraint) {
 		if (constraint verify(value))
 			TestFailedException new(value, constraint) throw()
