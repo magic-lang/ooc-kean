@@ -15,6 +15,9 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-Constraint : abstract class {
-	verify : abstract func(value : Object) -> Bool
+import ./Modifier
+
+Constraint : abstract class extends Modifier {
+	init: func { super() }
+	init: func~parent(parent : Modifier) { super(parent) }
 }

@@ -15,11 +15,8 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
  
-import ./Constraint
-import ./IsConstraints
-import ./Test
+import ./[Constraint, IsConstraints, Test, Modifier, TrueConstraint, FalseConstraint, TestFailedException]
 import structs/ArrayList
-import ./TestFailedException
 
 Fixture: abstract class {
 	name : String

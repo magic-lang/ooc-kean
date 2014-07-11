@@ -14,13 +14,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
- 
-import ./[Constraint, Modifier]
 
-TrueConstraint : class extends Constraint {
-	init: super func
-	init: super func~parent(parent : Modifier)
-	verify: func(value : Object) -> Bool {
-		value as Cell<Bool> get()
+Modifier : abstract class {
+	parent : Modifier
+	child : Modifier
+	init : func() {
+		this parent = null
+	}
+	init : func~parent(=parent)
+	modify : func(value : Object, =child) -> Bool {
+		this parent != null ? this parent modify (value, this) : this verify (value)
+	}
+	verify : func(value : Object) -> Bool {
+		this verifyChild(value)
+	}
+	verifyChild : func(value : Object) -> Bool {
+		this child != null && this child verify(value)
 	}
 }

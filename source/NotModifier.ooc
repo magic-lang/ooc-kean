@@ -15,11 +15,25 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
  
-import ./Constraint
+import ./[Constraint, Modifier, TrueConstraint, FalseConstraint]
 
 NotModifier : class extends Modifier {
-	init: func()
+	init: func { super() }
+	init: func~parent(parent : Modifier) { super(parent) }
 	verify: func(value : Object) -> Bool {
-		value as Cell<Bool> get()
+		!(this verifyChild(value))
 	}
+	true ::= TrueConstraint new (this)
+	false ::= FalseConstraint new (this)
+//	nan ::= NanConstraint new ()
+//	empty ::= EmptyConstraint new ()
+//	unique ::= UniqueConstraint new ()
+	not ::= NotModifier new (this)
+//	equal ::= EqualModifier new ()
+//	same ::= SameModifier new ()
+//	greater ::= greaterModifier new ()
+//	at ::= AtModifier new ()
+//	less ::= LessModifier new ()
+//	instance
+//	assignable
 }

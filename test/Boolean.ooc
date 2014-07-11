@@ -22,10 +22,21 @@ Boolean: class extends Fixture {
 		super("Boolean")
 		this add("true is true", func() { expect(true, is true) })
 		this add("false is true", func() { expect(false, is true) })
+		this add("true is false", func() { expect(true, is false) })
+		this add("false is false", func() { expect(false, is false) })
+
 		this add("true", func() { expect(true) })
 		this add("false", func() { expect(false) })
+
 		this add("true is not true", func() { expect(true, is not true) })
 		this add("false is not true", func() { expect(false, is not true) })
+		this add("true is not false", func() { expect(true, is not false) })
+		this add("false is not false", func() { expect(false, is not false) })
+		
+//		this add("true is not not true", func() { expect(true, is not not true) })
+//		this add("false is not not true", func() { expect(false, is not not true) })
+//		this add("true is not not false", func() { expect(true, is not not false) })
+//		this add("false is not not false", func() { expect(false, is not not false) })
 	}
 }
 Boolean new() run()

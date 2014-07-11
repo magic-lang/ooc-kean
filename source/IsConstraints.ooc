@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import TrueConstraint, FalseConstraint, NotModifier
+import ./[TrueConstraint, FalseConstraint, NotModifier]
 
 IsConstraints : class {
 	init: func()

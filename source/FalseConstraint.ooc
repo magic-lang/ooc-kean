@@ -15,11 +15,11 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
  
-import ./Constraint
-
+import ./[Constraint, Modifier]
 
 FalseConstraint : class extends Constraint {
-	init: func()
+	init: super func
+	init: super func~parent(parent : Modifier)
 	verify: func(value : Object) -> Bool {
 		!(value as Cell<Bool> get())
 	}
