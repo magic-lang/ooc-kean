@@ -17,24 +17,24 @@
 
 import ../source/Fixture
 
-Boolean: class extends Fixture {
+BooleanFail: class extends Fixture {
 	init: func () {
 		super("Boolean")
-		this add("true is true", func() { expect(true, is true) })
-		this add("false is false", func() { expect(false, is false) })
+		this add("false is true", func() { expect(false, is true) })
+		this add("true is false", func() { expect(true, is false) })
 
-		this add("true", func() { expect(true) })
+		this add("false", func() { expect(false) })
 
-		this add("false is not true", func() { expect(false, is not true) })
-		this add("true is not false", func() { expect(true, is not false) })
+		this add("true is not true", func() { expect(true, is not true) })
+		this add("false is not false", func() { expect(false, is not false) })
 		
 		notNotTrue := is not not true
-		this add("true is not not true", func() { expect(true, notNotTrue) })
+		this add("false is not not true", func() { expect(false, notNotTrue) })
 		notNotFalse := is not not false
-		this add("false is not not false", func() { expect(false, notNotFalse) })
+		this add("true is not not false", func() { expect(true, notNotFalse) })
 		
-		this add("true is equal to true", func() { expect(true, is equal to(true)) })
-		this add("false is equal to false", func() { expect(false, is equal to(false)) })		
+		this add("false is equal to true", func() { expect(false, is equal to(true)) })
+		this add("true is equal to false", func() { expect(true, is equal to(false)) })		
 	}
 }
-Boolean new() run()
+BooleanFail new() run()

@@ -27,6 +27,7 @@ rock_tmp
 
 # Executables
 Boolean
+BooleanFail
 *.exe
 *.out
 *.app

@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
  
-import ./[Constraint, IsConstraints, Test, Modifier, TrueConstraint, FalseConstraint, TestFailedException]
+import ./Constraints
 import structs/ArrayList
 
 Fixture: abstract class {
@@ -47,7 +47,7 @@ Fixture: abstract class {
 	}
 	is::= static IsConstraints new()
 	expect: static func (value: Object, constraint : Constraint) {
-		if (constraint verify(value))
+		if (!constraint verify(value))
 			TestFailedException new(value, constraint) throw()
 	}
 	expect: static func ~boolConstraint (value: Bool, constraint : Constraint) {
@@ -55,5 +55,19 @@ Fixture: abstract class {
 	}
 	expect: static func ~bool (value: Bool) {
 		This expect(Cell new(value), is true)
+	}
+}
+TestFailedException: class extends Exception {
+	test : Test
+	value : Object
+	constraint : Constraint
+	init: func (=value, =constraint)
+}
+Test : class {
+	name : String
+	action : Func
+	init: func(=name, =action)
+	run: func() {
+		action()
 	}
 }
