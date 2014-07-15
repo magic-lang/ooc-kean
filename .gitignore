@@ -26,8 +26,12 @@ rock_tmp
 *.dylib
 
 # Executables
-Boolean
+BooleanTest
 BooleanFail
+StringTest
+StringFail
+IntegerTest
+FloatTest
 *.exe
 *.out
 *.app

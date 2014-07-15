@@ -19,7 +19,7 @@ import ../source/Fixture
 
 BooleanFail: class extends Fixture {
 	init: func () {
-		super("Boolean")
+		super("BooleanFail")
 		this add("false is true", func() { expect(false, is true) })
 		this add("true is false", func() { expect(true, is false) })
 

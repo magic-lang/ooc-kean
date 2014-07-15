@@ -50,7 +50,21 @@ FalseConstraint : class extends Constraint {
 	init: func { super() }
 	init: func~parent(parent : Modifier) { super(parent) }
 	test: func(value : Object) -> Bool {
-		!(value as Cell<Bool> get())
+		!value as Cell<Bool> get()
+	}
+}
+NullConstraint : class extends Constraint {
+	init: func { super() }
+	init: func~parent(parent : Modifier) { super(parent) }
+	test: func(value : Object) -> Bool {
+		value == null
+	}
+}
+EmptyConstraint : class extends Constraint {
+	init: func { super() }
+	init: func~parent(parent : Modifier) { super(parent) }
+	test: func(value : Object) -> Bool {
+		value != null && value instanceOf?(String) && value as String empty?()
 	}
 }
 NotModifier : class extends Modifier {
@@ -61,11 +75,12 @@ NotModifier : class extends Modifier {
 	}
 	true ::= TrueConstraint new (this)
 	false ::= FalseConstraint new (this)
-//	nan ::= NanConstraint new ()
-//	empty ::= EmptyConstraint new ()
-//	unique ::= UniqueConstraint new ()
+	Null ::= NullConstraint new (this)
+	empty ::= EmptyConstraint new (this)
 	not ::= NotModifier new (this)
-//	equal ::= EqualModifier new ()
+	equal ::= EqualModifier new (this)
+//	nan ::= NanConstraint new ()
+//	unique ::= UniqueConstraint new ()
 //	same ::= SameModifier new ()
 //	greater ::= greaterModifier new ()
 //	at ::= AtModifier new ()
@@ -73,29 +88,52 @@ NotModifier : class extends Modifier {
 //	instance
 //	assignable
 }
-EqualModifier : class extends Modifier {
+EqualModifier: class extends Modifier {
 	init: func { super() }
 	init: func~parent(parent : Modifier) { super(parent) }
-	to: func(correct : Object) -> ToConstraint { ToConstraint new (correct, this) }
+	to: func~object(correct : Object) -> ToConstraint { ToConstraint new (correct, this) }
+	to: func~boolean(correct : Bool) -> ToConstraint { ToConstraint new (correct, this) }
+	to: func~integer(correct : Int) -> ToConstraint { ToConstraint new (correct, this) }
+	to: func~float(correct : Float) -> ToConstraint { ToConstraint new (correct, this) }
 }
-ToConstraint : class extends Constraint {
-	correct : Object
-	init: func(=correct, parent : EqualModifier) { super(parent) }
+ToConstraint: class extends Constraint {
+	comparer: Func(Object) -> Bool
+	init: func~object(correct: Object, parent : EqualModifier) { 
+		super(parent)
+		this comparer = func(value: Object) -> Bool { 
+			result := match correct {
+				case c: String => c == value as String
+				case => correct == value
+			}
+			result
+		}
+	}
+	init: func~boolean(correct: Bool, parent : EqualModifier) { 
+		super(parent)
+		this comparer = func(value: Object) -> Bool { value as Cell<Bool> get() == correct } 
+	}
+	init: func~integer(correct: Int, parent : EqualModifier) { 
+		super(parent)
+		this comparer = func(value: Object) -> Bool { value as Cell<Int> get() == correct } 
+	}
+	init: func~float(correct: Float, parent : EqualModifier) { 
+		super(parent)
+		this comparer = func(value: Object) -> Bool { value as Cell<Float> get() == correct } 
+	}
 	test: func(value : Object) -> Bool {
-		value instanceOf?(Cell<Bool>) ?
-		value as Cell<Bool> get() == correct :
-		value == correct
+		this comparer(value)
 	}
 }
-IsConstraints : class {
+IsConstraints: class {
 	init: func()
 	true ::= TrueConstraint new ()
 	false ::= FalseConstraint new ()
-//	nan ::= NanConstraint new ()
-//	empty ::= EmptyConstraint new ()
-//	unique ::= UniqueConstraint new ()
+	Null ::= NullConstraint new ()
+	empty ::= EmptyConstraint new ()
 	not ::= NotModifier new ()
 	equal ::= EqualModifier new ()
+//	nan ::= NanConstraint new ()
+//	unique ::= UniqueConstraint new ()
 //	same ::= SameModifier new ()
 //	greater ::= greaterModifier new ()
 //	at ::= AtModifier new ()

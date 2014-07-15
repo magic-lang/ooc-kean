@@ -50,10 +50,16 @@ Fixture: abstract class {
 		if (!constraint verify(value))
 			TestFailedException new(value, constraint) throw()
 	}
-	expect: static func ~boolConstraint (value: Bool, constraint : Constraint) {
+	expect: static func ~boolean (value: Bool, constraint : Constraint) {
 		This expect(Cell new(value), constraint)
 	}
-	expect: static func ~bool (value: Bool) {
+	expect: static func ~integer (value: Int, constraint : Constraint) {
+		This expect(Cell new(value), constraint)
+	}
+	expect: static func ~float (value: Float, constraint : Constraint) {
+		This expect(Cell new(value), constraint)
+	}
+	expect: static func ~isTrue (value: Bool) {
 		This expect(Cell new(value), is true)
 	}
 }

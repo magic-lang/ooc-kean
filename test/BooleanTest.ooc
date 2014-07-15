@@ -15,9 +15,9 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import ../source/Fixture
+import ../source/[Fixture, Constraints]
 
-Boolean: class extends Fixture {
+BooleanTest: class extends Fixture {
 	init: func () {
 		super("Boolean")
 		this add("true is true", func() { expect(true, is true) })
@@ -28,13 +28,13 @@ Boolean: class extends Fixture {
 		this add("false is not true", func() { expect(false, is not true) })
 		this add("true is not false", func() { expect(true, is not false) })
 		
-		notNotTrue := is not not true
+		notNotTrue := is not not true // FIXME: Does not work to skip variable and put expression below, why?
 		this add("true is not not true", func() { expect(true, notNotTrue) })
-		notNotFalse := is not not false
+		notNotFalse := is not not false // FIXME: Does not work to skip variable and put expression below, why?
 		this add("false is not not false", func() { expect(false, notNotFalse) })
 		
 		this add("true is equal to true", func() { expect(true, is equal to(true)) })
 		this add("false is equal to false", func() { expect(false, is equal to(false)) })		
 	}
 }
-Boolean new() run()
+BooleanTest new() run()
