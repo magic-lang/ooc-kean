@@ -95,6 +95,7 @@ EqualModifier: class extends Modifier {
 	to: func~boolean(correct : Bool) -> ToConstraint { ToConstraint new (correct, this) }
 	to: func~integer(correct : Int) -> ToConstraint { ToConstraint new (correct, this) }
 	to: func~float(correct : Float) -> ToConstraint { ToConstraint new (correct, this) }
+	to: func~double(correct : Double) -> ToConstraint { ToConstraint new (correct, this) }
 }
 ToConstraint: class extends Constraint {
 	comparer: Func(Object) -> Bool
@@ -119,6 +120,10 @@ ToConstraint: class extends Constraint {
 	init: func~float(correct: Float, parent : EqualModifier) { 
 		super(parent)
 		this comparer = func(value: Object) -> Bool { value as Cell<Float> get() == correct } 
+	}
+	init: func~double(correct: Double, parent : EqualModifier) { 
+		super(parent)
+		this comparer = func(value: Object) -> Bool { value as Cell<Double> get() == correct } 
 	}
 	test: func(value : Object) -> Bool {
 		this comparer(value)

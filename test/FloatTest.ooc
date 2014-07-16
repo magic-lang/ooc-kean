@@ -30,7 +30,7 @@ FloatTest: class extends Fixture {
 		this add("4.2 is equal to 4.2", func() { expect(4.2f, is equal to(4.2f)) })
 		this add("-13.37 is equal to -13.37", func() { expect(-13.37f, is equal to(-13.37f)) })
 		isNotEqualTo42 := is not equal to(4.2f)
-		this add("0.0 is not equal to 4.2", func() { expect(0, isNotEqualTo42) })
+		this add("0.0 is not equal to 4.2", func() { expect(0.0f, isNotEqualTo42) })
 		this add("0.0 is equal to -0.0", func() { expect(0.0f, is equal to(-0.0f)) })
 	}
 }

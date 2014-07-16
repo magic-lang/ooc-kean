@@ -59,6 +59,9 @@ Fixture: abstract class {
 	expect: static func ~float (value: Float, constraint : Constraint) {
 		This expect(Cell new(value), constraint)
 	}
+	expect: static func ~double (value: Double, constraint : Constraint) {
+		This expect(Cell new(value), constraint)
+	}
 	expect: static func ~isTrue (value: Bool) {
 		This expect(Cell new(value), is true)
 	}
