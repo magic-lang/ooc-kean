@@ -8,6 +8,7 @@
 build
 rock_tmp
 .libs
+.sam-cache
 
 # Object files
 *.o

@@ -15,7 +15,8 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import ../source/Fixture
+use unit
+import [Fixture, Constraints]
 
 StringTest: class extends Fixture {
 	init: func () {
