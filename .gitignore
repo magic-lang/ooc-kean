@@ -1,3 +1,15 @@
+# Autosave files
+*~
+
+# Project files
+.anjuta*
+
+# Build files
+build
+rock_tmp
+.libs
+.sam-cache
+
 # Object files
 *.o
 *.ko

@@ -1,0 +1,4 @@
+Name: OOC Math
+Description: Math functionality library.
+SourcePath: source
+Requires: unit
