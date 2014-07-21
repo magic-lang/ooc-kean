@@ -27,6 +27,8 @@ rock_tmp
 *.dylib
 
 # Executables
+Point
+Size
 *.exe
 *.out
 *.app

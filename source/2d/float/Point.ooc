@@ -33,7 +33,7 @@ Point : cover {
 		this x * other x + this y + other y
 	}
 	angle: func(other: This) -> Float {
-		(this scalarProduct(other) / (this Norm * other Norm)) clamp(-1, 1) acos() * (this x * other x - this y * other y < 0 ? -1 : 1)
+		(this scalarProduct(other) / (this Norm * other Norm)) clamp(-1, 1) acos() * (this x * other y - this y * other x < 0 ? -1 : 1)
 	}
 	distance: func(other: This) -> Float {
 		(this - other) Norm
@@ -54,10 +54,10 @@ Point : cover {
 		This new(this x minimum(ceiling x), this y minimum(ceiling y))
 	}
 	maximum: func(floor : This) -> This {
-		This new(this x minimum(floor x), this y minimum(floor y))
+		This new(this x maximum(floor x), this y maximum(floor y))
 	}
 	clamp: func(floor, ceiling : This) -> This {
-		This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling x))
+		This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y))
 	}
 	operator + (other: This) -> This {
 		This new(this x + other x, this y + other y)
