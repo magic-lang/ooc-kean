@@ -1,4 +1,4 @@
-use unit
+use ooc-unit
 
 PointTest: class extends Fixture {
 	init: func () {
