@@ -1,0 +1,12 @@
+before_script:
+  - sudo apt-get -y -qq install curl make libgc-dev
+  - export PATH=$PATH:$PWD/rock/bin:$PWD/sam
+  - git clone --depth=1 git://github.com/nddrylliog/rock.git -b 99x
+  - git clone --depth=1 git://github.com/nddrylliog/sam.git
+  - (cd rock && make -s rescue)
+  - (cd sam && rock -v)
+
+script:
+  - export OOC_LIBS=$PWD
+  - sam test
+
