@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use unit
+use ooc-unit
 
 BooleanTest: class extends Fixture {
 	init: func () {

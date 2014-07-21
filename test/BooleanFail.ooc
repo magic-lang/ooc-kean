@@ -15,8 +15,8 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use unit
-
+use ooc-unit
+//!shouldfail
 BooleanFail: class extends Fixture {
 	init: func () {
 		super("BooleanFail")

@@ -15,9 +15,9 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use unit
-import [Fixture, Constraints]
+use ooc-unit
 
+//!shouldfail
 StringFail: class extends Fixture {
 	init: func () {
 		super("StringFail")
