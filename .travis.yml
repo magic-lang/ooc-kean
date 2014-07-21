@@ -9,5 +9,6 @@ before_script:
 script:
   - export OOC_LIBS=$PWD
   - sam get
+  - rock -v
   - sam test
 
