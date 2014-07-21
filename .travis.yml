@@ -9,6 +9,6 @@ before_script:
 script:
   - export OOC_LIBS=$PWD
   - sam get
-  - rock -v
+  - rock -v test/2d/float/Point.ooc
   - sam test
 
