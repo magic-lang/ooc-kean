@@ -1,13 +1,13 @@
 before_script:
   - sudo apt-get -y -qq install curl make libgc-dev
   - export PATH=$PATH:$PWD/rock/bin:$PWD/sam
+  - export OOC_LIBS=$PWD
   - git clone --depth=1 git://github.com/cogneco/rock.git -b 99x
   - git clone --depth=1 git://github.com/cogneco/sam.git
   - (cd rock && make -s rescue)
   - (cd sam && rock -v)
 
 script:
-  - export OOC_LIBS=$PWD
   - sam get
   - rock -v test/2d/float/Point.ooc
   - sam test
