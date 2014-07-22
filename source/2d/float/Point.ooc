@@ -15,6 +15,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
 import ../../FloatExtension
+import Size
+import text/StringTokenizer
+import structs/ArrayList
 
 Point : cover {
 	x: Float
@@ -24,6 +27,9 @@ Point : cover {
 	//Azimuth ::= this y atan2(this x) // FIXME: Why does this syntax not work on a cover?
 	Azimuth: Float { get { this y atan2(this x) } }
 	init: func@ (=x, =y) { }
+	init: func ~default { 
+		this init(0.0f, 0.0f) 
+	}
 	pNorm: func (p : Float) -> Float {
 		p == 1 ?
 		this x abs() + this y abs() :
@@ -35,8 +41,9 @@ Point : cover {
 	angle: func(other: This) -> Float {
 		(this scalarProduct(other) / (this Norm * other Norm)) clamp(-1, 1) acos() * (this x * other y - this y * other x < 0 ? -1 : 1)
 	}
+	//FIXME: Oddly enough, "this - other" instead of "this + (-other)" causes a compile error in the unary '-' operator below.
 	distance: func(other: This) -> Float {
-		(this - other) Norm
+		(this + (-other)) Norm
 	}
 	swap: func() -> This {
 		This new(this y, this x)
@@ -62,14 +69,29 @@ Point : cover {
 	operator + (other: This) -> This {
 		This new(this x + other x, this y + other y)
 	}
+	operator + (other: Size) -> This {
+		This new(this x + other width, this y + other height)
+	}
 	operator - (other: This) -> This {
 		This new(this x - other x, this y - other y)
+	}
+	operator - (other: Size) -> This {
+		This new(this x - other width, this y - other height)
+	}
+	operator - -> This {
+		This new(-this x, -this y)
 	}
 	operator * (other: This) -> This {
 		This new(this x * other x, this y * other y)
 	}
+	operator * (other: Size) -> This {
+		This new(this x * other width, this y * other height)
+	}
 	operator / (other: This) -> This {
 		This new(this x / other x, this y / other y)
+	}
+	operator / (other: Size) -> This {
+		This new(this x / other width, this y / other height)
 	}
 	operator * (other: Float) -> This {
 		This new(this x * other, this y * other)
@@ -95,10 +117,26 @@ Point : cover {
 	operator >= (other: This) -> Bool {
 		this x >= other x && this y >= other y
 	}
+	operator as -> String {
+		this toString()
+	}
+	toString: func -> String {
+		"#{this x}, #{this y}"
+	}
+	parse: static func(input: String) -> This {
+		array := input split(',')
+		This new (array[0] toFloat(), array[1] toFloat())
+	}
 }
 operator * (left: Float, right: Point) -> Point {
 	Point new(left * right x, left * right y)
 }
 operator / (left: Float, right: Point) -> Point {
+	Point new(left / right x, left / right y)
+}
+operator * (left: Int, right: Point) -> Point {
+	Point new(left * right x, left * right y)
+}
+operator / (left: Int, right: Point) -> Point {
 	Point new(left / right x, left / right y)
 }

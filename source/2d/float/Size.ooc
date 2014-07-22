@@ -16,6 +16,8 @@
 import math
 import ../../FloatExtension
 import Point
+import text/StringTokenizer
+import structs/ArrayList
 
 Size : cover {
 	width: Float
@@ -30,6 +32,9 @@ Size : cover {
 	BasisX: static This { get { This new(1, 0) } }
 	BasisY: static This { get { This new(0, 1) } }
 	init: func@ (=width, =height) { }
+	init: func ~default { 
+		this init(0.0f, 0.0f) 
+	}
 	pNorm: func (p : Float) -> Float {
 		p == 1 ?
 		this width abs() + this height abs() :
@@ -41,8 +46,9 @@ Size : cover {
 	angle: func(other: This) -> Float {
 		(this scalarProduct(other) / (this Norm * other Norm)) clamp(-1, 1) acos() * (this width * other height - this height * other width < 0 ? -1 : 1)
 	}
+	//FIXME: Oddly enough, "this - other" instead of "this + (-other)" causes a compile error in the unary '-' operator below.
 	distance: func(other: This) -> Float {
-		(this - other) Norm
+		(this + (-other)) Norm
 	}
 	swap: func() -> This {
 		This new(this height, this width)
@@ -77,10 +83,9 @@ Size : cover {
 	operator - (other: Point) -> This {
 		This new(this width - other x, this height - other y)
 	}
-	/* FIXME: Unary operator overloading seems impossible at the moment.
-	operator - (this) -> This {
-		This new(-this width, -this height)
-	}*/
+	operator - -> This {
+		This new(this width, this height)
+	}
 	operator * (other: This) -> This {
 		This new(this width * other width, this height * other height)
 	}
@@ -123,6 +128,19 @@ Size : cover {
 	operator >= (other: This) -> Bool {
 		this width >= other width && this height >= other height
 	}
+	polar: func(radius : Float, azimuth : Float) -> This {
+		This new (radius * cos(azimuth), radius * sin(azimuth))
+	}
+	operator as -> String {
+		this toString()
+	}
+	toString: func -> String {
+		"#{this width}, #{this height}"
+	}
+	parse: static func(input: String) -> This {
+		array := input split(',')
+		This new (array[0] toFloat(), array[1] toFloat())
+	}
 }
 operator * (left: Float, right: Size) -> Size {
 	Size new(left * right width, left * right height)
@@ -136,3 +154,4 @@ operator * (left: Int, right: Size) -> Size {
 operator / (left: Int, right: Size) -> Size {
 	Size new(left / right width, left / right height)
 }
+
