@@ -41,10 +41,10 @@ Size : cover {
 		(this width abs() pow(p) + this height abs() pow(p)) pow(1 / p)
 	}
 	scalarProduct: func(other: This) -> Float {
-		this width * other width + this height + other height
+		this width * other width + this height * other height
 	}
 	angle: func(other: This) -> Float {
-		(this scalarProduct(other) / (this Norm * other Norm)) clamp(-1, 1) acos() * (this width * other height - this height * other width < 0 ? -1 : 1)
+		(this scalarProduct(other) / (this Norm * other Norm)) clamp(-1.0f, 1.0f) acos() * (this width * other height - this height * other width < 0.0f ? -1.0f : 1.0f)
 	}
 	//FIXME: Oddly enough, "this - other" instead of "this + (-other)" causes a compile error in the unary '-' operator below.
 	distance: func(other: This) -> Float {
@@ -84,7 +84,7 @@ Size : cover {
 		This new(this width - other x, this height - other y)
 	}
 	operator - -> This {
-		This new(this width, this height)
+		This new(-this width, -this height)
 	}
 	operator * (other: This) -> This {
 		This new(this width * other width, this height * other height)
@@ -128,14 +128,14 @@ Size : cover {
 	operator >= (other: This) -> Bool {
 		this width >= other width && this height >= other height
 	}
-	polar: func(radius : Float, azimuth : Float) -> This {
-		This new (radius * cos(azimuth), radius * sin(azimuth))
+	polar: static func(radius, azimuth : Float) -> This {
+		This new(radius * cos(azimuth), radius * sin(azimuth))
 	}
 	operator as -> String {
 		this toString()
 	}
 	toString: func -> String {
-		"#{this width}, #{this height}"
+		"#{this width toString()}, #{this height toString()}"
 	}
 	parse: static func(input: String) -> This {
 		array := input split(',')

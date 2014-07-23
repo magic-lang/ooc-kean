@@ -121,7 +121,7 @@ Point : cover {
 		this toString()
 	}
 	toString: func -> String {
-		"#{this x}, #{this y}"
+		"#{this x toString()}, #{this y toString()}"
 	}
 	parse: static func(input: String) -> This {
 		array := input split(',')

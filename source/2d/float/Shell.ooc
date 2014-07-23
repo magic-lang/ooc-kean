@@ -75,7 +75,7 @@ Shell : cover {
 		this toString()
 	}
 	toString: func -> String {
-		"#{this left}, #{this right}, #{this top}, #{this bottom}"
+		"#{this left toString()}, #{this right toString()}, #{this top toString()}, #{this bottom toString()}"
 	}
 	parse: static func(input: String) -> This {
 		array := input split(',')

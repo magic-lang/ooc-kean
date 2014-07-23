@@ -134,7 +134,7 @@ Box : cover {
 		this toString()
 	}
 	toString: func -> String {
-		"#{this leftTop}, #{this size}"
+		"#{this leftTop toString()}, #{this size toString()}"
 	}
 	parse: static func(input: String) -> This {
 		array := input split(',')
