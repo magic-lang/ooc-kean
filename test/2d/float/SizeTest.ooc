@@ -5,7 +5,7 @@ import lang/IO
 //import ../../../source/FloatExtension
 
 SizeTest: class extends Fixture {
-	precision := 1.0f / 1_0000_00.0f
+	precision := 1.0f / 1_0000.0f
 	vector0 := Size new (22.221f, -3.1f)
 	vector1 := Size new (12.221f, 13.1f)
 	vector2 := Size new (34.442f, 10.0f)
@@ -16,7 +16,7 @@ SizeTest: class extends Fixture {
 			point := Size new()
 //			FIXME: There is no equals interface yet
 //			expect(this vector0, is equal to(this vector0))
-//			expect(this vector0 equals(this vector as object), is true
+//			expect(this vector0 equals(this vector as Object), is true
 			expect(this vector0 == this vector0, is true)
 			expect(this vector0 != this vector1, is true)
 			expect(this vector0 == point, is false)

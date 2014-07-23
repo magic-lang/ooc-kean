@@ -35,3 +35,5 @@ Size
 *.i*86
 *.x86_64
 *.hex
+/test/2d/float/SizeTest
+/test/2d/float/PointTest
