@@ -16,7 +16,7 @@
  */
 
 use ooc-unit
-//!shouldfail
+//!shouldcrash
 BooleanFail: class extends Fixture {
 	init: func () {
 		super("BooleanFail")

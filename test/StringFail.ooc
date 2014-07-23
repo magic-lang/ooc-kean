@@ -17,7 +17,7 @@
 
 use ooc-unit
 
-//!shouldfail
+//!shouldcrash
 StringFail: class extends Fixture {
 	init: func () {
 		super("StringFail")
