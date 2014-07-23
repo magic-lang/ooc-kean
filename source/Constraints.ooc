@@ -91,42 +91,60 @@ NotModifier : class extends Modifier {
 EqualModifier: class extends Modifier {
 	init: func { super() }
 	init: func~parent(parent : Modifier) { super(parent) }
-	to: func~object(correct : Object) -> ToConstraint { ToConstraint new (correct, this) }
-	to: func~boolean(correct : Bool) -> ToConstraint { ToConstraint new (correct, this) }
-	to: func~integer(correct : Int) -> ToConstraint { ToConstraint new (correct, this) }
-	to: func~float(correct : Float) -> ToConstraint { ToConstraint new (correct, this) }
-	to: func~double(correct : Double) -> ToConstraint { ToConstraint new (correct, this) }
-}
-ToConstraint: class extends Constraint {
-	comparer: Func(Object) -> Bool
-	init: func~object(correct: Object, parent : EqualModifier) { 
-		super(parent)
-		this comparer = func(value: Object) -> Bool { 
-			result := match correct {
-				case c: String => c == value as String
-				case => correct == value
+	to: func~object(correct : Object) -> CompareConstraint { 
+		f := func(value, c: Object) -> Bool { 
+			result := match c {
+				case s: String => s == value as String
+				case => c == value
 			}
 			result
 		}
+		CompareConstraint new (this, correct, f) 
 	}
-	init: func~boolean(correct: Bool, parent : EqualModifier) { 
-		super(parent)
-		this comparer = func(value: Object) -> Bool { value as Cell<Bool> get() == correct } 
+	to: func~boolean(correct : Bool) -> CompareConstraint { 
+		f := func(value, c: Object) -> Bool { value as Cell<Bool> get() == c as Cell<Bool> get() }
+		CompareConstraint new (this, Cell<Bool> new(correct), f) 
 	}
-	init: func~integer(correct: Int, parent : EqualModifier) { 
-		super(parent)
-		this comparer = func(value: Object) -> Bool { value as Cell<Int> get() == correct } 
+	to: func~integer(correct : Int) -> CompareConstraint { 
+		f := func(value, c: Object) -> Bool { value as Cell<Int> get() == c as Cell<Int> get() }
+		CompareConstraint new (this, Cell<Int> new(correct), f) 
 	}
-	init: func~float(correct: Float, parent : EqualModifier) { 
-		super(parent)
-		this comparer = func(value: Object) -> Bool { value as Cell<Float> get() == correct } 
+	to: func~float(correct : Float) -> CompareWithinConstraint { 
+		f := func(value, c: Object) -> Bool { value as Cell<Float> get() == c as Cell<Float> get() }
+		CompareWithinConstraint new (this, Cell<Float> new(correct), f) 
 	}
-	init: func~double(correct: Double, parent : EqualModifier) { 
+	to: func~double(correct : Double) -> CompareWithinConstraint { 
+		f := func(value, c: Object) -> Bool { value as Cell<Double> get() == c as Cell<Double> get() } 
+		CompareWithinConstraint new (this, Cell<Double> new(correct), f) 
+	}
+}
+CompareConstraint: class extends Constraint {
+	comparer: Func(Object, Object) -> Bool
+	correct: Object
+	init: func(parent: Modifier, =correct, =comparer) {
 		super(parent)
-		this comparer = func(value: Object) -> Bool { value as Cell<Double> get() == correct } 
 	}
 	test: func(value : Object) -> Bool {
-		this comparer(value)
+		this comparer(value, this correct)
+	}
+}
+CompareWithinConstraint: class extends CompareConstraint {
+	init: func(parent: Modifier, .correct, .comparer) {
+		super(parent, correct, comparer)
+	}
+	within: func~float(precision : Float) -> CompareConstraint {
+		this comparer = func(value: Object, correct: Object) -> Bool { this testChild(value) }
+		f := func(value, correct: Object) -> Bool { (value as Cell<Float> get() - correct as Cell<Float> get()) abs() < precision }
+		CompareConstraint new (this, this correct, f)
+	}
+	within: func~double(precision : Double) -> CompareConstraint {
+		this comparer = func(value: Object, correct: Object) -> Bool { this testChild(value) }
+		f := func(value, correct: Object) -> Bool { (value as Cell<Double> get() - correct as Cell<Double> get()) abs() < precision }
+		CompareConstraint new (this, this correct, f)
+	}
+	test: func(value : Object) -> Bool {
+		comparer := this comparer
+		comparer(value, this correct)
 	}
 }
 IsConstraints: class {
