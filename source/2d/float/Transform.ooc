@@ -69,7 +69,9 @@ Transform : cover {
 	ScalingX: Float { get { (this a pow(2.0) + this b pow(2.0)) sqrt() } }
 	ScalingY: Float { get { (this d pow(2.0) + this e pow(2.0)) sqrt() } }
 	Rotation: Float { get { this b atan2(this a) } }
-//	Inverse: This {	get {
+//	FIXME: This doesn't compile for some reason
+//	Inverse: This {	
+//		get {
 //			determinant := this Determinant
 //			This new(
 //				(this e * this i - this h * this f) / determinant,
@@ -85,17 +87,18 @@ Transform : cover {
 //		}
 //	}
 	IsProjective: Bool { get { this Determinant != 0.0f } }
-	IsAffine: Bool { get { this c == 0 && this f == 0 && this i == 1 } }
+	IsAffine: Bool { get { this c == 0.0f && this f == 0.0f && this i == 1.0f } }
 	IsSimilarity: Bool { get { this == This create(this Translation, this Scaling, this Rotation) } }
 	IsEuclidian: Bool { get { this == This create(this Translation, this Rotation) } }
-	IsIdentity: Bool { get { (this a == this e == this i == 1) && (this b == this c == this d == this f == this g == this h == 0) } }
+	IsIdentity: Bool { get { (this a == this e == this i == 1.0f) && (this b == this c == this d == this f == this g == this h == 0.0f) } }
 	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i) { }
-	init: func@ ~reduced (a, b, d, e, g, h: Float) { This new(a, b, 0, d, e, 0, g, h, 1) }
+	init: func@ ~reduced(a, b, d, e, g, h: Float) { this init(a, b, 0.0f, d, e, 0.0f, g, h, 1.0f) }
+	init: func@ ~default() { this init(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f) }
 //	FIXME: Unary minus
 //	setTranslation: func(translation: Size) -> This { this translate(translation - this Translation) }
 	setScaling: func(scaling: Float) -> This { this scale(scaling / this Scaling) }
-	setXScaling: func(scaling: Float) -> This { this scale(scaling / this ScalingX, 1) }
-	setYScaling: func(scaling: Float) -> This { this scale(1, scaling / this ScalingY) }
+	setXScaling: func(scaling: Float) -> This { this scale(scaling / this ScalingX, 1.0f) }
+	setYScaling: func(scaling: Float) -> This { this scale(1.0f, scaling / this ScalingY) }
 	setRotation: func(rotation: Float) -> This { this rotate(rotation - this Rotation) }
 	translate: func(xDelta, yDelta: Float) -> This { this createTranslation(xDelta, yDelta) * this }
 	translate: func ~float(delta: Float) -> This { this translate(delta, delta) }
@@ -109,7 +112,7 @@ Transform : cover {
 	skewY: func (angle: Float) -> This { this createSkewingY(angle) * this }
 	reflectX: func () -> This { this createReflectionX() * this }
 	reflectY: func () -> This { this createReflectionY() * this }
-	Identity: static This { get { This new(1, 0, 0, 1, 0, 0) } }
+	Identity: static This { get { This new(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f) } }
 	create: static func(translation: Size, scale : Float, rotation: Float) -> This { 
 		This new(rotation cos() * scale, rotation sin() * scale, -rotation sin() * scale, rotation cos() * scale, translation width, translation height) 
 	}
@@ -118,10 +121,10 @@ Transform : cover {
 	createTranslation: static func ~float(delta: Float) -> This { This createTranslation(delta, delta) }
 	createTranslation: static func ~size(delta: Size) -> This { This createTranslation(delta width, delta height) }
 	createTranslation: static func ~point(delta: Point) -> This { This createTranslation(delta x, delta y) }
-	createScaling: static func(xFactor, yFactor: Float) -> This { This new(xFactor, 0, 0, yFactor, 0, 0) }
+	createScaling: static func(xFactor, yFactor: Float) -> This { This new(xFactor, 0.0f, 0.0f, yFactor, 0.0f, 0.0f) }
 	createScaling: static func ~float(factor: Float) -> This { This createScaling(factor, factor) }
 	createScaling: static func ~size(factor: Size) -> This { This createScaling(factor width, factor height) }
-	createZRotation: static func(angle: Float) -> This { This new(angle cos(), angle sin(), -angle sin(), angle cos(), 0, 0) }
+	createZRotation: static func(angle: Float) -> This { This new(angle cos(), angle sin(), -angle sin(), angle cos(), 0.0f, 0.0f) }
 	createZRotation: static func ~pivot(angle: Float, pivot: Point) -> This { 
 		one := 1.0f
 		sine := angle sin()
@@ -144,6 +147,10 @@ Transform : cover {
 			this b * other g + this e * other h + this h * other i,
 			this c * other g + this f * other h + this i * other i
 		)
+	}
+	operator * (other: Point) -> Point {
+		divisor := this c * other x + this f * other y + this i
+		Point new((this a * other x + this d * other y + this g) / divisor, (this b * other x + this e * other y + this h) / divisor)
 	}
 	operator == (other: This) -> Bool {
 		this a == other a &&
