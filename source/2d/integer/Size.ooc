@@ -56,7 +56,7 @@ Size: cover {
 	toString: func -> String { "#{this width toString()}, #{this height toString()}" }
 	parse: static func(input: String) -> This {
 		array := input split(',')
-		This new (array[0] toFloat(), array[1] toFloat())
+		This new (array[0] toInt(), array[1] toInt())
 	}
 }
 operator * (left: Int, right: Size) -> Size { Size new(left * right width, left * right height) }
