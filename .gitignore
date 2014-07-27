@@ -39,3 +39,7 @@ Size
 /test/2d/float/PointTest
 /test/2d/float/BoxTest
 /test/2d/float/TransformTest
+/test/FloatTransform2DTest
+/test/FloatSize2DTest
+/test/FloatPoint2DTest
+/test/FloatBox2DTest

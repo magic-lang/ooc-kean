@@ -15,30 +15,30 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
 import ../../FloatExtension
-import Point
-import Size
-import Box
+import FloatPoint2D
+import FloatSize2D
+import FloatBox2D
 import text/StringTokenizer
 import structs/ArrayList
 
-Shell: cover {
+FloatShell2D: cover {
 	left, right, top, bottom: Float
-	LeftTop: Point { get { Point new(this left, this top) } }
-	Size: Size { get { Size new(this left + this right, this top + this bottom) } }
-	Balance: Point { get { Point new(this right - this left, this bottom - this top) } }
+	LeftTop: FloatPoint2D { get { FloatPoint2D new(this left, this top) } }
+	FloatSize2D: FloatSize2D { get { FloatSize2D new(this left + this right, this top + this bottom) } }
+	Balance: FloatPoint2D { get { FloatPoint2D new(this right - this left, this bottom - this top) } }
 	IsZero: Bool { get { this left == 0 && this right == 0 && this top == 0 && this bottom == 0 } }
 	NotZero: Bool { get { this left != 0 && this right != 0 && this top != 0 && this bottom != 0 } }
 	init: func@ (=left, =right, =top, =bottom)
 	init: func@ ~fromFloat (value: Float) { this init(value, value) }
 	init: func@ ~fromFloats (x, y: Float) { this init(x, x, y, y) }
 	init: func@ ~default { this init(0.0f) }
-	decrease: func (size: Size) -> Box { Box new(this left, this top, size width - this left - this right, size height - this top - this bottom) }
-	increase: func (size: Size) -> Box { Box new(-this left, -this right, size width + this left + this right, size height + this top + this bottom) }
-	decrease: func ~byBox (box: Box) -> Box {
-		Box new(box leftTop x + this left, box leftTop y + this top, box size width - this left - this right, box size height - this top - this bottom)
+	decrease: func (size: FloatSize2D) -> FloatBox2D { FloatBox2D new(this left, this top, size width - this left - this right, size height - this top - this bottom) }
+	increase: func (size: FloatSize2D) -> FloatBox2D { FloatBox2D new(-this left, -this right, size width + this left + this right, size height + this top + this bottom) }
+	decrease: func ~byBox (box: FloatBox2D) -> FloatBox2D {
+		FloatBox2D new(box leftTop x + this left, box leftTop y + this top, box size width - this left - this right, box size height - this top - this bottom)
 	}
-	increase: func ~byBox (box: Box) -> Box {
-		Box new(box leftTop x - this left, box leftTop y - this top, box size width + this left + this right, box size height + this top + this bottom)
+	increase: func ~byBox (box: FloatBox2D) -> FloatBox2D {
+		FloatBox2D new(box leftTop x - this left, box leftTop y - this top, box size width + this left + this right, box size height + this top + this bottom)
 	}
 	operator + (other: This) -> This { This new(this left + other left, this right + other right, this top + other top, this bottom + other bottom) }
 	operator - (other: This) -> This { This new(this left - other left, this right - other right, this top - other top, this bottom - other bottom) }

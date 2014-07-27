@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
-import Point
+import IntPoint2D
 import ../../IntExtension
 import text/StringTokenizer
 import structs/ArrayList
 
-Size: cover {
+IntSize2D: cover {
 	width, height: Int
 	Area: Int { get { (this width * this height) } }
 	Empty: Bool { get { this width == 0 || this height == 0 } }
@@ -33,14 +33,14 @@ Size: cover {
 	maximum: func (floor: This) -> This { This new(this width maximum(floor width), this height maximum(floor height)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height)) }
 	operator + (other: This) -> This { This new(this width + other width, this height + other height) }
-	operator + (other: Point) -> This { This new(this width + other x, this height + other y) }
+	operator + (other: IntPoint2D) -> This { This new(this width + other x, this height + other y) }
 	operator - (other: This) -> This { This new(this width - other width, this height - other height) }
-	operator - (other: Point) -> This { This new(this width - other x, this height - other y) }
+	operator - (other: IntPoint2D) -> This { This new(this width - other x, this height - other y) }
 	operator - -> This { This new(-this width, -this height) }
 	operator * (other: This) -> This { This new(this width * other width, this height * other height) }
-	operator * (other: Point) -> This { This new(this width * other x, this height * other y) }
+	operator * (other: IntPoint2D) -> This { This new(this width * other x, this height * other y) }
 	operator / (other: This) -> This { This new(this width / other width, this height / other height) }
-	operator / (other: Point) -> This { This new(this width / other x, this height / other y) }
+	operator / (other: IntPoint2D) -> This { This new(this width / other x, this height / other y) }
 	operator * (other: Float) -> This { This new(this width * other, this height * other) }
 	operator / (other: Float) -> This { This new(this width / other, this height / other) }
 	operator * (other: Int) -> This { This new(this width * other, this height * other) }
@@ -59,8 +59,8 @@ Size: cover {
 		This new (array[0] toInt(), array[1] toInt())
 	}
 }
-operator * (left: Int, right: Size) -> Size { Size new(left * right width, left * right height) }
-operator / (left: Int, right: Size) -> Size { Size new(left / right width, left / right height) }
-operator * (left: Float, right: Size) -> Size { Size new(left * right width, left * right height) }
-operator / (left: Float, right: Size) -> Size { Size new(left / right width, left / right height) }
+operator * (left: Int, right: IntSize2D) -> IntSize2D { IntSize2D new(left * right width, left * right height) }
+operator / (left: Int, right: IntSize2D) -> IntSize2D { IntSize2D new(left / right width, left / right height) }
+operator * (left: Float, right: IntSize2D) -> IntSize2D { IntSize2D new(left * right width, left * right height) }
+operator / (left: Float, right: IntSize2D) -> IntSize2D { IntSize2D new(left / right width, left / right height) }
 
