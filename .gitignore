@@ -43,3 +43,6 @@ Size
 /test/FloatSize2DTest
 /test/FloatPoint2DTest
 /test/FloatBox2DTest
+/test/IntBox2DTest
+/test/IntPoint2DTest
+/test/IntSize2DTest
