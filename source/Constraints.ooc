@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see<http://www.gnu.org/licenses/>.
  */
+use ooc-base
 
 Modifier: abstract class {
 	parent: Modifier
@@ -93,7 +94,9 @@ EqualModifier: class extends Modifier {
 	init: func ~parent (parent: Modifier) { super(parent) }
 	to: func ~object(correct: Object) -> CompareConstraint {
 		f := func (value, c: Object) -> Bool {
+//			cType := c class
 			match c {
+//				case e: IEquals<cType> => e != null && e T == c class && e as IEquals<cType> equals(c as cType)
 				case s: String => s == value as String
 				case => c == value
 			}
@@ -118,7 +121,7 @@ EqualModifier: class extends Modifier {
 	}
 }
 CompareConstraint: class extends Constraint {
-	comparer: func (Object, Object) -> Bool
+	comparer: Func (Object, Object) -> Bool
 	correct: Object
 	init: func (parent: Modifier, =correct, =comparer) {
 		super(parent)
