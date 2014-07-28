@@ -46,3 +46,5 @@ Size
 /test/IntBox2DTest
 /test/IntPoint2DTest
 /test/IntSize2DTest
+/source/FloatPoint3D
+/test/FloatPoint3DTest
