@@ -48,3 +48,4 @@ Size
 /test/IntSize2DTest
 /source/FloatPoint3D
 /test/FloatPoint3DTest
+/test/FloatSize3DTest
