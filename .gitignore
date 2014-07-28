@@ -49,3 +49,5 @@ Size
 /source/FloatPoint3D
 /test/FloatPoint3DTest
 /test/FloatSize3DTest
+/source/FloatTransform3D
+/test/FloatTransform3DTest

@@ -182,9 +182,7 @@ FloatTransform3D: cover {
 	operator != (other: This) -> Bool { !(this == other) }
 	operator as -> String { this toString() }
 	toString: func -> String {
-		"#{this a toString()}, #{this b toString()}, #{this c toString()}, \
-		#{this d toString()}, #{this e toString()}, #{this f toString()}, \
-		#{this g toString()}, #{this h toString()}, #{this i toString()}, \
-		#{this j toString()}, #{this k toString()}, #{this l toString()}"
+//		FIXME: How do I concatenate strings, or define them on multple lines?
+		"#{this a toString()}, #{this b toString()}, #{this c toString()}, #{this d toString()}, #{this e toString()}, #{this f toString()}, #{this g toString()}, #{this h toString()}, #{this i toString()}, #{this j toString()}, #{this k toString()}, #{this l toString()}"
 	}
 }
