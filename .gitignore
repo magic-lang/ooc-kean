@@ -27,17 +27,11 @@ rock_tmp
 *.dylib
 
 # Executables
-BooleanTest
-BooleanFail
-StringTest
-StringFail
-IntegerTest
-FloatTest
-DoubleTest
+*Test
+*Fail
 *.exe
 *.out
 *.app
 *.i*86
 *.x86_64
 *.hex
-/source/Constraints
