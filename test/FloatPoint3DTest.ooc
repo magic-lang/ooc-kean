@@ -15,7 +15,7 @@ FloatPoint3DTest: class extends Fixture {
 			expect(this point0 Norm, is equal to(24.3515f) within(this precision))
 		})
 		this add("scalar product", func() {
-			// Must use values, default constructor is bugged
+			// FIXME: Must use values, default constructor is bugged
 			point := FloatPoint3D new(0, 0, 0)
 			expect(this point0 scalarProduct(point), is equal to(0.0f) within(this precision))
 			expect(this point0 scalarProduct(this point1), is equal to(425.0f) within(this precision))

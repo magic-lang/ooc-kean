@@ -15,7 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
 import IntSize2D
-import ../../IntExtension
+import IntExtension
 import text/StringTokenizer
 import structs/ArrayList
 

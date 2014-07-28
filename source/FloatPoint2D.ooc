@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
-import ../../FloatExtension
+import FloatExtension
 import FloatSize2D
 import text/StringTokenizer
 import structs/ArrayList
@@ -26,7 +26,7 @@ FloatPoint2D: cover {
 	//Azimuth ::= this y atan2(this x) // FIXME: Why does this syntax not work on a cover?
 	Azimuth: Float { get { this y atan2(this x) } }
 	init: func@ (=x, =y)
-	init: func ~default { "2D" println(); this init(0.0f, 0.0f) }
+	init: func ~default { this init(0.0f, 0.0f) }
 	pNorm: func (p: Float) -> Float {
 		p == 1 ?
 		this x abs() + this y abs() :
