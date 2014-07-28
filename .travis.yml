@@ -11,6 +11,5 @@ before_script:
 script:
   - pwd
   - sam get
-  - rock -v test/2d/float/Point.ooc
   - sam test
 
