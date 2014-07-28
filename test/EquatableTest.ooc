@@ -15,6 +15,21 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-IEquals: interface <T> {
-	Equals: func(other: T) -> Bool
+use ooc-unit
+use ooc-base
+
+EquatableTest: class extends Fixture {
+	init: func () {
+		super("Equatable")
+		this add("4 Equals 4 is true", func() { expect(EquatableImplementation new(4) Equals(4), is true) })
+		this add("4 Equals 3 is not true", func() { expect(EquatableImplementation new(4) Equals(3), is not true) })
+	}
 }
+EquatableImplementation: class implements IEquatable<Int> {
+	value: Int
+	init: func (=value) {	}
+	Equals: func (other: Int) -> Bool {
+		this value == other
+	}
+}
+EquatableTest new() run()

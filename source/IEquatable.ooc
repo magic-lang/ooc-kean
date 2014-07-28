@@ -15,6 +15,6 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-IEqualsWithin: interface <T, S> {
-	Equals: func(other: T, precision: S) -> Bool
+IEquatable: interface <T> {
+	Equals: func(other: T) -> Bool
 }

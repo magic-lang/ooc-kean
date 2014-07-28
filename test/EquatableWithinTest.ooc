@@ -18,21 +18,21 @@
 use ooc-unit
 use ooc-base
 
-EqualsWithinTest: class extends Fixture {
+EquatableWithinTest: class extends Fixture {
 	init: func () {
-		super("EqualsWithin")
-		this add("4 Equals 4 Within 0 is true", func() { expect(EqualsWithinImplementation new(4) Equals(4, 0), is true) })
-		this add("4 Equals 3 Within 0 is not true", func() { expect(EqualsWithinImplementation new(4) Equals(3, 0), is not true) })
-		this add("4 Equals 3 Within 0 is true", func() { expect(EqualsWithinImplementation new(4) Equals(3, 2), is true) })
-		this add("4 Equals 2 Within 0 is true", func() { expect(EqualsWithinImplementation new(4) Equals(2, 2), is true) })
-		this add("4 Equals 1 Within 0 is not true", func() { expect(EqualsWithinImplementation new(4) Equals(1, 2), is not true) })
+		super("EquatableWithin")
+		this add("4 Equals 4 Within 0 is true", func() { expect(EquatableWithinImplementation new(4) Equals(4, 0), is true) })
+		this add("4 Equals 3 Within 0 is not true", func() { expect(EquatableWithinImplementation new(4) Equals(3, 0), is not true) })
+		this add("4 Equals 3 Within 0 is true", func() { expect(EquatableWithinImplementation new(4) Equals(3, 2), is true) })
+		this add("4 Equals 2 Within 0 is true", func() { expect(EquatableWithinImplementation new(4) Equals(2, 2), is true) })
+		this add("4 Equals 1 Within 0 is not true", func() { expect(EquatableWithinImplementation new(4) Equals(1, 2), is not true) })
 	}
 }
-EqualsWithinImplementation: class implements IEqualsWithin<Int, Int> {
+EquatableWithinImplementation: class implements IEquatableWithin<Int, Int> {
 	value: Int
 	init: func (=value) {	}
 	Equals: func (other: Int, precision: Int) -> Bool {
 		(this value - other) abs() <= precision
 	}
 }
-EqualsWithinTest new() run()
+EquatableWithinTest new() run()

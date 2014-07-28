@@ -15,21 +15,6 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-unit
-use ooc-base
-
-EqualsTest: class extends Fixture {
-	init: func () {
-		super("Equals")
-		this add("4 Equals 4 is true", func() { expect(EqualsImplementation new(4) Equals(4), is true) })
-		this add("4 Equals 3 is not true", func() { expect(EqualsImplementation new(4) Equals(3), is not true) })
-	}
+IEquatableWithin: interface <T, S> {
+	Equals: func(other: T, precision: S) -> Bool
 }
-EqualsImplementation: class implements IEquals<Int> {
-	value: Int
-	init: func (=value) {	}
-	Equals: func (other: Int) -> Bool {
-		this value == other
-	}
-}
-EqualsTest new() run()
