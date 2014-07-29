@@ -1,0 +1,5 @@
+Name: OOC Math
+Description: Draw functionality library.
+SourcePath: source
+Requires: ooc-unit, ooc-math
+Imports: Color
