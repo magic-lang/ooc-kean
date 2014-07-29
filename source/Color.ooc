@@ -67,7 +67,7 @@ ColorBgr: cover implements IColor {
 	copy: func -> This { This new(this blue, this green, this red) }
 	asMonochrome: func -> ColorMonochrome { ColorMonochrome new() }
 	asBgr: func -> This { this copy() }
-	asBgra: func -> ColorBgra { ColorBgra new() }
+	asBgra: func -> ColorBgra { ColorBgra new(this copy(), 255) }
 	asYuv: func -> ColorYuv { ColorYuv new() }
 	blend: func (factor: Float, other: IColor) -> This {
 		This new()
@@ -86,6 +86,8 @@ ColorBgra: cover implements IColor {
 		this alpha = temp alpha
 	}
 	Blue: UInt8 { get { this bgr blue } set (value) { this bgr blue = value } }
+	Green: UInt8 { get { this bgr green } set (value) { this bgr green = value } }
+	Red: UInt8 { get { this bgr red } set (value) { this bgr red = value } }
 	init: func@ (=bgr, =alpha)
 	init: func@ ~default { this init(0, 0, 0, 0) }
 	init: func@ ~uint8 (b, g, r, a: UInt8) { this init(ColorBgr new(b, g, r), a) }
@@ -94,7 +96,7 @@ ColorBgra: cover implements IColor {
 	init: func@ ~double (b, g, r, a: Double) { this init(ColorBgr new(b, g, r), a*255.0f clamp(0.0f, 255.0f) as UInt8) }
 	copy: func -> This { This new(this bgr, this alpha) }
 	asMonochrome: func -> ColorMonochrome { ColorMonochrome new() }
-	asBgr: func -> ColorBgr { ColorBgr new() }
+	asBgr: func -> ColorBgr { ColorBgr new(this bgr) }
 	asBgra: func -> This { this copy() }
 	asYuv: func -> ColorYuv { ColorYuv new() }
 	blend: func (factor: Float, other: IColor) -> This {
