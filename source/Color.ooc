@@ -90,8 +90,8 @@ ColorBgra: cover implements IColor {
 	init: func@ ~default { this init(0, 0, 0, 0) }
 	init: func@ ~uint8 (b, g, r, a: UInt8) { this init(ColorBgr new(b, g, r), a) }
 	init: func@ ~int (b, g, r, a: Int) { this init(b as UInt8, g as UInt8, r as UInt8, a as UInt8) }
-	init: func@ ~float (b, g, r, a: Float) { this init(b*255.0f clamp(0.0f, 255.0f) as UInt8, g*255.0f clamp(0.0f, 255.0f) as UInt8, r*255.0f clamp(0.0f, 255.0f) as UInt8, a*255.0f clamp(0.0f, 255.0f) as UInt8) }
-	init: func@ ~double (b, g, r, a: Double) { this init(b*255.0f clamp(0.0f, 255.0f) as UInt8, g*255.0f clamp(0.0f, 255.0f) as UInt8, r*255.0f clamp(0.0f, 255.0f) as UInt8, a*255.0f clamp(0.0f, 255.0f) as UInt8) }
+	init: func@ ~float (b, g, r, a: Float) { this init(ColorBgr new(b, g, r), a*255.0f clamp(0.0f, 255.0f) as UInt8) }
+	init: func@ ~double (b, g, r, a: Double) { this init(ColorBgr new(b, g, r), a*255.0f clamp(0.0f, 255.0f) as UInt8) }
 	copy: func -> This { This new(this bgr, this alpha) }
 	asMonochrome: func -> ColorMonochrome { ColorMonochrome new() }
 	asBgr: func -> ColorBgr { ColorBgr new() }
