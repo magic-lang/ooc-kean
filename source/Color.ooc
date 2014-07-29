@@ -44,10 +44,10 @@ ColorMonochrome: cover implements IColor {
 	asBgra: func -> ColorBgra { ColorBgra new() }
 	asYuv: func -> ColorYuv { ColorYuv new() }
 	blend: func (factor: Float, other: IColor) -> This {
-		This new()
+		This new((this y * (1.0f - factor) + (other asMonochrome() y * factor)) as UInt8)
 	}
 	distance: func (other: IColor) -> Float {
-		0.0f
+		(this y - other asMonochrome() y) as Float sqrt()
 	}
 }
 
@@ -96,7 +96,7 @@ ColorBgra: cover implements IColor {
 	init: func@ ~double (b, g, r, a: Double) { this init(ColorBgr new(b, g, r), a*255.0f clamp(0.0f, 255.0f) as UInt8) }
 	copy: func -> This { This new(this bgr, this alpha) }
 	asMonochrome: func -> ColorMonochrome { ColorMonochrome new() }
-	asBgr: func -> ColorBgr { ColorBgr new(this bgr) }
+	asBgr: func -> ColorBgr { this bgr copy() }
 	asBgra: func -> This { this copy() }
 	asYuv: func -> ColorYuv { ColorYuv new() }
 	blend: func (factor: Float, other: IColor) -> This {
