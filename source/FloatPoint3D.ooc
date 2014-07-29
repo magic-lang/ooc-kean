@@ -34,8 +34,8 @@ FloatPoint3D: cover {
 		}
 	}
 	init: func@ (=x, =y, =z)
-	init: func ~default { this init(0.0f, 0.0f, 0.0f) }
-	init: func ~fromPoint2D (point: FloatPoint2D, z: Float) { this init(point x, point y, z) }
+	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
+	init: func@ ~fromPoint2D (point: FloatPoint2D, z: Float) { this init(point x, point y, z) }
 	
 	pNorm: func (p: Float) -> Float {
 		p == 1 ?

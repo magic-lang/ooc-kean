@@ -22,7 +22,7 @@ import structs/ArrayList
 IntPoint2D: cover {
 	x, y: Int
 	init: func@ (=x, =y)
-	init: func ~default { this init(0, 0) }
+	init: func@ ~default { this init(0, 0) }
 	scalarProduct: func (other: This) -> Int { this x * other x + this y + other y }
 	//FIXME: Oddly enough, "this - other" instead of "this + (-other)" causes a compile error in the unary '-' operator below.
 	swap: func -> This { This new(this y, this x) }

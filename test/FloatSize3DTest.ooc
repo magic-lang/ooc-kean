@@ -20,8 +20,7 @@ FloatSize3DTest: class extends Fixture {
 			expect(vector3 Volume, is equal to(6000.0f) within(this precision))
 		})
 		this add("scalar product", func() {
-			//FIXME: Something is wrong with the default constructors
-			size := FloatSize3D new(0.0f, 0.0f, 0.0f)
+			size := FloatSize3D new()
 			expect(this vector0 scalarProduct(size), is equal to(0.0f) within(this precision))
 			expect(this vector0 scalarProduct(this vector1), is equal to(425.0f) within(this precision))
 		})

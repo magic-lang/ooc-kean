@@ -32,7 +32,7 @@ FloatSize3D: cover {
 	BasisY: static This { get { This new(0, 1, 0) } }
 	BasisZ: static This { get { This new(0, 0, 1) } }
 	init: func@ (=width, =height, =depth)
-	init: func ~default { this init(0.0f, 0.0f, 0.0f) }
+	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	pNorm: func (p: Float) -> Float {
 		p == 1 ?
 		this width abs() + this height abs() :
