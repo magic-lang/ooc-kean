@@ -17,21 +17,21 @@
 use ooc-math
 import math
 
-IColor: interface {
-	set: func (color: IColor)
-	asMonochrome: func -> ColorMonochrome
-	asBgr: func -> ColorBgr
-	asBgra: func -> ColorBgra
-	asYuv: func -> ColorYuv
-	copy: func -> IColor
-	blend: func (factor: Float, other: IColor) -> IColor
-	distance: func (other: IColor) -> Float
-}
+//IColor: interface {
+//	set: func (color: IColor)
+//	asMonochrome: func -> ColorMonochrome
+//	asBgr: func -> ColorBgr
+//	asBgra: func -> ColorBgra
+//	asYuv: func -> ColorYuv
+//	copy: func -> IColor
+//	blend: func (factor: Float, other: IColor) -> Color
+//	distance: func (other: IColor) -> Float
+//}
 
-ColorMonochrome: cover implements IColor {
+ColorMonochrome: cover {
 	y: UInt8
-	set: func (color: IColor) { 
-		this y = color asMonochrome() y
+	set: func (color: This) { 
+		this y = color y
 	}
 	init: func@ (=y)
 	init: func@ ~default { this init(0) }
@@ -43,21 +43,20 @@ ColorMonochrome: cover implements IColor {
 	asBgr: func -> ColorBgr { ColorBgr new() }
 	asBgra: func -> ColorBgra { ColorBgra new() }
 	asYuv: func -> ColorYuv { ColorYuv new() }
-	blend: func (factor: Float, other: IColor) -> This {
-		This new((this y * (1.0f - factor) + (other asMonochrome() y * factor)) as UInt8)
+	blend: func (factor: Float, other: This) -> This {
+		This new((this y * (1 - factor) + (other y * factor)) as UInt8)
 	}
-	distance: func (other: IColor) -> Float {
-		(this y - other asMonochrome() y) as Float sqrt()
+	distance: func (other: This) -> Float {
+		(this y - other y) as Float abs()
 	}
 }
 
-ColorBgr: cover implements IColor {
+ColorBgr: cover {
 	blue, green, red: UInt8
-	set: func (color: IColor) { 
-		temp := color asBgr()
-		this blue = temp blue
-		this green = temp green
-		this red = temp red
+	set: func (color: This) { 
+		this blue = color blue
+		this green = color green
+		this red = color red
 	}
 	init: func@ (=blue, =green, =red)
 	init: func@ ~default { this init(0, 0, 0) }
@@ -69,21 +68,20 @@ ColorBgr: cover implements IColor {
 	asBgr: func -> This { this copy() }
 	asBgra: func -> ColorBgra { ColorBgra new(this copy(), 255) }
 	asYuv: func -> ColorYuv { ColorYuv new() }
-	blend: func (factor: Float, other: IColor) -> This {
-		This new()
+	blend: func (factor: Float, other: This) -> This {
+		This new((this blue * (1 - factor) + other blue * factor) as UInt8, (this green * (1 - factor) + other green * factor) as UInt8, (this red * (1 - factor) + other red * factor) as UInt8)
 	}
-	distance: func (other: IColor) -> Float {
-		0.0f
+	distance: func (other: This) -> Float {
+		((this blue - other blue) as Float pow(2) + (this green - other green) as Float pow(2) + (this red - other red) as Float pow(2)) / 3.0f sqrt()
 	}
 }
 
-ColorBgra: cover implements IColor {
+ColorBgra: cover {
 	bgr: ColorBgr
 	alpha: UInt8
-	set: func (color: IColor) { 
-		temp := color asBgra()
-		this bgr = temp bgr
-		this alpha = temp alpha
+	set: func (color: This) { 
+		this bgr = color bgr
+		this alpha = color alpha
 	}
 	Blue: UInt8 { get { this bgr blue } set (value) { this bgr blue = value } }
 	Green: UInt8 { get { this bgr green } set (value) { this bgr green = value } }
@@ -99,21 +97,20 @@ ColorBgra: cover implements IColor {
 	asBgr: func -> ColorBgr { this bgr copy() }
 	asBgra: func -> This { this copy() }
 	asYuv: func -> ColorYuv { ColorYuv new() }
-	blend: func (factor: Float, other: IColor) -> This {
-		This new()
+	blend: func (factor: Float, other: This) -> This {
+		This new(this bgr blend(factor, other bgr), (this alpha * (1 - factor) + other alpha * factor) as UInt8)
 	}
-	distance: func (other: IColor) -> Float {
-		0.0f
+	distance: func (other: This) -> Float {
+		(this bgr distance(other bgr) * 3.0f + (this alpha - other alpha) as Float pow(2)) / 4.0f sqrt()
 	}
 }
 
-ColorYuv: cover implements IColor {
+ColorYuv: cover {
 	y, u, v: UInt8
-	set: func (color: IColor) { 
-		temp := color asYuv()
-		this y = temp y
-		this u = temp u
-		this v = temp v
+	set: func (color: This) { 
+		this y = color y
+		this u = color u
+		this v = color v
 	}
 	init: func@ (=y, =u, =v)
 	init: func@ ~default { this init(0, 0, 0) }
@@ -125,10 +122,10 @@ ColorYuv: cover implements IColor {
 	asBgr: func -> ColorBgr { ColorBgr new() }
 	asBgra: func -> ColorBgra { ColorBgra new() }
 	asYuv: func -> This { this copy() }
-	blend: func (factor: Float, other: IColor) -> This {
-		This new()
+	blend: func (factor: Float, other: This) -> This {
+		This new((this y * (1 - factor) + other y * factor) as UInt8, (this u * (1 - factor) + other u * factor) as UInt8, (this v * (1 - factor) + other v * factor) as UInt8)
 	}
-	distance: func (other: IColor) -> Float {
-		0.0f
+	distance: func (other: This) -> Float {
+		((this y - other y) as Float pow(2) + (this u - other u) as Float pow(2) + (this v - other v) as Float pow(2)) / 3.0f sqrt()
 	}
 }
