@@ -87,7 +87,7 @@ ColorYuv: cover {
 		((this y - other y) as Float pow(2) + (this u - other u) as Float pow(2) + (this v - other v) as Float pow(2)) / 3.0f sqrt()
 	}
 	equals: func ~monochrome (other: ColorMonochrome) -> Bool { false }
-	equals: func ~yuv (other: This) -> Bool { this y == other y }
+	equals: func ~yuv (other: This) -> Bool { this y == other y && this u == other u && this v == other v }
 	equals: func ~bgr (other: ColorBgr) -> Bool { false }
 	equals: func ~bgra (other: ColorBgra) -> Bool { false }
 	operator == (other: ColorMonochrome) -> Bool { this equals(other) }

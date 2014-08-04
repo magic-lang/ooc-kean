@@ -24,3 +24,5 @@
 rock_tmp/
 *~
 .libs
+/test/ColorConvertTest
+/source/Color
