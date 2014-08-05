@@ -2,4 +2,4 @@ Name: OOC Math
 Description: Math functionality library.
 SourcePath: source
 Requires: ooc-unit
-Imports: FloatSize2D, FloatSize3D, FloatPoint2D, FloatPoint3D, FloatBox2D, FloatShell2D, FloatTransform2D, FloatTransform3D, FloatExtension, IntSize2D, IntPoint2D, IntBox2D, IntShell2D, IntExtension
+Imports: FloatSize2D, FloatSize3D, FloatPoint2D, FloatPoint3D, FloatBox2D, FloatShell2D, FloatTransform2D, FloatTransform3D, FloatExtension, IntSize2D, IntPoint2D, IntBox2D, IntShell2D, IntTransform2D, IntExtension
