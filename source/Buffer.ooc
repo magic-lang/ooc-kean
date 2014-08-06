@@ -21,13 +21,13 @@ import threading/Thread
 
 Buffer: class {
 	size: Int
-	pointer: Pointer
+	pointer: UInt8*
 	free: Func (Buffer)
 	init: func (=size, =pointer, =free)
 	init: func ~fromSize (=size) {
-		pointer: Pointer
+		pointer: UInt8*
 		bin := ArrayList<Buffer> new()
-//		bin = This getBin(size);
+		bin = This getBin(size);
 		
 		for(i in 0..bin size)
 		{
@@ -38,13 +38,13 @@ Buffer: class {
 				break
 			}
 		}
-		if (pointer == None new()) {
+		if (!pointer) {
 			pointer = gc_malloc(size);
 		}
 		this init(size, pointer, This recycle)
 	}
 	dispose: func() {
-		if (this free == null)
+		if ((free as Closure) thunk)
 			this free(this)
 	}
 	recycle: static func (buffer: Buffer) {
@@ -58,8 +58,13 @@ Buffer: class {
 		This lock unlock()
 	}
 	getBin: static func (size: Int) -> ArrayList<Buffer> {
-		// TODO: select bin
-		This mediumRecycleBin
+		if (size < 10000)
+			This smallRecycleBin
+		else if (size < 100000)
+			This mediumRecycleBin
+		else
+			This largeRecycleBin
+//		size < 10000 ? This smallRecycleBin : size < 100000 ? This mediumRecycleBin : This largeRecycleBin
 	}
 	lock := static Mutex new()
 	smallRecycleBin := static ArrayList<Buffer> new()
