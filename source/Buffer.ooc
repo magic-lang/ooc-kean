@@ -43,7 +43,7 @@ Buffer: class {
 		}
 		this init(size, pointer, This recycle)
 	}
-	dispose: func() {
+	dispose: func {
 		if ((free as Closure) thunk)
 			this free(this)
 	}
@@ -65,6 +65,11 @@ Buffer: class {
 		else
 			This largeRecycleBin
 //		size < 10000 ? This smallRecycleBin : size < 100000 ? This mediumRecycleBin : This largeRecycleBin
+	}
+	copy: func -> This {
+		result := This new(this size)
+		memcpy(result pointer, this pointer, this size)
+		result
 	}
 	lock := static Mutex new()
 	smallRecycleBin := static ArrayList<Buffer> new()
