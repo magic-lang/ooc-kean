@@ -18,6 +18,7 @@ import math
 import FloatExtension
 import FloatSize2D
 import FloatPoint2D
+import IntTransform2D
 import text/StringTokenizer
 import structs/ArrayList
 
@@ -115,6 +116,7 @@ FloatTransform2D: cover {
 	reflectX: func -> This { this createReflectionX() * this }
 	reflectY: func -> This { this createReflectionY() * this }
 	Identity: static This { get { This new(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f) } }
+	asIntTransform2D: func -> IntTransform2D { IntTransform2D new(this a, this b, this c, this d, this e, this f, this g, this h, this i) }
 	create: static func (translation: FloatSize2D, scale, rotation: Float) -> This { 
 		This new(rotation cos() * scale, rotation sin() * scale, -rotation sin() * scale, rotation cos() * scale, translation width, translation height) 
 	}
