@@ -16,7 +16,6 @@
 
 use ooc-math
 use ooc-base
-//import ooc-base/Buffer into Buffer
 import math
 import structs/ArrayList
 import Image
@@ -51,15 +50,15 @@ RasterImage: abstract class extends Image {
 		upperRight := mappingTransform * FloatPoint2D new(size width / 2, -size width / 2)
 		downLeft := mappingTransform * FloatPoint2D new(-size width / 2, size width / 2)
 		downRight := mappingTransform * FloatPoint2D new(size width / 2, size width / 2)
-		source := FloatBox2D bounds(upperLeft, upperRight, downLeft, downRight)
+		source := FloatBox2D bounds([upperLeft, upperRight, downLeft, downRight])
 		mappingTransformInverse := mappingTransform Inverse()
 		upperLeft = mappingTransformInverse * source leftTop
-		upperRight = mappingTransformInverse * source rightTop
-		downLeft = mappingTransformInverse * source leftBottom
-		downRight = mappingTransformInverse * source rightBottom
-		this copy(size asFloatSize2D(), source, upperLeft, upperRight, downLeft)
+		upperRight = mappingTransformInverse * source RightTop
+		downLeft = mappingTransformInverse * source LeftBottom
+		downRight = mappingTransformInverse * source RightBottom
+		this copy(size asFloatSize2D(), source, FloatPoint2D new(), FloatPoint2D new(), FloatPoint2D new())
 	}
-	copy: func (size: FloatSize2D, source: FloatBox2D, upperLeft, upperRight, lowerLeft: FloatPoint2D) -> RasterImage {
+	copy: func ~fromLots (size: FloatSize2D, source: FloatBox2D, upperLeft, upperRight, lowerLeft: FloatPoint2D) -> RasterImage {
 		result := RasterBgra new(size ceiling() asIntSize2D())
 //		TODO: The stuff
 		result

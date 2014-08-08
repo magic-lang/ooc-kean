@@ -68,7 +68,7 @@ Image: abstract class {
 	create: abstract func (size: IntSize2D) -> This
 	copy: abstract func -> This
 	copy: abstract func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This
-//	shift: abstract func (offset: IntSize2D) -> This
+	shift: abstract func (offset: IntSize2D) -> This
 	flush: func { }
 	finish: func -> Bool { true }
 	distance: abstract func (other: This) -> Float

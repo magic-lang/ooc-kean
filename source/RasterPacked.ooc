@@ -26,7 +26,7 @@ import Image
 RasterPacked: abstract class extends RasterImage {
 	bytesPerPixel: Int { get }
 	stride: Int { get set }
-	init: func (buffer: Buffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
+	init: func (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		super(buffer, size, coordinateSystem, crop)
 		this stride = This calculateStride(size, this bytesPerPixel)
 	}
@@ -34,7 +34,7 @@ RasterPacked: abstract class extends RasterImage {
 		super(original)
 		this stride = original stride	
 	}
-/*	shift: func (offset: IntSize2D) {
+	shift: func (offset: IntSize2D) -> Image {
 //		result: RasterImage
 //		if (this instanceOf?(RasterMonochrome))
 //			result = RasterMonochrome new(this size)
@@ -56,7 +56,7 @@ RasterPacked: abstract class extends RasterImage {
 			result buffer copyFrom(this buffer, this stride * y + length, destination, line - length)
 		}
 		result
-	}*/
+	}
 	equals: func (other: Image) -> Bool {
 		other instanceOf?(This) && this bytesPerPixel == (other as RasterPacked) bytesPerPixel && this as Image equals(other)
 	}
