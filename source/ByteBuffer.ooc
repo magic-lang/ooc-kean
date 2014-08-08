@@ -24,6 +24,9 @@ ByteBuffer: class {
 	pointer: UInt8*
 	free: Func (This)
 	init: func (=size, =pointer, =free)
+	init: func ~fromSizeAndPointer (=size, =pointer) {
+		this free = This recycle
+	}
 	init: func ~fromSize (=size) {
 		pointer: UInt8*
 		bin := ArrayList<This> new()
