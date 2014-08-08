@@ -62,4 +62,7 @@ extend Float {
 	even: static func(value: This) -> Bool {
 		This modulo(value, 2) == 0
 	}
+	squared: func -> This {
+		this * this
+	}
 }
