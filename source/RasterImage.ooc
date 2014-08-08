@@ -20,14 +20,16 @@ import math
 import structs/ArrayList
 import Image
 import RasterBgra
+import Color
 
 RasterImage: abstract class extends Image {
+	distanceRadius: Int { get { return 1; } }
 	buffer: ByteBuffer { get set }
 	pointer: UInt8* { get { buffer pointer } }
 	length: Int { get { buffer size } }
-	apply: abstract func ~bgr (action: Func<ColorBgr>)
-	apply: abstract func ~yuv (action: Func<ColorYuv>)
-	apply: abstract func ~monochrome (action: Func<ColorMonochrome>)
+	apply: abstract func ~bgr (action: Func (ColorBgr))
+	apply: abstract func ~yuv (action: Func (ColorYuv))
+	apply: abstract func ~monochrome (action: Func (ColorMonochrome))
 	init: func ~fromRasterImage (original: RasterImage) { 
 		super(original) 
 		this buffer = original buffer copy()
@@ -58,7 +60,7 @@ RasterImage: abstract class extends Image {
 		downRight = mappingTransformInverse * source RightBottom
 		this copy(size asFloatSize2D(), source, FloatPoint2D new(), FloatPoint2D new(), FloatPoint2D new())
 	}
-	copy: func ~fromLots (size: FloatSize2D, source: FloatBox2D, upperLeft, upperRight, lowerLeft: FloatPoint2D) -> RasterImage {
+	copy: func ~fromMoreParams (size: FloatSize2D, source: FloatBox2D, upperLeft, upperRight, lowerLeft: FloatPoint2D) -> RasterImage {
 		result := RasterBgra new(size ceiling() asIntSize2D())
 //		TODO: The stuff
 		result

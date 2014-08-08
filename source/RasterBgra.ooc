@@ -19,49 +19,57 @@ use ooc-base
 import math
 import structs/ArrayList
 import RasterPacked
+import RasterImage
 import Image
+import Color
 
 RasterBgra: class extends RasterPacked {
-//	get: func ~intPoint2D (point: IntPoint2D) -> ColorBgra { this get(point x, point y) }
-//	set: func ~intPoint2D (point: IntPoint2D, value: ColorBgra) { this set(point x, point y, color) }
-//	get: func ~ints (x, y: int) -> ColorBgra { ColorBgra new() /*((this pointer + y * this stride) + x) as ColorBgra*/ }
-//	set: func ~ints (x, y: int, color: ColorBgra) { /*((this pointer + y * this stride) + x) as ColorBgra = value*/ }
-//	get: func ~floatPoint2D (point: FloatPoint2D) -> ColorBgra { this get(point x, point y) }
-//	get: func ~floats (x, y: Float) {
-//		left := x - Int floor(x)
-//		top := y - Int floor(y)
-//		
-//		topLeft := this get(Int floor(x), Int floor(y))
-//		bottomLeft := this get(Int floor(x), Int ceiling(y))
-//		topRight := this get(Int ceiling(x), Int floor(y))
-//		bottomRight := this get(Int ceiling(x), Int floor(y))
-//		
-//		ColorBgra new(
-//			(top * (left * topLeft blue + (1 - left) * topRight blue) + (1 - top) * (left * bottomLeft blue + (1 - left) * bottomRight blue)),
-//			(top * (left * topLeft green + (1 - left) * topRight green) + (1 - top) * (left * bottomLeft green + (1 - left) * bottomRight green)),
-//			(top * (left * topLeft red + (1 - left) * topRight red) + (1 - top) * (left * bottomLeft red + (1 - left) * bottomRight red)),
-//			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
-//		)
-//	}
+	get: func ~intPoint2D (point: IntPoint2D) -> ColorBgra { this get(point x, point y) }
+	set: func ~intPoint2D (point: IntPoint2D, value: ColorBgra) { this set(point x, point y, value) }
+//	FIXME: This could be very wrong
+	get: func ~ints (x, y: Int) -> ColorBgra { ((this pointer + y * this stride) as ColorBgra* + x)@ }
+//	FIXME: This could be very wrong
+	set: func ~ints (x, y: Int, value: ColorBgra) { ((this pointer + y * this stride) as ColorBgra* + x)@ = value }
+	get: func ~floatPoint2D (point: FloatPoint2D) -> ColorBgra { this get(point x, point y) }
+	get: func ~floats (x, y: Float) -> ColorBgra {
+		left := x - floor(x)
+		top := y - floor(y)
+		
+		topLeft := this get(floor(x) as Int, floor(y) as Int)
+		bottomLeft := this get(floor(x) as Int, ceil(y) as Int)
+		topRight := this get(ceil(x) as Int, floor(y) as Int)
+		bottomRight := this get(ceil(x) as Int, ceil(y) as Int)
+		
+		ColorBgra new(
+			(top * (left * topLeft Blue + (1 - left) * topRight Blue) + (1 - top) * (left * bottomLeft Blue + (1 - left) * bottomRight Blue)),
+			(top * (left * topLeft Green + (1 - left) * topRight Green) + (1 - top) * (left * bottomLeft Green + (1 - left) * bottomRight Green)),
+			(top * (left * topLeft Red + (1 - left) * topRight Red) + (1 - top) * (left * bottomLeft Red + (1 - left) * bottomRight Red)),
+			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
+		)
+	}
 	bytesPerPixel: Int { get { 4 } }
-	init: func (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 4)), size) }
-//	init: func ~fromStuffer (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) { 
-//		super(ByteBuffer new(RasterPacked calculateLength(size, 4)), size, coordinateSystem, crop) 
-//	}
-//	init: func ~fromByteArray (data: byte[], size: IntSize2D) { this init(ByteBuffer new(data), size) }
-//	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D) { this init(ByteBuffer new(pointer, size area * 4), size) }
+	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 4)), size) }
+	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) { 
+		super(ByteBuffer new(RasterPacked calculateLength(size, 4)), size, coordinateSystem, crop) 
+	}
+//	 FIXME but only if we really need it
+//	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
+	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D) { this init(ByteBuffer new(size Area * 4, pointer), size) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, CoordinateSystem Default, IntShell2D new()) }
-	init: func ~fromStuff (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
+	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		super(buffer, size, coordinateSystem, crop)
 	}
 	init: func ~fromRasterBgra (original: This) { super(original) }
-//	init: func ~fromRasterImage (original: RasterImage) { 
-//		this init(original size, original coordinateSystem, original crop)
-//		destination := this pointer as UInt8*
-//		FIXME: How do I declare functions like this?
+	init: func ~fromRasterImage (original: RasterImage) {
+		this init(original size, original coordinateSystem, original crop)
+		destination := this pointer as Int*
 //		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
-//		original apply(Func<color: ColorBgr> { destination++ as ColorBgra = ColorBgra new(color, 255) } )
-//	}
+		f := func (color: ColorBgr) {
+			(destination as ColorBgra*)@ = ColorBgra new(color, 255) 
+			destination += 1
+		}
+		original apply(f)
+	}
 	create: func (size: IntSize2D) -> Image {
 		result := RasterBgra new(size)
 		result crop = this crop
@@ -80,7 +88,6 @@ RasterBgra: class extends RasterPacked {
 	apply: func ~monochrome (action: Func<ColorMonochrome>) {
 //		FIXME			
 	}	
-/*
 	distance: func (other: Image) -> Float {
 		result := 0.0f
 		if (!other)
@@ -94,8 +101,8 @@ RasterBgra: class extends RasterPacked {
 				for (x in 0..this size width)
 				{
 					c := this get(x, y)
-					o := other get(x, y)
-					if (c distance(0) > 0)
+					o := other as RasterBgra get(x, y)
+					if (c distance(o) > 0)
 					{
 						maximum := o
 						minimum := o
@@ -103,7 +110,7 @@ RasterBgra: class extends RasterPacked {
 							for (otherX in Int maximum(0, x - this distanceRadius)..Int minimum(x + 1 + this distanceRadius, this size width))
 								if (otherX != x || otherY != y)
 								{
-									pixel := other get(otherX, otherY)
+									pixel := other as RasterBgra get(otherX, otherY)
 									if (maximum Blue < pixel Blue)
 										maximum Blue = pixel Blue
 									else if (minimum Blue > pixel Blue)
@@ -116,34 +123,34 @@ RasterBgra: class extends RasterPacked {
 										maximum Red = pixel Red
 									else if (minimum Red > pixel Red)
 										minimum Red = pixel Red
-									if (maximum Alpha < pixel Alpha)
-										maximum Alpha = pixel Alpha
-									else if (minimum Alpha > pixel Alpha)
-										minimum Alpha = pixel Alpha
+									if (maximum alpha < pixel alpha)
+										maximum alpha = pixel alpha
+									else if (minimum alpha > pixel alpha)
+										minimum alpha = pixel alpha
 								}
 						distance := 0.0f;
-						if (c blue < minimum blue)
-							distance += (minimum blue - c blue) squared()
-						else if (c blue > maximum blue)
-							distance += (c blue - maximum blue) squared()
-						if (c green < minimum green)
-							distance += (minimum green - c green) squared()
-						else if (c green > maximum green)
-							distance += (c green - maximum green) squared()
-						if (c red < minimum red)
-							distance += (minimum red - c red) squared()
-						else if (c red > maximum red)
-							distance += (c red - maximum red) squared()
+						if (c Blue < minimum Blue)
+							distance += (minimum Blue - c Blue) as Float squared()
+						else if (c Blue > maximum Blue)
+							distance += (c Blue - maximum Blue) as Float squared()
+						if (c Green < minimum Green)
+							distance += (minimum Green - c Green) as Float squared()
+						else if (c Green > maximum Green)
+							distance += (c Green - maximum Green) as Float squared()
+						if (c Red < minimum Red)
+							distance += (minimum Red - c Red) as Float squared()
+						else if (c Red > maximum Red)
+							distance += (c Red - maximum Red) as Float squared()
 						if (c alpha < minimum alpha)
-							distance += (minimum alpha - c alpha) squared()
+							distance += (minimum alpha - c alpha) as Float squared()
 						else if (c alpha > maximum alpha)
-							distance += (c alpha - maximum alpha) squared()
+							distance += (c alpha - maximum alpha) as Float squared()
 						result += (distance) sqrt() / 4;
 					}
 				}
-			result /= this size length
+			result /= ((this size width squared() + this size height squared()) as Float sqrt())
 		}
-	}*/
+	}
 //	FIXME
 //	openResource(assembly: ???, name: String) {
 //		Image openResource
