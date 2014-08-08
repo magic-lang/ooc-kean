@@ -25,7 +25,7 @@ CoordinateSystem: enum {
 	YUpward = 0x02
 }
 
-Image: class {
+Image: abstract class {
 	size: IntSize2D
 	transform: IntTransform2D { get set }
 	coordinateSystem: CoordinateSystem {
@@ -46,7 +46,7 @@ Image: class {
 				this crop = value
 		}
 	}
-	wrap: IntShell2D {
+	wrap: Bool {
 		get
 		set (value) {
 			if (this wrap != value)
@@ -57,22 +57,20 @@ Image: class {
 	init: func (=size, .coordinateSystem, =crop, =wrap) { 
 		this coordinateSystem = coordinateSystem
 	}
-	init: func ~fromImage (original: This) { This new(original size, original coordinateSystem, original crop, original wrap) }
+	init: func ~fromImage (original: This) { this init(original size, original coordinateSystem, original crop, original wrap) }
 	init: func ~default { 
 		this transform = IntTransform2D Identity
 	}
 	resizeWithin: func (restriction: IntSize2D) -> This {
-//		min := Float minimum(restriction width as Float / this size width as Float, restriction height as Float / this size height as Float)
-//		s := this size asFloatSize2D()
-//		this resizeTo(s asIntSize2D())
 		this resizeTo(((this size asFloatSize2D()) * Float minimum(restriction width as Float / this size width as Float, restriction height as Float / this size height as Float)) asIntSize2D())
 	}
-	resizeTo: func (size: IntSize2D) -> This { This new() }
-	create: func (size: IntSize2D) -> This { This new() }
-	copy: func -> This { This new() }
-	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This { This new() }
-	shift: func (offset: IntSize2D) -> This { This new() }
+	resizeTo: abstract func (size: IntSize2D) -> This
+	create: abstract func (size: IntSize2D) -> This
+	copy: abstract func -> This
+	copy: abstract func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This
+//	shift: abstract func (offset: IntSize2D) -> This
+	flush: func { }
 	finish: func -> Bool { true }
-	distance: func (other: This) -> Float { 0.0f }
+	distance: abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
 }

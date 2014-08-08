@@ -1,5 +1,5 @@
-Name: OOC Math
+Name: OOC Draw
 Description: Draw functionality library.
 SourcePath: source
-Requires: ooc-unit, ooc-math
-Imports: Color, Image
+Requires: ooc-unit, ooc-math, ooc-base
+Imports: Color, Image, RasterImage, RasterPacked, RasterBgra
