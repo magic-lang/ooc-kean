@@ -19,6 +19,7 @@ use ooc-base
 import math
 import structs/ArrayList
 import RasterPacked
+import Image
 
 RasterBgra: class extends RasterPacked {
 	get: func ~intPoint2D (point: IntPoint2D) -> ColorBgra { this get(point x, point y) }
@@ -49,7 +50,7 @@ RasterBgra: class extends RasterPacked {
 	}
 	init: func ~fromByteArray (data: byte[], size: IntSize2D) { this init(ByteBuffer new(data), size) }
 	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D) { this init(ByteBuffer new(pointer, size area * 4), size) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, CoordinateSystem default, IntShell2D new()) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, CoordinateSystem Default, IntShell2D new()) }
 	init: func ~fromStuff (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		super(buffer, size, coordinateSystem, crop)
 	}
