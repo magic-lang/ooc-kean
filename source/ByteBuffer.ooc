@@ -19,14 +19,14 @@ import lang/Memory
 import structs/ArrayList
 import threading/Thread
 
-Buffer: class {
+ByteBuffer: class {
 	size: Int
 	pointer: UInt8*
-	free: Func (Buffer)
+	free: Func (This)
 	init: func (=size, =pointer, =free)
 	init: func ~fromSize (=size) {
 		pointer: UInt8*
-		bin := ArrayList<Buffer> new()
+		bin := ArrayList<This> new()
 		bin = This getBin(size);
 		
 		for(i in 0..bin size)
@@ -47,7 +47,7 @@ Buffer: class {
 		if ((free as Closure) thunk)
 			this free(this)
 	}
-	recycle: static func (buffer: Buffer) {
+	recycle: static func (buffer: This) {
 		This lock lock()
 		bin := This getBin(buffer size)
 		while (bin size > 10) {
@@ -57,7 +57,8 @@ Buffer: class {
 		bin add(buffer)
 		This lock unlock()
 	}
-	getBin: static func (size: Int) -> ArrayList<Buffer> {
+	getBin: static func (size: Int) -> ArrayList<This> {
+		
 		if (size < 10000)
 			This smallRecycleBin
 		else if (size < 100000)
@@ -71,8 +72,14 @@ Buffer: class {
 		memcpy(result pointer, this pointer, this size)
 		result
 	}
+	copyFrom: func (other: This, start, destination, length: Int) {
+		a := this as UInt8*
+		b := other as UInt8*
+		memcpy(a + destination, b + start, length)
+	}
+	
 	lock := static Mutex new()
-	smallRecycleBin := static ArrayList<Buffer> new()
-	mediumRecycleBin := static ArrayList<Buffer> new()
-	largeRecycleBin := static ArrayList<Buffer> new()
+	smallRecycleBin := static ArrayList<This> new()
+	mediumRecycleBin := static ArrayList<This> new()
+	largeRecycleBin := static ArrayList<This> new()
 }
