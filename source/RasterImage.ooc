@@ -57,7 +57,7 @@ RasterImage: abstract class extends Image {
 		upperRight = mappingTransformInverse * source rightTop
 		downLeft = mappingTransformInverse * source leftBottom
 		downRight = mappingTransformInverse * source rightBottom
-		this copy(size, source, upperLeft, upperRight, downLeft)
+		this copy(size asFloatSize2D(), source, upperLeft, upperRight, downLeft)
 	}
 	copy: func (size: FloatSize2D, source: FloatBox2D, upperLeft, upperRight, lowerLeft: FloatPoint2D) -> RasterImage {
 		result := RasterBgra new(size ceiling() asIntSize2D())

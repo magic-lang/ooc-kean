@@ -22,53 +22,54 @@ import RasterPacked
 import Image
 
 RasterBgra: class extends RasterPacked {
-	get: func ~intPoint2D (point: IntPoint2D) -> ColorBgra { this get(point x, point y) }
-	set: func ~intPoint2D (point: IntPoint2D, value: ColorBgra) { this set(point x, point y, color) }
-	get: func ~ints (x, y: int) -> ColorBgra { ((this pointer + y * this stride) + x) as ColorBgra }
-	set: func ~ints (x, y: int, color: ColorBgra) { ((this pointer + y * this stride) + x) as ColorBgra = value }
-	get: func ~floatPoint2D (point: FloatPoint2D) -> ColorBgra { this get(point x, point y) }
-	get: func ~floats (x, y: Float) {
-		left := x - Int floor(x)
-		top := y - Int floor(y)
-		
-		topLeft := this(Int floor(x), Int floor(y))
-		bottomLeft := this(Int floor(x), Int ceiling(y))
-		topRight := this(Int ceiling(x), Int floor(y))
-		bottomRight := this(Int ceiling(x), Int floor(y))
-		
-		ColorBgra new(
-			(top * (left * topLeft blue + (1 - left) * topRight blue) + (1 - top) * (left * bottomLeft blue + (1 - left) * bottomRight blue)),
-			(top * (left * topLeft green + (1 - left) * topRight green) + (1 - top) * (left * bottomLeft green + (1 - left) * bottomRight green)),
-			(top * (left * topLeft red + (1 - left) * topRight red) + (1 - top) * (left * bottomLeft red + (1 - left) * bottomRight red)),
-			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
-		)
-	}
+//	get: func ~intPoint2D (point: IntPoint2D) -> ColorBgra { this get(point x, point y) }
+//	set: func ~intPoint2D (point: IntPoint2D, value: ColorBgra) { this set(point x, point y, color) }
+//	get: func ~ints (x, y: int) -> ColorBgra { ColorBgra new() /*((this pointer + y * this stride) + x) as ColorBgra*/ }
+//	set: func ~ints (x, y: int, color: ColorBgra) { /*((this pointer + y * this stride) + x) as ColorBgra = value*/ }
+//	get: func ~floatPoint2D (point: FloatPoint2D) -> ColorBgra { this get(point x, point y) }
+//	get: func ~floats (x, y: Float) {
+//		left := x - Int floor(x)
+//		top := y - Int floor(y)
+//		
+//		topLeft := this get(Int floor(x), Int floor(y))
+//		bottomLeft := this get(Int floor(x), Int ceiling(y))
+//		topRight := this get(Int ceiling(x), Int floor(y))
+//		bottomRight := this get(Int ceiling(x), Int floor(y))
+//		
+//		ColorBgra new(
+//			(top * (left * topLeft blue + (1 - left) * topRight blue) + (1 - top) * (left * bottomLeft blue + (1 - left) * bottomRight blue)),
+//			(top * (left * topLeft green + (1 - left) * topRight green) + (1 - top) * (left * bottomLeft green + (1 - left) * bottomRight green)),
+//			(top * (left * topLeft red + (1 - left) * topRight red) + (1 - top) * (left * bottomLeft red + (1 - left) * bottomRight red)),
+//			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
+//		)
+//	}
 	bytesPerPixel: Int { get { 4 } }
 	init: func (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 4)), size) }
-	init: func ~fromStuffer (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) { 
-		super(ByteBuffer new(RasterPacked calculateLength(size, 4)), size, coordinateSystem, crop) 
-	}
-	init: func ~fromByteArray (data: byte[], size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D) { this init(ByteBuffer new(pointer, size area * 4), size) }
+//	init: func ~fromStuffer (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) { 
+//		super(ByteBuffer new(RasterPacked calculateLength(size, 4)), size, coordinateSystem, crop) 
+//	}
+//	init: func ~fromByteArray (data: byte[], size: IntSize2D) { this init(ByteBuffer new(data), size) }
+//	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D) { this init(ByteBuffer new(pointer, size area * 4), size) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, CoordinateSystem Default, IntShell2D new()) }
 	init: func ~fromStuff (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		super(buffer, size, coordinateSystem, crop)
 	}
 	init: func ~fromRasterBgra (original: This) { super(original) }
-	init: func ~fromRasterImage (original: RasterImage) { 
-		this init(original size, original coordinateSystem, original crop)
-		destination := this pointer as UInt8*
+//	init: func ~fromRasterImage (original: RasterImage) { 
+//		this init(original size, original coordinateSystem, original crop)
+//		destination := this pointer as UInt8*
 //		FIXME: How do I declare functions like this?
 //		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
 //		original apply(Func<color: ColorBgr> { destination++ as ColorBgra = ColorBgra new(color, 255) } )
-	}
+//	}
 	create: func (size: IntSize2D) -> Image {
-		result := Bgra new(size)
+		result := RasterBgra new(size)
 		result crop = this crop
 		result wrap = this wrap
+		result
 	}
 	copy: func -> Image {
-		Bgra new(this)
+		RasterBgra new(this)
 	}
 	apply: func ~bgr (action: Func<ColorBgr>) {
 //		FIXME
@@ -122,21 +123,21 @@ RasterBgra: class extends RasterPacked {
 								}
 						distance := 0.0f;
 						if (c blue < minimum blue)
-							distance += (minimum blue - c blue) pow(2.0f)
+							distance += (minimum blue - c blue) squared()
 						else if (c blue > maximum blue)
-							distance += (c blue - maximum blue) pow(2.0f)
+							distance += (c blue - maximum blue) squared()
 						if (c green < minimum green)
-							distance += (minimum green - c green) pow(2.0f)
+							distance += (minimum green - c green) squared()
 						else if (c green > maximum green)
-							distance += (c green - maximum green) pow(2.0f)
+							distance += (c green - maximum green) squared()
 						if (c red < minimum red)
-							distance += (minimum red - c red) pow(2.0f)
+							distance += (minimum red - c red) squared()
 						else if (c red > maximum red)
-							distance += (c red - maximum red) pow(2.0f)
+							distance += (c red - maximum red) squared()
 						if (c alpha < minimum alpha)
-							distance += (minimum alpha - c alpha) pow(2.0f)
+							distance += (minimum alpha - c alpha) squared()
 						else if (c alpha > maximum alpha)
-							distance += (c alpha - maximum alpha) pow(2.0f)
+							distance += (c alpha - maximum alpha) squared()
 						result += (distance) sqrt() / 4;
 					}
 				}
