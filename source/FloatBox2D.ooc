@@ -111,9 +111,9 @@ FloatBox2D: cover {
 	create: func (leftTop: FloatPoint2D, size: FloatSize2D) -> This { This new(leftTop, size) }
 	create: func ~fromFloats (left, top, width, height: Float) -> This { This new(left, top, width, height) }
 	createAround: func (center: FloatPoint2D, size: FloatSize2D) -> This { This new(center + (-size) / 2, size) }
-	bounds: func (left, right, top, bottom: Float) -> This { This new(left, top, right - left, bottom - top) }
-	bounds: func ~fromArray (points: FloatPoint2D[]) -> FloatBox2D { this bounds(points as ArrayList<FloatPoint2D>) }
-	bounds: func ~fromList (points: ArrayList<FloatPoint2D>) -> FloatBox2D {
+	bounds: static func (left, right, top, bottom: Float) -> This { This new(left, top, right - left, bottom - top) }
+	bounds: static func ~fromArray (points: FloatPoint2D[]) -> FloatBox2D { This bounds(points as ArrayList<FloatPoint2D>) }
+	bounds: static func ~fromList (points: ArrayList<FloatPoint2D>) -> FloatBox2D {
 		xMinimum := 0.0f
 		xMaximum := xMinimum
 		yMinimum := xMinimum
