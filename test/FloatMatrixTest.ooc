@@ -18,15 +18,16 @@ matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
 		})
 
 		this add("isSquare", func() {
-			expect(matrixNonSquare isSquare == false && matrix isSquare == true)
+			expect(!matrixNonSquare isSquare && matrix isSquare)
 		})
 
 		this add("order", func() {
-			expect(matrixNonSquare order == 2)
+			expect(matrixNonSquare order, is equal to(2))
 		})
 
 		this add("dimensions", func() {
-			expect(matrixNonSquare dimensions width == 2 && matrixNonSquare dimensions height == 3)
+			expect(matrixNonSquare dimensions width, is equal to(2))
+			expect(matrixNonSquare dimensions height, is equal to(3))
 		})
 
 		this add("elements", func() {
@@ -57,11 +58,11 @@ matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
 			A := createMatrix(5, 5, [ 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 1.0f, 3.0f, 6.0f, 10.0f, 15.0f, 1.0f, 4.0f, 10.0f, 20.0f, 35.0f, 1.0f, 5.0f, 15.0f, 35.0f, 70.0f ])
 			y := createMatrix(1, 5, [ -1.0f, 2.0f, -3.0f, 4.0f, 5.0f])
 			x := A solve(y)
-			expect(x get(0, 0) == -70.0f)
-			expect(x get(0, 1) == 231.0f)
-			expect(x get(0, 2) == -296.0f)
-			expect(x get(0, 3) == 172.0f)
-			expect(x get(0, 4) == -38.0f)
+			expect(x get(0, 0), is equal to(-70.0f))
+			expect(x get(0, 1), is equal to(231.0f))
+			expect(x get(0, 2), is equal to(-296.0f))
+			expect(x get(0, 3), is equal to(172.0f))
+			expect(x get(0, 4), is equal to(-38.0f))
 		})
 	}
 
@@ -80,15 +81,15 @@ matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
 		// 0 3 6
 		// 1 4 7
 		// 2 5 8
-		expect(matrix get(0, 0) == values[0])
-		expect(matrix get(0, 1) == values[1])
-		expect(matrix get(0, 2) == values[2])
-		expect(matrix get(1, 0) == values[3])
-		expect(matrix get(1, 1) == values[4])
-		expect(matrix get(1, 2) == values[5])
-		expect(matrix get(2, 0) == values[6])
-		expect(matrix get(2, 1) == values[7])
-		expect(matrix get(2, 2) == values[8])
+		expect(matrix get(0, 0), is equal to(values[0]))
+		expect(matrix get(0, 1), is equal to(values[1]))
+		expect(matrix get(0, 2), is equal to(values[2]))
+		expect(matrix get(1, 0), is equal to(values[3]))
+		expect(matrix get(1, 1), is equal to(values[4]))
+		expect(matrix get(1, 2), is equal to(values[5]))
+		expect(matrix get(2, 0), is equal to(values[6]))
+		expect(matrix get(2, 1), is equal to(values[7]))
+		expect(matrix get(2, 2), is equal to(values[8]))
 	}
 }
 FloatMatrixTest new() run()
