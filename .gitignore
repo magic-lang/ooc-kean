@@ -1,0 +1,36 @@
+# Autosave files
+*~
+
+# Project files
+.anjuta*
+
+# Build files
+build
+rock_tmp
+.libs
+.sam-cache
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+*Test
