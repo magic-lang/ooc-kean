@@ -26,6 +26,9 @@ CoordinateSystem: enum {
 }
 
 Image: abstract class {
+	isValidIn: func (x, y: Int) -> Bool {
+		return (x >= 0 && x < this size width && y >= 0 && y < this size height)
+	}
 	size: IntSize2D
 	transform: IntTransform2D { get set }
 	coordinateSystem: CoordinateSystem {

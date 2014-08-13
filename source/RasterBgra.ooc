@@ -27,7 +27,7 @@ RasterBgra: class extends RasterPacked {
 	get: func ~intPoint2D (point: IntPoint2D) -> ColorBgra { this get(point x, point y) }
 	set: func ~intPoint2D (point: IntPoint2D, value: ColorBgra) { this set(point x, point y, value) }
 //	FIXME: This could be very wrong
-	get: func ~ints (x, y: Int) -> ColorBgra { ((this pointer + y * this stride) as ColorBgra* + x)@ }
+	get: func ~ints (x, y: Int) -> ColorBgra { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorBgra* + x)@ : ColorBgra new(0, 0, 0, 0) }
 //	FIXME: This could be very wrong
 	set: func ~ints (x, y: Int, value: ColorBgra) { ((this pointer + y * this stride) as ColorBgra* + x)@ = value }
 	get: func ~floatPoint2D (point: FloatPoint2D) -> ColorBgra { this get(point x, point y) }
@@ -71,13 +71,13 @@ RasterBgra: class extends RasterPacked {
 		original apply(f)
 	}
 	create: func (size: IntSize2D) -> Image {
-		result := RasterBgra new(size)
+		result := This new(size)
 		result crop = this crop
 		result wrap = this wrap
 		result
 	}
 	copy: func -> Image {
-		RasterBgra new(this)
+		This new(this)
 	}
 	apply: func ~bgr (action: Func<ColorBgr>) {
 //		FIXME
