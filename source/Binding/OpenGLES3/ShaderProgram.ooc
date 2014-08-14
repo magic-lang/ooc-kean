@@ -19,7 +19,7 @@ import gles
 
 
 ShaderProgram: class {
-  shaderProgramID: UInt
+  backend: UInt
   vertexSource: Char*
   pixelSource: Char*
 
@@ -32,11 +32,11 @@ ShaderProgram: class {
   }
 
   use: func {
-    glUseProgram(shaderProgramID)
+    glUseProgram(backend)
   }
 
   dispose: func() {
-    glDeleteProgram(shaderProgramID)
+    glDeleteProgram(backend)
   }
 
   compileShader: func(source: Char*, shaderID: Int) {
@@ -61,14 +61,14 @@ ShaderProgram: class {
     compileShader(vertexSource, vertexShaderID)
     compileShader(pixelSource, pixelShaderID)
 
-    this shaderProgramID = glCreateProgram()
+    this backend = glCreateProgram()
 
-    glAttachShader(shaderProgramID, vertexShaderID)
-    glAttachShader(shaderProgramID, pixelShaderID)
-    glLinkProgram(shaderProgramID)
+    glAttachShader(backend, vertexShaderID)
+    glAttachShader(backend, pixelShaderID)
+    glLinkProgram(backend)
 
-    glDetachShader(shaderProgramID, vertexShaderID)
-    glDetachShader(shaderProgramID, pixelShaderID)
+    glDetachShader(backend, vertexShaderID)
+    glDetachShader(backend, pixelShaderID)
 
     glDeleteShader(vertexShaderID)
     glDeleteShader(pixelShaderID)

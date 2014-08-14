@@ -24,7 +24,7 @@ TextureType: enum {
 }
 
 Texture: class {
-  textureID: UInt
+  backend: UInt
   width: UInt
   height: UInt
   type: TextureType
@@ -32,16 +32,16 @@ Texture: class {
   internalFormat: UInt
 
   createTexture: static func (type: TextureType, width: UInt, height: UInt) -> This {
-    texture := Texture new(type, width, height)
-    if(texture)
-      texture genGLTexture(null)
-    return texture
+    result := Texture new(type, width, height)
+    if(result)
+      result generateTexture(null)
+    return result
   }
 
   loadTexture: static func (type: TextureType, width: UInt, height: UInt, pixels: Pointer) -> This {
     texture := Texture new(type, width, height)
     if(texture)
-      texture genGLTexture(pixels)
+      texture generateTexture(pixels)
     return texture
   }
 
@@ -62,7 +62,7 @@ Texture: class {
   }
 
   dispose: func () {
-    glDeleteTextures(1, textureID&)
+    glDeleteTextures(1, backend&)
   }
 
   setInternalFormat: func(type: TextureType) {
@@ -81,16 +81,16 @@ Texture: class {
     }
   }
   bind: func {
-    glBindTexture(GL_TEXTURE_2D, textureID)
+    glBindTexture(GL_TEXTURE_2D, backend)
   }
 
   unBind: func {
     glBindTexture(GL_TEXTURE_2D, 0)
   }
 
-  genGLTexture: func(pixels: Pointer) {
-    glGenTextures(1, textureID&)
-    glBindTexture(GL_TEXTURE_2D, textureID)
+  generateTexture: func(pixels: Pointer) {
+    glGenTextures(1, backend&)
+    glBindTexture(GL_TEXTURE_2D, backend)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
