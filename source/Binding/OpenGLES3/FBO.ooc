@@ -1,0 +1,68 @@
+/*
+ * Copyright (C) 2014 - Simon Mika <simon@mika.se>
+ *
+ * This sofware is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import gles, Texture
+
+
+FBO: class {
+  fboID: UInt
+  targetTexture: Texture
+  textureType: TextureType
+
+  createFBO: static func (type: TextureType, width: UInt, height: UInt) -> This {
+    fbo := FBO new(type)
+    if(fbo)
+      fbo genFBO(width, height)
+    return fbo
+  }
+
+
+  init: func (type: TextureType) {
+    this textureType = type
+  }
+
+
+  dispose: func () {
+    targetTexture dispose()
+    glDeleteFramebuffers(1, fboID&)
+  }
+
+  bind: func {
+    glBindFramebuffer(GL_FRAMEBUFFER, fboID)
+  }
+
+  unBind: func {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0)
+  }
+
+  genFBO: func(width: UInt, height: UInt) {
+    this targetTexture = Texture createTexture(this textureType, width, height)
+    glGenFramebuffers(1, this fboID&)
+    glBindFramebuffer(GL_FRAMEBUFFER, this fboID)
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this targetTexture textureID, 0);
+
+    /* Check FBO status */
+    status: UInt = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status != GL_FRAMEBUFFER_COMPLETE)
+    	raise("Framebuffer Object creation failed")
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+  }
+
+
+}
