@@ -15,9 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import math
-import FloatExtension
-import IntSize2D
-import IntExtension
+use ooc-unit
+use ooc-math
 
 FloatMatrix : class {
 
@@ -28,9 +27,9 @@ FloatMatrix : class {
 	elements: Float[]
 
 
-	init: func (= dimensions)
+	init: func ~IntSize2D (= dimensions)
 	init: func ~default { this init(0, 0) }
-	init: func ~reduced (width: Int, height: Int) {
+	init: func (width: Int, height: Int) {
 		this init(IntSize2D new(width, height))
 		this elements = Float[width * height] new()
 	}
@@ -83,7 +82,7 @@ FloatMatrix : class {
 		result := This new (this dimensions width, this dimensions height)
 		for (i in 0..this dimensions height) {
 			for (j in 0..this dimensions width) {
-				result set(i, j, this get(i, j))
+				result set(j, i, this get(j, i))
 			}
 		}
 		result
@@ -94,10 +93,10 @@ FloatMatrix : class {
 	// </summary>
 	// <returns>Return current matrix tranposed.</returns>
 	transpose: func () -> This {
-		result := This new (this dimensions width, this dimensions height)
+		result := This new (this dimensions height, this dimensions width)
 		for (i in 0..this dimensions height) {
 			for (j in 0..this dimensions width) {
-				result set(j, i, this get(i, j))
+				result set(i, j, this get(j, i))
 			}
 		}
 		result
@@ -192,7 +191,8 @@ FloatMatrix : class {
 					lup := (transpose * this) lupDecomposition()
 					result = (lup[2] * transpose * y) forwardSubstitution(lup[0])  backwardSubstitution(lup[1])
 				}
-			} catch (e: Exception) {}
+			} catch (e: Exception) {
+			}
 		result
 	}
 
