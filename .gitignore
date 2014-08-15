@@ -26,3 +26,8 @@ rock_tmp/
 .libs
 /test/ColorConvertTest
 /source/Color
+/source/RasterBgra
+/test/ImageFileTest
+/test/outputBGRA.png
+/test/outputPNG.png
+/test/outputJPEG.png
