@@ -26,7 +26,6 @@ FloatMatrix : class {
 	Dimensions: IntSize2D {get {this dimensions}}
 	elements: Float[]
 
-
 	init: func ~IntSize2D (= dimensions)
 	init: func ~default { this init(0, 0) }
 	init: func (width: Int, height: Int) {
@@ -62,7 +61,7 @@ FloatMatrix : class {
 	// <param name="y">Row number of a matrix.</param>
 	// <param name="value">The value set at (x,y).</param>
 	// <returns></returns>
-	set: func (x: Int, y: Int, value: Float) -> Void { this elements[x * dimensions height + y] = value }
+	set: func (x: Int, y: Int, value: Float) { this elements[x * dimensions height + y] = value }
 
 	// <summary>
 	// True if the matrix is a square matrix.

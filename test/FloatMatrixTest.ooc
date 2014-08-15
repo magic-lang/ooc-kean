@@ -78,7 +78,7 @@ matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
 	}
 
 
-	checkAllElements: func (matrix: FloatMatrix, values: Float[]) -> Void {
+	checkAllElements: func (matrix: FloatMatrix, values: Float[]) {
 		// Element order
 		// 0 3
 		// 1 4
