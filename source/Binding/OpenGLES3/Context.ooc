@@ -28,7 +28,7 @@ Context: class {
   create: static func () -> This {
     result := Context new()
     if(result)
-      result generateContext(null)
+      result _generate(null)
     return result
   }
 
@@ -37,7 +37,7 @@ Context: class {
   create: static func ~shared (sharedContext: This) -> This {
     result := Context new()
     if(result)
-      result generateContext(sharedContext)
+      result _generate(sharedContext)
     return result
   }
 
@@ -47,7 +47,7 @@ Context: class {
   update: func () {
     eglSwapBuffers(eglDisplay, eglSurface)
   }
-  generateContext: func (sharedContext: This) {
+  _generate: func (sharedContext: This) {
     this nativeDisplay = XOpenDisplay(":0")
     root: Long = DefaultRootWindow(this nativeDisplay)
 
@@ -100,7 +100,7 @@ Context: class {
     this eglContext = eglCreateContext(this eglDisplay, chosenConfig, shared, contextAttribs)
   }
 
-  destroy: func {
+  dispose: func {
     eglMakeCurrent(this eglDisplay, null, null, null)
     eglDestroyContext(this eglDisplay, this eglContext)
     eglDestroySurface(this eglDisplay, this eglSurface)

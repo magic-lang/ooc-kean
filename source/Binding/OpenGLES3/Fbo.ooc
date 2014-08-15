@@ -26,7 +26,7 @@ Fbo: class {
   create: static func (type: TextureType, width: UInt, height: UInt) -> This {
     result := Fbo new(type)
     if(result)
-      result generateFbo(width, height)
+      result generate(width, height)
     return result
   }
 
@@ -49,7 +49,7 @@ Fbo: class {
     glBindFramebuffer(GL_FRAMEBUFFER, 0)
   }
 
-  generateFbo: func(width: UInt, height: UInt) {
+  generate: func(width: UInt, height: UInt) {
     this targetTexture = Texture create(this textureType, width, height)
     glGenFramebuffers(1, this backend&)
     glBindFramebuffer(GL_FRAMEBUFFER, this backend)
@@ -57,8 +57,9 @@ Fbo: class {
 
     /* Check FBO status */
     status: UInt = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    if(status != GL_FRAMEBUFFER_COMPLETE)
+    if(status != GL_FRAMEBUFFER_COMPLETE) {
     	raise("Framebuffer Object creation failed")
+    }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

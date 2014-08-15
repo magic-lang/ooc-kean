@@ -23,10 +23,10 @@ Vao: class {
   positionLayout: const static UInt = 0
   textureCoordinateLayout: const static UInt = 1
 
-  create: static func (positions: Float[], textureCoordinates: Float[], vertexCount: UInt) -> This {
+  createVao: static func (positions: Float[], textureCoordinates: Float[], vertexCount: UInt) -> This {
     result := This new()
     if (result)
-      result _generate(positions, textureCoordinates, vertexCount)
+      result generateVao(positions, textureCoordinates, vertexCount)
     return result
   }
 
@@ -42,11 +42,11 @@ Vao: class {
     glBindVertexArray(backend);
   }
 
-  unbind: func {
+  unBind: func {
     glBindVertexArray(0);
   }
 
-  _generate: func(positions: Float[], textureCoordinates: Float[], vertexCount: UInt) {
+  generateVao: func(positions: Float[], textureCoordinates: Float[], vertexCount: UInt) {
     dimensions := positions length / vertexCount
     packedArray := Float[2*vertexCount*dimensions] new()
     for(i in 0..vertexCount) {

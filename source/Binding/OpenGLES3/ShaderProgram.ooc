@@ -21,14 +21,14 @@ import gles
 ShaderProgram: class {
   backend: UInt
   vertexSource: Char*
-  pixelSource: Char*
+  fragmentSource: Char*
 
-  init: func (vertexSource: Char*, pixelSource: Char*) {
+  init: func (vertexSource: Char*, fragmentSource: Char*) {
     this width = width
     this height = height
     this type = type
     this vertexSource = vertexSource
-    this pixelSource = pixelSource
+    this fragmentSource = fragmentSource
   }
 
   use: func {
@@ -39,7 +39,7 @@ ShaderProgram: class {
     glDeleteProgram(backend)
   }
 
-  compileShader: func(source: Char*, shaderID: Int) {
+  _compileShader: func(source: Char*, shaderID: Int) {
     glShaderSource(shaderID, source&, NULL)
     glCompileShader(shaderID)
 
@@ -54,27 +54,27 @@ ShaderProgram: class {
       raise("Shader compilation failed: %s" compileLog)
     }
   }
-  compileShaders: func(vertexSource: Char*, pixelSource: Char*) {
+  __compileShaders: func(vertexSource: Char*, fragmentSource: Char*) {
     vertexShaderID := glCreateShader(GL_VERTEX_SHADER)
-    pixelShaderID := glCreateShader(GL_FRAGMENT_SHADER)
+    fragmentShaderID := glCreateShader(GL_FRAGMENT_SHADER)
 
-    compileShader(vertexSource, vertexShaderID)
-    compileShader(pixelSource, pixelShaderID)
+    _compileShader(vertexSource, vertexShaderID)
+    _compileShader(fragmentSource, fragmentShaderID)
 
     this backend = glCreateProgram()
 
     glAttachShader(backend, vertexShaderID)
-    glAttachShader(backend, pixelShaderID)
+    glAttachShader(backend, fragmentShaderID)
     glLinkProgram(backend)
 
     glDetachShader(backend, vertexShaderID)
-    glDetachShader(backend, pixelShaderID)
+    glDetachShader(backend, fragmentShaderID)
 
     glDeleteShader(vertexShaderID)
-    glDeleteShader(pixelShaderID)
+    glDeleteShader(fragmentShaderID)
   }
   compile: func() {
-    compileShaders(this vertexSource, this pixelSource)
+    __compileShaders(this vertexSource, this fragmentSource)
   }
 
 }

@@ -31,26 +31,13 @@ Texture: class {
   format: UInt
   internalFormat: UInt
 
-  create: static func (type: TextureType, width: UInt, height: UInt) -> This {
-    result := Texture new(type, width, height)
-    if(result)
-      result generateTexture(null)
-    return result
-  }
-
-  create: static func~withPixels(type: TextureType, width: UInt, height: UInt, pixels: Pointer) -> This {
-    texture := Texture new(type, width, height)
-    if(texture)
-      texture generateTexture(pixels)
-    return texture
-  }
 
   init: func~nullTexture (type: TextureType, width: UInt, height: UInt) {
     this width = width
     this height = height
     this type = type
 
-    this setInternalFormat(type)
+    this _setInternalFormat(type)
   }
 
   init: func~Texture (type: TextureType, width: UInt, height: UInt, pixels: Pointer) {
@@ -58,28 +45,14 @@ Texture: class {
     this height = height
     this type = type
 
-    setInternalFormat(type)
+    this _setInternalFormat(type)
   }
 
   dispose: func () {
     glDeleteTextures(1, backend&)
   }
 
-  setInternalFormat: func(type: TextureType) {
-    match type {
-      case TextureType monochrome =>
-        this internalFormat = GL_R8
-        this format = GL_RED
-      case TextureType rgba =>
-        this internalFormat = GL_RGBA8
-        this format = GL_RGBA
-      case TextureType rgba =>
-        this internalFormat = GL_RGB8
-        this format = GL_RGB
-      case =>
-        raise("Unknown texture format")
-    }
-  }
+
   bind: func {
     glBindTexture(GL_TEXTURE_2D, backend)
   }
@@ -88,7 +61,29 @@ Texture: class {
     glBindTexture(GL_TEXTURE_2D, 0)
   }
 
-  generateTexture: func(pixels: Pointer) {
+  uploadPixels: func(pixels: Pointer) {
+    bind()
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this width, this height, format, GL_UNSIGNED_BYTE, pixels)
+    unbind()
+  }
+
+  _setInternalFormat: func(type: TextureType) {
+    match type {
+      case TextureType monochrome =>
+        this internalFormat = GL_R8
+        this format = GL_RED
+      case TextureType rgba =>
+        this internalFormat = GL_RGBA8
+        this format = GL_RGBA
+      case TextureType rgb =>
+        this internalFormat = GL_RGB8
+        this format = GL_RGB
+      case =>
+        raise("Unknown texture format")
+    }
+  }
+
+  _generate: func(pixels: Pointer) {
     glGenTextures(1, backend&)
     glBindTexture(GL_TEXTURE_2D, backend)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
@@ -100,10 +95,20 @@ Texture: class {
 
   }
 
-  uploadPixels: func(pixels: Pointer) {
-    bind()
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this width, this height, format, GL_UNSIGNED_BYTE, pixels)
-    unbind()
+
+
+  create: static func (type: TextureType, width: UInt, height: UInt) -> This {
+    result := Texture new(type, width, height)
+    if(result)
+      result _generate(null)
+    return result
+  }
+
+  create: static func~withPixels(type: TextureType, width: UInt, height: UInt, pixels: Pointer) -> This {
+    texture := Texture new(type, width, height)
+    if(texture)
+      texture _generate(pixels)
+    return texture
   }
 
 }

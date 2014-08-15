@@ -15,43 +15,36 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import gles, Vao
+import gles
 
 
-Quad: class {
-  vao: Vao
+Fence: class {
+  backend: Pointer
 
-  positions := static [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0] as Float[]
-  textureCoordinates := static [0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0] as Float[]
+  clientWait: static func (fence: This, timeout: UInt) {
+    glClientWaitSync(fence, 0, timeout)
+  }
+
+  wait: static func (fence: This) {
+    glClientWaitSync(fence, 0, GL_TIMEOUT_IGNORED)
+  }
+
+
+  dispose: func () {
+    glDeleteSync(backend)
+  }
+
+  generate: func() {
+    this backend = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0)
+  }
 
   create: static func () -> This {
     result := This new()
     if (result)
       result generate()
-    if(result vao)
-      return result
-    return null
+    return result
   }
 
-
-  init: func () {
-  }
-
-
-  dispose: func () {
-    this vao dispose()
-  }
-
-  draw: func {
-    vao bind()
-  	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    vao unbind()
-  }
-
-
-  generate: func() {
-    vao = Vao create(Quad positions, Quad textureCoordinates, 4)
-  }
 
 
 }
