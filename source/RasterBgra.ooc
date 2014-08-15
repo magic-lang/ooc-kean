@@ -23,6 +23,7 @@ import RasterPacked
 import RasterImage
 import Image
 import Color
+import lang/IO
 
 RasterBgra: class extends RasterPacked {
 	get: func ~intPoint2D (point: IntPoint2D) -> ColorBgra { this get(point x, point y) }
@@ -153,17 +154,19 @@ RasterBgra: class extends RasterPacked {
 //	openResource(assembly: ???, name: String) {
 //		Image openResource
 //	}
-	open: static func (filename: CString) -> This {
+	open: static func (filename: String) -> This {
 		x, y, n: Int
 		requiredComponents := 4
 		data := StbImage load(filename, x&, y&, n&, requiredComponents)
-		
+		x toString() println()
+		y toString() println()
+		n toString() println()
 		buffer := ByteBuffer new(x * y * requiredComponents)
-//		memcpy(buffer pointer, data, x * y * requiredComponents)
-		StbImage free(data)
+		memcpy(buffer pointer, data, x * y * requiredComponents)
+//		StbImage free(data)
 		This new(buffer, IntSize2D new(x, y))
 	}
-	save: func (filename: CString) -> Int {
-		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this pointer, this size width * this bytesPerPixel)
+	save: func (filename: String) -> Int {
+		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this size width * this bytesPerPixel)
 	}
 }
