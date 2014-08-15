@@ -11,8 +11,8 @@ ImageFileTest: class extends Fixture {
 			expect(1, is equal to(1))
 		})
 		this add("open PNG", func() {
-			source := "Space.png"
-			destination := "outputPNG.png"
+			source := "input/Space.png"
+			destination := "output/outputPNG.png"
 			requiredComponents := 4
 			x, y, n: Int
 			data := StbImage load(source, x&, y&, n&, requiredComponents)
@@ -28,14 +28,14 @@ ImageFileTest: class extends Fixture {
 			failureReason toString() println()
 		})
 		this add("open RasterBgra", func() {
-			source := "Space.png"
-			destination := "outputBGRA.png"
+			source := "input/Space.png"
+			destination := "output/outputBGRA.png"
 			image := RasterBgra open(source)	
 			image save(destination)	
 		})
 		this add("open JPEG", func() {
-			source := "Flower.jpg"
-			destination := "outputJPEG.png"
+			source := "input/Flower.jpg"
+			destination := "output/outputJPEG.png"
 			requiredComponents := 4
 			x, y, n: Int
 			data := StbImage load(source, x&, y&, n&, requiredComponents)
