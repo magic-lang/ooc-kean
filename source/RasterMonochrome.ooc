@@ -86,18 +86,15 @@ RasterMonochrome: class extends RasterPacked {
 //			FIXME
 		else {
 			for (y in 0..this size height)
-				for (x in 0..this size width)
-				{
+				for (x in 0..this size width) {
 					c := this get(x, y)
 					o := other as RasterMonochrome get(x, y)
-					if (c distance(o) > 0)
-					{
+					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
 						for (otherY in Int maximum(0, y - 2)..Int minimum(y + 3, this size height))
 							for (otherX in Int maximum(0, x - 2)..Int minimum(x + 3, this size width))
-								if (otherX != x || otherY != y)
-								{
+								if (otherX != x || otherY != y) {
 									pixel := other as RasterMonochrome get(otherX, otherY)
 									if (maximum y < pixel y)
 										maximum y = pixel y;

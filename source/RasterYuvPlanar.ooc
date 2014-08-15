@@ -31,8 +31,7 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 		get
 		set (value) {
 			this crop = value
-			if (this y != null && this u != null && this v != null)
-			{
+			if (this y != null && this u != null && this v != null) {
 				this y crop = value
 				this u crop = value / 2
 				this v crop = value / 2
@@ -42,7 +41,7 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 //	FIXME: This could be very wrong
 	get: abstract func ~ints (x, y: Int) -> ColorYuv
 //	FIXME: This could be very wrong
-	set: abstract func ~ints (x, y: Int, value: ColorBgr)
+	set: abstract func ~ints (x, y: Int, value: ColorYuv)
 	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		super(buffer, size, coordinateSystem, crop)
 		this y = this createY()
@@ -80,18 +79,15 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 //			FIXME
 		else {
 			for (y in 0..this size height)
-				for (x in 0..this size width)
-				{
+				for (x in 0..this size width) {
 					c := this get(x, y)
 					o := other as RasterYuvPlanar get(x, y)
-					if (c distance(o) > 0)
-					{
+					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
 						for (otherY in Int maximum(0, y - this distanceRadius)..Int minimum(y + 1 + this distanceRadius, this size height))
 							for (otherX in Int maximum(0, x - this distanceRadius)..Int minimum(x + 1 + this distanceRadius, this size width))
-								if (otherX != x || otherY != y)
-								{
+								if (otherX != x || otherY != y)	{
 									pixel := other as RasterYuvPlanar get(otherX, otherY)
 									if (maximum y < pixel y)
 										maximum y = pixel y

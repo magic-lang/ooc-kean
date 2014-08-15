@@ -49,8 +49,7 @@ RasterPacked: abstract class extends RasterImage {
 		offsetX := Int modulo(offset width, this size width)
 		length := (this size width - offsetX) * this bytesPerPixel
 		line := this size width * this bytesPerPixel
-		for (y in 0..this size height)
-		{
+		for (y in 0..this size height) {
 			destination := Int modulo(y + offset height, this size height) * this stride
 			result buffer copyFrom(this buffer, this stride * y, destination + offsetX * this bytesPerPixel, length)
 			result buffer copyFrom(this buffer, this stride * y + length, destination, line - length)

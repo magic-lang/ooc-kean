@@ -51,8 +51,7 @@ RasterBgr: class extends RasterPacked {
 			(destination as ColorBgr*)@ = color 
 			destination += 1
 //			FIXME: "Invalid comparison between ColorBgr* and ColorBgr*" compiler bug, cast to Pointer first
-			if (destination as Pointer >= rowEnd as Pointer)
-			{
+			if (destination as Pointer >= rowEnd as Pointer) {
 				row += this stride
 				destination = row as ColorBgr*
 				rowEnd = row as ColorBgr* + rowLength
@@ -88,18 +87,15 @@ RasterBgr: class extends RasterPacked {
 //			FIXME
 		else {
 			for (y in 0..this size height)
-				for (x in 0..this size width)
-				{
+				for (x in 0..this size width) {
 					c := this get(x, y)
 					o := other as RasterBgr get(x, y)
-					if (c distance(o) > 0)
-					{
+					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
 						for (otherY in Int maximum(0, y - this distanceRadius)..Int minimum(y + 1 + this distanceRadius, this size height))
 							for (otherX in Int maximum(0, x - this distanceRadius)..Int minimum(x + 1 + this distanceRadius, this size width))
-								if (otherX != x || otherY != y)
-								{
+								if (otherX != x || otherY != y) {
 									pixel := other as RasterBgr get(otherX, otherY)
 									if (maximum blue < pixel blue)
 										maximum blue = pixel blue

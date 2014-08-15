@@ -3,3 +3,5 @@ Description: Draw functionality library.
 SourcePath: source
 Requires: ooc-unit, ooc-math, ooc-base
 Imports: Color, Image, RasterImage, RasterPacked, RasterBgra
+Additionals: source/stb_image.c, source/stb_image_write.c
+Libs: -lm

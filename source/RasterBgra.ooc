@@ -16,6 +16,7 @@
 
 use ooc-math
 use ooc-base
+import StbImage
 import math
 import structs/ArrayList
 import RasterPacked
@@ -98,18 +99,15 @@ RasterBgra: class extends RasterPacked {
 //			FIXME
 		else {
 			for (y in 0..this size height)
-				for (x in 0..this size width)
-				{
+				for (x in 0..this size width) {
 					c := this get(x, y)
 					o := other as RasterBgra get(x, y)
-					if (c distance(o) > 0)
-					{
+					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
 						for (otherY in Int maximum(0, y - this distanceRadius)..Int minimum(y + 1 + this distanceRadius, this size height))
 							for (otherX in Int maximum(0, x - this distanceRadius)..Int minimum(x + 1 + this distanceRadius, this size width))
-								if (otherX != x || otherY != y)
-								{
+								if (otherX != x || otherY != y) {
 									pixel := other as RasterBgra get(otherX, otherY)
 									if (maximum Blue < pixel Blue)
 										maximum Blue = pixel Blue
@@ -155,7 +153,17 @@ RasterBgra: class extends RasterPacked {
 //	openResource(assembly: ???, name: String) {
 //		Image openResource
 //	}
-
-
-
+	open: static func (filename: CString) -> This {
+		x, y, n: Int
+		requiredComponents := 4
+		data := StbImage load(filename, x&, y&, n&, requiredComponents)
+		
+		buffer := ByteBuffer new(x * y * requiredComponents)
+//		memcpy(buffer pointer, data, x * y * requiredComponents)
+		StbImage free(data)
+		This new(buffer, IntSize2D new(x, y))
+	}
+	save: func (filename: CString) -> Int {
+		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this pointer, this size width * this bytesPerPixel)
+	}
 }
