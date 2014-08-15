@@ -31,14 +31,14 @@ Texture: class {
   format: UInt
   internalFormat: UInt
 
-  createTexture: static func (type: TextureType, width: UInt, height: UInt) -> This {
+  create: static func (type: TextureType, width: UInt, height: UInt) -> This {
     result := Texture new(type, width, height)
     if(result)
       result generateTexture(null)
     return result
   }
 
-  loadTexture: static func (type: TextureType, width: UInt, height: UInt, pixels: Pointer) -> This {
+  create: static func~withPixels(type: TextureType, width: UInt, height: UInt, pixels: Pointer) -> This {
     texture := Texture new(type, width, height)
     if(texture)
       texture generateTexture(pixels)
@@ -84,7 +84,7 @@ Texture: class {
     glBindTexture(GL_TEXTURE_2D, backend)
   }
 
-  unBind: func {
+  unbind: func {
     glBindTexture(GL_TEXTURE_2D, 0)
   }
 
@@ -103,7 +103,7 @@ Texture: class {
   uploadPixels: func(pixels: Pointer) {
     bind()
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this width, this height, format, GL_UNSIGNED_BYTE, pixels)
-    unBind()
+    unbind()
   }
 
 }
