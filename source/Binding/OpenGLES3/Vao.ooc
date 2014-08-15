@@ -17,18 +17,16 @@
 
 import gles
 
-Vertex2d: class {
-  positions: Float[2]
-  textureCoordinates: Float[2]
-}
 
 Vao: class {
   backend: UInt
+  positionLayout: const static UInt = 0
+  textureCoordinateLayout: const static UInt = 1
 
-  createVao: static func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt) -> This {
+  create: static func (positions: Float[], textureCoordinates: Float[], vertexCount: UInt) -> This {
     result := This new()
     if (result)
-      result generateVao(positions, texcoords, numVertices)
+      result generateVao(positions, textureCoordinates, vertexCount)
     return result
   }
 
@@ -44,12 +42,31 @@ Vao: class {
     glBindVertexArray(backend);
   }
 
-  unBind: func {
+  unbind: func {
     glBindVertexArray(0);
   }
 
-  generateVao: func(positions: Float*, textureCoordinates: Float*, vertexCount: UInt) {
-
+  generateVao: func(positions: Float[], textureCoordinates: Float[], vertexCount: UInt) {
+    dimensions := positions length / vertexCount
+    packedArray := Float[2*vertexCount*dimensions] new()
+    for(i in 0..vertexCount) {
+      for(j in 0..dimensions) {
+        packedArray[2*dimensions*i + j] = positions[dimensions*i + j]
+        packedArray[2*dimensions*i + j + dimensions] = textureCoordinates[dimensions*i + j]
+      }
+    }
+    glGenVertexArrays(1, backend&)
+    glBindVertexArray(backend)
+    vertexBuffer: UInt
+    glGenBuffers(1, vertexBuffer&)
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer)
+    glBufferData(GL_ARRAY_BUFFER, 4*vertexCount*dimensions , packedArray&, GL_STATIC_DRAW)
+    positionOffset : UInt = 0
+    textureCoordinateOffset : UInt = dimensions*4
+    glVertexAttribPointer(positionLayout, 2, GL_FLOAT, GL_FALSE, 4*dimensions*2, positionOffset& as Pointer)
+    glEnableVertexAttribArray(positionLayout)
+    glVertexAttribPointer(textureCoordinateLayout, 2, GL_FLOAT, GL_FALSE, 4*dimensions*2, textureCoordinateOffset& as Pointer)
+    glEnableVertexAttribArray(textureCoordinateLayout)
 
   }
 
