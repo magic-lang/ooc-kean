@@ -183,3 +183,4 @@ eglCreateWindowSurface: extern func(display: Pointer, config: Pointer, window: U
 eglCreatePbufferSurface: extern func(display: Pointer, config: Pointer, attridList: Int*) -> Pointer
 eglCreateContext: extern func(display: Pointer, config: Pointer, sharedContext: Pointer, attribList: Int*) -> Pointer
 eglGetConfigAttrib: extern func(display: Pointer, config: Pointer, attribute: Int, value: Int*) -> UInt
+eglSwapBuffers: extern func(display: Pointer, surface: Pointer)
