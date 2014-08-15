@@ -851,7 +851,7 @@ glRenderbufferStorage: extern func (target: UInt, internalformat: UInt, width: I
 glSampleCoverage: extern func (value: Float, invert: UInt)
 glScissor: extern func (x: Int, y: Int, width: Int, height: Int)
 glShaderBinary: extern func (n: Int, shaders: UInt*, binaryformat: UInt, binary: Pointer, length: Int)
-glShaderSource: extern func (shader: UInt, count: Int, string: Char*, length: Int*)
+glShaderSource: extern func (shader: UInt, count: Int, string: Pointer*, length: Pointer)
 glStencilFunc: extern func (function: UInt, ref: Int, mask: UInt)
 glStencilFuncSeparate: extern func (face: UInt, function: UInt, ref: Int, mask: UInt)
 glStencilMask: extern func (mask: UInt)

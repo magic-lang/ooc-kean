@@ -47,6 +47,7 @@ Context: class {
   update: func () {
     eglSwapBuffers(eglDisplay, eglSurface)
   }
+
   _generate: func (sharedContext: This) {
     this nativeDisplay = XOpenDisplay(":0")
     root: Long = DefaultRootWindow(this nativeDisplay)
@@ -59,6 +60,7 @@ Context: class {
     XStoreName(this nativeDisplay, this nativeWindow, "GL Test")
 
     this eglDisplay = eglGetDisplay(this nativeDisplay)
+
     eglInitialize(this eglDisplay, null, null)
     eglBindAPI(EGL_OPENGL_ES_API)
 

@@ -21,6 +21,8 @@ TextureType: enum {
   monochrome
   rgba
   rgb
+  bgr
+  bgra
 }
 
 Texture: class {
@@ -52,8 +54,11 @@ Texture: class {
     glDeleteTextures(1, backend&)
   }
 
-
-  bind: func {
+  getBackend: func () -> UInt {
+    return this backend
+  }
+  bind: func (unit: UInt) {
+    glActiveTexture(GL_TEXTURE0 + unit)
     glBindTexture(GL_TEXTURE_2D, backend)
   }
 
@@ -62,7 +67,7 @@ Texture: class {
   }
 
   uploadPixels: func(pixels: Pointer) {
-    bind()
+    bind(0)
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this width, this height, format, GL_UNSIGNED_BYTE, pixels)
     unbind()
   }

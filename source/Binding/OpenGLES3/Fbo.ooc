@@ -53,7 +53,7 @@ Fbo: class {
     this targetTexture = Texture create(this textureType, width, height)
     glGenFramebuffers(1, this backend&)
     glBindFramebuffer(GL_FRAMEBUFFER, this backend)
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this targetTexture backend, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this targetTexture getBackend(), 0);
 
     /* Check FBO status */
     status: UInt = glCheckFramebufferStatus(GL_FRAMEBUFFER);
