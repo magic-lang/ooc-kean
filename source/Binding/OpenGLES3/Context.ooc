@@ -24,19 +24,30 @@ Context: class {
 
   nativeDisplay: Pointer
   nativeWindow: Long
-  init: func {
-    createGLContext(null)
-  }
-  init: func~shared (shared: This) {
-    createGLContext(shared)
+
+  create: static func () -> This {
+    result := Context new()
+    if(result)
+      result generateContext(null)
+    return result
   }
 
+  init: func () {}
+
+  create: static func ~shared (sharedContext: This) -> This {
+    result := Context new()
+    if(result)
+      result generateContext(sharedContext)
+    return result
+  }
 
   makeCurrent: func -> Bool {
     eglMakeCurrent(this eglDisplay, this eglSurface, this eglSurface, this eglContext) != 0
   }
-
-  createGLContext: func (sharedContext: This) {
+  update: func () {
+    eglSwapBuffers(eglDisplay, eglSurface)
+  }
+  generateContext: func (sharedContext: This) {
     this nativeDisplay = XOpenDisplay(":0")
     root: Long = DefaultRootWindow(this nativeDisplay)
 
@@ -63,7 +74,7 @@ Context: class {
     eglChooseConfig(this eglDisplay, configAttribs, matchingConfigs, numConfigs, numConfigs&)
     chosenConfig: Pointer = null
 
-    for(i in 0..numConfigs-1) {
+    for(i in 0..numConfigs) {
       success: UInt
       red, green, blue, alpha: Int
       success = eglGetConfigAttrib(this eglDisplay, matchingConfigs[i], EGL_RED_SIZE, red&)
