@@ -62,7 +62,7 @@ Image: abstract class {
 	}
 	init: func ~fromImage (original: This) { this init(original size, original coordinateSystem, original crop, original wrap) }
 	init: func ~default { 
-		this transform = IntTransform2D Identity
+		this transform = IntTransform2D identity
 	}
 	resizeWithin: func (restriction: IntSize2D) -> This {
 		this resizeTo(((this size asFloatSize2D()) * Float minimum(restriction width as Float / this size width as Float, restriction height as Float / this size height as Float)) asIntSize2D())

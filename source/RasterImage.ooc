@@ -46,18 +46,18 @@ RasterImage: abstract class extends Image {
 		result		
 	}
 	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> Image {
-		transform = (this transform asFloatTransform2D()) * transform * (this transform asFloatTransform2D()) Inverse()
+		transform = (this transform asFloatTransform2D()) * transform * (this transform asFloatTransform2D()) inverse
 		mappingTransform := FloatTransform2D createTranslation(this size width / 2, this size height / 2) * transform
 		upperLeft := mappingTransform * FloatPoint2D new(-size width / 2, -size width / 2)
 		upperRight := mappingTransform * FloatPoint2D new(size width / 2, -size width / 2)
 		downLeft := mappingTransform * FloatPoint2D new(-size width / 2, size width / 2)
 		downRight := mappingTransform * FloatPoint2D new(size width / 2, size width / 2)
 		source := FloatBox2D bounds([upperLeft, upperRight, downLeft, downRight])
-		mappingTransformInverse := mappingTransform Inverse()
+		mappingTransformInverse := mappingTransform inverse
 		upperLeft = mappingTransformInverse * source leftTop
-		upperRight = mappingTransformInverse * source RightTop
-		downLeft = mappingTransformInverse * source LeftBottom
-		downRight = mappingTransformInverse * source RightBottom
+		upperRight = mappingTransformInverse * source rightTop
+		downLeft = mappingTransformInverse * source leftBottom
+		downRight = mappingTransformInverse * source rightBottom
 		this copy(size asFloatSize2D(), source, FloatPoint2D new(), FloatPoint2D new(), FloatPoint2D new())
 	}
 	copy: func ~fromMoreParams (size: FloatSize2D, source: FloatBox2D, upperLeft, upperRight, lowerLeft: FloatPoint2D) -> RasterImage {

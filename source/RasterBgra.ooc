@@ -33,7 +33,7 @@ RasterBgra: class extends RasterPacked {
 	}
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D) { this init(ByteBuffer new(size Area * 4, pointer), size) }
+	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D) { this init(ByteBuffer new(size area * 4, pointer), size) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, CoordinateSystem Default, IntShell2D new()) }
 	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		super(buffer, size, coordinateSystem, crop)
@@ -87,36 +87,36 @@ RasterBgra: class extends RasterPacked {
 							for (otherX in Int maximum(0, x - this distanceRadius)..Int minimum(x + 1 + this distanceRadius, this size width))
 								if (otherX != x || otherY != y) {
 									pixel := (other as RasterBgra)[otherX, otherY]
-									if (maximum Blue < pixel Blue)
-										maximum Blue = pixel Blue
-									else if (minimum Blue > pixel Blue)
-										minimum Blue = pixel Blue
-									if (maximum Green < pixel Green)
-										maximum Green = pixel Green
-									else if (minimum Green > pixel Green)
-										minimum Green = pixel Green
-									if (maximum Red < pixel Red)
-										maximum Red = pixel Red
-									else if (minimum Red > pixel Red)
-										minimum Red = pixel Red
+									if (maximum blue < pixel blue)
+										maximum blue = pixel blue
+									else if (minimum blue > pixel blue)
+										minimum blue = pixel blue
+									if (maximum green < pixel green)
+										maximum green = pixel green
+									else if (minimum green > pixel green)
+										minimum green = pixel green
+									if (maximum red < pixel red)
+										maximum red = pixel red
+									else if (minimum red > pixel red)
+										minimum red = pixel red
 									if (maximum alpha < pixel alpha)
 										maximum alpha = pixel alpha
 									else if (minimum alpha > pixel alpha)
 										minimum alpha = pixel alpha
 								}
 						distance := 0.0f;
-						if (c Blue < minimum Blue)
-							distance += (minimum Blue - c Blue) as Float squared()
-						else if (c Blue > maximum Blue)
-							distance += (c Blue - maximum Blue) as Float squared()
-						if (c Green < minimum Green)
-							distance += (minimum Green - c Green) as Float squared()
-						else if (c Green > maximum Green)
-							distance += (c Green - maximum Green) as Float squared()
-						if (c Red < minimum Red)
-							distance += (minimum Red - c Red) as Float squared()
-						else if (c Red > maximum Red)
-							distance += (c Red - maximum Red) as Float squared()
+						if (c blue < minimum blue)
+							distance += (minimum blue - c blue) as Float squared()
+						else if (c blue > maximum blue)
+							distance += (c blue - maximum blue) as Float squared()
+						if (c green < minimum green)
+							distance += (minimum green - c green) as Float squared()
+						else if (c green > maximum green)
+							distance += (c green - maximum green) as Float squared()
+						if (c red < minimum red)
+							distance += (minimum red - c red) as Float squared()
+						else if (c red > maximum red)
+							distance += (c red - maximum red) as Float squared()
 						if (c alpha < minimum alpha)
 							distance += (minimum alpha - c alpha) as Float squared()
 						else if (c alpha > maximum alpha)
@@ -159,9 +159,9 @@ RasterBgra: class extends RasterPacked {
 		bottomRight := this[ceil(x) as Int, ceil(y) as Int]
 		
 		ColorBgra new(
-			(top * (left * topLeft Blue + (1 - left) * topRight Blue) + (1 - top) * (left * bottomLeft Blue + (1 - left) * bottomRight Blue)),
-			(top * (left * topLeft Green + (1 - left) * topRight Green) + (1 - top) * (left * bottomLeft Green + (1 - left) * bottomRight Green)),
-			(top * (left * topLeft Red + (1 - left) * topRight Red) + (1 - top) * (left * bottomLeft Red + (1 - left) * bottomRight Red)),
+			(top * (left * topLeft blue + (1 - left) * topRight blue) + (1 - top) * (left * bottomLeft blue + (1 - left) * bottomRight blue)),
+			(top * (left * topLeft green + (1 - left) * topRight green) + (1 - top) * (left * bottomLeft green + (1 - left) * bottomRight green)),
+			(top * (left * topLeft red + (1 - left) * topRight red) + (1 - top) * (left * bottomLeft red + (1 - left) * bottomRight red)),
 			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
 		)
 	}

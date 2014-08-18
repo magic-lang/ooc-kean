@@ -144,9 +144,9 @@ ColorBgra: cover {
 		this bgr = color bgr
 		this alpha = color alpha
 	}
-	Blue: UInt8 { get { this bgr blue } set (value) { this bgr blue = value } }
-	Green: UInt8 { get { this bgr green } set (value) { this bgr green = value } }
-	Red: UInt8 { get { this bgr red } set (value) { this bgr red = value } }
+	blue: UInt8 { get { this bgr blue } set (value) { this bgr blue = value } }
+	green: UInt8 { get { this bgr green } set (value) { this bgr green = value } }
+	red: UInt8 { get { this bgr red } set (value) { this bgr red = value } }
 	init: func@ (=bgr, =alpha)
 	init: func@ ~default { this init(0, 0, 0, 0) }
 	init: func@ ~uint8 (b, g, r, a: UInt8) { this init(ColorBgr new(b, g, r), a) }
