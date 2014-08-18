@@ -2,7 +2,6 @@ use ooc-unit
 use ooc-math
 import math
 import lang/IO
-//import ../../../source/FloatExtension
 
 FloatSize2DTest: class extends Fixture {
 	precision := 1.0e-4f

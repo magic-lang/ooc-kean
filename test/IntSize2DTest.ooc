@@ -2,10 +2,8 @@ use ooc-unit
 use ooc-math
 import math
 import lang/IO
-//import ../../../source/FloatExtension
 
 IntSize2DTest: class extends Fixture {
-	precision := 1.0f / 1_0000.0f
 	vector0 := IntSize2D new (22, -3)
 	vector1 := IntSize2D new (12, 13)
 	vector2 := IntSize2D new (34, 10)
