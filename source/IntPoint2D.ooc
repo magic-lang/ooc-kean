@@ -24,7 +24,6 @@ IntPoint2D: cover {
 	init: func@ (=x, =y)
 	init: func@ ~default { this init(0, 0) }
 	scalarProduct: func (other: This) -> Int { this x * other x + this y + other y }
-	//FIXME: Oddly enough, "this - other" instead of "this + (-other)" causes a compile error in the unary '-' operator below.
 	swap: func -> This { This new(this y, this x) }
 	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y)) }
 	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y)) }

@@ -30,49 +30,38 @@ import structs/ArrayList
 
 IntTransform2D: cover {
 	a, b, c, d, e, f, g, h, i: Int
-//	FIXME: How do I overload the [x, y] operator? Do 2D arrays even exist in ooc?
-//	operator [] () -> Float { get {
-//			result := match (x)	{
-//				case 0 =>
-//					match (y) {
-//						case 0 => this.a
-//						case 1 => this.b
-//						case 2 => this.c
-//						case => raise(IndexOutOfRangeException())
-//					}
-//				case 1 =>
-//					match (y) {
-//						case 0 => this.d
-//						case 1 => this.e
-//						case 2 => this.f
-//						case => raise(IndexOutOfRangeException())
-//					}
-//				case 2 =>
-//					match (y) {
-//						case 0 => this.g
-//						case 1 => this.h
-//						case 2 => this.i
-//						case => raise(IndexOutOfRangeException())
-//					}
-//				case => raise(IndexOutOfRangeException())
-//			}
-//			result
-//		}
-//	}
-	Determinant: Int { 
-		get { 
-			this a * this e * this i + this d * this h * this c	+ this g * this b * this f \
-			- this g * this e * this c - this d * this b * this i - this a * this h * this f 
-		} 
+	operator [] (x, y: Int) -> Int {
+		result : Int
+		match (x) {
+			case 0 =>
+				match (y) {
+					case 0 => result = this a
+					case 1 => result = this b
+					case 2 => result = this c
+					case => OutOfBoundsException new(y, 3) throw()
+				}
+			case 1 =>
+				match (y) {
+					case 0 => result = this d
+					case 1 => result = this e
+					case 2 => result = this f
+					case => OutOfBoundsException new(y, 3) throw()
+				}
+			case 2 =>
+				match (y) {
+					case 0 => result = this g
+					case 1 => result = this h
+					case 2 => result = this i
+					case => OutOfBoundsException new(y, 3) throw()
+				}
+			case => OutOfBoundsException new(x, 3) throw()
+		}
+		result
 	}
-	Translation: IntSize2D { get { IntSize2D new(this g, this h) } }
-//	FIXME: Property doesn't compile for some reason
-//	Inverse: This { get { 
-//		determinant ...
-//	}}
-//	FIXME: ... so we use a method instead until the compiler is fixed
-	Inverse: func -> This {
-		determinant := this Determinant
+	determinant ::=	this a * this e * this i + this d * this h * this c	+ this g * this b * this f - this g * this e * this c - this d * this b * this i - this a * this h * this f 
+	translation ::= IntSize2D new(this g, this h)
+	inverse: This { get { 
+		determinant := this determinant
 		This new(
 			(this e * this i - this h * this f) / determinant,
 			(this h * this c - this b * this i) / determinant,
@@ -84,15 +73,14 @@ IntTransform2D: cover {
 			(this g * this b - this a * this h) / determinant,
 			(this a * this e - this b * this d) / determinant
 		)
-	}
-	IsProjective: Bool { get { this Determinant != 0 } }
-	IsAffine: Bool { get { this c == 0 && this f == 0 && this i == 1 } }
-	IsIdentity: Bool { get { (this a == this e == this i == 1) && (this b == this c == this d == this f == this g == this h == 0) } }
+	}}
+	isProjective ::= this determinant != 0
+	isAffine ::= this c == 0 && this f == 0 && this i == 1
+	isIdentity ::= (this a == this e == this i == 1) && (this b == this c == this d == this f == this g == this h == 0)
 	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i)
 	init: func@ ~reduced (a, b, d, e, g, h: Float) { this init(a, b, 0, d, e, 0, g, h, 1) }
 	init: func@ ~default { this init(0, 0, 0, 0, 0, 0, 0, 0, 0) }
-//	FIXME: Unary minus
-//	setTranslation: func(translation: FloatSize2D) -> This { this translate(translation - this Translation) }
+	setTranslation: func(translation: IntSize2D) -> This { this translate(translation - this translation) }
 	translate: func (xDelta, yDelta: Int) -> This { this createTranslation(xDelta, yDelta) * this }
 	translate: func ~float (delta: Int) -> This { this translate(delta, delta) }
 	translate: func ~point (delta: IntPoint2D) -> This { this translate(delta x, delta y) }
@@ -105,7 +93,7 @@ IntTransform2D: cover {
 	skewY: func (angle: Float) -> This { this createSkewingY(angle) * this }
 	reflectX: func -> This { this createReflectionX() * this }
 	reflectY: func -> This { this createReflectionY() * this }
-	Identity: static This { get { This new(1, 0, 0, 1, 0, 0) } }
+	identity: static This { get { This new(1, 0, 0, 1, 0, 0) } }
 	asFloatTransform2D: func -> FloatTransform2D { FloatTransform2D new(this a, this b, this c, this d, this e, this f, this g, this h, this i) }
 	create: static func (translation: IntSize2D, scale, rotation: Float) -> This { 
 		This new(rotation cos() * scale, rotation sin() * scale, -rotation sin() * scale, rotation cos() * scale, translation width, translation height) 

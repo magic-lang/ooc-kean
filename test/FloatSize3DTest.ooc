@@ -5,7 +5,7 @@ import lang/IO
 //import ../../../source/FloatExtension
 
 FloatSize3DTest: class extends Fixture {
-	precision := 1.0f / 1_0000.0f
+	precision := 1.0e-4f
 	vector0 := FloatSize3D new (22.0f, -3.0f, 10.0f)
 	vector1 := FloatSize3D new (12.0f, 13.0f, 20.0f)
 	vector2 := FloatSize3D new (34.0f, 10.0f, 30.0f)
@@ -13,11 +13,11 @@ FloatSize3DTest: class extends Fixture {
 	init: func () {
 		super("FloatSize3D")
 		this add("norm", func() {
-			expect(this vector0 Norm, is equal to(593.0f sqrt()) within(this precision))
-			expect(this vector0 Norm, is equal to(this vector0 scalarProduct(this vector0) sqrt()) within(this precision))
+			expect(this vector0 norm, is equal to(593.0f sqrt()) within(this precision))
+			expect(this vector0 norm, is equal to(this vector0 scalarProduct(this vector0) sqrt()) within(this precision))
 		})
 		this add("volume", func() {
-			expect(vector3 Volume, is equal to(6000.0f) within(this precision))
+			expect(vector3 volume, is equal to(6000.0f) within(this precision))
 		})
 		this add("scalar product", func() {
 			size := FloatSize3D new()
@@ -48,8 +48,9 @@ FloatSize3DTest: class extends Fixture {
 			expect((this vector0 + this vector1) depth, is equal to(this vector2 depth))
 		})
 		this add("subtraction", func() {
-//			FIXME: Unary minus compiler bug
-//			expect(this vector0 - this vector0, is equal to(FloatSize3D new()))
+			expect((this vector0 - this vector0) width, is equal to((FloatSize3D new()) width))
+			expect((this vector0 - this vector0) height, is equal to((FloatSize3D new()) height))
+			expect((this vector0 - this vector0) depth, is equal to((FloatSize3D new()) depth))
 		})
 		this add("get values", func() {
 			expect(this vector0 width, is equal to(22.0f))

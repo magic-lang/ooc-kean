@@ -30,53 +30,43 @@ import structs/ArrayList
 
 FloatTransform2D: cover {
 	a, b, c, d, e, f, g, h, i: Float
-//	FIXME: How do I overload the [x, y] operator? Do 2D arrays even exist in ooc?
-//	operator [] () -> Float { get {
-//			result := match (x)	{
-//				case 0 =>
-//					match (y) {
-//						case 0 => this.a
-//						case 1 => this.b
-//						case 2 => this.c
-//						case => raise(IndexOutOfRangeException())
-//					}
-//				case 1 =>
-//					match (y) {
-//						case 0 => this.d
-//						case 1 => this.e
-//						case 2 => this.f
-//						case => raise(IndexOutOfRangeException())
-//					}
-//				case 2 =>
-//					match (y) {
-//						case 0 => this.g
-//						case 1 => this.h
-//						case 2 => this.i
-//						case => raise(IndexOutOfRangeException())
-//					}
-//				case => raise(IndexOutOfRangeException())
-//			}
-//			result
-//		}
-//	}
-	Determinant: Float { 
-		get { 
-			this a * this e * this i + this d * this h * this c	+ this g * this b * this f \
-			- this g * this e * this c - this d * this b * this i - this a * this h * this f 
-		} 
+	operator [] (x, y: Int) -> Float {
+		result : Float
+		match (x) {
+			case 0 =>
+				match (y) {
+					case 0 => result = this a
+					case 1 => result = this b
+					case 2 => result = this c
+					case => OutOfBoundsException new(y, 3) throw()
+				}
+			case 1 =>
+				match (y) {
+					case 0 => result = this d
+					case 1 => result = this e
+					case 2 => result = this f
+					case => OutOfBoundsException new(y, 3) throw()
+				}
+			case 2 =>
+				match (y) {
+					case 0 => result = this g
+					case 1 => result = this h
+					case 2 => result = this i
+					case => OutOfBoundsException new(y, 3) throw()
+				}
+			case => OutOfBoundsException new(x, 3) throw()
+		}
+		result
 	}
-	Translation: FloatSize2D { get { FloatSize2D new(this g, this h) } }
-	Scaling: Float { get { (this ScalingX + this ScalingY) / 2.0f } }
-	ScalingX: Float { get { (this a pow(2.0) + this b pow(2.0)) sqrt() } }
-	ScalingY: Float { get { (this d pow(2.0) + this e pow(2.0)) sqrt() } }
-	Rotation: Float { get { this b atan2(this a) } }
-//	FIXME: Property doesn't compile for some reason
-//	Inverse: This { get { 
-//		determinant ...
-//	}}
-//	FIXME: ... so we use a method instead until the compiler is fixed
-	Inverse: func -> This {
-		determinant := this Determinant
+	determinant ::=	this a * this e * this i + this d * this h * this c	+ this g * this b * this f - this g * this e * this c - this d * this b * this i - this a * this h * this f 
+
+	translation ::= FloatSize2D new(this g, this h)
+	scaling ::= (this scalingX + this scalingY) / 2.0f
+	scalingX ::= (this a squared() + this b squared()) sqrt()
+	scalingY ::= (this d squared() + this e squared()) sqrt()
+	rotation ::= this b atan2(this a)
+	inverse: This { get {
+		determinant := this determinant
 		This new(
 			(this e * this i - this h * this f) / determinant,
 			(this h * this c - this b * this i) / determinant,
@@ -88,21 +78,20 @@ FloatTransform2D: cover {
 			(this g * this b - this a * this h) / determinant,
 			(this a * this e - this b * this d) / determinant
 		)
-	}
-	IsProjective: Bool { get { this Determinant != 0.0f } }
-	IsAffine: Bool { get { this c == 0.0f && this f == 0.0f && this i == 1.0f } }
-	IsSimilarity: Bool { get { this == This create(this Translation, this Scaling, this Rotation) } }
-	IsEuclidian: Bool { get { this == This create(this Translation, this Rotation) } }
-	IsIdentity: Bool { get { (this a == this e == this i == 1.0f) && (this b == this c == this d == this f == this g == this h == 0.0f) } }
+	}}
+	isProjective ::= this determinant != 0.0f
+	isAffine ::= this c == 0.0f && this f == 0.0f && this i == 1.0f
+	isSimilarity ::= this == This create(this translation, this scaling, this rotation)
+	isEuclidian ::= this == This create(this translation, this rotation)
+	isIdentity ::= (this a == this e == this i == 1.0f) && (this b == this c == this d == this f == this g == this h == 0.0f)
 	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i)
 	init: func@ ~reduced (a, b, d, e, g, h: Float) { this init(a, b, 0.0f, d, e, 0.0f, g, h, 1.0f) }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f) }
-//	FIXME: Unary minus
-//	setTranslation: func(translation: FloatSize2D) -> This { this translate(translation - this Translation) }
-	setScaling: func (scaling: Float) -> This { this scale(scaling / this Scaling) }
-	setXScaling: func (scaling: Float) -> This { this scale(scaling / this ScalingX, 1.0f) }
-	setYScaling: func (scaling: Float) -> This { this scale(1.0f, scaling / this ScalingY) }
-	setRotation: func (rotation: Float) -> This { this rotate(rotation - this Rotation) }
+	setTranslation: func(translation: FloatSize2D) -> This { this translate(translation - this translation) }
+	setScaling: func (scaling: Float) -> This { this scale(scaling / this scaling) }
+	setXScaling: func (scaling: Float) -> This { this scale(scaling / this scalingX, 1.0f) }
+	setYScaling: func (scaling: Float) -> This { this scale(1.0f, scaling / this scalingY) }
+	setRotation: func (rotation: Float) -> This { this rotate(rotation - this rotation) }
 	translate: func (xDelta, yDelta: Float) -> This { this createTranslation(xDelta, yDelta) * this }
 	translate: func ~float (delta: Float) -> This { this translate(delta, delta) }
 	translate: func ~point (delta: FloatPoint2D) -> This { this translate(delta x, delta y) }
@@ -115,7 +104,7 @@ FloatTransform2D: cover {
 	skewY: func (angle: Float) -> This { this createSkewingY(angle) * this }
 	reflectX: func -> This { this createReflectionX() * this }
 	reflectY: func -> This { this createReflectionY() * this }
-	Identity: static This { get { This new(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f) } }
+	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f) } }
 	asIntTransform2D: func -> IntTransform2D { IntTransform2D new(this a, this b, this c, this d, this e, this f, this g, this h, this i) }
 	create: static func (translation: FloatSize2D, scale, rotation: Float) -> This { 
 		This new(rotation cos() * scale, rotation sin() * scale, -rotation sin() * scale, rotation cos() * scale, translation width, translation height) 

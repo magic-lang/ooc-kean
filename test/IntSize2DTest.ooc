@@ -28,16 +28,16 @@ IntSize2DTest: class extends Fixture {
 			expect((this vector0 + this vector1) height, is equal to(this vector2 height))
 		})
 		this add("subtraction", func() {
-//			FIXME: Unary minus compiler bug
-//			expect(this vector0 - this vector0, is equal to(IntSize2D new()))
+			expect((this vector0 - this vector0) width, is equal to((IntSize2D new()) width))
+			expect((this vector0 - this vector0) height, is equal to((IntSize2D new()) height))
 		})
 		this add("scalar multiplication", func() {
-//			FIXME: Unary minus compiler bug
-//			expect((-1) * this vector0, is equal to(-vector0)) (-1)
+			expect(((-1) * this vector0) width, is equal to((-vector0) width))
+			expect(((-1) * this vector0) height, is equal to((-vector0) height))
 		})
 		this add("scalar division", func() {
-//			FIXME: Unary minus compiler bug
-//			expect(this vector0 / (-1), is equal to(-vector0))
+			expect((this vector0 / (-1)) width, is equal to((-vector0) width))
+			expect((this vector0 / (-1)) height, is equal to((-vector0) height))
 		})
 		this add("get values", func() {
 			expect(this vector0 width, is equal to(22))

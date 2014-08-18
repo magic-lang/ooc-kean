@@ -23,11 +23,11 @@ import structs/ArrayList
 
 IntShell2D: cover {
 	left, right, top, bottom: Int
-	LeftTop: IntPoint2D { get { IntPoint2D new(this left, this top) } }
-	IntSize2D: IntSize2D { get { IntSize2D new(this left + this right, this top + this bottom) } }
-	Balance: IntPoint2D { get { IntPoint2D new(this right - this left, this bottom - this top) } }
-	IsZero: Bool { get { this left == 0 && this right == 0 && this top == 0 && this bottom == 0 } }
-	NotZero: Bool { get { this left != 0 && this right != 0 && this top != 0 && this bottom != 0 } }
+	leftTop ::= IntPoint2D new(this left, this top)
+	intSize2D ::= IntSize2D new(this left + this right, this top + this bottom)
+	balance ::= IntPoint2D new(this right - this left, this bottom - this top)
+	isZero ::= this left == 0 && this right == 0 && this top == 0 && this bottom == 0 
+	notZero ::= this left != 0 && this right != 0 && this top != 0 && this bottom != 0
 	init: func@ (=left, =right, =top, =bottom)
 	init: func@ ~fromFloat (value: Int) { this init(value, value) }
 	init: func@ ~fromFloats (x, y: Int) { this init(x, x, y, y) }

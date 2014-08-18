@@ -29,59 +29,51 @@ import structs/ArrayList
 
 FloatTransform3D: cover {
 	a, b, c, d, e, f, g, h, i, j, k, l: Float
-//	FIXME: How do I overload the [x, y] operator? Do 2D arrays even exist in ooc?
-//	operator [] () -> Float { get {
-//			result := match (x)	{
-//				case 0 =>
-//					match (y) {
-//						case 0 => this.a
-//						case 1 => this.b
-//						case 2 => this.c
-//						case => raise(IndexOutOfRangeException())
-//					}
-//				case 1 =>
-//					match (y) {
-//						case 0 => this.d
-//						case 1 => this.e
-//						case 2 => this.f
-//						case => raise(IndexOutOfRangeException())
-//					}
-//				case 2 =>
-//					match (y) {
-//						case 0 => this.g
-//						case 1 => this.h
-//						case 2 => this.i
-//						case => raise(IndexOutOfRangeException())
-//					}
-//				case 3 =>
-//					match (y) {
-//						case 0 => this j
-//						case 1 => this k
-//						case 2 => this l
-//						case => raise(IndexOutOfRangeException())
-//				case => raise(IndexOutOfRangeException())
-//			}
-//			result
-//		}
-//	}
-	Determinant: Float { 
-		get { 
-			this a * (this e * this i - this f * this h) + this d * (this h * this c - this i * this b) + this g * (this b * this f - this e * this c) 
-		} 
+	operator [] (x, y: Int) -> Float {
+		result : Float
+		match (x) {
+			case 0 =>
+				match (y) {
+					case 0 => result = this a
+					case 1 => result = this b
+					case 2 => result = this c
+					case 3 => result = this d
+					case => OutOfBoundsException new(y, 3) throw()
+				}
+			case 1 =>
+				match (y) {
+					case 0 => result = this d
+					case 1 => result = this e
+					case 2 => result = this f
+					case => OutOfBoundsException new(y, 3) throw()
+				}
+			case 2 =>
+				match (y) {
+					case 0 => result = this g
+					case 1 => result = this h
+					case 2 => result = this i
+					case => OutOfBoundsException new(y, 3) throw()
+				}
+			case 3 =>
+				match (y) {
+					case 0 => result = this j
+					case 1 => result = this k
+					case 2 => result = this l
+					case => OutOfBoundsException new(y, 3) throw()
+				}
+			case => OutOfBoundsException new(x, 4) throw()
+		}
+		result
 	}
-	Translation: FloatSize3D { get { FloatSize3D new(this j, this k, this l) } }
-	Scaling: Float { get { (this ScalingX + this ScalingY + this ScalingZ) / 3.0f } }
-	ScalingX: Float { get { (this a pow(2.0f) + this b pow(2.0f) + this c pow(2.0f)) sqrt() } }
-	ScalingY: Float { get { (this d pow(2.0f) + this e pow(2.0f) + this f pow(2.0f)) sqrt() } }
-	ScalingZ: Float { get { (this g pow(2.0f) + this h pow(2.0f) + this i pow(2.0f)) sqrt() } }
-	Rotation: Float { get { this b atan2(this a) } }
-//	FIXME: Property doesn't compile for some reason
-//	Inverse: This { get { 
-//		determinant ...
-//	}}
-//	FIXME: ... so we use a method instead until the compiler is fixed
-	Inverse: func -> This {
-		determinant := this Determinant
+	determinant ::= this a * (this e * this i - this f * this h) + this d * (this h * this c - this i * this b) + this g * (this b * this f - this e * this c) 
+	translation ::= FloatSize3D new(this j, this k, this l)
+	scaling ::= (this scalingX + this scalingY + this scalingZ) / 3.0f
+	scalingX ::= (this a squared() + this b squared() + this c squared()) sqrt()
+	scalingY ::= (this d squared() + this e squared() + this f squared()) sqrt()
+	scalingZ ::= (this g squared() + this h squared() + this i squared()) sqrt()
+	rotation ::= this b atan2(this a)
+	inverse: This { get { 
+		determinant := this determinant
 		result := This new(
 			(this e * this i - this h * this f) / determinant,
 			(this h * this c - this b * this i) / determinant,
@@ -101,16 +93,16 @@ FloatTransform3D: cover {
 		result k = -translation k
 		result l = -translation l
 		result
-	}
+	}}
 	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i, =j, =k, =l)
 //	init: func@ ~reduced (a, b, d, e, g, h: Float) { this init(a, b, 0.0f, d, e, 0.0f, g, h, 1.0f) }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f) }
 //	FIXME: Unary minus
 //	setTranslation: func(translation: FloatSize2D) -> This { this translate(translation - this Translation) }
-	setScaling: func (scaling: Float) -> This { this scale(scaling / this Scaling) }
-	setXScaling: func (scaling: Float) -> This { this scale(scaling / this ScalingX, 1.0f, 1.0f) }
-	setYScaling: func (scaling: Float) -> This { this scale(1.0f, scaling / this ScalingY, 1.0f) }
-	setZScaling: func (scaling: Float) -> This { this scale(1.0f, 1.0f, scaling / this ScalingZ) }
+	setScaling: func (scaling: Float) -> This { this scale(scaling / this scaling) }
+	setXScaling: func (scaling: Float) -> This { this scale(scaling / this scalingX, 1.0f, 1.0f) }
+	setYScaling: func (scaling: Float) -> This { this scale(1.0f, scaling / this scalingY, 1.0f) }
+	setZScaling: func (scaling: Float) -> This { this scale(1.0f, 1.0f, scaling / this scalingZ) }
 	translate: func (xDelta, yDelta, zDelta: Float) -> This { this createTranslation(xDelta, yDelta, zDelta) * this }
 	translate: func ~float (delta: Float) -> This { this translate(delta, delta, delta) }
 	translate: func ~point (delta: FloatPoint3D) -> This { this translate(delta x, delta y, delta z) }
@@ -124,7 +116,7 @@ FloatTransform3D: cover {
 	reflectX: func -> This { this createReflectionX() * this }
 	reflectY: func -> This { this createReflectionY() * this }
 	reflectZ: func -> This { this createReflectionZ() * this }
-	Identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) } }
+	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) } }
 	create: static func (a, b, c, d, e, f, g, h, i, j, k, l: Float) -> This { This new(a, b, c, d, e, f, g, h, i, j, k, l) }
 	createTranslation: static func (xDelta, yDelta, zDelta: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, xDelta, yDelta, zDelta) }	
 	createTranslation: static func ~float (delta: Float) -> This { This createTranslation(delta, delta, delta) }

@@ -24,66 +24,66 @@ import structs/ArrayList
 IntBox2D: cover {
 	leftTop: IntPoint2D
 	size: IntSize2D
-	Width: Int { get { (this size width) } }
-	Height: Int { get { this size height } }
-	Left: Int { get { this leftTop x } }
-	Top: Int { get { this leftTop y } }
-	Right: Int { get { this leftTop x + this size width } }
-	Bottom: Int { get { this leftTop y + this size height } }
-	RightTop: IntPoint2D { get { IntPoint2D new(this Right, this Top) } }
-	LeftBottom: IntPoint2D { get { IntPoint2D new(this Left, this Bottom) } }
-	RightBottom: IntPoint2D { get { this leftTop + this size } }
-	Center: IntPoint2D { get { this leftTop + (this size / 2) } }
-	Empty: Bool { get { this size Empty } }
+	width ::= this size width
+	height ::= this size height
+	left ::= this leftTop x
+	top ::= this leftTop y
+	right ::= this leftTop x + this size width
+	bottom ::= this leftTop y + this size height
+	rightTop ::= IntPoint2D new(this right, this top)
+	leftBottom ::= IntPoint2D new(this left, this bottom)
+	rightBottom ::= this leftTop + this size
+	center ::= this leftTop + (this size / 2)
+	empty ::= this size empty
 	init: func@ (=leftTop, =size)
 	init: func@ ~fromFloats (left, top, width, height: Int) { this init(IntPoint2D new(left, top), IntSize2D new(width, height)) }
 	init: func@ ~fromSize (size: IntSize2D) { this init(IntPoint2D new(), size) }
 	init: func@ ~default { this init(IntPoint2D new(), IntSize2D new()) }
 	swap: func -> This { This new(this leftTop swap(), this size swap()) }
 	pad: func (left, right, top, bottom: Int) -> This {
-		This new(IntPoint2D new(this Left - left, this Top - top), IntSize2D new(this Width + left + right, this Height + top + bottom))
+		This new(IntPoint2D new(this left - left, this top - top), IntSize2D new(this width + left + right, this height + top + bottom))
 	}
 	pad: func ~fromFloat (pad: Int) -> This { this pad(pad, pad, pad, pad) }
 	pad: func ~fromSize (pad: IntSize2D) -> This { this pad(pad width, pad width, pad height, pad height) }
 	intersection: func (other: This) -> This {
-		left := this Left > other Left ? this Left : other Left
-		top := this Top > other Top ? this Top : other Top
-		width := ((this Right < other Right ? this Right : other Right) - left) maximum(0)
-		height := ((this Bottom < other Bottom ? this Bottom : other Bottom) - top) maximum(0)
+		left := this left > other left ? this left : other left
+		top := this top > other top ? this top : other top
+		width := ((this right < other right ? this right : other right) - left) maximum(0)
+		height := ((this bottom < other bottom ? this bottom : other bottom) - top) maximum(0)
 		This new(left, top, width, height)
 	}
 	//FIXME: Union is a keyword in C and so cannot be used for methods, but the name should be box__union something, so there shouldn't be a problem. Compiler bug?
 	union: func ~box (other: This) -> This {
-		left := this Left minimum(other Left)
-		top := this Top minimum(other Top)
-		width := this Right maximum(other Right) - this Left minimum(other Left) 
-		height := this Bottom maximum(other Bottom) - this Top minimum(other Top)
+		left := this left minimum(other left)
+		top := this top minimum(other top)
+		width := this right maximum(other right) - this left minimum(other left) 
+		height := this bottom maximum(other bottom) - this top minimum(other top)
 		This new(left, top, width, height)
 	}
 	contains: func (point: IntPoint2D) -> Bool {
-		this Left <= point x && point x < this Right && this Top <= point y && point y < this Bottom
+		this left <= point x && point x < this right && this top <= point y && point y < this bottom
 	}
 	contains: func ~box (box: IntBox2D) -> Bool { this intersection(box) == box }
 	operator + (other: This) -> This {
-		if (this Empty)
+		if (this empty)
 			other
-		else if (other Empty)
+		else if (other empty)
 			this
 		else
-			This new(this Left minimum(other Left),
-				this Top minimum (other Top),
-				this Right maximum(other Right) - this Left minimum(other Left),
-				this Bottom maximum(other Bottom) - this Top minimum(other Top)
+			This new(this left minimum(other left),
+				this top minimum (other top),
+				this right maximum(other right) - this left minimum(other left),
+				this bottom maximum(other bottom) - this top minimum(other top)
 			)
 	}
 	operator - (other: This) -> This {
-		if (this Empty || other Empty)
+		if (this empty || other empty)
 			This new()
 		else {
-			left := this Left maximum(other Left)
-			right := this Right minimum(other Right)
-			top := this Top maximum(other Top)
-			bottom := this Bottom minimum(other Bottom)
+			left := this left maximum(other left)
+			right := this right minimum(other right)
+			top := this top maximum(other top)
+			bottom := this bottom minimum(other bottom)
 			if (left < right && top < bottom)
 				This new(left, top, right-left, bottom-top)
 			else

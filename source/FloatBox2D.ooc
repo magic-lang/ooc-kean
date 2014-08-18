@@ -24,44 +24,44 @@ import structs/ArrayList
 FloatBox2D: cover {
 	leftTop: FloatPoint2D
 	size: FloatSize2D
-	Width: Float { get { (this size width) } }
-	Height: Float { get { this size height } }
-	Left: Float { get { this leftTop x } }
-	Top: Float { get { this leftTop y } }
-	Right: Float { get { this leftTop x + this size width } }
-	Bottom: Float { get { this leftTop y + this size height } }
-	RightTop: FloatPoint2D { get { FloatPoint2D new(this Right, this Top) } }
-	LeftBottom: FloatPoint2D { get { FloatPoint2D new(this Left, this Bottom) } }
-	RightBottom: FloatPoint2D { get { this leftTop + this size } }
-	Center: FloatPoint2D { get { this leftTop + (this size / 2) } }
-	Empty: Bool { get { this size Empty } }
+	width ::= this size width
+	height ::= this size height
+	left ::= this leftTop x
+	top ::= this leftTop y
+	right ::= this leftTop x + this size width
+	bottom ::= this leftTop y + this size height
+	rightTop ::= FloatPoint2D new(this right, this top)
+	leftBottom ::= FloatPoint2D new(this left, this bottom)
+	rightBottom ::= this leftTop + this size
+	center ::= this leftTop + (this size / 2)
+	empty ::= this size empty 
 	init: func@ (=leftTop, =size)
 	init: func@ ~fromFloats (left, top, width, height: Float) { this init(FloatPoint2D new(left, top), FloatSize2D new(width, height)) }
 	init: func@ ~fromSize (size: FloatSize2D) { this init(FloatPoint2D new(), size) }
 	init: func@ ~default { this init(FloatPoint2D new(), FloatSize2D new()) }
 	swap: func -> This { This new(this leftTop swap(), this size swap()) }
 	pad: func (left, right, top, bottom: Float) -> This {
-		This new(FloatPoint2D new(this Left - left, this Top - top), FloatSize2D new(this Width + left + right, this Height + top + bottom))
+		This new(FloatPoint2D new(this left - left, this top - top), FloatSize2D new(this width + left + right, this height + top + bottom))
 	}
 	pad: func ~fromFloat (pad: Float) -> This { this pad(pad, pad, pad, pad) }
 	pad: func ~fromSize (pad: FloatSize2D) -> This { this pad(pad width, pad width, pad height, pad height) }
 	intersection: func (other: This) -> This {
-		left := this Left > other Left ? this Left : other Left
-		top := this Top > other Top ? this Top : other Top
-		width := ((this Right < other Right ? this Right : other Right) - left) maximum(0.0f)
-		height := ((this Bottom < other Bottom ? this Bottom : other Bottom) - top) maximum(0.0f)
+		left := this left > other left ? this left : other left
+		top := this top > other top ? this top : other top
+		width := ((this right < other right ? this right : other right) - left) maximum(0.0f)
+		height := ((this bottom < other bottom ? this bottom : other bottom) - top) maximum(0.0f)
 		This new(left, top, width, height)
 	}
 	//FIXME: Union is a keyword in C and so cannot be used for methods, but the name should be box__union something, so there shouldn't be a problem. Compiler bug?
 	union: func ~box (other: This) -> This {
-		left := this Left minimum(other Left)
-		top := this Top minimum(other Top)
-		width := this Right maximum(other Right) - this Left minimum(other Left) 
-		height := this Bottom maximum(other Bottom) - this Top minimum(other Top)
+		left := this left minimum(other left)
+		top := this top minimum(other top)
+		width := this right maximum(other right) - this left minimum(other left) 
+		height := this bottom maximum(other bottom) - this top minimum(other top)
 		This new(left, top, width, height)
 	}
 	contains: func (point: FloatPoint2D) -> Bool {
-		this Left <= point x && point x < this Right && this Top <= point y && point y < this Bottom
+		this left <= point x && point x < this right && this top <= point y && point y < this bottom
 	}
 	contains: func ~box (box: FloatBox2D) -> Bool { this intersection(box) == box }
 	round: func -> This { This new(this leftTop round(), this size round()) }
@@ -69,25 +69,25 @@ FloatBox2D: cover {
 	floor: func -> This { This new(this leftTop floor(), this size floor()) }
 	
 	operator + (other: This) -> This {
-		if (this Empty)
+		if (this empty)
 			other
-		else if (other Empty)
+		else if (other empty)
 			this
 		else
-			This new(this Left minimum(other Left),
-				this Top minimum (other Top),
-				this Right maximum(other Right) - this Left minimum(other Left),
-				this Bottom maximum(other Bottom) - this Top minimum(other Top)
+			This new(this left minimum(other left),
+				this top minimum (other top),
+				this right maximum(other right) - this left minimum(other left),
+				this bottom maximum(other bottom) - this top minimum(other top)
 			)
 	}
 	operator - (other: This) -> This {
-		if (this Empty || other Empty)
+		if (this empty || other empty)
 			This new()
 		else {
-			left := this Left maximum(other Left)
-			right := this Right minimum(other Right)
-			top := this Top maximum(other Top)
-			bottom := this Bottom minimum(other Bottom)
+			left := this left maximum(other left)
+			right := this right minimum(other right)
+			top := this top maximum(other top)
+			bottom := this bottom minimum(other bottom)
 			if (left < right && top < bottom)
 				This new(left, top, right-left, bottom-top)
 			else
@@ -96,10 +96,10 @@ FloatBox2D: cover {
 	}
 	operator + (other: FloatPoint2D) -> This { This new(this leftTop + other, this size) }
 	//FIXME: Unary minus bug
-	operator - (other: FloatPoint2D) -> This { This new(this leftTop + (-other), this size) }
+	operator - (other: FloatPoint2D) -> This { This new(this leftTop - other, this size) }
 	operator + (other: FloatSize2D) -> This { This new(this leftTop, this size + other) }
 	//FIXME: Unary minus bug again
-	operator - (other: FloatSize2D) -> This { This new(this leftTop, this size + (-other)) }
+	operator - (other: FloatSize2D) -> This { This new(this leftTop, this size - other) }
 	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }
 	operator != (other: This) -> Bool { !(this == other) }
 	operator as -> String { this toString() }
