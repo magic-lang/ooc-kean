@@ -26,15 +26,6 @@ import Image
 import Color
 
 RasterYuv420: class extends RasterYuvPlanar {
-	get: func ~ints (x, y: Int) -> ColorYuv { 
-		ColorYuv new(0, 0, 0)
-		ColorYuv new(this y get(x, y) y, this u get(x/2, y/2) y, this v get(x/2, y/2) y)
-	}
-	set: func ~ints (x, y: Int, value: ColorYuv) {
-		this y set(x, y, ColorMonochrome new(value y))
-		this u set(x/2, y/2, ColorMonochrome new(value u))
-		this v set(x/2, y/2, ColorMonochrome new(value v))
-	}
 	bytesPerPixel: Int { get { 2 } }
 	init: func ~fromSize (size: IntSize2D) { this new(size, CoordinateSystem Default, IntShell2D new()) }
 	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) { 
@@ -127,7 +118,13 @@ RasterYuv420: class extends RasterYuvPlanar {
 //	openResource(assembly: ???, name: String) {
 //		Image openResource
 //	}
-
-
-
+	operator [] (x, y: Int) -> ColorYuv { 
+		ColorYuv new(0, 0, 0)
+		ColorYuv new(this y[x, y] y, this u [x/2, y/2] y, this v [x/2, y/2] y)
+	}
+	operator []= (x, y: Int, value: ColorYuv) {
+		this y[x, y] = ColorMonochrome new(value y)
+		this u[x/2, y/2] = ColorMonochrome new(value u)
+		this v[x/2, y/2] = ColorMonochrome new(value v)
+	}
 }

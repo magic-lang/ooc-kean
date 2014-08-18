@@ -27,12 +27,6 @@ ImageFileTest: class extends Fixture {
 			failureReason = StbImage failureReason()
 			failureReason toString() println()
 		})
-		this add("open RasterBgra", func() {
-			source := "input/Space.png"
-			destination := "output/outputBGRA.png"
-			image := RasterBgra open(source)	
-			image save(destination)	
-		})
 		this add("open JPEG", func() {
 			source := "input/Flower.jpg"
 			destination := "output/outputJPEG.png"
@@ -50,6 +44,31 @@ ImageFileTest: class extends Fixture {
 			failureReason = StbImage failureReason()
 			failureReason toString() println()
 		})
+		this add("open RasterBgra", func() {
+			source := "input/Space.png"
+			destination := "output/outputBgra.png"
+			image := RasterBgra open(source)
+			image save(destination)	
+		})
+		this add("open RasterBgr", func() {
+			source := "input/Space.png"
+			destination := "output/outputBgr.png"
+			image := RasterBgr open(source)
+			image save(destination)	
+		})
+		this add("open RasterMonochrome", func() {
+			source := "input/Barn.png"
+			destination := "output/outputMonochrome.png"
+			image := RasterMonochrome open(source)
+			image save(destination)	
+		})
+//		this add("convert to RasterMonochrome", func() {
+//			source := "input/Barn.png"
+//			destination := "output/outputConvert.png"
+//			bgra := RasterBgra open(source)
+//			monochrome := bgra as RasterMonochrome
+//			monochrome save(destination)	
+//		})
 		this add("Last", func() {
 			expect(1, is equal to(1))
 		})

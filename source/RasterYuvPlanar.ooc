@@ -38,10 +38,6 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 			}
 		}
 	}
-//	FIXME: This could be very wrong
-	get: abstract func ~ints (x, y: Int) -> ColorYuv
-//	FIXME: This could be very wrong
-	set: abstract func ~ints (x, y: Int, value: ColorYuv)
 	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		super(buffer, size, coordinateSystem, crop)
 		this y = this createY()
@@ -77,55 +73,54 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 //			FIXME
 //		else if (this size != other size)
 //			FIXME
-		else {
-			for (y in 0..this size height)
-				for (x in 0..this size width) {
-					c := this get(x, y)
-					o := other as RasterYuvPlanar get(x, y)
-					if (c distance(o) > 0) {
-						maximum := o
-						minimum := o
-						for (otherY in Int maximum(0, y - this distanceRadius)..Int minimum(y + 1 + this distanceRadius, this size height))
-							for (otherX in Int maximum(0, x - this distanceRadius)..Int minimum(x + 1 + this distanceRadius, this size width))
-								if (otherX != x || otherY != y)	{
-									pixel := other as RasterYuvPlanar get(otherX, otherY)
-									if (maximum y < pixel y)
-										maximum y = pixel y
-									else if (minimum y > pixel y)
-										minimum y = pixel y
-									if (maximum u < pixel u)
-										maximum u = pixel u
-									else if (minimum u > pixel u)
-										minimum u = pixel u
-									if (maximum v < pixel v)
-										maximum v = pixel v
-									else if (minimum v > pixel v)
-										minimum v = pixel v
-								}
-						distance := 0.0f;
-						if (c y < minimum y)
-							distance += (minimum y - c y) as Float squared()
-						else if (c y > maximum y)
-							distance += (c y - maximum y) as Float squared()
-						if (c u < minimum u)
-							distance += (minimum u - c u) as Float squared()
-						else if (c u > maximum u)
-							distance += (c u - maximum u) as Float squared()
-						if (c v < minimum v)
-							distance += (minimum v - c v) as Float squared()
-						else if (c v > maximum v)
-							distance += (c v - maximum v) as Float squared()
-						result += (distance) sqrt() / 3;
-					}
-				}
+//		else {
+//			for (y in 0..this size height)
+//				for (x in 0..this size width) {
+//					c := this[x, y]
+//					o := (other as RasterYuvPlanar)[x, y]
+//					if (c distance(o) > 0) {
+//						maximum := o
+//						minimum := o
+//						for (otherY in Int maximum(0, y - this distanceRadius)..Int minimum(y + 1 + this distanceRadius, this size height))
+//							for (otherX in Int maximum(0, x - this distanceRadius)..Int minimum(x + 1 + this distanceRadius, this size width))
+//								if (otherX != x || otherY != y)	{
+//									pixel := (other as RasterYuvPlanar)[otherX, otherY]
+//									if (maximum y < pixel y)
+//										maximum y = pixel y
+//									else if (minimum y > pixel y)
+//										minimum y = pixel y
+//									if (maximum u < pixel u)
+//										maximum u = pixel u
+//									else if (minimum u > pixel u)
+//										minimum u = pixel u
+//									if (maximum v < pixel v)
+//										maximum v = pixel v
+//									else if (minimum v > pixel v)
+//										minimum v = pixel v
+//								}
+//						distance := 0.0f;
+//						if (c y < minimum y)
+//							distance += (minimum y - c y) as Float squared()
+//						else if (c y > maximum y)
+//							distance += (c y - maximum y) as Float squared()
+//						if (c u < minimum u)
+//							distance += (minimum u - c u) as Float squared()
+//						else if (c u > maximum u)
+//							distance += (c u - maximum u) as Float squared()
+//						if (c v < minimum v)
+//							distance += (minimum v - c v) as Float squared()
+//						else if (c v > maximum v)
+//							distance += (c v - maximum v) as Float squared()
+//						result += (distance) sqrt() / 3;
+//					}
+//				}
 			result /= ((this size width squared() + this size height squared()) as Float sqrt())
-		}
+//		}
 	}
 //	FIXME
 //	openResource(assembly: ???, name: String) {
 //		Image openResource
 //	}
-
-
-
+//	operator abstract [] (x, y: Int) -> ColorYuv {}
+//	operator abstract []= (x, y: Int, value: ColorYuv) {}
 }

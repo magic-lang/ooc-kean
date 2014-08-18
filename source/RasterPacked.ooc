@@ -21,6 +21,8 @@ import math
 import structs/ArrayList
 import RasterImage
 import RasterBgra
+import RasterBgr
+import RasterMonochrome
 import Image
 
 RasterPacked: abstract class extends RasterImage {
@@ -35,17 +37,17 @@ RasterPacked: abstract class extends RasterImage {
 		this stride = original stride	
 	}
 	shift: func (offset: IntSize2D) -> Image {
-//		result: RasterImage
-//		if (this instanceOf?(RasterMonochrome))
-//			result = RasterMonochrome new(this size)
-//		else if (this instanceOf?(RasterBgr))
-//			result = RasterBgr new(this size)
-//		else if (this instanceOf?(RasterBgra))
-			result := RasterBgra new(this size)
+		result: RasterImage
+		if (this instanceOf?(RasterMonochrome))
+			result = RasterMonochrome new(this size)
+		else if (this instanceOf?(RasterBgr))
+			result = RasterBgr new(this size)
+		else if (this instanceOf?(RasterBgra))
+			result = RasterBgra new(this size)
 //		else if (this instanceOf?(RasterYuyv))
 //			result = RasterYuyv new(this size)
 		// FIXME: Use this line if and when Yuyv is implemented
-		// offsetX := Int modulo(this instanceOf?(RasterYuyv) && Int modulo(offset width, 2) != 0 ? offset width + 1 : offset width, this size width)
+//		offsetX := Int modulo(this instanceOf?(RasterYuyv) && Int modulo(offset width, 2) != 0 ? offset width + 1 : offset width, this size width)
 		offsetX := Int modulo(offset width, this size width)
 		length := (this size width - offsetX) * this bytesPerPixel
 		line := this size width * this bytesPerPixel

@@ -26,29 +26,6 @@ import Color
 import lang/IO
 
 RasterBgra: class extends RasterPacked {
-	get: func ~intPoint2D (point: IntPoint2D) -> ColorBgra { this get(point x, point y) }
-	set: func ~intPoint2D (point: IntPoint2D, value: ColorBgra) { this set(point x, point y, value) }
-//	FIXME: This could be very wrong
-	get: func ~ints (x, y: Int) -> ColorBgra { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorBgra* + x)@ : ColorBgra new(0, 0, 0, 0) }
-//	FIXME: This could be very wrong
-	set: func ~ints (x, y: Int, value: ColorBgra) { ((this pointer + y * this stride) as ColorBgra* + x)@ = value }
-	get: func ~floatPoint2D (point: FloatPoint2D) -> ColorBgra { this get(point x, point y) }
-	get: func ~floats (x, y: Float) -> ColorBgra {
-		left := x - floor(x)
-		top := y - floor(y)
-		
-		topLeft := this get(floor(x) as Int, floor(y) as Int)
-		bottomLeft := this get(floor(x) as Int, ceil(y) as Int)
-		topRight := this get(ceil(x) as Int, floor(y) as Int)
-		bottomRight := this get(ceil(x) as Int, ceil(y) as Int)
-		
-		ColorBgra new(
-			(top * (left * topLeft Blue + (1 - left) * topRight Blue) + (1 - top) * (left * bottomLeft Blue + (1 - left) * bottomRight Blue)),
-			(top * (left * topLeft Green + (1 - left) * topRight Green) + (1 - top) * (left * bottomLeft Green + (1 - left) * bottomRight Green)),
-			(top * (left * topLeft Red + (1 - left) * topRight Red) + (1 - top) * (left * bottomLeft Red + (1 - left) * bottomRight Red)),
-			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
-		)
-	}
 	bytesPerPixel: Int { get { 4 } }
 	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 4)), size) }
 	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) { 
@@ -101,15 +78,15 @@ RasterBgra: class extends RasterPacked {
 		else {
 			for (y in 0..this size height)
 				for (x in 0..this size width) {
-					c := this get(x, y)
-					o := other as RasterBgra get(x, y)
+					c := this[x, y]
+					o := (other as RasterBgra)[x, y]
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
 						for (otherY in Int maximum(0, y - this distanceRadius)..Int minimum(y + 1 + this distanceRadius, this size height))
 							for (otherX in Int maximum(0, x - this distanceRadius)..Int minimum(x + 1 + this distanceRadius, this size width))
 								if (otherX != x || otherY != y) {
-									pixel := other as RasterBgra get(otherX, otherY)
+									pixel := (other as RasterBgra)[otherX, otherY]
 									if (maximum Blue < pixel Blue)
 										maximum Blue = pixel Blue
 									else if (minimum Blue > pixel Blue)
@@ -158,15 +135,34 @@ RasterBgra: class extends RasterPacked {
 		x, y, n: Int
 		requiredComponents := 4
 		data := StbImage load(filename, x&, y&, n&, requiredComponents)
-		x toString() println()
-		y toString() println()
-		n toString() println()
 		buffer := ByteBuffer new(x * y * requiredComponents)
+		// FIXME: Find a better way to do this using Dispose() or something
 		memcpy(buffer pointer, data, x * y * requiredComponents)
-//		StbImage free(data)
+		StbImage free(data)
 		This new(buffer, IntSize2D new(x, y))
 	}
 	save: func (filename: String) -> Int {
 		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this size width * this bytesPerPixel)
+	}
+	operator [] (x, y: Int) -> ColorBgra { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorBgra* + x)@ : ColorBgra new(0, 0, 0, 0) }
+	operator []= (x, y: Int, value: ColorBgra) { ((this pointer + y * this stride) as ColorBgra* + x)@ = value }
+	operator [] (point: IntPoint2D) -> ColorBgra { this[point x, point y] }
+	operator []= (point: IntPoint2D, value: ColorBgra) { this[point x, point y] = value }
+	operator [] (point: FloatPoint2D) -> ColorBgra { this [point x, point y] }
+	operator [] (x, y: Float) -> ColorBgra {
+		left := x - floor(x)
+		top := y - floor(y)
+		
+		topLeft := this[floor(x) as Int, floor(y) as Int]
+		bottomLeft := this[floor(x) as Int, ceil(y) as Int]
+		topRight := this[ceil(x) as Int, floor(y) as Int]
+		bottomRight := this[ceil(x) as Int, ceil(y) as Int]
+		
+		ColorBgra new(
+			(top * (left * topLeft Blue + (1 - left) * topRight Blue) + (1 - top) * (left * bottomLeft Blue + (1 - left) * bottomRight Blue)),
+			(top * (left * topLeft Green + (1 - left) * topRight Green) + (1 - top) * (left * bottomLeft Green + (1 - left) * bottomRight Green)),
+			(top * (left * topLeft Red + (1 - left) * topRight Red) + (1 - top) * (left * bottomLeft Red + (1 - left) * bottomRight Red)),
+			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
+		)
 	}
 }

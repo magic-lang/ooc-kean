@@ -20,14 +20,11 @@ import math
 import structs/ArrayList
 import RasterPacked
 import RasterImage
+import StbImage
 import Image
 import Color
 
 RasterMonochrome: class extends RasterPacked {
-//	FIXME: This could be very wrong
-	get: func ~ints (x, y: Int) -> ColorMonochrome { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorMonochrome* + x)@ : ColorMonochrome new(0) }
-//	FIXME: This could be very wrong
-	set: func ~ints (x, y: Int, value: ColorMonochrome) { ((this pointer + y * this stride) as ColorMonochrome* + x)@ = value }
 	bytesPerPixel: Int { get { 1 } }
 	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 1)), size) }
 	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) { 
@@ -87,15 +84,15 @@ RasterMonochrome: class extends RasterPacked {
 		else {
 			for (y in 0..this size height)
 				for (x in 0..this size width) {
-					c := this get(x, y)
-					o := other as RasterMonochrome get(x, y)
+					c := this[x,y]
+					o := (other as RasterMonochrome)[x,y]
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
 						for (otherY in Int maximum(0, y - 2)..Int minimum(y + 3, this size height))
 							for (otherX in Int maximum(0, x - 2)..Int minimum(x + 3, this size width))
 								if (otherX != x || otherY != y) {
-									pixel := other as RasterMonochrome get(otherX, otherY)
+									pixel := (other as RasterMonochrome)[otherX, otherY]
 									if (maximum y < pixel y)
 										maximum y = pixel y;
 									else if (minimum y > pixel y)
@@ -116,7 +113,22 @@ RasterMonochrome: class extends RasterPacked {
 //	openResource(assembly: ???, name: String) {
 //		Image openResource
 //	}
-
-
-
+	open: static func (filename: String) -> This {
+		x, y, n: Int
+		requiredComponents := 1
+		data := StbImage load(filename, x&, y&, n&, requiredComponents)
+		buffer := ByteBuffer new(x * y * requiredComponents)
+		// FIXME: Find a better way to do this using Dispose() or something
+		memcpy(buffer pointer, data, x * y * requiredComponents)
+		StbImage free(data)
+		This new(buffer, IntSize2D new(x, y))
+	}
+	save: func (filename: String) -> Int {
+		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this size width * this bytesPerPixel)
+	}
+//	FIXME: This could be very wrong
+	operator [] (x, y: Int) -> ColorMonochrome { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorMonochrome* + x)@ : ColorMonochrome new(0) }
+//	FIXME: This could be very wrong
+	operator []= (x, y: Int, value: ColorMonochrome) { ((this pointer + y * this stride) as ColorMonochrome* + x)@ = value }
 }
+
