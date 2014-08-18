@@ -30,7 +30,7 @@ import math
 
 ColorMonochrome: cover {
 	y: UInt8
-	set: func (color: This) { 
+	set: func (color: This) {
 		this y = color y
 	}
 	init: func@ (=y)
@@ -65,7 +65,7 @@ ColorMonochrome: cover {
 
 ColorYuv: cover {
 	y, u, v: UInt8
-	set: func (color: This) { 
+	set: func (color: This) {
 		this y = color y
 		this u = color u
 		this v = color v
@@ -102,7 +102,7 @@ ColorYuv: cover {
 
 ColorBgr: cover {
 	blue, green, red: UInt8
-	set: func (color: This) { 
+	set: func (color: This) {
 		this blue = color blue
 		this green = color green
 		this red = color red
@@ -140,7 +140,7 @@ ColorBgr: cover {
 ColorBgra: cover {
 	bgr: ColorBgr
 	alpha: UInt8
-	set: func (color: This) { 
+	set: func (color: This) {
 		this bgr = color bgr
 		this alpha = color alpha
 	}
@@ -179,7 +179,9 @@ ColorBgra: cover {
 }
 
 ColorConvert: cover {
-	yuvToBgr: static func (color: ColorYuv) { 
+	// FIXME: yuvToBgr2[512-767] and yuvToBgr2[256-511] are all 0, so there's some minor room for optimization here.
+	// Also, since multidimensional arrays work now, the arrays below can be reorganized if so desired.
+	yuvToBgr: static func (color: ColorYuv) {
 		ColorBgr new(
 			((ColorConvert yuvToBgr2[color y] + ColorConvert yuvToBgr2[256 + color u] + ColorConvert yuvToBgr2[512 + color v]) >> 8) clamp(0, 255) as UInt8,
 			((ColorConvert yuvToBgr1[color y] + ColorConvert yuvToBgr1[256 + color u] + ColorConvert yuvToBgr1[512 + color v]) >> 8) clamp(0, 255) as UInt8,
