@@ -23,10 +23,10 @@ Vao: class {
   positionLayout: const static UInt = 0
   textureCoordinateLayout: const static UInt = 1
 
-  create: static func (positions: Float[], textureCoordinates: Float[], vertexCount: UInt) -> This {
+  create: static func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> This {
     result := This new()
     if (result)
-      result _generate(positions, textureCoordinates, vertexCount)
+      result _generate(positions, textureCoordinates, vertexCount, dimensions)
     return result
   }
 
@@ -46,27 +46,36 @@ Vao: class {
     glBindVertexArray(0);
   }
 
-  _generate: func(positions: Float[], textureCoordinates: Float[], vertexCount: UInt) {
-    dimensions := positions length / vertexCount
-    packedArray := Float[2*vertexCount*dimensions] new()
+  _generate: func(positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) {
+    attributeCount := 2
+    packedArray := gc_malloc(attributeCount * vertexCount * dimensions * Float size) as Float*
     for(i in 0..vertexCount) {
       for(j in 0..dimensions) {
-        packedArray[2*dimensions*i + j] = positions[dimensions*i + j]
-        packedArray[2*dimensions*i + j + dimensions] = textureCoordinates[dimensions*i + j]
+        packedArray[attributeCount * dimensions * i + j] = positions[dimensions * i + j]
+        packedArray[attributeCount * dimensions * i + j + dimensions] = textureCoordinates[dimensions * i + j]
       }
     }
+
     glGenVertexArrays(1, backend&)
     glBindVertexArray(backend)
     vertexBuffer: UInt
     glGenBuffers(1, vertexBuffer&)
+
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer)
-    glBufferData(GL_ARRAY_BUFFER, 4*vertexCount*dimensions , packedArray&, GL_STATIC_DRAW)
-    positionOffset : UInt = 0
-    textureCoordinateOffset : UInt = dimensions*4
-    glVertexAttribPointer(positionLayout, 2, GL_FLOAT, GL_FALSE, 4*dimensions*2, positionOffset& as Pointer)
+    glBufferData(GL_ARRAY_BUFFER, Float size * attributeCount * vertexCount * dimensions, packedArray, GL_STATIC_DRAW)
+
+    positionOffset : ULong = 0
+    textureCoordinateOffset : ULong = Float size * dimensions
+    glVertexAttribPointer(positionLayout, dimensions, GL_FLOAT, GL_FALSE, Float size * dimensions * attributeCount, positionOffset as Pointer)
     glEnableVertexAttribArray(positionLayout)
-    glVertexAttribPointer(textureCoordinateLayout, 2, GL_FLOAT, GL_FALSE, 4*dimensions*2, textureCoordinateOffset& as Pointer)
+    glVertexAttribPointer(textureCoordinateLayout, dimensions, GL_FLOAT, GL_FALSE, Float size * dimensions * attributeCount, textureCoordinateOffset as Pointer)
     glEnableVertexAttribArray(textureCoordinateLayout)
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0)
+    glBindVertexArray(0)
+    glDeleteBuffers(1, vertexBuffer&)
+
+    gc_free(packedArray)
 
   }
 

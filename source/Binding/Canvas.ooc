@@ -21,12 +21,10 @@ import GpuImage, ImageProcessor
 
 Canvas: class {
   renderTarget : Fbo
-  quad : Quad
 
   init: func (type: TextureType, width: UInt, height: UInt)
   {
     this renderTarget = Fbo create(type, width, height)
-    this quad = Quad create()
   }
 
   dispose: func () {
@@ -35,9 +33,11 @@ Canvas: class {
 
   draw: func (image: GpuImage, processor: ImageProcessor) {
     //renderTarget bind()
+    renderTarget clear()
     processor use()
-    image bind()
-    quad draw()
+    //image bind()
+    Quad draw()
+
   }
 
 }

@@ -20,7 +20,7 @@ ImageProcessor: abstract class {
   program : ShaderProgram
 
   use: func () {
-    
+    raise("Using non implemented use function for ImageProcessor")
   }
 
 }

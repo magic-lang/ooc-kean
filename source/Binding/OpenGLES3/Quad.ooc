@@ -12,45 +12,33 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this software. If not, see <http://www.gnu.org/licenses/>.
+ * along with This software. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import gles, Vao
 
 
 Quad: class {
-  vao: Vao
+  vao: static Vao
 
-  positions := static [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0] as Float[]
-  textureCoordinates := static [0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0] as Float[]
-
-  create: static func () -> This {
-    result := This new()
-    if (result)
-      result generate()
-    if(result vao)
-      return result
-    return null
+  initialize: static func () {
+    positions := [-16.0f / 9.0f, -1.0f, -16.0f / 9.0f, 1.0f, 16.0f / 9.0f, -1.0f, 16.0f / 9.0f, 1.0f] as Float*
+    textureCoordinates := [0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f] as Float*
+    This vao = Vao create(positions, textureCoordinates, 4, 2)
   }
 
-
-  init: func () {
+  dispose: static func () {
+    This vao dispose()
   }
 
+  draw: static func {
+    if(!This vao)
+      This initialize()
 
-  dispose: func () {
-    this vao dispose()
-  }
-
-  draw: func {
-    vao bind()
+    This vao bind()
   	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    vao unbind()
-  }
+    This vao unbind()
 
-
-  generate: func() {
-    vao = Vao create(Quad positions, Quad textureCoordinates, 4)
   }
 
 

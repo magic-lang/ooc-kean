@@ -29,11 +29,11 @@ ShaderProgram: class {
   }
 
   use: func {
-    glUseProgram(backend)
+    glUseProgram(this backend)
   }
 
   dispose: func() {
-    glDeleteProgram(backend)
+    glDeleteProgram(this backend)
   }
 
   setUniform: func (name: String, value: UInt) {
@@ -41,9 +41,11 @@ ShaderProgram: class {
   }
 
   _compileShader: func(source: String, shaderID: UInt) {
-    glShaderSource(shaderID, 1, source toCString()&, null)
+
+    glShaderSource(shaderID, 1, (source toCString())&, null)
 
     glCompileShader(shaderID)
+
     "Compiling shader:" println()
     source println()
     success: Int
@@ -57,10 +59,11 @@ ShaderProgram: class {
       length: Int
       glGetShaderInfoLog(shaderID, logSize, length&, compileLog)
       compileLog toString() println()
-      //raise("Shader compilation failed: %s" compileLog)
+      raise("Shader compilation failed")
+      gc_free(compileLog)
     }
   }
-  __compileShaders: func(vertexSource: String, fragmentSource: String) {
+  _compileShaders: func(vertexSource: String, fragmentSource: String) {
     vertexShaderID := glCreateShader(GL_VERTEX_SHADER)
     fragmentShaderID := glCreateShader(GL_FRAGMENT_SHADER)
 
@@ -69,18 +72,18 @@ ShaderProgram: class {
 
     this backend = glCreateProgram()
 
-    glAttachShader(backend, vertexShaderID)
-    glAttachShader(backend, fragmentShaderID)
-    glLinkProgram(backend)
+    glAttachShader(this backend, vertexShaderID)
+    glAttachShader(this backend, fragmentShaderID)
+    glLinkProgram(this backend)
 
-    glDetachShader(backend, vertexShaderID)
-    glDetachShader(backend, fragmentShaderID)
+    glDetachShader(this backend, vertexShaderID)
+    glDetachShader(this backend, fragmentShaderID)
 
     glDeleteShader(vertexShaderID)
     glDeleteShader(fragmentShaderID)
   }
   compile: func() {
-    __compileShaders(this vertexSource, this fragmentSource)
+    _compileShaders(this vertexSource, this fragmentSource)
   }
 
 }
