@@ -22,16 +22,19 @@ Fbo: class {
   backend: UInt
   targetTexture: Texture
   textureType: TextureType
+  width: UInt
+  height: UInt
 
   create: static func (type: TextureType, width: UInt, height: UInt) -> This {
-    result := Fbo new(type)
-    if(result)
-      result generate(width, height)
+    result := Fbo new(type, width, height)
+    result _generate(width, height)
     return result
   }
 
 
-  init: func (type: TextureType) {
+  init: func (type: TextureType, width: UInt, height: UInt) {
+    this width = width
+    this height = height
     this textureType = type
   }
 
@@ -42,14 +45,20 @@ Fbo: class {
   }
 
   bind: func {
-    glBindFramebuffer(GL_FRAMEBUFFER, backend)
+    glBindFramebuffer(GL_FRAMEBUFFER, 0)
   }
 
   unbind: func {
     glBindFramebuffer(GL_FRAMEBUFFER, 0)
   }
 
-  generate: func(width: UInt, height: UInt) {
+  clear: func {
+    bind()
+    glClear(GL_COLOR_BUFFER_BIT)
+    unbind()
+  }
+
+  _generate: func(width: UInt, height: UInt) {
     this targetTexture = Texture create(this textureType, width, height)
     glGenFramebuffers(1, this backend&)
     glBindFramebuffer(GL_FRAMEBUFFER, this backend)
