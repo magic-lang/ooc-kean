@@ -43,7 +43,7 @@ RasterImage: abstract class extends Image {
 //	TODO: Actually resize the image
 		resized := this
 		result = resized
-		result		
+		result
 	}
 	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> Image {
 		transform = (this transform asFloatTransform2D()) * transform * (this transform asFloatTransform2D()) inverse

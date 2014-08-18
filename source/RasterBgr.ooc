@@ -47,8 +47,7 @@ RasterBgr: class extends RasterPacked {
 		f := func (color: ColorBgr) {
 			(destination as ColorBgr*)@ = color 
 			destination += 1
-//			FIXME: "Invalid comparison between ColorBgr* and ColorBgr*" compiler bug, cast to Pointer first
-			if (destination as Pointer >= rowEnd as Pointer) {
+			if (destination >= rowEnd) {
 				row += this stride
 				destination = row as ColorBgr*
 				rowEnd = row as ColorBgr* + rowLength

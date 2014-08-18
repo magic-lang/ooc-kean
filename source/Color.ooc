@@ -179,7 +179,7 @@ ColorBgra: cover {
 }
 
 ColorConvert: cover {
-	// FIXME: yuvToBgr2[512-767] and yuvToBgr2[256-511] are all 0, so there's some minor room for optimization here.
+	// FIXME: yuvToBgr2[512..end] and yuvToBgr2[256..511] are all 0, so there's some minor room for optimization here.
 	// Also, since multidimensional arrays work now, the arrays below can be reorganized if so desired.
 	yuvToBgr: static func (color: ColorYuv) {
 		ColorBgr new(
