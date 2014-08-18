@@ -15,9 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import math
-import FloatExtension
-import IntSize2D
-import IntExtension
+use ooc-math
 
 FloatMatrix : class {
 
@@ -27,10 +25,9 @@ FloatMatrix : class {
 	Dimensions: IntSize2D {get {this dimensions}}
 	elements: Float[]
 
-
-	init: func (= dimensions)
+	init: func ~IntSize2D (= dimensions)
 	init: func ~default { this init(0, 0) }
-	init: func ~reduced (width: Int, height: Int) {
+	init: func (width: Int, height: Int) {
 		this init(IntSize2D new(width, height))
 		this elements = Float[width * height] new()
 	}
@@ -54,7 +51,7 @@ FloatMatrix : class {
 	// <param name="x">Column number of a matrix.</param>
 	// <param name="y">Row number of a matrix.</param>
 	// <returns></returns>
-	get: func (x: Int, y: Int) -> Float { this elements[x * dimensions height + y] }
+	get: func (x: Int, y: Int) -> Float { this elements[x + dimensions width * y] }
 
 	// <summary>
 	// Set an element in a matrix at position(x,y).
@@ -63,7 +60,7 @@ FloatMatrix : class {
 	// <param name="y">Row number of a matrix.</param>
 	// <param name="value">The value set at (x,y).</param>
 	// <returns></returns>
-	set: func (x: Int, y: Int, value: Float) -> Void { this elements[x * dimensions height + y] = value }
+	set: func (x: Int, y: Int, value: Float) { this elements[x + dimensions width * y] = value }
 
 	// <summary>
 	// True if the matrix is a square matrix.
@@ -81,9 +78,9 @@ FloatMatrix : class {
 	// <returns>Return a copy of the current matrix.</returns>
 	copy: func () -> This {
 		result := This new (this dimensions width, this dimensions height)
-		for (i in 0..this dimensions height) {
-			for (j in 0..this dimensions width) {
-				result set(i, j, this get(i, j))
+		for (y in 0..this dimensions height) {
+			for (x in 0..this dimensions width) {
+				result set(x, y, this get(x, y))
 			}
 		}
 		result
@@ -94,10 +91,10 @@ FloatMatrix : class {
 	// </summary>
 	// <returns>Return current matrix tranposed.</returns>
 	transpose: func () -> This {
-		result := This new (this dimensions width, this dimensions height)
-		for (i in 0..this dimensions height) {
-			for (j in 0..this dimensions width) {
-				result set(j, i, this get(i, j))
+		result := This new (this dimensions height, this dimensions width)
+		for (y in 0..this dimensions height) {
+			for (x in 0..this dimensions width) {
+				result set(y, x, this get(x, y))
 			}
 		}
 		result
@@ -122,11 +119,11 @@ FloatMatrix : class {
 
 	toString: func -> String {
 		result: String = ""
-		for (i in 0..this dimensions height) {
-			for (j in 0..this dimensions width) {
- 				result = result append(this get(j, i) toString()) append(", ")
+		for (y in 0..this dimensions height) {
+			for (x in 0..this dimensions width) {
+ 				result += this get(x, y) toString() + ", "
 			}
-			result = result append("; ")
+			result += "; "
 		}
 		result
 	 }
@@ -192,7 +189,8 @@ FloatMatrix : class {
 					lup := (transpose * this) lupDecomposition()
 					result = (lup[2] * transpose * y) forwardSubstitution(lup[0])  backwardSubstitution(lup[1])
 				}
-			} catch (e: Exception) {}
+			} catch (e: Exception) {
+			}
 		result
 	}
 
