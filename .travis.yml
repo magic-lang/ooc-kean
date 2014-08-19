@@ -9,4 +9,5 @@ before_script:
 script:
   - export OOC_LIBS=$PWD
   - sam get
+  - sam clone ooc-unit
   - sam test
