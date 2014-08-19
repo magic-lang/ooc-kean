@@ -2,10 +2,9 @@ use ooc-unit
 use ooc-math
 import math
 import lang/IO
-//import ../../../source/FloatExtension
 
 FloatTransform3DTest: class extends Fixture {
-	precision := 1.0f / 1_00000.0f
+	precision := 1.0e-5f
 	transform0 := FloatTransform3D new(-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
 	transform1 := FloatTransform3D new(-1, 2, 3, 4, 5, 6, 7, 8, -5, 10, 11, 12)
 	transform2 := FloatTransform3D new(30, 32, 36, 58, 81, 96, -10, 14, 24, 128, 182, 216)
@@ -28,7 +27,7 @@ FloatTransform3DTest: class extends Fixture {
 		this add("inverse transform", func() {
 			transform := FloatTransform3D new(0.035711678574190f, 0.849129305868777f, 0.933993247757551f, 0.678735154857773f, 0.757740130578333f, 0.743132468124916f, 0.392227019534168f, 0.655477890177557f, 0.171186687811562f, 0.706046088019609f, 0.031832846377421f, 0.276922984960890f)
 			transformInverseCorrect := FloatTransform3D new(-1.304260393891308f, 1.703723523873863f, -0.279939209639535f, 0.639686782697661f, -1.314595978968342f, 2.216619899417434f, 0.538976631155336f, 1.130007253038916f, -2.004511083979782f, 0.751249880258891f, -1.473984978790241f, 0.682183855876876f)
-			transformInverse := transform Inverse()
+			transformInverse := transform inverse
 			expect(transformInverse a, is equal to(transformInverseCorrect a) within(this precision))
 			expect(transformInverse b, is equal to(transformInverseCorrect b) within(this precision))
 			expect(transformInverse c, is equal to(transformInverseCorrect c) within(this precision))
@@ -66,7 +65,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform l, is equal to(0.0f) within(this precision))
 		})
 		this add("create identity", func() {
-			transform := FloatTransform3D Identity
+			transform := FloatTransform3D identity
 			expect(transform a, is equal to(1.0f) within(this precision))
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
@@ -81,7 +80,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform l, is equal to(0.0f) within(this precision))
 		})
 		this add("rotate", func() {
-			identity := FloatTransform3D Identity
+			identity := FloatTransform3D identity
 			scale := 20.0f
 			transform := FloatTransform3D createScaling(scale)
 			transform = transform scale(1.0f / scale)
@@ -168,23 +167,23 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform l, is equal to(zDelta) within(this precision))
 		})
 		this add("get scalingX", func() {
-			scale := this transform0 ScalingX
+			scale := this transform0 scalingX
 			expect(scale, is equal to(3.7416575f) within(this precision))
 		})
 		this add("get scalingY", func() {
-			scale := this transform0 ScalingY
+			scale := this transform0 scalingY
 			expect(scale, is equal to(8.77496433f) within(this precision))
 		})
 		this add("get scalingZ", func() {
-			scale := this transform0 ScalingZ
+			scale := this transform0 scalingZ
 			expect(scale, is equal to(13.9283886f) within(this precision))
 		})
 		this add("get scaling", func() {
-			scale := this transform0 Scaling
+			scale := this transform0 scaling
 			expect(scale, is equal to(8.8150f) within(this precision))
 		})
 		this add("get translation", func() {
-			translation := this transform0 Translation
+			translation := this transform0 translation
 			expect(translation width, is equal to(10.0f) within(this precision))
 			expect(translation height, is equal to(11.0f) within(this precision))
 			expect(translation depth, is equal to(12.0f) within(this precision))

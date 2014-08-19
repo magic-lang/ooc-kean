@@ -21,12 +21,12 @@ import structs/ArrayList
 
 FloatPoint2D: cover {
 	x, y: Float
-	//Norm ::= (this x pow(2.0f) + this y pow(2.0f)) sqrt() // FIXME: Why does this syntax not work on a cover?
-	Norm: Float { get { (this x pow(2.0f) + this y pow(2.0f)) sqrt() } }
-	//Azimuth ::= this y atan2(this x) // FIXME: Why does this syntax not work on a cover?
-	Azimuth: Float { get { this y atan2(this x) } }
+	norm ::= (this x squared() + this y squared()) sqrt()
+	azimuth ::= this y atan2(this x)
 	init: func@ (=x, =y)
 	init: func@ ~default { this init(0.0f, 0.0f) }
+	basisX: static This { get { This new(1, 0) } }
+	basisY: static This { get { This new(0, 1) } }
 	pNorm: func (p: Float) -> Float {
 		p == 1 ?
 		this x abs() + this y abs() :
@@ -34,10 +34,9 @@ FloatPoint2D: cover {
 	}
 	scalarProduct: func (other: This) -> Float { this x * other x + this y * other y }
 	angle: func (other: This) -> Float {
-		(this scalarProduct(other) / (this Norm * other Norm)) clamp(-1, 1) acos() * (this x * other y - this y * other x < 0 ? -1 : 1)
+		(this scalarProduct(other) / (this norm * other norm)) clamp(-1, 1) acos() * (this x * other y - this y * other x < 0 ? -1 : 1)
 	}
-	//FIXME: Oddly enough, "this - other" instead of "this + (-other)" causes a compile error in the unary '-' operator below.
-	distance: func (other: This) -> Float { (this + (-other)) Norm }
+	distance: func (other: This) -> Float { (this - other) norm }
 	swap: func -> This { This new(this y, this x) }
 	round: func -> This { This new(this x round(), this y round()) }
 	ceiling: func -> This { This new(this x ceil(), this y ceil()) }
@@ -63,6 +62,7 @@ FloatPoint2D: cover {
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
 	operator as -> String { this toString() }
+	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
 	parse: static func (input: String) -> This {
 		array := input split(',')

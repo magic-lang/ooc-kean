@@ -4,7 +4,7 @@ import math
 import lang/IO
 
 FloatPoint3DTest: class extends Fixture {
-	precision := 1.0f / 1_0000.0f
+	precision := 1.0e-4f
 	point0 := FloatPoint3D new (22.0f, -3.0f, 10.0f)
 	point1 := FloatPoint3D new (12.0f, 13.0f, 20.0f)
 	point2 := FloatPoint3D new (34.0f, 10.0f, 30.0f)
@@ -12,7 +12,7 @@ FloatPoint3DTest: class extends Fixture {
 	init: func () {
 		super("FloatPoint3D")
 		this add("norm", func() {
-			expect(this point0 Norm, is equal to(24.3515f) within(this precision))
+			expect(this point0 norm, is equal to(24.3515f) within(this precision))
 		})
 		this add("scalar product", func() {
 			point := FloatPoint3D new()
@@ -20,6 +20,7 @@ FloatPoint3DTest: class extends Fixture {
 			expect(this point0 scalarProduct(this point1), is equal to(425.0f) within(this precision))
 		})
 		this add("scalar multiplication", func() {
+//			FIXME: Equals interface
 //			expect(this point0 vectorProduct(this point1), is equal to(-(this point1 vectorProduct(point0))))
 			expect(this point0 vectorProduct(this point1) x, is equal to(-190.0f) within(this precision))
 			expect(this point0 vectorProduct(this point1) y, is equal to(-320.0f) within(this precision))
@@ -41,8 +42,9 @@ FloatPoint3DTest: class extends Fixture {
 			expect((this point0 + this point1) z, is equal to(this point2 z) within(this precision))
 		})
 		this add("subtraction", func() {
-//			FIXME: Unary minus compiler bug
-//			expect(this vector0 - this vector0, is equal to(FloatSize2D new()))
+			expect((this point0 - this point0) x, is equal to(FloatPoint3D new() x))
+			expect((this point0 - this point0) y, is equal to(FloatPoint3D new() y))
+			expect((this point0 - this point0) z, is equal to(FloatPoint3D new() z))
 		})
 		this add("get values", func() {
 			expect(this point0 x, is equal to(22.0f))

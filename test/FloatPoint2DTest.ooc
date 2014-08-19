@@ -4,7 +4,7 @@ import math
 import lang/IO
 
 FloatPoint2DTest: class extends Fixture {
-	precision := 1.0f / 1_0000.0f
+	precision := 1.0e-5f
 	vector0 := FloatPoint2D new (22.221f, -3.1f)
 	vector1 := FloatPoint2D new (12.221f, 13.1f)
 	vector2 := FloatPoint2D new (34.442f, 10.0f)
@@ -26,16 +26,16 @@ FloatPoint2DTest: class extends Fixture {
 			expect((this vector0 + this vector1) y, is equal to(this vector2 y))
 		})
 		this add("subtraction", func() {
-//			FIXME: Unary minus compiler bug
-//			expect(this vector0 - this vector0, is equal to(FloatSize2D new()))
+			expect((this vector0 - this vector0) x, is equal to((FloatPoint2D new()) x))
+			expect((this vector0 - this vector0) y, is equal to((FloatPoint2D new()) y))
 		})
 		this add("scalar multiplication", func() {
-//			FIXME: Unary minus compiler bug
-//			expect((-1) * this vector0, is equal to(-vector0)) (-1)
+			expect(((-1) * this vector0) x, is equal to((-vector0) x))
+			expect(((-1) * this vector0) y, is equal to((-vector0) y))
 		})
 		this add("scalar division", func() {
-//			FIXME: Unary minus compiler bug
-//			expect(this vector0 / (-1), is equal to(-vector0))
+			expect((this vector0 / (-1)) x, is equal to((-vector0) x))
+			expect((this vector0 / (-1)) y, is equal to((-vector0) y))
 		})
 		this add("get values", func() {
 			expect(this vector0 x, is equal to(22.221f))
@@ -50,43 +50,44 @@ FloatPoint2DTest: class extends Fixture {
 			value := "10.00, 20.00"
 			expect(this vector3 toString(), is equal to(value))
 //			FIXME: Equals interface
-//			expect(FloatSize2D parse(value), is equal to(this vector3))
+			expect((FloatPoint2D parse(value)) x, is equal to((this vector3) x))
+			expect((FloatPoint2D parse(value)) y, is equal to((this vector3) y))
 		})
 		this add("polar 0", func() {
-			point := FloatSize2D new()
-			expect(point Norm, is equal to(0))
-			expect(point Azimuth, is equal to(0))
+			point := FloatPoint2D new()
+			expect(point norm, is equal to(0))
+			expect(point azimuth, is equal to(0))
 		})		
 		this add("polar 1", func() {
-			point := FloatSize2D new(1, 0)
-			expect(point Norm, is equal to(1.0f))
-			expect(point Azimuth, is equal to(0))
+			point := FloatPoint2D new(1, 0)
+			expect(point norm, is equal to(1.0f))
+			expect(point azimuth, is equal to(0))
 		})		
 		this add("polar 2", func() {
-			point := FloatSize2D new(0, 1)
-			expect(point Norm, is equal to(1.0f))
-			expect(point Azimuth, is equal to(PI as Float / 2.0f))
+			point := FloatPoint2D new(0, 1)
+			expect(point norm, is equal to(1.0f))
+			expect(point azimuth, is equal to(PI as Float / 2.0f))
 		})		
 		this add("polar 3", func() {
-			point := FloatSize2D new(0, -5)
-			expect(point Norm, is equal to(5.0f))			
-			expect(point Azimuth, is equal to(PI as Float / -2.0f))
+			point := FloatPoint2D new(0, -5)
+			expect(point norm, is equal to(5.0f))			
+			expect(point azimuth, is equal to(PI as Float / -2.0f))
 		})		
 		this add("polar 4", func() {
-			point := FloatSize2D new(-1, 0)
-			expect(point Norm, is equal to(1.0f))
-			expect(point Azimuth, is equal to(PI as Float))
+			point := FloatPoint2D new(-1, 0)
+			expect(point norm, is equal to(1.0f))
+			expect(point azimuth, is equal to(PI as Float))
 		})		
 		this add("polar 5", func() {
-			point := FloatSize2D new(-3, 0)
-			point2 := FloatSize2D polar(point Norm, point Azimuth)
+			point := FloatPoint2D new(-3, 0)
+			point2 := FloatPoint2D polar(point norm, point azimuth)
 			expect(point distance(point2), is equal to(0.0f) within(this precision))
 		})
 		this add("angles", func() {
-			expect(FloatSize2D BasisX angle(FloatSize2D BasisX), is equal to(0.0f) within(this precision))
-			expect(FloatSize2D BasisX angle(FloatSize2D BasisY), is equal to(PI as Float / 2.0f) within(this precision))
-			expect(FloatSize2D BasisX angle(-FloatSize2D BasisX), is equal to(PI as Float) within(this precision))
-			expect(FloatSize2D BasisX angle(-FloatSize2D BasisY), is equal to(-PI as Float / 2.0f) within(this precision))
+			expect(FloatPoint2D basisX angle(FloatPoint2D basisX), is equal to(0.0f) within(this precision))
+			expect(FloatPoint2D basisX angle(FloatPoint2D basisY), is equal to(PI as Float / 2.0f) within(this precision))
+			expect(FloatPoint2D basisX angle(-FloatPoint2D basisX), is equal to(PI as Float) within(this precision))
+			expect(FloatPoint2D basisX angle(-FloatPoint2D basisY), is equal to(-PI as Float / 2.0f) within(this precision))
 		})
 		this add("casts", func() {
 //			FIXME: We have no integer versions of anything yet

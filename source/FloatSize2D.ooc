@@ -22,15 +22,13 @@ import structs/ArrayList
 
 FloatSize2D: cover {
 	width, height: Float
-	Area: Float { get { (this width * this height) } }
-	Length: Float { get { this Norm } }
-	Empty: Bool { get { this width == 0 || this height == 0 } }
-	//Norm ::= (this width pow(2.0f) + this height pow(2.0f)) sqrt() // FIXME: Why does this syntax not work on a cover?
-	Norm: Float { get { (this width pow(2.0f) + this height pow(2.0f)) sqrt() } }
-	//Azimuth ::= this height atan2(this width) // FIXME: Why does this syntax not work on a cover?
-	Azimuth: Float { get { this height atan2(this width) } }
-	BasisX: static This { get { This new(1, 0) } }
-	BasisY: static This { get { This new(0, 1) } }
+	area: Float { get { (this width * this height) } }
+	length: Float { get { this norm } }
+	empty: Bool { get { this width == 0 || this height == 0 } }
+	norm ::= (this width squared() + this height squared()) sqrt()
+	azimuth ::= this height atan2(this width)
+	basisX: static This { get { This new(1, 0) } }
+	basisY: static This { get { This new(0, 1) } }
 	init: func@ (=width, =height)
 	init: func@ ~default { this init(0.0f, 0.0f) }
 	pNorm: func (p: Float) -> Float {
@@ -40,10 +38,9 @@ FloatSize2D: cover {
 	}
 	scalarProduct: func (other: This) -> Float { this width * other width + this height * other height }
 	angle: func (other: This) -> Float {
-		(this scalarProduct(other) / (this Norm * other Norm)) clamp(-1.0f, 1.0f) acos() * (this width * other height - this height * other width < 0.0f ? -1.0f : 1.0f)
+		(this scalarProduct(other) / (this norm * other norm)) clamp(-1.0f, 1.0f) acos() * (this width * other height - this height * other width < 0.0f ? -1.0f : 1.0f)
 	}
-	//FIXME: Oddly enough, "this - other" instead of "this + (-other)" causes a compile error in the unary '-' operator below.
-	distance: func (other: This) -> Float { (this + (-other)) Norm }
+	distance: func (other: This) -> Float { (this - other) norm }
 	swap: func -> This { This new(this height, this width) }
 	round: func -> This { This new(this width round(), this height round()) }
 	ceiling: func -> This { This new(this width ceil(), this height ceil()) }

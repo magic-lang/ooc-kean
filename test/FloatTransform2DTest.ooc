@@ -2,10 +2,9 @@ use ooc-unit
 use ooc-math
 import math
 import lang/IO
-//import ../../../source/FloatExtension
 
 FloatTransform2DTest: class extends Fixture {
-	precision := 1.0f / 1_0000.0f
+	precision := 1.0e-5f
 	transform0 := FloatTransform2D new(3.0f, 1.0f, 2.0f, 1.0f, 5.0f, 7.0f)
 	transform1 := FloatTransform2D new(7.0f, 4.0f, 2.0f, 5.0f, 7.0f, 6.0f)
 	transform2 := FloatTransform2D new(29.0f, 11.0f, 16.0f, 7.0f, 38.0f, 20.0f)
@@ -48,7 +47,7 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform i, is equal to(0.0f) within(this precision))
 		})
 		this add("create identity transform", func() {
-			transform := FloatTransform2D Identity
+			transform := FloatTransform2D identity
 			expect(transform a, is equal to(1.0f) within(this precision))
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
@@ -60,7 +59,7 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform i, is equal to(1.0f) within(this precision))
 		})
 		this add("rotate", func() {
-			identity := FloatTransform2D Identity
+			identity := FloatTransform2D identity
 			angle := PI as Float / 9.0f 
 			transform := FloatTransform2D createZRotation(angle)
 			transform = transform rotate(-angle)
@@ -148,19 +147,19 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform i, is equal to(1.0f) within(this precision))
 		})
 		this add("get ScalingX", func() {
-			scale := this transform0 ScalingX
+			scale := this transform0 scalingX
 			expect(scale, is equal to(3.162277f) within(this precision))
 		})
 		this add("get ScalingY", func() {
-			scale := this transform0 ScalingY
+			scale := this transform0 scalingY
 			expect(scale, is equal to(2.23606801f) within(this precision))
 		})
 		this add("get Scaling", func() {
-			scale := this transform0 Scaling
+			scale := this transform0 scaling
 			expect(scale, is equal to(2.69917297f) within(this precision))
 		})
 		this add("get ScalingX", func() {
-			translation := this transform0 Translation
+			translation := this transform0 translation
 			expect(translation width, is equal to(5.0f) within(this precision))
 			expect(translation height, is equal to(7.0f) within(this precision))
 		})

@@ -22,10 +22,10 @@ import structs/ArrayList
 
 IntSize2D: cover {
 	width, height: Int
-	Area: Int { get { (this width * this height) } }
-	Empty: Bool { get { this width == 0 || this height == 0 } }
-	BasisX: static This { get { This new(1, 0) } }
-	BasisY: static This { get { This new(0, 1) } }
+	area ::= this width * this height
+	empty ::= this width == 0 || this height == 0
+	basisX: static This { get { This new(1, 0) } }
+	basisY: static This { get { This new(0, 1) } }
 	init: func@ (=width, =height)
 	init: func@ ~default { this init(0, 0) }
 	scalarProduct: func (other: This) -> Int { this width * other width + this height * other height }

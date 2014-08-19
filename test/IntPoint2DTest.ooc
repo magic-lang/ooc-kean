@@ -25,8 +25,8 @@ IntPoint2DTest: class extends Fixture {
 			expect((this vector0 + this vector1) y, is equal to(this vector2 y))
 		})
 		this add("subtraction", func() {
-//			FIXME: Unary minus compiler bug
-//			expect(this vector0 - this vector0, is equal to(FloatSize2D new()))
+			expect((this vector0 - this vector0) x, is equal to((IntPoint2D new()) x))
+			expect((this vector0 - this vector0) y, is equal to((IntPoint2D new()) y))
 		})
 		this add("get values", func() {
 			expect(this vector0 x, is equal to(22))

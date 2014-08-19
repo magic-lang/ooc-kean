@@ -4,7 +4,7 @@ import math
 import lang/IO
 
 FloatBox2DTest: class extends Fixture {
-	precision := 1.0f / 1_0000.0f
+	precision := 1.0e-5f
 	box0 := FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f)
 	box1 := FloatBox2D new (4.0f, 3.0f, 2.0f, 1.0f)
 	box2 := FloatBox2D new (2.0f, 1.0f, 4.0f, 3.0f)
