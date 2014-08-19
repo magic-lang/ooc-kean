@@ -18,8 +18,9 @@
 import lang/Memory
 import structs/ArrayList
 import threading/Thread
+import IDisposable
 
-ByteBuffer: class {
+ByteBuffer: class implements IDisposable {
 	size: Int
 	pointer: UInt8*
 	free: Func (This)
@@ -31,7 +32,7 @@ ByteBuffer: class {
 		pointer: UInt8*
 		bin := ArrayList<This> new()
 		bin = This getBin(size);
-		
+
 		for(i in 0..bin size)
 		{
 			buffer := bin[i]
@@ -61,7 +62,7 @@ ByteBuffer: class {
 		This lock unlock()
 	}
 	getBin: static func (size: Int) -> ArrayList<This> {
-		
+
 		if (size < 10000)
 			This smallRecycleBin
 		else if (size < 100000)
@@ -80,7 +81,7 @@ ByteBuffer: class {
 		b := other as UInt8*
 		memcpy(a + destination, b + start, length)
 	}
-	
+
 	lock := static Mutex new()
 	smallRecycleBin := static ArrayList<This> new()
 	mediumRecycleBin := static ArrayList<This> new()

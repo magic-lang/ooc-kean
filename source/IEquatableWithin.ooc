@@ -16,5 +16,5 @@
  */
 
 IEquatableWithin: interface <T, S> {
-	Equals: func(other: T, precision: S) -> Bool
+	equals: func(other: T, precision: S) -> Bool
 }

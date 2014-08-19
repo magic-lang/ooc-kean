@@ -15,8 +15,6 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-Order: enum {
-	less = -1
-	equal = 0
-	greater = 1
+IDisposable: interface {
+	dispose: func
 }
