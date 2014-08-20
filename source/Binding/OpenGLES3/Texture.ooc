@@ -72,6 +72,18 @@ Texture: class {
     unbind()
   }
 
+  getGLFormat: static func(type: TextureType) -> UInt {
+    match type {
+      case TextureType monochrome => GL_RED
+      case TextureType rgba => GL_RGBA
+      case TextureType rgb => GL_RGB
+      case TextureType bgra => GL_RGBA
+      case TextureType bgr => GL_RGB
+      case =>
+        raise("Unknown texture format")
+    }
+  }
+
   _setInternalFormat: func(type: TextureType) {
     match type {
       case TextureType monochrome =>
@@ -86,6 +98,9 @@ Texture: class {
       case TextureType bgra =>
         this internalFormat = GL_RGBA8
         this format = GL_RGBA
+      case TextureType bgr =>
+        this internalFormat = GL_RGB8
+        this format = GL_RGB
       case =>
         raise("Unknown texture format")
     }
