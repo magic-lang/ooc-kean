@@ -26,7 +26,7 @@ GpuCanvasBgr: class extends GpuCanvas {
 
   create: static func (size: IntSize2D) -> This {
     result := This new(size, TextureType bgr)
-    result
+    this renderTarget != null ? result : null
   }
 
   bind: func () {
