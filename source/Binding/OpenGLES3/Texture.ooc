@@ -38,7 +38,6 @@ Texture: class {
     this width = width
     this height = height
     this type = type
-
     this _setInternalFormat(type)
   }
 
@@ -46,17 +45,17 @@ Texture: class {
     this width = width
     this height = height
     this type = type
-
     this _setInternalFormat(type)
   }
 
-  dispose: func () {
+  dispose: func {
     glDeleteTextures(1, backend&)
   }
 
-  getBackend: func () -> UInt {
+  getBackend: func -> UInt {
     return this backend
   }
+
   bind: func (unit: UInt) {
     glActiveTexture(GL_TEXTURE0 + unit)
     glBindTexture(GL_TEXTURE_2D, backend)
@@ -67,21 +66,28 @@ Texture: class {
   }
 
   uploadPixels: func(pixels: Pointer) {
-    bind(0)
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this width, this height, format, GL_UNSIGNED_BYTE, pixels)
+    glBindTexture(GL_TEXTURE_2D, backend)
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this width, this height, this format, GL_UNSIGNED_BYTE, pixels)
     unbind()
   }
 
   getGLFormat: static func(type: TextureType) -> UInt {
+    format: UInt
     match type {
-      case TextureType monochrome => GL_RED
-      case TextureType rgba => GL_RGBA
-      case TextureType rgb => GL_RGB
-      case TextureType bgra => GL_RGBA
-      case TextureType bgr => GL_RGB
+      case TextureType monochrome =>
+        format = GL_RED
+      case TextureType rgba =>
+        format = GL_RGBA
+      case TextureType rgb =>
+        format = GL_RGB
+      case TextureType bgra =>
+        format = GL_RGBA
+      case TextureType bgr =>
+        format = GL_RGB
       case =>
         raise("Unknown texture format")
     }
+    format
   }
 
   _setInternalFormat: func(type: TextureType) {
@@ -106,29 +112,25 @@ Texture: class {
     }
   }
 
-  _generate: func(pixels: Pointer) {
+  _generate: func (pixels: Pointer) -> Bool {
     glGenTextures(1, backend&)
     glBindTexture(GL_TEXTURE_2D, backend)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-
     glTexImage2D(GL_TEXTURE_2D, 0, this internalFormat, this width, this height, 0, this format, GL_UNSIGNED_BYTE, pixels)
-
+    true
   }
-
 
   create: static func (type: TextureType, width: UInt, height: UInt) -> This {
     result := Texture new(type, width, height)
-    result _generate(null)
-    return result
+    result _generate(null) ? result : null
   }
 
-  create: static func~withPixels(type: TextureType, width: UInt, height: UInt, pixels: Pointer) -> This {
-    texture := Texture new(type, width, height)
-    texture _generate(pixels)
-    return texture
+  create: static func~fromPixels(type: TextureType, width: UInt, height: UInt, pixels: Pointer) -> This {
+    result := Texture new(type, width, height)
+    result _generate(pixels) ? result : null
   }
 
 }

@@ -22,14 +22,12 @@ X11Window: class extends NativeWindow {
 
   create: static func (width: UInt, height: UInt, title: String) -> This {
     result := X11Window new(width, height, title)
-
-    (result _generate(width, height, title)) ? result : null
+    result _generate(width, height, title) ? result : null
   }
 
   init: func (width: UInt, height: UInt, title: String) {
     this width = width
     this height = height
-    this _generate(width, height, title)
   }
 
   _generate: func (width: UInt, height: UInt, title: String) -> Bool {
@@ -46,8 +44,7 @@ X11Window: class extends NativeWindow {
 
     XMapWindow(this display, this window)
     XStoreName(this display, this window, title)
-
-    return true
+    true
   }
 
 }

@@ -21,5 +21,4 @@ NativeWindow: abstract class {
   window: Long {get{window} set}
   width: UInt {get{width} set}
   height: UInt {get{height} set}
-
 }

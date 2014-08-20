@@ -22,7 +22,7 @@ Context: class {
   eglDisplay: Pointer
   eglSurface: Pointer
 
-  init: func () {}
+  init: func
 
   dispose: func {
     eglMakeCurrent(this eglDisplay, null, null, null)
@@ -33,14 +33,15 @@ Context: class {
   makeCurrent: func -> Bool {
     return eglMakeCurrent(this eglDisplay, this eglSurface, this eglSurface, this eglContext) != 0
   }
-  update: func () {
+
+  update: func {
     eglSwapBuffers(eglDisplay, eglSurface)
   }
 
   _generate: func (window: NativeWindow, sharedContext: This) -> Bool {
     this eglDisplay = eglGetDisplay(window display)
 
-    if(!eglDisplay)
+    if(this eglDisplay == null)
       return false
 
     eglInitialize(this eglDisplay, null, null)
@@ -75,7 +76,7 @@ Context: class {
     gc_free(matchingConfigs)
     this eglSurface = eglCreateWindowSurface(this eglDisplay, chosenConfig, window window, null)
 
-    if(!this eglSurface)
+    if(this eglSurface == null)
       return false
 
     contextAttribs := [
@@ -92,22 +93,14 @@ Context: class {
     return true
   }
 
-
-
   create: static func (window: NativeWindow) -> This {
     result := This new()
-    if(result _generate(window, null))
-      return result
-
-    return null
+    result _generate(window, null) ? result : null
   }
 
   create: static func ~shared (window: NativeWindow, sharedContext: This) -> This {
     result := This new()
-    if(result _generate(window, sharedContext))
-      return result
-
-    return null
+    result _generate(window, sharedContext) ? result : null
   }
 
 

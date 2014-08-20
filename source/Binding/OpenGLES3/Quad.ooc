@@ -32,13 +32,12 @@ Quad: class {
   }
 
   draw: static func {
-    if(!This vao)
+    if(This vao == null)
       This initialize()
 
     This vao bind()
   	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     This vao unbind()
-
   }
 
 

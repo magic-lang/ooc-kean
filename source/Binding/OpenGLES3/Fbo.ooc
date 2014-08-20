@@ -21,25 +21,11 @@ import lib/gles, Texture
 Fbo: class {
   backend: UInt
   targetTexture: Texture
-  textureType: TextureType
+  type: TextureType
   width: UInt
   height: UInt
 
-  create: static func (type: TextureType, width: UInt, height: UInt) -> This {
-    result := This new(type, width, height)
-    if(result _generate(width, height))
-      return result
-
-    return null
-  }
-
-
-  init: func (type: TextureType, width: UInt, height: UInt) {
-    this width = width
-    this height = height
-    this textureType = type
-  }
-
+  init: func (=type, =width, =height)
 
   dispose: func () {
     targetTexture dispose()
@@ -67,15 +53,18 @@ Fbo: class {
   }
 
   getResultCopy: func (outputPixels: Pointer) {
+    //FIXME: Only working for RGBA
+    return
     bind()
     glPixelStorei(GL_PACK_ALIGNMENT, 1)
     glReadBuffer(GL_COLOR_ATTACHMENT0)
-    glReadPixels(0, 0, width, height, Texture getGLFormat(this textureType), GL_UNSIGNED_BYTE, outputPixels)
+    glReadPixels(0, 0, width, height, GL_RGBA, GL_FLOAT, outputPixels)
+    glGetError() toString() println()
     unbind()
   }
 
-  _generate: func(width: UInt, height: UInt) -> Bool {
-    this targetTexture = Texture create(this textureType, width, height)
+  _generate: func (width: UInt, height: UInt) -> Bool {
+    this targetTexture = Texture create(this type, width, height)
     glGenFramebuffers(1, this backend&)
     glBindFramebuffer(GL_FRAMEBUFFER, this backend)
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this targetTexture getBackend(), 0);
@@ -89,6 +78,11 @@ Fbo: class {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     return true
 
+  }
+
+  create: static func (type: TextureType, width: UInt, height: UInt) -> This {
+    result := This new(type, width, height)
+    result _generate(width, height) ? result : null
   }
 
 

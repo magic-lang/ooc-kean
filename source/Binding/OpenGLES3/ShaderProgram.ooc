@@ -23,16 +23,13 @@ ShaderProgram: class {
   vertexSource: String
   fragmentSource: String
 
-  init: func (vertexSource: String, fragmentSource: String) {
-    this vertexSource = vertexSource
-    this fragmentSource = fragmentSource
-  }
+  init: func (=vertexSource, =fragmentSource)
 
   use: func {
     glUseProgram(this backend)
   }
 
-  dispose: func() {
+  dispose: func {
     glDeleteProgram(this backend)
   }
 
@@ -65,6 +62,7 @@ ShaderProgram: class {
     }
     "Shader compilation success" println()
   }
+
   _compileShaders: func(vertexSource: String, fragmentSource: String) {
     vertexShaderID := glCreateShader(GL_VERTEX_SHADER)
     fragmentShaderID := glCreateShader(GL_FRAGMENT_SHADER)
@@ -84,6 +82,7 @@ ShaderProgram: class {
     glDeleteShader(vertexShaderID)
     glDeleteShader(fragmentShaderID)
   }
+
   compile: func() {
     _compileShaders(this vertexSource, this fragmentSource)
   }
