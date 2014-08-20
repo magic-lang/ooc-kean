@@ -19,9 +19,8 @@ import OpenGLES3/ShaderProgram
 import GpuMap
 
 GpuMapBgr: class extends GpuMap {
-program: ShaderProgram
 instance: static This
-bgrFragmentSource: String = "#version 300 es\n
+bgrFragmentSource: const static String = "#version 300 es\n
   precision highp float;\n
   uniform sampler2D frameSampler;\n
   in vec2 texCoords;
@@ -33,12 +32,6 @@ bgrFragmentSource: String = "#version 300 es\n
   init: func () {
     this program = ShaderProgram new(defaultVertexSource, bgrFragmentSource)
     this program compile()
-  }
-
-  use: func (transform: FloatTransform2D) {
-    this program use()
-    this program setUniformi("frameSampler", 0)
-    this program setUniformMatrix3fv("transform", transform& as Float*, 9, 0)
   }
 
   getInstance: static func -> This {

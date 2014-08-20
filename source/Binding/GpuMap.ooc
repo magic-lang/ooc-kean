@@ -18,6 +18,8 @@ use ooc-math
 import OpenGLES3/ShaderProgram
 
 GpuMap: abstract class {
+  program: ShaderProgram
+
   defaultVertexSource: String = "#version 300 es\n
   precision highp float;\n
   uniform mat3 transform;\n
@@ -31,6 +33,10 @@ GpuMap: abstract class {
     gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
   }\n";
 
-
+  use: func (transform: FloatTransform2D) {
+    this program use()
+    this program setUniformi("frameSampler", 0)
+    this program setUniformMatrix3fv("transform", transform& as Float*, 9, 0)
+  }
 
 }

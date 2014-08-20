@@ -19,9 +19,7 @@ import OpenGLES3/ShaderProgram
 import GpuMap
 
 GpuMapMonochrome: class extends GpuMap {
-program: ShaderProgram
 instance: static This
-
 monochromeFragmentSource: const static String = "#version 300 es\n
   precision highp float;\n
   uniform sampler2D frameSampler;\n
@@ -42,12 +40,6 @@ monochromeFragmentSource: const static String = "#version 300 es\n
       This instance = This new()
     }
     This instance
-  }
-
-  use: func (transform: FloatTransform2D) {
-    this program use()
-    this program setUniformi("frameSampler", 0)
-    this program setUniformMatrix3fv("transform", transform& as Float*, 9, 0)
   }
 
 }
