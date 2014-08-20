@@ -21,7 +21,7 @@ import OpenGLES3/NativeWindow
 import OpenGLES3/Context
 import OpenGLES3/X11Window
 
-import Surface, GpuImage, GpuMap
+import Surface, GpuImage, GpuCanvas
 
 Window: class extends Surface {
   native: NativeWindow
@@ -47,6 +47,12 @@ Window: class extends Surface {
     image bind(transform)
     Quad draw()
     image unbind()
+  }
+
+  draw: func ~canvas (canvas: GpuCanvas) {
+    canvas bind()
+    Quad draw()
+    canvas unbind()
   }
 
   update: func {
