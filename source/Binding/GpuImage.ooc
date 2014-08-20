@@ -19,11 +19,9 @@ use ooc-math
 
 GpuImage: abstract class extends Image {
 
-  init: func (size: IntSize2D) {
-    this size = size
-  }
-  bind: abstract func (transform: FloatTransform2D) {}
-  unbind: abstract func () {}
+  init: func (=size)
+  bind: abstract func (transform: FloatTransform2D)
+  unbind: abstract func
 
   //TODO: Implement abstract functions
   resizeTo: func (size: IntSize2D) -> This {null}
