@@ -54,17 +54,23 @@ Fbo: class {
     glBindFramebuffer(GL_FRAMEBUFFER, 0)
   }
 
+  bindTexture: func {
+    targetTexture bind(0)
+  }
+
+  unbindTexture: func {
+    targetTexture unbind()
+  }
+
   clear: func {
-    bind()
     glClear(GL_COLOR_BUFFER_BIT)
-    unbind()
   }
 
   getResultCopy: func (outputPixels: Pointer) {
     bind()
     glPixelStorei(GL_PACK_ALIGNMENT, 1)
     glReadBuffer(GL_COLOR_ATTACHMENT0)
-    glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, outputPixels)
+    glReadPixels(0, 0, width, height, Texture getGLFormat(this textureType), GL_UNSIGNED_BYTE, outputPixels)
     unbind()
   }
 
