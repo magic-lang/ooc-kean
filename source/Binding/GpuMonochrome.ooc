@@ -23,7 +23,12 @@ import GpuImage
 GpuMonochrome: class extends GpuImage {
 
   texture: Texture
-  init: func (data: Pointer, size: IntSize2D) {
+
+  init: func (size: IntSize2D) {
+    this texture = Texture create(TextureType monochrome, size width, size height)
+  }
+
+  init: func~fromPixels (data: Pointer, size: IntSize2D) {
     this texture = Texture create(TextureType monochrome, size width, size height, data)
   }
 
@@ -31,9 +36,9 @@ GpuMonochrome: class extends GpuImage {
     this texture dispose()
   }
 
-  bind: func (transform: FloatTransform2D) {
+  bind: func (transform: FloatTransform2D, onScreen: Bool) {
     this texture bind (0)
-    GpuMapMonochrome getInstance() use(transform)
+    GpuMapMonochrome getInstance() use(transform, onScreen)
   }
 
   unbind: func {
@@ -42,6 +47,16 @@ GpuMonochrome: class extends GpuImage {
 
   create: static func ~fromPixels (data: Pointer, size: IntSize2D) -> This {
     result := This new(data, size)
+    result texture != null ? result : null
+  }
+
+  create: func (size: IntSize2D) -> This {
+    result := This new(size)
+    result texture != null ? result : null
+  }
+
+  copy: func -> This {
+    result := This new(this size)
     result texture != null ? result : null
   }
 

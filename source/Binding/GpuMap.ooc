@@ -19,6 +19,7 @@ import OpenGLES3/ShaderProgram
 
 GpuMap: abstract class {
   program: ShaderProgram
+  screenProgram: ShaderProgram
 
   defaultVertexSource: String = "#version 300 es\n
   precision highp float;\n
@@ -27,16 +28,17 @@ GpuMap: abstract class {
   layout(location = 1) in vec2 texCoord;\n
   out vec2 texCoords;\n
   void main() {\n
-    vec3 transformedPosition = transform*vec3(vertexPosition, 0);\n
+    vec3 transformedPosition = transform * vec3(vertexPosition, 0);\n
     mat4 projectionMatrix = transpose(mat4(9.0f/16.0f, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
     texCoords = texCoord;\n
     gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
   }\n";
 
-  use: func (transform: FloatTransform2D) {
-    this program use()
-    this program setUniformi("frameSampler", 0)
-    this program setUniformMatrix3fv("transform", transform& as Float*, 9, 0)
+  use: func (transform: FloatTransform2D, onScreen: Bool) {
+    selectedProgram := onScreen ? this screenProgram : this program
+    selectedProgram use()
+    selectedProgram setUniformi("frameSampler", 0)
+    selectedProgram setUniformMatrix3fv("transform", transform& as Float*, 9, 0)
   }
 
 }

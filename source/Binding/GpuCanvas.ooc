@@ -33,7 +33,7 @@ GpuCanvas: abstract class extends Surface {
 
   draw: func (image: GpuImage, transform: FloatTransform2D) {
     this renderTarget bind(). clear()
-    image bind(transform)
+    image bind(transform, false)
     Quad draw()
     image unbind()
     this renderTarget unbind()
@@ -43,7 +43,7 @@ GpuCanvas: abstract class extends Surface {
     renderTarget getResultCopy(pixels)
   }
 
-  bind: abstract func
+  bind: abstract func (onScreen: Bool)
 
   unbind: func {
     this renderTarget unbindTexture()

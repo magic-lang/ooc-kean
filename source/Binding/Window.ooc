@@ -39,18 +39,18 @@ Window: class extends Surface {
   _generate: func (size: IntSize2D, title: String) -> Bool {
     this native = X11Window create(size width, size height, title)
     this context = Context create(native)
-    result : UInt = this context makeCurrent()
+    result: UInt = this context makeCurrent()
     result == 1 && (native != null) && (context != null)
   }
 
   draw: func (image: GpuImage, transform: FloatTransform2D) {
-    image bind(transform)
+    image bind(transform, true)
     Quad draw()
     image unbind()
   }
 
   draw: func ~canvas (canvas: GpuCanvas) {
-    canvas bind()
+    canvas bind(true)
     Quad draw()
     canvas unbind()
   }

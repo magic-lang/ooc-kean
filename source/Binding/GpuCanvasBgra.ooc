@@ -29,9 +29,9 @@ GpuCanvasBgra: class extends GpuCanvas {
     result renderTarget != null ? result : null
   }
 
-  bind: func () {
+  bind: func (onScreen: Bool) {
     this renderTarget bindTexture()
-    GpuMapBgra getInstance() use(FloatTransform2D identity)
+    GpuMapBgra getInstance() use(FloatTransform2D identity, onScreen)
   }
 
 }

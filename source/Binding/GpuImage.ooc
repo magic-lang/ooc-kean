@@ -20,13 +20,11 @@ use ooc-math
 GpuImage: abstract class extends Image {
 
   init: func (=size)
-  bind: abstract func (transform: FloatTransform2D)
+  bind: abstract func (transform: FloatTransform2D, onScreen: Bool)
   unbind: abstract func
 
   //TODO: Implement abstract functions
   resizeTo: func (size: IntSize2D) -> This {null}
-	create: func (size: IntSize2D) -> This {null}
-	copy: func -> This {null}
 	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {null}
 	shift: func (offset: IntSize2D) -> This {null}
 	distance: func (other: This) -> Float {0.0f}

@@ -20,7 +20,7 @@ import GpuMap
 
 GpuMapBgr: class extends GpuMap {
 instance: static This
-bgrFragmentSource: const static String = "#version 300 es\n
+bgrScreenFragmentSource: const static String = "#version 300 es\n
   precision highp float;\n
   uniform sampler2D frameSampler;\n
   in vec2 texCoords;
@@ -29,13 +29,25 @@ bgrFragmentSource: const static String = "#version 300 es\n
     outColor = vec4(texture(frameSampler, texCoords).rgb, 1.0f);\n
   }\n";
 
+bgrFragmentSource: const static String = "#version 300 es\n
+  precision highp float;\n
+  uniform sampler2D frameSampler;\n
+  in vec2 texCoords;
+  out vec3 outColor;\n
+  void main() {\n
+    outColor = texture(frameSampler, texCoords).rgb;\n
+  }\n";
+
   init: func () {
     this program = ShaderProgram new(defaultVertexSource, bgrFragmentSource)
     this program compile()
+
+    this screenProgram = ShaderProgram new(defaultVertexSource, bgrScreenFragmentSource)
+    this screenProgram compile()
   }
 
   getInstance: static func -> This {
-    if(!(This instance)) {
+    if(This instance == null) {
       This instance = This new()
     }
     This instance

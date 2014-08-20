@@ -20,7 +20,7 @@ import GpuMap
 
 GpuMapMonochrome: class extends GpuMap {
 instance: static This
-monochromeFragmentSource: const static String = "#version 300 es\n
+monochromeScreenFragmentSource: const static String = "#version 300 es\n
   precision highp float;\n
   uniform sampler2D frameSampler;\n
   in vec2 texCoords;
@@ -30,13 +30,25 @@ monochromeFragmentSource: const static String = "#version 300 es\n
     outColor = vec4(color, color, color, 1);\n
   }\n";
 
+monochromeFragmentSource: const static String = "#version 300 es\n
+  precision highp float;\n
+  uniform sampler2D frameSampler;\n
+  in vec2 texCoords;
+  out float outColor;\n
+  void main() {\n
+    outColor = texture(frameSampler, texCoords).r;\n
+  }\n";
+
   init: func () {
     this program = ShaderProgram new(defaultVertexSource, monochromeFragmentSource)
     this program compile()
+
+    this screenProgram = ShaderProgram new(defaultVertexSource, monochromeScreenFragmentSource)
+    this screenProgram compile()
   }
 
   getInstance: static func -> This {
-    if(!(This instance)) {
+    if(This instance == null) {
       This instance = This new()
     }
     This instance

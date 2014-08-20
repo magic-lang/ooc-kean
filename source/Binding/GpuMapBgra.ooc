@@ -32,10 +32,13 @@ bgraFragmentSource: const static String = "#version 300 es\n
   init: func () {
     this program = ShaderProgram new(defaultVertexSource, bgraFragmentSource)
     this program compile()
+
+    this screenProgram = ShaderProgram new(defaultVertexSource, bgraFragmentSource)
+    this screenProgram compile()
   }
 
   getInstance: static func -> This {
-    if(!(This instance)) {
+    if(This instance == null) {
       This instance = This new()
     }
     This instance

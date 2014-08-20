@@ -21,7 +21,11 @@ import GpuImage, GpuMapBgr
 GpuBgr: class extends GpuImage {
   texture: Texture
 
-  init: func (data: Pointer, size: IntSize2D) {
+  init: func (size: IntSize2D) {
+    this texture = Texture create(TextureType rgb, size width, size height)
+  }
+
+  init: func ~fromPixels (data: Pointer, size: IntSize2D) {
     this texture = Texture create(TextureType rgb, size width, size height, data)
   }
 
@@ -29,9 +33,9 @@ GpuBgr: class extends GpuImage {
     this texture dispose()
   }
 
-  bind: func (transform: FloatTransform2D) {
+  bind: func (transform: FloatTransform2D, onScreen: Bool) {
     this texture bind (0)
-    GpuMapBgr getInstance() use(transform)
+    GpuMapBgr getInstance() use(transform, onScreen)
   }
 
   unbind: func {
@@ -43,5 +47,14 @@ GpuBgr: class extends GpuImage {
     result texture != null ? result : null
   }
 
+  create: func (size: IntSize2D) -> This {
+    result := This new(size)
+    result texture != null ? result : null
+  }
+
+  copy: func -> This {
+    result := This new(this size)
+    result texture != null ? result : null
+  }
 
 }
