@@ -40,7 +40,7 @@ GpuBgr: class extends GpuImage {
 
   create: static func ~fromPixels (data: Pointer, size: IntSize2D) -> This {
     result := This new(data, size)
-    (result texture) ? result : null
+    result texture != null ? result : null
   }
 
 

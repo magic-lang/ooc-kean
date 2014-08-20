@@ -19,8 +19,8 @@ import OpenGLES3/Texture
 import GpuImage, GpuMapBgra
 
 GpuBgra: class extends GpuImage {
-
   texture: Texture
+
   init: func (data: Pointer, size: IntSize2D) {
     this texture = Texture create(TextureType rgba, size width, size height, data)
   }
@@ -30,7 +30,7 @@ GpuBgra: class extends GpuImage {
   }
 
   bind: func (transform: FloatTransform2D) {
-    this texture bind (0)
+    this texture bind(0)
     GpuMapBgra getInstance() use(transform)
   }
 
@@ -40,7 +40,7 @@ GpuBgra: class extends GpuImage {
 
   create: static func ~fromPixels (data: Pointer, size: IntSize2D) -> This {
     result := This new(data, size)
-    (result texture) ? result : null
+    result texture != null ? result : null
   }
 
 
