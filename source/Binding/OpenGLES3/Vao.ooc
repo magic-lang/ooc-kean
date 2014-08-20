@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import gles
+import lib/gles
 
 
 Vao: class {
@@ -25,8 +25,7 @@ Vao: class {
 
   create: static func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> This {
     result := This new()
-    if (result)
-      result _generate(positions, textureCoordinates, vertexCount, dimensions)
+    result _generate(positions, textureCoordinates, vertexCount, dimensions)
     return result
   }
 
@@ -36,6 +35,7 @@ Vao: class {
 
 
   dispose: func () {
+    glDeleteVertexArrays(1, backend&)
   }
 
   bind: func {
@@ -47,6 +47,7 @@ Vao: class {
   }
 
   _generate: func(positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) {
+    //Currently using 2 attributes: vertex position and texture coordinate
     attributeCount := 2
     packedArray := gc_malloc(attributeCount * vertexCount * dimensions * Float size) as Float*
     for(i in 0..vertexCount) {

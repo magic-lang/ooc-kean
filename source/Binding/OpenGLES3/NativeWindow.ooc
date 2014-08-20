@@ -15,37 +15,11 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import lib/gles
 
-
-Fence: class {
-  backend: Pointer
-
-  clientWait: static func (fence: This, timeout: UInt) {
-    glClientWaitSync(fence, 0, timeout)
-  }
-
-  wait: static func (fence: This) {
-    glClientWaitSync(fence, 0, GL_TIMEOUT_IGNORED)
-  }
-
-
-  dispose: func () {
-    glDeleteSync(backend)
-  }
-
-  _generate: func() -> Bool {
-    this backend = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0)
-  }
-
-  create: static func () -> This {
-    result := This new()
-    if(result _generate())
-      return result
-
-    return null
-  }
-
-
+NativeWindow: abstract class {
+  display: Pointer {get{display} set}
+  window: Long {get{window} set}
+  width: UInt {get{width} set}
+  height: UInt {get{height} set}
 
 }

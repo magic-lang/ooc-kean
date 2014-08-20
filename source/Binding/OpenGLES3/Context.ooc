@@ -15,51 +15,33 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import egl, x11
+import lib/egl, NativeWindow
 
 Context: class {
-  eglContext: Pointer
+  eglContext: Pointer {get{eglContext} set}
   eglDisplay: Pointer
   eglSurface: Pointer
 
-  nativeDisplay: Pointer
-  nativeWindow: Long
-
-  create: static func () -> This {
-    result := Context new()
-    if(result)
-      result _generate(null)
-    return result
-  }
-
   init: func () {}
 
-  create: static func ~shared (sharedContext: This) -> This {
-    result := Context new()
-    if(result)
-      result _generate(sharedContext)
-    return result
+  dispose: func {
+    eglMakeCurrent(this eglDisplay, null, null, null)
+    eglDestroyContext(this eglDisplay, this eglContext)
+    eglDestroySurface(this eglDisplay, this eglSurface)
   }
 
   makeCurrent: func -> Bool {
-    eglMakeCurrent(this eglDisplay, this eglSurface, this eglSurface, this eglContext) != 0
+    return eglMakeCurrent(this eglDisplay, this eglSurface, this eglSurface, this eglContext) != 0
   }
   update: func () {
     eglSwapBuffers(eglDisplay, eglSurface)
   }
 
-  _generate: func (sharedContext: This) {
-    this nativeDisplay = XOpenDisplay(":0")
-    root: Long = DefaultRootWindow(this nativeDisplay)
+  _generate: func (window: NativeWindow, sharedContext: This) -> Bool {
+    this eglDisplay = eglGetDisplay(window display)
 
-    swa: XSetWindowAttributesOOC
-    swa eventMask = ExposureMask | PointerMotionMask | KeyPressMask
-    this nativeWindow = XCreateWindow(this nativeDisplay, root, 0, 0, 800u, 480u, 0u, CopyFromParent as Int, InputOutput as UInt, null, CWEventMask, swa&)
-
-    XMapWindow(this nativeDisplay, this nativeWindow)
-    XStoreName(this nativeDisplay, this nativeWindow, "GL Test")
-
-    this eglDisplay = eglGetDisplay(this nativeDisplay)
+    if(!eglDisplay)
+      return false
 
     eglInitialize(this eglDisplay, null, null)
     eglBindAPI(EGL_OPENGL_ES_API)
@@ -91,7 +73,11 @@ Context: class {
     }
 
     gc_free(matchingConfigs)
-    eglSurface = eglCreateWindowSurface(this eglDisplay, chosenConfig, this nativeWindow, null)
+    this eglSurface = eglCreateWindowSurface(this eglDisplay, chosenConfig, window window, null)
+
+    if(!this eglSurface)
+      return false
+
     contextAttribs := [
             EGL_CONTEXT_CLIENT_VERSION, 3,
             EGL_NONE] as Int*
@@ -100,11 +86,29 @@ Context: class {
     if(sharedContext)
       shared = sharedContext eglContext
     this eglContext = eglCreateContext(this eglDisplay, chosenConfig, shared, contextAttribs)
+    if(!this eglContext)
+      return false
+
+    return true
   }
 
-  dispose: func {
-    eglMakeCurrent(this eglDisplay, null, null, null)
-    eglDestroyContext(this eglDisplay, this eglContext)
-    eglDestroySurface(this eglDisplay, this eglSurface)
+
+
+  create: static func (window: NativeWindow) -> This {
+    result := This new()
+    if(result _generate(window, null))
+      return result
+
+    return null
   }
+
+  create: static func ~shared (window: NativeWindow, sharedContext: This) -> This {
+    result := This new()
+    if(result _generate(window, sharedContext))
+      return result
+
+    return null
+  }
+
+
 }

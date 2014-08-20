@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import gles
+import lib/gles
 
 TextureType: enum {
   monochrome
@@ -83,6 +83,9 @@ Texture: class {
       case TextureType rgb =>
         this internalFormat = GL_RGB8
         this format = GL_RGB
+      case TextureType bgra =>
+        this internalFormat = GL_RGBA8
+        this format = GL_RGBA
       case =>
         raise("Unknown texture format")
     }
@@ -101,18 +104,15 @@ Texture: class {
   }
 
 
-
   create: static func (type: TextureType, width: UInt, height: UInt) -> This {
     result := Texture new(type, width, height)
-    if(result)
-      result _generate(null)
+    result _generate(null)
     return result
   }
 
   create: static func~withPixels(type: TextureType, width: UInt, height: UInt, pixels: Pointer) -> This {
     texture := Texture new(type, width, height)
-    if(texture)
-      texture _generate(pixels)
+    texture _generate(pixels)
     return texture
   }
 

@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import gles
+import lib/gles
 
 
 ShaderProgram: class {
@@ -36,14 +36,16 @@ ShaderProgram: class {
     glDeleteProgram(this backend)
   }
 
-  setUniform: func (name: String, value: UInt) {
+  setUniformi: func (name: String, value: Int) {
     glUniform1i(glGetUniformLocation(this backend, name), value)
   }
 
+  setUniformMatrix3fv: func (name: String, value: Float*, count: Int, transpose: UInt) {
+    glUniformMatrix3fv(glGetUniformLocation(this backend, name), 1, transpose, value)
+  }
+
   _compileShader: func(source: String, shaderID: UInt) {
-
     glShaderSource(shaderID, 1, (source toCString())&, null)
-
     glCompileShader(shaderID)
 
     "Compiling shader:" println()
@@ -52,7 +54,6 @@ ShaderProgram: class {
     glGetShaderiv(shaderID, GL_COMPILE_STATUS, success&)
 
     if(!success){
-      "Shader compilation failed:" println()
       logSize: Int = 0
       glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, logSize&)
       compileLog := gc_malloc(logSize * Char size) as Char*
@@ -62,6 +63,7 @@ ShaderProgram: class {
       raise("Shader compilation failed")
       gc_free(compileLog)
     }
+    "Shader compilation success" println()
   }
   _compileShaders: func(vertexSource: String, fragmentSource: String) {
     vertexShaderID := glCreateShader(GL_VERTEX_SHADER)
