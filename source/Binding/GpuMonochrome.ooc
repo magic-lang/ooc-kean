@@ -14,23 +14,36 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-draw
 use ooc-math
 
-GpuImage: abstract class extends Image {
+import OpenGLES3/Texture
+import GpuMapMonochrome
+import GpuImage
 
-  init: func (size: IntSize2D) {
-    this size = size
+
+GpuMonochrome: class extends GpuImage {
+
+  texture: Texture
+  init: func (data: Pointer, size: IntSize2D) {
+    this texture = Texture create(TextureType monochrome, size width, size height, data)
   }
-  bind: abstract func (transform: FloatTransform2D) {}
-  unbind: abstract func () {}
 
-  //TODO: Implement abstract functions
-  resizeTo: func (size: IntSize2D) -> This {null}
-	create: func (size: IntSize2D) -> This {null}
-	copy: func -> This {null}
-	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {null}
-	shift: func (offset: IntSize2D) -> This {null}
-	distance: func (other: This) -> Float {0.0f}
+  dispose: func {
+    this texture dispose()
+  }
+
+  bind: func (transform: FloatTransform2D) {
+    this texture bind (0)
+    GpuMapMonochrome getInstance() use(transform)
+  }
+
+  unbind: func {
+    this texture unbind()
+  }
+
+  create: static func ~fromPixels (data: Pointer, size: IntSize2D) -> This {
+    result := This new(data, size)
+    (result texture) ? result : null
+  }
 
 }

@@ -13,36 +13,44 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 use ooc-math
-import OpenGLES3/Fbo
+
 import OpenGLES3/Quad
-import OpenGLES3/Texture
-import GpuImage, GpuMap, Surface
+import OpenGLES3/NativeWindow
+import OpenGLES3/Context
+import OpenGLES3/X11Window
 
-Canvas: class extends Surface {
-  renderTarget : Fbo
+import Surface, GpuImage, GpuMap
 
-  init: func (type: TextureType, size: IntSize2D)
-  {
-    this renderTarget = Fbo create(type, size width, size height)
+Window: class extends Surface {
+  native: NativeWindow
+  context: Context
+
+  init: func (size: IntSize2D) {
+    this size = size
   }
 
-  dispose: func () {
-    renderTarget dispose()
+  create: static func (size: IntSize2D, title: String) -> This {
+    result := Window new(size)
+    (result _generate(size, title)) ? result : null
+  }
+
+  _generate: func (size: IntSize2D, title: String) -> Bool {
+    this native = X11Window create(size width, size height, title)
+    this context = Context create(native)
+    result : UInt = this context makeCurrent()
+    result == 1 && (native != null) && (context != null)
   }
 
   draw: func (image: GpuImage, transform: FloatTransform2D) {
-    renderTarget bind()
-    renderTarget clear()
     image bind(transform)
     Quad draw()
     image unbind()
-    renderTarget unbind()
-
   }
 
-  create: static func (type: TextureType, size: IntSize2D) {
-
+  update: func {
+    this context update()
   }
 
 }

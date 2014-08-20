@@ -14,23 +14,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-draw
 use ooc-math
 
-GpuImage: abstract class extends Image {
-
-  init: func (size: IntSize2D) {
-    this size = size
-  }
-  bind: abstract func (transform: FloatTransform2D) {}
-  unbind: abstract func () {}
-
-  //TODO: Implement abstract functions
-  resizeTo: func (size: IntSize2D) -> This {null}
-	create: func (size: IntSize2D) -> This {null}
-	copy: func -> This {null}
-	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {null}
-	shift: func (offset: IntSize2D) -> This {null}
-	distance: func (other: This) -> Float {0.0f}
-
+Surface: abstract class {
+  size: IntSize2D
 }
