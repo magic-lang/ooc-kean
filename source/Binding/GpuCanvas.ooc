@@ -45,4 +45,8 @@ GpuCanvas: abstract class extends Surface {
 
   bind: abstract func
 
+  unbind: func {
+    this renderTarget unbindTexture()
+  }
+
 }
