@@ -15,10 +15,15 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
+import lib/gles
 NativeWindow: abstract class {
   display: Pointer {get{display} set}
   window: Long {get{window} set}
   width: UInt {get{width} set}
   height: UInt {get{height} set}
+
+  clear: func {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0)
+    glClear(GL_COLOR_BUFFER_BIT)
+  }
 }
