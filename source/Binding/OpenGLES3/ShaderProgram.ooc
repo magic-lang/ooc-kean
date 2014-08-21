@@ -15,6 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use ooc-math
 import lib/gles
 
 
@@ -41,8 +42,8 @@ ShaderProgram: class {
     glUniform1f(glGetUniformLocation(this backend, name), value)
   }
 
-  setUniform: func ~Matrix3x3(name: String, value: Float*) {
-    glUniformMatrix3fv(glGetUniformLocation(this backend, name), 1, 0, value)
+  setUniform: func ~Matrix3x3(name: String, value: FloatTransform2D) {
+    glUniformMatrix3fv(glGetUniformLocation(this backend, name), 1, 0, value& as Float*)
   }
 
   _compileShader: func(source: String, shaderID: UInt) {
