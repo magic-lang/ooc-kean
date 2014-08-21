@@ -16,11 +16,12 @@
 
 use ooc-draw
 use ooc-math
+import GpuBgra, GpuBgr, GpuMonochrome
 
 GpuImage: abstract class extends Image {
 
   init: func (=size)
-  bind: abstract func (transform: FloatTransform2D, onScreen: Bool)
+  bind: abstract func
   unbind: abstract func
 
   //TODO: Implement abstract functions
@@ -28,5 +29,17 @@ GpuImage: abstract class extends Image {
 	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {null}
 	shift: func (offset: IntSize2D) -> This {null}
 	distance: func (other: This) -> Float {0.0f}
+
+  create: static func ~Monochrome (image: RasterMonochrome) -> GpuMonochrome {
+    GpuMonochrome create(image pointer, image size)
+  }
+
+  create: static func ~Bgr (image: RasterBgr) -> GpuBgr {
+    GpuBgr create(image pointer, image size)
+  }
+
+  create: static func ~Bgra (image: RasterBgra) -> GpuBgra {
+    GpuBgra create(image pointer, image size)
+  }
 
 }
