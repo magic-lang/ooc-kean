@@ -17,12 +17,9 @@
 use ooc-math
 
 import OpenGLES3/Texture
-import GpuMapMonochrome
-import GpuImage
+import GpuPacked
 
-GpuMonochrome: class extends GpuImage {
-
-  texture: Texture
+GpuMonochrome: class extends GpuPacked {
 
   init: func (size: IntSize2D) {
     this texture = Texture create(TextureType monochrome, size width, size height)
@@ -32,17 +29,8 @@ GpuMonochrome: class extends GpuImage {
     this texture = Texture create(TextureType monochrome, size width, size height, data)
   }
 
-  dispose: func {
-    this texture dispose()
-  }
-
-  bind: func (transform: FloatTransform2D, onScreen: Bool) {
+  bind: func {
     this texture bind (0)
-    GpuMapMonochrome getInstance() use(transform, onScreen)
-  }
-
-  unbind: func {
-    this texture unbind()
   }
 
   create: static func ~fromPixels (data: Pointer, size: IntSize2D) -> This {

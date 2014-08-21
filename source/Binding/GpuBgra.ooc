@@ -16,10 +16,9 @@
 
 use ooc-math
 import OpenGLES3/Texture
-import GpuImage, GpuMapBgra
+import GpuPacked
 
-GpuBgra: class extends GpuImage {
-  texture: Texture
+GpuBgra: class extends GpuPacked {
 
   init: func (size: IntSize2D) {
     this texture = Texture create(TextureType rgba, size width, size height)
@@ -29,17 +28,8 @@ GpuBgra: class extends GpuImage {
     this texture = Texture create(TextureType rgba, size width, size height, data)
   }
 
-  dispose: func () {
-    this texture dispose()
-  }
-
-  bind: func (transform: FloatTransform2D, onScreen: Bool) {
+  bind: func {
     this texture bind (0)
-    GpuMapBgra getInstance() use(transform, onScreen)
-  }
-
-  unbind: func {
-    this texture unbind()
   }
 
   create: static func ~fromPixels (data: Pointer, size: IntSize2D) -> This {
