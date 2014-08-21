@@ -21,7 +21,7 @@ Surface: abstract class {
   size: IntSize2D
   quad: Quad
 
-  draw: func (image: GpuImage, transform: FloatTransform2D, map: GpuMap) {
+  draw: func (image: GpuImage, map: GpuMap) {
     map use()
     image bind()
     this quad draw()
