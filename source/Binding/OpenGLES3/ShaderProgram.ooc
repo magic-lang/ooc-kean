@@ -33,12 +33,16 @@ ShaderProgram: class {
     glDeleteProgram(this backend)
   }
 
-  setUniformi: func (name: String, value: Int) {
+  setUniform: func ~Int (name: String, value: Int) {
     glUniform1i(glGetUniformLocation(this backend, name), value)
   }
 
-  setUniformMatrix3fv: func (name: String, value: Float*, count: Int, transpose: UInt) {
-    glUniformMatrix3fv(glGetUniformLocation(this backend, name), 1, transpose, value)
+  setUniform: func ~Float (name: String, value: Float) {
+    glUniform1f(glGetUniformLocation(this backend, name), value)
+  }
+
+  setUniform: func ~Matrix3x3(name: String, value: Float*) {
+    glUniformMatrix3fv(glGetUniformLocation(this backend, name), 1, 0, value)
   }
 
   _compileShader: func(source: String, shaderID: UInt) {
