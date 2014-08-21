@@ -19,26 +19,128 @@ import OpenGLES3/ShaderProgram
 
 GpuMap: abstract class {
   program: ShaderProgram
-  screenProgram: ShaderProgram
+  _onUse: Func
 
-  defaultVertexSource: String = "#version 300 es\n
-  precision highp float;\n
-  uniform mat3 transform;\n
-  layout(location = 0) in vec2 vertexPosition;\n
-  layout(location = 1) in vec2 texCoord;\n
-  out vec2 texCoords;\n
-  void main() {\n
-    vec3 transformedPosition = transform * vec3(vertexPosition, 0);\n
-    mat4 projectionMatrix = transpose(mat4(9.0f/16.0f, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
-    texCoords = texCoord;\n
-    gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
-  }\n";
-
-  use: func (transform: FloatTransform2D, onScreen: Bool) {
-    selectedProgram := onScreen ? this screenProgram : this program
-    selectedProgram use()
-    selectedProgram setUniformi("frameSampler", 0)
-    selectedProgram setUniformMatrix3fv("transform", transform& as Float*, 9, 0)
+  init: func (vertexSource: String, fragmentSource: String, onUse: Func) {
+    this _onUse = onUse;
+    this program = ShaderProgram new(vertexSource, fragmentSource)
+    this program compile()
   }
 
+  use: func {
+    this program use()
+    this _onUse()
+  }
+}
+
+GpuMapDefault: abstract class extends GpuMap {
+  transform: FloatTransform2D { get set }
+  ratio: Float { get set }
+  init: func (fragmentSource: String, onUse: Func) {
+    super(This defaultVertexSource, fragmentSource,
+      func {
+        onUse()
+        this program setUniform("ratio", ratio)
+        this program setUniform("transform", transform)
+      })
+  }
+  defaultVertexSource: static const String = "#version 300 es\n
+  precision highp float;\n
+  uniform mat3 transform;\n
+  uniform float ratio;\n
+  layout(location = 0) in vec2 vertexPosition;\n
+  layout(location = 1) in vec2 textureCoordinate;\n
+  out vec2 fragmentTextureCoordinate;\n
+  void main() {\n
+    vec3 transformedPosition = transform * vec3(vertexPosition, 0);\n
+    mat4 projectionMatrix = transpose(mat4(1.0f / ratio, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
+    fragmentTextureCoordinate = textureCoordinate;\n
+    gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
+  }\n";
+}
+
+GpuMapBgr: class extends GpuMapDefault {
+  init: func {
+    super(This fragmentSource,
+      func {
+        this program setUniform("texture0", 0)
+      })
+  }
+fragmentSource: const static String = "#version 300 es\n
+  precision highp float;\n
+  uniform sampler2D texture0;\n
+  in vec2 fragmentTextureCoordinate;
+  out vec3 outColor;\n
+  void main() {\n
+    outColor = texture(texture0, fragmentTextureCoordinate).rgb;\n
+  }\n";
+}
+
+GpuMapBgrToBgra: class extends GpuMapDefault {
+  init: func {
+    super(This fragmentSource,
+      func {
+        this program setUniform("texture0", 0)
+      })
+  }
+fragmentSource: const static String = "#version 300 es\n
+  precision highp float;\n
+  uniform sampler2D texture0;\n
+  in vec2 fragmentTextureCoordinate;
+  out vec4 outColor;\n
+  void main() {\n
+    outColor = vec4(texture(texture0, fragmentTextureCoordinate).rgb, 1.0f);\n
+  }\n";
+}
+
+GpuMapBgra: class extends GpuMapDefault {
+  init: func {
+    super(This fragmentSource,
+      func {
+        this program setUniform("texture0", 0)
+      })
+  }
+fragmentSource: const static String = "#version 300 es\n
+  precision highp float;\n
+  uniform sampler2D texture0;\n
+  in vec2 fragmentTextureCoordinate;
+  out vec3 outColor;\n
+  void main() {\n
+    outColor = texture(texture0, fragmentTextureCoordinate).rgb;\n
+  }\n";
+}
+
+GpuMapMonochrome: class extends GpuMapDefault {
+  init: func {
+    super(This fragmentSource,
+      func {
+        this program setUniform("texture0", 0)
+      })
+  }
+fragmentSource: const static String = "#version 300 es\n
+  precision highp float;\n
+  uniform sampler2D texture0;\n
+  in vec2 fragmentTextureCoordinate;
+  out float outColor;\n
+  void main() {\n
+    outColor = texture(texture0, fragmentTextureCoordinate).r;\n
+  }\n";
+}
+
+GpuMapMonochromeToBgra: class extends GpuMapDefault {
+  init: func {
+    super(This fragmentSource,
+      func {
+        this program setUniform("texture0", 0)
+      })
+  }
+fragmentSource: const static String = "#version 300 es\n
+  precision highp float;\n
+  uniform sampler2D texture0;\n
+  in vec2 fragmentTextureCoordinate;
+  out vec4 outColor;\n
+  void main() {\n
+    float colorSample = texture(texture0, fragmentTextureCoordinate).r;\n
+    outColor = vec4(colorSample, colorSample, colorSample, 1.0f);\n
+  }\n";
 }
