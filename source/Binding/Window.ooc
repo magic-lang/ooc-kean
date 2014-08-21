@@ -21,42 +21,66 @@ import OpenGLES3/NativeWindow
 import OpenGLES3/Context
 import OpenGLES3/X11Window
 
-import Surface, GpuImage, GpuCanvas
+import Surface, GpuImage, GpuCanvas, GpuMonochrome, GpuBgra, GpuBgr, GpuMap
 
 Window: class extends Surface {
   native: NativeWindow
   context: Context
+  ratio: Float
+
+  monochromeToBgra: GpuMapMonochromeToBgra
+  bgrToBgra: GpuMapBgrToBgra
+  bgraToBgra: GpuMapBgra
 
   init: func (size: IntSize2D) {
     this size = size
-  }
-
-  create: static func (size: IntSize2D, title: String) -> This {
-    result := Window new(size)
-    (result _generate(size, title)) ? result : null
+    this ratio = (size width) as Float / (size height) as Float
   }
 
   _generate: func (size: IntSize2D, title: String) -> Bool {
     this native = X11Window create(size width, size height, title)
     this context = Context create(native)
     result: UInt = this context makeCurrent()
-    result == 1 && (native != null) && (context != null)
+    this quad = Quad create(this ratio)
+    monochromeToBgra = GpuMapMonochromeToBgra new()
+    bgrToBgra = GpuMapBgrToBgra new()
+    bgraToBgra = GpuMapBgra new()
+    result == 1 && (this native != null) && (this context != null) && (this quad != null)
   }
 
-  draw: func (image: GpuImage, transform: FloatTransform2D) {
-    image bind(transform, true)
-    Quad draw()
-    image unbind()
+  draw: func ~Monochrome (image: GpuMonochrome, transform: FloatTransform2D) {
+    monochromeToBgra transform = transform
+    monochromeToBgra ratio = this ratio
+    this draw(image, monochromeToBgra)
+  }
+
+  draw: func ~Bgr (image: GpuBgr, transform: FloatTransform2D) {
+    bgrToBgra transform = transform
+    bgrToBgra ratio = this ratio
+    this draw(image, bgrToBgra)
+  }
+
+  draw: func ~Bgra (image: GpuBgra, transform: FloatTransform2D) {
+    bgraToBgra transform = transform
+    bgraToBgra ratio = this ratio
+    this draw(image, bgraToBgra)
   }
 
   draw: func ~canvas (canvas: GpuCanvas) {
-    canvas bind(true)
-    Quad draw()
-    canvas unbind()
+
+  }
+
+  clear: func {
+    this native clear()
   }
 
   update: func {
     this context update()
+  }
+
+  create: static func (size: IntSize2D, title: String) -> This {
+    result := Window new(size)
+    (result _generate(size, title)) ? result : null
   }
 
 }
