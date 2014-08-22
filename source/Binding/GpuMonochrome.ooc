@@ -20,32 +20,23 @@ import OpenGLES3/Texture
 import GpuPacked
 
 GpuMonochrome: class extends GpuPacked {
-
   init: func (size: IntSize2D) {
-    this texture = Texture create(TextureType monochrome, size width, size height)
+    super(size, TextureType monochrome, null)
   }
-
   init: func~fromPixels (data: Pointer, size: IntSize2D) {
-    this texture = Texture create(TextureType monochrome, size width, size height, data)
+    super(size, TextureType monochrome, data)
   }
-
-  bind: func {
-    this texture bind (0)
-  }
-
-  create: static func ~fromPixels (data: Pointer, size: IntSize2D) -> This {
+  create: static func ~fromPixels (size: IntSize2D, data: Pointer) -> This {
     result := This new(data, size)
-    result texture != null ? result : null
+    result _textures[0] != null ? result : null
   }
-
   create: func (size: IntSize2D) -> This {
     result := This new(size)
-    result texture != null ? result : null
+    result _textures[0] != null ? result : null
   }
-
   copy: func -> This {
     result := This new(this size)
-    result texture != null ? result : null
+    result _textures[0] != null ? result : null
   }
 
 }
