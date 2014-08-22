@@ -26,7 +26,6 @@ import Surface, GpuImage, GpuCanvas, GpuMonochrome, GpuBgra, GpuBgr, GpuMap
 Window: class extends Surface {
   native: NativeWindow
   context: Context
-  ratio: Float
 
   monochromeToBgra: GpuMapMonochromeToBgra
   bgrToBgra: GpuMapBgrToBgra
@@ -36,51 +35,42 @@ Window: class extends Surface {
     this size = size
     this ratio = (size width) as Float / (size height) as Float
   }
-
   _generate: func (size: IntSize2D, title: String) -> Bool {
     this native = X11Window create(size width, size height, title)
     this context = Context create(native)
     result: UInt = this context makeCurrent()
     this quad = Quad create(this ratio)
-    monochromeToBgra = GpuMapMonochromeToBgra new()
-    bgrToBgra = GpuMapBgrToBgra new()
-    bgraToBgra = GpuMapBgra new()
+    this monochromeToBgra = GpuMapMonochromeToBgra new()
+    this bgrToBgra = GpuMapBgrToBgra new()
+    this bgraToBgra = GpuMapBgra new()
     result == 1 && (this native != null) && (this context != null) && (this quad != null)
   }
-
   draw: func ~Monochrome (image: GpuMonochrome, transform: FloatTransform2D) {
     monochromeToBgra transform = transform
     monochromeToBgra ratio = this ratio
     this draw(image, monochromeToBgra)
   }
-
   draw: func ~Bgr (image: GpuBgr, transform: FloatTransform2D) {
     bgrToBgra transform = transform
     bgrToBgra ratio = this ratio
     this draw(image, bgrToBgra)
   }
-
   draw: func ~Bgra (image: GpuBgra, transform: FloatTransform2D) {
     bgraToBgra transform = transform
     bgraToBgra ratio = this ratio
     this draw(image, bgraToBgra)
   }
-
-  draw: func ~canvas (canvas: GpuCanvas) {
-
+  bind: func {
+    this native bind()
   }
-
   clear: func {
     this native clear()
   }
-
   update: func {
-    this context update()
+    this context swapBuffers()
   }
-
   create: static func (size: IntSize2D, title: String) -> This {
     result := Window new(size)
     (result _generate(size, title)) ? result : null
   }
-
 }
