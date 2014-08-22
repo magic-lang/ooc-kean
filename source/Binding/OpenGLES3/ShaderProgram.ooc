@@ -20,30 +20,28 @@ import lib/gles
 
 
 ShaderProgram: class {
-  backend: UInt
-  vertexSource: String
-  fragmentSource: String
+  _backend: UInt
 
-  init: func (=vertexSource, =fragmentSource)
+  init: func
 
   use: func {
-    glUseProgram(this backend)
+    glUseProgram(this _backend)
   }
 
   dispose: func {
-    glDeleteProgram(this backend)
+    glDeleteProgram(this _backend)
   }
 
   setUniform: func ~Int (name: String, value: Int) {
-    glUniform1i(glGetUniformLocation(this backend, name), value)
+    glUniform1i(glGetUniformLocation(this _backend, name), value)
   }
 
   setUniform: func ~Float (name: String, value: Float) {
-    glUniform1f(glGetUniformLocation(this backend, name), value)
+    glUniform1f(glGetUniformLocation(this _backend, name), value)
   }
 
   setUniform: func ~Matrix3x3(name: String, value: FloatTransform2D) {
-    glUniformMatrix3fv(glGetUniformLocation(this backend, name), 1, 0, value& as Float*)
+    glUniformMatrix3fv(glGetUniformLocation(this _backend, name), 1, 0, value& as Float*)
   }
 
   _compileShader: func(source: String, shaderID: UInt) {
@@ -75,21 +73,23 @@ ShaderProgram: class {
     _compileShader(vertexSource, vertexShaderID)
     _compileShader(fragmentSource, fragmentShaderID)
 
-    this backend = glCreateProgram()
+    this _backend = glCreateProgram()
 
-    glAttachShader(this backend, vertexShaderID)
-    glAttachShader(this backend, fragmentShaderID)
-    glLinkProgram(this backend)
+    glAttachShader(this _backend, vertexShaderID)
+    glAttachShader(this _backend, fragmentShaderID)
+    glLinkProgram(this _backend)
 
-    glDetachShader(this backend, vertexShaderID)
-    glDetachShader(this backend, fragmentShaderID)
+    glDetachShader(this _backend, vertexShaderID)
+    glDetachShader(this _backend, fragmentShaderID)
 
     glDeleteShader(vertexShaderID)
     glDeleteShader(fragmentShaderID)
   }
 
-  compile: func() {
-    _compileShaders(this vertexSource, this fragmentSource)
+  create: static func (vertexSource: String, fragmentSource: String) -> This {
+    result := This new()
+    result _compileShaders(vertexSource, fragmentSource)
+    result
   }
 
 }

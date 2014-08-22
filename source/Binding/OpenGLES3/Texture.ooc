@@ -26,39 +26,35 @@ TextureType: enum {
 }
 
 Texture: class {
-  backend: UInt
+  _backend: UInt
+  backend: UInt { get { this _backend } }
   width: UInt
   height: UInt
   type: TextureType
   format: UInt
   internalFormat: UInt
 
-
   init: func~nullTexture (type: TextureType, width: UInt, height: UInt) {
     this width = width
     this height = height
     this type = type
-    this _setInternalFormat(type)
+    this _setInternalFormats(type)
   }
 
   init: func~Texture (type: TextureType, width: UInt, height: UInt, pixels: Pointer) {
     this width = width
     this height = height
     this type = type
-    this _setInternalFormat(type)
+    this _setInternalFormats(type)
   }
 
   dispose: func {
-    glDeleteTextures(1, backend&)
-  }
-
-  getBackend: func -> UInt {
-    return this backend
+    glDeleteTextures(1, _backend&)
   }
 
   bind: func (unit: UInt) {
     glActiveTexture(GL_TEXTURE0 + unit)
-    glBindTexture(GL_TEXTURE_2D, backend)
+    glBindTexture(GL_TEXTURE_2D, _backend)
   }
 
   unbind: func {
@@ -66,7 +62,7 @@ Texture: class {
   }
 
   uploadPixels: func(pixels: Pointer) {
-    glBindTexture(GL_TEXTURE_2D, backend)
+    glBindTexture(GL_TEXTURE_2D, _backend)
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this width, this height, this format, GL_UNSIGNED_BYTE, pixels)
     unbind()
   }
@@ -90,7 +86,7 @@ Texture: class {
     format
   }
 
-  _setInternalFormat: func(type: TextureType) {
+  _setInternalFormats: func(type: TextureType) {
     match type {
       case TextureType monochrome =>
         this internalFormat = GL_R8
@@ -113,8 +109,8 @@ Texture: class {
   }
 
   _generate: func (pixels: Pointer) -> Bool {
-    glGenTextures(1, backend&)
-    glBindTexture(GL_TEXTURE_2D, backend)
+    glGenTextures(1, _backend&)
+    glBindTexture(GL_TEXTURE_2D, _backend)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)

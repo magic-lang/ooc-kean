@@ -22,29 +22,16 @@ Vao: class {
   backend: UInt
   positionLayout: const static UInt = 0
   textureCoordinateLayout: const static UInt = 1
-
-  create: static func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> This {
-    result := This new()
-    result _generate(positions, textureCoordinates, vertexCount, dimensions) ? result : null
-  }
-
-
-  init: func () {
-  }
-
-
-  dispose: func () {
+  init: func
+  dispose: func {
     glDeleteVertexArrays(1, backend&)
   }
-
   bind: func {
     glBindVertexArray(backend);
   }
-
   unbind: func {
     glBindVertexArray(0);
   }
-
   _generate: func(positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> Bool {
     //Currently using 2 attributes: vertex position and texture coordinate
     attributeCount := 2
@@ -80,4 +67,8 @@ Vao: class {
     true
   }
 
+  create: static func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> This {
+    result := This new()
+    result _generate(positions, textureCoordinates, vertexCount, dimensions) ? result : null
+  }
 }

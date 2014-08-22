@@ -18,33 +18,33 @@
 import lib/egl, NativeWindow
 
 Context: class {
-  eglContext: Pointer {get{eglContext} set}
-  eglDisplay: Pointer
-  eglSurface: Pointer
+  _eglContext: Pointer
+  _eglDisplay: Pointer
+  _eglSurface: Pointer
 
   init: func
 
   dispose: func {
-    eglMakeCurrent(this eglDisplay, null, null, null)
-    eglDestroyContext(this eglDisplay, this eglContext)
-    eglDestroySurface(this eglDisplay, this eglSurface)
+    eglMakeCurrent(this _eglDisplay, null, null, null)
+    eglDestroyContext(this _eglDisplay, this _eglContext)
+    eglDestroySurface(this _eglDisplay, this _eglSurface)
   }
 
   makeCurrent: func -> Bool {
-    return eglMakeCurrent(this eglDisplay, this eglSurface, this eglSurface, this eglContext) != 0
+    return eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0
   }
 
-  update: func {
-    eglSwapBuffers(eglDisplay, eglSurface)
+  swapBuffers: func {
+    eglSwapBuffers(_eglDisplay, _eglSurface)
   }
 
   _generate: func (window: NativeWindow, sharedContext: This) -> Bool {
-    this eglDisplay = eglGetDisplay(window display)
+    this _eglDisplay = eglGetDisplay(window display)
 
-    if(this eglDisplay == null)
+    if(this _eglDisplay == null)
       return false
 
-    eglInitialize(this eglDisplay, null, null)
+    eglInitialize(this _eglDisplay, null, null)
     eglBindAPI(EGL_OPENGL_ES_API)
 
     configAttribs := [
@@ -54,18 +54,18 @@ Context: class {
             EGL_NONE] as Int*
 
     numConfigs: Int
-    eglChooseConfig(this eglDisplay, configAttribs, null, 10, numConfigs&)
+    eglChooseConfig(this _eglDisplay, configAttribs, null, 10, numConfigs&)
     matchingConfigs := gc_malloc(numConfigs*Pointer size) as Pointer*
-    eglChooseConfig(this eglDisplay, configAttribs, matchingConfigs, numConfigs, numConfigs&)
+    eglChooseConfig(this _eglDisplay, configAttribs, matchingConfigs, numConfigs, numConfigs&)
     chosenConfig: Pointer = null
 
     for(i in 0..numConfigs) {
       success: UInt
       red, green, blue, alpha: Int
-      success = eglGetConfigAttrib(this eglDisplay, matchingConfigs[i], EGL_RED_SIZE, red&)
-      success &= eglGetConfigAttrib(this eglDisplay, matchingConfigs[i], EGL_BLUE_SIZE, blue&)
-      success &= eglGetConfigAttrib(this eglDisplay, matchingConfigs[i], EGL_GREEN_SIZE, green&)
-      success &= eglGetConfigAttrib(this eglDisplay, matchingConfigs[i], EGL_ALPHA_SIZE, alpha&)
+      success = eglGetConfigAttrib(this _eglDisplay, matchingConfigs[i], EGL_RED_SIZE, red&)
+      success &= eglGetConfigAttrib(this _eglDisplay, matchingConfigs[i], EGL_BLUE_SIZE, blue&)
+      success &= eglGetConfigAttrib(this _eglDisplay, matchingConfigs[i], EGL_GREEN_SIZE, green&)
+      success &= eglGetConfigAttrib(this _eglDisplay, matchingConfigs[i], EGL_ALPHA_SIZE, alpha&)
 
       if(success && red == 8 && blue == 8 && green == 8 && alpha == 8) {
         chosenConfig = matchingConfigs[i]
@@ -74,9 +74,9 @@ Context: class {
     }
 
     gc_free(matchingConfigs)
-    this eglSurface = eglCreateWindowSurface(this eglDisplay, chosenConfig, window window, null)
+    this _eglSurface = eglCreateWindowSurface(this _eglDisplay, chosenConfig, window backend, null)
 
-    if(this eglSurface == null)
+    if(this _eglSurface == null)
       return false
 
     contextAttribs := [
@@ -85,9 +85,9 @@ Context: class {
 
     shared: Pointer = null
     if(sharedContext)
-      shared = sharedContext eglContext
-    this eglContext = eglCreateContext(this eglDisplay, chosenConfig, shared, contextAttribs)
-    if(!this eglContext)
+      shared = sharedContext _eglContext
+    this _eglContext = eglCreateContext(this _eglDisplay, chosenConfig, shared, contextAttribs)
+    if(!this _eglContext)
       return false
 
     return true

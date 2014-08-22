@@ -19,33 +19,20 @@ import lib/gles, Texture
 
 
 Fbo: class {
-  backend: UInt
-  targetTexture: Texture
-  type: TextureType
-  width: UInt
-  height: UInt
+  _backend: UInt
 
-  init: func (=type, =width, =height)
+  init: func
 
-  dispose: func () {
-    targetTexture dispose()
-    glDeleteFramebuffers(1, backend&)
+  dispose: func {
+    glDeleteFramebuffers(1, _backend&)
   }
 
   bind: func {
-    glBindFramebuffer(GL_FRAMEBUFFER, backend)
+    glBindFramebuffer(GL_FRAMEBUFFER, _backend)
   }
 
   unbind: func {
     glBindFramebuffer(GL_FRAMEBUFFER, 0)
-  }
-
-  bindTexture: func {
-    targetTexture bind(0)
-  }
-
-  unbindTexture: func {
-    targetTexture unbind()
   }
 
   clear: func {
@@ -55,34 +42,35 @@ Fbo: class {
   getResultCopy: func (outputPixels: Pointer) {
     //FIXME: Only working for RGBA
     return
-    bind()
-    glPixelStorei(GL_PACK_ALIGNMENT, 1)
-    glReadBuffer(GL_COLOR_ATTACHMENT0)
-    glReadPixels(0, 0, width, height, GL_RGBA, GL_FLOAT, outputPixels)
-    glGetError() toString() println()
-    unbind()
+    //bind()
+    //glPixelStorei(GL_PACK_ALIGNMENT, 1)
+    //glReadBuffer(GL_COLOR_ATTACHMENT0)
+    //glReadPixels(0, 0, width, height, GL_RGBA, GL_FLOAT, outputPixels)
+    //glGetError() toString() println()
+    //unbind()
   }
 
-  _generate: func (width: UInt, height: UInt) -> Bool {
-    this targetTexture = Texture create(this type, width, height)
-    glGenFramebuffers(1, this backend&)
-    glBindFramebuffer(GL_FRAMEBUFFER, this backend)
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this targetTexture getBackend(), 0);
+  _generate: func ~fromTextures (textures: Texture[]) -> Bool {
+    glGenFramebuffers(1, this _backend&)
+    glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
+
+    for(i in 0..textures length) {
+      glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, textures[i] _backend, 0)
+    }
 
     /* Check FBO status */
     status: UInt = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if(status != GL_FRAMEBUFFER_COMPLETE) {
-    	raise("Framebuffer Object creation failed")
+      raise("Framebuffer Object creation failed")
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    return true
-
+    true
   }
 
-  create: static func (type: TextureType, width: UInt, height: UInt) -> This {
-    result := This new(type, width, height)
-    result _generate(width, height) ? result : null
+  create: static func (textures: Texture[]) -> This {
+    result := This new()
+    result _generate(textures) ? result : null
   }
 
 
