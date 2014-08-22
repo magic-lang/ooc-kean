@@ -20,11 +20,18 @@ import GpuImage, GpuMap, OpenGLES3/Quad
 Surface: abstract class {
   size: IntSize2D
   quad: Quad
-
+  ratio: Float
   draw: func (image: GpuImage, map: GpuMap) {
+    this bind()
+    this clear()
     map use()
     image bind()
     this quad draw()
-    image unbind()
+    this unbind()
   }
+
+  clear: abstract func
+  bind: abstract func
+  unbind: func
+  update: func
 }
