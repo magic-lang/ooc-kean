@@ -143,3 +143,61 @@ fragmentSource: const static String = "#version 300 es\n
     outColor = vec4(colorSample, colorSample, colorSample, 1.0f);\n
   }\n";
 }
+
+GpuMapYuvToBgra: class extends GpuMapDefault {
+  init: func {
+    super(This fragmentSource,
+      func {
+        this _program setUniform("texture0", 0)
+        this _program setUniform("texture1", 1)
+        this _program setUniform("texture2", 2)
+      })
+  }
+fragmentSource: const static String = "#version 300 es\n
+  precision highp float;\n
+  uniform sampler2D texture0;\n
+  uniform sampler2D texture1;\n
+  uniform sampler2D texture2;\n
+  in vec2 fragmentTextureCoordinate;
+  out vec4 outColor;\n
+  // Convert yuva to rgba
+  vec4 YuvToRgba(vec4 t)
+  {
+    mat4 matrix = mat4(1, 1, 1, 0,
+    -0.000001218894189, -0.344135678165337, 1.772000066073816, 0,
+    1.401999588657340, -0.714136155581812, 0.000000406298063, 0,
+    0, 0, 0, 1);
+    return matrix * t;
+  }
+  void main() {\n
+    float y = texture(texture0, fragmentTextureCoordinate).r;\n
+    float u = texture(texture1, fragmentTextureCoordinate).r;\n
+    float v = texture(texture2, fragmentTextureCoordinate).r;\n
+    outColor = YuvToRgba(vec4(y, v - 0.5f, u - 0.5f, 1.0f));\n
+  }\n";
+}
+
+GpuMapYuv: class extends GpuMapDefault {
+  init: func {
+    super(This fragmentSource,
+      func {
+        this _program setUniform("texture0", 0)
+        this _program setUniform("texture1", 1)
+        this _program setUniform("texture2", 2)
+      })
+  }
+fragmentSource: const static String = "#version 300 es\n
+  precision highp float;\n
+  uniform sampler2D texture0;\n
+  uniform sampler2D texture1;\n
+  uniform sampler2D texture2;\n
+  in vec2 fragmentTextureCoordinate;
+  layout(location = 0) out float yColor;\n
+  layout(location = 1) out float uColor;\n
+  layout(location = 2) out float vColor;\n
+  void main() {\n
+    yColor = texture(texture0, fragmentTextureCoordinate).r;\n
+    uColor = texture(texture1, fragmentTextureCoordinate).r;\n
+    vColor = texture(texture2, fragmentTextureCoordinate).r;\n
+  }\n";
+}

@@ -16,7 +16,7 @@
 
 use ooc-draw
 use ooc-math
-import GpuBgra, GpuBgr, GpuMonochrome, GpuCanvas, OpenGLES3/Texture
+import GpuBgra, GpuBgr, GpuMonochrome, GpuYuv420, GpuCanvas, OpenGLES3/Texture
 
 GpuImage: abstract class extends Image {
   _textures: Texture[]
@@ -46,6 +46,10 @@ GpuImage: abstract class extends Image {
 
   create: static func ~Bgra (image: RasterBgra) -> GpuBgra {
     GpuBgra create(image size, image pointer)
+  }
+
+  create: static func ~Yuv420 (image: RasterYuv420) -> GpuYuv420 {
+    GpuYuv420 create(image size, image y pointer, image u pointer, image v pointer)
   }
 
   //TODO: Implement abstract functions

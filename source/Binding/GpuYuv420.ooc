@@ -13,32 +13,35 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-use ooc-draw
 use ooc-math
+
 import OpenGLES3/Texture
-import OpenGLES3/lib/gles, OpenGLES3/Fbo
-import GpuImage
+import GpuPlanar
 
-GpuPlanar: abstract class extends GpuImage {
-  init: func (size: IntSize2D, type: TextureType, y: Pointer, u: Pointer, v: Pointer) {
-    super(size)
-    this _channelCount = 3
-    this _textures = Texture[this _channelCount] new()
-    this _textures[0] = Texture create(type, size width, size height, y)
-    this _textures[1] = Texture create(type, size width / 2, size height / 2, u)
-    this _textures[2] = Texture create(type, size width / 2, size height / 2, v)
+GpuYuv420: class extends GpuPlanar {
+
+  init: func (size: IntSize2D) {
+    super(size, TextureType monochrome, null, null, null)
   }
 
-  dispose: func {
-    for(i in 0..this _channelCount)
-      this _textures[i] dispose()
+  init: func ~fromPixels (size: IntSize2D, y: Pointer, u: Pointer, v: Pointer) {
+    super(size, TextureType monochrome, y, u, v)
   }
 
-  bind: func {
-    for(i in 0..this _channelCount) {
-      this _textures[i] bind (i)
-    }
+  create: func (size: IntSize2D) -> This {
+    result := This new(size)
+    //FIXME: null check
+    result
+  }
+  copy: func -> This {
+    result := This new(this size)
+    //FIXME: null check
+    result
   }
 
+  create: static func ~fromPixels (size: IntSize2D, y: Pointer, u: Pointer, v: Pointer) -> This {
+    result := This new(size, y, u, v)
+    //FIXME: null check
+    result
+  }
 }

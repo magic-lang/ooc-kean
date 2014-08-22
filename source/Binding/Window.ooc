@@ -21,7 +21,7 @@ import OpenGLES3/NativeWindow
 import OpenGLES3/Context
 import OpenGLES3/X11Window
 
-import Surface, GpuImage, GpuCanvas, GpuMonochrome, GpuBgra, GpuBgr, GpuMap
+import Surface, GpuImage, GpuCanvas, GpuMonochrome, GpuBgra, GpuYuv420, GpuBgr, GpuMap
 
 Window: class extends Surface {
   native: NativeWindow
@@ -30,6 +30,7 @@ Window: class extends Surface {
   monochromeToBgra: GpuMapMonochromeToBgra
   bgrToBgra: GpuMapBgrToBgra
   bgraToBgra: GpuMapBgra
+  yuvToBgra: GpuMapYuvToBgra
 
   init: func (size: IntSize2D) {
     this size = size
@@ -43,23 +44,34 @@ Window: class extends Surface {
     this monochromeToBgra = GpuMapMonochromeToBgra new()
     this bgrToBgra = GpuMapBgrToBgra new()
     this bgraToBgra = GpuMapBgra new()
+    this yuvToBgra = GpuMapYuvToBgra new()
     result == 1 && (this native != null) && (this context != null) && (this quad != null)
   }
+
+
   draw: func ~Monochrome (image: GpuMonochrome, transform: FloatTransform2D) {
     monochromeToBgra transform = transform
     monochromeToBgra ratio = this ratio
     this draw(image, monochromeToBgra)
   }
+
   draw: func ~Bgr (image: GpuBgr, transform: FloatTransform2D) {
     bgrToBgra transform = transform
     bgrToBgra ratio = this ratio
     this draw(image, bgrToBgra)
   }
+
   draw: func ~Bgra (image: GpuBgra, transform: FloatTransform2D) {
     bgraToBgra transform = transform
     bgraToBgra ratio = this ratio
     this draw(image, bgraToBgra)
   }
+  draw: func ~Yuv (image: GpuYuv420, transform: FloatTransform2D) {
+    yuvToBgra transform = transform
+    yuvToBgra ratio = this ratio
+    this draw(image, yuvToBgra)
+  }
+
   bind: func {
     this native bind()
   }
