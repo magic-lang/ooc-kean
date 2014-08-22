@@ -16,30 +16,42 @@
 
 use ooc-draw
 use ooc-math
-import GpuBgra, GpuBgr, GpuMonochrome
+import GpuBgra, GpuBgr, GpuMonochrome, GpuCanvas, OpenGLES3/Texture
 
 GpuImage: abstract class extends Image {
+  _textures: Texture[]
+  textures: Texture[] { get { _textures } }
+
+  _canvas: GpuCanvas
+  canvas: GpuCanvas {
+    get {
+      if (this _canvas == null)
+        this _canvas = GpuCanvas create(this)
+      this _canvas
+    }
+  }
+
+  _channelCount: UInt
 
   init: func (=size)
   bind: abstract func
-  unbind: abstract func
-
-  //TODO: Implement abstract functions
-  resizeTo: func (size: IntSize2D) -> This {null}
-	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {null}
-	shift: func (offset: IntSize2D) -> This {null}
-	distance: func (other: This) -> Float {0.0f}
 
   create: static func ~Monochrome (image: RasterMonochrome) -> GpuMonochrome {
-    GpuMonochrome create(image pointer, image size)
+    GpuMonochrome create(image size, image pointer)
   }
 
   create: static func ~Bgr (image: RasterBgr) -> GpuBgr {
-    GpuBgr create(image pointer, image size)
+    GpuBgr create(image size, image pointer)
   }
 
   create: static func ~Bgra (image: RasterBgra) -> GpuBgra {
-    GpuBgra create(image pointer, image size)
+    GpuBgra create(image size, image pointer)
   }
+
+  //TODO: Implement abstract functions
+  resizeTo: func (size: IntSize2D) -> This {null}
+  copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {null}
+  shift: func (offset: IntSize2D) -> This {null}
+  distance: func (other: This) -> Float {0.0f}
 
 }
