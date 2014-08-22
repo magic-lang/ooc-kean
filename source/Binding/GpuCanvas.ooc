@@ -15,7 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
 import OpenGLES3/Fbo, OpenGLES3/Quad
-import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr
+import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr, GpuYuv420
 
 GpuCanvas: class extends Surface {
   _renderTarget: Fbo
@@ -23,6 +23,7 @@ GpuCanvas: class extends Surface {
   _monochromeToMonochrome: static const GpuMapMonochrome
   _bgrToBgr: static const GpuMapBgr
   _bgraToBgra: static const GpuMapBgra
+  _yuvToYuv: static const GpuMapYuv
 
   init: func (=ratio)
 
@@ -48,6 +49,12 @@ GpuCanvas: class extends Surface {
     this draw(image, This _bgraToBgra)
   }
 
+  draw: func ~Yuv420 (image: GpuYuv420, transform: FloatTransform2D) {
+    This _yuvToYuv transform = transform
+    This _yuvToYuv ratio = this ratio
+    this draw(image, This _yuvToYuv)
+  }
+
   bind: func {
     this _renderTarget bind()
   }
@@ -71,6 +78,8 @@ GpuCanvas: class extends Surface {
       This _bgrToBgr = GpuMapBgr new()
     if(This _bgraToBgra == null)
       This _bgraToBgra = GpuMapBgra new()
+    if(This _yuvToYuv == null)
+      This _yuvToYuv = GpuMapYuv new()
 
     result _renderTarget != null ? result : null
   }
