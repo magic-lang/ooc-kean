@@ -14,39 +14,65 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
-import OpenGLES3/Fbo
-import OpenGLES3/Quad
-import OpenGLES3/Texture
-import GpuImage, GpuMap, Surface
+import OpenGLES3/Fbo, OpenGLES3/Quad
+import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr
 
-GpuCanvas: abstract class extends Surface {
-  renderTarget: Fbo
+GpuCanvas: class extends Surface {
+  _renderTarget: Fbo
 
-  init: func (size: IntSize2D, type: TextureType)
-  {
-    this renderTarget = Fbo create(type, size width, size height)
+  _monochromeToMonochrome: static const GpuMapMonochrome
+  _bgrToBgr: static const GpuMapBgr
+  _bgraToBgra: static const GpuMapBgra
+
+  init: func (=ratio)
+
+  dispose: func {
+    this _renderTarget dispose()
   }
 
-  dispose: func () {
-    renderTarget dispose()
+  draw: func ~Monochrome (image: GpuMonochrome, transform: FloatTransform2D) {
+    This _monochromeToMonochrome transform = transform
+    This _monochromeToMonochrome ratio = this ratio
+    this draw(image, This _monochromeToMonochrome)
   }
 
-  draw: func (image: GpuImage, transform: FloatTransform2D) {
-    this renderTarget bind(). clear()
-    image bind(transform, false)
-    Quad draw()
-    image unbind()
-    this renderTarget unbind()
+  draw: func ~Bgr (image: GpuBgr, transform: FloatTransform2D) {
+    This _bgrToBgr transform = transform
+    This _bgrToBgr ratio = this ratio
+    this draw(image, This _bgrToBgr)
   }
 
-  getPixels: func (pixels: Pointer) {
-    renderTarget getResultCopy(pixels)
+  draw: func ~Bgra (image: GpuBgra, transform: FloatTransform2D) {
+    This _bgraToBgra transform = transform
+    This _bgraToBgra ratio = this ratio
+    this draw(image, This _bgraToBgra)
   }
 
-  bind: abstract func (onScreen: Bool)
+  bind: func {
+    this _renderTarget bind()
+  }
 
   unbind: func {
-    this renderTarget unbindTexture()
+    this _renderTarget unbind()
+  }
+
+  clear: func {
+    this _renderTarget clear()
+  }
+
+  create: static func (image: GpuImage) -> This {
+    result := This new((image size width) as Float / (image size height) as Float)
+    result _renderTarget = Fbo create(image textures)
+    result quad = Quad create(result ratio)
+
+    if(This _monochromeToMonochrome == null)
+      This _monochromeToMonochrome = GpuMapMonochrome new()
+    if(This _bgrToBgr == null)
+      This _bgrToBgr = GpuMapBgr new()
+    if(This _bgraToBgra == null)
+      This _bgraToBgra = GpuMapBgra new()
+
+    result _renderTarget != null ? result : null
   }
 
 }
