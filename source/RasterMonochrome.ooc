@@ -40,16 +40,20 @@ RasterMonochrome: class extends RasterPacked {
 	init: func ~fromRasterMonochrome (original: This) { super(original) }
 	init: func ~fromRasterImage (original: RasterImage) {
 		this init(original size, original coordinateSystem, original crop)
+//		"RasterMonochrome init ~fromRasterImage, original: (#{original size}), this: (#{this size}), stride #{this stride}" println()
 		row := this pointer as UInt8*
 		rowLength := this size width
 		rowEnd := row + rowLength
 		destination := row
 		f := func (color: ColorMonochrome) {
 			(destination as ColorMonochrome*)@ = color
+//			"RasterMonochrome init ~fromRasterImage f, color: #{color y}, destination at #{destination}" println()			
 			destination += 1
 			if (destination >= rowEnd) {
+//				"RasterMonochrome init ~fromRasterImage f, end of line at #{destination}" println()
 				row += this stride
 				destination = row
+//				"RasterMonochrome init ~fromRasterImage f, new line at #{destination}" println()
 				rowEnd = row + rowLength
 			}
 		}
@@ -64,14 +68,21 @@ RasterMonochrome: class extends RasterPacked {
 	copy: func -> Image {
 		This new(this)
 	}
-	apply: func ~bgr (action: Func<ColorBgr>) {
-//		FIXME
+	apply: func ~bgr (action: Func(ColorBgr)) {
+		this apply(ColorConvert fromMonochrome(action))
 	}
-	apply: func ~yuv (action: Func<ColorYuv>) {
-//		FIXME
+	apply: func ~yuv (action: Func(ColorYuv)) {
+		this apply(ColorConvert fromMonochrome(action))
 	}
-	apply: func ~monochrome (action: Func<ColorMonochrome>) {
-//		FIXME			
+	apply: func ~monochrome (action: Func(ColorMonochrome)) {
+		end := (this pointer as UInt8*) + this length
+		rowLength := this size width
+		for (row in (this pointer as UInt8*)..end) {
+			rowEnd := row + rowLength
+			for (source in row..rowEnd)
+				action((source as ColorMonochrome*)@)
+			row += this stride
+		}
 	}	
 	distance: func (other: Image) -> Float {
 		result := 0.0f

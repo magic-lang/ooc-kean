@@ -58,15 +58,19 @@ RasterBgra: class extends RasterPacked {
 	copy: func -> Image {
 		This new(this)
 	}
-	apply: func ~bgr (action: Func<ColorBgr>) {
-//		FIXME
+	apply: func ~bgr (action: Func(ColorBgr)) {
+		end := (this pointer as Int*) + this size area
+		for (source in (this pointer as Int*)..end) {
+			action((source as ColorBgr*)@)
+			source +=3
+		}
 	}
-	apply: func ~yuv (action: Func<ColorYuv>) {
-//		FIXME
+	apply: func ~yuv (action: Func(ColorYuv)) {
+		this apply(ColorConvert fromBgr(action))
 	}
-	apply: func ~monochrome (action: Func<ColorMonochrome>) {
-//		FIXME			
-	}	
+	apply: func ~monochrome (action: Func(ColorMonochrome)) {
+		this apply(ColorConvert fromBgr(action))
+	}		
 	distance: func (other: Image) -> Float {
 		result := 0.0f
 		if (!other)

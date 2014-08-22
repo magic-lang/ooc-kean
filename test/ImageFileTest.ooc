@@ -11,8 +11,8 @@ ImageFileTest: class extends Fixture {
 			expect(1, is equal to(1))
 		})
 		this add("open PNG", func() {
-			source := "input/Space.png"
-			destination := "output/outputPNG.png"
+			source := "test/input/Space.png"
+			destination := "test/output/outputPNG.png"
 			requiredComponents := 4
 			x, y, n: Int
 			data := StbImage load(source, x&, y&, n&, requiredComponents)
@@ -28,8 +28,8 @@ ImageFileTest: class extends Fixture {
 			failureReason toString() println()
 		})
 		this add("open JPEG", func() {
-			source := "input/Flower.jpg"
-			destination := "output/outputJPEG.png"
+			source := "test/input/Flower.jpg"
+			destination := "test/output/outputJPEG.png"
 			requiredComponents := 4
 			x, y, n: Int
 			data := StbImage load(source, x&, y&, n&, requiredComponents)
@@ -45,30 +45,52 @@ ImageFileTest: class extends Fixture {
 			failureReason toString() println()
 		})
 		this add("open RasterBgra", func() {
-			source := "input/Space.png"
-			destination := "output/outputBgra.png"
+			source := "test/input/Space.png"
+			destination := "test/output/outputRasterBgra.png"
 			image := RasterBgra open(source)
 			image save(destination)	
 		})
 		this add("open RasterBgr", func() {
-			source := "input/Space.png"
-			destination := "output/outputBgr.png"
+			source := "test/input/Space.png"
+			destination := "test/output/outputRasterBgr.png"
 			image := RasterBgr open(source)
 			image save(destination)	
 		})
 		this add("open RasterMonochrome", func() {
-			source := "input/Barn.png"
-			destination := "output/outputMonochrome.png"
+			source := "test/input/Barn.png"
+			destination := "test/output/outputRasterMonochrome.png"
 			image := RasterMonochrome open(source)
 			image save(destination)	
 		})
-//		this add("convert to RasterMonochrome", func() {
-//			source := "input/Barn.png"
-//			destination := "output/outputConvert.png"
-//			bgra := RasterBgra open(source)
-//			monochrome := bgra as RasterMonochrome
-//			monochrome save(destination)	
-//		})
+		this add("convert RasterBgra to RasterMonochrome", func() {
+			source := "test/input/Barn.png"
+			destination := "test/output/outputRasterBgraToRasterMonochrome.png"
+			bgra := RasterBgra open(source)
+			monochrome := RasterMonochrome new(bgra)
+			monochrome save(destination)	
+		})
+		this add("convert RasterBgr to RasterMonochrome", func() {
+			source := "test/input/Barn.png"
+			destination := "test/output/outputRasterBgrToRasterMonochrome.png"
+			bgr := RasterBgr open(source)
+			monochrome := RasterMonochrome new(bgr)
+			monochrome save(destination)	
+		})
+		this add("convert RasterBgra to RasterYuv420", func() {
+			source := "test/input/Barn.png"
+			destination := "test/output/outputRasterBgraToYuv420ToRasterMonochrome.png"
+			bgra := RasterBgra open(source)
+			yuv420 := RasterYuv420 new(bgra)
+			monochrome := RasterMonochrome new(yuv420)
+			monochrome save(destination)	
+		})
+		this add("convert RasterBgr to RasterYuv420", func() {
+//			source := "test/input/Barn.png"
+//			destination := "test/output/outputRasterBgrToRasterMonochrome.png"
+//			bgr := RasterBgr open(source)
+//			yuv420 := RasterYuv420 new(bgr)
+//			yuv420 save(destination)	
+		})		
 		this add("Last", func() {
 			expect(1, is equal to(1))
 		})

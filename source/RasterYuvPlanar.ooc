@@ -38,33 +38,29 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 			}
 		}
 	}
-	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
+	init: func (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
+		"RasterYuvPlanar init ~fromEverything" println()
 		super(buffer, size, coordinateSystem, crop)
 		this y = this createY()
 		this u = this createU()
 		this v = this createV()
-		this crop = this crop
 	}
-	init: func ~fromRasterBgra (original: This) { 
+	init: func ~fromYuvPlanar (original: This) { 
 		super(original) 
 		this y = this createY()
 		this u = this createU()
 		this v = this createV()
-		this crop = this crop
 	}
 	createY: abstract func -> RasterMonochrome
 	createU: abstract func -> RasterMonochrome
 	createV: abstract func -> RasterMonochrome
 
-	apply: func ~bgr (action: Func<ColorBgr>) {
-//		FIXME
+	apply: func ~bgr (action: Func (ColorBgr)) {
+		this apply(ColorConvert fromYuv(action))
 	}
-	apply: func ~yuv (action: Func<ColorYuv>) {
-//		FIXME
+	apply: func ~monochrome (action: Func (ColorMonochrome)) {
+		this apply(ColorConvert fromYuv(action))		
 	}
-	apply: func ~monochrome (action: Func<ColorMonochrome>) {
-//		FIXME			
-	}	
 	distance: func (other: Image) -> Float {
 		result := 0.0f
 		if (!other)

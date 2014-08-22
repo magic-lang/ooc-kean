@@ -64,15 +64,22 @@ RasterBgr: class extends RasterPacked {
 	copy: func -> Image {
 		This new(this)
 	}
-	apply: func ~bgr (action: Func<ColorBgr>) {
-//		FIXME
+	apply: func ~bgr (action: Func(ColorBgr)) {
+		end := (this pointer as UInt8*) + this length
+		rowLength := this size width
+		for (row in (this pointer as UInt8*)..end) {
+			rowEnd := (row as ColorBgr*) + rowLength
+			for (source in (row as ColorBgr*)..rowEnd)
+				action((source as ColorBgr*)@)
+			row += this stride
+		}
 	}
-	apply: func ~yuv (action: Func<ColorYuv>) {
-//		FIXME
+	apply: func ~yuv (action: Func(ColorYuv)) {
+		this apply(ColorConvert fromBgr(action))
 	}
-	apply: func ~monochrome (action: Func<ColorMonochrome>) {
-//		FIXME			
-	}	
+	apply: func ~monochrome (action: Func(ColorMonochrome)) {
+		this apply(ColorConvert fromBgr(action))
+	}		
 	distance: func (other: Image) -> Float {
 		result := 0.0f
 		if (!other)

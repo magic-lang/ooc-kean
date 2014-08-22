@@ -179,16 +179,53 @@ ColorBgra: cover {
 }
 
 ColorConvert: cover {
+
+	fromBgr: static func ~monochrome (action: Func (ColorMonochrome)) -> Func (ColorBgr) {
+		func (color: ColorBgr) { action(ColorConvert bgrToMonochrome(color)) }
+	} 
+	fromBgr: static func ~yuv (action: Func (ColorYuv)) -> Func (ColorBgr) {
+		func (color: ColorBgr) { action(ColorConvert bgrToYuv(color)) }	
+	}
+	fromMonochrome: static func ~bgr (action: Func (ColorBgr)) -> Func (ColorMonochrome) {
+		func (color: ColorMonochrome) { action(ColorConvert monochromeToBgr(color)) }		
+	} 
+	fromMonochrome: static func ~yuv (action: Func (ColorYuv)) -> Func (ColorMonochrome) {
+		func (color: ColorMonochrome) { action(ColorConvert monochromeToYuv(color)) }	
+	} 
+	fromYuv: static func ~bgr (action: Func (ColorBgr)) -> Func (ColorYuv) {
+		func (color: ColorYuv) { action(ColorConvert yuvToBgr(color)) }		
+	} 
+	fromYuv: static func ~monochrome (action: Func (ColorMonochrome)) -> Func (ColorYuv) {
+		func (color: ColorYuv) { action(ColorConvert yuvToMonochrome(color)) }	
+	} 
 	// FIXME: yuvToBgr2[512..end] and yuvToBgr2[256..511] are all 0, so there's some minor room for optimization here.
 	// Also, since multidimensional arrays work now, the arrays below can be reorganized if so desired.
-	yuvToBgr: static func (color: ColorYuv) {
+	monochromeToBgr: static func (color: ColorMonochrome) -> ColorBgr {
+		ColorBgr new(
+			(ColorConvert yuvToBgr2[color y] >> 8) clamp(0, 255) as UInt8,
+			(ColorConvert yuvToBgr1[color y] >> 8) clamp(0, 255) as UInt8,
+			(ColorConvert yuvToBgr0[color y] >> 8) clamp(0, 255) as UInt8
+		)
+	}
+	monochromeToYuv: static func (color: ColorMonochrome) -> ColorYuv {
+		ColorYuv new(color y, 128, 128)
+	}
+	bgrToMonochrome: static func (color: ColorBgr) -> ColorMonochrome {
+		ColorMonochrome new(
+			((ColorConvert bgrToYuv0[color red] + ColorConvert bgrToYuv0[256 + color green] + ColorConvert bgrToYuv0[512 + color blue]) >> 8) clamp (0, 255) as UInt8
+		)
+	}
+	yuvToMonochrome: static func (color: ColorYuv) -> ColorMonochrome {
+		ColorMonochrome new(color y)
+	}
+	yuvToBgr: static func (color: ColorYuv) -> ColorBgr {
 		ColorBgr new(
 			((ColorConvert yuvToBgr2[color y] + ColorConvert yuvToBgr2[256 + color u] + ColorConvert yuvToBgr2[512 + color v]) >> 8) clamp(0, 255) as UInt8,
 			((ColorConvert yuvToBgr1[color y] + ColorConvert yuvToBgr1[256 + color u] + ColorConvert yuvToBgr1[512 + color v]) >> 8) clamp(0, 255) as UInt8,
 			((ColorConvert yuvToBgr0[color y] + ColorConvert yuvToBgr0[256 + color u] + ColorConvert yuvToBgr0[512 + color v]) >> 8) clamp(0, 255) as UInt8
 		)
 	}
-	bgrToYuv: static func (color: ColorBgr) {
+	bgrToYuv: static func (color: ColorBgr) -> ColorYuv {
 		ColorYuv new(
 			((ColorConvert bgrToYuv0[color red] + ColorConvert bgrToYuv0[256 + color green] + ColorConvert bgrToYuv0[512 + color blue]) >> 8) clamp (0, 255) as UInt8,
 			(((ColorConvert bgrToYuv1[color red] + ColorConvert bgrToYuv1[256 + color green] + ColorConvert bgrToYuv1[512 + color blue]) >> 8) + 128) clamp(0, 255) as UInt8,
