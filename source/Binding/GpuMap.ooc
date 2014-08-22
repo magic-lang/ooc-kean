@@ -1,34 +1,33 @@
 //
 // Copyright (c) 2011-2014 Simon Mika <simon@mika.se>
 //
-// This program is free software: you can redistribute it and/or modify
+// This _program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// This program is distributed in the hope that it will be useful,
+// This _program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// along with this _program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-math
 import OpenGLES3/ShaderProgram
 
 GpuMap: abstract class {
-  program: ShaderProgram
+  _program: ShaderProgram
   _onUse: Func
 
   init: func (vertexSource: String, fragmentSource: String, onUse: Func) {
     this _onUse = onUse;
-    this program = ShaderProgram new(vertexSource, fragmentSource)
-    this program compile()
+    this _program = ShaderProgram create(vertexSource, fragmentSource)
   }
 
   use: func {
-    this program use()
+    this _program use()
     this _onUse()
   }
 }
@@ -40,8 +39,8 @@ GpuMapDefault: abstract class extends GpuMap {
     super(This defaultVertexSource, fragmentSource,
       func {
         onUse()
-        this program setUniform("ratio", ratio)
-        this program setUniform("transform", transform)
+        this _program setUniform("ratio", ratio)
+        this _program setUniform("transform", transform)
       })
   }
   defaultVertexSource: static const String = "#version 300 es\n
@@ -63,7 +62,7 @@ GpuMapBgr: class extends GpuMapDefault {
   init: func {
     super(This fragmentSource,
       func {
-        this program setUniform("texture0", 0)
+        this _program setUniform("texture0", 0)
       })
   }
 fragmentSource: const static String = "#version 300 es\n
@@ -80,7 +79,7 @@ GpuMapBgrToBgra: class extends GpuMapDefault {
   init: func {
     super(This fragmentSource,
       func {
-        this program setUniform("texture0", 0)
+        this _program setUniform("texture0", 0)
       })
   }
 fragmentSource: const static String = "#version 300 es\n
@@ -97,7 +96,7 @@ GpuMapBgra: class extends GpuMapDefault {
   init: func {
     super(This fragmentSource,
       func {
-        this program setUniform("texture0", 0)
+        this _program setUniform("texture0", 0)
       })
   }
 fragmentSource: const static String = "#version 300 es\n
@@ -114,7 +113,7 @@ GpuMapMonochrome: class extends GpuMapDefault {
   init: func {
     super(This fragmentSource,
       func {
-        this program setUniform("texture0", 0)
+        this _program setUniform("texture0", 0)
       })
   }
 fragmentSource: const static String = "#version 300 es\n
@@ -131,7 +130,7 @@ GpuMapMonochromeToBgra: class extends GpuMapDefault {
   init: func {
     super(This fragmentSource,
       func {
-        this program setUniform("texture0", 0)
+        this _program setUniform("texture0", 0)
       })
   }
 fragmentSource: const static String = "#version 300 es\n
