@@ -20,6 +20,8 @@ import lib/gles, Texture
 
 Fbo: class {
   _backend: UInt
+  _bufferCount: UInt
+  _buffers: UInt*
 
   init: func
 
@@ -31,8 +33,17 @@ Fbo: class {
     glBindFramebuffer(GL_FRAMEBUFFER, _backend)
   }
 
+  bindRead: func {
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, _backend)
+  }
+
+  bindDraw: func {
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _backend)
+  }
+
   unbind: func {
     glBindFramebuffer(GL_FRAMEBUFFER, 0)
+    glDrawBuffers(this _bufferCount, this _buffers)
   }
 
   clear: func {
@@ -53,8 +64,11 @@ Fbo: class {
   _generate: func ~fromTextures (textures: Texture[]) -> Bool {
     glGenFramebuffers(1, this _backend&)
     glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
+    this _bufferCount = textures length
+    this _buffers = gc_malloc(this _bufferCount * UInt size) as UInt*
 
     for(i in 0..textures length) {
+      this _buffers[i] = GL_COLOR_ATTACHMENT0 + i
       glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, textures[i] _backend, 0)
     }
 
