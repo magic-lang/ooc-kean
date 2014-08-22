@@ -20,14 +20,19 @@ import OpenGLES3/Texture
 import GpuImage
 
 GpuPacked: abstract class extends GpuImage {
-texture: Texture
+  init: func (size: IntSize2D, type: TextureType, data: Pointer) {
+    super(size)
+    this _channelCount = 1
+    this _textures = Texture[this _channelCount] new()
+    this _textures[0] = Texture create(type, size width, size height, data)
+  }
 
   dispose: func {
-    this texture dispose()
   }
 
-  unbind: func {
-    this texture unbind()
+  bind: func {
+    this _textures[0] bind (0)
   }
+
 
 }
