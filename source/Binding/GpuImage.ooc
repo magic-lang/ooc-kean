@@ -13,14 +13,15 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
 use ooc-draw
 use ooc-math
-import GpuBgra, GpuBgr, GpuMonochrome, GpuYuv420, GpuCanvas, OpenGLES3/Texture
+use ooc-base
+import GpuBgra, GpuBgr, GpuMonochrome, GpuYuv420, GpuYuv420Semiplanar, GpuCanvas, OpenGLES3/Texture
 
-GpuImage: abstract class extends Image {
+GpuImage: abstract class extends Image implements IDisposable {
   _textures: Texture[]
   textures: Texture[] { get { _textures } }
+  ratio: Float { get {this size width as Float / this size height as Float } }
 
   init: func (=size)
   bind: abstract func
@@ -38,9 +39,20 @@ GpuImage: abstract class extends Image {
   }
 
   //TODO: Implement abstract functions
-  resizeTo: func (size: IntSize2D) -> This {null}
-  copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {null}
-  shift: func (offset: IntSize2D) -> This {null}
-  distance: func (other: This) -> Float {0.0f}
+  resizeTo: func (size: IntSize2D) -> This {
+    raise("Using unimplemented function reSizeTo in GpuImage class")
+  }
+  copy: func -> This {
+    raise("Using unimplemented function copy in GpuImage class")
+  }
+  copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {
+    raise("Using unimplemented function copy ~fromParams in GpuImage class")
+  }
+  shift: func (offset: IntSize2D) -> This {
+    raise("Using unimplemented function shift in GpuImage class")
+  }
+  distance: func (other: This) -> Float {
+    raise("Using unimplemented function distance in GpuImage class")
+  }
 
 }
