@@ -17,30 +17,23 @@
 
 import lib/gles, Vao
 
-
 Quad: class {
   vao: Vao
-
-  init: func (ratio: Float) {
-    positions := [-ratio, -1.0f, -ratio, 1.0f, ratio, -1.0f, ratio, 1.0f] as Float*
+  init: func {
+    positions := [-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f] as Float*
     textureCoordinates := [0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f] as Float*
     this vao = Vao create(positions, textureCoordinates, 4, 2)
   }
-
   dispose: func () {
     this vao dispose()
   }
-
   draw: func {
     this vao bind()
   	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     this vao unbind()
   }
-
-  create: static func (ratio: Float) -> This {
-    result := This new(ratio)
+  create: static func -> This {
+    result := This new()
     (result vao != null) ? result : null
   }
-
-
 }
