@@ -27,33 +27,26 @@ Fbo: class {
   _height: UInt
 
   init: func (=_width, =_height)
-
   dispose: func {
     glDeleteFramebuffers(1, _backend&)
   }
-
   bind: func {
     glBindFramebuffer(GL_FRAMEBUFFER, _backend)
     glViewport(0, 0, this _width, this _height)
   }
-
   bindRead: func {
     glBindFramebuffer(GL_READ_FRAMEBUFFER, _backend)
   }
-
   bindDraw: func {
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _backend)
   }
-
   unbind: func {
     glBindFramebuffer(GL_FRAMEBUFFER, 0)
     glDrawBuffers(this _bufferCount, this _buffers)
   }
-
   clear: func {
     glClear(GL_COLOR_BUFFER_BIT)
   }
-
   getResultCopy: func (outputPixels: Pointer) {
     //FIXME: Only working for RGBA
     return
@@ -64,7 +57,6 @@ Fbo: class {
     //glGetError() toString() println()
     //unbind()
   }
-
   _generate: func ~fromTextures (textures: Texture[]) -> Bool {
     glGenFramebuffers(1, this _backend&)
     glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
@@ -85,8 +77,9 @@ Fbo: class {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     true
   }
-
-
+  setViewport: static func (x: UInt, y: UInt, width: UInt, height: UInt) {
+    glViewport(x, y, width, height)
+  }
   create: static func (textures: Texture[], width: UInt, height: UInt) -> This {
     result := This new(width, height)
     result _generate(textures) ? result : null
