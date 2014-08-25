@@ -13,35 +13,6 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+import GpuImage
 
-use ooc-draw
-use ooc-math
-import OpenGLES3/Texture
-import GpuImage, GpuMonochrome, GpuCanvas
-
-GpuPlanar: abstract class extends GpuImage {
-  _canvas: GpuCanvasPlanar
-  _y: GpuMonochrome
-  y: GpuMonochrome { get { _y } }
-  _u: GpuMonochrome
-  u: GpuMonochrome { get { _u } }
-  _v: GpuMonochrome
-  v: GpuMonochrome { get { _v } }
-  canvas: GpuCanvasPlanar {
-    get {
-      if (this _canvas == null)
-        this _canvas = GpuCanvasPlanar create(this)
-      this _canvas
-    }
-  }
-  dispose: func {
-    this _y dispose()
-    this _u dispose()
-    this _v dispose()
-  }
-  bind: func {
-    this _y bind(0)
-    this _u bind(1)
-    this _v bind(2)
-  }
-}
+GpuPlanar: abstract class extends GpuImage {}

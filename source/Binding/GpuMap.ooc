@@ -13,11 +13,11 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this _program. If not, see <http://www.gnu.org/licenses/>.
-
+use ooc-base
 use ooc-math
 import OpenGLES3/ShaderProgram
 
-GpuMap: abstract class {
+GpuMap: abstract class implements IDisposable {
   _program: ShaderProgram
   _onUse: Func
 
@@ -25,7 +25,9 @@ GpuMap: abstract class {
     this _onUse = onUse;
     this _program = ShaderProgram create(vertexSource, fragmentSource)
   }
-
+  dispose: func {
+    this _program dispose()
+  }
   use: func {
     this _program use()
     this _onUse()
@@ -51,7 +53,8 @@ GpuMapDefault: abstract class extends GpuMap {
   layout(location = 1) in vec2 textureCoordinate;\n
   out vec2 fragmentTextureCoordinate;\n
   void main() {\n
-    vec3 transformedPosition = transform * vec3(vertexPosition, 0);\n
+    vec3 scaledQuadPosition = vec3(ratio * vertexPosition.x, vertexPosition.y, 0);\n
+    vec3 transformedPosition = transform * scaledQuadPosition;\n
     mat4 projectionMatrix = transpose(mat4(1.0f / ratio, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
     fragmentTextureCoordinate = textureCoordinate;\n
     gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n

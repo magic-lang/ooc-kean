@@ -13,15 +13,14 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
 use ooc-math
 import GpuImage, GpuMap, OpenGLES3/Quad
 
 Surface: abstract class {
   size: IntSize2D
   quad: Quad
-  ratio: Float
   draw: func (image: GpuImage, map: GpuMap) {
+    this setResolution(image size)
     this bind()
     this clear()
     map use()
@@ -32,6 +31,7 @@ Surface: abstract class {
 
   clear: abstract func
   bind: abstract func
+  setResolution: func (resolution: IntSize2D)
   unbind: func
   update: func
 }

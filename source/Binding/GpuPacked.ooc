@@ -13,7 +13,6 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
 use ooc-draw
 use ooc-math
 import OpenGLES3/Texture
@@ -33,11 +32,14 @@ GpuPacked: abstract class extends GpuImage {
     this _textures = Texture[1] new()
     this _textures[0] = Texture create(type, size width, size height, data)
   }
-  bind: func ~specificTextureUnit(unit: UInt){
+  bind: func ~specificTextureUnit(unit: UInt) {
     this _textures[0] bind (unit)
   }
   bind: func {
     this _textures[0] bind (0)
+  }
+  dispose: func {
+    this _textures[0] dispose()
   }
 
 
