@@ -33,40 +33,33 @@ Texture: class {
   type: TextureType
   format: UInt
   internalFormat: UInt
-
   init: func~nullTexture (type: TextureType, width: UInt, height: UInt) {
     this width = width
     this height = height
     this type = type
     this _setInternalFormats(type)
   }
-
   init: func~Texture (type: TextureType, width: UInt, height: UInt, pixels: Pointer) {
     this width = width
     this height = height
     this type = type
     this _setInternalFormats(type)
   }
-
   dispose: func {
     glDeleteTextures(1, _backend&)
   }
-
   bind: func (unit: UInt) {
     glActiveTexture(GL_TEXTURE0 + unit)
     glBindTexture(GL_TEXTURE_2D, _backend)
   }
-
   unbind: func {
     glBindTexture(GL_TEXTURE_2D, 0)
   }
-
   uploadPixels: func(pixels: Pointer) {
     glBindTexture(GL_TEXTURE_2D, _backend)
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this width, this height, this format, GL_UNSIGNED_BYTE, pixels)
     unbind()
   }
-
   getGLFormat: static func(type: TextureType) -> UInt {
     format: UInt
     match type {
@@ -85,7 +78,6 @@ Texture: class {
     }
     format
   }
-
   _setInternalFormats: func(type: TextureType) {
     match type {
       case TextureType monochrome =>
@@ -107,7 +99,6 @@ Texture: class {
         raise("Unknown texture format")
     }
   }
-
   _generate: func (pixels: Pointer) -> Bool {
     glGenTextures(1, _backend&)
     glBindTexture(GL_TEXTURE_2D, _backend)
@@ -118,12 +109,10 @@ Texture: class {
     glTexImage2D(GL_TEXTURE_2D, 0, this internalFormat, this width, this height, 0, this format, GL_UNSIGNED_BYTE, pixels)
     true
   }
-
   create: static func (type: TextureType, width: UInt, height: UInt) -> This {
     result := Texture new(type, width, height)
     result _generate(null) ? result : null
   }
-
   create: static func~fromPixels(type: TextureType, width: UInt, height: UInt, pixels: Pointer) -> This {
     result := Texture new(type, width, height)
     result _generate(pixels) ? result : null

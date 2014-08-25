@@ -17,32 +17,25 @@
 
 import lib/gles
 
-
 Fence: class {
   _backend: Pointer
 
   clientWait: func (timeout: UInt) {
     glClientWaitSync(this _backend, 0, timeout)
   }
-
   wait: func {
     glClientWaitSync(this _backend, 0, GL_TIMEOUT_IGNORED)
   }
-
   dispose: func () {
     glDeleteSync(_backend)
   }
-
   _generate: func -> Bool {
     this _backend = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0)
     true
   }
-
   create: static func -> This {
     result := This new()
     result _generate() ? result : null
   }
-
-
 
 }

@@ -23,21 +23,17 @@ Context: class {
   _eglSurface: Pointer
 
   init: func
-
   dispose: func {
     eglMakeCurrent(this _eglDisplay, null, null, null)
     eglDestroyContext(this _eglDisplay, this _eglContext)
     eglDestroySurface(this _eglDisplay, this _eglSurface)
   }
-
   makeCurrent: func -> Bool {
     return eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0
   }
-
   swapBuffers: func {
     eglSwapBuffers(_eglDisplay, _eglSurface)
   }
-
   _generate: func (window: NativeWindow, sharedContext: This) -> Bool {
     this _eglDisplay = eglGetDisplay(window display)
 
@@ -92,12 +88,10 @@ Context: class {
 
     return true
   }
-
   create: static func (window: NativeWindow) -> This {
     result := This new()
     result _generate(window, null) ? result : null
   }
-
   create: static func ~shared (window: NativeWindow, sharedContext: This) -> This {
     result := This new()
     result _generate(window, sharedContext) ? result : null

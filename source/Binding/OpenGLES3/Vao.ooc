@@ -66,7 +66,6 @@ Vao: class {
 
     true
   }
-
   create: static func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> This {
     result := This new()
     result _generate(positions, textureCoordinates, vertexCount, dimensions) ? result : null

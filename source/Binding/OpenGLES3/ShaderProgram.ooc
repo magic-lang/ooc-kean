@@ -18,38 +18,30 @@
 use ooc-math
 import lib/gles
 
-
 ShaderProgram: class {
   _backend: UInt
-
   init: func
-
   use: func {
     glUseProgram(this _backend)
   }
-
   dispose: func {
     glDeleteProgram(this _backend)
   }
-
   setUniform: func ~Int (name: String, value: Int) {
     glUniform1i(glGetUniformLocation(this _backend, name), value)
   }
-
   setUniform: func ~Float (name: String, value: Float) {
     glUniform1f(glGetUniformLocation(this _backend, name), value)
   }
-
   setUniform: func ~Matrix3x3(name: String, value: FloatTransform2D) {
     glUniformMatrix3fv(glGetUniformLocation(this _backend, name), 1, 0, value& as Float*)
   }
-
   _compileShader: func(source: String, shaderID: UInt) {
     glShaderSource(shaderID, 1, (source toCString())&, null)
     glCompileShader(shaderID)
 
-    "Compiling shader:" println()
-    source println()
+    //"Compiling shader:" println()
+    //source println()
     success: Int
     glGetShaderiv(shaderID, GL_COMPILE_STATUS, success&)
 
@@ -63,9 +55,8 @@ ShaderProgram: class {
       raise("Shader compilation failed")
       gc_free(compileLog)
     }
-    "Shader compilation success" println()
+    //"Shader compilation success" println()
   }
-
   _compileShaders: func(vertexSource: String, fragmentSource: String) {
     vertexShaderID := glCreateShader(GL_VERTEX_SHADER)
     fragmentShaderID := glCreateShader(GL_FRAGMENT_SHADER)
@@ -85,7 +76,6 @@ ShaderProgram: class {
     glDeleteShader(vertexShaderID)
     glDeleteShader(fragmentShaderID)
   }
-
   create: static func (vertexSource: String, fragmentSource: String) -> This {
     result := This new()
     result _compileShaders(vertexSource, fragmentSource)
