@@ -23,7 +23,10 @@ Fbo: class {
   _bufferCount: UInt
   _buffers: UInt*
 
-  init: func
+  _width: UInt
+  _height: UInt
+
+  init: func (=_width, =_height)
 
   dispose: func {
     glDeleteFramebuffers(1, _backend&)
@@ -31,6 +34,7 @@ Fbo: class {
 
   bind: func {
     glBindFramebuffer(GL_FRAMEBUFFER, _backend)
+    glViewport(0, 0, this _width, this _height)
   }
 
   bindRead: func {
@@ -82,8 +86,9 @@ Fbo: class {
     true
   }
 
-  create: static func (textures: Texture[]) -> This {
-    result := This new()
+
+  create: static func (textures: Texture[], width: UInt, height: UInt) -> This {
+    result := This new(width, height)
     result _generate(textures) ? result : null
   }
 
