@@ -30,5 +30,6 @@ NativeWindow: abstract class {
 
   bind: func {
     glBindFramebuffer(GL_FRAMEBUFFER, 0)
+    glViewport(0, 0, this _width, this _height)
   }
 }
