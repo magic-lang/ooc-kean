@@ -17,28 +17,31 @@
 use ooc-draw
 use ooc-math
 import OpenGLES3/Texture
-import OpenGLES3/lib/gles, OpenGLES3/Fbo
-import GpuImage
+import GpuImage, GpuMonochrome, GpuCanvas
 
 GpuPlanar: abstract class extends GpuImage {
-  init: func (size: IntSize2D, type: TextureType, y: Pointer, u: Pointer, v: Pointer) {
-    super(size)
-    this _channelCount = 3
-    this _textures = Texture[this _channelCount] new()
-    this _textures[0] = Texture create(type, size width, size height, y)
-    this _textures[1] = Texture create(type, size width / 2, size height / 2, u)
-    this _textures[2] = Texture create(type, size width / 2, size height / 2, v)
-  }
-
-  dispose: func {
-    for(i in 0..this _channelCount)
-      this _textures[i] dispose()
-  }
-
-  bind: func {
-    for(i in 0..this _channelCount) {
-      this _textures[i] bind (i)
+  _canvas: GpuCanvasPlanar
+  _y: GpuMonochrome
+  y: GpuMonochrome { get { _y } }
+  _u: GpuMonochrome
+  u: GpuMonochrome { get { _u } }
+  _v: GpuMonochrome
+  v: GpuMonochrome { get { _v } }
+  canvas: GpuCanvasPlanar {
+    get {
+      if (this _canvas == null)
+        this _canvas = GpuCanvasPlanar create(this)
+      this _canvas
     }
   }
-
+  dispose: func {
+    this _y dispose()
+    this _u dispose()
+    this _v dispose()
+  }
+  bind: func {
+    this _y bind(0)
+    this _u bind(1)
+    this _v bind(2)
+  }
 }

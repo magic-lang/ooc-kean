@@ -17,19 +17,25 @@
 use ooc-draw
 use ooc-math
 import OpenGLES3/Texture
-import GpuImage
+import GpuImage, GpuCanvas
 
 GpuPacked: abstract class extends GpuImage {
+  _canvas: GpuCanvasPacked
+  canvas: GpuCanvasPacked {
+    get {
+      if (this _canvas == null)
+        this _canvas = GpuCanvasPacked create(this)
+      this _canvas
+    }
+  }
   init: func (size: IntSize2D, type: TextureType, data: Pointer) {
     super(size)
-    this _channelCount = 1
-    this _textures = Texture[this _channelCount] new()
+    this _textures = Texture[1] new()
     this _textures[0] = Texture create(type, size width, size height, data)
   }
-
-  dispose: func {
+  bind: func ~specificTextureUnit(unit: UInt){
+    this _textures[0] bind (unit)
   }
-
   bind: func {
     this _textures[0] bind (0)
   }

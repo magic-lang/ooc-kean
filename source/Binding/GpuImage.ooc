@@ -22,32 +22,17 @@ GpuImage: abstract class extends Image {
   _textures: Texture[]
   textures: Texture[] { get { _textures } }
 
-  _canvas: GpuCanvas
-  canvas: GpuCanvas {
-    get {
-      if (this _canvas == null)
-        this _canvas = GpuCanvas create(this)
-      this _canvas
-    }
-  }
-
-  _channelCount: UInt
-
   init: func (=size)
   bind: abstract func
-
   create: static func ~Monochrome (image: RasterMonochrome) -> GpuMonochrome {
     GpuMonochrome create(image size, image pointer)
   }
-
   create: static func ~Bgr (image: RasterBgr) -> GpuBgr {
     GpuBgr create(image size, image pointer)
   }
-
   create: static func ~Bgra (image: RasterBgra) -> GpuBgra {
     GpuBgra create(image size, image pointer)
   }
-
   create: static func ~Yuv420 (image: RasterYuv420) -> GpuYuv420 {
     GpuYuv420 create(image size, image y pointer, image u pointer, image v pointer)
   }

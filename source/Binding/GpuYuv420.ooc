@@ -16,16 +16,24 @@
 use ooc-math
 
 import OpenGLES3/Texture
-import GpuPlanar
+import GpuPlanar, GpuMonochrome
 
 GpuYuv420: class extends GpuPlanar {
 
-  init: func (size: IntSize2D) {
-    super(size, TextureType monochrome, null, null, null)
+  init: func (=size)
+
+  copy: func -> This {
+    result := This new(this size)
+    //FIXME: null check
+    result
   }
 
-  init: func ~fromPixels (size: IntSize2D, y: Pointer, u: Pointer, v: Pointer) {
-    super(size, TextureType monochrome, y, u, v)
+  _generate: func (y: Pointer, u: Pointer, v: Pointer) -> Bool{
+    this _y = GpuMonochrome create(this size, y)
+    this _u = GpuMonochrome create(this size / 2, u)
+    this _v = GpuMonochrome create(this size / 2, v)
+
+    this _y != null && this _u != null && this _v != null
   }
 
   create: func (size: IntSize2D) -> This {
@@ -33,14 +41,9 @@ GpuYuv420: class extends GpuPlanar {
     //FIXME: null check
     result
   }
-  copy: func -> This {
-    result := This new(this size)
-    //FIXME: null check
-    result
-  }
-
   create: static func ~fromPixels (size: IntSize2D, y: Pointer, u: Pointer, v: Pointer) -> This {
-    result := This new(size, y, u, v)
+    result := This new(size)
+    result _generate(y, u, v) ? result : null
     //FIXME: null check
     result
   }

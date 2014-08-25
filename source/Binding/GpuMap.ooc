@@ -176,28 +176,3 @@ fragmentSource: const static String = "#version 300 es\n
     outColor = YuvToRgba(vec4(y, v - 0.5f, u - 0.5f, 1.0f));\n
   }\n";
 }
-
-GpuMapYuv: class extends GpuMapDefault {
-  init: func {
-    super(This fragmentSource,
-      func {
-        this _program setUniform("texture0", 0)
-        this _program setUniform("texture1", 1)
-        this _program setUniform("texture2", 2)
-      })
-  }
-fragmentSource: const static String = "#version 300 es\n
-  precision highp float;\n
-  uniform sampler2D texture0;\n
-  uniform sampler2D texture1;\n
-  uniform sampler2D texture2;\n
-  in vec2 fragmentTextureCoordinate;
-  layout(location = 0) out float yColor;\n
-  layout(location = 1) out float uColor;\n
-  layout(location = 2) out float vColor;\n
-  void main() {\n
-    yColor = texture(texture0, fragmentTextureCoordinate).r;\n
-    uColor = texture(texture1, fragmentTextureCoordinate).r;\n
-    vColor = texture(texture2, fragmentTextureCoordinate).r;\n
-  }\n";
-}
