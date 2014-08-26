@@ -33,20 +33,14 @@ gpuBgr := GpuImage create(rasterImageBgr)
 rasterImageBgra := RasterBgra open("input/Space.png")
 gpuBgra := GpuImage create(rasterImageBgra)
 
-rasterImageYuv420 := RasterYuv420 new(rasterImageBgra)
+rasterImageYuv420 := RasterYuv420Planar new(rasterImageBgra)
+rasterImageYuv420Semiplanar := RasterYuv420Semiplanar new(rasterImageBgra)
 
-gpuYv12 := GpuImage create(rasterImageYuv420)
-
-gpuTarget := GpuYuv420 create(gpuYv12 size, null, null, null)
-gpuTarget canvas draw(gpuYv12, transform)
-
-gpuTargetMono := GpuMonochrome create(gpuMonochrome size, null)
-gpuTargetMono canvas draw(gpuMonochrome, transform)
-
-
+gpuYuv420Planar := GpuImage create(rasterImageYuv420)
+gpuYuv420Semiplanar := GpuImage create(rasterImageYuv420Semiplanar)
 while(true) {
   transform = transform rotate(rotation)
-  window draw(gpuTarget, transform)
+  window draw(gpuYuv420Semiplanar, transform)
   //Update must be called before a redraw
   window update()
 }
