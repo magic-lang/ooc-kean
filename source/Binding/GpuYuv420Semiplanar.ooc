@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
-import GpuMonochrome, GpuCanvas, GpuPlanar
+import GpuMonochrome, GpuCanvas, GpuPlanar, GpuUv
 
 GpuYuv420Semiplanar: class extends GpuPlanar {
   _canvas: GpuCanvasYuv420Semiplanar
   _y: GpuMonochrome
   y: GpuMonochrome { get { this _y } }
-  _uv: GpuMonochrome
-  uv: GpuMonochrome { get { this _uv } }
+  _uv: GpuUv
+  uv: GpuUv { get { this _uv } }
 
   canvas: GpuCanvasYuv420Semiplanar {
     get {
@@ -30,25 +30,29 @@ GpuYuv420Semiplanar: class extends GpuPlanar {
       this _canvas
     }
   }
-  init: func (=size)
+  init: /* private */ func (=size)
   dispose: func {
     this _y dispose()
     this _uv dispose()
   }
-  bind: func {
-    this _y bind(0)
-    this _uv bind(1)
+  _bind: /* internal */ func {
+    this _y _bind(0)
+    this _uv _bind(1)
   }
   _generate: func (y: Pointer, uv: Pointer) -> Bool {
-    this _y = GpuMonochrome create(this size, y)
-    this _uv = GpuMonochrome create(IntSize2D new(this size width / 2, this size height), uv)
+    this _y = GpuMonochrome _create(this size, y)
+    this _uv = GpuUv _create(this size / 2, uv)
     this _y != null && this _uv != null
   }
   create: func (size: IntSize2D) -> This {
     result := This new(size)
     result _generate(null, null) ? result : null
   }
-  create: static func ~fromPixels (size: IntSize2D, y: Pointer, uv: Pointer) -> This {
+  create: static func ~empty (size: IntSize2D) -> This {
+    result := This new(size)
+    result _textures[0] != null ? result : null
+  }
+  _create: static /* internal */ func ~fromPixels (size: IntSize2D, y: Pointer, uv: Pointer) -> This {
     result := This new(size)
     result _generate(y, uv) ? result : null
   }
