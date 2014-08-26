@@ -16,26 +16,29 @@
 use ooc-draw
 use ooc-math
 use ooc-base
-import GpuBgra, GpuBgr, GpuMonochrome, GpuYuv420, GpuYuv420Semiplanar, GpuCanvas, OpenGLES3/Texture
+import GpuBgra, GpuBgr, GpuMonochrome, GpuYuv420Planar, GpuYuv420Semiplanar, GpuCanvas, OpenGLES3/Texture
 
 GpuImage: abstract class extends Image implements IDisposable {
   _textures: Texture[]
-  textures: Texture[] { get { _textures } }
+  textures: /* internal */ Texture[] { get { _textures } }
   ratio: Float { get {this size width as Float / this size height as Float } }
 
   init: func (=size)
-  bind: abstract func
+  _bind: abstract func
   create: static func ~Monochrome (image: RasterMonochrome) -> GpuMonochrome {
-    GpuMonochrome create(image size, image pointer)
+    GpuMonochrome _create(image size, image pointer)
   }
   create: static func ~Bgr (image: RasterBgr) -> GpuBgr {
-    GpuBgr create(image size, image pointer)
+    GpuBgr _create(image size, image pointer)
   }
   create: static func ~Bgra (image: RasterBgra) -> GpuBgra {
-    GpuBgra create(image size, image pointer)
+    GpuBgra _create(image size, image pointer)
   }
-  create: static func ~Yuv420 (image: RasterYuv420) -> GpuYuv420 {
-    GpuYuv420 create(image size, image y pointer, image u pointer, image v pointer)
+  create: static func ~Yuv420Planar (image: RasterYuv420Planar) -> GpuYuv420Planar {
+    GpuYuv420Planar _create(image size, image y pointer, image u pointer, image v pointer)
+  }
+  create: static func ~Yuv420Semiplanar (image: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar {
+    GpuYuv420Semiplanar _create(image size, image y pointer, image uv pointer)
   }
 
   //TODO: Implement abstract functions
