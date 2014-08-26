@@ -23,6 +23,7 @@ TextureType: enum {
   rgb
   bgr
   bgra
+  uv
 }
 
 Texture: class {
@@ -60,24 +61,6 @@ Texture: class {
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this width, this height, this format, GL_UNSIGNED_BYTE, pixels)
     unbind()
   }
-  getGLFormat: static func(type: TextureType) -> UInt {
-    format: UInt
-    match type {
-      case TextureType monochrome =>
-        format = GL_RED
-      case TextureType rgba =>
-        format = GL_RGBA
-      case TextureType rgb =>
-        format = GL_RGB
-      case TextureType bgra =>
-        format = GL_RGBA
-      case TextureType bgr =>
-        format = GL_RGB
-      case =>
-        raise("Unknown texture format")
-    }
-    format
-  }
   _setInternalFormats: func(type: TextureType) {
     match type {
       case TextureType monochrome =>
@@ -95,6 +78,9 @@ Texture: class {
       case TextureType bgr =>
         this internalFormat = GL_RGB8
         this format = GL_RGB
+      case TextureType uv =>
+        this internalFormat = GL_RG8
+        this format = GL_RG
       case =>
         raise("Unknown texture format")
     }
