@@ -24,12 +24,16 @@ GpuBgr: class extends GpuPacked {
   init: func ~fromPixels (size: IntSize2D, data: Pointer) {
     super(size, TextureType rgb, data)
   }
-  create: static func ~fromPixels (size: IntSize2D, data: Pointer) -> This {
-    result := This new(size, data)
-    result _textures[0] != null ? result : null
-  }
   create: func (size: IntSize2D) -> This {
     result := This new(size)
+    result _textures[0] != null ? result : null
+  }
+  create: static func ~empty (size: IntSize2D) -> This {
+    result := This new(size)
+    result _textures[0] != null ? result : null
+  }
+  _create: static /* internal */ func ~fromPixels (size: IntSize2D, data: Pointer) -> This {
+    result := This new(size, data)
     result _textures[0] != null ? result : null
   }
 }

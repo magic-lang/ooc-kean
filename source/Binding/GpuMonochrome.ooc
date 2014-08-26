@@ -24,12 +24,17 @@ GpuMonochrome: class extends GpuPacked {
   init: func~fromPixels (data: Pointer, size: IntSize2D) {
     super(size, TextureType monochrome, data)
   }
-  create: static func ~fromPixels (size: IntSize2D, data: Pointer) -> This {
-    result := This new(data, size)
-    result _textures[0] != null ? result : null
-  }
   create: func (size: IntSize2D) -> This {
     result := This new(size)
     result _textures[0] != null ? result : null
   }
+  create: static func ~empty (size: IntSize2D) -> This {
+    result := This new(size)
+    result _textures[0] != null ? result : null
+  }
+  _create: static /* internal */ func ~fromPixels (size: IntSize2D, data: Pointer) -> This {
+    result := This new(data, size)
+    result _textures[0] != null ? result : null
+  }
+
 }
