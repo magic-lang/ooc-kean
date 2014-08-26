@@ -32,10 +32,10 @@ GpuPacked: abstract class extends GpuImage {
     this _textures = Texture[1] new()
     this _textures[0] = Texture create(type, size width, size height, data)
   }
-  bind: func ~specificTextureUnit(unit: UInt) {
+  _bind: /* internal */ func ~specificTextureUnit(unit: UInt) {
     this _textures[0] bind (unit)
   }
-  bind: func {
+  _bind: /* internal */ func {
     this _textures[0] bind (0)
   }
   dispose: func {
