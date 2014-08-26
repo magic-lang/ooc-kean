@@ -47,16 +47,6 @@ Fbo: class {
   clear: func {
     glClear(GL_COLOR_BUFFER_BIT)
   }
-  getResultCopy: func (outputPixels: Pointer) {
-    //FIXME: Only working for RGBA
-    return
-    //bind()
-    //glPixelStorei(GL_PACK_ALIGNMENT, 1)
-    //glReadBuffer(GL_COLOR_ATTACHMENT0)
-    //glReadPixels(0, 0, width, height, GL_RGBA, GL_FLOAT, outputPixels)
-    //glGetError() toString() println()
-    //unbind()
-  }
   _generate: func ~fromTextures (textures: Texture[]) -> Bool {
     glGenFramebuffers(1, this _backend&)
     glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
