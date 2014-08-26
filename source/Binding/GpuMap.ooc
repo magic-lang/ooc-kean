@@ -129,6 +129,23 @@ fragmentSource: const static String = "#version 300 es\n
   }\n";
 }
 
+GpuMapUv: class extends GpuMapDefault {
+  init: func {
+    super(This fragmentSource,
+      func {
+        this _program setUniform("texture0", 0)
+      })
+  }
+fragmentSource: const static String = "#version 300 es\n
+  precision highp float;\n
+  uniform sampler2D texture0;\n
+  in vec2 fragmentTextureCoordinate;
+  out vec2 outColor;\n
+  void main() {\n
+    outColor = texture(texture0, fragmentTextureCoordinate).rg;\n
+  }\n";
+}
+
 GpuMapMonochromeToBgra: class extends GpuMapDefault {
   init: func {
     super(This fragmentSource,
@@ -147,7 +164,7 @@ fragmentSource: const static String = "#version 300 es\n
   }\n";
 }
 
-GpuMapYuvToBgra: class extends GpuMapDefault {
+GpuMapYuvPlanarToBgra: class extends GpuMapDefault {
   init: func {
     super(This fragmentSource,
       func {
@@ -177,5 +194,35 @@ fragmentSource: const static String = "#version 300 es\n
     float u = texture(texture1, fragmentTextureCoordinate).r;\n
     float v = texture(texture2, fragmentTextureCoordinate).r;\n
     outColor = YuvToRgba(vec4(y, v - 0.5f, u - 0.5f, 1.0f));\n
+  }\n";
+}
+
+GpuMapYuvSemiplanarToBgra: class extends GpuMapDefault {
+  init: func {
+    super(This fragmentSource,
+      func {
+        this _program setUniform("texture0", 0)
+        this _program setUniform("texture1", 1)
+      })
+  }
+fragmentSource: const static String = "#version 300 es\n
+  precision highp float;\n
+  uniform sampler2D texture0;\n
+  uniform sampler2D texture1;\n
+  in vec2 fragmentTextureCoordinate;
+  out vec4 outColor;\n
+  // Convert yuva to rgba
+  vec4 YuvToRgba(vec4 t)
+  {
+    mat4 matrix = mat4(1, 1, 1, 0,
+    -0.000001218894189, -0.344135678165337, 1.772000066073816, 0,
+    1.401999588657340, -0.714136155581812, 0.000000406298063, 0,
+    0, 0, 0, 1);
+    return matrix * t;
+  }
+  void main() {\n
+    float y = texture(texture0, fragmentTextureCoordinate).r;\n
+    vec2 uv = texture(texture1, fragmentTextureCoordinate).rg;\n
+    outColor = YuvToRgba(vec4(y, uv.g - 0.5f, uv.r - 0.5f, 1.0f));\n
   }\n";
 }
