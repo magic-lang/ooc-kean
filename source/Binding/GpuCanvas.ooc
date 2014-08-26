@@ -15,12 +15,13 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
 import OpenGLES3/Fbo, OpenGLES3/Quad
-import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr, GpuYuv420Semiplanar, GpuYuv420
+import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
 
 GpuCanvas: abstract class extends Surface {
   _monochromeToMonochrome: static const GpuMapMonochrome
   _bgrToBgr: static const GpuMapBgr
   _bgraToBgra: static const GpuMapBgra
+  _uvToUv: static const GpuMapUv
 
   init: func {
     if(This _monochromeToMonochrome == null)
@@ -29,6 +30,8 @@ GpuCanvas: abstract class extends Surface {
       This _bgrToBgr = GpuMapBgr new()
     if(This _bgraToBgra == null)
       This _bgraToBgra = GpuMapBgra new()
+    if(This _uvToUv == null)
+      This _uvToUv = GpuMapUv new()
   }
   dispose: abstract func
 
@@ -61,24 +64,29 @@ GpuCanvasPacked: class extends GpuCanvas {
     This _bgraToBgra ratio = image ratio
     this draw(image, This _bgraToBgra)
   }
-  bind: func {
+  draw: func ~Uv (image: GpuUv, transform: FloatTransform2D) {
+    This _uvToUv transform = transform
+    This _uvToUv ratio = image ratio
+    this draw(image, This _uvToUv)
+  }
+  _bind: func {
     this _renderTarget bind()
   }
-  unbind: func {
+  _unbind: func {
     this _renderTarget unbind()
   }
-  clear: func {
+  _clear: func {
     this _renderTarget clear()
   }
   create: static func (image: GpuImage) -> This {
     result := This new()
     result _renderTarget = Fbo create(image textures, image size width, image size height)
-    result quad = Quad create()
+    result _quad = Quad create()
     result _renderTarget != null ? result : null
   }
 }
 
-GpuCanvasYuv420: class extends GpuCanvas {
+GpuCanvasYuv420Planar: class extends GpuCanvas {
   _y: GpuCanvasPacked
   _u: GpuCanvasPacked
   _v: GpuCanvasPacked
@@ -91,24 +99,23 @@ GpuCanvasYuv420: class extends GpuCanvas {
     this _u dispose()
     this _v dispose()
   }
-  draw: func ~Yuv420 (image: GpuYuv420, transform: FloatTransform2D) {
+  draw: func ~Yuv420Planar (image: GpuYuv420Planar, transform: FloatTransform2D) {
     GpuCanvas _monochromeToMonochrome transform = transform
     GpuCanvas _monochromeToMonochrome ratio = image ratio
     this _y draw(image y, GpuCanvas _monochromeToMonochrome)
     this _u draw(image u, GpuCanvas _monochromeToMonochrome)
     this _v draw(image v, GpuCanvas _monochromeToMonochrome)
   }
-  clear: func
-  bind: func
-  _generate: func (image: GpuYuv420) -> Bool {
-    this quad = Quad create()
+  _clear: func
+  _bind: func
+  _generate: func (image: GpuYuv420Planar) -> Bool {
+    this _quad = Quad create()
     this _y = GpuCanvasPacked create(image y)
     this _u = GpuCanvasPacked create(image u)
     this _v = GpuCanvasPacked create(image v)
-
-    this quad != null && this _y != null && this _u != null && this _v != null
+    this _quad != null && this _y != null && this _u != null && this _v != null
   }
-  create: static func (image: GpuYuv420) -> This {
+  create: static func (image: GpuYuv420Planar) -> This {
     result := This new()
     result _generate(image) ? result : null
     result
@@ -126,19 +133,19 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
     this _y dispose()
     this _uv dispose()
   }
-  draw: func ~Nv12 (image: GpuYuv420Semiplanar, transform: FloatTransform2D) {
+  draw: func ~GpuYuv420Semiplanar (image: GpuYuv420Semiplanar, transform: FloatTransform2D) {
     GpuCanvas _monochromeToMonochrome transform = transform
     GpuCanvas _monochromeToMonochrome ratio = image ratio
     this _y draw(image y, GpuCanvas _monochromeToMonochrome)
     this _uv draw(image uv, GpuCanvas _monochromeToMonochrome)
   }
-  clear: func
-  bind: func
+  _clear: func
+  _bind: func
   _generate: func (image: GpuYuv420Semiplanar) -> Bool {
-    this quad = Quad create()
+    this _quad = Quad create()
     this _y = GpuCanvasPacked create(image y)
     this _uv = GpuCanvasPacked create(image uv)
-    this quad != null && this _y != null && this _uv != null
+    this _quad != null && this _y != null && this _uv != null
   }
   create: static func (image: GpuYuv420Semiplanar) -> This {
     result := This new()
