@@ -18,16 +18,10 @@ use ooc-math
 use ooc-draw-gpu
 use ooc-draw
 
-import Binding/GpuMonochrome
-import Binding/GpuBgra
-import Binding/GpuBgr
-import Binding/GpuImage
-import Binding/Window
-
 transform := FloatTransform2D identity
 rotation := 0.01f
 
-screenSize := IntSize2D new (1680.0f/2.0f, 1050.0f/2.0f)
+screenSize := IntSize2D new (1680.0f, 1050.0f)
 window := Window create(screenSize, "GL Test")
 
 rasterImageMonochrome := RasterMonochrome open("input/test.png")
@@ -39,14 +33,20 @@ gpuBgr := GpuImage create(rasterImageBgr)
 rasterImageBgra := RasterBgra open("input/Space.png")
 gpuBgra := GpuImage create(rasterImageBgra)
 
-gpuTarget := GpuMonochrome create(screenSize, null)
-gpuTarget canvas draw(gpuMonochrome, transform)
+rasterImageYuv420 := RasterYuv420 new(rasterImageBgra)
+
+gpuYv12 := GpuImage create(rasterImageYuv420)
+
+gpuTarget := GpuYuv420 create(gpuYv12 size, null, null, null)
+gpuTarget canvas draw(gpuYv12, transform)
+
+gpuTargetMono := GpuMonochrome create(gpuMonochrome size, null)
+gpuTargetMono canvas draw(gpuMonochrome, transform)
 
 
 while(true) {
   transform = transform rotate(rotation)
   window draw(gpuTarget, transform)
-
-  //Update must be called before a redraw, else unstable
+  //Update must be called before a redraw
   window update()
 }
