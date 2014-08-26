@@ -22,48 +22,55 @@ import OpenGLES3/NativeWindow
 import OpenGLES3/Context
 import OpenGLES3/X11Window
 
-import Surface, GpuImage, GpuMonochrome, GpuBgra, GpuYuv420, GpuYuv420Semiplanar, GpuBgr, GpuMap
+import Surface, GpuImage, GpuMonochrome, GpuBgra, GpuYuv420Planar, GpuYuv420Semiplanar, GpuBgr, GpuMap
 
 Window: class extends Surface {
   _native: NativeWindow
   _context: Context
 
-  monochromeToBgra: GpuMapMonochromeToBgra
-  bgrToBgra: GpuMapBgrToBgra
-  bgraToBgra: GpuMapBgra
-  yuvToBgra: GpuMapYuvToBgra
+  _monochromeToBgra: GpuMapMonochromeToBgra
+  _bgrToBgra: GpuMapBgrToBgra
+  _bgraToBgra: GpuMapBgra
+  _yuvPlanarToBgra: GpuMapYuvPlanarToBgra
+  _yuvSemiplanarToBgra: GpuMapYuvSemiplanarToBgra
 
-  init: func (=size)
-  _generate: func (size: IntSize2D, title: String) -> Bool {
+  init: /* internal */ func (=size)
+  _generate: /* private */ func (size: IntSize2D, title: String) -> Bool {
     this _native = X11Window create(size width, size height, title)
     this _context = Context create(_native)
     result: UInt = this _context makeCurrent()
-    this quad = Quad create()
-    this monochromeToBgra = GpuMapMonochromeToBgra new()
-    this bgrToBgra = GpuMapBgrToBgra new()
-    this bgraToBgra = GpuMapBgra new()
-    this yuvToBgra = GpuMapYuvToBgra new()
-    result == 1 && (this _native != null) && (this _context != null) && (this quad != null)
+    this _quad = Quad create()
+    this _monochromeToBgra = GpuMapMonochromeToBgra new()
+    this _bgrToBgra = GpuMapBgrToBgra new()
+    this _bgraToBgra = GpuMapBgra new()
+    this _yuvPlanarToBgra = GpuMapYuvPlanarToBgra new()
+    this _yuvSemiplanarToBgra = GpuMapYuvSemiplanarToBgra new()
+    result == 1 && (this _native != null) && (this _context != null) && (this _quad != null)
   }
   draw: func ~Monochrome (image: GpuMonochrome, transform := FloatTransform2D identity) {
-    monochromeToBgra transform = transform
-    monochromeToBgra ratio = image ratio
-    this draw(image, monochromeToBgra)
+    this _monochromeToBgra transform = transform
+    this _monochromeToBgra ratio = image ratio
+    this draw(image, _monochromeToBgra)
   }
   draw: func ~Bgr (image: GpuBgr, transform := FloatTransform2D identity) {
-    bgrToBgra transform = transform
-    bgrToBgra ratio = image ratio
-    this draw(image, bgrToBgra)
+    this _bgrToBgra transform = transform
+    this _bgrToBgra ratio = image ratio
+    this draw(image, _bgrToBgra)
   }
   draw: func ~Bgra (image: GpuBgra, transform := FloatTransform2D identity) {
-    bgraToBgra transform = transform
-    bgraToBgra ratio = image ratio
-    this draw(image, bgraToBgra)
+    this _bgraToBgra transform = transform
+    this _bgraToBgra ratio = image ratio
+    this draw(image, _bgraToBgra)
   }
-  draw: func ~Yuv (image: GpuYuv420, transform := FloatTransform2D identity) {
-    yuvToBgra transform = transform
-    yuvToBgra ratio = image ratio
-    this draw(image, yuvToBgra)
+  draw: func ~Yuv420Planar (image: GpuYuv420Planar, transform := FloatTransform2D identity) {
+    this _yuvPlanarToBgra transform = transform
+    this _yuvPlanarToBgra ratio = image ratio
+    this draw(image, _yuvPlanarToBgra)
+  }
+  draw: func ~Yuv420Semiplanar (image: GpuYuv420Semiplanar, transform := FloatTransform2D identity) {
+    this _yuvSemiplanarToBgra transform = transform
+    this _yuvSemiplanarToBgra ratio = image ratio
+    this draw(image, this _yuvSemiplanarToBgra)
   }
   draw: func ~RasterBgr (image: RasterBgr, transform := FloatTransform2D identity) {
     result := GpuImage create(image)
@@ -80,21 +87,26 @@ Window: class extends Surface {
     this draw(result, transform)
     result dispose()
   }
-  draw: func ~RasterYuv (image: RasterYuv420, transform := FloatTransform2D identity) {
+  draw: func ~RasterYuv (image: RasterYuv420Planar, transform := FloatTransform2D identity) {
     result := GpuImage create(image)
     this draw(result, transform)
     result dispose()
   }
-  bind: func {
+  draw: func ~RasterYuvSemiplanar (image: RasterYuv420Semiplanar, transform := FloatTransform2D identity) {
+    result := GpuImage create(image)
+    this draw(result, transform)
+    result dispose()
+  }
+  _bind: /* internal */ func {
     this _native bind()
   }
-  clear: func {
+  _clear: /* internal */ func {
     this _native clear()
   }
   update: func {
     this _context swapBuffers()
   }
-  setResolution: func (resolution: IntSize2D) {
+  _setResolution: /* internal */ func (resolution: IntSize2D) {
     this _native setViewport(this size width / 2 - resolution width / 2, this size height / 2 - resolution height / 2, resolution width, resolution height)
   }
   create: static func (size: IntSize2D, title := "Window title") -> This {
