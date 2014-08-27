@@ -69,9 +69,11 @@ RasterBgr: class extends RasterPacked {
 		rowLength := this size width
 		for (row in (this pointer as UInt8*)..end) {
 			rowEnd := (row as ColorBgr*) + rowLength
-			for (source in (row as ColorBgr*)..rowEnd)
+			for (source in (row as ColorBgr*)..rowEnd) {
 				action((source as ColorBgr*)@)
-			row += this stride
+				source += 2
+			}
+			row += this stride - 1
 		}
 	}
 	apply: func ~yuv (action: Func(ColorYuv)) {
