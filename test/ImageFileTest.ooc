@@ -85,11 +85,12 @@ ImageFileTest: class extends Fixture {
 			monochrome save(destination)	
 		})
 		this add("convert RasterBgr to RasterYuv420", func() {
-//			source := "test/input/Barn.png"
-//			destination := "test/output/outputRasterBgrToRasterMonochrome.png"
-//			bgr := RasterBgr open(source)
-//			yuv420 := RasterYuv420 new(bgr)
-//			yuv420 save(destination)	
+			source := "test/input/Barn.png"
+			destination := "test/output/outputRasterBgrToYuv420ToRasterMonochrome.png"
+			bgr := RasterBgr open(source)
+			yuv420 := RasterYuv420 new(bgr)
+			monochrome := RasterMonochrome new(yuv420)
+//			monochrome save(destination)		
 		})		
 		this add("Last", func() {
 			expect(1, is equal to(1))
