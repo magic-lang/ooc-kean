@@ -63,6 +63,44 @@ ColorMonochrome: cover {
 	operator != (other: ColorBgra) -> Bool { !this equals(other) }
 }
 
+ColorUv: cover {
+	u, v: UInt8
+	set: func (color: This) {
+		this u = color u
+		this v = color v
+	}
+	init: func@ (=u, =v)
+	init: func@ ~default { this init(0, 0) }
+	init: func@ ~int (i: Int) { this init(i as UInt8) }
+	init: func@ ~float (f: Float) { this init(f*255.0f clamp(0.0f, 255.0f) as UInt8) }
+	init: func@ ~double (d: Double) { this init(d*255.0f clamp(0.0f, 255.0f) as UInt8) }
+	copy: func -> This { This new(this u, this v) }
+	asMonochrome: func -> ColorMonochrome { ColorMonochrome new() }
+	asYuv: func -> ColorYuv { ColorYuv new(128, this u, this v) }
+	asBgr: func -> ColorBgr { ColorConvert yuvToBgr(this asYuv()) }
+	asBgra: func -> ColorBgra { this asBgr() asBgra() }
+	blend: func (factor: Float, other: This) -> This {
+		This new((this u * (1 - factor) + (other u * factor)) as UInt8, (this v * (1 - factor) + (other v * factor)) as UInt8)
+	}
+	distance: func (other: This) -> Float {
+		((this u - other u) as Float pow(2) + (this v - other v) as Float pow(2)) / 2.0f sqrt()
+	}
+	equals: func ~uv (other: This) -> Bool {this u == other u && this v == other v }
+	equals: func ~monochrome (other: ColorMonochrome) -> Bool { false }
+	equals: func ~yuv (other: ColorYuv) -> Bool { false }
+	equals: func ~bgr (other: ColorBgr) -> Bool { false }
+	equals: func ~bgra (other: ColorBgra) -> Bool { false }
+	operator == (other: This) -> Bool { this equals(other) }
+	operator == (other: ColorYuv) -> Bool { this equals(other) }
+	operator == (other: ColorBgr) -> Bool { this equals(other) }
+	operator == (other: ColorBgra) -> Bool { this equals(other) }
+	operator != (other: This) -> Bool { !this equals(other) }
+	operator != (other: ColorYuv) -> Bool { !this equals(other) }
+	operator != (other: ColorBgr) -> Bool { !this equals(other) }
+	operator != (other: ColorBgra) -> Bool { !this equals(other) }
+
+}
+
 ColorYuv: cover {
 	y, u, v: UInt8
 	set: func (color: This) {
@@ -182,22 +220,22 @@ ColorConvert: cover {
 
 	fromBgr: static func ~monochrome (action: Func (ColorMonochrome)) -> Func (ColorBgr) {
 		func (color: ColorBgr) { action(ColorConvert bgrToMonochrome(color)) }
-	} 
+	}
 	fromBgr: static func ~yuv (action: Func (ColorYuv)) -> Func (ColorBgr) {
-		func (color: ColorBgr) { action(ColorConvert bgrToYuv(color)) }	
+		func (color: ColorBgr) { action(ColorConvert bgrToYuv(color)) }
 	}
 	fromMonochrome: static func ~bgr (action: Func (ColorBgr)) -> Func (ColorMonochrome) {
-		func (color: ColorMonochrome) { action(ColorConvert monochromeToBgr(color)) }		
-	} 
+		func (color: ColorMonochrome) { action(ColorConvert monochromeToBgr(color)) }
+	}
 	fromMonochrome: static func ~yuv (action: Func (ColorYuv)) -> Func (ColorMonochrome) {
-		func (color: ColorMonochrome) { action(ColorConvert monochromeToYuv(color)) }	
-	} 
+		func (color: ColorMonochrome) { action(ColorConvert monochromeToYuv(color)) }
+	}
 	fromYuv: static func ~bgr (action: Func (ColorBgr)) -> Func (ColorYuv) {
-		func (color: ColorYuv) { action(ColorConvert yuvToBgr(color)) }		
-	} 
+		func (color: ColorYuv) { action(ColorConvert yuvToBgr(color)) }
+	}
 	fromYuv: static func ~monochrome (action: Func (ColorMonochrome)) -> Func (ColorYuv) {
-		func (color: ColorYuv) { action(ColorConvert yuvToMonochrome(color)) }	
-	} 
+		func (color: ColorYuv) { action(ColorConvert yuvToMonochrome(color)) }
+	}
 	// FIXME: yuvToBgr2[512..end] and yuvToBgr2[256..511] are all 0, so there's some minor room for optimization here.
 	// Also, since multidimensional arrays work now, the arrays below can be reorganized if so desired.
 	monochromeToBgr: static func (color: ColorMonochrome) -> ColorBgr {
