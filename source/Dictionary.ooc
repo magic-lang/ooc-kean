@@ -4,11 +4,10 @@ Dictionary: class {
   _myHashBag: HashBag
   _capacity: Int
   init: func {
-      init ~withCapacity(10)
+    init ~withCapacity(10)
   }
-  init: func ~withCapacity (_capacity: Int) {
-      this _capacity = _capacity
-      _myHashBag = HashBag new(_capacity)
+  init: func ~withCapacity (=_capacity) {
+    _myHashBag = HashBag new(this _capacity)
   }
   init: func ~copy (other: This) {
     hashMapClone := other _myHashBag myMap clone()
@@ -22,17 +21,14 @@ Dictionary: class {
     result
   }
   get: func <T>  (key: String, defaultValue: T) -> T {
-    if(!_myHashBag contains?(key)) {
-        return defaultValue
-    } else {
+    result := defaultValue
+    if (_myHashBag contains?(key)) {
         storedType := _myHashBag getClass(key)
         // is `T` a derived type or the same type as the stored type?
-        if(T inheritsFrom?(storedType)) {
-            return _myHashBag getEntry(key, T) value as T
-        } else {
-            return defaultValue
-        }
+        if (T inheritsFrom?(storedType))
+            result = _myHashBag getEntry(key, T) value as T
     }
+    result
   }
   getClass: func (key: String) -> Class {
     return _myHashBag getClass(key)
@@ -46,18 +42,18 @@ Dictionary: class {
   add: func <T> (key: String, value: T) -> Bool {
     return _myHashBag add(key, value)
   }
-  empty?: func -> Bool {return _myHashBag empty?()}
+  empty?: func -> Bool { return _myHashBag empty?() }
   remove: func (key: String) -> Bool {
-      return _myHashBag remove(key)
+    return _myHashBag remove(key)
   }
-  size: func -> Int {_myHashBag size()}
+  size: func -> Int { _myHashBag size() }
   contains?: func(key: String) -> Bool {
-      _myHashBag contains?(key)
+    return _myHashBag contains?(key)
   }
   getKeys: func -> ArrayList<String> {
-      _myHashBag getKeys()
+    return _myHashBag getKeys()
   }
   getPath: func <T> (path: String, T: Class) -> T {
-    _myHashBag getPath(path, T)
+    return _myHashBag getPath(path, T)
   }
 }
