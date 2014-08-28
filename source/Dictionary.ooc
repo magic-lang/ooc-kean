@@ -3,9 +3,7 @@ import structs/[HashBag, HashMap, ArrayList]
 Dictionary: class {
   _myHashBag: HashBag
   _capacity: Int
-  init: func {
-    init ~withCapacity(10)
-  }
+  init: func { init ~withCapacity(10) }
   init: func ~withCapacity (=_capacity) {
     _myHashBag = HashBag new(this _capacity)
   }
@@ -23,10 +21,10 @@ Dictionary: class {
   get: func <T> (key: String, defaultValue: T) -> T {
     result := defaultValue
     if (_myHashBag contains?(key)) {
-        storedType := _myHashBag getClass(key)
-        // is `T` a derived type or the same type as the stored type?
-        if (T inheritsFrom?(storedType))
-            result = _myHashBag getEntry(key, T) value as T
+      storedType := _myHashBag getClass(key)
+      // is `T` a derived type or the same type as the stored type?
+      if (T inheritsFrom?(storedType))
+        result = _myHashBag getEntry(key, T) value as T
     }
     result
   }
