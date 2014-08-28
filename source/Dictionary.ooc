@@ -20,7 +20,7 @@ Dictionary: class {
     result _myHashBag myMap = hashMapClone
     result
   }
-  get: func <T>  (key: String, defaultValue: T) -> T {
+  get: func <T> (key: String, defaultValue: T) -> T {
     result := defaultValue
     if (_myHashBag contains?(key)) {
         storedType := _myHashBag getClass(key)
