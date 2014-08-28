@@ -12,7 +12,7 @@ TestClass: class {
 	}
 	init: func (=intVal, =stringVal)
 }
-TestCover: class {
+TestCover: cover {
 	intVal: Int
 	stringVal: String
 
