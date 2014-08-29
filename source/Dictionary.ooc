@@ -20,12 +20,24 @@ Dictionary: class {
 	}
 	merge: func (other: This) -> This {
 		result := this clone()
-		//TODO: Actually merge, overwriting any existing keys in 'result'
-		// with values from the 'other'.
+    result _myHashBag myMap merge!(other _myHashBag myMap)
 		result
 	}
+  /* WARNING: The defaultValue parameter for Covers must be new Cell(cover)  */
 	get: func <T> (key: String, defaultValue: T) -> T {
 		result := defaultValue
+		if (_myHashBag contains?(key)) {
+			storedType := _myHashBag getClass(key)
+			// is `T` a derived type or the same type as the stored type?
+			if (T inheritsFrom?(storedType)) {
+				result = _myHashBag getEntry(key, T) value as T
+      }
+		}
+		result
+	}
+  /* WARNING: The Class parameter for Covers must be Cell<Cover>  */
+	getAsType: func <T>(key: String, T: Class) -> T {
+		result := null
 		if (_myHashBag contains?(key)) {
 			storedType := _myHashBag getClass(key)
 			// is `T` a derived type or the same type as the stored type?
@@ -41,10 +53,13 @@ Dictionary: class {
 		return _myHashBag getEntry(key, V)
 	}
 	put: func <T> (key: String, value: T) -> Bool {
+  	if (_myHashBag contains?(key))
+      this remove(key)
 		return _myHashBag put(key, value)
 	}
+  /* WARNING: Covers must be wrapped into a Cell before adding to the dictionary */
 	add: func <T> (key: String, value: T) -> Bool {
-		return _myHashBag add(key, value)
+		return this put(key, value)
 	}
 	empty?: func -> Bool { return _myHashBag empty?() }
 	remove: func (key: String) -> Bool {
