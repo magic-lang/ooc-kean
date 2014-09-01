@@ -16,6 +16,7 @@
  */
 
 import lib/gles
+import TextureBin
 
 TextureType: enum {
   monochrome
@@ -34,6 +35,9 @@ Texture: class {
   type: TextureType
   format: UInt
   internalFormat: UInt
+
+  _textureBin: static TextureBin
+  textureBin: static TextureBin { get { if(This _textureBin == null) { This _textureBin = TextureBin new() } This _textureBin } }
   init: func~nullTexture (type: TextureType, width: UInt, height: UInt) {
     this width = width
     this height = height
@@ -47,7 +51,8 @@ Texture: class {
     this _setInternalFormats(type)
   }
   dispose: func {
-    glDeleteTextures(1, _backend&)
+    //glDeleteTextures(1, _backend&)
+    This textureBin add(this)
   }
   bind: func (unit: UInt) {
     glActiveTexture(GL_TEXTURE0 + unit)
@@ -96,12 +101,24 @@ Texture: class {
     true
   }
   create: static func (type: TextureType, width: UInt, height: UInt) -> This {
-    result := Texture new(type, width, height)
-    result _generate(null) ? result : null
+    result := This textureBin find(type, width, height)
+    success := true
+    if(result == null) {
+      result = Texture new(type, width, height)
+      success = result _generate(null)
+    }
+    success ? result : null
   }
   create: static func~fromPixels(type: TextureType, width: UInt, height: UInt, pixels: Pointer) -> This {
-    result := Texture new(type, width, height)
-    result _generate(pixels) ? result : null
+    result := This textureBin find(type, width, height)
+    success := true
+    if(result == null) {
+      result = Texture new(type, width, height)
+      success = result _generate(pixels)
+    }
+    else
+      result uploadPixels(pixels)
+    success ? result : null
   }
 
 }
