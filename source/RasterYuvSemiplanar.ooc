@@ -40,7 +40,7 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
     }
   }
   init: func (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
-    "RasterYuvPlanar init ~fromEverything" println()
+//    "RasterYuvPlanar init ~fromEverything" println()
     super(buffer, size, coordinateSystem, crop)
     this y = this createY()
     this uv = this createUV()

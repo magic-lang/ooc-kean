@@ -29,7 +29,7 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 	init: func ~fromSize (size: IntSize2D) { this new(size, CoordinateSystem Default, IntShell2D new()) }
 	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		bufSize := RasterPacked calculateLength(size, 1) + 2 * RasterPacked calculateLength(size / 2, 1)
-		"RasterYuv420Planar init ~fromStuff" println()
+//		"RasterYuv420Planar init ~fromStuff" println()
 		super(ByteBuffer new(bufSize), size, coordinateSystem, crop)
 	}
 //	 FIXME but only if we really need it
