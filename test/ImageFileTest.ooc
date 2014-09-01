@@ -3,6 +3,7 @@ use ooc-draw
 import math
 import lang/IO
 import io/File
+import StbImage
 
 ImageFileTest: class extends Fixture {
 	init: func () {
