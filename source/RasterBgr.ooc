@@ -27,8 +27,8 @@ import Color
 RasterBgr: class extends RasterPacked {
 	bytesPerPixel: Int { get { 3 } }
 	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 3)), size) }
-	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) { 
-		super(ByteBuffer new(RasterPacked calculateLength(size, 3)), size, coordinateSystem, crop) 
+	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
+		super(ByteBuffer new(RasterPacked calculateLength(size, 3)), size, coordinateSystem, crop)
 	}
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
@@ -45,7 +45,7 @@ RasterBgr: class extends RasterPacked {
 		rowEnd := row as ColorBgr* + rowLength
 		destination := row as ColorBgr*
 		f := func (color: ColorBgr) {
-			(destination as ColorBgr*)@ = color 
+			(destination as ColorBgr*)@ = color
 			destination += 1
 			if (destination >= rowEnd) {
 				row += this stride
@@ -79,7 +79,7 @@ RasterBgr: class extends RasterPacked {
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
 		this apply(ColorConvert fromBgr(action))
-	}		
+	}
 	distance: func (other: Image) -> Float {
 		result := 0.0f
 		if (!other)

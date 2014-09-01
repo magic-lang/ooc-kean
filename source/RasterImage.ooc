@@ -19,8 +19,9 @@ use ooc-base
 import math
 import structs/ArrayList
 import Image
-import RasterBgra
+import RasterBgra, RasterMonochrome, RasterBgr
 import Color
+import StbImage
 
 RasterImage: abstract class extends Image {
 	distanceRadius: Int { get { return 1; } }
@@ -30,8 +31,8 @@ RasterImage: abstract class extends Image {
 	apply: abstract func ~bgr (action: Func (ColorBgr))
 	apply: abstract func ~yuv (action: Func (ColorYuv))
 	apply: abstract func ~monochrome (action: Func (ColorMonochrome))
-	init: func ~fromRasterImage (original: RasterImage) { 
-		super(original) 
+	init: func ~fromRasterImage (original: RasterImage) {
+		super(original)
 		this buffer = original buffer copy()
 	}
 	init: func (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
@@ -63,6 +64,27 @@ RasterImage: abstract class extends Image {
 	copy: func ~fromMoreParams (size: FloatSize2D, source: FloatBox2D, upperLeft, upperRight, lowerLeft: FloatPoint2D) -> RasterImage {
 		result := RasterBgra new(size ceiling() asIntSize2D())
 //		TODO: The stuff
+		result
+	}
+
+	open: static func ~unknownType (filename: String) -> This {
+		x, y, n: Int
+		data := StbImage load(filename, x&, y&, n&, 0)
+		buffer := ByteBuffer new(x * y * n)
+		// FIXME: Find a better way to do this using Dispose() or something
+		memcpy(buffer pointer, data, x * y * n)
+		StbImage free(data)
+		result: This
+		match (n) {
+			case 1 =>
+				result = RasterMonochrome new(buffer, IntSize2D new (x, y))
+			case 3 =>
+				result = RasterBgr new(buffer, IntSize2D new (x, y))
+			case 4 =>
+				result = RasterBgra new(buffer, IntSize2D new (x, y))
+			case =>
+				raise("Unsupported number of channels in image")
+		}
 		result
 	}
 }
