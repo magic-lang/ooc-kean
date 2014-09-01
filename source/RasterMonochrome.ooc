@@ -27,8 +27,8 @@ import Color
 RasterMonochrome: class extends RasterPacked {
 	bytesPerPixel: Int { get { 1 } }
 	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 1)), size) }
-	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) { 
-		super(ByteBuffer new(RasterPacked calculateLength(size, 1)), size, coordinateSystem, crop) 
+	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
+		super(ByteBuffer new(RasterPacked calculateLength(size, 1)), size, coordinateSystem, crop)
 	}
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
@@ -47,7 +47,7 @@ RasterMonochrome: class extends RasterPacked {
 		destination := row
 		f := func (color: ColorMonochrome) {
 			(destination as ColorMonochrome*)@ = color
-//			"RasterMonochrome init ~fromRasterImage f, color: #{color y}, destination at #{destination}" println()			
+//			"RasterMonochrome init ~fromRasterImage f, color: #{color y}, destination at #{destination}" println()
 			destination += 1
 			if (destination >= rowEnd) {
 //				"RasterMonochrome init ~fromRasterImage f, end of line at #{destination}" println()
@@ -140,4 +140,3 @@ RasterMonochrome: class extends RasterPacked {
 	operator [] (x, y: Int) -> ColorMonochrome { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorMonochrome* + x)@ : ColorMonochrome new(0) }
 	operator []= (x, y: Int, value: ColorMonochrome) { ((this pointer + y * this stride) as ColorMonochrome* + x)@ = value }
 }
-
