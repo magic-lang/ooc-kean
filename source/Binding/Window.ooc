@@ -38,6 +38,7 @@ Window: class extends Surface {
   _generate: /* private */ func (size: IntSize2D, title: String) -> Bool {
     this _native = X11Window create(size width, size height, title)
     this _context = Context create(_native)
+
     result: UInt = this _context makeCurrent()
     this _quad = Quad create()
     this _monochromeToBgra = GpuMapMonochromeToBgra new()
@@ -97,13 +98,42 @@ Window: class extends Surface {
     this draw(result, transform)
     result dispose()
   }
+
+  draw: func ~UnknownFormat (image: RasterImage) {
+    if(image instanceOf?(RasterBgr))
+      this draw(image as RasterBgr)
+    else if(image instanceOf?(RasterBgra))
+      this draw(image as RasterBgra)
+    if(image instanceOf?(RasterMonochrome))
+      this draw(image as RasterMonochrome)
+    if(image instanceOf?(RasterYuv420Planar))
+      this draw(image as RasterYuv420Planar)
+    if(image instanceOf?(RasterYuv420Semiplanar))
+      this draw(image as RasterYuv420Semiplanar)
+    /*
+    this draw( match image {
+      case i: RasterBgra =>
+        image as RasterBgra
+      case i: RasterBgr =>
+        image as RasterBgr
+      case i: RasterMonochrome =>
+        image as RasterMonochrome
+      case i: RasterYuv420Planar =>
+        image as RasterYuv420Planar
+      case i: RasterYuv420Semiplanar =>
+        image as RasterYuv420Semiplanar
+      case =>
+        image as RasterBgr
+    })
+    */
+  }
   _bind: /* internal */ func {
     this _native bind()
   }
   _clear: /* internal */ func {
     this _native clear()
   }
-  update: func {
+  _update: func {
     this _context swapBuffers()
   }
   _setResolution: /* internal */ func (resolution: IntSize2D) {

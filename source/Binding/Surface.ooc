@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
+use ooc-draw
 import GpuImage, GpuMap, OpenGLES3/Quad
 
 Surface: abstract class {
@@ -27,12 +28,12 @@ Surface: abstract class {
     image _bind()
     this _quad draw()
     this _unbind()
-    this update()
+    this _update()
   }
 
   _clear: abstract func
   _bind: abstract func
   _setResolution: func (resolution: IntSize2D)
   _unbind: func
-  update: func
+  _update: func
 }
