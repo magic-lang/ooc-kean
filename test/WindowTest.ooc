@@ -33,13 +33,13 @@ gpuBgr := GpuImage create(rasterImageBgr)
 rasterImageBgra := RasterBgra open("input/Space.png")
 gpuBgra := GpuImage create(rasterImageBgra)
 
-/* Not working */
-//rasterImageYuv420 := RasterYuv420Planar new(rasterImageBgr)
-//gpuYuv420Planar := GpuImage create(rasterImageYuv420)
+rasterImageYuv420Planar := RasterYuv420Planar new(rasterImageBgr)
+gpuYuv420Planar := GpuImage create(rasterImageYuv420Planar)
 
 rasterImageYuv420Semiplanar := RasterYuv420Semiplanar new(rasterImageBgra)
 gpuYuv420Semiplanar := GpuImage create(rasterImageYuv420Semiplanar)
+
 while(true) {
   transform = transform rotate(rotation)
-  window draw(rasterImageYuv420Semiplanar, transform)
+  window draw(rasterImageYuv420Planar, transform)
 }
