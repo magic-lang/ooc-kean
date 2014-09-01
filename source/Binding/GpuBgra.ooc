@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
+use ooc-draw
 import OpenGLES3/Texture
 import GpuPacked
 
@@ -22,7 +23,10 @@ GpuBgra: class extends GpuPacked {
     super(size, TextureType rgba, null)
   }
   init: func ~fromPixels (size: IntSize2D, data: Pointer) {
-    super(size, TextureType rgba, data)
+    super(size, TextureType bgra, data)
+  }
+  replace: func (image: RasterBgra) {
+    this _textures[0] uploadPixels(image pointer)
   }
   create: func (size: IntSize2D) -> This {
     result := This new(size)

@@ -22,7 +22,7 @@ GpuBgr: class extends GpuPacked {
     super(size, TextureType rgb, null)
   }
   init: func ~fromPixels (size: IntSize2D, data: Pointer) {
-    super(size, TextureType rgb, data)
+    super(size, TextureType bgr, data)
   }
   create: func (size: IntSize2D) -> This {
     result := This new(size)
