@@ -28,18 +28,18 @@ Synchronized: abstract class {
 		this _lock unlock()
 	}
 	lock: func ~action(action: Func) {
-		this lock()
-		try {
+		/*this lock() // TODO: Make lock work
+		try {*/
 			action()
-			this unlock()
+			/*this unlock()
 		}
 		catch(e: Exception)
 		{
 			this unlock()
 			e throw()
-		}
+		}*/
 	}
-	// FIXME: must this realy take T as an argument?
+	/*// FIXME: must this realy take T as an argument?
 	lock: func ~function <T> (T: Class, function: Func -> T) -> T {
 		result: T
 		this lock()
@@ -53,5 +53,5 @@ Synchronized: abstract class {
 			e throw()
 		}
 		result
-	}
+	}*/
 }
