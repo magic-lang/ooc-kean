@@ -1,11 +1,12 @@
 import threading/Thread
+import Synchronized
 
 ReferenceCounter: class extends Synchronized {
 	_target: Object
 	_count: Int
 	_claimed := true
 	_claimLock := Mutex new()
-	claimed: Bool { 
+	claimed: Bool {
 		get {
 			this _claimed
 // TODO: implement with lock
@@ -16,7 +17,7 @@ ReferenceCounter: class extends Synchronized {
 		set (value) {
 // TODO: implement with lock
 			if ((this _reuse as Closure) thunk == null) // this _reuse == null
-				this _reuse = value		
+				this _reuse = value
 		}
 	}
 	init: func (=_target)
