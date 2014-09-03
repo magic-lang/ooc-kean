@@ -24,13 +24,13 @@ rotation := 0.01f
 screenSize := IntSize2D new (1680.0f, 1050.0f)
 window := Window create(screenSize, "GL Test")
 
-rasterImageMonochrome := RasterMonochrome open("input/test.png")
+rasterImageMonochrome := RasterMonochrome open("test/input/test.png")
 gpuMonochrome := GpuImage create(rasterImageMonochrome)
 
-rasterImageBgr := RasterBgr open("input/Space.png")
+rasterImageBgr := RasterBgr open("test/input/Space.png")
 gpuBgr := GpuImage create(rasterImageBgr)
 
-rasterImageBgra := RasterBgra open("input/Space.png")
+rasterImageBgra := RasterBgra open("test/input/Space.png")
 gpuBgra := GpuImage create(rasterImageBgra)
 
 rasterImageYuv420Planar := RasterYuv420Planar new(rasterImageBgr)
