@@ -14,33 +14,36 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
-
 import threading/Thread
-
-Synchronized: abstract class {
+import IDisposable
+Synchronized: abstract class implements IDisposable {
 	_lock: Mutex
-	init: func (_lock: Mutex) { this lock = lock }
+	init: func (lock: Mutex) { this _lock = lock }
 	init: func ~default { this init(Mutex new()) }
+	dispose: func {
+		this _lock destroy()
+	}
 	lock: func {
 		this _lock lock()
 	}
 	unlock: func {
 		this _lock unlock()
 	}
-	lock: func ~action(action: Func) {
-		/*this lock() // TODO: Make lock work
-		try {*/
+
+	lock: func ~action (action: Func) {
+		this lock()
+		try {
 			action()
-			/*this unlock()
+			this unlock()
 		}
 		catch(e: Exception)
 		{
 			this unlock()
 			e throw()
-		}*/
+		}
 	}
-	/*// FIXME: must this realy take T as an argument?
-	lock: func ~function <T> (T: Class, function: Func -> T) -> T {
+
+	lockFunc: func <T> (function: Func -> T) -> T {
 		result: T
 		this lock()
 		try {
@@ -53,5 +56,5 @@ Synchronized: abstract class {
 			e throw()
 		}
 		result
-	}*/
+	}
 }
