@@ -18,6 +18,7 @@ import FloatExtension
 import FloatPoint2D
 import FloatSize2D
 import FloatShell2D
+import IntBox2D
 import text/StringTokenizer
 import structs/ArrayList
 
@@ -102,6 +103,7 @@ FloatBox2D: cover {
 	operator - (other: FloatSize2D) -> This { This new(this leftTop, this size - other) }
 	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }
 	operator != (other: This) -> Bool { !(this == other) }
+	asIntBox2D: func -> IntBox2D { IntBox2D new(this left, this top, this width, this height) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
 	parse: static func (input: String) -> This {
