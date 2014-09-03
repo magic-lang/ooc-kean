@@ -63,11 +63,18 @@ ImageFileTest: class extends Fixture {
 			image save(destination)
 		})
 		this add("convert RasterBgra to RasterMonochrome", func() {
-			source := "test/input/Barn.png"
+			source := "test/input/Space.png"
 			destination := "test/output/outputRasterBgraToRasterMonochrome.png"
 			bgra := RasterBgra open(source)
 			monochrome := RasterMonochrome new(bgra)
 			monochrome save(destination)
+		})
+		this add("convert RasterMonochrome to RasterBgra", func() {
+			source := "test/input/Space.png"
+			destination := "test/output/outputRasterMonochromeToRasterBgra.png"
+			monochrome := RasterMonochrome open(source)
+			bgra := RasterBgra new(monochrome)
+			bgra save(destination)
 		})
 		this add("convert RasterBgr to RasterMonochrome", func() {
 			source := "test/input/Barn.png"
@@ -75,6 +82,13 @@ ImageFileTest: class extends Fixture {
 			bgr := RasterBgr open(source)
 			monochrome := RasterMonochrome new(bgr)
 			monochrome save(destination)
+		})
+		this add("convert RasterMonochrome to RasterBgr", func() {
+			source := "test/input/Space.png"
+			destination := "test/output/outputRasterMonochromeToRasterBgr.png"
+			monochrome := RasterMonochrome open(source)
+			bgr := RasterBgra new(monochrome)
+			bgr save(destination)
 		})
 		this add("convert RasterBgra to RasterYuv420Planar", func() {
 			source := "test/input/Barn.png"
