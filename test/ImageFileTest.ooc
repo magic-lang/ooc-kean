@@ -90,7 +90,7 @@ ImageFileTest: class extends Fixture {
 			bgr := RasterBgra new(monochrome)
 			bgr save(destination)
 		})
-		this add("convert RasterBgra to RasterYuv420Planar", func() {
+		this add("convert RasterBgra to RasterYuv420Planar to RasterMonochrome", func() {
 			source := "test/input/Barn.png"
 			destination := "test/output/outputRasterBgraToYuv420PlanarToRasterMonochrome.png"
 			bgra := RasterBgra open(source)

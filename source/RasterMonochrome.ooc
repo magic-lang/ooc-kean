@@ -78,10 +78,11 @@ RasterMonochrome: class extends RasterPacked {
 		end := (this pointer as UInt8*) + this length
 		rowLength := this size width
 		for (row in (this pointer as UInt8*)..end) {
+//			"RasterMonochrome apply ~monochrome, end of line at #{row}" println()
 			rowEnd := row + rowLength
 			for (source in row..rowEnd)
 				action((source as ColorMonochrome*)@)
-			row += this stride
+			row += this stride-1
 		}
 	}	
 	distance: func (other: Image) -> Float {
