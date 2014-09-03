@@ -26,7 +26,7 @@ import RasterUv
 import Image
 import Color
 
-RasterYuvSemiplanar: abstract class extends RasterPlanar {
+RasterYuvSemiplanar: abstract class extends RasterPlanar implements IDisposable {
   y: RasterMonochrome
   uv: RasterUv
   crop: IntShell2D {
@@ -117,4 +117,5 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
 //	}
   abstract operator [] (x, y: Int) -> ColorYuv {}
   abstract operator []= (x, y: Int, value: ColorYuv) {}
+ 	dispose: func
 }

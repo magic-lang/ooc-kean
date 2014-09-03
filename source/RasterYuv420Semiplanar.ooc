@@ -26,7 +26,7 @@ import RasterUv
 import Image
 import Color
 
-RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
+RasterYuv420Semiplanar: class extends RasterYuvSemiplanar implements IDisposable {
   init: func ~fromSize (size: IntSize2D) { this new(size, CoordinateSystem Default, IntShell2D new()) }
   init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
     bufSize := RasterPacked calculateLength(size, 1) + 2 * RasterPacked calculateLength(size / 2, 1)
@@ -147,4 +147,5 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
     this y[x, y] = ColorMonochrome new(value y)
     this uv[x/2, y/2] = ColorUv new(value u, value v)
   }
+ 	dispose: func
 }
