@@ -18,6 +18,7 @@ import IntExtension
 import IntPoint2D
 import IntSize2D
 import IntShell2D
+import FloatPoint2D
 import FloatBox2D
 import text/StringTokenizer
 import structs/ArrayList
@@ -62,6 +63,9 @@ IntBox2D: cover {
 		This new(left, top, width, height)
 	}
 	contains: func (point: IntPoint2D) -> Bool {
+		this left <= point x && point x < this right && this top <= point y && point y < this bottom
+	}
+	contains: func ~float (point: FloatPoint2D) -> Bool {
 		this left <= point x && point x < this right && this top <= point y && point y < this bottom
 	}
 	contains: func ~box (box: IntBox2D) -> Bool { this intersection(box) == box }
