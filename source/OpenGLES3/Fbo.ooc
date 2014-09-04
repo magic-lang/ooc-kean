@@ -53,7 +53,7 @@ Fbo: class {
     this _bufferCount = textures length
     this _buffers = gc_malloc(this _bufferCount * UInt size) as UInt*
 
-    for(i in 0..textures length) {
+    for (i in 0..textures length) {
       this _buffers[i] = GL_COLOR_ATTACHMENT0 + i
       glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, textures[i] _backend, 0)
     }

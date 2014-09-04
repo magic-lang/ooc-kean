@@ -103,7 +103,7 @@ Texture: class {
   create: static func (type: TextureType, width: UInt, height: UInt) -> This {
     result := This textureBin find(type, width, height)
     success := true
-    if(result == null) {
+    if (result == null) {
       result = Texture new(type, width, height)
       success = result _generate(null)
     }
@@ -112,7 +112,7 @@ Texture: class {
   create: static func~fromPixels(type: TextureType, width: UInt, height: UInt, pixels: Pointer) -> This {
     result := This textureBin find(type, width, height)
     success := true
-    if(result == null) {
+    if (result == null) {
       result = Texture new(type, width, height)
       success = result _generate(pixels)
     }

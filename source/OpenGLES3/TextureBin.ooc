@@ -43,13 +43,13 @@ TextureBin: class {
   _search: func (width: UInt, height: UInt, arrayList: ArrayList<Texture>) -> Texture {
     result := null
 
-    for(texture in arrayList) {
+    for (texture in arrayList) {
       if(texture width == width && texture height == height) {
         result = texture
         break
       }
     }
-    if(result != null)
+    if (result != null)
       arrayList remove(result)
     result
   }
