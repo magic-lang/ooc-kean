@@ -24,13 +24,15 @@ X11Window: class extends NativeWindow {
     this _height = height
   }
   _generate: func (width: UInt, height: UInt, title: String) -> Bool {
-    /* FIXME: ":0" is the usual identifier for the default display but this should be read from the DISPLAY variable in the system by passing null as parameter,
+    /* Note: ":0" is the usual identifier for the default display but this should be read from the DISPLAY variable in the system by passing null as parameter,
     i.e. this _display = XOpenDisplay(null) */
     this _display = XOpenDisplay(null)
-    if (this _display == null)
+    if (this _display == null) {
+      "Failed to find default display identifier in DISPLAY variable, guessing :0 instead" println()
       this _display = XOpenDisplay(":0")
+    }
     if (this _display == null)
-      return false
+      raise("Unable to open X Display")
     root: Long = DefaultRootWindow(this _display)
 
     swa: XSetWindowAttributesOOC
