@@ -26,7 +26,9 @@ X11Window: class extends NativeWindow {
   _generate: func (width: UInt, height: UInt, title: String) -> Bool {
     /* FIXME: ":0" is the usual identifier for the default display but this should be read from the DISPLAY variable in the system by passing null as parameter,
     i.e. this _display = XOpenDisplay(null) */
-    this _display = XOpenDisplay(":0")
+    this _display = XOpenDisplay(null)
+    if(this _display == null)
+      this _display = XOpenDisplay(":0")
     if(this _display == null)
       return false
     root: Long = DefaultRootWindow(this _display)
