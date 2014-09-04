@@ -50,7 +50,7 @@ GpuYuv420Semiplanar: class extends GpuPlanar {
   }
   create: static func ~empty (size: IntSize2D) -> This {
     result := This new(size)
-    result _textures[0] != null ? result : null
+    result _generate(null, null) ? result : null
   }
   _create: static /* internal */ func ~fromPixels (size: IntSize2D, y: Pointer, uv: Pointer) -> This {
     result := This new(size)

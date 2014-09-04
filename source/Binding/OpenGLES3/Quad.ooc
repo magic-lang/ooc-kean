@@ -21,7 +21,7 @@ Quad: class {
   vao: Vao
   init: func {
     positions := [-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f] as Float*
-    textureCoordinates := [0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f] as Float*
+    textureCoordinates := [0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f] as Float*
     this vao = Vao create(positions, textureCoordinates, 4, 2)
   }
   dispose: func () {

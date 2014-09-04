@@ -20,6 +20,7 @@ import lib/gles
 Fence: class {
   _backend: Pointer
 
+  init: func
   clientWait: func (timeout: UInt) {
     glClientWaitSync(this _backend, 0, timeout)
   }
