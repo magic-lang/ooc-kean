@@ -100,28 +100,28 @@ Window: class extends Surface {
   }
 
   draw: func ~UnknownFormat (image: RasterImage) {
-    if(image instanceOf?(RasterBgr))
+    if (image instanceOf?(RasterBgr))
       this draw(image as RasterBgr)
-    else if(image instanceOf?(RasterBgra))
+    else if (image instanceOf?(RasterBgra))
       this draw(image as RasterBgra)
-    if(image instanceOf?(RasterMonochrome))
+    else if (image instanceOf?(RasterMonochrome))
       this draw(image as RasterMonochrome)
-    if(image instanceOf?(RasterYuv420Planar))
+    else if (image instanceOf?(RasterYuv420Planar))
       this draw(image as RasterYuv420Planar)
-    if(image instanceOf?(RasterYuv420Semiplanar))
+    else if (image instanceOf?(RasterYuv420Semiplanar))
       this draw(image as RasterYuv420Semiplanar)
     /*
     this draw( match image {
       case i: RasterBgra =>
-        image as RasterBgra
+        i as RasterBgra
       case i: RasterBgr =>
-        image as RasterBgr
+        i as RasterBgr
       case i: RasterMonochrome =>
-        image as RasterMonochrome
+        i as RasterMonochrome
       case i: RasterYuv420Planar =>
-        image as RasterYuv420Planar
+        i as RasterYuv420Planar
       case i: RasterYuv420Semiplanar =>
-        image as RasterYuv420Semiplanar
+        i as RasterYuv420Semiplanar
       case =>
         image as RasterBgr
     })
