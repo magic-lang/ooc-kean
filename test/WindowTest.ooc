@@ -24,7 +24,7 @@ rotation := 0.01f
 screenSize := IntSize2D new (1680.0f, 1050.0f)
 window := Window create(screenSize, "GL Test")
 
-rasterImageMonochrome := RasterMonochrome open("input/test.png")
+rasterImageMonochrome := RasterMonochrome open("input/Hercules.jpg")
 gpuMonochrome := GpuImage create(rasterImageMonochrome)
 
 rasterImageBgr := RasterBgr open("input/Space.png")
@@ -39,7 +39,10 @@ gpuYuv420Planar := GpuImage create(rasterImageYuv420Planar)
 rasterImageYuv420Semiplanar := RasterYuv420Semiplanar new(rasterImageBgra)
 gpuYuv420Semiplanar := GpuImage create(rasterImageYuv420Semiplanar)
 
+target := gpuYuv420Planar create(gpuYuv420Planar size)
+target canvas draw(gpuYuv420Planar)
+
 while(true) {
-  transform = transform rotate(rotation)
-  window draw(rasterImageYuv420Planar, transform)
+  transform = transform translate(0, 0)
+  window draw(rasterImageMonochrome, transform)
 }
