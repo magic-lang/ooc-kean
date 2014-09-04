@@ -65,7 +65,8 @@ RasterPacked: abstract class extends RasterImage implements IDisposable {
 		other instanceOf?(This) && this bytesPerPixel == (other as RasterPacked) bytesPerPixel ? this as Image distance(other) : Float maximumValue
 	}
 	calculateStride: static func (size: IntSize2D, bytesPerPixel: Int) -> Int {
-		size width * bytesPerPixel + (4 - (size width * bytesPerPixel) % 4) % 4
+//		size width * bytesPerPixel + (4 - (size width * bytesPerPixel) % 4) % 4
+		size width * bytesPerPixel
 	}
 	calculateLength: static func (size: IntSize2D, bytesPerPixel: Int) -> Int {
 		This calculateStride(size, bytesPerPixel) * size height
