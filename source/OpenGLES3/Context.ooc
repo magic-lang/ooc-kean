@@ -89,9 +89,12 @@ Context: class {
             EGL_CONTEXT_CLIENT_VERSION, 2,
             EGL_NONE] as Int*
       this _eglContext = eglCreateContext(this _eglDisplay, chosenConfig, shared, contextAttribsGLES2)
+      if (this _eglContext == null)
+        raise("Failed to create OpenGL ES 3 or OpenGL ES 2 context")
+      else
+        "WARNING: Using OpenGL ES 2" println()
     }
-    if (this _eglContext == null)
-      raise("Failed to create OpenGL ES 3 or OpenGL ES 2 context")
+
     return true
   }
   create: static func (window: NativeWindow) -> This {
