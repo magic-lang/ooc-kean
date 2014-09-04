@@ -49,22 +49,22 @@ GpuCanvasPacked: class extends GpuCanvas {
   dispose: func {
     this _renderTarget dispose()
   }
-  draw: func ~Monochrome (image: GpuMonochrome, transform: FloatTransform2D) {
+  draw: func ~Monochrome (image: GpuMonochrome, transform := FloatTransform2D identity) {
     This _monochromeToMonochrome transform = transform
     This _monochromeToMonochrome ratio = image ratio
     this draw(image, This _monochromeToMonochrome)
   }
-  draw: func ~Bgr (image: GpuBgr, transform: FloatTransform2D) {
+  draw: func ~Bgr (image: GpuBgr, transform := FloatTransform2D identity) {
     This _bgrToBgr transform = transform
     This _bgrToBgr ratio = image ratio
     this draw(image, This _bgrToBgr)
   }
-  draw: func ~Bgra (image: GpuBgra, transform: FloatTransform2D) {
+  draw: func ~Bgra (image: GpuBgra, transform := FloatTransform2D identity) {
     This _bgraToBgra transform = transform
     This _bgraToBgra ratio = image ratio
     this draw(image, This _bgraToBgra)
   }
-  draw: func ~Uv (image: GpuUv, transform: FloatTransform2D) {
+  draw: func ~Uv (image: GpuUv, transform := FloatTransform2D identity) {
     This _uvToUv transform = transform
     This _uvToUv ratio = image ratio
     this draw(image, This _uvToUv)
@@ -99,7 +99,7 @@ GpuCanvasYuv420Planar: class extends GpuCanvas {
     this _u dispose()
     this _v dispose()
   }
-  draw: func ~Yuv420Planar (image: GpuYuv420Planar, transform: FloatTransform2D) {
+  draw: func ~Yuv420Planar (image: GpuYuv420Planar, transform := FloatTransform2D identity) {
     GpuCanvas _monochromeToMonochrome transform = transform
     GpuCanvas _monochromeToMonochrome ratio = image ratio
     this _y draw(image y, GpuCanvas _monochromeToMonochrome)
@@ -133,11 +133,13 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
     this _y dispose()
     this _uv dispose()
   }
-  draw: func ~GpuYuv420Semiplanar (image: GpuYuv420Semiplanar, transform: FloatTransform2D) {
+  draw: func ~GpuYuv420Semiplanar (image: GpuYuv420Semiplanar, transform := FloatTransform2D identity) {
     GpuCanvas _monochromeToMonochrome transform = transform
     GpuCanvas _monochromeToMonochrome ratio = image ratio
     this _y draw(image y, GpuCanvas _monochromeToMonochrome)
-    this _uv draw(image uv, GpuCanvas _monochromeToMonochrome)
+    GpuCanvas _uvToUv transform = transform
+    GpuCanvas _uvToUv ratio = image ratio
+    this _uv draw(image uv, GpuCanvas _uvToUv)
   }
   _clear: func
   _bind: func

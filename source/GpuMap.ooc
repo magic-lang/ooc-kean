@@ -53,9 +53,10 @@ GpuMapDefault: abstract class extends GpuMap {
   layout(location = 1) in vec2 textureCoordinate;\n
   out vec2 fragmentTextureCoordinate;\n
   void main() {\n
-    vec3 scaledQuadPosition = vec3(ratio * vertexPosition.x, vertexPosition.y, 0);\n
+    vec3 scaledQuadPosition = vec3(ratio * vertexPosition.x, vertexPosition.y, 1);\n
     vec3 transformedPosition = transform * scaledQuadPosition;\n
-    mat4 projectionMatrix = transpose(mat4(1.0f / ratio, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
+    transformedPosition.xy /= transformedPosition.z; \n
+    mat4 projectionMatrix = transpose(mat4(1.0f / ratio, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
     fragmentTextureCoordinate = textureCoordinate;\n
     gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
   }\n";
