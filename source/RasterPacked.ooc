@@ -25,7 +25,7 @@ import RasterBgr
 import RasterMonochrome
 import Image
 
-RasterPacked: abstract class extends RasterImage {
+RasterPacked: abstract class extends RasterImage implements IDisposable {
 	bytesPerPixel: Int { get }
 	stride: Int { get set }
 	init: func (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
@@ -65,7 +65,8 @@ RasterPacked: abstract class extends RasterImage {
 		other instanceOf?(This) && this bytesPerPixel == (other as RasterPacked) bytesPerPixel ? this as Image distance(other) : Float maximumValue
 	}
 	calculateStride: static func (size: IntSize2D, bytesPerPixel: Int) -> Int {
-		size width * bytesPerPixel + (4 - (size width * bytesPerPixel) % 4) % 4
+//		size width * bytesPerPixel + (4 - (size width * bytesPerPixel) % 4) % 4
+		size width * bytesPerPixel
 	}
 	calculateLength: static func (size: IntSize2D, bytesPerPixel: Int) -> Int {
 		This calculateStride(size, bytesPerPixel) * size height
@@ -73,4 +74,5 @@ RasterPacked: abstract class extends RasterImage {
 	asRasterPacked: func (other: This) -> This {
 		other
 	}
+	dispose: func
 }

@@ -15,6 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-math
+use ooc-base
 import math
 
 CoordinateSystem: enum {
@@ -25,7 +26,7 @@ CoordinateSystem: enum {
 	YUpward = 0x02
 }
 
-Image: abstract class {
+Image: abstract class implements IDisposable {
 	isValidIn: func (x, y: Int) -> Bool {
 		return (x >= 0 && x < this size width && y >= 0 && y < this size height)
 	}
@@ -76,4 +77,5 @@ Image: abstract class {
 	finish: func -> Bool { true }
 	distance: abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
+	dispose: func
 }

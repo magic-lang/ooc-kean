@@ -44,41 +44,80 @@ ImageFileTest: class extends Fixture {
 			failureReason = StbImage failureReason()
 			failureReason toString() println()
 		})
-		this add("open RasterBgra", func() {
+		this add("open png RasterBgra", func() {
 			source := "test/input/Space.png"
-			destination := "test/output/outputRasterBgra.png"
+			destination := "test/output/pngRasterBgra.png"
 			image := RasterBgra open(source)
 			image save(destination)
 		})
-		this add("open RasterBgr", func() {
+		this add("open png RasterBgr", func() {
 			source := "test/input/Space.png"
-			destination := "test/output/outputRasterBgr.png"
+			destination := "test/output/pngRasterBgr.png"
 			image := RasterBgr open(source)
 			image save(destination)
 		})
-		this add("open RasterMonochrome", func() {
+		this add("open png RasterMonochrome", func() {
 			source := "test/input/Barn.png"
-			destination := "test/output/outputRasterMonochrome.png"
+			destination := "test/output/pngRasterMonochrome.png"
 			image := RasterMonochrome open(source)
 			image save(destination)
 		})
+		this add("open jpg RasterBgra", func() {
+			source := "test/input/Hercules.jpg"
+			destination := "test/output/jpgRasterBgra.png"
+			image := RasterBgra open(source)
+			image save(destination)
+		})
+		this add("open jpg RasterBgr", func() {
+			source := "test/input/Hercules.jpg"
+			destination := "test/output/jpgRasterBgr.png"
+			image := RasterBgr open(source)
+			image save(destination)
+		})
+		this add("open jpg RasterMonochrome", func() {
+			source := "test/input/Hercules.jpg"
+			destination := "test/output/jpgRasterMonochrome.png"
+			image := RasterMonochrome open(source)
+			image save(destination)
+		})
+		this add("open jpg RasterMonochrome to RasterBgra", func() {
+			source := "test/input/Space.jpg"
+			destination := "test/output/jpgRasterMonochrome-RasterBgra.png"
+			image := RasterMonochrome open(source)
+			bgra := RasterBgra new(image)
+			bgra save(destination)
+		})
 		this add("convert RasterBgra to RasterMonochrome", func() {
-			source := "test/input/Barn.png"
-			destination := "test/output/outputRasterBgraToRasterMonochrome.png"
+			source := "test/input/Space.png"
+			destination := "test/output/RasterBgra-RasterMonochrome.png"
 			bgra := RasterBgra open(source)
 			monochrome := RasterMonochrome new(bgra)
 			monochrome save(destination)
 		})
+		this add("convert RasterMonochrome to RasterBgra", func() {
+			source := "test/input/Space.png"
+			destination := "test/output/RasterMonochrome-RasterBgra.png"
+			monochrome := RasterMonochrome open(source)
+			bgra := RasterBgra new(monochrome)
+			bgra save(destination)
+		})
 		this add("convert RasterBgr to RasterMonochrome", func() {
-			source := "test/input/Barn.png"
-			destination := "test/output/outputRasterBgrToRasterMonochrome.png"
+			source := "test/input/Hercules.png"
+			destination := "test/output/RasterBgr-RasterMonochrome.png"
 			bgr := RasterBgr open(source)
 			monochrome := RasterMonochrome new(bgr)
 			monochrome save(destination)
 		})
-		this add("convert RasterBgra to RasterYuv420Planar", func() {
+		this add("convert RasterMonochrome to RasterBgr", func() {
+			source := "test/input/Hercules.png"
+			destination := "test/output/RasterMonochrome-RasterBgr.png"
+			monochrome := RasterMonochrome open(source)
+			bgr := RasterBgra new(monochrome)
+			bgr save(destination)
+		})
+		this add("convert RasterBgra to RasterYuv420Planar to RasterMonochrome", func() {
 			source := "test/input/Barn.png"
-			destination := "test/output/outputRasterBgraToYuv420PlanarToRasterMonochrome.png"
+			destination := "test/output/RasterBgra-RasterYuv420Planar-RasterMonochrome.png"
 			bgra := RasterBgra open(source)
 			yuv420 := RasterYuv420Planar new(bgra)
 			monochrome := RasterMonochrome new(yuv420)
@@ -86,7 +125,7 @@ ImageFileTest: class extends Fixture {
 		})
 		this add("convert RasterBgra to RasterYuv420Semiplanar", func() {
 			source := "test/input/Barn.png"
-			destination := "test/output/outputRasterBgraToYuv420SemiplanarToRasterMonochrome.png"
+			destination := "test/output/RasterBgra-RasterYuv420Semiplanar-RasterMonochrome.png"
 			bgra := RasterBgra open(source)
 			yuv420 := RasterYuv420Semiplanar new(bgra)
 			monochrome := RasterMonochrome new(yuv420)
@@ -94,7 +133,7 @@ ImageFileTest: class extends Fixture {
 		})
 		this add("convert RasterBgr to RasterYuv420Planar to RasterMonochrome", func() {
 			source := "test/input/Barn.png"
-			destination := "test/output/outputRasterBgrToYuv420PlanarToRasterMonochrome.png"
+			destination := "test/output/RasterBgr-RasterYuv420Planar-RasterMonochrome.png"
 			bgr := RasterBgr open(source)
 			yuv420 := RasterYuv420Planar new(bgr)
 			monochrome := RasterMonochrome new(yuv420)
@@ -102,7 +141,7 @@ ImageFileTest: class extends Fixture {
 		})
 		this add("convert RasterBgr to RasterYuv420Planar and back again", func() {
 			source := "test/input/Barn.png"
-			destination := "test/output/outputRasterBgrToYuv420PlanarAndBack.png"
+			destination := "test/output/RasterBgr-RasterYuv420Planar-RasterBgr.png"
 			bgr := RasterBgr open(source)
 			yuv420 := RasterYuv420Planar new(bgr)
 			bgr2 := RasterBgr new(yuv420)
