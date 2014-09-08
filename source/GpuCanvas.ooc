@@ -91,9 +91,7 @@ GpuCanvasYuv420Planar: class extends GpuCanvas {
   _u: GpuCanvasPacked
   _v: GpuCanvasPacked
 
-  init: func {
-    super()
-  }
+  init: func
   dispose: func {
     this _y dispose()
     this _u dispose()
@@ -109,11 +107,10 @@ GpuCanvasYuv420Planar: class extends GpuCanvas {
   _clear: func
   _bind: func
   _generate: func (image: GpuYuv420Planar) -> Bool {
-    this _quad = Quad create()
     this _y = GpuCanvasPacked create(image y)
     this _u = GpuCanvasPacked create(image u)
     this _v = GpuCanvasPacked create(image v)
-    this _quad != null && this _y != null && this _u != null && this _v != null
+    this _y != null && this _u != null && this _v != null
   }
   create: static func (image: GpuYuv420Planar) -> This {
     result := This new()
@@ -126,9 +123,7 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
   _y: GpuCanvasPacked
   _uv: GpuCanvasPacked
 
-  init: func {
-    super()
-  }
+  init: func
   dispose: func {
     this _y dispose()
     this _uv dispose()
@@ -144,10 +139,9 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
   _clear: func
   _bind: func
   _generate: func (image: GpuYuv420Semiplanar) -> Bool {
-    this _quad = Quad create()
     this _y = GpuCanvasPacked create(image y)
     this _uv = GpuCanvasPacked create(image uv)
-    this _quad != null && this _y != null && this _uv != null
+    this _y != null && this _uv != null
   }
   create: static func (image: GpuYuv420Semiplanar) -> This {
     result := This new()
