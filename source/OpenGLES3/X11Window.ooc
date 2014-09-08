@@ -15,6 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+version(debug) {
 import lib/x11
 import NativeWindow
 
@@ -48,4 +49,5 @@ X11Window: class extends NativeWindow {
     result _generate(width, height, title) ? result : null
   }
 
+}
 }
