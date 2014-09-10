@@ -65,4 +65,12 @@ extend Float {
 	squared: func -> This {
 		this * this
 	}
+	moduloTwoPi: static func(value: This) -> This {
+		This modulo(value, 2 * This pi)
+	}
+	minusPiToPi: static func(value: This) -> This {
+		value = This moduloTwoPi(value)
+		value = (value <= This pi) ? value : (value - 2 * pi)
+		value
+	}
 }
