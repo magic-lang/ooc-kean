@@ -34,6 +34,8 @@ GpuYuv420Semiplanar: class extends GpuPlanar {
   dispose: func {
     this _y dispose()
     this _uv dispose()
+    if(this _canvas != null)
+      this _canvas dispose()
   }
   _bind: /* internal */ func {
     this _y _bind(0)
@@ -48,7 +50,7 @@ GpuYuv420Semiplanar: class extends GpuPlanar {
     result := This new(size)
     result _generate(null, null) ? result : null
   }
-  create: static func ~empty (size: IntSize2D) -> This {
+  create2: static func ~empty (size: IntSize2D) -> This {
     result := This new(size)
     result _generate(null, null) ? result : null
   }
