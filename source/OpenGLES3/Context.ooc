@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import lib/egl, NativeWindow
+import lib/egl, lib/eglimage, NativeWindow
 
 Context: class {
   _eglContext: Pointer
@@ -32,7 +32,10 @@ Context: class {
     return eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0
   }
   swapBuffers: func {
-    eglSwapBuffers(_eglDisplay, _eglSurface)
+    eglSwapBuffers(this _eglDisplay, this _eglSurface)
+  }
+  generateEGLImage: func -> Pointer {
+    createEGLImage(this _eglDisplay)
   }
   _generate: func (window: NativeWindow, sharedContext: This) -> Bool {
     this _eglDisplay = eglGetDisplay(window display)
