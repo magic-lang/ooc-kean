@@ -99,17 +99,17 @@ Window: class extends Surface {
     result dispose()
   }
 
-  draw: func ~UnknownFormat (image: RasterImage) {
+  draw: func ~UnknownFormat (image: RasterImage, transform := FloatTransform2D identity) {
     if (image instanceOf?(RasterBgr))
-      this draw(image as RasterBgr)
+      this draw(image as RasterBgr, transform)
     else if (image instanceOf?(RasterBgra))
-      this draw(image as RasterBgra)
+      this draw(image as RasterBgra, transform)
     else if (image instanceOf?(RasterMonochrome))
-      this draw(image as RasterMonochrome)
+      this draw(image as RasterMonochrome, transform)
     else if (image instanceOf?(RasterYuv420Planar))
-      this draw(image as RasterYuv420Planar)
+      this draw(image as RasterYuv420Planar, transform)
     else if (image instanceOf?(RasterYuv420Semiplanar))
-      this draw(image as RasterYuv420Semiplanar)
+      this draw(image as RasterYuv420Semiplanar, transform)
     /*
     this draw( match image {
       case i: RasterBgra =>
