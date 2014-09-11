@@ -140,7 +140,7 @@ Window: class extends Surface {
     this _native setViewport(this size width / 2 - resolution width / 2, this size height / 2 - resolution height / 2, resolution width, resolution height)
   }
   create: static func (size: IntSize2D, title := "Window title") -> This {
-    result := Window new(size)
-    (result _generate(size, title)) ? result : null
+    result := This new(size)
+    result _generate(size, title) ? result : null
   }
 }
