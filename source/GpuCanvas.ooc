@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
+use ooc-draw
+use ooc-base
 import OpenGLES3/Fbo, OpenGLES3/Quad
 import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
 
@@ -34,6 +36,7 @@ GpuCanvas: abstract class extends Surface {
       This _uvToUv = GpuMapUv new()
   }
   dispose: abstract func
+  getPixels: abstract func (image: GpuImage, channels: UInt) -> ByteBuffer
 
   setResolution: func (resolution: IntSize2D) {
     Fbo setViewport(0, 0, resolution width, resolution height)
@@ -48,6 +51,10 @@ GpuCanvasPacked: class extends GpuCanvas {
   }
   dispose: func {
     this _renderTarget dispose()
+  }
+  getPixels: func (image: GpuImage, channels: UInt) -> ByteBuffer {
+    buffer := this _renderTarget getPixels(image size width, image size height, channels)
+    buffer
   }
   draw: func ~Monochrome (image: GpuMonochrome, transform := FloatTransform2D identity) {
     This _monochromeToMonochrome transform = transform
@@ -68,6 +75,24 @@ GpuCanvasPacked: class extends GpuCanvas {
     This _uvToUv transform = transform
     This _uvToUv ratio = image ratio
     this draw(image, This _uvToUv)
+  }
+  draw: func ~raster (image: RasterImage, transform := FloatTransform2D identity) {
+    if (image instanceOf?(RasterBgr)) {
+      gpuBgr := GpuImage create(image as RasterBgr)
+      this draw(gpuBgr, transform)
+      gpuBgr dispose()
+    }
+    else if (image instanceOf?(RasterBgra)) {
+      gpuBgra := GpuImage create(image as RasterBgra)
+      this draw(gpuBgra, transform)
+      gpuBgra dispose()
+    }
+    else if (image instanceOf?(RasterMonochrome)) {
+      gpuMonochrome := GpuImage create(image as RasterMonochrome)
+      this draw(gpuMonochrome, transform)
+      gpuMonochrome dispose()
+    }
+
   }
   _bind: func {
     this _renderTarget bind()
@@ -97,12 +122,23 @@ GpuCanvasYuv420Planar: class extends GpuCanvas {
     this _u dispose()
     this _v dispose()
   }
+  getPixels: func (image: GpuImage, channels: UInt) -> ByteBuffer {
+    buffer := this _y getPixels(image, channels)
+    buffer
+  }
   draw: func ~Yuv420Planar (image: GpuYuv420Planar, transform := FloatTransform2D identity) {
     GpuCanvas _monochromeToMonochrome transform = transform
     GpuCanvas _monochromeToMonochrome ratio = image ratio
     this _y draw(image y, GpuCanvas _monochromeToMonochrome)
     this _u draw(image u, GpuCanvas _monochromeToMonochrome)
     this _v draw(image v, GpuCanvas _monochromeToMonochrome)
+  }
+  draw: func ~raster (image: RasterImage, transform := FloatTransform2D identity) {
+    if (image instanceOf?(RasterYuv420Planar)) {
+      gpuYuv420Planar := GpuImage create(image as RasterYuv420Planar)
+      this draw(gpuYuv420Planar, transform)
+      gpuYuv420Planar dispose()
+    }
   }
   _clear: func
   _bind: func
@@ -128,13 +164,24 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
     this _y dispose()
     this _uv dispose()
   }
+  getPixels: func (image: GpuImage, channels: UInt) -> ByteBuffer {
+    buffer := this _y getPixels(image, channels)
+    buffer
+  }
   draw: func ~GpuYuv420Semiplanar (image: GpuYuv420Semiplanar, transform := FloatTransform2D identity) {
     GpuCanvas _monochromeToMonochrome transform = transform
     GpuCanvas _monochromeToMonochrome ratio = image ratio
     this _y draw(image y, GpuCanvas _monochromeToMonochrome)
-    GpuCanvas _uvToUv transform = transform
-    GpuCanvas _uvToUv ratio = image ratio
-    this _uv draw(image uv, GpuCanvas _uvToUv)
+    //GpuCanvas _uvToUv transform = transform
+    //GpuCanvas _uvToUv ratio = image ratio
+    //this _uv draw(image uv, GpuCanvas _uvToUv)
+  }
+  draw: func ~raster (image: RasterImage, transform := FloatTransform2D identity) {
+    if (image instanceOf?(RasterYuv420Semiplanar)) {
+      gpuYuv420Semiplanar := GpuImage create(image as RasterYuv420Semiplanar)
+      this draw(gpuYuv420Semiplanar, transform)
+      gpuYuv420Semiplanar dispose()
+    }
   }
   _clear: func
   _bind: func
