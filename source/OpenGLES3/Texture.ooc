@@ -17,6 +17,7 @@
 
 import lib/gles
 import TextureBin
+import Context
 
 TextureType: enum {
   monochrome
@@ -35,16 +36,11 @@ Texture: class {
   type: TextureType
   format: UInt
   internalFormat: UInt
+  _eglImage: Pointer
 
   _textureBin: static TextureBin
   textureBin: static TextureBin { get { if(This _textureBin == null) { This _textureBin = TextureBin new() } This _textureBin } }
   init: func~nullTexture (type: TextureType, width: UInt, height: UInt) {
-    this width = width
-    this height = height
-    this type = type
-    this _setInternalFormats(type)
-  }
-  init: func~Texture (type: TextureType, width: UInt, height: UInt, pixels: Pointer) {
     this width = width
     this height = height
     this type = type
@@ -100,23 +96,29 @@ Texture: class {
     glTexImage2D(GL_TEXTURE_2D, 0, this internalFormat, this width, this height, 0, this format, GL_UNSIGNED_BYTE, pixels)
     true
   }
-  create: static func (type: TextureType, width: UInt, height: UInt) -> This {
-    result := This textureBin find(type, width, height)
-    success := true
-    if (result == null) {
-      result = Texture new(type, width, height)
-      success = result _generate(null)
-    }
+  _generateEGL: func (context: Context) -> Bool {
+    glGenTextures(1, _backend&)
+    glBindTexture(GL_TEXTURE_2D, _backend)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+    this _eglImage = context generateEGLImage()
+    true
+  }
+  createEGL: static func (width: UInt, height: UInt, context: Context) {
+    result := Texture new(TextureType rgba, width, height)
+    success := result _generateEGL(context)
     success ? result : null
   }
-  create: static func~fromPixels(type: TextureType, width: UInt, height: UInt, pixels: Pointer) -> This {
+  create: static func (type: TextureType, width: UInt, height: UInt, pixels := null) -> This {
     result := This textureBin find(type, width, height)
     success := true
     if (result == null) {
       result = Texture new(type, width, height)
       success = result _generate(pixels)
     }
-    else
+    else if(pixels != null)
       result uploadPixels(pixels)
     success ? result : null
   }
