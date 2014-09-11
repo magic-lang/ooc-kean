@@ -42,7 +42,7 @@ GpuMapDefault: abstract class extends GpuMap {
   ratio: Float { get set }
   init: func (fragmentSource: String, onUse: Func) {
     version(debug) {
-      super(this defaultVertexSourceAndroid, fragmentSource,
+      super(This defaultVertexSourceAndroid, fragmentSource,
         func {
           onUse()
           this _program setUniform("ratio", ratio)
@@ -75,7 +75,7 @@ GpuMapDefault: abstract class extends GpuMap {
     gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
   }\n";
 
-  defaultVertexSourceAndroid: String = "#version 300 es\n
+  defaultVertexSourceAndroid: static String = "#version 300 es\n
   uniform mat3 transform;\n
   uniform float ratio;\n
   layout(location = 0) in vec2 vertexPosition;\n
@@ -101,7 +101,7 @@ GpuMapBgr: class extends GpuMapDefault {
       })
     }
     version(aosp) {
-    super(this fragmentSourceAndroid,
+    super(This fragmentSourceAndroid,
       func {
         this _program setUniform("texture0", 0)
       })
@@ -115,7 +115,7 @@ fragmentSource: const static String = "#version 300 es\n
   void main() {\n
     outColor = texture(texture0, fragmentTextureCoordinate).rgb;\n
   }\n";
-fragmentSourceAndroid: String = "#version 300 es\n
+fragmentSourceAndroid: static String = "#version 300 es\n
   uniform sampler2D texture0;\n
   in vec2 fragmentTextureCoordinate;
   out vec3 outColor;\n
@@ -133,7 +133,7 @@ GpuMapBgrToBgra: class extends GpuMapDefault {
       })
     }
     version(aosp) {
-    super(this fragmentSourceAndroid,
+    super(This fragmentSourceAndroid,
       func {
         this _program setUniform("texture0", 0)
       })
@@ -147,7 +147,7 @@ fragmentSource: const static String = "#version 300 es\n
   void main() {\n
     outColor = vec4(texture(texture0, fragmentTextureCoordinate).rgb, 1.0f);\n
   }\n";
-fragmentSourceAndroid: String = "#version 300 es\n
+fragmentSourceAndroid: static String = "#version 300 es\n
   uniform sampler2D texture0;\n
   in vec2 fragmentTextureCoordinate;
   out vec4 outColor;\n
@@ -165,7 +165,7 @@ GpuMapBgra: class extends GpuMapDefault {
       })
     }
     version(aosp) {
-    super(this fragmentSourceAndroid,
+    super(This fragmentSourceAndroid,
       func {
         this _program setUniform("texture0", 0)
       })
@@ -179,7 +179,7 @@ fragmentSource: const static String = "#version 300 es\n
   void main() {\n
     outColor = texture(texture0, fragmentTextureCoordinate).rgb;\n
   }\n";
-fragmentSourceAndroid: String = "#version 300 es\n
+fragmentSourceAndroid: static String = "#version 300 es\n
   uniform sampler2D texture0;\n
   in vec2 fragmentTextureCoordinate;
   out vec3 outColor;\n
@@ -197,7 +197,7 @@ GpuMapMonochrome: class extends GpuMapDefault {
         })
     }
     version(aosp) {
-      super(this fragmentSourceAndroid,
+      super(This fragmentSourceAndroid,
         func {
           this _program setUniform("texture0", 0)
         })
@@ -211,7 +211,7 @@ fragmentSource: const static String = "#version 300 es\n
   void main() {\n
     outColor = texture(texture0, fragmentTextureCoordinate).r;\n
   }\n";
-fragmentSourceAndroid: String = "#version 300 es\n
+fragmentSourceAndroid: static String = "#version 300 es\n
   uniform sampler2D texture0;\n
   in vec2 fragmentTextureCoordinate;
   out float outColor;\n
@@ -229,7 +229,7 @@ GpuMapUv: class extends GpuMapDefault {
       })
     }
     version(aosp) {
-    super(this fragmentSourceAndroid,
+    super(This fragmentSourceAndroid,
       func {
         this _program setUniform("texture0", 0)
       })
@@ -244,7 +244,7 @@ fragmentSource: const static String = "#version 300 es\n
     outColor = texture(texture0, fragmentTextureCoordinate).rg;\n
   }\n";
 
-fragmentSourceAndroid: String = "#version 300 es\n
+fragmentSourceAndroid: static String = "#version 300 es\n
   uniform sampler2D texture0;\n
   in vec2 fragmentTextureCoordinate;
   out vec2 outColor;\n
@@ -263,7 +263,7 @@ GpuMapMonochromeToBgra: class extends GpuMapDefault {
     }
 
     version(aosp) {
-      super(this fragmentSourceAndroid,
+      super(This fragmentSourceAndroid,
         func {
           this _program setUniform("texture0", 0)
         })
@@ -279,7 +279,7 @@ fragmentSource: const static String = "#version 300 es\n
     outColor = vec4(colorSample, colorSample, colorSample, 1.0f);\n
   }\n";
 
-fragmentSourceAndroid: String = "#version 300 es\n
+fragmentSourceAndroid: static String = "#version 300 es\n
   uniform sampler2D texture0;\n
   in vec2 fragmentTextureCoordinate;
   out vec4 outColor;\n
@@ -300,7 +300,7 @@ GpuMapYuvPlanarToBgra: class extends GpuMapDefault {
         })
     }
     version(aosp) {
-      super(this fragmentSourceAndroid,
+      super(This fragmentSourceAndroid,
         func {
           this _program setUniform("texture0", 0)
           this _program setUniform("texture1", 1)
@@ -331,7 +331,7 @@ fragmentSource: const static String = "#version 300 es\n
     outColor = YuvToRgba(vec4(y, v - 0.5f, u - 0.5f, 1.0f));\n
   }\n";
 
-fragmentSourceAndroid: String = "#version 300 es\n
+fragmentSourceAndroid: static String = "#version 300 es\n
   uniform sampler2D texture0;\n
   uniform sampler2D texture1;\n
   uniform sampler2D texture2;\n
@@ -364,7 +364,7 @@ GpuMapYuvSemiplanarToBgra: class extends GpuMapDefault {
       })
     }
     version(aosp) {
-    super(this fragmentSourceAndroid,
+    super(This fragmentSourceAndroid,
       func {
         this _program setUniform("texture0", 0)
         this _program setUniform("texture1", 1)
@@ -392,7 +392,7 @@ fragmentSource: const static String = "#version 300 es\n
     outColor = YuvToRgba(vec4(y, uv.g - 0.5f, uv.r - 0.5f, 1.0f));\n
   }\n";
 
-fragmentSourceAndroid: String = "#version 300 es\n
+fragmentSourceAndroid: static String = "#version 300 es\n
   uniform sampler2D texture0;\n
   uniform sampler2D texture1;\n
   in vec2 fragmentTextureCoordinate;
