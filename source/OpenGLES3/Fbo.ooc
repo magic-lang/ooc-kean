@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-
+use ooc-base
 import lib/gles, Texture
 
 
@@ -42,10 +42,28 @@ Fbo: class {
   }
   unbind: func {
     glBindFramebuffer(GL_FRAMEBUFFER, 0)
-    glDrawBuffers(this _bufferCount, this _buffers)
   }
   clear: func {
     glClear(GL_COLOR_BUFFER_BIT)
+  }
+  getPixels: func (width: UInt, height: UInt, channels: UInt) -> ByteBuffer {
+    buffer := ByteBuffer new(width * height * channels)
+    ptr := buffer pointer
+  	glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
+  	glPixelStorei(GL_PACK_ALIGNMENT, 1)
+  	glReadBuffer(GL_COLOR_ATTACHMENT0)
+
+    if (channels == 1)
+  	  glReadPixels(0, 0, width/4, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
+    else if (channels == 2)
+  	  glReadPixels(0, 0, width/2, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
+    else if (channels == 3)
+      glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, ptr)
+    else if (channels == 4)
+      glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
+
+  	glBindFramebuffer(GL_FRAMEBUFFER, 0)
+    buffer
   }
   _generate: func ~fromTextures (textures: Texture[]) -> Bool {
     glGenFramebuffers(1, this _backend&)
@@ -58,7 +76,6 @@ Fbo: class {
       glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, textures[i] _backend, 0)
     }
 
-    /* Check FBO status */
     status: UInt = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if(status != GL_FRAMEBUFFER_COMPLETE) {
       raise("Framebuffer Object creation failed")
