@@ -31,6 +31,9 @@ DummyWindow: class extends Surface {
     result := This new()
     result _generate() ? result : null
   }
+  dispose: func {
+    this _context dispose()
+  }
   _clear: func
   _bind: func
 }
