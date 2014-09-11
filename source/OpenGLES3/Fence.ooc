@@ -16,7 +16,7 @@
  */
 
 import lib/gles
-
+/*
 Fence: class {
   _backend: Pointer
 
@@ -40,3 +40,4 @@ Fence: class {
   }
 
 }
+*/
