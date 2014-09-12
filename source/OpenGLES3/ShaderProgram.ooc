@@ -44,17 +44,15 @@ ShaderProgram: class {
     //source println()
     success: Int
     glGetShaderiv(shaderID, GL_COMPILE_STATUS, success&)
-    version(debug) {
-      if(!success){
-        logSize: Int = 0
-        glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, logSize&)
-        compileLog := gc_malloc(logSize * Char size) as Char*
-        length: Int
-        glGetShaderInfoLog(shaderID, logSize, length&, compileLog)
-        compileLog toString() println()
-        raise("Shader compilation failed")
-        gc_free(compileLog)
-      }
+    if(!success){
+      logSize: Int = 0
+      glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, logSize&)
+      compileLog := gc_malloc(logSize * Char size) as Char*
+      length: Int
+      glGetShaderInfoLog(shaderID, logSize, length&, compileLog)
+      compileLog toString() println()
+      raise("Shader compilation failed")
+      gc_free(compileLog)
     }
     success != 0
   }
