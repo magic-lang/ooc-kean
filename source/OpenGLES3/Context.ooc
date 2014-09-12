@@ -34,8 +34,13 @@ Context: class {
   swapBuffers: func {
     eglSwapBuffers(this _eglDisplay, this _eglSurface)
   }
-  generateEGLImage: func -> Pointer {
-    createEGLImage(this _eglDisplay)
+  generateEGLImage: func -> Int {
+    result := createEGLImage(this _eglDisplay)
+    result
+  }
+  getEGLBuffer: func (eglImage: Int) -> Pointer {
+    result := getBuffer(eglImage)
+    result
   }
   _generate: func (window: NativeWindow, sharedContext: This) -> Bool {
     this _eglDisplay = eglGetDisplay(window display)
