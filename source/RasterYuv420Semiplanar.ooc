@@ -36,6 +36,10 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar implements IDisposable
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
   init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, CoordinateSystem Default, IntShell2D new()) }
+  init: func ~fromByteBufferWithOffset (buffer: ByteBuffer, size: IntSize2D, channelOffset: UInt) {
+    this channelOffset = channelOffset
+    super(buffer, size, CoordinateSystem Default, IntShell2D new())
+  }
   init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
     super(buffer, size, coordinateSystem, crop)
   }
@@ -96,7 +100,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar implements IDisposable
     RasterMonochrome new(this pointer, this size)
   }
   createUV: func -> RasterUv {
-    RasterUv new((this pointer + RasterPacked calculateLength(this size, 1)) as Int*, this size / 2)
+    RasterUv new((this pointer + this channelOffset + RasterPacked calculateLength(this size, 1)) as Int*, this size / 2)
   }
   copy: func -> Image {
     This new(this)
