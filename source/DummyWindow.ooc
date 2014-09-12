@@ -16,11 +16,13 @@
 
 import OpenGLES3/Context
 
-import Surface
+import Surface, GpuPacker, GpuMonochrome, GpuYuv420Semiplanar
 
 DummyWindow: class extends Surface {
   _context: Context
-
+  _yPacker: GpuPackerY
+  _uvPacker: GpuPackerUv
+  _uPacker: GpuPackerU
   init: /* internal */ func
   _generate: /* private */ func () -> Bool {
     this _context = Context create()
@@ -29,10 +31,26 @@ DummyWindow: class extends Surface {
   }
   create: static func -> This {
     result := This new()
-    result _generate() ? result : null
+    success := result _generate()
+    if(success) {
+      result _yPacker = GpuPackerY create(result _context)
+      result _uvPacker = GpuPackerUv create(result _context)
+      result _uPacker = GpuPackerU create(result _context)
+    }
+    success ? result : null
   }
   dispose: func {
     this _context dispose()
+  }
+  pack: func ~monochrome (image: GpuMonochrome) -> Pointer {
+    result := this _yPacker pack(image, this _context)
+    result
+  }
+  pack: func ~Yuv420Semiplanar(image: GpuYuv420Semiplanar) -> Pointer {
+    result := gc_malloc(Pointer size * 2) as Pointer*
+    result[0] = this _yPacker pack(image y, this _context)
+    result[1] = this _uvPacker pack(image uv, this _context)
+    result
   }
   _clear: func
   _bind: func
