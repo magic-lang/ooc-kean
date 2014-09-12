@@ -29,6 +29,7 @@ import Color
 RasterYuvSemiplanar: abstract class extends RasterPlanar {
   y: RasterMonochrome
   uv: RasterUv
+  channelOffset: UInt = 0
   crop: IntShell2D {
     get
     set (value) {
@@ -45,7 +46,7 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
     this y = this createY()
     this uv = this createUV()
   }
-  init: func ~fromYuvPlanar (original: This) {
+  init: func ~fromYuvSemiplanar (original: This) {
     super(original)
     this y = this createY()
     this uv = this createUV()
