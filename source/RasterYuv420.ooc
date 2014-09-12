@@ -24,13 +24,15 @@ import RasterYuvPlanar
 import RasterMonochrome
 import Image
 import Color
+import StbImage
+import RasterBgr
 
 RasterYuv420: class extends RasterYuvPlanar implements IDisposable {
 	init: func ~fromSize (size: IntSize2D) { this new(size, CoordinateSystem Default, IntShell2D new()) }
-	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) { 
+	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		bufSize := RasterPacked calculateLength(size, 1) + 2 * RasterPacked calculateLength(size / 2, 1)
 //		"RasterYuv420 init ~fromStuff" println()
-		super(ByteBuffer new(bufSize), size, coordinateSystem, crop) 
+		super(ByteBuffer new(bufSize), size, coordinateSystem, crop)
 	}
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
@@ -65,7 +67,7 @@ RasterYuv420: class extends RasterYuvPlanar implements IDisposable {
 			if (x >= width) {
 				x = 0
 				y += 1
-				
+
 				yRow += this y stride
 				yDestination = yRow
 				if (y % 2 == 0) {
@@ -119,7 +121,7 @@ RasterYuv420: class extends RasterYuvPlanar implements IDisposable {
 		vSource := vRow
 		width := this size width
 		height := this size height
-		
+
 		for (y in 0..height) {
 			for (x in 0..width) {
 				action(ColorYuv new(ySource@, uSource@, vSource@))
@@ -141,13 +143,13 @@ RasterYuv420: class extends RasterYuvPlanar implements IDisposable {
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
 		this apply(ColorConvert fromYuv(action))
-	}	
+	}
 
 //	FIXME
 //	openResource(assembly: ???, name: String) {
 //		Image openResource
 //	}
-	operator [] (x, y: Int) -> ColorYuv { 
+	operator [] (x, y: Int) -> ColorYuv {
 		ColorYuv new(0, 0, 0)
 		ColorYuv new(this y[x, y] y, this u [x/2, y/2] y, this v [x/2, y/2] y)
 	}
@@ -157,4 +159,14 @@ RasterYuv420: class extends RasterYuvPlanar implements IDisposable {
 		this v[x/2, y/2] = ColorMonochrome new(value v)
 	}
 	dispose: func
+		open: static func (filename: String) -> This {
+		x, y, n: Int
+		requiredComponents := 3
+		data := StbImage load(filename, x&, y&, n&, requiredComponents)
+		buffer := ByteBuffer new(x * y * requiredComponents)
+		// FIXME: Find a better way to do this using Dispose() or something
+		memcpy(buffer pointer, data, x * y * requiredComponents)
+		StbImage free(data)
+		This new(RasterBgr new(buffer, IntSize2D new(x, y)))
+	}
 }
