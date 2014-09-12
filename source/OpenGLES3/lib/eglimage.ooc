@@ -17,4 +17,5 @@
 
 include ./EGLImage/EGLImageImport
 
-createEGLImage: extern func(display: Pointer) -> Pointer
+createEGLImage: extern func(display: Pointer) -> Int
+getBuffer: extern func(index: Int) -> Pointer
