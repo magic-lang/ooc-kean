@@ -42,15 +42,15 @@ GpuMapDefault: abstract class extends GpuMap {
   ratio: Float { get set }
   init: func (fragmentSource: String, onUse: Func) {
     version(debug) {
-      super(This defaultVertexSourceAndroid, fragmentSource,
+      super(This defaultVertexSource, fragmentSource,
         func {
           onUse()
           this _program setUniform("ratio", ratio)
           this _program setUniform("transform", transform)
         })
     }
-    version(aosp) {
-      super(This defaultVertexSource, fragmentSource,
+    else {
+      super(This defaultVertexSourceAndroid, fragmentSource,
         func {
           onUse()
           this _program setUniform("ratio", ratio)
@@ -85,7 +85,7 @@ GpuMapDefault: abstract class extends GpuMap {
     vec3 scaledQuadPosition = vec3(ratio * vertexPosition.x, vertexPosition.y, 1);\n
     vec3 transformedPosition = transform * scaledQuadPosition;\n
     transformedPosition.xy /= transformedPosition.z; \n
-    mat4 projectionMatrix = transpose(mat4(1.0f / ratio, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
+    mat4 projectionMatrix = transpose(mat4(1.0f / ratio, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
     fragmentTextureCoordinate = textureCoordinate;\n
     gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
   }\n";
@@ -100,7 +100,7 @@ GpuMapBgr: class extends GpuMapDefault {
         this _program setUniform("texture0", 0)
       })
     }
-    version(aosp) {
+    else {
     super(This fragmentSourceAndroid,
       func {
         this _program setUniform("texture0", 0)
@@ -132,7 +132,7 @@ GpuMapBgrToBgra: class extends GpuMapDefault {
         this _program setUniform("texture0", 0)
       })
     }
-    version(aosp) {
+    else {
     super(This fragmentSourceAndroid,
       func {
         this _program setUniform("texture0", 0)
@@ -164,7 +164,7 @@ GpuMapBgra: class extends GpuMapDefault {
         this _program setUniform("texture0", 0)
       })
     }
-    version(aosp) {
+    else {
     super(This fragmentSourceAndroid,
       func {
         this _program setUniform("texture0", 0)
@@ -196,7 +196,7 @@ GpuMapMonochrome: class extends GpuMapDefault {
           this _program setUniform("texture0", 0)
         })
     }
-    version(aosp) {
+    else {
       super(This fragmentSourceAndroid,
         func {
           this _program setUniform("texture0", 0)
@@ -228,7 +228,7 @@ GpuMapUv: class extends GpuMapDefault {
         this _program setUniform("texture0", 0)
       })
     }
-    version(aosp) {
+    else {
     super(This fragmentSourceAndroid,
       func {
         this _program setUniform("texture0", 0)
@@ -262,7 +262,7 @@ GpuMapMonochromeToBgra: class extends GpuMapDefault {
         })
     }
 
-    version(aosp) {
+    else {
       super(This fragmentSourceAndroid,
         func {
           this _program setUniform("texture0", 0)
@@ -299,7 +299,7 @@ GpuMapYuvPlanarToBgra: class extends GpuMapDefault {
           this _program setUniform("texture2", 2)
         })
     }
-    version(aosp) {
+    else {
       super(This fragmentSourceAndroid,
         func {
           this _program setUniform("texture0", 0)
@@ -363,7 +363,7 @@ GpuMapYuvSemiplanarToBgra: class extends GpuMapDefault {
         this _program setUniform("texture1", 1)
       })
     }
-    version(aosp) {
+    else {
     super(This fragmentSourceAndroid,
       func {
         this _program setUniform("texture0", 0)
@@ -410,5 +410,55 @@ fragmentSourceAndroid: static String = "#version 300 es\n
     float y = texture(texture0, fragmentTextureCoordinate).r;\n
     vec2 uv = texture(texture1, fragmentTextureCoordinate).rg;\n
     outColor = YuvToRgba(vec4(y, uv.g - 0.5f, uv.r - 0.5f, 1.0f));\n
+  }\n";
+}
+
+GpuMapPackMonochrome: class extends GpuMapDefault {
+  width: Int { get set }
+  init: func {
+      super(This fragmentSourceAndroid,
+        func {
+          this _program setUniform("texture0", 0)
+          this _program setUniform("width", this width)
+        })
+  }
+
+fragmentSourceAndroid: static String = "#version 300 es\n
+  uniform sampler2D texture0;\n
+  uniform int width;\n
+  in vec2 fragmentTextureCoordinate;
+  out vec4 outColor;\n
+  void main() {\n
+    vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f/float(width), 0);\n
+    vec2 texelOffset = vec2(1.0f/float(width), 0);\n
+    float r = texture(texture0, offsetTexCoords).x;\n
+    float g = texture(texture0, offsetTexCoords + texelOffset).x;\n
+    float b = texture(texture0, offsetTexCoords + 2.0f*texelOffset).x;\n
+    float a = texture(texture0, offsetTexCoords + 3.0f*texelOffset).x;\n
+    outColor = vec4(r, g, b, a);\n
+  }\n";
+}
+
+GpuMapPackUv: class extends GpuMapDefault {
+  width: Int { get set }
+  init: func {
+      super(This fragmentSourceAndroid,
+        func {
+          this _program setUniform("texture0", 0)
+          this _program setUniform("width", this width)
+        })
+  }
+fragmentSourceAndroid: static String = "#version 300 es\n
+  uniform sampler2D texture0;\n
+  uniform int width;\n
+  in vec2 fragmentTextureCoordinate;
+  out vec4 outColor;\n
+  void main() {\n
+    vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f/float(width), 0);\n
+    vec2 texelOffset = vec2(1.0f/float(width), 0);\n
+    vec2 rg = texture(texture0, offsetTexCoords).rg;\n
+    vec2 ba = texture(texture0, offsetTexCoords + texelOffset).rg;\n
+    outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
+    //outColor = vec4(0.5f, 0.5f, 0.5f, 0.5f);\n
   }\n";
 }
