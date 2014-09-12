@@ -105,7 +105,7 @@ GpuCanvasPacked: class extends GpuCanvas {
   }
   create: static func (image: GpuImage) -> This {
     result := This new()
-    result _renderTarget = Fbo create(image textures, image size width, image size height)
+    result _renderTarget = Fbo create(image texture, image size width, image size height)
     result _quad = Quad create()
     result _renderTarget != null ? result : null
   }
@@ -172,9 +172,9 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
     GpuCanvas _monochromeToMonochrome transform = transform
     GpuCanvas _monochromeToMonochrome ratio = image ratio
     this _y draw(image y, GpuCanvas _monochromeToMonochrome)
-    //GpuCanvas _uvToUv transform = transform
-    //GpuCanvas _uvToUv ratio = image ratio
-    //this _uv draw(image uv, GpuCanvas _uvToUv)
+    GpuCanvas _uvToUv transform = transform
+    GpuCanvas _uvToUv ratio = image ratio
+    this _uv draw(image uv, GpuCanvas _uvToUv)
   }
   draw: func ~raster (image: RasterImage, transform := FloatTransform2D identity) {
     if (image instanceOf?(RasterYuv420Semiplanar)) {
