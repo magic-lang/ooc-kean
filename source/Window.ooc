@@ -98,7 +98,6 @@ Window: class extends Surface {
     this draw(result, transform)
     result dispose()
   }
-
   draw: func ~UnknownFormat (image: RasterImage) {
     if (image instanceOf?(RasterBgr))
       this draw(image as RasterBgr)
@@ -110,22 +109,6 @@ Window: class extends Surface {
       this draw(image as RasterYuv420Planar)
     else if (image instanceOf?(RasterYuv420Semiplanar))
       this draw(image as RasterYuv420Semiplanar)
-    /*
-    this draw( match image {
-      case i: RasterBgra =>
-        i as RasterBgra
-      case i: RasterBgr =>
-        i as RasterBgr
-      case i: RasterMonochrome =>
-        i as RasterMonochrome
-      case i: RasterYuv420Planar =>
-        i as RasterYuv420Planar
-      case i: RasterYuv420Semiplanar =>
-        i as RasterYuv420Semiplanar
-      case =>
-        image as RasterBgr
-    })
-    */
   }
   _bind: /* internal */ func {
     this _native bind()
