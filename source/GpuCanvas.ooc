@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
+use ooc-draw
+use ooc-base
 import OpenGLES3/Fbo, OpenGLES3/Quad
 import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
 
@@ -34,6 +36,7 @@ GpuCanvas: abstract class extends Surface {
       This _uvToUv = GpuMapUv new()
   }
   dispose: abstract func
+  getPixels: abstract func (image: GpuImage, channels: UInt) -> ByteBuffer
 
   setResolution: func (resolution: IntSize2D) {
     Fbo setViewport(0, 0, resolution width, resolution height)
@@ -48,6 +51,10 @@ GpuCanvasPacked: class extends GpuCanvas {
   }
   dispose: func {
     this _renderTarget dispose()
+  }
+  getPixels: func (image: GpuImage, channels: UInt) -> ByteBuffer {
+    buffer := this _renderTarget getPixels(image size width, image size height, channels)
+    buffer
   }
   draw: func ~Monochrome (image: GpuMonochrome, transform := FloatTransform2D identity) {
     This _monochromeToMonochrome transform = transform
@@ -69,6 +76,24 @@ GpuCanvasPacked: class extends GpuCanvas {
     This _uvToUv ratio = image ratio
     this draw(image, This _uvToUv)
   }
+  draw: func ~raster (image: RasterImage, transform := FloatTransform2D identity) {
+    if (image instanceOf?(RasterBgr)) {
+      gpuBgr := GpuImage create(image as RasterBgr)
+      this draw(gpuBgr, transform)
+      gpuBgr dispose()
+    }
+    else if (image instanceOf?(RasterBgra)) {
+      gpuBgra := GpuImage create(image as RasterBgra)
+      this draw(gpuBgra, transform)
+      gpuBgra dispose()
+    }
+    else if (image instanceOf?(RasterMonochrome)) {
+      gpuMonochrome := GpuImage create(image as RasterMonochrome)
+      this draw(gpuMonochrome, transform)
+      gpuMonochrome dispose()
+    }
+
+  }
   _bind: func {
     this _renderTarget bind()
   }
@@ -80,7 +105,7 @@ GpuCanvasPacked: class extends GpuCanvas {
   }
   create: static func (image: GpuImage) -> This {
     result := This new()
-    result _renderTarget = Fbo create(image textures, image size width, image size height)
+    result _renderTarget = Fbo create(image texture, image size width, image size height)
     result _quad = Quad create()
     result _renderTarget != null ? result : null
   }
@@ -91,13 +116,15 @@ GpuCanvasYuv420Planar: class extends GpuCanvas {
   _u: GpuCanvasPacked
   _v: GpuCanvasPacked
 
-  init: func {
-    super()
-  }
+  init: func
   dispose: func {
     this _y dispose()
     this _u dispose()
     this _v dispose()
+  }
+  getPixels: func (image: GpuImage, channels: UInt) -> ByteBuffer {
+    buffer := this _y getPixels(image, channels)
+    buffer
   }
   draw: func ~Yuv420Planar (image: GpuYuv420Planar, transform := FloatTransform2D identity) {
     GpuCanvas _monochromeToMonochrome transform = transform
@@ -106,14 +133,20 @@ GpuCanvasYuv420Planar: class extends GpuCanvas {
     this _u draw(image u, GpuCanvas _monochromeToMonochrome)
     this _v draw(image v, GpuCanvas _monochromeToMonochrome)
   }
+  draw: func ~raster (image: RasterImage, transform := FloatTransform2D identity) {
+    if (image instanceOf?(RasterYuv420Planar)) {
+      gpuYuv420Planar := GpuImage create(image as RasterYuv420Planar)
+      this draw(gpuYuv420Planar, transform)
+      gpuYuv420Planar dispose()
+    }
+  }
   _clear: func
   _bind: func
   _generate: func (image: GpuYuv420Planar) -> Bool {
-    this _quad = Quad create()
     this _y = GpuCanvasPacked create(image y)
     this _u = GpuCanvasPacked create(image u)
     this _v = GpuCanvasPacked create(image v)
-    this _quad != null && this _y != null && this _u != null && this _v != null
+    this _y != null && this _u != null && this _v != null
   }
   create: static func (image: GpuYuv420Planar) -> This {
     result := This new()
@@ -126,12 +159,14 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
   _y: GpuCanvasPacked
   _uv: GpuCanvasPacked
 
-  init: func {
-    super()
-  }
+  init: func
   dispose: func {
     this _y dispose()
     this _uv dispose()
+  }
+  getPixels: func (image: GpuImage, channels: UInt) -> ByteBuffer {
+    buffer := this _y getPixels(image, channels)
+    buffer
   }
   draw: func ~GpuYuv420Semiplanar (image: GpuYuv420Semiplanar, transform := FloatTransform2D identity) {
     GpuCanvas _monochromeToMonochrome transform = transform
@@ -141,13 +176,19 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
     GpuCanvas _uvToUv ratio = image ratio
     this _uv draw(image uv, GpuCanvas _uvToUv)
   }
+  draw: func ~raster (image: RasterImage, transform := FloatTransform2D identity) {
+    if (image instanceOf?(RasterYuv420Semiplanar)) {
+      gpuYuv420Semiplanar := GpuImage create(image as RasterYuv420Semiplanar)
+      this draw(gpuYuv420Semiplanar, transform)
+      gpuYuv420Semiplanar dispose()
+    }
+  }
   _clear: func
   _bind: func
   _generate: func (image: GpuYuv420Semiplanar) -> Bool {
-    this _quad = Quad create()
     this _y = GpuCanvasPacked create(image y)
     this _uv = GpuCanvasPacked create(image uv)
-    this _quad != null && this _y != null && this _uv != null
+    this _y != null && this _uv != null
   }
   create: static func (image: GpuYuv420Semiplanar) -> This {
     result := This new()

@@ -26,15 +26,15 @@ GpuMonochrome: class extends GpuPacked {
   }
   create: func (size: IntSize2D) -> This {
     result := This new(size)
-    result _textures[0] != null ? result : null
+    result _texture != null ? result : null
   }
-  create: static func ~empty (size: IntSize2D) -> This {
+  create2: static func ~empty (size: IntSize2D) -> This {
     result := This new(size)
-    result _textures[0] != null ? result : null
+    result _texture != null ? result : null
   }
   _create: static /* internal */ func ~fromPixels (size: IntSize2D, data: Pointer) -> This {
     result := This new(data, size)
-    result _textures[0] != null ? result : null
+    result _texture != null ? result : null
   }
 
 }

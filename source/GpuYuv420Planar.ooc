@@ -36,6 +36,8 @@ GpuYuv420Planar: class extends GpuPlanar {
     this _y dispose()
     this _u dispose()
     this _v dispose()
+    if(this _canvas != null)
+      this _canvas dispose()
   }
   _bind: /* internal */ func {
     this _y _bind(0)

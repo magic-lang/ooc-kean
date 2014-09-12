@@ -19,8 +19,8 @@ use ooc-base
 import GpuBgra, GpuBgr, GpuMonochrome, GpuYuv420Planar, GpuYuv420Semiplanar, GpuCanvas, OpenGLES3/Texture
 
 GpuImage: abstract class extends Image implements IDisposable {
-  _textures: Texture[]
-  textures: /* internal */ Texture[] { get { _textures } }
+  _texture: Texture
+  texture: /* internal */ Texture { get { _texture } }
   ratio: Float { get {this size width as Float / this size height as Float } }
 
   init: func (=size)

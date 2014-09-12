@@ -15,7 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-include GLES3/gl3, GLES3/gl3ext, GLES2/gl2ext
+include GLES3/gl3, GLES3/gl3ext
 
 
 /*-------------------------------------------------------------------------

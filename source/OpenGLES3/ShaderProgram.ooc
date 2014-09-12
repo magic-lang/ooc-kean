@@ -36,7 +36,7 @@ ShaderProgram: class {
   setUniform: func ~Matrix3x3(name: String, value: FloatTransform2D) {
     glUniformMatrix3fv(glGetUniformLocation(this _backend, name), 1, 0, value& as Float*)
   }
-  _compileShader: func(source: String, shaderID: UInt) {
+  _compileShader: func(source: String, shaderID: UInt) -> Bool {
     glShaderSource(shaderID, 1, (source toCString())&, null)
     glCompileShader(shaderID)
 
@@ -44,7 +44,6 @@ ShaderProgram: class {
     //source println()
     success: Int
     glGetShaderiv(shaderID, GL_COMPILE_STATUS, success&)
-
     if(!success){
       logSize: Int = 0
       glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, logSize&)
@@ -55,31 +54,33 @@ ShaderProgram: class {
       raise("Shader compilation failed")
       gc_free(compileLog)
     }
-    //"Shader compilation success" println()
+    success != 0
   }
-  _compileShaders: func(vertexSource: String, fragmentSource: String) {
+  _compileShaders: func(vertexSource: String, fragmentSource: String) -> Bool {
     vertexShaderID := glCreateShader(GL_VERTEX_SHADER)
     fragmentShaderID := glCreateShader(GL_FRAGMENT_SHADER)
 
-    _compileShader(vertexSource, vertexShaderID)
-    _compileShader(fragmentSource, fragmentShaderID)
+    success := _compileShader(vertexSource, vertexShaderID)
+    success = success && _compileShader(fragmentSource, fragmentShaderID)
 
-    this _backend = glCreateProgram()
+    if(success) {
+      this _backend = glCreateProgram()
 
-    glAttachShader(this _backend, vertexShaderID)
-    glAttachShader(this _backend, fragmentShaderID)
-    glLinkProgram(this _backend)
+      glAttachShader(this _backend, vertexShaderID)
+      glAttachShader(this _backend, fragmentShaderID)
+      glLinkProgram(this _backend)
 
-    glDetachShader(this _backend, vertexShaderID)
-    glDetachShader(this _backend, fragmentShaderID)
+      glDetachShader(this _backend, vertexShaderID)
+      glDetachShader(this _backend, fragmentShaderID)
 
-    glDeleteShader(vertexShaderID)
-    glDeleteShader(fragmentShaderID)
+      glDeleteShader(vertexShaderID)
+      glDeleteShader(fragmentShaderID)
+    }
+    success
   }
   create: static func (vertexSource: String, fragmentSource: String) -> This {
     result := This new()
-    result _compileShaders(vertexSource, fragmentSource)
-    result
+    result _compileShaders(vertexSource, fragmentSource) ? result : null
   }
 
 }

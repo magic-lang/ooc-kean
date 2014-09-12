@@ -98,34 +98,17 @@ Window: class extends Surface {
     this draw(result, transform)
     result dispose()
   }
-
-  draw: func ~UnknownFormat (image: RasterImage, transform := FloatTransform2D identity) {
+  draw: func ~UnknownFormat (image: RasterImage) {
     if (image instanceOf?(RasterBgr))
-      this draw(image as RasterBgr, transform)
+      this draw(image as RasterBgr)
     else if (image instanceOf?(RasterBgra))
-      this draw(image as RasterBgra, transform)
+      this draw(image as RasterBgra)
     else if (image instanceOf?(RasterMonochrome))
-      this draw(image as RasterMonochrome, transform)
+      this draw(image as RasterMonochrome)
     else if (image instanceOf?(RasterYuv420Planar))
-      this draw(image as RasterYuv420Planar, transform)
+      this draw(image as RasterYuv420Planar)
     else if (image instanceOf?(RasterYuv420Semiplanar))
-      this draw(image as RasterYuv420Semiplanar, transform)
-    /*
-    this draw( match image {
-      case i: RasterBgra =>
-        i as RasterBgra
-      case i: RasterBgr =>
-        i as RasterBgr
-      case i: RasterMonochrome =>
-        i as RasterMonochrome
-      case i: RasterYuv420Planar =>
-        i as RasterYuv420Planar
-      case i: RasterYuv420Semiplanar =>
-        i as RasterYuv420Semiplanar
-      case =>
-        image as RasterBgr
-    })
-    */
+      this draw(image as RasterYuv420Semiplanar)
   }
   _bind: /* internal */ func {
     this _native bind()
@@ -140,7 +123,7 @@ Window: class extends Surface {
     this _native setViewport(this size width / 2 - resolution width / 2, this size height / 2 - resolution height / 2, resolution width, resolution height)
   }
   create: static func (size: IntSize2D, title := "Window title") -> This {
-    result := Window new(size)
-    (result _generate(size, title)) ? result : null
+    result := This new(size)
+    result _generate(size, title) ? result : null
   }
 }

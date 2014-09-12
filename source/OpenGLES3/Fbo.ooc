@@ -14,15 +14,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-
+use ooc-base
 import lib/gles, Texture
-
 
 Fbo: class {
   _backend: UInt
-  _bufferCount: UInt
-  _buffers: UInt*
-
   _width: UInt
   _height: UInt
 
@@ -34,31 +30,36 @@ Fbo: class {
     glBindFramebuffer(GL_FRAMEBUFFER, _backend)
     glViewport(0, 0, this _width, this _height)
   }
-  bindRead: func {
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, _backend)
-  }
-  bindDraw: func {
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _backend)
-  }
   unbind: func {
     glBindFramebuffer(GL_FRAMEBUFFER, 0)
-    glDrawBuffers(this _bufferCount, this _buffers)
   }
   clear: func {
-    glClear(GL_COLOR_BUFFER_BIT)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT)
   }
-  _generate: func ~fromTextures (textures: Texture[]) -> Bool {
+  getPixels: func (width: UInt, height: UInt, channels: UInt) -> ByteBuffer {
+    buffer := ByteBuffer new(width * height * channels)
+    ptr := buffer pointer
+  	glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
+  	glPixelStorei(GL_PACK_ALIGNMENT, 1)
+  	glReadBuffer(GL_COLOR_ATTACHMENT0)
+
+    if (channels == 1)
+  	  glReadPixels(0, 0, width / 4, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
+    else if (channels == 2)
+  	  glReadPixels(0, 0, width / 2, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
+    else if (channels == 3)
+      glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, ptr)
+    else if (channels == 4)
+      glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
+
+  	glBindFramebuffer(GL_FRAMEBUFFER, 0)
+    buffer
+  }
+  _generate: func ~fromTextures (texture: Texture) -> Bool {
     glGenFramebuffers(1, this _backend&)
     glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
-    this _bufferCount = textures length
-    this _buffers = gc_malloc(this _bufferCount * UInt size) as UInt*
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture _backend, 0)
 
-    for (i in 0..textures length) {
-      this _buffers[i] = GL_COLOR_ATTACHMENT0 + i
-      glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, textures[i] _backend, 0)
-    }
-
-    /* Check FBO status */
     status: UInt = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if(status != GL_FRAMEBUFFER_COMPLETE) {
       raise("Framebuffer Object creation failed")
@@ -67,12 +68,15 @@ Fbo: class {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     true
   }
+  finish: static func {
+    glFinish()
+  }
   setViewport: static func (x: UInt, y: UInt, width: UInt, height: UInt) {
     glViewport(x, y, width, height)
   }
-  create: static func (textures: Texture[], width: UInt, height: UInt) -> This {
+  create: static func (texture: Texture, width: UInt, height: UInt) -> This {
     result := This new(width, height)
-    result _generate(textures) ? result : null
+    result _generate(texture) ? result : null
   }
 
 
