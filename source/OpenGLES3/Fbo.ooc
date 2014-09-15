@@ -34,7 +34,7 @@ Fbo: class {
     glBindFramebuffer(GL_FRAMEBUFFER, 0)
   }
   clear: func {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT)
+    glClear(GL_COLOR_BUFFER_BIT)
   }
   getPixels: func (width: UInt, height: UInt, channels: UInt) -> ByteBuffer {
     buffer := ByteBuffer new(width * height * channels)
