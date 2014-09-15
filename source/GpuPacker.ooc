@@ -38,17 +38,15 @@ GpuPacker: abstract class extends Surface {
       This _packMonochrome dispose()
   }
   pack: func ~monochrome (image: GpuMonochrome, context: Context) -> Pointer {
-    This _packMonochrome ratio = image ratio
     This _packMonochrome transform = FloatTransform2D identity
-    This _packMonochrome width = image size width
+    This _packMonochrome size = image size
     this draw(image, This _packMonochrome)
     result := context getEGLBuffer(this _targetTexture _eglImage)
     result
   }
   pack: func ~uv (image: GpuUv, context: Context) -> Pointer {
-    This _packUv ratio = image ratio
     This _packUv transform = FloatTransform2D identity
-    This _packUv width = image size width
+    This _packUv size = image size
     this draw(image, This _packUv)
     result := context getEGLBuffer(this _targetTexture _eglImage)
     result

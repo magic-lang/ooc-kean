@@ -50,27 +50,27 @@ Window: class extends Surface {
   }
   draw: func ~Monochrome (image: GpuMonochrome, transform := FloatTransform2D identity) {
     this _monochromeToBgra transform = transform
-    this _monochromeToBgra ratio = image ratio
+    this _monochromeToBgra size = image size
     this draw(image, _monochromeToBgra)
   }
   draw: func ~Bgr (image: GpuBgr, transform := FloatTransform2D identity) {
     this _bgrToBgra transform = transform
-    this _bgrToBgra ratio = image ratio
+    this _bgrToBgra size = image size
     this draw(image, _bgrToBgra)
   }
   draw: func ~Bgra (image: GpuBgra, transform := FloatTransform2D identity) {
     this _bgraToBgra transform = transform
-    this _bgraToBgra ratio = image ratio
+    this _bgraToBgra size = image size
     this draw(image, _bgraToBgra)
   }
   draw: func ~Yuv420Planar (image: GpuYuv420Planar, transform := FloatTransform2D identity) {
     this _yuvPlanarToBgra transform = transform
-    this _yuvPlanarToBgra ratio = image ratio
+    this _yuvPlanarToBgra size = image size
     this draw(image, _yuvPlanarToBgra)
   }
   draw: func ~Yuv420Semiplanar (image: GpuYuv420Semiplanar, transform := FloatTransform2D identity) {
     this _yuvSemiplanarToBgra transform = transform
-    this _yuvSemiplanarToBgra ratio = image ratio
+    this _yuvSemiplanarToBgra size = image size
     this draw(image, this _yuvSemiplanarToBgra)
   }
   draw: func ~RasterBgr (image: RasterBgr, transform := FloatTransform2D identity) {

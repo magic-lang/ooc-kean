@@ -39,13 +39,14 @@ GpuMap: abstract class implements IDisposable {
 
 GpuMapDefault: abstract class extends GpuMap {
   transform: FloatTransform2D { get set }
-  ratio: Float { get set }
+  size: IntSize2D { get set }
   init: func (fragmentSource: String, onUse: Func) {
     version(debug) {
       super(This defaultVertexSource, fragmentSource,
         func {
           onUse()
-          this _program setUniform("ratio", ratio)
+          this _program setUniform("width", this size width)
+          this _program setUniform("height", this size height)
           this _program setUniform("transform", transform)
         })
     }
@@ -53,7 +54,8 @@ GpuMapDefault: abstract class extends GpuMap {
       super(This defaultVertexSourceAndroid, fragmentSource,
         func {
           onUse()
-          this _program setUniform("ratio", ratio)
+          this _program setUniform("width", this size width)
+          this _program setUniform("height", this size height)
           this _program setUniform("transform", transform)
         })
     }
@@ -62,30 +64,32 @@ GpuMapDefault: abstract class extends GpuMap {
   defaultVertexSource: static const String = "#version 300 es\n
   precision highp float;\n
   uniform mat3 transform;\n
-  uniform float ratio;\n
+  uniform int width;\n
+  uniform int height;\n
   layout(location = 0) in vec2 vertexPosition;\n
   layout(location = 1) in vec2 textureCoordinate;\n
   out vec2 fragmentTextureCoordinate;\n
   void main() {\n
-    vec3 scaledQuadPosition = vec3(ratio * vertexPosition.x, vertexPosition.y, 1);\n
+    vec3 scaledQuadPosition = vec3(float(width) / 2.0f * vertexPosition.x, float(height) / 2.0f * vertexPosition.y, 1);\n
     vec3 transformedPosition = transform * scaledQuadPosition;\n
     transformedPosition.xy /= transformedPosition.z; \n
-    mat4 projectionMatrix = transpose(mat4(1.0f / ratio, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
+    mat4 projectionMatrix = transpose(mat4(2.0f / float(width), 0, 0, 0, 0, -2.0f / float(height), 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
     fragmentTextureCoordinate = textureCoordinate;\n
     gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
   }\n";
 
   defaultVertexSourceAndroid: static String = "#version 300 es\n
   uniform mat3 transform;\n
-  uniform float ratio;\n
+  uniform int width;\n
+  uniform int height;\n
   layout(location = 0) in vec2 vertexPosition;\n
   layout(location = 1) in vec2 textureCoordinate;\n
   out vec2 fragmentTextureCoordinate;\n
   void main() {\n
-    vec3 scaledQuadPosition = vec3(ratio * vertexPosition.x, vertexPosition.y, 1);\n
+    vec3 scaledQuadPosition = vec3(float(width) / 2.0f * vertexPosition.x, float(height) / 2.0f * vertexPosition.y, 1);\n
     vec3 transformedPosition = transform * scaledQuadPosition;\n
     transformedPosition.xy /= transformedPosition.z; \n
-    mat4 projectionMatrix = transpose(mat4(1.0f / ratio, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
+    mat4 projectionMatrix = transpose(mat4(2.0f / float(width), 0, 0, 0, 0, 2.0f / float(height), 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
     fragmentTextureCoordinate = textureCoordinate;\n
     gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
   }\n";
@@ -450,7 +454,6 @@ GpuMapPackUv: class extends GpuMapDefault {
   }
 fragmentSourceAndroid: static String = "#version 300 es\n
   uniform sampler2D texture0;\n
-  uniform int width;\n
   in vec2 fragmentTextureCoordinate;
   out vec4 outColor;\n
   void main() {\n

@@ -58,22 +58,22 @@ GpuCanvasPacked: class extends GpuCanvas {
   }
   draw: func ~Monochrome (image: GpuMonochrome, transform := FloatTransform2D identity) {
     This _monochromeToMonochrome transform = transform
-    This _monochromeToMonochrome ratio = image ratio
+    This _monochromeToMonochrome size = image size
     this draw(image, This _monochromeToMonochrome)
   }
   draw: func ~Bgr (image: GpuBgr, transform := FloatTransform2D identity) {
     This _bgrToBgr transform = transform
-    This _bgrToBgr ratio = image ratio
+    This _bgrToBgr size = image size
     this draw(image, This _bgrToBgr)
   }
   draw: func ~Bgra (image: GpuBgra, transform := FloatTransform2D identity) {
     This _bgraToBgra transform = transform
-    This _bgraToBgra ratio = image ratio
+    This _bgraToBgra size = image size
     this draw(image, This _bgraToBgra)
   }
   draw: func ~Uv (image: GpuUv, transform := FloatTransform2D identity) {
     This _uvToUv transform = transform
-    This _uvToUv ratio = image ratio
+    This _uvToUv size = image size
     this draw(image, This _uvToUv)
   }
   draw: func ~raster (image: RasterImage, transform := FloatTransform2D identity) {
@@ -128,7 +128,7 @@ GpuCanvasYuv420Planar: class extends GpuCanvas {
   }
   draw: func ~Yuv420Planar (image: GpuYuv420Planar, transform := FloatTransform2D identity) {
     GpuCanvas _monochromeToMonochrome transform = transform
-    GpuCanvas _monochromeToMonochrome ratio = image ratio
+    GpuCanvas _monochromeToMonochrome size = image size
     this _y draw(image y, GpuCanvas _monochromeToMonochrome)
     this _u draw(image u, GpuCanvas _monochromeToMonochrome)
     this _v draw(image v, GpuCanvas _monochromeToMonochrome)
@@ -170,10 +170,10 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
   }
   draw: func ~GpuYuv420Semiplanar (image: GpuYuv420Semiplanar, transform := FloatTransform2D identity) {
     GpuCanvas _monochromeToMonochrome transform = transform
-    GpuCanvas _monochromeToMonochrome ratio = image ratio
+    GpuCanvas _monochromeToMonochrome size = image size
     this _y draw(image y, GpuCanvas _monochromeToMonochrome)
     GpuCanvas _uvToUv transform = transform
-    GpuCanvas _uvToUv ratio = image ratio
+    GpuCanvas _uvToUv size = image size
     this _uv draw(image uv, GpuCanvas _uvToUv)
   }
   draw: func ~raster (image: RasterImage, transform := FloatTransform2D identity) {

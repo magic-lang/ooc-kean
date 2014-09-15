@@ -35,12 +35,25 @@ Context: class {
     eglSwapBuffers(this _eglDisplay, this _eglSurface)
   }
   generateEGLImage: func -> Int {
-    result := createEGLImage(this _eglDisplay)
-    result
+    result := -1
+    version(debug) {
+      raise("Using Android exclusive function in Debug mode")
+    }
+    else {
+      result := createEGLImage(this _eglDisplay)
+    }
+
+    return result
   }
   getEGLBuffer: func (eglImage: Int) -> Pointer {
-    result := getBuffer(eglImage)
-    result
+    result := null
+    version(debug) {
+      raise("Using Android exclusive function in Debug mode")
+    }
+    else {
+      result := getBuffer(eglImage)
+    }
+    return result
   }
   _generate: func (window: NativeWindow, sharedContext: This) -> Bool {
     this _eglDisplay = eglGetDisplay(window display)
