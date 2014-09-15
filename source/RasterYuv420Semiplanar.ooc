@@ -25,8 +25,11 @@ import RasterMonochrome
 import RasterUv
 import Image
 import Color
+import RasterBgr
+import StbImage
 
 RasterYuv420Semiplanar: class extends RasterYuvSemiplanar implements IDisposable {
+  channelOffset: UInt
   init: func ~fromSize (size: IntSize2D) { this new(size, CoordinateSystem Default, IntShell2D new()) }
   init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
     bufSize := RasterPacked calculateLength(size, 1) + 2 * RasterPacked calculateLength(size / 2, 1)
@@ -152,4 +155,14 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar implements IDisposable
     this uv[x/2, y/2] = ColorUv new(value u, value v)
   }
  	dispose: func
+	open: static func (filename: String) -> This {
+		x, y, n: Int
+		requiredComponents := 3
+		data := StbImage load(filename, x&, y&, n&, requiredComponents)
+		buffer := ByteBuffer new(x * y * requiredComponents)
+		// FIXME: Find a better way to do this using Dispose() or something
+		memcpy(buffer pointer, data, x * y * requiredComponents)
+		StbImage free(data)
+		This new(RasterBgr new(buffer, IntSize2D new(x, y)))
+	}
 }
