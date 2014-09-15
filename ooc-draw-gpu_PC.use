@@ -1,7 +1,0 @@
-Name: OOC Draw GPU
-Description: GPU accelerated implementation of OOC Draw interfaces.
-SourcePath: source
-Requires: ooc-base, ooc-math, ooc-unit, ooc-draw
-
-Imports: GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuCanvas, Surface, Window, OpenGLES3/lib/gles
-Libs: -lEGL, -lGLESv2, -lX11
