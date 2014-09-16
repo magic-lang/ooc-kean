@@ -20,34 +20,36 @@ import OpenGLES3/Fbo, OpenGLES3/Texture, OpenGLES3/Context, OpenGLES3/Quad
 import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
 
 GpuPacker: abstract class extends Surface {
-  _packMonochrome: static GpuMapPackMonochrome
-  _packUv: static GpuMapPackUv
+  _packMonochrome: GpuMapPackMonochrome
+  _packUv: GpuMapPackUv
   _renderTarget: Fbo
   _targetTexture: Texture
   init: func {
-    if(This _packMonochrome == null)
-      This _packMonochrome = GpuMapPackMonochrome new()
-    if(This _packUv == null)
-      This _packUv = GpuMapPackUv new()
+    if(this _packMonochrome == null)
+      this _packMonochrome = GpuMapPackMonochrome new()
+    if(this _packUv == null)
+      this _packUv = GpuMapPackUv new()
     this _quad = Quad create()
   }
   dispose: func {
     this _targetTexture dispose()
     this _renderTarget dispose()
-    if(This _packMonochrome != null)
-      This _packMonochrome dispose()
+    if(this _packMonochrome != null)
+      this _packMonochrome dispose()
+    if(this _packUv != null)
+      this _packUv dispose()
   }
   pack: func ~monochrome (image: GpuMonochrome, context: Context) -> Pointer {
-    This _packMonochrome transform = FloatTransform2D identity
-    This _packMonochrome size = image size
-    this draw(image, This _packMonochrome)
+    this _packMonochrome transform = FloatTransform2D identity
+    this _packMonochrome size = image size
+    this draw(image, this _packMonochrome)
     result := context getEGLBuffer(this _targetTexture _eglImage)
     result
   }
   pack: func ~uv (image: GpuUv, context: Context) -> Pointer {
-    This _packUv transform = FloatTransform2D identity
-    This _packUv size = image size
-    this draw(image, This _packUv)
+    this _packUv transform = FloatTransform2D identity
+    this _packUv size = image size
+    this draw(image, this _packUv)
     result := context getEGLBuffer(this _targetTexture _eglImage)
     result
   }
@@ -63,6 +65,7 @@ GpuPacker: abstract class extends Surface {
   _update: func {
     Fbo finish()
   }
+
 }
 
 GpuPackerY: class extends GpuPacker {
@@ -79,20 +82,26 @@ GpuPackerY: class extends GpuPacker {
     result initialize(context)
     result
   }
+  _setResolution: func (resolution: IntSize2D) {
+    Fbo setViewport(0, 0, resolution width / 4, resolution height)
+  }
 }
 
 GpuPackerUv: class extends GpuPacker {
-    init: func {
+  init: func {
     super()
   }
-    initialize: func (context: Context) {
+  initialize: func (context: Context) {
     this _targetTexture = Texture createEGL(1920 / 4, 1080 / 2, context)
-    this _renderTarget = Fbo create(this _targetTexture, 1920 / 4, 1080 / 2)
+    this _renderTarget = Fbo create(this _targetTexture, 1920 / 2, 1080 / 2)
   }
   create: static func (context: Context) -> This {
     result := This new()
     result initialize(context)
     result
+  }
+  _setResolution: func (resolution: IntSize2D) {
+    Fbo setViewport(0, 0, resolution width / 2, resolution height)
   }
 }
 
@@ -108,5 +117,8 @@ GpuPackerU: class extends GpuPacker {
     result := This new()
     result initialize(context)
     result
+  }
+    _setResolution: func (resolution: IntSize2D) {
+    Fbo setViewport(0, 0, resolution width / 4, resolution height / 4)
   }
 }
