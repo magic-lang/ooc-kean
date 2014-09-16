@@ -21,8 +21,8 @@ Surface: abstract class {
   size: IntSize2D
   _quad: Quad
   draw: func (image: GpuImage, map: GpuMap) {
-    this _setResolution(image size)
     this _bind()
+    this _setResolution(image size)
     this _clear()
     map use()
     image _bind()
