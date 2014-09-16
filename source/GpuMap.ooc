@@ -418,23 +418,22 @@ fragmentSourceAndroid: static String = "#version 300 es\n
 }
 
 GpuMapPackMonochrome: class extends GpuMapDefault {
-  width: Int { get set }
   init: func {
       super(This fragmentSourceAndroid,
         func {
           this _program setUniform("texture0", 0)
-          this _program setUniform("width", this width)
+          this _program setUniform("pixelWidth", this size width)
         })
   }
 
 fragmentSourceAndroid: static String = "#version 300 es\n
   uniform sampler2D texture0;\n
-  uniform int width;\n
+  uniform int pixelWidth;\n
   in vec2 fragmentTextureCoordinate;
   out vec4 outColor;\n
   void main() {\n
-    vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f/float(width), 0);\n
-    vec2 texelOffset = vec2(1.0f/float(width), 0);\n
+    vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f / float(pixelWidth), 0);\n
+    vec2 texelOffset = vec2(1.0f / float(pixelWidth), 0);\n
     float r = texture(texture0, offsetTexCoords).x;\n
     float g = texture(texture0, offsetTexCoords + texelOffset).x;\n
     float b = texture(texture0, offsetTexCoords + 2.0f*texelOffset).x;\n
@@ -444,21 +443,21 @@ fragmentSourceAndroid: static String = "#version 300 es\n
 }
 
 GpuMapPackUv: class extends GpuMapDefault {
-  width: Int { get set }
   init: func {
       super(This fragmentSourceAndroid,
         func {
           this _program setUniform("texture0", 0)
-          this _program setUniform("width", this width)
+          this _program setUniform("pixelWidth", this size width)
         })
   }
 fragmentSourceAndroid: static String = "#version 300 es\n
   uniform sampler2D texture0;\n
+  uniform int pixelWidth;\n
   in vec2 fragmentTextureCoordinate;
   out vec4 outColor;\n
   void main() {\n
-    vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f/float(width), 0);\n
-    vec2 texelOffset = vec2(1.0f/float(width), 0);\n
+    vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f / float(pixelWidth), 0);\n
+    vec2 texelOffset = vec2(1.0f / float(pixelWidth), 0);\n
     vec2 rg = texture(texture0, offsetTexCoords).rg;\n
     vec2 ba = texture(texture0, offsetTexCoords + texelOffset).rg;\n
     outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
