@@ -28,10 +28,14 @@ GpuBgra: class extends GpuPacked {
   replace: func (image: RasterBgra) {
     this _texture uploadPixels(image pointer)
   }
+  generateMipmap: func {
+    this _texture generateMipmap()
+  }
   create: func (size: IntSize2D) -> This {
     result := This new(size)
     result _texture != null ? result : null
   }
+
   create: static func ~empty (size: IntSize2D) -> This {
     result := This new(size)
     result _texture != null ? result : null
@@ -40,4 +44,5 @@ GpuBgra: class extends GpuPacked {
     result := This new(size, data)
     result _texture != null ? result : null
   }
+
 }
