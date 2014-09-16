@@ -22,11 +22,28 @@ TextureBin: class {
   monochrome: ArrayList<Texture>
   bgr: ArrayList<Texture>
   bgra: ArrayList<Texture>
+  uv: ArrayList<Texture>
 
   init: func {
     monochrome = ArrayList<Texture> new()
     bgr = ArrayList<Texture> new()
     bgra = ArrayList<Texture> new()
+    uv = ArrayList<Texture> new()
+  }
+  dispose: func {
+    for(texture in this monochrome)
+      texture dispose()
+    for(texture in this bgr)
+      texture dispose()
+    for(texture in this bgra)
+      texture dispose()
+    for(texture in this uv)
+      texture dispose()
+
+    this monochrome clear()
+    this bgr clear()
+    this bgra clear()
+    this uv clear()
   }
 
   add: func (texture: Texture) {
@@ -37,6 +54,8 @@ TextureBin: class {
         this bgr add(texture)
       case TextureType bgra =>
         this bgra add(texture)
+      case TextureType uv =>
+        this uv add(texture)
     }
   }
 
@@ -62,6 +81,8 @@ TextureBin: class {
         result = this _search(width, height, this bgr)
       case TextureType bgra =>
         result = this _search(width, height, this bgra)
+      case TextureType uv =>
+        result = this _search(width, height, this uv)
     }
     result
   }
