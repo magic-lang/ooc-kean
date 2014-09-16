@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import lib/egl, lib/eglimage, NativeWindow
+import lib/egl, lib/eglimage, NativeWindow, Texture
 
 Context: class {
   _eglContext: Pointer
@@ -24,6 +24,7 @@ Context: class {
 
   init: func
   dispose: func {
+    Texture textureBin dispose()
     eglMakeCurrent(this _eglDisplay, null, null, null)
     eglDestroyContext(this _eglDisplay, this _eglContext)
     eglDestroySurface(this _eglDisplay, this _eglSurface)
@@ -40,7 +41,7 @@ Context: class {
       raise("Using Android exclusive function in Debug mode")
     }
     else {
-      result := createEGLImage(this _eglDisplay)
+      result = createEGLImage(this _eglDisplay)
     }
 
     return result
@@ -51,7 +52,7 @@ Context: class {
       raise("Using Android exclusive function in Debug mode")
     }
     else {
-      result := getBuffer(eglImage)
+      result = getBuffer(eglImage)
     }
     return result
   }
