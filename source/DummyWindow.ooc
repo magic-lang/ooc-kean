@@ -40,6 +40,9 @@ DummyWindow: class extends Surface {
     success ? result : null
   }
   dispose: func {
+    this _yPacker dispose()
+    this _uvPacker dispose()
+    this _uPacker dispose()
     this _context dispose()
   }
   pack: func ~monochrome (image: GpuMonochrome) -> Pointer {
