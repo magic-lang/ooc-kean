@@ -48,6 +48,7 @@ Window: class extends Surface {
     this _yuvSemiplanarToBgra = GpuMapYuvSemiplanarToBgra new()
     result == 1 && (this _native != null) && (this _context != null) && (this _quad != null)
   }
+
   draw: func ~Monochrome (image: GpuMonochrome, transform := FloatTransform2D identity) {
     this _monochromeToBgra transform = transform
     this _monochromeToBgra size = image size
@@ -76,39 +77,39 @@ Window: class extends Surface {
   draw: func ~RasterBgr (image: RasterBgr, transform := FloatTransform2D identity) {
     result := GpuImage create(image)
     this draw(result, transform)
-    result dispose()
+    result bin()
   }
   draw: func ~RasterBgra (image: RasterBgra, transform := FloatTransform2D identity) {
     result := GpuImage create(image)
     this draw(result, transform)
-    result dispose()
+    result bin()
   }
   draw: func ~RasterMonochrome (image: RasterMonochrome, transform := FloatTransform2D identity) {
     result := GpuImage create(image)
     this draw(result, transform)
-    result dispose()
+    result bin()
   }
   draw: func ~RasterYuv (image: RasterYuv420Planar, transform := FloatTransform2D identity) {
     result := GpuImage create(image)
     this draw(result, transform)
-    result dispose()
+    result bin()
   }
   draw: func ~RasterYuvSemiplanar (image: RasterYuv420Semiplanar, transform := FloatTransform2D identity) {
     result := GpuImage create(image)
     this draw(result, transform)
-    result dispose()
+    result bin()
   }
-  draw: func ~UnknownFormat (image: RasterImage) {
+  draw: func ~UnknownFormat (image: RasterImage, transform := FloatTransform2D identity) {
     if (image instanceOf?(RasterBgr))
-      this draw(image as RasterBgr)
+      this draw(image as RasterBgr, transform)
     else if (image instanceOf?(RasterBgra))
-      this draw(image as RasterBgra)
+      this draw(image as RasterBgra, transform)
     else if (image instanceOf?(RasterMonochrome))
-      this draw(image as RasterMonochrome)
+      this draw(image as RasterMonochrome, transform)
     else if (image instanceOf?(RasterYuv420Planar))
-      this draw(image as RasterYuv420Planar)
+      this draw(image as RasterYuv420Planar, transform)
     else if (image instanceOf?(RasterYuv420Semiplanar))
-      this draw(image as RasterYuv420Semiplanar)
+      this draw(image as RasterYuv420Semiplanar, transform)
   }
   _bind: /* internal */ func {
     this _native bind()
