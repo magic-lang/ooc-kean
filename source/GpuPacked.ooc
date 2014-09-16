@@ -42,6 +42,9 @@ GpuPacked: abstract class extends GpuImage {
     if(this _canvas != null)
       this _canvas dispose()
   }
+  bin: func {
+    this _texture bin()
+  }
 
 
 }
