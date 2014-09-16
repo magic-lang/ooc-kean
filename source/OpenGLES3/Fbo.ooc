@@ -15,6 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 use ooc-base
+//use ooc-android-debug
 import lib/gles, Texture
 
 Fbo: class {
@@ -28,7 +29,6 @@ Fbo: class {
   }
   bind: func {
     glBindFramebuffer(GL_FRAMEBUFFER, _backend)
-    glViewport(0, 0, this _width, this _height)
   }
   unbind: func {
     glBindFramebuffer(GL_FRAMEBUFFER, 0)
@@ -62,6 +62,7 @@ Fbo: class {
 
     status: UInt = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if(status != GL_FRAMEBUFFER_COMPLETE) {
+      //printAndroid("FBO GENERATION FAILED WITH ERROR: " + status toString())
       raise("Framebuffer Object creation failed")
     }
 
