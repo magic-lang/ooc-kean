@@ -18,6 +18,7 @@
 import lib/gles
 import TextureBin
 import Context
+import lib/eglimage
 
 TextureType: enum {
   monochrome
@@ -44,11 +45,25 @@ Texture: class {
     this width = width
     this height = height
     this type = type
+    this _eglImage = -1
     this _setInternalFormats(type)
   }
-  dispose: func {
-    //glDeleteTextures(1, _backend&)
+  bin: func {
     This textureBin add(this)
+  }
+  dispose: func {
+    version(debug) {
+      glDeleteTextures(1, _backend&)
+    }
+    else {
+      if(_eglImage != -1)
+        destroyEGLImage(this _eglImage)
+      glDeleteTextures(1, _backend&)
+    }
+  }
+  generateMipmap: func {
+    this bind(0)
+    glGenerateMipmap(GL_TEXTURE_2D)
   }
   bind: func (unit: UInt) {
     glActiveTexture(GL_TEXTURE0 + unit)
