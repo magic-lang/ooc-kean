@@ -27,19 +27,23 @@ import Image
 import Color
 import RasterBgr
 import StbImage
+import io/File
+import io/FileReader
+import io/FileWriter
+import io/BinarySequence
 
 RasterYuv420Semiplanar: class extends RasterYuvSemiplanar implements IDisposable {
-  channelOffset: UInt
+  channelOffset: UInt = 0
   init: func ~fromSize (size: IntSize2D) { this new(size, CoordinateSystem Default, IntShell2D new()) }
   init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
-    bufSize := RasterPacked calculateLength(size, 1) + 2 * RasterPacked calculateLength(size / 2, 1)
+    bufSize := RasterPacked calculateLength(size, 1) + RasterPacked calculateLength(size / 2, 2)
 //    "RasterYuv420Semiplanar init ~fromStuff" println()
     super(ByteBuffer new(bufSize), size, coordinateSystem, crop)
   }
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
   init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, CoordinateSystem Default, IntShell2D new()) }
-  init: func ~fromByteBufferWithOffset (buffer: ByteBuffer, size: IntSize2D, channelOffset: UInt) {
+  init: func ~fromByteBufferWithOffset (buffer: ByteBuffer, size: IntSize2D, channelOffset := 0) {
     this channelOffset = channelOffset
     super(buffer, size, CoordinateSystem Default, IntShell2D new())
   }
@@ -103,7 +107,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar implements IDisposable
     RasterMonochrome new(this pointer, this size)
   }
   createUV: func -> RasterUv {
-    RasterUv new((this pointer + this channelOffset + RasterPacked calculateLength(this size, 1)) as Int*, this size / 2)
+    RasterUv new((this pointer + this channelOffset + RasterPacked calculateLength(this size, 1)) as Int*, this size/2)
   }
   copy: func -> Image {
     This new(this)
@@ -163,6 +167,28 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar implements IDisposable
 		// FIXME: Find a better way to do this using Dispose() or something
 		memcpy(buffer pointer, data, x * y * requiredComponents)
 		StbImage free(data)
-		This new(RasterBgr new(buffer, IntSize2D new(x, y)))
+		bgr := RasterBgr new(buffer, IntSize2D new(x, y))
+		result := This new(bgr)
+		bgr dispose()
+		return result
+	}
+	save: func (filename: String) {
+		bgr := RasterBgr new(this)
+		bgr save(filename)
+		bgr dispose()
+	}
+	saveBin: func (filename: String) {
+		file := File new(filename)
+		seq := BinarySequenceWriter new(FileWriter new(file))
+		seq bytes(this buffer pointer, this buffer size)
+		seq writer close()
+	}
+	openBin: static func (filename: String, width: Int, height: Int) -> This {
+		file := File new(filename)
+		seq := BinarySequenceReader new(FileReader new(file))
+		data := seq bytes(width * height + (width * height / 2))
+		seq reader close()
+		buffer := ByteBuffer new(width * height + width * height / 2, data as UInt8*)
+		This new(buffer, IntSize2D new(width, height))
 	}
 }

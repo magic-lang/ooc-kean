@@ -1,5 +1,6 @@
 use ooc-unit
 use ooc-draw
+use ooc-base
 import math
 import lang/IO
 import io/File
@@ -147,6 +148,32 @@ ImageFileTest: class extends Fixture {
 			yuv420 := RasterYuv420Planar new(bgr)
 			bgr2 := RasterBgr new(yuv420)
 			bgr2 save(destination)
+		})
+		this add("convert RasterBgra to RasterYuv420Semiplanar and back again", func() {
+			source := "test/input/Flower.png"
+			destination := "test/output/RasterBgr-RasterYuv420Semiplanar-RasterBgr.png"
+			bgr := RasterBgr open(source)
+			semiplanar := RasterYuv420Semiplanar new(bgr)
+			bgr2 := RasterBgr new(semiplanar)
+			bgr2 save(destination)
+		})
+		this add("Open and save RasterYuv420Semiplanar", func() {
+			source := "test/input/Flower.png"
+			destination := "test/output/RasterYuv420Semiplanar.png"
+			semiplanar := RasterYuv420Semiplanar open(source)
+			semiplanar save(destination)
+		})
+		this add("save to bin", func() {
+			source := "test/input/Flower.png"
+			destination := "test/output/Flower.bin"
+			semiplanar := RasterYuv420Semiplanar open(source)
+			semiplanar saveBin(destination)
+		})
+		this add("load from bin", func() {
+			source := "test/output/Flower.bin"
+			destination := "test/output/FromBinary.png"
+			semiplanar := RasterYuv420Semiplanar openBin(source, 636, 424)
+			semiplanar save(destination)
 		})
 		this add("Last", func() {
 			expect(1, is equal to(1))
