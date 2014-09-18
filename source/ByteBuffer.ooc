@@ -29,7 +29,7 @@ ByteBuffer: class implements IDisposable {
 		this free = This recycle
 	}
 	init: func ~fromSize (=size) {
-		pointer: UInt8*
+		pointer: UInt8* = 0
 		bin := ArrayList<This> new()
 		bin = This getBin(size);
 		
