@@ -461,6 +461,5 @@ fragmentSourceAndroid: static String = "#version 300 es\n
     vec2 rg = texture(texture0, offsetTexCoords).rg;\n
     vec2 ba = texture(texture0, offsetTexCoords + texelOffset).rg;\n
     outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
-    //outColor = vec4(0.5f, 0.5f, 0.5f, 0.5f);\n
   }\n";
 }
