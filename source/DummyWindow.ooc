@@ -16,9 +16,10 @@
 
 import OpenGLES3/Context
 
-import Surface, GpuPacker, GpuMonochrome, GpuYuv420Semiplanar
+import Surface, GpuPacker, GpuMonochrome, GpuYuv420Semiplanar, RasterMonochrome
 
 DummyWindow: class extends Surface {
+  _instance: static This
   _context: Context
   _yPacker: GpuPackerY
   _uvPacker: GpuPackerUv
@@ -31,6 +32,7 @@ DummyWindow: class extends Surface {
   }
   create: static func -> This {
     result := This new()
+    This _instance = result
     success := result _generate()
     if(success) {
       result _yPacker = GpuPackerY create(result _context)
@@ -45,15 +47,28 @@ DummyWindow: class extends Surface {
     this _uPacker dispose()
     this _context dispose()
   }
-  pack: func ~monochrome (image: GpuMonochrome) -> Pointer {
-    result := this _yPacker pack(image, this _context)
+  packPyramid: func ~monochrome (image: RasterMonochrome, count: Int) -> Pointer {
+    result := this _yPacker packPyramid(image, count)
     result
   }
-  pack: func ~Yuv420Semiplanar(image: GpuYuv420Semiplanar) -> Pointer {
-    result := gc_malloc(Pointer size * 2) as Pointer*
-    result[0] = this _yPacker pack(image y, this _context)
-    result[1] = this _uvPacker pack(image uv, this _context)
-    result
+  pack: func ~Yuv420Semiplanar(image: GpuYuv420Semiplanar, destination: UInt8*, channelOffset: UInt) {
+    yPixels := this _yPacker pack(image y)
+    paddedBytes := 640 + 1920 - image size width;
+    for(row in 0..image size height) {
+      sourceRow := yPixels + row * (image size width + paddedBytes)
+      destinationRow := destination + row * image size width
+      memcpy(destinationRow, sourceRow, image size width)
+    }
+    this _yPacker unlock()
+
+    uvPixels := this _uvPacker pack(image uv)
+    uvDestination := destination + image size width * image size height + channelOffset
+    for(row in 0..image size height / 2) {
+      sourceRow := uvPixels + row * (image size width + paddedBytes)
+      destinationRow := uvDestination + row * image size width
+      memcpy(destinationRow, sourceRow, image size width)
+    }
+    this _uvPacker unlock()
   }
   _clear: func
   _bind: func
