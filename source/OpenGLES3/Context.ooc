@@ -46,15 +46,23 @@ Context: class {
 
     return result
   }
-  getEGLBuffer: func (eglImage: Int) -> Pointer {
+  lockEGLPixels: func (eglImage: Int) -> Pointer {
     result := null
     version(debug) {
       raise("Using Android exclusive function in Debug mode")
     }
     else {
-      result = getBuffer(eglImage)
+      result = lockPixels(eglImage)
     }
     return result
+  }
+  unlockEGLPixels: func (eglImage: Int) {
+    version(debug) {
+      raise("Using Android exclusive function in Debug mode")
+    }
+    else {
+      unlockPixels(eglImage)
+    }
   }
   _generate: func (window: NativeWindow, sharedContext: This) -> Bool {
     this _eglDisplay = eglGetDisplay(window display)
