@@ -36,6 +36,9 @@ Fbo: class {
   clear: func {
     glClear(GL_COLOR_BUFFER_BIT)
   }
+  clearColor: func (color: Float) {
+    glClearColor(color, color, color, color)
+  }
   getPixels: func (width: UInt, height: UInt, channels: UInt) -> ByteBuffer {
     buffer := ByteBuffer new(width * height * channels)
     ptr := buffer pointer
