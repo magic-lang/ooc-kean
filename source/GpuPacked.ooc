@@ -45,6 +45,8 @@ GpuPacked: abstract class extends GpuImage {
   bin: func {
     this _texture bin()
   }
-
+  generateMipmap: func {
+    this _texture generateMipmap()
+  }
 
 }
