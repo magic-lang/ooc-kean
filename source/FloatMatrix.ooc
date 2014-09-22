@@ -17,7 +17,7 @@
 import math
 use ooc-math
 
-FloatMatrix : class {
+FloatMatrix : cover {
 
 	// x = column
 	// y = row
@@ -25,9 +25,9 @@ FloatMatrix : class {
 	Dimensions: IntSize2D {get {this dimensions}}
 	elements: Float[]
 
-	init: func ~IntSize2D (= dimensions)
-	init: func ~default { this init(0, 0) }
-	init: func (width: Int, height: Int) {
+	init: func@ ~IntSize2D (= dimensions)
+	init: func@ ~nullConstructor { this init(0, 0) }
+	init: func@ (width: Int, height: Int) {
 		this init(IntSize2D new(width, height))
 		this elements = Float[width * height] new()
 	}
@@ -37,7 +37,7 @@ FloatMatrix : class {
 	// </summary>
 	// <param name="order">Order of matrix to be created.</param>
 	// <returns>Identity matrix of given order.</returns>
-	identity: static func (order: Int) -> This {
+	identity: static func@ (order: Int) -> This {
 		result := This new (order, order)
 		for (i in 0..order) {
 			result set(i, i, 1.0f)
@@ -51,7 +51,7 @@ FloatMatrix : class {
 	// <param name="x">Column number of a matrix.</param>
 	// <param name="y">Row number of a matrix.</param>
 	// <returns></returns>
-	get: func (x: Int, y: Int) -> Float { this elements[x + dimensions width * y] }
+	get: func@ (x: Int, y: Int) -> Float { this elements[x + dimensions width * y] }
 
 	// <summary>
 	// Set an element in a matrix at position(x,y).
@@ -60,7 +60,7 @@ FloatMatrix : class {
 	// <param name="y">Row number of a matrix.</param>
 	// <param name="value">The value set at (x,y).</param>
 	// <returns></returns>
-	set: func (x: Int, y: Int, value: Float) { this elements[x + dimensions width * y] = value }
+	set: func@ (x: Int, y: Int, value: Float) { this elements[x + dimensions width * y] = value }
 
 	// <summary>
 	// True if the matrix is a square matrix.
@@ -76,7 +76,7 @@ FloatMatrix : class {
 	// Creates a copy of the current matrix.
 	// </summary>
 	// <returns>Return a copy of the current matrix.</returns>
-	copy: func () -> This {
+	copy: func@ () -> This {
 		result := This new (this dimensions width, this dimensions height)
 		for (y in 0..this dimensions height) {
 			for (x in 0..this dimensions width) {
@@ -90,7 +90,7 @@ FloatMatrix : class {
 	// Tranpose matrix. Creates a new matrix being the transpose of the current matrix.
 	// </summary>
 	// <returns>Return current matrix tranposed.</returns>
-	transpose: func () -> This {
+	transpose: func@ () -> This {
 		result := This new (this dimensions height, this dimensions width)
 		for (y in 0..this dimensions height) {
 			for (x in 0..this dimensions width) {
@@ -105,7 +105,7 @@ FloatMatrix : class {
 	// </summary>
 	// <param name="row1">First row</param>
 	// <param name="row2">Second row</param>
-	swaprows: func (row1: Int, row2: Int) -> Void {
+	swaprows: func@ (row1: Int, row2: Int) -> Void {
 		order := this order
 		buffer: Float
 		if (row1 != row2) {
@@ -117,7 +117,7 @@ FloatMatrix : class {
 		}
 	}
 
-	toString: func -> String {
+	toString: func@ -> String {
 		result: String = ""
 		for (y in 0..this dimensions height) {
 			for (x in 0..this dimensions width) {
@@ -134,16 +134,15 @@ FloatMatrix : class {
 	// where L is lower triangular, U is upper triangular, and P is a permutation matrix.
 	// </summary>
 	// <returns>Returns the Lup decomposition. L = [0], U = [1], P = [2].</returns>
-	lupDecomposition: func -> This[] {
+	lupDecomposition: func@ -> This[] {
 		if (!this isSquare)
 			InvalidDimensionsException new() throw()
 		order := this order
 		l := This identity(order)
 		u := this copy()
 		p := This identity(order)
-		last: Int = order - 1
 
-		for (position in 0..last) {
+		for (position in 0..order - 1) {
 			pivotRow: Int = position
 			for (y in position + 1..u dimensions height)
 					if (abs(u get (position, position)) < abs(u get (position, y)))
@@ -153,7 +152,7 @@ FloatMatrix : class {
 
 			if (u get(position, position) != 0) {
 				for (y in position + 1..order) {
-					pivot: Float = u get(position, y) / u get(position, position)
+					pivot := u get(position, y) / u get(position, position)
 					for (x in position..order)
 						u set(x, y, u get(x, y) - pivot * u get(x, position))
 					u set(position, y, pivot)
@@ -165,7 +164,7 @@ FloatMatrix : class {
 				l set(x, y, u get(x, y))
 				u set(x, y, 0)
 			}
-		result:= [l, u, p]
+		result := [l, u, p]
 		result
 	}
 
@@ -175,23 +174,42 @@ FloatMatrix : class {
 	// </summary>
 	// <param name="y">The right hand column y vector of the equation system.</param>
 	// <returns>Return the least square solution to the system.</returns>
-	solve: func (y: This) -> This {
-		result: This = null
+	solve: func@ (y: This) -> This {
+		result := This new()
+		lup: This[]
+		temp: This
 		if (this dimensions width > this dimensions height) {
 			InvalidDimensionsException new() throw()
-		} else
-			try {
+		} else {
+			//try {
 				if (this isSquare) {
-					lup := this lupDecomposition()
-					result = (lup[2] * y) forwardSubstitution(lup[0])  backwardSubstitution(lup[1])
+					lup = this lupDecomposition()
+					temp = lup[2] * y
+					result = temp forwardSubstitution(lup[0]) backwardSubstitution(lup[1])
 				} else {
+					temp2: This
 					transpose: This = this transpose()
-					lup := (transpose * this) lupDecomposition()
-					result = (lup[2] * transpose * y) forwardSubstitution(lup[0])  backwardSubstitution(lup[1])
+					temp = transpose * this
+					lup = temp lupDecomposition()
+					temp dispose()
+					temp = lup[2] * transpose
+					temp2 = temp * y
+					result = (temp2) forwardSubstitution(lup[0]) backwardSubstitution(lup[1])
+					transpose dispose()
+					temp2 dispose()
 				}
-			} catch (e: Exception) {
+				temp dispose()
+				lup[0] dispose()
+				lup[1] dispose()
+				lup[2] dispose()
+				free(lup data)
+			//} catch (e: Exception) {
 			}
 		result
+	}
+
+	isNull: func -> Bool{
+		return this dimensions width == 0 && this dimensions height == 0
 	}
 
 	// <summary>
@@ -199,7 +217,7 @@ FloatMatrix : class {
 	// </summary>
 	// <param name="lower">Lower triangual matrix.</param>
 	// <returns>Solution x.</returns>
-	forwardSubstitution: func (lower: This) -> This {
+	forwardSubstitution: func@ (lower: This) -> This {
 		result := This new(this dimensions width, this dimensions height)
 		for (x in 0..this dimensions width) {
 			for (y in 0..this dimensions height) {
@@ -223,7 +241,7 @@ FloatMatrix : class {
 	// </summary>
 	// <param name="lower">Upper triangual matrix.</param>
 	// <returns>Solution x.</returns>
-	backwardSubstitution: func (upper: This) -> This {
+	backwardSubstitution: func@ (upper: This) -> This {
 		result := This new(this dimensions width, this dimensions height)
 		for (x in 0..this dimensions width) {
 			y: Int = 0
@@ -243,6 +261,11 @@ FloatMatrix : class {
 		}
 		result
 	}
+
+	dispose: func {
+		free(this elements data)
+	}
+
 }
 
 // <summary>
@@ -266,9 +289,9 @@ result
 }
 
 DivisionByZeroException: class extends Exception {
-	init: func ()
+	init: func@ ()
 }
 
 InvalidDimensionsException: class extends Exception {
-	init: func ()
+	init: func@ ()
 }
