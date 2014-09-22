@@ -29,10 +29,10 @@ ByteBuffer: class implements IDisposable {
 		this free = This recycle
 	}
 	init: func ~fromSize (=size) {
-		pointer: UInt8*
-		bin := ArrayList<This> new()
-		bin = This getBin(size);
-		
+		pointer: UInt8* = 0
+		//bin := ArrayList<This> new()
+		bin := This getBin(size);
+
 		for(i in 0..bin size)
 		{
 			buffer := bin[i]
@@ -80,7 +80,7 @@ ByteBuffer: class implements IDisposable {
 		b := other as UInt8*
 		memcpy(a + destination, b + start, length)
 	}
-	
+
 	lock := static Mutex new()
 	smallRecycleBin := static ArrayList<This> new()
 	mediumRecycleBin := static ArrayList<This> new()
