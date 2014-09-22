@@ -84,6 +84,7 @@ Dictionary: class {
 			next := (this _myHashBag myMap buckets[i])
 			next dispose()
 		}
+		free(this _myHashBag myMap buckets data)
 		free(this _myHashBag myMap)
 		free(this _myHashBag)
 		free(this)
