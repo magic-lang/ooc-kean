@@ -84,7 +84,7 @@ RasterMonochrome: class extends RasterPacked implements IDisposable {
 				action((source as ColorMonochrome*)@)
 			row += this stride-1
 		}
-	}	
+	}
 	distance: func (other: Image) -> Float {
 		result := 0.0f
 		if (!other)
@@ -140,5 +140,9 @@ RasterMonochrome: class extends RasterPacked implements IDisposable {
 	}
 	operator [] (x, y: Int) -> ColorMonochrome { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorMonochrome* + x)@ : ColorMonochrome new(0) }
 	operator []= (x, y: Int, value: ColorMonochrome) { ((this pointer + y * this stride) as ColorMonochrome* + x)@ = value }
-	dispose: func
+	dispose: func {
+		this buffer dispose()
+		free(buffer)
+		free(this)
+	}
 }
