@@ -21,7 +21,8 @@ Synchronized: abstract class implements IDisposable {
 	init: func (lock: Mutex) { this _lock = lock }
 	init: func ~default { this init(Mutex new()) }
 	dispose: func {
-		this _lock destroy()
+//		this _lock destroy()
+//		free(this _lock)
 	}
 	lock: func {
 		this _lock lock()

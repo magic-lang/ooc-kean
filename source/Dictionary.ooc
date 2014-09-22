@@ -37,6 +37,7 @@ Dictionary: class {
 	}
 	/* WARNING: The Class parameter for Covers must be Cell<Cover> */
 	getAsType: func <T>(key: String, T: Class) -> T {
+		"Are we using this?" println()
 		result := null
 		if (_myHashBag contains?(key)) {
 			storedType := _myHashBag getClass(key)
@@ -74,5 +75,31 @@ Dictionary: class {
 	}
 	getPath: func <T> (path: String, T: Class) -> T {
 		return _myHashBag getPath(path, T)
+	}
+	dispose: func {
+		free(this _myHashBag myMap keys data)
+		free(this _myHashBag myMap keys)
+		next : HashEntry*
+		for (i in 0..(this _myHashBag myMap capacity)) {
+			next := (this _myHashBag myMap buckets[i])
+			next dispose()
+		}
+		free(this _myHashBag myMap buckets data)
+		free(this _myHashBag myMap)
+		free(this _myHashBag)
+		free(this)
+	}
+}
+
+extend HashEntry {
+	dispose: func {
+//		free(this key as String _buffer)
+		free(this key)
+		free(this value)
+		if (this next != null) {
+			temp := this next@
+			temp dispose()
+			free(this next)
+		}
 	}
 }
