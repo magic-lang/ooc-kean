@@ -158,7 +158,14 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar implements IDisposable
     this y[x, y] = ColorMonochrome new(value y)
     this uv[x/2, y/2] = ColorUv new(value u, value v)
   }
- 	dispose: func
+ 	dispose: func {
+//		this y dispose()
+		gc_free(this y)
+//		this uv dispose()
+		gc_free(this uv)
+		this buffer dispose()
+		gc_free(this buffer)
+	}
 	open: static func (filename: String) -> This {
 		x, y, n: Int
 		requiredComponents := 3

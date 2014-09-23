@@ -159,7 +159,7 @@ RasterYuv420: class extends RasterYuvPlanar implements IDisposable {
 		this v[x/2, y/2] = ColorMonochrome new(value v)
 	}
 	dispose: func
-		open: static func (filename: String) -> This {
+	open: static func (filename: String) -> This {
 		x, y, n: Int
 		requiredComponents := 3
 		data := StbImage load(filename, x&, y&, n&, requiredComponents)

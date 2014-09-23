@@ -140,5 +140,8 @@ RasterMonochrome: class extends RasterPacked implements IDisposable {
 	}
 	operator [] (x, y: Int) -> ColorMonochrome { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorMonochrome* + x)@ : ColorMonochrome new(0) }
 	operator []= (x, y: Int, value: ColorMonochrome) { ((this pointer + y * this stride) as ColorMonochrome* + x)@ = value }
-	dispose: func
+	dispose: func {
+		this buffer dispose()
+		gc_free(this buffer)
+	}
 }

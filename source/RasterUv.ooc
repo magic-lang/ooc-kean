@@ -167,5 +167,8 @@ RasterUv: class extends RasterPacked implements IDisposable {
   operator []= (x, y: Int, value: ColorUv) {
     ((this pointer + y * this stride) as ColorUv* + x)@ = value
   }
-	dispose: func
+	dispose: func {
+		this buffer dispose()
+		gc_free(this buffer)
+	}
 }
