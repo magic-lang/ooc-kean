@@ -63,6 +63,7 @@ Texture: class {
   }
   generateMipmap: func {
     this bind(0)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST)
     glGenerateMipmap(GL_TEXTURE_2D)
   }
   bind: func (unit: UInt) {
@@ -104,7 +105,7 @@ Texture: class {
   _generate: func (pixels: Pointer) -> Bool {
     glGenTextures(1, _backend&)
     glBindTexture(GL_TEXTURE_2D, _backend)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
