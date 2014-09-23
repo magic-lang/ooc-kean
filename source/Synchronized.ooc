@@ -33,15 +33,15 @@ Synchronized: abstract class implements IDisposable {
 
 	lock: func ~action (action: Func) {
 		this lock()
-		try {
+//		try {
 			action()
 			this unlock()
-		}
-		catch(e: Exception)
-		{
-			this unlock()
-			e throw()
-		}
+//		}
+//		catch(e: Exception)
+//		{
+//			this unlock()
+//			e throw()
+//		}
 	}
 
 	lockFunc: func <T> (function: Func -> T) -> T {

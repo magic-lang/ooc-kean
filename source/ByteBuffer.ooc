@@ -30,8 +30,8 @@ ByteBuffer: class implements IDisposable {
 	}
 	init: func ~fromSize (=size) {
 		pointer: UInt8* = 0
-		bin := ArrayList<This> new()
-		bin = This getBin(size);
+//		bin := ArrayList<This> new()
+		bin := This getBin(size);
 		
 		for(i in 0..bin size)
 		{
@@ -85,4 +85,27 @@ ByteBuffer: class implements IDisposable {
 	smallRecycleBin := static ArrayList<This> new()
 	mediumRecycleBin := static ArrayList<This> new()
 	largeRecycleBin := static ArrayList<This> new()
+	destroy := static func {
+		while (This smallRecycleBin size > 0) {
+			b := This smallRecycleBin removeAt(0)
+			gc_free(b pointer)
+			gc_free(b)
+		}
+		gc_free(This smallRecycleBin data)
+		gc_free(This smallRecycleBin)
+		while (This mediumRecycleBin size > 0) {
+			b := This mediumRecycleBin removeAt(0)
+			gc_free(b pointer)
+			gc_free(b)
+		}
+		gc_free(This mediumRecycleBin data)
+		gc_free(This mediumRecycleBin)
+		while (This largeRecycleBin size > 0) {
+			b := This largeRecycleBin removeAt(0)
+			gc_free(b pointer)
+			gc_free(b)
+		}
+		gc_free(This largeRecycleBin data)
+		gc_free(This largeRecycleBin)
+	}
 }
