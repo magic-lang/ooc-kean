@@ -177,33 +177,34 @@ FloatMatrix : cover {
 	solve: func@ (y: This) -> This {
 		result := This new()
 		lup: This[]
-		temp: This
 		if (this dimensions width > this dimensions height) {
 			InvalidDimensionsException new() throw()
 		} else {
-			//try {
 				if (this isSquare) {
 					lup = this lupDecomposition()
-					temp = lup[2] * y
-					result = temp forwardSubstitution(lup[0]) backwardSubstitution(lup[1])
-				} else {
-					temp2: This
-					transpose: This = this transpose()
-					temp = transpose * this
-					lup = temp lupDecomposition()
+					temp := lup[2] * y
+					temp2:= temp forwardSubstitution(lup[0])
+					result = temp2 backwardSubstitution(lup[1])
 					temp dispose()
-					temp = lup[2] * transpose
-					temp2 = temp * y
-					result = (temp2) forwardSubstitution(lup[0]) backwardSubstitution(lup[1])
-					transpose dispose()
+					temp2 dispose()
+				} else {
+					temp1 := this transpose()
+					temp2 := temp1 * this
+					lup = temp2 lupDecomposition()
+					temp2 dispose()
+					temp2 = lup[2] * temp1
+					temp1 dispose()
+					temp1 = temp2 * y
+					temp2 dispose()
+					temp2 = temp1 forwardSubstitution(lup[0])
+					result = temp2 backwardSubstitution(lup[1])
+					temp1 dispose()
 					temp2 dispose()
 				}
-				temp dispose()
 				lup[0] dispose()
 				lup[1] dispose()
 				lup[2] dispose()
 				free(lup data)
-			//} catch (e: Exception) {
 			}
 		result
 	}
