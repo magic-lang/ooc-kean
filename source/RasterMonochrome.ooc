@@ -84,7 +84,7 @@ RasterMonochrome: class extends RasterPacked implements IDisposable {
 				action((source as ColorMonochrome*)@)
 			row += this stride-1
 		}
-	}	
+	}
 	distance: func (other: Image) -> Float {
 		result := 0.0f
 		if (!other)
