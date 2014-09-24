@@ -14,6 +14,13 @@ Object: abstract class {
     /// Finalizer: cleans up any objects belonging to this instance
     __destroy__: func {}
 
+    free: func {
+      version(!gc) {
+        this __destroy__()
+        gc_free(this)
+      }
+    }
+
     /** return true if *class* is a subclass of *T*. */
     instanceOf?: final func (T: Class) -> Bool {
         if(!this) return false

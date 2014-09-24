@@ -29,7 +29,9 @@ String: class extends Iterable<Char> {
     init: func ~withCStrAndLength(s: CString, length: Int) {
         _buffer = Buffer new(s, length)
     }
-
+    __destroy__: func {
+      this _buffer free()
+    }
     length: func -> Int {
         _buffer size
     }
@@ -117,7 +119,7 @@ String: class extends Iterable<Char> {
     replaceAll: func ~char(oldie, kiddo: Char) -> This {
         (_buffer clone()) replaceAll~char(oldie, kiddo). toString()
     }
-    
+
     map: func (f: Func (Char) -> Char) -> This {
         (_buffer clone()) map(f). toString()
     }
@@ -240,7 +242,7 @@ String: class extends Iterable<Char> {
     print: func { _buffer print() }
 
     println: func { if(_buffer != null) _buffer println() }
-    
+
     println: func ~withStream (stream: FStream) { if(_buffer != null) _buffer println(stream) }
 
     toInt: func -> Int                       { _buffer toInt() }
