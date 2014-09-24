@@ -1,0 +1,7 @@
+Name: sdk
+Description: Lightweight ooc standard library replacement.
+SourcePath: source
+Imports: lang/Abstractions, lang/Buffer, lang/BufferIterator, lang/Character, lang/Exception, lang/Format, lang/IO, lang/Iterators, lang/Memory, lang/Numbers, lang/String, lang/stdlib, lang/types, lang/VarArgs
+
+AndroidLibs: gc
+AndroidIncludePaths: ../gc/include
