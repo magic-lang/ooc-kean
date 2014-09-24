@@ -29,7 +29,6 @@ GpuPacker: abstract class extends Surface {
   _pyramidBuffer: UInt8*
   _context: Context
   initialized: Bool
-  pyramids: PyramidLevel_v2*
   init: func (context: Context) {
     this _packMonochrome = GpuMapPackMonochrome new()
     this _packUv = GpuMapPackUv new()
