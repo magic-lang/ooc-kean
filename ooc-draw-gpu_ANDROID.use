@@ -6,5 +6,5 @@ Requires: ooc-base, ooc-math, ooc-unit, ooc-draw
 Imports: GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuCanvas, Surface, DummyWindow, GpuPacker
 Libs: -landroid -lEGL, -lGLESv3
 
-AndroidLibs: libeglimage
+AndroidLibs: libeglimage, Slibfastcv
 AndroidIncludePaths:
