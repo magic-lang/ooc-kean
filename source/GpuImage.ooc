@@ -41,6 +41,9 @@ GpuImage: abstract class extends Image implements IDisposable {
     GpuYuv420Semiplanar _create(image size, image y pointer, image uv pointer)
   }
 
+  bin: abstract func
+  generateMipmap: func
+
   //TODO: Implement abstract functions
   resizeTo: func (size: IntSize2D) -> This {
     raise("Using unimplemented function reSizeTo in GpuImage class")

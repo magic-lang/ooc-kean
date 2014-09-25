@@ -20,25 +20,21 @@ import OpenGLES3/Fbo, OpenGLES3/Quad
 import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
 
 GpuCanvas: abstract class extends Surface {
-  _monochromeToMonochrome: static const GpuMapMonochrome
-  _bgrToBgr: static const GpuMapBgr
-  _bgraToBgra: static const GpuMapBgra
-  _uvToUv: static const GpuMapUv
+  _monochromeToMonochrome: GpuMapMonochrome
+  _bgrToBgr: GpuMapBgr
+  _bgraToBgra: GpuMapBgra
+  _uvToUv: GpuMapUv
 
   init: func {
-    if(This _monochromeToMonochrome == null)
-      This _monochromeToMonochrome = GpuMapMonochrome new()
-    if(This _bgrToBgr == null)
-      This _bgrToBgr = GpuMapBgr new()
-    if(This _bgraToBgra == null)
-      This _bgraToBgra = GpuMapBgra new()
-    if(This _uvToUv == null)
-      This _uvToUv = GpuMapUv new()
+    this _monochromeToMonochrome = GpuMapMonochrome new()
+    this _bgrToBgr = GpuMapBgr new()
+    this _bgraToBgra = GpuMapBgra new()
+    this _uvToUv = GpuMapUv new()
   }
   dispose: abstract func
   getPixels: abstract func (image: GpuImage, channels: UInt) -> ByteBuffer
 
-  setResolution: func (resolution: IntSize2D) {
+  _setResolution: func (resolution: IntSize2D) {
     Fbo setViewport(0, 0, resolution width, resolution height)
   }
 }
@@ -57,40 +53,42 @@ GpuCanvasPacked: class extends GpuCanvas {
     buffer
   }
   draw: func ~Monochrome (image: GpuMonochrome, transform := FloatTransform2D identity) {
-    This _monochromeToMonochrome transform = transform
-    This _monochromeToMonochrome size = image size
-    this draw(image, This _monochromeToMonochrome)
+    this _monochromeToMonochrome transform = transform
+    this _monochromeToMonochrome size = image size
+    this draw(image, this _monochromeToMonochrome)
   }
   draw: func ~Bgr (image: GpuBgr, transform := FloatTransform2D identity) {
-    This _bgrToBgr transform = transform
-    This _bgrToBgr size = image size
-    this draw(image, This _bgrToBgr)
+    this _bgrToBgr transform = transform
+    this _bgrToBgr size = image size
+    this draw(image, this _bgrToBgr)
   }
   draw: func ~Bgra (image: GpuBgra, transform := FloatTransform2D identity) {
-    This _bgraToBgra transform = transform
-    This _bgraToBgra size = image size
-    this draw(image, This _bgraToBgra)
+    this _bgraToBgra transform = transform
+    this _bgraToBgra size = image size
+    this draw(image, this _bgraToBgra)
   }
   draw: func ~Uv (image: GpuUv, transform := FloatTransform2D identity) {
-    This _uvToUv transform = transform
-    This _uvToUv size = image size
-    this draw(image, This _uvToUv)
+    this _uvToUv transform  = transform setTranslation(FloatSize2D new (transform g / 2.0f, transform h / 2.0f))
+    this _uvToUv size = image size
+    this _renderTarget clearColor(0.5f)
+    this draw(image, this _uvToUv)
+    this _renderTarget clearColor(0.0f)
   }
   draw: func ~raster (image: RasterImage, transform := FloatTransform2D identity) {
     if (image instanceOf?(RasterBgr)) {
       gpuBgr := GpuImage create(image as RasterBgr)
       this draw(gpuBgr, transform)
-      gpuBgr dispose()
+      gpuBgr bin()
     }
     else if (image instanceOf?(RasterBgra)) {
       gpuBgra := GpuImage create(image as RasterBgra)
       this draw(gpuBgra, transform)
-      gpuBgra dispose()
+      gpuBgra bin()
     }
     else if (image instanceOf?(RasterMonochrome)) {
       gpuMonochrome := GpuImage create(image as RasterMonochrome)
       this draw(gpuMonochrome, transform)
-      gpuMonochrome dispose()
+      gpuMonochrome bin()
     }
 
   }
@@ -127,17 +125,15 @@ GpuCanvasYuv420Planar: class extends GpuCanvas {
     buffer
   }
   draw: func ~Yuv420Planar (image: GpuYuv420Planar, transform := FloatTransform2D identity) {
-    GpuCanvas _monochromeToMonochrome transform = transform
-    GpuCanvas _monochromeToMonochrome size = image size
-    this _y draw(image y, GpuCanvas _monochromeToMonochrome)
-    this _u draw(image u, GpuCanvas _monochromeToMonochrome)
-    this _v draw(image v, GpuCanvas _monochromeToMonochrome)
+    this _y draw(image y, transform)
+    this _u draw(image u, transform)
+    this _v draw(image v, transform)
   }
   draw: func ~raster (image: RasterImage, transform := FloatTransform2D identity) {
     if (image instanceOf?(RasterYuv420Planar)) {
       gpuYuv420Planar := GpuImage create(image as RasterYuv420Planar)
       this draw(gpuYuv420Planar, transform)
-      gpuYuv420Planar dispose()
+      gpuYuv420Planar bin()
     }
   }
   _clear: func
@@ -169,18 +165,14 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
     buffer
   }
   draw: func ~GpuYuv420Semiplanar (image: GpuYuv420Semiplanar, transform := FloatTransform2D identity) {
-    GpuCanvas _monochromeToMonochrome transform = transform
-    GpuCanvas _monochromeToMonochrome size = image size
-    this _y draw(image y, GpuCanvas _monochromeToMonochrome)
-    GpuCanvas _uvToUv transform = transform
-    GpuCanvas _uvToUv size = image size
-    this _uv draw(image uv, GpuCanvas _uvToUv)
+    this _y draw(image y, transform)
+    this _uv draw(image uv, transform)
   }
   draw: func ~raster (image: RasterImage, transform := FloatTransform2D identity) {
     if (image instanceOf?(RasterYuv420Semiplanar)) {
       gpuYuv420Semiplanar := GpuImage create(image as RasterYuv420Semiplanar)
       this draw(gpuYuv420Semiplanar, transform)
-      gpuYuv420Semiplanar dispose()
+      gpuYuv420Semiplanar bin()
     }
   }
   _clear: func

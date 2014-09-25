@@ -37,6 +37,10 @@ GpuYuv420Semiplanar: class extends GpuPlanar {
     if(this _canvas != null)
       this _canvas dispose()
   }
+  bin: func {
+    this _y bin()
+    this _uv bin()
+  }
   _bind: /* internal */ func {
     this _y _bind(0)
     this _uv _bind(1)
