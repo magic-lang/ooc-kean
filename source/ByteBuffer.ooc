@@ -20,13 +20,13 @@ import structs/ArrayList
 import threading/Thread
 import IDisposable
 
-ByteBuffer: class implements IDisposable {
+ByteBuffer: class {
 	size: Int
 	pointer: UInt8*
-	free: Func (This)
-	init: func (=size, =pointer, =free)
+	destroy: Func (This)
+	init: func (=size, =pointer, =destroy)
 	init: func ~fromSizeAndPointer (=size, =pointer) {
-		this free = This recycle
+		this destroy = This recycle
 	}
 	init: func ~fromSize (=size) {
 		pointer: UInt8* = 0
@@ -47,9 +47,9 @@ ByteBuffer: class implements IDisposable {
 		}
 		this init(size, pointer, This recycle)
 	}
-	dispose: func {
-		if ((free as Closure) thunk)
-			this free(this)
+	__destroy__: func {
+		if ((destroy as Closure) thunk)
+			this destroy(this)
 	}
 	recycle: static func (buffer: This) {
 		This lock lock()
@@ -85,7 +85,7 @@ ByteBuffer: class implements IDisposable {
 	smallRecycleBin := static ArrayList<This> new()
 	mediumRecycleBin := static ArrayList<This> new()
 	largeRecycleBin := static ArrayList<This> new()
-	destroy := static func {
+	clean := static func {
 		while (This smallRecycleBin size > 0) {
 			b := This smallRecycleBin removeAt(0)
 			gc_free(b pointer)
