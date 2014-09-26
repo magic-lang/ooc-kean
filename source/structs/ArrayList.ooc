@@ -33,6 +33,10 @@ ArrayList: class <T> extends List<T> {
         memcpy(this data, data, _size * T size)
         capacity = _size
     }
+    
+    __destroy__: func {
+    	gc_free(this data)
+    }
 
     add: func (element: T) {
         ensureCapacity(_size + 1)
@@ -155,7 +159,15 @@ ArrayList: class <T> extends List<T> {
         data[index] = element
         old
     }
-
+    
+    /**
+	* Set, but without WITHOUT RETURNING the current element.
+	*/
+	replaceAt: func(index: Int, element: T) {
+		checkIndex(index)
+		data[index] = element
+	}
+	
     /**
      * @return the number of elements in this list.
      */
@@ -288,7 +300,7 @@ IllegalIteratorOpException: class extends Exception {
 /* Operators */
 operator [] <T> (list: ArrayList<T>, r: Range) -> ArrayList<T> { list slice(r) }
 operator [] <T> (list: ArrayList<T>, i: Int) -> T { list get(i) }
-operator []= <T> (list: ArrayList<T>, i: Int, element: T) { list set(i, element) }
+operator []= <T> (list: ArrayList<T>, i: Int, element: T) { list replaceAt(i, element) }
 operator += <T> (list: ArrayList<T>, element: T) { list add(element) }
 operator -= <T> (list: ArrayList<T>, element: T) -> Bool { list remove(element) }
 
