@@ -32,7 +32,7 @@ import io/FileReader
 import io/FileWriter
 import io/BinarySequence
 
-RasterYuv420Semiplanar: class extends RasterYuvSemiplanar implements IDisposable {
+RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
   channelOffset: UInt = 0
   init: func ~fromSize (size: IntSize2D) { this new(size, CoordinateSystem Default, IntShell2D new()) }
   init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
@@ -158,13 +158,12 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar implements IDisposable
     this y[x, y] = ColorMonochrome new(value y)
     this uv[x/2, y/2] = ColorUv new(value u, value v)
   }
- 	dispose: func {
+ 	__destroy__: func {
 //		this y dispose()
-		gc_free(this y)
+		this y free()
 //		this uv dispose()
-		gc_free(this uv)
-		this buffer dispose()
-		gc_free(this buffer)
+		this uv free()
+		this buffer free()
 	}
 	open: static func (filename: String) -> This {
 		x, y, n: Int

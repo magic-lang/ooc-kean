@@ -25,7 +25,7 @@ import StbImage
 import Image
 import Color
 
-RasterUv: class extends RasterPacked implements IDisposable {
+RasterUv: class extends RasterPacked {
   bytesPerPixel: Int { get { 2 } }
   init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 2)), size) }
   init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
@@ -167,8 +167,7 @@ RasterUv: class extends RasterPacked implements IDisposable {
   operator []= (x, y: Int, value: ColorUv) {
     ((this pointer + y * this stride) as ColorUv* + x)@ = value
   }
-	dispose: func {
-		this buffer dispose()
-		gc_free(this buffer)
+	__destroy__: func {
+		this buffer free()
 	}
 }

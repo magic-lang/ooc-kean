@@ -24,7 +24,7 @@ import StbImage
 import Image
 import Color
 
-RasterMonochrome: class extends RasterPacked implements IDisposable {
+RasterMonochrome: class extends RasterPacked {
 	bytesPerPixel: Int { get { 1 } }
 	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 1)), size) }
 	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
@@ -140,8 +140,7 @@ RasterMonochrome: class extends RasterPacked implements IDisposable {
 	}
 	operator [] (x, y: Int) -> ColorMonochrome { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorMonochrome* + x)@ : ColorMonochrome new(0) }
 	operator []= (x, y: Int, value: ColorMonochrome) { ((this pointer + y * this stride) as ColorMonochrome* + x)@ = value }
-	dispose: func {
-		this buffer dispose()
-		gc_free(this buffer)
+	__destroy__: func {
+		this buffer free()
 	}
 }
