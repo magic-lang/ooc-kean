@@ -23,7 +23,7 @@ import RasterBgra, RasterMonochrome, RasterBgr
 import Color
 import StbImage
 
-RasterImage: abstract class extends Image implements IDisposable {
+RasterImage: abstract class extends Image {
 	distanceRadius: Int { get { return 1; } }
 	buffer: ByteBuffer { get set }
 	pointer: UInt8* { get { buffer pointer } }
@@ -87,5 +87,4 @@ RasterImage: abstract class extends Image implements IDisposable {
 		}
 		result
 	}
-	dispose: func
 }

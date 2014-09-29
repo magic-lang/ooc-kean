@@ -25,7 +25,7 @@ import Image
 import Color
 import lang/IO
 
-RasterBgra: class extends RasterPacked implements IDisposable {
+RasterBgra: class extends RasterPacked {
 	bytesPerPixel: Int { get { 4 } }
 	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 4)), size) }
 	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) { 
@@ -169,5 +169,4 @@ RasterBgra: class extends RasterPacked implements IDisposable {
 			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
 		)
 	}
-	dispose: func
 }

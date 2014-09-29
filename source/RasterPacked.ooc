@@ -25,7 +25,7 @@ import RasterBgr
 import RasterMonochrome
 import Image
 
-RasterPacked: abstract class extends RasterImage implements IDisposable {
+RasterPacked: abstract class extends RasterImage {
 	bytesPerPixel: Int { get }
 	stride: Int { get set }
 	init: func (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
@@ -74,5 +74,4 @@ RasterPacked: abstract class extends RasterImage implements IDisposable {
 	asRasterPacked: func (other: This) -> This {
 		other
 	}
-	dispose: func
 }

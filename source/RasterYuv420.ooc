@@ -27,7 +27,7 @@ import Color
 import StbImage
 import RasterBgr
 
-RasterYuv420: class extends RasterYuvPlanar implements IDisposable {
+RasterYuv420: class extends RasterYuvPlanar {
 	init: func ~fromSize (size: IntSize2D) { this new(size, CoordinateSystem Default, IntShell2D new()) }
 	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		bufSize := RasterPacked calculateLength(size, 1) + 2 * RasterPacked calculateLength(size / 2, 1)
@@ -158,7 +158,6 @@ RasterYuv420: class extends RasterYuvPlanar implements IDisposable {
 		this u[x/2, y/2] = ColorMonochrome new(value u)
 		this v[x/2, y/2] = ColorMonochrome new(value v)
 	}
-	dispose: func
 	open: static func (filename: String) -> This {
 		x, y, n: Int
 		requiredComponents := 3

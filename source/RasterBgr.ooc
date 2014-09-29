@@ -24,7 +24,7 @@ import StbImage
 import Image
 import Color
 
-RasterBgr: class extends RasterPacked implements IDisposable {
+RasterBgr: class extends RasterPacked {
 	bytesPerPixel: Int { get { 3 } }
 	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 3)), size) }
 	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
@@ -153,5 +153,4 @@ RasterBgr: class extends RasterPacked implements IDisposable {
 	}
 	operator [] (x, y: Int) -> ColorBgr { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorBgr* + x)@ : ColorBgr new(0, 0, 0) }
 	operator []= (x, y: Int, value: ColorBgr) { ((this pointer + y * this stride) as ColorBgr* + x)@ = value }
-	dispose: func
 }
