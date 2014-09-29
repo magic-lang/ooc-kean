@@ -1,10 +1,10 @@
 import threading/Thread
-import Synchronized, IDisposable
+import Synchronized
 
 ReferenceCounter: class extends Synchronized {
-	_target: IDisposable
+	_target: Object
 	_count: Int
-	init: func (target: IDisposable) {
+	init: func (target: Object) {
 		super()
 		this _target = target
 	}
@@ -13,9 +13,9 @@ ReferenceCounter: class extends Synchronized {
 			this lock()
 			this _count += delta
 			if (this _count <= 0) {
-				this _target dispose()
+				this _target free()
 				this unlock()
-				this dispose()
+				this free()
 //				free(this)
 			}
 			else

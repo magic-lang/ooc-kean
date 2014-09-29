@@ -15,8 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 import threading/Thread
-import IDisposable
-Synchronized: abstract class implements IDisposable {
+Synchronized: abstract class {
 	_lock: Mutex
 	init: func (lock: Mutex) { this _lock = lock }
 	init: func ~default { this init(Mutex new()) }

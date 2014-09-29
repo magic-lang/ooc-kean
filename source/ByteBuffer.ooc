@@ -18,7 +18,6 @@
 import lang/Memory
 import structs/ArrayList
 import threading/Thread
-import IDisposable
 
 ByteBuffer: class {
 	size: Int
