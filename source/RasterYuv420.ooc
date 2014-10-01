@@ -106,7 +106,7 @@ RasterYuv420: class extends RasterYuvPlanar {
 	createV: func -> RasterMonochrome {
 		RasterMonochrome new((this pointer + RasterPacked calculateLength(this size, 1) + RasterPacked calculateLength(this size / 2, 1)) as Int*, this size / 2)
 	}
-	copy: func -> Image {
+	copy: func -> This {
 		This new(this)
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {

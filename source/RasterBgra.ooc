@@ -55,7 +55,7 @@ RasterBgra: class extends RasterPacked {
 		result wrap = this wrap
 		result
 	}
-	copy: func -> Image {
+	copy: func -> This {
 		This new(this)
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {

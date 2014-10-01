@@ -109,7 +109,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
   createUV: func -> RasterUv {
     RasterUv new((this pointer + this channelOffset + RasterPacked calculateLength(this size, 1)) as Int*, this size/2)
   }
-  copy: func -> Image {
+  copy: func -> This {
     This new(this)
   }
   apply: func ~bgr (action: Func(ColorBgr)) {

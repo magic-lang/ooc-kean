@@ -46,7 +46,7 @@ RasterImage: abstract class extends Image {
 		result = resized
 		result
 	}
-	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> Image {
+	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {
 		transform = (this transform asFloatTransform2D()) * transform * (this transform asFloatTransform2D()) inverse
 		mappingTransform := FloatTransform2D createTranslation(this size width / 2, this size height / 2) * transform
 		upperLeft := mappingTransform * FloatPoint2D new(-size width / 2, -size width / 2)
@@ -61,7 +61,7 @@ RasterImage: abstract class extends Image {
 		downRight = mappingTransformInverse * source rightBottom
 		this copy(size asFloatSize2D(), source, FloatPoint2D new(), FloatPoint2D new(), FloatPoint2D new())
 	}
-	copy: func ~fromMoreParams (size: FloatSize2D, source: FloatBox2D, upperLeft, upperRight, lowerLeft: FloatPoint2D) -> RasterImage {
+	copy: func ~fromMoreParams (size: FloatSize2D, source: FloatBox2D, upperLeft, upperRight, lowerLeft: FloatPoint2D) -> This {
 		result := RasterBgra new(size ceiling() asIntSize2D())
 //		TODO: The stuff
 		result
