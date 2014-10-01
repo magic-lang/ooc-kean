@@ -36,6 +36,10 @@ IntBox2D: cover {
 	leftBottom ::= IntPoint2D new(this left, this bottom)
 	rightBottom ::= this leftTop + this size
 	center ::= this leftTop + (this size / 2)
+	leftCenter ::= IntPoint2D new(this left, this center y)
+	rightCenter ::= IntPoint2D new(this right, this center y)
+	topCenter ::= IntPoint2D new(this center x, this top)
+	bottomCenter ::= IntPoint2D new(this center x, this bottom)
 	empty ::= this size empty
 	init: func@ (=leftTop, =size)
 	init: func@ ~fromFloats (left, top, width, height: Int) { this init(IntPoint2D new(left, top), IntSize2D new(width, height)) }
