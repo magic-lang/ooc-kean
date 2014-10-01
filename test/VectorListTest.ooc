@@ -25,14 +25,10 @@ VectorTest: class extends Fixture {
 
 			vectorList := VectorList<Int> new() as VectorList<Int>
 
-
-
 			expect(vectorList count, is equal to(0))
 			vectorList add(0)
 			vectorList add(1)
 			vectorList add(2)
-
-
 
 			expect(vectorList count, is equal to(3))
 			removedInt := vectorList remove()
@@ -44,8 +40,6 @@ VectorTest: class extends Fixture {
 			removedInt = vectorList remove()
 			expect(vectorList count, is equal to(0))
 			expect(removedInt, is equal to(0))
-
-
 
 			expect(vectorList count, is equal to(0))
 			vectorList add(3)
@@ -76,7 +70,7 @@ VectorTest: class extends Fixture {
 
 			compareInt = vectorList[5]
 			removedInt = vectorList remove(5)
-			expect(removedInt , is equal to(compareInt))
+			expect(removedInt, is equal to(compareInt))
 
 			vectorList insert(5, 4)
 			expect(vectorList[5], is equal to(4))

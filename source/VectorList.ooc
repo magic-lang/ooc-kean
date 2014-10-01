@@ -21,7 +21,7 @@ VectorList: class <T> {
 	_vector: Vector<T>
 	_count: Int
 	count := this _count
-	init: func ~deafault {
+	init: func ~default {
 		this init(32)
 	}
 
@@ -55,9 +55,8 @@ VectorList: class <T> {
 	}
 
 	remove: func (index: Int) -> T {
-		tmp: T
-		tmp = this _vector[index]
-		this _vector copy(index+1,index)
+		tmp := this _vector[index]
+		this _vector copy(index+1, index)
 		this count -= 1
 		tmp
 }

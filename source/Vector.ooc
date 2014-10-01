@@ -52,7 +52,7 @@ Vector: abstract class <T> {
 			this _count = count
 		}
 	}
-	move: func  (sourceStart: Int, targetStart: Int, count := 0) {
+	move: func (sourceStart: Int, targetStart: Int, count := 0) {
 		if (count < 1)
 			count = this count - sourceStart
 		if (targetStart + count > this count)
@@ -85,13 +85,13 @@ Vector: abstract class <T> {
 	operator []= (index: Int, item: T) {
 		this _backend[index] = item
 	}
-
 }
 
 HeapVector: class <T> extends Vector<T> {
 	init: func(count: Int) {
 		super(count)
 	}
+
 	_allocate: func(count: Int)   {
 		this _backend = gc_realloc(this _backend, count * T size)
 	}
@@ -106,6 +106,7 @@ StackVector: class <T> extends Vector<T> {
 	init: func(data: T*, count: Int) {
 		super(data, count)
 	}
+	
 	_allocate: func(count: Int) {
 		this _backend
 	}
