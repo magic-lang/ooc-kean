@@ -59,7 +59,7 @@ VectorList: class <T> {
 		this _vector copy(index+1, index)
 		this count -= 1
 		tmp
-}
+	}
 
 	operator [] (index: Int) -> T {
 		this _vector[index]

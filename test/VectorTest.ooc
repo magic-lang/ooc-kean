@@ -64,7 +64,6 @@ VectorTest: class extends Fixture {
 			for (i in 16..20)
 				expect(heapVector[i], isNotTheValue)
 
-
 			// Decrease array size below original size
 			heapVector resize(5)
 			expect(heapVector count, is equal to(5))
@@ -74,7 +73,7 @@ VectorTest: class extends Fixture {
 				expect(heapVector[i], is equal to(5))
 			isNotTheValue = is not equal to(5)
 			for (i in 6..20)
-					expect(heapVector[i], isNotTheValue)
+				expect(heapVector[i], isNotTheValue)
 
 			// Copy tests
 			heapVector resize(3)
@@ -109,83 +108,81 @@ VectorTest: class extends Fixture {
 				heapVector move(i,i+1)
 			for (i in 0..10)
 				expect(heapVector[i], is equal to(0))
-
 		})
 
 
 
-	this add("Stack cover create", func() {
-		dataTMP: Int[30]
-		data := dataTMP[0]&
+		this add("Stack cover create", func() {
+			dataTMP: Int[30]
+			data := dataTMP[0]&
 
-		//stackVector := StackVector<Int> new(data[0]&, 10) as Vector<Int>
-		stackVector := StackVector<Int> new(data, 30) as Vector<Int>
+			//stackVector := StackVector<Int> new(data[0]&, 10) as Vector<Int>
+			stackVector := StackVector<Int> new(data, 30) as Vector<Int>
 
-		expect(stackVector count, is equal to(30))
-		for (i in 0..stackVector count)
-			stackVector[i] = i
-		// Test case for 0...30
-		for (i in 0..30)
-			expect(stackVector[i], is equal to(i))
-
-		// Insert 30 in every element of array
-		for (i in 0..30)
-			stackVector[i] = 30
-		for (i in 0..30)
-			expect(stackVector[i], is equal to(30))
-
-		// Decrease array size to 20
-		stackVector resize(20)
-		expect(stackVector count, is equal to(20))
-
-		// Insert 0...20
-		for (i in 0..20)
+			expect(stackVector count, is equal to(30))
+			for (i in 0..stackVector count)
 				stackVector[i] = i
-		for (i in 0..20)
-			expect(stackVector[i], is equal to(i))
-		// Change all values to 20
-		for (i in 0..20)
-			stackVector[i] = 20
-		for (i in 0..20)
-			expect(stackVector[i], is equal to(20))
-		// Test if elements above size=20 also changed
-		isNotTheValue := is not equal to(20)
-		for (i in 21..30)
-			expect(stackVector[i], isNotTheValue)
+			// Test case for 0...30
+			for (i in 0..30)
+				expect(stackVector[i], is equal to(i))
 
-		stackVector resize(40)
+			// Insert 30 in every element of array
+			for (i in 0..30)
+				stackVector[i] = 30
+			for (i in 0..30)
+				expect(stackVector[i], is equal to(30))
 
-		expect(stackVector count, is equal to(20))
-		stackVector resize(10)
-		expect(stackVector count, is equal to(10))
-		stackVector resize(14)
-		expect(stackVector count, is equal to(10))
-		for (i in 0..10)
-			stackVector[i] = 10
-		for (i in 0..10)
-			expect(stackVector[i], is equal to(10))
-		isNotTheValue = is not equal to(10)
-		for (i in 11..30)
-			expect(stackVector[i], isNotTheValue)
+			// Decrease array size to 20
+			stackVector resize(20)
+			expect(stackVector count, is equal to(20))
+
+			// Insert 0...20
+			for (i in 0..20)
+					stackVector[i] = i
+			for (i in 0..20)
+				expect(stackVector[i], is equal to(i))
+			// Change all values to 20
+			for (i in 0..20)
+				stackVector[i] = 20
+			for (i in 0..20)
+				expect(stackVector[i], is equal to(20))
+			// Test if elements above size=20 also changed
+			isNotTheValue := is not equal to(20)
+			for (i in 21..30)
+				expect(stackVector[i], isNotTheValue)
+
+			stackVector resize(40)
+
+			expect(stackVector count, is equal to(20))
+			stackVector resize(10)
+			expect(stackVector count, is equal to(10))
+			stackVector resize(14)
+			expect(stackVector count, is equal to(10))
+			for (i in 0..10)
+				stackVector[i] = 10
+			for (i in 0..10)
+				expect(stackVector[i], is equal to(10))
+			isNotTheValue = is not equal to(10)
+			for (i in 11..30)
+				expect(stackVector[i], isNotTheValue)
 
 
-		// Copy tests
-		stackVector resize(3)
-		for (i in 0..3)
-			stackVector[i] = i
-		oldValue := stackVector[1]
-		stackVector copy(1,0)
-		expect(stackVector[0], is equal to(oldValue))
+			// Copy tests
+			stackVector resize(3)
+			for (i in 0..3)
+				stackVector[i] = i
+			oldValue := stackVector[1]
+			stackVector copy(1,0)
+			expect(stackVector[0], is equal to(oldValue))
 
-		// Move tests
-		stackVector resize(3)
-		for (i in 0..3)
-			stackVector[i] = i
-		oldValue = stackVector[1]
-		stackVector move(1,0)
-		expect(stackVector[0], is equal to(oldValue))
-
-	})
+			// Move tests
+			stackVector resize(3)
+			for (i in 0..3)
+				stackVector[i] = i
+			oldValue = stackVector[1]
+			stackVector move(1,0)
+			expect(stackVector[0], is equal to(oldValue))
+		})
 
 	}
 }

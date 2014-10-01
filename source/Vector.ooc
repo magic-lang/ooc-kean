@@ -41,13 +41,11 @@ Vector: abstract class <T> {
 	_allocate: abstract func (count: Int)
 
 	resize: func (count: Int) {
-		if (count < this count)
-		{
+		if (count < this count) {
 			this _free(count, this count)
 			this _count = count
 		}
-		else if (count > this count)
-		{
+		else if (count > this count) {
 			this _allocate(count)
 			this _count = count
 		}
@@ -106,7 +104,7 @@ StackVector: class <T> extends Vector<T> {
 	init: func(data: T*, count: Int) {
 		super(data, count)
 	}
-	
+
 	_allocate: func(count: Int) {
 		this _backend
 	}
