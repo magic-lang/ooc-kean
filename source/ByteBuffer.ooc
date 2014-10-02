@@ -121,26 +121,23 @@ ByteBuffer: class {
 	mediumRecycleBin := static ArrayList<This> new()
 	largeRecycleBin := static ArrayList<This> new()
 	clean := static func {
-//		while (This smallRecycleBin size > 0) {
-//			b := This smallRecycleBin removeAt(0)
-//			gc_free(b pointer)
-//			gc_free(b)
-//		}
-//		gc_free(This smallRecycleBin data)
-//		gc_free(This smallRecycleBin)
-//		while (This mediumRecycleBin size > 0) {
-//			b := This mediumRecycleBin removeAt(0)
-//			gc_free(b pointer)
-//			gc_free(b)
-//		}
-//		gc_free(This mediumRecycleBin data)
-//		gc_free(This mediumRecycleBin)
-//		while (This largeRecycleBin size > 0) {
-//			b := This largeRecycleBin removeAt(0)
-//			gc_free(b pointer)
-//			gc_free(b)
-//		}
-//		gc_free(This largeRecycleBin data)
-//		gc_free(This largeRecycleBin)
+		while (This smallRecycleBin size > 0) {
+			b := This smallRecycleBin removeAt(0)
+			b __delete__()
+		}
+		gc_free(This smallRecycleBin data)
+		gc_free(This smallRecycleBin)
+		while (This mediumRecycleBin size > 0) {
+			b := This mediumRecycleBin removeAt(0)
+			b __delete__()
+		}
+		gc_free(This mediumRecycleBin data)
+		gc_free(This mediumRecycleBin)
+		while (This largeRecycleBin size > 0) {
+			b := This largeRecycleBin removeAt(0)
+			b __delete__()
+		}
+		gc_free(This largeRecycleBin data)
+		gc_free(This largeRecycleBin)
 	}
 }
