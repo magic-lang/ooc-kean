@@ -29,15 +29,8 @@ ByteBuffer: class {
 	}
 	init: func ~fromSize (=size) {
 		pointer: UInt8* = 0
-<<<<<<< HEAD
-//		bin := ArrayList<This> new()
-		bin := This getBin(size);
-		
-=======
-		//bin := ArrayList<This> new()
 		bin := This getBin(size);
 
->>>>>>> 6657b0ea467138aeeb4c8dbf476c581e117d99f5
 		for(i in 0..bin size)
 		{
 			buffer := bin[i]
