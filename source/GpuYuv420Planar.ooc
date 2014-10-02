@@ -39,10 +39,10 @@ GpuYuv420Planar: class extends GpuPlanar {
     if(this _canvas != null)
       this _canvas dispose()
   }
-  bin: func {
-    this _y bin()
-    this _u bin()
-    this _v bin()
+  recycle: func {
+    this _y recycle()
+    this _u recycle()
+    this _v recycle()
   }
   _bind: /* internal */ func {
     this _y _bind(0)

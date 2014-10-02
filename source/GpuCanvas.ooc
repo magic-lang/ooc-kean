@@ -78,17 +78,17 @@ GpuCanvasPacked: class extends GpuCanvas {
     if (image instanceOf?(RasterBgr)) {
       gpuBgr := GpuImage create(image as RasterBgr)
       this draw(gpuBgr, transform)
-      gpuBgr bin()
+      gpuBgr recycle()
     }
     else if (image instanceOf?(RasterBgra)) {
       gpuBgra := GpuImage create(image as RasterBgra)
       this draw(gpuBgra, transform)
-      gpuBgra bin()
+      gpuBgra recycle()
     }
     else if (image instanceOf?(RasterMonochrome)) {
       gpuMonochrome := GpuImage create(image as RasterMonochrome)
       this draw(gpuMonochrome, transform)
-      gpuMonochrome bin()
+      gpuMonochrome recycle()
     }
 
   }
@@ -133,7 +133,7 @@ GpuCanvasYuv420Planar: class extends GpuCanvas {
     if (image instanceOf?(RasterYuv420Planar)) {
       gpuYuv420Planar := GpuImage create(image as RasterYuv420Planar)
       this draw(gpuYuv420Planar, transform)
-      gpuYuv420Planar bin()
+      gpuYuv420Planar recycle()
     }
   }
   _clear: func
@@ -172,7 +172,7 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
     if (image instanceOf?(RasterYuv420Semiplanar)) {
       gpuYuv420Semiplanar := GpuImage create(image as RasterYuv420Semiplanar)
       this draw(gpuYuv420Semiplanar, transform)
-      gpuYuv420Semiplanar bin()
+      gpuYuv420Semiplanar recycle()
     }
   }
   _clear: func

@@ -16,7 +16,6 @@
 use ooc-math
 use ooc-draw
 use ooc-base
-use ooc-android-debug
 import OpenGLES3/Fbo, OpenGLES3/Texture, OpenGLES3/Context, OpenGLES3/Quad
 import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
 import math
@@ -28,14 +27,12 @@ GpuPacker: abstract class extends Surface {
   _targetTexture: Texture
   _pyramidBuffer: UInt8*
   _context: Context
-  initialized: Bool
   init: func (context: Context) {
     this _packMonochrome = GpuMapPackMonochrome new()
     this _packUv = GpuMapPackUv new()
     this _quad = Quad create()
     this _pyramidBuffer = gc_malloc((1920 + 640) * 1080) as UInt8*
     this _context = context
-    this initialized = false
   }
   dispose: func {
     this _targetTexture dispose()
@@ -59,19 +56,6 @@ GpuPacker: abstract class extends Surface {
     result
   }
   packPyramid: func ~monochrome (image: RasterMonochrome, count: Int) -> UInt8* {
-    /*
-    pyramidCount: UInt = 4
-
-    if(!this initialized) {
-      this initialized = true
-      pyramids = gc_malloc(PyramidLevel_v2 size * pyramidCount) as PyramidLevel_v2*
-      fcvPyramidAllocate_v2(pyramids, image size width, image size height, image size width, 1, pyramidCount, 0)
-    }
-    res := fcvPyramidCreateu8_v2(image pointer, image size width, image size height, image size width, pyramidCount, pyramids)
-    //gc_free(pyramids)
-    return this _pyramidBuffer
-
-  */
     gpuMonochrome := GpuImage create(image)
     gpuMonochrome generateMipmap()
     this _packMonochrome transform = FloatTransform2D identity
@@ -95,7 +79,7 @@ GpuPacker: abstract class extends Surface {
       */
       this _context unlockEGLPixels(this _targetTexture _eglImage)
     }
-    gpuMonochrome bin()
+    gpuMonochrome recycle()
     this _pyramidBuffer
   }
   unlock: func {

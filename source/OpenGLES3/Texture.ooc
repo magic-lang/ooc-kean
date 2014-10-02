@@ -48,7 +48,7 @@ Texture: class {
     this _eglImage = -1
     this _setInternalFormats(type)
   }
-  bin: func {
+  recycle: func {
     This textureBin add(this)
   }
   dispose: func {
