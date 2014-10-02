@@ -34,7 +34,7 @@ import io/BinarySequence
 
 RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
   channelOffset: UInt = 0
-  init: func ~fromSize (size: IntSize2D) { this new(size, CoordinateSystem Default, IntShell2D new()) }
+  init: func ~fromSize (size: IntSize2D) { this init(size, CoordinateSystem Default, IntShell2D new()) }
   init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
     bufSize := RasterPacked calculateLength(size, 1) + RasterPacked calculateLength(size / 2, 2)
 //    "RasterYuv420Semiplanar init ~fromStuff" println()
