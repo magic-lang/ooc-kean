@@ -13,6 +13,7 @@ ReferenceCounter: class extends Synchronized {
 			this lock()
 			this _count += delta
 			if (this _count <= 0) {
+//			"_target free" println()
 				this _target free()
 				this unlock()
 				this free()

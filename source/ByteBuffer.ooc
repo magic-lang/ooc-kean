@@ -31,33 +31,70 @@ ByteBuffer: class {
 		pointer: UInt8* = 0
 //		bin := ArrayList<This> new()
 		bin := This getBin(size);
-		
+		buffer: This
 		for(i in 0..bin size)
 		{
-			buffer := bin[i]
-			if (buffer size == size) {
-				pointer = bin[i] pointer
-				bin removeAt(i)
+//			"we need buffer of size " print()
+//			this size toString() println()
+//			"now at element " print()
+//			i toString() print()
+//			" in bin" println()
+			buffer = bin[i] // leak
+//			"buffer is " print()
+//			if (buffer == null)
+//				"null" println()
+//			else {
+//				bSize: Int = buffer size
+//				bSize toString() println()
+//			}
+			if ((buffer size) == size) {
+//				"old buffer found" println()
+				bin removeAt(i) // leak
 				break
+			} else {
+				buffer = null // leak
 			}
 		}
-		if (!pointer) {
+		if (buffer == null) {
 			pointer = gc_malloc(size);
+//			"new buffer" println()
+			this init(size, pointer, This recycle)
+		} else {
+//			"reusing buffer" println()
+			this init(size, buffer pointer, This recycle)
 		}
-		this init(size, pointer, This recycle)
 	}
 	__destroy__: func {
+//		"destroying buffer" println()
 		if ((destroy as Closure) thunk)
 			this destroy(this)
 	}
+	__delete__: func {
+		gc_free(this pointer)
+//		"deleting buffer" println()
+		gc_free(this)
+	}
+	
+	free: func {
+//		"freeing buffer" println()
+		version(!gc) {
+			this __destroy__()
+		}
+	}
+	
 	recycle: static func (buffer: This) {
 		This lock lock()
 		bin := This getBin(buffer size)
 		while (bin size > 10) {
 			b := bin removeAt(0)
-			gc_free(b pointer)
+			b __delete__()
 		}
+//		bin size toString() println()
 		bin add(buffer)
+//		"recycling buffer of size " print()
+//		buffer size toString() println()
+//		bin size toString() println()
+		
 		This lock unlock()
 	}
 	getBin: static func (size: Int) -> ArrayList<This> {
@@ -85,26 +122,26 @@ ByteBuffer: class {
 	mediumRecycleBin := static ArrayList<This> new()
 	largeRecycleBin := static ArrayList<This> new()
 	clean := static func {
-		while (This smallRecycleBin size > 0) {
-			b := This smallRecycleBin removeAt(0)
-			gc_free(b pointer)
-			gc_free(b)
-		}
-		gc_free(This smallRecycleBin data)
-		gc_free(This smallRecycleBin)
-		while (This mediumRecycleBin size > 0) {
-			b := This mediumRecycleBin removeAt(0)
-			gc_free(b pointer)
-			gc_free(b)
-		}
-		gc_free(This mediumRecycleBin data)
-		gc_free(This mediumRecycleBin)
-		while (This largeRecycleBin size > 0) {
-			b := This largeRecycleBin removeAt(0)
-			gc_free(b pointer)
-			gc_free(b)
-		}
-		gc_free(This largeRecycleBin data)
-		gc_free(This largeRecycleBin)
+//		while (This smallRecycleBin size > 0) {
+//			b := This smallRecycleBin removeAt(0)
+//			gc_free(b pointer)
+//			gc_free(b)
+//		}
+//		gc_free(This smallRecycleBin data)
+//		gc_free(This smallRecycleBin)
+//		while (This mediumRecycleBin size > 0) {
+//			b := This mediumRecycleBin removeAt(0)
+//			gc_free(b pointer)
+//			gc_free(b)
+//		}
+//		gc_free(This mediumRecycleBin data)
+//		gc_free(This mediumRecycleBin)
+//		while (This largeRecycleBin size > 0) {
+//			b := This largeRecycleBin removeAt(0)
+//			gc_free(b pointer)
+//			gc_free(b)
+//		}
+//		gc_free(This largeRecycleBin data)
+//		gc_free(This largeRecycleBin)
 	}
 }
