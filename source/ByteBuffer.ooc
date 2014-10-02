@@ -29,9 +29,15 @@ ByteBuffer: class {
 	}
 	init: func ~fromSize (=size) {
 		pointer: UInt8* = 0
+<<<<<<< HEAD
 //		bin := ArrayList<This> new()
 		bin := This getBin(size);
 		
+=======
+		//bin := ArrayList<This> new()
+		bin := This getBin(size);
+
+>>>>>>> 6657b0ea467138aeeb4c8dbf476c581e117d99f5
 		for(i in 0..bin size)
 		{
 			buffer := bin[i]
@@ -79,7 +85,7 @@ ByteBuffer: class {
 		b := other as UInt8*
 		memcpy(a + destination, b + start, length)
 	}
-	
+
 	lock := static Mutex new()
 	smallRecycleBin := static ArrayList<This> new()
 	mediumRecycleBin := static ArrayList<This> new()
