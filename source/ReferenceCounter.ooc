@@ -16,7 +16,6 @@ ReferenceCounter: class extends Synchronized {
 				this _target free()
 				this unlock()
 				this free()
-//				free(this)
 			}
 			else
 				this unlock()
@@ -25,5 +24,4 @@ ReferenceCounter: class extends Synchronized {
 	increase: func { this update(1) }
 	decrease: func { this update(-1) }
 	toString: func -> String { this _count toString() }
-//	dispose: func { free(this _lock) }
 }
