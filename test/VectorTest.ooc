@@ -60,10 +60,9 @@ VectorTest: class extends Fixture {
 			for (i in 0..15)
 				heapVector[i] = 15
 
-			isnot := is not equal to(15)
+			isNotTheValue := is not equal to(15)
 			for (i in 16..20)
-				expect(heapVector[i], isnot)
-
+				expect(heapVector[i], isNotTheValue)
 
 			// Decrease array size below original size
 			heapVector resize(5)
@@ -72,9 +71,9 @@ VectorTest: class extends Fixture {
 				heapVector[i] = 5
 			for (i in 0..5)
 				expect(heapVector[i], is equal to(5))
-			isnot = is not equal to(5)
+			isNotTheValue = is not equal to(5)
 			for (i in 6..20)
-					expect(heapVector[i], isnot)
+				expect(heapVector[i], isNotTheValue)
 
 			// Copy tests
 			heapVector resize(3)
@@ -97,19 +96,18 @@ VectorTest: class extends Fixture {
 			heapVector resize(3)
 			for (i in 0..3)
 				heapVector[i] = i
-				oldValue = heapVector[1]
-				heapVector move(1,0)
-				expect(heapVector[0], is equal to(oldValue))
+			oldValue = heapVector[1]
+			heapVector move(1,0)
+			expect(heapVector[0], is equal to(oldValue))
 
 			heapVector resize(10)
 			for (i in 0..10)
 				heapVector[i] = i
-				heapVector resize(20)
-				for (i in 0..10)
+			heapVector resize(20)
+			for (i in 0..10)
 				heapVector move(i,i+1)
-				for (i in 0..10)
+			for (i in 0..10)
 				expect(heapVector[i], is equal to(0))
-
 		})
 
 
@@ -149,9 +147,9 @@ VectorTest: class extends Fixture {
 			for (i in 0..20)
 				expect(stackVector[i], is equal to(20))
 			// Test if elements above size=20 also changed
-			isnot := is not equal to(20)
+			isNotTheValue := is not equal to(20)
 			for (i in 21..30)
-				expect(stackVector[i], isnot)
+				expect(stackVector[i], isNotTheValue)
 
 			stackVector resize(40)
 
@@ -164,9 +162,9 @@ VectorTest: class extends Fixture {
 				stackVector[i] = 10
 			for (i in 0..10)
 				expect(stackVector[i], is equal to(10))
-			isnot = is not equal to(10)
+			isNotTheValue = is not equal to(10)
 			for (i in 11..30)
-				expect(stackVector[i], isnot)
+				expect(stackVector[i], isNotTheValue)
 
 
 			// Copy tests
@@ -184,8 +182,7 @@ VectorTest: class extends Fixture {
 			oldValue = stackVector[1]
 			stackVector move(1,0)
 			expect(stackVector[0], is equal to(oldValue))
-
-			})
+		})
 
 	}
 }
