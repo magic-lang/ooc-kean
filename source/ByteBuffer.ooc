@@ -70,7 +70,7 @@ ByteBuffer: class {
 	}
 	__delete__: func {
 		gc_free(this pointer)
-//		"deleting buffer" println()
+		"deleting buffer" println()
 		gc_free(this)
 	}
 	
