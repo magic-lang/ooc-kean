@@ -27,9 +27,6 @@ CoordinateSystem: enum {
 }
 
 Image: abstract class {
-	isValidIn: func (x, y: Int) -> Bool {
-		return (x >= 0 && x < this size width && y >= 0 && y < this size height)
-	}
 	size: IntSize2D
 	transform: IntTransform2D { get set }
 	coordinateSystem: CoordinateSystem {
@@ -57,13 +54,16 @@ Image: abstract class {
 				this wrap = value
 		}
 	}
-	
-	init: func (=size, .coordinateSystem, =crop, =wrap) { 
+	_referenceCount: ReferenceCounter
+	referenceCount ::= this _referenceCount
+	init: func (=size, .coordinateSystem, =crop, =wrap) {
 		this coordinateSystem = coordinateSystem
+		this init()
 	}
 	init: func ~fromImage (original: This) { this init(original size, original coordinateSystem, original crop, original wrap) }
-	init: func ~default { 
+	init: func ~default {
 		this transform = IntTransform2D identity
+		this _referenceCount = ReferenceCounter new(this)
 	}
 	resizeWithin: func (restriction: IntSize2D) -> This {
 		this resizeTo(((this size asFloatSize2D()) * Float minimum(restriction width as Float / this size width as Float, restriction height as Float / this size height as Float)) asIntSize2D())
@@ -77,4 +77,7 @@ Image: abstract class {
 	finish: func -> Bool { true }
 	distance: abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
+	isValidIn: func (x, y: Int) -> Bool {
+		return (x >= 0 && x < this size width && y >= 0 && y < this size height)
+	}
 }
