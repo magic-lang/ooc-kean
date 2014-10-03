@@ -18,6 +18,7 @@
 import lib/gles
 import TextureBin
 import Context
+import lib/eglimage
 
 TextureType: enum {
   monochrome
@@ -44,11 +45,26 @@ Texture: class {
     this width = width
     this height = height
     this type = type
+    this _eglImage = -1
     this _setInternalFormats(type)
   }
-  dispose: func {
-    //glDeleteTextures(1, _backend&)
+  recycle: func {
     This textureBin add(this)
+  }
+  dispose: func {
+    version(debug) {
+      glDeleteTextures(1, _backend&)
+    }
+    else {
+      if(_eglImage != -1)
+        destroyEGLImage(this _eglImage)
+      glDeleteTextures(1, _backend&)
+    }
+  }
+  generateMipmap: func {
+    this bind(0)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST)
+    glGenerateMipmap(GL_TEXTURE_2D)
   }
   bind: func (unit: UInt) {
     glActiveTexture(GL_TEXTURE0 + unit)
@@ -89,7 +105,7 @@ Texture: class {
   _generate: func (pixels: Pointer) -> Bool {
     glGenTextures(1, _backend&)
     glBindTexture(GL_TEXTURE_2D, _backend)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)

@@ -48,6 +48,7 @@ Window: class extends Surface {
     this _yuvSemiplanarToBgra = GpuMapYuvSemiplanarToBgra new()
     result == 1 && (this _native != null) && (this _context != null) && (this _quad != null)
   }
+
   draw: func ~Monochrome (image: GpuMonochrome, transform := FloatTransform2D identity) {
     this _monochromeToBgra transform = transform
     this _monochromeToBgra size = image size
@@ -76,27 +77,27 @@ Window: class extends Surface {
   draw: func ~RasterBgr (image: RasterBgr, transform := FloatTransform2D identity) {
     result := GpuImage create(image)
     this draw(result, transform)
-    result dispose()
+    result recycle()
   }
   draw: func ~RasterBgra (image: RasterBgra, transform := FloatTransform2D identity) {
     result := GpuImage create(image)
     this draw(result, transform)
-    result dispose()
+    result recycle()
   }
   draw: func ~RasterMonochrome (image: RasterMonochrome, transform := FloatTransform2D identity) {
     result := GpuImage create(image)
     this draw(result, transform)
-    result dispose()
+    result recycle()
   }
   draw: func ~RasterYuv (image: RasterYuv420Planar, transform := FloatTransform2D identity) {
     result := GpuImage create(image)
     this draw(result, transform)
-    result dispose()
+    result recycle()
   }
   draw: func ~RasterYuvSemiplanar (image: RasterYuv420Semiplanar, transform := FloatTransform2D identity) {
     result := GpuImage create(image)
     this draw(result, transform)
-    result dispose()
+    result recycle()
   }
   draw: func ~UnknownFormat (image: RasterImage, transform := FloatTransform2D identity) {
     if (image instanceOf?(RasterBgr))

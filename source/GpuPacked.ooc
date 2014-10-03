@@ -42,6 +42,11 @@ GpuPacked: abstract class extends GpuImage {
     if(this _canvas != null)
       this _canvas dispose()
   }
-
+  recycle: func {
+    this _texture recycle()
+  }
+  generateMipmap: func {
+    this _texture generateMipmap()
+  }
 
 }
