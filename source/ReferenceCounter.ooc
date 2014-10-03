@@ -9,6 +9,7 @@ ReferenceCounter: class extends Synchronized {
 		this _target = target
 	}
 	update: func (delta: Int) {
+		/*
 		if (delta != 0) {
 			this lock()
 			this _count += delta
@@ -21,6 +22,7 @@ ReferenceCounter: class extends Synchronized {
 			else
 				this unlock()
 		}
+		*/
 	}
 	increase: func { this update(1) }
 	decrease: func { this update(-1) }
