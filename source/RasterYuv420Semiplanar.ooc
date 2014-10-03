@@ -110,6 +110,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
     RasterUv new((this pointer + this channelOffset + RasterPacked calculateLength(this size, 1)) as Int*, this size/2)
   }
   copy: func -> This {
+//  	"copying..." println()
     This new(this)
   }
   apply: func ~bgr (action: Func(ColorBgr)) {
@@ -159,10 +160,11 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
     this uv[x/2, y/2] = ColorUv new(value u, value v)
   }
  	__destroy__: func {
+// 		"destroying RasterYuv420Semiplanar" println()
 //		this y dispose()
-		this y free()
+//		this y free()
 //		this uv dispose()
-		this uv free()
+//		this uv free()
 		this buffer free()
 	}
 	open: static func (filename: String) -> This {

@@ -168,6 +168,7 @@ RasterUv: class extends RasterPacked {
     ((this pointer + y * this stride) as ColorUv* + x)@ = value
   }
 	__destroy__: func {
+//		"destroying RasterUv" println()
 		this buffer free()
 	}
 }

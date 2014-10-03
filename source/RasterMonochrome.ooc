@@ -141,6 +141,7 @@ RasterMonochrome: class extends RasterPacked {
 	operator [] (x, y: Int) -> ColorMonochrome { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorMonochrome* + x)@ : ColorMonochrome new(0) }
 	operator []= (x, y: Int, value: ColorMonochrome) { ((this pointer + y * this stride) as ColorMonochrome* + x)@ = value }
 	__destroy__: func {
+//		"destroying RasterMonochrome" println()
 		this buffer free()
 	}
 }
