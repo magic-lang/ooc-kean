@@ -21,138 +21,138 @@ import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv4
 import math
 
 GpuPacker: abstract class extends Surface {
-  _packMonochrome: GpuMapPackMonochrome
-  _packUv: GpuMapPackUv
-  _renderTarget: Fbo
-  _targetTexture: Texture
-  _pyramidBuffer: UInt8*
-  _context: Context
-  init: func (context: Context) {
-    this _packMonochrome = GpuMapPackMonochrome new()
-    this _packUv = GpuMapPackUv new()
-    this _quad = Quad create()
-    this _pyramidBuffer = gc_malloc((1920 + 640) * 1080) as UInt8*
-    this _context = context
-  }
-  dispose: func {
-    this _targetTexture dispose()
-    this _renderTarget dispose()
-    this _packMonochrome dispose()
-    this _packUv dispose()
-    gc_free(this _pyramidBuffer)
-  }
-  pack: func ~monochrome (image: GpuMonochrome) -> UInt8* {
-    this _packMonochrome transform = FloatTransform2D identity
-    this _packMonochrome imageSize = image size
-    this _packMonochrome screenSize = image size
-    this draw(image, this _packMonochrome)
-    result := this _context lockEGLPixels(this _targetTexture _eglImage)
-    result
-  }
-  pack: func ~uv (image: GpuUv) -> UInt8* {
-    this _packUv transform = FloatTransform2D identity
-    this _packUv imageSize = image size
-    this _packUv screenSize = image size
-    this draw(image, this _packUv)
-    result := this _context lockEGLPixels(this _targetTexture _eglImage)
-    result
-  }
-  packPyramid: func ~monochrome (image: RasterMonochrome, count: Int) -> UInt8* {
-    gpuMonochrome := GpuImage create(image)
-    gpuMonochrome generateMipmap()
-    this _packMonochrome transform = FloatTransform2D identity
-    this _packMonochrome imageSize = image size
-    this _packMonochrome screenSize = image size
-    resolution := image size
-    pyramidBuffer := this _pyramidBuffer
-    for(i in 0..count) {
-      resolution /= 2
-      this draw(gpuMonochrome, this _packMonochrome, resolution)
-      pixels := this _context lockEGLPixels(this _targetTexture _eglImage) as UInt8*
-      paddedBytes := 640 + 1920 - resolution width
-      byteCount := (640 + 1920) * resolution height
-      memcpy(pyramidBuffer, pixels, byteCount)
-      pyramidBuffer += byteCount
-      /*
-      for(row in 0..resolution height) {
-        memcpy(pyramidBuffer, pixels, resolution width)
-        pyramidBuffer += resolution width
-        pixels += resolution width + paddedBytes
-      }
-      */
-      this _context unlockEGLPixels(this _targetTexture _eglImage)
-    }
-    gpuMonochrome recycle()
-    this _pyramidBuffer
-  }
-  unlock: func {
-    this _context unlockEGLPixels(this _targetTexture _eglImage)
-  }
-  _bind: func {
-    this _renderTarget bind()
-  }
-  _unbind: func {
-    this _renderTarget unbind()
-  }
-  _clear: func {
-    this _renderTarget clear()
-  }
-  _update: func {
-    Fbo finish()
-  }
+	_packMonochrome: GpuMapPackMonochrome
+	_packUv: GpuMapPackUv
+	_renderTarget: Fbo
+	_targetTexture: Texture
+	_pyramidBuffer: UInt8*
+	_context: Context
+	init: func (context: Context) {
+		this _packMonochrome = GpuMapPackMonochrome new()
+		this _packUv = GpuMapPackUv new()
+		this _quad = Quad create()
+		this _pyramidBuffer = gc_malloc((1920 + 640) * 1080) as UInt8*
+		this _context = context
+	}
+	dispose: func {
+		this _targetTexture dispose()
+		this _renderTarget dispose()
+		this _packMonochrome dispose()
+		this _packUv dispose()
+		gc_free(this _pyramidBuffer)
+	}
+	pack: func ~monochrome (image: GpuMonochrome) -> UInt8* {
+		this _packMonochrome transform = FloatTransform2D identity
+		this _packMonochrome imageSize = image size
+		this _packMonochrome screenSize = image size
+		this draw(image, this _packMonochrome)
+		result := this _context lockEGLPixels(this _targetTexture _eglImage)
+		result
+	}
+	pack: func ~uv (image: GpuUv) -> UInt8* {
+		this _packUv transform = FloatTransform2D identity
+		this _packUv imageSize = image size
+		this _packUv screenSize = image size
+		this draw(image, this _packUv)
+		result := this _context lockEGLPixels(this _targetTexture _eglImage)
+		result
+	}
+	packPyramid: func ~monochrome (image: RasterMonochrome, count: Int) -> UInt8* {
+		gpuMonochrome := GpuImage create(image)
+		gpuMonochrome generateMipmap()
+		this _packMonochrome transform = FloatTransform2D identity
+		this _packMonochrome imageSize = image size
+		this _packMonochrome screenSize = image size
+		resolution := image size
+		pyramidBuffer := this _pyramidBuffer
+		for(i in 0..count) {
+			resolution /= 2
+			this draw(gpuMonochrome, this _packMonochrome, resolution)
+			pixels := this _context lockEGLPixels(this _targetTexture _eglImage) as UInt8*
+			paddedBytes := 640 + 1920 - resolution width
+			byteCount := (640 + 1920) * resolution height
+			memcpy(pyramidBuffer, pixels, byteCount)
+			pyramidBuffer += byteCount
+			/*
+			for(row in 0..resolution height) {
+				memcpy(pyramidBuffer, pixels, resolution width)
+				pyramidBuffer += resolution width
+				pixels += resolution width + paddedBytes
+			}
+			*/
+			this _context unlockEGLPixels(this _targetTexture _eglImage)
+		}
+		gpuMonochrome recycle()
+		this _pyramidBuffer
+	}
+	unlock: func {
+		this _context unlockEGLPixels(this _targetTexture _eglImage)
+	}
+	_bind: func {
+		this _renderTarget bind()
+	}
+	_unbind: func {
+		this _renderTarget unbind()
+	}
+	_clear: func {
+		this _renderTarget clear()
+	}
+	_update: func {
+		Fbo finish()
+	}
 }
 
 GpuPackerY: class extends GpuPacker {
-  init: func (context: Context) {
-    super(context)
-  }
-  initialize: func (context: Context) {
-    this _targetTexture = Texture createEGL(1920 / 4, 1080, context)
-    this _renderTarget = Fbo create(this _targetTexture, 1920 / 4, 1080)
-  }
+	init: func (context: Context) {
+		super(context)
+	}
+	initialize: func (context: Context) {
+		this _targetTexture = Texture createEGL(1920 / 4, 1080, context)
+		this _renderTarget = Fbo create(this _targetTexture, 1920 / 4, 1080)
+	}
 
-  create: static func (context: Context) -> This {
-    result := This new(context)
-    result initialize(context)
-    result
-  }
-  _setResolution: func (resolution: IntSize2D) {
-    Fbo setViewport(0, 0, resolution width / 4, resolution height)
-  }
+	create: static func (context: Context) -> This {
+		result := This new(context)
+		result initialize(context)
+		result
+	}
+	_setResolution: func (resolution: IntSize2D) {
+		Fbo setViewport(0, 0, resolution width / 4, resolution height)
+	}
 }
 
 GpuPackerUv: class extends GpuPacker {
-  init: func (context: Context) {
-    super(context)
-  }
-  initialize: func (context: Context) {
-    this _targetTexture = Texture createEGL(1920 / 4, 1080 / 2, context)
-    this _renderTarget = Fbo create(this _targetTexture, 1920 / 2, 1080 / 2)
-  }
-  create: static func (context: Context) -> This {
-    result := This new(context)
-    result initialize(context)
-    result
-  }
-  _setResolution: func (resolution: IntSize2D) {
-    Fbo setViewport(0, 0, resolution width / 2, resolution height)
-  }
+	init: func (context: Context) {
+		super(context)
+	}
+	initialize: func (context: Context) {
+		this _targetTexture = Texture createEGL(1920 / 4, 1080 / 2, context)
+		this _renderTarget = Fbo create(this _targetTexture, 1920 / 2, 1080 / 2)
+	}
+	create: static func (context: Context) -> This {
+		result := This new(context)
+		result initialize(context)
+		result
+	}
+	_setResolution: func (resolution: IntSize2D) {
+		Fbo setViewport(0, 0, resolution width / 2, resolution height)
+	}
 }
 
 GpuPackerU: class extends GpuPacker {
-    init: func (context: Context) {
-    super(context)
-  }
-    initialize: func (context: Context) {
-    this _targetTexture = Texture createEGL(1920 / 4, 1080 / 4, context)
-    this _renderTarget = Fbo create(this _targetTexture, 1920 / 4, 1080 / 4)
-  }
-  create: static func (context: Context) -> This {
-    result := This new(context)
-    result initialize(context)
-    result
-  }
-    _setResolution: func (resolution: IntSize2D) {
-    Fbo setViewport(0, 0, resolution width / 4, resolution height / 4)
-  }
+		init: func (context: Context) {
+		super(context)
+	}
+		initialize: func (context: Context) {
+		this _targetTexture = Texture createEGL(1920 / 4, 1080 / 4, context)
+		this _renderTarget = Fbo create(this _targetTexture, 1920 / 4, 1080 / 4)
+	}
+	create: static func (context: Context) -> This {
+		result := This new(context)
+		result initialize(context)
+		result
+	}
+		_setResolution: func (resolution: IntSize2D) {
+		Fbo setViewport(0, 0, resolution width / 4, resolution height / 4)
+	}
 }

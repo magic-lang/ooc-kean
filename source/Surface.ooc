@@ -18,66 +18,66 @@ use ooc-draw
 import GpuImage, GpuMap, OpenGLES3/Quad, OpenGLES3/Lines
 
 Surface: abstract class {
-  size: IntSize2D
-  _quad: Quad
-  _overlayMonochrome: GpuOverlay
-  _lines: Lines
-  init: func {
-    this _overlayMonochrome = GpuOverlay new()
-    this _lines = Lines new()
-  }
-  draw: func ~default (image: GpuImage, map: GpuMap) {
-    this _bind()
-    this _setResolution(image size)
-    this _clear()
-    map use()
-    image _bind()
-    this _quad draw()
-    this _unbind()
-    this _update()
-  }
-  draw: func ~customResolution (image: GpuImage, map: GpuMap, resolution: IntSize2D) {
-    this _bind()
-    this _setResolution(resolution)
-    this _clear()
-    map use()
-    image _bind()
-    this _quad draw()
-    this _unbind()
-    this _update()
-  }
-  drawLines: func (transform: FloatTransform2D, screenSize: IntSize2D) {
-    this _bind()
-    if(screenSize width == 768)
-      this _lines draw(transform, IntSize2D new(720, 480))
-    else
-      this _lines draw(transform, screenSize)
-    this _unbind()
-    this _update()
-  }
-  drawOverlay: func ~overlay (transform: FloatTransform2D, screenSize: IntSize2D) {
-    this _bind()
-    //Temp solution for handling stride for 480p
-    if (screenSize width == 768)
-      this _overlayMonochrome screenSize = IntSize2D new(720, 480)
-    else
-      this _overlayMonochrome screenSize = screenSize
-    crossWidth := this _overlayMonochrome screenSize width / 16
-    crossHeight := this _overlayMonochrome screenSize height / 160
-    this _overlayMonochrome imageSize = IntSize2D new(crossHeight, crossWidth)
-    this _overlayMonochrome transform = transform
-    this _overlayMonochrome use()
-    this _quad draw()
-    this _overlayMonochrome imageSize = IntSize2D new(crossWidth, crossHeight)
-    this _overlayMonochrome use()
-    this _quad draw()
-    this _unbind()
-    this _update()
-  }
+	size: IntSize2D
+	_quad: Quad
+	_overlayMonochrome: GpuOverlay
+	_lines: Lines
+	init: func {
+		this _overlayMonochrome = GpuOverlay new()
+		this _lines = Lines new()
+	}
+	draw: func ~default (image: GpuImage, map: GpuMap) {
+		this _bind()
+		this _setResolution(image size)
+		this _clear()
+		map use()
+		image _bind()
+		this _quad draw()
+		this _unbind()
+		this _update()
+	}
+	draw: func ~customResolution (image: GpuImage, map: GpuMap, resolution: IntSize2D) {
+		this _bind()
+		this _setResolution(resolution)
+		this _clear()
+		map use()
+		image _bind()
+		this _quad draw()
+		this _unbind()
+		this _update()
+	}
+	drawLines: func (transform: FloatTransform2D, screenSize: IntSize2D) {
+		this _bind()
+		if(screenSize width == 768)
+			this _lines draw(transform, IntSize2D new(720, 480))
+		else
+			this _lines draw(transform, screenSize)
+		this _unbind()
+		this _update()
+	}
+	drawOverlay: func ~overlay (transform: FloatTransform2D, screenSize: IntSize2D) {
+		this _bind()
+		//Temp solution for handling stride for 480p
+		if (screenSize width == 768)
+			this _overlayMonochrome screenSize = IntSize2D new(720, 480)
+		else
+			this _overlayMonochrome screenSize = screenSize
+		crossWidth := this _overlayMonochrome screenSize width / 16
+		crossHeight := this _overlayMonochrome screenSize height / 160
+		this _overlayMonochrome imageSize = IntSize2D new(crossHeight, crossWidth)
+		this _overlayMonochrome transform = transform
+		this _overlayMonochrome use()
+		this _quad draw()
+		this _overlayMonochrome imageSize = IntSize2D new(crossWidth, crossHeight)
+		this _overlayMonochrome use()
+		this _quad draw()
+		this _unbind()
+		this _update()
+	}
 
-  _clear: abstract func
-  _bind: abstract func
-  _setResolution: func (resolution: IntSize2D)
-  _unbind: func
-  _update: func
+	_clear: abstract func
+	_bind: abstract func
+	_setResolution: func (resolution: IntSize2D)
+	_unbind: func
+	_update: func
 }

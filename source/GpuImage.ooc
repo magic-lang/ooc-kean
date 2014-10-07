@@ -19,46 +19,46 @@ use ooc-base
 import GpuBgra, GpuBgr, GpuMonochrome, GpuYuv420Planar, GpuYuv420Semiplanar, GpuCanvas, OpenGLES3/Texture
 
 GpuImage: abstract class extends Image implements IDisposable {
-  _texture: Texture
-  texture: /* internal */ Texture { get { _texture } }
-  ratio: Float { get {this size width as Float / this size height as Float } }
+	_texture: Texture
+	texture: /* internal */ Texture { get { _texture } }
+	ratio: Float { get {this size width as Float / this size height as Float } }
 
-  init: func (=size)
-  _bind: abstract func
-  create: static func ~Monochrome (image: RasterMonochrome) -> GpuMonochrome {
-    GpuMonochrome _create(image size, image pointer)
-  }
-  create: static func ~Bgr (image: RasterBgr) -> GpuBgr {
-    GpuBgr _create(image size, image pointer)
-  }
-  create: static func ~Bgra (image: RasterBgra) -> GpuBgra {
-    GpuBgra _create(image size, image pointer)
-  }
-  create: static func ~Yuv420Planar (image: RasterYuv420Planar) -> GpuYuv420Planar {
-    GpuYuv420Planar _create(image size, image y pointer, image u pointer, image v pointer)
-  }
-  create: static func ~Yuv420Semiplanar (image: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar {
-    GpuYuv420Semiplanar _create(image size, image y pointer, image uv pointer)
-  }
+	init: func (=size)
+	_bind: abstract func
+	create: static func ~Monochrome (image: RasterMonochrome) -> GpuMonochrome {
+		GpuMonochrome _create(image size, image pointer)
+	}
+	create: static func ~Bgr (image: RasterBgr) -> GpuBgr {
+		GpuBgr _create(image size, image pointer)
+	}
+	create: static func ~Bgra (image: RasterBgra) -> GpuBgra {
+		GpuBgra _create(image size, image pointer)
+	}
+	create: static func ~Yuv420Planar (image: RasterYuv420Planar) -> GpuYuv420Planar {
+		GpuYuv420Planar _create(image size, image y pointer, image u pointer, image v pointer)
+	}
+	create: static func ~Yuv420Semiplanar (image: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar {
+		GpuYuv420Semiplanar _create(image size, image y pointer, image uv pointer)
+	}
 
-  recycle: abstract func
-  generateMipmap: func
+	recycle: abstract func
+	generateMipmap: func
 
-  //TODO: Implement abstract functions
-  resizeTo: func (size: IntSize2D) -> This {
-    raise("Using unimplemented function reSizeTo in GpuImage class")
-  }
-  copy: func -> This {
-    raise("Using unimplemented function copy in GpuImage class")
-  }
-  copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {
-    raise("Using unimplemented function copy ~fromParams in GpuImage class")
-  }
-  shift: func (offset: IntSize2D) -> This {
-    raise("Using unimplemented function shift in GpuImage class")
-  }
-  distance: func (other: This) -> Float {
-    raise("Using unimplemented function distance in GpuImage class")
-  }
+	//TODO: Implement abstract functions
+	resizeTo: func (size: IntSize2D) -> This {
+		raise("Using unimplemented function reSizeTo in GpuImage class")
+	}
+	copy: func -> This {
+		raise("Using unimplemented function copy in GpuImage class")
+	}
+	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {
+		raise("Using unimplemented function copy ~fromParams in GpuImage class")
+	}
+	shift: func (offset: IntSize2D) -> This {
+		raise("Using unimplemented function shift in GpuImage class")
+	}
+	distance: func (other: This) -> Float {
+		raise("Using unimplemented function distance in GpuImage class")
+	}
 
 }

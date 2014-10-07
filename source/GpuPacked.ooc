@@ -19,34 +19,34 @@ import OpenGLES3/Texture
 import GpuImage, GpuCanvas
 
 GpuPacked: abstract class extends GpuImage {
-  _canvas: GpuCanvasPacked
-  canvas: GpuCanvasPacked {
-    get {
-      if (this _canvas == null)
-        this _canvas = GpuCanvasPacked create(this)
-      this _canvas
-    }
-  }
-  init: func (size: IntSize2D, type: TextureType, data: Pointer) {
-    super(size)
-    this _texture = Texture create(type, size width, size height, data)
-  }
-  _bind: /* internal */ func ~specificTextureUnit(unit: UInt) {
-    this _texture bind (unit)
-  }
-  _bind: /* internal */ func {
-    this _texture bind (0)
-  }
-  dispose: func {
-    this _texture dispose()
-    if(this _canvas != null)
-      this _canvas dispose()
-  }
-  recycle: func {
-    this _texture recycle()
-  }
-  generateMipmap: func {
-    this _texture generateMipmap()
-  }
+	_canvas: GpuCanvasPacked
+	canvas: GpuCanvasPacked {
+		get {
+			if (this _canvas == null)
+				this _canvas = GpuCanvasPacked create(this)
+			this _canvas
+		}
+	}
+	init: func (size: IntSize2D, type: TextureType, data: Pointer) {
+		super(size)
+		this _texture = Texture create(type, size width, size height, data)
+	}
+	_bind: /* internal */ func ~specificTextureUnit(unit: UInt) {
+		this _texture bind (unit)
+	}
+	_bind: /* internal */ func {
+		this _texture bind (0)
+	}
+	dispose: func {
+		this _texture dispose()
+		if(this _canvas != null)
+			this _canvas dispose()
+	}
+	recycle: func {
+		this _texture recycle()
+	}
+	generateMipmap: func {
+		this _texture generateMipmap()
+	}
 
 }
