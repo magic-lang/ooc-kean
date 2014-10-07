@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import include/egl, NativeWindow
+import include/egl, NativeWindow, Texture
 
 Context: class {
 	_eglContext: Pointer
