@@ -17,7 +17,7 @@ use ooc-base
 use ooc-math
 import OpenGLES3/ShaderProgram
 
-GpuMap: abstract class implements IDisposable {
+GpuMap: abstract class {
   _program: ShaderProgram
   _onUse: Func
 
@@ -57,8 +57,10 @@ GpuMapDefault: abstract class extends GpuMap {
       super(This defaultVertexSourceAndroid, fragmentSource,
         func {
           onUse()
-          this _program setUniform("width", this size width)
-          this _program setUniform("height", this size height)
+          this _program setUniform("imageWidth", this imageSize width)
+          this _program setUniform("imageHeight", this imageSize height)
+          this _program setUniform("screenWidth", this screenSize width)
+          this _program setUniform("screenHeight", this screenSize height)
           this _program setUniform("transform", transform)
         })
     }
@@ -67,36 +69,65 @@ GpuMapDefault: abstract class extends GpuMap {
   defaultVertexSource: static const String = "#version 300 es\n
   precision highp float;\n
   uniform mat3 transform;\n
-  uniform int width;\n
-  uniform int height;\n
+  uniform int imageWidth;\n
+  uniform int imageHeight;\n
+  uniform int screenWidth;\n
+  uniform int screenHeight;\n
   layout(location = 0) in vec2 vertexPosition;\n
   layout(location = 1) in vec2 textureCoordinate;\n
   out vec2 fragmentTextureCoordinate;\n
   void main() {\n
-    vec3 scaledQuadPosition = vec3(float(width) / 2.0f * vertexPosition.x, float(height) / 2.0f * vertexPosition.y, 1);\n
+    vec3 scaledQuadPosition = vec3(float(imageWidth) / 2.0f * vertexPosition.x, float(imageHeight) / 2.0f * vertexPosition.y, 1);\n
     vec3 transformedPosition = transform * scaledQuadPosition;\n
     transformedPosition.xy /= transformedPosition.z; \n
-    mat4 projectionMatrix = transpose(mat4(2.0f / float(width), 0, 0, 0, 0, -2.0f / float(height), 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
+    mat4 projectionMatrix = transpose(mat4(2.0f / float(screenWidth), 0, 0, 0, 0, -2.0f / float(screenHeight), 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
     fragmentTextureCoordinate = textureCoordinate;\n
     gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
   }\n";
 
   defaultVertexSourceAndroid: static String = "#version 300 es\n
   uniform mat3 transform;\n
-  uniform int width;\n
-  uniform int height;\n
+  uniform int imageWidth;\n
+  uniform int imageHeight;\n
+  uniform int screenWidth;\n
+  uniform int screenHeight;\n
   layout(location = 0) in vec2 vertexPosition;\n
   layout(location = 1) in vec2 textureCoordinate;\n
   out vec2 fragmentTextureCoordinate;\n
   void main() {\n
-    vec3 scaledQuadPosition = vec3(float(width) / 2.0f * vertexPosition.x, float(height) / 2.0f * vertexPosition.y, 1);\n
+    vec3 scaledQuadPosition = vec3(float(imageWidth) / 2.0f * vertexPosition.x, float(imageHeight) / 2.0f * vertexPosition.y, 1);\n
     vec3 transformedPosition = transform * scaledQuadPosition;\n
     transformedPosition.xy /= transformedPosition.z; \n
-    mat4 projectionMatrix = transpose(mat4(2.0f / float(width), 0, 0, 0, 0, 2.0f / float(height), 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
+    mat4 projectionMatrix = transpose(mat4(2.0f / float(screenWidth), 0, 0, 0, 0, 2.0f / float(screenHeight), 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
     fragmentTextureCoordinate = textureCoordinate;\n
     gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
   }\n";
 
+}
+GpuOverlay: class extends GpuMapDefault {
+init: func {
+  version(debug) {
+  super(This fragmentSource,
+    func {
+    })
+  }
+  else {
+  super(This fragmentSourceAndroid,
+    func {
+    })
+  }
+}
+fragmentSource: const static String = "#version 300 es\n
+precision highp float;\n
+out float outColor;\n
+void main() {\n
+  outColor = 0.0f;\n
+}\n";
+fragmentSourceAndroid: static String = "#version 300 es\n
+out float outColor;\n
+void main() {\n
+  outColor = 0.0f;\n
+}\n";
 }
 
 GpuMapBgr: class extends GpuMapDefault {
@@ -425,7 +456,7 @@ GpuMapPackMonochrome: class extends GpuMapDefault {
       super(This fragmentSourceAndroid,
         func {
           this _program setUniform("texture0", 0)
-          this _program setUniform("pixelWidth", this size width)
+          this _program setUniform("pixelWidth", this imageSize width)
         })
   }
 
@@ -450,7 +481,7 @@ GpuMapPackUv: class extends GpuMapDefault {
       super(This fragmentSourceAndroid,
         func {
           this _program setUniform("texture0", 0)
-          this _program setUniform("pixelWidth", this size width)
+          this _program setUniform("pixelWidth", this imageSize width)
         })
   }
 fragmentSourceAndroid: static String = "#version 300 es\n

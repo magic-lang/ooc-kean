@@ -26,6 +26,7 @@ GpuCanvas: abstract class extends Surface {
   _uvToUv: GpuMapUv
 
   init: func {
+    super()
     this _monochromeToMonochrome = GpuMapMonochrome new()
     this _bgrToBgr = GpuMapBgr new()
     this _bgraToBgra = GpuMapBgra new()
@@ -54,22 +55,26 @@ GpuCanvasPacked: class extends GpuCanvas {
   }
   draw: func ~Monochrome (image: GpuMonochrome, transform := FloatTransform2D identity) {
     this _monochromeToMonochrome transform = transform
-    this _monochromeToMonochrome size = image size
+    this _monochromeToMonochrome imageSize = image size
+    this _monochromeToMonochrome screenSize = image size
     this draw(image, this _monochromeToMonochrome)
   }
   draw: func ~Bgr (image: GpuBgr, transform := FloatTransform2D identity) {
     this _bgrToBgr transform = transform
-    this _bgrToBgr size = image size
+    this _bgrToBgr imageSize = image size
+    this _bgrToBgr screenSize = image size
     this draw(image, this _bgrToBgr)
   }
   draw: func ~Bgra (image: GpuBgra, transform := FloatTransform2D identity) {
     this _bgraToBgra transform = transform
-    this _bgraToBgra size = image size
+    this _bgraToBgra imageSize = image size
+    this _bgraToBgra screenSize = image size
     this draw(image, this _bgraToBgra)
   }
   draw: func ~Uv (image: GpuUv, transform := FloatTransform2D identity) {
     this _uvToUv transform  = transform setTranslation(FloatSize2D new (transform g / 2.0f, transform h / 2.0f))
-    this _uvToUv size = image size
+    this _uvToUv imageSize = image size
+    this _uvToUv screenSize = image size
     this _renderTarget clearColor(0.5f)
     this draw(image, this _uvToUv)
     this _renderTarget clearColor(0.0f)
@@ -166,6 +171,8 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
   }
   draw: func ~GpuYuv420Semiplanar (image: GpuYuv420Semiplanar, transform := FloatTransform2D identity) {
     this _y draw(image y, transform)
+    //this _y drawOverlay(transform, image size)
+    this _y drawLines(transform, image size)
     this _uv draw(image uv, transform)
   }
   draw: func ~raster (image: RasterImage, transform := FloatTransform2D identity) {

@@ -43,14 +43,16 @@ GpuPacker: abstract class extends Surface {
   }
   pack: func ~monochrome (image: GpuMonochrome) -> UInt8* {
     this _packMonochrome transform = FloatTransform2D identity
-    this _packMonochrome size = image size
+    this _packMonochrome imageSize = image size
+    this _packMonochrome screenSize = image size
     this draw(image, this _packMonochrome)
     result := this _context lockEGLPixels(this _targetTexture _eglImage)
     result
   }
   pack: func ~uv (image: GpuUv) -> UInt8* {
     this _packUv transform = FloatTransform2D identity
-    this _packUv size = image size
+    this _packUv imageSize = image size
+    this _packUv screenSize = image size
     this draw(image, this _packUv)
     result := this _context lockEGLPixels(this _targetTexture _eglImage)
     result
@@ -59,7 +61,8 @@ GpuPacker: abstract class extends Surface {
     gpuMonochrome := GpuImage create(image)
     gpuMonochrome generateMipmap()
     this _packMonochrome transform = FloatTransform2D identity
-    this _packMonochrome size = image size
+    this _packMonochrome imageSize = image size
+    this _packMonochrome screenSize = image size
     resolution := image size
     pyramidBuffer := this _pyramidBuffer
     for(i in 0..count) {
