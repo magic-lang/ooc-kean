@@ -1,0 +1,6 @@
+Name: OOC OpenGL ES 3
+Description: Wrapper for OpenGL ES 3
+SourcePath: source
+Requires:
+Imports: Context, Fbo, Fence, Lines, NativeWindow, Quad, ShaderProgram, Texture, Vao
+Libs: -lEGL, -lGLESv2
