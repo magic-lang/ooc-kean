@@ -27,9 +27,7 @@ Vector: abstract class <T> {
 		this _allocate(this _count)
 		this _freeContent = freeContent
 	}
-	__destroy__: func {
-		this _free(0, this count)
-	}
+	__destroy__: func {	this _free(0, this count) }
 	_free: func ~range (start: Int, end: Int) {
 		if (this _freeContent && T inheritsFrom?(Object)) {
 			for (i in start..end) {
