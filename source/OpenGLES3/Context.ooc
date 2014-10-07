@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import lib/egl, lib/eglimage, NativeWindow, Texture
+import include/egl, include/eglimage, NativeWindow, Texture
 
 Context: class {
   _eglContext: Pointer
@@ -185,7 +185,7 @@ Context: class {
             EGL_NONE] as Int*
 
     shared: Pointer = null
-    if (sharedContext)
+    if (sharedContext != null)
       shared = sharedContext _eglContext
     this _eglContext = eglCreateContext(this _eglDisplay, chosenConfig, shared, contextAttribs)
     if (this _eglContext == null) {
@@ -210,9 +210,9 @@ Context: class {
     result := This new()
     result _generate(window, sharedContext) ? result : null
   }
-  create: static func ~pbuffer () -> This {
+  create: static func ~pbuffer (sharedContext: This) -> This {
     result := This new()
-    result _generate(null) ? result : null
+    result _generate(sharedContext) ? result : null
   }
 
 

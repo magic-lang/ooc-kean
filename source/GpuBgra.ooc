@@ -32,7 +32,6 @@ GpuBgra: class extends GpuPacked {
     result := This new(size)
     result _texture != null ? result : null
   }
-
   create: static func ~empty (size: IntSize2D) -> This {
     result := This new(size)
     result _texture != null ? result : null

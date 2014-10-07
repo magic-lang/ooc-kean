@@ -15,7 +15,7 @@
  * along with This software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import lib/gles, Vao
+import include/gles, Vao
 
 Quad: class {
   vao: Vao

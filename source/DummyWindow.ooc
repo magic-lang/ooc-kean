@@ -25,15 +25,20 @@ DummyWindow: class extends Surface {
   _uvPacker: GpuPackerUv
   _uPacker: GpuPackerU
   init: /* internal */ func
-  _generate: /* private */ func () -> Bool {
-    this _context = Context create()
+  _generate: /* private */ func (other: Context) -> Bool {
+    this _context = Context create(other)
     result: UInt = this _context makeCurrent()
     result == 1
   }
-  create: static func -> This {
+  create: static func (other: DummyWindow)-> This {
     result := This new()
     This _instance = result
-    success := result _generate()
+    success := false
+    if(other != null)
+      success = result _generate(other _context)
+    else
+      success = result _generate(null)
+
     if(success) {
       result _yPacker = GpuPackerY create(result _context)
       result _uvPacker = GpuPackerUv create(result _context)

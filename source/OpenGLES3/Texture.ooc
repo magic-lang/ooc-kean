@@ -15,10 +15,10 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import lib/gles
+import include/gles
+import include/eglimage
 import TextureBin
 import Context
-import lib/eglimage
 
 TextureType: enum {
   monochrome

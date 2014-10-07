@@ -39,14 +39,17 @@ GpuMap: abstract class implements IDisposable {
 
 GpuMapDefault: abstract class extends GpuMap {
   transform: FloatTransform2D { get set }
-  size: IntSize2D { get set }
+  imageSize: IntSize2D { get set }
+  screenSize: IntSize2D { get set }
   init: func (fragmentSource: String, onUse: Func) {
     version(debug) {
       super(This defaultVertexSource, fragmentSource,
         func {
           onUse()
-          this _program setUniform("width", this size width)
-          this _program setUniform("height", this size height)
+          this _program setUniform("imageWidth", this imageSize width)
+          this _program setUniform("imageHeight", this imageSize height)
+          this _program setUniform("screenWidth", this screenSize width)
+          this _program setUniform("screenHeight", this screenSize height)
           this _program setUniform("transform", transform)
         })
     }

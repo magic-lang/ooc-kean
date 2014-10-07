@@ -16,7 +16,7 @@
  */
 
 use ooc-math
-import lib/gles
+import include/gles
 
 ShaderProgram: class {
   _backend: UInt
@@ -41,10 +41,11 @@ ShaderProgram: class {
     glCompileShader(shaderID)
 
     //"Compiling shader:" println()
-    //source println()
+
     success: Int
     glGetShaderiv(shaderID, GL_COMPILE_STATUS, success&)
     if(!success){
+      source println()
       logSize: Int = 0
       glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, logSize&)
       compileLog := gc_malloc(logSize * Char size) as Char*
@@ -59,8 +60,9 @@ ShaderProgram: class {
   _compileShaders: func(vertexSource: String, fragmentSource: String) -> Bool {
     vertexShaderID := glCreateShader(GL_VERTEX_SHADER)
     fragmentShaderID := glCreateShader(GL_FRAGMENT_SHADER)
-
+    println("Compiling vertex shader")
     success := _compileShader(vertexSource, vertexShaderID)
+    println("Compiling fragment shader")
     success = success && _compileShader(fragmentSource, fragmentShaderID)
 
     if(success) {
