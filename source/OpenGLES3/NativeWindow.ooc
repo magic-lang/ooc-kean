@@ -15,22 +15,22 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import lib/gles
+import include/gles
 NativeWindow: abstract class {
-  _display: Pointer
-  display: Pointer { get { _display} }
-  _backend: Long
-  backend: Long { get { _backend} }
-  _width: UInt
-  _height: UInt
+	_display: Pointer
+	display: Pointer { get { _display} }
+	_backend: Long
+	backend: Long { get { _backend} }
+	_width: UInt
+	_height: UInt
 
-  setViewport: func (x: UInt, y: UInt, width: UInt, height: UInt) {
-    glViewport(x, y, width, height)
-  }
-  clear: func {
-    glClear(GL_COLOR_BUFFER_BIT)
-  }
-  bind: func {
-    glBindFramebuffer(GL_FRAMEBUFFER, 0)
-  }
+	setViewport: func (x: UInt, y: UInt, width: UInt, height: UInt) {
+		glViewport(x, y, width, height)
+	}
+	clear: func {
+		glClear(GL_COLOR_BUFFER_BIT)
+	}
+	bind: func {
+		glBindFramebuffer(GL_FRAMEBUFFER, 0)
+	}
 }

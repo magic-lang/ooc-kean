@@ -19,27 +19,26 @@ import OpenGLES3/Texture
 import GpuPacked
 
 GpuBgra: class extends GpuPacked {
-  init: func (size: IntSize2D) {
-    super(size, TextureType rgba, null)
-  }
-  init: func ~fromPixels (size: IntSize2D, data: Pointer) {
-    super(size, TextureType bgra, data)
-  }
-  replace: func (image: RasterBgra) {
-    this _texture uploadPixels(image pointer)
-  }
-  create: func (size: IntSize2D) -> This {
-    result := This new(size)
-    result _texture != null ? result : null
-  }
-
-  create: static func ~empty (size: IntSize2D) -> This {
-    result := This new(size)
-    result _texture != null ? result : null
-  }
-  _create: static /* internal */ func ~fromPixels (size: IntSize2D, data: Pointer) -> This {
-    result := This new(size, data)
-    result _texture != null ? result : null
-  }
+	init: func (size: IntSize2D) {
+		super(size, TextureType rgba, null)
+	}
+	init: func ~fromPixels (size: IntSize2D, data: Pointer) {
+		super(size, TextureType bgra, data)
+	}
+	replace: func (image: RasterBgra) {
+		this _texture uploadPixels(image pointer)
+	}
+	create: func (size: IntSize2D) -> This {
+		result := This new(size)
+		result _texture != null ? result : null
+	}
+	create: static func ~empty (size: IntSize2D) -> This {
+		result := This new(size)
+		result _texture != null ? result : null
+	}
+	_create: static /* internal */ func ~fromPixels (size: IntSize2D, data: Pointer) -> This {
+		result := This new(size, data)
+		result _texture != null ? result : null
+	}
 
 }

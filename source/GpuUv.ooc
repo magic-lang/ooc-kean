@@ -18,22 +18,22 @@ import OpenGLES3/Texture
 import GpuPacked
 
 GpuUv: class extends GpuPacked {
-  init: func (size: IntSize2D) {
-    super(size, TextureType uv, null)
-  }
-  init: func~fromPixels (data: Pointer, size: IntSize2D) {
-    super(size, TextureType uv, data)
-  }
-  _create: static /* internal */ func ~fromPixels (size: IntSize2D, data: Pointer) -> This {
-    result := This new(data, size)
-    result _texture != null ? result : null
-  }
-  create: func (size: IntSize2D) -> This {
-    result := This new(size)
-    result _texture != null ? result : null
-  }
-  create: static func ~empty (size: IntSize2D) -> This {
-    result := This new(size)
-    result _texture != null ? result : null
-  }
+	init: func (size: IntSize2D) {
+		super(size, TextureType uv, null)
+	}
+	init: func~fromPixels (data: Pointer, size: IntSize2D) {
+		super(size, TextureType uv, data)
+	}
+	_create: static /* internal */ func ~fromPixels (size: IntSize2D, data: Pointer) -> This {
+		result := This new(data, size)
+		result _texture != null ? result : null
+	}
+	create: func (size: IntSize2D) -> This {
+		result := This new(size)
+		result _texture != null ? result : null
+	}
+	create: static func ~empty (size: IntSize2D) -> This {
+		result := This new(size)
+		result _texture != null ? result : null
+	}
 }

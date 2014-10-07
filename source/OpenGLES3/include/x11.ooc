@@ -29,27 +29,27 @@ CWEventMask: extern const ULong
 
 
 XSetWindowAttributesOOC: cover from XSetWindowAttributes {
-  backgroundPixmap: extern(background_pixmap) Long
-  backgroundPixel: extern(background_pixel) ULong
-  borderPixmap: extern(border_pixmap) Long
-  borderPixel: extern(border_pixel) ULong
-  bitGravity: extern(bit_gravity) Int
-  winGravity: extern(win_gravity) Int
-  backingStore: extern(backing_store) Int
-  backingPlanes: extern(backing_planes) ULong
-  backingPixel: extern(backing_pixel) ULong
-  saveUnder: extern(save_under) Bool
-  eventMask: extern(event_mask) Long
-  doNotPropagateMask: extern(do_not_propagate_mask) Long
-  overrideRedirect: extern(override_redirect) Bool
-  colormap: extern Long
-  cursor: extern Long
+	backgroundPixmap: extern(background_pixmap) Long
+	backgroundPixel: extern(background_pixel) ULong
+	borderPixmap: extern(border_pixmap) Long
+	borderPixel: extern(border_pixel) ULong
+	bitGravity: extern(bit_gravity) Int
+	winGravity: extern(win_gravity) Int
+	backingStore: extern(backing_store) Int
+	backingPlanes: extern(backing_planes) ULong
+	backingPixel: extern(backing_pixel) ULong
+	saveUnder: extern(save_under) Bool
+	eventMask: extern(event_mask) Long
+	doNotPropagateMask: extern(do_not_propagate_mask) Long
+	overrideRedirect: extern(override_redirect) Bool
+	colormap: extern Long
+	cursor: extern Long
 }
 
 
 XOpenDisplay: extern func(displayName: Char*) -> Pointer
 XCreateWindow: extern func(display: Pointer, window: Long, x: Int, y: Int,
-  width: UInt, height: UInt, borderWidth: UInt, depth: Int, class: UInt, visual: Pointer, valueMask: ULong, attributes: Pointer) -> Long
+	width: UInt, height: UInt, borderWidth: UInt, depth: Int, class: UInt, visual: Pointer, valueMask: ULong, attributes: Pointer) -> Long
 XMapWindow: extern func(display: Pointer, window: Long) -> Int
 XStoreName: extern func(display: Pointer, window: Long, windowName: Char*) -> Int
 DefaultRootWindow: extern func(display: Pointer) -> UInt

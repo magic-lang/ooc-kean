@@ -18,22 +18,22 @@ import OpenGLES3/Texture
 import GpuPacked
 
 GpuBgr: class extends GpuPacked {
-  init: func (size: IntSize2D) {
-    super(size, TextureType rgb, null)
-  }
-  init: func ~fromPixels (size: IntSize2D, data: Pointer) {
-    super(size, TextureType bgr, data)
-  }
-  create: func (size: IntSize2D) -> This {
-    result := This new(size)
-    result _texture != null ? result : null
-  }
-  create: static func ~empty (size: IntSize2D) -> This {
-    result := This new(size)
-    result _texture != null ? result : null
-  }
-  _create: static /* internal */ func ~fromPixels (size: IntSize2D, data: Pointer) -> This {
-    result := This new(size, data)
-    result _texture != null ? result : null
-  }
+	init: func (size: IntSize2D) {
+		super(size, TextureType rgb, null)
+	}
+	init: func ~fromPixels (size: IntSize2D, data: Pointer) {
+		super(size, TextureType bgr, data)
+	}
+	create: func (size: IntSize2D) -> This {
+		result := This new(size)
+		result _texture != null ? result : null
+	}
+	create: static func ~empty (size: IntSize2D) -> This {
+		result := This new(size)
+		result _texture != null ? result : null
+	}
+	_create: static /* internal */ func ~fromPixels (size: IntSize2D, data: Pointer) -> This {
+		result := This new(size, data)
+		result _texture != null ? result : null
+	}
 }

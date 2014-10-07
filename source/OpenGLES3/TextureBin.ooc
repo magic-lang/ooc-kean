@@ -19,72 +19,72 @@ import structs/ArrayList
 import Texture
 
 TextureBin: class {
-  monochrome: ArrayList<Texture>
-  bgr: ArrayList<Texture>
-  bgra: ArrayList<Texture>
-  uv: ArrayList<Texture>
+	monochrome: ArrayList<Texture>
+	bgr: ArrayList<Texture>
+	bgra: ArrayList<Texture>
+	uv: ArrayList<Texture>
 
-  init: func {
-    monochrome = ArrayList<Texture> new()
-    bgr = ArrayList<Texture> new()
-    bgra = ArrayList<Texture> new()
-    uv = ArrayList<Texture> new()
-  }
-  dispose: func {
-    for(texture in this monochrome)
-      texture dispose()
-    for(texture in this bgr)
-      texture dispose()
-    for(texture in this bgra)
-      texture dispose()
-    for(texture in this uv)
-      texture dispose()
+	init: func {
+		monochrome = ArrayList<Texture> new()
+		bgr = ArrayList<Texture> new()
+		bgra = ArrayList<Texture> new()
+		uv = ArrayList<Texture> new()
+	}
+	dispose: func {
+		for(texture in this monochrome)
+			texture dispose()
+		for(texture in this bgr)
+			texture dispose()
+		for(texture in this bgra)
+			texture dispose()
+		for(texture in this uv)
+			texture dispose()
 
-    this monochrome clear()
-    this bgr clear()
-    this bgra clear()
-    this uv clear()
-  }
+		this monochrome clear()
+		this bgr clear()
+		this bgra clear()
+		this uv clear()
+	}
 
-  add: func (texture: Texture) {
-    match (texture type) {
-      case TextureType monochrome =>
-        this monochrome add(texture)
-      case TextureType bgr =>
-        this bgr add(texture)
-      case TextureType bgra =>
-        this bgra add(texture)
-      case TextureType uv =>
-        this uv add(texture)
-    }
-  }
+	add: func (texture: Texture) {
+		match (texture type) {
+			case TextureType monochrome =>
+				this monochrome add(texture)
+			case TextureType bgr =>
+				this bgr add(texture)
+			case TextureType bgra =>
+				this bgra add(texture)
+			case TextureType uv =>
+				this uv add(texture)
+		}
+	}
 
-  _search: func (width: UInt, height: UInt, arrayList: ArrayList<Texture>) -> Texture {
-    result := null
+	_search: func (width: UInt, height: UInt, arrayList: ArrayList<Texture>) -> Texture {
+		result := null
 
-    for (texture in arrayList) {
-      if(texture width == width && texture height == height) {
-        result = texture
-        break
-      }
-    }
-    if (result != null)
-      arrayList remove(result)
-    result
-  }
-  find: func (type: TextureType, width: UInt, height: UInt) -> Texture {
-    result := null
-    match (type) {
-      case TextureType monochrome =>
-        result = this _search(width, height, this monochrome)
-      case TextureType bgr =>
-        result = this _search(width, height, this bgr)
-      case TextureType bgra =>
-        result = this _search(width, height, this bgra)
-      case TextureType uv =>
-        result = this _search(width, height, this uv)
-    }
-    result
-  }
+		for (texture in arrayList) {
+			if(texture width == width && texture height == height) {
+				result = texture
+				break
+			}
+		}
+		if (result != null)
+			arrayList remove(result)
+		result
+	}
+	find: func (type: TextureType, width: UInt, height: UInt) -> Texture {
+		result := null
+		match (type) {
+			case TextureType monochrome =>
+				result = this _search(width, height, this monochrome)
+			case TextureType bgr =>
+				result = this _search(width, height, this bgr)
+			case TextureType bgra =>
+				result = this _search(width, height, this bgra)
+			case TextureType uv =>
+				result = this _search(width, height, this uv)
+		}
+		result
+	}
 
 }
