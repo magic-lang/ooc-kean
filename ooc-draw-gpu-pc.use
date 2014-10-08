@@ -1,0 +1,7 @@
+Name: OOC Draw GPU PC
+Description: PC specific, GPU accelerated implementation of OOC Draw interfaces.
+SourcePath: source
+Requires: ooc-base, ooc-math, ooc-unit, ooc-draw, ooc-draw-gpu
+
+Imports: GpuMapPC, Window
+Libs: -lX11
