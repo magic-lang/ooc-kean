@@ -13,9 +13,10 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 use ooc-math
 use ooc-draw
-import OpenGLES3/Texture
+use ooc-opengl
 import GpuPacked
 
 GpuBgra: class extends GpuPacked {

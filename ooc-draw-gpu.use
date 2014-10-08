@@ -3,5 +3,5 @@ Description: GPU accelerated versions of ooc-draw classes.
 SourcePath: source
 Requires: ooc-base, ooc-math, ooc-unit, ooc-draw
 
-Imports: GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuCanvas, Surface, Window, OpenGLES3/lib/gles
-Libs: -lEGL, -lGLESv2, -lX11
+Imports: GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuCanvas, Surface, GpuMap
+Libs:

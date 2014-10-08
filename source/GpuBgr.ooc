@@ -13,8 +13,9 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 use ooc-math
-import OpenGLES3/Texture
+use ooc-opengl
 import GpuPacked
 
 GpuBgr: class extends GpuPacked {
@@ -28,7 +29,7 @@ GpuBgr: class extends GpuPacked {
 		result := This new(size)
 		result _texture != null ? result : null
 	}
-	create: static func ~empty (size: IntSize2D) -> This {
+	create2: static func ~empty (size: IntSize2D) -> This {
 		result := This new(size)
 		result _texture != null ? result : null
 	}

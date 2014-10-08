@@ -13,10 +13,11 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 use ooc-math
 use ooc-draw
 use ooc-base
-import OpenGLES3/Fbo, OpenGLES3/Quad
+use ooc-opengl
 import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
 
 GpuCanvas: abstract class extends Surface {
