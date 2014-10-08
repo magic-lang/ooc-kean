@@ -15,16 +15,16 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
 use ooc-draw
+use ooc-draw-gpu
 use ooc-base
-import OpenGLES3/Fbo, OpenGLES3/Texture, OpenGLES3/Context, OpenGLES3/Quad
-import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
-import math
+use ooc-opengl
+import math, EGLImage
 
 GpuPacker: abstract class extends Surface {
 	_packMonochrome: GpuMapPackMonochrome
 	_packUv: GpuMapPackUv
 	_renderTarget: Fbo
-	_targetTexture: Texture
+	_targetTexture: EGLImage
 	_pyramidBuffer: UInt8*
 	_context: Context
 	init: func (context: Context) {
@@ -46,7 +46,7 @@ GpuPacker: abstract class extends Surface {
 		this _packMonochrome imageSize = image size
 		this _packMonochrome screenSize = image size
 		this draw(image, this _packMonochrome)
-		result := this _context lockEGLPixels(this _targetTexture _eglImage)
+		result := this _targetTexture lock()
 		result
 	}
 	pack: func ~uv (image: GpuUv) -> UInt8* {
@@ -54,7 +54,7 @@ GpuPacker: abstract class extends Surface {
 		this _packUv imageSize = image size
 		this _packUv screenSize = image size
 		this draw(image, this _packUv)
-		result := this _context lockEGLPixels(this _targetTexture _eglImage)
+		result := this _targetTexture lock()
 		result
 	}
 	packPyramid: func ~monochrome (image: RasterMonochrome, count: Int) -> UInt8* {
@@ -68,7 +68,7 @@ GpuPacker: abstract class extends Surface {
 		for(i in 0..count) {
 			resolution /= 2
 			this draw(gpuMonochrome, this _packMonochrome, resolution)
-			pixels := this _context lockEGLPixels(this _targetTexture _eglImage) as UInt8*
+			pixels := this _targetTexture lock() as UInt8*
 			paddedBytes := 640 + 1920 - resolution width
 			byteCount := (640 + 1920) * resolution height
 			memcpy(pyramidBuffer, pixels, byteCount)
@@ -80,13 +80,13 @@ GpuPacker: abstract class extends Surface {
 				pixels += resolution width + paddedBytes
 			}
 			*/
-			this _context unlockEGLPixels(this _targetTexture _eglImage)
+			this _targetTexture unlock()
 		}
 		gpuMonochrome recycle()
 		this _pyramidBuffer
 	}
 	unlock: func {
-		this _context unlockEGLPixels(this _targetTexture _eglImage)
+		this _targetTexture unlock()
 	}
 	_bind: func {
 		this _renderTarget bind()
@@ -107,8 +107,8 @@ GpuPackerY: class extends GpuPacker {
 		super(context)
 	}
 	initialize: func (context: Context) {
-		this _targetTexture = Texture createEGL(1920 / 4, 1080, context)
-		this _renderTarget = Fbo create(this _targetTexture, 1920 / 4, 1080)
+		this _targetTexture = EGLImage new(context _eglDisplay, TextureType monochrome, IntSize2D new(1920 / 4, 1080))
+		this _renderTarget = Fbo create(this _targetTexture texture, 1920 / 4, 1080)
 	}
 
 	create: static func (context: Context) -> This {
@@ -126,8 +126,8 @@ GpuPackerUv: class extends GpuPacker {
 		super(context)
 	}
 	initialize: func (context: Context) {
-		this _targetTexture = Texture createEGL(1920 / 4, 1080 / 2, context)
-		this _renderTarget = Fbo create(this _targetTexture, 1920 / 2, 1080 / 2)
+		this _targetTexture = EGLImage new(context _eglDisplay, TextureType uv, IntSize2D new(1920 / 4, 1080 / 2))
+		this _renderTarget = Fbo create(this _targetTexture texture, 1920 / 2, 1080 / 2)
 	}
 	create: static func (context: Context) -> This {
 		result := This new(context)
@@ -144,8 +144,8 @@ GpuPackerU: class extends GpuPacker {
 		super(context)
 	}
 		initialize: func (context: Context) {
-		this _targetTexture = Texture createEGL(1920 / 4, 1080 / 4, context)
-		this _renderTarget = Fbo create(this _targetTexture, 1920 / 4, 1080 / 4)
+		this _targetTexture = EGLImage new(context _eglDisplay, TextureType monochrome, IntSize2D new(1920 / 4, 1080 / 4))
+		this _renderTarget = Fbo create(this _targetTexture texture, 1920 / 4, 1080 / 4)
 	}
 	create: static func (context: Context) -> This {
 		result := This new(context)

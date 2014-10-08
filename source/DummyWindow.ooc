@@ -14,9 +14,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import OpenGLES3/Context
-
-import Surface, GpuPacker, GpuMonochrome, GpuYuv420Semiplanar, RasterMonochrome
+use ooc-opengl
+use ooc-draw-gpu
+use ooc-draw
+import GpuPacker
 
 DummyWindow: class extends Surface {
 	_instance: static This
