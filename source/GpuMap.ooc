@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this _program. If not, see <http://www.gnu.org/licenses/>.
+
 use ooc-base
 use ooc-math
 use ooc-opengl
@@ -26,11 +27,11 @@ GpuMap: abstract class {
 		this _program = ShaderProgram create(vertexSource, fragmentSource)
 	}
 	dispose: func {
-		if(this _program != null)
+		if (this _program != null)
 			this _program dispose()
 	}
 	use: func {
-		if(this _program != null) {
+		if (this _program != null) {
 			this _program use()
 			this _onUse()
 		}
@@ -58,12 +59,13 @@ GpuMapDefault: abstract class extends GpuMap {
 }
 
 GpuOverlay: class extends GpuMapDefault {
-init: func {
-	super(This fragmentSource,
-		func {
-		})
-}
-fragmentSource: static String
+	init: func {
+		super(This fragmentSource,
+			func {
+				this _program setUniform("texture0", 0)
+			})
+	}
+	fragmentSource: static String
 }
 
 GpuMapBgr: class extends GpuMapDefault {
@@ -73,7 +75,7 @@ GpuMapBgr: class extends GpuMapDefault {
 				this _program setUniform("texture0", 0)
 			})
 	}
-fragmentSource: static String
+	fragmentSource: static String
 }
 
 GpuMapBgrToBgra: class extends GpuMapDefault {
@@ -83,7 +85,7 @@ GpuMapBgrToBgra: class extends GpuMapDefault {
 				this _program setUniform("texture0", 0)
 			})
 	}
-fragmentSource: static String
+	fragmentSource: static String
 }
 
 GpuMapBgra: class extends GpuMapDefault {
@@ -93,7 +95,7 @@ GpuMapBgra: class extends GpuMapDefault {
 				this _program setUniform("texture0", 0)
 			})
 	}
-fragmentSource: static String
+	fragmentSource: static String
 }
 
 GpuMapMonochrome: class extends GpuMapDefault {
@@ -103,7 +105,7 @@ GpuMapMonochrome: class extends GpuMapDefault {
 					this _program setUniform("texture0", 0)
 				})
 	}
-fragmentSource: static String
+	fragmentSource: static String
 }
 
 GpuMapUv: class extends GpuMapDefault {
@@ -113,7 +115,7 @@ GpuMapUv: class extends GpuMapDefault {
 				this _program setUniform("texture0", 0)
 			})
 	}
-fragmentSource: static String
+	fragmentSource: static String
 }
 
 GpuMapMonochromeToBgra: class extends GpuMapDefault {
@@ -123,7 +125,7 @@ GpuMapMonochromeToBgra: class extends GpuMapDefault {
 					this _program setUniform("texture0", 0)
 				})
 	}
-fragmentSource: static String
+	fragmentSource: static String
 }
 
 GpuMapYuvPlanarToBgra: class extends GpuMapDefault {
@@ -135,7 +137,7 @@ GpuMapYuvPlanarToBgra: class extends GpuMapDefault {
 					this _program setUniform("texture2", 2)
 				})
 	}
-fragmentSource: static String
+	fragmentSource: static String
 }
 
 GpuMapYuvSemiplanarToBgra: class extends GpuMapDefault {
@@ -146,7 +148,7 @@ GpuMapYuvSemiplanarToBgra: class extends GpuMapDefault {
 				this _program setUniform("texture1", 1)
 			})
 	}
-fragmentSource: static String
+	fragmentSource: static String
 }
 
 GpuMapPackMonochrome: class extends GpuMapDefault {
@@ -158,7 +160,7 @@ GpuMapPackMonochrome: class extends GpuMapDefault {
 				})
 	}
 
-fragmentSource: static String
+	fragmentSource: static String
 }
 
 GpuMapPackUv: class extends GpuMapDefault {
@@ -169,5 +171,5 @@ GpuMapPackUv: class extends GpuMapDefault {
 					this _program setUniform("pixelWidth", this imageSize width)
 				})
 	}
-fragmentSource: static String
+	fragmentSource: static String
 }

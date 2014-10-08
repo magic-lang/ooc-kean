@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 use ooc-math
 use ooc-draw
 use ooc-opengl
@@ -47,7 +48,7 @@ Surface: abstract class {
 	}
 	drawLines: func (transform: FloatTransform2D, screenSize: IntSize2D) {
 		this _bind()
-		if(screenSize width == 768)
+		if (screenSize width == 768)
 			this _lines draw(transform, IntSize2D new(720, 480))
 		else
 			this _lines draw(transform, screenSize)

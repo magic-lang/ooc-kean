@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 use ooc-draw
 use ooc-math
 use ooc-opengl
@@ -39,7 +40,7 @@ GpuPacked: abstract class extends GpuImage {
 	}
 	dispose: func {
 		this _texture dispose()
-		if(this _canvas != null)
+		if (this _canvas != null)
 			this _canvas dispose()
 	}
 	recycle: func {

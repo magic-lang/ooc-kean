@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 use ooc-math
 import GpuMonochrome, GpuCanvas, GpuPlanar
 
@@ -36,7 +37,7 @@ GpuYuv420Planar: class extends GpuPlanar {
 		this _y dispose()
 		this _u dispose()
 		this _v dispose()
-		if(this _canvas != null)
+		if (this _canvas != null)
 			this _canvas dispose()
 	}
 	recycle: func {
