@@ -15,34 +15,14 @@
 // along with this _program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-base
 use ooc-math
-import OpenGLES3/ShaderProgram
-
-GpuMap: abstract class {
-	_program: ShaderProgram
-	_onUse: Func
-
-	init: func (vertexSource: String, fragmentSource: String, onUse: Func) {
-		this _onUse = onUse;
-		this _program = ShaderProgram create(vertexSource, fragmentSource)
-	}
-	dispose: func {
-		if(this _program != null)
-			this _program dispose()
-	}
-	use: func {
-		if(this _program != null) {
-			this _program use()
-			this _onUse()
-		}
-	}
-}
+use ooc-draw-gpu
 
 GpuMapDefault: abstract class extends GpuMap {
 	transform: FloatTransform2D { get set }
 	imageSize: IntSize2D { get set }
 	screenSize: IntSize2D { get set }
 	init: func (fragmentSource: String, onUse: Func) {
-			super(This defaultVertexSourceAndroid, fragmentSource,
+			super(This defaultVertexSource, fragmentSource,
 				func {
 					onUse()
 					this _program setUniform("imageWidth", this imageSize width)
@@ -52,7 +32,7 @@ GpuMapDefault: abstract class extends GpuMap {
 					this _program setUniform("transform", transform)
 				})
 	}
-	defaultVertexSourceAndroid: static String = "#version 300 es\n
+	defaultVertexSource: static String = "#version 300 es\n
 	uniform mat3 transform;\n
 	uniform int imageWidth;\n
 	uniform int imageHeight;\n
@@ -69,15 +49,15 @@ GpuMapDefault: abstract class extends GpuMap {
 		fragmentTextureCoordinate = textureCoordinate;\n
 		gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
 	}\n";
-
 }
+
 GpuOverlay: class extends GpuMapDefault {
 init: func {
-	super(This fragmentSourceAndroid,
+	super(This fragmentSource,
 		func {
 		})
 }
-fragmentSourceAndroid: static String = "#version 300 es\n
+fragmentSource: static String = "#version 300 es\n
 out float outColor;\n
 void main() {\n
 	outColor = 0.0f;\n
@@ -86,12 +66,12 @@ void main() {\n
 
 GpuMapBgr: class extends GpuMapDefault {
 	init: func {
-		super(This fragmentSourceAndroid,
+		super(This fragmentSource,
 			func {
 				this _program setUniform("texture0", 0)
 			})
 	}
-fragmentSourceAndroid: static String = "#version 300 es\n
+fragmentSource: static String = "#version 300 es\n
 	uniform sampler2D texture0;\n
 	in vec2 fragmentTextureCoordinate;
 	out vec3 outColor;\n
@@ -102,12 +82,12 @@ fragmentSourceAndroid: static String = "#version 300 es\n
 
 GpuMapBgrToBgra: class extends GpuMapDefault {
 	init: func {
-		super(This fragmentSourceAndroid,
+		super(This fragmentSource,
 			func {
 				this _program setUniform("texture0", 0)
 			})
 	}
-fragmentSourceAndroid: static String = "#version 300 es\n
+fragmentSource: static String = "#version 300 es\n
 	uniform sampler2D texture0;\n
 	in vec2 fragmentTextureCoordinate;
 	out vec4 outColor;\n
@@ -118,12 +98,12 @@ fragmentSourceAndroid: static String = "#version 300 es\n
 
 GpuMapBgra: class extends GpuMapDefault {
 	init: func {
-		super(This fragmentSourceAndroid,
+		super(This fragmentSource,
 			func {
 				this _program setUniform("texture0", 0)
 			})
 	}
-fragmentSourceAndroid: static String = "#version 300 es\n
+fragmentSource: static String = "#version 300 es\n
 	uniform sampler2D texture0;\n
 	in vec2 fragmentTextureCoordinate;
 	out vec3 outColor;\n
@@ -134,12 +114,12 @@ fragmentSourceAndroid: static String = "#version 300 es\n
 
 GpuMapMonochrome: class extends GpuMapDefault {
 	init: func {
-			super(This fragmentSourceAndroid,
+			super(This fragmentSource,
 				func {
 					this _program setUniform("texture0", 0)
 				})
 	}
-fragmentSourceAndroid: static String = "#version 300 es\n
+fragmentSource: static String = "#version 300 es\n
 	uniform sampler2D texture0;\n
 	in vec2 fragmentTextureCoordinate;
 	out float outColor;\n
@@ -150,12 +130,12 @@ fragmentSourceAndroid: static String = "#version 300 es\n
 
 GpuMapUv: class extends GpuMapDefault {
 	init: func {
-		super(This fragmentSourceAndroid,
+		super(This fragmentSource,
 			func {
 				this _program setUniform("texture0", 0)
 			})
 	}
-fragmentSourceAndroid: static String = "#version 300 es\n
+fragmentSource: static String = "#version 300 es\n
 	uniform sampler2D texture0;\n
 	in vec2 fragmentTextureCoordinate;
 	out vec2 outColor;\n
@@ -166,12 +146,12 @@ fragmentSourceAndroid: static String = "#version 300 es\n
 
 GpuMapMonochromeToBgra: class extends GpuMapDefault {
 	init: func {
-			super(This fragmentSourceAndroid,
+			super(This fragmentSource,
 				func {
 					this _program setUniform("texture0", 0)
 				})
 	}
-fragmentSourceAndroid: static String = "#version 300 es\n
+fragmentSourceA: static String = "#version 300 es\n
 	uniform sampler2D texture0;\n
 	in vec2 fragmentTextureCoordinate;
 	out vec4 outColor;\n
@@ -183,14 +163,14 @@ fragmentSourceAndroid: static String = "#version 300 es\n
 
 GpuMapYuvPlanarToBgra: class extends GpuMapDefault {
 	init: func {
-			super(This fragmentSourceAndroid,
+			super(This fragmentSource,
 				func {
 					this _program setUniform("texture0", 0)
 					this _program setUniform("texture1", 1)
 					this _program setUniform("texture2", 2)
 				})
 	}
-fragmentSourceAndroid: static String = "#version 300 es\n
+fragmentSource: static String = "#version 300 es\n
 	uniform sampler2D texture0;\n
 	uniform sampler2D texture1;\n
 	uniform sampler2D texture2;\n
@@ -215,13 +195,13 @@ fragmentSourceAndroid: static String = "#version 300 es\n
 
 GpuMapYuvSemiplanarToBgra: class extends GpuMapDefault {
 	init: func {
-		super(This fragmentSourceAndroid,
+		super(This fragmentSource,
 			func {
 				this _program setUniform("texture0", 0)
 				this _program setUniform("texture1", 1)
 			})
 	}
-fragmentSourceAndroid: static String = "#version 300 es\n
+fragmentSource: static String = "#version 300 es\n
 	uniform sampler2D texture0;\n
 	uniform sampler2D texture1;\n
 	in vec2 fragmentTextureCoordinate;
@@ -244,14 +224,14 @@ fragmentSourceAndroid: static String = "#version 300 es\n
 
 GpuMapPackMonochrome: class extends GpuMapDefault {
 	init: func {
-			super(This fragmentSourceAndroid,
+			super(This fragmentSource,
 				func {
 					this _program setUniform("texture0", 0)
 					this _program setUniform("pixelWidth", this imageSize width)
 				})
 	}
 
-fragmentSourceAndroid: static String = "#version 300 es\n
+fragmentSource: static String = "#version 300 es\n
 	uniform sampler2D texture0;\n
 	uniform int pixelWidth;\n
 	in vec2 fragmentTextureCoordinate;
@@ -269,13 +249,13 @@ fragmentSourceAndroid: static String = "#version 300 es\n
 
 GpuMapPackUv: class extends GpuMapDefault {
 	init: func {
-			super(This fragmentSourceAndroid,
+			super(This fragmentSource,
 				func {
 					this _program setUniform("texture0", 0)
 					this _program setUniform("pixelWidth", this imageSize width)
 				})
 	}
-fragmentSourceAndroid: static String = "#version 300 es\n
+fragmentSource: static String = "#version 300 es\n
 	uniform sampler2D texture0;\n
 	uniform int pixelWidth;\n
 	in vec2 fragmentTextureCoordinate;
