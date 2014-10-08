@@ -28,7 +28,6 @@ window := Window create(screenSize, "GL Test")
 rasterImageMonochrome := RasterMonochrome open("input/Hercules.jpg")
 gpuMonochrome := GpuImage create(rasterImageMonochrome)
 
-
 rasterImageBgr := RasterBgr open("input/Space.png")
 gpuBgr := GpuImage create(rasterImageBgr)
 
@@ -43,7 +42,6 @@ gpuYuv420Planar := GpuImage create(rasterImageYuv420Planar)
 
 rasterImageYuv420Semiplanar := RasterYuv420Semiplanar new(rasterImageBgra)
 gpuYuv420Semiplanar := GpuImage create(rasterImageYuv420Semiplanar)
-
 
 while(true) {
   transform = transform translate(0, 0)

@@ -19,14 +19,12 @@ include X11/Xlib
 include X11/Xatom
 include X11/Xutil
 
-
 ExposureMask: extern const Long
 PointerMotionMask: extern const Long
 KeyPressMask: extern const Long
 CopyFromParent: extern const Long
 InputOutput: extern const UInt
 CWEventMask: extern const ULong
-
 
 XSetWindowAttributesOOC: cover from XSetWindowAttributes {
 	backgroundPixmap: extern(background_pixmap) Long
@@ -45,7 +43,6 @@ XSetWindowAttributesOOC: cover from XSetWindowAttributes {
 	colormap: extern Long
 	cursor: extern Long
 }
-
 
 XOpenDisplay: extern func(displayName: Char*) -> Pointer
 XCreateWindow: extern func(display: Pointer, window: Long, x: Int, y: Int,
