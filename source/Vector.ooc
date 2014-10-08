@@ -21,8 +21,7 @@ Vector: abstract class <T> {
 	count ::= this _count
 	_freeContent: Bool
 
-	init: /* protected */ func ~preallocated (=_backend, =_count, freeContent := false) {
-	}
+	init: /* protected */ func ~preallocated (=_backend, =_count, freeContent := false) {}
 	init: /* protected */ func (=_count, freeContent := false) {
 		this _allocate(this _count)
 		this _freeContent = freeContent
