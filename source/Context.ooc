@@ -45,10 +45,10 @@ Context: class {
 		eglBindAPI(EGL_OPENGL_ES_API)
 
 		configAttribs := [
-						EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-						EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-						EGL_BUFFER_SIZE, 16,
-						EGL_NONE] as Int*
+			EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+			EGL_BUFFER_SIZE, 16,
+			EGL_NONE] as Int*
 
 		numConfigs: Int
 		eglChooseConfig(this _eglDisplay, configAttribs, null, 10, numConfigs&)
@@ -77,8 +77,8 @@ Context: class {
 			return false
 
 		contextAttribs := [
-						EGL_CONTEXT_CLIENT_VERSION, 3,
-						EGL_NONE] as Int*
+			EGL_CONTEXT_CLIENT_VERSION, 3,
+			EGL_NONE] as Int*
 
 		shared: Pointer = null
 		if (sharedContext)
@@ -108,16 +108,16 @@ Context: class {
 		eglBindAPI(EGL_OPENGL_ES_API)
 
 		configAttribs := [
-						EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
-						EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-						EGL_BLUE_SIZE, 8,
-						EGL_GREEN_SIZE, 8,
-						EGL_RED_SIZE, 8,
-						EGL_ALPHA_SIZE, 8,
-						EGL_SAMPLES, 0,
-						EGL_DEPTH_SIZE, 0,
-						EGL_BIND_TO_TEXTURE_RGBA, EGL_TRUE,
-						EGL_NONE] as Int*
+			EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
+			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+			EGL_BLUE_SIZE, 8,
+			EGL_GREEN_SIZE, 8,
+			EGL_RED_SIZE, 8,
+			EGL_ALPHA_SIZE, 8,
+			EGL_SAMPLES, 0,
+			EGL_DEPTH_SIZE, 0,
+			EGL_BIND_TO_TEXTURE_RGBA, EGL_TRUE,
+			EGL_NONE] as Int*
 
 		numConfigs: Int
 		eglChooseConfig(this _eglDisplay, configAttribs, null, 10, numConfigs&)
@@ -141,19 +141,19 @@ Context: class {
 
 		gc_free(matchingConfigs)
 		pbufferAttribs := [
-				EGL_WIDTH, 1,
-				EGL_HEIGHT, 1,
-				EGL_TEXTURE_TARGET, EGL_NO_TEXTURE,
-				EGL_TEXTURE_FORMAT, EGL_NO_TEXTURE,
-				EGL_NONE] as Int*
+			EGL_WIDTH, 1,
+			EGL_HEIGHT, 1,
+			EGL_TEXTURE_TARGET, EGL_NO_TEXTURE,
+			EGL_TEXTURE_FORMAT, EGL_NO_TEXTURE,
+			EGL_NONE] as Int*
 		this _eglSurface = eglCreatePbufferSurface(this _eglDisplay, chosenConfig, pbufferAttribs)
 
 		if (this _eglSurface == null)
 			return false
 
 		contextAttribs := [
-						EGL_CONTEXT_CLIENT_VERSION, 3,
-						EGL_NONE] as Int*
+			EGL_CONTEXT_CLIENT_VERSION, 3,
+			EGL_NONE] as Int*
 
 		shared: Pointer = null
 		if (sharedContext != null)
@@ -170,7 +170,6 @@ Context: class {
 			else
 				"WARNING: Using OpenGL ES 2" println()
 		}
-
 		return true
 	}
 	create: static func (window: NativeWindow) -> This {

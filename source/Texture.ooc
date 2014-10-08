@@ -92,22 +92,23 @@ Texture: class {
 				raise("Unknown texture format")
 		}
 	}
-	_generate: func (pixels: Pointer) -> Bool {
+	_generate: func (pixels: Pointer, allocate := true) -> Bool {
 		glGenTextures(1, _backend&)
 		glBindTexture(GL_TEXTURE_2D, _backend)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-		glTexImage2D(GL_TEXTURE_2D, 0, this internalFormat, this width, this height, 0, this format, GL_UNSIGNED_BYTE, pixels)
+		if(allocate) 
+			glTexImage2D(GL_TEXTURE_2D, 0, this internalFormat, this width, this height, 0, this format, GL_UNSIGNED_BYTE, pixels)
 		true
 	}
-	create: static func (type: TextureType, width: UInt, height: UInt, pixels := null) -> This {
+	create: static func (type: TextureType, width: UInt, height: UInt, pixels := null, allocate : Bool = true) -> This {
 		result := This textureBin find(type, width, height)
 		success := true
 		if (result == null) {
 			result = Texture new(type, width, height)
-			success = result _generate(pixels)
+			success = result _generate(pixels, allocate)
 		}
 		else if(pixels != null)
 			result uploadPixels(pixels)
