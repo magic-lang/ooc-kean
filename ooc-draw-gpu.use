@@ -3,5 +3,5 @@ Description: GPU accelerated implementation of OOC Draw interfaces.
 SourcePath: source
 Requires: ooc-base, ooc-math, ooc-unit, ooc-draw
 
-Imports: GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuCanvas, Surface
+Imports: GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuCanvas, Surface, GpuMap
 Libs:
