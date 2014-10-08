@@ -15,7 +15,7 @@
 // along with this _program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-base
 use ooc-math
-import OpenGLES3/ShaderProgram
+use ooc-opengl
 
 GpuMap: abstract class {
 	_program: ShaderProgram
@@ -35,4 +35,139 @@ GpuMap: abstract class {
 			this _onUse()
 		}
 	}
+}
+
+GpuMapDefault: abstract class extends GpuMap {
+	transform: FloatTransform2D { get set }
+	imageSize: IntSize2D { get set }
+	screenSize: IntSize2D { get set }
+	init: func (fragmentSource: String, onUse: Func) {
+			super(This defaultVertexSource, fragmentSource,
+				func {
+					onUse()
+					this _program setUniform("imageWidth", this imageSize width)
+					this _program setUniform("imageHeight", this imageSize height)
+					this _program setUniform("screenWidth", this screenSize width)
+					this _program setUniform("screenHeight", this screenSize height)
+					this _program setUniform("transform", transform)
+				})
+	}
+	initShaders: func {
+	}
+	defaultVertexSource: static String
+}
+
+GpuOverlay: class extends GpuMapDefault {
+init: func {
+	super(This fragmentSource,
+		func {
+		})
+}
+fragmentSource: static String
+}
+
+GpuMapBgr: class extends GpuMapDefault {
+	init: func {
+		super(This fragmentSource,
+			func {
+				this _program setUniform("texture0", 0)
+			})
+	}
+fragmentSource: static String
+}
+
+GpuMapBgrToBgra: class extends GpuMapDefault {
+	init: func {
+		super(This fragmentSource,
+			func {
+				this _program setUniform("texture0", 0)
+			})
+	}
+fragmentSource: static String
+}
+
+GpuMapBgra: class extends GpuMapDefault {
+	init: func {
+		super(This fragmentSource,
+			func {
+				this _program setUniform("texture0", 0)
+			})
+	}
+fragmentSource: static String
+}
+
+GpuMapMonochrome: class extends GpuMapDefault {
+	init: func {
+			super(This fragmentSource,
+				func {
+					this _program setUniform("texture0", 0)
+				})
+	}
+fragmentSource: static String
+}
+
+GpuMapUv: class extends GpuMapDefault {
+	init: func {
+		super(This fragmentSource,
+			func {
+				this _program setUniform("texture0", 0)
+			})
+	}
+fragmentSource: static String
+}
+
+GpuMapMonochromeToBgra: class extends GpuMapDefault {
+	init: func {
+			super(This fragmentSource,
+				func {
+					this _program setUniform("texture0", 0)
+				})
+	}
+fragmentSource: static String
+}
+
+GpuMapYuvPlanarToBgra: class extends GpuMapDefault {
+	init: func {
+			super(This fragmentSource,
+				func {
+					this _program setUniform("texture0", 0)
+					this _program setUniform("texture1", 1)
+					this _program setUniform("texture2", 2)
+				})
+	}
+fragmentSource: static String
+}
+
+GpuMapYuvSemiplanarToBgra: class extends GpuMapDefault {
+	init: func {
+		super(This fragmentSource,
+			func {
+				this _program setUniform("texture0", 0)
+				this _program setUniform("texture1", 1)
+			})
+	}
+fragmentSource: static String
+}
+
+GpuMapPackMonochrome: class extends GpuMapDefault {
+	init: func {
+			super(This fragmentSource,
+				func {
+					this _program setUniform("texture0", 0)
+					this _program setUniform("pixelWidth", this imageSize width)
+				})
+	}
+
+fragmentSource: static String
+}
+
+GpuMapPackUv: class extends GpuMapDefault {
+	init: func {
+			super(This fragmentSource,
+				func {
+					this _program setUniform("texture0", 0)
+					this _program setUniform("pixelWidth", this imageSize width)
+				})
+	}
+fragmentSource: static String
 }

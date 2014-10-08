@@ -16,7 +16,8 @@
 use ooc-draw
 use ooc-math
 use ooc-base
-import GpuBgra, GpuBgr, GpuMonochrome, GpuYuv420Planar, GpuYuv420Semiplanar, GpuCanvas, OpenGLES3/Texture
+use ooc-opengl
+import GpuBgra, GpuBgr, GpuMonochrome, GpuYuv420Planar, GpuYuv420Semiplanar, GpuCanvas
 
 GpuImage: abstract class extends Image implements IDisposable {
 	_texture: Texture

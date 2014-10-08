@@ -15,15 +15,14 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
 use ooc-draw
-import GpuImage, GpuMap, OpenGLES3/Quad, OpenGLES3/Lines
+use ooc-opengl
+import GpuImage, GpuMap
 
 Surface: abstract class {
 	size: IntSize2D
 	_quad: Quad
-	_overlayMonochrome: GpuOverlay
 	_lines: Lines
 	init: func {
-		this _overlayMonochrome = GpuOverlay new()
 		this _lines = Lines new()
 	}
 	draw: func ~default (image: GpuImage, map: GpuMap) {
@@ -56,7 +55,7 @@ Surface: abstract class {
 		this _update()
 	}
 	drawOverlay: func ~overlay (transform: FloatTransform2D, screenSize: IntSize2D) {
-		this _bind()
+		/*this _bind()
 		//Temp solution for handling stride for 480p
 		if (screenSize width == 768)
 			this _overlayMonochrome screenSize = IntSize2D new(720, 480)
@@ -72,7 +71,7 @@ Surface: abstract class {
 		this _overlayMonochrome use()
 		this _quad draw()
 		this _unbind()
-		this _update()
+		this _update()*/
 	}
 
 	_clear: abstract func

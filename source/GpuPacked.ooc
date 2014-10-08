@@ -15,7 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-draw
 use ooc-math
-import OpenGLES3/Texture
+use ooc-opengl
 import GpuImage, GpuCanvas
 
 GpuPacked: abstract class extends GpuImage {

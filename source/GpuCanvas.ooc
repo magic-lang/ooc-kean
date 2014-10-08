@@ -16,7 +16,7 @@
 use ooc-math
 use ooc-draw
 use ooc-base
-import OpenGLES3/Fbo, OpenGLES3/Quad
+use ooc-opengl
 import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
 
 GpuCanvas: abstract class extends Surface {
