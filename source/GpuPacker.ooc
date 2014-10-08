@@ -142,7 +142,7 @@ GpuPackerUv: class extends GpuPacker {
 
 GpuPackerU: class extends GpuPacker {
 	init: func (context: Context) {
-			super(context)
+		super(context)
 	}
 	initialize: func (context: Context) {
 		this _targetTexture = EGLImage new(context _eglDisplay, TextureType monochrome, IntSize2D new(1920 / 4, 1080 / 4))
