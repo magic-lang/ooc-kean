@@ -15,13 +15,12 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use ooc-opengl
 import include/x11
-import ../OpenGLES3/NativeWindow
+
 
 X11Window: class extends NativeWindow {
-	init: func (width: UInt, height: UInt, title: String) {
-		this _width = width
-		this _height = height
+	init: func (=_width, =_height) {
 	}
 	_generate: func (width: UInt, height: UInt, title: String) -> Bool {
 		/* Note: ":0" is the usual identifier for the default display but this should be read from the DISPLAY variable in the system by passing null as parameter,
@@ -44,7 +43,7 @@ X11Window: class extends NativeWindow {
 		true
 	}
 	create: static func (width: UInt, height: UInt, title: String) -> This {
-		result := X11Window new(width, height, title)
+		result := X11Window new(width, height)
 		result _generate(width, height, title) ? result : null
 	}
 

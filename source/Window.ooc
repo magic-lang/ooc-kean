@@ -16,13 +16,11 @@
 
 use ooc-math
 use ooc-draw
+use ooc-opengl
+use ooc-draw-gpu
 
-import OpenGLES3/Quad
-import OpenGLES3/NativeWindow
-import OpenGLES3/Context
 import X11/X11Window
-
-import Surface, GpuImage, GpuMonochrome, GpuBgra, GpuYuv420Planar, GpuYuv420Semiplanar, GpuBgr, GpuMap, OpenGLES3/Lines
+import GpuMapPC
 
 Window: class extends Surface {
 	_native: NativeWindow
@@ -42,6 +40,7 @@ Window: class extends Surface {
 
 		result: UInt = this _context makeCurrent()
 		this _quad = Quad create()
+		initShaders()
 		this _monochromeToBgra = GpuMapMonochromeToBgra new()
 		this _bgrToBgra = GpuMapBgrToBgra new()
 		this _bgraToBgra = GpuMapBgra new()
@@ -80,7 +79,6 @@ Window: class extends Surface {
 		this _yuvSemiplanarToBgra screenSize = image size
 		this draw(image, this _yuvSemiplanarToBgra)
 		this drawLines(transform, this size)
-
 	}
 	draw: func ~RasterBgr (image: RasterBgr, transform := FloatTransform2D identity) {
 		result := GpuImage create(image)
