@@ -15,6 +15,7 @@
 // along with this _program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-base
 use ooc-math
+use ooc-draw-gpu
 
 GpuMapDefault: abstract class extends GpuMap {
 	transform: FloatTransform2D { get set }
@@ -50,8 +51,8 @@ GpuMapDefault: abstract class extends GpuMap {
 		fragmentTextureCoordinate = textureCoordinate;\n
 		gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
 	}\n";
-
 }
+
 GpuOverlay: class extends GpuMapDefault {
 	init: func {
 		super(This fragmentSource,
