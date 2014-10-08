@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
@@ -140,10 +141,10 @@ GpuPackerUv: class extends GpuPacker {
 }
 
 GpuPackerU: class extends GpuPacker {
-		init: func (context: Context) {
-		super(context)
+	init: func (context: Context) {
+			super(context)
 	}
-		initialize: func (context: Context) {
+	initialize: func (context: Context) {
 		this _targetTexture = EGLImage new(context _eglDisplay, TextureType monochrome, IntSize2D new(1920 / 4, 1080 / 4))
 		this _renderTarget = Fbo create(this _targetTexture texture, 1920 / 4, 1080 / 4)
 	}
@@ -152,7 +153,7 @@ GpuPackerU: class extends GpuPacker {
 		result initialize(context)
 		result
 	}
-		_setResolution: func (resolution: IntSize2D) {
+	_setResolution: func (resolution: IntSize2D) {
 		Fbo setViewport(0, 0, resolution width / 4, resolution height / 4)
 	}
 }
