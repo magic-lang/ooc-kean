@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
-version(debug) {
+
 include X11/Xlib
 include X11/Xatom
 include X11/Xutil
@@ -50,4 +50,3 @@ XCreateWindow: extern func(display: Pointer, window: Long, x: Int, y: Int,
 XMapWindow: extern func(display: Pointer, window: Long) -> Int
 XStoreName: extern func(display: Pointer, window: Long, windowName: Char*) -> Int
 DefaultRootWindow: extern func(display: Pointer) -> UInt
-}

@@ -14,12 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+
 use ooc-opengl
 import include/x11
 
 X11Window: class extends NativeWindow {
-	init: func (=_width, =_height) {
-	}
+	init: func (=_width, =_height) {}
 	_generate: func (width: UInt, height: UInt, title: String) -> Bool {
 		/* Note: ":0" is the usual identifier for the default display but this should be read from the DISPLAY variable in the system by passing null as parameter,
 		i.e. this _display = XOpenDisplay(null) */
