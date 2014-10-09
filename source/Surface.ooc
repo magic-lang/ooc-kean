@@ -17,12 +17,12 @@
 use ooc-math
 use ooc-draw
 use ooc-opengl
-import GpuImage, GpuMap
+import GpuImage, GpuMap, TraceDrawer
 
 Surface: abstract class {
 	size: IntSize2D
 	_quad: Quad
-	_lines: Lines
+	traceDrawer: TraceDrawer
 	init: func {
 	}
 	draw: func ~default (image: GpuImage, map: GpuMap) {
@@ -46,23 +46,17 @@ Surface: abstract class {
 		this _update()
 	}
 	drawLines: func (transform: FloatTransform2D, screenSize: IntSize2D) {
-		if(this _lines == null)
-			this _lines = Lines new()
+		if(this traceDrawer == null)
+			this traceDrawer = TraceDrawer new(screenSize)
 		this _bind()
-		if (screenSize width == 768)
-			this _lines draw(transform, IntSize2D new(720, 480))
-		else
-			this _lines draw(transform, screenSize)
+		this traceDrawer add(transform)
+		this traceDrawer draw()
 		this _unbind()
 		this _update()
 	}
 	drawOverlay: func ~overlay (transform: FloatTransform2D, screenSize: IntSize2D) {
 		/*this _bind()
-		//Temp solution for handling stride for 480p
-		if (screenSize width == 768)
-			this _overlayMonochrome screenSize = IntSize2D new(720, 480)
-		else
-			this _overlayMonochrome screenSize = screenSize
+		this _overlayMonochrome screenSize = screenSize
 		crossWidth := this _overlayMonochrome screenSize width / 16
 		crossHeight := this _overlayMonochrome screenSize height / 160
 		this _overlayMonochrome imageSize = IntSize2D new(crossHeight, crossWidth)

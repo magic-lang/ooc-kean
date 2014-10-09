@@ -22,11 +22,11 @@ GpuUv: class extends GpuPacked {
 	init: func (size: IntSize2D) {
 		super(size, TextureType uv, null)
 	}
-	init: func~fromPixels (data: Pointer, size: IntSize2D) {
-		super(size, TextureType uv, data)
+	init: func~fromPixels (size: IntSize2D, stride: UInt, data: Pointer) {
+		super(size, stride, TextureType uv, data)
 	}
-	_create: static /* internal */ func ~fromPixels (size: IntSize2D, data: Pointer) -> This {
-		result := This new(data, size)
+	_create: static /* internal */ func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer) -> This {
+		result := This new(size, stride, data)
 		result _texture != null ? result : null
 	}
 	create: func (size: IntSize2D) -> This {

@@ -23,8 +23,8 @@ GpuBgra: class extends GpuPacked {
 	init: func (size: IntSize2D) {
 		super(size, TextureType rgba, null)
 	}
-	init: func ~fromPixels (size: IntSize2D, data: Pointer) {
-		super(size, TextureType bgra, data)
+	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer) {
+		super(size, stride, TextureType bgra, data)
 	}
 	replace: func (image: RasterBgra) {
 		this _texture uploadPixels(image pointer)
@@ -37,8 +37,8 @@ GpuBgra: class extends GpuPacked {
 		result := This new(size)
 		result _texture != null ? result : null
 	}
-	_create: static /* internal */ func ~fromPixels (size: IntSize2D, data: Pointer) -> This {
-		result := This new(size, data)
+	_create: static /* internal */ func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer) -> This {
+		result := This new(size, stride, data)
 		result _texture != null ? result : null
 	}
 
