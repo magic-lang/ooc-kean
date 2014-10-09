@@ -24,7 +24,6 @@ Surface: abstract class {
 	_quad: Quad
 	_lines: Lines
 	init: func {
-		this _lines = Lines new()
 	}
 	draw: func ~default (image: GpuImage, map: GpuMap) {
 		this _bind()
@@ -47,6 +46,8 @@ Surface: abstract class {
 		this _update()
 	}
 	drawLines: func (transform: FloatTransform2D, screenSize: IntSize2D) {
+		if(this _lines == null)
+			this _lines = Lines new()
 		this _bind()
 		if (screenSize width == 768)
 			this _lines draw(transform, IntSize2D new(720, 480))
