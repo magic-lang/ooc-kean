@@ -55,7 +55,7 @@ ByteBuffer: class {
 			}
 		}
 		if (buffer == null) {
-			pointer = gc_malloc(size);
+			pointer = gc_malloc_atomic(size);
 //			"new buffer" println()
 			this init(size, pointer, This recycle)
 		} else {
@@ -70,7 +70,7 @@ ByteBuffer: class {
 	}
 	__delete__: func {
 		gc_free(this pointer)
-		"deleting buffer" println()
+//		"deleting buffer" println()
 		gc_free(this)
 	}
 	
