@@ -28,6 +28,8 @@ RasterImage: abstract class extends Image {
 	buffer: ByteBuffer { get set }
 	pointer: UInt8* { get { buffer pointer } }
 	length: Int { get { buffer size } }
+	horizontalStride: UInt { get set }
+	verticalStride: UInt { get set }
 	apply: abstract func ~bgr (action: Func (ColorBgr))
 	apply: abstract func ~yuv (action: Func (ColorYuv))
 	apply: abstract func ~monochrome (action: Func (ColorMonochrome))
