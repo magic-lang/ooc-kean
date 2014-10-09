@@ -17,12 +17,12 @@
 use ooc-math
 use ooc-draw
 use ooc-opengl
-import GpuImage, GpuMap
+import GpuImage, GpuMap, TraceDrawer
 
 Surface: abstract class {
 	size: IntSize2D
 	_quad: Quad
-	_lines: Lines
+	traceDrawer: TraceDrawer
 	init: func {
 	}
 	draw: func ~default (image: GpuImage, map: GpuMap) {
@@ -46,10 +46,11 @@ Surface: abstract class {
 		this _update()
 	}
 	drawLines: func (transform: FloatTransform2D, screenSize: IntSize2D) {
-		if(this _lines == null)
-			this _lines = Lines new()
+		if(this traceDrawer == null)
+			this traceDrawer = TraceDrawer new(screenSize)
 		this _bind()
-		this _lines draw(transform, screenSize)
+		this traceDrawer add(transform)
+		this traceDrawer draw()
 		this _unbind()
 		this _update()
 	}
