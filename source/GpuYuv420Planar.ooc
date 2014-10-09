@@ -50,7 +50,7 @@ GpuYuv420Planar: class extends GpuPlanar {
 		this _u _bind(1)
 		this _v _bind(2)
 	}
-	_generate: func (y: Pointer, u: Pointer, v: Pointer, stride: UInt) -> Bool {
+	_generate: func (stride: UInt, y: Pointer, u: Pointer, v: Pointer) -> Bool {
 		this _y = GpuMonochrome _create(this size, stride, y)
 		this _u = GpuMonochrome _create(this size / 2, stride, u)
 		this _v = GpuMonochrome _create(this size / 2, stride, v)
@@ -58,14 +58,14 @@ GpuYuv420Planar: class extends GpuPlanar {
 	}
 	create: func (size: IntSize2D) -> This {
 		result := This new(size)
-		result _generate(null, null, null, size width) ? result : null
+		result _generate(size width, null, null, null) ? result : null
 	}
 	create: static func ~empty (size: IntSize2D) -> This {
 		result := This new(size)
-		result _generate(null, null, null, size width) ? result : null
+		result _generate(size width, null, null, null) ? result : null
 	}
 	_create: static /* internal */ func ~fromPixels (size: IntSize2D, stride: UInt, y: Pointer, u: Pointer, v: Pointer) -> This {
 		result := This new(size)
-		result _generate(y, u, v, stride) ? result : null
+		result _generate(stride, y, u, v) ? result : null
 	}
 }
