@@ -41,6 +41,7 @@ Texture: class {
 
 	_textureBin: static TextureBin
 	textureBin: static TextureBin { get { if(This _textureBin == null) { This _textureBin = TextureBin new() } This _textureBin } }
+
 	init: func~nullTexture (type: TextureType, width: UInt, height: UInt, stride: UInt) {
 		this width = width
 		this height = height

@@ -16,6 +16,7 @@
  */
 
 import include/gles
+
 NativeWindow: abstract class {
 	_display: Pointer
 	display: Pointer { get { _display} }

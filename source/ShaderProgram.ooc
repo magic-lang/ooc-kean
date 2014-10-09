@@ -44,7 +44,7 @@ ShaderProgram: class {
 
 		success: Int
 		glGetShaderiv(shaderID, GL_COMPILE_STATUS, success&)
-		if(!success){
+		if (!success){
 			source println()
 			logSize: Int = 0
 			glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, logSize&)
@@ -65,7 +65,7 @@ ShaderProgram: class {
 		println("Compiling fragment shader")
 		success = success && _compileShader(fragmentSource, fragmentShaderID)
 
-		if(success) {
+		if (success) {
 			this _backend = glCreateProgram()
 
 			glAttachShader(this _backend, vertexShaderID)
