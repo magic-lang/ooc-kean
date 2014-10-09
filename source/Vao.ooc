@@ -17,7 +17,6 @@
 
 import include/gles
 
-
 Vao: class {
 	backend: UInt
 	positionLayout: const static UInt = 0

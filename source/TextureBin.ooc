@@ -64,7 +64,7 @@ TextureBin: class {
 		result := null
 
 		for (texture in arrayList) {
-			if(texture width == width && texture height == height) {
+			if (texture width == width && texture height == height) {
 				result = texture
 				break
 			}

@@ -162,8 +162,8 @@ Context: class {
 		if (this _eglContext == null) {
 			"Failed to create OpenGL ES 3 context, trying with OpenGL ES 2 instead" println()
 			contextAttribsGLES2 := [
-						EGL_CONTEXT_CLIENT_VERSION, 2,
-						EGL_NONE] as Int*
+				EGL_CONTEXT_CLIENT_VERSION, 2,
+				EGL_NONE] as Int*
 			this _eglContext = eglCreateContext(this _eglDisplay, chosenConfig, shared, contextAttribsGLES2)
 			if (this _eglContext == null)
 				raise("Failed to create OpenGL ES 3 or OpenGL ES 2 context")
@@ -184,6 +184,4 @@ Context: class {
 		result := This new()
 		result _generate(sharedContext) ? result : null
 	}
-
-
 }

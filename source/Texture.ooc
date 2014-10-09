@@ -38,7 +38,7 @@ Texture: class {
 	internalFormat: UInt
 
 	_textureBin: static TextureBin
-	textureBin: static TextureBin { get { if(This _textureBin == null) { This _textureBin = TextureBin new() } This _textureBin } }
+	textureBin: static TextureBin { get { if (This _textureBin == null) { This _textureBin = TextureBin new() } This _textureBin } }
 	init: func~nullTexture (type: TextureType, width: UInt, height: UInt) {
 		this width = width
 		this height = height
@@ -99,7 +99,7 @@ Texture: class {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-		if(allocate) 
+		if (allocate) 
 			glTexImage2D(GL_TEXTURE_2D, 0, this internalFormat, this width, this height, 0, this format, GL_UNSIGNED_BYTE, pixels)
 		true
 	}
@@ -110,7 +110,7 @@ Texture: class {
 			result = Texture new(type, width, height)
 			success = result _generate(pixels, allocate)
 		}
-		else if(pixels != null)
+		else if (pixels != null)
 			result uploadPixels(pixels)
 		success ? result : null
 	}

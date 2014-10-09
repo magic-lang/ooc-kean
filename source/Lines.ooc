@@ -62,7 +62,7 @@ Lines: class {
 		else {
 			program = ShaderProgram create(defaultVertexSourceAndroid, fragmentSourceAndroid)
 		}
-		if(This pointList == null)
+		if (This pointList == null)
 			This pointList = LinkedList<FloatPoint2D> new()
 		This pointList clear()
 		this positions = gc_malloc(Float size * this pointCount * 2) as Float*
@@ -75,7 +75,7 @@ Lines: class {
 		origo := FloatPoint2D new(transform g + screenSize width / 4, transform h + screenSize height / 4)
 		transformedPosition := origo
 		This pointList add(transformedPosition)
-		if(This pointList size > this pointCount) {
+		if (This pointList size > this pointCount) {
 			This pointList removeAt(0)
 		}
 		this program setUniform("screenWidth", screenSize width)
