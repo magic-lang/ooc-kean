@@ -28,9 +28,13 @@ GpuPacked: abstract class extends GpuImage {
 			this _canvas
 		}
 	}
-	init: func (size: IntSize2D, type: TextureType, data: Pointer) {
-		super(size)
-		this _texture = Texture create(type, size width, size height, data)
+	init: func ~withStride (size: IntSize2D, stride: UInt, type: TextureType, data: Pointer) {
+		super(size, stride)
+		this _texture = Texture create(type, size width, size height, stride, data)
+	}
+	init: func ~noStride (size: IntSize2D, type: TextureType, data: Pointer) {
+		super(size, size width)
+		this _texture = Texture create(type, size width, size height, size width, data)
 	}
 	_bind: /* internal */ func ~specificTextureUnit(unit: UInt) {
 		this _texture bind (unit)

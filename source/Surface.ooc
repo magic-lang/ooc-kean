@@ -49,20 +49,13 @@ Surface: abstract class {
 		if(this _lines == null)
 			this _lines = Lines new()
 		this _bind()
-		if (screenSize width == 768)
-			this _lines draw(transform, IntSize2D new(720, 480))
-		else
-			this _lines draw(transform, screenSize)
+		this _lines draw(transform, screenSize)
 		this _unbind()
 		this _update()
 	}
 	drawOverlay: func ~overlay (transform: FloatTransform2D, screenSize: IntSize2D) {
 		/*this _bind()
-		//Temp solution for handling stride for 480p
-		if (screenSize width == 768)
-			this _overlayMonochrome screenSize = IntSize2D new(720, 480)
-		else
-			this _overlayMonochrome screenSize = screenSize
+		this _overlayMonochrome screenSize = screenSize
 		crossWidth := this _overlayMonochrome screenSize width / 16
 		crossHeight := this _overlayMonochrome screenSize height / 160
 		this _overlayMonochrome imageSize = IntSize2D new(crossHeight, crossWidth)

@@ -23,24 +23,24 @@ import GpuBgra, GpuBgr, GpuMonochrome, GpuYuv420Planar, GpuYuv420Semiplanar, Gpu
 GpuImage: abstract class extends Image implements IDisposable {
 	_texture: Texture
 	texture: /* internal */ Texture { get { _texture } }
-	ratio: Float { get {this size width as Float / this size height as Float } }
+	stride: UInt
 
-	init: func (=size)
+	init: func (=size, =stride)
 	_bind: abstract func
 	create: static func ~Monochrome (image: RasterMonochrome) -> GpuMonochrome {
-		GpuMonochrome _create(image size, image pointer)
+		GpuMonochrome _create(image size, image horizontalStride, image pointer)
 	}
 	create: static func ~Bgr (image: RasterBgr) -> GpuBgr {
-		GpuBgr _create(image size, image pointer)
+		GpuBgr _create(image size, image horizontalStride, image pointer)
 	}
 	create: static func ~Bgra (image: RasterBgra) -> GpuBgra {
-		GpuBgra _create(image size, image pointer)
+		GpuBgra _create(image size, image horizontalStride, image pointer)
 	}
 	create: static func ~Yuv420Planar (image: RasterYuv420Planar) -> GpuYuv420Planar {
-		GpuYuv420Planar _create(image size, image y pointer, image u pointer, image v pointer)
+		GpuYuv420Planar _create(image size, image horizontalStride, image y pointer, image u pointer, image v pointer)
 	}
 	create: static func ~Yuv420Semiplanar (image: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar {
-		GpuYuv420Semiplanar _create(image size, image y pointer, image uv pointer)
+		GpuYuv420Semiplanar _create(image size, image horizontalStride, image y pointer, image uv pointer)
 	}
 
 	recycle: abstract func
