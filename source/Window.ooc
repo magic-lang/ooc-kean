@@ -33,6 +33,7 @@ Window: class extends Surface {
 	_yuvSemiplanarToBgra: GpuMapYuvSemiplanarToBgra
 
 	init: /* internal */ func (=size) {
+		super()
 	}
 	_generate: /* private */ func (size: IntSize2D, title: String) -> Bool {
 		this _native = X11Window create(size width, size height, title)
@@ -40,7 +41,7 @@ Window: class extends Surface {
 
 		result: UInt = this _context makeCurrent()
 		this _quad = Quad create()
-		initShaders()
+		setShaderSources()
 		this _monochromeToBgra = GpuMapMonochromeToBgra new()
 		this _bgrToBgra = GpuMapBgrToBgra new()
 		this _bgraToBgra = GpuMapBgra new()
