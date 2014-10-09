@@ -44,12 +44,16 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 		this y = this createY()
 		this u = this createU()
 		this v = this createV()
+		this horizontalStride = y horizontalStride
+		this verticalStride = y verticalStride + u verticalStride + v verticalStride
 	}
-	init: func ~fromYuvPlanar (original: This) { 
-		super(original) 
+	init: func ~fromYuvPlanar (original: This) {
+		super(original)
 		this y = this createY()
 		this u = this createU()
 		this v = this createV()
+		this horizontalStride = y horizontalStride
+		this verticalStride = y verticalStride + u verticalStride + v verticalStride
 	}
 	createY: abstract func -> RasterMonochrome
 	createU: abstract func -> RasterMonochrome
@@ -59,7 +63,7 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 		this apply(ColorConvert fromYuv(action))
 	}
 	apply: func ~monochrome (action: Func (ColorMonochrome)) {
-		this apply(ColorConvert fromYuv(action))		
+		this apply(ColorConvert fromYuv(action))
 	}
 	distance: func (other: Image) -> Float {
 		result := 0.0f

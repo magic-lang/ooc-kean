@@ -28,13 +28,20 @@ import Image
 RasterPacked: abstract class extends RasterImage {
 	bytesPerPixel: Int { get }
 	stride: Int { get set }
-	init: func (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
+
+	init: func (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment: IntSize2D) {
 		super(buffer, size, coordinateSystem, crop)
 		this stride = This calculateStride(size, this bytesPerPixel)
+		horizontalPixelStride := Int align(this size width, byteAlignment width)
+		verticalPixelStride := Int align(this size height, byteAlignment height)
+		this horizontalStride = (horizontalPixelStride > 0 ? horizontalPixelStride : this size width) * bytesPerPixel
+		this verticalStride = (verticalPixelStride > 0 ? verticalPixelStride : this size height) * this horizontalStride
 	}
 	init: func ~fromOriginal (original: This) {
 		super(original)
-		this stride = original stride	
+		this horizontalStride = original horizontalStride
+		this verticalStride = original verticalStride
+		this stride = original stride
 	}
 	shift: func (offset: IntSize2D) -> Image {
 		result: RasterImage

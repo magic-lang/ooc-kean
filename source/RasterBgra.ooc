@@ -28,15 +28,17 @@ import lang/IO
 RasterBgra: class extends RasterPacked {
 	bytesPerPixel: Int { get { 4 } }
 	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 4)), size) }
-	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) { 
-		super(ByteBuffer new(RasterPacked calculateLength(size, 4)), size, coordinateSystem, crop) 
+	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
+		super(ByteBuffer new(RasterPacked calculateLength(size, 4)), size, coordinateSystem, crop, byteAlignment)
 	}
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
 	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D) { this init(ByteBuffer new(size area * 4, pointer), size) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, CoordinateSystem Default, IntShell2D new()) }
-	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
-		super(buffer, size, coordinateSystem, crop)
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, byteAlignment := IntSize2D new()) {
+		super(buffer, size, CoordinateSystem Default, IntShell2D new(), byteAlignment)
+	}
+	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
+		super(buffer, size, coordinateSystem, crop, byteAlignment)
 	}
 	init: func ~fromRasterBgra (original: This) { super(original) }
 	init: func ~fromRasterImage (original: RasterImage) {
@@ -44,7 +46,7 @@ RasterBgra: class extends RasterPacked {
 		destination := this pointer as Int*
 //		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
 		f := func (color: ColorBgr) {
-			(destination as ColorBgra*)@ = ColorBgra new(color, 255) 
+			(destination as ColorBgra*)@ = ColorBgra new(color, 255)
 			destination += 1
 		}
 		original apply(f)
@@ -70,7 +72,7 @@ RasterBgra: class extends RasterPacked {
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
 		this apply(ColorConvert fromBgr(action))
-	}		
+	}
 	distance: func (other: Image) -> Float {
 		result := 0.0f
 		if (!other)
@@ -156,12 +158,12 @@ RasterBgra: class extends RasterPacked {
 	operator [] (x, y: Float) -> ColorBgra {
 		left := x - floor(x)
 		top := y - floor(y)
-		
+
 		topLeft := this[floor(x) as Int, floor(y) as Int]
 		bottomLeft := this[floor(x) as Int, ceil(y) as Int]
 		topRight := this[ceil(x) as Int, floor(y) as Int]
 		bottomRight := this[ceil(x) as Int, ceil(y) as Int]
-		
+
 		ColorBgra new(
 			(top * (left * topLeft blue + (1 - left) * topRight blue) + (1 - top) * (left * bottomLeft blue + (1 - left) * bottomRight blue)),
 			(top * (left * topLeft green + (1 - left) * topRight green) + (1 - top) * (left * bottomLeft green + (1 - left) * bottomRight green)),
