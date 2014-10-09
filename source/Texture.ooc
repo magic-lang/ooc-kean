@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-
+use ooc-math
 import include/gles
 import TextureBin
 import Context
@@ -33,15 +33,19 @@ Texture: class {
 	backend: UInt { get { this _backend } }
 	width: UInt
 	height: UInt
+	_stride: UInt
 	type: TextureType
 	format: UInt
 	internalFormat: UInt
+	_bytesPerPixel: UInt
 
 	_textureBin: static TextureBin
-	textureBin: static TextureBin { get { if (This _textureBin == null) { This _textureBin = TextureBin new() } This _textureBin } }
-	init: func~nullTexture (type: TextureType, width: UInt, height: UInt) {
+	textureBin: static TextureBin { get { if(This _textureBin == null) { This _textureBin = TextureBin new() } This _textureBin } }
+
+	init: func~nullTexture (type: TextureType, width: UInt, height: UInt, stride: UInt) {
 		this width = width
 		this height = height
+		this _stride = stride
 		this type = type
 		this _setInternalFormats(type)
 	}
@@ -65,7 +69,10 @@ Texture: class {
 	}
 	uploadPixels: func(pixels: Pointer) {
 		glBindTexture(GL_TEXTURE_2D, _backend)
+		if (this _stride != this width)
+			glPixelStorei(GL_UNPACK_ROW_LENGTH, this _stride / this _bytesPerPixel)
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this width, this height, this format, GL_UNSIGNED_BYTE, pixels)
+		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
 		unbind()
 	}
 	_setInternalFormats: func(type: TextureType) {
@@ -73,21 +80,27 @@ Texture: class {
 			case TextureType monochrome =>
 				this internalFormat = GL_R8
 				this format = GL_RED
+				this _bytesPerPixel = 1
 			case TextureType rgba =>
 				this internalFormat = GL_RGBA8
 				this format = GL_RGBA
+				this _bytesPerPixel = 4
 			case TextureType rgb =>
 				this internalFormat = GL_RGB8
 				this format = GL_RGB
+				this _bytesPerPixel = 3
 			case TextureType bgra =>
 				this internalFormat = GL_RGBA8
 				this format = GL_RGBA
+				this _bytesPerPixel = 4
 			case TextureType bgr =>
 				this internalFormat = GL_RGB8
 				this format = GL_RGB
+				this _bytesPerPixel = 3
 			case TextureType uv =>
 				this internalFormat = GL_RG8
 				this format = GL_RG
+				this _bytesPerPixel = 2
 			case =>
 				raise("Unknown texture format")
 		}
@@ -99,15 +112,19 @@ Texture: class {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-		if (allocate) 
+		if (allocate) {
+			if (this _stride != this width)
+				glPixelStorei(GL_UNPACK_ROW_LENGTH, this _stride / this _bytesPerPixel)
 			glTexImage2D(GL_TEXTURE_2D, 0, this internalFormat, this width, this height, 0, this format, GL_UNSIGNED_BYTE, pixels)
+			glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
+		}
 		true
 	}
-	create: static func (type: TextureType, width: UInt, height: UInt, pixels := null, allocate : Bool = true) -> This {
+	create: static func (type: TextureType, width: UInt, height: UInt, stride: UInt, pixels := null, allocate : Bool = true) -> This {
 		result := This textureBin find(type, width, height)
 		success := true
 		if (result == null) {
-			result = Texture new(type, width, height)
+			result = Texture new(type, width, height, stride)
 			success = result _generate(pixels, allocate)
 		}
 		else if (pixels != null)
