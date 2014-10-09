@@ -17,7 +17,7 @@
 use ooc-opengl
 use ooc-draw-gpu
 use ooc-draw
-import GpuPacker
+import GpuPacker, GpuMapAndroid
 
 DummyWindow: class extends Surface {
 	_instance: static This
@@ -29,6 +29,7 @@ DummyWindow: class extends Surface {
 	_generate: /* private */ func (other: Context) -> Bool {
 		this _context = Context create(other)
 		result: UInt = this _context makeCurrent()
+		setShaderSources()
 		result == 1
 	}
 	create: static func (other: DummyWindow)-> This {
@@ -57,21 +58,21 @@ DummyWindow: class extends Surface {
 		result := this _yPacker packPyramid(image, count)
 		result
 	}
-	pack: func ~Yuv420Semiplanar(image: GpuYuv420Semiplanar, destination: UInt8*, channelOffset: UInt) {
+	copyPixels: func ~Yuv420Semiplanar(image: GpuYuv420Semiplanar, destination: UInt8*, destinationStride: UInt, uvOffset: UInt) {
 		yPixels := this _yPacker pack(image y)
 		paddedBytes := 640 + 1920 - image size width;
 		for(row in 0..image size height) {
 			sourceRow := yPixels + row * (image size width + paddedBytes)
-			destinationRow := destination + row * image size width
+			destinationRow := destination + row * destinationStride
 			memcpy(destinationRow, sourceRow, image size width)
 		}
 		this _yPacker unlock()
 
 		uvPixels := this _uvPacker pack(image uv)
-		uvDestination := destination + image size width * image size height + channelOffset
+		uvDestination := destination + uvOffset
 		for(row in 0..image size height / 2) {
 			sourceRow := uvPixels + row * (image size width + paddedBytes)
-			destinationRow := uvDestination + row * image size width
+			destinationRow := uvDestination + row * destinationStride
 			memcpy(destinationRow, sourceRow, image size width)
 		}
 		this _uvPacker unlock()

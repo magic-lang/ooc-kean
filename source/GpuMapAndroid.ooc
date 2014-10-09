@@ -16,7 +16,7 @@
 
 use ooc-draw-gpu
 
-initShaders: func {
+setShaderSources: func {
 	GpuMapDefault defaultVertexSource =
 		"#version 300 es\n
 		uniform mat3 transform;\n
