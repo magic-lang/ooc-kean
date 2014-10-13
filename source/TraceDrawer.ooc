@@ -16,13 +16,15 @@
 use ooc-opengl
 use ooc-math
 import structs/LinkedList
+import GpuMap
 
 TraceDrawer: class {
 	pointList: static LinkedList<FloatPoint2D>
-	shaderProgram: ShaderProgram
+	shader: GpuMapLines
 	positions: Float*
 	pointCount: Int = 60
 	screenSize: IntSize2D
+	scale: Float = 1.0f
 
 	init: func (=screenSize) {
 		if(This pointList == null)
@@ -33,12 +35,12 @@ TraceDrawer: class {
 			this positions[2 * i] = 0
 			this positions[2 * i + 1] = 0
 		}
-		this shaderProgram = ShaderProgram create(This vertexSource, This fragmentSource)
+		this shader = GpuMapLines new()
 	}
 	add: func(transform: FloatTransform2D) {
 		transformedPosition := FloatPoint2D new(transform g + this screenSize width / 4, transform h + this screenSize height / 4)
 		This pointList add(transformedPosition)
-		if(This pointList size > this pointCount) {
+		if(This pointList size > this pointCount - 5) {
 			This pointList removeAt(0)
 		}
 	}
@@ -50,10 +52,32 @@ TraceDrawer: class {
 			this positions[2 * i] = This pointList[i] x / (this screenSize width / 2)
 			this positions[2 * i + 1] = This pointList[i] y / (this screenSize height / 2)
 		}
-		this shaderProgram use()
-		Lines draw(this positions, this pointList size, 2, 1.5f)
-	}
 
-	vertexSource: static String
-	fragmentSource: static String
+		crosshairStart := This pointList size * 2
+		crosshairSize := FloatPoint2D new(50.0f / this screenSize width as Float, 50.0f / this screenSize height as Float)
+		currentPoint := FloatPoint2D new(this positions[2 * This pointList size - 2], this positions[2 * This pointList size - 1])
+
+		this positions[crosshairStart] = currentPoint x
+		this positions[crosshairStart + 1] = currentPoint y + crosshairSize y
+
+		this positions[crosshairStart + 2] = currentPoint x
+		this positions[crosshairStart + 3] = currentPoint y - crosshairSize y
+
+		this positions[crosshairStart + 4] = currentPoint x
+		this positions[crosshairStart + 5] = currentPoint y
+
+		this positions[crosshairStart + 6] = currentPoint x + crosshairSize x
+		this positions[crosshairStart + 7] = currentPoint y
+
+		this positions[crosshairStart + 8] = currentPoint x - crosshairSize x
+		this positions[crosshairStart + 9] = currentPoint y
+
+		this shader color = FloatPoint3D new(0.0f, 0.0f, 0.0f)
+		this shader use()
+		Lines draw(this positions, this pointList size + 5, 2, 3.5f)
+
+		this shader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
+		this shader use()
+		Lines draw(this positions, this pointList size + 5, 2, 1.5f)
+	}
 }

@@ -172,7 +172,6 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
 	}
 	draw: func ~GpuYuv420Semiplanar (image: GpuYuv420Semiplanar, transform := FloatTransform2D identity) {
 		this _y draw(image y, transform)
-		//this _y drawOverlay(transform, image size)
 		this _y drawLines(transform, image size)
 		this _uv draw(image uv, transform)
 	}
