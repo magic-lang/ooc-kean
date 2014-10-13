@@ -27,16 +27,16 @@ import Color
 RasterMonochrome: class extends RasterPacked {
 	bytesPerPixel: Int { get { 1 } }
 	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 1)), size) }
-	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
 		super(ByteBuffer new(RasterPacked calculateLength(size, 1)), size, coordinateSystem, crop, byteAlignment)
 	}
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D, byteAlignment := IntSize2D new()) { this init(ByteBuffer new(size area * 1, pointer), size, byteAlignment) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D, byteAlignment := 0) { this init(ByteBuffer new(size area * 1, pointer), size, byteAlignment) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, byteAlignment := 0) {
 		super(buffer, size, CoordinateSystem Default, IntShell2D new(), byteAlignment)
 	}
-	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
 		super(buffer, size, coordinateSystem, crop, byteAlignment)
 	}
 	init: func ~fromRasterMonochrome (original: This) { super(original) }
@@ -44,7 +44,7 @@ RasterMonochrome: class extends RasterPacked {
 		this init(original size, original coordinateSystem, original crop)
 //		"RasterMonochrome init ~fromRasterImage, original: (#{original size}), this: (#{this size}), stride #{this stride}" println()
 		row := this pointer as UInt8*
-		rowLength := this size width
+		rowLength := this stride
 		rowEnd := row + rowLength
 		destination := row
 		f := func (color: ColorMonochrome) {
@@ -84,7 +84,7 @@ RasterMonochrome: class extends RasterPacked {
 			rowEnd := row + rowLength
 			for (source in row..rowEnd)
 				action((source as ColorMonochrome*)@)
-			row += this stride-1
+			row += this stride - 1
 		}
 	}
 	distance: func (other: Image) -> Float {
