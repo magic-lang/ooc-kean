@@ -58,13 +58,25 @@ GpuMapDefault: abstract class extends GpuMap {
 	defaultVertexSource: static String
 }
 
-GpuOverlay: class extends GpuMapDefault {
+GpuMapOverlay: class extends GpuMapDefault {
 	init: func {
 		super(This fragmentSource,
 			func {
 				this _program setUniform("texture0", 0)
 			})
 	}
+	fragmentSource: static String
+}
+
+GpuMapLines: class extends GpuMap {
+	color: FloatPoint3D { get set }
+	init: func {
+		super(This vertexSource, This fragmentSource,
+			func {
+				this _program setUniform("color", this color)
+			})
+	}
+	vertexSource: static String
 	fragmentSource: static String
 }
 
