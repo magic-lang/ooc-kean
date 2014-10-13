@@ -35,7 +35,7 @@ setShaderSources: func {
 			fragmentTextureCoordinate = textureCoordinate;\n
 			gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
 		}\n";
-	GpuOverlay fragmentSource =
+	GpuMapOverlay fragmentSource =
 		"#version 300 es\n
 		out float outColor;\n
 		void main() {\n
@@ -159,5 +159,19 @@ setShaderSources: func {
 			vec2 rg = texture(texture0, offsetTexCoords).rg;\n
 			vec2 ba = texture(texture0, offsetTexCoords + texelOffset).rg;\n
 			outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
+		}\n";
+
+	GpuMapLines vertexSource =
+		"#version 300 es\n
+		layout(location = 0) in vec2 vertexPosition;\n
+		void main() {\n
+			gl_Position = vec4(vertexPosition, 0, 1);\n
+		}\n";
+	GpuMapLines fragmentSource =
+		"#version 300 es\n
+		uniform vec3 color;\n
+		out float outColor;\n
+		void main() {\n
+			outColor = color.r;\n
 		}\n";
 }
