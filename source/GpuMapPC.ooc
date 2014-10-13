@@ -16,7 +16,7 @@
 
 use ooc-draw-gpu
 
-initShaders: func {
+setShaderSources: func {
 	GpuMapDefault defaultVertexSource =
 		"#version 300 es\n
 		precision highp float;\n
@@ -36,7 +36,7 @@ initShaders: func {
 			fragmentTextureCoordinate = textureCoordinate;\n
 			gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
 		}\n";
-	GpuOverlay fragmentSource =
+	GpuMapOverlay fragmentSource =
 		"#version 300 es\n
 		precision highp float;\n
 		out float outColor;\n
@@ -141,5 +141,20 @@ initShaders: func {
 			float y = texture(texture0, fragmentTextureCoordinate).r;\n
 			vec2 uv = texture(texture1, fragmentTextureCoordinate).rg;\n
 			outColor = YuvToRgba(vec4(y, uv.g - 0.5f, uv.r - 0.5f, 1.0f));\n
+		}\n";
+	GpuMapLines vertexSource =
+		"#version 300 es\n
+		precision highp float;\n
+		layout(location = 0) in vec2 vertexPosition;\n
+		void main() {\n
+			gl_Position = vec4(vertexPosition.x, -vertexPosition.y, 0, 1);\n
+		}\n";
+	GpuMapLines fragmentSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform vec3 color;\n
+		out vec4 outColor;\n
+		void main() {\n
+			outColor = vec4(color.r, color.g, color.b, 1.0f);\n
 		}\n";
 }
