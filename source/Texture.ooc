@@ -68,9 +68,11 @@ Texture: class {
 		glBindTexture(GL_TEXTURE_2D, 0)
 	}
 	uploadPixels: func(pixels: Pointer) {
+		pixelStride := this _stride / this _bytesPerPixel
 		glBindTexture(GL_TEXTURE_2D, _backend)
-		if (this _stride != this width)
-			glPixelStorei(GL_UNPACK_ROW_LENGTH, this _stride / this _bytesPerPixel)
+		if (pixelStride != this width) {
+			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
+		}
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this width, this height, this format, GL_UNSIGNED_BYTE, pixels)
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
 		unbind()
@@ -113,8 +115,10 @@ Texture: class {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
 		if (allocate) {
-			if (this _stride != this width)
-				glPixelStorei(GL_UNPACK_ROW_LENGTH, this _stride / this _bytesPerPixel)
+			pixelStride := this _stride / this _bytesPerPixel
+			if (pixelStride != this width) {
+				glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
+			}
 			glTexImage2D(GL_TEXTURE_2D, 0, this internalFormat, this width, this height, 0, this format, GL_UNSIGNED_BYTE, pixels)
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
 		}
