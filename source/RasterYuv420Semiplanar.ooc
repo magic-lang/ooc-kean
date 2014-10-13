@@ -107,7 +107,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		RasterMonochrome new(this pointer, this size, this byteAlignment width)
 	}
 	createUV: func -> RasterUv {
-		uvOffset := Int align(this size height, this byteAlignment height) + this y stride * this y size height
+		uvOffset := Int align(this y size height, this byteAlignment height) * this y stride
 		RasterUv new((this pointer + uvOffset) as Int*, this size / 2, this byteAlignment width)
 	}
 	copy: func -> This {
