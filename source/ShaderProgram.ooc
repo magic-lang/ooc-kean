@@ -36,6 +36,9 @@ ShaderProgram: class {
 	setUniform: func ~Matrix3x3(name: String, value: FloatTransform2D) {
 		glUniformMatrix3fv(glGetUniformLocation(this _backend, name), 1, 0, value& as Float*)
 	}
+	setUniform: func ~Vector3(name: String, value: FloatPoint3D) {
+		glUniform3fv(glGetUniformLocation(this _backend, name), 1, value& as Float*)
+	}
 	_compileShader: func(source: String, shaderID: UInt) -> Bool {
 		glShaderSource(shaderID, 1, (source toCString())&, null)
 		glCompileShader(shaderID)
