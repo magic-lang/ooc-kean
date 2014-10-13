@@ -101,13 +101,15 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		result
 	}
 	createY: func -> RasterMonochrome {
-		RasterMonochrome new(this pointer, this size, this byteAlignment)
+		RasterMonochrome new(this pointer, this size, this byteAlignment width)
 	}
 	createU: func -> RasterMonochrome {
-		RasterMonochrome new((this pointer + RasterPacked calculateLength(this size, 1)) as Int*, this size / 2, this byteAlignment)
+		//FIXME: Calculate correct position in memory when horizontal padding
+		RasterMonochrome new((this pointer + RasterPacked calculateLength(this size, 1)) as Int*, this size / 2, this byteAlignment width)
 	}
 	createV: func -> RasterMonochrome {
-		RasterMonochrome new((this pointer + RasterPacked calculateLength(this size, 1) + RasterPacked calculateLength(this size / 2, 1)) as Int*, this size / 2, this byteAlignment)
+		//FIXME: Calculate correct position in memory when horizontal padding
+		RasterMonochrome new((this pointer + RasterPacked calculateLength(this size, 1) + RasterPacked calculateLength(this size / 2, 1)) as Int*, this size / 2, this byteAlignment width)
 	}
 	copy: func -> This {
 		This new(this)

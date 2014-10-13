@@ -44,15 +44,13 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
 		super(buffer, size, coordinateSystem, crop)
 		this y = this createY()
 		this uv = this createUV()
-		this horizontalStride = y horizontalStride * y bytesPerPixel
-		this verticalStride = y verticalStride + uv verticalStride
+		this stride = y stride
 	}
 	init: func ~fromYuvPlanar (original: This) {
 		super(original)
 		this y = this createY()
 		this uv = this createUV()
-		this horizontalStride = y horizontalStride * y bytesPerPixel
-		this verticalStride = y verticalStride + uv verticalStride
+		this stride = y stride
 	}
 	createY: abstract func -> RasterMonochrome
 	createUV: abstract func -> RasterUv

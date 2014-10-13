@@ -28,19 +28,19 @@ import Color
 RasterUv: class extends RasterPacked {
 	bytesPerPixel: Int { get { 2 } }
 	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 2)), size) }
-	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
 		super(ByteBuffer new(RasterPacked calculateLength(size, 2)), size, coordinateSystem, crop, byteAlignment)
 	}
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D, byteAlignment := 0) {
 		this init(ByteBuffer new(size area * 2, pointer), size, byteAlignment)
 	}
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, byteAlignment := 0) {
 		super(buffer, size, CoordinateSystem Default, IntShell2D new(), byteAlignment)
 	}
 
-	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
 		super(buffer, size, coordinateSystem, crop, byteAlignment)
 	}
 	init: func ~fromRasterUv (original: This) { super(original) }
