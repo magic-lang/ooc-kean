@@ -17,6 +17,7 @@
 use ooc-opengl
 use ooc-draw-gpu
 use ooc-draw
+use ooc-math
 import GpuPacker, GpuMapAndroid
 
 DummyWindow: class extends Surface {
@@ -58,18 +59,21 @@ DummyWindow: class extends Surface {
 		result := this _yPacker packPyramid(image, count)
 		result
 	}
-	copyPixels: func ~Yuv420Semiplanar(image: GpuYuv420Semiplanar, destination: UInt8*, destinationStride: UInt, uvOffset: UInt) {
+	copyPixels: func ~Yuv420Semiplanar(image: GpuYuv420Semiplanar, destination: RasterYuv420Semiplanar) {
 		yPixels := this _yPacker pack(image y)
+		destinationPointer := destination y pointer
+		destinationStride := destination y stride
 		paddedBytes := 640 + 1920 - image size width;
 		for(row in 0..image size height) {
 			sourceRow := yPixels + row * (image size width + paddedBytes)
-			destinationRow := destination + row * destinationStride
+			destinationRow := destinationPointer + row * destinationStride
 			memcpy(destinationRow, sourceRow, image size width)
 		}
 		this _yPacker unlock()
 
 		uvPixels := this _uvPacker pack(image uv)
-		uvDestination := destination + uvOffset
+		uvOffset := destination y stride * destination y size height + (Int align(destination y size height, destination byteAlignment height) - destination y size height) * destination y stride
+		uvDestination := destinationPointer + uvOffset
 		for(row in 0..image size height / 2) {
 			sourceRow := uvPixels + row * (image size width + paddedBytes)
 			destinationRow := uvDestination + row * destinationStride
