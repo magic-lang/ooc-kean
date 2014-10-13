@@ -63,6 +63,7 @@ extend Int {
 		this * this
 	}
 	align: static func (x: Int, bytes: Int) -> This {
-		(x + bytes-1) & ~(bytes-1)
+		result := bytes > 0 ? (x + bytes-1) & ~(bytes-1) : x
+		result
 	}
 }
