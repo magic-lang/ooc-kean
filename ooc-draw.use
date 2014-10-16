@@ -1,7 +1,7 @@
 Name: OOC Draw
 Description: Draw functionality library.
-SourcePath: source
+SourcePath: source/draw
 Requires: ooc-unit, ooc-math, ooc-base
 Imports: Color, Image, RasterBgr, RasterBgra, RasterImage, RasterMonochrome, RasterPacked, RasterPlanar, RasterYuvPlanar, RasterYuv420, RasterYuv420Planar, RasterYuvSemiplanar, RasterYuv420Semiplanar
-Additionals: source/stb_image.c, source/stb_image_write.c
+Additionals: source/draw/stb_image.c, source/draw/stb_image_write.c
 Libs: -lm
