@@ -28,14 +28,16 @@ GpuPacker: class extends Surface {
 	_targetTexture: EglRgba
 	_pyramidBuffer: UInt8*
 	_context: Context
-	init: func (context: Context, resolution: IntSize2D) {
+	_bytesPerPixel: Int
+	init: func (context: Context, resolution: IntSize2D, bytesPerPixel: Int) {
 		this size = resolution
+		this _bytesPerPixel = bytesPerPixel
 		this _packMonochrome = GpuMapPackMonochrome new()
 		this _packUv = GpuMapPackUv new()
 		this _quad = Quad create()
 		this _pyramidBuffer = gc_malloc((1920 + 640) * 1080) as UInt8*
 		this _context = context
-		this _targetTexture = EglRgba new(context _eglDisplay, resolution)
+		this _targetTexture = EglRgba new(context _eglDisplay, IntSize2D new(1920 / 4, 1080))
 		this _renderTarget = Fbo create(this _targetTexture texture, resolution width, resolution height)
 	}
 	dispose: func {
@@ -105,6 +107,6 @@ GpuPacker: class extends Surface {
 		Fbo finish()
 	}
 	_setResolution: func (resolution: IntSize2D) {
-		Fbo setViewport(0, 0, this size width, this size height)
+		Fbo setViewport(0, 0, resolution width * this _bytesPerPixel / 4, resolution height)
 	}
 }
