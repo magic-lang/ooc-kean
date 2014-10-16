@@ -22,7 +22,7 @@ import GpuPacker, GpuMapAndroid
 
 DummyWindow: class extends Surface {
 	_context: Context
-	_yPacker, _uvPacker, _uPacker: GpuPacker
+	_yPacker, _uvPacker, _scaledPacker: GpuPacker
 	init: /* internal */ func
 	_generate: /* private */ func (other: Context) -> Bool {
 		this _context = Context create(other)
@@ -39,21 +39,27 @@ DummyWindow: class extends Surface {
 			success = result _generate(null)
 
 		if(success) {
-			result _yPacker = GpuPacker new(result _context, IntSize2D new(1920 / 4, 1080))
-			result _uvPacker = GpuPacker new(result _context, IntSize2D new(1920 / 4, 1080 / 2))
-			result _uPacker = GpuPacker new(result _context, IntSize2D new(1920 / 4, 1080 / 4))
+			result _yPacker = GpuPacker new(result _context, IntSize2D new(1920 / 4, 1080), 1)
+			result _uvPacker = GpuPacker new(result _context, IntSize2D new(1920 / 4, 1080 / 2), 2)
+			result _scaledPacker = GpuPacker new(result _context, IntSize2D new(768 / 4, 480), 1)
 		}
 		success ? result : null
 	}
 	dispose: func {
 		this _yPacker dispose()
 		this _uvPacker dispose()
-		this _uPacker dispose()
+		this _scaledPacker dispose()
 		this _context dispose()
 	}
 	packPyramid: func ~monochrome (image: RasterMonochrome, count: Int) -> Pointer {
 		result := this _yPacker packPyramid(image, count)
 		result
+	}
+	copyPixels: func ~Monochrome (image: GpuMonochrome, destination: RasterMonochrome) {
+		this _scaledPacker pack(image)
+		yPixels := this _scaledPacker lock()
+		memcpy(destination pointer, yPixels, 768 * 480)
+		this _scaledPacker unlock()
 	}
 	copyPixels: func ~Yuv420Semiplanar(image: GpuYuv420Semiplanar, destination: RasterYuv420Semiplanar) {
 		this _yPacker pack(image y)
