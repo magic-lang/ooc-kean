@@ -1,0 +1,5 @@
+Name: OOC Collections
+Description: Collections Library
+SourcePath: source
+Requires: ooc-unit, ooc-base, ooc-sdk-lite
+Imports: Vector, VectorList
