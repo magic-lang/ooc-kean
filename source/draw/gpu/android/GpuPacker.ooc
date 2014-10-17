@@ -19,21 +19,26 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-base
 use ooc-opengl
-import math, EGLImage
+import math, EglRgba
 
-GpuPacker: abstract class extends Surface {
+GpuPacker: class extends Surface {
 	_packMonochrome: GpuMapPackMonochrome
 	_packUv: GpuMapPackUv
 	_renderTarget: Fbo
-	_targetTexture: EGLImage
+	_targetTexture: EglRgba
 	_pyramidBuffer: UInt8*
 	_context: Context
-	init: func (context: Context) {
+	_bytesPerPixel: Int
+	init: func (context: Context, resolution: IntSize2D, bytesPerPixel: Int) {
+		this size = resolution
+		this _bytesPerPixel = bytesPerPixel
 		this _packMonochrome = GpuMapPackMonochrome new()
 		this _packUv = GpuMapPackUv new()
 		this _quad = Quad create()
 		this _pyramidBuffer = gc_malloc((1920 + 640) * 1080) as UInt8*
 		this _context = context
+		this _targetTexture = EglRgba new(context _eglDisplay, resolution)
+		this _renderTarget = Fbo create(this _targetTexture texture, resolution width, resolution height)
 	}
 	dispose: func {
 		this _targetTexture dispose()
@@ -42,21 +47,17 @@ GpuPacker: abstract class extends Surface {
 		this _packUv dispose()
 		gc_free(this _pyramidBuffer)
 	}
-	pack: func ~monochrome (image: GpuMonochrome) -> UInt8* {
+	pack: func ~monochrome (image: GpuMonochrome) {
 		this _packMonochrome transform = FloatTransform2D identity
 		this _packMonochrome imageSize = image size
 		this _packMonochrome screenSize = image size
 		this draw(image, this _packMonochrome)
-		result := this _targetTexture lock()
-		result
 	}
-	pack: func ~uv (image: GpuUv) -> UInt8* {
+	pack: func ~uv (image: GpuUv) {
 		this _packUv transform = FloatTransform2D identity
 		this _packUv imageSize = image size
 		this _packUv screenSize = image size
 		this draw(image, this _packUv)
-		result := this _targetTexture lock()
-		result
 	}
 	packPyramid: func ~monochrome (image: RasterMonochrome, count: Int) -> UInt8* {
 		gpuMonochrome := GpuImage create(image)
@@ -86,6 +87,10 @@ GpuPacker: abstract class extends Surface {
 		gpuMonochrome recycle()
 		this _pyramidBuffer
 	}
+	lock: func -> UInt8* {
+		result := this _targetTexture lock()
+		result
+	}
 	unlock: func {
 		this _targetTexture unlock()
 	}
@@ -101,59 +106,7 @@ GpuPacker: abstract class extends Surface {
 	_update: func {
 		Fbo finish()
 	}
-}
-
-GpuPackerY: class extends GpuPacker {
-	init: func (context: Context) {
-		super(context)
-	}
-	initialize: func (context: Context) {
-		this _targetTexture = EGLImage new(context _eglDisplay, TextureType monochrome, IntSize2D new(1920 / 4, 1080))
-		this _renderTarget = Fbo create(this _targetTexture texture, 1920 / 4, 1080)
-	}
-
-	create: static func (context: Context) -> This {
-		result := This new(context)
-		result initialize(context)
-		result
-	}
 	_setResolution: func (resolution: IntSize2D) {
-		Fbo setViewport(0, 0, resolution width / 4, resolution height)
-	}
-}
-
-GpuPackerUv: class extends GpuPacker {
-	init: func (context: Context) {
-		super(context)
-	}
-	initialize: func (context: Context) {
-		this _targetTexture = EGLImage new(context _eglDisplay, TextureType uv, IntSize2D new(1920 / 4, 1080 / 2))
-		this _renderTarget = Fbo create(this _targetTexture texture, 1920 / 2, 1080 / 2)
-	}
-	create: static func (context: Context) -> This {
-		result := This new(context)
-		result initialize(context)
-		result
-	}
-	_setResolution: func (resolution: IntSize2D) {
-		Fbo setViewport(0, 0, resolution width / 2, resolution height)
-	}
-}
-
-GpuPackerU: class extends GpuPacker {
-	init: func (context: Context) {
-		super(context)
-	}
-	initialize: func (context: Context) {
-		this _targetTexture = EGLImage new(context _eglDisplay, TextureType monochrome, IntSize2D new(1920 / 4, 1080 / 4))
-		this _renderTarget = Fbo create(this _targetTexture texture, 1920 / 4, 1080 / 4)
-	}
-	create: static func (context: Context) -> This {
-		result := This new(context)
-		result initialize(context)
-		result
-	}
-	_setResolution: func (resolution: IntSize2D) {
-		Fbo setViewport(0, 0, resolution width / 4, resolution height / 4)
+		Fbo setViewport(0, 0, resolution width * this _bytesPerPixel / 4, resolution height)
 	}
 }

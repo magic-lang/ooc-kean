@@ -18,6 +18,7 @@ use ooc-math
 use ooc-draw
 use ooc-base
 use ooc-opengl
+
 import GpuImage, GpuMap, Surface, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
 
 GpuCanvas: abstract class extends Surface {
@@ -37,7 +38,7 @@ GpuCanvas: abstract class extends Surface {
 	getPixels: abstract func (image: GpuImage, channels: UInt) -> ByteBuffer
 
 	_setResolution: func (resolution: IntSize2D) {
-		Fbo setViewport(0, 0, resolution width, resolution height)
+		Fbo setViewport(0, 0, this size width, this size height)
 	}
 }
 
@@ -109,6 +110,7 @@ GpuCanvasPacked: class extends GpuCanvas {
 	}
 	create: static func (image: GpuImage) -> This {
 		result := This new()
+		result size = image size
 		result _renderTarget = Fbo create(image texture, image size width, image size height)
 		result _quad = Quad create()
 		result _renderTarget != null ? result : null
