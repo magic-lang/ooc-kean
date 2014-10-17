@@ -54,21 +54,6 @@ Surface: abstract class {
 		this _unbind()
 		this _update()
 	}
-	drawOverlay: func ~overlay (transform: FloatTransform2D, screenSize: IntSize2D) {
-		/*this _bind()
-		this _overlayMonochrome screenSize = screenSize
-		crossWidth := this _overlayMonochrome screenSize width / 16
-		crossHeight := this _overlayMonochrome screenSize height / 160
-		this _overlayMonochrome imageSize = IntSize2D new(crossHeight, crossWidth)
-		this _overlayMonochrome transform = transform
-		this _overlayMonochrome use()
-		this _quad draw()
-		this _overlayMonochrome imageSize = IntSize2D new(crossWidth, crossHeight)
-		this _overlayMonochrome use()
-		this _quad draw()
-		this _unbind()
-		this _update()*/
-	}
 
 	_clear: abstract func
 	_bind: abstract func
