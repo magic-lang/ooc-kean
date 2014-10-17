@@ -1,5 +1,5 @@
 #ifndef EGLIMAGEIMPORT_H_
-extern int createEGLImage(void* display);
+extern int createEGLImage(int width, int height, void* display);
 extern void destroyEGLImage(int index);
 extern void* lockPixels(int index);
 extern void unlockPixels(int index);
