@@ -37,7 +37,7 @@ GpuPacker: class extends Surface {
 		this _quad = Quad create()
 		this _pyramidBuffer = gc_malloc((1920 + 640) * 1080) as UInt8*
 		this _context = context
-		this _targetTexture = EglRgba new(context _eglDisplay, IntSize2D new(1920 / 4, 1080))
+		this _targetTexture = EglRgba new(context _eglDisplay, resolution)
 		this _renderTarget = Fbo create(this _targetTexture texture, resolution width, resolution height)
 	}
 	dispose: func {
