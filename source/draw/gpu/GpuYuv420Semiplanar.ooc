@@ -17,50 +17,14 @@
 use ooc-math
 import GpuMonochrome, GpuCanvas, GpuPlanar, GpuUv
 
-GpuYuv420Semiplanar: class extends GpuPlanar {
-	_canvas: GpuCanvasYuv420Semiplanar
+GpuYuv420Semiplanar: abstract class extends GpuPlanar {
+	_canvas: GpuCanvas
 	_y: GpuMonochrome
 	y: GpuMonochrome { get { this _y } }
 	_uv: GpuUv
 	uv: GpuUv { get { this _uv } }
 
-	canvas: GpuCanvasYuv420Semiplanar {
-		get {
-			if (this _canvas == null)
-				this _canvas = GpuCanvasYuv420Semiplanar create(this)
-			this _canvas
-		}
-	}
-	init: /* private */ func (=size)
-	dispose: func {
-		this _y dispose()
-		this _uv dispose()
-		if (this _canvas != null)
-			this _canvas dispose()
-	}
-	recycle: func {
-		this _y recycle()
-		this _uv recycle()
-	}
-	_bind: /* internal */ func {
-		this _y _bind(0)
-		this _uv _bind(1)
-	}
-	_generate: func (stride: UInt, y: Pointer, uv: Pointer) -> Bool {
-		this _y = GpuMonochrome _create(this size, stride, y)
-		this _uv = GpuUv _create(this size / 2, stride, uv)
-		this _y != null && this _uv != null
-	}
-	create: func (size: IntSize2D) -> This {
-		result := This new(size)
-		result _generate(size width, null, null) ? result : null
-	}
-	create2: static func ~empty (size: IntSize2D) -> This {
-		result := This new(size)
-		result _generate(size width, null, null) ? result : null
-	}
-	_create: static /* internal */ func ~fromPixels (size: IntSize2D, stride: UInt, y: Pointer, uv: Pointer) -> This {
-		result := This new(size)
-		result _generate(stride, y, uv) ? result : null
+	init: func (size: IntSize2D) {
+		super(size)
 	}
 }

@@ -13,14 +13,13 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-use ooc-opengl
 use ooc-math
 import structs/LinkedList
-import GpuMap
+import OpenGLES3Map, OpenGLES3/Lines
 
 TraceDrawer: class {
 	pointList: static LinkedList<FloatPoint2D>
-	shader: GpuMapLines
+	shader: OpenGLES3MapLines
 	positions: Float*
 	pointCount: Int = 60
 	screenSize: IntSize2D
@@ -35,7 +34,7 @@ TraceDrawer: class {
 			this positions[2 * i] = 0
 			this positions[2 * i + 1] = 0
 		}
-		this shader = GpuMapLines new()
+		this shader = OpenGLES3MapLines new()
 	}
 	add: func(transform: FloatTransform2D) {
 		transformedPosition := FloatPoint2D new(transform g + this screenSize width / 4, transform h + this screenSize height / 4)

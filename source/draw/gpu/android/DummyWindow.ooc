@@ -14,14 +14,13 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-opengl
+//use ooc-opengl
 use ooc-draw-gpu
 use ooc-draw
 use ooc-math
 import GpuPacker, GpuMapAndroid
 
-DummyWindow: class extends Surface {
-	_instance: static This
+DummyWindow: class {
 	_context: Context
 	_yPacker: GpuPackerY
 	_uvPacker: GpuPackerUv
@@ -35,7 +34,6 @@ DummyWindow: class extends Surface {
 	}
 	create: static func (other: DummyWindow)-> This {
 		result := This new()
-		This _instance = result
 		success := false
 		if(other != null)
 			success = result _generate(other _context)

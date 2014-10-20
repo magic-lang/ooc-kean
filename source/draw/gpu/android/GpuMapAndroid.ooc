@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this _program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-draw-gpu
+use ooc-opengl
 
 setShaderSources: func {
-	GpuMapDefault defaultVertexSource =
+	OpenGLES3MapDefault defaultVertexSource =
 		"#version 300 es\n
 		uniform mat3 transform;\n
 		uniform int imageWidth;\n
@@ -35,13 +35,13 @@ setShaderSources: func {
 			fragmentTextureCoordinate = textureCoordinate;\n
 			gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
 		}\n";
-	GpuMapOverlay fragmentSource =
+	OpenGLES3MapOverlay fragmentSource =
 		"#version 300 es\n
 		out float outColor;\n
 		void main() {\n
 			outColor = 0.0f;\n
 		}\n";
-	GpuMapBgr fragmentSource =
+	OpenGLES3MapBgr fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n
 		in vec2 fragmentTextureCoordinate;
@@ -49,7 +49,7 @@ setShaderSources: func {
 		void main() {\n
 			outColor = texture(texture0, fragmentTextureCoordinate).rgb;\n
 		}\n";
-	GpuMapBgrToBgra fragmentSource =
+	OpenGLES3MapBgrToBgra fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n
 		in vec2 fragmentTextureCoordinate;
@@ -57,7 +57,7 @@ setShaderSources: func {
 		void main() {\n
 			outColor = vec4(texture(texture0, fragmentTextureCoordinate).rgb, 1.0f);\n
 		}\n";
-	GpuMapBgra fragmentSource =
+	OpenGLES3MapBgra fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n
 		in vec2 fragmentTextureCoordinate;
@@ -65,7 +65,7 @@ setShaderSources: func {
 		void main() {\n
 			outColor = texture(texture0, fragmentTextureCoordinate).rgb;\n
 		}\n";
-	GpuMapMonochrome fragmentSource =
+	OpenGLES3MapMonochrome fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n
 		in vec2 fragmentTextureCoordinate;
@@ -73,7 +73,7 @@ setShaderSources: func {
 		void main() {\n
 			outColor = texture(texture0, fragmentTextureCoordinate).r;\n
 		}\n";
-	GpuMapUv fragmentSource =
+	OpenGLES3MapUv fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n
 		in vec2 fragmentTextureCoordinate;
@@ -81,7 +81,7 @@ setShaderSources: func {
 		void main() {\n
 			outColor = texture(texture0, fragmentTextureCoordinate).rg;\n
 		}\n";
-	GpuMapMonochromeToBgra fragmentSource =
+	OpenGLES3MapMonochromeToBgra fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n
 		in vec2 fragmentTextureCoordinate;
@@ -90,7 +90,7 @@ setShaderSources: func {
 			float colorSample = texture(texture0, fragmentTextureCoordinate).r;\n
 			outColor = vec4(colorSample, colorSample, colorSample, 1.0f);\n
 		}\n";
-	GpuMapYuvPlanarToBgra fragmentSource =
+	OpenGLES3MapYuvPlanarToBgra fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n
 		uniform sampler2D texture1;\n
@@ -112,7 +112,7 @@ setShaderSources: func {
 			float v = texture(texture2, fragmentTextureCoordinate).r;\n
 			outColor = YuvToRgba(vec4(y, v - 0.5f, u - 0.5f, 1.0f));\n
 		}\n";
-	GpuMapYuvSemiplanarToBgra fragmentSource =
+	OpenGLES3MapYuvSemiplanarToBgra fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n
 		uniform sampler2D texture1;\n
@@ -132,7 +132,7 @@ setShaderSources: func {
 			vec2 uv = texture(texture1, fragmentTextureCoordinate).rg;\n
 			outColor = YuvToRgba(vec4(y, uv.g - 0.5f, uv.r - 0.5f, 1.0f));\n
 		}\n";
-	GpuMapPackMonochrome fragmentSource =
+	OpenGLES3MapPackMonochrome fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n
 		uniform int pixelWidth;\n
@@ -147,7 +147,7 @@ setShaderSources: func {
 			float a = texture(texture0, offsetTexCoords + 3.0f*texelOffset).x;\n
 			outColor = vec4(r, g, b, a);\n
 		}\n";
-	GpuMapPackUv fragmentSource =
+	OpenGLES3MapPackUv fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n
 		uniform int pixelWidth;\n
@@ -161,13 +161,13 @@ setShaderSources: func {
 			outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
 		}\n";
 
-	GpuMapLines vertexSource =
+	OpenGLES3MapLines vertexSource =
 		"#version 300 es\n
 		layout(location = 0) in vec2 vertexPosition;\n
 		void main() {\n
 			gl_Position = vec4(vertexPosition, 0, 1);\n
 		}\n";
-	GpuMapLines fragmentSource =
+	OpenGLES3MapLines fragmentSource =
 		"#version 300 es\n
 		uniform vec3 color;\n
 		out float outColor;\n

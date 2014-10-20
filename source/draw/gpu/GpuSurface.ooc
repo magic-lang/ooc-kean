@@ -14,25 +14,16 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-//use ooc-opengl
 use ooc-math
-import egl/eglimage
-EGLImage: class {
-	texture: Texture { get set }
-	id: Int { get set }
-	init: func (eglDisplay: Pointer, type: TextureType, size: IntSize2D, pixels := null) {
-		this texture = Texture create(type, size width, size height, size width, pixels, false)
-		this id = createEGLImage(eglDisplay)
-	}
-	dispose: func {
-		this texture dispose()
-		destroyEGLImage(this id)
-	}
-	lock: func -> Pointer {
-		result := lockPixels(this id)
-		result
-	}
-	unlock: func {
-		unlockPixels(this id)
-	}
+use ooc-draw
+import GpuMap
+
+GpuSurface: abstract class {
+	size: IntSize2D
+	draw: abstract func (image: Image, map: GpuMap, resolution: IntSize2D)
+	clear: abstract func
+	bind: abstract func
+	setResolution: func (resolution: IntSize2D)
+	unbind: func
+	update: func
 }

@@ -16,30 +16,11 @@
 
 use ooc-math
 use ooc-draw
-use ooc-opengl
 import GpuPacked
 
-GpuBgra: class extends GpuPacked {
+GpuBgra: abstract class extends GpuPacked {
 	init: func (size: IntSize2D) {
-		super(size, TextureType rgba, null)
-	}
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer) {
-		super(size, stride, TextureType bgra, data)
-	}
-	replace: func (image: RasterBgra) {
-		this _texture uploadPixels(image pointer)
-	}
-	create: func (size: IntSize2D) -> This {
-		result := This new(size)
-		result _texture != null ? result : null
-	}
-	create: static func ~empty (size: IntSize2D) -> This {
-		result := This new(size)
-		result _texture != null ? result : null
-	}
-	_create: static /* internal */ func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer) -> This {
-		result := This new(size, stride, data)
-		result _texture != null ? result : null
+		super(size)
 	}
 
 }
