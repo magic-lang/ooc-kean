@@ -194,10 +194,12 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	}
 	openBin: static func (filename: String, width: Int, height: Int) -> This {
 		file := File new(filename)
-		seq := BinarySequenceReader new(FileReader new(file))
-		data := seq bytes(width * height + (width * height / 2))
-		seq reader close()
-		buffer := ByteBuffer new(width * height + width * height / 2, data as UInt8*)
+		fileReader := FileReader new(file)
+		bytes := width * height + (width * height / 2)
+		data: UInt8* = gc_malloc_atomic(bytes)
+		fileReader read((data as Char*), 0, bytes)
+		fileReader close()
+		buffer := ByteBuffer new(bytes, data as UInt8*)
 		This new(buffer, IntSize2D new(width, height))
 	}
 }
