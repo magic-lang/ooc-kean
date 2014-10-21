@@ -48,30 +48,35 @@ Window: class {
 		(this _native != null)
 	}
 	draw: func ~Monochrome (image: GpuMonochrome, transform := FloatTransform2D identity) {
+		this setResolution(image size)
 		this _monochromeToBgra transform = transform
 		this _monochromeToBgra imageSize = image size
 		this _monochromeToBgra screenSize = image size
 		this _surface draw(image, _monochromeToBgra, image size)
 	}
 	draw: func ~Bgr (image: GpuBgr, transform := FloatTransform2D identity) {
+		this setResolution(image size)
 		this _bgrToBgra transform = transform
 		this _bgrToBgra imageSize = image size
 		this _bgrToBgra screenSize = image size
 		this _surface draw(image, _bgrToBgra, image size)
 	}
 	draw: func ~Bgra (image: GpuBgra, transform := FloatTransform2D identity) {
+		this setResolution(image size)
 		this _bgraToBgra transform = transform
 		this _bgraToBgra imageSize = image size
 		this _bgraToBgra screenSize = image size
 		this _surface draw(image, _bgraToBgra, image size)
 	}
 	draw: func ~Yuv420Planar (image: GpuYuv420Planar, transform := FloatTransform2D identity) {
+		this setResolution(image size)
 		this _yuvPlanarToBgra transform = transform
 		this _yuvPlanarToBgra imageSize = image size
 		this _yuvPlanarToBgra screenSize = image size
 		this _surface draw(image, _yuvPlanarToBgra, image size)
 	}
 	draw: func ~Yuv420Semiplanar (image: GpuYuv420Semiplanar, transform := FloatTransform2D identity) {
+		this setResolution(image size)
 		this _yuvSemiplanarToBgra transform = transform
 		this _yuvSemiplanarToBgra imageSize = image size
 		this _yuvSemiplanarToBgra screenSize = image size
@@ -130,6 +135,8 @@ Window: class {
 	}
 	update: func {
 		this gpuContext update()
+		this setResolution(this size)
+		this clear()
 	}
 	setResolution: /* internal */ func (resolution: IntSize2D) {
 		this _native setViewport(this size width / 2 - resolution width / 2, this size height / 2 - resolution height / 2, resolution width, resolution height)
