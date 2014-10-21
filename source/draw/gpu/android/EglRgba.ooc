@@ -17,12 +17,12 @@
 //use ooc-opengl
 use ooc-math
 import egl/eglimage
-EGLImage: class {
+EglRgba: class {
 	texture: Texture { get set }
 	id: Int { get set }
-	init: func (eglDisplay: Pointer, type: TextureType, size: IntSize2D, pixels := null) {
-		this texture = Texture create(type, size width, size height, size width, pixels, false)
-		this id = createEGLImage(eglDisplay)
+	init: func (eglDisplay: Pointer, size: IntSize2D) {
+		this texture = Texture create(TextureType rgba, size width, size height, size width, null, false)
+		this id = createEGLImage(size width, size height, eglDisplay)
 	}
 	dispose: func {
 		this texture dispose()

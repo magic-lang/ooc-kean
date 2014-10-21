@@ -17,7 +17,7 @@
 
 include ./headers/EGLImageImport
 
-createEGLImage: extern func(display: Pointer) -> Int
+createEGLImage: extern func(width: Int, height: Int, display: Pointer) -> Int
 destroyEGLImage: extern func(index: Int)
 lockPixels: extern func(index: Int) -> Pointer
 unlockPixels: extern func(index: Int)

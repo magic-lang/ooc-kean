@@ -19,16 +19,20 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-base
 use ooc-opengl
-import math, EGLImage
+import math, EglRgba
 
 GpuPacker: abstract class {
 	_packMonochrome: GpuMapPackMonochrome
 	_surface: OpenGLES3Surface
 	_packUv: GpuMapPackUv
 	_renderTarget: Fbo
-	_targetTexture: EGLImage
+	_targetTexture: EglRgba
+	_pyramidBuffer: UInt8*
 	_context: Context
-	init: func (context: Context) {
+	_bytesPerPixel: Int
+	init: func (context: Context, resolution: IntSize2D, bytesPerPixel: Int) {
+		this size = resolution
+		this _bytesPerPixel = bytesPerPixel
 		this _packMonochrome = GpuMapPackMonochrome new()
 		this _packUv = GpuMapPackUv new()
 		this _quad = Quad create()
@@ -41,7 +45,7 @@ GpuPacker: abstract class {
 		this _packMonochrome dispose()
 		this _packUv dispose()
 	}
-	pack: func ~monochrome (image: GpuMonochrome) -> UInt8* {
+	pack: func ~monochrome (image: GpuMonochrome) {
 		this _packMonochrome transform = FloatTransform2D identity
 		this _packMonochrome imageSize = image size
 		this _packMonochrome screenSize = image size
@@ -49,7 +53,7 @@ GpuPacker: abstract class {
 		result := this _targetTexture lock()
 		result
 	}
-	pack: func ~uv (image: GpuUv) -> UInt8* {
+	pack: func ~uv (image: GpuUv) {
 		this _packUv transform = FloatTransform2D identity
 		this _packUv imageSize = image size
 		this _packUv screenSize = image size
@@ -72,59 +76,7 @@ GpuPacker: abstract class {
 	_update: func {
 		Fbo finish()
 	}
-}
-
-GpuPackerY: class extends GpuPacker {
-	init: func (context: Context) {
-		super(context)
-	}
-	initialize: func (context: Context) {
-		this _targetTexture = EGLImage new(context _eglDisplay, TextureType monochrome, IntSize2D new(1920 / 4, 1080))
-		this _renderTarget = Fbo create(this _targetTexture texture, 1920 / 4, 1080)
-	}
-
-	create: static func (context: Context) -> This {
-		result := This new(context)
-		result initialize(context)
-		result
-	}
 	_setResolution: func (resolution: IntSize2D) {
-		Fbo setViewport(0, 0, resolution width / 4, resolution height)
-	}
-}
-
-GpuPackerUv: class extends GpuPacker {
-	init: func (context: Context) {
-		super(context)
-	}
-	initialize: func (context: Context) {
-		this _targetTexture = EGLImage new(context _eglDisplay, TextureType uv, IntSize2D new(1920 / 4, 1080 / 2))
-		this _renderTarget = Fbo create(this _targetTexture texture, 1920 / 2, 1080 / 2)
-	}
-	create: static func (context: Context) -> This {
-		result := This new(context)
-		result initialize(context)
-		result
-	}
-	_setResolution: func (resolution: IntSize2D) {
-		Fbo setViewport(0, 0, resolution width / 2, resolution height)
-	}
-}
-
-GpuPackerU: class extends GpuPacker {
-	init: func (context: Context) {
-		super(context)
-	}
-	initialize: func (context: Context) {
-		this _targetTexture = EGLImage new(context _eglDisplay, TextureType monochrome, IntSize2D new(1920 / 4, 1080 / 4))
-		this _renderTarget = Fbo create(this _targetTexture texture, 1920 / 4, 1080 / 4)
-	}
-	create: static func (context: Context) -> This {
-		result := This new(context)
-		result initialize(context)
-		result
-	}
-	_setResolution: func (resolution: IntSize2D) {
-		Fbo setViewport(0, 0, resolution width / 4, resolution height / 4)
+		Fbo setViewport(0, 0, resolution width * this _bytesPerPixel / 4, resolution height)
 	}
 }

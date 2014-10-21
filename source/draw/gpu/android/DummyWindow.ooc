@@ -22,9 +22,7 @@ import GpuPacker, GpuMapAndroid
 
 DummyWindow: class {
 	_context: Context
-	_yPacker: GpuPackerY
-	_uvPacker: GpuPackerUv
-	_uPacker: GpuPackerU
+	_yPacker, _uvPacker, _scaledPacker: GpuPacker
 	init: /* internal */ func
 	_generate: /* private */ func (other: Context) -> Bool {
 		this _context = Context create(other)
@@ -41,24 +39,31 @@ DummyWindow: class {
 			success = result _generate(null)
 
 		if(success) {
-			result _yPacker = GpuPackerY create(result _context)
-			result _uvPacker = GpuPackerUv create(result _context)
-			result _uPacker = GpuPackerU create(result _context)
+			result _yPacker = GpuPacker new(result _context, IntSize2D new(1920 / 4, 1080), 1)
+			result _uvPacker = GpuPacker new(result _context, IntSize2D new(1920 / 4, 1080 / 2), 2)
+			result _scaledPacker = GpuPacker new(result _context, IntSize2D new(768 / 4, 480), 1)
 		}
 		success ? result : null
 	}
 	dispose: func {
 		this _yPacker dispose()
 		this _uvPacker dispose()
-		this _uPacker dispose()
+		this _scaledPacker dispose()
 		this _context dispose()
 	}
 	packPyramid: func ~monochrome (image: RasterMonochrome, count: Int) -> Pointer {
 		result := this _yPacker packPyramid(image, count)
 		result
 	}
+	copyPixels: func ~Monochrome (image: GpuMonochrome, destination: RasterMonochrome) {
+		this _scaledPacker pack(image)
+		yPixels := this _scaledPacker lock()
+		memcpy(destination pointer, yPixels, 768 * 480)
+		this _scaledPacker unlock()
+	}
 	copyPixels: func ~Yuv420Semiplanar(image: GpuYuv420Semiplanar, destination: RasterYuv420Semiplanar) {
-		yPixels := this _yPacker pack(image y)
+		this _yPacker pack(image y)
+		yPixels := this _yPacker lock()
 		destinationPointer := destination y pointer
 		destinationStride := destination y stride
 		paddedBytes := 640 + 1920 - image size width;
@@ -69,7 +74,8 @@ DummyWindow: class {
 		}
 		this _yPacker unlock()
 
-		uvPixels := this _uvPacker pack(image uv)
+		this _uvPacker pack(image uv)
+		uvPixels := this _uvPacker lock()
 		uvOffset := destination y stride * destination y size height + (Int align(destination y size height, destination byteAlignment height) - destination y size height) * destination y stride
 		uvDestination := destinationPointer + uvOffset
 		for(row in 0..image size height / 2) {
