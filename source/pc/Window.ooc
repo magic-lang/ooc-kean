@@ -22,85 +22,112 @@ use ooc-opengl
 import X11/X11Window
 import GpuMapPC
 
-Window: class {
+Window: class  {
+	/*
 	_native: NativeWindow
+	_context: Context
 	_surface: GpuSurface
 	_monochromeToBgra: OpenGLES3MapMonochromeToBgra
 	_bgrToBgra: OpenGLES3MapBgrToBgra
 	_bgraToBgra: OpenGLES3MapBgra
 	_yuvPlanarToBgra: OpenGLES3MapYuvPlanarToBgra
 	_yuvSemiplanarToBgra: OpenGLES3MapYuvSemiplanarToBgra
-	size: IntSize2D
-	gpuContext: GpuContext
+	_quad: Quad
 
 	init: /* internal */ func (=size) {
 	}
 	_generate: /* private */ func (size: IntSize2D, title: String) -> Bool {
-		setShaderSources()
-		this _native = X11Window create(size width, size height, title)
-		this gpuContext = OpenGLES3Context new(this _native)
+		//this _native = X11Window create(size width, size height, title)
+		this _context = Context create(_native)
 		this _surface = OpenGLES3Surface create()
-		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new()
-		this _bgrToBgra = OpenGLES3MapBgrToBgra new()
-		this _bgraToBgra = OpenGLES3MapBgra new()
-		this _yuvPlanarToBgra = OpenGLES3MapYuvPlanarToBgra new()
-		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new()
-		(this _native != null)
+		result: UInt = this _context makeCurrent()
+		this _quad = Quad create()
+		setShaderSources()
+		this _monochromeToBgra = GpuMapMonochromeToBgra new()
+		this _bgrToBgra = GpuMapBgrToBgra new()
+		this _bgraToBgra = GpuMapBgra new()
+		this _yuvPlanarToBgra = GpuMapYuvPlanarToBgra new()
+		this _yuvSemiplanarToBgra = GpuMapYuvSemiplanarToBgra new()
+		result == 1 && (this _native != null) && (this _context != null) && (this _quad != null)
+	}
+	draw: func (image: Image, map: GpuMap, resolution: IntSize2D) {
+
 	}
 	draw: func ~Monochrome (image: GpuMonochrome, transform := FloatTransform2D identity) {
+		/*
 		this _monochromeToBgra transform = transform
 		this _monochromeToBgra imageSize = image size
 		this _monochromeToBgra screenSize = image size
-		this _surface draw(image, _monochromeToBgra, image size)
+		this _surface draw(image, _monochromeToBgra)
+		*/
 	}
 	draw: func ~Bgr (image: GpuBgr, transform := FloatTransform2D identity) {
+		/*
 		this _bgrToBgra transform = transform
 		this _bgrToBgra imageSize = image size
 		this _bgrToBgra screenSize = image size
-		this _surface draw(image, _bgrToBgra, image size)
+		this _surface draw(image, _bgrToBgra)
+		*/
 	}
 	draw: func ~Bgra (image: GpuBgra, transform := FloatTransform2D identity) {
+		/*
 		this _bgraToBgra transform = transform
 		this _bgraToBgra imageSize = image size
 		this _bgraToBgra screenSize = image size
-		this _surface draw(image, _bgraToBgra, image size)
+		this _surface draw(image, _bgraToBgra)
+		*/
 	}
 	draw: func ~Yuv420Planar (image: GpuYuv420Planar, transform := FloatTransform2D identity) {
+		/*
 		this _yuvPlanarToBgra transform = transform
 		this _yuvPlanarToBgra imageSize = image size
 		this _yuvPlanarToBgra screenSize = image size
-		this _surface draw(image, _yuvPlanarToBgra, image size)
+		this _surface draw(image, _yuvPlanarToBgra)
+		*/
 	}
 	draw: func ~Yuv420Semiplanar (image: GpuYuv420Semiplanar, transform := FloatTransform2D identity) {
+		/*
 		this _yuvSemiplanarToBgra transform = transform
 		this _yuvSemiplanarToBgra imageSize = image size
 		this _yuvSemiplanarToBgra screenSize = image size
-		this _surface draw(image, this _yuvSemiplanarToBgra, image size)
+		this _surface draw(image, this _yuvSemiplanarToBgra)
+		this drawLines(transform, this size)
+		*/
 	}
 	draw: func ~RasterBgr (image: RasterBgr, transform := FloatTransform2D identity) {
-		result := this gpuContext createGpuImage(image)
-		this draw(result, transform)
+		/*
+		result := OpenGLES3Image create(image)
+		this _surface draw(result, transform)
 		result recycle()
+		*/
 	}
 	draw: func ~RasterBgra (image: RasterBgra, transform := FloatTransform2D identity) {
-		result := this gpuContext createGpuImage(image)
-		this draw(result, transform)
+		/*
+		result := OpenGLES3Image create(image)
+		this _surface draw(result, transform)
 		result recycle()
+		*/
 	}
 	draw: func ~RasterMonochrome (image: RasterMonochrome, transform := FloatTransform2D identity) {
-		result := this gpuContext createGpuImage(image)
-		this draw(result, transform)
+		/*
+		result := OpenGLES3Image create(image)
+		this _surface draw(result, transform)
 		result recycle()
+		*/
 	}
 	draw: func ~RasterYuv (image: RasterYuv420Planar, transform := FloatTransform2D identity) {
-		result := this gpuContext createGpuImage(image)
-		this draw(result, transform)
+		/*
+		result := OpenGLES3Image create(image)
+		this _surface draw(result, transform)
 		result recycle()
+		*/
 	}
 	draw: func ~RasterYuvSemiplanar (image: RasterYuv420Semiplanar, transform := FloatTransform2D identity) {
-		result := this gpuContext createGpuImage(image)
-		this draw(result, transform)
+		/*
+		result := OpenGLES3Image create(image)
+		this _surface draw(result, transform)
 		result recycle()
+		*/
 	}
 	draw: func ~UnknownFormat (image: Image, transform := FloatTransform2D identity) {
 		if (image instanceOf?(RasterBgr))
@@ -113,14 +140,6 @@ Window: class {
 			this draw(image as RasterYuv420Planar, transform)
 		else if (image instanceOf?(RasterYuv420Semiplanar))
 			this draw(image as RasterYuv420Semiplanar, transform)
-		else if (image instanceOf?(GpuBgra))
-			this draw(image as GpuBgra, transform)
-		else if (image instanceOf?(GpuMonochrome))
-			this draw(image as GpuMonochrome, transform)
-		else if (image instanceOf?(GpuYuv420Planar))
-			this draw(image as GpuYuv420Planar, transform)
-		else if (image instanceOf?(GpuYuv420Semiplanar))
-			this draw(image as GpuYuv420Semiplanar, transform)
 	}
 	bind: /* internal */ func {
 		this _native bind()
@@ -129,7 +148,7 @@ Window: class {
 		this _native clear()
 	}
 	update: func {
-		this gpuContext update()
+		this _context swapBuffers()
 	}
 	setResolution: /* internal */ func (resolution: IntSize2D) {
 		this _native setViewport(this size width / 2 - resolution width / 2, this size height / 2 - resolution height / 2, resolution width, resolution height)
@@ -138,4 +157,5 @@ Window: class {
 		result := This new(size)
 		result _generate(size, title) ? result : null
 	}
+	*/
 }

@@ -26,6 +26,6 @@ GpuCanvas: abstract class {
 	init: func
 	dispose: abstract func
 	draw: abstract func (image: Image, transform: FloatTransform2D)
-	_setResolution: func (resolution: IntSize2D) {
+	setResolution: func (resolution: IntSize2D) {
 	}
 }

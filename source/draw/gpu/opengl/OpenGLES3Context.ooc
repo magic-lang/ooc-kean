@@ -17,9 +17,14 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar
+import OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3/Context, OpenGLES3/NativeWindow
 
 OpenGLES3Context: class extends GpuContext {
+	_backend: Context
+	init: func (nativeWindow: NativeWindow) {
+		this _backend = Context create(nativeWindow)
+		res := this _backend makeCurrent()
+	}
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
 		result := OpenGLES3Monochrome create2(size)
 		result
@@ -46,13 +51,16 @@ OpenGLES3Context: class extends GpuContext {
 	}
 	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
 		result := match (rasterImage) {
-			case (rasterImage instanceOf?(RasterMonochrome)) => OpenGLES3Monochrome create(rasterImage as RasterMonochrome)
-			case (rasterImage instanceOf?(RasterBgr)) => OpenGLES3Bgr create(rasterImage as RasterBgr)
-			case (rasterImage instanceOf?(RasterBgra)) => OpenGLES3Bgra create(rasterImage as RasterBgra)
-			case (rasterImage instanceOf?(RasterUv)) => OpenGLES3Uv create(rasterImage as RasterUv)
-			case (rasterImage instanceOf?(RasterYuv420Semiplanar)) => OpenGLES3Yuv420Semiplanar create(rasterImage as RasterYuv420Semiplanar)
-			case (rasterImage instanceOf?(RasterYuv420Planar)) => OpenGLES3Yuv420Planar create(rasterImage as RasterYuv420Planar)
+			case image: RasterMonochrome => OpenGLES3Monochrome createStatic(rasterImage as RasterMonochrome)
+			case image: RasterBgr => OpenGLES3Bgr createStatic(rasterImage as RasterBgr)
+			case image: RasterBgra => OpenGLES3Bgra createStatic(rasterImage as RasterBgra)
+			case image: RasterUv => OpenGLES3Uv createStatic(rasterImage as RasterUv)
+			case image: RasterYuv420Semiplanar => OpenGLES3Yuv420Semiplanar createStatic(rasterImage as RasterYuv420Semiplanar)
+			case image: RasterYuv420Planar => OpenGLES3Yuv420Planar createStatic(rasterImage as RasterYuv420Planar)
 		}
 		result
+	}
+	update: func {
+		this _backend swapBuffers()
 	}
 }

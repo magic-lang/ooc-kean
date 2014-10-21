@@ -38,10 +38,10 @@ OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 		this _v dispose()
 	}
 	recycle: func {
-		this _canvas dispose()
 		this _y recycle()
 		this _u recycle()
 		this _v recycle()
+		this _canvas dispose()
 	}
 	bind: func (unit: UInt) {
 		this _y bind(unit)
@@ -54,7 +54,7 @@ OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 		this _v = OpenGLES3Monochrome _create(this size / 2, stride, v)
 		this _y != null && this _u != null && this _v != null
 	}
-	create: func ~fromRaster (rasterImage: RasterYuv420Planar) -> This {
+	createStatic: static func ~fromRaster (rasterImage: RasterYuv420Planar) -> This {
 		result := This _create(rasterImage size, rasterImage stride, rasterImage y pointer, rasterImage u pointer, rasterImage v pointer)
 		result
 	}

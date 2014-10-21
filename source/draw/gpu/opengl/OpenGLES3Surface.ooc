@@ -26,7 +26,6 @@ OpenGLES3Surface: class extends GpuSurface {
 	}
 	draw: func ~gpuimage (image: GpuImage, map: GpuMap, resolution: IntSize2D) {
 		this bind()
-		this setResolution(resolution)
 		this clear()
 		map use()
 		image bind(0)
@@ -36,49 +35,41 @@ OpenGLES3Surface: class extends GpuSurface {
 	}
 	draw: func (image: Image, map: GpuMap, resolution: IntSize2D) {
 		match (image) {
-			case (image instanceOf?(GpuImage)) => { this draw(image, map, resolution) }
-			case (image instanceOf?(RasterMonochrome)) => {
-				/*
-				temp := OpenGLES3Monochrome create(image as RasterMonochrome)
-				this draw(image, map, resolution)
-				temp recycle()
-				*/
+			case (i: GpuImage) => {
+				this draw(image as GpuImage, map, resolution)
 			}
-			case (image instanceOf?(RasterBgr)) => {
-				/*
-				temp := OpenGLES3Bgr create(image as RasterBgr)
-				this draw(image, map, resolution)
+			case (i: RasterMonochrome) => {
+				temp := OpenGLES3Monochrome createStatic(image as RasterMonochrome)
+				this draw(image as RasterMonochrome, map, resolution)
 				temp recycle()
-				*/
 			}
-			case (image instanceOf?(RasterBgra)) => {
-				/*
-				temp := OpenGLES3Bgra create(image as RasterBgra)
-				this draw(image, map, resolution)
+			case (i: RasterBgr) => {
+				temp := OpenGLES3Bgr createStatic(image as RasterBgr)
+				this draw(image as RasterBgr, map, resolution)
 				temp recycle()
-				*/
 			}
-			case (image instanceOf?(RasterUv)) => {
-				/*
-				temp := OpenGLES3Uv create(image as RasterUv)
-				this draw(image, map, resolution)
+			case (i: RasterBgra) => {
+				temp := OpenGLES3Bgra createStatic(image as RasterBgra)
+				this draw(image as RasterBgra, map, resolution)
 				temp recycle()
-				*/
 			}
-			case (image instanceOf?(RasterYuv420Semiplanar)) => {
-				/*
-				temp := OpenGLES3Yuv420Semiplanar create(image as RasterYuv420Semiplanar)
-				this draw(image, map, resolution)
+			case (i: RasterUv) => {
+				temp := OpenGLES3Uv createStatic(image as RasterUv)
+				this draw(image as RasterUv, map, resolution)
 				temp recycle()
-				*/
 			}
-			case (image instanceOf?(RasterYuv420Planar)) => {
-				/*
-				temp := OpenGLES3420Planar create(image as RasterYuv420Planar)
-				this draw(image, map, resolution)
+			case (i: RasterYuv420Semiplanar) => {
+				temp := OpenGLES3Yuv420Semiplanar createStatic(image as RasterYuv420Semiplanar)
+				this draw(image as RasterYuv420Semiplanar, map, resolution)
 				temp recycle()
-				*/
 			}
+			case (i: RasterYuv420Planar) => {
+				temp := OpenGLES3Yuv420Planar createStatic(image as RasterYuv420Planar)
+				this draw(image as RasterYuv420Planar, map, resolution)
+				temp recycle()
+			}
+			case =>
+				raise("Couldnt match image type in OpenGLES3Surface")
 		}
 	}
 	drawLines: func (transform: FloatTransform2D, screenSize: IntSize2D) {
@@ -92,7 +83,6 @@ OpenGLES3Surface: class extends GpuSurface {
 	}
 	clear: func
 	bind: func
-	setResolution: func (resolution: IntSize2D)
 	unbind: func
 	update: func
 	create: static func -> This {

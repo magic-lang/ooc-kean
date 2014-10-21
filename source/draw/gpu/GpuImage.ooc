@@ -19,6 +19,7 @@ use ooc-math
 use ooc-base
 
 GpuImage: abstract class extends Image {
+	_backend: Pointer
 	init: func (=size)
 	bind: abstract func (unit: UInt)
 	recycle: abstract func

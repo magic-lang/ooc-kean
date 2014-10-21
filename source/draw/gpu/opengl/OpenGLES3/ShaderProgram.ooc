@@ -43,8 +43,6 @@ ShaderProgram: class {
 		glShaderSource(shaderID, 1, (source toCString())&, null)
 		glCompileShader(shaderID)
 
-		//"Compiling shader:" println()
-
 		success: Int
 		glGetShaderiv(shaderID, GL_COMPILE_STATUS, success&)
 		if (!success){

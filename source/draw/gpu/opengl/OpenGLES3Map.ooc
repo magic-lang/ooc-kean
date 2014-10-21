@@ -45,9 +45,13 @@ OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 	imageSize: IntSize2D { get set }
 	screenSize: IntSize2D { get set }
 	init: func (fragmentSource: String, onUse: Func) {
-		super(This defaultVertexSource, fragmentSource, func { onUse() })
-	}
-	initShaders: func {
+		super(This defaultVertexSource, fragmentSource, func {
+			onUse()
+			this _program setUniform("imageWidth", this imageSize width)
+			this _program setUniform("imageHeight", this imageSize height)
+			this _program setUniform("screenWidth", this screenSize width)
+			this _program setUniform("screenHeight", this screenSize height)
+			this _program setUniform("transform", transform)})
 	}
 	defaultVertexSource: static String
 }

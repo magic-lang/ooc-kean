@@ -29,45 +29,45 @@ OpenGLES3Bgr: class extends GpuBgr {
 			this _canvas
 		}
 	}
-	_backend: Texture
+	backend: Texture { get { this _backend as Texture } }
 	init: func (size: IntSize2D) {
 		init(size, size width, null)
 	}
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer) {
 		super(size)
-		this _backend = Texture create(TextureType bgr, size width, size height, stride, data)
+		this _backend = Texture create(TextureType bgr, size width, size height, stride, data) as Pointer
 	}
-	create: func ~fromRaster (rasterImage: RasterBgr) -> This {
+	createStatic: static func ~fromRaster (rasterImage: RasterBgr) -> This {
 		result := This new(rasterImage size, rasterImage stride, rasterImage pointer)
 		result
 	}
 	create: func (size: IntSize2D) -> This {
 		result := This new(size)
-		result _backend != null ? result : null
+		result backend != null ? result : null
 	}
 	create2: static func ~empty (size: IntSize2D) -> This {
 		result := This new(size)
-		result _backend != null ? result : null
+		result backend != null ? result : null
 	}
 	_create: static /* internal */ func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer) -> This {
 		result := This new(size, stride, data)
-		result _backend != null ? result : null
+		result backend != null ? result : null
 	}
 	replace: func (image: RasterBgra) {
-		this _backend uploadPixels(image pointer)
+		this backend uploadPixels(image pointer)
 	}
 	bind: func (unit: UInt) {
-		this _backend bind (unit)
+		this backend bind (unit)
 	}
 	dispose: func {
-		this _backend dispose()
+		this backend dispose()
 		if (this _canvas != null)
 			this _canvas dispose()
 	}
 	recycle: func {
-		this _backend recycle()
+		this backend recycle()
 	}
 	generateMipmap: func {
-		this _backend generateMipmap()
+		this backend generateMipmap()
 	}
 }

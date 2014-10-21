@@ -23,7 +23,6 @@ GpuSurface: abstract class {
 	draw: abstract func (image: Image, map: GpuMap, resolution: IntSize2D)
 	clear: abstract func
 	bind: abstract func
-	setResolution: func (resolution: IntSize2D)
 	unbind: func
 	update: func
 }
