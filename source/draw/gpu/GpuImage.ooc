@@ -17,33 +17,13 @@
 use ooc-draw
 use ooc-math
 use ooc-base
-use ooc-opengl
-import GpuBgra, GpuBgr, GpuMonochrome, GpuYuv420Planar, GpuYuv420Semiplanar, GpuCanvas
 
-GpuImage: abstract class extends Image implements IDisposable {
-	_texture: Texture
-	texture: /* internal */ Texture { get { _texture } }
-	stride: UInt
-
-	init: func (=size, =stride)
-	_bind: abstract func
-	create: static func ~Monochrome (image: RasterMonochrome) -> GpuMonochrome {
-		GpuMonochrome _create(image size, image stride, image pointer)
-	}
-	create: static func ~Bgr (image: RasterBgr) -> GpuBgr {
-		GpuBgr _create(image size, image stride, image pointer)
-	}
-	create: static func ~Bgra (image: RasterBgra) -> GpuBgra {
-		GpuBgra _create(image size, image stride, image pointer)
-	}
-	create: static func ~Yuv420Planar (image: RasterYuv420Planar) -> GpuYuv420Planar {
-		GpuYuv420Planar _create(image size, image y stride, image y pointer, image u pointer, image v pointer)
-	}
-	create: static func ~Yuv420Semiplanar (image: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar {
-		GpuYuv420Semiplanar _create(image size, image y stride, image y pointer, image uv pointer)
-	}
-
+GpuImage: abstract class extends Image {
+	_backend: Pointer
+	init: func (=size)
+	bind: abstract func (unit: UInt)
 	recycle: abstract func
+	dispose: abstract func
 	generateMipmap: func
 
 	//TODO: Implement abstract functions

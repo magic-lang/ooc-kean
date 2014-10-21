@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-opengl
+//use ooc-opengl
 use ooc-draw-gpu
 use ooc-draw
 use ooc-math
 import GpuPacker, GpuMapAndroid
 
-DummyWindow: class extends Surface {
+DummyWindow: class {
 	_context: Context
 	_yPacker, _uvPacker, _scaledPacker: GpuPacker
 	init: /* internal */ func

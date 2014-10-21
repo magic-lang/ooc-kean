@@ -16,16 +16,13 @@
 
 use ooc-math
 use ooc-draw
-use ooc-base
+import GpuMap
 
-import GpuImage, GpuMap, GpuSurface
-
-GpuCanvas: abstract class {
-	_size: IntSize2D
-	_surface: GpuSurface
-	init: func
-	dispose: abstract func
-	draw: abstract func (image: Image, transform: FloatTransform2D)
-	setResolution: func (resolution: IntSize2D) {
-	}
+GpuSurface: abstract class {
+	size: IntSize2D
+	draw: abstract func (image: Image, map: GpuMap, resolution: IntSize2D)
+	clear: abstract func
+	bind: abstract func
+	unbind: func
+	update: func
 }

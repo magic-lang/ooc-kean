@@ -13,45 +13,12 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-use ooc-draw
 use ooc-math
-use ooc-opengl
 import GpuImage, GpuCanvas
 
 GpuPacked: abstract class extends GpuImage {
-	_canvas: GpuCanvasPacked
-	canvas: GpuCanvasPacked {
-		get {
-			if (this _canvas == null)
-				this _canvas = GpuCanvasPacked create(this)
-			this _canvas
-		}
+	_canvas: GpuCanvas
+	init: func (size: IntSize2D) {
+		super(size)
 	}
-	init: func ~withStride (size: IntSize2D, stride: UInt, type: TextureType, data: Pointer) {
-		super(size, stride)
-		this _texture = Texture create(type, size width, size height, stride, data)
-	}
-	init: func ~noStride (size: IntSize2D, type: TextureType, data: Pointer) {
-		super(size, size width)
-		this _texture = Texture create(type, size width, size height, size width, data)
-	}
-	_bind: /* internal */ func ~specificTextureUnit(unit: UInt) {
-		this _texture bind (unit)
-	}
-	_bind: /* internal */ func {
-		this _texture bind (0)
-	}
-	dispose: func {
-		this _texture dispose()
-		if (this _canvas != null)
-			this _canvas dispose()
-	}
-	recycle: func {
-		this _texture recycle()
-	}
-	generateMipmap: func {
-		this _texture generateMipmap()
-	}
-
 }

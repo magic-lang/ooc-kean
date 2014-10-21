@@ -15,26 +15,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-math
-use ooc-opengl
 import GpuPacked
 
-GpuBgr: class extends GpuPacked {
+GpuBgr: abstract class extends GpuPacked {
 	init: func (size: IntSize2D) {
-		super(size, TextureType rgb, null)
-	}
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer) {
-		super(size, stride, TextureType bgr, data)
-	}
-	create: func (size: IntSize2D) -> This {
-		result := This new(size)
-		result _texture != null ? result : null
-	}
-	create2: static func ~empty (size: IntSize2D) -> This {
-		result := This new(size)
-		result _texture != null ? result : null
-	}
-	_create: static /* internal */ func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer) -> This {
-		result := This new(size, stride, data)
-		result _texture != null ? result : null
+		super(size)
 	}
 }

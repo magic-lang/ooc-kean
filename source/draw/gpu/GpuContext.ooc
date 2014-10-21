@@ -13,19 +13,16 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
 use ooc-math
 use ooc-draw
-use ooc-base
-
-import GpuImage, GpuMap, GpuSurface
-
-GpuCanvas: abstract class {
-	_size: IntSize2D
-	_surface: GpuSurface
-	init: func
-	dispose: abstract func
-	draw: abstract func (image: Image, transform: FloatTransform2D)
-	setResolution: func (resolution: IntSize2D) {
-	}
+import GpuImage, GpuMonochrome, GpuUv, GpuBgr, GpuBgra, GpuYuv420Semiplanar, GpuYuv420Planar
+GpuContext: abstract class {
+	createMonochrome: abstract func (size: IntSize2D) -> GpuMonochrome
+	createBgr: abstract func (size: IntSize2D) -> GpuBgr
+	createBgra: abstract func (size: IntSize2D) -> GpuBgra
+	createUv: abstract func (size: IntSize2D) -> GpuUv
+	createYuv420Semiplanar: abstract func (size: IntSize2D) -> GpuYuv420Semiplanar
+	createYuv420Planar: abstract func (size: IntSize2D) -> GpuYuv420Planar
+	createGpuImage: abstract func (rasterImage: RasterImage) -> GpuImage
+	update: abstract func
 }
