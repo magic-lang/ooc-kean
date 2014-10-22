@@ -45,7 +45,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _map screenSize = image size
 		clearColor := 0.0f
 
-		if(image instanceOf?(OpenGLES3Uv)) {
+		if (image instanceOf?(OpenGLES3Uv)) {
 			this _map transform  = transform setTranslation(FloatSize2D new (transform g / 2.0f, transform h / 2.0f))
 			clearColor = 0.5f
 		}

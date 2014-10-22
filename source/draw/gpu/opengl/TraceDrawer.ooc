@@ -26,7 +26,7 @@ TraceDrawer: class {
 	scale: Float = 1.0f
 
 	init: func (=screenSize) {
-		if(This pointList == null)
+		if (This pointList == null)
 			This pointList = LinkedList<FloatPoint2D> new()
 		This pointList clear()
 		this positions = gc_malloc(Float size * this pointCount * 2) as Float*
@@ -39,7 +39,7 @@ TraceDrawer: class {
 	add: func(transform: FloatTransform2D) {
 		transformedPosition := FloatPoint2D new(transform g + this screenSize width / 4, transform h + this screenSize height / 4)
 		This pointList add(transformedPosition)
-		if(This pointList size > this pointCount - 5) {
+		if (This pointList size > this pointCount - 5) {
 			This pointList removeAt(0)
 		}
 	}

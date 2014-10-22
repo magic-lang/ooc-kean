@@ -44,7 +44,7 @@ OpenGLES3Uv: class extends GpuUv {
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterUv, context: GpuContext) -> This {
 		result := context getRecycled(GpuImageType uv, rasterImage size) as This
-		if(result != null)
+		if (result != null)
 			result backend uploadPixels(rasterImage pointer)
 		else
 			result = This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
@@ -52,7 +52,7 @@ OpenGLES3Uv: class extends GpuUv {
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
 		result := context getRecycled(GpuImageType uv, size) as This
-		if(result == null)
+		if (result == null)
 			result = This new(size, context)
 		result backend != null ? result : null
 	}

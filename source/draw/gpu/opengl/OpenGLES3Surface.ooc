@@ -74,7 +74,7 @@ OpenGLES3Surface: class extends GpuSurface {
 		}
 	}
 	drawLines: func (transform: FloatTransform2D, screenSize: IntSize2D) {
-		if(this traceDrawer == null)
+		if (this traceDrawer == null)
 			this traceDrawer = TraceDrawer new(screenSize)
 		this bind()
 		this traceDrawer add(transform)
