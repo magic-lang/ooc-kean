@@ -55,7 +55,6 @@ GpuImageBin: class {
 		this _yuvSemiplanar clear()
 		this _yuvPlanar clear()
 	}
-
 	add: func (image: GpuImage) {
 		match (image) {
 			case (i: GpuMonochrome) =>
@@ -72,7 +71,6 @@ GpuImageBin: class {
 				this _yuvPlanar add(image)
 		}
 	}
-
 	_search: func (size: IntSize2D, arrayList: ArrayList<GpuImage>) -> GpuImage {
 		result := null
 		for (image in arrayList) {
@@ -97,5 +95,4 @@ GpuImageBin: class {
 		}
 		result
 	}
-
 }
