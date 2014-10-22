@@ -28,10 +28,10 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	_map: OpenGLES3MapDefault
 	_quad: Quad
 
-	init: func (map: OpenGLES3MapDefault) {
-		super()
+	init: func (map: OpenGLES3MapDefault, context: GpuContext) {
+		super(context)
 		this _map = map
-		this _surface = OpenGLES3Surface new()
+		this _surface = OpenGLES3Surface create(context)
 	}
 	dispose: func {
 		this _renderTarget dispose()
@@ -62,14 +62,14 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	_clear: func {
 		this _renderTarget clear()
 	}
-	create: static func (image: GpuImage) -> This {
+	create: static func (image: GpuImage, context: GpuContext) -> This {
 		map := match(image) {
 			case (i : OpenGLES3Bgr) => OpenGLES3MapBgr new()
 			case (i : OpenGLES3Bgra) => OpenGLES3MapBgra new()
 			case (i : OpenGLES3Monochrome) => OpenGLES3MapMonochrome new()
 			case (i : OpenGLES3Uv) => OpenGLES3MapUv new()
 		}
-		result := This new(map)
+		result := This new(map, context)
 		result _renderTarget = Fbo create(image _backend as Texture, image size width, image size height)
 		result _quad = Quad create()
 		result _size = image size
@@ -83,7 +83,9 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 	_u: OpenGLES3Canvas
 	_v: OpenGLES3Canvas
 
-	init: func
+	init: func (context: GpuContext) {
+		super(context)
+	}
 	dispose: func {
 		this _y dispose()
 		this _u dispose()
@@ -99,7 +101,7 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 	}
 	draw: func (image: Image, transform: FloatTransform2D) {
 		if (image instanceOf?(RasterYuv420Planar)) {
-			temp := OpenGLES3Yuv420Planar createStatic(image as RasterYuv420Planar)
+			temp := OpenGLES3Yuv420Planar create(image as RasterYuv420Planar, this _context)
 			this draw(temp, transform)
 			temp recycle()
 		}
@@ -109,13 +111,13 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 	_clear: func
 	_bind: func
 	_generate: func (image: OpenGLES3Yuv420Planar) -> Bool {
-		this _y = OpenGLES3Canvas create(image y as GpuImage)
-		this _u = OpenGLES3Canvas create(image u as GpuImage)
-		this _v = OpenGLES3Canvas create(image v as GpuImage)
+		this _y = OpenGLES3Canvas create(image y as GpuImage, this _context)
+		this _u = OpenGLES3Canvas create(image u as GpuImage, this _context)
+		this _v = OpenGLES3Canvas create(image v as GpuImage, this _context)
 		this _y != null && this _u != null && this _v != null
 	}
-	create: static func (image: OpenGLES3Yuv420Planar) -> This {
-		result := This new()
+	create: static func (image: OpenGLES3Yuv420Planar, context: GpuContext) -> This {
+		result := This new(context)
 		result _generate(image) ? result : null
 		result
 	}
@@ -125,7 +127,9 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 	_y: OpenGLES3Canvas
 	_uv: OpenGLES3Canvas
 
-	init: func
+	init: func (context: GpuContext) {
+		super(context)
+	}
 	dispose: func {
 		this _y dispose()
 		this _uv dispose()
@@ -140,7 +144,7 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 	}
 	draw: func (image: Image, transform: FloatTransform2D) {
 		if (image instanceOf?(RasterYuv420Semiplanar)) {
-			temp := OpenGLES3Yuv420Semiplanar createStatic(image as RasterYuv420Semiplanar)
+			temp := OpenGLES3Yuv420Semiplanar create(image as RasterYuv420Semiplanar, this _context)
 			this draw(temp, transform)
 			temp recycle()
 		}
@@ -150,12 +154,12 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 	_clear: func
 	_bind: func
 	_generate: func (image: OpenGLES3Yuv420Semiplanar) -> Bool {
-		this _y = OpenGLES3Canvas create(image y as GpuImage)
-		this _uv = OpenGLES3Canvas create(image uv as GpuImage)
+		this _y = OpenGLES3Canvas create(image y as GpuImage, this _context)
+		this _uv = OpenGLES3Canvas create(image uv as GpuImage, this _context)
 		this _y != null && this _uv != null
 	}
-	create: static func (image: OpenGLES3Yuv420Semiplanar) -> This {
-		result := This new()
+	create: static func (image: OpenGLES3Yuv420Semiplanar, context: GpuContext) -> This {
+		result := This new(context)
 		result _generate(image) ? result : null
 		result
 	}

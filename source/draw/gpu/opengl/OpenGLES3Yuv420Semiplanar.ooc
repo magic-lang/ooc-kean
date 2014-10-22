@@ -21,50 +21,39 @@ use ooc-draw
 import OpenGLES3Canvas, OpenGLES3Monochrome, OpenGLES3Uv
 
 OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
-	canvas: GpuCanvas {
-		get {
-			if (this _canvas == null)
-				this _canvas = OpenGLES3CanvasYuv420Semiplanar create(this)
-			this _canvas
-		}
-	}
-	init: func (size: IntSize2D) { super(size) }
+	init: func (size: IntSize2D, context: GpuContext) { super(size, context) }
 	dispose: func {
 		if (this _canvas != null)
 			this _canvas dispose()
 		this _y dispose()
 		this _uv dispose()
 	}
-	recycle: func {
-		this _y recycle()
-		this _uv recycle()
-		if(this _canvas != null)
-			this _canvas dispose()
-	}
 	bind: func (unit: UInt) {
 		this _y bind(unit)
 		this _uv bind(unit + 1)
 	}
-	_generate: func (stride: UInt, y: Pointer, uv: Pointer) -> Bool {
-		this _y = OpenGLES3Monochrome _create(this size, stride, y)
-		this _uv = OpenGLES3Uv _create(this size / 2, stride, uv)
-		this _y != null && this _uv != null
-	}
-	createStatic: static func ~fromRaster (rasterImage: RasterYuv420Semiplanar) -> This {
-		result := This _create(rasterImage size, rasterImage stride, rasterImage y pointer, rasterImage uv pointer)
+	toRaster: func -> RasterImage { return null }
+	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Semiplanar create(this, this _context) }
+	create: static func ~fromRaster (rasterImage: RasterYuv420Semiplanar, context: GpuContext) -> This {
+		result := context getRecycled(GpuImageType yuvSemiplanar, rasterImage size) as This
+		if(result != null) {
+			(result _y as OpenGLES3Monochrome) backend uploadPixels(rasterImage y pointer)
+			(result _uv as OpenGLES3Uv) backend uploadPixels(rasterImage uv pointer)
+		}
+		else {
+			result = This new(rasterImage size, context)
+			result _y = OpenGLES3Monochrome create(rasterImage y, context)
+			result _uv = OpenGLES3Uv create(rasterImage uv, context)
+		}
 		result
 	}
-	create: func (size: IntSize2D) -> This {
-		result := This new(size)
-		result _generate(size width, null, null) ? result : null
+	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
+		result := context getRecycled(GpuImageType yuvSemiplanar, size) as This
+		if(result == null) {
+			result := This new(size, context)
+			//result _y = OpenGLES3Monochrome create(size, context)
+			//result _uv = OpenGLES3Uv create(IntSize2D new(size width, size height / 2), context)
+		}
+		result
 	}
-	create2: static func ~empty (size: IntSize2D) -> This {
-		result := This new(size)
-		result _generate(size width, null, null) ? result : null
-	}
-	_create: static /* internal */ func ~fromPixels (size: IntSize2D, stride: UInt, y: Pointer, uv: Pointer) -> This {
-		result := This new(size)
-		result _generate(stride, y, uv) ? result : null
-	}
-
 }

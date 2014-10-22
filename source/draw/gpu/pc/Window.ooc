@@ -39,7 +39,7 @@ Window: class {
 		setShaderSources()
 		this _native = X11Window create(size width, size height, title)
 		this gpuContext = OpenGLES3Context new(this _native)
-		this _surface = OpenGLES3Surface create()
+		this _surface = OpenGLES3Surface create(this gpuContext)
 		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new()
 		this _bgrToBgra = OpenGLES3MapBgrToBgra new()
 		this _bgraToBgra = OpenGLES3MapBgra new()

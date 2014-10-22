@@ -25,4 +25,6 @@ GpuContext: abstract class {
 	createYuv420Planar: abstract func (size: IntSize2D) -> GpuYuv420Planar
 	createGpuImage: abstract func (rasterImage: RasterImage) -> GpuImage
 	update: abstract func
+	recycle: abstract func (gpuImage: GpuImage)
+	getRecycled: abstract func (type: GpuImageType, size: IntSize2D) -> This
 }

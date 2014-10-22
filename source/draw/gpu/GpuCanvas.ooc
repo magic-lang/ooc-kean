@@ -18,12 +18,13 @@ use ooc-math
 use ooc-draw
 use ooc-base
 
-import GpuImage, GpuMap, GpuSurface
+import GpuImage, GpuMap, GpuSurface, GpuContext
 
 GpuCanvas: abstract class {
 	_size: IntSize2D
 	_surface: GpuSurface
-	init: func
+	_context: GpuContext
+	init: func (=_context)
 	dispose: abstract func
 	draw: abstract func (image: Image, transform: FloatTransform2D)
 	setResolution: func (resolution: IntSize2D) {

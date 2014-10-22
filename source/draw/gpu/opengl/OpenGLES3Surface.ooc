@@ -22,7 +22,8 @@ import OpenGLES3/Fbo, OpenGLES3Map, TraceDrawer, OpenGLES3/Quad, OpenGLES3Monoch
 OpenGLES3Surface: class extends GpuSurface {
 	_quad: Quad
 	traceDrawer: TraceDrawer
-	init: func {
+	init: func (context: GpuContext){
+		super(context)
 	}
 	draw: func ~gpuimage (image: GpuImage, map: GpuMap, resolution: IntSize2D) {
 		this bind()
@@ -39,32 +40,32 @@ OpenGLES3Surface: class extends GpuSurface {
 				this draw(image as GpuImage, map, resolution)
 			}
 			case (i: RasterMonochrome) => {
-				temp := OpenGLES3Monochrome createStatic(image as RasterMonochrome)
+				temp := OpenGLES3Monochrome create(image as RasterMonochrome, this _context)
 				this draw(image as RasterMonochrome, map, resolution)
 				temp recycle()
 			}
 			case (i: RasterBgr) => {
-				temp := OpenGLES3Bgr createStatic(image as RasterBgr)
+				temp := OpenGLES3Bgr create(image as RasterBgr, this _context)
 				this draw(image as RasterBgr, map, resolution)
 				temp recycle()
 			}
 			case (i: RasterBgra) => {
-				temp := OpenGLES3Bgra createStatic(image as RasterBgra)
+				temp := OpenGLES3Bgra create(image as RasterBgra, this _context)
 				this draw(image as RasterBgra, map, resolution)
 				temp recycle()
 			}
 			case (i: RasterUv) => {
-				temp := OpenGLES3Uv createStatic(image as RasterUv)
+				temp := OpenGLES3Uv create(image as RasterUv, this _context)
 				this draw(image as RasterUv, map, resolution)
 				temp recycle()
 			}
 			case (i: RasterYuv420Semiplanar) => {
-				temp := OpenGLES3Yuv420Semiplanar createStatic(image as RasterYuv420Semiplanar)
+				temp := OpenGLES3Yuv420Semiplanar create(image as RasterYuv420Semiplanar, this _context)
 				this draw(image as RasterYuv420Semiplanar, map, resolution)
 				temp recycle()
 			}
 			case (i: RasterYuv420Planar) => {
-				temp := OpenGLES3Yuv420Planar createStatic(image as RasterYuv420Planar)
+				temp := OpenGLES3Yuv420Planar create(image as RasterYuv420Planar, this _context)
 				this draw(image as RasterYuv420Planar, map, resolution)
 				temp recycle()
 			}
@@ -85,8 +86,8 @@ OpenGLES3Surface: class extends GpuSurface {
 	bind: func
 	unbind: func
 	update: func
-	create: static func -> This {
-		result := This new()
+	create: static func (context: GpuContext)-> This {
+		result := This new(context)
 		result _quad = Quad create()
 		result
 	}

@@ -21,36 +21,13 @@ use ooc-draw-gpu
 import OpenGLES3/Texture, OpenGLES3Canvas
 
 OpenGLES3Uv: class extends GpuUv {
-	canvas: GpuCanvas {
-		get {
-			if (this _canvas == null)
-				this _canvas = OpenGLES3Canvas create(this)
-			this _canvas
-		}
-	}
 	backend: Texture { get { this _backend as Texture } }
-	init: func (size: IntSize2D) {
-		init(size, size width, null)
+	init: func (size: IntSize2D, context: GpuContext) {
+		init(size, size width, null, context)
 	}
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer) {
-		super(size)
+	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
+		super(size, context)
 		this _backend = Texture create(TextureType uv, size width, size height, stride, data) as Pointer
-	}
-	createStatic: static func ~fromRaster (rasterImage: RasterUv) -> This {
-		result := This new(rasterImage size, rasterImage stride, rasterImage pointer)
-		result
-	}
-	create: func (size: IntSize2D) -> This {
-		result := This new(size)
-		result backend != null ? result : null
-	}
-	create2: static func ~empty (size: IntSize2D) -> This {
-		result := This new(size)
-		result backend != null ? result : null
-	}
-	_create: static /* internal */ func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer) -> This {
-		result := This new(size, stride, data)
-		result backend != null ? result : null
 	}
 	bind: func (unit: UInt) {
 		this backend bind (unit)
@@ -60,11 +37,24 @@ OpenGLES3Uv: class extends GpuUv {
 		if (this _canvas != null)
 			this _canvas dispose()
 	}
-	recycle: func {
-		this backend recycle()
-	}
 	generateMipmap: func {
 		this backend generateMipmap()
+	}
+	toRaster: func -> RasterImage { return null }
+	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
+	create: static func ~fromRaster (rasterImage: RasterUv, context: GpuContext) -> This {
+		result := context getRecycled(GpuImageType uv, rasterImage size) as This
+		if(result != null)
+			result backend uploadPixels(rasterImage pointer)
+		else
+			result = This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
+		result
+	}
+	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
+		result := context getRecycled(GpuImageType uv, size) as This
+		if(result == null)
+			result = This new(size, context)
+		result backend != null ? result : null
 	}
 
 }

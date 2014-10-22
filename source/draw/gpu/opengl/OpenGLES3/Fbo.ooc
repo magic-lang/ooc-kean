@@ -58,16 +58,19 @@ Fbo: class {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0)
 		buffer
 	}
+	setTarget: func (texture: Texture) {
+		glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture _backend, 0)
+		glBindFramebuffer(GL_FRAMEBUFFER, 0)
+	}
 	_generate: func ~fromTextures (texture: Texture) -> Bool {
 		glGenFramebuffers(1, this _backend&)
 		glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture _backend, 0)
-
 		status: UInt = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		if (status != GL_FRAMEBUFFER_COMPLETE) {
 			raise("Framebuffer Object creation failed")
 		}
-
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		true
 	}

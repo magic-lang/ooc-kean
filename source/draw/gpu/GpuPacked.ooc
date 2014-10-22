@@ -14,11 +14,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
-import GpuImage, GpuCanvas
+import GpuImage, GpuCanvas, GpuContext
 
 GpuPacked: abstract class extends GpuImage {
-	_canvas: GpuCanvas
-	init: func (size: IntSize2D) {
-		super(size)
+	init: func (size: IntSize2D, context: GpuContext) {
+		super(size, context)
 	}
 }
