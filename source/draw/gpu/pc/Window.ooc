@@ -31,15 +31,15 @@ Window: class {
 	_yuvPlanarToBgra: OpenGLES3MapYuvPlanarToBgra
 	_yuvSemiplanarToBgra: OpenGLES3MapYuvSemiplanarToBgra
 	size: IntSize2D
-	gpuContext: GpuContext
+	_context: GpuContext
 
 	init: /* internal */ func (=size) {
 	}
 	_generate: /* private */ func (size: IntSize2D, title: String) -> Bool {
 		setShaderSources()
 		this _native = X11Window create(size width, size height, title)
-		this gpuContext = OpenGLES3Context new(this _native)
-		this _surface = OpenGLES3Surface create(this gpuContext)
+		this _context = OpenGLES3Context new(this _native)
+		this _surface = OpenGLES3Surface create(this _context)
 		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new()
 		this _bgrToBgra = OpenGLES3MapBgrToBgra new()
 		this _bgraToBgra = OpenGLES3MapBgra new()
@@ -52,58 +52,63 @@ Window: class {
 		this _monochromeToBgra transform = transform
 		this _monochromeToBgra imageSize = image size
 		this _monochromeToBgra screenSize = image size
-		this _surface draw(image, _monochromeToBgra, image size)
+		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
+		this _surface draw(image, _monochromeToBgra, image size, offset)
 	}
 	draw: func ~Bgr (image: GpuBgr, transform := FloatTransform2D identity) {
 		this setResolution(image size)
 		this _bgrToBgra transform = transform
 		this _bgrToBgra imageSize = image size
 		this _bgrToBgra screenSize = image size
-		this _surface draw(image, _bgrToBgra, image size)
+		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
+		this _surface draw(image, _bgrToBgra, image size, offset)
 	}
 	draw: func ~Bgra (image: GpuBgra, transform := FloatTransform2D identity) {
 		this setResolution(image size)
 		this _bgraToBgra transform = transform
 		this _bgraToBgra imageSize = image size
 		this _bgraToBgra screenSize = image size
-		this _surface draw(image, _bgraToBgra, image size)
+		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
+		this _surface draw(image, _bgraToBgra, image size, offset)
 	}
 	draw: func ~Yuv420Planar (image: GpuYuv420Planar, transform := FloatTransform2D identity) {
 		this setResolution(image size)
 		this _yuvPlanarToBgra transform = transform
 		this _yuvPlanarToBgra imageSize = image size
 		this _yuvPlanarToBgra screenSize = image size
-		this _surface draw(image, _yuvPlanarToBgra, image size)
+		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
+		this _surface draw(image, _yuvPlanarToBgra, image size, offset)
 	}
 	draw: func ~Yuv420Semiplanar (image: GpuYuv420Semiplanar, transform := FloatTransform2D identity) {
 		this setResolution(image size)
 		this _yuvSemiplanarToBgra transform = transform
 		this _yuvSemiplanarToBgra imageSize = image size
 		this _yuvSemiplanarToBgra screenSize = image size
-		this _surface draw(image, this _yuvSemiplanarToBgra, image size)
+		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
+		this _surface draw(image, this _yuvSemiplanarToBgra, image size, offset)
 	}
 	draw: func ~RasterBgr (image: RasterBgr, transform := FloatTransform2D identity) {
-		result := this gpuContext createGpuImage(image)
+		result := this _context createGpuImage(image)
 		this draw(result, transform)
 		result recycle()
 	}
 	draw: func ~RasterBgra (image: RasterBgra, transform := FloatTransform2D identity) {
-		result := this gpuContext createGpuImage(image)
+		result := this _context createGpuImage(image)
 		this draw(result, transform)
 		result recycle()
 	}
 	draw: func ~RasterMonochrome (image: RasterMonochrome, transform := FloatTransform2D identity) {
-		result := this gpuContext createGpuImage(image)
+		result := this _context createGpuImage(image)
 		this draw(result, transform)
 		result recycle()
 	}
 	draw: func ~RasterYuv (image: RasterYuv420Planar, transform := FloatTransform2D identity) {
-		result := this gpuContext createGpuImage(image)
+		result := this _context createGpuImage(image)
 		this draw(result, transform)
 		result recycle()
 	}
 	draw: func ~RasterYuvSemiplanar (image: RasterYuv420Semiplanar, transform := FloatTransform2D identity) {
-		result := this gpuContext createGpuImage(image)
+		result := this _context createGpuImage(image)
 		this draw(result, transform)
 		result recycle()
 	}
@@ -134,7 +139,7 @@ Window: class {
 		this _native clear()
 	}
 	update: func {
-		this gpuContext update()
+		this _context update()
 		this setResolution(this size)
 		this clear()
 	}
