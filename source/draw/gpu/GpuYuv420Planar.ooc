@@ -15,10 +15,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-math
-import GpuMonochrome, GpuCanvas, GpuPlanar
+import GpuMonochrome, GpuCanvas, GpuPlanar, GpuContext
 
 GpuYuv420Planar: abstract class extends GpuPlanar {
-	_canvas: GpuCanvas
 	_y: GpuMonochrome
 	y: GpuMonochrome { get { this _y } }
 	_u: GpuMonochrome
@@ -26,8 +25,8 @@ GpuYuv420Planar: abstract class extends GpuPlanar {
 	_v: GpuMonochrome
 	v: GpuMonochrome { get { this _v } }
 
-	init: func (size: IntSize2D) {
-		super(size)
+	init: func (size: IntSize2D, context: GpuContext) {
+		super(size, context)
 	}
 
 }

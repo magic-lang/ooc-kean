@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import include/egl, NativeWindow, Texture
+import include/egl, NativeWindow
 
 Context: class {
 	_eglContext: Pointer
@@ -26,7 +26,6 @@ Context: class {
 
 	init: func
 	dispose: func {
-		Texture textureBin dispose()
 		eglMakeCurrent(this _eglDisplay, null, null, null)
 		eglDestroyContext(this _eglDisplay, this _eglContext)
 		eglDestroySurface(this _eglDisplay, this _eglSurface)
@@ -100,7 +99,8 @@ Context: class {
 				"WARNING: Using OpenGL ES 2" println()
 		}
 
-		return true
+		result := this makeCurrent()
+		return result
 	}
 	_generate: func ~pbuffer (sharedContext: This) -> Bool {
 		this _eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY)
@@ -174,17 +174,14 @@ Context: class {
 			else
 				"WARNING: Using OpenGL ES 2" println()
 		}
-		return true
+		result := this makeCurrent()
+		return result
 	}
-	create: static func (window: NativeWindow) -> This {
-		result := This new()
-		result _generate(window, null) ? result : null
-	}
-	create: static func ~shared (window: NativeWindow, sharedContext: This) -> This {
+	create: static func ~shared (window: NativeWindow, sharedContext: This = null) -> This {
 		result := This new()
 		result _generate(window, sharedContext) ? result : null
 	}
-	create: static func ~pbuffer (sharedContext: This) -> This {
+	create: static func ~pbufferShared (sharedContext: This = null) -> This {
 		result := This new()
 		result _generate(sharedContext) ? result : null
 	}

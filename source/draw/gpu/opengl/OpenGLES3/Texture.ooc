@@ -16,7 +16,6 @@
  */
 use ooc-math
 import include/gles
-import TextureBin
 import Context
 
 TextureType: enum {
@@ -39,18 +38,12 @@ Texture: class {
 	internalFormat: UInt
 	_bytesPerPixel: UInt
 
-	_textureBin: static TextureBin
-	textureBin: static TextureBin { get { if(This _textureBin == null) { This _textureBin = TextureBin new() } This _textureBin } }
-
 	init: func~nullTexture (type: TextureType, width: UInt, height: UInt, stride: UInt) {
 		this width = width
 		this height = height
 		this _stride = stride
 		this type = type
 		this _setInternalFormats(type)
-	}
-	recycle: func {
-		This textureBin add(this)
 	}
 	dispose: func {
 		glDeleteTextures(1, _backend&)
@@ -125,14 +118,8 @@ Texture: class {
 		true
 	}
 	create: static func (type: TextureType, width: UInt, height: UInt, stride: UInt, pixels := null, allocate : Bool = true) -> This {
-		result := This textureBin find(type, width, height)
-		success := true
-		if (result == null) {
-			result = Texture new(type, width, height, stride)
-			success = result _generate(pixels, allocate)
-		}
-		else if (pixels != null)
-			result uploadPixels(pixels)
+		result := Texture new(type, width, height, stride)
+		success := result _generate(pixels, allocate)
 		success ? result : null
 	}
 

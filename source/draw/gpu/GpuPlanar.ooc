@@ -16,10 +16,10 @@
 
 use ooc-math
 
-import GpuImage
+import GpuImage, GpuContext
 
 GpuPlanar: abstract class extends GpuImage {
-	init: func (size: IntSize2D) {
-		super(size)
+	init: func (size: IntSize2D, context: GpuContext) {
+		super(size, context)
 	}
 }

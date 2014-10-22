@@ -15,12 +15,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-math
-use ooc-draw
-import GpuPacked
+import GpuPacked, GpuContext
 
 GpuBgra: abstract class extends GpuPacked {
-	init: func (size: IntSize2D) {
-		super(size)
+	init: func (size: IntSize2D, context: GpuContext) {
+		super(size, context)
 	}
-
 }

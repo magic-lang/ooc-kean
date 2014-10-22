@@ -17,46 +17,66 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3/Context, OpenGLES3/NativeWindow
+import GpuImageBin, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3/Context, OpenGLES3/NativeWindow
 
 OpenGLES3Context: class extends GpuContext {
+	_imageBin: GpuImageBin
 	_backend: Context
-	init: func (nativeWindow: NativeWindow) {
+	init: func {
+		this _backend = Context create()
+		this _imageBin = GpuImageBin new()
+	}
+	init: func ~shared (other: This) {
+		this _backend = Context create(other _backend)
+		this _imageBin = GpuImageBin new()
+	}
+	init: func ~window (nativeWindow: NativeWindow) {
 		this _backend = Context create(nativeWindow)
-		res := this _backend makeCurrent()
+		this _imageBin = GpuImageBin new()
+	}
+	dispose: func {
+		this _backend dispose()
+		this _imageBin dispose()
+	}
+	recycle: func (gpuImage: GpuImage) {
+		this _imageBin add(gpuImage)
+	}
+	getRecycled: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
+		result := this _imageBin find(type, size)
+		result
 	}
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
-		result := OpenGLES3Monochrome create2(size)
-		result
-	}
-	createBgr: func (size: IntSize2D) -> GpuImage {
-		result := OpenGLES3Bgr create2(size)
-		result
-	}
-	createBgra: func (size: IntSize2D) -> GpuImage {
-		result := OpenGLES3Bgra create2(size)
+		result := OpenGLES3Monochrome create(size, this)
 		result
 	}
 	createUv: func (size: IntSize2D) -> GpuImage {
-		result := OpenGLES3Uv create2(size)
+		result := OpenGLES3Uv create(size, this)
+		result
+	}
+	createBgr: func (size: IntSize2D) -> GpuImage {
+		result := OpenGLES3Bgr create(size, this)
+		result
+	}
+	createBgra: func (size: IntSize2D) -> GpuImage {
+		result := OpenGLES3Bgra create(size, this)
 		result
 	}
 	createYuv420Semiplanar: func (size: IntSize2D) -> GpuImage {
-		result := OpenGLES3Yuv420Semiplanar create2(size)
+		result := OpenGLES3Yuv420Semiplanar create(size, this)
 		result
 	}
 	createYuv420Planar: func (size: IntSize2D) -> GpuImage {
-		result := OpenGLES3Yuv420Planar create2(size)
+		result := OpenGLES3Yuv420Planar create(size, this)
 		result
 	}
 	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
 		result := match (rasterImage) {
-			case image: RasterMonochrome => OpenGLES3Monochrome createStatic(rasterImage as RasterMonochrome)
-			case image: RasterBgr => OpenGLES3Bgr createStatic(rasterImage as RasterBgr)
-			case image: RasterBgra => OpenGLES3Bgra createStatic(rasterImage as RasterBgra)
-			case image: RasterUv => OpenGLES3Uv createStatic(rasterImage as RasterUv)
-			case image: RasterYuv420Semiplanar => OpenGLES3Yuv420Semiplanar createStatic(rasterImage as RasterYuv420Semiplanar)
-			case image: RasterYuv420Planar => OpenGLES3Yuv420Planar createStatic(rasterImage as RasterYuv420Planar)
+			case image: RasterMonochrome => OpenGLES3Monochrome create(rasterImage as RasterMonochrome, this)
+			case image: RasterBgr => OpenGLES3Bgr create(rasterImage as RasterBgr, this)
+			case image: RasterBgra => OpenGLES3Bgra create(rasterImage as RasterBgra, this)
+			case image: RasterUv => OpenGLES3Uv create(rasterImage as RasterUv, this)
+			case image: RasterYuv420Semiplanar => OpenGLES3Yuv420Semiplanar create(rasterImage as RasterYuv420Semiplanar, this)
+			case image: RasterYuv420Planar => OpenGLES3Yuv420Planar create(rasterImage as RasterYuv420Planar, this)
 		}
 		result
 	}

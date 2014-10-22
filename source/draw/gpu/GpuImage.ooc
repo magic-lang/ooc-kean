@@ -17,16 +17,39 @@
 use ooc-draw
 use ooc-math
 use ooc-base
+import GpuCanvas, GpuContext
+
+GpuImageType: enum {
+	monochrome
+	rgba
+	rgb
+	bgr
+	bgra
+	uv
+	yuvSemiplanar
+	yuvPlanar
+}
 
 GpuImage: abstract class extends Image {
+	canvas: GpuCanvas { get {
+		if (this _canvas == null)
+			this _canvas = this _createCanvas()
+		this _canvas } }
+	_canvas: GpuCanvas
 	_backend: Pointer
-	init: func (=size)
+	_context: GpuContext
+	init: func (=size, =_context)
 	bind: abstract func (unit: UInt)
-	recycle: abstract func
+	recycle: func {
+		this _context recycle(this)
+	}
 	dispose: abstract func
 	generateMipmap: func
 
 	//TODO: Implement abstract functions
+	create: func (size: IntSize2D) -> This {
+		raise("Unimplemented")
+	}
 	resizeTo: func (size: IntSize2D) -> This {
 		raise("Using unimplemented function reSizeTo in GpuImage class")
 	}
@@ -42,5 +65,7 @@ GpuImage: abstract class extends Image {
 	distance: func (other: This) -> Float {
 		raise("Using unimplemented function distance in GpuImage class")
 	}
+	toRaster: abstract func -> RasterImage
+	_createCanvas: abstract func -> GpuCanvas
 
 }
