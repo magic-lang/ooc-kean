@@ -33,9 +33,14 @@ OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
 		this _uv bind(unit + 1)
 	}
 	toRaster: func -> RasterImage { return null }
+	resizeTo: func (size: IntSize2D) -> This {
+		target := OpenGLES3Yuv420Semiplanar create(size, this _context)
+		target canvas draw(this)
+		target
+	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Semiplanar create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterYuv420Semiplanar, context: GpuContext) -> This {
-		result := context getRecycled(GpuImageType yuvSemiplanar, rasterImage size) as This
+		result := context getImage(GpuImageType yuvSemiplanar, rasterImage size) as This
 		if (result != null) {
 			(result _y as OpenGLES3Monochrome) backend uploadPixels(rasterImage y pointer)
 			(result _uv as OpenGLES3Uv) backend uploadPixels(rasterImage uv pointer)
@@ -48,7 +53,7 @@ OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
 		result
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
-		result := context getRecycled(GpuImageType yuvSemiplanar, size) as This
+		result := context getImage(GpuImageType yuvSemiplanar, size) as This
 		if (result == null) {
 			result := This new(size, context)
 			result _y = OpenGLES3Monochrome create(size, context)
