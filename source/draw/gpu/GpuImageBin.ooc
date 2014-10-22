@@ -87,8 +87,7 @@ GpuImageBin: class {
 	}
 	find: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
 		result := null
-		result =
-		match (type) {
+		result = match (type) {
 			case GpuImageType monochrome => this _search(size, this _monochrome)
 			case GpuImageType uv => this _search(size, this _uv)
 			case GpuImageType bgr => this _search(size, this _bgr)
