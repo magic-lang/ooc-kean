@@ -61,6 +61,13 @@ VectorList: class <T> {
 		tmp
 	}
 
+	__destroy__: func {
+		for (i in 0..this _count) {
+			gc_free(this _vector[i])
+		}
+		gc_free(this _vector)
+	}
+
 	operator [] (index: Int) -> T {
 		this _vector[index]
 	}

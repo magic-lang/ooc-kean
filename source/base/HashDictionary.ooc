@@ -1,6 +1,6 @@
 import structs/[HashBag, HashMap, ArrayList]
 
-Dictionary: class {
+HashDictionary: class {
 	_myHashBag: HashBag
 	_capacity: Int
 	init: func { init ~withCapacity(10) }
