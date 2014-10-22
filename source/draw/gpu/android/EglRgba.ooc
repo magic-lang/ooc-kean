@@ -15,13 +15,19 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-math
+use ooc-opengl
 import egl/eglimage
 EglRgba: class {
-	texture: Texture { get set }
-	id: Int { get set }
+	_texture: Texture
+	texture: Texture { get { this _texture } }
+	_id: Int
+	id: Int { get { this _id } }
+	_stride: Int
+	stride: Int { get { this _stride } }
 	init: func (eglDisplay: Pointer, size: IntSize2D) {
-		this texture = Texture create(TextureType rgba, size width, size height, size width, null, false)
-		this id = createEGLImage(size width, size height, eglDisplay)
+		this _texture = Texture create(TextureType rgba, size width, size height, size width, null, false)
+		this _id = createEGLImage(size width, size height, eglDisplay)
+		this _stride = getStride(this _id)
 	}
 	dispose: func {
 		this texture dispose()
