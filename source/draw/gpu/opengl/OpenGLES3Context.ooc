@@ -20,54 +20,52 @@ use ooc-draw-gpu
 import GpuImageBin, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3/Context, OpenGLES3/NativeWindow
 
 OpenGLES3Context: class extends GpuContext {
-	_imageBin: GpuImageBin
 	_backend: Context
 	init: func {
+		super()
 		this _backend = Context create()
-		this _imageBin = GpuImageBin new()
 	}
 	init: func ~shared (other: This) {
+		super()
 		this _backend = Context create(other _backend)
-		this _imageBin = GpuImageBin new()
 	}
 	init: func ~window (nativeWindow: NativeWindow) {
+		super()
 		this _backend = Context create(nativeWindow)
-		this _imageBin = GpuImageBin new()
 	}
 	dispose: func {
 		this _backend dispose()
 		this _imageBin dispose()
 	}
-	recycle: func (gpuImage: GpuImage) {
+	recycle: func ~image (gpuImage: GpuImage) {
 		this _imageBin add(gpuImage)
 	}
-	getRecycled: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
-		result := this _imageBin find(type, size)
-		result
+	recycle: func ~surface (surface: GpuSurface) {
+		this _surfaceBin add(surface)
+	}
+	getImage: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
+		this _imageBin find(type, size)
+	}
+	getSurface: func -> GpuSurface {
+		this _surfaceBin find()
 	}
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
-		result := OpenGLES3Monochrome create(size, this)
-		result
+		OpenGLES3Monochrome create(size, this)
 	}
 	createUv: func (size: IntSize2D) -> GpuImage {
-		result := OpenGLES3Uv create(size, this)
-		result
+		OpenGLES3Uv create(size, this)
 	}
 	createBgr: func (size: IntSize2D) -> GpuImage {
-		result := OpenGLES3Bgr create(size, this)
-		result
+		OpenGLES3Bgr create(size, this)
 	}
 	createBgra: func (size: IntSize2D) -> GpuImage {
-		result := OpenGLES3Bgra create(size, this)
-		result
+		OpenGLES3Bgra create(size, this)
 	}
 	createYuv420Semiplanar: func (size: IntSize2D) -> GpuImage {
-		result := OpenGLES3Yuv420Semiplanar create(size, this)
-		result
+		OpenGLES3Yuv420Semiplanar create(size, this)
 	}
 	createYuv420Planar: func (size: IntSize2D) -> GpuImage {
-		result := OpenGLES3Yuv420Planar create(size, this)
-		result
+		OpenGLES3Yuv420Planar create(size, this)
 	}
 	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
 		result := match (rasterImage) {
@@ -82,5 +80,8 @@ OpenGLES3Context: class extends GpuContext {
 	}
 	update: func {
 		this _backend swapBuffers()
+	}
+	toRaster: func (gpuImage: GpuImage) {
+		raise("Not implemented")
 	}
 }
