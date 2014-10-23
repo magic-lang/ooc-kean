@@ -69,7 +69,7 @@ Dictionary: class {
 		this add(key, value)
 	}
 
-	_destroy: func {
+	__destroy__: func {
 		gc_free(this _dictionaryList)
 	}
 }
