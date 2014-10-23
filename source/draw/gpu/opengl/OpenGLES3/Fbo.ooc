@@ -39,7 +39,9 @@ Fbo: class {
 	clearColor: func (color: Float) {
 		glClearColor(color, color, color, color)
 	}
-	getPixels: func (width: UInt, height: UInt, channels: UInt) -> ByteBuffer {
+	readPixels: func (channels: UInt) -> ByteBuffer {
+		width := this _width
+		height := this _height
 		buffer := ByteBuffer new(width * height * channels)
 		ptr := buffer pointer
 		glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
