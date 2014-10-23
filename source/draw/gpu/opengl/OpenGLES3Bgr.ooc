@@ -24,7 +24,7 @@ import OpenGLES3/Texture, OpenGLES3Canvas
 OpenGLES3Bgr: class extends GpuBgr {
 	backend: Texture { get { this _backend as Texture } }
 	init: func (size: IntSize2D, context: GpuContext) {
-		init(size, size width, null, context)
+		init(size, size width * 3, null, context)
 	}
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
 		super(size, context)
@@ -45,7 +45,9 @@ OpenGLES3Bgr: class extends GpuBgr {
 		this backend generateMipmap()
 	}
 	toRaster: func -> RasterImage {
-		return null
+		buffer := this canvas readPixels(3)
+		result := RasterBgr new(buffer, this size)
+		result
 	}
 	resizeTo: func (size: IntSize2D) -> This {
 		target := OpenGLES3Bgr create(size, this _context)

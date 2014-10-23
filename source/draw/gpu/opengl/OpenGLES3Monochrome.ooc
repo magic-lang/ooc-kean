@@ -41,7 +41,11 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 	generateMipmap: func {
 		this backend generateMipmap()
 	}
-	toRaster: func -> RasterImage { return null }
+	toRaster: func -> RasterImage {
+		buffer := this canvas readPixels(1)
+		result := RasterMonochrome new(buffer, this size)
+		result
+	}
 	resizeTo: func (size: IntSize2D) -> This {
 		target := OpenGLES3Monochrome create(size, this _context)
 		target canvas draw(this)
