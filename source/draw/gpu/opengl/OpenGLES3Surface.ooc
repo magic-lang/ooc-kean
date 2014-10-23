@@ -24,6 +24,7 @@ OpenGLES3Surface: class extends GpuSurface {
 	traceDrawer: TraceDrawer
 	init: func (context: GpuContext){
 		super(context)
+		this _quad = Quad create()
 	}
 	recycle: func {
 		this _context recycle(this)
@@ -95,10 +96,8 @@ OpenGLES3Surface: class extends GpuSurface {
 	update: func
 	create: static func (context: GpuContext)-> This {
 		result := context getSurface() as This
-		if(result == null) {
+		if(result == null)
 			result = This new(context)
-			result _quad = Quad create()
-		}
 		result
 	}
 }
