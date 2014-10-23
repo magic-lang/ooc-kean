@@ -22,6 +22,11 @@ import OpenGLES3Canvas, OpenGLES3Monochrome, OpenGLES3Uv
 
 OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
 	init: func (size: IntSize2D, context: GpuContext) { super(size, context) }
+	init: func ~gpuImages (y: OpenGLES3Monochrome, uv: OpenGLES3Uv, context: GpuContext) {
+		super(y size, context)
+		this _y = y
+		this _uv = uv
+	}
 	dispose: func {
 		if (this _canvas != null)
 			this _canvas dispose()
@@ -32,33 +37,40 @@ OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
 		this _y bind(unit)
 		this _uv bind(unit + 1)
 	}
-	toRaster: func -> RasterImage { return null }
+	toRaster: func -> RasterImage {
+		y := this _y toRaster()
+		uv := this _uv toRaster()
+		result := RasterYuv420Semiplanar new(y as RasterMonochrome, uv as RasterUv)
+		result
+	}
 	resizeTo: func (size: IntSize2D) -> This {
 		target := OpenGLES3Yuv420Semiplanar create(size, this _context)
 		target canvas draw(this)
 		target
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Semiplanar create(this, this _context) }
+
 	create: static func ~fromRaster (rasterImage: RasterYuv420Semiplanar, context: GpuContext) -> This {
 		result := context getImage(GpuImageType yuvSemiplanar, rasterImage size) as This
-		if (result != null) {
-			(result _y as OpenGLES3Monochrome) backend uploadPixels(rasterImage y pointer)
-			(result _uv as OpenGLES3Uv) backend uploadPixels(rasterImage uv pointer)
+		if (result == null) {
+			y := OpenGLES3Monochrome create(rasterImage y, context)
+			uv := OpenGLES3Uv create(rasterImage uv, context)
+			result = This new(y, uv, context)
 		}
 		else {
-			result = This new(rasterImage size, context)
-			result _y = OpenGLES3Monochrome create(rasterImage y, context)
-			result _uv = OpenGLES3Uv create(rasterImage uv, context)
+			(result _y as OpenGLES3Monochrome) backend uploadPixels(rasterImage y pointer)
+			(result _uv as OpenGLES3Uv) backend uploadPixels(rasterImage uv pointer)
 		}
 		result
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
 		result := context getImage(GpuImageType yuvSemiplanar, size) as This
 		if (result == null) {
-			result := This new(size, context)
+			result = This new(size, context)
 			result _y = OpenGLES3Monochrome create(size, context)
-			result _uv = OpenGLES3Uv create(IntSize2D new(size width, size height / 2), context)
+			result _uv = OpenGLES3Uv create(size / 2, context)
 		}
 		result
 	}
+
 }

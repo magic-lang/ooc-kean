@@ -23,6 +23,12 @@ import OpenGLES3Canvas, OpenGLES3Monochrome
 
 OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 	init: func (size: IntSize2D, context: GpuContext) { super(size, context) }
+	init: func ~gpuImages (y: OpenGLES3Monochrome, u: OpenGLES3Monochrome, v: OpenGLES3Monochrome, context: GpuContext) {
+		super(y size, context)
+		this _y = y
+		this _u = u
+		this _v = v
+	}
 	dispose: func {
 		if (this _canvas != null)
 			this _canvas dispose()
@@ -35,7 +41,13 @@ OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 		this _u bind(unit + 1)
 		this _v bind(unit + 2)
 	}
-	toRaster: func -> RasterImage { return null }
+	toRaster: func -> RasterImage {
+		y := this _y toRaster()
+		u := this _u toRaster()
+		v := this _v toRaster()
+		result := RasterYuv420Planar new(y as RasterMonochrome, u as RasterMonochrome, v as RasterMonochrome)
+		result
+	}
 	resizeTo: func (size: IntSize2D) -> This {
 		target := OpenGLES3Yuv420Planar create(size, this _context)
 		target canvas draw(this)
@@ -44,16 +56,16 @@ OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Planar create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterYuv420Planar, context: GpuContext) -> This {
 		result := context getImage(GpuImageType yuvPlanar, rasterImage size) as This
-		if (result != null) {
+		if (result == null) {
+			y := OpenGLES3Monochrome create(rasterImage y, context)
+			u := OpenGLES3Monochrome create(rasterImage u, context)
+			v := OpenGLES3Monochrome create(rasterImage v, context)
+			result = This new(y, u, v, context)
+		}
+		else {
 			(result _y as OpenGLES3Monochrome) backend uploadPixels(rasterImage y pointer)
 			(result _u as OpenGLES3Monochrome) backend uploadPixels(rasterImage u pointer)
 			(result _v as OpenGLES3Monochrome) backend uploadPixels(rasterImage v pointer)
-		}
-		else {
-			result = This new(rasterImage size, context)
-			result _y = OpenGLES3Monochrome create(rasterImage y, context)
-			result _u = OpenGLES3Monochrome create(rasterImage u, context)
-			result _v = OpenGLES3Monochrome create(rasterImage v, context)
 		}
 		result
 	}

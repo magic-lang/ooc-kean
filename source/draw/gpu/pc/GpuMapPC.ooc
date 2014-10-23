@@ -32,7 +32,7 @@ setShaderSources: func {
 			vec3 scaledQuadPosition = vec3(float(imageWidth) / 2.0f * vertexPosition.x, float(imageHeight) / 2.0f * vertexPosition.y, 1);\n
 			vec3 transformedPosition = transform * scaledQuadPosition;\n
 			transformedPosition.xy /= transformedPosition.z; \n
-			mat4 projectionMatrix = transpose(mat4(2.0f / float(screenWidth), 0, 0, 0, 0, -2.0f / float(screenHeight), 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
+			mat4 projectionMatrix = transpose(mat4(2.0f / float(screenWidth), 0, 0, 0, 0, 2.0f / float(screenHeight), 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
 			fragmentTextureCoordinate = textureCoordinate;\n
 			gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
 		}\n";

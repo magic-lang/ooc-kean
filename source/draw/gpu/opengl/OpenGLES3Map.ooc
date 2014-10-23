@@ -168,7 +168,6 @@ OpenGLES3MapPackMonochrome: class extends OpenGLES3MapDefault {
 					this _program setUniform("pixelWidth", this imageSize width)
 				})
 	}
-
 	fragmentSource: static String
 }
 

@@ -17,21 +17,32 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import GpuImageBin, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3/Context, OpenGLES3/NativeWindow
+import GpuImageBin, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Map
+import OpenGLES3/Context, OpenGLES3/NativeWindow
 
 OpenGLES3Context: class extends GpuContext {
 	_backend: Context
-	init: func {
+	_bgrMap: OpenGLES3MapBgr
+	_bgraMap: OpenGLES3MapBgra
+	_monochromeMap: OpenGLES3MapMonochrome
+	_uvMap: OpenGLES3MapUv
+
+	init: func (context: Context) {
 		super()
-		this _backend = Context create()
+		this _bgrMap = OpenGLES3MapBgr new()
+		this _bgraMap = OpenGLES3MapBgra new()
+		this _monochromeMap = OpenGLES3MapMonochrome new()
+		this _uvMap = OpenGLES3MapUv new()
+		this _backend = context
+	}
+	init: func ~unshared {
+		this init(Context create())
 	}
 	init: func ~shared (other: This) {
-		super()
-		this _backend = Context create(other _backend)
+		this init(Context create(other _backend))
 	}
 	init: func ~window (nativeWindow: NativeWindow) {
-		super()
-		this _backend = Context create(nativeWindow)
+		this init(Context create(nativeWindow))
 	}
 	dispose: func {
 		this _backend dispose()
@@ -42,6 +53,15 @@ OpenGLES3Context: class extends GpuContext {
 	}
 	recycle: func ~surface (surface: GpuSurface) {
 		this _surfaceBin add(surface)
+	}
+	getDefaultMap: func (gpuImage: GpuImage) -> GpuMap {
+		result := match(gpuImage) {
+			case (i : OpenGLES3Bgr) => this _bgrMap
+			case (i : OpenGLES3Bgra) => this _bgraMap
+			case (i : OpenGLES3Monochrome) => this _monochromeMap
+			case (i : OpenGLES3Uv) => this _uvMap
+		}
+		result
 	}
 	getImage: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
 		this _imageBin find(type, size)

@@ -33,6 +33,12 @@ import io/FileWriter
 import io/BinarySequence
 
 RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
+	init: func ~fromRasterImages (y: RasterMonochrome, uv: RasterUv) {
+		this y = y
+		this uv = uv
+		this size = y size
+		this stride = y stride
+	}
 	init: func ~fromSize (size: IntSize2D) { this init(size, CoordinateSystem Default, IntShell2D new()) }
 	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
 		bufSize := RasterPacked calculateLength(size, 1) + RasterPacked calculateLength(size / 2, 2)

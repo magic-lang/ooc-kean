@@ -51,7 +51,7 @@ Window: class {
 		this setResolution(image size)
 		this _monochromeToBgra transform = transform
 		this _monochromeToBgra imageSize = image size
-		this _monochromeToBgra screenSize = image size
+		this _monochromeToBgra screenSize = IntSize2D new(image size width, -image size height)
 		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
 		this _surface draw(image, _monochromeToBgra, image size, offset)
 	}
@@ -59,7 +59,7 @@ Window: class {
 		this setResolution(image size)
 		this _bgrToBgra transform = transform
 		this _bgrToBgra imageSize = image size
-		this _bgrToBgra screenSize = image size
+		this _bgrToBgra screenSize = IntSize2D new(image size width, -image size height)
 		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
 		this _surface draw(image, _bgrToBgra, image size, offset)
 	}
@@ -67,7 +67,7 @@ Window: class {
 		this setResolution(image size)
 		this _bgraToBgra transform = transform
 		this _bgraToBgra imageSize = image size
-		this _bgraToBgra screenSize = image size
+		this _bgraToBgra screenSize = IntSize2D new(image size width, -image size height)
 		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
 		this _surface draw(image, _bgraToBgra, image size, offset)
 	}
@@ -75,17 +75,18 @@ Window: class {
 		this setResolution(image size)
 		this _yuvPlanarToBgra transform = transform
 		this _yuvPlanarToBgra imageSize = image size
-		this _yuvPlanarToBgra screenSize = image size
+		this _yuvPlanarToBgra screenSize = IntSize2D new(image size width, -image size height)
 		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
 		this _surface draw(image, _yuvPlanarToBgra, image size, offset)
 	}
 	draw: func ~Yuv420Semiplanar (image: GpuYuv420Semiplanar, transform := FloatTransform2D identity) {
-		this setResolution(image size)
 		this _yuvSemiplanarToBgra transform = transform
 		this _yuvSemiplanarToBgra imageSize = image size
-		this _yuvSemiplanarToBgra screenSize = image size
+		this _yuvSemiplanarToBgra screenSize = IntSize2D new(image size width, -image size height)
 		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
-		this _surface draw(image, this _yuvSemiplanarToBgra, image size, offset)
+		surface := OpenGLES3Surface create(this _context)
+		surface draw(image, this _yuvSemiplanarToBgra, image size, offset)
+		surface recycle()
 	}
 	draw: func ~RasterBgr (image: RasterBgr, transform := FloatTransform2D identity) {
 		result := this _context createGpuImage(image)

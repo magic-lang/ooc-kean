@@ -26,6 +26,9 @@ GpuCanvas: abstract class {
 	init: func (=_context)
 	dispose: abstract func
 	draw: abstract func (image: Image, transform := FloatTransform2D identity)
+	readPixels: func (channels: UInt) -> ByteBuffer {
+		raise("Trying to read pixels in unimplemented readPixels function")
+	}
 	setResolution: func (resolution: IntSize2D) {
 	}
 }

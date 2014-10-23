@@ -26,6 +26,13 @@ import Image
 import Color
 
 RasterYuv420Planar: class extends RasterYuvPlanar {
+	init: func ~fromRasterImages (y: RasterMonochrome, u: RasterMonochrome, v: RasterMonochrome) {
+		this y = y
+		this u = u
+		this v = v
+		this size = y size
+		this stride = y stride
+	}
 	init: func ~fromSize (size: IntSize2D) { this init(size, CoordinateSystem Default, IntShell2D new()) }
 	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
 		bufSize := RasterPacked calculateLength(size, 1) + 2 * RasterPacked calculateLength(size / 2, 1)

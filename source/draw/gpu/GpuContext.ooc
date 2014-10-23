@@ -15,7 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
 use ooc-draw
-import GpuImage, GpuMonochrome, GpuUv, GpuBgr, GpuBgra, GpuYuv420Semiplanar, GpuYuv420Planar, GpuImageBin, GpuSurfaceBin, GpuSurface
+import GpuImage, GpuMonochrome, GpuUv, GpuBgr, GpuBgra, GpuYuv420Semiplanar, GpuYuv420Planar, GpuImageBin, GpuSurfaceBin, GpuSurface, GpuMap
 GpuContext: abstract class {
 	_imageBin: GpuImageBin
 	_surfaceBin: GpuSurfaceBin
@@ -37,4 +37,5 @@ GpuContext: abstract class {
 	getImage: abstract func (type: GpuImageType, size: IntSize2D) -> GpuImage
 	getSurface: abstract func -> GpuSurface
 	toRaster: abstract func (gpuImage: GpuImage) -> RasterImage
+	getDefaultMap: abstract func (gpuImage: GpuImage) -> GpuMap
 }
