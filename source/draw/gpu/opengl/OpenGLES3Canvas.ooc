@@ -60,6 +60,9 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	_clear: func {
 		this _renderTarget clear()
 	}
+	readPixels: func (channels: UInt) -> ByteBuffer {
+		this _renderTarget readPixels(channels)
+	}
 	create: static func (image: GpuImage, context: GpuContext) -> This {
 		map := match(image) {
 			case (i : OpenGLES3Bgr) => OpenGLES3MapBgr new()
