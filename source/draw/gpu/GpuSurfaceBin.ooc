@@ -41,7 +41,6 @@ GpuSurfaceBin: class {
 		result
 	}
 	find: func -> GpuSurface {
-		result := this _search(this _surfaces)
-		result
+		this _search(this _surfaces)
 	}
 }
