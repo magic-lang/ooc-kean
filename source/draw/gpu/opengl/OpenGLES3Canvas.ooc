@@ -27,9 +27,9 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	_renderTarget: Fbo
 	_map: OpenGLES3MapDefault
 
-	init: func (map: OpenGLES3MapDefault, context: GpuContext) {
+	init: func (map: GpuMap, context: GpuContext) {
 		super(context)
-		this _map = map
+		this _map = map as OpenGLES3MapDefault
 	}
 	dispose: func {
 		this _renderTarget dispose()
@@ -64,12 +64,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _renderTarget readPixels(channels)
 	}
 	create: static func (image: GpuImage, context: GpuContext) -> This {
-		map := match(image) {
-			case (i : OpenGLES3Bgr) => OpenGLES3MapBgr new()
-			case (i : OpenGLES3Bgra) => OpenGLES3MapBgra new()
-			case (i : OpenGLES3Monochrome) => OpenGLES3MapMonochrome new()
-			case (i : OpenGLES3Uv) => OpenGLES3MapUv new()
-		}
+		map := context getDefaultMap(image)
 		result := This new(map, context)
 		result _renderTarget = Fbo create(image _backend as Texture, image size width, image size height)
 		result _size = image size
