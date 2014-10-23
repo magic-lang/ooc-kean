@@ -110,9 +110,6 @@ Window: class {
 	}
 	draw: func ~RasterYuvSemiplanar (image: RasterYuv420Semiplanar, transform := FloatTransform2D identity) {
 		result := this _context createGpuImage(image)
-		//raster := result toRaster()
-		//result recycle()
-		//result = this _context createGpuImage(raster)
 		this draw(result, transform)
 		result recycle()
 	}
