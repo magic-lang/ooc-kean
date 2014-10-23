@@ -22,9 +22,11 @@ GpuSurface: abstract class {
 	size: IntSize2D
 	_context: GpuContext
 	init: func (=_context)
-	draw: abstract func (image: Image, map: GpuMap, resolution: IntSize2D)
+	draw: abstract func (image: Image, map: GpuMap, resolution: IntSize2D, offset := IntSize2D new())
 	clear: abstract func
 	bind: abstract func
+	recycle: abstract func
+	dispose: abstract func
 	unbind: func
 	update: func
 }

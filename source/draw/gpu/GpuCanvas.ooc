@@ -22,11 +22,10 @@ import GpuImage, GpuMap, GpuSurface, GpuContext
 
 GpuCanvas: abstract class {
 	_size: IntSize2D
-	_surface: GpuSurface
 	_context: GpuContext
 	init: func (=_context)
 	dispose: abstract func
-	draw: abstract func (image: Image, transform: FloatTransform2D)
+	draw: abstract func (image: Image, transform := FloatTransform2D identity)
 	setResolution: func (resolution: IntSize2D) {
 	}
 }
