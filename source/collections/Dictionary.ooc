@@ -34,9 +34,12 @@ Dictionary: class {
 
 	add: func (key: Int, value: Object) -> This {
 		copy := this clone()
-
 		copy _insert(value, key)
 		return copy
+	}
+
+	put: func (key: Int, value: Object) -> This {
+		add(key, value)
 	}
 
 	remove: func (key: Int) -> Object {
@@ -66,7 +69,7 @@ Dictionary: class {
 		this add(key, value)
 	}
 
-	_destroy: func {
+	__destroy__: func {
 		gc_free(this _dictionaryList)
 	}
 }
