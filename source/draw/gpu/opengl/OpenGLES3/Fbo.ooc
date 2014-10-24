@@ -40,6 +40,7 @@ Fbo: class {
 		glClearColor(color, color, color, color)
 	}
 	readPixels: func (channels: UInt) -> ByteBuffer {
+		//FIXME: Only works for RGBA textures so must be converted before reading
 		width := this _width
 		height := this _height
 		buffer := ByteBuffer new(width * height * channels)
@@ -47,16 +48,14 @@ Fbo: class {
 		glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
 		glPixelStorei(GL_PACK_ALIGNMENT, 1)
 		glReadBuffer(GL_COLOR_ATTACHMENT0)
-
 		if (channels == 1)
 			glReadPixels(0, 0, width / 4, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
 		else if (channels == 2)
 			glReadPixels(0, 0, width / 2, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
 		else if (channels == 3)
-			glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, ptr)
+			glReadPixels(0, 0, 3 * width / 4, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
 		else if (channels == 4)
 			glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
-
 		glBindFramebuffer(GL_FRAMEBUFFER, 0)
 		buffer
 	}
