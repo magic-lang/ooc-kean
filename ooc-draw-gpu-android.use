@@ -3,8 +3,8 @@ Description: Android specific, GPU accelerated implementation of OOC Draw interf
 SourcePath: source/draw/gpu/android
 Requires: ooc-base, ooc-math, ooc-unit, ooc-draw, ooc-draw-gpu
 
-Imports: DummyWindow, GpuMapAndroid
+Imports: AndroidContext, GpuMapAndroid
 Libs: -landroid
 
-AndroidLibs: libeglimage, Slibfastcv
+AndroidLibs: libeglimage
 AndroidIncludePaths:
