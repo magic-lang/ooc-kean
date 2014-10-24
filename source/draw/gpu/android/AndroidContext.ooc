@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
+use ooc-android-debug
 use ooc-draw-gpu
 use ooc-opengl
 use ooc-draw
@@ -28,6 +28,19 @@ AndroidContext: class extends OpenGLES3Context {
 		this _packMonochrome = OpenGLES3MapPackMonochrome new()
 		this _packUv = OpenGLES3MapPackUv new()
 		this _packerBin = GpuPackerBin new()
+	}
+	toRaster: func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) {
+		if(gpuImage instanceOf?(GpuYuv420Semiplanar)) {
+			printAndroid("Packing YUV420")
+			rasterYuv420Semiplanar := rasterImage as RasterYuv420Semiplanar
+			semiPlanar := gpuImage as GpuYuv420Semiplanar
+			yPacker := createPacker(semiPlanar y size, 1)
+			//yPacker pack(semiPlanar y, this _packMonochrome, rasterYuv420Semiplanar y)
+			yPacker recycle()
+			uvPacker := createPacker(semiPlanar uv size, 2)
+			//uvPacker pack(semiPlanar uv, this _packUv, rasterYuv420Semiplanar uv)
+			uvPacker recycle()
+		}
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
 		result := null
@@ -50,7 +63,7 @@ AndroidContext: class extends OpenGLES3Context {
 	createPacker: func (size: IntSize2D, bytesPerPixel: UInt) -> GpuPacker {
 		result := this _packerBin find(size, bytesPerPixel)
 		if (result == null) {
-			//result = GpuPacker new(size, bytesPerPixel, this)
+			result = GpuPacker new(size, bytesPerPixel, this)
 		}
 		result
 	}
@@ -62,40 +75,9 @@ AndroidContext: class extends OpenGLES3Context {
 AndroidContextManager: class extends GpuContextManager {
 	init: func {
 		setShaderSources()
+		super(3)
 	}
 	_createContext: func -> GpuContext {
 		AndroidContext new()
 	}
-	/*
-	copyPixels: func ~Monochrome (image: GpuMonochrome, destination: RasterMonochrome) {
-		this _scaledPacker pack(image)
-		yPixels := this _scaledPacker lock()
-		memcpy(destination pointer, yPixels, 768 * 480)
-		this _scaledPacker unlock()
-	}
-	copyPixels: func ~Yuv420Semiplanar(image: GpuYuv420Semiplanar, destination: RasterYuv420Semiplanar) {
-		this _yPacker pack(image y)
-		yPixels := this _yPacker lock()
-		destinationPointer := destination y pointer
-		destinationStride := destination y stride
-		paddedBytes := 640 + 1920 - image size width;
-		for(row in 0..image size height) {
-			sourceRow := yPixels + row * (image size width + paddedBytes)
-			destinationRow := destinationPointer + row * destinationStride
-			memcpy(destinationRow, sourceRow, image size width)
-		}
-		this _yPacker unlock()
-
-		this _uvPacker pack(image uv)
-		uvPixels := this _uvPacker lock()
-		uvOffset := destination y stride * destination y size height + (Int align(destination y size height, destination byteAlignment height) - destination y size height) * destination y stride
-		uvDestination := destinationPointer + uvOffset
-		for(row in 0..image size height / 2) {
-			sourceRow := uvPixels + row * (image size width + paddedBytes)
-			destinationRow := uvDestination + row * destinationStride
-			memcpy(destinationRow, sourceRow, image size width)
-		}
-		this _uvPacker unlock()
-	}
-	*/
 }
