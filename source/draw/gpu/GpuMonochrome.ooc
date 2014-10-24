@@ -19,6 +19,6 @@ import GpuPacked, GpuContext
 
 GpuMonochrome: abstract class extends GpuPacked {
 	init: func (size: IntSize2D, context: GpuContext) {
-		super(size, context)
+		super(size, 1, context)
 	}
 }

@@ -14,10 +14,17 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
+use ooc-draw
+use ooc-base
 import GpuImage, GpuCanvas, GpuContext
 
 GpuPacked: abstract class extends GpuImage {
-	init: func (size: IntSize2D, context: GpuContext) {
-		super(size, context)
+	init: func (size: IntSize2D, channels: Int, context: GpuContext) {
+		super(size, channels, context)
+	}
+	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
+		buffer := this canvas readPixels(this _channels)
+		memcpy(rasterImage pointer, buffer pointer, this size width * this size height * this _channels)
+		buffer free()
 	}
 }
