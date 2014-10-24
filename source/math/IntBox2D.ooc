@@ -62,7 +62,7 @@ IntBox2D: cover {
 	union: func ~box (other: This) -> This {
 		left := this left minimum(other left)
 		top := this top minimum(other top)
-		width := this right maximum(other right) - this left minimum(other left) 
+		width := this right maximum(other right) - this left minimum(other left)
 		height := this bottom maximum(other bottom) - this top minimum(other top)
 		This new(left, top, width, height)
 	}
@@ -114,9 +114,9 @@ IntBox2D: cover {
 		array := input split(',')
 		This new(array[0] toInt(), array[1] toInt(), array[2] toInt(), array[3] toInt())
 	}
-	create: func (leftTop: IntPoint2D, size: IntSize2D) -> This { This new(leftTop, size) }
-	create: func ~fromFloats (left, top, width, height: Int) -> This { This new(left, top, width, height) }
-	createAround: func (center: IntPoint2D, size: IntSize2D) -> This { This new(center + (-size) / 2, size) }
+	create: static func (leftTop: IntPoint2D, size: IntSize2D) -> This { This new(leftTop, size) }
+	create: static func ~fromFloats (left, top, width, height: Int) -> This { This new(left, top, width, height) }
+	createAround: static func (center: IntPoint2D, size: IntSize2D) -> This { This new(center + (-size) / 2, size) }
 	bounds: func (left, right, top, bottom: Int) -> This { This new(left, top, right - left, bottom - top) }
 	bounds: func ~fromArray (points: IntPoint2D[]) -> IntBox2D { this bounds(points as ArrayList<IntPoint2D>) }
 	bounds: func ~fromList (points: ArrayList<IntPoint2D>) -> IntBox2D {
