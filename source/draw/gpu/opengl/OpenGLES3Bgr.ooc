@@ -30,7 +30,7 @@ OpenGLES3Bgr: class extends GpuBgr {
 		super(size, context)
 		this _backend = Texture create(TextureType bgr, size width, size height, stride, data) as Pointer
 	}
-	replace: func (image: RasterBgra) {
+	replace: func (image: RasterBgr) {
 		this backend uploadPixels(image pointer)
 	}
 	bind: func (unit: UInt) {
@@ -44,7 +44,7 @@ OpenGLES3Bgr: class extends GpuBgr {
 	generateMipmap: func {
 		this backend generateMipmap()
 	}
-	toRaster: func -> RasterImage {
+	toRasterDefault: func -> RasterImage {
 		buffer := this canvas readPixels(3)
 		result := RasterBgr new(buffer, this size)
 		result
