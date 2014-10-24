@@ -20,6 +20,6 @@ import GpuImage, GpuContext
 
 GpuPlanar: abstract class extends GpuImage {
 	init: func (size: IntSize2D, context: GpuContext) {
-		super(size, context)
+		super(size, 3, context)
 	}
 }

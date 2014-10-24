@@ -92,6 +92,9 @@ GpuContextManager: abstract class extends GpuContext {
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
 		this _getContext() toRaster(gpuImage)
 	}
+	toRaster: func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) {
+		this _getContext() toRaster(gpuImage, rasterImage)
+	}
 	getDefaultMap: func (gpuImage: GpuImage) -> GpuMap {
 		this _getContext() getDefaultMap(gpuImage)
 	}

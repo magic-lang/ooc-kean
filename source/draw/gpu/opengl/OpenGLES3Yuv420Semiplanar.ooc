@@ -43,6 +43,11 @@ OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
 		result := RasterYuv420Semiplanar new(y as RasterMonochrome, uv as RasterUv)
 		result
 	}
+	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
+		semiPlanar := rasterImage as RasterYuv420Semiplanar
+		this _y toRasterDefault(semiPlanar y)
+		this _uv toRasterDefault(semiPlanar uv)
+	}
 	resizeTo: func (size: IntSize2D) -> This {
 		target := OpenGLES3Yuv420Semiplanar create(size, this _context)
 		target canvas draw(this)

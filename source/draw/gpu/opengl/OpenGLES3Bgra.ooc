@@ -23,7 +23,7 @@ import OpenGLES3/Texture, OpenGLES3Canvas
 OpenGLES3Bgra: class extends GpuBgra {
 	backend: Texture { get { this _backend as Texture } }
 	init: func (size: IntSize2D, context: GpuContext) {
-		init(size, size width * 4, null, context)
+		init(size, size width * this _channels, null, context)
 	}
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
 		super(size, context)
@@ -44,7 +44,7 @@ OpenGLES3Bgra: class extends GpuBgra {
 		this backend generateMipmap()
 	}
 	toRasterDefault: func -> RasterImage {
-		buffer := this canvas readPixels(4)
+		buffer := this canvas readPixels(this _channels)
 		result := RasterBgra new(buffer, this size)
 		result
 	}

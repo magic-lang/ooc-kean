@@ -26,7 +26,6 @@ import OpenGLES3/Fbo, OpenGLES3/Quad, OpenGLES3/Texture, OpenGLES3Bgr, OpenGLES3
 OpenGLES3Canvas: class extends GpuCanvas {
 	_renderTarget: Fbo
 	_map: OpenGLES3MapDefault
-
 	init: func (map: GpuMap, context: GpuContext) {
 		super(context)
 		this _map = map as OpenGLES3MapDefault
@@ -47,6 +46,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _renderTarget clearColor(clearColor)
 		surface := OpenGLES3Surface create(this _context)
 		surface draw(image, this _map, this _size)
+		surface drawLines(transform, image size)
 		surface recycle()
 		this _renderTarget clearColor(0.0f)
 		this _unbind()
@@ -131,7 +131,6 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 	}
 	draw: func ~Yuv420Semiplanar (image: OpenGLES3Yuv420Semiplanar, transform: FloatTransform2D) {
 		this _y draw(image y, transform)
-		//this _y drawLines(transform, image size)
 		this _uv draw(image uv, transform)
 	}
 	draw: func (image: Image, transform := FloatTransform2D identity) {

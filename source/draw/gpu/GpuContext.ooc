@@ -40,5 +40,8 @@ GpuContext: abstract class {
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
 		gpuImage toRasterDefault()
 	}
+	toRaster: func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) {
+		gpuImage toRasterDefault(rasterImage)
+	}
 	getDefaultMap: abstract func (gpuImage: GpuImage) -> GpuMap
 }

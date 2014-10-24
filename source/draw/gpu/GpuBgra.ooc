@@ -19,6 +19,6 @@ import GpuPacked, GpuContext
 
 GpuBgra: abstract class extends GpuPacked {
 	init: func (size: IntSize2D, context: GpuContext) {
-		super(size, context)
+		super(size, 4, context)
 	}
 }
