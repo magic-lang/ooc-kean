@@ -43,7 +43,7 @@ OpenGLES3Bgra: class extends GpuBgra {
 	generateMipmap: func {
 		this backend generateMipmap()
 	}
-	toRaster: func -> RasterImage {
+	toRasterDefault: func -> RasterImage {
 		buffer := this canvas readPixels(4)
 		result := RasterBgra new(buffer, this size)
 		result

@@ -41,7 +41,7 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 	generateMipmap: func {
 		this backend generateMipmap()
 	}
-	toRaster: func -> RasterImage {
+	toRasterDefault: func -> RasterImage {
 		buffer := this canvas readPixels(1)
 		result := RasterMonochrome new(buffer, this size)
 		result

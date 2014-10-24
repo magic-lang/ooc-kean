@@ -15,45 +15,58 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-draw-gpu
+use ooc-opengl
 use ooc-draw
 use ooc-math
-import GpuPacker, GpuMapAndroid
-
-DummyWindow: class {
-	_context: Context
-	_yPacker, _uvPacker, _scaledPacker: GpuPacker
-	init: /* internal */ func
-	_generate: /* private */ func (other: Context) -> Bool {
-		this _context = Context create(other)
-		result: UInt = this _context makeCurrent()
-		setShaderSources()
-		result == 1
+import GpuPacker, GpuMapAndroid, GpuPackerBin, EglRgba
+AndroidContext: class extends OpenGLES3Context {
+	_packMonochrome: OpenGLES3MapPackMonochrome
+	_packUv: OpenGLES3MapPackUv
+	_packerBin: GpuPackerBin
+	init: func {
+		super()
+		this _packMonochrome = OpenGLES3MapPackMonochrome new()
+		this _packUv = OpenGLES3MapPackUv new()
+		this _packerBin = GpuPackerBin new()
 	}
-	create: static func (other: DummyWindow)-> This {
-		result := This new()
-		success := false
-		if(other != null)
-			success = result _generate(other _context)
-		else
-			success = result _generate(null)
-
-		if(success) {
-			result _yPacker = GpuPacker new(result _context, IntSize2D new(1920 / 4, 1080), 1)
-			result _uvPacker = GpuPacker new(result _context, IntSize2D new(1920 / 4, 1080 / 2), 2)
-			result _scaledPacker = GpuPacker new(result _context, IntSize2D new(768 / 4, 480), 1)
+	toRaster: func (gpuImage: GpuImage) -> RasterImage {
+		result := null
+		if(gpuImage instanceOf?(GpuYuv420Semiplanar)) {
+			raster := RasterYuv420Semiplanar new(gpuImage size)
+			semiPlanar := gpuImage as GpuYuv420Semiplanar
+			yPacker := createPacker(semiPlanar y size, 1)
+			yPacker pack(semiPlanar y, this _packMonochrome, raster y)
+			yPacker recycle()
+			uvPacker := createPacker(semiPlanar uv size, 2)
+			uvPacker pack(semiPlanar uv, this _packUv, raster uv)
+			uvPacker recycle()
+			result = raster
 		}
-		success ? result : null
-	}
-	dispose: func {
-		this _yPacker dispose()
-		this _uvPacker dispose()
-		this _scaledPacker dispose()
-		this _context dispose()
-	}
-	packPyramid: func ~monochrome (image: RasterMonochrome, count: Int) -> Pointer {
-		result := this _yPacker packPyramid(image, count)
 		result
 	}
+	recycle: func ~GpuPacker (packer: GpuPacker) {
+		this _packerBin add(packer)
+	}
+	createPacker: func (size: IntSize2D, bytesPerPixel: UInt) -> GpuPacker {
+		result := this _packerBin find(size, bytesPerPixel)
+		if (result == null) {
+			//result = GpuPacker new(size, bytesPerPixel, this)
+		}
+		result
+	}
+	createEglRgba: func (size: IntSize2D) -> EglRgba {
+		EglRgba new(this _backend _eglDisplay, size)
+	}
+}
+
+AndroidContextManager: class extends GpuContextManager {
+	init: func {
+		setShaderSources()
+	}
+	_createContext: func -> GpuContext {
+		AndroidContext new()
+	}
+	/*
 	copyPixels: func ~Monochrome (image: GpuMonochrome, destination: RasterMonochrome) {
 		this _scaledPacker pack(image)
 		yPixels := this _scaledPacker lock()
@@ -84,6 +97,5 @@ DummyWindow: class {
 		}
 		this _uvPacker unlock()
 	}
-	_clear: func
-	_bind: func
+	*/
 }

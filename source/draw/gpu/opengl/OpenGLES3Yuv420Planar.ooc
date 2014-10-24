@@ -41,7 +41,7 @@ OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 		this _u bind(unit + 1)
 		this _v bind(unit + 2)
 	}
-	toRaster: func -> RasterImage {
+	toRasterDefault: func -> RasterImage {
 		y := this _y toRaster()
 		u := this _u toRaster()
 		v := this _v toRaster()
