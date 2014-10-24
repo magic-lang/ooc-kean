@@ -18,15 +18,15 @@ import FloatExtension
 import FloatSize2D
 import text/StringTokenizer
 import structs/ArrayList
+import IntPoint2D
 
 FloatPoint2D: cover {
 	x, y: Float
 	norm ::= (this x squared() + this y squared()) sqrt()
 	azimuth ::= this y atan2(this x)
+	asIntPoint2D ::= IntPoint2D new(this x floor() as Int, this y floor() as Int)
 	init: func@ (=x, =y)
 	init: func@ ~default { this init(0.0f, 0.0f) }
-	basisX: static This { get { This new(1, 0) } }
-	basisY: static This { get { This new(0, 1) } }
 	pNorm: func (p: Float) -> Float {
 		p == 1 ?
 		this x abs() + this y abs() :
@@ -68,6 +68,8 @@ FloatPoint2D: cover {
 		array := input split(',')
 		This new(array[0] toFloat(), array[1] toFloat())
 	}
+	basisX: static This { get { This new(1, 0) } }
+	basisY: static This { get { This new(0, 1) } }
 }
 operator * (left: Float, right: FloatPoint2D) -> FloatPoint2D { FloatPoint2D new(left * right x, left * right y) }
 operator / (left: Float, right: FloatPoint2D) -> FloatPoint2D { FloatPoint2D new(left / right x, left / right y) }
