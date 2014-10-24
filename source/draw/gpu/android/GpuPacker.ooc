@@ -58,7 +58,18 @@ GpuPacker: class {
 		Fbo finish()
 		this _renderTarget unbind()
 		resultPixels := this _targetTexture lock()
-		memcpy(destination pointer, resultPixels, this _internalSize width * this _internalSize height * 4)
+		if(this _targetTexture isPadded()) {
+			destinationPointer := destination pointer
+			destinationStride := destination stride
+			paddedBytes := this _targetTexture getPadding()
+			for(row in 0..image size height) {
+				sourceRow := resultPixels + row * (image size width + paddedBytes)
+				destinationRow := destinationPointer + row * destinationStride
+				memcpy(destinationRow, sourceRow, image size width)
+			}
+		}
+		else
+			memcpy(destination pointer, resultPixels, this _internalSize width * this _internalSize height * 4)
 		this _targetTexture unlock()
 	}
 }
