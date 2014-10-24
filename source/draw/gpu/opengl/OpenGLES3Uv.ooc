@@ -41,7 +41,7 @@ OpenGLES3Uv: class extends GpuUv {
 		this backend generateMipmap()
 	}
 	toRasterDefault: func -> RasterImage {
-		buffer := this canvas readPixels(2)
+		buffer := this canvas readPixels(this _channels)
 		result := RasterUv new(buffer, this size)
 		result
 	}
