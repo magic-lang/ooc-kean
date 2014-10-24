@@ -17,7 +17,7 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import GpuImageBin, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Map
+import GpuImageBin, OpenGLES3Surface, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Map
 import OpenGLES3/Context, OpenGLES3/NativeWindow
 
 OpenGLES3Context: class extends GpuContext {
@@ -98,10 +98,13 @@ OpenGLES3Context: class extends GpuContext {
 		}
 		result
 	}
+	createSurface: func -> GpuSurface {
+		result := this getSurface()
+		if(result == null)
+			result = OpenGLES3Surface create(this)
+		result
+	}
 	update: func {
 		this _backend swapBuffers()
-	}
-	toRaster: func (gpuImage: GpuImage) {
-		raise("Not implemented")
 	}
 }
