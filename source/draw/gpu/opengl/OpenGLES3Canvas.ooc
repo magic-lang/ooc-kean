@@ -26,6 +26,7 @@ import OpenGLES3/Fbo, OpenGLES3/Quad, OpenGLES3/Texture, OpenGLES3Bgr, OpenGLES3
 OpenGLES3Canvas: class extends GpuCanvas {
 	_renderTarget: Fbo
 	_map: OpenGLES3MapDefault
+	clearColor := 0.0f
 	init: func (map: GpuMap, context: GpuContext) {
 		super(context)
 		this _map = map as OpenGLES3MapDefault
@@ -37,18 +38,19 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _map transform = transform
 		this _map imageSize = image size
 		this _map screenSize = image size
-		clearColor := 0.0f
-		if (image instanceOf?(OpenGLES3Uv)) {
-			this _map transform  = transform setTranslation(FloatSize2D new (transform g / 2.0f, transform h / 2.0f))
-			clearColor = 0.5f
-		}
 		this _bind()
-		this _renderTarget clearColor(clearColor)
+		this _renderTarget clearColor(this clearColor)
 		surface := OpenGLES3Surface create(this _context)
 		surface draw(image, this _map, this _size)
-		surface drawLines(transform, image size)
 		surface recycle()
 		this _renderTarget clearColor(0.0f)
+		this _unbind()
+	}
+	drawLines: func (transform: FloatTransform2D, size: IntSize2D) {
+		this _bind()
+		surface := OpenGLES3Surface create(this _context)
+		surface drawLines(transform, size)
+		surface recycle()
 		this _unbind()
 	}
 	_bind: func {
@@ -126,12 +128,10 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 		this _y dispose()
 		this _uv dispose()
 	}
-	draw: func ~noTransform (image: Image) {
-		this draw(image, FloatTransform2D identity)
-	}
 	draw: func ~Yuv420Semiplanar (image: OpenGLES3Yuv420Semiplanar, transform: FloatTransform2D) {
 		this _y draw(image y, transform)
-		this _uv draw(image uv, transform)
+		scaledTransform := transform setTranslation(FloatSize2D new (transform g / 2.0f, transform h / 2.0f))
+		this _uv draw(image uv, scaledTransform)
 	}
 	draw: func (image: Image, transform := FloatTransform2D identity) {
 		if (image instanceOf?(RasterYuv420Semiplanar)) {

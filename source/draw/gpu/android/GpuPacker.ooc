@@ -63,13 +63,15 @@ GpuPacker: class {
 			destinationStride := destination stride
 			paddedBytes := this _targetTexture getPadding()
 			for(row in 0..image size height) {
-				sourceRow := resultPixels + row * (image size width + paddedBytes)
+				sourceRow := resultPixels + row * (image size width * image channels + paddedBytes)
 				destinationRow := destinationPointer + row * destinationStride
 				memcpy(destinationRow, sourceRow, image size width)
 			}
 		}
-		else
+		else {
 			memcpy(destination pointer, resultPixels, this _internalSize width * this _internalSize height * 4)
+		}
+
 		this _targetTexture unlock()
 	}
 }

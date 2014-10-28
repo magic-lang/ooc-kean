@@ -39,6 +39,7 @@ GpuImage: abstract class extends Image {
 	_backend: Pointer
 	_context: GpuContext
 	_channels: Int
+	channels: Int { get { this _channels } }
 	init: func (=size, =_channels, =_context)
 	bind: abstract func (unit: UInt)
 	recycle: func {

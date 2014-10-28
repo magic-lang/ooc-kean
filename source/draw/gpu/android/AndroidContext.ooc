@@ -13,7 +13,6 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-use ooc-android-debug
 use ooc-draw-gpu
 use ooc-opengl
 use ooc-draw
@@ -24,37 +23,53 @@ AndroidContext: class extends OpenGLES3Context {
 	_packUv: OpenGLES3MapPackUv
 	_packerBin: GpuPackerBin
 	init: func {
-		super()
+		super(func { this onDispose() })
 		this _packMonochrome = OpenGLES3MapPackMonochrome new()
 		this _packUv = OpenGLES3MapPackUv new()
 		this _packerBin = GpuPackerBin new()
 	}
+	onDispose: func {
+		this _packerBin dispose()
+		this _packMonochrome dispose()
+		this _packUv dispose()
+	}
 	toRaster: func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) {
-		if(gpuImage instanceOf?(GpuYuv420Semiplanar)) {
-			printAndroid("Packing YUV420")
+		if (gpuImage instanceOf?(GpuYuv420Semiplanar)) {
 			rasterYuv420Semiplanar := rasterImage as RasterYuv420Semiplanar
 			semiPlanar := gpuImage as GpuYuv420Semiplanar
 			yPacker := createPacker(semiPlanar y size, 1)
-			//yPacker pack(semiPlanar y, this _packMonochrome, rasterYuv420Semiplanar y)
+			yPacker pack(semiPlanar y, this _packMonochrome, rasterYuv420Semiplanar y)
 			yPacker recycle()
 			uvPacker := createPacker(semiPlanar uv size, 2)
-			//uvPacker pack(semiPlanar uv, this _packUv, rasterYuv420Semiplanar uv)
+			uvPacker pack(semiPlanar uv, this _packUv, rasterYuv420Semiplanar uv)
 			uvPacker recycle()
 		}
+		else
+			raise("Using toRaster on unimplemented image format")
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
 		result := null
-		if(gpuImage instanceOf?(GpuYuv420Semiplanar)) {
+		if (gpuImage instanceOf?(GpuYuv420Semiplanar)) {
 			raster := RasterYuv420Semiplanar new(gpuImage size)
 			semiPlanar := gpuImage as GpuYuv420Semiplanar
-			yPacker := createPacker(semiPlanar y size, 1)
+			yPacker := this createPacker(semiPlanar y size, 1)
 			yPacker pack(semiPlanar y, this _packMonochrome, raster y)
 			yPacker recycle()
-			uvPacker := createPacker(semiPlanar uv size, 2)
+			uvPacker := this createPacker(semiPlanar uv size, 2)
 			uvPacker pack(semiPlanar uv, this _packUv, raster uv)
 			uvPacker recycle()
 			result = raster
 		}
+		else if (gpuImage instanceOf?(GpuMonochrome)) {
+			raster := RasterMonochrome new(gpuImage size)
+			monochrome := gpuImage as GpuMonochrome
+			yPacker := this createPacker(monochrome size, 1)
+			yPacker pack(monochrome, this _packMonochrome, raster)
+			yPacker recycle()
+			result = raster
+		}
+		else
+			raise("Using toRaster on unimplemented image format")
 		result
 	}
 	recycle: func ~GpuPacker (packer: GpuPacker) {
