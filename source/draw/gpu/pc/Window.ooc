@@ -35,13 +35,20 @@ Window: class extends OpenGLES3Context {
 	init: /* internal */ func (=size, title: String) {
 		setShaderSources()
 		this _native = X11Window create(size width, size height, title)
-		super(this _native)
+		super(this _native, func { this onDispose() })
 		this _surface = OpenGLES3Surface create(this)
 		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new()
 		this _bgrToBgra = OpenGLES3MapBgrToBgra new()
 		this _bgraToBgra = OpenGLES3MapBgra new()
 		this _yuvPlanarToBgra = OpenGLES3MapYuvPlanarToBgra new()
 		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new()
+	}
+	onDispose: func {
+		this _bgrToBgra dispose()
+		this _bgraToBgra dispose()
+		this _yuvPlanarToBgra dispose()
+		this _yuvSemiplanarToBgra dispose()
+		this _surface dispose()
 	}
 	getMap: func (image: GpuImage) -> OpenGLES3MapDefault {
 		result := match(image) {
