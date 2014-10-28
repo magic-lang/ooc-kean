@@ -63,8 +63,8 @@ OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
 			result = This new(y, uv, context)
 		}
 		else {
-			(result _y as OpenGLES3Monochrome) backend uploadPixels(rasterImage y pointer)
-			(result _uv as OpenGLES3Uv) backend uploadPixels(rasterImage uv pointer)
+			(result _y as OpenGLES3Monochrome) backend uploadPixels(rasterImage y pointer, rasterImage y stride)
+			(result _uv as OpenGLES3Uv) backend uploadPixels(rasterImage uv pointer, rasterImage uv stride)
 		}
 		result
 	}
