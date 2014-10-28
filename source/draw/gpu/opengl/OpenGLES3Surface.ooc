@@ -77,9 +77,10 @@ OpenGLES3Surface: class extends GpuSurface {
 				raise("Couldnt match image type in OpenGLES3Surface")
 		}
 	}
-	drawLines: func (transform: FloatTransform2D, screenSize: IntSize2D) {
+	drawLines: func (transform: FloatTransform2D, screenSize: IntSize2D, offset := IntSize2D new()) {
 		if (this traceDrawer == null)
 			this traceDrawer = TraceDrawer new(screenSize)
+		Fbo setViewport(offset width, offset height, screenSize width, screenSize height)
 		this traceDrawer add(transform)
 		this traceDrawer draw()
 	}
