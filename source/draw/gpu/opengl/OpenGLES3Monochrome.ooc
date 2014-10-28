@@ -55,7 +55,7 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 	create: static func ~fromRaster (rasterImage: RasterMonochrome, context: GpuContext) -> This {
 		result := context getImage(GpuImageType monochrome, rasterImage size) as This
 		if (result != null)
-			result backend uploadPixels(rasterImage pointer)
+			result backend uploadPixels(rasterImage pointer, rasterImage stride)
 		else
 			result = This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
 		result

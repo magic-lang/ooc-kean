@@ -69,9 +69,9 @@ OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 			result = This new(y, u, v, context)
 		}
 		else {
-			(result _y as OpenGLES3Monochrome) backend uploadPixels(rasterImage y pointer)
-			(result _u as OpenGLES3Monochrome) backend uploadPixels(rasterImage u pointer)
-			(result _v as OpenGLES3Monochrome) backend uploadPixels(rasterImage v pointer)
+			(result _y as OpenGLES3Monochrome) backend uploadPixels(rasterImage y pointer, rasterImage y stride)
+			(result _u as OpenGLES3Monochrome) backend uploadPixels(rasterImage u pointer, rasterImage u stride)
+			(result _v as OpenGLES3Monochrome) backend uploadPixels(rasterImage v pointer, rasterImage v stride)
 		}
 		result
 	}

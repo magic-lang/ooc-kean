@@ -29,9 +29,6 @@ OpenGLES3Bgra: class extends GpuBgra {
 		super(size, context)
 		this _backend = Texture create(TextureType bgra, size width, size height, stride, data) as Pointer
 	}
-	replace: func (image: RasterBgra) {
-		this backend uploadPixels(image pointer)
-	}
 	bind: func (unit: UInt) {
 		this backend bind (unit)
 	}
@@ -57,7 +54,7 @@ OpenGLES3Bgra: class extends GpuBgra {
 	create: static func ~fromRaster (rasterImage: RasterBgra, context: GpuContext) -> This {
 		result := context getImage(GpuImageType bgra, rasterImage size) as This
 		if (result != null)
-			result backend uploadPixels(rasterImage pointer)
+			result backend uploadPixels(rasterImage pointer, rasterImage stride)
 		else
 			result = This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
 		result
