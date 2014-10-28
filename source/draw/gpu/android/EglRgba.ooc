@@ -46,7 +46,4 @@ EglRgba: class {
 	isPadded: func -> Bool {
 		this _stride > this _size width * this _channels
 	}
-	getPadding: func -> Int {
-		this _stride - this _size width * this _channels
-	}
 }
