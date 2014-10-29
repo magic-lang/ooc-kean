@@ -38,7 +38,9 @@ GpuImage: abstract class extends Image {
 	_canvas: GpuCanvas
 	_backend: Pointer
 	_context: GpuContext
-	init: func (=size, =_context)
+	_channels: Int
+	channels: Int { get { this _channels } }
+	init: func (=size, =_channels, =_context)
 	bind: abstract func (unit: UInt)
 	recycle: func {
 		this _context recycle(this)
@@ -65,7 +67,14 @@ GpuImage: abstract class extends Image {
 	distance: func (other: This) -> Float {
 		raise("Using unimplemented function distance in GpuImage class")
 	}
-	toRaster: abstract func -> RasterImage
+	toRaster: func -> RasterImage {
+		this _context toRaster(this)
+	}
+	toRaster: func ~overwrite (rasterImage: RasterImage) {
+		this _context toRaster(this, rasterImage)
+	}
+	toRasterDefault: abstract func ~overwrite (rasterImage: RasterImage)
+	toRasterDefault: abstract func -> RasterImage
 	_createCanvas: abstract func -> GpuCanvas
 
 }

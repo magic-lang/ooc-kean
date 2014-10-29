@@ -41,12 +41,18 @@ OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 		this _u bind(unit + 1)
 		this _v bind(unit + 2)
 	}
-	toRaster: func -> RasterImage {
+	toRasterDefault: func -> RasterImage {
 		y := this _y toRaster()
 		u := this _u toRaster()
 		v := this _v toRaster()
 		result := RasterYuv420Planar new(y as RasterMonochrome, u as RasterMonochrome, v as RasterMonochrome)
 		result
+	}
+	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
+		planar := rasterImage as RasterYuv420Planar
+		this _y toRasterDefault(planar y)
+		this _u toRasterDefault(planar u)
+		this _v toRasterDefault(planar v)
 	}
 	resizeTo: func (size: IntSize2D) -> This {
 		target := OpenGLES3Yuv420Planar create(size, this _context)
@@ -63,9 +69,9 @@ OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 			result = This new(y, u, v, context)
 		}
 		else {
-			(result _y as OpenGLES3Monochrome) backend uploadPixels(rasterImage y pointer)
-			(result _u as OpenGLES3Monochrome) backend uploadPixels(rasterImage u pointer)
-			(result _v as OpenGLES3Monochrome) backend uploadPixels(rasterImage v pointer)
+			(result _y as OpenGLES3Monochrome) backend uploadPixels(rasterImage y pointer, rasterImage y stride)
+			(result _u as OpenGLES3Monochrome) backend uploadPixels(rasterImage u pointer, rasterImage u stride)
+			(result _v as OpenGLES3Monochrome) backend uploadPixels(rasterImage v pointer, rasterImage v stride)
 		}
 		result
 	}

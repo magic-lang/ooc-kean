@@ -37,11 +37,16 @@ OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
 		this _y bind(unit)
 		this _uv bind(unit + 1)
 	}
-	toRaster: func -> RasterImage {
+	toRasterDefault: func -> RasterImage {
 		y := this _y toRaster()
 		uv := this _uv toRaster()
 		result := RasterYuv420Semiplanar new(y as RasterMonochrome, uv as RasterUv)
 		result
+	}
+	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
+		semiPlanar := rasterImage as RasterYuv420Semiplanar
+		this _y toRasterDefault(semiPlanar y)
+		this _uv toRasterDefault(semiPlanar uv)
 	}
 	resizeTo: func (size: IntSize2D) -> This {
 		target := OpenGLES3Yuv420Semiplanar create(size, this _context)
@@ -58,8 +63,8 @@ OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
 			result = This new(y, uv, context)
 		}
 		else {
-			(result _y as OpenGLES3Monochrome) backend uploadPixels(rasterImage y pointer)
-			(result _uv as OpenGLES3Uv) backend uploadPixels(rasterImage uv pointer)
+			(result _y as OpenGLES3Monochrome) backend uploadPixels(rasterImage y pointer, rasterImage y stride)
+			(result _uv as OpenGLES3Uv) backend uploadPixels(rasterImage uv pointer, rasterImage uv stride)
 		}
 		result
 	}

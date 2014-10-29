@@ -23,7 +23,7 @@ GpuContext: abstract class {
 		this _imageBin = GpuImageBin new()
 		this _surfaceBin = GpuSurfaceBin new()
 	}
-
+	dispose: abstract func
 	createMonochrome: abstract func (size: IntSize2D) -> GpuMonochrome
 	createBgr: abstract func (size: IntSize2D) -> GpuBgr
 	createBgra: abstract func (size: IntSize2D) -> GpuBgra
@@ -36,6 +36,12 @@ GpuContext: abstract class {
 	recycle: abstract func ~surface (surface: GpuSurface)
 	getImage: abstract func (type: GpuImageType, size: IntSize2D) -> GpuImage
 	getSurface: abstract func -> GpuSurface
-	toRaster: abstract func (gpuImage: GpuImage) -> RasterImage
+	createSurface: abstract func -> GpuSurface
+	toRaster: func (gpuImage: GpuImage) -> RasterImage {
+		gpuImage toRasterDefault()
+	}
+	toRaster: func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) {
+		gpuImage toRasterDefault(rasterImage)
+	}
 	getDefaultMap: abstract func (gpuImage: GpuImage) -> GpuMap
 }

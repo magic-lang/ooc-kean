@@ -23,14 +23,11 @@ import OpenGLES3/Texture, OpenGLES3Canvas
 OpenGLES3Bgra: class extends GpuBgra {
 	backend: Texture { get { this _backend as Texture } }
 	init: func (size: IntSize2D, context: GpuContext) {
-		init(size, size width * 4, null, context)
+		init(size, size width * this _channels, null, context)
 	}
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
 		super(size, context)
 		this _backend = Texture create(TextureType bgra, size width, size height, stride, data) as Pointer
-	}
-	replace: func (image: RasterBgra) {
-		this backend uploadPixels(image pointer)
 	}
 	bind: func (unit: UInt) {
 		this backend bind (unit)
@@ -43,8 +40,8 @@ OpenGLES3Bgra: class extends GpuBgra {
 	generateMipmap: func {
 		this backend generateMipmap()
 	}
-	toRaster: func -> RasterImage {
-		buffer := this canvas readPixels(4)
+	toRasterDefault: func -> RasterImage {
+		buffer := this canvas readPixels(this _channels)
 		result := RasterBgra new(buffer, this size)
 		result
 	}
@@ -57,7 +54,7 @@ OpenGLES3Bgra: class extends GpuBgra {
 	create: static func ~fromRaster (rasterImage: RasterBgra, context: GpuContext) -> This {
 		result := context getImage(GpuImageType bgra, rasterImage size) as This
 		if (result != null)
-			result backend uploadPixels(rasterImage pointer)
+			result backend uploadPixels(rasterImage pointer, rasterImage stride)
 		else
 			result = This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
 		result

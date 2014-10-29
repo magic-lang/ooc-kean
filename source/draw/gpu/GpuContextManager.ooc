@@ -16,6 +16,7 @@
 
 use ooc-draw
 use ooc-math
+import GpuContext, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuImage, GpuSurface, GpuMap
 
 pthread_self: extern func -> Long
 
@@ -25,7 +26,7 @@ GpuContextManager: abstract class extends GpuContext {
 	_threadIdentifiers: Int[]
 	init: func (=MAX_CONTEXTS) {
 		this _threadIdentifiers = Int[this MAX_CONTEXTS] new()
-		this _contexts = OpenGLES3Context[this MAX_CONTEXTS] new()
+		this _contexts = GpuContext[this MAX_CONTEXTS] new()
 	}
 	_getContext: func -> GpuContext {
 		threadIdentifier := pthread_self()
@@ -82,10 +83,19 @@ GpuContextManager: abstract class extends GpuContext {
 	getImage: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
 		this _getContext() getImage(type, size)
 	}
+	createSurface: func -> GpuSurface {
+		this _getContext() createSurface()
+	}
 	getSurface: func -> GpuSurface {
 		this _getContext() getSurface()
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
 		this _getContext() toRaster(gpuImage)
+	}
+	toRaster: func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) {
+		this _getContext() toRaster(gpuImage, rasterImage)
+	}
+	getDefaultMap: func (gpuImage: GpuImage) -> GpuMap {
+		this _getContext() getDefaultMap(gpuImage)
 	}
 }

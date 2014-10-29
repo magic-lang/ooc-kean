@@ -13,7 +13,6 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
@@ -32,15 +31,12 @@ OpenGLES3Surface: class extends GpuSurface {
 	dispose: func {
 		this _quad dispose()
 	}
+	clear: func
 	draw: func ~gpuimage (image: GpuImage, map: GpuMap, resolution: IntSize2D, offset := IntSize2D new()) {
 		Fbo setViewport(offset width, offset height, resolution width, resolution height)
-		this bind()
-		this clear()
 		map use()
 		image bind(0)
 		this _quad draw()
-		this unbind()
-		this update()
 	}
 	draw: func (image: Image, map: GpuMap, resolution: IntSize2D, offset := IntSize2D new()) {
 		match (image) {
@@ -81,19 +77,13 @@ OpenGLES3Surface: class extends GpuSurface {
 				raise("Couldnt match image type in OpenGLES3Surface")
 		}
 	}
-	drawLines: func (transform: FloatTransform2D, screenSize: IntSize2D) {
+	drawLines: func (transform: FloatTransform2D, screenSize: IntSize2D, offset := IntSize2D new()) {
 		if (this traceDrawer == null)
 			this traceDrawer = TraceDrawer new(screenSize)
-		this bind()
+		Fbo setViewport(offset width, offset height, screenSize width, screenSize height)
 		this traceDrawer add(transform)
 		this traceDrawer draw()
-		this unbind()
-		this update()
 	}
-	clear: func
-	bind: func
-	unbind: func
-	update: func
 	create: static func (context: GpuContext)-> This {
 		result := context getSurface() as This
 		if(result == null)

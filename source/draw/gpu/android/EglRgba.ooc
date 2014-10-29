@@ -24,20 +24,26 @@ EglRgba: class {
 	id: Int { get { this _id } }
 	_stride: Int
 	stride: Int { get { this _stride } }
+	_size: IntSize2D
+	_channels := 4
 	init: func (eglDisplay: Pointer, size: IntSize2D) {
+		this _size = size
 		this _texture = Texture create(TextureType rgba, size width, size height, size width, null, false)
 		this _id = createEGLImage(size width, size height, eglDisplay)
-		this _stride = getStride(this _id)
+		this _stride = getStride(this _id) * this _channels
 	}
 	dispose: func {
 		this texture dispose()
 		destroyEGLImage(this id)
 	}
-	lock: func -> Pointer {
-		result := lockPixels(this id)
+	lock: func -> UInt8* {
+		result := lockPixels(this id) as UInt8*
 		result
 	}
 	unlock: func {
 		unlockPixels(this id)
+	}
+	isPadded: func -> Bool {
+		this _stride > this _size width * this _channels
 	}
 }

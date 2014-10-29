@@ -19,64 +19,59 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-base
 use ooc-opengl
-import math, EglRgba
+import math, EglRgba, AndroidContext
 
-GpuPacker: abstract class {
-	_packMonochrome: GpuMapPackMonochrome
-	_surface: OpenGLES3Surface
-	_packUv: GpuMapPackUv
+GpuPacker: class {
 	_renderTarget: Fbo
 	_targetTexture: EglRgba
-	_pyramidBuffer: UInt8*
-	_context: Context
-	_bytesPerPixel: Int
-	init: func (context: Context, resolution: IntSize2D, bytesPerPixel: Int) {
-		this size = resolution
+	_context: AndroidContext
+	_size: IntSize2D
+	size: IntSize2D { get { this _size } }
+	_internalSize: IntSize2D
+	_bytesPerPixel: UInt
+	bytesPerPixel: UInt { get { this _bytesPerPixel } }
+	init: func (size: IntSize2D, bytesPerPixel: UInt, context: AndroidContext) {
 		this _bytesPerPixel = bytesPerPixel
-		this _packMonochrome = GpuMapPackMonochrome new()
-		this _packUv = GpuMapPackUv new()
-		this _quad = Quad create()
 		this _context = context
-		this _surface = OpenGLES3Surface new()
+		this _size = size
+		this _internalSize = IntSize2D new(size width * bytesPerPixel / 4, size height)
+		this _bytesPerPixel = bytesPerPixel
+		this _targetTexture = context createEglRgba(this _internalSize)
+		this _renderTarget = Fbo create(this _targetTexture texture, this _internalSize width, this _internalSize height)
+	}
+	recycle: func {
+		this _context recycle(this)
 	}
 	dispose: func {
 		this _targetTexture dispose()
 		this _renderTarget dispose()
-		this _packMonochrome dispose()
-		this _packUv dispose()
 	}
-	pack: func ~monochrome (image: GpuMonochrome) {
-		this _packMonochrome transform = FloatTransform2D identity
-		this _packMonochrome imageSize = image size
-		this _packMonochrome screenSize = image size
-		this _surface draw(image, this _packMonochrome)
-		result := this _targetTexture lock()
-		result
-	}
-	pack: func ~uv (image: GpuUv) {
-		this _packUv transform = FloatTransform2D identity
-		this _packUv imageSize = image size
-		this _packUv screenSize = image size
-		this _surface draw(image, this _packUv)
-		result := this _targetTexture lock()
-		result
-	}
-	unlock: func {
-		this _targetTexture unlock()
-	}
-	_bind: func {
+	pack: func (image: GpuImage, map: OpenGLES3MapDefault, destination: RasterImage) {
+		map transform = FloatTransform2D identity
+		map imageSize = image size
+		map screenSize = image size
 		this _renderTarget bind()
-	}
-	_unbind: func {
-		this _renderTarget unbind()
-	}
-	_clear: func {
 		this _renderTarget clear()
-	}
-	_update: func {
+		surface := this _context createSurface()
+		surface draw(image, map, this _internalSize)
+		surface recycle()
 		Fbo finish()
-	}
-	_setResolution: func (resolution: IntSize2D) {
-		Fbo setViewport(0, 0, resolution width * this _bytesPerPixel / 4, resolution height)
+		this _renderTarget unbind()
+		sourcePointer := this _targetTexture lock()
+		destinationPointer := destination pointer
+		destinationStride := destination stride
+		sourceStride := this _targetTexture stride
+		if (sourceStride == destinationStride) {
+			memcpy(destinationPointer, sourcePointer, destinationStride * destination size height)
+		}
+		else {
+			for(row in 0..image size height) {
+				sourceRow := sourcePointer + row * sourceStride
+				destinationRow := destinationPointer + row * destinationStride
+				memcpy(destinationRow, sourceRow, destinationStride)
+			}
+		}
+
+		this _targetTexture unlock()
 	}
 }

@@ -15,7 +15,6 @@
 * along with This software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
@@ -41,8 +40,8 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 	generateMipmap: func {
 		this backend generateMipmap()
 	}
-	toRaster: func -> RasterImage {
-		buffer := this canvas readPixels(1)
+	toRasterDefault: func -> RasterImage {
+		buffer := this canvas readPixels(this _channels)
 		result := RasterMonochrome new(buffer, this size)
 		result
 	}
@@ -55,7 +54,7 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 	create: static func ~fromRaster (rasterImage: RasterMonochrome, context: GpuContext) -> This {
 		result := context getImage(GpuImageType monochrome, rasterImage size) as This
 		if (result != null)
-			result backend uploadPixels(rasterImage pointer)
+			result backend uploadPixels(rasterImage pointer, rasterImage stride)
 		else
 			result = This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
 		result
