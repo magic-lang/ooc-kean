@@ -185,16 +185,16 @@ setShaderSources: func {
 			for (float i = 0.0; i <= max; i = i + stepsize) {\n
 				increase = increase + (level / height);\n
 			}\n
-			return vec2(coordinate.x * level - trunc(coordinate.x * level), coordinate.y * level * 2.0 - trunc(coordinate.y * level * 2.0) + increase);\n
+			return vec2(coordinate.x * level - trunc(coordinate.x * level), coordinate.y * pow(level,2.0) - trunc(coordinate.y * pow(level,2.0)) + increase);\n
 		}\n
 		void main() {\n
 			if ((0.0 <= fragmentTextureCoordinate.y) && (fragmentTextureCoordinate.y <= 0.25) ) {\n
 				outColor = texture(texture0, makeCoordsFor(1.0, 0.5, 2.0, fragmentTextureCoordinate)).r;\n
 			}\n
-			else if ((0.25 <= fragmentTextureCoordinate.y) && (fragmentTextureCoordinate.y <= 0.375 )) {\n
+			else if ((0.25 <= fragmentTextureCoordinate.y) && (fragmentTextureCoordinate.y <= 0.3125 )) {\n
 				outColor = texture(texture0, makeCoordsFor(1.0, 0.25, 4.0, fragmentTextureCoordinate)).r;\n
 			}\n
-			else if ((0.375 <= fragmentTextureCoordinate.y) && (fragmentTextureCoordinate.y <= 0.4375)) {\n
+			else if ((0.3125 <= fragmentTextureCoordinate.y) && (fragmentTextureCoordinate.y <= 0.328125)) {\n
 				outColor = texture(texture0, makeCoordsFor(1.0, 0.125, 8.0, fragmentTextureCoordinate)).r;\n
 			}\n
 			else {\n
