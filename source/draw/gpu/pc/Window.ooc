@@ -87,7 +87,6 @@ Window: class extends OpenGLES3Context {
 		surface := OpenGLES3Surface create(this)
 		surface draw(image, map, image size, offset)
 		surface recycle()
-
 	}
 	bind: /* internal */ func {
 		this _native bind()
