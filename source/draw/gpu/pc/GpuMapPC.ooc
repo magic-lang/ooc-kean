@@ -182,7 +182,7 @@ setShaderSources: func {
 			outColor = texture(texture0, makeCoordsFor(1.0, 0.125, 8.0, fragmentTextureCoordinate)).rgb;\n
 		}\n
 		else {\n
-			outColor = vec3(0.0,0.0,0.0);\n
+			outColor = vec3(0.0, 0.0, 0.0);\n
 		}\n
 	}\n";
 }

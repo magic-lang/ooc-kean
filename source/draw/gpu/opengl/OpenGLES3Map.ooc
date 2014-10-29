@@ -184,11 +184,11 @@ OpenGLES3MapPackUv: class extends OpenGLES3MapDefault {
 
 OpenGLES3MapPyramidGeneration: class extends OpenGLES3MapDefault {
 	init: func {
-			super(This fragmentSource,
-				func {
-					this _program setUniform("texture0", 0)
+		super(This fragmentSource,
+			func {
+				this _program setUniform("texture0", 0)
 					this _program setUniform("height", this imageSize height as Float)
-				})
+			})
 	}
 	fragmentSource: static String
 }
