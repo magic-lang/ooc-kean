@@ -82,6 +82,12 @@ Window: class extends OpenGLES3Context {
 		else if (image instanceOf?(GpuImage))
 			this draw(image as GpuImage, transform)
 	}
+	draw: func ~shader(image: GpuImage, map: GpuMap) {
+		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
+		surface := OpenGLES3Surface create(this)
+		surface draw(image, map, image size, offset)
+		surface recycle()
+	}
 	bind: /* internal */ func {
 		this _native bind()
 	}
