@@ -175,30 +175,30 @@ setShaderSources: func {
 			outColor = color.r;\n
 		}\n";
 	OpenGLES3MapPyramidGeneration fragmentSource =
-	"#version 300 es\n
-	uniform sampler2D texture0;\n
-	in vec2 fragmentTextureCoordinate;\n
-	uniform float height;\n
-	out float outColor;\n
-	vec2 makeCoordsFor(float max, float stepsize, float level, vec2 coordinate) {\n
-		float increase = 0.0;\n
-		for (float i = 0.0; i <= max; i = i + stepsize) {\n
-			increase = increase + (level / height);\n
+		"#version 300 es\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;\n
+		uniform float height;\n
+		out float outColor;\n
+		vec2 makeCoordsFor(float max, float stepsize, float level, vec2 coordinate) {\n
+			float increase = 0.0;\n
+			for (float i = 0.0; i <= max; i = i + stepsize) {\n
+				increase = increase + (level / height);\n
+			}\n
+			return vec2(coordinate.x * level - trunc(coordinate.x * level), coordinate.y * level * 2.0 - trunc(coordinate.y * level * 2.0) + increase);\n
 		}\n
-		return vec2(coordinate.x * level - trunc(coordinate.x * level), coordinate.y * level * 2.0 - trunc(coordinate.y * level * 2.0) + increase);\n
-	}\n
-	void main() {\n
-		if ((0.0 <= fragmentTextureCoordinate.y) && (fragmentTextureCoordinate.y <= 0.25) ) {\n
-			outColor = texture(texture0, makeCoordsFor(1.0, 0.5, 2.0, fragmentTextureCoordinate)).r;\n
-		}\n
-		else if ((0.25 <= fragmentTextureCoordinate.y) && (fragmentTextureCoordinate.y <= 0.375 )) {\n
-			outColor = texture(texture0, makeCoordsFor(1.0, 0.25, 4.0, fragmentTextureCoordinate)).r;\n
-		}\n
-		else if ((0.375 <= fragmentTextureCoordinate.y) && (fragmentTextureCoordinate.y <= 0.4375)) {\n
-			outColor = texture(texture0, makeCoordsFor(1.0, 0.125, 8.0, fragmentTextureCoordinate)).r;\n
-		}\n
-		else {\n
-			outColor = 0.0f;\n
-		}\n
-	}\n";
+		void main() {\n
+			if ((0.0 <= fragmentTextureCoordinate.y) && (fragmentTextureCoordinate.y <= 0.25) ) {\n
+				outColor = texture(texture0, makeCoordsFor(1.0, 0.5, 2.0, fragmentTextureCoordinate)).r;\n
+			}\n
+			else if ((0.25 <= fragmentTextureCoordinate.y) && (fragmentTextureCoordinate.y <= 0.375 )) {\n
+				outColor = texture(texture0, makeCoordsFor(1.0, 0.25, 4.0, fragmentTextureCoordinate)).r;\n
+			}\n
+			else if ((0.375 <= fragmentTextureCoordinate.y) && (fragmentTextureCoordinate.y <= 0.4375)) {\n
+				outColor = texture(texture0, makeCoordsFor(1.0, 0.125, 8.0, fragmentTextureCoordinate)).r;\n
+			}\n
+			else {\n
+				outColor = 0.0f;\n
+			}\n
+		}\n";
 }
