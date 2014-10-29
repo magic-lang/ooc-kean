@@ -50,6 +50,29 @@ AndroidContext: class extends OpenGLES3Context {
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
 		result := null
 		if (gpuImage instanceOf?(GpuYuv420Semiplanar)) {
+			semiPlanar := gpuImage as GpuYuv420Semiplanar
+			yPacker := this createPacker(semiPlanar y size, 1)
+			yBuffer := yPacker pack(semiPlanar y, this _packMonochrome)
+			uvPacker := this createPacker(semiPlanar uv size, 2)
+			uvBuffer := uvPacker pack(semiPlanar uv, this _packUv)
+			yRaster := RasterMonochrome new(yBuffer, semiPlanar size, 64)
+			uvRaster := RasterUv new(uvBuffer, semiPlanar size / 2, 64)
+			result = RasterYuv420Semiplanar new(yRaster, uvRaster)
+		}
+		else if (gpuImage instanceOf?(GpuMonochrome)) {
+			monochrome := gpuImage as GpuMonochrome
+			yPacker := this createPacker(monochrome size, 1)
+			buffer := yPacker pack(monochrome, this _packMonochrome)
+			raster := RasterMonochrome new(buffer, monochrome size, 64)
+			result = raster
+		}
+		else
+			raise("Using toRaster on unimplemented image format")
+		result
+	}
+	toRasterCopy: func (gpuImage: GpuImage) -> RasterImage {
+		result := null
+		if (gpuImage instanceOf?(GpuYuv420Semiplanar)) {
 			raster := RasterYuv420Semiplanar new(gpuImage size)
 			semiPlanar := gpuImage as GpuYuv420Semiplanar
 			yPacker := this createPacker(semiPlanar y size, 1)
