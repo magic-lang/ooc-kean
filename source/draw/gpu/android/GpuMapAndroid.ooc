@@ -176,7 +176,6 @@ setShaderSources: func {
 		}\n";
 	OpenGLES3MapPyramidGeneration fragmentSource =
 		"#version 300 es\n
-		precision highp float;\n
 		uniform sampler2D texture0;\n
 		uniform float height;\n
 		uniform float level;\n
