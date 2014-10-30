@@ -69,8 +69,10 @@ OpenGLES3Context: class extends GpuContext {
 	getPyramidMap: func (gpuImage: GpuImage) -> GpuMap {
 		result := match(gpuImage) {
 			case (i : OpenGLES3Monochrome) => this _pyramidMapMonochrome
-			case => raise("Trying to get Pyramid map for invalid image type")
+			case => null
 		}
+		if (result == null)
+			raise("Trying to get Pyramid map for invalid image type")
 		result
 	}
 	getDefaultMap: func (gpuImage: GpuImage) -> GpuMap {
