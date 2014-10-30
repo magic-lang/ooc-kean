@@ -46,11 +46,11 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _renderTarget clearColor(0.0f)
 		this _unbind()
 	}
-	draw: func ~withmap (image: Image, map: GpuMap, transform := FloatTransform2D identity) {
+	draw: func ~withmap (image: Image, map: GpuMap, offset := IntSize2D new()) {
 		this _bind()
 		this _renderTarget clearColor(this clearColor)
 		surface := this _context createSurface()
-		surface draw(image, map, this _size)
+		surface draw(image, map, this _size, offset)
 		surface recycle()
 		this _renderTarget clearColor(0.0f)
 		this _unbind()
