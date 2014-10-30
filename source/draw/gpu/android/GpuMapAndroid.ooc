@@ -180,22 +180,19 @@ setShaderSources: func {
 		in vec2 fragmentTextureCoordinate;\n
 		uniform float height;\n
 		out float outColor;\n
-		vec2 makeCoordsFor(float max, float stepsize, float level, vec2 coordinate) {\n
-			float increase = 0.0;\n
-			for (float i = 0.0; i <= max; i = i + stepsize) {\n
-				increase = increase + (level / height);\n
-			}\n
-			return vec2(coordinate.x * level - trunc(coordinate.x * level), coordinate.y * pow(level,2.0) - trunc(coordinate.y * pow(level,2.0)) + increase);\n
+		vec2 makeCoords(float level, float levelSquare, vec2 coordinate) {\n
+			float increase =  levelSquare / height;\n
+			return vec2(coordinate.x * level - trunc(coordinate.x * level), coordinate.y * levelSquare - trunc(coordinate.y * levelSquare) + increase);\n
 		}\n
 		void main() {\n
-			if ((0.0 <= fragmentTextureCoordinate.y) && (fragmentTextureCoordinate.y <= 0.25) ) {\n
-				outColor = texture(texture0, makeCoordsFor(1.0, 0.5, 2.0, fragmentTextureCoordinate)).r;\n
+			if (fragmentTextureCoordinate.y <= 0.25 ) {\n
+				outColor = texture(texture0, makeCoords(2.0, 4.0, fragmentTextureCoordinate)).r;\n
 			}\n
-			else if ((0.25 <= fragmentTextureCoordinate.y) && (fragmentTextureCoordinate.y <= 0.3125 )) {\n
-				outColor = texture(texture0, makeCoordsFor(1.0, 0.25, 4.0, fragmentTextureCoordinate)).r;\n
+			else if (fragmentTextureCoordinate.y <= 0.3125) {\n
+				outColor = texture(texture0, makeCoords(4.0, 16.0, fragmentTextureCoordinate)).r;\n
 			}\n
-			else if ((0.3125 <= fragmentTextureCoordinate.y) && (fragmentTextureCoordinate.y <= 0.328125)) {\n
-				outColor = texture(texture0, makeCoordsFor(1.0, 0.125, 8.0, fragmentTextureCoordinate)).r;\n
+			else if (fragmentTextureCoordinate.y <= 0.328125) {\n
+				outColor = texture(texture0, makeCoords(8.0, 64.0, fragmentTextureCoordinate)).r;\n
 			}\n
 			else {\n
 				outColor = 0.0f;\n
