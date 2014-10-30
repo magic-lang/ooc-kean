@@ -37,10 +37,10 @@ AndroidContext: class extends OpenGLES3Context {
 		if (gpuImage instanceOf?(GpuYuv420Semiplanar)) {
 			rasterYuv420Semiplanar := rasterImage as RasterYuv420Semiplanar
 			semiPlanar := gpuImage as GpuYuv420Semiplanar
-			yPacker := createPacker(semiPlanar y size, 1)
+			yPacker := this createPacker(semiPlanar y size, 1)
 			yPacker pack(semiPlanar y, this _packMonochrome, rasterYuv420Semiplanar y)
 			yPacker recycle()
-			uvPacker := createPacker(semiPlanar uv size, 2)
+			uvPacker := this createPacker(semiPlanar uv size, 2)
 			uvPacker pack(semiPlanar uv, this _packUv, rasterYuv420Semiplanar uv)
 			uvPacker recycle()
 		}
