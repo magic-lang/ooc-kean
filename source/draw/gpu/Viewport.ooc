@@ -13,17 +13,19 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
 use ooc-math
-use ooc-draw
-import GpuMap, GpuContext, Viewport
-
-GpuSurface: abstract class {
-	size: IntSize2D
-	_context: GpuContext
-	init: func (=_context)
-	draw: abstract func (image: Image, map: GpuMap, viewport: Viewport)
-	clear: abstract func
-	recycle: abstract func
-	dispose: abstract func
+Viewport: class {
+	resolution: IntSize2D { get set }
+	offset: IntSize2D { get set }
+	init: func (offsetX: Int, offsetY: Int, resolutionX: Int, resolutionY: Int) {
+		this resolution = IntSize2D new(resolutionX, resolutionY)
+		this offset = IntSize2D new(offsetX, offsetY)
+	}
+	init: func ~resolutionOnly (resolution: IntSize2D) {
+		this resolution = resolution
+		this offset = IntSize2D new()
+	}
+	toString: func -> String {
+		"Resolution: " + this resolution toString() + " Offset: " + this offset toString()
+	}
 }

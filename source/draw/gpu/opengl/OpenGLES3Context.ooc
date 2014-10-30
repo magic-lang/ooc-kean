@@ -17,6 +17,7 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
+use ooc-opengl
 import GpuImageBin, OpenGLES3Surface, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Map
 import OpenGLES3/Context, OpenGLES3/NativeWindow
 
@@ -127,5 +128,8 @@ OpenGLES3Context: class extends GpuContext {
 	}
 	update: func {
 		this _backend swapBuffers()
+	}
+	setViewport: func (viewport: Viewport) {
+		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
 	}
 }

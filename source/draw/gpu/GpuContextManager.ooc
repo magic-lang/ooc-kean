@@ -16,7 +16,7 @@
 
 use ooc-draw
 use ooc-math
-import GpuContext, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuImage, GpuSurface, GpuMap
+import GpuContext, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuImage, GpuSurface, GpuMap, Viewport
 
 pthread_self: extern func -> Long
 
@@ -100,5 +100,8 @@ GpuContextManager: abstract class extends GpuContext {
 	}
 	getPyramidMap : func (gpuImage: GpuImage) -> GpuMap {
 		this _getContext() getPyramidMap(gpuImage)
+	}
+	setViewport: func (viewport: Viewport) {
+		this _getContext() setViewport(viewport)
 	}
 }
