@@ -43,34 +43,9 @@ OpenGLES3Surface: class extends GpuSurface {
 			case (i: GpuImage) => {
 				this draw(image as GpuImage, map, resolution, offset)
 			}
-			case (i: RasterMonochrome) => {
-				temp := OpenGLES3Monochrome create(image as RasterMonochrome, this _context)
-				this draw(image as RasterMonochrome, map, resolution, offset)
-				temp recycle()
-			}
-			case (i: RasterBgr) => {
-				temp := OpenGLES3Bgr create(image as RasterBgr, this _context)
-				this draw(image as RasterBgr, map, resolution, offset)
-				temp recycle()
-			}
-			case (i: RasterBgra) => {
-				temp := OpenGLES3Bgra create(image as RasterBgra, this _context)
-				this draw(image as RasterBgra, map, resolution, offset)
-				temp recycle()
-			}
-			case (i: RasterUv) => {
-				temp := OpenGLES3Uv create(image as RasterUv, this _context)
-				this draw(image as RasterUv, map, resolution, offset)
-				temp recycle()
-			}
-			case (i: RasterYuv420Semiplanar) => {
-				temp := OpenGLES3Yuv420Semiplanar create(image as RasterYuv420Semiplanar, this _context)
-				this draw(image as RasterYuv420Semiplanar, map, resolution, offset)
-				temp recycle()
-			}
-			case (i: RasterYuv420Planar) => {
-				temp := OpenGLES3Yuv420Planar create(image as RasterYuv420Planar, this _context)
-				this draw(image as RasterYuv420Planar, map, resolution, offset)
+			case (i: RasterImage) => {
+				temp := this _context createGpuImage(image as RasterImage)
+				this draw(temp, map, resolution, offset)
 				temp recycle()
 			}
 			case =>
