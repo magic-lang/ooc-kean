@@ -48,6 +48,8 @@ AndroidContext: class extends OpenGLES3Context {
 			raise("Using toRaster on unimplemented image format")
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
+		if (gpuImage size width == 1920)
+			return toRasterCopy(gpuImage)
 		result := null
 		if (gpuImage instanceOf?(GpuYuv420Semiplanar)) {
 			semiPlanar := gpuImage as GpuYuv420Semiplanar
