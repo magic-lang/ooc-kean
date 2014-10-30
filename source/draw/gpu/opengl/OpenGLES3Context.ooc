@@ -26,6 +26,7 @@ OpenGLES3Context: class extends GpuContext {
 	_bgraMap: OpenGLES3MapBgra
 	_monochromeMap: OpenGLES3MapMonochrome
 	_uvMap: OpenGLES3MapUv
+	_pyramidMapMonochrome: OpenGLES3MapPyramidGeneration
 	_onDispose: Func
 
 	init: func (context: Context) {
@@ -34,6 +35,7 @@ OpenGLES3Context: class extends GpuContext {
 		this _bgraMap = OpenGLES3MapBgra new()
 		this _monochromeMap = OpenGLES3MapMonochrome new()
 		this _uvMap = OpenGLES3MapUv new()
+		this _pyramidMapMonochrome = OpenGLES3MapPyramidGeneration new()
 		this _backend = context
 	}
 	init: func ~unshared (onDispose: Func) {
@@ -63,6 +65,12 @@ OpenGLES3Context: class extends GpuContext {
 	}
 	recycle: func ~surface (surface: GpuSurface) {
 		this _surfaceBin add(surface)
+	}
+	getPyramidMap: func (gpuImage: GpuImage) -> GpuMap {
+		result := match(gpuImage) {
+			case (i : OpenGLES3Monochrome) => this _pyramidMapMonochrome
+		}
+		result
 	}
 	getDefaultMap: func (gpuImage: GpuImage) -> GpuMap {
 		result := match(gpuImage) {
