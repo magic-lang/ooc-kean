@@ -29,6 +29,7 @@ import RasterBgr
 import StbImage
 import io/File
 import io/FileReader
+import io/Reader
 import io/FileWriter
 import io/BinarySequence
 
@@ -199,12 +200,12 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		seq writer close()
 	}
 	openBin: static func (filename: String, width: Int, height: Int) -> This {
-		file := File new(filename)
-		fileReader := FileReader new(file)
+		fileReader := FileReader new(FStream open(filename, "rb"))
 		bytes := width * height + (width * height / 2)
 		data: UInt8* = gc_malloc_atomic(bytes)
 		fileReader read((data as Char*), 0, bytes)
 		fileReader close()
+		fileReader free()
 		buffer := ByteBuffer new(bytes, data as UInt8*)
 		This new(buffer, IntSize2D new(width, height))
 	}

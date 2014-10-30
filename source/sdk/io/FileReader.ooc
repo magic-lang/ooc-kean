@@ -9,7 +9,7 @@ import io/[Reader, File]
  */
 FileReader: class extends Reader {
 
-    fileName := "<stream>"
+    fileName: String
     
     /** The underlying file descriptor */
     file: FStream

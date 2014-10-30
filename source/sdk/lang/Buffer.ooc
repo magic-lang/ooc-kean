@@ -12,7 +12,7 @@ Buffer: class extends Iterable<Char> {
     size: Int
 
     /** capacity of the buffer, in bytes, e.g. how much bytes we can store before resizing. */
-    capacity: Int
+    capacity: Int = 0
 
     /**
      * Original pointer to the allocated memory - a reference is kept here
@@ -61,8 +61,13 @@ Buffer: class extends Iterable<Char> {
             capacity = 0
         } else {
     	    setLength(length)
-            memcpy(data, s, length) 
-        }        
+            memcpy(data, s, length)
+        }
+    }
+    
+    __destroy__: func {
+    	if (this data != null)
+	    	gc_free(this data)
     }
 
     /**
