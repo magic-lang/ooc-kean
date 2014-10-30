@@ -177,8 +177,8 @@ setShaderSources: func {
 	OpenGLES3MapPyramidGeneration fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n
-		in vec2 fragmentTextureCoordinate;\n
 		uniform float height;\n
+		in vec2 fragmentTextureCoordinate;\n
 		out float outColor;\n
 		vec2 makeCoords(float level, float levelSquare, vec2 coordinate) {\n
 			float increase =  levelSquare / height;\n

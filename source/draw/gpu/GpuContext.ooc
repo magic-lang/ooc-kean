@@ -44,4 +44,5 @@ GpuContext: abstract class {
 		gpuImage toRasterDefault(rasterImage)
 	}
 	getDefaultMap: abstract func (gpuImage: GpuImage) -> GpuMap
+	getPyramidMap: abstract func (gpuImage: GpuImage) -> GpuMap
 }
