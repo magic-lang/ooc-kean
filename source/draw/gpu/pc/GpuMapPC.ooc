@@ -157,4 +157,29 @@ setShaderSources: func {
 		void main() {\n
 			outColor = vec4(color.r, color.g, color.b, 1.0f);\n
 		}\n";
+	OpenGLES3MapPyramidGeneration fragmentSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;\n
+		uniform float height;\n
+		out vec3 outColor;\n
+		vec2 makeCoords(float level, float levelSquare, vec2 coordinate) {\n
+			float increase =  levelSquare / height;\n
+			return vec2(coordinate.x * level - trunc(coordinate.x * level), coordinate.y * levelSquare - trunc(coordinate.y * levelSquare) + increase);\n
+		}\n
+		void main() {\n
+			if (fragmentTextureCoordinate.y <= 0.25 ) {\n
+				outColor = texture(texture0, makeCoords(2.0, 4.0, fragmentTextureCoordinate)).rgb;\n
+			}\n
+			else if (fragmentTextureCoordinate.y <= 0.3125) {\n
+				outColor = texture(texture0, makeCoords(4.0, 16.0, fragmentTextureCoordinate)).rgb;\n
+			}\n
+			else if (fragmentTextureCoordinate.y <= 0.328125) {\n
+				outColor = texture(texture0, makeCoords(8.0, 64.0, fragmentTextureCoordinate)).rgb;\n
+			}\n
+			else {\n
+				outColor = vec3(0.0, 0.0, 0.0);\n
+			}\n
+		}\n";
 }

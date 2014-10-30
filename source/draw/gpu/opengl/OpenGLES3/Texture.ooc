@@ -32,16 +32,14 @@ Texture: class {
 	backend: UInt { get { this _backend } }
 	width: UInt
 	height: UInt
-	_stride: UInt
 	type: TextureType
 	format: UInt
 	internalFormat: UInt
 	_bytesPerPixel: UInt
 
-	init: func~nullTexture (type: TextureType, width: UInt, height: UInt, stride: UInt) {
+	init: func~nullTexture (type: TextureType, width: UInt, height: UInt) {
 		this width = width
 		this height = height
-		this _stride = stride
 		this type = type
 		this _setInternalFormats(type)
 	}
@@ -60,8 +58,8 @@ Texture: class {
 	unbind: func {
 		glBindTexture(GL_TEXTURE_2D, 0)
 	}
-	uploadPixels: func(pixels: Pointer) {
-		pixelStride := this _stride / this _bytesPerPixel
+	uploadPixels: func(pixels: Pointer, stride: Int) {
+		pixelStride := stride / this _bytesPerPixel
 		glBindTexture(GL_TEXTURE_2D, _backend)
 		if (pixelStride != this width) {
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
@@ -100,7 +98,7 @@ Texture: class {
 				raise("Unknown texture format")
 		}
 	}
-	_generate: func (pixels: Pointer, allocate := true) -> Bool {
+	_generate: func (pixels: Pointer, stride: Int, allocate := true) -> Bool {
 		glGenTextures(1, _backend&)
 		glBindTexture(GL_TEXTURE_2D, _backend)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
@@ -108,7 +106,7 @@ Texture: class {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
 		if (allocate) {
-			pixelStride := this _stride / this _bytesPerPixel
+			pixelStride := stride / this _bytesPerPixel
 			if (pixelStride != this width) {
 				glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
 			}
@@ -118,8 +116,8 @@ Texture: class {
 		true
 	}
 	create: static func (type: TextureType, width: UInt, height: UInt, stride: UInt, pixels := null, allocate : Bool = true) -> This {
-		result := Texture new(type, width, height, stride)
-		success := result _generate(pixels, allocate)
+		result := Texture new(type, width, height)
+		success := result _generate(pixels, stride, allocate)
 		success ? result : null
 	}
 

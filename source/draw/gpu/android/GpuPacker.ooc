@@ -46,6 +46,24 @@ GpuPacker: class {
 		this _targetTexture dispose()
 		this _renderTarget dispose()
 	}
+	pack: func ~ByteBuffer (image: GpuImage, map: OpenGLES3MapDefault) -> ByteBuffer {
+		map transform = FloatTransform2D identity
+		map imageSize = image size
+		map screenSize = image size
+		this _renderTarget bind()
+		this _renderTarget clear()
+		surface := this _context createSurface()
+		surface draw(image, map, this _internalSize)
+		surface recycle()
+		Fbo finish()
+		this _renderTarget unbind()
+		sourcePointer := this _targetTexture lock()
+		buffer := ByteBuffer new(this _targetTexture stride * image size height, sourcePointer,
+			func (buffer: ByteBuffer){ this _targetTexture unlock()
+						 this recycle()
+						})
+		buffer
+	}
 	pack: func (image: GpuImage, map: OpenGLES3MapDefault, destination: RasterImage) {
 		map transform = FloatTransform2D identity
 		map imageSize = image size
@@ -57,19 +75,19 @@ GpuPacker: class {
 		surface recycle()
 		Fbo finish()
 		this _renderTarget unbind()
-		resultPixels := this _targetTexture lock()
-		if(this _targetTexture isPadded()) {
-			destinationPointer := destination pointer
-			destinationStride := destination stride
-			paddedBytes := this _targetTexture getPadding()
-			for(row in 0..image size height) {
-				sourceRow := resultPixels + row * (image size width * image channels + paddedBytes)
-				destinationRow := destinationPointer + row * destinationStride
-				memcpy(destinationRow, sourceRow, image size width)
-			}
+		sourcePointer := this _targetTexture lock()
+		destinationPointer := destination pointer
+		destinationStride := destination stride
+		sourceStride := this _targetTexture stride
+		if (sourceStride == destinationStride) {
+			memcpy(destinationPointer, sourcePointer, destinationStride * destination size height)
 		}
 		else {
-			memcpy(destination pointer, resultPixels, this _internalSize width * this _internalSize height * 4)
+			for(row in 0..image size height) {
+				sourceRow := sourcePointer + row * sourceStride
+				destinationRow := destinationPointer + row * destinationStride
+				memcpy(destinationRow, sourceRow, destinationStride)
+			}
 		}
 
 		this _targetTexture unlock()
