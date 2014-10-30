@@ -98,4 +98,7 @@ GpuContextManager: abstract class extends GpuContext {
 	getDefaultMap: func (gpuImage: GpuImage) -> GpuMap {
 		this _getContext() getDefaultMap(gpuImage)
 	}
+	getPyramidMap : func (gpuImage: GpuImage) -> GpuMap {
+		this _getContext() getPyramidMap(gpuImage)
+	}
 }
