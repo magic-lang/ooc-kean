@@ -32,6 +32,7 @@ AndroidContext: class extends OpenGLES3Context {
 		this _packerBin dispose()
 		this _packMonochrome dispose()
 		this _packUv dispose()
+		EglRgba disposeAll()
 	}
 	toRaster: func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) {
 		if (gpuImage instanceOf?(GpuYuv420Semiplanar)) {
