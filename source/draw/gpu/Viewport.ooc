@@ -13,7 +13,9 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 use ooc-math
+
 Viewport: class {
 	resolution: IntSize2D { get set }
 	offset: IntSize2D { get set }
