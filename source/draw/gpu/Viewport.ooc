@@ -25,6 +25,7 @@ Viewport: class {
 		this resolution = resolution
 		this offset = IntSize2D new()
 	}
+	init: func ~both (=offset, =resolution)
 	toString: func -> String {
 		"Resolution: " + this resolution toString() + " Offset: " + this offset toString()
 	}
