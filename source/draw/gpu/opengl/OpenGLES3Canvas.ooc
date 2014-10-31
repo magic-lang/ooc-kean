@@ -41,7 +41,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _bind()
 		this _renderTarget clearColor(this clearColor)
 		surface := this _context createSurface()
-		viewport := Viewport new(image size)
+		viewport := Viewport new(this _size)
 		surface draw(image, this _defaultMap, viewport)
 		surface recycle()
 		this _renderTarget clearColor(0.0f)
