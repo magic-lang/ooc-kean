@@ -4,4 +4,5 @@ extern void destroyEGLImage(int index);
 extern void* lockPixels(int index);
 extern void unlockPixels(int index);
 extern int getStride(int index);
+extern void destroyAll();
 #endif /* EGLIMAGEIMPORT_H_ */

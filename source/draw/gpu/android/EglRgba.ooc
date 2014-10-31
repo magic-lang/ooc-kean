@@ -46,4 +46,7 @@ EglRgba: class {
 	isPadded: func -> Bool {
 		this _stride > this _size width * this _channels
 	}
+	disposeAll: static func {
+		destroyAll()
+	}
 }
