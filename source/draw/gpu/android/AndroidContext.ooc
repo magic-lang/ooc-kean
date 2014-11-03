@@ -19,13 +19,10 @@ use ooc-draw
 use ooc-math
 import GpuPacker, GpuMapAndroid, GpuPackerBin, EglRgba
 AndroidContext: class extends OpenGLES3Context {
-	_packMonochrome: OpenGLES3MapPackMonochrome
-	_packUv: OpenGLES3MapPackUv
 	_packerBin: GpuPackerBin
 	init: func {
 		super(func { this onDispose() })
-		this _packMonochrome = OpenGLES3MapPackMonochrome new()
-		this _packUv = OpenGLES3MapPackUv new()
+
 		this _packerBin = GpuPackerBin new()
 	}
 	onDispose: func {

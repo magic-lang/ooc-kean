@@ -28,6 +28,8 @@ OpenGLES3Context: class extends GpuContext {
 	_monochromeMap: OpenGLES3MapMonochrome
 	_uvMap: OpenGLES3MapUv
 	_pyramidMapMonochrome: OpenGLES3MapPyramidGeneration
+	_packMonochrome: OpenGLES3MapPackMonochrome
+	_packUv: OpenGLES3MapPackUv
 	_onDispose: Func
 
 	init: func (context: Context) {
@@ -37,6 +39,8 @@ OpenGLES3Context: class extends GpuContext {
 		this _monochromeMap = OpenGLES3MapMonochrome new()
 		this _uvMap = OpenGLES3MapUv new()
 		this _pyramidMapMonochrome = OpenGLES3MapPyramidGeneration new()
+		this _packMonochrome = OpenGLES3MapPackMonochrome new()
+		this _packUv = OpenGLES3MapPackUv new()
 		this _backend = context
 	}
 	init: func ~unshared (onDispose: Func) {
@@ -57,6 +61,7 @@ OpenGLES3Context: class extends GpuContext {
 		this _bgraMap dispose()
 		this _monochromeMap dispose()
 		this _uvMap dispose()
+		this _pyramidMapMonochrome
 		this _imageBin dispose()
 		this _surfaceBin dispose()
 		this _backend dispose()
@@ -67,61 +72,133 @@ OpenGLES3Context: class extends GpuContext {
 	recycle: func ~surface (surface: GpuSurface) {
 		this _surfaceBin add(surface)
 	}
-	getPyramidMap: func (gpuImage: GpuImage) -> GpuMap {
-		result := match(gpuImage) {
-			case (i : OpenGLES3Monochrome) => this _pyramidMapMonochrome
+	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) {
+		result := match (mapType) {
+			case GpuMapType defaultmap =>
+				match (gpuImage) {
+					case (i : GpuMonochrome) => this _monochromeMap
+					case (i : GpuUv) => this _uvMap
+					case (i : GpuBgr) => this _bgrMap
+					case (i : GpuBgra) => this _bgraMap
+					case => null
+				}
+			case GpuMapType pyramid =>
+				match (gpuImage) {
+					case (i : GpuMonochrome) => this _pyramidMapMonochrome
+					case => null
+				}
+			case GpuMapType pack =>
+				match (gpuImage) {
+					case (i : GpuMonochrome) => this _packMonochrome
+					case (i : GpuUv) => this _packUv
+					case => null
+				}
 			case => null
 		}
 		if (result == null)
-			raise("Trying to get Pyramid map for invalid image type")
+			raise("Could not find Map implementation of specified type")
 		result
 	}
-	getDefaultMap: func (gpuImage: GpuImage) -> GpuMap {
-		result := match(gpuImage) {
-			case (i : OpenGLES3Bgr) => this _bgrMap
-			case (i : OpenGLES3Bgra) => this _bgraMap
-			case (i : OpenGLES3Monochrome) => this _monochromeMap
-			case (i : OpenGLES3Uv) => this _uvMap
-		}
-		result
-	}
-	getImage: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
+	searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
 		this _imageBin find(type, size)
 	}
-	getSurface: func -> GpuSurface {
-		this _surfaceBin find()
-	}
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
-		OpenGLES3Monochrome create(size, this)
+		result := this searchImageBin(GpuImageType monochrome, size)
+		if (result == null)
+			result = OpenGLES3Monochrome create(size, this)
+		result
+	}
+	_createMonochrome: func (raster: RasterMonochrome) -> GpuImage {
+		result := this searchImageBin(GpuImageType monochrome, raster size)
+		if (result == null)
+			result = OpenGLES3Monochrome create(raster, this)
+		else
+			result upload(raster)
+		result
 	}
 	createUv: func (size: IntSize2D) -> GpuImage {
-		OpenGLES3Uv create(size, this)
+		result := this searchImageBin(GpuImageType uv, size)
+		if (result == null)
+			result = OpenGLES3Uv create(size, this)
+		result
+	}
+	_createUv: func (raster: RasterUv) -> GpuImage {
+		result := this searchImageBin(GpuImageType uv, raster size)
+		if (result == null)
+			result = OpenGLES3Uv create(raster, this)
+		else
+			result upload(raster)
+		result
 	}
 	createBgr: func (size: IntSize2D) -> GpuImage {
-		OpenGLES3Bgr create(size, this)
+		result := this searchImageBin(GpuImageType bgr, size)
+		if (result == null)
+			result = OpenGLES3Bgr create(size, this)
+		result
+	}
+	_createBgr: func (raster: RasterBgr) -> GpuImage {
+		result := this searchImageBin(GpuImageType bgr, raster size)
+		if (result == null)
+			result = OpenGLES3Bgr create(raster, this)
+		else
+			result upload(raster)
+		result
 	}
 	createBgra: func (size: IntSize2D) -> GpuImage {
-		OpenGLES3Bgra create(size, this)
+		result := this searchImageBin(GpuImageType bgra, size)
+		if (result == null)
+			result = OpenGLES3Bgra create(size, this)
+		result
+	}
+	_createBgra: func (raster: RasterBgra) -> GpuImage {
+		result := this searchImageBin(GpuImageType bgra, raster size)
+		if (result == null)
+			result = OpenGLES3Bgra create(raster, this)
+		else
+			result upload(raster)
+		result
 	}
 	createYuv420Semiplanar: func (size: IntSize2D) -> GpuImage {
-		OpenGLES3Yuv420Semiplanar create(size, this)
+		result := this searchImageBin(GpuImageType yuvSemiplanar, size)
+		if (result == null)
+			result = OpenGLES3Yuv420Semiplanar create(size, this)
+		result
+	}
+	_createYuv420Semiplanar: func (raster: RasterYuv420Semiplanar) -> GpuImage {
+		result := this searchImageBin(GpuImageType yuvSemiplanar, raster size)
+		if (result == null)
+			result = OpenGLES3Yuv420Semiplanar create(raster, this)
+		else
+			result upload(raster)
+		result
 	}
 	createYuv420Planar: func (size: IntSize2D) -> GpuImage {
-		OpenGLES3Yuv420Planar create(size, this)
+		result := this searchImageBin(GpuImageType yuvPlanar, size)
+		if (result == null)
+			result = OpenGLES3Yuv420Planar create(size, this)
+		result
+	}
+	_createYuv420Planar: func (raster: RasterYuv420Planar) -> GpuImage {
+		result := this searchImageBin(GpuImageType yuvPlanar, raster size)
+		if (result == null)
+			result = OpenGLES3Yuv420Planar create(raster, this)
+		else
+			result upload(raster)
+		result
 	}
 	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
 		result := match (rasterImage) {
-			case image: RasterMonochrome => OpenGLES3Monochrome create(rasterImage as RasterMonochrome, this)
-			case image: RasterBgr => OpenGLES3Bgr create(rasterImage as RasterBgr, this)
-			case image: RasterBgra => OpenGLES3Bgra create(rasterImage as RasterBgra, this)
-			case image: RasterUv => OpenGLES3Uv create(rasterImage as RasterUv, this)
-			case image: RasterYuv420Semiplanar => OpenGLES3Yuv420Semiplanar create(rasterImage as RasterYuv420Semiplanar, this)
-			case image: RasterYuv420Planar => OpenGLES3Yuv420Planar create(rasterImage as RasterYuv420Planar, this)
+			case image: RasterMonochrome => this _createMonochrome(rasterImage as RasterMonochrome)
+			case image: RasterBgr => this _createBgr(rasterImage as RasterBgr)
+			case image: RasterBgra => this _createBgra(rasterImage as RasterBgra)
+			case image: RasterUv => this _createUv(rasterImage as RasterUv)
+			case image: RasterYuv420Semiplanar => this _createYuv420Semiplanar(rasterImage as RasterYuv420Semiplanar)
+			case image: RasterYuv420Planar => this _createYuv420Planar(rasterImage as RasterYuv420Planar)
 		}
 		result
 	}
 	createSurface: func -> GpuSurface {
-		result := this getSurface()
+		result := this _surfaceBin find()
 		if(result == null)
 			result = OpenGLES3Surface create(this)
 		result

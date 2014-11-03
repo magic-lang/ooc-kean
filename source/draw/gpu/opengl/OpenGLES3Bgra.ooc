@@ -37,6 +37,9 @@ OpenGLES3Bgra: class extends GpuBgra {
 		if (this _canvas != null)
 			this _canvas dispose()
 	}
+	upload: func (raster: RasterImage) {
+		this backend uploadPixels(raster pointer, raster stride)
+	}
 	generateMipmap: func {
 		this backend generateMipmap()
 	}
@@ -52,17 +55,11 @@ OpenGLES3Bgra: class extends GpuBgra {
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterBgra, context: GpuContext) -> This {
-		result := context getImage(GpuImageType bgra, rasterImage size) as This
-		if (result != null)
-			result backend uploadPixels(rasterImage pointer, rasterImage stride)
-		else
-			result = This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
+		result := This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
 		result
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
-		result := context getImage(GpuImageType bgra, size) as This
-		if (result == null)
-			result = This new(size, context)
+		result := This new(size, context)
 		result backend != null ? result : null
 	}
 
