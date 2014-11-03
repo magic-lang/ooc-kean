@@ -189,7 +189,7 @@ OpenGLES3MapPyramidGeneration: class extends OpenGLES3MapDefault {
 			func {
 				this _program setUniform("texture0", 0)
 				this _program setUniform("height", this imageSize height as Float)
-				this _program setUniform("level", this level)
+				this _program setUniform("level", this level as Float)
 			})
 	}
 	fragmentSource: static String
