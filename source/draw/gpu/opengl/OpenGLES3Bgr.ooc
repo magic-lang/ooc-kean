@@ -45,9 +45,8 @@ OpenGLES3Bgr: class extends GpuBgr {
 		this backend generateMipmap()
 	}
 	toRasterDefault: func -> RasterImage {
-		buffer := this canvas readPixels(this _channels)
-		result := RasterBgr new(buffer, this size)
-		result
+		raise("toRaster not implemented for BGR")
+		null
 	}
 	resizeTo: func (size: IntSize2D) -> This {
 		target := OpenGLES3Bgr create(size, this _context)
