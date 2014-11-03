@@ -72,7 +72,7 @@ OpenGLES3Context: class extends GpuContext {
 	recycle: func ~surface (surface: GpuSurface) {
 		this _surfaceBin add(surface)
 	}
-	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) {
+	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap {
 		result := match (mapType) {
 			case GpuMapType defaultmap =>
 				match (gpuImage) {
