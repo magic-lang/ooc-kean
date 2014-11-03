@@ -166,7 +166,6 @@ setShaderSources: func {
 		in vec2 fragmentTextureCoordinate;\n
 		out vec3 outColor;\n
 		void main() {\n
-			float levelSquare = level*level;
 			float xCoordinate = fragmentTextureCoordinate.x * level - trunc(fragmentTextureCoordinate.x*level);
 			float yCoordinate = fragmentTextureCoordinate.y - trunc(fragmentTextureCoordinate.y) + (level / height);
 			vec2 newCoordinates = vec2(xCoordinate,yCoordinate);
