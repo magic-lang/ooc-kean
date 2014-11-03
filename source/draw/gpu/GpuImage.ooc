@@ -46,6 +46,7 @@ GpuImage: abstract class extends Image {
 		this _context recycle(this)
 	}
 	dispose: abstract func
+	upload: abstract func (raster: RasterImage)
 	generateMipmap: func
 
 	//TODO: Implement abstract functions

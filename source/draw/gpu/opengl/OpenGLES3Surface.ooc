@@ -60,9 +60,7 @@ OpenGLES3Surface: class extends GpuSurface {
 		this traceDrawer draw()
 	}
 	create: static func (context: GpuContext)-> This {
-		result := context getSurface() as This
-		if(result == null)
-			result = This new(context)
+		result := This new(context)
 		result
 	}
 }

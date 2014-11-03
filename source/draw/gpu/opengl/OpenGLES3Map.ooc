@@ -194,13 +194,3 @@ OpenGLES3MapPyramidGeneration: class extends OpenGLES3MapDefault {
 	}
 	fragmentSource: static String
 }
-
-OpenGLES3MapScaling: class extends OpenGLES3MapDefault {
-	init: func {
-		super(This fragmentSource,
-			func {
-				this _program setUniform("texture0", 0)
-			})
-	}
-	fragmentSource: static String
-}

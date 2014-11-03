@@ -36,6 +36,12 @@ OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 		this _u dispose()
 		this _v dispose()
 	}
+	upload: func (raster: RasterImage) {
+		planar := raster as RasterYuv420Planar
+		this _y upload(planar y)
+		this _u upload(planar u)
+		this _v upload(planar v)
+	}
 	bind: func (unit: UInt) {
 		this _y bind(unit)
 		this _u bind(unit + 1)
@@ -61,28 +67,18 @@ OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Planar create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterYuv420Planar, context: GpuContext) -> This {
-		result := context getImage(GpuImageType yuvPlanar, rasterImage size) as This
-		if (result == null) {
-			y := OpenGLES3Monochrome create(rasterImage y, context)
-			u := OpenGLES3Monochrome create(rasterImage u, context)
-			v := OpenGLES3Monochrome create(rasterImage v, context)
-			result = This new(y, u, v, context)
-		}
-		else {
-			(result _y as OpenGLES3Monochrome) backend uploadPixels(rasterImage y pointer, rasterImage y stride)
-			(result _u as OpenGLES3Monochrome) backend uploadPixels(rasterImage u pointer, rasterImage u stride)
-			(result _v as OpenGLES3Monochrome) backend uploadPixels(rasterImage v pointer, rasterImage v stride)
-		}
+		y := OpenGLES3Monochrome create(rasterImage y, context)
+		u := OpenGLES3Monochrome create(rasterImage u, context)
+		v := OpenGLES3Monochrome create(rasterImage v, context)
+		result := This new(y, u, v, context)
 		result
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
-		result := context getImage(GpuImageType yuvPlanar, size) as This
-		if (result == null) {
-			result = This new(size, context)
-			result _y = OpenGLES3Monochrome create(size, context)
-			result _u = OpenGLES3Monochrome create(IntSize2D new (size width, size height / 4), context)
-			result _v = OpenGLES3Monochrome create(IntSize2D new (size width, size height / 4), context)
-		}
+		result := This new(size, context)
+		result _y = OpenGLES3Monochrome create(size, context)
+		result _u = OpenGLES3Monochrome create(IntSize2D new (size width, size height / 4), context)
+		result _v = OpenGLES3Monochrome create(IntSize2D new (size width, size height / 4), context)
+
 		result
 	}
 }

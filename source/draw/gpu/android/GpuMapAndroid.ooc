@@ -187,12 +187,4 @@ setShaderSources: func {
 			vec2 newCoordinates = vec2(xCoordinate,yCoordinate);
 			outColor = texture(texture0, newCoordinates).r;\n
 		}\n";
-	OpenGLES3MapScaling fragmentSource =
-		"#version 300 es\n
-		uniform sampler2D texture0;\n
-		in vec2 fragmentTextureCoordinate;\n
-		out float outColor;\n
-		void main() {\n
-			outColor = texture(texture0, fragmentTextureCoordinate).r;\n
-		}\n";
 }
