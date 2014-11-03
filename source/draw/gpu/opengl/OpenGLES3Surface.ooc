@@ -32,37 +32,35 @@ OpenGLES3Surface: class extends GpuSurface {
 		this _quad dispose()
 	}
 	clear: func
-	draw: func ~gpuimage (image: GpuImage, map: GpuMap, resolution: IntSize2D, offset := IntSize2D new()) {
-		Fbo setViewport(offset width, offset height, resolution width, resolution height)
+	draw: func ~gpuimage (image: GpuImage, map: GpuMap, viewport: Viewport) {
+		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
 		map use()
 		image bind(0)
 		this _quad draw()
 	}
-	draw: func (image: Image, map: GpuMap, resolution: IntSize2D, offset := IntSize2D new()) {
+	draw: func (image: Image, map: GpuMap, viewport: Viewport) {
 		match (image) {
 			case (i: GpuImage) => {
-				this draw(image as GpuImage, map, resolution, offset)
+				this draw(image as GpuImage, map, viewport)
 			}
 			case (i: RasterImage) => {
 				temp := this _context createGpuImage(image as RasterImage)
-				this draw(temp, map, resolution, offset)
+				this draw(temp, map, viewport)
 				temp recycle()
 			}
 			case =>
 				raise("Couldnt match image type in OpenGLES3Surface")
 		}
 	}
-	drawLines: func (transform: FloatTransform2D, screenSize: IntSize2D, offset := IntSize2D new()) {
+	drawLines: func (transform: FloatTransform2D, viewport: Viewport) {
 		if (this traceDrawer == null)
-			this traceDrawer = TraceDrawer new(screenSize)
-		Fbo setViewport(offset width, offset height, screenSize width, screenSize height)
+			this traceDrawer = TraceDrawer new(viewport resolution)
+		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
 		this traceDrawer add(transform)
 		this traceDrawer draw()
 	}
 	create: static func (context: GpuContext)-> This {
-		result := context getSurface() as This
-		if(result == null)
-			result = This new(context)
+		result := This new(context)
 		result
 	}
 }

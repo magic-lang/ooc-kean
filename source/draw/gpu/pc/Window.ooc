@@ -67,8 +67,9 @@ Window: class extends OpenGLES3Context {
 		map screenSize = IntSize2D new(image size width, -image size height)
 		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
 		surface := OpenGLES3Surface create(this)
-		surface draw(image, map, image size, offset)
-		surface drawLines(transform, image size, offset)
+		viewport := Viewport new(offset, image size)
+		surface draw(image, map, viewport)
+		surface drawLines(transform, viewport)
 		surface recycle()
 	}
 	draw: func ~RasterImage (image: RasterImage, transform := FloatTransform2D identity) {
@@ -84,8 +85,9 @@ Window: class extends OpenGLES3Context {
 	}
 	draw: func ~shader(image: GpuImage, map: GpuMap) {
 		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
+		viewport := Viewport new(offset, image size)
 		surface := OpenGLES3Surface create(this)
-		surface draw(image, map, image size, offset)
+		surface draw(image, map, viewport)
 		surface recycle()
 	}
 	bind: /* internal */ func {

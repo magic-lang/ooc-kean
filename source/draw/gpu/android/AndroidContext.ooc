@@ -19,19 +19,17 @@ use ooc-draw
 use ooc-math
 import GpuPacker, GpuMapAndroid, GpuPackerBin, EglRgba
 AndroidContext: class extends OpenGLES3Context {
-	_packMonochrome: OpenGLES3MapPackMonochrome
-	_packUv: OpenGLES3MapPackUv
 	_packerBin: GpuPackerBin
 	init: func {
 		super(func { this onDispose() })
-		this _packMonochrome = OpenGLES3MapPackMonochrome new()
-		this _packUv = OpenGLES3MapPackUv new()
+
 		this _packerBin = GpuPackerBin new()
 	}
 	onDispose: func {
 		this _packerBin dispose()
 		this _packMonochrome dispose()
 		this _packUv dispose()
+		EglRgba disposeAll()
 	}
 	toRaster: func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) {
 		if (gpuImage instanceOf?(GpuYuv420Semiplanar)) {
@@ -48,6 +46,8 @@ AndroidContext: class extends OpenGLES3Context {
 			raise("Using toRaster on unimplemented image format")
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
+		if (gpuImage size width == 1920)
+			return toRasterCopy(gpuImage)
 		result := null
 		if (gpuImage instanceOf?(GpuYuv420Semiplanar)) {
 			semiPlanar := gpuImage as GpuYuv420Semiplanar

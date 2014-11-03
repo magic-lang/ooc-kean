@@ -61,9 +61,7 @@ ShaderProgram: class {
 	_compileShaders: func(vertexSource: String, fragmentSource: String) -> Bool {
 		vertexShaderID := glCreateShader(GL_VERTEX_SHADER)
 		fragmentShaderID := glCreateShader(GL_FRAGMENT_SHADER)
-		println("Compiling vertex shader")
 		success := _compileShader(vertexSource, vertexShaderID)
-		println("Compiling fragment shader")
 		success = success && _compileShader(fragmentSource, fragmentShaderID)
 
 		if (success) {

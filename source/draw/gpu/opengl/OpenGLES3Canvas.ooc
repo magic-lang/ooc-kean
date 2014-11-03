@@ -41,20 +41,17 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _bind()
 		this _renderTarget clearColor(this clearColor)
 		surface := this _context createSurface()
-		surface draw(image, this _defaultMap, this _size)
+		viewport := Viewport new(this _size)
+		surface draw(image, this _defaultMap, viewport)
 		surface recycle()
 		this _renderTarget clearColor(0.0f)
 		this _unbind()
 	}
-	draw: func ~withmap (image: Image, map: GpuMap, transform := FloatTransform2D identity) {
-		glMap := map as OpenGLES3MapDefault
-		glMap transform = transform
-		glMap imageSize = image size
-		glMap screenSize = image size
+	draw: func ~withmap (image: Image, map: GpuMap, viewport: Viewport) {
 		this _bind()
 		this _renderTarget clearColor(this clearColor)
 		surface := this _context createSurface()
-		surface draw(image, map, this _size)
+		surface draw(image, map, viewport)
 		surface recycle()
 		this _renderTarget clearColor(0.0f)
 		this _unbind()
@@ -62,7 +59,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	drawLines: func (transform: FloatTransform2D, size: IntSize2D) {
 		this _bind()
 		surface := this _context createSurface() as OpenGLES3Surface
-		surface drawLines(transform, size)
+		surface drawLines(transform, Viewport new(size))
 		surface recycle()
 		this _unbind()
 	}
@@ -79,7 +76,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _renderTarget readPixels(channels)
 	}
 	create: static func (image: GpuImage, context: GpuContext) -> This {
-		map := context getDefaultMap(image)
+		map := context getMap(image)
 		result := This new(map, context)
 		result _renderTarget = Fbo create(image _backend as Texture, image size width, image size height)
 		result _size = image size
@@ -115,7 +112,7 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 		else if (image instanceOf?(OpenGLES3Yuv420Planar))
 			this draw(image as OpenGLES3Yuv420Planar, transform)
 	}
-	draw: func ~withmap (image: Image, map: GpuMap, transform := FloatTransform2D identity)
+	draw: func ~withmap (image: Image, map: GpuMap, viewport: Viewport)
 	{
 
 	}
@@ -159,7 +156,7 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 		else if (image instanceOf?(OpenGLES3Yuv420Semiplanar))
 			this draw(image as OpenGLES3Yuv420Semiplanar, transform)
 	}
-	draw: func ~withmap (image: Image, map: GpuMap, transform := FloatTransform2D identity)
+	draw: func ~withmap (image: Image, map: GpuMap, viewport: Viewport)
 	{
 
 	}

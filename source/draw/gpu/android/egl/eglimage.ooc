@@ -22,3 +22,4 @@ destroyEGLImage: extern func(index: Int)
 lockPixels: extern func(index: Int) -> Pointer
 unlockPixels: extern func(index: Int)
 getStride: extern func(index: Int) -> Int
+destroyAll: extern func

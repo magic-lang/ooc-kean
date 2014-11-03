@@ -16,7 +16,7 @@
 
 use ooc-draw
 use ooc-math
-import GpuContext, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuImage, GpuSurface, GpuMap
+import GpuContext, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuImage, GpuSurface, GpuMap, Viewport
 
 pthread_self: extern func -> Long
 
@@ -80,14 +80,8 @@ GpuContextManager: abstract class extends GpuContext {
 	recycle: func ~surface (surface: GpuSurface) {
 		this _getContext() recycle(surface)
 	}
-	getImage: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
-		this _getContext() getImage(type, size)
-	}
 	createSurface: func -> GpuSurface {
 		this _getContext() createSurface()
-	}
-	getSurface: func -> GpuSurface {
-		this _getContext() getSurface()
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
 		this _getContext() toRaster(gpuImage)
@@ -95,7 +89,10 @@ GpuContextManager: abstract class extends GpuContext {
 	toRaster: func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) {
 		this _getContext() toRaster(gpuImage, rasterImage)
 	}
-	getDefaultMap: func (gpuImage: GpuImage) -> GpuMap {
-		this _getContext() getDefaultMap(gpuImage)
+	setViewport: func (viewport: Viewport) {
+		this _getContext() setViewport(viewport)
+	}
+	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap {
+		this _getContext() getMap(gpuImage, mapType)
 	}
 }

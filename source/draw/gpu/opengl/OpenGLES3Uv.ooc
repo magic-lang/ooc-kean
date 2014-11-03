@@ -37,6 +37,9 @@ OpenGLES3Uv: class extends GpuUv {
 		if (this _canvas != null)
 			this _canvas dispose()
 	}
+	upload: func (raster: RasterImage) {
+		this backend uploadPixels(raster pointer, raster stride)
+	}
 	generateMipmap: func {
 		this backend generateMipmap()
 	}
@@ -56,17 +59,11 @@ OpenGLES3Uv: class extends GpuUv {
 		result
 	}
 	create: static func ~fromRaster (rasterImage: RasterUv, context: GpuContext) -> This {
-		result := context getImage(GpuImageType uv, rasterImage size) as This
-		if (result != null)
-			result backend uploadPixels(rasterImage pointer, rasterImage stride)
-		else
-			result = This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
+		result := This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
 		result
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
-		result := context getImage(GpuImageType uv, size) as This
-		if (result == null)
-			result = This new(size, context)
+		result := This new(size, context)
 		result backend != null ? result : null
 	}
 
