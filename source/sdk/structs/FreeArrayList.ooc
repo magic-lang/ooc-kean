@@ -47,21 +47,22 @@ FreeArrayList: class <T> extends ArrayList<T> {
 		data[index] = element
 	}
 	
-//	/**
-//	* Removes the element at the specified position in this list
-//	* WITHOUT RETURNING the current element.
-//	*/
-//	removeAt: func (index: SSizeT) {
-//			"freeing object" println()
-//		if (index < 0) index = _size + index
-//		if (index < 0 || index >= _size) OutOfBoundsException new(This, index, _size) throw()
-//		if (T inheritsFrom?(Object)) {
-//			old := data[index] as Object
-//			old free()
-//		}
-//	memmove(data + (index * T size), data + ((index + 1) * T size), (_size - index) * T size)
-//	_size -= 1
-//    }
+	/**
+	* Removes the element at the specified position in this list
+	* WITHOUT RETURNING the current element. Will free the object
+	* if second parameter is set to true.
+	*/
+	
+	removeAt: func ~withBool (index: SSizeT, free: Bool) {
+		if (index < 0) index = _size + index
+		if (index < 0 || index >= _size) OutOfBoundsException new(This, index, _size) throw()
+		if (free && T inheritsFrom?(Object)) {
+			old := data[index] as Object
+			old free()
+		}
+		memmove(data + (index * T size), data + ((index + 1) * T size), (_size - index) * T size)
+		_size -= 1
+	}
 }
 
 /* Operators */

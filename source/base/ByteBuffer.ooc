@@ -16,7 +16,7 @@
 */
 
 import lang/Memory
-import structs/ArrayList
+import structs/FreeArrayList
 import threading/Thread
 
 ByteBuffer: class {
@@ -27,76 +27,54 @@ ByteBuffer: class {
 	init: func ~fromSizeAndPointer (=size, =pointer) {
 		this destroy = This recycle
 	}
-	init: func ~fromSize (=size) {
-		pointer: UInt8* = 0
-		bin := This getBin(size);
+	new: static func ~fromSize (size: Int) -> This {
+		bin := This getBin(size)
 		buffer: This
 		for(i in 0..bin size)
 		{
-//			"we need buffer of size " print()
-//			this size toString() println()
-//			"now at element " print()
-//			i toString() print()
-//			" in bin" println()
-			buffer = bin[i] // leak
-//			"buffer is " print()
-//			if (buffer == null)
-//				"null" println()
-//			else {
-//				bSize: Int = buffer size
-//				bSize toString() println()
-//			}
+			buffer = bin[i]
 			if ((buffer size) == size) {
-//				"old buffer found" println()
-				bin removeAt(i) // leak
+				bin removeAt(i, false)
 				break
 			} else {
-				buffer = null // leak
+				buffer = null
 			}
 		}
 		if (buffer == null) {
-			pointer = gc_malloc_atomic(size);
-//			"new buffer" println()
-			this init(size, pointer, This recycle)
+			pointer: UInt8* = gc_malloc_atomic(size);
+			This new(size, pointer, This recycle)
 		} else {
-//			"reusing buffer" println()
-			this init(size, buffer pointer, This recycle)
+			buffer
 		}
 	}
 	__destroy__: func {
-//		"destroying buffer" println()
-		if ((destroy as Closure) thunk)
+		if ((destroy as Closure) thunk) {
 			this destroy(this)
+		} else {
+			raise("Wtf, no thunk?")
+		}
 	}
 	__delete__: func {
 		gc_free(this pointer)
-//		"deleting buffer" println()
 		gc_free(this)
 	}
 	
 	free: func {
-//		"freeing buffer" println()
-		version(!gc) {
-			this __destroy__()
-		}
+		this __destroy__()
 	}
 	
 	recycle: static func (buffer: This) {
 		This lock lock()
 		bin := This getBin(buffer size)
 		while (bin size > 10) {
-			b := bin removeAt(0)
+			b := bin get(0)
+			bin removeAt(0, false)
 			b __delete__()
 		}
-//		bin size toString() println()
 		bin add(buffer)
-//		"recycling buffer of size " print()
-//		buffer size toString() println()
-//		bin size toString() println()
-		
 		This lock unlock()
 	}
-	getBin: static func (size: Int) -> ArrayList<This> {
+	getBin: static func (size: Int) -> FreeArrayList<This> {
 		if (size < 10000)
 			This smallRecycleBin
 		else if (size < 100000)
@@ -117,24 +95,27 @@ ByteBuffer: class {
 	}
 
 	lock := static Mutex new()
-	smallRecycleBin := static ArrayList<This> new()
-	mediumRecycleBin := static ArrayList<This> new()
-	largeRecycleBin := static ArrayList<This> new()
+	smallRecycleBin := static FreeArrayList<This> new()
+	mediumRecycleBin := static FreeArrayList<This> new()
+	largeRecycleBin := static FreeArrayList<This> new()
 	clean := static func {
 		while (This smallRecycleBin size > 0) {
-			b := This smallRecycleBin removeAt(0)
+			b := This smallRecycleBin get(0)
+			This smallRecycleBin removeAt(0, false)
 			b __delete__()
 		}
 		gc_free(This smallRecycleBin data)
 		gc_free(This smallRecycleBin)
 		while (This mediumRecycleBin size > 0) {
-			b := This mediumRecycleBin removeAt(0)
+			b := This mediumRecycleBin get(0)
+			This mediumRecycleBin removeAt(0, false)
 			b __delete__()
 		}
 		gc_free(This mediumRecycleBin data)
 		gc_free(This mediumRecycleBin)
 		while (This largeRecycleBin size > 0) {
-			b := This largeRecycleBin removeAt(0)
+			b := This largeRecycleBin get(0)
+			This largeRecycleBin removeAt(0, false)
 			b __delete__()
 		}
 		gc_free(This largeRecycleBin data)
