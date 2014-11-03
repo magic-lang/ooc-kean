@@ -24,7 +24,6 @@ import GpuMapPC
 
 Window: class extends OpenGLES3Context {
 	_native: NativeWindow
-	_surface: GpuSurface
 	_monochromeToBgra: OpenGLES3MapMonochromeToBgra
 	_bgrToBgra: OpenGLES3MapBgrToBgra
 	_bgraToBgra: OpenGLES3MapBgra
@@ -36,7 +35,6 @@ Window: class extends OpenGLES3Context {
 		setShaderSources()
 		this _native = X11Window create(size width, size height, title)
 		super(this _native, func { this onDispose() })
-		this _surface = OpenGLES3Surface create(this)
 		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new()
 		this _bgrToBgra = OpenGLES3MapBgrToBgra new()
 		this _bgraToBgra = OpenGLES3MapBgra new()
@@ -48,10 +46,9 @@ Window: class extends OpenGLES3Context {
 		this _bgraToBgra dispose()
 		this _yuvPlanarToBgra dispose()
 		this _yuvSemiplanarToBgra dispose()
-		this _surface dispose()
 	}
-	getMap: func (image: GpuImage) -> OpenGLES3MapDefault {
-		result := match(image) {
+	getWindowMap: func (gpuImage: GpuImage) -> OpenGLES3MapDefault {
+		result := match(gpuImage) {
 			case (i: GpuMonochrome) => this _monochromeToBgra
 			case (i: GpuBgr) => this _bgrToBgra
 			case (i: GpuBgra) => this _bgraToBgra
@@ -61,7 +58,7 @@ Window: class extends OpenGLES3Context {
 		result
 	}
 	draw: func ~GpuImage (image: GpuImage, transform := FloatTransform2D identity) {
-		map := this getMap(image)
+		map := this getWindowMap(image)
 		map transform = transform
 		map imageSize = image size
 		map screenSize = IntSize2D new(image size width, -image size height)

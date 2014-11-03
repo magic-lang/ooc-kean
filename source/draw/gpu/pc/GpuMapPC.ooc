@@ -142,6 +142,36 @@ setShaderSources: func {
 			vec2 uv = texture(texture1, fragmentTextureCoordinate).rg;\n
 			outColor = YuvToRgba(vec4(y, uv.g - 0.5f, uv.r - 0.5f, 1.0f));\n
 		}\n";
+	OpenGLES3MapPackMonochrome fragmentSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		uniform int pixelWidth;\n
+		in vec2 fragmentTextureCoordinate;
+		out vec4 outColor;\n
+		void main() {\n
+			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f / float(pixelWidth), 0);\n
+			vec2 texelOffset = vec2(1.0f / float(pixelWidth), 0);\n
+			float r = texture(texture0, offsetTexCoords).x;\n
+			float g = texture(texture0, offsetTexCoords + texelOffset).x;\n
+			float b = texture(texture0, offsetTexCoords + 2.0f*texelOffset).x;\n
+			float a = texture(texture0, offsetTexCoords + 3.0f*texelOffset).x;\n
+			outColor = vec4(r, g, b, a);\n
+		}\n";
+	OpenGLES3MapPackUv fragmentSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		uniform int pixelWidth;\n
+		in vec2 fragmentTextureCoordinate;
+		out vec4 outColor;\n
+		void main() {\n
+			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f / float(pixelWidth), 0);\n
+			vec2 texelOffset = vec2(1.0f / float(pixelWidth), 0);\n
+			vec2 rg = texture(texture0, offsetTexCoords).rg;\n
+			vec2 ba = texture(texture0, offsetTexCoords + texelOffset).rg;\n
+			outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
+		}\n";
 	OpenGLES3MapLines vertexSource =
 		"#version 300 es\n
 		precision highp float;\n
