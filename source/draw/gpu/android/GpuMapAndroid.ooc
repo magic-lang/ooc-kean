@@ -182,10 +182,17 @@ setShaderSources: func {
 		in vec2 fragmentTextureCoordinate;\n
 		out float outColor;\n
 		void main() {\n
-			float levelSquare = level*level;
 			float xCoordinate = fragmentTextureCoordinate.x * level - trunc(fragmentTextureCoordinate.x*level);
 			float yCoordinate = fragmentTextureCoordinate.y - trunc(fragmentTextureCoordinate.y) + (level / height);
 			vec2 newCoordinates = vec2(xCoordinate,yCoordinate);
-			outColor = texture(texture0, newCoordinates).rgb;\n
+			outColor = texture(texture0, newCoordinates).r;\n
+		}\n";
+	OpenGLES3MapScaling fragmentSource =
+		"#version 300 es\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;\n
+		out float outColor;\n
+		void main() {\n
+			outColor = texture(texture0, fragmentTextureCoordinate).r;\n
 		}\n";
 }

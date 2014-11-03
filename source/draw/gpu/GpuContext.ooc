@@ -45,5 +45,6 @@ GpuContext: abstract class {
 	}
 	getDefaultMap: abstract func (gpuImage: GpuImage) -> GpuMap
 	getPyramidMap: abstract func (gpuImage: GpuImage) -> GpuMap
+	getScaleMap: abstract func (gpuImage: GpuImage) -> GpuMap
 	setViewport: abstract func (viewport: Viewport)
 }

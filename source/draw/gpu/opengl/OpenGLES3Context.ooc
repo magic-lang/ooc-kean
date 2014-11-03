@@ -28,6 +28,7 @@ OpenGLES3Context: class extends GpuContext {
 	_monochromeMap: OpenGLES3MapMonochrome
 	_uvMap: OpenGLES3MapUv
 	_pyramidMapMonochrome: OpenGLES3MapPyramidGeneration
+	_scalingMap: OpenGLES3MapScaling
 	_onDispose: Func
 
 	init: func (context: Context) {
@@ -37,6 +38,7 @@ OpenGLES3Context: class extends GpuContext {
 		this _monochromeMap = OpenGLES3MapMonochrome new()
 		this _uvMap = OpenGLES3MapUv new()
 		this _pyramidMapMonochrome = OpenGLES3MapPyramidGeneration new()
+		this _scalingMap = OpenGLES3MapScaling new()
 		this _backend = context
 	}
 	init: func ~unshared (onDispose: Func) {
@@ -74,6 +76,15 @@ OpenGLES3Context: class extends GpuContext {
 		}
 		if (result == null)
 			raise("Trying to get Pyramid map for invalid image type")
+		result
+	}
+	getScaleMap: func (gpuImage: GpuImage) -> GpuMap {
+		result := match(gpuImage) {
+			case (i : OpenGLES3Monochrome) => this _scalingMap
+			case => null
+		}
+		if (result == null)
+			raise("Trying to get Scaling map for invalid image type")
 		result
 	}
 	getDefaultMap: func (gpuImage: GpuImage) -> GpuMap {
