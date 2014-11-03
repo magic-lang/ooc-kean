@@ -102,9 +102,6 @@ OpenGLES3Context: class extends GpuContext {
 	searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
 		this _imageBin find(type, size)
 	}
-	getSurface: func -> GpuSurface {
-		this _surfaceBin find()
-	}
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType monochrome, size)
 		if (result == null)
@@ -201,7 +198,7 @@ OpenGLES3Context: class extends GpuContext {
 		result
 	}
 	createSurface: func -> GpuSurface {
-		result := this getSurface()
+		result := this _surfaceBin find()
 		if(result == null)
 			result = OpenGLES3Surface create(this)
 		result
