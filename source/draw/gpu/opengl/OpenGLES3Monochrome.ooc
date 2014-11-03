@@ -18,7 +18,7 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3/Texture, OpenGLES3Canvas
+import OpenGLES3/Texture, OpenGLES3Canvas, OpenGLES3Map
 
 OpenGLES3Monochrome: class extends GpuMonochrome {
 	backend: Texture { get { this _backend as Texture } }
@@ -44,8 +44,15 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 		this backend generateMipmap()
 	}
 	toRasterDefault: func -> RasterImage {
-		buffer := this canvas readPixels(this _channels)
+		packed := this _context createBgra(IntSize2D new(this size width / 4, this size height))
+		packMap := this _context getMap(this, GpuMapType pack) as OpenGLES3MapPackMonochrome
+		packMap transform = FloatTransform2D identity
+		packMap imageSize = this size
+		packMap screenSize = this size
+		packed canvas draw(this, packMap, Viewport new(packed size))
+		buffer := packed canvas readPixels(4)
 		result := RasterMonochrome new(buffer, this size)
+		packed recycle()
 		result
 	}
 	resizeTo: func (size: IntSize2D) -> This {
