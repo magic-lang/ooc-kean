@@ -61,7 +61,7 @@ OpenGLES3Context: class extends GpuContext {
 		this _bgraMap dispose()
 		this _monochromeMap dispose()
 		this _uvMap dispose()
-		this _pyramidMapMonochrome
+		this _pyramidMapMonochrome dispose()
 		this _imageBin dispose()
 		this _surfaceBin dispose()
 		this _backend dispose()
