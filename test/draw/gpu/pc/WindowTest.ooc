@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 use ooc-math
 use ooc-draw-gpu
 use ooc-draw-gpu-pc
@@ -27,12 +27,12 @@ screenSize := IntSize2D new (1680.0f, 1050.0f)
 window := Window create(screenSize, "GL Test")
 
 rasterImageMonochrome := RasterMonochrome open("input/Hercules.jpg")
-gpuMonochrome := GpuImage create(rasterImageMonochrome)
+gpuMonochrome := window createGpuImage(rasterImageMonochrome)
 
 rasterImageBgr := RasterBgr open("input/Space.png")
-gpuBgr := GpuImage create(rasterImageBgr)
+gpuBgr := window createGpuImage(rasterImageBgr)
 
-gpuTarget := GpuBgr create2(rasterImageBgr size)
+gpuTarget := windw createGpuBgr(rasterImageBgr size)
 gpuTarget canvas draw(rasterImageBgr)
 
 rasterImageBgra := RasterBgra open("input/Space.png")
@@ -45,7 +45,7 @@ rasterImageYuv420Semiplanar := RasterYuv420Semiplanar new(rasterImageBgra)
 gpuYuv420Semiplanar := GpuImage create(rasterImageYuv420Semiplanar)
 
 while(true) {
-  transform = transform translate(0, 0)
-  //window draw(rasterImageBgr, transform)
-  window draw(gpuTarget, transform)
+	transform = transform translate(0, 0)
+	//window draw(rasterImageBgr, transform)
+	window draw(gpuTarget, transform)
 }
