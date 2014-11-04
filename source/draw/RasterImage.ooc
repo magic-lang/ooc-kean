@@ -35,10 +35,12 @@ RasterImage: abstract class extends Image {
 	init: func ~fromRasterImage (original: RasterImage) {
 		super(original)
 		this buffer = original buffer copy()
+		this buffer increaseReferenceCount()
 	}
 	init: func (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		super(size, coordinateSystem, crop, false)
 		this buffer = buffer
+		this buffer increaseReferenceCount()
 	}
 	resizeTo: func (size: IntSize2D) -> Image {
 		result : Image
@@ -48,7 +50,7 @@ RasterImage: abstract class extends Image {
 		result
 	}
 	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {
-		transform = (this transform asFloatTransform2D()) * transform * (this transform asFloatTransform2D()) inverse
+		transform = (this transform toFloatTransform2D()) * transform * (this transform toFloatTransform2D()) inverse
 		mappingTransform := FloatTransform2D createTranslation(this size width / 2, this size height / 2) * transform
 		upperLeft := mappingTransform * FloatPoint2D new(-size width / 2, -size width / 2)
 		upperRight := mappingTransform * FloatPoint2D new(size width / 2, -size width / 2)
@@ -60,14 +62,16 @@ RasterImage: abstract class extends Image {
 		upperRight = mappingTransformInverse * source rightTop
 		downLeft = mappingTransformInverse * source leftBottom
 		downRight = mappingTransformInverse * source rightBottom
-		this copy(size asFloatSize2D(), source, FloatPoint2D new(), FloatPoint2D new(), FloatPoint2D new())
+		this copy(size toFloatSize2D(), source, FloatPoint2D new(), FloatPoint2D new(), FloatPoint2D new())
 	}
 	copy: func ~fromMoreParams (size: FloatSize2D, source: FloatBox2D, upperLeft, upperRight, lowerLeft: FloatPoint2D) -> This {
-		result := RasterBgra new(size ceiling() asIntSize2D())
+		result := RasterBgra new(size ceiling() toIntSize2D())
 //		TODO: The stuff
 		result
 	}
-
+	__destroy__: func {
+//		this buffer decreaseReferenceCount()
+	}
 	open: static func ~unknownType (filename: String) -> This {
 		x, y, n: Int
 		data := StbImage load(filename, x&, y&, n&, 0)

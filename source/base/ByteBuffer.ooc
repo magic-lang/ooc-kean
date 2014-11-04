@@ -18,14 +18,26 @@
 import lang/Memory
 import structs/FreeArrayList
 import threading/Thread
+import ReferenceCounter
 
 ByteBuffer: class {
+	_referenceCount: ReferenceCounter
 	size: Int
 	pointer: UInt8*
 	destroy: Func (This)
-	init: func (=size, =pointer, =destroy)
+	increaseReferenceCount: func {
+		this _referenceCount increase()
+	}
+	decreaseReferenceCount: func {
+		this _referenceCount decrease()
+	}
+
+	init: func (=size, =pointer, =destroy) {
+		this _referenceCount = ReferenceCounter new(this)
+	}
 	init: func ~fromSizeAndPointer (=size, =pointer) {
 		this destroy = This recycle
+		this _referenceCount = ReferenceCounter new(this)
 	}
 	new: static func ~fromSize (size: Int) -> This {
 		bin := This getBin(size)
@@ -44,6 +56,7 @@ ByteBuffer: class {
 			pointer: UInt8* = gc_malloc_atomic(size);
 			This new(size, pointer, This recycle)
 		} else {
+			buffer _referenceCount = ReferenceCounter new(buffer)
 			buffer
 		}
 	}
@@ -51,7 +64,7 @@ ByteBuffer: class {
 		if ((destroy as Closure) thunk) {
 			this destroy(this)
 		} else {
-			raise("Wtf, no thunk?")
+			raise("ByteBuffer __destroy__() has no thunk!")
 		}
 	}
 	__delete__: func {

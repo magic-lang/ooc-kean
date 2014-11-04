@@ -56,6 +56,8 @@ Image: abstract class {
 	}
 	_referenceCount: ReferenceCounter
 	referenceCount ::= this _referenceCount
+	increaseReferenceCount: func { this _referenceCount increase() }
+	decreaseReferenceCount: func { this _referenceCount decrease() }
 	init: func (=size, .coordinateSystem, =crop, =wrap) {
 		this coordinateSystem = coordinateSystem
 		this init()
@@ -66,7 +68,7 @@ Image: abstract class {
 		this _referenceCount = ReferenceCounter new(this)
 	}
 	resizeWithin: func (restriction: IntSize2D) -> This {
-		this resizeTo(((this size asFloatSize2D()) * Float minimum(restriction width as Float / this size width as Float, restriction height as Float / this size height as Float)) asIntSize2D())
+		this resizeTo(((this size toFloatSize2D()) * Float minimum(restriction width as Float / this size width as Float, restriction height as Float / this size height as Float)) toIntSize2D())
 	}
 	resizeTo: abstract func (size: IntSize2D) -> This
 	create: abstract func (size: IntSize2D) -> This

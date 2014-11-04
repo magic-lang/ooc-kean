@@ -58,9 +58,9 @@ IntTransform2D: cover {
 		}
 		result
 	}
-	determinant ::=	this a * this e * this i + this d * this h * this c	+ this g * this b * this f - this g * this e * this c - this d * this b * this i - this a * this h * this f 
+	determinant ::=	this a * this e * this i + this d * this h * this c	+ this g * this b * this f - this g * this e * this c - this d * this b * this i - this a * this h * this f
 	translation ::= IntSize2D new(this g, this h)
-	inverse: This { get { 
+	inverse: This { get {
 		determinant := this determinant
 		This new(
 			(this e * this i - this h * this f) / determinant,
@@ -94,9 +94,9 @@ IntTransform2D: cover {
 	reflectX: func -> This { this createReflectionX() * this }
 	reflectY: func -> This { this createReflectionY() * this }
 	identity: static This { get { This new(1, 0, 0, 1, 0, 0) } }
-	asFloatTransform2D: func -> FloatTransform2D { FloatTransform2D new(this a, this b, this c, this d, this e, this f, this g, this h, this i) }
-	create: static func (translation: IntSize2D, scale, rotation: Float) -> This { 
-		This new(rotation cos() * scale, rotation sin() * scale, -rotation sin() * scale, rotation cos() * scale, translation width, translation height) 
+	toFloatTransform2D: func -> FloatTransform2D { FloatTransform2D new(this a, this b, this c, this d, this e, this f, this g, this h, this i) }
+	create: static func (translation: IntSize2D, scale, rotation: Float) -> This {
+		This new(rotation cos() * scale, rotation sin() * scale, -rotation sin() * scale, rotation cos() * scale, translation width, translation height)
 	}
 	create: static func ~reduced (translation: IntSize2D, rotation: Float) -> This { This create(translation, 1, rotation) }
 	createTranslation: static func (xDelta, yDelta: Int) -> This { This new(1, 0, 0, 1, xDelta, yDelta) }	
@@ -111,7 +111,7 @@ IntTransform2D: cover {
 		one := 1
 		sine := angle sin()
 		cosine := angle cos()
-		This new(cosine, sine, -sine, cosine, (one - cosine) * pivot x + sine * pivot y, -sine * pivot x + (one - cosine) * pivot y) 
+		This new(cosine, sine, -sine, cosine, (one - cosine) * pivot x + sine * pivot y, -sine * pivot x + (one - cosine) * pivot y)
 	}
 	createSkewingX: static func (angle: Float) -> This { This new(1, 0, angle sin(), 1, 0, 0) }
 	createSkewingY: static func (angle: Float) -> This { This new(1, angle sin(), 0, 1, 0, 0) }

@@ -107,7 +107,7 @@ IntBox2D: cover {
 	operator - (other: IntSize2D) -> This { This new(this leftTop, this size + (-other)) }
 	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }
 	operator != (other: This) -> Bool { !(this == other) }
-	asFloatBox2D: func -> FloatBox2D { FloatBox2D new(this left, this top, this width, this height) }
+	toFloatBox2D: func -> FloatBox2D { FloatBox2D new(this left, this top, this width, this height) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
 	parse: static func (input: String) -> This {

@@ -42,6 +42,7 @@ version(unix || apple) {
 
     ooc_mutex_destroy: inline unmangled func (m: Mutex) {
         pthread_mutex_destroy(m as PThreadMutex*)
+        gc_free(m)
     }
 
     RecursiveMutexUnix: class extends Mutex {
