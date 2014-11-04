@@ -3,7 +3,7 @@ import Synchronized
 
 ReferenceCounter: class extends Synchronized {
 	_target: Object
-	_count: Int
+	_count: Int = 0
 	init: func (target: Object) {
 		super()
 		this _target = target
