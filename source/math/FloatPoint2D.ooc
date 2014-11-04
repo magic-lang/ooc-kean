@@ -24,7 +24,7 @@ FloatPoint2D: cover {
 	x, y: Float
 	norm ::= (this x squared() + this y squared()) sqrt()
 	azimuth ::= this y atan2(this x)
-	asIntPoint2D ::= IntPoint2D new(this x floor() as Int, this y floor() as Int)
+	toIntPoint2D ::= IntPoint2D new(this x floor() as Int, this y floor() as Int)
 	init: func@ (=x, =y)
 	init: func@ ~default { this init(0.0f, 0.0f) }
 	pNorm: func (p: Float) -> Float {

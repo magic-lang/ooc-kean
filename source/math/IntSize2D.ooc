@@ -54,7 +54,7 @@ IntSize2D: cover {
 	operator <= (other: This) -> Bool { this width <= other width && this height <= other height }
 	operator >= (other: This) -> Bool { this width >= other width && this height >= other height }
 	polar: static func (radius, azimuth: Int) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
-	asFloatSize2D: func -> FloatSize2D { FloatSize2D new(this width as Float, this height as Float) }
+	toFloatSize2D: func -> FloatSize2D { FloatSize2D new(this width as Float, this height as Float) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this width toString()}, #{this height toString()}" }
 	parse: static func(input: String) -> This {

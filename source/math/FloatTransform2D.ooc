@@ -58,7 +58,7 @@ FloatTransform2D: cover {
 		}
 		result
 	}
-	determinant ::=	this a * this e * this i + this d * this h * this c	+ this g * this b * this f - this g * this e * this c - this d * this b * this i - this a * this h * this f 
+	determinant ::=	this a * this e * this i + this d * this h * this c	+ this g * this b * this f - this g * this e * this c - this d * this b * this i - this a * this h * this f
 
 	translation ::= FloatSize2D new(this g, this h)
 	scaling ::= (this scalingX + this scalingY) / 2.0f
@@ -105,12 +105,12 @@ FloatTransform2D: cover {
 	reflectX: func -> This { this createReflectionX() * this }
 	reflectY: func -> This { this createReflectionY() * this }
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f) } }
-	asIntTransform2D: func -> IntTransform2D { IntTransform2D new(this a, this b, this c, this d, this e, this f, this g, this h, this i) }
-	create: static func (translation: FloatSize2D, scale, rotation: Float) -> This { 
-		This new(rotation cos() * scale, rotation sin() * scale, -rotation sin() * scale, rotation cos() * scale, translation width, translation height) 
+	toIntTransform2D: func -> IntTransform2D { IntTransform2D new(this a, this b, this c, this d, this e, this f, this g, this h, this i) }
+	create: static func (translation: FloatSize2D, scale, rotation: Float) -> This {
+		This new(rotation cos() * scale, rotation sin() * scale, -rotation sin() * scale, rotation cos() * scale, translation width, translation height)
 	}
 	create: static func ~reduced (translation: FloatSize2D, rotation: Float) -> This { This create(translation, 1.0f, rotation) }
-	createTranslation: static func (xDelta, yDelta: Float) -> This { This new(1.0f, 0.0f, 0.0f, 1.0f, xDelta, yDelta) }	
+	createTranslation: static func (xDelta, yDelta: Float) -> This { This new(1.0f, 0.0f, 0.0f, 1.0f, xDelta, yDelta) }
 	createTranslation: static func ~float (delta: Float) -> This { This createTranslation(delta, delta) }
 	createTranslation: static func ~size (delta: FloatSize2D) -> This { This createTranslation(delta width, delta height) }
 	createTranslation: static func ~point (delta: FloatPoint2D) -> This { This createTranslation(delta x, delta y) }
@@ -118,11 +118,11 @@ FloatTransform2D: cover {
 	createScaling: static func ~float (factor: Float) -> This { This createScaling(factor, factor) }
 	createScaling: static func ~size (factor: FloatSize2D) -> This { This createScaling(factor width, factor height) }
 	createZRotation: static func (angle: Float) -> This { This new(angle cos(), angle sin(), -angle sin(), angle cos(), 0.0f, 0.0f) }
-	createZRotation: static func ~pivot (angle: Float, pivot: FloatPoint2D) -> This { 
+	createZRotation: static func ~pivot (angle: Float, pivot: FloatPoint2D) -> This {
 		one := 1.0f
 		sine := angle sin()
 		cosine := angle cos()
-		This new(cosine, sine, -sine, cosine, (one - cosine) * pivot x + sine * pivot y, -sine * pivot x + (one - cosine) * pivot y) 
+		This new(cosine, sine, -sine, cosine, (one - cosine) * pivot x + sine * pivot y, -sine * pivot x + (one - cosine) * pivot y)
 	}
 	createSkewingX: static func (angle: Float) -> This { This new(1.0f, 0.0f, angle sin(), 1.0f, 0.0f, 0.0f) }
 	createSkewingY: static func (angle: Float) -> This { This new(1.0f, angle sin(), 0.0f, 1.0f, 0.0f, 0.0f) }
