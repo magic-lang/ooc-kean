@@ -34,12 +34,10 @@ ByteBuffer: class {
 
 	init: func (=size, =pointer, =destroy) {
 		this _referenceCount = ReferenceCounter new(this)
-		this increaseReferenceCount()
 	}
 	init: func ~fromSizeAndPointer (=size, =pointer) {
 		this destroy = This recycle
 		this _referenceCount = ReferenceCounter new(this)
-		this increaseReferenceCount()
 	}
 	new: static func ~fromSize (size: Int) -> This {
 		bin := This getBin(size)
@@ -59,7 +57,6 @@ ByteBuffer: class {
 			This new(size, pointer, This recycle)
 		} else {
 			buffer _referenceCount = ReferenceCounter new(buffer)
-			buffer increaseReferenceCount()
 			buffer
 		}
 	}
@@ -67,7 +64,7 @@ ByteBuffer: class {
 		if ((destroy as Closure) thunk) {
 			this destroy(this)
 		} else {
-			raise("Wtf, no thunk?")
+			raise("ByteBuffer __destroy__() has no thunk!")
 		}
 	}
 	__delete__: func {
