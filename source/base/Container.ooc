@@ -16,15 +16,19 @@
 */
 
 Container: class <T> {
-	blockFree: Boolean {
+	blockFree: Bool {
 		get
 		set(value) { blockFree = value }
 	}
-	content: T { get set }
-  init: func(=_content)
-  init: func ~novalue
+	content: T
+    set: func (=content)
+    get: func -> T { content }
+	init: func(=content)
+	init: func ~novalue
 	free: func {
-		if (!this blockFree && this content != null)
-			this content free()
+		if (!this blockFree && T inheritsFrom?(Object) && this content != null) {
+			obj := this content as Object
+			obj free()
+		}
 	}
 }
