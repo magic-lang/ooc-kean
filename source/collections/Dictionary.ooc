@@ -20,7 +20,7 @@ Dictionary: class {
 	_capacity: Int
 
 	init: func {
-		init(5)
+		init(10)
 	}
 	init: func ~withCapacity (=_capacity) {
 		this _dictionaryList = gc_malloc((this _capacity as SizeT)*(Object size))
