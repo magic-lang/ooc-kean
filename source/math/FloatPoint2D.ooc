@@ -24,7 +24,6 @@ FloatPoint2D: cover {
 	x, y: Float
 	norm ::= (this x squared() + this y squared()) sqrt()
 	azimuth ::= this y atan2(this x)
-	toIntPoint2D ::= IntPoint2D new(this x floor() as Int, this y floor() as Int)
 	init: func@ (=x, =y)
 	init: func@ ~default { this init(0.0f, 0.0f) }
 	pNorm: func (p: Float) -> Float {
@@ -61,8 +60,9 @@ FloatPoint2D: cover {
 	operator > (other: This) -> Bool { this x > other x && this y > other y }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
-	operator as -> String { this toString() }
 	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
+	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x floor() as Int, this y floor() as Int) }
+	operator as -> String { this toString() }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
 	parse: static func (input: String) -> This {
 		array := input split(',')
