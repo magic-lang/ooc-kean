@@ -2,6 +2,7 @@ use ooc-math
 use ooc-draw
 use ooc-base
 import math
+import structs/Stack
 
 Foo: class {
 	bar := Bar new()

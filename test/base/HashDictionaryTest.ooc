@@ -23,18 +23,18 @@ TestCover: cover {
 	init: func@ (=intVal, =stringVal)
 }
 
-DictionaryTest: class extends Fixture {
+HashDictionaryTest: class extends Fixture {
 	init: func {
 
 		super("Dictionary")
 		this add("Int", func {
-			dictionary := Dictionary new()
+			dictionary := HashDictionary new()
 			dictionary add("IntegerValue", 1)
 			expect(dictionary get("IntegerValue", 0) == 1, is true)
 			expect(dictionary get("Nonexistent", 0) == 0, is true)
 		})
 		this add("String", func {
-			dictionary := Dictionary new()
+			dictionary := HashDictionary new()
 			dictionary add("StringValue", "String")
 			dictionary add("IntegerValue", 1)
 			expect(dictionary get("StringValue", "Default") == "String", is true)
@@ -43,7 +43,7 @@ DictionaryTest: class extends Fixture {
 		})
 
 		this add("Cover", func {
-			dictionary := Dictionary new()
+			dictionary := HashDictionary new()
 			defaultCover := TestCover new()
 			testCover := TestCover new(1, "String")
 			dictionary add("TestClassValue", Cell new(testCover))
@@ -54,7 +54,7 @@ DictionaryTest: class extends Fixture {
 		})
 
 		this add("Class", func {
-			dictionary := Dictionary new()
+			dictionary := HashDictionary new()
 			defaultClass := TestClass new()
 			testClass := TestClass new(1, "String")
 			dictionary add("TestClassValue", testClass)
@@ -64,7 +64,7 @@ DictionaryTest: class extends Fixture {
 			expect(dictionary get("Nonexistent", defaultClass) intVal == 0, is true)
 		})
 		this add("ArrayList", func {
-			dictionary := Dictionary new()
+			dictionary := HashDictionary new()
 			arrayListDefault := ArrayList<String> new()
 			arrayListDefault add("zero")
 			arrayList := ArrayList<String> new()
@@ -78,9 +78,9 @@ DictionaryTest: class extends Fixture {
 			expect(dictionary get("Nonexistent", arrayListDefault)[0] == "zero", is true)
 		})
 		this add("Copy constructor", func {
-			dictionary := Dictionary new()
+			dictionary := HashDictionary new()
 			dictionary add("First", "First")
-			dictionary2 := Dictionary new(dictionary)
+			dictionary2 := HashDictionary new(dictionary)
 			dictionary2 add ("Second", "Second")
 			expect(dictionary get("Second", "Default") == "Default", is true)
 			expect(dictionary get("First", "Default") == "First", is true)
@@ -88,7 +88,7 @@ DictionaryTest: class extends Fixture {
 			expect(dictionary2 get("First", "Default") == "First", is true)
 		})
 		this add("Clone", func {
-			dictionary := Dictionary new()
+			dictionary := HashDictionary new()
 			dictionary add("First", "First")
       dictionary add("Int", 1)
 			dictionary2 := dictionary clone()
@@ -101,7 +101,7 @@ DictionaryTest: class extends Fixture {
 		})
 
 		this add("Get from primitive", func {
-			dictionary := Dictionary new()
+			dictionary := HashDictionary new()
 			dictionary add("First", 1337)
 			expect(dictionary getAsType("First", Int) == 1337)
 			expect(dictionary getAsType("First", String) == null)
@@ -111,7 +111,7 @@ DictionaryTest: class extends Fixture {
 		})
 
 		this add("Get from cover", func {
-			dictionary := Dictionary new()
+			dictionary := HashDictionary new()
       testCover := TestCover new(1337, "String")
 			dictionary add("First", Cell new(testCover))
 			expect(dictionary getAsType("First", Cell<TestCover>) get() intVal == 1337)
@@ -122,7 +122,7 @@ DictionaryTest: class extends Fixture {
 		})
 
 		this add("Get from class", func {
-			dictionary := Dictionary new()
+			dictionary := HashDictionary new()
 			dictionary add("First", TestClass new(1337, "String"))
 
 			expect(dictionary getAsType("First", TestClass) intVal == 1337)
@@ -132,7 +132,7 @@ DictionaryTest: class extends Fixture {
 			expect(dictionary getAsType("First", Cell<TestCover>) == null)
 		})
 		this add("Merge", func {
-			dictionary := Dictionary new()
+			dictionary := HashDictionary new()
 			dictionary add("First", 1337)
 			dictionary add("Second", "Foo")
 			dictionary add("Third", Cell new(TestCover new(42, "Hello")))
@@ -140,7 +140,7 @@ DictionaryTest: class extends Fixture {
 			dictionary add("Fifth", "Almost")
 			dictionary add("Sixth", "Done")
 
-			dictionary2 := Dictionary new()
+			dictionary2 := HashDictionary new()
 			dictionary2 add("First", 1338)
 			dictionary2 add("Second", "Bar")
 			dictionary2 add("Third", Cell new(TestCover new(43, "World")))
@@ -162,4 +162,4 @@ DictionaryTest: class extends Fixture {
 
 	}
 }
-DictionaryTest new() run()
+HashDictionaryTest new() run()

@@ -8,7 +8,7 @@ TestClass: class implements IDisposable {
     refCounter = ReferenceCounter new(this)
   }
   dispose: func {
-    refCounter dispose()
+    refCounter decrease()
   }
 }
 
