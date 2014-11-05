@@ -187,6 +187,7 @@ setShaderSources: func {
 		void main() {\n
 			outColor = vec4(color.r, color.g, color.b, 1.0f);\n
 		}\n";
+		/*
 	OpenGLES3MapPyramidGeneration fragmentSource =
 		"#version 300 es\n
 		precision highp float;\n
@@ -194,11 +195,29 @@ setShaderSources: func {
 		uniform float height;\n
 		uniform float level;\n
 		in vec2 fragmentTextureCoordinate;\n
-		out vec3 outColor;\n
+		out float outColor;\n
 		void main() {\n
 			float xCoordinate = fragmentTextureCoordinate.x * level - trunc(fragmentTextureCoordinate.x*level);
 			float yCoordinate = fragmentTextureCoordinate.y - trunc(fragmentTextureCoordinate.y) + (level / height);
 			vec2 newCoordinates = vec2(xCoordinate,yCoordinate);
-			outColor = texture(texture0, newCoordinates).rgb;\n
+			outColor = texture(texture0, newCoordinates).r;\n
 		}\n";
+*/
+		OpenGLES3MapPyramidGeneration fragmentSource =
+			"#version 300 es\n
+			precision highp float;\n
+			uniform sampler2D texture0;\n
+			uniform float pyramidFraction;\n
+			uniform float pyramidCoefficient;\n
+			in vec2 fragmentTextureCoordinate;\n
+			out float outColor;\n
+			void main() {\n
+				float level = floor(max(pyramidCoefficient * fragmentTextureCoordinate.y - 2.0f, 1.0f));\n
+				float sampleDistanceX = pow(2.0f, level);\n
+				float sampleDistanceY = pyramidFraction * sampleDistanceX * sampleDistanceX;\n
+				vec2 transformedCoords = vec2(fract(fragmentTextureCoordinate.x * sampleDistanceX), fract(fragmentTextureCoordinate.y * sampleDistanceY));\n
+				outColor = texture(texture0, transformedCoords).r;\n
+			}\n";
+
+
 }

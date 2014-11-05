@@ -1,10 +1,11 @@
 before_script:
   - sudo apt-get -y -qq install curl make libgc-dev
-  - export PATH=$PATH:$PWD/rock/bin:$PWD/sam
-  - git clone --depth=1 git://github.com/cogneco/rock.git -b 99x
-  - git clone --depth=1 git://github.com/cogneco/sam.git
-  - (cd rock && make -s rescue)
-  - (cd sam && rock -v)
+  - export PATH=$PATH:$PWD/tools/rock/bin:$PWD/tools/sam
+  - mkdir tools
+  - (cd tools && git clone --depth=1 git://github.com/cogneco/rock.git -b master)
+  - (cd tools && git clone --depth=1 git://github.com/cogneco/sam.git)
+  - (cd tools/rock && make -s rescue)
+  - (cd tools/sam && rock -v)
 
 script:
   - export OOC_LIBS=$PWD
