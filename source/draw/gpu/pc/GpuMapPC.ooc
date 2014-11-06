@@ -188,41 +188,41 @@ setShaderSources: func {
 			outColor = vec4(color.r, color.g, color.b, 1.0f);\n
 		}\n";
 
-		OpenGLES3MapPyramidGeneration fragmentSource =
-			"#version 300 es\n
-			precision highp float;\n
-			uniform sampler2D texture0;\n
-			uniform float pyramidFraction;\n
-			uniform float pyramidCoefficient;\n
-			uniform int originalHeight;\n
-			in vec2 fragmentTextureCoordinate;\n
-			out float outColor;\n
-			void main() {\n
-				float level = floor(max(pyramidCoefficient * fragmentTextureCoordinate.y - 2.0f, 1.0f));\n
-				float sampleDistanceX = pow(2.0f, level);\n
-				float sampleDistanceY = pyramidFraction * sampleDistanceX * sampleDistanceX;\n
-				float scaledX = sampleDistanceX * fragmentTextureCoordinate.x;\n
-				float yOffset = floor(scaledX) * sampleDistanceX / float(originalHeight);\n
-				vec2 transformedCoords = vec2(fract(scaledX), fract(fragmentTextureCoordinate.y * sampleDistanceY) + yOffset);\n
-				outColor = texture(texture0, transformedCoords).r;\n
-			}\n";
+	OpenGLES3MapPyramidGeneration fragmentSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		uniform float pyramidFraction;\n
+		uniform float pyramidCoefficient;\n
+		uniform int originalHeight;\n
+		in vec2 fragmentTextureCoordinate;\n
+		out float outColor;\n
+		void main() {\n
+			float level = floor(max(pyramidCoefficient * fragmentTextureCoordinate.y - 2.0f, 1.0f));\n
+			float sampleDistanceX = pow(2.0f, level);\n
+			float sampleDistanceY = pyramidFraction * sampleDistanceX * sampleDistanceX;\n
+			float scaledX = sampleDistanceX * fragmentTextureCoordinate.x;\n
+			float yOffset = floor(scaledX) * sampleDistanceX / float(originalHeight);\n
+			vec2 transformedCoords = vec2(fract(scaledX), fract(fragmentTextureCoordinate.y * sampleDistanceY) + yOffset);\n
+			outColor = texture(texture0, transformedCoords).r;\n
+		}\n";
 
-		OpenGLES3MapPyramidGenerationMipmap fragmentSource =
-			"#version 300 es\n
-			precision highp float;\n
-			uniform sampler2D texture0;\n
-			uniform float pyramidFraction;\n
-			uniform float pyramidCoefficient;\n
-			uniform int originalHeight;\n
-			in vec2 fragmentTextureCoordinate;\n
-			out float outColor;\n
-			void main() {\n
-				float level = floor(max(pyramidCoefficient * fragmentTextureCoordinate.y - 2.0f, 1.0f));\n
-				float sampleDistanceX = pow(2.0f, level);\n
-				float sampleDistanceY = pyramidFraction * sampleDistanceX * sampleDistanceX;\n
-				float scaledX = sampleDistanceX * fragmentTextureCoordinate.x;\n
-				float yOffset = floor(scaledX) * sampleDistanceX / float(originalHeight);\n
-				vec2 transformedCoords = vec2(fract(scaledX), fract(fragmentTextureCoordinate.y * sampleDistanceY) + yOffset);\n
-				outColor = textureLod(texture0, transformedCoords, level).r;\n
-			}\n";
+	OpenGLES3MapPyramidGenerationMipmap fragmentSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		uniform float pyramidFraction;\n
+		uniform float pyramidCoefficient;\n
+		uniform int originalHeight;\n
+		in vec2 fragmentTextureCoordinate;\n
+		out float outColor;\n
+		void main() {\n
+			float level = floor(max(pyramidCoefficient * fragmentTextureCoordinate.y - 2.0f, 1.0f));\n
+			float sampleDistanceX = pow(2.0f, level);\n
+			float sampleDistanceY = pyramidFraction * sampleDistanceX * sampleDistanceX;\n
+			float scaledX = sampleDistanceX * fragmentTextureCoordinate.x;\n
+			float yOffset = floor(scaledX) * sampleDistanceX / float(originalHeight);\n
+			vec2 transformedCoords = vec2(fract(scaledX), fract(fragmentTextureCoordinate.y * sampleDistanceY) + yOffset);\n
+			outColor = textureLod(texture0, transformedCoords, level).r;\n
+		}\n";
 }
