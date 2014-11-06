@@ -207,12 +207,30 @@ OpenGLES3MapPackUv1080p: class extends OpenGLES3MapDefault {
 OpenGLES3MapPyramidGeneration: class extends OpenGLES3MapDefault {
 	pyramidFraction: Float { get set }
 	pyramidCoefficient: Float { get set }
+	originalHeight: Int { get set }
 	init: func {
 		super(This fragmentSource,
 			func {
 				this _program setUniform("texture0", 0)
 				this _program setUniform("pyramidFraction", this pyramidFraction)
 				this _program setUniform("pyramidCoefficient", this pyramidCoefficient)
+				this _program setUniform("originalHeight", this originalHeight)
+			})
+	}
+	fragmentSource: static String
+}
+
+OpenGLES3MapPyramidGenerationMipmap: class extends OpenGLES3MapDefault {
+	pyramidFraction: Float { get set }
+	pyramidCoefficient: Float { get set }
+	originalHeight: Int { get set }
+	init: func {
+		super(This fragmentSource,
+			func {
+				this _program setUniform("texture0", 0)
+				this _program setUniform("pyramidFraction", this pyramidFraction)
+				this _program setUniform("pyramidCoefficient", this pyramidCoefficient)
+				this _program setUniform("originalHeight", this originalHeight)
 			})
 	}
 	fragmentSource: static String
