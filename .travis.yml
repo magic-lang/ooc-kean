@@ -2,7 +2,9 @@ before_script:
   - sudo apt-get -y -qq install curl make libgc-dev
   - export PATH=$PATH:$PWD/tools/rock/bin:$PWD/tools/sam
   - mkdir tools
-  - export OOC_LIBS=$PWD/tools
+  - export OOC_LIBS=$PWD/tools 
+  - # otherwise, PWD/sdk.use will be used instead of PWD/tools/rock/sdk.use and rock will fail to compile.
+  - # rock will look for .use files not in OOC_LIBS, but in subfolders to OOC_LIBS - in this case, OOC_LIBS/rock.
   - (cd tools && git clone --depth=1 git://github.com/cogneco/rock.git -b master)
   - (cd tools && git clone --depth=1 git://github.com/cogneco/sam.git)
   - (cd tools/rock && make -s rescue)
@@ -10,4 +12,6 @@ before_script:
 
 script:
   - export OOC_LIBS=$PWD/..
+  - # because now we want to use ooc-kean/sdk.use, i.e. PWD/sdk.use.
   - sam test --rockargs --gc=off,-lpthread,-O2
+  - sam test
