@@ -19,6 +19,7 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-base
 use ooc-opengl
+use ooc-android-debug
 import math, EglRgba, AndroidContext
 
 GpuPacker: class {
@@ -79,16 +80,21 @@ GpuPacker: class {
 		destinationPointer := destination pointer
 		destinationStride := destination stride
 		sourceStride := this _targetTexture stride
-		if (sourceStride == destinationStride) {
-			memcpy(destinationPointer, sourcePointer, destinationStride * destination size height)
-		}
-		else {
+		/*
+		if (this _targetTexture isPadded()) {
+			printAndroid("Warning: Copying row by row")
+			printAndroid("Stride: " + this _targetTexture stride toString())
 			for(row in 0..image size height) {
 				sourceRow := sourcePointer + row * sourceStride
 				destinationRow := destinationPointer + row * destinationStride
 				memcpy(destinationRow, sourceRow, destinationStride)
 			}
 		}
+		else {
+			memcpy(destinationPointer, sourcePointer, destinationStride * destination size height)
+		}
+		*/
+		memcpy(destinationPointer, sourcePointer, destinationStride * destination size height)
 
 		this _targetTexture unlock()
 	}
