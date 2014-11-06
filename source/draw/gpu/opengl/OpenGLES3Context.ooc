@@ -28,6 +28,7 @@ OpenGLES3Context: class extends GpuContext {
 	_monochromeMap: OpenGLES3MapMonochrome
 	_uvMap: OpenGLES3MapUv
 	_pyramidMapMonochrome: OpenGLES3MapPyramidGeneration
+	_pyramidMapMonochromeMipmap: OpenGLES3MapPyramidGenerationMipmap
 	_packMonochrome: OpenGLES3MapPackMonochrome
 	_packUv: OpenGLES3MapPackUv
 	_onDispose: Func
@@ -39,6 +40,7 @@ OpenGLES3Context: class extends GpuContext {
 		this _monochromeMap = OpenGLES3MapMonochrome new()
 		this _uvMap = OpenGLES3MapUv new()
 		this _pyramidMapMonochrome = OpenGLES3MapPyramidGeneration new()
+		this _pyramidMapMonochromeMipmap = OpenGLES3MapPyramidGenerationMipmap new()
 		this _packMonochrome = OpenGLES3MapPackMonochrome new()
 		this _packUv = OpenGLES3MapPackUv new()
 		this _backend = context
@@ -85,6 +87,11 @@ OpenGLES3Context: class extends GpuContext {
 			case GpuMapType pyramid =>
 				match (gpuImage) {
 					case (i : GpuMonochrome) => this _pyramidMapMonochrome
+					case => null
+				}
+			case GpuMapType pyramidMipmap =>
+				match (gpuImage) {
+					case (i : GpuMonochrome) => this _pyramidMapMonochromeMipmap
 					case => null
 				}
 			case GpuMapType pack =>
