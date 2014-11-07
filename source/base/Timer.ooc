@@ -16,7 +16,6 @@
 */
 
 use ooc-collections
-
 import io/FileWriter
 
 clock: extern func () -> LLong
