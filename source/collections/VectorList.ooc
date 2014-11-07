@@ -20,7 +20,7 @@ import Vector
 VectorList: class <T> {
 	_vector: Vector<T>
 	_count: Int
-	count := this _count
+	count ::= this _count
 	init: func ~default {
 		this init(32)
 	}
@@ -31,33 +31,33 @@ VectorList: class <T> {
 
 	init: func (=_vector)
 	add: func (item: T) {
-		if (this _vector count <= this count) {
-			this _vector resize(this _vector count + 8)
+		if (this _vector count <= this _count) {
+			this _vector resize(this _vector _count + 8)
 		}
 
-		this _vector[this count] = item
-		this count += 1
+		this _vector[this _count] = item
+		this _count += 1
 	}
 
 	remove: func ~last -> T {
-		this count -= 1
-		this _vector[this count]
+		this _count -= 1
+		this _vector[this _count]
 	}
 
 	insert: func (index: Int, item: T) {
-		if (this _vector count <= this count) {
+		if (this _vector count <= this _count) {
 			this _vector resize(this _vector count + 8)
 		}
 
 		this _vector copy(index,index+1)
 		this _vector[index] = item
-		this count += 1
+		this _count += 1
 	}
 
 	remove: func (index: Int) -> T {
 		tmp := this _vector[index]
 		this _vector copy(index+1, index)
-		this count -= 1
+		this _count -= 1
 		tmp
 	}
 
