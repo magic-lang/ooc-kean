@@ -30,7 +30,7 @@ Timer: class {
 	_max: Double
 	_timeList := static VectorList<String> new(100)
 	init: func {
-		this _min = 1000000.0
+		this _min = INFINITY
 		this _max = 0.0
 	}
 	startTimer: func {
