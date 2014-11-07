@@ -23,17 +23,18 @@ CLOCKS_PER_SEC: extern const LLong
 
 Timer: class {
 	_startTime: Double
-	_endTime:  Double
+	_endTime: Double
 	_total: Double
 	_count: Int
 	_min: Double
 	_max: Double
 	_timeList := static VectorList<String> new(100)
-	init: func
-	startTimer: func {
-		this _startTime = (clock() as Double)
+	init: func {
 		this _min = 1000000.0
 		this _max = 0.0
+	}
+	startTimer: func {
+		this _startTime = (clock() as Double)
 	}
 	stopTimer: func (message: String)  -> Double {
 		this _endTime = (clock() as Double)
@@ -45,8 +46,8 @@ Timer: class {
 		this _total = this _total + result
 		this _count = this _count + 1
 		average := this _total / this _count
-		outStr := message + ": Time = " + (result toString() + ", Total = " + this _total toString() + ", Count = " + this _count toString() + ", Average = " + average toString() + ", Min = " + this _min toString() + ", Max = " + this _max toString()  )
-		This _timeList add(outStr)
+		dataStr := message + ": Time = " + (result toString() + ", Total = " + this _total toString() + ", Count = " + this _count toString() + ", Average = " + average toString() + ", Min = " + this _min toString() + ", Max = " + this _max toString()  )
+		This _timeList add(dataStr)
 		result
 	}
 	printTimeList: static func {
