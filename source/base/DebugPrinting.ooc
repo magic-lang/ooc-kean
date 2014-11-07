@@ -15,11 +15,9 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-DebugPrinting:  class {
-	_printFunctionPointer: static Func (String)
-	init: func (=_printFunctionPointer )
+DebugPrinting: class {
+	printFunctionPointer: static Func (String)
 	printDebug: static func (printOut: String) {
-		print := _printFunctionPointer
-		print(printOut)
+		This printFunctionPointer(printOut)
 	}
 }

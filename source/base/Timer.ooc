@@ -16,7 +16,7 @@
 */
 
 use ooc-collections
-import io/FileWriter
+import io/FileWriter, DebugPrinting
 
 clock: extern func () -> LLong
 CLOCKS_PER_SEC: extern const LLong
@@ -29,14 +29,15 @@ Timer: class {
 	_min: Double
 	_max: Double
 	_timeList := static VectorList<String> new(100)
-	init: func {
+	_message: String
+	init: func (=_message) {
 		this _min = INFINITY
 		this _max = 0.0
 	}
-	startTimer: func {
+	start: func {
 		this _startTime = (clock() as Double)
 	}
-	stopTimer: func (message: String)  -> Double {
+	stop: func -> Double {
 		this _endTime = (clock() as Double)
 		result := (this _endTime - this _startTime) / CLOCKS_PER_SEC
 		if (result < this _min)
@@ -46,7 +47,7 @@ Timer: class {
 		this _total = this _total + result
 		this _count = this _count + 1
 		average := this _total / this _count
-		dataStr := message + ": Time = " + (result toString() + ", Total = " + this _total toString() + ", Count = " + this _count toString() + ", Average = " + average toString() + ", Min = " + this _min toString() + ", Max = " + this _max toString()  )
+		dataStr := this _message + ": Time = " + (result toString() + ", Total = " + this _total toString() + ", Count = " + this _count toString() + ", Average = " + average toString() + ", Min = " + this _min toString() + ", Max = " + this _max toString()  )
 		This _timeList add(dataStr)
 		result
 	}
@@ -55,7 +56,13 @@ Timer: class {
 		for (i in 0..This _timeList count) {
 			timeStr = timeStr + This _timeList[i]  + "\n"
 		}
-		(timeStr) println()
+		DebugPrinting printDebug(timeStr)
+	}
+	saveLog: static func {
+		timeStr := ""
+		for (i in 0..This _timeList count) {
+			timeStr = timeStr + This _timeList[i]  + "\n"
+		}
 		fw := FileWriter new("profiling.txt")
 		fw write(timeStr)
 		fw close()
