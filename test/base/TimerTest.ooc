@@ -15,11 +15,87 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-DebugPrinting:  class {
-	_printFunctionPointer: static Func (String)
-	init: func (=_printFunctionPointer )
-	printDebug: static func (printOut: String) {
-		print := _printFunctionPointer
-		print(printOut)
+use ooc-base
+import Timer
+
+
+testfunction: func {
+
+	println("Test")
+	t_test := Timer new()
+	t_test startTimer()
+	for (i in 0..10000) {
+
 	}
+	t_test stopTimer("testfunction")
+
 }
+
+y: Double
+t := Timer new()
+t  startTimer()
+
+for (i in 0..10) {
+
+}
+
+t stopTimer("1")
+
+t startTimer()
+
+for (i in 0..100000000) {
+
+}
+
+t stopTimer("2")
+
+
+t startTimer()
+
+for (i in 0..10000) {
+
+}
+
+t stopTimer("3")
+
+testfunction()
+
+t startTimer()
+
+for (i in 0..1000000000) {
+
+}
+
+t stopTimer("4")
+
+t startTimer()
+
+for (i in 0..100) {
+
+}
+
+t stopTimer("5")
+
+
+t startTimer()
+
+for (i in 0..50) {
+
+}
+
+t stopTimer("6")
+
+
+
+t startTimer()
+
+for (i in 0..8) {
+
+}
+
+t stopTimer("7")
+
+
+
+
+t printTimeList()
