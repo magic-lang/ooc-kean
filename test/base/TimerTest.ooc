@@ -18,43 +18,43 @@
 use ooc-base
 
 testfunction: func {
-	t_test := Timer new()
-	t_test startTimer()
+	t_test := Timer new("testfunction")
+	t_test start()
 	for (i in 0..10000) {}
-	t_test stopTimer("testfunction")
+	t_test stop()
 }
 
 y: Double
-t := Timer new()
+t := Timer new("Main")
 
-t  startTimer()
+t  start()
 for (i in 0..10) {}
-t stopTimer("1")
+t stop()
 
-t startTimer()
+t start()
 for (i in 0..100000000) {}
-t stopTimer("2")
+t stop()
 
-t startTimer()
+t start()
 for (i in 0..10000) {}
-t stopTimer("3")
+t stop()
 
 testfunction()
 
-t startTimer()
+t start()
 for (i in 0..1000000000) {}
-t stopTimer("4")
+t stop()
 
-t startTimer()
+t start()
 for (i in 0..100) {}
-t stopTimer("5")
+t stop()
 
-t startTimer()
+t start()
 for (i in 0..50) {}
-t stopTimer("6")
+t stop()
 
-t startTimer()
+t start()
 for (i in 0..8) {}
-t stopTimer("7")
+t stop()
 
 Timer printTimeList()
