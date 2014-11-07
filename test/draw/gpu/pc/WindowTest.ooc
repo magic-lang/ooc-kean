@@ -26,25 +26,25 @@ rotation := 0.01f
 screenSize := IntSize2D new (1680.0f, 1050.0f)
 window := Window create(screenSize, "GL Test")
 
-rasterImageMonochrome := RasterMonochrome open("input/Hercules.jpg")
-gpuMonochrome := window createGpuImage(rasterImageMonochrome)
+//rasterImageMonochrome := RasterMonochrome open("../test/draw/input/Hercules.jpg")
+//gpuMonochrome := window createGpuImage(rasterImageMonochrome)
 
-rasterImageBgr := RasterBgr open("input/Space.png")
+rasterImageBgr := RasterBgr open("../test/draw/input/Space.png")
 gpuBgr := window createGpuImage(rasterImageBgr)
 
-gpuTarget := windw createGpuBgr(rasterImageBgr size)
+gpuTarget := window createGpuImage(rasterImageBgr)
 gpuTarget canvas draw(rasterImageBgr)
 
-rasterImageBgra := RasterBgra open("input/Space.png")
-gpuBgra := GpuImage create(rasterImageBgra)
+rasterImageBgra := RasterBgra open("../test/draw/input/Space.png")
+gpuBgra := GpuImage create(rasterImageBgra, rasterImageBgra size)
 
-rasterImageYuv420Planar := RasterYuv420Planar new(rasterImageBgr)
-gpuYuv420Planar := GpuImage create(rasterImageYuv420Planar)
+//rasterImageYuv420Planar := RasterYuv420Planar new(rasterImageBgr)
+//gpuYuv420Planar := GpuImage create(rasterImageYuv420Planar, rasterImageYuv420Planar size)
 
-rasterImageYuv420Semiplanar := RasterYuv420Semiplanar new(rasterImageBgra)
-gpuYuv420Semiplanar := GpuImage create(rasterImageYuv420Semiplanar)
+//rasterImageYuv420Semiplanar := RasterYuv420Semiplanar new(rasterImageBgra)
+//gpuYuv420Semiplanar := GpuImage create(rasterImageYuv420Semiplanar, rasterImageYuv420Semiplanar size)
 
-while(true) {
+for(i in 0..300) {
 	transform = transform translate(0, 0)
 	//window draw(rasterImageBgr, transform)
 	window draw(gpuTarget, transform)
