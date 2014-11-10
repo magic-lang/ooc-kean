@@ -44,7 +44,7 @@ gpuBgra := GpuImage create(rasterImageBgra, rasterImageBgra size)
 //rasterImageYuv420Semiplanar := RasterYuv420Semiplanar new(rasterImageBgra)
 //gpuYuv420Semiplanar := GpuImage create(rasterImageYuv420Semiplanar, rasterImageYuv420Semiplanar size)
 
-for(i in 0..300) {
+for(i in 0..500) {
 	transform = transform translate(0, 0)
 	//window draw(rasterImageBgr, transform)
 	window draw(gpuTarget, transform)

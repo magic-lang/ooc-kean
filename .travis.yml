@@ -13,5 +13,8 @@ before_script:
 script:
   - export OOC_LIBS=$PWD/..
   - # because now we want to use ooc-kean/sdk.use, i.e. PWD/sdk.use.
+  - (cd test && rock -v -r --gc=off -lpthread -O2 draw/gpu/pc/ToRasterTest)
+  - (cd test && rock -v -r --gc=off -lpthread -O2 draw/gpu/pc/WindowTest)
   - sam test --rockargs --gc=off,-lpthread,-O2
   - sam test
+
