@@ -53,11 +53,14 @@ Timer: class {
 		this _result
 	}
 	printTimeList: static func {
+		output := "Timer results: \n"
+		DebugPrinting printDebug(output)
 		for (i in 0..This _timeList count) {
 			timer := This _timeList[i]
-			output := timer _message + " Time: " + timer _result toString() + " Average: " + timer _average toString() + " Min: " + timer _min toString() + " Max: " + timer _max toString()
+			output := timer _message + " Time: " + timer _result toString() + " Average: " + timer _average toString() + " Min: " + timer _min toString() + " Max: " + timer _max toString() + "\n"
 			DebugPrinting printDebug(output)
 		}
+
 	}
 	saveLog: static func {
 		fw := FileWriter new("profiling.txt")
