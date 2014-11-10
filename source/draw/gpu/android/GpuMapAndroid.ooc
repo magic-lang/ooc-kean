@@ -166,9 +166,9 @@ setShaderSources: func {
 		in vec2 fragmentTextureCoordinate;
 		out vec4 outColor;\n
 		void main() {\n
-			float xCoord = 4.0f * fragmentTextureCoordinate.x - 1.5f / 1920.0f;\n
+			float xCoord = 4.0f * fragmentTextureCoordinate.x;\n
 			float texelHeight = 1.0f / 1080.0f;\n
-			float yCoord = fragmentTextureCoordinate.y - 1.5f / 1080.0f + floor(xCoord) * texelHeight;\n
+			float yCoord = fragmentTextureCoordinate.y + floor(xCoord) * texelHeight;\n
 			xCoord = fract(xCoord);\n
 			vec2 transformedCoords = vec2(xCoord, yCoord);\n
 			vec2 texelOffset = vec2(1.0f / 1920.0f, 0);\n
@@ -184,15 +184,16 @@ setShaderSources: func {
 		in vec2 fragmentTextureCoordinate;
 		out vec4 outColor;\n
 		void main() {\n
-			float xCoord = 4.0f * fragmentTextureCoordinate.x - 0.5f / 960.0f;\n
+			float xCoord = 4.0f * fragmentTextureCoordinate.x;\n
 			float texelHeight = 1.0f / 540.0f;\n
-			float yCoord = fragmentTextureCoordinate.y - 1.5f / 540.0f + floor(xCoord) * texelHeight;\n
+			float yCoord = fragmentTextureCoordinate.y + floor(xCoord) * texelHeight;\n
 			xCoord = fract(xCoord);\n
 			vec2 transformedCoords = vec2(xCoord, yCoord);\n
 			vec2 texelOffset = vec2(1.0f / 960.0f, 0);\n
 			vec2 rg = texture(texture0, transformedCoords).rg;\n
 			vec2 ba = texture(texture0, transformedCoords + texelOffset).rg;\n
 			outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
+			//outColor = vec4(0.5f, 0.5f, 0.5f, 0.5f);\n
 		}\n";
 
 	OpenGLES3MapLines vertexSource =

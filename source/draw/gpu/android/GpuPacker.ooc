@@ -47,7 +47,7 @@ GpuPacker: class {
 		this _targetTexture dispose()
 		this _renderTarget dispose()
 	}
-	pack: func ~ByteBuffer (image: GpuImage, map: OpenGLES3MapDefault) -> ByteBuffer {
+	pack: func (image: GpuImage, map: OpenGLES3MapDefault) {
 		map transform = FloatTransform2D identity
 		map imageSize = image size
 		map screenSize = image size
@@ -56,26 +56,23 @@ GpuPacker: class {
 		surface := this _context createSurface()
 		surface draw(image, map, Viewport new(this _internalSize))
 		surface recycle()
-		Fbo finish()
 		this _renderTarget unbind()
+	}
+	read: func ~ByteBuffer -> ByteBuffer {
 		sourcePointer := this _targetTexture lock()
-		buffer := ByteBuffer new(this _targetTexture stride * image size height, sourcePointer,
+		buffer := ByteBuffer new(this _targetTexture stride * this _targetTexture size height, sourcePointer,
 			func (buffer: ByteBuffer){ this _targetTexture unlock()
 						 this recycle()
 						})
 		buffer
 	}
-	pack: func (image: GpuImage, map: OpenGLES3MapDefault, destination: RasterImage) {
-		map transform = FloatTransform2D identity
-		map imageSize = image size
-		map screenSize = image size
-		this _renderTarget bind()
-		this _renderTarget clear()
-		surface := this _context createSurface()
-		surface draw(image, map, Viewport new(this _internalSize))
-		surface recycle()
+	finish: static func {
 		Fbo finish()
-		this _renderTarget unbind()
+	}
+	flush: static func {
+		Fbo flush()
+	}
+	read: func (destination: RasterImage) {
 		sourcePointer := this _targetTexture lock()
 		destinationPointer := destination pointer
 		destinationStride := destination stride
@@ -95,7 +92,6 @@ GpuPacker: class {
 		}
 		*/
 		memcpy(destinationPointer, sourcePointer, destinationStride * destination size height)
-
 		this _targetTexture unlock()
 	}
 }

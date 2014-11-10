@@ -25,6 +25,7 @@ EglRgba: class {
 	_stride: Int
 	stride: Int { get { this _stride } }
 	_size: IntSize2D
+	size: IntSize2D { get }
 	_channels := 4
 	init: func (eglDisplay: Pointer, size: IntSize2D) {
 		this _size = size
