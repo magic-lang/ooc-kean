@@ -1,5 +1,5 @@
 before_script:
-  - sudo apt-get -y -qq install curl make libgc-dev libgles2-mesa-dev dlocate binutils
+  - sudo apt-get -y -qq install curl make libgc-dev libgles2-mesa-dev dlocate binutils-dev
   - echo `dlocate gl3.h` # This gives an empty string back, yet libgles2-mesa-dev gives no errors on installing. Why?
   - export PATH=$PATH:$PWD/tools/rock/bin:$PWD/tools/sam
   - mkdir tools
