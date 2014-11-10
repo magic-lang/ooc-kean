@@ -16,9 +16,6 @@
 */
 use ooc-base
 
-print := func (value: String)  {
-	println(value)
-}
 
-DebugPrinting new(print)
-DebugPrinting printDebug("Printing test with prinln")
+DebugPrinting printFunctionPointer = func (message: String) {println(message)}
+DebugPrinting printDebug("Printing test with println")
