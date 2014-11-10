@@ -78,6 +78,9 @@ Fbo: class {
 	finish: static func {
 		glFinish()
 	}
+	flush: static func {
+		glFlush()
+	}
 	setViewport: static func (x: UInt, y: UInt, width: UInt, height: UInt) {
 		glViewport(x, y, width, height)
 	}
