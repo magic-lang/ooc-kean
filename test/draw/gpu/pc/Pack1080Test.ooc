@@ -9,7 +9,7 @@ packMonochrome := OpenGLES3MapPackMonochrome1080p new()
 packMonochrome transform = FloatTransform2D identity
 packMonochrome screenSize = gpuBgra size
 packMonochrome imageSize = gpuBgra size
-raster := RasterMonochrome open("test/draw/gpu/pc/input/test.png")
+raster := RasterMonochrome open("../test/draw/gpu/pc/input/test.png")
 gpuBgra canvas draw(raster, packMonochrome, Viewport new(gpuBgra size))
 packedRaster := gpuBgra toRaster() as RasterBgra
 raster2 := RasterMonochrome new(packedRaster pointer, IntSize2D new(1920, 1080))
