@@ -8,7 +8,7 @@ before_script:
   - # rock will look for .use files not in OOC_LIBS, but in subfolders to OOC_LIBS - in this case, OOC_LIBS/rock.
   - (cd tools && git clone --depth=1 git://github.com/cogneco/rock.git -b master)
   - (cd tools && git clone --depth=1 git://github.com/cogneco/sam.git)
-  - (cd tools/rock && make -s rescue && make && cd extensions && make)
+  - (cd tools/rock && make -s rescue && cd extensions && make)
   - (cd tools/sam && rock -v)
 
 script:
