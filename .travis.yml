@@ -1,5 +1,5 @@
 before_script:
-  - sudo apt-get -y -qq install curl make libgc-dev
+  - sudo apt-get -y -qq install curl make libgc-dev libgles2-mesa-dev
   - export PATH=$PATH:$PWD/tools/rock/bin:$PWD/tools/sam
   - mkdir tools
   - export OOC_LIBS=$PWD/tools 
