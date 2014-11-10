@@ -38,7 +38,7 @@ GpuPacker: class {
 		this _internalSize = IntSize2D new(size width * bytesPerPixel / 4, size height)
 		this _bytesPerPixel = bytesPerPixel
 		this _targetTexture = context createEglRgba(this _internalSize)
-		this _renderTarget = Fbo create(this _targetTexture texture, this _internalSize width, this _internalSize height)
+		this _renderTarget = Fbo create(this _targetTexture, this _internalSize width, this _internalSize height)
 	}
 	recycle: func {
 		this _context recycle(this)

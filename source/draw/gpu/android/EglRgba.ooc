@@ -17,9 +17,7 @@
 use ooc-math
 use ooc-opengl
 import egl/eglimage
-EglRgba: class {
-	_texture: Texture
-	texture: Texture { get { this _texture } }
+EglRgba: class extends Texture {
 	_id: Int
 	id: Int { get { this _id } }
 	_stride: Int
@@ -28,14 +26,21 @@ EglRgba: class {
 	size: IntSize2D { get }
 	_channels := 4
 	init: func (eglDisplay: Pointer, size: IntSize2D) {
+		super(TextureType rgba, size width, size height)
 		this _size = size
-		this _texture = Texture create(TextureType rgba, size width, size height, size width, null, false)
+		this _generate(null, size width, false)
+		//this _backend = Texture create(TextureType rgba, size width, size height, size width, null, false)
 		this _id = createEGLImage(size width, size height, eglDisplay)
 		this _stride = getStride(this _id) * this _channels
 	}
 	dispose: func {
-		this texture dispose()
+		//this dispose()
 		destroyEGLImage(this id)
+	}
+	uploadPixels: func(pixels: Pointer, stride: Int) {
+		pointer := this lock()
+		memcpy(pointer, pixels, this size width * this size height)
+		this unlock()
 	}
 	lock: func -> UInt8* {
 		result := lockPixels(this id) as UInt8*

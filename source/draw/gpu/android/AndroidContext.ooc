@@ -23,14 +23,20 @@ AndroidContext: class extends OpenGLES3Context {
 	_packerBin: GpuPackerBin
 	_packMonochrome1080p: OpenGLES3MapPackMonochrome1080p
 	_packUv1080p: OpenGLES3MapPackUv1080p
+	_unpackMonochrome1080p: OpenGLES3MapUnpackMonochrome1080p
+	_unpackUv1080p: OpenGLES3MapUnpackUv1080p
 	packTimer, readTimer: Timer
+	_eglImageBin: GpuImageBin
 	init: func {
 		super(func { this onDispose() })
 		this _packerBin = GpuPackerBin new()
 		this _packMonochrome1080p = OpenGLES3MapPackMonochrome1080p new()
 		this _packUv1080p = OpenGLES3MapPackUv1080p new()
+		this _unpackMonochrome1080p = OpenGLES3MapUnpackMonochrome1080p new()
+		this _unpackUv1080p = OpenGLES3MapUnpackUv1080p new()
 		this packTimer = Timer new("Packing")
 		this readTimer = Timer new("Reading")
+		this _eglImageBin = GpuImageBin new()
 	}
 	onDispose: func {
 		this _packerBin dispose()
@@ -137,6 +143,86 @@ AndroidContext: class extends OpenGLES3Context {
 	*/
 	recycle: func ~GpuPacker (packer: GpuPacker) {
 		this _packerBin add(packer)
+	}
+	recycle: func ~image (gpuImage: GpuImage) {
+		texture := gpuImage _backend as Texture
+		if (texture instanceOf?(EglRgba)) {
+			this _eglImageBin add(gpuImage)
+		}
+		else
+			this _imageBin add(gpuImage)
+	}
+	_createEglYuv420Semiplanar: func (rasterImage: RasterYuv420Semiplanar) -> GpuImage {
+		result := null
+		if (rasterImage size width == 1920) {
+			y := this _createEglMonochrome(rasterImage y) as OpenGLES3Monochrome
+			uv := this _createEglUv(rasterImage uv) as OpenGLES3Uv
+			result = OpenGLES3Yuv420Semiplanar new(y, uv, this)
+		}
+		else
+			result = this _createYuv420Semiplanar(rasterImage)
+		result
+	}
+	_createEglMonochrome: func (rasterImage: RasterMonochrome) -> GpuImage {
+		packed := this _eglImageBin find(GpuImageType monochrome, rasterImage size)
+		if (packed != null) {
+				packed upload(rasterImage)
+		}
+		else {
+			eglRgba: EglRgba
+			eglRgba = match (rasterImage size width) {
+				case 1920 => this createEglRgba(IntSize2D new(rasterImage size width, rasterImage size height / 4))
+				case 1280 => this createEglRgba(IntSize2D new(rasterImage size width / 4, rasterImage size height))
+				case 720 => this _createMonochrome(rasterImage)
+				case => null
+			}
+			pointer := eglRgba lock()
+			memcpy(pointer, rasterImage pointer, rasterImage size width * rasterImage size height)
+			eglRgba unlock()
+			packed = OpenGLES3Monochrome new(eglRgba, rasterImage size, this)
+		}
+		result := this createMonochrome(rasterImage size)
+		match (rasterImage size width) {
+			case 1920 => result canvas draw(packed, this _unpackMonochrome1080p, Viewport new(rasterImage size))
+		}
+		packed recycle()
+		result
+	}
+	_createEglUv: func (rasterImage: RasterUv) -> GpuImage {
+		packed := this _eglImageBin find(GpuImageType uv, rasterImage size)
+		if (packed != null) {
+				packed upload(rasterImage)
+		}
+		else {
+			eglRgba: EglRgba
+			eglRgba = match (rasterImage size width) {
+				case 960 => this createEglRgba(IntSize2D new(1920, 135))
+				case 640 => this createEglRgba(IntSize2D new(rasterImage size width / 4, rasterImage size height))
+				case 360 => this _createUv(rasterImage)
+				case => null
+			}
+			pointer := eglRgba lock()
+			memcpy(pointer, rasterImage pointer, rasterImage size width * rasterImage size height)
+			eglRgba unlock()
+			packed = OpenGLES3Monochrome new(eglRgba, rasterImage size, this)
+		}
+		result := this createUv(rasterImage size)
+		match (rasterImage size width) {
+			case 960 => result canvas draw(packed, this _unpackUv1080p, Viewport new(rasterImage size))
+		}
+		packed recycle()
+		result
+	}
+	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
+		result := match (rasterImage) {
+			case image: RasterYuv420Semiplanar => this _createEglYuv420Semiplanar(rasterImage as RasterYuv420Semiplanar)
+			case image: RasterMonochrome => this _createEglMonochrome(rasterImage as RasterMonochrome)
+			case image: RasterBgr => this _createBgr(rasterImage as RasterBgr)
+			case image: RasterBgra => this _createBgra(rasterImage as RasterBgra)
+			case image: RasterUv => this _createEglUv(rasterImage as RasterUv)
+			case image: RasterYuv420Planar => this _createYuv420Planar(rasterImage as RasterYuv420Planar)
+		}
+		result
 	}
 	createPacker: func (size: IntSize2D, bytesPerPixel: UInt) -> GpuPacker {
 		result := this _packerBin find(size, bytesPerPixel)
