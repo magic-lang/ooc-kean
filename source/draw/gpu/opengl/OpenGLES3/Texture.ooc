@@ -37,7 +37,7 @@ Texture: class {
 	internalFormat: UInt
 	_bytesPerPixel: UInt
 
-	init: func~nullTexture (type: TextureType, width: UInt, height: UInt) {
+	init: func (type: TextureType, width: UInt, height: UInt) {
 		this width = width
 		this height = height
 		this type = type
