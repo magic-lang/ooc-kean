@@ -35,39 +35,37 @@ Timer: class {
 	init: func (=_message) {
 		this _min = INFINITY
 		this _max = 0.0
+		This _timeList add(this)
 	}
 	start: func {
 		this _startTime = (clock() as Double)
 	}
 	stop: func -> Double {
 		this _endTime = (clock() as Double)
-		this _result = (this _endTime - this _startTime) / CLOCKS_PER_SEC
+		this _result = 1000.0 * (this _endTime - this _startTime) / CLOCKS_PER_SEC
 		if (this _result < this _min)
 			this _min = this _result
 		if (this _result > this _max)
 			this _max = this _result
-		this _total = this _total + this _result
-		this _count = this _count + 1
+		this _total += this _result
+		this _count += 1
 		this _average = this _total / this _count
-		This _timeList add(this)
 		this _result
 	}
 	printTimeList: static func {
-		timeStr := ""
 		for (i in 0..This _timeList count) {
-			dataStr := This _timeList[i] _message  + ": Time = " + (This _timeList[i] _result toString() + ", Total = " + This _timeList[i] _total toString() + ", Count = " + This _timeList[i] _count toString() + ", Average = " + This _timeList[i] _average toString() + ", Min = " + This _timeList[i] _min toString() + ", Max = " + This _timeList[i] _max toString()  )
-			timeStr = timeStr + dataStr  + "\n"
+			timer := This _timeList[i]
+			output := timer _message + " Time: " + timer _result toString() + " Average: " + timer _average toString() + " Min: " + timer _min toString() + " Max: " + timer _max toString()
+			DebugPrinting printDebug(output)
 		}
-		DebugPrinting printDebug(timeStr)
 	}
 	saveLog: static func {
-		timeStr := ""
-		for (i in 0..This _timeList count) {
-			dataStr := This _timeList[i] _message  + ": Time = " + (This _timeList[i] _result toString() + ", Total = " + This _timeList[i] _total toString() + ", Count = " + This _timeList[i] _count toString() + ", Average = " + This _timeList[i] _average toString() + ", Min = " + This _timeList[i] _min toString() + ", Max = " + This _timeList[i] _max toString()  )
-			timeStr = timeStr + dataStr  + "\n"
-		}
 		fw := FileWriter new("profiling.txt")
-		fw write(timeStr)
+		for (i in 0..This _timeList count) {
+			timer := This _timeList[i]
+			output := timer _message + " Time: " + timer _result toString() + " Average: " + timer _average toString() + " Min: " + timer _min toString() + " Max: " + timer _max toString() + "\n"
+			fw write(output)
+		}
 		fw close()
 	}
 }
