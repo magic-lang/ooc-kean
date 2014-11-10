@@ -15,6 +15,8 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+version (!travis) {
+
 use ooc-math
 use ooc-draw-gpu
 use ooc-draw-gpu-pc
@@ -48,4 +50,6 @@ for(i in 0..500) {
 	transform = transform translate(0, 0)
 	//window draw(rasterImageBgr, transform)
 	window draw(gpuTarget, transform)
+}
+
 }

@@ -1,3 +1,5 @@
+version (!travis) {
+
 use ooc-math
 use ooc-draw-gpu
 use ooc-draw-gpu-pc
@@ -24,4 +26,6 @@ raster := gpuImage toRaster()
 for (i in 0..500) {
 	window draw(raster)
 	window refresh()
+}
+
 }
