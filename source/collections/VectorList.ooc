@@ -34,7 +34,6 @@ VectorList: class <T> {
 		if (this _vector count <= this _count) {
 			this _vector resize(this _vector _count + 8)
 		}
-
 		this _vector[this _count] = item
 		this _count += 1
 	}
@@ -48,7 +47,6 @@ VectorList: class <T> {
 		if (this _vector count <= this _count) {
 			this _vector resize(this _vector count + 8)
 		}
-
 		this _vector copy(index,index+1)
 		this _vector[index] = item
 		this _count += 1
@@ -64,8 +62,10 @@ VectorList: class <T> {
 	__destroy__: func {
 		for (i in 0..this _count) {
 			gc_free(this _vector[i])
+			//free(this _vector[i])
 		}
-		gc_free(this _vector)
+		//gc_free(this _vector)
+		free(this _vector)
 	}
 
 	operator [] (index: Int) -> T {
