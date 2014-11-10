@@ -22,7 +22,6 @@ use ooc-draw-gpu
 
 import OpenGLES3/Fbo, OpenGLES3/Quad, OpenGLES3/Texture, OpenGLES3Bgr, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Map, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Monochrome, OpenGLES3Surface
 
-
 OpenGLES3Canvas: class extends GpuCanvas {
 	_renderTarget: Fbo
 	_defaultMap: OpenGLES3MapDefault
@@ -83,7 +82,6 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		result _renderTarget != null ? result : null
 	}
 }
-
 
 OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 	_y: OpenGLES3Canvas
