@@ -1,5 +1,5 @@
 before_script:
-  - sudo apt-get -y -qq install curl make libgc-dev libgles2-mesa-dev-lts-raring dlocate binutils-dev 
+  - sudo apt-get -y -qq install curl make libgc-dev libgles2-mesa-dev dlocate binutils-dev 
   - ls /usr/include
   - ls /usr/include/GLES3
   - export PATH=$PATH:$PWD/tools/rock/bin:$PWD/tools/sam
