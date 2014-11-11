@@ -15,35 +15,11 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-clock: extern func () -> LLong
-CLOCKS_PER_SEC: extern const LLong
 
-Timer: class {
-	_startTime: Double
-	_endTime: Double
-	_result: Double
-	_total: Double
-	_count: Int
-	_min: Double
-	_max: Double
-	_average: Double
-	init: func () {
-		this _min = INFINITY
-		this _max = 0.0
+__android_log_print: extern func (prio: Int, tag: Char*, fmt: Char*)
+DebugPrintAndroid: class extends DebugPrint {
+	printDebug: static func (printOut: String) {
+		__android_log_print(4, "OOC", printOut)
 	}
-	start: func {
-		this _startTime = (clock() as Double)
-	}
-	stop: func -> Double {
-		this _endTime = (clock() as Double)
-		this _result = 1000.0 * (this _endTime - this _startTime) / CLOCKS_PER_SEC
-		if (this _result < this _min)
-			this _min = this _result
-		if (this _result > this _max)
-			this _max = this _result
-		this _total += this _result
-		this _count += 1
-		this _average = this _total / this _count
-		this _result
-	}
+
 }

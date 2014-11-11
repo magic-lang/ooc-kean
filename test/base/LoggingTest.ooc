@@ -15,35 +15,51 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-clock: extern func () -> LLong
-CLOCKS_PER_SEC: extern const LLong
+use ooc-base
+import Logging
 
-Timer: class {
-	_startTime: Double
-	_endTime: Double
-	_result: Double
-	_total: Double
-	_count: Int
-	_min: Double
-	_max: Double
-	_average: Double
-	init: func () {
-		this _min = INFINITY
-		this _max = 0.0
-	}
-	start: func {
-		this _startTime = (clock() as Double)
-	}
-	stop: func -> Double {
-		this _endTime = (clock() as Double)
-		this _result = 1000.0 * (this _endTime - this _startTime) / CLOCKS_PER_SEC
-		if (this _result < this _min)
-			this _min = this _result
-		if (this _result > this _max)
-			this _max = this _result
-		this _total += this _result
-		this _count += 1
-		this _average = this _total / this _count
-		this _result
-	}
+DebugPrinting printFunctionPointer = func (message: String) {println(message)}
+
+testfunction: func {
+	log_test := Logging new("testfunction", 2)
+	log_test start()
+	for (i in 0..10000) {}
+	log_test stop()
 }
+
+log := Logging new("main", 1)
+
+log  start()
+for (i in 0..10) {}
+log stop()
+
+log start()
+for (i in 0..100000000) {}
+log stop()
+
+log start()
+for (i in 0..10000) {}
+log stop()
+
+testfunction()
+
+log start()
+for (i in 0..1000000000) {}
+log stop()
+
+log start()
+for (i in 0..100) {}
+log stop()
+
+log start()
+for (i in 0..50) {}
+log stop()
+
+log start()
+for (i in 0..8) {}
+log stop()
+
+Logging printLog(1)
+Logging printLog(2)
+Logging saveLog(1)
+Logging saveLog(2, "newlog.txt")

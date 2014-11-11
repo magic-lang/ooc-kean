@@ -20,14 +20,14 @@ use ooc-base
 DebugPrinting printFunctionPointer = func (message: String) {println(message)}
 
 testfunction: func {
-	t_test := Timer new("testfunction")
+	t_test := Timer new()
 	t_test start()
 	for (i in 0..10000) {}
 	t_test stop()
 }
 
 y: Double
-t := Timer new("Main")
+t := Timer new()
 
 t  start()
 for (i in 0..10) {}
@@ -58,5 +58,3 @@ t stop()
 t start()
 for (i in 0..8) {}
 t stop()
-
-Timer printTimeList()
