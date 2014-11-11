@@ -1,6 +1,6 @@
 before_script:
-  - sudo apt-get -y -qq install curl make libgc-dev libgles2-mesa-dev dlocate
-  - echo `dlocate gl3.h`
+  - sudo apt-get -y -qq install curl make libgc-dev libgles2-mesa-dev dlocate binutils-dev 
+  - ls /usr/include
   - export PATH=$PATH:$PWD/tools/rock/bin:$PWD/tools/sam
   - mkdir tools
   - export OOC_LIBS=$PWD/tools 
@@ -8,14 +8,26 @@ before_script:
   - # rock will look for .use files not in OOC_LIBS, but in subfolders to OOC_LIBS - in this case, OOC_LIBS/rock.
   - (cd tools && git clone --depth=1 git://github.com/cogneco/rock.git -b master)
   - (cd tools && git clone --depth=1 git://github.com/cogneco/sam.git)
-  - (cd tools/rock && make -s rescue)
+  - (cd tools/rock && make -s rescue && cd extensions && make)
   - (cd tools/sam && rock -v)
 
 script:
   - export OOC_LIBS=$PWD/..
   - # because now we want to use ooc-kean/sdk.use, i.e. PWD/sdk.use.
-  - (cd test && rock -v -r --gc=off -lpthread -O2 draw/gpu/pc/ToRasterTest)
-  - (cd test && rock -v -r --gc=off -lpthread -O2 draw/gpu/pc/WindowTest)
-  - sam test --rockargs --gc=off,-lpthread,-O2
-  - sam test
+  - sam test sdk.use test/sdk --rockargs --gc=off,-lpthread,-O2
+  - sam test ooc-sdk-lite.use test/sdk --rockargs --gc=off,-lpthread,-O2
+  - sam test ooc-base.use test/base --rockargs --gc=off,-lpthread,-O2
+  - sam test ooc-math.use test/math --rockargs --gc=off,-lpthread,-O2
+  - sam test ooc-unit.use test/unit --rockargs --gc=off,-lpthread,-O2
+  - sam test ooc-collections.use test/collections --rockargs --gc=off,-lpthread,-O2
+  - sam test ooc-draw.use test/draw/ColorConvertTest.ooc --rockargs --gc=off,-lpthread,-O2
+  - sam test ooc-draw.use test/draw/ImageFileTest.ooc --rockargs --gc=off,-lpthread,-O2
+  - sam test sdk.use test/sdk
+  - sam test ooc-sdk-lite.use test/sdk
+  - sam test ooc-base.use test/base
+  - sam test ooc-math.use test/math
+  - sam test ooc-unit.use test/unit
+  - sam test ooc-collections.use test/collections
+  - sam test ooc-draw.use test/draw/ColorConvertTest.ooc
+  - sam test ooc-draw.use test/draw/ImageFileTest.ooc
 

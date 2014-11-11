@@ -17,16 +17,20 @@ use ooc-draw-gpu
 use ooc-opengl
 use ooc-draw
 use ooc-math
+use ooc-base
 import GpuPacker, GpuMapAndroid, GpuPackerBin, EglRgba
 AndroidContext: class extends OpenGLES3Context {
 	_packerBin: GpuPackerBin
 	_packMonochrome1080p: OpenGLES3MapPackMonochrome1080p
 	_packUv1080p: OpenGLES3MapPackUv1080p
+	packTimer, readTimer: Timer
 	init: func {
 		super(func { this onDispose() })
 		this _packerBin = GpuPackerBin new()
 		this _packMonochrome1080p = OpenGLES3MapPackMonochrome1080p new()
 		this _packUv1080p = OpenGLES3MapPackUv1080p new()
+		this packTimer = Timer new("Packing")
+		this readTimer = Timer new("Reading")
 	}
 	onDispose: func {
 		this _packerBin dispose()
@@ -40,18 +44,28 @@ AndroidContext: class extends OpenGLES3Context {
 			semiPlanar := gpuImage as GpuYuv420Semiplanar
 
 			if (gpuImage size width == 1920) {
+				this packTimer start()
 				yPacker := this createPacker(IntSize2D new(1920, 270), 4)
-				yPacker pack(semiPlanar y, this _packMonochrome1080p, rasterYuv420Semiplanar y)
-				yPacker recycle()
 				uvPacker := this createPacker(IntSize2D new(1920, 135), 4)
-				uvPacker pack(semiPlanar uv, this _packUv1080p, rasterYuv420Semiplanar uv)
+				yPacker pack(semiPlanar y, this _packMonochrome1080p)
+				uvPacker pack(semiPlanar uv, this _packUv1080p)
+				GpuPacker finish()
+				this packTimer stop()
+				this readTimer start()
+				yPacker read(rasterYuv420Semiplanar y)
+				uvPacker read(rasterYuv420Semiplanar uv)
+				yPacker recycle()
 				uvPacker recycle()
+				this readTimer stop()
 			} else {
 				yPacker := this createPacker(semiPlanar y size, 1)
-				yPacker pack(semiPlanar y, this _packMonochrome, rasterYuv420Semiplanar y)
-				yPacker recycle()
 				uvPacker := this createPacker(semiPlanar uv size, 2)
-				uvPacker pack(semiPlanar uv, this _packUv, rasterYuv420Semiplanar uv)
+				yPacker pack(semiPlanar y, this _packMonochrome)
+				uvPacker pack(semiPlanar uv, this _packUv)
+				GpuPacker finish()
+				yPacker read(rasterYuv420Semiplanar y)
+				uvPacker read(rasterYuv420Semiplanar uv)
+				yPacker recycle()
 				uvPacker recycle()
 			}
 		} else
@@ -63,17 +77,23 @@ AndroidContext: class extends OpenGLES3Context {
 			semiPlanar := gpuImage as GpuYuv420Semiplanar
 			if (gpuImage size width == 1920) {
 				yPacker := this createPacker(IntSize2D new(1920, 270), 4)
-				yBuffer := yPacker pack(semiPlanar y, this _packMonochrome1080p)
 				uvPacker := this createPacker(IntSize2D new(1920, 135), 4)
-				uvBuffer := uvPacker pack(semiPlanar uv, this _packUv1080p)
+				yPacker pack(semiPlanar y, this _packMonochrome1080p)
+				uvPacker pack(semiPlanar uv, this _packUv1080p)
+				GpuPacker finish()
+				yBuffer := yPacker read()
+				uvBuffer := uvPacker read()
 				yRaster := RasterMonochrome new(yBuffer, semiPlanar size, 64)
 				uvRaster := RasterUv new(uvBuffer, semiPlanar size / 2, 64)
 				result = RasterYuv420Semiplanar new(yRaster, uvRaster)
 			} else {
 				yPacker := this createPacker(semiPlanar y size, 1)
-				yBuffer := yPacker pack(semiPlanar y, this _packMonochrome)
 				uvPacker := this createPacker(semiPlanar uv size, 2)
-				uvBuffer := uvPacker pack(semiPlanar uv, this _packUv)
+				yPacker pack(semiPlanar y, this _packMonochrome)
+				uvPacker pack(semiPlanar uv, this _packUv)
+				GpuPacker finish()
+				yBuffer := yPacker read()
+				uvBuffer := uvPacker read()
 				yRaster := RasterMonochrome new(yBuffer, semiPlanar size, 64)
 				uvRaster := RasterUv new(uvBuffer, semiPlanar size / 2, 64)
 				result = RasterYuv420Semiplanar new(yRaster, uvRaster)
@@ -81,13 +101,16 @@ AndroidContext: class extends OpenGLES3Context {
 		} else if (gpuImage instanceOf?(GpuMonochrome)) {
 			monochrome := gpuImage as GpuMonochrome
 			yPacker := this createPacker(monochrome size, 1)
-			buffer := yPacker pack(monochrome, this _packMonochrome)
+			yPacker pack(monochrome, this _packMonochrome)
+			GpuPacker finish()
+			buffer := yPacker read()
 			raster := RasterMonochrome new(buffer, monochrome size, 64)
 			result = raster
 		} else
 			raise("Using toRaster on unimplemented image format")
 		result
 	}
+	/*
 	toRasterCopy: func (gpuImage: GpuImage) -> RasterImage {
 		result := null
 		if (gpuImage instanceOf?(GpuYuv420Semiplanar)) {
@@ -104,13 +127,14 @@ AndroidContext: class extends OpenGLES3Context {
 			raster := RasterMonochrome new(gpuImage size)
 			monochrome := gpuImage as GpuMonochrome
 			yPacker := this createPacker(monochrome size, 1)
-			yPacker pack(monochrome, this _packMonochrome, raster)
+			yPacker pack(monochrome, this _packMonochrome)
 			yPacker recycle()
 			result = raster
 		} else
 			raise("Using toRaster on unimplemented image format")
 		result
 	}
+	*/
 	recycle: func ~GpuPacker (packer: GpuPacker) {
 		this _packerBin add(packer)
 	}
