@@ -44,6 +44,9 @@ Texture: class {
 		this _setInternalFormats(type)
 	}
 	dispose: func {
+		this internalDispose()
+	}
+	internalDispose: func {
 		glDeleteTextures(1, _backend&)
 	}
 	generateMipmap: func {
