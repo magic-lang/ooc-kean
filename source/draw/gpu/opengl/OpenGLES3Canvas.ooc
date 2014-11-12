@@ -33,6 +33,9 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	dispose: func {
 		this _renderTarget dispose()
 	}
+	onRecycle: func {
+		this _renderTarget invalidate()
+	}
 	draw: func (image: Image, transform := FloatTransform2D identity) {
 		this _defaultMap transform = transform
 		this _defaultMap imageSize = image size
@@ -96,6 +99,11 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 		this _u dispose()
 		this _v dispose()
 	}
+	onRecycle: func {
+		this _y onRecycle()
+		this _u onRecycle()
+		this _v onRecycle()
+	}
 	draw: func ~Yuv420Planar (image: OpenGLES3Yuv420Planar, transform := FloatTransform2D identity) {
 		this _y draw(image y, transform)
 		this _u draw(image u, transform)
@@ -139,6 +147,10 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 	dispose: func {
 		this _y dispose()
 		this _uv dispose()
+	}
+	onRecycle: func {
+		this _y onRecycle()
+		this _uv onRecycle()
 	}
 	draw: func ~Yuv420Semiplanar (image: OpenGLES3Yuv420Semiplanar, transform: FloatTransform2D) {
 		this _y draw(image y, transform)
