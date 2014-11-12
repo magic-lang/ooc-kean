@@ -53,14 +53,14 @@ Texture: class {
 	}
 	bind: func (unit: UInt) {
 		glActiveTexture(GL_TEXTURE0 + unit)
-		glBindTexture(GL_TEXTURE_2D, _backend)
+		glBindTexture(GL_TEXTURE_2D, this _backend)
 	}
 	unbind: func {
 		glBindTexture(GL_TEXTURE_2D, 0)
 	}
 	uploadPixels: func(pixels: Pointer, stride: Int) {
 		pixelStride := stride / this _bytesPerPixel
-		glBindTexture(GL_TEXTURE_2D, _backend)
+		glBindTexture(GL_TEXTURE_2D, this _backend)
 		if (pixelStride != this width) {
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
 		}
