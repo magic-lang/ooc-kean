@@ -2,6 +2,7 @@ use ooc-math
 use ooc-draw
 use ooc-base
 import math
+import structs/Stack
 
 Foo: class {
 	bar := Bar new()
@@ -18,7 +19,7 @@ Bar: class {
 	dispose: func { gc_free(this) }
 }
 
-while (true) {
+while (false) {
 	foo := Foo new()
 	foo dispose()
 //	gc_free(hog)
@@ -31,7 +32,7 @@ Dog: class {
 		if (pool empty?()) {
 			obj := This alloc()
 			obj __defaults__()
-			obj
+			obj as Dog
 		} else {
 			pool pop()
 		}

@@ -23,7 +23,7 @@ VectorTest: class extends Fixture {
 		super("Vector")
 		this add("heap cover create", func() {
 			heapVector := HeapVector<Int> new(10) as Vector<Int>
-			expect(heapVector count, is equal to(10))
+			expect(heapVector capacity, is equal to(10))
 			expect(heapVector[0], is equal to(0))
 
 			for (i in 0..10)
@@ -41,7 +41,7 @@ VectorTest: class extends Fixture {
 
 			// Increase array size to 20
 			heapVector resize(20)
-			expect(heapVector count, is equal to(20))
+			expect(heapVector capacity, is equal to(20))
 			for (i in 0..20)
 				heapVector[i] = i
 			for (i in 0..20)
@@ -52,7 +52,7 @@ VectorTest: class extends Fixture {
 			for (i in 0..20)
 				expect(heapVector[i], is equal to(20))
 			heapVector resize(15)
-			expect(heapVector count, is equal to(15))
+			expect(heapVector capacity, is equal to(15))
 
 			for (i in 0..15)
 				expect(heapVector[i], is equal to(20))
@@ -66,7 +66,7 @@ VectorTest: class extends Fixture {
 
 			// Decrease array size below original size
 			heapVector resize(5)
-			expect(heapVector count, is equal to(5))
+			expect(heapVector capacity, is equal to(5))
 			for (i in 0..5)
 				heapVector[i] = 5
 			for (i in 0..5)
@@ -119,8 +119,8 @@ VectorTest: class extends Fixture {
 			//stackVector := StackVector<Int> new(data[0]&, 10) as Vector<Int>
 			stackVector := StackVector<Int> new(data, 30) as Vector<Int>
 
-			expect(stackVector count, is equal to(30))
-			for (i in 0..stackVector count)
+			expect(stackVector capacity, is equal to(30))
+			for (i in 0..stackVector capacity)
 				stackVector[i] = i
 			// Test case for 0...30
 			for (i in 0..30)
@@ -134,7 +134,7 @@ VectorTest: class extends Fixture {
 
 			// Decrease array size to 20
 			stackVector resize(20)
-			expect(stackVector count, is equal to(20))
+			expect(stackVector capacity, is equal to(20))
 
 			// Insert 0...20
 			for (i in 0..20)
@@ -153,11 +153,11 @@ VectorTest: class extends Fixture {
 
 			stackVector resize(40)
 
-			expect(stackVector count, is equal to(20))
+			expect(stackVector capacity, is equal to(20))
 			stackVector resize(10)
-			expect(stackVector count, is equal to(10))
+			expect(stackVector capacity, is equal to(10))
 			stackVector resize(14)
-			expect(stackVector count, is equal to(10))
+			expect(stackVector capacity, is equal to(10))
 			for (i in 0..10)
 				stackVector[i] = 10
 			for (i in 0..10)

@@ -17,6 +17,7 @@
 GpuMapType: enum {
 	defaultmap
 	pyramid
+	pyramidMipmap
 	pack
 }
 

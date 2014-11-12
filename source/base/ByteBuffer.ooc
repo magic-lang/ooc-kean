@@ -19,19 +19,10 @@ import lang/Memory
 import structs/FreeArrayList
 import threading/Thread
 import ReferenceCounter
+import ByteBufferAbstract
 
-ByteBuffer: class {
-	_referenceCount: ReferenceCounter
-	size: Int
-	pointer: UInt8*
+ByteBuffer: class extends ByteBufferAbstract {
 	destroy: Func (This)
-	increaseReferenceCount: func {
-		this _referenceCount increase()
-	}
-	decreaseReferenceCount: func {
-		this _referenceCount decrease()
-	}
-
 	init: func (=size, =pointer, =destroy) {
 		this _referenceCount = ReferenceCounter new(this)
 	}

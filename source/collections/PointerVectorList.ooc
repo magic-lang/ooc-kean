@@ -15,38 +15,38 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import Vector
+import PointerVector
 
-VectorList: class <T> {
-	_vector: Vector<T>
-	count: Int
-	_count ::= this count
+PointerVectorList: class {
+	_vector: PointerVector
+	_count: Int
+	count := this _count
 	init: func ~default {
 		this init(32)
 	}
 
 	init: func ~heap (capacity: Int) {
-		this init(HeapVector<T> new(capacity))
+		this init(PointerHeapVector new(capacity))
 	}
 
 	init: func (=_vector)
-	add: func (item: T) {
-		if (this _vector capacity <= this count) {
-			this _vector resize(this _vector capacity + 8)
+	add: func (item: Pointer) {
+		if (this _vector count <= this count) {
+			this _vector resize(this _vector count + 8)
 		}
 
 		this _vector[this count] = item
 		this count += 1
 	}
 
-	remove: func ~last -> T {
+	remove: func ~last -> Pointer {
 		this count -= 1
 		this _vector[this count]
 	}
 
-	insert: func (index: Int, item: T) {
-		if (this _vector capacity <= this count) {
-			this _vector resize(this _vector capacity + 8)
+	insert: func (index: Int, item: Pointer) {
+		if (this _vector count <= this count) {
+			this _vector resize(this _vector count + 8)
 		}
 
 		this _vector copy(index,index+1)
@@ -54,7 +54,7 @@ VectorList: class <T> {
 		this count += 1
 	}
 
-	remove: func (index: Int) -> T {
+	remove: func (index: Int) -> Pointer {
 		tmp := this _vector[index]
 		this _vector copy(index+1, index)
 		this count -= 1
@@ -66,15 +66,12 @@ VectorList: class <T> {
 			gc_free(this _vector[i])
 		}
 		gc_free(this _vector)
-		// Remove above lines and uncomment next two to get total free of memory when pyramids can be free without causing problems
-		//this _vector _free(0, this count)
-		//this _vector free()
 	}
 
-	operator [] (index: Int) -> T {
+	operator [] (index: Int) -> Pointer {
 		this _vector[index]
 	}
-	operator []= (index: Int, item: T) {
+	operator []= (index: Int, item: Pointer) {
 		this _vector[index] = item
 	}
 }
