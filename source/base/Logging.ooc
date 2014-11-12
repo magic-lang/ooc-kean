@@ -18,7 +18,6 @@
 use ooc-collections
 
 import Timer, io/FileWriter, DebugPC/DebugPrintPC
-//import DebugPrinting
 
 Logging: class {
 	_debugLevel: Int
@@ -38,16 +37,15 @@ Logging: class {
 	createOutput: static func (debugLevel: Int) -> String {
 		output := ""
 		for (i in 0..This _logList count) {
-			if (This _logList[i] _debugLevel == debugLevel) {
+			if ((This _logList[i] _debugLevel == debugLevel) || (debugLevel == 0) ) {
 				log := This _logList[i]
-				output = log _message + " Time: " + log _timer _result toString() + " Average: " + log _timer _average toString() + " Min: " + log _timer _min toString() + " Max: " + log _timer _max toString() + "\n"
+				output = output + log _message + " Time: " + log _timer _result toString() + " Average: " + log _timer _average toString() + " Min: " + log _timer _min toString() + " Max: " + log _timer _max toString() + "\n"
 			}
 		}
 		output
 	}
 	printLog: static func (debugLevel: Int) {
 		output := This createOutput(debugLevel)
-		//DebugPrinting printDebug(output)
 		DebugPrintPC printDebug(output)
 	}
 	saveLog: static func (debugLevel: Int, fileName := "profiling.txt") {

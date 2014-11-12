@@ -15,11 +15,11 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
+import DebugPrint
 
 __android_log_print: extern func (prio: Int, tag: Char*, fmt: Char*)
 DebugPrintAndroid: class extends DebugPrint {
 	printDebug: static func (printOut: String) {
 		__android_log_print(4, "OOC", printOut)
 	}
-
 }

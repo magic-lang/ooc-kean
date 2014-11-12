@@ -27,6 +27,14 @@ testfunction: func {
 	log_test stop()
 }
 
+testfunction2: func {
+	log_test := Logging new("testfunction2", 1)
+	log_test start()
+	for (i in 0..1000) {}
+	log_test stop()
+}
+
+
 log := Logging new("main", 1)
 
 log  start()
@@ -59,7 +67,18 @@ log start()
 for (i in 0..8) {}
 log stop()
 
+testfunction2()
+
+println("-----------")
+Logging printLog(0)
+println("-----------")
 Logging printLog(1)
+println("-----------")
 Logging printLog(2)
-Logging saveLog(1)
+println("-----------")
+
+
+
+Logging saveLog(1, "firstlog.txt")
 Logging saveLog(2, "newlog.txt")
+Logging saveLog(0)

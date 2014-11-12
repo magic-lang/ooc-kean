@@ -21,5 +21,4 @@ DebugPrintPC: class extends DebugPrint {
 	printDebug: static func (printOut: String) {
 		println(printOut)
 	}
-
 }
