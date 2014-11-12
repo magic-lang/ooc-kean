@@ -118,6 +118,8 @@ FloatTransform2D: cover {
 	createScaling: static func ~float (factor: Float) -> This { This createScaling(factor, factor) }
 	createScaling: static func ~size (factor: FloatSize2D) -> This { This createScaling(factor width, factor height) }
 	createZRotation: static func (angle: Float) -> This { This new(angle cos(), angle sin(), -angle sin(), angle cos(), 0.0f, 0.0f) }
+	createXRotation: static func (angle: Float, k: Float) -> This { This new(1 / cos(angle), 0.0f, 0.0f, 0.0f, 1, tan(angle) * k, 0.0f, -tan(angle) / k, 1) }
+	createYRotation: static func (angle: Float, k: Float) -> This { This new(1, 0.0f, tan(angle) * k, 0.0f, 1 / cos(angle), 0.0f, -tan(angle) / k, 0.0f, 1) }
 	createZRotation: static func ~pivot (angle: Float, pivot: FloatPoint2D) -> This {
 		one := 1.0f
 		sine := angle sin()
