@@ -230,7 +230,7 @@ FloatMatrix : cover {
 				if (value != 0) {
 					result set(x, y, accumulator / value)
 				} else {
-					DivisionByZeroException new() throw()
+					/*DivisionByZeroException new() throw()*/
 				}
 			}
 		}
@@ -256,7 +256,7 @@ FloatMatrix : cover {
 				if (value != 0) {
 					result set(x, y, accumulator / value)
 				} else {
-					DivisionByZeroException new() throw()
+					/*DivisionByZeroException new() throw()*/
 				}
 			}
 		}
