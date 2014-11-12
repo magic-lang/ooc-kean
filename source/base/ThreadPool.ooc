@@ -1,5 +1,6 @@
 import structs/LinkedList
 import threading/Thread
+import threading/native/ConditionUnix
 
 ThreadJob: class {
 	init: func (=body)
@@ -8,14 +9,17 @@ ThreadJob: class {
 
 ThreadPool: class {
 	jobs: LinkedList<ThreadJob>
+	timesLocked := 0
 	threads: Thread[]
 	mutex: Mutex
+	condition: ConditionUnix
 	activeJobs: Int
 
 	init: func (threadCount := 4) {
 		this threads = Thread[threadCount] new()
 		this jobs = LinkedList<ThreadJob> new()
 		this mutex = Mutex new()
+		this condition = ConditionUnix new()
 
 		for(i in 0..threadCount) {
 			threads[i] = Thread new(|| threadLoop())
@@ -25,10 +29,13 @@ ThreadPool: class {
 	threadLoop: func {
 		while(true) {
 			this mutex lock()
+			this condition wait(this mutex)
+			timesLocked += 1
 			if(this jobs getSize() > 0) {
 				job := this jobs first()
 				jobs removeAt(0)
 				this mutex unlock()
+				"Unlocking threadLoop " print()
 				job body()
 				this mutex lock()
 				this activeJobs -= 1
@@ -44,6 +51,7 @@ ThreadPool: class {
 		this mutex lock()
 		this jobs add(ThreadJob new(body))
 		this activeJobs += 1
+		this condition signal()
 		this mutex unlock()
 	}
 
