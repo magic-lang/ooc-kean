@@ -17,55 +17,55 @@
 
 Vector: abstract class <T> {
 	_backend: T*
-	_count: Int
-	count ::= this _count
+	_capacity: Int
+	capacity ::= this _capacity
 	_freeContent: Bool
 
-	init: /* protected */ func ~preallocated (=_backend, =_count, freeContent := false) {}
-	init: /* protected */ func (=_count, freeContent := false) {
-		this _allocate(this _count)
+	init: /* protected */ func ~preallocated (=_backend, =_capacity, freeContent := true) {}
+	init: /* protected */ func (=_capacity, freeContent := true) {
+		this _allocate(this _capacity)
 		this _freeContent = freeContent
 	}
-	__destroy__: func {	this _free(0, this count) }
+	__destroy__: func {	this _free(0, this capacity) }
 	_free: func ~range (start: Int, end: Int) {
 		if (this _freeContent && T inheritsFrom?(Object)) {
 			for (i in start..end) {
-				old := this[i] as Object
-				old free()
+					old := this[i] as Object
+					old free()
 			}
 		}
 	}
-	_allocate: abstract func (count: Int)
+	_allocate: abstract func (capacity: Int)
 
-	resize: func (count: Int) {
-		if (count < this count) {
-			this _free(count, this count)
-			this _count = count
+	resize: func (capacity: Int) {
+		if (capacity < this capacity) {
+			this _free(capacity, this capacity)
+			this _capacity = capacity
 		}
-		else if (count > this count) {
-			this _allocate(count)
-			this _count = count
+		else if (capacity > this capacity) {
+			this _allocate(capacity)
+			this _capacity = capacity
 		}
 	}
-	move: func (sourceStart: Int, targetStart: Int, count := 0) {
-		if (count < 1)
-			count = this count - sourceStart
-		if (targetStart + count > this count)
-			count = this count - targetStart
-		memmove(this _backend + targetStart * T size, this _backend + sourceStart * T size, count * T size)
+	move: func (sourceStart: Int, targetStart: Int, capacity := 0) {
+		if (capacity < 1)
+			capacity = this capacity - sourceStart
+		if (targetStart + capacity > this capacity)
+			capacity = this capacity - targetStart
+		memmove(this _backend + targetStart * T size, this _backend + sourceStart * T size, capacity * T size)
 	}
-	copy: func ~within (sourceStart: Int, targetStart: Int, count := 0) {
-		this copy(sourceStart, this, targetStart, count)
+	copy: func ~within (sourceStart: Int, targetStart: Int, capacity := 0) {
+		this copy(sourceStart, this, targetStart, capacity)
 	}
-	copy: func (sourceStart: Int, target: Vector<T>, targetStart: Int, count := 0) {
-		if (count < 1)
-			count = this count - sourceStart
-		if (targetStart + count > target count)
-			count = target count - targetStart
+	copy: func (sourceStart: Int, target: Vector<T>, targetStart: Int, capacity := 0) {
+		if (capacity < 1)
+			capacity = this capacity - sourceStart
+		if (targetStart + capacity > target capacity)
+			capacity = target capacity - targetStart
 
 		source := this _backend + sourceStart * T size
 		destination := target _backend + targetStart * T size
-		length := count * T size
+		length := capacity * T size
 
 		if (source <= destination && destination <= source + length || destination <= source && source <= destination + length)
 			memmove(destination, source, length)
@@ -83,32 +83,31 @@ Vector: abstract class <T> {
 }
 
 HeapVector: class <T> extends Vector<T> {
-	init: func(count: Int) {
-		super(count)
+	init: func(capacity: Int) {
+		super(capacity)
 	}
 
-	_allocate: func(count: Int)   {
-		this _backend = gc_realloc(this _backend, count * T size)
+	_allocate: func(capacity: Int)   {
+		this _backend = gc_realloc(this _backend, capacity * T size)
 	}
 
 	__destroy__: func {
-		super()
 		gc_free(this _backend)
 	}
 }
 
 StackVector: class <T> extends Vector<T> {
-	init: func(data: T*, count: Int) {
-		super(data, count)
+	init: func(data: T*, capacity: Int) {
+		super(data, capacity)
 	}
 
-	_allocate: func(count: Int) {
+	_allocate: func(capacity: Int) {
 		this _backend
 	}
 
-	resize: func(count: Int) {
-		if (count > this count)
-			count = this count
-		super(count)
+	resize: func(capacity: Int) {
+		if (capacity > this capacity)
+			capacity = this capacity
+		super(capacity)
 	}
 }

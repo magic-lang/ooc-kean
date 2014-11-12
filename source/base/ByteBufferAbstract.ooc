@@ -15,10 +15,19 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-base
-import DebugPC/DebugPrintPC
+import lang/Memory
+import structs/FreeArrayList
+import threading/Thread
+import ReferenceCounter
 
-//DebugPrinting printFunctionPointer = func (message: String) {println(message)}
-//DebugPrinting printDebug("Printing test with println")
-
-DebugPrintPC printDebug("TEST")
+ByteBufferAbstract: class {
+	_referenceCount: ReferenceCounter
+	size: Int
+	pointer: UInt8*
+	increaseReferenceCount: func {
+		this _referenceCount increase()
+	}
+	decreaseReferenceCount: func {
+		this _referenceCount decrease()
+	}
+}

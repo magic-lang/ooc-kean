@@ -5,6 +5,7 @@ PThreadCondAttr: cover from pthread_condattr_t
 
 pthread_cond_init: extern func (cond: PThreadCond*, attr: PThreadCondAttr*) -> Int
 pthread_cond_signal: extern func (cond: PThreadCond*) -> Int
+pthread_cond_broadcast: extern func (cond: PThreadCond*) -> Int
 pthread_cond_wait: extern func (cond: PThreadCond*, mutex: PThreadMutex*) -> Int
 
 import ../Thread
@@ -23,6 +24,10 @@ ConditionUnix: class {
   }
   signal: func -> Bool {
     result := pthread_cond_signal(this _backend)
+    result == 0
+  }
+  broadcast: func -> Bool {
+    result := pthread_cond_broadcast(this _backend)
     result == 0
   }
 }

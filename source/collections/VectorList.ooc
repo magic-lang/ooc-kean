@@ -19,8 +19,8 @@ import Vector
 
 VectorList: class <T> {
 	_vector: Vector<T>
-	_count: Int
-	count ::= this _count
+	count: Int
+	_count ::= this count
 	init: func ~default {
 		this init(32)
 	}
@@ -31,41 +31,44 @@ VectorList: class <T> {
 
 	init: func (=_vector)
 	add: func (item: T) {
-		if (this _vector count <= this _count) {
-			this _vector resize(this _vector _count + 8)
+		if (this _vector capacity <= this count) {
+			this _vector resize(this _vector capacity + 8)
 		}
-		this _vector[this _count] = item
-		this _count += 1
+
+		this _vector[this count] = item
+		this count += 1
 	}
 
 	remove: func ~last -> T {
-		this _count -= 1
-		this _vector[this _count]
+		this count -= 1
+		this _vector[this count]
 	}
 
 	insert: func (index: Int, item: T) {
-		if (this _vector count <= this _count) {
-			this _vector resize(this _vector count + 8)
+		if (this _vector capacity <= this count) {
+			this _vector resize(this _vector capacity + 8)
 		}
+
 		this _vector copy(index,index+1)
 		this _vector[index] = item
-		this _count += 1
+		this count += 1
 	}
 
 	remove: func (index: Int) -> T {
 		tmp := this _vector[index]
 		this _vector copy(index+1, index)
-		this _count -= 1
+		this count -= 1
 		tmp
 	}
 
 	__destroy__: func {
 		for (i in 0..this _count) {
 			gc_free(this _vector[i])
-			//free(this _vector[i])
 		}
-		//gc_free(this _vector)
-		free(this _vector)
+		gc_free(this _vector)
+		// Remove above lines and uncomment next two to get total free of memory when pyramids can be free without causing problems
+		//this _vector _free(0, this count)
+		//this _vector free()
 	}
 
 	operator [] (index: Int) -> T {
