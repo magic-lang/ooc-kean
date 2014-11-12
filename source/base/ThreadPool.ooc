@@ -9,7 +9,6 @@ ThreadJob: class {
 
 ThreadPool: class {
 	jobs: LinkedList<ThreadJob>
-	timesLocked := 0
 	threads: Thread[]
 	mutex: Mutex
 	condition: ConditionUnix
@@ -29,21 +28,17 @@ ThreadPool: class {
 	threadLoop: func {
 		while(true) {
 			this mutex lock()
-			this condition wait(this mutex)
-			timesLocked += 1
 			if(this jobs getSize() > 0) {
 				job := this jobs first()
 				jobs removeAt(0)
 				this mutex unlock()
-				"Unlocking threadLoop " print()
 				job body()
 				this mutex lock()
 				this activeJobs -= 1
 				this mutex unlock()
-			}
-			else {
+			} else {
+				this condition wait(this mutex)
 				this mutex unlock()
-				Thread yield()
 			}
 		}
 	}
@@ -51,7 +46,7 @@ ThreadPool: class {
 		this mutex lock()
 		this jobs add(ThreadJob new(body))
 		this activeJobs += 1
-		this condition signal()
+		this condition broadcast()
 		this mutex unlock()
 	}
 
@@ -61,8 +56,7 @@ ThreadPool: class {
 			if (this activeJobs > 0) {
 				this mutex unlock()
 				Thread yield()
-			}
-			else {
+			} else {
 				this mutex unlock()
 				break
 			}
