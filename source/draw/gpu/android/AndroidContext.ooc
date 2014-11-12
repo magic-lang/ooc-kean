@@ -45,217 +45,97 @@ AndroidContext: class extends OpenGLES3Context {
 		this _packUv dispose()
 		EglRgba disposeAll()
 	}
+	toRaster: func ~Yuv420SpOverwrite (gpuImage: GpuYuv420Semiplanar, rasterImage: RasterYuv420Semiplanar) {
+		yPacker, uvPacker: GpuPacker
+		//Special case to deal with padding for 1080p
+		if (gpuImage size width == 1920) {
+			yPacker = this createPacker(IntSize2D new(1920, 270), 4)
+			uvPacker = this createPacker(IntSize2D new(1920, 135), 4)
+			yPacker pack(gpuImage y, this _packMonochrome1080p)
+			uvPacker pack(gpuImage uv, this _packUv1080p)
+		}
+		else {
+			yPacker = this createPacker(gpuImage y size, 1)
+			uvPacker = this createPacker(gpuImage uv size, 2)
+			yPacker pack(gpuImage y, this _packMonochrome)
+			uvPacker pack(gpuImage uv, this _packUv)
+		}
+		GpuPacker finish()
+		yPacker read(rasterImage y)
+		uvPacker read(rasterImage uv)
+		yPacker recycle()
+		uvPacker recycle()
+	}
 	toRaster: func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) {
-		if (gpuImage instanceOf?(GpuYuv420Semiplanar)) {
-			rasterYuv420Semiplanar := rasterImage as RasterYuv420Semiplanar
-			semiPlanar := gpuImage as GpuYuv420Semiplanar
-
-			if (gpuImage size width == 1920) {
-				this packTimer start()
-				yPacker := this createPacker(IntSize2D new(1920, 270), 4)
-				uvPacker := this createPacker(IntSize2D new(1920, 135), 4)
-				yPacker pack(semiPlanar y, this _packMonochrome1080p)
-				uvPacker pack(semiPlanar uv, this _packUv1080p)
-				GpuPacker finish()
-				this packTimer stop()
-				this readTimer start()
-				yPacker read(rasterYuv420Semiplanar y)
-				uvPacker read(rasterYuv420Semiplanar uv)
-				yPacker recycle()
-				uvPacker recycle()
-				this readTimer stop()
-			} else {
-				yPacker := this createPacker(semiPlanar y size, 1)
-				uvPacker := this createPacker(semiPlanar uv size, 2)
-				yPacker pack(semiPlanar y, this _packMonochrome)
-				uvPacker pack(semiPlanar uv, this _packUv)
-				GpuPacker finish()
-				yPacker read(rasterYuv420Semiplanar y)
-				uvPacker read(rasterYuv420Semiplanar uv)
-				yPacker recycle()
-				uvPacker recycle()
-			}
-		} else
-			raise("Using toRaster on unimplemented image format")
+		match(gpuImage) {
+			case (i : GpuYuv420Semiplanar) => this toRaster(gpuImage as GpuYuv420Semiplanar, rasterImage as RasterYuv420Semiplanar)
+			case => raise("Using toRaster on unimplemented image format")
+		}
+	}
+	toRaster: func ~Yuv420Sp (gpuImage: GpuYuv420Semiplanar) -> RasterImage {
+		yPacker, uvPacker: GpuPacker
+		if (gpuImage size width == 1920) {
+			yPacker = this createPacker(IntSize2D new(1920, 270), 4)
+			uvPacker = this createPacker(IntSize2D new(1920, 135), 4)
+			yPacker pack(gpuImage y, this _packMonochrome1080p)
+			uvPacker pack(gpuImage uv, this _packUv1080p)
+		}
+		else {
+			yPacker = this createPacker(gpuImage y size, 1)
+			uvPacker = this createPacker(gpuImage uv size, 2)
+			yPacker pack(gpuImage y, this _packMonochrome)
+			uvPacker pack(gpuImage uv, this _packUv)
+		}
+		GpuPacker finish()
+		yBuffer := yPacker read()
+		uvBuffer := uvPacker read()
+		yRaster := RasterMonochrome new(yBuffer, gpuImage size, 64)
+		uvRaster := RasterUv new(uvBuffer, gpuImage size / 2, 64)
+		result := RasterYuv420Semiplanar new(yRaster, uvRaster)
+		result
+	}
+	toRaster: func ~monochrome (gpuImage: GpuMonochrome) -> RasterImage {
+		yPacker := this createPacker(gpuImage size, 1)
+		yPacker pack(gpuImage, this _packMonochrome)
+		GpuPacker finish()
+		buffer := yPacker read()
+		result := RasterMonochrome new(buffer, gpuImage size, 64)
+		result
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
-		result := null
-		if (gpuImage instanceOf?(GpuYuv420Semiplanar)) {
-			semiPlanar := gpuImage as GpuYuv420Semiplanar
-			if (gpuImage size width == 1920) {
-				yPacker := this createPacker(IntSize2D new(1920, 270), 4)
-				uvPacker := this createPacker(IntSize2D new(1920, 135), 4)
-				yPacker pack(semiPlanar y, this _packMonochrome1080p)
-				uvPacker pack(semiPlanar uv, this _packUv1080p)
-				GpuPacker finish()
-				yBuffer := yPacker read()
-				uvBuffer := uvPacker read()
-				yRaster := RasterMonochrome new(yBuffer, semiPlanar size, 64)
-				uvRaster := RasterUv new(uvBuffer, semiPlanar size / 2, 64)
-				result = RasterYuv420Semiplanar new(yRaster, uvRaster)
-			} else {
-				yPacker := this createPacker(semiPlanar y size, 1)
-				uvPacker := this createPacker(semiPlanar uv size, 2)
-				yPacker pack(semiPlanar y, this _packMonochrome)
-				uvPacker pack(semiPlanar uv, this _packUv)
-				GpuPacker finish()
-				yBuffer := yPacker read()
-				uvBuffer := uvPacker read()
-				yRaster := RasterMonochrome new(yBuffer, semiPlanar size, 64)
-				uvRaster := RasterUv new(uvBuffer, semiPlanar size / 2, 64)
-				result = RasterYuv420Semiplanar new(yRaster, uvRaster)
-			}
-		} else if (gpuImage instanceOf?(GpuMonochrome)) {
-			monochrome := gpuImage as GpuMonochrome
-			yPacker := this createPacker(monochrome size, 1)
-			yPacker pack(monochrome, this _packMonochrome)
-			GpuPacker finish()
-			buffer := yPacker read()
-			raster := RasterMonochrome new(buffer, monochrome size, 64)
-			result = raster
-		} else
-			raise("Using toRaster on unimplemented image format")
+		result := match(gpuImage) {
+			case (i : GpuYuv420Semiplanar) => this toRaster(gpuImage as GpuYuv420Semiplanar)
+			case (i : GpuMonochrome) => this toRaster(gpuImage as GpuMonochrome)
+			case => raise("Using toRaster on unimplemented image format"); null
+		}
 		result
 	}
-	/*
-	toRasterCopy: func (gpuImage: GpuImage) -> RasterImage {
-		result := null
-		if (gpuImage instanceOf?(GpuYuv420Semiplanar)) {
-			raster := RasterYuv420Semiplanar new(gpuImage size)
-			semiPlanar := gpuImage as GpuYuv420Semiplanar
-			yPacker := this createPacker(semiPlanar y size, 1)
-			yPacker pack(semiPlanar y, this _packMonochrome, raster y)
-			yPacker recycle()
-			uvPacker := this createPacker(semiPlanar uv size, 2)
-			uvPacker pack(semiPlanar uv, this _packUv, raster uv)
-			uvPacker recycle()
-			result = raster
-		} else if (gpuImage instanceOf?(GpuMonochrome)) {
-			raster := RasterMonochrome new(gpuImage size)
-			monochrome := gpuImage as GpuMonochrome
-			yPacker := this createPacker(monochrome size, 1)
-			yPacker pack(monochrome, this _packMonochrome)
-			yPacker recycle()
-			result = raster
-		} else
-			raise("Using toRaster on unimplemented image format")
-		result
-	}
-	*/
 	recycle: func ~GpuPacker (packer: GpuPacker) {
 		this _packerBin add(packer)
 	}
-	/*
-	recycle: func ~image (gpuImage: GpuImage) {
-		DebugPrinting printDebug("Recycling gpuimage")
-		texture := gpuImage _backend as Texture
-		if (texture instanceOf?(EglRgba)) {
-			DebugPrinting printDebug("Recycled EGLImage")
-			this _eglImageBin add(gpuImage)
-		}
-		else {
-			DebugPrinting printDebug("Recycled normal gpuimage")
-			this _imageBin add(gpuImage)
-		}
-	}
-	*/
 	_createEglYuv420Semiplanar: func (rasterImage: RasterYuv420Semiplanar) -> GpuImage {
 		if (rasterImage y size width != 1920)
 			return this _createYuv420Semiplanar(rasterImage)
-		packedY := this _eglImageBin find(GpuImageType monochrome, rasterImage y size) as OpenGLES3Monochrome
-		packedUv := this _eglImageBin find(GpuImageType uv, rasterImage uv size) as OpenGLES3Uv
-		if (packedY != null) {
-			DebugPrinting printDebug("Upload monochrome")
-			packedY upload(rasterImage y)
-		}
-		else {
-			DebugPrinting printDebug("Allocating new EglRgba for monochrome")
-			texture := this createEglRgba(IntSize2D new(rasterImage y size width, rasterImage y size height / 4), rasterImage y pointer, 1)
-			packedY = OpenGLES3Monochrome new(texture, rasterImage y size, this)
-		}
-		if (packedUv != null) {
-			DebugPrinting printDebug("Upload uv")
-			packedUv upload(rasterImage uv)
-		}
-		else {
-			DebugPrinting printDebug("Allocating new EglRgba for uv")
-			texture := this createEglRgba(IntSize2D new(1920, 135), rasterImage uv pointer, 1)
-			packedUv = OpenGLES3Uv new(texture, rasterImage uv size, this)
-		}
-
+		textureY := this createEglRgba(IntSize2D new(rasterImage y size width, rasterImage y size height / 4), rasterImage y pointer, 1)
+		packedY := OpenGLES3Monochrome new(textureY, rasterImage y size, this)
+		textureUv := this createEglRgba(IntSize2D new(1920, 135), rasterImage uv pointer, 1)
+		packedUv := OpenGLES3Uv new(textureUv, rasterImage uv size, this)
 		result := this createYuv420Semiplanar(rasterImage size) as OpenGLES3Yuv420Semiplanar
 		this _unpackMonochrome1080p transform = FloatTransform2D identity
 		this _unpackMonochrome1080p imageSize = rasterImage y size
 		this _unpackMonochrome1080p screenSize = rasterImage y size
 		result y canvas draw(packedY, this _unpackMonochrome1080p, Viewport new(rasterImage y size))
+		packedY dispose()
 		this _unpackUv1080p transform = FloatTransform2D identity
 		this _unpackUv1080p imageSize = rasterImage uv size
 		this _unpackUv1080p screenSize = rasterImage uv size
 		result uv canvas draw(packedUv, this _unpackUv1080p, Viewport new(rasterImage uv size))
-		this _eglImageBin add(packedY)
-		this _eglImageBin add(packedUv)
-		result
-	}
-	_createEglMonochrome: func (rasterImage: RasterMonochrome) -> OpenGLES3Monochrome {
-		packed := this _eglImageBin find(GpuImageType monochrome, rasterImage size) as OpenGLES3Monochrome
-		if (packed != null) {
-			DebugPrinting printDebug("Found recycled eglMonochrome")
-			packed upload(rasterImage)
-		}
-		else {
-			eglRgba: EglRgba
-			eglRgba = match (rasterImage size width) {
-				case 1920 => this createEglRgba(IntSize2D new(rasterImage size width, rasterImage size height / 4))
-				case 1280 => this createEglRgba(IntSize2D new(rasterImage size width / 4, rasterImage size height))
-				case 720 => this _createMonochrome(rasterImage)
-				case => null
-			}
-			pointer := eglRgba write()
-			memcpy(pointer, rasterImage pointer, rasterImage size width * rasterImage size height)
-			eglRgba unlock()
-			packed = OpenGLES3Monochrome new(eglRgba, rasterImage size, this)
-		}
-
-		result := this createMonochrome(rasterImage size) as OpenGLES3Monochrome
-		this _unpackMonochrome1080p transform = FloatTransform2D identity
-		this _unpackMonochrome1080p imageSize = result size
-		this _unpackMonochrome1080p screenSize = result size
-		result canvas draw(packed, this _unpackMonochrome1080p, Viewport new(rasterImage size))
-		packed recycle()
-		result
-	}
-	_createEglUv: func (rasterImage: RasterUv) -> OpenGLES3Uv {
-		packed := this _eglImageBin find(GpuImageType uv, rasterImage size) as OpenGLES3Uv
-		if (packed != null) {
-			DebugPrinting printDebug("Found recycled eglUv")
-			packed upload(rasterImage)
-		}
-		else {
-			DebugPrinting printDebug("Creating eglRgba")
-			eglRgba: EglRgba
-			eglRgba = match (rasterImage size width) {
-				case 960 => this createEglRgba(IntSize2D new(1920, 135))
-				case 640 => this createEglRgba(IntSize2D new(rasterImage size width / 4, rasterImage size height))
-				case 360 => this createEglRgba(rasterImage size)
-				case => null
-			}
-			pointer := eglRgba write()
-			memcpy(pointer, rasterImage pointer, rasterImage size width * rasterImage size height)
-			eglRgba unlock()
-			packed = OpenGLES3Uv new(eglRgba, rasterImage size, this)
-		}
-
-		result := this createUv(rasterImage size) as OpenGLES3Uv
-		this _unpackUv1080p transform = FloatTransform2D identity
-		this _unpackUv1080p imageSize = result size
-		this _unpackUv1080p screenSize = result size
-		result canvas draw(packed, this _unpackUv1080p, Viewport new(rasterImage size))
-		packed recycle()
+		packedUv dispose()
 		result
 	}
 	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
 		result := match (rasterImage) {
-			case image: RasterYuv420Semiplanar => this _createYuv420Semiplanar(rasterImage as RasterYuv420Semiplanar)
+			case image: RasterYuv420Semiplanar => this _createEglYuv420Semiplanar(rasterImage as RasterYuv420Semiplanar)
 			case image: RasterMonochrome => this _createMonochrome(rasterImage as RasterMonochrome)
 			case image: RasterBgr => this _createBgr(rasterImage as RasterBgr)
 			case image: RasterBgra => this _createBgra(rasterImage as RasterBgra)
