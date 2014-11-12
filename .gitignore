@@ -36,3 +36,6 @@ rock_tmp
 *.x86_64
 *.hex
 /source/Constraints
+
+# Test output
+/test/draw/output
