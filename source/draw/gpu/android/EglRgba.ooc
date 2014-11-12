@@ -39,13 +39,12 @@ EglRgba: class extends Texture {
 		}
 	}
 	dispose: func {
-		//this dispose()
+		this internalDispose()
 		destroyEGLImage(this id)
 	}
 	uploadPixels: func(pixels: Pointer, stride: Int) {
-		this unbind()
 		pointer := this write()
-		memcpy(pointer, pixels, this size width * this size height)
+		memcpy(pointer, pixels, this size width * this size height * this _channels)
 		this unlock()
 	}
 	read: func -> UInt8* {
