@@ -34,7 +34,10 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 		this _backend = texture
 	}
 	bind: func (unit: UInt) {
-		this backend bind (unit)
+		this backend bind(unit)
+	}
+	unbind: func {
+		this backend unbind()
 	}
 	dispose: func {
 		this backend dispose()

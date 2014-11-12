@@ -42,6 +42,10 @@ OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
 		this _y bind(unit)
 		this _uv bind(unit + 1)
 	}
+	unbind: func {
+		this _y unbind()
+		this _uv unbind()
+	}
 	toRasterDefault: func -> RasterImage {
 		y := this _y toRaster()
 		uv := this _uv toRaster()
