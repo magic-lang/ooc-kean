@@ -59,7 +59,7 @@ GpuPacker: class {
 		this _renderTarget unbind()
 	}
 	read: func ~ByteBuffer -> ByteBuffer {
-		sourcePointer := this _targetTexture lock()
+		sourcePointer := this _targetTexture read()
 		buffer := ByteBuffer new(this _targetTexture stride * this _targetTexture size height, sourcePointer,
 			func (buffer: ByteBuffer){ this _targetTexture unlock()
 						 this recycle()
@@ -73,7 +73,7 @@ GpuPacker: class {
 		Fbo flush()
 	}
 	read: func (destination: RasterImage) {
-		sourcePointer := this _targetTexture lock()
+		sourcePointer := this _targetTexture read()
 		destinationPointer := destination pointer
 		destinationStride := destination stride
 		sourceStride := this _targetTexture stride
