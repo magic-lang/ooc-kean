@@ -31,6 +31,6 @@ GpuCanvas: abstract class {
 	readPixels: func (channels: UInt) -> ByteBuffer {
 		raise("Trying to read pixels in unimplemented readPixels function")
 	}
-	setResolution: func (resolution: IntSize2D) {
-	}
+	onRecycle: abstract func
+
 }
