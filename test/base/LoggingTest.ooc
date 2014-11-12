@@ -8,7 +8,7 @@
 *
 * This software is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public License
@@ -16,45 +16,69 @@
 */
 
 use ooc-base
+import Logging
 
 DebugPrinting printFunctionPointer = func (message: String) {println(message)}
 
 testfunction: func {
-	t_test := Timer new()
-	t_test start()
+	log_test := Logging new("testfunction", 2)
+	log_test start()
 	for (i in 0..10000) {}
-	t_test stop()
+	log_test stop()
 }
 
-y: Double
-t := Timer new()
+testfunction2: func {
+	log_test := Logging new("testfunction2", 1)
+	log_test start()
+	for (i in 0..1000) {}
+	log_test stop()
+}
 
-t  start()
+
+log := Logging new("main", 1)
+
+log  start()
 for (i in 0..10) {}
-t stop()
+log stop()
 
-t start()
+log start()
 for (i in 0..100000000) {}
-t stop()
+log stop()
 
-t start()
+log start()
 for (i in 0..10000) {}
-t stop()
+log stop()
 
 testfunction()
 
-t start()
+log start()
 for (i in 0..1000000000) {}
-t stop()
+log stop()
 
-t start()
+log start()
 for (i in 0..100) {}
-t stop()
+log stop()
 
-t start()
+log start()
 for (i in 0..50) {}
-t stop()
+log stop()
 
-t start()
+log start()
 for (i in 0..8) {}
-t stop()
+log stop()
+
+testfunction2()
+
+println("-----------")
+Logging printLog(0)
+println("-----------")
+Logging printLog(1)
+println("-----------")
+Logging printLog(2)
+println("-----------")
+
+
+
+Logging saveLog(1, "firstlog.txt")
+Logging saveLog(2, "newlog.txt")
+Logging saveLog(0)
