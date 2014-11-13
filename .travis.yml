@@ -1,4 +1,5 @@
 before_script:
+  - sudo apt-get update
   - sudo apt-get -y -qq install curl make libgc-dev libgles2-mesa-dev dlocate binutils-dev 
   - ls /usr/include
   - export PATH=$PATH:$PWD/tools/rock/bin:$PWD/tools/sam

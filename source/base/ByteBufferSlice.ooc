@@ -28,6 +28,7 @@ ByteBufferSlice: class extends ByteBufferAbstract {
 	init: func (=_byteBuffer, =_offset, =size) {
 		this _referenceCount = ReferenceCounter new(this)
 		_byteBuffer increaseReferenceCount()
+		this pointer = _byteBuffer pointer + _offset
 	}
 	__destroy__: func {
 		this _byteBuffer decreaseReferenceCount()
