@@ -95,7 +95,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		}
 		original apply(f)
 	}
-	shift: func (offset: IntSize2D) -> Image {
+	/*shift: func (offset: IntSize2D) -> Image {
 		result : This
 		y = this y shift(offset) as RasterMonochrome
 		uv = this uv shift(offset / 2) as RasterMonochrome
@@ -103,7 +103,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		result buffer copyFrom(y buffer, 0, 0, y length)
 		result buffer copyFrom(uv buffer, 0, y length, uv length)
 		result
-	}
+	}*/
 	create: func (size: IntSize2D) -> Image {
 		result := This new(size)
 		result crop = this crop

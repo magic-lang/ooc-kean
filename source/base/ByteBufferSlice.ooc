@@ -33,4 +33,9 @@ ByteBufferSlice: class extends ByteBufferAbstract {
 	__destroy__: func {
 		this _byteBuffer decreaseReferenceCount()
 	}
+	copy: func -> ByteBuffer {
+		result := ByteBuffer new(this size)
+		memcpy(result pointer, this pointer, this size)
+		result
+	}
 }

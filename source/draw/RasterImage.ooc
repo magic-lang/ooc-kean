@@ -25,7 +25,7 @@ import StbImage
 
 RasterImage: abstract class extends Image {
 	distanceRadius: Int { get { return 1; } }
-	buffer: ByteBuffer { get set }
+	buffer: ByteBufferAbstract { get set }
 	pointer: UInt8* { get { buffer pointer } }
 	length: Int { get { buffer size } }
 	stride: UInt { get set }
