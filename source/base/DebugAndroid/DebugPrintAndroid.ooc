@@ -18,8 +18,8 @@
 import DebugPrint
 
 __android_log_print: extern func (prio: Int, tag: Char*, fmt: Char*)
-DebugPrintAndroid: class extends DebugPrint {
-	printDebug: static func (printOut: String) {
-		__android_log_print(4, "OOC", printOut)
+DebugPrintAndroid: class {
+	initialize: static func {
+		DebugPrint printFunctionPointer = func (message: String) {__android_log_print(4, "OOC", message)}
 	}
 }
