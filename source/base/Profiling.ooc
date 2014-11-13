@@ -44,17 +44,4 @@ Profiling: class {
 		}
 		output
 	}
-<<<<<<< HEAD:source/base/Profiling.ooc
-=======
-	printLog: static func (debugLevel: Int) {
-		output := This createOutput(debugLevel)
-		DebugPrint printDebug(output)
-	}
-	saveLog: static func (debugLevel: Int, fileName := "profiling.txt") {
-		fw := FileWriter new(fileName)
-		output := This createOutput(debugLevel)
-		fw write(output)
-		fw close()
-	}
->>>>>>> 30750d5137853d20123ad42fcc88c83e3ef21fd0:source/base/Logging.ooc
 }

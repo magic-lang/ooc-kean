@@ -30,6 +30,10 @@ DebugLevels: enum {
 DebugPrint: class {
 	_level: static Int
 	printFunctionPointer: static Func (String)
+	init: func
+	initialize: static func (f: Func (String)) {
+		This printFunctionPointer = f
+	}
 	print: static func (printOut: String, level: Int) {
 		if (This _level == level || (This _level == 1) ) {
 			This printFunctionPointer(printOut)
