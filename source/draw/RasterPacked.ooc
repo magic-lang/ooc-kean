@@ -29,7 +29,7 @@ RasterPacked: abstract class extends RasterImage {
 	bytesPerPixel: Int { get }
 	init: func (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment: UInt) {
 		super(buffer, size, coordinateSystem, crop)
-		this stride = Int align(this size width, byteAlignment) * bytesPerPixel
+		this stride = Int align(this size width * bytesPerPixel, byteAlignment)
 	}
 	init: func ~fromOriginal (original: This) {
 		super(original)

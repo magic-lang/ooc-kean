@@ -23,7 +23,7 @@ import ByteBufferAbstract
 import ByteBuffer
 
 ByteBufferSlice: class extends ByteBufferAbstract { 
-	_byteBuffer: ByteBuffer
+	_byteBuffer: ByteBufferAbstract
 	_offset: Int
 	init: func (=_byteBuffer, =_offset, =size) {
 		this _referenceCount = ReferenceCounter new(this)
