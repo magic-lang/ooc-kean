@@ -204,6 +204,27 @@ OpenGLES3MapPackUv1080p: class extends OpenGLES3MapDefault {
 	fragmentSource: static String
 }
 
+OpenGLES3MapUnpackMonochrome1080p: class extends OpenGLES3MapDefault {
+	init: func {
+		super(This fragmentSource,
+			func {
+				this _program setUniform("texture0", 0)
+			})
+	}
+	fragmentSource: static String
+}
+
+OpenGLES3MapUnpackUv1080p: class extends OpenGLES3MapDefault {
+	init: func {
+		super(This fragmentSource,
+			func {
+				this _program setUniform("texture0", 0)
+			})
+	}
+	fragmentSource: static String
+}
+
+
 OpenGLES3MapPyramidGeneration: class extends OpenGLES3MapDefault {
 	pyramidFraction: Float { get set }
 	pyramidCoefficient: Float { get set }

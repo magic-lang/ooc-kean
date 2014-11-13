@@ -33,6 +33,9 @@ OpenGLES3Bgr: class extends GpuBgr {
 	bind: func (unit: UInt) {
 		this backend bind (unit)
 	}
+	unbind: func {
+		this backend unbind()
+	}
 	dispose: func {
 		this backend dispose()
 		if (this _canvas != null)

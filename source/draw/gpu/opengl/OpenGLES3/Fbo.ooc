@@ -81,6 +81,12 @@ Fbo: class {
 	flush: static func {
 		glFlush()
 	}
+	invalidate: func {
+		this bind()
+		att: Int = GL_COLOR_ATTACHMENT0
+		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, att&)
+		this unbind()
+	}
 	setViewport: static func (x: UInt, y: UInt, width: UInt, height: UInt) {
 		glViewport(x, y, width, height)
 	}

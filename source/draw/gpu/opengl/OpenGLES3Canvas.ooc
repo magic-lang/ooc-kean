@@ -22,7 +22,6 @@ use ooc-draw-gpu
 
 import OpenGLES3/Fbo, OpenGLES3/Quad, OpenGLES3/Texture, OpenGLES3Bgr, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Map, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Monochrome, OpenGLES3Surface
 
-
 OpenGLES3Canvas: class extends GpuCanvas {
 	_renderTarget: Fbo
 	_defaultMap: OpenGLES3MapDefault
@@ -33,6 +32,9 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	}
 	dispose: func {
 		this _renderTarget dispose()
+	}
+	onRecycle: func {
+		this _renderTarget invalidate()
 	}
 	draw: func (image: Image, transform := FloatTransform2D identity) {
 		this _defaultMap transform = transform
@@ -84,7 +86,6 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	}
 }
 
-
 OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 	_y: OpenGLES3Canvas
 	_u: OpenGLES3Canvas
@@ -97,6 +98,11 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 		this _y dispose()
 		this _u dispose()
 		this _v dispose()
+	}
+	onRecycle: func {
+		this _y onRecycle()
+		this _u onRecycle()
+		this _v onRecycle()
 	}
 	draw: func ~Yuv420Planar (image: OpenGLES3Yuv420Planar, transform := FloatTransform2D identity) {
 		this _y draw(image y, transform)
@@ -141,6 +147,10 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 	dispose: func {
 		this _y dispose()
 		this _uv dispose()
+	}
+	onRecycle: func {
+		this _y onRecycle()
+		this _uv onRecycle()
 	}
 	draw: func ~Yuv420Semiplanar (image: OpenGLES3Yuv420Semiplanar, transform: FloatTransform2D) {
 		this _y draw(image y, transform)

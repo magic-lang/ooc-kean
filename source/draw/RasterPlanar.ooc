@@ -30,5 +30,6 @@ RasterPlanar: abstract class extends RasterImage {
 	init: func ~fromOriginal (original: This) {
 		super(original)
 		this stride = original stride
+		this byteAlignment = original byteAlignment
 	}
 }

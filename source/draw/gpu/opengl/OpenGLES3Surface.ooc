@@ -37,6 +37,7 @@ OpenGLES3Surface: class extends GpuSurface {
 		map use()
 		image bind(0)
 		this _quad draw()
+		image unbind()
 	}
 	draw: func (image: Image, map: GpuMap, viewport: Viewport) {
 		match (image) {

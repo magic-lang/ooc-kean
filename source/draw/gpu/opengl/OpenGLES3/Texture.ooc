@@ -37,13 +37,16 @@ Texture: class {
 	internalFormat: UInt
 	_bytesPerPixel: UInt
 
-	init: func~nullTexture (type: TextureType, width: UInt, height: UInt) {
+	init: func (type: TextureType, width: UInt, height: UInt) {
 		this width = width
 		this height = height
 		this type = type
 		this _setInternalFormats(type)
 	}
 	dispose: func {
+		this internalDispose()
+	}
+	internalDispose: func {
 		glDeleteTextures(1, _backend&)
 	}
 	generateMipmap: func {
@@ -53,14 +56,14 @@ Texture: class {
 	}
 	bind: func (unit: UInt) {
 		glActiveTexture(GL_TEXTURE0 + unit)
-		glBindTexture(GL_TEXTURE_2D, _backend)
+		glBindTexture(GL_TEXTURE_2D, this _backend)
 	}
 	unbind: func {
 		glBindTexture(GL_TEXTURE_2D, 0)
 	}
 	uploadPixels: func(pixels: Pointer, stride: Int) {
 		pixelStride := stride / this _bytesPerPixel
-		glBindTexture(GL_TEXTURE_2D, _backend)
+		glBindTexture(GL_TEXTURE_2D, this _backend)
 		if (pixelStride != this width) {
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
 		}

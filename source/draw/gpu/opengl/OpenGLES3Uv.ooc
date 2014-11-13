@@ -29,8 +29,15 @@ OpenGLES3Uv: class extends GpuUv {
 		super(size, context)
 		this _backend = Texture create(TextureType uv, size width, size height, stride, data) as Pointer
 	}
+	init: func ~fromTexture (texture: Texture, size: IntSize2D, context: GpuContext) {
+		super(size, context)
+		this _backend = texture
+	}
 	bind: func (unit: UInt) {
 		this backend bind (unit)
+	}
+	unbind: func {
+		this backend unbind()
 	}
 	dispose: func {
 		this backend dispose()
