@@ -16,10 +16,9 @@
 */
 
 use ooc-base
-import DebugPC/DebugPrintPC
 import DebugPrint
 
-DebugPrintPC initialize()
+DebugPrint initialize(func (message: String) {println(message)})
 DebugPrint _level = DebugLevels Everything as Int
 
 
