@@ -17,8 +17,8 @@
 
 import DebugPrint
 
-DebugPrintPC: class extends DebugPrint {
-	printDebug: static func (printOut: String) {
-		println(printOut)
+DebugPrintPC: class {
+	initialize: static func {
+		DebugPrint printFunctionPointer = func (message: String) {println(message)}
 	}
 }

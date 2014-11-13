@@ -15,6 +15,14 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-DebugPrint: abstract class {
-printDebug: static abstract func (printOut: String)
+DebugLevels: enum {
+	Everything
+
+}
+
+DebugPrint: class {
+	printFunctionPointer: static Func (String)
+	printDebug: static func (printOut: String) {
+		This printFunctionPointer(printOut)
+	}
 }

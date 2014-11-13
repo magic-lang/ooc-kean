@@ -17,7 +17,7 @@
 
 use ooc-collections
 
-import Timer, io/FileWriter, DebugPC/DebugPrintPC
+import Timer, io/FileWriter, DebugPrint
 
 Logging: class {
 	_debugLevel: Int
@@ -46,7 +46,7 @@ Logging: class {
 	}
 	printLog: static func (debugLevel: Int) {
 		output := This createOutput(debugLevel)
-		DebugPrintPC printDebug(output)
+		DebugPrint printDebug(output)
 	}
 	saveLog: static func (debugLevel: Int, fileName := "profiling.txt") {
 		fw := FileWriter new(fileName)

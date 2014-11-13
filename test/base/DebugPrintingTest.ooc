@@ -17,8 +17,10 @@
 
 use ooc-base
 import DebugPC/DebugPrintPC
+import DebugPrint
 
 //DebugPrinting printFunctionPointer = func (message: String) {println(message)}
 //DebugPrinting printDebug("Printing test with println")
 
-DebugPrintPC printDebug("TEST")
+DebugPrintPC initialize()
+DebugPrint printDebug("TEST")
