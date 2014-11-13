@@ -20,10 +20,11 @@ import structs/FreeArrayList
 import threading/Thread
 import ReferenceCounter
 
-ByteBufferAbstract: class {
+ByteBufferAbstract: abstract class {
 	_referenceCount: ReferenceCounter
 	size: Int
 	pointer: UInt8*
+	copy: abstract func -> This
 	increaseReferenceCount: func {
 		this _referenceCount increase()
 	}

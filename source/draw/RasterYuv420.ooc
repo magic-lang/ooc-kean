@@ -36,10 +36,10 @@ RasterYuv420: class extends RasterYuvPlanar {
 	}
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromByteBuffer (buffer: ByteBufferAbstract, size: IntSize2D, byteAlignment := IntSize2D new()) {
 		super(buffer, size, CoordinateSystem Default, IntShell2D new())
 	}
-	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromEverything (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
 		super(buffer, size, coordinateSystem, crop)
 	}
 	init: func ~fromRasterYuv420 (original: This) { super(original) }
@@ -82,7 +82,7 @@ RasterYuv420: class extends RasterYuvPlanar {
 		}
 		original apply(f)
 	}
-	shift: func (offset: IntSize2D) -> Image {
+/*	shift: func (offset: IntSize2D) -> Image {
 		result : This
 		y = this y shift(offset) as RasterMonochrome
 		u = this u shift(offset/2) as RasterMonochrome
@@ -92,7 +92,7 @@ RasterYuv420: class extends RasterYuvPlanar {
 		result buffer copyFrom(u buffer, 0, y length, u length)
 		result buffer copyFrom(v buffer, 0, y length + u length, v length)
 		result
-	}
+	}*/
 	create: func (size: IntSize2D) -> Image {
 		result := This new(size)
 		result crop = this crop
