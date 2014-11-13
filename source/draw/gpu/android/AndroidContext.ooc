@@ -25,7 +25,7 @@ AndroidContext: class extends OpenGLES3Context {
 	_packUv1080p: OpenGLES3MapPackUv1080p
 	_unpackMonochrome1080p: OpenGLES3MapUnpackMonochrome1080p
 	_unpackUv1080p: OpenGLES3MapUnpackUv1080p
-	packTimer, readTimer: Logging
+	packTimer, readTimer: Profiling
 	_eglImageBin: GpuImageBin
 	init: func {
 		super(func { this onDispose() })
@@ -34,8 +34,8 @@ AndroidContext: class extends OpenGLES3Context {
 		this _packUv1080p = OpenGLES3MapPackUv1080p new()
 		this _unpackMonochrome1080p = OpenGLES3MapUnpackMonochrome1080p new()
 		this _unpackUv1080p = OpenGLES3MapUnpackUv1080p new()
-		this packTimer = Logging new("Packing", 0)
-		this readTimer = Logging new("Reading", 0)
+		this packTimer = Profiling new("Packing", 0)
+		this readTimer = Profiling new("Reading", 0)
 		this _eglImageBin = GpuImageBin new()
 	}
 	onDispose: func {
