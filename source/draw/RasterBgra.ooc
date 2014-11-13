@@ -34,10 +34,10 @@ RasterBgra: class extends RasterPacked {
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
 	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D) { this init(ByteBuffer new(size area * 4, pointer), size) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, byteAlignment := 0) {
+	init: func ~fromByteBuffer (buffer: ByteBufferAbstract, size: IntSize2D, byteAlignment := 0) {
 		super(buffer, size, CoordinateSystem Default, IntShell2D new(), byteAlignment)
 	}
-	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
+	init: func ~fromEverything (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
 		super(buffer, size, coordinateSystem, crop, byteAlignment)
 	}
 	init: func ~fromRasterBgra (original: This) { super(original) }

@@ -36,11 +36,11 @@ RasterUv: class extends RasterPacked {
 	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D, byteAlignment := 0) {
 		this init(ByteBuffer new(size area * 2, pointer), size, byteAlignment)
 	}
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, byteAlignment := 0) {
+	init: func ~fromByteBuffer (buffer: ByteBufferAbstract, size: IntSize2D, byteAlignment := 0) {
 		super(buffer, size, CoordinateSystem Default, IntShell2D new(), byteAlignment)
 	}
 
-	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
+	init: func ~fromEverything (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
 		super(buffer, size, coordinateSystem, crop, byteAlignment)
 	}
 	init: func ~fromRasterUv (original: This) { super(original) }
@@ -172,5 +172,6 @@ RasterUv: class extends RasterPacked {
 	__destroy__: func {
 //		"destroying RasterUv" println()
 		this buffer free()
+//		this buffer decreaseReferenceCount()
 	}
 }

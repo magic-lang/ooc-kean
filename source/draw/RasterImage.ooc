@@ -37,7 +37,7 @@ RasterImage: abstract class extends Image {
 		this buffer = original buffer copy()
 		this buffer increaseReferenceCount()
 	}
-	init: func (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
+	init: func (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		super(size, coordinateSystem, crop, false)
 		this buffer = buffer
 		this buffer increaseReferenceCount()

@@ -36,10 +36,10 @@ RasterYuv420: class extends RasterYuvPlanar {
 	}
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromByteBuffer (buffer: ByteBufferAbstract, size: IntSize2D, byteAlignment := IntSize2D new()) {
 		super(buffer, size, CoordinateSystem Default, IntShell2D new())
 	}
-	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromEverything (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
 		super(buffer, size, coordinateSystem, crop)
 	}
 	init: func ~fromRasterYuv420 (original: This) { super(original) }
