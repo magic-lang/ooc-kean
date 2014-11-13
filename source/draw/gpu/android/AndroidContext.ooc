@@ -48,7 +48,7 @@ AndroidContext: class extends OpenGLES3Context {
 	toRaster: func ~Yuv420SpOverwrite (gpuImage: GpuYuv420Semiplanar, rasterImage: RasterYuv420Semiplanar) {
 		yPacker, uvPacker: GpuPacker
 		//Special case to deal with padding for 1080p
-		if (gpuImage size width == 1920) {
+		if (gpuImage size height == 1080) {
 			yPacker = this createPacker(IntSize2D new(1920, 270), 4)
 			uvPacker = this createPacker(IntSize2D new(1920, 135), 4)
 			yPacker pack(gpuImage y, this _packMonochrome1080p)
@@ -74,7 +74,7 @@ AndroidContext: class extends OpenGLES3Context {
 	}
 	toRaster: func ~Yuv420Sp (gpuImage: GpuYuv420Semiplanar) -> RasterImage {
 		yPacker, uvPacker: GpuPacker
-		if (gpuImage size width == 1920) {
+		if (gpuImage size height == 1080) {
 			yPacker = this createPacker(IntSize2D new(1920, 270), 4)
 			uvPacker = this createPacker(IntSize2D new(1920, 135), 4)
 			yPacker pack(gpuImage y, this _packMonochrome1080p)
@@ -135,7 +135,7 @@ AndroidContext: class extends OpenGLES3Context {
 	}
 	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
 		result := match (rasterImage) {
-			case image: RasterYuv420Semiplanar => this _createEglYuv420Semiplanar(rasterImage as RasterYuv420Semiplanar)
+			case image: RasterYuv420Semiplanar => this _createYuv420Semiplanar(rasterImage as RasterYuv420Semiplanar)
 			case image: RasterMonochrome => this _createMonochrome(rasterImage as RasterMonochrome)
 			case image: RasterBgr => this _createBgr(rasterImage as RasterBgr)
 			case image: RasterBgra => this _createBgra(rasterImage as RasterBgra)
