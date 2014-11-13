@@ -15,14 +15,29 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
+import Profiling, io/FileWriter
+
 DebugLevels: enum {
 	Everything
 
 }
 
 DebugPrint: class {
+	_level: static Int
 	printFunctionPointer: static Func (String)
-	printDebug: static func (printOut: String) {
-		This printFunctionPointer(printOut)
+	print: static func (printOut: String, level: Int) {
+		if (This _level == level || (This _level == 0) ) {
+			This printFunctionPointer(printOut)
+		}
+	}
+	printProfilingData: static func (level: Int, save: Bool, fileName := "profiling.txt") {
+		outputData := Profiling createOutput(level)
+		This printFunctionPointer(outputData)
+		if (save) {
+			fw := FileWriter new(fileName)
+			fw write(outputData)
+			fw close()
+		}
+
 	}
 }

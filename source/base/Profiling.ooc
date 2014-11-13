@@ -17,11 +17,11 @@
 
 use ooc-collections
 
-import Timer, io/FileWriter, DebugPC/DebugPrintPC
+import Timer
 
-Logging: class {
+Profiling: class {
 	_debugLevel: Int
-	_logList := static VectorList<Logging> new(100)
+	_logList := static VectorList<Profiling> new(100)
 	_message: String
 	_timer: Timer
 	init: func (=_message, =_debugLevel) {
@@ -43,15 +43,5 @@ Logging: class {
 			}
 		}
 		output
-	}
-	printLog: static func (debugLevel: Int) {
-		output := This createOutput(debugLevel)
-		DebugPrintPC printDebug(output)
-	}
-	saveLog: static func (debugLevel: Int, fileName := "profiling.txt") {
-		fw := FileWriter new(fileName)
-		output := This createOutput(debugLevel)
-		fw write(output)
-		fw close()
 	}
 }

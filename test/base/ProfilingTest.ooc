@@ -16,69 +16,74 @@
 */
 
 use ooc-base
-import Logging
+import DebugPC/DebugPrintPC
+import DebugPrint
 
-DebugPrinting printFunctionPointer = func (message: String) {println(message)}
+DebugPrintPC initialize()
+DebugPrint _level = 0
 
 testfunction: func {
-	log_test := Logging new("testfunction", 2)
-	log_test start()
+	profiling_test := Profiling new("testfunction", 2)
+	profiling_test start()
 	for (i in 0..10000) {}
-	log_test stop()
+	profiling_test stop()
 }
 
 testfunction2: func {
-	log_test := Logging new("testfunction2", 1)
-	log_test start()
+	profiling_test := Profiling new("testfunction2", 1)
+	profiling_test start()
 	for (i in 0..1000) {}
-	log_test stop()
+	profiling_test stop()
 }
 
 
-log := Logging new("main", 1)
+profiling := Profiling new("main", 1)
 
-log  start()
+profiling  start()
 for (i in 0..10) {}
-log stop()
+profiling stop()
 
-log start()
+profiling start()
 for (i in 0..100000000) {}
-log stop()
+profiling stop()
 
-log start()
+profiling start()
 for (i in 0..10000) {}
-log stop()
+profiling stop()
 
 testfunction()
 
-log start()
+profiling start()
 for (i in 0..1000000000) {}
-log stop()
+profiling stop()
 
-log start()
+profiling start()
 for (i in 0..100) {}
-log stop()
+profiling stop()
 
-log start()
+profiling start()
 for (i in 0..50) {}
-log stop()
+profiling stop()
 
-log start()
+profiling start()
 for (i in 0..8) {}
-log stop()
+profiling stop()
 
 testfunction2()
 
-println("-----------")
-Logging printLog(0)
-println("-----------")
-Logging printLog(1)
-println("-----------")
-Logging printLog(2)
-println("-----------")
+
+/*DebugPrint printProfilingData(2, false)
+DebugPrint print("TEST", 0)
+
+DebugPrint print("hello", 2)*/
 
 
 
-Logging saveLog(1, "firstlog.txt")
-Logging saveLog(2, "newlog.txt")
-Logging saveLog(0)
+
+
+DebugPrint print("first print",0)
+DebugPrint print("second print", 1)
+DebugPrint print("third print", 2)
+DebugPrint print("lolprint1", 3)
+DebugPrint print("lolprint2", 4)
+DebugPrint print("lolprint3", 5)

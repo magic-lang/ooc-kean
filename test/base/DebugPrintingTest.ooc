@@ -23,4 +23,4 @@ import DebugPrint
 //DebugPrinting printDebug("Printing test with println")
 
 DebugPrintPC initialize()
-DebugPrint printDebug("TEST")
+DebugPrint printDebug("TEST", 0)
