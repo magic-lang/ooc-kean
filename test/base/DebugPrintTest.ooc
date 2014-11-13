@@ -23,4 +23,7 @@ import DebugPrint
 //DebugPrinting printDebug("Printing test with println")
 
 DebugPrintPC initialize()
-DebugPrint printDebug("TEST", 0)
+DebugPrint _level = 3
+DebugPrint print("TEST1", 2)
+
+DebugPrint print("TEST2", 3)

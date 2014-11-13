@@ -19,19 +19,24 @@ import Profiling, io/FileWriter
 
 DebugLevels: enum {
 	Everything
-
+	Debug
+	Notification
+	Warning
+	Recoverable
+	Message
+	Critical
 }
 
 DebugPrint: class {
 	_level: static Int
 	printFunctionPointer: static Func (String)
 	print: static func (printOut: String, level: Int) {
-		if (This _level == level || (This _level == 0) ) {
+		if (This _level == level || (This _level == 1) ) {
 			This printFunctionPointer(printOut)
 		}
 	}
-	printProfilingData: static func (level: Int, save: Bool, fileName := "profiling.txt") {
-		outputData := Profiling createOutput(level)
+	printProfilingData: static func (save := false, fileName := "profiling.txt") {
+		outputData := Profiling createOutputString(This _level)
 		This printFunctionPointer(outputData)
 		if (save) {
 			fw := FileWriter new(fileName)

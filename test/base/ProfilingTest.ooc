@@ -20,7 +20,8 @@ import DebugPC/DebugPrintPC
 import DebugPrint
 
 DebugPrintPC initialize()
-DebugPrint _level = 0
+DebugPrint _level = DebugLevels Everything as Int
+
 
 testfunction: func {
 	profiling_test := Profiling new("testfunction", 2)
@@ -71,19 +72,7 @@ profiling stop()
 
 testfunction2()
 
-
-/*DebugPrint printProfilingData(2, false)
-DebugPrint print("TEST", 0)
-
-DebugPrint print("hello", 2)*/
-
-
-
-
-
 DebugPrint print("first print",0)
 DebugPrint print("second print", 1)
 DebugPrint print("third print", 2)
-DebugPrint print("lolprint1", 3)
-DebugPrint print("lolprint2", 4)
-DebugPrint print("lolprint3", 5)
+DebugPrint printProfilingData()
