@@ -16,11 +16,10 @@
 */
 
 use ooc-base
-import DebugPC/DebugPrintPC
 import DebugPrint
 
-//DebugPrinting printFunctionPointer = func (message: String) {println(message)}
-//DebugPrinting printDebug("Printing test with println")
+DebugPrint initialize(func (message: String) {println(message)})
+DebugPrint _level = 3
+DebugPrint print("TEST1", 2)
 
-DebugPrintPC initialize()
-DebugPrint printDebug("TEST")
+DebugPrint print("TEST2", 3)
