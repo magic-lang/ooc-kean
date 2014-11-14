@@ -36,6 +36,7 @@ testfunction2: func {
 	profiling_test stop()
 }
 
+DebugPrint printProfilingData()
 
 profiling := Profiling new("main", 1)
 
@@ -52,6 +53,8 @@ for (i in 0..10000) {}
 profiling stop()
 
 testfunction()
+Profiling reset()
+DebugPrint printProfilingData()
 
 profiling start()
 for (i in 0..1000000000) {}

@@ -44,4 +44,10 @@ Profiling: class {
 		}
 		output
 	}
+	reset: static func {
+		This _logList clear()
+	}
+	dispose: static func {
+		This _logList free()
+	}
 }
