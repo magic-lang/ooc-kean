@@ -15,6 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 use ooc-math
+use ooc-base
 import include/gles
 import Context
 
@@ -109,6 +110,7 @@ Texture: class {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
 		if (allocate) {
+			DebugPrint print("Allocating OpenGL texture")
 			pixelStride := stride / this _bytesPerPixel
 			if (pixelStride != this width) {
 				glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
