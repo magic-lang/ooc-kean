@@ -23,7 +23,7 @@ import ByteBufferAbstract
 import ByteBuffer
 
 ByteBufferSlice: class extends ByteBufferAbstract { 
-	_byteBuffer: ByteBuffer
+	_byteBuffer: ByteBufferAbstract
 	_offset: Int
 	init: func (=_byteBuffer, =_offset, =size) {
 		this _referenceCount = ReferenceCounter new(this)
@@ -32,5 +32,10 @@ ByteBufferSlice: class extends ByteBufferAbstract {
 	}
 	__destroy__: func {
 		this _byteBuffer decreaseReferenceCount()
+	}
+	copy: func -> ByteBuffer {
+		result := ByteBuffer new(this size)
+		memcpy(result pointer, this pointer, this size)
+		result
 	}
 }

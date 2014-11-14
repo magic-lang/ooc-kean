@@ -24,11 +24,12 @@ import RasterImage
 
 RasterPlanar: abstract class extends RasterImage {
 	byteAlignment: IntSize2D
-	init: func (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
+	init: func (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		super(buffer, size, coordinateSystem, crop)
 	}
 	init: func ~fromOriginal (original: This) {
 		super(original)
 		this stride = original stride
+		this byteAlignment = original byteAlignment
 	}
 }

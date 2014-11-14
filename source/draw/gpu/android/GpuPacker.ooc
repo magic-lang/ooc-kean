@@ -38,7 +38,7 @@ GpuPacker: class {
 		this _internalSize = IntSize2D new(size width * bytesPerPixel / 4, size height)
 		this _bytesPerPixel = bytesPerPixel
 		this _targetTexture = context createEglRgba(this _internalSize)
-		this _renderTarget = Fbo create(this _targetTexture texture, this _internalSize width, this _internalSize height)
+		this _renderTarget = Fbo create(this _targetTexture, this _internalSize width, this _internalSize height)
 	}
 	recycle: func {
 		this _context recycle(this)
@@ -59,7 +59,7 @@ GpuPacker: class {
 		this _renderTarget unbind()
 	}
 	read: func ~ByteBuffer -> ByteBuffer {
-		sourcePointer := this _targetTexture lock()
+		sourcePointer := this _targetTexture read()
 		buffer := ByteBuffer new(this _targetTexture stride * this _targetTexture size height, sourcePointer,
 			func (buffer: ByteBuffer){ this _targetTexture unlock()
 						 this recycle()
@@ -73,7 +73,7 @@ GpuPacker: class {
 		Fbo flush()
 	}
 	read: func (destination: RasterImage) {
-		sourcePointer := this _targetTexture lock()
+		sourcePointer := this _targetTexture read()
 		destinationPointer := destination pointer
 		destinationStride := destination stride
 		sourceStride := this _targetTexture stride
