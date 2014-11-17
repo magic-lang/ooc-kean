@@ -47,6 +47,7 @@ AndroidContext: class extends OpenGLES3Context {
 	}
 	toRaster: func ~Yuv420SpOverwrite (gpuImage: GpuYuv420Semiplanar, rasterImage: RasterYuv420Semiplanar) {
 		yPacker, uvPacker: GpuPacker
+		/*
 		//Special case to deal with padding for 1080p
 		if (gpuImage size height == 1080) {
 			yPacker = this createPacker(IntSize2D new(1920, 270), 4)
@@ -60,9 +61,21 @@ AndroidContext: class extends OpenGLES3Context {
 			yPacker pack(gpuImage y, this _packMonochrome)
 			uvPacker pack(gpuImage uv, this _packUv)
 		}
+		*/
+		yPacker = this createPacker(gpuImage y size, 1)
+		uvPacker = this createPacker(gpuImage uv size, 2)
+		yPacker pack(gpuImage y, this _packMonochrome)
+		uvPacker pack(gpuImage uv, this _packUv)
 		GpuPacker finish()
-		yPacker read(rasterImage y)
-		uvPacker read(rasterImage uv)
+		if (rasterImage size height == 1080) {
+			yPacker readRows(rasterImage y)
+			uvPacker readRows(rasterImage uv)
+		}
+		else {
+			yPacker read(rasterImage y)
+			uvPacker read(rasterImage uv)
+		}
+
 		yPacker recycle()
 		uvPacker recycle()
 	}
@@ -74,6 +87,7 @@ AndroidContext: class extends OpenGLES3Context {
 	}
 	toRaster: func ~Yuv420Sp (gpuImage: GpuYuv420Semiplanar) -> RasterImage {
 		yPacker, uvPacker: GpuPacker
+		/*
 		if (gpuImage size height == 1080) {
 			yPacker = this createPacker(IntSize2D new(1920, 270), 4)
 			uvPacker = this createPacker(IntSize2D new(1920, 135), 4)
@@ -86,9 +100,18 @@ AndroidContext: class extends OpenGLES3Context {
 			yPacker pack(gpuImage y, this _packMonochrome)
 			uvPacker pack(gpuImage uv, this _packUv)
 		}
+		*/
+
+		yPacker = this createPacker(gpuImage y size, 1)
+		uvPacker = this createPacker(gpuImage uv size, 2)
+		yPacker pack(gpuImage y, this _packMonochrome)
+		uvPacker pack(gpuImage uv, this _packUv)
+
 		GpuPacker finish()
+
 		yBuffer := yPacker read()
 		uvBuffer := uvPacker read()
+
 		yRaster := RasterMonochrome new(yBuffer, gpuImage size, 64)
 		uvRaster := RasterUv new(uvBuffer, gpuImage size / 2, 64)
 		result := RasterYuv420Semiplanar new(yRaster, uvRaster)
