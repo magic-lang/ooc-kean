@@ -35,12 +35,12 @@ zHandle: func {
 	println("z flag action")
 }
 main: func (argc: Int, argv: CString*) {
-inputList := VectorList<String> new()
-for (i in 1..argc) {
-	arg := argv[i] toString()
-	inputList add(arg)
-	//arg  println()
-}
+	inputList := VectorList<String> new()
+	for (i in 1..argc) {
+		arg := argv[i] toString()
+		inputList add(arg)
+		//arg  println()
+	}
 parser := CLIParser new()
 parser add("version", "v", 0, "", Event new(vHandle))
 parser add("run", "r", 0, "", Event new(rHandle))
