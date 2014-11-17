@@ -45,7 +45,7 @@ for (i in 0..10) {}
 profiling stop()
 
 profiling start()
-for (i in 0..100000000) {}
+for (i in 0..1_00_000_000) {}
 profiling stop()
 
 profiling start()
@@ -57,7 +57,7 @@ Profiling reset()
 DebugPrint printProfilingData()
 
 profiling start()
-for (i in 0..1000000000) {}
+for (i in 0..1_000_000_000) {}
 profiling stop()
 
 profiling start()

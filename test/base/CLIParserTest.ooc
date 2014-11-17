@@ -22,33 +22,25 @@ import CLIParser
 vHandle: func {
 	println("v flag action")
 }
-
 rHandle: func {
 	println("r flag action")
 }
-
 gcoff: func {
 	println("gc=off flag action")
 }
-
 lpthread: func {
 	println("lpthread flag action")
 }
-
-
-
 zHandle: func {
 	println("z flag action")
 }
-
 main: func (argc: Int, argv: CString*) {
 	inputList := VectorList<String> new()
-  for (i in 1..argc) {
-    arg := argv[i] toString()
+	for (i in 1..argc) {
+		arg := argv[i] toString()
 		inputList add(arg)
 		//arg  println()
   }
-
 	parser := CLIParser new()
 	parser add("version", "v", 0, "", Event new(vHandle))
 	parser add("run", "r", 0, "", Event new(rHandle))
@@ -58,7 +50,5 @@ main: func (argc: Int, argv: CString*) {
 	parser add("number", "n", 1, "", Event1<String> new(func (message: String) {(message as Int)+ 10}))
 	parser add("path", "p", 1, "", Event1<String> new(func (message: String) {println(message)}))
 	parser add("level", "l", 1 , "", Event1<String> new(func (level: String) {_level := (level as Int)}))
-
 	parser parse(inputList, argc-1)
-
 }

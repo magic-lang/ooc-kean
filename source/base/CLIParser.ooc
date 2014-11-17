@@ -57,59 +57,57 @@ CLIParser: class {
 		this _arguments add(Argument new(longIdentifier, shortIdentifier, parameters, help, action))
 	}
 	parse: func (input: VectorList<String>, inputLength: Int) {
-			tokens := VectorList<Token> new()
-			for (i in 0..inputLength) {
-				tmpStr := input[i]
-				tmpLength := tmpStr length()
-				if (tmpStr startsWith?("--")) {
-					subStr := tmpStr substring(2)
-					tokens add(Token new(TokenType Long, subStr))
+		tokens := VectorList<Token> new()
+		for (i in 0..inputLength) {
+			tmpStr := input[i]
+			tmpLength := tmpStr length()
+			if (tmpStr startsWith?("--")) {
+				subStr := tmpStr substring(2)
+				tokens add(Token new(TokenType Long, subStr))
+			} else if ((tmpStr startsWith?("-")) && (tmpLength > 1)) {
+				newStr := tmpStr substring(1)
+				for (i in 0..tmpLength-1) {
+					tokens add(Token new(TokenType Short, newStr[i]toString()))
 				}
-				else if ((tmpStr startsWith?("-")) && (tmpLength > 1)) {
-					newStr := tmpStr substring(1)
-					for (i in 0..tmpLength-1) {
-						tokens add(Token new(TokenType Short, newStr[i]toString()))
-					}
-				}
-				else {
-					tokens add(Token new(TokenType Parameter, tmpStr))
-				}
+			} else {
+				tokens add(Token new(TokenType Parameter, tmpStr))
 			}
-			argument: Argument
-			for (i in 0..tokens count) {
-				argument = null
-				if (tokens[i] _type == TokenType Short) {
-					for (j in 0..this _arguments count) {
-						if (this _arguments[j] _shortIdentifier == tokens[i] _value) {
+		}
+		argument: Argument
+		for (i in 0..tokens count) {
+			argument = null
+			if (tokens[i] _type == TokenType Short) {
+				for (j in 0..this _arguments count) {
+					if (this _arguments[j] _shortIdentifier == tokens[i] _value) {
 							argument = this _arguments[j]
-						}
-					}
-				}
-				else if (tokens[i] _type == TokenType Long) {
-					for (j in 0..this _arguments count) {
-						if (this _arguments[j] _longIdentifier == tokens[i] _value) {
-							argument = this _arguments[j]
-						}
-					}
-				}
-				else if (tokens[i] _type == TokenType Parameter)  {
-					raise("Unassociated Parameter")
-				}
-				if (argument != null) {
-					parameters := VectorList<String> new()
-					for ( k in 0..argument _parameters) {
-						if (tokens[i+1] _type == TokenType Parameter) {
-							parameters add(tokens[i+1] _value)
-							tokens remove(i+1)
-						}
-					}
-					if (parameters count == 0) {
-						argument _action call()
-					}
-					else if (parameters count == 1) {
-						argument _action1 call(parameters[0])
 					}
 				}
 			}
+			else if (tokens[i] _type == TokenType Long) {
+				for (j in 0..this _arguments count) {
+					if (this _arguments[j] _longIdentifier == tokens[i] _value) {
+						argument = this _arguments[j]
+					}
+				}
+			}
+			else if (tokens[i] _type == TokenType Parameter)  {
+				raise("Unassociated Parameter")
+			}
+			if (argument != null) {
+				parameters := VectorList<String> new()
+				for ( k in 0..argument _parameters) {
+					if (tokens[i+1] _type == TokenType Parameter) {
+						parameters add(tokens[i+1] _value)
+						tokens remove(i+1)
+					}
+				}
+				if (parameters count == 0) {
+					argument _action call()
+				}
+				else if (parameters count == 1) {
+					argument _action1 call(parameters[0])
+				}
+			}
+		}
 	}
 }
