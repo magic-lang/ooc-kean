@@ -30,6 +30,7 @@ EglRgba: class extends Texture {
 		super(TextureType rgba, size width, size height)
 		this _size = size
 		this _generate(null, size width, false)
+		DebugPrint print("Allocating EGL Image")
 		this _id = createEGLImage(size width, size height, eglDisplay, write)
 		this _stride = getStride(this _id) * this _channels
 		if (pixels != null) {
