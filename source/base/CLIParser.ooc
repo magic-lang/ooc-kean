@@ -82,15 +82,13 @@ CLIParser: class {
 							argument = this _arguments[j]
 					}
 				}
-			}
-			else if (tokens[i] _type == TokenType Long) {
+			} else if (tokens[i] _type == TokenType Long) {
 				for (j in 0..this _arguments count) {
 					if (this _arguments[j] _longIdentifier == tokens[i] _value) {
 						argument = this _arguments[j]
 					}
 				}
-			}
-			else if (tokens[i] _type == TokenType Parameter)  {
+			} else if (tokens[i] _type == TokenType Parameter)  {
 				raise("Unassociated Parameter")
 			}
 			if (argument != null) {
@@ -103,8 +101,7 @@ CLIParser: class {
 				}
 				if (parameters count == 0) {
 					argument _action call()
-				}
-				else if (parameters count == 1) {
+				} else if (parameters count == 1) {
 					argument _action1 call(parameters[0])
 				}
 			}

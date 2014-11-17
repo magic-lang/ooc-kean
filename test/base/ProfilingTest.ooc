@@ -44,7 +44,7 @@ for (i in 0..10) {}
 profiling stop()
 
 profiling start()
-for (i in 0..1_00_000_000) {}
+for (i in 0..100_000_000) {}
 profiling stop()
 
 profiling start()
