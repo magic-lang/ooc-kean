@@ -30,23 +30,23 @@ DebugLevels: enum {
 DebugPrint: class {
 	_level: static Int
 	printFunctionPointer: static Func (String)
-	init: func
 	initialize: static func (f: Func (String)) {
 		This printFunctionPointer = f
 	}
-	print: static func (printOut: String, level: Int) {
+	print: static func (printOut: String, level: Int = 1) {
 		if (This _level == level || (This _level == 1) ) {
 			This printFunctionPointer(printOut)
 		}
 	}
 	printProfilingData: static func (save := false, fileName := "profiling.txt") {
 		outputData := Profiling createOutputString(This _level)
-		This printFunctionPointer(outputData)
+		This print(outputData, 1)
 		if (save) {
 			fw := FileWriter new(fileName)
 			fw write(outputData)
 			fw close()
 		}
-
+		if (outputData size > 0)
+			outputData free()
 	}
 }

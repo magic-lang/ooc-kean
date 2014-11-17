@@ -58,6 +58,7 @@ OpenGLES3Context: class extends GpuContext {
 		this init(Context create(nativeWindow))
 	}
 	dispose: func {
+		this _backend makeCurrent()
 		this _onDispose()
 		this _bgrMap dispose()
 		this _bgraMap dispose()

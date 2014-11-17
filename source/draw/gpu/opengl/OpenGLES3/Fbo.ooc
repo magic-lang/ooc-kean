@@ -65,6 +65,7 @@ Fbo: class {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0)
 	}
 	_generate: func ~fromTextures (texture: Texture) -> Bool {
+		DebugPrint print("Allocating FBO")
 		glGenFramebuffers(1, this _backend&)
 		glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture _backend, 0)
@@ -80,6 +81,12 @@ Fbo: class {
 	}
 	flush: static func {
 		glFlush()
+	}
+	invalidate: func {
+		this bind()
+		att: Int = GL_COLOR_ATTACHMENT0
+		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, att&)
+		this unbind()
 	}
 	setViewport: static func (x: UInt, y: UInt, width: UInt, height: UInt) {
 		glViewport(x, y, width, height)

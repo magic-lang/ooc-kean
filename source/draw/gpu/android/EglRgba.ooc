@@ -16,30 +16,43 @@
 
 use ooc-math
 use ooc-opengl
+use ooc-base
 import egl/eglimage
-EglRgba: class {
-	_texture: Texture
-	texture: Texture { get { this _texture } }
+EglRgba: class extends Texture {
 	_id: Int
 	id: Int { get { this _id } }
 	_stride: Int
 	stride: Int { get { this _stride } }
 	_size: IntSize2D
-	size: IntSize2D { get }
+	size: IntSize2D { get { this size } }
 	_channels := 4
-	init: func (eglDisplay: Pointer, size: IntSize2D) {
+	init: func (eglDisplay: Pointer, size: IntSize2D, pixels: Pointer = null, write: Int = 0) {
+		super(TextureType rgba, size width, size height)
 		this _size = size
-		this _texture = Texture create(TextureType rgba, size width, size height, size width, null, false)
-		this _id = createEGLImage(size width, size height, eglDisplay)
+		this _generate(null, size width, false)
+		DebugPrint print("Allocating EGL Image")
+		this _id = createEGLImage(size width, size height, eglDisplay, write)
 		this _stride = getStride(this _id) * this _channels
+		if (pixels != null) {
+			pointer := this write()
+			memcpy(pointer, pixels, size width * size height * this _channels)
+			this unlock()
+		}
 	}
 	dispose: func {
-		this texture dispose()
+		this internalDispose()
 		destroyEGLImage(this id)
 	}
-	lock: func -> UInt8* {
-		result := lockPixels(this id) as UInt8*
-		result
+	uploadPixels: func(pixels: Pointer, stride: Int) {
+		pointer := this write()
+		memcpy(pointer, pixels, this size width * this size height * this _channels)
+		this unlock()
+	}
+	read: func -> UInt8* {
+		readPixels(this id) as UInt8*
+	}
+	write: func -> UInt8* {
+		writePixels(this id) as UInt8*
 	}
 	unlock: func {
 		unlockPixels(this id)
