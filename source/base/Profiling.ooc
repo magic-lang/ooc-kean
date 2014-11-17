@@ -35,13 +35,24 @@ Profiling: class {
 		this _timer stop()
 	}
 	createOutputString: static func (debugLevel: Int) -> String {
+		timeStr := " Time: "
+		average := " Average: "
+		min := " Min: "
+		max := " Max: "
 		output := ""
 		for (i in 0..This _logList count) {
 			if ((This _logList[i] _debugLevel == debugLevel) || (debugLevel == 1) ) {
 				log := This _logList[i]
-				output = output + log _message + " Time: " + log _timer _result toString() + " Average: " + log _timer _average toString() + " Min: " + log _timer _min toString() + " Max: " + log _timer _max toString() + "\n"
+				//output = output + log _message + " Time: " + log _timer _result toString() + " Average: " + log _timer _average toString() + " Min: " + log _timer _min toString() + " Max: " + log _timer _max toString() + "\n"
+				output = output + log _message + timeStr + log _timer _result toString() + average + log _timer _average toString() + min + log _timer _min toString() + max + log _timer _max toString() + "\n"
 			}
 		}
 		output
+	}
+	reset: static func {
+		This _logList clear()
+	}
+	dispose: static func {
+		This _logList free()
 	}
 }
