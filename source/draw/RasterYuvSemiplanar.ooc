@@ -50,7 +50,7 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
 		super(original)
 		this y = this createY()
 		this uv = this createUV()
-		this stride = y stride
+//		this stride = y stride
 	}
 	createY: abstract func -> RasterMonochrome
 	createUV: abstract func -> RasterUv
