@@ -75,6 +75,13 @@ VectorTest: class extends Fixture {
 			vectorList insert(5, 4)
 			expect(vectorList[5], is equal to(4))
 
+			vectorList clear()
+			for (i in 0..vectorList count) 
+				expect(vectorList[i], is equal to(null))
+			for (i in 0..10)
+				vectorList add(i)
+			expect(vectorList count, is equal to(10))
+
 		})
 	}
 }

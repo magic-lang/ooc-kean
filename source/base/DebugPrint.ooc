@@ -46,6 +46,7 @@ DebugPrint: class {
 			fw write(outputData)
 			fw close()
 		}
-		outputData free()
+		if (outputData size > 0)
+			outputData free()
 	}
 }

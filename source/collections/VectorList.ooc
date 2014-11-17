@@ -60,6 +60,12 @@ VectorList: class <T> {
 		this count -= 1
 		tmp
 	}
+	clear: func {
+		for (i in 0..this _count) {
+			this _vector[i] = null
+		}
+		this count = 0
+	}
 
 	__destroy__: func {
 		for (i in 0..this _count) {
