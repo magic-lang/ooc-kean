@@ -21,6 +21,7 @@ import FloatPoint2D
 import IntTransform2D
 import text/StringTokenizer
 import structs/ArrayList
+import FloatEuclidTransform
 
 // The 2D transform is a 3x3 homogeneous coordinate matrix.
 // The element order is:
@@ -109,6 +110,15 @@ FloatTransform2D: cover {
 	create: static func (translation: FloatSize2D, scale, rotation: Float) -> This {
 		This new(rotation cos() * scale, rotation sin() * scale, -rotation sin() * scale, rotation cos() * scale, translation width, translation height)
 	}
+	create: static func ~fromEuclid (euclidTransform: FloatEuclidTransform) -> This {
+		k := euclidTransform k
+		translation := FloatTransform2D createTranslation(euclidTransform translationX, euclidTransform translationY)
+		scaling := FloatTransform2D createScaling(euclidTransform scaling)
+		rotationX := FloatTransform2D createXRotation(euclidTransform rotationX, k)
+		rotationY := FloatTransform2D createYRotation(euclidTransform rotationY, k)
+		rotationZ := FloatTransform2D createZRotation(euclidTransform rotationZ)
+		return scaling * translation * rotationZ * rotationY * rotationX
+	}
 	create: static func ~reduced (translation: FloatSize2D, rotation: Float) -> This { This create(translation, 1.0f, rotation) }
 	createTranslation: static func (xDelta, yDelta: Float) -> This { This new(1.0f, 0.0f, 0.0f, 1.0f, xDelta, yDelta) }
 	createTranslation: static func ~float (delta: Float) -> This { This createTranslation(delta, delta) }
@@ -161,8 +171,8 @@ FloatTransform2D: cover {
 	operator != (other: This) -> Bool { !(this == other) }
 	operator as -> String { this toString() }
 	toString: func -> String {
-		"#{this a toString()}, #{this b toString()}, #{this c toString()}, \
-		#{this d toString()}, #{this e toString()}, #{this f toString()}, \
-		#{this g toString()}, #{this h toString()}, #{this i toString()}"
+		"%8f" format(this a) + ", " +"%8f" format(this b) + ", " +"%8f" format(this c) + "\t" +
+		"%8f" format(this d) + ", " +"%8f" format(this e) + ", " +"%8f" format(this f) + "\t" +
+		"%8f" format(this g) + ", " +"%8f" format(this h) + ", " +"%8f" format(this i) + "\t"
 	}
 }

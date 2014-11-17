@@ -40,7 +40,7 @@ main: func (argc: Int, argv: CString*) {
 		arg := argv[i] toString()
 		inputList add(arg)
 		//arg  println()
-  }
+	}
 	parser := CLIParser new()
 	parser add("version", "v", 0, "", Event new(vHandle))
 	parser add("run", "r", 0, "", Event new(rHandle))
