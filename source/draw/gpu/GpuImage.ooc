@@ -80,5 +80,6 @@ GpuImage: abstract class extends Image {
 	toRasterDefault: abstract func ~overwrite (rasterImage: RasterImage)
 	toRasterDefault: abstract func -> RasterImage
 	_createCanvas: abstract func -> GpuCanvas
+	setFilter: abstract func (filter: Bool)
 
 }

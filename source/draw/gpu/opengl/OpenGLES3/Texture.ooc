@@ -102,6 +102,14 @@ Texture: class {
 				raise("Unknown texture format")
 		}
 	}
+	setFilter: func (filter: Bool) {
+		this bind(0)
+		if (filter)
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+		else
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+		this unbind()
+	}
 	_generate: func (pixels: Pointer, stride: Int, allocate := true) -> Bool {
 		glGenTextures(1, _backend&)
 		glBindTexture(GL_TEXTURE_2D, _backend)
