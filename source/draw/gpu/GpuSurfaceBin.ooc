@@ -32,12 +32,7 @@ GpuSurfaceBin: class {
 		this _surfaces add(surface)
 	}
 	_search: func (arrayList: ArrayList<GpuSurface>) -> GpuSurface {
-		result := null
-		for (surface in arrayList) {
-			result = surface
-		}
-		if (result != null)
-			arrayList remove(result)
+		result := arrayList size > 0 ? arrayList removeAt(0) : null
 		result
 	}
 	find: func -> GpuSurface {
