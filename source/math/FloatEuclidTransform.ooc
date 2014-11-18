@@ -49,7 +49,10 @@ FloatEuclidTransform: cover {
 		K5 := tan(this rotationX)
 		K6 := tan(this rotationY)
 		this rotationZ = atan((K3 * (1.0f + K6 * K6) * (H7 * this k * K5 - H4)) / (H1 * (K1 + K5 * K2) - H4 * K5 * K6 - H7 * this k * K6))
-		this scaling = (K2 * K3 * H1 - K4 * H4 + 0.00000000001f) / (cos(this rotationZ) * K5 * (K3 + K4 * K6) + sin(this rotationZ) * K6 + 0.00000000001f)
+		if (this isProjective)
+			this scaling = (K2 * K3 * H1 - K4 * H4 + 0.00000000001f) / (cos(this rotationZ) * K5 * (K3 + K4 * K6) + sin(this rotationZ) * K6 + 0.00000000001f)
+		else
+			this scaling = ((H1 * H1 + H2 * H2) sqrt() + (H4 * H4 + H5 * H5) sqrt()) / 2.0f
 		this translationX = H7 + this scaling / this k * (cos(this rotationZ) * K6 - sin(this rotationZ) * K5 / K3)
 		this translationY = H8 + this scaling / this k * (sin(this rotationZ) * K6 + cos(this rotationZ) * K5 / K3)
 	}
@@ -85,7 +88,7 @@ FloatEuclidTransform: cover {
 	toString: func -> String {
 		" tx: " + "%8f" format(this translationX) +
 		" ty: " + "%8f" format(this translationY) +
-		" tz: " + "%8f" format(this scaling) +
+		" Scale: " + "%8f" format(this scaling) +
 		" Rx: " + "%8f" format(this rotationX) +
 		" Ry: " + "%8f" format(this rotationY) +
 		" Rz: " + "%8f" format(this rotationZ)
