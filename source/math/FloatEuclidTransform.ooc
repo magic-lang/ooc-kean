@@ -79,6 +79,9 @@ FloatEuclidTransform: cover {
 	operator - (other: This) -> This {
 		This new(this translationX - other translationX, this translationY - other translationY, this rotationX - other rotationX, this rotationY - other rotationY, this rotationZ - other rotationZ, this scaling / other scaling)
 	}
+	operator / (value: Float) -> This {
+		This new(this translationX / value, this translationY / value, this rotationX / value, this rotationY / value, this rotationZ / value, this scaling / value)
+	}
 	toString: func -> String {
 		" tx: " + "%8f" format(this translationX) +
 		" ty: " + "%8f" format(this translationY) +
