@@ -33,10 +33,13 @@ Fbo: class {
 	unbind: func {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0)
 	}
-	clear: func {
+	scissor: static func (x: Int, y: Int, width: Int, height: Int) {
+		glScissor(x, y, width, height)
+	}
+	clear: static func {
 		glClear(GL_COLOR_BUFFER_BIT)
 	}
-	clearColor: func (color: Float) {
+	clearColor: static func (color: Float) {
 		glClearColor(color, color, color, color)
 	}
 	readPixels: func (channels: UInt) -> ByteBuffer {
@@ -89,6 +92,8 @@ Fbo: class {
 		this unbind()
 	}
 	setViewport: static func (x: UInt, y: UInt, width: UInt, height: UInt) {
+		//glEnable(GL_SCISSOR_TEST)
+		//glScissor(x, y, width, height)
 		glViewport(x, y, width, height)
 	}
 	create: static func (texture: Texture, width: UInt, height: UInt) -> This {
