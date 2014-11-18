@@ -10,9 +10,9 @@ ByteBufferSliceTest: class extends Fixture {
 			yuv := ByteBuffer new(30000)
 			y := ByteBufferSlice new(yuv, 0, 20000)
 			uv := ByteBufferSlice new(yuv, 20000, 10000)
-			expect(yuv _referenceCount _count == 2, is true)
+			expect(yuv _referenceCount _count == 3, is true)
 			y decreaseReferenceCount()
-			expect(yuv _referenceCount _count == 1, is true)
+			expect(yuv _referenceCount _count == 2, is true)
 		})
 	}
 	}
