@@ -111,11 +111,22 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		result
 	}
 	createY: func -> RasterMonochrome {
-		RasterMonochrome new(this pointer, this size, this byteAlignment width)
+		yStride := Int align(this size width, byteAlignment width)
+		ySize := Int align(this size height, this byteAlignment height) * yStride
+		ySlice := ByteBufferSlice new(this buffer, 0, ySize)
+		result := RasterMonochrome new(ySlice, this size, this byteAlignment width)
+		ySlice decreaseReferenceCount()
+		result
 	}
 	createUV: func -> RasterUv {
-		uvOffset := Int align(this y size height, this byteAlignment height) * this y stride
-		RasterUv new((this pointer + uvOffset) as Int*, this size / 2, this byteAlignment width)
+		yStride := Int align(this size width, byteAlignment width)
+		ySize := Int align(this size height, this byteAlignment height) * yStride
+		uvStride := Int align(this size width * 2, byteAlignment width)
+		uvSize := Int align(this y size height, this byteAlignment height) * uvStride
+		uvSlice := ByteBufferSlice new(this buffer, ySize, uvSize)
+		result := RasterUv new(uvSlice, this size / 2, this byteAlignment width)
+		uvSlice decreaseReferenceCount()
+		result
 	}
 	copy: func -> This {
 //  	"copying..." println()
@@ -167,13 +178,10 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		this y[x, y] = ColorMonochrome new(value y)
 		this uv[x/2, y/2] = ColorUv new(value u, value v)
 	}
-	 __destroy__: func {
-// 		"destroying RasterYuv420Semiplanar" println()
-//		this y dispose()
-//		this y free()
-//		this uv dispose()
-//		this uv free()
-		this buffer free()
+	__destroy__: func {
+		this y decreaseReferenceCount()
+		this uv decreaseReferenceCount()
+		this buffer decreaseReferenceCount()
 	}
 	open: static func (filename: String) -> This {
 		x, y, n: Int
@@ -207,6 +215,8 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		fileReader close()
 		fileReader free()
 		buffer := ByteBuffer new(bytes, data as UInt8*)
-		This new(buffer, IntSize2D new(width, height))
+		result := This new(buffer, IntSize2D new(width, height))
+		buffer decreaseReferenceCount()
+		result
 	}
 }

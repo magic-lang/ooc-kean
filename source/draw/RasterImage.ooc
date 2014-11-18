@@ -35,7 +35,6 @@ RasterImage: abstract class extends Image {
 	init: func ~fromRasterImage (original: RasterImage) {
 		super(original)
 		this buffer = original buffer copy()
-		this buffer increaseReferenceCount()
 	}
 	init: func (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		super(size, coordinateSystem, crop, false)
@@ -70,7 +69,7 @@ RasterImage: abstract class extends Image {
 		result
 	}
 	__destroy__: func {
-//		this buffer decreaseReferenceCount()
+		this buffer decreaseReferenceCount()
 	}
 	open: static func ~unknownType (filename: String) -> This {
 		x, y, n: Int
