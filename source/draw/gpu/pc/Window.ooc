@@ -29,6 +29,7 @@ Window: class extends OpenGLES3Context {
 	_bgraToBgra: OpenGLES3MapBgra
 	_yuvPlanarToBgra: OpenGLES3MapYuvPlanarToBgra
 	_yuvSemiplanarToBgra: OpenGLES3MapYuvSemiplanarToBgra
+	_yuvSemiplanarToBgraTransform: OpenGLES3MapYuvSemiplanarToBgraTransform
 	size: IntSize2D { get set }
 
 	init: /* internal */ func (=size, title: String) {
@@ -40,6 +41,7 @@ Window: class extends OpenGLES3Context {
 		this _bgraToBgra = OpenGLES3MapBgra new()
 		this _yuvPlanarToBgra = OpenGLES3MapYuvPlanarToBgra new()
 		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new()
+		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgraTransform new()
 	}
 	onDispose: func {
 		this _bgrToBgra dispose()
@@ -47,7 +49,7 @@ Window: class extends OpenGLES3Context {
 		this _yuvPlanarToBgra dispose()
 		this _yuvSemiplanarToBgra dispose()
 	}
-	getWindowMap: func (gpuImage: GpuImage) -> OpenGLES3MapDefault {
+	getDefaultMap: func (gpuImage: GpuImage) -> OpenGLES3MapDefault {
 		result := match(gpuImage) {
 			case (i: GpuMonochrome) => this _monochromeToBgra
 			case (i: GpuBgr) => this _bgrToBgra
@@ -57,30 +59,35 @@ Window: class extends OpenGLES3Context {
 		}
 		result
 	}
-	draw: func ~GpuImage (image: GpuImage, transform := FloatTransform2D identity) {
-		map := this getWindowMap(image)
-		map transform = transform
-		map imageSize = image size
-		map screenSize = IntSize2D new(image size width, -image size height)
-		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
-		surface := OpenGLES3Surface create(this)
-		viewport := Viewport new(offset, image size)
-		surface draw(image, map, viewport)
-		surface drawLines(transform, viewport)
-		surface recycle()
+	getTransformMap: func (gpuImage: GpuImage) -> OpenGLES3MapTransform {
+		result := match(gpuImage) {
+			case (i: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgraTransform
+		}
+		result
 	}
-	draw: func ~RasterImage (image: RasterImage, transform := FloatTransform2D identity) {
+	draw: func ~Transform3D (image: GpuImage, transform: FloatTransform3D) {
+		map := this getTransformMap(image)
+		map view = transform
+		map imageSize = image size
+		map screenSize = image size
+		this draw(image, map)
+	}
+	draw: func ~Transform2D (image: GpuImage, transform: FloatTransform2D) {
+		map := this getDefaultMap(image)
+		this draw(image, map)
+	}
+	draw: func ~RasterImage (image: RasterImage, transform: FloatTransform2D) {
 		result := this createGpuImage(image)
 		this draw(result, transform)
 		result recycle()
 	}
-	draw: func ~UnknownFormat (image: Image, transform := FloatTransform2D identity) {
+	draw: func ~UnknownFormat (image: Image, transform := FloatTransform2D identity ) {
 		if (image instanceOf?(RasterImage))
 			this draw(image as RasterImage, transform)
 		else if (image instanceOf?(GpuImage))
 			this draw(image as GpuImage, transform)
 	}
-	draw: func ~shader(image: GpuImage, map: GpuMap) {
+	draw: func ~shader (image: GpuImage, map: GpuMap) {
 		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
 		viewport := Viewport new(offset, image size)
 		surface := OpenGLES3Surface create(this)
