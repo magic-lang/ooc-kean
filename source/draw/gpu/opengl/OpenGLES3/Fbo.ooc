@@ -43,7 +43,6 @@ Fbo: class {
 		glClearColor(color, color, color, color)
 	}
 	readPixels: func (channels: UInt) -> ByteBuffer {
-		//FIXME: Only works for RGBA textures so must be converted before reading
 		width := this _width
 		height := this _height
 		buffer := ByteBuffer new(width * height * channels)
@@ -77,6 +76,7 @@ Fbo: class {
 			raise("Framebuffer Object creation failed")
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		DebugPrint print("Allocated FBO")
 		true
 	}
 	finish: static func {
