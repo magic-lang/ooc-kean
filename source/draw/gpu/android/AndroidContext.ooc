@@ -75,7 +75,6 @@ AndroidContext: class extends OpenGLES3Context {
 			yPacker read(rasterImage y)
 			uvPacker read(rasterImage uv)
 		}
-
 		yPacker recycle()
 		uvPacker recycle()
 	}
@@ -113,7 +112,9 @@ AndroidContext: class extends OpenGLES3Context {
 		uvBuffer := uvPacker read()
 
 		yRaster := RasterMonochrome new(yBuffer, gpuImage size, 64)
+		yBuffer decreaseReferenceCount()
 		uvRaster := RasterUv new(uvBuffer, gpuImage size / 2, 64)
+		uvBuffer decreaseReferenceCount()
 		result := RasterYuv420Semiplanar new(yRaster, uvRaster)
 		result
 	}
@@ -123,6 +124,7 @@ AndroidContext: class extends OpenGLES3Context {
 		GpuPacker finish()
 		buffer := yPacker read()
 		result := RasterMonochrome new(buffer, gpuImage size, 64)
+		buffer decreaseReferenceCount()
 		result
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
@@ -144,18 +146,13 @@ AndroidContext: class extends OpenGLES3Context {
 		textureUv := this createEglRgba(IntSize2D new(1920, 135), rasterImage uv pointer, 1)
 		packedUv := OpenGLES3Uv new(textureUv, rasterImage uv size, this)
 		result := this createYuv420Semiplanar(rasterImage size) as OpenGLES3Yuv420Semiplanar
-		this _unpackMonochrome1080p transform = FloatTransform2D identity
-		this _unpackMonochrome1080p imageSize = rasterImage y size
-		this _unpackMonochrome1080p screenSize = rasterImage y size
 		result y canvas draw(packedY, this _unpackMonochrome1080p, Viewport new(rasterImage y size))
 		packedY dispose()
-		this _unpackUv1080p transform = FloatTransform2D identity
-		this _unpackUv1080p imageSize = rasterImage uv size
-		this _unpackUv1080p screenSize = rasterImage uv size
 		result uv canvas draw(packedUv, this _unpackUv1080p, Viewport new(rasterImage uv size))
 		packedUv dispose()
 		result
 	}
+	/*
 	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
 		result := match (rasterImage) {
 			case image: RasterYuv420Semiplanar => this _createYuv420Semiplanar(rasterImage as RasterYuv420Semiplanar)
@@ -167,6 +164,7 @@ AndroidContext: class extends OpenGLES3Context {
 		}
 		result
 	}
+	*/
 	createPacker: func (size: IntSize2D, bytesPerPixel: UInt) -> GpuPacker {
 		result := this _packerBin find(size, bytesPerPixel)
 		if (result == null) {
