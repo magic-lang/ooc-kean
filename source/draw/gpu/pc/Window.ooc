@@ -73,7 +73,10 @@ Window: class extends OpenGLES3Context {
 		this draw(image, map)
 	}
 	draw: func ~Transform2D (image: GpuImage, transform: FloatTransform2D) {
-		map := this getDefaultMap(image)
+		map := this getTransformMap(image)
+		map transform = transform
+		map imageSize = image size
+		map screenSize = image size
 		this draw(image, map)
 	}
 	draw: func ~RasterImage (image: RasterImage, transform: FloatTransform2D) {
