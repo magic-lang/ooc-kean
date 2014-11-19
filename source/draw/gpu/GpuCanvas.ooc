@@ -21,11 +21,14 @@ use ooc-base
 import GpuImage, GpuMap, GpuSurface, GpuContext, Viewport
 
 GpuCanvas: abstract class {
+	_target: GpuImage
 	_size: IntSize2D
 	_context: GpuContext
-	init: func (=_context)
+	init: func (=_target, =_context)
 	dispose: abstract func
-	draw: abstract func (image: Image, transform := FloatTransform2D identity)
+	draw: abstract func (image: Image)
+	draw: abstract func ~transform2D (image: Image, transform: FloatTransform2D)
+	draw: abstract func ~transform3D (image: Image, transform: FloatTransform3D)
 	draw: abstract func ~withmap (image: Image, map: GpuMap, viewport: Viewport)
 	drawLines: func (transform: FloatTransform2D, size: IntSize2D)
 	readPixels: func (channels: UInt) -> ByteBuffer {
