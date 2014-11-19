@@ -270,16 +270,17 @@ getEntityInfo: inline func (info: FSInfoStruct@, va: VarArgsIterator*, start: Ch
     /* save original pointer */
     p := start
 
-    checkedInc := func {
-        if (p < end) p += 1
-        else InvalidFormatException new(start) throw()
-    }
+//    checkedInc := func {
+//        if (p < end) p += 1
+//        else InvalidFormatException new(start) throw()
+//    }
 
     /* Find any flags. */
     info flags = 0
 
     while(p as Pointer < end) {
-        checkedInc()
+        if (p < end) p += 1
+        else InvalidFormatException new(start) throw()
         match(p@) {
             case '#' => info flags |= TF_ALTERNATE
             case '0' => info flags |= TF_ZEROPAD
@@ -296,24 +297,28 @@ getEntityInfo: inline func (info: FSInfoStruct@, va: VarArgsIterator*, start: Ch
         if(info fieldwidth > 0)
             info fieldwidth *= 10
         info fieldwidth += (p@ as Int - 0x30)
-        checkedInc()
+        if (p < end) p += 1
+        else InvalidFormatException new(start) throw()
     }
 
     /* Find the precision. */
     info precision = -1
     if(p@ == '.') {
-        checkedInc()
+        if (p < end) p += 1
+        else InvalidFormatException new(start) throw()
         info precision = 0
         if(p@ == '*') {
             T := va@ getNextType()
             info precision = argNext(va, T) as Int
-            checkedInc()
+            if (p < end) p += 1
+            else InvalidFormatException new(start) throw()
         }
         while(p@ digit?()) {
             if (info precision > 0)
                 info precision *= 10
             info precision += (p@ as Int - 0x30)
-            checkedInc()
+            if (p < end) p += 1
+            else InvalidFormatException new(start) throw()
         }
     }
 
@@ -321,7 +326,8 @@ getEntityInfo: inline func (info: FSInfoStruct@, va: VarArgsIterator*, start: Ch
     info length = 0
     while (p@ == 'l' || p@ == 'h' || p@ == 'L') {
         info length += 1
-        checkedInc()
+        if (p < end) p += 1
+        else InvalidFormatException new(start) throw()
     }
 
     info bytesProcessed = p as SizeT - start as SizeT
