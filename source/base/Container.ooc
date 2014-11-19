@@ -24,6 +24,7 @@ Container: class <T> {
     set: func (=content)
     get: func -> T { content }
 	init: func(=content)
+	init: func ~withBlockFree(=content, blockFree: Bool) { this blockFree = blockFree }
 	init: func ~novalue
 	free: func {
 		if (!this blockFree && T inheritsFrom?(Object) && this content != null) {

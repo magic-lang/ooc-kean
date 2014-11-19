@@ -68,6 +68,16 @@ RasterImage: abstract class extends Image {
 //		TODO: The stuff
 		result
 	}
+	free: func {
+		version(!gc) {
+			if (this _referenceCount _count == 0) {
+				this __destroy__()
+				gc_free(this)
+			} else {
+				raise("free() called on RasterImage! Use decreaseReferenceCount instead.")
+			}
+		}
+	}
 	__destroy__: func {
 		this buffer decreaseReferenceCount()
 	}
