@@ -193,13 +193,13 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		StbImage free(data)
 		bgr := RasterBgr new(buffer, IntSize2D new(x, y))
 		result := This new(bgr)
-		bgr free()
+		bgr decreaseReferenceCount()
 		return result
 	}
 	save: func (filename: String) {
 		bgr := RasterBgr new(this)
 		bgr save(filename)
-		bgr free()
+		bgr decreaseReferenceCount()
 	}
 	saveBin: func (filename: String) {
 		file := File new(filename)
