@@ -48,6 +48,10 @@ GpuImage: abstract class extends Image {
 			this _canvas onRecycle()
 		this _context recycle(this)
 	}
+
+	free: func {
+		DebugPrint print("Destroying GpuImage")
+	}
 	dispose: abstract func
 	upload: abstract func (raster: RasterImage)
 	generateMipmap: func
