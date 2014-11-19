@@ -31,6 +31,7 @@ setShaderSources: func {
 	OpenGLES3MapTransform vertexSource =
 		"#version 300 es\n
 		precision highp float;\n
+		uniform mat3 transform;\n
 		uniform mat4 view;\n
 		uniform int imageWidth;\n
 		uniform int imageHeight;\n
