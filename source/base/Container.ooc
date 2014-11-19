@@ -31,5 +31,6 @@ Container: class <T> {
 			obj := this content as Object
 			obj free()
 		}
+		gc_free(this)
 	}
 }
