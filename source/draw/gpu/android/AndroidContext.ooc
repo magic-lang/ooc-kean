@@ -64,7 +64,9 @@ AndroidContext: class extends OpenGLES3Context {
 		*/
 		yPacker = this createPacker(gpuImage y size, 1)
 		uvPacker = this createPacker(gpuImage uv size, 2)
+		this _packMonochrome imageWidth = gpuImage y size width
 		yPacker pack(gpuImage y, this _packMonochrome)
+		this _packUv imageWidth = gpuImage uv size width
 		uvPacker pack(gpuImage uv, this _packUv)
 		GpuPacker finish()
 		if (rasterImage size height == 1080) {
@@ -103,7 +105,9 @@ AndroidContext: class extends OpenGLES3Context {
 
 		yPacker = this createPacker(gpuImage y size, 1)
 		uvPacker = this createPacker(gpuImage uv size, 2)
+		this _packMonochrome imageWidth = gpuImage y size width
 		yPacker pack(gpuImage y, this _packMonochrome)
+		this _packUv imageWidth = gpuImage uv size width
 		uvPacker pack(gpuImage uv, this _packUv)
 
 		GpuPacker finish()
@@ -120,6 +124,7 @@ AndroidContext: class extends OpenGLES3Context {
 	}
 	toRaster: func ~monochrome (gpuImage: GpuMonochrome) -> RasterImage {
 		yPacker := this createPacker(gpuImage size, 1)
+		this _packMonochrome imageWidth = gpuImage size width
 		yPacker pack(gpuImage, this _packMonochrome)
 		GpuPacker finish()
 		buffer := yPacker read()
