@@ -74,7 +74,7 @@ RasterImage: abstract class extends Image {
 				this __destroy__()
 				gc_free(this)
 			} else {
-				raise("free() called on RasterImage! Use decreaseReferenceCount instead.")
+				raise("free() called on RasterImage! Use decreaseReferenceCount() instead.")
 			}
 		}
 	}
