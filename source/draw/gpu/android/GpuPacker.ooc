@@ -49,9 +49,6 @@ GpuPacker: class {
 	}
 	pack: func (image: GpuImage, map: OpenGLES3MapDefault) {
 		image setFilter(false)
-		map transform = FloatTransform2D identity
-		map imageSize = image size
-		map screenSize = image size
 		this _renderTarget bind()
 		this _renderTarget clear()
 		surface := this _context createSurface()
