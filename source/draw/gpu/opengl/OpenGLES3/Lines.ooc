@@ -28,3 +28,12 @@ Lines: class {
 		glDisableVertexAttribArray(0)
 	}
 }
+Points: class {
+	draw: static func (positions: Float*, count: Int, dimensions: Int) {
+		glBindVertexArray(0);
+		glEnableVertexAttribArray(0)
+		glVertexAttribPointer(0, dimensions, GL_FLOAT, 0, 0, positions)
+		glDrawArrays(GL_POINTS, 0, count)
+		glDisableVertexAttribArray(0)
+	}
+}
