@@ -35,7 +35,7 @@ LLong: cover from signed long long {
 
 Long:  cover from signed long  extends LLong
 Int:   cover from signed int   extends LLong {
-    toString:    func -> String { "%d" format(this) }
+    toString:    func -> String { "%d" formatInt(this) }
 }
 Short: cover from signed short extends LLong
 
