@@ -262,7 +262,7 @@ parseArg: func(res: Buffer, info: FSInfoStruct*, va: VarArgsIterator*, p: Char*)
     }
 }
 
-parseArgInt: func(res: Buffer, info: FSInfoStruct*, va: Int, p: Char*) {
+parseArgOne: func <T> (res: Buffer, info: FSInfoStruct*, va: T, p: Char*) {
     info@ flags |= TF_UNSIGNED
     info@ base = 10
     mprintCall := true
@@ -361,7 +361,7 @@ getEntityInfo: inline func (info: FSInfoStruct@, va: VarArgsIterator*, start: Ch
     info bytesProcessed = p as SizeT - start as SizeT
 }
 
-getEntityInfoInt: inline func (info: FSInfoStruct@, va: Int*, start: Char*, end: Pointer) {
+getEntityInfoOne: inline func <T> (info: FSInfoStruct@, va: T*, start: Char*, end: Pointer) {
 
     /* save original pointer */
     p := start
@@ -397,7 +397,25 @@ getEntityInfoInt: inline func (info: FSInfoStruct@, va: Int*, start: Char*, end:
         else InvalidFormatException new(start) throw()
     }
     
+    /* Find the precision. */
     info precision = -1
+    if(p@ == '.') {
+        if (p < end) p += 1
+        else InvalidFormatException new(start) throw()
+        info precision = 0
+        if(p@ == '*') {
+            info precision = T as Int
+            if (p < end) p += 1
+            else InvalidFormatException new(start) throw()
+        }
+        while(p@ digit?()) {
+            if (info precision > 0)
+                info precision *= 10
+            info precision += (p@ as Int - 0x30)
+            if (p < end) p += 1
+            else InvalidFormatException new(start) throw()
+        }
+    }
 
     /* Find the length modifier. */
     info length = 0
@@ -448,7 +466,7 @@ format: func ~main <T> (fmt: T, args: ... ) -> T {
     return result
 }
 
-formatInt: func ~main (fmt: String, arg: Int) -> String {
+formatOne: func ~main <T> (fmt: String, arg: T) -> String {
     res := Buffer new(64)
     ptr : Char* = fmt toCString()
     end : Pointer = (ptr as SizeT + fmt _buffer size as SizeT) as Pointer
@@ -461,11 +479,11 @@ formatInt: func ~main (fmt: String, arg: Int) -> String {
                 if (!reddit) {
                 	reddit = true
                     info: FSInfoStruct
-                    getEntityInfoInt(info&, arg&, ptr, end)
+                    getEntityInfoOne(info&, arg&, ptr, end)
 //                    info bytesProcessed toString() println()
                     ptr += info bytesProcessed
 //                    "%d" format(ptr as Pointer) println()
-                    parseArgInt(res, info&, arg, ptr)
+                    parseArgOne(res, info&, arg, ptr)
 //                    "Here?" println()
                 } else {
                     ptr += 1
@@ -496,13 +514,37 @@ extend Buffer {
 }
 
 extend String {
+	// rock can't handle generic extensions, 
+	// so we need one function for every type...
+	
     formatInt: func (arg: Int) -> This {
-        formatInt~main(this, arg)
+        formatOne~main(this, arg)
+    }
+    formatUInt: func (arg: UInt) -> This {
+        formatOne~main(this, arg)
+    }
+    formatLLong: func (arg: LLong) -> This {
+        formatOne~main(this, arg)
+    }
+    formatULLong: func (arg: ULLong) -> This {
+        formatOne~main(this, arg)
+    }
+    formatFloat: func (arg: Float) -> This {
+        formatOne~main(this, arg)
+    }
+    formatDouble: func (arg: Double) -> This {
+        formatOne~main(this, arg)
+    }
+    formatSSizeT: func (arg: SSizeT) -> This {
+        formatOne~main(this, arg)
+    }
+    formatLDouble: func (arg: LDouble) -> This {
+        formatOne~main(this, arg)
     }
     format: func(args: ...) -> This {
         format~main(this, args)
     }
-
+    
     printf: func(args: ...) {
         format~main(this, args) print()
     }
