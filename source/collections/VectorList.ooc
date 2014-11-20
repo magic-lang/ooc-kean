@@ -68,13 +68,8 @@ VectorList: class <T> {
 	}
 
 	__destroy__: func {
-		for (i in 0..this _count) {
-			gc_free(this _vector[i])
-		}
-		gc_free(this _vector)
-		// Remove above lines and uncomment next two to get total free of memory when pyramids can be free without causing problems
-		//this _vector _free(0, this count)
-		//this _vector free()
+		this _vector _free(0, this count)
+		this _vector free()
 	}
 
 	operator [] (index: Int) -> T {

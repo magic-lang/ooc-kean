@@ -59,6 +59,7 @@ argNext: inline func<T> (va: VarArgsIterator*, T: Class) -> T {
 }
 
 m_printn: func <T> (res: Buffer, info: FSInfoStruct@, arg: T) {
+//	"m_printn" println()
     sign: Char = '\0'
     tmp: Char[36]
     digits := __digits
@@ -91,7 +92,6 @@ m_printn: func <T> (res: Buffer, info: FSInfoStruct@, arg: T) {
     } else if(info flags & TF_EXP_SIGN) {
         sign = '+'
     }
-
     if(sign) {
         size -= 1
     }
@@ -107,7 +107,6 @@ m_printn: func <T> (res: Buffer, info: FSInfoStruct@, arg: T) {
             n /= info base
         }
     }
-
     /* Pad the number with zeros or spaces. */
     if(!(info flags & TF_LEFT))
         while(size > i) {
@@ -115,15 +114,13 @@ m_printn: func <T> (res: Buffer, info: FSInfoStruct@, arg: T) {
             if(info flags & TF_ZEROPAD) res append('0')
             else res append (' ')
         }
-
     if(sign) res append(sign)
-
     /* Write any zeros to satisfy the precision. */
     while(i < info precision) {
+//       	"There" println()
         info precision -= 1
         res append('0')
     }
-
     /* Write the number. */
     while(i != 0) {
         i -= 1
@@ -265,21 +262,101 @@ parseArg: func(res: Buffer, info: FSInfoStruct*, va: VarArgsIterator*, p: Char*)
     }
 }
 
+parseArgOne: func <T> (res: Buffer, info: FSInfoStruct*, va: T, p: Char*) {
+    info@ flags |= TF_UNSIGNED
+    info@ base = 10
+    mprintCall := true
+    /* Find the conversion. */
+    match(p@) {
+        case 'i' =>
+            info@ flags &= ~TF_UNSIGNED
+        case 'd' =>
+//        	"Right?" println()
+            info@ flags &= ~TF_UNSIGNED
+        case 'u' =>
+        case 'o' =>
+            info@ base = 8
+        case 'x' =>
+            info@ flags |= TF_SMALL
+            info@ base = 16
+        case 'X' =>
+            info@ base = 16
+        case 'p' =>
+            info@ flags |= TF_ALTERNATE | TF_SMALL
+            info@ base = 16
+        case 'f' =>
+            // reconstruct the original format statement.
+            // TODO let this do the real thing.
+            mprintCall = false
+            tmp := Buffer new()
+            tmp append('%')
+            if(info@ flags & TF_ALTERNATE)
+                tmp append('#')
+            else if(info@ flags & TF_ZEROPAD)
+                tmp append('0')
+            else if (info@ flags & TF_LEFT)
+                tmp append('-')
+            else if (info@ flags & TF_SPACE)
+                tmp append(' ')
+            else if (info@ flags & TF_EXP_SIGN)
+                tmp append('+')
+            if (info@ fieldwidth != 0) {
+            	fieldwidthString := info@ fieldwidth toString()
+                tmp append(fieldwidthString)
+                fieldwidthString free()
+            }
+            if (info@ precision >= 0) {
+            	precisionString := info@ precision toString()
+            	tmp append('.')
+                tmp append(precisionString)
+                precisionString free()
+            }
+            tmp append("f")
+            tmpString := tmp toString()
+            match T {
+              case LDouble =>
+              	cString := tmpString cformat(va as LDouble)
+                res append(cString)
+                cString free()
+              case Double =>
+               	cString := tmpString cformat(va as Double)
+                res append(cString)
+                cString free()
+              case => // assume everything else is Float
+                cString := tmpString cformat(va as Float)
+                res append(cString)
+                cString free()
+            }
+//            tmp free()
+            tmpString free()
+        case '%' =>
+            res append('%')
+            mprintCall = false
+        case =>
+            mprintCall = false
+    }
+    if(mprintCall) {
+//    	"here!" println()
+        m_printn(res, info, va)
+    }
+}
+
 getEntityInfo: inline func (info: FSInfoStruct@, va: VarArgsIterator*, start: Char*, end: Pointer) {
 
     /* save original pointer */
     p := start
 
-    checkedInc := func {
-        if (p < end) p += 1
-        else InvalidFormatException new(start) throw()
-    }
+//    checkedInc := func {
+//        if (p < end) p += 1
+//        else InvalidFormatException new(start) throw()
+//    }
 
     /* Find any flags. */
     info flags = 0
 
     while(p as Pointer < end) {
-        checkedInc()
+        if (p < end) p += 1
+        else InvalidFormatException new(start) throw()
         match(p@) {
             case '#' => info flags |= TF_ALTERNATE
             case '0' => info flags |= TF_ZEROPAD
@@ -296,24 +373,28 @@ getEntityInfo: inline func (info: FSInfoStruct@, va: VarArgsIterator*, start: Ch
         if(info fieldwidth > 0)
             info fieldwidth *= 10
         info fieldwidth += (p@ as Int - 0x30)
-        checkedInc()
+        if (p < end) p += 1
+        else InvalidFormatException new(start) throw()
     }
 
     /* Find the precision. */
     info precision = -1
     if(p@ == '.') {
-        checkedInc()
+        if (p < end) p += 1
+        else InvalidFormatException new(start) throw()
         info precision = 0
         if(p@ == '*') {
             T := va@ getNextType()
             info precision = argNext(va, T) as Int
-            checkedInc()
+            if (p < end) p += 1
+            else InvalidFormatException new(start) throw()
         }
         while(p@ digit?()) {
             if (info precision > 0)
                 info precision *= 10
             info precision += (p@ as Int - 0x30)
-            checkedInc()
+            if (p < end) p += 1
+            else InvalidFormatException new(start) throw()
         }
     }
 
@@ -321,12 +402,79 @@ getEntityInfo: inline func (info: FSInfoStruct@, va: VarArgsIterator*, start: Ch
     info length = 0
     while (p@ == 'l' || p@ == 'h' || p@ == 'L') {
         info length += 1
-        checkedInc()
+        if (p < end) p += 1
+        else InvalidFormatException new(start) throw()
     }
 
     info bytesProcessed = p as SizeT - start as SizeT
 }
 
+getEntityInfoOne: inline func <T> (info: FSInfoStruct@, va: T*, start: Char*, end: Pointer) {
+
+    /* save original pointer */
+    p := start
+
+//    checkedInc := func {
+//        if (p < end) p += 1
+//        else InvalidFormatException new(start) throw()
+//    }
+
+    /* Find any flags. */
+    info flags = 0
+
+    while(p as Pointer < end) {
+        if (p < end) p += 1
+        else InvalidFormatException new(start) throw()
+        match(p@) {
+            case '#' => info flags |= TF_ALTERNATE
+            case '0' => info flags |= TF_ZEROPAD
+            case '-' => info flags |= TF_LEFT
+            case ' ' => info flags |= TF_SPACE
+            case '+' => info flags |= TF_EXP_SIGN
+            case => break
+        }
+    }
+
+    /* Find the field width. */
+    info fieldwidth = 0
+    while(p@ digit?()) {
+        if(info fieldwidth > 0)
+            info fieldwidth *= 10
+        info fieldwidth += (p@ as Int - 0x30)
+        if (p < end) p += 1
+        else InvalidFormatException new(start) throw()
+    }
+    
+    /* Find the precision. */
+    info precision = -1
+    if(p@ == '.') {
+        if (p < end) p += 1
+        else InvalidFormatException new(start) throw()
+        info precision = 0
+        if(p@ == '*') {
+            info precision = T as Int
+            if (p < end) p += 1
+            else InvalidFormatException new(start) throw()
+        }
+        while(p@ digit?()) {
+            if (info precision > 0)
+                info precision *= 10
+            info precision += (p@ as Int - 0x30)
+            if (p < end) p += 1
+            else InvalidFormatException new(start) throw()
+        }
+    }
+
+    /* Find the length modifier. */
+    info length = 0
+    while (p@ == 'l' || p@ == 'h' || p@ == 'L') {
+        info length += 1
+        if (p < end) p += 1
+        else InvalidFormatException new(start) throw()
+    }
+//    "%d" format(info precision) println()
+    info bytesProcessed = p as SizeT - start as SizeT
+}
 
 format: func ~main <T> (fmt: T, args: ... ) -> T {
     if (args count == 0) return fmt
@@ -366,6 +514,46 @@ format: func ~main <T> (fmt: T, args: ... ) -> T {
     return result
 }
 
+formatOne: func ~main <T> (fmt: String, arg: T) -> String {
+    res := Buffer new(64)
+    ptr : Char* = fmt toCString()
+    end : Pointer = (ptr as SizeT + fmt _buffer size as SizeT) as Pointer
+//    "%d" format(ptr as Pointer) println()
+//    "%d" format(end) println()
+    reddit := false
+    while (ptr as Pointer < end) {
+        match (ptr@) {
+            case '%' => {
+                if (!reddit) {
+                	reddit = true
+                    info: FSInfoStruct
+                    getEntityInfoOne(info&, arg&, ptr, end)
+//                    info bytesProcessed toString() println()
+                    ptr += info bytesProcessed
+//                    "%d" format(ptr as Pointer) println()
+                    parseArgOne(res, info&, arg, ptr)
+//                    "Here?" println()
+                } else {
+                    ptr += 1
+                    if (ptr@ == '%') {
+                        res append(ptr@)
+                    } else {
+                        // missing argument, display format string instead:
+                        res append('%')
+                        res append(ptr@)
+                    }
+                }
+            }
+            case => res append(ptr@)
+        }
+        ptr += 1
+//        "%d" format(ptr as Pointer) println()
+//        "Here" println()
+    }
+//    "Out of the while" println()
+    result := res toString()
+    return result
+}
 
 extend Buffer {
     format: func(args: ...) {
@@ -374,10 +562,37 @@ extend Buffer {
 }
 
 extend String {
+	// rock can't handle generic extensions, 
+	// so we need one function for every type...
+	
+    formatInt: func (arg: Int) -> This {
+        formatOne~main(this, arg)
+    }
+    formatUInt: func (arg: UInt) -> This {
+        formatOne~main(this, arg)
+    }
+    formatLLong: func (arg: LLong) -> This {
+        formatOne~main(this, arg)
+    }
+    formatULLong: func (arg: ULLong) -> This {
+        formatOne~main(this, arg)
+    }
+    formatFloat: func (arg: Float) -> This {
+        formatOne~main(this, arg)
+    }
+    formatDouble: func (arg: Double) -> This {
+        formatOne~main(this, arg)
+    }
+    formatSSizeT: func (arg: SSizeT) -> This {
+        formatOne~main(this, arg)
+    }
+    formatLDouble: func (arg: LDouble) -> This {
+        formatOne~main(this, arg)
+    }
     format: func(args: ...) -> This {
         format~main(this, args)
     }
-
+    
     printf: func(args: ...) {
         format~main(this, args) print()
     }
