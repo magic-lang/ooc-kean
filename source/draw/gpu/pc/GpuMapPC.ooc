@@ -49,7 +49,7 @@ setShaderSources: func {
 			float near = 0.0001f;\n
 			float far = 5000.0f;\n
 			//mat4 projectionMatrix = mat4(2.0f * near / float(screenWidth), 0, 0, 0, 0, 2.0f * near / float(screenHeight), 0, 0, 0, 0, -(far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 1);\n
-			mat4 projectionMatrix = mat4(2.0f * float(screenHeight) / float(screenWidth), 0, 0, 0, 0, 2.0f, 0, 0, 0, 0, -(far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 0);\n
+			mat4 projectionMatrix = mat4(2.0f * float(screenHeight) / float(screenWidth), 0, 0, 0, 0, -2.0f, 0, 0, 0, 0, -(far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 0);\n
 			fragmentTextureCoordinate = textureCoordinate;\n
 			gl_Position = projectionMatrix * transformedPosition;\n
 		}\n";
@@ -96,7 +96,25 @@ setShaderSources: func {
 		void main() {\n
 			outColor = texture(texture0, fragmentTextureCoordinate).r;\n
 		}\n";
+	OpenGLES3MapMonochromeTransform fragmentSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out float outColor;\n
+		void main() {\n
+			outColor = texture(texture0, fragmentTextureCoordinate).r;\n
+		}\n";
 	OpenGLES3MapUv fragmentSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out vec2 outColor;\n
+		void main() {\n
+			outColor = texture(texture0, fragmentTextureCoordinate).rg;\n
+		}\n";
+	OpenGLES3MapUvTransform fragmentSource =
 		"#version 300 es\n
 		precision highp float;\n
 		uniform sampler2D texture0;\n
