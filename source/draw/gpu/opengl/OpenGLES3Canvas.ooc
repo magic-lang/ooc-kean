@@ -208,7 +208,8 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 	}
 	_draw: func ~transform3D (image: OpenGLES3Yuv420Semiplanar, transform: FloatTransform3D) {
 		this _y draw(image y, transform)
-		this _uv draw(image uv, transform)
+		uvTransform := transform translate(-transform j / 2.0f, -transform k / 2.0f, 0)
+		this _uv draw(image uv, uvTransform)
 	}
 	draw: func (image: Image) {
 		if (image instanceOf?(RasterYuv420Semiplanar)) {
