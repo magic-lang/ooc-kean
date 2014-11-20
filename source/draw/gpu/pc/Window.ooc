@@ -63,10 +63,10 @@ Window: class extends OpenGLES3Context {
 		map imageSize = image size
 		map screenSize = IntSize2D new(image size width, -image size height)
 		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
-		surface := OpenGLES3Surface create(this)
+		surface := this createSurface()
 		viewport := Viewport new(offset, image size)
 		surface draw(image, map, viewport)
-		surface drawLines(transform, viewport)
+//		surface drawLines(transform, viewport)
 		surface recycle()
 	}
 	draw: func ~RasterImage (image: RasterImage, transform := FloatTransform2D identity) {
