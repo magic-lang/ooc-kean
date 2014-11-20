@@ -284,6 +284,54 @@ parseArgOne: func <T> (res: Buffer, info: FSInfoStruct*, va: T, p: Char*) {
         case 'p' =>
             info@ flags |= TF_ALTERNATE | TF_SMALL
             info@ base = 16
+        case 'f' =>
+            // reconstruct the original format statement.
+            // TODO let this do the real thing.
+            mprintCall = false
+            tmp := Buffer new()
+            tmp append('%')
+            if(info@ flags & TF_ALTERNATE)
+                tmp append('#')
+            else if(info@ flags & TF_ZEROPAD)
+                tmp append('0')
+            else if (info@ flags & TF_LEFT)
+                tmp append('-')
+            else if (info@ flags & TF_SPACE)
+                tmp append(' ')
+            else if (info@ flags & TF_EXP_SIGN)
+                tmp append('+')
+            if (info@ fieldwidth != 0) {
+            	fieldwidthString := info@ fieldwidth toString()
+                tmp append(fieldwidthString)
+                fieldwidthString free()
+            }
+            if (info@ precision >= 0) {
+            	precisionString := info@ precision toString()
+            	tmp append('.')
+                tmp append(precisionString)
+                precisionString free()
+            }
+            tmp append("f")
+            tmpString := tmp toString()
+            match T {
+              case LDouble =>
+              	cString := tmpString cformat(va as LDouble)
+                res append(cString)
+                cString free()
+              case Double =>
+               	cString := tmpString cformat(va as Double)
+                res append(cString)
+                cString free()
+              case => // assume everything else is Float
+                cString := tmpString cformat(va as Float)
+                res append(cString)
+                cString free()
+            }
+//            tmp free()
+            tmpString free()
+        case '%' =>
+            res append('%')
+            mprintCall = false
         case =>
             mprintCall = false
     }
