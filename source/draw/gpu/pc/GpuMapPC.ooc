@@ -177,7 +177,7 @@ setShaderSources: func {
 		precision highp float;\n
 		layout(location = 0) in vec2 vertexPosition;\n
 		void main() {\n
-			gl_Position = vec4(vertexPosition.x, -vertexPosition.y, 0, 1);\n
+			gl_Position = vec4(vertexPosition.x, vertexPosition.y, 0, 1);\n
 		}\n";
 	OpenGLES3MapLines fragmentSource =
 		"#version 300 es\n
@@ -187,7 +187,23 @@ setShaderSources: func {
 		void main() {\n
 			outColor = vec4(color.r, color.g, color.b, 1.0f);\n
 		}\n";
-
+	OpenGLES3MapPoints vertexSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform float pointSize;\n
+		layout(location = 0) in vec2 vertexPosition;\n
+		void main() {\n
+			gl_PointSize = pointSize;\n
+			gl_Position = vec4(vertexPosition.x, vertexPosition.y, 0, 1);\n
+		}\n";
+	OpenGLES3MapPoints fragmentSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform vec3 color;\n
+		out vec4 outColor;\n
+		void main() {\n
+			outColor = vec4(color.r, color.g, color.b, 1.0f);\n
+		}\n";
 	OpenGLES3MapPyramidGeneration fragmentSource =
 		"#version 300 es\n
 		precision highp float;\n

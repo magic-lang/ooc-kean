@@ -17,8 +17,9 @@
 use ooc-math
 use ooc-draw
 use ooc-base
+use ooc-collections
 
-import GpuImage, GpuMap, GpuSurface, GpuContext, Viewport
+import GpuImage, GpuMap, GpuSurface, GpuContext, Viewport, structs/LinkedList
 
 GpuCanvas: abstract class {
 	_size: IntSize2D
@@ -27,7 +28,9 @@ GpuCanvas: abstract class {
 	dispose: abstract func
 	draw: abstract func (image: Image, transform := FloatTransform2D identity)
 	draw: abstract func ~withmap (image: Image, map: GpuMap, viewport: Viewport)
-	drawLines: func (transform: FloatTransform2D, size: IntSize2D)
+	drawTrace: func (transformList: LinkedList<FloatPoint2D>, size: IntSize2D, positions: Float*, screenSize: IntSize2D)
+	drawBox: func (box: IntBox2D, size: IntSize2D)
+	drawPoints: func (pointList: VectorList<FloatPoint2D>, size: IntSize2D)
 	readPixels: func (channels: UInt) -> ByteBuffer {
 		raise("Trying to read pixels in unimplemented readPixels function")
 	}

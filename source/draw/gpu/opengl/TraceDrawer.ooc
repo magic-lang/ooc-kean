@@ -14,71 +14,81 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
+use ooc-collections
 import structs/LinkedList
 import OpenGLES3Map, OpenGLES3/Lines
 
 TraceDrawer: class {
-	pointList: static LinkedList<FloatPoint2D>
 	shader: OpenGLES3MapLines
-	positions: Float*
-	pointCount: Int = 60
-	screenSize: IntSize2D
 	scale: Float = 1.0f
-
-	init: func (=screenSize) {
-		if (This pointList == null)
-			This pointList = LinkedList<FloatPoint2D> new()
-		This pointList clear()
-		this positions = gc_malloc(Float size * this pointCount * 2) as Float*
-		for(i in 0..this pointCount) {
-			this positions[2 * i] = 0
-			this positions[2 * i + 1] = 0
-		}
+	init: func () {
 		this shader = OpenGLES3MapLines new()
 	}
-	add: func(transform: FloatTransform2D) {
-		//Screen coordinates [0, width] [0, height]
-		transformedPosition := FloatPoint2D new(transform g + 3 * this screenSize width / 4, transform h + 3 * this screenSize height / 4)
-		This pointList add(transformedPosition)
-		if (This pointList size > this pointCount - 5) {
-			This pointList removeAt(0)
-		}
-	}
-	clear: func {
-		This pointList clear()
-	}
-	draw: func {
+	drawTrace: func (pointList: LinkedList<FloatPoint2D>, positions: Float*, screenSize: IntSize2D) {
 		//Go from screen coordinates to normalized coordinates [-1, 1] [-1, 1]
-		for(i in 0..This pointList size) {
-			this positions[2 * i] = 2.0f * This pointList[i] x / this screenSize width - 1.0f
-			this positions[2 * i + 1] = 2.0f * This pointList[i] y / this screenSize height - 1.0f
+		for(i in 0..pointList size) {
+			positions[2 * i] = 2.0f * pointList[i] x / screenSize width - 1.0f
+			positions[2 * i + 1] = 2.0f * pointList[i] y / screenSize height - 1.0f
 		}
+		crosshairStart := pointList size * 2
+		crosshairSize := FloatPoint2D new(0.05f, 0.05f * screenSize width as Float / screenSize height as Float)
+		currentPoint := FloatPoint2D new(positions[2 * pointList size - 2], positions[2 * pointList size - 1])
 
-		crosshairStart := This pointList size * 2
-		crosshairSize := FloatPoint2D new(0.05f, 0.05f * this screenSize width as Float / this screenSize height as Float)
-		currentPoint := FloatPoint2D new(this positions[2 * This pointList size - 2], this positions[2 * This pointList size - 1])
+		positions[crosshairStart] = currentPoint x
+		positions[crosshairStart + 1] = currentPoint y + crosshairSize y
 
-		this positions[crosshairStart] = currentPoint x
-		this positions[crosshairStart + 1] = currentPoint y + crosshairSize y
+		positions[crosshairStart + 2] = currentPoint x
+		positions[crosshairStart + 3] = currentPoint y - crosshairSize y
 
-		this positions[crosshairStart + 2] = currentPoint x
-		this positions[crosshairStart + 3] = currentPoint y - crosshairSize y
+		positions[crosshairStart + 4] = currentPoint x
+		positions[crosshairStart + 5] = currentPoint y
 
-		this positions[crosshairStart + 4] = currentPoint x
-		this positions[crosshairStart + 5] = currentPoint y
+		positions[crosshairStart + 6] = currentPoint x + crosshairSize x
+		positions[crosshairStart + 7] = currentPoint y
 
-		this positions[crosshairStart + 6] = currentPoint x + crosshairSize x
-		this positions[crosshairStart + 7] = currentPoint y
-
-		this positions[crosshairStart + 8] = currentPoint x - crosshairSize x
-		this positions[crosshairStart + 9] = currentPoint y
+		positions[crosshairStart + 8] = currentPoint x - crosshairSize x
+		positions[crosshairStart + 9] = currentPoint y
 
 		this shader color = FloatPoint3D new(0.0f, 0.0f, 0.0f)
 		this shader use()
-		Lines draw(this positions, this pointList size + 5, 2, 3.5f)
-
+		Lines draw(positions, pointList size + 5, 2, 3.5f)
 		this shader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
 		this shader use()
-		Lines draw(this positions, this pointList size + 5, 2, 1.5f)
+		Lines draw(positions, pointList size + 5, 2, 1.5f)
+		gc_free(positions)
+	}
+
+	drawBox: func (box: IntBox2D, size: IntSize2D) {
+		positions: Float*
+		positions = gc_malloc(Float size  * 10) as Float*
+		positions[0] = 2.0f * (box leftTop x as Float / size width as Float)
+		positions[1] =  2.0f * (box leftTop y as Float / size height as Float)
+		positions[2] =  2.0f * (box rightTop x as Float / size width as Float)
+		positions[3] =  2.0f * (box rightTop y as Float / size height as Float)
+		positions[4] =  2.0f * (box rightBottom x as Float / size width as Float)
+		positions[5] =  2.0f * (box rightBottom y as Float / size height as Float)
+		positions[6] =  2.0f * (box leftBottom x as Float / size width as Float)
+		positions[7] =  2.0f * (box leftBottom y as Float / size height as Float)
+		positions[8] =  2.0f * (box leftTop x as Float / size width as Float)
+		positions[9] =  2.0f * (box leftTop y as Float / size height as Float)
+		this shader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
+		this shader use()
+		Lines draw(positions, 5, 2, 1.5f)
+		gc_free(positions)
+	}
+
+	drawPoints: func (pointList: VectorList<FloatPoint2D>, size: IntSize2D) {
+		positions: Float*
+		positions = gc_malloc(Float size  * pointList count * 2) as Float*
+		for(i in 0..pointList count) {
+			positions[2 * i] = 2.0f * pointList[i] x / (size width as Float)
+			positions[2 * i + 1] = 2.0f * pointList[i] y / (size height as Float)
+		}
+		pointShader := OpenGLES3MapPoints new()
+		pointShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
+		pointShader pointSize = 5.0f
+		pointShader use()
+		Points draw(positions, pointList count, 2)
+		gc_free(positions)
 	}
 }
