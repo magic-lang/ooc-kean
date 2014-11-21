@@ -40,6 +40,7 @@ GpuImage: abstract class extends Image {
 	_context: GpuContext
 	_channels: Int
 	channels: Int { get { this _channels } }
+	length: Int { get { this _channels * this size width * this size height } }
 	init: func (=size, =_channels, =_context)
 	bind: abstract func (unit: UInt)
 	unbind: abstract func
