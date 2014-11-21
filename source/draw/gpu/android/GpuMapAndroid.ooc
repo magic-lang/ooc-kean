@@ -265,7 +265,6 @@ OpenGLES3MapTransform vertexSource =
 			//outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
 			outColor = vec4(0.5f, 0.5f, 0.5f, 0.5f);\n
 		}\n";
-
 	OpenGLES3MapLines vertexSource =
 		"#version 300 es\n
 		layout(location = 0) in vec2 vertexPosition;\n
@@ -279,7 +278,23 @@ OpenGLES3MapTransform vertexSource =
 		void main() {\n
 			outColor = color.r;\n
 		}\n";
-
+	OpenGLES3MapPoints vertexSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform float pointSize;\n
+		layout(location = 0) in vec2 vertexPosition;\n
+		void main() {\n
+			gl_PointSize = pointSize;\n
+			gl_Position = vec4(vertexPosition.x, vertexPosition.y, 0, 1);\n
+		}\n";
+	OpenGLES3MapPoints fragmentSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform vec3 color;\n
+		out vec4 outColor;\n
+		void main() {\n
+			outColor = vec4(color.r, color.g, color.b, 1.0f);\n
+		}\n";
 	OpenGLES3MapPyramidGeneration fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n
