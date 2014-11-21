@@ -40,14 +40,16 @@ OpenGLES3MapTransform vertexSource =
 	out vec2 fragmentTextureCoordinate;\n
 	void main() {\n
 		float fov = 50.35f * 0.0174f;\n
+		float ar = float(imageWidth) / float(imageHeight);\n
 		float k = 2.0f * float(imageWidth) * tan(fov / 2.0f);\n
-		vec4 scaledQuadPosition = vec4(1.2f * float(imageWidth) * vertexPosition.x / 2.0f, 1.2f * float(imageHeight) * vertexPosition.y / 2.0f, -k, 1);\n
+		vec4 scaledQuadPosition = vec4(float(imageWidth) * vertexPosition.x / 2.0f, float(imageHeight) * vertexPosition.y / 2.0f, -1.0f, 1);\n
 		mat4 viewMatrix = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n
 		vec4 transformedPosition = transpose(view) * scaledQuadPosition;\n
-		float near = 0.0001f;\n
-		float far = 5000.0f;\n
-		//mat4 projectionMatrix = mat4(2.0f * near / float(screenWidth), 0, 0, 0, 0, 2.0f * near / float(screenHeight), 0, 0, 0, 0, -(far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 1);\n
-		mat4 projectionMatrix = mat4(2.0f * float(screenHeight) / float(screenWidth), 0, 0, 0, 0, 2.0f, 0, 0, 0, 0, -(far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 0);\n
+		//transformedPosition.z = -1.0f;\n
+		float near = 1.0f;\n
+		float far = 1000.0f;\n
+		//mat4 projectionMatrix = mat4(2.0f * near / float(screenWidth), 0, 0, 0, 0, 2.0f * near / float(screenHeight), 0, 0, 0, 0, - (far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 1);\n
+		mat4 projectionMatrix = mat4(2.0f / float(screenWidth), 0, 0, 0, 0, 2.0f / float(screenHeight), 0, 0, 0, 0, - (far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 0);\n
 		fragmentTextureCoordinate = textureCoordinate;\n
 		gl_Position = projectionMatrix * transformedPosition;\n
 	}\n";
