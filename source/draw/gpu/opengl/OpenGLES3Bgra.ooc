@@ -43,6 +43,9 @@ OpenGLES3Bgra: class extends GpuBgra {
 	upload: func (raster: RasterImage) {
 		this backend uploadPixels(raster pointer, raster stride)
 	}
+	setFilter: func (filter: Bool) {
+		this backend setFilter(filter)
+	}
 	generateMipmap: func {
 		this backend generateMipmap()
 	}

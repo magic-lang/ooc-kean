@@ -48,15 +48,14 @@ GpuPacker: class {
 		this _renderTarget dispose()
 	}
 	pack: func (image: GpuImage, map: OpenGLES3MapDefault) {
-		map transform = FloatTransform2D identity
-		map imageSize = image size
-		map screenSize = image size
+		image setFilter(false)
 		this _renderTarget bind()
 		this _renderTarget clear()
 		surface := this _context createSurface()
 		surface draw(image, map, Viewport new(this _internalSize))
 		surface recycle()
 		this _renderTarget unbind()
+		image setFilter(true)
 	}
 	read: func ~ByteBuffer -> ByteBuffer {
 		sourcePointer := this _targetTexture read()
@@ -72,25 +71,27 @@ GpuPacker: class {
 	flush: static func {
 		Fbo flush()
 	}
+	readRows: func (destination: RasterImage) {
+		sourcePointer := this _targetTexture read()
+		destinationPointer := destination pointer
+		destinationStride := destination stride
+		sourceStride := this _targetTexture stride
+
+		sourceRow := sourcePointer
+		destinationRow := destinationPointer
+		for(row in 0..destination size height) {
+			sourceRow = sourcePointer + row * sourceStride
+			destinationRow = destinationPointer + row * destinationStride
+			memcpy(destinationRow, sourceRow, destinationStride)
+		}
+		this _targetTexture unlock()
+	}
 	read: func (destination: RasterImage) {
 		sourcePointer := this _targetTexture read()
 		destinationPointer := destination pointer
 		destinationStride := destination stride
 		sourceStride := this _targetTexture stride
-		/*
-		if (this _targetTexture isPadded()) {
-			printAndroid("Warning: Copying row by row")
-			printAndroid("Stride: " + this _targetTexture stride toString())
-			for(row in 0..image size height) {
-				sourceRow := sourcePointer + row * sourceStride
-				destinationRow := destinationPointer + row * destinationStride
-				memcpy(destinationRow, sourceRow, destinationStride)
-			}
-		}
-		else {
-			memcpy(destinationPointer, sourcePointer, destinationStride * destination size height)
-		}
-		*/
+
 		memcpy(destinationPointer, sourcePointer, destinationStride * destination size height)
 		this _targetTexture unlock()
 	}

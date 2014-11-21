@@ -22,11 +22,14 @@ use ooc-collections
 import GpuImage, GpuMap, GpuSurface, GpuContext, Viewport, structs/LinkedList
 
 GpuCanvas: abstract class {
+	_target: GpuImage
 	_size: IntSize2D
 	_context: GpuContext
-	init: func (=_context)
+	init: func (=_target, =_context)
 	dispose: abstract func
-	draw: abstract func (image: Image, transform := FloatTransform2D identity)
+	draw: abstract func (image: Image)
+	draw: abstract func ~transform2D (image: Image, transform: FloatTransform2D)
+	draw: abstract func ~transform3D (image: Image, transform: FloatTransform3D)
 	draw: abstract func ~withmap (image: Image, map: GpuMap, viewport: Viewport)
 	drawTrace: func (transformList: LinkedList<FloatPoint2D>, size: IntSize2D, positions: Float*, screenSize: IntSize2D)
 	drawBox: func (box: IntBox2D, size: IntSize2D)

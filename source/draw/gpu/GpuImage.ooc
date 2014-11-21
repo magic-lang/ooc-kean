@@ -40,6 +40,7 @@ GpuImage: abstract class extends Image {
 	_context: GpuContext
 	_channels: Int
 	channels: Int { get { this _channels } }
+	length: Int { get { this _channels * this size width * this size height } }
 	init: func (=size, =_channels, =_context)
 	bind: abstract func (unit: UInt)
 	unbind: abstract func
@@ -47,6 +48,10 @@ GpuImage: abstract class extends Image {
 		if (this _canvas != null)
 			this _canvas onRecycle()
 		this _context recycle(this)
+	}
+
+	free: func {
+		DebugPrint print("Destroying GpuImage")
 	}
 	dispose: abstract func
 	upload: abstract func (raster: RasterImage)
@@ -80,5 +85,6 @@ GpuImage: abstract class extends Image {
 	toRasterDefault: abstract func ~overwrite (rasterImage: RasterImage)
 	toRasterDefault: abstract func -> RasterImage
 	_createCanvas: abstract func -> GpuCanvas
+	setFilter: abstract func (filter: Bool)
 
 }

@@ -65,14 +65,14 @@ FloatTransform3D: cover {
 		}
 		result
 	}
-	determinant ::= this a * (this e * this i - this f * this h) + this d * (this h * this c - this i * this b) + this g * (this b * this f - this e * this c) 
+	determinant ::= this a * (this e * this i - this f * this h) + this d * (this h * this c - this i * this b) + this g * (this b * this f - this e * this c)
 	translation ::= FloatSize3D new(this j, this k, this l)
 	scaling ::= (this scalingX + this scalingY + this scalingZ) / 3.0f
 	scalingX ::= (this a squared() + this b squared() + this c squared()) sqrt()
 	scalingY ::= (this d squared() + this e squared() + this f squared()) sqrt()
 	scalingZ ::= (this g squared() + this h squared() + this i squared()) sqrt()
 	rotation ::= this b atan2(this a)
-	inverse: This { get { 
+	inverse: This { get {
 		determinant := this determinant
 		result := This new(
 			(this e * this i - this h * this f) / determinant,
@@ -118,7 +118,7 @@ FloatTransform3D: cover {
 	reflectZ: func -> This { this createReflectionZ() * this }
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) } }
 	create: static func (a, b, c, d, e, f, g, h, i, j, k, l: Float) -> This { This new(a, b, c, d, e, f, g, h, i, j, k, l) }
-	createTranslation: static func (xDelta, yDelta, zDelta: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, xDelta, yDelta, zDelta) }	
+	createTranslation: static func (xDelta, yDelta, zDelta: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, xDelta, yDelta, zDelta) }
 	createTranslation: static func ~float (delta: Float) -> This { This createTranslation(delta, delta, delta) }
 	createTranslation: static func ~size (delta: FloatSize3D) -> This { This createTranslation(delta width, delta height, delta depth) }
 	createTranslation: static func ~point (delta: FloatPoint3D) -> This { This createTranslation(delta x, delta y, delta z) }
@@ -128,12 +128,31 @@ FloatTransform3D: cover {
 	createRotationX: static func (angle: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, angle cos(), angle sin(), 0.0f, (-angle) sin(), angle cos(), 0.0f, 0.0f, 0.0f) }
 	createRotationY: static func (angle: Float) -> This { This new(angle cos(), 0.0f, angle sin(), 0.0f, 1.0f, 0.0f, (-angle) sin(), 0.0f, angle cos(), 0.0f, 0.0f, 0.0f) }
 	createRotationZ: static func (angle: Float) -> This { This new(angle cos(), angle sin(), 0.0f, (-angle) sin(), angle cos(), 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) }
-	createRotation: static func ~pivot (transform: This, pivot: FloatPoint3D) -> This { 
+	createRotation: static func ~pivot (transform: This, pivot: FloatPoint3D) -> This {
 		This createTranslation(pivot x, pivot y, pivot z) * transform * This createTranslation(-pivot x, -pivot y, -pivot z)
 	}
 	createReflectionX: static func -> This { This new(-1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) }
 	createReflectionY: static func -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) }
 	createReflectionZ: static func -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f) }
+	to4x4: func -> Float* {
+		//TODO: Do not use heap array
+		array := gc_malloc(Float size * 16) as Float*
+		array[0] = this a
+		array[1] = this d
+		array[2] = this g
+		array[3] = this j
+		array[4] = this b
+		array[5] = this e
+		array[6] = this h
+		array[7] = this k
+		array[8] = this c
+		array[9] = this f
+		array[10] = this i
+		array[11] = this l
+		array[12] = array[13] = array[14] = 0
+		array[15] = 1
+		array
+	}
 	operator * (other: This) -> This {
 		This new(
 			this a * other a + this d * other b + this g * other c,
