@@ -26,6 +26,10 @@ OpenGLES3Map: abstract class extends GpuMap {
 	_onUse: Func
 	init: func (vertexSource: String, fragmentSource: String, onUse: Func) {
 		this _onUse = onUse
+		if (vertexSource == null || fragmentSource == null) {
+			DebugPrint print("Vertex or fragment shader source not set")
+			raise("Vertex or fragment shader source not set")
+		}
 		this _program = ShaderProgram create(vertexSource, fragmentSource)
 	}
 	dispose: func {
@@ -41,19 +45,30 @@ OpenGLES3Map: abstract class extends GpuMap {
 }
 
 OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
+	init: func (fragmentSource: String, onUse: Func) {
+		super(This vertexSource, fragmentSource, func {
+			onUse()
+			})
+	}
+	vertexSource: static String
+}
+
+OpenGLES3MapTransform: abstract class extends OpenGLES3Map {
 	transform: FloatTransform2D { get set }
+	view: FloatTransform3D { get set }
 	imageSize: IntSize2D { get set }
 	screenSize: IntSize2D { get set }
 	init: func (fragmentSource: String, onUse: Func) {
-		super(This defaultVertexSource, fragmentSource, func {
+		super(This vertexSource, fragmentSource, func {
 			onUse()
 			this _program setUniform("imageWidth", this imageSize width)
 			this _program setUniform("imageHeight", this imageSize height)
 			this _program setUniform("screenWidth", this screenSize width)
 			this _program setUniform("screenHeight", this screenSize height)
-			this _program setUniform("transform", transform)})
+			this _program setUniform("view", this view)
+			this _program setUniform("transform", this transform)})
 	}
-	defaultVertexSource: static String
+	vertexSource: static String
 }
 
 OpenGLES3MapOverlay: class extends OpenGLES3MapDefault {
@@ -129,8 +144,27 @@ OpenGLES3MapMonochrome: class extends OpenGLES3MapDefault {
 	}
 	fragmentSource: static String
 }
+OpenGLES3MapMonochromeTransform: class extends OpenGLES3MapTransform {
+	init: func {
+		super(This fragmentSource,
+			func {
+				this _program setUniform("texture0", 0)
+			})
+	}
+	fragmentSource: static String
+}
 
 OpenGLES3MapUv: class extends OpenGLES3MapDefault {
+	init: func {
+		super(This fragmentSource,
+			func {
+				this _program setUniform("texture0", 0)
+			})
+	}
+	fragmentSource: static String
+}
+
+OpenGLES3MapUvTransform: class extends OpenGLES3MapTransform {
 	init: func {
 		super(This fragmentSource,
 			func {
@@ -173,46 +207,52 @@ OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapDefault {
 	fragmentSource: static String
 }
 
-OpenGLES3MapPackMonochrome: class extends OpenGLES3MapDefault {
+OpenGLES3MapYuvSemiplanarToBgraTransform: class extends OpenGLES3MapTransform {
 	init: func {
 		super(This fragmentSource,
 			func {
 				this _program setUniform("texture0", 0)
-				this _program setUniform("pixelWidth", this imageSize width)
+				this _program setUniform("texture1", 1)
 			})
 	}
 	fragmentSource: static String
 }
 
-OpenGLES3MapPackUv: class extends OpenGLES3MapDefault {
-	init: func {
-		super(This fragmentSource,
+OpenGLES3MapPack: abstract class extends OpenGLES3MapDefault {
+	imageWidth: Int { get set }
+	init: func (fragmentSource: String) {
+		super(fragmentSource,
 			func {
 				this _program setUniform("texture0", 0)
-				this _program setUniform("pixelWidth", this imageSize width)
+				this _program setUniform("imageWidth", this imageWidth)
 			})
+	}
+}
+
+OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
+	init: func {
+		super(This fragmentSource)
 	}
 	fragmentSource: static String
 }
 
-OpenGLES3MapPackMonochrome1080p: class extends OpenGLES3MapDefault {
+OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
 	init: func {
-		super(This fragmentSource,
-			func {
-				this _program setUniform("texture0", 0)
-				this _program setUniform("pixelWidth", this imageSize width)
-			})
+		super(This fragmentSource)
 	}
 	fragmentSource: static String
 }
 
-OpenGLES3MapPackUv1080p: class extends OpenGLES3MapDefault {
+OpenGLES3MapPackMonochrome1080p: class extends OpenGLES3MapPack {
 	init: func {
-		super(This fragmentSource,
-			func {
-				this _program setUniform("texture0", 0)
-				this _program setUniform("pixelWidth", this imageSize width)
-			})
+		super(This fragmentSource)
+	}
+	fragmentSource: static String
+}
+
+OpenGLES3MapPackUv1080p: class extends OpenGLES3MapPack {
+	init: func {
+		super(This fragmentSource)
 	}
 	fragmentSource: static String
 }

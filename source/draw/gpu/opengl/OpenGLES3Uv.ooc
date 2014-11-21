@@ -47,15 +47,16 @@ OpenGLES3Uv: class extends GpuUv {
 	upload: func (raster: RasterImage) {
 		this backend uploadPixels(raster pointer, raster stride)
 	}
+	setFilter: func (filter: Bool) {
+		this backend setFilter(filter)
+	}
 	generateMipmap: func {
 		this backend generateMipmap()
 	}
 	toRasterDefault: func -> RasterImage {
 		packed := this _context createBgra(IntSize2D new(this size width / 2, this size height))
 		packMap := this _context getMap(this, GpuMapType pack) as OpenGLES3MapPackUv
-		packMap transform = FloatTransform2D identity
-		packMap imageSize = this size
-		packMap screenSize = this size
+		packMap imageWidth = this size width
 		packed canvas draw(this, packMap, Viewport new(packed size))
 		buffer := packed canvas readPixels(4)
 		result := RasterUv new(buffer, this size)

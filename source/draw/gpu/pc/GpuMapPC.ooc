@@ -17,10 +17,22 @@
 use ooc-opengl
 
 setShaderSources: func {
-	OpenGLES3MapDefault defaultVertexSource =
+	OpenGLES3MapDefault vertexSource =
+		"#version 300 es\n
+		precision highp float;\n
+		layout(location = 0) in vec2 vertexPosition;\n
+		layout(location = 1) in vec2 textureCoordinate;\n
+		out vec2 fragmentTextureCoordinate;\n
+		void main() {\n
+			fragmentTextureCoordinate = textureCoordinate;\n
+			gl_Position = vec4(vertexPosition, -1, 1);\n
+		}\n";
+
+	OpenGLES3MapTransform vertexSource =
 		"#version 300 es\n
 		precision highp float;\n
 		uniform mat3 transform;\n
+		uniform mat4 view;\n
 		uniform int imageWidth;\n
 		uniform int imageHeight;\n
 		uniform int screenWidth;\n
@@ -29,12 +41,19 @@ setShaderSources: func {
 		layout(location = 1) in vec2 textureCoordinate;\n
 		out vec2 fragmentTextureCoordinate;\n
 		void main() {\n
-			vec3 scaledQuadPosition = vec3(float(imageWidth) / 2.0f * vertexPosition.x, float(imageHeight) / 2.0f * vertexPosition.y, 1);\n
-			vec3 transformedPosition = transform * scaledQuadPosition;\n
-			transformedPosition.xy /= transformedPosition.z; \n
-			mat4 projectionMatrix = transpose(mat4(2.0f / float(screenWidth), 0, 0, 0, 0, 2.0f / float(screenHeight), 0, 0, 0, 0, -1, 0, 0, 0, 0, 1));\n
+			float fov = 50.35f * 0.0174f;\n
+			float ar = float(imageWidth) / float(imageHeight);\n
+			float k = 2.0f * float(imageWidth) * tan(fov / 2.0f);\n
+			vec4 scaledQuadPosition = vec4(float(imageWidth) * vertexPosition.x / 2.0f, float(imageHeight) * vertexPosition.y / 2.0f, -k, 1);\n
+			mat4 viewMatrix = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n
+			vec4 transformedPosition = transpose(view) * scaledQuadPosition;\n
+			float near = 0.0f;\n
+			float far = 1000.0f;\n
+			transformedPosition.z /= k;\n
+			//mat4 projectionMatrix = mat4(2.0f * near / float(screenWidth), 0, 0, 0, 0, 2.0f * near / float(screenHeight), 0, 0, 0, 0, - (far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 1);\n
+			mat4 projectionMatrix = mat4(2.0f / float(screenWidth), 0, 0, 0, 0, 2.0f / float(screenHeight), 0, 0, 0, 0, - (far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 0);\n
 			fragmentTextureCoordinate = textureCoordinate;\n
-			gl_Position = projectionMatrix * vec4(transformedPosition, 1);\n
+			gl_Position = projectionMatrix * transformedPosition;\n
 		}\n";
 	OpenGLES3MapOverlay fragmentSource =
 		"#version 300 es\n
@@ -52,7 +71,7 @@ setShaderSources: func {
 		void main() {\n
 			outColor = texture(texture0, fragmentTextureCoordinate).rgb;\n
 		}\n";
-	OpenGLES3MapBgrToBgra  fragmentSource =
+	OpenGLES3MapBgrToBgra fragmentSource =
 		"#version 300 es\n
 		precision highp float;\n
 		uniform sampler2D texture0;\n
@@ -79,7 +98,25 @@ setShaderSources: func {
 		void main() {\n
 			outColor = texture(texture0, fragmentTextureCoordinate).r;\n
 		}\n";
+	OpenGLES3MapMonochromeTransform fragmentSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out float outColor;\n
+		void main() {\n
+			outColor = texture(texture0, fragmentTextureCoordinate).r;\n
+		}\n";
 	OpenGLES3MapUv fragmentSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out vec2 outColor;\n
+		void main() {\n
+			outColor = texture(texture0, fragmentTextureCoordinate).rg;\n
+		}\n";
+	OpenGLES3MapUvTransform fragmentSource =
 		"#version 300 es\n
 		precision highp float;\n
 		uniform sampler2D texture0;\n
@@ -142,16 +179,37 @@ setShaderSources: func {
 			vec2 uv = texture(texture1, fragmentTextureCoordinate).rg;\n
 			outColor = YuvToRgba(vec4(y, uv.g - 0.5f, uv.r - 0.5f, 1.0f));\n
 		}\n";
+	OpenGLES3MapYuvSemiplanarToBgraTransform fragmentSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		uniform sampler2D texture1;\n
+		in vec2 fragmentTextureCoordinate;
+		out vec4 outColor;\n
+		// Convert yuva to rgba
+		vec4 YuvToRgba(vec4 t)
+		{
+			mat4 matrix = mat4(1, 1, 1, 0,
+			-0.000001218894189, -0.344135678165337, 1.772000066073816, 0,
+			1.401999588657340, -0.714136155581812, 0.000000406298063, 0,
+			0, 0, 0, 1);
+			return matrix * t;
+		}
+		void main() {\n
+			float y = texture(texture0, fragmentTextureCoordinate).r;\n
+			vec2 uv = texture(texture1, fragmentTextureCoordinate).rg;\n
+			outColor = YuvToRgba(vec4(y, uv.g - 0.5f, uv.r - 0.5f, 1.0f));\n
+		}\n";
 	OpenGLES3MapPackMonochrome fragmentSource =
 		"#version 300 es\n
 		precision highp float;\n
 		uniform sampler2D texture0;\n
-		uniform int pixelWidth;\n
+		uniform int imageWidth;\n
 		in vec2 fragmentTextureCoordinate;
 		out vec4 outColor;\n
 		void main() {\n
-			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f / float(pixelWidth), 0);\n
-			vec2 texelOffset = vec2(1.0f / float(pixelWidth), 0);\n
+			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f / float(imageWidth), 0);\n
+			vec2 texelOffset = vec2(1.0f / float(imageWidth), 0);\n
 			float r = texture(texture0, offsetTexCoords).x;\n
 			float g = texture(texture0, offsetTexCoords + texelOffset).x;\n
 			float b = texture(texture0, offsetTexCoords + 2.0f*texelOffset).x;\n
@@ -162,12 +220,12 @@ setShaderSources: func {
 		"#version 300 es\n
 		precision highp float;\n
 		uniform sampler2D texture0;\n
-		uniform int pixelWidth;\n
+		uniform int imageWidth;\n
 		in vec2 fragmentTextureCoordinate;
 		out vec4 outColor;\n
 		void main() {\n
-			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f / float(pixelWidth), 0);\n
-			vec2 texelOffset = vec2(1.0f / float(pixelWidth), 0);\n
+			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f / float(imageWidth), 0);\n
+			vec2 texelOffset = vec2(1.0f / float(imageWidth), 0);\n
 			vec2 rg = texture(texture0, offsetTexCoords).rg;\n
 			vec2 ba = texture(texture0, offsetTexCoords + texelOffset).rg;\n
 			outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n

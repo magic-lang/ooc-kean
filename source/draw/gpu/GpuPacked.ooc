@@ -23,8 +23,8 @@ GpuPacked: abstract class extends GpuImage {
 		super(size, channels, context)
 	}
 	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
-		buffer := this canvas readPixels(this _channels)
-		memcpy(rasterImage pointer, buffer pointer, this size width * this size height * this _channels)
-		buffer free()
+		raster := this toRaster()
+		memcpy(rasterImage pointer, raster pointer, this length)
+		raster decreaseReferenceCount()
 	}
 }
