@@ -280,3 +280,20 @@ setShaderSources: func {
 			outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
 		}\n";
 }
+	OpenGLES3MapBlend fragmentSource =
+	"#version 300 es\n
+	precision highp float;\n
+	uniform sampler2D texture0;\n
+	in vec2 fragmentTextureCoordinate;
+	out float outColor;\n
+	void main() {\n
+		outColor = 1.0f;\n
+		/*
+		if (texture(texture0, fragmentTextureCoordinate).a == 0.0f) {
+			outColor = 0.0;
+		}
+		else {
+			outColor = 1.0;
+		}
+		*/
+	}\n"
