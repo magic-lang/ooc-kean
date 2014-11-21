@@ -51,7 +51,7 @@ setShaderSources: func {
 			float far = 1000.0f;\n
 			transformedPosition.z /= k;\n
 			//mat4 projectionMatrix = mat4(2.0f * near / float(screenWidth), 0, 0, 0, 0, 2.0f * near / float(screenHeight), 0, 0, 0, 0, - (far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 1);\n
-			mat4 projectionMatrix = mat4(2.0f / float(screenWidth), 0, 0, 0, 0, -2.0f / float(screenHeight), 0, 0, 0, 0, - (far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 0);\n
+			mat4 projectionMatrix = mat4(2.0f / float(screenWidth), 0, 0, 0, 0, 2.0f / float(screenHeight), 0, 0, 0, 0, - (far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 0);\n
 			fragmentTextureCoordinate = textureCoordinate;\n
 			gl_Position = projectionMatrix * transformedPosition;\n
 		}\n";
@@ -220,12 +220,12 @@ setShaderSources: func {
 		"#version 300 es\n
 		precision highp float;\n
 		uniform sampler2D texture0;\n
-		uniform int pixelWidth;\n
+		uniform int imageWidth;\n
 		in vec2 fragmentTextureCoordinate;
 		out vec4 outColor;\n
 		void main() {\n
-			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f / float(pixelWidth), 0);\n
-			vec2 texelOffset = vec2(1.0f / float(pixelWidth), 0);\n
+			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f / float(imageWidth), 0);\n
+			vec2 texelOffset = vec2(1.0f / float(imageWidth), 0);\n
 			vec2 rg = texture(texture0, offsetTexCoords).rg;\n
 			vec2 ba = texture(texture0, offsetTexCoords + texelOffset).rg;\n
 			outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
