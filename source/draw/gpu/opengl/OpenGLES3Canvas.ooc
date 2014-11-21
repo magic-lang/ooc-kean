@@ -17,10 +17,12 @@
 
 use ooc-math
 use ooc-base
+use ooc-collections
 use ooc-draw
 use ooc-draw-gpu
 
 import OpenGLES3/Fbo, OpenGLES3/Quad, OpenGLES3/Texture, OpenGLES3Bgr, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Map, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Monochrome, OpenGLES3Surface
+import structs/LinkedList
 
 OpenGLES3Canvas: class extends GpuCanvas {
 	_renderTarget: Fbo
@@ -64,10 +66,24 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		Fbo clearColor(0.0f)
 		this _unbind()
 	}
-	drawLines: func (transform: FloatTransform2D, size: IntSize2D) {
+	drawTrace: func (transformList: LinkedList<FloatPoint2D>, size: IntSize2D, positions: Float*, screenSize: IntSize2D) {
 		this _bind()
 		surface := this _context createSurface() as OpenGLES3Surface
-		surface drawLines(transform, Viewport new(size))
+		surface drawTrace(transformList, Viewport new(size), positions, screenSize)
+		surface recycle()
+		this _unbind()
+	}
+	drawBox: func (box: IntBox2D, size: IntSize2D) {
+		this _bind()
+		surface := this _context createSurface() as OpenGLES3Surface
+		surface drawBox(box, Viewport new(size), size)
+		surface recycle()
+		this _unbind()
+	}
+	drawPoints: func (pointList: VectorList<FloatPoint2D>, size: IntSize2D) {
+		this _bind()
+		surface := this _context createSurface() as OpenGLES3Surface
+		surface drawPoints(pointList, Viewport new(size), size)
 		surface recycle()
 		this _unbind()
 	}
@@ -91,7 +107,6 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		result _renderTarget != null ? result : null
 	}
 }
-
 OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 	_y: OpenGLES3Canvas
 	_u: OpenGLES3Canvas

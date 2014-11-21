@@ -91,6 +91,19 @@ OpenGLES3MapLines: class extends OpenGLES3Map {
 	vertexSource: static String
 	fragmentSource: static String
 }
+OpenGLES3MapPoints: class extends OpenGLES3Map {
+	color: FloatPoint3D { get set }
+	pointSize: Float { get set }
+	init: func {
+		super(This vertexSource, This fragmentSource,
+			func {
+				this _program setUniform("color", this color)
+				this _program setUniform("pointSize", this pointSize)
+		})
+	}
+	vertexSource: static String
+	fragmentSource: static String
+}
 
 OpenGLES3MapBgr: class extends OpenGLES3MapDefault {
 	init: func {
