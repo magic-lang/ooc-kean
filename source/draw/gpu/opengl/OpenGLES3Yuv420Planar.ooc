@@ -66,9 +66,9 @@ OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 	}
 	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
 		planar := rasterImage as RasterYuv420Planar
-		this _y toRasterDefault(planar y)
-		this _u toRasterDefault(planar u)
-		this _v toRasterDefault(planar v)
+		this _y toRaster(planar y)
+		this _u toRaster(planar u)
+		this _v toRaster(planar v)
 	}
 	resizeTo: func (size: IntSize2D) -> This {
 		target := OpenGLES3Yuv420Planar create(size, this _context)
