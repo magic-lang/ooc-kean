@@ -28,7 +28,6 @@ CreateAlfaByteString: class {
 		ip: Int*
 		tmp := ByteBuffer new(image size width * image size height)
 		ipbuffer := ByteBuffer new(image size width * image size height)
-
 		for (i in 0..(buf size / 4)) {
 			ipbuffer pointer[i] = buf pointer[(i*4)+3]
 		}
