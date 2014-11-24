@@ -350,7 +350,7 @@ setShaderSources: func {
 			else {\n
 				outColor = 1.0;\n
 			}\n*/
-			outColor = texture(texture0, fragmentTextureCoordinate).r;\n
+			outColor = texture(texture0, fragmentTextureCoordinate).r * 0.7f;\n
 		}\n"
 }
 
