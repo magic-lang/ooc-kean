@@ -46,9 +46,13 @@ Profiling: class {
 			if ((This _logList[i] _debugLevel == debugLevel) || (debugLevel == 1) ) {
 				log := This _logList[i]
 				//output = output + log _message + " Time: " + log _timer _result toString() + " Average: " + log _timer _average toString() + " Min: " + log _timer _min toString() + " Max: " + log _timer _max toString() + "\n"
+				outputTmp = output + log _message
+				if (i > 0)
+					output free()
 				logStr := log _timer _result toString()
-				outputTmp = log _message + timeStr
-				output = outputTmp + logStr
+				tmp := outputTmp + timeStr
+				output = tmp + logStr
+				tmp free()
 	
 				outputTmp free()
 				outputTmp = output + average
@@ -77,7 +81,6 @@ Profiling: class {
 	
 				output free()
 				output = outputTmp
-//				outputTmp free()
 			}
 		}
 		output
