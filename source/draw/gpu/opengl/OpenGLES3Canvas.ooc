@@ -66,10 +66,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		Fbo clearColor(0.0f)
 		this _unbind()
 	}
-	drawSmall: func (image: Image, map: GpuMap, size: IntSize2D, offset: IntSize2D, transform := FloatTransform2D identity) {
-		this _defaultMap transform = transform
-		this _defaultMap imageSize = image size
-		this _defaultMap screenSize = image size
+	drawLogo: func (image: Image, map: GpuMap, size: IntSize2D, offset: IntSize2D, transform := FloatTransform2D identity) {
 		this _bind()
 		this _renderTarget clearColor(this clearColor)
 		surface := this _context createSurface() as OpenGLES3Surface

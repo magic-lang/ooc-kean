@@ -345,13 +345,13 @@ setShaderSources: func {
 	in vec2 fragmentTextureCoordinate;
 	out float outColor;\n
 	void main() {\n
-		outColor = 1.0f;\n
-		/*
-		if (texture(texture0, fragmentTextureCoordinate).a == 0.0f) {
+		/*if (texture(texture0, fragmentTextureCoordinate).a == 0.0f) {
 			outColor = 0.0;
 		}
 		else {
 			outColor = 1.0;
-		}
-		*/
+		}*/
+
+		outColor = texture(texture0, fragmentTextureCoordinate).r;
+
 	}\n"
