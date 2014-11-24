@@ -20,6 +20,7 @@ GpuMapType: enum {
 	pyramid
 	pyramidMipmap
 	pack
+	blendMap
 }
 
 GpuMap: abstract class {
