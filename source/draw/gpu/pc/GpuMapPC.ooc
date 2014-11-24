@@ -208,7 +208,7 @@ setShaderSources: func {
 		in vec2 fragmentTextureCoordinate;
 		out vec4 outColor;\n
 		void main() {\n
-			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f / float(imageWidth), 0);\n
+			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(1.5f / float(imageWidth), 0);\n
 			vec2 texelOffset = vec2(1.0f / float(imageWidth), 0);\n
 			float r = texture(texture0, offsetTexCoords).x;\n
 			float g = texture(texture0, offsetTexCoords + texelOffset).x;\n
@@ -224,7 +224,7 @@ setShaderSources: func {
 		in vec2 fragmentTextureCoordinate;
 		out vec4 outColor;\n
 		void main() {\n
-			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f / float(imageWidth), 0);\n
+			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(1.5f / float(imageWidth), 0);\n
 			vec2 texelOffset = vec2(1.0f / float(imageWidth), 0);\n
 			vec2 rg = texture(texture0, offsetTexCoords).rg;\n
 			vec2 ba = texture(texture0, offsetTexCoords + texelOffset).rg;\n
