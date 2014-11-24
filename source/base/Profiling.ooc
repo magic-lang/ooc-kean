@@ -77,7 +77,7 @@ Profiling: class {
 	
 				output free()
 				output = outputTmp
-				outputTmp free()
+//				outputTmp free()
 			}
 		}
 		output
