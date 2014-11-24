@@ -33,6 +33,7 @@ OpenGLES3Context: class extends GpuContext {
 	_pyramidMapMonochromeMipmap: OpenGLES3MapPyramidGenerationMipmap
 	_packMonochrome: OpenGLES3MapPackMonochrome
 	_packUv: OpenGLES3MapPackUv
+	_blendMap: OpenGLES3MapBlend
 	_onDispose: Func
 
 	init: func (context: Context) {
@@ -47,6 +48,7 @@ OpenGLES3Context: class extends GpuContext {
 		this _pyramidMapMonochromeMipmap = OpenGLES3MapPyramidGenerationMipmap new()
 		this _packMonochrome = OpenGLES3MapPackMonochrome new()
 		this _packUv = OpenGLES3MapPackUv new()
+		this _blendMap = OpenGLES3MapBlend new()
 		this _backend = context
 	}
 	init: func ~unshared (onDispose: Func) {
@@ -72,6 +74,7 @@ OpenGLES3Context: class extends GpuContext {
 		this _imageBin dispose()
 		this _surfaceBin dispose()
 		this _backend dispose()
+		this _blendMap dispose()
 	}
 	recycle: func ~image (gpuImage: GpuImage) {
 		this _imageBin add(gpuImage)
@@ -109,6 +112,12 @@ OpenGLES3Context: class extends GpuContext {
 				match (gpuImage) {
 					case (i : GpuMonochrome) => this _packMonochrome
 					case (i : GpuUv) => this _packUv
+					case => null
+				}
+			case GpuMapType blendMap =>
+				match (gpuImage) {
+					case (i : GpuMonochrome) => this _blendMap
+					case (i : GpuYuv420Semiplanar) => this _blendMap
 					case => null
 				}
 			case => null
