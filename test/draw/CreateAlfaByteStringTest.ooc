@@ -18,7 +18,7 @@
 use ooc-draw
 import CreateAlfaByteString, io/FileWriter
 
-outputData := CreateAlfaByteString makeAlfaString("input/logo.png")
+outputData := CreateAlfaByteString makeAlfaString("../test/draw/input/logo.png")
 fw := FileWriter new("dataFile.txt")
 fw write(outputData)
 fw close()
