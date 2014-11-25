@@ -60,6 +60,10 @@ VectorList: class <T> {
 		this count -= 1
 		tmp
 	}
+	removeAt: func (index: Int) {
+		this _vector copy(index+1, index)
+		this count -= 1
+	}
 	clear: func {
 		for (i in 0..this _count) {
 			this _vector[i] = null

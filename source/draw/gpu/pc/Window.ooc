@@ -48,6 +48,8 @@ Window: class extends OpenGLES3Context {
 		this _bgraToBgra dispose()
 		this _yuvPlanarToBgra dispose()
 		this _yuvSemiplanarToBgra dispose()
+		this _monochromeToBgra dispose()
+		this _yuvSemiplanarToBgraTransform dispose()
 	}
 	getDefaultMap: func (gpuImage: GpuImage) -> OpenGLES3MapDefault {
 		result := match(gpuImage) {
