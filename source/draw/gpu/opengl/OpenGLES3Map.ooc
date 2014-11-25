@@ -24,6 +24,7 @@ import OpenGLES3/ShaderProgram
 OpenGLES3Map: abstract class extends GpuMap {
 	_program: ShaderProgram
 	_onUse: Func
+	invertY: Float { get set }
 	init: func (vertexSource: String, fragmentSource: String, onUse: Func) {
 		this _onUse = onUse
 		if (vertexSource == null || fragmentSource == null) {
@@ -37,10 +38,10 @@ OpenGLES3Map: abstract class extends GpuMap {
 			this _program dispose()
 	}
 	use: func {
-		if (this _program != null) {
-			this _program use()
-			this _onUse()
-		}
+		this _program use()
+		this _onUse()
+		this _program setUniform("invertY", this invertY)
+		this invertY = 1.0f
 	}
 }
 
@@ -53,20 +54,19 @@ OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 	vertexSource: static String
 }
 
-OpenGLES3MapTransform: abstract class extends OpenGLES3Map {
-	transform: FloatTransform2D { get set }
-	view: FloatTransform3D { get set }
+OpenGLES3MapTransform: class extends OpenGLES3Map {
 	imageSize: IntSize2D { get set }
-	screenSize: IntSize2D { get set }
+	transform: FloatTransform2D { get set }
 	init: func (fragmentSource: String, onUse: Func) {
 		super(This vertexSource, fragmentSource, func {
 			onUse()
 			this _program setUniform("imageWidth", this imageSize width)
 			this _program setUniform("imageHeight", this imageSize height)
-			this _program setUniform("screenWidth", this screenSize width)
-			this _program setUniform("screenHeight", this screenSize height)
-			this _program setUniform("view", this view)
-			this _program setUniform("transform", this transform)})
+			arr := this transform to3DTransformArray()
+			this _program setUniform("transform", arr)
+			gc_free(arr)
+			})
+
 	}
 	vertexSource: static String
 }
@@ -286,35 +286,26 @@ OpenGLES3MapUnpackUv1080p: class extends OpenGLES3MapDefault {
 	fragmentSource: static String
 }
 
-
-OpenGLES3MapPyramidGeneration: class extends OpenGLES3MapDefault {
+OpenGLES3MapPyramidGeneration: abstract class extends OpenGLES3MapDefault {
 	pyramidFraction: Float { get set }
 	pyramidCoefficient: Float { get set }
 	originalHeight: Int { get set }
-	init: func {
-		super(This fragmentSource,
+	init: func (fragmentSource: String) {
+		super(fragmentSource,
 			func {
 				this _program setUniform("texture0", 0)
 				this _program setUniform("pyramidFraction", this pyramidFraction)
 				this _program setUniform("pyramidCoefficient", this pyramidCoefficient)
 				this _program setUniform("originalHeight", this originalHeight)
-			})
-	}
-	fragmentSource: static String
+				})
+			}
 }
 
-OpenGLES3MapPyramidGenerationMipmap: class extends OpenGLES3MapDefault {
-	pyramidFraction: Float { get set }
-	pyramidCoefficient: Float { get set }
-	originalHeight: Int { get set }
-	init: func {
-		super(This fragmentSource,
-			func {
-				this _program setUniform("texture0", 0)
-				this _program setUniform("pyramidFraction", this pyramidFraction)
-				this _program setUniform("pyramidCoefficient", this pyramidCoefficient)
-				this _program setUniform("originalHeight", this originalHeight)
-			})
-	}
+OpenGLES3MapPyramidGenerationDefault: class extends OpenGLES3MapPyramidGeneration {
+	init: func { super(This fragmentSource) }
+	fragmentSource: static String
+}
+OpenGLES3MapPyramidGenerationMipmap: class extends OpenGLES3MapPyramidGeneration {
+	init: func { super(This fragmentSource) }
 	fragmentSource: static String
 }
