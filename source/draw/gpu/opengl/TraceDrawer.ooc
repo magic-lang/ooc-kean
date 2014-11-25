@@ -21,10 +21,14 @@ import structs/LinkedList
 import OpenGLES3Map, OpenGLES3/Lines
 
 TraceDrawer: class {
-	shader: OpenGLES3MapLines
+	linesShader: OpenGLES3MapLines
+	pointsShader: OpenGLES3MapPoints
 	scale: Float = 1.0f
 	init: func () {
-		this shader = OpenGLES3MapLines new()
+		this linesShader = OpenGLES3MapLines new()
+		this pointsShader = OpenGLES3MapPoints new()
+		pointsShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
+		pointsShader pointSize = 5.0f
 	}
 	drawTrace: func (pointList: LinkedList<FloatPoint2D>, positions: Float*, screenSize: IntSize2D) {
 		//Go from screen coordinates to normalized coordinates [-1, 1] [-1, 1]
@@ -51,11 +55,11 @@ TraceDrawer: class {
 		positions[crosshairStart + 8] = currentPoint x - crosshairSize x
 		positions[crosshairStart + 9] = currentPoint y
 
-		this shader color = FloatPoint3D new(0.0f, 0.0f, 0.0f)
-		this shader use()
+		this linesShader color = FloatPoint3D new(0.0f, 0.0f, 0.0f)
+		this linesShader use()
 		Lines draw(positions, pointList size + 5, 2, 3.5f)
-		this shader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
-		this shader use()
+		this linesShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
+		this linesShader use()
 		Lines draw(positions, pointList size + 5, 2, 1.5f)
 		gc_free(positions)
 	}
@@ -73,8 +77,8 @@ TraceDrawer: class {
 		positions[7] =  2.0f * (box leftBottom y as Float / size height as Float)
 		positions[8] =  2.0f * (box leftTop x as Float / size width as Float)
 		positions[9] =  2.0f * (box leftTop y as Float / size height as Float)
-		this shader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
-		this shader use()
+		this linesShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
+		this linesShader use()
 		Lines draw(positions, 5, 2, 1.5f)
 		gc_free(positions)
 	}
@@ -86,10 +90,7 @@ TraceDrawer: class {
 			positions[2 * i] = 2.0f * pointList[i] x / (size width as Float)
 			positions[2 * i + 1] = 2.0f * pointList[i] y / (size height as Float)
 		}
-		pointShader := OpenGLES3MapPoints new()
-		pointShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
-		pointShader pointSize = 5.0f
-		pointShader use()
+		pointsShader use()
 		Points draw(positions, pointList count, 2)
 		gc_free(positions)
 	}
