@@ -172,20 +172,20 @@ FloatTransform2D: cover {
 		array := gc_malloc(Float size * 16) as Float*
 		array[0] = this a
 		array[1] = this d
-		array[2] = this 0
+		array[2] = 0.0f
 		array[3] = this c
 		array[4] = this d
 		array[5] = this e
-		array[6] = this 0
+		array[6] = 0.0f
 		array[7] = this f
-		array[8] = this 0
-		array[9] = this 0
-		array[10] = this 1
-		array[11] = this 0
+		array[8] = 0.0f
+		array[9] = 0.0f
+		array[10] = 1.0f
+		array[11] = 0.0f
 		array[12] = this g
 		array[13] = this h
-		array[14] = 0
-		array[15] = 1
+		array[14] = 0.0f
+		array[15] = 1.0f
 		array
 	}
 	operator != (other: This) -> Bool { !(this == other) }
