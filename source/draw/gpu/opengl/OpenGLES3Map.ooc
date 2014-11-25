@@ -31,6 +31,7 @@ OpenGLES3Map: abstract class extends GpuMap {
 			DebugPrint print("Vertex or fragment shader source not set")
 			raise("Vertex or fragment shader source not set")
 		}
+		this invertY = 1.0f
 		this _program = ShaderProgram create(vertexSource, fragmentSource)
 	}
 	dispose: func {
@@ -62,9 +63,9 @@ OpenGLES3MapTransform: class extends OpenGLES3Map {
 			onUse()
 			this _program setUniform("imageWidth", this imageSize width)
 			this _program setUniform("imageHeight", this imageSize height)
-			arr := this transform to3DTransformArray()
-			this _program setUniform("transform", arr)
-			gc_free(arr)
+			reference := (this transform) to3DTransformArray()
+			this _program setUniform("transform", reference)
+			gc_free(reference)
 			})
 
 	}
