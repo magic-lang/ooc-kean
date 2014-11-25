@@ -104,6 +104,15 @@ OpenGLES3MapPoints: class extends OpenGLES3Map {
 	vertexSource: static String
 	fragmentSource: static String
 }
+OpenGLES3MapBlend: class extends OpenGLES3MapDefault {
+	init: func {
+		super(This fragmentSource,
+			func {
+				this _program setUniform("texture0", 0)
+			})
+	}
+	fragmentSource: static String
+}
 
 OpenGLES3MapBgr: class extends OpenGLES3MapDefault {
 	init: func {

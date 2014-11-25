@@ -208,7 +208,7 @@ setShaderSources: func {
 		in vec2 fragmentTextureCoordinate;
 		out vec4 outColor;\n
 		void main() {\n
-			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f / float(imageWidth), 0);\n
+			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(1.5f / float(imageWidth), 0);\n
 			vec2 texelOffset = vec2(1.0f / float(imageWidth), 0);\n
 			float r = texture(texture0, offsetTexCoords).x;\n
 			float g = texture(texture0, offsetTexCoords + texelOffset).x;\n
@@ -224,7 +224,7 @@ setShaderSources: func {
 		in vec2 fragmentTextureCoordinate;
 		out vec4 outColor;\n
 		void main() {\n
-			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(2.0f / float(imageWidth), 0);\n
+			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(1.5f / float(imageWidth), 0);\n
 			vec2 texelOffset = vec2(1.0f / float(imageWidth), 0);\n
 			vec2 rg = texture(texture0, offsetTexCoords).rg;\n
 			vec2 ba = texture(texture0, offsetTexCoords + texelOffset).rg;\n
@@ -337,4 +337,20 @@ setShaderSources: func {
 			vec2 ba = texture(texture0, transformedCoords + texelOffset).rg;\n
 			outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
 		}\n";
+	OpenGLES3MapBlend fragmentSource =
+		"#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out float outColor;\n
+		void main() {\n
+			/*if (texture(texture0, fragmentTextureCoordinate).a == 0.0f) {\n
+				outColor = 0.0;\n
+			}\n
+			else {\n
+				outColor = 1.0;\n
+			}\n*/
+			outColor = texture(texture0, fragmentTextureCoordinate).r * 0.7f;\n
+		}\n"
 }
+
