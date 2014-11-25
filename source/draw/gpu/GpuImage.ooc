@@ -51,7 +51,6 @@ GpuImage: abstract class extends Image {
 	}
 
 	free: func {
-		DebugPrint print("Destroying GpuImage")
 	}
 	dispose: abstract func
 	upload: abstract func (raster: RasterImage)

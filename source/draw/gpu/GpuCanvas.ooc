@@ -29,8 +29,8 @@ GpuCanvas: abstract class {
 	dispose: abstract func
 	draw: abstract func (image: Image)
 	draw: abstract func ~transform2D (image: Image, transform: FloatTransform2D)
-	draw: abstract func ~transform3D (image: Image, transform: FloatTransform3D)
 	draw: abstract func ~withmap (image: Image, map: GpuMap, viewport: Viewport)
+	clear: abstract func
 	drawTrace: func (transformList: LinkedList<FloatPoint2D>, size: IntSize2D, positions: Float*, screenSize: IntSize2D)
 	drawBox: func (box: IntBox2D, size: IntSize2D)
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, size: IntSize2D)
