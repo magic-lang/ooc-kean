@@ -39,13 +39,19 @@ setShaderSources: func {
 		layout(location = 1) in vec2 textureCoordinate;\n
 		out vec2 fragmentTextureCoordinate;\n
 		void main() {\n
-			vec4 scaledQuadPosition = vec4(float(imageWidth) * vertexPosition.x / 2.0f, float(imageHeight) * vertexPosition.y / 2.0f, -1, 1);\n
-			vec4 transformedPosition = transform * scaledQuadPosition;\n
-			float near = 1.0f;\n
-			float far = 1000.0f;\n
-			mat4 projectionMatrix = mat4(2.0f / float(imageWidth), 0, 0, 0, 0, 2.0f / (invertY * float(imageHeight)), 0, 0, 0, 0, - (far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 0);\n
+			float k = 1.0f;\n
+			vec4 scaledQuadPosition = vec4(float(imageWidth) * vertexPosition.x / 2.0f, float(imageHeight) * vertexPosition.y / 2.0f, -k, 1);\n
+			vec4 transformedPosition = (transform) * scaledQuadPosition;\n
+			transformedPosition.x *= 2.0f / float(imageWidth);\n
+			transformedPosition.y *= 2.0f / float(imageHeight);\n
+			float near = 0.1f;\n
+			float far = 10.0f;\n
+			transformedPosition.z *= -(far + near) / (far - near);\n
+			transformedPosition.z += (-2.0f * far * near) / (far - near);\n
+			float scale = 1.0f;\n
+			//mat4 projectionMatrix = mat4(scale * 2.0f / float(imageWidth), 0, 0, 0, 0, scale * 2.0f / (invertY * float(imageHeight)), 0, 0, 0, 0, - (far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 0);\n
 			fragmentTextureCoordinate = textureCoordinate;\n
-			gl_Position = projectionMatrix * transformedPosition;\n
+			gl_Position = transformedPosition;\n
 		}\n";
 	OpenGLES3MapOverlay fragmentSource =
 		"#version 300 es\n
