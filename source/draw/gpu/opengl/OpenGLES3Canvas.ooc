@@ -97,8 +97,10 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	_unbind: func {
 		this _renderTarget unbind()
 	}
-	_clear: func {
+	clear: func {
+		this _bind()
 		this _renderTarget clear()
+		this _unbind()
 	}
 	readPixels: func (channels: UInt) -> ByteBuffer {
 		this _renderTarget readPixels(channels)
@@ -168,7 +170,11 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 	{
 
 	}
-	_clear: func
+	clear: func {
+		this _y clear()
+		this _u clear()
+		this _v clear()
+	}
 	_bind: func
 	_generate: func (image: OpenGLES3Yuv420Planar) -> Bool {
 		this _y = OpenGLES3Canvas create(image y as GpuImage, this _context)
@@ -204,7 +210,8 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 	}
 	_draw: func ~transform2D (image: OpenGLES3Yuv420Semiplanar, transform: FloatTransform2D) {
 		this _y draw(image y, transform)
-		uvTransform := transform translate(-transform g / 2.0f, -transform h / 2.0f)
+		//uvTransform := transform translate(-transform g / 2.0f, -transform h / 2.0f)
+		uvTransform := FloatTransform2D new(transform a, transform b, transform c * 2.0f, transform d, transform e, transform f * 2.0f, transform g / 2.0f, transform h / 2.0f, transform i)
 		this _uv draw(image uv, uvTransform)
 	}
 	draw: func (image: Image) {
@@ -237,7 +244,10 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 	{
 
 	}
-	_clear: func
+	clear: func {
+		this _y clear()
+		this _uv clear()
+	}
 	_bind: func
 	_generate: func (image: OpenGLES3Yuv420Semiplanar) -> Bool {
 		this _y = OpenGLES3Canvas create(image y as GpuImage, this _context)
