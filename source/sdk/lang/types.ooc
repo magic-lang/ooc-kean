@@ -128,6 +128,10 @@ Cell: class <T> {
 
     set: func (=val)
     get: func -> T { val }
+    
+    __destroy__: func {
+    	gc_free(this val)
+    }
 }
 
 operator [] <T> (c: Cell<T>, T: Class) -> T {
