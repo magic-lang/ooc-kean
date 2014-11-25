@@ -168,7 +168,7 @@ FloatTransform2D: cover {
 		this h == other h &&
 		this i == other i
 	}
-	to3dArray: func -> Float* {
+	to3DTransformArray: func -> Float* {
 		array := gc_malloc(Float size * 16) as Float*
 		array[0] = this a
 		array[1] = this d
