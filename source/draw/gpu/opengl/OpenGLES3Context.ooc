@@ -29,14 +29,14 @@ OpenGLES3Context: class extends GpuContext {
 	_monochromeMapTransform: OpenGLES3MapMonochromeTransform
 	_uvMapDefault: OpenGLES3MapUv
 	_uvMapTransform: OpenGLES3MapUvTransform
-	_pyramidMapMonochrome: OpenGLES3MapPyramidGeneration
+	_pyramidMapMonochrome: OpenGLES3MapPyramidGenerationDefault
 	_pyramidMapMonochromeMipmap: OpenGLES3MapPyramidGenerationMipmap
 	_packMonochrome: OpenGLES3MapPackMonochrome
 	_packUv: OpenGLES3MapPackUv
 	_blendMap: OpenGLES3MapBlend
 	_onDispose: Func
 
-	init: func (context: Context) {
+	init: func (context: Context, =_onDispose) {
 		super()
 		this _bgrMapDefault = OpenGLES3MapBgr new()
 		this _bgraMapDefault = OpenGLES3MapBgra new()
@@ -44,7 +44,7 @@ OpenGLES3Context: class extends GpuContext {
 		this _monochromeMapTransform = OpenGLES3MapMonochromeTransform new()
 		this _uvMapDefault = OpenGLES3MapUv new()
 		this _uvMapTransform = OpenGLES3MapUvTransform new()
-		this _pyramidMapMonochrome = OpenGLES3MapPyramidGeneration new()
+		this _pyramidMapMonochrome = OpenGLES3MapPyramidGenerationDefault new()
 		this _pyramidMapMonochromeMipmap = OpenGLES3MapPyramidGenerationMipmap new()
 		this _packMonochrome = OpenGLES3MapPackMonochrome new()
 		this _packUv = OpenGLES3MapPackUv new()
@@ -52,16 +52,13 @@ OpenGLES3Context: class extends GpuContext {
 		this _backend = context
 	}
 	init: func ~unshared (onDispose: Func) {
-		this _onDispose = onDispose
-		this init(Context create())
+		this init(Context create(), onDispose)
 	}
 	init: func ~shared (other: This, onDispose: Func) {
-		this _onDispose = onDispose
-		this init(Context create(other _backend))
+		this init(Context create(other _backend), onDispose)
 	}
 	init: func ~window (nativeWindow: NativeWindow, onDispose: Func) {
-		this _onDispose = onDispose
-		this init(Context create(nativeWindow))
+		this init(Context create(nativeWindow), onDispose)
 	}
 	dispose: func {
 		this _backend makeCurrent()
