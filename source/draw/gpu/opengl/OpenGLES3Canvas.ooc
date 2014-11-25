@@ -45,15 +45,6 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		map := this _context getMap(this _target, GpuMapType transform) as OpenGLES3MapTransform
 		map transform = transform
 		map imageSize = image size
-		map screenSize = image size
-		viewport := Viewport new(this _size)
-		this draw(image, map, viewport)
-	}
-	draw: func ~transform3D (image: Image, transform: FloatTransform3D) {
-		map := this _context getMap(this _target, GpuMapType transform) as OpenGLES3MapTransform
-		map view = transform
-		map imageSize = image size
-		map screenSize = image size
 		viewport := Viewport new(this _size)
 		this draw(image, map, viewport)
 	}
@@ -147,11 +138,6 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 		this _u draw(image u, transform)
 		this _v draw(image v, transform)
 	}
-	_draw: func ~transform3D (image: OpenGLES3Yuv420Planar, transform: FloatTransform3D) {
-		this _y draw(image y, transform)
-		this _u draw(image u, transform)
-		this _v draw(image v, transform)
-	}
 	draw: func (image: Image) {
 		if (image instanceOf?(RasterYuv420Planar)) {
 			temp := this _context createGpuImage(image as RasterYuv420Planar) as OpenGLES3Yuv420Planar
@@ -166,19 +152,6 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 			raise("Trying to draw unsupported image format to OpenGLES3Yuv420Planar")
 	}
 	draw: func ~transform2D (image: Image, transform: FloatTransform2D) {
-		if (image instanceOf?(RasterYuv420Planar)) {
-			temp := this _context createGpuImage(image as RasterYuv420Planar) as OpenGLES3Yuv420Planar
-			this _draw(temp, transform)
-			temp recycle()
-		}
-		else if (image instanceOf?(OpenGLES3Yuv420Planar)) {
-			temp := image as OpenGLES3Yuv420Planar
-			this _draw(temp, transform)
-		}
-		else
-			raise("Trying to draw unsupported image format to OpenGLES3Yuv420Planar")
-	}
-	draw: func ~transform3D (image: Image, transform: FloatTransform3D) {
 		if (image instanceOf?(RasterYuv420Planar)) {
 			temp := this _context createGpuImage(image as RasterYuv420Planar) as OpenGLES3Yuv420Planar
 			this _draw(temp, transform)
@@ -231,11 +204,7 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 	}
 	_draw: func ~transform2D (image: OpenGLES3Yuv420Semiplanar, transform: FloatTransform2D) {
 		this _y draw(image y, transform)
-		this _uv draw(image uv, transform)
-	}
-	_draw: func ~transform3D (image: OpenGLES3Yuv420Semiplanar, transform: FloatTransform3D) {
-		this _y draw(image y, transform)
-		uvTransform := transform translate(-transform j / 2.0f, -transform k / 2.0f, 0)
+		uvTransform := transform translate(-transform g / 2.0f, -transform h / 2.0f)
 		this _uv draw(image uv, uvTransform)
 	}
 	draw: func (image: Image) {
@@ -252,19 +221,6 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 			raise("Trying to draw unsupported image format to OpenGLES3Yuv420Planar")
 	}
 	draw: func ~transform2D (image: Image, transform: FloatTransform2D) {
-		if (image instanceOf?(RasterYuv420Semiplanar)) {
-			temp := this _context createGpuImage(image as RasterYuv420Semiplanar) as OpenGLES3Yuv420Semiplanar
-			this _draw(temp, transform)
-			temp recycle()
-		}
-		else if (image instanceOf?(OpenGLES3Yuv420Semiplanar)) {
-			temp := image as OpenGLES3Yuv420Semiplanar
-			this _draw(temp, transform)
-		}
-		else
-			raise("Trying to draw unsupported image format to OpenGLES3Yuv420Planar")
-	}
-	draw: func ~transform3D (image: Image, transform: FloatTransform3D) {
 		if (image instanceOf?(RasterYuv420Semiplanar)) {
 			temp := this _context createGpuImage(image as RasterYuv420Semiplanar) as OpenGLES3Yuv420Semiplanar
 			this _draw(temp, transform)
