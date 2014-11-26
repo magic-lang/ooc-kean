@@ -312,7 +312,6 @@ OpenGLES3MapTransform vertexSource =
 			vec2 transformedCoords = vec2(fract(scaledX), fract(fragmentTextureCoordinate.y * sampleDistanceY) + yOffset);\n
 			outColor = texture(texture0, transformedCoords).r;\n
 		}\n";
-
 	OpenGLES3MapPyramidGenerationMipmap fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n

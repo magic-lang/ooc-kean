@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-
+use ooc-base
 import include/gles
 
 Vao: class {
@@ -32,6 +32,7 @@ Vao: class {
 		glBindVertexArray(0);
 	}
 	_generate: func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> Bool {
+		DebugPrint print("Allocating VAO")
 		//Currently using 2 attributes: vertex position and texture coordinate
 		attributeCount := 2
 		packedArray := gc_malloc(attributeCount * vertexCount * dimensions * Float size) as Float*
