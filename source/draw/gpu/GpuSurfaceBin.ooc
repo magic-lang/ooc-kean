@@ -16,24 +16,36 @@
 */
 
 use ooc-math
-import structs/ArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuSurface
+import structs/FreeArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuSurface
 
 GpuSurfaceBin: class {
-	_surfaces: ArrayList<GpuSurface>
+	_surfaces: FreeArrayList<GpuSurface>
 	init: func {
-		this _surfaces = ArrayList<GpuSurface> new()
+		this _surfaces = FreeArrayList<GpuSurface> new()
 	}
 	dispose: func {
-		for(surface in this _surfaces)
-			surface dispose()
+		for(i in 0..this _surfaces size)
+			this _surfaces[i] dispose()
 		this _surfaces clear()
 	}
 	add: func (surface: GpuSurface) {
 		this _surfaces add(surface)
 	}
-	_search: func (arrayList: ArrayList<GpuSurface>) -> GpuSurface {
-		result := arrayList size > 0 ? arrayList removeAt(0) : null
-		result
+	_search: func (arrayList: FreeArrayList<GpuSurface>) -> GpuSurface {
+		//TODO: using a result variable, initially null,
+		// and then assigning it to arrayList[0], always returns null,
+		// even if arrayList size > 0. So, using multiple returns for now.
+//		result : GpuSurface = null
+//		arrayList size toString() println()
+		if (arrayList size > 0) {
+			result := arrayList[0]
+			arrayList removeAt(0, false)
+//			if (result == null)
+//				"Result is null!" println()
+			return result
+		}
+//		arrayList size toString() println()
+		null
 	}
 	find: func -> GpuSurface {
 		this _search(this _surfaces)

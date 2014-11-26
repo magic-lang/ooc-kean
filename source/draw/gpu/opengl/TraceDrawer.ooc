@@ -30,6 +30,10 @@ TraceDrawer: class {
 		pointsShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
 		pointsShader pointSize = 5.0f
 	}
+	__destroy__: func {
+		this linesShader dispose()
+		this pointsShader dispose()
+	}
 	drawTrace: func (pointList: LinkedList<FloatPoint2D>, positions: Float*, screenSize: IntSize2D) {
 		//Go from screen coordinates to normalized coordinates [-1, 1] [-1, 1]
 		for(i in 0..pointList size) {

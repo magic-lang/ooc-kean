@@ -31,6 +31,8 @@ FreeArrayList: class <T> extends ArrayList<T> {
 				old free()
 			}
 		}
+		gc_free(data)
+		data = gc_malloc(capacity * T size)
 		_size = 0
 	}
 	
