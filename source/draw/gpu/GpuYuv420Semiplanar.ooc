@@ -26,4 +26,9 @@ GpuYuv420Semiplanar: abstract class extends GpuPlanar {
 	init: func (size: IntSize2D, context: GpuContext) {
 		super(size, context)
 	}
+	generateMipmap: func {
+		this mipmap = true
+		this _y generateMipmap()
+		this _uv generateMipmap()
+	}
 }
