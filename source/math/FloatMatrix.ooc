@@ -175,22 +175,25 @@ FloatMatrix : cover {
 	// <param name="y">The right hand column y vector of the equation system.</param>
 	// <returns>Return the least square solution to the system.</returns>
 	solve: func@ (y: This) -> This {
-		result := This new()
-		lup: This[]
+		result: This
 		if (this dimensions width > this dimensions height) {
 			InvalidDimensionsException new() throw()
 		} else {
 			if (this isSquare) {
-				lup = this lupDecomposition()
+				lup := this lupDecomposition()
 				temp := lup[2] * y
 				temp2:= temp forwardSubstitution(lup[0])
 				result = temp2 backwardSubstitution(lup[1])
 				temp dispose()
 				temp2 dispose()
+				lup[0] dispose()
+				lup[1] dispose()
+				lup[2] dispose()
+				gc_free(lup data)
 			} else {
 				temp1 := this transpose()
 				temp2 := temp1 * this
-				lup = temp2 lupDecomposition()
+				lup := temp2 lupDecomposition()
 				temp2 dispose()
 				temp2 = lup[2] * temp1
 				temp1 dispose()
@@ -200,11 +203,11 @@ FloatMatrix : cover {
 				result = temp2 backwardSubstitution(lup[1])
 				temp1 dispose()
 				temp2 dispose()
+				lup[0] dispose()
+				lup[1] dispose()
+				lup[2] dispose()
+				gc_free(lup data)
 			}
-			lup[0] dispose()
-			lup[1] dispose()
-			lup[2] dispose()
-			gc_free(lup data)
 		}
 		result
 	}
