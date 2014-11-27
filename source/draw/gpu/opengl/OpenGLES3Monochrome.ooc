@@ -51,6 +51,7 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 		this backend setFilter(filter)
 	}
 	generateMipmap: func {
+		this mipmap = true
 		this backend generateMipmap()
 	}
 	toRasterDefault: func -> RasterImage {

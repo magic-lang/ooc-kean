@@ -21,7 +21,7 @@ import FloatPoint2D
 import IntTransform2D
 import text/StringTokenizer
 import structs/ArrayList
-import FloatEuclidTransform
+import FloatEuclidTransform, FloatTransform3D
 
 // The 2D transform is a 3x3 homogeneous coordinate matrix.
 // The element order is:
@@ -117,7 +117,8 @@ FloatTransform2D: cover {
 		rotationX := FloatTransform2D createXRotation(euclidTransform rotationX, k)
 		rotationY := FloatTransform2D createYRotation(euclidTransform rotationY, k)
 		rotationZ := FloatTransform2D createZRotation(euclidTransform rotationZ)
-		return scaling * translation * rotationZ * rotationY * rotationX
+		//return scaling * translation * rotationZ * rotationY * rotationX
+		return translation * scaling * rotationZ * rotationY * rotationX
 	}
 	create: static func ~reduced (translation: FloatSize2D, rotation: Float) -> This { This create(translation, 1.0f, rotation) }
 	createTranslation: static func (xDelta, yDelta: Float) -> This { This new(1.0f, 0.0f, 0.0f, 1.0f, xDelta, yDelta) }
@@ -171,7 +172,7 @@ FloatTransform2D: cover {
 	to3DTransformArray: func -> Float* {
 		array := gc_malloc(Float size * 16) as Float*
 		array[0] = this a
-		array[1] = this d
+		array[1] = this b
 		array[2] = 0.0f
 		array[3] = this c
 		array[4] = this d
@@ -185,8 +186,17 @@ FloatTransform2D: cover {
 		array[12] = this g
 		array[13] = this h
 		array[14] = 0.0f
-		array[15] = 1.0f
+		array[15] = this i
 		array
+	}
+	to3DTransformArray2: func -> Float* {
+		euclid := FloatEuclidTransform new(this)
+		newTransform := FloatTransform3D createRotationX(euclid rotationX)
+		newTransform = FloatTransform3D createRotationY(euclid rotationY) * newTransform
+		newTransform = FloatTransform3D createRotationZ(euclid rotationZ) * newTransform
+		newTransform = FloatTransform3D createScaling(euclid scaling, euclid scaling, 1) * newTransform
+		newTransform = FloatTransform3D createTranslation(euclid translationX, euclid translationY, 0) * newTransform
+		newTransform to4x4()
 	}
 	operator != (other: This) -> Bool { !(this == other) }
 	operator as -> String { this toString() }
