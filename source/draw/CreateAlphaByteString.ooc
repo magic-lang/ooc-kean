@@ -24,7 +24,7 @@ CreateAlphaByteString: class {
 	makeAlphaString: static func (filename: String, name: String) -> String {
 		image := RasterBgra open(filename)
 		buf := image buffer as ByteBuffer
-		result := name + "ImageArray := ["
+		imageArray := "["
 		ip: Int*
 		counter := 0
 		tmp := ByteBuffer new(image size width * image size height)
@@ -34,17 +34,15 @@ CreateAlphaByteString: class {
 		}
 		ip = ipbuffer pointer as Int*
 		for (i in 0..ipbuffer size / 4) {
-			result = result + ip[i] toString() + ", "
+			imageArray = imageArray + ip[i] toString() + ", "
 			counter += 1
 			if (i % 32 == 0) {
-				result = result + "\n"
+				imageArray = imageArray + "\n"
 			}
 		}
-		result = result + "]"
-		widthStr :=  name + "Width := " + image size width toString() + "\n"
-		heightStr := name + "Height := " + image size height toString() + "\n"
-
-		result = widthStr + heightStr + result
+		imageArray = imageArray + "]"
+		result := name +"Image" + ": StaticOverlayImages \n" + name  + "Image image = " + imageArray + "\n"
+		result = result + name + "Image size = IntSize2D new(" + image size width toString() +", " + image size height toString() +")\n"
 		result
 	}
 }
