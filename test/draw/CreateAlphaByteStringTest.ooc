@@ -16,9 +16,10 @@
 */
 
 use ooc-draw
-import CreateAlfaByteString, io/FileWriter
+import CreateAlphaByteString, io/FileWriter
 
-outputData := CreateAlfaByteString makeAlfaString("../test/draw/input/logo.png")
+outputData := CreateAlphaByteString makeAlphaString("../test/draw/input/logo.png", "logo")
+//outputData := CreateAlphaByteString makeAlphaString("../test/draw/input/prototype-0.3.0.png", "versionNumber")
 fw := FileWriter new("dataFile.txt")
 fw write(outputData)
 fw close()

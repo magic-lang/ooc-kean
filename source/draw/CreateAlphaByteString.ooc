@@ -19,13 +19,14 @@ use ooc-base
 
 import RasterBgra, RasterMonochrome
 
-CreateAlfaByteString: class {
+CreateAlphaByteString: class {
 	init: func ()
-	makeAlfaString: static func (fileName: String) -> String {
-		image := RasterBgra open(fileName)
+	makeAlphaString: static func (filename: String, name: String) -> String {
+		image := RasterBgra open(filename)
 		buf := image buffer as ByteBuffer
-		result := "imageArray := ["
+		result := name + "ImageArray := ["
 		ip: Int*
+		counter := 0
 		tmp := ByteBuffer new(image size width * image size height)
 		ipbuffer := ByteBuffer new(image size width * image size height)
 		for (i in 0..(buf size / 4)) {
@@ -34,11 +35,16 @@ CreateAlfaByteString: class {
 		ip = ipbuffer pointer as Int*
 		for (i in 0..ipbuffer size / 4) {
 			result = result + ip[i] toString() + ", "
+			counter += 1
 			if (i % 32 == 0) {
 				result = result + "\n"
 			}
 		}
 		result = result + "]"
+		widthStr :=  name + "Width := " + image size width toString() + "\n"
+		heightStr := name + "Height := " + image size height toString() + "\n"
+
+		result = widthStr + heightStr + result
 		result
 	}
 }
