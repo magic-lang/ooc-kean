@@ -74,7 +74,10 @@ OpenGLES3Context: class extends GpuContext {
 		this _blendMap dispose()
 	}
 	recycle: func ~image (gpuImage: GpuImage) {
-		this _imageBin add(gpuImage)
+		if (gpuImage mipmap)
+			gpuImage dispose()
+		else
+			this _imageBin add(gpuImage)
 	}
 	recycle: func ~surface (surface: GpuSurface) {
 		this _surfaceBin add(surface)

@@ -41,6 +41,7 @@ GpuImage: abstract class extends Image {
 	_channels: Int
 	channels: Int { get { this _channels } }
 	length: Int { get { this _channels * this size width * this size height } }
+	mipmap: Bool = false
 	init: func (=size, =_channels, =_context)
 	bind: abstract func (unit: UInt)
 	unbind: abstract func
@@ -54,7 +55,9 @@ GpuImage: abstract class extends Image {
 	}
 	dispose: abstract func
 	upload: abstract func (raster: RasterImage)
-	generateMipmap: func
+	generateMipmap: func {
+		raise("generateMipmap not implemented")
+	}
 
 	//TODO: Implement abstract functions
 	create: func (size: IntSize2D) -> This {

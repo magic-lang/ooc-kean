@@ -51,6 +51,7 @@ OpenGLES3Uv: class extends GpuUv {
 		this backend setFilter(filter)
 	}
 	generateMipmap: func {
+		this mipmap = true
 		this backend generateMipmap()
 	}
 	toRasterDefault: func -> RasterImage {
