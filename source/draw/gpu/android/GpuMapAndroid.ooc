@@ -17,42 +17,46 @@
 use ooc-opengl
 
 setShaderSources: func {
-OpenGLES3MapDefault vertexSource =
-	"#version 300 es\n
-	layout(location = 0) in vec2 vertexPosition;\n
-	layout(location = 1) in vec2 textureCoordinate;\n
-	out vec2 fragmentTextureCoordinate;\n
-	void main() {\n
-		fragmentTextureCoordinate = textureCoordinate;\n
-		gl_Position = vec4(vertexPosition, -1, 1);\n
-	}\n";
-
-OpenGLES3MapTransform vertexSource =
-	"#version 300 es\n
-	uniform mat3 transform;\n
-	uniform mat4 view;\n
-	uniform int imageWidth;\n
-	uniform int imageHeight;\n
-	uniform int screenWidth;\n
-	uniform int screenHeight;\n
-	layout(location = 0) in vec2 vertexPosition;\n
-	layout(location = 1) in vec2 textureCoordinate;\n
-	out vec2 fragmentTextureCoordinate;\n
-	void main() {\n
-		float fov = 50.35f * 0.0174f;\n
-		float ar = float(imageWidth) / float(imageHeight);\n
-		float k = 2.0f * float(imageWidth) * tan(fov / 2.0f);\n
-		vec4 scaledQuadPosition = vec4(float(imageWidth) * vertexPosition.x / 2.0f, float(imageHeight) * vertexPosition.y / 2.0f, -1.0f, 1);\n
-		mat4 viewMatrix = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);\n
-		vec4 transformedPosition = transpose(view) * scaledQuadPosition;\n
-		//transformedPosition.z = -1.0f;\n
-		float near = 1.0f;\n
-		float far = 1000.0f;\n
-		//mat4 projectionMatrix = mat4(2.0f * near / float(screenWidth), 0, 0, 0, 0, 2.0f * near / float(screenHeight), 0, 0, 0, 0, - (far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 1);\n
-		mat4 projectionMatrix = mat4(2.0f / float(screenWidth), 0, 0, 0, 0, 2.0f / float(screenHeight), 0, 0, 0, 0, - (far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 0);\n
-		fragmentTextureCoordinate = textureCoordinate;\n
-		gl_Position = projectionMatrix * transformedPosition;\n
-	}\n";
+	OpenGLES3MapDefault vertexSource =
+		"#version 300 es\n
+		uniform float invertY;\n
+		layout(location = 0) in vec2 vertexPosition;\n
+		layout(location = 1) in vec2 textureCoordinate;\n
+		out vec2 fragmentTextureCoordinate;\n
+		void main() {\n
+			fragmentTextureCoordinate = textureCoordinate;\n
+			gl_Position = vec4(vertexPosition.x, invertY * vertexPosition.y, -1, 1);\n
+		}\n";
+	OpenGLES3MapTransform vertexSource =
+		"#version 300 es\n
+		uniform mat4 transform;\n
+		uniform int imageWidth;\n
+		uniform int imageHeight;\n
+		uniform float invertY;\n
+		layout(location = 0) in vec2 vertexPosition;\n
+		layout(location = 1) in vec2 textureCoordinate;\n
+		out vec2 fragmentTextureCoordinate;\n
+		void main() {\n
+			float k = 1.0f;\n
+			vec4 scaledQuadPosition = vec4(float(imageWidth) * vertexPosition.x / 2.0f, float(imageHeight) * vertexPosition.y / 2.0f, -k, 1);\n
+			vec4 transformedPosition = (transform) * scaledQuadPosition;\n
+			//transformedPosition.z = 0.0f;\n
+			//transformedPosition.w = 1.0f;\n
+			transformedPosition.x *= 2.0f / float(imageWidth);\n
+			transformedPosition.y *= 2.0f / float(imageHeight);\n
+			//transformedPosition.xyz /= transformedPosition.w;\n
+			//transformedPosition.z /= 1.0f/(sqrt(1.0f + 1.0f/transformedPosition.w) + 1.0f);\n
+			//transformedPosition.w = 1.0f;\n
+			float near = 0.1f;\n
+			float far = 10.0f;\n
+			transformedPosition.z *= -(far + near) / (far - near);\n
+			transformedPosition.z += (-2.0f * far * near) / (far - near);\n
+			//transformedPosition.z *= -1.0;\n
+			float scale = 1.0f;\n
+			//mat4 projectionMatrix = mat4(scale * 2.0f / float(imageWidth), 0, 0, 0, 0, scale * 2.0f / (invertY * float(imageHeight)), 0, 0, 0, 0, - (far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 0);\n
+			fragmentTextureCoordinate = textureCoordinate;\n
+			gl_Position = transformedPosition;\n
+		}\n";
 	OpenGLES3MapOverlay fragmentSource =
 		"#version 300 es\n
 		out float outColor;\n
@@ -295,7 +299,7 @@ OpenGLES3MapTransform vertexSource =
 		void main() {\n
 			outColor = vec4(color.r, color.g, color.b, 1.0f);\n
 		}\n";
-	OpenGLES3MapPyramidGeneration fragmentSource =
+	OpenGLES3MapPyramidGenerationDefault fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n
 		uniform float pyramidFraction;\n
@@ -329,5 +333,14 @@ OpenGLES3MapTransform vertexSource =
 			vec2 transformedCoords = vec2(fract(scaledX), fract(fragmentTextureCoordinate.y * sampleDistanceY) + yOffset);\n
 			outColor = textureLod(texture0, transformedCoords, level).r;\n
 		}\n";
+
+	OpenGLES3MapBlend fragmentSource =
+		"#version 300 es\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out float outColor;\n
+		void main() {\n
+				outColor = texture(texture0, fragmentTextureCoordinate).r;
+		}\n"
 
 }
