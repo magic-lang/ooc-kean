@@ -339,6 +339,6 @@ setShaderSources: func {
 		in vec2 fragmentTextureCoordinate;
 		out float outColor;\n
 		void main() {\n
-			outColor = texture(texture0, fragmentTextureCoordinate).r;
+			outColor = texture(texture0, fragmentTextureCoordinate).r/3.0f;
 		}\n"
 	}
