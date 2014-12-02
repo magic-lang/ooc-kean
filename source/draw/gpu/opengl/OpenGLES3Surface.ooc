@@ -13,7 +13,6 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
 use ooc-math
 use ooc-collections
 use ooc-draw
@@ -27,6 +26,7 @@ OpenGLES3Surface: class extends GpuSurface {
 	init: func (context: GpuContext){
 		super(context)
 		this _quad = Quad create()
+		this traceDrawer = TraceDrawer new()
 	}
 	recycle: func {
 		this _context recycle(this)
@@ -59,21 +59,15 @@ OpenGLES3Surface: class extends GpuSurface {
 				raise("Couldnt match image type in OpenGLES3Surface")
 		}
 	}
-	drawTrace: func (transformList: LinkedList<FloatPoint2D>, viewport: Viewport,positions: Float*, screenSize: IntSize2D ) {
-		if (this traceDrawer == null)
-			this traceDrawer = TraceDrawer new()
+	drawTrace: func (transformList: LinkedList<FloatPoint2D>, viewport: Viewport, screenSize: IntSize2D ) {
 		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
-		this traceDrawer drawTrace(transformList, positions, screenSize)
+		this traceDrawer drawTrace(transformList, screenSize)
 	}
 	drawBox: func (box: IntBox2D, viewport: Viewport, size: IntSize2D) {
-		if (this traceDrawer == null)
-			this traceDrawer = TraceDrawer new()
 		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
 		this traceDrawer drawBox(box, size)
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, viewport: Viewport, size: IntSize2D) {
-		if (this traceDrawer == null)
-			this traceDrawer = TraceDrawer new()
 		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
 		this traceDrawer drawPoints(pointList, size)
 	}
