@@ -202,10 +202,9 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		bgr decreaseReferenceCount()
 	}
 	saveBin: func (filename: String) {
-		file := File new(filename)
-		seq := BinarySequenceWriter new(FileWriter new(file))
-		seq bytes(this buffer pointer, this buffer size)
-		seq writer close()
+		fileWriter := FileWriter new(filename)
+		fileWriter write(this buffer pointer as Char*, this buffer size)
+		fileWriter close()
 	}
 	openBin: static func (filename: String, width: Int, height: Int) -> This {
 		fileReader := FileReader new(FStream open(filename, "rb"))
