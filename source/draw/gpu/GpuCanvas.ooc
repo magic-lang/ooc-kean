@@ -31,7 +31,7 @@ GpuCanvas: abstract class {
 	draw: abstract func ~transform2D (image: Image, transform: FloatTransform2D)
 	draw: abstract func ~withmap (image: Image, map: GpuMap, viewport: Viewport)
 	clear: abstract func
-	drawTrace: func (transformList: LinkedList<FloatPoint2D>, size: IntSize2D, positions: Float*, screenSize: IntSize2D)
+	drawTrace: func (transformList: LinkedList<FloatPoint2D>, size: IntSize2D, screenSize: IntSize2D)
 	drawBox: func (box: IntBox2D, size: IntSize2D)
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, size: IntSize2D)
 	drawStaticRaster: func (image: Image, map: GpuMap, size: IntSize2D, offset: IntSize2D, transform := FloatTransform2D identity)
