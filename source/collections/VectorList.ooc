@@ -65,9 +65,7 @@ VectorList: class <T> {
 		this count -= 1
 	}
 	clear: func {
-		for (i in 0..this _count) {
-			this _vector[i] = null
-		}
+		this _vector _free(0, this count)
 		this count = 0
 	}
 	empty: func -> Bool {
