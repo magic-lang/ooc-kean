@@ -20,53 +20,28 @@ use ooc-collections
 import structs/LinkedList
 import OpenGLES3Map, OpenGLES3/Lines
 
-TraceDrawer: class {
+OverlayDrawer: class {
 	linesShader: OpenGLES3MapLines
 	pointsShader: OpenGLES3MapPoints
 	scale: Float = 1.0f
-	positions: Float*
 	init: func () {
 		this linesShader = OpenGLES3MapLines new()
 		this pointsShader = OpenGLES3MapPoints new()
 		pointsShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
 		pointsShader pointSize = 5.0f
-		this positions = gc_malloc(Float size * 2 * 100) as Float*
 	}
 	__destroy__: func {
 		this linesShader dispose()
 		this pointsShader dispose()
 	}
-	drawTrace: func (pointList: LinkedList<FloatPoint2D>, screenSize: IntSize2D) {
-		//Go from screen coordinates to normalized coordinates [-1, 1] [-1, 1]
-		for(i in 0..pointList size) {
-			this positions[2 * i] = 2.0f * pointList[i] x / screenSize width - 1.0f
-			this positions[2 * i + 1] = 2.0f * pointList[i] y / screenSize height - 1.0f
-		}
-		crosshairStart := pointList size * 2
-		crosshairSize := FloatPoint2D new(0.05f, 0.05f * screenSize width as Float / screenSize height as Float)
-		currentPoint := FloatPoint2D new(this positions[2 * pointList size - 2], this positions[2 * pointList size - 1])
-
-		this positions[crosshairStart] = currentPoint x
-		this positions[crosshairStart + 1] = currentPoint y + crosshairSize y
-
-		this positions[crosshairStart + 2] = currentPoint x
-		this positions[crosshairStart + 3] = currentPoint y - crosshairSize y
-
-		this positions[crosshairStart + 4] = currentPoint x
-		this positions[crosshairStart + 5] = currentPoint y
-
-		this positions[crosshairStart + 6] = currentPoint x + crosshairSize x
-		this positions[crosshairStart + 7] = currentPoint y
-
-		this positions[crosshairStart + 8] = currentPoint x - crosshairSize x
-		this positions[crosshairStart + 9] = currentPoint y
-
+	drawLines: func (pointList: VectorList<FloatPoint2D>) {
+		positions := pointList pointer as Float*
 		this linesShader color = FloatPoint3D new(0.0f, 0.0f, 0.0f)
 		this linesShader use()
-		Lines draw(this positions, pointList size + 5, 2, 3.5f)
+		Lines draw(positions, pointList count, 2, 3.5f)
 		this linesShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
 		this linesShader use()
-		Lines draw(this positions, pointList size + 5, 2, 1.5f)
+		Lines draw(positions, pointList count, 2, 1.5f)
 	}
 
 	drawBox: func (box: IntBox2D, size: IntSize2D) {
