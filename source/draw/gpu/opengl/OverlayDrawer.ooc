@@ -23,8 +23,7 @@ import OpenGLES3Map, OpenGLES3/Lines
 OverlayDrawer: class {
 	linesShader: OpenGLES3MapLines
 	pointsShader: OpenGLES3MapPoints
-	scale: Float = 1.0f
-	init: func () {
+	init: func {
 		this linesShader = OpenGLES3MapLines new()
 		this pointsShader = OpenGLES3MapPoints new()
 		pointsShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
