@@ -70,10 +70,10 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _renderTarget clearColor(0.0f)
 		this _unbind()
 	}
-	drawTrace: func (transformList: LinkedList<FloatPoint2D>, size: IntSize2D, positions: Float*, screenSize: IntSize2D) {
+	drawTrace: func (transformList: LinkedList<FloatPoint2D>, size: IntSize2D, screenSize: IntSize2D) {
 		this _bind()
 		surface := this _context createSurface() as OpenGLES3Surface
-		surface drawTrace(transformList, Viewport new(size), positions, screenSize)
+		surface drawTrace(transformList, Viewport new(size), screenSize)
 		surface recycle()
 		this _unbind()
 	}
