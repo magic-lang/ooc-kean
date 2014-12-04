@@ -64,7 +64,7 @@ OverlayDrawer: class {
 			positions[2 * i] = 2.0f * pointList[i] x / (imageSize width as Float)
 			positions[2 * i + 1] = 2.0f * pointList[i] y / (imageSize height as Float)
 		}
-		pointsShader use()
+		this pointsShader use()
 		Points draw(positions[0]&, pointList count, 2)
 	}
 }
