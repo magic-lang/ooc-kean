@@ -228,10 +228,11 @@ setShaderSources: func {
 		"#version 300 es\n
 		precision highp float;\n
 		uniform float pointSize;\n
+		uniform mat4 transform;\n
 		layout(location = 0) in vec2 vertexPosition;\n
 		void main() {\n
 			gl_PointSize = pointSize;\n
-			gl_Position = vec4(vertexPosition.x, vertexPosition.y, 0, 1);\n
+			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);\n
 		}\n";
 	OpenGLES3MapPoints fragmentSource =
 		"#version 300 es\n
