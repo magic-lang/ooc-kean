@@ -15,6 +15,9 @@ before_script:
 script:
   - export OOC_LIBS=$PWD/..
   - # because now we want to use ooc-kean/sdk.use, i.e. PWD/sdk.use.
+  - cd test 
+  - rock -r --gc=off -lpthread -O2 base/ProfilingTest.ooc
+  - cd ..
   - sam test sdk.use test/sdk --rockargs --gc=off,-lpthread,-O2
   - sam test ooc-sdk-lite.use test/sdk --rockargs --gc=off,-lpthread,-O2
   - sam test ooc-base.use test/base --rockargs --gc=off,-lpthread,-O2
