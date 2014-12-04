@@ -33,9 +33,10 @@ OverlayDrawer: class {
 		this linesShader dispose()
 		this pointsShader dispose()
 	}
-	drawLines: func (pointList: VectorList<FloatPoint2D>) {
+	drawLines: func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform2D) {
 		positions := pointList pointer as Float*
 		this linesShader color = FloatPoint3D new(0.0f, 0.0f, 0.0f)
+		this linesShader transform = transform
 		this linesShader use()
 		Lines draw(positions, pointList count, 2, 3.5f)
 		this linesShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
@@ -58,13 +59,10 @@ OverlayDrawer: class {
 		this linesShader use()
 		Lines draw(positions[0]&, 5, 2, 1.5f)
 	}
-	drawPoints: func (pointList: VectorList<FloatPoint2D>, imageSize: IntSize2D) {
-		positions: Float[pointList count * 2]
-		for(i in 0..pointList count) {
-			positions[2 * i] = 2.0f * pointList[i] x / (imageSize width as Float)
-			positions[2 * i + 1] = 2.0f * pointList[i] y / (imageSize height as Float)
-		}
+	drawPoints: func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform2D) {
+		positions := pointList pointer
 		this pointsShader use()
-		Points draw(positions[0]&, pointList count, 2)
+		this pointsShader transform = transform
+		Points draw(positions, pointList count, 2)
 	}
 }

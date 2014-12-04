@@ -56,18 +56,15 @@ OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 }
 
 OpenGLES3MapTransform: class extends OpenGLES3Map {
-	imageSize: IntSize2D { get set }
 	transform: FloatTransform2D { get set }
 	init: func (fragmentSource: String, onUse: Func) {
 		super(This vertexSource, fragmentSource, func {
 			onUse()
-			this _program setUniform("imageWidth", this imageSize width)
-			this _program setUniform("imageHeight", this imageSize height)
+			//FIXME: Don't use heap array
 			reference := (this transform) to3DTransformArray()
 			this _program setUniform("transform", reference)
 			gc_free(reference)
 			})
-
 	}
 	vertexSource: static String
 }
@@ -81,25 +78,29 @@ OpenGLES3MapOverlay: class extends OpenGLES3MapDefault {
 	}
 	fragmentSource: static String
 }
-OpenGLES3MapLines: class extends OpenGLES3Map {
+OpenGLES3MapLines: class extends OpenGLES3MapTransform {
 	color: FloatPoint3D { get set }
 	init: func {
-		super(This vertexSource, This fragmentSource,
+		super(This fragmentSource,
 			func {
 				this _program setUniform("color", this color)
 		})
 	}
-	vertexSource: static String
 	fragmentSource: static String
 }
 OpenGLES3MapPoints: class extends OpenGLES3Map {
 	color: FloatPoint3D { get set }
 	pointSize: Float { get set }
+	transform: FloatTransform2D { get set }
 	init: func {
 		super(This vertexSource, This fragmentSource,
 			func {
 				this _program setUniform("color", this color)
 				this _program setUniform("pointSize", this pointSize)
+				//FIXME: Don't use heap array
+				reference := (this transform) to3DTransformArray()
+				this _program setUniform("transform", reference)
+				gc_free(reference)
 		})
 	}
 	vertexSource: static String
