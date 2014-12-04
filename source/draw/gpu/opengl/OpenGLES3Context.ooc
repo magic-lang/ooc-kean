@@ -190,7 +190,6 @@ OpenGLES3Context: class extends GpuContext {
 		if (result == null) {
 			result = OpenGLES3Yuv420Semiplanar create(size, this)
 		}
-
 		result
 	}
 	_createYuv420Semiplanar: func (raster: RasterYuv420Semiplanar) -> GpuImage {
