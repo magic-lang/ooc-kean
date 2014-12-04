@@ -59,8 +59,9 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		Fbo setClearColor(0.0f)
 		this _unbind()
 	}
-	drawLines: func (transformList: VectorList<FloatPoint2D>, viewport: Viewport) {
+	drawLines: func (transformList: VectorList<FloatPoint2D>) {
 		this _bind()
+		viewport := Viewport new(this _size)
 		surface := this _context createSurface() as OpenGLES3Surface
 		surface drawLines(transformList, viewport)
 		surface recycle()
