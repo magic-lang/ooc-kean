@@ -70,7 +70,6 @@ Window: class extends OpenGLES3Context {
 	draw: func ~Transform2D (image: GpuImage, transform: FloatTransform2D) {
 		map := this getTransformMap(image)
 		map transform = transform
-		map imageSize = image size
 		map invertY = -1.0f
 		this draw(image, map)
 	}
