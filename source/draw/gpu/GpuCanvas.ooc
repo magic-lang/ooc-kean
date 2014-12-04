@@ -25,6 +25,7 @@ GpuCanvas: abstract class {
 	_target: GpuImage
 	_size: IntSize2D
 	_context: GpuContext
+	blend := false
 	init: func (=_target, =_context)
 	dispose: abstract func
 	draw: abstract func (image: Image)
@@ -34,7 +35,6 @@ GpuCanvas: abstract class {
 	drawLines: func (transformList: VectorList<FloatPoint2D>, viewport: Viewport)
 	drawBox: func (box: IntBox2D, size: IntSize2D)
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, size: IntSize2D)
-	drawStaticRaster: func (image: Image, map: GpuMap, size: IntSize2D, offset: IntSize2D)
 	readPixels: func (channels: UInt) -> ByteBuffer {
 		raise("Trying to read pixels in unimplemented readPixels function")
 	}

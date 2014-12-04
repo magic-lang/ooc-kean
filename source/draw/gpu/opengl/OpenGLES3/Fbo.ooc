@@ -28,7 +28,7 @@ Fbo: class {
 		glDeleteFramebuffers(1, _backend&)
 	}
 	bind: func {
-		glBindFramebuffer(GL_FRAMEBUFFER, _backend)
+		glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
 	}
 	unbind: func {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0)
@@ -39,7 +39,7 @@ Fbo: class {
 	clear: static func {
 		glClear(GL_COLOR_BUFFER_BIT)
 	}
-	clearColor: static func (color: Float) {
+	setClearColor: static func (color: Float) {
 		glClearColor(color, color, color, color)
 	}
 	readPixels: func (channels: UInt) -> ByteBuffer {
@@ -47,7 +47,7 @@ Fbo: class {
 		height := this _height
 		buffer := ByteBuffer new(width * height * channels)
 		ptr := buffer pointer
-		glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
+		this bind()
 		glPixelStorei(GL_PACK_ALIGNMENT, 1)
 		glReadBuffer(GL_COLOR_ATTACHMENT0)
 		if (channels == 1)
@@ -58,7 +58,7 @@ Fbo: class {
 			glReadPixels(0, 0, 3 * width / 4, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
 		else if (channels == 4)
 			glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
-		glBindFramebuffer(GL_FRAMEBUFFER, 0)
+		this unbind()
 		buffer
 	}
 	setTarget: func (texture: Texture) {
@@ -67,15 +67,15 @@ Fbo: class {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0)
 	}
 	_generate: func ~fromTextures (texture: Texture) -> Bool {
-		DebugPrint print("Allocating FBO")
 		glGenFramebuffers(1, this _backend&)
-		glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
+		this bind()
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture _backend, 0)
 		status: UInt = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		if (status != GL_FRAMEBUFFER_COMPLETE) {
+			DebugPrint print("Framebuffer Object creation failed with status: " + status toString())
 			raise("Framebuffer Object creation failed")
 		}
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		this unbind()
 		DebugPrint print("Allocated FBO")
 		true
 	}
@@ -100,15 +100,11 @@ Fbo: class {
 		result := This new(width, height)
 		result _generate(texture) ? result : null
 	}
-	setBlendFactor: static func (on: Bool) {
+	enableBlend: static func (on: Bool) {
 		if (on) {
 			glEnable(GL_BLEND)
-			glBlendFunc(GL_ONE,GL_ONE)
-		}
-		else {
+			glBlendFunc(GL_ONE, GL_ONE)
+		} else
 			glDisable(GL_BLEND)
-		}
 	}
-
-
 }
