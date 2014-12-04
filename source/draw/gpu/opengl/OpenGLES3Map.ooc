@@ -60,6 +60,7 @@ OpenGLES3MapTransform: class extends OpenGLES3Map {
 	init: func (fragmentSource: String, onUse: Func) {
 		super(This vertexSource, fragmentSource, func {
 			onUse()
+			//FIXME: Don't use heap array
 			reference := (this transform) to3DTransformArray()
 			this _program setUniform("transform", reference)
 			gc_free(reference)
@@ -90,11 +91,16 @@ OpenGLES3MapLines: class extends OpenGLES3MapTransform {
 OpenGLES3MapPoints: class extends OpenGLES3Map {
 	color: FloatPoint3D { get set }
 	pointSize: Float { get set }
+	transform: FloatTransform2D { get set }
 	init: func {
 		super(This vertexSource, This fragmentSource,
 			func {
 				this _program setUniform("color", this color)
 				this _program setUniform("pointSize", this pointSize)
+				//FIXME: Don't use heap array
+				reference := (this transform) to3DTransformArray()
+				this _program setUniform("transform", reference)
+				gc_free(reference)
 		})
 	}
 	vertexSource: static String
