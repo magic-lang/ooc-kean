@@ -51,22 +51,11 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	draw: func ~withmap (image: Image, map: GpuMap, viewport: Viewport) {
 		this _bind()
 		Fbo setClearColor(this clearColor)
+		Fbo enableBlend(this blend)
 		surface := this _context createSurface()
 		surface draw(image, map, viewport)
 		surface recycle()
-		Fbo setClearColor(0.0f)
-		this _unbind()
-	}
-	drawStaticRaster: func (image: Image, map: GpuMap, size: IntSize2D, offset: IntSize2D) {
-		this _bind()
-		Fbo setClearColor(this clearColor)
-		surface := this _context createSurface() as OpenGLES3Surface
-		viewport := Viewport new(size)
-		viewport offset = offset
-		surface setBlendFactor(true)
-		surface draw(image, map, viewport)
-		surface setBlendFactor(false)
-		surface recycle()
+		Fbo enableBlend(false)
 		Fbo setClearColor(0.0f)
 		this _unbind()
 	}
@@ -167,9 +156,6 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 			raise("Trying to draw unsupported image format to OpenGLES3Yuv420Planar")
 	}
 	draw: func ~withmap (image: Image, map: GpuMap, viewport: Viewport)
-	{
-
-	}
 	clear: func {
 		this _y clear()
 		this _u clear()
@@ -240,9 +226,6 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 			raise("Trying to draw unsupported image format to OpenGLES3Yuv420Planar")
 	}
 	draw: func ~withmap (image: Image, map: GpuMap, viewport: Viewport)
-	{
-
-	}
 	clear: func {
 		this _y clear()
 		this _uv clear()
