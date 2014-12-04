@@ -57,7 +57,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		Fbo clearColor(0.0f)
 		this _unbind()
 	}
-	drawStaticRaster: func (image: Image, map: GpuMap, size: IntSize2D, offset: IntSize2D, transform := FloatTransform2D identity) {
+	drawStaticRaster: func (image: Image, map: GpuMap, size: IntSize2D, offset: IntSize2D) {
 		this _bind()
 		this _renderTarget clearColor(this clearColor)
 		surface := this _context createSurface() as OpenGLES3Surface
@@ -70,10 +70,10 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _renderTarget clearColor(0.0f)
 		this _unbind()
 	}
-	drawTrace: func (transformList: LinkedList<FloatPoint2D>, size: IntSize2D, screenSize: IntSize2D) {
+	drawLines: func (transformList: VectorList<FloatPoint2D>, viewport: Viewport) {
 		this _bind()
 		surface := this _context createSurface() as OpenGLES3Surface
-		surface drawTrace(transformList, Viewport new(size), screenSize)
+		surface drawLines(transformList, viewport)
 		surface recycle()
 		this _unbind()
 	}

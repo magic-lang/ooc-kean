@@ -21,6 +21,7 @@ VectorList: class <T> {
 	_vector: Vector<T>
 	count: Int
 	_count ::= this count
+	pointer: Pointer { get { this _vector _backend as Pointer } }
 	init: func ~default {
 		this init(32)
 	}

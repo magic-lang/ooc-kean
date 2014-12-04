@@ -17,16 +17,16 @@ use ooc-math
 use ooc-collections
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3/Fbo, OpenGLES3Map, TraceDrawer, OpenGLES3/Quad, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar
+import OpenGLES3/Fbo, OpenGLES3Map, OverlayDrawer, OpenGLES3/Quad, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar
 import structs/LinkedList
 
 OpenGLES3Surface: class extends GpuSurface {
 	_quad: Quad
-	traceDrawer: TraceDrawer
+	overlayDrawer: OverlayDrawer
 	init: func (context: GpuContext){
 		super(context)
 		this _quad = Quad create()
-		this traceDrawer = TraceDrawer new()
+		this overlayDrawer = OverlayDrawer new()
 	}
 	recycle: func {
 		this _context recycle(this)
@@ -59,17 +59,17 @@ OpenGLES3Surface: class extends GpuSurface {
 				raise("Couldnt match image type in OpenGLES3Surface")
 		}
 	}
-	drawTrace: func (transformList: LinkedList<FloatPoint2D>, viewport: Viewport, screenSize: IntSize2D ) {
+	drawLines: func (transformList: VectorList<FloatPoint2D>, viewport: Viewport) {
 		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
-		this traceDrawer drawTrace(transformList, screenSize)
+		this overlayDrawer drawLines(transformList)
 	}
 	drawBox: func (box: IntBox2D, viewport: Viewport, size: IntSize2D) {
 		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
-		this traceDrawer drawBox(box, size)
+		this overlayDrawer drawBox(box, size)
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, viewport: Viewport, size: IntSize2D) {
 		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
-		this traceDrawer drawPoints(pointList, size)
+		this overlayDrawer drawPoints(pointList, size)
 	}
 	create: static func (context: GpuContext)-> This {
 		result := This new(context)
