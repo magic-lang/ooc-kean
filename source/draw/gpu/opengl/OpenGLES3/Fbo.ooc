@@ -100,13 +100,11 @@ Fbo: class {
 		result := This new(width, height)
 		result _generate(texture) ? result : null
 	}
-	setBlendFactor: static func (on: Bool) {
+	enableBlend: static func (on: Bool) {
 		if (on) {
 			glEnable(GL_BLEND)
 			glBlendFunc(GL_ONE, GL_ONE)
-		}
-		else {
+		} else
 			glDisable(GL_BLEND)
-		}
 	}
 }
