@@ -80,8 +80,11 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>) {
 		this _bind()
+		viewport := Viewport new(this _size)
+		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
 		surface := this _context createSurface() as OpenGLES3Surface
-		surface drawPoints(pointList, Viewport new(this _size), this _size)
+		transform := FloatTransform2D createScaling(2.0f / this _size width, 2.0f / this _size height)
+		surface drawPoints(pointList, transform)
 		surface recycle()
 		this _unbind()
 	}
