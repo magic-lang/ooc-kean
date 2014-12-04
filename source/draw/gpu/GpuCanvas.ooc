@@ -32,7 +32,7 @@ GpuCanvas: abstract class {
 	draw: abstract func ~transform2D (image: Image, transform: FloatTransform2D)
 	draw: abstract func ~withmap (image: Image, map: GpuMap, viewport: Viewport)
 	clear: abstract func
-	drawLines: func (transformList: VectorList<FloatPoint2D>, viewport: Viewport)
+	drawLines: func (transformList: VectorList<FloatPoint2D>)
 	drawBox: func (box: IntBox2D, size: IntSize2D)
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, size: IntSize2D)
 	readPixels: func (channels: UInt) -> ByteBuffer {
