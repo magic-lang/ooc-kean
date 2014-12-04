@@ -43,8 +43,10 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	}
 	draw: func ~transform2D (image: Image, transform: FloatTransform2D) {
 		map := this _context getMap(this _target, GpuMapType transform) as OpenGLES3MapTransform
-		map transform = transform
-		map imageSize = image size
+		toReference := FloatTransform2D createScaling(this _size width / 2.0f, this _size height / 2.0f)
+		toNormalized := FloatTransform2D createScaling(2.0f / this _size width, 2.0f / this _size height)
+		finalTransform := toNormalized * transform * toReference
+		map transform = finalTransform
 		viewport := Viewport new(this _size)
 		this draw(image, map, viewport)
 	}
@@ -59,11 +61,13 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		Fbo setClearColor(0.0f)
 		this _unbind()
 	}
-	drawLines: func (transformList: VectorList<FloatPoint2D>) {
+	drawLines: func (pointList: VectorList<FloatPoint2D>) {
 		this _bind()
 		viewport := Viewport new(this _size)
+		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
 		surface := this _context createSurface() as OpenGLES3Surface
-		surface drawLines(transformList, viewport)
+		transform := FloatTransform2D createScaling(1.0f / this _size width, 1.0f / this _size height)
+		surface drawLines(pointList, transform)
 		surface recycle()
 		this _unbind()
 	}
@@ -74,10 +78,10 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		surface recycle()
 		this _unbind()
 	}
-	drawPoints: func (pointList: VectorList<FloatPoint2D>, size: IntSize2D) {
+	drawPoints: func (pointList: VectorList<FloatPoint2D>) {
 		this _bind()
 		surface := this _context createSurface() as OpenGLES3Surface
-		surface drawPoints(pointList, Viewport new(size), size)
+		surface drawPoints(pointList, Viewport new(this _size), this _size)
 		surface recycle()
 		this _unbind()
 	}
