@@ -50,16 +50,16 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	}
 	draw: func ~withmap (image: Image, map: GpuMap, viewport: Viewport) {
 		this _bind()
-		Fbo clearColor(this clearColor)
+		Fbo setClearColor(this clearColor)
 		surface := this _context createSurface()
 		surface draw(image, map, viewport)
 		surface recycle()
-		Fbo clearColor(0.0f)
+		Fbo setClearColor(0.0f)
 		this _unbind()
 	}
 	drawStaticRaster: func (image: Image, map: GpuMap, size: IntSize2D, offset: IntSize2D) {
 		this _bind()
-		this _renderTarget clearColor(this clearColor)
+		Fbo setClearColor(this clearColor)
 		surface := this _context createSurface() as OpenGLES3Surface
 		viewport := Viewport new(size)
 		viewport offset = offset
@@ -67,7 +67,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		surface draw(image, map, viewport)
 		surface setBlendFactor(false)
 		surface recycle()
-		this _renderTarget clearColor(0.0f)
+		Fbo setClearColor(0.0f)
 		this _unbind()
 	}
 	drawLines: func (transformList: VectorList<FloatPoint2D>, viewport: Viewport) {
@@ -210,7 +210,6 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 	}
 	_draw: func ~transform2D (image: OpenGLES3Yuv420Semiplanar, transform: FloatTransform2D) {
 		this _y draw(image y, transform)
-		//uvTransform := transform translate(-transform g / 2.0f, -transform h / 2.0f)
 		uvTransform := FloatTransform2D new(transform a, transform b, transform c * 2.0f, transform d, transform e, transform f * 2.0f, transform g / 2.0f, transform h / 2.0f, transform i)
 		this _uv draw(image uv, uvTransform)
 	}
