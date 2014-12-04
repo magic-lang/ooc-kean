@@ -35,9 +35,6 @@ OpenGLES3Surface: class extends GpuSurface {
 		this _quad dispose()
 	}
 	clear: func
-	setBlendFactor: func (on: Bool) {
-		Fbo setBlendFactor(on)
-	}
 	draw: func ~gpuimage (image: GpuImage, map: GpuMap, viewport: Viewport) {
 		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
 		map use()
