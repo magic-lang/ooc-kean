@@ -43,19 +43,20 @@ OverlayDrawer: class {
 		this linesShader use()
 		Lines draw(positions, pointList count, 2, 1.5f)
 	}
-	drawBox: func (box: IntBox2D, imageSize: IntSize2D) {
+	drawBox: func (box: IntBox2D, transform: FloatTransform2D) {
 		positions: Float[10]
-		positions[0] =  2.0f * (box leftTop x as Float / imageSize width as Float)
-		positions[1] =  2.0f * (box leftTop y as Float / imageSize height as Float)
-		positions[2] =  2.0f * (box rightTop x as Float / imageSize width as Float)
-		positions[3] =  2.0f * (box rightTop y as Float / imageSize height as Float)
-		positions[4] =  2.0f * (box rightBottom x as Float / imageSize width as Float)
-		positions[5] =  2.0f * (box rightBottom y as Float / imageSize height as Float)
-		positions[6] =  2.0f * (box leftBottom x as Float / imageSize width as Float)
-		positions[7] =  2.0f * (box leftBottom y as Float / imageSize height as Float)
-		positions[8] =  2.0f * (box leftTop x as Float / imageSize width as Float)
-		positions[9] =  2.0f * (box leftTop y as Float / imageSize height as Float)
+		positions[0] = box leftTop x as Float
+		positions[1] = box leftTop y as Float
+		positions[2] = box rightTop x as Float
+		positions[3] = box rightTop y as Float
+		positions[4] = box rightBottom x as Float
+		positions[5] = box rightBottom y as Float
+		positions[6] = box leftBottom x as Float
+		positions[7] = box leftBottom y as Float
+		positions[8] = box leftTop x as Float
+		positions[9] = box leftTop y as Float
 		this linesShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
+		this linesShader transform = transform
 		this linesShader use()
 		Lines draw(positions[0]&, 5, 2, 1.5f)
 	}
