@@ -32,24 +32,12 @@ setShaderSources: func {
 		"#version 300 es\n
 		precision highp float;\n
 		uniform mat4 transform;\n
-		uniform int imageWidth;\n
-		uniform int imageHeight;\n
-		uniform float invertY;\n
 		layout(location = 0) in vec2 vertexPosition;\n
 		layout(location = 1) in vec2 textureCoordinate;\n
 		out vec2 fragmentTextureCoordinate;\n
 		void main() {\n
-			float k = 1.0f;\n
-			vec4 scaledQuadPosition = vec4(float(imageWidth) * vertexPosition.x / 2.0f, float(imageHeight) * vertexPosition.y / 2.0f, -k, 1);\n
-			vec4 transformedPosition = (transform) * scaledQuadPosition;\n
-			transformedPosition.x *= 2.0f / float(imageWidth);\n
-			transformedPosition.y *= 2.0f / float(imageHeight);\n
-			float near = 0.1f;\n
-			float far = 10.0f;\n
-			transformedPosition.z *= -(far + near) / (far - near);\n
-			transformedPosition.z += (-2.0f * far * near) / (far - near);\n
-			float scale = 1.0f;\n
-			//mat4 projectionMatrix = mat4(scale * 2.0f / float(imageWidth), 0, 0, 0, 0, scale * 2.0f / (invertY * float(imageHeight)), 0, 0, 0, 0, - (far + near) / (far - near), -1.0f, 0, 0, -2.0f * far * near / (far - near), 0);\n
+			vec4 position = vec4(vertexPosition.x, vertexPosition.y, 0, 1);\n
+			vec4 transformedPosition = transform * position;\n
 			fragmentTextureCoordinate = textureCoordinate;\n
 			gl_Position = transformedPosition;\n
 		}\n";
@@ -227,13 +215,6 @@ setShaderSources: func {
 			vec2 rg = texture(texture0, offsetTexCoords).rg;\n
 			vec2 ba = texture(texture0, offsetTexCoords + texelOffset).rg;\n
 			outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
-		}\n";
-	OpenGLES3MapLines vertexSource =
-		"#version 300 es\n
-		precision highp float;\n
-		layout(location = 0) in vec2 vertexPosition;\n
-		void main() {\n
-			gl_Position = vec4(vertexPosition.x, vertexPosition.y, 0, 1);\n
 		}\n";
 	OpenGLES3MapLines fragmentSource =
 		"#version 300 es\n
