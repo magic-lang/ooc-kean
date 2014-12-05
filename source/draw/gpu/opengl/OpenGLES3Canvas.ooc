@@ -97,9 +97,9 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	readPixels: func (channels: UInt) -> ByteBuffer {
 		this _renderTarget readPixels(channels)
 	}
-	create: static func (image: GpuImage, context: GpuContext) -> This {
+	create: static func (image: GpuPacked, context: GpuContext) -> This {
 		result := This new(image, context)
-		result _renderTarget = Fbo create(image _backend as Texture, image size width, image size height)
+		result _renderTarget = Fbo create(image texture _backend as Texture, image size width, image size height)
 		result _size = image size
 		result _renderTarget != null ? result : null
 	}
@@ -166,9 +166,9 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 	}
 	_bind: func
 	_generate: func (image: OpenGLES3Yuv420Planar) -> Bool {
-		this _y = OpenGLES3Canvas create(image y as GpuImage, this _context)
-		this _u = OpenGLES3Canvas create(image u as GpuImage, this _context)
-		this _v = OpenGLES3Canvas create(image v as GpuImage, this _context)
+		this _y = OpenGLES3Canvas create(image y, this _context)
+		this _u = OpenGLES3Canvas create(image u, this _context)
+		this _v = OpenGLES3Canvas create(image v, this _context)
 		this _y != null && this _u != null && this _v != null
 	}
 	create: static func (image: OpenGLES3Yuv420Planar, context: GpuContext) -> This {
@@ -235,8 +235,8 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 	}
 	_bind: func
 	_generate: func (image: OpenGLES3Yuv420Semiplanar) -> Bool {
-		this _y = OpenGLES3Canvas create(image y as GpuImage, this _context)
-		this _uv = OpenGLES3Canvas create(image uv as GpuImage, this _context)
+		this _y = OpenGLES3Canvas create(image y, this _context)
+		this _uv = OpenGLES3Canvas create(image uv, this _context)
 		this _y != null && this _uv != null
 	}
 	create: static func (image: OpenGLES3Yuv420Semiplanar, context: GpuContext) -> This {

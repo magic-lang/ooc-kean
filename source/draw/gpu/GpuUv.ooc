@@ -15,10 +15,15 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-math
-import GpuPacked, GpuContext
+import GpuPacked, GpuContext, GpuTexture
 
 GpuUv: abstract class extends GpuPacked {
-	init: func (size: IntSize2D, context: GpuContext) {
-		super(size, 2, context)
+	init: func (texture: GpuTexture, size: IntSize2D, context: GpuContext) {
+		super(texture, size, 2, context)
+	}
+	resizeTo: func (size: IntSize2D) -> This {
+		target := this _context createUv(size)
+		target canvas draw(this)
+		target
 	}
 }

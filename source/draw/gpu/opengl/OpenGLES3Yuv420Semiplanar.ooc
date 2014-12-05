@@ -27,47 +27,7 @@ OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
 		this _y = y
 		this _uv = uv
 	}
-	dispose: func {
-		if (this _canvas != null)
-			this _canvas dispose()
-		this _y dispose()
-		this _uv dispose()
-	}
-	upload: func (raster: RasterImage) {
-		semiPlanar := raster as RasterYuv420Semiplanar
-		this _y upload(semiPlanar y)
-		this _uv upload(semiPlanar uv)
-	}
-	bind: func (unit: UInt) {
-		this _y bind(unit)
-		this _uv bind(unit + 1)
-	}
-	unbind: func {
-		this _y unbind()
-		this _uv unbind()
-	}
-	setFilter: func (filter: Bool) {
-		this _y setFilter(filter)
-		this _uv setFilter(filter)
-	}
-	toRasterDefault: func -> RasterImage {
-		y := this _y toRaster()
-		uv := this _uv toRaster()
-		result := RasterYuv420Semiplanar new(y as RasterMonochrome, uv as RasterUv)
-		result
-	}
-	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
-		semiPlanar := rasterImage as RasterYuv420Semiplanar
-		this _y toRaster(semiPlanar y)
-		this _uv toRaster(semiPlanar uv)
-	}
-	resizeTo: func (size: IntSize2D) -> This {
-		target := OpenGLES3Yuv420Semiplanar create(size, this _context)
-		target canvas draw(this)
-		target
-	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Semiplanar create(this, this _context) }
-
 	create: static func ~fromRaster (rasterImage: RasterYuv420Semiplanar, context: GpuContext) -> This {
 		y := OpenGLES3Monochrome create(rasterImage y, context)
 		uv := OpenGLES3Uv create(rasterImage uv, context)
@@ -80,5 +40,4 @@ OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
 		result _uv = OpenGLES3Uv create(size / 2, context)
 		result
 	}
-
 }

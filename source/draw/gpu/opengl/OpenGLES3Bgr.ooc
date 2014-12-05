@@ -15,57 +15,33 @@
 * along with This software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3/Texture, OpenGLES3Canvas
+import OpenGLES3/Texture, OpenGLES3Canvas, OpenGLES3Texture
 
 OpenGLES3Bgr: class extends GpuBgr {
-	backend: Texture { get { this _backend as Texture } }
 	init: func (size: IntSize2D, context: GpuContext) {
-		init(size, size width * this _channels, null, context)
+		this init(size, size width * this _channels, null, context)
 	}
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
-		super(size, context)
-		this _backend = Texture create(TextureType bgr, size width, size height, stride, data) as Pointer
-	}
-	bind: func (unit: UInt) {
-		this backend bind (unit)
-	}
-	unbind: func {
-		this backend unbind()
-	}
-	dispose: func {
-		this backend dispose()
-		if (this _canvas != null)
-			this _canvas dispose()
-	}
-	upload: func (raster: RasterImage) {
-		this backend uploadPixels(raster pointer, raster stride)
-	}
-	setFilter: func (filter: Bool) {
-		this backend setFilter(filter)
-	}
-	generateMipmap: func {
-		this backend generateMipmap()
+		super(OpenGLES3Texture createBgr(size, stride, data), size, context)
 	}
 	toRasterDefault: func -> RasterImage {
 		raise("toRaster not implemented for BGR")
 		null
 	}
-	resizeTo: func (size: IntSize2D) -> This {
-		target := OpenGLES3Bgr create(size, this _context)
-		target canvas draw(this)
-		target
+	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
+		raise("toRaster not implemented for BGR")
+		null
 	}
-	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
+_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterBgr, context: GpuContext) -> This {
 		result := This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
 		result
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
 		result := This new(size, context)
-		result backend != null ? result : null
+		result texture != null ? result : null
 	}
 }

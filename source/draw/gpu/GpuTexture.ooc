@@ -14,16 +14,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-math
-import GpuPacked, GpuContext, GpuTexture
-
-GpuBgr: abstract class extends GpuPacked {
-	init: func (texture: GpuTexture, size: IntSize2D, context: GpuContext) {
-		super(texture, size, 3, context)
-	}
-	resizeTo: func (size: IntSize2D) -> This {
-		target := this _context createBgr(size)
-		target canvas draw(this)
-		target
-	}
+GpuTexture: abstract class {
+	_backend: Pointer
+	generateMipmap: abstract func
+	dispose: abstract func
+	bind: abstract func (unit: UInt)
+	unbind: abstract func
+	upload: abstract func(pointer: UInt8*, stride: UInt)
+	setMagFilter: abstract func (linear: Bool)
 }

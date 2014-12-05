@@ -24,14 +24,12 @@ import OpenGLES3/ShaderProgram
 OpenGLES3Map: abstract class extends GpuMap {
 	_program: ShaderProgram
 	_onUse: Func
-	invertY: Float { get set }
 	init: func (vertexSource: String, fragmentSource: String, onUse: Func) {
 		this _onUse = onUse
 		if (vertexSource == null || fragmentSource == null) {
 			DebugPrint print("Vertex or fragment shader source not set")
 			raise("Vertex or fragment shader source not set")
 		}
-		this invertY = 1.0f
 		this _program = ShaderProgram create(vertexSource, fragmentSource)
 	}
 	dispose: func {
@@ -41,11 +39,8 @@ OpenGLES3Map: abstract class extends GpuMap {
 	use: func {
 		this _program use()
 		this _onUse()
-		this _program setUniform("invertY", this invertY)
-		this invertY = 1.0f
 	}
 }
-
 OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 	init: func (fragmentSource: String, onUse: Func) {
 		super(This vertexSource, fragmentSource, func {
@@ -54,7 +49,6 @@ OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 	}
 	vertexSource: static String
 }
-
 OpenGLES3MapTransform: class extends OpenGLES3Map {
 	transform: FloatTransform2D { get set }
 	init: func (fragmentSource: String, onUse: Func) {
@@ -67,16 +61,6 @@ OpenGLES3MapTransform: class extends OpenGLES3Map {
 			})
 	}
 	vertexSource: static String
-}
-
-OpenGLES3MapOverlay: class extends OpenGLES3MapDefault {
-	init: func {
-		super(This fragmentSource,
-			func {
-				this _program setUniform("texture0", 0)
-			})
-	}
-	fragmentSource: static String
 }
 OpenGLES3MapLines: class extends OpenGLES3MapTransform {
 	color: FloatPoint3D { get set }
@@ -115,7 +99,6 @@ OpenGLES3MapBlend: class extends OpenGLES3MapDefault {
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapBgr: class extends OpenGLES3MapDefault {
 	init: func {
 		super(This fragmentSource,
@@ -125,7 +108,6 @@ OpenGLES3MapBgr: class extends OpenGLES3MapDefault {
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapBgrToBgra: class extends OpenGLES3MapDefault {
 	init: func {
 		super(This fragmentSource,
@@ -135,7 +117,6 @@ OpenGLES3MapBgrToBgra: class extends OpenGLES3MapDefault {
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapBgra: class extends OpenGLES3MapDefault {
 	init: func {
 		super(This fragmentSource,
@@ -145,7 +126,6 @@ OpenGLES3MapBgra: class extends OpenGLES3MapDefault {
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapMonochrome: class extends OpenGLES3MapDefault {
 	init: func {
 		super(This fragmentSource,
@@ -164,7 +144,6 @@ OpenGLES3MapMonochromeTransform: class extends OpenGLES3MapTransform {
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapUv: class extends OpenGLES3MapDefault {
 	init: func {
 		super(This fragmentSource,
@@ -174,7 +153,6 @@ OpenGLES3MapUv: class extends OpenGLES3MapDefault {
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapUvTransform: class extends OpenGLES3MapTransform {
 	init: func {
 		super(This fragmentSource,
@@ -184,7 +162,6 @@ OpenGLES3MapUvTransform: class extends OpenGLES3MapTransform {
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapMonochromeToBgra: class extends OpenGLES3MapDefault {
 	init: func {
 		super(This fragmentSource,
@@ -194,7 +171,6 @@ OpenGLES3MapMonochromeToBgra: class extends OpenGLES3MapDefault {
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapYuvPlanarToBgra: class extends OpenGLES3MapDefault {
 	init: func {
 		super(This fragmentSource,
@@ -206,7 +182,6 @@ OpenGLES3MapYuvPlanarToBgra: class extends OpenGLES3MapDefault {
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapDefault {
 	init: func {
 		super(This fragmentSource,
@@ -217,7 +192,6 @@ OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapDefault {
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapYuvSemiplanarToBgraTransform: class extends OpenGLES3MapTransform {
 	init: func {
 		super(This fragmentSource,
@@ -228,7 +202,6 @@ OpenGLES3MapYuvSemiplanarToBgraTransform: class extends OpenGLES3MapTransform {
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapPack: abstract class extends OpenGLES3MapDefault {
 	imageWidth: Int { get set }
 	init: func (fragmentSource: String) {
@@ -239,35 +212,30 @@ OpenGLES3MapPack: abstract class extends OpenGLES3MapDefault {
 			})
 	}
 }
-
 OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
 	init: func {
 		super(This fragmentSource)
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
 	init: func {
 		super(This fragmentSource)
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapPackMonochrome1080p: class extends OpenGLES3MapPack {
 	init: func {
 		super(This fragmentSource)
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapPackUv1080p: class extends OpenGLES3MapPack {
 	init: func {
 		super(This fragmentSource)
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapUnpackMonochrome1080p: class extends OpenGLES3MapDefault {
 	init: func {
 		super(This fragmentSource,
@@ -277,7 +245,6 @@ OpenGLES3MapUnpackMonochrome1080p: class extends OpenGLES3MapDefault {
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapUnpackUv1080p: class extends OpenGLES3MapDefault {
 	init: func {
 		super(This fragmentSource,
@@ -287,7 +254,6 @@ OpenGLES3MapUnpackUv1080p: class extends OpenGLES3MapDefault {
 	}
 	fragmentSource: static String
 }
-
 OpenGLES3MapPyramidGeneration: abstract class extends OpenGLES3MapDefault {
 	pyramidFraction: Float { get set }
 	pyramidCoefficient: Float { get set }
@@ -302,7 +268,6 @@ OpenGLES3MapPyramidGeneration: abstract class extends OpenGLES3MapDefault {
 				})
 			}
 }
-
 OpenGLES3MapPyramidGenerationDefault: class extends OpenGLES3MapPyramidGeneration {
 	init: func { super(This fragmentSource) }
 	fragmentSource: static String
