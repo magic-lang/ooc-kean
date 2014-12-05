@@ -14,11 +14,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+use ooc-draw-gpu
 use ooc-math
 use ooc-opengl
 use ooc-base
 import egl/eglimage
-EglRgba: class extends Texture {
+EglRgba: class extends GpuTexture {
+	_texture: Texture
+	texture: Texture { get }
 	_id: Int
 	id: Int { get { this _id } }
 	_stride: Int
@@ -27,9 +30,8 @@ EglRgba: class extends Texture {
 	size: IntSize2D { get { this size } }
 	_channels := 4
 	init: func (eglDisplay: Pointer, size: IntSize2D, pixels: Pointer = null, write: Int = 0) {
-		super(TextureType rgba, size width, size height)
+		this _texture = Texture create(TextureType rgba, size width, size height, size width * this _channels, null, false)
 		this _size = size
-		this _generate(null, size width, false)
 		DebugPrint print("Allocating EGL Image")
 		this _id = createEGLImage(size width, size height, eglDisplay, write)
 		this _stride = getStride(this _id) * this _channels
@@ -40,14 +42,18 @@ EglRgba: class extends Texture {
 		}
 	}
 	dispose: func {
-		this internalDispose()
+		this _texture dispose()
 		destroyEGLImage(this id)
 	}
-	uploadPixels: func(pixels: Pointer, stride: Int) {
+	setMagFilter: func (linear: Bool)
+	upload: func(pixels: Pointer, stride: Int) {
 		pointer := this write()
 		memcpy(pointer, pixels, this size width * this size height * this _channels)
 		this unlock()
 	}
+	generateMipmap: func
+	bind: func (unit: UInt)
+	unbind: func
 	read: func -> UInt8* {
 		readPixels(this id) as UInt8*
 	}
