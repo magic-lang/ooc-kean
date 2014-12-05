@@ -24,6 +24,12 @@ OpenGLES3Texture: class extends GpuTexture {
 		this _backend = texture as Pointer
 	}
 	generateMipmap: func { this backend generateMipmap() }
+	setMagFilter: func (on: Bool) {
+		if (on)
+			this backend setMagFilter(InterpolationType Linear)
+		else
+			this backend setMagFilter(InterpolationType Nearest)
+	}
 	dispose: func { this backend dispose() }
 	bind: func (unit: UInt) { this backend bind(unit) }
 	unbind: func { this backend unbind() }
