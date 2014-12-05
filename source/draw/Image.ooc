@@ -56,8 +56,6 @@ Image: abstract class {
 	}
 	_referenceCount: ReferenceCounter
 	referenceCount ::= this _referenceCount
-	increaseReferenceCount: func { this _referenceCount increase() }
-	decreaseReferenceCount: func { this _referenceCount decrease() }
 	init: func (=size, .coordinateSystem, =crop, =wrap) {
 		this coordinateSystem = coordinateSystem
 		this init()
