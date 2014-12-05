@@ -25,7 +25,7 @@ import StbImage
 
 RasterImage: abstract class extends Image {
 	distanceRadius: Int { get { return 1; } }
-	buffer: ByteBufferAbstract { get set }
+	buffer: ByteBuffer { get set }
 	pointer: UInt8* { get { buffer pointer } }
 	length: Int { get { buffer size } }
 	stride: UInt { get set }
@@ -36,10 +36,10 @@ RasterImage: abstract class extends Image {
 		super(original)
 		this buffer = original buffer copy()
 	}
-	init: func (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
+	init: func (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		super(size, coordinateSystem, crop, false)
 		this buffer = buffer
-		this buffer increaseReferenceCount()
+		this buffer referenceCount increase()
 	}
 	resizeTo: func (size: IntSize2D) -> Image {
 		result : Image
@@ -74,12 +74,12 @@ RasterImage: abstract class extends Image {
 				this __destroy__()
 				gc_free(this)
 			} else {
-				raise("free() called on RasterImage! Use decreaseReferenceCount() instead.")
+				raise("free() called on RasterImage! Use referenceCount decrease() instead.")
 			}
 		}
 	}
 	__destroy__: func {
-		this buffer decreaseReferenceCount()
+		this buffer referenceCount decrease()
 	}
 	open: static func ~unknownType (filename: String) -> This {
 		x, y, n: Int

@@ -25,6 +25,6 @@ GpuPacked: abstract class extends GpuImage {
 	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
 		raster := this toRaster()
 		memcpy(rasterImage pointer, raster pointer, this length)
-		raster decreaseReferenceCount()
+		raster referenceCount decrease()
 	}
 }

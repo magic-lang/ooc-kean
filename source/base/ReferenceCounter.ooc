@@ -3,7 +3,7 @@ import Synchronized
 
 ReferenceCounter: class extends Synchronized {
 	_target: Object
-	_count: Int = 1
+	_count: Int = 0
 	init: func (target: Object) {
 		super()
 		this _target = target
@@ -15,7 +15,6 @@ ReferenceCounter: class extends Synchronized {
 			if (this _count <= 0) {
 				this _target free()
 				this unlock()
-				this free()
 			}
 			else
 				this unlock()

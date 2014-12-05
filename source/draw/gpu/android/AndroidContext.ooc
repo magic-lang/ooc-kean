@@ -113,9 +113,9 @@ AndroidContext: class extends OpenGLES3Context {
 		uvBuffer := uvPacker read()
 
 		yRaster := RasterMonochrome new(yBuffer, gpuImage size, 64)
-		yBuffer decreaseReferenceCount()
+		yBuffer referenceCount decrease()
 		uvRaster := RasterUv new(uvBuffer, gpuImage size / 2, 64)
-		uvBuffer decreaseReferenceCount()
+		uvBuffer referenceCount decrease()
 		result := RasterYuv420Semiplanar new(yRaster, uvRaster)
 		result
 	}
@@ -126,7 +126,7 @@ AndroidContext: class extends OpenGLES3Context {
 		GpuPacker finish()
 		buffer := yPacker read()
 		result := RasterMonochrome new(buffer, gpuImage size, 64)
-		buffer decreaseReferenceCount()
+		buffer referenceCount decrease()
 		result
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {

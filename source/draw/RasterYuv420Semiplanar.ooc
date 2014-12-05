@@ -49,11 +49,11 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	}
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromByteBuffer (buffer: ByteBufferAbstract, size: IntSize2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, byteAlignment := IntSize2D new()) {
 		this byteAlignment = byteAlignment
 		super(buffer, size, CoordinateSystem Default, IntShell2D new())
 	}
-	init: func ~fromEverything (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
 		this byteAlignment = byteAlignment
 		super(buffer, size, coordinateSystem, crop)
 	}
@@ -113,20 +113,14 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	createY: func -> RasterMonochrome {
 		yStride := Int align(this size width, byteAlignment width)
 		ySize := Int align(this size height, this byteAlignment height) * yStride
-		ySlice := ByteBufferSlice new(this buffer, 0, ySize)
-		result := RasterMonochrome new(ySlice, this size, this byteAlignment width)
-		ySlice decreaseReferenceCount()
-		result
+		RasterMonochrome new(this buffer slice(0, ySize), this size, this byteAlignment width)
 	}
 	createUV: func -> RasterUv {
 		yStride := Int align(this size width, byteAlignment width)
 		ySize := Int align(this size height, this byteAlignment height) * yStride
 		uvStride := Int align(this size width * 2, byteAlignment width)
 		uvSize := Int align(this y size height, this byteAlignment height) * uvStride
-		uvSlice := ByteBufferSlice new(this buffer, ySize, uvSize)
-		result := RasterUv new(uvSlice, this size / 2, this byteAlignment width)
-		uvSlice decreaseReferenceCount()
-		result
+		RasterUv new(this buffer slice(ySize, uvSize), this size / 2, this byteAlignment width)
 	}
 	copy: func -> This {
 //  	"copying..." println()
@@ -172,16 +166,16 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 //	}
 	operator [] (x, y: Int) -> ColorYuv {
 		ColorYuv new(0, 0, 0)
-		ColorYuv new(this y[x, y] y, this uv [x/2, y/2] u, this uv [x/2, y/2] v)
+		ColorYuv new(this y[x, y] y, this uv [x / 2, y / 2] u, this uv [x / 2, y / 2] v)
 	}
 	operator []= (x, y: Int, value: ColorYuv) {
 		this y[x, y] = ColorMonochrome new(value y)
-		this uv[x/2, y/2] = ColorUv new(value u, value v)
+		this uv[x / 2, y / 2] = ColorUv new(value u, value v)
 	}
 	__destroy__: func {
-		this y decreaseReferenceCount()
-		this uv decreaseReferenceCount()
-		this buffer decreaseReferenceCount()
+		this y referenceCount decrease()
+		this uv referenceCount decrease()
+		this buffer referenceCount decrease()
 	}
 	open: static func (filename: String) -> This {
 		x, y, n: Int
@@ -193,13 +187,13 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		StbImage free(data)
 		bgr := RasterBgr new(buffer, IntSize2D new(x, y))
 		result := This new(bgr)
-		bgr decreaseReferenceCount()
+		bgr referenceCount decrease()
 		return result
 	}
 	save: func (filename: String) {
 		bgr := RasterBgr new(this)
 		bgr save(filename)
-		bgr decreaseReferenceCount()
+		bgr referenceCount decrease()
 	}
 	saveBin: func (filename: String) {
 		fileWriter := FileWriter new(filename)
@@ -213,9 +207,6 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		fileReader read((data as Char*), 0, bytes)
 		fileReader close()
 		fileReader free()
-		buffer := ByteBuffer new(bytes, data as UInt8*)
-		result := This new(buffer, IntSize2D new(width, height))
-		buffer decreaseReferenceCount()
-		result
+		This new(ByteBuffer new(data, bytes), IntSize2D new(width, height))
 	}
 }
