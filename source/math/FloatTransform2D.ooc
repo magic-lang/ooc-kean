@@ -63,8 +63,8 @@ FloatTransform2D: cover {
 
 	translation ::= FloatSize2D new(this g, this h)
 	scaling ::= (this scalingX + this scalingY) / 2.0f
-	scalingX ::= (this a squared() + this b squared()) sqrt()
-	scalingY ::= (this d squared() + this e squared()) sqrt()
+	scalingX ::= (this a * this a + this b * this b) sqrt()
+	scalingY ::= (this d * this d + this e * this e) sqrt()
 	rotation ::= this b atan2(this a)
 	inverse: This { get {
 		determinant := this determinant
