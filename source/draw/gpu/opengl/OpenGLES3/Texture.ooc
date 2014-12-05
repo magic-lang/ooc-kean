@@ -28,6 +28,15 @@ TextureType: enum {
 	uv
 }
 
+InterpolationType: enum {
+	Nearest
+	Linear
+	LinearMipmapNearest
+	LinearMipmapLinear
+	NearestMipmapNearest
+	NearestMipmapLinear
+}
+
 Texture: class {
 	_backend: UInt
 	backend: UInt { get { this _backend } }
@@ -52,7 +61,6 @@ Texture: class {
 	}
 	generateMipmap: func {
 		this bind(0)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST)
 		glGenerateMipmap(GL_TEXTURE_2D)
 	}
 	bind: func (unit: UInt) {
@@ -102,12 +110,28 @@ Texture: class {
 				raise("Unknown texture format")
 		}
 	}
-	setFilter: func (filter: Bool) {
+	setMagFilter: func (interpolation: InterpolationType) {
 		this bind(0)
-		if (filter)
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-		else
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+		interpolationType := match (interpolation) {
+			case InterpolationType Nearest => GL_NEAREST
+			case InterpolationType Linear => GL_LINEAR
+			case => raise("Interpolation type not supported for MagFilter"); -1
+		}
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, interpolationType)
+		this unbind()
+	}
+	setMinFilter: func (interpolation: InterpolationType) {
+		this bind(0)
+		interpolationType := match (interpolation) {
+			case InterpolationType Nearest => GL_NEAREST
+			case InterpolationType Linear => GL_LINEAR
+			case InterpolationType LinearMipmapNearest => GL_LINEAR_MIPMAP_NEAREST
+			case InterpolationType LinearMipmapLinear => GL_LINEAR_MIPMAP_LINEAR
+			case InterpolationType NearestMipmapNearest => GL_NEAREST_MIPMAP_NEAREST
+			case InterpolationType NearestMipmapLinear => GL_NEAREST_MIPMAP_LINEAR
+			case => raise("Interpolation type not supported for MinFilter"); -1
+		}
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, interpolationType)
 		this unbind()
 	}
 	_generate: func (pixels: Pointer, stride: Int, allocate := true) -> Bool {
