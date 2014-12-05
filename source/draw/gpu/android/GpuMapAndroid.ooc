@@ -38,12 +38,6 @@ setShaderSources: func {
 			fragmentTextureCoordinate = textureCoordinate;\n
 			gl_Position = transformedPosition;\n
 		}\n";
-	OpenGLES3MapOverlay fragmentSource =
-		"#version 300 es\n
-		out float outColor;\n
-		void main() {\n
-			outColor = 0.0f;\n
-		}\n";
 	OpenGLES3MapBgr fragmentSource =
 		"#version 300 es\n
 		uniform sampler2D texture0;\n
