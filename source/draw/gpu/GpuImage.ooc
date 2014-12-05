@@ -31,33 +31,30 @@ GpuImageType: enum {
 }
 
 GpuImage: abstract class extends Image {
+	_canvas: GpuCanvas
 	canvas: GpuCanvas { get {
 		if (this _canvas == null)
 			this _canvas = this _createCanvas()
 		this _canvas } }
-	_canvas: GpuCanvas
-	_backend: Pointer
 	_context: GpuContext
 	_channels: Int
 	channels: Int { get { this _channels } }
 	length: Int { get { this _channels * this size width * this size height } }
-	mipmap: Bool = false
 	init: func (=size, =_channels, =_context)
-	bind: abstract func (unit: UInt)
-	unbind: abstract func
+	free: func
+	dispose: func {
+		if (this _canvas != null)
+			this _canvas dispose()
+	}
 	recycle: func {
 		if (this _canvas != null)
 			this _canvas onRecycle()
 		this _context recycle(this)
 	}
-
-	free: func {
-	}
-	dispose: abstract func
+	bind: abstract func (unit: UInt)
+	unbind: abstract func
 	upload: abstract func (raster: RasterImage)
-	generateMipmap: func {
-		raise("generateMipmap not implemented")
-	}
+	generateMipmap: abstract func
 
 	//TODO: Implement abstract functions
 	create: func (size: IntSize2D) -> This {
@@ -87,6 +84,5 @@ GpuImage: abstract class extends Image {
 	toRasterDefault: abstract func ~overwrite (rasterImage: RasterImage)
 	toRasterDefault: abstract func -> RasterImage
 	_createCanvas: abstract func -> GpuCanvas
-	setFilter: abstract func (filter: Bool)
 
 }

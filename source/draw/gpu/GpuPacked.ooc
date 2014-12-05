@@ -16,15 +16,21 @@
 use ooc-math
 use ooc-draw
 use ooc-base
-import GpuImage, GpuCanvas, GpuContext
+import GpuImage, GpuTexture, GpuCanvas, GpuContext
 
 GpuPacked: abstract class extends GpuImage {
-	init: func (size: IntSize2D, channels: Int, context: GpuContext) {
+	_texture: GpuTexture
+	texture: GpuTexture { get { this _texture } }
+	init: func (=_texture, size: IntSize2D, channels: Int, context: GpuContext) {
 		super(size, channels, context)
 	}
-	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
-		raster := this toRaster()
-		memcpy(rasterImage pointer, raster pointer, this length)
-		raster decreaseReferenceCount()
+	dispose: func {
+		this _texture dispose()
+		if (this _canvas != null)
+			this _canvas dispose()
 	}
+	bind: func (unit: UInt) { this _texture bind(unit) }
+	unbind: func { this _texture unbind() }
+	upload: func (raster: RasterImage) { this _texture upload(raster pointer, raster stride) }
+	generateMipmap: func { this _texture generateMipmap() }
 }
