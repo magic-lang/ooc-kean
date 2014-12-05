@@ -22,7 +22,7 @@ import IntPoint2D
 
 FloatPoint2D: cover {
 	x, y: Float
-	norm ::= (this x squared() + this y squared()) sqrt()
+	norm ::= (this x *this x + this y * this y) sqrt()
 	azimuth ::= this y atan2(this x)
 	init: func@ (=x, =y)
 	init: func@ ~default { this init(0.0f, 0.0f) }
