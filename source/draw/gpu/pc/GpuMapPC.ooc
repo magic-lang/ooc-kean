@@ -20,13 +20,12 @@ setShaderSources: func {
 	OpenGLES3MapDefault vertexSource =
 		"#version 300 es\n
 		precision highp float;\n
-		uniform float invertY;\n
 		layout(location = 0) in vec2 vertexPosition;\n
 		layout(location = 1) in vec2 textureCoordinate;\n
 		out vec2 fragmentTextureCoordinate;\n
 		void main() {\n
 			fragmentTextureCoordinate = textureCoordinate;\n
-			gl_Position = vec4(vertexPosition.x, invertY * vertexPosition.y, -1, 1);\n
+			gl_Position = vec4(vertexPosition.x, vertexPosition.y, -1, 1);\n
 		}\n";
 	OpenGLES3MapTransform vertexSource =
 		"#version 300 es\n
@@ -40,13 +39,6 @@ setShaderSources: func {
 			vec4 transformedPosition = transform * position;\n
 			fragmentTextureCoordinate = textureCoordinate;\n
 			gl_Position = transformedPosition;\n
-		}\n";
-	OpenGLES3MapOverlay fragmentSource =
-		"#version 300 es\n
-		precision highp float;\n
-		out float outColor;\n
-		void main() {\n
-			outColor = 0.0f;\n
 		}\n";
 	OpenGLES3MapBgr fragmentSource =
 		"#version 300 es\n
