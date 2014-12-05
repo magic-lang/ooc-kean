@@ -103,7 +103,7 @@ Fbo: class {
 	enableBlend: static func (on: Bool) {
 		if (on) {
 			glEnable(GL_BLEND)
-			glBlendFunc(GL_ONE, GL_ONE)
+			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR)
 		} else
 			glDisable(GL_BLEND)
 	}
