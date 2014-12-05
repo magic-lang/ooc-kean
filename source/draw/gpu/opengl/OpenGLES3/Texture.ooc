@@ -62,7 +62,7 @@ Texture: class {
 	unbind: func {
 		glBindTexture(GL_TEXTURE_2D, 0)
 	}
-	uploadPixels: func(pixels: Pointer, stride: Int) {
+	upload: func(pixels: Pointer, stride: Int) {
 		pixelStride := stride / this _bytesPerPixel
 		glBindTexture(GL_TEXTURE_2D, this _backend)
 		if (pixelStride != this width) {
