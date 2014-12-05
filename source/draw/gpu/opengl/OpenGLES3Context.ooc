@@ -18,7 +18,8 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 use ooc-opengl
-import GpuImageBin, OpenGLES3Surface, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Map
+import GpuImageBin, OpenGLES3Surface, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar
+import Map/OpenGLES3Map, Map/OpenGLES3MapOverlay, Map/OpenGLES3MapPack, Map/OpenGLES3MapPyramid
 import OpenGLES3/Context, OpenGLES3/NativeWindow
 
 OpenGLES3Context: class extends GpuContext {

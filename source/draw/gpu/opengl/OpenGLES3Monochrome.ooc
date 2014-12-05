@@ -18,7 +18,7 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3/Texture, OpenGLES3Canvas, OpenGLES3Map, OpenGLES3Texture
+import OpenGLES3Canvas, Map/OpenGLES3Map, Map/OpenGLES3MapPack, OpenGLES3Texture
 
 OpenGLES3Monochrome: class extends GpuMonochrome {
 	init: func (size: IntSize2D, context: GpuContext) {

@@ -21,7 +21,6 @@ use ooc-opengl
 use ooc-base
 
 import X11/X11Window
-import GpuMapPC
 
 Window: class extends OpenGLES3Context {
 	_native: NativeWindow
@@ -34,7 +33,6 @@ Window: class extends OpenGLES3Context {
 	size: IntSize2D { get set }
 
 	init: /* internal */ func (=size, title: String) {
-		setShaderSources()
 		this _native = X11Window create(size width, size height, title)
 		super(this _native, func { this onDispose() })
 		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new()

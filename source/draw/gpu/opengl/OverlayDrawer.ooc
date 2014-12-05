@@ -18,7 +18,7 @@ use ooc-math
 use ooc-collections
 
 import structs/LinkedList
-import OpenGLES3Map, OpenGLES3/Lines
+import Map/OpenGLES3Map, Map/OpenGLES3MapOverlay, OpenGLES3/Lines
 
 OverlayDrawer: class {
 	linesShader: OpenGLES3MapLines
@@ -26,8 +26,8 @@ OverlayDrawer: class {
 	init: func {
 		this linesShader = OpenGLES3MapLines new()
 		this pointsShader = OpenGLES3MapPoints new()
-		pointsShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
-		pointsShader pointSize = 5.0f
+		this pointsShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
+		this pointsShader pointSize = 5.0f
 	}
 	__destroy__: func {
 		this linesShader dispose()
