@@ -61,32 +61,27 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		Fbo setClearColor(0.0f)
 		this _unbind()
 	}
-	drawLines: func (pointList: VectorList<FloatPoint2D>) {
+	drawSurface: func (function: Func (OpenGLES3Surface, FloatTransform2D)) {
 		this _bind()
-		viewport := Viewport new(this _size)
-		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
+		this _setViewport()
+		transform := FloatTransform2D createScaling(2.0f / this _size width, 2.0f / this _size height)
 		surface := this _context createSurface() as OpenGLES3Surface
-		transform := FloatTransform2D createScaling(1.0f / this _size width, 1.0f / this _size height)
-		surface drawLines(pointList, transform)
+		function(surface, transform)
 		surface recycle()
 		this _unbind()
 	}
-	drawBox: func (box: IntBox2D, size: IntSize2D) {
-		this _bind()
-		surface := this _context createSurface() as OpenGLES3Surface
-		surface drawBox(box, Viewport new(size), size)
-		surface recycle()
-		this _unbind()
+	drawLines: func (pointList: VectorList<FloatPoint2D>) {
+		this drawSurface(func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawLines(pointList, transform) })
+	}
+	drawBox: func (box: IntBox2D) {
+		this drawSurface(func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawBox(box, transform) })
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>) {
-		this _bind()
+		this drawSurface(func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawPoints(pointList, transform) })
+	}
+	_setViewport: func {
 		viewport := Viewport new(this _size)
 		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
-		surface := this _context createSurface() as OpenGLES3Surface
-		transform := FloatTransform2D createScaling(2.0f / this _size width, 2.0f / this _size height)
-		surface drawPoints(pointList, transform)
-		surface recycle()
-		this _unbind()
 	}
 	_bind: func {
 		this _renderTarget bind()
