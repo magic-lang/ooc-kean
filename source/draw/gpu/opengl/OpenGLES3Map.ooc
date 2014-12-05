@@ -24,14 +24,12 @@ import OpenGLES3/ShaderProgram
 OpenGLES3Map: abstract class extends GpuMap {
 	_program: ShaderProgram
 	_onUse: Func
-	invertY: Float { get set }
 	init: func (vertexSource: String, fragmentSource: String, onUse: Func) {
 		this _onUse = onUse
 		if (vertexSource == null || fragmentSource == null) {
 			DebugPrint print("Vertex or fragment shader source not set")
 			raise("Vertex or fragment shader source not set")
 		}
-		this invertY = 1.0f
 		this _program = ShaderProgram create(vertexSource, fragmentSource)
 	}
 	dispose: func {
@@ -41,8 +39,6 @@ OpenGLES3Map: abstract class extends GpuMap {
 	use: func {
 		this _program use()
 		this _onUse()
-		this _program setUniform("invertY", this invertY)
-		this invertY = 1.0f
 	}
 }
 
@@ -69,15 +65,6 @@ OpenGLES3MapTransform: class extends OpenGLES3Map {
 	vertexSource: static String
 }
 
-OpenGLES3MapOverlay: class extends OpenGLES3MapDefault {
-	init: func {
-		super(This fragmentSource,
-			func {
-				this _program setUniform("texture0", 0)
-			})
-	}
-	fragmentSource: static String
-}
 OpenGLES3MapLines: class extends OpenGLES3MapTransform {
 	color: FloatPoint3D { get set }
 	init: func {
