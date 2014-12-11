@@ -42,5 +42,7 @@ GpuContext: abstract class {
 		gpuImage toRasterDefault(rasterImage)
 	}
 	getMap: abstract func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap
+	getMaxContexts: func -> Int { 1 }
 	setViewport: abstract func (viewport: Viewport)
+	getCurrentIndex: func -> Int { 0 }
 }

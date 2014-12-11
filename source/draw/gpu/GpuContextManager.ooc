@@ -28,6 +28,7 @@ GpuContextManager: abstract class extends GpuContext {
 		this _threadIdentifiers = Int[this MAX_CONTEXTS] new()
 		this _contexts = GpuContext[this MAX_CONTEXTS] new()
 	}
+	getMaxContexts: func -> Int { this MAX_CONTEXTS }
 	_getContext: func -> GpuContext {
 		threadIdentifier := pthread_self()
 		for (i in 0..MAX_CONTEXTS) {
@@ -42,6 +43,15 @@ GpuContextManager: abstract class extends GpuContext {
 			}
 		}
 		return null
+	}
+	getCurrentIndex: func -> Int {
+		threadIdentifier := pthread_self()
+		result := -1
+		for (i in 0..MAX_CONTEXTS) {
+			if (threadIdentifier == this _threadIdentifiers[i])
+			result = i
+		}
+		result
 	}
 	_createContext: abstract func -> GpuContext
 	dispose: func {
