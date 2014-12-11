@@ -19,7 +19,7 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-opengl
 import GpuImageBin, OpenGLES3Surface, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar
-import Map/OpenGLES3Map, Map/OpenGLES3MapOverlay, Map/OpenGLES3MapPack, Map/OpenGLES3MapPyramid
+import Map/OpenGLES3Map, Map/OpenGLES3MapOverlay, Map/OpenGLES3MapPack
 import OpenGLES3/Context, OpenGLES3/NativeWindow
 
 OpenGLES3Context: class extends GpuContext {
@@ -30,8 +30,6 @@ OpenGLES3Context: class extends GpuContext {
 	_monochromeMapTransform: OpenGLES3MapMonochromeTransform
 	_uvMapDefault: OpenGLES3MapUv
 	_uvMapTransform: OpenGLES3MapUvTransform
-	_pyramidMapMonochrome: OpenGLES3MapPyramidGenerationDefault
-	_pyramidMapMonochromeMipmap: OpenGLES3MapPyramidGenerationMipmap
 	_packMonochrome: OpenGLES3MapPackMonochrome
 	_packUv: OpenGLES3MapPackUv
 	_blendMap: OpenGLES3MapBlend
@@ -39,17 +37,15 @@ OpenGLES3Context: class extends GpuContext {
 
 	init: func (context: Context, =_onDispose) {
 		super()
-		this _bgrMapDefault = OpenGLES3MapBgr new()
-		this _bgraMapDefault = OpenGLES3MapBgra new()
-		this _monochromeMapDefault = OpenGLES3MapMonochrome new()
-		this _monochromeMapTransform = OpenGLES3MapMonochromeTransform new()
-		this _uvMapDefault = OpenGLES3MapUv new()
-		this _uvMapTransform = OpenGLES3MapUvTransform new()
-		this _pyramidMapMonochrome = OpenGLES3MapPyramidGenerationDefault new()
-		this _pyramidMapMonochromeMipmap = OpenGLES3MapPyramidGenerationMipmap new()
-		this _packMonochrome = OpenGLES3MapPackMonochrome new()
-		this _packUv = OpenGLES3MapPackUv new()
-		this _blendMap = OpenGLES3MapBlend new()
+		this _bgrMapDefault = OpenGLES3MapBgr new(this)
+		this _bgraMapDefault = OpenGLES3MapBgra new(this)
+		this _monochromeMapDefault = OpenGLES3MapMonochrome new(this)
+		this _monochromeMapTransform = OpenGLES3MapMonochromeTransform new(this)
+		this _uvMapDefault = OpenGLES3MapUv new(this)
+		this _uvMapTransform = OpenGLES3MapUvTransform new(this)
+		this _packMonochrome = OpenGLES3MapPackMonochrome new(this)
+		this _packUv = OpenGLES3MapPackUv new(this)
+		this _blendMap = OpenGLES3MapBlend new(this)
 		this _backend = context
 	}
 	init: func ~unshared (onDispose: Func) {
@@ -68,7 +64,6 @@ OpenGLES3Context: class extends GpuContext {
 		this _bgraMapDefault dispose()
 		this _monochromeMapDefault dispose()
 		this _uvMapDefault dispose()
-		this _pyramidMapMonochrome dispose()
 		this _imageBin dispose()
 		this _surfaceBin dispose()
 		this _backend dispose()
@@ -94,16 +89,6 @@ OpenGLES3Context: class extends GpuContext {
 				match (gpuImage) {
 					case (i : GpuMonochrome) => this _monochromeMapTransform
 					case (i : GpuUv) => this _uvMapTransform
-					case => null
-				}
-			case GpuMapType pyramid =>
-				match (gpuImage) {
-					case (i : GpuMonochrome) => this _pyramidMapMonochrome
-					case => null
-				}
-			case GpuMapType pyramidMipmap =>
-				match (gpuImage) {
-					case (i : GpuMonochrome) => this _pyramidMapMonochromeMipmap
 					case => null
 				}
 			case GpuMapType pack =>

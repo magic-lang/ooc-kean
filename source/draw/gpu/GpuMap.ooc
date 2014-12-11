@@ -17,8 +17,6 @@
 GpuMapType: enum {
 	defaultmap
 	transform
-	pyramid
-	pyramidMipmap
 	pack
 	blendMap
 }
