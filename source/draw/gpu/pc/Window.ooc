@@ -35,12 +35,12 @@ Window: class extends OpenGLES3Context {
 	init: /* internal */ func (=size, title: String) {
 		this _native = X11Window create(size width, size height, title)
 		super(this _native, func { this onDispose() })
-		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new()
-		this _bgrToBgra = OpenGLES3MapBgrToBgra new()
-		this _bgraToBgra = OpenGLES3MapBgra new()
-		this _yuvPlanarToBgra = OpenGLES3MapYuvPlanarToBgra new()
-		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new()
-		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgraTransform new()
+		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new(this)
+		this _bgrToBgra = OpenGLES3MapBgrToBgra new(this)
+		this _bgraToBgra = OpenGLES3MapBgra new(this)
+		this _yuvPlanarToBgra = OpenGLES3MapYuvPlanarToBgra new(this)
+		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new(this)
+		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgraTransform new(this)
 	}
 	onDispose: func {
 		this _bgrToBgra dispose()

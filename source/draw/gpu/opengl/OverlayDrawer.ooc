@@ -16,16 +16,16 @@
 
 use ooc-math
 use ooc-collections
-
+use ooc-draw-gpu
 import structs/LinkedList
 import Map/OpenGLES3Map, Map/OpenGLES3MapOverlay, OpenGLES3/Lines
 
 OverlayDrawer: class {
 	linesShader: OpenGLES3MapLines
 	pointsShader: OpenGLES3MapPoints
-	init: func {
-		this linesShader = OpenGLES3MapLines new()
-		this pointsShader = OpenGLES3MapPoints new()
+	init: func (context: GpuContext){
+		this linesShader = OpenGLES3MapLines new(context)
+		this pointsShader = OpenGLES3MapPoints new(context)
 		this pointsShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
 		this pointsShader pointSize = 5.0f
 	}

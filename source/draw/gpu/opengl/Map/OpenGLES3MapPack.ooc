@@ -1,18 +1,19 @@
 use ooc-math
+use ooc-draw-gpu
 import OpenGLES3Map
 OpenGLES3MapPack: abstract class extends OpenGLES3MapDefault {
 	imageWidth: Int { get set }
-	init: func (fragmentSource: String) {
-		super(fragmentSource,
+	init: func (fragmentSource: String, context: GpuContext) {
+		super(fragmentSource, context,
 			func {
-				this _program setUniform("texture0", 0)
-				this _program setUniform("imageWidth", this imageWidth)
+				this program setUniform("texture0", 0)
+				this program setUniform("imageWidth", this imageWidth)
 				})
 			}
 		}
 OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
-	init: func {
-		super(This fragmentSource)
+	init: func (context: GpuContext) {
+		super(This fragmentSource, context)
 	}
 	fragmentSource: static String ="
 	#version 300 es\n
@@ -32,8 +33,8 @@ OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
 		}\n";
 }
 OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
-	init: func {
-		super(This fragmentSource)
+	init: func (context: GpuContext) {
+		super(This fragmentSource, context)
 	}
 	fragmentSource: static String ="
 	#version 300 es\n
@@ -51,8 +52,8 @@ OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
 		}\n";
 }
 OpenGLES3MapPackMonochrome1080p: class extends OpenGLES3MapPack {
-	init: func {
-		super(This fragmentSource)
+	init: func (context: GpuContext) {
+		super(This fragmentSource, context)
 	}
 	fragmentSource: static String ="
 	#version 300 es\n
@@ -74,8 +75,8 @@ OpenGLES3MapPackMonochrome1080p: class extends OpenGLES3MapPack {
 		}\n";
 }
 OpenGLES3MapPackUv1080p: class extends OpenGLES3MapPack {
-	init: func {
-		super(This fragmentSource)
+	init: func (context: GpuContext) {
+		super(This fragmentSource, context)
 	}
 	fragmentSource: static String ="
 	#version 300 es\n
@@ -92,10 +93,10 @@ OpenGLES3MapPackUv1080p: class extends OpenGLES3MapPack {
 		}\n";
 }
 OpenGLES3MapUnpackMonochrome1080p: class extends OpenGLES3MapDefault {
-	init: func {
-		super(This fragmentSource,
+	init: func (context: GpuContext) {
+		super(This fragmentSource, context,
 			func {
-				this _program setUniform("texture0", 0)
+				this program setUniform("texture0", 0)
 				})
 			}
 		fragmentSource: static String ="
@@ -120,10 +121,10 @@ OpenGLES3MapUnpackMonochrome1080p: class extends OpenGLES3MapDefault {
 			}\n";
 }
 OpenGLES3MapUnpackUv1080p: class extends OpenGLES3MapDefault {
-	init: func {
-		super(This fragmentSource,
+	init: func (context: GpuContext) {
+		super(This fragmentSource, context,
 			func {
-				this _program setUniform("texture0", 0)
+				this program setUniform("texture0", 0)
 				})
 			}
 			fragmentSource: static String ="

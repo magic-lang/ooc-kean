@@ -26,7 +26,7 @@ OpenGLES3Surface: class extends GpuSurface {
 	init: func (context: GpuContext){
 		super(context)
 		this _quad = Quad create()
-		this overlayDrawer = OverlayDrawer new()
+		this overlayDrawer = OverlayDrawer new(this _context)
 	}
 	recycle: func {
 		this _context recycle(this)

@@ -1,12 +1,13 @@
 use ooc-math
+use ooc-draw-gpu
 import OpenGLES3Map
 
 OpenGLES3MapLines: class extends OpenGLES3MapTransform {
 	color: FloatPoint3D { get set }
-	init: func {
-		super(This fragmentSource,
+	init: func (context: GpuContext) {
+		super(This fragmentSource, context,
 			func {
-				this _program setUniform("color", this color)
+				this program setUniform("color", this color)
 				})
 			}
 			fragmentSource: static String ="
@@ -22,14 +23,14 @@ OpenGLES3MapPoints: class extends OpenGLES3Map {
 	color: FloatPoint3D { get set }
 	pointSize: Float { get set }
 	transform: FloatTransform2D { get set }
-	init: func {
-		super(This vertexSource, This fragmentSource,
+	init: func (context: GpuContext) {
+		super(This vertexSource, This fragmentSource, context,
 			func {
-				this _program setUniform("color", this color)
-				this _program setUniform("pointSize", this pointSize)
+				this program setUniform("color", this color)
+				this program setUniform("pointSize", this pointSize)
 				//FIXME: Don't use heap array
 				reference := (this transform) to3DTransformArray()
-				this _program setUniform("transform", reference)
+				this program setUniform("transform", reference)
 				gc_free(reference)
 				})
 	}
@@ -53,10 +54,10 @@ OpenGLES3MapPoints: class extends OpenGLES3Map {
 		}\n";
 }
 OpenGLES3MapBlend: class extends OpenGLES3MapDefault {
-	init: func {
-		super(This fragmentSource,
+	init: func (context: GpuContext) {
+		super(This fragmentSource, context,
 			func {
-				this _program setUniform("texture0", 0)
+				this program setUniform("texture0", 0)
 				})
 			}
 			fragmentSource: static String ="
