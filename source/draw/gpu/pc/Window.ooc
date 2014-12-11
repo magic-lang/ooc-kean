@@ -28,8 +28,8 @@ Window: class extends OpenGLES3Context {
 	_bgrToBgra: OpenGLES3MapBgrToBgra
 	_bgraToBgra: OpenGLES3MapBgra
 	_yuvPlanarToBgra: OpenGLES3MapYuvPlanarToBgra
-	_yuvSemiplanarToBgra: OpenGLES3MapYuvSemiplanarToBgra
-	_yuvSemiplanarToBgraTransform: OpenGLES3MapYuvSemiplanarToBgraTransform
+	_yuvSemiplanarToBgra, _yuvSemiplanarToBgraTransform: OpenGLES3MapYuvSemiplanarToBgra
+
 	size: IntSize2D { get set }
 
 	init: /* internal */ func (=size, title: String) {
@@ -40,7 +40,7 @@ Window: class extends OpenGLES3Context {
 		this _bgraToBgra = OpenGLES3MapBgra new(this)
 		this _yuvPlanarToBgra = OpenGLES3MapYuvPlanarToBgra new(this)
 		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new(this)
-		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgraTransform new(this)
+		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgra new(this, true)
 	}
 	onDispose: func {
 		this _bgrToBgra dispose()
@@ -48,9 +48,8 @@ Window: class extends OpenGLES3Context {
 		this _yuvPlanarToBgra dispose()
 		this _yuvSemiplanarToBgra dispose()
 		this _monochromeToBgra dispose()
-		this _yuvSemiplanarToBgraTransform dispose()
 	}
-	getTransformMap: func (gpuImage: GpuImage) -> OpenGLES3MapTransform {
+	getTransformMap: func (gpuImage: GpuImage) -> OpenGLES3MapDefault {
 		result := match(gpuImage) {
 			case (i: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgraTransform
 			case => null

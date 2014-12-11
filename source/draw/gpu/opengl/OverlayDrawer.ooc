@@ -20,10 +20,10 @@ use ooc-draw-gpu
 use ooc-opengl
 import structs/LinkedList
 import OpenGLES3/Lines
-OpenGLES3MapLines: class extends OpenGLES3MapTransform {
+OpenGLES3MapLines: class extends OpenGLES3MapDefault {
 	color: FloatPoint3D { get set }
 	init: func (context: GpuContext) {
-		super(This fragmentSource, context,
+		super(This fragmentSource, context, true,
 			func {
 				this program setUniform("color", this color)
 				})

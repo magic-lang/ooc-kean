@@ -4,7 +4,7 @@ import OpenGLES3Map
 OpenGLES3MapPack: abstract class extends OpenGLES3MapDefault {
 	imageWidth: Int { get set }
 	init: func (fragmentSource: String, context: GpuContext) {
-		super(fragmentSource, context,
+		super(fragmentSource, context, false,
 			func {
 				this program setUniform("texture0", 0)
 				this program setUniform("imageWidth", this imageWidth)
@@ -94,7 +94,7 @@ OpenGLES3MapPackUv1080p: class extends OpenGLES3MapPack {
 }
 OpenGLES3MapUnpackMonochrome1080p: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext) {
-		super(This fragmentSource, context,
+		super(This fragmentSource, context, false,
 			func {
 				this program setUniform("texture0", 0)
 				})
@@ -122,7 +122,7 @@ OpenGLES3MapUnpackMonochrome1080p: class extends OpenGLES3MapDefault {
 }
 OpenGLES3MapUnpackUv1080p: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext) {
-		super(This fragmentSource, context,
+		super(This fragmentSource, context, false,
 			func {
 				this program setUniform("texture0", 0)
 				})

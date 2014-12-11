@@ -27,9 +27,9 @@ OpenGLES3Context: class extends GpuContext {
 	_bgrMapDefault: OpenGLES3MapBgr
 	_bgraMapDefault: OpenGLES3MapBgra
 	_monochromeMapDefault: OpenGLES3MapMonochrome
-	_monochromeMapTransform: OpenGLES3MapMonochromeTransform
+	_monochromeMapTransform: OpenGLES3MapMonochrome
 	_uvMapDefault: OpenGLES3MapUv
-	_uvMapTransform: OpenGLES3MapUvTransform
+	_uvMapTransform: OpenGLES3MapUv
 	_packMonochrome: OpenGLES3MapPackMonochrome
 	_packUv: OpenGLES3MapPackUv
 	_onDispose: Func
@@ -39,9 +39,9 @@ OpenGLES3Context: class extends GpuContext {
 		this _bgrMapDefault = OpenGLES3MapBgr new(this)
 		this _bgraMapDefault = OpenGLES3MapBgra new(this)
 		this _monochromeMapDefault = OpenGLES3MapMonochrome new(this)
-		this _monochromeMapTransform = OpenGLES3MapMonochromeTransform new(this)
+		this _monochromeMapTransform = OpenGLES3MapMonochrome new(this, true)
 		this _uvMapDefault = OpenGLES3MapUv new(this)
-		this _uvMapTransform = OpenGLES3MapUvTransform new(this)
+		this _uvMapTransform = OpenGLES3MapUv new(this, true)
 		this _packMonochrome = OpenGLES3MapPackMonochrome new(this)
 		this _packUv = OpenGLES3MapPackUv new(this)
 		this _backend = context
