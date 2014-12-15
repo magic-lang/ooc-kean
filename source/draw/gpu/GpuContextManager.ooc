@@ -28,6 +28,7 @@ GpuContextManager: abstract class extends GpuContext {
 		this _threadIdentifiers = Int[this MAX_CONTEXTS] new()
 		this _contexts = GpuContext[this MAX_CONTEXTS] new()
 	}
+	getMaxContexts: func -> Int { this MAX_CONTEXTS }
 	_getContext: func -> GpuContext {
 		threadIdentifier := pthread_self()
 		for (i in 0..MAX_CONTEXTS) {
@@ -43,6 +44,15 @@ GpuContextManager: abstract class extends GpuContext {
 		}
 		return null
 	}
+	getCurrentIndex: func -> Int {
+		threadIdentifier := pthread_self()
+		result := -1
+		for (i in 0..MAX_CONTEXTS) {
+			if (threadIdentifier == this _threadIdentifiers[i])
+				result = i
+		}
+		result
+	}
 	_createContext: abstract func -> GpuContext
 	dispose: func {
 		for(i in 0..MAX_CONTEXTS) {
@@ -50,49 +60,19 @@ GpuContextManager: abstract class extends GpuContext {
 				this _contexts[i] dispose()
 		}
 	}
-	createMonochrome: func (size: IntSize2D) -> GpuMonochrome {
-		this _getContext() createMonochrome(size)
-	}
-	createBgr: func (size: IntSize2D) -> GpuBgr {
-		this _getContext() createBgr(size)
-	}
-	createBgra: func (size: IntSize2D) -> GpuBgra {
-		this _getContext() createBgra(size)
-	}
-	createUv: func (size: IntSize2D) -> GpuUv {
-		this _getContext() createUv(size)
-	}
-	createYuv420Semiplanar: func (size: IntSize2D) -> GpuYuv420Semiplanar {
-		this _getContext() createYuv420Semiplanar(size)
-	}
-	createYuv420Planar: func (size: IntSize2D) -> GpuYuv420Planar {
-		this _getContext() createYuv420Planar(size)
-	}
-	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
-		this _getContext() createGpuImage(rasterImage)
-	}
-	update: func {
-		this _getContext() update()
-	}
-	recycle: func ~image (gpuImage: GpuImage) {
-		this _getContext() recycle(gpuImage)
-	}
-	recycle: func ~surface (surface: GpuSurface) {
-		this _getContext() recycle(surface)
-	}
-	createSurface: func -> GpuSurface {
-		this _getContext() createSurface()
-	}
-	toRaster: func (gpuImage: GpuImage) -> RasterImage {
-		this _getContext() toRaster(gpuImage)
-	}
-	toRaster: func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) {
-		this _getContext() toRaster(gpuImage, rasterImage)
-	}
-	setViewport: func (viewport: Viewport) {
-		this _getContext() setViewport(viewport)
-	}
-	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap {
-		this _getContext() getMap(gpuImage, mapType)
-	}
+	createMonochrome: func (size: IntSize2D) -> GpuMonochrome { this _getContext() createMonochrome(size) }
+	createBgr: func (size: IntSize2D) -> GpuBgr { this _getContext() createBgr(size) }
+	createBgra: func (size: IntSize2D) -> GpuBgra { this _getContext() createBgra(size) }
+	createUv: func (size: IntSize2D) -> GpuUv { this _getContext() createUv(size) }
+	createYuv420Semiplanar: func (size: IntSize2D) -> GpuYuv420Semiplanar { this _getContext() createYuv420Semiplanar(size) }
+	createYuv420Planar: func (size: IntSize2D) -> GpuYuv420Planar { this _getContext() createYuv420Planar(size) }
+	createGpuImage: func (rasterImage: RasterImage) -> GpuImage { this _getContext() createGpuImage(rasterImage) }
+	update: func { this _getContext() update() }
+	recycle: func ~image (gpuImage: GpuImage) { this _getContext() recycle(gpuImage) }
+	recycle: func ~surface (surface: GpuSurface) { this _getContext() recycle(surface) }
+	createSurface: func -> GpuSurface { this _getContext() createSurface() }
+	toRaster: func (gpuImage: GpuImage) -> RasterImage { this _getContext() toRaster(gpuImage) }
+	toRaster: func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) { this _getContext() toRaster(gpuImage, rasterImage) }
+	setViewport: func (viewport: Viewport) { this _getContext() setViewport(viewport) }
+	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap { this _getContext() getMap(gpuImage, mapType) }
 }

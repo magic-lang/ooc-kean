@@ -22,15 +22,9 @@ Vao: class {
 	positionLayout: const static UInt = 0
 	textureCoordinateLayout: const static UInt = 1
 	init: func
-	dispose: func {
-		glDeleteVertexArrays(1, backend&)
-	}
-	bind: func {
-		glBindVertexArray(backend);
-	}
-	unbind: func {
-		glBindVertexArray(0);
-	}
+	dispose: func { glDeleteVertexArrays(1, backend&) }
+	bind: func { glBindVertexArray(backend) }
+	unbind: func { glBindVertexArray(0) }
 	_generate: func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> Bool {
 		DebugPrint print("Allocating VAO")
 		//Currently using 2 attributes: vertex position and texture coordinate

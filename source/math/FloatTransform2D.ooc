@@ -171,6 +171,10 @@ FloatTransform2D: cover {
 	}
 	to3DTransformArray: func -> Float* {
 		array := gc_malloc(Float size * 16) as Float*
+		this to3DTransformArray(array)
+		array
+	}
+	to3DTransformArray: func ~proc (array: Float*) {
 		array[0] = this a
 		array[1] = this b
 		array[2] = 0.0f

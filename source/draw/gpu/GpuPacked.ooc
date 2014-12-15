@@ -21,9 +21,7 @@ import GpuImage, GpuTexture, GpuCanvas, GpuContext
 GpuPacked: abstract class extends GpuImage {
 	_texture: GpuTexture
 	texture: GpuTexture { get { this _texture } }
-	init: func (=_texture, size: IntSize2D, channels: Int, context: GpuContext) {
-		super(size, channels, context)
-	}
+	init: func (=_texture, size: IntSize2D, channels: Int, context: GpuContext) { super(size, channels, context) }
 	dispose: func {
 		this _texture dispose()
 		if (this _canvas != null)

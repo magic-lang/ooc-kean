@@ -21,32 +21,18 @@ import include/gles
 ShaderProgram: class {
 	_backend: UInt
 	init: func
-	use: func {
-		glUseProgram(this _backend)
-	}
-	dispose: func {
-		glDeleteProgram(this _backend)
-	}
-	setUniform: func ~Int (name: String, value: Int) {
-		glUniform1i(glGetUniformLocation(this _backend, name), value)
-	}
-	setUniform: func ~Float (name: String, value: Float) {
-		glUniform1f(glGetUniformLocation(this _backend, name), value)
-	}
-	setUniform: func ~Matrix4x4arr (name: String, value: Float*) {
-		glUniformMatrix4fv(glGetUniformLocation(this _backend, name), 1, 0, value)
-	}
-	setUniform: func ~Matrix3x3 (name: String, value: FloatTransform2D) {
-		glUniformMatrix3fv(glGetUniformLocation(this _backend, name), 1, 0, value& as Float*)
-	}
+	use: func { glUseProgram(this _backend) }
+	dispose: func { glDeleteProgram(this _backend) }
+	setUniform: func ~Int (name: String, value: Int) { glUniform1i(glGetUniformLocation(this _backend, name), value) }
+	setUniform: func ~Float (name: String, value: Float) { glUniform1f(glGetUniformLocation(this _backend, name), value) }
+	setUniform: func ~Matrix4x4arr (name: String, value: Float*) { glUniformMatrix4fv(glGetUniformLocation(this _backend, name), 1, 0, value) }
+	setUniform: func ~Matrix3x3 (name: String, value: FloatTransform2D) { glUniformMatrix3fv(glGetUniformLocation(this _backend, name), 1, 0, value& as Float*) }
 	setUniform: func ~Matrix4x4 (name: String, value: FloatTransform3D) {
 		array := value to4x4()
 		glUniformMatrix4fv(glGetUniformLocation(this _backend, name), 1, 0, array)
 		gc_free(array)
 	}
-	setUniform: func ~Vector3(name: String, value: FloatPoint3D) {
-		glUniform3fv(glGetUniformLocation(this _backend, name), 1, value& as Float*)
-	}
+	setUniform: func ~Vector3(name: String, value: FloatPoint3D) { glUniform3fv(glGetUniformLocation(this _backend, name), 1, value& as Float*) }
 	_compileShader: func(source: String, shaderID: UInt) -> Bool {
 		glShaderSource(shaderID, 1, (source toCString())&, null)
 		glCompileShader(shaderID)

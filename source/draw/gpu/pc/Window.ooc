@@ -21,7 +21,6 @@ use ooc-opengl
 use ooc-base
 
 import X11/X11Window
-import GpuMapPC
 
 Window: class extends OpenGLES3Context {
 	_native: NativeWindow
@@ -29,20 +28,19 @@ Window: class extends OpenGLES3Context {
 	_bgrToBgra: OpenGLES3MapBgrToBgra
 	_bgraToBgra: OpenGLES3MapBgra
 	_yuvPlanarToBgra: OpenGLES3MapYuvPlanarToBgra
-	_yuvSemiplanarToBgra: OpenGLES3MapYuvSemiplanarToBgra
-	_yuvSemiplanarToBgraTransform: OpenGLES3MapYuvSemiplanarToBgraTransform
+	_yuvSemiplanarToBgra, _yuvSemiplanarToBgraTransform: OpenGLES3MapYuvSemiplanarToBgra
+
 	size: IntSize2D { get set }
 
 	init: /* internal */ func (=size, title: String) {
-		setShaderSources()
 		this _native = X11Window create(size width, size height, title)
 		super(this _native, func { this onDispose() })
-		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new()
-		this _bgrToBgra = OpenGLES3MapBgrToBgra new()
-		this _bgraToBgra = OpenGLES3MapBgra new()
-		this _yuvPlanarToBgra = OpenGLES3MapYuvPlanarToBgra new()
-		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new()
-		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgraTransform new()
+		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new(this)
+		this _bgrToBgra = OpenGLES3MapBgrToBgra new(this)
+		this _bgraToBgra = OpenGLES3MapBgra new(this)
+		this _yuvPlanarToBgra = OpenGLES3MapYuvPlanarToBgra new(this)
+		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new(this)
+		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgra new(this, true)
 	}
 	onDispose: func {
 		this _bgrToBgra dispose()
@@ -50,9 +48,8 @@ Window: class extends OpenGLES3Context {
 		this _yuvPlanarToBgra dispose()
 		this _yuvSemiplanarToBgra dispose()
 		this _monochromeToBgra dispose()
-		this _yuvSemiplanarToBgraTransform dispose()
 	}
-	getTransformMap: func (gpuImage: GpuImage) -> OpenGLES3MapTransform {
+	getTransformMap: func (gpuImage: GpuImage) -> OpenGLES3MapDefault {
 		result := match(gpuImage) {
 			case (i: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgraTransform
 			case => null
@@ -86,12 +83,8 @@ Window: class extends OpenGLES3Context {
 		surface draw(image, map, viewport)
 		surface recycle()
 	}
-	bind: /* internal */ func {
-		this _native bind()
-	}
-	clear: /* internal */ func {
-		this _native clear()
-	}
+	bind: /* internal */ func { this _native bind() }
+	clear: /* internal */ func { this _native clear() }
 	refresh: func {
 		this update()
 		this clear()

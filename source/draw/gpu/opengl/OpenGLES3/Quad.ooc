@@ -24,9 +24,7 @@ Quad: class {
 		textureCoordinates := [0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f] as Float*
 		this vao = Vao create(positions, textureCoordinates, 4, 2)
 	}
-	dispose: func () {
-		this vao dispose()
-	}
+	dispose: func { this vao dispose() }
 	draw: func {
 		this vao bind()
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

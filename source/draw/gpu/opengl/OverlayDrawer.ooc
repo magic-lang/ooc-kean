@@ -16,18 +16,63 @@
 
 use ooc-math
 use ooc-collections
-
+use ooc-draw-gpu
+use ooc-opengl
 import structs/LinkedList
-import OpenGLES3Map, OpenGLES3/Lines
-
+import OpenGLES3/Lines
+OpenGLES3MapLines: class extends OpenGLES3MapDefault {
+	color: FloatPoint3D { get set }
+	init: func (context: GpuContext) { super(This fragmentSource, context, true, func { this program setUniform("color", this color) }) }
+	fragmentSource: static String ="
+		#version 300 es\n
+		precision highp float;\n
+		uniform vec3 color;\n
+		out vec4 outColor;\n
+		void main() {\n
+			outColor = vec4(color.r, color.g, color.b, 1.0f);\n
+		}\n"
+}
+OpenGLES3MapPoints: class extends OpenGLES3Map {
+	color: FloatPoint3D { get set }
+	pointSize: Float { get set }
+	transform: FloatTransform2D { get set }
+	init: func (context: GpuContext) {
+		super(This vertexSource, This fragmentSource, context,
+			func {
+				this program setUniform("color", this color)
+				this program setUniform("pointSize", this pointSize)
+				reference: Float[16]
+				this transform to3DTransformArray(reference[0]&)
+				this program setUniform("transform", reference[0]&)
+			})
+	}
+	vertexSource: static String ="
+		#version 300 es\n
+		precision highp float;\n
+		uniform float pointSize;\n
+		uniform mat4 transform;\n
+		layout(location = 0) in vec2 vertexPosition;\n
+		void main() {\n
+			gl_PointSize = pointSize;\n
+			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);\n
+		}\n"
+	fragmentSource: static String ="
+		#version 300 es\n
+		precision highp float;\n
+		uniform vec3 color;\n
+		out vec4 outColor;\n
+		void main() {\n
+			outColor = vec4(color.r, color.g, color.b, 1.0f);\n
+		}\n"
+}
 OverlayDrawer: class {
 	linesShader: OpenGLES3MapLines
 	pointsShader: OpenGLES3MapPoints
-	init: func {
-		this linesShader = OpenGLES3MapLines new()
-		this pointsShader = OpenGLES3MapPoints new()
-		pointsShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
-		pointsShader pointSize = 5.0f
+	init: func (context: GpuContext){
+		this linesShader = OpenGLES3MapLines new(context)
+		this pointsShader = OpenGLES3MapPoints new(context)
+		this pointsShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
+		this pointsShader pointSize = 5.0f
 	}
 	__destroy__: func {
 		this linesShader dispose()
