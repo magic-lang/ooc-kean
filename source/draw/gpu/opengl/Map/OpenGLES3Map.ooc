@@ -73,7 +73,7 @@ OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 		void main() {\n
 			fragmentTextureCoordinate = textureCoordinate;\n
 			gl_Position = vec4(vertexPosition.x, vertexPosition.y, -1, 1);\n
-		}\n";
+		}\n"
 	vertexSourceTransform: static String ="
 		#version 300 es\n
 		precision highp float;\n
@@ -86,7 +86,7 @@ OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 			vec4 transformedPosition = transform * position;\n
 			fragmentTextureCoordinate = textureCoordinate;\n
 			gl_Position = transformedPosition;\n
-		}\n";
+		}\n"
 }
 OpenGLES3MapBgr: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform, func { this program setUniform("texture0", 0) }) }
@@ -98,7 +98,7 @@ OpenGLES3MapBgr: class extends OpenGLES3MapDefault {
 		out vec3 outColor;\n
 		void main() {\n
 			outColor = texture(texture0, fragmentTextureCoordinate).rgb;\n
-		}\n";
+		}\n"
 }
 OpenGLES3MapBgrToBgra: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform, func { this program setUniform("texture0", 0) }) }
@@ -110,7 +110,7 @@ OpenGLES3MapBgrToBgra: class extends OpenGLES3MapDefault {
 		out vec4 outColor;\n
 		void main() {\n
 			outColor = vec4(texture(texture0, fragmentTextureCoordinate).rgb, 1.0f);\n
-		}\n";
+		}\n"
 }
 OpenGLES3MapBgra: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform, func { this program setUniform("texture0", 0) }) }
@@ -122,7 +122,7 @@ OpenGLES3MapBgra: class extends OpenGLES3MapDefault {
 		out vec3 outColor;\n
 		void main() {\n
 			outColor = texture(texture0, fragmentTextureCoordinate).rgb;\n
-		}\n";
+		}\n"
 }
 OpenGLES3MapMonochrome: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform, func { this program setUniform("texture0", 0) }) }
@@ -134,7 +134,7 @@ OpenGLES3MapMonochrome: class extends OpenGLES3MapDefault {
 		out float outColor;\n
 		void main() {\n
 			outColor = texture(texture0, fragmentTextureCoordinate).r;\n
-		}\n";
+		}\n"
 }
 OpenGLES3MapMonochromeTransform: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform, func { this program setUniform("texture0", 0) }) }
@@ -146,7 +146,7 @@ OpenGLES3MapMonochromeTransform: class extends OpenGLES3MapDefault {
 		out float outColor;\n
 		void main() {\n
 			outColor = texture(texture0, fragmentTextureCoordinate).r;\n
-		}\n";
+		}\n"
 }
 OpenGLES3MapUv: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform, func { this program setUniform("texture0", 0) }) }
@@ -158,7 +158,7 @@ OpenGLES3MapUv: class extends OpenGLES3MapDefault {
 		out vec2 outColor;\n
 		void main() {\n
 			outColor = texture(texture0, fragmentTextureCoordinate).rg;\n
-		}\n";
+		}\n"
 }
 OpenGLES3MapMonochromeToBgra: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform, func { this program setUniform("texture0", 0) }) }
@@ -171,7 +171,7 @@ OpenGLES3MapMonochromeToBgra: class extends OpenGLES3MapDefault {
 		void main() {\n
 			float colorSample = texture(texture0, fragmentTextureCoordinate).r;\n
 			outColor = vec4(colorSample, colorSample, colorSample, 1.0f);\n
-		}\n";
+		}\n"
 }
 OpenGLES3MapYuvPlanarToBgra: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext, transform := false) {
@@ -204,7 +204,7 @@ OpenGLES3MapYuvPlanarToBgra: class extends OpenGLES3MapDefault {
 			float u = texture(texture1, fragmentTextureCoordinate).r;\n
 			float v = texture(texture2, fragmentTextureCoordinate).r;\n
 			outColor = YuvToRgba(vec4(y, v - 0.5f, u - 0.5f, 1.0f));\n
-		}\n";
+		}\n"
 }
 OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext, transform := false) {
@@ -234,5 +234,5 @@ OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapDefault {
 			float y = texture(texture0, fragmentTextureCoordinate).r;\n
 			vec2 uv = texture(texture1, fragmentTextureCoordinate).rg;\n
 			outColor = YuvToRgba(vec4(y, uv.g - 0.5f, uv.r - 0.5f, 1.0f));\n
-		}\n";
+		}\n"
 }

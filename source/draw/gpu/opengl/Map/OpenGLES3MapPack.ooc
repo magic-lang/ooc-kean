@@ -28,7 +28,7 @@ OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
 			float b = texture(texture0, offsetTexCoords + 2.0f*texelOffset).x;\n
 			float a = texture(texture0, offsetTexCoords + 3.0f*texelOffset).x;\n
 			outColor = vec4(r, g, b, a);\n
-		}\n";
+		}\n"
 }
 OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
 	init: func (context: GpuContext) { super(This fragmentSource, context) }
@@ -45,7 +45,7 @@ OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
 			vec2 rg = texture(texture0, offsetTexCoords).rg;\n
 			vec2 ba = texture(texture0, offsetTexCoords + texelOffset).rg;\n
 			outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
-		}\n";
+		}\n"
 }
 OpenGLES3MapPackMonochrome1080p: class extends OpenGLES3MapPack {
 	init: func (context: GpuContext) { super(This fragmentSource, context) }
@@ -66,7 +66,7 @@ OpenGLES3MapPackMonochrome1080p: class extends OpenGLES3MapPack {
 			float b = texture(texture0, transformedCoords + 2.0f*texelOffset).x;\n
 			float a = texture(texture0, transformedCoords + 3.0f*texelOffset).x;\n
 			outColor = vec4(r, g, b, a);\n
-		}\n";
+		}\n"
 }
 OpenGLES3MapPackUv1080p: class extends OpenGLES3MapPack {
 	init: func (context: GpuContext) { super(This fragmentSource, context) }
@@ -82,7 +82,7 @@ OpenGLES3MapPackUv1080p: class extends OpenGLES3MapPack {
 			vec2 rg = texture(texture0, offsetTexCoords).rg;\n
 			vec2 ba = texture(texture0, offsetTexCoords + texelOffset).rg;\n
 			outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
-		}\n";
+		}\n"
 }
 OpenGLES3MapUnpackMonochrome1080p: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext) { super(This fragmentSource, context, false, func { this program setUniform("texture0", 0) }) }
@@ -105,7 +105,7 @@ OpenGLES3MapUnpackMonochrome1080p: class extends OpenGLES3MapDefault {
 			else
 			outColor = texture(texture0, coords).a;\n
 			//outColor = 1.0f;\n
-		}\n";
+		}\n"
 }
 OpenGLES3MapUnpackUv1080p: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext) { super(This fragmentSource, context, false, func { this program setUniform("texture0", 0) }) }
@@ -124,5 +124,5 @@ OpenGLES3MapUnpackUv1080p: class extends OpenGLES3MapDefault {
 			else\n
 			outColor = texture(texture0, coords).ba;\n
 			outColor = vec2(0.5f, 0.5f);\n
-		}\n";
+		}\n"
 }
