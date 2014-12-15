@@ -49,7 +49,7 @@ GpuContextManager: abstract class extends GpuContext {
 		result := -1
 		for (i in 0..MAX_CONTEXTS) {
 			if (threadIdentifier == this _threadIdentifiers[i])
-			result = i
+				result = i
 		}
 		result
 	}
