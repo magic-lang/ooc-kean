@@ -60,10 +60,9 @@ OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 			onUse()
 			//TODO: Don't use if statement, pass a different closure if not using transform instead
 			if (transform) {
-				//FIXME: Don't use heap array
-				reference := (this transform) to3DTransformArray()
-				this program setUniform("transform", reference)
-				gc_free(reference)
+				reference: Float[16]
+				this transform to3DTransformArray(reference[0]&)
+				this program setUniform("transform", reference[0]&)
 			}
 			})
 	}

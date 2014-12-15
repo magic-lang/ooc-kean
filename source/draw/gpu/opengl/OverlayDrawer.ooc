@@ -46,10 +46,9 @@ OpenGLES3MapPoints: class extends OpenGLES3Map {
 			func {
 				this program setUniform("color", this color)
 				this program setUniform("pointSize", this pointSize)
-				//FIXME: Don't use heap array
-				reference := (this transform) to3DTransformArray()
-				this program setUniform("transform", reference)
-				gc_free(reference)
+				reference: Float[16]
+				this transform to3DTransformArray(reference[0]&)
+				this program setUniform("transform", reference[0]&)
 				})
 			}
 	vertexSource: static String ="
