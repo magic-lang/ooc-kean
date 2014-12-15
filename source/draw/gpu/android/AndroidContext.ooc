@@ -18,7 +18,7 @@ use ooc-opengl
 use ooc-draw
 use ooc-math
 use ooc-base
-import GpuPacker, GpuMapAndroid, GpuPackerBin, EglRgba
+import GpuPacker, GpuPackerBin, EglRgba
 AndroidContext: class extends OpenGLES3Context {
 	_packerBin: GpuPackerBin
 	_packMonochrome1080p: OpenGLES3MapPackMonochrome1080p
@@ -29,10 +29,10 @@ AndroidContext: class extends OpenGLES3Context {
 	init: func {
 		super(func { this onDispose() })
 		this _packerBin = GpuPackerBin new()
-		this _packMonochrome1080p = OpenGLES3MapPackMonochrome1080p new()
-		this _packUv1080p = OpenGLES3MapPackUv1080p new()
-		this _unpackMonochrome1080p = OpenGLES3MapUnpackMonochrome1080p new()
-		this _unpackUv1080p = OpenGLES3MapUnpackUv1080p new()
+		this _packMonochrome1080p = OpenGLES3MapPackMonochrome1080p new(this)
+		this _packUv1080p = OpenGLES3MapPackUv1080p new(this)
+		this _unpackMonochrome1080p = OpenGLES3MapUnpackMonochrome1080p new(this)
+		this _unpackUv1080p = OpenGLES3MapUnpackUv1080p new(this)
 		this _eglImageBin = GpuImageBin new()
 	}
 	onDispose: func {
@@ -178,10 +178,7 @@ AndroidContext: class extends OpenGLES3Context {
 }
 
 AndroidContextManager: class extends GpuContextManager {
-	init: func {
-		setShaderSources()
-		super(3)
-	}
+	init: func { super(3) }
 	_createContext: func -> GpuContext { AndroidContext new() }
 	createEglRgba: func (size: IntSize2D, pixels: Pointer = null) -> EglRgba { this _getContext() as AndroidContext createEglRgba(size, pixels, 1) }
 }
