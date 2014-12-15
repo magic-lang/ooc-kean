@@ -46,7 +46,7 @@ EglRgba: class extends GpuTexture {
 		destroyEGLImage(this id)
 	}
 	setMagFilter: func (linear: Bool)
-	upload: func(pixels: Pointer, stride: Int) {
+	upload: func (pixels: Pointer, stride: Int) {
 		pointer := this write()
 		memcpy(pointer, pixels, this size width * this size height * this _channels)
 		this unlock()

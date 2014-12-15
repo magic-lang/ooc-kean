@@ -40,7 +40,7 @@ OpenGLES3Map: abstract class extends GpuMap {
 		}
 	}
 	dispose: func {
-		for(i in 0..this _context getMaxContexts()) {
+		for (i in 0..this _context getMaxContexts()) {
 			if (this _program[i] != null)
 				this _program[i] dispose()
 		}
