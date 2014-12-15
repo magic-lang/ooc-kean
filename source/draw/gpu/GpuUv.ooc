@@ -18,9 +18,7 @@ use ooc-math
 import GpuPacked, GpuContext, GpuTexture
 
 GpuUv: abstract class extends GpuPacked {
-	init: func (texture: GpuTexture, size: IntSize2D, context: GpuContext) {
-		super(texture, size, 2, context)
-	}
+	init: func (texture: GpuTexture, size: IntSize2D, context: GpuContext) { super(texture, size, 2, context) }
 	resizeTo: func (size: IntSize2D) -> This {
 		target := this _context createUv(size)
 		target canvas draw(this)

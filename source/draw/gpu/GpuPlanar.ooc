@@ -18,8 +18,4 @@ use ooc-math
 
 import GpuImage, GpuContext
 
-GpuPlanar: abstract class extends GpuImage {
-	init: func (size: IntSize2D, context: GpuContext) {
-		super(size, 3, context)
-	}
-}
+GpuPlanar: abstract class extends GpuImage { init: func (size: IntSize2D, context: GpuContext) { super(size, 3, context) } }
