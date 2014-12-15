@@ -19,7 +19,6 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-base
 use ooc-opengl
-use ooc-android-debug
 import math, EglRgba, AndroidContext
 
 GpuPacker: class {
