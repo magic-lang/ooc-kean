@@ -54,19 +54,9 @@ EglRgba: class extends GpuTexture {
 	generateMipmap: func
 	bind: func (unit: UInt)
 	unbind: func
-	read: func -> UInt8* {
-		readPixels(this id) as UInt8*
-	}
-	write: func -> UInt8* {
-		writePixels(this id) as UInt8*
-	}
-	unlock: func {
-		unlockPixels(this id)
-	}
-	isPadded: func -> Bool {
-		this _stride > this _size width * this _channels
-	}
-	disposeAll: static func {
-		destroyAll()
-	}
+	read: func -> UInt8* { readPixels(this id) as UInt8* }
+	write: func -> UInt8* { writePixels(this id) as UInt8* }
+	unlock: func { unlockPixels(this id) }
+	isPadded: func -> Bool { this _stride > this _size width * this _channels }
+	disposeAll: static func { destroyAll() }
 }

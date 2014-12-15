@@ -25,13 +25,7 @@ NativeWindow: abstract class {
 	_width: UInt
 	_height: UInt
 
-	setViewport: func (x: UInt, y: UInt, width: UInt, height: UInt) {
-		glViewport(x, y, width, height)
-	}
-	clear: func {
-		glClear(GL_COLOR_BUFFER_BIT)
-	}
-	bind: func {
-		glBindFramebuffer(GL_FRAMEBUFFER, 0)
-	}
+	setViewport: func (x: UInt, y: UInt, width: UInt, height: UInt) { glViewport(x, y, width, height) }
+	clear: func { glClear(GL_COLOR_BUFFER_BIT) }
+	bind: func { glBindFramebuffer(GL_FRAMEBUFFER, 0) }
 }

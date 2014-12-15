@@ -24,24 +24,12 @@ Fbo: class {
 	_height: UInt
 
 	init: func (=_width, =_height)
-	dispose: func {
-		glDeleteFramebuffers(1, _backend&)
-	}
-	bind: func {
-		glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
-	}
-	unbind: func {
-		glBindFramebuffer(GL_FRAMEBUFFER, 0)
-	}
-	scissor: static func (x: Int, y: Int, width: Int, height: Int) {
-		glScissor(x, y, width, height)
-	}
-	clear: static func {
-		glClear(GL_COLOR_BUFFER_BIT)
-	}
-	setClearColor: static func (color: Float) {
-		glClearColor(color, color, color, color)
-	}
+	dispose: func { glDeleteFramebuffers(1, _backend&) }
+	bind: func { glBindFramebuffer(GL_FRAMEBUFFER, this _backend) }
+	unbind: func { glBindFramebuffer(GL_FRAMEBUFFER, 0) }
+	scissor: static func (x: Int, y: Int, width: Int, height: Int) { glScissor(x, y, width, height) }
+	clear: static func { glClear(GL_COLOR_BUFFER_BIT) }
+	setClearColor: static func (color: Float) { glClearColor(color, color, color, color) }
 	readPixels: func (channels: UInt) -> ByteBuffer {
 		width := this _width
 		height := this _height
@@ -79,12 +67,8 @@ Fbo: class {
 		DebugPrint print("Allocated FBO")
 		true
 	}
-	finish: static func {
-		glFinish()
-	}
-	flush: static func {
-		glFlush()
-	}
+	finish: static func { glFinish() }
+	flush: static func { glFlush() }
 	invalidate: func {
 		this bind()
 		att: Int = GL_COLOR_ATTACHMENT0

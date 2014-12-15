@@ -40,9 +40,7 @@ GpuPacker: class {
 		this _targetTexture = context createEglRgba(this _internalSize)
 		this _renderTarget = Fbo create(this _targetTexture texture, this _internalSize width, this _internalSize height)
 	}
-	recycle: func {
-		this _context recycle(this)
-	}
+	recycle: func { this _context recycle(this) }
 	dispose: func {
 		this _targetTexture dispose()
 		this _renderTarget dispose()
@@ -66,12 +64,8 @@ GpuPacker: class {
 			})
 		buffer
 	}
-	finish: static func {
-		Fbo finish()
-	}
-	flush: static func {
-		Fbo flush()
-	}
+	finish: static func { Fbo finish() }
+	flush: static func { Fbo flush() }
 	readRows: func (destination: RasterImage) {
 		sourcePointer := this _targetTexture read()
 		destinationPointer := destination pointer

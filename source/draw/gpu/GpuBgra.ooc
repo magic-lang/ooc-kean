@@ -18,9 +18,7 @@ use ooc-math
 import GpuPacked, GpuContext, GpuTexture
 
 GpuBgra: abstract class extends GpuPacked {
-	init: func (texture: GpuTexture, size: IntSize2D, context: GpuContext) {
-		super(texture, size, 4, context)
-	}
+	init: func (texture: GpuTexture, size: IntSize2D, context: GpuContext) { super(texture, size, 4, context) }
 	resizeTo: func (size: IntSize2D) -> This {
 		target := this _context createBgra(size)
 		target canvas draw(this)

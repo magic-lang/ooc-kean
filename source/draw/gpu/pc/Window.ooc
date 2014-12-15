@@ -83,12 +83,8 @@ Window: class extends OpenGLES3Context {
 		surface draw(image, map, viewport)
 		surface recycle()
 	}
-	bind: /* internal */ func {
-		this _native bind()
-	}
-	clear: /* internal */ func {
-		this _native clear()
-	}
+	bind: /* internal */ func { this _native bind() }
+	clear: /* internal */ func { this _native clear() }
 	refresh: func {
 		this update()
 		this clear()

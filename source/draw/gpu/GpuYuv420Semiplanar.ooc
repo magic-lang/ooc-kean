@@ -24,9 +24,7 @@ GpuYuv420Semiplanar: abstract class extends GpuPlanar {
 	_uv: GpuUv
 	uv: GpuUv { get { this _uv } }
 
-	init: func (size: IntSize2D, context: GpuContext) {
-		super(size, context)
-	}
+	init: func (size: IntSize2D, context: GpuContext) { super(size, context) }
 	dispose: func {
 		this _y dispose()
 		this _uv dispose()
