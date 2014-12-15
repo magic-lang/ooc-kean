@@ -21,7 +21,7 @@ use ooc-base
 import egl/eglimage
 EglRgba: class extends GpuTexture {
 	_texture: Texture
-	texture: Texture { get }
+	texture: Texture { get { this _texture } }
 	_id: Int
 	id: Int { get { this _id } }
 	_stride: Int
