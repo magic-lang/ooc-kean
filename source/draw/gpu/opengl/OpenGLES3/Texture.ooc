@@ -64,7 +64,7 @@ Texture: class {
 		glBindTexture(GL_TEXTURE_2D, this _backend)
 	}
 	unbind: func { glBindTexture(GL_TEXTURE_2D, 0) }
-	upload: func(pixels: Pointer, stride: Int) {
+	upload: func (pixels: Pointer, stride: Int) {
 		pixelStride := stride / this _bytesPerPixel
 		glBindTexture(GL_TEXTURE_2D, this _backend)
 		if (pixelStride != this width) {
@@ -74,7 +74,7 @@ Texture: class {
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
 		unbind()
 	}
-	_setInternalFormats: func(type: TextureType) {
+	_setInternalFormats: func (type: TextureType) {
 		match type {
 			case TextureType monochrome =>
 				this internalFormat = GL_R8
