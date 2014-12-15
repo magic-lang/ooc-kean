@@ -70,7 +70,7 @@ FloatMatrix : cover {
 	// <summary>
 	// Minimum of maxtrix dimensions.
 	// </summary>
-	order: Int { get {Int minimum(this dimensions height, this dimensions width)}}
+	order: Int { get {Int minimum~two(this dimensions height, this dimensions width)}}
 
 	// <summary>
 	// Creates a copy of the current matrix.

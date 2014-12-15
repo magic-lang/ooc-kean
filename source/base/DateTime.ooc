@@ -108,13 +108,13 @@ DateTime: cover {
   }
   operator - (timeSpan: TimeSpan) -> This {
     secondRemainder := (60 + (this _second - (timeSpan seconds % 60))) % 60
-    minuteOverflow := Int maximum(0, (59 + timeSpan seconds - this _second) / 60)
+    minuteOverflow := Int maximum~two(0, (59 + timeSpan seconds - this _second) / 60)
     this _second = secondRemainder
     minuteRemainder := (60 + (this _minute - (timeSpan minutes % 60) - minuteOverflow)) % 60
-    hourOverflow := Int maximum(0, (59 + minuteOverflow + timeSpan minutes - this _minute) / 60)
+    hourOverflow := Int maximum~two(0, (59 + minuteOverflow + timeSpan minutes - this _minute) / 60)
     this _minute = minuteRemainder
     hourRemainder := (24 + (this _hour - (timeSpan hours % 24) - hourOverflow)) % 24
-    dayOverflow := Int maximum(0, (23 + hourOverflow + timeSpan hours - this _hour) / 24)
+    dayOverflow := Int maximum~two(0, (23 + hourOverflow + timeSpan hours - this _hour) / 24)
     this _hour = hourRemainder
     this _day -= (dayOverflow + timeSpan days)
     while(this _day < 1) {
