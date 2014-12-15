@@ -56,15 +56,13 @@ OpenGLES3Map: abstract class extends GpuMap {
 OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 	transform: FloatTransform2D { get set }
 	init: func (fragmentSource: String, context: GpuContext, transform: Bool, onUse: Func) {
-		super(transform ? This vertexSourceTransform : This vertexSource, fragmentSource, context, func {
+		useFunc := transform ? (func {
 			onUse()
-			//TODO: Don't use if statement, pass a different closure if not using transform instead
-			if (transform) {
-				reference: Float[16]
-				this transform to3DTransformArray(reference[0]&)
-				this program setUniform("transform", reference[0]&)
-			}
-			})
+			reference: Float[16]
+			this transform to3DTransformArray(reference[0]&)
+			this program setUniform("transform", reference[0]&)
+			}) : (func { onUse() })
+		super(transform ? This vertexSourceTransform : This vertexSource, fragmentSource, context, useFunc)
 	}
 	vertexSource: static String ="
 	#version 300 es\n
