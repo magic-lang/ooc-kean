@@ -8,13 +8,11 @@ OpenGLES3MapPack: abstract class extends OpenGLES3MapDefault {
 			func {
 				this program setUniform("texture0", 0)
 				this program setUniform("imageWidth", this imageWidth)
-				})
-			}
-		}
-OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
-	init: func (context: GpuContext) {
-		super(This fragmentSource, context)
+			})
 	}
+}
+OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	fragmentSource: static String ="
 		#version 300 es\n
 		precision highp float;\n
@@ -33,9 +31,7 @@ OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
 		}\n";
 }
 OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
-	init: func (context: GpuContext) {
-		super(This fragmentSource, context)
-	}
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	fragmentSource: static String ="
 		#version 300 es\n
 		precision highp float;\n
@@ -52,9 +48,7 @@ OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
 		}\n";
 }
 OpenGLES3MapPackMonochrome1080p: class extends OpenGLES3MapPack {
-	init: func (context: GpuContext) {
-		super(This fragmentSource, context)
-	}
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	fragmentSource: static String ="
 		#version 300 es\n
 		uniform sampler2D texture0;\n
@@ -75,9 +69,7 @@ OpenGLES3MapPackMonochrome1080p: class extends OpenGLES3MapPack {
 		}\n";
 }
 OpenGLES3MapPackUv1080p: class extends OpenGLES3MapPack {
-	init: func (context: GpuContext) {
-		super(This fragmentSource, context)
-	}
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	fragmentSource: static String ="
 		#version 300 es\n
 		uniform sampler2D texture0;\n
@@ -93,54 +85,44 @@ OpenGLES3MapPackUv1080p: class extends OpenGLES3MapPack {
 		}\n";
 }
 OpenGLES3MapUnpackMonochrome1080p: class extends OpenGLES3MapDefault {
-	init: func (context: GpuContext) {
-		super(This fragmentSource, context, false,
-			func {
-				this program setUniform("texture0", 0)
-				})
-			}
-		fragmentSource: static String ="
-			#version 300 es\n
-			uniform sampler2D texture0;\n
-			in vec2 fragmentTextureCoordinate;
-			out float outColor;\n
-			void main() {\n
-				int xOffset = int(1080.0f * fragmentTextureCoordinate.y) % 4;\n
-				float xCoord = 0.25f * fragmentTextureCoordinate.x + 0.25f * float(xOffset);\n
-				vec2 coords = vec2(xCoord, fragmentTextureCoordinate.y);\n
-				int pixelIndex = int(1920.0f * fragmentTextureCoordinate.x) % 4;\n
-				if (pixelIndex == 0)\n
-				outColor = texture(texture0, coords).r;\n
-				else if (pixelIndex == 1)\n
-				outColor = texture(texture0, coords).g;\n
-				else if (pixelIndex == 2)\n
-				outColor = texture(texture0, coords).b;\n
-				else
-				outColor = texture(texture0, coords).a;\n
-				//outColor = 1.0f;\n
-			}\n";
+	init: func (context: GpuContext) { super(This fragmentSource, context, false, func { this program setUniform("texture0", 0) }) }
+	fragmentSource: static String ="
+		#version 300 es\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out float outColor;\n
+		void main() {\n
+			int xOffset = int(1080.0f * fragmentTextureCoordinate.y) % 4;\n
+			float xCoord = 0.25f * fragmentTextureCoordinate.x + 0.25f * float(xOffset);\n
+			vec2 coords = vec2(xCoord, fragmentTextureCoordinate.y);\n
+			int pixelIndex = int(1920.0f * fragmentTextureCoordinate.x) % 4;\n
+			if (pixelIndex == 0)\n
+			outColor = texture(texture0, coords).r;\n
+			else if (pixelIndex == 1)\n
+			outColor = texture(texture0, coords).g;\n
+			else if (pixelIndex == 2)\n
+			outColor = texture(texture0, coords).b;\n
+			else
+			outColor = texture(texture0, coords).a;\n
+			//outColor = 1.0f;\n
+		}\n";
 }
 OpenGLES3MapUnpackUv1080p: class extends OpenGLES3MapDefault {
-	init: func (context: GpuContext) {
-		super(This fragmentSource, context, false,
-			func {
-				this program setUniform("texture0", 0)
-				})
-			}
-		fragmentSource: static String ="
-			#version 300 es\n
-			uniform sampler2D texture0;\n
-			in vec2 fragmentTextureCoordinate;
-			out vec2 outColor;\n
-			void main() {\n
-				int xOffset = int(540.0f * fragmentTextureCoordinate.y) % 4;\n
-				float xCoord = 0.25f * fragmentTextureCoordinate.x + 0.25f * float(xOffset);\n
-				vec2 coords = vec2(xCoord, fragmentTextureCoordinate.y);\n
-				int pixelIndex = int(960.0f * fragmentTextureCoordinate.x) % 2;\n
-				if (pixelIndex == 0)\n
-				outColor = texture(texture0, coords).rg;\n
-				else\n
-				outColor = texture(texture0, coords).ba;\n
-				outColor = vec2(0.5f, 0.5f);\n
-			}\n";
-		}
+	init: func (context: GpuContext) { super(This fragmentSource, context, false, func { this program setUniform("texture0", 0) }) }
+	fragmentSource: static String ="
+		#version 300 es\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out vec2 outColor;\n
+		void main() {\n
+			int xOffset = int(540.0f * fragmentTextureCoordinate.y) % 4;\n
+			float xCoord = 0.25f * fragmentTextureCoordinate.x + 0.25f * float(xOffset);\n
+			vec2 coords = vec2(xCoord, fragmentTextureCoordinate.y);\n
+			int pixelIndex = int(960.0f * fragmentTextureCoordinate.x) % 2;\n
+			if (pixelIndex == 0)\n
+			outColor = texture(texture0, coords).rg;\n
+			else\n
+			outColor = texture(texture0, coords).ba;\n
+			outColor = vec2(0.5f, 0.5f);\n
+		}\n";
+}
