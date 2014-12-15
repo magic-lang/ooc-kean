@@ -65,27 +65,27 @@ OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 		super(transform ? This vertexSourceTransform : This vertexSource, fragmentSource, context, useFunc)
 	}
 	vertexSource: static String ="
-	#version 300 es\n
-	precision highp float;\n
-	layout(location = 0) in vec2 vertexPosition;\n
-	layout(location = 1) in vec2 textureCoordinate;\n
-	out vec2 fragmentTextureCoordinate;\n
-	void main() {\n
-		fragmentTextureCoordinate = textureCoordinate;\n
-		gl_Position = vec4(vertexPosition.x, vertexPosition.y, -1, 1);\n
+		#version 300 es\n
+		precision highp float;\n
+		layout(location = 0) in vec2 vertexPosition;\n
+		layout(location = 1) in vec2 textureCoordinate;\n
+		out vec2 fragmentTextureCoordinate;\n
+		void main() {\n
+			fragmentTextureCoordinate = textureCoordinate;\n
+			gl_Position = vec4(vertexPosition.x, vertexPosition.y, -1, 1);\n
 		}\n";
 	vertexSourceTransform: static String ="
-	#version 300 es\n
-	precision highp float;\n
-	uniform mat4 transform;\n
-	layout(location = 0) in vec2 vertexPosition;\n
-	layout(location = 1) in vec2 textureCoordinate;\n
-	out vec2 fragmentTextureCoordinate;\n
-	void main() {\n
-		vec4 position = vec4(vertexPosition.x, vertexPosition.y, 0, 1);\n
-		vec4 transformedPosition = transform * position;\n
-		fragmentTextureCoordinate = textureCoordinate;\n
-		gl_Position = transformedPosition;\n
+		#version 300 es\n
+		precision highp float;\n
+		uniform mat4 transform;\n
+		layout(location = 0) in vec2 vertexPosition;\n
+		layout(location = 1) in vec2 textureCoordinate;\n
+		out vec2 fragmentTextureCoordinate;\n
+		void main() {\n
+			vec4 position = vec4(vertexPosition.x, vertexPosition.y, 0, 1);\n
+			vec4 transformedPosition = transform * position;\n
+			fragmentTextureCoordinate = textureCoordinate;\n
+			gl_Position = transformedPosition;\n
 		}\n";
 }
 OpenGLES3MapBgr: class extends OpenGLES3MapDefault {
@@ -96,13 +96,13 @@ OpenGLES3MapBgr: class extends OpenGLES3MapDefault {
 			})
 	}
 	fragmentSource: static String ="
-	#version 300 es\n
-	precision highp float;\n
-	uniform sampler2D texture0;\n
-	in vec2 fragmentTextureCoordinate;
-	out vec3 outColor;\n
-	void main() {\n
-		outColor = texture(texture0, fragmentTextureCoordinate).rgb;\n
+		#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out vec3 outColor;\n
+		void main() {\n
+			outColor = texture(texture0, fragmentTextureCoordinate).rgb;\n
 		}\n";
 }
 OpenGLES3MapBgrToBgra: class extends OpenGLES3MapDefault {
@@ -113,13 +113,13 @@ OpenGLES3MapBgrToBgra: class extends OpenGLES3MapDefault {
 			})
 	}
 	fragmentSource: static String ="
-	#version 300 es\n
-	precision highp float;\n
-	uniform sampler2D texture0;\n
-	in vec2 fragmentTextureCoordinate;
-	out vec4 outColor;\n
-	void main() {\n
-		outColor = vec4(texture(texture0, fragmentTextureCoordinate).rgb, 1.0f);\n
+		#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out vec4 outColor;\n
+		void main() {\n
+			outColor = vec4(texture(texture0, fragmentTextureCoordinate).rgb, 1.0f);\n
 		}\n";
 }
 OpenGLES3MapBgra: class extends OpenGLES3MapDefault {
@@ -130,13 +130,13 @@ OpenGLES3MapBgra: class extends OpenGLES3MapDefault {
 			})
 	}
 	fragmentSource: static String ="
-	#version 300 es\n
-	precision highp float;\n
-	uniform sampler2D texture0;\n
-	in vec2 fragmentTextureCoordinate;
-	out vec3 outColor;\n
-	void main() {\n
-		outColor = texture(texture0, fragmentTextureCoordinate).rgb;\n
+		#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out vec3 outColor;\n
+		void main() {\n
+			outColor = texture(texture0, fragmentTextureCoordinate).rgb;\n
 		}\n";
 }
 OpenGLES3MapMonochrome: class extends OpenGLES3MapDefault {
@@ -147,13 +147,13 @@ OpenGLES3MapMonochrome: class extends OpenGLES3MapDefault {
 			})
 	}
 	fragmentSource: static String ="
-	#version 300 es\n
-	precision highp float;\n
-	uniform sampler2D texture0;\n
-	in vec2 fragmentTextureCoordinate;
-	out float outColor;\n
-	void main() {\n
-		outColor = texture(texture0, fragmentTextureCoordinate).r;\n
+		#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out float outColor;\n
+		void main() {\n
+			outColor = texture(texture0, fragmentTextureCoordinate).r;\n
 		}\n";
 }
 OpenGLES3MapMonochromeTransform: class extends OpenGLES3MapDefault {
@@ -164,13 +164,13 @@ OpenGLES3MapMonochromeTransform: class extends OpenGLES3MapDefault {
 			})
 	}
 	fragmentSource: static String ="
-	#version 300 es\n
-	precision highp float;\n
-	uniform sampler2D texture0;\n
-	in vec2 fragmentTextureCoordinate;
-	out float outColor;\n
-	void main() {\n
-		outColor = texture(texture0, fragmentTextureCoordinate).r;\n
+		#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out float outColor;\n
+		void main() {\n
+			outColor = texture(texture0, fragmentTextureCoordinate).r;\n
 		}\n";
 }
 OpenGLES3MapUv: class extends OpenGLES3MapDefault {
@@ -181,13 +181,13 @@ OpenGLES3MapUv: class extends OpenGLES3MapDefault {
 			})
 	}
 	fragmentSource: static String ="
-	#version 300 es\n
-	precision highp float;\n
-	uniform sampler2D texture0;\n
-	in vec2 fragmentTextureCoordinate;
-	out vec2 outColor;\n
-	void main() {\n
-		outColor = texture(texture0, fragmentTextureCoordinate).rg;\n
+		#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out vec2 outColor;\n
+		void main() {\n
+			outColor = texture(texture0, fragmentTextureCoordinate).rg;\n
 		}\n";
 }
 OpenGLES3MapMonochromeToBgra: class extends OpenGLES3MapDefault {
@@ -198,14 +198,14 @@ OpenGLES3MapMonochromeToBgra: class extends OpenGLES3MapDefault {
 			})
 	}
 	fragmentSource: static String ="
-	#version 300 es\n
-	precision highp float;\n
-	uniform sampler2D texture0;\n
-	in vec2 fragmentTextureCoordinate;
-	out vec4 outColor;\n
-	void main() {\n
-		float colorSample = texture(texture0, fragmentTextureCoordinate).r;\n
-		outColor = vec4(colorSample, colorSample, colorSample, 1.0f);\n
+		#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		in vec2 fragmentTextureCoordinate;
+		out vec4 outColor;\n
+		void main() {\n
+			float colorSample = texture(texture0, fragmentTextureCoordinate).r;\n
+			outColor = vec4(colorSample, colorSample, colorSample, 1.0f);\n
 		}\n";
 }
 OpenGLES3MapYuvPlanarToBgra: class extends OpenGLES3MapDefault {
@@ -218,28 +218,28 @@ OpenGLES3MapYuvPlanarToBgra: class extends OpenGLES3MapDefault {
 			})
 	}
 	fragmentSource: static String ="
-	#version 300 es\n
-	precision highp float;\n
-	uniform sampler2D texture0;\n
-	uniform sampler2D texture1;\n
-	uniform sampler2D texture2;\n
-	in vec2 fragmentTextureCoordinate;
-	out vec4 outColor;\n
-	// Convert yuva to rgba
-	vec4 YuvToRgba(vec4 t)
-	{
-		mat4 matrix = mat4(1, 1, 1, 0,
-			-0.000001218894189, -0.344135678165337, 1.772000066073816, 0,
-			1.401999588657340, -0.714136155581812, 0.000000406298063, 0,
-			0, 0, 0, 1);
-			return matrix * t;
+		#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		uniform sampler2D texture1;\n
+		uniform sampler2D texture2;\n
+		in vec2 fragmentTextureCoordinate;
+		out vec4 outColor;\n
+		// Convert yuva to rgba
+		vec4 YuvToRgba(vec4 t)
+		{
+			mat4 matrix = mat4(1, 1, 1, 0,
+				-0.000001218894189, -0.344135678165337, 1.772000066073816, 0,
+				1.401999588657340, -0.714136155581812, 0.000000406298063, 0,
+				0, 0, 0, 1);
+				return matrix * t;
 		}
 		void main() {\n
 			float y = texture(texture0, fragmentTextureCoordinate).r;\n
 			float u = texture(texture1, fragmentTextureCoordinate).r;\n
 			float v = texture(texture2, fragmentTextureCoordinate).r;\n
 			outColor = YuvToRgba(vec4(y, v - 0.5f, u - 0.5f, 1.0f));\n
-			}\n";
+		}\n";
 }
 OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext, transform := false) {
@@ -250,24 +250,24 @@ OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapDefault {
 			})
 	}
 	fragmentSource: static String ="
-	#version 300 es\n
-	precision highp float;\n
-	uniform sampler2D texture0;\n
-	uniform sampler2D texture1;\n
-	in vec2 fragmentTextureCoordinate;
-	out vec4 outColor;\n
-	// Convert yuva to rgba
-	vec4 YuvToRgba(vec4 t)
-	{
-		mat4 matrix = mat4(1, 1, 1, 0,
-			-0.000001218894189, -0.344135678165337, 1.772000066073816, 0,
-			1.401999588657340, -0.714136155581812, 0.000000406298063, 0,
-			0, 0, 0, 1);
-			return matrix * t;
+		#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		uniform sampler2D texture1;\n
+		in vec2 fragmentTextureCoordinate;
+		out vec4 outColor;\n
+		// Convert yuva to rgba
+		vec4 YuvToRgba(vec4 t)
+		{
+			mat4 matrix = mat4(1, 1, 1, 0,
+				-0.000001218894189, -0.344135678165337, 1.772000066073816, 0,
+				1.401999588657340, -0.714136155581812, 0.000000406298063, 0,
+				0, 0, 0, 1);
+				return matrix * t;
 		}
 		void main() {\n
 			float y = texture(texture0, fragmentTextureCoordinate).r;\n
 			vec2 uv = texture(texture1, fragmentTextureCoordinate).rg;\n
 			outColor = YuvToRgba(vec4(y, uv.g - 0.5f, uv.r - 0.5f, 1.0f));\n
-			}\n";
+		}\n";
 }
