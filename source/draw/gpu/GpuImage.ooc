@@ -42,7 +42,7 @@ GpuImage: abstract class extends Image {
 	channels: Int { get { this _channels } }
 	length: Int { get { this _channels * this size width * this size height } }
 	mipmap: Bool = false
-	init: func (=size, =_channels, =_context)
+	init: func (size: IntSize2D, =_channels, =_context) { super(size) }
 	bind: abstract func (unit: UInt)
 	unbind: abstract func
 	recycle: func {

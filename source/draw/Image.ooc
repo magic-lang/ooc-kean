@@ -28,7 +28,7 @@ CoordinateSystem: enum {
 
 Image: abstract class {
 	_size: IntSize2D
-	size := this _size
+	size ::= this _size
 	transform: IntTransform2D { get set }
 	coordinateSystem: CoordinateSystem {
 		get
@@ -51,7 +51,7 @@ Image: abstract class {
 		this _referenceCount = ReferenceCounter new(this)
 	}
 	init: func ~fromImage (original: This) {
-		this size = original size
+		this _size = original size
 		this coordinateSystem = original coordinateSystem
 		this crop = original crop
 		this wrap = original wrap
