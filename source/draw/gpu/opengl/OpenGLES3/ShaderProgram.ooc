@@ -23,6 +23,9 @@ ShaderProgram: class {
 	init: func
 	use: func { glUseProgram(this _backend) }
 	dispose: func { glDeleteProgram(this _backend) }
+	setUniform: func ~Array (name: String, array: Float*, count: Int) {
+		glUniform1fv(glGetUniformLocation(this _backend, name), count, array)
+	}
 	setUniform: func ~Int (name: String, value: Int) { glUniform1i(glGetUniformLocation(this _backend, name), value) }
 	setUniform: func ~Float (name: String, value: Float) { glUniform1f(glGetUniformLocation(this _backend, name), value) }
 	setUniform: func ~FloatArray (name: String, count: Int, value: Float*) {glUniform1fv(glGetUniformLocation(this _backend, name), count, value) }
