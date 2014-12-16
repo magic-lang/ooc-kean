@@ -44,7 +44,7 @@ IntBox2D: cover {
 	init: func@ (=leftTop, =size)
 	init: func@ ~fromFloats (left, top, width, height: Int) { this init(IntPoint2D new(left, top), IntSize2D new(width, height)) }
 	//init: func@ ~fromSize (size: IntSize2D) { this init(IntPoint2D new(), size) }
-	init: func@ ~fromPoints (leftTop, rightBottom: IntPoint2D) {this init(leftTop, IntSize2D new(rightBottom x - leftTop x,rightBottom y - leftTop y ))}
+	init: func@ ~fromPoints (leftTop, rightBottom: IntPoint2D) { this init(leftTop, IntSize2D new(rightBottom x - leftTop x,rightBottom y - leftTop y )) }
 	init: func@ ~default { this init(IntPoint2D new(), IntSize2D new()) }
 	swap: func -> This { This new(this leftTop swap(), this size swap()) }
 	pad: func (left, right, top, bottom: Int) -> This {
