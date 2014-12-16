@@ -72,8 +72,10 @@ Fbo: class {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture _backend, 0)
 		status: UInt = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		if (status != GL_FRAMEBUFFER_COMPLETE) {
-			DebugPrint print("Framebuffer Object creation failed with status: " + status toString())
-			raise("Framebuffer Object creation failed")
+			errorMessage := "Framebuffer Object creation failed with status: " + status toString() + " for texture of size " +
+			texture width toString() + " x " + texture height toString()
+			DebugPrint print(errorMessage)
+			raise(errorMessage)
 		}
 		this unbind()
 		DebugPrint print("Allocated FBO")
