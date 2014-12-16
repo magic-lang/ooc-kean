@@ -22,9 +22,9 @@ GpuPacked: abstract class extends GpuImage {
 	init: func (size: IntSize2D, channels: Int, context: GpuContext) {
 		super(size, channels, context)
 	}
-	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
-		raster := this toRaster()
-		memcpy(rasterImage pointer, raster pointer, this length)
+	toRasterDefault: func ~overwrite (rasterImage: RasterPacked) {
+		raster := this toRaster() as RasterPacked
+		memcpy(rasterImage buffer pointer, raster buffer pointer, raster buffer size)
 		raster referenceCount decrease()
 	}
 }

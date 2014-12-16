@@ -62,8 +62,7 @@ extend Int {
 	squared: func -> This {
 		this * this
 	}
-	align: static func (x: Int, bytes: Int) -> This {
-		result := bytes > 0 ? (x + bytes-1) & ~(bytes-1) : x
-		result
+	align: static func (x: Int, align: Int) -> This {
+		align > 0 ? (x + align - 1) & ~(align - 1) : x
 	}
 }

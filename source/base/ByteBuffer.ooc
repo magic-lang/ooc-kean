@@ -44,8 +44,8 @@ ByteBuffer: class {
 		result
 	}
 	copyTo: func ~untilEnd (other: This, start := 0, destination := 0) {
-		a := start - this size
-		b := destination - other size
+		a := this size - start
+		b := other size - destination
 		this copyTo(other, start, destination, a < b ? a : b)
 	}
 	copyTo: func (other: This, start: Int, destination: Int, length: Int) {

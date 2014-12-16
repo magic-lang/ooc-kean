@@ -26,50 +26,19 @@ import Color
 
 RasterBgr: class extends RasterPacked {
 	bytesPerPixel: Int { get { 3 } }
-	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 3)), size) }
-	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
-		super(ByteBuffer new(RasterPacked calculateLength(size, 3)), size, coordinateSystem, crop, byteAlignment)
-	}
-//	 FIXME but only if we really need it
-//	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D) { this init(ByteBuffer new(pointer, size area * 3), size) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, byteAlignment := 0) {
-		super(buffer, size, CoordinateSystem Default, IntShell2D new(), byteAlignment)
-	}
-	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
-		super(buffer, size, coordinateSystem, crop, byteAlignment)
-	}
-	init: func ~fromRasterBgra (original: This) { super(original) }
-	init: func ~fromRasterImage (original: RasterImage) {
-		this init(original size, original coordinateSystem, original crop, original stride)
-		row := this pointer as UInt8*
-		rowLength := this size width
-		rowEnd := row as ColorBgr* + rowLength
-		destination := row as ColorBgr*
-		f := func (color: ColorBgr) {
-			(destination as ColorBgr*)@ = color
-			destination += 1
-			if (destination >= rowEnd) {
-				row += this stride
-				destination = row as ColorBgr*
-				rowEnd = row as ColorBgr* + rowLength
-			}
-		}
-		original apply(f)
-	}
-	create: func (size: IntSize2D) -> Image {
-		result := This new(size)
-		result crop = this crop
-		result wrap = this wrap
+	init: func ~allocate (size: IntSize2D, align := 0) { super(size, align) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, align := 0) { super(buffer, size, align) }
+	init: func ~fromRasterImage (original: RasterImage) { super(original)	}
+	create: func (size: IntSize2D) -> Image { This new(size) }
+	copy: func -> This {
+		result := This new(this)
+		this buffer copyTo(result buffer)
 		result
 	}
-	copy: func -> This {
-		This new(this)
-	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
-		end := (this pointer as UInt8*) + this length
+		end := this buffer pointer + this buffer size
 		rowLength := this size width
-		for (row in (this pointer as UInt8*)..end) {
+		for (row in this buffer pointer..end) {
 			rowEnd := (row as ColorBgr*) + rowLength
 			for (source in (row as ColorBgr*)..rowEnd) {
 				action((source as ColorBgr*)@)
@@ -144,15 +113,33 @@ RasterBgr: class extends RasterPacked {
 		x, y, n: Int
 		requiredComponents := 3
 		data := StbImage load(filename, x&, y&, n&, requiredComponents)
-		buffer := ByteBuffer new(x * y * requiredComponents)
+		result := This new(IntSize2D new(x, y))
+		memcpy(result buffer pointer, data, x * y * requiredComponents)
 		// FIXME: Find a better way to do this using Dispose() or something
-		memcpy(buffer pointer, data, x * y * requiredComponents)
 		StbImage free(data)
-		This new(buffer, IntSize2D new(x, y))
+		result
 	}
 	save: func (filename: String) -> Int {
-		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this size width * 3)
+		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this buffer size)
 	}
-	operator [] (x, y: Int) -> ColorBgr { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorBgr* + x)@ : ColorBgr new(0, 0, 0) }
-	operator []= (x, y: Int, value: ColorBgr) { ((this pointer + y * this stride) as ColorBgr* + x)@ = value }
+	convertFrom: static func(original: RasterImage) -> This {
+		result := This new(original)
+		row := result buffer pointer
+		rowLength := result size width
+		rowEnd := row as ColorBgr* + rowLength
+		destination := row as ColorBgr*
+		f := func (color: ColorBgr) {
+			(destination as ColorBgr*)@ = color
+			destination += 1
+			if (destination >= rowEnd) {
+				row += result stride
+				destination = row as ColorBgr*
+				rowEnd = row as ColorBgr* + rowLength
+			}
+		}
+		original apply(f)
+		result
+	}
+	operator [] (x, y: Int) -> ColorBgr { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorBgr* + x)@ : ColorBgr new(0, 0, 0) }
+	operator []= (x, y: Int, value: ColorBgr) { ((this buffer pointer + y * this stride) as ColorBgr* + x)@ = value }
 }

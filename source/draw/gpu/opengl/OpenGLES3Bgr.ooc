@@ -41,8 +41,8 @@ OpenGLES3Bgr: class extends GpuBgr {
 		if (this _canvas != null)
 			this _canvas dispose()
 	}
-	upload: func (raster: RasterImage) {
-		this backend uploadPixels(raster pointer, raster stride)
+	upload: func (raster: RasterPacked) {
+		this backend uploadPixels(raster buffer pointer, raster stride)
 	}
 	setFilter: func (filter: Bool) {
 		this backend setFilter(filter)
@@ -61,7 +61,7 @@ OpenGLES3Bgr: class extends GpuBgr {
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterBgr, context: GpuContext) -> This {
-		result := This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
+		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
 		result
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {

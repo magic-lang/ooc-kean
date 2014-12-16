@@ -26,14 +26,27 @@ import RasterMonochrome
 import Image
 
 RasterPacked: abstract class extends RasterImage {
+	_buffer: ByteBuffer
+	buffer ::= this _buffer
+	_stride: UInt
+	stride ::= this _stride
 	bytesPerPixel: Int { get }
-	init: func (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment: UInt) {
-		super(buffer, size, coordinateSystem, crop)
-		this stride = Int align(this size width * bytesPerPixel, byteAlignment)
+	init: func (=_buffer, size: IntSize2D, align := 0) {
+		super(size)
+		this _buffer referenceCount increase()
+		this _stride = Int align(this size width * bytesPerPixel, align)
+	}
+	init: func ~allocate (size: IntSize2D, align := 0) {
+		this init(ByteBuffer new(Int align(size width * this bytesPerPixel, align) * size height), size)
 	}
 	init: func ~fromOriginal (original: This) {
 		super(original)
-		this stride = original stride
+		this _stride = original stride
+	}
+	__destroy__: func {
+		if (this _buffer != null)
+			this _buffer referenceCount decrease()
+		this _buffer = null
 	}
 	/*shift: func (offset: IntSize2D) -> Image {
 		result: RasterImage
@@ -62,13 +75,6 @@ RasterPacked: abstract class extends RasterImage {
 	}
 	distance: func (other: Image) -> Float {
 		other instanceOf?(This) && this bytesPerPixel == (other as RasterPacked) bytesPerPixel ? this as Image distance(other) : Float maximumValue
-	}
-	calculateStride: static func (size: IntSize2D, bytesPerPixel: Int) -> Int {
-//		size width * bytesPerPixel + (4 - (size width * bytesPerPixel) % 4) % 4
-		size width * bytesPerPixel
-	}
-	calculateLength: static func (size: IntSize2D, bytesPerPixel: Int) -> Int {
-		This calculateStride(size, bytesPerPixel) * size height
 	}
 	asRasterPacked: func (other: This) -> This {
 		other
