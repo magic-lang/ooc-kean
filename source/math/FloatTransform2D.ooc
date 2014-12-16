@@ -18,6 +18,7 @@ import math
 import FloatExtension
 import FloatSize2D
 import FloatPoint2D
+import FloatBox2D
 import IntTransform2D
 import text/StringTokenizer
 import structs/ArrayList
@@ -157,6 +158,9 @@ FloatTransform2D: cover {
 	operator * (other: FloatPoint2D) -> FloatPoint2D {
 		divisor := this c * other x + this f * other y + this i
 		FloatPoint2D new((this a * other x + this d * other y + this g) / divisor, (this b * other x + this e * other y + this h) / divisor)
+	}
+	operator * (other: FloatBox2D) -> FloatBox2D {
+		FloatBox2D new(this * other leftTop, this * other rightBottom)
 	}
 	operator == (other: This) -> Bool {
 		this a == other a &&

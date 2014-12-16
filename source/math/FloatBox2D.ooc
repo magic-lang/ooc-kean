@@ -37,6 +37,7 @@ FloatBox2D: cover {
 	center ::= this leftTop + (this size / 2)
 	empty ::= this size empty 
 	init: func@ (=leftTop, =size)
+	init: func@ ~fromPoints (leftTop, rightBottom: FloatPoint2D) { this init(leftTop, FloatSize2D new(rightBottom x - leftTop x,rightBottom y - leftTop y )) }
 	init: func@ ~fromFloats (left, top, width, height: Float) { this init(FloatPoint2D new(left, top), FloatSize2D new(width, height)) }
 	init: func@ ~fromSize (size: FloatSize2D) { this init(FloatPoint2D new(), size) }
 	init: func@ ~default { this init(FloatPoint2D new(), FloatSize2D new()) }
@@ -110,9 +111,9 @@ FloatBox2D: cover {
 		array := input split(',')
 		This new(array[0] toFloat(), array[1] toFloat(), array[2] toFloat(), array[3] toFloat())
 	}
-	create: func (leftTop: FloatPoint2D, size: FloatSize2D) -> This { This new(leftTop, size) }
-	create: func ~fromFloats (left, top, width, height: Float) -> This { This new(left, top, width, height) }
-	createAround: func (center: FloatPoint2D, size: FloatSize2D) -> This { This new(center + (-size) / 2, size) }
+	create: static func (leftTop: FloatPoint2D, size: FloatSize2D) -> This { This new(leftTop, size) }
+	create: static func ~fromFloats (left, top, width, height: Float) -> This { This new(left, top, width, height) }
+	createAround: static func (center: FloatPoint2D, size: FloatSize2D) -> This { This new(center + (-size) / 2, size) }
 	bounds: static func (left, right, top, bottom: Float) -> This { This new(left, top, right - left, bottom - top) }
 	bounds: static func ~fromArray (points: FloatPoint2D[]) -> FloatBox2D { This bounds(points as ArrayList<FloatPoint2D>) }
 	bounds: static func ~fromList (points: ArrayList<FloatPoint2D>) -> FloatBox2D {
