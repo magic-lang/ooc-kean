@@ -34,7 +34,11 @@ ByteBuffer: class {
 		if (this _referenceCount != null)
 			this _referenceCount free()
 		this _referenceCount = null
+		gc_free(this pointer)
+		this _pointer = null
+		super()
 	}
+
 	slice: func(offset: Int, size: Int) -> This {
 		_SlicedByteBuffer new(this, offset, size)
 	}
@@ -102,11 +106,6 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		}
 		bin add(this)
 		This _lock unlock()
-	}
-	__destroy__: func {
-		super()
-		gc_free(this pointer)
-		gc_free(this)
 	}
 
 	// STATIC

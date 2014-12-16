@@ -127,6 +127,8 @@ RasterMonochrome: class extends RasterPacked {
 		original apply(f)
 	}
 
-	operator [] (x, y: Int) -> ColorMonochrome { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorMonochrome* + x)@ : ColorMonochrome new(0) }
+	operator [] (x, y: Int) -> ColorMonochrome {
+		this isValidIn(x, y) ? ColorMonochrome new(this buffer pointer[y * this stride + x]) : ColorMonochrome new(0)
+	}
 	operator []= (x, y: Int, value: ColorMonochrome) { ((this buffer pointer + y * this stride) as ColorMonochrome* + x)@ = value }
 }

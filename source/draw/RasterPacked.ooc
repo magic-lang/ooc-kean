@@ -47,6 +47,7 @@ RasterPacked: abstract class extends RasterImage {
 		if (this _buffer != null)
 			this _buffer referenceCount decrease()
 		this _buffer = null
+		super()
 	}
 	/*shift: func (offset: IntSize2D) -> Image {
 		result: RasterImage

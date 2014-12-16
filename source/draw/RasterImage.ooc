@@ -61,16 +61,6 @@ RasterImage: abstract class extends Image {
 //		TODO: The stuff
 		result
 	}
-	free: func {
-		version(!gc) {
-			if (this _referenceCount _count == 0) {
-				this __destroy__()
-				gc_free(this)
-			} else {
-				raise("free() called on RasterImage! Use referenceCount decrease() instead.")
-			}
-		}
-	}
 	open: static func ~unknownType (filename: String) -> This {
 		x, y, n: Int
 		data := StbImage load(filename, x&, y&, n&, 0)

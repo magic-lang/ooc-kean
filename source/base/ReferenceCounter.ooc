@@ -12,15 +12,13 @@ ReferenceCounter: class extends Synchronized {
 		if (delta != 0) {
 			this lock()
 			this _count += delta
-			if (this _count <= 0) {
+			if (this _count <= 0)
 				this _target free()
-				this unlock()
-			}
-			else
-				this unlock()
+			this unlock()
 		}
 	}
 	increase: func { this update(1) }
 	decrease: func { this update(-1) }
 	toString: func -> String { this _count toString() }
+	free: func
 }

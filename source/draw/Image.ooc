@@ -46,12 +46,11 @@ Image: abstract class {
 	_referenceCount: ReferenceCounter
 	referenceCount ::= this _referenceCount
 	init: func (=_size) {
-		this transform = IntTransform2D identity
-		this coordinateSystem = CoordinateSystem Default
 		this _referenceCount = ReferenceCounter new(this)
+		this coordinateSystem = CoordinateSystem Default
 	}
 	init: func ~fromImage (original: This) {
-		this _size = original size
+		this init(original size)
 		this coordinateSystem = original coordinateSystem
 		this crop = original crop
 		this wrap = original wrap
