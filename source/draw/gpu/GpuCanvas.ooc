@@ -33,7 +33,7 @@ GpuCanvas: abstract class {
 	draw: abstract func ~withmap (image: Image, map: GpuMap, viewport: Viewport)
 	clear: abstract func
 	drawLines: func (transformList: VectorList<FloatPoint2D>)
-	drawBox: func (box: IntBox2D)
+	drawBox: func (box: FloatBox2D)
 	drawPoints: func (pointList: VectorList<FloatPoint2D>)
 	readPixels: func (channels: UInt) -> ByteBuffer { raise("Trying to read pixels in unimplemented readPixels function") }
 	onRecycle: abstract func

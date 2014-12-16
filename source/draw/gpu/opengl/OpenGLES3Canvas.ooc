@@ -75,7 +75,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	drawLines: func (pointList: VectorList<FloatPoint2D>) {
 		this drawSurface(func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawLines(pointList, transform) })
 	}
-	drawBox: func (box: IntBox2D) {
+	drawBox: func (box: FloatBox2D) {
 		this drawSurface(func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawBox(box, transform) })
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>) {

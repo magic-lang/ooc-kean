@@ -59,7 +59,7 @@ OpenGLES3Surface: class extends GpuSurface {
 	drawLines: func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform2D) {
 		this overlayDrawer drawLines(pointList, transform)
 	}
-	drawBox: func (box: IntBox2D, transform: FloatTransform2D) {
+	drawBox: func (box: FloatBox2D, transform: FloatTransform2D) {
 		this overlayDrawer drawBox(box, transform)
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform2D) {
