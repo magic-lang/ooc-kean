@@ -34,7 +34,7 @@ ByteBuffer: class {
 		if (this _referenceCount != null)
 			this _referenceCount free()
 		this _referenceCount = null
-		gc_free(this pointer)
+		gc_free(this _pointer)
 		this _pointer = null
 		super()
 	}
@@ -76,7 +76,10 @@ _SlicedByteBuffer: class extends ByteBuffer {
 		if (this _parent != null)
 			this _parent referenceCount decrease()
 		this _parent = null
-		super()
+		this _pointer = null
+		if (this _referenceCount != null)
+			this _referenceCount free()
+		this _referenceCount = null
 	}
 }
 _RecoverableByteBuffer: class extends ByteBuffer {
@@ -104,6 +107,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 			bin removeAt(0, false)
 			b __destroy__()
 		}
+		this referenceCount _count = 0
 		bin add(this)
 		This _lock unlock()
 	}
@@ -111,18 +115,17 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 	// STATIC
 	new: static func ~fromSize (size: Int) -> This {
 		bin := This _getBin(size)
-		buffer: This
+		buffer: This = null
 		for(i in 0..bin size)
 		{
-			buffer = bin[i]
-			if ((buffer size) == size) {
+			if ((bin[i] size) == size) {
+				buffer = bin[i]
 				bin removeAt(i, false)
+				buffer referenceCount _count = 0
 				break
-			} else {
-				buffer = null
 			}
 		}
-		buffer == null ? This new(gc_malloc_atomic(size), size): buffer
+		buffer == null ? This new(gc_malloc_atomic(size), size) : buffer
 	}
 	_lock := static Mutex new()
 	_smallRecycleBin := static FreeArrayList<This> new()
