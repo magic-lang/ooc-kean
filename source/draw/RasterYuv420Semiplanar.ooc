@@ -47,8 +47,8 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	}
 	_allocate: static func (size: IntSize2D, align := 0, verticalAlign := 0) -> (RasterMonochrome, RasterUv) {
 		yLength := Int align(size width, align) * Int align(size height, verticalAlign)
-		uvLength := Int align(size width / 2 * 2, align) * Int align(size height / 2, verticalAlign)
-		buffer := ByteBuffer new(yLength + 2 * uvLength)
+		uvLength := Int align(size width, align) * Int align(size height / 2, verticalAlign)
+		buffer := ByteBuffer new(yLength + uvLength)
 		(RasterMonochrome new(buffer slice(0, yLength), size, align), RasterUv new(buffer slice(yLength, uvLength), size / 2, align))
 	}
 
