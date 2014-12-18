@@ -10,15 +10,15 @@ for (i in 0..1) {
 	uv := image uv
 	yBuffer := y buffer
 	uvBuffer := uv buffer
-	r := image _referenceCount
+	r := image referenceCount
 	yb := yBuffer as _SlicedByteBuffer
-	yr := y _referenceCount
-	ybr := yb _referenceCount
-	ybbr := yb _parent _referenceCount
+	yr := y referenceCount
+	ybr := yb referenceCount
+	ybbr := yb _parent referenceCount
 	uvb := uvBuffer as _SlicedByteBuffer
-	uvr := uv _referenceCount
-	uvbr := uvb _referenceCount
-	uvbbr := uvb _parent _referenceCount
+	uvr := uv referenceCount
+	uvbr := uvb referenceCount
+	uvbbr := uvb _parent referenceCount
 
 	"image RC: #{r _count}" println()
 	"y RC: #{yr _count}" println()
