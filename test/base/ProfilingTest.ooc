@@ -53,8 +53,8 @@ profiling stop()
 
 testfunction()
 Profiling reset()
-/*
 DebugPrint printProfilingData()
+/*
 
 profiling start()
 for (i in 0..1_000_000_000) {}
