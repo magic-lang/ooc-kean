@@ -61,7 +61,6 @@ OpenGLES3Uv: class extends GpuUv {
 		packed canvas draw(this, packMap, Viewport new(packed size))
 		buffer := packed canvas readPixels(4)
 		result := RasterUv new(buffer, this size)
-		buffer referenceCount decrease()
 		packed recycle()
 		result
 	}
