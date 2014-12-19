@@ -69,8 +69,8 @@ RasterBgr: class extends RasterPacked {
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in Int maximum(0, y - this distanceRadius)..Int minimum(y + 1 + this distanceRadius, this size height))
-							for (otherX in Int maximum(0, x - this distanceRadius)..Int minimum(x + 1 + this distanceRadius, this size width))
+						for (otherY in Int maximum~two(0, y - this distanceRadius)..Int minimum~two(y + 1 + this distanceRadius, this size height))
+							for (otherX in Int maximum~two(0, x - this distanceRadius)..Int minimum~two(x + 1 + this distanceRadius, this size width))
 								if (otherX != x || otherY != y) {
 									pixel := (other as RasterBgr)[otherX, otherY]
 									if (maximum blue < pixel blue)

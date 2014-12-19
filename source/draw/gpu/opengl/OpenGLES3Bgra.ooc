@@ -18,36 +18,14 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3/Texture, OpenGLES3Canvas
+import OpenGLES3/Texture, OpenGLES3Canvas, OpenGLES3Texture
 
 OpenGLES3Bgra: class extends GpuBgra {
-	backend: Texture { get { this _backend as Texture } }
 	init: func (size: IntSize2D, context: GpuContext) {
 		init(size, size width * this _channels, null, context)
 	}
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
-		super(size, context)
-		this _backend = Texture create(TextureType bgra, size width, size height, stride, data) as Pointer
-	}
-	bind: func (unit: UInt) {
-		this backend bind (unit)
-	}
-	unbind: func {
-		this backend unbind()
-	}
-	dispose: func {
-		this backend dispose()
-		if (this _canvas != null)
-			this _canvas dispose()
-	}
-	upload: func (raster: RasterPacked) {
-		this backend uploadPixels(raster buffer pointer, raster stride)
-	}
-	setFilter: func (filter: Bool) {
-		this backend setFilter(filter)
-	}
-	generateMipmap: func {
-		this backend generateMipmap()
+		super(OpenGLES3Texture createBgra(size, stride, data), size, context)
 	}
 	toRasterDefault: func -> RasterImage {
 		buffer := this canvas readPixels(this _channels)
@@ -55,10 +33,9 @@ OpenGLES3Bgra: class extends GpuBgra {
 		buffer referenceCount decrease()
 		result
 	}
-	resizeTo: func (size: IntSize2D) -> This {
-		target := OpenGLES3Bgra create(size, this _context)
-		target canvas draw(this)
-		target
+	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
+		raise("toRaster not implemented for BGRA")
+		null
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterBgra, context: GpuContext) -> This {
@@ -67,7 +44,7 @@ OpenGLES3Bgra: class extends GpuBgra {
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
 		result := This new(size, context)
-		result backend != null ? result : null
+		result texture != null ? result : null
 	}
 
 }

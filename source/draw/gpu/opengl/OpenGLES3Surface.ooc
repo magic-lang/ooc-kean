@@ -17,7 +17,7 @@ use ooc-math
 use ooc-collections
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3/Fbo, OpenGLES3Map, OverlayDrawer, OpenGLES3/Quad, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar
+import OpenGLES3/Fbo, Map/OpenGLES3Map, OverlayDrawer, OpenGLES3/Quad, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar
 import structs/LinkedList
 
 OpenGLES3Surface: class extends GpuSurface {
@@ -26,7 +26,7 @@ OpenGLES3Surface: class extends GpuSurface {
 	init: func (context: GpuContext){
 		super(context)
 		this _quad = Quad create()
-		this overlayDrawer = OverlayDrawer new()
+		this overlayDrawer = OverlayDrawer new(this _context)
 	}
 	recycle: func {
 		this _context recycle(this)
@@ -59,7 +59,7 @@ OpenGLES3Surface: class extends GpuSurface {
 	drawLines: func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform2D) {
 		this overlayDrawer drawLines(pointList, transform)
 	}
-	drawBox: func (box: IntBox2D, transform: FloatTransform2D) {
+	drawBox: func (box: FloatBox2D, transform: FloatTransform2D) {
 		this overlayDrawer drawBox(box, transform)
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform2D) {

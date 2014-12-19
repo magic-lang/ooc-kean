@@ -21,7 +21,7 @@ use ooc-collections
 use ooc-draw
 use ooc-draw-gpu
 
-import OpenGLES3/Fbo, OpenGLES3/Quad, OpenGLES3/Texture, OpenGLES3Bgr, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Map, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Monochrome, OpenGLES3Surface
+import OpenGLES3/Fbo, OpenGLES3/Quad, OpenGLES3/Texture, OpenGLES3Bgr, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, Map/OpenGLES3Map, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Monochrome, OpenGLES3Surface
 import structs/LinkedList
 
 OpenGLES3Canvas: class extends GpuCanvas {
@@ -42,7 +42,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this draw(image, map, viewport)
 	}
 	draw: func ~transform2D (image: Image, transform: FloatTransform2D) {
-		map := this _context getMap(this _target, GpuMapType transform) as OpenGLES3MapTransform
+		map := this _context getMap(this _target, GpuMapType transform) as OpenGLES3MapDefault
 		toReference := FloatTransform2D createScaling(this _size width / 2.0f, this _size height / 2.0f)
 		toNormalized := FloatTransform2D createScaling(2.0f / this _size width, 2.0f / this _size height)
 		finalTransform := toNormalized * transform * toReference
@@ -70,10 +70,12 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		surface recycle()
 		this _unbind()
 	}
+	// TODO: These 3 functions create new closure instances every time they're called, and leak memory.
+	// Either free them afterwards, or create them once and re-use them.
 	drawLines: func (pointList: VectorList<FloatPoint2D>) {
 		this drawSurface(func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawLines(pointList, transform) })
 	}
-	drawBox: func (box: IntBox2D) {
+	drawBox: func (box: FloatBox2D) {
 		this drawSurface(func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawBox(box, transform) })
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>) {
@@ -97,9 +99,9 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	readPixels: func (channels: UInt) -> ByteBuffer {
 		this _renderTarget readPixels(channels)
 	}
-	create: static func (image: GpuImage, context: GpuContext) -> This {
+	create: static func (image: GpuPacked, context: GpuContext) -> This {
 		result := This new(image, context)
-		result _renderTarget = Fbo create(image _backend as Texture, image size width, image size height)
+		result _renderTarget = Fbo create(image texture _backend as Texture, image size width, image size height)
 		result _size = image size
 		result _renderTarget != null ? result : null
 	}
@@ -166,9 +168,9 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 	}
 	_bind: func
 	_generate: func (image: OpenGLES3Yuv420Planar) -> Bool {
-		this _y = OpenGLES3Canvas create(image y as GpuImage, this _context)
-		this _u = OpenGLES3Canvas create(image u as GpuImage, this _context)
-		this _v = OpenGLES3Canvas create(image v as GpuImage, this _context)
+		this _y = OpenGLES3Canvas create(image y, this _context)
+		this _u = OpenGLES3Canvas create(image u, this _context)
+		this _v = OpenGLES3Canvas create(image v, this _context)
 		this _y != null && this _u != null && this _v != null
 	}
 	create: static func (image: OpenGLES3Yuv420Planar, context: GpuContext) -> This {
@@ -235,8 +237,8 @@ OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
 	}
 	_bind: func
 	_generate: func (image: OpenGLES3Yuv420Semiplanar) -> Bool {
-		this _y = OpenGLES3Canvas create(image y as GpuImage, this _context)
-		this _uv = OpenGLES3Canvas create(image uv as GpuImage, this _context)
+		this _y = OpenGLES3Canvas create(image y, this _context)
+		this _uv = OpenGLES3Canvas create(image uv, this _context)
 		this _y != null && this _uv != null
 	}
 	create: static func (image: OpenGLES3Yuv420Semiplanar, context: GpuContext) -> This {

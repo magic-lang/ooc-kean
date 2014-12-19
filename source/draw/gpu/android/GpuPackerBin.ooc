@@ -19,9 +19,7 @@ import structs/FreeArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, G
 
 GpuPackerBin: class {
 	_packers: FreeArrayList<GpuPacker>
-	init: func {
-		this _packers = FreeArrayList<GpuPacker> new()
-	}
+	init: func { this _packers = FreeArrayList<GpuPacker> new() }
 	dispose: func {
 		for(i in 0..this _packers size) {
 			packer := this _packers[i]
@@ -29,9 +27,7 @@ GpuPackerBin: class {
 		}
 		this _packers clear()
 	}
-	add: func (packer: GpuPacker) {
-		this _packers add(packer)
-	}
+	add: func (packer: GpuPacker) { this _packers add(packer) }
 	_search: func (size: IntSize2D, bytesPerPixel: UInt, arrayList: FreeArrayList<GpuPacker>) -> GpuPacker {
 		result := null
 		index := 0
@@ -47,7 +43,5 @@ GpuPackerBin: class {
 			arrayList removeAt(index, false)
 		result
 	}
-	find: func (size: IntSize2D, bytesPerPixel: UInt)-> GpuPacker {
-		this _search(size, bytesPerPixel, this _packers)
-	}
+	find: func (size: IntSize2D, bytesPerPixel: UInt)-> GpuPacker { this _search(size, bytesPerPixel, this _packers) }
 }

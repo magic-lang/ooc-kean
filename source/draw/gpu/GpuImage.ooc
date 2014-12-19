@@ -31,62 +31,43 @@ GpuImageType: enum {
 }
 
 GpuImage: abstract class extends Image {
+	_canvas: GpuCanvas
 	canvas: GpuCanvas { get {
 		if (this _canvas == null)
 			this _canvas = this _createCanvas()
 		this _canvas } }
-	_canvas: GpuCanvas
-	_backend: Pointer
 	_context: GpuContext
 	_channels: Int
 	channels: Int { get { this _channels } }
 	length: Int { get { this _channels * this size width * this size height } }
-	mipmap: Bool = false
-	init: func (size: IntSize2D, =_channels, =_context) { super(size) }
-	bind: abstract func (unit: UInt)
-	unbind: abstract func
+	init: func (=size, =_channels, =_context)
+	free: func
+	dispose: func {
+		if (this _canvas != null)
+			this _canvas dispose()
+	}
 	recycle: func {
 		if (this _canvas != null)
 			this _canvas onRecycle()
 		this _context recycle(this)
 	}
-
-	free: func {
-	}
-	dispose: abstract func
+	bind: abstract func (unit: UInt)
+	unbind: abstract func
 	upload: abstract func (raster: RasterImage)
-	generateMipmap: func {
-		raise("generateMipmap not implemented")
-	}
+	generateMipmap: abstract func
+	setMagFilter: abstract func (linear: Bool)
 
 	//TODO: Implement abstract functions
-	create: func (size: IntSize2D) -> This {
-		raise("Unimplemented")
-	}
-	resizeTo: func (size: IntSize2D) -> This {
-		raise("Using unimplemented function reSizeTo in GpuImage class")
-	}
-	copy: func -> This {
-		raise("Using unimplemented function copy in GpuImage class")
-	}
-	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {
-		raise("Using unimplemented function copy ~fromParams in GpuImage class")
-	}
-	shift: func (offset: IntSize2D) -> This {
-		raise("Using unimplemented function shift in GpuImage class")
-	}
-	distance: func (other: This) -> Float {
-		raise("Using unimplemented function distance in GpuImage class")
-	}
-	toRaster: func -> RasterImage {
-		this _context toRaster(this)
-	}
-	toRaster: func ~overwrite (rasterImage: RasterImage) {
-		this _context toRaster(this, rasterImage)
-	}
+	create: func (size: IntSize2D) -> This { raise("Unimplemented") }
+	resizeTo: func (size: IntSize2D) -> This { raise("Using unimplemented function reSizeTo in GpuImage class") }
+	copy: func -> This { raise("Using unimplemented function copy in GpuImage class") }
+	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This { raise("Using unimplemented function copy ~fromParams in GpuImage class") }
+	shift: func (offset: IntSize2D) -> This { raise("Using unimplemented function shift in GpuImage class") }
+	distance: func (other: This) -> Float { raise("Using unimplemented function distance in GpuImage class") }
+	toRaster: func -> RasterImage { this _context toRaster(this) }
+	toRaster: func ~overwrite (rasterImage: RasterImage) { this _context toRaster(this, rasterImage) }
 	toRasterDefault: abstract func ~overwrite (rasterImage: RasterImage)
 	toRasterDefault: abstract func -> RasterImage
 	_createCanvas: abstract func -> GpuCanvas
-	setFilter: abstract func (filter: Bool)
 
 }

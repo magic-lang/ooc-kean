@@ -174,9 +174,7 @@ AndroidContext: class extends OpenGLES3Context {
 		}
 		result
 	}
-	createEglRgba: func (size: IntSize2D, pixels: Pointer = null, write: Int = 0) -> EglRgba {
-			EglRgba new(this _backend _eglDisplay, size, pixels, write)
-	}
+	createEglRgba: func (size: IntSize2D, pixels: Pointer = null, write: Int = 0) -> EglRgba { EglRgba new(this _backend _eglDisplay, size, pixels, write) }
 }
 
 AndroidContextManager: class extends GpuContextManager {
@@ -184,10 +182,6 @@ AndroidContextManager: class extends GpuContextManager {
 		setShaderSources()
 		super(3)
 	}
-	_createContext: func -> GpuContext {
-		AndroidContext new()
-	}
-	createEglRgba: func (size: IntSize2D, pixels: Pointer = null) -> EglRgba {
-		this _getContext() as AndroidContext createEglRgba(size, pixels, 1)
-	}
+	_createContext: func -> GpuContext { AndroidContext new() }
+	createEglRgba: func (size: IntSize2D, pixels: Pointer = null) -> EglRgba { this _getContext() as AndroidContext createEglRgba(size, pixels, 1) }
 }

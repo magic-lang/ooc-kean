@@ -27,7 +27,7 @@ extend Int {
 	sign: static func(value: This) -> This {
 		value >= 0 ? 1 : -1
 	}
-	maximum: static func(first: This, second: This) -> This {
+	maximum: static func ~two(first: This, second: This) -> This {
 		first > second ? first : second
 	}
 	maximum: static func ~multiple(value: This, values: ...) -> This {
@@ -37,7 +37,7 @@ extend Int {
 		)
 		value
 	}
-	minimum: static func(first: This, second: This) -> This {
+	minimum: static func ~two(first: This, second: This) -> This {
 		first < second ? first : second
 	}
 	minimum: static func ~multiple(value: This, values: ...) -> This {
