@@ -38,17 +38,27 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		super(yImage, uvImage)
 	}
 	init: func ~allocate (size: IntSize2D, align := 0, verticalAlign := 0) {
-		(yImage, uvImage) := this _allocate(size, align, verticalAlign)
+		(yImage, uvImage) := This _allocate(size, align, verticalAlign)
 		this init(yImage, uvImage)
 	}
 	init: func ~fromRasterImage (original: RasterImage) {
 		(yImage, uvImage) := This _allocate(original size)
 		super(original, yImage, uvImage)
 	}
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, align := 0, verticalAlign := 0) {
+		(yLength, uvLength) := This _calculateSizes(size, align, verticalAlign)
+		(yImage, uvImage) := This _createSubimages(buffer, yLength, uvLength, size, align)
+		this init(yImage, uvImage)
+	}
+	_calculateSizes: static func (size: IntSize2D, align := 0, verticalAlign := 0) -> (Int, Int) {
+		(Int align(size width, align) * Int align(size height, verticalAlign), Int align(size width, align) * Int align(size height / 2, verticalAlign))
+	}
 	_allocate: static func (size: IntSize2D, align := 0, verticalAlign := 0) -> (RasterMonochrome, RasterUv) {
-		yLength := Int align(size width, align) * Int align(size height, verticalAlign)
-		uvLength := Int align(size width, align) * Int align(size height / 2, verticalAlign)
+		(yLength, uvLength) := This _calculateSizes(size, align, verticalAlign)
 		buffer := ByteBuffer new(yLength + uvLength)
+		This _createSubimages(buffer, yLength, uvLength, size, align)
+	}
+	_createSubimages: static func (buffer: ByteBuffer, yLength, uvLength : Int, size: IntSize2D, align: Int) -> (RasterMonochrome, RasterUv) {
 		(RasterMonochrome new(buffer slice(0, yLength), size, align), RasterUv new(buffer slice(yLength, uvLength), size / 2, align))
 	}
 

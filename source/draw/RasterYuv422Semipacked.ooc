@@ -1,4 +1,4 @@
-//
+/*//
 // Copyright (c) 2011-2014 Simon Mika <simon@mika.se>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -40,10 +40,10 @@ RasterYuv422Semipacked: class extends RasterPacked {
 	}
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromByteBuffer (buffer: ByteBufferAbstract, size: IntSize2D) {
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) {
 		super(buffer, size, CoordinateSystem Default, IntShell2D new())
 	}
-	init: func ~fromEverything (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
+	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		super(buffer, size, coordinateSystem, crop)
 	}
 	init: func ~fromRasterYuv420 (original: This) { super(original) }
@@ -90,7 +90,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		this apply(ColorConvert fromYuv(action))
 	}
 	apply: func ~yuv (action: Func (ColorYuv)) {
-		row := this pointer as UInt8*
+		row := this buffer pointer as UInt8*
 		source := row
 		width := this size width
 		height := this size height
@@ -114,14 +114,14 @@ RasterYuv422Semipacked: class extends RasterPacked {
 	operator [] (x, y: Int) -> ColorYuv {
 		result := ColorYuv new()
 		if (this isValidIn(x, y)) {
-			index := (this pointer + y * this stride + x * this bytesPerPixel) as ColorMonochrome* // U or V value
+			index := (this buffer pointer + y * this stride + x * this bytesPerPixel) as ColorMonochrome* // U or V value
 			result = ColorYuv new((index + 1)@ y, (index - 2*(x % 2))@ y, (index + 2*((x + 1) % 2))@ y)
 		}
 		result
 	}
 	operator []= (x, y: Int, value: ColorYuv) {
 		if (this isValidIn(x, y)) {
-			index := (this pointer + y * this stride + x * this bytesPerPixel) as ColorMonochrome* // U or V value
+			index := (this buffer pointer + y * this stride + x * this bytesPerPixel) as ColorMonochrome* // U or V value
 			(index + 1)@ = ColorMonochrome new(value y)
 			(index - 2*(x % 2))@ = ColorMonochrome new(value u)
 			(index - 2*((x + 1) % 2))@ = ColorMonochrome new(value v)
@@ -165,4 +165,4 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		buffer decreaseReferenceCount()
 		result
 	}
-}
+}*/

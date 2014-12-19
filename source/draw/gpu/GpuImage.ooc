@@ -40,7 +40,7 @@ GpuImage: abstract class extends Image {
 	_channels: Int
 	channels: Int { get { this _channels } }
 	length: Int { get { this _channels * this size width * this size height } }
-	init: func (=size, =_channels, =_context)
+	init: func (size: IntSize2D, =_channels, =_context) { super(size) }
 	free: func
 	dispose: func {
 		if (this _canvas != null)
