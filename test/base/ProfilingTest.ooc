@@ -55,12 +55,12 @@ testfunction()
 Profiling reset()
 DebugPrint printProfilingData()
 
-
+/*
 profiling start()
 for (i in 0..1_000_000_000) {}
 profiling stop()
+*/
 
-/*
 profiling start()
 for (i in 0..100) {}
 profiling stop()
@@ -72,7 +72,7 @@ profiling stop()
 profiling start()
 for (i in 0..8) {}
 profiling stop()
-testfunction2()
+/*testfunction2()
 
 DebugPrint print("first print",0)
 DebugPrint print("second print", 1)
