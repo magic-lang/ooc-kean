@@ -46,7 +46,7 @@ profiling stop()
 profiling start()
 for (i in 0..100_000_000) {}
 profiling stop()
-/*
+
 profiling start()
 for (i in 0..10000) {}
 profiling stop()
@@ -58,7 +58,7 @@ DebugPrint printProfilingData()
 profiling start()
 for (i in 0..1_000_000_000) {}
 profiling stop()
-
+/*
 profiling start()
 for (i in 0..100) {}
 profiling stop()
