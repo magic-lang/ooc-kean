@@ -59,7 +59,7 @@ DebugPrint printProfilingData()
 profiling start()
 for (i in 0..1_000_000_000) {}
 profiling stop()
-
+*/
 profiling start()
 for (i in 0..100) {}
 profiling stop()
@@ -77,4 +77,4 @@ testfunction2()
 DebugPrint print("first print",0)
 DebugPrint print("second print", 1)
 DebugPrint print("third print", 2)
-DebugPrint printProfilingData()*/
+DebugPrint printProfilingData()
