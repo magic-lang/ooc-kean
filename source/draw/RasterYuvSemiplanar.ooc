@@ -58,6 +58,7 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
 	__destroy__: func {
 		this y referenceCount decrease()
 		this uv referenceCount decrease()
+		super()
 	}
 
 	apply: func ~bgr (action: Func (ColorBgr)) {
