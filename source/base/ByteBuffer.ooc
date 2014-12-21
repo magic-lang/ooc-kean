@@ -111,6 +111,13 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		bin add(this)
 		This _lock unlock()
 	}
+	
+	__destroy__: func {
+		super()
+		// This is called by Object free(), which we've overridden,
+		// so we we have to do it manually
+		gc_free(this)
+	}
 
 	// STATIC
 	new: static func ~fromSize (size: Int) -> This {
