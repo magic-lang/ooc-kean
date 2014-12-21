@@ -3,11 +3,14 @@ import Synchronized
 
 ReferenceCounter: class extends Synchronized {
 	_target: Object
+	count: static Int = 0
 	_count: Int = 0
 	_kill := false
 	init: func (target: Object) {
 		super()
+		This count += 1
 		this _target = target
+//		"  RC, #{This count}, #{this _target class name}" println()
 	}
 	update: func (delta: Int) {
 		if (delta != 0) {
@@ -15,7 +18,7 @@ ReferenceCounter: class extends Synchronized {
 			target := null
 			if (!this _kill) {
 				this _count += delta
-				("{" + _target class name + "} #{this} #{delta}") println()
+//				("{" + _target class name + "} #{this} #{delta}") println()
 				this _kill = this _count <= 0
 				if (this _kill)
 					target = this _target
@@ -27,6 +30,11 @@ ReferenceCounter: class extends Synchronized {
 				target free()
 			}
 		}
+	}
+	__destroy__: func { 
+		This count -= 1
+//		" -RC, #{This count}, #{this _target class name}" println()
+		super()
 	}
 	increase: func { this update(1) }
 	decrease: func { this update(-1) }
