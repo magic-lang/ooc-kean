@@ -55,6 +55,13 @@ Image: abstract class {
 		this crop = original crop
 		this wrap = original wrap
 	}
+	__destroy__:func { 
+		this referenceCount
+		if (this referenceCount != null)
+			this referenceCount free()
+		this _referenceCount = null
+		super()
+	}
 	resizeWithin: func (restriction: IntSize2D) -> This {
 		this resizeTo(((this size toFloatSize2D()) * Float minimum(restriction width as Float / this size width as Float, restriction height as Float / this size height as Float)) toIntSize2D())
 	}
