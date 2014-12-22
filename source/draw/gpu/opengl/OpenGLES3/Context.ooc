@@ -29,13 +29,10 @@ Context: class {
 		eglMakeCurrent(this _eglDisplay, null, null, null)
 		eglDestroyContext(this _eglDisplay, this _eglContext)
 		eglDestroySurface(this _eglDisplay, this _eglSurface)
+		eglTerminate(this _eglDisplay)
 	}
-	makeCurrent: func -> Bool {
-		return eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0
-	}
-	swapBuffers: func {
-		eglSwapBuffers(this _eglDisplay, this _eglSurface)
-	}
+	makeCurrent: func -> Bool { eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0 }
+	swapBuffers: func { eglSwapBuffers(this _eglDisplay, this _eglSurface) }
 	_chooseConfig: func (configAttribs: Int*) -> Pointer {
 		numConfigs: Int
 		eglChooseConfig(this _eglDisplay, configAttribs, null, 10, numConfigs&)

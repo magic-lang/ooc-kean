@@ -25,22 +25,15 @@ import StbImage
 
 RasterImage: abstract class extends Image {
 	distanceRadius: Int { get { return 1; } }
-	buffer: ByteBufferAbstract { get set }
-	pointer: UInt8* { get { buffer pointer } }
-	length: Int { get { buffer size } }
-	stride: UInt { get set }
+	init: func ~fromRasterImage (original: RasterImage) {
+		super(original)
+	}
+	init: func (size: IntSize2D) {
+		super(size)
+	}
 	apply: abstract func ~bgr (action: Func (ColorBgr))
 	apply: abstract func ~yuv (action: Func (ColorYuv))
 	apply: abstract func ~monochrome (action: Func (ColorMonochrome))
-	init: func ~fromRasterImage (original: RasterImage) {
-		super(original)
-		this buffer = original buffer copy()
-	}
-	init: func (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
-		super(size, coordinateSystem, crop, false)
-		this buffer = buffer
-		this buffer increaseReferenceCount()
-	}
 	resizeTo: func (size: IntSize2D) -> Image {
 		result : Image
 //	TODO: Actually resize the image
@@ -67,19 +60,6 @@ RasterImage: abstract class extends Image {
 		result := RasterBgra new(size ceiling() toIntSize2D())
 //		TODO: The stuff
 		result
-	}
-	free: func {
-		version(!gc) {
-			if (this _referenceCount _count == 0) {
-				this __destroy__()
-				gc_free(this)
-			} else {
-				raise("free() called on RasterImage! Use decreaseReferenceCount() instead.")
-			}
-		}
-	}
-	__destroy__: func {
-		this buffer decreaseReferenceCount()
 	}
 	open: static func ~unknownType (filename: String) -> This {
 		x, y, n: Int

@@ -25,7 +25,6 @@ AndroidContext: class extends OpenGLES3Context {
 	_packUv1080p: OpenGLES3MapPackUv1080p
 	_unpackMonochrome1080p: OpenGLES3MapUnpackMonochrome1080p
 	_unpackUv1080p: OpenGLES3MapUnpackUv1080p
-	packTimer, readTimer: Profiling
 	_eglImageBin: GpuImageBin
 	init: func {
 		super(func { this onDispose() })
@@ -34,8 +33,6 @@ AndroidContext: class extends OpenGLES3Context {
 		this _packUv1080p = OpenGLES3MapPackUv1080p new()
 		this _unpackMonochrome1080p = OpenGLES3MapUnpackMonochrome1080p new()
 		this _unpackUv1080p = OpenGLES3MapUnpackUv1080p new()
-		this packTimer = Profiling new("Packing", 0)
-		this readTimer = Profiling new("Reading", 0)
 		this _eglImageBin = GpuImageBin new()
 	}
 	onDispose: func {
@@ -116,9 +113,9 @@ AndroidContext: class extends OpenGLES3Context {
 		uvBuffer := uvPacker read()
 
 		yRaster := RasterMonochrome new(yBuffer, gpuImage size, 64)
-		yBuffer decreaseReferenceCount()
+		yBuffer referenceCount decrease()
 		uvRaster := RasterUv new(uvBuffer, gpuImage size / 2, 64)
-		uvBuffer decreaseReferenceCount()
+		uvBuffer referenceCount decrease()
 		result := RasterYuv420Semiplanar new(yRaster, uvRaster)
 		result
 	}
@@ -129,7 +126,7 @@ AndroidContext: class extends OpenGLES3Context {
 		GpuPacker finish()
 		buffer := yPacker read()
 		result := RasterMonochrome new(buffer, gpuImage size, 64)
-		buffer decreaseReferenceCount()
+		buffer referenceCount decrease()
 		result
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
@@ -177,9 +174,7 @@ AndroidContext: class extends OpenGLES3Context {
 		}
 		result
 	}
-	createEglRgba: func (size: IntSize2D, pixels: Pointer = null, write: Int = 0) -> EglRgba {
-			EglRgba new(this _backend _eglDisplay, size, pixels, write)
-	}
+	createEglRgba: func (size: IntSize2D, pixels: Pointer = null, write: Int = 0) -> EglRgba { EglRgba new(this _backend _eglDisplay, size, pixels, write) }
 }
 
 AndroidContextManager: class extends GpuContextManager {
@@ -187,10 +182,6 @@ AndroidContextManager: class extends GpuContextManager {
 		setShaderSources()
 		super(3)
 	}
-	_createContext: func -> GpuContext {
-		AndroidContext new()
-	}
-	createEglRgba: func (size: IntSize2D, pixels: Pointer = null) -> EglRgba {
-		this _getContext() as AndroidContext createEglRgba(size, pixels, 1)
-	}
+	_createContext: func -> GpuContext { AndroidContext new() }
+	createEglRgba: func (size: IntSize2D, pixels: Pointer = null) -> EglRgba { this _getContext() as AndroidContext createEglRgba(size, pixels, 1) }
 }

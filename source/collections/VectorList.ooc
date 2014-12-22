@@ -21,6 +21,7 @@ VectorList: class <T> {
 	_vector: Vector<T>
 	count: Int
 	_count ::= this count
+	pointer: Pointer { get { this _vector _backend as Pointer } }
 	init: func ~default {
 		this init(32)
 	}
@@ -60,13 +61,22 @@ VectorList: class <T> {
 		this count -= 1
 		tmp
 	}
+	removeAt: func (index: Int) {
+		this _vector copy(index+1, index)
+		this count -= 1
+	}
 	clear: func {
-		for (i in 0..this _count) {
-			this _vector[i] = null
-		}
+		this _vector _free(0, this count)
 		this count = 0
 	}
-
+	empty: func -> Bool {
+		this count == 0
+	}
+	pop: func -> T {
+		result := this[0]
+		this remove(0)
+		result
+	}
 	__destroy__: func {
 		this _vector _free(0, this count)
 		this _vector free()

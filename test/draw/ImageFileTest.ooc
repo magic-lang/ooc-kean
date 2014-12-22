@@ -118,6 +118,7 @@ ImageFileTest: class extends Fixture {
 			bgr := RasterBgra new(monochrome)
 			bgr save(destination)
 		})
+		//TODO: Make these work
 /*		this add("convert RasterBgra to RasterYuv420Planar to RasterMonochrome", func() {
 			source := "../test/draw/input/Barn.png"
 			destination := "../test/draw/output/RasterBgra-RasterYuv420Planar-RasterMonochrome.png"

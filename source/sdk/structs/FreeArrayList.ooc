@@ -60,8 +60,8 @@ FreeArrayList: class <T> extends ArrayList<T> {
 			old := data[index] as Object
 			old free()
 		}
-		memmove(data + (index * T size), data + ((index + 1) * T size), (_size - index) * T size)
 		_size -= 1
+		memmove(data + (index * T size), data + ((index + 1) * T size), (_size - index) * T size)
 	}
 }
 

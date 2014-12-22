@@ -16,19 +16,17 @@
 
 use ooc-math
 
-Viewport: class {
+Viewport: cover {
 	resolution: IntSize2D { get set }
 	offset: IntSize2D { get set }
-	init: func (offsetX: Int, offsetY: Int, resolutionX: Int, resolutionY: Int) {
+	init: func@ (offsetX: Int, offsetY: Int, resolutionX: Int, resolutionY: Int) {
 		this resolution = IntSize2D new(resolutionX, resolutionY)
 		this offset = IntSize2D new(offsetX, offsetY)
 	}
-	init: func ~resolutionOnly (resolution: IntSize2D) {
+	init: func@ ~resolutionOnly (resolution: IntSize2D) {
 		this resolution = resolution
 		this offset = IntSize2D new()
 	}
-	init: func ~both (=offset, =resolution)
-	toString: func -> String {
-		"Resolution: " + this resolution toString() + " Offset: " + this offset toString()
-	}
+	init: func@ ~both (=offset, =resolution)
+	toString: func -> String { "Resolution: " + this resolution toString() + " Offset: " + this offset toString() }
 }

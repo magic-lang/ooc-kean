@@ -16,37 +16,37 @@
 */
 
 use ooc-math
-import structs/ArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
+import structs/FreeArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
 
 GpuImageBin: class {
-	_monochrome: ArrayList<GpuImage>
-	_bgr: ArrayList<GpuImage>
-	_bgra: ArrayList<GpuImage>
-	_uv: ArrayList<GpuImage>
-	_yuvSemiplanar: ArrayList<GpuImage>
-	_yuvPlanar: ArrayList<GpuImage>
+	_monochrome: FreeArrayList<GpuImage>
+	_bgr: FreeArrayList<GpuImage>
+	_bgra: FreeArrayList<GpuImage>
+	_uv: FreeArrayList<GpuImage>
+	_yuvSemiplanar: FreeArrayList<GpuImage>
+	_yuvPlanar: FreeArrayList<GpuImage>
 
 	init: func {
-		this _monochrome = ArrayList<GpuImage> new()
-		this _bgr = ArrayList<GpuImage> new()
-		this _bgra = ArrayList<GpuImage> new()
-		this _uv = ArrayList<GpuImage> new()
-		this _yuvSemiplanar = ArrayList<GpuImage> new()
-		this _yuvPlanar = ArrayList<GpuImage> new()
+		this _monochrome = FreeArrayList<GpuImage> new()
+		this _bgr = FreeArrayList<GpuImage> new()
+		this _bgra = FreeArrayList<GpuImage> new()
+		this _uv = FreeArrayList<GpuImage> new()
+		this _yuvSemiplanar = FreeArrayList<GpuImage> new()
+		this _yuvPlanar = FreeArrayList<GpuImage> new()
 	}
 	dispose: func {
-		for(image in this _monochrome)
-			image dispose()
-		for(image in this _bgr)
-			image dispose()
-		for(image in this _bgra)
-			image dispose()
-		for(image in this _uv)
-			image dispose()
-		for(image in this _yuvSemiplanar)
-			image dispose()
-		for(image in this _yuvPlanar)
-			image dispose()
+		for(i in 0..this _monochrome size)
+			this _monochrome[i] dispose()
+		for(i in 0..this _bgr size)
+			this _bgr[i] dispose()
+		for(i in 0..this _bgra size)
+			this _bgra[i] dispose()
+		for(i in 0..this _uv size)
+			this _uv[i] dispose()
+		for(i in 0..this _yuvSemiplanar size)
+			this _yuvSemiplanar[i] dispose()
+		for(i in 0..this _yuvPlanar size)
+			this _yuvPlanar[i] dispose()
 
 		this _monochrome clear()
 		this _bgr clear()
@@ -71,16 +71,19 @@ GpuImageBin: class {
 				this _yuvPlanar add(image)
 		}
 	}
-	_search: func (size: IntSize2D, arrayList: ArrayList<GpuImage>) -> GpuImage {
+	_search: func (size: IntSize2D, arrayList: FreeArrayList<GpuImage>) -> GpuImage {
 		result := null
-		for (image in arrayList) {
+		index := 0
+		for (i in 0..arrayList size) {
+			image := arrayList[i]
 			if (image size width == size width && image size height == size height) {
 				result = image
+				index = i
 				break
 			}
 		}
 		if (result != null)
-			arrayList remove(result)
+			arrayList removeAt(index, false)
 		result
 	}
 	find: func (type: GpuImageType, size: IntSize2D) -> GpuImage {

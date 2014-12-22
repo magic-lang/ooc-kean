@@ -18,40 +18,17 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3/Texture, OpenGLES3Canvas, OpenGLES3Map
+import OpenGLES3/Texture, OpenGLES3Canvas, Map/OpenGLES3Map, Map/OpenGLES3MapPack, OpenGLES3Texture
 
 OpenGLES3Uv: class extends GpuUv {
-	backend: Texture { get { this _backend as Texture } }
 	init: func (size: IntSize2D, context: GpuContext) {
 		init(size, size width * 2, null, context)
 	}
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
-		super(size, context)
-		this _backend = Texture create(TextureType uv, size width, size height, stride, data) as Pointer
+		super(OpenGLES3Texture createUv(size, stride, data), size, context)
 	}
-	init: func ~fromTexture (texture: Texture, size: IntSize2D, context: GpuContext) {
-		super(size, context)
-		this _backend = texture
-	}
-	bind: func (unit: UInt) {
-		this backend bind (unit)
-	}
-	unbind: func {
-		this backend unbind()
-	}
-	dispose: func {
-		this backend dispose()
-		if (this _canvas != null)
-			this _canvas dispose()
-	}
-	upload: func (raster: RasterImage) {
-		this backend uploadPixels(raster pointer, raster stride)
-	}
-	setFilter: func (filter: Bool) {
-		this backend setFilter(filter)
-	}
-	generateMipmap: func {
-		this backend generateMipmap()
+	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) {
+		super(texture, size, context)
 	}
 	toRasterDefault: func -> RasterImage {
 		packed := this _context createBgra(IntSize2D new(this size width / 2, this size height))
@@ -60,14 +37,12 @@ OpenGLES3Uv: class extends GpuUv {
 		packed canvas draw(this, packMap, Viewport new(packed size))
 		buffer := packed canvas readPixels(4)
 		result := RasterUv new(buffer, this size)
-		buffer decreaseReferenceCount()
 		packed recycle()
 		result
 	}
-	resizeTo: func (size: IntSize2D) -> This {
-		target := OpenGLES3Uv create(size, this _context)
-		target canvas draw(this)
-		target
+	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
+		raise("toRaster not implemented for UV")
+		null
 	}
 	_createCanvas: func -> GpuCanvas {
 		result := OpenGLES3Canvas create(this, this _context)
@@ -75,12 +50,11 @@ OpenGLES3Uv: class extends GpuUv {
 		result
 	}
 	create: static func ~fromRaster (rasterImage: RasterUv, context: GpuContext) -> This {
-		result := This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
+		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
 		result
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
 		result := This new(size, context)
-		result backend != null ? result : null
+		result texture != null ? result : null
 	}
-
 }

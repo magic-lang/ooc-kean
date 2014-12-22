@@ -27,8 +27,10 @@ import Image
 import Color
 
 RasterYuvSemiplanar: abstract class extends RasterPlanar {
-	y: RasterMonochrome
-	uv: RasterUv
+	_y: RasterMonochrome
+	y ::= this _y
+	_uv: RasterUv
+	uv ::= this _uv
 	crop: IntShell2D {
 		get
 		set (value) {
@@ -39,21 +41,25 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
 			}
 		}
 	}
-	init: func (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
-//    "RasterYuvPlanar init ~fromEverything" println()
-		super(buffer, size, coordinateSystem, crop)
-		this y = this createY()
-		this uv = this createUV()
-		this stride = y stride
+	init: func (yImage: RasterMonochrome, uvImage: RasterUv) {
+		super(yImage size)
+		this _y = yImage
+		this _y referenceCount increase()
+		this _uv = uvImage
+		this _uv referenceCount increase()
 	}
-	init: func ~fromYuvPlanar (original: This) {
+	init: func ~fromYuvPlanar (original: This, y: RasterMonochrome, uv: RasterUv) {
 		super(original)
-		this y = this createY()
-		this uv = this createUV()
-//		this stride = y stride
+		this _y = y
+		this _y referenceCount increase()
+		this _uv = uv
+		this _uv referenceCount increase()
 	}
-	createY: abstract func -> RasterMonochrome
-	createUV: abstract func -> RasterUv
+	__destroy__: func {
+		this y referenceCount decrease()
+		this uv referenceCount decrease()
+		super()
+	}
 
 	apply: func ~bgr (action: Func (ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))
@@ -77,8 +83,8 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in Int maximum(0, y - this distanceRadius)..Int minimum(y + 1 + this distanceRadius, this size height))
-							for (otherX in Int maximum(0, x - this distanceRadius)..Int minimum(x + 1 + this distanceRadius, this size width))
+						for (otherY in Int maximum~two(0, y - this distanceRadius)..Int minimum~two(y + 1 + this distanceRadius, this size height))
+							for (otherX in Int maximum~two(0, x - this distanceRadius)..Int minimum~two(x + 1 + this distanceRadius, this size width))
 								if (otherX != x || otherY != y)	{
 									pixel := (other as RasterYuvSemiplanar)[otherX, otherY]
 									if (maximum y < pixel y)

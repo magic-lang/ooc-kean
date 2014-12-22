@@ -19,110 +19,155 @@ import lang/Memory
 import structs/FreeArrayList
 import threading/Thread
 import ReferenceCounter
-import ByteBufferAbstract
 
-ByteBuffer: class extends ByteBufferAbstract {
-	destroy: Func (This)
-	init: func (=size, =pointer, =destroy) {
+ByteBuffer: class {
+	_pointer: UInt8*
+	pointer ::= this _pointer
+	_size: Int
+	size ::= this _size
+	_referenceCount: ReferenceCounter
+	referenceCount ::= this _referenceCount
+	init: func(=_pointer, =_size) {
 		this _referenceCount = ReferenceCounter new(this)
-	}
-	init: func ~fromSizeAndPointer (=size, =pointer) {
-		this destroy = This recycle
-		this _referenceCount = ReferenceCounter new(this)
-	}
-	new: static func ~fromSize (size: Int) -> This {
-		bin := This getBin(size)
-		buffer: This
-		for(i in 0..bin size)
-		{
-			buffer = bin[i]
-			if ((buffer size) == size) {
-				bin removeAt(i, false)
-				break
-			} else {
-				buffer = null
-			}
-		}
-		if (buffer == null) {
-			pointer: UInt8* = gc_malloc_atomic(size);
-			This new(size, pointer, This recycle)
-		} else {
-			buffer _referenceCount = ReferenceCounter new(buffer)
-			buffer
-		}
 	}
 	__destroy__: func {
-		if ((destroy as Closure) thunk) {
-			this destroy(this)
-		} else {
-			raise("ByteBuffer __destroy__() has no thunk!")
-		}
+		if (this _referenceCount != null)
+			this _referenceCount free()
+		this _referenceCount = null
+		gc_free(this _pointer)
+		this _pointer = null
+		super()
 	}
-	__delete__: func {
-		gc_free(this pointer)
-		gc_free(this)
-	}
-	
-	free: func {
-		this __destroy__()
-	}
-	
-	recycle: static func (buffer: This) {
-		This lock lock()
-		bin := This getBin(buffer size)
-		while (bin size > 10) {
-			b := bin get(0)
-			bin removeAt(0, false)
-			b __delete__()
-		}
-		bin add(buffer)
-		This lock unlock()
-	}
-	getBin: static func (size: Int) -> FreeArrayList<This> {
-		if (size < 10000)
-			This smallRecycleBin
-		else if (size < 100000)
-			This mediumRecycleBin
-		else
-			This largeRecycleBin
-//		size < 10000 ? This smallRecycleBin : size < 100000 ? This mediumRecycleBin : This largeRecycleBin
+
+	slice: func(offset: Int, size: Int) -> This {
+		_SlicedByteBuffer new(this, offset, size)
 	}
 	copy: func -> This {
 		result := This new(this size)
 		memcpy(result pointer, this pointer, this size)
 		result
 	}
-	copyFrom: func (other: This, start, destination, length: Int) {
-		a := this as UInt8*
-		b := other as UInt8*
-		memcpy(a + destination, b + start, length)
+	copyTo: func ~untilEnd (other: This, start := 0, destination := 0) {
+		a := this size - start
+		b := other size - destination
+		this copyTo(other, start, destination, a < b ? a : b)
+	}
+	copyTo: func (other: This, start: Int, destination: Int, length: Int) {
+		memcpy(other pointer + destination, this pointer + start, length)
+	}
+	new: static func ~size (size: Int) -> This {
+		_RecyclableByteBuffer new(size)
+	}
+	new: static func ~recover (pointer: UInt8*, size: Int, recover: Func (This)) -> This {
+		_RecoverableByteBuffer new(pointer, size, recover)
+	}
+	clean: static func {
+		_RecyclableByteBuffer _clean()
+	}
+}
+_SlicedByteBuffer: class extends ByteBuffer {
+	_parent: ByteBuffer
+	_offset: Int
+	init: func (=_parent, =_offset, size: Int) {
+		_parent referenceCount increase()
+		super(_parent pointer + _offset, size)
+	}
+	__destroy__: func {
+		if (this _parent != null)
+			this _parent referenceCount decrease()
+		this _parent = null
+		this _pointer = null
+		if (this _referenceCount != null)
+			this _referenceCount free()
+		this _referenceCount = null
+	}
+}
+_RecoverableByteBuffer: class extends ByteBuffer {
+	_recover: Func (ByteBuffer)
+	init: func (pointer: UInt8*, size: Int, =_recover) {
+		super(pointer, size)
+	}
+	free: func {
+		if ((this _recover as Closure) thunk) {
+			this _recover(this)
+		} else {
+			raise("ByteBuffer __destroy__() has no thunk!")
+		}
+	}
+}
+_RecyclableByteBuffer: class extends ByteBuffer {
+	init: func (pointer: UInt8*, size: Int) {
+		super(pointer, size)
+	}
+	free: func {
+		This _lock lock()
+		bin := This _getBin(this size)
+		while (bin size > 10) {
+			b := bin get(0)
+			bin removeAt(0, false)
+			b __destroy__()
+		}
+		this referenceCount _count = 0
+		bin add(this)
+		This _lock unlock()
+	}
+	
+	__destroy__: func {
+		super()
+		// This is called by Object free(), which we've overridden,
+		// so we we have to do it manually
+		gc_free(this)
 	}
 
-	lock := static Mutex new()
-	smallRecycleBin := static FreeArrayList<This> new()
-	mediumRecycleBin := static FreeArrayList<This> new()
-	largeRecycleBin := static FreeArrayList<This> new()
-	clean := static func {
-		while (This smallRecycleBin size > 0) {
-			b := This smallRecycleBin get(0)
-			This smallRecycleBin removeAt(0, false)
-			b __delete__()
+	// STATIC
+	new: static func ~fromSize (size: Int) -> This {
+		bin := This _getBin(size)
+		buffer: This = null
+		for(i in 0..bin size)
+		{
+			if ((bin[i] size) == size) {
+				buffer = bin[i]
+				bin removeAt(i, false)
+				buffer referenceCount _count = 0
+				break
+			}
 		}
-		gc_free(This smallRecycleBin data)
-		gc_free(This smallRecycleBin)
-		while (This mediumRecycleBin size > 0) {
-			b := This mediumRecycleBin get(0)
-			This mediumRecycleBin removeAt(0, false)
-			b __delete__()
+		buffer == null ? This new(gc_malloc_atomic(size), size) : buffer
+	}
+	_lock := static Mutex new()
+	_smallRecycleBin := static FreeArrayList<This> new()
+	_mediumRecycleBin := static FreeArrayList<This> new()
+	_largeRecycleBin := static FreeArrayList<This> new()
+	_getBin: static func (size: Int) -> FreeArrayList<This> {
+		if (size < 10000)
+			This _smallRecycleBin
+		else if (size < 100000)
+			This _mediumRecycleBin
+		else
+			This _largeRecycleBin
+		//		size < 10000 ? This smallRecycleBin : size < 100000 ? This mediumRecycleBin : This largeRecycleBin
+	}
+	_clean: static func {
+		while (This _smallRecycleBin size > 0) {
+			b := This _smallRecycleBin get(0)
+			This _smallRecycleBin removeAt(0, false)
+			b __destroy__()
 		}
-		gc_free(This mediumRecycleBin data)
-		gc_free(This mediumRecycleBin)
-		while (This largeRecycleBin size > 0) {
-			b := This largeRecycleBin get(0)
-			This largeRecycleBin removeAt(0, false)
-			b __delete__()
+		gc_free(This _smallRecycleBin data)
+		gc_free(This _smallRecycleBin)
+		while (This _mediumRecycleBin size > 0) {
+			b := This _mediumRecycleBin get(0)
+			This _mediumRecycleBin removeAt(0, false)
+			b __destroy__()
 		}
-		gc_free(This largeRecycleBin data)
-		gc_free(This largeRecycleBin)
+		gc_free(This _mediumRecycleBin data)
+		gc_free(This _mediumRecycleBin)
+		while (This _largeRecycleBin size > 0) {
+			b := This _largeRecycleBin get(0)
+			This _largeRecycleBin removeAt(0, false)
+			b __destroy__()
+		}
+		gc_free(This _largeRecycleBin data)
+		gc_free(This _largeRecycleBin)
 	}
 }

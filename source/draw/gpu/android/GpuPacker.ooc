@@ -19,7 +19,6 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-base
 use ooc-opengl
-use ooc-android-debug
 import math, EglRgba, AndroidContext
 
 GpuPacker: class {
@@ -38,39 +37,34 @@ GpuPacker: class {
 		this _internalSize = IntSize2D new(size width * bytesPerPixel / 4, size height)
 		this _bytesPerPixel = bytesPerPixel
 		this _targetTexture = context createEglRgba(this _internalSize)
-		this _renderTarget = Fbo create(this _targetTexture, this _internalSize width, this _internalSize height)
+		this _renderTarget = Fbo create(this _targetTexture texture, this _internalSize width, this _internalSize height)
 	}
-	recycle: func {
-		this _context recycle(this)
-	}
+	recycle: func { this _context recycle(this) }
 	dispose: func {
 		this _targetTexture dispose()
 		this _renderTarget dispose()
 	}
 	pack: func (image: GpuImage, map: OpenGLES3MapDefault) {
-		image setFilter(false)
+		image setMagFilter(false)
 		this _renderTarget bind()
 		this _renderTarget clear()
 		surface := this _context createSurface()
 		surface draw(image, map, Viewport new(this _internalSize))
 		surface recycle()
 		this _renderTarget unbind()
-		image setFilter(true)
+		image setMagFilter(true)
 	}
 	read: func ~ByteBuffer -> ByteBuffer {
 		sourcePointer := this _targetTexture read()
-		buffer := ByteBuffer new(this _targetTexture stride * this _targetTexture size height, sourcePointer,
-			func (buffer: ByteBuffer){ this _targetTexture unlock()
-						 this recycle()
-						})
+		buffer := ByteBuffer new(sourcePointer, this _targetTexture stride * this _targetTexture size height,
+			func (buffer: ByteBuffer){
+				this _targetTexture unlock()
+				this recycle()
+			})
 		buffer
 	}
-	finish: static func {
-		Fbo finish()
-	}
-	flush: static func {
-		Fbo flush()
-	}
+	finish: static func { Fbo finish() }
+	flush: static func { Fbo flush() }
 	readRows: func (destination: RasterImage) {
 		sourcePointer := this _targetTexture read()
 		destinationPointer := destination pointer
@@ -91,7 +85,6 @@ GpuPacker: class {
 		destinationPointer := destination pointer
 		destinationStride := destination stride
 		sourceStride := this _targetTexture stride
-
 		memcpy(destinationPointer, sourcePointer, destinationStride * destination size height)
 		this _targetTexture unlock()
 	}

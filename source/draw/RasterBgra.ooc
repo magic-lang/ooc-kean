@@ -27,44 +27,20 @@ import lang/IO
 
 RasterBgra: class extends RasterPacked {
 	bytesPerPixel: Int { get { 4 } }
-	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 4)), size) }
-	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
-		super(ByteBuffer new(RasterPacked calculateLength(size, 4)), size, coordinateSystem, crop, byteAlignment)
-	}
-//	 FIXME but only if we really need it
-//	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D) { this init(ByteBuffer new(size area * 4, pointer), size) }
-	init: func ~fromByteBuffer (buffer: ByteBufferAbstract, size: IntSize2D, byteAlignment := 0) {
-		super(buffer, size, CoordinateSystem Default, IntShell2D new(), byteAlignment)
-	}
-	init: func ~fromEverything (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
-		super(buffer, size, coordinateSystem, crop, byteAlignment)
-	}
-	init: func ~fromRasterBgra (original: This) { super(original) }
-	init: func ~fromRasterImage (original: RasterImage) {
-		this init(original size, original coordinateSystem, original crop)
-		destination := this pointer as Int*
-//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
-		f := func (color: ColorBgr) {
-			(destination as ColorBgra*)@ = ColorBgra new(color, 255)
-			destination += 1
-		}
-		original apply(f)
-	}
-	create: func (size: IntSize2D) -> Image {
-		result := This new(size)
-		result crop = this crop
-		result wrap = this wrap
+	init: func ~allocate (size: IntSize2D, align := 0) { super(size, align) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, align := 0) { super(buffer, size, align) }
+	init: func ~fromRaster (original: RasterImage) { super(original) }
+	create: func (size: IntSize2D) -> Image { This new(size) }
+	copy: func -> This {
+		result := This new(this)
+		this buffer copyTo(result buffer)
 		result
 	}
-	copy: func -> This {
-		This new(this)
-	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
-		end := (this pointer as Int*) + this size area
-		for (source in (this pointer as Int*)..end) {
+		end := (this buffer pointer as Int*) + this size area
+		for (source in (this buffer pointer as Int*)..end) {
 			action((source as ColorBgr*)@)
-			source +=3
+			source += 3
 		}
 	}
 	apply: func ~yuv (action: Func(ColorYuv)) {
@@ -89,8 +65,8 @@ RasterBgra: class extends RasterPacked {
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in Int maximum(0, y - this distanceRadius)..Int minimum(y + 1 + this distanceRadius, this size height))
-							for (otherX in Int maximum(0, x - this distanceRadius)..Int minimum(x + 1 + this distanceRadius, this size width))
+						for (otherY in Int maximum~two(0, y - this distanceRadius)..Int minimum~two(y + 1 + this distanceRadius, this size height))
+							for (otherX in Int maximum~two(0, x - this distanceRadius)..Int minimum~two(x + 1 + this distanceRadius, this size width))
 								if (otherX != x || otherY != y) {
 									pixel := (other as RasterBgra)[otherX, otherY]
 									if (maximum blue < pixel blue)
@@ -150,8 +126,19 @@ RasterBgra: class extends RasterPacked {
 	save: func (filename: String) -> Int {
 		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this size width * this bytesPerPixel)
 	}
-	operator [] (x, y: Int) -> ColorBgra { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorBgra* + x)@ : ColorBgra new(0, 0, 0, 0) }
-	operator []= (x, y: Int, value: ColorBgra) { ((this pointer + y * this stride) as ColorBgra* + x)@ = value }
+	convertFrom: static func (original: RasterImage) -> RasterBgra {
+		result := RasterBgra new(original)
+		destination := result buffer pointer as Int*
+		//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
+		f := func (color: ColorBgr) {
+			(destination as ColorBgra*)@ = ColorBgra new(color, 255)
+			destination += 1
+		}
+		original apply(f)
+		result
+	}
+	operator [] (x, y: Int) -> ColorBgra { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorBgra* + x)@ : ColorBgra new(0, 0, 0, 0) }
+	operator []= (x, y: Int, value: ColorBgra) { ((this buffer pointer + y * this stride) as ColorBgra* + x)@ = value }
 	operator [] (point: IntPoint2D) -> ColorBgra { this[point x, point y] }
 	operator []= (point: IntPoint2D, value: ColorBgra) { this[point x, point y] = value }
 	operator [] (point: FloatPoint2D) -> ColorBgra { this [point x, point y] }

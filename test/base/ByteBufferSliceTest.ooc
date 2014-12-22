@@ -8,14 +8,13 @@ ByteBufferSliceTest: class extends Fixture {
 	version(!gc) {
 		this add("Int", func {
 			yuv := ByteBuffer new(30000)
-			y := ByteBufferSlice new(yuv, 0, 20000)
-			uv := ByteBufferSlice new(yuv, 20000, 10000)
-			expect(yuv _referenceCount _count == 3, is true)
-			y decreaseReferenceCount()
-			expect(yuv _referenceCount _count == 2, is true)
+			y := yuv slice(0, 20000)
+			uv := yuv slice(20000, 10000)
+			expect(yuv referenceCount _count == 2, is true)
+			y referenceCount decrease()
+			expect(yuv referenceCount _count == 1, is true)
 		})
 	}
 	}
 }
 ByteBufferSliceTest new() run()
-

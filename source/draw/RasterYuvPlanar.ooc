@@ -26,7 +26,10 @@ import Image
 import Color
 
 RasterYuvPlanar: abstract class extends RasterPlanar {
-	y, u, v: RasterMonochrome
+	_y, _u, _v: RasterMonochrome
+	y ::= this _y
+	u ::= this _u
+	v ::= this _v
 	crop: IntShell2D {
 		get
 		set (value) {
@@ -38,24 +41,24 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 			}
 		}
 	}
-	init: func (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
-//		"RasterYuvPlanar init ~fromEverything" println()
-		super(buffer, size, coordinateSystem, crop)
-		this y = this createY()
-		this u = this createU()
-		this v = this createV()
-		this stride = y stride
+	init: func (y: RasterMonochrome, u: RasterMonochrome, v: RasterMonochrome) {
+		super(y size)
+		this _y = y
+		this _y referenceCount increase()
+		this _u = u
+		this _u referenceCount increase()
+		this _v = v
+		this _v referenceCount increase()
 	}
-	init: func ~fromYuvPlanar (original: This) {
+	init: func ~fromYuvPlanar (original: This, y: RasterMonochrome, u: RasterMonochrome, v: RasterMonochrome) {
 		super(original)
-		this y = this createY()
-		this u = this createU()
-		this v = this createV()
-		this stride = y stride
+		this _y = y
+		this _y referenceCount increase()
+		this _u = u
+		this _u referenceCount increase()
+		this _v = v
+		this _v referenceCount increase()
 	}
-	createY: abstract func -> RasterMonochrome
-	createU: abstract func -> RasterMonochrome
-	createV: abstract func -> RasterMonochrome
 
 	apply: func ~bgr (action: Func (ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))
@@ -79,8 +82,8 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in Int maximum(0, y - this distanceRadius)..Int minimum(y + 1 + this distanceRadius, this size height))
-							for (otherX in Int maximum(0, x - this distanceRadius)..Int minimum(x + 1 + this distanceRadius, this size width))
+						for (otherY in Int maximum~two(0, y - this distanceRadius)..Int minimum~two(y + 1 + this distanceRadius, this size height))
+							for (otherX in Int maximum~two(0, x - this distanceRadius)..Int minimum~two(x + 1 + this distanceRadius, this size width))
 								if (otherX != x || otherY != y)	{
 									pixel := (other as RasterYuvPlanar)[otherX, otherY]
 									if (maximum y < pixel y)

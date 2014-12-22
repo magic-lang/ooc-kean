@@ -15,34 +15,33 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 use ooc-math
-import structs/ArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuPacker
+import structs/FreeArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuPacker
 
 GpuPackerBin: class {
-	_packers: ArrayList<GpuPacker>
-	init: func {
-		this _packers = ArrayList<GpuPacker> new()
-	}
+	_packers: FreeArrayList<GpuPacker>
+	init: func { this _packers = FreeArrayList<GpuPacker> new() }
 	dispose: func {
-		for(packer in this _packers)
+		for(i in 0..this _packers size) {
+			packer := this _packers[i]
 			packer dispose()
+		}
 		this _packers clear()
 	}
-	add: func (packer: GpuPacker) {
-		this _packers add(packer)
-	}
-	_search: func (size: IntSize2D, bytesPerPixel: UInt, arrayList: ArrayList<GpuPacker>) -> GpuPacker {
+	add: func (packer: GpuPacker) { this _packers add(packer) }
+	_search: func (size: IntSize2D, bytesPerPixel: UInt, arrayList: FreeArrayList<GpuPacker>) -> GpuPacker {
 		result := null
-		for (packer in arrayList) {
+		index := 0
+		for (i in 0..arrayList size) {
+			packer := arrayList[i]
 			if(packer size == size && packer bytesPerPixel == bytesPerPixel) {
+				index = i
 				result = packer
 				break
 			}
 		}
 		if (result != null)
-			arrayList remove(result)
+			arrayList removeAt(index, false)
 		result
 	}
-	find: func (size: IntSize2D, bytesPerPixel: UInt)-> GpuPacker {
-		this _search(size, bytesPerPixel, this _packers)
-	}
+	find: func (size: IntSize2D, bytesPerPixel: UInt)-> GpuPacker { this _search(size, bytesPerPixel, this _packers) }
 }

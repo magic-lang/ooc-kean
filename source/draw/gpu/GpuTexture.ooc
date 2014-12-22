@@ -14,19 +14,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-math
-use ooc-base
-import ByteBuffer into ByteBuffer
-import math
-import structs/ArrayList
-import Image
-import RasterImage
-
-RasterPlanar: abstract class extends RasterImage {
-	init: func (size: IntSize2D) {
-		super(size)
-	}
-	init: func ~fromOriginal (original: This) {
-		super(original)
-	}
+GpuTexture: abstract class {
+	_backend: Pointer
+	generateMipmap: abstract func
+	dispose: abstract func
+	bind: abstract func (unit: UInt)
+	unbind: abstract func
+	upload: abstract func(pointer: UInt8*, stride: UInt)
+	setMagFilter: abstract func (linear: Bool)
 }

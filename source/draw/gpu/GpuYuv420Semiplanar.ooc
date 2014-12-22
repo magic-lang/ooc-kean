@@ -15,6 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-math
+use ooc-draw
 import GpuMonochrome, GpuCanvas, GpuPlanar, GpuUv, GpuContext
 
 GpuYuv420Semiplanar: abstract class extends GpuPlanar {
@@ -23,7 +24,46 @@ GpuYuv420Semiplanar: abstract class extends GpuPlanar {
 	_uv: GpuUv
 	uv: GpuUv { get { this _uv } }
 
-	init: func (size: IntSize2D, context: GpuContext) {
-		super(size, context)
+	init: func (size: IntSize2D, context: GpuContext) { super(size, context) }
+	dispose: func {
+		this _y dispose()
+		this _uv dispose()
+	}
+	bind: func (unit: UInt) {
+		this _y bind(unit)
+		this _uv bind(unit + 1)
+	}
+	unbind: func {
+		this _y unbind()
+		this _uv unbind()
+	}
+	upload: func (raster: RasterImage) {
+		semiPlanar := raster as RasterYuv420Semiplanar
+		this _y upload(semiPlanar y)
+		this _uv upload(semiPlanar uv)
+	}
+	generateMipmap: func {
+		this _y generateMipmap()
+		this _uv generateMipmap()
+	}
+	setMagFilter: func (linear: Bool) {
+		this _y setMagFilter(linear)
+		this _uv setMagFilter(linear)
+	}
+	resizeTo: func (size: IntSize2D) -> This {
+		target := this _context createYuv420Semiplanar(size)
+		target canvas draw(this)
+		target
+	}
+	toRasterDefault: func -> RasterImage {
+		y := this _y toRaster()
+		uv := this _uv toRaster()
+		result := RasterYuv420Semiplanar new(y as RasterMonochrome, uv as RasterUv)
+		result
+	}
+	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
+		semiPlanar := rasterImage as RasterYuv420Semiplanar
+		this _y toRaster(semiPlanar y)
+		this _uv toRaster(semiPlanar uv)
 	}
 }
