@@ -27,7 +27,8 @@ CoordinateSystem: enum {
 }
 
 Image: abstract class {
-	size: IntSize2D
+	_size: IntSize2D
+	size ::= this _size
 	transform: IntTransform2D { get set }
 	coordinateSystem: CoordinateSystem {
 		get
@@ -40,32 +41,26 @@ Image: abstract class {
 			}
 		}
 	}
-	crop: IntShell2D {
-		get
-		set (value) {
-			if (this crop != value)
-				this crop = value
-		}
-	}
-	wrap: Bool {
-		get
-		set (value) {
-			if (this wrap != value)
-				this wrap = value
-		}
-	}
+	crop: IntShell2D { get set }
+	wrap: Bool { get set }
 	_referenceCount: ReferenceCounter
 	referenceCount ::= this _referenceCount
-	increaseReferenceCount: func { this _referenceCount increase() }
-	decreaseReferenceCount: func { this _referenceCount decrease() }
-	init: func (=size, .coordinateSystem, =crop, =wrap) {
-		this coordinateSystem = coordinateSystem
-		this init()
-	}
-	init: func ~fromImage (original: This) { this init(original size, original coordinateSystem, original crop, original wrap) }
-	init: func ~default {
-		this transform = IntTransform2D identity
+	init: func (=_size) {
 		this _referenceCount = ReferenceCounter new(this)
+		this coordinateSystem = CoordinateSystem Default
+	}
+	init: func ~fromImage (original: This) {
+		this init(original size)
+		this coordinateSystem = original coordinateSystem
+		this crop = original crop
+		this wrap = original wrap
+	}
+	__destroy__:func { 
+		this referenceCount
+		if (this referenceCount != null)
+			this referenceCount free()
+		this _referenceCount = null
+		super()
 	}
 	resizeWithin: func (restriction: IntSize2D) -> This {
 		this resizeTo(((this size toFloatSize2D()) * Float minimum(restriction width as Float / this size width as Float, restriction height as Float / this size height as Float)) toIntSize2D())

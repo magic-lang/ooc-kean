@@ -30,7 +30,7 @@ OpenGLES3Bgra: class extends GpuBgra {
 	toRasterDefault: func -> RasterImage {
 		buffer := this canvas readPixels(this _channels)
 		result := RasterBgra new(buffer, this size)
-		buffer decreaseReferenceCount()
+		buffer referenceCount decrease()
 		result
 	}
 	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
@@ -39,7 +39,7 @@ OpenGLES3Bgra: class extends GpuBgra {
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterBgra, context: GpuContext) -> This {
-		result := This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
+		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
 		result
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {

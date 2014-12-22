@@ -26,49 +26,14 @@ import Color
 
 RasterMonochrome: class extends RasterPacked {
 	bytesPerPixel: Int { get { 1 } }
-	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 1)), size) }
-	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
-		super(ByteBuffer new(RasterPacked calculateLength(size, 1)), size, coordinateSystem, crop, byteAlignment)
-	}
-//	 FIXME but only if we really need it
-//	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D, byteAlignment := 0) { this init(ByteBuffer new(size area * 1, pointer), size, byteAlignment) }
-	init: func ~fromByteBuffer (buffer: ByteBufferAbstract, size: IntSize2D, byteAlignment := 0) {
-		super(buffer, size, CoordinateSystem Default, IntShell2D new(), byteAlignment)
-	}
-	init: func ~fromEverything (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
-		super(buffer, size, coordinateSystem, crop, byteAlignment)
-	}
-	init: func ~fromRasterMonochrome (original: This) { super(original) }
-	init: func ~fromRasterImage (original: RasterImage) {
-		this init(original size, original coordinateSystem, original crop)
-//		"RasterMonochrome init ~fromRasterImage, original: (#{original size}), this: (#{this size}), stride #{this stride}" println()
-		row := this pointer as UInt8*
-		rowLength := this stride
-		rowEnd := row + rowLength
-		destination := row
-		f := func (color: ColorMonochrome) {
-			(destination as ColorMonochrome*)@ = color
-//			"RasterMonochrome init ~fromRasterImage f, color: #{color y}, destination at #{destination}" println()
-			destination += 1
-			if (destination >= rowEnd) {
-//				"RasterMonochrome init ~fromRasterImage f, end of line at #{destination}" println()
-				row += this stride
-				destination = row
-//				"RasterMonochrome init ~fromRasterImage f, new line at #{destination}" println()
-				rowEnd = row + rowLength
-			}
-		}
-		original apply(f)
-	}
-	create: func (size: IntSize2D) -> Image {
-		result := This new(size)
-		result crop = this crop
-		result wrap = this wrap
-		result
-	}
+	init: func ~allocate (size: IntSize2D, align := 0) { super(size, align) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, align := 0) { super(buffer, size, align) }
+	init: func ~fromRasterImage (original: RasterImage) { super(original)	}
+	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This {
-		This new(this)
+		result := This new(this)
+		this buffer copyTo(result buffer)
+		result
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		this apply(ColorConvert fromMonochrome(action))
@@ -77,9 +42,9 @@ RasterMonochrome: class extends RasterPacked {
 		this apply(ColorConvert fromMonochrome(action))
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
-		end := (this pointer as UInt8*) + this length
+		end := this buffer pointer + this buffer size
 		rowLength := this size width
-		for (row in (this pointer as UInt8*)..end) {
+		for (row in this buffer pointer..end) {
 //			"RasterMonochrome apply ~monochrome, end of line at #{row}" println()
 			rowEnd := row + rowLength
 			for (source in row..rowEnd)
@@ -140,6 +105,30 @@ RasterMonochrome: class extends RasterPacked {
 	save: func (filename: String) -> Int {
 		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this size width * this bytesPerPixel)
 	}
-	operator [] (x, y: Int) -> ColorMonochrome { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorMonochrome* + x)@ : ColorMonochrome new(0) }
-	operator []= (x, y: Int, value: ColorMonochrome) { ((this pointer + y * this stride) as ColorMonochrome* + x)@ = value }
+	convertFrom: static func(original: RasterImage) -> This {
+		result := This new(original)
+		//		"RasterMonochrome init ~fromRasterImage, original: (#{original size}), this: (#{this size}), stride #{this stride}" println()
+		row := result buffer pointer as UInt8*
+		rowLength := result stride
+		rowEnd := row + rowLength
+		destination := row
+		f := func (color: ColorMonochrome) {
+			(destination as ColorMonochrome*)@ = color
+			//			"RasterMonochrome init ~fromRasterImage f, color: #{color y}, destination at #{destination}" println()
+			destination += 1
+			if (destination >= rowEnd) {
+				//				"RasterMonochrome init ~fromRasterImage f, end of line at #{destination}" println()
+				row += result stride
+				destination = row
+				//				"RasterMonochrome init ~fromRasterImage f, new line at #{destination}" println()
+				rowEnd = row + rowLength
+			}
+		}
+		original apply(f)
+	}
+
+	operator [] (x, y: Int) -> ColorMonochrome {
+		this isValidIn(x, y) ? ColorMonochrome new(this buffer pointer[y * this stride + x]) : ColorMonochrome new(0)
+	}
+	operator []= (x, y: Int, value: ColorMonochrome) { ((this buffer pointer + y * this stride) as ColorMonochrome* + x)@ = value }
 }

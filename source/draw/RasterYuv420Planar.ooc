@@ -27,109 +27,42 @@ import Color
 
 RasterYuv420Planar: class extends RasterYuvPlanar {
 	init: func ~fromRasterImages (y: RasterMonochrome, u: RasterMonochrome, v: RasterMonochrome) {
-		this y = y
-		this u = u
-		this v = v
-		this size = y size
-		this stride = y stride
+		super(y, u, v)
 	}
-	init: func ~fromSize (size: IntSize2D) { this init(size, CoordinateSystem Default, IntShell2D new()) }
-	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
-		bufSize := RasterPacked calculateLength(size, 1) + 2 * RasterPacked calculateLength(size / 2, 1)
-		this byteAlignment = byteAlignment
-//		"RasterYuv420Planar init ~fromStuff" println()
-		super(ByteBuffer new(bufSize), size, coordinateSystem, crop)
+	init: func ~allocate (size: IntSize2D, align := 0, verticalAlign := 0) {
+		(y, u, v) := this _allocate(size, align, verticalAlign)
+		super(y, u, v)
 	}
-//	 FIXME but only if we really need it
-//	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromByteBuffer (buffer: ByteBufferAbstract, size: IntSize2D, byteAlignment: IntSize2D = IntSize2D new()) {
-		this byteAlignment = byteAlignment
-		super(buffer, size, CoordinateSystem Default, IntShell2D new())
-	}
-	init: func ~fromEverything (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
-		this byteAlignment = byteAlignment
-		super(buffer, size, coordinateSystem, crop)
-	}
-	init: func ~fromRasterYuv420Planar (original: This) { super(original) }
 	init: func ~fromRasterImage (original: RasterImage) {
-		this init(original size, original coordinateSystem, original crop)
-//		"RasterYuv420Planar init ~fromRasterImage, original: (#{original size}), this: (#{this size}), y stride #{this y stride}" println()
-		y := 0
-		x := 0
-		width := this size width
-		yRow := this y pointer as UInt8*
-		yDestination := yRow
-		uRow := this u pointer as UInt8*
-		uDestination := uRow
-		vRow := this v pointer as UInt8*
-		vDestination := vRow
-//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
-		f := func (color: ColorYuv) {
-			(yDestination)@ = color y
-			yDestination += 1
-			if (x % 2 == 0 && y % 2 == 0) {
-				uDestination@ = color u
-				uDestination += 1
-				vDestination@ = color v
-				vDestination += 1
-			}
-			x += 1
-			if (x >= width) {
-				x = 0
-				y += 1
-
-				yRow += this y stride
-				yDestination = yRow
-				if (y % 2 == 0) {
-					uRow += this u stride
-					uDestination = uRow
-					vRow += this v stride
-					vDestination = vRow
-				}
-			}
-		}
-		original apply(f)
+		(y, u, v) := this _allocate(original size)
+		super(original, y, u, v)
 	}
-	/*shift: func (offset: IntSize2D) -> Image {
-		result : This
-		y = this y shift(offset) as RasterMonochrome
-		u = this u shift(offset/2) as RasterMonochrome
-		v = this v shift(offset/2) as RasterMonochrome
-		result = This new(this size)
-		result buffer copyFrom(y buffer, 0, 0, y length)
-		result buffer copyFrom(u buffer, 0, y length, u length)
-		result buffer copyFrom(v buffer, 0, y length + u length, v length)
-		result
-	}*/
-	create: func (size: IntSize2D) -> Image {
-		result := This new(size)
-		result crop = this crop
-		result wrap = this wrap
-		result
+	_allocate: func (size: IntSize2D, align := 0, verticalAlign := 0) -> (RasterMonochrome, RasterMonochrome, RasterMonochrome) {
+		yLength := Int align(size width, align) * Int align(size height, verticalAlign)
+		uLength := Int align(size width / 2, align) * Int align(size height / 2, verticalAlign)
+		buffer := ByteBuffer new(yLength + 2 * uLength)
+		(
+			RasterMonochrome new(buffer slice(0, yLength), size, align),
+			RasterMonochrome new(buffer slice(yLength, uLength), size / 2, align),
+			RasterMonochrome new(buffer slice(yLength + uLength, uLength), size / 2, align)
+		)
 	}
-	createY: func -> RasterMonochrome {
-		RasterMonochrome new(this pointer, this size, this byteAlignment width)
-	}
-	createU: func -> RasterMonochrome {
-		//FIXME: Calculate correct position in memory when horizontal padding
-		RasterMonochrome new((this pointer + RasterPacked calculateLength(this size, 1)) as Int*, this size / 2, this byteAlignment width)
-	}
-	createV: func -> RasterMonochrome {
-		//FIXME: Calculate correct position in memory when horizontal padding
-		RasterMonochrome new((this pointer + RasterPacked calculateLength(this size, 1) + RasterPacked calculateLength(this size / 2, 1)) as Int*, this size / 2, this byteAlignment width)
-	}
+	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This {
-		This new(this)
+		result := This new(this)
+		this y buffer copyTo(result y buffer)
+		this u buffer copyTo(result u buffer)
+		this v buffer copyTo(result v buffer)
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))
 	}
 	apply: func ~yuv (action: Func (ColorYuv)) {
-		yRow := this y pointer as UInt8*
+		yRow := this y buffer pointer
 		ySource := yRow
-		uRow := this u pointer as UInt8*
+		uRow := this u buffer pointer
 		uSource := uRow
-		vRow := this v pointer as UInt8*
+		vRow := this v buffer pointer
 		vSource := vRow
 		width := this size width
 		height := this size height
@@ -156,11 +89,45 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
 		this apply(ColorConvert fromYuv(action))
 	}
+	convertFrom: static func(original: RasterImage) -> This {
+		result := This new(original)
+		y := 0
+		x := 0
+		width := result size width
+		yRow := result y buffer pointer
+		yDestination := yRow
+		uRow := result u buffer pointer
+		uDestination := uRow
+		vRow := result v buffer pointer
+		vDestination := vRow
+		//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
+		f := func (color: ColorYuv) {
+			(yDestination)@ = color y
+			yDestination += 1
+			if (x % 2 == 0 && y % 2 == 0) {
+				uDestination@ = color u
+				uDestination += 1
+				vDestination@ = color v
+				vDestination += 1
+			}
+			x += 1
+			if (x >= width) {
+				x = 0
+				y += 1
 
-//	FIXME
-//	openResource(assembly: ???, name: String) {
-//		Image openResource
-//	}
+				yRow += result y stride
+				yDestination = yRow
+				if (y % 2 == 0) {
+					uRow += result u stride
+					uDestination = uRow
+					vRow += result v stride
+					vDestination = vRow
+				}
+			}
+		}
+		original apply(f)
+		result
+	}
 	operator [] (x, y: Int) -> ColorYuv {
 		ColorYuv new(0, 0, 0)
 		ColorYuv new(this y[x, y] y, this u [x/2, y/2] y, this v [x/2, y/2] y)

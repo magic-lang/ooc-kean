@@ -27,57 +27,20 @@ import Color
 
 RasterUv: class extends RasterPacked {
 	bytesPerPixel: Int { get { 2 } }
-	init: func ~fromSize (size: IntSize2D) { this init(ByteBuffer new(RasterPacked calculateLength(size, 2)), size) }
-	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
-		super(ByteBuffer new(RasterPacked calculateLength(size, 2)), size, coordinateSystem, crop, byteAlignment)
-	}
-//	 FIXME but only if we really need it
-//	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromIntPointer (pointer: UInt8*, size: IntSize2D, byteAlignment := 0) {
-		this init(ByteBuffer new(size area * 2, pointer), size, byteAlignment)
-	}
-	init: func ~fromByteBuffer (buffer: ByteBufferAbstract, size: IntSize2D, byteAlignment := 0) {
-		super(buffer, size, CoordinateSystem Default, IntShell2D new(), byteAlignment)
-	}
-
-	init: func ~fromEverything (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := 0) {
-		super(buffer, size, coordinateSystem, crop, byteAlignment)
-	}
-	init: func ~fromRasterUv (original: This) { super(original) }
-
-	init: func ~fromRasterImage (original: RasterImage) {
-		this init(original size, original coordinateSystem, original crop)
-		row := this pointer as UInt8*
-		rowLength := this size width
-		rowEnd := row as ColorUv* + rowLength
-		destination := row as ColorUv*
-		f := func (color: ColorYuv) {
-			(destination as ColorUv*)@ = ColorUv new(color u, color v)
-			destination += 1
-			if (destination >= rowEnd) {
-				row += this stride
-				destination = row as ColorUv*
-				rowEnd = row as ColorUv* + rowLength
-			}
-		}
-		original apply(f)
-	}
-
-	create: func (size: IntSize2D) -> Image {
-		result := This new(size)
-		result crop = this crop
-		result wrap = this wrap
+	init: func ~allocate (size: IntSize2D, align := 0) { super(size, align) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, align := 0) { super(buffer, size, align) }
+	init: func ~fromRasterImage (original: RasterImage) { super(original)	}
+	create: func (size: IntSize2D) -> Image { This new(size) }
+	copy: func -> This {
+		result := This new(this)
+		this buffer copyTo(result buffer)
 		result
 	}
-	copy: func -> This {
-		This new(this)
-	}
-
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))
 	}
 	apply: func ~yuv (action: Func(ColorYuv)) {
-		uvRow := this pointer as UInt8*
+		uvRow := this buffer pointer
 		uSource := uvRow
 		vRow := uvRow + 1
 		vSource := vRow
@@ -164,9 +127,24 @@ RasterUv: class extends RasterPacked {
 		result := RasterBgr new(this)
 		StbImage writePng(filename, result size width, result size height, result bytesPerPixel, result buffer pointer, result size width * 3)
 	}
-
-	operator [] (x, y: Int) -> ColorUv { this isValidIn(x, y) ? ((this pointer + y * this stride) as ColorUv* + x)@ : ColorUv new(0, 0) }
-	operator []= (x, y: Int, value: ColorUv) {
-		((this pointer + y * this stride) as ColorUv* + x)@ = value
+	convertFrom: static func(original: RasterImage) -> This {
+		result := This new(original)
+		row := result buffer pointer
+		rowLength := result size width
+		rowEnd := row as ColorUv* + rowLength
+		destination := row as ColorUv*
+		f := func (color: ColorYuv) {
+			(destination as ColorUv*)@ = ColorUv new(color u, color v)
+			destination += 1
+			if (destination >= rowEnd) {
+				row += result stride
+				destination = row as ColorUv*
+				rowEnd = row as ColorUv* + rowLength
+			}
+		}
+		original apply(f)
 	}
+
+	operator [] (x, y: Int) -> ColorUv { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorUv* + x)@ : ColorUv new(0, 0) }
+	operator []= (x, y: Int, value: ColorUv) { ((this buffer pointer + y * this stride) as ColorUv* + x)@ = value }
 }
