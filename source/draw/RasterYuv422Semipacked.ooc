@@ -1,4 +1,4 @@
-/*//
+//
 // Copyright (c) 2011-2014 Simon Mika <simon@mika.se>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -33,27 +33,16 @@ import io/BinarySequence
 
 RasterYuv422Semipacked: class extends RasterPacked {
 	bytesPerPixel: Int { get { 2 } }
-	init: func ~fromSize (size: IntSize2D) { this init(size, CoordinateSystem Default, IntShell2D new()) }
-	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
-		bufSize := RasterPacked calculateLength(size, this bytesPerPixel)
-		super(ByteBuffer new(bufSize), size, coordinateSystem, crop)
-	}
-//	 FIXME but only if we really need it
-//	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) {
-		super(buffer, size, CoordinateSystem Default, IntShell2D new())
-	}
-	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
-		super(buffer, size, coordinateSystem, crop)
-	}
-	init: func ~fromRasterYuv420 (original: This) { super(original) }
-	init: func ~fromRasterImage (original: RasterImage) {
-		this init(original size, original coordinateSystem, original crop)
+	init: func ~allocate (size: IntSize2D, align := 0) { super(size, align) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, align := 0) { super(buffer, size, align) }
+	init: func ~fromRasterImage (original: RasterImage) { super(original)	}
+	createFrom: func ~fromRasterImage (original: RasterImage) {
+		result := This new(original size)
 //		"RasterYuv420 init ~fromRasterImage, original: (#{original size}), this: (#{this size}), y stride #{this y stride}" println()
 		y := 0
 		x := 0
 		width := this size width
-		row := this pointer as UInt8*
+		row := this buffer pointer as UInt8*
 		destination := row
 //		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
 		f := func (color: ColorYuv) {
@@ -128,7 +117,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		}
 	}
 	__destroy__: func {
-		this buffer decreaseReferenceCount()
+		this buffer referenceCount decrease()
 	}
 	open: static func (filename: String) -> This {
 		x, y, n: Int
@@ -140,29 +129,25 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		StbImage free(data)
 		bgr := RasterBgr new(buffer, IntSize2D new(x, y))
 		result := This new(bgr)
-		bgr decreaseReferenceCount()
+		bgr referenceCount decrease()
 		return result
 	}
 	save: func (filename: String) {
 		bgr := RasterBgr new(this)
 		bgr save(filename)
-		bgr decreaseReferenceCount()
+		bgr referenceCount decrease()
 	}
-	saveBin: func (filename: String) {
+	saveRaw: func (filename: String) {
 		fileWriter := FileWriter new(filename)
 		fileWriter write(this buffer pointer as Char*, this buffer size)
 		fileWriter close()
 	}
-	openBin: static func (filename: String, width: Int, height: Int) -> This {
+	openRaw: static func (filename: String, size: IntSize2D) -> This {
 		fileReader := FileReader new(FStream open(filename, "rb"))
-		bytes := width * height * 2
-		data: UInt8* = gc_malloc_atomic(bytes)
-		fileReader read((data as Char*), 0, bytes)
+		result := This new(size)
+		fileReader read((result buffer pointer as Char*), 0, result buffer size)
 		fileReader close()
 		fileReader free()
-		buffer := ByteBuffer new(bytes, data as UInt8*)
-		result := This new(buffer, IntSize2D new(width, height))
-		buffer decreaseReferenceCount()
 		result
 	}
-}*/
+}
