@@ -72,8 +72,9 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		result
 	}
 	copy: func -> This {
-//  	"copying..." println()
-		This new(this)
+		result := This new(this size)
+		this buffer copyTo(result buffer)
+		result
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))

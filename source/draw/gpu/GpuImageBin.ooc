@@ -16,7 +16,7 @@
 */
 
 use ooc-math
-import structs/FreeArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
+import structs/FreeArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuYuv422Semipacked
 
 GpuImageBin: class {
 	_monochrome: FreeArrayList<GpuImage>
@@ -25,6 +25,7 @@ GpuImageBin: class {
 	_uv: FreeArrayList<GpuImage>
 	_yuvSemiplanar: FreeArrayList<GpuImage>
 	_yuvPlanar: FreeArrayList<GpuImage>
+	_yuv422: FreeArrayList<GpuImage>
 
 	init: func {
 		this _monochrome = FreeArrayList<GpuImage> new()
@@ -33,6 +34,7 @@ GpuImageBin: class {
 		this _uv = FreeArrayList<GpuImage> new()
 		this _yuvSemiplanar = FreeArrayList<GpuImage> new()
 		this _yuvPlanar = FreeArrayList<GpuImage> new()
+		this _yuv422 = FreeArrayList<GpuImage> new()
 	}
 	dispose: func {
 		for(i in 0..this _monochrome size)
@@ -47,6 +49,8 @@ GpuImageBin: class {
 			this _yuvSemiplanar[i] dispose()
 		for(i in 0..this _yuvPlanar size)
 			this _yuvPlanar[i] dispose()
+		for(i in 0..this _yuv422 size)
+			this _yuv422[i] dispose()
 
 		this _monochrome clear()
 		this _bgr clear()
@@ -54,6 +58,7 @@ GpuImageBin: class {
 		this _uv clear()
 		this _yuvSemiplanar clear()
 		this _yuvPlanar clear()
+		this _yuv422 clear()
 	}
 	add: func (image: GpuImage) {
 		match (image) {
@@ -69,6 +74,10 @@ GpuImageBin: class {
 				this _yuvSemiplanar add(image)
 			case (i: GpuYuv420Planar) =>
 				this _yuvPlanar add(image)
+			case (i: GpuYuv422Semipacked) =>
+				this _yuv422 add(image)
+			case =>
+				raise("Unknown format in GpuImageBin add()")
 		}
 	}
 	_search: func (size: IntSize2D, arrayList: FreeArrayList<GpuImage>) -> GpuImage {
@@ -95,7 +104,11 @@ GpuImageBin: class {
 			case GpuImageType bgra => this _search(size, this _bgra)
 			case GpuImageType yuvSemiplanar => this _search(size, this _yuvSemiplanar)
 			case GpuImageType yuvPlanar => this _search(size, this _yuvPlanar)
+			case GpuImageType yuv422 => this _search(size, this _yuv422)
+			case => null
 		}
+//		if (result == null)
+//			raise("Unknown format in GpuImageBin find()")
 		result
 	}
 }

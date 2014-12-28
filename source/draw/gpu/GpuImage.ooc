@@ -28,6 +28,7 @@ GpuImageType: enum {
 	uv
 	yuvSemiplanar
 	yuvPlanar
+	yuv422
 }
 
 GpuImage: abstract class extends Image {
