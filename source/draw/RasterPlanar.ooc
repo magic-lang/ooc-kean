@@ -23,8 +23,8 @@ import Image
 import RasterImage
 
 RasterPlanar: abstract class extends RasterImage {
-	init: func (size: IntSize2D) {
-		super(size)
+	init: func (size: IntSize2D, align := 0, verticalAlign := 0) {
+		super(size, align, verticalAlign)
 	}
 	init: func ~fromOriginal (original: This) {
 		super(original)
