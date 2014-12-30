@@ -143,9 +143,9 @@ AndroidContext: class extends OpenGLES3Context {
 	_createEglYuv420Semiplanar: func (rasterImage: RasterYuv420Semiplanar) -> GpuImage {
 		if (rasterImage y size width != 1920)
 			return this _createYuv420Semiplanar(rasterImage)
-		textureY := this createEglRgba(IntSize2D new(rasterImage y size width, rasterImage y size height / 4), rasterImage y pointer, 1)
+		textureY := this createEglRgba(IntSize2D new(rasterImage y size width, rasterImage y size height / 4), rasterImage y buffer pointer, 1)
 		packedY := OpenGLES3Monochrome new(textureY, rasterImage y size, this)
-		textureUv := this createEglRgba(IntSize2D new(1920, 135), rasterImage uv pointer, 1)
+		textureUv := this createEglRgba(IntSize2D new(1920, 135), rasterImage uv buffer pointer, 1)
 		packedUv := OpenGLES3Uv new(textureUv, rasterImage uv size, this)
 		result := this createYuv420Semiplanar(rasterImage size) as OpenGLES3Yuv420Semiplanar
 		result y canvas draw(packedY, this _unpackMonochrome1080p, Viewport new(rasterImage y size))

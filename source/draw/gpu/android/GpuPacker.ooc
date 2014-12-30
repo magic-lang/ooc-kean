@@ -65,9 +65,9 @@ GpuPacker: class {
 	}
 	finish: static func { Fbo finish() }
 	flush: static func { Fbo flush() }
-	readRows: func (destination: RasterImage) {
+	readRows: func (destination: RasterPacked) {
 		sourcePointer := this _targetTexture read()
-		destinationPointer := destination pointer
+		destinationPointer := destination buffer pointer
 		destinationStride := destination stride
 		sourceStride := this _targetTexture stride
 
@@ -80,9 +80,9 @@ GpuPacker: class {
 		}
 		this _targetTexture unlock()
 	}
-	read: func (destination: RasterImage) {
+	read: func (destination: RasterPacked) {
 		sourcePointer := this _targetTexture read()
-		destinationPointer := destination pointer
+		destinationPointer := destination buffer pointer
 		destinationStride := destination stride
 		sourceStride := this _targetTexture stride
 		memcpy(destinationPointer, sourcePointer, destinationStride * destination size height)
