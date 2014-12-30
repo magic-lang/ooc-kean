@@ -15,12 +15,14 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 import threading/Thread
-Synchronized: abstract class {
+Synchronized: class {
 	_lock: Mutex
 	init: func (lock: Mutex) { this _lock = lock }
 	init: func ~default { this init(Mutex new()) }
 	__destroy__: func {
-		this _lock destroy()
+		if (this _lock != null)
+			this _lock destroy()
+		this _lock = null
 //		this _lock free()
 	}
 	lock: func {

@@ -1,4 +1,4 @@
-//
+/*//
 // Copyright (c) 2011-2014 Simon Mika <simon@mika.se>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -20,26 +20,30 @@ import math
 import structs/ArrayList
 import RasterPacked
 import RasterImage
-import RasterYuvPlanar
 import RasterMonochrome
 import Image
 import Color
-import StbImage
 import RasterBgr
+import StbImage
+import io/File
+import io/FileReader
+import io/Reader
+import io/FileWriter
+import io/BinarySequence
 
-RasterYuv420: class extends RasterYuvPlanar {
+RasterYuv422Semipacked: class extends RasterPacked {
+	bytesPerPixel: Int { get { 2 } }
 	init: func ~fromSize (size: IntSize2D) { this init(size, CoordinateSystem Default, IntShell2D new()) }
-	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
-		bufSize := RasterPacked calculateLength(size, 1) + 2 * RasterPacked calculateLength(size / 2, 1)
-//		"RasterYuv420 init ~fromStuff" println()
+	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
+		bufSize := RasterPacked calculateLength(size, this bytesPerPixel)
 		super(ByteBuffer new(bufSize), size, coordinateSystem, crop)
 	}
 //	 FIXME but only if we really need it
 //	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromByteBuffer (buffer: ByteBufferAbstract, size: IntSize2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) {
 		super(buffer, size, CoordinateSystem Default, IntShell2D new())
 	}
-	init: func ~fromEverything (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
+	init: func ~fromEverything (buffer: ByteBuffer, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D) {
 		super(buffer, size, coordinateSystem, crop)
 	}
 	init: func ~fromRasterYuv420 (original: This) { super(original) }
@@ -49,98 +53,54 @@ RasterYuv420: class extends RasterYuvPlanar {
 		y := 0
 		x := 0
 		width := this size width
-		yRow := this y pointer as UInt8*
-		yDestination := yRow
-		uRow := this u pointer as UInt8*
-		uDestination := uRow
-		vRow := this v pointer as UInt8*
-		vDestination := vRow
+		row := this pointer as UInt8*
+		destination := row
 //		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
 		f := func (color: ColorYuv) {
-			(yDestination)@ = color y
-			yDestination += 1
-			if (x % 2 == 0 && y % 2 == 0) {
-				uDestination@ = color u
-				uDestination += 1
-				vDestination@ = color v
-				vDestination += 1
+			if (x % 2) {
+				destination@ = color v
+			} else {
+				destination@ = color u
 			}
+			destination += 1
+			destination@ = color y
+			destination += 1
 			x += 1
 			if (x >= width) {
 				x = 0
 				y += 1
 
-				yRow += this y stride
-				yDestination = yRow
-				if (y % 2 == 0) {
-					uRow += this u stride
-					uDestination = uRow
-					vRow += this v stride
-					vDestination = vRow
-				}
+				row += this stride
+				destination = row
 			}
 		}
 		original apply(f)
 	}
-/*	shift: func (offset: IntSize2D) -> Image {
-		result : This
-		y = this y shift(offset) as RasterMonochrome
-		u = this u shift(offset/2) as RasterMonochrome
-		v = this v shift(offset/2) as RasterMonochrome
-		result = This new(this size)
-		result buffer copyFrom(y buffer, 0, 0, y length)
-		result buffer copyFrom(u buffer, 0, y length, u length)
-		result buffer copyFrom(v buffer, 0, y length + u length, v length)
-		result
-	}*/
 	create: func (size: IntSize2D) -> Image {
 		result := This new(size)
 		result crop = this crop
 		result wrap = this wrap
 		result
 	}
-	createY: func -> RasterMonochrome {
-		RasterMonochrome new(this pointer, this size)
-	}
-	createU: func -> RasterMonochrome {
-		RasterMonochrome new((this pointer + RasterPacked calculateLength(this size, 1)) as Int*, this size / 2)
-	}
-	createV: func -> RasterMonochrome {
-		RasterMonochrome new((this pointer + RasterPacked calculateLength(this size, 1) + RasterPacked calculateLength(this size / 2, 1)) as Int*, this size / 2)
-	}
 	copy: func -> This {
+//  	"copying..." println()
 		This new(this)
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))
 	}
 	apply: func ~yuv (action: Func (ColorYuv)) {
-		yRow := this y pointer as UInt8*
-		ySource := yRow
-		uRow := this u pointer as UInt8*
-		uSource := uRow
-		vRow := this v pointer as UInt8*
-		vSource := vRow
+		row := this buffer pointer as UInt8*
+		source := row
 		width := this size width
 		height := this size height
 
 		for (y in 0..height) {
 			for (x in 0..width) {
-				action(ColorYuv new(ySource@, uSource@, vSource@))
-				ySource += 1
-				if (x % 2 == 1) {
-					uSource += 1
-					vSource += 1
-				}
+				action(ColorYuv new((source+1)@, (source - 2*(x % 2))@, (source + 2*((x + 1) % 2))@))
+				source += 2
 			}
-			yRow += this y stride
-			if (y % 2 == 1) {
-				uRow += this u stride
-				vRow += this v stride
-			}
-			ySource = yRow
-			uSource = uRow
-			vSource = vRow
+			row += this stride
 		}
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
@@ -152,13 +112,23 @@ RasterYuv420: class extends RasterYuvPlanar {
 //		Image openResource
 //	}
 	operator [] (x, y: Int) -> ColorYuv {
-		ColorYuv new(0, 0, 0)
-		ColorYuv new(this y[x, y] y, this u [x/2, y/2] y, this v [x/2, y/2] y)
+		result := ColorYuv new()
+		if (this isValidIn(x, y)) {
+			index := (this buffer pointer + y * this stride + x * this bytesPerPixel) as ColorMonochrome* // U or V value
+			result = ColorYuv new((index + 1)@ y, (index - 2*(x % 2))@ y, (index + 2*((x + 1) % 2))@ y)
+		}
+		result
 	}
 	operator []= (x, y: Int, value: ColorYuv) {
-		this y[x, y] = ColorMonochrome new(value y)
-		this u[x/2, y/2] = ColorMonochrome new(value u)
-		this v[x/2, y/2] = ColorMonochrome new(value v)
+		if (this isValidIn(x, y)) {
+			index := (this buffer pointer + y * this stride + x * this bytesPerPixel) as ColorMonochrome* // U or V value
+			(index + 1)@ = ColorMonochrome new(value y)
+			(index - 2*(x % 2))@ = ColorMonochrome new(value u)
+			(index - 2*((x + 1) % 2))@ = ColorMonochrome new(value v)
+		}
+	}
+	__destroy__: func {
+		this buffer decreaseReferenceCount()
 	}
 	open: static func (filename: String) -> This {
 		x, y, n: Int
@@ -168,6 +138,31 @@ RasterYuv420: class extends RasterYuvPlanar {
 		// FIXME: Find a better way to do this using Dispose() or something
 		memcpy(buffer pointer, data, x * y * requiredComponents)
 		StbImage free(data)
-		This new(RasterBgr new(buffer, IntSize2D new(x, y)))
+		bgr := RasterBgr new(buffer, IntSize2D new(x, y))
+		result := This new(bgr)
+		bgr decreaseReferenceCount()
+		return result
 	}
-}
+	save: func (filename: String) {
+		bgr := RasterBgr new(this)
+		bgr save(filename)
+		bgr decreaseReferenceCount()
+	}
+	saveBin: func (filename: String) {
+		fileWriter := FileWriter new(filename)
+		fileWriter write(this buffer pointer as Char*, this buffer size)
+		fileWriter close()
+	}
+	openBin: static func (filename: String, width: Int, height: Int) -> This {
+		fileReader := FileReader new(FStream open(filename, "rb"))
+		bytes := width * height * 2
+		data: UInt8* = gc_malloc_atomic(bytes)
+		fileReader read((data as Char*), 0, bytes)
+		fileReader close()
+		fileReader free()
+		buffer := ByteBuffer new(bytes, data as UInt8*)
+		result := This new(buffer, IntSize2D new(width, height))
+		buffer decreaseReferenceCount()
+		result
+	}
+}*/

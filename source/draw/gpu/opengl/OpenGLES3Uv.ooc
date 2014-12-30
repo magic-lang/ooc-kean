@@ -37,7 +37,6 @@ OpenGLES3Uv: class extends GpuUv {
 		packed canvas draw(this, packMap, Viewport new(packed size))
 		buffer := packed canvas readPixels(4)
 		result := RasterUv new(buffer, this size)
-		buffer decreaseReferenceCount()
 		packed recycle()
 		result
 	}
@@ -51,7 +50,7 @@ OpenGLES3Uv: class extends GpuUv {
 		result
 	}
 	create: static func ~fromRaster (rasterImage: RasterUv, context: GpuContext) -> This {
-		result := This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
+		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
 		result
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {

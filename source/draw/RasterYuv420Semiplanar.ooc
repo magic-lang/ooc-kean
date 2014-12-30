@@ -34,67 +34,34 @@ import io/FileWriter
 import io/BinarySequence
 
 RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
-	init: func ~fromRasterImages (y: RasterMonochrome, uv: RasterUv) {
-		this y = y
-		this uv = uv
-		this size = y size
-		this stride = y stride
+	init: func ~fromRasterImages (yImage: RasterMonochrome, uvImage: RasterUv) {
+		super(yImage, uvImage)
 	}
-	init: func ~fromSize (size: IntSize2D) { this init(size, CoordinateSystem Default, IntShell2D new()) }
-	init: func ~fromStuff (size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
-		bufSize := RasterPacked calculateLength(size, 1) + RasterPacked calculateLength(size / 2, 2)
-		this byteAlignment = byteAlignment
-//    "RasterYuv420Semiplanar init ~fromStuff" println()
-		super(ByteBuffer new(bufSize), size, coordinateSystem, crop)
+	init: func ~allocate (size: IntSize2D, align := 0, verticalAlign := 0) {
+		(yImage, uvImage) := This _allocate(size, align, verticalAlign)
+		this init(yImage, uvImage)
 	}
-//	 FIXME but only if we really need it
-//	init: func ~fromByteArray (data: UInt8*, size: IntSize2D) { this init(ByteBuffer new(data), size) }
-	init: func ~fromByteBuffer (buffer: ByteBufferAbstract, size: IntSize2D, byteAlignment := IntSize2D new()) {
-		this byteAlignment = byteAlignment
-		super(buffer, size, CoordinateSystem Default, IntShell2D new())
-	}
-	init: func ~fromEverything (buffer: ByteBufferAbstract, size: IntSize2D, coordinateSystem: CoordinateSystem, crop: IntShell2D, byteAlignment := IntSize2D new()) {
-		this byteAlignment = byteAlignment
-		super(buffer, size, coordinateSystem, crop)
-	}
-	init: func ~fromRasterYuv420 (original: This) { super(original) }
 	init: func ~fromRasterImage (original: RasterImage) {
-		this init(original size, original coordinateSystem, original crop)
-//		"RasterYuv420 init ~fromRasterImage, original: (#{original size}), this: (#{this size}), y stride #{this y stride}" println()
-		y := 0
-		x := 0
-		width := this size width
-		yRow := this y pointer as UInt8*
-		yDestination := yRow
-		uvRow := this uv pointer as UInt8*
-		uDestination := uvRow
-		vDestination := uvRow + 1
-//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
-		f := func (color: ColorYuv) {
-			(yDestination)@ = color y
-			yDestination += 1
-			if (x % 2 == 0 && y % 2 == 0) {
-				uDestination@ = color u
-				uDestination += 2
-				vDestination@ = color v
-				vDestination += 2
-			}
-			x += 1
-			if (x >= width) {
-				x = 0
-				y += 1
-
-				yRow += this y stride
-				yDestination = yRow
-				if (y % 2 == 0) {
-					uvRow += this uv stride
-					uDestination = uvRow
-					vDestination = uvRow + 1
-				}
-			}
-		}
-		original apply(f)
+		(yImage, uvImage) := This _allocate(original size)
+		super(original, yImage, uvImage)
 	}
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, align := 0, verticalAlign := 0) {
+		(yLength, uvLength) := This _calculateSizes(size, align, verticalAlign)
+		(yImage, uvImage) := This _createSubimages(buffer, yLength, uvLength, size, align)
+		this init(yImage, uvImage)
+	}
+	_calculateSizes: static func (size: IntSize2D, align := 0, verticalAlign := 0) -> (Int, Int) {
+		(Int align(size width, align) * Int align(size height, verticalAlign), Int align(size width, align) * Int align(size height / 2, verticalAlign))
+	}
+	_allocate: static func (size: IntSize2D, align := 0, verticalAlign := 0) -> (RasterMonochrome, RasterUv) {
+		(yLength, uvLength) := This _calculateSizes(size, align, verticalAlign)
+		buffer := ByteBuffer new(yLength + uvLength)
+		This _createSubimages(buffer, yLength, uvLength, size, align)
+	}
+	_createSubimages: static func (buffer: ByteBuffer, yLength, uvLength : Int, size: IntSize2D, align: Int) -> (RasterMonochrome, RasterUv) {
+		(RasterMonochrome new(buffer slice(0, yLength), size, align), RasterUv new(buffer slice(yLength, uvLength), size / 2, align))
+	}
+
 	/*shift: func (offset: IntSize2D) -> Image {
 		result : This
 		y = this y shift(offset) as RasterMonochrome
@@ -104,41 +71,20 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		result buffer copyFrom(uv buffer, 0, y length, uv length)
 		result
 	}*/
-	create: func (size: IntSize2D) -> Image {
-		result := This new(size)
-		result crop = this crop
-		result wrap = this wrap
-		result
-	}
-	createY: func -> RasterMonochrome {
-		yStride := Int align(this size width, byteAlignment width)
-		ySize := Int align(this size height, this byteAlignment height) * yStride
-		ySlice := ByteBufferSlice new(this buffer, 0, ySize)
-		result := RasterMonochrome new(ySlice, this size, this byteAlignment width)
-		ySlice decreaseReferenceCount()
-		result
-	}
-	createUV: func -> RasterUv {
-		yStride := Int align(this size width, byteAlignment width)
-		ySize := Int align(this size height, this byteAlignment height) * yStride
-		uvStride := Int align(this size width * 2, byteAlignment width)
-		uvSize := Int align(this y size height, this byteAlignment height) * uvStride
-		uvSlice := ByteBufferSlice new(this buffer, ySize, uvSize)
-		result := RasterUv new(uvSlice, this size / 2, this byteAlignment width)
-		uvSlice decreaseReferenceCount()
-		result
-	}
+	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This {
-//  	"copying..." println()
-		This new(this)
+		result := This new(this)
+		this y buffer copyTo(result y buffer)
+		this uv buffer copyTo(result uv buffer)
+		result
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))
 	}
 	apply: func ~yuv (action: Func (ColorYuv)) {
-		yRow := this y pointer as UInt8*
+		yRow := this y buffer pointer
 		ySource := yRow
-		uvRow := this uv pointer as UInt8*
+		uvRow := this uv buffer pointer
 		uSource := uvRow
 		vSource := uvRow + 1
 		width := this size width
@@ -172,50 +118,73 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 //	}
 	operator [] (x, y: Int) -> ColorYuv {
 		ColorYuv new(0, 0, 0)
-		ColorYuv new(this y[x, y] y, this uv [x/2, y/2] u, this uv [x/2, y/2] v)
+		ColorYuv new(this y[x, y] y, this uv [x / 2, y / 2] u, this uv [x / 2, y / 2] v)
 	}
 	operator []= (x, y: Int, value: ColorYuv) {
 		this y[x, y] = ColorMonochrome new(value y)
-		this uv[x/2, y/2] = ColorUv new(value u, value v)
+		this uv[x / 2, y / 2] = ColorUv new(value u, value v)
 	}
-	__destroy__: func {
-		this y decreaseReferenceCount()
-		this uv decreaseReferenceCount()
-		this buffer decreaseReferenceCount()
+	createFrom: static func(original: RasterImage) -> This {
+		result := This new(original)
+		//		"RasterYuv420 init ~fromRasterImage, original: (#{original size}), this: (#{this size}), y stride #{this y stride}" println()
+		y := 0
+		x := 0
+		width := result size width
+		yRow := result y buffer pointer
+		yDestination := yRow
+		uvRow := result uv buffer pointer
+		uDestination := uvRow
+		vDestination := uvRow + 1
+		//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
+		f := func (color: ColorYuv) {
+			(yDestination)@ = color y
+			yDestination += 1
+			if (x % 2 == 0 && y % 2 == 0) {
+				uDestination@ = color u
+				uDestination += 2
+				vDestination@ = color v
+				vDestination += 2
+			}
+			x += 1
+			if (x >= width) {
+				x = 0
+				y += 1
+				yRow += result y stride
+				yDestination = yRow
+				if (y % 2 == 0) {
+					uvRow += result uv stride
+					uDestination = uvRow
+					vDestination = uvRow + 1
+				}
+			}
+		}
+		original apply(f)
+		result
 	}
 	open: static func (filename: String) -> This {
-		x, y, n: Int
-		requiredComponents := 3
-		data := StbImage load(filename, x&, y&, n&, requiredComponents)
-		buffer := ByteBuffer new(x * y * requiredComponents)
-		// FIXME: Find a better way to do this using Dispose() or something
-		memcpy(buffer pointer, data, x * y * requiredComponents)
-		StbImage free(data)
-		bgr := RasterBgr new(buffer, IntSize2D new(x, y))
-		result := This new(bgr)
-		bgr decreaseReferenceCount()
-		return result
+		bgr := RasterBgr open(filename)
+		result := This createFrom(bgr)
+		bgr free()
+		result
 	}
 	save: func (filename: String) {
-		bgr := RasterBgr new(this)
+		bgr := RasterBgr convertFrom(this)
 		bgr save(filename)
-		bgr decreaseReferenceCount()
+		bgr free()
 	}
-	saveBin: func (filename: String) {
-		fileWriter := FileWriter new(filename)
-		fileWriter write(this buffer pointer as Char*, this buffer size)
-		fileWriter close()
-	}
-	openBin: static func (filename: String, width: Int, height: Int) -> This {
+	openRaw: static func (filename: String, size: IntSize2D) -> This {
 		fileReader := FileReader new(FStream open(filename, "rb"))
-		bytes := width * height + (width * height / 2)
-		data: UInt8* = gc_malloc_atomic(bytes)
-		fileReader read((data as Char*), 0, bytes)
+		result := This new(size)
+		fileReader read((result y buffer pointer as Char*), 0, result y buffer size)
+		fileReader read((result uv buffer pointer as Char*), 0, result uv buffer size)
 		fileReader close()
 		fileReader free()
-		buffer := ByteBuffer new(bytes, data as UInt8*)
-		result := This new(buffer, IntSize2D new(width, height))
-		buffer decreaseReferenceCount()
 		result
+	}
+	saveRaw: func (filename: String) {
+		fileWriter := FileWriter new(filename)
+		fileWriter write(this y buffer pointer as Char*, this y buffer size)
+		fileWriter write(this uv buffer pointer as Char*, this uv buffer size)
+		fileWriter close()
 	}
 }

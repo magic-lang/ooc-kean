@@ -37,7 +37,6 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 		packed canvas draw(this, packMap, Viewport new(packed size))
 		buffer := packed canvas readPixels(4)
 		result := RasterMonochrome new(buffer, this size)
-		buffer decreaseReferenceCount()
 		packed recycle()
 		result
 	}
@@ -47,7 +46,7 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterMonochrome, context: GpuContext) -> This {
-		result := This new(rasterImage size, rasterImage stride, rasterImage pointer, context)
+		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
 		result
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {

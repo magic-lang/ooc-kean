@@ -56,7 +56,7 @@ GpuPacker: class {
 	}
 	read: func ~ByteBuffer -> ByteBuffer {
 		sourcePointer := this _targetTexture read()
-		buffer := ByteBuffer new(this _targetTexture stride * this _targetTexture size height, sourcePointer,
+		buffer := ByteBuffer new(sourcePointer, this _targetTexture stride * this _targetTexture size height,
 			func (buffer: ByteBuffer){
 				this _targetTexture unlock()
 				this recycle()

@@ -72,7 +72,6 @@ Vector: abstract class <T> {
 		else
 			memcpy(destination, source, length)
 	}
-
 	operator [] (index: Int) -> T {
 		this _backend[index]
 	}
