@@ -25,7 +25,6 @@ AndroidContext: class extends OpenGLES3Context {
 	_packUv1080p: OpenGLES3MapPackUv1080p
 	_unpackMonochrome1080p: OpenGLES3MapUnpackMonochrome1080p
 	_unpackUv1080p: OpenGLES3MapUnpackUv1080p
-	_eglImageBin: GpuImageBin
 	init: func {
 		super(func { this onDispose() })
 		this _packerBin = GpuPackerBin new()
@@ -33,11 +32,9 @@ AndroidContext: class extends OpenGLES3Context {
 		this _packUv1080p = OpenGLES3MapPackUv1080p new(this)
 		this _unpackMonochrome1080p = OpenGLES3MapUnpackMonochrome1080p new(this)
 		this _unpackUv1080p = OpenGLES3MapUnpackUv1080p new(this)
-		this _eglImageBin = GpuImageBin new()
 	}
 	onDispose: func {
 		this _packerBin dispose()
-		this _eglImageBin dispose()
 		this _packMonochrome dispose()
 		this _packUv dispose()
 		EglRgba disposeAll()
