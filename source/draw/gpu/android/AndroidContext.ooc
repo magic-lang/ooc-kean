@@ -109,13 +109,21 @@ AndroidContext: class extends OpenGLES3Context {
 
 		GpuPacker finish()
 
-		yBuffer := yPacker read()
-		uvBuffer := uvPacker read()
+		yBuffer, uvBuffer: ByteBuffer
+		if (gpuImage size height == 1080) {
+			yBuffer = yPacker readRows()
+			uvBuffer = uvPacker readRows()
+			yPacker recycle()
+			uvPacker recycle()
+		}
+		else {
+			yBuffer = yPacker read()
+			uvBuffer = uvPacker read()
+		}
 
-		yRaster := RasterMonochrome new(yBuffer, gpuImage size, 64)
-		yBuffer referenceCount decrease()
-		uvRaster := RasterUv new(uvBuffer, gpuImage size / 2, 64)
-		uvBuffer referenceCount decrease()
+		yRaster := RasterMonochrome new(yBuffer, gpuImage size)
+		uvRaster := RasterUv new(uvBuffer, gpuImage size / 2)
+
 		result := RasterYuv420Semiplanar new(yRaster, uvRaster)
 		result
 	}
