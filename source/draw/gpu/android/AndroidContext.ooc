@@ -136,7 +136,6 @@ AndroidContext: class extends OpenGLES3Context {
 		GpuPacker finish()
 		buffer := yPacker read()
 		result := RasterMonochrome new(buffer, gpuImage size, 64)
-		buffer referenceCount decrease()
 		result
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
