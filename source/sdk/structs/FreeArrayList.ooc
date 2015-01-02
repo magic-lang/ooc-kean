@@ -18,13 +18,13 @@ FreeArrayList: class <T> extends ArrayList<T> {
 	init: func ~withData (.data, ._size) {
 		super(data, _size)
 	}
-	
+
 	__destroy__: func {
-		this clear()
+		this clean()
 		gc_free(data)
 	}
-	
-	clear: func {
+
+	clean: func {
 		if (T inheritsFrom?(Object)) {
 			for (i in 0..this _size) {
 				old := this[i] as Object
@@ -33,7 +33,7 @@ FreeArrayList: class <T> extends ArrayList<T> {
 		}
 		_size = 0
 	}
-	
+
 	/**
 	* Replaces the element at the specified position in this list with
 	* the specified element WITHOUT RETURNING the current element.
@@ -46,13 +46,13 @@ FreeArrayList: class <T> extends ArrayList<T> {
 		}
 		data[index] = element
 	}
-	
+
 	/**
 	* Removes the element at the specified position in this list
 	* WITHOUT RETURNING the current element. Will free the object
 	* if second parameter is set to true.
 	*/
-	
+
 	removeAt: func ~withBool (index: SSizeT, free: Bool) {
 		if (index < 0) index = _size + index
 		if (index < 0 || index >= _size) OutOfBoundsException new(This, index, _size) throw()
