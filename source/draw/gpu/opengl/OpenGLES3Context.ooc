@@ -18,7 +18,7 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 use ooc-opengl
-import GpuImageBin, OpenGLES3Surface, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar
+import GpuImageBin, OpenGLES3Surface, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Yuv422Semipacked
 import Map/OpenGLES3Map, Map/OpenGLES3MapPack
 import OpenGLES3/Context, OpenGLES3/NativeWindow
 
@@ -190,6 +190,20 @@ OpenGLES3Context: class extends GpuContext {
 			result upload(raster)
 		result
 	}
+	createYuv422Semipacked: func (size: IntSize2D) -> GpuImage {
+		result := this searchImageBin(GpuImageType yuv422, size)
+		if (result == null)
+			result = OpenGLES3Yuv422Semipacked create(size, this)
+		result
+	}
+	_createYuv422Semipacked: func (raster: RasterYuv422Semipacked) -> GpuImage {
+		result := this searchImageBin(GpuImageType yuv422, raster size)
+		if (result == null)
+			result = OpenGLES3Yuv422Semipacked create(raster, this)
+		else
+			result upload(raster)
+		result
+	}
 	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
 		result := match (rasterImage) {
 			case image: RasterMonochrome => this _createMonochrome(rasterImage as RasterMonochrome)
@@ -198,7 +212,11 @@ OpenGLES3Context: class extends GpuContext {
 			case image: RasterUv => this _createUv(rasterImage as RasterUv)
 			case image: RasterYuv420Semiplanar => this _createYuv420Semiplanar(rasterImage as RasterYuv420Semiplanar)
 			case image: RasterYuv420Planar => this _createYuv420Planar(rasterImage as RasterYuv420Planar)
+			case image: RasterYuv422Semipacked => this _createYuv422Semipacked(rasterImage as RasterYuv422Semipacked)
+			case => null
 		}
+		if (result == null)
+			raise("Unknown input format in OpenGLES3Context createGpuImage")
 		result
 	}
 	createSurface: func -> GpuSurface {
