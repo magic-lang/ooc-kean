@@ -34,7 +34,7 @@ Window: class extends OpenGLES3Context {
 
 	init: /* internal */ func (=size, title: String) {
 		this _native = X11Window create(size width, size height, title)
-		super(this _native, func { this onDispose() })
+		super(this _native)
 		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new(this)
 		this _bgrToBgra = OpenGLES3MapBgrToBgra new(this)
 		this _bgraToBgra = OpenGLES3MapBgra new(this)
