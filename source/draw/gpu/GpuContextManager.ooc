@@ -16,7 +16,7 @@
 
 use ooc-draw
 use ooc-math
-import GpuContext, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuImage, GpuSurface, GpuMap, Viewport
+import GpuContext, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv422Semipacked, GpuYuv420Planar, GpuImage, GpuSurface, GpuMap, Viewport
 
 pthread_self: extern func -> Long
 
@@ -60,6 +60,7 @@ GpuContextManager: abstract class extends GpuContext {
 				this _contexts[i] dispose()
 		}
 	}
+	createYuv422Semipacked: func (size: IntSize2D) -> GpuYuv422Semipacked { this _getContext() createYuv422Semipacked(size) }
 	createMonochrome: func (size: IntSize2D) -> GpuMonochrome { this _getContext() createMonochrome(size) }
 	createBgr: func (size: IntSize2D) -> GpuBgr { this _getContext() createBgr(size) }
 	createBgra: func (size: IntSize2D) -> GpuBgra { this _getContext() createBgra(size) }
