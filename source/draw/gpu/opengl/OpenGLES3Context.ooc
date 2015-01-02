@@ -56,12 +56,11 @@ OpenGLES3Context: class extends GpuContext {
 	}
 	dispose: func {
 		this _backend makeCurrent()
+		super()
 		this _bgrMapDefault dispose()
 		this _bgraMapDefault dispose()
 		this _monochromeMapDefault dispose()
 		this _uvMapDefault dispose()
-		this _imageBin dispose()
-		this _surfaceBin dispose()
 		this _backend dispose()
 	}
 	recycle: func ~image (gpuImage: GpuImage) {
