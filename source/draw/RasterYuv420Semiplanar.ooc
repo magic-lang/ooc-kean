@@ -34,15 +34,13 @@ import io/FileWriter
 import io/BinarySequence
 
 RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
-	init: func ~fromRasterImages (yImage: RasterMonochrome, uvImage: RasterUv) {
-		super(yImage, uvImage)
-	}
+	init: func ~fromRasterImages (yImage: RasterMonochrome, uvImage: RasterUv) { super(yImage, uvImage) }
 	init: func ~allocate (size: IntSize2D, align := 0, verticalAlign := 0) {
 		(yImage, uvImage) := This _allocate(size, align, verticalAlign)
 		this init(yImage, uvImage)
 	}
 	init: func ~fromRasterImage (original: RasterImage) {
-		(yImage, uvImage) := This _allocate(original size)
+		(yImage, uvImage) := This _allocate(original size, original align, original verticalAlign)
 		super(original, yImage, uvImage)
 	}
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, align := 0, verticalAlign := 0) {

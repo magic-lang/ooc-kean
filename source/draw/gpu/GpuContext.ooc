@@ -24,6 +24,7 @@ GpuContext: abstract class {
 		this _surfaceBin = GpuSurfaceBin new()
 	}
 	dispose: abstract func
+	clean: func
 	createMonochrome: abstract func (size: IntSize2D) -> GpuMonochrome
 	createBgr: abstract func (size: IntSize2D) -> GpuBgr
 	createBgra: abstract func (size: IntSize2D) -> GpuBgra

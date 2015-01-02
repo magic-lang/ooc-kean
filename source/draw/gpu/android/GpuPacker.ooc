@@ -63,11 +63,28 @@ GpuPacker: class {
 			})
 		buffer
 	}
-	finish: static func { Fbo finish() }
-	flush: static func { Fbo flush() }
-	readRows: func (destination: RasterImage) {
+	readRows: func ~ByteBuffer -> ByteBuffer {
+		destinationWidth := this size width
+		destinationHeight := this size height
+		size := destinationWidth * destinationHeight * this bytesPerPixel
+		buffer := ByteBuffer new(size)
 		sourcePointer := this _targetTexture read()
-		destinationPointer := destination pointer
+		sourceRow := sourcePointer
+		sourceStride := this _targetTexture stride
+		destinationRow := buffer pointer
+		destinationStride := destinationWidth * this bytesPerPixel
+		for (row in 0..destinationHeight) {
+			//DebugPrint print("Row: " + row toString() + "Dest Offset: " + (row * destinationStride) toString() + "Source offset: " + (row * sourceStride) toString())
+			sourceRow = sourcePointer + row * sourceStride
+			destinationRow = buffer pointer + row * destinationStride
+			memcpy(destinationRow, sourceRow, destinationStride)
+		}
+		this _targetTexture unlock()
+		buffer
+	}
+	readRows: func ~overwrite (destination: RasterPacked) {
+		sourcePointer := this _targetTexture read()
+		destinationPointer := destination buffer pointer
 		destinationStride := destination stride
 		sourceStride := this _targetTexture stride
 
@@ -80,12 +97,14 @@ GpuPacker: class {
 		}
 		this _targetTexture unlock()
 	}
-	read: func (destination: RasterImage) {
+	read: func (destination: RasterPacked) {
 		sourcePointer := this _targetTexture read()
-		destinationPointer := destination pointer
+		destinationPointer := destination buffer pointer
 		destinationStride := destination stride
 		sourceStride := this _targetTexture stride
 		memcpy(destinationPointer, sourcePointer, destinationStride * destination size height)
 		this _targetTexture unlock()
 	}
+	finish: static func { Fbo finish() }
+	flush: static func { Fbo flush() }
 }

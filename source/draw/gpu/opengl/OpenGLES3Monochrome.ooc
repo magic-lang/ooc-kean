@@ -27,9 +27,7 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
 		super(OpenGLES3Texture createMonochrome(size, stride, data), size, context)
 	}
-	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) {
-		super(texture, size, context)
-	}
+	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) { super(texture, size, context) }
 	toRasterDefault: func -> RasterImage {
 		packed := this _context createBgra(IntSize2D new(this size width / 4, this size height))
 		packMap := this _context getMap(this, GpuMapType pack) as OpenGLES3MapPackMonochrome
