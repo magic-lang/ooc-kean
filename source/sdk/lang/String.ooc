@@ -289,6 +289,15 @@ String: class extends Iterable<Char> {
     }
 
     toCString: func -> CString { _buffer data as CString }
+    
+    getExtension: func -> This {
+    	result := ""
+    	pointer := strrchr(this _buffer data, '.' as Int)
+    	if (pointer != null && pointer > this _buffer data) {
+   			result = this substring((pointer + 1 - this _buffer data) as Int)
+    	}
+    	result
+    }
 
 }
 
