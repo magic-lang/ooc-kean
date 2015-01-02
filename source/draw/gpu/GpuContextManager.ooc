@@ -60,6 +60,12 @@ GpuContextManager: abstract class extends GpuContext {
 				this _contexts[i] dispose()
 		}
 	}
+	clean: func {
+		for(i in 0..MAX_CONTEXTS) {
+			if (this _contexts[i] != null)
+				this _contexts[i] clean()
+		}
+	}
 	createYuv422Semipacked: func (size: IntSize2D) -> GpuYuv422Semipacked { this _getContext() createYuv422Semipacked(size) }
 	createMonochrome: func (size: IntSize2D) -> GpuMonochrome { this _getContext() createMonochrome(size) }
 	createBgr: func (size: IntSize2D) -> GpuBgr { this _getContext() createBgr(size) }
