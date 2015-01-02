@@ -121,8 +121,9 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 
 	// STATIC
 	new: static func ~fromSize (size: Int) -> This {
-		bin := This _getBin(size)
 		buffer: This = null
+		bin := This _getBin(size)
+		This _lock lock()
 		for(i in 0..bin size)
 		{
 			if ((bin[i] size) == size) {
@@ -132,6 +133,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 				break
 			}
 		}
+		This _lock unlock()
 		buffer == null ? This new(gc_malloc_atomic(size), size) : buffer
 	}
 	_lock := static Mutex new()
