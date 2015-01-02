@@ -39,6 +39,9 @@ AndroidContext: class extends OpenGLES3Context {
 		this _packUv dispose()
 		EglRgba disposeAll()
 	}
+	clean: func {
+		this _packerBin dispose()
+	}
 	toRaster: func ~Yuv420SpOverwrite (gpuImage: GpuYuv420Semiplanar, rasterImage: RasterYuv420Semiplanar) {
 		yPacker, uvPacker: GpuPacker
 		/*
