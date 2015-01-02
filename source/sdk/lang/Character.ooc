@@ -4,6 +4,8 @@ __LINE__: extern Int
 __FILE__: extern CString
 __FUNCTION__: extern CString
 
+strrchr: extern func (Char*, Int) -> Char*
+
 strcmp: extern func (Char*, Char*) -> Int
 strncmp: extern func (Char*, Char*, Int) -> Int
 strstr: extern func (Char*, Char*) -> Char*
