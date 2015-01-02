@@ -53,8 +53,7 @@ Texture: class {
 		this type = type
 		this _setInternalFormats(type)
 	}
-	dispose: func { this internalDispose() }
-	internalDispose: func { glDeleteTextures(1, _backend&) }
+	dispose: func { glDeleteTextures(1, _backend&) }
 	generateMipmap: func {
 		this bind(0)
 		glGenerateMipmap(GL_TEXTURE_2D)
