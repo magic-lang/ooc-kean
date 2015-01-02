@@ -23,6 +23,8 @@ File: abstract class {
 
     name: String { get { getName() } }
     parent: This { get { getParent() } }
+    
+    extension: String { get { getExtension() } }
 
     children: ArrayList<This> {
         get {
@@ -143,6 +145,14 @@ File: abstract class {
         if (pName) return new(pName)
         if (path != "." && !path startsWith?(This separator)) return new(".") // return the current directory
         return null
+    }
+    
+    getExtension: func -> String {
+    	result: String = null
+    	index := this path lastIndexOf('.')
+    	if (index >= 0)
+   			result = this path substring(index+1)
+    	result
     }
 
     /**

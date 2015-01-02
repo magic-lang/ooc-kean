@@ -289,7 +289,6 @@ String: class extends Iterable<Char> {
     }
 
     toCString: func -> CString { _buffer data as CString }
-
 }
 
 /* conversions C world -> String */
