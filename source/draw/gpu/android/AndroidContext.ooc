@@ -187,7 +187,7 @@ AndroidContext: class extends OpenGLES3Context {
 }
 
 AndroidContextManager: class extends GpuContextManager {
-	init: func { super(3) }
+	init: func (contexts: Int) { super(contexts) }
 	_createContext: func -> GpuContext { AndroidContext new() }
 	createEglRgba: func (size: IntSize2D, pixels: Pointer = null) -> EglRgba { this _getContext() as AndroidContext createEglRgba(size, pixels, 1) }
 }
