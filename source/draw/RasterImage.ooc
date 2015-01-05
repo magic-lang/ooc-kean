@@ -25,11 +25,18 @@ import StbImage
 
 RasterImage: abstract class extends Image {
 	distanceRadius: Int { get { return 1; } }
+	_align, _verticalAlign: Int
+	align ::= this _align
+	verticalAlign ::= this _verticalAlign
 	init: func ~fromRasterImage (original: RasterImage) {
 		super(original)
+		this _align = original align
+		this _verticalAlign = original verticalAlign
 	}
-	init: func (size: IntSize2D) {
+	init: func (size: IntSize2D, align: Int, verticalAlign: Int) {
 		super(size)
+		this _align = align
+		this _verticalAlign = verticalAlign
 	}
 	apply: abstract func ~bgr (action: Func (ColorBgr))
 	apply: abstract func ~yuv (action: Func (ColorYuv))

@@ -18,32 +18,32 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3Canvas, Map/OpenGLES3Map, Map/OpenGLES3MapPack, OpenGLES3Texture
+import OpenGLES3/Texture, OpenGLES3Canvas, Map/OpenGLES3Map, Map/OpenGLES3MapPack, OpenGLES3Texture
 
-OpenGLES3Monochrome: class extends GpuMonochrome {
+OpenGLES3Yuv422Semipacked: class extends GpuYuv422Semipacked {
 	init: func (size: IntSize2D, context: GpuContext) {
-		init(size, size width, null, context)
+		init(size, size width * 2, null, context)
 	}
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
-		super(OpenGLES3Texture createMonochrome(size, stride, data), size, context)
+		super(OpenGLES3Texture createUv(size, stride, data), size, context)
 	}
-	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) { super(texture, size, context) }
+	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) {
+		super(texture, size, context)
+	}
 	toRasterDefault: func -> RasterImage {
-		packed := this _context createBgra(IntSize2D new(this size width / 4, this size height))
-		packMap := this _context getMap(this, GpuMapType pack) as OpenGLES3MapPackMonochrome
-		packMap imageWidth = this size width
-		packed canvas draw(this, packMap, Viewport new(packed size))
-		buffer := packed canvas readPixels(4)
-		result := RasterMonochrome new(buffer, this size)
-		packed recycle()
-		result
-	}
-	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
-		raise("toRaster not implemented for MONOCHROME")
+		raise("toRaster not implemented for YUV422SEMIPACKED")
 		null
 	}
-	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
-	create: static func ~fromRaster (rasterImage: RasterMonochrome, context: GpuContext) -> This {
+	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
+		raise("toRaster not implemented for YUV422SEMIPACKED")
+		null
+	}
+	_createCanvas: func -> GpuCanvas {
+		result := OpenGLES3Canvas create(this, this _context)
+		result clearColor = 0.5f
+		result
+	}
+	create: static func ~fromRaster (rasterImage: RasterYuv422Semipacked, context: GpuContext) -> This {
 		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
 		result
 	}
@@ -51,5 +51,4 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 		result := This new(size, context)
 		result texture != null ? result : null
 	}
-
 }

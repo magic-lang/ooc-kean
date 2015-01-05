@@ -15,18 +15,13 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-math
-use ooc-base
-import ByteBuffer into ByteBuffer
-import math
-import structs/ArrayList
-import Image
-import RasterImage
+import GpuPacked, GpuContext, GpuTexture
 
-RasterPlanar: abstract class extends RasterImage {
-	init: func (size: IntSize2D, align := 0, verticalAlign := 0) {
-		super(size, align, verticalAlign)
-	}
-	init: func ~fromOriginal (original: This) {
-		super(original)
+GpuYuv422Semipacked: abstract class extends GpuPacked {
+	init: func (texture: GpuTexture, size: IntSize2D, context: GpuContext) { super(texture, size, 2, context) }
+	resizeTo: func (size: IntSize2D) -> This {
+		target := this _context createYuv422Semipacked(size)
+		target canvas draw(this)
+		target
 	}
 }
