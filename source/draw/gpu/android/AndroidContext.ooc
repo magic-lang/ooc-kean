@@ -26,18 +26,20 @@ AndroidContext: class extends OpenGLES3Context {
 	_unpackMonochrome1080p: OpenGLES3MapUnpackMonochrome1080p
 	_unpackUv1080p: OpenGLES3MapUnpackUv1080p
 	init: func {
-		super(func { this onDispose() })
+		super()
 		this _packerBin = GpuPackerBin new()
 		this _packMonochrome1080p = OpenGLES3MapPackMonochrome1080p new(this)
 		this _packUv1080p = OpenGLES3MapPackUv1080p new(this)
 		this _unpackMonochrome1080p = OpenGLES3MapUnpackMonochrome1080p new(this)
 		this _unpackUv1080p = OpenGLES3MapUnpackUv1080p new(this)
 	}
-	onDispose: func {
+	dispose: func {
+		this _backend makeCurrent()
 		this _packerBin dispose()
 		this _packMonochrome dispose()
 		this _packUv dispose()
 		EglRgba disposeAll()
+		super()
 	}
 	clean: func {
 		this _packerBin dispose()
@@ -134,7 +136,6 @@ AndroidContext: class extends OpenGLES3Context {
 		GpuPacker finish()
 		buffer := yPacker read()
 		result := RasterMonochrome new(buffer, gpuImage size, 64)
-		buffer referenceCount decrease()
 		result
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
@@ -186,7 +187,7 @@ AndroidContext: class extends OpenGLES3Context {
 }
 
 AndroidContextManager: class extends GpuContextManager {
-	init: func { super(3) }
+	init: func (contexts: Int) { super(contexts) }
 	_createContext: func -> GpuContext { AndroidContext new() }
 	createEglRgba: func (size: IntSize2D, pixels: Pointer = null) -> EglRgba { this _getContext() as AndroidContext createEglRgba(size, pixels, 1) }
 }

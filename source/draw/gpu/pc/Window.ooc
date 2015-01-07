@@ -34,7 +34,7 @@ Window: class extends OpenGLES3Context {
 
 	init: /* internal */ func (=size, title: String) {
 		this _native = X11Window create(size width, size height, title)
-		super(this _native, func { this onDispose() })
+		super(this _native)
 		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new(this)
 		this _bgrToBgra = OpenGLES3MapBgrToBgra new(this)
 		this _bgraToBgra = OpenGLES3MapBgra new(this)
@@ -42,12 +42,13 @@ Window: class extends OpenGLES3Context {
 		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new(this)
 		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgra new(this, true)
 	}
-	onDispose: func {
+	dispose: func {
 		this _bgrToBgra dispose()
 		this _bgraToBgra dispose()
 		this _yuvPlanarToBgra dispose()
 		this _yuvSemiplanarToBgra dispose()
 		this _monochromeToBgra dispose()
+		super()
 	}
 	getTransformMap: func (gpuImage: GpuImage) -> OpenGLES3MapDefault {
 		result := match(gpuImage) {

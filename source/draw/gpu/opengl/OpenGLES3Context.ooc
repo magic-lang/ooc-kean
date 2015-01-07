@@ -32,9 +32,8 @@ OpenGLES3Context: class extends GpuContext {
 	_uvMapTransform: OpenGLES3MapUv
 	_packMonochrome: OpenGLES3MapPackMonochrome
 	_packUv: OpenGLES3MapPackUv
-	_onDispose: Func
 
-	init: func (context: Context, =_onDispose) {
+	init: func (context: Context) {
 		super()
 		this _bgrMapDefault = OpenGLES3MapBgr new(this)
 		this _bgraMapDefault = OpenGLES3MapBgra new(this)
@@ -46,24 +45,22 @@ OpenGLES3Context: class extends GpuContext {
 		this _packUv = OpenGLES3MapPackUv new(this)
 		this _backend = context
 	}
-	init: func ~unshared (onDispose: Func) {
-		this init(Context create(), onDispose)
+	init: func ~unshared {
+		this init(Context create())
 	}
-	init: func ~shared (other: This, onDispose: Func) {
-		this init(Context create(other _backend), onDispose)
+	init: func ~shared (other: This) {
+		this init(Context create(other _backend))
 	}
-	init: func ~window (nativeWindow: NativeWindow, onDispose: Func) {
-		this init(Context create(nativeWindow), onDispose)
+	init: func ~window (nativeWindow: NativeWindow) {
+		this init(Context create(nativeWindow))
 	}
 	dispose: func {
 		this _backend makeCurrent()
-		this _onDispose()
+		super()
 		this _bgrMapDefault dispose()
 		this _bgraMapDefault dispose()
 		this _monochromeMapDefault dispose()
 		this _uvMapDefault dispose()
-		this _imageBin dispose()
-		this _surfaceBin dispose()
 		this _backend dispose()
 	}
 	recycle: func ~image (gpuImage: GpuImage) {

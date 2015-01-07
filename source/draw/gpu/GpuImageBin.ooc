@@ -36,7 +36,7 @@ GpuImageBin: class {
 		this _yuvPlanar = FreeArrayList<GpuImage> new()
 		this _yuv422 = FreeArrayList<GpuImage> new()
 	}
-	dispose: func {
+	__destroy__: func {
 		for(i in 0..this _monochrome size)
 			this _monochrome[i] dispose()
 		for(i in 0..this _bgr size)
