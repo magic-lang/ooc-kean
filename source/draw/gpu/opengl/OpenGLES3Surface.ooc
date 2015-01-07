@@ -42,6 +42,15 @@ OpenGLES3Surface: class extends GpuSurface {
 		this _quad draw()
 		image unbind()
 	}
+	draw: func ~twoGpuimages (image1: GpuImage, image2: GpuImage, map: GpuMap, viewport: Viewport) {
+		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
+		map use()
+		image1 bind(0)
+		image2 bind(2)
+		this _quad draw()
+		image1 unbind()
+		image2 unbind()
+	}
 	draw: func (image: Image, map: GpuMap, viewport: Viewport) {
 		match (image) {
 			case (i: GpuImage) => {
