@@ -237,3 +237,151 @@ OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapDefault {
 			outColor = YuvToRgba(vec4(y, uv.g - 0.5f, uv.r - 0.5f, 1.0f));\n
 		}\n"
 }
+OpenGLES3MapCalculateCoefficients: class extends OpenGLES3MapDefault {
+	init: func (context: GpuContext, gain: Float, shrinking: Float, transform := false) { super(This fragmentSource, context, transform,
+		func {
+			this program setUniform("texture0", 0)
+			this program setUniform("texture1", 2)
+			this program setUniform("shrinking", shrinking)
+			this program setUniform("gain", gain)
+		})
+	}
+	fragmentSource: static String ="
+		#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		uniform sampler2D texture1;\n
+		uniform float gain;
+		uniform float shrinking;
+		in vec2 fragmentTextureCoordinate;\n
+		out float outColor;\n
+		void main() {\n
+			float difference = texture(texture0, fragmentTextureCoordinate).r - texture(texture1, fragmentTextureCoordinate).r;
+			difference = sign(difference) * clamp(abs(difference) - shrinking / 255.0f, 0.0f, 1.0f);
+			outColor = clamp(difference * gain + 0.5f, 0.0f, 1.0f);\n
+		}\n"
+}
+OpenGLES3MapAdd: class extends OpenGLES3MapDefault {
+	init: func (context: GpuContext, offsetImage1: Float, gainImage1: Float, offsetImage2: Float, gainImage2: Float, transform := false) { super(This fragmentSource, context, transform,
+		func {
+			this program setUniform("texture0", 0)
+			this program setUniform("texture1", 2)
+			this program setUniform("offset1", offsetImage1)
+			this program setUniform("offset2", offsetImage2)
+			this program setUniform("gain1", gainImage1)
+			this program setUniform("gain2", gainImage2)
+		})
+	}
+	fragmentSource: static String ="
+		#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		uniform sampler2D texture1;\n
+		uniform float offset1;\n
+		uniform float offset2;\n
+		uniform float gain1;\n
+		uniform float gain2;\n
+		in vec2 fragmentTextureCoordinate;\n
+		out float outColor;\n
+		void main() {\n
+				outColor =  texture(texture0, fragmentTextureCoordinate - offset1).r / gain1 + (texture(texture1, fragmentTextureCoordinate).r - offset2) / gain2;\n
+		}\n"
+}
+OpenGLES3MapTemporalFilter: class extends OpenGLES3MapDefault {
+	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform,
+		func {
+			this program setUniform("texture0", 0)
+			this program setUniform("texture1", 2)
+		})
+	}
+	fragmentSource: static String ="
+		#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		uniform sampler2D texture1;\n
+		in vec2 fragmentTextureCoordinate;\n
+		out float outColor;\n
+		void main() {\n
+			float sigma = 10.0f;
+			float denominator = 2.0f * pow(sigma / 255.0f, 2.0f);\n
+			float currentValue = texture(texture0, fragmentTextureCoordinate).r;\n
+			float previousValue = texture(texture1, fragmentTextureCoordinate).r;\n
+			float weight = exp(-pow(currentValue - previousValue, 2.0f) / denominator) / 1.0f;\n
+			outColor = (currentValue + previousValue * weight) / (1.0f + weight);\n
+		}\n"
+}
+OpenGLES3MapSpatialFilter: class extends OpenGLES3MapDefault {
+	init: func (context: GpuContext, filterStep: Float, sigmaRange: Float, transform := false) { super(This fragmentSource, context, transform,
+		func {
+			this program setUniform("texture0", 0)
+			this program setUniform("filterStep", filterStep)
+			this program setUniform("sigma", sigmaRange)
+		})
+	}
+	fragmentSource: static String ="
+		#version 300 es\n
+		precision highp float;\n
+		uniform sampler2D texture0;\n
+		uniform float filterStep;\n
+		uniform float sigma;\n
+		in vec2 fragmentTextureCoordinate;\n
+		out float outColor;\n
+		void main() {\n
+			float a = 1.0f / (sigma / 255.0f * sqrt(2.0f * 3.1415f));\n
+			float denominator = 2.0f * pow(sigma / 255.0f, 2.0f);\n
+			float xStep = filterStep / 1920.0f;\n
+			float yStep = filterStep / 1080.0f;\n
+			float weight;\n
+			float centerPixel = texture(texture0, fragmentTextureCoordinate).r;\n
+			float neighbour;\n
+			float sum = 0.0f;\n
+			float totalWeight = 0.0f;\n
+
+			neighbour = texture(texture0, vec2(fragmentTextureCoordinate.x - xStep, fragmentTextureCoordinate.y - yStep)).r;\n
+			weight = a * exp(-pow(centerPixel - neighbour, 2.0f) / denominator) / 16.0f;\n
+			totalWeight += weight;\n
+			sum += neighbour * weight;\n
+
+			neighbour = texture(texture0, vec2(fragmentTextureCoordinate.x, fragmentTextureCoordinate.y - yStep)).r;\n
+			weight = a * exp(-pow(centerPixel - neighbour, 2.0f) / denominator) / 8.0f;\n
+			totalWeight += weight;\n
+			sum += neighbour * weight;\n
+
+			neighbour = texture(texture0, vec2(fragmentTextureCoordinate.x + xStep, fragmentTextureCoordinate.y - yStep)).r;\n
+			weight = a * exp(-pow(centerPixel - neighbour, 2.0f) / denominator) / 16.0f;\n
+			totalWeight += weight;\n
+			sum += neighbour * weight;\n
+
+			neighbour = texture(texture0, vec2(fragmentTextureCoordinate.x - xStep, fragmentTextureCoordinate.y)).r;\n
+			weight = a * exp(-pow(centerPixel - neighbour, 2.0f) / denominator) / 8.0f;\n
+			totalWeight += weight;\n
+			sum += neighbour * weight;\n
+
+			neighbour = texture(texture0, vec2(fragmentTextureCoordinate.x, fragmentTextureCoordinate.y)).r;\n
+			weight = a * exp(-pow(centerPixel - neighbour, 2.0f) / denominator) / 4.0f;\n
+			totalWeight += weight;\n
+			sum += neighbour * weight;\n
+
+			neighbour = texture(texture0, vec2(fragmentTextureCoordinate.x + xStep, fragmentTextureCoordinate.y)).r;\n
+			weight = a * exp(-pow(centerPixel - neighbour, 2.0f) / denominator) / 8.0f;\n
+			totalWeight += weight;\n
+			sum += neighbour * weight;\n
+
+			neighbour = texture(texture0, vec2(fragmentTextureCoordinate.x - xStep, fragmentTextureCoordinate.y + yStep)).r;\n
+			weight = a * exp(-pow(centerPixel - neighbour, 2.0f) / denominator) / 16.0f;\n
+			totalWeight += weight;\n
+			sum += neighbour * weight;\n
+
+			neighbour = texture(texture0, vec2(fragmentTextureCoordinate.x, fragmentTextureCoordinate.y + yStep)).r;\n
+			weight = a * exp(-pow(centerPixel - neighbour, 2.0f) / denominator) / 8.0f;\n
+			totalWeight += weight;\n
+			sum += neighbour * weight;\n
+
+			neighbour = texture(texture0, vec2(fragmentTextureCoordinate.x + xStep, fragmentTextureCoordinate.y + yStep)).r;\n
+			weight = a * exp(-pow(centerPixel - neighbour, 2.0f) / denominator) / 16.0f;\n
+			totalWeight += weight;\n
+			sum += neighbour * weight;\n
+
+			outColor = sum / totalWeight;\n
+		}\n"
+}
