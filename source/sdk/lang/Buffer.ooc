@@ -305,7 +305,7 @@ Buffer: class extends Iterable<Char> {
 
     /** @return true if the last character of *this* is equal to *c*. */
     endsWith?: func ~char(c: Char) -> Bool {
-        (size > 0) && data[size] == c
+        (size > 0) && data[size-1] == c
     }
 
     find: func ~char (what: Char, offset: Int, searchCaseSensitive := true) -> Int {
