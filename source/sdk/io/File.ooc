@@ -26,6 +26,20 @@ File: abstract class {
     
     extension: String { get { getExtension() } }
     nameWithoutExtension: String { get { getNameWithoutExtension() } }
+    pathWithoutExtension: String { get { getPathWithoutExtension() } }
+    rectifySeparator: func {
+    	old := this path
+		if (this dir?() && !this path endsWith?(File separator)) {
+			this path = old + File separator
+			//TODO: freeing will result in a crash if 'old' is a literal string;
+			// 	not freeing will result in a leak if it isn't. Fix later 
+			//old free()
+		}
+		else if (!this dir?() && this path endsWith?(File separator)) {
+			this path = this path trimRight(File separator)
+			//TODO: This will leak a lot...
+		}
+    }
 
     children: ArrayList<This> {
         get {
