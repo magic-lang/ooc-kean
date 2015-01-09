@@ -55,6 +55,7 @@ ThreadPool: class {
 			this mutex lock()
 			if (this activeJobs > 0) {
 				this mutex unlock()
+				//TODO: Wait for a condition to signal instead
 				Thread yield()
 			} else {
 				this mutex unlock()
