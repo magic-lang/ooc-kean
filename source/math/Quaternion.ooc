@@ -52,4 +52,33 @@ Quaternion: cover {
 		return Quaternion new(w, x, y, z);
 	}
 	toString: func -> String { "Real:" + this real toString() + " Imaginary: " + this imaginary toString() }
+	/*
+	vector4 hamiltonProduct(vector4 v1, vector4 v2) {
+	vector4 result;
+	float a1 = v1.x;
+	float b1 = v1.y;
+	float c1 = v1.z;
+	float d1 = v1.w;
+	float a2 = v2.x;
+	float b2 = v2.y;
+	float c2 = v2.z;
+	float d2 = v2.w;
+
+	result.x = a1*a2 - b1*b2 - c1*c2 - d1*d2;
+	result.y = a1*b2 + b1*a2 + c1*d2 - d1*c2;
+	result.z = a1*c2 - b1*d2 + c1*a2 + d1*b2;
+	result.w = a1*d2 + b1*c2 - c1*b2 + d1*a2;
+	return result;
+}
+vector3 quaternionMult(vector4 quaternion, vector3 vec) {
+vector3 result;
+vector4 R = quaternion;
+vector4 P; P.x = 0; P.y = vec.x; P.z = vec.y; P.w = vec.z;
+vector4 Rn; Rn.x = R.x; Rn.y = -R.y; Rn.z = -R.z; Rn.w = -R.w;
+vector4 Hrp = hamiltonProduct(R, P);
+vector4 Hrpn = hamiltonProduct(Hrp, Rn);
+result.x = Hrpn.y; result.y = Hrpn.z; result.z = Hrpn.w;
+return result;
+}
+*/
 }
