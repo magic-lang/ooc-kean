@@ -71,4 +71,13 @@ extend Int {
 			result *= 2
 		result
 	}
+	digits: static func (x: Int) -> This {
+		result := x < 0 ? 2 : 1
+		value := This abs(x)
+		while (value >= 10) {
+			result += 1
+			value /= 10
+		}
+		result
+	}
 }
