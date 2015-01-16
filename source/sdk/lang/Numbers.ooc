@@ -98,10 +98,6 @@ LDouble: cover from long double {
         "%.2Lf" formatLDouble(this)
     }
 
-    abs: func -> This {
-        return this < 0 ? -this : this
-    }
-
 }
 Double: cover from double extends LDouble {
     toString: func -> String {
