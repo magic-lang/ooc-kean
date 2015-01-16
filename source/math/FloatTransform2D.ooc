@@ -22,7 +22,7 @@ import FloatBox2D
 import IntTransform2D
 import text/StringTokenizer
 import structs/ArrayList
-import FloatEuclidTransform, FloatTransform3D
+import FloatEuclidTransform, FloatTransform3D, FloatPoint3D
 
 // The 2D transform is a 3x3 homogeneous coordinate matrix.
 // The element order is:
@@ -158,6 +158,9 @@ FloatTransform2D: cover {
 	operator * (other: FloatPoint2D) -> FloatPoint2D {
 		divisor := this c * other x + this f * other y + this i
 		FloatPoint2D new((this a * other x + this d * other y + this g) / divisor, (this b * other x + this e * other y + this h) / divisor)
+	}
+	operator * (other: FloatPoint3D) -> FloatPoint3D {
+		FloatPoint3D new(this a * other x + this d * other y + this g * other z, this b * other x + this e * other y + this h * other z, this c * other x + this f * other y + this i * other z)
 	}
 	operator * (other: FloatBox2D) -> FloatBox2D {
 		FloatBox2D new(this * other leftTop, this * other rightBottom)
