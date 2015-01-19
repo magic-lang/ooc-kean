@@ -54,10 +54,10 @@ OpenGLES3Surface: class extends GpuSurface {
 	draw: func (image: Image, map: GpuMap, viewport: Viewport) {
 		match (image) {
 			case (i: GpuImage) => {
-				this draw(image as GpuImage, map, viewport)
+				this draw(i, map, viewport)
 			}
 			case (i: RasterImage) => {
-				temp := this _context createGpuImage(image as RasterImage)
+				temp := this _context createGpuImage(i)
 				this draw(temp, map, viewport)
 				temp recycle()
 			}
