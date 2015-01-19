@@ -28,7 +28,12 @@ extend Float {
 		value >= 0 ? value : -1 * value
 	}
 	sign: static func(value: This) -> This {
-		value >= 0 ? 1 : -1
+		if (value > 0.0f)
+			1.0f
+		else if (value < 0.0f)
+			-1.0f
+		else
+			0.0f
 	}
 	maximum: static func(first: This, second: This) -> This {
 		first > second ? first : second
@@ -72,5 +77,20 @@ extend Float {
 		value = This moduloTwoPi(value)
 		value = (value <= This pi) ? value : (value - 2 * pi)
 		value
+	}
+	// Linear interpolation between a and b using ratio
+	//   lerp(a, b, 0) = a
+	//   lerp(a, b, 0.5) = (a + b) / 2
+	//   lerp(a, b, 1) = b
+	//   lerp(a, a, x) = a
+	lerp: static func (a: Float, b: Float, ratio: Float) -> Float {
+		(ratio * (b - a)) + a
+	}
+	// Inverse to lerp returning ratio given the same a and b
+	// Precondition: a and b have different values
+	//   Getting +inf, -inf or NaN shows when the precondition is broken
+	// Postcondition: inverseLerp(a, b, lerp(a, b, r)) = r
+	inverseLerp: static func (a: Float, b: Float, value: Float) -> Float {
+		(value - a) / (b - a)
 	}
 }

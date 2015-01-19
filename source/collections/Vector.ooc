@@ -54,10 +54,15 @@ Vector: abstract class <T> {
 			capacity = this capacity - targetStart
 		memmove(this _backend + targetStart * T size, this _backend + sourceStart * T size, capacity * T size)
 	}
+	copy: func -> This<T> {
+		result := HeapVector<T> new(this _capacity)
+		this copy(0, result, 0)
+		result
+	}
 	copy: func ~within (sourceStart: Int, targetStart: Int, capacity := 0) {
 		this copy(sourceStart, this, targetStart, capacity)
 	}
-	copy: func (sourceStart: Int, target: Vector<T>, targetStart: Int, capacity := 0) {
+	copy: func ~to (sourceStart: Int, target: Vector<T>, targetStart: Int, capacity := 0) {
 		if (capacity < 1)
 			capacity = this capacity - sourceStart
 		if (targetStart + capacity > target capacity)
