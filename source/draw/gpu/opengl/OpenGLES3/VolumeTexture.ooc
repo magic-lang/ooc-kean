@@ -21,9 +21,7 @@ import Context
 VolumeTexture: class {
 	_backend: UInt
 	backend: UInt { get { this _backend } }
-	width: UInt
-	height: UInt
-	depth: UInt
+	width, height, depth: UInt
 
 	init: func (=width, =height, =depth, pixels: UInt8*) {
 		glGenTextures(1, _backend&)
