@@ -52,7 +52,7 @@ Window: class extends OpenGLES3Context {
 	}
 	getTransformMap: func (gpuImage: GpuImage) -> OpenGLES3MapDefault {
 		result := match(gpuImage) {
-			case (i: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgraTransform
+			case (gpuImage: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgraTransform
 			case => null
 		}
 		if (result == null) {
