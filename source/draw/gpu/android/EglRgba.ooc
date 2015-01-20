@@ -18,7 +18,7 @@ use ooc-draw-gpu
 use ooc-math
 use ooc-opengl
 use ooc-base
-import egl/eglimage
+import EGLImage/eglimage
 EglRgba: class extends GpuTexture {
 	_texture: Texture
 	texture: Texture { get { this _texture } }
