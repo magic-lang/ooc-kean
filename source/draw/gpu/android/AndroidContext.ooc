@@ -154,33 +154,6 @@ AndroidContext: class extends OpenGLES3Context {
 	recycle: func ~GpuPacker (packer: GpuPacker) {
 		this _packerBin add(packer)
 	}
-	_createEglYuv420Semiplanar: func (rasterImage: RasterYuv420Semiplanar) -> GpuImage {
-		if (rasterImage y size width != 1920)
-			return this _createYuv420Semiplanar(rasterImage)
-		textureY := this createEglRgba(IntSize2D new(rasterImage y size width, rasterImage y size height / 4), rasterImage y buffer pointer, 1)
-		packedY := OpenGLES3Monochrome new(textureY, rasterImage y size, this)
-		textureUv := this createEglRgba(IntSize2D new(1920, 135), rasterImage uv buffer pointer, 1)
-		packedUv := OpenGLES3Uv new(textureUv, rasterImage uv size, this)
-		result := this createYuv420Semiplanar(rasterImage size) as OpenGLES3Yuv420Semiplanar
-		result y canvas draw(packedY, this _unpackMonochrome1080p, Viewport new(rasterImage y size))
-		packedY dispose()
-		result uv canvas draw(packedUv, this _unpackUv1080p, Viewport new(rasterImage uv size))
-		packedUv dispose()
-		result
-	}
-	/*
-	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
-		result := match (rasterImage) {
-			case image: RasterYuv420Semiplanar => this _createYuv420Semiplanar(rasterImage as RasterYuv420Semiplanar)
-			case image: RasterMonochrome => this _createMonochrome(rasterImage as RasterMonochrome)
-			case image: RasterBgr => this _createBgr(rasterImage as RasterBgr)
-			case image: RasterBgra => this _createBgra(rasterImage as RasterBgra)
-			case image: RasterUv => this _createUv(rasterImage as RasterUv)
-			case image: RasterYuv420Planar => this _createYuv420Planar(rasterImage as RasterYuv420Planar)
-		}
-		result
-	}
-	*/
 	createPacker: func (size: IntSize2D, bytesPerPixel: UInt) -> GpuPacker {
 		result := this _packerBin find(size, bytesPerPixel)
 		if (result == null) {
@@ -208,7 +181,7 @@ AndroidContextManager: class extends GpuContextManager {
 				result = this _motherContext
 			}
 			else
-			result = AndroidContext new(this _motherContext)
+				result = AndroidContext new(this _motherContext)
 		}
 		else
 			result = AndroidContext new()
