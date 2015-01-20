@@ -16,6 +16,7 @@
 
 GpuTexture: abstract class {
 	_backend: Pointer
+	init: func (=_backend)
 	generateMipmap: abstract func
 	dispose: abstract func
 	bind: abstract func (unit: UInt)
