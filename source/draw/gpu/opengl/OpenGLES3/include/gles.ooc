@@ -15,7 +15,8 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-include GLES3/gl3, GLES3/gl3ext
+include GLES3/gl3, GLES3/gl3ext, GLES3/gl3platform, GLES2/gl2ext
+PFNGLEGLIMAGETARGETTEXTURE2DOESPROC_OOC: cover from PFNGLEGLIMAGETARGETTEXTURE2DOESPROC
 
 /*-------------------------------------------------------------------------
  * Token definitions

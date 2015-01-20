@@ -172,6 +172,14 @@ EGL_COLORSPACE_LINEAR: extern const UInt
 EGL_ALPHA_FORMAT_NONPRE: extern const UInt
 EGL_ALPHA_FORMAT_PRE: extern const UInt
 
+/* Extensions */
+EGL_IMAGE_PRESERVED_KHR: extern const UInt
+EGL_NATIVE_BUFFER_ANDROID: extern const UInt
+__eglMustCastToProperFunctionPointerType_OOC: cover from __eglMustCastToProperFunctionPointerType
+eglGetProcAddress: extern func(procname: CString) -> Func
+PFNEGLCREATEIMAGEKHRPROC_OOC: cover from PFNEGLCREATEIMAGEKHRPROC
+PFNEGLDESTROYIMAGEKHRPROC_OOC: cover from PFNEGLDESTROYIMAGEKHRPROC
+
 eglMakeCurrent: extern func(display: Pointer, draw: Pointer, read: Pointer, context: Pointer) -> UInt
 eglDestroyContext: extern func(display: Pointer, context: Pointer) -> UInt
 eglDestroySurface: extern func(display: Pointer, surface: Pointer)
