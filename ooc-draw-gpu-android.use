@@ -3,7 +3,7 @@ Description: Android specific, GPU accelerated implementation of OOC Draw interf
 SourcePath: source/draw/gpu/android
 Requires: ooc-base, ooc-math, ooc-unit, ooc-draw, ooc-draw-gpu
 
-Imports: AndroidContext, EglRgba
+Imports: AndroidContext, EglRgba, GraphicBuffer
 Libs: -landroid
 
 AndroidLibs: libeglimage
