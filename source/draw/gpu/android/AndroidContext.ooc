@@ -27,6 +27,13 @@ AndroidContext: class extends OpenGLES3Context {
 	_unpackUv1080p: OpenGLES3MapUnpackUv1080p
 	init: func {
 		super()
+		this _initialize()
+	}
+	init: func ~other (other: This) {
+		super(other)
+		this _initialize()
+	}
+	_initialize: func {
 		this _packerBin = GpuPackerBin new()
 		this _packMonochrome1080p = OpenGLES3MapPackMonochrome1080p new(this)
 		this _packUv1080p = OpenGLES3MapPackUv1080p new(this)
@@ -125,7 +132,6 @@ AndroidContext: class extends OpenGLES3Context {
 
 		yRaster := RasterMonochrome new(yBuffer, gpuImage size)
 		uvRaster := RasterUv new(uvBuffer, gpuImage size / 2)
-
 		result := RasterYuv420Semiplanar new(yRaster, uvRaster)
 		result
 	}
@@ -179,6 +185,7 @@ AndroidContext: class extends OpenGLES3Context {
 	createPacker: func (size: IntSize2D, bytesPerPixel: UInt) -> GpuPacker {
 		result := this _packerBin find(size, bytesPerPixel)
 		if (result == null) {
+			DebugPrint print("Could not find a recycled GpuPacker in list with size " + this _packerBin _packers size toString() + " with size " + size toString())
 			result = GpuPacker new(size, bytesPerPixel, this)
 		}
 		result
@@ -187,7 +194,26 @@ AndroidContext: class extends OpenGLES3Context {
 }
 
 AndroidContextManager: class extends GpuContextManager {
-	init: func (contexts: Int) { super(contexts) }
-	_createContext: func -> GpuContext { AndroidContext new() }
+	_motherContext: AndroidContext
+	_sharedContexts: Bool
+
+	init: func (contexts: Int, sharedContexts := false) {
+		super(contexts)
+		this _sharedContexts = sharedContexts
+	}
+	_createContext: func -> GpuContext {
+		result: GpuContext
+		if (this _sharedContexts) {
+			if (this _motherContext == null) {
+				this _motherContext = AndroidContext new()
+				result = this _motherContext
+			}
+			else
+			result = AndroidContext new(this _motherContext)
+		}
+		else
+			result = AndroidContext new()
+		result
+	}
 	createEglRgba: func (size: IntSize2D, pixels: Pointer = null) -> EglRgba { this _getContext() as AndroidContext createEglRgba(size, pixels, 1) }
 }
