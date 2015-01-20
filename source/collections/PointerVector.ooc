@@ -67,7 +67,7 @@ PointerVector: abstract class {
 		destination := target _backend + targetStart * Pointer size
 		length := count * Pointer size
 
-		if (source <= destination && destination <= source + length || destination <= source && source <= destination + length)
+		if ((source <= destination && destination <= source + length) || (destination <= source && source <= destination + length))
 			memmove(destination, source, length)
 		else
 			memcpy(destination, source, length)
@@ -88,7 +88,7 @@ PointerHeapVector: class extends PointerVector {
 		super(count)
 	}
 
-	_allocate: func(count: Int)   {
+	_allocate: func(count: Int) {
 		this _backend = gc_realloc(this _backend, count * Pointer size)
 	}
 
@@ -103,10 +103,9 @@ PointerStackVector: class extends PointerVector {
 		super(data, count)
 	}
 
-	_allocate: func(count: Int) {
-		this _backend
-	}
-
+	// TODO: Why does this function exist here?
+	_allocate: func(count: Int)
+	
 	resize: func(count: Int) {
 		if (count > this count)
 			count = this count
