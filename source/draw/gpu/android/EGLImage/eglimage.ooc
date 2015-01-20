@@ -15,7 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-include ./headers/EGLImageImport
+include ./source/EGLImageImport
 
 createEGLImage: extern func(width: Int, height: Int, display: Pointer, write: Int) -> Int
 destroyEGLImage: extern func(index: Int)
