@@ -45,7 +45,6 @@ AndroidContext: class extends OpenGLES3Context {
 		this _packerBin dispose()
 		this _packMonochrome dispose()
 		this _packUv dispose()
-		EglRgba disposeAll()
 		super()
 	}
 	clean: func {
@@ -190,7 +189,7 @@ AndroidContext: class extends OpenGLES3Context {
 		}
 		result
 	}
-	createEglRgba: func (size: IntSize2D, pixels: Pointer = null, write: Int = 0) -> EglRgba { EglRgba new(this _backend _eglDisplay, size, pixels, write) }
+	createEglRgba: func (size: IntSize2D, read: Bool, write: Bool) -> EglRgba { EglRgba new(size, read, write, this _backend _eglDisplay) }
 }
 
 AndroidContextManager: class extends GpuContextManager {
@@ -215,5 +214,4 @@ AndroidContextManager: class extends GpuContextManager {
 			result = AndroidContext new()
 		result
 	}
-	createEglRgba: func (size: IntSize2D, pixels: Pointer = null) -> EglRgba { this _getContext() as AndroidContext createEglRgba(size, pixels, 1) }
 }

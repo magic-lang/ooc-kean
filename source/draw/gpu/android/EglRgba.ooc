@@ -18,45 +18,36 @@ use ooc-draw-gpu
 use ooc-math
 use ooc-opengl
 use ooc-base
-import EGLImage/eglimage
+import GraphicBuffer
 EglRgba: class extends GpuTexture {
-	_texture: Texture
-	texture: Texture { get { this _texture } }
-	_id: Int
-	id: Int { get { this _id } }
-	_stride: Int
-	stride: Int { get { this _stride } }
+	backend: EGLImage { get { this _backend as EGLImage } }
+	stride ::= this _buffer stride
 	_size: IntSize2D
-	size: IntSize2D { get { this size } }
+	size ::= this _size
 	_channels := 4
-	init: func (eglDisplay: Pointer, size: IntSize2D, pixels: Pointer = null, write: Int = 0) {
-		this _texture = Texture create(TextureType rgba, size width, size height, size width * this _channels, null, false)
-		this _size = size
+	_buffer: GraphicBuffer
+	init: func (=_size, read: Bool, write: Bool, eglDisplay: Pointer) {
+		this _buffer = GraphicBuffer new(_size, read, write)
+		super(EGLImage create(TextureType rgba, _size width, _size height, this _buffer nativeBuffer, eglDisplay))
 		DebugPrint print("Allocating EGL Image")
-		this _id = createEGLImage(size width, size height, eglDisplay, write)
-		this _stride = getStride(this _id) * this _channels
-		if (pixels != null) {
-			pointer := this write()
-			memcpy(pointer, pixels, size width * size height * this _channels)
-			this unlock()
-		}
 	}
 	dispose: func {
-		this _texture dispose()
-		destroyEGLImage(this id)
+		this backend dispose()
+		this _buffer free()
+	}
+	lock: func (write: Bool) -> UInt8* {
+		this _buffer lock(write) as UInt8*
+	}
+	unlock: func {
+		this _buffer unlock()
 	}
 	setMagFilter: func (linear: Bool)
 	upload: func (pixels: Pointer, stride: Int) {
-		pointer := this write()
+		pointer := this _buffer lock(true)
 		memcpy(pointer, pixels, this size width * this size height * this _channels)
-		this unlock()
+		this _buffer unlock()
 	}
-	generateMipmap: func
-	bind: func (unit: UInt)
-	unbind: func
-	read: func -> UInt8* { readPixels(this id) as UInt8* }
-	write: func -> UInt8* { writePixels(this id) as UInt8* }
-	unlock: func { unlockPixels(this id) }
-	isPadded: func -> Bool { this _stride > this _size width * this _channels }
-	disposeAll: static func { destroyAll() }
+	generateMipmap: func { raise("Unimplemented") }
+	bind: func (unit: UInt) { this backend bind(unit) }
+	unbind: func { this backend unbind() }
 }

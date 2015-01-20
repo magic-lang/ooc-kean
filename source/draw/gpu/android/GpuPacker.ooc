@@ -31,13 +31,14 @@ GpuPacker: class {
 	_bytesPerPixel: UInt
 	bytesPerPixel: UInt { get { this _bytesPerPixel } }
 	init: func (size: IntSize2D, bytesPerPixel: UInt, context: AndroidContext) {
+		DebugPrint print("Allocating GpuPacker")
 		this _bytesPerPixel = bytesPerPixel
 		this _context = context
 		this _size = size
 		this _internalSize = IntSize2D new(size width * bytesPerPixel / 4, size height)
 		this _bytesPerPixel = bytesPerPixel
-		this _targetTexture = context createEglRgba(this _internalSize)
-		this _renderTarget = Fbo create(this _targetTexture texture, this _internalSize width, this _internalSize height)
+		this _targetTexture = context createEglRgba(this _internalSize, true, false)
+		this _renderTarget = Fbo create(this _targetTexture backend, this _internalSize width, this _internalSize height)
 	}
 	recycle: func { this _context recycle(this) }
 	dispose: func {
@@ -55,7 +56,7 @@ GpuPacker: class {
 		image setMagFilter(true)
 	}
 	read: func ~ByteBuffer -> ByteBuffer {
-		sourcePointer := this _targetTexture read()
+		sourcePointer := this _targetTexture lock(false)
 		buffer := ByteBuffer new(sourcePointer, this _targetTexture stride * this _targetTexture size height,
 			func (buffer: ByteBuffer){
 				this _targetTexture unlock()
@@ -68,7 +69,7 @@ GpuPacker: class {
 		destinationHeight := this size height
 		size := destinationWidth * destinationHeight * this bytesPerPixel
 		buffer := ByteBuffer new(size)
-		sourcePointer := this _targetTexture read()
+		sourcePointer := this _targetTexture lock(false)
 		sourceRow := sourcePointer
 		sourceStride := this _targetTexture stride
 		destinationRow := buffer pointer
@@ -83,7 +84,7 @@ GpuPacker: class {
 		buffer
 	}
 	readRows: func ~overwrite (destination: RasterPacked) {
-		sourcePointer := this _targetTexture read()
+		sourcePointer := this _targetTexture lock(false)
 		destinationPointer := destination buffer pointer
 		destinationStride := destination stride
 		sourceStride := this _targetTexture stride
@@ -98,7 +99,7 @@ GpuPacker: class {
 		this _targetTexture unlock()
 	}
 	read: func (destination: RasterPacked) {
-		sourcePointer := this _targetTexture read()
+		sourcePointer := this _targetTexture lock(false)
 		destinationPointer := destination buffer pointer
 		destinationStride := destination stride
 		sourceStride := this _targetTexture stride
