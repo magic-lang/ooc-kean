@@ -45,15 +45,9 @@ OpenGLES3Context: class extends GpuContext {
 		this _packUv = OpenGLES3MapPackUv new(this)
 		this _backend = context
 	}
-	init: func ~unshared {
-		this init(Context create())
-	}
-	init: func ~shared (other: This) {
-		this init(Context create(other _backend))
-	}
-	init: func ~window (nativeWindow: NativeWindow) {
-		this init(Context create(nativeWindow))
-	}
+	init: func ~unshared { this init(Context create()) }
+	init: func ~shared (other: This) { this init(Context create(other _backend)) }
+	init: func ~window (nativeWindow: NativeWindow) { this init(Context create(nativeWindow)) }
 	dispose: func {
 		this _backend makeCurrent()
 		super()
@@ -63,12 +57,8 @@ OpenGLES3Context: class extends GpuContext {
 		this _uvMapDefault dispose()
 		this _backend dispose()
 	}
-	recycle: func ~image (gpuImage: GpuImage) {
-		this _imageBin add(gpuImage)
-	}
-	recycle: func ~surface (surface: GpuSurface) {
-		this _surfaceBin add(surface)
-	}
+	recycle: func ~image (gpuImage: GpuImage) { this _imageBin add(gpuImage) }
+	recycle: func ~surface (surface: GpuSurface) { this _surfaceBin add(surface) }
 	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap {
 		result := match (mapType) {
 			case GpuMapType defaultmap =>
@@ -97,9 +87,7 @@ OpenGLES3Context: class extends GpuContext {
 			raise("Could not find Map implementation of specified type")
 		result
 	}
-	searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
-		this _imageBin find(type, size)
-	}
+	searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage { this _imageBin find(type, size) }
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType monochrome, size)
 		if (result == null)
@@ -222,10 +210,6 @@ OpenGLES3Context: class extends GpuContext {
 			result = OpenGLES3Surface create(this)
 		result
 	}
-	update: func {
-		this _backend swapBuffers()
-	}
-	setViewport: func (viewport: Viewport) {
-		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
-	}
+	update: func { this _backend swapBuffers() }
+	setViewport: func (viewport: Viewport) { Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height) }
 }
