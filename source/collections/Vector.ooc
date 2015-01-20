@@ -72,7 +72,7 @@ Vector: abstract class <T> {
 		destination := target _backend + targetStart * T size
 		length := capacity * T size
 
-		if (source <= destination && destination <= source + length || destination <= source && source <= destination + length)
+		if ((source <= destination && destination <= source + length) || (destination <= source && source <= destination + length))
 			memmove(destination, source, length)
 		else
 			memcpy(destination, source, length)
@@ -91,7 +91,7 @@ HeapVector: class <T> extends Vector<T> {
 		super(capacity)
 	}
 
-	_allocate: func(capacity: Int)   {
+	_allocate: func(capacity: Int) {
 		this _backend = gc_realloc(this _backend, capacity * T size)
 	}
 
@@ -105,10 +105,9 @@ StackVector: class <T> extends Vector<T> {
 		super(data, capacity)
 	}
 
-	_allocate: func(capacity: Int) {
-		this _backend
-	}
-
+	// TODO: Why does this function exist here?
+	_allocate: func(capacity: Int)
+	
 	resize: func(capacity: Int) {
 		if (capacity > this capacity)
 			capacity = this capacity

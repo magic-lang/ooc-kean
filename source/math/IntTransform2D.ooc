@@ -31,7 +31,7 @@ import structs/ArrayList
 IntTransform2D: cover {
 	a, b, c, d, e, f, g, h, i: Int
 	operator [] (x, y: Int) -> Int {
-		result : Int
+		result := 0
 		match (x) {
 			case 0 =>
 				match (y) {
