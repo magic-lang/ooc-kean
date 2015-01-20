@@ -23,6 +23,7 @@ GraphicBuffer: class {
 	_size: IntSize2D
 	size ::= this _size
 	_stride: Int
+	stride ::= this _stride
 	_backend: Pointer = null
 	_nativeBuffer: Pointer = null
 	nativeBuffer ::= this _nativeBuffer
