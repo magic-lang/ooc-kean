@@ -85,7 +85,7 @@ FloatTransform2D: cover {
 	isAffine ::= this c == 0.0f && this f == 0.0f && this i == 1.0f
 	isSimilarity ::= this == This create(this translation, this scaling, this rotation)
 	isEuclidian ::= this == This create(this translation, this rotation)
-	isIdentity ::= (this a == this e == this i == 1.0f) && (this b == this c == this d == this f == this g == this h == 0.0f)
+	isIdentity ::= (this a == 1.0f && this e == 1.0f == && this i == 1.0f) && (this b == 0.0f && this c == 0.0f && this d == 0.0f && this f == 0.0f && this g == 0.0f && this h == 0.0f)
 	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i)
 	init: func@ ~reduced (a, b, d, e, g, h: Float) { this init(a, b, 0.0f, d, e, 0.0f, g, h, 1.0f) }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f) }
