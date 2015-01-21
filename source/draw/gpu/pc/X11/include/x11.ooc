@@ -25,7 +25,7 @@ KeyPressMask: extern const Long
 CopyFromParent: extern const Long
 InputOutput: extern const UInt
 CWEventMask: extern const ULong
-XEvent: extern 
+//XEvent: extern 
 
 XSetWindowAttributesOOC: cover from XSetWindowAttributes {
 	backgroundPixmap: extern(background_pixmap) Long
