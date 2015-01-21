@@ -187,7 +187,7 @@ File: abstract class {
     }
     
     hasExtension: func -> Bool {
-		this path lastIndexOf('.') > 0
+		(this path lastIndexOf('.') > 0) && (!this dir?)
     }
 
     /**
