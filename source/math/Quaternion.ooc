@@ -20,7 +20,7 @@ import FloatExtension
 Quaternion: cover {
 	real: Float
 	imaginary: FloatPoint3D
-	
+
 	// q = w + xi + yj + zk
 	w ::= this real
 	x ::= this imaginary x
@@ -79,16 +79,23 @@ Quaternion: cover {
 		rightYawPitch := yawAndPitch * right
 
 		roll: Float
-		if (Float absolute(rightYawPitch x) > Float absolute(rightYawPitch y) && Float absolute(rightYawPitch x) > Float absolute(rightYawPitch z)) {
+		if (Float absolute(rightYawPitch x) > Float absolute(rightYawPitch y) && Float absolute(rightYawPitch x) > Float absolute(rightYawPitch z))
 			roll = asin((upYawPitch scalarProduct(upRotated) * upYawPitch x - upRotated x) / rightYawPitch x)
-		}
-		else if (Float absolute(rightYawPitch y) > Float absolute(rightYawPitch z)) {
+		else if (Float absolute(rightYawPitch y) > Float absolute(rightYawPitch z))
 			roll = asin((upYawPitch scalarProduct(upRotated) * upYawPitch y - upRotated y) / rightYawPitch y)
-		}
-		else {
+		else
 			roll = asin((upYawPitch scalarProduct(upRotated) * upYawPitch z - upRotated z) / rightYawPitch z)
-		}
+
 		FloatPoint3D new(pitch, -yaw, roll)
+	}
+	getTransform: static func(eulerAngles: FloatPoint3D, k: Float) -> FloatTransform2D {
+			rx := FloatTransform2D createXRotation(eulerAngles x, k)
+			ry := FloatTransform2D createYRotation(eulerAngles y, k)
+			rz := FloatTransform2D createZRotation(eulerAngles z)
+			/*return ry * rx * rz // Roll -> Pitch -> Yaw*/
+			/*return rx * ry * rz // Roll -> Yaw -> Pitch*/
+			/*return rz * ry * rx // Pitch -> Yaw -> Roll*/
+			return rz * rx * ry // Yaw -> Pitch -> Roll // Currently used
 	}
 	toString: func -> String { "Real:" + this real toString() + " Imaginary: " + this imaginary toString() }
 }
