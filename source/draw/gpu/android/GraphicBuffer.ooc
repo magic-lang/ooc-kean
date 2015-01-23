@@ -29,6 +29,7 @@ GraphicBuffer: class {
 	nativeBuffer ::= this _nativeBuffer
 	init: func (=_size, read: Bool, write: Bool) {
 		This _allocate(_size width, _size height, read, write, this _backend&, this _nativeBuffer&, this _stride&)
+		this _stride *= 4
 	}
 	free: func { This _free(this _backend) }
 	lock: func (write: Bool) -> Pointer {
