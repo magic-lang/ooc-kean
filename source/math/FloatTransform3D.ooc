@@ -30,14 +30,13 @@ import structs/ArrayList
 FloatTransform3D: cover {
 	a, b, c, d, e, f, g, h, i, j, k, l: Float
 	operator [] (x, y: Int) -> Float {
-		result : Float
+		result := 0.0f
 		match (x) {
 			case 0 =>
 				match (y) {
 					case 0 => result = this a
 					case 1 => result = this b
 					case 2 => result = this c
-					case 3 => result = this d
 					case => OutOfBoundsException new(y, 3) throw()
 				}
 			case 1 =>

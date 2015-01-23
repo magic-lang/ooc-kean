@@ -22,7 +22,7 @@ import FloatBox2D
 import IntTransform2D
 import text/StringTokenizer
 import structs/ArrayList
-import FloatEuclidTransform, FloatTransform3D
+import FloatEuclidTransform, FloatTransform3D, FloatPoint3D
 
 // The 2D transform is a 3x3 homogeneous coordinate matrix.
 // The element order is:
@@ -33,7 +33,7 @@ import FloatEuclidTransform, FloatTransform3D
 FloatTransform2D: cover {
 	a, b, c, d, e, f, g, h, i: Float
 	operator [] (x, y: Int) -> Float {
-		result : Float
+		result := 0.0f
 		match (x) {
 			case 0 =>
 				match (y) {
@@ -85,7 +85,7 @@ FloatTransform2D: cover {
 	isAffine ::= this c == 0.0f && this f == 0.0f && this i == 1.0f
 	isSimilarity ::= this == This create(this translation, this scaling, this rotation)
 	isEuclidian ::= this == This create(this translation, this rotation)
-	isIdentity ::= (this a == this e == this i == 1.0f) && (this b == this c == this d == this f == this g == this h == 0.0f)
+	isIdentity ::= (this a == 1.0f && this e == 1.0f && this i == 1.0f) && (this b == 0.0f && this c == 0.0f && this d == 0.0f && this f == 0.0f && this g == 0.0f && this h == 0.0f)
 	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i)
 	init: func@ ~reduced (a, b, d, e, g, h: Float) { this init(a, b, 0.0f, d, e, 0.0f, g, h, 1.0f) }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f) }
@@ -159,6 +159,9 @@ FloatTransform2D: cover {
 		divisor := this c * other x + this f * other y + this i
 		FloatPoint2D new((this a * other x + this d * other y + this g) / divisor, (this b * other x + this e * other y + this h) / divisor)
 	}
+	operator * (other: FloatPoint3D) -> FloatPoint3D {
+		FloatPoint3D new(this a * other x + this d * other y + this g * other z, this b * other x + this e * other y + this h * other z, this c * other x + this f * other y + this i * other z)
+	}
 	operator * (other: FloatBox2D) -> FloatBox2D {
 		FloatBox2D new(this * other leftTop, this * other rightBottom)
 	}
@@ -195,7 +198,6 @@ FloatTransform2D: cover {
 		array[13] = this h
 		array[14] = 0.0f
 		array[15] = this i
-		array
 	}
 	to3DTransformArray2: func -> Float* {
 		euclid := FloatEuclidTransform new(this)
