@@ -193,3 +193,4 @@ eglCreateContext: extern func(display: Pointer, config: Pointer, sharedContext: 
 eglGetConfigAttrib: extern func(display: Pointer, config: Pointer, attribute: Int, value: Int*) -> UInt
 eglSwapBuffers: extern func(display: Pointer, surface: Pointer)
 eglTerminate: extern func(display: Pointer) -> Pointer
+eglGetError: extern func -> UInt
