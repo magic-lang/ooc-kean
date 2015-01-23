@@ -83,6 +83,7 @@ extend Float {
 	//   lerp(a, b, 0.5) = (a + b) / 2
 	//   lerp(a, b, 1) = b
 	//   lerp(a, a, x) = a
+	// Called "lerp" in CG and HLSL, called "mix" in GLSL
 	lerp: static func (a: Float, b: Float, ratio: Float) -> Float {
 		(ratio * (b - a)) + a
 	}

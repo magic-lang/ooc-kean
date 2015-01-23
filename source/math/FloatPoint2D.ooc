@@ -22,7 +22,7 @@ import IntPoint2D
 
 FloatPoint2D: cover {
 	x, y: Float
-	norm ::= (this x *this x + this y * this y) sqrt()
+	norm ::= (this x * this x + this y * this y) sqrt()
 	azimuth ::= this y atan2(this x)
 	init: func@ (=x, =y)
 	init: func@ ~default { this init(0.0f, 0.0f) }
@@ -70,6 +70,9 @@ FloatPoint2D: cover {
 	}
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
+	lerp: static func (a, b: FloatPoint2D, ratio: Float) -> FloatPoint2D {
+		FloatPoint2D new(Float lerp(a x, b x, ratio), Float lerp(a y, b y, ratio))
+	}
 }
 operator * (left: Float, right: FloatPoint2D) -> FloatPoint2D { FloatPoint2D new(left * right x, left * right y) }
 operator / (left: Float, right: FloatPoint2D) -> FloatPoint2D { FloatPoint2D new(left / right x, left / right y) }

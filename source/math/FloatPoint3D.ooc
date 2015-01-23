@@ -23,11 +23,11 @@ FloatPoint3D: cover {
 	x, y, z: Float
 	norm ::= (this x squared() + this y squared() + this z squared()) sqrt()
 	azimuth ::= this y atan2(this x)
-	elevation: Float { 
-		get { 
+	elevation: Float {
+		get {
 			r := this norm
 			if (r != 0.0f)
-				r = (this z / r) clamp(-1.0f, 1.0f) acos()	
+				r = (this z / r) clamp(-1.0f, 1.0f) acos()
 			r
 		}
 	}
@@ -36,7 +36,7 @@ FloatPoint3D: cover {
 	init: func@ ~fromPoint2D (point: FloatPoint2D, z: Float) { this init(point x, point y, z) }
 	scalarProduct: func (other: This) -> Float { this x * other x + this y * other y + this z * other z }
 	vectorProduct: func (other: This) -> This { This new(this y * other z - other y * this z, -(this x * other z - other x * this z), this x * other y - other x * this y) }
-	spherical: func (radius, azimuth, elevation: Float) -> This { 
+	spherical: func (radius, azimuth, elevation: Float) -> This {
 		This new(radius * (azimuth cos()) * (elevation sin()), radius * (azimuth sin()) * (elevation sin()), radius * (elevation cos()))
 	}
 	angles: func (rx, ry, n: Float) -> This {
@@ -71,6 +71,9 @@ FloatPoint3D: cover {
 	parse: static func (input: String) -> This {
 		array := input split(',')
 		This new(array[0] toFloat(), array[1] toFloat(), array[2] toFloat())
+	}
+	lerp: static func (a, b: FloatPoint3D, ratio: Float) -> FloatPoint3D {
+		FloatPoint3D new(Float lerp(a x, b x, ratio), Float lerp(a y, b y, ratio), Float lerp(a z, b z, ratio))
 	}
 }
 operator * (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left * right x, left * right y, left * right z) }
