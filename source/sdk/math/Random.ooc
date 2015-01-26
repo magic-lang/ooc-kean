@@ -60,7 +60,7 @@ Random: class {
 	   generated using the C functions srand/rand.
 	 */
 	randRange: static func(start, end: Int) -> Int {
-		width := end - start
+		width := 1 + end - start
 		return start + (random() % width)
 	}
 
@@ -164,4 +164,25 @@ Random: class {
 		return l get(fastRandRange(0, l size))
 	}
 
+}
+
+RandomGenerator: cover {
+	_randomState := 12835
+	// Constructor for random generator with custom seed
+	init: func(seed: Int) {
+		_randomState = seed
+	}
+	// Post-condition: Returns a random integer value
+	getRandomRaw: func() -> Int {
+		this _randomState = (214013 * this _randomState) + 2531011
+		((this _randomState>>16) & 0x7fff)
+	}
+	// Post-condition: Returns a random value from min to max
+	getRandomInt: func(min: Int, max: Int) -> Float {
+		min + (getRandomRaw() % (1 + max - min))
+	}
+	// Post-condition: Returns a random value from 0.0 to less than 1.0
+	getRandomFloat: func() -> Float {
+		((getRandomRaw() % 10000) as Float) / 10000.0f
+	}
 }
