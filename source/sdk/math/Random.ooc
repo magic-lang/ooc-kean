@@ -166,8 +166,8 @@ Random: class {
 
 }
 
-RandomGenerator: cover {
-	_randomState := 12835
+RandomGenerator: class {
+	_randomState: Int
 	// Constructor for random generator with custom seed
 	init: func(seed: Int) {
 		_randomState = seed
@@ -178,7 +178,7 @@ RandomGenerator: cover {
 		((this _randomState>>16) & 0x7fff)
 	}
 	// Post-condition: Returns a random value from min to max
-	getRandomInt: func(min: Int, max: Int) -> Float {
+	getRandomInt: func(min: Int, max: Int) -> Int {
 		min + (getRandomRaw() % (1 + max - min))
 	}
 	// Post-condition: Returns a random value from 0.0 to less than 1.0
