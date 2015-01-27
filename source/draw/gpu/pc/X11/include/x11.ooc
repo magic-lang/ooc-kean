@@ -25,6 +25,7 @@ KeyPressMask: extern const Long
 CopyFromParent: extern const Long
 InputOutput: extern const UInt
 CWEventMask: extern const ULong
+//XEvent: extern 
 
 XSetWindowAttributesOOC: cover from XSetWindowAttributes {
 	backgroundPixmap: extern(background_pixmap) Long
@@ -50,3 +51,27 @@ XCreateWindow: extern func(display: Pointer, window: Long, x: Int, y: Int,
 XMapWindow: extern func(display: Pointer, window: Long) -> Int
 XStoreName: extern func(display: Pointer, window: Long, windowName: Char*) -> Int
 DefaultRootWindow: extern func(display: Pointer) -> UInt
+
+//XNextEvent: extern func(Pointer, XEvent) -> Int
+
+XKeyEventOOC: cover from XKeyEvent {
+	type: extern Int
+	serial: extern ULong
+	sendEvent: extern(send_event) Bool
+	display: extern Pointer
+	window: extern ULong
+	root: extern ULong
+	subwindow: extern ULong
+	time: extern ULong
+	x: extern Int
+	y: extern Int
+	xRoot: extern(x_root) Int
+	yRoot: extern(y_root) Int
+	state: extern UInt
+	keyCode: extern(keycode) UInt
+	sameScreen: extern(same_screen) Bool
+}
+
+XKeyPressedEventOOC: extern XKeyEventOOC
+XKeyReleasedEventOOC: extern XKeyEventOOC
+

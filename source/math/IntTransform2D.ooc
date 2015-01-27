@@ -31,7 +31,7 @@ import structs/ArrayList
 IntTransform2D: cover {
 	a, b, c, d, e, f, g, h, i: Int
 	operator [] (x, y: Int) -> Int {
-		result : Int
+		result := 0
 		match (x) {
 			case 0 =>
 				match (y) {
@@ -76,7 +76,7 @@ IntTransform2D: cover {
 	}}
 	isProjective ::= this determinant != 0
 	isAffine ::= this c == 0 && this f == 0 && this i == 1
-	isIdentity ::= (this a == this e == this i == 1) && (this b == this c == this d == this f == this g == this h == 0)
+	isIdentity ::= (this a == 1 && this e == 1 && this i == 1) && (this b == 0 && this c == 0 && this d == 0 && this f == 0 && this g == 0 && this h == 0)
 	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i)
 	init: func@ ~reduced (a, b, d, e, g, h: Float) { this init(a, b, 0, d, e, 0, g, h, 1) }
 	init: func@ ~default { this init(0, 0, 0, 0, 0, 0, 0, 0, 0) }

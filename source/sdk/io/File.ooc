@@ -163,10 +163,12 @@ File: abstract class {
     }
     
     getExtension: func -> String {
-    	result: String = null
-    	index := this path lastIndexOf('.')
-    	if (index > 0)
-   			result = this path substring(index+1)
+    	result := ""
+    	if (!this dir?()) {
+	    	index := this path lastIndexOf('.')
+    		if (index > 0)
+   				result = this path substring(index+1)
+    	}
     	result
     }
     
@@ -187,7 +189,7 @@ File: abstract class {
     }
     
     hasExtension: func -> Bool {
-		this path lastIndexOf('.') > 0
+		(this path lastIndexOf('.') > 0) && (!this dir?())
     }
 
     /**
