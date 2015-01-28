@@ -12,15 +12,23 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public License
-* along with this software. If not, see <http://www.gnu.org/licenses/>.
+* along with This software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-include ./headers/EGLImageImport
+use ooc-math
+use ooc-draw
+use ooc-draw-gpu
+import OpenGLES3/VolumeTexture
 
-createEGLImage: extern func(width: Int, height: Int, display: Pointer, write: Int) -> Int
-destroyEGLImage: extern func(index: Int)
-unlockPixels: extern func(index: Int)
-getStride: extern func(index: Int) -> Int
-destroyAll: extern func
-readPixels: extern func(index: Int) -> Pointer
-writePixels: extern func(index: Int) -> Pointer
+OpenGLES3VolumeMonochrome: class {
+	_backend: VolumeTexture
+	init: func (size: IntSize3D, pixels: UInt8* = null) {
+		this _backend = VolumeTexture new(size width, size height, size depth, pixels)
+	}
+	bind: func (unit: UInt) {
+		this _backend bind(unit)
+	}
+	upload: func (pixels: UInt8*) {
+		this _backend upload(pixels)
+	}
+}

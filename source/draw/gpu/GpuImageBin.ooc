@@ -63,19 +63,19 @@ GpuImageBin: class {
 	add: func (image: GpuImage) {
 		match (image) {
 			case (i: GpuMonochrome) =>
-				this _monochrome add(image)
+				this _monochrome add(i)
 			case (i: GpuBgr) =>
-				this _bgr add(image)
+				this _bgr add(i)
 			case (i: GpuBgra) =>
-				this _bgra add(image)
+				this _bgra add(i)
 			case (i: GpuUv) =>
-				this _uv add(image)
+				this _uv add(i)
 			case (i: GpuYuv420Semiplanar) =>
-				this _yuvSemiplanar add(image)
+				this _yuvSemiplanar add(i)
 			case (i: GpuYuv420Planar) =>
-				this _yuvPlanar add(image)
+				this _yuvPlanar add(i)
 			case (i: GpuYuv422Semipacked) =>
-				this _yuv422 add(image)
+				this _yuv422 add(i)
 			case =>
 				raise("Unknown format in GpuImageBin add()")
 		}

@@ -45,15 +45,9 @@ OpenGLES3Context: class extends GpuContext {
 		this _packUv = OpenGLES3MapPackUv new(this)
 		this _backend = context
 	}
-	init: func ~unshared {
-		this init(Context create())
-	}
-	init: func ~shared (other: This) {
-		this init(Context create(other _backend))
-	}
-	init: func ~window (nativeWindow: NativeWindow) {
-		this init(Context create(nativeWindow))
-	}
+	init: func ~unshared { this init(Context create()) }
+	init: func ~shared (other: This) { this init(Context create(other _backend)) }
+	init: func ~window (nativeWindow: NativeWindow) { this init(Context create(nativeWindow)) }
 	dispose: func {
 		this _backend makeCurrent()
 		super()
@@ -63,32 +57,28 @@ OpenGLES3Context: class extends GpuContext {
 		this _uvMapDefault dispose()
 		this _backend dispose()
 	}
-	recycle: func ~image (gpuImage: GpuImage) {
-		this _imageBin add(gpuImage)
-	}
-	recycle: func ~surface (surface: GpuSurface) {
-		this _surfaceBin add(surface)
-	}
+	recycle: func ~image (gpuImage: GpuImage) { this _imageBin add(gpuImage) }
+	recycle: func ~surface (surface: GpuSurface) { this _surfaceBin add(surface) }
 	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap {
 		result := match (mapType) {
 			case GpuMapType defaultmap =>
 				match (gpuImage) {
-					case (i : GpuMonochrome) => this _monochromeMapDefault
-					case (i : GpuUv) => this _uvMapDefault
-					case (i : GpuBgr) => this _bgrMapDefault
-					case (i : GpuBgra) => this _bgraMapDefault
+					case (gpuImage : GpuMonochrome) => this _monochromeMapDefault
+					case (gpuImage : GpuUv) => this _uvMapDefault
+					case (gpuImage : GpuBgr) => this _bgrMapDefault
+					case (gpuImage : GpuBgra) => this _bgraMapDefault
 					case => null
 				}
 			case GpuMapType transform =>
 				match (gpuImage) {
-					case (i : GpuMonochrome) => this _monochromeMapTransform
-					case (i : GpuUv) => this _uvMapTransform
+					case (gpuImage : GpuMonochrome) => this _monochromeMapTransform
+					case (gpuImage : GpuUv) => this _uvMapTransform
 					case => null
 				}
 			case GpuMapType pack =>
 				match (gpuImage) {
-					case (i : GpuMonochrome) => this _packMonochrome
-					case (i : GpuUv) => this _packUv
+					case (gpuImage : GpuMonochrome) => this _packMonochrome
+					case (gpuImage : GpuUv) => this _packUv
 					case => null
 				}
 			case => null
@@ -97,9 +87,7 @@ OpenGLES3Context: class extends GpuContext {
 			raise("Could not find Map implementation of specified type")
 		result
 	}
-	searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
-		this _imageBin find(type, size)
-	}
+	searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage { this _imageBin find(type, size) }
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType monochrome, size)
 		if (result == null)
@@ -203,13 +191,13 @@ OpenGLES3Context: class extends GpuContext {
 	}
 	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
 		result := match (rasterImage) {
-			case image: RasterMonochrome => this _createMonochrome(rasterImage as RasterMonochrome)
-			case image: RasterBgr => this _createBgr(rasterImage as RasterBgr)
-			case image: RasterBgra => this _createBgra(rasterImage as RasterBgra)
-			case image: RasterUv => this _createUv(rasterImage as RasterUv)
-			case image: RasterYuv420Semiplanar => this _createYuv420Semiplanar(rasterImage as RasterYuv420Semiplanar)
-			case image: RasterYuv420Planar => this _createYuv420Planar(rasterImage as RasterYuv420Planar)
-			case image: RasterYuv422Semipacked => this _createYuv422Semipacked(rasterImage as RasterYuv422Semipacked)
+			case image: RasterMonochrome => this _createMonochrome(image)
+			case image: RasterBgr => this _createBgr(image)
+			case image: RasterBgra => this _createBgra(image)
+			case image: RasterUv => this _createUv(image)
+			case image: RasterYuv420Semiplanar => this _createYuv420Semiplanar(image)
+			case image: RasterYuv420Planar => this _createYuv420Planar(image)
+			case image: RasterYuv422Semipacked => this _createYuv422Semipacked(image)
 			case => null
 		}
 		if (result == null)
@@ -222,10 +210,6 @@ OpenGLES3Context: class extends GpuContext {
 			result = OpenGLES3Surface create(this)
 		result
 	}
-	update: func {
-		this _backend swapBuffers()
-	}
-	setViewport: func (viewport: Viewport) {
-		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
-	}
+	update: func { this _backend swapBuffers() }
+	setViewport: func (viewport: Viewport) { Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height) }
 }

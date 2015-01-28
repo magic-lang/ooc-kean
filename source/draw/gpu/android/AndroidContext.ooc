@@ -27,6 +27,13 @@ AndroidContext: class extends OpenGLES3Context {
 	_unpackUv1080p: OpenGLES3MapUnpackUv1080p
 	init: func {
 		super()
+		this _initialize()
+	}
+	init: func ~other (other: This) {
+		super(other)
+		this _initialize()
+	}
+	_initialize: func {
 		this _packerBin = GpuPackerBin new()
 		this _packMonochrome1080p = OpenGLES3MapPackMonochrome1080p new(this)
 		this _packUv1080p = OpenGLES3MapPackUv1080p new(this)
@@ -38,7 +45,6 @@ AndroidContext: class extends OpenGLES3Context {
 		this _packerBin dispose()
 		this _packMonochrome dispose()
 		this _packUv dispose()
-		EglRgba disposeAll()
 		super()
 	}
 	clean: func {
@@ -125,7 +131,6 @@ AndroidContext: class extends OpenGLES3Context {
 
 		yRaster := RasterMonochrome new(yBuffer, gpuImage size)
 		uvRaster := RasterUv new(uvBuffer, gpuImage size / 2)
-
 		result := RasterYuv420Semiplanar new(yRaster, uvRaster)
 		result
 	}
@@ -149,45 +154,37 @@ AndroidContext: class extends OpenGLES3Context {
 	recycle: func ~GpuPacker (packer: GpuPacker) {
 		this _packerBin add(packer)
 	}
-	_createEglYuv420Semiplanar: func (rasterImage: RasterYuv420Semiplanar) -> GpuImage {
-		if (rasterImage y size width != 1920)
-			return this _createYuv420Semiplanar(rasterImage)
-		textureY := this createEglRgba(IntSize2D new(rasterImage y size width, rasterImage y size height / 4), rasterImage y buffer pointer, 1)
-		packedY := OpenGLES3Monochrome new(textureY, rasterImage y size, this)
-		textureUv := this createEglRgba(IntSize2D new(1920, 135), rasterImage uv buffer pointer, 1)
-		packedUv := OpenGLES3Uv new(textureUv, rasterImage uv size, this)
-		result := this createYuv420Semiplanar(rasterImage size) as OpenGLES3Yuv420Semiplanar
-		result y canvas draw(packedY, this _unpackMonochrome1080p, Viewport new(rasterImage y size))
-		packedY dispose()
-		result uv canvas draw(packedUv, this _unpackUv1080p, Viewport new(rasterImage uv size))
-		packedUv dispose()
-		result
-	}
-	/*
-	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
-		result := match (rasterImage) {
-			case image: RasterYuv420Semiplanar => this _createYuv420Semiplanar(rasterImage as RasterYuv420Semiplanar)
-			case image: RasterMonochrome => this _createMonochrome(rasterImage as RasterMonochrome)
-			case image: RasterBgr => this _createBgr(rasterImage as RasterBgr)
-			case image: RasterBgra => this _createBgra(rasterImage as RasterBgra)
-			case image: RasterUv => this _createUv(rasterImage as RasterUv)
-			case image: RasterYuv420Planar => this _createYuv420Planar(rasterImage as RasterYuv420Planar)
-		}
-		result
-	}
-	*/
 	createPacker: func (size: IntSize2D, bytesPerPixel: UInt) -> GpuPacker {
 		result := this _packerBin find(size, bytesPerPixel)
 		if (result == null) {
+			DebugPrint print("Could not find a recycled GpuPacker in list with size " + this _packerBin _packers size toString() + " with size " + size toString())
 			result = GpuPacker new(size, bytesPerPixel, this)
 		}
 		result
 	}
-	createEglRgba: func (size: IntSize2D, pixels: Pointer = null, write: Int = 0) -> EglRgba { EglRgba new(this _backend _eglDisplay, size, pixels, write) }
+	createEglRgba: func (size: IntSize2D, read: Bool, write: Bool) -> EglRgba { EglRgba new(size, read, write, this _backend _eglDisplay) }
 }
 
 AndroidContextManager: class extends GpuContextManager {
-	init: func (contexts: Int) { super(contexts) }
-	_createContext: func -> GpuContext { AndroidContext new() }
-	createEglRgba: func (size: IntSize2D, pixels: Pointer = null) -> EglRgba { this _getContext() as AndroidContext createEglRgba(size, pixels, 1) }
+	_motherContext: AndroidContext
+	_sharedContexts: Bool
+
+	init: func (contexts: Int, sharedContexts := false) {
+		super(contexts)
+		this _sharedContexts = sharedContexts
+	}
+	_createContext: func -> GpuContext {
+		result: GpuContext
+		if (this _sharedContexts) {
+			if (this _motherContext == null) {
+				this _motherContext = AndroidContext new()
+				result = this _motherContext
+			}
+			else
+				result = AndroidContext new(this _motherContext)
+		}
+		else
+			result = AndroidContext new()
+		result
+	}
 }
