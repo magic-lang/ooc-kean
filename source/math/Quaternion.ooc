@@ -97,5 +97,5 @@ Quaternion: cover {
 			/*return rz * ry * rx // Pitch -> Yaw -> Roll*/
 			return rz * rx * ry // Yaw -> Pitch -> Roll // Currently used
 	}
-	toString: func -> String { "Real:" + this real toString() + " Imaginary: " + this imaginary toString() }
+	toString: func -> String { "Real:" + "%8f" format(this real) + " Imaginary: " + "%8f" format(this imaginary x) + " " + "%8f" format(this imaginary y) + " " + "%8f" format(this imaginary z)}
 }
