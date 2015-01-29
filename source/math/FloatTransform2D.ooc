@@ -167,16 +167,16 @@ FloatTransform2D: cover {
 	}
 	operator / (value: Float) -> This {
 		This new(
-				this a / value,
-				this b / value,
-				this c / value,
-				this d / value,
-				this e / value,
-				this f / value,
-				this g / value,
-				this h / value,
-				this i / value
-				)
+			this a / value,
+			this b / value,
+			this c / value,
+			this d / value,
+			this e / value,
+			this f / value,
+			this g / value,
+			this h / value,
+			this i / value
+		)
 	}
 	operator == (other: This) -> Bool {
 		this a == other a &&
