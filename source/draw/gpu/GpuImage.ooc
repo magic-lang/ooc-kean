@@ -59,11 +59,11 @@ GpuImage: abstract class extends Image {
 	setMagFilter: abstract func (linear: Bool)
 
 	//TODO: Implement abstract functions
-	create: func (size: IntSize2D) -> This { raise("Unimplemented") }
-	resizeTo: func (size: IntSize2D) -> This { raise("Using unimplemented function reSizeTo in GpuImage class") }
-	copy: func -> This { raise("Using unimplemented function copy in GpuImage class") }
-	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This { raise("Using unimplemented function copy ~fromParams in GpuImage class") }
-	shift: func (offset: IntSize2D) -> This { raise("Using unimplemented function shift in GpuImage class") }
+	create: func (size: IntSize2D) -> This { raise("Unimplemented"); null }
+	resizeTo: func (size: IntSize2D) -> This { raise("Using unimplemented function reSizeTo in GpuImage class"); null }
+	copy: func -> This { raise("Using unimplemented function copy in GpuImage class"); null }
+	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This { raise("Using unimplemented function copy ~fromParams in GpuImage class"); null }
+	shift: func (offset: IntSize2D) -> This { raise("Using unimplemented function shift in GpuImage class"); null }
 	distance: func (other: This) -> Float { raise("Using unimplemented function distance in GpuImage class") }
 	toRaster: func -> RasterImage { this _context toRaster(this) }
 	toRaster: func ~overwrite (rasterImage: RasterImage) { this _context toRaster(this, rasterImage) }
