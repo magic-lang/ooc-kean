@@ -66,7 +66,7 @@ DateTime: cover {
     result
   }
   getDaysInMonth: func (month: Int, year: Int) -> Int {
-    match (month) {
+    result := match (month) {
       case 1 => 31
       case 2 => isLeapYear(year) ? 29 : 28
       case 3 => 31
@@ -79,7 +79,11 @@ DateTime: cover {
       case 10 => 31
       case 11 => 30
       case 12 => 31
+      case => -1
     }
+    if (result == -1)
+    	raise("Invalid month: #{month}")
+    result
   }
   operator + (timeSpan: TimeSpan) -> This {
     secondRemainder := (this _second + timeSpan seconds) % 60
