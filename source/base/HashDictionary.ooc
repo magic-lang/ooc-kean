@@ -79,7 +79,6 @@ HashDictionary: class {
 	dispose: func {
 		free(this _myHashBag myMap keys data)
 		free(this _myHashBag myMap keys)
-		next : HashEntry*
 		for (i in 0..(this _myHashBag myMap capacity)) {
 			next := (this _myHashBag myMap buckets[i])
 			next dispose()

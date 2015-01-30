@@ -53,11 +53,11 @@ FreeArrayList: class <T> extends ArrayList<T> {
 	* if second parameter is set to true.
 	*/
 
-	removeAt: func ~withBool (index: SSizeT, free: Bool) {
+	removeAt: func ~withBool (index: Int, free: Bool) {
 		if (index < 0) index = _size + index
 		if (index < 0 || index >= _size) OutOfBoundsException new(This, index, _size) throw()
 		if (free && T inheritsFrom?(Object)) {
-			old := data[index] as Object
+			old := this[index] as Object
 			old free()
 		}
 		_size -= 1
