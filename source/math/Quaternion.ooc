@@ -28,6 +28,7 @@ Quaternion: cover {
 	z ::= this imaginary z
 	inverse ::= Quaternion new(this w, -this x, -this y, -this z)
 
+	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
 	init: func@ (=real, =imaginary)
 	init: func@ ~floats (w: Float, x: Float, y: Float, z: Float) { this init(w, FloatPoint3D new(x, y, z)) }
 	init: func@ ~default { this init(0, 0, 0, 0) }
@@ -96,6 +97,24 @@ Quaternion: cover {
 			/*return rx * ry * rz // Roll -> Yaw -> Pitch*/
 			/*return rz * ry * rx // Pitch -> Yaw -> Roll*/
 			return rz * rx * ry // Yaw -> Pitch -> Roll // Currently used
+	}
+	operator == (other: This) -> Bool {
+		this w ==  w &&
+		this x ==  x &&
+		this y ==  y &&
+		this z == other z
+	}
+	operator + (other: This) -> This {
+		This new(this w + other w, this x + other x, this y + other y, this z + other z)
+	}
+	operator - (other: This) -> This {
+		This new(this w - other w, this x - other x, this y - other y, this z - other z)
+	}
+	operator / (value: Float) -> This {
+		This new(this w / value, this x / value, this y / value, this z / value)
+	}
+	operator * (value: Float) -> This {
+		This new(this w * value, this x * value, this y * value, this z * value)
 	}
 	toString: func -> String { "Real:" + "%8f" format(this real) + " Imaginary: " + "%8f" format(this imaginary x) + " " + "%8f" format(this imaginary y) + " " + "%8f" format(this imaginary z)}
 }
