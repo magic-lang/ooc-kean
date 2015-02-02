@@ -19,6 +19,7 @@ use ooc-draw
 use ooc-math
 use ooc-base
 import GpuPacker, GpuPackerBin, EglRgba
+import threading/Thread
 AndroidContext: class extends OpenGLES3Context {
 	_packerBin: GpuPackerBin
 	_packMonochrome1080p: OpenGLES3MapPackMonochrome1080p
@@ -168,23 +169,27 @@ AndroidContext: class extends OpenGLES3Context {
 AndroidContextManager: class extends GpuContextManager {
 	_motherContext: AndroidContext
 	_sharedContexts: Bool
-
+	_mutex: Mutex
 	init: func (contexts: Int, sharedContexts := false) {
 		super(contexts)
 		this _sharedContexts = sharedContexts
+		this _mutex = Mutex new()
 	}
 	_createContext: func -> GpuContext {
 		result: GpuContext
 		if (this _sharedContexts) {
+			this _mutex lock()
 			if (this _motherContext == null) {
 				this _motherContext = AndroidContext new()
 				result = this _motherContext
 			}
 			else
 				result = AndroidContext new(this _motherContext)
+			this _mutex unlock()
 		}
 		else
 			result = AndroidContext new()
+
 		result
 	}
 }
