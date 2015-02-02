@@ -971,8 +971,10 @@ glDrawElementsInstanced: extern func (mode: UInt, count: Int, type: UInt, indice
 glFenceSync: extern func (condition: UInt, flags: UInt) -> Pointer
 glIsSync: extern func (sync: Pointer) -> UInt
 glDeleteSync: extern func (sync: Pointer)
-//glClientWaitSync: extern func (sync: Pointer, flags: UInt, timeout: UInt64) -> UInt
 glWaitSync: extern func (sync: Pointer, flags: UInt, timeout: UInt64)
+
+glClientWaitSync: extern func (sync: Pointer, flags: UInt, timeout: UInt64) -> UInt
+
 glGetInteger64v: extern func (pname: UInt, params: Int64*)
 glGetSynciv: extern func (sync: Pointer, pname: UInt, bufSize: Int, length: Int*, values: Int*)
 glGetInteger64i_v: extern func (target: UInt, index: UInt, data: Int64*)
