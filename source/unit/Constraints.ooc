@@ -16,6 +16,7 @@
  */
 
 use ooc-base
+import math
 
 Modifier: abstract class {
 	parent: Modifier

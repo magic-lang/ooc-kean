@@ -39,6 +39,7 @@ extend Float {
 		first > second ? first : second
 	}
 	maximum: static func ~multiple(value: This, values: ...) -> This {
+		// FIXME: This creates a closure that causes a leak every time this function is called.
 		values each(|v|
 			if ((v as This) > value)
 				value = v
@@ -49,6 +50,7 @@ extend Float {
 		first < second ? first : second
 	}
 	minimum: static func ~multiple(value: This, values: ...) -> This {
+		// FIXME: This creates a closure that causes a leak every time this function is called.
 		values each(|v|
 			if ((v as This) < value)
 				value = v
@@ -83,6 +85,7 @@ extend Float {
 	//   lerp(a, b, 0.5) = (a + b) / 2
 	//   lerp(a, b, 1) = b
 	//   lerp(a, a, x) = a
+	// Called "lerp" in CG and HLSL, called "mix" in GLSL
 	lerp: static func (a: Float, b: Float, ratio: Float) -> Float {
 		(ratio * (b - a)) + a
 	}

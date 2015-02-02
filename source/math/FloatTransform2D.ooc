@@ -165,6 +165,19 @@ FloatTransform2D: cover {
 	operator * (other: FloatBox2D) -> FloatBox2D {
 		FloatBox2D new(this * other leftTop, this * other rightBottom)
 	}
+	operator / (value: Float) -> This {
+		This new(
+			this a / value,
+			this b / value,
+			this c / value,
+			this d / value,
+			this e / value,
+			this f / value,
+			this g / value,
+			this h / value,
+			this i / value
+		)
+	}
 	operator == (other: This) -> Bool {
 		this a == other a &&
 		this b == other b &&

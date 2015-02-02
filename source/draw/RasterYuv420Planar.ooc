@@ -53,6 +53,7 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		this y buffer copyTo(result y buffer)
 		this u buffer copyTo(result u buffer)
 		this v buffer copyTo(result v buffer)
+		result
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))
