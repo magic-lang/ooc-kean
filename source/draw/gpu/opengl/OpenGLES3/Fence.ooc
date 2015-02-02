@@ -14,30 +14,30 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-/*
+
 import include/gles
+import os/Time
 
 Fence: class {
 	_backend: Pointer
+	active ::= this _backend != null
 
 	init: func
 	clientWait: func (timeout: UInt) {
 		glClientWaitSync(this _backend, 0, timeout)
 	}
 	wait: func {
+		while(!this active)
+			Time sleepMilli(1)
 		glClientWaitSync(this _backend, 0, GL_TIMEOUT_IGNORED)
 	}
 	dispose: func () {
-		glDeleteSync(_backend)
+		glDeleteSync(this _backend)
 	}
-	_generate: func -> Bool {
+	sync: func {
+		if(this _backend != null)
+			glDeleteSync(this _backend)
 		this _backend = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0)
-		true
-	}
-	create: static func -> This {
-		result := This new()
-		result _generate() ? result : null
 	}
 
 }
-*/
