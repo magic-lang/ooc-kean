@@ -3,65 +3,88 @@ import threading/Thread
 import threading/native/ConditionUnix
 
 ThreadJob: class {
-	init: func (=body)
-	body: Func
+	_pool: ThreadPool
+	_finishedCondition: ConditionUnix
+	finishedCondition ::= this _finishedCondition
+	_body: Func
+	_finished := false
+	finished ::= this _finished
+	init: func (=_body, =_pool) { this _finishedCondition = ConditionUnix new() }
+	execute: func {
+		this _body()
+		this _finishedCondition broadcast()
+	}
+	finish: func {
+		this _finished = true
+	}
+	wait: func {
+		this _pool wait(this)
+	}
 }
 
 ThreadPool: class {
-	jobs: LinkedList<ThreadJob>
-	threads: Thread[]
-	mutex: Mutex
-	condition: ConditionUnix
-	activeJobs: Int
+	_jobs: LinkedList<ThreadJob>
+	_threads: Thread[]
+	_mutex: Mutex
+	_newJobCondition: ConditionUnix
+	_allFinishedCondition: ConditionUnix
+	_activeJobs: Int
 
 	init: func (threadCount := 4) {
-		this threads = Thread[threadCount] new()
-		this jobs = LinkedList<ThreadJob> new()
-		this mutex = Mutex new()
-		this condition = ConditionUnix new()
+		this _threads = Thread[threadCount] new()
+		this _jobs = LinkedList<ThreadJob> new()
+		this _mutex = Mutex new()
+		this _newJobCondition = ConditionUnix new()
+		this _allFinishedCondition = ConditionUnix new()
 
 		for(i in 0..threadCount) {
-			threads[i] = Thread new(|| threadLoop())
-			threads[i] start()
+			this _threads[i] = Thread new(|| threadLoop())
+			this _threads[i] start()
 		}
 	}
 	threadLoop: func {
 		while(true) {
-			this mutex lock()
-			if(this jobs getSize() > 0) {
-				job := this jobs first()
-				jobs removeAt(0)
-				this mutex unlock()
-				job body()
-				this mutex lock()
-				this activeJobs -= 1
-				this mutex unlock()
+			this _mutex lock()
+			if(this _jobs getSize() > 0) {
+				job := this _jobs first()
+				this _jobs removeAt(0)
+				this _mutex unlock()
+				job execute()
+				this _mutex lock()
+				job finish()
+				this _activeJobs -= 1
+				if(this _activeJobs == 0)
+					this _allFinishedCondition broadcast()
+				this _mutex unlock()
 			} else {
-				this condition wait(this mutex)
-				this mutex unlock()
+				this _newJobCondition wait(this _mutex)
+				this _mutex unlock()
 			}
 		}
 	}
-	add: func (body: Func) {
-		this mutex lock()
-		this jobs add(ThreadJob new(body))
-		this activeJobs += 1
-		this condition broadcast()
-		this mutex unlock()
+	add: func (body: Func) -> ThreadJob {
+		this _mutex lock()
+		job := ThreadJob new(body, this)
+		this _jobs add(job)
+		this _activeJobs += 1
+		this _newJobCondition broadcast()
+		this _mutex unlock()
+		job
 	}
-
 	waitAll: func {
-		while(true) {
-			this mutex lock()
-			if (this activeJobs > 0) {
-				this mutex unlock()
-				//TODO: Wait for a condition to signal instead
-				Thread yield()
-			} else {
-				this mutex unlock()
-				break
-			}
+		this _mutex lock()
+		if (this _activeJobs > 0) {
+			this _allFinishedCondition wait(this _mutex)
+			this _mutex unlock()
+		} else {
+			this _mutex unlock()
 		}
+	}
+	wait: func (job: ThreadJob) {
+		this _mutex lock()
+		if (!job finished)
+			job finishedCondition wait(this _mutex)
+		this _mutex unlock()
 	}
 
 
