@@ -28,6 +28,8 @@ Quaternion: cover {
 	z ::= this imaginary z
 	inverse ::= Quaternion new(this w, -this x, -this y, -this z)
 
+	isValid ::= (this w == this w && this x == this x && this y == this y && this z == this z)
+	isIdentity ::= (this w == 1.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
 	init: func@ (=real, =imaginary)
 	init: func@ ~floats (w: Float, x: Float, y: Float, z: Float) { this init(w, FloatPoint3D new(x, y, z)) }
