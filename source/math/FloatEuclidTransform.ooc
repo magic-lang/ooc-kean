@@ -39,7 +39,6 @@ FloatEuclidTransform: cover {
 		H6 := transform f
 		H7 := transform g
 		H8 := transform h
-		H9 := transform i
 		this rotationX = atan(H6 / this k)
 		this rotationY = atan(H3 / this k * cos(this rotationX))
 		K1 := cos(this rotationX)
