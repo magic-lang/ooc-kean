@@ -78,6 +78,7 @@ extend Float {
 	minusPiToPi: static func(value: This) -> This {
 		value = This moduloTwoPi(value)
 		value = (value <= This pi) ? value : (value - 2 * pi)
+		value = (value >= -This pi) ? value : (value + 2 * pi)
 		value
 	}
 	// Linear interpolation between a and b using ratio
