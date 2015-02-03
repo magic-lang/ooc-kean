@@ -28,7 +28,8 @@ EGLImage: class extends Texture {
 	init: func (type: TextureType, width: Int, height: Int, nativeBuffer: Pointer, display: Pointer) {
 		super(type, width, height)
 		this _eglDisplay = display
-		result := this _generate(null, 0, false)
+		if (!this _generate(null, 0, false))
+			raise("Could not generate EGLImage.")
 		eglImageAttributes := [EGL_IMAGE_PRESERVED_KHR, EGL_FALSE, EGL_NONE] as Int*
 		this _eglBackend = This _eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID, nativeBuffer, eglImageAttributes)
 		This _glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, this _eglBackend)
