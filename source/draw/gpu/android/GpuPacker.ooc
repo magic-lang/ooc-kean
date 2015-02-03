@@ -30,8 +30,10 @@ GpuPacker: class {
 	_internalSize: IntSize2D
 	_bytesPerPixel: UInt
 	bytesPerPixel: UInt { get { this _bytesPerPixel } }
+	_packFence: Fence
 	init: func (size: IntSize2D, bytesPerPixel: UInt, context: AndroidContext) {
 		DebugPrint print("Allocating GpuPacker")
+		this _packFence = Fence new()
 		this _bytesPerPixel = bytesPerPixel
 		this _context = context
 		this _size = size
@@ -54,8 +56,11 @@ GpuPacker: class {
 		surface recycle()
 		this _renderTarget unbind()
 		image setMagFilter(true)
+		this _packFence sync()
+		This flush()
 	}
 	read: func ~ByteBuffer -> ByteBuffer {
+		this _packFence wait()
 		sourcePointer := this _targetTexture lock(false)
 		buffer := ByteBuffer new(sourcePointer, this _targetTexture stride * this _targetTexture size height,
 			func (buffer: ByteBuffer){
@@ -65,6 +70,7 @@ GpuPacker: class {
 		buffer
 	}
 	readRows: func ~ByteBuffer -> ByteBuffer {
+		this _packFence wait()
 		destinationWidth := this size width
 		destinationHeight := this size height
 		size := destinationWidth * destinationHeight * this bytesPerPixel
@@ -84,6 +90,7 @@ GpuPacker: class {
 		buffer
 	}
 	readRows: func ~overwrite (destination: RasterPacked) {
+		this _packFence wait()
 		sourcePointer := this _targetTexture lock(false)
 		destinationPointer := destination buffer pointer
 		destinationStride := destination stride
@@ -99,6 +106,7 @@ GpuPacker: class {
 		this _targetTexture unlock()
 	}
 	read: func (destination: RasterPacked) {
+		this _packFence wait()
 		sourcePointer := this _targetTexture lock(false)
 		destinationPointer := destination buffer pointer
 		destinationStride := destination stride
