@@ -5,7 +5,7 @@ use ooc-math
 //path := "test/draw/input/ElephantSeal.jpg"
 path := "../ooc-vidproc-run-input/Yuv420Semiplanar/bird/frame00001.png.bin"
 for (i in 0..1) {
-	image := RasterYuv420Semiplanar openRaw(path, IntSize2D new(720, 576))
+/*	image := RasterYuv420Semiplanar openRaw(path, IntSize2D new(720, 576))
 	y := image y
 	uv := image uv
 	yBuffer := y buffer
@@ -60,5 +60,5 @@ for (i in 0..1) {
 	"uv RC: #{uvr _count}" println()
 	"uv buffer RC: #{uvbr _count}" println()
 	"uv buffer buffer RC: #{uvbbr _count}" println()
-}
+}*/
 ByteBuffer clean()
