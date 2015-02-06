@@ -20,7 +20,7 @@ import OpenGLES3/Texture
 
 OpenGLES3Texture: class extends GpuTexture {
 	backend: Texture { get { this _backend as Texture } }
-	init: func (texture: Texture) { super(texture) }
+	init: func (texture: Texture) { super(texture, IntSize2D new(texture width, texture height)) }
 	generateMipmap: func { this backend generateMipmap() }
 	setMagFilter: func (linear: Bool) {
 		if (linear)
