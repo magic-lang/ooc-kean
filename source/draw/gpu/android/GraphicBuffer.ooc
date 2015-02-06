@@ -14,12 +14,24 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
+GraphicBufferFormat: enum {
+	Rgba8888 = 1
+}
+GraphicBufferUsage: enum (*2) {
+	ReadNever = 1
+	ReadOften
+	WriteNever
+	WriteOften
+	Texture
+	Rendertarget
+}
 GraphicBuffer: class {
-	_allocate: static Func (Int, Int, Bool, Bool, Pointer*, Pointer*, Int*)
+	_allocate: static Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
 	_free: static Func (Pointer)
 	_lock: static Func (Pointer, Bool, Pointer*)
 	_unlock: static Func (Pointer)
-
+	_format: GraphicBufferFormat
+	format ::= this _format
 	_size: IntSize2D
 	size ::= this _size
 	_stride: Int
@@ -27,20 +39,19 @@ GraphicBuffer: class {
 	_backend: Pointer = null
 	_nativeBuffer: Pointer = null
 	nativeBuffer ::= this _nativeBuffer
-	init: func (=_size, read: Bool, write: Bool) {
-		This _allocate(_size width, _size height, read, write, this _backend&, this _nativeBuffer&, this _stride&)
-		this _stride *= 4
+	init: func (=_size, usage: Int) {
+		this _format = GraphicBufferFormat Rgba8888
+		This _allocate(_size width, _size height, this _format as Int, usage, this _backend&, this _nativeBuffer&, this _stride&)
 	}
+	init: func ~existing (=_backend, =_nativeBuffer, =_size, =_stride, =_format)
 	free: func { This _free(this _backend) }
 	lock: func (write: Bool) -> Pointer {
 		result: Pointer = null
 		This _lock(this _backend, write, result&)
 		result
 	}
-	unlock: func {
-		This _unlock(this _backend)
-	}
-	initialize: static func (allocate: Func (Int, Int, Bool, Bool, Pointer*, Pointer*, Int*), free: Func (Pointer),
+	unlock: func { This _unlock(this _backend) }
+	initialize: static func (allocate: Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*), free: Func (Pointer),
 	lock: Func (Pointer, Bool, Pointer*), unlock: Func (Pointer)) {
 		This _allocate = allocate
 		This _free = free
