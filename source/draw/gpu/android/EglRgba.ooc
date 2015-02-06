@@ -22,14 +22,19 @@ import GraphicBuffer
 EglRgba: class extends GpuTexture {
 	backend: EGLImage { get { this _backend as EGLImage } }
 	stride ::= this _buffer stride
-	_size: IntSize2D
-	size ::= this _size
 	_channels := 4
 	_buffer: GraphicBuffer
 	init: func (=_size, read: Bool, write: Bool, eglDisplay: Pointer) {
-		this _buffer = GraphicBuffer new(_size, read, write)
-		super(EGLImage create(TextureType rgba, _size width, _size height, this _buffer nativeBuffer, eglDisplay))
+		usage := 0
+		usage = read ? usage | GraphicBufferUsage ReadOften : usage | GraphicBufferUsage ReadNever
+		usage = write ? usage | GraphicBufferUsage WriteOften : usage | GraphicBufferUsage WriteNever
+		this _buffer = GraphicBuffer new(_size, usage)
+		super(EGLImage create(TextureType rgba, _size width, _size height, this _buffer nativeBuffer, eglDisplay), _size)
 		DebugPrint print("Allocating EGL Image")
+	}
+	init: func ~fromGraphicBuffer (=_buffer, eglDisplay: Pointer) {
+		eglImage := EGLImage create(TextureType rgba, _buffer size width, _buffer size height, _buffer nativeBuffer, eglDisplay)
+		super(eglImage, IntSize2D new(eglImage width, eglImage height))
 	}
 	dispose: func {
 		this backend dispose()
