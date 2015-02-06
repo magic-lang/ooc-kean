@@ -13,10 +13,12 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
+use ooc-math
 GpuTexture: abstract class {
 	_backend: Pointer
-	init: func (=_backend)
+	_size: IntSize2D
+	size ::= this _size
+	init: func (=_backend, =_size)
 	generateMipmap: abstract func
 	dispose: abstract func
 	bind: abstract func (unit: UInt)
