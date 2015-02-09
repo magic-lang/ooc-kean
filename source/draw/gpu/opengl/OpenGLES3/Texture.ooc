@@ -26,6 +26,7 @@ TextureType: enum {
 	bgr
 	bgra
 	uv
+	yv12
 }
 
 InterpolationType: enum {
@@ -46,6 +47,7 @@ Texture: class {
 	format: UInt
 	internalFormat: UInt
 	_bytesPerPixel: UInt
+	_target: UInt
 
 	init: func (type: TextureType, width: UInt, height: UInt) {
 		version(debugGL) { validateStart() }
@@ -80,11 +82,11 @@ Texture: class {
 	upload: func (pixels: Pointer, stride: Int) {
 		version(debugGL) { validateStart() }
 		pixelStride := stride / this _bytesPerPixel
-		glBindTexture(GL_TEXTURE_2D, this _backend)
+		glBindTexture(this _target, this _backend)
 		if (pixelStride != this width) {
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
 		}
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this width, this height, this format, GL_UNSIGNED_BYTE, pixels)
+		glTexSubImage2D(this _target, 0, 0, 0, this width, this height, this format, GL_UNSIGNED_BYTE, pixels)
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
 		unbind()
 		version(debugGL) { validateEnd("Texture upload") }
@@ -116,6 +118,11 @@ Texture: class {
 				this internalFormat = GL_RG8
 				this format = GL_RG
 				this _bytesPerPixel = 2
+			case TextureType yv12 =>
+				this internalFormat = GL_R8
+				this format = GL_RED
+				this _bytesPerPixel = 1
+				this _target = GL_TEXTURE_EXTERNAL_OES
 			case =>
 				raise("Unknown texture format")
 		}
@@ -129,7 +136,7 @@ Texture: class {
 			case InterpolationType Linear => GL_LINEAR
 			case => raise("Interpolation type not supported for MagFilter"); -1
 		}
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, interpolationType)
+		glTexParameteri(this _target, GL_TEXTURE_MAG_FILTER, interpolationType)
 		this unbind()
 		version(debugGL) { validateEnd("Texture setMagFilter") }
 	}
@@ -145,26 +152,24 @@ Texture: class {
 			case InterpolationType NearestMipmapLinear => GL_NEAREST_MIPMAP_LINEAR
 			case => raise("Interpolation type not supported for MinFilter"); -1
 		}
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, interpolationType)
+		glTexParameteri(this _target, GL_TEXTURE_MIN_FILTER, interpolationType)
 		this unbind()
 		version(debugGL) { validateEnd("Texture setMinFilter") }
 	}
 	_generate: func (pixels: Pointer, stride: Int, allocate := true) -> Bool {
 		version(debugGL) { validateStart() }
 		glGenTextures(1, this _backend&)
-		glBindTexture(GL_TEXTURE_2D, this _backend)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-		if (allocate) {
-			DebugPrint print("Allocating OpenGL texture")
-			pixelStride := stride / this _bytesPerPixel
-			if (pixelStride != this width) {
-				glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
-			}
-			glTexImage2D(GL_TEXTURE_2D, 0, this internalFormat, this width, this height, 0, this format, GL_UNSIGNED_BYTE, pixels)
-			glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
+		glBindTexture(this _target, this _backend)
+		glTexParameteri(this _target, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+		glTexParameteri(this _target, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+		glTexParameteri(this _target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
+		glTexParameteri(this _target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+	}
+	_allocate: func (pixels: Pointer, stride: Int) {
+		DebugPrint print("Allocating OpenGL texture")
+		pixelStride := stride / this _bytesPerPixel
+		if (pixelStride != this width) {
+			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
 		}
 		version(debugGL) { validateEnd("Texture _generate") }
 		true
