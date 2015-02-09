@@ -22,6 +22,10 @@ PFNGLEGLIMAGETARGETTEXTURE2DOESPROC_OOC: cover from PFNGLEGLIMAGETARGETTEXTURE2D
  * Token definitions
  *-----------------------------------------------------------------------*/
 
+/* Extensions */
+GL_TEXTURE_EXTERNAL_OES: extern const UInt
+GL_REQUIRED_TEXTURE_IMAGE_UNITS_OES: extern const UInt
+
 /* OpenGL ES core versions */
 GL_ES_VERSION_3_0: extern const UInt
 GL_ES_VERSION_2_0: extern const UInt
