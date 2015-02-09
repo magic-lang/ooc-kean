@@ -18,7 +18,7 @@ use ooc-opengl
 use ooc-draw
 use ooc-math
 use ooc-base
-import GpuPacker, GpuPackerBin, EglRgba
+import GpuPacker, GpuPackerBin, AndroidTexture, GraphicBuffer
 import threading/Thread
 AndroidContext: class extends OpenGLES3Context {
 	_packerBin: GpuPackerBin
@@ -163,7 +163,9 @@ AndroidContext: class extends OpenGLES3Context {
 		}
 		result
 	}
-	createEglRgba: func (size: IntSize2D, read: Bool, write: Bool) -> EglRgba { EglRgba new(size, read, write, this _backend _eglDisplay) }
+createAndroidRgba: func (size: IntSize2D, read: Bool, write: Bool) -> AndroidRgba { AndroidRgba new(size, read, write, this _backend _eglDisplay) }
+	//createAndroidRgba: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> AndroidRgba { AndroidRgba new(buffer, this _backend _eglDisplay) }
+	//createBgra: func ~fromGpuTexture (AndroidRgba: AndroidRgba) -> OpenGLES3Bgra { OpenGLES3Bgra new(AndroidRgba, this) }
 }
 
 AndroidContextManager: class extends GpuContextManager {
