@@ -19,11 +19,11 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-base
 use ooc-opengl
-import math, EglRgba, AndroidContext
+import math, AndroidTexture, AndroidContext
 
 GpuPacker: class {
 	_renderTarget: Fbo
-	_targetTexture: EglRgba
+	_targetTexture: AndroidRgba
 	_context: AndroidContext
 	_size: IntSize2D
 	size: IntSize2D { get { this _size } }
@@ -39,7 +39,7 @@ GpuPacker: class {
 		this _size = size
 		this _internalSize = IntSize2D new(size width * bytesPerPixel / 4, size height)
 		this _bytesPerPixel = bytesPerPixel
-		this _targetTexture = context createEglRgba(this _internalSize, true, false)
+		this _targetTexture = context createAndroidRgba(this _internalSize, true, false)
 		this _renderTarget = Fbo create(this _targetTexture backend, this _internalSize width, this _internalSize height)
 	}
 	recycle: func { this _context recycle(this) }
