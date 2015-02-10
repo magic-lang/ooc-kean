@@ -160,9 +160,11 @@ AndroidContext: class extends OpenGLES3Context {
 		}
 		result
 	}
-createAndroidRgba: func (size: IntSize2D, read: Bool, write: Bool) -> AndroidRgba { AndroidRgba new(size, read, write, this _backend _eglDisplay) }
-	//createAndroidRgba: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> AndroidRgba { AndroidRgba new(buffer, this _backend _eglDisplay) }
-	//createBgra: func ~fromGpuTexture (AndroidRgba: AndroidRgba) -> OpenGLES3Bgra { OpenGLES3Bgra new(AndroidRgba, this) }
+	createAndroidRgba: func (size: IntSize2D, read: Bool, write: Bool) -> AndroidRgba { AndroidRgba new(size, read, write, this _backend _eglDisplay) }
+	createAndroidYv12: func (buffer: GraphicBuffer) -> AndroidYv12 { AndroidYv12 new(buffer, this _backend _eglDisplay) }
+	createBgra: func ~fromGpuTexture (texture: GpuTexture) -> OpenGLES3Bgra { OpenGLES3Bgra new(texture, this) }
+	createAndroidRgba: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> AndroidRgba { AndroidRgba new(buffer, this _backend _eglDisplay) }
+
 }
 
 AndroidContextManager: class extends GpuContextManager {
