@@ -116,8 +116,6 @@ AndroidContext: class extends OpenGLES3Context {
 		this _packUv imageWidth = gpuImage uv size width
 		uvPacker pack(gpuImage uv, this _packUv)
 
-		//GpuPacker finish()
-
 		yBuffer, uvBuffer: ByteBuffer
 		if (gpuImage size height == 1080) {
 			yBuffer = yPacker readRows()
@@ -139,7 +137,6 @@ AndroidContext: class extends OpenGLES3Context {
 		yPacker := this createPacker(gpuImage size, 1)
 		this _packMonochrome imageWidth = gpuImage size width
 		yPacker pack(gpuImage, this _packMonochrome)
-		//GpuPacker finish()
 		buffer := yPacker read()
 		result := RasterMonochrome new(buffer, gpuImage size, 64)
 		result
