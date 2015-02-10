@@ -50,12 +50,10 @@ AndroidRgba: class extends AndroidTexture {
 	init: func ~allocate (size: IntSize2D, read: Bool, write: Bool, eglDisplay: Pointer) {
 		gb := GraphicBuffer new(size, GraphicBufferFormat Rgba8888, GraphicBuffer getUsageFlags(read, write))
 		egl := EGLImage create(TextureType rgba, size width, size height, gb nativeBuffer, eglDisplay)
-		if (egl == null)
-			DebugPrint print("EGL IS NULL")
 		super(size, gb, egl, 4)
 	}
 	init: func ~fromGraphicBuffer (buffer: GraphicBuffer, eglDisplay: Pointer) {
-		eglImage := EGLImage create(TextureType rgba, _buffer size width, _buffer size height, _buffer nativeBuffer, eglDisplay)
+		eglImage := EGLImage create(TextureType rgba, buffer size width, buffer size height, buffer nativeBuffer, eglDisplay)
 		super(IntSize2D new(eglImage width, eglImage height), buffer, eglImage, 4)
 	}
 }
@@ -66,7 +64,7 @@ AndroidYv12: class extends AndroidTexture {
 		super(size, gb, EGLImage create(TextureType rgba, size width, size height, gb nativeBuffer, eglDisplay), 1)
 	}
 	init: func ~fromGraphicBuffer (buffer: GraphicBuffer, eglDisplay: Pointer) {
-		eglImage := EGLImage create(TextureType yv12, _buffer size width, _buffer size height, _buffer nativeBuffer, eglDisplay)
+		eglImage := EGLImage create(TextureType yv12, buffer size width, buffer size height, buffer nativeBuffer, eglDisplay)
 		super(IntSize2D new(eglImage width, eglImage height), buffer, eglImage, 1)
 	}
 }
