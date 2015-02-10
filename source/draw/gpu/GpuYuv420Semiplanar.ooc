@@ -20,9 +20,9 @@ import GpuMonochrome, GpuCanvas, GpuPlanar, GpuUv, GpuContext
 
 GpuYuv420Semiplanar: abstract class extends GpuPlanar {
 	_y: GpuMonochrome
-	y: GpuMonochrome { get { this _y } }
+	y ::= this _y
 	_uv: GpuUv
-	uv: GpuUv { get { this _uv } }
+	uv ::= this _uv
 
 	init: func (size: IntSize2D, context: GpuContext) { super(size, context) }
 	dispose: func {
