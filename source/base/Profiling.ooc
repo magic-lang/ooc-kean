@@ -25,21 +25,15 @@ Profiling: class {
 	_message: String
 	_timer: Timer
 	init: func (=_message, =_debugLevel) {
-		version(profiling) {
-			this _timer = Timer new()
-			This _logList add(this)
-		}
+		this _timer = Timer new()
+		This _logList add(this)
 	}
 	start: func {
-		version(profiling) {
-			this _timer start()
-		}
+		this _timer start()
 	}
 	stop: func -> Double {
 		result := 0.0f
-		version(profiling) {
-			result = this _timer stop()
-		}
+		result = this _timer stop()
 		result
 	}
 	timeStr : static String = " Time: "
@@ -49,60 +43,54 @@ Profiling: class {
 	newLine : static String = "\n"
 	createOutputString: static func (debugLevel: Int) -> String {
 		output := ""
-		version(profiling) {
-			outputTmp := ""
-			for (i in 0..This _logList count) {
-				if ((This _logList[i] _debugLevel == debugLevel) || (debugLevel == 1) ) {
-					log := This _logList[i]
-					//output = output + log _message + " Time: " + log _timer _result toString() + " Average: " + log _timer _average toString() + " Min: " + log _timer _min toString() + " Max: " + log _timer _max toString() + "\n"
-					outputTmp = output + log _message
-					if (i > 0)
-						output free()
-					logStr := log _timer _result toString()
-					tmp := outputTmp + timeStr
-					output = tmp + logStr
-					tmp free()
-
-					outputTmp free()
-					outputTmp = output + average
+		outputTmp := ""
+		for (i in 0..This _logList count) {
+			if ((This _logList[i] _debugLevel == debugLevel) || (debugLevel == 1) ) {
+				log := This _logList[i]
+				//output = output + log _message + " Time: " + log _timer _result toString() + " Average: " + log _timer _average toString() + " Min: " + log _timer _min toString() + " Max: " + log _timer _max toString() + "\n"
+				outputTmp = output + log _message
+				if (i > 0)
 					output free()
-					logStr free()
-					logStr = log _timer _average toString()
-					output = outputTmp + logStr
+				logStr := log _timer _result toString()
+				tmp := outputTmp + timeStr
+				output = tmp + logStr
+				tmp free()
 
-					outputTmp free()
-					outputTmp = output + min
-					output free()
-					logStr free()
-					logStr = log _timer _min toString()
-					output = outputTmp + logStr
+				outputTmp free()
+				outputTmp = output + average
+				output free()
+				logStr free()
+				logStr = log _timer _average toString()
+				output = outputTmp + logStr
 
-					outputTmp free()
-					outputTmp = output + max
-					output free()
-					logStr free()
-					logStr = log _timer _max toString()
-					output = outputTmp + logStr
+				outputTmp free()
+				outputTmp = output + min
+				output free()
+				logStr free()
+				logStr = log _timer _min toString()
+				output = outputTmp + logStr
 
-					outputTmp free()
-					logStr free()
-					outputTmp = output + newLine
+				outputTmp free()
+				outputTmp = output + max
+				output free()
+				logStr free()
+				logStr = log _timer _max toString()
+				output = outputTmp + logStr
 
-					output free()
-					output = outputTmp
-				}
+				outputTmp free()
+				logStr free()
+				outputTmp = output + newLine
+
+				output free()
+				output = outputTmp
 			}
 		}
 		output
 	}
 	reset: static func {
-		version(profiling) {
-			This _logList clear()
-		}
+		This _logList clear()
 	}
 	dispose: static func {
-		version(profiling) {
-			This _logList free()
-		}
+		This _logList free()
 	}
 }
