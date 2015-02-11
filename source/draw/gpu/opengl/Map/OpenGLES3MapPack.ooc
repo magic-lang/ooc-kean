@@ -18,7 +18,7 @@ OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
 		precision highp float;\n
 		uniform sampler2D texture0;\n
 		uniform int imageWidth;\n
-		in vec2 fragmentTextureCoordinate;
+		in highp vec2 fragmentTextureCoordinate;
 		out vec4 outColor;\n
 		void main() {\n
 			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(1.5f / float(imageWidth), 0);\n
@@ -37,7 +37,7 @@ OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
 		precision highp float;\n
 		uniform sampler2D texture0;\n
 		uniform int imageWidth;\n
-		in vec2 fragmentTextureCoordinate;
+		in highp vec2 fragmentTextureCoordinate;
 		out vec4 outColor;\n
 		void main() {\n
 			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(1.5f / float(imageWidth), 0);\n
@@ -133,12 +133,14 @@ OpenGLES3MapUnpackRgbaToUv: class extends OpenGLES3MapDefault {
 		out vec2 outColor;\n
 		void main() {\n
 			int pixelIndex = int(float(targetSize.x) * fragmentTextureCoordinate.x) % 2;\n
-			float yCoord = fragmentTextureCoordinate.y + float(sourceSize.y) * (1.0f - fragmentTextureCoordinate.y) / float(targetSize.y);
+			float startY = (float(sourceSize.y) - float(targetSize.y)) / float(sourceSize.y);
+			float yCoord = startY + (1.0f - startY) * fragmentTextureCoordinate.y;
 			vec2 texCoords = vec2(fragmentTextureCoordinate.x, yCoord);
 			if (pixelIndex == 0)\n
 				outColor = vec2(texture(texture0, texCoords).r, texture(texture0, texCoords).g);\n
 			else\n
 				outColor = vec2(texture(texture0, texCoords).b, texture(texture0, texCoords).a);\n
+			//outColor = vec2(0.5f, 0.5f);
 		}\n"
 }
 OpenGLES3MapUnpackMonochrome1080p: class extends OpenGLES3MapDefault {
