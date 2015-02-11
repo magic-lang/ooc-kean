@@ -74,7 +74,6 @@ AndroidContext: class extends OpenGLES3Context {
 		yPacker pack(gpuImage y, this _packMonochrome)
 		this _packUv imageWidth = gpuImage uv size width
 		uvPacker pack(gpuImage uv, this _packUv)
-		//GpuPacker finish()
 		if (rasterImage size height == 1080) {
 			yPacker readRows(rasterImage y)
 			uvPacker readRows(rasterImage uv)
@@ -145,7 +144,7 @@ AndroidContext: class extends OpenGLES3Context {
 		result := match(gpuImage) {
 			case (i : GpuYuv420Semiplanar) => this toRaster(gpuImage as GpuYuv420Semiplanar)
 			case (i : GpuMonochrome) => this toRaster(gpuImage as GpuMonochrome)
-			case => raise("Using toRaster on unimplemented image format"); null
+			case => super(gpuImage)
 		}
 		result
 	}
