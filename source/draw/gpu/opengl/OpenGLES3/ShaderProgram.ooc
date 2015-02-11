@@ -16,30 +16,75 @@
  */
 
 use ooc-math
-import include/gles
+import include/gles, Debug
 
 ShaderProgram: class {
 	_backend: UInt
 	init: func
-	use: func { glUseProgram(this _backend) }
-	dispose: func { glDeleteProgram(this _backend) }
-	setUniform: func ~Array (name: String, array: Float*, count: Int) {
-		glUniform1fv(glGetUniformLocation(this _backend, name), count, array)
+	use: func {
+		version(debugGL) { validateStart() }
+		glUseProgram(this _backend)
+		version(debugGL) { validateEnd("ShaderProgram use") }
 	}
-	setUniform: func ~Int (name: String, value: Int) { glUniform1i(glGetUniformLocation(this _backend, name), value) }
-	setUniform: func ~Float (name: String, value: Float) { glUniform1f(glGetUniformLocation(this _backend, name), value) }
-	setUniform: func ~FloatPoint2D (name: String, value: FloatPoint2D) { glUniform2f(glGetUniformLocation(this _backend, name), value x, value y) }
-	setUniform: func ~FloatPoint3D (name: String, value: FloatPoint3D) { glUniform3f(glGetUniformLocation(this _backend, name), value x, value y, value z) }
-	setUniform: func ~FloatArray (name: String, count: Int, value: Float*) {glUniform1fv(glGetUniformLocation(this _backend, name), count, value) }
-	setUniform: func ~Matrix4x4arr (name: String, value: Float*) { glUniformMatrix4fv(glGetUniformLocation(this _backend, name), 1, 0, value) }
-	setUniform: func ~Matrix3x3 (name: String, value: FloatTransform2D) { glUniformMatrix3fv(glGetUniformLocation(this _backend, name), 1, 0, value& as Float*) }
+	dispose: func {
+		version(debugGL) { validateStart() }
+		glDeleteProgram(this _backend)
+		version(debugGL) { validateEnd("ShaderProgram dispose") }
+	}
+	setUniform: func ~Array (name: String, array: Float*, count: Int) {
+		version(debugGL) { validateStart() }
+		glUniform1fv(glGetUniformLocation(this _backend, name), count, array)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~Array") }
+	}
+	setUniform: func ~Int (name: String, value: Int) {
+		version(debugGL) { validateStart() }
+		glUniform1i(glGetUniformLocation(this _backend, name), value)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~Int") }
+	}
+	setUniform: func ~Float (name: String, value: Float) {
+		version(debugGL) { validateStart() }
+		glUniform1f(glGetUniformLocation(this _backend, name), value)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~Float") }
+	}
+	setUniform: func ~FloatPoint2D (name: String, value: FloatPoint2D) {
+		version(debugGL) { validateStart() }
+		glUniform2f(glGetUniformLocation(this _backend, name), value x, value y)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatPoint2D") }
+	}
+	setUniform: func ~FloatPoint3D (name: String, value: FloatPoint3D) {
+		version(debugGL) { validateStart() }
+		glUniform3f(glGetUniformLocation(this _backend, name), value x, value y, value z)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatPoint3D") }
+	}
+	setUniform: func ~FloatArray (name: String, count: Int, value: Float*) {
+		version(debugGL) { validateStart() }
+		glUniform1fv(glGetUniformLocation(this _backend, name), count, value)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatArray") }
+	}
+	setUniform: func ~Matrix4x4arr (name: String, value: Float*) {
+		version(debugGL) { validateStart() }
+		glUniformMatrix4fv(glGetUniformLocation(this _backend, name), 1, 0, value)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~Matrix4x4arr") }
+	}
+	setUniform: func ~Matrix3x3 (name: String, value: FloatTransform2D) {
+		version(debugGL) { validateStart() }
+		glUniformMatrix3fv(glGetUniformLocation(this _backend, name), 1, 0, value& as Float*)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~Matrix3x3") }
+	}
 	setUniform: func ~Matrix4x4 (name: String, value: FloatTransform3D) {
+		version(debugGL) { validateStart() }
 		array := value to4x4()
 		glUniformMatrix4fv(glGetUniformLocation(this _backend, name), 1, 0, array)
 		gc_free(array)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~Matrix4x4") }
 	}
-	setUniform: func ~Vector3(name: String, value: FloatPoint3D) { glUniform3fv(glGetUniformLocation(this _backend, name), 1, value& as Float*) }
+	setUniform: func ~Vector3(name: String, value: FloatPoint3D) {
+		version(debugGL) { validateStart() }
+		glUniform3fv(glGetUniformLocation(this _backend, name), 1, value& as Float*)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~Vector3") }
+	}
 	_compileShader: func(source: String, shaderID: UInt) -> Bool {
+		version(debugGL) { validateStart() }
 		glShaderSource(shaderID, 1, (source toCString())&, null)
 		glCompileShader(shaderID)
 
@@ -56,9 +101,11 @@ ShaderProgram: class {
 			raise("Shader compilation failed")
 			gc_free(compileLog)
 		}
+		version(debugGL) { validateEnd("ShaderProgram _compileShader") }
 		success != 0
 	}
 	_compileShaders: func(vertexSource: String, fragmentSource: String) -> Bool {
+		version(debugGL) { validateStart() }
 		vertexShaderID := glCreateShader(GL_VERTEX_SHADER)
 		fragmentShaderID := glCreateShader(GL_FRAGMENT_SHADER)
 		success := _compileShader(vertexSource, vertexShaderID)
@@ -77,11 +124,15 @@ ShaderProgram: class {
 			glDeleteShader(vertexShaderID)
 			glDeleteShader(fragmentShaderID)
 		}
+		version(debugGL) { validateEnd("ShaderProgram _compileShaders") }
 		success
 	}
 	create: static func (vertexSource: String, fragmentSource: String) -> This {
+		version(debugGL) { validateStart() }
 		result := This new()
-		result _compileShaders(vertexSource, fragmentSource) ? result : null
+		result = result _compileShaders(vertexSource, fragmentSource) ? result : null
+		version(debugGL) { validateEnd("ShaderProgram create") }
+		result
 	}
 
 }

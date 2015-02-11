@@ -16,7 +16,7 @@
  */
 use ooc-math
 use ooc-base
-import include/gles
+import include/gles, Debug
 import Context
 
 TextureType: enum {
@@ -48,22 +48,37 @@ Texture: class {
 	_bytesPerPixel: UInt
 
 	init: func (type: TextureType, width: UInt, height: UInt) {
+		version(debugGL) { validateStart() }
 		this width = width
 		this height = height
 		this type = type
 		this _setInternalFormats(type)
+		version(debugGL) { validateEnd("Texture init") }
 	}
-	dispose: func { glDeleteTextures(1, _backend&) }
+	dispose: func {
+		version(debugGL) { validateStart() }
+		glDeleteTextures(1, _backend&)
+		version(debugGL) { validateEnd("Texture dispose") }
+	}
 	generateMipmap: func {
+		version(debugGL) { validateStart() }
 		this bind(0)
 		glGenerateMipmap(GL_TEXTURE_2D)
+		version(debugGL) { validateEnd("Texture generateMipmap") }
 	}
 	bind: func (unit: UInt) {
+		version(debugGL) { validateStart() }
 		glActiveTexture(GL_TEXTURE0 + unit)
 		glBindTexture(GL_TEXTURE_2D, this _backend)
+		version(debugGL) { validateEnd("Texture bind") }
 	}
-	unbind: func { glBindTexture(GL_TEXTURE_2D, 0) }
+	unbind: func {
+		version(debugGL) { validateStart() }
+		glBindTexture(GL_TEXTURE_2D, 0)
+		version(debugGL) { validateEnd("Texture unbind") }
+	}
 	upload: func (pixels: Pointer, stride: Int) {
+		version(debugGL) { validateStart() }
 		pixelStride := stride / this _bytesPerPixel
 		glBindTexture(GL_TEXTURE_2D, this _backend)
 		if (pixelStride != this width) {
@@ -72,8 +87,10 @@ Texture: class {
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this width, this height, this format, GL_UNSIGNED_BYTE, pixels)
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
 		unbind()
+		version(debugGL) { validateEnd("Texture upload") }
 	}
 	_setInternalFormats: func (type: TextureType) {
+		version(debugGL) { validateStart() }
 		match type {
 			case TextureType monochrome =>
 				this internalFormat = GL_R8
@@ -102,8 +119,10 @@ Texture: class {
 			case =>
 				raise("Unknown texture format")
 		}
+		version(debugGL) { validateEnd("Texture _setInternalFormats") }
 	}
 	setMagFilter: func (interpolation: InterpolationType) {
+		version(debugGL) { validateStart() }
 		this bind(0)
 		interpolationType := match (interpolation) {
 			case InterpolationType Nearest => GL_NEAREST
@@ -112,8 +131,10 @@ Texture: class {
 		}
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, interpolationType)
 		this unbind()
+		version(debugGL) { validateEnd("Texture setMagFilter") }
 	}
 	setMinFilter: func (interpolation: InterpolationType) {
+		version(debugGL) { validateStart() }
 		this bind(0)
 		interpolationType := match (interpolation) {
 			case InterpolationType Nearest => GL_NEAREST
@@ -126,8 +147,10 @@ Texture: class {
 		}
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, interpolationType)
 		this unbind()
+		version(debugGL) { validateEnd("Texture setMinFilter") }
 	}
 	_generate: func (pixels: Pointer, stride: Int, allocate := true) -> Bool {
+		version(debugGL) { validateStart() }
 		glGenTextures(1, this _backend&)
 		glBindTexture(GL_TEXTURE_2D, this _backend)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
@@ -143,12 +166,16 @@ Texture: class {
 			glTexImage2D(GL_TEXTURE_2D, 0, this internalFormat, this width, this height, 0, this format, GL_UNSIGNED_BYTE, pixels)
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
 		}
+		version(debugGL) { validateEnd("Texture _generate") }
 		true
 	}
 	create: static func (type: TextureType, width: UInt, height: UInt, stride: UInt, pixels := null, allocate : Bool = true) -> This {
+		version(debugGL) { validateStart() }
 		result := Texture new(type, width, height)
 		success := result _generate(pixels, stride, allocate)
-		success ? result : null
+		result = success ? result : null
+		version(debugGL) { validateEnd("Texture create") }
+		result
 	}
 
 }
