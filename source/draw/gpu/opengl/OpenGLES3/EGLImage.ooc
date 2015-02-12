@@ -29,7 +29,9 @@ EGLImage: class extends Texture {
 		this bindSibling()
 		/*textureUnitCount: Int
 		glGetTexParameteriv(GL_TEXTURE_EXTERNAL_OES, GL_REQUIRED_TEXTURE_IMAGE_UNITS_OES, textureUnitCount&)
-		DebugPrint print("Texture units needed: " + textureUnitCount toString())*/
+		DebugPrint print("Texture units needed: " + textureUnitCount toString())
+		glIsEnabled(GL_TEXTURE_EXTERNAL_OES)
+		*/
 	}
 	dispose: func {
 		super()
