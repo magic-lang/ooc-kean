@@ -16,28 +16,26 @@
  */
 
 import include/gles
-import os/Time
 
 Fence: class {
 	_backend: Pointer
-	active ::= this _backend != null
-
 	init: func
-	clientWait: func (timeout: UInt) {
-		glClientWaitSync(this _backend, 0, timeout)
-	}
+	clientWait: func (timeout: UInt) { glClientWaitSync(this _backend, 0, timeout) }
 	wait: func {
-		while(!this active)
-			Time sleepMilli(1)
-		glClientWaitSync(this _backend, 0, GL_TIMEOUT_IGNORED)
+		if (this _backend != null)
+			glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED)
+		else
+			raise("Trying to wait for null fence")
 	}
-	dispose: func () {
-		glDeleteSync(this _backend)
-	}
+	dispose: func { glDeleteSync(this _backend) }
 	sync: func {
 		if(this _backend != null)
 			glDeleteSync(this _backend)
 		this _backend = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0)
+	}
+	free: func {
+		this dispose()
+		super()
 	}
 
 }
