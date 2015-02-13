@@ -30,23 +30,16 @@ Fbo: class {
 	scissor: static func (x: Int, y: Int, width: Int, height: Int) { glScissor(x, y, width, height) }
 	clear: static func { glClear(GL_COLOR_BUFFER_BIT) }
 	setClearColor: static func (color: Float) { glClearColor(color, color, color, color) }
-	readPixels: func (channels: UInt) -> ByteBuffer {
+	readPixels: func () -> ByteBuffer {
 		version(debugGL) { validateStart() }
 		width := this _width
 		height := this _height
-		buffer := ByteBuffer new(width * height * channels)
+		buffer := ByteBuffer new(width * height * 4)
 		ptr := buffer pointer
 		this bind()
 		glPixelStorei(GL_PACK_ALIGNMENT, 1)
 		glReadBuffer(GL_COLOR_ATTACHMENT0)
-		if (channels == 1)
-			glReadPixels(0, 0, width / 4, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
-		else if (channels == 2)
-			glReadPixels(0, 0, width / 2, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
-		else if (channels == 3)
-			glReadPixels(0, 0, 3 * width / 4, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
-		else if (channels == 4)
-			glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
+		glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
 		this unbind()
 		version(debugGL) { validateEnd("fbo readPixels") }
 		buffer

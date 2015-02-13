@@ -28,7 +28,7 @@ OpenGLES3Bgra: class extends GpuBgra {
 		super(OpenGLES3Texture createBgra(size, stride, data), size, context)
 	}
 	toRasterDefault: func -> RasterImage {
-		buffer := this canvas readPixels(this _channels)
+		buffer := this canvas readPixels()
 		result := RasterBgra new(buffer, this size)
 		buffer referenceCount decrease()
 		result
