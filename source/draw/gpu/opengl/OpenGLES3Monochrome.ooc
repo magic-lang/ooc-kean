@@ -33,7 +33,7 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 		packMap := this _context getMap(this, GpuMapType pack) as OpenGLES3MapPackMonochrome
 		packMap imageWidth = this size width
 		packed canvas draw(this, packMap, Viewport new(packed size))
-		buffer := packed canvas readPixels(4)
+		buffer := packed canvas readPixels()
 		result := RasterMonochrome new(buffer, this size)
 		packed recycle()
 		result
