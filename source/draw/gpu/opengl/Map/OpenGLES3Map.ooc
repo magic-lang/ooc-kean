@@ -234,6 +234,6 @@ OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapDefault {
 		void main() {\n
 			float y = texture(texture0, fragmentTextureCoordinate).r;\n
 			vec2 uv = texture(texture1, fragmentTextureCoordinate).rg;\n
-			outColor = YuvToRgba(vec4(y, uv.g - 0.5f, uv.r - 0.5f, 1.0f));\n
+			outColor = YuvToRgba(vec4(y, uv.r - 0.5f, uv.g - 0.5f, 1.0f));\n
 		}\n"
 }
