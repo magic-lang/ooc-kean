@@ -148,7 +148,7 @@ AndroidContext: class extends OpenGLES3Context {
 		result := match(gpuImage) {
 			case (i : GpuYuv420Semiplanar) => this toRaster(gpuImage as GpuYuv420Semiplanar)
 			case (i : GpuMonochrome) => this toRaster(gpuImage as GpuMonochrome)
-			case => raise("Using toRaster on unimplemented image format"); null
+			case => super(gpuImage)
 		}
 		result
 	}
