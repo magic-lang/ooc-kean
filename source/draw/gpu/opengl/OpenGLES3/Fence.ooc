@@ -14,18 +14,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-
+use ooc-base
+import os/Time
 import include/gles
 
 Fence: class {
-	_backend: Pointer
+	_backend: Pointer = null
 	init: func
-	clientWait: func (timeout: UInt) { glClientWaitSync(this _backend, 0, timeout) }
+	clientWait: func (timeout: UInt) {
+		glClientWaitSync(this _backend, 0, timeout)
+	}
 	wait: func {
-		if (this _backend != null)
-			glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED)
-		else
-			raise("Trying to wait for null fence")
+		while (this _backend == null) { Time sleepMilli(1) }
+		glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED)
 	}
 	dispose: func { glDeleteSync(this _backend) }
 	sync: func {
