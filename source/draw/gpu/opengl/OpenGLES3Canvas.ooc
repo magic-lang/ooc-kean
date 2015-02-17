@@ -30,6 +30,10 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	init: func (image: GpuImage, context: GpuContext) {
 		super(image, context)
 	}
+	free: func {
+		this dispose()
+		super()
+	}
 	dispose: func {
 		this _renderTarget dispose()
 	}
