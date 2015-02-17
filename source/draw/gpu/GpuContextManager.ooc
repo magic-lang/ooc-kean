@@ -42,6 +42,7 @@ GpuContextManager: abstract class extends GpuContext {
 				return this _contexts[i]
 			}
 		}
+		raise("Ran out of OpenGL contexts!")
 		return null
 	}
 	getCurrentIndex: func -> Int {
