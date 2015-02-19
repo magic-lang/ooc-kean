@@ -157,7 +157,7 @@ Texture: class {
 		this unbind()
 		version(debugGL) { validateEnd("Texture setMinFilter") }
 	}
-	_generate: func (pixels: Pointer, stride: Int, allocate := true) -> Bool {
+	_genTexture: func {
 		version(debugGL) { validateStart() }
 		glGenTextures(1, this _backend&)
 		glBindTexture(this _target, this _backend)
@@ -165,6 +165,12 @@ Texture: class {
 		glTexParameteri(this _target, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 		glTexParameteri(this _target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
 		glTexParameteri(this _target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+	}
+	_generate: func (pixels: Pointer, stride: Int, allocate := true) -> Bool {
+		this _genTexture()
+		if (allocate)
+			this _allocate(pixels, stride)
+		true
 	}
 	_allocate: func (pixels: Pointer, stride: Int) {
 		DebugPrint print("Allocating OpenGL texture")
