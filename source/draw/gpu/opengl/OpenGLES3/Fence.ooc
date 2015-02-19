@@ -17,25 +17,36 @@
 use ooc-base
 import os/Time
 import include/gles
-
+import threading/native/ConditionUnix
+import threading/Thread
 Fence: class {
 	_backend: Pointer = null
-	init: func
-	clientWait: func (timeout: UInt) {
-		glClientWaitSync(this _backend, 0, timeout)
+	_syncCondition: ConditionUnix
+	_mutex: Mutex
+	init: func {
+		this _mutex = Mutex new()
+		this _syncCondition = ConditionUnix new()
 	}
-	wait: func {
-		while (this _backend == null) { Time sleepMilli(1) }
+	clientWait: func {
+		this _mutex lock()
+		if (this _backend == null)
+			this _syncCondition wait(this _mutex)
+		this _mutex unlock()
 		glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED)
 	}
-	dispose: func { glDeleteSync(this _backend) }
 	sync: func {
+		this _mutex lock()
 		if(this _backend != null)
 			glDeleteSync(this _backend)
 		this _backend = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0)
+		this _mutex unlock()
+		this _syncCondition broadcast()
+		glFlush()
 	}
 	free: func {
-		this dispose()
+		glDeleteSync(this _backend)
+		this _mutex destroy()
+		this _syncCondition destroy()
 		super()
 	}
 
