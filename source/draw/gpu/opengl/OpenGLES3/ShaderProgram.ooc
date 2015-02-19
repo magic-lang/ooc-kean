@@ -42,6 +42,11 @@ ShaderProgram: class {
 		glUniform1i(glGetUniformLocation(this _backend, name), value)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~Int") }
 	}
+	setUniform: func ~IntSize2D (name: String, value: IntSize2D) {
+		version(debugGL) { validateStart() }
+		glUniform2i(glGetUniformLocation(this _backend, name), value width, value height)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatPoint2D") }
+	}
 	setUniform: func ~Float (name: String, value: Float) {
 		version(debugGL) { validateStart() }
 		glUniform1f(glGetUniformLocation(this _backend, name), value)
