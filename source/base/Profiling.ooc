@@ -32,7 +32,9 @@ Profiling: class {
 		this _timer start()
 	}
 	stop: func -> Double {
-		this _timer stop()
+		result := 0.0f
+		result = this _timer stop()
+		result
 	}
 	timeStr : static String = " Time: "
 	average : static String = " Average: "
@@ -53,32 +55,32 @@ Profiling: class {
 				tmp := outputTmp + timeStr
 				output = tmp + logStr
 				tmp free()
-	
+
 				outputTmp free()
 				outputTmp = output + average
 				output free()
 				logStr free()
 				logStr = log _timer _average toString()
 				output = outputTmp + logStr
-	
+
 				outputTmp free()
 				outputTmp = output + min
 				output free()
 				logStr free()
 				logStr = log _timer _min toString()
 				output = outputTmp + logStr
-		
+
 				outputTmp free()
 				outputTmp = output + max
 				output free()
 				logStr free()
 				logStr = log _timer _max toString()
 				output = outputTmp + logStr
-	
+
 				outputTmp free()
 				logStr free()
 				outputTmp = output + newLine
-	
+
 				output free()
 				output = outputTmp
 			}

@@ -39,11 +39,12 @@ OpenGLES3Map: abstract class extends GpuMap {
 			raise("Vertex or fragment shader source not set")
 		}
 	}
-	dispose: func {
+	free: func {
 		for (i in 0..this _context getMaxContexts()) {
 			if (this _program[i] != null)
-				this _program[i] dispose()
+				this _program[i] free()
 		}
+		super()
 	}
 	use: func {
 		currentIndex := this _context getCurrentIndex()
@@ -120,9 +121,9 @@ OpenGLES3MapBgra: class extends OpenGLES3MapDefault {
 		precision highp float;\n
 		uniform sampler2D texture0;\n
 		in vec2 fragmentTextureCoordinate;
-		out vec3 outColor;\n
+		out vec4 outColor;\n
 		void main() {\n
-			outColor = texture(texture0, fragmentTextureCoordinate).rgb;\n
+			outColor = texture(texture0, fragmentTextureCoordinate).rgba;\n
 		}\n"
 }
 OpenGLES3MapMonochrome: class extends OpenGLES3MapDefault {

@@ -22,6 +22,5 @@ GpuMapType: enum {
 }
 
 GpuMap: abstract class {
-	dispose: abstract func
 	use: abstract func
 }

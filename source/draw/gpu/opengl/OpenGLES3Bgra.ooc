@@ -22,20 +22,19 @@ import OpenGLES3/Texture, OpenGLES3Canvas, OpenGLES3Texture
 
 OpenGLES3Bgra: class extends GpuBgra {
 	init: func (size: IntSize2D, context: GpuContext) {
-		init(size, size width * this _channels, null, context)
+		this init(size, size width * this _channels, null, context)
 	}
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
 		super(OpenGLES3Texture createBgra(size, stride, data), size, context)
 	}
+	init: func ~fromGpuTexture (texture: GpuTexture, context: GpuContext) { super(texture, texture size, context) }
 	toRasterDefault: func -> RasterImage {
 		buffer := this canvas readPixels()
 		result := RasterBgra new(buffer, this size)
-		buffer referenceCount decrease()
 		result
 	}
 	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
 		raise("toRaster not implemented for BGRA")
-		null
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterBgra, context: GpuContext) -> This {

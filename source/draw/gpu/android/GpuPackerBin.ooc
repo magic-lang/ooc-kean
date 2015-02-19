@@ -20,10 +20,10 @@ import structs/FreeArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, G
 GpuPackerBin: class {
 	_packers: FreeArrayList<GpuPacker>
 	init: func { this _packers = FreeArrayList<GpuPacker> new() }
-	dispose: func {
+	clean: func {
 		for(i in 0..this _packers size) {
 			packer := this _packers[i]
-			packer dispose()
+			packer free()
 		}
 		this _packers clear()
 	}

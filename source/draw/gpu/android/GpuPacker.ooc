@@ -19,11 +19,11 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-base
 use ooc-opengl
-import math, EglRgba, AndroidContext
+import math, AndroidTexture, AndroidContext
 
 GpuPacker: class {
 	_renderTarget: Fbo
-	_targetTexture: EglRgba
+	_targetTexture: AndroidRgba
 	_context: AndroidContext
 	_size: IntSize2D
 	size: IntSize2D { get { this _size } }
@@ -39,13 +39,14 @@ GpuPacker: class {
 		this _size = size
 		this _internalSize = IntSize2D new(size width * bytesPerPixel / 4, size height)
 		this _bytesPerPixel = bytesPerPixel
-		this _targetTexture = context createEglRgba(this _internalSize, true, false)
+		this _targetTexture = context createAndroidRgba(this _internalSize, true, false)
 		this _renderTarget = Fbo create(this _targetTexture backend, this _internalSize width, this _internalSize height)
 	}
 	recycle: func { this _context recycle(this) }
-	dispose: func {
-		this _targetTexture dispose()
-		this _renderTarget dispose()
+	free: func {
+		this _targetTexture free()
+		this _renderTarget free()
+		super()
 	}
 	pack: func (image: GpuImage, map: OpenGLES3MapDefault) {
 		image setMagFilter(false)
@@ -60,7 +61,7 @@ GpuPacker: class {
 		This flush()
 	}
 	read: func ~ByteBuffer -> ByteBuffer {
-		this _packFence wait()
+		this _packFence clientWait()
 		sourcePointer := this _targetTexture lock(false)
 		buffer := ByteBuffer new(sourcePointer, this _targetTexture stride * this _targetTexture size height,
 			func (buffer: ByteBuffer){
@@ -70,7 +71,7 @@ GpuPacker: class {
 		buffer
 	}
 	readRows: func ~ByteBuffer -> ByteBuffer {
-		this _packFence wait()
+		this _packFence clientWait()
 		destinationWidth := this size width
 		destinationHeight := this size height
 		size := destinationWidth * destinationHeight * this bytesPerPixel
@@ -81,7 +82,6 @@ GpuPacker: class {
 		destinationRow := buffer pointer
 		destinationStride := destinationWidth * this bytesPerPixel
 		for (row in 0..destinationHeight) {
-			//DebugPrint print("Row: " + row toString() + "Dest Offset: " + (row * destinationStride) toString() + "Source offset: " + (row * sourceStride) toString())
 			sourceRow = sourcePointer + row * sourceStride
 			destinationRow = buffer pointer + row * destinationStride
 			memcpy(destinationRow, sourceRow, destinationStride)
@@ -90,7 +90,7 @@ GpuPacker: class {
 		buffer
 	}
 	readRows: func ~overwrite (destination: RasterPacked) {
-		this _packFence wait()
+		this _packFence clientWait()
 		sourcePointer := this _targetTexture lock(false)
 		destinationPointer := destination buffer pointer
 		destinationStride := destination stride
@@ -106,7 +106,7 @@ GpuPacker: class {
 		this _targetTexture unlock()
 	}
 	read: func (destination: RasterPacked) {
-		this _packFence wait()
+		this _packFence clientWait()
 		sourcePointer := this _targetTexture lock(false)
 		destinationPointer := destination buffer pointer
 		destinationStride := destination stride

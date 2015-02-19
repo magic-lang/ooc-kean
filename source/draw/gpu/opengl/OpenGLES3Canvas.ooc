@@ -30,8 +30,9 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	init: func (image: GpuImage, context: GpuContext) {
 		super(image, context)
 	}
-	dispose: func {
-		this _renderTarget dispose()
+	free: func {
+		this _renderTarget free()
+		super()
 	}
 	onRecycle: func {
 		this _renderTarget invalidate()
@@ -128,10 +129,11 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 	init: func (image: GpuImage, context: GpuContext) {
 		super(image, context)
 	}
-	dispose: func {
-		this _y dispose()
-		this _u dispose()
-		this _v dispose()
+	free: func {
+		this _y free()
+		this _u free()
+		this _v free()
+		super()
 	}
 	onRecycle: func {
 		this _y onRecycle()
@@ -195,16 +197,18 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 	}
 }
 
-OpenGLES3CanvasYuv420Semiplanar: class extends OpenGLES3Canvas {
+OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 	_y: OpenGLES3Canvas
 	_uv: OpenGLES3Canvas
 
 	init: func (image: GpuImage, context: GpuContext) {
 		super(image, context)
 	}
-	dispose: func {
-		this _y dispose()
-		this _uv dispose()
+	free: func {
+		this _y free()
+		this _uv free()
+		//Works if commented
+		super()
 	}
 	onRecycle: func {
 		this _y onRecycle()

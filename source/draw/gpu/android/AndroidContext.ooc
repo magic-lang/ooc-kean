@@ -18,7 +18,7 @@ use ooc-opengl
 use ooc-draw
 use ooc-math
 use ooc-base
-import GpuPacker, GpuPackerBin, EglRgba
+import GpuPacker, GpuPackerBin, AndroidTexture, GraphicBuffer
 import threading/Thread
 AndroidContext: class extends OpenGLES3Context {
 	_packerBin: GpuPackerBin
@@ -26,6 +26,8 @@ AndroidContext: class extends OpenGLES3Context {
 	_packUv1080p: OpenGLES3MapPackUv1080p
 	_unpackMonochrome1080p: OpenGLES3MapUnpackMonochrome1080p
 	_unpackUv1080p: OpenGLES3MapUnpackUv1080p
+	_unpackRgbaToMonochrome: OpenGLES3MapUnpackRgbaToMonochrome
+	_unpackRgbaToUv: OpenGLES3MapUnpackRgbaToUv
 	init: func {
 		super()
 		this _initialize()
@@ -40,16 +42,18 @@ AndroidContext: class extends OpenGLES3Context {
 		this _packUv1080p = OpenGLES3MapPackUv1080p new(this)
 		this _unpackMonochrome1080p = OpenGLES3MapUnpackMonochrome1080p new(this)
 		this _unpackUv1080p = OpenGLES3MapUnpackUv1080p new(this)
+		this _unpackRgbaToMonochrome = OpenGLES3MapUnpackRgbaToMonochrome new(this)
+		this _unpackRgbaToUv = OpenGLES3MapUnpackRgbaToUv new(this)
 	}
-	dispose: func {
+	free: func {
 		this _backend makeCurrent()
-		this _packerBin dispose()
-		this _packMonochrome dispose()
-		this _packUv dispose()
+		this _packerBin free()
+		this _packMonochrome free()
+		this _packUv free()
 		super()
 	}
 	clean: func {
-		this _packerBin dispose()
+		this _packerBin clean()
 	}
 	toRaster: func ~Yuv420SpOverwrite (gpuImage: GpuYuv420Semiplanar, rasterImage: RasterYuv420Semiplanar) {
 		yPacker, uvPacker: GpuPacker
@@ -74,7 +78,6 @@ AndroidContext: class extends OpenGLES3Context {
 		yPacker pack(gpuImage y, this _packMonochrome)
 		this _packUv imageWidth = gpuImage uv size width
 		uvPacker pack(gpuImage uv, this _packUv)
-		//GpuPacker finish()
 		if (rasterImage size height == 1080) {
 			yPacker readRows(rasterImage y)
 			uvPacker readRows(rasterImage uv)
@@ -116,8 +119,6 @@ AndroidContext: class extends OpenGLES3Context {
 		this _packUv imageWidth = gpuImage uv size width
 		uvPacker pack(gpuImage uv, this _packUv)
 
-		//GpuPacker finish()
-
 		yBuffer, uvBuffer: ByteBuffer
 		if (gpuImage size height == 1080) {
 			yBuffer = yPacker readRows()
@@ -139,7 +140,6 @@ AndroidContext: class extends OpenGLES3Context {
 		yPacker := this createPacker(gpuImage size, 1)
 		this _packMonochrome imageWidth = gpuImage size width
 		yPacker pack(gpuImage, this _packMonochrome)
-		//GpuPacker finish()
 		buffer := yPacker read()
 		result := RasterMonochrome new(buffer, gpuImage size, 64)
 		result
@@ -163,13 +163,32 @@ AndroidContext: class extends OpenGLES3Context {
 		}
 		result
 	}
-	createEglRgba: func (size: IntSize2D, read: Bool, write: Bool) -> EglRgba { EglRgba new(size, read, write, this _backend _eglDisplay) }
+	createAndroidRgba: func (size: IntSize2D, read: Bool, write: Bool) -> AndroidRgba { AndroidRgba new(size, read, write, this _backend _eglDisplay) }
+	createBgra: func ~fromGpuTexture (texture: GpuTexture) -> OpenGLES3Bgra { OpenGLES3Bgra new(texture, this) }
+	createBgra: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> OpenGLES3Bgra {
+		androidTexture := this createAndroidRgba(buffer)
+		result := this createBgra(androidTexture)
+		result
+	}
+	createAndroidRgba: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> AndroidRgba { AndroidRgba new(buffer, this _backend _eglDisplay) }
+	unpackBgraToYuv420Semiplanar: func (source: GpuBgra, targetSize: IntSize2D) -> GpuYuv420Semiplanar {
+		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
+		this _unpackRgbaToMonochrome targetSize = target y size
+		this _unpackRgbaToMonochrome sourceSize = source size
+		target y canvas draw(source, _unpackRgbaToMonochrome, Viewport new(target y size))
+		this _unpackRgbaToUv targetSize = target uv size
+		this _unpackRgbaToUv sourceSize = source size
+		target uv canvas draw(source, _unpackRgbaToUv, Viewport new(target uv size))
+		target
+	}
+
 }
 
 AndroidContextManager: class extends GpuContextManager {
 	_motherContext: AndroidContext
 	_sharedContexts: Bool
 	_mutex: Mutex
+	currentAndroidContext: AndroidContext { get { this _getContext() as AndroidContext } }
 	init: func (contexts: Int, sharedContexts := false) {
 		super(contexts)
 		this _sharedContexts = sharedContexts
@@ -192,4 +211,6 @@ AndroidContextManager: class extends GpuContextManager {
 
 		result
 	}
+	createBgra: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> OpenGLES3Bgra { this currentAndroidContext createBgra(buffer) }
+	unpackBgraToYuv420Semiplanar: func (source: GpuBgra, targetSize: IntSize2D) -> GpuYuv420Semiplanar { this currentAndroidContext unpackBgraToYuv420Semiplanar(source, targetSize) }
 }

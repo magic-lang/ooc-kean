@@ -33,7 +33,10 @@ VolumeTexture: class {
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE)
 		glTexImage3D(GL_TEXTURE_3D, 0, GL_R8, this width, this height, this depth, 0, GL_RED, GL_UNSIGNED_BYTE, pixels)
 	}
-	dispose: func { glDeleteTextures(1, _backend&) }
+	free: func {
+		glDeleteTextures(1, _backend&)
+		super()
+	}
 	bind: func (unit: UInt) {
 		glActiveTexture(GL_TEXTURE0 + unit)
 		glBindTexture(GL_TEXTURE_3D, this _backend)

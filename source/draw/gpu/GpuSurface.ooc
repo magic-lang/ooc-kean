@@ -26,5 +26,4 @@ GpuSurface: abstract class {
 	draw: abstract func ~twoGpuimages (image1: Image, image2: Image, map: GpuMap, viewport: Viewport)
 	clear: abstract func
 	recycle: abstract func
-	dispose: abstract func
 }

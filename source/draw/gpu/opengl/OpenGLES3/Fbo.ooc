@@ -24,7 +24,10 @@ Fbo: class {
 	_height: UInt
 
 	init: func (=_width, =_height)
-	dispose: func { glDeleteFramebuffers(1, _backend&) }
+	free: func {
+		glDeleteFramebuffers(1, _backend&)
+		super()
+	}
 	bind: func { glBindFramebuffer(GL_FRAMEBUFFER, this _backend) }
 	unbind: func { glBindFramebuffer(GL_FRAMEBUFFER, 0) }
 	scissor: static func (x: Int, y: Int, width: Int, height: Int) { glScissor(x, y, width, height) }

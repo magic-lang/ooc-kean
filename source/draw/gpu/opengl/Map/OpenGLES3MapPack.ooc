@@ -18,7 +18,7 @@ OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
 		precision highp float;\n
 		uniform sampler2D texture0;\n
 		uniform int imageWidth;\n
-		in vec2 fragmentTextureCoordinate;
+		in highp vec2 fragmentTextureCoordinate;
 		out vec4 outColor;\n
 		void main() {\n
 			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(1.5f / float(imageWidth), 0);\n
@@ -37,7 +37,7 @@ OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
 		precision highp float;\n
 		uniform sampler2D texture0;\n
 		uniform int imageWidth;\n
-		in vec2 fragmentTextureCoordinate;
+		in highp vec2 fragmentTextureCoordinate;
 		out vec4 outColor;\n
 		void main() {\n
 			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(1.5f / float(imageWidth), 0);\n
@@ -84,6 +84,65 @@ OpenGLES3MapPackUv1080p: class extends OpenGLES3MapPack {
 			outColor = vec4(rg.x, rg.y, ba.x, ba.y);\n
 		}\n"
 }
+OpenGLES3MapUnpackRgbaToMonochrome: class extends OpenGLES3MapDefault {
+	sourceSize: IntSize2D { get set }
+	targetSize: IntSize2D { get set }
+	init: func (context: GpuContext) {
+		super(This fragmentSource, context, false, func {
+			this program setUniform("texture0", 0)
+			this program setUniform("sourceSize", this sourceSize)
+			this program setUniform("targetSize", this targetSize)
+		})
+	}
+	fragmentSource: static String ="
+		#version 300 es\n
+		uniform sampler2D texture0;\n
+		uniform ivec2 sourceSize;
+		uniform ivec2 targetSize;
+		in highp vec2 fragmentTextureCoordinate;
+		out float outColor;\n
+		void main() {\n
+			int pixelIndex = int(float(targetSize.x) * fragmentTextureCoordinate.x) % 4;\n
+			vec2 texCoords = vec2(fragmentTextureCoordinate.x, float(targetSize.y) * fragmentTextureCoordinate.y / float(sourceSize.y));
+			if (pixelIndex == 0)\n
+				outColor = texture(texture0, texCoords).r;\n
+			else if (pixelIndex == 1)\n
+				outColor = texture(texture0, texCoords).g;\n
+			else if (pixelIndex == 2)\n
+				outColor = texture(texture0, texCoords).b;\n
+			else
+				outColor = texture(texture0, texCoords).a;\n
+		}\n"
+}
+OpenGLES3MapUnpackRgbaToUv: class extends OpenGLES3MapDefault {
+	sourceSize: IntSize2D { get set }
+	targetSize: IntSize2D { get set }
+	init: func (context: GpuContext) {
+		super(This fragmentSource, context, false, func {
+			this program setUniform("texture0", 0)
+			this program setUniform("sourceSize", this sourceSize)
+			this program setUniform("targetSize", this targetSize)
+		})
+	}
+	fragmentSource: static String ="
+		#version 300 es\n
+		uniform sampler2D texture0;\n
+		uniform ivec2 sourceSize;
+		uniform ivec2 targetSize;
+		in highp vec2 fragmentTextureCoordinate;
+		out vec2 outColor;\n
+		void main() {\n
+			int pixelIndex = int(float(targetSize.x) * fragmentTextureCoordinate.x) % 2;\n
+			float startY = (float(sourceSize.y) - float(targetSize.y)) / float(sourceSize.y);
+			float yCoord = startY + (1.0f - startY) * fragmentTextureCoordinate.y;
+			vec2 texCoords = vec2(fragmentTextureCoordinate.x, yCoord);
+			if (pixelIndex == 0)\n
+				outColor = vec2(texture(texture0, texCoords).r, texture(texture0, texCoords).g);\n
+			else\n
+				outColor = vec2(texture(texture0, texCoords).b, texture(texture0, texCoords).a);\n
+			//outColor = vec2(0.5f, 0.5f);
+		}\n"
+}
 OpenGLES3MapUnpackMonochrome1080p: class extends OpenGLES3MapDefault {
 	init: func (context: GpuContext) { super(This fragmentSource, context, false, func { this program setUniform("texture0", 0) }) }
 	fragmentSource: static String ="
@@ -97,13 +156,13 @@ OpenGLES3MapUnpackMonochrome1080p: class extends OpenGLES3MapDefault {
 			vec2 coords = vec2(xCoord, fragmentTextureCoordinate.y);\n
 			int pixelIndex = int(1920.0f * fragmentTextureCoordinate.x) % 4;\n
 			if (pixelIndex == 0)\n
-			outColor = texture(texture0, coords).r;\n
+				outColor = texture(texture0, coords).r;\n
 			else if (pixelIndex == 1)\n
-			outColor = texture(texture0, coords).g;\n
+				outColor = texture(texture0, coords).g;\n
 			else if (pixelIndex == 2)\n
-			outColor = texture(texture0, coords).b;\n
+				outColor = texture(texture0, coords).b;\n
 			else
-			outColor = texture(texture0, coords).a;\n
+				outColor = texture(texture0, coords).a;\n
 			//outColor = 1.0f;\n
 		}\n"
 }

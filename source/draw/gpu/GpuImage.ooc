@@ -41,11 +41,17 @@ GpuImage: abstract class extends Image {
 	_channels: Int
 	channels: Int { get { this _channels } }
 	length: Int { get { this _channels * this size width * this size height } }
+
 	init: func (size: IntSize2D, =_channels, =_context) { super(size) }
-	free: func { this recycle() }
+	free: func {
+		this recycle()
+	}
 	dispose: func {
-		if (this _canvas != null)
-			this _canvas dispose()
+		if (this _canvas != null) {
+			this _canvas free()
+			this _canvas = null
+		}
+		//TODO: Leaks memory, needs to call super free()
 	}
 	recycle: func {
 		if (this _canvas != null)
