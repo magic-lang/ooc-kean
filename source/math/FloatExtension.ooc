@@ -81,6 +81,12 @@ extend Float {
 		value = (value >= -This pi) ? value : (value + 2 * pi)
 		value
 	}
+	minusPiToPiOverTwo: static func(value: This) -> This {
+		value = modulo(value, This pi)
+		value = (value <= This pi / 2) ? value : (value - pi)
+		value = (value >= -This pi / 2) ? value : (value + pi)
+		value
+	}
 	// Linear interpolation between a and b using ratio
 	//   lerp(a, b, 0) = a
 	//   lerp(a, b, 0.5) = (a + b) / 2
