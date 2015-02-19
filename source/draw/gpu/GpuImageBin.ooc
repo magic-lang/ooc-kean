@@ -17,6 +17,7 @@
 
 use ooc-math
 import structs/FreeArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuYuv422Semipacked
+import threading/Thread
 
 GpuImageBin: class {
 	_monochrome: FreeArrayList<GpuImage>
@@ -26,8 +27,10 @@ GpuImageBin: class {
 	_yuvSemiplanar: FreeArrayList<GpuImage>
 	_yuvPlanar: FreeArrayList<GpuImage>
 	_yuv422: FreeArrayList<GpuImage>
+	_mutex: Mutex
 
 	init: func {
+		this _mutex = Mutex new()
 		this _monochrome = FreeArrayList<GpuImage> new()
 		this _bgr = FreeArrayList<GpuImage> new()
 		this _bgra = FreeArrayList<GpuImage> new()
@@ -61,6 +64,7 @@ GpuImageBin: class {
 		this _yuv422 clear()
 	}
 	add: func (image: GpuImage) {
+		this _mutex lock()
 		match (image) {
 			case (i: GpuMonochrome) =>
 				this _monochrome add(i)
@@ -79,6 +83,7 @@ GpuImageBin: class {
 			case =>
 				raise("Unknown format in GpuImageBin add()")
 		}
+		this _mutex unlock()
 	}
 	_search: func (size: IntSize2D, arrayList: FreeArrayList<GpuImage>) -> GpuImage {
 		result := null
@@ -96,6 +101,7 @@ GpuImageBin: class {
 		result
 	}
 	find: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
+		this _mutex lock()
 		result := null
 		result = match (type) {
 			case GpuImageType monochrome => this _search(size, this _monochrome)
@@ -107,8 +113,7 @@ GpuImageBin: class {
 			case GpuImageType yuv422 => this _search(size, this _yuv422)
 			case => null
 		}
-//		if (result == null)
-//			raise("Unknown format in GpuImageBin find()")
+		this _mutex unlock()
 		result
 	}
 }
