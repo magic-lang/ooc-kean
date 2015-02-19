@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
+use ooc-base
 use ooc-draw
 use ooc-math
 import GpuContext, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv422Semipacked, GpuYuv420Planar, GpuImage, GpuSurface, GpuMap, Viewport
@@ -42,6 +42,8 @@ GpuContextManager: abstract class extends GpuContext {
 				return this _contexts[i]
 			}
 		}
+		DebugPrint print("ERROR: Maximum gpu contexts already used!")
+		raise("Maximum contexts already used!")
 		return null
 	}
 	getCurrentIndex: func -> Int {
