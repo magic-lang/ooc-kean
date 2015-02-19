@@ -25,11 +25,12 @@ Context: class {
 	version: static Int { get }
 
 	init: func
-	dispose: func {
+	free: func {
 		eglMakeCurrent(this _eglDisplay, null, null, null)
 		eglDestroyContext(this _eglDisplay, this _eglContext)
 		eglDestroySurface(this _eglDisplay, this _eglSurface)
 		eglTerminate(this _eglDisplay)
+		super()
 	}
 	makeCurrent: func -> Bool { eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0 }
 	swapBuffers: func { eglSwapBuffers(this _eglDisplay, this _eglSurface) }

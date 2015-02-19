@@ -31,8 +31,9 @@ OpenGLES3Surface: class extends GpuSurface {
 	recycle: func {
 		this _context recycle(this)
 	}
-	dispose: func {
-		this _quad dispose()
+	free: func {
+		this _quad free()
+		super()
 	}
 	clear: func
 	draw: func ~gpuimage (image: GpuImage, map: GpuMap, viewport: Viewport) {

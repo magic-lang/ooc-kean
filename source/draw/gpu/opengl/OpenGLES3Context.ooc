@@ -48,14 +48,14 @@ OpenGLES3Context: class extends GpuContext {
 	init: func ~unshared { this init(Context create()) }
 	init: func ~shared (other: This) { this init(Context create(other _backend)) }
 	init: func ~window (nativeWindow: NativeWindow) { this init(Context create(nativeWindow)) }
-	dispose: func {
+	free: func {
 		this _backend makeCurrent()
+		this _bgrMapDefault free()
+		this _bgraMapDefault free()
+		this _monochromeMapDefault free()
+		this _uvMapDefault free()
+		this _backend free()
 		super()
-		this _bgrMapDefault dispose()
-		this _bgraMapDefault dispose()
-		this _monochromeMapDefault dispose()
-		this _uvMapDefault dispose()
-		this _backend dispose()
 	}
 	recycle: func ~image (gpuImage: GpuImage) { this _imageBin add(gpuImage) }
 	recycle: func ~surface (surface: GpuSurface) { this _surfaceBin add(surface) }

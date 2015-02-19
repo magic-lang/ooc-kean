@@ -42,12 +42,12 @@ Window: class extends OpenGLES3Context {
 		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new(this)
 		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgra new(this, true)
 	}
-	dispose: func {
-		this _bgrToBgra dispose()
-		this _bgraToBgra dispose()
-		this _yuvPlanarToBgra dispose()
-		this _yuvSemiplanarToBgra dispose()
-		this _monochromeToBgra dispose()
+	free: func {
+		this _bgrToBgra free()
+		this _bgraToBgra free()
+		this _yuvPlanarToBgra free()
+		this _yuvSemiplanarToBgra free()
+		this _monochromeToBgra free()
 		super()
 	}
 	getTransformMap: func (gpuImage: GpuImage) -> OpenGLES3MapDefault {

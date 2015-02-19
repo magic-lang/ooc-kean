@@ -33,9 +33,9 @@ EGLImage: class extends Texture {
 		glIsEnabled(GL_TEXTURE_EXTERNAL_OES)
 		*/
 	}
-	dispose: func {
-		super()
+	free: func {
 		This _eglDestroyImageKHR(this _eglDisplay, this _eglBackend)
+		super()
 	}
 	bindSibling: func {
 		eglImageAttributes := [EGL_IMAGE_PRESERVED_KHR, EGL_FALSE, EGL_NONE] as Int*

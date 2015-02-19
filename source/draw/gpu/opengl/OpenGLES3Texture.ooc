@@ -28,7 +28,10 @@ OpenGLES3Texture: class extends GpuTexture {
 		else
 			this backend setMagFilter(InterpolationType Nearest)
 	}
-	dispose: func { this backend dispose() }
+	free: func {
+		this backend free()
+		super()
+	}
 	bind: func (unit: UInt) { this backend bind(unit) }
 	unbind: func { this backend unbind() }
 	upload: func(pointer: UInt8*, stride: UInt) { this backend upload(pointer, stride) }

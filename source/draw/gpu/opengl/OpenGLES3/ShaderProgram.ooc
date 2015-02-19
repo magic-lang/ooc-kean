@@ -26,10 +26,11 @@ ShaderProgram: class {
 		glUseProgram(this _backend)
 		version(debugGL) { validateEnd("ShaderProgram use") }
 	}
-	dispose: func {
+	free: func {
 		version(debugGL) { validateStart() }
 		glDeleteProgram(this _backend)
 		version(debugGL) { validateEnd("ShaderProgram dispose") }
+		super()
 	}
 	setUniform: func ~Array (name: String, array: Float*, count: Int) {
 		version(debugGL) { validateStart() }

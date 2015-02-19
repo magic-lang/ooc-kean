@@ -45,15 +45,15 @@ AndroidContext: class extends OpenGLES3Context {
 		this _unpackRgbaToMonochrome = OpenGLES3MapUnpackRgbaToMonochrome new(this)
 		this _unpackRgbaToUv = OpenGLES3MapUnpackRgbaToUv new(this)
 	}
-	dispose: func {
+	free: func {
 		this _backend makeCurrent()
-		this _packerBin dispose()
-		this _packMonochrome dispose()
-		this _packUv dispose()
+		this _packerBin free()
+		this _packMonochrome free()
+		this _packUv free()
 		super()
 	}
 	clean: func {
-		this _packerBin dispose()
+		this _packerBin clean()
 	}
 	toRaster: func ~Yuv420SpOverwrite (gpuImage: GpuYuv420Semiplanar, rasterImage: RasterYuv420Semiplanar) {
 		yPacker, uvPacker: GpuPacker

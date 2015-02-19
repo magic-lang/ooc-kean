@@ -55,11 +55,12 @@ GpuContextManager: abstract class extends GpuContext {
 		result
 	}
 	_createContext: abstract func -> GpuContext
-	dispose: func {
+	free: func {
 		for(i in 0..MAX_CONTEXTS) {
 			if (this _contexts[i] != null)
-				this _contexts[i] dispose()
+				this _contexts[i] free()
 		}
+		super()
 	}
 	clean: func {
 		for(i in 0..MAX_CONTEXTS) {

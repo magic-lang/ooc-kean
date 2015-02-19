@@ -27,11 +27,10 @@ AndroidTexture: abstract class extends GpuTexture {
 	_buffer: GraphicBuffer
 	init: func (size: IntSize2D, =_buffer, eglImage: EGLImage, =_channels) {
 		super(eglImage, size)
-		DebugPrint print("Allocating Android Texture")
 	}
-	dispose: func {
-		this backend dispose()
-		//this _buffer free()
+	free: func {
+		this backend free()
+		this _buffer free()
 	}
 	lock: func (write: Bool) -> UInt8* { this _buffer lock(write) as UInt8* }
 	unlock: func { this _buffer unlock() }
