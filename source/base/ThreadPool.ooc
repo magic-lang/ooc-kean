@@ -29,8 +29,11 @@ ThreadPool: class {
 	_newJobCondition: ConditionUnix
 	_allFinishedCondition: ConditionUnix
 	_activeJobs: Int
+	_threadCount: Int
+	threadCount ::= this _threadCount
 
 	init: func (threadCount := 4) {
+		this _threadCount = threadCount
 		this _threads = Thread[threadCount] new()
 		this _jobs = LinkedList<ThreadJob> new()
 		this _mutex = Mutex new()
