@@ -61,7 +61,7 @@ GpuPacker: class {
 		This flush()
 	}
 	read: func ~ByteBuffer -> ByteBuffer {
-		this _packFence wait()
+		this _packFence clientWait()
 		sourcePointer := this _targetTexture lock(false)
 		buffer := ByteBuffer new(sourcePointer, this _targetTexture stride * this _targetTexture size height,
 			func (buffer: ByteBuffer){
@@ -71,7 +71,7 @@ GpuPacker: class {
 		buffer
 	}
 	readRows: func ~ByteBuffer -> ByteBuffer {
-		this _packFence wait()
+		this _packFence clientWait()
 		destinationWidth := this size width
 		destinationHeight := this size height
 		size := destinationWidth * destinationHeight * this bytesPerPixel
@@ -82,7 +82,6 @@ GpuPacker: class {
 		destinationRow := buffer pointer
 		destinationStride := destinationWidth * this bytesPerPixel
 		for (row in 0..destinationHeight) {
-			//DebugPrint print("Row: " + row toString() + "Dest Offset: " + (row * destinationStride) toString() + "Source offset: " + (row * sourceStride) toString())
 			sourceRow = sourcePointer + row * sourceStride
 			destinationRow = buffer pointer + row * destinationStride
 			memcpy(destinationRow, sourceRow, destinationStride)
@@ -91,7 +90,7 @@ GpuPacker: class {
 		buffer
 	}
 	readRows: func ~overwrite (destination: RasterPacked) {
-		this _packFence wait()
+		this _packFence clientWait()
 		sourcePointer := this _targetTexture lock(false)
 		destinationPointer := destination buffer pointer
 		destinationStride := destination stride
@@ -107,7 +106,7 @@ GpuPacker: class {
 		this _targetTexture unlock()
 	}
 	read: func (destination: RasterPacked) {
-		this _packFence wait()
+		this _packFence clientWait()
 		sourcePointer := this _targetTexture lock(false)
 		destinationPointer := destination buffer pointer
 		destinationStride := destination stride
