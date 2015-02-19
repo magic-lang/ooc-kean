@@ -47,7 +47,7 @@ Texture: class {
 	format: UInt
 	internalFormat: UInt
 	_bytesPerPixel: UInt
-	_target: UInt
+	_target: UInt = GL_TEXTURE_2D
 
 	init: func (type: TextureType, width: UInt, height: UInt) {
 		version(debugGL) { validateStart() }
@@ -178,7 +178,9 @@ Texture: class {
 		if (pixelStride != this width) {
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
 		}
-		version(debugGL) { validateEnd("Texture _generate") }
+		glTexImage2D(this _target, 0, this internalFormat, this width, this height, 0, this format, GL_UNSIGNED_BYTE, pixels)
+		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
+		version(debugGL) { validateEnd("Texture _allocate") }
 		true
 	}
 	create: static func (type: TextureType, width: UInt, height: UInt, stride: UInt, pixels := null, allocate : Bool = true) -> This {
