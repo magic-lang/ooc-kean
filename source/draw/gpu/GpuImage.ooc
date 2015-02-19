@@ -51,7 +51,7 @@ GpuImage: abstract class extends Image {
 			this _canvas free()
 			this _canvas = null
 		}
-		//TODO: Leaks memory
+		//TODO: Leaks memory, needs to call super free()
 	}
 	recycle: func {
 		if (this _canvas != null)
