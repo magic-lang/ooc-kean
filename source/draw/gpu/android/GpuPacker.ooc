@@ -43,9 +43,10 @@ GpuPacker: class {
 		this _renderTarget = Fbo create(this _targetTexture backend, this _internalSize width, this _internalSize height)
 	}
 	recycle: func { this _context recycle(this) }
-	dispose: func {
-		this _targetTexture dispose()
-		this _renderTarget dispose()
+	free: func {
+		this _targetTexture free()
+		this _renderTarget free()
+		super()
 	}
 	pack: func (image: GpuImage, map: OpenGLES3MapDefault) {
 		image setMagFilter(false)

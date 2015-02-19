@@ -27,7 +27,6 @@ GpuCanvas: abstract class {
 	_context: GpuContext
 	blend := false
 	init: func (=_target, =_context)
-	dispose: abstract func
 	draw: abstract func (image: Image)
 	draw: abstract func ~transform2D (image: Image, transform: FloatTransform2D)
 	draw: abstract func ~withmap (image: Image, map: GpuMap, viewport: Viewport)

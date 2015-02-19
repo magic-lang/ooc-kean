@@ -74,9 +74,10 @@ OverlayDrawer: class {
 		this pointsShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
 		this pointsShader pointSize = 5.0f
 	}
-	__destroy__: func {
-		this linesShader dispose()
-		this pointsShader dispose()
+	free: func {
+		this linesShader free()
+		this pointsShader free()
+		super()
 	}
 	drawLines: func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform2D) {
 		positions := pointList pointer as Float*

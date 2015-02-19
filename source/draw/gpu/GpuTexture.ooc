@@ -20,7 +20,6 @@ GpuTexture: abstract class {
 	size ::= this _size
 	init: func (=_backend, =_size)
 	generateMipmap: abstract func
-	dispose: abstract func
 	bind: abstract func (unit: UInt)
 	unbind: abstract func
 	upload: abstract func(pointer: UInt8*, stride: UInt)

@@ -57,10 +57,11 @@ Texture: class {
 		this _setInternalFormats(type)
 		version(debugGL) { validateEnd("Texture init") }
 	}
-	dispose: func {
+	free: func {
 		version(debugGL) { validateStart() }
 		glDeleteTextures(1, _backend&)
 		version(debugGL) { validateEnd("Texture dispose") }
+		super()
 	}
 	generateMipmap: func {
 		version(debugGL) { validateStart() }

@@ -22,7 +22,10 @@ Vao: class {
 	positionLayout: const static UInt = 0
 	textureCoordinateLayout: const static UInt = 1
 	init: func
-	dispose: func { glDeleteVertexArrays(1, backend&) }
+	free: func {
+		glDeleteVertexArrays(1, backend&)
+		super()
+	}
 	bind: func { glBindVertexArray(backend) }
 	unbind: func { glBindVertexArray(0) }
 	_generate: func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> Bool {

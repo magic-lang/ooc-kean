@@ -26,10 +26,9 @@ Quad: class {
 		this vao = Vao create(positions, textureCoordinates, 4, 2)
 		version(debugGL) { validateEnd("quad init") }
 	}
-	dispose: func {
-		version(debugGL) { validateStart() }
-		this vao dispose()
-		version(debugGL) { validateEnd("quad dispose") }
+	free: func {
+		this vao free()
+		super()
 	}
 	draw: func {
 		version(debugGL) { validateStart() }
