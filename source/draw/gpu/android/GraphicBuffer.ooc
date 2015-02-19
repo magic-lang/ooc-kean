@@ -40,11 +40,17 @@ GraphicBuffer: class {
 	_backend: Pointer = null
 	_nativeBuffer: Pointer = null
 	nativeBuffer ::= this _nativeBuffer
+	_allocated := false
 	init: func (=_size, =_format, usage: Int) {
 		This _allocate(_size width, _size height, this _format as Int, usage, this _backend&, this _nativeBuffer&, this _stride&)
+		this _allocated = true
 	}
 	init: func ~existing (=_backend, =_nativeBuffer, =_size, =_stride, =_format)
-	free: func { This _free(this _backend) }
+	free: func {
+		if (this _allocated)
+			This _free(this _backend)
+		super()
+	}
 	lock: func (write: Bool) -> Pointer {
 		result: Pointer = null
 		This _lock(this _backend, write, result&)
