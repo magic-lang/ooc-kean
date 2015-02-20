@@ -27,12 +27,16 @@ Fence: class {
 		this _mutex = Mutex new()
 		this _syncCondition = ConditionUnix new()
 	}
-	clientWait: func {
+	clientWait: func (timeout: Int = GL_TIMEOUT_IGNORED) {
 		this _mutex lock()
 		if (this _backend == null)
 			this _syncCondition wait(this _mutex)
 		this _mutex unlock()
-		glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED)
+		glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, timeout)
+	}
+	wait: func {
+		glFlush()
+		glWaitSync(this _backend, 0, GL_TIMEOUT_IGNORED)
 	}
 	sync: func {
 		this _mutex lock()
