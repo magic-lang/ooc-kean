@@ -75,6 +75,16 @@ FloatEuclidTransform: cover {
 		this rotationZ == other rotationZ &&
 		this scaling == other scaling
 	}
+	weight: func(other, weight: This) -> This {
+		This new(
+			this translationX * weight translationX + other translationX * (1 - weight translationX),
+			this translationY * weight translationY + other translationY * (1 - weight translationY),
+			this rotationX * weight rotationX + other rotationX * (1 - weight rotationX),
+			this rotationY * weight rotationY + other rotationY * (1 - weight rotationY),
+			this rotationZ * weight rotationZ + other rotationZ * (1 - weight rotationZ),
+			this scaling * weight scaling + other scaling * (1 - weight scaling)
+			)
+	}
 	operator + (other: This) -> This {
 		This new(this translationX + other translationX, this translationY + other translationY, this rotationX + other rotationX, this rotationY + other rotationY, this rotationZ + other rotationZ, this scaling * other scaling)
 	}
