@@ -45,7 +45,7 @@ AndroidContext: class extends OpenGLES3Context {
 		this _unpackRgbaToMonochrome = OpenGLES3MapUnpackRgbaToMonochrome new(this)
 		this _unpackRgbaToUv = OpenGLES3MapUnpackRgbaToUv new(this)
 	}
-	free: func {
+	free: override func {
 		this _backend makeCurrent()
 		this _packerBin free()
 		this _packMonochrome free()
@@ -89,7 +89,7 @@ AndroidContext: class extends OpenGLES3Context {
 		yPacker recycle()
 		uvPacker recycle()
 	}
-	toRaster: func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) {
+	toRaster: override func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) {
 		match(gpuImage) {
 			case (i : GpuYuv420Semiplanar) => this toRaster(gpuImage as GpuYuv420Semiplanar, rasterImage as RasterYuv420Semiplanar)
 			case => raise("Using toRaster on unimplemented image format")
@@ -144,7 +144,7 @@ AndroidContext: class extends OpenGLES3Context {
 		result := RasterMonochrome new(buffer, gpuImage size, 64)
 		result
 	}
-	toRaster: func (gpuImage: GpuImage) -> RasterImage {
+	toRaster: override func (gpuImage: GpuImage) -> RasterImage {
 		result := match(gpuImage) {
 			case (i : GpuYuv420Semiplanar) => this toRaster(gpuImage as GpuYuv420Semiplanar)
 			case (i : GpuMonochrome) => this toRaster(gpuImage as GpuMonochrome)

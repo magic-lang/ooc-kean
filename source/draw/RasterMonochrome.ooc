@@ -52,7 +52,7 @@ RasterMonochrome: class extends RasterPacked {
 			row += this stride - 1
 		}
 	}
-	distance: func (other: Image) -> Float {
+	distance: override func (other: Image) -> Float {
 		result := 0.0f
 		if (!other)
 			result = Float maximumValue

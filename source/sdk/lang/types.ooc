@@ -14,7 +14,7 @@ Object: abstract class {
     /// Finalizer: cleans up any objects belonging to this instance
     __destroy__: func {}
 
-    free: func {
+    free: virtual func {
       version(!gc) {
         this __destroy__()
         gc_free(this)
@@ -128,7 +128,7 @@ Cell: class <T> {
 
     set: func (=val)
     get: func -> T { val }
-    
+
     __destroy__: func {
     	gc_free(this val)
     }

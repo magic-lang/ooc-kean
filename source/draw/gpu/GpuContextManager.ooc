@@ -81,8 +81,8 @@ GpuContextManager: abstract class extends GpuContext {
 	recycle: func ~image (gpuImage: GpuImage) { this _getContext() recycle(gpuImage) }
 	recycle: func ~surface (surface: GpuSurface) { this _getContext() recycle(surface) }
 	createSurface: func -> GpuSurface { this _getContext() createSurface() }
-	toRaster: func (gpuImage: GpuImage) -> RasterImage { this _getContext() toRaster(gpuImage) }
-	toRaster: func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) { this _getContext() toRaster(gpuImage, rasterImage) }
+	toRaster: override func (gpuImage: GpuImage) -> RasterImage { this _getContext() toRaster(gpuImage) }
+	toRaster: override func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) { this _getContext() toRaster(gpuImage, rasterImage) }
 	setViewport: func (viewport: Viewport) { this _getContext() setViewport(viewport) }
 	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap { this _getContext() getMap(gpuImage, mapType) }
 }

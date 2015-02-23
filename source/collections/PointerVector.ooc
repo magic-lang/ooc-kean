@@ -37,7 +37,7 @@ PointerVector: abstract class {
 	}
 	_allocate: abstract func (count: Int)
 
-	resize: func (count: Int) {
+	resize: virtual func (count: Int) {
 		if (count < this count) {
 			this _free(count, this count)
 			this _count = count
@@ -105,8 +105,8 @@ PointerStackVector: class extends PointerVector {
 
 	// TODO: Why does this function exist here?
 	_allocate: func(count: Int)
-	
-	resize: func(count: Int) {
+
+	resize: override func(count: Int) {
 		if (count > this count)
 			count = this count
 		super(count)
