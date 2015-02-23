@@ -87,7 +87,7 @@ _RecoverableByteBuffer: class extends ByteBuffer {
 	init: func (pointer: UInt8*, size: Int, =_recover) {
 		super(pointer, size)
 	}
-	free: func {
+	free: override func {
 		if ((this _recover as Closure) thunk) {
 			this _recover(this)
 		} else {
@@ -99,7 +99,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 	init: func (pointer: UInt8*, size: Int) {
 		super(pointer, size)
 	}
-	free: func {
+	free: override func {
 		This _lock lock()
 		bin := This _getBin(this size)
 		while (bin size > 10) {
@@ -111,7 +111,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		bin add(this)
 		This _lock unlock()
 	}
-	
+
 	__destroy__: func {
 		super()
 		// This is called by Object free(), which we've overridden,

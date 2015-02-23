@@ -33,7 +33,7 @@ EGLImage: class extends Texture {
 		glIsEnabled(GL_TEXTURE_EXTERNAL_OES)
 		*/
 	}
-	free: func {
+	free: override func {
 		This _eglDestroyImageKHR(this _eglDisplay, this _eglBackend)
 		super()
 	}

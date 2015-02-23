@@ -42,7 +42,7 @@ Window: class extends OpenGLES3Context {
 		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new(this)
 		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgra new(this, true)
 	}
-	free: func {
+	free: override func {
 		this _bgrToBgra free()
 		this _bgraToBgra free()
 		this _yuvPlanarToBgra free()

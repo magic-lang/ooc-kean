@@ -55,7 +55,7 @@ Image: abstract class {
 		this crop = original crop
 		this wrap = original wrap
 	}
-	__destroy__:func { 
+	__destroy__:func {
 		this referenceCount
 		if (this referenceCount != null)
 			this referenceCount free()
@@ -72,7 +72,7 @@ Image: abstract class {
 //	shift: abstract func (offset: IntSize2D) -> This
 	flush: func { }
 	finish: func -> Bool { true }
-	distance: abstract func (other: This) -> Float
+	distance: virtual abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
 	isValidIn: func (x, y: Int) -> Bool {
 		return (x >= 0 && x < this size width && y >= 0 && y < this size height)

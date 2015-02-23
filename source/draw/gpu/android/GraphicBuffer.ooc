@@ -48,7 +48,7 @@ GraphicBuffer: class {
 		this _allocated = true
 	}
 	init: func ~existing (=_backend, =_nativeBuffer, =_size, =_stride, =_format)
-	free: func {
+	free: override  func {
 		if (this _allocated)
 			This _free(this _backend)
 		super()

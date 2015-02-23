@@ -37,7 +37,7 @@ Vector: abstract class <T> {
 	}
 	_allocate: abstract func (capacity: Int)
 
-	resize: func (capacity: Int) {
+	resize: virtual func (capacity: Int) {
 		if (capacity < this capacity) {
 			this _free(capacity, this capacity)
 			this _capacity = capacity
@@ -107,8 +107,8 @@ StackVector: class <T> extends Vector<T> {
 
 	// TODO: Why does this function exist here?
 	_allocate: func(capacity: Int)
-	
-	resize: func(capacity: Int) {
+
+	resize: override func(capacity: Int) {
 		if (capacity > this capacity)
 			capacity = this capacity
 		super(capacity)

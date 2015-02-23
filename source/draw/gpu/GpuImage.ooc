@@ -44,7 +44,10 @@ GpuImage: abstract class extends Image {
 	_recyclable := false
 	recyclable ::= this _recyclable
 	init: func (size: IntSize2D, =_channels, =_context) { super(size) }
-	free: func {
+	free: override func {
+		this recycle()
+	}
+	dispose: virtual func {
 		if (this _canvas != null) {
 			this _canvas free()
 			this _canvas = null
@@ -69,7 +72,7 @@ GpuImage: abstract class extends Image {
 	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This { raise("Using unimplemented function copy ~fromParams in GpuImage class"); null }
 	shift: func (offset: IntSize2D) -> This { raise("Using unimplemented function shift in GpuImage class"); null }
 	distance: func (other: This) -> Float { raise("Using unimplemented function distance in GpuImage class") }
-	toRaster: func -> RasterImage { this _context toRaster(this) }
+	toRaster: func -> RasterImage {	this _context toRaster(this) }
 	toRaster: func ~overwrite (rasterImage: RasterImage) { this _context toRaster(this, rasterImage) }
 	toRasterDefault: abstract func ~overwrite (rasterImage: RasterImage)
 	toRasterDefault: abstract func -> RasterImage
