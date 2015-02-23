@@ -151,6 +151,9 @@ OpenGLES3Context: class extends GpuContext {
 		}
 		result
 	}
+	createYuv420Semiplanar: func ~fromImages (y: GpuMonochrome, uv: GpuUv) -> GpuYuv420Semiplanar {
+		OpenGLES3Yuv420Semiplanar new(y as OpenGLES3Monochrome, uv as OpenGLES3Uv, this) 
+	}
 	_createYuv420Semiplanar: func (raster: RasterYuv420Semiplanar) -> GpuImage {
 		result := this searchImageBin(GpuImageType yuvSemiplanar, raster size)
 		if (result == null) {

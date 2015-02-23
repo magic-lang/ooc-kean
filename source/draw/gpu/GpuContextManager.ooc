@@ -75,6 +75,7 @@ GpuContextManager: abstract class extends GpuContext {
 	createBgra: func (size: IntSize2D) -> GpuBgra { this _getContext() createBgra(size) }
 	createUv: func (size: IntSize2D) -> GpuUv { this _getContext() createUv(size) }
 	createYuv420Semiplanar: func (size: IntSize2D) -> GpuYuv420Semiplanar { this _getContext() createYuv420Semiplanar(size) }
+	createYuv420Semiplanar: func ~fromImages (y: GpuMonochrome, uv: GpuUv) -> GpuYuv420Semiplanar { this _getContext() createYuv420Semiplanar(y, uv) }
 	createYuv420Planar: func (size: IntSize2D) -> GpuYuv420Planar { this _getContext() createYuv420Planar(size) }
 	createGpuImage: func (rasterImage: RasterImage) -> GpuImage { this _getContext() createGpuImage(rasterImage) }
 	update: func { this _getContext() update() }
