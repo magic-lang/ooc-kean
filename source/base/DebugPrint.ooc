@@ -38,15 +38,4 @@ DebugPrint: class {
 			This printFunctionPointer(printOut)
 		}
 	}
-	printProfilingData: static func (save := false, fileName := "profiling.txt") {
-		outputData := Profiling createOutputString(This _level)
-		This print(outputData, 1)
-		if (save) {
-			fw := FileWriter new(fileName)
-			fw write(outputData)
-			fw close()
-		}
-		if (outputData size > 0)
-			outputData free()
-	}
 }
