@@ -25,7 +25,20 @@ GpuYuv420Planar: abstract class extends GpuPlanar {
 	u: GpuMonochrome { get { this _u } }
 	_v: GpuMonochrome
 	v: GpuMonochrome { get { this _v } }
-	init: func (size: IntSize2D, context: GpuContext) { super(size, context) }
+	init: func (y: GpuMonochrome, u: GpuMonochrome, v: GpuMonochrome, context: GpuContext) {
+		super(y size, context)
+		this _y = y
+		this _y referenceCount increase()
+		this _u = u
+		this _u referenceCount increase()
+		this _v = v
+		this _v referenceCount increase()
+	}
+	free: func {
+		this y referenceCount decrease()
+		this u referenceCount decrease()
+		this v referenceCount decrease()
+	}
 	dispose: func {
 		this _y free()
 		this _u free()

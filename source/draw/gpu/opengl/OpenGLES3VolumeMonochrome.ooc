@@ -31,4 +31,8 @@ OpenGLES3VolumeMonochrome: class {
 	upload: func (pixels: UInt8*) {
 		this _backend upload(pixels)
 	}
+	free: func {
+		this _backend free()
+		super()
+	}
 }

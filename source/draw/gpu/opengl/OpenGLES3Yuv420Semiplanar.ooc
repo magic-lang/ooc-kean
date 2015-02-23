@@ -21,23 +21,20 @@ use ooc-draw
 import OpenGLES3Canvas, OpenGLES3Monochrome, OpenGLES3Uv
 
 OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
-	init: func (size: IntSize2D, context: GpuContext) { super(size, context) }
 	init: func ~gpuImages (y: OpenGLES3Monochrome, uv: OpenGLES3Uv, context: GpuContext) {
-		super(y size, context)
-		this _y = y
-		this _uv = uv
+		super(y, uv, context)
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Semiplanar create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterYuv420Semiplanar, context: GpuContext) -> This {
-		y := OpenGLES3Monochrome create(rasterImage y, context)
-		uv := OpenGLES3Uv create(rasterImage uv, context)
+		y := context createGpuImage(rasterImage y) as OpenGLES3Monochrome
+		uv := context createGpuImage(rasterImage uv) as OpenGLES3Uv
 		result := This new(y, uv, context)
 		result
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
-		result := This new(size, context)
-		result _y = OpenGLES3Monochrome create(size, context)
-		result _uv = OpenGLES3Uv create(size / 2, context)
+		y := context createMonochrome(size) as OpenGLES3Monochrome
+		uv := context createUv(size / 2) as OpenGLES3Uv
+		result := This new(y, uv, context)
 		result
 	}
 }
