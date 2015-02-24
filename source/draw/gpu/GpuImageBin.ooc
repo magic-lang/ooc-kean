@@ -37,23 +37,23 @@ GpuImageBin: class {
 	}
 	free: func {
 		for(i in 0..this _monochrome size) {
-			this _monochrome[i] recycable = false
+			this _monochrome[i] _recycable = false
 			this _monochrome[i] free()
 		}
 		for(i in 0..this _bgr size) {
-			this _bgr[i] recycable = false
+			this _bgr[i] _recycable = false
 			this _bgr[i] free()
 		}
 		for(i in 0..this _bgra size) {
-			this _bgra[i] recycable = false
+			this _bgra[i] _recycable = false
 			this _bgra[i] free()
 		}
 		for(i in 0..this _uv size) {
-			this _uv[i] recycable = false
+			this _uv[i] _recycable = false
 			this _uv[i] free()
 		}
 		for(i in 0..this _yuv422 size) {
-			this _yuv422[i] recycable = false
+			this _yuv422[i] _recycable = false
 			this _yuv422[i] free()
 		}
 		this _monochrome free()
