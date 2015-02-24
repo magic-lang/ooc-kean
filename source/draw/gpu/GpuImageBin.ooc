@@ -24,8 +24,6 @@ GpuImageBin: class {
 	_bgr: FreeArrayList<GpuImage>
 	_bgra: FreeArrayList<GpuImage>
 	_uv: FreeArrayList<GpuImage>
-	_yuvSemiplanar: FreeArrayList<GpuImage>
-	_yuvPlanar: FreeArrayList<GpuImage>
 	_yuv422: FreeArrayList<GpuImage>
 	_mutex: Mutex
 
@@ -35,33 +33,35 @@ GpuImageBin: class {
 		this _bgr = FreeArrayList<GpuImage> new()
 		this _bgra = FreeArrayList<GpuImage> new()
 		this _uv = FreeArrayList<GpuImage> new()
-		this _yuvSemiplanar = FreeArrayList<GpuImage> new()
-		this _yuvPlanar = FreeArrayList<GpuImage> new()
 		this _yuv422 = FreeArrayList<GpuImage> new()
 	}
-	__destroy__: func {
-		for(i in 0..this _monochrome size)
-			this _monochrome[i] dispose()
-		for(i in 0..this _bgr size)
-			this _bgr[i] dispose()
-		for(i in 0..this _bgra size)
-			this _bgra[i] dispose()
-		for(i in 0..this _uv size)
-			this _uv[i] dispose()
-		for(i in 0..this _yuvSemiplanar size)
-			this _yuvSemiplanar[i] dispose()
-		for(i in 0..this _yuvPlanar size)
-			this _yuvPlanar[i] dispose()
-		for(i in 0..this _yuv422 size)
-			this _yuv422[i] dispose()
-
-		this _monochrome clear()
-		this _bgr clear()
-		this _bgra clear()
-		this _uv clear()
-		this _yuvSemiplanar clear()
-		this _yuvPlanar clear()
-		this _yuv422 clear()
+	free: func {
+		for(i in 0..this _monochrome size) {
+			this _monochrome[i] recycable = false
+			this _monochrome[i] free()
+		}
+		for(i in 0..this _bgr size) {
+			this _bgr[i] recycable = false
+			this _bgr[i] free()
+		}
+		for(i in 0..this _bgra size) {
+			this _bgra[i] recycable = false
+			this _bgra[i] free()
+		}
+		for(i in 0..this _uv size) {
+			this _uv[i] recycable = false
+			this _uv[i] free()
+		}
+		for(i in 0..this _yuv422 size) {
+			this _yuv422[i] recycable = false
+			this _yuv422[i] free()
+		}
+		this _monochrome free()
+		this _bgr free()
+		this _bgra free()
+		this _uv free()
+		this _yuv422 free()
+		super()
 	}
 	add: func (image: GpuImage) {
 		this _mutex lock()
@@ -74,10 +74,6 @@ GpuImageBin: class {
 				this _bgra add(i)
 			case (i: GpuUv) =>
 				this _uv add(i)
-			case (i: GpuYuv420Semiplanar) =>
-				this _yuvSemiplanar add(i)
-			case (i: GpuYuv420Planar) =>
-				this _yuvPlanar add(i)
 			case (i: GpuYuv422Semipacked) =>
 				this _yuv422 add(i)
 			case =>
@@ -108,8 +104,6 @@ GpuImageBin: class {
 			case GpuImageType uv => this _search(size, this _uv)
 			case GpuImageType bgr => this _search(size, this _bgr)
 			case GpuImageType bgra => this _search(size, this _bgra)
-			case GpuImageType yuvSemiplanar => this _search(size, this _yuvSemiplanar)
-			case GpuImageType yuvPlanar => this _search(size, this _yuvPlanar)
 			case GpuImageType yuv422 => this _search(size, this _yuv422)
 			case => null
 		}
