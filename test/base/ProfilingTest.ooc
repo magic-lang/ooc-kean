@@ -36,7 +36,7 @@ testfunction2: func {
 	profiling_test stop()
 }
 
-DebugPrint printProfilingData()
+Profiling printResults()
 profiling := Profiling new("main", 1)
 
 profiling  start()
