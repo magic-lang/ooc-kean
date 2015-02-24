@@ -207,7 +207,6 @@ OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 	free: func {
 		this _y free()
 		this _uv free()
-		//Works if commented
 		super()
 	}
 	onRecycle: func {
@@ -234,7 +233,7 @@ OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 			this _draw(temp)
 		}
 		else
-			raise("Trying to draw unsupported image format to OpenGLES3Yuv420Planar")
+			raise("Trying to draw unsupported image format to OpenGLES3Yuv420Semiplanar")
 	}
 	draw: func ~transform2D (image: Image, transform: FloatTransform2D) {
 		if (image instanceOf?(RasterYuv420Semiplanar)) {
@@ -247,7 +246,7 @@ OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 			this _draw(temp, transform)
 		}
 		else
-			raise("Trying to draw unsupported image format to OpenGLES3Yuv420Planar")
+			raise("Trying to draw unsupported image format to OpenGLES3Yuv420Semiplanar")
 	}
 	draw: func ~withmap (image: Image, map: GpuMap, viewport: Viewport)
 	draw: func ~withmapTwoImages (image1: Image, image2: Image, map: GpuMap, viewport: Viewport)
