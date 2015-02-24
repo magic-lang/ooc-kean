@@ -53,7 +53,7 @@ profiling stop()
 
 testfunction()
 Profiling reset()
-DebugPrint printProfilingData()
+Profiling printResults()
 
 /*
 profiling start()
