@@ -21,13 +21,17 @@ import GpuImage, GpuTexture, GpuCanvas, GpuContext
 GpuPacked: abstract class extends GpuImage {
 	_texture: GpuTexture
 	texture: GpuTexture { get { this _texture } }
-	init: func (=_texture, size: IntSize2D, channels: Int, context: GpuContext) { super(size, channels, context) }
-	dispose: func {
-		this _texture free()
-		super()
+	init: func (=_texture, size: IntSize2D, channels: Int, context: GpuContext) {
+		super(size, channels, context)
+		this _recycable = true
 	}
 	free: func {
-		this recycle()
+		if (this recycable)
+			this recycle()
+		else {
+			this _texture free()
+			super()
+		}
 	}
 	bind: func (unit: UInt) { this _texture bind(unit) }
 	unbind: func { this _texture unbind() }

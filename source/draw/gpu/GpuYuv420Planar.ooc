@@ -38,11 +38,6 @@ GpuYuv420Planar: abstract class extends GpuPlanar {
 		this y referenceCount decrease()
 		this u referenceCount decrease()
 		this v referenceCount decrease()
-	}
-	dispose: func {
-		this _y free()
-		this _u free()
-		this _v free()
 		super()
 	}
 	bind: func (unit: UInt) {
