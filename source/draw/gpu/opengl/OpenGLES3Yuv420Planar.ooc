@@ -34,8 +34,8 @@ OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
 		y := context createMonochrome(size) as OpenGLES3Monochrome
-		u := context createMonochrome(IntSize2D new(size width / 4, size height / 2)) as OpenGLES3Monochrome
-		v := context createMonochrome(IntSize2D new(size width / 4, size height / 2)) as OpenGLES3Monochrome
+		u := context createMonochrome(IntSize2D new(size width / 2, size height / 2)) as OpenGLES3Monochrome
+		v := context createMonochrome(IntSize2D new(size width / 2, size height / 2)) as OpenGLES3Monochrome
 		result := This new(y, u, v, context)
 		result
 	}
