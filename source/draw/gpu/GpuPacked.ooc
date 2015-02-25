@@ -23,10 +23,10 @@ GpuPacked: abstract class extends GpuImage {
 	texture: GpuTexture { get { this _texture } }
 	init: func (=_texture, size: IntSize2D, channels: Int, context: GpuContext) {
 		super(size, channels, context)
-		this _recycable = true
+		this _recyclable = true
 	}
 	free: func {
-		if (this recycable)
+		if (this recyclable)
 			this recycle()
 		else {
 			this _texture free()

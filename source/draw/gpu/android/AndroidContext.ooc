@@ -137,7 +137,7 @@ AndroidContext: class extends OpenGLES3Context {
 	createBgra: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> OpenGLES3Bgra {
 		androidTexture := AndroidRgba new(buffer, this _backend _eglDisplay)
 		result := OpenGLES3Bgra new(androidTexture, this)
-		result _recycable = false
+		result _recyclable = false
 		result
 	}
 	unpackBgraToYuv420Semiplanar: func (source: GpuBgra, targetSize: IntSize2D) -> GpuYuv420Semiplanar {
