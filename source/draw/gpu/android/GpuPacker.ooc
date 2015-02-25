@@ -60,7 +60,7 @@ GpuPacker: class {
 		this _packFence sync()
 		This flush()
 	}
-	wait: func { this _packFence clientWait(1000000000) }
+	wait: func { this _packFence clientWait(1_000_000_000) }
 	read: func ~ByteBuffer -> ByteBuffer {
 		this wait()
 		sourcePointer := this _targetTexture lock(false)
