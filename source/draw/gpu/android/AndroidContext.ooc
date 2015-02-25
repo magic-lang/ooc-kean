@@ -181,5 +181,7 @@ AndroidContextManager: class extends GpuContextManager {
 		result
 	}
 	createBgra: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> OpenGLES3Bgra { this currentContext createBgra(buffer) }
-	unpackBgraToYuv420Semiplanar: func (source: GpuBgra, targetSize: IntSize2D) -> GpuYuv420Semiplanar { this currentContext unpackBgraToYuv420Semiplanar(source, targetSize) }
+	unpackBgraToYuv420Semiplanar: func (source: GpuBgra, targetSize: IntSize2D) -> GpuYuv420Semiplanar {
+		this currentContext unpackBgraToYuv420Semiplanar(source, targetSize)
+	}
 }
