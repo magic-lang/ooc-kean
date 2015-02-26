@@ -36,26 +36,16 @@ GpuImageBin: class {
 		this _yuv422 = FreeArrayList<GpuImage> new()
 	}
 	free: func {
-		for(i in 0..this _monochrome size) {
+		for(i in 0..this _monochrome size)
 			this _monochrome[i] _recyclable = false
-			this _monochrome[i] free()
-		}
-		for(i in 0..this _bgr size) {
+		for(i in 0..this _bgr size)
 			this _bgr[i] _recyclable = false
-			this _bgr[i] free()
-		}
-		for(i in 0..this _bgra size) {
+		for(i in 0..this _bgra size)
 			this _bgra[i] _recyclable = false
-			this _bgra[i] free()
-		}
-		for(i in 0..this _uv size) {
+		for(i in 0..this _uv size)
 			this _uv[i] _recyclable = false
-			this _uv[i] free()
-		}
-		for(i in 0..this _yuv422 size) {
+		for(i in 0..this _yuv422 size)
 			this _yuv422[i] _recyclable = false
-			this _yuv422[i] free()
-		}
 		this _monochrome free()
 		this _bgr free()
 		this _bgra free()
