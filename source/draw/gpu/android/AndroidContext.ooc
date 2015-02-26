@@ -109,18 +109,25 @@ AndroidContext: class extends OpenGLES3Context {
 		result
 	}
 	toRaster: func ~monochrome (gpuImage: GpuMonochrome) -> RasterImage {
-		yPacker := this createPacker(gpuImage size, 1)
-		this _packMonochrome imageWidth = gpuImage size width
-		yPacker pack(gpuImage, this _packMonochrome)
-		buffer := yPacker read()
-		result := RasterMonochrome new(buffer, gpuImage size, 64)
+		result: RasterImage
+		if (GraphicBuffer isPadded(gpuImage size width)) {
+			DebugPrint print("Watning: Using slow glReadPixels due to padded width!")
+			result = super(gpuImage)
+		}
+		else {
+			yPacker := this createPacker(gpuImage size, 1)
+			this _packMonochrome imageWidth = gpuImage size width
+			yPacker pack(gpuImage, this _packMonochrome)
+			buffer := yPacker read()
+			result = RasterMonochrome new(buffer, gpuImage size, 64)
+		}
 		result
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
 		result := match(gpuImage) {
 			case (i : GpuYuv420Semiplanar) => this toRaster(gpuImage as GpuYuv420Semiplanar)
 			case (i : GpuMonochrome) => this toRaster(gpuImage as GpuMonochrome)
-			case => super(gpuImage)
+			case => DebugPrint print("Warning: Using slow glReadPixels due to unoptimized format!"); super(gpuImage)
 		}
 		result
 	}
