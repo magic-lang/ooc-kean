@@ -34,6 +34,7 @@ GpuContext: abstract class {
 	createBgra: abstract func (size: IntSize2D) -> GpuBgra
 	createUv: abstract func (size: IntSize2D) -> GpuUv
 	createYuv420Semiplanar: abstract func (size: IntSize2D) -> GpuYuv420Semiplanar
+	createYuv420Semiplanar: abstract func ~fromImages (y: GpuMonochrome, uv: GpuUv) -> GpuYuv420Semiplanar
 	createYuv420Planar: abstract func (size: IntSize2D) -> GpuYuv420Planar
 	createYuv422Semipacked: abstract func (size: IntSize2D) -> GpuYuv422Semipacked
 	createGpuImage: abstract func (rasterImage: RasterImage) -> GpuImage

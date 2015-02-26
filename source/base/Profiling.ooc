@@ -16,6 +16,8 @@
 */
 
 use ooc-collections
+use ooc-base
+import io/FileWriter
 
 import Timer
 
@@ -41,6 +43,22 @@ Profiling: class {
 	min : static String = " Min: "
 	max : static String = " Max: "
 	newLine : static String = "\n"
+
+	printResults: static func {
+		for (i in 0..This _logList count) {
+			resultString := ""
+			log := This _logList[i]
+			DebugPrint print(log _message + This timeStr + log _timer _result toString() + This average + log _timer _average toString())
+		}
+	}
+
+	logResults: static func (fileName := "profiling.txt") {
+		str := This createOutputString(0)
+		fw := FileWriter new(fileName)
+		fw write(str)
+		fw close()
+	}
+
 	createOutputString: static func (debugLevel: Int) -> String {
 		output := ""
 		outputTmp := ""
@@ -87,10 +105,6 @@ Profiling: class {
 		}
 		output
 	}
-	reset: static func {
-		This _logList clear()
-	}
-	dispose: static func {
-		This _logList free()
-	}
+	reset: static func { This _logList clear() }
+	dispose: static func { This _logList free() }
 }

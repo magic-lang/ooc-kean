@@ -73,7 +73,6 @@ Fbo: class {
 			raise(errorMessage)
 		}
 		this unbind()
-		DebugPrint print("Allocated FBO")
 		version(debugGL) { validateEnd("fbo _generate") }
 		true
 	}

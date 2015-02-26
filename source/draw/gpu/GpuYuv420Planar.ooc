@@ -20,16 +20,21 @@ import GpuMonochrome, GpuCanvas, GpuPlanar, GpuContext
 
 GpuYuv420Planar: abstract class extends GpuPlanar {
 	_y: GpuMonochrome
-	y: GpuMonochrome { get { this _y } }
+	y ::= this _y
 	_u: GpuMonochrome
-	u: GpuMonochrome { get { this _u } }
+	u ::= this _u
 	_v: GpuMonochrome
-	v: GpuMonochrome { get { this _v } }
-	init: func (size: IntSize2D, context: GpuContext) { super(size, context) }
-	dispose: func {
-		this _y free()
-		this _u free()
-		this _v free()
+	v ::= this _v
+	init: func (=_y, =_u, =_v, context: GpuContext) {
+		super(this _y size, context)
+		this _y referenceCount increase()
+		this _u referenceCount increase()
+		this _v referenceCount increase()
+	}
+	free: func {
+		this y referenceCount decrease()
+		this u referenceCount decrease()
+		this v referenceCount decrease()
 		super()
 	}
 	bind: func (unit: UInt) {

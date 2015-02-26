@@ -24,10 +24,14 @@ GpuYuv420Semiplanar: abstract class extends GpuPlanar {
 	_uv: GpuUv
 	uv ::= this _uv
 
-	init: func (size: IntSize2D, context: GpuContext) { super(size, context) }
-	dispose: func {
-		this _y free()
-		this _uv free()
+	init: func (=_y, =_uv, context: GpuContext) {
+		super(this _y size, context)
+		this _y referenceCount increase()
+		this _uv referenceCount increase()
+	}
+	free: func {
+		this y referenceCount decrease()
+		this uv referenceCount decrease()
 		super()
 	}
 	bind: func (unit: UInt) {

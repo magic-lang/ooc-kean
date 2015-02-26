@@ -144,37 +144,13 @@ OpenGLES3Context: class extends GpuContext {
 			result upload(raster)
 		result
 	}
-	createYuv420Semiplanar: func (size: IntSize2D) -> GpuImage {
-		result := this searchImageBin(GpuImageType yuvSemiplanar, size)
-		if (result == null) {
-			result = OpenGLES3Yuv420Semiplanar create(size, this)
-		}
-		result
+	createYuv420Semiplanar: func (size: IntSize2D) -> GpuImage { OpenGLES3Yuv420Semiplanar create(size, this) }
+	createYuv420Semiplanar: func ~fromImages (y: GpuMonochrome, uv: GpuUv) -> GpuYuv420Semiplanar {
+		OpenGLES3Yuv420Semiplanar new(y as OpenGLES3Monochrome, uv as OpenGLES3Uv, this)
 	}
-	_createYuv420Semiplanar: func (raster: RasterYuv420Semiplanar) -> GpuImage {
-		result := this searchImageBin(GpuImageType yuvSemiplanar, raster size)
-		if (result == null) {
-			result = OpenGLES3Yuv420Semiplanar create(raster, this)
-		}
-		else {
-			result upload(raster)
-		}
-		result
-	}
-	createYuv420Planar: func (size: IntSize2D) -> GpuImage {
-		result := this searchImageBin(GpuImageType yuvPlanar, size)
-		if (result == null)
-			result = OpenGLES3Yuv420Planar create(size, this)
-		result
-	}
-	_createYuv420Planar: func (raster: RasterYuv420Planar) -> GpuImage {
-		result := this searchImageBin(GpuImageType yuvPlanar, raster size)
-		if (result == null)
-			result = OpenGLES3Yuv420Planar create(raster, this)
-		else
-			result upload(raster)
-		result
-	}
+	_createYuv420Semiplanar: func (raster: RasterYuv420Semiplanar) -> GpuImage { OpenGLES3Yuv420Semiplanar create(raster, this) }
+	createYuv420Planar: func (size: IntSize2D) -> GpuImage { OpenGLES3Yuv420Planar create(size, this) }
+	_createYuv420Planar: func (raster: RasterYuv420Planar) -> GpuImage { OpenGLES3Yuv420Planar create(raster, this) }
 	createYuv422Semipacked: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType yuv422, size)
 		if (result == null)

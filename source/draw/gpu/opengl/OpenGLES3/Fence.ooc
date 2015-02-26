@@ -27,18 +27,33 @@ Fence: class {
 		this _mutex = Mutex new()
 		this _syncCondition = ConditionUnix new()
 	}
-	clientWait: func {
+	clientWait: func (timeout: UInt = GL_TIMEOUT_IGNORED) {
 		this _mutex lock()
 		if (this _backend == null)
 			this _syncCondition wait(this _mutex)
 		this _mutex unlock()
-		glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED)
+		result := glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, timeout)
+		version(debugGL) {
+			match (result) {
+				case GL_TIMEOUT_EXPIRED => DebugPrint print("Fence reached timeout limit. Possible deadlock?")
+				case GL_WAIT_FAILED => DebugPrint print("Fence wait failed!")
+				/*
+				case GL_ALREADY_SIGNALED => DebugPrint print("Fence has already been signaled!")
+				case GL_CONDITION_SATISFIED => DebugPrint print("Fence condition satisifed!")
+				*/
+			}
+		}
+	}
+	wait: func {
+		glFlush()
+		glWaitSync(this _backend, 0, GL_TIMEOUT_IGNORED)
 	}
 	sync: func {
 		this _mutex lock()
 		if(this _backend != null)
 			glDeleteSync(this _backend)
 		this _backend = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0)
+		version(debugGL) { if (this _backend as Int == 0) DebugPrint print("glFenceSync failed!") }
 		this _mutex unlock()
 		this _syncCondition broadcast()
 		glFlush()
