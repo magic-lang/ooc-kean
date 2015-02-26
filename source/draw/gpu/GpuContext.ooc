@@ -16,6 +16,13 @@
 use ooc-math
 use ooc-draw
 import GpuImage, GpuMonochrome, GpuUv, GpuBgr, GpuBgra, GpuYuv420Semiplanar, GpuYuv420Planar, GpuYuv422Semipacked, GpuImageBin, GpuSurfaceBin, GpuSurface, GpuMap, Viewport
+
+AlignWidth: enum {
+	Nearest
+	Floor
+	Ceiling
+}
+
 GpuContext: abstract class {
 	_imageBin: GpuImageBin
 	_surfaceBin: GpuSurfaceBin
@@ -48,4 +55,6 @@ GpuContext: abstract class {
 	getMaxContexts: func -> Int { 1 }
 	setViewport: abstract func (viewport: Viewport)
 	getCurrentIndex: func -> Int { 0 }
+	alignWidth: func (width: Int, align := AlignWidth Nearest) -> Int { width }
+	isAligned: func (width: Int) -> Bool { true }
 }
