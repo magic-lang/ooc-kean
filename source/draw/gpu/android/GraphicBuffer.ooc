@@ -33,7 +33,7 @@ GraphicBuffer: class {
 	_free: static Func (Pointer)
 	_lock: static Func (Pointer, Bool, Pointer*)
 	_unlock: static Func (Pointer)
-	_unpaddedWidth: static Int[]
+	_paddedWidth: static Int[]
 	_format: GraphicBufferFormat
 	format ::= this _format
 	_size: IntSize2D
@@ -73,27 +73,27 @@ GraphicBuffer: class {
 		This _lock = lock
 		This _unlock = unlock
 	}
-	setUnpaddedWidth: static func (array: Int*, count: Int) {
-		This _unpaddedWidth = Int[count] new()
+	setPaddedWidth: static func (array: Int*, count: Int) {
+		This _paddedWidth = Int[count] new()
 		for (i in 0..count) {
-			This _unpaddedWidth[i] = array[i]
-			DebugPrint print("Unpadded width: " + This _unpaddedWidth[i] toString())
+			This _paddedWidth[i] = array[i]
+			DebugPrint print("Padded width: " + This _paddedWidth[i] toString())
 		}
 	}
 	isPadded: static func (width: Int) -> Bool {
 		result := true
-		for (i in 0..This _unpaddedWidth length) {
-			if (width == This _unpaddedWidth[i]) {
+		for (i in 0..This _paddedWidth length) {
+			if (width == This _paddedWidth[i]) {
 				result = false
 				break
 			}
 		}
 		result
 	}
-	getUnpaddedWidth: func (width: Int) -> Int {
+	getPaddedWidth: static func (width: Int) -> Int {
 		result := 0
-		for (i in 0..This _unpaddedWidth length) {
-			currentWidth := This _unpaddedWidth[i]
+		for (i in 0..This _paddedWidth length) {
+			currentWidth := This _paddedWidth[i]
 			if (abs(result - width) > abs(currentWidth - width))
 				result = currentWidth
 		}
