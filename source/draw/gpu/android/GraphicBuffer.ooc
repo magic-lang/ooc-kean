@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
+use ooc-base
+import math
 GraphicBufferFormat: enum {
 	Rgba8888 = 1
 	Yv12
@@ -31,6 +33,7 @@ GraphicBuffer: class {
 	_free: static Func (Pointer)
 	_lock: static Func (Pointer, Bool, Pointer*)
 	_unlock: static Func (Pointer)
+	_unpaddedWidth: static Int[]
 	_format: GraphicBufferFormat
 	format ::= this _format
 	_size: IntSize2D
@@ -69,5 +72,31 @@ GraphicBuffer: class {
 		This _free = free
 		This _lock = lock
 		This _unlock = unlock
+	}
+	setUnpaddedWidth: static func (array: Int*, count: Int) {
+		This _unpaddedWidth = Int[count] new()
+		for (i in 0..count) {
+			This _unpaddedWidth[i] = array[i]
+			DebugPrint print("Unpadded width: " + This _unpaddedWidth[i] toString())
+		}
+	}
+	isPadded: static func (width: Int) -> Bool {
+		result := true
+		for (i in 0..This _unpaddedWidth length) {
+			if (width == This _unpaddedWidth[i]) {
+				result = false
+				break
+			}
+		}
+		result
+	}
+	getUnpaddedWidth: func (width: Int) -> Int {
+		result := 0
+		for (i in 0..This _unpaddedWidth length) {
+			currentWidth := This _unpaddedWidth[i]
+			if (abs(result - width) > abs(currentWidth - width))
+				result = currentWidth
+		}
+		result
 	}
 }
