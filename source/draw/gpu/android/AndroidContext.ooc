@@ -111,7 +111,7 @@ AndroidContext: class extends OpenGLES3Context {
 	toRaster: func ~monochrome (gpuImage: GpuMonochrome) -> RasterImage {
 		result: RasterImage
 		if (GraphicBuffer isPadded(gpuImage size width)) {
-			DebugPrint print("Watning: Using slow glReadPixels due to padded width!")
+			DebugPrint print("Warning: Using slow glReadPixels due to padded width!")
 			result = super(gpuImage)
 		}
 		else {
