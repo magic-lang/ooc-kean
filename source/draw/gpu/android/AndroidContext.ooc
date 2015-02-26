@@ -113,7 +113,6 @@ AndroidContext: class extends OpenGLES3Context {
 	toRaster: func ~monochrome (gpuImage: GpuMonochrome) -> RasterImage {
 		result: RasterImage
 		if (!this isAligned(gpuImage size width)) {
-			DebugPrint print("Warning: Using slow glReadPixels due to padded width!")
 			result = super(gpuImage)
 		}
 		else {
@@ -129,7 +128,7 @@ AndroidContext: class extends OpenGLES3Context {
 		result := match(gpuImage) {
 			case (i : GpuYuv420Semiplanar) => this toRaster(gpuImage as GpuYuv420Semiplanar)
 			case (i : GpuMonochrome) => this toRaster(gpuImage as GpuMonochrome)
-			case => DebugPrint print("Warning: Using slow glReadPixels due to unoptimized format!"); super(gpuImage)
+			case => super(gpuImage)
 		}
 		result
 	}
