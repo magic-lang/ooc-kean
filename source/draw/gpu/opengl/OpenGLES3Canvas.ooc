@@ -85,16 +85,21 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		surface recycle()
 		this _unbind()
 	}
-	// TODO: These 3 functions create new closure instances every time they're called, and leak memory.
-	// Either free them afterwards, or create them once and re-use them.
+	// TODO: Clean these 3 functions up...
 	drawLines: func (pointList: VectorList<FloatPoint2D>) {
-		this drawSurface(func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawLines(pointList, transform) })
+		drawLinesFunc := func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawLines(pointList, transform) }
+		this drawSurface(drawLinesFunc)
+		(drawLinesFunc as Closure) dispose()
 	}
 	drawBox: func (box: FloatBox2D) {
-		this drawSurface(func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawBox(box, transform) })
+		drawBoxFunc := func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawBox(box, transform) }
+		this drawSurface(drawBoxFunc)
+		(drawBoxFunc as Closure) dispose()
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>) {
-		this drawSurface(func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawPoints(pointList, transform) })
+		drawPointsFunc := func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawPoints(pointList, transform) }
+		this drawSurface(drawPointsFunc)
+		(drawPointsFunc as Closure) dispose()
 	}
 	_setViewport: func {
 		viewport := Viewport new(this _size)
