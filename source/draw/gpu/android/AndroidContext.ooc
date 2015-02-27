@@ -20,6 +20,7 @@ use ooc-math
 use ooc-base
 import GpuPacker, GpuPackerBin, AndroidTexture, GraphicBuffer
 import threading/Thread
+import math
 AndroidContext: class extends OpenGLES3Context {
 	_packerBin: GpuPackerBin
 	_packMonochrome1080p: OpenGLES3MapPackMonochrome1080p
@@ -28,6 +29,7 @@ AndroidContext: class extends OpenGLES3Context {
 	_unpackUv1080p: OpenGLES3MapUnpackUv1080p
 	_unpackRgbaToMonochrome: OpenGLES3MapUnpackRgbaToMonochrome
 	_unpackRgbaToUv: OpenGLES3MapUnpackRgbaToUv
+	_unpaddedWidth: static Int[]
 	init: func {
 		super()
 		this _initialize()
@@ -109,11 +111,17 @@ AndroidContext: class extends OpenGLES3Context {
 		result
 	}
 	toRaster: func ~monochrome (gpuImage: GpuMonochrome) -> RasterImage {
-		yPacker := this createPacker(gpuImage size, 1)
-		this _packMonochrome imageWidth = gpuImage size width
-		yPacker pack(gpuImage, this _packMonochrome)
-		buffer := yPacker read()
-		result := RasterMonochrome new(buffer, gpuImage size, 64)
+		result: RasterImage
+		if (!this isAligned(gpuImage size width)) {
+			result = super(gpuImage)
+		}
+		else {
+			yPacker := this createPacker(gpuImage size, 1)
+			this _packMonochrome imageWidth = gpuImage size width
+			yPacker pack(gpuImage, this _packMonochrome)
+			buffer := yPacker read()
+			result = RasterMonochrome new(buffer, gpuImage size, 64)
+		}
 		result
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
@@ -151,6 +159,44 @@ AndroidContext: class extends OpenGLES3Context {
 		target
 	}
 
+	alignWidth: func (width: Int, align := AlignWidth Nearest) -> Int {
+		result := 0
+		match(align) {
+			case AlignWidth Nearest => {
+				for (i in 0..This _unpaddedWidth length) {
+					currentWidth := This _unpaddedWidth[i]
+					if (abs(result - width) > abs(currentWidth - width))
+						result = currentWidth
+				}
+			}
+			case AlignWidth Floor => {
+				for (i in 0..This _unpaddedWidth length) {
+					currentWidth := This _unpaddedWidth[i]
+					if (abs(result - width) > abs(currentWidth - width) && currentWidth <= width)
+						result = currentWidth
+				}
+			}
+			case AlignWidth Ceiling => {
+				for (i in 0..This _unpaddedWidth length) {
+					currentWidth := This _unpaddedWidth[i]
+					if (abs(result - width) > abs(currentWidth - width) && currentWidth >= width)
+						result = currentWidth
+				}
+			}
+		}
+		result
+	}
+	isAligned: func (width: Int) -> Bool {
+		result := false
+		for (i in 0..This _unpaddedWidth length) {
+			if (width == This _unpaddedWidth[i]) {
+				result = true
+				break
+			}
+		}
+		result
+	}
+
 }
 
 AndroidContextManager: class extends GpuContextManager {
@@ -158,7 +204,8 @@ AndroidContextManager: class extends GpuContextManager {
 	_sharedContexts: Bool
 	_mutex: Mutex
 	currentContext: AndroidContext { get { this _getContext() as AndroidContext } }
-	init: func (contexts: Int, sharedContexts := false) {
+	init: func (contexts: Int, unpaddedWidth: Int[], sharedContexts := false) {
+		AndroidContext _unpaddedWidth = unpaddedWidth
 		super(contexts)
 		this _sharedContexts = sharedContexts
 		this _mutex = Mutex new()
@@ -184,4 +231,6 @@ AndroidContextManager: class extends GpuContextManager {
 	unpackBgraToYuv420Semiplanar: func (source: GpuBgra, targetSize: IntSize2D) -> GpuYuv420Semiplanar {
 		this currentContext unpackBgraToYuv420Semiplanar(source, targetSize)
 	}
+	alignWidth: func (width: Int, align := AlignWidth Nearest) -> Int { this currentContext alignWidth(width, align) }
+	isAligned: func (width: Int) -> Bool { this currentContext isAligned(width) }
 }
