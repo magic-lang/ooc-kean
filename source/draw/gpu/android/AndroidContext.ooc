@@ -109,17 +109,12 @@ AndroidContext: class extends OpenGLES3Context {
 		result
 	}
 	toRaster: func ~monochrome (gpuImage: GpuMonochrome) -> RasterImage {
-		//TODO: Check if unpadded resolution
-		if (gpuImage size width == 512) { // Hard coded for testing
-			yPacker := this createPacker(gpuImage size, 1)
-			this _packMonochrome imageWidth = gpuImage size width
-			yPacker pack(gpuImage, this _packMonochrome)
-			buffer := yPacker read()
-			result := RasterMonochrome new(buffer, gpuImage size, 64)
-			result
-		} else {
-			super(gpuImage)
-		}
+		yPacker := this createPacker(gpuImage size, 1)
+		this _packMonochrome imageWidth = gpuImage size width
+		yPacker pack(gpuImage, this _packMonochrome)
+		buffer := yPacker read()
+		result := RasterMonochrome new(buffer, gpuImage size, 64)
+		result
 	}
 	toRaster: func (gpuImage: GpuImage) -> RasterImage {
 		result := match(gpuImage) {
