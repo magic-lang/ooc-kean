@@ -45,9 +45,6 @@ GpuImage: abstract class extends Image {
 	recyclable ::= this _recyclable
 	init: func (size: IntSize2D, =_channels, =_context) { super(size) }
 	free: override func {
-		this recycle()
-	}
-	dispose: virtual func {
 		if (this _canvas != null) {
 			this _canvas free()
 			this _canvas = null

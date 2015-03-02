@@ -31,7 +31,7 @@ OpenGLES3Surface: class extends GpuSurface {
 	recycle: func {
 		this _context recycle(this)
 	}
-	free: func {
+	free: override func {
 		this _quad free()
 		super()
 	}

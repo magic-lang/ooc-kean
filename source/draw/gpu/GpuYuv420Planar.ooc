@@ -31,7 +31,7 @@ GpuYuv420Planar: abstract class extends GpuPlanar {
 		this _u referenceCount increase()
 		this _v referenceCount increase()
 	}
-	free: func {
+	free: override func {
 		this y referenceCount decrease()
 		this u referenceCount decrease()
 		this v referenceCount decrease()

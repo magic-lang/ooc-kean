@@ -28,7 +28,7 @@ OpenGLES3Texture: class extends GpuTexture {
 		else
 			this backend setMagFilter(InterpolationType Nearest)
 	}
-	free: func {
+	free: override func {
 		this backend free()
 		super()
 	}

@@ -26,7 +26,7 @@ Container: class <T> {
 	init: func(=content)
 	init: func ~withBlockFree(=content, blockFree: Bool) { this blockFree = blockFree }
 	init: func ~novalue
-	free: func {
+	free: override func {
 		if (!this blockFree && T inheritsFrom?(Object) && this content != null) {
 			obj := this content as Object
 			obj free()

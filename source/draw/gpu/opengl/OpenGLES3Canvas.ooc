@@ -30,7 +30,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	init: func (image: GpuImage, context: GpuContext) {
 		super(image, context)
 	}
-	free: func {
+	free: override func {
 		this _renderTarget free()
 		super()
 	}
@@ -180,7 +180,7 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 
 OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 	target ::= this _target as GpuYuv420Semiplanar
-	
+
 	init: func (image: GpuImage, context: GpuContext) { super(image, context) }
 	onRecycle: func
 	_draw: func (image: OpenGLES3Yuv420Semiplanar) {
