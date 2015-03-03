@@ -1,13 +1,10 @@
 before_script:
-  - sudo apt-get update
-  - sudo apt-get -y -qq install curl make libgc-dev libgles2-mesa-dev dlocate binutils-dev wget
-  - sudo apt-get -y qq install curl
-  - sudo apt-get -y qq install make
-  - sudo apt-get -y qq install libgc-dev 
-  - sudo apt-get -y qq install libgles2-mesa-dev
-  - sudo apt-get -y qq install dlocate
-  - sudo apt-get -y qq install binutils-dev
-  - sudo apt-get -y qq install wget
+  - sudo apt-get -y -qq install make
+  - sudo apt-get -y -qq install libgc-dev 
+  - sudo apt-get -y -qq install libgles2-mesa-dev
+  - sudo apt-get -y -qq install dlocate
+  - sudo apt-get -y -qq install binutils-dev
+  - sudo apt-get -y -qq install wget
   - tmp="$(wget -O - https://github.com/cogneco/rock/releases/latest | grep -o '\<download/rock_.*deb\>')" 
   - wget https://github.com/cogneco/rock/releases/$tmp
   - sudo dpkg --install ${tmp##*/}
