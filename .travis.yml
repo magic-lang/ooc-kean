@@ -1,19 +1,26 @@
 before_script:
   - sudo apt-get update
-  - sudo apt-get -y -qq install curl make libgc-dev libgles2-mesa-dev dlocate binutils-dev 
+  - sudo apt-get -y -qq install curl make libgc-dev libgles2-mesa-dev dlocate binutils-dev wget
+  - sudo apt-get -y qq install curl
+  - sudo apt-get -y qq install make
+  - sudo apt-get -y qq install libgc-dev 
+  - sudo apt-get -y qq install libgles2-mesa-dev
+  - sudo apt-get -y qq install dlocate
+  - sudo apt-get -y qq install binutils-dev
+  - sudo apt-get -y qq install wget
+  - tmp="$(wget -O - https://github.com/cogneco/rock/releases/latest | grep -o '\<download/rock_.*deb\>')" 
+  - wget https://github.com/cogneco/rock/releases/$tmp
+  - sudo dpkg --install ${tmp##*/}
   - ls /usr/include
   - export PATH=$PATH:$PWD/tools/rock/bin:$PWD/tools/sam
   - mkdir tools
-  - export OOC_LIBS=$PWD/tools 
+  - export OOC_LIBS=$PWD/..
   - # otherwise, PWD/sdk.use will be used instead of PWD/tools/rock/sdk.use and rock will fail to compile.
   - # rock will look for .use files not in OOC_LIBS, but in subfolders to OOC_LIBS - in this case, OOC_LIBS/rock.
-  - (cd tools && git clone --depth=1 git://github.com/cogneco/rock.git -b release-0.5)
   - (cd tools && git clone --depth=1 git://github.com/cogneco/sam.git)
-  - (cd tools/rock && make -s rescue && cd extensions && make)
   - (cd tools/sam && rock -v)
 
 script:
-  - export OOC_LIBS=$PWD/..
   - # because now we want to use ooc-kean/sdk.use, i.e. PWD/sdk.use.
   - cd test 
   - rock -r --gc=off -lpthread -O2 base/ProfilingTest.ooc
