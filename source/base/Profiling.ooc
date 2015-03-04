@@ -105,6 +105,11 @@ Profiling: class {
 		}
 		output
 	}
-	reset: static func { This _logList clear() }
+	reset: func { this _timer reset() }
+	resetAll: static func {
+		for (i in 0..This _logList count) {
+			This _logList[i] reset()
+		}
+	}
 	dispose: static func { This _logList free() }
 }
