@@ -21,6 +21,7 @@ use ooc-opengl
 use ooc-base
 
 import X11/X11Window
+import X11/include/x11
 
 Window: class extends OpenGLES3Context {
 	_native: NativeWindow
@@ -41,6 +42,10 @@ Window: class extends OpenGLES3Context {
 		this _yuvPlanarToBgra = OpenGLES3MapYuvPlanarToBgra new(this)
 		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new(this)
 		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgra new(this, true)
+		XSelectInput(this _native display, this _native _backend, KeyPressMask | KeyReleaseMask)
+		temp: Bool
+		detectable := XkbSetDetectableAutoRepeat(this _native display, true, temp&)
+		println(detectable toString())
 	}
 	free: override func {
 		this _bgrToBgra free()
