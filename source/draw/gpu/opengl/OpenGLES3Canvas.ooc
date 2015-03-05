@@ -86,17 +86,17 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _unbind()
 	}
 	// TODO: Clean these 3 functions up...
-	drawLines: func (pointList: VectorList<FloatPoint2D>) {
+	drawLines: override func (pointList: VectorList<FloatPoint2D>) {
 		drawLinesFunc := func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawLines(pointList, transform) }
 		this drawSurface(drawLinesFunc)
 		(drawLinesFunc as Closure) dispose()
 	}
-	drawBox: func (box: FloatBox2D) {
+	drawBox: override func (box: FloatBox2D) {
 		drawBoxFunc := func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawBox(box, transform) }
 		this drawSurface(drawBoxFunc)
 		(drawBoxFunc as Closure) dispose()
 	}
-	drawPoints: func (pointList: VectorList<FloatPoint2D>) {
+	drawPoints: override func (pointList: VectorList<FloatPoint2D>) {
 		drawPointsFunc := func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawPoints(pointList, transform) }
 		this drawSurface(drawPointsFunc)
 		(drawPointsFunc as Closure) dispose()

@@ -46,4 +46,13 @@ Timer: class {
 		this _average = this _total / this _count
 		this _result
 	}
+	reset: func {
+		this _startTime = 0
+		this _endTime = 0
+		this _result = 0
+		this _total = 0
+		this _count = 0
+		this _min = 0
+		this _average = 0
+	}
 }
