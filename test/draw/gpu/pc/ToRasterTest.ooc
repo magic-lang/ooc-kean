@@ -11,7 +11,7 @@ window := Window create(screenSize, "GL Test")
 rasterImageMonochrome := RasterMonochrome open("../test/draw/gpu/pc/input/Space.png")
 rasterBgra := RasterBgra open("../test/draw/gpu/pc/input/Space.png")
 rasterYuvSemiplanar := RasterYuv420Semiplanar open("../test/draw/gpu/pc/input/Space.png")
-gpuImage := window createGpuImage(rasterYuvSemiplanar)
+//gpuImage := window createGpuImage(rasterYuvSemiplanar)
 /*
 packed := window createBgra(IntSize2D new(gpuImage size width / 4, gpuImage size height))
 packMap := window getMap(gpuImage, GpuMapType pack) as OpenGLES3MapPackMonochrome
