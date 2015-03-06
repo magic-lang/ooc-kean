@@ -52,7 +52,7 @@ for (i in 0..10000) {}
 profiling stop()
 
 testfunction()
-Profiling reset()
+Profiling resetAll()
 Profiling printResults()
 
 /*

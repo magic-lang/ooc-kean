@@ -15,6 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*
 use ooc-unit
 use ooc-collections
 
@@ -76,4 +77,4 @@ SortedVectorTest: class extends Fixture {
 		first > second
 	}
 }
-SortedVectorTest new() run()
+SortedVectorTest new() run()*/
