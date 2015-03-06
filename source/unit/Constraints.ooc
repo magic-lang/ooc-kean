@@ -31,7 +31,7 @@ Modifier: abstract class {
 	verify: func (value: Object) -> Bool {
 		this verify(value, null)
 	}
-	test: func (value: Object) -> Bool {
+	test: virtual func (value: Object) -> Bool {
 		this testChild(value)
 	}
 	testChild: func (value: Object) -> Bool {
@@ -45,35 +45,35 @@ Constraint: abstract class extends Modifier {
 TrueConstraint: class extends Constraint {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
-	test: func (value: Object) -> Bool {
+	test: override func (value: Object) -> Bool {
 		value as Cell<Bool> get()
 	}
 }
 FalseConstraint: class extends Constraint {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
-	test: func (value: Object) -> Bool {
+	test: override func (value: Object) -> Bool {
 		!value as Cell<Bool> get()
 	}
 }
 NullConstraint: class extends Constraint {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
-	test: func (value: Object) -> Bool {
+	test: override func (value: Object) -> Bool {
 		value == null
 	}
 }
 EmptyConstraint: class extends Constraint {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
-	test: func (value: Object) -> Bool {
+	test: override func (value: Object) -> Bool {
 		value != null && value instanceOf?(String) && value as String empty?()
 	}
 }
 NotModifier: class extends Modifier {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
-	test: func (value: Object) -> Bool {
+	test: override func (value: Object) -> Bool {
 		!(this testChild(value))
 	}
 	true ::= TrueConstraint new(this)
@@ -126,7 +126,7 @@ CompareConstraint: class extends Constraint {
 	init: func (parent: Modifier, =correct, =comparer) {
 		super(parent)
 	}
-	test: func (value: Object) -> Bool {
+	test: override func (value: Object) -> Bool {
 		this comparer(value, this correct)
 	}
 }
@@ -144,7 +144,7 @@ CompareWithinConstraint: class extends CompareConstraint {
 		f := func (value, correct: Object) -> Bool { (value as Cell<Double> get() - correct as Cell<Double> get()) abs() < precision }
 		CompareConstraint new(this, this correct, f)
 	}
-	test: func (value: Object) -> Bool {
+	test: override func (value: Object) -> Bool {
 		comparer := this comparer
 		comparer(value, this correct)
 	}

@@ -59,6 +59,6 @@ for (i in 0..1) {
 	"y buffer buffer RC: #{ybbr _count}" println()
 	"uv RC: #{uvr _count}" println()
 	"uv buffer RC: #{uvbr _count}" println()
-	"uv buffer buffer RC: #{uvbbr _count}" println()
-}*/
+	"uv buffer buffer RC: #{uvbbr _count}" println()*/
+}
 ByteBuffer clean()
