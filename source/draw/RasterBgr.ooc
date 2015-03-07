@@ -120,7 +120,7 @@ RasterBgr: class extends RasterPacked {
 		result
 	}
 	save: func (filename: String) -> Int {
-		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this buffer size)
+		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this size width * this bytesPerPixel)
 	}
 	convertFrom: static func(original: RasterImage) -> This {
 		result := This new(original)
