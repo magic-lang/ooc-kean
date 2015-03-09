@@ -33,6 +33,11 @@ ConditionUnix: class {
     result := pthread_cond_broadcast(this _backend)
     result == 0
   }
+  free: override func {
+    this destroy()
+    gc_free(this _backend)
+    super()
+  }
   destroy: func -> Bool {
     result := pthread_cond_destroy(this _backend)
     result == 0

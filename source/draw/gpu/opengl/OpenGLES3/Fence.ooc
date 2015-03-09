@@ -58,10 +58,10 @@ Fence: class {
 		this _syncCondition broadcast()
 		glFlush()
 	}
-	free: func {
+	free: override func {
 		glDeleteSync(this _backend)
 		this _mutex destroy()
-		this _syncCondition destroy()
+		this _syncCondition free()
 		super()
 	}
 
