@@ -81,7 +81,7 @@ GraphicBuffer: class {
 		This _unpaddedWidth = unpaddedWidth
 	}
 	alignWidth: static func (width: Int, align := AlignWidth Nearest) -> Int {
-		result := 0
+		result := This _unpaddedWidth[0]
 		match(align) {
 			case AlignWidth Nearest => {
 				for (i in 0..This _unpaddedWidth length) {
@@ -98,6 +98,7 @@ GraphicBuffer: class {
 				}
 			}
 			case AlignWidth Ceiling => {
+				result = This _unpaddedWidth[This _unpaddedWidth length-1]
 				for (i in 0..This _unpaddedWidth length) {
 					currentWidth := This _unpaddedWidth[i]
 					if (abs(result - width) > abs(currentWidth - width) && currentWidth >= width)
