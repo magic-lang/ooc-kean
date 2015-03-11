@@ -10,58 +10,57 @@ Shape: enum {
 }
 
 ScatterPlotData2D: class extends PlotData2D {
-	shape:= Shape CIRCLE
+	shape := Shape CIRCLE
 	scalingRelativeLineWidth:= 3.0f
 
 	init: func ~default() {
 		super()
 	}
-	init: func ~dataserie(dataSerie: VectorList<FloatPoint2D>) {
-		super(dataSerie)
+	init: func ~dataserie(dataSeries: VectorList<FloatPoint2D>) {
+		super(dataSeries)
 	}
-	init: func ~label(dataSerie: VectorList<FloatPoint2D>, label: String) {
-		super(dataSerie, label)
+	init: func ~label(dataSeries: VectorList<FloatPoint2D>, label: String) {
+		super(dataSeries, label)
 	}
-	init: func ~color(dataSerie: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
-		super(dataSerie, colorBgra)
+	init: func ~color(dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
+		super(dataSeries, colorBgra)
 	}
-	init: func ~labelColor(dataSerie: VectorList<FloatPoint2D>, label: String, colorBgra: ColorBgra) {
-		super(dataSerie,label,colorBgra)
+	init: func ~labelColor(dataSeries: VectorList<FloatPoint2D>, label: String, colorBgra: ColorBgra) {
+		super(dataSeries,label,colorBgra)
 	}
 
-	getSVG: func(scaling: FloatPoint2D) -> String {
-		result:= ""
-		if (!this dataSerie empty()) {
-			for(i in 0..this dataSerie count) {
+	getSVG: func (scaling: FloatPoint2D) -> String {
+		result := ""
+		result += ""
+		if (!this dataSeries empty()) {
+			for (i in 0..this dataSeries count) {
 				match (this shape) {
 
 					case Shape CIRCLE =>
-						r:= this scalingRelativeLineWidth / 2.0f * this lineWidth
-						result += Shapes circle(scaling x * this dataSerie[i] x, - scaling y * this dataSerie[i] y, r, this opacity, this color)
+						r := this scalingRelativeLineWidth / 2.0f * this lineWidth
+						result = result & Shapes circle(scaling x * this dataSeries[i] x, - scaling y * this dataSeries[i] y, r, this opacity, this color)
 
 					case Shape SQUARE =>
-						x:= scaling x * this dataSerie[i] x - this scalingRelativeLineWidth / 2.0f * this lineWidth
-						y:= -scaling y * this dataSerie[i] y - this scalingRelativeLineWidth / 2.0f * this lineWidth
-						width:= this scalingRelativeLineWidth * this lineWidth
-						result += Shapes rect(x, y, width, width, this opacity, this color)
+						x := scaling x * this dataSeries[i] x - this scalingRelativeLineWidth / 2.0f * this lineWidth
+						y := -scaling y * this dataSeries[i] y - this scalingRelativeLineWidth / 2.0f * this lineWidth
+						width := this scalingRelativeLineWidth * this lineWidth
+						result = result & Shapes rect(x, y, width, width, this opacity, this color)
 				}
-
 			}
 		}
 		result
 	}
 
-	getSvgLegend: func(legendCount: Int) -> String {
-		boundaryOffset:=5
-		symbol:=""
+	getSvgLegend: func (legendCount: Int) -> String {
+		boundaryOffset := 5
+		symbol := ""
 		match (this shape) {
 			case Shape CIRCLE =>
 				symbol = "•"
 			case Shape SQUARE =>
 				symbol = "■"
 		}
-		result:="<text id='" + this label + "' x='" + boundaryOffset + "' y='" + (this fontSize * legendCount + boundaryOffset) toString() + "' font-size='" + this fontSize toString() + "' fill='" + this color + "' fill-opacity='" + this opacity toString() + "'> " + symbol + "	" + this label + "</text>"
+		result := "<text id='" clone() & this label clone() & "' x='" clone() & boundaryOffset toString() & "' y='" clone() & (this fontSize * legendCount + boundaryOffset) toString() & "' font-size='" clone() & this fontSize toString() & "' fill='" clone() & this color clone() & "' fill-opacity='" clone() & this opacity toString() & "'> " clone() & symbol clone() & "	" clone() & this label clone() & "</text>\n" clone()
 		result
 	}
-
 }

@@ -8,36 +8,36 @@ LinePlotData2D: class extends PlotData2D {
 	init: func ~default() {
 		super()
 	}
-	init: func ~dataserie(dataSerie: VectorList<FloatPoint2D>) {
-		super(dataSerie)
+	init: func ~dataserie(dataSeries: VectorList<FloatPoint2D>) {
+		super(dataSeries)
 	}
-	init: func ~label(dataSerie: VectorList<FloatPoint2D>, label: String) {
-		super(dataSerie, label)
-	}
-
-	init: func ~color(dataSerie: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
-		super(dataSerie, colorBgra)
+	init: func ~label(dataSeries: VectorList<FloatPoint2D>, label: String) {
+		super(dataSeries, label)
 	}
 
-	init: func ~labelColor(dataSerie: VectorList<FloatPoint2D>, label: String, colorBgra: ColorBgra) {
-		super(dataSerie,label,colorBgra)
+	init: func ~color(dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
+		super(dataSeries, colorBgra)
 	}
 
-	getSVG: func(scaling: FloatPoint2D) -> String {
-		result:= ""
-		if (!this dataSerie empty()) {
-			result += "<path stroke='" + this color + "' stroke-opacity='" + this opacity toString() + "' fill='none' stroke-width='" + this lineWidth toString() + "' d='M " + (scaling x * this dataSerie[0] x) toString() + " " + (- scaling y * this dataSerie[0] y) toString() + " L "
-			for (j in 1..this dataSerie count) {
-				result += (scaling x * this dataSerie[j] x) toString() + " " + (- scaling y * this dataSerie[j] y) toString() + " "
+	init: func ~labelColor(dataSeries: VectorList<FloatPoint2D>, label: String, colorBgra: ColorBgra) {
+		super(dataSeries,label,colorBgra)
+	}
+
+	getSVG: func (scaling: FloatPoint2D) -> String {
+		result := ""
+		if (!this dataSeries empty()) {
+			result = result & "<path stroke='" clone() & this color clone() & "' stroke-opacity='" clone() & this opacity toString() & "' fill='none' stroke-width='" clone() & this lineWidth toString() & "' d='M " clone() & (scaling x * this dataSeries[0] x) toString() & " " clone() & (- scaling y * this dataSeries[0] y) toString() & " L " clone()
+			for (j in 1..this dataSeries count) {
+				result = result & (scaling x * this dataSeries[j] x) toString() & " " clone() & (- scaling y * this dataSeries[j] y) toString() & " " clone()
 			}
-			result += "'/>"
+			result = result & "'/>\n" clone()
 		}
 		result
 	}
 
-	getSvgLegend: func(legendCount: Int) -> String {
-		boundaryOffset:=5
-		result:= "<text id='" + this label + "' x='" + boundaryOffset + "' y='" + (this fontSize * legendCount + boundaryOffset) toString() + "' font-size='" + this fontSize toString() + "' fill='" + this color + "' fill-opacity='" + this opacity toString() + "'> ▬ " + this label + "</text>"
+	getSvgLegend: func (legendCount: Int) -> String {
+		boundaryOffset := 5
+		result := "<text id='" clone() & this label clone() & "' x='" clone() & boundaryOffset toString() & "' y='" clone() & (this fontSize * legendCount + boundaryOffset) toString() & "' font-size='" clone() & this fontSize toString() & "' fill='" clone() & this color clone() & "' fill-opacity='" clone() & this opacity toString() & "'> ▬ " clone() & this label clone() & "</text>\n" clone()
 		result
 	}
 }

@@ -6,17 +6,14 @@ use ooc-draw
 import math
 import math/Random
 
-colorTest:= ColorBgra new(100,200,250,255)
-colorTest1:= ColorBgra new(255,255,39,255)
-
-log:= VectorList<FloatPoint2D> new()
-sin:= VectorList<FloatPoint2D> new()
-cos:= VectorList<FloatPoint2D> new()
-sinMinusCos:= VectorList<FloatPoint2D> new()
-unitCircle:= VectorList<FloatPoint2D> new()
-scatter:= VectorList<FloatPoint2D> new()
-parabola:= VectorList<FloatPoint2D> new()
-sparseParabola:= VectorList<FloatPoint2D> new()
+log := VectorList<FloatPoint2D> new()
+sin := VectorList<FloatPoint2D> new()
+cos := VectorList<FloatPoint2D> new()
+sinMinusCos := VectorList<FloatPoint2D> new()
+unitCircle := VectorList<FloatPoint2D> new()
+scatter := VectorList<FloatPoint2D> new()
+parabola := VectorList<FloatPoint2D> new()
+sparseParabola := VectorList<FloatPoint2D> new()
 for (i in -200..201) {
 	log add(FloatPoint2D new((201 + i as Float) * 100, log((201 + i as Float)) * 100))
 	sin add(FloatPoint2D new(i as Float / 20, sin(i as Float / 20)))
@@ -33,26 +30,26 @@ for (i in -200..201) {
 }
 
 // Simplest use-case with line plot
-logData:= LinePlotData2D new(log, "log(x)")
-logPlot:= SVGPlot new(logData, "Simplest use-case with line plot")
+logData := LinePlotData2D new(log, "log(x)")
+logPlot := SVGPlot new(logData, "Simplest use-case with line plot")
 
 // Simplest use-case with scatter plot
-scatterData:= ScatterPlotData2D new(scatter, "Random numbers")
-scatterPlot:= SVGPlot new(scatterData, "Simplest use-case with scatter plot")
+scatterData := ScatterPlotData2D new(scatter, "Random numbers")
+scatterPlot := SVGPlot new(scatterData, "Simplest use-case with scatter plot")
 
 // Multiple shapes in one plot
-sinData:= LinePlotData2D new(sin, "sin(x)")
-cosData:= LinePlotData2D new(cos, "cos(x)")
-sinMinusCosData:= LinePlotData2D new(sinMinusCos, "sin(x) - cos(x)")
-trigonometryPlot:= SVGPlot new(sinData, "Multiple shapes in one plot")
+sinData := LinePlotData2D new(sin, "sin(x)")
+cosData := LinePlotData2D new(cos, "cos(x)")
+sinMinusCosData := LinePlotData2D new(sinMinusCos, "sin(x) - cos(x)")
+trigonometryPlot := SVGPlot new(sinData, "Multiple shapes in one plot")
 trigonometryPlot addDataset(cosData)
 trigonometryPlot addDataset(sinMinusCosData)
 trigonometryPlot xAxis label = "x"
 trigonometryPlot yAxis label = "y"
 
 // Adjustment of axis endpoints
-unitCircleData:= LinePlotData2D new(unitCircle, "Unit circle")
-unitCirclePlot:= SVGPlot new(unitCircleData, "Unit circle plot with set axis endpoints")
+unitCircleData := LinePlotData2D new(unitCircle, "Unit circle")
+unitCirclePlot := SVGPlot new(unitCircleData, "Unit circle plot with set axis endpoints")
 unitCirclePlot xAxis label = "x"
 unitCirclePlot yAxis label = "y"
 unitCirclePlot xAxis min = -1.5
@@ -61,21 +58,21 @@ unitCirclePlot yAxis min = -1.5
 unitCirclePlot yAxis max = 1.5
 
 // Symmetric plot
-symmetricUnitCircleData:= LinePlotData2D new(unitCircle, "Unit circle")
-symmetricUnitCirclePlot:= SVGPlot new(unitCircleData, "Unit circle plot with symmetic set to true")
+symmetricUnitCircleData := LinePlotData2D new(unitCircle, "Unit circle")
+symmetricUnitCirclePlot := SVGPlot new(unitCircleData, "Unit circle plot with symmetic set to true")
 symmetricUnitCirclePlot xAxis label = "x"
 symmetricUnitCirclePlot yAxis label = "y"
 symmetricUnitCirclePlot symmetric = true
 
 // Plot that shows usage of various formatting options
-scatterParabolaData:= ScatterPlotData2D new(sparseParabola, "Temporary label")
+scatterParabolaData := ScatterPlotData2D new(sparseParabola, "Temporary label")
 scatterParabolaData shape = Shape SQUARE
 scatterParabolaData label = "" // label for the data object can be set
 scatterParabolaData lineWidth = 4 // line width can be set, defaults to 1 if not set
 scatterParabolaData colorBgra = ColorBgra new(255,0,0,150) // color can be specified, if not specified a color map will be used
-lineParabolaData:= LinePlotData2D new(parabola, "x²")
+lineParabolaData := LinePlotData2D new(parabola, "x²")
 lineParabolaData colorBgra = ColorBgra new(255,0,0,150)
-formatPlot:= SVGPlot new(scatterParabolaData, "temporary title")
+formatPlot := SVGPlot new(scatterParabolaData, "temporary title")
 formatPlot addDataset(lineParabolaData)
 formatPlot title = "Plot showing usage of various formatting options" // title can be set in this way
 formatPlot fontSize = 20 // defaults to 14 if not set
@@ -86,8 +83,8 @@ formatPlot xAxis gridOn = false // defaults to true, set to false if grid is not
 formatPlot xAxis roundAxisEndpoints = false // defaults to true, if set to false the axis endpoints will be equal to the data's endpoints
 
 // Write plots to file
-filename:= "example.svg"
-writer:= SVGWriter2D new(filename, logPlot)
+filename := "example.svg"
+writer := SVGWriter2D new(filename, logPlot)
 writer addPlot(scatterPlot)
 writer addPlot(trigonometryPlot)
 writer addPlot(unitCirclePlot)

@@ -14,7 +14,7 @@ SVGWriter2D: class {
 	height: Int { get set }
 	width: Int { get set }
 
-	init: func(=filename) {
+	init: func (=filename) {
 		this svgPlots = VectorList<SVGPlot> new()
 		this width = 1920
 		this height = 1080
@@ -28,24 +28,25 @@ SVGWriter2D: class {
 		this svgPlots = svgPlots
 	}
 
-	addPlot: func(svgPlot: SVGPlot) {
+	addPlot: func (svgPlot: SVGPlot) {
 		this svgPlots add(svgPlot)
 	}
 
-	write: func() {
-		output:= prepareOutput()
-		fileWriter:= FileWriter new(this filename, false)
+	write: func {
+		output := prepareOutput()
+		fileWriter := FileWriter new(this filename, false)
 		fileWriter write(output)
 		fileWriter close()
+		output free()
 	}
 
-	prepareOutput: func() -> String {
-		result:= "<?xml version='1.0' standalone='no'?>
+	prepareOutput: func -> String {
+		result := "<?xml version='1.0' standalone='no'?>\n
 <!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN'
 	'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
-	<svg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.1' width='" + this width toString() + "' height='" + this height toString() + "'>"
+	<svg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.1' width='" clone() & this width toString() & "' height='" clone() & this height toString() & "'>\n" clone()
 
-		result += "<rect desc='background' width='100%' height='100%' fill='white'/>"
+		result = result & "<rect desc='background' width='100%' height='100%' fill='white'/>\n" clone()
 
 		if (!this svgPlots empty()) {
 			numPlotsX: Int
@@ -59,20 +60,20 @@ SVGWriter2D: class {
 			}
 
 			numPlotsY = Int modulo(this svgPlots count, numPlotsX) ? 1 + this svgPlots count / numPlotsX : this svgPlots count / numPlotsX
-			plotSize:= FloatPoint2D new(this width / numPlotsX, this height / numPlotsY)
-			position:= FloatPoint2D new()
+			plotSize := FloatPoint2D new(this width / numPlotsX, this height / numPlotsY)
+			position := FloatPoint2D new()
 
 			for (i in 0..this svgPlots count) {
 				position x = plotSize x * Int modulo(i, numPlotsX)
 				position y = plotSize y * (i / numPlotsX)
 
-				result += "<svg desc='Plot " + (i + 1) toString() + "' x='" + position x toString() + "' y='" + position y toString() + "' width='" + plotSize x toString() + "' height='" + plotSize y toString() + "'>"
-				result += svgPlots[i] getSVG(plotSize)
-				result += "</svg>"
+				result = result & "<svg desc='Plot " clone() & (i + 1) toString() & "' x='" clone() & position x toString() & "' y='" clone() & position y toString() & "' width='" clone() & plotSize x toString() & "' height='" clone() & plotSize y toString() & "'>\n" clone()
+				result = result & svgPlots[i] getSVG(plotSize)
+				result = result & "</svg>\n" clone()
 			}
 		}
 
-		result += "</svg>"
+		result = result & "</svg>\n" clone()
 		result
 	}
 }
