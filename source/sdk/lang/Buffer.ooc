@@ -66,7 +66,7 @@ Buffer: class extends Iterable<Char> {
     }
     
     __destroy__: func {
-    	if (this data != null)
+    	if (this data != null && this capacity > 0)
 	    	gc_free(this data)
     }
 
