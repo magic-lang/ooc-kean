@@ -40,8 +40,8 @@ FloatPoint2D: cover {
 	round: func -> This { This new(this x round(), this y round()) }
 	ceiling: func -> This { This new(this x ceil(), this y ceil()) }
 	floor: func -> This { This new(this x floor(), this y floor()) }
-	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y)) }
-	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y)) }
+	minimum: func (ceiling: This) -> This { This new(Float minimum(this x, ceiling x), Float minimum(this y, ceiling y)) }
+	maximum: func (floor: This) -> This { This new(Float maximum(this x, floor x), Float maximum(this y, floor y)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
 	operator + (other: FloatSize2D) -> This { This new(this x + other width, this y + other height) }

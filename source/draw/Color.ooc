@@ -173,6 +173,10 @@ ColorBgr: cover {
 	operator != (other: ColorYuv) -> Bool { !this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 	operator != (other: ColorBgra) -> Bool { !this equals(other) }
+	svgRGBToString: func() -> String {
+		result:= this red toString() + "," + this green toString() + "," + this blue toString()
+		result
+	}
 }
 
 ColorBgra: cover {
@@ -214,6 +218,14 @@ ColorBgra: cover {
 	operator != (other: ColorYuv) -> Bool { !this equals(other) }
 	operator != (other: ColorBgr) -> Bool { !this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
+	svgRGBToString: func() -> String {
+		result:= "rgb(" + this bgr svgRGBToString() + ")"
+		result
+	}
+	svgRGBAlpha: func() -> Int {
+		result:= this alpha
+		result
+	}
 }
 
 ColorConvert: cover {
