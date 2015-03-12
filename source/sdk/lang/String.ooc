@@ -348,6 +348,18 @@ operator & (left, right: String) -> String {
 	result
 }
 
+operator >> (left, right: String) -> String {
+	result := left + right
+	left free()
+	result
+}
+
+operator << (left, right: String) -> String {
+	result := left + right
+	right free()
+	result
+}
+
 operator + (left: String, right: CString) -> String {
     left append(right)
 }
