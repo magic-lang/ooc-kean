@@ -174,7 +174,7 @@ ColorBgr: cover {
 	operator != (other: This) -> Bool { !this equals(other) }
 	operator != (other: ColorBgra) -> Bool { !this equals(other) }
 	svgRGBToString: func() -> String {
-		result:= this red toString() & "," clone() & this green toString() & "," clone() & this blue toString()
+		result := this red toString() & "," clone() & this green toString() & "," clone() & this blue toString()
 		result
 	}
 }
@@ -219,11 +219,11 @@ ColorBgra: cover {
 	operator != (other: ColorBgr) -> Bool { !this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 	svgRGBToString: func() -> String {
-		result:= "rgb(" clone() & this bgr svgRGBToString() & ")" clone()
+		result := "rgb(" clone() & this bgr svgRGBToString() & ")" clone()
 		result
 	}
 	svgRGBAlpha: func() -> Int {
-		result:= this alpha
+		result := this alpha
 		result
 	}
 }

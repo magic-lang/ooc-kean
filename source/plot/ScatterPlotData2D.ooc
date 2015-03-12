@@ -16,17 +16,13 @@ ScatterPlotData2D: class extends PlotData2D {
 	init: func ~default() {
 		super()
 	}
-	init: func ~dataserie(dataSeries: VectorList<FloatPoint2D>) {
-		super(dataSeries)
+
+	init: func ~dataSeries(dataSeries: VectorList<FloatPoint2D>, label := "", colorBgra := ColorBgra new()) {
+			super(dataSeries, label, colorBgra)
 	}
-	init: func ~label(dataSeries: VectorList<FloatPoint2D>, label: String) {
-		super(dataSeries, label)
-	}
+
 	init: func ~color(dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
-		super(dataSeries, colorBgra)
-	}
-	init: func ~labelColor(dataSeries: VectorList<FloatPoint2D>, label: String, colorBgra: ColorBgra) {
-		super(dataSeries, label, colorBgra)
+			super(dataSeries, "", colorBgra)
 	}
 
 	getSVG: func (scaling: FloatPoint2D) -> String {

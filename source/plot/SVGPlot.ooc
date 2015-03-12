@@ -17,38 +17,24 @@ SVGPlot: class {
 	plotAreaPercentage: Float
 	symmetric: Bool
 
-
 	init: func {
+		this init(VectorList<PlotData2D> new())
+	}
+
+	init: func ~datasets(=datasets, title := "") {
+		this title = title
 		this plotAreaPercentage = 0.8f
-		this title=""
 		this fontSize = 14
 		this symmetric = false
 		this xAxis = Axis new(Orientation Horizontal)
 		this yAxis = Axis new(Orientation Vertical)
-		if (this datasets == null)
-			this datasets = VectorList<PlotData2D> new()
 		this setAxesMinMax()
 	}
 
-	init: func ~dataset(dataset: PlotData2D) {
-		this init(dataset, "")
-	}
-
-	init: func ~datasets(datasets: VectorList<PlotData2D>) {
-		this init(datasets, "")
-	}
-
-	init: func ~datasetTitle(dataset: PlotData2D, title: String) {
-		this datasets = VectorList<PlotData2D> new()
-		this datasets add(dataset)
-		this init()
-		this title = title
-	}
-
-	init: func ~datasetsTitle(datasets: VectorList<PlotData2D>, title: String) {
-		this datasets = datasets
-		this init()
-		this title = title
+	init: func ~dataset(dataset: PlotData2D, title := "") {
+		datasets := VectorList<PlotData2D> new()
+		datasets add(dataset)
+		this init(datasets, title)
 	}
 
 	addDataset: func (dataset: PlotData2D) {

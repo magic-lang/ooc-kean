@@ -42,23 +42,21 @@ SVGWriter2D: class {
 	}
 
 	prepareOutput: func -> String {
-		result := "<?xml version='1.0' standalone='no'?>\n
-<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN'
-	'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
-	<svg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.1' width='" clone() & this width toString() & "' height='" clone() & this height toString() & "'>\n" clone()
+		result := "<?xml version='1.0' standalone='no'?>\n"
+		result = result & "<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>\n" clone()
+		result = result & "<svg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.1' width='" clone() & this width toString() & "' height='" clone() & this height toString() & "'>\n" clone()
 
 		result = result & "<rect desc='background' width='100%' height='100%' fill='white'/>\n" clone()
 
 		if (!this svgPlots empty()) {
 			numPlotsX: Int
 			numPlotsY: Int
-			if (this svgPlots count > 1 && this svgPlots count < 5) {
+			if (this svgPlots count > 1 && this svgPlots count < 5)
 				numPlotsX = 2
-			} else if (this svgPlots count >= 5) {
+			else if (this svgPlots count >= 5)
 				numPlotsX = 3
-			} else {
+			else
 				numPlotsX = 1
-			}
 
 			numPlotsY = Int modulo(this svgPlots count, numPlotsX) ? 1 + this svgPlots count / numPlotsX : this svgPlots count / numPlotsX
 			plotSize := FloatPoint2D new(this width / numPlotsX, this height / numPlotsY)

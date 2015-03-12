@@ -12,29 +12,18 @@ PlotData2D: abstract class {
 	dataSeries: VectorList<FloatPoint2D> { get set }
 
 	init: func ~default() {
-		this init(VectorList<FloatPoint2D> new(), "")
+		this init(VectorList<FloatPoint2D> new())
 	}
-	init: func ~dataserie(dataSeries: VectorList<FloatPoint2D>) {
-		this dataSeries = dataSeries
-		this lineWidth = 1
-		this fontSize = 14
-		if (this label == null)
-			this label = ""
-	}
-	init: func ~label(dataSeries: VectorList<FloatPoint2D>, label: String) {
-		this label = label
-		this init(dataSeries)
+
+	init: func ~dataSeries(=dataSeries, label := "", colorBgra := ColorBgra new()) {
+			this lineWidth = 1
+			this fontSize = 14
+			this label = label
+			this colorBgra = colorBgra
 	}
 
 	init: func ~color(dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
-		this colorBgra = colorBgra
-		this init(dataSeries)
-	}
-
-	init: func ~labelColor(dataSeries: VectorList<FloatPoint2D>, label: String, colorBgra: ColorBgra) {
-		this label = label
-		this colorBgra = colorBgra
-		this init(dataSeries)
+			this init(dataSeries, "", colorBgra)
 	}
 
 	getSVG: abstract func (scaling: FloatPoint2D) -> String
