@@ -26,7 +26,7 @@ ScatterPlotData2D: class extends PlotData2D {
 		super(dataSeries, colorBgra)
 	}
 	init: func ~labelColor(dataSeries: VectorList<FloatPoint2D>, label: String, colorBgra: ColorBgra) {
-		super(dataSeries,label,colorBgra)
+		super(dataSeries, label, colorBgra)
 	}
 
 	getSVG: func (scaling: FloatPoint2D) -> String {
@@ -52,7 +52,7 @@ ScatterPlotData2D: class extends PlotData2D {
 
 	getSvgLegend: func (legendCount: Int) -> String {
 		boundaryOffset := 5
-		symbol: String 
+		symbol: String
 		match (this shape) {
 			case Shape CIRCLE =>
 				symbol = "•"

@@ -20,16 +20,15 @@ LinePlotData2D: class extends PlotData2D {
 	}
 
 	init: func ~labelColor(dataSeries: VectorList<FloatPoint2D>, label: String, colorBgra: ColorBgra) {
-		super(dataSeries,label,colorBgra)
+		super(dataSeries, label, colorBgra)
 	}
 
 	getSVG: func (scaling: FloatPoint2D) -> String {
 		result := ""
 		if (!this dataSeries empty()) {
 			result = result & "<path stroke='" clone() & this color clone() & "' stroke-opacity='" clone() & this opacity toString() & "' fill='none' stroke-width='" clone() & this lineWidth toString() & "' d='M " clone() & (scaling x * this dataSeries[0] x) toString() & " " clone() & (- scaling y * this dataSeries[0] y) toString() & " L " clone()
-			for (j in 1..this dataSeries count) {
+			for (j in 1..this dataSeries count)
 				result = result & (scaling x * this dataSeries[j] x) toString() & " " clone() & (- scaling y * this dataSeries[j] y) toString() & " " clone()
-			}
 			result = result & "'/>\n" clone()
 		}
 		result
