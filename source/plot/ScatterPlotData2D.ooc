@@ -31,7 +31,6 @@ ScatterPlotData2D: class extends PlotData2D {
 
 	getSVG: func (scaling: FloatPoint2D) -> String {
 		result := ""
-		result += ""
 		if (!this dataSeries empty()) {
 			for (i in 0..this dataSeries count) {
 				match (this shape) {
@@ -53,12 +52,14 @@ ScatterPlotData2D: class extends PlotData2D {
 
 	getSvgLegend: func (legendCount: Int) -> String {
 		boundaryOffset := 5
-		symbol := ""
+		symbol: String 
 		match (this shape) {
 			case Shape CIRCLE =>
 				symbol = "•"
 			case Shape SQUARE =>
 				symbol = "■"
+			case =>
+				symbol = ""
 		}
 		result := "<text id='" clone() & this label clone() & "' x='" clone() & boundaryOffset toString() & "' y='" clone() & (this fontSize * legendCount + boundaryOffset) toString() & "' font-size='" clone() & this fontSize toString() & "' fill='" clone() & this color clone() & "' fill-opacity='" clone() & this opacity toString() & "'> " clone() & symbol clone() & "	" clone() & this label clone() & "</text>\n" clone()
 		result

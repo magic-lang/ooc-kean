@@ -38,6 +38,7 @@ SVGWriter2D: class {
 		fileWriter write(output)
 		fileWriter close()
 		output free()
+		fileWriter free()
 	}
 
 	prepareOutput: func -> String {

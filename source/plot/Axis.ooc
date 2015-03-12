@@ -130,6 +130,7 @@ Axis: class {
 			result = up ? ceil(valueAndPower[0]) : floor(valueAndPower[0])
 			result *= valueAndPower[1]
 		}
+		gc_free(valueAndPower data)
 		result
 	}
 
@@ -154,6 +155,7 @@ Axis: class {
 	getBase: func (value: Float, valueDigits: Int) -> Float {
 		valueAndPower := this decomposeToValueAndPower(value, valueDigits)
 		result := valueAndPower[1]
+		gc_free(valueAndPower data)
 		result
 	}
 
@@ -168,7 +170,7 @@ Axis: class {
 			power -= 1
 			value *= 10
 		}
-		result := "10^" + power toString()
+		result := "10^" clone() & power toString()
 		result
 	}
 }
