@@ -105,12 +105,12 @@ extend Float {
 	}
 	decomposeToCoefficientAndRadix: static func (value: Float, valueDigits: Int) -> (Float, Float) {
 		radix := 1.0f
-		if (value != 0) {
-			while (Float absolute(value) >= pow(10, valueDigits)) {
+		if (value != 0.0f) {
+			while (Float absolute(value) >= pow(10.0f, valueDigits)) {
 				value /= 10.0f
 				radix *= 10.0f
 			}
-			while (Float absolute(value) < pow(10, valueDigits-1)) {
+			while (Float absolute(value) < pow(10.0f, valueDigits-1)) {
 				value *= 10.0f
 				radix /= 10.0f
 			}
