@@ -29,8 +29,8 @@ Axis: class {
 	precision: Int { get set }
 	roundAxisEndpoints: Bool { get set }
 
-	init: func (=orientation) {
-		this label = ""
+	init: func (=orientation, label := "") {
+		this label = label
 		this fontSize = 10
 		this gridOn = true
 		this precision = 3

@@ -11,7 +11,7 @@ Shape: enum {
 
 ScatterPlotData2D: class extends PlotData2D {
 	shape := Shape CIRCLE
-	scalingRelativeLineWidth:= 3.0f
+	scalingRelativeLineWidth:= 5.0f
 
 	init: func ~default() {
 		super()

@@ -21,20 +21,20 @@ SVGPlot: class {
 		this init(VectorList<PlotData2D> new())
 	}
 
-	init: func ~datasets(=datasets, title := "") {
+	init: func ~datasets(=datasets, title := "", xAxisLabel := "", yAxisLabel := "") {
 		this title = title
 		this plotAreaPercentage = 0.8f
 		this fontSize = 14
 		this symmetric = false
-		this xAxis = Axis new(Orientation Horizontal)
-		this yAxis = Axis new(Orientation Vertical)
+		this xAxis = Axis new(Orientation Horizontal, xAxisLabel)
+		this yAxis = Axis new(Orientation Vertical, yAxisLabel)
 		this setAxesMinMax()
 	}
 
-	init: func ~dataset(dataset: PlotData2D, title := "") {
+	init: func ~dataset(dataset: PlotData2D, title := "", xAxisLabel := "", yAxisLabel := "") {
 		datasets := VectorList<PlotData2D> new()
 		datasets add(dataset)
-		this init(datasets, title)
+		this init(datasets, title, xAxisLabel, yAxisLabel)
 	}
 
 	addDataset: func (dataset: PlotData2D) {
@@ -115,11 +115,11 @@ SVGPlot: class {
 	fillColorList: func {
 		this colorList = VectorList<String> new()
 		this colorList add("crimson")
-		this colorList add("darkorange")
 		this colorList add("black")
 		this colorList add("darkmagenta")
 		this colorList add("seagreen")
 		this colorList add("dodgerblue")
+		this colorList add("darkorange")
 		this colorList add("hotpink")
 		this colorList add("lightgreen")
 		this colorList add("yellowgreen")
