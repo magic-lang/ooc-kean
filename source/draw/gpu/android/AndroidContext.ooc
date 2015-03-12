@@ -29,7 +29,6 @@ AndroidContext: class extends OpenGLES3Context {
 	_unpackUv1080p: OpenGLES3MapUnpackUv1080p
 	_unpackRgbaToMonochrome: OpenGLES3MapUnpackRgbaToMonochrome
 	_unpackRgbaToUv: OpenGLES3MapUnpackRgbaToUv
-	_unpaddedWidth: static Int[]
 	init: func {
 		super()
 		this _initialize()
@@ -159,44 +158,8 @@ AndroidContext: class extends OpenGLES3Context {
 		target
 	}
 
-	alignWidth: func (width: Int, align := AlignWidth Nearest) -> Int {
-		result := 0
-		match(align) {
-			case AlignWidth Nearest => {
-				for (i in 0..This _unpaddedWidth length) {
-					currentWidth := This _unpaddedWidth[i]
-					if (abs(result - width) > abs(currentWidth - width))
-						result = currentWidth
-				}
-			}
-			case AlignWidth Floor => {
-				for (i in 0..This _unpaddedWidth length) {
-					currentWidth := This _unpaddedWidth[i]
-					if (abs(result - width) > abs(currentWidth - width) && currentWidth <= width)
-						result = currentWidth
-				}
-			}
-			case AlignWidth Ceiling => {
-				for (i in 0..This _unpaddedWidth length) {
-					currentWidth := This _unpaddedWidth[i]
-					if (abs(result - width) > abs(currentWidth - width) && currentWidth >= width)
-						result = currentWidth
-				}
-			}
-		}
-		result
-	}
-	isAligned: func (width: Int) -> Bool {
-		result := false
-		for (i in 0..This _unpaddedWidth length) {
-			if (width == This _unpaddedWidth[i]) {
-				result = true
-				break
-			}
-		}
-		result
-	}
-
+	alignWidth: func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }
+	isAligned: func (width: Int) -> Bool { GraphicBuffer isAligned(width) }
 }
 
 AndroidContextManager: class extends GpuContextManager {
@@ -204,8 +167,7 @@ AndroidContextManager: class extends GpuContextManager {
 	_sharedContexts: Bool
 	_mutex: Mutex
 	currentContext: AndroidContext { get { this _getContext() as AndroidContext } }
-	init: func (contexts: Int, unpaddedWidth: Int[], sharedContexts := false) {
-		AndroidContext _unpaddedWidth = unpaddedWidth
+	init: func (contexts: Int, sharedContexts := false) {
 		super(contexts)
 		this _sharedContexts = sharedContexts
 		this _mutex = Mutex new()
