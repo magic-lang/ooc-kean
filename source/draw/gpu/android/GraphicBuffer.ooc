@@ -41,11 +41,14 @@ GraphicBuffer: class {
 	size ::= this _size
 	_stride: Int
 	stride ::= this _stride
+	length: Int { get { this stride * this height } }
 	_backend: Pointer = null
 	_nativeBuffer: Pointer = null
 	nativeBuffer ::= this _nativeBuffer
+	_handle: Pointer = null
+	handle ::= this _handle
 	_allocated := false
-	_unpaddedWidth: static Int[]
+	_alignedWidth: static Int[]
 	init: func (=_size, =_format, usage: Int) {
 		This _allocate(_size width, _size height, this _format as Int, usage, this _backend&, this _nativeBuffer&, this _stride&)
 		this _allocated = true
@@ -71,14 +74,17 @@ GraphicBuffer: class {
 		usage = write ? usage | GraphicBufferUsage WriteOften : usage | GraphicBufferUsage WriteNever
 		usage
 	}
-	initialize: static func (allocate: Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*), create: Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*),
-	free: Func (Pointer), lock: Func (Pointer, Bool, Pointer*), unlock: Func (Pointer), unpaddedWidth: Int[]) {
-		This _allocate = allocate
-		This _create = create
-		This _free = free
-		This _lock = lock
-		This _unlock = unlock
-		This _unpaddedWidth = unpaddedWidth
+	registerCallbacks: static func (allocate: Pointer, create: Pointer, free: Pointer, lock: Pointer, unlock: Pointer) {
+		This _allocate = (allocate, null) as Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
+		This _create = (create, null) as Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
+		This _free = (free, null) as Func (Pointer)
+		This _lock = (lock, null) as Func (Pointer, Bool, Pointer*)
+		This _unlock = (unlock, null) as Func (Pointer)
+	}
+	configureAlignedWidth: static func (alignedWidth: Int*, count: Int) {
+		This _alignedWidth = Int[count] new()
+		for (i in 0..count)
+			This _alignedWidth[i] = alignedWidth[i]
 	}
 	alignWidth: static func (width: Int, align := AlignWidth Nearest) -> Int {
 		result := This _unpaddedWidth[0]
