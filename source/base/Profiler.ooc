@@ -21,9 +21,9 @@ import io/FileWriter
 
 import Timer
 
-Profiling: class {
+Profiler: class {
 	_debugLevel: Int
-	_logList := static VectorList<Profiling> new(100)
+	_logList := static VectorList<Profiler> new(100)
 	_message: String
 	_timer: Timer
 	init: func (=_message, =_debugLevel) {
