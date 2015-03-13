@@ -35,6 +35,9 @@ GraphicBuffer: class {
 	_free: static Func (Pointer)
 	_lock: static Func (Pointer, Bool, Pointer*)
 	_unlock: static Func (Pointer)
+	_alignedWidth: static Int[]
+
+
 	_format: GraphicBufferFormat
 	format ::= this _format
 	_size: IntSize2D
@@ -48,7 +51,7 @@ GraphicBuffer: class {
 	_handle: Pointer = null
 	handle ::= this _handle
 	_allocated := false
-	_alignedWidth: static Int[]
+
 	init: func (=_size, =_format, usage: Int) {
 		This _allocate(_size width, _size height, this _format as Int, usage, this _backend&, this _nativeBuffer&, this _stride&)
 		this _allocated = true
@@ -56,6 +59,9 @@ GraphicBuffer: class {
 	init: func ~existing (=_backend, =_nativeBuffer, =_size, =_stride, =_format)
 	init: func ~fromHandle (=_size, =_format, usage: GraphicBufferUsage, =_stride, handle: Pointer, keepOwnership: Bool) {
 		This _create(_size width, _size height, _format as Int, usage as Int, _stride, handle, keepOwnership, this _backend&, this _nativeBuffer&)
+	}
+	init: func (=_backend, =_nativeBuffer, =_handle, =_size, =_format, verticalAlign: Int, horizontalAlign: Int) {
+		
 	}
 	free: override func {
 		if (this _allocated)
