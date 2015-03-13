@@ -48,6 +48,13 @@ DateTime: cover {
 
   now: String { get { Time dateTime() } }
 
+  init: func@ ~default {
+    now: TimeT
+    nowTM: TMStruct*
+    now = time(null)
+    nowTM = localtime(now&)
+    this init(1900 + (nowTM@ tm_year), 1 + (nowTM@ tm_mon), nowTM@ tm_mday, nowTM@ tm_hour, nowTM@ tm_min, nowTM@ tm_sec)
+  }
   init: func@ (year := 2014, month := 1, day := 1, hour := 0, minute := 0, second := 0) {
     this _year = year
     this _month = month
@@ -177,6 +184,15 @@ DateTime: cover {
     minute := this _minute < 10 ? "0" + this _minute toString() : this _minute toString()
     second := this _second < 10 ? "0" + this _second toString() : this _second toString()
     year + "/" + month + "/" + day  + " " + hour + ":" + minute + ":" + second
+  }
+  toFileSafeString: func -> String {
+    year := this _year toString()
+    month := this _month < 10 ? "0" << this _month toString() : this _month toString()
+    day := this _day < 10 ? "0" << this _day toString() : this _day toString()
+    hour := this _hour < 10 ? "0" << this _hour toString() : this _hour toString()
+    minute := this _minute < 10 ? "0" << this _minute toString() : this _minute toString()
+    second := this _second < 10 ? "0" << this _second toString() : this _second toString()
+    year >> "-" & month >> "-" & day >> "_" & hour >> "-" & minute >> "-" & second
   }
 
 
