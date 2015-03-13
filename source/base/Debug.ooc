@@ -38,4 +38,7 @@ Debug: class {
 			This printFunction(printOut)
 		}
 	}
+	registerCallback: unmangled(kean_base_debug_registerCallback) static func (print: Pointer) {
+		This initialize((print, null) as Func (String))
+	}
 }

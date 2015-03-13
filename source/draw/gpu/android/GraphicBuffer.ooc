@@ -77,14 +77,14 @@ GraphicBuffer: class {
 		usage = write ? usage | GraphicBufferUsage WriteOften : usage | GraphicBufferUsage WriteNever
 		usage
 	}
-	registerCallbacks: static func (allocate: Pointer, create: Pointer, free: Pointer, lock: Pointer, unlock: Pointer) {
+	registerCallbacks: unmangled(kean_draw_gpu_android_graphicBuffer_registerCallbacks) static func (allocate: Pointer, create: Pointer, free: Pointer, lock: Pointer, unlock: Pointer) {
 		This _allocate = (allocate, null) as Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
 		This _create = (create, null) as Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
 		This _free = (free, null) as Func (Pointer)
 		This _lock = (lock, null) as Func (Pointer, Bool, Pointer*)
 		This _unlock = (unlock, null) as Func (Pointer)
 	}
-	configureAlignedWidth: static func (alignedWidth: Int*, count: Int) {
+	configureAlignedWidth: unmangled(kean_draw_gpu_android_graphicBuffer_configureAlignedWidth) static func (alignedWidth: Int*, count: Int) {
 		This _alignedWidth = Int[count] new()
 		for (i in 0..count)
 			This _alignedWidth[i] = alignedWidth[i]

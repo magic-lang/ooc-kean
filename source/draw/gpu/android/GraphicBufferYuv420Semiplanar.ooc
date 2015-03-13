@@ -12,7 +12,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		byteBuffer := ByteBuffer new(ptr, _buffer length, func (buffer: ByteBuffer) {} )
 		super(byteBuffer, _buffer size)
 	}
-	init: func (backend: Pointer, nativeBuffer: Pointer, handle: Pointer, size: IntSize2D, format: GraphicBufferFormat, verticalAlign: Int, horizontalAlign: Int) {
+	init: unmangled(kean_draw_gpu_android_graphicBufferYuv420Semiplanar_new) func (backend: Pointer, nativeBuffer: Pointer, handle: Pointer, size: IntSize2D, format: GraphicBufferFormat, verticalAlign: Int, horizontalAlign: Int) {
 		this init(GraphicBuffer new(backend, nativeBuffer, handle, size, format, verticalAlign, horizontalAlign))
 	}
 }
