@@ -15,7 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-io/FileWriter
+import io/FileWriter
 
 DebugLevel: enum {
 	Everything
