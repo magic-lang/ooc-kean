@@ -19,7 +19,7 @@ use ooc-base
 import Debug
 
 Debug initialize(func (message: String) {println(message)})
-Debug _level = DebugLevels Everything as Int
+Debug _level = DebugLevel Everything as Int
 
 
 testfunction: func {
