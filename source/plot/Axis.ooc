@@ -47,7 +47,7 @@ Axis: class {
 		this tick = this length()
 		radix := Float getRadix(this length(), this precision)
 		if (this orientation == Orientation Horizontal) {
-			result = result & "<g desc='X-axis data'>\n" clone()
+			result = result >> "<g desc='X-axis data'>\n"
 			labelOffset := FloatPoint2D new(this length() * scaling x / 2.0f, this fontSize + 0.5f * axisAreaSize y)
 			numberOffset := FloatPoint2D new(0.0f, this fontSize + 0.2f * axisAreaSize y)
 			tickMarkerEndOffset := FloatPoint2D new(0.0f, - axisAreaSize y * 0.1f)
@@ -55,7 +55,9 @@ Axis: class {
 			result = result & Shapes text(position + labelOffset, this label, this fontSize + 4, "middle")
 			if (radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision)) {
 				radixOffset := FloatPoint2D new(axisAreaSize x + (plotAreaSize x / plotAreaSize y) * axisAreaSize y / 2, numberOffset y)
-				result = result & Shapes text(position + radixOffset, Float getScientificPowerString(radix), this fontSize, "middle")
+				scientificPower := Float getScientificPowerString(radix)
+				result = result & Shapes text(position + radixOffset, scientificPower, this fontSize, "middle")
+				scientificPower free()
 			}
 
 			tickValue := this getFirstTickValue()
@@ -66,7 +68,7 @@ Axis: class {
 				position x += scaling x * tick
 			}
 		} else {
-			result = result & "<g desc='Y-axis data'>\n" clone()
+			result = result >> "<g desc='Y-axis data'>\n"
 			labelOffset := FloatPoint2D new(- 0.6f * axisAreaSize x, - this length() * scaling y / 2.0f)
 			numberOffset := FloatPoint2D new(-0.2f * axisAreaSize x, this fontSize / 2)
 			tickMarkerEndOffset := FloatPoint2D new(axisAreaSize x * 0.1f, 0.0f)
@@ -76,7 +78,9 @@ Axis: class {
 			result = result & "</g>\n" clone()
 			if (radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision)) {
 				radixOffset := FloatPoint2D new(numberOffset x, - axisAreaSize y - (plotAreaSize y / plotAreaSize x) * axisAreaSize x / 2 + this fontSize / 2)
-				result = result & Shapes text(position + radixOffset, Float getScientificPowerString(radix), this fontSize, "end")
+				scientificPower := Float getScientificPowerString(radix)
+				result = result & Shapes text(position + radixOffset, scientificPower, this fontSize, "end")
+				scientificPower free()
 			}
 
 			tickValue := this getFirstTickValue()
@@ -87,7 +91,7 @@ Axis: class {
 				position y += - scaling y * tick
 			}
 		}
-		result = result & "</g>\n" clone()
+		result = result >> "</g>\n"
 		result
 	}
 
@@ -101,7 +105,7 @@ Axis: class {
 	}
 
 	getTickSVG: func (tickValue, radix: Float, position, numberOffset, tickMarkerOnOtherSideOffset, tickMarkerEndOffset: FloatPoint2D, textAnchor: String) -> String {
-		result := "<g desc='" clone() & tickValue toString() & "'>\n" clone()
+		result := "<g desc='" << tickValue toString() >> "'>\n"
 		if (this gridOn)
 			result = result & Shapes line(position, position + tickMarkerOnOtherSideOffset, "grey", FloatPoint2D new(5,5))
 		result = result & Shapes line(position, position + tickMarkerEndOffset, "black")
@@ -112,7 +116,7 @@ Axis: class {
 		result = result & Shapes text(position + numberOffset, tickValue == floor(tickValue) ? tempTickInt : tempTick, this fontSize, textAnchor)
 		tempTick free()
 		tempTickInt free()
-		result = result & "</g>\n" clone()
+		result = result >> "</g>\n"
 		result
 	}
 

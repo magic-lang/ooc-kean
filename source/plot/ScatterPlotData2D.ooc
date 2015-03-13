@@ -5,13 +5,13 @@ import PlotData2D
 import svg/Shapes
 
 Shape: enum {
-	CIRCLE
-	SQUARE
+	Circle
+	Square
 }
 
 ScatterPlotData2D: class extends PlotData2D {
-	shape := Shape CIRCLE
-	scalingRelativeLineWidth:= 5.0f
+	shape := Shape Circle
+	scalingRelativeLineWidth := 5.0f
 
 	init: func ~default() {
 		super()
@@ -30,12 +30,10 @@ ScatterPlotData2D: class extends PlotData2D {
 		if (!this dataSeries empty()) {
 			for (i in 0..this dataSeries count) {
 				match (this shape) {
-
-					case Shape CIRCLE =>
+					case Shape Circle =>
 						r := this scalingRelativeLineWidth / 2.0f * this lineWidth
 						result = result & Shapes circle(scaling x * this dataSeries[i] x, - scaling y * this dataSeries[i] y, r, this opacity, this color)
-
-					case Shape SQUARE =>
+					case Shape Square =>
 						x := scaling x * this dataSeries[i] x - this scalingRelativeLineWidth / 2.0f * this lineWidth
 						y := -scaling y * this dataSeries[i] y - this scalingRelativeLineWidth / 2.0f * this lineWidth
 						width := this scalingRelativeLineWidth * this lineWidth
@@ -50,9 +48,9 @@ ScatterPlotData2D: class extends PlotData2D {
 		boundaryOffset := 5
 		symbol: String
 		match (this shape) {
-			case Shape CIRCLE =>
+			case Shape Circle =>
 				symbol = "•"
-			case Shape SQUARE =>
+			case Shape Square =>
 				symbol = "■"
 			case =>
 				symbol = ""

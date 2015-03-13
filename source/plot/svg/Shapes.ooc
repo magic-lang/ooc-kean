@@ -31,6 +31,6 @@ Shapes: abstract class {
 	}
 
 	text: static func ~textAnchor(position: FloatPoint2D, text: String, fontSize: Int, textAnchor: String) -> String {
-		"<text id='" clone() & text clone() & "' x='" clone() & position x toString() & "' y='" clone() & position y toString() & "' font-size='" clone() & fontSize toString() & "' fill='black'	text-anchor='" clone() & textAnchor clone() & "' >" clone() & text clone() + "</text>\n" clone()
+		"<text id='" << (text + "' x='") & position x toString() & "' y='" clone() & position y toString() & "' font-size='" clone() & fontSize toString() & ("' fill='black'	text-anchor='" << (textAnchor << ("' >" << (text + "</text>\n"))))
 	}
 }

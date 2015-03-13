@@ -66,7 +66,7 @@ symmetricUnitCirclePlot symmetric = true
 
 // Plot that shows usage of various formatting options
 scatterParabolaData := ScatterPlotData2D new(sparseParabola, "Temporary label")
-scatterParabolaData shape = Shape SQUARE
+scatterParabolaData shape = Shape Square
 scatterParabolaData label = "" // label for the data object can be set
 scatterParabolaData lineWidth = 4 // line width can be set, defaults to 1 if not set
 scatterParabolaData colorBgra = ColorBgra new(255,0,0,150) // color can be specified, if not specified a color map will be used
