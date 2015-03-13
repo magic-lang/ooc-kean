@@ -17,7 +17,7 @@
 
 use ooc-base
 
-DebugPrint printFunctionPointer = func (message: String) {println(message)}
+Debug initialize(func (message: String) { println(message) })
 
 testfunction: func {
 	t_test := Timer new()

@@ -15,9 +15,9 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import Profiling, io/FileWriter
+import io/FileWriter
 
-DebugLevels: enum {
+DebugLevel: enum {
 	Everything
 	Debug
 	Notification
@@ -27,15 +27,15 @@ DebugLevels: enum {
 	Critical
 }
 
-DebugPrint: class {
-	_level: static Int
-	printFunctionPointer: static Func (String)
+Debug: class {
+	_level: static Int = DebugLevel Everything
+	printFunction: static Func (String)
 	initialize: static func (f: Func (String)) {
-		This printFunctionPointer = f
+		This printFunction = f
 	}
 	print: static func (printOut: String, level: Int = 1) {
-		if (This _level == level || (This _level == 1) ) {
-			This printFunctionPointer(printOut)
+		if (This _level == level || (This _level == DebugLevel Everything) ) {
+			This printFunction(printOut)
 		}
 	}
 }

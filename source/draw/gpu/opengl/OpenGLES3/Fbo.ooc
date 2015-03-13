@@ -16,7 +16,7 @@
  */
 
 use ooc-base
-import include/gles, Texture, Debug
+import include/gles, Texture, DebugGL
 
 Fbo: class {
 	_backend: UInt
@@ -69,7 +69,7 @@ Fbo: class {
 			}
 			errorMessage := "Framebuffer Object creation failed with status: " + statusMessage + " for texture of size " +
 			texture width toString() + " x " + texture height toString()
-			DebugPrint print(errorMessage)
+			Debug print(errorMessage)
 			raise(errorMessage)
 		}
 		this unbind()

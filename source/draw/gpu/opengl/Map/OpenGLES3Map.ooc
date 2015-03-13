@@ -35,7 +35,7 @@ OpenGLES3Map: abstract class extends GpuMap {
 		this _context = context
 		this _program = ShaderProgram[context getMaxContexts()] new()
 		if (vertexSource == null || fragmentSource == null) {
-			DebugPrint print("Vertex or fragment shader source not set")
+			Debug print("Vertex or fragment shader source not set")
 			raise("Vertex or fragment shader source not set")
 		}
 	}

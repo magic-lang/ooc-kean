@@ -21,9 +21,9 @@ import io/FileWriter
 
 import Timer
 
-Profiling: class {
+Profiler: class {
 	_debugLevel: Int
-	_logList := static VectorList<Profiling> new(100)
+	_logList := static VectorList<Profiler> new(100)
 	_message: String
 	_timer: Timer
 	init: func (=_message, =_debugLevel) {
@@ -48,7 +48,7 @@ Profiling: class {
 		for (i in 0..This _logList count) {
 			resultString := ""
 			log := This _logList[i]
-			DebugPrint print(log _message + This timeStr + log _timer _result toString() + This average + log _timer _average toString())
+			Debug print(log _message + This timeStr + log _timer _result toString() + This average + log _timer _average toString())
 		}
 	}
 
