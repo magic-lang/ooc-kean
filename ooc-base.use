@@ -1,4 +1,4 @@
 Name: OOC Base
 Description: OOC Base library that complements the built in SDK.
 SourcePath: source/base
-Imports: IEquatable, IEquatableWithin, Order, IComparable, OnOff, ByteBuffer, IDisposable, HashDictionary, DateTime, Synchronized, ReferenceCounter, Event, ThreadPool, Container, Timer, DebugPrint, Profiling, CLIParser
+Imports: IEquatable, IEquatableWithin, Order, IComparable, OnOff, ByteBuffer, IDisposable, HashDictionary, DateTime, Synchronized, ReferenceCounter, Event, ThreadPool, Container, Timer, Debug, Profiler, CLIParser

@@ -56,7 +56,7 @@ Window: class extends OpenGLES3Context {
 			case => null
 		}
 		if (result == null) {
-			DebugPrint print("No support for drawing image format to Window")
+			Debug print("No support for drawing image format to Window")
 			raise("No support for drawing image format to Window")
 		}
 		result

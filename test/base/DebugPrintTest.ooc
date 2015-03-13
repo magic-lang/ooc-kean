@@ -16,10 +16,10 @@
 */
 
 use ooc-base
-import DebugPrint
+import Debug
 
-DebugPrint initialize(func (message: String) {println(message)})
-DebugPrint _level = 3
-DebugPrint print("TEST1", 2)
+Debug initialize(func (message: String) {println(message)})
+Debug _level = 3
+Debug print("TEST1", 2)
 
-DebugPrint print("TEST2", 3)
+Debug print("TEST2", 3)
