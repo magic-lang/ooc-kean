@@ -29,7 +29,7 @@ Vao: class {
 	bind: func { glBindVertexArray(backend) }
 	unbind: func { glBindVertexArray(0) }
 	_generate: func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> Bool {
-		DebugPrint print("Allocating VAO")
+		Debug print("Allocating VAO")
 		//Currently using 2 attributes: vertex position and texture coordinate
 		attributeCount := 2
 		packedArray := gc_malloc(attributeCount * vertexCount * dimensions * Float size) as Float*

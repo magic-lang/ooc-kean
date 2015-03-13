@@ -16,10 +16,10 @@
 */
 
 use ooc-base
-import DebugPrint
+import Debug
 
-DebugPrint initialize(func (message: String) {println(message)})
-DebugPrint _level = DebugLevels Everything as Int
+Debug initialize(func (message: String) {println(message)})
+Debug _level = DebugLevels Everything as Int
 
 
 testfunction: func {
@@ -73,7 +73,7 @@ for (i in 0..8) {}
 profiling stop()
 testfunction2()
 
-DebugPrint print("first print",0)
-DebugPrint print("second print", 1)
-DebugPrint print("third print", 2)
-DebugPrint printProfilingData()*/
+Debug print("first print",0)
+Debug print("second print", 1)
+Debug print("third print", 2)
+Debug printProfilingData()*/

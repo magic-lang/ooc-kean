@@ -15,7 +15,7 @@
  * along with This software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import include/gles, Vao, Debug
+import include/gles, Vao, DebugGL
 
 Quad: class {
 	vao: Vao

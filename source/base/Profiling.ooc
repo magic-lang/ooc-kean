@@ -48,7 +48,7 @@ Profiling: class {
 		for (i in 0..This _logList count) {
 			resultString := ""
 			log := This _logList[i]
-			DebugPrint print(log _message + This timeStr + log _timer _result toString() + This average + log _timer _average toString())
+			Debug print(log _message + This timeStr + log _timer _result toString() + This average + log _timer _average toString())
 		}
 	}
 

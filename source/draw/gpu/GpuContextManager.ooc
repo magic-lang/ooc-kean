@@ -42,7 +42,7 @@ GpuContextManager: abstract class extends GpuContext {
 				return this _contexts[i]
 			}
 		}
-		DebugPrint print("ERROR: Maximum gpu contexts already used!")
+		Debug print("ERROR: Maximum gpu contexts already used!")
 		raise("Maximum contexts already used!")
 		return null
 	}
