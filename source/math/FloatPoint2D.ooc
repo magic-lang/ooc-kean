@@ -40,8 +40,8 @@ FloatPoint2D: cover {
 	round: func -> This { This new(this x round(), this y round()) }
 	ceiling: func -> This { This new(this x ceil(), this y ceil()) }
 	floor: func -> This { This new(this x floor(), this y floor()) }
-	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y)) }
-	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y)) }
+	minimum: func (ceiling: This) -> This { This new(Float minimum(this x, ceiling x), Float minimum(this y, ceiling y)) }
+	maximum: func (floor: This) -> This { This new(Float maximum(this x, floor x), Float maximum(this y, floor y)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
 	operator + (other: FloatSize2D) -> This { This new(this x + other width, this y + other height) }
@@ -63,7 +63,7 @@ FloatPoint2D: cover {
 	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
 	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x floor() as Int, this y floor() as Int) }
 	operator as -> String { this toString() }
-	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
+	toString: func -> String { this x toString() & ", " clone() & this y toString() }
 	parse: static func (input: String) -> This {
 		array := input split(',')
 		This new(array[0] toFloat(), array[1] toFloat())

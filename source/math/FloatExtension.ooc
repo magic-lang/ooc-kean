@@ -103,4 +103,40 @@ extend Float {
 	inverseLerp: static func (a: Float, b: Float, value: Float) -> Float {
 		(value - a) / (b - a)
 	}
+	decomposeToCoefficientAndRadix: static func (value: Float, valueDigits: Int) -> (Float, Float) {
+		radix := 1.0f
+		if (value != 0.0f) {
+			while (Float absolute(value) >= pow(10.0f, valueDigits)) {
+				value /= 10.0f
+				radix *= 10.0f
+			}
+			while (Float absolute(value) < pow(10.0f, valueDigits-1)) {
+				value *= 10.0f
+				radix /= 10.0f
+			}
+		}
+		coefficient := value
+		(coefficient, radix)
+	}
+	roundToValueDigits: static func (value: Float, valueDigits: Int, up: Bool) -> Float {
+		(result, radix) := This decomposeToCoefficientAndRadix(value, valueDigits)
+		if (result != 0) {
+			result = up ? ceil(result) : floor(result)
+			result *= radix
+		}
+		result
+	}
+	getRadix: static func (value: Float, valueDigits: Int) -> Float {
+		(tempValue, result) := This decomposeToCoefficientAndRadix(value, valueDigits)
+		result
+	}
+	getScientificPowerString: static func (value: Float) -> String {
+		(coefficient, radix) := This decomposeToCoefficientAndRadix(value, 1)
+		power := log10(radix) as Int
+		result := ""
+		if (coefficient != 1.0f)
+			result = result & coefficient toString() & "×" clone()
+		result = result & "10^" clone() & power toString()
+		result
+	}
 }

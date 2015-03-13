@@ -42,7 +42,7 @@ FloatPoint2DTest: class extends Fixture {
 			expect(this vector0 y, is equal to(-3.1f))
 		})
 		this add("swap", func()	{
-			result := this vector0 swap() 
+			result := this vector0 swap()
 			expect(result x, is equal to(this vector0 y))
 			expect(result y, is equal to(this vector0 x))
 		})
@@ -57,27 +57,27 @@ FloatPoint2DTest: class extends Fixture {
 			point := FloatPoint2D new()
 			expect(point norm, is equal to(0))
 			expect(point azimuth, is equal to(0))
-		})		
+		})
 		this add("polar 1", func() {
 			point := FloatPoint2D new(1, 0)
 			expect(point norm, is equal to(1.0f))
 			expect(point azimuth, is equal to(0))
-		})		
+		})
 		this add("polar 2", func() {
 			point := FloatPoint2D new(0, 1)
 			expect(point norm, is equal to(1.0f))
 			expect(point azimuth, is equal to(PI as Float / 2.0f))
-		})		
+		})
 		this add("polar 3", func() {
 			point := FloatPoint2D new(0, -5)
-			expect(point norm, is equal to(5.0f))			
+			expect(point norm, is equal to(5.0f))
 			expect(point azimuth, is equal to(PI as Float / -2.0f))
-		})		
+		})
 		this add("polar 4", func() {
 			point := FloatPoint2D new(-1, 0)
 			expect(point norm, is equal to(1.0f))
 			expect(point azimuth, is equal to(PI as Float))
-		})		
+		})
 		this add("polar 5", func() {
 			point := FloatPoint2D new(-3, 0)
 			point2 := FloatPoint2D polar(point norm, point azimuth)
@@ -88,6 +88,14 @@ FloatPoint2DTest: class extends Fixture {
 			expect(FloatPoint2D basisX angle(FloatPoint2D basisY), is equal to(PI as Float / 2.0f) within(this precision))
 			expect(FloatPoint2D basisX angle(-FloatPoint2D basisX), is equal to(PI as Float) within(this precision))
 			expect(FloatPoint2D basisX angle(-FloatPoint2D basisY), is equal to(-PI as Float / 2.0f) within(this precision))
+		})
+		this add("minimum", func() {
+			expect((this vector0 minimum(this vector1)) x, is equal to((this vector1) x))
+			expect((this vector0 minimum(this vector1)) y, is equal to((this vector0) y))
+		})
+		this add("maximum", func() {
+			expect((this vector0 maximum(this vector1)) x, is equal to((this vector0) x))
+			expect((this vector0 maximum(this vector1)) y, is equal to((this vector1) y))
 		})
 		this add("casts", func() {
 //			FIXME: We have no integer versions of anything yet
