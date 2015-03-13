@@ -15,7 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import Profiling, io/FileWriter
+io/FileWriter
 
 DebugLevel: enum {
 	Everything
