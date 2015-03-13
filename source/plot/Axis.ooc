@@ -93,7 +93,7 @@ Axis: class {
 
 	getFirstTickValue: func -> Float {
 		result: Float
-		if ((this min < this tick && this min > 0.0f) || (this min > this tick && this min > 0.0f && this min < 1.0f) )
+		if ((this min < this tick && this min > 0.0f) || (this min > this tick && this min > 0.0f && this min < 1.0f))
 			result = this min + (this tick - Float modulo(this min, this tick))
 		else
 			result = this min - Float modulo(this min, this tick)
