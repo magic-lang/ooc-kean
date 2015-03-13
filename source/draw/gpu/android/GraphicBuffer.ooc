@@ -57,18 +57,15 @@ GraphicBuffer: class {
 		this _allocated = true
 	}
 	init: func ~existing (=_backend, =_nativeBuffer, =_size, =_stride, =_format)
-	init: func ~fromHandle (=_size, =_format, usage: GraphicBufferUsage, =_stride, handle: Pointer, keepOwnership: Bool) {
-		This _create(_size width, _size height, _format as Int, usage as Int, _stride, handle, keepOwnership, this _backend&, this _nativeBuffer&)
-	}
-	init: func (=_backend, =_nativeBuffer, =_handle, =_size, =_format, verticalAlign: Int, horizontalAlign: Int) {
-		
+	init: func ~fromHandle (=_backend, =_nativeBuffer, =_handle, =_size, =_format, verticalAlign: Int, horizontalAlign: Int) {
+
 	}
 	free: override func {
 		if (this _allocated)
 			This _free(this _backend)
 		super()
 	}
-	lock: func (write: Bool) -> Pointer {
+	lock: func (write: Bool = false) -> Pointer {
 		result: Pointer = null
 		This _lock(this _backend, write, result&)
 		result
