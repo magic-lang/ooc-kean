@@ -25,6 +25,10 @@ ScatterPlotData2D: class extends PlotData2D {
 			super(dataSeries, "", colorBgra)
 	}
 
+	init: func ~twoFloatSeries(xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new()) {
+		super(xSeries, ySeries, label, colorBgra)
+	}
+
 	getSVG: func (scaling: FloatPoint2D) -> String {
 		result := ""
 		if (!this dataSeries empty()) {
@@ -38,6 +42,8 @@ ScatterPlotData2D: class extends PlotData2D {
 						y := -scaling y * this dataSeries[i] y - this scalingRelativeLineWidth / 2.0f * this lineWidth
 						width := this scalingRelativeLineWidth * this lineWidth
 						result = result & Shapes rect(x, y, width, width, this opacity, this color)
+					case =>
+						result = result >> ""
 				}
 			}
 		}

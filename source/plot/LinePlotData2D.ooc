@@ -10,11 +10,15 @@ LinePlotData2D: class extends PlotData2D {
 	}
 
 	init: func ~dataSeries(dataSeries: VectorList<FloatPoint2D>, label := "", colorBgra := ColorBgra new()) {
-			super(dataSeries, label, colorBgra)
+		super(dataSeries, label, colorBgra)
 	}
 
 	init: func ~color(dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
-			super(dataSeries, "", colorBgra)
+		super(dataSeries, "", colorBgra)
+	}
+
+	init: func ~twoFloatSeries(xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new()) {
+		super(xSeries, ySeries, label, colorBgra)
 	}
 
 	getSVG: func (scaling: FloatPoint2D) -> String {
