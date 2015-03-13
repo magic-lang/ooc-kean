@@ -23,6 +23,6 @@ Shapes: abstract class {
 		This text(position, text, fontSize, "start")
 	}
 	text: static func ~textAnchor(position: FloatPoint2D, text: String, fontSize: Int, textAnchor: String) -> String {
-		"<text id='" << (text + "' x='") & position x toString() & "' y='" clone() & position y toString() & "' font-size='" clone() & fontSize toString() & ("' fill='black'	text-anchor='" << (textAnchor << ("' >" << (text + "</text>\n"))))
+		"<text id='" << (text + "' x='") & position x toString() & "' y='" clone() & position y toString() & "' font-size='" clone() & fontSize toString() & ("' fill='black' text-anchor='" << (textAnchor << ("'>" << (text + "</text>\n"))))
 	}
 }
