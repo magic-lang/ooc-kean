@@ -13,6 +13,6 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		super(byteBuffer, _buffer size)
 	}
 	init: func (backend: Pointer, nativeBuffer: Pointer, handle: Pointer, size: IntSize2D, format: GraphicBufferFormat, verticalAlign: Int, horizontalAlign: Int) {
-		super(GraphicBuffer new(backend, nativeBuffer, handle, size, format, verticalAlign, horizontalAlign))
+		this init(GraphicBuffer new(backend, nativeBuffer, handle, size, format, verticalAlign, horizontalAlign))
 	}
 }
