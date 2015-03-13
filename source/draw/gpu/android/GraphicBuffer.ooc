@@ -41,7 +41,7 @@ GraphicBuffer: class {
 	size ::= this _size
 	_stride: Int
 	stride ::= this _stride
-	length: Int { get { this stride * this height } }
+	length: Int { get { this stride * this size height } }
 	_backend: Pointer = null
 	_nativeBuffer: Pointer = null
 	nativeBuffer ::= this _nativeBuffer
@@ -87,26 +87,26 @@ GraphicBuffer: class {
 			This _alignedWidth[i] = alignedWidth[i]
 	}
 	alignWidth: static func (width: Int, align := AlignWidth Nearest) -> Int {
-		result := This _unpaddedWidth[0]
+		result := This _alignedWidth[0]
 		match(align) {
 			case AlignWidth Nearest => {
-				for (i in 0..This _unpaddedWidth length) {
-					currentWidth := This _unpaddedWidth[i]
+				for (i in 0..This _alignedWidth length) {
+					currentWidth := This _alignedWidth[i]
 					if (abs(result - width) > abs(currentWidth - width))
 						result = currentWidth
 				}
 			}
 			case AlignWidth Floor => {
-				for (i in 0..This _unpaddedWidth length) {
-					currentWidth := This _unpaddedWidth[i]
+				for (i in 0..This _alignedWidth length) {
+					currentWidth := This _alignedWidth[i]
 					if (abs(result - width) > abs(currentWidth - width) && currentWidth <= width)
 						result = currentWidth
 				}
 			}
 			case AlignWidth Ceiling => {
-				result = This _unpaddedWidth[This _unpaddedWidth length-1]
-				for (i in 0..This _unpaddedWidth length) {
-					currentWidth := This _unpaddedWidth[i]
+				result = This _alignedWidth[This _alignedWidth length-1]
+				for (i in 0..This _alignedWidth length) {
+					currentWidth := This _alignedWidth[i]
 					if (abs(result - width) > abs(currentWidth - width) && currentWidth >= width)
 						result = currentWidth
 				}
@@ -116,8 +116,8 @@ GraphicBuffer: class {
 	}
 	isAligned: static func (width: Int) -> Bool {
 		result := false
-		for (i in 0..This _unpaddedWidth length) {
-			if (width == This _unpaddedWidth[i]) {
+		for (i in 0..This _alignedWidth length) {
+			if (width == This _alignedWidth[i]) {
 				result = true
 				break
 			}
