@@ -46,8 +46,8 @@ AndroidTexture: abstract class extends GpuTexture {
 }
 
 AndroidRgba: class extends AndroidTexture {
-	init: func ~allocate (size: IntSize2D, read: Bool, write: Bool, eglDisplay: Pointer) {
-		gb := GraphicBuffer new(size, GraphicBufferFormat Rgba8888, GraphicBuffer getUsageFlags(read, write))
+	init: func ~allocate (size: IntSize2D, eglDisplay: Pointer) {
+		gb := GraphicBuffer new(size, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture)
 		egl := EGLImage create(TextureType rgba, size width, size height, gb nativeBuffer, eglDisplay)
 		super(size, gb, egl, 4)
 	}
