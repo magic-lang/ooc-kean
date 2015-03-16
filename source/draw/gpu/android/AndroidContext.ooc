@@ -68,8 +68,7 @@ AndroidContext: class extends OpenGLES3Context {
 		if (rasterImage size height == 1080) {
 			yPacker readRows(rasterImage y)
 			uvPacker readRows(rasterImage uv)
-		}
-		else {
+		} else {
 			yPacker read(rasterImage y)
 			uvPacker read(rasterImage uv)
 		}
@@ -98,8 +97,7 @@ AndroidContext: class extends OpenGLES3Context {
 			uvBuffer = uvPacker readRows()
 			yPacker recycle()
 			uvPacker recycle()
-		}
-		else {
+		} else {
 			yBuffer = yPacker read()
 			uvBuffer = uvPacker read()
 		}
@@ -112,28 +110,26 @@ AndroidContext: class extends OpenGLES3Context {
 	toRasterAux: func ~monochrome (gpuImage: GpuMonochrome, async: Bool) -> RasterImage {
 		result: RasterImage
 		bytesPerPixel := 1
-		if (!this isAligned(gpuImage size width * bytesPerPixel)) {
+		if (!this isAligned(gpuImage size width * bytesPerPixel))
 			result = gpuImage toRasterDefault()
-		}
 		else {
 			yPacker := this createPacker(gpuImage size, 1)
 			this _packMonochrome imageWidth = gpuImage size width
 			yPacker pack(gpuImage, this _packMonochrome)
-			result = RasterMonochrome new(async ? (yPacker readAsync()) : (yPacker read()), gpuImage size, 64)
+			result = RasterMonochrome new(async ? yPacker readAsync() : yPacker read(), gpuImage size, 64)
 		}
 		result
 	}
 	toRasterAux: func ~uv (gpuImage: GpuUv, async: Bool) -> RasterImage {
 		result: RasterImage
 		bytesPerPixel := 2
-		if (!this isAligned(gpuImage size width * bytesPerPixel)) {
+		if (!this isAligned(gpuImage size width * bytesPerPixel))
 			result = gpuImage toRasterDefault()
-		}
 		else {
 			uvPacker := this createPacker(gpuImage size, 2)
 			this _packUv imageWidth = gpuImage size width
 			uvPacker pack(gpuImage, this _packUv)
-			result = RasterUv new(async ? (uvPacker readAsync()) : (uvPacker read()), gpuImage size, 64)
+			result = RasterUv new(async ? uvPacker readAsync() : uvPacker read(), gpuImage size, 64)
 		}
 		result
 	}
@@ -207,14 +203,11 @@ AndroidContextManager: class extends GpuContextManager {
 			if (this _motherContext == null) {
 				this _motherContext = AndroidContext new()
 				result = this _motherContext
-			}
-			else
+			} else
 				result = AndroidContext new(this _motherContext)
 			this _mutex unlock()
-		}
-		else
+		} else
 			result = AndroidContext new()
-
 		result
 	}
 	createBgra: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> OpenGLES3Bgra { this currentContext createBgra(buffer) }
