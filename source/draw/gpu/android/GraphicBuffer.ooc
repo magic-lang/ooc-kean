@@ -37,13 +37,20 @@ GraphicBuffer: class {
 	_unlock: static Func (Pointer)
 	_alignedWidth: static Int[]
 
-
 	_format: GraphicBufferFormat
 	format ::= this _format
 	_size: IntSize2D
 	size ::= this _size
-	_stride: Int
-	stride ::= this _stride
+	_pixelStride: Int
+	pixelStride ::= this _pixelStride
+	stride: Int {
+		get {
+			match(this _format) {
+				case GraphicBufferFormat Rgba8888 => this _pixelStride * 4
+				case => raise("Using unimplemented GraphicBuffer format!"); 0
+			}
+		}
+	}
 	length: Int { get { this stride * this size height } }
 	_backend: Pointer = null
 	_nativeBuffer: Pointer = null
