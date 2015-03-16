@@ -72,18 +72,12 @@ GraphicBuffer: class {
 			This _free(this _backend)
 		super()
 	}
-	lock: func (write: Bool = false) -> Pointer {
+	lock: func (write := false) -> Pointer {
 		result: Pointer = null
 		This _lock(this _backend, write, result&)
 		result
 	}
 	unlock: func { This _unlock(this _backend) }
-	getUsageFlags: static func (read: Bool, write: Bool) -> Int {
-		usage := 0
-		usage = read ? usage | GraphicBufferUsage ReadOften : usage | GraphicBufferUsage ReadNever
-		usage = write ? usage | GraphicBufferUsage WriteOften : usage | GraphicBufferUsage WriteNever
-		usage
-	}
 	registerCallbacks: unmangled(kean_draw_gpu_android_graphicBuffer_registerCallbacks) static func (allocate: Pointer, create: Pointer, free: Pointer, lock: Pointer, unlock: Pointer) {
 		This _allocate = (allocate, null) as Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
 		This _create = (create, null) as Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
