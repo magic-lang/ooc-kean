@@ -59,7 +59,7 @@ SVGPlot: class {
 		}
 
 		plotAreaSize := size * this plotAreaPercentage
-		scaling := FloatPoint2D new(plotAreaSize x / this xAxis length(), plotAreaSize y / this yAxis length())
+		scaling := FloatPoint2D new(this xAxis length() != 0.0f ? plotAreaSize x / this xAxis length() : 1.0f, this yAxis length() != 0.0f ? plotAreaSize y / this yAxis length() : 1.0f)
 		translationToRealOrigo := FloatPoint2D new(- scaling x * this xAxis min, plotAreaSize y + scaling y * this yAxis min)
 		bottomLeftCornerOfPlot := FloatPoint2D new((size x - plotAreaSize x) / 2, (plotAreaSize y + (size y - plotAreaSize y) / 2))
 
