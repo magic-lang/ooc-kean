@@ -73,6 +73,7 @@ GpuImage: abstract class extends Image {
 	toRaster: func ~overwrite (rasterImage: RasterImage) { this _context toRaster(this, rasterImage) }
 	toRasterDefault: abstract func ~overwrite (rasterImage: RasterImage)
 	toRasterDefault: abstract func -> RasterImage
+	toRasterAsync: func -> RasterImage { this _context toRasterAsync(this) }
 	_createCanvas: abstract func -> GpuCanvas
 
 }

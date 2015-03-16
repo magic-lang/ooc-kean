@@ -50,6 +50,7 @@ GpuContext: abstract class {
 	recycle: abstract func ~surface (surface: GpuSurface)
 	createSurface: abstract func -> GpuSurface
 	toRaster: virtual func (gpuImage: GpuImage) -> RasterImage { gpuImage toRasterDefault() }
+	toRasterAsync: virtual func (gpuImage: GpuImage) -> RasterImage { gpuImage toRasterDefault() }
 	toRaster: virtual func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) { gpuImage toRasterDefault(rasterImage) }
 	getMap: abstract func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap
 	getMaxContexts: func -> Int { 1 }

@@ -63,6 +63,9 @@ GpuPacker: class {
 	wait: func { this _packFence clientWait(1_000_000_000) }
 	read: func ~ByteBuffer -> ByteBuffer {
 		this wait()
+		readAsync()
+	}
+	readAsync: func ~ByteBuffer -> ByteBuffer {
 		sourcePointer := this _targetTexture lock(false)
 		buffer := ByteBuffer new(sourcePointer, this _targetTexture stride * this _targetTexture size height,
 			func (buffer: ByteBuffer){
@@ -108,6 +111,9 @@ GpuPacker: class {
 	}
 	read: func (destination: RasterPacked) {
 		this wait()
+		readAsync(destination)
+	}
+	readAsync: func (destination: RasterPacked) {
 		sourcePointer := this _targetTexture lock(false)
 		destinationPointer := destination buffer pointer
 		destinationStride := destination stride
