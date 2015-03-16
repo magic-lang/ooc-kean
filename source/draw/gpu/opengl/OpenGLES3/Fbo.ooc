@@ -62,12 +62,7 @@ Fbo: class {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture _backend, 0)
 		status: UInt = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		if (status != GL_FRAMEBUFFER_COMPLETE) {
-			statusMessage := match(status) {
-				case 36054 => "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT"
-				case 36055 => "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"
-				case 36056 => "GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS"
-				case => "UNKNOWN FRAMEBUFFER ERROR: " + status toString()
-			}
+			statusMessage := getErrorMessage(status)
 			errorMessage := "Framebuffer Object creation failed with status: " + statusMessage + " for texture of size " +
 			texture width toString() + " x " + texture height toString()
 			Debug print(errorMessage)
