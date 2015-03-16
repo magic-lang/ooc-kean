@@ -130,13 +130,13 @@ RasterMonochrome: class extends RasterPacked {
 	getFirstDerivativeWindow: func(windowLocation: IntBox2D, imageX, imageY: FloatImage) {
 		step := 3
 		// Ix & Iy  centered difference approximation with 4th error order, centered window
-		for(y in (windowLocation leftTop y).. (windowLocation rightBottom y)) {
-			for(x in (windowLocation leftTop x).. (windowLocation rightBottom x)) {
+		for (y in (windowLocation leftTop y)..(windowLocation rightBottom y)) {
+			for (x in (windowLocation leftTop x)..(windowLocation rightBottom x)) {
 				imageX[x - windowLocation leftTop x, y - windowLocation leftTop y] = ((-(this[x + 2 * step, y] y)) as Float + 8.0f * (this[x + step, y] y) as Float - 8.0f * (this[x - step, y] y) as Float + (this[x - 2 * step, y] y) as Float) / (12.0f * step)
 			}
 		}
-		for(y in (windowLocation leftTop y).. ( windowLocation rightBottom y)) {
-			for(x in (windowLocation leftTop x).. (windowLocation rightBottom x)) {
+		for (y in (windowLocation leftTop y)..( windowLocation rightBottom y)) {
+			for (x in (windowLocation leftTop x)..(windowLocation rightBottom x)) {
 				imageY[x - windowLocation leftTop x, y - windowLocation leftTop y] = ((-(this[x, y + 2 * step] y)) as Float + 8.0f * (this[x, y + step] y) as Float - 8.0f * (this[x, y - step] y) as Float + (this[x, y - 2 * step] y) as Float) / (12.0f * step)
 			}
 		}

@@ -12,15 +12,17 @@ FloatImage : class {
 		this _imagePointer = gc_malloc(width * height * Float instanceSize)
 	}
   operator [] (x, y: Int) -> Float {
-    //if (x <= _size width && y <= _size height) //Keep for debug purposes
-      (this _imagePointer + ( x + this _size width * y))@ as Float
-    //else
-      //println("Accessing FloatImage over limited size by getting value......")
+    version(safe) {
+      if (x > _size width || y > _size height || x < 0 || y < 0)
+        raise("Accessing FloatImage index out of range in get")
+    }
+    (this _imagePointer + ( x + this _size width * y))@ as Float
   }
   operator []= (x, y: Int, value: Float) {
-    //if (x <= _size width && y <= _size height)  //Keep for debug purposes
-      (this _imagePointer + ( x  + this _size width * y))@ = value
-    //else
-    //  println("Accessing FloatImage over limited size by setting value......")
+    version(safe) {
+      if (x > _size width || y > _size height || x < 0 || y < 0)
+        raise("Accessing FloatImage index out of range in set")
+    }
+    (this _imagePointer + ( x  + this _size width * y))@ = value
   }
 }
