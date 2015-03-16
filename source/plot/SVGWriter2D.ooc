@@ -19,9 +19,14 @@ SVGWriter2D: class {
 		this width = 1920
 		this height = 1080
 	}
-	init: func ~svgPlot(filename: String, svgPlot: SVGPlot) {
+	init: func ~svgPlot(filename: String, args: ...) {
 		this init(filename)
-		this svgPlots add(svgPlot)
+		args each(|arg|
+			match arg {
+				case plot: SVGPlot => this addPlot(plot)
+				case => // no action, unsupported argument
+			}
+		)
 	}
 	init: func ~svgPlots(filename: String, svgPlots: VectorList<SVGPlot>) {
 		this init(filename)
