@@ -127,35 +127,17 @@ RasterMonochrome: class extends RasterPacked {
 		original apply(f)
 	}
 	// get the derivative on small window, windowLocation is window's global location on image, window is left top centered.
-	getFirstDerivativeWindow: func(point: FloatPoint2D, windowLocation: IntBox2D, imageX, imageY: FloatImage) {
-		step := 4
-		k0 := 5.0f// 1.0f//
-		k1 := 14.0f
-		k := 32.0f
+	getFirstDerivativeWindow: func(windowLocation: IntBox2D, imageX, imageY: FloatImage) {
+		step := 3
 		// Ix & Iy  centered difference approximation with 4th error order, centered window
 		for(y in (windowLocation leftTop y).. (windowLocation rightBottom y)) {
 			for(x in (windowLocation leftTop x).. (windowLocation rightBottom x)) {
-				imageX[x - point x, y - point y] = ((-(this[x + 2 * step, y] y) * k0) as Float + 8.0f * k1 * (this[x + step, y] y) as Float - 8.0f * k1 * (this[x - step, y] y) as Float + (k0 * this[x - 2 * step, y] y) as Float) / (12.0f * step * k)
+				imageX[x - windowLocation leftTop x, y - windowLocation leftTop y] = ((-(this[x + 2 * step, y] y)) as Float + 8.0f * (this[x + step, y] y) as Float - 8.0f * (this[x - step, y] y) as Float + (this[x - 2 * step, y] y) as Float) / (12.0f * step)
 			}
 		}
 		for(y in (windowLocation leftTop y).. ( windowLocation rightBottom y)) {
 			for(x in (windowLocation leftTop x).. (windowLocation rightBottom x)) {
-				imageY[x - point x, y - point y] = ((-(this[x, y + 2 * step] y) * k0) as Float + 8.0f * k1 * (this[x, y + step] y) as Float - 8.0f * k1 * (this[x, y - step] y) as Float + (k0 * this[x, y - 2 * step] y) as Float) / (12.0f * step * k)
-			}
-		}
-	}
-	// Take the derivative on the whole image
-	getFirstDerivativeImages: func(imageX, imageY: FloatImage) {
-		step := 1
-		// Ix & Iy  centered difference approximation with 4th error order
-		for(y in 0.. this size height) {
-			for(x in 0.. this size width) {
-				imageX[x, y] = (-(this[x + 2 * step, y] y) as Float + 8.0f * (this[x + step, y] y) as Float - 8.0f * (this[x - step, y] y) as Float + (this[x - 2 * step, y] y) as Float) / (12.0f * step)
-			}
-		}
-		for(y in 0.. this size height) {
-			for(x in 0.. this size width) {
-				imageY[x, y] = (-(this[x, y + 2 * step] y) as Float + 8.0f * (this[x, y + step] y) as Float - 8.0f * (this[x, y - step] y) as Float + (this[x, y - 2 * step] y) as Float) / (12.0f * step)
+				imageY[x - windowLocation leftTop x, y - windowLocation leftTop y] = ((-(this[x, y + 2 * step] y)) as Float + 8.0f * (this[x, y + step] y) as Float - 8.0f * (this[x, y - step] y) as Float + (this[x, y - 2 * step] y) as Float) / (12.0f * step)
 			}
 		}
 	}

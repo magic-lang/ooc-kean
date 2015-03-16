@@ -11,6 +11,16 @@ FloatImage : class {
 		this _size = IntSize2D new(width, height)
 		this _imagePointer = gc_malloc(width * height * Float instanceSize)
 	}
-  operator [] (x, y: Int) -> Float { (this _imagePointer + ( x + this _size width * y))@ as Float }
-  operator []= (x, y: Int, value: Float) { (this _imagePointer + ( x  + this _size width * y))@ = value}
+  operator [] (x, y: Int) -> Float {
+    //if (x <= _size width && y <= _size height) //Keep for debug purposes
+      (this _imagePointer + ( x + this _size width * y))@ as Float
+    //else
+      //println("Accessing FloatImage over limited size by getting value......")
+  }
+  operator []= (x, y: Int, value: Float) {
+    //if (x <= _size width && y <= _size height)  //Keep for debug purposes
+      (this _imagePointer + ( x  + this _size width * y))@ = value
+    //else
+    //  println("Accessing FloatImage over limited size by setting value......")
+  }
 }
