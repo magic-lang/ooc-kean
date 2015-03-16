@@ -47,7 +47,7 @@ GraphicBuffer: class {
 		get {
 			match(this _format) {
 				case GraphicBufferFormat Rgba8888 => this _pixelStride * 4
-				case => raise("Using unimplemented GraphicBuffer format!"); 0
+				case => this _pixelStride
 			}
 		}
 	}
