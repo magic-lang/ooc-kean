@@ -39,6 +39,7 @@ Debug: class {
 		}
 	}
 	registerCallback: unmangled(kean_base_debug_registerCallback) static func (print: Pointer) {
-		This initialize((print, null) as Func (String))
+		f := (print, null) as Func (Char*)
+		This initialize(func (s: String) { f(s toCString()) })
 	}
 }
