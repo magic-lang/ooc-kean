@@ -26,6 +26,7 @@ GpuImageBin: class {
 	_uv: FreeArrayList<GpuImage>
 	_yuv422: FreeArrayList<GpuImage>
 	_mutex: Mutex
+	_limit := 5
 
 	init: func {
 		this _mutex = Mutex new()
@@ -53,19 +54,27 @@ GpuImageBin: class {
 		this _yuv422 free()
 		super()
 	}
+	_add: func (image: GpuImage, list: FreeArrayList<GpuImage>) {
+		if (list size > this _limit) {
+			tmp := list[0]
+			list removeAt(0)
+			tmp free()
+		}
+		list add(image)
+	}
 	add: func (image: GpuImage) {
 		this _mutex lock()
 		match (image) {
 			case (i: GpuMonochrome) =>
-				this _monochrome add(i)
+				this _add(i, this _monochrome)
 			case (i: GpuBgr) =>
-				this _bgr add(i)
+				this _add(i, this _bgr)
 			case (i: GpuBgra) =>
-				this _bgra add(i)
+				this _add(i, this _bgra)
 			case (i: GpuUv) =>
-				this _uv add(i)
+				this _add(i, this _uv)
 			case (i: GpuYuv422Semipacked) =>
-				this _yuv422 add(i)
+				this _add(i, this _yuv422)
 			case =>
 				raise("Unknown format in GpuImageBin add()")
 		}
