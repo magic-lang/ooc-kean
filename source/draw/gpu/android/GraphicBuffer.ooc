@@ -52,13 +52,13 @@ GraphicBuffer: class {
 	handle ::= this _handle
 	_allocated := false
 
-	init: func (=_size, =_format, usage: Int) {
-		This _allocate(_size width, _size height, this _format as Int, usage, this _backend&, this _nativeBuffer&, this _stride&)
+	init: func (=_size, =_format, usage: GraphicBufferUsage) {
+		This _allocate(_size width, _size height, this _format as Int, usage as Int, this _backend&, this _nativeBuffer&, this _pixelStride&)
 		this _allocated = true
 	}
-	init: func ~existing (=_backend, =_nativeBuffer, =_size, =_stride, =_format)
-	init: func ~fromHandle (=_backend, =_nativeBuffer, =_handle, =_size, =_format, verticalAlign: Int, horizontalAlign: Int) {
-
+	init: func ~existing (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format)
+	init: func ~fromHandle (handle: Pointer, =_size, =_pixelStride, =_format, usage: GraphicBufferUsage) {
+		This _create(_size width, _size height, _format as Int, usage as Int, _pixelStride, handle, false, this _backend&, this _nativeBuffer&)
 	}
 	free: override func {
 		if (this _allocated)
