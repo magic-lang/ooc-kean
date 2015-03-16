@@ -14,7 +14,7 @@ Axis: class {
 	tick: Float { get set (length) {
 			(value, radix) := Float decomposeToCoefficientAndRadix(length, 1)
 			this tick = radix
-			if (value != 0) {
+			if (value != 0.0f) {
 				if (length / this tick < 1.1f) {
 					this tick /= 10.0f
 				} else if (length / this tick < 4.0f) {
@@ -48,7 +48,7 @@ Axis: class {
 		radix := Float getRadix(this length(), this precision)
 		if (this orientation == Orientation Horizontal) {
 			result = result >> "<g desc='X-axis data'>\n"
-			labelOffset := FloatPoint2D new(this length() * scaling x / 2.0f, this fontSize + 0.5f * axisAreaSize y)
+			labelOffset := FloatPoint2D new(plotAreaSize x / 2.0f, this fontSize + 0.5f * axisAreaSize y)
 			numberOffset := FloatPoint2D new(0.0f, this fontSize + 0.2f * axisAreaSize y)
 			tickMarkerEndOffset := FloatPoint2D new(0.0f, - axisAreaSize y * 0.1f)
 			topTickMarkerStartOffset := FloatPoint2D new(0.0f, - plotAreaSize y)
@@ -69,7 +69,7 @@ Axis: class {
 			}
 		} else {
 			result = result >> "<g desc='Y-axis data'>\n"
-			labelOffset := FloatPoint2D new(- 0.6f * axisAreaSize x, - this length() * scaling y / 2.0f)
+			labelOffset := FloatPoint2D new(- 0.6f * axisAreaSize x, - plotAreaSize y / 2.0f)
 			numberOffset := FloatPoint2D new(-0.2f * axisAreaSize x, this fontSize / 2)
 			tickMarkerEndOffset := FloatPoint2D new(axisAreaSize x * 0.1f, 0.0f)
 			rightTickMarkerStartOffset := FloatPoint2D new(plotAreaSize x, 0.0f)
@@ -113,7 +113,7 @@ Axis: class {
 		tickValue = radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision) ? (tickValue / radix) : tickValue
 		tempTick := tickValue toString()
 		tempTickInt := tickValue as Int toString()
-		result = result & Shapes text(position + numberOffset, tickValue == floor(tickValue) ? tempTickInt : tempTick, this fontSize, textAnchor)
+		result = result & Shapes text(position + numberOffset, Float absolute(tickValue - tickValue round()) < 0.0001 ? tempTickInt : tempTick, this fontSize, textAnchor)
 		tempTick free()
 		tempTickInt free()
 		result = result >> "</g>\n"
