@@ -26,8 +26,9 @@ IntSize2D: cover {
 	empty ::= this width == 0 || this height == 0
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
-	init: unmangled(kean_math_intSize2D_new) func@ (=width, =height)
+	init: func@ (=width, =height)
 	init: func@ ~default { this init(0, 0) }
+	create: unmangled(kean_math_intSize2D_new) static func@ (width: Int, height: Int) { This new(width, height) }
 	scalarProduct: func (other: This) -> Int { this width * other width + this height * other height }
 	swap: func -> This { This new(this height, this width) }
 	minimum: func (ceiling: This) -> This { This new(this width minimum(ceiling width), this height minimum(ceiling height)) }
