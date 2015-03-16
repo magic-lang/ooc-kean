@@ -55,6 +55,6 @@ GpuContext: abstract class {
 	getMaxContexts: func -> Int { 1 }
 	setViewport: abstract func (viewport: Viewport)
 	getCurrentIndex: func -> Int { 0 }
-	alignWidth: func (width: Int, align := AlignWidth Nearest) -> Int { width }
-	isAligned: func (width: Int) -> Bool { true }
+	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }
+	isAligned: virtual func (width: Int) -> Bool { true }
 }
