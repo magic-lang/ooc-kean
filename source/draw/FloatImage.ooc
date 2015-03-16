@@ -4,13 +4,13 @@ FloatImage : class {
 	// x = column
 	// y = row
   _size: IntSize2D
-	size ::= _size
-	_imagePointer: Float*
-	init: func ~IntSize2D (=_size)
-	init: func ~WidthAndHeight (width: Int, height: Int) {
-		this _size = IntSize2D new(width, height)
-		this _imagePointer = gc_malloc(width * height * Float instanceSize)
-	}
+  size ::= _size
+  _imagePointer: Float*
+  init: func ~IntSize2D (=_size)
+  init: func ~WidthAndHeight (width: Int, height: Int) {
+    this _size = IntSize2D new(width, height)
+    this _imagePointer = gc_malloc(width * height * Float instanceSize)
+  }
   operator [] (x, y: Int) -> Float {
     version(safe) {
       if (x > _size width || y > _size height || x < 0 || y < 0)
