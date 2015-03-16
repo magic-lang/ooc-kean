@@ -22,7 +22,7 @@ import GraphicBuffer
 
 AndroidTexture: abstract class extends GpuTexture {
 	backend: EGLImage { get { this _backend as EGLImage } }
-	stride ::= this _buffer stride
+	stride ::= this _buffer pixelStride * this _channels
 	_channels: UInt
 	_buffer: GraphicBuffer
 	init: func (size: IntSize2D, =_buffer, eglImage: EGLImage, =_channels) {
