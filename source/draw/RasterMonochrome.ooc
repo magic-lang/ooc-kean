@@ -21,7 +21,7 @@ import structs/ArrayList
 import RasterPacked
 import RasterImage
 import StbImage
-import Image
+import Image, FloatImage
 import Color
 
 RasterMonochrome: class extends RasterPacked {
@@ -127,8 +127,57 @@ RasterMonochrome: class extends RasterPacked {
 		original apply(f)
 	}
 
-	operator [] (x, y: Int) -> ColorMonochrome {
-		this isValidIn(x, y) ? ColorMonochrome new(this buffer pointer[y * this stride + x]) : ColorMonochrome new(0)
+	// get the derivative on small window, windowLocation is window's global location on image, window is left top centered.
+	getFirstDerivativeWindow: func(windowLocation: IntBox2D, imageX, imageY: FloatImage) {
+		step := 3
+		// Ix & Iy  centered difference approximation with 4th error order, centered window
+		for (y in (windowLocation leftTop y)..(windowLocation rightBottom y)) {
+			for (x in (windowLocation leftTop x)..(windowLocation rightBottom x)) {
+				imageX[x - windowLocation leftTop x, y - windowLocation leftTop y] =
+					(
+						8 * this getValue(x + step, y) -
+						8 * this getValue(x - step, y) +
+						this getValue(x - 2 * step, y) -
+						this getValue(x + 2 * step, y)
+					) as Float / (12.0f * step)
+			}
+		}
+		for (y in (windowLocation leftTop y)..(windowLocation rightBottom y)) {
+			for (x in (windowLocation leftTop x)..(windowLocation rightBottom x)) {
+				imageY[x - windowLocation leftTop x, y - windowLocation leftTop y] =
+					(
+						8 * this getValue(x, y + step) -
+						8 * this getValue(x, y - step) +
+						this getValue(x, y - 2 * step) -
+						this getValue(x, y + 2 * step)
+					) as Float / (12.0f * step)
+			}
+		}
 	}
-	operator []= (x, y: Int, value: ColorMonochrome) { ((this buffer pointer + y * this stride) as ColorMonochrome* + x)@ = value }
+	operator [] (x, y: Int) -> ColorMonochrome {
+		version(safe) {
+			if (!this isValidIn(x, y)) {
+				raise("Accessing RasterMonochrome index out of range in get operator")
+			}
+		}
+		//this isValidIn(x, y) ? ColorMonochrome new(this buffer pointer[y * this stride + x]) : ColorMonochrome new(0)
+		ColorMonochrome new(this buffer pointer[y * this stride + x])
+	}
+
+	getValue: func(x, y: Int) -> UInt8 {
+		version(safe) {
+			if (x > this size width || y > this size height || x < 0 || y < 0) {
+				raise("Accessing RasterMonochrome index out of range in getValue")
+			}
+		}
+		return(this buffer pointer[y * this stride + x])
+	}
+
+	operator []= (x, y: Int, value: ColorMonochrome) {
+		version(safe) {
+			if (x > this size width || y > this size height || x < 0 || y < 0)
+				raise("Accessing RasterMonochrome index out of range in set operator")
+		}
+		((this buffer pointer + y * this stride) as ColorMonochrome* + x)@ = value
+	}
 }
