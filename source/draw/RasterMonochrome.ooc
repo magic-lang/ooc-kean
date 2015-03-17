@@ -157,7 +157,6 @@ RasterMonochrome: class extends RasterPacked {
 	operator [] (x, y: Int) -> ColorMonochrome {
 		version(safe) {
 			if (!this isValidIn(x, y)) {
-				println("x, y: (" + x toString() + "," + y toString() + "), size:" + this size toString())
 				raise("Accessing RasterMonochrome index out of range in get operator")
 			}
 		}
@@ -169,7 +168,6 @@ RasterMonochrome: class extends RasterPacked {
 		version(safe) {
 			if (x > this size width || y > this size height || x < 0 || y < 0) {
 				raise("Accessing RasterMonochrome index out of range in getValue")
-				println("x:" + x toString())
 			}
 		}
 		return(this buffer pointer[y * this stride + x])
