@@ -49,12 +49,12 @@ GpuContext: abstract class {
 	recycle: abstract func ~image (gpuImage: GpuImage)
 	recycle: abstract func ~surface (surface: GpuSurface)
 	createSurface: abstract func -> GpuSurface
-	toRaster: virtual func (gpuImage: GpuImage) -> RasterImage { gpuImage toRasterDefault() }
+	toRaster: virtual func (gpuImage: GpuImage, async: Bool = false) -> RasterImage { gpuImage toRasterDefault() }
 	toRaster: virtual func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) { gpuImage toRasterDefault(rasterImage) }
 	getMap: abstract func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap
 	getMaxContexts: func -> Int { 1 }
 	setViewport: abstract func (viewport: Viewport)
 	getCurrentIndex: func -> Int { 0 }
-	alignWidth: func (width: Int, align := AlignWidth Nearest) -> Int { width }
-	isAligned: func (width: Int) -> Bool { true }
+	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }
+	isAligned: virtual func (width: Int) -> Bool { true }
 }

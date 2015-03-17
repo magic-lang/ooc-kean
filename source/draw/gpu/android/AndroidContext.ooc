@@ -68,8 +68,7 @@ AndroidContext: class extends OpenGLES3Context {
 		if (rasterImage size height == 1080) {
 			yPacker readRows(rasterImage y)
 			uvPacker readRows(rasterImage uv)
-		}
-		else {
+		} else {
 			yPacker read(rasterImage y)
 			uvPacker read(rasterImage uv)
 		}
@@ -98,8 +97,7 @@ AndroidContext: class extends OpenGLES3Context {
 			uvBuffer = uvPacker readRows()
 			yPacker recycle()
 			uvPacker recycle()
-		}
-		else {
+		} else {
 			yBuffer = yPacker read()
 			uvBuffer = uvPacker read()
 		}
@@ -109,24 +107,37 @@ AndroidContext: class extends OpenGLES3Context {
 		result := RasterYuv420Semiplanar new(yRaster, uvRaster)
 		result
 	}
-	toRaster: func ~monochrome (gpuImage: GpuMonochrome) -> RasterImage {
+	toRaster: func ~monochrome (gpuImage: GpuMonochrome, async: Bool = false) -> RasterImage {
 		result: RasterImage
-		if (!this isAligned(gpuImage size width)) {
-			result = super(gpuImage)
-		}
+		bytesPerPixel := 1
+		if (!this isAligned(gpuImage size width * bytesPerPixel))
+			result = gpuImage toRasterDefault()
 		else {
 			yPacker := this createPacker(gpuImage size, 1)
 			this _packMonochrome imageWidth = gpuImage size width
 			yPacker pack(gpuImage, this _packMonochrome)
-			buffer := yPacker read()
-			result = RasterMonochrome new(buffer, gpuImage size, 64)
+			result = RasterMonochrome new(yPacker read(async), gpuImage size, 64)
 		}
 		result
 	}
-	toRaster: override func (gpuImage: GpuImage) -> RasterImage {
+	toRaster: func ~uv (gpuImage: GpuUv, async: Bool = false) -> RasterImage {
+		result: RasterImage
+		bytesPerPixel := 2
+		if (!this isAligned(gpuImage size width * bytesPerPixel))
+			result = gpuImage toRasterDefault()
+		else {
+			uvPacker := this createPacker(gpuImage size, 2)
+			this _packUv imageWidth = gpuImage size width
+			uvPacker pack(gpuImage, this _packUv)
+			result = RasterUv new(uvPacker read(async), gpuImage size, 64)
+		}
+		result
+	}
+	toRaster: override func (gpuImage: GpuImage, async: Bool = false) -> RasterImage {
 		result := match(gpuImage) {
 			case (i : GpuYuv420Semiplanar) => this toRaster(gpuImage as GpuYuv420Semiplanar)
-			case (i : GpuMonochrome) => this toRaster(gpuImage as GpuMonochrome)
+			case (i : GpuUv) => this toRaster(gpuImage as GpuUv, async)
+			case (i : GpuMonochrome) => this toRaster(gpuImage as GpuMonochrome, async)
 			case => super(gpuImage)
 		}
 		result
@@ -158,8 +169,8 @@ AndroidContext: class extends OpenGLES3Context {
 		target
 	}
 
-	alignWidth: func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }
-	isAligned: func (width: Int) -> Bool { GraphicBuffer isAligned(width) }
+	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }
+	isAligned: override func (width: Int) -> Bool { GraphicBuffer isAligned(width) }
 }
 
 AndroidContextManager: class extends GpuContextManager {
@@ -179,20 +190,17 @@ AndroidContextManager: class extends GpuContextManager {
 			if (this _motherContext == null) {
 				this _motherContext = AndroidContext new()
 				result = this _motherContext
-			}
-			else
+			} else
 				result = AndroidContext new(this _motherContext)
 			this _mutex unlock()
-		}
-		else
+		} else
 			result = AndroidContext new()
-
 		result
 	}
 	createBgra: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> OpenGLES3Bgra { this currentContext createBgra(buffer) }
 	unpackBgraToYuv420Semiplanar: func (source: GpuBgra, targetSize: IntSize2D) -> GpuYuv420Semiplanar {
 		this currentContext unpackBgraToYuv420Semiplanar(source, targetSize)
 	}
-	alignWidth: func (width: Int, align := AlignWidth Nearest) -> Int { this currentContext alignWidth(width, align) }
-	isAligned: func (width: Int) -> Bool { this currentContext isAligned(width) }
+	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { this currentContext alignWidth(width, align) }
+	isAligned: override func (width: Int) -> Bool { this currentContext isAligned(width) }
 }
