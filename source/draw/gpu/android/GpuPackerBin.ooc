@@ -23,16 +23,13 @@ GpuPackerBin: class {
 	init: func { this _packers = FreeArrayList<GpuPacker> new() }
 	clean: func {
 		for(i in 0..this _packers size) {
-			packer := this _packers[i]
-			packer free()
+			this _packers removeAt(0, true)
 		}
-		this _packers clear()
 	}
 	add: func (packer: GpuPacker) {
-		if (this _packers size > this _limit) {
+		if (this _packers size >= this _limit) {
 			tmp := this _packers[0]
-			this _packers removeAt(0)
-			tmp free()
+			this _packers removeAt(0, true)
 		}
 		this _packers add(packer)
 	}
