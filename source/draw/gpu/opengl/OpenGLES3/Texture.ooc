@@ -60,7 +60,7 @@ Texture: class {
 	free: override func {
 		version(debugGL) { validateStart() }
 		glDeleteTextures(1, _backend&)
-		version(debugGL) { validateEnd("Texture dispose") }
+		version(debugGL) { validateEnd("Texture free") }
 		super()
 	}
 	generateMipmap: func {
