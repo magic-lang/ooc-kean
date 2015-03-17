@@ -48,7 +48,7 @@ Axis: class {
 		radix := Float getRadix(this length(), this precision)
 		if (this orientation == Orientation Horizontal) {
 			result = result >> "<g desc='X-axis data'>\n"
-			labelOffset := FloatPoint2D new(plotAreaSize x / 2.0f, this fontSize + 0.5f * axisAreaSize y)
+			labelOffset := FloatPoint2D new(plotAreaSize x / 2.0f, this fontSize + 0.6f * axisAreaSize y)
 			numberOffset := FloatPoint2D new(0.0f, this fontSize + 0.2f * axisAreaSize y)
 			tickMarkerEndOffset := FloatPoint2D new(0.0f, - axisAreaSize y * 0.1f)
 			topTickMarkerStartOffset := FloatPoint2D new(0.0f, - plotAreaSize y)
