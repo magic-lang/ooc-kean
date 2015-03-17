@@ -17,7 +17,7 @@ FloatImage : class {
 			if (x > _size width || y > _size height || x < 0 || y < 0)
 				raise("Accessing FloatImage index out of range in get")
 		}
-		(this _imagePointer + ( x + this _size width * y))@ as Float
+		(this _imagePointer + (x + this _size width * y))@ as Float
 	}
 
 	operator []= (x, y: Int, value: Float) {
@@ -25,6 +25,6 @@ FloatImage : class {
 			if (x > _size width || y > _size height || x < 0 || y < 0)
 				raise("Accessing FloatImage index out of range in set")
 		}
-		(this _imagePointer + ( x  + this _size width * y))@ = value
+		(this _imagePointer + (x + this _size width * y))@ = value
 	}
 }
