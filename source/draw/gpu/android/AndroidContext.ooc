@@ -107,7 +107,7 @@ AndroidContext: class extends OpenGLES3Context {
 		result := RasterYuv420Semiplanar new(yRaster, uvRaster)
 		result
 	}
-	toRasterAux: func ~monochrome (gpuImage: GpuMonochrome, async: Bool) -> RasterImage {
+	toRaster: func ~monochrome (gpuImage: GpuMonochrome, async: Bool = false) -> RasterImage {
 		result: RasterImage
 		bytesPerPixel := 1
 		if (!this isAligned(gpuImage size width * bytesPerPixel))
@@ -116,11 +116,11 @@ AndroidContext: class extends OpenGLES3Context {
 			yPacker := this createPacker(gpuImage size, 1)
 			this _packMonochrome imageWidth = gpuImage size width
 			yPacker pack(gpuImage, this _packMonochrome)
-			result = RasterMonochrome new(async ? yPacker readAsync() : yPacker read(), gpuImage size, 64)
+			result = RasterMonochrome new(yPacker read(async), gpuImage size, 64)
 		}
 		result
 	}
-	toRasterAux: func ~uv (gpuImage: GpuUv, async: Bool) -> RasterImage {
+	toRaster: func ~uv (gpuImage: GpuUv, async: Bool = false) -> RasterImage {
 		result: RasterImage
 		bytesPerPixel := 2
 		if (!this isAligned(gpuImage size width * bytesPerPixel))
@@ -129,28 +129,15 @@ AndroidContext: class extends OpenGLES3Context {
 			uvPacker := this createPacker(gpuImage size, 2)
 			this _packUv imageWidth = gpuImage size width
 			uvPacker pack(gpuImage, this _packUv)
-			result = RasterUv new(async ? uvPacker readAsync() : uvPacker read(), gpuImage size, 64)
+			result = RasterUv new(uvPacker read(async), gpuImage size, 64)
 		}
 		result
 	}
-	toRaster: func ~monochrome (gpuImage: GpuMonochrome) -> RasterImage { toRasterAux(gpuImage, false) }
-	toRasterAsync: func ~monochrome (gpuImage: GpuMonochrome) -> RasterImage { toRasterAux(gpuImage, true) }
-	toRaster: func ~uv (gpuImage: GpuUv) -> RasterImage { toRasterAux(gpuImage, false) }
-	toRasterAsync: func ~uv (gpuImage: GpuUv) -> RasterImage { toRasterAux(gpuImage, true) }
-	toRaster: override func (gpuImage: GpuImage) -> RasterImage {
+	toRaster: override func (gpuImage: GpuImage, async: Bool = false) -> RasterImage {
 		result := match(gpuImage) {
 			case (i : GpuYuv420Semiplanar) => this toRaster(gpuImage as GpuYuv420Semiplanar)
-			case (i : GpuUv) => this toRaster(gpuImage as GpuUv)
-			case (i : GpuMonochrome) => this toRaster(gpuImage as GpuMonochrome)
-			case => super(gpuImage)
-		}
-		result
-	}
-	toRasterAsync: override func (gpuImage: GpuImage) -> RasterImage {
-		result := match(gpuImage) {
-			case (i : GpuYuv420Semiplanar) => this toRaster(gpuImage as GpuYuv420Semiplanar)
-			case (i : GpuUv) => this toRasterAsync(gpuImage as GpuUv)
-			case (i : GpuMonochrome) => this toRasterAsync(gpuImage as GpuMonochrome)
+			case (i : GpuUv) => this toRaster(gpuImage as GpuUv, async)
+			case (i : GpuMonochrome) => this toRaster(gpuImage as GpuMonochrome, async)
 			case => super(gpuImage)
 		}
 		result
