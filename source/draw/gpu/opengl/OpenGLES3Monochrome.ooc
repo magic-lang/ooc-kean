@@ -22,7 +22,7 @@ import OpenGLES3Canvas, Map/OpenGLES3Map, Map/OpenGLES3MapPack, OpenGLES3Texture
 
 OpenGLES3Monochrome: class extends GpuMonochrome {
 	init: func (size: IntSize2D, context: GpuContext) {
-		init(size, size width, null, context)
+		this init(size, size width, null, context)
 	}
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
 		super(OpenGLES3Texture createMonochrome(size, stride, data), size, context)
