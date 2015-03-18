@@ -47,8 +47,7 @@ ImageFileTest: class extends Fixture {
 			failureReason = StbImage failureReason()
 			failureReason toString() println()
 		})
-		//TODO: Make these work
-/*		this add("open png RasterBgra", func() {
+		this add("open png RasterBgra", func() {
 			source := "../test/draw/input/Space.png"
 			destination := "../test/draw/output/pngRasterBgra.png"
 			image := RasterBgra open(source)
@@ -84,7 +83,8 @@ ImageFileTest: class extends Fixture {
 			image := RasterMonochrome open(source)
 			image save(destination)
 		})
-		this add("open jpg RasterMonochrome to RasterBgra", func() {
+		//TODO: Make these work
+/*		this add("open jpg RasterMonochrome to RasterBgra", func() {
 			source := "../test/draw/input/Space.jpg"
 			destination := "../test/draw/output/jpgRasterMonochrome-RasterBgra.png"
 			image := RasterMonochrome open(source)
