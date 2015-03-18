@@ -34,10 +34,8 @@ Debug: class {
 		This printFunction = f
 	}
 	print: static func (printOut: String, level: Int = 1) {
-		version(debugPrint) {
-			if (This _level == level || (This _level == DebugLevel Everything) ) {
-				This printFunction(printOut)
-			}
+		if (This _level == level || (This _level == DebugLevel Everything) ) {
+			This printFunction(printOut)
 		}
 	}
 	registerCallback: unmangled(kean_base_debug_registerCallback) static func (print: Pointer) {
