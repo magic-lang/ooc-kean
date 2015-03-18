@@ -27,7 +27,7 @@ import lang/IO
 
 RasterBgra: class extends RasterPacked {
 	bytesPerPixel: Int { get { 4 } }
-	init: func ~allocate (size: IntSize2D, align := 0, verticalAlign := 0) { super(size, align, verticalAlign) }
+	init: func ~allocate (size: IntSize2D, align := 0, verticalAlign := 0) { super~allocate(size, align, verticalAlign) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, align := 0, verticalAlign := 0) { super(buffer, size, align, verticalAlign) }
 	init: func ~fromRaster (original: RasterImage) { super(original) }
 	create: func (size: IntSize2D) -> Image { This new(size) }
