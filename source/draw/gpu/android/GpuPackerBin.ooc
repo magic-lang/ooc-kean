@@ -28,7 +28,6 @@ GpuPackerBin: class {
 	}
 	add: func (packer: GpuPacker) {
 		if (this _packers size >= this _limit) {
-			tmp := this _packers[0]
 			this _packers removeAt(0, true)
 		}
 		this _packers add(packer)
