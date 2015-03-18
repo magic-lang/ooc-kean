@@ -21,8 +21,8 @@ Container: class <T> {
 		set(value) { blockFree = value }
 	}
 	content: T
-    set: func (=content)
-    get: func -> T { content }
+	set: func (=content)
+	get: func -> T { content }
 	init: func(=content)
 	init: func ~withBlockFree(=content, blockFree: Bool) { this blockFree = blockFree }
 	init: func ~novalue
