@@ -22,7 +22,7 @@ import GraphicBuffer
 
 AndroidTexture: abstract class extends GpuTexture {
 	backend: EGLImage { get { this _backend as EGLImage } }
-	stride ::= this _buffer stride
+	stride ::= this _buffer pixelStride * this _channels
 	_channels: UInt
 	_buffer: GraphicBuffer
 	init: func (size: IntSize2D, =_buffer, eglImage: EGLImage, =_channels) {
@@ -46,24 +46,13 @@ AndroidTexture: abstract class extends GpuTexture {
 }
 
 AndroidRgba: class extends AndroidTexture {
-	init: func ~allocate (size: IntSize2D, read: Bool, write: Bool, eglDisplay: Pointer) {
-		gb := GraphicBuffer new(size, GraphicBufferFormat Rgba8888, GraphicBuffer getUsageFlags(read, write))
+	init: func ~allocate (size: IntSize2D, eglDisplay: Pointer) {
+		gb := GraphicBuffer new(size, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture)
 		egl := EGLImage create(TextureType rgba, size width, size height, gb nativeBuffer, eglDisplay)
 		super(size, gb, egl, 4)
 	}
 	init: func ~fromGraphicBuffer (buffer: GraphicBuffer, eglDisplay: Pointer) {
 		eglImage := EGLImage create(TextureType rgba, buffer size width, buffer size height, buffer nativeBuffer, eglDisplay)
 		super(IntSize2D new(eglImage width, eglImage height), buffer, eglImage, 4)
-	}
-}
-
-AndroidYv12: class extends AndroidTexture {
-	init: func ~allocate (size: IntSize2D, read: Bool, write: Bool, eglDisplay: Pointer) {
-		gb := GraphicBuffer new(size, GraphicBufferFormat Yv12, GraphicBuffer getUsageFlags(read, write))
-		super(size, gb, EGLImage create(TextureType rgba, size width, size height, gb nativeBuffer, eglDisplay), 1)
-	}
-	init: func ~fromGraphicBuffer (buffer: GraphicBuffer, eglDisplay: Pointer) {
-		eglImage := EGLImage create(TextureType yv12, buffer size width, buffer size height, buffer nativeBuffer, eglDisplay)
-		super(IntSize2D new(eglImage width, eglImage height), buffer, eglImage, 1)
 	}
 }

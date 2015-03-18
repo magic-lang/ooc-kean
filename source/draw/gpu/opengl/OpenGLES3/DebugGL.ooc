@@ -11,12 +11,21 @@ validateEnd: func (location: String) {
 validate: func (message: String) {
 	glError := glGetError()
 	if(glError != GL_NO_ERROR) {
-		errorMessage := "OpenGL error " + message + ": #"  + glError toString()
+		errorMessage := "OpenGL error " + message + ": "  + getErrorMessage(glError)
 		Debug print(errorMessage)
 		raise(errorMessage)
 	}
 }
 printGlError: func {
-	Debug print("OpenGL error: " + glGetError() toString())
+	Debug print("OpenGL error: " + getErrorMessage(glGetError()))
 	Debug print("EGL error: " + eglGetError() toString())
+}
+getErrorMessage: func (errorCode: Int) -> String {
+	result := match(errorCode) {
+		case 36054 => "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT"
+		case 36055 => "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"
+		case 36056 => "GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS"
+		case => "ERROR CODE: " + errorCode toString()
+	}
+	result
 }

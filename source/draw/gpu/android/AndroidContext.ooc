@@ -151,7 +151,7 @@ AndroidContext: class extends OpenGLES3Context {
 		}
 		result
 	}
-	createAndroidRgba: func (size: IntSize2D, read: Bool, write: Bool) -> AndroidRgba { AndroidRgba new(size, read, write, this _backend _eglDisplay) }
+	createAndroidRgba: func (size: IntSize2D) -> AndroidRgba { AndroidRgba new(size, this _backend _eglDisplay) }
 	createBgra: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> OpenGLES3Bgra {
 		androidTexture := AndroidRgba new(buffer, this _backend _eglDisplay)
 		result := OpenGLES3Bgra new(androidTexture, this)

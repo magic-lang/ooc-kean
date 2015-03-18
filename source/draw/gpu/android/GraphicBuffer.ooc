@@ -35,72 +35,82 @@ GraphicBuffer: class {
 	_free: static Func (Pointer)
 	_lock: static Func (Pointer, Bool, Pointer*)
 	_unlock: static Func (Pointer)
+	_alignedWidth: static Int[]
+
 	_format: GraphicBufferFormat
 	format ::= this _format
 	_size: IntSize2D
 	size ::= this _size
-	_stride: Int
-	stride ::= this _stride
+	_pixelStride: Int
+	pixelStride ::= this _pixelStride
+	stride: Int {
+		get {
+			match(this _format) {
+				case GraphicBufferFormat Rgba8888 => this _pixelStride * 4
+				case => this _pixelStride
+			}
+		}
+	}
+	length: Int { get { this stride * this size height } }
 	_backend: Pointer = null
 	_nativeBuffer: Pointer = null
 	nativeBuffer ::= this _nativeBuffer
+	_handle: Pointer = null
+	handle ::= this _handle
 	_allocated := false
-	_unpaddedWidth: static Int[]
-	init: func (=_size, =_format, usage: Int) {
-		This _allocate(_size width, _size height, this _format as Int, usage, this _backend&, this _nativeBuffer&, this _stride&)
+
+	init: func (=_size, =_format, usage: GraphicBufferUsage) {
+		This _allocate(_size width, _size height, this _format as Int, usage as Int, this _backend&, this _nativeBuffer&, this _pixelStride&)
 		this _allocated = true
 	}
-	init: func ~existing (=_backend, =_nativeBuffer, =_size, =_stride, =_format)
-	init: func ~fromHandle (=_size, =_format, usage: GraphicBufferUsage, =_stride, handle: Pointer, keepOwnership: Bool) {
-		This _create(_size width, _size height, _format as Int, usage as Int, _stride, handle, keepOwnership, this _backend&, this _nativeBuffer&)
+	init: func ~existing (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format)
+	init: func ~fromHandle (handle: Pointer, =_size, =_pixelStride, =_format, usage: GraphicBufferUsage) {
+		This _create(_size width, _size height, _format as Int, usage as Int, _pixelStride, handle, false, this _backend&, this _nativeBuffer&)
 	}
 	free: override func {
 		if (this _allocated)
 			This _free(this _backend)
 		super()
 	}
-	lock: func (write: Bool) -> Pointer {
+	lock: func (write := false) -> Pointer {
 		result: Pointer = null
 		This _lock(this _backend, write, result&)
 		result
 	}
 	unlock: func { This _unlock(this _backend) }
-	getUsageFlags: static func (read: Bool, write: Bool) -> Int {
-		usage := 0
-		usage = read ? usage | GraphicBufferUsage ReadOften : usage | GraphicBufferUsage ReadNever
-		usage = write ? usage | GraphicBufferUsage WriteOften : usage | GraphicBufferUsage WriteNever
-		usage
+	registerCallbacks: unmangled(kean_draw_gpu_android_graphicBuffer_registerCallbacks) static func (allocate: Pointer, create: Pointer, free: Pointer, lock: Pointer, unlock: Pointer) {
+		This _allocate = (allocate, null) as Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
+		This _create = (create, null) as Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
+		This _free = (free, null) as Func (Pointer)
+		This _lock = (lock, null) as Func (Pointer, Bool, Pointer*)
+		This _unlock = (unlock, null) as Func (Pointer)
 	}
-	initialize: static func (allocate: Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*), create: Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*),
-	free: Func (Pointer), lock: Func (Pointer, Bool, Pointer*), unlock: Func (Pointer), unpaddedWidth: Int[]) {
-		This _allocate = allocate
-		This _create = create
-		This _free = free
-		This _lock = lock
-		This _unlock = unlock
-		This _unpaddedWidth = unpaddedWidth
+	configureAlignedWidth: unmangled(kean_draw_gpu_android_graphicBuffer_configureAlignedWidth) static func (alignedWidth: Int*, count: Int) {
+		This _alignedWidth = Int[count] new()
+		for (i in 0..count)
+			This _alignedWidth[i] = alignedWidth[i]
 	}
 	alignWidth: static func (width: Int, align := AlignWidth Nearest) -> Int {
-		result := This _unpaddedWidth[0]
+		result := This _alignedWidth[0]
 		match(align) {
 			case AlignWidth Nearest => {
-				for (i in 0..This _unpaddedWidth length) {
-					currentWidth := This _unpaddedWidth[i]
+				for (i in 0..This _alignedWidth length) {
+					currentWidth := This _alignedWidth[i]
 					if (abs(result - width) > abs(currentWidth - width))
 						result = currentWidth
 				}
 			}
 			case AlignWidth Floor => {
-				for (i in 0..This _unpaddedWidth length) {
-					currentWidth := This _unpaddedWidth[i]
+				for (i in 0..This _alignedWidth length) {
+					currentWidth := This _alignedWidth[i]
 					if (abs(result - width) > abs(currentWidth - width) && currentWidth <= width)
 						result = currentWidth
 				}
 			}
 			case AlignWidth Ceiling => {
-				result = This _unpaddedWidth[This _unpaddedWidth length-1]
-				for (i in 0..This _unpaddedWidth length) {
-					currentWidth := This _unpaddedWidth[i]
+				result = This _alignedWidth[This _alignedWidth length-1]
+				for (i in 0..This _alignedWidth length) {
+					currentWidth := This _alignedWidth[i]
 					if (abs(result - width) > abs(currentWidth - width) && currentWidth >= width)
 						result = currentWidth
 				}
@@ -110,8 +120,8 @@ GraphicBuffer: class {
 	}
 	isAligned: static func (width: Int) -> Bool {
 		result := false
-		for (i in 0..This _unpaddedWidth length) {
-			if (width == This _unpaddedWidth[i]) {
+		for (i in 0..This _alignedWidth length) {
+			if (width == This _alignedWidth[i]) {
 				result = true
 				break
 			}
