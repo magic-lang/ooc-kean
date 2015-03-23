@@ -38,7 +38,12 @@ ByteBuffer: class {
 		this _pointer = null
 		super()
 	}
-
+	zero: func ~whole() {
+		memset(_pointer, 0, _size)
+	}
+	zero: func ~range (offset: Int, length: Int) {
+		memset(_pointer + offset, 0, length)
+	}
 	slice: func(offset: Int, size: Int) -> This {
 		_SlicedByteBuffer new(this, offset, size)
 	}
