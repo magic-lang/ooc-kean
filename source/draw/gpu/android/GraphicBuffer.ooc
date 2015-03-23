@@ -29,14 +29,14 @@ GraphicBufferUsage: enum (*2) {
 	Texture
 	Rendertarget
 }
+
 GraphicBuffer: class {
 	_allocate: static Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
 	_create: static Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
 	_free: static Func (Pointer)
 	_lock: static Func (Pointer, Bool, Pointer*)
 	_unlock: static Func (Pointer)
-	_alignedWidth: static Int[]
-
+	_alignedWidth: static Int[] = Int[0] new()
 	_format: GraphicBufferFormat
 	format ::= this _format
 	_size: IntSize2D
@@ -87,32 +87,38 @@ GraphicBuffer: class {
 	}
 	configureAlignedWidth: unmangled(kean_draw_gpu_android_graphicBuffer_configureAlignedWidth) static func (alignedWidth: Int*, count: Int) {
 		This _alignedWidth = Int[count] new()
-		for (i in 0..count)
-			This _alignedWidth[i] = alignedWidth[i]
+		memcpy(This _alignedWidth data, alignedWidth, count * Int size)
 	}
 	alignWidth: static func (width: Int, align := AlignWidth Nearest) -> Int {
-		result := This _alignedWidth[0]
-		match(align) {
-			case AlignWidth Nearest => {
-				for (i in 0..This _alignedWidth length) {
-					currentWidth := This _alignedWidth[i]
-					if (abs(result - width) > abs(currentWidth - width))
-						result = currentWidth
+		//TODO: Clean this messy function and remove check for empty array
+		result: Int
+		if (This _alignedWidth length == 0) {
+			result = width
+		}
+		else {
+			result = This _alignedWidth[0]
+			match(align) {
+				case AlignWidth Nearest => {
+					for (i in 0..This _alignedWidth length) {
+						currentWidth := This _alignedWidth[i]
+						if (abs(result - width) > abs(currentWidth - width))
+							result = currentWidth
+					}
 				}
-			}
-			case AlignWidth Floor => {
-				for (i in 0..This _alignedWidth length) {
-					currentWidth := This _alignedWidth[i]
-					if (abs(result - width) > abs(currentWidth - width) && currentWidth <= width)
-						result = currentWidth
+				case AlignWidth Floor => {
+					for (i in 0..This _alignedWidth length) {
+						currentWidth := This _alignedWidth[i]
+						if (abs(result - width) > abs(currentWidth - width) && currentWidth <= width)
+							result = currentWidth
+					}
 				}
-			}
-			case AlignWidth Ceiling => {
-				result = This _alignedWidth[This _alignedWidth length-1]
-				for (i in 0..This _alignedWidth length) {
-					currentWidth := This _alignedWidth[i]
-					if (abs(result - width) > abs(currentWidth - width) && currentWidth >= width)
-						result = currentWidth
+				case AlignWidth Ceiling => {
+					result = This _alignedWidth[This _alignedWidth length-1]
+					for (i in 0..This _alignedWidth length) {
+						currentWidth := This _alignedWidth[i]
+						if (abs(result - width) > abs(currentWidth - width) && currentWidth >= width)
+							result = currentWidth
+					}
 				}
 			}
 		}
