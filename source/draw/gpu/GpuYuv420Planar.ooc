@@ -75,10 +75,4 @@ GpuYuv420Planar: abstract class extends GpuPlanar {
 		result := RasterYuv420Planar new(y as RasterMonochrome, u as RasterMonochrome, v as RasterMonochrome)
 		result
 	}
-	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
-		planar := rasterImage as RasterYuv420Planar
-		this _y toRaster(planar y)
-		this _u toRaster(planar u)
-		this _v toRaster(planar v)
-	}
 }
