@@ -48,8 +48,12 @@ FloatComplexTest: class extends Fixture {
 			expect((this complexNumber0 * this complexNumber1) imaginary == 7, is true)
 		})
 		this add("scalar multiplication", func() {
-			expect((this complexNumber0 * (-1.0f)) real, is equal to((-complexNumber0) real))
-			expect((this complexNumber0 * (-1.0f)) imaginary, is equal to((-complexNumber0) imaginary))
+			expect(((-1.0f) * this complexNumber0) real, is equal to((-complexNumber0) real))
+			expect(((-1.0f) * this complexNumber0) imaginary, is equal to((-complexNumber0) imaginary))
+		})
+		this add("division", func() {
+			expect((complexNumber2 / complexNumber0) real == 2.6f, is true)
+			expect((complexNumber2 / complexNumber0) imaginary == 0.2f, is true)
 		})
 	}
 }

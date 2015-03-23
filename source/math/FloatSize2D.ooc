@@ -81,4 +81,3 @@ operator * (left: Float, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(le
 operator / (left: Float, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left / right width, left / right height) }
 operator * (left: Int, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left * right width, left * right height) }
 operator / (left: Int, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left / right width, left / right height) }
-

@@ -25,7 +25,11 @@ FloatComplex: cover {
 	operator + (other: This) -> This {This new(this real + other real, this imaginary + other imaginary)}
 	operator - (other: This) -> This {This new(this real - other real, this imaginary - other imaginary)}
 	operator - -> This {This new(-this real, -this imaginary)}
-	operator * (other: This) -> This {This new(this real * other real - this imaginary * other imaginary, this real * other imaginary + this imaginary * other real)}
 	operator * (other: Float) -> This {This new(other * this real, other * this imaginary)}
-	
+	operator * (other: This) -> This {This new(this real * other real - this imaginary * other imaginary, this real * other imaginary + this imaginary * other real)}
+	operator / (other: Float) -> This {This new(this real / other, this imaginary / other)}
+	operator / (other: This) -> This {(this * other conjugate) / (other absoluteValue pow(2))}
+
+
 }
+operator * (left: Float, right: FloatComplex) -> FloatComplex { FloatComplex new(left * right real, left * right imaginary) }
