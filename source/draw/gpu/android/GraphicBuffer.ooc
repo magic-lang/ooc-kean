@@ -87,12 +87,14 @@ GraphicBuffer: class {
 	}
 	configureAlignedWidth: unmangled(kean_draw_gpu_android_graphicBuffer_configureAlignedWidth) static func (alignedWidth: Int*, count: Int) {
 		This _alignedWidth = Int[count] new()
-		for (i in 0..count)
-			This _alignedWidth[i] = alignedWidth[i]
+		memcpy(This _alignedWidth data, alignedWidth, count * Int size)
 	}
 	alignWidth: static func (width: Int, align := AlignWidth Nearest) -> Int {
-		result := width
-		if (This _alignedWidth length > 0) {
+		result: Int
+		if (This _alignedWidth length == 0) {
+			result = width
+		}
+		else {
 			result = This _alignedWidth[0]
 			match(align) {
 				case AlignWidth Nearest => {
@@ -123,12 +125,10 @@ GraphicBuffer: class {
 	}
 	isAligned: static func (width: Int) -> Bool {
 		result := false
-		if (This _alignedWidth length > 0) {
-			for (i in 0..This _alignedWidth length) {
-				if (width == This _alignedWidth[i]) {
-					result = true
-					break
-				}
+		for (i in 0..This _alignedWidth length) {
+			if (width == This _alignedWidth[i]) {
+				result = true
+				break
 			}
 		}
 		result
