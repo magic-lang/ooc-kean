@@ -86,7 +86,6 @@ GraphicBuffer: class {
 		This _unlock = (unlock, null) as Func (Pointer)
 	}
 	configureAlignedWidth: unmangled(kean_draw_gpu_android_graphicBuffer_configureAlignedWidth) static func (alignedWidth: Int*, count: Int) {
-		This _alignedWidth free()
 		This _alignedWidth = Int[count] new()
 		memcpy(This _alignedWidth data, alignedWidth, count * Int size)
 	}
