@@ -16,20 +16,33 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import math
+import text/StringTokenizer
+import structs/ArrayList
 
 FloatComplex: cover {
 	real, imaginary: Float
 	init: func@ (=real, =imaginary)
 	conjugate ::= FloatComplex new(this real, - this imaginary)
 	absoluteValue ::= (this real pow(2) + this imaginary pow(2)) sqrt()
-	operator + (other: This) -> This {This new(this real + other real, this imaginary + other imaginary)}
-	operator - (other: This) -> This {This new(this real - other real, this imaginary - other imaginary)}
-	operator - -> This {This new(-this real, -this imaginary)}
-	operator * (other: Float) -> This {This new(other * this real, other * this imaginary)}
-	operator * (other: This) -> This {This new(this real * other real - this imaginary * other imaginary, this real * other imaginary + this imaginary * other real)}
-	operator / (other: Float) -> This {This new(this real / other, this imaginary / other)}
-	operator / (other: This) -> This {(this * other conjugate) / (other absoluteValue pow(2))}
-
-
+	operator + (other: This) -> This { This new(this real + other real, this imaginary + other imaginary) }
+	operator - (other: This) -> This { This new(this real - other real, this imaginary - other imaginary) }
+	operator - -> This { This new(-this real, -this imaginary) }
+	operator * (other: Float) -> This { This new(other * this real, other * this imaginary) }
+	operator * (other: This) -> This { This new(this real * other real - this imaginary * other imaginary, this real * other imaginary + this imaginary * other real) }
+	operator / (other: Float) -> This { This new(this real / other, this imaginary / other) }
+	operator / (other: This) -> This { (this * other conjugate) / (other absoluteValue pow(2)) }
+	operator == (other: This) -> Bool { this real == other real && this imaginary == other imaginary }
+	operator != (other: This) -> Bool { !(this == other) }
+	toString: func -> String {
+		if (this imaginary < 0) "#{this real toString()} #{this imaginary toString()}i"
+		else "#{this real toString()} +#{this imaginary toString()}i"
+	}
+	parse: static func(input: String) -> This {
+		array := input split('-')
+		"{array[0]}" println()
+		"{array[1]}" println()
+		//This new (array[0] toFloat(), array[1] toFloat())
+	}
 }
 operator * (left: Float, right: FloatComplex) -> FloatComplex { FloatComplex new(left * right real, left * right imaginary) }
+operator / (left: Float, right: FloatComplex) -> FloatComplex { (left * right conjugate) / (right absoluteValue pow(2)) }

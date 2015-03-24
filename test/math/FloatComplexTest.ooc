@@ -18,6 +18,7 @@ use ooc-unit
 use ooc-math
 import math
 import FloatComplex
+import lang/IO
 
 FloatComplexTest: class extends Fixture {
 
@@ -27,10 +28,6 @@ FloatComplexTest: class extends Fixture {
 
 	init: func() {
 		super("FloatComplex")
-		this add("equality", func() {
-			expect(this complexNumber0 real == 2, is true)
-			expect(this complexNumber0 imaginary == 1, is true)
-		})
 		this add("addition", func() {
 			expect((this complexNumber0 + this complexNumber1) real, is equal to(this complexNumber2 real))
 			expect((this complexNumber0 + this complexNumber1) imaginary, is equal to(this complexNumber2 imaginary))
@@ -40,8 +37,8 @@ FloatComplexTest: class extends Fixture {
 			expect((this complexNumber2 - this complexNumber1) imaginary, is equal to(this complexNumber0 imaginary))
 		})
 		this add("negative", func() {
-			expect(-this complexNumber0 real == -2, is true)
-			expect(-this complexNumber0 imaginary == -1, is true)
+			expect((-this complexNumber0) real == -2, is true)
+			expect((-this complexNumber0) imaginary == -1, is true)
 		})
 		this add("mulitplication", func() {
 			expect((this complexNumber0 * this complexNumber1) real == 4, is true)
@@ -55,13 +52,21 @@ FloatComplexTest: class extends Fixture {
 			expect((complexNumber2 / complexNumber0) real == 2.6f, is true)
 			expect((complexNumber2 / complexNumber0) imaginary == 0.2f, is true)
 		})
+		// TODO: Add tests for compound assignment operators
+		this add("equality", func() {
+			expect(this complexNumber0 real == 2, is true)
+			expect(this complexNumber0 imaginary == 1, is true)
+			expect(this complexNumber0 == this complexNumber0, is true)
+			expect(this complexNumber0 != this complexNumber1, is true)
+			expect(this complexNumber1 == this complexNumber2, is false)
+		})
+		/*this add("toString", func() {
+			expect((complexNumber2 / complexNumber0) real == 2.6f, is true)
+			expect((complexNumber2 / complexNumber0) imaginary == 0.2f, is true)
+		})*/
 	}
 }
+"#{FloatComplex new (1,-1)}" println()
+"#{FloatComplex new (1,1)}" println()
+
 FloatComplexTest new() run()
-
-
-/*
-expect(this complexNumber0 == this complexNumber0, is true)
-expect(this complexNumber0 != this complexNumber1, is true)
-expect(this complexNumber1 == this complexNumber2, is true)
-*/
