@@ -64,7 +64,7 @@ FloatComplexTest: class extends Fixture {
 		})
 		this add("toString", func() {
 			expect(this complexNumber0 toString(), is equal to("2.00 +1.00i"))
-			//expect(this complexNumber0 toString() parse(), is equal to(this complexNumber0))
+			expect((FloatComplex parse("2.00 +1.00i")) == this complexNumber0, is true)
 		})
 		this add("exponential", func() {
 			expect(this complexNumber0 exponential() real, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary cos()))
