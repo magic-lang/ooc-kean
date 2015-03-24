@@ -38,11 +38,42 @@ FloatComplex: cover {
 		else "#{this real toString()} +#{this imaginary toString()}i"
 	}
 	parse: static func(input: String) -> This {
+		realResult, imaginaryResult: Float
 		array := input split('-')
-		"{array[0]}" println()
-		"{array[1]}" println()
-		//This new (array[0] toFloat(), array[1] toFloat())
+		if (array size > 1) {
+			realResult = array[0] toFloat()
+			imaginaryResult = -array[1] trimRight('i') toFloat()
+		} else {
+			array := input split('+')
+			realResult = array[0] toFloat()
+			imaginaryResult = array[1] trimRight('i') toFloat()
+		}
+		This new (realResult, imaginaryResult)
 	}
+	exponential: func -> This {
+		(this real) exp() * This new((this imaginary) cos(), (this imaginary) sin())
+	}
+	/*logarithm: func -> This {
+		this absoluteValue log() + This new(0, atan2(this imaginary, this real))
+	}*/
+
+	/*
+	* Inverse discrete Fourier transform. Input array of arbitrary size.
+	*
+	* @param input Input array to be transformed.
+	* @return Output Fourier transformed array.
+	*/
+	/*discreteTransform: func@ (input: ArrayList<This>) -> ArrayList<This> {
+		result := ArrayList<This> new(input size)
+		if (input size > 0) {
+			for (i in 0..(input size - 1)) {
+				for (j in 0..(input size - 1)) {
+					// result[i] += input[j] * Single.RootOfUnity(input.Length, -i * j);
+				}
+			}
+		}
+		result
+	}*/
 }
 operator * (left: Float, right: FloatComplex) -> FloatComplex { FloatComplex new(left * right real, left * right imaginary) }
 operator / (left: Float, right: FloatComplex) -> FloatComplex { (left * right conjugate) / (right absoluteValue pow(2)) }

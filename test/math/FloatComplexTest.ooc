@@ -17,6 +17,8 @@
 use ooc-unit
 use ooc-math
 import math
+import text/StringTokenizer
+import structs/ArrayList
 import FloatComplex
 import lang/IO
 
@@ -60,13 +62,14 @@ FloatComplexTest: class extends Fixture {
 			expect(this complexNumber0 != this complexNumber1, is true)
 			expect(this complexNumber1 == this complexNumber2, is false)
 		})
-		/*this add("toString", func() {
-			expect((complexNumber2 / complexNumber0) real == 2.6f, is true)
-			expect((complexNumber2 / complexNumber0) imaginary == 0.2f, is true)
-		})*/
+		this add("toString", func() {
+			expect(this complexNumber0 toString(), is equal to("2.00 +1.00i"))
+			//expect(this complexNumber0 toString() parse(), is equal to(this complexNumber0))
+		})
+		this add("exponential", func() {
+			expect(this complexNumber0 exponential() real, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary cos()))
+			expect(this complexNumber0 exponential() imaginary, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary sin()))
+		})
 	}
 }
-"#{FloatComplex new (1,-1)}" println()
-"#{FloatComplex new (1,1)}" println()
-
 FloatComplexTest new() run()
