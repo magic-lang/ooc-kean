@@ -54,7 +54,7 @@ FloatComplex: cover {
 		(this real) exp() * This new((this imaginary) cos(), (this imaginary) sin())
 	}
 	/*logarithm: func -> This {
-		this absoluteValue log() + This new(0, atan2(this imaginary, this real))
+		This new(this absoluteValue log(), atan2(this imaginary, this real))
 	}*/
 
 	/*
