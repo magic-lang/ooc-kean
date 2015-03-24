@@ -30,7 +30,7 @@ Queue: class <T> {
     add: func (item: T) {
         if (!this isFull()) {
             this _queue[this _tail] = item
-            this _tail = (this _tail + 1) % this _capacity
+						this _tail = (this _tail + 1) % this _capacity
             this _count += 1
         }
     }
@@ -38,7 +38,7 @@ Queue: class <T> {
     pop: func -> T {
         tempHead := this _head
         if (!this isEmpty()) {
-            if (this _head != this _tail)
+            if (this _head != this _tail || this isFull())
                 this _head = (this _head + 1) % this _capacity
             this _count -= 1
         }
