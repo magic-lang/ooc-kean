@@ -45,17 +45,9 @@ FloatComplex: cover {
 	parse: static func (input: String) -> This {
 		realResult, imaginaryResult: Float
 		array: ArrayList <String>
-		negativeReal := input[0] == '-'
-		if (negativeReal)
-			input = input substring(1)
-		if (input contains?('+')) {
-			array = input split('+')
-			imaginaryResult = (array[1] trimRight('i')) toFloat()
-		} else {
-			array = input split('-')
-			imaginaryResult = -((array[1] trimRight('i')) toFloat())
-		}
-		realResult = negativeReal ? -(array[0] toFloat()) : array[0] toFloat()
+		array = input split(' ')
+		realResult = array[0] toFloat()
+		imaginaryResult = array[1] toFloat()
 		array free()
 		This new (realResult, imaginaryResult)
 	}
@@ -86,6 +78,11 @@ FloatComplex: cover {
 		for (i in 0..(result _count)) {
 			result[i] = (result[i] conjugate) / (input _count)
 		}
+		result
+	}
+	fastFourierTransform: static func (input: VectorList<This>) -> VectorList<This> {
+		result := VectorList<This> new()
+
 		result
 	}
 }
