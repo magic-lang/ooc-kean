@@ -42,10 +42,10 @@ extend Buffer {
         result := ArrayList<This> new(maxItems)
         sstart: SizeT = 0 //source (this) start pos
         
-        for (item in findResults) {
+        for (item in 0..findResults size) {
             if ((maxTokens > 0) && (result size == maxItems - 1)) break
             
-            sdist := item - sstart // bytes to copy
+            sdist := findResults[item] - sstart // bytes to copy
             if (maxTokens != 0 || sdist > 0) {
                 b := This new ((data + sstart) as CString, sdist)
                 result add(b)
@@ -59,6 +59,7 @@ extend Buffer {
             result add(b)
         }
         
+        findResults free()
         result
     }
 
@@ -75,7 +76,10 @@ extend String {
     }
 
     split: func ~withCharWithoutmaxTokens(c: Char) -> ArrayList<This> {
-        _bufArrayListToStrArrayList(_buffer split(c))
+        bufferSplit := _buffer split(c)
+        result := _bufArrayListToStrArrayList(bufferSplit)
+        bufferSplit free()
+        result
     }
 
     split: func ~withStringWithEmpties( s: This, empties: Bool) -> ArrayList<This> {

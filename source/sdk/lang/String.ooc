@@ -126,7 +126,7 @@ String: class extends Iterable<Char> {
 
     _bufArrayListToStrArrayList: func (x: ArrayList<Buffer>) -> ArrayList<This> {
         result := ArrayList<This> new( x size )
-        for (i in x) result add (i toString())
+        for (i in 0..x size) result add (x[i] toString())
         result
     }
 
