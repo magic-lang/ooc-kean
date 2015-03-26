@@ -20,6 +20,7 @@ use ooc-collections
 import math
 import text/StringTokenizer
 import structs/ArrayList
+import structs/FreeArrayList
 import FloatComplex
 import lang/IO
 
@@ -30,11 +31,11 @@ FloatComplexTest: class extends Fixture {
 	complexNumber2 := FloatComplex new (5,3)
 	complexNumber3 := FloatComplex new (-2,-1)
 
-	complexNumberArray := VectorList<FloatComplex> new()
-	complexNumberArray add(complexNumber0)
-	complexNumberArray add(complexNumber1)
-	complexNumberArray add(complexNumber2)
-	complexNumberArray add(complexNumber3)
+	complexNumberArray := HeapVector<FloatComplex> new(4)
+	complexNumberArray[0] = complexNumber0
+	complexNumberArray[1] = complexNumber1
+	complexNumberArray[2] = complexNumber2
+	complexNumberArray[3] = complexNumber3
 
 	tolerance := 0.00001
 
@@ -89,7 +90,14 @@ FloatComplexTest: class extends Fixture {
 		this add("discrete fourier transform", func() {
 			result := FloatComplex discreteFourierTransform(complexNumberArray)
 			result = FloatComplex inverseDiscreteFourierTransform(result)
-			for (i in 0..(complexNumberArray _count)) {
+			for (i in 0..(complexNumberArray capacity)) {
+				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
+			}
+		})
+		this add("fast fourier transform", func() {
+			result := FloatComplex fastFourierTransform(complexNumberArray)
+			result = FloatComplex inverseFastFourierTransform(result)
+			for (i in 0..(complexNumberArray capacity)) {
 				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
 			}
 		})

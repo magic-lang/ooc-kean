@@ -24,6 +24,7 @@ Vector: abstract class <T> {
 	init: /* protected */ func ~preallocated (=_backend, =_capacity, freeContent := true) {}
 	init: /* protected */ func (=_capacity, freeContent := true) {
 		this _allocate(this _capacity)
+		memset(this _backend, 0, capacity * T size)
 		this _freeContent = freeContent
 	}
 	__destroy__: func {	this _free(0, this capacity) }
@@ -98,6 +99,14 @@ HeapVector: class <T> extends Vector<T> {
 	__destroy__: func {
 		gc_free(this _backend)
 	}
+
+		operator [] (index: Int) -> T {
+			this _backend[index]
+		}
+
+		operator []= (index: Int, item: T) {
+			this _backend[index] = item
+		}
 }
 
 StackVector: class <T> extends Vector<T> {

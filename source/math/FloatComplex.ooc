@@ -19,6 +19,7 @@ use ooc-collections
 import math
 import text/StringTokenizer
 import structs/ArrayList
+import structs/FreeArrayList
 
 FloatComplex: cover {
 	real, imaginary: Float
@@ -44,11 +45,10 @@ FloatComplex: cover {
 	}
 	parse: static func (input: String) -> This {
 		realResult, imaginaryResult: Float
-		array: ArrayList <String>
-		array = input split(' ')
-		realResult = array[0] toFloat()
-		imaginaryResult = array[1] toFloat()
-		array free()
+		parts: FreeArrayList<String> = input split(' ') as FreeArrayList
+		realResult = parts[0] toFloat()
+		imaginaryResult = parts[1] toFloat()
+		parts free()
 		This new (realResult, imaginaryResult)
 	}
 	exponential: func -> This {
@@ -60,29 +60,57 @@ FloatComplex: cover {
 	rootOfUnity: static func (n: Int, k:= 1) -> This {
 		This new(0, 2 * k * PI / n) exponential()
 	}
-	discreteFourierTransform: static func (input: VectorList<This>) -> VectorList<This> {
-		result := VectorList<This> new()
-		for (i in 0..(input _count)) {
-			result add(This new (0,0))
-			for (j in 0..(input _count))
-				result[i] = result[i] + input[j] * FloatComplex rootOfUnity(input _count, -i * j)
+	discreteFourierTransform: static func (input: HeapVector<This>) -> HeapVector<This> {
+		result := HeapVector<This> new(input capacity)
+		for (i in 0..(input capacity)) {
+			for (j in 0..(input capacity))
+				result[i] = result[i] + input[j] * FloatComplex rootOfUnity(input capacity, -i * j)
 		}
 		result
 	}
-	inverseDiscreteFourierTransform: static func (input: VectorList<This>) -> VectorList<This> {
-		result := VectorList<This> new()
-		for (i in 0..(input _count)) {
-			result add(input[i] conjugate)
+	inverseDiscreteFourierTransform: static func (input: HeapVector<This>) -> HeapVector<This> {
+		result := HeapVector<This> new(input capacity)
+		for (i in 0..(input capacity)) {
+			result[i] = input[i] conjugate
 		}
 		result = FloatComplex discreteFourierTransform(result)
-		for (i in 0..(result _count)) {
-			result[i] = (result[i] conjugate) / (input _count)
+		for (i in 0..(result capacity)) {
+			result[i] = (result[i] conjugate) / (input capacity)
 		}
 		result
 	}
-	fastFourierTransform: static func (input: VectorList<This>) -> VectorList<This> {
-		result := VectorList<This> new()
-
+	fastFourierTransform: static func (input: HeapVector<This>) -> HeapVector<This> {
+		result := HeapVector<This> new(input capacity)
+		if (input capacity == 1)
+			result = input
+		else {
+			halfLength: Int = input capacity / 2
+			evenInput := HeapVector<This> new(halfLength)
+			oddInput := HeapVector<This> new(halfLength)
+			for (i in 0..halfLength) {
+				evenInput[i] = input[2 * i]
+				oddInput[i] = input[2 * i + 1]
+			}
+			evenOutput := FloatComplex fastFourierTransform(evenInput)
+			oddOutput := FloatComplex fastFourierTransform(oddInput)
+			root: This
+			for (i in 0..halfLength) {
+				root = FloatComplex rootOfUnity(input capacity, -i)
+				result[i] = evenOutput[i] + root * oddOutput[i]
+				result[halfLength + i] = evenOutput[i] - root * oddOutput[i]
+			}
+		}
+		result
+	}
+	inverseFastFourierTransform: static func (input: HeapVector<This>) -> HeapVector<This> {
+		result := HeapVector<This> new(input capacity)
+		for (i in 0..(input capacity)) {
+			result[i] = input[i] conjugate
+		}
+		result = FloatComplex fastFourierTransform(result)
+		for (i in 0..(result capacity)) {
+			result[i] = (result[i] conjugate) / (input capacity)
+		}
 		result
 	}
 }
