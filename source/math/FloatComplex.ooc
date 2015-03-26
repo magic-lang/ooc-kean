@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+use ooc-collections
 import math
 import text/StringTokenizer
 import structs/ArrayList
@@ -28,7 +29,12 @@ FloatComplex: cover {
 	operator - (other: This) -> This { This new(this real - other real, this imaginary - other imaginary) }
 	operator - -> This { This new(-this real, -this imaginary) }
 	operator * (other: Float) -> This { This new(other * this real, other * this imaginary) }
-	operator * (other: This) -> This { This new(this real * other real - this imaginary * other imaginary, this real * other imaginary + this imaginary * other real) }
+	operator * (other: This) -> This {
+		This new(
+			this real * other real - this imaginary * other imaginary,
+			this real * other imaginary + this imaginary * other real
+		)
+	}
 	operator / (other: Float) -> This { This new(this real / other, this imaginary / other) }
 	operator / (other: This) -> This { (this * other conjugate) / (other absoluteValue pow(2)) }
 	operator == (other: This) -> Bool { this real == other real && this imaginary == other imaginary }
@@ -37,15 +43,21 @@ FloatComplex: cover {
 		this real toString() >> (this imaginary > 0 ? " +" : " ") & this imaginary toString() >> "i"
 	}
 	parse: static func (input: String) -> This {
-    realResult, imaginaryResult: Float
-    minus := input contains?('-')
-    array := input split(minus ? '-' : '+')
-    realResult = array[0] toFloat()
-    imaginaryString := array[1] trimRight('i')
-    imaginaryResult = minus ? -imaginaryString toFloat() : imaginaryString toFloat()
-    imaginaryString free()
-    array free()
-    This new (realResult, imaginaryResult)
+		realResult, imaginaryResult: Float
+		array: ArrayList <String>
+		negativeReal := input[0] == '-'
+		if (negativeReal)
+			input = input substring(1)
+		if (input contains?('+')) {
+			array = input split('+')
+			imaginaryResult = (array[1] trimRight('i')) toFloat()
+		} else {
+			array = input split('-')
+			imaginaryResult = -((array[1] trimRight('i')) toFloat())
+		}
+		realResult = negativeReal ? -(array[0] toFloat()) : array[0] toFloat()
+		array free()
+		This new (realResult, imaginaryResult)
 	}
 	exponential: func -> This {
 		(this real) exp() * This new((this imaginary) cos(), (this imaginary) sin())
@@ -53,20 +65,26 @@ FloatComplex: cover {
 	logarithm: func -> This {
 		This new(this absoluteValue log(), atan2(this imaginary, this real))
 	}
-	rootOfUnity: func ~one (n: Int) -> This {
-		this rootOfUnity(n, 1)
+	rootOfUnity: static func (n: Int, k:= 1) -> This {
+		This new(0, 2 * k * PI / n) exponential()
 	}
-	rootOfUnity: func ~two (n: Int, k: Int) -> This {
-		This new(0, 2 * k * PI / n)
+	discreteFourierTransform: static func (input: VectorList<This>) -> VectorList<This> {
+		result := VectorList<This> new()
+		for (i in 0..(input _count)) {
+			result add(This new (0,0))
+			for (j in 0..(input _count))
+				result[i] = result[i] + input[j] * FloatComplex rootOfUnity(input _count, -i * j)
+		}
+		result
 	}
-	discreteFourierTransform: func (input: ArrayList<This>) -> ArrayList<This> {
-		result := ArrayList<This> new(input size)
-		if (input size > 0) {
-			for (i in 0..(input size - 1)) {
-				for (j in 0..(input size - 1)) {
-					result[i] = result[i] + input[j] * this rootOfUnity(input size, -i * j)
-				}
-			}
+	inverseDiscreteFourierTransform: static func (input: VectorList<This>) -> VectorList<This> {
+		result := VectorList<This> new()
+		for (i in 0..(input _count)) {
+			result add(input[i] conjugate)
+		}
+		result = FloatComplex discreteFourierTransform(result)
+		for (i in 0..(result _count)) {
+			result[i] = (result[i] conjugate) / (input _count)
 		}
 		result
 	}

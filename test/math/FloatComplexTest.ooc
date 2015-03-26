@@ -16,6 +16,7 @@
 
 use ooc-unit
 use ooc-math
+use ooc-collections
 import math
 import text/StringTokenizer
 import structs/ArrayList
@@ -27,6 +28,15 @@ FloatComplexTest: class extends Fixture {
 	complexNumber0 := FloatComplex new (2,1)
 	complexNumber1 := FloatComplex new (3,2)
 	complexNumber2 := FloatComplex new (5,3)
+	complexNumber3 := FloatComplex new (-2,-1)
+
+	complexNumberArray := VectorList<FloatComplex> new()
+	complexNumberArray add(complexNumber0)
+	complexNumberArray add(complexNumber1)
+	complexNumberArray add(complexNumber2)
+	complexNumberArray add(complexNumber3)
+
+	tolerance := 0.00001
 
 	init: func() {
 		super("FloatComplex")
@@ -65,10 +75,23 @@ FloatComplexTest: class extends Fixture {
 		this add("toString", func() {
 			expect(this complexNumber0 toString(), is equal to("2.00 +1.00i"))
 			expect((FloatComplex parse("2.00 +1.00i")) == this complexNumber0, is true)
+			expect(this complexNumber3 toString(), is equal to("-2.00 -1.00i"))
+			expect((FloatComplex parse("-2.00 -1.00i")) == this complexNumber3, is true)
+			expect(FloatComplex new (2,-1) toString(), is equal to("2.00 -1.00i"))
+			expect((FloatComplex parse("2.00 -1.00i")) == FloatComplex new (2,-1), is true)
+			expect(FloatComplex new (-2,1) toString(), is equal to("-2.00 +1.00i"))
+			expect((FloatComplex parse("-2.00 +1.00i")) == FloatComplex new (-2,+1), is true)
 		})
 		this add("exponential", func() {
 			expect(this complexNumber0 exponential() real, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary cos()))
 			expect(this complexNumber0 exponential() imaginary, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary sin()))
+		})
+		this add("discrete fourier transform", func() {
+			result := FloatComplex discreteFourierTransform(complexNumberArray)
+			result = FloatComplex inverseDiscreteFourierTransform(result)
+			for (i in 0..(complexNumberArray _count)) {
+				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
+			}
 		})
 	}
 }
