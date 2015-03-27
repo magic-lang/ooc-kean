@@ -105,6 +105,10 @@ HeapVector: class <T> extends Vector<T> {
 		}
 
 		operator []= (index: Int, item: T) {
+			if (T inheritsFrom?(Object)) {
+				old := this[index] as Object
+				old free()
+			}
 			this _backend[index] = item
 		}
 }
