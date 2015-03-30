@@ -14,7 +14,6 @@ SVGPlot: class {
 	yAxis: Axis { get set }
 	colorList: VectorList<String> { get set }
 	colorCount := 0
-	plotAreaPercentage: Float
 	symmetric: Bool
 
 	init: func {
@@ -23,8 +22,6 @@ SVGPlot: class {
 
 	init: func ~datasets(=datasets, title := "", xAxisLabel := "", yAxisLabel := "") {
 		this title = title
-		this plotAreaPercentage = 0.8f
-		this fontSize = 14
 		this symmetric = false
 		this xAxis = Axis new(Orientation Horizontal, xAxisLabel)
 		this yAxis = Axis new(Orientation Vertical, yAxisLabel)
@@ -42,7 +39,9 @@ SVGPlot: class {
 		this setAxesMinMax()
 	}
 
-	getSVG: func (size: FloatPoint2D) -> String {
+	getSVG: func (size: FloatPoint2D, fontSize: Int) -> String {
+		if (this fontSize == 0)
+			this fontSize = fontSize
 		aspectRatio := size x / size y
 		this fillColorList()
 		this setColor()
@@ -57,19 +56,17 @@ SVGPlot: class {
 				this yAxis max *= aspectRatio
 			}
 		}
+		margin := FloatPoint2D new(yAxis getRequiredMargin(this fontSize), xAxis getRequiredMargin(this fontSize))
 
-		plotAreaSize := size * this plotAreaPercentage
+		plotAreaSize := size - FloatPoint2D new(2.0f * margin x, 2.0f * margin y)
 		scaling := FloatPoint2D new(this xAxis length() != 0.0f ? plotAreaSize x / this xAxis length() : 1.0f, this yAxis length() != 0.0f ? plotAreaSize y / this yAxis length() : 1.0f)
 		translationToRealOrigo := FloatPoint2D new(- scaling x * this xAxis min, plotAreaSize y + scaling y * this yAxis min)
-		bottomLeftCornerOfPlot := FloatPoint2D new((size x - plotAreaSize x) / 2, (plotAreaSize y + (size y - plotAreaSize y) / 2))
 
-		result := Shapes text(FloatPoint2D new(size x / 2, (size y - plotAreaSize y) / 4 + this fontSize / 2), this title, this fontSize, "middle")
-		xAxisSize := FloatPoint2D new(plotAreaSize x, (size y - plotAreaSize y) / 2)
-		yAxisSize := FloatPoint2D new((size x - plotAreaSize x) / 2, plotAreaSize y)
-		result = result & this xAxis getSVG(plotAreaSize, xAxisSize, bottomLeftCornerOfPlot, translationToRealOrigo, scaling)
-		result = result & this yAxis getSVG(plotAreaSize, yAxisSize, bottomLeftCornerOfPlot, translationToRealOrigo, scaling)
-		result = result & "<rect desc='Plot-border' x='" clone() & bottomLeftCornerOfPlot x toString() & "' y='" clone() & (bottomLeftCornerOfPlot y - plotAreaSize y) toString() & "' width='" clone() & plotAreaSize x toString() & "' height='" clone() & plotAreaSize y toString() & "' stroke='black' fill='none'/>\n" clone()
-		result = result & "<svg desc='Data' x='" clone() & bottomLeftCornerOfPlot x toString() & "' y='" clone() & (bottomLeftCornerOfPlot y - plotAreaSize y) toString() & "' width='" clone() & plotAreaSize x toString() & "' height='" clone() & plotAreaSize y toString() & "'>\n" clone()
+		result := Shapes text(FloatPoint2D new(size x / 2.0f, margin y / 2.0f + this fontSize / 3.0f), this title, this fontSize + 2, "middle")
+		result = result & this xAxis getSVG(plotAreaSize, margin, translationToRealOrigo, scaling, fontSize)
+		result = result & this yAxis getSVG(plotAreaSize, margin, translationToRealOrigo, scaling, fontSize)
+		result = result & "<rect desc='Plot-border' x='" clone() & margin x toString() & "' y='" clone() & margin y toString() & "' width='" clone() & plotAreaSize x toString() & "' height='" clone() & plotAreaSize y toString() & "' stroke='black' fill='none'/>\n" clone()
+		result = result & "<svg desc='Data' x='" clone() & margin x toString() & "' y='" clone() & margin y toString() & "' width='" clone() & plotAreaSize x toString() & "' height='" clone() & plotAreaSize y toString() & "'>\n" clone()
 		result = result & "<g transform='translate(" clone() & translationToRealOrigo toString() & ")'>\n" clone()
 		if (!this datasets empty())
 			for (i in 0..this datasets count)
@@ -132,7 +129,7 @@ SVGPlot: class {
 		for (i in 0..this datasets count) {
 			if (this datasets[i] label != "") {
 				legendCounter += 1
-				result = result & this datasets[i] getSvgLegend(legendCounter)
+				result = result & this datasets[i] getSvgLegend(legendCounter, fontSize)
 			}
 		}
 		result = result & "</g>\n</svg>\n" clone()

@@ -7,17 +7,21 @@ import io/FileWriter
 import SVGPlot
 import LinePlotData2D
 import svg/Shapes
+import math
 
 SVGWriter2D: class {
 	filename: String { get set }
 	svgPlots: VectorList<SVGPlot> { get set }
 	height: Int { get set }
 	width: Int { get set }
+	fontSize: Int { get set }
+	numberOfPlotsHorizontally: Int
 
 	init: func (=filename) {
 		this svgPlots = VectorList<SVGPlot> new()
 		this width = 1920
 		this height = 1080
+		this fontSize = 14
 	}
 	init: func ~svgPlot(filename: String, args: ...) {
 		this init(filename)
@@ -27,6 +31,9 @@ SVGWriter2D: class {
 				case => // no action, unsupported argument
 			}
 		)
+	}
+	init: func ~withPositioning(filename: String, args: ...) {
+		this init(filename, args)
 	}
 	init: func ~svgPlots(filename: String, svgPlots: VectorList<SVGPlot>) {
 		this init(filename)
@@ -56,14 +63,19 @@ SVGWriter2D: class {
 		if (!this svgPlots empty()) {
 			numPlotsX: Int
 			numPlotsY: Int
-			if (this svgPlots count > 1 && this svgPlots count < 5)
-				numPlotsX = 2
-			else if (this svgPlots count >= 5)
-				numPlotsX = 3
-			else
-				numPlotsX = 1
+			if (this numberOfPlotsHorizontally == 0) {
+				if (this svgPlots count > 1 && this svgPlots count < 5)
+					numPlotsX = 2
+				else if (this svgPlots count >= 5)
+					numPlotsX = 3
+				else
+					numPlotsX = 1
+				numPlotsY = Int modulo(this svgPlots count, numPlotsX) ? 1 + this svgPlots count / numPlotsX : this svgPlots count / numPlotsX
+			} else {
+				numPlotsX = numberOfPlotsHorizontally
+				numPlotsY = ceil(this svgPlots count as Float / numPlotsX as Float) as Int
+			}
 
-			numPlotsY = Int modulo(this svgPlots count, numPlotsX) ? 1 + this svgPlots count / numPlotsX : this svgPlots count / numPlotsX
 			plotSize := FloatPoint2D new(this width / numPlotsX, this height / numPlotsY)
 			position := FloatPoint2D new()
 
@@ -72,7 +84,7 @@ SVGWriter2D: class {
 				position y = plotSize y * (i / numPlotsX)
 
 				result = result & "<svg desc='Plot " clone() & (i + 1) toString() & "' x='" clone() & position x toString() & "' y='" clone() & position y toString() & "' width='" clone() & plotSize x toString() & "' height='" clone() & plotSize y toString() & "'>\n" clone()
-				result = result & svgPlots[i] getSVG(plotSize)
+				result = result & svgPlots[i] getSVG(plotSize, fontSize)
 				result = result & "</svg>\n" clone()
 			}
 		}

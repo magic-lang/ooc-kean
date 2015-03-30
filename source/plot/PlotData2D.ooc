@@ -4,8 +4,8 @@ use ooc-math
 
 PlotData2D: abstract class {
 	label: String { get set}
-	fontSize: Int { get set }
 	lineWidth: Float { get set }
+	legendOffset: Float { get set }
 	colorBgra: ColorBgra { get set }
 	color: String { get set }
 	opacity: Float { get set }
@@ -17,7 +17,7 @@ PlotData2D: abstract class {
 
 	init: func ~dataSeries(=dataSeries, label := "", colorBgra := ColorBgra new()) {
 		this lineWidth = 1
-		this fontSize = 14
+		this legendOffset = 5.0f
 		this label = label
 		this colorBgra = colorBgra
 	}
@@ -35,7 +35,7 @@ PlotData2D: abstract class {
 	}
 
 	getSVG: abstract func (scaling: FloatPoint2D) -> String
-	getSvgLegend: abstract func(legendCount: Int) -> String
+	getSvgLegend: abstract func(legendCount, fontSize: Int) -> String
 
 	minValues: func -> FloatPoint2D {
 		result: FloatPoint2D
