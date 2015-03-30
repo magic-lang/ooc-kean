@@ -32,7 +32,7 @@ GpuPacker: class {
 	bytesPerPixel: UInt { get { this _bytesPerPixel } }
 	_packFence: Fence
 	init: func (size: IntSize2D, bytesPerPixel: UInt, context: AndroidContext) {
-		Debug print("Allocating GpuPacker")
+		version(debugGLv) { Debug print("Allocating GpuPacker") }
 		this _packFence = Fence new()
 		this _bytesPerPixel = bytesPerPixel
 		this _context = context
