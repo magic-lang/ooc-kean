@@ -24,7 +24,6 @@ IntPoint3D: cover {
 	init: func@ (=x, =y, =z)
 	init: func@ ~default { this init(0, 0, 0) }
 	scalarProduct: func (other: This) -> Int { this x * other x + this y * other y + this z * other z }
-	swap: func -> This { This new(this y, this x, this z) }
 	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y), this z minimum(ceiling z)) }
 	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y), this z maximum(floor z)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
