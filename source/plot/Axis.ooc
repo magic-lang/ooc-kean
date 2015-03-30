@@ -8,6 +8,7 @@ Orientation: enum {
 }
 
 Axis: class {
+	visible: Bool { get set }
 	label: String { get set }
 	min: Float { get set }
 	max: Float { get set }
@@ -30,8 +31,8 @@ Axis: class {
 	roundAxisEndpoints: Bool { get set }
 
 	init: func (=orientation, label := "") {
+		this visible = true
 		this label = label
-		this fontSize = 10
 		this gridOn = true
 		this precision = 3
 		this roundAxisEndpoints = true
@@ -42,56 +43,63 @@ Axis: class {
 		result
 	}
 
-	getSVG: func (plotAreaSize, axisAreaSize, position, translationToOrigo, scaling: FloatPoint2D) -> String {
+	getSVG: func (plotAreaSize, margin, translationToOrigo, scaling: FloatPoint2D, fontSize: Int) -> String {
 		result := ""
-		this tick = this length()
-		radix := Float getRadix(this length(), this precision)
-		if (this orientation == Orientation Horizontal) {
-			result = result >> "<g desc='X-axis data'>\n"
-			labelOffset := FloatPoint2D new(plotAreaSize x / 2.0f, this fontSize + 0.6f * axisAreaSize y)
-			numberOffset := FloatPoint2D new(0.0f, this fontSize + 0.2f * axisAreaSize y)
-			tickMarkerEndOffset := FloatPoint2D new(0.0f, - axisAreaSize y * 0.1f)
-			topTickMarkerStartOffset := FloatPoint2D new(0.0f, - plotAreaSize y)
-			result = result & Shapes text(position + labelOffset, this label, this fontSize + 4, "middle")
-			if (radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision)) {
-				radixOffset := FloatPoint2D new(axisAreaSize x + (plotAreaSize x / plotAreaSize y) * axisAreaSize y / 2, numberOffset y)
-				scientificPower := Float getScientificPowerString(radix)
-				result = result & Shapes text(position + radixOffset, scientificPower, this fontSize, "middle")
-				scientificPower free()
-			}
+		if (this visible) {
+			position := FloatPoint2D new(margin x, margin y + plotAreaSize y)
 
-			tickValue := this getFirstTickValue()
-			position x += translationToOrigo x + scaling x * tickValue
-			while (tickValue <= this max) {
-				result = result & this getTickSVG(tickValue, radix, position, numberOffset, topTickMarkerStartOffset, tickMarkerEndOffset, "middle")
-				tickValue += this tick
-				position x += scaling x * tick
-			}
-		} else {
-			result = result >> "<g desc='Y-axis data'>\n"
-			labelOffset := FloatPoint2D new(- 0.6f * axisAreaSize x, - plotAreaSize y / 2.0f)
-			numberOffset := FloatPoint2D new(-0.2f * axisAreaSize x, this fontSize / 2)
-			tickMarkerEndOffset := FloatPoint2D new(axisAreaSize x * 0.1f, 0.0f)
-			rightTickMarkerStartOffset := FloatPoint2D new(plotAreaSize x, 0.0f)
-			result = result & "<g desc='rotated Y-axis' transform='rotate(-90," clone() & (position x + labelOffset x) toString() & "," clone() & (position y + labelOffset y) toString() & ")'>\n" clone()
-			result = result & Shapes text(position + labelOffset, this label, this fontSize + 4, "middle")
-			result = result & "</g>\n" clone()
-			if (radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision)) {
-				radixOffset := FloatPoint2D new(numberOffset x, - axisAreaSize y - (plotAreaSize y / plotAreaSize x) * axisAreaSize x / 2 + this fontSize / 2)
-				scientificPower := Float getScientificPowerString(radix)
-				result = result & Shapes text(position + radixOffset, scientificPower, this fontSize, "end")
-				scientificPower free()
-			}
+			if (this fontSize == 0)
+				this fontSize = fontSize
 
-			tickValue := this getFirstTickValue()
-			position y += translationToOrigo y - plotAreaSize y - scaling y * tickValue
-			while (tickValue <= this max) {
-				result = result & this getTickSVG(tickValue, radix, position, numberOffset, rightTickMarkerStartOffset, tickMarkerEndOffset, "end")
-				tickValue += this tick
-				position y += - scaling y * tick
+			this tick = this length()
+			radix := Float getRadix(this length(), this precision)
+			if (this orientation == Orientation Horizontal) {
+				result = result >> "<g desc='X-axis data'>\n"
+				labelOffset := FloatPoint2D new(plotAreaSize x / 2.0f, 3.0f + (this fontSize - 4) + this fontSize)
+				numberOffset := FloatPoint2D new(0.0f, 3.0f + (this fontSize - 4))
+				tickMarkerEndOffset := FloatPoint2D new(0.0f, -5.0f)
+				topTickMarkerStartOffset := FloatPoint2D new(0.0f, - plotAreaSize y)
+				result = result & Shapes text(position + labelOffset, this label, this fontSize, "middle")
+				if (radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision)) {
+					radixOffset := FloatPoint2D new(plotAreaSize x + margin x / 2.0f, numberOffset y)
+					scientificPower := Float getScientificPowerString(radix)
+					result = result & Shapes text(position + radixOffset, scientificPower, this fontSize, "middle")
+					scientificPower free()
+				}
+
+				tickValue := this getFirstTickValue()
+				position x += translationToOrigo x + scaling x * tickValue
+				while (tickValue <= this max) {
+					result = result & this getTickSVG(tickValue, radix, position, numberOffset, topTickMarkerStartOffset, tickMarkerEndOffset, "middle")
+					tickValue += this tick
+					position x += scaling x * tick
+				}
+			} else {
+				result = result >> "<g desc='Y-axis data'>\n"
+				labelOffset := FloatPoint2D new(- (log10(Float maximum(this max, Float absolute(this min)) / radix) + 3.0f) * 0.6f * (this fontSize - 4.0f), - plotAreaSize y / 2.0f)
+				numberOffset := FloatPoint2D new(- 0.6f * (this fontSize - 4.0f), (this fontSize - 4.0f) / 3.0f)
+				tickMarkerEndOffset := FloatPoint2D new(5.0f, 0.0f)
+				rightTickMarkerStartOffset := FloatPoint2D new(plotAreaSize x, 0.0f)
+				result = result & "<g desc='rotated Y-axis' transform='rotate(-90," clone() & (position x + labelOffset x) toString() & "," clone() & (position y + labelOffset y) toString() & ")'>\n" clone()
+				result = result & Shapes text(position + labelOffset, this label, this fontSize, "middle")
+				result = result & "</g>\n" clone()
+				if (radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision)) {
+					radixOffset := FloatPoint2D new(numberOffset x, - plotAreaSize y - margin y / 2 + this fontSize / 3.0f)
+					scientificPower := Float getScientificPowerString(radix)
+					result = result & Shapes text(position + radixOffset, scientificPower, this fontSize, "end")
+					scientificPower free()
+				}
+
+				tickValue := this getFirstTickValue()
+				position y += translationToOrigo y - plotAreaSize y - scaling y * tickValue
+				while (tickValue <= this max) {
+					result = result & this getTickSVG(tickValue, radix, position, numberOffset, rightTickMarkerStartOffset, tickMarkerEndOffset, "end")
+					tickValue += this tick
+					position y += - scaling y * tick
+				}
 			}
+			result = result >> "</g>\n"
 		}
-		result = result >> "</g>\n"
 		result
 	}
 
@@ -107,16 +115,28 @@ Axis: class {
 	getTickSVG: func (tickValue, radix: Float, position, numberOffset, tickMarkerOnOtherSideOffset, tickMarkerEndOffset: FloatPoint2D, textAnchor: String) -> String {
 		result := "<g desc='" << tickValue toString() >> "'>\n"
 		if (this gridOn)
-			result = result & Shapes line(position, position + tickMarkerOnOtherSideOffset, "grey", FloatPoint2D new(5,5))
-		result = result & Shapes line(position, position + tickMarkerEndOffset, "black")
-		result = result & Shapes line(position + tickMarkerOnOtherSideOffset, position + tickMarkerOnOtherSideOffset - tickMarkerEndOffset, "black")
+			result = result & Shapes line(position, position + tickMarkerOnOtherSideOffset, 1, 255.0f, "grey", FloatPoint2D new(5,5))
+		result = result & Shapes line(position, position + tickMarkerEndOffset, 1, 255.0f, "black")
+		result = result & Shapes line(position + tickMarkerOnOtherSideOffset, position + tickMarkerOnOtherSideOffset - tickMarkerEndOffset, 1, 255.0f, "black")
 		tickValue = radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision) ? (tickValue / radix) : tickValue
 		tempTick := tickValue toString()
 		tempTickInt := tickValue as Int toString()
-		result = result & Shapes text(position + numberOffset, Float absolute(tickValue - tickValue round()) < 0.0001 ? tempTickInt : tempTick, this fontSize, textAnchor)
+		result = result & Shapes text(position + numberOffset, Float absolute(tickValue - tickValue round()) < 0.001 ? tempTickInt : tempTick, this fontSize - 4, textAnchor)
 		tempTick free()
 		tempTickInt free()
 		result = result >> "</g>\n"
+		result
+	}
+
+	getRequiredMargin: func(fontSize: Int) -> Float {
+		result: Float
+		if (this fontSize == 0)
+			this fontSize = fontSize
+
+		if (this orientation == Orientation Horizontal)
+			result = 2.5f * this fontSize as Float
+		else
+			result = (this precision + 2) * (this fontSize as Float - 4)
 		result
 	}
 
