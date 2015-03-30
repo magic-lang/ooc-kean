@@ -42,17 +42,17 @@ ShaderProgram: class {
 		glUniform1i(glGetUniformLocation(this _backend, name), value)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~Int") }
 	}
-	setUniform: func ~Int2 (name: String, a: Int, b: Int) {
+	setUniform: func ~Int2 (name: String, a, b: Int) {
 		version(debugGL) { validateStart() }
 		glUniform2i(glGetUniformLocation(this _backend, name), a, b)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~Int2") }
 	}
-	setUniform: func ~Int3 (name: String, a: Int, b: Int, c: Int) {
+	setUniform: func ~Int3 (name: String, a, b, c: Int) {
 		version(debugGL) { validateStart() }
 		glUniform3i(glGetUniformLocation(this _backend, name), a, b, c)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~Int3") }
 	}
-	setUniform: func ~Int4 (name: String, a: Int, b: Int, c: Int, d: Int) {
+	setUniform: func ~Int4 (name: String, a, b, c, d: Int) {
 		version(debugGL) { validateStart() }
 		glUniform4i(glGetUniformLocation(this _backend, name), a, b, c, d)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~Int4") }
@@ -75,7 +75,7 @@ ShaderProgram: class {
 	setUniform: func ~IntSize3D (name: String, value: IntSize3D) {
 		version(debugGL) { validateStart() }
 		glUniform3i(glGetUniformLocation(this _backend, name), value width, value height, value depth)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatPoint3D") }
+		version(debugGL) { validateEnd("ShaderProgram setUniform~IntSize3D") }
 	}
 	setUniform: func ~Float (name: String, value: Float) {
 		version(debugGL) { validateStart() }
