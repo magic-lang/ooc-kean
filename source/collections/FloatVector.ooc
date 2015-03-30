@@ -38,11 +38,7 @@ FloatVector: class extends VectorList<Float> {
 			result
 		}
 	}
-	mean: Float {
-		get {
-			this sum / this count
-		}
-	}
+	mean ::= this sum / this count
 	variance: Float {
 		get {
 			squaredSum := 0.0f
@@ -93,7 +89,7 @@ FloatVector: class extends VectorList<Float> {
 	toString: func() -> String {
 		result := ""
 		for (i in 0..this _count)
-			result += this[i] toString() + "\n"
+			result = result >> this[i] toString() >> "\n"
 		result
 	}
 }
