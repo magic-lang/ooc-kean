@@ -173,7 +173,7 @@ Texture: class {
 		true
 	}
 	_allocate: func (pixels: Pointer, stride: Int) {
-		version(debugGL) { Debug print("Allocating OpenGL Texture") }
+		version(debugGLv) { Debug print("Allocating OpenGL Texture") }
 		pixelStride := stride / this _bytesPerPixel
 		if (pixelStride != this width) {
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
