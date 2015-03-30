@@ -30,7 +30,6 @@ IntSize3D: cover {
 	init: func@ (=width, =height, =depth)
 	init: func@ ~default { this init(0, 0, 0) }
 	scalarProduct: func (other: This) -> Int { this width * other width + this height * other height + this depth * other depth }
-	swap: func -> This { This new(this height, this width, this depth) }
 	minimum: func (ceiling: This) -> This { This new(this width minimum(ceiling width), this height minimum(ceiling height), this depth minimum(ceiling depth)) }
 	maximum: func (floor: This) -> This { This new(this width maximum(floor width), this height maximum(floor height), this depth maximum(floor depth)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height), this depth clamp(floor depth, ceiling depth)) }
