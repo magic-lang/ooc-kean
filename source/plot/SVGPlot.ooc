@@ -72,13 +72,13 @@ SVGPlot: class {
 		result := Shapes text(FloatPoint2D new(size x / 2.0f, margin y / 2.0f + this fontSize / 3.0f), this title, this fontSize + 2, "middle")
 		result = result & this xAxis getSVG(plotAreaSize, margin, translationToRealOrigo, scaling, fontSize)
 		result = result & this yAxis getSVG(plotAreaSize, margin, translationToRealOrigo, scaling, fontSize)
-		result = result & "<rect desc='Plot-border' x='" clone() & margin x toString() & "' y='" clone() & margin y toString() & "' width='" clone() & plotAreaSize x toString() & "' height='" clone() & plotAreaSize y toString() & "' stroke='black' fill='none'/>\n" clone()
-		result = result & "<svg desc='Data' x='" clone() & margin x toString() & "' y='" clone() & margin y toString() & "' width='" clone() & plotAreaSize x toString() & "' height='" clone() & plotAreaSize y toString() & "'>\n" clone()
-		result = result & "<g transform='translate(" clone() & translationToRealOrigo toString() & ")'>\n" clone()
+		result = result >> "<rect desc='Plot-border' x='" & margin x toString() >> "' y='" & margin y toString() >> "' width='" & plotAreaSize x toString() >> "' height='" & plotAreaSize y toString() >> "' stroke='black' fill='none'/>\n"
+		result = result >> "<svg desc='Data' x='" & margin x toString() >> "' y='" & margin y toString() >> "' width='" & plotAreaSize x toString() >> "' height='" & plotAreaSize y toString() >> "'>\n"
+		result = result >> "<g transform='translate(" & translationToRealOrigo toString() >> ")'>\n"
 		if (!this datasets empty())
 			for (i in 0..this datasets count)
 				result = result & this datasets[i] getSVG(scaling)
-		result = result & "</g>\n</svg>\n" clone()
+		result = result >> "</g>\n</svg>\n"
 		result = result & this setLegends(size, plotAreaSize)
 		result
 	}
@@ -131,7 +131,7 @@ SVGPlot: class {
 	}
 
 	setLegends: func (size, plotAreaSize: FloatPoint2D) -> String {
-		result := "<svg desc='Legends' x='" clone() & ((size x - plotAreaSize x) / 2) toString() & "' y='" clone() & ((size y - plotAreaSize y) / 2) toString() & "' width='" clone() & plotAreaSize x toString() & "' height='" clone() & plotAreaSize y toString() & "' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>\n<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>\n<g id='Legend' drag:enable='true'>\n" clone()
+		result := "<svg desc='Legends' x='" << ((size x - plotAreaSize x) / 2) toString() >> "' y='" & ((size y - plotAreaSize y) / 2) toString() >> "' width='" & plotAreaSize x toString() >> "' height='" & plotAreaSize y toString() >> "' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>\n<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>\n<g id='Legend' drag:enable='true'>\n"
 		legendCounter:= 0
 		for (i in 0..this datasets count) {
 			if (this datasets[i] label != "") {
@@ -139,7 +139,7 @@ SVGPlot: class {
 				result = result & this datasets[i] getSvgLegend(legendCounter, fontSize)
 			}
 		}
-		result = result & "</g>\n</svg>\n" clone()
+		result = result >> "</g>\n</svg>\n"
 		result
 	}
 }

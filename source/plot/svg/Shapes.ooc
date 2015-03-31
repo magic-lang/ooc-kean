@@ -11,7 +11,7 @@ Shapes: abstract class {
 		This ellipse(center, r, r, opacity, color)
 	}
 	ellipse: static func (center: FloatPoint2D, rx, ry, opacity: Float, color: String) -> String {
-		"<ellipse cx='" clone() & center x toString() & "' cy='" clone() & center y toString() & "' rx='" clone() & rx toString() & "' ry='" clone() & ry toString() & "' fill='" clone() & color clone() & "' fill-opacity='" clone() & opacity toString() & "'/>\n" clone()
+		"<ellipse cx='" << center x toString() >> "' cy='" & center y toString() >> "' rx='" & rx toString() >> "' ry='" & ry toString() >> "' fill='" >> color >> "' fill-opacity='" & opacity toString() >> "'/>\n"
 	}
 	rect: static func ~FloatPoint2D(upperRight, size: FloatPoint2D, opacity: Float, color: String) -> String {
 		This rect(upperRight x, upperRight y, size x, size y, opacity, color)
@@ -20,7 +20,7 @@ Shapes: abstract class {
 		This rect(upperRight x, upperRight y, width, height, opacity, color)
 	}
 	rect: static func ~Float(x, y, width, height, opacity: Float, color: String) -> String {
-		"<rect x='" clone() & x toString() & "' y='" clone() & y toString() & "' width='" clone() & width toString() & "' height='" clone() & height toString() & "' fill='" clone() & color clone() & "' fill-opacity='" clone() & opacity toString() & "'/>\n" clone()
+		"<rect x='" << x toString() >> "' y='" & y toString() >> "' width='" & width toString() >> "' height='" & height toString() >> "' fill='" >> color >> "' fill-opacity='" & opacity toString() >> "'/>\n"
 	}
 	text: static func ~simple(position: FloatPoint2D, text: String, fontSize: Int, opacity := 255.0f, color := "black") -> String {
 		This text(position, text, fontSize, "start", opacity, color)

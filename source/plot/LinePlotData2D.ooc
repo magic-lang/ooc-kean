@@ -15,39 +15,37 @@ LinePlotData2D: class extends PlotData2D {
 	lineStyle: LineStyle { get set }
 
 	init: func ~default(lineStyle := LineStyle Solid) {
-		this lineStyle = lineStyle
 		super()
+		this lineStyle = lineStyle
 	}
 
 	init: func ~dataSeries(dataSeries: VectorList<FloatPoint2D>, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
-		this lineStyle = lineStyle
 		super(dataSeries, label, colorBgra)
+		this lineStyle = lineStyle
 	}
 
 	init: func ~color(dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra, lineStyle := LineStyle Solid) {
-		this lineStyle = lineStyle
-		super(dataSeries, "", colorBgra)
+		this init(dataSeries, "", colorBgra, lineStyle)
 	}
 
 	init: func ~twoFloatSeries(xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
-		this lineStyle = lineStyle
 		super(xSeries, ySeries, label, colorBgra)
+		this lineStyle = lineStyle
 	}
 
 	getSVG: func (scaling: FloatPoint2D) -> String {
 		result := ""
 		if (!this dataSeries empty()) {
-			result = result & "<path stroke='" clone() & this color clone() & "' stroke-opacity='" clone() & this opacity toString() & "' fill='none' stroke-width='" clone() & this lineWidth toString() & "' d='M " clone() & (scaling x * this dataSeries[0] x) toString() & " " clone() & (- scaling y * this dataSeries[0] y) toString() & " L " clone()
+			result = result & "<path stroke='" + this color >> "' stroke-opacity='" & this opacity toString() >> "' fill='none' stroke-width='" & this lineWidth toString() >> "' d='M " & (scaling x * this dataSeries[0] x) toString() >> " " & (- scaling y * this dataSeries[0] y) toString() >> " L "
 			for (j in 1..this dataSeries count)
-				result = result & (scaling x * this dataSeries[j] x) toString() & " " clone() & (- scaling y * this dataSeries[j] y) toString() & " " clone()
+				result = result & (scaling x * this dataSeries[j] x) toString() >> " " & (- scaling y * this dataSeries[j] y) toString() >> " "
 			result = result >> "' "
 			match (this lineStyle) {
 				case LineStyle Dashed =>
 					result = result >> "stroke-dasharray='" & (this lineWidth * 5) toString() >> "," & (this lineWidth * 5) toString() >> "'"
 				case LineStyle Dotted =>
 					result = result >> "stroke-dasharray='" & this lineWidth toString() >> "," & this lineWidth toString() >> "'"
-				case =>
-					// do not do anything, will result in solid line
+				case => // LineStyle Solid
 			}
 			result = result >> "/>\n"
 		}
@@ -59,13 +57,11 @@ LinePlotData2D: class extends PlotData2D {
 		start := FloatPoint2D new(this legendOffset, this legendOffset + (fontSize * legendCount - fontSize / 2) as Float)
 		end := FloatPoint2D new(this legendOffset + fontSize, start y)
 		match (this lineStyle) {
-			case LineStyle Solid =>
-				result = Shapes line(start, end, this lineWidth, this opacity, this color)
 			case LineStyle Dashed =>
 				result = Shapes line(start, end, this lineWidth, this opacity, this color, FloatPoint2D new((this lineWidth * 5) as Float, (this lineWidth * 5) as Float))
 			case LineStyle Dotted =>
 				result = Shapes line(start, end, this lineWidth, this opacity, this color, FloatPoint2D new(this lineWidth as Float, this lineWidth as Float))
-			case =>
+			case => // LineStyle Solid
 				result = Shapes line(start, end, this lineWidth, this opacity, this color)
 		}
 		result = result & Shapes text(FloatPoint2D new(end x, end y + fontSize / 3), this label, fontSize, this opacity, this color)
