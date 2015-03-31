@@ -82,6 +82,21 @@ ShaderProgram: class {
 		glUniform1f(glGetUniformLocation(this _backend, name), value)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~Float") }
 	}
+	setUniform: func ~Float2 (name: String, a, b: Float) {
+		version(debugGL) { validateStart() }
+		glUniform2f(glGetUniformLocation(this _backend, name), a, b)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~Float2") }
+	}
+	setUniform: func ~Float3 (name: String, a, b, c: Float) {
+		version(debugGL) { validateStart() }
+		glUniform3f(glGetUniformLocation(this _backend, name), a, b, c)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~Float3") }
+	}
+	setUniform: func ~Float4 (name: String, a, b, c, d: Float) {
+		version(debugGL) { validateStart() }
+		glUniform4f(glGetUniformLocation(this _backend, name), a, b, c, d)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~Float4") }
+	}
 	setUniform: func ~FloatPoint2D (name: String, value: FloatPoint2D) {
 		version(debugGL) { validateStart() }
 		glUniform2f(glGetUniformLocation(this _backend, name), value x, value y)
