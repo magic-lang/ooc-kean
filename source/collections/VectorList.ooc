@@ -74,7 +74,7 @@ VectorList: class <T> {
 	}
 	pop: func -> T {
 		result := this[0]
-		this remove(0)
+		this removeAt(0)
 		result
 	}
 	__destroy__: func {
