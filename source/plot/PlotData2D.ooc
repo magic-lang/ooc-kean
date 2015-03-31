@@ -34,6 +34,11 @@ PlotData2D: abstract class {
 		this init(dataSeries, label, colorBgra)
 	}
 
+	free: override func {
+		dataSeries free()
+		super()
+	}
+
 	getSVG: abstract func (scaling: FloatPoint2D) -> String
 	getSvgLegend: abstract func(legendCount, fontSize: Int) -> String
 

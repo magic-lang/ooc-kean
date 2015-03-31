@@ -34,6 +34,13 @@ SVGPlot: class {
 		this init(datasets, title, xAxisLabel, yAxisLabel)
 	}
 
+	free: override func {
+		datasets free()
+		xAxis free()
+		yAxis free()
+		super()
+	}
+
 	addDataset: func (dataset: PlotData2D) {
 		this datasets add(dataset)
 		this setAxesMinMax()

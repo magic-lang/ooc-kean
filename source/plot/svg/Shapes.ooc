@@ -26,6 +26,6 @@ Shapes: abstract class {
 		This text(position, text, fontSize, "start", opacity, color)
 	}
 	text: static func ~textAnchor(position: FloatPoint2D, text: String, fontSize: Int, textAnchor: String, opacity := 255.0f, color := "black") -> String {
-		"<text id='" + text + "' x='" & position x toString() >> "' y='" & position y toString() >> "' font-size='" & fontSize toString() >> "px' text-anchor='" >> textAnchor >> "' fill='" >> color >> "' fill-opacity='" & opacity toString() >> "'>" >> text >> "</text>\n"
+		"<text id='" + text >> "' x='" & position x toString() >> "' y='" & position y toString() >> "' font-size='" & fontSize toString() >> "px' text-anchor='" >> textAnchor >> "' fill='" >> color >> "' fill-opacity='" & opacity toString() >> "'>" >> text >> "</text>\n"
 	}
 }

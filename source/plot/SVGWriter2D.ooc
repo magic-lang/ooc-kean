@@ -25,19 +25,26 @@ SVGWriter2D: class {
 	}
 	init: func ~svgPlot(filename: String, args: ...) {
 		this init(filename)
-		args each(|arg|
-			match arg {
-				case plot: SVGPlot => this addPlot(plot)
-				case => // no action, unsupported argument
+
+		iterator := args iterator()
+		while (iterator hasNext?()) {
+			match (iterator getNextType()) {
+				case SVGPlot => this addPlot(iterator next(SVGPlot))
+				case => // no action, unsupported type
 			}
-		)
+		}
 	}
-	init: func ~withPositioning(filename: String, args: ...) {
+	init: func ~withPositioning(filename: String, =numberOfPlotsHorizontally, args: ...) {
 		this init(filename, args)
 	}
 	init: func ~svgPlots(filename: String, svgPlots: VectorList<SVGPlot>) {
 		this init(filename)
 		this svgPlots = svgPlots
+	}
+	free: override func {
+		filename free()
+		svgPlots free()
+		super();
 	}
 
 	addPlot: func (svgPlot: SVGPlot) {
