@@ -121,11 +121,11 @@ FloatEuclidTransform: cover {
 			this scaling)
 	}
 	toString: func -> String {
-		" tx: " >> "%8f" format(this translationX) >>
-		" ty: " >> "%8f" format(this translationY) >>
-		" Scale: " >> "%8f" format(this scaling) >>
-		" Rx: " >> "%8f" format(this rotationX) >>
-		" Ry: " >> "%8f" format(this rotationY) >>
-		" Rz: " >> "%8f" format(this rotationZ)
-	}
+        " tx: " << "%8f" formatFloat(this translationX) >>
+        " ty: " & "%8f" formatFloat(this translationY) >>
+        " Scale: " & "%8f" formatFloat(this scaling) >>
+        " Rx: " & "%8f" formatFloat(this rotationX) >>
+        " Ry: " & "%8f" formatFloat(this rotationY) >>
+        " Rz: " & "%8f" formatFloat(this rotationZ)
+    }
 }
