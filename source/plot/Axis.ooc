@@ -95,7 +95,7 @@ Axis: class {
 				while (tickValue <= this max) {
 					result = result & this getTickSVG(tickValue, radix, position, numberOffset, rightTickMarkerStartOffset, tickMarkerEndOffset, "end")
 					tickValue += this tick
-					position y += - scaling y * tick
+					position y -= scaling y * tick
 				}
 			}
 			result = result >> "</g>\n"

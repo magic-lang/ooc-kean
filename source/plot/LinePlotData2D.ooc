@@ -37,21 +37,19 @@ LinePlotData2D: class extends PlotData2D {
 	getSVG: func (scaling: FloatPoint2D) -> String {
 		result := ""
 		if (!this dataSeries empty()) {
-				result = result & "<path stroke='" clone() & this color clone() & "' stroke-opacity='" clone() & this opacity toString() & "' fill='none' stroke-width='" clone() & this lineWidth toString() & "' d='M " clone() & (scaling x * this dataSeries[0] x) toString() & " " clone() & (- scaling y * this dataSeries[0] y) toString() & " L " clone()
-				for (j in 1..this dataSeries count)
-					result = result & (scaling x * this dataSeries[j] x) toString() & " " clone() & (- scaling y * this dataSeries[j] y) toString() & " " clone()
-				result = result >> "' "
-				match (this lineStyle) {
-					case LineStyle Solid =>
-						// do not do anything, will result in solid line
-					case LineStyle Dashed =>
-						result = result >> "stroke-dasharray='" & (this lineWidth * 5) toString() >> "," & (this lineWidth * 5) toString() >> "'"
-					case LineStyle Dotted =>
-						result = result >> "stroke-dasharray='" & this lineWidth toString() >> "," & this lineWidth toString() >> "'"
-					case =>
-						// do not do anything, will result in solid line
-				}
-				result = result >> "/>\n"
+			result = result & "<path stroke='" clone() & this color clone() & "' stroke-opacity='" clone() & this opacity toString() & "' fill='none' stroke-width='" clone() & this lineWidth toString() & "' d='M " clone() & (scaling x * this dataSeries[0] x) toString() & " " clone() & (- scaling y * this dataSeries[0] y) toString() & " L " clone()
+			for (j in 1..this dataSeries count)
+				result = result & (scaling x * this dataSeries[j] x) toString() & " " clone() & (- scaling y * this dataSeries[j] y) toString() & " " clone()
+			result = result >> "' "
+			match (this lineStyle) {
+				case LineStyle Dashed =>
+					result = result >> "stroke-dasharray='" & (this lineWidth * 5) toString() >> "," & (this lineWidth * 5) toString() >> "'"
+				case LineStyle Dotted =>
+					result = result >> "stroke-dasharray='" & this lineWidth toString() >> "," & this lineWidth toString() >> "'"
+				case =>
+					// do not do anything, will result in solid line
+			}
+			result = result >> "/>\n"
 		}
 		result
 	}
