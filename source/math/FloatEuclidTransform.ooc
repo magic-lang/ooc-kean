@@ -18,10 +18,13 @@ import math
 import FloatExtension
 import FloatSize2D
 import FloatPoint2D
+import FloatPoint3D
 import FloatTransform2D
+import Quaternion
 
 FloatEuclidTransform: cover {
 	translationX, translationY, rotationX, rotationY, rotationZ, scaling: Float
+	rotation ::= FloatPoint3D new(rotationX, rotationY, rotationZ)
 	imageWidth := 1920
 	fov := 50.0f
 	k ::= tan(this fov * 0.01745329252f / 2.0f) / (this imageWidth / 2)
@@ -97,12 +100,32 @@ FloatEuclidTransform: cover {
 	operator * (value: Float) -> This {
 		This new(this translationX * value, this translationY * value, this rotationX * value, this rotationY * value, this rotationZ * value, (this scaling - 1) * value + 1)
 	}
+	toImageCoordinates: func(zDistance: Float) -> This {
+		correction := Quaternion getTransform(this rotation, zDistance) * FloatPoint2D new(0.0f, 0.0f)
+		This new(
+			this translationX + correction x,
+			this translationY + correction y,
+			this rotationX,
+			this rotationY,
+			this rotationZ,
+			this scaling)
+	}
+	toCameraCoordinates: func(zDistance: Float) -> This {
+		correction := Quaternion getTransform(-this rotation, zDistance) * FloatPoint2D new(0.0f, 0.0f)
+		This new(
+			this translationX + correction x,
+			this translationY + correction y,
+			this rotationX,
+			this rotationY,
+			this rotationZ,
+			this scaling)
+	}
 	toString: func -> String {
-		" tx: " + "%8f" format(this translationX) +
-		" ty: " + "%8f" format(this translationY) +
-		" Scale: " + "%8f" format(this scaling) +
-		" Rx: " + "%8f" format(this rotationX) +
-		" Ry: " + "%8f" format(this rotationY) +
-		" Rz: " + "%8f" format(this rotationZ)
+		" tx: " >> "%8f" format(this translationX) >>
+		" ty: " >> "%8f" format(this translationY) >>
+		" Scale: " >> "%8f" format(this scaling) >>
+		" Rx: " >> "%8f" format(this rotationX) >>
+		" Ry: " >> "%8f" format(this rotationY) >>
+		" Rz: " >> "%8f" format(this rotationZ)
 	}
 }

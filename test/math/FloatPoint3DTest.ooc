@@ -52,7 +52,7 @@ FloatPoint3DTest: class extends Fixture {
 			expect(this point0 z, is equal to(10.0f))
 		})
 		this add("casting", func() {
-			value := "10.00, 20.00, 30.00"
+			value := "10.00000000, 20.00000000, 30.00000000"
 			expect(this point3 toString(), is equal to(value))
 //			FIXME: Equals interface
 //			expect(FloatSize2D parse(value), is equal to(this vector3))

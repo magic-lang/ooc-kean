@@ -67,7 +67,7 @@ FloatPoint3D: cover {
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
 	operator as -> String { this toString() }
-	toString: func -> String { "#{this x toString()}, #{this y toString()}, #{this z toString()}" }
+	toString: func -> String { "%.8f" formatFloat(this x) >> ", " & "%.8f" formatFloat(this y) >> ", " & "%.8f" formatFloat(this z) }
 	parse: static func (input: String) -> This {
 		array := input split(',')
 		This new(array[0] toFloat(), array[1] toFloat(), array[2] toFloat())
