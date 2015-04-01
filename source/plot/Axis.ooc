@@ -15,11 +15,12 @@ Axis: class {
 	tick: Float { get set (length) {
 			(value, radix) := Float decomposeToCoefficientAndRadix(length, 1)
 			this tick = radix
-			if (value != 0.0f)
+			if (value != 0.0f) {
 				if (length / this tick < 1.1f)
 					this tick /= 10.0f
 				else if (length / this tick < 4.0f)
 					this tick /= 2.0f
+			}
 		}
 	}
 	orientation: Orientation { get set }

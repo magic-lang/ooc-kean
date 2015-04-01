@@ -76,7 +76,6 @@ formatPlot := SVGPlot new(scatterParabolaData, "temporary title")
 formatPlot addDataset(lineParabolaData)
 formatPlot title = "Plot showing usage of various formatting options" // title can be set in this way
 formatPlot fontSize = 20 // defaults to 14 if not set
-formatPlot plotAreaPercentage = 0.6 // defaults to 0.8 if not set
 formatPlot xAxis label = "x"
 formatPlot xAxis fontSize = 12 // default to 10 for numbers, the label is displayed with fontsize + 4
 formatPlot xAxis gridOn = false // defaults to true, set to false if grid is not wanted

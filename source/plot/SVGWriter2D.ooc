@@ -3,6 +3,7 @@ use ooc-math
 use ooc-draw
 import PlotData2D
 import Axis
+import io/File
 import io/FileWriter
 import SVGPlot
 import LinePlotData2D
@@ -10,21 +11,24 @@ import svg/Shapes
 import math
 
 SVGWriter2D: class {
-	filename: String { get set }
+	file: File { get set }
 	svgPlots: VectorList<SVGPlot> { get set }
 	height: Int { get set }
 	width: Int { get set }
 	fontSize: Int { get set }
 	numberOfPlotsHorizontally: Int
 
-	init: func (=filename) {
+	init: func (=file) {
 		this svgPlots = VectorList<SVGPlot> new()
 		this width = 1920
 		this height = 1080
 		this fontSize = 14
 	}
-	init: func ~svgPlot(filename: String, args: ...) {
-		this init(filename)
+	init: func ~fileName(filename: String) {
+		this init(File new(filename))
+	}
+	init: func ~svgPlot(file: File, args: ...) {
+		this init(file)
 
 		iterator := args iterator()
 		while (iterator hasNext?()) {
@@ -34,16 +38,26 @@ SVGWriter2D: class {
 			}
 		}
 	}
-	init: func ~withPositioning(filename: String, =numberOfPlotsHorizontally, args: ...) {
-		this init(filename, args)
+	init: func ~svgPlotWithFilename(filename: String, args: ...) {
+		this init(File new(filename), args)
 	}
-	init: func ~svgPlots(filename: String, svgPlots: VectorList<SVGPlot>) {
-		this init(filename)
+	init: func ~withPositioning(file: File, =numberOfPlotsHorizontally, args: ...) {
+		this init(file, args)
+	}
+	init: func ~withPositioningFilename(filename: String, =numberOfPlotsHorizontally, args: ...) {
+		this init(File new(filename), args)
+	}
+	init: func ~svgPlots(file: File, svgPlots: VectorList<SVGPlot>) {
+		this init(file)
+		this svgPlots = svgPlots
+	}
+	init: func ~svgPlotsFilename(filename: String, svgPlots: VectorList<SVGPlot>) {
+		this init(File new(filename))
 		this svgPlots = svgPlots
 	}
 	free: override func {
-		filename free()
 		svgPlots free()
+		file free()
 		super();
 	}
 
@@ -53,7 +67,7 @@ SVGWriter2D: class {
 
 	write: func {
 		output := prepareOutput()
-		fileWriter := FileWriter new(this filename, false)
+		fileWriter := FileWriter new(this file, false)
 		fileWriter write(output)
 		fileWriter close()
 		output free()
