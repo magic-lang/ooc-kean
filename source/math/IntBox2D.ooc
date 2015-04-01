@@ -62,10 +62,10 @@ IntBox2D: cover {
 	}
 	//FIXME: Union is a keyword in C and so cannot be used for methods, but the name should be box__union something, so there shouldn't be a problem. Compiler bug?
 	union: func ~box (other: This) -> This {
-		left := this left minimum(other left)
-		top := this top minimum(other top)
-		width := this right maximum(other right) - this left minimum(other left)
-		height := this bottom maximum(other bottom) - this top minimum(other top)
+		left := Int minimum~two(this left, other left)
+		top := Int minimum~two(this top, other top)
+		width := Int maximum~two(this right, other right) - Int minimum~two(this left, other left)
+		height := Int maximum~two(this bottom, other bottom) - Int minimum~two(this top, other top)
 		This new(left, top, width, height)
 	}
 	contains: func (point: IntPoint2D) -> Bool {
@@ -81,20 +81,20 @@ IntBox2D: cover {
 		else if (other empty)
 			this
 		else
-			This new(this left minimum(other left),
-				this top minimum (other top),
-				this right maximum(other right) - this left minimum(other left),
-				this bottom maximum(other bottom) - this top minimum(other top)
+			This new(Int minimum~two(this left, other left),
+				Int minimum~two(this top, other top),
+				Int maximum~two(this right, other right) - Int minimum~two(this left, other left),
+				Int maximum~two(this bottom, other bottom) - Int minimum~two(this top, other top)
 			)
 	}
 	operator - (other: This) -> This {
 		if (this empty || other empty)
 			This new()
 		else {
-			left := this left maximum(other left)
-			right := this right minimum(other right)
-			top := this top maximum(other top)
-			bottom := this bottom minimum(other bottom)
+			left := Int maximum~two(this left, other left)
+			right := Int minimum~two(this right, other right)
+			top := Int maximum~two( this top, other top)
+			bottom := Int minimum~two(this bottom, other bottom)
 			if (left < right && top < bottom)
 				This new(left, top, right-left, bottom-top)
 			else

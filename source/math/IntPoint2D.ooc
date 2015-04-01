@@ -25,8 +25,8 @@ IntPoint2D: cover {
 	init: func@ ~default { this init(0, 0) }
 	scalarProduct: func (other: This) -> Int { this x * other x + this y * other y }
 	swap: func -> This { This new(this y, this x) }
-	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y)) }
-	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y)) }
+	minimum: func (ceiling: This) -> This { This new(Int minimum~two(this x, ceiling x), Int minimum~two(this y, ceiling y)) }
+	maximum: func (floor: This) -> This { This new(Int maximum~two(this x, floor x), Int maximum~two(this y, floor y)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
 	operator + (other: IntSize2D) -> This { This new(this x + other width, this y + other height) }
