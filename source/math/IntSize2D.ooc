@@ -31,8 +31,8 @@ IntSize2D: cover {
 	new: unmangled(kean_math_intSize2D_new) static func@ ~API (width: Int, height: Int) -> This { This new(width, height) }
 	scalarProduct: func (other: This) -> Int { this width * other width + this height * other height }
 	swap: func -> This { This new(this height, this width) }
-	minimum: func (ceiling: This) -> This { This new(this width minimum(ceiling width), this height minimum(ceiling height)) }
-	maximum: func (floor: This) -> This { This new(this width maximum(floor width), this height maximum(floor height)) }
+	minimum: func (ceiling: This) -> This { This new(Int minimum~two(this width, ceiling width), Int minimum~two(this height, ceiling height)) }
+	maximum: func (floor: This) -> This { This new(Int maximum~two(this width, floor width), Int maximum~two(this height, floor height)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height)) }
 	fillEven: static func (other: This) -> This { This new(other width + (other width % 2 == 1 ? 1 : 0), other height + (other height % 2 == 1 ? 1 : 0)) }
 	operator + (other: This) -> This { This new(this width + other width, this height + other height) }

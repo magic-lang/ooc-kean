@@ -44,10 +44,10 @@ IntShell2D: cover {
 	operator - (other: This) -> This { This new(this left - other left, this right - other right, this top - other top, this bottom - other bottom) }
 	operator / (other: Int) -> This { This new(this left / other, this right / other, this top / other, this bottom / other) }
 	maximum: func (other: This) -> This {
-		This new(this left maximum(other left), this right maximum(other right), this top maximum(other top), this bottom maximum(other bottom))
+		This new(Int maximum~two(this left, other left), Int maximum~two(this right, other right), Int maximum~two(this top, other top), Int maximum~two(this bottom, other bottom))
 	}
 	minimum: func (other: This) -> This {
-		This new(this left minimum(other left), this right minimum(other right), this top minimum(other top), this bottom minimum(other bottom))
+		This new(Int minimum~two(this left, other left), Int minimum~two(this right, other right), Int minimum~two(this top, other top), Int minimum~two(this bottom, other bottom))
 	}
 	operator == (other: This) -> Bool { this left == other left && this right == other right && this top == other top && this bottom == other bottom }
 	operator != (other: This) -> Bool { !(this == other) }

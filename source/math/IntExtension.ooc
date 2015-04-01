@@ -30,6 +30,7 @@ extend Int {
 	maximum: static func ~two(first: This, second: This) -> This {
 		first > second ? first : second
 	}
+	// TODO: Avoid using this, consider removing it.
 	maximum: static func ~multiple(value: This, values: ...) -> This {
 		values each(|v|
 			if ((v as This*)@ > value)
@@ -40,6 +41,7 @@ extend Int {
 	minimum: static func ~two(first: This, second: This) -> This {
 		first < second ? first : second
 	}
+	// TODO: Avoid using this, consider removing it.
 	minimum: static func ~multiple(value: This, values: ...) -> This {
 		values each(|v|
 			if ((v as This*)@ < value)
