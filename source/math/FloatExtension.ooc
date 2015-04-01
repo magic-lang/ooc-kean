@@ -135,8 +135,8 @@ extend Float {
 		power := log10(radix) as Int
 		result := ""
 		if (Float absolute(coefficient - 1.0f) > Float epsilon)
-			result = result & coefficient toString() & "×" clone()
-		result = result & "10^" clone() & power toString()
+			result = result & coefficient toString() >> "×"
+		result = result >> "10^" & power toString()
 		result
 	}
 }
