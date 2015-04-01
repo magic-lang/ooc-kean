@@ -22,6 +22,7 @@ import FloatPoint2D
 import FloatBox2D
 import text/StringTokenizer
 import structs/ArrayList
+use ooc-math
 
 IntBox2D: cover {
 	leftTop: IntPoint2D
@@ -55,8 +56,8 @@ IntBox2D: cover {
 	intersection: func (other: This) -> This {
 		left := this left > other left ? this left : other left
 		top := this top > other top ? this top : other top
-		width := ((this right < other right ? this right : other right) - left) maximum(0)
-		height := ((this bottom < other bottom ? this bottom : other bottom) - top) maximum(0)
+		width := Int maximum~two(0, (this right < other right ? this right : other right) - left)
+		height := Int maximum~two(0, (this bottom < other bottom ? this bottom : other bottom) - top)
 		This new(left, top, width, height)
 	}
 	//FIXME: Union is a keyword in C and so cannot be used for methods, but the name should be box__union something, so there shouldn't be a problem. Compiler bug?
