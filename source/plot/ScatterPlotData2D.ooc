@@ -29,7 +29,7 @@ ScatterPlotData2D: class extends PlotData2D {
 		super(xSeries, ySeries, label, colorBgra)
 	}
 
-	getSVG: func (scaling: FloatPoint2D) -> String {
+	getSvg: func (scaling: FloatPoint2D) -> String {
 		result := ""
 		if (!this dataSeries empty()) {
 			for (i in 0..this dataSeries count) {

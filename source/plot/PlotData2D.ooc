@@ -39,7 +39,7 @@ PlotData2D: abstract class {
 		super()
 	}
 
-	getSVG: abstract func (scaling: FloatPoint2D) -> String
+	getSvg: abstract func (scaling: FloatPoint2D) -> String
 	getSvgLegend: abstract func(legendCount, fontSize: Int) -> String
 
 	minValues: func -> FloatPoint2D {

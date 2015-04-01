@@ -46,7 +46,7 @@ SVGPlot: class {
 		this setAxesMinMax()
 	}
 
-	getSVG: func (size: FloatPoint2D, fontSize: Int) -> String {
+	getSvg: func (size: FloatPoint2D, fontSize: Int) -> String {
 		if (this fontSize == 0)
 			this fontSize = fontSize
 		aspectRatio := size x / size y
@@ -70,14 +70,14 @@ SVGPlot: class {
 		translationToRealOrigo := FloatPoint2D new(- scaling x * this xAxis min, plotAreaSize y + scaling y * this yAxis min)
 
 		result := Shapes text(FloatPoint2D new(size x / 2.0f, margin y / 2.0f + this fontSize / 3.0f), this title, this fontSize + 2, "middle")
-		result = result & this xAxis getSVG(plotAreaSize, margin, translationToRealOrigo, scaling, fontSize)
-		result = result & this yAxis getSVG(plotAreaSize, margin, translationToRealOrigo, scaling, fontSize)
+		result = result & this xAxis getSvg(plotAreaSize, margin, translationToRealOrigo, scaling, fontSize)
+		result = result & this yAxis getSvg(plotAreaSize, margin, translationToRealOrigo, scaling, fontSize)
 		result = result >> "<rect desc='Plot-border' x='" & margin x toString() >> "' y='" & margin y toString() >> "' width='" & plotAreaSize x toString() >> "' height='" & plotAreaSize y toString() >> "' stroke='black' fill='none'/>\n"
 		result = result >> "<svg desc='Data' x='" & margin x toString() >> "' y='" & margin y toString() >> "' width='" & plotAreaSize x toString() >> "' height='" & plotAreaSize y toString() >> "'>\n"
 		result = result >> "<g transform='translate(" & translationToRealOrigo toString() >> ")'>\n"
 		if (!this datasets empty())
 			for (i in 0..this datasets count)
-				result = result & this datasets[i] getSVG(scaling)
+				result = result & this datasets[i] getSvg(scaling)
 		result = result >> "</g>\n</svg>\n"
 		result = result & this setLegends(size, plotAreaSize)
 		result

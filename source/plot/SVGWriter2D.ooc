@@ -105,7 +105,7 @@ SVGWriter2D: class {
 				position y = plotSize y * (i / numPlotsX)
 
 				result = result >> "<svg desc='Plot " & (i + 1) toString() >> "' x='" & position x toString() >> "' y='" & position y toString() >> "' width='" & plotSize x toString() >> "' height='" & plotSize y toString() >> "'>\n"
-				result = result & svgPlots[i] getSVG(plotSize, fontSize)
+				result = result & svgPlots[i] getSvg(plotSize, fontSize)
 				result = result >> "</svg>\n"
 			}
 		}
