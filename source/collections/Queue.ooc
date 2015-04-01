@@ -10,7 +10,6 @@ Queue: class <T> {
 	empty ::= this _count == 0
 	full ::= this _count == this _capacity
 
-
 	init: func (=_capacity) {
 		this _queue = gc_calloc(capacity as SizeT, T size)
 	}
@@ -26,7 +25,7 @@ Queue: class <T> {
 			this _tail = (this _tail + 1) % this _capacity
 			this _count += 1
 		} else
-    	raise("Trying to enqueue something on a full queue")
+			raise("Trying to enqueue something on a full queue")
 	}
 
 	dequeue: func -> T {
