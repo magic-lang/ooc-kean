@@ -25,11 +25,19 @@ Random: class {
 	state := static Time microtime()
 
 	/**
-	   :return: a pseudo-random number between INT_MIN and INT_MAX, generated using
+	   :return: a pseudo-random number between 0 and INT_MAX, generated using
 	   the C functions srand/rand
 	 */
 	random: static func -> Int {
 		return rand()
+	}
+
+	/**
+	   :return: a pseudo-random float number between 0 and 1, generated using
+	   the C functions srand/rand
+	 */
+	randFloat: static func -> Float {
+		return (rand() as Float) / INT_MAX
 	}
 
 	/**
