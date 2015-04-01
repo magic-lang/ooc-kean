@@ -33,7 +33,7 @@ LinePlotData2D: class extends PlotData2D {
 		this lineStyle = lineStyle
 	}
 
-	getSVG: func (scaling: FloatPoint2D) -> String {
+	getSvg: func (scaling: FloatPoint2D) -> String {
 		result := ""
 		if (!this dataSeries empty()) {
 			result = result & "<path stroke='" + this color >> "' stroke-opacity='" & this opacity toString() >> "' fill='none' stroke-width='" & this lineWidth toString() >> "' d='M " & (scaling x * this dataSeries[0] x) toString() >> " " & (- scaling y * this dataSeries[0] y) toString() >> " L "

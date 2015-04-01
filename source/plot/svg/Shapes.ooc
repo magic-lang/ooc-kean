@@ -16,7 +16,7 @@ Shapes: abstract class {
 	rect: static func ~FloatPoint2D(upperRight, size: FloatPoint2D, opacity: Float, color: String) -> String {
 		This rect(upperRight x, upperRight y, size x, size y, opacity, color)
 	}
-	rect: static func ~positionFloatPoint2D(upperRight: FloatPoint2D, width, height: Float, opacity: Float, color: String) -> String {
+	rect: static func ~positionFloatPoint2D(upperRight: FloatPoint2D, width, height, opacity: Float, color: String) -> String {
 		This rect(upperRight x, upperRight y, width, height, opacity, color)
 	}
 	rect: static func ~Float(x, y, width, height, opacity: Float, color: String) -> String {
