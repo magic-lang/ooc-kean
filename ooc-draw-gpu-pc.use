@@ -3,5 +3,5 @@ Description: PC specific, GPU accelerated implementation of OOC Draw interfaces.
 SourcePath: source/draw/gpu/pc
 Requires: ooc-base, ooc-math, ooc-unit, ooc-draw, ooc-draw-gpu
 
-Imports: Window
+Imports: Window, X11/X11Window, X11/include/x11
 Libs: -lX11
