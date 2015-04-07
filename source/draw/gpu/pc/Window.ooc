@@ -42,7 +42,7 @@ Window: class extends OpenGLES3Context {
 		this _yuvPlanarToBgra = OpenGLES3MapYuvPlanarToBgra new(this)
 		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new(this)
 		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgra new(this, true)
-		XSelectInput(this _native display, this _native _backend, KeyPressMask | KeyReleaseMask)
+		XSelectInput(this _native display, this _native _backend, KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask)
 		temp: Bool
 		detectable := XkbSetDetectableAutoRepeat(this _native display, true, temp&)
 		println(detectable toString())

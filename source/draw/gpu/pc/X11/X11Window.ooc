@@ -33,7 +33,7 @@ X11Window: class extends NativeWindow {
 		root: Long = DefaultRootWindow(this _display)
 
 		swa: XSetWindowAttributesOOC
-		swa eventMask = ExposureMask | PointerMotionMask | KeyPressMask
+		swa eventMask = ExposureMask | PointerMotionMask | KeyPressMask | ButtonPressMask
 		this _backend = XCreateWindow(this _display, root, 0, 0, width, height, 0u, CopyFromParent as Int, InputOutput as UInt, null, CWEventMask, swa&)
 
 		XMapWindow(this _display, this _backend)

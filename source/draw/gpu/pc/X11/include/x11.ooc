@@ -23,7 +23,6 @@ include X11/keysym
 
 ExposureMask: extern const Long
 PointerMotionMask: extern const Long
-KeyPressMask: extern const Long
 CopyFromParent: extern const Long
 InputOutput: extern const UInt
 CWEventMask: extern const ULong
@@ -88,11 +87,21 @@ XkbSetDetectableAutoRepeat: extern func(display: Pointer, detectable: Bool, supp
 XLookupKeysym: extern func(keyEvent: extern(key_event) XKeyEventOoc*, index: Int) -> ULong
 KeyPress: extern const Int
 KeyRelease: extern const Int
-KeyPressMask: extern const Int
-KeyReleaseMask: extern const Int
+KeyPressMask: extern const Long
+KeyReleaseMask: extern const Long
+ButtonPress: extern const Int
+ButtonRelease: extern const Int
+ButtonPressMask: extern const Long
+ButtonReleaseMask: extern const Long
 
 XK_VoidSymbol                 : extern const ULong
 XK_VoidSymbol                 : extern const ULong
+
+Button1 : extern const UInt
+Button2 : extern const UInt
+Button3 : extern const UInt
+Button4 : extern const UInt
+Button5 : extern const UInt
 
 /*
  * TTY function keys, cleverly chosen to map to ASCII, for convenience of
