@@ -45,7 +45,6 @@ Window: class extends OpenGLES3Context {
 		XSelectInput(this _native display, this _native _backend, KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask)
 		temp: Bool
 		detectable := XkbSetDetectableAutoRepeat(this _native display, true, temp&)
-		println(detectable toString())
 	}
 	free: override func {
 		this _bgrToBgra free()

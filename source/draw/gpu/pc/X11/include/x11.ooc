@@ -27,7 +27,7 @@ CopyFromParent: extern const Long
 InputOutput: extern const UInt
 CWEventMask: extern const ULong
 
-XSetWindowAttributesOOC: cover from XSetWindowAttributes {
+XSetWindowAttributesOoc: cover from XSetWindowAttributes {
 	backgroundPixmap: extern(background_pixmap) Long
 	backgroundPixel: extern(background_pixel) ULong
 	borderPixmap: extern(border_pixmap) Long

@@ -32,7 +32,7 @@ X11Window: class extends NativeWindow {
 			raise("Unable to open X Display")
 		root: Long = DefaultRootWindow(this _display)
 
-		swa: XSetWindowAttributesOOC
+		swa: XSetWindowAttributesOoc
 		swa eventMask = ExposureMask | PointerMotionMask | KeyPressMask | ButtonPressMask
 		this _backend = XCreateWindow(this _display, root, 0, 0, width, height, 0u, CopyFromParent as Int, InputOutput as UInt, null, CWEventMask, swa&)
 
