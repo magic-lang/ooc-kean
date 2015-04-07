@@ -103,6 +103,14 @@ Button3 : extern const UInt
 Button4 : extern const UInt
 Button5 : extern const UInt
 
+MouseButton: enum {
+	Left = Button1
+	Middle = Button2
+	Right = Button3
+	WheelUp = Button4
+	WheelDown = Button5
+}
+
 /*
  * TTY function keys, cleverly chosen to map to ASCII, for convenience of
  * programming, but could have been arbitrary (at the cost of lookup
