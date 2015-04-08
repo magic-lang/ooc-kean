@@ -1,5 +1,6 @@
 import os/Time
 import structs/[ArrayList,List]
+import math
 
 /**
    seed rand: C stdlib function to initialize the random number generator from a given seed.
@@ -38,6 +39,16 @@ Random: class {
 	 */
 	randFloat: static func -> Float {
 		return (rand() as Float) / INT_MAX
+	}
+	/**
+	   :return: a pseudo-random float number with a normal distribution
+	 */
+	randn: static func (sigma := 1.0f) -> Float {
+		result := 0.0f
+		u1 := randFloat()
+		u2 := randFloat()
+		result = sqrt(-2.0f * log(u1)) * cos(2 * PI * u2)
+		return result * sigma
 	}
 
 	/**
