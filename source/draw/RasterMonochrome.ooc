@@ -128,6 +128,52 @@ RasterMonochrome: class extends RasterPacked {
 	}
 
 	// get the derivative on small window, windowLocation is window's global location on image, window is left top centered.
+	getFirstDerivativeWindowOptimized: func(windowLocation: IntBox2D, imageX, imageY: FloatImage) {
+		step := 2
+		leftTopX := windowLocation leftTop x
+		leftTopY := windowLocation leftTop y
+		rightBottomX := windowLocation rightBottom x
+		rightBottomY := windowLocation rightBottom y
+		sourceWidth := this size width
+
+		_pointer := this buffer pointer + leftTopY * sourceWidth  // this getValue [x,y]
+		_pointerP1 := _pointer + sourceWidth * step
+		_pointerP2 := _pointer + sourceWidth * 2 * step
+		_pointerM1 := _pointer - sourceWidth * step
+		_pointerM2 := _pointer - sourceWidth * 2 * step
+		destinationX := imageX pointer
+		destinationY := imageY pointer
+
+		// Ix & Iy  centered difference approximation with 4th error order, centered window
+		for (y in (leftTopY)..(rightBottomY)) {
+			for (x in (leftTopX)..(rightBottomX)) {
+				destinationX@ =
+					(
+						8 * _pointer[x + step] -
+						8 * _pointer[x - step] +
+						_pointer[x - 2 * step] -
+						_pointer[x + 2 * step]
+					) as Float / (12.0f * step)
+				destinationX += 1
+
+				destinationY@ =
+					(
+						8 * _pointerP1[x] -
+						8 * _pointerM1[x] +
+						_pointerM2[x] -
+						_pointerP2[x]
+					) as Float / (12.0f * step)
+				destinationY += 1
+			}
+			_pointer += sourceWidth
+			_pointerP1 += sourceWidth
+			_pointerP2 += sourceWidth
+			_pointerM1 += sourceWidth
+			_pointerM2 += sourceWidth
+		}
+	}
+	
+	// get the derivative on small window, windowLocation is window's global location on image, window is left top centered.
 	getFirstDerivativeWindow: func(windowLocation: IntBox2D, imageX, imageY: FloatImage) {
 		step := 3
 		// Ix & Iy  centered difference approximation with 4th error order, centered window

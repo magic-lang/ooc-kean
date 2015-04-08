@@ -5,11 +5,12 @@ FloatImage : class {
 	// y = row
 	_size: IntSize2D
 	size ::= _size
-	_imagePointer: Float*
+	_pointer: Float*
+	pointer ::= this _pointer
 	init: func ~IntSize2D (=_size)
 	init: func ~WidthAndHeight (width: Int, height: Int) {
 		this _size = IntSize2D new(width, height)
-		this _imagePointer = gc_malloc(width * height * Float instanceSize)
+		this _pointer = gc_malloc(width * height * Float instanceSize)
 	}
 
 	operator [] (x, y: Int) -> Float {
@@ -17,7 +18,7 @@ FloatImage : class {
 			if (x > _size width || y > _size height || x < 0 || y < 0)
 				raise("Accessing FloatImage index out of range in get")
 		}
-		(this _imagePointer + (x + this _size width * y))@ as Float
+		(this _pointer + (x + this _size width * y))@ as Float
 	}
 
 	operator []= (x, y: Int, value: Float) {
@@ -25,6 +26,6 @@ FloatImage : class {
 			if (x > _size width || y > _size height || x < 0 || y < 0)
 				raise("Accessing FloatImage index out of range in set")
 		}
-		(this _imagePointer + (x + this _size width * y))@ = value
+		(this _pointer + (x + this _size width * y))@ = value
 	}
 }
