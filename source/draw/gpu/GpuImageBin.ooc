@@ -61,6 +61,9 @@ GpuImageBin: class {
 		list add(image)
 	}
 	add: func (image: GpuImage) {
+		version(noRecycle) {
+			raise("Recycled without permission.")
+		}
 		this _mutex lock()
 		match (image) {
 			case (i: GpuMonochrome) =>
