@@ -35,7 +35,7 @@ FloatBox2D: cover {
 	leftBottom ::= FloatPoint2D new(this left, this bottom)
 	rightBottom ::= this leftTop + this size
 	center ::= this leftTop + (this size / 2)
-	empty ::= this size empty 
+	empty ::= this size empty
 	init: func@ (=leftTop, =size)
 	init: func@ ~fromPoints (leftTop, rightBottom: FloatPoint2D) { this init(leftTop, FloatSize2D new(rightBottom x - leftTop x,rightBottom y - leftTop y )) }
 	init: func@ ~fromFloats (left, top, width, height: Float) { this init(FloatPoint2D new(left, top), FloatSize2D new(width, height)) }
@@ -50,15 +50,15 @@ FloatBox2D: cover {
 	intersection: func (other: This) -> This {
 		left := this left > other left ? this left : other left
 		top := this top > other top ? this top : other top
-		width := ((this right < other right ? this right : other right) - left) maximum(0.0f)
-		height := ((this bottom < other bottom ? this bottom : other bottom) - top) maximum(0.0f)
+		width := Float maximum(0, (this right < other right ? this right : other right) - left)
+		height := Float maximum(0, (this bottom < other bottom ? this bottom : other bottom) - top)
 		This new(left, top, width, height)
 	}
 	//FIXME: Union is a keyword in C and so cannot be used for methods, but the name should be box__union something, so there shouldn't be a problem. Compiler bug?
 	union: func ~box (other: This) -> This {
 		left := this left minimum(other left)
 		top := this top minimum(other top)
-		width := this right maximum(other right) - this left minimum(other left) 
+		width := this right maximum(other right) - this left minimum(other left)
 		height := this bottom maximum(other bottom) - this top minimum(other top)
 		This new(left, top, width, height)
 	}
@@ -69,7 +69,6 @@ FloatBox2D: cover {
 	round: func -> This { This new(this leftTop round(), this size round()) }
 	ceiling: func -> This { This new(this leftTop ceiling(), this size ceiling()) }
 	floor: func -> This { This new(this leftTop floor(), this size floor()) }
-	
 	operator + (other: This) -> This {
 		if (this empty)
 			other
