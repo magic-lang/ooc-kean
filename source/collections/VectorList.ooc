@@ -102,4 +102,10 @@ VectorList: class <T> {
 			}
 		}
 	}
+	copy: func -> This<T> {
+		result := This new()
+		memcpy(result pointer, this pointer, this count * T size)
+		result count = this count
+		result
+	}
 }
