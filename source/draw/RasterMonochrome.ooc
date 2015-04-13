@@ -28,7 +28,7 @@ RasterMonochrome: class extends RasterPacked {
 	bytesPerPixel: Int { get { 1 } }
 	init: func ~allocate (size: IntSize2D, align := 0, verticalAlign := 0) { super~allocate(size, align, verticalAlign) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, align := 0, verticalAlign := 0) { super(buffer, size, align, verticalAlign) }
-	init: func ~fromRasterImage (original: RasterImage) { super(original)	}
+	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This {
 		result := This new(this)
@@ -107,68 +107,91 @@ RasterMonochrome: class extends RasterPacked {
 	}
 	convertFrom: static func(original: RasterImage) -> This {
 		result := This new(original)
-		//		"RasterMonochrome init ~fromRasterImage, original: (#{original size}), this: (#{this size}), stride #{this stride}" println()
 		row := result buffer pointer as UInt8*
 		rowLength := result stride
 		rowEnd := row + rowLength
 		destination := row
 		f := func (color: ColorMonochrome) {
 			(destination as ColorMonochrome*)@ = color
-			//			"RasterMonochrome init ~fromRasterImage f, color: #{color y}, destination at #{destination}" println()
 			destination += 1
 			if (destination >= rowEnd) {
-				//				"RasterMonochrome init ~fromRasterImage f, end of line at #{destination}" println()
 				row += result stride
 				destination = row
-				//				"RasterMonochrome init ~fromRasterImage f, new line at #{destination}" println()
 				rowEnd = row + rowLength
 			}
 		}
 		original apply(f)
+		result
 	}
 
-	// get the derivative on small window, windowLocation is window's global location on image, window is left top centered.
-	getFirstDerivativeWindow: func(windowLocation: IntBox2D, imageX, imageY: FloatImage) {
+	// get the derivative on small window, region is window's global location on image, window is left top centered.
+	getFirstDerivativeWindowOptimized: func(region: IntBox2D, imageX, imageY: FloatImage) {
+		step := 2
+		sourceWidth := this size width
+		source := this buffer pointer + region leftTop y * sourceWidth  // this getValue [x,y]
+		destinationX := imageX pointer
+		destinationY := imageY pointer
+
+		// Ix & Iy  centered difference approximation with 4th error order, centered window
+		for (y in (region leftTop y)..(region rightBottom y)) {
+			for (x in (region leftTop x)..(region rightBottom x)) {
+				destinationX@ =	(
+					8 * source[x + step] -
+					8 * source[x - step] +
+					source[x - 2 * step] -
+					source[x + 2 * step]
+				) as Float / (12.0f * step)
+				destinationX += 1
+
+				destinationY@ =	(
+					8 * source[x + sourceWidth * step] -
+					8 * source[x - sourceWidth * step] +
+					source[x - sourceWidth * 2 * step] -
+					source[x + sourceWidth * 2 * step]
+				) as Float / (12.0f * step)
+				destinationY += 1
+			}
+			source += sourceWidth
+		}
+	}
+	
+	// get the derivative on small window, region is window's global location on image, window is left top centered.
+	getFirstDerivativeWindow: func(region: IntBox2D, imageX, imageY: FloatImage) {
 		step := 3
 		// Ix & Iy  centered difference approximation with 4th error order, centered window
-		for (y in (windowLocation leftTop y)..(windowLocation rightBottom y)) {
-			for (x in (windowLocation leftTop x)..(windowLocation rightBottom x)) {
-				imageX[x - windowLocation leftTop x, y - windowLocation leftTop y] =
-					(
-						8 * this getValue(x + step, y) -
-						8 * this getValue(x - step, y) +
-						this getValue(x - 2 * step, y) -
-						this getValue(x + 2 * step, y)
-					) as Float / (12.0f * step)
+		for (y in (region leftTop y)..(region rightBottom y)) {
+			for (x in (region leftTop x)..(region rightBottom x)) {
+				imageX[x - region leftTop x, y - region leftTop y] = (
+					8 * this getValue(x + step, y) -
+					8 * this getValue(x - step, y) +
+					this getValue(x - 2 * step, y) -
+					this getValue(x + 2 * step, y)
+				) as Float / (12.0f * step)
 			}
 		}
-		for (y in (windowLocation leftTop y)..(windowLocation rightBottom y)) {
-			for (x in (windowLocation leftTop x)..(windowLocation rightBottom x)) {
-				imageY[x - windowLocation leftTop x, y - windowLocation leftTop y] =
-					(
-						8 * this getValue(x, y + step) -
-						8 * this getValue(x, y - step) +
-						this getValue(x, y - 2 * step) -
-						this getValue(x, y + 2 * step)
-					) as Float / (12.0f * step)
+		for (y in (region leftTop y)..(region rightBottom y)) {
+			for (x in (region leftTop x)..(region rightBottom x)) {
+				imageY[x - region leftTop x, y - region leftTop y] = (
+					8 * this getValue(x, y + step) -
+					8 * this getValue(x, y - step) +
+					this getValue(x, y - 2 * step) -
+					this getValue(x, y + 2 * step)
+				) as Float / (12.0f * step)
 			}
 		}
 	}
 	operator [] (x, y: Int) -> ColorMonochrome {
 		version(safe) {
-			if (!this isValidIn(x, y)) {
+			if (!this isValidIn(x, y))
 				raise("Accessing RasterMonochrome index out of range in get operator")
-			}
 		}
-		//this isValidIn(x, y) ? ColorMonochrome new(this buffer pointer[y * this stride + x]) : ColorMonochrome new(0)
 		ColorMonochrome new(this buffer pointer[y * this stride + x])
 	}
 
 	getValue: func(x, y: Int) -> UInt8 {
 		version(safe) {
-			if (x > this size width || y > this size height || x < 0 || y < 0) {
+			if (x > this size width || y > this size height || x < 0 || y < 0)
 				raise("Accessing RasterMonochrome index out of range in getValue")
-			}
 		}
 		return(this buffer pointer[y * this stride + x])
 	}

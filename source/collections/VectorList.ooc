@@ -88,4 +88,24 @@ VectorList: class <T> {
 	operator []= (index: Int, item: T) {
 		this _vector[index] = item
 	}
+	sort: func (greaterThan: Func (T, T) -> Bool) {
+		inOrder := false
+		while (!inOrder) {
+			inOrder = true
+			for (i in 0..count - 1) {
+				if (greaterThan(this[i], this[i + 1])) {
+					inOrder = false
+					tmp := this[i]
+					this[i] = this[i + 1]
+					this[i + 1] = tmp
+				}
+			}
+		}
+	}
+	copy: func -> This<T> {
+		result := This new()
+		memcpy(result pointer, this pointer, this count * T size)
+		result count = this count
+		result
+	}
 }
