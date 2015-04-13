@@ -54,12 +54,10 @@ GpuImage: abstract class extends Image {
 	recycle: func {
 		if (this _canvas != null)
 			this _canvas onRecycle()
-		version(safe) {
+		version(safe)
 			free()
-		} else {
+		else
 			this _context recycle(this)
-		}
-
 	}
 	bind: abstract func (unit: UInt)
 	unbind: abstract func
