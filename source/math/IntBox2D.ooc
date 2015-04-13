@@ -45,7 +45,13 @@ IntBox2D: cover {
 	init: func@ (=leftTop, =size)
 	init: func@ ~fromFloats (left, top, width, height: Int) { this init(IntPoint2D new(left, top), IntSize2D new(width, height)) }
 	//init: func@ ~fromSize (size: IntSize2D) { this init(IntPoint2D new(), size) }
-	init: func@ ~fromPoints (leftTop, rightBottom: IntPoint2D) { this init(leftTop, IntSize2D new(rightBottom x - leftTop x,rightBottom y - leftTop y )) }
+	init: func@ ~fromPoints (first, second: IntPoint2D) {
+		left := first x < second x ? first x : second x
+		top := first y < second y ? first y : second y
+		width := (first x - second x) abs()
+		height := (first y - second y) abs()
+		this init(left, top, width, height)
+	}
 	init: func@ ~default { this init(IntPoint2D new(), IntSize2D new()) }
 	swap: func -> This { This new(this leftTop swap(), this size swap()) }
 	pad: func (left, right, top, bottom: Int) -> This {
@@ -64,8 +70,8 @@ IntBox2D: cover {
 	union: func ~box (other: This) -> This {
 		left := Int minimum~two(this left, other left)
 		top := Int minimum~two(this top, other top)
-		width := Int maximum~two(this right, other right) - Int minimum~two(this left, other left)
-		height := Int maximum~two(this bottom, other bottom) - Int minimum~two(this top, other top)
+		width := Int maximum~two(0, (this right > other right ? this right : other right) - left)
+		height := Int maximum~two(0, (this bottom > other bottom ? this bottom : other bottom) - top)
 		This new(left, top, width, height)
 	}
 	contains: func (point: IntPoint2D) -> Bool {

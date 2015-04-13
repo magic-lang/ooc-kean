@@ -37,7 +37,13 @@ FloatBox2D: cover {
 	center ::= this leftTop + (this size / 2)
 	empty ::= this size empty
 	init: func@ (=leftTop, =size)
-	init: func@ ~fromPoints (leftTop, rightBottom: FloatPoint2D) { this init(leftTop, FloatSize2D new(rightBottom x - leftTop x,rightBottom y - leftTop y )) }
+	init: func@ ~fromPoints (first, second: FloatPoint2D) {
+		left := first x < second x ? first x : second x
+		top := first y < second y ? first y : second y
+		width := (first x - second x) abs()
+		height := (first y - second y) abs()
+		this init(left, top, width, height)
+	}
 	init: func@ ~fromFloats (left, top, width, height: Float) { this init(FloatPoint2D new(left, top), FloatSize2D new(width, height)) }
 	init: func@ ~fromSize (size: FloatSize2D) { this init(FloatPoint2D new(), size) }
 	init: func@ ~default { this init(FloatPoint2D new(), FloatSize2D new()) }
@@ -56,10 +62,10 @@ FloatBox2D: cover {
 	}
 	//FIXME: Union is a keyword in C and so cannot be used for methods, but the name should be box__union something, so there shouldn't be a problem. Compiler bug?
 	union: func ~box (other: This) -> This {
-		left := this left minimum(other left)
-		top := this top minimum(other top)
-		width := this right maximum(other right) - this left minimum(other left)
-		height := this bottom maximum(other bottom) - this top minimum(other top)
+		left := this left < other left ? this left : other left
+		top := this top < other top ? this top : other top
+		width := Float maximum(0, (this right > other right ? this right : other right) - left)
+		height := Float maximum(0, (this bottom > other bottom ? this bottom : other bottom) - top)
 		This new(left, top, width, height)
 	}
 	contains: func (point: FloatPoint2D) -> Bool {
