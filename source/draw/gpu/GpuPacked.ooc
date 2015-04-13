@@ -26,7 +26,7 @@ GpuPacked: abstract class extends GpuImage {
 		this _recyclable = true
 	}
 	free: override func {
-		version(noRecycle) {
+		version(safe) {
 			this _texture free()
 			super()
 		} else {

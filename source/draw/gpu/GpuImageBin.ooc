@@ -61,7 +61,7 @@ GpuImageBin: class {
 		list add(image)
 	}
 	add: func (image: GpuImage) {
-		version(noRecycle) {
+		version(safe) {
 			raise("Recycled without permission.")
 		}
 		this _mutex lock()

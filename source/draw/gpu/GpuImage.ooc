@@ -54,7 +54,7 @@ GpuImage: abstract class extends Image {
 	recycle: func {
 		if (this _canvas != null)
 			this _canvas onRecycle()
-		version(noRecycle) {
+		version(safe) {
 			free()
 		} else {
 			this _context recycle(this)
