@@ -6,7 +6,7 @@ import PlotData2D
 import math
 import svg/Shapes
 
-SVGPlot: class {
+SvgPlot: class {
 	datasets: VectorList<PlotData2D> { get set }
 	title: String { get set }
 	fontSize: Int { get set }
