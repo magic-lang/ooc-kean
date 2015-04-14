@@ -13,15 +13,13 @@ import math
 SvgWriter2D: class {
 	file: File { get set }
 	svgPlots: VectorList<SvgPlot> { get set }
-	height: Int { get set }
-	width: Int { get set }
+	size: FloatSize2D { get set }
 	fontSize: Int { get set }
 	numberOfPlotsHorizontally: Int
 
 	init: func (=file) {
 		this svgPlots = VectorList<SvgPlot> new()
-		this width = 1920
-		this height = 1080
+		this size = FloatSize2D new(1920,1080)
 		this fontSize = 14
 	}
 	init: func ~fileName(filename: String) {
@@ -77,7 +75,7 @@ SvgWriter2D: class {
 	prepareOutput: func -> String {
 		result := "<?xml version='1.0' standalone='no'?>\n"
 		result = result >> "<!DOCTYPE svg PUBLIC '-//W3C//DTD Svg 1.1//EN' 'http://www.w3.org/Graphics/Svg/1.1/DTD/svg11.dtd'>\n"
-		result = result >> "<svg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.1' width='" & this width toString() >> "' height='" & this height toString() >> "'>\n"
+		result = result >> "<svg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.1' width='" & this size width toString() >> "' height='" & this size height toString() >> "'>\n"
 
 		result = result >> "<rect desc='background' width='100%' height='100%' fill='white'/>\n"
 
@@ -98,14 +96,14 @@ SvgWriter2D: class {
 				numPlotsY = ceil(this svgPlots count as Float / numPlotsX as Float) as Int
 			}
 
-			plotSize := FloatPoint2D new(this width / numPlotsX, this height / numPlotsY)
+			plotSize := FloatSize2D new(this size width / numPlotsX, this size height / numPlotsY)
 			position := FloatPoint2D new()
 
 			for (i in 0..this svgPlots count) {
-				position x = plotSize x * Int modulo(i, numPlotsX)
-				position y = plotSize y * (i / numPlotsX)
+				position x = plotSize width * Int modulo(i, numPlotsX)
+				position y = plotSize height * (i / numPlotsX)
 
-				result = result >> "<svg desc='Plot " & (i + 1) toString() >> "' x='" & position x toString() >> "' y='" & position y toString() >> "' width='" & plotSize x toString() >> "' height='" & plotSize y toString() >> "'>\n"
+				result = result >> "<svg desc='Plot " & (i + 1) toString() >> "' x='" & position x toString() >> "' y='" & position y toString() >> "' width='" & plotSize width toString() >> "' height='" & plotSize height toString() >> "'>\n"
 				result = result & svgPlots[i] getSvg(plotSize, fontSize)
 				result = result >> "</svg>\n"
 			}

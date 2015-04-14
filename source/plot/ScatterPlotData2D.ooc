@@ -29,17 +29,17 @@ ScatterPlotData2D: class extends PlotData2D {
 		super(xSeries, ySeries, label, colorBgra)
 	}
 
-	getSvg: func (scaling: FloatPoint2D) -> String {
+	getSvg: func (transform: FloatTransform2D) -> String {
 		result := ""
 		if (!this dataSeries empty()) {
 			for (i in 0..this dataSeries count) {
 				match (this shape) {
 					case Shape Circle =>
 						r := this scalingRelativeLineWidth / 2.0f * this lineWidth
-						result = result & Shapes circle(FloatPoint2D new(scaling x * this dataSeries[i] x, - scaling y * dataSeries[i] y), r, this opacity, this color)
+						result = result & Shapes circle(FloatPoint2D new((transform * this dataSeries[i]) x, (transform * dataSeries[i]) y), r, this opacity, this color)
 					case Shape Square =>
-						x := scaling x * this dataSeries[i] x - this scalingRelativeLineWidth / 2.0f * this lineWidth
-						y := -scaling y * this dataSeries[i] y - this scalingRelativeLineWidth / 2.0f * this lineWidth
+						x := (transform * this dataSeries[i]) x - this scalingRelativeLineWidth / 2.0f * this lineWidth
+						y := (transform * this dataSeries[i]) y - this scalingRelativeLineWidth / 2.0f * this lineWidth
 						width := this scalingRelativeLineWidth * this lineWidth
 						result = result & Shapes rect(x, y, width, width, this opacity, this color)
 					case =>

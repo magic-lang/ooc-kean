@@ -46,10 +46,10 @@ SvgPlot: class {
 		this setAxesMinMax()
 	}
 
-	getSvg: func (size: FloatPoint2D, fontSize: Int) -> String {
+	getSvg: func (size: FloatSize2D, fontSize: Int) -> String {
 		if (this fontSize == 0)
 			this fontSize = fontSize
-		aspectRatio := size x / size y
+		aspectRatio := size width / size height
 		this fillColorList()
 		this setColor()
 		this xAxis roundEndpoints()
@@ -63,22 +63,22 @@ SvgPlot: class {
 				this yAxis max *= aspectRatio
 			}
 		}
-		margin := FloatPoint2D new(yAxis getRequiredMargin(this fontSize), xAxis getRequiredMargin(this fontSize))
+		margin := FloatSize2D new(yAxis getRequiredMargin(this fontSize), xAxis getRequiredMargin(this fontSize))
 
-		plotAreaSize := size - FloatPoint2D new(2.0f * margin x, 2.0f * margin y)
-		scaling := FloatPoint2D new(this xAxis length() != 0.0f ? plotAreaSize x / this xAxis length() : 1.0f, this yAxis length() != 0.0f ? plotAreaSize y / this yAxis length() : 1.0f)
-		translationToRealOrigo := FloatPoint2D new(- scaling x * this xAxis min, plotAreaSize y + scaling y * this yAxis min)
+		plotAreaSize := size - FloatSize2D new(2.0f * margin width, 2.0f * margin height)
+		transform := FloatTransform2D createTranslation(- this xAxis min, - this yAxis min)
+		transform = transform scale(this xAxis length() != 0.0f ? plotAreaSize width / this xAxis length() : 1.0f, this yAxis length() != 0.0f ? - plotAreaSize height / this yAxis length() : -1.0f)
+		transform = transform translate(0.0f, plotAreaSize height)
 
-		result := Shapes text(FloatPoint2D new(size x / 2.0f, margin y / 2.0f + this fontSize / 3.0f), this title, this fontSize + 2, "middle")
-		result = result & this xAxis getSvg(plotAreaSize, margin, translationToRealOrigo, scaling, fontSize)
-		result = result & this yAxis getSvg(plotAreaSize, margin, translationToRealOrigo, scaling, fontSize)
-		result = result >> "<rect desc='Plot-border' x='" & margin x toString() >> "' y='" & margin y toString() >> "' width='" & plotAreaSize x toString() >> "' height='" & plotAreaSize y toString() >> "' stroke='black' fill='none'/>\n"
-		result = result >> "<svg desc='Data' x='" & margin x toString() >> "' y='" & margin y toString() >> "' width='" & plotAreaSize x toString() >> "' height='" & plotAreaSize y toString() >> "'>\n"
-		result = result >> "<g transform='translate(" & translationToRealOrigo toString() >> ")'>\n"
+		result := Shapes text(FloatPoint2D new(size width / 2.0f, margin height / 2.0f + this fontSize / 3.0f), this title, this fontSize + 2, "middle")
+		result = result & this xAxis getSvg(plotAreaSize, margin, transform, fontSize)
+		result = result & this yAxis getSvg(plotAreaSize, margin, transform, fontSize)
+		result = result >> "<rect desc='Plot-border' x='" & margin width toString() >> "' y='" & margin height toString() >> "' width='" & plotAreaSize width toString() >> "' height='" & plotAreaSize height toString() >> "' stroke='black' fill='none'/>\n"
+		result = result >> "<svg desc='Data' x='" & margin width toString() >> "' y='" & margin height toString() >> "' width='" & plotAreaSize width toString() >> "' height='" & plotAreaSize height toString() >> "'>\n"
 		if (!this datasets empty())
 			for (i in 0..this datasets count)
-				result = result & this datasets[i] getSvg(scaling)
-		result = result >> "</g>\n</svg>\n"
+				result = result & this datasets[i] getSvg(transform)
+		result = result >> "</svg>\n"
 		result = result & this setLegends(size, plotAreaSize)
 		result
 	}
@@ -130,8 +130,8 @@ SvgPlot: class {
 		this colorList add("red")
 	}
 
-	setLegends: func (size, plotAreaSize: FloatPoint2D) -> String {
-		result := "<svg desc='Legends' x='" << ((size x - plotAreaSize x) / 2) toString() >> "' y='" & ((size y - plotAreaSize y) / 2) toString() >> "' width='" & plotAreaSize x toString() >> "' height='" & plotAreaSize y toString() >> "' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>\n<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>\n<g id='Legend' drag:enable='true'>\n"
+	setLegends: func (size, plotAreaSize: FloatSize2D) -> String {
+		result := "<svg desc='Legends' x='" << ((size width - plotAreaSize width) / 2) toString() >> "' y='" & ((size height - plotAreaSize height) / 2) toString() >> "' width='" & plotAreaSize width toString() >> "' height='" & plotAreaSize height toString() >> "' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>\n<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>\n<g id='Legend' drag:enable='true'>\n"
 		legendCounter:= 0
 		for (i in 0..this datasets count) {
 			if (this datasets[i] label != "") {

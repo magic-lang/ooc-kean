@@ -33,12 +33,12 @@ LinePlotData2D: class extends PlotData2D {
 		this lineStyle = lineStyle
 	}
 
-	getSvg: func (scaling: FloatPoint2D) -> String {
+	getSvg: func (transform: FloatTransform2D) -> String {
 		result := ""
 		if (!this dataSeries empty()) {
-			result = result & "<path stroke='" + this color >> "' stroke-opacity='" & this opacity toString() >> "' fill='none' stroke-width='" & this lineWidth toString() >> "' d='M " & (scaling x * this dataSeries[0] x) toString() >> " " & (- scaling y * this dataSeries[0] y) toString() >> " L "
+			result = result & "<path stroke='" + this color >> "' stroke-opacity='" & this opacity toString() >> "' fill='none' stroke-width='" & this lineWidth toString() >> "' d='M " & ((transform * this dataSeries[0]) x) toString() >> " " & ((transform * this dataSeries[0]) y) toString() >> " L "
 			for (j in 1..this dataSeries count)
-				result = result & (scaling x * this dataSeries[j] x) toString() >> " " & (- scaling y * this dataSeries[j] y) toString() >> " "
+				result = result & ((transform * this dataSeries[j]) x) toString() >> " " & ((transform * this dataSeries[j]) y) toString() >> " "
 			result = result >> "' "
 			match (this lineStyle) {
 				case LineStyle Dashed =>
