@@ -17,7 +17,6 @@ import math
 import IntExtension
 import IntPoint2D
 import IntSize2D
-import IntShell2D
 import FloatPoint2D
 import FloatBox2D
 import text/StringTokenizer
@@ -46,8 +45,8 @@ IntBox2D: cover {
 	init: func@ ~fromFloats (left, top, width, height: Int) { this init(IntPoint2D new(left, top), IntSize2D new(width, height)) }
 	//init: func@ ~fromSize (size: IntSize2D) { this init(IntPoint2D new(), size) }
 	init: func@ ~fromPoints (first, second: IntPoint2D) {
-		left := first x < second x ? first x : second x
-		top := first y < second y ? first y : second y
+		left := Int minimum~two(first x, second x)
+		top := Int minimum~two(first y, second y)
 		width := (first x - second x) abs()
 		height := (first y - second y) abs()
 		this init(left, top, width, height)
@@ -60,18 +59,18 @@ IntBox2D: cover {
 	pad: func ~fromFloat (pad: Int) -> This { this pad(pad, pad, pad, pad) }
 	pad: func ~fromSize (pad: IntSize2D) -> This { this pad(pad width, pad width, pad height, pad height) }
 	intersection: func (other: This) -> This {
-		left := this left > other left ? this left : other left
-		top := this top > other top ? this top : other top
-		width := Int maximum~two(0, (this right < other right ? this right : other right) - left)
-		height := Int maximum~two(0, (this bottom < other bottom ? this bottom : other bottom) - top)
+		left := Int maximum~two(this left, other left)
+		top := Int maximum~two(this top, other top)
+		width := Int maximum~two(0, Int minimum~two(this right, other right) - left)
+		height := Int maximum~two(0, Int minimum~two(this bottom, other bottom) - top)
 		This new(left, top, width, height)
 	}
 	//FIXME: Union is a keyword in C and so cannot be used for methods, but the name should be box__union something, so there shouldn't be a problem. Compiler bug?
 	union: func ~box (other: This) -> This {
 		left := Int minimum~two(this left, other left)
 		top := Int minimum~two(this top, other top)
-		width := Int maximum~two(0, (this right > other right ? this right : other right) - left)
-		height := Int maximum~two(0, (this bottom > other bottom ? this bottom : other bottom) - top)
+		width := Int maximum~two(0, Int maximum(this right, other right) - left)
+		height := Int maximum~two(0, Int maximum(this bottom, other bottom) - top)
 		This new(left, top, width, height)
 	}
 	contains: func (point: IntPoint2D) -> Bool {
@@ -87,25 +86,13 @@ IntBox2D: cover {
 		else if (other empty)
 			this
 		else
-			This new(Int minimum~two(this left, other left),
-				Int minimum~two(this top, other top),
-				Int maximum~two(this right, other right) - Int minimum~two(this left, other left),
-				Int maximum~two(this bottom, other bottom) - Int minimum~two(this top, other top)
-			)
+			union(other)
 	}
 	operator - (other: This) -> This {
 		if (this empty || other empty)
 			This new()
-		else {
-			left := Int maximum~two(this left, other left)
-			right := Int minimum~two(this right, other right)
-			top := Int maximum~two( this top, other top)
-			bottom := Int minimum~two(this bottom, other bottom)
-			if (left < right && top < bottom)
-				This new(left, top, right-left, bottom-top)
-			else
-				This new()
-		}
+		else
+			intersection(other)
 	}
 	operator + (other: IntPoint2D) -> This { This new(this leftTop + other, this size) }
 	//FIXME: Unary minus bug

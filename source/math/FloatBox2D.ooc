@@ -17,7 +17,6 @@ import math
 import FloatExtension
 import FloatPoint2D
 import FloatSize2D
-import FloatShell2D
 import IntBox2D
 import text/StringTokenizer
 import structs/ArrayList
@@ -38,8 +37,8 @@ FloatBox2D: cover {
 	empty ::= this size empty
 	init: func@ (=leftTop, =size)
 	init: func@ ~fromPoints (first, second: FloatPoint2D) {
-		left := first x < second x ? first x : second x
-		top := first y < second y ? first y : second y
+		left := Float minimum(first x, second x)
+		top := Float minimum(first y, second y)
 		width := (first x - second x) abs()
 		height := (first y - second y) abs()
 		this init(left, top, width, height)
@@ -54,18 +53,18 @@ FloatBox2D: cover {
 	pad: func ~fromFloat (pad: Float) -> This { this pad(pad, pad, pad, pad) }
 	pad: func ~fromSize (pad: FloatSize2D) -> This { this pad(pad width, pad width, pad height, pad height) }
 	intersection: func (other: This) -> This {
-		left := this left > other left ? this left : other left
-		top := this top > other top ? this top : other top
-		width := Float maximum(0, (this right < other right ? this right : other right) - left)
-		height := Float maximum(0, (this bottom < other bottom ? this bottom : other bottom) - top)
+		left := Float maximum(this left, other left)
+		top := Float maximum(this top, other top)
+		width := Float maximum(0, Float minimum(this right, other right) - left)
+		height := Float maximum(0, Float minimum(this bottom, other bottom) - top)
 		This new(left, top, width, height)
 	}
 	//FIXME: Union is a keyword in C and so cannot be used for methods, but the name should be box__union something, so there shouldn't be a problem. Compiler bug?
 	union: func ~box (other: This) -> This {
-		left := this left < other left ? this left : other left
-		top := this top < other top ? this top : other top
-		width := Float maximum(0, (this right > other right ? this right : other right) - left)
-		height := Float maximum(0, (this bottom > other bottom ? this bottom : other bottom) - top)
+		left := Float minimum(this left, other left)
+		top := Float minimum(this top, other top)
+		width := Float maximum(0, Float maximum(this right, other right) - left)
+		height := Float maximum(0, Float maximum(this bottom, other bottom) - top)
 		This new(left, top, width, height)
 	}
 	contains: func (point: FloatPoint2D) -> Bool {
@@ -81,25 +80,13 @@ FloatBox2D: cover {
 		else if (other empty)
 			this
 		else
-			This new(this left minimum(other left),
-				this top minimum (other top),
-				this right maximum(other right) - this left minimum(other left),
-				this bottom maximum(other bottom) - this top minimum(other top)
-			)
+			union(other)
 	}
 	operator - (other: This) -> This {
 		if (this empty || other empty)
 			This new()
-		else {
-			left := this left maximum(other left)
-			right := this right minimum(other right)
-			top := this top maximum(other top)
-			bottom := this bottom minimum(other bottom)
-			if (left < right && top < bottom)
-				This new(left, top, right-left, bottom-top)
-			else
-				This new()
-		}
+		else
+			intersection(other)
 	}
 	operator + (other: FloatPoint2D) -> This { This new(this leftTop + other, this size) }
 	//FIXME: Unary minus bug
