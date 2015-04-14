@@ -110,7 +110,7 @@ extend Float {
 				value /= 10.0f
 				radix *= 10.0f
 			}
-			while (Float absolute(value) - pow(10.0f, valueDigits-1) < -0.000001) {
+			while (Float absolute(value) - pow(10.0f, valueDigits-1) < -1.0E-6f) {
 				value *= 10.0f
 				radix /= 10.0f
 			}

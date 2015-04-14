@@ -73,9 +73,7 @@ VectorList: class <T> {
 		this count == 0
 	}
 	pop: func -> T {
-		result := this[0]
-		this removeAt(0)
-		result
+		this remove(0)
 	}
 	__destroy__: func {
 		this _vector _free(0, this count)

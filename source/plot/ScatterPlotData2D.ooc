@@ -61,7 +61,6 @@ ScatterPlotData2D: class extends PlotData2D {
 			case Shape Square =>
 				result = result & Shapes rect(FloatPoint2D new(start x, start y - halfLineHeight), FloatPoint2D new(size, size), this opacity, this color)
 			case =>
-				result = ""
 		}
 		result = result & Shapes text(FloatPoint2D new(start x + fontSize as Float, start y + halfLineHeight), this label, fontSize, this opacity, this color)
 		result

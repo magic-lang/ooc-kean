@@ -15,13 +15,11 @@ Axis: class {
 	tick: Float { get set (length) {
 			(value, radix) := Float decomposeToCoefficientAndRadix(length, 1)
 			this tick = radix
-			if (value != 0.0f) {
-				if (length / this tick < 1.1f) {
+			if (value != 0.0f)
+				if (length / this tick < 1.1f)
 					this tick /= 10.0f
-				} else if (length / this tick < 4.0f) {
+				else if (length / this tick < 4.0f)
 					this tick /= 2.0f
-				}
-			}
 		}
 	}
 	orientation: Orientation { get set }
@@ -80,9 +78,9 @@ Axis: class {
 				numberOffset := FloatPoint2D new(- 0.6f * (this fontSize - 4.0f), (this fontSize - 4.0f) / 3.0f)
 				tickMarkerEndOffset := FloatPoint2D new(5.0f, 0.0f)
 				rightTickMarkerStartOffset := FloatPoint2D new(plotAreaSize x, 0.0f)
-				result = result & "<g desc='rotated Y-axis' transform='rotate(-90," clone() & (position x + labelOffset x) toString() & "," clone() & (position y + labelOffset y) toString() & ")'>\n" clone()
+				result = result >> "<g desc='rotated Y-axis' transform='rotate(-90," & (position x + labelOffset x) toString() >> "," & (position y + labelOffset y) toString() >> ")'>\n"
 				result = result & Shapes text(position + labelOffset, this label, this fontSize, "middle")
-				result = result & "</g>\n" clone()
+				result = result >> "</g>\n"
 				if (radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision)) {
 					radixOffset := FloatPoint2D new(numberOffset x, - plotAreaSize y - margin y / 2 + this fontSize / 3.0f)
 					scientificPower := Float getScientificPowerString(radix)
