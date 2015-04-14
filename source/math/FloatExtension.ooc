@@ -110,7 +110,7 @@ extend Float {
 				value /= 10.0f
 				radix *= 10.0f
 			}
-			while (Float absolute(value) - pow(10.0f, valueDigits-1) < -1.0E-6f) {
+			while (Float absolute(value) - pow(10.0f, valueDigits-1) < - Float epsilon) {
 				value *= 10.0f
 				radix /= 10.0f
 			}
@@ -134,7 +134,7 @@ extend Float {
 		(coefficient, radix) := This decomposeToCoefficientAndRadix(value, 1)
 		power := log10(radix) as Int
 		result := ""
-		if (Float absolute(coefficient - 1.0f) > 1.0E-6f)
+		if (Float absolute(coefficient - 1.0f) > Float epsilon)
 			result = result & coefficient toString() & "×" clone()
 		result = result & "10^" clone() & power toString()
 		result
