@@ -43,12 +43,12 @@ Random: class {
 	/**
 	   :return: a pseudo-random float number with a normal distribution
 	 */
-	randn: static func (sigma := 1.0f) -> Float {
+	generateGaussianFloat: static func (sigma := 1.0f, mu := 0.0f) -> Float {
 		result := 0.0f
 		u1 := randFloat()
 		u2 := randFloat()
 		result = sqrt(-2.0f * log(u1)) * cos(2.0f * PI * u2)
-		return result * sigma
+		return result * sigma + mu
 	}
 
 	/**
