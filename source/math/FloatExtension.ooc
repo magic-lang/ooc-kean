@@ -133,10 +133,7 @@ extend Float {
 	getScientificPowerString: static func (value: This) -> String {
 		(coefficient, radix) := This decomposeToCoefficientAndRadix(value, 1)
 		power := log10(radix) as Int
-		result := ""
-		if (This absolute(coefficient - 1.0f) > This epsilon)
-			result = result & coefficient toString() >> "×"
-		result = result >> "10^" & power toString()
+		result := coefficient toString() >> "E" & power toString()
 		result
 	}
 }
