@@ -41,6 +41,7 @@ Random: class {
 		return (rand() as Float) / INT_MAX
 	}
 	/**
+	   Box-Muller transform, http://en.wikipedia.org/wiki/Box-Muller_transform
 	   :return: a pseudo-random float number with a normal distribution
 	 */
 	generateGaussianFloat: static func (sigma := 1.0f, mu := 0.0f) -> Float {
