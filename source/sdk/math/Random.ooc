@@ -47,7 +47,7 @@ Random: class {
 		result := 0.0f
 		u1 := randFloat()
 		u2 := randFloat()
-		result = sqrt(-2.0f * log(u1)) * cos(2 * PI * u2)
+		result = sqrt(-2.0f * log(u1)) * cos(2.0f * PI * u2)
 		return result * sigma
 	}
 
