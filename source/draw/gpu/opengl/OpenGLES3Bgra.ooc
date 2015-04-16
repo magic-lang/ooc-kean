@@ -33,9 +33,6 @@ OpenGLES3Bgra: class extends GpuBgra {
 		result := RasterBgra new(buffer, this size)
 		result
 	}
-	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
-		raise("toRaster not implemented for BGRA")
-	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterBgra, context: GpuContext) -> This {
 		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
