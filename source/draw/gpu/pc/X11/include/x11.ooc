@@ -439,7 +439,7 @@ XK_NewSheqelSign             : extern const ULong
 XK_DongSign                  : extern const ULong
 XK_EuroSign                     : extern const ULong
 
-Keyboard: enum {
+Key: enum {
 	BackSpace = XK_BackSpace
 	Tab = XK_Tab
 	Linefeed = XK_Linefeed

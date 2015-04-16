@@ -15,6 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
 import IntSize2D
+import FloatPoint2D
 import IntExtension
 import text/StringTokenizer
 import structs/ArrayList
@@ -25,6 +26,7 @@ IntPoint2D: cover {
 	init: func@ ~default { this init(0, 0) }
 	scalarProduct: func (other: This) -> Int { this x * other x + this y * other y }
 	swap: func -> This { This new(this y, this x) }
+	distance: func (other: This) -> Float { (this - other) toFloatPoint2D() norm }
 	minimum: func (ceiling: This) -> This { This new(Int minimum~two(this x, ceiling x), Int minimum~two(this y, ceiling y)) }
 	maximum: func (floor: This) -> This { This new(Int maximum~two(this x, floor x), Int maximum~two(this y, floor y)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
@@ -45,6 +47,7 @@ IntPoint2D: cover {
 	operator > (other: This) -> Bool { this x > other x && this y > other y }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
+	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x as Float, this y as Float) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
 	parse: static func (input: String) -> This {
