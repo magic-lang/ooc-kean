@@ -48,13 +48,9 @@ GpuImageBin: class {
 			this _uv[i] _recyclable = false
 		for(i in 0..this _yuv422 size)
 			this _yuv422[i] _recyclable = false
-		this _monochrome clean()
 		this _monochrome free()
-		this _bgr clean()
 		this _bgr free()
-		this _bgra clean()
 		this _bgra free()
-		this _uv clean()
 		this _uv free()
 		this _yuv422 free()
 		this _mutex unlock()
@@ -73,18 +69,12 @@ GpuImageBin: class {
 	add: func (image: GpuImage) {
 		this _mutex lock()
 		match (image) {
-			case (i: GpuMonochrome) =>
-				this _add(i, this _monochrome)
-			case (i: GpuBgr) =>
-				this _add(i, this _bgr)
-			case (i: GpuBgra) =>
-				this _add(i, this _bgra)
-			case (i: GpuUv) =>
-				this _add(i, this _uv)
-			case (i: GpuYuv422Semipacked) =>
-				this _add(i, this _yuv422)
-			case =>
-				raise("Unknown format in GpuImageBin add()")
+			case (i: GpuMonochrome) => this _add(i, this _monochrome)
+			case (i: GpuBgr) => this _add(i, this _bgr)
+			case (i: GpuBgra) => this _add(i, this _bgra)
+			case (i: GpuUv) => this _add(i, this _uv)
+			case (i: GpuYuv422Semipacked) => this _add(i, this _yuv422)
+			case => Debug raise("Unknown format in GpuImageBin add()")
 		}
 		this _mutex unlock()
 	}
