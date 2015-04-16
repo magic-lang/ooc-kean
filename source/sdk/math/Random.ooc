@@ -2,6 +2,7 @@ import os/Time
 import structs/[ArrayList,List]
 import math
 
+
 /**
    seed rand: C stdlib function to initialize the random number generator from a given seed.
  */
@@ -42,11 +43,12 @@ Random: class {
 	}
 	/**
 	   Box-Muller transform, http://en.wikipedia.org/wiki/Box-Muller_transform
-	   :return: a pseudo-random float number with a normal distribution
+	   :return: a pseudo-random float number with a normal distribution, centered around mu.
 	 */
 	generateGaussianFloat: static func (sigma := 1.0f, mu := 0.0f) -> Float {
 		result := 0.0f
 		u1 := randFloat()
+		if (u1 < FLT_MIN) u1 = FLT_MIN
 		u2 := randFloat()
 		result = sqrt(-2.0f * log(u1)) * cos(2.0f * PI * u2)
 		return result * sigma + mu
