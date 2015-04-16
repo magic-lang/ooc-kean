@@ -31,17 +31,17 @@ for (i in -200..201) {
 
 // Simplest use-case with line plot
 logData := LinePlotData2D new(log, "log(x)")
-logPlot := SVGPlot new(logData, "Simplest use-case with line plot")
+logPlot := SvgPlot new(logData, "Simplest use-case with line plot")
 
 // Simplest use-case with scatter plot
 scatterData := ScatterPlotData2D new(scatter, "Random numbers")
-scatterPlot := SVGPlot new(scatterData, "Simplest use-case with scatter plot")
+scatterPlot := SvgPlot new(scatterData, "Simplest use-case with scatter plot")
 
 // Multiple shapes in one plot
 sinData := LinePlotData2D new(sin, "sin(x)")
 cosData := LinePlotData2D new(cos, "cos(x)")
 sinMinusCosData := LinePlotData2D new(sinMinusCos, "sin(x) - cos(x)")
-trigonometryPlot := SVGPlot new(sinData, "Multiple shapes in one plot")
+trigonometryPlot := SvgPlot new(sinData, "Multiple shapes in one plot")
 trigonometryPlot addDataset(cosData)
 trigonometryPlot addDataset(sinMinusCosData)
 trigonometryPlot xAxis label = "x"
@@ -49,7 +49,7 @@ trigonometryPlot yAxis label = "y"
 
 // Adjustment of axis endpoints
 unitCircleData := LinePlotData2D new(unitCircle, "Unit circle")
-unitCirclePlot := SVGPlot new(unitCircleData, "Unit circle plot with set axis endpoints")
+unitCirclePlot := SvgPlot new(unitCircleData, "Unit circle plot with set axis endpoints")
 unitCirclePlot xAxis label = "x"
 unitCirclePlot yAxis label = "y"
 unitCirclePlot xAxis min = -1.5
@@ -59,7 +59,7 @@ unitCirclePlot yAxis max = 1.5
 
 // Symmetric plot
 symmetricUnitCircleData := LinePlotData2D new(unitCircle, "Unit circle")
-symmetricUnitCirclePlot := SVGPlot new(unitCircleData, "Unit circle plot with symmetic set to true")
+symmetricUnitCirclePlot := SvgPlot new(unitCircleData, "Unit circle plot with symmetic set to true")
 symmetricUnitCirclePlot xAxis label = "x"
 symmetricUnitCirclePlot yAxis label = "y"
 symmetricUnitCirclePlot symmetric = true
@@ -72,11 +72,10 @@ scatterParabolaData lineWidth = 4 // line width can be set, defaults to 1 if not
 scatterParabolaData colorBgra = ColorBgra new(255,0,0,150) // color can be specified, if not specified a color map will be used
 lineParabolaData := LinePlotData2D new(parabola, "x²")
 lineParabolaData colorBgra = ColorBgra new(255,0,0,150)
-formatPlot := SVGPlot new(scatterParabolaData, "temporary title")
+formatPlot := SvgPlot new(scatterParabolaData, "temporary title")
 formatPlot addDataset(lineParabolaData)
 formatPlot title = "Plot showing usage of various formatting options" // title can be set in this way
 formatPlot fontSize = 20 // defaults to 14 if not set
-formatPlot plotAreaPercentage = 0.6 // defaults to 0.8 if not set
 formatPlot xAxis label = "x"
 formatPlot xAxis fontSize = 12 // default to 10 for numbers, the label is displayed with fontsize + 4
 formatPlot xAxis gridOn = false // defaults to true, set to false if grid is not wanted
@@ -84,7 +83,7 @@ formatPlot xAxis roundAxisEndpoints = false // defaults to true, if set to false
 
 // Write plots to file
 filename := "example.svg"
-writer := SVGWriter2D new(filename, logPlot)
+writer := SvgWriter2D new(filename, logPlot)
 writer addPlot(scatterPlot)
 writer addPlot(trigonometryPlot)
 writer addPlot(unitCirclePlot)

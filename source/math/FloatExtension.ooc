@@ -93,24 +93,24 @@ extend Float {
 	//   lerp(a, b, 1) = b
 	//   lerp(a, a, x) = a
 	// Called "lerp" in CG and HLSL, called "mix" in GLSL
-	lerp: static func (a: Float, b: Float, ratio: Float) -> Float {
+	lerp: static func (a: This, b: This, ratio: This) -> This {
 		(ratio * (b - a)) + a
 	}
 	// Inverse to lerp returning ratio given the same a and b
 	// Precondition: a and b have different values
 	//   Getting +inf, -inf or NaN shows when the precondition is broken
 	// Postcondition: inverseLerp(a, b, lerp(a, b, r)) = r
-	inverseLerp: static func (a: Float, b: Float, value: Float) -> Float {
+	inverseLerp: static func (a: This, b: This, value: This) -> This {
 		(value - a) / (b - a)
 	}
-	decomposeToCoefficientAndRadix: static func (value: Float, valueDigits: Int) -> (Float, Float) {
+	decomposeToCoefficientAndRadix: static func (value: This, valueDigits: Int) -> (This, This) {
 		radix := 1.0f
 		if (value != 0.0f) {
-			while (Float absolute(value) >= pow(10.0f, valueDigits)) {
+			while (This absolute(value) >= pow(10.0f, valueDigits)) {
 				value /= 10.0f
 				radix *= 10.0f
 			}
-			while (Float absolute(value) < pow(10.0f, valueDigits-1)) {
+			while (This absolute(value) - pow(10.0f, valueDigits-1) < - This epsilon) {
 				value *= 10.0f
 				radix /= 10.0f
 			}
@@ -118,7 +118,7 @@ extend Float {
 		coefficient := value
 		(coefficient, radix)
 	}
-	roundToValueDigits: static func (value: Float, valueDigits: Int, up: Bool) -> Float {
+	roundToValueDigits: static func (value: This, valueDigits: Int, up: Bool) -> This {
 		(result, radix) := This decomposeToCoefficientAndRadix(value, valueDigits)
 		if (result != 0) {
 			result = up ? ceil(result) : floor(result)
@@ -126,17 +126,14 @@ extend Float {
 		}
 		result
 	}
-	getRadix: static func (value: Float, valueDigits: Int) -> Float {
+	getRadix: static func (value: This, valueDigits: Int) -> This {
 		(tempValue, result) := This decomposeToCoefficientAndRadix(value, valueDigits)
 		result
 	}
-	getScientificPowerString: static func (value: Float) -> String {
+	getScientificPowerString: static func (value: This) -> String {
 		(coefficient, radix) := This decomposeToCoefficientAndRadix(value, 1)
 		power := log10(radix) as Int
-		result := ""
-		if (coefficient != 1.0f)
-			result = result & coefficient toString() & "×" clone()
-		result = result & "10^" clone() & power toString()
+		result := coefficient toString() >> "E" & power toString()
 		result
 	}
 }

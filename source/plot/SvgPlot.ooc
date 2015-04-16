@@ -6,7 +6,7 @@ import PlotData2D
 import math
 import svg/Shapes
 
-SVGPlot: class {
+SvgPlot: class {
 	datasets: VectorList<PlotData2D> { get set }
 	title: String { get set }
 	fontSize: Int { get set }
@@ -14,7 +14,6 @@ SVGPlot: class {
 	yAxis: Axis { get set }
 	colorList: VectorList<String> { get set }
 	colorCount := 0
-	plotAreaPercentage: Float
 	symmetric: Bool
 
 	init: func {
@@ -23,8 +22,6 @@ SVGPlot: class {
 
 	init: func ~datasets(=datasets, title := "", xAxisLabel := "", yAxisLabel := "") {
 		this title = title
-		this plotAreaPercentage = 0.8f
-		this fontSize = 14
 		this symmetric = false
 		this xAxis = Axis new(Orientation Horizontal, xAxisLabel)
 		this yAxis = Axis new(Orientation Vertical, yAxisLabel)
@@ -37,13 +34,22 @@ SVGPlot: class {
 		this init(datasets, title, xAxisLabel, yAxisLabel)
 	}
 
+	free: override func {
+		datasets free()
+		xAxis free()
+		yAxis free()
+		super()
+	}
+
 	addDataset: func (dataset: PlotData2D) {
 		this datasets add(dataset)
 		this setAxesMinMax()
 	}
 
-	getSVG: func (size: FloatPoint2D) -> String {
-		aspectRatio := size x / size y
+	getSvg: func (size: FloatSize2D, fontSize: Int) -> String {
+		if (this fontSize == 0)
+			this fontSize = fontSize
+		aspectRatio := size width / size height
 		this fillColorList()
 		this setColor()
 		this xAxis roundEndpoints()
@@ -57,24 +63,22 @@ SVGPlot: class {
 				this yAxis max *= aspectRatio
 			}
 		}
+		margin := FloatSize2D new(yAxis getRequiredMargin(this fontSize), xAxis getRequiredMargin(this fontSize))
 
-		plotAreaSize := size * this plotAreaPercentage
-		scaling := FloatPoint2D new(plotAreaSize x / this xAxis length(), plotAreaSize y / this yAxis length())
-		translationToRealOrigo := FloatPoint2D new(- scaling x * this xAxis min, plotAreaSize y + scaling y * this yAxis min)
-		bottomLeftCornerOfPlot := FloatPoint2D new((size x - plotAreaSize x) / 2, (plotAreaSize y + (size y - plotAreaSize y) / 2))
+		plotAreaSize := size - FloatSize2D new(2.0f * margin width, 2.0f * margin height)
+		transform := FloatTransform2D createTranslation(- this xAxis min, - this yAxis min)
+		transform = transform scale(this xAxis length() != 0.0f ? plotAreaSize width / this xAxis length() : 1.0f, this yAxis length() != 0.0f ? - plotAreaSize height / this yAxis length() : -1.0f)
+		transform = transform translate(0.0f, plotAreaSize height)
 
-		result := Shapes text(FloatPoint2D new(size x / 2, (size y - plotAreaSize y) / 4 + this fontSize / 2), this title, this fontSize, "middle")
-		xAxisSize := FloatPoint2D new(plotAreaSize x, (size y - plotAreaSize y) / 2)
-		yAxisSize := FloatPoint2D new((size x - plotAreaSize x) / 2, plotAreaSize y)
-		result = result & this xAxis getSVG(plotAreaSize, xAxisSize, bottomLeftCornerOfPlot, translationToRealOrigo, scaling)
-		result = result & this yAxis getSVG(plotAreaSize, yAxisSize, bottomLeftCornerOfPlot, translationToRealOrigo, scaling)
-		result = result & "<rect desc='Plot-border' x='" clone() & bottomLeftCornerOfPlot x toString() & "' y='" clone() & (bottomLeftCornerOfPlot y - plotAreaSize y) toString() & "' width='" clone() & plotAreaSize x toString() & "' height='" clone() & plotAreaSize y toString() & "' stroke='black' fill='none'/>\n" clone()
-		result = result & "<svg desc='Data' x='" clone() & bottomLeftCornerOfPlot x toString() & "' y='" clone() & (bottomLeftCornerOfPlot y - plotAreaSize y) toString() & "' width='" clone() & plotAreaSize x toString() & "' height='" clone() & plotAreaSize y toString() & "'>\n" clone()
-		result = result & "<g transform='translate(" clone() & translationToRealOrigo toString() & ")'>\n" clone()
+		result := Shapes text(FloatPoint2D new(size width / 2.0f, margin height / 2.0f + this fontSize / 3.0f), this title, this fontSize + 2, "middle")
+		result = result & this xAxis getSvg(plotAreaSize, margin, transform, fontSize)
+		result = result & this yAxis getSvg(plotAreaSize, margin, transform, fontSize)
+		result = result >> "<rect desc='Plot-border' x='" & margin width toString() >> "' y='" & margin height toString() >> "' width='" & plotAreaSize width toString() >> "' height='" & plotAreaSize height toString() >> "' stroke='black' fill='none'/>\n"
+		result = result >> "<svg desc='Data' x='" & margin width toString() >> "' y='" & margin height toString() >> "' width='" & plotAreaSize width toString() >> "' height='" & plotAreaSize height toString() >> "'>\n"
 		if (!this datasets empty())
 			for (i in 0..this datasets count)
-				result = result & this datasets[i] getSVG(scaling)
-		result = result & "</g>\n</svg>\n" clone()
+				result = result & this datasets[i] getSvg(transform)
+		result = result >> "</svg>\n"
 		result = result & this setLegends(size, plotAreaSize)
 		result
 	}
@@ -126,16 +130,16 @@ SVGPlot: class {
 		this colorList add("red")
 	}
 
-	setLegends: func (size, plotAreaSize: FloatPoint2D) -> String {
-		result := "<svg desc='Legends' x='" clone() & ((size x - plotAreaSize x) / 2) toString() & "' y='" clone() & ((size y - plotAreaSize y) / 2) toString() & "' width='" clone() & plotAreaSize x toString() & "' height='" clone() & plotAreaSize y toString() & "' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>\n<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>\n<g id='Legend' drag:enable='true'>\n" clone()
+	setLegends: func (size, plotAreaSize: FloatSize2D) -> String {
+		result := "<svg desc='Legends' x='" << ((size width - plotAreaSize width) / 2) toString() >> "' y='" & ((size height - plotAreaSize height) / 2) toString() >> "' width='" & plotAreaSize width toString() >> "' height='" & plotAreaSize height toString() >> "' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>\n<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>\n<g id='Legend' drag:enable='true'>\n"
 		legendCounter:= 0
 		for (i in 0..this datasets count) {
 			if (this datasets[i] label != "") {
 				legendCounter += 1
-				result = result & this datasets[i] getSvgLegend(legendCounter)
+				result = result & this datasets[i] getSvgLegend(legendCounter, fontSize)
 			}
 		}
-		result = result & "</g>\n</svg>\n" clone()
+		result = result >> "</g>\n</svg>\n"
 		result
 	}
 }
