@@ -31,7 +31,7 @@ Queue: class <T> {
 		this _tail = (this _tail + 1) % this _capacity
 		this _count += 1
 	}
-	dequeue: virtual func -> (T, Bool) {
+	dequeue: virtual func -> T {
 		if (!this empty) {
 			tempHead := this _head
 			if (this _head != this _tail || this full)
