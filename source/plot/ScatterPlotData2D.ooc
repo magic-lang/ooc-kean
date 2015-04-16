@@ -29,14 +29,14 @@ ScatterPlotData2D: class extends PlotData2D {
 		super(xSeries, ySeries, label, colorBgra)
 	}
 
-	getSVG: func (scaling: FloatPoint2D) -> String {
+	getSvg: func (scaling: FloatPoint2D) -> String {
 		result := ""
 		if (!this dataSeries empty()) {
 			for (i in 0..this dataSeries count) {
 				match (this shape) {
 					case Shape Circle =>
 						r := this scalingRelativeLineWidth / 2.0f * this lineWidth
-						result = result & Shapes circle(scaling x * this dataSeries[i] x, - scaling y * this dataSeries[i] y, r, this opacity, this color)
+						result = result & Shapes circle(FloatPoint2D new(scaling x * this dataSeries[i] x, - scaling y * dataSeries[i] y), r, this opacity, this color)
 					case Shape Square =>
 						x := scaling x * this dataSeries[i] x - this scalingRelativeLineWidth / 2.0f * this lineWidth
 						y := -scaling y * this dataSeries[i] y - this scalingRelativeLineWidth / 2.0f * this lineWidth
@@ -50,18 +50,19 @@ ScatterPlotData2D: class extends PlotData2D {
 		result
 	}
 
-	getSvgLegend: func (legendCount: Int) -> String {
-		boundaryOffset := 5
-		symbol: String
+	getSvgLegend: func (legendCount, fontSize: Int) -> String {
+		result := ""
+		start := FloatPoint2D new(this legendOffset as Float, this legendOffset + (fontSize * legendCount) as Float - (fontSize as Float) / 2.0f)
+		size := (fontSize as Float) * 0.8f
+		halfLineHeight := (fontSize as Float) / 2.0f
 		match (this shape) {
 			case Shape Circle =>
-				symbol = "•"
+				result = result & Shapes circle(FloatPoint2D new(start x + halfLineHeight, start y), size / 2.0f, this opacity, this color)
 			case Shape Square =>
-				symbol = "■"
+				result = result & Shapes rect(FloatPoint2D new(start x, start y - halfLineHeight), FloatPoint2D new(size, size), this opacity, this color)
 			case =>
-				symbol = ""
 		}
-		result := "<text id='" clone() & this label clone() & "' x='" clone() & boundaryOffset toString() & "' y='" clone() & (this fontSize * legendCount + boundaryOffset) toString() & "' font-size='" clone() & this fontSize toString() & "' fill='" clone() & this color clone() & "' fill-opacity='" clone() & this opacity toString() & "'> " clone() & symbol clone() & "	" clone() & this label clone() & "</text>\n" clone()
+		result = result & Shapes text(FloatPoint2D new(start x + fontSize as Float, start y + halfLineHeight), this label, fontSize, this opacity, this color)
 		result
 	}
 }
