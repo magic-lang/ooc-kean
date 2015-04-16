@@ -22,12 +22,12 @@ FloatVector: class extends VectorList<Float> {
 	}
 	init: func ~fromVectorList (other: VectorList<Float>) {
 		this super(other _vector)
-		this count = other count
+		this _count = other count
 	}
 	toVectorList: func() -> VectorList<Float> {
 		result := VectorList<Float> new()
 		result _vector = this _vector
-		result count = this count
+		result _count = this count
 		result
 	}
 	sum: Float {
