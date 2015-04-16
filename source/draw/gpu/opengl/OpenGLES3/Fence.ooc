@@ -35,7 +35,7 @@ Fence: class {
 		result := glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, timeout)
 		version(debugGL) {
 			match (result) {
-				case GL_TIMEOUT_EXPIRED => Debug print("Fence reached timeout limit. Possible deadlock?")
+				case GL_TIMEOUT_EXPIRED => Debug print("Fence reached timeout limit after %llu ns. Possible deadlock?" format(timeout))
 				case GL_WAIT_FAILED => Debug print("Fence wait failed!")
 				/*
 				case GL_ALREADY_SIGNALED => Debug print("Fence has already been signaled!")
