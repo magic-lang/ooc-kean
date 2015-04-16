@@ -48,7 +48,7 @@ Random: class {
 	generateGaussianFloat: static func (sigma := 1.0f, mu := 0.0f) -> Float {
 		result := 0.0f
 		u1 := randFloat()
-		if (u1 < FLT_MIN) u1 = FLT_MIN
+		if (u1 == 0) u1 = FLT_MIN
 		u2 := randFloat()
 		result = sqrt(-2.0f * log(u1)) * cos(2.0f * PI * u2)
 		return result * sigma + mu
