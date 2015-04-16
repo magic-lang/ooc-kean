@@ -42,4 +42,8 @@ Debug: class {
 		f := (print, null) as Func (Char*)
 		This initialize(func (s: String) { f(s toCString()) })
 	}
+	raise: static func (message: String) {
+		This print(message)
+		raise(message)
+	}
 }
