@@ -74,7 +74,7 @@ SvgWriter2D: class {
 
 	prepareOutput: func -> String {
 		result := "<?xml version='1.0' standalone='no'?>\n"
-		result = result >> "<!DOCTYPE svg PUBLIC '-//W3C//DTD Svg 1.1//EN' 'http://www.w3.org/Graphics/Svg/1.1/DTD/svg11.dtd'>\n"
+		result = result >> "<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>\n"
 		result = result >> "<svg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.1' width='" & this size width toString() >> "' height='" & this size height toString() >> "'>\n"
 
 		result = result >> "<rect desc='background' width='100%' height='100%' fill='white'/>\n"
