@@ -66,9 +66,4 @@ GpuYuv420Semiplanar: abstract class extends GpuPlanar {
 		result := RasterYuv420Semiplanar new(y as RasterMonochrome, uv as RasterUv)
 		result
 	}
-	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
-		semiPlanar := rasterImage as RasterYuv420Semiplanar
-		this _y toRaster(semiPlanar y)
-		this _uv toRaster(semiPlanar uv)
-	}
 }

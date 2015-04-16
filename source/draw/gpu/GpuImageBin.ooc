@@ -37,6 +37,7 @@ GpuImageBin: class {
 		this _yuv422 = FreeArrayList<GpuImage> new()
 	}
 	free: func {
+		this _mutex lock()
 		for(i in 0..this _monochrome size)
 			this _monochrome[i] _recyclable = false
 		for(i in 0..this _bgr size)
@@ -52,11 +53,16 @@ GpuImageBin: class {
 		this _bgra free()
 		this _uv free()
 		this _yuv422 free()
+		this _mutex unlock()
+		this _mutex destroy()
 		super()
 	}
 	_add: func (image: GpuImage, list: FreeArrayList<GpuImage>) {
 		if (list size >= this _limit) {
-			list removeAt(0, true)
+			temp := list[0]
+			list removeAt(0)
+			temp _recyclable = false
+			temp free()
 		}
 		list add(image)
 	}
@@ -64,18 +70,12 @@ GpuImageBin: class {
 		version(safe) raise("Added a GpuImage to the bin without permission to recycle images.")
 		this _mutex lock()
 		match (image) {
-			case (i: GpuMonochrome) =>
-				this _add(i, this _monochrome)
-			case (i: GpuBgr) =>
-				this _add(i, this _bgr)
-			case (i: GpuBgra) =>
-				this _add(i, this _bgra)
-			case (i: GpuUv) =>
-				this _add(i, this _uv)
-			case (i: GpuYuv422Semipacked) =>
-				this _add(i, this _yuv422)
-			case =>
-				raise("Unknown format in GpuImageBin add()")
+			case (i: GpuMonochrome) => this _add(i, this _monochrome)
+			case (i: GpuBgr) => this _add(i, this _bgr)
+			case (i: GpuBgra) => this _add(i, this _bgra)
+			case (i: GpuUv) => this _add(i, this _uv)
+			case (i: GpuYuv422Semipacked) => this _add(i, this _yuv422)
+			case => Debug raise("Unknown format in GpuImageBin add()")
 		}
 		this _mutex unlock()
 	}
