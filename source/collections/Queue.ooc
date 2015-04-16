@@ -1,64 +1,76 @@
 
 Queue: class <T> {
-	_queue: T*
+	_backend: T*
 	_capacity := 0
 	_count := 0
 	_head := 0
 	_tail := 0
-	capacity: Int { get { this capacity() }}
-	count: Int { get { this count() }}
-	empty: Bool { get {this empty() }}
-	full: Bool { get { this full() }}
+	capacity ::= this _capacity
+	count ::= this _count
+	empty ::= this _count == 0
+	full ::= this _count == this _capacity
+	_chunkCount := 32
 
-	init: func (=_capacity) {
-		this _queue = gc_calloc(capacity as SizeT, T size)
+	init: func (capacity := 32) {
+		this _capacity = capacity
+		this _backend = gc_calloc(capacity as SizeT, T size)
 	}
-
 	free: override func {
-		gc_free(_queue)
+		gc_free(_backend)
 		super()
 	}
-
-	enqueue: virtual func (item: T) {
-		if (!this full()) {
-			this _queue[this _tail] = item
-			this _tail = (this _tail + 1) % this _capacity
-			this _count += 1
-		} else
-			raise("Trying to enqueue something on a full queue")
+	clear: func {
+		this _head = 0
+		this _tail = 0
+		this _count = 0
 	}
-
-	dequeue: virtual func -> T {
-		if (!this empty()) {
+	enqueue: virtual func (item: T) {
+		if (this full)
+			this _resize()
+		this _backend[this _tail] = item
+		this _tail = (this _tail + 1) % this _capacity
+		this _count += 1
+	}
+	dequeue: virtual func -> (T, Bool) {
+		if (!this empty) {
 			tempHead := this _head
-			if (this _head != this _tail || this full())
+			if (this _head != this _tail || this full)
 				this _head = (this _head + 1) % this _capacity
 			this _count -= 1
-			return this _queue[tempHead]
+			return this _backend[tempHead]
 		} else
 			raise("Trying to dequeue something from an empty queue")
 	}
-
+	_resize: func {
+		oldCapacity := this _capacity
+		newCapacity := this _capacity + this _chunkCount
+		moveCount := oldCapacity - this _head
+		bytes := newCapacity * T size
+		this _backend = gc_realloc(this _backend, bytes)
+		sourcePtr: UInt8* = this _backend as UInt8* + (this _head * T size)
+		destinationPtr := sourcePtr + (this _chunkCount * T size)
+		memmove(destinationPtr, sourcePtr, moveCount * T size)
+		this _head += this _chunkCount
+		this _capacity = newCapacity
+	}
 	peek: virtual func -> T {
-		if (!this empty())
-			return this _queue[this _head]
+		if (!this empty)
+			return this _backend[this _head]
 		else
 			raise("Trying to peek on an empty queue")
 	}
-
-	capacity: func -> Int {
-		this _capacity
-	}
-
-	count: func -> Int {
-		this _count
-	}
-
-	empty: func -> Bool {
-		this _count == 0
-	}
-
-	full: func -> Bool {
-		this _count == this _capacity
+	toString: func -> String {
+		result := ""
+		result += "Count: %d \n" format(this _count)
+		result += "Capacity: %d \n" format(this _capacity)
+		/*for (i in 0..this _count) {
+			index := (i + this _head) % this _capacity
+			result += ("Value %d = " format(i))
+			value := this _backend[index]
+			temp: Int = 0
+			temp += (value as Int)
+			result += temp toString() + "\n"
+		}*/
+		result
 	}
 }

@@ -53,25 +53,22 @@ QueueTest: class extends Fixture {
 				queue dequeue()
 			expect(queue count, is equal to(0))
 
-			try {
-				for (i in 0..4)
-					queue enqueue(i)
-			} catch (e: Exception) {
-				expect(e message, is equal to("Trying to enqueue something on a full queue"))
-			}
-			expect(queue count, is equal to(3))
-			expect(queue full, is equal to(true))
-			count := queue count
-			for (i in 0..count)
-				expect(queue dequeue(), is equal to(i))
+			for (i in 0..50)
+				queue enqueue(i)
+			expect(queue count, is equal to(50))
+			queue clear()
+			expect(queue count, is equal to(0))
 			expect(queue empty, is equal to(true))
-
-			try {
-				queue dequeue()
-			} catch (e: Exception) {
-				expect(e message, is equal to("Trying to dequeue something from an empty queue"))
+			for (i in 0..111)
+				queue enqueue(i)
+			result := queue dequeue()
+			expect(result, is equal to(0))
+			expect(queue count, is equal to(110))
+			count := queue count
+			for (i in 0..count) {
+				result := queue dequeue()
+				expect(result, is equal to(i + 1))
 			}
-
 			queue free()
 		})
 	}
