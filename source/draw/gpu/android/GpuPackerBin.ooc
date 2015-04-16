@@ -16,21 +16,28 @@
 */
 use ooc-math
 import structs/FreeArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuPacker
+import threading/Thread
 
 GpuPackerBin: class {
 	_packers: FreeArrayList<GpuPacker>
 	_limit := 5
-	init: func { this _packers = FreeArrayList<GpuPacker> new() }
+	_mutex: Mutex
+	init: func {
+		this _packers = FreeArrayList<GpuPacker> new()
+		this _mutex = Mutex new()
+	}
 	clean: func {
 		for(i in 0..this _packers size) {
 			this _packers removeAt(0, true)
 		}
 	}
 	add: func (packer: GpuPacker) {
+		this _mutex lock()
 		if (this _packers size >= this _limit) {
 			this _packers removeAt(0, true)
 		}
 		this _packers add(packer)
+		this _mutex unlock()
 	}
 	_search: func (size: IntSize2D, bytesPerPixel: UInt, arrayList: FreeArrayList<GpuPacker>) -> GpuPacker {
 		result := null
@@ -47,5 +54,10 @@ GpuPackerBin: class {
 			arrayList removeAt(index, false)
 		result
 	}
-	find: func (size: IntSize2D, bytesPerPixel: UInt)-> GpuPacker { this _search(size, bytesPerPixel, this _packers) }
+	find: func (size: IntSize2D, bytesPerPixel: UInt)-> GpuPacker {
+		this _mutex lock()
+		result := this _search(size, bytesPerPixel, this _packers)
+		this _mutex unlock()
+		result
+	}
 }
