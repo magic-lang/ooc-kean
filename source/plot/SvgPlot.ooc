@@ -75,7 +75,7 @@ SvgPlot: class {
 		result = result & this yAxis getSvg(plotAreaSize, margin, transform, fontSize)
 		result = result >> "<rect desc='Plot-border' x='" & margin width toString() >> "' y='" & margin height toString() >> "' width='" & plotAreaSize width toString() >> "' height='" & plotAreaSize height toString() >> "' stroke='black' fill='none'/>\n"
 		result = result >> "<svg desc='Data' x='" & margin width toString() >> "' y='" & margin height toString() >> "' width='" & plotAreaSize width toString() >> "' height='" & plotAreaSize height toString() >> "'>\n"
-		if (!this datasets empty())
+		if (!this datasets empty)
 			for (i in 0..this datasets count)
 				result = result & this datasets[i] getSvg(transform)
 		result = result >> "</svg>\n"
@@ -84,7 +84,7 @@ SvgPlot: class {
 	}
 
 	setAxesMinMax: func {
-		if (!datasets empty()) {
+		if (!datasets empty) {
 			min := datasets[0] minValues()
 			max := datasets[0] maxValues()
 
@@ -101,7 +101,7 @@ SvgPlot: class {
 	}
 
 	setColor: func {
-		if (!datasets empty()) {
+		if (!datasets empty) {
 			noneColor := ColorBgra new(0,0,0,0)
 			for (j in 0..datasets count) {
 				if (noneColor != datasets[j] colorBgra) {
