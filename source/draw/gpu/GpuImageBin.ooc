@@ -16,6 +16,7 @@
 */
 
 use ooc-math
+use ooc-base
 import structs/FreeArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuYuv422Semipacked
 import threading/Thread
 
@@ -59,6 +60,7 @@ GpuImageBin: class {
 	}
 	_add: func (image: GpuImage, list: FreeArrayList<GpuImage>) {
 		if (list size >= this _limit) {
+			// We need to make sure the image will be destroyed instead of recycled
 			temp := list[0]
 			list removeAt(0)
 			temp _recyclable = false
