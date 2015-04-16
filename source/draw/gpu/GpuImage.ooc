@@ -55,7 +55,7 @@ GpuImage: abstract class extends Image {
 		if (this _canvas != null)
 			this _canvas onRecycle()
 		version(safe)
-			free()
+			this free()
 		else
 			this _context recycle(this)
 	}
