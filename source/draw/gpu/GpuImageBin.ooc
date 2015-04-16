@@ -56,7 +56,10 @@ GpuImageBin: class {
 	}
 	_add: func (image: GpuImage, list: FreeArrayList<GpuImage>) {
 		if (list size >= this _limit) {
-			list removeAt(0, true)
+			temp := list[0]
+			list removeAt(0)
+			temp _recyclable = false
+			temp free()
 		}
 		list add(image)
 	}
