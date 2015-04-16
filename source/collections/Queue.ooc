@@ -1,4 +1,5 @@
 
+
 Queue: class <T> {
 	_backend: T*
 	_capacity := 0
@@ -32,14 +33,15 @@ Queue: class <T> {
 		this _count += 1
 	}
 	dequeue: virtual func -> T {
-		if (!this empty) {
-			tempHead := this _head
-			if (this _head != this _tail || this full)
-				this _head = (this _head + 1) % this _capacity
-			this _count -= 1
-			return this _backend[tempHead]
-		} else
+		result: T
+		if (this empty)
 			raise("Trying to dequeue something from an empty queue")
+		else {
+			result = this _backend[this _head]
+			this _count -= 1
+			this _head = (this _head + 1) % this _capacity
+		}
+		result
 	}
 	_resize: func {
 		oldCapacity := this _capacity
@@ -60,9 +62,7 @@ Queue: class <T> {
 			raise("Trying to peek on an empty queue")
 	}
 	toString: func -> String {
-		result := ""
-		result += "Count: %d \n" format(this _count)
-		result += "Capacity: %d \n" format(this _capacity)
+		result := "Queue: count=%d capacity=%d" format(this _count, this _capacity)
 		/*for (i in 0..this _count) {
 			index := (i + this _head) % this _capacity
 			result += ("Value %d = " format(i))
