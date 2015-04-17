@@ -3,10 +3,10 @@ use ooc-collections
 use ooc-unit
 import os/Time
 
-SynchronizedQueueTest: class extends Fixture {
+BlockedQueueTest: class extends Fixture {
 
 	init: func() {
-		queue := SynchronizedQueue<Int> new()
+		queue := BlockedQueue<Int> new()
 
 		func1 := func { queue enqueue(123) }
 		func2 := func {
@@ -29,13 +29,17 @@ SynchronizedQueueTest: class extends Fixture {
 			expect(!success)
 			expect(queue empty)
 		}
+		func5 := func {
+			result := queue wait()
+			expect(result == 123)
+		}
 
-		super("SynchronizedQueue")
-		this add("SynchronizedQueue cover create", func() {
+		super("BlockedQueue")
+		this add("BlockedQueue cover create", func() {
 			expect(queue empty)
 			expect(queue count, is equal to(0))
 
-			pool := ThreadPool new(3)
+			pool := ThreadPool new(8)
 			/* Enqueue values asynchronously */
 			for (i in 0..100)
 				pool add(func1)
@@ -57,9 +61,20 @@ SynchronizedQueueTest: class extends Fixture {
 			expect(queue empty)
 			expect(queue count, is equal to(0))
 
+			for(i in 0..4) {
+				pool add(func5)
+				Time sleepMilli(10)
+			}
+			for(i in 0..4) {
+				pool add(func1)
+				Time sleepMilli(10)
+			}
+			pool waitAll()
+			expect(queue empty)
+
 			queue free()
 		})
 	}
 }
 
-SynchronizedQueueTest new() run()
+BlockedQueueTest new() run()
