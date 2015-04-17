@@ -34,7 +34,6 @@ SynchronizedQueue: class <T> extends Queue<T> {
 		this _mutex lock()
 		while (this empty)
 			this _populated wait(this _mutex)
-		result = super()
 		this _mutex unlock()
 		result
 	}
