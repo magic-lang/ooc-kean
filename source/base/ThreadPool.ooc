@@ -4,22 +4,22 @@ import threading/native/ConditionUnix
 
 ThreadJob: class {
 	_pool: ThreadPool
-	_finishedCondition: ConditionUnix
+	_finishedCondition := ConditionUnix new()
 	finishedCondition ::= this _finishedCondition
 	_body: Func
 	_finished := false
 	finished ::= this _finished
-	init: func (=_body, =_pool) { this _finishedCondition = ConditionUnix new() }
+	init: func (=_body, =_pool)
+	free: override func {
+		this _finishedCondition free()
+		super()
+	}
 	execute: func {
 		this _body()
 		this _finishedCondition broadcast()
 	}
-	finish: func {
-		this _finished = true
-	}
-	wait: func {
-		this _pool wait(this)
-	}
+	finish: func { this _finished = true }
+	wait: func { this _pool wait(this) }
 }
 
 ThreadPool: class {
@@ -76,12 +76,9 @@ ThreadPool: class {
 	}
 	waitAll: func {
 		this _mutex lock()
-		if (this _activeJobs > 0) {
+		if (this _activeJobs > 0)
 			this _allFinishedCondition wait(this _mutex)
-			this _mutex unlock()
-		} else {
-			this _mutex unlock()
-		}
+		this _mutex unlock()
 	}
 	wait: func (job: ThreadJob) {
 		this _mutex lock()

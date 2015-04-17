@@ -34,10 +34,6 @@ OpenGLES3Yuv422Semipacked: class extends GpuYuv422Semipacked {
 		raise("toRaster not implemented for YUV422SEMIPACKED")
 		null
 	}
-	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
-		raise("toRaster not implemented for YUV422SEMIPACKED")
-		null
-	}
 	_createCanvas: func -> GpuCanvas {
 		result := OpenGLES3Canvas create(this, this _context)
 		result clearColor = 0.5f

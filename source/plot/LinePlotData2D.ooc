@@ -35,7 +35,7 @@ LinePlotData2D: class extends PlotData2D {
 
 	getSvg: func (transform: FloatTransform2D) -> String {
 		result := ""
-		if (!this dataSeries empty()) {
+		if (!this dataSeries empty) {
 			result = result & "<path stroke='" + this color >> "' stroke-opacity='" & this opacity toString() >> "' fill='none' stroke-width='" & this lineWidth toString() >> "' d='M " & ((transform * this dataSeries[0]) x) toString() >> " " & ((transform * this dataSeries[0]) y) toString() >> " L "
 			for (j in 1..this dataSeries count)
 				result = result & ((transform * this dataSeries[j]) x) toString() >> " " & ((transform * this dataSeries[j]) y) toString() >> " "

@@ -40,10 +40,6 @@ OpenGLES3Uv: class extends GpuUv {
 		packed recycle()
 		result
 	}
-	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
-		raise("toRaster not implemented for UV")
-		null
-	}
 	_createCanvas: func -> GpuCanvas {
 		result := OpenGLES3Canvas create(this, this _context)
 		result clearColor = 0.5f
