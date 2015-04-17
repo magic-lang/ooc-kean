@@ -79,7 +79,7 @@ SvgWriter2D: class {
 
 		result = result >> "<rect desc='background' width='100%' height='100%' fill='white'/>\n"
 
-		if (!this svgPlots empty()) {
+		if (!this svgPlots empty) {
 			numPlotsX: Int
 			numPlotsY: Int
 			if (this numberOfPlotsHorizontally == 0) {
