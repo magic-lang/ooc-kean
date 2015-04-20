@@ -121,7 +121,7 @@ AndroidContext: class extends OpenGLES3Context {
 	createPacker: func (size: IntSize2D, bytesPerPixel: UInt) -> GpuPacker {
 		result := this _packerBin find(size, bytesPerPixel)
 		if (result == null) {
-			version(debugGLv) { Debug print("Could not find a recycled GpuPacker in list with size " << this _packerBin _packers size toString() >> " with size " & size toString()) }
+			version(debugGL) { Debug print("Could not find a recycled GpuPacker in list with size " << this _packerBin _packers size toString() >> " with size " & size toString()) }
 			result = GpuPacker new(size, bytesPerPixel, this)
 		}
 		result
