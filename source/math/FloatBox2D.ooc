@@ -52,6 +52,11 @@ FloatBox2D: cover {
 	}
 	pad: func ~fromFloat (pad: Float) -> This { this pad(pad, pad, pad, pad) }
 	pad: func ~fromSize (pad: FloatSize2D) -> This { this pad(pad width, pad width, pad height, pad height) }
+	pad: func ~fraction (pad: Float) -> This {
+		padX := pad * this width
+		padY := pad * this height
+		this pad(padX, padX, padY, padY)
+	}
 	intersection: func (other: This) -> This {
 		left := Float maximum(this left, other left)
 		top := Float maximum(this top, other top)
@@ -65,6 +70,13 @@ FloatBox2D: cover {
 		top := Float minimum(this top, other top)
 		width := Float maximum(0, Float maximum(this right, other right) - left)
 		height := Float maximum(0, Float maximum(this bottom, other bottom) - top)
+		This new(left, top, width, height)
+	}
+	union: func ~point (point: FloatPoint2D) -> This {
+		left := Float minimum(this left, point x)
+		top := Float minimum(this top, point y)
+		width := Float maximum(0, Float maximum(this right, point x) - left)
+		height := Float maximum(0, Float maximum(this bottom, point y) - top)
 		This new(left, top, width, height)
 	}
 	contains: func (point: FloatPoint2D) -> Bool {
