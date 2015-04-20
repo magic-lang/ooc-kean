@@ -58,11 +58,10 @@ ThreadPool: class {
 				this _activeJobs -= 1
 				if(this _activeJobs == 0)
 					this _allFinishedCondition broadcast()
-				this _mutex unlock()
-			} else {
-				this _newJobCondition wait(this _mutex)
-				this _mutex unlock()
 			}
+			else
+				this _newJobCondition wait(this _mutex)
+			this _mutex unlock()
 		}
 	}
 	add: func (body: Func) -> ThreadJob {
