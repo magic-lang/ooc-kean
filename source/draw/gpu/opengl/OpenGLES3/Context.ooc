@@ -139,12 +139,12 @@ Context: class {
 		return result
 	}
 	create: static func ~shared (window: NativeWindow, sharedContext: This = null) -> This {
-		version(debugGLv){ Debug print("Creating OpenGL context") }
+		version (debugGLv) { Debug print("Creating OpenGL context") }
 		result := This new()
 		result _generate(window, sharedContext) ? result : null
 	}
 	create: static func ~pbufferShared (sharedContext: This = null) -> This {
-		version(debugGLv){ Debug print("Creating OpenGL context") }
+		version (debugGLv) { Debug print("Creating OpenGL context") }
 		result := This new()
 		result _generate(sharedContext) ? result : null
 	}
