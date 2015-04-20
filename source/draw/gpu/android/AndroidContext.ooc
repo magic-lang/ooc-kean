@@ -56,31 +56,6 @@ AndroidContext: class extends OpenGLES3Context {
 	clean: func {
 		this _packerBin clean()
 	}
-	toRaster: func ~Yuv420SpOverwrite (gpuImage: GpuYuv420Semiplanar, rasterImage: RasterYuv420Semiplanar) {
-		yPacker, uvPacker: GpuPacker
-
-		yPacker = this createPacker(gpuImage y size, 1)
-		uvPacker = this createPacker(gpuImage uv size, 2)
-		this _packMonochrome imageWidth = gpuImage y size width
-		yPacker pack(gpuImage y, this _packMonochrome)
-		this _packUv imageWidth = gpuImage uv size width
-		uvPacker pack(gpuImage uv, this _packUv)
-		if (rasterImage size height == 1080) {
-			yPacker readRows(rasterImage y)
-			uvPacker readRows(rasterImage uv)
-		} else {
-			yPacker read(rasterImage y)
-			uvPacker read(rasterImage uv)
-		}
-		yPacker recycle()
-		uvPacker recycle()
-	}
-	toRaster: override func ~overwrite (gpuImage: GpuImage, rasterImage: RasterImage) {
-		match(gpuImage) {
-			case (i : GpuYuv420Semiplanar) => this toRaster(gpuImage as GpuYuv420Semiplanar, rasterImage as RasterYuv420Semiplanar)
-			case => raise("Using toRaster on unimplemented image format")
-		}
-	}
 	toRaster: func ~Yuv420Sp (gpuImage: GpuYuv420Semiplanar) -> RasterImage {
 		yPacker, uvPacker: GpuPacker
 
@@ -146,7 +121,7 @@ AndroidContext: class extends OpenGLES3Context {
 	createPacker: func (size: IntSize2D, bytesPerPixel: UInt) -> GpuPacker {
 		result := this _packerBin find(size, bytesPerPixel)
 		if (result == null) {
-			Debug print("Could not find a recycled GpuPacker in list with size " + this _packerBin _packers size toString() + " with size " + size toString())
+			version(debugGL) { Debug print("Could not find a recycled GpuPacker in list with size " << this _packerBin _packers size toString() >> " with size " & size toString()) }
 			result = GpuPacker new(size, bytesPerPixel, this)
 		}
 		result

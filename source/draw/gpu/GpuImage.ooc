@@ -73,8 +73,6 @@ GpuImage: abstract class extends Image {
 	shift: func (offset: IntSize2D) -> This { raise("Using unimplemented function shift in GpuImage class"); null }
 	distance: func (other: This) -> Float { raise("Using unimplemented function distance in GpuImage class") }
 	toRaster: func(async: Bool = false) -> RasterImage { this _context toRaster(this, async) }
-	toRaster: func ~overwrite (rasterImage: RasterImage) { this _context toRaster(this, rasterImage) }
-	toRasterDefault: abstract func ~overwrite (rasterImage: RasterImage)
 	toRasterDefault: abstract func -> RasterImage
 	_createCanvas: abstract func -> GpuCanvas
 
