@@ -54,7 +54,7 @@ GpuPackerBin: class {
 			arrayList removeAt(index, false)
 		result
 	}
-	find: func (size: IntSize2D, bytesPerPixel: UInt)-> GpuPacker {
+	find: func (size: IntSize2D, bytesPerPixel: UInt) -> GpuPacker {
 		this _mutex lock()
 		result := this _search(size, bytesPerPixel, this _packers)
 		this _mutex unlock()
