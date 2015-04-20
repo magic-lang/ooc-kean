@@ -22,9 +22,9 @@ FloatExtensionTest: class extends Fixture {
 			expect(Float roundToValueDigits(0.3333f, 2, true), is equal to(0.34f) within(this precision))
 		})
 		this add("get scientific power string", func {
-			expect(Float getScientificPowerString(3333.0f), is equal to("3.33×10^3"))
-			expect(Float getScientificPowerString(10000.0f), is equal to("10^4"))
-			expect(Float getScientificPowerString(0.0044f), is equal to("4.40×10^-3"))
+			expect(Float getScientificPowerString(3333.0f), is equal to("3.33E3"))
+			expect(Float getScientificPowerString(10000.0f), is equal to("1.00E4"))
+			expect(Float getScientificPowerString(0.0044f), is equal to("4.40E-3"))
 		})
 	}
 }
