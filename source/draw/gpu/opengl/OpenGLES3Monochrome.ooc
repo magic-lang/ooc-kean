@@ -38,10 +38,6 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 		packed recycle()
 		result
 	}
-	toRasterDefault: func ~overwrite (rasterImage: RasterImage) {
-		raise("toRaster not implemented for MONOCHROME")
-		null
-	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterMonochrome, context: GpuContext) -> This {
 		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)

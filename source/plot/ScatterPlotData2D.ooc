@@ -31,7 +31,7 @@ ScatterPlotData2D: class extends PlotData2D {
 
 	getSvg: func (transform: FloatTransform2D) -> String {
 		result := ""
-		if (!this dataSeries empty()) {
+		if (!this dataSeries empty) {
 			for (i in 0..this dataSeries count) {
 				match (this shape) {
 					case Shape Circle =>
