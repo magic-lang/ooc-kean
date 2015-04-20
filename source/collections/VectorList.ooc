@@ -40,7 +40,7 @@ VectorList: class <T> {
 	insert: func (index: Int, item: T) {
 		if (this _vector capacity <= this _count)
 			this _vector resize(this _vector capacity + 8)
-		this _vector copy(index,index + 1)
+		this _vector copy(index, index + 1)
 		this _vector[index] = item
 		this _count += 1
 	}
@@ -86,8 +86,8 @@ VectorList: class <T> {
 	}
 	copy: func -> This<T> {
 		result := This new()
-		memcpy(result pointer, this pointer, this count * T size)
-		result _count = this count
+		memcpy(result pointer, this pointer, this _count * T size)
+		result _count = this _count
 		result
 	}
 }
