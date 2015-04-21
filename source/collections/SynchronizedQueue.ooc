@@ -64,9 +64,8 @@ BlockedQueue: class <T> extends SynchronizedQueue<T> {
 	wait: func -> T {
 		result: T
 		this _mutex lock()
-		while (this empty) {
+		while (this empty)
 			this _populated wait(this _mutex)
-		}
 		success := this _backend dequeue(result&)
 		this _mutex unlock()
 		result

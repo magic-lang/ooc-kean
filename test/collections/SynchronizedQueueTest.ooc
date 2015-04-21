@@ -18,7 +18,7 @@ SynchronizedQueueTest: class extends Fixture {
 		func3 := func {
 			result: Int
 			success := queue dequeue(result&)
-			if(success)
+			if (success)
 				expect(result == 123)
 			else
 				expect(queue empty)

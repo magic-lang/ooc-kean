@@ -23,7 +23,6 @@ VectorQueue: class <T> extends Queue<T> {
 	_head := 0
 	_tail := 0
 	capacity ::= this _capacity
-	count ::= this _count
 	full ::= this _count == this _capacity
 	_chunkCount := 32
 

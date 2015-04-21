@@ -18,7 +18,7 @@ BlockedQueueTest: class extends Fixture {
 		func3 := func {
 			result: Int
 			success := queue dequeue(result&)
-			if(success)
+			if (success)
 				expect(result == 123)
 			else
 				expect(queue empty)
@@ -61,11 +61,11 @@ BlockedQueueTest: class extends Fixture {
 			expect(queue empty)
 			expect(queue count, is equal to(0))
 
-			for(i in 0..4) {
+			for (i in 0..4) {
 				pool add(func5)
 				Time sleepMilli(10)
 			}
-			for(i in 0..4) {
+			for (i in 0..4) {
 				pool add(func1)
 				Time sleepMilli(10)
 			}
