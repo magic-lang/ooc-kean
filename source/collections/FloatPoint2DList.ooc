@@ -24,7 +24,7 @@ FloatPoint2DList: class extends VectorList<FloatPoint2D> {
 	}
 	init: func ~fromVectorList (other: VectorList<FloatPoint2D>) {
 		this super(other _vector)
-		this _count = other count
+		count = other count
 	}
 	toVectorList: func() -> VectorList<FloatPoint2D> {
 		result := VectorList<FloatPoint2D> new()
