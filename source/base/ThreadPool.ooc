@@ -28,7 +28,7 @@ SynchronizedThreadJob: class extends ThreadJob {
 	}
 	wait: func {
 		this _mutex lock()
-		if(!this _finished)
+		if (!this _finished)
 			this _finishedCondition wait(this _mutex)
 		this _mutex unlock()
 	}
