@@ -44,10 +44,10 @@ FloatShell2D: cover {
 	operator - (other: This) -> This { This new(this left - other left, this right - other right, this top - other top, this bottom - other bottom) }
 	operator / (other: Float) -> This { This new(this left / other, this right / other, this top / other, this bottom / other) }
 	maximum: func (other: This) -> This {
-		This new(this left maximum(other left), this right maximum(other right), this top maximum(other top), this bottom maximum(other bottom))
+		This new(Float maximum(this left, other left), Float maximum(this right, other right), Float maximum(this top, other top), Float maximum(this bottom, other bottom))
 	}
 	minimum: func (other: This) -> This {
-		This new(this left minimum(other left), this right minimum(other right), this top minimum(other top), this bottom minimum(other bottom))
+		This new(Float minimum(this left, other left), Float minimum(this right, other right), Float minimum(this top, other top), Float minimum(this bottom, other bottom))
 	}
 	operator == (other: This) -> Bool { this left == other left && this right == other right && this top == other top && this bottom == other bottom }
 	operator != (other: This) -> Bool { !(this == other) }
