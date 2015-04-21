@@ -14,11 +14,17 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
+//use ooc-math
 import VectorList
 import math
-FloatVector: class extends VectorList<Float> {
+import FloatComplex
+
+FloatVectorList: class extends VectorList<Float> {
 	init: func ~default {
 		this super()
+	}
+	init: func ~heap(capacity: Int){
+		super(capacity)
 	}
 	init: func ~fromVectorList (other: VectorList<Float>) {
 		this super(other _vector)
@@ -30,6 +36,19 @@ FloatVector: class extends VectorList<Float> {
 		result _count = this count
 		result
 	}
+
+	discreteFourierTransform: static func (input: This) -> This {
+		result := This new(input count)
+		for (i in 0..(input count)) {
+			tempVariable:= FloatComplex new(0,0)
+			for (j in 0..(input count)){
+				tempVariable = tempVariable + FloatComplex new(input[j],0) * FloatComplex rootOfUnity(input count, -i * j)
+			}
+			result[i] = tempVariable absoluteValue as Float
+		}
+		result
+	}
+
 	sum: Float {
 		get {
 			result := 0.0f
@@ -69,6 +88,11 @@ FloatVector: class extends VectorList<Float> {
 			result add(this[i] + other[i])
 		result
 	}
+	addInto: func(other: This) {
+		minimumCount := this count < other count ? this count : other count
+		for (i in 0..minimumCount)
+			this[i] = this[i] + other[i]
+	}
 	operator - (other: This) -> This {
 		result := This new()
 		minimumCount := this count < other count ? this count : other count
@@ -103,7 +127,7 @@ FloatVector: class extends VectorList<Float> {
 	toString: func() -> String {
 		result := ""
 		for (i in 0..this _count)
-			result = result >> this[i] toString() >> "\n"
+			result = result << this[i] toString() << "\n"
 		result
 	}
 }
