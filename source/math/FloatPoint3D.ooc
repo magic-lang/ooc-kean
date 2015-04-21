@@ -52,7 +52,8 @@ FloatPoint3D: cover {
 	floor: func -> This { This new(this x floor(), this y floor(), this z floor()) }
 	minimum: func (ceiling: This) -> This { This new(Float minimum(this x, ceiling x), Float minimum(this y, ceiling y), Float minimum(this z, ceiling z)) }
 	maximum: func (floor: This) -> This { This new(Float maximum(this x, floor x), Float maximum(this y, floor y), Float maximum(this z, floor z)) }
-	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
+	clamp: func ~point(floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
+	clamp: func ~float(floor, ceiling: Float) -> This { This new(this x clamp(floor, ceiling), this y clamp(floor, ceiling), this z clamp(floor, ceiling)) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
 	operator - (other: This) -> This { This new(this x - other x, this y - other y, this z - other z) }
 	operator - -> This { This new(-this x, -this y, -this z) }
@@ -80,3 +81,4 @@ operator * (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new
 operator / (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left / right x, left / right y, left / right z) }
 operator * (left: Int, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left * right x, left * right y, left * right z) }
 operator / (left: Int, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left / right x, left / right y, left / right z) }
+operator - (left: Float, right: FloatPoint3D) -> FloatPoint3D {	FloatPoint3D new(left - right x, left - right y, left - right z) }
