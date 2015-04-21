@@ -3,23 +3,35 @@ import threading/Thread
 import threading/native/ConditionUnix
 
 ThreadJob: class {
-	_pool: ThreadPool
-	_finishedCondition := ConditionUnix new()
-	finishedCondition ::= this _finishedCondition
 	_body: Func
+	init: func (=_body)
+	execute: virtual func { this _body() }
+}
+
+SynchronizedThreadJob: class extends ThreadJob {
+	_finishedCondition := ConditionUnix new()
+	_mutex := Mutex new()
 	_finished := false
 	finished ::= this _finished
-	init: func (=_body, =_pool)
+	init: func (body: Func) { super(body) }
 	free: override func {
+		this _mutex destroy()
 		this _finishedCondition free()
 		super()
 	}
-	execute: func {
-		this _body()
+	execute: override func {
+		super()
+		this _mutex lock()
+		this _finished = true
+		this _mutex unlock()
 		this _finishedCondition broadcast()
 	}
-	finish: func { this _finished = true }
-	wait: func { this _pool wait(this) }
+	wait: func {
+		this _mutex lock()
+		if(!this _finished)
+			this _finishedCondition wait(this _mutex)
+		this _mutex unlock()
+	}
 }
 
 ThreadPool: class {
@@ -54,7 +66,6 @@ ThreadPool: class {
 				this _mutex unlock()
 				job execute()
 				this _mutex lock()
-				job finish()
 				this _activeJobs -= 1
 				if(this _activeJobs == 0)
 					this _allFinishedCondition broadcast()
@@ -64,25 +75,23 @@ ThreadPool: class {
 			this _mutex unlock()
 		}
 	}
-	add: func (body: Func) -> ThreadJob {
+	_add: func (job: ThreadJob) {
 		this _mutex lock()
-		job := ThreadJob new(body, this)
 		this _jobs add(job)
 		this _activeJobs += 1
 		this _newJobCondition broadcast()
 		this _mutex unlock()
+	}
+	addSynchronized: func (body: Func) -> SynchronizedThreadJob {
+		job := SynchronizedThreadJob new(body)
+		this _add(job)
 		job
 	}
+	add: func (body: Func) { this _add(ThreadJob new(body)) }
 	waitAll: func {
 		this _mutex lock()
 		if (this _activeJobs > 0)
 			this _allFinishedCondition wait(this _mutex)
-		this _mutex unlock()
-	}
-	wait: func (job: ThreadJob) {
-		this _mutex lock()
-		if (!job finished)
-			job finishedCondition wait(this _mutex)
 		this _mutex unlock()
 	}
 
