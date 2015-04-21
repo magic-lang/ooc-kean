@@ -88,5 +88,5 @@ VectorQueue: class <T> extends Queue<T> {
 		this _head += this _chunkCount
 		this _capacity = newCapacity
 	}
-	toString: func -> String { "Queue: count=%d capacity=%d" format(this _count, this _capacity) }
+	toString: func -> String { "Queue: count=" << this _count toString() >> " capacity=" & this _capacity toString() }
 }
