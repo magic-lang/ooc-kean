@@ -176,6 +176,6 @@ AndroidContextManager: class extends GpuContextManager {
 	unpackBgraToYuv420Semiplanar: func (source: GpuBgra, targetSize: IntSize2D) -> GpuYuv420Semiplanar {
 		this currentContext unpackBgraToYuv420Semiplanar(source, targetSize)
 	}
-	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { this currentContext alignWidth(width, align) }
-	isAligned: override func (width: Int) -> Bool { this currentContext isAligned(width) }
+	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }
+	isAligned: override func (width: Int) -> Bool { GraphicBuffer isAligned(width) }
 }
