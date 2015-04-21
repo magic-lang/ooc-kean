@@ -48,6 +48,20 @@ FloatVector: class extends VectorList<Float> {
 		}
 	}
 	standardDeviation ::= sqrt(this variance)
+	sort: func {
+		inOrder := false
+		while (!inOrder) {
+			inOrder = true
+			for (i in 0..count - 1) {
+				if (this[i] > this[i + 1]) {
+					inOrder = false
+					tmp := this[i]
+					this[i] = this[i + 1]
+					this[i + 1] = tmp
+				}
+			}
+		}
+	}
 	operator + (other: This) -> This {
 		result := This new()
 		minimumCount := this count < other count ? this count : other count
