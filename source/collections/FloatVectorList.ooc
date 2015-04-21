@@ -14,7 +14,6 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
-//use ooc-math
 import VectorList
 import math
 import FloatComplex
@@ -127,7 +126,7 @@ FloatVectorList: class extends VectorList<Float> {
 	toString: func() -> String {
 		result := ""
 		for (i in 0..this _count)
-			result = result << this[i] toString() << "\n"
+			result = result >> this[i] toString() >> "\n"
 		result
 	}
 }
