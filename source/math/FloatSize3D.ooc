@@ -51,8 +51,8 @@ FloatSize3D: cover {
 	round: func -> This { This new(this width round(), this height round(), this depth round()) }
 	ceiling: func -> This { This new(this width ceil(), this height ceil(), this depth ceil()) }
 	floor: func -> This { This new(this width floor(), this height floor(), this height floor()) }
-	minimum: func (ceiling: This) -> This { This new(this width minimum(ceiling width), this height minimum(ceiling height), this depth minimum(ceiling depth)) }
-	maximum: func (floor: This) -> This { This new(this width maximum(floor width), this height maximum(floor height), this depth maximum(floor depth)) }
+	minimum: func (ceiling: This) -> This { This new(Float minimum(this width, ceiling width), Float minimum(this height, ceiling height), Float minimum(this depth, ceiling depth)) }
+	maximum: func (floor: This) -> This { This new(Float maximum(this width, floor width), Float maximum(this height, floor height), Float maximum(this depth, floor depth)) }
 	clamp: func (floor, ceiling: This) -> This { 
 		This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height), this depth clamp(floor depth, ceiling depth)) 
 	}
