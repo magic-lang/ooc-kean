@@ -23,11 +23,11 @@ FloatRotation3D: cover {
 	init: func@ ~full(=x, =y, =z)
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	init: func@ ~fromPoint(point: FloatPoint3D) { this init(point x, point y, point z) }
-	getTransform: func(k: Float) -> FloatTransform2D {
-			rx := FloatTransform2D createXRotation(this x, k)
-			ry := FloatTransform2D createYRotation(this y, k)
-			rz := FloatTransform2D createZRotation(this z)
-			return rz * rx * ry // Yaw -> Pitch -> Roll
+	getTransform: func(zDistance: Float) -> FloatTransform2D {
+		rx := FloatTransform2D createXRotation(this x, zDistance)
+		ry := FloatTransform2D createYRotation(this y, zDistance)
+		rz := FloatTransform2D createZRotation(this z)
+		return rz * rx * ry // Yaw -> Pitch -> Roll
 	}
 	round: func -> This { This new(this x round(), this y round(), this z round()) }
 	ceiling: func -> This { This new(this x ceil(), this y ceil(), this z ceil()) }

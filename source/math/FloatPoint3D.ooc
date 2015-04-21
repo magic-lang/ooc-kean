@@ -81,4 +81,4 @@ operator * (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new
 operator / (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left / right x, left / right y, left / right z) }
 operator * (left: Int, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left * right x, left * right y, left * right z) }
 operator / (left: Int, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left / right x, left / right y, left / right z) }
-operator - (left: Float, right: FloatPoint3D) -> FloatPoint3D {	FloatPoint3D new(left - right x, left - right y, left - right z) }
+operator - (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left - right x, left - right y, left - right z) }
