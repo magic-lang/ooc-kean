@@ -61,7 +61,6 @@ VectorQueueTest: class extends Fixture {
 			for (i in 0..queue count)
 				queue dequeue(removedInt&)
 			expect(queue count, is equal to(0))
-
 			for (i in 0..50)
 				queue enqueue(i)
 			expect(queue count, is equal to(50))
@@ -84,6 +83,9 @@ VectorQueueTest: class extends Fixture {
 			success = queue dequeue(removedInt&)
 			expect(success, is equal to(true))
 			expect(removedInt, is equal to(666))
+			queueString := queue toString()
+			queueString println()
+			queueString free()
 			queue free()
 		})
 	}
