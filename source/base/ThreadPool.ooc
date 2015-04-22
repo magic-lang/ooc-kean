@@ -1,33 +1,63 @@
+use ooc-collections
+
 import structs/LinkedList
 import threading/Thread
 import threading/native/ConditionUnix
 
 ThreadJob: class {
-	_pool: ThreadPool
-	_finishedCondition := ConditionUnix new()
-	finishedCondition ::= this _finishedCondition
 	_body: Func
+	init: func (=_body)
+	_execute: func { this _body() }
+	run: virtual func {
+		this _execute()
+		this free()
+	}
+}
+
+SynchronizedThreadJob: class extends ThreadJob {
+	_finishedCondition := ConditionUnix new()
+	_mutex := Mutex new()
 	_finished := false
 	finished ::= this _finished
-	init: func (=_body, =_pool)
+	_freeOnCompletion := false
+	init: func (body: Func) { super(body) }
 	free: override func {
-		this _finishedCondition free()
-		super()
+		this _mutex lock()
+		if (!this _finished) {
+			this _freeOnCompletion = true
+			this _mutex unlock()
+		} else {
+			this _mutex unlock()
+			this _mutex destroy()
+			this _finishedCondition free()
+			super()
+		}
 	}
-	execute: func {
-		this _body()
-		this _finishedCondition broadcast()
+	run: override func {
+		this _execute()
+		this _mutex lock()
+		this _finished = true
+		if (this _freeOnCompletion) {
+			this _mutex unlock()
+			this free()
+		} else {
+			this _mutex unlock()
+			this _finishedCondition broadcast()
+		}
 	}
-	finish: func { this _finished = true }
-	wait: func { this _pool wait(this) }
+	wait: func {
+		this _mutex lock()
+		if (!this _finished)
+			this _finishedCondition wait(this _mutex)
+		this _mutex unlock()
+	}
 }
 
 ThreadPool: class {
-	_jobs: LinkedList<ThreadJob>
 	_threads: Thread[]
-	_mutex: Mutex
-	_newJobCondition: ConditionUnix
-	_allFinishedCondition: ConditionUnix
+	_jobs := BlockedQueue<ThreadJob> new()
+	_mutex := Mutex new()
+	_allFinishedCondition := ConditionUnix new()
 	_activeJobs: Int
 	_threadCount: Int
 	threadCount ::= this _threadCount
@@ -35,11 +65,6 @@ ThreadPool: class {
 	init: func (threadCount := 4) {
 		this _threadCount = threadCount
 		this _threads = Thread[threadCount] new()
-		this _jobs = LinkedList<ThreadJob> new()
-		this _mutex = Mutex new()
-		this _newJobCondition = ConditionUnix new()
-		this _allFinishedCondition = ConditionUnix new()
-
 		for(i in 0..threadCount) {
 			this _threads[i] = Thread new(|| threadLoop())
 			this _threads[i] start()
@@ -47,43 +72,31 @@ ThreadPool: class {
 	}
 	threadLoop: func {
 		while(true) {
+			job := this _jobs wait()
+			job run()
 			this _mutex lock()
-			if(this _jobs getSize() > 0) {
-				job := this _jobs first()
-				this _jobs removeAt(0)
-				this _mutex unlock()
-				job execute()
-				this _mutex lock()
-				job finish()
-				this _activeJobs -= 1
-				if(this _activeJobs == 0)
-					this _allFinishedCondition broadcast()
-				this _mutex unlock()
-			} else {
-				this _newJobCondition wait(this _mutex)
-				this _mutex unlock()
-			}
+			this _activeJobs -= 1
+			if (this _activeJobs == 0)
+				this _allFinishedCondition broadcast()
+			this _mutex unlock()
 		}
 	}
-	add: func (body: Func) -> ThreadJob {
+	_add: func (job: ThreadJob) {
 		this _mutex lock()
-		job := ThreadJob new(body, this)
-		this _jobs add(job)
 		this _activeJobs += 1
-		this _newJobCondition broadcast()
 		this _mutex unlock()
+		this _jobs enqueue(job)
+	}
+	addSynchronized: func (body: Func) -> SynchronizedThreadJob {
+		job := SynchronizedThreadJob new(body)
+		this _add(job)
 		job
 	}
+	add: func (body: Func) { this _add(ThreadJob new(body)) }
 	waitAll: func {
 		this _mutex lock()
 		if (this _activeJobs > 0)
 			this _allFinishedCondition wait(this _mutex)
-		this _mutex unlock()
-	}
-	wait: func (job: ThreadJob) {
-		this _mutex lock()
-		if (!job finished)
-			job finishedCondition wait(this _mutex)
 		this _mutex unlock()
 	}
 
