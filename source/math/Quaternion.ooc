@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import FloatPoint3D
+import FloatRotation3D
 import FloatTransform2D
 import math
 import FloatExtension
@@ -56,7 +57,7 @@ Quaternion: cover {
 		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2;
 		return Quaternion new(w, x, y, z);
 	}
-	getEulerAngles: func() -> FloatPoint3D {
+	getEulerAngles: func() -> FloatRotation3D {
 		// http://www.jldoty.com/code/DirectX/YPRfromUF/YPRfromUF.html
 		// Should be used in order Yaw -> Pitch -> Roll or Pitch -> Yaw -> Roll,
 		// According to jldoty it should be Roll -> Pitch -> Yaw, but this doesn't work
@@ -90,16 +91,7 @@ Quaternion: cover {
 		else
 			roll = asin((upYawPitch scalarProduct(upRotated) * upYawPitch z - upRotated z) / rightYawPitch z)
 
-		FloatPoint3D new(pitch, -yaw, roll)
-	}
-	getTransform: static func(eulerAngles: FloatPoint3D, k: Float) -> FloatTransform2D {
-			rx := FloatTransform2D createXRotation(eulerAngles x, k)
-			ry := FloatTransform2D createYRotation(eulerAngles y, k)
-			rz := FloatTransform2D createZRotation(eulerAngles z)
-			/*return ry * rx * rz // Roll -> Pitch -> Yaw*/
-			/*return rx * ry * rz // Roll -> Yaw -> Pitch*/
-			/*return rz * ry * rx // Pitch -> Yaw -> Roll*/
-			return rz * rx * ry // Yaw -> Pitch -> Roll // Currently used
+		FloatRotation3D new(pitch, -yaw, roll)
 	}
 	operator == (other: This) -> Bool {
 		this w ==  w &&

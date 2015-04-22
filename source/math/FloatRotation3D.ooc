@@ -15,43 +15,24 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
 import FloatExtension
-import FloatPoint2D
-import text/StringTokenizer
-import structs/ArrayList
+import FloatPoint3D
+import FloatTransform2D
 
-FloatPoint3D: cover {
+FloatRotation3D: cover {
 	x, y, z: Float
-	norm ::= (this x squared() + this y squared() + this z squared()) sqrt()
-	azimuth ::= this y atan2(this x)
-	elevation: Float {
-		get {
-			r := this norm
-			if (r != 0.0f)
-				r = (this z / r) clamp(-1.0f, 1.0f) acos()
-			r
-		}
-	}
-	init: func@ (=x, =y, =z)
+	init: func@ ~full(=x, =y, =z)
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
-	init: func@ ~fromPoint2D (point: FloatPoint2D, z: Float) { this init(point x, point y, z) }
-	scalarProduct: func (other: This) -> Float { this x * other x + this y * other y + this z * other z }
-	vectorProduct: func (other: This) -> This { This new(this y * other z - other y * this z, -(this x * other z - other x * this z), this x * other y - other x * this y) }
-	spherical: func (radius, azimuth, elevation: Float) -> This {
-		This new(radius * (azimuth cos()) * (elevation sin()), radius * (azimuth sin()) * (elevation sin()), radius * (elevation cos()))
+	init: func@ ~fromPoint(point: FloatPoint3D) { this init(point x, point y, point z) }
+	getTransform: func(zDistance: Float) -> FloatTransform2D {
+		FloatTransform2D createZRotation(this z) * //Roll
+		FloatTransform2D createXRotation(this x, zDistance) * //Pitch
+		FloatTransform2D createYRotation(this y, zDistance) //Yaw
 	}
-	angles: func (rx, ry, n: Float) -> This {
-		z := n*n sqrt() / (1 + ry tan() squared() + rx tan() squared())
-		This new(z * (ry tan()), z * (rx tan()), z)
-	}
-	angle: func (other: This) -> Float {
-		(this scalarProduct(other) / (this norm * other norm)) clamp(-1, 1) acos() * (this x * other y - this y * other x < 0 ? -1 : 1)
-	}
-	distance: func (other: This) -> Float { (this - other) norm }
 	round: func -> This { This new(this x round(), this y round(), this z round()) }
 	ceiling: func -> This { This new(this x ceil(), this y ceil(), this z ceil()) }
 	floor: func -> This { This new(this x floor(), this y floor(), this z floor()) }
-	minimum: func (ceiling: This) -> This { This new(Float minimum(this x, ceiling x), Float minimum(this y, ceiling y), Float minimum(this z, ceiling z)) }
-	maximum: func (floor: This) -> This { This new(Float maximum(this x, floor x), Float maximum(this y, floor y), Float maximum(this z, floor z)) }
+	minimum: func (ceiling: This) -> This { This new(Float minimum(x, ceiling x), Float minimum(y, ceiling y), Float minimum(z, ceiling z)) }
+	maximum: func (floor: This) -> This { This new(Float maximum(x, floor x), Float maximum(y, floor y), Float maximum(z, floor z)) }
 	clamp: func ~point(floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
 	clamp: func ~float(floor, ceiling: Float) -> This { This new(this x clamp(floor, ceiling), this y clamp(floor, ceiling), this z clamp(floor, ceiling)) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
@@ -67,18 +48,8 @@ FloatPoint3D: cover {
 	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z}
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
-	operator as -> String { this toString() }
 	toString: func -> String { "%.8f" formatFloat(this x) >> ", " & "%.8f" formatFloat(this y) >> ", " & "%.8f" formatFloat(this z) }
-	parse: static func (input: String) -> This {
-		array := input split(',')
-		This new(array[0] toFloat(), array[1] toFloat(), array[2] toFloat())
-	}
-	lerp: static func (a, b: FloatPoint3D, ratio: Float) -> FloatPoint3D {
-		FloatPoint3D new(Float lerp(a x, b x, ratio), Float lerp(a y, b y, ratio), Float lerp(a z, b z, ratio))
-	}
 }
-operator * (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left * right x, left * right y, left * right z) }
-operator / (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left / right x, left / right y, left / right z) }
-operator * (left: Int, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left * right x, left * right y, left * right z) }
-operator / (left: Int, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left / right x, left / right y, left / right z) }
-operator - (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left - right x, left - right y, left - right z) }
+operator * (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left * right x, left * right y, left * right z) }
+operator / (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left / right x, left / right y, left / right z) }
+operator - (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left - right x, left - right y, left - right z) }

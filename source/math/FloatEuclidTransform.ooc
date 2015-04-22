@@ -19,6 +19,7 @@ import FloatExtension
 import FloatSize2D
 import FloatPoint2D
 import FloatPoint3D
+import FloatRotation3D
 import FloatTransform2D
 import Quaternion
 
@@ -101,7 +102,7 @@ FloatEuclidTransform: cover {
 		This new(this translationX * value, this translationY * value, this rotationX * value, this rotationY * value, this rotationZ * value, (this scaling - 1) * value + 1)
 	}
 	toImageCoordinates: func(zDistance: Float) -> This {
-		correction := Quaternion getTransform(this rotation, zDistance) * FloatPoint2D new(0.0f, 0.0f)
+		correction := FloatRotation3D new(this rotation) getTransform(zDistance) * FloatPoint2D new(0.0f, 0.0f)
 		This new(
 			this translationX + correction x,
 			this translationY + correction y,
@@ -111,7 +112,7 @@ FloatEuclidTransform: cover {
 			this scaling)
 	}
 	toCameraCoordinates: func(zDistance: Float) -> This {
-		correction := Quaternion getTransform(-this rotation, zDistance) * FloatPoint2D new(0.0f, 0.0f)
+		correction := FloatRotation3D new(-this rotation) getTransform(zDistance) * FloatPoint2D new(0.0f, 0.0f)
 		This new(
 			this translationX + correction x,
 			this translationY + correction y,
