@@ -44,7 +44,7 @@ PlotData2D: abstract class {
 
 	minValues: func -> FloatPoint2D {
 		result: FloatPoint2D
-		if (dataSeries empty())
+		if (dataSeries empty)
 			result = FloatPoint2D new()
 		else {
 			result = dataSeries[0]
@@ -56,7 +56,7 @@ PlotData2D: abstract class {
 
 	maxValues: func -> FloatPoint2D {
 		result: FloatPoint2D
-		if (dataSeries empty())
+		if (dataSeries empty)
 			result = FloatPoint2D new()
 		else {
 			result = dataSeries[0]

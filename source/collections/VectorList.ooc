@@ -19,65 +19,53 @@ import Vector
 
 VectorList: class <T> {
 	_vector: Vector<T>
-	count: Int
-	_count ::= this count
-	pointer: Pointer { get { this _vector _backend as Pointer } }
+	_count: Int
+	count ::= this _count
+	pointer ::= this _vector _backend as Pointer
+	empty ::= this _count == 0
 	init: func ~default {
 		this init(32)
 	}
-
 	init: func ~heap (capacity: Int) {
 		this init(HeapVector<T> new(capacity))
 	}
-
 	init: func (=_vector)
+
 	add: func (item: T) {
-		if (this _vector capacity <= this count) {
+		if (this _vector capacity <= this _count)
 			this _vector resize(this _vector capacity + 8)
-		}
-
-		this _vector[this count] = item
-		this count += 1
+		this _vector[this _count] = item
+		this _count += 1
 	}
-
-	remove: func ~last -> T {
-		this count -= 1
-		this _vector[this count]
-	}
-
 	insert: func (index: Int, item: T) {
-		if (this _vector capacity <= this count) {
+		if (this _vector capacity <= this _count)
 			this _vector resize(this _vector capacity + 8)
-		}
-
-		this _vector copy(index,index+1)
+		this _vector copy(index, index + 1)
 		this _vector[index] = item
-		this count += 1
+		this _count += 1
 	}
-
-	remove: func (index: Int) -> T {
-		tmp := this _vector[index]
-		this _vector copy(index+1, index)
-		this count -= 1
-		tmp
+	remove: func ~last -> T {
+		this _count -= 1
+		this _vector[this _count]
+	}
+	remove: func ~atIndex (index: Int) -> T {
+		result := this _vector[index]
+		this _vector copy(index + 1, index)
+		this _count -= 1
+		result
 	}
 	removeAt: func (index: Int) {
 		this _vector copy(index+1, index)
-		this count -= 1
+		this _count -= 1
 	}
 	clear: func {
-		this _vector _free(0, this count)
-		this count = 0
+		this _vector _free(0, this _count)
+		this _count = 0
 	}
-	empty: func -> Bool {
-		this count == 0
-	}
-	pop: func -> T {
-		this remove(0)
-	}
-	__destroy__: func {
-		this _vector _free(0, this count)
+	free: override func {
+		this _vector _free(0, this _count)
 		this _vector free()
+		super()
 	}
 
 	operator [] (index: Int) -> T {
@@ -102,8 +90,8 @@ VectorList: class <T> {
 	}
 	copy: func -> This<T> {
 		result := This new()
-		memcpy(result pointer, this pointer, this count * T size)
-		result count = this count
+		memcpy(result pointer, this pointer, this _count * T size)
+		result _count = this _count
 		result
 	}
 }
