@@ -14,9 +14,8 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
-import VectorList
+use ooc-collections
 import math
-import FloatComplex
 
 FloatVectorList: class extends VectorList<Float> {
 	init: func ~default {
@@ -33,18 +32,6 @@ FloatVectorList: class extends VectorList<Float> {
 		result := VectorList<Float> new()
 		result _vector = this _vector
 		result _count = this count
-		result
-	}
-
-	discreteFourierTransform: static func (input: This) -> This {
-		result := This new(input count)
-		for (i in 0..(input count)) {
-			tempVariable:= FloatComplex new(0,0)
-			for (j in 0..(input count)){
-				tempVariable = tempVariable + FloatComplex new(input[j],0) * FloatComplex rootOfUnity(input count, -i * j)
-			}
-			result[i] = tempVariable absoluteValue as Float
-		}
 		result
 	}
 
