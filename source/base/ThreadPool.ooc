@@ -26,8 +26,7 @@ SynchronizedThreadJob: class extends ThreadJob {
 		if (!this _finished) {
 			this _freeOnCompletion = true
 			this _mutex unlock()
-		}
-		else {
+		}	else {
 			this _mutex unlock()
 			this _mutex destroy()
 			this _finishedCondition free()
@@ -41,8 +40,7 @@ SynchronizedThreadJob: class extends ThreadJob {
 		if (this _freeOnCompletion) {
 			this _mutex unlock()
 			this free()
-		}
-		else {
+		}	else {
 			this _mutex unlock()
 			this _finishedCondition broadcast()
 		}
