@@ -5,7 +5,11 @@ import threading/native/ConditionUnix
 ThreadJob: class {
 	_body: Func
 	init: func (=_body)
-	execute: virtual func { this _body() }
+	_execute: func { this _body() }
+	run: virtual func {
+		this _execute()
+		this free()
+	}
 }
 
 SynchronizedThreadJob: class extends ThreadJob {
@@ -13,18 +17,33 @@ SynchronizedThreadJob: class extends ThreadJob {
 	_mutex := Mutex new()
 	_finished := false
 	finished ::= this _finished
+	_freeOnCompletion := false
 	init: func (body: Func) { super(body) }
 	free: override func {
-		this _mutex destroy()
-		this _finishedCondition free()
-		super()
+		this _mutex lock()
+		if (!this _finished) {
+			this _freeOnCompletion = true
+			this _mutex unlock()
+		}
+		else {
+			this _mutex unlock()
+			this _mutex destroy()
+			this _finishedCondition free()
+			super()
+		}
 	}
-	execute: override func {
-		super()
+	run: override func {
+		this _execute()
 		this _mutex lock()
 		this _finished = true
-		this _mutex unlock()
-		this _finishedCondition broadcast()
+		if (this _freeOnCompletion) {
+			this _mutex unlock()
+			this free()
+		}
+		else {
+			this _mutex unlock()
+			this _finishedCondition broadcast()
+		}
 	}
 	wait: func {
 		this _mutex lock()
@@ -64,7 +83,7 @@ ThreadPool: class {
 				job := this _jobs first()
 				this _jobs removeAt(0)
 				this _mutex unlock()
-				job execute()
+				job run()
 				this _mutex lock()
 				this _activeJobs -= 1
 				if(this _activeJobs == 0)
