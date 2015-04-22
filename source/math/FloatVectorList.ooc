@@ -49,7 +49,7 @@ FloatVectorList: class extends VectorList<Float> {
 			squaredSum := 0.0f
 			for (i in 0..this count)
 				squaredSum += pow((this[i] - this mean), 2.0f)
-			squaredSum / this count
+				squaredSum / this count
 		}
 	}
 	standardDeviation ::= sqrt(this variance)
