@@ -24,16 +24,15 @@ FloatRotation3D: cover {
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	init: func@ ~fromPoint(point: FloatPoint3D) { this init(point x, point y, point z) }
 	getTransform: func(zDistance: Float) -> FloatTransform2D {
-		rx := FloatTransform2D createXRotation(this x, zDistance)
-		ry := FloatTransform2D createYRotation(this y, zDistance)
-		rz := FloatTransform2D createZRotation(this z)
-		return rz * rx * ry // Yaw -> Pitch -> Roll
+		FloatTransform2D createZRotation(this z) * //Roll
+		FloatTransform2D createXRotation(this x, zDistance) * //Pitch
+		FloatTransform2D createYRotation(this y, zDistance) //Yaw
 	}
 	round: func -> This { This new(this x round(), this y round(), this z round()) }
 	ceiling: func -> This { This new(this x ceil(), this y ceil(), this z ceil()) }
 	floor: func -> This { This new(this x floor(), this y floor(), this z floor()) }
-	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y), this z minimum(ceiling z)) }
-	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y), this z maximum(floor z)) }
+	minimum: func (ceiling: This) -> This { This new(Float minimum(x, ceiling x), Float minimum(y, ceiling y), Float minimum(z, ceiling z)) }
+	maximum: func (floor: This) -> This { This new(Float maximum(x, floor x), Float maximum(y, floor y), Float maximum(z, floor z)) }
 	clamp: func ~point(floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
 	clamp: func ~float(floor, ceiling: Float) -> This { This new(this x clamp(floor, ceiling), this y clamp(floor, ceiling), this z clamp(floor, ceiling)) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
@@ -53,6 +52,4 @@ FloatRotation3D: cover {
 }
 operator * (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left * right x, left * right y, left * right z) }
 operator / (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left / right x, left / right y, left / right z) }
-operator * (left: Int, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left * right x, left * right y, left * right z) }
-operator / (left: Int, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left / right x, left / right y, left / right z) }
 operator - (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left - right x, left - right y, left - right z) }
