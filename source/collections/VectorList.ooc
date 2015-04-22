@@ -54,6 +54,10 @@ VectorList: class <T> {
 		this _count -= 1
 		result
 	}
+	removeAt: func (index: Int) {
+		this _vector copy(index+1, index)
+		this _count -= 1
+	}
 	clear: func {
 		this _vector _free(0, this _count)
 		this _count = 0
