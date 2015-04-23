@@ -24,12 +24,12 @@ FloatPoint2DList: class extends VectorList<FloatPoint2D> {
 	}
 	init: func ~fromVectorList (other: VectorList<FloatPoint2D>) {
 		this super(other _vector)
-		count = other count
+		this _count = other _count
 	}
 	toVectorList: func() -> VectorList<FloatPoint2D> {
 		result := VectorList<FloatPoint2D> new()
 		result _vector = this _vector
-		result count = this _count
+		result _count = this _count
 		result
 	}
 	sum: func -> FloatPoint2D {
@@ -78,8 +78,8 @@ FloatPoint2DList: class extends VectorList<FloatPoint2D> {
 	operator - (value: FloatPoint2D) -> This {
 		this + (-value)
 	}
-	operator [] (index: Int) -> FloatPoint2D {
-		this _vector[index] as FloatPoint2D
+	operator [] <T> (index: Int) -> T {
+		this as VectorList<FloatPoint2D> _vector[index]
 	}
 	operator []= (index: Int, item: FloatPoint2D) {
 		this _vector[index] = item
