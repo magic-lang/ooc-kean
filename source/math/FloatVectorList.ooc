@@ -16,12 +16,13 @@
 */
 use ooc-collections
 import math
+import IntExtension
 
 FloatVectorList: class extends VectorList<Float> {
 	init: func ~default {
 		this super()
 	}
-	init: func ~heap(capacity: Int){
+	init: func ~heap (capacity: Int){
 		super(capacity)
 	}
 	init: func ~fromVectorList (other: VectorList<Float>) {
@@ -49,7 +50,7 @@ FloatVectorList: class extends VectorList<Float> {
 			squaredSum := 0.0f
 			for (i in 0..this count)
 				squaredSum += pow((this[i] - this mean), 2.0f)
-				squaredSum / this count
+			squaredSum / this count
 		}
 	}
 	standardDeviation ::= sqrt(this variance)
@@ -74,8 +75,8 @@ FloatVectorList: class extends VectorList<Float> {
 			result add(this[i] + other[i])
 		result
 	}
-	addInto: func(other: This) {
-		minimumCount := this count < other count ? this count : other count
+	addInto: func (other: This) {
+		minimumCount := Int minimum(this count, other count)
 		for (i in 0..minimumCount)
 			this[i] = this[i] + other[i]
 	}
