@@ -38,24 +38,8 @@ extend Float {
 	maximum: static func(first: This, second: This) -> This {
 		first > second ? first : second
 	}
-	maximum: static func ~multiple(value: This, values: ...) -> This {
-		// FIXME: This creates a closure that causes a leak every time this function is called.
-		values each(|v|
-			if ((v as This) > value)
-				value = v
-		)
-		value
-	}
 	minimum: static func(first: This, second: This) -> This {
 		first < second ? first : second
-	}
-	minimum: static func ~multiple(value: This, values: ...) -> This {
-		// FIXME: This creates a closure that causes a leak every time this function is called.
-		values each(|v|
-			if ((v as This) < value)
-				value = v
-		)
-		value
 	}
 	modulo: static func(dividend: This, divisor: This) -> This {
 // TODO: handle negative dividends
