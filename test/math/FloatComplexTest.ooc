@@ -87,20 +87,6 @@ FloatComplexTest: class extends Fixture {
 			expect(this complexNumber0 exponential() real, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary cos()))
 			expect(this complexNumber0 exponential() imaginary, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary sin()))
 		})
-		this add("discrete fourier transform", func() {
-			result := FloatComplex discreteFourierTransform(complexNumberArray)
-			result = FloatComplex inverseDiscreteFourierTransform(result)
-			for (i in 0..(complexNumberArray capacity)) {
-				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
-			}
-		})
-		this add("fast fourier transform", func() {
-			result := FloatComplex fastFourierTransform(complexNumberArray)
-			result = FloatComplex inverseFastFourierTransform(result)
-			for (i in 0..(complexNumberArray capacity)) {
-				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
-			}
-		})
 	}
 }
 FloatComplexTest new() run()
