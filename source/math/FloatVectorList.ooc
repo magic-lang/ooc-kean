@@ -17,6 +17,7 @@
 use ooc-collections
 import math
 import IntExtension
+import FloatComplexList
 
 FloatVectorList: class extends VectorList<Float> {
 	init: func ~default {
@@ -35,7 +36,6 @@ FloatVectorList: class extends VectorList<Float> {
 		result _count = this count
 		result
 	}
-
 	sum: Float {
 		get {
 			result := 0.0f
@@ -115,6 +115,12 @@ FloatVectorList: class extends VectorList<Float> {
 		result := ""
 		for (i in 0..this _count)
 			result = result >> this[i] toString() >> "\n"
+		result
+	}
+	toFloatComplexList: func -> FloatComplexList {
+		result := FloatComplexList new()
+		for (i in 0..this _count)
+			result add(FloatComplex new(this[i], 0))
 		result
 	}
 }
