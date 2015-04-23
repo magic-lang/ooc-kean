@@ -94,8 +94,8 @@ FloatVector: class extends VectorList<Float> {
 	operator - (value: Float) -> This {
 		this + (-value)
 	}
-	operator [] (index: Int) -> Float {
-		this _vector[index] as Float
+	operator [] <T> (index: Int) -> T {
+		this as VectorList<Float> _vector[index]
 	}
 	operator []= (index: Int, item: Float) {
 		this _vector[index] = item
