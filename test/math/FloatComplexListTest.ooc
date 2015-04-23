@@ -43,14 +43,14 @@ FloatComplexListTest: class extends Fixture {
 		this add("discrete fourier transform", func() {
 			result := FloatComplexList discreteFourierTransform(complexNumberArray)
 			result = FloatComplexList inverseDiscreteFourierTransform(result)
-			for (i in 0..(complexNumberArray capacity)) {
+			for (i in 0..(complexNumberArray count)) {
 				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
 			}
 		})
 		this add("fast fourier transform", func() {
 			result := FloatComplexList fastFourierTransform(complexNumberArray)
 			result = FloatComplexList inverseFastFourierTransform(result)
-			for (i in 0..(complexNumberArray capacity)) {
+			for (i in 0..(complexNumberArray count)) {
 				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
 			}
 		})
