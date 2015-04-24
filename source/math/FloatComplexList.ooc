@@ -16,7 +16,7 @@
 */
 import FloatComplex
 use ooc-collections
-import FloatVector
+import FloatVectorList
 
 FloatComplexList: class extends VectorList<FloatComplex> {
 	init: func ~default {
@@ -46,16 +46,16 @@ FloatComplexList: class extends VectorList<FloatComplex> {
 	mean: func -> FloatComplex {
 		sum() / this _count
 	}
-	getReal: func -> FloatVector {
-		result := FloatVector new()
+	getReal: func -> FloatVectorList {
+		result := FloatVectorList new()
 		for (i in 0..this _count) {
 			currentPoint := this[i]
 			result add(currentPoint real)
 		}
 		result
 	}
-	getImaginary: func -> FloatVector {
-		result := FloatVector new()
+	getImaginary: func -> FloatVectorList {
+		result := FloatVectorList new()
 		for (i in 0..this _count) {
 			currentPoint := this[i]
 			result add(currentPoint imaginary)

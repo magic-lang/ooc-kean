@@ -17,6 +17,7 @@
 use ooc-collections
 import math
 import IntExtension
+import FloatComplex
 import FloatComplexList
 
 FloatVectorList: class extends VectorList<Float> {

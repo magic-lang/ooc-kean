@@ -16,7 +16,7 @@
 */
 use ooc-collections
 import FloatPoint2D
-import FloatVector
+import FloatVectorList
 
 FloatPoint2DList: class extends VectorList<FloatPoint2D> {
 	init: func ~default {
@@ -41,16 +41,16 @@ FloatPoint2DList: class extends VectorList<FloatPoint2D> {
 	mean: func -> FloatPoint2D {
 		sum() / this _count
 	}
-	getX: func -> FloatVector {
-		result := FloatVector new()
+	getX: func -> FloatVectorList {
+		result := FloatVectorList new()
 		for (i in 0..this _count) {
 			currentPoint := this[i]
 			result add(currentPoint x)
 		}
 		result
 	}
-	getY: func -> FloatVector {
-		result := FloatVector new()
+	getY: func -> FloatVectorList {
+		result := FloatVectorList new()
 		for (i in 0..this _count) {
 			currentPoint := this[i]
 			result add(currentPoint y)
