@@ -20,17 +20,17 @@ use ooc-collections
 import math
 import text/StringTokenizer
 import FloatComplex
-import FloatComplexList
+import FloatComplexVectorList
 import lang/IO
 
-FloatComplexListTest: class extends Fixture {
+FloatComplexVectorListTest: class extends Fixture {
 
 	complexNumber0 := FloatComplex new (2,1)
 	complexNumber1 := FloatComplex new (3,2)
 	complexNumber2 := FloatComplex new (5,3)
 	complexNumber3 := FloatComplex new (-2,-1)
 
-	complexNumberArray := FloatComplexList new(4)
+	complexNumberArray := FloatComplexVectorList new(4)
 	complexNumberArray[0] = complexNumber0
 	complexNumberArray[1] = complexNumber1
 	complexNumberArray[2] = complexNumber2
@@ -39,21 +39,21 @@ FloatComplexListTest: class extends Fixture {
 	tolerance := 0.00001
 
 	init: func() {
-		super("FloatComplexList")
+		super("FloatComplexVectorList")
 		this add("discrete fourier transform", func() {
-			result := FloatComplexList discreteFourierTransform(complexNumberArray)
-			result = FloatComplexList inverseDiscreteFourierTransform(result)
+			result := FloatComplexVectorList discreteFourierTransform(complexNumberArray)
+			result = FloatComplexVectorList inverseDiscreteFourierTransform(result)
 			for (i in 0..(complexNumberArray count)) {
 				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
 			}
 		})
 		this add("fast fourier transform", func() {
-			result := FloatComplexList fastFourierTransform(complexNumberArray)
-			result = FloatComplexList inverseFastFourierTransform(result)
+			result := FloatComplexVectorList fastFourierTransform(complexNumberArray)
+			result = FloatComplexVectorList inverseFastFourierTransform(result)
 			for (i in 0..(complexNumberArray count)) {
 				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
 			}
 		})
 	}
 }
-FloatComplexListTest new() run()
+FloatComplexVectorListTest new() run()
