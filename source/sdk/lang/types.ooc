@@ -122,16 +122,9 @@ Closure: cover {
 /** An object storing a value and its class. */
 Cell: class <T> {
     val: __onheap__ T
-    init: func(val: T) {
-      this val = val
-    }
+    init: func(=val) {}
     set: func (=val)
     get: func -> T { this val }
-    setDefaults: func {
-      p := (this val&) as Pointer
-      t := gc_malloc(T instanceSize)
-      p = t
-    }
     __destroy__: func {
       gc_free(this val)
     }
