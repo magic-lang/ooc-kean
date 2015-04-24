@@ -130,7 +130,7 @@ Cell: class <T> {
     get: func -> T { val }
 
     __destroy__: func {
-    	gc_free(this val)
+	gc_free(this val)
     }
 }
 
