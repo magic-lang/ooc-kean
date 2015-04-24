@@ -2,4 +2,4 @@ Name: OOC Collections
 Description: Collections Library
 SourcePath: source/collections
 Requires: ooc-unit, ooc-base, ooc-sdk-lite
-Imports: Vector, FloatVector, VectorList, PointerVector, PointerVectorList, SortedVectorList, Queue, SynchronizedQueue, FloatPoint2DList
+Imports: Vector, VectorList, PointerVector, PointerVectorList, SortedVectorList, Queue, SynchronizedQueue

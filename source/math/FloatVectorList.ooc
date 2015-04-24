@@ -14,11 +14,18 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
-import VectorList
+use ooc-collections
 import math
-FloatVector: class extends VectorList<Float> {
+import IntExtension
+import FloatComplex
+import FloatComplexVectorList
+
+FloatVectorList: class extends VectorList<Float> {
 	init: func ~default {
 		this super()
+	}
+	init: func ~heap (capacity: Int){
+		super(capacity)
 	}
 	init: func ~fromVectorList (other: VectorList<Float>) {
 		this super(other _vector)
@@ -69,6 +76,11 @@ FloatVector: class extends VectorList<Float> {
 			result add(this[i] + other[i])
 		result
 	}
+	addInto: func (other: This) {
+		minimumCount := Int minimum(this count, other count)
+		for (i in 0..minimumCount)
+			this[i] = this[i] + other[i]
+	}
 	operator - (other: This) -> This {
 		result := This new()
 		minimumCount := this count < other count ? this count : other count
@@ -104,6 +116,12 @@ FloatVector: class extends VectorList<Float> {
 		result := ""
 		for (i in 0..this _count)
 			result = result >> this[i] toString() >> "\n"
+		result
+	}
+	toFloatComplexVectorList: func -> FloatComplexVectorList {
+		result := FloatComplexVectorList new()
+		for (i in 0..this _count)
+			result add(FloatComplex new(this[i], 0))
 		result
 	}
 }
