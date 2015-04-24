@@ -60,16 +60,16 @@ FloatBox2D: cover {
 	intersection: func (other: This) -> This {
 		left := Float maximum(this left, other left)
 		top := Float maximum(this top, other top)
-		width := Float maximum(0, Float minimum(this right, other right) - left)
-		height := Float maximum(0, Float minimum(this bottom, other bottom) - top)
+		width := Float maximum(0, (Float minimum(this right, other right) - left))
+		height := Float maximum(0, (Float minimum(this bottom, other bottom) - top))
 		This new(left, top, width, height)
 	}
 	//FIXME: Union is a keyword in C and so cannot be used for methods, but the name should be box__union something, so there shouldn't be a problem. Compiler bug?
 	union: func ~box (other: This) -> This {
 		left := Float minimum(this left, other left)
 		top := Float minimum(this top, other top)
-		width := Float maximum(0, Float maximum(this right, other right) - left)
-		height := Float maximum(0, Float maximum(this bottom, other bottom) - top)
+		width := Float maximum(0, (Float maximum(this right, other right) - left))
+		height := Float maximum(0, (Float maximum(this bottom, other bottom) - top))
 		This new(left, top, width, height)
 	}
 	union: func ~point (point: FloatPoint2D) -> This {
@@ -104,6 +104,8 @@ FloatBox2D: cover {
 	//FIXME: Unary minus bug
 	operator - (other: FloatPoint2D) -> This { This new(this leftTop - other, this size) }
 	operator + (other: FloatSize2D) -> This { This new(this leftTop, this size + other) }
+	operator * (other: FloatSize2D) -> This { This new(this leftTop * other, this size * other) }
+	operator / (other: FloatSize2D) -> This { This new(this leftTop / other, this size / other) }
 	//FIXME: Unary minus bug again
 	operator - (other: FloatSize2D) -> This { This new(this leftTop, this size - other) }
 	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }
