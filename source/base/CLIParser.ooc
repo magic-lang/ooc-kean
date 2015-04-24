@@ -106,5 +106,10 @@ CLIParser: class {
 				}
 			}
 		}
+		tokens free()
+	}
+	free: override func {
+		this _arguments free()
+		super()
 	}
 }
