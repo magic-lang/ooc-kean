@@ -46,9 +46,10 @@ Profiler: class {
 
 	printResults: static func {
 		for (i in 0..This _logList count) {
-			resultString := ""
 			log := This _logList[i]
-			Debug print(log _message + This timeStr + log _timer _result toString() + This average + log _timer _average toString())
+			resultString := log _message + This timeStr & log _timer _result toString() >> This average & log _timer _average toString()
+			Debug print(resultString)
+			resultString free()
 		}
 	}
 
