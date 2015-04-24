@@ -77,14 +77,14 @@ extend Float {
 	//   lerp(a, b, 1) = b
 	//   lerp(a, a, x) = a
 	// Called "lerp" in CG and HLSL, called "mix" in GLSL
-	lerp: static func (a: This, b: This, ratio: This) -> This {
+	linearInterpolation: static func (a: This, b: This, ratio: This) -> This {
 		(ratio * (b - a)) + a
 	}
 	// Inverse to lerp returning ratio given the same a and b
 	// Precondition: a and b have different values
 	//   Getting +inf, -inf or NaN shows when the precondition is broken
 	// Postcondition: inverseLerp(a, b, lerp(a, b, r)) = r
-	inverseLerp: static func (a: This, b: This, value: This) -> This {
+	inverseLinearInterpolation: static func (a: This, b: This, value: This) -> This {
 		(value - a) / (b - a)
 	}
 	decomposeToCoefficientAndRadix: static func (value: This, valueDigits: Int) -> (This, This) {
