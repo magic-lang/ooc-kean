@@ -121,16 +121,12 @@ Closure: cover {
 
 /** An object storing a value and its class. */
 Cell: class <T> {
-    val: T
-
-    init: func(=val)
-    init: func ~noval
-
+    val: __onheap__ T
+    init: func(=val) {}
     set: func (=val)
-    get: func -> T { val }
-
+    get: func -> T { this val }
     __destroy__: func {
-    	gc_free(this val)
+      gc_free(this val)
     }
 }
 

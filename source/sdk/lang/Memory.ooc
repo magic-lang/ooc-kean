@@ -2,6 +2,7 @@
 // as goofy as it sounds, memory-related routines are actually in string.h
 // yay C. (Also, Google Native Client doesn't have memory.h)
 include string
+include alloca
 
 version(!gc) {
     // GC_MALLOC zeroes the memory, so in the non-gc version, we prefer to use calloc
@@ -18,7 +19,7 @@ version(!gc) {
 }
 
 version(gc) {
-    include gc/gc | (GC_THREADS) 
+    include gc/gc | (GC_THREADS)
     // to get the GC_pthread_* prototypes
     include gc/gc_pthread_redirects | (GC_NO_THREAD_REDIRECTS)
 
@@ -51,6 +52,7 @@ memcmp: extern func (Pointer, Pointer, SizeT) -> Int
 memmove: extern func (Pointer, Pointer, SizeT)
 memcpy: extern func (Pointer, Pointer, SizeT)
 free: extern func (Pointer)
+alloca: extern func (size: SizeT) -> Pointer
 
 // note: sizeof is intentionally not here. sizeof(Int) will be translated
 // to sizeof(Int_class()), and thus will always give the same value for
