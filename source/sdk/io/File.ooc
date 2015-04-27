@@ -167,7 +167,7 @@ File: abstract class {
     	if (!this dir?()) {
 	    	index := this path lastIndexOf('.')
     		if (index > 0)
-   				result = this path substring(index+1)
+   				result = result >> this path substring(index+1)
     	}
     	result
     }
