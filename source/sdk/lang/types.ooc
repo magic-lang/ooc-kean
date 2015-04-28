@@ -121,7 +121,7 @@ Closure: cover {
 
 /** An object storing a value and its class. */
 Cell: class <T> {
-    val: T
+    val: __onheap__ T
 
     init: func(=val)
     init: func ~noval
