@@ -23,9 +23,7 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		super()
 	}
 	init: func ~capacity (capacity: Int) {
-		super()
-		for (i in 0..capacity)
-			this add(FloatComplex new())
+		super(capacity)
 	}
 	init: func ~fromVectorList (other: VectorList<FloatComplex>) {
 		super(other _vector)
@@ -75,8 +73,8 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	operator - (value: FloatComplex) -> This {
 		this + (-value)
 	}
-	operator [] (index: Int) -> FloatComplex {
-		this _vector[index] as FloatComplex
+	operator [] <T> (index: Int) -> T {
+		this as VectorList<FloatComplex> _vector[index]
 	}
 	operator []= (index: Int, item: FloatComplex) {
 		this _vector[index] = item
