@@ -1,4 +1,4 @@
 Name: OOC Math
 Description: Math functionality library.
 SourcePath: source/math
-Imports: FloatSize2D, FloatSize3D, FloatPoint2D, FloatPoint3D, FloatBox2D, FloatShell2D, FloatTransform2D, FloatTransform3D, FloatExtension, IntSize2D, IntSize3D, IntPoint2D, IntPoint3D, IntBox2D, IntShell2D, IntTransform2D, IntExtension, FloatMatrix, FloatEuclidTransform, Quaternion, FloatComplex, FloatRotation3D, FloatVectorList, FloatPoint2DVectorList
+Imports: FloatSize2D, FloatSize3D, FloatPoint2D, FloatPoint3D, FloatBox2D, FloatShell2D, FloatTransform2D, FloatTransform3D, FloatExtension, IntSize2D, IntSize3D, IntPoint2D, IntPoint3D, IntBox2D, IntShell2D, IntTransform2D, IntExtension, FloatMatrix, FloatEuclidTransform, Quaternion, FloatComplex, FloatRotation3D, FloatVectorList, FloatPoint2DVectorList, FloatComplexVectorList
