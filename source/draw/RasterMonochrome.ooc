@@ -203,22 +203,22 @@ RasterMonochrome: class extends RasterPacked {
 		}
 		((this buffer pointer + y * this stride) as ColorMonochrome* + x)@ = value
 	}
-	getLine: func (y: Int) -> FloatVectorList {
+	getRow: func (y: Int) -> FloatVectorList {
 		result := FloatVectorList new()
 		version(safe) {
 			if (y > this size height || y < 0)
-				raise("Accessing RasterMonochrome index out of range in getLine")
+				raise("Accessing RasterMonochrome index out of range in getRow")
 		}
 		for (x in 0..(this size width))
 				result add(this buffer pointer[y * this stride + x] as Float)
 		result
 	}
 
-	getColon: func (x: Int) -> FloatVectorList {
+	getColumn: func (x: Int) -> FloatVectorList {
 		result := FloatVectorList new()
 		version(safe) {
 			if (x > this size width || x < 0)
-				raise("Accessing RasterMonochrome index out of range in getColon")
+				raise("Accessing RasterMonochrome index out of range in getColumn")
 		}
 		for (y in 0..(this size height))
 				result add(this buffer pointer[y * this stride + x] as Float)
