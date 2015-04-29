@@ -139,19 +139,20 @@ FloatVectorList: class extends VectorList<Float> {
 		result
 	}
 	gaussianKernel: static func ~defaultSigma (size: Int) -> This {
-		This gaussianKernel(size, size / 3.0f)
+		This gaussianKernel(size, size as Float / 3.0f)
 	}
 	gaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
 		result := This new(size)
+		factor := 1.0f / (sqrt(2.0f * Float pi) * sigma)
 		for (i in 0..size)
-			result add(1.0f / (sqrt(2.0f * Float pi) * sigma) * pow(Float e, - 0.5f * ((i - (size - 1.0f) / 2.0f) squared()) / (sigma squared())))
+			result add(factor * pow(Float e, -0.5f * ((i - (size - 1.0f) / 2.0f) squared()) / (sigma squared())))
 		sum := result sum
 		for (i in 0..size)
 			result[i] = result[i] / sum
 		result
 	}
 	forwardGaussianKernel: static func ~defaultSigma (size: Int) -> This {
-		This forwardGaussianKernel(size, size / 3.0f)
+		This forwardGaussianKernel(size, size as Float / 3.0f)
 	}
 	forwardGaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
 		result := This gaussianKernel(size, sigma)
@@ -163,7 +164,7 @@ FloatVectorList: class extends VectorList<Float> {
 		result
 	}
 	backwardGaussianKernel: static func ~defaultSigma (size: Int) -> This {
-		This backwardGaussianKernel(size, size / 3.0f)
+		This backwardGaussianKernel(size, size as Float / 3.0f)
 	}
 	backwardGaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
 		result := This new(size)
