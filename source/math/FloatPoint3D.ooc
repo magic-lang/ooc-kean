@@ -73,8 +73,8 @@ FloatPoint3D: cover {
 		array := input split(',')
 		This new(array[0] toFloat(), array[1] toFloat(), array[2] toFloat())
 	}
-	lerp: static func (a, b: FloatPoint3D, ratio: Float) -> FloatPoint3D {
-		FloatPoint3D new(Float lerp(a x, b x, ratio), Float lerp(a y, b y, ratio), Float lerp(a z, b z, ratio))
+	linearInterpolation: static func (a, b: FloatPoint3D, ratio: Float) -> FloatPoint3D {
+		FloatPoint3D new(Float linearInterpolation(a x, b x, ratio), Float linearInterpolation(a y, b y, ratio), Float linearInterpolation(a z, b z, ratio))
 	}
 }
 operator * (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left * right x, left * right y, left * right z) }
