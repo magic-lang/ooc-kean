@@ -25,6 +25,9 @@ getErrorMessage: func (errorCode: Int) -> String {
 		case 36054 => "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT"
 		case 36055 => "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"
 		case 36056 => "GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS"
+		case 1280 => "GL_INVALID_ENUM"
+		case 1281 => "GL_INVALID_VALUE"
+		case 1282 => "GL_INVALID_OPERATION"
 		case => "ERROR CODE: " + errorCode toString()
 	}
 	result
