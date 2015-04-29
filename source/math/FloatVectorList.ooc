@@ -19,6 +19,7 @@ import math
 import IntExtension
 import FloatComplex
 import FloatComplexVectorList
+import FloatExtension
 
 FloatVectorList: class extends VectorList<Float> {
 	init: func ~default {
@@ -122,6 +123,54 @@ FloatVectorList: class extends VectorList<Float> {
 		result := FloatComplexVectorList new()
 		for (i in 0..this _count)
 			result add(FloatComplex new(this[i], 0))
+		result
+	}
+	convolve: func(kernel: This) -> This {
+		result := This new(this count)
+		for (i in 0..this count)
+			result add(convolveAt(i, kernel))
+		result
+	}
+	convolveAt: func(index: Int, kernel: This) -> Float {
+		halfSize := round((kernel count - 1) / 2) as Int
+		result := 0.0f
+		for (kernelIndex in -halfSize..halfSize + 1)
+			result = result + this[(index + kernelIndex) clamp(0, this count - 1)] * kernel[halfSize + kernelIndex]
+		result
+	}
+	gaussianKernel: static func ~defaultSigma (size: Int) -> This {
+		This gaussianKernel(size, size / 3.0f)
+	}
+	gaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
+		result := This new(size)
+		for (i in 0..size)
+			result add(1.0f / (sqrt(2.0f * Float pi) * sigma) * pow(Float e, - 0.5f * ((i - (size - 1.0f) / 2.0f) squared()) / (sigma squared())))
+		sum := result sum
+		for (i in 0..size)
+			result[i] = result[i] / sum
+		result
+	}
+	forwardGaussianKernel: static func ~defaultSigma (size: Int) -> This {
+		This forwardGaussianKernel(size, size / 3.0f)
+	}
+	forwardGaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
+		result := This gaussianKernel(size, sigma)
+		for (i in 0..(size - 1) / 2)
+			result[i] = 0.0f
+		sum := result sum
+		for (i in 0..size)
+			result[i] = result[i] / sum
+		result
+	}
+	backwardGaussianKernel: static func ~defaultSigma (size: Int) -> This {
+		This backwardGaussianKernel(size, size / 3.0f)
+	}
+	backwardGaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
+		result := This new(size)
+		forwardGaussian := This forwardGaussianKernel(size, sigma)
+		for (i in 0..size)
+			result add(forwardGaussian[size - i - 1])
+		forwardGaussian free()
 		result
 	}
 }
