@@ -125,13 +125,13 @@ FloatVectorList: class extends VectorList<Float> {
 			result add(FloatComplex new(this[i], 0))
 		result
 	}
-	convolve: func(kernel: This) -> This {
+	convolve: func (kernel: This) -> This {
 		result := This new(this count)
 		for (i in 0..this count)
 			result add(convolveAt(i, kernel))
 		result
 	}
-	convolveAt: func(index: Int, kernel: This) -> Float {
+	convolveAt: func (index: Int, kernel: This) -> Float {
 		halfSize := round((kernel count - 1) / 2) as Int
 		result := 0.0f
 		for (kernelIndex in -halfSize..halfSize + 1)
