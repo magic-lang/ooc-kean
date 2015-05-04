@@ -16,6 +16,7 @@
 
 use ooc-math
 use ooc-draw
+use ooc-collections
 import GpuMonochrome, GpuCanvas, GpuPlanar, GpuUv, GpuContext
 
 GpuYuv420Semiplanar: abstract class extends GpuPlanar {
@@ -65,5 +66,15 @@ GpuYuv420Semiplanar: abstract class extends GpuPlanar {
 		uv := this _uv toRaster()
 		result := RasterYuv420Semiplanar new(y as RasterMonochrome, uv as RasterUv)
 		result
+	}
+	drawBox: func (box: FloatBox2D, transform: FloatTransform2D) {
+		debugPoints := VectorList<FloatPoint2D> new()
+		debugPoints add(transform * box leftTop)
+		debugPoints add(transform * box rightTop)
+		debugPoints add(transform * box rightBottom)
+		debugPoints add(transform * box leftBottom)
+		debugPoints add(transform * box leftTop)
+		_y canvas drawLines(debugPoints)
+		debugPoints free()
 	}
 }
