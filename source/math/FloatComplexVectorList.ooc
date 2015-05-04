@@ -86,32 +86,34 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		result
 	}
 	discreteFourierTransform: static func (input: This) -> This {
-		result := This new(input count)
+		result := This createDefault(input count)
 		for (i in 0..(input count))
 			for (j in 0..(input count))
 				result[i] = result[i] + input[j] * FloatComplex rootOfUnity(input count, -i * j)
 		result
 	}
 	inverseDiscreteFourierTransform: static func (input: This) -> This {
-		result := This new(input count)
+		conjugates := This new()
 		for (i in 0..(input count))
-			result[i] = input[i] conjugate
-		result = This discreteFourierTransform(result)
+			conjugates add(input[i] conjugate)
+		result := This discreteFourierTransform(conjugates)
+		conjugates free()
 		for (i in 0..(result count))
 			result[i] = (result[i] conjugate) / (input count)
 		result
 	}
 	fastFourierTransform: static func (input: This) -> This {
-		result := This new(input count)
+		result: This
 		if (input count == 1)
 			result = input
 		else {
+			result = createDefault(input count)
 			halfLength: Int = input count / 2
-			evenInput := This new(halfLength)
-			oddInput := This new(halfLength)
+			evenInput := This new()
+			oddInput := This new()
 			for (i in 0..halfLength) {
-				evenInput[i] = input[2 * i]
-				oddInput[i] = input[2 * i + 1]
+				evenInput add(input[2 * i])
+				oddInput add(input[2 * i + 1])
 			}
 			evenOutput := This fastFourierTransform(evenInput)
 			oddOutput := This fastFourierTransform(oddInput)
@@ -120,16 +122,30 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 				result[i] = evenOutput[i] + root * oddOutput[i]
 				result[halfLength + i] = evenOutput[i] - root * oddOutput[i]
 			}
+			evenOutput free()
+			oddOutput free()
 		}
 		result
 	}
 	inverseFastFourierTransform: static func (input: This) -> This {
-		result := This new(input count)
+		conjugates := This new()
 		for (i in 0..(input count))
-			result[i] = input[i] conjugate
-		result = This fastFourierTransform(result)
+			conjugates add(input[i] conjugate)
+		result := This fastFourierTransform(conjugates)
+		conjugates free()
 		for (i in 0..(result count))
 			result[i] = (result[i] conjugate) / (input count)
+		result
+	}
+	createDefault: static func (capacity: Int) -> This {
+		result := This new(capacity)
+		result _count = capacity
+		result
+	}
+	createDefault: static func ~withValue (capacity: Int, value: FloatComplex) -> This {
+		result := This new(capacity)
+		for (i in 0..capacity)
+				result add(value)
 		result
 	}
 }
