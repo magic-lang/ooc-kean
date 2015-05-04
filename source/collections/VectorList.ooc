@@ -37,6 +37,13 @@ VectorList: class <T> {
 		this _vector[this _count] = item
 		this _count += 1
 	}
+	append: func (other: This<T>) {
+		if (this _vector capacity < this _count + other count)
+			this _vector resize(this _vector capacity + other count)
+		for (i in 0..other count)
+			this _vector[this _count + i] = other[i]
+		this _count += other count
+	}
 	insert: func (index: Int, item: T) {
 		if (this _vector capacity <= this _count)
 			this _vector resize(this _vector capacity + 8)

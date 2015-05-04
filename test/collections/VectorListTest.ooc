@@ -76,12 +76,30 @@ VectorTest: class extends Fixture {
 			expect(vectorList[5], is equal to(4))
 
 			vectorList clear()
-			for (i in 0..vectorList count) 
+			for (i in 0..vectorList count)
 				expect(vectorList[i], is equal to(null))
 			for (i in 0..10)
 				vectorList add(i)
 			expect(vectorList count, is equal to(10))
 
+		})
+		this add("VectorList append", func() {
+			firstList := VectorList<Int> new() as VectorList<Int>
+			firstList add(0)
+			firstList add(1)
+			firstList add(2)
+			secondList := VectorList<Int> new() as VectorList<Int>
+			secondList add(3)
+			secondList add(4)
+			secondList add(5)
+			firstList append(secondList)
+			expect(firstList[0], is equal to(0))
+			expect(firstList[1], is equal to(1))
+			expect(firstList[2], is equal to(2))
+			expect(firstList[3], is equal to(3))
+			expect(firstList[4], is equal to(4))
+			expect(firstList[5], is equal to(5))
+			expect(firstList count, is equal to(6))
 		})
 	}
 }
