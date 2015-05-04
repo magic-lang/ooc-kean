@@ -93,19 +93,21 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		result
 	}
 	inverseDiscreteFourierTransform: static func (input: This) -> This {
-		result := This new()
+		conjugates := This new()
 		for (i in 0..(input count))
-			result add(input[i] conjugate)
-		result = This discreteFourierTransform(result)
+			conjugates add(input[i] conjugate)
+		result := This discreteFourierTransform(conjugates)
+		conjugates free()
 		for (i in 0..(result count))
 			result[i] = (result[i] conjugate) / (input count)
 		result
 	}
 	fastFourierTransform: static func (input: This) -> This {
-		result := This createDefault(input count)
+		result: This
 		if (input count == 1)
 			result = input
 		else {
+			result = createDefault(input count)
 			halfLength: Int = input count / 2
 			evenInput := This new()
 			oddInput := This new()
@@ -120,14 +122,17 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 				result[i] = evenOutput[i] + root * oddOutput[i]
 				result[halfLength + i] = evenOutput[i] - root * oddOutput[i]
 			}
+			evenOutput free()
+			oddOutput free()
 		}
 		result
 	}
 	inverseFastFourierTransform: static func (input: This) -> This {
-		result := This new()
+		conjugates := This new()
 		for (i in 0..(input count))
-			result add(input[i] conjugate)
-		result = This fastFourierTransform(result)
+			conjugates add(input[i] conjugate)
+		result := This fastFourierTransform(conjugates)
+		conjugates free()
 		for (i in 0..(result count))
 			result[i] = (result[i] conjugate) / (input count)
 		result
