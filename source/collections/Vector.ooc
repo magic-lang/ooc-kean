@@ -79,10 +79,18 @@ Vector: abstract class <T> {
 			memcpy(destination, source, length)
 	}
 	operator [] (index: Int) -> T {
+		version(safe) {
+			if (index >= this capacity || index < 0)
+				raise("Accessing Vector index out of range in get operator")
+		}
 		this _backend[index]
 	}
 
 	operator []= (index: Int, item: T) {
+		version(safe) {
+			if (index >= this capacity || index < 0)
+				raise("Accessing Vector index out of range in set operator")
+		}
 		this _backend[index] = item
 	}
 }
