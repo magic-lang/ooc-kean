@@ -19,6 +19,7 @@ import lang/Memory
 import structs/FreeArrayList
 import threading/Thread
 import ReferenceCounter
+import Debug
 
 ByteBuffer: class {
 	_pointer: UInt8*
@@ -108,6 +109,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		This _lock lock()
 		bin := This _getBin(this size)
 		while (bin size > 10) {
+			version(debugByteBuffer) { Debug print("ByteBuffer bin full; freeing one ByteBuffer") }
 			b := bin get(0)
 			bin removeAt(0, false)
 			b __destroy__()
@@ -139,6 +141,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 			}
 		}
 		This _lock unlock()
+		version(debugByteBuffer) { if (buffer == null) Debug print("No RecyclableByteBuffer available in the bin; allocating a new one") }
 		buffer == null ? This new(gc_malloc_atomic(size), size) : buffer
 	}
 	_lock := static Mutex new()
