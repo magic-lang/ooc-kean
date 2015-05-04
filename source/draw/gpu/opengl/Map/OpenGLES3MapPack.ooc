@@ -40,7 +40,7 @@ OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
 		in highp vec2 fragmentTextureCoordinate;
 		out vec4 outColor;\n
 		void main() {\n
-			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(1.5f / float(imageWidth), 0);\n
+			vec2 offsetTexCoords = fragmentTextureCoordinate - vec2(0.5f / float(imageWidth), 0);\n
 			vec2 texelOffset = vec2(1.0f / float(imageWidth), 0);\n
 			vec2 rg = texture(texture0, offsetTexCoords).rg;\n
 			vec2 ba = texture(texture0, offsetTexCoords + texelOffset).rg;\n
