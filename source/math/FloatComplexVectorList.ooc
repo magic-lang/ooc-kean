@@ -137,13 +137,15 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 			result[i] = (result[i] conjugate) / (input count)
 		result
 	}
-	createDefault: static func (capacity: Int, value := FloatComplex new()) -> This {
+	createDefault: static func (capacity: Int) -> This {
 		result := This new(capacity)
-		if (value != FloatComplex new())
-			for (i in 0..capacity)
+		result _count = capacity
+		result
+	}
+	createDefault: static func ~withValue (capacity: Int, value: FloatComplex) -> This {
+		result := This new(capacity)
+		for (i in 0..capacity)
 				result add(value)
-		else
-			result _count = capacity
 		result
 	}
 }
