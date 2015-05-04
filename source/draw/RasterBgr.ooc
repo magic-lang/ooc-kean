@@ -123,7 +123,7 @@ RasterBgr: class extends RasterPacked {
 		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this stride)
 	}
 	convertFrom: static func(original: RasterImage) -> This {
-		result := This new(original)
+		result := This new(original size)
 		row := result buffer pointer
 		rowLength := result size width
 		rowEnd := row as ColorBgr* + rowLength
