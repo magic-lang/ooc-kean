@@ -27,7 +27,7 @@ GpuImageBin: class {
 	_uv: FreeArrayList<GpuImage>
 	_yuv422: FreeArrayList<GpuImage>
 	_mutex: Mutex
-	_limit := 5
+	_limit := 15
 
 	init: func {
 		this _mutex = Mutex new()
