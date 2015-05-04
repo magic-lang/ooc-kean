@@ -108,7 +108,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 	free: override func {
 		This _lock lock()
 		bin := This _getBin(this size)
-		while (bin size > 10) {
+		while (bin size > 20) {
 			version(debugByteBuffer) { Debug print("ByteBuffer bin full; freeing one ByteBuffer") }
 			b := bin get(0)
 			bin removeAt(0, false)
