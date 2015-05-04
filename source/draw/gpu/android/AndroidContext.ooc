@@ -23,10 +23,6 @@ import threading/Thread
 import math
 AndroidContext: class extends OpenGLES3Context {
 	_packerBin: GpuPackerBin
-	_packMonochrome1080p: OpenGLES3MapPackMonochrome1080p
-	_packUv1080p: OpenGLES3MapPackUv1080p
-	_unpackMonochrome1080p: OpenGLES3MapUnpackMonochrome1080p
-	_unpackUv1080p: OpenGLES3MapUnpackUv1080p
 	_unpackRgbaToMonochrome: OpenGLES3MapUnpackRgbaToMonochrome
 	_unpackRgbaToUv: OpenGLES3MapUnpackRgbaToUv
 	init: func {
@@ -39,10 +35,6 @@ AndroidContext: class extends OpenGLES3Context {
 	}
 	_initialize: func {
 		this _packerBin = GpuPackerBin new()
-		this _packMonochrome1080p = OpenGLES3MapPackMonochrome1080p new(this)
-		this _packUv1080p = OpenGLES3MapPackUv1080p new(this)
-		this _unpackMonochrome1080p = OpenGLES3MapUnpackMonochrome1080p new(this)
-		this _unpackUv1080p = OpenGLES3MapUnpackUv1080p new(this)
 		this _unpackRgbaToMonochrome = OpenGLES3MapUnpackRgbaToMonochrome new(this)
 		this _unpackRgbaToUv = OpenGLES3MapUnpackRgbaToUv new(this)
 	}
