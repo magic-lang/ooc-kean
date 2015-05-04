@@ -1,3 +1,5 @@
+import math
+
 extend Int {
 	clamp: func(floor: This, ceiling: This) -> This {
 		if (this > ceiling)
@@ -49,11 +51,8 @@ extend Int {
 		)
 		value
 	}
-	modulo: static func(dividend: This, divisor: This) -> This {
-// TODO: handle negative dividends
-//		if (dividend < 0)
-//			dividend += This ceiling(This absolute(dividend) / (Float) divisor) * divisor
-		dividend % divisor
+	modulo: static func ~deprecated (dividend: This, divisor: This) -> This {
+		dividend modulo(divisor)
 	}
 	odd: static func(value: This) -> Bool {
 		This modulo(value, 2) == 1
@@ -68,7 +67,7 @@ extend Int {
 		align > 0 ? (x + align - 1) & ~(align - 1) : x
 	}
 	toPowerOfTwo: static func (x: Int) -> This {
-		result := x == 0 ? 0 : 1 
+		result := x == 0 ? 0 : 1
 		while (result < x)
 			result *= 2
 		result

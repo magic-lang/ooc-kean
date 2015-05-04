@@ -47,7 +47,18 @@ floor: extern(floorl) func ~Long (LDouble) -> LDouble
 
    - Scott
  */
-
+extend Int {
+	modulo: func(divisor: This) -> This {
+		if (divisor < 0) {
+			this *= -1
+			divisor *= -1
+		}
+		result := this % divisor;
+		if (result < 0)
+			result += divisor;
+		result
+	}
+}
 extend Double {
     cos: extern(cos) func -> This
     sin: extern(sin) func -> This
