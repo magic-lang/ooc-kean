@@ -31,10 +31,10 @@ FloatComplexVectorListTest: class extends Fixture {
 	complexNumber3 := FloatComplex new (-2,-1)
 
 	complexNumberArray := FloatComplexVectorList new(4)
-	complexNumberArray[0] = complexNumber0
-	complexNumberArray[1] = complexNumber1
-	complexNumberArray[2] = complexNumber2
-	complexNumberArray[3] = complexNumber3
+	complexNumberArray add(complexNumber0)
+	complexNumberArray add(complexNumber1)
+	complexNumberArray add(complexNumber2)
+	complexNumberArray add(complexNumber3)
 
 	tolerance := 0.00001
 

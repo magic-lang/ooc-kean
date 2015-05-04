@@ -86,32 +86,32 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		result
 	}
 	discreteFourierTransform: static func (input: This) -> This {
-		result := This new(input count)
+		result := This createDefault(input count)
 		for (i in 0..(input count))
 			for (j in 0..(input count))
 				result[i] = result[i] + input[j] * FloatComplex rootOfUnity(input count, -i * j)
 		result
 	}
 	inverseDiscreteFourierTransform: static func (input: This) -> This {
-		result := This new(input count)
+		result := This new()
 		for (i in 0..(input count))
-			result[i] = input[i] conjugate
+			result add(input[i] conjugate)
 		result = This discreteFourierTransform(result)
 		for (i in 0..(result count))
 			result[i] = (result[i] conjugate) / (input count)
 		result
 	}
 	fastFourierTransform: static func (input: This) -> This {
-		result := This new(input count)
+		result := This createDefault(input count)
 		if (input count == 1)
 			result = input
 		else {
 			halfLength: Int = input count / 2
-			evenInput := This new(halfLength)
-			oddInput := This new(halfLength)
+			evenInput := This new()
+			oddInput := This new()
 			for (i in 0..halfLength) {
-				evenInput[i] = input[2 * i]
-				oddInput[i] = input[2 * i + 1]
+				evenInput add(input[2 * i])
+				oddInput add(input[2 * i + 1])
 			}
 			evenOutput := This fastFourierTransform(evenInput)
 			oddOutput := This fastFourierTransform(oddInput)
@@ -124,12 +124,21 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		result
 	}
 	inverseFastFourierTransform: static func (input: This) -> This {
-		result := This new(input count)
+		result := This new()
 		for (i in 0..(input count))
-			result[i] = input[i] conjugate
+			result add(input[i] conjugate)
 		result = This fastFourierTransform(result)
 		for (i in 0..(result count))
 			result[i] = (result[i] conjugate) / (input count)
+		result
+	}
+	createDefault: static func (capacity: Int, value := FloatComplex new()) -> This {
+		result := This new(capacity)
+		if (value != FloatComplex new())
+			for (i in 0..capacity)
+				result add(value)
+		else
+			result _count = capacity
 		result
 	}
 }
