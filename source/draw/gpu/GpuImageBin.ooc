@@ -60,6 +60,7 @@ GpuImageBin: class {
 	}
 	_add: func (image: GpuImage, list: FreeArrayList<GpuImage>) {
 		if (list size >= this _limit) {
+			version(debugGL) Debug print("GpuImageBin full; freeing one GpuImage")
 			// We need to make sure the image will be destroyed instead of recycled
 			temp := list[0]
 			list removeAt(0)
