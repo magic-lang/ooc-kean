@@ -14,8 +14,8 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
-
-clock: extern func () -> LLong
+import os/Time
+clock: extern func -> LLong
 CLOCKS_PER_SEC: extern const LLong
 
 Timer: class {
@@ -31,12 +31,14 @@ Timer: class {
 		this _min = INFINITY
 		this _max = 0.0
 	}
-	start: func {
-		this _startTime = (clock() as Double)
+	start: virtual func { this _startTime = (Time runTime() as Double) }
+	stop: virtual func -> Double {
+		this _endTime = (Time runTime() as Double)
+		this _result = this _endTime - this _startTime
+		this _update()
+		this _result
 	}
-	stop: func -> Double {
-		this _endTime = (clock() as Double)
-		this _result = 1000.0 * (this _endTime - this _startTime) / CLOCKS_PER_SEC
+	_update: virtual func {
 		if (this _result < this _min)
 			this _min = this _result
 		if (this _result > this _max)
@@ -46,7 +48,7 @@ Timer: class {
 		this _average = this _total / this _count
 		this _result
 	}
-	reset: func {
+	reset: virtual func {
 		this _startTime = 0
 		this _endTime = 0
 		this _result = 0
@@ -54,5 +56,16 @@ Timer: class {
 		this _count = 0
 		this _min = 0
 		this _average = 0
+	}
+}
+
+ClockTimer: class extends Timer {
+	init: func { super() }
+	start: override func { this _startTime = (clock() as Double) }
+	stop: override func -> Double {
+		this _endTime = (clock() as Double)
+		this _result = 1000.0 * (this _endTime - this _startTime) / CLOCKS_PER_SEC
+		this _update()
+		this _result
 	}
 }
