@@ -52,3 +52,12 @@ printExtensions: func {
 	for(i in 0..array size)
 		Debug print(array[i])
 }
+printVersionInfo: func {
+	vendor: CString = glGetString(GL_VENDOR) as CString
+	renderer: CString = glGetString(GL_RENDERER) as CString
+	version: CString = glGetString(GL_VERSION) as CString
+
+	Debug print("OpenGL vendor: %s" format(vendor))
+	Debug print("OpenGL renderer: %s" format(renderer))
+	Debug print("OpenGL version: %s" format(version))
+}

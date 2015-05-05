@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 use ooc-base
-import include/egl, NativeWindow
+import include/egl, NativeWindow, DebugGL
 
 Context: class {
 	_eglContext: Pointer
@@ -32,7 +32,14 @@ Context: class {
 		eglTerminate(this _eglDisplay)
 		super()
 	}
-	makeCurrent: func -> Bool { eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0 }
+	makeCurrent: func -> Bool {
+		result := eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0
+		version(debugGL) {
+			if(result)
+				printVersionInfo()
+		}
+		result
+	}
 	swapBuffers: func { eglSwapBuffers(this _eglDisplay, this _eglSurface) }
 	_chooseConfig: func (configAttribs: Int*) -> Pointer {
 		numConfigs: Int
@@ -98,8 +105,7 @@ Context: class {
 		if (sharedContext)
 			shared = sharedContext _eglContext
 		this _generateContext(shared, chosenConfig)
-		result := this makeCurrent()
-		return result
+		this makeCurrent()
 	}
 	_generate: func ~pbuffer (sharedContext: This) -> Bool {
 		this _eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY)
@@ -135,8 +141,7 @@ Context: class {
 		if (sharedContext != null)
 			shared = sharedContext _eglContext
 		this _generateContext(shared, chosenConfig)
-		result := this makeCurrent()
-		return result
+		this makeCurrent()
 	}
 	create: static func ~shared (window: NativeWindow, sharedContext: This = null) -> This {
 		version(debugGL) { Debug print("Creating OpenGL context") }
