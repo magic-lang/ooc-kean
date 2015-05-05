@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-
+use ooc-math
 use ooc-opengl
 import include/x11
 
@@ -46,6 +46,7 @@ X11Window: class extends NativeWindow {
 		XStoreName(this _display, this _backend, title)
 		true
 	}
+	resize: func (size: IntSize2D) { XResizeWindow(this _display, this _backend, size width, size height) }
 	create: static func (width: UInt, height: UInt, title: String) -> This {
 		result := X11Window new(width, height)
 		result _generate(width, height, title) ? result : null
