@@ -1,9 +1,9 @@
 before_script:
   - sudo apt-get update
-  - sudo apt-get -y -qq install libgc-dev 
+  - sudo apt-get -y -qq install libgc-dev
   - sudo apt-get -y -qq install libgles2-mesa-dev
   - sudo apt-get -y -qq install wget
-  - tmp="$(wget -O - https://github.com/cogneco/rock/releases/latest | grep -o '\<download/rock_.*deb\>')" 
+  - tmp="$(wget -O - https://github.com/cogneco/rock/releases/latest | grep -o '\<download/rock_.*deb\>')"
   - wget https://github.com/cogneco/rock/releases/$tmp
   - sudo dpkg --install ${tmp##*/}
   - ls /usr/include
@@ -16,25 +16,4 @@ before_script:
   - (cd tools/sam && rock -v)
 
 script:
-  - # because now we want to use ooc-kean/sdk.use, i.e. PWD/sdk.use.
-  - cd test 
-  - rock -r --gc=off -lpthread -O2 base/ProfilingTest.ooc
-  - cd ..
-  - sam test sdk.use test/sdk --rockargs --gc=off,-lpthread,-O2
-  - sam test ooc-sdk-lite.use test/sdk --rockargs --gc=off,-lpthread,-O2
-  - sam test ooc-base.use test/base/ProfilingTest.ooc --rockargs --gc=off,-lpthread,-O2
-  - sam test ooc-base.use test/base --rockargs --gc=off,-lpthread,-O2
-  - sam test ooc-math.use test/math --rockargs --gc=off,-lpthread,-O2
-  - sam test ooc-unit.use test/unit --rockargs --gc=off,-lpthread,-O2
-  - sam test ooc-collections.use test/collections --rockargs --gc=off,-lpthread,-O2
-  - sam test ooc-draw.use test/draw/ColorConvertTest.ooc --rockargs --gc=off,-lpthread,-O2
-  - sam test ooc-draw.use test/draw/ImageFileTest.ooc --rockargs --gc=off,-lpthread,-O2
-  - sam test sdk.use test/sdk
-  - sam test ooc-sdk-lite.use test/sdk
-  - sam test ooc-base.use test/base
-  - sam test ooc-math.use test/math
-  - sam test ooc-unit.use test/unit
-  - sam test ooc-collections.use test/collections
-  - sam test ooc-draw.use test/draw/ColorConvertTest.ooc
-  - sam test ooc-draw.use test/draw/ImageFileTest.ooc
-
+  - ./test.sh all -Dnogpu
