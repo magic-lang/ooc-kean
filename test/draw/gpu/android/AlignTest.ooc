@@ -1,10 +1,10 @@
-use ooc-math
+/*use ooc-math
 use ooc-unit
 use ooc-draw-gpu-android
 use ooc-draw-gpu
 use ooc-base
 
-/*GraphicBufferAlignTest: class extends Fixture {
+GraphicBufferAlignTest: class extends Fixture {
 	init: func {
 		super("GraphicBufferAlign")
 		this add("Align", func {
