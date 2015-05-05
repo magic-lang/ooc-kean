@@ -1,5 +1,7 @@
 use ooc-base
 import include/[egl, gles]
+import text/StringTokenizer
+import structs/ArrayList
 
 validateStart: func {
 	validate("from unknown location")
@@ -31,4 +33,22 @@ getErrorMessage: func (errorCode: Int) -> String {
 		case => "ERROR CODE: " + errorCode toString()
 	}
 	result
+}
+getExtensions: func -> String {
+	result: CString = glGetString(GL_EXTENSIONS) as CString
+	String new(result, result length())
+}
+getExtensionList: func -> ArrayList<String> {
+	string := getExtensions()
+	string split(' ')
+}
+queryExtension: func (extension: String) -> Bool {
+	string := getExtensions()
+	string contains?(extension)
+}
+printExtensions: func {
+	array := getExtensionList()
+	Debug print("OpenGL extensions:")
+	for(i in 0..array size)
+		Debug print(array[i])
 }
