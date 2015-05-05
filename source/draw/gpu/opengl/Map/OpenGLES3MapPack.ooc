@@ -67,6 +67,7 @@ OpenGLES3MapUnpackRgbaToMonochrome: class extends OpenGLES3MapDefault {
 		out float outColor;\n
 		void main() {\n
 			int pixelIndex = int(float(targetSize.x) * fragmentTextureCoordinate.x) % 4;\n
+			//Can this be moved to vertex shader?
 			vec2 texCoords = vec2(fragmentTextureCoordinate.x, float(targetSize.y) * fragmentTextureCoordinate.y / float(sourceSize.y));
 			if (pixelIndex == 0)\n
 				outColor = texture(texture0, texCoords).r;\n
