@@ -35,6 +35,12 @@ X11Window: class extends NativeWindow {
 		swa: XSetWindowAttributesOoc
 		swa eventMask = ExposureMask | PointerMotionMask | KeyPressMask | ButtonPressMask
 		this _backend = XCreateWindow(this _display, root, 0, 0, width, height, 0u, CopyFromParent as Int, InputOutput as UInt, null, CWEventMask, swa&)
+		//Disable fit to screen
+		sh: XSizeHintsOoc
+		sh width = sh min_width = width
+		sh height = sh min_height = height
+		sh flags = PSize | PMinSize | PPosition
+		XSetWMNormalHints(this _display, this _backend, sh&)
 
 		XMapWindow(this _display, this _backend)
 		XStoreName(this _display, this _backend, title)
