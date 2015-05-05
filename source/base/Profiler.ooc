@@ -26,7 +26,7 @@ Profiler: class {
 	_logList := static VectorList<Profiler> new(100)
 	_message: String
 	_timer: Timer
-	init: func (=_message, =_debugLevel) {
+	init: func (=_message, debugLevel := 0) {
 		this _timer = Timer new()
 		This _logList add(this)
 	}
