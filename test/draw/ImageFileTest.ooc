@@ -19,16 +19,19 @@ ImageFileTest: class extends Fixture {
 			requiredComponents := 4
 			x, y, n: Int
 			data := StbImage load(source, x&, y&, n&, requiredComponents)
-			failureReason := StbImage failureReason()
-			println()
-			failureReason toString() println()
-			x toString() println()
-			y toString() println()
-			n toString() println()
-
+			version(debugTests) {
+				failureReason := StbImage failureReason()
+				println()
+				failureReason toString() println()
+				x toString() println()
+				y toString() println()
+				n toString() println()
+			}
 			StbImage writePng(destination, x, y, 4, data, x * 4)
-			failureReason = StbImage failureReason()
-			failureReason toString() println()
+			version(debugTests) {
+				failureReason = StbImage failureReason()
+				failureReason toString() println()
+			}
 		})
 		this add("open JPEG", func() {
 			source := "../test/draw/input/Flower.jpg"
@@ -36,16 +39,19 @@ ImageFileTest: class extends Fixture {
 			requiredComponents := 4
 			x, y, n: Int
 			data := StbImage load(source, x&, y&, n&, requiredComponents)
-			failureReason := StbImage failureReason()
-			println()
-			failureReason toString() println()
-			x toString() println()
-			y toString() println()
-			n toString() println()
-
+			version(debugTests) {
+				failureReason := StbImage failureReason()
+				println()
+				failureReason toString() println()
+				x toString() println()
+				y toString() println()
+				n toString() println()
+			}
 			StbImage writePng(destination, x, y, 4, data, x * 4)
-			failureReason = StbImage failureReason()
-			failureReason toString() println()
+			version(debugTests) {
+				failureReason = StbImage failureReason()
+				failureReason toString() println()
+			}
 		})
 		this add("open png RasterBgra", func() {
 			source := "../test/draw/input/Space.png"

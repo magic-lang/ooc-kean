@@ -25,8 +25,7 @@ TestCover: cover {
 
 HashDictionaryTest: class extends Fixture {
 	init: func {
-
-		super("Dictionary")
+		super("HashDictionary")
 		this add("Int", func {
 			dictionary := HashDictionary new()
 			dictionary add("IntegerValue", 1)

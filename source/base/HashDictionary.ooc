@@ -37,7 +37,6 @@ HashDictionary: class {
 	}
 	/* WARNING: The Class parameter for Covers must be Cell<Cover> */
 	getAsType: func <T>(key: String, T: Class) -> T {
-		"Are we using this?" println()
 		result := null
 		if (_myHashBag contains?(key)) {
 			storedType := _myHashBag getClass(key)
