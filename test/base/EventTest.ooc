@@ -68,7 +68,8 @@ EventTest: class extends Fixture {
 			e call(-1337)
 			expect(counter0, is equal to(2))
 			expect(counter1, is equal to(1))
-			counter2 toString() println()
+			version(debugTests)
+				counter2 toString() println()
 
 			expect(counter2, is equal to(-1337))
 	}

@@ -18,62 +18,66 @@
 use ooc-base
 import Debug
 
-Debug initialize(func (message: String) {println(message)})
-Debug _level = DebugLevel Everything as Int
+version(debugTests) {
+
+	Debug initialize(func (message: String) {println(message)})
+	Debug _level = DebugLevel Everything as Int
 
 
-testfunction: func {
-	profiling_test := Profiler new("testfunction", 2)
-	profiling_test start()
+	testfunction: func {
+		profiling_test := Profiler new("testfunction", 2)
+		profiling_test start()
+		for (i in 0..10000) {}
+		profiling_test stop()
+	}
+
+	testfunction2: func {
+		profiling_test := Profiler new("testfunction2", 1)
+		profiling_test start()
+		for (i in 0..1000) {}
+		profiling_test stop()
+	}
+
+	Profiler printResults()
+	profiling := Profiler new("main", 1)
+
+	profiling  start()
+	for (i in 0..10) {}
+	profiling stop()
+
+	profiling start()
+	for (i in 0..100_000_000) {}
+	profiling stop()
+
+	profiling start()
 	for (i in 0..10000) {}
-	profiling_test stop()
+	profiling stop()
+
+	testfunction()
+	Profiler resetAll()
+	Profiler printResults()
+
+	/*
+	profiling start()
+	for (i in 0..1_000_000_000) {}
+	profiling stop()
+
+	profiling start()
+	for (i in 0..100) {}
+	profiling stop()
+
+	profiling start()
+	for (i in 0..50) {}
+	profiling stop()
+
+	profiling start()
+	for (i in 0..8) {}
+	profiling stop()
+	testfunction2()
+
+	Debug print("first print",0)
+	Debug print("second print", 1)
+	Debug print("third print", 2)
+	Debug printProfilerData()*/
+
 }
-
-testfunction2: func {
-	profiling_test := Profiler new("testfunction2", 1)
-	profiling_test start()
-	for (i in 0..1000) {}
-	profiling_test stop()
-}
-
-Profiler printResults()
-profiling := Profiler new("main", 1)
-
-profiling  start()
-for (i in 0..10) {}
-profiling stop()
-
-profiling start()
-for (i in 0..100_000_000) {}
-profiling stop()
-
-profiling start()
-for (i in 0..10000) {}
-profiling stop()
-
-testfunction()
-Profiler resetAll()
-Profiler printResults()
-
-/*
-profiling start()
-for (i in 0..1_000_000_000) {}
-profiling stop()
-
-profiling start()
-for (i in 0..100) {}
-profiling stop()
-
-profiling start()
-for (i in 0..50) {}
-profiling stop()
-
-profiling start()
-for (i in 0..8) {}
-profiling stop()
-testfunction2()
-
-Debug print("first print",0)
-Debug print("second print", 1)
-Debug print("third print", 2)
-Debug printProfilerData()*/

@@ -31,7 +31,8 @@ ComparableImplementation: class implements IComparable<ComparableImplementation>
 	value: Int
 	init: func (=value) {	}
 	compare: func (other: ComparableImplementation) -> Order {
-		(this toString() + " == " + other toString()) println()
+		version(debugTests)
+			(this toString() + " == " + other toString()) println()
 		if (this value == other value)
 			Order equal
 		else if (this value > other value)

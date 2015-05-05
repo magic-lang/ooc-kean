@@ -2,13 +2,9 @@ use ooc-unit
 use ooc-base
 use ooc-collections
 
-TestClass: class {
-	init: func
-}
-
 VectorQueueTest: class extends Fixture {
 	init: func() {
-		super("Queue")
+		super("VectorQueue")
 		this add("Queue cover create", func {
 			queue := VectorQueue<Int> new(3)
 
@@ -83,9 +79,11 @@ VectorQueueTest: class extends Fixture {
 			success = queue dequeue(removedInt&)
 			expect(success, is equal to(true))
 			expect(removedInt, is equal to(666))
-			queueString := queue toString()
-			queueString println()
-			queueString free()
+			version(debugTests) {
+				queueString := queue toString()
+				queueString println()
+				queueString free()
+			}
 			queue free()
 		})
 	}

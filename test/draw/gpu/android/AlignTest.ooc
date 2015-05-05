@@ -4,7 +4,7 @@ use ooc-draw-gpu-android
 use ooc-draw-gpu
 use ooc-base
 
-GraphicBufferAlignTest: class extends Fixture {
+/*GraphicBufferAlignTest: class extends Fixture {
 	init: func {
 		super("GraphicBufferAlign")
 		this add("Align", func {
@@ -40,4 +40,4 @@ GraphicBufferAlignTest: class extends Fixture {
 		})
 	}
 }
-GraphicBufferAlignTest new() run()
+GraphicBufferAlignTest new() run()*/
