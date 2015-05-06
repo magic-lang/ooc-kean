@@ -53,7 +53,11 @@ OpenGLES3Context: class extends GpuContext {
 		this _bgrMapDefault free()
 		this _bgraMapDefault free()
 		this _monochromeMapDefault free()
+		this _monochromeMapTransform free()
 		this _uvMapDefault free()
+		this _uvMapTransform free()
+		this _packMonochrome free()
+		this _packUv free()
 		this _backend free()
 		super()
 	}
