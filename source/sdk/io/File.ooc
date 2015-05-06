@@ -28,16 +28,15 @@ File: abstract class {
     nameWithoutExtension: String { get { getNameWithoutExtension() } }
     pathWithoutExtension: String { get { getPathWithoutExtension() } }
     rectifySeparator: func {
-    	old := this path
 		if (this dir?() && !this path endsWith?(File separator)) {
-			this path = old + File separator
-			//TODO: freeing will result in a crash if 'old' is a literal string;
-			// 	not freeing will result in a leak if it isn't. Fix later 
-			//old free()
+			oldPath := this path
+			this path = oldPath + File separator
+			oldPath free()
 		}
 		else if (!this dir?() && this path endsWith?(File separator)) {
-			this path = this path trimRight(File separator)
-			//TODO: This will leak a lot...
+			newPath := this path trimRight(File separator)
+			this path free()
+			this path = newPath
 		}
     }
 
