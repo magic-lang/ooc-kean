@@ -87,7 +87,7 @@ OpenGLES3MapUnpackRgbaToUv: class extends OpenGLES3MapDefault {
 			this program setUniform("texture0", 0)
 			this program setUniform("sourceSize", this sourceSize)
 			this program setUniform("targetWidth", this targetSize width)
-			startY: Float = (sourceSize height - targetSize height) / sourceSize height as Float
+			startY := (sourceSize height - targetSize height) as Float / sourceSize height
 			this program setUniform("startY", startY)
 		})
 	}
