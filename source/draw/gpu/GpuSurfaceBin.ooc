@@ -21,10 +21,8 @@ import structs/FreeArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, G
 GpuSurfaceBin: class {
 	_surfaces: FreeArrayList<GpuSurface>
 	init: func { this _surfaces = FreeArrayList<GpuSurface> new() }
-	free: func {
-		for(i in 0..this _surfaces size)
-			this _surfaces[i] free()
-		this _surfaces clear()
+	free: override func {
+		this _surfaces free()
 		super()
 	}
 	add: func (surface: GpuSurface) { this _surfaces add(surface) }
