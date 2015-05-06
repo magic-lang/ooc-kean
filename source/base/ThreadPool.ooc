@@ -70,6 +70,15 @@ ThreadPool: class {
 			this _threads[i] start()
 		}
 	}
+	free: override func {
+		for (i in 0..this _threadCount)
+			this _threads[i] free()
+		gc_free(this _threads data)
+		this _jobs free()
+		this _allFinishedCondition free()
+		this _mutex destroy()
+		super()
+	}
 	threadLoop: func {
 		while(true) {
 			job := this _jobs wait()
