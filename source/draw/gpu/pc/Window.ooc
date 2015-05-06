@@ -57,6 +57,7 @@ Window: class extends OpenGLES3Context {
 		this _bgraToBgra free()
 		this _yuvPlanarToBgra free()
 		this _yuvSemiplanarToBgra free()
+		this _yuvSemiplanarToBgraTransform free()
 		this _monochromeToBgra free()
 		(this _native as X11Window) free()
 		super()
