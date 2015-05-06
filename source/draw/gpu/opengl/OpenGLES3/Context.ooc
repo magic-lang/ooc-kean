@@ -44,7 +44,7 @@ Context: class {
 	_chooseConfig: func (configAttribs: Int*) -> Pointer {
 		numConfigs: Int
 		eglChooseConfig(this _eglDisplay, configAttribs, null, 10, numConfigs&)
-		matchingConfigs := gc_malloc(numConfigs*Pointer size) as Pointer*
+		matchingConfigs := gc_malloc(numConfigs * Pointer size) as Pointer*
 		eglChooseConfig(this _eglDisplay, configAttribs, matchingConfigs, numConfigs, numConfigs&)
 		chosenConfig: Pointer = null
 
