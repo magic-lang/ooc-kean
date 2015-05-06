@@ -1,4 +1,4 @@
-/*use ooc-math
+use ooc-math
 use ooc-unit
 use ooc-draw-gpu-android
 use ooc-draw-gpu
@@ -8,11 +8,11 @@ GraphicBufferAlignTest: class extends Fixture {
 	init: func {
 		super("GraphicBufferAlign")
 		this add("Align", func {
-			GraphicBuffer _unpaddedWidth = Int[5] new()
+			GraphicBuffer _alignedWidth = Int[5] new()
 
 			for(i in 0..5) {
-				GraphicBuffer _unpaddedWidth[i] = (i+1)*16
-				println("Unpadded width: " + GraphicBuffer _unpaddedWidth[i])
+				GraphicBuffer _alignedWidth[i] = (i+1)*16
+				println("Unpadded width: " + GraphicBuffer _alignedWidth[i])
 			}
 			expect((GraphicBuffer alignWidth(5) == 16), is true)
 			expect((GraphicBuffer alignWidth(16) == 16), is true)
@@ -40,4 +40,4 @@ GraphicBufferAlignTest: class extends Fixture {
 		})
 	}
 }
-GraphicBufferAlignTest new() run()*/
+GraphicBufferAlignTest new() run()
