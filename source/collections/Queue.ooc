@@ -1,3 +1,4 @@
+import math
 
 Queue: abstract class <T> {
 	_count := 0
@@ -89,4 +90,11 @@ VectorQueue: class <T> extends Queue<T> {
 		this _capacity = newCapacity
 	}
 	toString: func -> String { "Queue: count=" << this _count toString() >> " capacity=" & this _capacity toString() }
+	operator [] (index: Int) -> T {
+		version(safe)
+			if (index < -this count || index >= this count)
+				raise("Indexing in get accessor of VectorQueue outside of range.")
+		position := (index >= 0 ? this _head + index : this _tail + index) modulo(this _capacity)
+		this _backend[position]
+	}
 }

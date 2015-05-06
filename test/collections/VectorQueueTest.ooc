@@ -86,6 +86,49 @@ VectorQueueTest: class extends Fixture {
 			}
 			queue free()
 		})
+		this add("Queue positive indexing", func {
+			queue := this _createQueue(10, 5)
+			version(debugTests)
+				for (i in 0..queue count)
+					(i toString() + " -> " + queue[i] toString()) println()
+			for (i in 0..5)
+				expect(queue[i], is equal to(i))
+		})
+		this add("Queue negative indexing", func {
+			queue := this _createQueue(10, 5)
+			version(debugTests)
+				for (i in 1..queue count + 1)
+					((-i) toString() + " -> " + queue[-i] toString()) println()
+			for (i in 1..6)
+				expect(queue[-i], is equal to(5 - i))
+		})
+		this add("Queue wrap positive indexing", func {
+			queue := this _createQueue(10, 10, 5)
+			version(debugTests)
+				for (i in 0..queue count)
+					(i toString() + " -> " + queue[i] toString()) println()
+			for (i in 0..10)
+				expect(queue[i], is equal to(5 + i))
+		})
+		this add("Queue wrap negative indexing", func {
+			queue := this _createQueue(10, 10, 5)
+			version(debugTests)
+				for (i in 1..queue count + 1)
+					((-i) toString() + " -> " + queue[-i] toString()) println()
+			for (i in 1..11)
+				expect(queue[-i], is equal to(15 - i))
+		})
+	}
+	_createQueue: func (capacity, fill: Int, replace := 0) -> VectorQueue<Int> {
+		result := VectorQueue<Int> new(capacity)
+		for (i in 0..fill)
+			result enqueue(i)
+		dummy: Int
+		for (i in 0..replace)
+			result dequeue(dummy&)
+		for (i in 0..replace)
+			result enqueue(fill + i)
+		result
 	}
 }
 VectorQueueTest new() run()
