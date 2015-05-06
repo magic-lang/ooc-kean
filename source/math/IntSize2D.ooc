@@ -60,8 +60,13 @@ IntSize2D: cover {
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this width toString()}, #{this height toString()}" }
 	parse: static func(input: String) -> This {
+		//TODO: split should return something that is easier to clean up than an ArrayList is.
 		array := input split(',')
-		This new (array[0] toInt(), array[1] toInt())
+		result := This new (array[0] toInt(), array[1] toInt())
+		array[0] free()
+		array[1] free()
+		array free()
+		result
 	}
 }
 operator * (left: Int, right: IntSize2D) -> IntSize2D { IntSize2D new(left * right width, left * right height) }
