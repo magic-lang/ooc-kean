@@ -58,6 +58,7 @@ Window: class extends OpenGLES3Context {
 		this _yuvPlanarToBgra free()
 		this _yuvSemiplanarToBgra free()
 		this _monochromeToBgra free()
+		(this _native as X11Window) free()
 		super()
 	}
 	getTransformMap: func (gpuImage: GpuImage) -> OpenGLES3MapDefault {

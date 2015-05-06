@@ -65,9 +65,10 @@ Buffer: class extends Iterable<Char> {
         }
     }
     
-    __destroy__: func {
+    free: override func {
     	if (this data != null && this capacity > 0)
-	    	gc_free(this data)
+	    	gc_free(this mallocAddr)
+		super()
     }
 
     /**
