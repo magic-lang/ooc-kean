@@ -29,8 +29,9 @@ String: class extends Iterable<Char> {
     init: func ~withCStrAndLength(s: CString, length: Int) {
         _buffer = Buffer new(s, length)
     }
-    __destroy__: func {
+    free: override func {
       this _buffer free()
+	  super()
     }
     length: func -> Int {
         _buffer size
