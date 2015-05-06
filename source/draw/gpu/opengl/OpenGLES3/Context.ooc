@@ -41,8 +41,8 @@ Context: class {
 	_chooseConfig: func (configAttribs: Int*) -> Pointer {
 		numConfigs: Int
 		eglChooseConfig(this _eglDisplay, configAttribs, null, 10, numConfigs&)
-		matchingConfigs := gc_malloc(numConfigs * Pointer size) as Pointer*
-		eglChooseConfig(this _eglDisplay, configAttribs, matchingConfigs, numConfigs, numConfigs&)
+		matchingConfigs: Pointer[numConfigs]
+		eglChooseConfig(this _eglDisplay, configAttribs, matchingConfigs[0]&, numConfigs, numConfigs&)
 		chosenConfig: Pointer = null
 
 		for (i in 0..numConfigs) {
@@ -58,7 +58,6 @@ Context: class {
 				break
 			}
 		}
-		gc_free(matchingConfigs)
 		chosenConfig
 	}
 	_generateContext: func (shared: Pointer, config: Pointer) {
