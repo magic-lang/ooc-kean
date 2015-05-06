@@ -27,6 +27,13 @@ Argument: class {
 	_action1: Event1<String>
 	init: func (=_longIdentifier, =_shortIdentifier, =_parameters, =_help, =_action)
 	init: func ~parameter(=_longIdentifier, =_shortIdentifier, =_parameters, =_help, =_action1)
+	free: override func {
+		if (this _action != null)
+			this _action free()
+		if (this _action1 != null)
+			this _action1 free()
+		super()
+	}
 }
 
 TokenType: enum {
@@ -41,6 +48,10 @@ Token: class {
 	init: func (type: TokenType, value: String) {
 		this _type = type
 		this _value = value
+	}
+	free: override func {
+		this _value free()
+		super()
 	}
 }
 
@@ -69,8 +80,9 @@ CLIParser: class {
 				for (i in 0..tmpLength-1) {
 					tokens add(Token new(TokenType Short, newStr[i]toString()))
 				}
+				newStr free()
 			} else {
-				tokens add(Token new(TokenType Parameter, tmpStr))
+				tokens add(Token new(TokenType Parameter, tmpStr clone()))
 			}
 		}
 		argument: Argument
@@ -95,8 +107,9 @@ CLIParser: class {
 				parameters := VectorList<String> new()
 				for ( k in 0..argument _parameters) {
 					if (tokens[i+1] _type == TokenType Parameter) {
-						parameters add(tokens[i+1] _value)
-						tokens remove(i+1)
+						parameters add(tokens[i+1] _value clone())
+						token := tokens remove(i+1)
+						token free()
 					}
 				}
 				if (parameters count == 0) {
@@ -104,6 +117,7 @@ CLIParser: class {
 				} else if (parameters count == 1) {
 					argument _action1 call(parameters[0])
 				}
+				parameters free()
 			}
 		}
 		tokens free()
