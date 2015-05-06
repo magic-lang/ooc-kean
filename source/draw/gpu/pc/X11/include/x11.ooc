@@ -26,6 +26,26 @@ PointerMotionMask: extern const Long
 CopyFromParent: extern const Long
 InputOutput: extern const UInt
 CWEventMask: extern const ULong
+PSize: extern const Long
+PMinSize: extern const Long
+PPosition: extern const Long
+
+Aspect: cover {
+	x: Int
+	y: Int
+}
+
+XSizeHintsOoc: cover from XSizeHints {
+	flags: extern Long
+	x, y: extern Int
+	width, height: extern Int
+	min_width, min_height: extern Int
+ 	max_width, max_height: extern Int
+	width_inc, height_inc: extern Int
+	min_aspect, max_aspect: extern Aspect
+	base_width, base_height: extern Int
+ 	win_gravity: extern Int
+}
 
 XSetWindowAttributesOoc: cover from XSetWindowAttributes {
 	backgroundPixmap: extern(background_pixmap) Long
@@ -45,14 +65,26 @@ XSetWindowAttributesOoc: cover from XSetWindowAttributes {
 	cursor: extern Long
 }
 
+
+XEventOoc: cover from XEvent {
+	type: extern Int
+	xkey: extern XKeyEventOoc
+}
+
 XOpenDisplay: extern func(displayName: Char*) -> Pointer
 XCreateWindow: extern func(display: Pointer, window: Long, x: Int, y: Int,
 	width: UInt, height: UInt, borderWidth: UInt, depth: Int, class: UInt, visual: Pointer, valueMask: ULong, attributes: Pointer) -> Long
 XMapWindow: extern func(display: Pointer, window: Long) -> Int
 XStoreName: extern func(display: Pointer, window: Long, windowName: Char*) -> Int
 DefaultRootWindow: extern func(display: Pointer) -> UInt
+XSetWMNormalHints: extern func(display: Pointer, window: Long, hints: XSizeHintsOoc*)
+XResizeWindow: extern func(display: Pointer, window: Long, width: UInt, height: UInt)
+XSync: extern func(display: Pointer, discard: Bool)
+XFlush: extern func(display: Pointer)
+XSendEvent: extern func(display: Pointer, window: Long, propagate: Bool, event_mask: Long, event_send: XEventOoc*)
+XClearWindow: extern func(display: Pointer, window: Long)
+XMoveWindow: extern func(display: Pointer, window: Long, x: Int, y: Int)
 
-//XNextEvent: extern func(Pointer, XEvent) -> Int
 
 XKeyEventOoc: cover from XKeyEvent {
 	type: extern Int
@@ -72,10 +104,7 @@ XKeyEventOoc: cover from XKeyEvent {
 	sameScreen: extern(same_screen) Bool
 }
 
-XEventOoc: cover from XEvent {
-	type: extern Int
-	xkey: extern XKeyEventOoc
-}
+//XNextEvent: extern func(Pointer, XEvent) -> Int
 
 XKeyPressedEventOoc: extern XKeyEventOoc
 XKeyReleasedEventOoc: extern XKeyEventOoc

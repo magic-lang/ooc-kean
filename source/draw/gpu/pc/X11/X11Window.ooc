@@ -14,13 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-
+use ooc-math
 use ooc-opengl
 import include/x11
 
 X11Window: class extends NativeWindow {
-	init: func (=_width, =_height) {}
-	_generate: func (width: UInt, height: UInt, title: String) -> Bool {
+	init: func (=_width, =_height, title: String) {
 		/* Note: ":0" is the usual identifier for the default display but this should be read from the DISPLAY variable in the system by passing null as parameter,
 		i.e. this _display = XOpenDisplay(null) */
 		this _display = XOpenDisplay(null)
@@ -34,14 +33,16 @@ X11Window: class extends NativeWindow {
 
 		swa: XSetWindowAttributesOoc
 		swa eventMask = ExposureMask | PointerMotionMask | KeyPressMask | ButtonPressMask
-		this _backend = XCreateWindow(this _display, root, 0, 0, width, height, 0u, CopyFromParent as Int, InputOutput as UInt, null, CWEventMask, swa&)
+		this _backend = XCreateWindow(this _display, root, 0, 0, this _width, this _height, 0u, CopyFromParent as Int, InputOutput as UInt, null, CWEventMask, swa&)
+		//Disable fit to screen
+		sh: XSizeHintsOoc
+		sh width = sh min_width = this _width
+		sh height = sh min_height = this _height
+		sh flags = PSize | PMinSize | PPosition
+		XSetWMNormalHints(this _display, this _backend, sh&)
 
 		XMapWindow(this _display, this _backend)
 		XStoreName(this _display, this _backend, title)
-		true
 	}
-	create: static func (width: UInt, height: UInt, title: String) -> This {
-		result := X11Window new(width, height)
-		result _generate(width, height, title) ? result : null
-	}
+	resize: func (size: IntSize2D) { XResizeWindow(this _display, this _backend, size width, size height) }
 }

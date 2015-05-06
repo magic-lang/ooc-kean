@@ -34,8 +34,14 @@ Window: class extends OpenGLES3Context {
 	size: IntSize2D { get set }
 
 	init: /* internal */ func (=size, title: String) {
-		this _native = X11Window create(size width, size height, title)
+		this _native = X11Window new(size width, size height, title)
 		super(this _native)
+
+		/* BEGIN Ugly hack to force the window to resize outside screen */
+		this refresh()
+		(this _native as X11Window) resize(size)
+		/* END */
+
 		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new(this)
 		this _bgrToBgra = OpenGLES3MapBgrToBgra new(this)
 		this _bgraToBgra = OpenGLES3MapBgra new(this)

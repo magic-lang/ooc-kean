@@ -59,6 +59,7 @@ OpenGLES3MapUnpackRgbaToMonochrome: class extends OpenGLES3MapDefault {
 	}
 	fragmentSource: static String ="
 		#version 300 es\n
+		precision highp float;\n
 		uniform sampler2D texture0;\n
 		uniform ivec2 sourceSize;
 		uniform ivec2 targetSize;
@@ -66,6 +67,7 @@ OpenGLES3MapUnpackRgbaToMonochrome: class extends OpenGLES3MapDefault {
 		out float outColor;\n
 		void main() {\n
 			int pixelIndex = int(float(targetSize.x) * fragmentTextureCoordinate.x) % 4;\n
+			//Can this be moved to vertex shader?
 			vec2 texCoords = vec2(fragmentTextureCoordinate.x, float(targetSize.y) * fragmentTextureCoordinate.y / float(sourceSize.y));
 			if (pixelIndex == 0)\n
 				outColor = texture(texture0, texCoords).r;\n
@@ -84,19 +86,22 @@ OpenGLES3MapUnpackRgbaToUv: class extends OpenGLES3MapDefault {
 		super(This fragmentSource, context, false, func {
 			this program setUniform("texture0", 0)
 			this program setUniform("sourceSize", this sourceSize)
-			this program setUniform("targetSize", this targetSize)
+			this program setUniform("targetWidth", this targetSize width)
+			startY := (sourceSize height - targetSize height) as Float / sourceSize height
+			this program setUniform("startY", startY)
 		})
 	}
 	fragmentSource: static String ="
 		#version 300 es\n
+		precision highp float;\n
 		uniform sampler2D texture0;\n
-		uniform ivec2 sourceSize;
-		uniform ivec2 targetSize;
+		uniform int targetWidth;
+		uniform highp float startY;
 		in highp vec2 fragmentTextureCoordinate;
 		out vec2 outColor;\n
 		void main() {\n
-			int pixelIndex = int(float(targetSize.x) * fragmentTextureCoordinate.x) % 2;\n
-			float startY = (float(sourceSize.y) - float(targetSize.y)) / float(sourceSize.y);
+			int pixelIndex = int(float(targetWidth) * fragmentTextureCoordinate.x) % 2;\n
+			//Can this be moved to vertex shader?
 			float yCoord = startY + (1.0f - startY) * fragmentTextureCoordinate.y;
 			vec2 texCoords = vec2(fragmentTextureCoordinate.x, yCoord);
 			if (pixelIndex == 0)\n
