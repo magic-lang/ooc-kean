@@ -25,7 +25,7 @@ Context: class {
 	version: static Int { get }
 
 	init: func
-	free: func {
+	free: override func {
 		eglMakeCurrent(this _eglDisplay, null, null, null)
 		eglDestroyContext(this _eglDisplay, this _eglContext)
 		eglDestroySurface(this _eglDisplay, this _eglSurface)
