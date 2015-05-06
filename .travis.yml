@@ -16,4 +16,4 @@ before_script:
   - (cd tools/sam && rock -v)
 
 script:
-  - ./test.sh all -Dnogpu
+  - ./test.sh nogpu -Dnogpu
