@@ -101,4 +101,8 @@ VectorList: class <T> {
 		result _count = this _count
 		result
 	}
+	apply: func (function: Func(T)) {
+		for(i in 0..this count)
+			function(this[i])
+	}
 }

@@ -23,55 +23,40 @@ import Timer
 
 Profiler: class {
 	_debugLevel: Int
-	_logList := static VectorList<Profiler> new(100)
-	_message: String
-	_timer: Timer
-	init: func (=_message, =_debugLevel) {
-		this _timer = Timer new()
-		This _logList add(this)
-	}
+	_profilers := static VectorList<Profiler> new(100)
+	_name: String
+	_timer := Timer new()
+	_clockTimer := ClockTimer new()
+	init: func (=_name, debugLevel := 0) { This _profilers add(this) }
 	start: func {
 		this _timer start()
+		this _clockTimer start()
 	}
-	stop: func -> Double {
-		result := 0.0f
-		result = this _timer stop()
-		result
+	stop: func {
+		this _timer stop()
+		this _clockTimer stop()
 	}
-
 	printResults: static func {
-		for (i in 0..This _logList count) {
-			log := This _logList[i]
-			resultString := log _message + " Time: " & log _timer _result toString() >> " Average: " & log _timer _average toString()
-			Debug print(resultString)
-			resultString free()
-		}
+		This _profilers apply(func(profiler: Profiler) {
+			outputString := profiler _name + " Time: " & profiler _timer _result toString() >> " Average: " & profiler _timer _average toString()
+			Debug print(outputString)
+			outputString free()
+		})
 	}
 
 	logResults: static func (fileName := "profiling.txt") {
-		str := This createOutputString(0)
 		fw := FileWriter new(fileName)
-		fw write(str)
+		This _profilers apply(func(profiler: Profiler) {
+			outputString := profiler _name + " Time: " & profiler _timer _result toString() >> " Average: " & profiler _timer _average toString()
+			fw write(outputString)
+			outputString free()
+		})
 		fw close()
 	}
-
-	createOutputString: static func (debugLevel: Int) -> String {
-		result := ""
-
-		for (i in 0..This _logList count) {
-			if ((This _logList[i] _debugLevel == debugLevel) || (debugLevel == 1) ) {
-				log := This _logList[i]
-				result = result >> log _message >> " Time: " & log _timer _result toString() >> " Average: " & log _timer _average toString()
-				result = result >> " Min: " & log _timer _min toString() >> " Max: " & log _timer _max toString() >> "\n"
-			}
-		}
-		result
+	reset: func {
+		this _timer reset()
+		this _clockTimer reset()
 	}
-	reset: func { this _timer reset() }
-	resetAll: static func {
-		for (i in 0..This _logList count) {
-			This _logList[i] reset()
-		}
-	}
-	dispose: static func { This _logList free() }
+	resetAll: static func { This _profilers apply(func(profiler: Profiler) { profiler reset() }) }
+	dispose: static func { This _profilers free() }
 }
