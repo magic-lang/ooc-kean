@@ -46,6 +46,15 @@ FloatVectorList: class extends VectorList<Float> {
 			result
 		}
 	}
+	maxValue: Float {
+		get {
+			result := Float negativeInfinity
+			for (i in 0..this count)
+				if (result < this[i])
+					result = this[i]
+			result
+		}
+	}
 	mean ::= this sum / this count
 	variance: Float {
 		get {
@@ -69,6 +78,12 @@ FloatVectorList: class extends VectorList<Float> {
 				}
 			}
 		}
+	}
+	copy: func -> This {
+		result := This new(this _count)
+		for (i in 0..this _count)
+			result add(this[i])
+		result
 	}
 	operator + (other: This) -> This {
 		result := This new()
