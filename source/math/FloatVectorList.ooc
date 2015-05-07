@@ -46,6 +46,14 @@ FloatVectorList: class extends VectorList<Float> {
 			result
 		}
 	}
+	maxValue: Float {
+		get {
+			result: Float
+			for (i in 0..this count)
+				result = Float maximum(result, this[i])
+			result
+		}
+	}
 	mean ::= this sum / this count
 	variance: Float {
 		get {

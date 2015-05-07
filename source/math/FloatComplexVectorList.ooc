@@ -44,6 +44,12 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	mean: func -> FloatComplex {
 		sum() / this _count
 	}
+	copy: func -> This {
+		result := This new(this _count)
+		for (i in 0..this _count)
+			result add(this[i])
+		result
+	}
 	real: FloatVectorList {
 		get {
 			result := FloatVectorList new()
