@@ -1,7 +1,7 @@
 before_script:
-  - sudo apt-get update
+  - # sudo apt-get update
   - sudo apt-get -y -qq install libgc-dev
-  - sudo apt-get -y -qq install libgles2-mesa-dev
+  - # sudo apt-get -y -qq install libgles2-mesa-dev
   - sudo apt-get -y -qq install wget
   - tmp="$(wget -O - https://github.com/cogneco/rock/releases/latest | grep -o '\<download/rock_.*deb\>')"
   - wget https://github.com/cogneco/rock/releases/$tmp
