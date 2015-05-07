@@ -21,11 +21,8 @@ Context: class {
 	_eglContext: Pointer
 	_eglDisplay: Pointer
 	_eglSurface: Pointer
-	_version: static Int
-	version: static Int { get }
-
 	init: func
-	free: func {
+	free: override func {
 		eglMakeCurrent(this _eglDisplay, null, null, null)
 		eglDestroyContext(this _eglDisplay, this _eglContext)
 		eglDestroySurface(this _eglDisplay, this _eglSurface)
@@ -44,8 +41,8 @@ Context: class {
 	_chooseConfig: func (configAttribs: Int*) -> Pointer {
 		numConfigs: Int
 		eglChooseConfig(this _eglDisplay, configAttribs, null, 10, numConfigs&)
-		matchingConfigs := gc_malloc(numConfigs*Pointer size) as Pointer*
-		eglChooseConfig(this _eglDisplay, configAttribs, matchingConfigs, numConfigs, numConfigs&)
+		matchingConfigs: Pointer[numConfigs]
+		eglChooseConfig(this _eglDisplay, configAttribs, matchingConfigs[0]&, numConfigs, numConfigs&)
 		chosenConfig: Pointer = null
 
 		for (i in 0..numConfigs) {
@@ -61,7 +58,6 @@ Context: class {
 				break
 			}
 		}
-		gc_free(matchingConfigs)
 		chosenConfig
 	}
 	_generateContext: func (shared: Pointer, config: Pointer) {
@@ -69,14 +65,12 @@ Context: class {
 			EGL_CONTEXT_CLIENT_VERSION, 3,
 			EGL_NONE] as Int*
 		this _eglContext = eglCreateContext(this _eglDisplay, config, shared, contextAttribs)
-		This _version = 3
 		if (this _eglContext == null) {
 			"Failed to create OpenGL ES 3 context, trying with OpenGL ES 2 instead" println()
 			contextAttribsGLES2 := [
 				EGL_CONTEXT_CLIENT_VERSION, 2,
 				EGL_NONE] as Int*
 			this _eglContext = eglCreateContext(this _eglDisplay, config, shared, contextAttribsGLES2)
-			This _version = 2
 			if (this _eglContext == null)
 				raise("Failed to create OpenGL ES 3 or OpenGL ES 2 context")
 			else
