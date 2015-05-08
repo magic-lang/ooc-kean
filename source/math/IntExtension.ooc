@@ -73,6 +73,7 @@ extend Int {
 		}
 		result
 	}
+	alignPowerOfTwo: static func (x: Int, align: Int) -> This { align > 0 ? (x + align - 1) & ~(align - 1) : x }
 	toPowerOfTwo: static func (x: Int) -> This {
 		result := x == 0 ? 0 : 1
 		while (result < x)
