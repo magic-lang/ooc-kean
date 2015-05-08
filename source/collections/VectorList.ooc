@@ -96,7 +96,7 @@ VectorList: class <T> {
 		}
 	}
 	copy: func -> This<T> {
-		result := This new()
+		result := This new(this _count)
 		memcpy(result pointer, this pointer, this _count * T size)
 		result _count = this _count
 		result
