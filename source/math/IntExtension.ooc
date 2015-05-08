@@ -64,7 +64,14 @@ extend Int {
 		this * this
 	}
 	align: static func (x: Int, align: Int) -> This {
-		align > 0 ? (x + align - 1) & ~(align - 1) : x
+		result := x
+		if (align > 0) {
+			remainder := x % align
+			if (remainder > 0) {
+				result = x + align - remainder
+			}
+		}
+		result
 	}
 	toPowerOfTwo: static func (x: Int) -> This {
 		result := x == 0 ? 0 : 1
