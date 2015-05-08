@@ -22,5 +22,5 @@ GpuMapType: enum {
 }
 
 GpuMap: abstract class {
-	use: abstract func
+	use: virtual func
 }

@@ -3,12 +3,11 @@ use ooc-draw-gpu
 import OpenGLES3Map
 OpenGLES3MapPack: abstract class extends OpenGLES3MapDefault {
 	imageWidth: Int { get set }
-	init: func (fragmentSource: String, context: GpuContext) {
-		super(fragmentSource, context, false,
-			func {
-				this program setUniform("texture0", 0)
-				this program setUniform("imageWidth", this imageWidth)
-			})
+	init: func (fragmentSource: String, context: GpuContext) { super(fragmentSource, context, false) }
+	use: override func {
+		super()
+		this program setUniform("texture0", 0)
+		this program setUniform("imageWidth", this imageWidth)
 	}
 }
 OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
@@ -50,12 +49,12 @@ OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
 OpenGLES3MapUnpackRgbaToMonochrome: class extends OpenGLES3MapDefault {
 	sourceSize: IntSize2D { get set }
 	targetSize: IntSize2D { get set }
-	init: func (context: GpuContext) {
-		super(This fragmentSource, context, false, func {
-			this program setUniform("texture0", 0)
-			this program setUniform("sourceSize", this sourceSize)
-			this program setUniform("targetSize", this targetSize)
-		})
+	init: func (context: GpuContext) { super(This fragmentSource, context, false) }
+	use: override func {
+		super()
+		this program setUniform("texture0", 0)
+		this program setUniform("sourceSize", this sourceSize)
+		this program setUniform("targetSize", this targetSize)
 	}
 	fragmentSource: static String ="
 		#version 300 es\n
@@ -82,14 +81,14 @@ OpenGLES3MapUnpackRgbaToMonochrome: class extends OpenGLES3MapDefault {
 OpenGLES3MapUnpackRgbaToUv: class extends OpenGLES3MapDefault {
 	sourceSize: IntSize2D { get set }
 	targetSize: IntSize2D { get set }
-	init: func (context: GpuContext) {
-		super(This fragmentSource, context, false, func {
-			this program setUniform("texture0", 0)
-			this program setUniform("sourceSize", this sourceSize)
-			this program setUniform("targetWidth", this targetSize width)
-			startY := (sourceSize height - targetSize height) as Float / sourceSize height
-			this program setUniform("startY", startY)
-		})
+	init: func (context: GpuContext) { super(This fragmentSource, context, false) }
+	use: override func {
+		super()
+		this program setUniform("texture0", 0)
+		this program setUniform("sourceSize", this sourceSize)
+		this program setUniform("targetWidth", this targetSize width)
+		startY := (sourceSize height - targetSize height) as Float / sourceSize height
+		this program setUniform("startY", startY)
 	}
 	fragmentSource: static String ="
 		#version 300 es\n

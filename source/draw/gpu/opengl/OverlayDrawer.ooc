@@ -22,7 +22,11 @@ import structs/LinkedList
 import OpenGLES3/Lines
 OpenGLES3MapLines: class extends OpenGLES3MapDefault {
 	color: FloatPoint3D { get set }
-	init: func (context: GpuContext) { super(This fragmentSource, context, true, func { this program setUniform("color", this color) }) }
+	init: func (context: GpuContext) { super(This fragmentSource, context, true) }
+	use: override func {
+		super()
+		this program setUniform("color", this color)
+	}
 	fragmentSource: static String ="
 		#version 300 es\n
 		precision highp float;\n
@@ -36,15 +40,14 @@ OpenGLES3MapPoints: class extends OpenGLES3Map {
 	color: FloatPoint3D { get set }
 	pointSize: Float { get set }
 	transform: FloatTransform2D { get set }
-	init: func (context: GpuContext) {
-		super(This vertexSource, This fragmentSource, context,
-			func {
-				this program setUniform("color", this color)
-				this program setUniform("pointSize", this pointSize)
-				reference: Float[16]
-				this transform to3DTransformArray(reference[0]&)
-				this program setUniform("transform", reference[0]&)
-			})
+	init: func (context: GpuContext) { super(This vertexSource, This fragmentSource, context) }
+	use: override func {
+		super()
+		this program setUniform("color", this color)
+		this program setUniform("pointSize", this pointSize)
+		reference: Float[16]
+		this transform to3DTransformArray(reference[0]&)
+		this program setUniform("transform", reference[0]&)
 	}
 	vertexSource: static String ="
 		#version 300 es\n
