@@ -67,9 +67,8 @@ extend Int {
 		result := x
 		if (align > 0) {
 			remainder := x % align
-			if (remainder > 0) {
+			if (remainder > 0)
 				result = x + align - remainder
-			}
 		}
 		result
 	}
