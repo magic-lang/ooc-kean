@@ -101,6 +101,17 @@ VectorTest: class extends Fixture {
 			expect(firstList[5], is equal to(5))
 			expect(firstList count, is equal to(6))
 		})
+		this add("VectorList getFirstElements", func() {
+			list := VectorList<Int> new() as VectorList<Int>
+			list add(0)
+			list add(1)
+			list add(2)
+			firstResult := list getFirstElements(2)
+			secondResult := firstResult getFirstElements(5)
+			expect(secondResult count, is equal to(2))
+			expect(secondResult[0], is equal to(0))
+			expect(secondResult[1], is equal to(1))
+		})
 	}
 }
 VectorTest new() run()
