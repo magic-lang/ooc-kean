@@ -105,4 +105,11 @@ VectorList: class <T> {
 		for(i in 0..this count)
 			function(this[i])
 	}
+	getFirstElements: func (number: Int) -> This<T> {
+		result := This<T> new()
+		number = number < count ? number : count
+		for (i in 0..number)
+			result add(this _vector[i])
+		result
+	}
 }
