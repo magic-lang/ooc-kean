@@ -112,6 +112,11 @@ FloatBox2D: cover {
 	operator != (other: This) -> Bool { !(this == other) }
 	toIntBox2D: func -> IntBox2D { IntBox2D new(this left, this top, this width, this height) }
 	operator as -> String { this toString() }
+	adaptTo: func (other: This, weight: Float) -> This {
+		newCenter := FloatPoint2D new(Float linearInterpolation(this center x, other center x, weight), Float linearInterpolation(this center y, other center y, weight))
+		newSize := FloatSize2D new(Float linearInterpolation(this width, other width, weight), Float linearInterpolation(this height, other height, weight))
+		this createAround(newCenter, newSize)
+	}
 	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
 	parse: static func (input: String) -> This {
 		array := input split(',')
