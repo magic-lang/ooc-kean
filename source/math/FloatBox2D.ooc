@@ -113,10 +113,8 @@ FloatBox2D: cover {
 	toIntBox2D: func -> IntBox2D { IntBox2D new(this left, this top, this width, this height) }
 	operator as -> String { this toString() }
 	adaptTo: func (other: This, weight: Float) -> This {
-		weightedAverage := func (first, second: Float) -> Float { (1 - weight) * first + weight * second }
-		newCenter := FloatPoint2D new(weightedAverage(this center x, other center x), weightedAverage(this center y, other center y))
-		newSize := FloatSize2D new(weightedAverage(this width, other width), weightedAverage(this height, other height))
-
+		newCenter := FloatPoint2D new(Float linearInterpolation(this center x, other center x, weight), Float linearInterpolation(this center y, other center y, weight))
+		newSize := FloatSize2D new(Float linearInterpolation(this width, other width, weight), Float linearInterpolation(this height, other height, weight))
 		this createAround(newCenter, newSize)
 	}
 	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
