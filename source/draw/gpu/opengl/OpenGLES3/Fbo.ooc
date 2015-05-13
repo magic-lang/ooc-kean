@@ -85,7 +85,7 @@ Fbo: class {
 	invalidate: func {
 		version(debugGL) { validateStart() }
 		this bind()
-		att: Int = GL_COLOR_ATTACHMENT0
+		att: UInt = GL_COLOR_ATTACHMENT0
 		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, att&)
 		this unbind()
 		version(debugGL) { validateEnd("fbo invalidate") }
