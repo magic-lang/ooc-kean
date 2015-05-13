@@ -84,11 +84,11 @@ VectorTest: class extends Fixture {
 
 		})
 		this add("VectorList append", func() {
-			firstList := VectorList<Int> new() as VectorList<Int>
+			firstList := VectorList<Int> new()
 			firstList add(0)
 			firstList add(1)
 			firstList add(2)
-			secondList := VectorList<Int> new() as VectorList<Int>
+			secondList := VectorList<Int> new()
 			secondList add(3)
 			secondList add(4)
 			secondList add(5)
@@ -102,7 +102,7 @@ VectorTest: class extends Fixture {
 			expect(firstList count, is equal to(6))
 		})
 		this add("VectorList getFirstElements", func() {
-			list := VectorList<Int> new() as VectorList<Int>
+			list := VectorList<Int> new()
 			list add(0)
 			list add(1)
 			list add(2)
@@ -111,6 +111,22 @@ VectorTest: class extends Fixture {
 			expect(secondResult count, is equal to(2))
 			expect(secondResult[0], is equal to(0))
 			expect(secondResult[1], is equal to(1))
+		})
+		this add("VectorList getElements", func {
+			list := VectorList<Int> new()
+			list add(0)
+			list add(1)
+			list add(2)
+			list add(3)
+			indices := VectorList<Bool> new()
+			indices add(false)
+			indices add(true)
+			indices add(true)
+			indices add(false)
+			newList := list getElements(indices)
+			expect(newList count, is equal to(2))
+			expect(newList[0], is equal to(1))
+			expect(newList[1], is equal to(2))
 		})
 	}
 }
