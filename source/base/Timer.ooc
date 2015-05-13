@@ -46,7 +46,6 @@ Timer: class {
 		this _total += this _result
 		this _count += 1
 		this _average = this _total / this _count
-		this _result
 	}
 	reset: virtual func {
 		this _startTime = 0
