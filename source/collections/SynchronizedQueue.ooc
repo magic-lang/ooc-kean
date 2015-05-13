@@ -66,7 +66,7 @@ BlockedQueue: class <T> extends SynchronizedQueue<T> {
 		this _mutex lock()
 		while (this empty)
 			this _populated wait(this _mutex)
-		success := this _backend dequeue(result&)
+		this _backend dequeue(result&) as Void // Ignore the return value to avoid build warning
 		this _mutex unlock()
 		result
 	}
