@@ -18,8 +18,10 @@ import FloatExtension
 import FloatPoint2D
 import FloatSize2D
 import IntBox2D
+import FloatPoint2DVectorList
 import text/StringTokenizer
 import structs/ArrayList
+use ooc-collections
 
 FloatBox2D: cover {
 	leftTop: FloatPoint2D
@@ -80,9 +82,19 @@ FloatBox2D: cover {
 		This new(left, top, width, height)
 	}
 	contains: func (point: FloatPoint2D) -> Bool {
-		this left <= point x && point x < this right && this top <= point y && point y < this bottom
+		this left <= point x && point x <= this right && this top <= point y && point y <= this bottom
 	}
 	contains: func ~box (box: FloatBox2D) -> Bool { this intersection(box) == box }
+	contains: func ~FloatPoint2DVectorList (list: FloatPoint2DVectorList) -> VectorList<Bool> {
+		result := VectorList<Bool> new()
+		for (i in 0..list count) {
+			if (this contains(list[i]))
+				result add(true)
+			else
+				result add(false)
+		}
+		result
+	}
 	round: func -> This { This new(this leftTop round(), this size round()) }
 	ceiling: func -> This { This new(this leftTop ceiling(), this size ceiling()) }
 	floor: func -> This { This new(this leftTop floor(), this size floor()) }
@@ -92,13 +104,13 @@ FloatBox2D: cover {
 		else if (other empty)
 			this
 		else
-			union(other)
+			this union(other)
 	}
 	operator - (other: This) -> This {
 		if (this empty || other empty)
 			This new()
 		else
-			intersection(other)
+			this intersection(other)
 	}
 	operator + (other: FloatPoint2D) -> This { This new(this leftTop + other, this size) }
 	//FIXME: Unary minus bug
