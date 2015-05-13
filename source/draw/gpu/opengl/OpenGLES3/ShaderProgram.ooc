@@ -168,12 +168,14 @@ ShaderProgram: class {
 			source println()
 			logSize: Int = 0
 			glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, logSize&)
-			compileLog := gc_malloc(logSize * Char size) as Char*
+			compileLog := gc_malloc(logSize * Char size) as CString
 			length: Int
 			glGetShaderInfoLog(shaderID, logSize, length&, compileLog)
-			compileLog toString() println()
-			raise("Shader compilation failed")
+			compileLogString := compileLog toString()
+			compileLogString println()
+			compileLogString free()
 			gc_free(compileLog)
+			raise("Shader compilation failed")
 		}
 		version(debugGL) { validateEnd("ShaderProgram _compileShader") }
 		success != 0

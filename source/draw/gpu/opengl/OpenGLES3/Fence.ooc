@@ -32,8 +32,8 @@ Fence: class {
 		if (this _backend == null)
 			this _syncCondition wait(this _mutex)
 		this _mutex unlock()
-		result := glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, timeout)
 		version(debugGL) {
+			result := glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, timeout)
 			match (result) {
 				case GL_TIMEOUT_EXPIRED => Debug print("Fence reached timeout limit after %llu ns. Possible deadlock?" format(timeout))
 				case GL_WAIT_FAILED => Debug print("Fence wait failed!")
@@ -42,7 +42,8 @@ Fence: class {
 				case GL_CONDITION_SATISFIED => Debug print("Fence condition satisifed!")
 				*/
 			}
-		}
+		} else
+			glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, timeout)
 	}
 	wait: func {
 		glFlush()
