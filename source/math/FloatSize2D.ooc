@@ -24,7 +24,7 @@ FloatSize2D: cover {
 	width, height: Float
 	area: Float { get { (this width * this height) } }
 	length: Float { get { this norm } }
-	empty: Bool { get { this width == 0 || this height == 0 } }
+	empty: Bool { get { !(this width > 0 && this height > 0) } }
 	norm ::= (this width squared() + this height squared()) sqrt()
 	azimuth ::= this height atan2(this width)
 	basisX: static This { get { This new(1, 0) } }
