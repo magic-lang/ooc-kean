@@ -1,5 +1,6 @@
 use ooc-unit
 use ooc-math
+use ooc-collections
 import math
 import lang/IO
 
@@ -35,6 +36,25 @@ FloatBox2DTest: class extends Fixture {
 		this add("scalar multiplication", func() {})
 		this add("casts", func() {
 //			FIXME: We have no integer versions of anything yet
+		})
+		this add("contains~FloatPoint2DVectorList", func {
+			box := FloatBox2D new(-2.0f, -1.0f, 3.0f, 3.0f)
+			list := FloatPoint2DVectorList new()
+			list add(FloatPoint2D new(0.0f, 1.0f))
+			list add(FloatPoint2D new(-2.0f, 2.0f))
+			list add(FloatPoint2D new(-2.0f, -2.0f))
+			list add(FloatPoint2D new(0.0f, 0.0f))
+			inBox := box contains~FloatPoint2DVectorList(list)
+			expect(inBox count, is equal to(3))
+			expect(inBox[0], is equal to(0))
+			expect(inBox[1], is equal to(1))
+			expect(inBox[2], is equal to(3))
+		})
+		this add("pad and shrink ~fraction", func {
+			box := FloatBox2D new(-2.0f, -1.0f, 3.0f, 3.0f)
+			paddedBox := box pad~fraction(0.1f)
+			shrunkBox := paddedBox shrink(1.0f / 11.0f)
+			expect(box == shrunkBox, is true)
 		})
 	}
 }

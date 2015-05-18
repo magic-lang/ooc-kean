@@ -112,4 +112,10 @@ VectorList: class <T> {
 			result add(this _vector[i])
 		result
 	}
+	getElements: func (indices: VectorList<Int>) -> This<T> {
+		result := This<T> new()
+		for (i in 0..indices count)
+			result add(this[indices[i]])
+		result
+	}
 }
