@@ -90,14 +90,11 @@ FloatBox2D: cover {
 		this left <= point x && point x <= this right && this top <= point y && point y <= this bottom
 	}
 	contains: func ~box (box: FloatBox2D) -> Bool { this intersection(box) == box }
-	contains: func ~FloatPoint2DVectorList (list: FloatPoint2DVectorList) -> VectorList<Bool> {
-		result := VectorList<Bool> new()
-		for (i in 0..list count) {
+	contains: func ~FloatPoint2DVectorList (list: FloatPoint2DVectorList) -> VectorList<Int> {
+		result := VectorList<Int> new()
+		for (i in 0..list count)
 			if (this contains(list[i]))
-				result add(true)
-			else
-				result add(false)
-		}
+				result add(i)
 		result
 	}
 	round: func -> This { This new(this leftTop round(), this size round()) }
