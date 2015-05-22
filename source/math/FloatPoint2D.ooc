@@ -70,8 +70,8 @@ FloatPoint2D: cover {
 	}
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
-	linearInterpolation: static func (a, b: FloatPoint2D, ratio: Float) -> FloatPoint2D {
-		FloatPoint2D new(Float linearInterpolation(a x, b x, ratio), Float linearInterpolation(a y, b y, ratio))
+	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
+		This new(Float linearInterpolation(a x, b x, ratio), Float linearInterpolation(a y, b y, ratio))
 	}
 }
 operator * (left: Float, right: FloatPoint2D) -> FloatPoint2D { FloatPoint2D new(left * right x, left * right y) }

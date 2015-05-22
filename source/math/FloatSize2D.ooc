@@ -77,6 +77,9 @@ FloatSize2D: cover {
 		array := input split(',')
 		This new (array[0] toFloat(), array[1] toFloat())
 	}
+	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
+		This new(Float linearInterpolation(a width, b width, ratio), Float linearInterpolation(a height, b height, ratio))
+	}
 }
 operator * (left: Float, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left * right width, left * right height) }
 operator / (left: Float, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left / right width, left / right height) }
