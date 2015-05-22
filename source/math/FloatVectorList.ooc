@@ -201,11 +201,8 @@ FloatVectorList: class extends VectorList<Float> {
 	getWaveletTransform: func (levels: Int) -> VectorList<This> {
 		result := VectorList<This> new(levels)
 		previous := this
-		filtered: This
 		for (level in 0..levels) {
 			size := 1 + pow(2, level + 1)
-			if (filtered != null)
-				filtered free()
 			kernel := This gaussianKernel(size)
 			filtered := this convolve(kernel)
 			kernel free()
