@@ -30,7 +30,7 @@ FloatSize2D: cover {
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
 	init: func@ (=width, =height)
-	init: func@ ~square (length: Int) { this width = this height = length }
+	init: func@ ~square (length: Float) { this width = this height = length }
 	init: func@ ~default { this init(0.0f, 0.0f) }
 	pNorm: func (p: Float) -> Float {
 		p == 1 ?
