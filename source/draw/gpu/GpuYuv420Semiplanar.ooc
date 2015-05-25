@@ -66,4 +66,7 @@ GpuYuv420Semiplanar: abstract class extends GpuPlanar {
 		result := RasterYuv420Semiplanar new(y as RasterMonochrome, uv as RasterUv)
 		result
 	}
+	create: override func (size: IntSize2D) -> This {
+		this _context createYuv420Semiplanar(size)
+	}
 }
