@@ -66,7 +66,7 @@ Image: abstract class {
 		this resizeTo(((this size toFloatSize2D()) * Float minimum(restriction width as Float / this size width as Float, restriction height as Float / this size height as Float)) toIntSize2D())
 	}
 	resizeTo: abstract func (size: IntSize2D) -> This
-	create: abstract func (size: IntSize2D) -> This
+	create: virtual func (size: IntSize2D) -> This { raise("Image type not implemented."); null }
 	copy: abstract func -> This
 	copy: abstract func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This
 //	shift: abstract func (offset: IntSize2D) -> This
