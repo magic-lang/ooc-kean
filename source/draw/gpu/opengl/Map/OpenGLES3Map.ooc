@@ -53,6 +53,7 @@ OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 	transform: FloatTransform2D { get set }
 	_useTransform: Bool
 	init: func (fragmentSource: String, context: GpuContext, transform: Bool) {
+		this transform = FloatTransform2D identity
 		this _useTransform = transform
 		super(transform ? This vertexSourceTransform : This vertexSource, fragmentSource, context)
 	}
