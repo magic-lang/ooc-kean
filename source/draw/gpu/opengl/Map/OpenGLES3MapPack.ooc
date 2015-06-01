@@ -55,19 +55,22 @@ OpenGLES3MapUnpackRgbaToMonochrome: class extends OpenGLES3MapDefault {
 		this program setUniform("texture0", 0)
 		this program setUniform("sourceSize", this sourceSize)
 		this program setUniform("targetSize", this targetSize)
+		this program setUniform("xCoordScale", (this targetSize width as Float) / (4 * this sourceSize width))
 	}
 	fragmentSource: static String ="
-		#version 300 es\n
-		precision highp float;\n
-		uniform sampler2D texture0;\n
+		#version 300 es
+		precision highp float;
+		uniform sampler2D texture0;
 		uniform ivec2 sourceSize;
 		uniform ivec2 targetSize;
+		uniform float xCoordScale;
 		in highp vec2 fragmentTextureCoordinate;
-		out float outColor;\n
-		void main() {\n
+		out float outColor;
+		void main() {
+			float unpaddedXCoord = xCoordScale * fragmentTextureCoordinate.x;
 			int pixelIndex = int(float(targetSize.x) * fragmentTextureCoordinate.x) % 4;\n
 			//Can this be moved to vertex shader?
-			vec2 texCoords = vec2(fragmentTextureCoordinate.x, float(targetSize.y) * fragmentTextureCoordinate.y / float(sourceSize.y));
+			vec2 texCoords = vec2(unpaddedXCoord, float(targetSize.y) * fragmentTextureCoordinate.y / float(sourceSize.y));
 			if (pixelIndex == 0)\n
 				outColor = texture(texture0, texCoords).r;\n
 			else if (pixelIndex == 1)\n
@@ -86,26 +89,31 @@ OpenGLES3MapUnpackRgbaToUv: class extends OpenGLES3MapDefault {
 		super()
 		this program setUniform("texture0", 0)
 		this program setUniform("sourceSize", this sourceSize)
+		this program setUniform("targetSize", this targetSize)
 		this program setUniform("targetWidth", this targetSize width)
 		startY := (sourceSize height - targetSize height) as Float / sourceSize height
 		this program setUniform("startY", startY)
+		this program setUniform("xCoordScale", (this targetSize width as Float) / (2 * this sourceSize width))
 	}
 	fragmentSource: static String ="
-		#version 300 es\n
-		precision highp float;\n
-		uniform sampler2D texture0;\n
-		uniform int targetWidth;
+		#version 300 es
+		precision highp float;
+		uniform sampler2D texture0;
+		uniform ivec2 sourceSize;
+		uniform ivec2 targetSize;
+		uniform float xCoordScale;
 		uniform highp float startY;
 		in highp vec2 fragmentTextureCoordinate;
-		out vec2 outColor;\n
-		void main() {\n
-			int pixelIndex = int(float(targetWidth) * fragmentTextureCoordinate.x) % 2;\n
+		out vec2 outColor;
+		void main() {
+			float unpaddedXCoord = xCoordScale * fragmentTextureCoordinate.x;
+			int pixelIndex = int(float(targetSize.x) * fragmentTextureCoordinate.x) % 2;
 			//Can this be moved to vertex shader?
 			float yCoord = startY + (1.0f - startY) * fragmentTextureCoordinate.y;
-			vec2 texCoords = vec2(fragmentTextureCoordinate.x, yCoord);
-			if (pixelIndex == 0)\n
-				outColor = vec2(texture(texture0, texCoords).r, texture(texture0, texCoords).g);\n
-			else\n
-				outColor = vec2(texture(texture0, texCoords).b, texture(texture0, texCoords).a);\n
+			vec2 texCoords = vec2(unpaddedXCoord, yCoord);
+			if (pixelIndex == 0)
+				outColor = vec2(texture(texture0, texCoords).r, texture(texture0, texCoords).g);
+			else
+				outColor = vec2(texture(texture0, texCoords).b, texture(texture0, texCoords).a);
 		}\n"
 }
