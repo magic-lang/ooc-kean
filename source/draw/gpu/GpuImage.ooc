@@ -64,6 +64,7 @@ GpuImage: abstract class extends Image {
 	upload: abstract func (raster: RasterImage)
 	generateMipmap: abstract func
 	setMagFilter: abstract func (linear: Bool)
+	setMinFilter: abstract func (linear: Bool)
 
 	//TODO: Implement abstract functions
 	create: override func (size: IntSize2D) -> This { raise("Unimplemented"); null }

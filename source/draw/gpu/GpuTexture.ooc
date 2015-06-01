@@ -24,4 +24,5 @@ GpuTexture: abstract class {
 	unbind: abstract func
 	upload: abstract func(pointer: UInt8*, stride: UInt)
 	setMagFilter: abstract func (linear: Bool)
+	setMinFilter: abstract func (linear: Bool)
 }

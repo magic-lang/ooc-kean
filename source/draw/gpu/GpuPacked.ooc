@@ -43,4 +43,5 @@ GpuPacked: abstract class extends GpuImage {
 	upload: func (raster: RasterPacked) { this _texture upload(raster buffer pointer, raster stride) }
 	generateMipmap: func { this _texture generateMipmap() }
 	setMagFilter: func (linear: Bool) { this _texture setMagFilter(linear) }
+	setMinFilter: func (linear: Bool) { this _texture setMinFilter(linear) }
 }

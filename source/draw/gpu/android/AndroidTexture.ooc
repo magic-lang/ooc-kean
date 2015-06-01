@@ -35,6 +35,7 @@ AndroidTexture: abstract class extends GpuTexture {
 	lock: func (write: Bool) -> UInt8* { this _buffer lock(write) as UInt8* }
 	unlock: func { this _buffer unlock() }
 	setMagFilter: func (linear: Bool)
+	setMinFilter: func (linear: Bool)
 	upload: func (pixels: Pointer, stride: Int) {
 		pointer := this _buffer lock(true)
 		memcpy(pointer, pixels, this size width * this size height * this _channels)
