@@ -55,6 +55,10 @@ GpuYuv420Semiplanar: abstract class extends GpuPlanar {
 		this _y setMagFilter(linear)
 		this _uv setMagFilter(linear)
 	}
+	setMinFilter: func (linear: Bool) {
+		this _y setMinFilter(linear)
+		this _uv setMinFilter(linear)
+	}
 	resizeTo: func (size: IntSize2D) -> This {
 		target := this _context createYuv420Semiplanar(size)
 		target canvas draw(this)

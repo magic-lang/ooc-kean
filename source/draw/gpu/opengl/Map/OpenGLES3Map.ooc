@@ -32,10 +32,8 @@ OpenGLES3Map: abstract class extends GpuMap {
 		this _fragmentSource = fragmentSource
 		this _context = context
 		this _program = ShaderProgram[context getMaxContexts()] new()
-		if (vertexSource == null || fragmentSource == null) {
-			Debug print("Vertex or fragment shader source not set")
-			raise("Vertex or fragment shader source not set")
-		}
+		if (vertexSource == null || fragmentSource == null)
+			Debug raise("Vertex or fragment shader source not set")
 	}
 	free: override func {
 		for (i in 0..this _context getMaxContexts()) {
@@ -55,6 +53,7 @@ OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 	transform: FloatTransform2D { get set }
 	_useTransform: Bool
 	init: func (fragmentSource: String, context: GpuContext, transform: Bool) {
+		this transform = FloatTransform2D identity
 		this _useTransform = transform
 		super(transform ? This vertexSourceTransform : This vertexSource, fragmentSource, context)
 	}

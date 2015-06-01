@@ -63,6 +63,11 @@ GpuYuv420Planar: abstract class extends GpuPlanar {
 		this _u setMagFilter(linear)
 		this _v setMagFilter(linear)
 	}
+	setMinFilter: func (linear: Bool) {
+		this _y setMinFilter(linear)
+		this _u setMinFilter(linear)
+		this _v setMinFilter(linear)
+	}
 	resizeTo: func (size: IntSize2D) -> This {
 		target := this _context createYuv420Planar(size)
 		target canvas draw(this)

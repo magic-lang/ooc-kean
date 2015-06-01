@@ -28,6 +28,12 @@ OpenGLES3Texture: class extends GpuTexture {
 		else
 			this backend setMagFilter(InterpolationType Nearest)
 	}
+	setMinFilter: func (linear: Bool) {
+		if (linear)
+			this backend setMinFilter(InterpolationType Linear)
+		else
+			this backend setMinFilter(InterpolationType Nearest)
+	}
 	free: override func {
 		this backend free()
 		super()
