@@ -8,6 +8,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	_buffer: GraphicBuffer
 	buffer ::= this _buffer
 	_stride: Int
+	stride ::= this _stride
 	_uvOffset: Int
 	uvOffset ::= this _uvOffset
 	uvPadding ::= (this _uvOffset - this _stride * this _size height)
