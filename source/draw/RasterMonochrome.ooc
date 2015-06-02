@@ -132,7 +132,6 @@ RasterMonochrome: class extends RasterPacked {
 		source := this buffer pointer + region leftTop y * sourceWidth  // this getValue [x,y]
 		destinationX := imageX pointer
 		destinationY := imageY pointer
-
 		// Ix & Iy  centered difference approximation with 4th error order, centered searching window
 		for (y in (region leftTop y)..(region rightBottom y)) {
 			for (x in (region leftTop x)..(region rightBottom x)) {
@@ -158,7 +157,6 @@ RasterMonochrome: class extends RasterPacked {
 	getScharrDerivative: func(region: IntBox2D, imageX, imageY: FloatImage) {
 		step := 2
 		sourceWidth := this size width
-
 		_pointer := this buffer pointer + region leftTop y * sourceWidth  // this getValue [x,y]
 		_pointerP1 := _pointer + sourceWidth * step
 		_pointerM1 := _pointer - sourceWidth * step
@@ -167,7 +165,6 @@ RasterMonochrome: class extends RasterPacked {
 
 		for (y in (region leftTop y)..(region rightBottom y)) {
 			for (x in (region leftTop x)..(region rightBottom x)) {
-
 				rightUp := _pointerM1[x + step]
 				rightDown := _pointerP1[x + step]
 				leftUp := _pointerM1[x - step]
