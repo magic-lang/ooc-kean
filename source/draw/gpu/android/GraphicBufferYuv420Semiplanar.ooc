@@ -14,7 +14,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	init: func ~fromBuffer (=_buffer, size: IntSize2D, =_stride, =_uvOffset) {
 		ptr := _buffer lock()
 		_buffer unlock()
-		length := 3 * this _stride * size width / 2
+		length := 3 * this _stride * size height / 2
 		byteBuffer := ByteBuffer new(ptr, length, func (buffer: ByteBuffer) {} )
 		super(byteBuffer, size, 1, 1)
 	}
@@ -23,7 +23,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	}
 	toRgba: func (context: AndroidContextManager) -> GpuBgra {
 		padding := this _uvOffset - this _stride * this _size height
-		extraRows := Int align(padding, this _size width) / this _size width
+		extraRows := Int align(padding, this _stride) / this _stride
 		height := this _size height + this _size height / 2 + extraRows
 		width := this _stride / 4
 		rgbaBuffer := GraphicBuffer new(this buffer handle, IntSize2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage Rendertarget)
