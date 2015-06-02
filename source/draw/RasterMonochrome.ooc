@@ -173,10 +173,10 @@ RasterMonochrome: class extends RasterPacked {
 				leftUp := _pointerM1[x - step]
 				leftDown := _pointerP1[x - step]
 
-				destinationX@ = ((1.0f * (_pointer[x + step] - _pointer[x - step]) * 0.4641f) + (1.0f * ((rightUp + rightDown) - (leftUp + leftDown)) * 0.26795f))
+				destinationX@ = (0.4641f * (_pointer[x + step] - _pointer[x - step]) + 0.26795f * ((rightUp + rightDown) - (leftUp + leftDown)))
 				destinationX += 1
 
-				destinationY@ = ((1.0f * (_pointerP1[x] - _pointerM1[x]) * 0.4641f) + (1.0f * ((leftDown + rightDown) - (leftUp + rightUp)) * 0.26795f))
+				destinationY@ = (0.4641f * (_pointerP1[x] - _pointerM1[x]) + 0.26795f * ((leftDown + rightDown) - (leftUp + rightUp)))
 				destinationY += 1
 			}
 			_pointer += sourceWidth
