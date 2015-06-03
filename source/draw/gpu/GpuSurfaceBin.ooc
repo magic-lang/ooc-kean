@@ -16,31 +16,22 @@
 */
 
 use ooc-math
-import structs/FreeArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuSurface
+use ooc-collections
+import GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuSurface
 
 GpuSurfaceBin: class {
-	_surfaces: FreeArrayList<GpuSurface>
-	init: func { this _surfaces = FreeArrayList<GpuSurface> new() }
+	_surfaces := VectorList<GpuSurface> new()
+	init: func
 	free: override func {
 		this _surfaces free()
 		super()
 	}
 	add: func (surface: GpuSurface) { this _surfaces add(surface) }
-	_search: func (arrayList: FreeArrayList<GpuSurface>) -> GpuSurface {
-		//TODO: using a result variable, initially null,
-		// and then assigning it to arrayList[0], always returns null,
-		// even if arrayList size > 0. So, using multiple returns for now.
-//		result : GpuSurface = null
-//		arrayList size toString() println()
-		if (arrayList size > 0) {
-			result := arrayList[0]
-			arrayList removeAt(0, false)
-//			if (result == null)
-//				"Result is null!" println()
-			return result
-		}
-//		arrayList size toString() println()
-		null
+	_search: func (list: VectorList<GpuSurface>) -> GpuSurface {
+		result: GpuSurface = null
+		if (!list empty)
+			result = list remove(0)
+		result
 	}
 	find: func -> GpuSurface { this _search(this _surfaces) }
 }
