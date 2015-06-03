@@ -45,32 +45,6 @@ AndroidContext: class extends OpenGLES3Context {
 		this _unpackRgbaToUv free()
 		super()
 	}
-	toRaster: func ~Yuv420Sp (gpuImage: GpuYuv420Semiplanar) -> RasterImage {
-		yPacker, uvPacker: GpuPacker
-
-		yPacker = this createPacker(gpuImage y size, 1)
-		uvPacker = this createPacker(gpuImage uv size, 2)
-		this _packMonochrome imageWidth = gpuImage y size width
-		yPacker pack(gpuImage y, this _packMonochrome)
-		this _packUv imageWidth = gpuImage uv size width
-		uvPacker pack(gpuImage uv, this _packUv)
-
-		yBuffer, uvBuffer: ByteBuffer
-		if (gpuImage size height == 1080) {
-			yBuffer = yPacker readRows()
-			uvBuffer = uvPacker readRows()
-			yPacker recycle()
-			uvPacker recycle()
-		} else {
-			yBuffer = yPacker read()
-			uvBuffer = uvPacker read()
-		}
-
-		yRaster := RasterMonochrome new(yBuffer, gpuImage size)
-		uvRaster := RasterUv new(uvBuffer, gpuImage size / 2)
-		result := RasterYuv420Semiplanar new(yRaster, uvRaster)
-		result
-	}
 	toRaster: func ~monochrome (gpuImage: GpuMonochrome, async: Bool = false) -> RasterImage {
 		result: RasterImage
 		bytesPerPixel := 1
@@ -99,7 +73,6 @@ AndroidContext: class extends OpenGLES3Context {
 	}
 	toRaster: override func (gpuImage: GpuImage, async: Bool = false) -> RasterImage {
 		result := match(gpuImage) {
-			case (i : GpuYuv420Semiplanar) => this toRaster(gpuImage as GpuYuv420Semiplanar)
 			case (i : GpuUv) => this toRaster(gpuImage as GpuUv, async)
 			case (i : GpuMonochrome) => this toRaster(gpuImage as GpuMonochrome, async)
 			case => super(gpuImage)
