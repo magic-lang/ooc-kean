@@ -77,7 +77,7 @@ AndroidContext: class extends OpenGLES3Context {
 		if (!this isAligned(gpuImage size width * bytesPerPixel))
 			result = gpuImage toRasterDefault()
 		else {
-			yPacker := this createPacker(gpuImage size, 1)
+			yPacker := this createPacker(gpuImage size, bytesPerPixel)
 			this _packMonochrome imageWidth = gpuImage size width
 			yPacker pack(gpuImage, this _packMonochrome)
 			result = RasterMonochrome new(yPacker read(async), gpuImage size, 64)
@@ -90,7 +90,7 @@ AndroidContext: class extends OpenGLES3Context {
 		if (!this isAligned(gpuImage size width * bytesPerPixel))
 			result = gpuImage toRasterDefault()
 		else {
-			uvPacker := this createPacker(gpuImage size, 2)
+			uvPacker := this createPacker(gpuImage size, bytesPerPixel)
 			this _packUv imageWidth = gpuImage size width
 			uvPacker pack(gpuImage, this _packUv)
 			result = RasterUv new(uvPacker read(async), gpuImage size, 64)
