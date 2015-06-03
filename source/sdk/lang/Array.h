@@ -27,7 +27,7 @@
     *((type*) NULL) : \
     (((type*) array.data)[index] = value)
 
-#define _lang_array__Array_free(array) { array_free(array.data) }
+#define _lang_array__Array_free(array) { array_free(array.data); }
 
 typedef struct {
     size_t length;
