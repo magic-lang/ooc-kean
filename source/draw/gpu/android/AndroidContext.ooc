@@ -45,9 +45,6 @@ AndroidContext: class extends OpenGLES3Context {
 		this _packUv free()
 		super()
 	}
-	clean: func {
-		this _packerBin clean()
-	}
 	toRaster: func ~Yuv420Sp (gpuImage: GpuYuv420Semiplanar) -> RasterImage {
 		yPacker, uvPacker: GpuPacker
 

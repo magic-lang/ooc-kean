@@ -14,63 +14,64 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
-
+use ooc-collections
 use ooc-math
 use ooc-base
-import structs/FreeArrayList, GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuYuv422Semipacked
+import GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuYuv422Semipacked
 import threading/Thread
 
 GpuImageBin: class {
-	_monochrome: FreeArrayList<GpuImage>
-	_bgr: FreeArrayList<GpuImage>
-	_bgra: FreeArrayList<GpuImage>
-	_uv: FreeArrayList<GpuImage>
-	_yuv422: FreeArrayList<GpuImage>
+	_monochrome: VectorList<GpuImage>
+	_bgr: VectorList<GpuImage>
+	_bgra: VectorList<GpuImage>
+	_uv: VectorList<GpuImage>
+	_yuv422: VectorList<GpuImage>
 	_mutex: Mutex
 	_limit := 15
 
 	init: func {
 		this _mutex = Mutex new()
-		this _monochrome = FreeArrayList<GpuImage> new()
-		this _bgr = FreeArrayList<GpuImage> new()
-		this _bgra = FreeArrayList<GpuImage> new()
-		this _uv = FreeArrayList<GpuImage> new()
-		this _yuv422 = FreeArrayList<GpuImage> new()
+		this _monochrome = VectorList<GpuImage> new()
+		this _bgr = VectorList<GpuImage> new()
+		this _bgra = VectorList<GpuImage> new()
+		this _uv = VectorList<GpuImage> new()
+		this _yuv422 = VectorList<GpuImage> new()
 	}
-	free: func {
+	_cleanList: func (list: VectorList<GpuImage>) {
+		list apply(|image| image _recyclable = false)
+		list clear()
+	}
+	clean: func {
 		this _mutex lock()
-		for(i in 0..this _monochrome size)
-			this _monochrome[i] _recyclable = false
-		for(i in 0..this _bgr size)
-			this _bgr[i] _recyclable = false
-		for(i in 0..this _bgra size)
-			this _bgra[i] _recyclable = false
-		for(i in 0..this _uv size)
-			this _uv[i] _recyclable = false
-		for(i in 0..this _yuv422 size)
-			this _yuv422[i] _recyclable = false
+		this _cleanList(this _monochrome)
+		this _cleanList(this _bgr)
+		this _cleanList(this _bgra)
+		this _cleanList(this _uv)
+		this _cleanList(this _yuv422)
+		this _mutex unlock()
+	}
+	free: override func {
+		this clean()
 		this _monochrome free()
 		this _bgr free()
 		this _bgra free()
 		this _uv free()
 		this _yuv422 free()
-		this _mutex unlock()
 		this _mutex destroy()
 		super()
 	}
-	_add: func (image: GpuImage, list: FreeArrayList<GpuImage>) {
-		if (list size >= this _limit) {
+	_add: func (image: GpuImage, list: VectorList<GpuImage>) {
+		if (list count >= this _limit) {
 			version(debugGL) Debug print("GpuImageBin full; freeing one GpuImage")
 			// We need to make sure the image will be destroyed instead of recycled
-			temp := list[0]
-			list removeAt(0)
+			temp := list remove(0)
 			temp _recyclable = false
 			temp free()
 		}
 		list add(image)
 	}
 	add: func (image: GpuImage) {
-		version(safe) raise("Added a GpuImage to the bin without permission to recycle images.")
+		version(safe) Debug raise("Added a GpuImage to the bin without permission to recycle images.")
 		this _mutex lock()
 		match (image) {
 			case (i: GpuMonochrome) => this _add(i, this _monochrome)
@@ -82,19 +83,19 @@ GpuImageBin: class {
 		}
 		this _mutex unlock()
 	}
-	_search: func (size: IntSize2D, arrayList: FreeArrayList<GpuImage>) -> GpuImage {
+	_search: func (size: IntSize2D, list: VectorList<GpuImage>) -> GpuImage {
 		result := null
-		index := 0
-		for (i in 0..arrayList size) {
-			image := arrayList[i]
+		index := -1
+		count := list count
+		for (i in 0..count) {
+			image := list[i]
 			if (image size width == size width && image size height == size height) {
-				result = image
 				index = i
 				break
 			}
 		}
-		if (result != null)
-			arrayList removeAt(index, false)
+		if (index != -1)
+			result = list remove(index)
 		result
 	}
 	find: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
