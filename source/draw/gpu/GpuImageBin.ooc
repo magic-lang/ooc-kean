@@ -37,17 +37,17 @@ GpuImageBin: class {
 		this _uv = VectorList<GpuImage> new()
 		this _yuv422 = VectorList<GpuImage> new()
 	}
-	_cleanList: func (list: VectorList<GpuImage>) {
+	_cleanList: static func (list: VectorList<GpuImage>) {
 		list apply(|image| image _recyclable = false)
 		list clear()
 	}
 	clean: func {
 		this _mutex lock()
-		this _cleanList(this _monochrome)
-		this _cleanList(this _bgr)
-		this _cleanList(this _bgra)
-		this _cleanList(this _uv)
-		this _cleanList(this _yuv422)
+		This _cleanList(this _monochrome)
+		This _cleanList(this _bgr)
+		This _cleanList(this _bgra)
+		This _cleanList(this _uv)
+		This _cleanList(this _yuv422)
 		this _mutex unlock()
 	}
 	free: override func {
