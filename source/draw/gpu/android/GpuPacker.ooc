@@ -49,7 +49,7 @@ GpuPacker: class {
 		this _packFence free()
 		super()
 	}
-	pack: func (image: GpuImage, map: OpenGLES3MapDefault) {
+	pack: func (image: GpuImage, map: OpenGLES3Map) {
 		image setMagFilter(false)
 		this _renderTarget bind()
 		this _renderTarget clear()
