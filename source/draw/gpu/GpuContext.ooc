@@ -56,4 +56,5 @@ GpuContext: abstract class {
 	getCurrentIndex: func -> Int { 0 }
 	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }
 	isAligned: virtual func (width: Int) -> Bool { true }
+	packToRgba: abstract func (source: GpuImage, target: GpuBgra, viewport: Viewport)
 }
