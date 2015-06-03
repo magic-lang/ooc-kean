@@ -28,7 +28,6 @@ GpuImageBin: class {
 	_yuv422: VectorList<GpuImage>
 	_mutex: Mutex
 	_limit := 15
-
 	init: func {
 		this _mutex = Mutex new()
 		this _monochrome = VectorList<GpuImage> new()
@@ -38,7 +37,8 @@ GpuImageBin: class {
 		this _yuv422 = VectorList<GpuImage> new()
 	}
 	_cleanList: static func (list: VectorList<GpuImage>) {
-		list apply(|image| image _recyclable = false)
+		for (i in 0..list count)
+			list[i] _recyclable = false
 		list clear()
 	}
 	clean: func {
