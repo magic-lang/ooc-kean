@@ -35,7 +35,7 @@ GpuContext: abstract class {
 		this _surfaceBin free()
 		super()
 	}
-	clean: func
+	clean: virtual func { this _imageBin clean() }
 	createMonochrome: abstract func (size: IntSize2D) -> GpuMonochrome
 	createBgr: abstract func (size: IntSize2D) -> GpuBgr
 	createBgra: abstract func (size: IntSize2D) -> GpuBgra

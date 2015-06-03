@@ -41,38 +41,9 @@ AndroidContext: class extends OpenGLES3Context {
 	free: override func {
 		this _backend makeCurrent()
 		this _packerBin free()
-		this _packMonochrome free()
-		this _packUv free()
+		this _unpackRgbaToMonochrome free()
+		this _unpackRgbaToUv free()
 		super()
-	}
-	clean: func {
-		this _packerBin clean()
-	}
-	toRaster: func ~Yuv420Sp (gpuImage: GpuYuv420Semiplanar) -> RasterImage {
-		yPacker, uvPacker: GpuPacker
-
-		yPacker = this createPacker(gpuImage y size, 1)
-		uvPacker = this createPacker(gpuImage uv size, 2)
-		this _packMonochrome imageWidth = gpuImage y size width
-		yPacker pack(gpuImage y, this _packMonochrome)
-		this _packUv imageWidth = gpuImage uv size width
-		uvPacker pack(gpuImage uv, this _packUv)
-
-		yBuffer, uvBuffer: ByteBuffer
-		if (gpuImage size height == 1080) {
-			yBuffer = yPacker readRows()
-			uvBuffer = uvPacker readRows()
-			yPacker recycle()
-			uvPacker recycle()
-		} else {
-			yBuffer = yPacker read()
-			uvBuffer = uvPacker read()
-		}
-
-		yRaster := RasterMonochrome new(yBuffer, gpuImage size)
-		uvRaster := RasterUv new(uvBuffer, gpuImage size / 2)
-		result := RasterYuv420Semiplanar new(yRaster, uvRaster)
-		result
 	}
 	toRaster: func ~monochrome (gpuImage: GpuMonochrome, async: Bool = false) -> RasterImage {
 		result: RasterImage
@@ -80,7 +51,7 @@ AndroidContext: class extends OpenGLES3Context {
 		if (!this isAligned(gpuImage size width * bytesPerPixel))
 			result = gpuImage toRasterDefault()
 		else {
-			yPacker := this createPacker(gpuImage size, 1)
+			yPacker := this createPacker(gpuImage size, bytesPerPixel)
 			this _packMonochrome imageWidth = gpuImage size width
 			yPacker pack(gpuImage, this _packMonochrome)
 			result = RasterMonochrome new(yPacker read(async), gpuImage size, 64)
@@ -93,7 +64,7 @@ AndroidContext: class extends OpenGLES3Context {
 		if (!this isAligned(gpuImage size width * bytesPerPixel))
 			result = gpuImage toRasterDefault()
 		else {
-			uvPacker := this createPacker(gpuImage size, 2)
+			uvPacker := this createPacker(gpuImage size, bytesPerPixel)
 			this _packUv imageWidth = gpuImage size width
 			uvPacker pack(gpuImage, this _packUv)
 			result = RasterUv new(uvPacker read(async), gpuImage size, 64)
@@ -102,7 +73,6 @@ AndroidContext: class extends OpenGLES3Context {
 	}
 	toRaster: override func (gpuImage: GpuImage, async: Bool = false) -> RasterImage {
 		result := match(gpuImage) {
-			case (i : GpuYuv420Semiplanar) => this toRaster(gpuImage as GpuYuv420Semiplanar)
 			case (i : GpuUv) => this toRaster(gpuImage as GpuUv, async)
 			case (i : GpuMonochrome) => this toRaster(gpuImage as GpuMonochrome, async)
 			case => super(gpuImage)
@@ -113,7 +83,7 @@ AndroidContext: class extends OpenGLES3Context {
 	createPacker: func (size: IntSize2D, bytesPerPixel: UInt) -> GpuPacker {
 		result := this _packerBin find(size, bytesPerPixel)
 		if (result == null) {
-			version(debugGL) { Debug print("Could not find a recycled GpuPacker in list with size " << this _packerBin _packers size toString() >> " with size " & size toString()) }
+			version(debugGL) { Debug print("Could not find a recycled GpuPacker!")}
 			result = GpuPacker new(size, bytesPerPixel, this)
 		}
 		result
