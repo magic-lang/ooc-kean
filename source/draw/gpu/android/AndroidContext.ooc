@@ -41,8 +41,8 @@ AndroidContext: class extends OpenGLES3Context {
 	free: override func {
 		this _backend makeCurrent()
 		this _packerBin free()
-		this _packMonochrome free()
-		this _packUv free()
+		this _unpackRgbaToMonochrome free()
+		this _unpackRgbaToUv free()
 		super()
 	}
 	toRaster: func ~Yuv420Sp (gpuImage: GpuYuv420Semiplanar) -> RasterImage {
