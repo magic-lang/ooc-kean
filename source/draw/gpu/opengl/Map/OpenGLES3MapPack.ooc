@@ -16,8 +16,8 @@ OpenGLES3MapPack: abstract class extends OpenGLES3Map {
 	}
 	vertexSource: static String ="
 		#version 300 es
-		precision highp float;
-		uniform highp float offset;
+		precision mediump float;
+		uniform float offset;
 		layout(location = 0) in vec2 vertexPosition;
 		layout(location = 1) in vec2 textureCoordinate;
 		out vec2 fragmentTextureCoordinate;
@@ -35,7 +35,7 @@ OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
 	}
 	fragmentSource: static String ="
 		#version 300 es
-		precision highp float;
+		precision mediump float;
 		uniform sampler2D texture0;
 		uniform float texelOffset;
 		in highp vec2 fragmentTextureCoordinate;
@@ -58,7 +58,7 @@ OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
 	}
 	fragmentSource: static String ="
 		#version 300 es
-		precision highp float;
+		precision mediump float;
 		uniform sampler2D texture0;
 		uniform float texelOffset;
 		in highp vec2 fragmentTextureCoordinate;
@@ -81,17 +81,15 @@ OpenGLES3MapUnpack: abstract class extends OpenGLES3Map {
 	}
 	vertexSource: static String ="
 		#version 300 es
-		precision highp float;
-		uniform highp float startY;
-		uniform highp float scaleX;
-		uniform highp float scaleY;
+		precision mediump float;
+		uniform float startY;
+		uniform float scaleX;
+		uniform float scaleY;
 		layout(location = 0) in vec2 vertexPosition;
 		layout(location = 1) in vec2 textureCoordinate;
-		out vec2 fragmentTextureCoordinate;
-		out vec2 originalTextureCoordinate;
+		out vec4 fragmentTextureCoordinate;
 		void main() {
-			fragmentTextureCoordinate = vec2(scaleX * textureCoordinate.x, startY + scaleY * textureCoordinate.y);
-			originalTextureCoordinate = textureCoordinate;
+			fragmentTextureCoordinate = vec4(scaleX * textureCoordinate.x, startY + scaleY * textureCoordinate.y, textureCoordinate);
 			gl_Position = vec4(vertexPosition.x, vertexPosition.y, -1, 1);
 		}"
 }
@@ -107,15 +105,14 @@ OpenGLES3MapUnpackRgbaToMonochrome: class extends OpenGLES3MapUnpack {
 	}
 	fragmentSource: static String ="
 		#version 300 es
-		precision highp float;
+		precision mediump float;
 		uniform sampler2D texture0;
 		uniform int targetWidth;
-		in highp vec2 fragmentTextureCoordinate;
-		in highp vec2 originalTextureCoordinate;
+		in highp vec4 fragmentTextureCoordinate;
 		out float outColor;
 		void main() {
-			int pixelIndex = int(float(targetWidth) * originalTextureCoordinate.x) % 4;
-			vec4 texel = texture(texture0, fragmentTextureCoordinate).rgba;
+			int pixelIndex = int(float(targetWidth) * fragmentTextureCoordinate.z) % 4;
+			vec4 texel = texture(texture0, fragmentTextureCoordinate.xy).rgba;
 			float r = float(clamp((1 - pixelIndex), 0, 1));
 			float g = (1.0f - r) * float(clamp((2 - pixelIndex), 0, 1));
 			float a = float(clamp((pixelIndex - 2), 0, 1));
@@ -136,15 +133,14 @@ OpenGLES3MapUnpackRgbaToUv: class extends OpenGLES3MapUnpack {
 	}
 	fragmentSource: static String ="
 		#version 300 es
-		precision highp float;
+		precision mediump float;
 		uniform sampler2D texture0;
 		uniform int targetWidth;
-		in highp vec2 fragmentTextureCoordinate;
-		in highp vec2 originalTextureCoordinate;
+		in highp vec4 fragmentTextureCoordinate;
 		out vec2 outColor;
 		void main() {
-			int pixelIndex = int(float(targetWidth) * originalTextureCoordinate.x) % 2;
-			vec4 texel = texture(texture0, fragmentTextureCoordinate).rgba;
+			int pixelIndex = int(float(targetWidth) * fragmentTextureCoordinate.z) % 2;
+			vec4 texel = texture(texture0, fragmentTextureCoordinate.xy).rgba;
 			float resultX = float(1 - pixelIndex) * texel.r + float(pixelIndex) * texel.b;
 			float resultY = float(1 - pixelIndex) * texel.g + float(pixelIndex) * texel.a;
 			outColor = vec2(resultX, resultY);
