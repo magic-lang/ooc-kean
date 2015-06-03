@@ -86,8 +86,7 @@ GpuImageBin: class {
 	_search: func (size: IntSize2D, list: VectorList<GpuImage>) -> GpuImage {
 		result := null
 		index := -1
-		count := list count
-		for (i in 0..count) {
+		for (i in 0..list count) {
 			image := list[i]
 			if (image size width == size width && image size height == size height) {
 				index = i
