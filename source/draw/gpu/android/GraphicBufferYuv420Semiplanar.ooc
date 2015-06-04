@@ -22,6 +22,10 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	init: func (backend: Pointer, nativeBuffer: Pointer, handle: Pointer, size: IntSize2D, format: GraphicBufferFormat, stride: Int, uvOffset: Int) {
 		this init(GraphicBuffer new(backend, nativeBuffer, handle, size, stride, format), size, stride, uvOffset)
 	}
+	free: override func {
+		this _buffer free()
+		super()
+	}
 	toRgba: func (context: AndroidContextManager) -> GpuBgra {
 		padding := this _uvOffset - this _stride * this _size height
 		extraRows := Int align(padding, this _stride) / this _stride
