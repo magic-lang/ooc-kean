@@ -132,8 +132,7 @@ RasterMonochrome: class extends RasterPacked {
 		source := this buffer pointer + region leftTop y * sourceWidth  // this getValue [x,y]
 		destinationX := imageX pointer
 		destinationY := imageY pointer
-
-		// Ix & Iy  centered difference approximation with 4th error order, centered window
+		// Ix & Iy  centered difference approximation with 4th error order, centered searching window
 		for (y in (region leftTop y)..(region rightBottom y)) {
 			for (x in (region leftTop x)..(region rightBottom x)) {
 				destinationX@ =	(
@@ -153,6 +152,33 @@ RasterMonochrome: class extends RasterPacked {
 				destinationY += 1
 			}
 			source += sourceWidth
+		}
+	}
+	getScharrDerivative: func(region: IntBox2D, imageX, imageY: FloatImage) {
+		step := 2
+		sourceWidth := this size width
+		_pointer := this buffer pointer + region leftTop y * sourceWidth  // this getValue [x,y]
+		_pointerP1 := _pointer + sourceWidth * step
+		_pointerM1 := _pointer - sourceWidth * step
+		destinationX := imageX pointer
+		destinationY := imageY pointer
+
+		for (y in (region leftTop y)..(region rightBottom y)) {
+			for (x in (region leftTop x)..(region rightBottom x)) {
+				rightUp := _pointerM1[x + step]
+				rightDown := _pointerP1[x + step]
+				leftUp := _pointerM1[x - step]
+				leftDown := _pointerP1[x - step]
+
+				destinationX@ = (0.4641f * (_pointer[x + step] - _pointer[x - step]) + 0.26795f * ((rightUp + rightDown) - (leftUp + leftDown)))
+				destinationX += 1
+
+				destinationY@ = (0.4641f * (_pointerP1[x] - _pointerM1[x]) + 0.26795f * ((leftDown + rightDown) - (leftUp + rightUp)))
+				destinationY += 1
+			}
+			_pointer += sourceWidth
+			_pointerP1 += sourceWidth
+			_pointerM1 += sourceWidth
 		}
 	}
 	// get the derivative on small window, region is window's global location on image, window is left top centered.
