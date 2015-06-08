@@ -46,6 +46,7 @@ GpuPacker: class {
 	free: override func {
 		this _targetTexture free()
 		this _renderTarget free()
+		this _packFence free()
 		super()
 	}
 	pack: func (image: GpuImage, map: OpenGLES3MapDefault) {
