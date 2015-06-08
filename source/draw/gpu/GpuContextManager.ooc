@@ -56,7 +56,7 @@ GpuContextManager: abstract class extends GpuContext {
 		result
 	}
 	_createContext: abstract func -> GpuContext
-	free: func {
+	free: override func {
 		for(i in 0..MAX_CONTEXTS) {
 			if (this _contexts[i] != null)
 				this _contexts[i] free()
