@@ -28,4 +28,8 @@ FloatImage : class {
 		}
 		(this _pointer + (x + this _size width * y))@ = value
 	}
+	free: override func {
+		gc_free(this _pointer)
+		super()
+	}
 }

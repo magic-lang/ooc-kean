@@ -55,8 +55,7 @@ Image: abstract class {
 		this crop = original crop
 		this wrap = original wrap
 	}
-	__destroy__:func {
-		this referenceCount
+	free: override func {
 		if (this referenceCount != null)
 			this referenceCount free()
 		this _referenceCount = null

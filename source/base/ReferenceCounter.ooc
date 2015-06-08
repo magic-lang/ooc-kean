@@ -31,7 +31,7 @@ ReferenceCounter: class extends Synchronized {
 			}
 		}
 	}
-	__destroy__: func {
+	free: override func {
 		This count -= 1
 //		"--RC, #{This count}, #{this _target class name}" println()
 		super()
