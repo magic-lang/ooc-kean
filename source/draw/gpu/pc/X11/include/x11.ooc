@@ -72,6 +72,7 @@ XEventOoc: cover from XEvent {
 }
 
 XOpenDisplay: extern func(displayName: Char*) -> Pointer
+XCloseDisplay: extern func(display: Pointer) -> Int
 XCreateWindow: extern func(display: Pointer, window: Long, x: Int, y: Int,
 	width: UInt, height: UInt, borderWidth: UInt, depth: Int, class: UInt, visual: Pointer, valueMask: ULong, attributes: Pointer) -> Long
 XMapWindow: extern func(display: Pointer, window: Long) -> Int
