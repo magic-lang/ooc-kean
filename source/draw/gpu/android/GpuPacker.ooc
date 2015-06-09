@@ -49,7 +49,7 @@ GpuPacker: class {
 		this _packFence free()
 		super()
 	}
-	pack: func (image: GpuImage, map: OpenGLES3MapDefault) {
+	pack: func (image: GpuImage, map: OpenGLES3Map) {
 		image setMagFilter(false)
 		this _renderTarget bind()
 		this _renderTarget clear()
@@ -61,7 +61,7 @@ GpuPacker: class {
 		this _packFence sync()
 		This flush()
 	}
-	wait: func { this _packFence clientWait(1_000_000_000) }
+	wait: func { this _packFence clientWait() }
 	read: func ~ByteBuffer(async: Bool = false) -> ByteBuffer {
 		if (!async) this wait()
 		sourcePointer := this _targetTexture lock(false)

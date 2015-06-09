@@ -30,12 +30,10 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) { super(texture, size, context) }
 	toRasterDefault: func -> RasterImage {
 		packed := this _context createBgra(IntSize2D new(this size width / 4, this size height))
-		packMap := this _context getMap(this, GpuMapType pack) as OpenGLES3MapPackMonochrome
-		packMap imageWidth = this size width
-		packed canvas draw(this, packMap, Viewport new(packed size))
+		this _context packToRgba(this, packed, Viewport new(packed size))
 		buffer := packed canvas readPixels()
 		result := RasterMonochrome new(buffer, this size)
-		packed recycle()
+		packed free()
 		result
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
