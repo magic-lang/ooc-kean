@@ -38,5 +38,5 @@ ReferenceCounter: class extends Synchronized {
 	}
 	increase: func { this update(1) }
 	decrease: func { this update(-1) }
-	toString: func -> String { "Object ID: " + this _target as Pointer toString() + " Count: " + this _count toString() }
+	toString: func -> String { "Object ID: " << this _target as Pointer toString() >> " Count: " & this _count toString() }
 }
