@@ -43,7 +43,13 @@ Profiler: class {
 			outputString free()
 		})
 	}
-
+	free: override func {
+		this _timer free()
+		this _timer = null
+		this _clockTimer free()
+		this _clockTimer = null
+		super()
+	}
 	logResults: static func (fileName := "profiling.txt") {
 		fw := FileWriter new(fileName)
 		This _profilers apply(func(profiler: Profiler) {
@@ -58,5 +64,8 @@ Profiler: class {
 		this _clockTimer reset()
 	}
 	resetAll: static func { This _profilers apply(func(profiler: Profiler) { profiler reset() }) }
-	dispose: static func { This _profilers free() }
+	dispose: static func {
+		This _profilers free()
+		This _profilers = null
+	}
 }
