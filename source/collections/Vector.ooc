@@ -32,7 +32,8 @@ Vector: abstract class <T> {
 		if (this _freeContent && T inheritsFrom?(Object)) {
 			for (i in start..end) {
 					old := this[i] as Object
-					old free()
+					if (old != null)
+						old free()
 			}
 		}
 	}

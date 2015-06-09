@@ -40,6 +40,7 @@ OpenGLES3Map: abstract class extends GpuMap {
 			if (this _program[i] != null)
 				this _program[i] free()
 		}
+		this _program free()
 		super()
 	}
 	use: override func {

@@ -70,6 +70,12 @@ Event1: class <T> {
 			this _tail call(argument)
 		this _head(argument)
 	}
+	free: override func {
+		(this _head as Closure) dispose()
+		if (this _tail != null)
+			this _tail free()
+		super()
+	}
 }
 
 Event2: class <T0, T1> { // TODO: Write tests and fix this

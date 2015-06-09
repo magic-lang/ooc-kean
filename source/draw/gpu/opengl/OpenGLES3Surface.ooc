@@ -33,6 +33,7 @@ OpenGLES3Surface: class extends GpuSurface {
 	}
 	free: override func {
 		this _quad free()
+		this overlayDrawer free()
 		super()
 	}
 	clear: func

@@ -19,11 +19,12 @@ Synchronized: class {
 	_lock: Mutex
 	init: func (lock: Mutex) { this _lock = lock }
 	init: func ~default { this init(Mutex new()) }
-	__destroy__: func {
+	free: override func {
 		if (this _lock != null)
 			this _lock destroy()
 		this _lock = null
 //		this _lock free()
+		super()
 	}
 	lock: func {
 		this _lock lock()

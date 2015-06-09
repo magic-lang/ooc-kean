@@ -31,12 +31,12 @@ ReferenceCounter: class extends Synchronized {
 			}
 		}
 	}
-	__destroy__: func {
+	free: override func {
 		This count -= 1
 //		"--RC, #{This count}, #{this _target class name}" println()
 		super()
 	}
 	increase: func { this update(1) }
 	decrease: func { this update(-1) }
-	toString: func -> String { "Object ID: " + this _target as Pointer toString() + " Count: " + this _count toString() }
+	toString: func -> String { "Object ID: " << this _target as Pointer toString() >> " Count: " & this _count toString() }
 }
