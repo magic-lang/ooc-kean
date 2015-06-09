@@ -24,6 +24,7 @@ Synchronized: class {
 			this _lock destroy()
 		this _lock = null
 //		this _lock free()
+		super()
 	}
 	lock: func {
 		this _lock lock()
