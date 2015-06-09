@@ -194,8 +194,8 @@ OpenGLES3Context: class extends GpuContext {
 	setViewport: func (viewport: Viewport) { Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height) }
 	packToRgba: func (source: GpuImage, target: GpuBgra, viewport: Viewport) {
 		map := match(source) {
-			case image: GpuMonochrome => this _packMonochrome
-			case image: GpuUv => this _packUv
+			case source: GpuMonochrome => this _packMonochrome
+			case source: GpuUv => this _packUv
 		} as OpenGLES3MapPack
 		map imageWidth = source size width
 		map channels = source channels
