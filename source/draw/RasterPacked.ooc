@@ -31,13 +31,14 @@ RasterPacked: abstract class extends RasterImage {
 	_stride: UInt
 	stride ::= this _stride
 	bytesPerPixel: Int { get }
-	init: func (=_buffer, size: IntSize2D, align := 0, verticalAlign := 0) {
-		super(size, align, verticalAlign)
+	init: func (=_buffer, size: IntSize2D, =_stride) {
+		super(size)
 		this _buffer referenceCount increase()
-		this _stride = Int align(this size width * bytesPerPixel, align)
 	}
-	init: func ~allocate (size: IntSize2D, align := 0, verticalAlign := 0) {
-		this init(ByteBuffer new(Int align(size width * this bytesPerPixel, align) * size height), size, align, verticalAlign)
+	init: func ~allocateStride (size: IntSize2D, stride: UInt) { this init(ByteBuffer new(stride * size height), size, stride) }
+	init: func ~allocate (size: IntSize2D) {
+		stride := this bytesPerPixel * size width
+		this init(ByteBuffer new(stride * size height), size, stride)
 	}
 	init: func ~fromOriginal (original: This) {
 		super(original)

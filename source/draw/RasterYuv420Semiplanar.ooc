@@ -34,30 +34,31 @@ import io/FileWriter
 import io/BinarySequence
 
 RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
+	stride ::= this _y stride
 	init: func ~fromRasterImages (yImage: RasterMonochrome, uvImage: RasterUv) { super(yImage, uvImage) }
-	init: func ~allocate (size: IntSize2D, align := 0, verticalAlign := 0) {
-		(yImage, uvImage) := This _allocate(size, align, verticalAlign)
+	init: func ~allocateOffset (size: IntSize2D, stride: UInt, uvOffset: UInt) {
+		(yImage, uvImage) := This _allocate(size, stride, uvOffset)
 		this init(yImage, uvImage)
 	}
+	init: func ~allocateStride (size: IntSize2D, stride: UInt) { this init(size, stride, stride * size height) }
+	init: func ~allocate (size: IntSize2D) { this init(size, size width) }
 	init: func ~fromRasterImage (original: RasterImage) {
-		(yImage, uvImage) := This _allocate(original size, original align, original verticalAlign)
+		(yImage, uvImage) := This _allocate(original size, original stride, original stride * original size height)
 		super(original, yImage, uvImage)
 	}
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, align := 0, verticalAlign := 0) {
-		(yLength, uvLength) := This _calculateSizes(size, align, verticalAlign)
-		(yImage, uvImage) := This _createSubimages(buffer, yLength, uvLength, size, align)
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, stride: UInt, uvOffset: UInt) {
+		(yImage, uvImage) := This _createSubimages(buffer, size, stride, uvOffset)
 		this init(yImage, uvImage)
 	}
-	_calculateSizes: static func (size: IntSize2D, align := 0, verticalAlign := 0) -> (Int, Int) {
-		(Int align(size width, align) * Int align(size height, verticalAlign), Int align(size width, align) * Int align(size height / 2, verticalAlign))
+	_allocate: static func (size: IntSize2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
+		length := uvOffset + stride * size height / 2
+		buffer := ByteBuffer new(length)
+		This _createSubimages(buffer, size, stride, uvOffset)
 	}
-	_allocate: static func (size: IntSize2D, align := 0, verticalAlign := 0) -> (RasterMonochrome, RasterUv) {
-		(yLength, uvLength) := This _calculateSizes(size, align, verticalAlign)
-		buffer := ByteBuffer new(yLength + uvLength)
-		This _createSubimages(buffer, yLength, uvLength, size, align)
-	}
-	_createSubimages: static func (buffer: ByteBuffer, yLength, uvLength : Int, size: IntSize2D, align: Int) -> (RasterMonochrome, RasterUv) {
-		(RasterMonochrome new(buffer slice(0, yLength), size, align), RasterUv new(buffer slice(yLength, uvLength), size / 2, align))
+	_createSubimages: static func (buffer: ByteBuffer, size: IntSize2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
+		yLength := stride * size height
+		uvLength := stride * size height / 2
+		(RasterMonochrome new(buffer slice(0, yLength), size, stride), RasterUv new(buffer slice(uvOffset, uvLength), size / 2, stride))
 	}
 
 	/*shift: func (offset: IntSize2D) -> Image {
