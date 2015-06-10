@@ -20,6 +20,7 @@ include X11/Xatom
 include X11/Xutil
 include X11/Xos
 include X11/keysym
+include X11/XKBlib
 
 ExposureMask: extern const Long
 PointerMotionMask: extern const Long

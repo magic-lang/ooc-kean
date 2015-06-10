@@ -49,8 +49,7 @@ Window: class extends OpenGLES3Context {
 		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new(this)
 		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgra new(this, true)
 		XSelectInput(this _native display, this _native _backend, KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask)
-		temp: Bool
-		detectable := XkbSetDetectableAutoRepeat(this _native display, true, temp&)
+		XkbSetDetectableAutoRepeat(this _native display, true, null) as Void
 	}
 	free: override func {
 		this _bgrToBgra free()
