@@ -86,8 +86,8 @@ AndroidContext: class extends OpenGLES3Context {
 			result = super(gpuImage, async)
 		else {
 			result = match(gpuImage) {
-				case (i : GpuUv) => this toRaster(gpuImage as GpuUv, async)
-				case (i : GpuMonochrome) => this toRaster(gpuImage as GpuMonochrome, async)
+				case (image : GpuUv) => this toRaster(image, async)
+				case (image : GpuMonochrome) => this toRaster(image, async)
 				case => super(gpuImage)
 			}
 		}
