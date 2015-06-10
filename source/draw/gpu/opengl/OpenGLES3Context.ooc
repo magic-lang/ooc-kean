@@ -18,7 +18,7 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 use ooc-opengl
-import GpuImageBin, OpenGLES3Surface, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Yuv422Semipacked
+import GpuImageBin, OpenGLES3Surface, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Yuv422Semipacked, OpenGLES3Fence
 import Map/OpenGLES3Map, Map/OpenGLES3MapPack
 import OpenGLES3/Context, OpenGLES3/NativeWindow
 
@@ -201,4 +201,5 @@ OpenGLES3Context: class extends GpuContext {
 		map channels = source channels
 		target canvas draw(source, map, viewport)
 	}
+	createFence: func -> GpuFence { OpenGLES3Fence new() }
 }
