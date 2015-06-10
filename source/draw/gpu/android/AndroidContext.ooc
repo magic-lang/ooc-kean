@@ -14,79 +14,82 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-draw-gpu
+use ooc-collections
 use ooc-opengl
 use ooc-draw
 use ooc-math
 use ooc-base
-import GpuPacker, GpuPackerBin, AndroidTexture, GraphicBuffer
+import AndroidTexture, GraphicBuffer
 import threading/Thread
 import math
 AndroidContext: class extends OpenGLES3Context {
-	_packerBin: GpuPackerBin
-	_unpackRgbaToMonochrome: OpenGLES3MapUnpackRgbaToMonochrome
-	_unpackRgbaToUv: OpenGLES3MapUnpackRgbaToUv
-	init: func {
-		super()
-		this _initialize()
-	}
-	init: func ~other (other: This) {
-		super(other)
-		this _initialize()
-	}
-	_initialize: func {
-		this _packerBin = GpuPackerBin new()
-		this _unpackRgbaToMonochrome = OpenGLES3MapUnpackRgbaToMonochrome new(this)
-		this _unpackRgbaToUv = OpenGLES3MapUnpackRgbaToUv new(this)
-	}
+	_unpackRgbaToMonochrome := OpenGLES3MapUnpackRgbaToMonochrome new(this)
+	_unpackRgbaToUv := OpenGLES3MapUnpackRgbaToUv new(this)
+	_packers := VectorList<OpenGLES3Bgra> new()
+	init: func { super() }
+	init: func ~other (other: This) { super(other) }
 	free: override func {
 		this _backend makeCurrent()
-		this _packerBin free()
 		this _unpackRgbaToMonochrome free()
 		this _unpackRgbaToUv free()
+		this _packers free()
 		super()
 	}
-	toRaster: func ~monochrome (gpuImage: GpuMonochrome, async: Bool = false) -> RasterImage {
-		result: RasterImage
-		bytesPerPixel := 1
-		if (!this isAligned(gpuImage size width * bytesPerPixel))
-			result = gpuImage toRasterDefault()
-		else {
-			yPacker := this createPacker(gpuImage size, bytesPerPixel)
-			this _packMonochrome imageWidth = gpuImage size width
-			this _packMonochrome channels = bytesPerPixel
-			yPacker pack(gpuImage, this _packMonochrome)
-			result = RasterMonochrome new(yPacker read(async), gpuImage size, 64)
+	recyclePacker: func (packer: OpenGLES3Bgra) { this _packers add(packer) }
+	getPacker: func (size: IntSize2D) -> OpenGLES3Bgra {
+		result: OpenGLES3Bgra = null
+		index := -1
+		for (i in 0..this _packers count) {
+			if (this _packers[i] size == size) {
+				index = i
+				break
+			}
 		}
+		if (index == -1) {
+			androidTexture := this createAndroidRgba(size)
+			result = OpenGLES3Bgra new(androidTexture, this)
+			result _recyclable = false
+		}
+		else
+			result = this _packers remove(index)
 		result
 	}
-	toRaster: func ~uv (gpuImage: GpuUv, async: Bool = false) -> RasterImage {
-		result: RasterImage
-		bytesPerPixel := 2
-		if (!this isAligned(gpuImage size width * bytesPerPixel))
-			result = gpuImage toRasterDefault()
-		else {
-			uvPacker := this createPacker(gpuImage size, bytesPerPixel)
-			this _packUv imageWidth = gpuImage size width
-			this _packUv channels = bytesPerPixel
-			uvPacker pack(gpuImage, this _packUv)
-			result = RasterUv new(uvPacker read(async), gpuImage size, 64)
-		}
-		result
+	toBuffer: func (gpuImage: GpuImage, packMap: OpenGLES3MapPack, async: Bool) -> ByteBuffer {
+		packSize := IntSize2D new(gpuImage size width / (4 / gpuImage channels), gpuImage size height)
+		gpuRgba := this getPacker(packSize)
+		packMap imageWidth = gpuImage size width
+		gpuImage setMagFilter(false)
+		gpuImage setMinFilter(false)
+		gpuRgba canvas draw(gpuImage, packMap, Viewport new(gpuRgba size))
+		if(!async)
+			Fence new() sync() . clientWait() . free()
+		androidTexture := gpuRgba texture as AndroidTexture
+		sourcePointer := androidTexture lock(false)
+		buffer := ByteBuffer new(sourcePointer, androidTexture stride * androidTexture size height,
+			func (buffer: ByteBuffer) {
+				androidTexture unlock()
+				this recyclePacker(gpuRgba)
+			})
+		buffer
+	}
+	toRaster: func ~monochrome (gpuImage: GpuMonochrome, async: Bool) -> RasterImage {
+		buffer := this toBuffer(gpuImage, this _packMonochrome, async)
+		RasterMonochrome new(buffer, gpuImage size)
+	}
+	toRaster: func ~uv (gpuImage: GpuUv, async: Bool) -> RasterImage {
+		buffer := this toBuffer(gpuImage, this _packUv, async)
+		RasterUv new(buffer, gpuImage size)
 	}
 	toRaster: override func (gpuImage: GpuImage, async: Bool = false) -> RasterImage {
-		result := match(gpuImage) {
-			case (i : GpuUv) => this toRaster(gpuImage as GpuUv, async)
-			case (i : GpuMonochrome) => this toRaster(gpuImage as GpuMonochrome, async)
-			case => super(gpuImage)
-		}
-		result
-	}
-	recycle: func ~GpuPacker (packer: GpuPacker) { this _packerBin add(packer) }
-	createPacker: func (size: IntSize2D, bytesPerPixel: UInt) -> GpuPacker {
-		result := this _packerBin find(size, bytesPerPixel)
-		if (result == null) {
-			version(debugGL) { Debug print("Could not find a recycled GpuPacker!")}
-			result = GpuPacker new(size, bytesPerPixel, this)
+		result: RasterImage = null
+		if (!this isAligned(gpuImage channels * gpuImage size width))
+			result = super(gpuImage, async)
+		else {
+			result = match(gpuImage) {
+				case (image : GpuUv) => this toRaster(image, async)
+				case (image : GpuMonochrome) => this toRaster(image, async)
+				case => super(gpuImage)
+			}
 		}
 		result
 	}
