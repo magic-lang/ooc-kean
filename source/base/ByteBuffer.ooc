@@ -16,7 +16,7 @@
 */
 
 import lang/Memory
-import structs/FreeArrayList
+use ooc-collections
 import threading/Thread
 import ReferenceCounter
 import Debug
@@ -108,10 +108,9 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 	free: override func {
 		This _lock lock()
 		bin := This _getBin(this size)
-		while (bin size > 20) {
+		while (bin count > 20) {
 			version(debugByteBuffer) { Debug print("ByteBuffer bin full; freeing one ByteBuffer") }
-			b := bin get(0)
-			bin removeAt(0, false)
+			b := bin remove(0)
 			b __destroy__()
 		}
 		this referenceCount _count = 0
@@ -131,11 +130,10 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		buffer: This = null
 		bin := This _getBin(size)
 		This _lock lock()
-		for(i in 0..bin size)
+		for(i in 0..bin count)
 		{
 			if ((bin[i] size) == size) {
-				buffer = bin[i]
-				bin removeAt(i, false)
+				buffer = bin remove(i)
 				buffer referenceCount _count = 0
 				break
 			}
@@ -145,10 +143,10 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		buffer == null ? This new(gc_malloc_atomic(size), size) : buffer
 	}
 	_lock := static Mutex new()
-	_smallRecycleBin := static FreeArrayList<This> new()
-	_mediumRecycleBin := static FreeArrayList<This> new()
-	_largeRecycleBin := static FreeArrayList<This> new()
-	_getBin: static func (size: Int) -> FreeArrayList<This> {
+	_smallRecycleBin := static VectorList<This> new()
+	_mediumRecycleBin := static VectorList<This> new()
+	_largeRecycleBin := static VectorList<This> new()
+	_getBin: static func (size: Int) -> VectorList<This> {
 		if (size < 10000)
 			This _smallRecycleBin
 		else if (size < 100000)
@@ -158,26 +156,20 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		//		size < 10000 ? This smallRecycleBin : size < 100000 ? This mediumRecycleBin : This largeRecycleBin
 	}
 	_clean: static func {
-		while (This _smallRecycleBin size > 0) {
-			b := This _smallRecycleBin get(0)
-			This _smallRecycleBin removeAt(0, false)
+		while (This _smallRecycleBin count > 0) {
+			b := This _smallRecycleBin remove(0)
 			b __destroy__()
 		}
-		gc_free(This _smallRecycleBin data)
-		gc_free(This _smallRecycleBin)
-		while (This _mediumRecycleBin size > 0) {
-			b := This _mediumRecycleBin get(0)
-			This _mediumRecycleBin removeAt(0, false)
+		This _smallRecycleBin free()
+		while (This _mediumRecycleBin count > 0) {
+			b := This _mediumRecycleBin remove(0)
 			b __destroy__()
 		}
-		gc_free(This _mediumRecycleBin data)
-		gc_free(This _mediumRecycleBin)
-		while (This _largeRecycleBin size > 0) {
-			b := This _largeRecycleBin get(0)
-			This _largeRecycleBin removeAt(0, false)
+		This _mediumRecycleBin free()
+		while (This _largeRecycleBin count > 0) {
+			b := This _largeRecycleBin remove(0)
 			b __destroy__()
 		}
-		gc_free(This _largeRecycleBin data)
-		gc_free(This _largeRecycleBin)
+		This _largeRecycleBin free()
 	}
 }
