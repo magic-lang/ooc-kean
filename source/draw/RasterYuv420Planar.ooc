@@ -26,25 +26,34 @@ import Image
 import Color
 
 RasterYuv420Planar: class extends RasterYuvPlanar {
-	init: func ~fromRasterImages (y: RasterMonochrome, u: RasterMonochrome, v: RasterMonochrome) {
-		super(y, u, v)
+	stride ::= this _y stride
+	init: func ~fromRasterImages (y: RasterMonochrome, u: RasterMonochrome, v: RasterMonochrome) { super(y, u, v) }
+	init: func ~allocateOffset (size: IntSize2D, stride: UInt, uOffset: UInt, vOffset: UInt) {
+		(y, u, v) := this _allocate(size, stride, uOffset, vOffset)
+		this init(y, u, v)
 	}
-	init: func ~allocate (size: IntSize2D, align := 0, verticalAlign := 0) {
-		(y, u, v) := this _allocate(size, align, verticalAlign)
-		super(y, u, v)
+	init: func ~allocateStride (size: IntSize2D, stride: UInt) {
+		yLength := stride * size height
+		uLength := stride * size height / 4
+		this init(size, stride, yLength, yLength + uLength)
 	}
+	init: func ~allocate (size: IntSize2D) { this init(size, size width) }
 	init: func ~fromRasterImage (original: RasterImage) {
-		(y, u, v) := this _allocate(original size)
+		uOffset := original stride * original size height
+		vOffset := uOffset + original stride * original size height / 4
+		(y, u, v) := this _allocate(original size, original stride, uOffset, vOffset)
 		super(original, y, u, v)
 	}
-	_allocate: func (size: IntSize2D, align := 0, verticalAlign := 0) -> (RasterMonochrome, RasterMonochrome, RasterMonochrome) {
-		yLength := Int align(size width, align) * Int align(size height, verticalAlign)
-		uLength := Int align(size width / 2, align) * Int align(size height / 2, verticalAlign)
-		buffer := ByteBuffer new(yLength + 2 * uLength)
+	_allocate: func (size: IntSize2D, stride: UInt, uOffset: UInt, vOffset: UInt) -> (RasterMonochrome, RasterMonochrome, RasterMonochrome) {
+		yLength := stride * size height
+		uLength := stride * size height / 4
+		vLength := uLength
+		length := vOffset + vLength
+		buffer := ByteBuffer new(length)
 		(
-			RasterMonochrome new(buffer slice(0, yLength), size, align),
-			RasterMonochrome new(buffer slice(yLength, uLength), size / 2, align),
-			RasterMonochrome new(buffer slice(yLength + uLength, uLength), size / 2, align)
+			RasterMonochrome new(buffer slice(0, yLength), size, stride),
+			RasterMonochrome new(buffer slice(uOffset, uLength), IntSize2D new(size width / 2, size height / 4), stride),
+			RasterMonochrome new(buffer slice(vOffset, vLength), IntSize2D new(size width / 2, size height / 4), stride)
 		)
 	}
 	create: func (size: IntSize2D) -> Image { This new(size) }

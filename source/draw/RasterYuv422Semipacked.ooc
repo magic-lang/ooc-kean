@@ -33,8 +33,8 @@ import io/BinarySequence
 
 RasterYuv422Semipacked: class extends RasterPacked {
 	bytesPerPixel: Int { get { 2 } }
-	init: func ~allocate (size: IntSize2D, align := 0) { super(size, align) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, align := 0) { super(buffer, size, align) }
+	init: func ~allocate (size: IntSize2D) { super~allocate(size) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, this bytesPerPixel * size width) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original)	}
 	createFrom: func ~fromRasterImage (original: RasterImage) {
 		// TODO: What does this function even do?

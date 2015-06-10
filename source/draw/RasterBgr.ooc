@@ -26,8 +26,10 @@ import Color
 
 RasterBgr: class extends RasterPacked {
 	bytesPerPixel: Int { get { 3 } }
-	init: func ~allocate (size: IntSize2D, align := 0, verticalAlign := 0) { super~allocate(size, align, verticalAlign) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, align := 0, verticalAlign := 0) { super(buffer, size, align, verticalAlign) }
+	init: func ~allocate (size: IntSize2D) { super~allocate(size) }
+	init: func ~allocateStride (size: IntSize2D, stride: UInt) { super(size, stride) }
+	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntSize2D, stride: UInt) { super(buffer, size, stride) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { this init(buffer, size, this bytesPerPixel * size width) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This {

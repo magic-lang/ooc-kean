@@ -42,7 +42,7 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
 		}
 	}
 	init: func (yImage: RasterMonochrome, uvImage: RasterUv) {
-		super(yImage size, yImage align, yImage verticalAlign)
+		super(yImage size)
 		this _y = yImage
 		this _y referenceCount increase()
 		this _uv = uvImage
