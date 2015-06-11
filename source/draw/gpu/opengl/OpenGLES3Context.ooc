@@ -202,4 +202,10 @@ OpenGLES3Context: class extends GpuContext {
 		target canvas draw(source, map, viewport)
 	}
 	createFence: func -> GpuFence { OpenGLES3Fence new() }
+	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) {
+		result := this toRaster(gpuImage, true)
+		fence := this createFence()
+		fence sync()
+		(result, fence)
+	}
 }
