@@ -17,7 +17,7 @@
 use ooc-draw
 use ooc-math
 use ooc-base
-import GpuCanvas, GpuContext
+import GpuCanvas, GpuContext, GpuFence
 
 GpuImageType: enum {
 	monochrome
@@ -74,6 +74,7 @@ GpuImage: abstract class extends Image {
 	shift: func (offset: IntSize2D) -> This { raise("Using unimplemented function shift in GpuImage class"); null }
 	distance: func (other: This) -> Float { raise("Using unimplemented function distance in GpuImage class"); 0.0f }
 	toRaster: func(async: Bool = false) -> RasterImage { this _context toRaster(this, async) }
+	toRasterAsync: func -> (RasterImage, GpuFence) { this _context toRasterAsync(this) }
 	toRasterDefault: abstract func -> RasterImage
 	_createCanvas: abstract func -> GpuCanvas
 

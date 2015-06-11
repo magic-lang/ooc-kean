@@ -54,15 +54,15 @@ AndroidContext: class extends OpenGLES3Context {
 			result = this _packers remove(index)
 		result
 	}
-	toBuffer: func (gpuImage: GpuImage, packMap: OpenGLES3MapPack, async: Bool) -> ByteBuffer {
+	toBuffer: func (gpuImage: GpuImage, packMap: OpenGLES3MapPack) -> (ByteBuffer, GpuFence) {
 		packSize := IntSize2D new(gpuImage size width / (4 / gpuImage channels), gpuImage size height)
 		gpuRgba := this getPacker(packSize)
 		packMap imageWidth = gpuImage size width
 		gpuImage setMagFilter(false)
 		gpuImage setMinFilter(false)
 		gpuRgba canvas draw(gpuImage, packMap, Viewport new(gpuRgba size))
-		if(!async)
-			Fence new() sync() . clientWait() . free()
+		fence := this createFence()
+		fence sync()
 		androidTexture := gpuRgba texture as AndroidTexture
 		sourcePointer := androidTexture lock(false)
 		buffer := ByteBuffer new(sourcePointer, androidTexture stride * androidTexture size height,
@@ -70,14 +70,20 @@ AndroidContext: class extends OpenGLES3Context {
 				androidTexture unlock()
 				this recyclePacker(gpuRgba)
 			})
-		buffer
+		(buffer, fence)
 	}
 	toRaster: func ~monochrome (gpuImage: GpuMonochrome, async: Bool) -> RasterImage {
-		buffer := this toBuffer(gpuImage, this _packMonochrome, async)
+		(buffer, fence) := this toBuffer(gpuImage, this _packMonochrome)
+		if (!async)
+			fence wait()
+		fence free()
 		RasterMonochrome new(buffer, gpuImage size)
 	}
 	toRaster: func ~uv (gpuImage: GpuUv, async: Bool) -> RasterImage {
-		buffer := this toBuffer(gpuImage, this _packUv, async)
+		(buffer, fence) := this toBuffer(gpuImage, this _packUv)
+		if (!async)
+			fence wait()
+		fence free()
 		RasterUv new(buffer, gpuImage size)
 	}
 	toRaster: override func (gpuImage: GpuImage, async: Bool = false) -> RasterImage {
@@ -92,6 +98,24 @@ AndroidContext: class extends OpenGLES3Context {
 			}
 		}
 		result
+	}
+	toRasterAsync: func~monochrome (gpuImage: GpuMonochrome) -> (RasterImage, GpuFence) {
+		(buffer, fence) := this toBuffer(gpuImage, this _packMonochrome)
+		(RasterMonochrome new(buffer, gpuImage size), fence)
+	}
+	toRasterAsync: func~uv (gpuImage: GpuUv) -> (RasterImage, GpuFence) {
+		(buffer, fence) := this toBuffer(gpuImage, this _packUv)
+		(RasterUv new(buffer, gpuImage size), fence)
+	}
+	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) {
+		imageResult: RasterImage
+		fenceResult: GpuFence
+		match(gpuImage) {
+			case (image : GpuMonochrome) => (imageResult, fenceResult) = this toRasterAsync(image)
+			case (image : GpuUv) => (imageResult, fenceResult) = this toRasterAsync(image)
+			case => Debug raise("Unknown format in toRasterAsync");
+		}
+		(imageResult, fenceResult)
 	}
 	createAndroidRgba: func (size: IntSize2D) -> AndroidRgba { AndroidRgba new(size, this _backend _eglDisplay) }
 	createBgra: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> OpenGLES3Bgra {
