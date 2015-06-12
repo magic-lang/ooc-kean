@@ -15,7 +15,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
 import IntPoint3D
-import IntExtension
 import FloatSize3D
 import text/StringTokenizer
 import structs/ArrayList

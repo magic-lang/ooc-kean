@@ -15,7 +15,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import math
-import IntExtension
 import IntSize2D
 import IntPoint2D
 import FloatTransform2D

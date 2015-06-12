@@ -17,7 +17,7 @@ import FloatPoint3D
 import FloatRotation3D
 import FloatTransform2D
 import math
-import FloatExtension
+
 Quaternion: cover {
 	real: Float
 	imaginary: FloatPoint3D
