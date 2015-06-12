@@ -46,7 +46,7 @@ X11Window: class extends NativeWindow {
 	}
 	resize: func (size: IntSize2D) { XResizeWindow(this _display, this _backend, size width, size height) }
 	free: override func {
-//		XCloseDisplay(this _display)
+		XCloseDisplay(this _display)
 		super()
 	}
 }
