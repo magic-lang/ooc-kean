@@ -16,7 +16,6 @@
 */
 use ooc-collections
 import math
-import IntExtension
 import FloatComplex
 import FloatComplexVectorList
 

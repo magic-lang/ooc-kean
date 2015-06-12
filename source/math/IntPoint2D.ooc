@@ -16,7 +16,6 @@
 import math
 import IntSize2D
 import FloatPoint2D
-import IntExtension
 import text/StringTokenizer
 import structs/ArrayList
 
