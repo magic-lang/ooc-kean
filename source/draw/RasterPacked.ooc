@@ -44,7 +44,7 @@ RasterPacked: abstract class extends RasterImage {
 		super(original)
 		this _stride = original stride
 	}
-	__destroy__: func {
+	free: override func {
 		if (this _buffer != null)
 			this _buffer referenceCount decrease()
 		this _buffer = null
