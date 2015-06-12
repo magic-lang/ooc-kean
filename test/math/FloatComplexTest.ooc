@@ -20,7 +20,6 @@ use ooc-collections
 import math
 import text/StringTokenizer
 import structs/ArrayList
-import structs/FreeArrayList
 import FloatComplex
 import lang/IO
 
