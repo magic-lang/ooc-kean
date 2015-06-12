@@ -117,9 +117,6 @@ RasterYuv422Semipacked: class extends RasterPacked {
 			(index - 2*((x + 1) % 2))@ = ColorMonochrome new(value v)
 		}
 	}
-	__destroy__: func {
-		this buffer referenceCount decrease()
-	}
 	open: static func (filename: String) -> This {
 		x, y, n: Int
 		requiredComponents := 3

@@ -18,7 +18,6 @@
 import math
 import text/StringTokenizer
 import structs/ArrayList
-import structs/FreeArrayList
 
 FloatComplex: cover {
 	real, imaginary: Float
@@ -44,12 +43,12 @@ FloatComplex: cover {
 		this real toString() >> (this imaginary > 0 ? " +" : " ") & this imaginary toString() >> "i"
 	}
 	parse: static func (input: String) -> This {
-		realResult, imaginaryResult: Float
-		parts: FreeArrayList<String> = input split(' ') as FreeArrayList
-		realResult = parts[0] toFloat()
-		imaginaryResult = parts[1] toFloat()
+		parts := input split(' ')
+		result := This new(parts[0] toFloat(), parts[1] toFloat())
+		parts[0] free()
+		parts[1] free()
 		parts free()
-		This new (realResult, imaginaryResult)
+		result
 	}
 	exponential: func -> This {
 		(this real) exp() * This new((this imaginary) cos(), (this imaginary) sin())

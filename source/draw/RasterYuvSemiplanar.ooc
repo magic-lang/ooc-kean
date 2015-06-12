@@ -55,7 +55,7 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
 		this _uv = uv
 		this _uv referenceCount increase()
 	}
-	__destroy__: func {
+	free: override func {
 		this y referenceCount decrease()
 		this uv referenceCount decrease()
 		super()
