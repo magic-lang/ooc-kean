@@ -31,9 +31,9 @@ Timer: class {
 		this _min = INFINITY
 		this _max = 0.0
 	}
-	start: virtual func { this _startTime = (Time runTime() as Double) }
+	start: virtual func { this _startTime = (Time runTimeMicro() as Double) }
 	stop: virtual func -> Double {
-		this _endTime = (Time runTime() as Double)
+		this _endTime = (Time runTimeMicro() as Double)
 		this _result = this _endTime - this _startTime
 		this _update()
 		this _result

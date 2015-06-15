@@ -64,7 +64,8 @@ version(!windows) {
 /* implementation */
 
 Time: class {
-    __time_millisec_base := static This runTime()
+	__time_microsec_base := static This runTime
+    __time_millisec_base := static This __time_microsec_base() / 1000
 
     /**
         Returns the current date + time as a human-readable string without a trailing newline character.
@@ -130,12 +131,22 @@ Time: class {
             return ((counter quadPart * 1000) / frequency quadPart) - __time_millisec_base
         }
         version(!windows) {
-            tv : TimeVal
-            gettimeofday(tv&, null)
-            return ((tv tv_usec / 1000 + tv tv_sec * 1000) - __time_millisec_base) as UInt
+			return This runTimeMicro() / (1000 as UInt)
         }
         return -1
     }
+	
+	/**
+		Gets the number of microseconds elapsed since program start.
+	*/
+	runTimeMicro: static func -> UInt {
+		version(!windows) {
+            tv : TimeVal
+            gettimeofday(tv&, null)
+            return ((tv tv_usec + tv tv_sec * 1_000_000) - __time_millisec_base) as UInt
+        }
+        return -1
+	}
 
     /**
      * @return the number of milliseconds spent executing 'action'
