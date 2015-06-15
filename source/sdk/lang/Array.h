@@ -15,17 +15,23 @@
 
 #define _lang_array__Array_new(type, size) ((_lang_array__Array) { size, array_malloc((size) * sizeof(type)) });
 
+#if defined(safe)
 #define _lang_array__Array_get(array, index, type) ( \
     (index < 0 || index >= array.length) ? \
     lang_Exception__Exception_throw((lang_Exception__Exception *) lang_Exception__OutOfBoundsException_new_noOrigin(index, array.length)), \
     *((type*) NULL) : \
     ((type*) array.data)[index])
-
 #define _lang_array__Array_set(array, index, type, value) \
     (index < 0 || index >= array.length) ? \
     lang_Exception__Exception_throw((lang_Exception__Exception *) lang_Exception__OutOfBoundsException_new_noOrigin(index, array.length)), \
     *((type*) NULL) : \
     (((type*) array.data)[index] = value)
+#else
+#define _lang_array__Array_get(array, index, type) ( \
+    ((type*) array.data)[index])
+#define _lang_array__Array_set(array, index, type, value) \
+    (((type*) array.data)[index] = value)
+#endif
 
 #define _lang_array__Array_free(array) { array_free(array.data); }
 

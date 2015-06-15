@@ -45,12 +45,12 @@ RasterMonochrome: class extends RasterPacked {
 		this apply(ColorConvert fromMonochrome(action))
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
-		end := this buffer pointer + this buffer size
+		end := this buffer pointer as Long + this buffer size
 		rowLength := this size width
-		for (row in this buffer pointer..end) {
+		for (row in this buffer pointer as Long..end) {
 //			"RasterMonochrome apply ~monochrome, end of line at #{row}" println()
 			rowEnd := row + rowLength
-			for (source in row..rowEnd)
+			for (source: Long in row..rowEnd)
 				action((source as ColorMonochrome*)@)
 			row += this stride - 1
 		}

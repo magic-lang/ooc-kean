@@ -145,6 +145,7 @@ RasterUv: class extends RasterPacked {
 			}
 		}
 		original apply(f)
+		result
 	}
 
 	operator [] (x, y: Int) -> ColorUv { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorUv* + x)@ : ColorUv new(0, 0) }
