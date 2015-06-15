@@ -32,7 +32,7 @@ OpenGLES3Uv: class extends GpuUv {
 	}
 	toRasterDefault: func -> RasterImage {
 		packed := this _context createBgra(IntSize2D new(this size width / 2, this size height))
-		this _context packToRgba(this, packed, Viewport new(packed size))
+		this _context packToRgba(this, packed, IntBox2D new(packed size))
 		buffer := packed canvas readPixels()
 		result := RasterUv new(buffer, this size)
 		packed free()

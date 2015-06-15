@@ -191,8 +191,8 @@ OpenGLES3Context: class extends GpuContext {
 		result
 	}
 	update: func { this _backend swapBuffers() }
-	setViewport: func (viewport: Viewport) { Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height) }
-	packToRgba: func (source: GpuImage, target: GpuBgra, viewport: Viewport) {
+	setViewport: func (viewport: IntBox2D) { Fbo setViewport(viewport left, viewport top, viewport width, viewport height) }
+	packToRgba: func (source: GpuImage, target: GpuBgra, viewport: IntBox2D) {
 		map := match(source) {
 			case source: GpuMonochrome => this _packMonochrome
 			case source: GpuUv => this _packUv

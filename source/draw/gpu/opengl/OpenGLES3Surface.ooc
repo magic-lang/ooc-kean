@@ -37,15 +37,15 @@ OpenGLES3Surface: class extends GpuSurface {
 		super()
 	}
 	clear: func
-	draw: func ~gpuimage (image: GpuImage, map: GpuMap, viewport: Viewport) {
-		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
+	draw: func ~gpuimage (image: GpuImage, map: GpuMap, viewport: IntBox2D) {
+		Fbo setViewport(viewport left, viewport top, viewport width, viewport height)
 		map use()
 		image bind(0)
 		this _quad draw()
 		image unbind()
 	}
-	draw: func ~twoGpuimages (image1: GpuImage, image2: GpuImage, map: GpuMap, viewport: Viewport) {
-		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
+	draw: func ~twoGpuimages (image1: GpuImage, image2: GpuImage, map: GpuMap, viewport: IntBox2D) {
+		Fbo setViewport(viewport left, viewport top, viewport width, viewport height)
 		map use()
 		image1 bind(0)
 		image2 bind(2)
@@ -53,7 +53,7 @@ OpenGLES3Surface: class extends GpuSurface {
 		image1 unbind()
 		image2 unbind()
 	}
-	draw: func (image: Image, map: GpuMap, viewport: Viewport) {
+	draw: func (image: Image, map: GpuMap, viewport: IntBox2D) {
 		match (image) {
 			case (i: GpuImage) => {
 				this draw(i, map, viewport)

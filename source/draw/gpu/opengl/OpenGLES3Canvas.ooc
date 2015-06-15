@@ -39,7 +39,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	}
 	draw: func (image: Image) {
 		map := this _context getMap(this _target)
-		viewport := Viewport new(this _size)
+		viewport := IntBox2D new(this _size)
 		this draw(image, map, viewport)
 	}
 	// Postcondition: Returns the transform to apply directly to a quad for rendering with compensation for aspect ratio.
@@ -51,10 +51,10 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	draw: func ~transform2D (image: Image, transform: FloatTransform2D) {
 		map := this _context getMap(this _target, GpuMapType transform) as OpenGLES3MapDefault
 		map transform = getFinalTransform(this _size, transform)
-		viewport := Viewport new(this _size)
+		viewport := IntBox2D new(this _size)
 		this draw(image, map, viewport)
 	}
-	draw: func ~withmap (image: Image, map: GpuMap, viewport: Viewport) {
+	draw: func ~withmap (image: Image, map: GpuMap, viewport: IntBox2D) {
 		this _bind()
 		Fbo setClearColor(this clearColor)
 		Fbo enableBlend(this blend)
@@ -65,7 +65,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		Fbo setClearColor(0.0f)
 		this _unbind()
 	}
-	draw: func ~withmapTwoImages (image1: Image, image2: Image, map: GpuMap, viewport: Viewport) {
+	draw: func ~withmapTwoImages (image1: Image, image2: Image, map: GpuMap, viewport: IntBox2D) {
 		this _bind()
 		Fbo setClearColor(this clearColor)
 		Fbo enableBlend(this blend)
@@ -102,8 +102,8 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		(drawPointsFunc as Closure) dispose()
 	}
 	_setViewport: func {
-		viewport := Viewport new(this _size)
-		Fbo setViewport(viewport offset width, viewport offset height, viewport resolution width, viewport resolution height)
+		viewport := IntBox2D new(this _size)
+		Fbo setViewport(viewport left, viewport top, viewport width, viewport height)
 	}
 	_bind: func {
 		this _renderTarget bind()
@@ -167,8 +167,8 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 		else
 			raise("Trying to draw unsupported image format to OpenGLES3Yuv420Planar")
 	}
-	draw: func ~withmap (image: Image, map: GpuMap, viewport: Viewport)
-	draw: func ~withmapTwoImages (image1: Image, image2: Image, map: GpuMap, viewport: Viewport)
+	draw: func ~withmap (image: Image, map: GpuMap, viewport: IntBox2D)
+	draw: func ~withmapTwoImages (image1: Image, image2: Image, map: GpuMap, viewport: IntBox2D)
 	clear: func {
 		this target y canvas clear()
 		this target u canvas clear()
@@ -218,8 +218,8 @@ OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 		else
 			raise("Trying to draw unsupported image format to OpenGLES3Yuv420Semiplanar")
 	}
-	draw: func ~withmap (image: Image, map: GpuMap, viewport: Viewport)
-	draw: func ~withmapTwoImages (image1: Image, image2: Image, map: GpuMap, viewport: Viewport)
+	draw: func ~withmap (image: Image, map: GpuMap, viewport: IntBox2D)
+	draw: func ~withmapTwoImages (image1: Image, image2: Image, map: GpuMap, viewport: IntBox2D)
 	clear: func {
 		this target y canvas clear()
 		this target uv canvas clear()

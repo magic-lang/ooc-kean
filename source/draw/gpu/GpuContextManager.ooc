@@ -16,7 +16,7 @@
 use ooc-base
 use ooc-draw
 use ooc-math
-import GpuContext, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv422Semipacked, GpuYuv420Planar, GpuImage, GpuSurface, GpuMap, Viewport, GpuFence
+import GpuContext, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv422Semipacked, GpuYuv420Planar, GpuImage, GpuSurface, GpuMap, GpuFence
 
 pthread_self: extern func -> Long
 
@@ -84,8 +84,8 @@ GpuContextManager: abstract class extends GpuContext {
 	createSurface: func -> GpuSurface { this _getContext() createSurface() }
 	toRaster: override func (gpuImage: GpuImage, async: Bool = false) -> RasterImage { this _getContext() toRaster(gpuImage, async) }
 	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) { this _getContext() toRasterAsync(gpuImage) }
-	setViewport: func (viewport: Viewport) { this _getContext() setViewport(viewport) }
+	setViewport: func (viewport: IntBox2D) { this _getContext() setViewport(viewport) }
 	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap { this _getContext() getMap(gpuImage, mapType) }
-	packToRgba: func (source: GpuImage, target: GpuBgra, viewport: Viewport) { this _getContext() packToRgba(source, target, viewport) }
+	packToRgba: func (source: GpuImage, target: GpuBgra, viewport: IntBox2D) { this _getContext() packToRgba(source, target, viewport) }
 	createFence: func -> GpuFence { this _getContext() createFence() }
 }

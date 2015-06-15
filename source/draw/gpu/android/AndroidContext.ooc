@@ -60,7 +60,7 @@ AndroidContext: class extends OpenGLES3Context {
 		packMap imageWidth = gpuImage size width
 		gpuImage setMagFilter(false)
 		gpuImage setMinFilter(false)
-		gpuRgba canvas draw(gpuImage, packMap, Viewport new(gpuRgba size))
+		gpuRgba canvas draw(gpuImage, packMap, IntBox2D new(gpuRgba size))
 		fence := this createFence()
 		fence sync()
 		androidTexture := gpuRgba texture as AndroidTexture
@@ -128,10 +128,10 @@ AndroidContext: class extends OpenGLES3Context {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
 		this _unpackRgbaToMonochrome targetSize = target y size
 		this _unpackRgbaToMonochrome sourceSize = source size
-		target y canvas draw(source, _unpackRgbaToMonochrome, Viewport new(target y size))
+		target y canvas draw(source, _unpackRgbaToMonochrome, IntBox2D new(target y size))
 		this _unpackRgbaToUv targetSize = target uv size
 		this _unpackRgbaToUv sourceSize = source size
-		target uv canvas draw(source, _unpackRgbaToUv, Viewport new(target uv size))
+		target uv canvas draw(source, _unpackRgbaToUv, IntBox2D new(target uv size))
 		target
 	}
 
