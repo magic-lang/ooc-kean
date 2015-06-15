@@ -38,7 +38,7 @@ Profiler: class {
 	}
 	printResults: static func {
 		This _profilers apply(func(profiler: Profiler) {
-			outputString := profiler _name + " Time: " & profiler _timer _result toString() >> " Average: " & profiler _timer _average toString()
+			outputString := profiler _name + " Time: " & ("%.3f" formatFloat(profiler _timer _result / 1000.0f)) >> " Average: " & ("%.3f" formatFloat(profiler _timer _average / 1000.0f))
 			Debug print(outputString)
 			outputString free()
 		})
@@ -53,7 +53,7 @@ Profiler: class {
 	logResults: static func (fileName := "profiling.txt") {
 		fw := FileWriter new(fileName)
 		This _profilers apply(func(profiler: Profiler) {
-			outputString := profiler _name + " Time: " & profiler _timer _result toString() >> " Average: " & profiler _timer _average toString()
+			outputString := profiler _name + " Time: " & ("%.3f" formatFloat(profiler _timer _result / 1000.0f)) >> " Average: " & ("%.3f" formatFloat(profiler _timer _average / 1000.0f))
 			fw write(outputString)
 			outputString free()
 		})
