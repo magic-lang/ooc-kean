@@ -110,10 +110,14 @@ AndroidContext: class extends OpenGLES3Context {
 	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) {
 		imageResult: RasterImage
 		fenceResult: GpuFence
-		match(gpuImage) {
-			case (image : GpuMonochrome) => (imageResult, fenceResult) = this toRasterAsync(image)
-			case (image : GpuUv) => (imageResult, fenceResult) = this toRasterAsync(image)
-			case => Debug raise("Unknown format in toRasterAsync");
+		if (!this isAligned(gpuImage channels * gpuImage size width))
+			(imageResult, fenceResult) = super(gpuImage)
+		else {
+			match(gpuImage) {
+				case (image : GpuMonochrome) => (imageResult, fenceResult) = this toRasterAsync(image)
+				case (image : GpuUv) => (imageResult, fenceResult) = this toRasterAsync(image)
+				case => Debug raise("Unknown format in toRasterAsync");
+			}
 		}
 		(imageResult, fenceResult)
 	}
