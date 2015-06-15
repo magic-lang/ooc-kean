@@ -39,8 +39,8 @@ RasterBgra: class extends RasterPacked {
 		result
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
-		end := (this buffer pointer as Int*) + this size area
-		for (source in (this buffer pointer as Int*)..end) {
+		end := this buffer pointer as Long + this size area
+		for (source: Long in (this buffer pointer as Long)..end) {
 			action((source as ColorBgr*)@)
 			source += 3
 		}

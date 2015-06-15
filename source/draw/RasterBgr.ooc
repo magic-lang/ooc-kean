@@ -38,11 +38,11 @@ RasterBgr: class extends RasterPacked {
 		result
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
-		end := this buffer pointer + this buffer size
+		end := this buffer pointer as Long + this buffer size
 		rowLength := this size width
-		for (row in this buffer pointer..end) {
-			rowEnd := (row as ColorBgr*) + rowLength
-			for (source in (row as ColorBgr*)..rowEnd) {
+		for (row: Long in this buffer pointer as Long..end) {
+			rowEnd := (row as ColorBgr* as Long) + rowLength as Long
+			for (source: Long in (row as Long)..rowEnd) {
 				action((source as ColorBgr*)@)
 				source += 2
 			}
