@@ -41,6 +41,8 @@ IntBox2D: cover {
 	bottomCenter ::= IntPoint2D new(this center x, this bottom)
 	empty ::= this size empty
 	init: func@ (=leftTop, =size)
+	init: func@ ~fromSizes (leftTop: IntSize2D, =size) { this leftTop = IntPoint2D new(leftTop width, leftTop height) }
+	init: func@ ~fromSize (=size) { this leftTop = IntPoint2D new() }
 	init: func@ ~fromInts (left, top, width, height: Int) { this init(IntPoint2D new(left, top), IntSize2D new(width, height)) }
 	//init: func@ ~fromSize (size: IntSize2D) { this init(IntPoint2D new(), size) }
 	init: func@ ~fromPoints (first, second: IntPoint2D) {

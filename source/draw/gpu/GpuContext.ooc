@@ -16,7 +16,7 @@
 use ooc-math
 use ooc-draw
 use ooc-base
-import GpuImage, GpuMonochrome, GpuUv, GpuBgr, GpuBgra, GpuYuv420Semiplanar, GpuYuv420Planar, GpuYuv422Semipacked, GpuImageBin, GpuSurfaceBin, GpuSurface, GpuMap, Viewport, GpuFence
+import GpuImage, GpuMonochrome, GpuUv, GpuBgr, GpuBgra, GpuYuv420Semiplanar, GpuYuv420Planar, GpuYuv422Semipacked, GpuImageBin, GpuSurfaceBin, GpuSurface, GpuMap, GpuFence
 
 AlignWidth: enum {
 	Nearest
@@ -55,9 +55,9 @@ GpuContext: abstract class {
 	toRasterAsync: virtual func (gpuImage: GpuImage) -> (RasterImage, GpuFence) { Debug raise("toRasterAsync unimplemented") }
 	getMap: abstract func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap
 	getMaxContexts: func -> Int { 1 }
-	setViewport: abstract func (viewport: Viewport)
+	setViewport: abstract func (viewport: IntBox2D)
 	getCurrentIndex: func -> Int { 0 }
 	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }
 	isAligned: virtual func (width: Int) -> Bool { true }
-	packToRgba: abstract func (source: GpuImage, target: GpuBgra, viewport: Viewport)
+	packToRgba: abstract func (source: GpuImage, target: GpuBgra, viewport: IntBox2D)
 }

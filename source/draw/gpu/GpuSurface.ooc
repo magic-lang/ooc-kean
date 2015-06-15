@@ -16,14 +16,14 @@
 
 use ooc-math
 use ooc-draw
-import GpuMap, GpuContext, Viewport
+import GpuMap, GpuContext
 
 GpuSurface: abstract class {
 	size: IntSize2D
 	_context: GpuContext
 	init: func (=_context)
-	draw: abstract func (image: Image, map: GpuMap, viewport: Viewport)
-	draw: abstract func ~twoGpuimages (image1: Image, image2: Image, map: GpuMap, viewport: Viewport)
+	draw: abstract func (image: Image, map: GpuMap, viewport: IntBox2D)
+	draw: abstract func ~twoGpuimages (image1: Image, image2: Image, map: GpuMap, viewport: IntBox2D)
 	clear: abstract func
 	recycle: abstract func
 }

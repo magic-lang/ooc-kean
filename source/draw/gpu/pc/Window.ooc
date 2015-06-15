@@ -92,8 +92,8 @@ Window: class extends OpenGLES3Context {
 			this draw(image as GpuImage, transform)
 	}
 	draw: func ~shader (image: GpuImage, map: GpuMap) {
-		offset := IntSize2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
-		viewport := Viewport new(offset, image size)
+		offset := IntPoint2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
+		viewport := IntBox2D new(offset, image size)
 		surface := this createSurface()
 		surface draw(image, map, viewport)
 		surface recycle()
