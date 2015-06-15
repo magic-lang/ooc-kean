@@ -1,4 +1,4 @@
-
+import math
 use ooc-draw
 use ooc-math
 use ooc-base
