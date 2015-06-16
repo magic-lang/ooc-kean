@@ -40,7 +40,7 @@ FloatMatrix : cover {
 	identity: static func@ (order: Int) -> This {
 		result := This new (order, order)
 		for (i in 0..order) {
-			result set(i, i, 1.0f)
+			result elements[i + result dimensions width * i] = 1.0f
 		}
 		result
 	}
@@ -77,12 +77,8 @@ FloatMatrix : cover {
 	// </summary>
 	// <returns>Return a copy of the current matrix.</returns>
 	copy: func@ () -> This {
-		result := This new (this dimensions width, this dimensions height)
-		for (y in 0..this dimensions height) {
-			for (x in 0..this dimensions width) {
-				result set(x, y, this get(x, y))
-			}
-		}
+		result := This new(this dimensions width, this dimensions height)
+		memcpy(result elements data, this elements data, this dimensions area * Float size)
 		result
 	}
 
@@ -94,7 +90,7 @@ FloatMatrix : cover {
 		result := This new (this dimensions height, this dimensions width)
 		for (y in 0..this dimensions height) {
 			for (x in 0..this dimensions width) {
-				result set(y, x, this get(x, y))
+				result elements[y + this dimensions height * x] = this elements[x + this dimensions width * y]
 			}
 		}
 		result
@@ -110,9 +106,9 @@ FloatMatrix : cover {
 		buffer: Float
 		if (row1 != row2) {
 			for (i in 0..order) {
-					buffer = this get(i, row1)
-					this set(i, row1, this get(i, row2))
-					this set(i, row2, buffer)
+				buffer = this elements[i + this dimensions width * row1]
+				this elements[i + this dimensions width * row1] = this elements[i + this dimensions width * row2]
+				this elements[i + this dimensions width * row2] = buffer
 			}
 		}
 	}
@@ -286,9 +282,11 @@ operator * (left: FloatMatrix, right: FloatMatrix) -> FloatMatrix {
 	result := FloatMatrix new (right dimensions width, left dimensions height)
 	for (x in 0..right dimensions width) {
 		for (y in 0..left dimensions height) {
+			temp := result elements[x + result dimensions width * y]
 			for (z in 0..left dimensions width) {
-				result set(x, y, result get(x, y) + left get(z, y) * right get(x, z))
+				temp += left elements[z + left dimensions width * y] * right elements[x + right dimensions width * z]
 			}
+			result elements[x + result dimensions width * y] = temp
 		}
 	}
 result
