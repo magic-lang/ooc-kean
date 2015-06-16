@@ -40,7 +40,7 @@ FloatMatrix : cover {
 	identity: static func@ (order: Int) -> This {
 		result := This new (order, order)
 		for (i in 0..order) {
-			result set(i, i, 1.0f)
+			result elements[i + result dimensions width * i] = 1.0f
 		}
 		result
 	}
@@ -77,12 +77,8 @@ FloatMatrix : cover {
 	// </summary>
 	// <returns>Return a copy of the current matrix.</returns>
 	copy: func@ () -> This {
-		result := This new (this dimensions width, this dimensions height)
-		for (y in 0..this dimensions height) {
-			for (x in 0..this dimensions width) {
-				result set(x, y, this get(x, y))
-			}
-		}
+		result := This new(this dimensions width, this dimensions height)
+		memcpy(result elements data, this elements data, this dimensions area * Float size)
 		result
 	}
 
@@ -94,7 +90,7 @@ FloatMatrix : cover {
 		result := This new (this dimensions height, this dimensions width)
 		for (y in 0..this dimensions height) {
 			for (x in 0..this dimensions width) {
-				result set(y, x, this get(x, y))
+				result elements[y + this dimensions height * x] = this elements[x + this dimensions width * y]
 			}
 		}
 		result
@@ -110,9 +106,9 @@ FloatMatrix : cover {
 		buffer: Float
 		if (row1 != row2) {
 			for (i in 0..order) {
-					buffer = this get(i, row1)
-					this set(i, row1, this get(i, row2))
-					this set(i, row2, buffer)
+				buffer = this elements[i + this dimensions width * row1]
+				this elements[i + this dimensions width * row1] = this elements[i + this dimensions width * row2]
+				this elements[i + this dimensions width * row2] = buffer
 			}
 		}
 	}
@@ -145,24 +141,24 @@ FloatMatrix : cover {
 		for (position in 0..order - 1) {
 			pivotRow: Int = position
 			for (y in position + 1..u dimensions height)
-					if (abs(u get (position, position)) < abs(u get (position, y)))
+					if (abs(u elements[position + u dimensions width * position]) < abs(u elements[position + u dimensions width * y]))
 						pivotRow = y
 			p swaprows(position, pivotRow)
 			u swaprows(position, pivotRow)
 
-			if (u get(position, position) != 0) {
+			if (u elements[position + u dimensions width * position] != 0) {
 				for (y in position + 1..order) {
-					pivot := u get(position, y) / u get(position, position)
+					pivot := u elements[position + u dimensions width * y] / u elements[position + u dimensions width * position]
 					for (x in position..order)
-						u set(x, y, u get(x, y) - pivot * u get(x, position))
-					u set(position, y, pivot)
+						u elements[x + u dimensions width * y] = u elements[x + u dimensions width * y] - pivot * u elements[x + u dimensions width * position]
+					u elements[position + u dimensions width * y] = pivot
 				}
 			}
 		}
 		for (y in 0..order)
 			for (x in 0..y) {
-				l set(x, y, u get(x, y))
-				u set(x, y, 0)
+				l elements[x + l dimensions width * y] = u elements[x + u dimensions width * y]
+				u elements[x + u dimensions width * y] = 0
 			}
 		result := [l, u, p]
 		result
@@ -225,13 +221,13 @@ FloatMatrix : cover {
 		result := This new(this dimensions width, this dimensions height)
 		for (x in 0..this dimensions width) {
 			for (y in 0..this dimensions height) {
-				accumulator := this get(x, y)
+				accumulator := this elements[x + this dimensions width * y]
 				for (x2 in 0..y) {
-					accumulator -= lower get(x2, y) * result get(x, x2)
+					accumulator -= lower elements[x2 + lower dimensions width * y] * result elements[x + result dimensions width * x2]
 				}
-				value := lower get(y, y)
+				value := lower elements[y + lower dimensions width * y]
 				if (value != 0) {
-					result set(x, y, accumulator / value)
+					result elements[x + result dimensions width * y] = accumulator / value
 				} else {
 					/*DivisionByZeroException new() throw()*/
 				}
@@ -251,13 +247,13 @@ FloatMatrix : cover {
 			y: Int = 0
 			for (antiY in 0..this dimensions height) {
 				y = this dimensions height - 1 - antiY
-				accumulator := this get(x, y)
+				accumulator := this elements[x + this dimensions width * y]
 				for (x2 in y + 1..upper dimensions width) {
-					accumulator -= upper get(x2, y) * result get(x, x2)
+					accumulator -= upper elements[x2 + upper dimensions width * y] * result elements[x + result dimensions width * x2]
 				}
-				value := upper get(y, y)
+				value := upper elements[y + upper dimensions width * y]
 				if (value != 0) {
-					result set(x, y, accumulator / value)
+					result elements[x + result dimensions width * y] = accumulator / value
 				} else {
 					/*DivisionByZeroException new() throw()*/
 				}
@@ -286,9 +282,11 @@ operator * (left: FloatMatrix, right: FloatMatrix) -> FloatMatrix {
 	result := FloatMatrix new (right dimensions width, left dimensions height)
 	for (x in 0..right dimensions width) {
 		for (y in 0..left dimensions height) {
+			temp := result elements[x + result dimensions width * y]
 			for (z in 0..left dimensions width) {
-				result set(x, y, result get(x, y) + left get(z, y) * right get(x, z))
+				temp += left elements[z + left dimensions width * y] * right elements[x + right dimensions width * z]
 			}
+			result elements[x + result dimensions width * y] = temp
 		}
 	}
 result
