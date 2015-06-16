@@ -61,6 +61,7 @@ FloatPoint2D: cover {
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
 	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
 	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x floor() as Int, this y floor() as Int) }
+	toFloatSize2D: func -> FloatSize2D { FloatSize2D new(this x, this y) }
 	operator as -> String { this toString() }
 	toString: func -> String { this x toString() & ", " clone() & this y toString() }
 	parse: static func (input: String) -> This {
