@@ -109,17 +109,28 @@ HeapVector: class <T> extends Vector<T> {
 		gc_free(this _backend)
 	}
 
-		operator [] (index: Int) -> T {
-			this _backend[index]
+	operator [] (index: Int) -> T {
+		version(safe) {
+			// TODO: Should we also check that index < count?
+			if (index >= this capacity || index < 0)
+				raise("Accessing Vector index out of range in set operator")
 		}
+		this _backend[index]
+	}
 
-		operator []= (index: Int, item: T) {
-			if (T inheritsFrom?(Object)) {
-				old := this[index] as Object
-				old free()
-			}
-			this _backend[index] = item
+	operator []= (index: Int, item: T) {
+		version(safe) {
+			// TODO: Should we also check that index < count?
+			// TODO: Should this affect count, if index > count?
+			if (index >= this capacity || index < 0)
+				raise("Accessing Vector index out of range in set operator")
 		}
+		if (T inheritsFrom?(Object)) {
+			old := this[index] as Object
+			old free()
+		}
+		this _backend[index] = item
+	}
 }
 
 StackVector: class <T> extends Vector<T> {
