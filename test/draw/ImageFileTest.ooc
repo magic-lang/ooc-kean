@@ -1,6 +1,7 @@
 use ooc-unit
 use ooc-draw
 use ooc-base
+use ooc-math
 import math
 import lang/IO
 import io/File
@@ -140,15 +141,15 @@ ImageFileTest: class extends Fixture {
 			monochrome := RasterMonochrome new(yuv420)
 			monochrome save(destination)
 		})
-		this add("convert RasterBgra to RasterYuv420Semiplanar", func() {
+*/		this add("convert RasterBgra to RasterYuv420Semiplanar", func() {
 			source := "test/draw/input/Barn.png"
 			destination := "test/draw/output/RasterBgra-RasterYuv420Semiplanar-RasterMonochrome.png"
 			bgra := RasterBgra open(source)
-			yuv420 := RasterYuv420Semiplanar new(bgra)
-			monochrome := RasterMonochrome new(yuv420)
+			yuv420 := RasterYuv420Semiplanar convertFrom(bgra)
+			monochrome := RasterMonochrome convertFrom(yuv420)
 			monochrome save(destination)
 		})
-		this add("convert RasterBgr to RasterYuv420Planar to RasterMonochrome", func() {
+/*		this add("convert RasterBgr to RasterYuv420Planar to RasterMonochrome", func() {
 			source := "test/draw/input/Barn.png"
 			destination := "test/draw/output/RasterBgr-RasterYuv420Planar-RasterMonochrome.png"
 			bgr := RasterBgr open(source)
@@ -164,12 +165,12 @@ ImageFileTest: class extends Fixture {
 			bgr2 := RasterBgr new(yuv420)
 			bgr2 save(destination)
 		})
-		this add("convert RasterBgra to RasterYuv420Semiplanar and back again", func() {
+*/		this add("convert RasterBgra to RasterYuv420Semiplanar and back again", func() {
 			source := "test/draw/input/Flower.png"
 			destination := "test/draw/output/RasterBgr-RasterYuv420Semiplanar-RasterBgr.png"
 			bgr := RasterBgr open(source)
-			semiplanar := RasterYuv420Semiplanar new(bgr)
-			bgr2 := RasterBgr new(semiplanar)
+			semiplanar := RasterYuv420Semiplanar convertFrom(bgr)
+			bgr2 := RasterBgr convertFrom(semiplanar)
 			bgr2 save(destination)
 		})
 		this add("Open and save RasterYuv420Semiplanar", func() {
@@ -187,9 +188,9 @@ ImageFileTest: class extends Fixture {
 		this add("load from bin", func() {
 			source := "test/draw/output/Flower.bin"
 			destination := "test/draw/output/FromBinary.png"
-			semiplanar := RasterYuv420Semiplanar openRaw(source, 636, 424)
+			semiplanar := RasterYuv420Semiplanar openRaw(source, IntSize2D new(636, 424))
 			semiplanar save(destination)
-		})*/
+		})
 		this add("Last", func() {
 			expect(1, is equal to(1))
 		})

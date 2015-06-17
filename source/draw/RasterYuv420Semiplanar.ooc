@@ -123,8 +123,8 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		this y[x, y] = ColorMonochrome new(value y)
 		this uv[x / 2, y / 2] = ColorUv new(value u, value v)
 	}
-	createFrom: static func(original: RasterImage) -> This {
-		result := This new(original)
+	convertFrom: static func(original: RasterImage) -> This {
+		result := This new(original size)
 		//		"RasterYuv420 init ~fromRasterImage, original: (#{original size}), this: (#{this size}), y stride #{this y stride}" println()
 		y := 0
 		x := 0
@@ -132,8 +132,8 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		yRow := result y buffer pointer
 		yDestination := yRow
 		uvRow := result uv buffer pointer
-		uDestination := uvRow + 1
-		vDestination := uvRow
+		uDestination := uvRow
+		vDestination := uvRow + 1
 		//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
 		f := func (color: ColorYuv) {
 			(yDestination)@ = color y
@@ -152,8 +152,8 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 				yDestination = yRow
 				if (y % 2 == 0) {
 					uvRow += result uv stride
-					uDestination = uvRow + 1
-					vDestination = uvRow
+					uDestination = uvRow
+					vDestination = uvRow + 1
 				}
 			}
 		}
@@ -162,7 +162,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	}
 	open: static func (filename: String) -> This {
 		bgr := RasterBgr open(filename)
-		result := This createFrom(bgr)
+		result := This convertFrom(bgr)
 		bgr free()
 		result
 	}
