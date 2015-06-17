@@ -16,14 +16,12 @@
 
 use ooc-math
 use ooc-base
-import StbImage
 import math
-import structs/ArrayList
 import RasterPacked
 import RasterImage
+import StbImage
 import Image
 import Color
-import lang/IO
 
 RasterBgra: class extends RasterPacked {
 	bytesPerPixel: Int { get { 4 } }
@@ -31,7 +29,7 @@ RasterBgra: class extends RasterPacked {
 	init: func ~allocateStride (size: IntSize2D, stride: UInt) { super(size, stride) }
 	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntSize2D, stride: UInt) { super(buffer, size, stride) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { this init(buffer, size, this bytesPerPixel * size width) }
-	init: func ~fromRaster (original: RasterImage) { super(original) }
+	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This {
 		result := This new(this)
@@ -39,10 +37,15 @@ RasterBgra: class extends RasterPacked {
 		result
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
-		end := this buffer pointer as Long + this size area
-		for (source: Long in (this buffer pointer as Long)..end) {
-			action((source as ColorBgr*)@)
-			source += 3
+		end := this buffer pointer as Long + this buffer size
+		rowLength := this size width * this bytesPerPixel
+		for (row: Long in this buffer pointer as Long..end) {
+			rowEnd := row + rowLength
+			for (source: Long in row..rowEnd) {
+				action((source as ColorBgr*)@)
+				source += 3
+			}
+			row += this stride - 1
 		}
 	}
 	apply: func ~yuv (action: Func(ColorYuv)) {
@@ -129,12 +132,19 @@ RasterBgra: class extends RasterPacked {
 		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this size width * this bytesPerPixel)
 	}
 	convertFrom: static func (original: RasterImage) -> RasterBgra {
-		result := RasterBgra new(original)
-		destination := result buffer pointer as Int*
-		//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
+		result := RasterBgra new(original size)
+		row := result buffer pointer as Long
+		rowLength := result stride
+		rowEnd := row + rowLength
+		destination := row as ColorBgra*
 		f := func (color: ColorBgr) {
 			(destination as ColorBgra*)@ = ColorBgra new(color, 255)
 			destination += 1
+			if (destination >= rowEnd) {
+				row += result stride
+				destination = row as ColorBgra*
+				rowEnd = row + rowLength
+			}
 		}
 		original apply(f)
 		result

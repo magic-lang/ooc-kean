@@ -17,7 +17,6 @@
 use ooc-math
 use ooc-base
 import math
-import structs/ArrayList
 import RasterPacked
 import RasterImage
 import StbImage
@@ -39,10 +38,10 @@ RasterBgr: class extends RasterPacked {
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		end := this buffer pointer as Long + this buffer size
-		rowLength := this size width
+		rowLength := this size width * this bytesPerPixel
 		for (row: Long in this buffer pointer as Long..end) {
-			rowEnd := (row as ColorBgr* as Long) + rowLength as Long
-			for (source: Long in (row as Long)..rowEnd) {
+			rowEnd := row + rowLength
+			for (source: Long in row..rowEnd) {
 				action((source as ColorBgr*)@)
 				source += 2
 			}
@@ -126,7 +125,7 @@ RasterBgr: class extends RasterPacked {
 	}
 	convertFrom: static func(original: RasterImage) -> This {
 		result := This new(original size)
-		row := result buffer pointer
+		row := result buffer pointer as Long
 		rowLength := result size width
 		rowEnd := row as ColorBgr* + rowLength
 		destination := row as ColorBgr*

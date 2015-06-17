@@ -16,9 +16,7 @@
 
 use ooc-math
 use ooc-base
-use ooc-collections
 import math
-import structs/ArrayList
 import RasterPacked
 import RasterImage
 import StbImage
@@ -46,9 +44,8 @@ RasterMonochrome: class extends RasterPacked {
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
 		end := this buffer pointer as Long + this buffer size
-		rowLength := this size width
+		rowLength := this size width * this bytesPerPixel
 		for (row in this buffer pointer as Long..end) {
-//			"RasterMonochrome apply ~monochrome, end of line at #{row}" println()
 			rowEnd := row + rowLength
 			for (source: Long in row..rowEnd)
 				action((source as ColorMonochrome*)@)
@@ -109,8 +106,8 @@ RasterMonochrome: class extends RasterPacked {
 		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this size width * this bytesPerPixel)
 	}
 	convertFrom: static func(original: RasterImage) -> This {
-		result := This new(original)
-		row := result buffer pointer as UInt8*
+		result := This new(original size)
+		row := result buffer pointer as Long
 		rowLength := result stride
 		rowEnd := row + rowLength
 		destination := row
