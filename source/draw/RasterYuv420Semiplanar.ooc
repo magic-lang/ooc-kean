@@ -42,7 +42,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	}
 	init: func ~allocateStride (size: IntSize2D, stride: UInt) { this init(size, stride, stride * size height) }
 	init: func ~allocate (size: IntSize2D) { this init(size, size width) }
-	init: func ~fromRasterImage (original: RasterImage) {
+	init: func ~fromThis (original: This) {
 		(yImage, uvImage) := This _allocate(original size, original stride, original stride * original size height)
 		super(original, yImage, uvImage)
 	}
