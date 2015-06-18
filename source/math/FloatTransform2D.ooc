@@ -107,6 +107,18 @@ FloatTransform2D: cover {
 	reflectY: func -> This { this createReflectionY() * this }
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f) } }
 	toIntTransform2D: func -> IntTransform2D { IntTransform2D new(this a, this b, this c, this d, this e, this f, this g, this h, this i) }
+	linearInterpolation: static func (first, second: This, weight: Float) -> This {
+		a := Float linearInterpolation(first a, second a, weight)
+		b := Float linearInterpolation(first b, second b, weight)
+		c := Float linearInterpolation(first c, second c, weight)
+		d := Float linearInterpolation(first d, second d, weight)
+		e := Float linearInterpolation(first e, second e, weight)
+		f := Float linearInterpolation(first f, second f, weight)
+		g := Float linearInterpolation(first g, second g, weight)
+		h := Float linearInterpolation(first h, second h, weight)
+		i := Float linearInterpolation(first i, second i, weight)
+		This new(a, b, c, d, e, f, g, h, i)
+	}
 	create: static func (translation: FloatSize2D, scale, rotation: Float) -> This {
 		This new(rotation cos() * scale, rotation sin() * scale, -rotation sin() * scale, rotation cos() * scale, translation width, translation height)
 	}
