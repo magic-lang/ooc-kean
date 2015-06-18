@@ -38,7 +38,7 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		this init(size, stride, yLength, yLength + uLength)
 	}
 	init: func ~allocate (size: IntSize2D) { this init(size, size width) }
-	init: func ~fromRasterImage (original: RasterImage) {
+	init: func ~fromThis (original: This) {
 		uOffset := original stride * original size height
 		vOffset := uOffset + original stride * original size height / 4
 		(y, u, v) := this _allocate(original size, original stride, uOffset, vOffset)
@@ -100,7 +100,7 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		this apply(ColorConvert fromYuv(action))
 	}
 	convertFrom: static func(original: RasterImage) -> This {
-		result := This new(original)
+		result := This new(original size)
 		y := 0
 		x := 0
 		width := result size width
