@@ -29,8 +29,8 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 	stride ::= this _y stride
 	init: func ~fromRasterImages (y: RasterMonochrome, u: RasterMonochrome, v: RasterMonochrome) { super(y, u, v) }
 	init: func ~allocateOffset (size: IntSize2D, stride: UInt, uOffset: UInt, vOffset: UInt) {
-		(y, u, v) := this _allocate(size, stride, uOffset, vOffset)
-		this init(y, u, v)
+		(yImage, uImage, vImage) := This _allocate(size, stride, uOffset, vOffset)
+		this init(yImage, uImage, vImage)
 	}
 	init: func ~allocateStride (size: IntSize2D, stride: UInt) {
 		yLength := stride * size height
@@ -41,10 +41,10 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 	init: func ~fromThis (original: This) {
 		uOffset := original stride * original size height
 		vOffset := uOffset + original stride * original size height / 4
-		(y, u, v) := this _allocate(original size, original stride, uOffset, vOffset)
-		super(original, y, u, v)
+		(yImage, uImage, vImage) := RasterYuv420Planar _allocate(original size, original stride, uOffset, vOffset)
+		super(original, yImage, uImage, vImage)
 	}
-	_allocate: func (size: IntSize2D, stride: UInt, uOffset: UInt, vOffset: UInt) -> (RasterMonochrome, RasterMonochrome, RasterMonochrome) {
+	_allocate: static func (size: IntSize2D, stride: UInt, uOffset: UInt, vOffset: UInt) -> (RasterMonochrome, RasterMonochrome, RasterMonochrome) {
 		yLength := stride * size height
 		uLength := stride * size height / 4
 		vLength := uLength
@@ -52,8 +52,8 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		buffer := ByteBuffer new(length)
 		(
 			RasterMonochrome new(buffer slice(0, yLength), size, stride),
-			RasterMonochrome new(buffer slice(uOffset, uLength), IntSize2D new(size width / 2, size height / 4), stride),
-			RasterMonochrome new(buffer slice(vOffset, vLength), IntSize2D new(size width / 2, size height / 4), stride)
+			RasterMonochrome new(buffer slice(uOffset, uLength), IntSize2D new(size width / 2, size height / 4), stride / 2),
+			RasterMonochrome new(buffer slice(vOffset, vLength), IntSize2D new(size width / 2, size height / 4), stride / 2)
 		)
 	}
 	create: func (size: IntSize2D) -> Image { This new(size) }
