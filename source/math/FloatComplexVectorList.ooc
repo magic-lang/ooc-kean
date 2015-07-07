@@ -17,6 +17,7 @@
 import FloatComplex
 use ooc-collections
 import FloatVectorList
+import IntExtension
 
 FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	init: func ~default {
@@ -69,6 +70,11 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 			}
 			result
 		}
+	}
+	addInto: func (other: This) {
+		minimumCount := Int minimum(this count, other count)
+		for (i in 0..minimumCount)
+			this[i] = this[i] + other[i]
 	}
 	operator + (value: FloatComplex) -> This {
 		result := This new()
