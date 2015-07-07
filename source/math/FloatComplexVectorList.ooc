@@ -17,7 +17,7 @@
 import FloatComplex
 use ooc-collections
 import FloatVectorList
-import IntExtension
+import math
 
 FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	init: func ~default {
