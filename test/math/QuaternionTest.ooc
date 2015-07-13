@@ -25,7 +25,16 @@ QuaternionTest: class extends Fixture {
         this add("scalarMultiplication", func() {
             expect((-1.0f) * this quaternion0 == -this quaternion0)
         })
-
+        this add("norm", func() {
+            expect(this quaternion0 norm() == 65.5991592f)
+        })
+        this add("ActionOnVector", func() {
+            direction := FloatPoint3D new(1, 1, 1)
+            quaternion := Quaternion createRotation(this toRadians(120), direction)
+            point1 := FloatPoint3D new(5, 6, 7)
+            point2 := FloatPoint3D new(7, 5, 6)
+            expect((quaternion * point1) distance(point2) == 0.0f)
+        })
     }
     // TODO: Migrate to better place?
 	toRadians: func(angle: Float) -> Float {

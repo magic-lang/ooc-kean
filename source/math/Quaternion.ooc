@@ -21,14 +21,12 @@ import math
 Quaternion: cover {
 	real: Float
 	imaginary: FloatPoint3D
-
 	// q = w + xi + yj + zk
 	w ::= this real
 	x ::= this imaginary x
 	y ::= this imaginary y
 	z ::= this imaginary z
 	inverse ::= Quaternion new(this w, -this x, -this y, -this z)
-
 	isValid ::= (this w == this w && this x == this x && this y == this y && this z == this z)
 	isIdentity ::= (this w == 1.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
 	isNull ::= (this w == 0.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
@@ -36,6 +34,15 @@ Quaternion: cover {
 	init: func@ (=real, =imaginary)
 	init: func@ ~floats (w: Float, x: Float, y: Float, z: Float) { this init(w, FloatPoint3D new(x, y, z)) }
 	init: func@ ~default { this init(0, 0, 0, 0) }
+
+	createRotation: static func(angle: Float, direction: FloatPoint3D) -> Quaternion {
+		halfAngle := angle / 2.0f
+		point3DNorm := direction norm
+		if (point3DNorm != 0)
+			direction /= point3DNorm
+		Quaternion new(0.0f, halfAngle * direction) exponential()
+	}
+
 	apply: func(vector: FloatPoint3D) -> FloatPoint3D {
  		vectorQuaternion := Quaternion new(0.0f, vector)
 		result := hamiltonProduct(hamiltonProduct(this, vectorQuaternion), this inverse)
@@ -96,12 +103,22 @@ Quaternion: cover {
 	norm: func -> Float {
 		(this real * this real + this imaginary norm * this imaginary norm) sqrt()
 	}
+	rotation: func -> Float {
+		2.0f * (this logarithm() imaginary) norm
+	}
+	distance: func(other: Quaternion) -> Float {
+		(this - other) norm()
+	}
+	direction: func -> FloatPoint3D {
+		quaternionLogarithm := this logarithm()
+		quaternionLogarithm imaginary / quaternionLogarithm imaginary norm
+	}
 	logarithm: func -> Quaternion {
 		result: Quaternion
 		norm := this norm()
 		point3DNorm := this imaginary norm
 		if (point3DNorm != 0)
-			result = Quaternion new(norm log(), (this imaginary / point3DNorm) * (this real / norm) acos())
+			result = Quaternion new(norm log(), (this imaginary / point3DNorm) * ((this real / norm) acos()))
 		else
 			result = Quaternion new(norm, 0.0f, 0.0f, 0.0f)
 		result
@@ -111,7 +128,7 @@ Quaternion: cover {
 		point3DNorm := this imaginary norm
 		exponentialReal := this real exp()
 		if (point3DNorm != 0)
-			result = Quaternion new(exponentialReal * point3DNorm cos(), exponentialReal * (this imaginary / point3DNorm) * point3DNorm sin())
+			result = Quaternion new(exponentialReal * (point3DNorm cos()), exponentialReal * (this imaginary / point3DNorm) * (point3DNorm sin()))
 		else
 			result = Quaternion new(exponentialReal, 0.0f, 0.0f, 0.0f)
 		result
@@ -141,6 +158,9 @@ Quaternion: cover {
 		realResult := this real * other real - this imaginary scalarProduct(other imaginary)
 		imaginaryResult := this real * other imaginary + this imaginary * other real + this imaginary vectorProduct(other imaginary)
 		This new(realResult, imaginaryResult)
+	}
+	operator * (value: FloatPoint3D) -> FloatPoint3D {
+		(this * Quaternion new(0.0f, value) * this inverse) imaginary
 	}
 	toString: func -> String { "Real:" + "%8f" format(this real) + " Imaginary: " + "%8f" format(this imaginary x) + " " + "%8f" format(this imaginary y) + " " + "%8f" format(this imaginary z)}
 }
