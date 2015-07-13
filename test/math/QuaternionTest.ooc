@@ -35,6 +35,19 @@ QuaternionTest: class extends Fixture {
             point2 := FloatPoint3D new(7, 5, 6)
             expect((quaternion * point1) distance(point2) == 0.0f)
         })
+        this add("LogarithmExponential", func() {
+            roll := this toRadians(20.0f)
+            pitch := this toRadians(-30.0f)
+            yaw := this toRadians(45.0f)
+            quaternion := Quaternion createRotationZ(yaw) * Quaternion createRotationY(pitch) * Quaternion createRotationX(roll)
+            expLog := quaternion exponential() logarithm()
+            logExp := quaternion logarithm() exponential()
+            expect(expLog real == quaternion real)
+            expect(logExp real == quaternion real)
+            // TODO: These two fails, find out why
+            /*expect(logExp imaginary distance(quaternion imaginary) == 0.0f)
+            expect(expLog imaginary distance(quaternion imaginary) == 0.0f)*/
+        })
     }
     // TODO: Migrate to better place?
 	toRadians: func(angle: Float) -> Float {

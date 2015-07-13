@@ -34,7 +34,11 @@ Quaternion: cover {
 	init: func@ (=real, =imaginary)
 	init: func@ ~floats (w: Float, x: Float, y: Float, z: Float) { this init(w, FloatPoint3D new(x, y, z)) }
 	init: func@ ~default { this init(0, 0, 0, 0) }
-
+	apply: func(vector: FloatPoint3D) -> FloatPoint3D {
+ 		vectorQuaternion := Quaternion new(0.0f, vector)
+		result := hamiltonProduct(hamiltonProduct(this, vectorQuaternion), this inverse)
+		FloatPoint3D new(result x, result y, result z)
+	}
 	createRotation: static func(angle: Float, direction: FloatPoint3D) -> Quaternion {
 		halfAngle := angle / 2.0f
 		point3DNorm := direction norm
@@ -43,10 +47,16 @@ Quaternion: cover {
 		Quaternion new(0.0f, halfAngle * direction) exponential()
 	}
 
-	apply: func(vector: FloatPoint3D) -> FloatPoint3D {
- 		vectorQuaternion := Quaternion new(0.0f, vector)
-		result := hamiltonProduct(hamiltonProduct(this, vectorQuaternion), this inverse)
-		FloatPoint3D new(result x, result y, result z)
+	createRotationX: static func(angle: Float) -> Quaternion {
+		This createRotation(angle, FloatPoint3D new(1, 0, 0))
+	}
+
+	createRotationY: static func(angle: Float) -> Quaternion {
+		This createRotation(angle, FloatPoint3D new(0, 1, 0))
+	}
+
+	createRotationZ: static func(angle: Float) -> Quaternion {
+		This createRotation(angle, FloatPoint3D new(0, 0, 1))
 	}
 	hamiltonProduct: static func(left, right: Quaternion) -> Quaternion {
 		a1 := left w;
