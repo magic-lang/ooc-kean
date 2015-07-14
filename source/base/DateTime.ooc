@@ -26,15 +26,6 @@ DateTime: cover {
 	ticks ::= this _ticks
 
 	init: func@ (=_ticks)
-
-	isLeapYear: static func (year: Int) -> Bool {
-		result := false
-		if(year % 100 == 0) {
-			result = (year % 400 == 0)
-		}
-		else
-			result = (year % 4 == 0)
-		result
-	}
+	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
 
 }
