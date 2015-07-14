@@ -181,6 +181,13 @@ extend Double {
     ceil: extern(ceil) func -> This
     floor: extern(floor) func -> This
     truncate: extern(trunc) func -> This
+
+	toRadians: static func(value: This) -> This {
+		PI / 180.0 * value
+	}
+	toDegrees: static func(value: This) -> This {
+		180.0 / PI * value
+	}
 }
 
 extend Float {
@@ -237,6 +244,12 @@ extend Float {
 //	toString: static func(value: This) -> String {
 //		value toString()
 //	}
+	toRadians: static func(value: This) -> This {
+		This pi / 180.0f * value
+	}
+	toDegrees: static func(value: This) -> This {
+		180.0f / This pi * value
+	}
 	absolute: static func(value: This) -> This {
 		value >= 0 ? value : -1 * value
 	}
