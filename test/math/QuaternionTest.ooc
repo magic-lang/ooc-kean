@@ -14,19 +14,19 @@ QuaternionTest: class extends Fixture {
 		super("Quaternion")
 		tolerance := 0.000001f
 		this add("addition", func() {
-		    expect(this quaternion0 + this quaternion1 == this quaternion2)
+			expect(this quaternion0 + this quaternion1 == this quaternion2)
 		})
 		this add("subtraction", func() {
-		    expect(this quaternion0 - this quaternion0 == Quaternion new())
+			expect(this quaternion0 - this quaternion0 == Quaternion new())
 		})
 		this add("multiplication", func() {
-		    expect(this quaternion0 * this quaternion1 == this quaternion3)
+			expect(this quaternion0 * this quaternion1 == this quaternion3)
 		})
 		this add("scalarMultiplication", func() {
-		    expect((-1.0f) * this quaternion0 == -this quaternion0)
+			expect((-1.0f) * this quaternion0 == -this quaternion0)
 		})
 		this add("norm", func() {
-		    expect(this quaternion0 norm, is equal to(65.5991592f))
+			expect(this quaternion0 norm, is equal to(65.5991592f))
 		})
 		this add("ActionOnVector", func() {
 				direction := FloatPoint3D new(1.0f, 1.0f, 1.0f)
