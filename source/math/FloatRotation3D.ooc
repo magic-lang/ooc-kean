@@ -23,6 +23,9 @@ FloatRotation3D: cover {
 	init: func@ ~full(=x, =y, =z)
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	init: func@ ~fromPoint(point: FloatPoint3D) { this init(point x, point y, point z) }
+	createFromQuaternion: static func (quaternion: Quaternion) -> This {
+		quaternion getEulerAngles()
+	}
 	getTransform: func(zDistance: Float) -> FloatTransform2D {
 		FloatTransform2D createZRotation(this z) * //Roll
 		FloatTransform2D createXRotation(this x, zDistance) * //Pitch
@@ -55,7 +58,7 @@ operator / (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotat
 operator - (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left - right x, left - right y, left - right z) }
 
 
-NewFloatRotation3D: cover {
+/*NewFloatRotation3D: cover {
 	// https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
 	// Roll: Rotation about X-axis
 	// Pitch: Roation about Y-axis
@@ -87,10 +90,8 @@ NewFloatRotation3D: cover {
 	init: func@ ~full(=_roll, =_pitch, =_yaw) { this _updateQuaternion() }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	init: func@ ~fromPoint(point: FloatPoint3D) { this init(point x, point y, point z) }
-	init: func@ ~quaternion(=_quaternion) {
-		this _roll = this _quaternion xRotation
-		this _pitch = this _quaternion yRotation
-		this _yaw = this _quaternion zRotation
+	createFromQuaternion: static func (quaternion: Quaternion) -> This {
+		this init(this _quaternion xRotation, this _quaternion yRotation, this _quaternion zRotation)
 	}
 	_updateQuaternion: func {
 		/*this _quaternion = Quaternion createRotationZ(this _yaw) * Quaternion createRotationX(this _roll) * Quaternion createRotationY(this _pitch)*/
@@ -123,4 +124,4 @@ NewFloatRotation3D: cover {
 }
 operator * (left: Float, right: NewFloatRotation3D) -> NewFloatRotation3D { NewFloatRotation3D new(left * right _quaternion) }
 operator / (left: Float, right: NewFloatRotation3D) -> NewFloatRotation3D { NewFloatRotation3D new(left / right _quaternion) }
-operator - (left: Float, right: NewFloatRotation3D) -> NewFloatRotation3D { NewFloatRotation3D new(left - right _quaternion) }
+operator - (left: Float, right: NewFloatRotation3D) -> NewFloatRotation3D { NewFloatRotation3D new(left - right _quaternion) }*/
