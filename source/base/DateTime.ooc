@@ -19,6 +19,7 @@ TimeSpan: cover {
 	ticks ::= this _ticks
 	init: func@ (=_ticks)
 	kean_base_timeSpan_getTicks: unmangled func -> Int64 { this _ticks }
+	new: unmangled(kean_base_timeSpan_new) static func@ ~API (ticks: UInt64) -> This { This new(ticks) }
 }
 
 DateTime: cover {

@@ -77,10 +77,16 @@ FloatRotation3D: cover {
 	operator <= (other: This) -> Bool { this _quaternion <= other _quaternion }
 	operator >= (other: This) -> Bool { this _quaternion >= other _quaternion }
 	toString: func -> String { "%.8f" formatFloat(this x) >> ", " & "%.8f" formatFloat(this y) >> ", " & "%.8f" formatFloat(this z) }
+	new: unmangled(kean_math_floatRotation3D_new) static func@ ~API (quaternion: Quaternion) -> This {
+		//FIXME: This is just dummy code and will not work at all
+		This createFromQuaternion(quaternion)
+	}
 }
 operator * (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left * right x, left * right y, left * right z) }
 operator / (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left / right x, left / right y, left / right z) }
 operator - (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left - right x, left - right y, left - right z) }
+
+
 
 
 /*NewFloatRotation3D: cover {
