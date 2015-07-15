@@ -21,27 +21,52 @@ import math
 Quaternion: cover {
 	real: Float
 	imaginary: FloatPoint3D
-
+	precision := 0.000001f
 	// q = w + xi + yj + zk
 	w ::= this real
 	x ::= this imaginary x
 	y ::= this imaginary y
 	z ::= this imaginary z
-	inverse ::= Quaternion new(this w, -this x, -this y, -this z)
 
+	// NOTE: The coordinates are represented differently in C# Kean:
+	// x = this w
+	// y = this x
+	// z = this y
+	// w = this z
+
+	inverse ::= This new(this w, -this x, -this y, -this z)
 	isValid ::= (this w == this w && this x == this x && this y == this y && this z == this z)
 	isIdentity ::= (this w == 1.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
 	isNull ::= (this w == 0.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
+	norm ::= (this real squared() + (this imaginary norm) squared()) sqrt()
+	rotation ::= 2.0f * (this logarithm imaginary) norm
+	conjugate ::= This new(this real, -(this imaginary))
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
 	init: func@ (=real, =imaginary)
-	init: func@ ~floats (w: Float, x: Float, y: Float, z: Float) { this init(w, FloatPoint3D new(x, y, z)) }
+	init: func@ ~floats (w, x, y, z: Float) { this init(w, FloatPoint3D new (x, y, z)) }
 	init: func@ ~default { this init(0, 0, 0, 0) }
-	apply: func(vector: FloatPoint3D) -> FloatPoint3D {
- 		vectorQuaternion := Quaternion new(0.0f, vector)
+	apply: func (vector: FloatPoint3D) -> FloatPoint3D {
+ 		vectorQuaternion := This new(0.0f, vector)
 		result := hamiltonProduct(hamiltonProduct(this, vectorQuaternion), this inverse)
 		FloatPoint3D new(result x, result y, result z)
 	}
-	hamiltonProduct: static func(left, right: Quaternion) -> Quaternion {
+	createRotation: static func (angle: Float, direction: FloatPoint3D) -> This {
+		halfAngle := angle / 2.0f
+		point3DNorm := direction norm
+		if (point3DNorm != 0.0f)
+			direction /= point3DNorm
+		This new (0.0f, halfAngle * direction) exponential
+	}
+	createRotationX: static func (angle: Float) -> This {
+		This createRotation(angle, FloatPoint3D new(1.0f, 0.0f, 0.0f))
+	}
+	createRotationY: static func (angle: Float) -> This {
+		This createRotation(angle, FloatPoint3D new(0.0f, 1.0f, 0.0f))
+	}
+	createRotationZ: static func (angle: Float) -> This {
+		This createRotation(angle, FloatPoint3D new(0.0f, 0.0f, 1.0f))
+	}
+	hamiltonProduct: static func (left, right: This) -> This {
 		a1 := left w;
 		b1 := left x;
 		c1 := left y;
@@ -55,9 +80,9 @@ Quaternion: cover {
 		x := a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2;
 		y := a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2;
 		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2;
-		return Quaternion new(w, x, y, z);
+		return This new (w, x, y, z);
 	}
-	getEulerAngles: func() -> FloatRotation3D {
+	getEulerAngles: func -> FloatRotation3D {
 		// http://www.jldoty.com/code/DirectX/YPRfromUF/YPRfromUF.html
 		// Should be used in order Yaw -> Pitch -> Roll or Pitch -> Yaw -> Roll,
 		// According to jldoty it should be Roll -> Pitch -> Yaw, but this doesn't work
@@ -65,7 +90,6 @@ Quaternion: cover {
 		// Forward, up and right might need to be changed depending on phone coordinate system and camera direction
 		// World coordinates: x axis -> west, y axis -> north, z axis -> up
 		// Forward is direction of camera.
-
 		forward := FloatPoint3D new(0.0f, 0.0f, -1.0f)
 		up := FloatPoint3D new(1.0f, 0.0f, 0.0f)
 		right := FloatPoint3D new(0.0f, -1.0f, 0.0f)
@@ -91,19 +115,88 @@ Quaternion: cover {
 		else
 			roll = asin((upYawPitch scalarProduct(upRotated) * upYawPitch z - upRotated z) / rightYawPitch z)
 
-		FloatRotation3D new(pitch, -yaw, roll)
+		FloatRotation3D new (pitch, -yaw, roll)
+	}
+	distance: func (other: This) -> Float {
+		(this - other) norm
+	}
+	rotationX: Float {
+		get {
+			result: Float
+			value := this w * this y - this z * this x
+			if ((value abs() - 0.5f) abs() < this precision)
+				result = 0.0f
+			else
+				result = (2.0f * (this w * this x + this y * this z)) atan2(1.0f - 2.0f * (this x squared() + this y squared()))
+			result
+		}
+	}
+	rotationY: Float {
+		get {
+			result: Float
+			value := this w * this y - this z * this x
+			if ((value abs() - 0.5f) abs() < this precision)
+				result = Float sign(value) * (Float pi / 2.0f)
+			else
+				result = ((2.0f * value) clamp(-1, 1)) asin()
+			result
+		}
+	}
+	rotationZ: Float {
+		get {
+			result: Float
+			value := this w * this y - this z * this x
+			if ((value abs() - 0.5f) abs() < this precision)
+				result = 2.0f * (this z atan2(this w))
+			else
+				result = (2.0f * (this w * this z + this x * this y)) atan2(1.0f - 2.0f * (this y squared() + this z squared()))
+			result
+		}
+	}
+	direction: FloatPoint3D {
+		get {
+			quaternionLogarithm := this logarithm
+			quaternionLogarithm imaginary / quaternionLogarithm imaginary norm
+		}
+	}
+	logarithm: This {
+		get {
+			result: This
+			norm := this norm
+			point3DNorm := this imaginary norm
+			if (point3DNorm != 0)
+				result = This new(norm log(), (this imaginary / point3DNorm) * ((this real / norm) acos()))
+			else 
+				result = This new(norm, FloatPoint3D new())
+			result
+		}
+	}
+	exponential: This {
+		get {
+			result: This
+			point3DNorm := this imaginary norm
+			exponentialReal := this real exp()
+			if (point3DNorm != 0)
+				result = This new(exponentialReal * point3DNorm cos(), exponentialReal * (this imaginary / point3DNorm) * point3DNorm sin())
+			else
+				result = This new(exponentialReal, FloatPoint3D new())
+			result
+		}
 	}
 	operator == (other: This) -> Bool {
-		this w ==  w &&
-		this x ==  x &&
-		this y ==  y &&
+		this w == other w &&
+		this x == other x &&
+		this y == other y &&
 		this z == other z
 	}
 	operator + (other: This) -> This {
-		This new(this w + other w, this x + other x, this y + other y, this z + other z)
+		This new(this real + other real, this imaginary + other imaginary)
 	}
 	operator - (other: This) -> This {
-		This new(this w - other w, this x - other x, this y - other y, this z - other z)
+		this + (-other)
+	}
+	operator - -> This {
+		This new(-this real, -this imaginary)
 	}
 	operator / (value: Float) -> This {
 		This new(this w / value, this x / value, this y / value, this z / value)
@@ -111,5 +204,19 @@ Quaternion: cover {
 	operator * (value: Float) -> This {
 		This new(this w * value, this x * value, this y * value, this z * value)
 	}
-	toString: func -> String { "Real:" + "%8f" format(this real) + " Imaginary: " + "%8f" format(this imaginary x) + " " + "%8f" format(this imaginary y) + " " + "%8f" format(this imaginary z)}
+	operator * (other: This) -> This {
+		realResult := this real * other real - this imaginary scalarProduct(other imaginary)
+		imaginaryResult := this real * other imaginary + this imaginary * other real + this imaginary vectorProduct(other imaginary)
+		This new(realResult, imaginaryResult)
+	}
+	operator * (value: FloatPoint3D) -> FloatPoint3D {
+		(this * Quaternion new (0.0f, value) * this inverse) imaginary
+	}
+	toString: func -> String {
+		"Real: " << "%8f" formatFloat(this real) >>
+		" Imaginary: " & "%8f" formatFloat(this imaginary x) >> " " & "%8f" formatFloat(this imaginary y) >> " " & "%8f" formatFloat(this imaginary z)
+	}
+}
+operator * (value: Float, other: Quaternion) -> Quaternion {
+	other * value
 }
