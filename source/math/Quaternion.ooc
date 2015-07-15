@@ -34,38 +34,39 @@ Quaternion: cover {
 	// z = this y
 	// w = this z
 
-	inverse ::= Quaternion new(this w, -this x, -this y, -this z)
+	inverse ::= This new(this w, -this x, -this y, -this z)
 	isValid ::= (this w == this w && this x == this x && this y == this y && this z == this z)
 	isIdentity ::= (this w == 1.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
 	isNull ::= (this w == 0.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
 	norm ::= (this real squared() + (this imaginary norm) squared()) sqrt()
 	rotation ::= 2.0f * (this logarithm imaginary) norm
+	conjugate ::= This new(this real, -(this imaginary))
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
 	init: func@ (=real, =imaginary)
 	init: func@ ~floats (w, x, y, z: Float) { this init(w, FloatPoint3D new (x, y, z)) }
 	init: func@ ~default { this init(0, 0, 0, 0) }
 	apply: func (vector: FloatPoint3D) -> FloatPoint3D {
- 		vectorQuaternion := Quaternion new(0.0f, vector)
+ 		vectorQuaternion := This new(0.0f, vector)
 		result := hamiltonProduct(hamiltonProduct(this, vectorQuaternion), this inverse)
 		FloatPoint3D new(result x, result y, result z)
 	}
-	createRotation: static func (angle: Float, direction: FloatPoint3D) -> Quaternion {
+	createRotation: static func (angle: Float, direction: FloatPoint3D) -> This {
 		halfAngle := angle / 2.0f
 		point3DNorm := direction norm
 		if (point3DNorm != 0.0f)
 			direction /= point3DNorm
-		Quaternion new (0.0f, halfAngle * direction) exponential
+		This new (0.0f, halfAngle * direction) exponential
 	}
-	createRotationX: static func (angle: Float) -> Quaternion {
+	createRotationX: static func (angle: Float) -> This {
 		This createRotation(angle, FloatPoint3D new(1.0f, 0.0f, 0.0f))
 	}
-	createRotationY: static func (angle: Float) -> Quaternion {
+	createRotationY: static func (angle: Float) -> This {
 		This createRotation(angle, FloatPoint3D new(0.0f, 1.0f, 0.0f))
 	}
-	createRotationZ: static func (angle: Float) -> Quaternion {
+	createRotationZ: static func (angle: Float) -> This {
 		This createRotation(angle, FloatPoint3D new(0.0f, 0.0f, 1.0f))
 	}
-	hamiltonProduct: static func (left, right: Quaternion) -> Quaternion {
+	hamiltonProduct: static func (left, right: This) -> This {
 		a1 := left w;
 		b1 := left x;
 		c1 := left y;
@@ -79,7 +80,7 @@ Quaternion: cover {
 		x := a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2;
 		y := a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2;
 		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2;
-		return Quaternion new (w, x, y, z);
+		return This new (w, x, y, z);
 	}
 	getEulerAngles: func -> FloatRotation3D {
 		// http://www.jldoty.com/code/DirectX/YPRfromUF/YPRfromUF.html
@@ -116,7 +117,7 @@ Quaternion: cover {
 
 		FloatRotation3D new (pitch, -yaw, roll)
 	}
-	distance: func (other: Quaternion) -> Float {
+	distance: func (other: This) -> Float {
 		(this - other) norm
 	}
 	rotationX: Float {
@@ -134,10 +135,10 @@ Quaternion: cover {
 		get {
 			result: Float
 			value := this w * this y - this z * this x
-			if ((value abs() - 0.5f) abs() > this precision)
-				result = ((2.0f * (this w * this y - this z * this x)) clamp(-1, 1)) asin()
-			else
+			if ((value abs() - 0.5f) abs() < this precision)
 				result = Float sign(value) * (Float pi / 2.0f)
+			else
+				result = ((2.0f * value) clamp(-1, 1)) asin()
 			result
 		}
 	}
@@ -158,34 +159,34 @@ Quaternion: cover {
 			quaternionLogarithm imaginary / quaternionLogarithm imaginary norm
 		}
 	}
-	logarithm: Quaternion {
+	logarithm: This {
 		get {
-			result: Quaternion
+			result: This
 			norm := this norm
 			point3DNorm := this imaginary norm
 			if (point3DNorm != 0)
-				result = Quaternion new(norm log(), (this imaginary / point3DNorm) * ((this real / norm) acos()))
+				result = This new(norm log(), (this imaginary / point3DNorm) * ((this real / norm) acos()))
 			else 
-				result = Quaternion new(norm, FloatPoint3D new())
+				result = This new(norm, FloatPoint3D new())
 			result
 		}
 	}
-	exponential: Quaternion {
+	exponential: This {
 		get {
-			result: Quaternion
+			result: This
 			point3DNorm := this imaginary norm
 			exponentialReal := this real exp()
 			if (point3DNorm != 0)
-				result = Quaternion new(exponentialReal * point3DNorm cos(), exponentialReal * (this imaginary / point3DNorm) * point3DNorm sin())
+				result = This new(exponentialReal * point3DNorm cos(), exponentialReal * (this imaginary / point3DNorm) * point3DNorm sin())
 			else
-				result = Quaternion new(exponentialReal, FloatPoint3D new())
+				result = This new(exponentialReal, FloatPoint3D new())
 			result
 		}
 	}
 	operator == (other: This) -> Bool {
-		this w ==  w &&
-		this x ==  x &&
-		this y ==  y &&
+		this w == other w &&
+		this x == other x &&
+		this y == other y &&
 		this z == other z
 	}
 	operator + (other: This) -> This {
