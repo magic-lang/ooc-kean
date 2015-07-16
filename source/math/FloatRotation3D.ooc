@@ -54,20 +54,15 @@ FloatRotation3D: cover {
 		This new(quaternion rotationX, quaternion rotationY, quaternion rotationZ)
 	}
 	_updateQuaternion: func {
-		/*this _quaternion = Quaternion createRotationZ(this _yaw) * Quaternion createRotationX(this _roll) * Quaternion createRotationY(this _pitch)*/
 		this _quaternion = Quaternion createRotationX(this _roll) * Quaternion createRotationY(this _pitch) * Quaternion createRotationZ(this _yaw)
 	}
-	getTransform: func(zDistance: Float) -> FloatTransform2D { // TODO: Using quaternions?
-		/*FloatTransform2D createZRotation(this _yaw) *
-		FloatTransform2D createXRotation(this _roll, zDistance) *
-		FloatTransform2D createYRotation(this _pitch, zDistance)*/
+	getTransform: func(zDistance: Float) -> FloatTransform2D {
 		FloatTransform2D createXRotation(this _roll, zDistance) *
 		FloatTransform2D createYRotation(this _pitch, zDistance) *
 		FloatTransform2D createZRotation(this _yaw)
 	}
 	clamp: func ~point(floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
 	clamp: func ~float(floor, ceiling: Float) -> This { This new(this x clamp(floor, ceiling), this y clamp(floor, ceiling), this z clamp(floor, ceiling)) }
-
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
 	operator - (other: This) -> This { This new(this x - other x, this y - other y, this z - other z) }
 	operator - -> This { This new(-this x, -this y, -this z) }
@@ -75,34 +70,14 @@ FloatRotation3D: cover {
 	operator / (other: This) -> This { This new(this x / other x, this y / other y, this z / other z) }
 	operator * (other: Float) -> This { This new(this x * other, this y * other, this z * other) }
 	operator / (other: Float) -> This { This new(this x / other, this y / other, this z / other) }
-	operator == (other: This) -> Bool { this x == other x && this y == other y && this z == other z }
-	operator != (other: This) -> Bool { this x != other x || this y != other y || this z != other z }
-	operator < (other: This) -> Bool { this x < other x && this y < other y && this z < other z }
-	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z}
-	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
-	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
-
-
-
-	/*operator + (other: This) -> This { This new(this _quaternion + other _quaternion) }
-	operator - (other: This) -> This { This new(this _quaternion - other _quaternion) }
-	operator - -> This { This new(-this _quaternion) }
-	operator * (other: This) -> This { This new(this _quaternion * other _quaternion) }
-	operator / (other: This) -> This { This new(this _quaternion / other _quaternion) }
-	operator * (other: Float) -> This { This new(this _quaternion * other) }
-	operator / (other: Float) -> This { This new(this _quaternion / other) }
 	operator == (other: This) -> Bool { this _quaternion == other _quaternion }
 	operator != (other: This) -> Bool { this _quaternion != other _quaternion }
 	operator < (other: This) -> Bool { this _quaternion < other _quaternion }
 	operator > (other: This) -> Bool { this _quaternion > other _quaternion }
 	operator <= (other: This) -> Bool { this _quaternion <= other _quaternion }
-	operator >= (other: This) -> Bool { this _quaternion >= other _quaternion }*/
+	operator >= (other: This) -> Bool { this _quaternion >= other _quaternion }
 	toString: func -> String { "%.8f" formatFloat(this x) >> ", " & "%.8f" formatFloat(this y) >> ", " & "%.8f" formatFloat(this z) }
 }
-/*operator * (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left * right _quaternion) }
-operator / (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left / right _quaternion) }
-operator - (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left - right _quaternion) }*/
-
 operator * (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left * right x, left * right y, left * right z) }
 operator / (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left / right x, left / right y, left / right z) }
 operator - (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left - right x, left - right y, left - right z) }
