@@ -11,6 +11,7 @@ QuaternionTest: class extends Fixture {
 	quaternion4 := Quaternion new(10.0f, 17.0f, -10.0f, 14.5f)
 	quaternion5 := Quaternion new(1.0f, 2.0f, 3.0f, 4.0f)
 	quaternion6 := Quaternion new(-1.0f, -2.0f, -3.0f, -4.0f)
+	quaternion7 := Quaternion new(1.0f, 0.0f, 0.0f, 0.0f)
 	point0 := FloatPoint3D new(22.221f, -3.1f, 10.0f)
 	point1 := FloatPoint3D new(12.221f, 13.1f, 20.0f)
 	init: func () {
@@ -63,6 +64,14 @@ QuaternionTest: class extends Fixture {
 			expect(conjugate[1] == -quaternion5[1])
 			expect(conjugate[2] == -quaternion5[2])
 			expect(conjugate[3] == -quaternion5[3])
+		})
+		this add("normalized", func() {
+			normalized := quaternion0 normalized
+			expect(Quaternion new(1, 0, 0, 0) normalized == Quaternion identity)
+			expect(normalized w, is equal to(0.5030552f) within(tolerance))
+			expect(normalized x, is equal to(0.1524409f) within(tolerance))
+			expect(normalized y, is equal to(-0.1829291f) within(tolerance))
+			expect(normalized z, is equal to(0.8308033f) within(tolerance))
 		})
 		this add("toArray", func() {
 			source := [1.0f, 2.0f, 3.0f, 4.0f]
