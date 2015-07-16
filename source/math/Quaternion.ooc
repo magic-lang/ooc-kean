@@ -40,6 +40,7 @@ Quaternion: cover {
 	isIdentity ::= (this w == 1.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
 	isNull ::= (this w == 0.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
 	norm ::= (this real squared() + (this imaginary norm) squared()) sqrt()
+	normalized ::= this / this norm
 	rotation ::= 2.0f * (this logarithm imaginary) norm
 	conjugate ::= This new(this real, -(this imaginary))
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
@@ -246,7 +247,7 @@ Quaternion: cover {
 	// This function is not yet needed, and there are no tests for it yet.
 	//
 	/*toFloatTransform3D: func -> FloatTransform3D {
-		normalized := this / this norm
+		normalized := this normalized
 		nw := normalized w
 		nx := normalized x
 		ny := normalized y
