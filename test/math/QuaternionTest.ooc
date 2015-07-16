@@ -131,7 +131,7 @@ QuaternionTest: class extends Fixture {
 			yaw := Float toRadians(45.0f)
 			quaternion := Quaternion createRotationZ(yaw) * Quaternion createRotationY(pitch) * Quaternion createRotationX(roll)
 			expLog := quaternion exponential logarithm
-			expect(expLog real, is equal to(quaternion real))
+			expect(expLog real, is equal to(quaternion real) within(tolerance))
 		})
 		this add("logarithmExponential", func() {
 			roll := Float toRadians(20.0f)
@@ -139,7 +139,7 @@ QuaternionTest: class extends Fixture {
 			yaw := Float toRadians(45.0f)
 			quaternion := Quaternion createRotationZ(yaw) * Quaternion createRotationY(pitch) * Quaternion createRotationX(roll)
 			logExp := quaternion logarithm exponential
-			expect(logExp real, is equal to(quaternion real))
+			expect(logExp real, is equal to(quaternion real) within(tolerance))
 		})
 		this add("exponentialLogarithmDistance", func() {
 			roll := Float toRadians(20.0f)
