@@ -44,7 +44,7 @@ Quaternion: cover {
 	conjugate ::= This new(this real, -(this imaginary))
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
 	init: func@ (=real, =imaginary)
-	init: func@ ~floats (w, x, y, z: Float) { this init(w, FloatPoint3D new (x, y, z)) }
+	init: func@ ~floats (w, x, y, z: Float) { this init(w, FloatPoint3D new(x, y, z)) }
 	init: func@ ~default { this init(0, 0, 0, 0) }
 	init: func@ ~floatArray (source: Float[]) { this init(source[0], source[1], source[2], source[3]) }
 	apply: func (vector: FloatPoint3D) -> FloatPoint3D {
@@ -57,7 +57,7 @@ Quaternion: cover {
 		point3DNorm := direction norm
 		if (point3DNorm != 0.0f)
 			direction /= point3DNorm
-		This new (0.0f, halfAngle * direction) exponential
+		This new(0.0f, halfAngle * direction) exponential
 	}
 	createRotationX: static func (angle: Float) -> This {
 		This createRotation(angle, FloatPoint3D new(1.0f, 0.0f, 0.0f))
@@ -82,7 +82,7 @@ Quaternion: cover {
 		x := a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2;
 		y := a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2;
 		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2;
-		return This new (w, x, y, z);
+		return This new(w, x, y, z);
 	}
 	getEulerAngles: func -> FloatRotation3D {
 		// http://www.jldoty.com/code/DirectX/YPRfromUF/YPRfromUF.html
@@ -117,7 +117,7 @@ Quaternion: cover {
 		else
 			roll = asin((upYawPitch scalarProduct(upRotated) * upYawPitch z - upRotated z) / rightYawPitch z)
 
-		FloatRotation3D new (pitch, -yaw, roll)
+		FloatRotation3D new(pitch, -yaw, roll)
 	}
 	distance: func (other: This) -> Float {
 		(this - other) norm
@@ -224,16 +224,16 @@ Quaternion: cover {
 		This new(realResult, imaginaryResult)
 	}
 	operator * (value: FloatPoint3D) -> FloatPoint3D {
-		(this * This new (0.0f, value) * this inverse) imaginary
+		(this * This new(0.0f, value) * this inverse) imaginary
 	}
 	operator [] (index: Int) -> Float {
 		result: Float
-		match(index) {
+		match (index) {
 			case 0 => result = this w
 			case 1 => result = this x
 			case 2 => result = this y
 			case 3 => result = this z
-			case => raise("Invalid index: #{index}, valid indices are 0-3.")
+			case => raise("Quaternion: Invalid index: #{index}, valid indices are 0-3.")
 		}
 		result
 	}
