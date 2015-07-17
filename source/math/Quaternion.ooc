@@ -24,6 +24,8 @@ Quaternion: cover {
 	imaginary: FloatPoint3D
 	precision := 0.000001f
 	// q = w + xi + yj + zk
+
+
 	w ::= this real
 	x ::= this imaginary x
 	y ::= this imaginary y
@@ -34,7 +36,6 @@ Quaternion: cover {
 	// y = this x
 	// z = this y
 	// w = this z
-
 	inverse ::= This new(this w, -this x, -this y, -this z)
 	isValid ::= (this w == this w && this x == this x && this y == this y && this z == this z)
 	isIdentity ::= (this w == 1.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
@@ -169,7 +170,7 @@ Quaternion: cover {
 			point3DNorm := this imaginary norm
 			if (point3DNorm != 0)
 				result = This new(norm log(), (this imaginary / point3DNorm) * ((this real / norm) acos()))
-			else 
+			else
 				result = This new(norm, FloatPoint3D new())
 			result
 		}
@@ -190,7 +191,7 @@ Quaternion: cover {
 		this w == other w && this x == other x && this y == other y && this z == other z
 	}
 	operator != (other: This) -> Bool {
-		!(this == other)	
+		!(this == other)
 	}
 	operator < (other: This) -> Bool {
 		this w < other w && this x < other x && this y < other y && this z < other z
@@ -243,10 +244,7 @@ Quaternion: cover {
 		result := [this w, this x, this y, this z]
 		result
 	}
-	//
-	// This function is not yet needed, and there are no tests for it yet.
-	//
-	/*toFloatTransform3D: func -> FloatTransform3D {
+	toFloatTransform2D: func -> FloatTransform2D {
 		normalized := this normalized
 		nw := normalized w
 		nx := normalized x
@@ -256,8 +254,35 @@ Quaternion: cover {
 		nwSquared := nw squared()
 		nxSquared := nx squared()
 		nySquared := ny squared()
-		nzSquared := nz squared() 
+		nzSquared := nz squared()
 		
+		a := 1.0f - 2.0f * nySquared - 2.0f * nzSquared
+		b := 2.0f * nx * ny + 2.0f * nz * nw
+		c := 2.0f * nx * nz - 2.0f * ny * nw
+		d := 2.0f * nx * ny - 2.0f * nz * nw
+		e := 1.0f - 2.0f * nxSquared - 2.0f * nzSquared
+		f := 2.0f * ny * nz + 2.0f * nx * nw
+		g := 2.0f * nx * nz + 2.0f * ny * nw
+		h := 2.0f * ny * nz - 2.0f * nx * nw
+		i := 1.0f - 2.0f * nxSquared - 2.0f * nySquared
+		
+		FloatTransform2D new(a, b, c, d, e, f, g, h, i)
+	}
+	//
+	// This function is not yet needed, and there are no tests for it yet.
+	//
+	/*toFloatTransform3D: func -> FloatTransform3D {
+		normalized := this normalized
+		nw := normalized w
+		nx := normalized x
+		ny := normalized y
+		nz := normalized z
+
+		nwSquared := nw squared()
+		nxSquared := nx squared()
+		nySquared := ny squared()
+		nzSquared := nz squared()
+
 		a := nwSquared + nxSquared - nySquared - nzSquared
 		b := 2.0f * (nx * nz + nw * nz)
 		c := 2.0f * (nx * nz - nw * ny)
@@ -267,7 +292,7 @@ Quaternion: cover {
 		g := 2.0f * (nw * ny + nx * nz)
 		h := 2.0f * (ny * nz - nw * nx)
 		i := nwSquared - nxSquared + nySquared + nzSquared
-		
+
 		FloatTransform3D new(a, b, c, d, e, f, g, h, i, 0, 0, 0)
 	}*/
 	toString: func -> String {
