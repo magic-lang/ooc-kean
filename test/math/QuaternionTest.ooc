@@ -113,7 +113,7 @@ QuaternionTest: class extends Fixture {
 			quaternion := Quaternion createRotation(angle, direction)
 			expect(quaternion rotation, is equal to(angle) within(tolerance))
 		})
-		/*this add("rollPitchYaw", func() {
+		this add("rollPitchYaw", func() {
 			for (r in -180..180) {
 				for (p in -90..90)
 					for (y in -180..180)
@@ -133,7 +133,7 @@ QuaternionTest: class extends Fixture {
 						}
 				r += 30
 			}
-		})*/
+		})
 		this add("exponentialLogarithm", func() {
 			roll := Float toRadians(20.0f)
 			pitch := Float toRadians(-30.0f)
