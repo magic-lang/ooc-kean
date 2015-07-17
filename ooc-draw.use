@@ -1,4 +1,4 @@
-Name: OOC Draw
+Name: ooc Draw
 Description: Draw functionality library.
 SourcePath: source/draw
 Requires: ooc-unit, ooc-math, ooc-base

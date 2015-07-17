@@ -1,4 +1,4 @@
-Name: OOC Unit
-Description: OOC Unit is a unit testing library for OOC (http://ooc-lang.org).
+Name: ooc Unit
+Description: ooc Unit is a unit testing library for ooc (http://ooc-lang.org).
 SourcePath: source/unit
 Imports: Fixture
