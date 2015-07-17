@@ -149,6 +149,20 @@ extend Int {
 		result
 	}
 }
+extend Range {
+	clamp: func (floor: Int, ceiling: Int) -> This {
+		this clamp(floor..ceiling)
+	}
+	clamp: func ~range (other: This) -> This {
+		this min clamp(other min, other max)..this max clamp(other min, other max)
+	}
+	count ::= this max + 1 - this min
+}
+operator - (range: Range, integer: Int) -> Range { (range min - integer)..(range max - integer) }
+operator + (range: Range, integer: Int) -> Range { (range min + integer)..(range max + integer) }
+operator == (left, right: Range) -> Bool { left min == right min && left max == right max }
+operator != (left, right: Range) -> Bool { !(left == right) }
+
 extend Double {
     cos: extern(cos) func -> This
     sin: extern(sin) func -> This
