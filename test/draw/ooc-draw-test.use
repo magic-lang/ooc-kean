@@ -1,4 +1,4 @@
-Name: OOC Draw Test
+Name: ooc Draw Test
 Description: Draw functionality library test.
 SourcePath: .
 Requires: ooc-unit, ooc-math, ooc-test, ooc-draw

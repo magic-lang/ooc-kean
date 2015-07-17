@@ -1,4 +1,4 @@
-Name: OOC Collections
+Name: ooc Collections
 Description: Collections Library
 SourcePath: source/collections
 Requires: ooc-unit, ooc-base, ooc-sdk-lite

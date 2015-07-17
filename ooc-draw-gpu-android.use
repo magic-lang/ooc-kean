@@ -1,5 +1,5 @@
-Name: OOC Draw GPU Android
-Description: Android specific, GPU accelerated implementation of OOC Draw interfaces.
+Name: ooc Draw GPU Android
+Description: Android specific, GPU accelerated implementation of ooc Draw interfaces.
 SourcePath: source/draw/gpu/android
 Requires: ooc-base, ooc-math, ooc-unit, ooc-draw, ooc-draw-gpu
 Imports: AndroidContext, AndroidTexture, GraphicBuffer, GraphicBufferYuv420Semiplanar
