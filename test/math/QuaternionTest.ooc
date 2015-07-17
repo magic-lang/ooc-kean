@@ -166,6 +166,30 @@ QuaternionTest: class extends Fixture {
 			logExp := quaternion exponential logarithm
 			expect(logExp imaginary distance(quaternion imaginary), is equal to(0.0f) within(tolerance))
 		})
+		this add("toFloatTransform2D_1", func() {
+			float2DTransform := this quaternion0 toFloatTransform2D()
+			expect(float2DTransform a, is equal to(-0.44739f) within(tolerance))
+			expect(float2DTransform b, is equal to(0.780108f) within(tolerance))
+			expect(float2DTransform c, is equal to(0.437344f) within(tolerance))
+			expect(float2DTransform d, is equal to(-0.891652f) within(tolerance))
+			expect(float2DTransform e, is equal to(-0.426945f) within(tolerance))
+			expect(float2DTransform f, is equal to(-0.150584f) within(tolerance))
+			expect(float2DTransform g, is equal to(0.06925f) within(tolerance))
+			expect(float2DTransform h, is equal to(-0.457329f) within(tolerance))
+			expect(float2DTransform i, is equal to(0.886597f) within(tolerance))
+		})
+		this add("toFloatTransform2D_2", func() {
+			float2DTransform := this quaternion3 toFloatTransform2D()			
+			expect(float2DTransform a, is equal to(0.0820029f) within(tolerance))
+			expect(float2DTransform b, is equal to(-0.334856f) within(tolerance))
+			expect(float2DTransform c, is equal to(0.938694f) within(tolerance))
+			expect(float2DTransform d, is equal to(0.789629f) within(tolerance))
+			expect(float2DTransform e, is equal to(-0.552837f) within(tolerance))
+			expect(float2DTransform f, is equal to(-0.266192f) within(tolerance))
+			expect(float2DTransform g, is equal to(0.608081f) within(tolerance))
+			expect(float2DTransform h, is equal to(0.763048f) within(tolerance))
+			expect(float2DTransform i, is equal to(0.219078f) within(tolerance))
+		})
 	}
 	
 	angleDistance: func (a, b: Float) -> Float {
