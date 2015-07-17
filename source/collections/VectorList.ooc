@@ -16,6 +16,7 @@
 */
 
 import Vector
+import math
 
 VectorList: class <T> {
 	_vector: Vector<T>
@@ -116,6 +117,13 @@ VectorList: class <T> {
 		result := This<T> new()
 		for (i in 0..indices count)
 			result add(this[indices[i]])
+		result
+	}
+	getSlice: func (range: Range) -> This<T> {
+		result := This<T> new(range count)
+		result _count = range count
+		source := (this pointer as Long + (range min * (T size))) as Pointer
+		memcpy(result pointer, source, range count * (T size))
 		result
 	}
 }
