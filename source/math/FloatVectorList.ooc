@@ -216,29 +216,22 @@ FloatVectorList: class extends VectorList<Float> {
 		result: Float
 		tempVector := this copy()
 		tempVector sort()
-		if(Int odd(this count))
+		if (Int odd(this count))
 			result = tempVector[this count / 2]
 		else
 			result = (tempVector[this count / 2 - 1] + tempVector[this count / 2]) / 2
+		tempVector free()
 		result
 	}
 	movingMedianFilter: func (windowSize: Int) -> This {
 		result := FloatVectorList new()
-		indices := VectorList<Int> new()
-		for (i in 0..(windowSize - 1) / 2) {
-			indices add(i)
-		}
+		start := -((windowSize - 1) / 2)
 		for (i in 0..this count) {
-			if (i + (windowSize - 1) / 2 < this count)
-				indices add(i + (windowSize - 1) / 2)
-			if (i > (windowSize - 1) / 2)
-				indices removeAt(0)
-
-			elementsInWindow := this getElements(indices)
+			range := (start..(start + windowSize - 1)) + i
+			elementsInWindow := this getSlice(range clamp(0, this count-1))
 			result add((elementsInWindow as FloatVectorList) median())
 			elementsInWindow free()
 		}
-		indices free()
 		result
 	}
 }
