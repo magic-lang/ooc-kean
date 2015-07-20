@@ -34,7 +34,7 @@ Quaternion: cover {
 	// y = this x
 	// z = this y
 	// w = this z
-	
+
 	inverse ::= This new(this w, -this x, -this y, -this z)
 	isValid ::= (this w == this w && this x == this x && this y == this y && this z == this z)
 	isIdentity ::= (this w == 1.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
@@ -77,6 +77,36 @@ Quaternion: cover {
 		y := a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2;
 		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2;
 		return This new(w, x, y, z);
+	}
+	fromRotationMatrix: static func (matrix: FloatTransform2D) -> This {
+		trace := matrix a + matrix e + matrix i
+		s, w, x, y, z: Float
+		if (trace > 0.0f) {
+			s = 2.0f * (trace + 1.0f) sqrt()
+			w = 0.25f * s
+			x = (matrix f - matrix h) / s
+			y = (matrix g - matrix c) / s
+			z = (matrix b - matrix d) / s
+		} else if (matrix a > matrix e && matrix a > matrix i) {
+			s = 2.0f * (1.0f + matrix a - matrix e - matrix i) sqrt()
+			w = (matrix f - matrix h) / s
+			x = 0.25f * s
+			y = (matrix d + matrix b) / s
+			z = (matrix g + matrix c) / s
+		} else if (matrix e > matrix i) {
+			s = 2.0f * (1.0f + matrix e - matrix a - matrix i) sqrt()
+			w = (matrix g - matrix c) / s
+			x = (matrix d + matrix b) / s
+			y = 0.25f * s
+			z = (matrix h + matrix f) / s
+		} else {
+			s = 2.0f * (1.0f + matrix i - matrix a - matrix e) sqrt()
+			w = (matrix b - matrix d) / s
+			x = (matrix g + matrix c) / s
+			y = (matrix h + matrix f) / s
+			z = 0.25f * s
+		}
+		This new(w, x, y, z)
 	}
 	getEulerAngles: func -> FloatRotation3D {
 		// http://www.jldoty.com/code/DirectX/YPRfromUF/YPRfromUF.html
