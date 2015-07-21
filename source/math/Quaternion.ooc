@@ -79,32 +79,38 @@ Quaternion: cover {
 		return This new(w, x, y, z);
 	}
 	fromRotationMatrix: static func (matrix: FloatTransform2D) -> This {
+		// Farrell, Jay. A. Computation of the Quaternion from a Rotation Matrix.
+		// http://www.ee.ucr.edu/~farrell/AidedNavigation/D_App_Quaternions/Rot2Quat.pdf
+		r, s, w, x, y, z: Float
 		trace := matrix a + matrix e + matrix i
-		s, w, x, y, z: Float
 		if (trace > 0.0f) {
-			s = 2.0f * (trace + 1.0f) sqrt()
-			w = 0.25f * s
-			x = (matrix f - matrix h) / s
-			y = (matrix g - matrix c) / s
-			z = (matrix b - matrix d) / s
+			r = (1.0f + trace) sqrt()
+			s = 0.5f / r
+			w = 0.5f * r
+			x = (matrix f - matrix h) * s
+			y = (matrix g - matrix c) * s
+			z = (matrix b - matrix d) * s
 		} else if (matrix a > matrix e && matrix a > matrix i) {
-			s = 2.0f * (1.0f + matrix a - matrix e - matrix i) sqrt()
-			w = (matrix f - matrix h) / s
-			x = 0.25f * s
-			y = (matrix d + matrix b) / s
-			z = (matrix g + matrix c) / s
+			r = (1.0f + matrix a - matrix e - matrix i) sqrt()
+			s = 0.5f / r
+			w = (matrix f - matrix h) * s
+			x = 0.5f * r
+			y = (matrix d + matrix b) * s
+			z = (matrix g + matrix c) * s
 		} else if (matrix e > matrix i) {
-			s = 2.0f * (1.0f + matrix e - matrix a - matrix i) sqrt()
-			w = (matrix g - matrix c) / s
-			x = (matrix d + matrix b) / s
-			y = 0.25f * s
-			z = (matrix h + matrix f) / s
+			r = (1.0f - matrix a + matrix e - matrix i) sqrt()
+			s = 0.5f / r
+			w = (matrix g - matrix c) * s
+			x = (matrix d + matrix b) * s
+			y = 0.5f * r
+			z = (matrix h + matrix f) * s
 		} else {
-			s = 2.0f * (1.0f + matrix i - matrix a - matrix e) sqrt()
-			w = (matrix b - matrix d) / s
-			x = (matrix g + matrix c) / s
-			y = (matrix h + matrix f) / s
-			z = 0.25f * s
+			r = (1.0f - matrix a - matrix e + matrix i) sqrt()
+			s = 0.5f / r
+			w = (matrix b - matrix d) * s
+			x = (matrix g + matrix c) * s
+			y = (matrix h + matrix f) * s
+			z = 0.5f * r
 		}
 		This new(w, x, y, z)
 	}
@@ -280,23 +286,6 @@ Quaternion: cover {
 		i := 1.0f - 2.0f * (x * x + y * y)
 		FloatTransform2D new(a, b, c, d, e, f, g, h, i)
 	}
-	//
-	// This function is not yet needed, and there are no tests for it yet.
-	//
-	/*toFloatTransform3D: func -> FloatTransform3D {
-		normalized := this normalized
-		(w, x, y, z) := (normalized w, normalized x, normalized y, normalized z)
-		a := w * w + x * x - y * y - z * z
-		b := 2.0f * (x * z + w * z)
-		c := 2.0f * (x * z - w * y)
-		d := 2.0f * (x * y - w * z)
-		e := w * w - x * x + y * y - z * z
-		f := 2.0f * (w * x + y * z)
-		g := 2.0f * (w * y + x * z)
-		h := 2.0f * (y * z - w * x)
-		i := w * w - x * x + y * y + z * z
-		FloatTransform3D new(a, b, c, d, e, f, g, h, i, 0, 0, 0)
-	}*/
 	toString: func -> String {
 		"Real: " << "%8f" formatFloat(this real) >>
 		" Imaginary: " & "%8f" formatFloat(this imaginary x) >> " " & "%8f" formatFloat(this imaginary y) >> " " & "%8f" formatFloat(this imaginary z)

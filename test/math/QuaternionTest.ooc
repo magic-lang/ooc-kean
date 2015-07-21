@@ -1,9 +1,12 @@
 use ooc-unit
 use ooc-math
+use ooc-base
 import math
 import lang/IO
 
+
 QuaternionTest: class extends Fixture {
+	Debug initialize(func (s: String) { println(s) })
 	quaternion0 := Quaternion new(33.0f, 10.0f, -12.0f, 54.5f)
 	quaternion1 := Quaternion new(10.0f, 17.0f, -10.0f, 14.5f)
 	quaternion2 := Quaternion new(43.0f, 27.0f, -22.0f, 69.0f)
@@ -218,19 +221,12 @@ QuaternionTest: class extends Fixture {
 			expect(quaternion z, is equal to(0.353553f) within(tolerance))
 		})
 		this add("fromRotationMatrix: else", func() {
-			//
-			// TODO: This test fails because for some reason, w and z are switched
-			//
-			matrix := FloatTransform2D new(0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f)
+			matrix := FloatTransform2D new(-1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f)
 			quaternion := Quaternion fromRotationMatrix(matrix)
-			"\nw = %f" printfln(quaternion w)
-			"x = %f" printfln(quaternion x)
-			"y = %f" printfln(quaternion y)
-			"z = %f" printfln(quaternion z)
-			expect(quaternion w, is equal to(0.5f) within(tolerance))
-			expect(quaternion x, is equal to(0.0f) within(tolerance))
-			expect(quaternion y, is equal to(1.0f) within(tolerance))
-			expect(quaternion z, is equal to(0.0f) within(tolerance))
+			expect(quaternion w, is equal to(-0.35355339059327373f) within(tolerance))
+			expect(quaternion x, is equal to(-0.353553f) within(tolerance))
+			expect(quaternion y, is equal to(-0.353553f) within(tolerance))
+			expect(quaternion z, is equal to(0.707106f) within(tolerance))
 		})
 		this add("fromRotationMatrix_1", func() {
 			matrix := quaternion0 toFloatTransform2D();
@@ -241,12 +237,19 @@ QuaternionTest: class extends Fixture {
 			expect(quaternion y, is equal to(normalized y) within(tolerance))
 			expect(quaternion z, is equal to(normalized z) within(tolerance))
 		})
+		this add("fromRotationMatrix_2", func() {
+			matrix := quaternion3 toFloatTransform2D();
+			quaternion := Quaternion fromRotationMatrix(matrix)
+			normalized := quaternion3 normalized
+			expect(quaternion w, is equal to(normalized w) within(tolerance))
+			expect(quaternion x, is equal to(normalized x) within(tolerance))
+			expect(quaternion y, is equal to(normalized y) within(tolerance))
+			expect(quaternion z, is equal to(normalized z) within(tolerance))
+		})
 	}
-
 	angleDistance: func (a, b: Float) -> Float {
 		(FloatPoint2D polar(1, a) - FloatPoint2D polar(1, b)) norm
 	}
-
 }
 
 QuaternionTest new() run()
