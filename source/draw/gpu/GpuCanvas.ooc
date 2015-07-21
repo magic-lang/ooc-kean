@@ -30,7 +30,6 @@ GpuCanvas: abstract class {
 	draw: abstract func (image: Image)
 	draw: abstract func ~transform2D (image: Image, transform: FloatTransform2D)
 	draw: abstract func ~withmap (image: Image, map: GpuMap, viewport: IntBox2D)
-	draw: abstract func ~withmapTwoImages (image1: Image, image2: Image, map: GpuMap, viewport: IntBox2D)
 	clear: abstract func
 	drawLines: virtual func (transformList: VectorList<FloatPoint2D>)
 	drawBox: virtual func (box: FloatBox2D)
