@@ -142,7 +142,7 @@ FloatVectorList: class extends VectorList<Float> {
 		result
 	}
 	divideByMaxValue: func () -> This {
-		this maxValue != 0 ? (this / this maxValue) copy() : this copy()
+		this maxValue != 0 ? (this / this maxValue) : this copy()
 	}
 	getOnes: static func (count: Float) -> This {
 		result := This new(count)
