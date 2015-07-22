@@ -18,7 +18,8 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 use ooc-opengl
-import GpuImageBin, OpenGLES3Surface, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Yuv422Semipacked, OpenGLES3Fence
+use ooc-collections
+import GpuImageBin, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Yuv422Semipacked, OpenGLES3Fence, OverlayDrawer
 import Map/OpenGLES3Map, Map/OpenGLES3MapPack
 import OpenGLES3/Context, OpenGLES3/NativeWindow
 
@@ -33,6 +34,9 @@ OpenGLES3Context: class extends GpuContext {
 	_packMonochrome: OpenGLES3MapPackMonochrome
 	_packUv: OpenGLES3MapPackUv
 
+	_quad: Quad
+	_overlayDrawer: OverlayDrawer
+
 	init: func (context: Context) {
 		super()
 		this _bgrMapDefault = OpenGLES3MapBgr new(this)
@@ -44,6 +48,8 @@ OpenGLES3Context: class extends GpuContext {
 		this _packMonochrome = OpenGLES3MapPackMonochrome new(this)
 		this _packUv = OpenGLES3MapPackUv new(this)
 		this _backend = context
+		this _quad = Quad create()
+		this _overlayDrawer = OverlayDrawer new(this)
 	}
 	init: func ~unshared { this init(Context create()) }
 	init: func ~shared (other: This) { this init(Context create(other _backend)) }
@@ -59,10 +65,15 @@ OpenGLES3Context: class extends GpuContext {
 		this _packMonochrome free()
 		this _packUv free()
 		this _backend free()
+		this _quad free()
+		this _overlayDrawer free()
 		super()
 	}
 	recycle: func ~image (gpuImage: GpuImage) { this _imageBin add(gpuImage) }
-	recycle: func ~surface (surface: GpuSurface) { this _surfaceBin add(surface) }
+	drawQuad: func { this _quad draw() }
+	drawLines: func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform2D) { this _overlayDrawer drawLines(pointList, transform) }
+	drawBox: func (box: FloatBox2D, transform: FloatTransform2D) { this _overlayDrawer drawBox(box, transform) }
+	drawPoints: func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform2D) { this _overlayDrawer drawPoints(pointList, transform) }
 	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap {
 		result := match (mapType) {
 			case GpuMapType defaultmap =>
@@ -184,14 +195,8 @@ OpenGLES3Context: class extends GpuContext {
 			raise("Unknown input format in OpenGLES3Context createGpuImage")
 		result
 	}
-	createSurface: func -> GpuSurface {
-		result := this _surfaceBin find()
-		if(result == null)
-			result = OpenGLES3Surface create(this)
-		result
-	}
 	update: func { this _backend swapBuffers() }
-	setViewport: func (viewport: IntBox2D) { Fbo setViewport(viewport left, viewport top, viewport width, viewport height) }
+	setViewport: func (viewport: IntBox2D) { Fbo setViewport(viewport) }
 	packToRgba: func (source: GpuImage, target: GpuBgra, viewport: IntBox2D) {
 		map := match(source) {
 			case sourceImage: GpuMonochrome => this _packMonochrome

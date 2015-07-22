@@ -21,93 +21,76 @@ use ooc-collections
 use ooc-draw
 use ooc-draw-gpu
 
-import OpenGLES3/Fbo, OpenGLES3/Quad, OpenGLES3/Texture, OpenGLES3Bgr, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, Map/OpenGLES3Map, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Monochrome, OpenGLES3Surface
-import structs/LinkedList
+import OpenGLES3/Fbo, OpenGLES3/Quad, OpenGLES3/Texture, OpenGLES3Bgr, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, Map/OpenGLES3Map, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Monochrome, OpenGLES3Context
 
 OpenGLES3Canvas: class extends GpuCanvas {
 	_renderTarget: Fbo
-	clearColor := 0.0f
-	init: func (image: GpuImage, context: GpuContext) {
-		super(image, context)
-	}
+	context ::= this _context as OpenGLES3Context
+	init: func (image: GpuImage, context: GpuContext) { super(image, context) }
 	free: override func {
 		this _renderTarget free()
 		super()
 	}
-	onRecycle: func {
-		this _renderTarget invalidate()
+	onRecycle: func { this _renderTarget invalidate() }
+	draw: func ~viewport (viewport: IntBox2D) {
+		this _bind()
+		Fbo setViewport(viewport)
+		if (this blend)
+			Fbo enableBlend(this blend)
+		this context drawQuad()
+		if (this blend)
+			Fbo enableBlend(false)
+		this _unbind()
+	}
+	draw: func ~withmap (image: Image, map: GpuMap, viewport: IntBox2D) {
+		if (image instanceOf?(GpuImage)) {
+			temp := image as GpuImage
+			temp bind(0)
+			map use()
+			this draw(viewport)
+		}
+		else if(image instanceOf?(RasterImage)) {
+			temp := this _context createGpuImage(image as RasterImage)
+			temp bind(0)
+			map use()
+			this draw(viewport)
+			temp free()
+		}
+		else
+			Debug raise("Invalid image type in OpenGLES3Canvas draw: func ~withmap")
 	}
 	draw: func (image: Image) {
 		map := this _context getMap(this _target)
-		viewport := IntBox2D new(this _size)
-		this draw(image, map, viewport)
-	}
-	// Postcondition: Returns the transform to apply directly to a quad for rendering with compensation for aspect ratio.
-	getFinalTransform: static func (imageSize: IntSize2D, transform: FloatTransform2D) -> FloatTransform2D {
-		toReference := FloatTransform2D createScaling(imageSize width / 2.0f, imageSize height / 2.0f)
-		toNormalized := FloatTransform2D createScaling(2.0f / imageSize width, 2.0f / imageSize height)
-		toNormalized * transform * toReference
+		this draw(image, map, this viewport)
 	}
 	draw: func ~transform2D (image: Image, transform: FloatTransform2D) {
 		map := this _context getMap(this _target, GpuMapType transform) as OpenGLES3MapDefault
-		map transform = getFinalTransform(this _size, transform)
-		viewport := IntBox2D new(this _size)
-		this draw(image, map, viewport)
+		map transform = This getFinalTransform(this _size, transform)
+		this draw(image, map, this viewport)
 	}
-	draw: func ~withmap (image: Image, map: GpuMap, viewport: IntBox2D) {
-		this _bind()
-		Fbo setClearColor(this clearColor)
-		Fbo enableBlend(this blend)
-		surface := this _context createSurface()
-		surface draw(image, map, viewport)
-		surface recycle()
-		Fbo enableBlend(false)
-		Fbo setClearColor(0.0f)
-		this _unbind()
-	}
-	drawSurface: func (function: Func (OpenGLES3Surface, FloatTransform2D)) {
-		this _bind()
-		this _setViewport()
-		transform := FloatTransform2D createScaling(2.0f / this _size width, 2.0f / this _size height)
-		surface := this _context createSurface() as OpenGLES3Surface
-		function(surface, transform)
-		surface recycle()
-		this _unbind()
-	}
-	// TODO: Clean these 3 functions up...
 	drawLines: override func (pointList: VectorList<FloatPoint2D>) {
-		drawLinesFunc := func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawLines(pointList, transform) }
-		this drawSurface(drawLinesFunc)
-		(drawLinesFunc as Closure) dispose()
+		this _bind()
+		this context drawLines(pointList, this _projection)
+		this _unbind()
 	}
 	drawBox: override func (box: FloatBox2D) {
-		drawBoxFunc := func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawBox(box, transform) }
-		this drawSurface(drawBoxFunc)
-		(drawBoxFunc as Closure) dispose()
+		this _bind()
+		this context drawBox(box, this _projection)
+		this _unbind()
 	}
 	drawPoints: override func (pointList: VectorList<FloatPoint2D>) {
-		drawPointsFunc := func (surface: OpenGLES3Surface, transform: FloatTransform2D) { surface drawPoints(pointList, transform) }
-		this drawSurface(drawPointsFunc)
-		(drawPointsFunc as Closure) dispose()
+		this _bind()
+		this context drawPoints(pointList, this _projection)
+		this _unbind()
 	}
-	_setViewport: func {
-		viewport := IntBox2D new(this _size)
-		Fbo setViewport(viewport left, viewport top, viewport width, viewport height)
-	}
-	_bind: func {
-		this _renderTarget bind()
-	}
-	_unbind: func {
-		this _renderTarget unbind()
-	}
+	_bind: func { this _renderTarget bind() }
+	_unbind: func { this _renderTarget unbind() }
 	clear: func {
 		this _bind()
 		this _renderTarget clear()
 		this _unbind()
 	}
-	readPixels: override func () -> ByteBuffer {
-		this _renderTarget readPixels()
-	}
+	readPixels: override func -> ByteBuffer { this _renderTarget readPixels() }
 	create: static func (image: GpuPacked, context: GpuContext) -> This {
 		result := This new(image, context)
 		result _renderTarget = Fbo create(image texture _backend as Texture, image size width, image size height)
@@ -156,7 +139,7 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 		else
 			raise("Trying to draw unsupported image format to OpenGLES3Yuv420Planar")
 	}
-	draw: func ~withmap (image: Image, map: GpuMap, viewport: IntBox2D)
+	draw: func ~withmap (image: Image, map: GpuMap)
 	clear: func {
 		this target y canvas clear()
 		this target u canvas clear()
@@ -206,7 +189,7 @@ OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 		else
 			raise("Trying to draw unsupported image format to OpenGLES3Yuv420Semiplanar")
 	}
-	draw: func ~withmap (image: Image, map: GpuMap, viewport: IntBox2D)
+	draw: func ~withmap (image: Image, map: GpuMap)
 	clear: func {
 		this target y canvas clear()
 		this target uv canvas clear()
