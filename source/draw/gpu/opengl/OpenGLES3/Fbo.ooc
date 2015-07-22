@@ -98,9 +98,9 @@ Fbo: class {
 		glViewport(viewport left, viewport top, viewport width, viewport height)
 		version(debugGL) { validateEnd("fbo setViewport") }
 	}
-	create: static func (texture: Texture, width: UInt, height: UInt) -> This {
+	create: static func (texture: Texture, size: IntSize2D) -> This {
 		version(debugGL) { validateStart() }
-		result := This new(width, height)
+		result := This new(size width, size height)
 		result = result _generate(texture) ? result : null
 		version(debugGL) { validateEnd("fbo create") }
 		result
