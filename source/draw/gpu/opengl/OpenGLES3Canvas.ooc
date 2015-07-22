@@ -97,7 +97,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	readPixels: override func -> ByteBuffer { this _renderTarget readPixels() }
 	create: static func (image: GpuPacked, context: GpuContext) -> This {
 		result := This new(image, context)
-		result _renderTarget = Fbo create(image texture _backend as Texture, image size width, image size height)
+		result _renderTarget = Fbo create(image texture _backend as Texture, image size)
 		result _size = image size
 		result _renderTarget != null ? result : null
 	}
