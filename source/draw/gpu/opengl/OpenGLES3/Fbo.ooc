@@ -16,6 +16,7 @@
  */
 
 use ooc-base
+use ooc-math
 import include/gles, Texture, DebugGL
 
 Fbo: class {
@@ -90,11 +91,11 @@ Fbo: class {
 		this unbind()
 		version(debugGL) { validateEnd("fbo invalidate") }
 	}
-	setViewport: static func (x: UInt, y: UInt, width: UInt, height: UInt) {
+	setViewport: static func (viewport: IntBox2D) {
 		version(debugGL) { validateStart() }
 		//glEnable(GL_SCISSOR_TEST)
 		//glScissor(x, y, width, height)
-		glViewport(x, y, width, height)
+		glViewport(viewport left, viewport top, viewport width, viewport height)
 		version(debugGL) { validateEnd("fbo setViewport") }
 	}
 	create: static func (texture: Texture, width: UInt, height: UInt) -> This {

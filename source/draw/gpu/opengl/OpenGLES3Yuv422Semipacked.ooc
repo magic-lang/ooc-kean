@@ -36,7 +36,7 @@ OpenGLES3Yuv422Semipacked: class extends GpuYuv422Semipacked {
 	}
 	_createCanvas: func -> GpuCanvas {
 		result := OpenGLES3Canvas create(this, this _context)
-		result clearColor = 0.5f
+		result clearColor = ColorBgra new(128, 128, 128, 128)
 		result
 	}
 	create: static func ~fromRaster (rasterImage: RasterYuv422Semipacked, context: GpuContext) -> This {
