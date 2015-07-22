@@ -75,7 +75,9 @@ Window: class extends GpuSurface {
 	}
 	draw: func ~Transform2D (image: GpuImage, transform := FloatTransform2D identity) {
 		map := this getTransformMap(image)
-		map transform = this getTransform(this _size, transform)
+		map transform = transform
+		map projection = this _projection
+		map reference = image reference
 		this draw(image, map)
 	}
 	draw: func ~RasterImageTransform (image: RasterImage, transform: FloatTransform2D) {
