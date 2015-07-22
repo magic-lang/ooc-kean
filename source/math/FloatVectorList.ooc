@@ -141,6 +141,21 @@ FloatVectorList: class extends VectorList<Float> {
 			result = result >> this[i] toString() >> "\n"
 		result
 	}
+	divideByMaxValue: func () -> This {
+		this maxValue != 0 ? (this / this maxValue) : this copy()
+	}
+	getOnes: static func (count: Float) -> This {
+		result := This new(count)
+		for (i in 0..count)
+			result add(1.0f)
+		result
+	}
+	getZeros: static func (count: Float) -> This {
+		result := This new()
+		for (i in 0..count)
+			result add(0.0f)
+		result
+	}
 	toFloatComplexVectorList: func -> FloatComplexVectorList {
 		result := FloatComplexVectorList new()
 		for (i in 0..this _count)
