@@ -31,6 +31,8 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _renderTarget free()
 		super()
 	}
+	_bind: func { this _renderTarget bind() }
+	_unbind: func { this _renderTarget unbind() }
 	onRecycle: func { this _renderTarget invalidate() }
 	draw: func ~viewport (viewport: IntBox2D) {
 		this _bind()
@@ -46,12 +48,16 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		if (image instanceOf?(GpuImage)) {
 			temp := image as GpuImage
 			temp bind(0)
+			map reference = temp reference
+			map projection = this _projection
 			map use()
 			this draw(viewport)
 		}
 		else if(image instanceOf?(RasterImage)) {
 			temp := this _context createGpuImage(image as RasterImage)
 			temp bind(0)
+			map reference = temp reference
+			map projection = this _projection
 			map use()
 			this draw(viewport)
 			temp free()
@@ -65,7 +71,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	}
 	draw: func ~transform2D (image: Image, transform: FloatTransform2D) {
 		map := this _context getMap(this _target, GpuMapType transform) as OpenGLES3MapDefault
-		map transform = This getFinalTransform(this _size, transform)
+		map transform = transform
 		this draw(image, map, this viewport)
 	}
 	drawLines: override func (pointList: VectorList<FloatPoint2D>) {
@@ -83,8 +89,6 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this context drawPoints(pointList, this _projection)
 		this _unbind()
 	}
-	_bind: func { this _renderTarget bind() }
-	_unbind: func { this _renderTarget unbind() }
 	clear: func {
 		this _bind()
 		this _renderTarget clear()
@@ -167,7 +171,7 @@ OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 		if (image instanceOf?(RasterYuv420Semiplanar)) {
 			temp := this _context createGpuImage(image as RasterYuv420Semiplanar) as OpenGLES3Yuv420Semiplanar
 			this _draw(temp)
-			temp recycle()
+			temp free()
 		}
 		else if (image instanceOf?(OpenGLES3Yuv420Semiplanar)) {
 			temp := image as OpenGLES3Yuv420Semiplanar
@@ -180,7 +184,7 @@ OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 		if (image instanceOf?(RasterYuv420Semiplanar)) {
 			temp := this _context createGpuImage(image as RasterYuv420Semiplanar) as OpenGLES3Yuv420Semiplanar
 			this _draw(temp, transform)
-			temp recycle()
+			temp free()
 		}
 		else if (image instanceOf?(OpenGLES3Yuv420Semiplanar)) {
 			temp := image as OpenGLES3Yuv420Semiplanar

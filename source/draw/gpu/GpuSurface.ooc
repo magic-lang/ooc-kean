@@ -17,8 +17,4 @@ GpuSurface: abstract class {
 			toNormalized := FloatTransform2D createScaling(2.0f / imageSize width, 2.0f / imageSize height)
 			toNormalized * transform * toReference
 		}
-		getTransform: func (imageSize: IntSize2D, transform: FloatTransform2D) -> FloatTransform2D {
-			toReference := FloatTransform2D createScaling(imageSize width / 2.0f, imageSize height / 2.0f)
-			this _projection * transform * toReference
-		}
 }
