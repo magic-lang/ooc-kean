@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this _program. If not, see <http://www.gnu.org/licenses/>.
+use ooc-math
 
 GpuMapType: enum {
 	defaultmap
@@ -23,4 +24,10 @@ GpuMapType: enum {
 
 GpuMap: abstract class {
 	use: virtual func
+	reference: FloatTransform2D { get set }
+	projection: FloatTransform2D { get set }
+	init: func {
+		this reference = FloatTransform2D identity
+		this projection = FloatTransform2D identity
+	}
 }
