@@ -21,12 +21,12 @@ use ooc-collections
 
 import GpuImage, GpuMap, GpuSurface, GpuContext, structs/LinkedList
 
-GpuCanvas: abstract class {
+GpuCanvas: abstract class extends GpuSurface {
 	_target: GpuImage
-	_size: IntSize2D
-	_context: GpuContext
 	blend := false
-	init: func (=_target, =_context)
+	init: func (=_target, context: GpuContext) {
+		super(this _target size, context, FloatTransform2D createScaling(2.0f / this _target size width, 2.0f / this _target size height))
+	}
 	draw: abstract func (image: Image)
 	draw: abstract func ~transform2D (image: Image, transform: FloatTransform2D)
 	draw: abstract func ~withmap (image: Image, map: GpuMap, viewport: IntBox2D)
