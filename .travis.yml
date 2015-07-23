@@ -12,6 +12,7 @@ before_script:
   - dpkg-deb -x ${tmp##*/} .
   - mv usr/bin/rock .
   - mv usr/lib/fancy_backtrace.so .
+  - ls
   - ls /usr/include
   - export PATH=$PATH:$PWD
   - mkdir tools
