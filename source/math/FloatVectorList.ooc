@@ -86,6 +86,12 @@ FloatVectorList: class extends VectorList<Float> {
 		}
 		result
 	}
+	absolute: func -> This {
+		result := This new(this _count)
+		for (i in 0..this _count)
+			result add(this[i] abs())
+		result
+	}
 	copy: func -> This {
 		result := This new(this _count)
 		for (i in 0..this _count)
