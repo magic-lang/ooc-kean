@@ -77,7 +77,7 @@ FloatVectorList: class extends VectorList<Float> {
 			}
 		}
 	}
-	_accumulate: func -> This {
+	accumulate: func -> This {
 		result := This new(this _count)
 		sum := 0
 		for (i in 0..this _count) {
