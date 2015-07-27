@@ -15,7 +15,14 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
+import DateTime
+
 TimeSpan: cover {
+
+	timeToTicks : static func(hours: Int, minutes: Int, seconds : Int) -> Int64 {
+		hours * 3600 * minutes * 60 * seconds * DateTime TicksPerSecond
+	}
+
 	_ticks: Int64
 	ticks ::= this _ticks
 	init: func@ (=_ticks)
