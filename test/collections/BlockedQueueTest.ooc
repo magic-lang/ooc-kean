@@ -73,6 +73,7 @@ BlockedQueueTest: class extends Fixture {
 			expect(queue empty)
 
 			queue free()
+			pool free()
 		})
 	}
 }

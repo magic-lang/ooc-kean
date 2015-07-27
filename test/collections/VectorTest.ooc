@@ -108,6 +108,9 @@ VectorTest: class extends Fixture {
 				heapVector move(i,i+1)
 			for (i in 0..10)
 				expect(heapVector[i], is equal to(0))
+
+			heapVector free()
+
 		})
 
 
@@ -182,6 +185,9 @@ VectorTest: class extends Fixture {
 			oldValue = stackVector[1]
 			stackVector move(1,0)
 			expect(stackVector[0], is equal to(oldValue))
+
+			stackVector free()
+
 		})
 
 	}
