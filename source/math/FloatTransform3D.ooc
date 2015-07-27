@@ -20,7 +20,7 @@ import FloatPoint3D
 import text/StringTokenizer
 import structs/ArrayList
 
-// The 3D transform is a 4x3 homogeneous coordinate matrix.
+// The 3D transform is a 4x4 homogeneous coordinate matrix.
 // The element order is:
 // A E I M
 // B F J N
