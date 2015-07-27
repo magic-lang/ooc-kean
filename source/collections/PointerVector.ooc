@@ -23,10 +23,13 @@ PointerVector: abstract class {
 
 	init: /* protected */ func ~preallocated (=_backend, =_count, freeContent := false) {}
 	init: /* protected */ func (=_count, freeContent := false) {
-		this _allocate(this _count)
 		this _freeContent = freeContent
 	}
-	__destroy__: func {	this _free(0, this count) }
+	free: override func {
+		this _free(0, this count)
+		gc_free(this _backend)
+		super()
+	}
 	_free: func ~range (start: Int, end: Int) {
 		if (this _freeContent) {
 			for (i in start..end) {
@@ -35,17 +38,13 @@ PointerVector: abstract class {
 			}
 		}
 	}
-	_allocate: abstract func (count: Int)
-
 	resize: virtual func (count: Int) {
 		if (count < this count) {
 			this _free(count, this count)
 			this _count = count
 		}
-		else if (count > this count) {
-			this _allocate(count)
+		else if (count > this count)
 			this _count = count
-		}
 	}
 	move: func (sourceStart: Int, targetStart: Int, count := 0) {
 		if (count < 1)
@@ -72,29 +71,25 @@ PointerVector: abstract class {
 		else
 			memcpy(destination, source, length)
 	}
-
 	operator [] (index: Int) -> Pointer {
 		this _backend[index]
 	}
-
 	operator []= (index: Int, item: Pointer) {
 		this _backend[index] = item
 	}
 }
 
-
 PointerHeapVector: class extends PointerVector {
 	init: func(count: Int) {
 		super(count)
+		this _allocate(count)
 	}
-
-	_allocate: func(count: Int) {
+	_allocate: func (count: Int) {
 		this _backend = gc_realloc(this _backend, count * Pointer size)
 	}
-
-	__destroy__: func {
+	resize: override func (count: Int) {
 		super()
-		gc_free(this _backend)
+		this _allocate(count)
 	}
 }
 
@@ -102,11 +97,7 @@ PointerStackVector: class extends PointerVector {
 	init: func(data: Pointer*, count: Int) {
 		super(data, count)
 	}
-
-	// TODO: Why does this function exist here?
-	_allocate: func(count: Int)
-
-	resize: override func(count: Int) {
+	resize: override func (count: Int) {
 		if (count > this count)
 			count = this count
 		super(count)

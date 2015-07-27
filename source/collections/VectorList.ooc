@@ -31,7 +31,6 @@ VectorList: class <T> {
 		this init(HeapVector<T> new(capacity))
 	}
 	init: func (=_vector)
-
 	add: func (item: T) {
 		if (this _vector capacity <= this _count)
 			this _vector resize(this _vector capacity + 8)
@@ -71,11 +70,9 @@ VectorList: class <T> {
 		this _count = 0
 	}
 	free: override func {
-		this _vector _free(0, this _count)
 		this _vector free()
 		super()
 	}
-
 	operator [] (index: Int) -> T {
 		this _vector[index]
 	}
