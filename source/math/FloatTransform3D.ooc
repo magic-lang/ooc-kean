@@ -68,18 +68,23 @@ FloatTransform3D: cover {
 		}
 		result
 	}
-	det2: static func (a, b, c, d: Float) -> Float { a * d - c * b}
-	det3: static func (a, b, c, d, e, f, g, h, i: Float) -> Float { a * This det2(e, f, h, i) - d * This det2(b, c, h, i) + g * This det2(b, c, e, f) }
-	det4: func -> Float {
-		this a * This det3(f, g, h, j, k, l, n, o, p) - this e * This det3(b, c, d, j, k, l, n, o, p) + this i * This det3(b, c, d, f, g, h, n, o, p) - this m * This det3(b, c, d, f, g, h, j, k, l)
+	determinant: Float {
+		get {
+			this a * this f * this k * this p + this a * this j * this o * this h + this a * this n * this g * this l +
+			this e * this b * this o * this l + this e * this j * this c * this p + this e * this n * this k * this d +
+			this i * this b * this g * this p + this i * this f * this o * this d + this i * this n * this c * this h +
+			this m * this b * this k * this h + this m * this f * this c * this l + this m * this j * this g * this d -
+			this a * this f * this o * this l - this a * this j * this g * this p - this a * this n * this k * this h -
+			this e * this b * this k * this p - this e * this j * this o * this d - this e * this n * this c * this l -
+			this i * this b * this o * this h - this i * this f * this c * this p - this i * this n * this g * this d -
+			this m * this b * this g * this l - this m * this f * this k * this d - this m * this j * this c * this h
+		}
 	}
-	determinant ::= this det4()
-	//determinant ::= this a * (this e * this i - this f * this h) + this d * (this h * this c - this i * this b) + this g * (this b * this f - this e * this c)
-	translation ::= FloatSize3D new(this j, this k, this l)
+	translation ::= FloatSize3D new(this m, this n, this o)
 	scaling ::= (this scalingX + this scalingY + this scalingZ) / 3.0f
 	scalingX ::= (this a squared() + this b squared() + this c squared()) sqrt()
-	scalingY ::= (this d squared() + this e squared() + this f squared()) sqrt()
-	scalingZ ::= (this g squared() + this h squared() + this i squared()) sqrt()
+	scalingY ::= (this e squared() + this f squared() + this g squared()) sqrt()
+	scalingZ ::= (this i squared() + this j squared() + this k squared()) sqrt()
 	rotation ::= this b atan2(this a)
 	inverse: This { get {
 		determinant := this determinant
