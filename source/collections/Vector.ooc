@@ -26,7 +26,6 @@ Vector: abstract class <T> {
 		this _freeContent = freeContent
 	}
 	free: override func {
-		this _free(0, this capacity)
 		if (!(this instanceOf?(StackVector)))
 			gc_free(this _backend)
 		super()
