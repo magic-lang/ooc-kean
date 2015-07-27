@@ -21,6 +21,7 @@ QuaternionTest: class extends Fixture {
 		super("Quaternion")
 		tolerance := 0.0001f
 		this add("comparison", func() {
+			raise("Does fancy backtrace work, or not?")
 			expect(this quaternion1 == this quaternion4)
 			expect(this quaternion2 == this quaternion3, is false)
 			expect(this quaternion3 != this quaternion4)
