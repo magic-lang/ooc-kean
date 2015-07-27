@@ -22,12 +22,13 @@ import structs/ArrayList
 
 // The 3D transform is a 4x3 homogeneous coordinate matrix.
 // The element order is:
-// A D G J
-// B E H K
-// C F I L
+// A E I M
+// B F J N
+// C G K O
+// D H L P
 
 FloatTransform3D: cover {
-	a, b, c, d, e, f, g, h, i, j, k, l: Float
+	a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p: Float
 	operator [] (x, y: Int) -> Float {
 		result := 0.0f
 		match (x) {
@@ -36,34 +37,44 @@ FloatTransform3D: cover {
 					case 0 => result = this a
 					case 1 => result = this b
 					case 2 => result = this c
-					case => OutOfBoundsException new(y, 3) throw()
+					case 3 => result = this d
+					case => OutOfBoundsException new(y, 4) throw()
 				}
 			case 1 =>
 				match (y) {
-					case 0 => result = this d
-					case 1 => result = this e
-					case 2 => result = this f
-					case => OutOfBoundsException new(y, 3) throw()
+					case 0 => result = this e
+					case 1 => result = this f
+					case 2 => result = this g
+					case 3 => result = this h
+					case => OutOfBoundsException new(y, 4) throw()
 				}
 			case 2 =>
 				match (y) {
-					case 0 => result = this g
-					case 1 => result = this h
-					case 2 => result = this i
-					case => OutOfBoundsException new(y, 3) throw()
+					case 0 => result = this i
+					case 1 => result = this j
+					case 2 => result = this k
+					case 3 => result = this l
+					case => OutOfBoundsException new(y, 4) throw()
 				}
 			case 3 =>
 				match (y) {
-					case 0 => result = this j
-					case 1 => result = this k
-					case 2 => result = this l
-					case => OutOfBoundsException new(y, 3) throw()
+					case 0 => result = this m
+					case 1 => result = this n
+					case 2 => result = this o
+					case 3 => result = this p
+					case => OutOfBoundsException new(y, 4) throw()
 				}
 			case => OutOfBoundsException new(x, 4) throw()
 		}
 		result
 	}
-	determinant ::= this a * (this e * this i - this f * this h) + this d * (this h * this c - this i * this b) + this g * (this b * this f - this e * this c)
+	det2: static func (a, b, c, d: Float) -> Float { a * d - c * b}
+	det3: static func (a, b, c, d, e, f, g, h, i: Float) -> Float { a * This det2(e, f, h, i) - d * This det2(b, c, h, i) + g * This det2(b, c, e, f) }
+	det4: func -> Float {
+		this a * This det3(f, g, h, j, k, l, n, o, p) - this e * This det3(b, c, d, j, k, l, n, o, p) + this i * This det3(b, c, d, f, g, h, n, o, p) - this m * This det3(b, c, d, f, g, h, j, k, l)
+	}
+	determinant ::= this det4()
+	//determinant ::= this a * (this e * this i - this f * this h) + this d * (this h * this c - this i * this b) + this g * (this b * this f - this e * this c)
 	translation ::= FloatSize3D new(this j, this k, this l)
 	scaling ::= (this scalingX + this scalingY + this scalingZ) / 3.0f
 	scalingX ::= (this a squared() + this b squared() + this c squared()) sqrt()
@@ -72,29 +83,30 @@ FloatTransform3D: cover {
 	rotation ::= this b atan2(this a)
 	inverse: This { get {
 		determinant := this determinant
-		result := This new(
-			(this e * this i - this h * this f) / determinant,
-			(this h * this c - this b * this i) / determinant,
-			(this b * this f - this e * this c) / determinant,
-			(this g * this f - this d * this i) / determinant,
-			(this a * this i - this g * this c) / determinant,
-			(this c * this d - this a * this f) / determinant,
-			(this d * this h - this g * this e) / determinant,
-			(this g * this b - this a * this h) / determinant,
-			(this a * this e - this b * this d) / determinant,
-			0.0f,
-			0.0f,
-			0.0f
-		)
-		translation := result * This createTranslation(this j, this k, this l)
-		result j = -translation j
-		result k = -translation k
-		result l = -translation l
-		result
+		a := (this f * this k * this p  +  this j * this o * this h  +  this n * this g * this l - this f * this o * this l - this j * this g * this p - this n * this k * this h) / determinant
+		e := (this e * this o * this l  +  this i * this g * this p  +  this m * this k * this h - this e * this k * this p - this i * this o * this h - this m * this g * this l) / determinant
+		i := (this e * this j * this p  +  this i * this n * this h  +  this m * this f * this l - this e * this n * this l - this i * this f * this p - this m * this j * this h) / determinant
+		m := (this e * this n * this k  +  this i * this f * this o  +  this m * this j * this g - this e * this j * this o - this i * this n * this g - this m * this f * this k) / determinant
+		b := (this b * this o * this l  +  this j * this c * this p  +  this n * this k * this d - this b * this k * this p - this j * this o * this d - this n * this c * this l) / determinant
+		f := (this a * this k * this p  +  this i * this o * this d  +  this m * this c * this l - this a * this o * this l - this i * this c * this p - this m * this k * this d) / determinant
+		j := (this a * this n * this l  +  this i * this b * this p  +  this m * this j * this d - this a * this j * this p - this i * this n * this d - this m * this b * this l) / determinant
+		n := (this a * this j * this o  +  this i * this n * this c  +  this m * this b * this k - this a * this n * this k - this i * this b * this o - this m * this j * this c) / determinant
+		c := (this b * this g * this p  +  this f * this o * this d  +  this n * this c * this h - this b * this o * this h - this f * this c * this p - this n * this g * this d) / determinant
+		g := (this a * this o * this h  +  this e * this c * this p  +  this m * this g * this d - this a * this g * this p - this e * this o * this d - this m * this c * this h) / determinant
+		k := (this a * this f * this p  +  this e * this n * this d  +  this m * this b * this h - this a * this n * this h - this e * this b * this p - this m * this f * this d) / determinant
+		o := (this a * this n * this g  +  this e * this b * this o  +  this m * this f * this c - this a * this f * this o - this e * this n * this c - this m * this b * this g) / determinant
+		d := (this b * this k * this h  +  this f * this c * this l  +  this j * this g * this d - this b * this g * this l - this f * this k * this d - this j * this c * this h) / determinant
+		h := (this a * this g * this l  +  this e * this k * this d  +  this i * this c * this h - this a * this k * this h - this e * this c * this l - this i * this g * this d) / determinant
+		l := (this a * this j * this h  +  this e * this b * this l  +  this i * this f * this d - this a * this f * this l - this e * this j * this d - this i * this b * this h) / determinant
+		p := (this a * this f * this k  +  this e * this j * this c  +  this i * this b * this g - this a * this j * this g - this e * this b * this k - this i * this f * this c) / determinant
+
+		This new(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
 	}}
-	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i, =j, =k, =l)
+	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i, =j, =k, =l, =m, =n, =o, =p)
+	init: func@ ~withoutBottomRow (a, b, c, e, f, g, i, j, k, m, n, o: Float) { this init(a, b, c, 0.0f, e, f, g, 0.0f, i, j, k, 0.0f, m, n, o, 1.0f) }
 //	init: func@ ~reduced (a, b, d, e, g, h: Float) { this init(a, b, 0.0f, d, e, 0.0f, g, h, 1.0f) }
-	init: func@ ~default { this init(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f) }
+	init: func@ ~default { this init(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f) }
+	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f) } }
 //	FIXME: Unary minus
 //	setTranslation: func(translation: FloatSize2D) -> This { this translate(translation - this Translation) }
 	setScaling: func (scaling: Float) -> This { this scale(scaling / this scaling) }
@@ -114,7 +126,6 @@ FloatTransform3D: cover {
 	reflectX: func -> This { this createReflectionX() * this }
 	reflectY: func -> This { this createReflectionY() * this }
 	reflectZ: func -> This { this createReflectionZ() * this }
-	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) } }
 	create: static func (a, b, c, d, e, f, g, h, i, j, k, l: Float) -> This { This new(a, b, c, d, e, f, g, h, i, j, k, l) }
 	createTranslation: static func (xDelta, yDelta, zDelta: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, xDelta, yDelta, zDelta) }
 	createTranslation: static func ~float (delta: Float) -> This { This createTranslation(delta, delta, delta) }
@@ -124,7 +135,7 @@ FloatTransform3D: cover {
 	createScaling: static func ~float (factor: Float) -> This { This createScaling(factor, factor, factor) }
 	createScaling: static func ~size (factor: FloatSize3D) -> This { This createScaling(factor width, factor height, factor width) }
 	createRotationX: static func (angle: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, angle cos(), angle sin(), 0.0f, (-angle) sin(), angle cos(), 0.0f, 0.0f, 0.0f) }
-	createRotationY: static func (angle: Float) -> This { This new(angle cos(), 0.0f, angle sin(), 0.0f, 1.0f, 0.0f, (-angle) sin(), 0.0f, angle cos(), 0.0f, 0.0f, 0.0f) }
+	createRotationY: static func (angle: Float) -> This { This new(angle cos(), 0.0f, (-angle) sin(), 0.0f, 1.0f, 0.0f, angle sin(), 0.0f, angle cos(), 0.0f, 0.0f, 0.0f) }
 	createRotationZ: static func (angle: Float) -> This { This new(angle cos(), angle sin(), 0.0f, (-angle) sin(), angle cos(), 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) }
 	createRotation: static func ~pivot (transform: This, pivot: FloatPoint3D) -> This {
 		This createTranslation(pivot x, pivot y, pivot z) * transform * This createTranslation(-pivot x, -pivot y, -pivot z)
@@ -132,39 +143,28 @@ FloatTransform3D: cover {
 	createReflectionX: static func -> This { This new(-1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) }
 	createReflectionY: static func -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) }
 	createReflectionZ: static func -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f) }
-	to4x4: func -> Float* {
-		//TODO: Do not use heap array
-		array := gc_malloc(Float size * 16) as Float*
-		array[0] = this a
-		array[1] = this d
-		array[2] = this g
-		array[3] = this j
-		array[4] = this b
-		array[5] = this e
-		array[6] = this h
-		array[7] = this k
-		array[8] = this c
-		array[9] = this f
-		array[10] = this i
-		array[11] = this l
-		array[12] = array[13] = array[14] = 0
-		array[15] = 1
-		array
-	}
+
 	operator * (other: This) -> This {
 		This new(
-			this a * other a + this d * other b + this g * other c,
-			this b * other a + this e * other b + this h * other c,
-			this c * other a + this f * other b + this i * other c,
-			this a * other d + this d * other e + this g * other f,
-			this b * other d + this e * other e + this h * other f,
-			this c * other d + this f * other e + this i * other f,
-			this a * other g + this d * other h + this g * other i,
-			this b * other g + this e * other h + this h * other i,
-			this c * other g + this f * other h + this i * other i,
-			this a * other j + this d * other k + this g * other l + this j,
-			this b * other j + this e * other k + this h * other l + this k,
-			this c * other j + this f * other k + this i * other l + this l
+			this a * other a + this e * other b + this i * other c + this m * other d,
+			this b * other a + this f * other b + this j * other c + this n * other d,
+			this c * other a + this g * other b + this k * other c + this o * other d,
+			this d * other a + this h * other b + this l * other c + this p * other d,
+
+			this a * other e + this e * other f + this i * other g + this m * other h,
+			this b * other e + this f * other f + this j * other g + this n * other h,
+			this c * other e + this g * other f + this k * other g + this o * other h,
+			this d * other e + this h * other f + this l * other g + this p * other h,
+
+			this a * other i + this e * other j + this i * other k + this m * other l,
+			this b * other i + this f * other j + this j * other k + this n * other l,
+			this c * other i + this g * other j + this k * other k + this o * other l,
+			this d * other i + this h * other j + this l * other k + this p * other l,
+
+			this a * other m + this e * other n + this i * other o + this m * other p,
+			this b * other m + this f * other n + this j * other o + this n * other p,
+			this c * other m + this g * other n + this k * other o + this o * other p,
+			this d * other m + this h * other n + this l * other o + this p * other p
 		)
 	}
 	operator * (other: FloatPoint3D) -> FloatPoint3D {
@@ -186,12 +186,17 @@ FloatTransform3D: cover {
 		this i == other i &&
 		this j == other j &&
 		this k == other k &&
-		this l == other l
+		this l == other l &&
+		this m == other m &&
+		this n == other n &&
+		this o == other o &&
+		this p == other p
 	}
+
 	operator != (other: This) -> Bool { !(this == other) }
 	operator as -> String { this toString() }
 	toString: func -> String {
 //		FIXME: How do I concatenate strings, or define them on multple lines?
-		"#{this a toString()}, #{this b toString()}, #{this c toString()}, #{this d toString()}, #{this e toString()}, #{this f toString()}, #{this g toString()}, #{this h toString()}, #{this i toString()}, #{this j toString()}, #{this k toString()}, #{this l toString()}"
+		"#{this a toString()}, #{this e toString()}, #{this i toString()}, #{this m toString()},\n#{this b toString()}, #{this f toString()}, #{this j toString()}, #{this m toString()},\n#{this c toString()}, #{this g toString()}, #{this k toString()}, #{this o toString()},\n#{this d toString()}, #{this h toString()}, #{this l toString()}, #{this p toString()}"
 	}
 }
