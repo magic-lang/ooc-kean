@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2014 - Simon Mika <simon@mika.se>
+* Copyright (C) 2015 - Simon Mika <simon@mika.se>
 *
 * This sofware is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -15,14 +15,10 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-DateTime: cover {
-	/* Number of 100 ns intervals since 00.00 1/1/1 */
-	_ticks: UInt64
+TimeSpan: cover {
+	_ticks: Int64
 	ticks ::= this _ticks
-
 	init: func@ (=_ticks)
-	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
-	kean_base_dateTime_getTicks: unmangled func -> UInt64 { this _ticks }
-	new: unmangled(kean_base_dateTime_new) static func ~API (ticks: UInt64) -> This { This new(ticks) }
-
+	kean_base_timeSpan_getTicks: unmangled func -> Int64 { this _ticks }
+	new: unmangled(kean_base_timeSpan_new) static func ~API (ticks: UInt64) -> This { This new(ticks) }
 }
