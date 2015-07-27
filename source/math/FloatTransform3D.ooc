@@ -174,9 +174,9 @@ FloatTransform3D: cover {
 	}
 	operator * (other: FloatPoint3D) -> FloatPoint3D {
 		FloatPoint3D new(
-			this a * other x + this d * other y + this g * other z + this j,
-			this b * other x + this e * other y + this h * other z + this k,
-			this c * other x + this f * other y + this i * other z + this l
+			this a * other x + this e * other y + this i * other z + this m,
+			this b * other x + this f * other y + this j * other z + this n,
+			this c * other x + this g * other y + this k * other z + this o
 		)
 	}
 	operator == (other: This) -> Bool {
