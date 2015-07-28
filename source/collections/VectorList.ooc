@@ -71,7 +71,7 @@ VectorList: class <T> {
 		this _count = 0
 	}
 	free: override func {
-		this _vector _free(0, this _count)
+		this clear()
 		this _vector free()
 		super()
 	}

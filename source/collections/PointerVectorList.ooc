@@ -61,11 +61,11 @@ PointerVectorList: class {
 		tmp
 	}
 
-	__destroy__: func {
-		for (i in 0..this _count) {
+	free: override func {
+		for (i in 0..this count)
 			gc_free(this _vector[i])
-		}
-		gc_free(this _vector)
+		this _vector free()
+		super()
 	}
 
 	operator [] (index: Int) -> Pointer {

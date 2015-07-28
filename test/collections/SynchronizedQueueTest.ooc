@@ -58,6 +58,7 @@ SynchronizedQueueTest: class extends Fixture {
 			expect(queue count, is equal to(0))
 
 			queue free()
+			pool free()
 		})
 	}
 }

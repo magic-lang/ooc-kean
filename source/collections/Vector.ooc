@@ -23,11 +23,13 @@ Vector: abstract class <T> {
 
 	init: /* protected */ func ~preallocated (=_backend, =_capacity, freeContent := true) {}
 	init: /* protected */ func (=_capacity, freeContent := true) {
-		this _allocate(this _capacity)
-		memset(this _backend, 0, capacity * T size)
 		this _freeContent = freeContent
 	}
-	__destroy__: func {	this _free(0, this capacity) }
+	free: override func {
+		if (!(this instanceOf?(StackVector)))
+			gc_free(this _backend)
+		super()
+	}
 	_free: func ~range (start: Int, end: Int) {
 		if (this _freeContent && T inheritsFrom?(Object)) {
 			for (i in start..end) {
@@ -37,17 +39,13 @@ Vector: abstract class <T> {
 			}
 		}
 	}
-	_allocate: abstract func (capacity: Int)
-
 	resize: virtual func (capacity: Int) {
 		if (capacity < this capacity) {
 			this _free(capacity, this capacity)
 			this _capacity = capacity
 		}
-		else if (capacity > this capacity) {
-			this _allocate(capacity)
+		else if (capacity > this capacity)
 			this _capacity = capacity
-		}
 	}
 	move: func (sourceStart: Int, targetStart: Int, capacity := 0) {
 		if (capacity < 1)
@@ -99,14 +97,17 @@ Vector: abstract class <T> {
 HeapVector: class <T> extends Vector<T> {
 	init: func(capacity: Int) {
 		super(capacity)
+		this _allocate(capacity)
+		memset(this _backend, 0, capacity * T size)
 	}
 
 	_allocate: func(capacity: Int) {
 		this _backend = gc_realloc(this _backend, capacity * T size)
 	}
 
-	__destroy__: func {
-		gc_free(this _backend)
+	resize: override func (capacity: Int) {
+		super()
+		this _allocate(capacity)
 	}
 
 	operator [] (index: Int) -> T {
@@ -137,10 +138,6 @@ StackVector: class <T> extends Vector<T> {
 	init: func(data: T*, capacity: Int) {
 		super(data, capacity)
 	}
-
-	// TODO: Why does this function exist here?
-	_allocate: func(capacity: Int)
-
 	resize: override func(capacity: Int) {
 		if (capacity > this capacity)
 			capacity = this capacity
