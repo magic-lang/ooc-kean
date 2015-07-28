@@ -23,7 +23,13 @@ GpuMapType: enum {
 }
 
 GpuMap: abstract class {
+	model: FloatTransform3D { get set }
+	view: FloatTransform3D { get set }
+	projection: FloatTransform3D { get set }
 	use: virtual func
-	init: func
-	setTransform: virtual func(model: FloatTransform3D, view: FloatTransform3D, projection: FloatTransform3D)
+	init: func {
+		this model = FloatTransform3D identity
+		this view = FloatTransform3D identity
+		this projection = FloatTransform3D identity
+	}
 }
