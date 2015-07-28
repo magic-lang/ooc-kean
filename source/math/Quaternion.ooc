@@ -286,6 +286,25 @@ Quaternion: cover {
 		i := 1.0f - 2.0f * (x * x + y * y)
 		FloatTransform2D new(a, b, c, d, e, f, g, h, i)
 	}
+	dotProduct: func(other: Quaternion) -> Float {
+		this w * other w + this x * other x + this y * other y + this z * other z
+	}
+	sphericalLinearInterpolation: func(other: Quaternion, factor: Float) -> This {
+		cosAngle := this dotProduct(other)
+		longPath := cosAngle < 0.0f
+		angle := acos(Float absolute(cosAngle))
+		result: Quaternion
+		if (angle < 1e-10)
+			result = this * (1 - factor) + other * factor
+		else {
+			thisFactor := sin((1 - factor) * angle) / sin(angle)
+			otherFactor := sin(factor * angle) / sin(angle)
+			if (longPath)
+				otherFactor = -otherFactor
+			result = this * thisFactor + other * otherFactor
+		}
+		result
+	}
 	toString: func -> String {
 		"Real: " << "%8f" formatFloat(this real) >>
 		" Imaginary: " & "%8f" formatFloat(this imaginary x) >> " " & "%8f" formatFloat(this imaginary y) >> " " & "%8f" formatFloat(this imaginary z)

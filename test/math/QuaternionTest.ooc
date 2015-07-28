@@ -15,6 +15,9 @@ QuaternionTest: class extends Fixture {
 	quaternion5 := Quaternion new(1.0f, 2.0f, 3.0f, 4.0f)
 	quaternion6 := Quaternion new(-1.0f, -2.0f, -3.0f, -4.0f)
 	quaternion7 := Quaternion new(1.0f, 0.0f, 0.0f, 0.0f)
+	quaternion8 := Quaternion new(0.1f, 0.0f, 0.0f, 1.0f)
+	quaternion9 := Quaternion new(0.2f, 0.0f, 1.0f, 0.0f)
+	quaternion10 := Quaternion new(0.12f, 0.4472136f, 0.8366f, 0.316227766f)
 	point0 := FloatPoint3D new(22.221f, -3.1f, 10.0f)
 	point1 := FloatPoint3D new(12.221f, 13.1f, 20.0f)
 	init: func () {
@@ -245,6 +248,41 @@ QuaternionTest: class extends Fixture {
 			expect(quaternion x, is equal to(normalized x) within(tolerance))
 			expect(quaternion y, is equal to(normalized y) within(tolerance))
 			expect(quaternion z, is equal to(normalized z) within(tolerance))
+		})
+		this add("sphericalLinearInterpolation_1", func() {
+			interpolated := quaternion8 sphericalLinearInterpolation(quaternion9, 0.5f)
+			expect(interpolated w, is equal to(0.210042f) within(tolerance))
+			expect(interpolated x, is equal to(0.0f) within(tolerance))
+			expect(interpolated y, is equal to(0.700140f) within(tolerance))
+			expect(interpolated z, is equal to(0.700140f) within(tolerance))
+		})
+		this add("sphericalLinearInterpolation_2", func() {
+			interpolated := quaternion10 sphericalLinearInterpolation(quaternion8, 0.0f)
+			expect(interpolated w, is equal to(quaternion10 w) within(tolerance))
+			expect(interpolated x, is equal to(quaternion10 x) within(tolerance))
+			expect(interpolated y, is equal to(quaternion10 y) within(tolerance))
+			expect(interpolated z, is equal to(quaternion10 z) within(tolerance))
+		})
+		this add("sphericalLinearInterpolation_3", func() {
+			interpolated := quaternion10 sphericalLinearInterpolation(quaternion8, 1.0f)
+			expect(interpolated w, is equal to(quaternion8 w) within(tolerance))
+			expect(interpolated x, is equal to(quaternion8 x) within(tolerance))
+			expect(interpolated y, is equal to(quaternion8 y) within(tolerance))
+			expect(interpolated z, is equal to(quaternion8 z) within(tolerance))
+		})
+		this add("sphericalLinearInterpolation_4", func() {
+			interpolated := quaternion10 sphericalLinearInterpolation(quaternion8, 0.24f)
+			expect(interpolated w, is equal to(0.13351797f) within(tolerance))
+			expect(interpolated x, is equal to(0.38223242f) within(tolerance))
+			expect(interpolated y, is equal to(0.71509135f) within(tolerance))
+			expect(interpolated z, is equal to(0.57982165f) within(tolerance))
+		})
+		this add("sphericalLinearInterpolation_5", func() {
+			interpolated := quaternion10 sphericalLinearInterpolation(quaternion8, 0.9f)
+			expect(interpolated w, is equal to(0.11061810f) within(tolerance))
+			expect(interpolated x, is equal to(0.05838604f) within(tolerance))
+			expect(interpolated y, is equal to(0.10923036f) within(tolerance))
+			expect(interpolated z, is equal to(0.99080002f) within(tolerance))
 		})
 	}
 	angleDistance: func (a, b: Float) -> Float {
