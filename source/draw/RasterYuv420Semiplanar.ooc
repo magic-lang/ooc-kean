@@ -84,8 +84,8 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		yRow := this y buffer pointer
 		ySource := yRow
 		uvRow := this uv buffer pointer
-		uSource := uvRow
-		vSource := uvRow + 1
+		vSource := uvRow
+		uSource := uvRow + 1
 		width := this size width
 		height := this size height
 
@@ -103,8 +103,8 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 				uvRow += this uv stride
 			}
 			ySource = yRow
-			uSource = uvRow
-			vSource = uvRow + 1
+			vSource = uvRow
+			uSource = uvRow + 1
 		}
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
@@ -132,8 +132,8 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		yRow := result y buffer pointer
 		yDestination := yRow
 		uvRow := result uv buffer pointer
-		uDestination := uvRow
-		vDestination := uvRow + 1
+		vDestination := uvRow
+		uDestination := uvRow + 1
 		//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
 		f := func (color: ColorYuv) {
 			(yDestination)@ = color y
@@ -152,8 +152,8 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 				yDestination = yRow
 				if (y % 2 == 0) {
 					uvRow += result uv stride
-					uDestination = uvRow
-					vDestination = uvRow + 1
+					vDestination = uvRow
+					uDestination = uvRow + 1
 				}
 			}
 		}
