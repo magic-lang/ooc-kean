@@ -1,8 +1,9 @@
 use ooc-math
 use ooc-draw
 use ooc-collections
+use ooc-base
 
-import GpuContext
+import GpuContext, GpuMap
 
 GpuSurface: abstract class {
 	clearColor: ColorBgra { get set }
@@ -10,19 +11,43 @@ GpuSurface: abstract class {
 	_size: IntSize2D
 	size ::= this _size
 	_context: GpuContext
-	projection: FloatTransform3D { get set }
-	focalLength: Float { get set }
+	_model: FloatTransform3D
+	_view: FloatTransform3D
+	_projection: FloatTransform3D
+	_toReference: FloatTransform3D
+	_toLocal: FloatTransform3D
+	transform: FloatTransform3D {
+		get { this _view }
+		set(value) {
+			this _view = this _toLocal * value * this _toReference
+		}
+	}
+	_focalLength: Float
+	focalLength: Float {
+		get { this _focalLength }
+		set(value) {
+			this _focalLength = value
+			this _projection = FloatTransform3D new(2.0f * this _focalLength / this size width, 0.0f, 0.0f, 0.0f, 0.0f, 2.0f * this _focalLength / this size height, 0.0f, 0.0f, 0.0f, 0.0f, -(this farPlane + this nearPlane) / (this farPlane - this nearPlane), -1.0f, 0.0f, 0.0f, -2.0f * this farPlane * this nearPlane / (this farPlane - this nearPlane), 0.0f)
+			this _model = this _createModelTransform(this size)
+		}
+	}
 	nearPlane: Float { get set }
 	farPlane: Float { get set }
 	map: GpuMap { get set }
 	init: func (=_size, =_context) { this reset() }
+	_createModelTransform: func (size: IntSize2D) -> FloatTransform3D { FloatTransform3D createTranslation(0.0f, 0.0f, -this focalLength) * FloatTransform3D createScaling(this size width / 2.0f, this size height / 2.0f, 1.0f) }
 	reset: virtual func {
+		this _toReference = FloatTransform3D createTranslation(this size width / 2.0f, this size height / 2.0f, 0.0f) * FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
+		this _toLocal = this _toReference inverse
 		this clearColor = ColorBgra new(0, 0, 0, 0)
 		this viewport = IntBox2D new(this size)
-		this focalLength = 3000.0f
+		this focalLength = 0.0f
 		this nearPlane = 1.0f
 		this farPlane = 10000.0f
-		this projection = FloatTransform3D new(2.0f * this focalLength / this size width, 0.0f, 0.0f, 0.0f, 0.0f, 2.0f * this focalLength / this size height, 0.0f, 0.0f, 0.0f, 0.0f, -(this farPlane + this nearPlane) / (this farPlane - this nearPlane), -1.0f, 0.0f, 0.0f, -2.0f * this farPlane * this nearPlane / (this farPlane - this nearPlane), 0.0f)
+
+		this _model = this _createModelTransform(this size)
+		this _view = FloatTransform3D identity
+		this _projection = FloatTransform3D createScaling(2.0f / this size width, 2.0f / this size height, 1.0f)
 	}
 	_bind: virtual func
 	_unbind: virtual func
@@ -30,12 +55,12 @@ GpuSurface: abstract class {
 	draw: func ~general (action: Func) {
 		this _bind()
 		this _context setViewport(this viewport)
+		this map use()
 		action()
-		this context drawQuad()
 		this _unbind()
 	}
 	draw: abstract func (image: Image)
-	drawLines: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawLines(pointList, this projection) }) }
-	drawBox: virtual func (box: FloatBox2D) { this draw(func { this _context drawBox(box, this projection) }) }
-	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawPoints(pointList, this projection) }) }
+	drawLines: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawLines(pointList, this _projection) }) }
+	drawBox: virtual func (box: FloatBox2D) { this draw(func { this _context drawBox(box, this _projection) }) }
+	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawPoints(pointList, this _projection) }) }
 }

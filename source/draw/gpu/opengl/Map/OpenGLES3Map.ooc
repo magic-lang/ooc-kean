@@ -51,16 +51,22 @@ OpenGLES3Map: abstract class extends GpuMap {
 		this _program[currentIndex] use()
 	}
 }
+OpenGLES3Map2D: abstract class extends OpenGLES3Map {
+	init: func (fragmentSource: String, context: GpuContext) { super(This vertexSource, fragmentSource, context) }
+	vertexSource: static String ="
+		#version 300 es
+		precision highp float;
+		layout(location = 0) in vec2 vertexPosition;
+		layout(location = 1) in vec2 textureCoordinate;
+		out vec2 fragmentTextureCoordinate;
+		void main() {
+			vec4 position = vec4(vertexPosition.x, vertexPosition.y, 0, 1);
+			fragmentTextureCoordinate = textureCoordinate;
+			gl_Position = position;
+		}"
+}
 OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
-	model: FloatTransform3D { get set }
-	view: FloatTransform3D { get set }
-	projection: FloatTransform3D { get set }
-	init: func (fragmentSource: String, context: GpuContext) {
-		super(This vertexSource, fragmentSource, context)
-		this model = FloatTransform3D identity
-		this view = FloatTransform3D identity
-		this projection = FloatTransform3D identity
-	}
+	init: func (fragmentSource: String, context: GpuContext) { super(This vertexSource, fragmentSource, context) }
 	use: override func {
 		super()
 		this program setUniform("transform", this projection * this view * this model)
