@@ -313,6 +313,9 @@ Quaternion: cover {
 			0.0f
 		)
 	}
+	relativeQuaternion: func(other: Quaternion) -> Quaternion {
+		this inverse * other
+	}
 	toString: func -> String {
 		"Real: " << "%8f" formatFloat(this real) >>
 		" Imaginary: " & "%8f" formatFloat(this imaginary x) >> " " & "%8f" formatFloat(this imaginary y) >> " " & "%8f" formatFloat(this imaginary z)
