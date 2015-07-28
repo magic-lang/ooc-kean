@@ -50,6 +50,7 @@ FloatRotation3D: cover {
 	init: func@ ~full(=_roll, =_pitch, =_yaw) { this _updateQuaternion() }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	init: func@ ~fromPoint(point: FloatPoint3D) { this init(point x, point y, point z) }
+	init: func@ ~fromQuaternion (=_quaternion)
 	createFromQuaternion: static func (quaternion: Quaternion) -> This {
 		This new(quaternion rotationX, quaternion rotationY, quaternion rotationZ)
 	}
