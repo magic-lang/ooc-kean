@@ -139,9 +139,7 @@ ShaderProgram: class {
 	}
 	setUniform: func ~Matrix4x4 (name: String, value: FloatTransform3D) {
 		version(debugGL) { validateStart() }
-		array := value to4x4()
-		glUniformMatrix4fv(glGetUniformLocation(this _backend, name), 1, 0, array)
-		gc_free(array)
+		glUniformMatrix4fv(glGetUniformLocation(this _backend, name), 1, 0, value& as Float*)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~Matrix4x4") }
 	}
 	setUniform: func ~Vector3(name: String, value: FloatPoint3D) {
@@ -150,7 +148,7 @@ ShaderProgram: class {
 		version(debugGL) { validateEnd("ShaderProgram setUniform~Vector3") }
 	}
 	// glCompileShader leaks 3 bytes on each call, and there is nothing we can do about it.
-	// Normally, we would just suppress this tiny, but verbose, error for valgrind leak checks. However, 
+	// Normally, we would just suppress this tiny, but verbose, error for valgrind leak checks. However,
 	// depending on your graphics driver, the shared library containing glCompileShader will unload
 	// before the program exits, which results in valgrind being unable to read its debug symbols,
 	// and so we cannot reliably suppress this leak check by suppressing glCompileShader directly.
