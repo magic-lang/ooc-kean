@@ -40,13 +40,13 @@ DateTime: cover {
 		else
 			raise ("invalid input specified for constructor(year,month,day)")
 	}
-	init: func@ ~fromHourMinuteSec (hour, minute, second, millisecond: Int){
+	init: func@ ~fromHourMinuteSec (hour, minute, second, millisecond: Int) {
 		if (timeIsValid(hour, minute, second, millisecond))
 			this _ticks = DateTime timeToTicks(hour, minute, second, millisecond)
 		else
 			raise ("invalid input specified for constructor(hour,minute,second)")
 	}
-	init: func@ ~fromDateTime (year, month, day, hour, minute, second, millisecond: Int){
+	init: func@ ~fromDateTime (year, month, day, hour, minute, second, millisecond: Int) {
 		if (dateIsValid(year, month, day) && timeIsValid(hour, minute, second, millisecond))
 			this _ticks = DateTime timeToTicks(hour, minute, second, millisecond) + DateTime dateToTicks(year, month, day)
 		else

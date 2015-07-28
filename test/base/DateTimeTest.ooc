@@ -37,14 +37,14 @@ DateTimeTest: class extends Fixture {
 			t = DateTime timeToTicks(1, 2, 3, 0)
 			expect(t == 1 * DateTime TicksPerHour + 2 * DateTime TicksPerMinute + 3 * DateTime TicksPerSecond)
 		})
-		this add("validate time", func(){
+		this add("validate time", func() {
 			expect(DateTime timeIsValid(23, 10, 14, 0) == true)
 			expect(DateTime timeIsValid(25, 0, 1, 0) == false)
 			expect(DateTime timeIsValid(0, 60, 1, 999) == false)
 			expect(DateTime timeIsValid(3, 23, -23, 1) == false)
 			expect(DateTime timeIsValid(3, 23, 15, 1001) == false)
 		})
-		this add("validate date", func(){
+		this add("validate date", func() {
 			expect(DateTime dateIsValid(1983, 1, 3) == true)
 			expect(DateTime dateIsValid(1983, 1, 0) == false)
 			expect(DateTime dateIsValid(0, 30, 3) == false)
@@ -53,14 +53,14 @@ DateTimeTest: class extends Fixture {
 			expect(DateTime dateIsValid(2000, 2, 29) == true)
 			expect(DateTime dateIsValid(1998, 2, 29) == false)
 		})
-		this add("create from h/m/s", func(){
+		this add("create from h/m/s", func() {
 			d := DateTime new ~fromHourMinuteSec(10, 12, 56, 895)
 			expect(d millisecond() == 895)
 			expect(d second() == 56)
 			expect(d minute() == 12)
 			expect(d hour() == 10)
 		})
-		this add("create from y/m/d", func(){
+		this add("create from y/m/d", func() {
 			d := DateTime new ~fromYearMonthDay(1, 1, 1)
 			expect(d ticks == 0)
 			expect(d year() == 1)
@@ -75,7 +75,7 @@ DateTimeTest: class extends Fixture {
 			expect(d second() == 0)
 			expect(d millisecond() == 0)
 		})
-		this add("create from y/m/d/hh/mm/ss/ms", func(){
+		this add("create from y/m/d/hh/mm/ss/ms", func() {
 			d := DateTime new ~fromDateTime(2015, 7, 28, 10, 29, 15, 764)
 			expect(d year() == 2015)
 			expect(d month() == 7)
@@ -118,7 +118,7 @@ DateTimeTest: class extends Fixture {
 			expect(d month() == 12)
 			expect(d day() == 1)
 		})
-		this add("ordering operators", func(){
+		this add("ordering operators", func() {
 			d1 := DateTime new ~fromYearMonthDay(2000,1,2)
 			d2 := DateTime new ~fromYearMonthDay(2000,1,3)
 			expect(d1 < d2)
@@ -128,7 +128,7 @@ DateTimeTest: class extends Fixture {
 			expect(d2 >= d1)
 			expect(d1 == d1)
 		})
-		this add("TimeSpan operators", func(){
+		this add("TimeSpan operators", func() {
 			d1 := DateTime new ~fromYearMonthDay(2000,1,3)
 			d2 := DateTime new ~fromYearMonthDay(2000,1,2)
 			span := d1 - d2
@@ -161,7 +161,7 @@ DateTimeTest: class extends Fixture {
 			span = d1 - d2
 			expect(span == TimeSpan day())
 		})
-		this add("toString", func(){
+		this add("toString", func() {
 			d := DateTime new(1643, 12, 31, 23, 59, 59, 999)
 			expect(d toStringFormat("%yyyy-%MM-%dd %hh:%mm:%ss.%zzzz") == "1643-12-31 23:59:59.999")
 			d = DateTime new(1998, 7, 18, 1, 44, 31, 742)

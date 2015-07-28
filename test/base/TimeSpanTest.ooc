@@ -21,7 +21,7 @@ use ooc-base
 TimeSpanTest: class extends Fixture {
 	init: func () {
 		super("TimeSpan")
-		this add("test compareTo", func(){
+		this add("test compareTo", func() {
 			t1 := TimeSpan new(1000)
 			t2 := TimeSpan new(2000)
 			expect(t1 compareTo(t2) == Order less)
@@ -35,7 +35,7 @@ TimeSpanTest: class extends Fixture {
 			expect(t2 >= t1)
 			expect(t1 <= t2)
 		})
-		this add("test add", func(){
+		this add("test add", func() {
 			t := TimeSpan new(100)
 			t2 := t + 50
 			expect((t + TimeSpan new(-100)) ticks == 0)
@@ -43,18 +43,18 @@ TimeSpanTest: class extends Fixture {
 			expect((t + TimeSpan new(100)) ticks == 200)
 			expect(t2 ticks == 150 )
 		})
-		this add("test subtract", func(){
+		this add("test subtract", func() {
 			t := TimeSpan new(100)
 			expect((t - TimeSpan new(50)) ticks == 50)
 			expect((t - t) ticks == 0)
 		})
-		this add("test negate", func(){
+		this add("test negate", func() {
 			t := TimeSpan new(200)
 			t = t negate()
 			expect(t ticks == -200 )
 			expect((t + (t negate())) ticks == 0)
 		})
-		this add("test creation helpers", func(){
+		this add("test creation helpers", func() {
 			expect(TimeSpan millisecond() elapsedMilliseconds() == 1)
 			expect(TimeSpan millisecond() elapsedSeconds() == 0)
 			expect(TimeSpan second() elapsedSeconds() == 1)
