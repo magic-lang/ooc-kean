@@ -15,9 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import DateTime
-import Order
-import math
+use ooc-base
 
 TimeSpan: cover {
 	_ticks: Int64

@@ -15,8 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import TimeSpan
-import Order
+use ooc-base
 
 DateTimeData: class {
 	year: Int { get set }
