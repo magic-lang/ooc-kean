@@ -33,9 +33,9 @@ Window: class extends GpuSurface {
 	context ::= this _context as OpenGLES3Context
 	size ::= this _size
 
-	init: /* internal */ func (size: IntSize2D, title: String) {
+	init: /* internal */ func (size: IntSize2D, title := "Window title") {
 		this _native = X11Window new(size width, size height, title)
-		super(size, OpenGLES3Context new(this _native), FloatTransform2D createScaling(2.0f / size width, -2.0f / size height))
+		super(size, OpenGLES3Context new(this _native))
 
 		/* BEGIN Ugly hack to force the window to resize outside screen */
 		this refresh()
@@ -44,10 +44,10 @@ Window: class extends GpuSurface {
 
 		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new(this context)
 		this _bgrToBgra = OpenGLES3MapBgrToBgra new(this context)
-		this _bgraToBgra = OpenGLES3MapBgra new(this context, true)
+		this _bgraToBgra = OpenGLES3MapBgra new(this context)
 		this _yuvPlanarToBgra = OpenGLES3MapYuvPlanarToBgra new(this context)
 		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new(this context)
-		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgra new(this context, true)
+		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgra new(this context)
 
 		XSelectInput(this _native display, this _native _backend, KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask)
 		XkbSetDetectableAutoRepeat(this _native display, true, null) as Void
@@ -64,7 +64,8 @@ Window: class extends GpuSurface {
 		super()
 		(native as X11Window) free()
 	}
-	getTransformMap: func (gpuImage: GpuImage) -> OpenGLES3MapDefault {
+	_bind: override func { this _native bind() }
+	_getTransformMap: func (gpuImage: GpuImage) -> OpenGLES3MapDefault {
 		result := match(gpuImage) {
 			case (gpuImage: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgraTransform
 			case (gpuImage: GpuBgra) => this _bgraToBgra
@@ -73,40 +74,32 @@ Window: class extends GpuSurface {
 		}
 		result
 	}
-	draw: func ~Transform2D (image: GpuImage, transform := FloatTransform2D identity) {
-		map := this getTransformMap(image)
-		map transform = transform
-		map projection = this _projection
-		map reference = image reference
-		this draw(image, map)
+	draw: func ~gpuImage (image: GpuImage) {
+		map := this _getTransformMap(image) as OpenGLES3MapDefault
+		map model = FloatTransform3D createTranslation(0, 0, -this focalLength) * FloatTransform3D createScaling(image size width / 2, image size height / 2, 0)
+		map view = FloatTransform3D identity
+		map projection = this projection
+		temp := map projection * map view * map model
+		Debug print(temp toString())
+		this draw(func {
+			image bind(0)
+			map use()
+		})
 	}
-	draw: func ~RasterImageTransform (image: RasterImage, transform: FloatTransform2D) {
-		result := this context createGpuImage(image)
-		this draw(result, transform)
-		result free()
-	}
-	draw: func ~UnknownFormat (image: Image, transform := FloatTransform2D identity) {
-		if (image instanceOf?(RasterImage))
-			this draw(image as RasterImage, transform)
-		else if (image instanceOf?(GpuImage))
-			this draw(image as GpuImage, transform)
-	}
-	draw: func ~shader (image: GpuImage, map: GpuMap) {
-		offset := IntPoint2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
-		viewport := IntBox2D new(offset, image size)
-		image bind(0)
-		map use()
-		this context setViewport(this viewport)
-		this context drawQuad()
+	draw: func (image: Image) {
+		if (image instanceOf?(GpuImage)) { this draw(image as GpuImage) }
+		else if (image instanceOf?(RasterImage)) {
+			temp := this context createGpuImage(image as RasterImage)
+			this draw(temp as GpuImage)
+			temp free()
+		}
+		else
+			Debug raise("Trying to draw unsupported image format to Window!!")
 	}
 	bind: /* internal */ func { this _native bind() }
 	clear: /* internal */ func { this _native clear() }
 	refresh: func {
 		this context update()
 		this clear()
-	}
-	create: static func (size: IntSize2D, title := "Window title") -> This {
-		result := This new(size, title)
-		result
 	}
 }
