@@ -27,8 +27,8 @@ TimeSpan: cover {
 		this _ticks = DateTime timeToTicks(hour, minute, second, millisecond)
 	}
 	kean_base_timeSpan_getTicks: unmangled func -> Int64 { this _ticks }
-	new: unmangled(kean_base_timeSpan_new) static func ~Api (ticks: UInt64) -> This { This new(ticks) }
-	negate: func -> TimeSpan { TimeSpan new(-1 * this ticks) }
+	new: unmangled(kean_base_timeSpan_new) static func ~Api (ticks: Int64) -> This { This new(ticks) }
+	negate: func -> This { This new(-1 * this ticks) }
 	elapsedMilliseconds: func -> Int64 {
 		this ticks / DateTime TicksPerMillisecond
 	}
@@ -47,28 +47,28 @@ TimeSpan: cover {
 	elapsedWeeks: func -> Int64 {
 		this ticks / DateTime TicksPerWeek
 	}
-	operator + (value: Int) -> TimeSpan {
-		TimeSpan new(this ticks + value)
+	operator + (value: Int) -> This {
+		This new(this ticks + value)
 	}
-	operator + (value: Double) -> TimeSpan {
-		this + (value * DateTime TicksPerSecond)
+	operator + (value: Double) -> This {
+		This new(this ticks + value * DateTime TicksPerSecond)
 	}
-	operator + (other: TimeSpan) -> TimeSpan {
-		TimeSpan new(this ticks + other ticks)
+	operator + (other: This) -> This {
+		This new(this ticks + other ticks)
 	}
-	operator - (other: TimeSpan) -> TimeSpan {
-		TimeSpan new(this ticks - other ticks)
+	operator - (other: This) -> This {
+		This new(this ticks - other ticks)
 	}
-	operator - (value: Double) -> TimeSpan {
-		TimeSpan new(this ticks - value * DateTime TicksPerSecond)
+	operator - (value: Double) -> This {
+		This new(this ticks - value * DateTime TicksPerSecond)
 	}
-	operator - (value: Int64) -> TimeSpan {
-		TimeSpan new(this ticks + value)
+	operator - (value: Int64) -> This {
+		This new(this ticks + value)
 	}
-	operator * (value: Int64) -> TimeSpan {
-		TimeSpan new(this ticks * value)
+	operator * (value: Int64) -> This {
+		This new(this ticks * value)
 	}
-	compareTo: func (other: TimeSpan) -> Order {
+	compareTo: func (other: This) -> Order {
 		if (this ticks > other ticks)
 			Order greater
 		else if (this ticks < other ticks)
@@ -76,42 +76,42 @@ TimeSpan: cover {
 		else
 			Order equal
 	}
-	operator == (other: TimeSpan) -> Bool {
+	operator == (other: This) -> Bool {
 		this compareTo(other) == Order equal
 	}
-	operator != (other: TimeSpan) -> Bool {
+	operator != (other: This) -> Bool {
 		! (this == other)
 	}
-	operator > (other: TimeSpan) -> Bool {
+	operator > (other: This) -> Bool {
 		this compareTo(other) == Order greater
 	}
-	operator < (other: TimeSpan) -> Bool {
+	operator < (other: This) -> Bool {
 		this compareTo(other) == Order less
 	}
-	operator >= (other: TimeSpan) -> Bool {
+	operator >= (other: This) -> Bool {
 		! (this < other)
 	}
-	operator <= (other: TimeSpan) -> Bool {
+	operator <= (other: This) -> Bool {
 		! (this > other)
 	}
 
-	millisecond: static func -> TimeSpan {
-		TimeSpan new(DateTime TicksPerMillisecond)
+	millisecond: static func -> This {
+		This new(DateTime TicksPerMillisecond)
 	}
-	second: static func -> TimeSpan {
-		TimeSpan new(DateTime TicksPerSecond)
+	second: static func -> This {
+		This new(DateTime TicksPerSecond)
 	}
-	minute: static func -> TimeSpan {
-		TimeSpan new(DateTime TicksPerMinute)
+	minute: static func -> This {
+		This new(DateTime TicksPerMinute)
 	}
-	hour: static func -> TimeSpan {
-		TimeSpan new(DateTime TicksPerHour)
+	hour: static func -> This {
+		This new(DateTime TicksPerHour)
 	}
-	day: static func -> TimeSpan {
-		TimeSpan new(DateTime TicksPerDay)
+	day: static func -> This {
+		This new(DateTime TicksPerDay)
 	}
-	week: static func -> TimeSpan {
-		TimeSpan new(DateTime TicksPerWeek)
+	week: static func -> This {
+		This new(DateTime TicksPerWeek)
 	}
 
 }

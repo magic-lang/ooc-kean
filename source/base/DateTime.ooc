@@ -36,19 +36,19 @@ DateTime: cover {
 	init: func@ (=_ticks)
 	init: func@ ~fromYearMonthDay (year, month, day: Int) {
 		if (dateIsValid(year, month, day))
-			this _ticks = DateTime dateToTicks(year, month, day)
+			this _ticks = This dateToTicks(year, month, day)
 		else
 			raise ("invalid input specified for constructor(year,month,day)")
 	}
 	init: func@ ~fromHourMinuteSec (hour, minute, second, millisecond: Int) {
 		if (timeIsValid(hour, minute, second, millisecond))
-			this _ticks = DateTime timeToTicks(hour, minute, second, millisecond)
+			this _ticks = This timeToTicks(hour, minute, second, millisecond)
 		else
 			raise ("invalid input specified for constructor(hour,minute,second)")
 	}
 	init: func@ ~fromDateTime (year, month, day, hour, minute, second, millisecond: Int) {
 		if (dateIsValid(year, month, day) && timeIsValid(hour, minute, second, millisecond))
-			this _ticks = DateTime timeToTicks(hour, minute, second, millisecond) + DateTime dateToTicks(year, month, day)
+			this _ticks = This timeToTicks(hour, minute, second, millisecond) + This dateToTicks(year, month, day)
 		else
 			raise ("invalid input specified for constructor(year,month,day,hour,minute,second,ms)")
 	}
@@ -57,29 +57,29 @@ DateTime: cover {
 	new: unmangled(kean_base_dateTime_new) static func ~API (ticks: UInt64) -> This { This new(ticks) }
 
 	millisecond: func -> Int {
-		DateTime _ticksToDateTimeHelper(this ticks) millisecond
+		This _ticksToDateTimeHelper(this ticks) millisecond
 	}
 	second: func -> Int {
-		DateTime _ticksToDateTimeHelper(this ticks) second
+		This _ticksToDateTimeHelper(this ticks) second
 	}
 	minute: func -> Int {
-		DateTime _ticksToDateTimeHelper(this ticks) minute
+		This _ticksToDateTimeHelper(this ticks) minute
 	}
 	hour: func -> Int {
-		DateTime _ticksToDateTimeHelper(this ticks) hour
+		This _ticksToDateTimeHelper(this ticks) hour
 	}
 	day: func -> Int {
-		DateTime _ticksToDateTimeHelper(this ticks) day
+		This _ticksToDateTimeHelper(this ticks) day
 	}
 	month: func -> Int {
-		DateTime _ticksToDateTimeHelper(this ticks) month
+		This _ticksToDateTimeHelper(this ticks) month
 	}
 	year: func -> Int {
-		DateTime _ticksToDateTimeHelper(this ticks) year
+		This _ticksToDateTimeHelper(this ticks) year
 	}
 
 	toString: func -> String {
-		this toStringFormat(DateTime DefaultFormat)
+		this toStringFormat(This DefaultFormat)
 	}
 	// <summary>
 	// Convert this object to string representation
@@ -98,7 +98,7 @@ DateTime: cover {
 	// <param name="format">output format specification</param>
 	toStringFormat: func (format: String) -> String {
 		result := format
-		data := DateTime _ticksToDateTimeHelper(this ticks)
+		data := This _ticksToDateTimeHelper(this ticks)
 		result = result replaceAll("%yyyy", "%d" format(data year))
 		result = result replaceAll("%yy", "%d" format(data year % 100))
 		result = result replaceAll("%MM", (data month < 10 ? "0%d" : "%d") format(data month))
@@ -112,7 +112,7 @@ DateTime: cover {
 		result
 	}
 
-	compareTo: func (other: DateTime) -> Order {
+	compareTo: func (other: This) -> Order {
 		if (this ticks > other ticks)
 			Order greater
 		else if (this ticks < other ticks)
@@ -121,31 +121,31 @@ DateTime: cover {
 			Order equal
 	}
 
-	operator - (other: DateTime) -> TimeSpan {
+	operator - (other: This) -> TimeSpan {
 		TimeSpan new(this ticks as Int64 - other ticks as Int64)
 	}
-	operator + (span: TimeSpan) -> DateTime {
-		DateTime new(this ticks as Int64 + span ticks)
+	operator + (span: TimeSpan) -> This {
+		This new(this ticks as Int64 + span ticks)
 	}
-	operator - (span: TimeSpan) -> DateTime {
-		DateTime new(this ticks as Int64 - span ticks)
+	operator - (span: TimeSpan) -> This {
+		This new(this ticks as Int64 - span ticks)
 	}
-	operator == (other: DateTime) -> Bool {
+	operator == (other: This) -> Bool {
 		this compareTo(other) == Order equal
 	}
-	operator != (other: DateTime) -> Bool {
+	operator != (other: This) -> Bool {
 		this compareTo(other) != Order equal
 	}
-	operator < (other: DateTime) -> Bool {
+	operator < (other: This) -> Bool {
 		this compareTo(other) == Order less
 	}
-	operator <= (other: DateTime) -> Bool {
+	operator <= (other: This) -> Bool {
 		this compareTo(other) != Order greater
 	}
-	operator > (other: DateTime) -> Bool {
+	operator > (other: This) -> Bool {
 		this compareTo(other) == Order greater
 	}
-	operator >= (other: DateTime) -> Bool {
+	operator >= (other: This) -> Bool {
 		this compareTo(other) != Order less
 	}
 
@@ -164,11 +164,11 @@ DateTime: cover {
 
 	_ticksToDateTimeHelper: static func (totalTicks: Int64) -> DateTimeData {
 		result := DateTimeData new()
-		fourYearBlocks := totalTicks / DateTime TicksPerFourYears
+		fourYearBlocks := totalTicks / This TicksPerFourYears
 		year := 4 * fourYearBlocks
-		ticksLeft := totalTicks - fourYearBlocks * DateTime TicksPerFourYears
+		ticksLeft := totalTicks - fourYearBlocks * This TicksPerFourYears
 		for (y in year + 1 .. year + 5) {
-			t := DateTime ticksInYear(y)
+			t := This ticksInYear(y)
 			if (ticksLeft < t) {
 				year = y
 				break
@@ -178,7 +178,7 @@ DateTime: cover {
 		}
 		month := 0
 		for (m in 1 .. 13) {
-			t := DateTime ticksInMonth(year, m)
+			t := This ticksInMonth(year, m)
 			if (ticksLeft < t) {
 				month = m
 				break
@@ -186,15 +186,15 @@ DateTime: cover {
 				ticksLeft -= t
 			}
 		}
-		days := ticksLeft / DateTime TicksPerDay
-		ticksLeft -= days * DateTime TicksPerDay
-		hour := ticksLeft / DateTime TicksPerHour
-		ticksLeft -= hour * DateTime TicksPerHour
-		minute := ticksLeft / DateTime TicksPerMinute
-		ticksLeft -= minute * DateTime TicksPerMinute
-		second := ticksLeft / DateTime TicksPerSecond
-		ticksLeft -= second * DateTime TicksPerSecond
-		millisecond := ticksLeft / DateTime TicksPerMillisecond
+		days := ticksLeft / This TicksPerDay
+		ticksLeft -= days * This TicksPerDay
+		hour := ticksLeft / This TicksPerHour
+		ticksLeft -= hour * This TicksPerHour
+		minute := ticksLeft / This TicksPerMinute
+		ticksLeft -= minute * This TicksPerMinute
+		second := ticksLeft / This TicksPerSecond
+		ticksLeft -= second * This TicksPerSecond
+		millisecond := ticksLeft / This TicksPerMillisecond
 		result year = year
 		result month = month
 		result day = days + 1
@@ -207,33 +207,33 @@ DateTime: cover {
 
 	/* returns number of ticks for given hours, minutes and seconds */
 	timeToTicks: static func(hours, minutes, seconds, millisecond: Int) -> Int64 {
-		(hours * 3600 + minutes * 60 + seconds) * DateTime TicksPerSecond + millisecond * DateTime TicksPerMillisecond
+		(hours * 3600 + minutes * 60 + seconds) * This TicksPerSecond + millisecond * This TicksPerMillisecond
 	}
 
 	/* returns number of ticks for given date at 0:00*/
 	dateToTicks: static func(year, month, day : Int) -> UInt64 {
-		if (DateTime dateIsValid(year, month, day)) {
+		if (This dateIsValid(year, month, day)) {
 			totalDays := day - 1
 			for (m in 1 .. month) {
-				totalDays += DateTime daysInMonth(year, m)
+				totalDays += This daysInMonth(year, m)
 			}
 			fourYearBlocks := (year - 1) / 4
 			year_start := fourYearBlocks * 4
 			for (y in year_start + 1 .. year)
-				totalDays += DateTime daysInYear(y)
-			totalDays += fourYearBlocks * DateTime DaysInFourYears
-			totalDays * DateTime TicksPerDay
+				totalDays += This daysInYear(y)
+			totalDays += fourYearBlocks * This DaysInFourYears
+			totalDays * This TicksPerDay
 		} else {
 			0
 		}
 	}
 
 	daysInYear: static func (year: Int) -> Int {
-		DateTime DaysInYear + isLeapYear(year)
+		This DaysInYear + isLeapYear(year)
 	}
 
 	ticksInYear: static func (year: Int) -> UInt64 {
-		DateTime daysInYear(year) * DateTime TicksPerDay
+		This daysInYear(year) * This TicksPerDay
 	}
 
 	daysInMonth: static func (year, month: Int) -> Int {
@@ -246,7 +246,7 @@ DateTime: cover {
 	}
 
 	ticksInMonth: static func (year, month: Int) -> UInt64 {
-		DateTime TicksPerDay * DateTime daysInMonth(year, month)
+		This TicksPerDay * This daysInMonth(year, month)
 	}
 	/* validate argument ranges for hour/minutes/seconds vaules */
 	timeIsValid: static func (hour, minute, second, millisecond: Int) -> Bool {
