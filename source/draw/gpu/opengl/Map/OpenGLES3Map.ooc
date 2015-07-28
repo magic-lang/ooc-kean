@@ -52,33 +52,20 @@ OpenGLES3Map: abstract class extends GpuMap {
 	}
 }
 OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
-	transform: FloatTransform2D { get set }
-	_useTransform: Bool
-	init: func (fragmentSource: String, context: GpuContext, transform: Bool) {
-		this transform = FloatTransform2D identity
-		this _useTransform = transform
-		super(transform ? This vertexSourceTransform : This vertexSource, fragmentSource, context)
+	model: FloatTransform3D { get set }
+	view: FloatTransform3D { get set }
+	projection: FloatTransform3D { get set }
+	init: func (fragmentSource: String, context: GpuContext) {
+		super(This vertexSource, fragmentSource, context)
+		this model = FloatTransform3D identity
+		this view = FloatTransform3D identity
+		this projection = FloatTransform3D identity
 	}
 	use: override func {
 		super()
-		if (this _useTransform) {
-			finalTransform := this projection * this transform * this reference
-			array: Float[16]
-			finalTransform to3DTransformArray(array[0]&)
-			this program setUniform("transform", array[0]&)
-		}
+		this program setUniform("transform", this projection * this view * this model)
 	}
 	vertexSource: static String ="
-		#version 300 es
-		precision highp float;
-		layout(location = 0) in vec2 vertexPosition;
-		layout(location = 1) in vec2 textureCoordinate;
-		out vec2 fragmentTextureCoordinate;
-		void main() {
-			fragmentTextureCoordinate = textureCoordinate;
-			gl_Position = vec4(vertexPosition.x, vertexPosition.y, -1, 1);
-		}"
-	vertexSourceTransform: static String ="
 		#version 300 es
 		precision highp float;
 		uniform mat4 transform;
@@ -93,14 +80,14 @@ OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 		}"
 }
 OpenGLES3MapDefaultTexture: abstract class extends OpenGLES3MapDefault {
-	init: func (fragmentSource: String, context: GpuContext, transform: Bool) { super(fragmentSource, context, transform) }
+	init: func (fragmentSource: String, context: GpuContext) { super(fragmentSource, context) }
 	use: override func {
 		super()
 		this program setUniform("texture0", 0)
 	}
 }
 OpenGLES3MapBgr: class extends OpenGLES3MapDefaultTexture {
-	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform) }
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	fragmentSource: static String ="
 		#version 300 es
 		precision highp float;
@@ -112,7 +99,7 @@ OpenGLES3MapBgr: class extends OpenGLES3MapDefaultTexture {
 		}"
 }
 OpenGLES3MapBgrToBgra: class extends OpenGLES3MapDefaultTexture {
-	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform) }
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	fragmentSource: static String ="
 		#version 300 es
 		precision highp float;
@@ -124,7 +111,7 @@ OpenGLES3MapBgrToBgra: class extends OpenGLES3MapDefaultTexture {
 		}"
 }
 OpenGLES3MapBgra: class extends OpenGLES3MapDefaultTexture {
-	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform) }
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	fragmentSource: static String ="
 		#version 300 es
 		precision highp float;
@@ -136,7 +123,7 @@ OpenGLES3MapBgra: class extends OpenGLES3MapDefaultTexture {
 		}"
 }
 OpenGLES3MapMonochrome: class extends OpenGLES3MapDefaultTexture {
-	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform) }
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	fragmentSource: static String ="
 		#version 300 es
 		precision highp float;
@@ -148,7 +135,7 @@ OpenGLES3MapMonochrome: class extends OpenGLES3MapDefaultTexture {
 		}"
 }
 OpenGLES3MapMonochromeTransform: class extends OpenGLES3MapDefaultTexture {
-	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform) }
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	fragmentSource: static String ="
 		#version 300 es
 		precision highp float;
@@ -160,7 +147,7 @@ OpenGLES3MapMonochromeTransform: class extends OpenGLES3MapDefaultTexture {
 		}"
 }
 OpenGLES3MapUv: class extends OpenGLES3MapDefaultTexture {
-	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform) }
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	fragmentSource: static String ="
 		#version 300 es
 		precision highp float;
@@ -172,7 +159,7 @@ OpenGLES3MapUv: class extends OpenGLES3MapDefaultTexture {
 		}"
 }
 OpenGLES3MapMonochromeToBgra: class extends OpenGLES3MapDefaultTexture {
-	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform) }
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	fragmentSource: static String ="
 		#version 300 es
 		precision highp float;
@@ -185,7 +172,7 @@ OpenGLES3MapMonochromeToBgra: class extends OpenGLES3MapDefaultTexture {
 		}"
 }
 OpenGLES3MapYuvPlanarToBgra: class extends OpenGLES3MapDefault {
-	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform) }
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	use: override func {
 		super()
 		this program setUniform("texture0", 0)
@@ -217,7 +204,7 @@ OpenGLES3MapYuvPlanarToBgra: class extends OpenGLES3MapDefault {
 		}"
 }
 OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapDefault {
-	init: func (context: GpuContext, transform := false) { super(This fragmentSource, context, transform) }
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	use: override func {
 		super()
 		this program setUniform("texture0", 0)

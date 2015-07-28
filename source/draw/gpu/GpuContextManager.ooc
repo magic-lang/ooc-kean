@@ -16,6 +16,7 @@
 use ooc-base
 use ooc-draw
 use ooc-math
+use ooc-collections
 import GpuContext, GpuMonochrome, GpuBgra, GpuBgr, GpuUv, GpuYuv420Semiplanar, GpuYuv422Semipacked, GpuYuv420Planar, GpuImage, GpuSurface, GpuMap, GpuFence
 
 pthread_self: extern func -> Long
@@ -42,9 +43,8 @@ GpuContextManager: abstract class extends GpuContext {
 				return this _contexts[i]
 			}
 		}
-		Debug print("ERROR: Maximum gpu contexts already used!")
-		raise("Maximum contexts already used!")
-		return null
+		Debug raise("ERROR: Maximum gpu contexts already used!")
+		null
 	}
 	getCurrentIndex: func -> Int {
 		threadIdentifier := pthread_self()
@@ -86,4 +86,7 @@ GpuContextManager: abstract class extends GpuContext {
 	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap { this _getContext() getMap(gpuImage, mapType) }
 	packToRgba: func (source: GpuImage, target: GpuBgra, viewport: IntBox2D) { this _getContext() packToRgba(source, target, viewport) }
 	createFence: func -> GpuFence { this _getContext() createFence() }
+	drawLines: override func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D) { this _getContext() drawLines(pointList, transform) }
+	drawBox: override func (box: FloatBox2D, transform: FloatTransform3D) { this _getContext() drawBox(box, transform) }
+	drawPoints: override func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D) { this _getContext() drawPoints(pointList, transform) }
 }
