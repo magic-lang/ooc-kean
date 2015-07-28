@@ -54,6 +54,17 @@ TimeSpanTest: class extends Fixture {
 			expect(t ticks == -200 )
 			expect((t + (t negate())) ticks == 0)
 		})
+		this add("test creation helpers", func(){
+			expect(TimeSpan millisecond() elapsedMilliseconds() == 1)
+			expect(TimeSpan millisecond() elapsedSeconds() == 0)
+			expect(TimeSpan second() elapsedSeconds() == 1)
+			expect(TimeSpan second() elapsedMinutes() == 0)
+			expect(TimeSpan minute() elapsedMinutes() == 1)
+			expect(TimeSpan hour() elapsedMinutes() == 60)
+			expect(TimeSpan hour() elapsedHours() == 1)
+			expect(TimeSpan day() elapsedHours() == 24)
+			expect(TimeSpan week() elapsedDays() == 7)
+		})
 	}
 }
 TimeSpanTest new() run()

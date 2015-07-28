@@ -121,16 +121,44 @@ DateTime: cover {
 			Order equal
 	}
 
+	operator - (other: DateTime) -> TimeSpan {
+		TimeSpan new(this ticks as Int64 - other ticks as Int64)
+	}
+	operator + (span: TimeSpan) -> DateTime {
+		DateTime new(this ticks as Int64 + span ticks)
+	}
+	operator - (span: TimeSpan) -> DateTime {
+		DateTime new(this ticks as Int64 - span ticks)
+	}
+	operator == (other: DateTime) -> Bool {
+		this compareTo(other) == Order equal
+	}
+	operator != (other: DateTime) -> Bool {
+		this compareTo(other) != Order equal
+	}
+	operator < (other: DateTime) -> Bool {
+		this compareTo(other) == Order less
+	}
+	operator <= (other: DateTime) -> Bool {
+		this compareTo(other) != Order greater
+	}
+	operator > (other: DateTime) -> Bool {
+		this compareTo(other) == Order greater
+	}
+	operator >= (other: DateTime) -> Bool {
+		this compareTo(other) != Order less
+	}
+
 	/* number of days in year ( non-leap ) */
 	DaysInYear: static const Int = 365
 	DaysInFourYears: static const Int = 3 * 365 + 366
-	TicksPerMillisecond: static const UInt64 = 1000
-	TicksPerSecond: static const UInt64 = TicksPerMillisecond * 1000
-	TicksPerMinute: static const UInt64 = TicksPerSecond * 60
-	TicksPerHour: static const UInt64 = TicksPerMinute * 60
-	TicksPerDay: static const UInt64 = TicksPerHour * 24
+	TicksPerMillisecond: static const Int64 = 1000
+	TicksPerSecond: static const Int64 = TicksPerMillisecond * 1000
+	TicksPerMinute: static const Int64 = TicksPerSecond * 60
+	TicksPerHour: static const Int64 = TicksPerMinute * 60
+	TicksPerDay: static const Int64 = TicksPerHour * 24
 	TicksPerWeek: static const UInt64 = TicksPerDay * 7
-	TicksPerFourYears: static const UInt64 = DaysInFourYears * TicksPerDay
+	TicksPerFourYears: static const Int64 = DaysInFourYears * TicksPerDay
 	/* default date/time printing format */
 	DefaultFormat: static const String = "%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
 
@@ -139,7 +167,7 @@ DateTime: cover {
 		fourYearBlocks := totalTicks / DateTime TicksPerFourYears
 		year := 4 * fourYearBlocks
 		ticksLeft := totalTicks - fourYearBlocks * DateTime TicksPerFourYears
-		for (y in year + 1 .. year + 4) {
+		for (y in year + 1 .. year + 5) {
 			t := DateTime ticksInYear(y)
 			if (ticksLeft < t) {
 				year = y
@@ -183,7 +211,6 @@ DateTime: cover {
 	}
 
 	/* returns number of ticks for given date at 0:00*/
-	// do we need something like dateToTicks(0,0,-2) for TimeSpan("two days ago?")
 	dateToTicks: static func(year, month, day : Int) -> UInt64 {
 		if (DateTime dateIsValid(year, month, day)) {
 			totalDays := day - 1
