@@ -229,6 +229,13 @@ FloatTransform3DTest: class extends Fixture {
 			expect(translation height, is equal to(11.0f) within(this precision))
 			expect(translation depth, is equal to(12.0f) within(this precision))
 		})
+		this add("casting", func() {
+			value := "10.00000000, 40.00000000, 70.00000000, 100.00000000\n" + \
+				"20.00000000, 50.00000000, 80.00000000, 110.00000000\n" + \
+				"30.00000000, 60.00000000, 90.00000000, 120.00000000\n" + \
+				"0.00000000, 0.00000000, 0.00000000, 1.00000000"
+			expect(this transform4 toString(), is equal to(value))
+		})
 	}
 }
 FloatTransform3DTest new() run()
