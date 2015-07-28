@@ -75,15 +75,13 @@ Window: class extends GpuSurface {
 		result
 	}
 	draw: func ~gpuImage (image: GpuImage) {
-		map := this _getTransformMap(image) as OpenGLES3MapDefault
-		map model = FloatTransform3D createTranslation(0, 0, -this focalLength) * FloatTransform3D createScaling(image size width / 2, image size height / 2, 0)
-		map view = FloatTransform3D identity
-		map projection = this projection
-		temp := map projection * map view * map model
-		Debug print(temp toString())
+		this map = this _getTransformMap(image) as OpenGLES3MapDefault
+		this map model = this _createModelTransform(image size)
+		this map view = this _view
+		this map projection = this _projection
 		this draw(func {
 			image bind(0)
-			map use()
+			this context drawQuad()
 		})
 	}
 	draw: func (image: Image) {
