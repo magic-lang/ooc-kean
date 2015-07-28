@@ -257,7 +257,7 @@ Quaternion: cover {
 		(this * This new(0.0f, value) * this inverse) imaginary
 	}
 	operator [] (index: Int) -> Float {
-		result: Float
+		result := 0.0f
 		match (index) {
 			case 0 => result = this w
 			case 1 => result = this x
