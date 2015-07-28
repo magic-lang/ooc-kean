@@ -171,6 +171,10 @@ DateTimeTest: class extends Fixture {
 			d = DateTime new ~fromYearMonthDay(1, 1, 1)
 			expect(d toStringFormat("start date is: %yy %M %d, %hh-%mm-%ss-%zzzz") == "start date is: 1 1 1, 0-0-0-0")
 		})
+		this add("current time", func() {
+			d := DateTime now
+			expect(d > DateTime new(0))
+		})
 	}
 }
 DateTimeTest new() run()

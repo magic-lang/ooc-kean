@@ -19,7 +19,7 @@ version(windows) {
 
 version(windows) {
     SystemTime: cover from SYSTEMTIME {
-        wHour, wMinute, wSecond, wMilliseconds : extern UShort
+      wYear, wMonth, wDayOfWeek, wDay, wHour, wMinute, wSecond, wMilliseconds : extern UShort
     }
 
     GetLocalTime: extern func (SystemTime*)
@@ -135,7 +135,7 @@ Time: class {
         }
         return -1
     }
-	
+
 	/**
 		Gets the number of microseconds elapsed since program start.
 	*/
@@ -207,6 +207,57 @@ Time: class {
             return val@ tm_hour
         }
         return -1
+    }
+
+    /**
+        Returns the current day of the month (1-31)
+    */
+    day: static func -> UInt {
+      version(windows) {
+          st: SystemTime
+          GetLocalTime(st&)
+          return st wDay
+      }
+      version(!windows) {
+          tt := time(null)
+          val := localtime(tt&)
+          return val@ tm_mday
+      }
+      return -1
+    }
+
+    /**
+        Returns the current month of the year (1-12)
+    */
+    month: static func -> UInt {
+      version(windows) {
+          st: SystemTime
+          GetLocalTime(st&)
+          return st wMonth
+      }
+      version(!windows) {
+          tt := time(null)
+          val := localtime(tt&)
+          return val@ tm_mon+1
+      }
+      return -1
+    }
+
+    /**
+        Returns the current year
+    */
+    year: static func -> UInt {
+      version(windows) {
+          st: SystemTime
+          GetLocalTime(st&)
+          return st wYear
+      }
+      version(!windows) {
+          tt := time(null)
+          val := localtime(tt&)
+          return val@ tm_year+1900
+      }
+      return -1
     }
 
     sleepSec: static func (duration: Float) {

@@ -16,6 +16,7 @@
 */
 
 use ooc-base
+import os/Time
 
 DateTimeData: class {
 	year: Int { get set }
@@ -152,7 +153,7 @@ DateTime: cover {
 	DaysInYear: static const Int = 365
 	DaysInFourYears: static const Int = 3 * 365 + 366
 	TicksPerMillisecond: static const Int64 = 1000
-	TicksPerSecond: static const Int64 = TicksPerMillisecond * 1000
+	TicksPerSecond: static const Int64 = This TicksPerMillisecond * 1000
 	TicksPerMinute: static const Int64 = TicksPerSecond * 60
 	TicksPerHour: static const Int64 = TicksPerMinute * 60
 	TicksPerDay: static const Int64 = TicksPerHour * 24
@@ -160,6 +161,12 @@ DateTime: cover {
 	TicksPerFourYears: static const Int64 = DaysInFourYears * TicksPerDay
 	/* default date/time printing format */
 	DefaultFormat: static const String = "%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
+
+	now: static DateTime {
+      get {
+					DateTime new(Time year(), Time month(), Time day(), Time hour(), Time min(), Time sec(), Time microsec()/1000)
+      }
+  }
 
 	_ticksToDateTimeHelper: static func (totalTicks: Int64) -> DateTimeData {
 		result := DateTimeData new()

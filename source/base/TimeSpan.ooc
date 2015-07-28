@@ -48,22 +48,34 @@ TimeSpan: cover {
 	operator + (value: Int) -> This {
 		This new(this ticks + value)
 	}
+	operator + (value: Int64) -> This {
+		This new(this ticks + value)
+	}
 	operator + (value: Double) -> This {
 		This new(this ticks + value * DateTime TicksPerSecond)
 	}
 	operator + (other: This) -> This {
 		This new(this ticks + other ticks)
 	}
-	operator - (other: This) -> This {
-		This new(this ticks - other ticks)
+	operator - (value: Int) -> This {
+		This new(this ticks - value)
+	}
+	operator - (value: Int64) -> This {
+		This new(this ticks - value)
 	}
 	operator - (value: Double) -> This {
 		This new(this ticks - value * DateTime TicksPerSecond)
 	}
-	operator - (value: Int64) -> This {
-		This new(this ticks + value)
+	operator - (other: This) -> This {
+		This new(this ticks - other ticks)
+	}
+	operator * (value: Int) -> This {
+		This new(this ticks * value)
 	}
 	operator * (value: Int64) -> This {
+		This new(this ticks * value)
+	}
+	operator * (value: Double) -> This {
 		This new(this ticks * value)
 	}
 	compareTo: func (other: This) -> Order {
@@ -113,3 +125,13 @@ TimeSpan: cover {
 	}
 
 }
+
+operator + (left: Int, right: TimeSpan) -> TimeSpan { right + left }
+operator + (left: Int64, right: TimeSpan) -> TimeSpan { right + left }
+operator + (left: Double, right: TimeSpan) -> TimeSpan { right + left }
+operator - (left: Int, right: TimeSpan) -> TimeSpan { right negate() + left }
+operator - (left: Int64, right: TimeSpan) -> TimeSpan { right negate() + left }
+operator - (left: Double, right: TimeSpan) -> TimeSpan { right negate() + left }
+operator * (left: Int, right: TimeSpan) -> TimeSpan { right * left }
+operator * (left: Int64, right: TimeSpan) -> TimeSpan { right * left }
+operator * (left: Double, right: TimeSpan) -> TimeSpan { right * left }

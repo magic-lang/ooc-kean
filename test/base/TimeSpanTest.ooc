@@ -34,25 +34,54 @@ TimeSpanTest: class extends Fixture {
 			expect(t2 != t1)
 			expect(t2 >= t1)
 			expect(t1 <= t2)
+			expect(TimeSpan millisecond() * 100 < TimeSpan second())
+			expect(TimeSpan week() > TimeSpan day())
+			expect(TimeSpan day() != TimeSpan day() * 1.5)
 		})
-		this add("test add", func() {
+		this add("test addition", func() {
 			t := TimeSpan new(100)
 			t2 := t + 50
 			expect((t + TimeSpan new(-100)) ticks == 0)
 			expect((t + TimeSpan new(-230)) ticks == -130)
 			expect((t + TimeSpan new(100)) ticks == 200)
 			expect(t2 ticks == 150 )
+			expect(TimeSpan day() * 6 + TimeSpan day() == TimeSpan week())
+			expect(TimeSpan second() + TimeSpan second() == TimeSpan second() * 2)
+			t = TimeSpan second()
+			t = t + 1.2
+			expect(t elapsedSeconds() == 2)
+			expect(t elapsedMilliseconds() == 2200)
+			expect(t + 1.9 == 1.9 + t)
+			expect(1.0 + TimeSpan new(0) == TimeSpan second())
+			expect((1.9 + TimeSpan second() + 3.1) elapsedMilliseconds() == 6000)
 		})
-		this add("test subtract", func() {
+		this add("test subtraction", func() {
 			t := TimeSpan new(100)
 			expect((t - TimeSpan new(50)) ticks == 50)
 			expect((t - t) ticks == 0)
+			expect(TimeSpan week() - TimeSpan day() * 6 == TimeSpan day())
+			expect(TimeSpan hour() - TimeSpan minute() == TimeSpan minute() * 59)
+			expect(TimeSpan minute() - TimeSpan millisecond() == TimeSpan second() * 59 + TimeSpan millisecond() * 999)
+			expect((TimeSpan hour() - TimeSpan minute()) elapsedHours() == 0)
+			expect((TimeSpan hour() - TimeSpan minute()) elapsedMinutes() == 59)
+			expect(t - 10 == 190 - t)
+			t = TimeSpan second()
+			expect((1.0 - t) ticks == 0)
 		})
-		this add("test negate", func() {
+		this add("test negation", func() {
 			t := TimeSpan new(200)
 			t = t negate()
 			expect(t ticks == -200 )
 			expect((t + (t negate())) ticks == 0)
+		})
+		this add("test multiplication", func() {
+			expect((TimeSpan millisecond() * 1.5) ticks == DateTime TicksPerMillisecond * 1.5)
+			expect(TimeSpan second() * 2 == TimeSpan second() + TimeSpan second())
+			expect(TimeSpan day() * 7 == TimeSpan week())
+			expect(TimeSpan millisecond() * 1000.0 == TimeSpan second())
+			t := TimeSpan new ~fromHourMinuteSec(0,0,1,0)
+			expect(2.0 * t == TimeSpan second() * 2)
+			expect((2000 * DateTime TicksPerMillisecond + TimeSpan second()) elapsedSeconds() == 3)
 		})
 		this add("test creation helpers", func() {
 			expect(TimeSpan millisecond() elapsedMilliseconds() == 1)
