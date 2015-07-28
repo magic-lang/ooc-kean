@@ -211,15 +211,6 @@ FloatTransform2D: cover {
 		array[14] = 0.0f
 		array[15] = this i
 	}
-	to3DTransformArray2: func -> Float* {
-		euclid := FloatEuclidTransform new(this)
-		newTransform := FloatTransform3D createRotationX(euclid rotationX)
-		newTransform = FloatTransform3D createRotationY(euclid rotationY) * newTransform
-		newTransform = FloatTransform3D createRotationZ(euclid rotationZ) * newTransform
-		newTransform = FloatTransform3D createScaling(euclid scaling, euclid scaling, 1) * newTransform
-		newTransform = FloatTransform3D createTranslation(euclid translationX, euclid translationY, 0) * newTransform
-		newTransform to4x4()
-	}
 	operator != (other: This) -> Bool { !(this == other) }
 	operator as -> String { this toString() }
 	toString: func -> String {

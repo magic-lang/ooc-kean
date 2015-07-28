@@ -24,6 +24,18 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform == transform, is true)
 			expect(transform == this transform0, is false)
 		})
+		this add("determinant", func() {
+			expect(transform0 determinant, is equal to(6.0f) within(this precision))
+			exception := false
+			transform := FloatTransform3D new()
+			try {
+				value := transform inverse
+			} catch {
+				exception = true
+			}
+			expect(exception, is true)
+			expect(transform determinant, is equal to(0.0f))
+		})
 		this add("inverse transform", func() {
 			transform := FloatTransform3D new(0.035711678574190f, 0.849129305868777f, 0.933993247757551f, 0.678735154857773f, 0.757740130578333f, 0.743132468124916f, 0.392227019534168f, 0.655477890177557f, 0.171186687811562f, 0.706046088019609f, 0.031832846377421f, 0.276922984960890f)
 			transformInverseCorrect := FloatTransform3D new(-1.304260393891308f, 1.703723523873863f, -0.279939209639535f, 0.639686782697661f, -1.314595978968342f, 2.216619899417434f, 0.538976631155336f, 1.130007253038916f, -2.004511083979782f, 0.751249880258891f, -1.473984978790241f, 0.682183855876876f)
@@ -70,17 +82,23 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))
-			expect(transform e, is equal to(1.0f) within(this precision))
-			expect(transform f, is equal to(0.0f) within(this precision))
+
+			expect(transform e, is equal to(0.0f) within(this precision))
+			expect(transform f, is equal to(1.0f) within(this precision))
 			expect(transform g, is equal to(0.0f) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
-			expect(transform i, is equal to(1.0f) within(this precision))
+
+			expect(transform i, is equal to(0.0f) within(this precision))
 			expect(transform j, is equal to(0.0f) within(this precision))
-			expect(transform k, is equal to(0.0f) within(this precision))
+			expect(transform k, is equal to(1.0f) within(this precision))
 			expect(transform l, is equal to(0.0f) within(this precision))
+
+			expect(transform m, is equal to(0.0f) within(this precision))
+			expect(transform n, is equal to(0.0f) within(this precision))
+			expect(transform o, is equal to(0.0f) within(this precision))
+			expect(transform p, is equal to(1.0f) within(this precision))
 		})
-		this add("rotate", func() {
-			identity := FloatTransform3D identity
+		this add("scale", func() {
 			scale := 20.0f
 			transform := FloatTransform3D createScaling(scale)
 			transform = transform scale(1.0f / scale)
@@ -88,14 +106,21 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))
-			expect(transform e, is equal to(1.0f) within(this precision))
-			expect(transform f, is equal to(0.0f) within(this precision))
+
+			expect(transform e, is equal to(0.0f) within(this precision))
+			expect(transform f, is equal to(1.0f) within(this precision))
 			expect(transform g, is equal to(0.0f) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
-			expect(transform i, is equal to(1.0f) within(this precision))
+
+			expect(transform i, is equal to(0.0f) within(this precision))
 			expect(transform j, is equal to(0.0f) within(this precision))
-			expect(transform k, is equal to(0.0f) within(this precision))
+			expect(transform k, is equal to(1.0f) within(this precision))
 			expect(transform l, is equal to(0.0f) within(this precision))
+
+			expect(transform m, is equal to(0.0f) within(this precision))
+			expect(transform n, is equal to(0.0f) within(this precision))
+			expect(transform o, is equal to(0.0f) within(this precision))
+			expect(transform p, is equal to(1.0f) within(this precision))
 		})
 		this add("translate", func() {
 			xDelta := 40.0f
@@ -107,14 +132,21 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))
-			expect(transform e, is equal to(1.0f) within(this precision))
-			expect(transform f, is equal to(0.0f) within(this precision))
+
+			expect(transform e, is equal to(0.0f) within(this precision))
+			expect(transform f, is equal to(1.0f) within(this precision))
 			expect(transform g, is equal to(0.0f) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
-			expect(transform i, is equal to(1.0f) within(this precision))
+
+			expect(transform i, is equal to(0.0f) within(this precision))
 			expect(transform j, is equal to(0.0f) within(this precision))
-			expect(transform k, is equal to(0.0f) within(this precision))
+			expect(transform k, is equal to(1.0f) within(this precision))
 			expect(transform l, is equal to(0.0f) within(this precision))
+
+			expect(transform m, is equal to(0.0f) within(this precision))
+			expect(transform n, is equal to(0.0f) within(this precision))
+			expect(transform o, is equal to(0.0f) within(this precision))
+			expect(transform p, is equal to(1.0f) within(this precision))
 		})
 		this add("create rotation", func() {
 			angle := PI as Float / 9.0f
@@ -123,14 +155,21 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))
-			expect(transform e, is equal to(angle cos()) within(this precision))
-			expect(transform f, is equal to(angle sin()) within(this precision))
-			expect(transform g, is equal to(0.0f) within(this precision))
-			expect(transform h, is equal to((-angle) sin()) within(this precision))
-			expect(transform i, is equal to(angle cos()) within(this precision))
-			expect(transform j, is equal to(0.0f) within(this precision))
-			expect(transform k, is equal to(0.0f) within(this precision))
+
+			expect(transform e, is equal to(0.0f) within(this precision))
+			expect(transform f, is equal to(angle cos()) within(this precision))
+			expect(transform g, is equal to(angle sin()) within(this precision))
+			expect(transform h, is equal to(0.0f) within(this precision))
+
+			expect(transform i, is equal to(0.0f) within(this precision))
+			expect(transform j, is equal to((-angle) sin()) within(this precision))
+			expect(transform k, is equal to(angle cos()) within(this precision))
 			expect(transform l, is equal to(0.0f) within(this precision))
+
+			expect(transform m, is equal to(0.0f) within(this precision))
+			expect(transform n, is equal to(0.0f) within(this precision))
+			expect(transform o, is equal to(0.0f) within(this precision))
+			expect(transform p, is equal to(1.0f) within(this precision))
 		})
 		this add("create scale", func() {
 			scale := 20.0f
@@ -139,14 +178,21 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))
-			expect(transform e, is equal to(scale) within(this precision))
-			expect(transform f, is equal to(0.0f) within(this precision))
+
+			expect(transform e, is equal to(0.0f) within(this precision))
+			expect(transform f, is equal to(scale) within(this precision))
 			expect(transform g, is equal to(0.0f) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
-			expect(transform i, is equal to(scale) within(this precision))
+
+			expect(transform i, is equal to(0.0f) within(this precision))
 			expect(transform j, is equal to(0.0f) within(this precision))
-			expect(transform k, is equal to(0.0f) within(this precision))
+			expect(transform k, is equal to(scale) within(this precision))
 			expect(transform l, is equal to(0.0f) within(this precision))
+
+			expect(transform m, is equal to(0.0f) within(this precision))
+			expect(transform n, is equal to(0.0f) within(this precision))
+			expect(transform o, is equal to(0.0f) within(this precision))
+			expect(transform p, is equal to(1.0f) within(this precision))
 		})
 		this add("create translation", func() {
 			xDelta := 40.0f
@@ -157,14 +203,21 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))
-			expect(transform e, is equal to(1.0f) within(this precision))
-			expect(transform f, is equal to(0.0f) within(this precision))
+
+			expect(transform e, is equal to(0.0f) within(this precision))
+			expect(transform f, is equal to(1.0f) within(this precision))
 			expect(transform g, is equal to(0.0f) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
-			expect(transform i, is equal to(1.0f) within(this precision))
-			expect(transform j, is equal to(xDelta) within(this precision))
-			expect(transform k, is equal to(yDelta) within(this precision))
-			expect(transform l, is equal to(zDelta) within(this precision))
+
+			expect(transform i, is equal to(0.0f) within(this precision))
+			expect(transform j, is equal to(0.0f) within(this precision))
+			expect(transform k, is equal to(1.0f) within(this precision))
+			expect(transform l, is equal to(0.0f) within(this precision))
+
+			expect(transform m, is equal to(xDelta) within(this precision))
+			expect(transform n, is equal to(yDelta) within(this precision))
+			expect(transform o, is equal to(zDelta) within(this precision))
+			expect(transform p, is equal to(1.0f) within(this precision))
 		})
 		this add("get scalingX", func() {
 			scale := this transform0 scalingX
@@ -189,10 +242,11 @@ FloatTransform3DTest: class extends Fixture {
 			expect(translation depth, is equal to(12.0f) within(this precision))
 		})
 		this add("casting", func() {
-			value := "10.00, 20.00, 30.00, 40.00, 50.00, 60.00, 70.00, 80.00, 90.00, 100.00, 110.00, 120.00"
+			value := "10.00000000, 40.00000000, 70.00000000, 100.00000000\n" + \
+				"20.00000000, 50.00000000, 80.00000000, 110.00000000\n" + \
+				"30.00000000, 60.00000000, 90.00000000, 120.00000000\n" + \
+				"0.00000000, 0.00000000, 0.00000000, 1.00000000"
 			expect(this transform4 toString(), is equal to(value))
-//			FIXME: Equals interface
-//			expect(FloatTransform3D parse(value), is equal to(this transform4))
 		})
 	}
 }
