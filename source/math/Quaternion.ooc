@@ -43,6 +43,7 @@ Quaternion: cover {
 	normalized ::= this / this norm
 	rotation ::= 2.0f * (this logarithm imaginary) norm
 	conjugate ::= This new(this real, -(this imaginary))
+	transform ::= this toFloatTransform3D()
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
 	init: func@ (=real, =imaginary)
 	init: func@ ~floats (w, x, y, z: Float) { this init(w, FloatPoint3D new(x, y, z)) }
@@ -78,7 +79,10 @@ Quaternion: cover {
 		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2;
 		return This new(w, x, y, z);
 	}
-	fromRotationMatrix: static func (matrix: FloatTransform2D) -> This {
+	// TODO: This cannot be used with FloatTransform2D, only with a 3D rotation matrix
+	// for which we don't have a data type. We could do this for FloatTransform3D but that would
+	// make the calculations more complex than we have here.
+	/*fromRotationMatrix: static func (matrix: FloatTransform2D) -> This {
 		// Farrell, Jay. A. Computation of the Quaternion from a Rotation Matrix.
 		// http://www.ee.ucr.edu/~farrell/AidedNavigation/D_App_Quaternions/Rot2Quat.pdf
 		r, s, w, x, y, z: Float
@@ -113,7 +117,7 @@ Quaternion: cover {
 			z = 0.5f * r
 		}
 		This new(w, x, y, z)
-	}
+	}*/
 	getEulerAngles: func -> FloatRotation3D {
 		// http://www.jldoty.com/code/DirectX/YPRfromUF/YPRfromUF.html
 		// Should be used in order Yaw -> Pitch -> Roll or Pitch -> Yaw -> Roll,
@@ -272,20 +276,6 @@ Quaternion: cover {
 		result := [this w, this x, this y, this z]
 		result
 	}
-	toFloatTransform2D: func -> FloatTransform2D {
-		normalized := this normalized
-		(w, x, y, z) := (normalized w, normalized x, normalized y, normalized z)
-		a := 1.0f - 2.0f * (y * y + z * z)
-		b := 2.0f * (x * y + z * w)
-		c := 2.0f * (x * z - y * w)
-		d := 2.0f * (x * y - z * w)
-		e := 1.0f - 2.0f * (x * x + z * z)
-		f := 2.0f * (y * z + x * w)
-		g := 2.0f * (x * z + y * w)
-		h := 2.0f * (y * z - x * w)
-		i := 1.0f - 2.0f * (x * x + y * y)
-		FloatTransform2D new(a, b, c, d, e, f, g, h, i)
-	}
 	dotProduct: func(other: Quaternion) -> Float {
 		this w * other w + this x * other x + this y * other y + this z * other z
 	}
@@ -304,6 +294,24 @@ Quaternion: cover {
 			result = this * thisFactor + other * otherFactor
 		}
 		result
+	}
+	toFloatTransform3D: func -> FloatTransform3D {
+		length := this w * this w + this x * this x + this y * this y + this z * this z
+		factor := length == 0.0f ? 0.0f : 2.0f / length
+		FloatTransform3D new(
+			1.0f - factor * (this y * this y + this z * this z),
+			factor * (this x * this y + this z * this w),
+			factor * (this x * this z - this y * this w),
+			factor * (this x * this y - this w * this z),
+			1.0f - factor * (this x * this x + this z * this z),
+			factor * (this y * this z + this w * this x),
+			factor * (this x * this z + this w * this y),
+			factor * (this y * this z - this w * this x),
+			1.0f - factor * (this x * this x + this y * this y),
+			0.0f,
+			0.0f,
+			0.0f
+		)
 	}
 	toString: func -> String {
 		"Real: " << "%8f" formatFloat(this real) >>
