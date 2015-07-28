@@ -24,6 +24,18 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform == transform, is true)
 			expect(transform == this transform0, is false)
 		})
+		this add("determinant", func() {
+			expect(transform0 determinant, is equal to(6.0f) within(this precision))
+			exception := false
+			transform := FloatTransform3D new()
+			try {
+				value := transform inverse
+			} catch {
+				exception = true
+			}
+			expect(exception, is true)
+			expect(transform determinant, is equal to(0.0f))
+		})
 		this add("inverse transform", func() {
 			transform := FloatTransform3D new(0.035711678574190f, 0.849129305868777f, 0.933993247757551f, 0.678735154857773f, 0.757740130578333f, 0.743132468124916f, 0.392227019534168f, 0.655477890177557f, 0.171186687811562f, 0.706046088019609f, 0.031832846377421f, 0.276922984960890f)
 			transformInverseCorrect := FloatTransform3D new(-1.304260393891308f, 1.703723523873863f, -0.279939209639535f, 0.639686782697661f, -1.314595978968342f, 2.216619899417434f, 0.538976631155336f, 1.130007253038916f, -2.004511083979782f, 0.751249880258891f, -1.473984978790241f, 0.682183855876876f)
@@ -228,6 +240,13 @@ FloatTransform3DTest: class extends Fixture {
 			expect(translation width, is equal to(10.0f) within(this precision))
 			expect(translation height, is equal to(11.0f) within(this precision))
 			expect(translation depth, is equal to(12.0f) within(this precision))
+		})
+		this add("casting", func() {
+			value := "10.00000000, 40.00000000, 70.00000000, 100.00000000\n" + \
+				"20.00000000, 50.00000000, 80.00000000, 110.00000000\n" + \
+				"30.00000000, 60.00000000, 90.00000000, 120.00000000\n" + \
+				"0.00000000, 0.00000000, 0.00000000, 1.00000000"
+			expect(this transform4 toString(), is equal to(value))
 		})
 	}
 }

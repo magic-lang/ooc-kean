@@ -88,6 +88,11 @@ FloatTransform3D: cover {
 	rotation ::= this b atan2(this a)
 	inverse: This { get {
 		determinant := this determinant
+		// If the determinant is 0, the resulting transform will be full of NaN values.
+		// No FloatTransform3D instance should have a determinant of 0, so
+		// throw an exception, because something has gone wrong, somewhere.
+		if (determinant == 0)
+			raise("determinant is zero in FloatTransform3D inverse()!")
 		a := (this f * this k * this p  +  this j * this o * this h  +  this n * this g * this l - this f * this o * this l - this j * this g * this p - this n * this k * this h) / determinant
 		e := (this e * this o * this l  +  this i * this g * this p  +  this m * this k * this h - this e * this k * this p - this i * this o * this h - this m * this g * this l) / determinant
 		i := (this e * this j * this p  +  this i * this n * this h  +  this m * this f * this l - this e * this n * this l - this i * this f * this p - this m * this j * this h) / determinant
@@ -201,7 +206,9 @@ FloatTransform3D: cover {
 	operator != (other: This) -> Bool { !(this == other) }
 	operator as -> String { this toString() }
 	toString: func -> String {
-//		FIXME: How do I concatenate strings, or define them on multple lines?
-		"#{this a toString()}, #{this e toString()}, #{this i toString()}, #{this m toString()},\n#{this b toString()}, #{this f toString()}, #{this j toString()}, #{this m toString()},\n#{this c toString()}, #{this g toString()}, #{this k toString()}, #{this o toString()},\n#{this d toString()}, #{this h toString()}, #{this l toString()}, #{this p toString()}"
+		"%.8f" formatFloat(this a) >> ", " & "%.8f" formatFloat(this e) >> ", " & "%.8f" formatFloat(this i) >> ", " & "%.8f" formatFloat(this m) >> "\n" & \
+		"%.8f" formatFloat(this b) >> ", " & "%.8f" formatFloat(this f) >> ", " & "%.8f" formatFloat(this j) >> ", " & "%.8f" formatFloat(this n) >> "\n" & \
+		"%.8f" formatFloat(this c) >> ", " & "%.8f" formatFloat(this g) >> ", " & "%.8f" formatFloat(this k) >> ", " & "%.8f" formatFloat(this o) >> "\n" & \
+		"%.8f" formatFloat(this d) >> ", " & "%.8f" formatFloat(this h) >> ", " & "%.8f" formatFloat(this l) >> ", " & "%.8f" formatFloat(this p)
 	}
 }
