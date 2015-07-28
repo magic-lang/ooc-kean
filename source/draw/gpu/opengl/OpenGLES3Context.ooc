@@ -42,9 +42,9 @@ OpenGLES3Context: class extends GpuContext {
 		this _bgrMapDefault = OpenGLES3MapBgr new(this)
 		this _bgraMapDefault = OpenGLES3MapBgra new(this)
 		this _monochromeMapDefault = OpenGLES3MapMonochrome new(this)
-		this _monochromeMapTransform = OpenGLES3MapMonochrome new(this, true)
+		this _monochromeMapTransform = OpenGLES3MapMonochrome new(this)
 		this _uvMapDefault = OpenGLES3MapUv new(this)
-		this _uvMapTransform = OpenGLES3MapUv new(this, true)
+		this _uvMapTransform = OpenGLES3MapUv new(this)
 		this _packMonochrome = OpenGLES3MapPackMonochrome new(this)
 		this _packUv = OpenGLES3MapPackUv new(this)
 		this _backend = context
@@ -71,9 +71,9 @@ OpenGLES3Context: class extends GpuContext {
 	}
 	recycle: func ~image (gpuImage: GpuImage) { this _imageBin add(gpuImage) }
 	drawQuad: func { this _quad draw() }
-	drawLines: func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform2D) { this _overlayDrawer drawLines(pointList, transform) }
-	drawBox: func (box: FloatBox2D, transform: FloatTransform2D) { this _overlayDrawer drawBox(box, transform) }
-	drawPoints: func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform2D) { this _overlayDrawer drawPoints(pointList, transform) }
+	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D) { this _overlayDrawer drawLines(pointList, projection) }
+	drawBox: func (box: FloatBox2D, projection: FloatTransform3D) { this _overlayDrawer drawBox(box, projection) }
+	drawPoints: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D) { this _overlayDrawer drawPoints(pointList, projection) }
 	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap {
 		result := match (mapType) {
 			case GpuMapType defaultmap =>
@@ -204,7 +204,8 @@ OpenGLES3Context: class extends GpuContext {
 		} as OpenGLES3MapPack
 		map imageWidth = source size width
 		map channels = source channels
-		target canvas draw(source, map, viewport)
+		//Needs to adapt to new kean API
+		//target canvas draw(source, map, viewport)
 	}
 	createFence: func -> GpuFence { OpenGLES3Fence new() }
 	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) {

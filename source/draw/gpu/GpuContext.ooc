@@ -16,6 +16,7 @@
 use ooc-math
 use ooc-draw
 use ooc-base
+use ooc-collections
 import GpuImage, GpuMonochrome, GpuUv, GpuBgr, GpuBgra, GpuYuv420Semiplanar, GpuYuv420Planar, GpuYuv422Semipacked, GpuImageBin, GpuSurface, GpuMap, GpuFence
 
 AlignWidth: enum {
@@ -53,4 +54,7 @@ GpuContext: abstract class {
 	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }
 	isAligned: virtual func (width: Int) -> Bool { true }
 	packToRgba: abstract func (source: GpuImage, target: GpuBgra, viewport: IntBox2D)
+	drawLines: abstract func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D)
+	drawBox: abstract func (box: FloatBox2D, transform: FloatTransform3D)
+	drawPoints: abstract func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D)
 }

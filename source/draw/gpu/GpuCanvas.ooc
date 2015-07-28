@@ -24,16 +24,7 @@ import GpuImage, GpuMap, GpuSurface, GpuContext, structs/LinkedList
 GpuCanvas: abstract class extends GpuSurface {
 	_target: GpuImage
 	blend := false
-	init: func (=_target, context: GpuContext) {
-		super(this _target size, context, FloatTransform2D createScaling(2.0f / this _target size width, 2.0f / this _target size height))
-	}
-	draw: abstract func (image: Image)
-	draw: abstract func ~transform2D (image: Image, transform: FloatTransform2D)
-	draw: abstract func ~withmap (image: Image, map: GpuMap, viewport: IntBox2D)
-	clear: abstract func
-	drawLines: virtual func (transformList: VectorList<FloatPoint2D>)
-	drawBox: virtual func (box: FloatBox2D)
-	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>)
+	init: func (=_target, context: GpuContext) { super(this _target size, context) }
 	readPixels: virtual func -> ByteBuffer { raise("Trying to read pixels in unimplemented readPixels function"); null }
 	onRecycle: abstract func
 }
