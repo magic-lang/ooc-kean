@@ -49,6 +49,42 @@ Quaternion: cover {
 	init: func@ ~floats (w, x, y, z: Float) { this init(w, FloatPoint3D new(x, y, z)) }
 	init: func@ ~default { this init(0, 0, 0, 0) }
 	init: func@ ~floatArray (source: Float[]) { this init(source[0], source[1], source[2], source[3]) }
+	init: func@ ~fromeFloatTransform3D (transform: FloatTransform3D) {
+		// Farrell, Jay. A. Computation of the Quaternion from a Rotation Matrix.
+		// http://www.ee.ucr.edu/~farrell/AidedNavigation/D_App_Quaternions/Rot2Quat.pdf
+		r, s, w, x, y, z: Float
+		trace := transform a + transform f + transform k
+		if (trace > 0.0f) {
+			r = (1.0f + trace) sqrt()
+			s = 0.5f / r
+			w = 0.5f * r
+			x = (transform g - transform j) * s
+			y = (transform i - transform c) * s
+			z = (transform b - transform e) * s
+		} else if (transform a > transform f && transform a > transform k) {
+			r = (1.0f + transform a - transform f - transform k) sqrt()
+			s = 0.5f / r
+			w = (transform g - transform j) * s
+			x = 0.5f * r
+			y = (transform e + transform b) * s
+			z = (transform i + transform c) * s
+		} else if (transform f > transform k) {
+			r = (1.0f - transform a + transform f - transform k) sqrt()
+			s = 0.5f / r
+			w = (transform i - transform c) * s
+			x = (transform e + transform b) * s
+			y = 0.5f * r
+			z = (transform j + transform g) * s
+		} else {
+			r = (1.0f - transform a - transform f + transform k) sqrt()
+			s = 0.5f / r
+			w = (transform b - transform e) * s
+			x = (transform i + transform c) * s
+			y = (transform j + transform g) * s
+			z = 0.5f * r
+		}
+		this init(w, x, y, z)
+	}
 	apply: func (vector: FloatPoint3D) -> FloatPoint3D {
  		vectorQuaternion := This new(0.0f, vector)
 		result := hamiltonProduct(hamiltonProduct(this, vectorQuaternion), this inverse)
@@ -79,45 +115,6 @@ Quaternion: cover {
 		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2;
 		return This new(w, x, y, z);
 	}
-	// TODO: This cannot be used with FloatTransform2D, only with a 3D rotation matrix
-	// for which we don't have a data type. We could do this for FloatTransform3D but that would
-	// make the calculations more complex than we have here.
-	/*fromRotationMatrix: static func (matrix: FloatTransform2D) -> This {
-		// Farrell, Jay. A. Computation of the Quaternion from a Rotation Matrix.
-		// http://www.ee.ucr.edu/~farrell/AidedNavigation/D_App_Quaternions/Rot2Quat.pdf
-		r, s, w, x, y, z: Float
-		trace := matrix a + matrix e + matrix i
-		if (trace > 0.0f) {
-			r = (1.0f + trace) sqrt()
-			s = 0.5f / r
-			w = 0.5f * r
-			x = (matrix f - matrix h) * s
-			y = (matrix g - matrix c) * s
-			z = (matrix b - matrix d) * s
-		} else if (matrix a > matrix e && matrix a > matrix i) {
-			r = (1.0f + matrix a - matrix e - matrix i) sqrt()
-			s = 0.5f / r
-			w = (matrix f - matrix h) * s
-			x = 0.5f * r
-			y = (matrix d + matrix b) * s
-			z = (matrix g + matrix c) * s
-		} else if (matrix e > matrix i) {
-			r = (1.0f - matrix a + matrix e - matrix i) sqrt()
-			s = 0.5f / r
-			w = (matrix g - matrix c) * s
-			x = (matrix d + matrix b) * s
-			y = 0.5f * r
-			z = (matrix h + matrix f) * s
-		} else {
-			r = (1.0f - matrix a - matrix e + matrix i) sqrt()
-			s = 0.5f / r
-			w = (matrix b - matrix d) * s
-			x = (matrix g + matrix c) * s
-			y = (matrix h + matrix f) * s
-			z = 0.5f * r
-		}
-		This new(w, x, y, z)
-	}*/
 	getEulerAngles: func -> FloatRotation3D {
 		// http://www.jldoty.com/code/DirectX/YPRfromUF/YPRfromUF.html
 		// Should be used in order Yaw -> Pitch -> Roll or Pitch -> Yaw -> Roll,

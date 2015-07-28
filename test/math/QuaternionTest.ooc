@@ -204,66 +204,65 @@ QuaternionTest: class extends Fixture {
 			expect(float3DTransform o, is equal to(0.0f) within(tolerance))
 			expect(float3DTransform p, is equal to(1.0f) within(tolerance))
 		})
-		//TODO: Tests removed until we have a correct fromRotationMatrix function.
-		/*this add("fromRotationMatrix: identity", func() {
+		this add("fromFloatTransform3D: identity", func() {
 			// Identity matrix
-			matrix := FloatTransform2D new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f)
-			quaternion := Quaternion fromRotationMatrix(matrix)
+			matrix := FloatTransform3D new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f)
+			quaternion := Quaternion new(matrix)
 			expect(quaternion w == 1.0f)
 			expect(quaternion x == 0.0f)
 			expect(quaternion y == 0.0f)
 			expect(quaternion z == 0.0f)
 		})
-		this add("fromRotationMatrix: trace > 0.0f", func() {
-			matrix := FloatTransform2D new(1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f)
-			quaternion := Quaternion fromRotationMatrix(matrix)
+		this add("fromFloatTransform3D: trace > 0.0f", func() {
+			matrix := FloatTransform3D new(1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f)
+			quaternion := Quaternion new(matrix)
 			expect(quaternion w, is equal to(0.866025f) within(tolerance))
 			expect(quaternion x, is equal to(0.288675f) within(tolerance))
 			expect(quaternion y, is equal to(0.577350f) within(tolerance))
 			expect(quaternion z, is equal to(0.0f) within(tolerance))
 		})
-		this add("fromRotationMatrix: matrix a > matrix e && matrix a > matrix i", func() {
-			matrix := FloatTransform2D new(1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 0.0f, -1.0f, -1.0f)
-			quaternion := Quaternion fromRotationMatrix(matrix)
+		this add("fromFloatTransform3D: matrix a > matrix e && matrix a > matrix i", func() {
+			matrix := FloatTransform3D new(1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 0.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f)
+			quaternion := Quaternion new(matrix)
 			expect(quaternion w, is equal to(0.0f) within(tolerance))
 			expect(quaternion x, is equal to(1.0f) within(tolerance))
 			expect(quaternion y, is equal to(0.5f) within(tolerance))
 			expect(quaternion z, is equal to(-0.25f) within(tolerance))
 		})
-		this add("fromRotationMatrix: matrix e > matrix i", func() {
-			matrix := FloatTransform2D new(0.0f, 1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f)
-			quaternion := Quaternion fromRotationMatrix(matrix)
+		this add("fromFloatTransform3D: matrix e > matrix i", func() {
+			matrix := FloatTransform3D new(0.0f, 1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f)
+			quaternion := Quaternion new(matrix)
 			expect(quaternion w, is equal to(0.707106f) within(tolerance))
 			expect(quaternion x, is equal to(0.707106f) within(tolerance))
 			expect(quaternion y, is equal to(0.707106f) within(tolerance))
 			expect(quaternion z, is equal to(0.353553f) within(tolerance))
 		})
-		this add("fromRotationMatrix: else", func() {
-			matrix := FloatTransform2D new(-1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f)
-			quaternion := Quaternion fromRotationMatrix(matrix)
+		this add("fromFloatTransform3D: else", func() {
+			matrix := FloatTransform3D new(-1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f)
+			quaternion := Quaternion new(matrix)
 			expect(quaternion w, is equal to(-0.35355339059327373f) within(tolerance))
 			expect(quaternion x, is equal to(-0.353553f) within(tolerance))
 			expect(quaternion y, is equal to(-0.353553f) within(tolerance))
 			expect(quaternion z, is equal to(0.707106f) within(tolerance))
 		})
-		this add("fromRotationMatrix_1", func() {
-			matrix := quaternion0 toFloatTransform2D();
-			quaternion := Quaternion fromRotationMatrix(matrix)
+		this add("fromFloatTransform3D_1", func() {
+			matrix := quaternion0 toFloatTransform3D();
+			quaternion := Quaternion new(matrix)
 			normalized := quaternion0 normalized
 			expect(quaternion w, is equal to(normalized w) within(tolerance))
 			expect(quaternion x, is equal to(normalized x) within(tolerance))
 			expect(quaternion y, is equal to(normalized y) within(tolerance))
 			expect(quaternion z, is equal to(normalized z) within(tolerance))
 		})
-		this add("fromRotationMatrix_2", func() {
-			matrix := quaternion3 toFloatTransform2D();
-			quaternion := Quaternion fromRotationMatrix(matrix)
+		this add("fromFloatTransform3D_2", func() {
+			matrix := quaternion3 toFloatTransform3D();
+			quaternion := Quaternion new(matrix)
 			normalized := quaternion3 normalized
 			expect(quaternion w, is equal to(normalized w) within(tolerance))
 			expect(quaternion x, is equal to(normalized x) within(tolerance))
 			expect(quaternion y, is equal to(normalized y) within(tolerance))
 			expect(quaternion z, is equal to(normalized z) within(tolerance))
-		})*/
+		})
 		this add("sphericalLinearInterpolation_1", func() {
 			interpolated := quaternion8 sphericalLinearInterpolation(quaternion9, 0.5f)
 			expect(interpolated w, is equal to(0.210042f) within(tolerance))
