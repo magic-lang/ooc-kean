@@ -85,7 +85,6 @@ FloatTransform3D: cover {
 	scalingX ::= (this a squared() + this b squared() + this c squared()) sqrt()
 	scalingY ::= (this e squared() + this f squared() + this g squared()) sqrt()
 	scalingZ ::= (this i squared() + this j squared() + this k squared()) sqrt()
-	rotation ::= this b atan2(this a)
 	inverse: This { get {
 		determinant := this determinant
 		// If the determinant is 0, the resulting transform will be full of NaN values.
