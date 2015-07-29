@@ -153,8 +153,8 @@ DateTime: cover {
 
 	now: static DateTime {
 		get {
-					data := Time dateTimeData()
-					DateTime new(data year, data month, data day, data hour, data minute, data second, data millisecond)
+			data := Time dateTimeData()
+			DateTime new(data year, data month, data day, data hour, data minute, data second, data millisecond)
 		}
 	}
 
