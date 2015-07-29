@@ -198,20 +198,19 @@ DateTime: cover {
 
 	/* returns number of ticks for given date at 0:00*/
 	dateToTicks: static func(year, month, day : Int) -> UInt64 {
+		result := 0 as UInt64
 		if (This dateIsValid(year, month, day)) {
 			totalDays := day - 1
-			for (m in 1 .. month) {
+			for (m in 1 .. month)
 				totalDays += This daysInMonth(year, m)
-			}
 			fourYearBlocks := (year - 1) / 4
 			year_start := fourYearBlocks * 4
 			for (y in year_start + 1 .. year)
 				totalDays += This daysInYear(y)
 			totalDays += fourYearBlocks * This daysPerFourYears
-			totalDays * This ticksPerDay
-		} else {
-			0
+			result = totalDays * This ticksPerDay
 		}
+		return result
 	}
 
 	daysInYear: static func (year: Int) -> Int {
