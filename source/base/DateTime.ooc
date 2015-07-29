@@ -18,6 +18,36 @@
 use ooc-base
 import os/Time
 
+DateTimeData: cover {
+	year: Int { get set }
+	month: Int { get set }
+	day: Int { get set }
+	hour: Int { get set }
+	minute: Int { get set }
+	second: Int { get set }
+	millisecond: Int { get set }
+  init: func@ ()
+	init: func@ ~fromDateTime (=year, =month, =day, =hour, =minute, =second, =millisecond)
+}
+
+extend Time {
+	dateTimeData: static func -> DateTimeData {
+		version(windows) {
+				st: SystemTime
+				GetLocalTime(st&)
+				return DateTimeData new(st wYear, st wMonth, st wDay, st wHour, st wMinute, st wSecond, st wMilliseconds)
+		}
+		version(!windows) {
+				tt := time(null)
+				tv : TimeVal
+				val := localtime(tt&)
+				gettimeofday(tv&, null)
+				return DateTimeData new(val@ tm_year+1900, val@ tm_mon+1, val@ tm_mday, val@ tm_hour, val@ tm_min, val@ tm_sec, tv tv_usec / 1000)
+		}
+		return DateTimeData new()
+	}
+}
+
 DateTime: cover {
 	/* Number of 100 ns intervals since 00.00 1/1/1 */
 	_ticks: UInt64
@@ -197,15 +227,15 @@ DateTime: cover {
 	}
 
 	/* returns number of ticks for given date at 0:00*/
-	dateToTicks: static func(year, month, day : Int) -> UInt64 {
+	dateToTicks: static func (year, month, day: Int) -> UInt64 {
 		result := 0 as UInt64
 		if (This dateIsValid(year, month, day)) {
 			totalDays := day - 1
 			for (m in 1 .. month)
 				totalDays += This daysInMonth(year, m)
 			fourYearBlocks := (year - 1) / 4
-			year_start := fourYearBlocks * 4
-			for (y in year_start + 1 .. year)
+			startYear := fourYearBlocks * 4
+			for (y in startYear + 1 .. year)
 				totalDays += This daysInYear(y)
 			totalDays += fourYearBlocks * This daysPerFourYears
 			result = totalDays * This ticksPerDay
