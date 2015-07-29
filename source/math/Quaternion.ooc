@@ -279,9 +279,9 @@ Quaternion: cover {
 	sphericalLinearInterpolation: func(other: Quaternion, factor: Float) -> This {
 		cosAngle := this dotProduct(other)
 		longPath := cosAngle < 0.0f
-		angle := acos(Float absolute(cosAngle))
+		angle := acos(Float absolute(cosAngle) clamp(-1.0f, 1.0f))
 		result: Quaternion
-		if (angle < 1e-10)
+		if (angle < 0.00000001)
 			result = this * (1 - factor) + other * factor
 		else {
 			thisFactor := sin((1 - factor) * angle) / sin(angle)
