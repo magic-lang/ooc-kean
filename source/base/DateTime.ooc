@@ -18,25 +18,6 @@
 use ooc-base
 import os/Time
 
-DateTimeData: class {
-	year: Int { get set }
-	month: Int { get set }
-	day: Int { get set }
-	hour: Int { get set }
-	minute: Int { get set }
-	second: Int { get set }
-	millisecond: Int { get set }
-	init: func@ (year, month, day, hour, minute, second, millisecond: Int) {
-		this year = year
-		this month = month
-		this day = day
-		this hour = hour
-		this minute = minute
-		this second = second
-		this millisecond = millisecond
-	}
-}
-
 DateTime: cover {
 	/* Number of 100 ns intervals since 00.00 1/1/1 */
 	_ticks: UInt64
@@ -87,7 +68,7 @@ DateTime: cover {
 	}
 
 	toString: func -> String {
-		this toStringFormat(This DefaultFormat)
+		this toStringFormat(This defaultFormat)
 	}
 	// <summary>
 	// Convert this object to string representation
@@ -168,11 +149,12 @@ DateTime: cover {
 	ticksPerWeek: static const UInt64 = This ticksPerDay * 7
 	ticksPerFourYears: static const Int64 = This daysPerFourYears * This ticksPerDay
 	/* default date/time printing format */
-	DefaultFormat: static const String = "%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
+	defaultFormat: static const String = "%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
 
 	now: static DateTime {
 		get {
-					DateTime new(Time year(), Time month(), Time day(), Time hour(), Time min(), Time sec(), Time microsec()/1000)
+					data := Time dateTimeData()
+					DateTime new(data year, data month, data day, data hour, data minute, data second, data millisecond)
 		}
 	}
 

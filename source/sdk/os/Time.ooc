@@ -63,6 +63,18 @@ version(!windows) {
 
 /* implementation */
 
+DateTimeData: cover {
+	year: Int { get set }
+	month: Int { get set }
+	day: Int { get set }
+	hour: Int { get set }
+	minute: Int { get set }
+	second: Int { get set }
+	millisecond: Int { get set }
+  init: func@ ()
+	init: func@ ~fromDateTime (=year, =month, =day, =hour, =minute, =second, =millisecond)
+}
+
 Time: class {
 	__time_microsec_base := static This runTime
     __time_millisec_base := static This __time_microsec_base() / 1000
@@ -258,6 +270,22 @@ Time: class {
           return val@ tm_year+1900
       }
       return -1
+    }
+
+    dateTimeData: static func -> DateTimeData {
+      version(windows) {
+          st: SystemTime
+          GetLocalTime(st&)
+          return DateTimeData new(st wYear, st wMonth, st wDay, st wHour, st wMinute, st wSecond, st wMilliseconds)
+      }
+      version(!windows) {
+          tt := time(null)
+          tv : TimeVal
+          val := localtime(tt&)
+          gettimeofday(tv&, null)
+          return DateTimeData new(val@ tm_year+1900, val@ tm_mon+1, val@ tm_mday, val@ tm_hour, val@ tm_min, val@ tm_sec, tv tv_usec / 1000)
+      }
+      return DateTimeData new()
     }
 
     sleepSec: static func (duration: Float) {
