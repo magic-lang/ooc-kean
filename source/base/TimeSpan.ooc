@@ -21,7 +21,7 @@ TimeSpan: cover {
 	_ticks: Int64
 	ticks ::= this _ticks
 	init: func@ (=_ticks)
-	init: func@ ~fromHourMinuteSec (hour, minute, second, millisecond : Int) {
+	init: func@ ~fromHourMinuteSec (hour, minute, second, millisecond: Int) {
 		this _ticks = DateTime timeToTicks(hour, minute, second, millisecond)
 	}
 	kean_base_timeSpan_getTicks: unmangled func -> Int64 { this _ticks }

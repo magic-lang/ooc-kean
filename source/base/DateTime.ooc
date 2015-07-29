@@ -163,10 +163,10 @@ DateTime: cover {
 	DefaultFormat: static const String = "%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
 
 	now: static DateTime {
-      get {
+		get {
 					DateTime new(Time year(), Time month(), Time day(), Time hour(), Time min(), Time sec(), Time microsec()/1000)
-      }
-  }
+		}
+	}
 
 	_ticksToDateTimeHelper: static func (totalTicks: Int64) -> DateTimeData {
 		result := DateTimeData new()
@@ -178,9 +178,8 @@ DateTime: cover {
 			if (ticksLeft < t) {
 				year = y
 				break
-			} else {
+			} else
 				ticksLeft -= t
-			}
 		}
 		month := 0
 		for (m in 1 .. 13) {
@@ -188,9 +187,8 @@ DateTime: cover {
 			if (ticksLeft < t) {
 				month = m
 				break
-			} else {
+			} else
 				ticksLeft -= t
-			}
 		}
 		days := ticksLeft / This ticksPerDay
 		ticksLeft -= days * This ticksPerDay
@@ -212,7 +210,7 @@ DateTime: cover {
 	}
 
 	/* returns number of ticks for given hours, minutes and seconds */
-	timeToTicks: static func(hours, minutes, seconds, millisecond: Int) -> Int64 {
+	timeToTicks: static func (hours, minutes, seconds, millisecond: Int) -> Int64 {
 		(hours * 3600 + minutes * 60 + seconds) * This ticksPerSecond + millisecond * This ticksPerMillisecond
 	}
 
@@ -259,7 +257,7 @@ DateTime: cover {
 		hour >= 0 && hour < 24 && minute >= 0 && minute < 60 && second >= 0 && second < 60 && millisecond >= 0 && millisecond < 1000
 	}
 	/* validate argument ranges for year/month/day values */
-	dateIsValid: static func (year, month, day : Int) -> Bool {
+	dateIsValid: static func (year, month, day: Int) -> Bool {
 		year >= 1 && month >= 1 && month <= 12 && day >= 1 && day <= daysInMonth(year, month)
 	}
 
