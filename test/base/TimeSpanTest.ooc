@@ -54,13 +54,26 @@ TimeSpanTest: class extends Fixture {
 			expect(t + 1.9 == 1.9 + t)
 			expect(1.0 + TimeSpan new(0) == TimeSpan second())
 			expect((1.9 + TimeSpan second() + 3.1) elapsedMilliseconds() == 6000)
+			t += 800 * DateTime ticksPerMillisecond
+			expect(t elapsedMilliseconds() == 3000)
+			t += 0.5
+			expect(t elapsedMilliseconds() == 3500)
+			t -= 2.5
+			expect(t elapsedMilliseconds() == 1000)
+			t -= 1000 * DateTime ticksPerMillisecond
+			expect(t ticks == 0)
+			t = TimeSpan second()
+			t *= 4
+			expect(t elapsedSeconds() == 4)
+			t *= 2.5
+			expect(t elapsedSeconds() == 10)
 		})
 		this add("test subtraction", func() {
 			t := TimeSpan new(100)
 			expect((t - TimeSpan new(50)) ticks == 50)
 			expect((t - t) ticks == 0)
-			expect(TimeSpan week() - TimeSpan day() * 6 == TimeSpan day())
-			expect(TimeSpan hour() - TimeSpan minute() == TimeSpan minute() * 59)
+			expect(TimeSpan week() - TimeSpan days(6) == TimeSpan day())
+			expect(TimeSpan hour() - TimeSpan minute() == TimeSpan minutes(59))
 			expect(TimeSpan minute() - TimeSpan millisecond() == TimeSpan second() * 59 + TimeSpan millisecond() * 999)
 			expect((TimeSpan hour() - TimeSpan minute()) elapsedHours() == 0)
 			expect((TimeSpan hour() - TimeSpan minute()) elapsedMinutes() == 59)
@@ -80,7 +93,7 @@ TimeSpanTest: class extends Fixture {
 			expect(TimeSpan day() * 7 == TimeSpan week())
 			expect(TimeSpan millisecond() * 1000.0 == TimeSpan second())
 			t := TimeSpan new ~fromHourMinuteSec(0,0,1,0)
-			expect(2.0 * t == TimeSpan second() * 2)
+			expect(2.0 * t == TimeSpan seconds(2))
 			expect((2000 * DateTime ticksPerMillisecond + TimeSpan second()) elapsedSeconds() == 3)
 		})
 		this add("test creation helpers", func() {
@@ -93,6 +106,13 @@ TimeSpanTest: class extends Fixture {
 			expect(TimeSpan hour() elapsedHours() == 1)
 			expect(TimeSpan day() elapsedHours() == 24)
 			expect(TimeSpan week() elapsedDays() == 7)
+			expect(TimeSpan milliseconds(10) elapsedMilliseconds() == 10)
+			expect(TimeSpan seconds(8.5) elapsedMilliseconds() == 8500)
+			expect(TimeSpan minutes(60) elapsedHours() == 1)
+			expect(TimeSpan hours(55) elapsedHours() == 55)
+			expect(TimeSpan hours(2.5) elapsedMinutes() == 150)
+			expect(TimeSpan days(14.1) elapsedWeeks() == 2)
+			expect(TimeSpan weeks(2) elapsedDays() == 14)
 		})
 	}
 }

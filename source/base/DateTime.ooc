@@ -274,3 +274,6 @@ DateTime: cover {
 	}
 
 }
+
+operator += (date: DateTime@, span: TimeSpan) { date _ticks += span ticks }
+operator -= (date: DateTime@, span: TimeSpan) { date _ticks -= span ticks }

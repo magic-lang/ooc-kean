@@ -106,22 +106,40 @@ TimeSpan: cover {
 	}
 
 	millisecond: static func -> This {
-		This new(DateTime ticksPerMillisecond)
+		This milliseconds(1)
+	}
+	milliseconds: static func (count: Double) -> This {
+		This new(DateTime ticksPerMillisecond * count)
 	}
 	second: static func -> This {
-		This new(DateTime ticksPerSecond)
+		This seconds(1)
+	}
+	seconds: static func (count: Double) -> This {
+		This new(DateTime ticksPerSecond * count)
 	}
 	minute: static func -> This {
-		This new(DateTime ticksPerMinute)
+		This minutes(1)
+	}
+	minutes: static func (count: Double) -> This {
+		This new(DateTime ticksPerMinute * count)
 	}
 	hour: static func -> This {
-		This new(DateTime ticksPerHour)
+		This hours(1)
+	}
+	hours: static func (count: Double) -> This {
+		This new(DateTime ticksPerHour * count)
 	}
 	day: static func -> This {
-		This new(DateTime ticksPerDay)
+		This days(1)
+	}
+	days: static func (count: Double) -> This {
+		This new(DateTime ticksPerDay * count)
 	}
 	week: static func -> This {
-		This new(DateTime ticksPerWeek)
+		This weeks(1)
+	}
+	weeks: static func (count: Double) -> This {
+		This new(DateTime ticksPerWeek * count)
 	}
 
 }
@@ -135,3 +153,11 @@ operator - (left: Double, right: TimeSpan) -> TimeSpan { right negate() + left }
 operator * (left: Int, right: TimeSpan) -> TimeSpan { right * left }
 operator * (left: Int64, right: TimeSpan) -> TimeSpan { right * left }
 operator * (left: Double, right: TimeSpan) -> TimeSpan { right * left }
+operator += (left: TimeSpan@, right: TimeSpan) { left _ticks += right ticks }
+operator += (left: TimeSpan@, right: Int64) { left _ticks += right }
+operator += (left: TimeSpan@, right: Double) { left _ticks += right * DateTime ticksPerSecond }
+operator -= (left: TimeSpan@, right: TimeSpan) { left _ticks -= right ticks }
+operator -= (left: TimeSpan@, right: Int64) { left _ticks -= right }
+operator -= (left: TimeSpan@, right: Double) { left _ticks -= right * DateTime ticksPerSecond }
+operator *= (left: TimeSpan@, right: Int64) { left _ticks *= right }
+operator *= (left: TimeSpan@, right: Double) { left _ticks *= right }

@@ -160,6 +160,11 @@ DateTimeTest: class extends Fixture {
 			d1 = d2 + TimeSpan day()
 			span = d1 - d2
 			expect(span == TimeSpan day())
+			d2 = d1
+			d1 += span
+			expect(d1 - d2 == TimeSpan day())
+			d1 -= TimeSpan week()
+			expect((d2 - d1) elapsedDays() == 6)
 		})
 		this add("toString", func() {
 			d := DateTime new(1643, 12, 31, 23, 59, 59, 999)
