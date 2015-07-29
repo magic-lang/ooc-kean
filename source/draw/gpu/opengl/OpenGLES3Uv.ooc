@@ -21,11 +21,12 @@ use ooc-draw-gpu
 import OpenGLES3/Texture, OpenGLES3Canvas, Map/OpenGLES3Map, Map/OpenGLES3MapPack, OpenGLES3Texture
 
 OpenGLES3Uv: class extends GpuUv {
-	init: func (size: IntSize2D, context: GpuContext) {
-		init(size, size width * 2, null, context)
-	}
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
+	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
 		super(OpenGLES3Texture createUv(size, stride, data), size, context)
+		this coordinateSystem = coordinateSystem
+	}
+	init: func (size: IntSize2D, context: GpuContext) {
+		this init(size, size width * 2, null, CoordinateSystem YUpward, context)
 	}
 	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) {
 		super(texture, size, context)
@@ -44,7 +45,7 @@ OpenGLES3Uv: class extends GpuUv {
 		result
 	}
 	create: static func ~fromRaster (rasterImage: RasterUv, context: GpuContext) -> This {
-		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
+		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 		result
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
