@@ -36,7 +36,7 @@ extend Time {
 		version(windows) {
 				st: SystemTime
 				GetLocalTime(st&)
-				result = DateTime new ~fromDateTime(st wYear, st wMonth, st wDay, st wHour, st wMinute, st wSecond, st wMilliseconds)
+				result = DateTime new(st wYear, st wMonth, st wDay, st wHour, st wMinute, st wSecond, st wMilliseconds)
 		}
 		version(!windows) {
 				tt := time(null)
