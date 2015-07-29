@@ -26,7 +26,15 @@ DateTimeData: class {
 	minute: Int { get set }
 	second: Int { get set }
 	millisecond: Int { get set }
-	init: func ()
+	init: func@ (year, month, day, hour, minute, second, millisecond: Int) {
+		this year = year
+		this month = month
+		this day = day
+		this hour = hour
+		this minute = minute
+		this second = second
+		this millisecond = millisecond
+	}
 }
 
 DateTime: cover {
@@ -169,7 +177,6 @@ DateTime: cover {
 	}
 
 	_ticksToDateTimeHelper: static func (totalTicks: Int64) -> DateTimeData {
-		result := DateTimeData new()
 		fourYearBlocks := totalTicks / This ticksPerFourYears
 		year := 4 * fourYearBlocks
 		ticksLeft := totalTicks - fourYearBlocks * This ticksPerFourYears
@@ -199,14 +206,7 @@ DateTime: cover {
 		second := ticksLeft / This ticksPerSecond
 		ticksLeft -= second * This ticksPerSecond
 		millisecond := ticksLeft / This ticksPerMillisecond
-		result year = year
-		result month = month
-		result day = days + 1
-		result hour = hour
-		result minute = minute
-		result second = second
-		result millisecond = millisecond
-		result
+		DateTimeData new(year, month, days + 1, hour, minute, second, millisecond)
 	}
 
 	/* returns number of ticks for given hours, minutes and seconds */
