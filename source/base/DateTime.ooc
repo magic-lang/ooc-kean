@@ -24,20 +24,20 @@ DateTime: cover {
 	ticks ::= this _ticks
 	init: func@ (=_ticks)
 	init: func@ ~fromYearMonthDay (year, month, day: Int) {
-		if (dateIsValid(year, month, day))
+		if (This dateIsValid(year, month, day))
 			this _ticks = This dateToTicks(year, month, day)
 		else
 			raise ("invalid input specified for constructor(year,month,day)")
 	}
 	init: func@ ~fromHourMinuteSec (hour, minute, second, millisecond: Int) {
-		if (timeIsValid(hour, minute, second, millisecond))
+		if (This timeIsValid(hour, minute, second, millisecond))
 			this _ticks = This timeToTicks(hour, minute, second, millisecond)
 		else
 			raise ("invalid input specified for constructor(hour,minute,second)")
 	}
 	init: func@ ~fromDateTime (year, month, day, hour, minute, second, millisecond: Int) {
-		if (dateIsValid(year, month, day) && timeIsValid(hour, minute, second, millisecond))
-			this _ticks = This timeToTicks(hour, minute, second, millisecond) + This dateToTicks(year, month, day)
+		if (This dateIsValid(year, month, day) && This timeIsValid(hour, minute, second, millisecond))
+			this _ticks = This dateToTicks(year, month, day) + This timeToTicks(hour, minute, second, millisecond)
 		else
 			raise ("invalid input specified for constructor(year,month,day,hour,minute,second,ms)")
 	}
@@ -214,7 +214,7 @@ DateTime: cover {
 	}
 
 	daysInYear: static func (year: Int) -> Int {
-		This daysPerYear + isLeapYear(year)
+		This daysPerYear + This isLeapYear(year)
 	}
 
 	ticksInYear: static func (year: Int) -> UInt64 {
@@ -223,7 +223,7 @@ DateTime: cover {
 
 	daysInMonth: static func (year, month: Int) -> Int {
 		if (month == 2)
-			isLeapYear(year) ? 29 : 28
+			This isLeapYear(year) ? 29 : 28
 		else if (month <= 7)
 			month % 2 ? 31 : 30
 		else
@@ -239,7 +239,7 @@ DateTime: cover {
 	}
 	/* validate argument ranges for year/month/day values */
 	dateIsValid: static func (year, month, day: Int) -> Bool {
-		year >= 1 && month in?(1..13) && day in?(1..daysInMonth(year, month)+1)
+		year >= 1 && month in?(1..13) && day in?(1..This daysInMonth(year, month)+1)
 	}
 
 }
