@@ -26,14 +26,16 @@ GpuSurface: abstract class {
 		set(value) {
 			this _focalLength = value
 			this _projection = FloatTransform3D new(2.0f * this _focalLength / this size width, 0.0f, 0.0f, 0.0f, 0.0f, 2.0f * this _focalLength / this size height, 0.0f, 0.0f, 0.0f, 0.0f, -(this farPlane + this nearPlane) / (this farPlane - this nearPlane), -1.0f, 0.0f, 0.0f, -2.0f * this farPlane * this nearPlane / (this farPlane - this nearPlane), 0.0f)
-			this _model = this _createModelTransform(this size)
+			this _model = this _createModelTransform(this size, IntTransform2D identity)
 		}
 	}
 	nearPlane: Float { get set }
 	farPlane: Float { get set }
 	map: GpuMap { get set }
 	init: func (=_size, =_context) { this reset() }
-	_createModelTransform: func (size: IntSize2D) -> FloatTransform3D { FloatTransform3D createTranslation(0.0f, 0.0f, -this focalLength) * FloatTransform3D createScaling(size width / 2.0f, size height / 2.0f, 1.0f) }
+	_createModelTransform: func (size: IntSize2D, coordinateTransform: IntTransform2D) -> FloatTransform3D {
+		FloatTransform3D createTranslation(0.0f, 0.0f, -this focalLength) * FloatTransform3D createScaling(coordinateTransform a * size width / 2.0f, -coordinateTransform e * size height / 2.0f, 1.0f)
+	}
 	reset: virtual func {
 		this _toLocal = FloatTransform3D createTranslation(this size width / 2.0f, this size height / 2.0f, 0.0f) * FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
 		this _toReference = this _toLocal inverse
@@ -43,7 +45,7 @@ GpuSurface: abstract class {
 		this nearPlane = 1.0f
 		this farPlane = 10000.0f
 
-		this _model = this _createModelTransform(this size)
+		this _model = this _createModelTransform(this size, IntTransform2D identity)
 		this _view = FloatTransform3D identity
 		this _projection = FloatTransform3D createScaling(2.0f / this size width, 2.0f / this size height, 1.0f)
 	}

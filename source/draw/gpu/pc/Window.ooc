@@ -76,7 +76,7 @@ Window: class extends GpuSurface {
 	}
 	draw: func ~gpuImage (image: GpuImage) {
 		this map = this _getTransformMap(image) as OpenGLES3MapDefault
-		this map model = this _createModelTransform(image size)
+		this map model = this _createModelTransform(image size, image transform)
 		this map view = this _view
 		this map projection = this _projection
 		this draw(func {
