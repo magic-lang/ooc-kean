@@ -31,20 +31,22 @@ DateTimeData: cover {
 }
 
 extend Time {
-	dateTimeData: static func -> DateTimeData {
+	currentDateTime: static func -> DateTime {
+		result := DateTime new(0)
 		version(windows) {
 				st: SystemTime
 				GetLocalTime(st&)
-				return DateTimeData new(st wYear, st wMonth, st wDay, st wHour, st wMinute, st wSecond, st wMilliseconds)
+				result = DateTime new ~fromDateTime(st wYear, st wMonth, st wDay, st wHour, st wMinute, st wSecond, st wMilliseconds)
 		}
 		version(!windows) {
 				tt := time(null)
 				tv : TimeVal
 				val := localtime(tt&)
 				gettimeofday(tv&, null)
-				return DateTimeData new(val@ tm_year+1900, val@ tm_mon+1, val@ tm_mday, val@ tm_hour, val@ tm_min, val@ tm_sec, tv tv_usec / 1000)
+				result = DateTime new(val@ tm_year+1900, val@ tm_mon+1, val@ tm_mday, val@ tm_hour, val@ tm_min, val@ tm_sec, 0)
+				result = result + TimeSpan new(tv tv_usec * 10)
 		}
-		return DateTimeData new()
+		return result
 	}
 }
 
@@ -183,8 +185,7 @@ DateTime: cover {
 
 	now: static DateTime {
 		get {
-			data := Time dateTimeData()
-			DateTime new(data year, data month, data day, data hour, data minute, data second, data millisecond)
+			Time currentDateTime()
 		}
 	}
 
