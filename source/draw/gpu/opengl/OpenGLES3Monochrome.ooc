@@ -14,19 +14,17 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with This software. If not, see <http://www.gnu.org/licenses/>.
 */
-
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 import OpenGLES3Canvas, Map/OpenGLES3Map, Map/OpenGLES3MapPack, OpenGLES3Texture
 
 OpenGLES3Monochrome: class extends GpuMonochrome {
-	init: func (size: IntSize2D, context: GpuContext) {
-		this init(size, size width, null, context)
-	}
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
+	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
 		super(OpenGLES3Texture createMonochrome(size, stride, data), size, context)
+		this coordinateSystem = coordinateSystem
 	}
+	init: func (size: IntSize2D, context: GpuContext) { this init(size, size width, null, CoordinateSystem YUpward, context) }
 	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) { super(texture, size, context) }
 	toRasterDefault: func -> RasterImage {
 		packed := this _context createBgra(IntSize2D new(this size width / 4, this size height))
@@ -38,8 +36,7 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterMonochrome, context: GpuContext) -> This {
-		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
-		result
+		This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
 		result := This new(size, context)

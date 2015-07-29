@@ -42,7 +42,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	}
 	draw: func ~packed (image: GpuPacked) {
 		map := this _context getMap(this _target, GpuMapType transform) as OpenGLES3MapDefault
-		map model = FloatTransform3D createTranslation(0.0f, 0.0f, -this focalLength) * FloatTransform3D createScaling(image size width / 2.0f, image size height / 2.0f, 1.0f)
+		map model = this _createModelTransform(image size, image transform)
 		map view = this _view
 		map projection = this _projection
 		this map = map

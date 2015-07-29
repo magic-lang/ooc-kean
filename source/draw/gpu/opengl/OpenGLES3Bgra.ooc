@@ -21,22 +21,19 @@ use ooc-draw-gpu
 import OpenGLES3/Texture, OpenGLES3Canvas, OpenGLES3Texture
 
 OpenGLES3Bgra: class extends GpuBgra {
-	init: func (size: IntSize2D, context: GpuContext) {
-		this init(size, size width * this _channels, null, context)
-	}
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
+	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
 		super(OpenGLES3Texture createBgra(size, stride, data), size, context)
+		this coordinateSystem = coordinateSystem
 	}
+	init: func (size: IntSize2D, context: GpuContext) { this init(size, size width * this _channels, null, CoordinateSystem YUpward, context) }
 	init: func ~fromGpuTexture (texture: GpuTexture, context: GpuContext) { super(texture, texture size, context) }
 	toRasterDefault: func -> RasterImage {
 		buffer := this canvas readPixels()
-		result := RasterBgra new(buffer, this size)
-		result
+		RasterBgra new(buffer, this size)
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterBgra, context: GpuContext) -> This {
-		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
-		result
+		This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
 		result := This new(size, context)
