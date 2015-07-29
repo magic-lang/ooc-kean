@@ -150,15 +150,15 @@ DateTime: cover {
 	}
 
 	/* number of days in year ( non-leap ) */
-	DaysInYear: static const Int = 365
-	DaysInFourYears: static const Int = 3 * 365 + 366
-	TicksPerMillisecond: static const Int64 = 1000
-	TicksPerSecond: static const Int64 = This TicksPerMillisecond * 1000
-	TicksPerMinute: static const Int64 = TicksPerSecond * 60
-	TicksPerHour: static const Int64 = TicksPerMinute * 60
-	TicksPerDay: static const Int64 = TicksPerHour * 24
-	TicksPerWeek: static const UInt64 = TicksPerDay * 7
-	TicksPerFourYears: static const Int64 = DaysInFourYears * TicksPerDay
+	daysPerYear: static const Int = 365
+	daysPerFourYears: static const Int = 3 * This daysPerYear + 366
+	ticksPerMillisecond: static const Int64 = 1000
+	ticksPerSecond: static const Int64 = This ticksPerMillisecond * 1000
+	ticksPerMinute: static const Int64 = This ticksPerSecond * 60
+	ticksPerHour: static const Int64 = This ticksPerMinute * 60
+	ticksPerDay: static const Int64 = This ticksPerHour * 24
+	ticksPerWeek: static const UInt64 = This ticksPerDay * 7
+	ticksPerFourYears: static const Int64 = This daysPerFourYears * This ticksPerDay
 	/* default date/time printing format */
 	DefaultFormat: static const String = "%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
 
@@ -170,9 +170,9 @@ DateTime: cover {
 
 	_ticksToDateTimeHelper: static func (totalTicks: Int64) -> DateTimeData {
 		result := DateTimeData new()
-		fourYearBlocks := totalTicks / This TicksPerFourYears
+		fourYearBlocks := totalTicks / This ticksPerFourYears
 		year := 4 * fourYearBlocks
-		ticksLeft := totalTicks - fourYearBlocks * This TicksPerFourYears
+		ticksLeft := totalTicks - fourYearBlocks * This ticksPerFourYears
 		for (y in year + 1 .. year + 5) {
 			t := This ticksInYear(y)
 			if (ticksLeft < t) {
@@ -192,15 +192,15 @@ DateTime: cover {
 				ticksLeft -= t
 			}
 		}
-		days := ticksLeft / This TicksPerDay
-		ticksLeft -= days * This TicksPerDay
-		hour := ticksLeft / This TicksPerHour
-		ticksLeft -= hour * This TicksPerHour
-		minute := ticksLeft / This TicksPerMinute
-		ticksLeft -= minute * This TicksPerMinute
-		second := ticksLeft / This TicksPerSecond
-		ticksLeft -= second * This TicksPerSecond
-		millisecond := ticksLeft / This TicksPerMillisecond
+		days := ticksLeft / This ticksPerDay
+		ticksLeft -= days * This ticksPerDay
+		hour := ticksLeft / This ticksPerHour
+		ticksLeft -= hour * This ticksPerHour
+		minute := ticksLeft / This ticksPerMinute
+		ticksLeft -= minute * This ticksPerMinute
+		second := ticksLeft / This ticksPerSecond
+		ticksLeft -= second * This ticksPerSecond
+		millisecond := ticksLeft / This ticksPerMillisecond
 		result year = year
 		result month = month
 		result day = days + 1
@@ -213,7 +213,7 @@ DateTime: cover {
 
 	/* returns number of ticks for given hours, minutes and seconds */
 	timeToTicks: static func(hours, minutes, seconds, millisecond: Int) -> Int64 {
-		(hours * 3600 + minutes * 60 + seconds) * This TicksPerSecond + millisecond * This TicksPerMillisecond
+		(hours * 3600 + minutes * 60 + seconds) * This ticksPerSecond + millisecond * This ticksPerMillisecond
 	}
 
 	/* returns number of ticks for given date at 0:00*/
@@ -227,19 +227,19 @@ DateTime: cover {
 			year_start := fourYearBlocks * 4
 			for (y in year_start + 1 .. year)
 				totalDays += This daysInYear(y)
-			totalDays += fourYearBlocks * This DaysInFourYears
-			totalDays * This TicksPerDay
+			totalDays += fourYearBlocks * This daysPerFourYears
+			totalDays * This ticksPerDay
 		} else {
 			0
 		}
 	}
 
 	daysInYear: static func (year: Int) -> Int {
-		This DaysInYear + isLeapYear(year)
+		This daysPerYear + isLeapYear(year)
 	}
 
 	ticksInYear: static func (year: Int) -> UInt64 {
-		This daysInYear(year) * This TicksPerDay
+		This daysInYear(year) * This ticksPerDay
 	}
 
 	daysInMonth: static func (year, month: Int) -> Int {
@@ -252,7 +252,7 @@ DateTime: cover {
 	}
 
 	ticksInMonth: static func (year, month: Int) -> UInt64 {
-		This TicksPerDay * This daysInMonth(year, month)
+		This ticksPerDay * This daysInMonth(year, month)
 	}
 	/* validate argument ranges for hour/minutes/seconds vaules */
 	timeIsValid: static func (hour, minute, second, millisecond: Int) -> Bool {

@@ -28,22 +28,22 @@ TimeSpan: cover {
 	new: unmangled(kean_base_timeSpan_new) static func ~Api (ticks: Int64) -> This { This new(ticks) }
 	negate: func -> This { This new(-1 * this ticks) }
 	elapsedMilliseconds: func -> Int64 {
-		this ticks / DateTime TicksPerMillisecond
+		this ticks / DateTime ticksPerMillisecond
 	}
 	elapsedSeconds: func -> Int64 {
-		this ticks / DateTime TicksPerSecond
+		this ticks / DateTime ticksPerSecond
 	}
 	elapsedMinutes: func -> Int64 {
-		this ticks / DateTime TicksPerMinute
+		this ticks / DateTime ticksPerMinute
 	}
 	elapsedHours: func -> Int64 {
-		this ticks / DateTime TicksPerHour
+		this ticks / DateTime ticksPerHour
 	}
 	elapsedDays: func -> Int64 {
-		this ticks / DateTime TicksPerDay
+		this ticks / DateTime ticksPerDay
 	}
 	elapsedWeeks: func -> Int64 {
-		this ticks / DateTime TicksPerWeek
+		this ticks / DateTime ticksPerWeek
 	}
 	operator + (value: Int) -> This {
 		This new(this ticks + value)
@@ -52,7 +52,7 @@ TimeSpan: cover {
 		This new(this ticks + value)
 	}
 	operator + (value: Double) -> This {
-		This new(this ticks + value * DateTime TicksPerSecond)
+		This new(this ticks + value * DateTime ticksPerSecond)
 	}
 	operator + (other: This) -> This {
 		This new(this ticks + other ticks)
@@ -64,7 +64,7 @@ TimeSpan: cover {
 		This new(this ticks - value)
 	}
 	operator - (value: Double) -> This {
-		This new(this ticks - value * DateTime TicksPerSecond)
+		This new(this ticks - value * DateTime ticksPerSecond)
 	}
 	operator - (other: This) -> This {
 		This new(this ticks - other ticks)
@@ -106,22 +106,22 @@ TimeSpan: cover {
 	}
 
 	millisecond: static func -> This {
-		This new(DateTime TicksPerMillisecond)
+		This new(DateTime ticksPerMillisecond)
 	}
 	second: static func -> This {
-		This new(DateTime TicksPerSecond)
+		This new(DateTime ticksPerSecond)
 	}
 	minute: static func -> This {
-		This new(DateTime TicksPerMinute)
+		This new(DateTime ticksPerMinute)
 	}
 	hour: static func -> This {
-		This new(DateTime TicksPerHour)
+		This new(DateTime ticksPerHour)
 	}
 	day: static func -> This {
-		This new(DateTime TicksPerDay)
+		This new(DateTime ticksPerDay)
 	}
 	week: static func -> This {
-		This new(DateTime TicksPerWeek)
+		This new(DateTime ticksPerWeek)
 	}
 
 }

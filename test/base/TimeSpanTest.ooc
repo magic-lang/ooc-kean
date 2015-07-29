@@ -75,13 +75,13 @@ TimeSpanTest: class extends Fixture {
 			expect((t + (t negate())) ticks == 0)
 		})
 		this add("test multiplication", func() {
-			expect((TimeSpan millisecond() * 1.5) ticks == DateTime TicksPerMillisecond * 1.5)
+			expect((TimeSpan millisecond() * 1.5) ticks == DateTime ticksPerMillisecond * 1.5)
 			expect(TimeSpan second() * 2 == TimeSpan second() + TimeSpan second())
 			expect(TimeSpan day() * 7 == TimeSpan week())
 			expect(TimeSpan millisecond() * 1000.0 == TimeSpan second())
 			t := TimeSpan new ~fromHourMinuteSec(0,0,1,0)
 			expect(2.0 * t == TimeSpan second() * 2)
-			expect((2000 * DateTime TicksPerMillisecond + TimeSpan second()) elapsedSeconds() == 3)
+			expect((2000 * DateTime ticksPerMillisecond + TimeSpan second()) elapsedSeconds() == 3)
 		})
 		this add("test creation helpers", func() {
 			expect(TimeSpan millisecond() elapsedMilliseconds() == 1)
