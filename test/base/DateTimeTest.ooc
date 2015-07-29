@@ -165,11 +165,11 @@ DateTimeTest: class extends Fixture {
 			d := DateTime new(1643, 12, 31, 23, 59, 59, 999)
 			expect(d toStringFormat("%yyyy-%MM-%dd %hh:%mm:%ss.%zzzz") == "1643-12-31 23:59:59.999")
 			d = DateTime new(1998, 7, 18, 1, 44, 31, 742)
-			expect(d toStringFormat("date is : %yy, %M, %dd; hour: %hh-%mm-%ss") == "date is : 98, 7, 18; hour: 1-44-31")
+			expect(d toStringFormat("date is : %yy, %M, %dd; hour: %hh-%mm-%ss") == "date is : 98, 7, 18; hour: 01-44-31")
 			expect(d toStringFormat("%yyyy/%dd/%MM") == "1998/18/07")
 			expect(d toString() == d toStringFormat(DateTime defaultFormat))
 			d = DateTime new ~fromYearMonthDay(1, 1, 1)
-			expect(d toStringFormat("start date is: %yy %M %d, %hh-%mm-%ss-%zzzz") == "start date is: 1 1 1, 0-0-0-0")
+			expect(d toStringFormat("start date is: %yy %M %d, %hh-%mm-%ss-%zzzz") == "start date is: 1 1 1, 00-00-0-0")
 		})
 		this add("current time", func() {
 			d := DateTime now
