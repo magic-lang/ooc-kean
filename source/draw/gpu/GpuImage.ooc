@@ -33,17 +33,19 @@ GpuImageType: enum {
 
 GpuImage: abstract class extends Image {
 	_canvas: GpuCanvas
-	canvas: GpuCanvas { get {
-		if (this _canvas == null)
-			this _canvas = this _createCanvas()
-		this _canvas } }
+	canvas: GpuCanvas {
+		get {
+			if (this _canvas == null)
+				this _canvas = this _createCanvas()
+			this _canvas
+		}
+	}
 	_context: GpuContext
 	_channels: Int
 	channels: Int { get { this _channels } }
 	length: Int { get { this _channels * this size width * this size height } }
 	_recyclable := false
 	recyclable ::= this _recyclable
-	reference ::= FloatTransform2D createScaling(this size width / 2.0f, this size height / 2.0f)
 	init: func (size: IntSize2D, =_channels, =_context) { super(size) }
 	free: override func {
 		if (this _canvas != null) {
