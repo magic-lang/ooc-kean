@@ -23,6 +23,7 @@ import OpenGLES3Canvas, OpenGLES3Monochrome
 OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 	init: func ~gpuImages (y: OpenGLES3Monochrome, u: OpenGLES3Monochrome, v: OpenGLES3Monochrome, context: GpuContext) {
 		super(y, u, v, context)
+		this coordinateSystem = y coordinateSystem
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Planar create(this, this _context) }
 	create: static func ~fromRaster (rasterImage: RasterYuv420Planar, context: GpuContext) -> This {
