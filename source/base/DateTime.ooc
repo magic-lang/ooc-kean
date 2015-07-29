@@ -25,7 +25,7 @@ DateTimeData: cover {
 	hour: UInt8 { get set }
 	minute: UInt8 { get set }
 	second: UInt8 { get set }
-	millisecond: UInt32 { get set }
+	millisecond: Int { get set }
   init: func@ ()
 	init: func@ ~fromDateTime (=year, =month, =day, =hour, =minute, =second, =millisecond)
 }
