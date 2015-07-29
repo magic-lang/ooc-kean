@@ -17,7 +17,7 @@ GpuSurface: abstract class {
 	_toReference: FloatTransform3D
 	_toLocal: FloatTransform3D
 	transform: FloatTransform3D {
-		get { this _toLocal * this _view * this _toReference }
+		get { this _view }
 		set(value) { this _view = this _toReference * value * this _toLocal }
 	}
 	_focalLength: Float
@@ -37,7 +37,7 @@ GpuSurface: abstract class {
 		FloatTransform3D createTranslation(0.0f, 0.0f, -this focalLength) * FloatTransform3D createScaling(coordinateTransform a * size width / 2.0f, -coordinateTransform e * size height / 2.0f, 1.0f)
 	}
 	reset: virtual func {
-		this _toLocal = FloatTransform3D createTranslation(this size width / 2.0f, this size height / 2.0f, 0.0f) * FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
+		this _toLocal = FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
 		this _toReference = this _toLocal inverse
 		this clearColor = ColorBgra new(0, 0, 0, 0)
 		this viewport = IntBox2D new(this size)
