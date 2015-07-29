@@ -19,12 +19,12 @@ use ooc-base
 import os/Time
 
 DateTimeData: cover {
-	year: UInt32 { get set }
-	month: UInt8 { get set }
-	day: UInt8 { get set }
-	hour: UInt8 { get set }
-	minute: UInt8 { get set }
-	second: UInt8 { get set }
+	year: Int { get set }
+	month: Int { get set }
+	day: Int { get set }
+	hour: Int { get set }
+	minute: Int { get set }
+	second: Int { get set }
 	millisecond: Int { get set }
   init: func@ ()
 	init: func@ ~fromDateTime (=year, =month, =day, =hour, =minute, =second, =millisecond)
