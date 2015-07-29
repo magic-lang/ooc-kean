@@ -171,7 +171,7 @@ DateTime: cover {
 	/* number of days in year ( non-leap ) */
 	daysPerYear: static const Int = 365
 	daysPerFourYears: static const Int = 3 * This daysPerYear + 366
-	ticksPerMillisecond: static const Int64 = 1000
+	ticksPerMillisecond: static const Int64 = 10_000
 	ticksPerSecond: static const Int64 = This ticksPerMillisecond * 1000
 	ticksPerMinute: static const Int64 = This ticksPerSecond * 60
 	ticksPerHour: static const Int64 = This ticksPerMinute * 60

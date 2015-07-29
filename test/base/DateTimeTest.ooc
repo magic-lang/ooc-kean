@@ -175,16 +175,6 @@ DateTimeTest: class extends Fixture {
 			d := DateTime now
 			expect(d > DateTime new(0))
 		})
-		this add("datatype tests for Travis", func() {
-			expect(UInt16 instanceSize >= 2)
-			expect(UInt32 instanceSize >= 4)
-			value := 999 as UInt32
-			expect(value == 999)
-			expect(value as Int == 999)
-			value = 999 as UInt16
-			expect(value == 999)
-			expect(value as Int == 999)
-		})
 	}
 }
 DateTimeTest new() run()
