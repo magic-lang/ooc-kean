@@ -64,9 +64,7 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		this v buffer copyTo(result v buffer)
 		result
 	}
-	apply: func ~bgr (action: Func(ColorBgr)) {
-		this apply(ColorConvert fromYuv(action))
-	}
+	apply: func ~bgr (action: Func(ColorBgr)) { this apply(ColorConvert fromYuv(action)) }
 	apply: func ~yuv (action: Func (ColorYuv)) {
 		yRow := this y buffer pointer
 		ySource := yRow
@@ -96,9 +94,7 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 			vSource = vRow
 		}
 	}
-	apply: func ~monochrome (action: Func(ColorMonochrome)) {
-		this apply(ColorConvert fromYuv(action))
-	}
+	apply: func ~monochrome (action: Func(ColorMonochrome)) { this apply(ColorConvert fromYuv(action)) }
 	convertFrom: static func(original: RasterImage) -> This {
 		result := This new(original size)
 		y := 0
