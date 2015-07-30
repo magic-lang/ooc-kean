@@ -69,7 +69,8 @@ OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 	init: func (fragmentSource: String, context: GpuContext) { super(This vertexSource, fragmentSource, context) }
 	use: override func {
 		super()
-		this program setUniform("transform", this projection * this view * this model)
+		finalTransform := this projection * this view * this model
+		this program setUniform("transform", finalTransform)
 	}
 	vertexSource: static String ="
 		#version 300 es

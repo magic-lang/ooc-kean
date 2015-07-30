@@ -166,7 +166,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		bgr free()
 		result
 	}
-	save: func (filename: String) {
+	save: override func (filename: String) -> Int {
 		bgr := RasterBgr convertFrom(this)
 		bgr save(filename)
 		bgr free()
