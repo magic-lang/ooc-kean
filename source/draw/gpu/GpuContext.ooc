@@ -57,4 +57,5 @@ GpuContext: abstract class {
 	drawLines: abstract func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D)
 	drawBox: abstract func (box: FloatBox2D, transform: FloatTransform3D)
 	drawPoints: abstract func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D)
+	drawQuad: abstract func
 }

@@ -60,7 +60,13 @@ AndroidContext: class extends OpenGLES3Context {
 		packMap imageWidth = gpuImage size width
 		gpuImage setMagFilter(false)
 		gpuImage setMinFilter(false)
-		gpuRgba canvas draw(gpuImage, packMap, IntBox2D new(gpuRgba size))
+		//Must adapt to change in kean
+		//gpuRgba canvas draw(gpuImage, packMap, IntBox2D new(gpuRgba size))
+		gpuRgba canvas map = packMap
+		gpuRgba canvas draw(func{
+			gpuImage bind(0)
+			this drawQuad()
+		})
 		fence := this createFence()
 		fence sync()
 		androidTexture := gpuRgba texture as AndroidTexture
@@ -132,10 +138,24 @@ AndroidContext: class extends OpenGLES3Context {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
 		this _unpackRgbaToMonochrome targetSize = target y size
 		this _unpackRgbaToMonochrome sourceSize = source size
-		target y canvas draw(source, _unpackRgbaToMonochrome, IntBox2D new(target y size))
+		this _unpackRgbaToMonochrome transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
+		//Must adapt to change in kean
+		//target y canvas draw(source, _unpackRgbaToMonochrome, IntBox2D new(target y size))
+		target y canvas map = this _unpackRgbaToMonochrome
+		target y canvas draw(func{
+			 source bind(0)
+			this drawQuad()
+		})
 		this _unpackRgbaToUv targetSize = target uv size
 		this _unpackRgbaToUv sourceSize = source size
-		target uv canvas draw(source, _unpackRgbaToUv, IntBox2D new(target uv size))
+		this _unpackRgbaToUv transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
+		//Must adapt to change in kean
+		//target uv canvas draw(source, _unpackRgbaToUv, IntBox2D new(target uv size))
+		target uv canvas map = this _unpackRgbaToUv
+		target uv canvas draw(func {
+			source bind(0)
+			this drawQuad()
+		})
 		target
 	}
 
