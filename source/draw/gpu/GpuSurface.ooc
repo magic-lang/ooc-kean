@@ -56,7 +56,8 @@ GpuSurface: abstract class {
 	draw: func ~general (action: Func) {
 		this _bind()
 		this _context setViewport(this viewport)
-		this map use()
+		if (this map != null)
+			this map use()
 		action()
 		this _unbind()
 	}
