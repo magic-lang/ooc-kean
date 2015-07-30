@@ -78,9 +78,7 @@ FloatRotation3D: cover {
 	operator <= (other: This) -> Bool { this _quaternion <= other _quaternion }
 	operator >= (other: This) -> Bool { this _quaternion >= other _quaternion }
 	toString: func -> String { "%.8f" formatFloat(this x) >> ", " & "%.8f" formatFloat(this y) >> ", " & "%.8f" formatFloat(this z) }
-	kean_math_floatRotation3D_new: unmangled static func ~API (quaternion: Quaternion) -> This {
-		quaternion getEulerAngles()
-	}
+	kean_math_floatRotation3D_new: unmangled static func ~API (quaternion: Quaternion) -> This { This new(quaternion) }
 }
 operator * (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left * right x, left * right y, left * right z) }
 operator / (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left / right x, left / right y, left / right z) }
