@@ -120,7 +120,7 @@ RasterBgr: class extends RasterPacked {
 		StbImage free(data)
 		result
 	}
-	save: func (filename: String) -> Int {
+	save: override func (filename: String) -> Int {
 		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this stride)
 	}
 	convertFrom: static func(original: RasterImage) -> This {

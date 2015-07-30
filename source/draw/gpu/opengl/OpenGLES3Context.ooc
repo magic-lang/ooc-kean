@@ -181,7 +181,7 @@ OpenGLES3Context: class extends GpuContext {
 		result
 	}
 	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
-		result := match (rasterImage) {
+		match (rasterImage) {
 			case image: RasterMonochrome => this _createMonochrome(image)
 			case image: RasterBgr => this _createBgr(image)
 			case image: RasterBgra => this _createBgra(image)
@@ -189,11 +189,8 @@ OpenGLES3Context: class extends GpuContext {
 			case image: RasterYuv420Semiplanar => this _createYuv420Semiplanar(image)
 			case image: RasterYuv420Planar => this _createYuv420Planar(image)
 			case image: RasterYuv422Semipacked => this _createYuv422Semipacked(image)
-			case => null
+			case => Debug raise("Unknown input format in OpenGLES3Context createGpuImage"); null
 		}
-		if (result == null)
-			raise("Unknown input format in OpenGLES3Context createGpuImage")
-		result
 	}
 	update: func { this _backend swapBuffers() }
 	setViewport: func (viewport: IntBox2D) { Fbo setViewport(viewport) }
@@ -204,8 +201,12 @@ OpenGLES3Context: class extends GpuContext {
 		} as OpenGLES3MapPack
 		map imageWidth = source size width
 		map channels = source channels
-		//Needs to adapt to new kean API
-		//target canvas draw(source, map, viewport)
+		map transform = FloatTransform3D createScaling(source transform a, source transform e, 1.0f)
+		target canvas map = map
+		target canvas draw(func {
+			source bind(0)
+			this drawQuad()
+		})
 	}
 	createFence: func -> GpuFence { OpenGLES3Fence new() }
 	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) {
