@@ -236,6 +236,7 @@ OpenGLES3Context: class extends GpuContext {
 		map channels = source channels
 		map transform = FloatTransform3D createScaling(source transform a, source transform e, 1.0f)
 		target canvas map = map
+		target canvas viewport = viewport
 		target canvas draw(func {
 			source bind(0)
 			this drawQuad()
