@@ -32,7 +32,8 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		height := this _size height + this _size height / 2 + extraRows
 		width := this _stride / 4
 		rgbaBuffer := GraphicBuffer new(this buffer handle, IntSize2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage Rendertarget)
-		context createBgra(rgbaBuffer)
+		result := context createBgra(rgbaBuffer)
+		result coordinateSystem = this coordinateSystem
 	}
 	new: unmangled(kean_draw_gpu_android_graphicBufferYuv420Semiplanar_new) static func ~API (backend: Pointer, nativeBuffer: Pointer, handle: Pointer, size: IntSize2D, stride: Int, format: GraphicBufferFormat, uvOffset: Int) -> This {
 		This new(backend, nativeBuffer, handle, size, format, stride, uvOffset)
