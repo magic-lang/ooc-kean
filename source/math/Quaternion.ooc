@@ -22,7 +22,7 @@ import math
 Quaternion: cover {
 	real: Float
 	imaginary: FloatPoint3D
-	precision := 0.000001f
+	precision: static Float = 0.000001f
 	// q = w + xi + yj + zk
 	w ::= this real
 	x ::= this imaginary x
@@ -157,7 +157,7 @@ Quaternion: cover {
 		get {
 			result: Float
 			value := this w * this y - this z * this x
-			if ((value abs() - 0.5f) abs() < this precision)
+			if ((value abs() - 0.5f) abs() < This precision)
 				result = 0.0f
 			else
 				result = (2.0f * (this w * this x + this y * this z)) atan2(1.0f - 2.0f * (this x squared() + this y squared()))
@@ -168,7 +168,7 @@ Quaternion: cover {
 		get {
 			result: Float
 			value := this w * this y - this z * this x
-			if ((value abs() - 0.5f) abs() < this precision)
+			if ((value abs() - 0.5f) abs() < This precision)
 				result = Float sign(value) * (Float pi / 2.0f)
 			else
 				result = ((2.0f * value) clamp(-1, 1)) asin()
@@ -179,7 +179,7 @@ Quaternion: cover {
 		get {
 			result: Float
 			value := this w * this y - this z * this x
-			if ((value abs() - 0.5f) abs() < this precision)
+			if ((value abs() - 0.5f) abs() < This precision)
 				result = 2.0f * (this z atan2(this w))
 			else
 				result = (2.0f * (this w * this z + this x * this y)) atan2(1.0f - 2.0f * (this y squared() + this z squared()))
