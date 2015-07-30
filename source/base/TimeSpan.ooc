@@ -78,6 +78,15 @@ TimeSpan: cover {
 	operator * (value: Double) -> This {
 		This new(this ticks * value)
 	}
+	operator / (value: Int) -> This {
+		This new(this ticks / value)
+	}
+	operator / (value: Int64) -> This {
+		This new(this ticks / value)
+	}
+	operator / (value: Double) -> This {
+		This new(this ticks / value)
+	}
 	compareTo: func (other: This) -> Order {
 		if (this ticks > other ticks)
 			Order greater
@@ -154,10 +163,16 @@ operator * (left: Int, right: TimeSpan) -> TimeSpan { right * left }
 operator * (left: Int64, right: TimeSpan) -> TimeSpan { right * left }
 operator * (left: Double, right: TimeSpan) -> TimeSpan { right * left }
 operator += (left: TimeSpan@, right: TimeSpan) { left _ticks += right ticks }
+operator += (left: TimeSpan@, right: Int) { left _ticks += right }
 operator += (left: TimeSpan@, right: Int64) { left _ticks += right }
 operator += (left: TimeSpan@, right: Double) { left _ticks += right * DateTime ticksPerSecond }
 operator -= (left: TimeSpan@, right: TimeSpan) { left _ticks -= right ticks }
+operator -= (left: TimeSpan@, right: Int) { left _ticks -= right }
 operator -= (left: TimeSpan@, right: Int64) { left _ticks -= right }
 operator -= (left: TimeSpan@, right: Double) { left _ticks -= right * DateTime ticksPerSecond }
+operator *= (left: TimeSpan@, right: Int) { left _ticks *= right }
 operator *= (left: TimeSpan@, right: Int64) { left _ticks *= right }
 operator *= (left: TimeSpan@, right: Double) { left _ticks *= right }
+operator /= (left: TimeSpan@, right: Int) { left _ticks /= right }
+operator /= (left: TimeSpan@, right: Int64) { left _ticks /= right }
+operator /= (left: TimeSpan@, right: Double) { left _ticks /= right }

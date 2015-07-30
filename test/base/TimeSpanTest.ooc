@@ -96,6 +96,16 @@ TimeSpanTest: class extends Fixture {
 			expect(2.0 * t == TimeSpan seconds(2))
 			expect((2000 * DateTime ticksPerMillisecond + TimeSpan second()) elapsedSeconds() == 3)
 		})
+		this add("test division", func() {
+			expect((TimeSpan days(2) / 2) elapsedDays() == 1)
+			expect((TimeSpan weeks(1) / 0.5) elapsedDays() == 14)
+			t := TimeSpan day() + TimeSpan hours(8)
+			t /= 32
+			expect(t elapsedHours() == 1)
+			t = TimeSpan days(100)
+			t /= 25.0
+			expect(t elapsedDays() == 4)
+		})
 		this add("test creation helpers", func() {
 			expect(TimeSpan millisecond() elapsedMilliseconds() == 1)
 			expect(TimeSpan millisecond() elapsedSeconds() == 0)
