@@ -4,26 +4,30 @@ import OpenGLES3Map
 OpenGLES3MapPack: abstract class extends OpenGLES3Map {
 	imageWidth: Int { get set }
 	channels: Int { get set }
+	transform: FloatTransform3D { get set }
 	init: func (fragmentSource: String, context: GpuContext) {
 		super(This vertexSource, fragmentSource, context)
 		this channels = 1
+		this transform = FloatTransform3D identity
 	}
 	use: override func {
 		super()
 		this program setUniform("texture0", 0)
 		offset := (2.0f / channels - 0.5f) / this imageWidth
 		this program setUniform("offset", offset)
+		this program setUniform("transform", this transform)
 	}
 	vertexSource: static String ="
 		#version 300 es
 		precision mediump float;
+		uniform mat4 transform;
 		uniform float offset;
 		layout(location = 0) in vec2 vertexPosition;
 		layout(location = 1) in vec2 textureCoordinate;
 		out vec2 fragmentTextureCoordinate;
 		void main() {
 			fragmentTextureCoordinate = textureCoordinate - vec2(offset, 0);
-			gl_Position = vec4(vertexPosition.x, vertexPosition.y, -1, 1);
+			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
 		}"
 }
 OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {

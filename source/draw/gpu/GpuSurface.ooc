@@ -25,7 +25,11 @@ GpuSurface: abstract class {
 		get { this _focalLength }
 		set(value) {
 			this _focalLength = value
-			this _projection = FloatTransform3D new(2.0f * this _focalLength / this size width, 0.0f, 0.0f, 0.0f, 0.0f, 2.0f * this _focalLength / this size height, 0.0f, 0.0f, 0.0f, 0.0f, -(this farPlane + this nearPlane) / (this farPlane - this nearPlane), -1.0f, 0.0f, 0.0f, -2.0f * this farPlane * this nearPlane / (this farPlane - this nearPlane), 0.0f)
+			if (this _focalLength > 0.0f) {
+				this _projection = FloatTransform3D new(2.0f * this _focalLength / this size width, 0.0f, 0.0f, 0.0f, 0.0f, 2.0f * this _focalLength / this size height, 0.0f, 0.0f, 0.0f, 0.0f, -(this farPlane + this nearPlane) / (this farPlane - this nearPlane), -1.0f, 0.0f, 0.0f, -2.0f * this farPlane * this nearPlane / (this farPlane - this nearPlane), 0.0f)
+			}
+			else
+				this _projection = FloatTransform3D createScaling(2.0f / this size width, 2.0f / this size height, 1.0f)
 			this _model = this _createModelTransform(this size, IntTransform2D identity)
 		}
 	}
@@ -44,10 +48,7 @@ GpuSurface: abstract class {
 		this focalLength = 0.0f
 		this nearPlane = 1.0f
 		this farPlane = 10000.0f
-
-		this _model = this _createModelTransform(this size, IntTransform2D identity)
 		this _view = FloatTransform3D identity
-		this _projection = FloatTransform3D createScaling(2.0f / this size width, 2.0f / this size height, 1.0f)
 	}
 	_bind: virtual func
 	_unbind: virtual func

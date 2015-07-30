@@ -125,7 +125,7 @@ RasterUv: class extends RasterPacked {
 		StbImage free(data)
 		This new(RasterBgr new(buffer, IntSize2D new (x, y)))
 	}
-	save: func (filename: String) -> Int {
+	save: override func (filename: String) -> Int {
 		result := RasterBgr new(this)
 		StbImage writePng(filename, result size width, result size height, result bytesPerPixel, result buffer pointer, result size width * 3)
 	}

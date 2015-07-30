@@ -78,4 +78,5 @@ RasterImage: abstract class extends Image {
 		}
 		result
 	}
+	save: virtual func (filename: String) -> Int { Debug raise("RasterImage save unimplemented for format!") }
 }
