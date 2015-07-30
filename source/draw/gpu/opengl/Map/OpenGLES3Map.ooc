@@ -239,3 +239,53 @@ OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapDefault {
 			outColor = YuvToRgba(vec4(y, uv.r - 0.5f, uv.g - 0.5f, 1.0f));
 		}"
 }
+OpenGLES3MapLines: class extends OpenGLES3MapDefault {
+	color: FloatPoint3D { get set }
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
+	use: override func {
+		super()
+		this program setUniform("color", this color)
+	}
+	fragmentSource: static String ="
+		#version 300 es
+		precision highp float;
+		uniform vec3 color;
+		out vec4 outColor;
+		void main() {
+			outColor = vec4(color.r, color.g, color.b, 1.0f);
+		}"
+}
+OpenGLES3MapPoints: class extends OpenGLES3Map {
+	color: FloatPoint3D { get set }
+	pointSize: Float { get set }
+	projection: FloatTransform3D { get set }
+	init: func (context: GpuContext) {
+		this pointSize = 5.0f
+		this color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
+		super(This vertexSource, This fragmentSource, context)
+	}
+	use: override func {
+		super()
+		this program setUniform("color", this color)
+		this program setUniform("pointSize", this pointSize)
+		this program setUniform("transform", this projection)
+	}
+	vertexSource: static String ="
+		#version 300 es
+		precision highp float;
+		uniform float pointSize;
+		uniform mat4 transform;
+		layout(location = 0) in vec2 vertexPosition;
+		void main() {
+			gl_PointSize = pointSize;
+			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
+		}"
+	fragmentSource: static String ="
+		#version 300 es
+		precision highp float;
+		uniform vec3 color;
+		out vec4 outColor;
+		void main() {
+			outColor = vec4(color.r, color.g, color.b, 1.0f);
+		}"
+}
