@@ -19,9 +19,9 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-opengl
 use ooc-collections
-import GpuImageBin, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Yuv422Semipacked, OpenGLES3Fence, OverlayDrawer
+import GpuImageBin, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Yuv422Semipacked, OpenGLES3Fence
 import Map/OpenGLES3Map, Map/OpenGLES3MapPack
-import OpenGLES3/Context, OpenGLES3/NativeWindow
+import OpenGLES3/Context, OpenGLES3/NativeWindow, OpenGLES3/Lines
 
 OpenGLES3Context: class extends GpuContext {
 	_backend: Context
@@ -33,9 +33,10 @@ OpenGLES3Context: class extends GpuContext {
 	_uvMapTransform: OpenGLES3MapUv
 	_packMonochrome: OpenGLES3MapPackMonochrome
 	_packUv: OpenGLES3MapPackUv
+	_linesShader: OpenGLES3MapLines
+	_pointsShader: OpenGLES3MapPoints
 
 	_quad: Quad
-	_overlayDrawer: OverlayDrawer
 
 	init: func (context: Context) {
 		super()
@@ -47,9 +48,10 @@ OpenGLES3Context: class extends GpuContext {
 		this _uvMapTransform = OpenGLES3MapUv new(this)
 		this _packMonochrome = OpenGLES3MapPackMonochrome new(this)
 		this _packUv = OpenGLES3MapPackUv new(this)
+		this _linesShader = OpenGLES3MapLines new(this)
+		this _pointsShader = OpenGLES3MapPoints new(this)
 		this _backend = context
 		this _quad = Quad create()
-		this _overlayDrawer = OverlayDrawer new(this)
 	}
 	init: func ~unshared { this init(Context create()) }
 	init: func ~shared (other: This) { this init(Context create(other _backend)) }
@@ -64,16 +66,47 @@ OpenGLES3Context: class extends GpuContext {
 		this _uvMapTransform free()
 		this _packMonochrome free()
 		this _packUv free()
+		this _linesShader free()
+		this _pointsShader free()
 		this _backend free()
 		this _quad free()
-		this _overlayDrawer free()
 		super()
 	}
 	recycle: func ~image (gpuImage: GpuImage) { this _imageBin add(gpuImage) }
 	drawQuad: func { this _quad draw() }
-	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D) { this _overlayDrawer drawLines(pointList, projection) }
-	drawBox: func (box: FloatBox2D, projection: FloatTransform3D) { this _overlayDrawer drawBox(box, projection) }
-	drawPoints: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D) { this _overlayDrawer drawPoints(pointList, projection) }
+	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D) {
+		positions := pointList pointer as Float*
+		this _linesShader color = FloatPoint3D new(0.0f, 0.0f, 0.0f)
+		this _linesShader projection = projection
+		this _linesShader use()
+		Lines draw(positions, pointList count, 2, 3.5f)
+		this _linesShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
+		this _linesShader use()
+		Lines draw(positions, pointList count, 2, 1.5f)
+	}
+	drawBox: func (box: FloatBox2D, projection: FloatTransform3D) {
+		positions: Float[10]
+		positions[0] = box leftTop x
+		positions[1] = box leftTop y
+		positions[2] = box rightTop x
+		positions[3] = box rightTop y
+		positions[4] = box rightBottom x
+		positions[5] = box rightBottom y
+		positions[6] = box leftBottom x
+		positions[7] = box leftBottom y
+		positions[8] = box leftTop x
+		positions[9] = box leftTop y
+		this _linesShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
+		this _linesShader projection = projection
+		this _linesShader use()
+		Lines draw(positions[0]&, 5, 2, 1.5f)
+	}
+	drawPoints: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D) {
+		positions := pointList pointer
+		this _pointsShader use()
+		this _pointsShader projection = projection
+		Points draw(positions, pointList count, 2)
+	}
 	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap {
 		result := match (mapType) {
 			case GpuMapType defaultmap =>
