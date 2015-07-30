@@ -133,6 +133,46 @@ VectorTest: class extends Fixture {
 			list free()
 			indices free()
 		})
+		this add("VectorList apply", func {
+			list := VectorList<Int> new()
+			list add(0)
+			list add(1)
+			list add(2)
+			c := 0
+			list apply(|value|
+				expect(value, is equal to(c))
+				c += 1)
+		})
+		this add("VectorList modify", func {
+			list := VectorList<Int> new()
+			list add(0)
+			list add(1)
+			list add(2)
+
+			list modify(|value| value += 1)
+			c := 1
+			list apply(|value|
+				expect(value, is equal to(c))
+				c += 1)
+			})
+			/*this add("VectorList map", func {
+				list := VectorList<Int> new()
+				list add(0)
+				list add(1)
+				list add(2)
+				newList := list map(|value| value toString())
+				//list apply(|value| value toString() println())
+				list count toString() println()
+				//newList apply(|value| value println())
+				newList count toString() println()
+			})*/
+			/*this add("VectorList fold", func {
+				list := VectorList<Int> new()
+				list add(0)
+				list add(1)
+				list add(2)
+				str := list fold(|value,value2| value toString() + value2, "test")
+			})*/
 	}
 }
 VectorTest new() run()
