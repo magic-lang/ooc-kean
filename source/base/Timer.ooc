@@ -27,7 +27,7 @@ Timer: class {
 	_min: Double
 	_max: Double
 	_average: Double
-	init: func () {
+	init: func {
 		this _min = INFINITY
 		this _max = 0.0
 	}

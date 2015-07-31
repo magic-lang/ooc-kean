@@ -38,12 +38,11 @@ Synchronized: class {
 //		try {
 			action()
 			this unlock()
-//		}
-//		catch(e: Exception)
-//		{
+//		} catch(e: Exception) {
 //			this unlock()
 //			e throw()
 //		}
+//		FIXME: What is this commented-out code doing here?
 	}
 
 	lockFunc: func <T> (function: Func -> T) -> T {
@@ -52,9 +51,7 @@ Synchronized: class {
 		try {
 			result = function()
 			this unlock()
-		}
-		catch(e: Exception)
-		{
+		} catch (e: Exception) {
 			this unlock()
 			e throw()
 		}

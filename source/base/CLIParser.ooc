@@ -77,7 +77,7 @@ CLIParser: class {
 				tokens add(Token new(TokenType Long, subStr))
 			} else if ((tmpStr startsWith?("-")) && (tmpLength > 1)) {
 				newStr := tmpStr substring(1)
-				for (i in 0..tmpLength-1) {
+				for (i in 0..tmpLength - 1) {
 					tokens add(Token new(TokenType Short, newStr[i]toString()))
 				}
 				newStr free()
@@ -100,15 +100,15 @@ CLIParser: class {
 						argument = this _arguments[j]
 					}
 				}
-			} else if (tokens[i] _type == TokenType Parameter)  {
+			} else if (tokens[i] _type == TokenType Parameter) {
 				raise("Unassociated Parameter")
 			}
 			if (argument != null) {
 				parameters := VectorList<String> new()
 				for ( k in 0..argument _parameters) {
-					if (tokens[i+1] _type == TokenType Parameter) {
-						parameters add(tokens[i+1] _value clone())
-						token := tokens remove(i+1)
+					if (tokens[i + 1] _type == TokenType Parameter) {
+						parameters add(tokens[i + 1] _value clone())
+						token := tokens remove(i + 1)
 						token free()
 					}
 				}

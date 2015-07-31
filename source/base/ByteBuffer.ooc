@@ -28,7 +28,7 @@ ByteBuffer: class {
 	size ::= this _size
 	_referenceCount: ReferenceCounter
 	referenceCount ::= this _referenceCount
-	init: func(=_pointer, =_size) {
+	init: func (=_pointer, =_size) {
 		this _referenceCount = ReferenceCounter new(this)
 	}
 	__destroy__: func {
@@ -39,13 +39,13 @@ ByteBuffer: class {
 		this _pointer = null
 		super()
 	}
-	zero: func ~whole() {
+	zero: func ~whole {
 		memset(_pointer, 0, _size)
 	}
-	zero: func ~range (offset: Int, length: Int) {
+	zero: func ~range (offset, length: Int) {
 		memset(_pointer + offset, 0, length)
 	}
-	slice: func(offset: Int, size: Int) -> This {
+	slice: func (offset, size: Int) -> This {
 		_SlicedByteBuffer new(this, offset, size)
 	}
 	copy: func -> This {
@@ -130,8 +130,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		buffer: This = null
 		bin := This _getBin(size)
 		This _lock lock()
-		for(i in 0..bin count)
-		{
+		for (i in 0..bin count) {
 			if ((bin[i] size) == size) {
 				buffer = bin remove(i)
 				buffer referenceCount _count = 0

@@ -20,7 +20,7 @@ Event: class {
 	head ::= this _head
 	_tail: This
 	tail ::= this _tail
-	init: func ~nil() {
+	init: func ~nil {
 		this init(func) // FIXME: this is realy a stupid way to create null pointer although no null text is required
 	}
 	init: func (=_head)
@@ -42,7 +42,7 @@ Event1: class <T> {
 	head ::= this _head
 	_tail: This<T>
 	tail ::= this _tail
-	init: func ~nil() {
+	init: func ~nil {
 		this init(func(argument: T)) // FIXME: this is realy a stupid way to create null pointer although no null text is required
 	}
 	init: func (=_head)
@@ -65,7 +65,7 @@ Event1: class <T> {
 	operator + (event: This<T>) -> This<T> {
 		event != null ? This<T> new(event _head, this) + event _tail : this
 	}
-	call: func(argument: T) {
+	call: func (argument: T) {
 		if (this _tail != null)
 			this _tail call(argument)
 		this _head(argument)
@@ -83,7 +83,7 @@ Event2: class <T0, T1> { // TODO: Write tests and fix this
 	head ::= this _head
 	_tail: This<T0, T1>
 	tail ::= this _tail
-	init: func ~nil() {
+	init: func ~nil {
 		this init(func(argument0: T0, argument1: T1)) // FIXME: this is realy a stupid way to create null pointer although no null text is required
 	}
 	init: func (=_head)
@@ -106,7 +106,7 @@ Event2: class <T0, T1> { // TODO: Write tests and fix this
 	operator + (event: This<T0, T1>) -> This<T0, T1> {
 		event != null ? This new(event _head, this) + event _tail : this
 	}
-	call: func(argument0: T0, argument1: T1) {
+	call: func (argument0: T0, argument1: T1) {
 		if (this _tail != null)
 			this _tail call(argument0, argument1)
 		this _head(argument0, argument1)

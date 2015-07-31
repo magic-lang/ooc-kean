@@ -65,7 +65,7 @@ ThreadPool: class {
 	init: func (threadCount := 4) {
 		this _threadCount = threadCount
 		this _threads = Thread[threadCount] new()
-		for(i in 0..threadCount) {
+		for (i in 0..threadCount) {
 			this _threads[i] = Thread new(|| threadLoop())
 			this _threads[i] start()
 		}
@@ -80,7 +80,7 @@ ThreadPool: class {
 		super()
 	}
 	threadLoop: func {
-		while(true) {
+		while (true) {
 			job := this _jobs wait()
 			job run()
 			this _mutex lock()
@@ -108,6 +108,4 @@ ThreadPool: class {
 			this _allFinishedCondition wait(this _mutex)
 		this _mutex unlock()
 	}
-
-
 }

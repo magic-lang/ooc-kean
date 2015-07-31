@@ -66,7 +66,7 @@ HashDictionary: class {
 		return _myHashBag remove(key)
 	}
 	size: func -> Int { _myHashBag size() }
-	contains?: func(key: String) -> Bool {
+	contains?: func (key: String) -> Bool {
 		return _myHashBag contains?(key)
 	}
 	getKeys: func -> ArrayList<String> {

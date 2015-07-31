@@ -29,7 +29,7 @@ DebugLevel: enum {
 
 Debug: class {
 	_level: static Int = DebugLevel Everything
-	printFunction: static Func (String) = func(s: String) {}
+	printFunction: static Func (String) = func (s: String)
 	initialize: static func (f: Func (String)) {
 		This printFunction = f
 	}

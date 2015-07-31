@@ -16,5 +16,5 @@
  */
 
 IEquatable: interface <T> {
-	equals: func(other: T) -> Bool
+	equals: func (other: T) -> Bool
 }
