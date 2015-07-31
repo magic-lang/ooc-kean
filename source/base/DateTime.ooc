@@ -44,7 +44,7 @@ extend Time {
 				clock_gettime(CLOCK_REALTIME, tspec&)
 				localtime_r(tspec tv_sec&, val&)
 				result = DateTime new(val tm_year+1900, val tm_mon+1, val tm_mday, val tm_hour, val tm_min, val tm_sec, 0)
-				result = result + TimeSpan new(tspec tv_nsec / 100)
+				result = result + TimeSpan new(tspec tv_nsec / DateTime nanosecondsPerTick)
 		}
 		return result
 	}
@@ -173,7 +173,8 @@ DateTime: cover {
 	/* number of days in year ( non-leap ) */
 	daysPerYear: static const Int = 365
 	daysPerFourYears: static const Int = 3 * This daysPerYear + 366
-	ticksPerMillisecond: static const Int64 = 10_000
+	nanosecondsPerTick: static const Int64 = 100
+	ticksPerMillisecond: static const Int64 = 1_000_000 / nanosecondsPerTick
 	ticksPerSecond: static const Int64 = This ticksPerMillisecond * 1000
 	ticksPerMinute: static const Int64 = This ticksPerSecond * 60
 	ticksPerHour: static const Int64 = This ticksPerMinute * 60
