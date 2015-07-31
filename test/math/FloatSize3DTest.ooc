@@ -9,7 +9,7 @@ FloatSize3DTest: class extends Fixture {
 	vector1 := FloatSize3D new (12.0f, 13.0f, 20.0f)
 	vector2 := FloatSize3D new (34.0f, 10.0f, 30.0f)
 	vector3 := FloatSize3D new (10.0f, 20.0f, 30.0f)
-	init: func () {
+	init: func {
 		super("FloatSize3D")
 		this add("norm", func {
 			expect(this vector0 norm, is equal to(593.0f sqrt()) within(this precision))

@@ -19,7 +19,7 @@ use ooc-unit
 use ooc-base
 
 ComparableTest: class extends Fixture {
-	init: func () {
+	init: func {
 		super("Comparable")
 		four := ComparableImplementation new(4)
 		this add("4 Compare 4 is Equal", func { expect(four compare(ComparableImplementation new(4)) == Order equal, is true) })
@@ -29,7 +29,7 @@ ComparableTest: class extends Fixture {
 }
 ComparableImplementation: class implements IComparable<ComparableImplementation> {
 	value: Int
-	init: func (=value) {	}
+	init: func (=value)
 	compare: func (other: ComparableImplementation) -> Order {
 		version(debugTests)
 			(this toString() + " == " + other toString()) println()

@@ -4,7 +4,7 @@ import math
 import lang/IO
 
 RangeTest: class extends Fixture {
-	init: func () {
+	init: func {
 		super("Range")
 		this add("properties", func {
 			range := 0..10

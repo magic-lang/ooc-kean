@@ -8,7 +8,7 @@ FloatMatrixTest: class extends Fixture {
 matrix := FloatMatrix new (3, 3)
 matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
 
-	init: func () {
+	init: func {
 		super ("FloatMatrix")
 
 		this add("identity", func {

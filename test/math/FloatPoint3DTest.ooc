@@ -9,7 +9,7 @@ FloatPoint3DTest: class extends Fixture {
 	point1 := FloatPoint3D new (12.0f, 13.0f, 20.0f)
 	point2 := FloatPoint3D new (34.0f, 10.0f, 30.0f)
 	point3 := FloatPoint3D new (10.0f, 20.0f, 30.0f)
-	init: func () {
+	init: func {
 		super("FloatPoint3D")
 		this add("norm", func {
 			expect(this point0 norm, is equal to(24.3515f) within(this precision))

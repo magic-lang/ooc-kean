@@ -9,7 +9,7 @@ FloatPoint2DTest: class extends Fixture {
 	vector1 := FloatPoint2D new (12.221f, 13.1f)
 	vector2 := FloatPoint2D new (34.442f, 10.0f)
 	vector3 := FloatPoint2D new (10.0f, 20.0f)
-	init: func () {
+	init: func {
 		super("FloatPoint2D")
 		this add("equality", func {
 			point := FloatPoint2D new()

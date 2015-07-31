@@ -102,7 +102,7 @@ SvgPlot: class {
 
 	setColor: func {
 		if (!datasets empty) {
-			noneColor := ColorBgra new(0,0,0,0)
+			noneColor := ColorBgra new(0, 0, 0, 0)
 			for (j in 0..datasets count) {
 				if (noneColor != datasets[j] colorBgra) {
 					datasets[j] color = datasets[j] colorBgra svgRGBToString()
@@ -132,7 +132,7 @@ SvgPlot: class {
 
 	setLegends: func (size, plotAreaSize: FloatSize2D) -> String {
 		result := "<svg desc='Legends' x='" << ((size width - plotAreaSize width) / 2) toString() >> "' y='" & ((size height - plotAreaSize height) / 2) toString() >> "' width='" & plotAreaSize width toString() >> "' height='" & plotAreaSize height toString() >> "' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>\n<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>\n<g id='Legend' drag:enable='true'>\n"
-		legendCounter:= 0
+		legendCounter := 0
 		for (i in 0..this datasets count) {
 			if (this datasets[i] label != "") {
 				legendCounter += 1

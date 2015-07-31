@@ -19,7 +19,7 @@ use ooc-unit
 use ooc-base
 
 EquatableWithinTest: class extends Fixture {
-	init: func () {
+	init: func {
 		super("EquatableWithin")
 		four := EquatableWithinImplementation new(4)
 		this add("4 Equals 4 Within 0 is true", func { expect(four equals(Cell new(4), Cell new(0)), is true) })
@@ -31,7 +31,7 @@ EquatableWithinTest: class extends Fixture {
 }
 EquatableWithinImplementation: class implements IEquatableWithin<Cell<Int>, Cell<Int>> {
 	value: Int
-	init: func (=value) {	}
+	init: func (=value)
 	equals: func (other: Cell<Int>, precision: Cell<Int>) -> Bool {
 		(this value - other get()) abs() <= precision get()
 	}
