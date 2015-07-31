@@ -8,7 +8,7 @@ IntSize2DTest: class extends Fixture {
 	vector1 := IntSize2D new (12, 13)
 	vector2 := IntSize2D new (34, 10)
 	vector3 := IntSize2D new (10, 20)
-	init: func () {
+	init: func {
 		super("IntSize2D")
 		this add("equality", func {
 			point := IntSize2D new()

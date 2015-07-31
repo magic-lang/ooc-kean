@@ -9,7 +9,7 @@ FloatBox2DTest: class extends Fixture {
 	box0 := FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f)
 	box1 := FloatBox2D new (4.0f, 3.0f, 2.0f, 1.0f)
 	box2 := FloatBox2D new (2.0f, 1.0f, 4.0f, 3.0f)
-	init: func () {
+	init: func {
 		super("FloatBox2D")
 		this add("equality", func {
 			box := FloatBox2D new()

@@ -19,7 +19,7 @@ QuaternionTest: class extends Fixture {
 	quaternion10 := Quaternion new(0.12f, 0.4472136f, 0.8366f, 0.316227766f)
 	point0 := FloatPoint3D new(22.221f, -3.1f, 10.0f)
 	point1 := FloatPoint3D new(12.221f, 13.1f, 20.0f)
-	init: func () {
+	init: func {
 		super("Quaternion")
 		tolerance := 0.0001f
 		this add("comparison", func {

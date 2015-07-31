@@ -19,7 +19,7 @@ use ooc-unit
 use ooc-base
 
 EquatableTest: class extends Fixture {
-	init: func () {
+	init: func {
 		super("Equatable")
 		four := EquatableImplementation new(4)
 		this add("4 Equals 4 is true", func { expect(four equals(EquatableImplementation new(4)), is true) })
@@ -28,7 +28,7 @@ EquatableTest: class extends Fixture {
 }
 EquatableImplementation: class implements IEquatable<EquatableImplementation> {
 	value: Int
-	init: func (=value) {	}
+	init: func (=value)
 	equals: func (other: EquatableImplementation) -> Bool {
 		this value == other value
 	}

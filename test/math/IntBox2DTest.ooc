@@ -7,7 +7,7 @@ IntBox2DTest: class extends Fixture {
 	box0 := IntBox2D new (1, 2, 3, 4)
 	box1 := IntBox2D new (4, 3, 2, 1)
 	box2 := IntBox2D new (2, 1, 4, 3)
-	init: func () {
+	init: func {
 		super("IntBox2D")
 		this add("equality", func {
 			box := IntBox2D new()

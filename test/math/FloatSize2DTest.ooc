@@ -9,7 +9,7 @@ FloatSize2DTest: class extends Fixture {
 	vector1 := FloatSize2D new (12.221f, 13.1f)
 	vector2 := FloatSize2D new (34.442f, 10.0f)
 	vector3 := FloatSize2D new (10.0f, 20.0f)
-	init: func () {
+	init: func {
 		super("FloatSize2D")
 		this add("equality", func {
 			point := FloatSize2D new()

@@ -12,7 +12,7 @@ FloatTransform3DTest: class extends Fixture {
 	transform4 := FloatTransform3D new(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120)
 	point0 := FloatPoint3D new(34, 10, 30)
 	point1 := FloatPoint3D new(226, 369, 444)
-	init: func () {
+	init: func {
 		super("FloatTransform3D")
 		this add("equality", func {
 			transform := FloatTransform3D new()
