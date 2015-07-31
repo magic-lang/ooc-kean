@@ -34,6 +34,8 @@ version(windows) {
 }
 
 version(!windows) {
+    ClockT: cover from clock_t
+    CLOCK_REALTIME: extern ClockT
     TimeT: cover from time_t
     TimeZone: cover from struct timezone
     TMStruct: cover from struct tm {
@@ -43,12 +45,18 @@ version(!windows) {
         tv_sec: extern TimeT
         tv_usec: extern Int
     }
+    TimeSpec: cover from struct timespec {
+        tv_sec: extern TimeT
+        tv_nsec: extern Long
+    }
 
     time: extern proto func (TimeT*) -> TimeT
     localtime: extern func (TimeT*) -> TMStruct*
+    localtime_r: extern func (TimeT*, TMStruct*) -> TMStruct*
     gettimeofday: extern func (TimeVal*, TimeZone*) -> Int
     usleep: extern func (UInt)
     _asctime: extern(asctime) func (TMStruct*) -> CString
+    clock_gettime: extern func (ClockT, TimeSpec*) -> Int
 
     /**
         An `asctime` wrapper that copies the result to a new string. Otherwise,
