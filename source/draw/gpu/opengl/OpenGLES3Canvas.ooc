@@ -29,6 +29,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	init: func (image: GpuImage, context: GpuContext) {
 		super(image, context)
 		this reset()
+		this map = context getMap(image, GpuMapType transform)
 	}
 	free: override func {
 		this _renderTarget free()
@@ -41,11 +42,9 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _renderTarget invalidate()
 	}
 	draw: func ~packed (image: GpuPacked) {
-		map := this _context getMap(this _target, GpuMapType transform) as OpenGLES3MapDefault
-		map model = this _createModelTransform(image size, image transform)
-		map view = this _view
-		map projection = this _projection
-		this map = map
+		this map model = this _createModelTransform(image size, image transform)
+		this map view = this _view
+		this map projection = this _projection
 		this draw(func {
 			image bind(0)
 			this context drawQuad()
