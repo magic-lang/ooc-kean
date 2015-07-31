@@ -42,7 +42,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _renderTarget invalidate()
 	}
 	draw: func ~packed (image: GpuPacked) {
-		this map model = this _createModelTransform(image size, image transform)
+		this map model = this _createModelTransform(image size, image transform * this _target transform)
 		this map view = this _view
 		this map projection = this _projection
 		this draw(func {
