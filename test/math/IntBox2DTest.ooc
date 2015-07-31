@@ -9,7 +9,7 @@ IntBox2DTest: class extends Fixture {
 	box2 := IntBox2D new (2, 1, 4, 3)
 	init: func () {
 		super("IntBox2D")
-		this add("equality", func() {
+		this add("equality", func {
 			box := IntBox2D new()
 //			expect(this vector0, is equal to(this vector0))
 //			expect(this vector0 equals(this vector0 as Object), is true)
@@ -19,20 +19,20 @@ IntBox2DTest: class extends Fixture {
 			expect(box == box, is true)
 			expect(box == this box0, is false)
 		})
-		this add("leftTop", func() {
+		this add("leftTop", func {
 			leftTop := this box0 leftTop
 			expect(leftTop x, is equal to(1))
 			expect(leftTop y, is equal to(2))
 		})
-		this add("size", func() {
+		this add("size", func {
 			size := this box0 size
 			expect(size width, is equal to(3))
 			expect(size height, is equal to(4))
 		})
-		this add("addition", func() {})
-		this add("subtraction", func() {})
-		this add("scalar multiplication", func() {})
-		this add("casts", func() {
+		this add("addition", func)
+		this add("subtraction", func)
+		this add("scalar multiplication", func)
+		this add("casts", func {
 //			FIXME: We have no integer versions of anything yet
 		})
 	}

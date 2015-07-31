@@ -22,8 +22,8 @@ EquatableTest: class extends Fixture {
 	init: func () {
 		super("Equatable")
 		four := EquatableImplementation new(4)
-		this add("4 Equals 4 is true", func() { expect(four equals(EquatableImplementation new(4)), is true) })
-		this add("4 Equals 3 is not true", func() { expect(four equals(EquatableImplementation new(3)), is not true) })
+		this add("4 Equals 4 is true", func { expect(four equals(EquatableImplementation new(4)), is true) })
+		this add("4 Equals 3 is not true", func { expect(four equals(EquatableImplementation new(3)), is not true) })
 	}
 }
 EquatableImplementation: class implements IEquatable<EquatableImplementation> {
@@ -32,10 +32,10 @@ EquatableImplementation: class implements IEquatable<EquatableImplementation> {
 	equals: func (other: EquatableImplementation) -> Bool {
 		this value == other value
 	}
-	toString: func() -> String {
+	toString: func -> String {
 		this value toString()
 	}
-	create: static func(value: Int) -> IEquatable<Int> {
+	create: static func (value: Int) -> IEquatable<Int> {
 		This new(value)
 	}
 }

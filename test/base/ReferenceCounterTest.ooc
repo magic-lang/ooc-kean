@@ -1,7 +1,7 @@
 use ooc-base
 
 Thing: class {
-	init: func()
+	init: func
 }
 
 t := Thing new()

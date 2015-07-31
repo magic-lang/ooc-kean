@@ -21,7 +21,7 @@ use ooc-base
 DisposableTest: class extends Fixture {
 	init: func () {
 		super("Disposable")
-		this add("dispose", func() {
+		this add("dispose", func {
 			c := DisposableImplementation new()
 			d := c as IDisposable
 			expect(c disposed, is false)

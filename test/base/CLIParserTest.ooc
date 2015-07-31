@@ -47,7 +47,7 @@ main: func (argc: Int, argv: CString*) {
 	parser add("gc=off", "g", 0, "", Event new(gcoff))
 	parser add("message", "m", 1, "", Event1<String> new(func (message: String) {println(message)}))
 	parser add("zed", "z", 0, "", Event new(zHandle))
-	parser add("number", "n", 1, "", Event1<String> new(func (message: String) {(message as Int)+ 10}))
+	parser add("number", "n", 1, "", Event1<String> new(func (message: String) {(message as Int) + 10}))
 	parser add("path", "p", 1, "", Event1<String> new(func (message: String) {println(message)}))
 	parser add("level", "l", 1 , "", Event1<String> new(func (level: String) {_level := (level as Int)}))
 	parser parse(inputList, argc-1)

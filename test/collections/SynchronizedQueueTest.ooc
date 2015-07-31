@@ -5,7 +5,7 @@ import os/Time
 
 SynchronizedQueueTest: class extends Fixture {
 
-	init: func() {
+	init: func {
 		queue := SynchronizedQueue<Int> new()
 
 		func1 := func { queue enqueue(123) }
@@ -31,7 +31,7 @@ SynchronizedQueueTest: class extends Fixture {
 		}
 
 		super("SynchronizedQueue")
-		this add("SynchronizedQueue cover create", func() {
+		this add("SynchronizedQueue cover create", func {
 			expect(queue empty)
 			expect(queue count, is equal to(0))
 

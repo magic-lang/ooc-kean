@@ -19,9 +19,9 @@ use ooc-unit
 use ooc-collections
 
 VectorTest: class extends Fixture {
-	init: func() {
+	init: func {
 		super("Vector")
-		this add("heap cover create", func() {
+		this add("heap cover create", func {
 			heapVector := HeapVector<Int> new(10) as Vector<Int>
 			expect(heapVector capacity, is equal to(10))
 			expect(heapVector[0], is equal to(0))
@@ -80,7 +80,7 @@ VectorTest: class extends Fixture {
 			for (i in 0..3)
 				heapVector[i] = i
 			oldValue := heapVector[1]
-			heapVector copy(1,0)
+			heapVector copy(1, 0)
 			expect(heapVector[0], is equal to(oldValue))
 
 			heapVector resize(10)
@@ -88,7 +88,7 @@ VectorTest: class extends Fixture {
 				heapVector[i] = i
 			heapVector resize(20)
 			for (i in 0..10)
-				heapVector copy(i,i+1)
+				heapVector copy(i, i + 1)
 			for (i in 0..10)
 				expect(heapVector[i], is equal to(0))
 
@@ -97,7 +97,7 @@ VectorTest: class extends Fixture {
 			for (i in 0..3)
 				heapVector[i] = i
 			oldValue = heapVector[1]
-			heapVector move(1,0)
+			heapVector move(1, 0)
 			expect(heapVector[0], is equal to(oldValue))
 
 			heapVector resize(10)
@@ -105,7 +105,7 @@ VectorTest: class extends Fixture {
 				heapVector[i] = i
 			heapVector resize(20)
 			for (i in 0..10)
-				heapVector move(i,i+1)
+				heapVector move(i, i + 1)
 			for (i in 0..10)
 				expect(heapVector[i], is equal to(0))
 
@@ -113,9 +113,7 @@ VectorTest: class extends Fixture {
 
 		})
 
-
-
-		this add("Stack cover create", func() {
+		this add("Stack cover create", func {
 			dataTMP: Int[30]
 			data := dataTMP[0]&
 
@@ -169,13 +167,12 @@ VectorTest: class extends Fixture {
 			for (i in 11..30)
 				expect(stackVector[i], isNotTheValue)
 
-
 			// Copy tests
 			stackVector resize(3)
 			for (i in 0..3)
 				stackVector[i] = i
 			oldValue := stackVector[1]
-			stackVector copy(1,0)
+			stackVector copy(1, 0)
 			expect(stackVector[0], is equal to(oldValue))
 
 			// Move tests
@@ -183,7 +180,7 @@ VectorTest: class extends Fixture {
 			for (i in 0..3)
 				stackVector[i] = i
 			oldValue = stackVector[1]
-			stackVector move(1,0)
+			stackVector move(1, 0)
 			expect(stackVector[0], is equal to(oldValue))
 
 			stackVector free()

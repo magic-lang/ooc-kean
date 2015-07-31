@@ -22,9 +22,9 @@ ComparableTest: class extends Fixture {
 	init: func () {
 		super("Comparable")
 		four := ComparableImplementation new(4)
-		this add("4 Compare 4 is Equal", func() { expect(four compare(ComparableImplementation new(4)) == Order equal, is true) })
-		this add("4 Compare 3 is Greater", func() { expect(four compare(ComparableImplementation new(3)) == Order greater, is true) })
-		this add("4 Compare 5 is Less", func() { expect(four compare(ComparableImplementation new(5)) == Order less, is true) })
+		this add("4 Compare 4 is Equal", func { expect(four compare(ComparableImplementation new(4)) == Order equal, is true) })
+		this add("4 Compare 3 is Greater", func { expect(four compare(ComparableImplementation new(3)) == Order greater, is true) })
+		this add("4 Compare 5 is Less", func { expect(four compare(ComparableImplementation new(5)) == Order less, is true) })
 	}
 }
 ComparableImplementation: class implements IComparable<ComparableImplementation> {

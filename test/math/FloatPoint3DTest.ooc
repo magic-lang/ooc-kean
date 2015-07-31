@@ -11,22 +11,22 @@ FloatPoint3DTest: class extends Fixture {
 	point3 := FloatPoint3D new (10.0f, 20.0f, 30.0f)
 	init: func () {
 		super("FloatPoint3D")
-		this add("norm", func() {
+		this add("norm", func {
 			expect(this point0 norm, is equal to(24.3515f) within(this precision))
 		})
-		this add("scalar product", func() {
+		this add("scalar product", func {
 			point := FloatPoint3D new()
 			expect(this point0 scalarProduct(point), is equal to(0.0f) within(this precision))
 			expect(this point0 scalarProduct(this point1), is equal to(425.0f) within(this precision))
 		})
-		this add("scalar multiplication", func() {
+		this add("scalar multiplication", func {
 //			FIXME: Equals interface
 //			expect(this point0 vectorProduct(this point1), is equal to(-(this point1 vectorProduct(point0))))
 			expect(this point0 vectorProduct(this point1) x, is equal to(-190.0f) within(this precision))
 			expect(this point0 vectorProduct(this point1) y, is equal to(-320.0f) within(this precision))
 			expect(this point0 vectorProduct(this point1) z, is equal to(322.0f) within(this precision))
 		})
-		this add("equality", func() {
+		this add("equality", func {
 			point := FloatPoint3D new()
 //			expect(this vector0, is equal to(this vector0))
 //			expect(this vector0 equals(this vector0 as Object), is true)
@@ -36,28 +36,28 @@ FloatPoint3DTest: class extends Fixture {
 			expect(point == point, is true)
 			expect(point == this point0, is false)
 		})
-		this add("addition", func() {
+		this add("addition", func {
 			expect((this point0 + this point1) x, is equal to(this point2 x) within(this precision))
 			expect((this point0 + this point1) y, is equal to(this point2 y) within(this precision))
 			expect((this point0 + this point1) z, is equal to(this point2 z) within(this precision))
 		})
-		this add("subtraction", func() {
+		this add("subtraction", func {
 			expect((this point0 - this point0) x, is equal to(FloatPoint3D new() x))
 			expect((this point0 - this point0) y, is equal to(FloatPoint3D new() y))
 			expect((this point0 - this point0) z, is equal to(FloatPoint3D new() z))
 		})
-		this add("get values", func() {
+		this add("get values", func {
 			expect(this point0 x, is equal to(22.0f))
 			expect(this point0 y, is equal to(-3.0f))
 			expect(this point0 z, is equal to(10.0f))
 		})
-		this add("casting", func() {
+		this add("casting", func {
 			value := "10.00000000, 20.00000000, 30.00000000"
 			expect(this point3 toString(), is equal to(value))
 //			FIXME: Equals interface
 //			expect(FloatSize2D parse(value), is equal to(this vector3))
 		})
-		this add("casts", func() {
+		this add("casts", func {
 //			FIXME: We have no integer versions of anything yet
 		})
 	}

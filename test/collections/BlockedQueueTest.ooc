@@ -5,7 +5,7 @@ import os/Time
 
 BlockedQueueTest: class extends Fixture {
 
-	init: func() {
+	init: func {
 		queue := BlockedQueue<Int> new()
 
 		func1 := func { queue enqueue(123) }
@@ -35,7 +35,7 @@ BlockedQueueTest: class extends Fixture {
 		}
 
 		super("BlockedQueue")
-		this add("BlockedQueue cover create", func() {
+		this add("BlockedQueue cover create", func {
 			expect(queue empty)
 			expect(queue count, is equal to(0))
 

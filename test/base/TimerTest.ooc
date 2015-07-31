@@ -29,7 +29,7 @@ testfunction: func {
 y: Double
 t := Timer new()
 
-t  start()
+t start()
 for (i in 0..10) {}
 t stop()
 

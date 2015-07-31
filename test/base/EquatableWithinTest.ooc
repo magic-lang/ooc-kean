@@ -22,11 +22,11 @@ EquatableWithinTest: class extends Fixture {
 	init: func () {
 		super("EquatableWithin")
 		four := EquatableWithinImplementation new(4)
-		this add("4 Equals 4 Within 0 is true", func() { expect(four equals(Cell new(4), Cell new(0)), is true) })
-		this add("4 Equals 3 Within 0 is not true", func() { expect(four equals(Cell new(3), Cell new(0)), is not true) })
-		this add("4 Equals 3 Within 0 is true", func() { expect(four equals(Cell new(3), Cell new(2)), is true) })
-		this add("4 Equals 2 Within 0 is true", func() { expect(four equals(Cell new(2), Cell new(2)), is true) })
-		this add("4 Equals 1 Within 0 is not true", func() { expect(four equals(Cell new(1), Cell new(2)), is not true) })
+		this add("4 Equals 4 Within 0 is true", func { expect(four equals(Cell new(4), Cell new(0)), is true) })
+		this add("4 Equals 3 Within 0 is not true", func { expect(four equals(Cell new(3), Cell new(0)), is not true) })
+		this add("4 Equals 3 Within 0 is true", func { expect(four equals(Cell new(3), Cell new(2)), is true) })
+		this add("4 Equals 2 Within 0 is true", func { expect(four equals(Cell new(2), Cell new(2)), is true) })
+		this add("4 Equals 1 Within 0 is not true", func { expect(four equals(Cell new(1), Cell new(2)), is not true) })
 	}
 }
 EquatableWithinImplementation: class implements IEquatableWithin<Cell<Int>, Cell<Int>> {

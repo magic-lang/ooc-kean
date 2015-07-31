@@ -3,7 +3,7 @@ use ooc-base
 use ooc-collections
 
 VectorQueueTest: class extends Fixture {
-	init: func() {
+	init: func {
 		super("VectorQueue")
 		this add("Queue cover create", func {
 			queue := VectorQueue<Int> new(3)

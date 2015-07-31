@@ -25,10 +25,10 @@ import lang/IO
 
 FloatComplexVectorListTest: class extends Fixture {
 
-	complexNumber0 := FloatComplex new (2,1)
-	complexNumber1 := FloatComplex new (3,2)
-	complexNumber2 := FloatComplex new (5,3)
-	complexNumber3 := FloatComplex new (-2,-1)
+	complexNumber0 := FloatComplex new (2, 1)
+	complexNumber1 := FloatComplex new (3, 2)
+	complexNumber2 := FloatComplex new (5, 3)
+	complexNumber3 := FloatComplex new (-2, -1)
 
 	complexNumberArray := FloatComplexVectorList new(4)
 	complexNumberArray add(complexNumber0)
@@ -38,16 +38,16 @@ FloatComplexVectorListTest: class extends Fixture {
 
 	tolerance := 0.00001
 
-	init: func() {
+	init: func {
 		super("FloatComplexVectorList")
-		this add("discrete fourier transform", func() {
+		this add("discrete fourier transform", func {
 			result := FloatComplexVectorList discreteFourierTransform(complexNumberArray)
 			result = FloatComplexVectorList inverseDiscreteFourierTransform(result)
 			for (i in 0..(complexNumberArray count)) {
 				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
 			}
 		})
-		this add("fast fourier transform", func() {
+		this add("fast fourier transform", func {
 			result := FloatComplexVectorList fastFourierTransform(complexNumberArray)
 			result = FloatComplexVectorList inverseFastFourierTransform(result)
 			for (i in 0..(complexNumberArray count)) {

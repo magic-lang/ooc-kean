@@ -19,9 +19,9 @@ use ooc-unit
 use ooc-collections
 
 VectorTest: class extends Fixture {
-	init: func() {
+	init: func {
 		super("VectorList")
-		this add("VectorList cover create", func() {
+		this add("VectorList cover create", func {
 
 			vectorList := VectorList<Int> new() as VectorList<Int>
 
@@ -83,7 +83,7 @@ VectorTest: class extends Fixture {
 			expect(vectorList count, is equal to(10))
 			vectorList free()
 		})
-		this add("VectorList append", func() {
+		this add("VectorList append", func {
 			firstList := VectorList<Int> new()
 			firstList add(0)
 			firstList add(1)
@@ -103,7 +103,7 @@ VectorTest: class extends Fixture {
 			firstList free()
 			secondList free()
 		})
-		this add("VectorList getFirstElements", func() {
+		this add("VectorList getFirstElements", func {
 			list := VectorList<Int> new()
 			list add(0)
 			list add(1)

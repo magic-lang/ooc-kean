@@ -23,7 +23,6 @@ version(debugTests) {
 	Debug initialize(func (message: String) {println(message)})
 	Debug _level = DebugLevel Everything as Int
 
-
 	testfunction: func {
 		profiling_test := Profiler new("testfunction", 2)
 		profiling_test start()
@@ -41,7 +40,7 @@ version(debugTests) {
 	Profiler printResults()
 	profiling := Profiler new("main", 1)
 
-	profiling  start()
+	profiling start()
 	for (i in 0..10) {}
 	profiling stop()
 
