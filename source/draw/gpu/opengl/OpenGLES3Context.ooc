@@ -119,8 +119,10 @@ OpenGLES3Context: class extends GpuContext {
 				}
 			case GpuMapType transform =>
 				match (gpuImage) {
-					case (image : GpuMonochrome) => this _monochromeMapTransform
-					case (image : GpuUv) => this _uvMapTransform
+					case (gpuImage : GpuMonochrome) => this _monochromeMapTransform
+					case (gpuImage : GpuUv) => this _uvMapTransform
+					case (gpuImage : GpuBgr) => this _bgrMapDefault
+					case (gpuImage : GpuBgra) => this _bgraMapDefault
 					case => null
 				}
 			case GpuMapType pack =>
