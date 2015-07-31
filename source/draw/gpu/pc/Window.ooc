@@ -32,6 +32,7 @@ Window: class extends GpuSurface {
 	_yuvSemiplanarToBgra, _yuvSemiplanarToBgraTransform: OpenGLES3MapYuvSemiplanarToBgra
 	context ::= this _context as OpenGLES3Context
 	size ::= this _size
+	_transform := IntTransform2D createScaling(1, -1)
 
 	init: /* internal */ func (size: IntSize2D, title := "Window title") {
 		this _native = X11Window new(size width, size height, title)
@@ -76,7 +77,7 @@ Window: class extends GpuSurface {
 	}
 	draw: func ~gpuImage (image: GpuImage) {
 		this map = this _getTransformMap(image) as OpenGLES3MapDefault
-		this map model = this _createModelTransform(image size, image transform)
+		this map model = this _createModelTransform(image size, this _transform * image transform)
 		this map view = this _view
 		this map projection = this _projection
 		this draw(func {
