@@ -63,7 +63,7 @@ VectorList: class <T> {
 		result
 	}
 	removeAt: func (index: Int) {
-		this _vector copy(index+1, index)
+		this _vector copy(index + 1, index)
 		this _count -= 1
 	}
 	clear: func {
@@ -103,7 +103,7 @@ VectorList: class <T> {
 		result
 	}
 	apply: func (function: Func(T)) {
-		for(i in 0..this count)
+		for (i in 0..this count)
 			function(this[i])
 	}
 	getFirstElements: func (number: Int) -> This<T> {
