@@ -36,7 +36,7 @@ Fixture: abstract class {
 			r := true
 			try {
 				test run()
-			} catch(e: TestFailedException) {
+			} catch (e: TestFailedException) {
 				e test = test
 				result = r = false
 			}

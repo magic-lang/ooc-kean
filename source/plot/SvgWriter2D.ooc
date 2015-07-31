@@ -19,7 +19,7 @@ SvgWriter2D: class {
 
 	init: func (=file) {
 		this svgPlots = VectorList<SvgPlot> new()
-		this size = FloatSize2D new(1920,1080)
+		this size = FloatSize2D new(1920, 1080)
 		this fontSize = 14
 	}
 	init: func ~fileName(filename: String) {

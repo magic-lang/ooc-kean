@@ -13,7 +13,7 @@ ScatterPlotData2D: class extends PlotData2D {
 	shape := Shape Circle
 	scalingRelativeLineWidth := 5.0f
 
-	init: func ~default() {
+	init: func ~default {
 		super()
 	}
 

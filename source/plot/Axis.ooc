@@ -59,7 +59,7 @@ Axis: class {
 		result
 	}
 
-	getHorizontalSvg: func(plotAreaSize, margin: FloatSize2D, position: FloatPoint2D, transform: FloatTransform2D, radix: Float) -> String {
+	getHorizontalSvg: func (plotAreaSize, margin: FloatSize2D, position: FloatPoint2D, transform: FloatTransform2D, radix: Float) -> String {
 		result := "<g desc='X-axis data'>\n"
 		labelOffset := FloatPoint2D new(plotAreaSize width / 2.0f, 3.0f + (this fontSize - 4) + this fontSize)
 		numberOffset := FloatPoint2D new(0.0f, 3.0f + (this fontSize - 4))
@@ -80,7 +80,7 @@ Axis: class {
 		result
 	}
 
-	getVerticalSvg: func(plotAreaSize, margin: FloatSize2D, position: FloatPoint2D, transform: FloatTransform2D, radix: Float) -> String {
+	getVerticalSvg: func (plotAreaSize, margin: FloatSize2D, position: FloatPoint2D, transform: FloatTransform2D, radix: Float) -> String {
 		result := "<g desc='Y-axis data'>\n"
 		labelOffset := FloatPoint2D new(- (log10(Float maximum(this max, Float absolute(this min)) / radix) + 3.0f) * 0.6f * (this fontSize - 4.0f), - plotAreaSize height / 2.0f)
 		numberOffset := FloatPoint2D new(- 0.6f * (this fontSize - 4.0f), (this fontSize - 4.0f) / 3.0f)
@@ -103,7 +103,7 @@ Axis: class {
 		result
 	}
 
-	getRadixSvg: func(position: FloatPoint2D, radix: Float, textAnchor: String) -> String {
+	getRadixSvg: func (position: FloatPoint2D, radix: Float, textAnchor: String) -> String {
 		result := ""
 		if (radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision)) {
 			scientificPower := Float getScientificPowerString(radix)
@@ -116,7 +116,7 @@ Axis: class {
 	getTickSvg: func (tickValue, radix: Float, position, numberOffset, tickMarkerOnOtherSideOffset, tickMarkerEndOffset: FloatPoint2D, textAnchor: String) -> String {
 		result := "<g desc='" << tickValue toString() >> "'>\n"
 		if (this gridOn)
-			result = result & Shapes line(position, position + tickMarkerOnOtherSideOffset, 1, 255.0f, "grey", FloatPoint2D new(5,5))
+			result = result & Shapes line(position, position + tickMarkerOnOtherSideOffset, 1, 255.0f, "grey", FloatPoint2D new(5, 5))
 		result = result & Shapes line(position, position + tickMarkerEndOffset, 1, 255.0f, "black")
 		result = result & Shapes line(position + tickMarkerOnOtherSideOffset, position + tickMarkerOnOtherSideOffset - tickMarkerEndOffset, 1, 255.0f, "black")
 		tickValue = radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision) ? (tickValue / radix) : tickValue
@@ -138,7 +138,7 @@ Axis: class {
 		result
 	}
 
-	getRequiredMargin: func(fontSize: Int) -> Float {
+	getRequiredMargin: func (fontSize: Int) -> Float {
 		result: Float
 		if (this fontSize == 0)
 			this fontSize = fontSize

@@ -11,7 +11,7 @@ PlotData2D: abstract class {
 	opacity: Float { get set }
 	dataSeries: VectorList<FloatPoint2D> { get set }
 
-	init: func ~default() {
+	init: func ~default {
 		this init(VectorList<FloatPoint2D> new())
 	}
 
@@ -40,7 +40,7 @@ PlotData2D: abstract class {
 	}
 
 	getSvg: abstract func (transform: FloatTransform2D) -> String
-	getSvgLegend: abstract func(legendCount, fontSize: Int) -> String
+	getSvgLegend: abstract func (legendCount, fontSize: Int) -> String
 
 	minValues: func -> FloatPoint2D {
 		result: FloatPoint2D
