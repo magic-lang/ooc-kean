@@ -36,7 +36,7 @@ zHandle: func {
 }
 main: func (argc: Int, argv: CString*) {
 	inputList := VectorList<String> new()
-	for (i in 1..argc) {
+	for (i in 1 .. argc) {
 		arg := argv[i] toString()
 		inputList add(arg)
 		//arg  println()

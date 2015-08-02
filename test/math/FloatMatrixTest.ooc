@@ -69,8 +69,8 @@ matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
 
 	createMatrix: func (width: Int, height: Int, values: Float[]) -> FloatMatrix {
 		result := FloatMatrix new(width, height)
-		for (x in 0..width) {
-			for (y in 0..height) {
+		for (x in 0 .. width) {
+			for (y in 0 .. height) {
 				result set(x, y, values[x * height + y])
 			}
 		}
@@ -82,8 +82,8 @@ matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
 		// 0 3
 		// 1 4
 		// 2 5
-		for (x in 0..matrix dimensions width) {
-			for (y in 0..matrix dimensions height) {
+		for (x in 0 .. matrix dimensions width) {
+			for (y in 0 .. matrix dimensions height) {
 				expect(matrix get(x, y), is equal to(values[x *matrix dimensions height + y]))
 			}
 		}

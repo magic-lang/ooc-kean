@@ -56,11 +56,11 @@ VectorTest: class extends Fixture {
 			expect(vectorList count, is equal to(0))
 			expect(removedInt, is equal to(3))
 
-			for (i in 0..vectorList count)
+			for (i in 0 .. vectorList count)
 				vectorList remove()
 			expect(vectorList count, is equal to(0))
 
-			for (i in 0..10)
+			for (i in 0 .. 10)
 				vectorList add(i)
 			expect(vectorList count, is equal to(10))
 
@@ -76,9 +76,9 @@ VectorTest: class extends Fixture {
 			expect(vectorList[5], is equal to(4))
 
 			vectorList clear()
-			for (i in 0..vectorList count)
+			for (i in 0 .. vectorList count)
 				expect(vectorList[i], is equal to(null))
-			for (i in 0..10)
+			for (i in 0 .. 10)
 				vectorList add(i)
 			expect(vectorList count, is equal to(10))
 			vectorList free()

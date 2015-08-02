@@ -14,21 +14,21 @@ LinePlotData2D: class extends PlotData2D {
 
 	lineStyle: LineStyle { get set }
 
-	init: func ~default(lineStyle := LineStyle Solid) {
+	init: func ~default (lineStyle := LineStyle Solid) {
 		super()
 		this lineStyle = lineStyle
 	}
 
-	init: func ~dataSeries(dataSeries: VectorList<FloatPoint2D>, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
+	init: func ~dataSeries (dataSeries: VectorList<FloatPoint2D>, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
 		super(dataSeries, label, colorBgra)
 		this lineStyle = lineStyle
 	}
 
-	init: func ~color(dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra, lineStyle := LineStyle Solid) {
+	init: func ~color (dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra, lineStyle := LineStyle Solid) {
 		this init(dataSeries, "", colorBgra, lineStyle)
 	}
 
-	init: func ~twoFloatSeries(xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
+	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
 		super(xSeries, ySeries, label, colorBgra)
 		this lineStyle = lineStyle
 	}
@@ -37,7 +37,7 @@ LinePlotData2D: class extends PlotData2D {
 		result := ""
 		if (!this dataSeries empty) {
 			result = result & "<path stroke='" + this color >> "' stroke-opacity='" & this opacity toString() >> "' fill='none' stroke-width='" & this lineWidth toString() >> "' d='M " & ((transform * this dataSeries[0]) x) toString() >> " " & ((transform * this dataSeries[0]) y) toString() >> " L "
-			for (j in 1..this dataSeries count)
+			for (j in 1 .. this dataSeries count)
 				result = result & ((transform * this dataSeries[j]) x) toString() >> " " & ((transform * this dataSeries[j]) y) toString() >> " "
 			result = result >> "' "
 			match (this lineStyle) {

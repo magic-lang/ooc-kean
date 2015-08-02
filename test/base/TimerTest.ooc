@@ -22,7 +22,7 @@ Debug initialize(func (message: String) { println(message) })
 testfunction: func {
 	t_test := Timer new()
 	t_test start()
-	for (i in 0..10000) {}
+	for (i in 0 .. 10000) {}
 	t_test stop()
 }
 
@@ -30,31 +30,31 @@ y: Double
 t := Timer new()
 
 t start()
-for (i in 0..10) {}
+for (i in 0 .. 10) {}
 t stop()
 
 t start()
-for (i in 0..100000000) {}
+for (i in 0 .. 100000000) {}
 t stop()
 
 t start()
-for (i in 0..10000) {}
+for (i in 0 .. 10000) {}
 t stop()
 
 testfunction()
 
 t start()
-for (i in 0..1000000000) {}
+for (i in 0 .. 1000000000) {}
 t stop()
 
 t start()
-for (i in 0..100) {}
+for (i in 0 .. 100) {}
 t stop()
 
 t start()
-for (i in 0..50) {}
+for (i in 0 .. 50) {}
 t stop()
 
 t start()
-for (i in 0..8) {}
+for (i in 0 .. 8) {}
 t stop()

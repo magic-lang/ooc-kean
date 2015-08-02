@@ -15,20 +15,20 @@ PlotData2D: abstract class {
 		this init(VectorList<FloatPoint2D> new())
 	}
 
-	init: func ~dataSeries(=dataSeries, label := "", colorBgra := ColorBgra new()) {
+	init: func ~dataSeries (=dataSeries, label := "", colorBgra := ColorBgra new()) {
 		this lineWidth = 1
 		this legendOffset = 5.0f
 		this label = label
 		this colorBgra = colorBgra
 	}
 
-	init: func ~color(dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
+	init: func ~color (dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
 		this init(dataSeries, "", colorBgra)
 	}
 
-	init: func ~twoFloatSeries(xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new()) {
+	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new()) {
 		dataSeries := VectorList<FloatPoint2D> new()
-		for (i in 0..ySeries count) {
+		for (i in 0 .. ySeries count) {
 			dataSeries add(FloatPoint2D new(xSeries != null ? xSeries[i] : (i + 1) as Float, ySeries[i]))
 		}
 		this init(dataSeries, label, colorBgra)
@@ -48,7 +48,7 @@ PlotData2D: abstract class {
 			result = FloatPoint2D new()
 		else {
 			result = dataSeries[0]
-			for (i in 1..dataSeries count)
+			for (i in 1 .. dataSeries count)
 				result = result minimum(dataSeries[i])
 		}
 		result
@@ -60,7 +60,7 @@ PlotData2D: abstract class {
 			result = FloatPoint2D new()
 		else {
 			result = dataSeries[0]
-			for (i in 1..dataSeries count)
+			for (i in 1 .. dataSeries count)
 				result = result maximum(dataSeries[i])
 		}
 		result

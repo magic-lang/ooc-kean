@@ -32,7 +32,7 @@ PointerVector: abstract class {
 	}
 	_free: func ~range (start, end: Int) {
 		if (this _freeContent) {
-			for (i in start..end) {
+			for (i in start .. end) {
 				old := this[i] as Object
 				old free()
 			}
@@ -57,7 +57,7 @@ PointerVector: abstract class {
 	copy: func ~within (sourceStart, targetStart: Int, count := 0) {
 		this copy(sourceStart, this, targetStart, count)
 	}
-	copy: func (sourceStart: Int, target: PointerVector, targetStart: Int, count := 0) {
+	copy: func (sourceStart: Int, target: This, targetStart: Int, count := 0) {
 		if (count < 1)
 			count = this count - sourceStart
 		if (targetStart + count > target count)

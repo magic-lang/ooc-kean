@@ -41,7 +41,7 @@ VectorList: class <T> {
 	append: func (other: This<T>) {
 		if (this _vector capacity < this _count + other count)
 			this _vector resize(this _vector capacity + other count)
-		for (i in 0..other count)
+		for (i in 0 .. other count)
 			this _vector[this _count + i] = other[i]
 		this _count += other count
 	}
@@ -86,7 +86,7 @@ VectorList: class <T> {
 		inOrder := false
 		while (!inOrder) {
 			inOrder = true
-			for (i in 0..count - 1) {
+			for (i in 0 .. count - 1) {
 				if (greaterThan(this[i], this[i + 1])) {
 					inOrder = false
 					tmp := this[i]
@@ -103,19 +103,19 @@ VectorList: class <T> {
 		result
 	}
 	apply: func (function: Func(T)) {
-		for (i in 0..this count)
+		for (i in 0 .. this count)
 			function(this[i])
 	}
 	getFirstElements: func (number: Int) -> This<T> {
 		result := This<T> new()
 		number = number < count ? number : count
-		for (i in 0..number)
+		for (i in 0 .. number)
 			result add(this _vector[i])
 		result
 	}
-	getElements: func (indices: VectorList<Int>) -> This<T> {
+	getElements: func (indices: This<Int>) -> This<T> {
 		result := This<T> new()
-		for (i in 0..indices count)
+		for (i in 0 .. indices count)
 			result add(this[indices[i]])
 		result
 	}

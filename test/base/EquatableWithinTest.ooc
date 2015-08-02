@@ -36,7 +36,7 @@ EquatableWithinImplementation: class implements IEquatableWithin<Cell<Int>, Cell
 		(this value - other get()) abs() <= precision get()
 	}
 	create: static func (.value) -> IEquatableWithin<Cell<Int>, Cell<Int>> {
-		EquatableWithinImplementation new(value)
+		This new(value)
 	}
 }
 EquatableWithinTest new() run()
