@@ -65,13 +65,13 @@ ThreadPool: class {
 	init: func (threadCount := 4) {
 		this _threadCount = threadCount
 		this _threads = Thread[threadCount] new()
-		for (i in 0..threadCount) {
+		for (i in 0 .. threadCount) {
 			this _threads[i] = Thread new(|| threadLoop())
 			this _threads[i] start()
 		}
 	}
 	free: override func {
-		for (i in 0..this _threadCount)
+		for (i in 0 .. this _threadCount)
 			this _threads[i] free()
 		gc_free(this _threads data)
 		this _jobs free()
