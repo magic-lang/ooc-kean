@@ -20,14 +20,14 @@ thread1 start()
 thread2 start()
 
 func1: func {
-	for (i in 0..10) {
+	for (i in 0 .. 10) {
 		obj1 := obj
 		Time sleepMilli(100)
 	}
 }
 
 func2: func {
-	for (i in 0..10) {
+	for (i in 0 .. 10) {
 		obj2 := obj
 		Time sleepMilli(76)
 	}

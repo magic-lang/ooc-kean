@@ -32,7 +32,7 @@ Dog: class {
 		if (pool empty?()) {
 			obj := This alloc()
 			obj __defaults__()
-			obj as Dog
+			obj as This
 		} else {
 			pool pop()
 		}

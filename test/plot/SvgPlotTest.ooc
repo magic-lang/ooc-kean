@@ -14,7 +14,7 @@ unitCircle := VectorList<FloatPoint2D> new()
 scatter := VectorList<FloatPoint2D> new()
 parabola := VectorList<FloatPoint2D> new()
 sparseParabola := VectorList<FloatPoint2D> new()
-for (i in -200..201) {
+for (i in -200 .. 201) {
 	log add(FloatPoint2D new((201 + i as Float) * 100, log((201 + i as Float)) * 100))
 	sin add(FloatPoint2D new(i as Float / 20, sin(i as Float / 20)))
 	cos add(FloatPoint2D new(i as Float / 20, cos(i as Float / 20)))
@@ -23,7 +23,7 @@ for (i in -200..201) {
 	scatter add(FloatPoint2D new(Random randInt(0, 100) as Float, Random randInt(0, 100) as Float))
 	parabola add(FloatPoint2D new(i as Float / 20, pow(i as Float / 20, 2)))
 }
-for (i in -200..201) {
+for (i in -200 .. 201) {
 	unitCircle add(FloatPoint2D new(i as Float / 200, - sqrt(1 - pow(i as Float / 200, 2))))
 	if (i % 50 == 0)
 		sparseParabola add(FloatPoint2D new(i as Float / 20, pow(i as Float / 20, 2)))

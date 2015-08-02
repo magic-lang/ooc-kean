@@ -40,7 +40,7 @@ SortedVectorTest: class extends Fixture {
 			sortedVectorList add(0)
 			sortedVectorList add(4)
 			expect(sortedVectorList count, is equal to(10))
-			for (i in 0..sortedVectorList count)
+			for (i in 0 .. sortedVectorList count)
 				expect(sortedVectorList[i]  < i+1)
 
 			sortedVectorList remove()
@@ -48,7 +48,7 @@ SortedVectorTest: class extends Fixture {
 			sortedVectorList remove()
 			sortedVectorList remove()
 			expect(sortedVectorList count, is equal to(6))
-			for (i in 0..sortedVectorList count)
+			for (i in 0 .. sortedVectorList count)
 				expect(sortedVectorList[i]  < i+1)
 
 
@@ -56,17 +56,17 @@ SortedVectorTest: class extends Fixture {
 			sortedVectorList add(8)
 			sortedVectorList add(7)
 			expect(sortedVectorList count, is equal to(9))
-			for (i in 0..sortedVectorList count)
+			for (i in 0 .. sortedVectorList count)
 				expect(sortedVectorList[i]  < i+1)
 
 			sortedVectorList remove(5)
 			expect(sortedVectorList count, is equal to(8))
-			for (i in 0..sortedVectorList count)
+			for (i in 0 .. sortedVectorList count)
 				expect(sortedVectorList[i]  < i+1)
 
 			sortedVectorList insert(3, 6)
 			expect(sortedVectorList count, is equal to(9))
-			for (i in 0..sortedVectorList count)
+			for (i in 0 .. sortedVectorList count)
 				expect(sortedVectorList[i]  < i+1)
 		})
 	}
