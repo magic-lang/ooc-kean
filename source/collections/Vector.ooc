@@ -32,7 +32,7 @@ Vector: abstract class <T> {
 	}
 	_free: func ~range (start, end: Int) {
 		if (this _freeContent && T inheritsFrom?(Object)) {
-			for (i in start..end) {
+			for (i in start .. end) {
 					old := this[i] as Object
 					if (old != null)
 						old free()
@@ -62,7 +62,7 @@ Vector: abstract class <T> {
 	copy: func ~within (sourceStart, targetStart: Int, capacity := 0) {
 		this copy(sourceStart, this, targetStart, capacity)
 	}
-	copy: func ~to (sourceStart: Int, target: Vector<T>, targetStart: Int, capacity := 0) {
+	copy: func ~to (sourceStart: Int, target: This<T>, targetStart: Int, capacity := 0) {
 		if (capacity < 1)
 			capacity = this capacity - sourceStart
 		if (targetStart + capacity > target capacity)

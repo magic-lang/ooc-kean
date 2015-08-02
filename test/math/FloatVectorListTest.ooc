@@ -57,7 +57,7 @@ FloatVectorListTest: class extends Fixture {
 			list add(2.0f)
 			list add(3.0f)
 			list add(4.0f)
-			slice := list getSlice(1..2)
+			slice := list getSlice(1 .. 2)
 			expect(slice[0] == 2.0f)
 			expect(slice[1] == 3.0f)
 		})

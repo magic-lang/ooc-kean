@@ -19,8 +19,8 @@ use ooc-base
 import math
 
 Modifier: abstract class {
-	parent: Modifier
-	child: Modifier
+	parent: This
+	child: This
 	init: func {
 		this parent = null
 	}
@@ -80,7 +80,7 @@ NotModifier: class extends Modifier {
 	false ::= FalseConstraint new(this)
 	Null ::= NullConstraint new(this)
 	empty ::= EmptyConstraint new(this)
-	not ::= NotModifier new(this)
+	not ::= This new(this)
 	equal ::= EqualModifier new(this)
 //	nan ::= NanConstraint new()
 //	unique ::= UniqueConstraint new()
@@ -94,7 +94,7 @@ NotModifier: class extends Modifier {
 EqualModifier: class extends Modifier {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
-	to: func ~object(correct: Object) -> CompareConstraint {
+	to: func ~object (correct: Object) -> CompareConstraint {
 		f := func (value, c: Object) -> Bool {
 			match c {
 				case s: String => s == value as String

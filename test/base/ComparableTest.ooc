@@ -30,7 +30,7 @@ ComparableTest: class extends Fixture {
 ComparableImplementation: class implements IComparable<ComparableImplementation> {
 	value: Int
 	init: func (=value)
-	compare: func (other: ComparableImplementation) -> Order {
+	compare: func (other: This) -> Order {
 		version(debugTests)
 			(this toString() + " == " + other toString()) println()
 		if (this value == other value)
@@ -43,8 +43,8 @@ ComparableImplementation: class implements IComparable<ComparableImplementation>
 	toString: func -> String {
 		this value toString()
 	}
-	create: static func (.value) -> IComparable<ComparableImplementation> {
-		ComparableImplementation new(value)
+	create: static func (.value) -> IComparable<This> {
+		This new(value)
 	}
 }
 ComparableTest new() run()

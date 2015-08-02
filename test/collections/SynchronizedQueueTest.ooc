@@ -37,19 +37,19 @@ SynchronizedQueueTest: class extends Fixture {
 
 			pool := ThreadPool new(3)
 			/* Enqueue values asynchronously */
-			for (i in 0..100)
+			for (i in 0 .. 100)
 				pool add(func1)
 
 			/* Peek values asynchronously */
-			for (i in 0..200)
+			for (i in 0 .. 200)
 				pool add(func2)
 
 			/* Dequeue values asynchronously */
-			for (i in 0..200)
+			for (i in 0 .. 200)
 				pool add(func3)
 
 			/* Peek values asynchronously in empty Queue */
-			for (i in 0..20)
+			for (i in 0 .. 20)
 				pool add(func4)
 
 			pool waitAll()
