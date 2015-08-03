@@ -25,7 +25,7 @@ TimeSpan: cover {
 	operator / (value: Int) -> This { This new(this ticks / value) }
 	operator * (value: Float) -> This { This new(this ticks * value) }
 	operator * (value: Int) -> This { This new(this ticks * value) }
-	new: unmangled(kean_base_timeSpan_new) static func ~API (ticks: UInt64) -> This { This new(ticks) }
+	new: unmangled(kean_base_timeSpan_new) static func ~API (ticks: Int64) -> This { This new(ticks) }
 }
 
 DateTime: cover {
