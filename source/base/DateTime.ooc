@@ -19,6 +19,8 @@ TimeSpan: cover {
 	ticks ::= this _ticks
 	init: func@ (=_ticks)
 	kean_base_timeSpan_getTicks: unmangled func -> Int64 { this _ticks }
+	operator + (span: TimeSpan) -> This { This new(this ticks + span ticks) }
+	operator - (span: TimeSpan) -> This { This new(this ticks - span ticks) }
 	new: unmangled(kean_base_timeSpan_new) static func ~API (ticks: UInt64) -> This { This new(ticks) }
 }
 
@@ -30,6 +32,8 @@ DateTime: cover {
 	init: func@ (=_ticks)
 	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
 	kean_base_dateTime_getTicks: unmangled func -> UInt64 { this _ticks }
+	operator + (span: TimeSpan) -> This { This new(this ticks + span ticks) }
+	operator - (span: TimeSpan) -> This { This new(this ticks - span ticks) }
 	new: unmangled(kean_base_dateTime_new) static func ~API (ticks: UInt64) -> This { This new(ticks) }
 
 }
