@@ -21,6 +21,10 @@ TimeSpan: cover {
 	kean_base_timeSpan_getTicks: unmangled func -> Int64 { this _ticks }
 	operator + (span: TimeSpan) -> This { This new(this ticks + span ticks) }
 	operator - (span: TimeSpan) -> This { This new(this ticks - span ticks) }
+	operator / (value: Float) -> This { This new(this ticks / value) }
+	operator / (value: Int) -> This { This new(this ticks / value) }
+	operator * (value: Float) -> This { This new(this ticks * value) }
+	operator * (value: Int) -> This { This new(this ticks * value) }
 	new: unmangled(kean_base_timeSpan_new) static func ~API (ticks: UInt64) -> This { This new(ticks) }
 }
 
