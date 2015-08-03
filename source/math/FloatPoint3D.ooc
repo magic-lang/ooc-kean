@@ -22,6 +22,7 @@ FloatPoint3D: cover {
 	x, y, z: Float
 	norm ::= (this x squared() + this y squared() + this z squared()) sqrt()
 	azimuth ::= this y atan2(this x)
+	isValid ::= (this x == this x && this y == this y && this z == this z)
 	elevation: Float {
 		get {
 			r := this norm
