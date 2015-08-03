@@ -314,6 +314,20 @@ Quaternion: cover {
 	relativeQuaternion: func (other: This) -> This {
 		other * this inverse
 	}
+	rotate: func(angularVelocity: FloatPoint3D) -> This {
+		result := this
+		angle := sqrt(angularVelocity x * angularVelocity x + angularVelocity y * angularVelocity y + angularVelocity z * angularVelocity z)
+		if (angle > 0.00000001f) {
+			rotationQuaternion := This new(
+				cos(angle / 2.0f),
+				angularVelocity x * sin(angle / 2.0f) / angle,
+				angularVelocity y * sin(angle / 2.0f) / angle,
+				angularVelocity z * sin(angle / 2.0f) / angle
+				)
+			result = rotationQuaternion * result
+		}
+		result
+	}
 	toString: func -> String {
 		"Real: " << "%8f" formatFloat(this real) >>
 		" Imaginary: " & "%8f" formatFloat(this imaginary x) >> " " & "%8f" formatFloat(this imaginary y) >> " " & "%8f" formatFloat(this imaginary z)
