@@ -279,7 +279,7 @@ Quaternion: cover {
 	sphericalLinearInterpolation: func(other: Quaternion, factor: Float) -> This {
 		cosAngle := this dotProduct(other)
 		longPath := cosAngle < 0.0f
-		angle := acos(Float absolute(cosAngle) clamp(-1.0f, 1.0f))
+		angle := acos(Float absolute(cosAngle) as Float clamp(-1.0f, 1.0f))
 		result: Quaternion
 		if (angle < 0.00000001)
 			result = this * (1 - factor) + other * factor
@@ -312,6 +312,20 @@ Quaternion: cover {
 	}
 	relativeQuaternion: func(other: Quaternion) -> Quaternion {
 		other * this inverse
+	}
+	rotate: func(angularVelocity: FloatPoint3D) -> This {
+		result := this
+		angle := sqrt(angularVelocity x * angularVelocity x + angularVelocity y * angularVelocity y + angularVelocity z * angularVelocity z)
+		if (angle > 0.00000001f) {
+			rotationQuaternion := This new(
+				cos(angle / 2.0f),
+				angularVelocity x * sin(angle / 2.0f) / angle,
+				angularVelocity y * sin(angle / 2.0f) / angle,
+				angularVelocity z * sin(angle / 2.0f) / angle
+				)
+			result = rotationQuaternion * result
+		}
+		result
 	}
 	toString: func -> String {
 		"Real: " << "%8f" formatFloat(this real) >>
