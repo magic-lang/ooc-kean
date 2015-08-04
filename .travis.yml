@@ -8,11 +8,13 @@ before_script:
   - # sudo apt-get update
   - # sudo apt-get -y -qq install libgles2-mesa-dev
   - tmp="$(wget -O - https://github.com/cogneco/rock/releases/latest | grep -o '\<download/rock_.*deb\>')"
+  - echo $tmp
   - wget https://github.com/cogneco/rock/releases/$tmp
   - dpkg-deb -x ${tmp##*/} .
   - mv usr/bin/rock .
   - mv usr/lib/fancy_backtrace.so .
   - tmp="$(wget -O - https://github.com/cogneco/magic/releases/latest | grep -o -m 1 '\<download/.*tar.gz\>')"
+  - echo $tmp
   - wget https://github.com/cogneco/magic/releases/$tmp
   - tar zxvf ${tmp##*/}
   - ls /usr/include
