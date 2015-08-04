@@ -49,7 +49,7 @@ do
 		rm -f $NAME
 	fi
 done
-if [ $FAILED ]
+if [ "$FAILED" = true ]
 then
 	exit 1
 else
