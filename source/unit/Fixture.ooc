@@ -30,6 +30,7 @@ Fixture: abstract class {
 		this add(test)
 	}
 	run: func {
+		failures := ArrayList<TestFailedException> new()
 		result := true
 		(this name + " ") print()
 		this tests each(|test|
@@ -38,11 +39,17 @@ Fixture: abstract class {
 				test run()
 			} catch (e: TestFailedException) {
 				e test = test
+				e message = test name
 				result = r = false
+				failures add(e)
 			}
 			(r ? "." : "f") print()
 		)
 		(result ? " done" : " failed") println()
+		if (!result)
+			for (f in failures)
+				"  -> '%s'" printfln(f message)
+		failures free()
 		exit(result ? 0 : 1)
 	}
 	is ::= static IsConstraints new()
@@ -70,7 +77,9 @@ TestFailedException: class extends Exception {
 	test: Test
 	value: Object
 	constraint: Constraint
-	init: func (=value, =constraint)
+	init: func (=value, =constraint, message := "") {
+		this message = message
+	}
 }
 Test: class {
 	name: String
