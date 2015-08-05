@@ -18,16 +18,15 @@ TimeSpan: cover {
 	_ticks: Int64
 	ticks ::= this _ticks
 	init: func@ (=_ticks)
-	createFromMs: static func (milliseconds: Int64)  -> This {
-		This new(milliseconds * 100000)
-	}
-	kean_base_timeSpan_getTicks: unmangled func -> Int64 { this _ticks }
 	operator + (span: TimeSpan) -> This { This new(this ticks + span ticks) }
 	operator - (span: TimeSpan) -> This { This new(this ticks - span ticks) }
 	operator / (value: Float) -> This { This new(this ticks / value) }
 	operator / (value: Int) -> This { This new(this ticks / value) }
 	operator * (value: Float) -> This { This new(this ticks * value) }
 	operator * (value: Int) -> This { This new(this ticks * value) }
+	createFromMs: static func (milliseconds: Int64)  -> This { This new(milliseconds * 100000) }
+
+	kean_base_timeSpan_getTicks: unmangled func -> Int64 { this _ticks }
 	new: unmangled(kean_base_timeSpan_new) static func ~API (ticks: Int64) -> This { This new(ticks) }
 }
 
@@ -37,13 +36,12 @@ DateTime: cover {
 	ticks ::= this _ticks
 
 	init: func@ (=_ticks)
-	createFromMs: static func (milliseconds: Int64)  -> This {
-		This new(milliseconds * 100000)
-	}
-	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
-	kean_base_dateTime_getTicks: unmangled func -> UInt64 { this _ticks }
 	operator + (span: TimeSpan) -> This { This new(this ticks + span ticks) }
 	operator - (span: TimeSpan) -> This { This new(this ticks - span ticks) }
+	createFromMs: static func (milliseconds: Int64)  -> This { This new(milliseconds * 100000) }
+	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
+
+	kean_base_dateTime_getTicks: unmangled func -> UInt64 { this _ticks }
 	new: unmangled(kean_base_dateTime_new) static func ~API (ticks: UInt64) -> This { This new(ticks) }
 
 }
