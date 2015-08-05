@@ -148,7 +148,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform o, is equal to(0.0f) within(this precision))
 			expect(transform p, is equal to(1.0f) within(this precision))
 		})
-		this add("create rotation", func {
+		this add("create rotation x", func {
 			angle := PI as Float / 9.0f
 			transform := FloatTransform3D createRotationX(angle)
 			expect(transform a, is equal to(1.0f) within(this precision))
@@ -164,6 +164,52 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform i, is equal to(0.0f) within(this precision))
 			expect(transform j, is equal to((-angle) sin()) within(this precision))
 			expect(transform k, is equal to(angle cos()) within(this precision))
+			expect(transform l, is equal to(0.0f) within(this precision))
+
+			expect(transform m, is equal to(0.0f) within(this precision))
+			expect(transform n, is equal to(0.0f) within(this precision))
+			expect(transform o, is equal to(0.0f) within(this precision))
+			expect(transform p, is equal to(1.0f) within(this precision))
+		})
+		this add("create rotation y", func {
+			angle := PI as Float / 9.0f
+			transform := FloatTransform3D createRotationY(angle)
+			expect(transform a, is equal to(angle cos()) within(this precision))
+			expect(transform b, is equal to(0.0f) within(this precision))
+			expect(transform c, is equal to(-angle sin()) within(this precision))
+			expect(transform d, is equal to(0.0f) within(this precision))
+
+			expect(transform e, is equal to(0.0f) within(this precision))
+			expect(transform f, is equal to(1.0f) within(this precision))
+			expect(transform g, is equal to(0.0f) within(this precision))
+			expect(transform h, is equal to(0.0f) within(this precision))
+
+			expect(transform i, is equal to(angle sin()) within(this precision))
+			expect(transform j, is equal to(0.0f) within(this precision))
+			expect(transform k, is equal to(angle cos()) within(this precision))
+			expect(transform l, is equal to(0.0f) within(this precision))
+
+			expect(transform m, is equal to(0.0f) within(this precision))
+			expect(transform n, is equal to(0.0f) within(this precision))
+			expect(transform o, is equal to(0.0f) within(this precision))
+			expect(transform p, is equal to(1.0f) within(this precision))
+		})
+		this add("create rotation z", func {
+			angle := PI as Float / 9.0f
+			transform := FloatTransform3D createRotationZ(angle)
+			expect(transform a, is equal to(angle cos()) within(this precision))
+			expect(transform b, is equal to(angle sin()) within(this precision))
+			expect(transform c, is equal to(0.0f) within(this precision))
+			expect(transform d, is equal to(0.0f) within(this precision))
+
+			expect(transform e, is equal to(-angle sin()) within(this precision))
+			expect(transform f, is equal to(angle cos()) within(this precision))
+			expect(transform g, is equal to(0.0f) within(this precision))
+			expect(transform h, is equal to(0.0f) within(this precision))
+
+			expect(transform i, is equal to(0.0f) within(this precision))
+			expect(transform j, is equal to(0.0f) within(this precision))
+			expect(transform k, is equal to(1.0f) within(this precision))
 			expect(transform l, is equal to(0.0f) within(this precision))
 
 			expect(transform m, is equal to(0.0f) within(this precision))
