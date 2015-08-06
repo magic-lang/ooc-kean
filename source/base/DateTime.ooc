@@ -39,12 +39,9 @@ extend Time {
 				result = DateTime new(st wYear, st wMonth, st wDay, st wHour, st wMinute, st wSecond, st wMilliseconds)
 		}
 		version(!windows) {
-				tspec : TimeSpec
-				val : TMStruct
-				clock_gettime(CLOCK_REALTIME, tspec&)
-				localtime_r(tspec tv_sec&, val&)
-				result = DateTime new(val tm_year+1900, val tm_mon+1, val tm_mday, val tm_hour, val tm_min, val tm_sec, 0)
-				result = result + TimeSpan new(tspec tv_nsec / DateTime nanosecondsPerTick)
+				tt := time(null)
+				val := localtime(tt&)
+				result = DateTime new(val@ tm_year+1900, val@ tm_mon+1, val@ tm_mday, val@ tm_hour, val@ tm_min, val@ tm_sec, 0)
 		}
 		return result
 	}

@@ -34,8 +34,6 @@ version(windows) {
 }
 
 version(!windows) {
-    ClockT: cover from clock_t
-    CLOCK_REALTIME: extern ClockT
     TimeT: cover from time_t
     TimeZone: cover from struct timezone
     TMStruct: cover from struct tm {
@@ -45,18 +43,12 @@ version(!windows) {
         tv_sec: extern TimeT
         tv_usec: extern Int
     }
-    TimeSpec: cover from struct timespec {
-        tv_sec: extern TimeT
-        tv_nsec: extern Long
-    }
 
     time: extern proto func (TimeT*) -> TimeT
     localtime: extern func (TimeT*) -> TMStruct*
-    localtime_r: extern func (TimeT*, TMStruct*) -> TMStruct*
     gettimeofday: extern func (TimeVal*, TimeZone*) -> Int
     usleep: extern func (UInt)
     _asctime: extern(asctime) func (TMStruct*) -> CString
-    clock_gettime: extern func (ClockT, TimeSpec*) -> Int
 
     /**
         An `asctime` wrapper that copies the result to a new string. Otherwise,
@@ -215,57 +207,6 @@ Time: class {
             return val@ tm_hour
         }
         return -1
-    }
-
-    /**
-        Returns the current day of the month (1-31)
-    */
-    day: static func -> UInt {
-      version(windows) {
-          st: SystemTime
-          GetLocalTime(st&)
-          return st wDay
-      }
-      version(!windows) {
-          tt := time(null)
-          val := localtime(tt&)
-          return val@ tm_mday
-      }
-      return -1
-    }
-
-    /**
-        Returns the current month of the year (1-12)
-    */
-    month: static func -> UInt {
-      version(windows) {
-          st: SystemTime
-          GetLocalTime(st&)
-          return st wMonth
-      }
-      version(!windows) {
-          tt := time(null)
-          val := localtime(tt&)
-          return val@ tm_mon+1
-      }
-      return -1
-    }
-
-    /**
-        Returns the current year
-    */
-    year: static func -> UInt {
-      version(windows) {
-          st: SystemTime
-          GetLocalTime(st&)
-          return st wYear
-      }
-      version(!windows) {
-          tt := time(null)
-          val := localtime(tt&)
-          return val@ tm_year+1900
-      }
-      return -1
     }
 
     sleepSec: static func (duration: Float) {
