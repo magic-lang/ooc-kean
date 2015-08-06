@@ -10,6 +10,7 @@ GpuSurface: abstract class {
 	viewport: IntBox2D { get set }
 	_size: IntSize2D
 	size ::= this _size
+	blend: Bool { get set }
 	_context: GpuContext
 	_model: FloatTransform3D
 	_view: FloatTransform3D
@@ -49,6 +50,7 @@ GpuSurface: abstract class {
 		this nearPlane = 1.0f
 		this farPlane = 10000.0f
 		this _view = FloatTransform3D identity
+		this blend = false
 	}
 	_bind: virtual func
 	_unbind: virtual func
@@ -56,6 +58,7 @@ GpuSurface: abstract class {
 	draw: func ~general (action: Func) {
 		this _bind()
 		this _context setViewport(this viewport)
+		this _context enableBlend(this blend)
 		//FIXME: Ugly check that shouldn't be necessary
 		if (this map != null)
 			this map use()
