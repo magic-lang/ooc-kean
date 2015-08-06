@@ -64,6 +64,7 @@ GpuSurface: abstract class {
 			this map use()
 		action()
 		this _unbind()
+		this reset()
 	}
 	draw: abstract func (image: Image)
 	drawLines: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawLines(pointList, this _projection) }) }
