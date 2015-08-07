@@ -53,6 +53,15 @@ FloatVectorList: class extends VectorList<Float> {
 			result
 		}
 	}
+	minValue: Float {
+		get {
+			result := Float positiveInfinity
+			for (i in 0..this count)
+				if (result > this[i])
+					result = this[i]
+			result
+		}
+	}
 	mean ::= this sum / this count
 	variance: Float {
 		get {
