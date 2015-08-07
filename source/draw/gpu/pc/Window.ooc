@@ -27,8 +27,6 @@ Window: class extends GpuSurface {
 	_native: NativeWindow
 
 	_monochromeToBgra: OpenGLES3MapMonochromeToBgra
-	_bgrToBgra: OpenGLES3MapBgrToBgra
-	_bgraToBgra: OpenGLES3MapBgra
 	_yuvSemiplanarToBgra: OpenGLES3MapYuvSemiplanarToBgra
 
 	context ::= this _context as OpenGLES3Context
@@ -38,8 +36,7 @@ Window: class extends GpuSurface {
 	init: /* internal */ func (size: IntSize2D, title := "Window title") {
 		this _native = X11Window new(size width, size height, title)
 		context := OpenGLES3Context new(this _native)
-		this _bgraToBgra = OpenGLES3MapBgra new(this context)
-		super(size, context, this _bgraToBgra)
+		super(size, context, OpenGLES3MapDefaultTexture new(this context))
 
 		/* BEGIN Ugly hack to force the window to resize outside screen */
 		this refresh()
@@ -47,30 +44,26 @@ Window: class extends GpuSurface {
 		/* END */
 
 		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new(this context)
-		this _bgrToBgra = OpenGLES3MapBgrToBgra new(this context)
 		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new(this context)
 
 		XSelectInput(this _native display, this _native _backend, KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask)
 		XkbSetDetectableAutoRepeat(this _native display, true, null) as Void
 	}
 	free: override func {
-		this _bgrToBgra free()
-		this _bgraToBgra free()
 		this _yuvSemiplanarToBgra free()
 		this _monochromeToBgra free()
-
+		this _defaultMap free()
 		native := this _native
 		this _context free()
 		super()
 		(native as X11Window) free()
 	}
 	_bind: override func { this _native bind() }
-	_getTransformMap: func (gpuImage: GpuImage) -> OpenGLES3MapTransform {
+	_getTransformMap: func (gpuImage: GpuImage) -> GpuMap {
 		result := match(gpuImage) {
 			case (gpuImage: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgra
-			case (gpuImage: GpuBgra) => this _bgraToBgra
 			case (gpuImage: GpuMonochrome) => this _monochromeToBgra
-			case => Debug raise("No support for drawing image format to Window"); null
+			case => this context getMap(gpuImage, GpuMapType transform)
 		}
 		result
 	}

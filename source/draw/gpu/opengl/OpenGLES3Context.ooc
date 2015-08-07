@@ -25,10 +25,8 @@ import OpenGLES3/Context, OpenGLES3/NativeWindow, OpenGLES3/Lines
 
 OpenGLES3Context: class extends GpuContext {
 	_backend: Context
-	_bgrMapDefault: OpenGLES3MapBgr
-	_bgraMapDefault: OpenGLES3MapBgra
-	_monochromeMapDefault: OpenGLES3MapMonochrome
-	_uvMapDefault: OpenGLES3MapUv
+	_defaultMap: OpenGLES3MapDefaultTexture
+	_transformTextureMap: OpenGLES3MapTransformTexture
 	_packMonochrome: OpenGLES3MapPackMonochrome
 	_packUv: OpenGLES3MapPackUv
 	_linesShader: OpenGLES3MapLines
@@ -38,26 +36,22 @@ OpenGLES3Context: class extends GpuContext {
 
 	init: func (context: Context) {
 		super()
-		this _bgrMapDefault = OpenGLES3MapBgr new(this)
-		this _bgraMapDefault = OpenGLES3MapBgra new(this)
-		this _monochromeMapDefault = OpenGLES3MapMonochrome new(this)
-		this _uvMapDefault = OpenGLES3MapUv new(this)
 		this _packMonochrome = OpenGLES3MapPackMonochrome new(this)
 		this _packUv = OpenGLES3MapPackUv new(this)
 		this _linesShader = OpenGLES3MapLines new(this)
 		this _pointsShader = OpenGLES3MapPoints new(this)
 		this _backend = context
 		this _quad = Quad create()
+		this _defaultMap = OpenGLES3MapDefaultTexture new(this)
+		this _transformTextureMap = OpenGLES3MapTransformTexture new(this)
 	}
 	init: func ~unshared { this init(Context create()) }
 	init: func ~shared (other: This) { this init(Context create(other _backend)) }
 	init: func ~window (nativeWindow: NativeWindow) { this init(Context create(nativeWindow)) }
 	free: override func {
 		this _backend makeCurrent()
-		this _bgrMapDefault free()
-		this _bgraMapDefault free()
-		this _monochromeMapDefault free()
-		this _uvMapDefault free()
+		this _defaultMap free()
+		this _transformTextureMap free()
 		this _packMonochrome free()
 		this _packUv free()
 		this _linesShader free()
@@ -103,32 +97,16 @@ OpenGLES3Context: class extends GpuContext {
 	}
 	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap {
 		result := match (mapType) {
-			case GpuMapType defaultmap =>
-				match (gpuImage) {
-					case (gpuImage : GpuMonochrome) => this _monochromeMapDefault
-					case (gpuImage : GpuUv) => this _uvMapDefault
-					case (gpuImage : GpuBgr) => this _bgrMapDefault
-					case (gpuImage : GpuBgra) => this _bgraMapDefault
-					case => this _bgraMapDefault
-				}
-			case GpuMapType transform =>
-				match (gpuImage) {
-					case (gpuImage : GpuMonochrome) => this _monochromeMapDefault
-					case (gpuImage : GpuUv) => this _uvMapDefault
-					case (gpuImage : GpuBgr) => this _bgrMapDefault
-					case (gpuImage : GpuBgra) => this _bgraMapDefault
-					case => this _bgraMapDefault
-				}
+			case GpuMapType defaultmap => this _defaultMap
+			case GpuMapType transform => this _transformTextureMap
 			case GpuMapType pack =>
 				match (gpuImage) {
 					case (image : GpuMonochrome) => this _packMonochrome
 					case (image : GpuUv) => this _packUv
 					case => null
 				}
-			case => null
+			case => Debug raise("Could not find Map implementation of specified type"); null
 		}
-		if (result == null)
-			Debug raise("Could not find Map implementation of specified type")
 		result
 	}
 	searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage { this _imageBin find(type, size) }
