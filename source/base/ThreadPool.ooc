@@ -102,6 +102,7 @@ ThreadPool: class {
 		job
 	}
 	add: func (body: Func) { this _add(ThreadJob new(body)) }
+	wait: func (body: Func) { this addSynchronized(body) wait() . free() }
 	waitAll: func {
 		this _mutex lock()
 		if (this _activeJobs > 0)
