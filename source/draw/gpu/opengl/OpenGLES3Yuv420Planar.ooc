@@ -25,19 +25,17 @@ OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 		super(y, u, v, context)
 		this coordinateSystem = y coordinateSystem
 	}
-	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Planar create(this, this _context) }
-	create: static func ~fromRaster (rasterImage: RasterYuv420Planar, context: GpuContext) -> This {
-		y := context createGpuImage(rasterImage y) as OpenGLES3Monochrome
-		u := context createGpuImage(rasterImage u) as OpenGLES3Monochrome
-		v := context createGpuImage(rasterImage v) as OpenGLES3Monochrome
-		result := This new(y, u, v, context)
-		result
-	}
-	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
+	init: func ~empty (size: IntSize2D, context: GpuContext) {
 		y := context createMonochrome(size) as OpenGLES3Monochrome
 		u := context createMonochrome(IntSize2D new(size width / 2, size height / 2)) as OpenGLES3Monochrome
 		v := context createMonochrome(IntSize2D new(size width / 2, size height / 2)) as OpenGLES3Monochrome
-		result := This new(y, u, v, context)
-		result
+		this init(y, u, v, context)
 	}
+	init: func ~fromRaster (rasterImage: RasterYuv420Planar, context: GpuContext) {
+		y := context createGpuImage(rasterImage y) as OpenGLES3Monochrome
+		u := context createGpuImage(rasterImage u) as OpenGLES3Monochrome
+		v := context createGpuImage(rasterImage v) as OpenGLES3Monochrome
+		this init(y, u, v, context)
+	}
+	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Planar create(this, this _context) }
 }

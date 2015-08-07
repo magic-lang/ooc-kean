@@ -30,6 +30,9 @@ OpenGLES3Yuv422Semipacked: class extends GpuYuv422Semipacked {
 	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) {
 		super(texture, size, context)
 	}
+	init: func ~fromRaster (rasterImage: RasterYuv422Semipacked, context: GpuContext) {
+		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
+	}
 	toRasterDefault: func -> RasterImage {
 		raise("toRaster not implemented for YUV422SEMIPACKED")
 		null
@@ -39,12 +42,5 @@ OpenGLES3Yuv422Semipacked: class extends GpuYuv422Semipacked {
 		result clearColor = ColorBgra new(128, 128, 128, 128)
 		result
 	}
-	create: static func ~fromRaster (rasterImage: RasterYuv422Semipacked, context: GpuContext) -> This {
-		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
-		result
-	}
-	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
-		result := This new(size, context)
-		result texture != null ? result : null
-	}
+
 }
