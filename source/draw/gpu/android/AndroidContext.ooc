@@ -162,35 +162,3 @@ AndroidContext: class extends OpenGLES3Context {
 	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }
 	isAligned: override func (width: Int) -> Bool { GraphicBuffer isAligned(width) }
 }
-
-AndroidContextManager: class extends GpuContextManager {
-	_motherContext: AndroidContext
-	_sharedContexts: Bool
-	_mutex: Mutex
-	currentContext: AndroidContext { get { this _getContext() as AndroidContext } }
-	init: func (contexts: Int, sharedContexts := false) {
-		super(contexts)
-		this _sharedContexts = sharedContexts
-		this _mutex = Mutex new()
-	}
-	_createContext: func -> GpuContext {
-		result: GpuContext
-		if (this _sharedContexts) {
-			this _mutex lock()
-			if (this _motherContext == null) {
-				this _motherContext = AndroidContext new()
-				result = this _motherContext
-			} else
-				result = AndroidContext new(this _motherContext)
-			this _mutex unlock()
-		} else
-			result = AndroidContext new()
-		result
-	}
-	createBgra: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> OpenGLES3Bgra { this currentContext createBgra(buffer) }
-	unpackBgraToYuv420Semiplanar: func (source: GpuBgra, targetSize: IntSize2D) -> GpuYuv420Semiplanar {
-		this currentContext unpackBgraToYuv420Semiplanar(source, targetSize)
-	}
-	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }
-	isAligned: override func (width: Int) -> Bool { GraphicBuffer isAligned(width) }
-}
