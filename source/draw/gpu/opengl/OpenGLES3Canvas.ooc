@@ -76,7 +76,7 @@ OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 		this target y canvas _view = this _view
 		this target y canvas focalLength = this _focalLength
 		this target y canvas draw(image y)
-		this target uv canvas _view = this _view * FloatTransform3D createTranslation(-this _view m / 2.0f, -this _view n / 2.0f, -this _view o / 2.0f)
+		this target uv canvas _view = FloatTransform3D createTranslation(-this _view m / 2.0f, -this _view n / 2.0f, -this _view o / 2.0f) * this _view
 		this target uv canvas focalLength = this _focalLength / 2.0f
 		this target uv canvas draw(image uv)
 	}
