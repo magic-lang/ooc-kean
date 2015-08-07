@@ -28,9 +28,7 @@ OpenGLES3Context: class extends GpuContext {
 	_bgrMapDefault: OpenGLES3MapBgr
 	_bgraMapDefault: OpenGLES3MapBgra
 	_monochromeMapDefault: OpenGLES3MapMonochrome
-	_monochromeMapTransform: OpenGLES3MapMonochrome
 	_uvMapDefault: OpenGLES3MapUv
-	_uvMapTransform: OpenGLES3MapUv
 	_packMonochrome: OpenGLES3MapPackMonochrome
 	_packUv: OpenGLES3MapPackUv
 	_linesShader: OpenGLES3MapLines
@@ -43,9 +41,7 @@ OpenGLES3Context: class extends GpuContext {
 		this _bgrMapDefault = OpenGLES3MapBgr new(this)
 		this _bgraMapDefault = OpenGLES3MapBgra new(this)
 		this _monochromeMapDefault = OpenGLES3MapMonochrome new(this)
-		this _monochromeMapTransform = OpenGLES3MapMonochrome new(this)
 		this _uvMapDefault = OpenGLES3MapUv new(this)
-		this _uvMapTransform = OpenGLES3MapUv new(this)
 		this _packMonochrome = OpenGLES3MapPackMonochrome new(this)
 		this _packUv = OpenGLES3MapPackUv new(this)
 		this _linesShader = OpenGLES3MapLines new(this)
@@ -61,9 +57,7 @@ OpenGLES3Context: class extends GpuContext {
 		this _bgrMapDefault free()
 		this _bgraMapDefault free()
 		this _monochromeMapDefault free()
-		this _monochromeMapTransform free()
 		this _uvMapDefault free()
-		this _uvMapTransform free()
 		this _packMonochrome free()
 		this _packUv free()
 		this _linesShader free()
@@ -111,19 +105,19 @@ OpenGLES3Context: class extends GpuContext {
 		result := match (mapType) {
 			case GpuMapType defaultmap =>
 				match (gpuImage) {
-					case (image : GpuMonochrome) => this _monochromeMapDefault
-					case (image : GpuUv) => this _uvMapDefault
-					case (image : GpuBgr) => this _bgrMapDefault
-					case (image : GpuBgra) => this _bgraMapDefault
-					case => null
+					case (gpuImage : GpuMonochrome) => this _monochromeMapDefault
+					case (gpuImage : GpuUv) => this _uvMapDefault
+					case (gpuImage : GpuBgr) => this _bgrMapDefault
+					case (gpuImage : GpuBgra) => this _bgraMapDefault
+					case => this _bgraMapDefault
 				}
 			case GpuMapType transform =>
 				match (gpuImage) {
-					case (gpuImage : GpuMonochrome) => this _monochromeMapTransform
-					case (gpuImage : GpuUv) => this _uvMapTransform
+					case (gpuImage : GpuMonochrome) => this _monochromeMapDefault
+					case (gpuImage : GpuUv) => this _uvMapDefault
 					case (gpuImage : GpuBgr) => this _bgrMapDefault
 					case (gpuImage : GpuBgra) => this _bgraMapDefault
-					case => null
+					case => this _bgraMapDefault
 				}
 			case GpuMapType pack =>
 				match (gpuImage) {

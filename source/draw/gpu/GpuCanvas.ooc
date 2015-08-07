@@ -23,7 +23,7 @@ import GpuImage, GpuMap, GpuSurface, GpuContext, structs/LinkedList
 
 GpuCanvas: abstract class extends GpuSurface {
 	_target: GpuImage
-	init: func (=_target, context: GpuContext) { super(this _target size, context) }
+	init: func (=_target, context: GpuContext) { super(this _target size, context, context getMap(this _target, GpuMapType transform)) }
 	readPixels: virtual func -> ByteBuffer { raise("Trying to read pixels in unimplemented readPixels function"); null }
 	onRecycle: abstract func
 }
