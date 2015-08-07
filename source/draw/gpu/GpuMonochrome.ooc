@@ -19,9 +19,4 @@ import GpuPacked, GpuContext, GpuTexture
 
 GpuMonochrome: abstract class extends GpuPacked {
 	init: func (texture: GpuTexture, size: IntSize2D, context: GpuContext) { super(texture, size, 1, context) }
-	resizeTo: func (size: IntSize2D) -> This {
-		target := this _context createMonochrome(size)
-		target canvas draw(this)
-		target
-	}
 }

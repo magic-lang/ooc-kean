@@ -19,9 +19,4 @@ import GpuPacked, GpuContext, GpuTexture
 
 GpuBgr: abstract class extends GpuPacked {
 	init: func (texture: GpuTexture, size: IntSize2D, context: GpuContext) { super(texture, size, 3, context) }
-	resizeTo: func (size: IntSize2D) -> This {
-		target := this _context createBgr(size)
-		target canvas draw(this)
-		target
-	}
 }

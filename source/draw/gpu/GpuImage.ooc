@@ -70,8 +70,13 @@ GpuImage: abstract class extends Image {
 	setMinFilter: abstract func (linear: Bool)
 
 	//TODO: Implement abstract functions
-	create: override func (size: IntSize2D) -> This { raise("Unimplemented"); null }
-	resizeTo: func (size: IntSize2D) -> This { raise("Using unimplemented function reSizeTo in GpuImage class"); null }
+	resizeTo: override func (size: IntSize2D) -> This {
+		result := this create(size) as This
+		map := this _context getMap(this)
+		result canvas map = map
+		result canvas draw(this)
+		result
+	}
 	copy: func -> This { raise("Using unimplemented function copy in GpuImage class"); null }
 	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This { raise("Using unimplemented function copy ~fromParams in GpuImage class"); null }
 	shift: func (offset: IntSize2D) -> This { raise("Using unimplemented function shift in GpuImage class"); null }
