@@ -51,7 +51,7 @@ OpenGLES3Map: abstract class extends GpuMap {
 		this _program[currentIndex] use()
 	}
 }
-OpenGLES3Map2D: abstract class extends OpenGLES3Map {
+OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 	init: func (fragmentSource: String, context: GpuContext) { super(This vertexSource, fragmentSource, context) }
 	vertexSource: static String ="
 		#version 300 es
@@ -65,7 +65,7 @@ OpenGLES3Map2D: abstract class extends OpenGLES3Map {
 			gl_Position = position;
 		}"
 }
-OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
+OpenGLES3MapTransform: abstract class extends OpenGLES3Map {
 	init: func (fragmentSource: String, context: GpuContext) { super(This vertexSource, fragmentSource, context) }
 	use: override func {
 		super()
@@ -86,7 +86,7 @@ OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 			gl_Position = transformedPosition;
 		}"
 }
-OpenGLES3MapDefaultTexture: abstract class extends OpenGLES3MapDefault {
+OpenGLES3MapDefaultTexture: abstract class extends OpenGLES3MapTransform {
 	init: func (fragmentSource: String, context: GpuContext) { super(fragmentSource, context) }
 	use: override func {
 		super()
@@ -178,7 +178,7 @@ OpenGLES3MapMonochromeToBgra: class extends OpenGLES3MapDefaultTexture {
 			outColor = vec4(colorSample, colorSample, colorSample, 1.0f);
 		}"
 }
-OpenGLES3MapYuvPlanarToBgra: class extends OpenGLES3MapDefault {
+OpenGLES3MapYuvPlanarToBgra: class extends OpenGLES3MapTransform {
 	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	use: override func {
 		super()
@@ -210,7 +210,7 @@ OpenGLES3MapYuvPlanarToBgra: class extends OpenGLES3MapDefault {
 			outColor = YuvToRgba(vec4(y, v - 0.5f, u - 0.5f, 1.0f));
 		}"
 }
-OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapDefault {
+OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapTransform {
 	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	use: override func {
 		super()
@@ -239,7 +239,7 @@ OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapDefault {
 			outColor = YuvToRgba(vec4(y, uv.r - 0.5f, uv.g - 0.5f, 1.0f));
 		}"
 }
-OpenGLES3MapLines: class extends OpenGLES3MapDefault {
+OpenGLES3MapLines: class extends OpenGLES3MapTransform {
 	color: FloatPoint3D { get set }
 	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	use: override func {
