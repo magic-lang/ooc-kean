@@ -26,13 +26,10 @@ OpenGLES3Bgr: class extends GpuBgr {
 		this coordinateSystem = coordinateSystem
 	}
 	init: func (size: IntSize2D, context: GpuContext) { this init(size, size width * this _channels, null, CoordinateSystem YUpward, context) }
+	init: func ~fromRaster (rasterImage: RasterBgr, context: GpuContext) {
+		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
+	}
 	toRasterDefault: func -> RasterImage { Debug raise("toRaster not implemented for BGR"); null }
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
-	create: static func ~fromRaster (rasterImage: RasterBgr, context: GpuContext) -> This {
-		This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
-	}
-	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
-		result := This new(size, context)
-		result texture != null ? result : null
-	}
+	create: override func (size: IntSize2D) -> This { This new(size, this _context) }
 }

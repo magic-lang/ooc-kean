@@ -31,6 +31,9 @@ OpenGLES3Uv: class extends GpuUv {
 	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) {
 		super(texture, size, context)
 	}
+	init: func ~fromRaster (rasterImage: RasterUv, context: GpuContext) {
+		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
+	}
 	toRasterDefault: func -> RasterImage {
 		packed := this _context createBgra(IntSize2D new(this size width / 2, this size height))
 		this _context packToRgba(this, packed, IntBox2D new(packed size))
@@ -44,12 +47,5 @@ OpenGLES3Uv: class extends GpuUv {
 		result clearColor = ColorBgra new(128, 128, 128, 128)
 		result
 	}
-	create: static func ~fromRaster (rasterImage: RasterUv, context: GpuContext) -> This {
-		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
-		result
-	}
-	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
-		result := This new(size, context)
-		result texture != null ? result : null
-	}
+	create: override func (size: IntSize2D) -> This { This new(size, this _context) }
 }
