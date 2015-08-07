@@ -25,17 +25,15 @@ OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
 		super(y, uv, context)
 		this coordinateSystem = y coordinateSystem
 	}
-	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Semiplanar create(this, this _context) }
-	create: static func ~fromRaster (rasterImage: RasterYuv420Semiplanar, context: GpuContext) -> This {
+	init: func ~fromRaster (rasterImage: RasterYuv420Semiplanar, context: GpuContext) {
 		y := context createGpuImage(rasterImage y) as OpenGLES3Monochrome
 		uv := context createGpuImage(rasterImage uv) as OpenGLES3Uv
-		result := This new(y, uv, context)
-		result
+		this init(y, uv, context)
 	}
-	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
+	init: func ~empty (size: IntSize2D, context: GpuContext) {
 		y := context createMonochrome(size) as OpenGLES3Monochrome
 		uv := context createUv(size / 2) as OpenGLES3Uv
-		result := This new(y, uv, context)
-		result
+		this init(y, uv, context)
 	}
+	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Semiplanar create(this, this _context) }
 }
