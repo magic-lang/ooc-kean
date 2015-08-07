@@ -37,6 +37,6 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 		packed free()
 		result
 	}
-	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
+	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas new(this, this _context) }
 	create: override func (size: IntSize2D) -> This { This new(size, this _context) }
 }
