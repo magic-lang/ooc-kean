@@ -128,7 +128,7 @@ OpenGLES3Context: class extends GpuContext {
 			case => null
 		}
 		if (result == null)
-			raise("Could not find Map implementation of specified type")
+			Debug raise("Could not find Map implementation of specified type")
 		result
 	}
 	searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage { this _imageBin find(type, size) }
@@ -234,10 +234,7 @@ OpenGLES3Context: class extends GpuContext {
 		map transform = FloatTransform3D createScaling(source transform a, source transform e, 1.0f)
 		target canvas map = map
 		target canvas viewport = viewport
-		target canvas draw(func {
-			source bind(0)
-			this drawQuad()
-		})
+		target canvas draw(source)
 	}
 	createFence: func -> GpuFence { OpenGLES3Fence new() }
 	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) {
