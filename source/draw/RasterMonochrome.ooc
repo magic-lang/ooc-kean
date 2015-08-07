@@ -102,7 +102,7 @@ RasterMonochrome: class extends RasterPacked {
 		StbImage free(data)
 		This new(buffer, IntSize2D new(x, y))
 	}
-	save: func (filename: String) -> Int {
+	save: override func (filename: String) -> Int {
 		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this size width * this bytesPerPixel)
 	}
 	convertFrom: static func(original: RasterImage) -> This {

@@ -22,6 +22,7 @@ FloatPoint3D: cover {
 	x, y, z: Float
 	norm ::= (this x squared() + this y squared() + this z squared()) sqrt()
 	azimuth ::= this y atan2(this x)
+	isValid ::= (this x == this x && this y == this y && this z == this z)
 	elevation: Float {
 		get {
 			r := this norm
@@ -75,6 +76,7 @@ FloatPoint3D: cover {
 	linearInterpolation: static func (a, b: FloatPoint3D, ratio: Float) -> FloatPoint3D {
 		FloatPoint3D new(Float linearInterpolation(a x, b x, ratio), Float linearInterpolation(a y, b y, ratio), Float linearInterpolation(a z, b z, ratio))
 	}
+	new: unmangled(kean_math_floatPoint3D_new) static func ~API (x: Float, y: Float, z: Float) -> This { This new(x, y, z) }
 }
 operator * (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left * right x, left * right y, left * right z) }
 operator / (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left / right x, left / right y, left / right z) }

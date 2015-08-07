@@ -23,89 +23,73 @@ use ooc-base
 import X11/X11Window
 import X11/include/x11
 
-Window: class extends OpenGLES3Context {
+Window: class extends GpuSurface {
 	_native: NativeWindow
+
 	_monochromeToBgra: OpenGLES3MapMonochromeToBgra
-	_bgrToBgra: OpenGLES3MapBgrToBgra
-	_bgraToBgra: OpenGLES3MapBgra
-	_yuvPlanarToBgra: OpenGLES3MapYuvPlanarToBgra
-	_yuvSemiplanarToBgra, _yuvSemiplanarToBgraTransform: OpenGLES3MapYuvSemiplanarToBgra
+	_yuvSemiplanarToBgra: OpenGLES3MapYuvSemiplanarToBgra
 
-	size: IntSize2D { get set }
+	context ::= this _context as OpenGLES3Context
+	size ::= this _size
+	_transform := IntTransform2D createScaling(1, -1)
 
-	init: /* internal */ func (=size, title: String) {
+	init: /* internal */ func (size: IntSize2D, title := "Window title") {
 		this _native = X11Window new(size width, size height, title)
-		super(this _native)
+		context := OpenGLES3Context new(this _native)
+		super(size, context, OpenGLES3MapDefaultTexture new(this context))
 
 		/* BEGIN Ugly hack to force the window to resize outside screen */
 		this refresh()
 		(this _native as X11Window) resize(size)
 		/* END */
 
-		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new(this)
-		this _bgrToBgra = OpenGLES3MapBgrToBgra new(this)
-		this _bgraToBgra = OpenGLES3MapBgra new(this)
-		this _yuvPlanarToBgra = OpenGLES3MapYuvPlanarToBgra new(this)
-		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new(this)
-		this _yuvSemiplanarToBgraTransform = OpenGLES3MapYuvSemiplanarToBgra new(this, true)
+		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new(this context)
+		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new(this context)
+
 		XSelectInput(this _native display, this _native _backend, KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask)
 		XkbSetDetectableAutoRepeat(this _native display, true, null) as Void
 	}
 	free: override func {
-		this _bgrToBgra free()
-		this _bgraToBgra free()
-		this _yuvPlanarToBgra free()
 		this _yuvSemiplanarToBgra free()
-		this _yuvSemiplanarToBgraTransform free()
 		this _monochromeToBgra free()
+		this _defaultMap free()
 		native := this _native
+		this _context free()
 		super()
 		(native as X11Window) free()
 	}
-	getTransformMap: func (gpuImage: GpuImage) -> OpenGLES3MapDefault {
+	_bind: override func { this _native bind() }
+	_getTransformMap: func (gpuImage: GpuImage) -> GpuMap {
 		result := match(gpuImage) {
-			case (gpuImage: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgraTransform
-			case (gpuImage: GpuBgra) => this _bgraToBgra
+			case (gpuImage: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgra
 			case (gpuImage: GpuMonochrome) => this _monochromeToBgra
-			case => null
-		}
-		if (result == null) {
-			Debug print("No support for drawing image format to Window")
-			raise("No support for drawing image format to Window")
+			case => this context getMap(gpuImage, GpuMapType transform)
 		}
 		result
 	}
-	draw: func ~Transform2D (image: GpuImage, transform := FloatTransform2D identity) {
-		map := this getTransformMap(image)
-		map transform = FloatTransform2D createScaling(1.0f, -1.0f) * transform
-		this draw(image, map)
+	draw: func ~gpuImage (image: GpuImage) {
+		this map = this _getTransformMap(image)
+		this map model = this _createModelTransform(image size, this _transform * image transform)
+		this map view = this _view
+		this map projection = this _projection
+		this draw(func {
+			image bind(0)
+			this context drawQuad()
+		})
 	}
-	draw: func ~RasterImageTransform (image: RasterImage, transform: FloatTransform2D) {
-		result := this createGpuImage(image)
-		this draw(result, transform)
-		result recycle()
+	draw: func (image: Image) {
+		if (image instanceOf?(GpuImage)) { this draw(image as GpuImage) }
+		else if (image instanceOf?(RasterImage)) {
+			temp := this context createGpuImage(image as RasterImage)
+			this draw(temp as GpuImage)
+			temp free()
+		}
+		else
+			Debug raise("Trying to draw unsupported image format to Window!!")
 	}
-	draw: func ~UnknownFormat (image: Image, transform := FloatTransform2D identity) {
-		if (image instanceOf?(RasterImage))
-			this draw(image as RasterImage, transform)
-		else if (image instanceOf?(GpuImage))
-			this draw(image as GpuImage, transform)
-	}
-	draw: func ~shader (image: GpuImage, map: GpuMap) {
-		offset := IntPoint2D new(this size width / 2 - image size width / 2, this size height / 2 - image size height / 2)
-		viewport := IntBox2D new(offset, image size)
-		surface := this createSurface()
-		surface draw(image, map, viewport)
-		surface recycle()
-	}
-	bind: /* internal */ func { this _native bind() }
-	clear: /* internal */ func { this _native clear() }
+	clear: func { this _native clear() }
 	refresh: func {
-		this update()
+		this context update()
 		this clear()
-	}
-	create: static func (size: IntSize2D, title := "Window title") -> This {
-		result := This new(size, title)
-		result
 	}
 }
