@@ -26,11 +26,7 @@ import OpenGLES3/Fbo, OpenGLES3/Quad, OpenGLES3/Texture, OpenGLES3Bgr, OpenGLES3
 OpenGLES3Canvas: class extends GpuCanvas {
 	_renderTarget: Fbo
 	context ::= this _context as OpenGLES3Context
-	init: func (image: GpuImage, context: GpuContext) {
-		super(image, context)
-		this reset()
-		this map = context getMap(image, GpuMapType transform)
-	}
+	init: func (image: GpuImage, context: GpuContext) { super(image, context) }
 	free: override func {
 		this _renderTarget free()
 		super()
@@ -73,39 +69,6 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		result _renderTarget != null ? result : null
 	}
 }
-OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
-	target ::= this _target as GpuYuv420Planar
-
-	init: func (image: GpuImage, context: GpuContext) { super(image, context) }
-	onRecycle: func
-	_draw: func (image: OpenGLES3Yuv420Planar) {
-		this target y canvas draw(image y)
-		this target u canvas draw(image u)
-		this target v canvas draw(image v)
-	}
-	draw: func (image: Image) {
-		if (image instanceOf?(RasterYuv420Planar)) {
-			temp := this _context createGpuImage(image as RasterYuv420Planar) as OpenGLES3Yuv420Planar
-			this _draw(temp)
-			temp free()
-		}
-		else if (image instanceOf?(OpenGLES3Yuv420Planar)) {
-			temp := image as OpenGLES3Yuv420Planar
-			this _draw(temp)
-		}
-		else
-			Debug raise("Trying to draw unsupported image format to OpenGLES3Yuv420Planar")
-	}
-	drawLines: override func (pointList: VectorList<FloatPoint2D>) { this target y canvas drawLines(pointList) }
-	drawBox: override func (box: FloatBox2D) { this target y canvas drawBox(box) }
-	drawPoints: override func (pointList: VectorList<FloatPoint2D>) { this target y canvas drawPoints(pointList) }
-	clear: override func {
-		this target y canvas clear()
-		this target u canvas clear()
-		this target v canvas clear()
-	}
-	create: static func (image: OpenGLES3Yuv420Planar, context: GpuContext) -> This { This new(image, context) }
-}
 
 OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 	target ::= this _target as GpuYuv420Semiplanar
@@ -140,4 +103,38 @@ OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 		this target uv canvas clear()
 	}
 	create: static func (image: OpenGLES3Yuv420Semiplanar, context: GpuContext) -> This { This new(image, context) }
+}
+
+OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
+	target ::= this _target as GpuYuv420Planar
+
+	init: func (image: GpuImage, context: GpuContext) { super(image, context) }
+	onRecycle: func
+	_draw: func (image: OpenGLES3Yuv420Planar) {
+		this target y canvas draw(image y)
+		this target u canvas draw(image u)
+		this target v canvas draw(image v)
+	}
+	draw: func (image: Image) {
+		if (image instanceOf?(RasterYuv420Planar)) {
+			temp := this _context createGpuImage(image as RasterYuv420Planar) as OpenGLES3Yuv420Planar
+			this _draw(temp)
+			temp free()
+		}
+		else if (image instanceOf?(OpenGLES3Yuv420Planar)) {
+			temp := image as OpenGLES3Yuv420Planar
+			this _draw(temp)
+		}
+		else
+			Debug raise("Trying to draw unsupported image format to OpenGLES3Yuv420Planar")
+	}
+	drawLines: override func (pointList: VectorList<FloatPoint2D>) { this target y canvas drawLines(pointList) }
+	drawBox: override func (box: FloatBox2D) { this target y canvas drawBox(box) }
+	drawPoints: override func (pointList: VectorList<FloatPoint2D>) { this target y canvas drawPoints(pointList) }
+	clear: override func {
+		this target y canvas clear()
+		this target u canvas clear()
+		this target v canvas clear()
+	}
+	create: static func (image: OpenGLES3Yuv420Planar, context: GpuContext) -> This { This new(image, context) }
 }

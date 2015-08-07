@@ -37,7 +37,8 @@ GpuSurface: abstract class {
 	nearPlane: Float { get set }
 	farPlane: Float { get set }
 	map: GpuMap { get set }
-	init: func (=_size, =_context) { this reset() }
+	_defaultMap: GpuMap
+	init: func (=_size, =_context, =_defaultMap) { this reset() }
 	_createModelTransform: func (size: IntSize2D, coordinateTransform: IntTransform2D) -> FloatTransform3D {
 		FloatTransform3D createTranslation(0.0f, 0.0f, -this focalLength) * FloatTransform3D createScaling(coordinateTransform a * size width / 2.0f, coordinateTransform e * size height / 2.0f, 1.0f)
 	}
@@ -51,6 +52,7 @@ GpuSurface: abstract class {
 		this farPlane = 10000.0f
 		this _view = FloatTransform3D identity
 		this blend = false
+		this map = this _defaultMap
 	}
 	_bind: virtual func
 	_unbind: virtual func
@@ -59,9 +61,7 @@ GpuSurface: abstract class {
 		this _bind()
 		this _context setViewport(this viewport)
 		this _context enableBlend(this blend)
-		//FIXME: Ugly check that shouldn't be necessary
-		if (this map != null)
-			this map use()
+		this map use()
 		action()
 		this _unbind()
 		this reset()
