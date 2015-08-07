@@ -135,13 +135,13 @@ OpenGLES3Context: class extends GpuContext {
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType monochrome, size)
 		if (result == null)
-			result = OpenGLES3Monochrome create(size, this)
+			result = OpenGLES3Monochrome new(size, this)
 		result
 	}
 	_createMonochrome: func (raster: RasterMonochrome) -> GpuImage {
 		result := this searchImageBin(GpuImageType monochrome, raster size)
 		if (result == null)
-			result = OpenGLES3Monochrome create(raster, this)
+			result = OpenGLES3Monochrome new(raster, this)
 		else
 			result upload(raster)
 		result
@@ -149,13 +149,13 @@ OpenGLES3Context: class extends GpuContext {
 	createUv: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType uv, size)
 		if (result == null)
-			result = OpenGLES3Uv create(size, this)
+			result = OpenGLES3Uv new(size, this)
 		result
 	}
 	_createUv: func (raster: RasterUv) -> GpuImage {
 		result := this searchImageBin(GpuImageType uv, raster size)
 		if (result == null)
-			result = OpenGLES3Uv create(raster, this)
+			result = OpenGLES3Uv new(raster, this)
 		else
 			result upload(raster)
 		result
@@ -163,13 +163,13 @@ OpenGLES3Context: class extends GpuContext {
 	createBgr: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType bgr, size)
 		if (result == null)
-			result = OpenGLES3Bgr create(size, this)
+			result = OpenGLES3Bgr new(size, this)
 		result
 	}
 	_createBgr: func (raster: RasterBgr) -> GpuImage {
 		result := this searchImageBin(GpuImageType bgr, raster size)
 		if (result == null)
-			result = OpenGLES3Bgr create(raster, this)
+			result = OpenGLES3Bgr new(raster, this)
 		else
 			result upload(raster)
 		result
@@ -177,34 +177,34 @@ OpenGLES3Context: class extends GpuContext {
 	createBgra: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType bgra, size)
 		if (result == null)
-			result = OpenGLES3Bgra create(size, this)
+			result = OpenGLES3Bgra new(size, this)
 		result
 	}
 	_createBgra: func (raster: RasterBgra) -> GpuImage {
 		result := this searchImageBin(GpuImageType bgra, raster size)
 		if (result == null)
-			result = OpenGLES3Bgra create(raster, this)
+			result = OpenGLES3Bgra new(raster, this)
 		else
 			result upload(raster)
 		result
 	}
-	createYuv420Semiplanar: func (size: IntSize2D) -> GpuImage { OpenGLES3Yuv420Semiplanar create(size, this) }
+	createYuv420Semiplanar: func (size: IntSize2D) -> GpuImage { OpenGLES3Yuv420Semiplanar new(size, this) }
 	createYuv420Semiplanar: func ~fromImages (y: GpuMonochrome, uv: GpuUv) -> GpuYuv420Semiplanar {
 		OpenGLES3Yuv420Semiplanar new(y as OpenGLES3Monochrome, uv as OpenGLES3Uv, this)
 	}
-	_createYuv420Semiplanar: func (raster: RasterYuv420Semiplanar) -> GpuImage { OpenGLES3Yuv420Semiplanar create(raster, this) }
-	createYuv420Planar: func (size: IntSize2D) -> GpuImage { OpenGLES3Yuv420Planar create(size, this) }
-	_createYuv420Planar: func (raster: RasterYuv420Planar) -> GpuImage { OpenGLES3Yuv420Planar create(raster, this) }
+	_createYuv420Semiplanar: func (raster: RasterYuv420Semiplanar) -> GpuImage { OpenGLES3Yuv420Semiplanar new(raster, this) }
+	createYuv420Planar: func (size: IntSize2D) -> GpuImage { OpenGLES3Yuv420Planar new(size, this) }
+	_createYuv420Planar: func (raster: RasterYuv420Planar) -> GpuImage { OpenGLES3Yuv420Planar new(raster, this) }
 	createYuv422Semipacked: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType yuv422, size)
 		if (result == null)
-			result = OpenGLES3Yuv422Semipacked create(size, this)
+			result = OpenGLES3Yuv422Semipacked new(size, this)
 		result
 	}
 	_createYuv422Semipacked: func (raster: RasterYuv422Semipacked) -> GpuImage {
 		result := this searchImageBin(GpuImageType yuv422, raster size)
 		if (result == null)
-			result = OpenGLES3Yuv422Semipacked create(raster, this)
+			result = OpenGLES3Yuv422Semipacked new(raster, this)
 		else
 			result upload(raster)
 		result

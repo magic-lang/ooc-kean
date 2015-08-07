@@ -26,6 +26,9 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 	}
 	init: func (size: IntSize2D, context: GpuContext) { this init(size, size width, null, CoordinateSystem YUpward, context) }
 	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) { super(texture, size, context) }
+	init: func ~fromRaster(rasterImage: RasterMonochrome, context: GpuContext) {
+		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
+	}
 	toRasterDefault: func -> RasterImage {
 		packed := this _context createBgra(IntSize2D new(this size width / 4, this size height))
 		this _context packToRgba(this, packed, IntBox2D new(packed size))
@@ -35,12 +38,5 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 		result
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
-	create: static func ~fromRaster (rasterImage: RasterMonochrome, context: GpuContext) -> This {
-		This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
-	}
-	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
-		result := This new(size, context)
-		result texture != null ? result : null
-	}
-
+	create: override func (size: IntSize2D) -> This { This new(size, this _context) }
 }
