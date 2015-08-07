@@ -90,4 +90,5 @@ GpuContextManager: abstract class extends GpuContext {
 	drawBox: override func (box: FloatBox2D, transform: FloatTransform3D) { this _getContext() drawBox(box, transform) }
 	drawPoints: override func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D) { this _getContext() drawPoints(pointList, transform) }
 	drawQuad: func { this _getContext() drawQuad() }
+	enableBlend: override func (blend: Bool) { this _getContext() enableBlend(blend) }
 }
