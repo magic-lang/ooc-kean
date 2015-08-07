@@ -47,5 +47,5 @@ OpenGLES3Uv: class extends GpuUv {
 		result clearColor = ColorBgra new(128, 128, 128, 128)
 		result
 	}
-	create: override func (size: IntSize2D) -> This { This new(size, this _context) }
+	create: override func (size: IntSize2D) -> This { this _context createUv(size) as This }
 }
