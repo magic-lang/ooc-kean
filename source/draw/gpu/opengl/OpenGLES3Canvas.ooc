@@ -26,7 +26,10 @@ import OpenGLES3/Fbo, OpenGLES3/Quad, OpenGLES3/Texture, OpenGLES3Bgr, OpenGLES3
 OpenGLES3Canvas: class extends GpuCanvas {
 	_renderTarget: Fbo
 	context ::= this _context as OpenGLES3Context
-	init: func (image: GpuImage, context: GpuContext) { super(image, context) }
+	init: func (image: GpuPacked, context: GpuContext) {
+		super(image, context)
+		this _renderTarget = Fbo create(image texture _backend as Texture, image size)
+	}
 	free: override func {
 		this _renderTarget free()
 		super()
@@ -62,18 +65,12 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this _unbind()
 	}
 	readPixels: override func -> ByteBuffer { this _renderTarget readPixels() }
-	create: static func (image: GpuPacked, context: GpuContext) -> This {
-		result := This new(image, context)
-		result _renderTarget = Fbo create(image texture _backend as Texture, image size)
-		result _size = image size
-		result _renderTarget != null ? result : null
-	}
 }
 
 OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 	target ::= this _target as GpuYuv420Semiplanar
 
-	init: func (image: GpuImage, context: GpuContext) { super(image, context) }
+	init: func (image: OpenGLES3Yuv420Semiplanar, context: GpuContext) { super(image, context) }
 	onRecycle: func
 	_draw: func (image: OpenGLES3Yuv420Semiplanar) {
 		this target y canvas _view = this _view
@@ -102,13 +99,12 @@ OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 		this target y canvas clear()
 		this target uv canvas clear()
 	}
-	create: static func (image: OpenGLES3Yuv420Semiplanar, context: GpuContext) -> This { This new(image, context) }
 }
 
 OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 	target ::= this _target as GpuYuv420Planar
 
-	init: func (image: GpuImage, context: GpuContext) { super(image, context) }
+	init: func (image: OpenGLES3Yuv420Planar, context: GpuContext) { super(image, context) }
 	onRecycle: func
 	_draw: func (image: OpenGLES3Yuv420Planar) {
 		this target y canvas draw(image y)
@@ -136,5 +132,4 @@ OpenGLES3CanvasYuv420Planar: class extends GpuCanvas {
 		this target u canvas clear()
 		this target v canvas clear()
 	}
-	create: static func (image: OpenGLES3Yuv420Planar, context: GpuContext) -> This { This new(image, context) }
 }

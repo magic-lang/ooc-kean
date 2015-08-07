@@ -37,5 +37,5 @@ OpenGLES3Yuv420Planar: class extends GpuYuv420Planar {
 		v := context createGpuImage(rasterImage v) as OpenGLES3Monochrome
 		this init(y, u, v, context)
 	}
-	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Planar create(this, this _context) }
+	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Planar new(this, this _context) }
 }
