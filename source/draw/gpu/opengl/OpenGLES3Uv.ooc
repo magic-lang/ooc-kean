@@ -43,7 +43,7 @@ OpenGLES3Uv: class extends GpuUv {
 		result
 	}
 	_createCanvas: func -> GpuCanvas {
-		result := OpenGLES3Canvas create(this, this _context)
+		result := OpenGLES3Canvas new(this, this _context)
 		result clearColor = ColorBgra new(128, 128, 128, 128)
 		result
 	}

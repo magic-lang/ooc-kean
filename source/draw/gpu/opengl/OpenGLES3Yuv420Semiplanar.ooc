@@ -35,5 +35,5 @@ OpenGLES3Yuv420Semiplanar: class extends GpuYuv420Semiplanar {
 		uv := context createUv(size / 2) as OpenGLES3Uv
 		this init(y, uv, context)
 	}
-	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Semiplanar create(this, this _context) }
+	_createCanvas: func -> GpuCanvas { OpenGLES3CanvasYuv420Semiplanar new(this, this _context) }
 }
