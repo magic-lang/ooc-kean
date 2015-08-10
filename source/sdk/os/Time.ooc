@@ -19,7 +19,7 @@ version(windows) {
 
 version(windows) {
     SystemTime: cover from SYSTEMTIME {
-        wHour, wMinute, wSecond, wMilliseconds : extern UShort
+      wYear, wMonth, wDayOfWeek, wDay, wHour, wMinute, wSecond, wMilliseconds : extern UShort
     }
 
     GetLocalTime: extern func (SystemTime*)
@@ -135,7 +135,7 @@ Time: class {
         }
         return -1
     }
-	
+
 	/**
 		Gets the number of microseconds elapsed since program start.
 	*/
