@@ -35,5 +35,5 @@ OpenGLES3Bgra: class extends GpuBgra {
 		RasterBgra new(buffer, this size)
 	}
 	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas new(this, this _context) }
-	create: override func (size: IntSize2D) -> This { this _context createBgra(size) as This}
+	create: override func (size: IntSize2D) -> This { this _context createBgra(size) as This }
 }
