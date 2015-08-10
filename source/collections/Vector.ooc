@@ -95,8 +95,8 @@ Vector: abstract class <T> {
 }
 
 HeapVector: class <T> extends Vector<T> {
-	init: func (capacity: Int) {
-		super(capacity)
+	init: func (capacity: Int, freeContent := true) {
+		super(capacity, freeContent)
 		this _allocate(capacity)
 		memset(this _backend, 0, capacity * T size)
 	}

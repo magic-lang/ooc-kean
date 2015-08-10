@@ -27,8 +27,8 @@ VectorList: class <T> {
 	init: func ~default {
 		this init(32)
 	}
-	init: func ~heap (capacity: Int) {
-		this init(HeapVector<T> new(capacity))
+	init: func ~heap (capacity: Int, freeContent := true) {
+		this init(HeapVector<T> new(capacity, freeContent))
 	}
 	init: func (=_vector)
 
