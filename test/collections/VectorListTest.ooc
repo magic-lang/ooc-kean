@@ -154,7 +154,7 @@ VectorTest: class extends Fixture {
 			list apply(|value|
 				expect(value, is equal to(c))
 				c += 1)
-			})
+		})
 			/*this add("VectorList map", func {
 				list := VectorList<Int> new()
 				list add(0)
