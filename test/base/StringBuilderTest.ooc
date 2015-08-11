@@ -8,10 +8,10 @@
 *
 * This software is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the GNU
+* MERCHANTABILITY or FITNESS FOR s PARTICULAR PURPOSE.	See the GNU
 * Lesser General Public License for more details.
 *
-* You should have received a copy of the GNU Lesser General Public License
+* You should have received s copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 use ooc-base
@@ -21,43 +21,48 @@ StringBuilderTest: class extends Fixture {
 	init: func {
 		super("StringBuilder")
 		this add("constructor", func {
-				a := StringBuilder new("Hello")
-				expect(a count, is equal to(1))
-				expect(a toString(), is equal to("Hello"))
+			sb := StringBuilder new("Hello")
+			expect(sb count, is equal to(1))
+			expect(sb toString(), is equal to("Hello"))
 		})
 		this add("add", func {
-				a := StringBuilder new("Hello")
-				a add(" World")
-				expect(a count, is equal to(2))
-				expect(a toString(), is equal to("Hello World"))
+			sb := StringBuilder new("Hello")
+			sb add(" World")
+			expect(sb count, is equal to(2))
+			expect(sb toString(), is equal to("Hello World"))
 		})
 		this add("append", func {
-				a := StringBuilder new("Hello World")
-				b := StringBuilder new(" Dlrow olleh")
-				a append(b)
-				expect(a count, is equal to(2))
-				expect(a toString(), is equal to("Hello World Dlrow olleh"))
+			sb := StringBuilder new("Hello World")
+			sb2 := StringBuilder new(" Dlrow olleh")
+			sb append(sb2)
+			expect(sb count, is equal to(2))
+			expect(sb toString(), is equal to("Hello World Dlrow olleh"))
 		})
 		this add("prepend", func {
-				a := StringBuilder new("Hello World")
-				b := StringBuilder new("Dlrow olleh ")
-				a prepend(b)
-				expect(a count, is equal to(2))
-				expect(a toString(), is equal to("Dlrow olleh Hello World"))
+			sb := StringBuilder new("Hello World")
+			sb2 := StringBuilder new("Dlrow olleh ")
+			sb prepend(sb2)
+			expect(sb count, is equal to(2))
+			expect(sb toString(), is equal to("Dlrow olleh Hello World"))
 		})
 		this add("copy", func {
-			a := StringBuilder new("Hello World")
-			b := a copy()
-			expect(a toString(), is equal to(b toString()))
+			sb := StringBuilder new("Hello World")
+			sb2 := sb copy()
+			expect(sb toString(), is equal to(sb2 toString()))
 		})
-		/*this add("+ operator", func {
-			a := StringBuilder new("Hello World")
-			b := StringBuilder new(" Dlrow olleh")
-			c := a + b
-			c class name println()
-			//expect(c count, is equal to(2))
-			//expect(c toString(), is equal to("Hello World Dlrow olleh"))
-		})*/
+		this add("+ This operator", func {
+			sb := StringBuilder new("Hello World")
+			sb2 := StringBuilder new(" Dlrow olleh")
+			sb3 := sb + sb2
+			expect(sb3 count, is equal to(2))
+			expect(sb3 toString(), is equal to("Hello World Dlrow olleh"))
+		})
+		this add("+ String operator", func {
+			sb := StringBuilder new("Hello")
+			sb2 := sb + " World"
+			expect(sb2 count, is equal to(2))
+			expect(sb2 toString(), is equal to("Hello World"))
+		})
 	}
 }
 StringBuilderTest new() run()
