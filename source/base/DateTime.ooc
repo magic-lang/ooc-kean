@@ -49,7 +49,7 @@ extend Time {
 
 DateTime: cover {
 	/* Number of 100 ns intervals since 00.00 1/1/1 */
-	_ticks: UInt64
+	_ticks: UInt64 = 0
 	ticks ::= this _ticks
 	init: func@ (=_ticks)
 	init: func@ ~fromYearMonthDay (year, month, day: Int) {
