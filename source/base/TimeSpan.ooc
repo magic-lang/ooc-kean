@@ -18,7 +18,7 @@
 use ooc-base
 
 TimeSpan: cover {
-	_ticks: Int64
+	_ticks: Int64 = 0
 	ticks ::= this _ticks
 	init: func@ (=_ticks)
 	init: func@ ~fromHourMinuteSec (hour, minute, second, millisecond: Int) {
