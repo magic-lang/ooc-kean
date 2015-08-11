@@ -31,5 +31,5 @@ script:
   - ./test.sh nogpu -Dnogpu
   - echo "travis_fold:end:test folding ends"
   - echo "travis_fold:start:magic folding starts"
-  - # ./magic
+  - ./magic
   - echo "travis_fold:end:magic folding ends"
