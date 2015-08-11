@@ -72,8 +72,7 @@ GpuImage: abstract class extends Image {
 	//TODO: Implement abstract functions
 	resizeTo: override func (size: IntSize2D) -> This {
 		result := this create(size) as This
-		map := this _context getMap(this)
-		result canvas map = map
+		result canvas transform = FloatTransform3D createScaling(size width as Float / this size width, size height as Float / this size height, 1.0f)
 		result canvas draw(this)
 		result
 	}
