@@ -314,17 +314,16 @@ Quaternion: cover {
 	relativeQuaternion: func (other: This) -> This {
 		other * this inverse
 	}
-	rotate: func(angularVelocity: FloatPoint3D) -> This {
-		result := this
+	relativeFromVelocity: static func(angularVelocity: FloatPoint3D) -> This {
+		result := Quaternion identity
 		angle := sqrt(angularVelocity x * angularVelocity x + angularVelocity y * angularVelocity y + angularVelocity z * angularVelocity z)
 		if (angle > 0.00000001f) {
-			rotationQuaternion := This new(
+			result = This new(
 				cos(angle / 2.0f),
 				angularVelocity x * sin(angle / 2.0f) / angle,
 				angularVelocity y * sin(angle / 2.0f) / angle,
 				angularVelocity z * sin(angle / 2.0f) / angle
 				)
-			result = rotationQuaternion * result
 		}
 		result
 	}
