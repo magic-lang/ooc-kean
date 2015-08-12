@@ -24,11 +24,11 @@ StringBuilder: class {
 	init: func ~default
 	init: func ~string (value: String) {
 		this init()
-		this _stringList add(value)
+		this append(value)
 	}
 	init: func ~this (original: This) {
 		this init()
-		original _stringList apply( func (value: String) { this add(value) })
+		original _stringList apply( func (value: String) { this append(value) })
 	}
 	free: func {
 		_stringList free()
@@ -38,17 +38,19 @@ StringBuilder: class {
 		This new(this)
 	}
 
-	add: func (value: String) {
+	append: func ~String (value: String) {
 		this _stringList add(value clone())
 	}
-
-	append: func (other: This) {
+	append: func ~This (other: This) {
 		for (i in 0..other count)
-			this add(other[i])
+			this append(other[i])
 	}
-	prepend: func (other: This) {
+	prepend: func ~String (value: String) {
+		this _stringList insert(0, value clone())
+	}
+	prepend: func ~This (other: This) {
 		for (i in 0..other count)
-			this _stringList insert(0, other[i] clone())
+			prepend(other[other count -1 -i])
 	}
 
 	toString: func -> String {
@@ -57,7 +59,6 @@ StringBuilder: class {
 			result = result >> this _stringList[i]
 		result
 	}
-
 	println: func {
 		this toString() println().free()
 	}
@@ -75,7 +76,12 @@ StringBuilder: class {
 	}
 	operator + (value: String) -> This {
 		result := This new (this)
-		result add(value)
+		result append(value)
 		result
 	}
+}
+operator + (value: String, stringBuilder: StringBuilder) -> StringBuilder {
+	result := StringBuilder new (stringBuilder)
+	result prepend(value)
+	result
 }
