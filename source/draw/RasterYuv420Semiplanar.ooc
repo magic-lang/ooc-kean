@@ -168,8 +168,9 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	}
 	save: override func (filename: String) -> Int {
 		bgr := RasterBgr convertFrom(this)
-		bgr save(filename)
+		result := bgr save(filename)
 		bgr free()
+		result
 	}
 	openRaw: static func (filename: String, size: IntSize2D) -> This {
 		fileReader := FileReader new(FStream open(filename, "rb"))

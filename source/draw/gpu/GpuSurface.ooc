@@ -1,3 +1,19 @@
+//
+// Copyright (c) 2011-2014 Simon Mika <simon@mika.se>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 use ooc-math
 use ooc-draw
 use ooc-collections
@@ -27,7 +43,9 @@ GpuSurface: abstract class {
 		set(value) {
 			this _focalLength = value
 			if (this _focalLength > 0.0f) {
-				this _projection = FloatTransform3D new(2.0f * this _focalLength / this size width, 0.0f, 0.0f, 0.0f, 0.0f, 2.0f * this _focalLength / this size height, 0.0f, 0.0f, 0.0f, 0.0f, -(this farPlane + this nearPlane) / (this farPlane - this nearPlane), -1.0f, 0.0f, 0.0f, -2.0f * this farPlane * this nearPlane / (this farPlane - this nearPlane), 0.0f)
+				this _projection = FloatTransform3D new(2.0f * this _focalLength / this size width, 0.0f, 0.0f, 0.0f, 0.0f,
+					2.0f * this _focalLength / this size height, 0.0f, 0.0f, 0.0f, 0.0f, -(this farPlane + this nearPlane) / (this farPlane - this nearPlane),
+					-1.0f, 0.0f, 0.0f, -2.0f * this farPlane * this nearPlane / (this farPlane - this nearPlane), 0.0f)
 			}
 			else
 				this _projection = FloatTransform3D createScaling(2.0f / this size width, 2.0f / this size height, 1.0f)
