@@ -22,7 +22,7 @@ import math
 Quaternion: cover {
 	real: Float
 	imaginary: FloatPoint3D
-	precision: static Float = 0.000001f
+	precision: static Float = 1.0e-6f
 	// q = w + xi + yj + zk
 	w ::= this real
 	x ::= this imaginary x
@@ -282,7 +282,7 @@ Quaternion: cover {
 		longPath := cosAngle < 0.0f
 		angle := acos(Float absolute(cosAngle) as Float clamp(-1.0f, 1.0f))
 		result: This
-		if (angle < 1.0e-8)
+		if (angle < 1.0e-8f)
 			result = this * (1 - factor) + other * factor
 		else {
 			thisFactor := sin((1 - factor) * angle) / sin(angle)
@@ -317,7 +317,7 @@ Quaternion: cover {
 	relativeFromVelocity: static func(angularVelocity: FloatPoint3D) -> This {
 		result := Quaternion identity
 		angle := sqrt(angularVelocity x * angularVelocity x + angularVelocity y * angularVelocity y + angularVelocity z * angularVelocity z)
-		if (angle > 0.00000001f) {
+		if (angle > 1.0e-8f) {
 			result = This new(
 				cos(angle / 2.0f),
 				angularVelocity x * sin(angle / 2.0f) / angle,
