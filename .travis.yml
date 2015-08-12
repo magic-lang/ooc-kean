@@ -27,9 +27,9 @@ before_script:
   - # (cd tools/sam && rock -v)
 
 script:
-  - echo "travis_fold:start:test folding starts"
-  - ./test.sh nogpu -Dnogpu
-  - echo "travis_fold:end:test folding ends"
   - echo "travis_fold:start:magic folding starts"
   - ./magic
   - echo "travis_fold:end:magic folding ends"
+  - echo "travis_fold:start:test folding starts"
+  - ./test.sh nogpu -Dnogpu
+  - echo "travis_fold:end:test folding ends"
