@@ -4,7 +4,7 @@ use ooc-math
 
 //path := "test/draw/input/ElephantSeal.jpg"
 path := "../ooc-vidproc-run-input/Yuv420Semiplanar/bird/frame00001.png.bin"
-for (i in 0..1) {
+for (i in 0 .. 1) {
 /*	image := RasterYuv420Semiplanar openRaw(path, IntSize2D new(720, 576))
 	y := image y
 	uv := image uv

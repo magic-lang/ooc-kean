@@ -66,7 +66,7 @@ HashDictionary: class {
 		return _myHashBag remove(key)
 	}
 	size: func -> Int { _myHashBag size() }
-	contains?: func(key: String) -> Bool {
+	contains?: func (key: String) -> Bool {
 		return _myHashBag contains?(key)
 	}
 	getKeys: func -> ArrayList<String> {
@@ -78,7 +78,7 @@ HashDictionary: class {
 	dispose: func {
 		free(this _myHashBag myMap keys data)
 		free(this _myHashBag myMap keys)
-		for (i in 0..(this _myHashBag myMap capacity)) {
+		for (i in 0 .. (this _myHashBag myMap capacity)) {
 			next := (this _myHashBag myMap buckets[i])
 			next dispose()
 		}

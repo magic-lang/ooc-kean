@@ -19,7 +19,7 @@ use ooc-unit
 use ooc-base
 
 EventTest: class extends Fixture {
-	init: func () {
+	init: func {
 		super("Event")
 		this add("event", This event)
 		this add("event1", This event1)
@@ -126,6 +126,6 @@ EventTest: class extends Fixture {
 }
 IntCell: class {
 	value: Int
-	init: func(=value)
+	init: func (=value)
 }
 EventTest new() run()

@@ -5,7 +5,7 @@ import lang/IO
 
 FloatExtensionTest: class extends Fixture {
 	precision := 1.0e-5f
-	init: func () {
+	init: func {
 		super("FloatExtension")
 		this add("decompose to coefficient and radix", func {
 			(coefficient, radix) := Float decomposeToCoefficientAndRadix(3333.0f, 2)

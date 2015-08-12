@@ -89,14 +89,14 @@ HashDictionaryTest: class extends Fixture {
 		this add("Clone", func {
 			dictionary := HashDictionary new()
 			dictionary add("First", "First")
-      dictionary add("Int", 1)
+			dictionary add("Int", 1)
 			dictionary2 := dictionary clone()
 			dictionary2 add ("Second", "Second")
 			expect(dictionary get("Second", "Default") == "Default", is true)
 			expect(dictionary get("First", "Default") == "First", is true)
 			expect(dictionary2 get("Second", "Default") == "Second", is true)
 			expect(dictionary2 get("First", "Default") == "First", is true)
-      expect(dictionary2 get("Int", 0) == 1, is true)
+			expect(dictionary2 get("Int", 0) == 1, is true)
 		})
 
 		this add("Get from primitive", func {
@@ -111,10 +111,10 @@ HashDictionaryTest: class extends Fixture {
 
 		this add("Get from cover", func {
 			dictionary := HashDictionary new()
-      testCover := TestCover new(1337, "String")
+			testCover := TestCover new(1337, "String")
 			dictionary add("First", Cell new(testCover))
 			expect(dictionary getAsType("First", Cell<TestCover>) get() intVal == 1337)
-		  expect(dictionary getAsType("First", Cell<TestCover>) get() stringVal == "String")
+			expect(dictionary getAsType("First", Cell<TestCover>) get() stringVal == "String")
 			expect(dictionary getAsType("Second", Cell<TestCover>) == null)
 			expect(dictionary getAsType("First", Int) == null)
 			expect(dictionary getAsType("First", TestClass) == null)
@@ -151,11 +151,11 @@ HashDictionaryTest: class extends Fixture {
 			expect(dictionary3 getAsType("Second", String) == "Bar")
 			expect(dictionary3 getAsType("Third", Cell<TestCover>) get() intVal == 43)
 			expect(dictionary3 getAsType("Third", Cell<TestCover>) get() stringVal == "World")
-			expect(dictionary3 getAsType("Fourth", TestClass) intVal== 102)
+			expect(dictionary3 getAsType("Fourth", TestClass) intVal == 102)
 			expect(dictionary3 getAsType("Fourth", TestClass) stringVal == "Vader")
 			expect(dictionary3 getAsType("Fifth", String) == "Almost")
 			expect(dictionary3 getAsType("Sixth", Int) == 1002)
-      expect(dictionary3 getAsType("Sixth", String) == null)
+			expect(dictionary3 getAsType("Sixth", String) == null)
 
 		})
 

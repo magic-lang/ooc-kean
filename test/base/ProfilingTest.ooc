@@ -23,34 +23,33 @@ version(debugTests) {
 	Debug initialize(func (message: String) {println(message)})
 	Debug _level = DebugLevel Everything as Int
 
-
 	testfunction: func {
 		profiling_test := Profiler new("testfunction", 2)
 		profiling_test start()
-		for (i in 0..10000) {}
+		for (i in 0 .. 10000) {}
 		profiling_test stop()
 	}
 
 	testfunction2: func {
 		profiling_test := Profiler new("testfunction2", 1)
 		profiling_test start()
-		for (i in 0..1000) {}
+		for (i in 0 .. 1000) {}
 		profiling_test stop()
 	}
 
 	Profiler printResults()
 	profiling := Profiler new("main", 1)
 
-	profiling  start()
-	for (i in 0..10) {}
+	profiling start()
+	for (i in 0 .. 10) {}
 	profiling stop()
 
 	profiling start()
-	for (i in 0..100_000_000) {}
+	for (i in 0 .. 100_000_000) {}
 	profiling stop()
 
 	profiling start()
-	for (i in 0..10000) {}
+	for (i in 0 .. 10000) {}
 	profiling stop()
 
 	testfunction()
@@ -59,19 +58,19 @@ version(debugTests) {
 
 	/*
 	profiling start()
-	for (i in 0..1_000_000_000) {}
+	for (i in 0 .. 1_000_000_000) {}
 	profiling stop()
 
 	profiling start()
-	for (i in 0..100) {}
+	for (i in 0 .. 100) {}
 	profiling stop()
 
 	profiling start()
-	for (i in 0..50) {}
+	for (i in 0 .. 50) {}
 	profiling stop()
 
 	profiling start()
-	for (i in 0..8) {}
+	for (i in 0 .. 8) {}
 	profiling stop()
 	testfunction2()
 

@@ -6,16 +6,16 @@ import structs/Stack
 
 Foo: class {
 	bar := Bar new()
-	init: func ()
-	dispose: func { 
-//		this bar dispose() 
+	init: func
+	dispose: func {
+//		this bar dispose()
 		gc_free(this)
 	}
 }
 
 Bar: class {
 	x: Int
-	init: func ()
+	init: func
 	dispose: func { gc_free(this) }
 }
 
@@ -32,7 +32,7 @@ Dog: class {
 		if (pool empty?()) {
 			obj := This alloc()
 			obj __defaults__()
-			obj as Dog
+			obj as This
 		} else {
 			pool pop()
 		}

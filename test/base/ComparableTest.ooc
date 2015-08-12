@@ -19,18 +19,18 @@ use ooc-unit
 use ooc-base
 
 ComparableTest: class extends Fixture {
-	init: func () {
+	init: func {
 		super("Comparable")
 		four := ComparableImplementation new(4)
-		this add("4 Compare 4 is Equal", func() { expect(four compare(ComparableImplementation new(4)) == Order equal, is true) })
-		this add("4 Compare 3 is Greater", func() { expect(four compare(ComparableImplementation new(3)) == Order greater, is true) })
-		this add("4 Compare 5 is Less", func() { expect(four compare(ComparableImplementation new(5)) == Order less, is true) })
+		this add("4 Compare 4 is Equal", func { expect(four compare(ComparableImplementation new(4)) == Order equal, is true) })
+		this add("4 Compare 3 is Greater", func { expect(four compare(ComparableImplementation new(3)) == Order greater, is true) })
+		this add("4 Compare 5 is Less", func { expect(four compare(ComparableImplementation new(5)) == Order less, is true) })
 	}
 }
 ComparableImplementation: class implements IComparable<ComparableImplementation> {
 	value: Int
-	init: func (=value) {	}
-	compare: func (other: ComparableImplementation) -> Order {
+	init: func (=value)
+	compare: func (other: This) -> Order {
 		version(debugTests)
 			(this toString() + " == " + other toString()) println()
 		if (this value == other value)
@@ -43,8 +43,8 @@ ComparableImplementation: class implements IComparable<ComparableImplementation>
 	toString: func -> String {
 		this value toString()
 	}
-	create: static func (.value) -> IComparable<ComparableImplementation> {
-		ComparableImplementation new(value)
+	create: static func (.value) -> IComparable<This> {
+		This new(value)
 	}
 }
 ComparableTest new() run()

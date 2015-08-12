@@ -19,23 +19,23 @@ use ooc-unit
 use ooc-base
 
 EquatableTest: class extends Fixture {
-	init: func () {
+	init: func {
 		super("Equatable")
 		four := EquatableImplementation new(4)
-		this add("4 Equals 4 is true", func() { expect(four equals(EquatableImplementation new(4)), is true) })
-		this add("4 Equals 3 is not true", func() { expect(four equals(EquatableImplementation new(3)), is not true) })
+		this add("4 Equals 4 is true", func { expect(four equals(EquatableImplementation new(4)), is true) })
+		this add("4 Equals 3 is not true", func { expect(four equals(EquatableImplementation new(3)), is not true) })
 	}
 }
-EquatableImplementation: class implements IEquatable<EquatableImplementation> {
+EquatableImplementation: class implements IEquatable<This> {
 	value: Int
-	init: func (=value) {	}
-	equals: func (other: EquatableImplementation) -> Bool {
+	init: func (=value)
+	equals: func (other: This) -> Bool {
 		this value == other value
 	}
-	toString: func() -> String {
+	toString: func -> String {
 		this value toString()
 	}
-	create: static func(value: Int) -> IEquatable<Int> {
+	create: static func (value: Int) -> IEquatable<Int> {
 		This new(value)
 	}
 }

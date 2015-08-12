@@ -21,7 +21,7 @@ Vector: abstract class <T> {
 	capacity ::= this _capacity
 	_freeContent: Bool
 
-	init: /* protected */ func ~preallocated (=_backend, =_capacity, freeContent := true) {}
+	init: /* protected */ func ~preallocated (=_backend, =_capacity, freeContent := true)
 	init: /* protected */ func (=_capacity, freeContent := true) {
 		this _freeContent = freeContent
 	}
@@ -30,9 +30,9 @@ Vector: abstract class <T> {
 			gc_free(this _backend)
 		super()
 	}
-	_free: func ~range (start: Int, end: Int) {
+	_free: func ~range (start, end: Int) {
 		if (this _freeContent && T inheritsFrom?(Object)) {
-			for (i in start..end) {
+			for (i in start .. end) {
 					old := this[i] as Object
 					if (old != null)
 						old free()
@@ -47,7 +47,7 @@ Vector: abstract class <T> {
 		else if (capacity > this capacity)
 			this _capacity = capacity
 	}
-	move: func (sourceStart: Int, targetStart: Int, capacity := 0) {
+	move: func (sourceStart, targetStart: Int, capacity := 0) {
 		if (capacity < 1)
 			capacity = this capacity - sourceStart
 		if (targetStart + capacity > this capacity)
@@ -59,10 +59,10 @@ Vector: abstract class <T> {
 		this copy(0, result, 0)
 		result
 	}
-	copy: func ~within (sourceStart: Int, targetStart: Int, capacity := 0) {
+	copy: func ~within (sourceStart, targetStart: Int, capacity := 0) {
 		this copy(sourceStart, this, targetStart, capacity)
 	}
-	copy: func ~to (sourceStart: Int, target: Vector<T>, targetStart: Int, capacity := 0) {
+	copy: func ~to (sourceStart: Int, target: This<T>, targetStart: Int, capacity := 0) {
 		if (capacity < 1)
 			capacity = this capacity - sourceStart
 		if (targetStart + capacity > target capacity)
@@ -78,7 +78,7 @@ Vector: abstract class <T> {
 			memcpy(destination, source, length)
 	}
 	operator [] (index: Int) -> T {
-		version(safe) {
+		version (safe) {
 			if (index >= this capacity || index < 0)
 				raise("Accessing Vector index out of range in get operator")
 		}
@@ -86,7 +86,7 @@ Vector: abstract class <T> {
 	}
 
 	operator []= (index: Int, item: T) {
-		version(safe) {
+		version (safe) {
 			if (index >= this capacity || index < 0)
 				raise("Accessing Vector index out of range in set operator")
 		}
@@ -95,13 +95,13 @@ Vector: abstract class <T> {
 }
 
 HeapVector: class <T> extends Vector<T> {
-	init: func(capacity: Int) {
-		super(capacity)
+	init: func (capacity: Int, freeContent := true) {
+		super(capacity, freeContent)
 		this _allocate(capacity)
 		memset(this _backend, 0, capacity * T size)
 	}
 
-	_allocate: func(capacity: Int) {
+	_allocate: func (capacity: Int) {
 		this _backend = gc_realloc(this _backend, capacity * T size)
 	}
 
@@ -111,7 +111,7 @@ HeapVector: class <T> extends Vector<T> {
 	}
 
 	operator [] (index: Int) -> T {
-		version(safe) {
+		version (safe) {
 			// TODO: Should we also check that index < count?
 			if (index >= this capacity || index < 0)
 				raise("Accessing Vector index out of range in set operator")
@@ -120,7 +120,7 @@ HeapVector: class <T> extends Vector<T> {
 	}
 
 	operator []= (index: Int, item: T) {
-		version(safe) {
+		version (safe) {
 			// TODO: Should we also check that index < count?
 			// TODO: Should this affect count, if index > count?
 			if (index >= this capacity || index < 0)
@@ -135,10 +135,10 @@ HeapVector: class <T> extends Vector<T> {
 }
 
 StackVector: class <T> extends Vector<T> {
-	init: func(data: T*, capacity: Int) {
+	init: func (data: T*, capacity: Int) {
 		super(data, capacity)
 	}
-	resize: override func(capacity: Int) {
+	resize: override func (capacity: Int) {
 		if (capacity > this capacity)
 			capacity = this capacity
 		super(capacity)

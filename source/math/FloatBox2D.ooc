@@ -35,6 +35,10 @@ FloatBox2D: cover {
 	leftBottom ::= FloatPoint2D new(this left, this bottom)
 	rightBottom ::= this leftTop + this size
 	center ::= this leftTop + (this size / 2)
+	leftCenter ::= FloatPoint2D new(this left, this center y)
+	rightCenter ::= FloatPoint2D new(this right, this center y)
+	topCenter ::= FloatPoint2D new(this center x, this top)
+	bottomCenter ::= FloatPoint2D new(this center x, this bottom)
 	empty ::= this size empty
 	init: func@ (=leftTop, =size)
 	init: func@ ~fromPoints (first, second: FloatPoint2D) {

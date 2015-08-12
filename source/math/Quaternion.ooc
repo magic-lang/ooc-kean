@@ -43,11 +43,48 @@ Quaternion: cover {
 	normalized ::= this / this norm
 	rotation ::= 2.0f * (this logarithm imaginary) norm
 	conjugate ::= This new(this real, -(this imaginary))
+	transform ::= this toFloatTransform3D()
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
 	init: func@ (=real, =imaginary)
 	init: func@ ~floats (w, x, y, z: Float) { this init(w, FloatPoint3D new(x, y, z)) }
 	init: func@ ~default { this init(0, 0, 0, 0) }
 	init: func@ ~floatArray (source: Float[]) { this init(source[0], source[1], source[2], source[3]) }
+	init: func@ ~fromeFloatTransform3D (transform: FloatTransform3D) {
+		// Farrell, Jay. A. Computation of the Quaternion from a Rotation Matrix.
+		// http://www.ee.ucr.edu/~farrell/AidedNavigation/D_App_Quaternions/Rot2Quat.pdf
+		r, s, w, x, y, z: Float
+		trace := transform a + transform f + transform k
+		if (trace > 0.0f) {
+			r = (1.0f + trace) sqrt()
+			s = 0.5f / r
+			w = 0.5f * r
+			x = (transform g - transform j) * s
+			y = (transform i - transform c) * s
+			z = (transform b - transform e) * s
+		} else if (transform a > transform f && transform a > transform k) {
+			r = (1.0f + transform a - transform f - transform k) sqrt()
+			s = 0.5f / r
+			w = (transform g - transform j) * s
+			x = 0.5f * r
+			y = (transform e + transform b) * s
+			z = (transform i + transform c) * s
+		} else if (transform f > transform k) {
+			r = (1.0f - transform a + transform f - transform k) sqrt()
+			s = 0.5f / r
+			w = (transform i - transform c) * s
+			x = (transform e + transform b) * s
+			y = 0.5f * r
+			z = (transform j + transform g) * s
+		} else {
+			r = (1.0f - transform a - transform f + transform k) sqrt()
+			s = 0.5f / r
+			w = (transform b - transform e) * s
+			x = (transform i + transform c) * s
+			y = (transform j + transform g) * s
+			z = 0.5f * r
+		}
+		this init(w, x, y, z)
+	}
 	apply: func (vector: FloatPoint3D) -> FloatPoint3D {
  		vectorQuaternion := This new(0.0f, vector)
 		result := hamiltonProduct(hamiltonProduct(this, vectorQuaternion), this inverse)
@@ -77,42 +114,6 @@ Quaternion: cover {
 		y := a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2;
 		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2;
 		return This new(w, x, y, z);
-	}
-	fromRotationMatrix: static func (matrix: FloatTransform2D) -> This {
-		// Farrell, Jay. A. Computation of the Quaternion from a Rotation Matrix.
-		// http://www.ee.ucr.edu/~farrell/AidedNavigation/D_App_Quaternions/Rot2Quat.pdf
-		r, s, w, x, y, z: Float
-		trace := matrix a + matrix e + matrix i
-		if (trace > 0.0f) {
-			r = (1.0f + trace) sqrt()
-			s = 0.5f / r
-			w = 0.5f * r
-			x = (matrix f - matrix h) * s
-			y = (matrix g - matrix c) * s
-			z = (matrix b - matrix d) * s
-		} else if (matrix a > matrix e && matrix a > matrix i) {
-			r = (1.0f + matrix a - matrix e - matrix i) sqrt()
-			s = 0.5f / r
-			w = (matrix f - matrix h) * s
-			x = 0.5f * r
-			y = (matrix d + matrix b) * s
-			z = (matrix g + matrix c) * s
-		} else if (matrix e > matrix i) {
-			r = (1.0f - matrix a + matrix e - matrix i) sqrt()
-			s = 0.5f / r
-			w = (matrix g - matrix c) * s
-			x = (matrix d + matrix b) * s
-			y = 0.5f * r
-			z = (matrix h + matrix f) * s
-		} else {
-			r = (1.0f - matrix a - matrix e + matrix i) sqrt()
-			s = 0.5f / r
-			w = (matrix b - matrix d) * s
-			x = (matrix g + matrix c) * s
-			y = (matrix h + matrix f) * s
-			z = 0.5f * r
-		}
-		This new(w, x, y, z)
 	}
 	getEulerAngles: func -> FloatRotation3D {
 		// http://www.jldoty.com/code/DirectX/YPRfromUF/YPRfromUF.html
@@ -272,20 +273,6 @@ Quaternion: cover {
 		result := [this w, this x, this y, this z]
 		result
 	}
-	toFloatTransform2D: func -> FloatTransform2D {
-		normalized := this normalized
-		(w, x, y, z) := (normalized w, normalized x, normalized y, normalized z)
-		a := 1.0f - 2.0f * (y * y + z * z)
-		b := 2.0f * (x * y + z * w)
-		c := 2.0f * (x * z - y * w)
-		d := 2.0f * (x * y - z * w)
-		e := 1.0f - 2.0f * (x * x + z * z)
-		f := 2.0f * (y * z + x * w)
-		g := 2.0f * (x * z + y * w)
-		h := 2.0f * (y * z - x * w)
-		i := 1.0f - 2.0f * (x * x + y * y)
-		FloatTransform2D new(a, b, c, d, e, f, g, h, i)
-	}
 	dotProduct: func(other: Quaternion) -> Float {
 		this w * other w + this x * other x + this y * other y + this z * other z
 	}
@@ -304,6 +291,27 @@ Quaternion: cover {
 			result = this * thisFactor + other * otherFactor
 		}
 		result
+	}
+	toFloatTransform3D: func -> FloatTransform3D {
+		length := this w * this w + this x * this x + this y * this y + this z * this z
+		factor := length == 0.0f ? 0.0f : 2.0f / length
+		FloatTransform3D new(
+			1.0f - factor * (this y * this y + this z * this z),
+			factor * (this x * this y + this z * this w),
+			factor * (this x * this z - this y * this w),
+			factor * (this x * this y - this w * this z),
+			1.0f - factor * (this x * this x + this z * this z),
+			factor * (this y * this z + this w * this x),
+			factor * (this x * this z + this w * this y),
+			factor * (this y * this z - this w * this x),
+			1.0f - factor * (this x * this x + this y * this y),
+			0.0f,
+			0.0f,
+			0.0f
+		)
+	}
+	relativeQuaternion: func(other: Quaternion) -> Quaternion {
+		other * this inverse
 	}
 	toString: func -> String {
 		"Real: " << "%8f" formatFloat(this real) >>

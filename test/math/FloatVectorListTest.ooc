@@ -25,70 +25,70 @@ FloatVectorListTest: class extends Fixture {
 //	TODO: Implement the remaining tests
 	tolerance := 0.000001f
 
-	init: func() {
+	init: func {
 		super("FloatVectorList")
-		this add("sum", func() {
+		this add("sum", func {
 
 		})
-		this add("maxValue", func() {
+		this add("maxValue", func {
 
 		})
-		this add("mean", func() {
+		this add("mean", func {
 
 		})
-		this add("variance", func() {
+		this add("variance", func {
 
 		})
-		this add("standard deviation", func() {
+		this add("standard deviation", func {
 
 		})
-		this add("sort", func() {
+		this add("sort", func {
 
 		})
-		this add("accumulate", func() {
+		this add("accumulate", func {
 
 		})
-		this add("copy", func() {
+		this add("copy", func {
 
 		})
-		this add("getSlice", func() {
+		this add("getSlice", func {
 			list := FloatVectorList new()
 			list add(1.0f)
 			list add(2.0f)
 			list add(3.0f)
 			list add(4.0f)
-			slice := list getSlice(1..2)
+			slice := list getSlice(1 .. 2)
 			expect(slice[0] == 2.0f)
 			expect(slice[1] == 3.0f)
 		})
-		this add("operator + (This)", func() {
+		this add("operator + (This)", func {
 
 		})
-		this add("add into", func() {
+		this add("add into", func {
 
 		})
-		this add("operator - (This)", func() {
+		this add("operator - (This)", func {
 
 		})
-		this add("operator * (Float)", func() {
+		this add("operator * (Float)", func {
 
 		})
-		this add("operator / (Float)", func() {
+		this add("operator / (Float)", func {
 
 		})
-		this add("operator + (Float)", func() {
+		this add("operator + (Float)", func {
 
 		})
-		this add("operator - (Float)", func() {
+		this add("operator - (Float)", func {
 
 		})
-		this add("array index", func() {
+		this add("array index", func {
 
 		})
-		this add("to string", func() {
+		this add("to string", func {
 
 		})
-		this add("median", func() {
+		this add("median", func {
 			list := FloatVectorList new()
 			list add(2.0f)
 			expect(list median(), is equal to(2.0f) within(tolerance))
@@ -101,7 +101,7 @@ FloatVectorListTest: class extends Fixture {
 			list add(7.0f)
 			expect(list median(), is equal to(4.0f) within(tolerance))
 		})
-		this add("moving median filter", func() {
+		this add("moving median filter", func {
 			list := FloatVectorList new()
 			list add(2.0f)
 			list add(1.0f)

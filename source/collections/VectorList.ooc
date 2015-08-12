@@ -27,8 +27,8 @@ VectorList: class <T> {
 	init: func ~default {
 		this init(32)
 	}
-	init: func ~heap (capacity: Int) {
-		this init(HeapVector<T> new(capacity))
+	init: func ~heap (capacity: Int, freeContent := true) {
+		this init(HeapVector<T> new(capacity, freeContent))
 	}
 	init: func (=_vector)
 
@@ -41,7 +41,7 @@ VectorList: class <T> {
 	append: func (other: This<T>) {
 		if (this _vector capacity < this _count + other count)
 			this _vector resize(this _vector capacity + other count)
-		for (i in 0..other count)
+		for (i in 0 .. other count)
 			this _vector[this _count + i] = other[i]
 		this _count += other count
 	}
@@ -63,7 +63,7 @@ VectorList: class <T> {
 		result
 	}
 	removeAt: func (index: Int) {
-		this _vector copy(index+1, index)
+		this _vector copy(index + 1, index)
 		this _count -= 1
 	}
 	clear: func {
@@ -86,7 +86,7 @@ VectorList: class <T> {
 		inOrder := false
 		while (!inOrder) {
 			inOrder = true
-			for (i in 0..count - 1) {
+			for (i in 0 .. count - 1) {
 				if (greaterThan(this[i], this[i + 1])) {
 					inOrder = false
 					tmp := this[i]
@@ -103,7 +103,7 @@ VectorList: class <T> {
 		result
 	}
 	apply: func (function: Func(T)) {
-		for(i in 0..this count)
+		for (i in 0 .. this count)
 			function(this[i])
 	}
 	modify: func (function: Func(T) -> T) {
@@ -127,13 +127,13 @@ VectorList: class <T> {
 	getFirstElements: func (number: Int) -> This<T> {
 		result := This<T> new()
 		number = number < count ? number : count
-		for (i in 0..number)
+		for (i in 0 .. number)
 			result add(this _vector[i])
 		result
 	}
-	getElements: func (indices: VectorList<Int>) -> This<T> {
+	getElements: func (indices: This<Int>) -> This<T> {
 		result := This<T> new()
-		for (i in 0..indices count)
+		for (i in 0 .. indices count)
 			result add(this[indices[i]])
 		result
 	}

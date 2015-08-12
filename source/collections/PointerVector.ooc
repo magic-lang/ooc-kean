@@ -21,7 +21,7 @@ PointerVector: abstract class {
 	count ::= this _count
 	_freeContent: Bool
 
-	init: /* protected */ func ~preallocated (=_backend, =_count, freeContent := false) {}
+	init: /* protected */ func ~preallocated (=_backend, =_count, freeContent := false)
 	init: /* protected */ func (=_count, freeContent := false) {
 		this _freeContent = freeContent
 	}
@@ -30,9 +30,9 @@ PointerVector: abstract class {
 		gc_free(this _backend)
 		super()
 	}
-	_free: func ~range (start: Int, end: Int) {
+	_free: func ~range (start, end: Int) {
 		if (this _freeContent) {
-			for (i in start..end) {
+			for (i in start .. end) {
 				old := this[i] as Object
 				old free()
 			}
@@ -47,17 +47,17 @@ PointerVector: abstract class {
 		else if (count > this count)
 			this _count = count
 	}
-	move: func (sourceStart: Int, targetStart: Int, count := 0) {
+	move: func (sourceStart, targetStart: Int, count := 0) {
 		if (count < 1)
 			count = this count - sourceStart
 		if (targetStart + count > this count)
 			count = this count - targetStart
 		memmove(this _backend + targetStart * Pointer size, this _backend + sourceStart * Pointer size, count * Pointer size)
 	}
-	copy: func ~within (sourceStart: Int, targetStart: Int, count := 0) {
+	copy: func ~within (sourceStart, targetStart: Int, count := 0) {
 		this copy(sourceStart, this, targetStart, count)
 	}
-	copy: func (sourceStart: Int, target: PointerVector, targetStart: Int, count := 0) {
+	copy: func (sourceStart: Int, target: This, targetStart: Int, count := 0) {
 		if (count < 1)
 			count = this count - sourceStart
 		if (targetStart + count > target count)
@@ -82,14 +82,13 @@ PointerVector: abstract class {
 	}
 }
 
-
 PointerHeapVector: class extends PointerVector {
-	init: func(count: Int) {
+	init: func (count: Int) {
 		super(count)
 		this _allocate(count)
 	}
 
-	_allocate: func(count: Int) {
+	_allocate: func (count: Int) {
 		this _backend = gc_realloc(this _backend, count * Pointer size)
 	}
 
@@ -100,7 +99,7 @@ PointerHeapVector: class extends PointerVector {
 }
 
 PointerStackVector: class extends PointerVector {
-	init: func(data: Pointer*, count: Int) {
+	init: func (data: Pointer*, count: Int) {
 		super(data, count)
 	}
 	resize: override func (count: Int) {

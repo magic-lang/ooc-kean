@@ -49,20 +49,20 @@ PointerVectorList: class {
 			this _vector resize(this _vector count + 8)
 		}
 
-		this _vector copy(index,index+1)
+		this _vector copy(index, index + 1)
 		this _vector[index] = item
 		this count += 1
 	}
 
 	remove: func (index: Int) -> Pointer {
 		tmp := this _vector[index]
-		this _vector copy(index+1, index)
+		this _vector copy(index + 1, index)
 		this count -= 1
 		tmp
 	}
 
 	free: override func {
-		for (i in 0..this count)
+		for (i in 0 .. this count)
 			gc_free(this _vector[i])
 		this _vector free()
 		super()

@@ -13,9 +13,9 @@ FloatTransform2DTest: class extends Fixture {
 	point0 := FloatPoint2D new(-7.0f, 3.0f)
 	point1 := FloatPoint2D new(-10.0f, 3.0f)
 	size := FloatSize2D new(10.0f, 10.0f)
-	init: func () {
+	init: func {
 		super("FloatTransform2D")
-		this add("equality", func() {
+		this add("equality", func {
 			transform := FloatTransform2D new()
 //			expect(this transform0, is equal to(this transform0))
 //			expect(this transform0 equals(this transform0 as Object), is true)
@@ -25,16 +25,16 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform == transform, is true)
 			expect(transform == this transform0, is false)
 		})
-		this add("inverse transform", func() {
+		this add("inverse transform", func {
 //			expect(this transform0 Inverse, is equal to(this transform3))
 		})
-		this add("multiplication, transform - transform", func() {
+		this add("multiplication, transform - transform", func {
 //			expect(this transform0 * this transform1, is equal to(this transform2))
 		})
-		this add("multiplication, transform - point", func() {
+		this add("multiplication, transform - point", func {
 //			expect(this transform0 * this point0, is equal to(this point1))
 		})
-		this add("create zero transform", func() {
+		this add("create zero transform", func {
 			transform := FloatTransform2D new()
 			expect(transform a, is equal to(0.0f) within(this precision))
 			expect(transform b, is equal to(0.0f) within(this precision))
@@ -46,7 +46,7 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform h, is equal to(0.0f) within(this precision))
 			expect(transform i, is equal to(0.0f) within(this precision))
 		})
-		this add("create identity transform", func() {
+		this add("create identity transform", func {
 			transform := FloatTransform2D identity
 			expect(transform a, is equal to(1.0f) within(this precision))
 			expect(transform b, is equal to(0.0f) within(this precision))
@@ -58,9 +58,9 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform h, is equal to(0.0f) within(this precision))
 			expect(transform i, is equal to(1.0f) within(this precision))
 		})
-		this add("rotate", func() {
+		this add("rotate", func {
 			identity := FloatTransform2D identity
-			angle := PI as Float / 9.0f 
+			angle := PI as Float / 9.0f
 			transform := FloatTransform2D createZRotation(angle)
 			transform = transform rotate(-angle)
 			expect(transform a, is equal to(1.0f) within(this precision))
@@ -73,8 +73,8 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform h, is equal to(0.0f) within(this precision))
 			expect(transform i, is equal to(1.0f) within(this precision))
 		})
-		this add("scale", func() {
-			scale := 20.0f 
+		this add("scale", func {
+			scale := 20.0f
 			identity := FloatTransform2D new(scale, 0.0f, 0.0f, scale, 0.0f, 0.0f);
 			transform := FloatTransform2D createScaling(scale, scale);
 			transform = transform scale(5.0f)
@@ -88,9 +88,9 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform h, is equal to(0.0f) within(this precision))
 			expect(transform i, is equal to(1.0f) within(this precision))
 		})
-		this add("translate", func() {
+		this add("translate", func {
 			xDelta := 40.0f
-			yDelta := -40.0f 
+			yDelta := -40.0f
 			transform := FloatTransform2D createTranslation(xDelta, yDelta)
 			transform = transform translate(-xDelta, -yDelta)
 			expect(transform a, is equal to(1.0f) within(this precision))
@@ -103,7 +103,7 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform h, is equal to(0.0f) within(this precision))
 			expect(transform i, is equal to(1.0f) within(this precision))
 		})
-		this add("create rotation", func() {
+		this add("create rotation", func {
 			angle := PI as Float / 9.0f
 			transform := FloatTransform2D createZRotation(angle)
 			expect(transform a, is equal to(angle cos()) within(this precision))
@@ -113,7 +113,7 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform g, is equal to(0.0f) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
 		})
-		this add("create scale", func() {
+		this add("create scale", func {
 			scale := 20.0f
 			transform := FloatTransform2D createScaling(scale, scale);
 			expect(transform a, is equal to(scale) within(this precision))
@@ -123,7 +123,7 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform g, is equal to(0.0f) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
 		})
-		this add("create translation", func() {
+		this add("create translation", func {
 			xDelta := 40.0f
 			yDelta := -40.0f
 			transform := FloatTransform2D createTranslation(xDelta, yDelta)
@@ -134,7 +134,7 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform g, is equal to(xDelta) within(this precision))
 			expect(transform h, is equal to(yDelta) within(this precision))
 		})
-		this add("get values", func() {
+		this add("get values", func {
 			transform := this transform0
 			expect(transform a, is equal to(3.0f) within(this precision))
 			expect(transform b, is equal to(1.0f) within(this precision))
@@ -146,19 +146,19 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform h, is equal to(7.0f) within(this precision))
 			expect(transform i, is equal to(1.0f) within(this precision))
 		})
-		this add("get ScalingX", func() {
+		this add("get ScalingX", func {
 			scale := this transform0 scalingX
 			expect(scale, is equal to(3.162277f) within(this precision))
 		})
-		this add("get ScalingY", func() {
+		this add("get ScalingY", func {
 			scale := this transform0 scalingY
 			expect(scale, is equal to(2.23606801f) within(this precision))
 		})
-		this add("get Scaling", func() {
+		this add("get Scaling", func {
 			scale := this transform0 scaling
 			expect(scale, is equal to(2.69917297f) within(this precision))
 		})
-		this add("get ScalingX", func() {
+		this add("get ScalingX", func {
 			translation := this transform0 translation
 			expect(translation width, is equal to(5.0f) within(this precision))
 			expect(translation height, is equal to(7.0f) within(this precision))

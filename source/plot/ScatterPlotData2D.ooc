@@ -13,26 +13,26 @@ ScatterPlotData2D: class extends PlotData2D {
 	shape := Shape Circle
 	scalingRelativeLineWidth := 5.0f
 
-	init: func ~default() {
+	init: func ~default {
 		super()
 	}
 
-	init: func ~dataSeries(dataSeries: VectorList<FloatPoint2D>, label := "", colorBgra := ColorBgra new()) {
+	init: func ~dataSeries (dataSeries: VectorList<FloatPoint2D>, label := "", colorBgra := ColorBgra new()) {
 			super(dataSeries, label, colorBgra)
 	}
 
-	init: func ~color(dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
+	init: func ~color (dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
 			super(dataSeries, "", colorBgra)
 	}
 
-	init: func ~twoFloatSeries(xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new()) {
+	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new()) {
 		super(xSeries, ySeries, label, colorBgra)
 	}
 
 	getSvg: func (transform: FloatTransform2D) -> String {
 		result := ""
 		if (!this dataSeries empty) {
-			for (i in 0..this dataSeries count) {
+			for (i in 0 .. this dataSeries count) {
 				match (this shape) {
 					case Shape Circle =>
 						r := this scalingRelativeLineWidth / 2.0f * this lineWidth

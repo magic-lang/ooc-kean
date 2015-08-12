@@ -17,5 +17,5 @@
 import Order
 
 IComparable: interface <T> {
-	compare: func(other: T) -> Order
+	compare: func (other: T) -> Order
 }

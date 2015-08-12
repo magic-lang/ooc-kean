@@ -20,7 +20,7 @@ SvgPlot: class {
 		this init(VectorList<PlotData2D> new())
 	}
 
-	init: func ~datasets(=datasets, title := "", xAxisLabel := "", yAxisLabel := "") {
+	init: func ~datasets (=datasets, title := "", xAxisLabel := "", yAxisLabel := "") {
 		this title = title
 		this symmetric = false
 		this xAxis = Axis new(Orientation Horizontal, xAxisLabel)
@@ -28,7 +28,7 @@ SvgPlot: class {
 		this setAxesMinMax()
 	}
 
-	init: func ~dataset(dataset: PlotData2D, title := "", xAxisLabel := "", yAxisLabel := "") {
+	init: func ~dataset (dataset: PlotData2D, title := "", xAxisLabel := "", yAxisLabel := "") {
 		datasets := VectorList<PlotData2D> new()
 		datasets add(dataset)
 		this init(datasets, title, xAxisLabel, yAxisLabel)
@@ -76,7 +76,7 @@ SvgPlot: class {
 		result = result >> "<rect desc='Plot-border' x='" & margin width toString() >> "' y='" & margin height toString() >> "' width='" & plotAreaSize width toString() >> "' height='" & plotAreaSize height toString() >> "' stroke='black' fill='none'/>\n"
 		result = result >> "<svg desc='Data' x='" & margin width toString() >> "' y='" & margin height toString() >> "' width='" & plotAreaSize width toString() >> "' height='" & plotAreaSize height toString() >> "'>\n"
 		if (!this datasets empty)
-			for (i in 0..this datasets count)
+			for (i in 0 .. this datasets count)
 				result = result & this datasets[i] getSvg(transform)
 		result = result >> "</svg>\n"
 		result = result & this setLegends(size, plotAreaSize)
@@ -88,7 +88,7 @@ SvgPlot: class {
 			min := datasets[0] minValues()
 			max := datasets[0] maxValues()
 
-			for (i in 0..datasets count) {
+			for (i in 0 .. datasets count) {
 				min = min minimum(datasets[i] minValues())
 				max = max maximum(datasets[i] maxValues())
 			}
@@ -102,8 +102,8 @@ SvgPlot: class {
 
 	setColor: func {
 		if (!datasets empty) {
-			noneColor := ColorBgra new(0,0,0,0)
-			for (j in 0..datasets count) {
+			noneColor := ColorBgra new(0, 0, 0, 0)
+			for (j in 0 .. datasets count) {
 				if (noneColor != datasets[j] colorBgra) {
 					datasets[j] color = datasets[j] colorBgra svgRGBToString()
 					datasets[j] opacity = ((datasets[j] colorBgra svgRGBAlpha()) as Float) / 255.0f
@@ -132,8 +132,8 @@ SvgPlot: class {
 
 	setLegends: func (size, plotAreaSize: FloatSize2D) -> String {
 		result := "<svg desc='Legends' x='" << ((size width - plotAreaSize width) / 2) toString() >> "' y='" & ((size height - plotAreaSize height) / 2) toString() >> "' width='" & plotAreaSize width toString() >> "' height='" & plotAreaSize height toString() >> "' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>\n<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>\n<g id='Legend' drag:enable='true'>\n"
-		legendCounter:= 0
-		for (i in 0..this datasets count) {
+		legendCounter := 0
+		for (i in 0 .. this datasets count) {
 			if (this datasets[i] label != "") {
 				legendCounter += 1
 				result = result & this datasets[i] getSvgLegend(legendCounter, fontSize)

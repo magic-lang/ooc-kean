@@ -1,6 +1,7 @@
 #!/bin/bash
 export OOC_LIBS=$(dirname `pwd`)
 ARGS=""
+FAILED=false
 if [ -e rock_arguments.txt ]
 	then
 		ARGS=$(cat rock_arguments.txt)
@@ -43,9 +44,14 @@ do
 		if [[ !( $? == 0 ) ]]
 		then
 			echo "Failed test: $TEST"
-			exit 1
+			FAILED=true
 		fi
 		rm -f $NAME
 	fi
 done
-exit 0
+if [ "$FAILED" = true ]
+then
+	exit 1
+else
+	exit 0
+fi

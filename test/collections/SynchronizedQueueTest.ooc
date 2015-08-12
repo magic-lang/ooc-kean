@@ -5,7 +5,7 @@ import os/Time
 
 SynchronizedQueueTest: class extends Fixture {
 
-	init: func() {
+	init: func {
 		queue := SynchronizedQueue<Int> new()
 
 		func1 := func { queue enqueue(123) }
@@ -31,25 +31,25 @@ SynchronizedQueueTest: class extends Fixture {
 		}
 
 		super("SynchronizedQueue")
-		this add("SynchronizedQueue cover create", func() {
+		this add("SynchronizedQueue cover create", func {
 			expect(queue empty)
 			expect(queue count, is equal to(0))
 
 			pool := ThreadPool new(3)
 			/* Enqueue values asynchronously */
-			for (i in 0..100)
+			for (i in 0 .. 100)
 				pool add(func1)
 
 			/* Peek values asynchronously */
-			for (i in 0..200)
+			for (i in 0 .. 200)
 				pool add(func2)
 
 			/* Dequeue values asynchronously */
-			for (i in 0..200)
+			for (i in 0 .. 200)
 				pool add(func3)
 
 			/* Peek values asynchronously in empty Queue */
-			for (i in 0..20)
+			for (i in 0 .. 20)
 				pool add(func4)
 
 			pool waitAll()

@@ -26,7 +26,7 @@ Argument: class {
 	_action: Event
 	_action1: Event1<String>
 	init: func (=_longIdentifier, =_shortIdentifier, =_parameters, =_help, =_action)
-	init: func ~parameter(=_longIdentifier, =_shortIdentifier, =_parameters, =_help, =_action1)
+	init: func ~parameter (=_longIdentifier, =_shortIdentifier, =_parameters, =_help, =_action1)
 	free: override func {
 		if (this _action != null)
 			this _action free()
@@ -64,12 +64,12 @@ CLIParser: class {
 	add: func (longIdentifier: String, shortIdentifier: String, parameters: Int, help: String, action: Event) {
 		this _arguments add(Argument new(longIdentifier, shortIdentifier, parameters, help, action))
 	}
-	add: func ~parameter(longIdentifier: String, shortIdentifier: String, parameters: Int, help: String, action: Event1<String>) {
+	add: func ~parameter (longIdentifier: String, shortIdentifier: String, parameters: Int, help: String, action: Event1<String>) {
 		this _arguments add(Argument new(longIdentifier, shortIdentifier, parameters, help, action))
 	}
 	parse: func (input: VectorList<String>, inputLength: Int) {
 		tokens := VectorList<Token> new()
-		for (i in 0..inputLength) {
+		for (i in 0 .. inputLength) {
 			tmpStr := input[i]
 			tmpLength := tmpStr length()
 			if (tmpStr startsWith?("--")) {
@@ -77,7 +77,7 @@ CLIParser: class {
 				tokens add(Token new(TokenType Long, subStr))
 			} else if ((tmpStr startsWith?("-")) && (tmpLength > 1)) {
 				newStr := tmpStr substring(1)
-				for (i in 0..tmpLength-1) {
+				for (i in 0 .. tmpLength - 1) {
 					tokens add(Token new(TokenType Short, newStr[i]toString()))
 				}
 				newStr free()
@@ -86,29 +86,29 @@ CLIParser: class {
 			}
 		}
 		argument: Argument
-		for (i in 0..tokens count) {
+		for (i in 0 .. tokens count) {
 			argument = null
 			if (tokens[i] _type == TokenType Short) {
-				for (j in 0..this _arguments count) {
+				for (j in 0 .. this _arguments count) {
 					if (this _arguments[j] _shortIdentifier == tokens[i] _value) {
 							argument = this _arguments[j]
 					}
 				}
 			} else if (tokens[i] _type == TokenType Long) {
-				for (j in 0..this _arguments count) {
+				for (j in 0 .. this _arguments count) {
 					if (this _arguments[j] _longIdentifier == tokens[i] _value) {
 						argument = this _arguments[j]
 					}
 				}
-			} else if (tokens[i] _type == TokenType Parameter)  {
+			} else if (tokens[i] _type == TokenType Parameter) {
 				raise("Unassociated Parameter")
 			}
 			if (argument != null) {
 				parameters := VectorList<String> new()
-				for ( k in 0..argument _parameters) {
-					if (tokens[i+1] _type == TokenType Parameter) {
-						parameters add(tokens[i+1] _value clone())
-						token := tokens remove(i+1)
+				for (k in 0 .. argument _parameters) {
+					if (tokens[i + 1] _type == TokenType Parameter) {
+						parameters add(tokens[i + 1] _value clone())
+						token := tokens remove(i + 1)
 						token free()
 					}
 				}

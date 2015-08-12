@@ -19,13 +19,13 @@ SvgWriter2D: class {
 
 	init: func (=file) {
 		this svgPlots = VectorList<SvgPlot> new()
-		this size = FloatSize2D new(1920,1080)
+		this size = FloatSize2D new(1920, 1080)
 		this fontSize = 14
 	}
-	init: func ~fileName(filename: String) {
+	init: func ~fileName (filename: String) {
 		this init(File new(filename))
 	}
-	init: func ~svgPlot(file: File, args: ...) {
+	init: func ~svgPlot (file: File, args: ...) {
 		this init(file)
 
 		iterator := args iterator()
@@ -36,20 +36,20 @@ SvgWriter2D: class {
 			}
 		}
 	}
-	init: func ~svgPlotWithFilename(filename: String, args: ...) {
+	init: func ~svgPlotWithFilename (filename: String, args: ...) {
 		this init(File new(filename), args)
 	}
-	init: func ~withPositioning(file: File, =numberOfPlotsHorizontally, args: ...) {
+	init: func ~withPositioning (file: File, =numberOfPlotsHorizontally, args: ...) {
 		this init(file, args)
 	}
-	init: func ~withPositioningFilename(filename: String, =numberOfPlotsHorizontally, args: ...) {
+	init: func ~withPositioningFilename (filename: String, =numberOfPlotsHorizontally, args: ...) {
 		this init(File new(filename), args)
 	}
-	init: func ~svgPlots(file: File, svgPlots: VectorList<SvgPlot>) {
+	init: func ~svgPlots (file: File, svgPlots: VectorList<SvgPlot>) {
 		this init(file)
 		this svgPlots = svgPlots
 	}
-	init: func ~svgPlotsFilename(filename: String, svgPlots: VectorList<SvgPlot>) {
+	init: func ~svgPlotsFilename (filename: String, svgPlots: VectorList<SvgPlot>) {
 		this init(File new(filename))
 		this svgPlots = svgPlots
 	}
@@ -99,7 +99,7 @@ SvgWriter2D: class {
 			plotSize := FloatSize2D new(this size width / numPlotsX, this size height / numPlotsY)
 			position := FloatPoint2D new()
 
-			for (i in 0..this svgPlots count) {
+			for (i in 0 .. this svgPlots count) {
 				position x = plotSize width * Int modulo(i, numPlotsX)
 				position y = plotSize height * (i / numPlotsX)
 
