@@ -21,8 +21,8 @@ Vector: abstract class <T> {
 	capacity ::= this _capacity
 	_freeContent: Bool
 
-	init: /* protected */ func ~preallocated (=_backend, =_capacity, freeContent := true)
-	init: /* protected */ func (=_capacity, freeContent := true) {
+	init: /* protected */ func ~preallocated (=_backend, =_capacity, freeContent := This FreeContent)
+	init: /* protected */ func (=_capacity, freeContent := This FreeContent) {
 		this _freeContent = freeContent
 	}
 	free: override func {
@@ -92,6 +92,9 @@ Vector: abstract class <T> {
 		}
 		this _backend[index] = item
 	}
+
+	FreeContent: static const Bool = true
+	DoNotFreeContent: static const Bool = false
 }
 
 HeapVector: class <T> extends Vector<T> {
