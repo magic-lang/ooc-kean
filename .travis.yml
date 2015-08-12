@@ -28,7 +28,8 @@ before_script:
 
 script:
   - echo "travis_fold:start:magic folding starts"
-  - ./magic
+  - #magic releases assume /usr/local/bin/node, but on Travis, that's wrong, so call node explictly.
+  - node ./magic
   - echo "travis_fold:end:magic folding ends"
   - echo "travis_fold:start:test folding starts"
   - ./test.sh nogpu -Dnogpu
