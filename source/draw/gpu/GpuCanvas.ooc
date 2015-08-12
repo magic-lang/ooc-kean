@@ -17,24 +17,11 @@
 use ooc-math
 use ooc-draw
 use ooc-base
-use ooc-collections
+import GpuImage, GpuMap, GpuSurface, GpuContext
 
-import GpuImage, GpuMap, GpuSurface, GpuContext, structs/LinkedList
-
-GpuCanvas: abstract class {
+GpuCanvas: abstract class extends GpuSurface {
 	_target: GpuImage
-	_size: IntSize2D
-	_context: GpuContext
-	blend := false
-	init: func (=_target, =_context)
-	draw: abstract func (image: Image)
-	draw: abstract func ~transform2D (image: Image, transform: FloatTransform2D)
-	draw: abstract func ~withmap (image: Image, map: GpuMap, viewport: IntBox2D)
-	draw: abstract func ~withmapTwoImages (image1: Image, image2: Image, map: GpuMap, viewport: IntBox2D)
-	clear: abstract func
-	drawLines: virtual func (transformList: VectorList<FloatPoint2D>)
-	drawBox: virtual func (box: FloatBox2D)
-	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>)
-	readPixels: virtual func -> ByteBuffer { raise("Trying to read pixels in unimplemented readPixels function"); null }
+	init: func (=_target, context: GpuContext) { super(this _target size, context, context getMap(this _target, GpuMapType transform)) }
+	readPixels: virtual func -> ByteBuffer { Debug raise("Trying to read pixels in unimplemented readPixels function"); null }
 	onRecycle: abstract func
 }

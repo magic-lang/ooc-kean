@@ -21,14 +21,18 @@ use ooc-draw-gpu
 import OpenGLES3/Texture, OpenGLES3Canvas, Map/OpenGLES3Map, Map/OpenGLES3MapPack, OpenGLES3Texture
 
 OpenGLES3Uv: class extends GpuUv {
-	init: func (size: IntSize2D, context: GpuContext) {
-		init(size, size width * 2, null, context)
-	}
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
+	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
 		super(OpenGLES3Texture createUv(size, stride, data), size, context)
+		this coordinateSystem = coordinateSystem
+	}
+	init: func (size: IntSize2D, context: GpuContext) {
+		this init(size, size width * 2, null, CoordinateSystem YUpward, context)
 	}
 	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) {
 		super(texture, size, context)
+	}
+	init: func ~fromRaster (rasterImage: RasterUv, context: GpuContext) {
+		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: func -> RasterImage {
 		packed := this _context createBgra(IntSize2D new(this size width / 2, this size height))
@@ -39,16 +43,9 @@ OpenGLES3Uv: class extends GpuUv {
 		result
 	}
 	_createCanvas: func -> GpuCanvas {
-		result := OpenGLES3Canvas create(this, this _context)
-		result clearColor = 0.5f
+		result := OpenGLES3Canvas new(this, this _context)
+		result clearColor = ColorBgra new(128, 128, 128, 128)
 		result
 	}
-	create: static func ~fromRaster (rasterImage: RasterUv, context: GpuContext) -> This {
-		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
-		result
-	}
-	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
-		result := This new(size, context)
-		result texture != null ? result : null
-	}
+	create: override func (size: IntSize2D) -> This { this _context createUv(size) as This }
 }

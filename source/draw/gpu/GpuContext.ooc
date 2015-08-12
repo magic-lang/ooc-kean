@@ -16,7 +16,8 @@
 use ooc-math
 use ooc-draw
 use ooc-base
-import GpuImage, GpuMonochrome, GpuUv, GpuBgr, GpuBgra, GpuYuv420Semiplanar, GpuYuv420Planar, GpuYuv422Semipacked, GpuImageBin, GpuSurfaceBin, GpuSurface, GpuMap, GpuFence
+use ooc-collections
+import GpuImage, GpuMonochrome, GpuUv, GpuBgr, GpuBgra, GpuYuv420Semiplanar, GpuYuv420Planar, GpuYuv422Semipacked, GpuImageBin, GpuSurface, GpuMap, GpuFence
 
 AlignWidth: enum {
 	Nearest
@@ -25,15 +26,10 @@ AlignWidth: enum {
 }
 
 GpuContext: abstract class {
-	_imageBin: GpuImageBin
-	_surfaceBin: GpuSurfaceBin
-	init: func {
-		this _imageBin = GpuImageBin new()
-		this _surfaceBin = GpuSurfaceBin new()
-	}
+	_imageBin := GpuImageBin new()
+	init: func
 	free: override func {
 		this _imageBin free()
-		this _surfaceBin free()
 		super()
 	}
 	clean: virtual func { this _imageBin clean() }
@@ -49,8 +45,6 @@ GpuContext: abstract class {
 	createFence: abstract func -> GpuFence
 	update: abstract func
 	recycle: abstract func ~image (gpuImage: GpuImage)
-	recycle: abstract func ~surface (surface: GpuSurface)
-	createSurface: abstract func -> GpuSurface
 	toRaster: virtual func (gpuImage: GpuImage, async: Bool = false) -> RasterImage { gpuImage toRasterDefault() }
 	toRasterAsync: virtual func (gpuImage: GpuImage) -> (RasterImage, GpuFence) { Debug raise("toRasterAsync unimplemented") }
 	getMap: abstract func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap
@@ -60,4 +54,9 @@ GpuContext: abstract class {
 	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }
 	isAligned: virtual func (width: Int) -> Bool { true }
 	packToRgba: abstract func (source: GpuImage, target: GpuBgra, viewport: IntBox2D)
+	drawLines: abstract func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D)
+	drawBox: abstract func (box: FloatBox2D, transform: FloatTransform3D)
+	drawPoints: abstract func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D)
+	drawQuad: abstract func
+	enableBlend: abstract func (blend: Bool)
 }
