@@ -57,12 +57,7 @@ AndroidContext: class extends OpenGLES3Context {
 	toBuffer: func (gpuImage: GpuImage, packMap: OpenGLES3MapPack) -> (ByteBuffer, GpuFence) {
 		packSize := IntSize2D new(gpuImage size width / (4 / gpuImage channels), gpuImage size height)
 		gpuRgba := this getPacker(packSize)
-		packMap imageWidth = gpuImage size width
-		gpuImage setMagFilter(false)
-		gpuImage setMinFilter(false)
-		//TODO: Verify adaptation to new kean
-		gpuRgba canvas map = packMap
-		gpuRgba canvas draw(gpuImage)
+		this packToRgba(gpuImage, gpuRgba, IntBox2D new(gpuRgba size))
 		fence := this createFence()
 		fence sync()
 		androidTexture := gpuRgba texture as AndroidTexture
