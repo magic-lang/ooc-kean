@@ -89,8 +89,8 @@ VectorList: class <T> {
 			for (i in 0 .. count - 1) {
 				a := this[i]
 				b := this[i + 1]
-				"values in VectorList: %i %i" format(a as Int, b as Int) println()
-				"addresses in VectorList: %i %i" format(a& as Int, b& as Int) println()
+				//"values in VectorList: %i %i" format(a as Int, b as Int) println()
+				//"addresses in VectorList: %i %i" format(a& as Int, b& as Int) println()
 				if (greaterThan(a,b)) {
 					inOrder = false
 					tmp := this[i]

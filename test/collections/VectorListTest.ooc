@@ -18,12 +18,21 @@
 use ooc-unit
 use ooc-collections
 
+TestClass: class {
+	_value := 0
+	value ::= _value
+	init: func(=_value)
+}
+
 VectorTest: class extends Fixture {
 
 	sortFunc: static func (a,b: Int) -> Bool {
 		result := a > b
 		"arguments to sortFunc %i, %i : %i" format(a,b,result) println()
 		result
+	}
+	sortFuncClass: static func (a,b: TestClass) -> Bool {
+		a value > b value
 	}
 	init: func {
 		super("VectorList")
@@ -140,10 +149,12 @@ VectorTest: class extends Fixture {
 			indices free()
 		})
 		this add("VectorList apply and sort", func {
-			list := VectorList<Int> new()
-			list add(0)
-			list add(2)
-			list sort(sortFunc)
+			list := VectorList<TestClass> new()
+			list add(TestClass new(1))
+			list add(TestClass new(3))
+			list add(TestClass new(2))
+			list sort(sortFuncClass)
+			list free()
 		})
 	}
 }
