@@ -34,6 +34,9 @@ VectorTest: class extends Fixture {
 	sortFuncClass: static func (a,b: TestClass) -> Bool {
 		a value > b value
 	}
+	passByRef: static func (vec: VectorList<Int>@) -> Int {
+		vec[0]
+	}
 	init: func {
 		super("VectorList")
 		this add("VectorList cover create", func {
@@ -154,6 +157,12 @@ VectorTest: class extends Fixture {
 			list add(TestClass new(3))
 			list add(TestClass new(2))
 			list sort(sortFuncClass)
+			list free()
+		})
+		this add("VectorList pass by reference", func {
+			list := VectorList<Int> new()
+			list add(1)
+			expect(passByRef(list&) == 1)
 			list free()
 		})
 	}
