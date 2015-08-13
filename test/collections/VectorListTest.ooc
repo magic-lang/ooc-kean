@@ -28,7 +28,7 @@ VectorTest: class extends Fixture {
 
 	sortFunc: static func (a,b: Int) -> Bool {
 		result := a > b
-		"arguments to sortFunc %i, %i : %i" format(a,b,result) println()
+//		"arguments to sortFunc %i, %i : %i" format(a,b,result) println()
 		result
 	}
 	sortFuncClass: static func (a,b: TestClass) -> Bool {
@@ -151,12 +151,26 @@ VectorTest: class extends Fixture {
 			list free()
 			indices free()
 		})
-		this add("VectorList apply and sort", func {
+		this add("VectorList sort vector with integers", func {
+			list := VectorList<Int> new()
+			list add(1)
+			list add(3)
+			list add(2)
+			list sort(sortFunc)
+			expect(list[0] == 1)
+			expect(list[1] == 2)
+			expect(list[2] == 3)
+			list free()
+		})
+		this add("VectorList sort vector with class objects", func {
 			list := VectorList<TestClass> new()
 			list add(TestClass new(1))
 			list add(TestClass new(3))
 			list add(TestClass new(2))
 			list sort(sortFuncClass)
+			expect(list[0] value == 1)
+			expect(list[1] value == 2)
+			expect(list[2] value == 3)
 			list free()
 		})
 		this add("VectorList pass by reference", func {
