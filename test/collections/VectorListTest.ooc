@@ -24,6 +24,12 @@ TestClass: class {
 	init: func(=_value)
 }
 
+extend VectorList <T> {
+	newMethod: func -> Int {
+		return 1
+	}
+}
+
 VectorTest: class extends Fixture {
 
 	sortFunc: static func (a,b: Int) -> Bool {
@@ -35,7 +41,7 @@ VectorTest: class extends Fixture {
 		a value > b value
 	}
 	passByRef: static func (vec: VectorList<Int>@) -> Int {
-		vec[0]
+		vec count
 	}
 	init: func {
 		super("VectorList")
@@ -177,6 +183,11 @@ VectorTest: class extends Fixture {
 			list := VectorList<Int> new()
 			list add(1)
 			expect(passByRef(list&) == 1)
+			list free()
+		})
+		this add("VectorList test extended class", func {
+			list := VectorList<Float> new()
+			expect(list newMethod() == 1)
 			list free()
 		})
 	}
