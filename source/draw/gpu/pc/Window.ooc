@@ -31,7 +31,6 @@ Window: class extends GpuSurface {
 
 	context ::= this _context as OpenGLES3Context
 	size ::= this _size
-	_transform := IntTransform2D createScaling(1, -1)
 
 	init: /* internal */ func (size: IntSize2D, title := "Window title") {
 		this _native = X11Window new(size width, size height, title)
@@ -69,8 +68,8 @@ Window: class extends GpuSurface {
 	}
 	draw: func ~gpuImage (image: GpuImage) {
 		this map = this _getTransformMap(image)
-		this map model = this _createModelTransform(image size, this _transform * image transform)
-		this map view = this _view
+		this map model = this _createModelTransform(image size)
+		this map view = FloatTransform3D createScaling(1.0f, -1.0f, 1.0f) * this _view
 		this map projection = this _projection
 		this draw(func {
 			image bind(0)
