@@ -75,8 +75,8 @@ FloatTransform2DTest: class extends Fixture {
 		})
 		this add("scale", func {
 			scale := 20.0f
-			identity := FloatTransform2D new(scale, 0.0f, 0.0f, scale, 0.0f, 0.0f);
-			transform := FloatTransform2D createScaling(scale, scale);
+			identity := FloatTransform2D new(scale, 0.0f, 0.0f, scale, 0.0f, 0.0f)
+			transform := FloatTransform2D createScaling(scale, scale)
 			transform = transform scale(5.0f)
 			expect(transform a, is equal to(100.0f) within(this precision))
 			expect(transform b, is equal to(0.0f) within(this precision))
@@ -115,7 +115,7 @@ FloatTransform2DTest: class extends Fixture {
 		})
 		this add("create scale", func {
 			scale := 20.0f
-			transform := FloatTransform2D createScaling(scale, scale);
+			transform := FloatTransform2D createScaling(scale, scale)
 			expect(transform a, is equal to(scale) within(this precision))
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))

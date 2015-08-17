@@ -110,7 +110,6 @@ VectorTest: class extends Fixture {
 				expect(heapVector[i], is equal to(0))
 
 			heapVector free()
-
 		})
 
 		this add("Stack cover create", func {
@@ -184,9 +183,7 @@ VectorTest: class extends Fixture {
 			expect(stackVector[0], is equal to(oldValue))
 
 			stackVector free()
-
 		})
-
 	}
 }
 VectorTest new() run()
