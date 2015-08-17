@@ -15,7 +15,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import math
+import FloatSize2D
 import FloatSize3D
+import FloatPoint2D
 import FloatPoint3D
 import text/StringTokenizer
 import structs/ArrayList
@@ -201,7 +203,17 @@ FloatTransform3D: cover {
 		this o == other o &&
 		this p == other p
 	}
-
+	transformProjected: func(point: FloatPoint2D, focalLength: Float) -> FloatPoint2D {
+		transformedWorldPoint := this * FloatPoint3D new(point x, point y, focalLength)
+		this project(transformedWorldPoint, focalLength)
+	}
+	project: func(point: FloatPoint3D, focalLength: Float) -> FloatPoint2D {
+		projectedPoint := This createProjection(focalLength) * point / point z
+		FloatPoint2D new(projectedPoint x, projectedPoint y)
+	}
+	createProjection: static func(focalLength: Float) -> This {
+		This new(focalLength, 0, 0, 0, 0, focalLength, 0, 0, 0, 0, focalLength, 1.0f, 0, 0, 0, 0)
+	}
 	operator != (other: This) -> Bool { !(this == other) }
 	operator as -> String { this toString() }
 	toString: func -> String {
