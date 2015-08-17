@@ -37,7 +37,7 @@ Profiler: class {
 		this _clockTimer stop()
 	}
 	printResults: static func {
-		This _profilers apply(func(profiler: This) {
+		This _profilers apply(func (profiler: This) {
 			outputString := profiler _name + " Time: " & ("%.3f" formatFloat(profiler _timer _result / 1000.0f)) >> " Average: " & ("%.3f" formatFloat(profiler _timer _average / 1000.0f))
 			Debug print(outputString)
 			outputString free()
@@ -52,7 +52,7 @@ Profiler: class {
 	}
 	logResults: static func (fileName := "profiling.txt") {
 		fw := FileWriter new(fileName)
-		This _profilers apply(func(profiler: This) {
+		This _profilers apply(func (profiler: This) {
 			outputString := profiler _name + " Time: " & ("%.3f" formatFloat(profiler _timer _result / 1000.0f)) >> " Average: " & ("%.3f" formatFloat(profiler _timer _average / 1000.0f))
 			fw write(outputString)
 			outputString free()
@@ -63,7 +63,7 @@ Profiler: class {
 		this _timer reset()
 		this _clockTimer reset()
 	}
-	resetAll: static func { This _profilers apply(func(profiler: This) { profiler reset() }) }
+	resetAll: static func { This _profilers apply(func (profiler: This) { profiler reset() }) }
 	dispose: static func {
 		This _profilers free()
 		This _profilers = null
