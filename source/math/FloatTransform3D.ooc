@@ -92,22 +92,22 @@ FloatTransform3D: cover {
 		// throw an exception, because something has gone wrong, somewhere.
 		if (determinant == 0)
 			raise("determinant is zero in FloatTransform3D inverse()!")
-		a := (this f * this k * this p  +  this j * this o * this h  +  this n * this g * this l - this f * this o * this l - this j * this g * this p - this n * this k * this h) / determinant
-		e := (this e * this o * this l  +  this i * this g * this p  +  this m * this k * this h - this e * this k * this p - this i * this o * this h - this m * this g * this l) / determinant
-		i := (this e * this j * this p  +  this i * this n * this h  +  this m * this f * this l - this e * this n * this l - this i * this f * this p - this m * this j * this h) / determinant
-		m := (this e * this n * this k  +  this i * this f * this o  +  this m * this j * this g - this e * this j * this o - this i * this n * this g - this m * this f * this k) / determinant
-		b := (this b * this o * this l  +  this j * this c * this p  +  this n * this k * this d - this b * this k * this p - this j * this o * this d - this n * this c * this l) / determinant
-		f := (this a * this k * this p  +  this i * this o * this d  +  this m * this c * this l - this a * this o * this l - this i * this c * this p - this m * this k * this d) / determinant
-		j := (this a * this n * this l  +  this i * this b * this p  +  this m * this j * this d - this a * this j * this p - this i * this n * this d - this m * this b * this l) / determinant
-		n := (this a * this j * this o  +  this i * this n * this c  +  this m * this b * this k - this a * this n * this k - this i * this b * this o - this m * this j * this c) / determinant
-		c := (this b * this g * this p  +  this f * this o * this d  +  this n * this c * this h - this b * this o * this h - this f * this c * this p - this n * this g * this d) / determinant
-		g := (this a * this o * this h  +  this e * this c * this p  +  this m * this g * this d - this a * this g * this p - this e * this o * this d - this m * this c * this h) / determinant
-		k := (this a * this f * this p  +  this e * this n * this d  +  this m * this b * this h - this a * this n * this h - this e * this b * this p - this m * this f * this d) / determinant
-		o := (this a * this n * this g  +  this e * this b * this o  +  this m * this f * this c - this a * this f * this o - this e * this n * this c - this m * this b * this g) / determinant
-		d := (this b * this k * this h  +  this f * this c * this l  +  this j * this g * this d - this b * this g * this l - this f * this k * this d - this j * this c * this h) / determinant
-		h := (this a * this g * this l  +  this e * this k * this d  +  this i * this c * this h - this a * this k * this h - this e * this c * this l - this i * this g * this d) / determinant
-		l := (this a * this j * this h  +  this e * this b * this l  +  this i * this f * this d - this a * this f * this l - this e * this j * this d - this i * this b * this h) / determinant
-		p := (this a * this f * this k  +  this e * this j * this c  +  this i * this b * this g - this a * this j * this g - this e * this b * this k - this i * this f * this c) / determinant
+		a := (this f * this k * this p + this j * this o * this h + this n * this g * this l - this f * this o * this l - this j * this g * this p - this n * this k * this h) / determinant
+		e := (this e * this o * this l + this i * this g * this p + this m * this k * this h - this e * this k * this p - this i * this o * this h - this m * this g * this l) / determinant
+		i := (this e * this j * this p + this i * this n * this h + this m * this f * this l - this e * this n * this l - this i * this f * this p - this m * this j * this h) / determinant
+		m := (this e * this n * this k + this i * this f * this o + this m * this j * this g - this e * this j * this o - this i * this n * this g - this m * this f * this k) / determinant
+		b := (this b * this o * this l + this j * this c * this p + this n * this k * this d - this b * this k * this p - this j * this o * this d - this n * this c * this l) / determinant
+		f := (this a * this k * this p + this i * this o * this d + this m * this c * this l - this a * this o * this l - this i * this c * this p - this m * this k * this d) / determinant
+		j := (this a * this n * this l + this i * this b * this p + this m * this j * this d - this a * this j * this p - this i * this n * this d - this m * this b * this l) / determinant
+		n := (this a * this j * this o + this i * this n * this c + this m * this b * this k - this a * this n * this k - this i * this b * this o - this m * this j * this c) / determinant
+		c := (this b * this g * this p + this f * this o * this d + this n * this c * this h - this b * this o * this h - this f * this c * this p - this n * this g * this d) / determinant
+		g := (this a * this o * this h + this e * this c * this p + this m * this g * this d - this a * this g * this p - this e * this o * this d - this m * this c * this h) / determinant
+		k := (this a * this f * this p + this e * this n * this d + this m * this b * this h - this a * this n * this h - this e * this b * this p - this m * this f * this d) / determinant
+		o := (this a * this n * this g + this e * this b * this o + this m * this f * this c - this a * this f * this o - this e * this n * this c - this m * this b * this g) / determinant
+		d := (this b * this k * this h + this f * this c * this l + this j * this g * this d - this b * this g * this l - this f * this k * this d - this j * this c * this h) / determinant
+		h := (this a * this g * this l + this e * this k * this d + this i * this c * this h - this a * this k * this h - this e * this c * this l - this i * this g * this d) / determinant
+		l := (this a * this j * this h + this e * this b * this l + this i * this f * this d - this a * this f * this l - this e * this j * this d - this i * this b * this h) / determinant
+		p := (this a * this f * this k + this e * this j * this c + this i * this b * this g - this a * this j * this g - this e * this b * this k - this i * this f * this c) / determinant
 
 		This new(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
 	}}

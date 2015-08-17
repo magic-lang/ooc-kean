@@ -55,7 +55,7 @@ IntSize3D: cover {
 	toFloatSize3D: func -> FloatSize3D { FloatSize3D new(this width as Float, this height as Float, this depth as Float) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this width toString()}, #{this height toString()}, #{this depth toString()}" }
-	parse: static func(input: String) -> This {
+	parse: static func (input: String) -> This {
 		array := input split(',')
 		This new (array[0] toInt(), array[1] toInt(), array[2] toInt())
 	}

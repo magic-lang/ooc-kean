@@ -28,7 +28,7 @@ IntSize2D: cover {
 	init: func@ (=width, =height)
 	init: func@ ~square (length: Int) { this width = this height = length }
 	init: func@ ~default { this init(0, 0) }
-	new: unmangled(kean_math_intSize2D_new) static func ~API (width: Int, height: Int) -> This { This new(width, height) }
+	new: unmangled (kean_math_intSize2D_new) static func ~API (width, height: Int) -> This { This new(width, height) }
 	scalarProduct: func (other: This) -> Int { this width * other width + this height * other height }
 	swap: func -> This { This new(this height, this width) }
 	minimum: func (ceiling: This) -> This { This new(Int minimum~two(this width, ceiling width), Int minimum~two(this height, ceiling height)) }
@@ -59,7 +59,7 @@ IntSize2D: cover {
 	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this width, this height) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this width toString()}, #{this height toString()}" }
-	parse: static func(input: String) -> This {
+	parse: static func (input: String) -> This {
 		//TODO: split should return something that is easier to clean up than an ArrayList is.
 		array := input split(',')
 		result := This new (array[0] toInt(), array[1] toInt())

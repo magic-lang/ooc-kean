@@ -88,10 +88,10 @@ FloatBox2D: cover {
 	contains: func (point: FloatPoint2D) -> Bool {
 		this left <= point x && point x <= this right && this top <= point y && point y <= this bottom
 	}
-	contains: func ~box (box: FloatBox2D) -> Bool { this intersection(box) == box }
+	contains: func ~box (box: This) -> Bool { this intersection(box) == box }
 	contains: func ~FloatPoint2DVectorList (list: FloatPoint2DVectorList) -> VectorList<Int> {
 		result := VectorList<Int> new()
-		for (i in 0..list count)
+		for (i in 0 .. list count)
 			if (this contains(list[i]))
 				result add(i)
 		result
@@ -139,8 +139,8 @@ FloatBox2D: cover {
 	create: static func ~fromFloats (left, top, width, height: Float) -> This { This new(left, top, width, height) }
 	createAround: static func (center: FloatPoint2D, size: FloatSize2D) -> This { This new(center + (-size) / 2, size) }
 	bounds: static func (left, right, top, bottom: Float) -> This { This new(left, top, right - left, bottom - top) }
-	bounds: static func ~fromArray (points: FloatPoint2D[]) -> FloatBox2D { This bounds(points as ArrayList<FloatPoint2D>) }
-	bounds: static func ~fromList (points: ArrayList<FloatPoint2D>) -> FloatBox2D {
+	bounds: static func ~fromArray (points: FloatPoint2D[]) -> This { This bounds(points as ArrayList<FloatPoint2D>) }
+	bounds: static func ~fromList (points: ArrayList<FloatPoint2D>) -> This {
 		xMinimum := 0.0f
 		xMaximum := xMinimum
 		yMinimum := xMinimum
