@@ -28,7 +28,10 @@ StringBuilder: class {
 	}
 	init: func ~this (original: This) {
 		this init()
-		original _stringList apply( func (value: String) { this append(value) })
+		// This leaks memory
+		/*original _stringList apply( func (value: String) { this append(value) })*/
+		for (i in 0..original count)
+			append(original[i])
 	}
 	free: func {
 		_stringList free()
@@ -70,18 +73,35 @@ StringBuilder: class {
 		this _stringList[index] = value
 	}
 	operator + (other: This) -> This {
-		result := This new(this)
-		result append(other)
+		result := This new(this). append(other)
 		result
 	}
 	operator + (value: String) -> This {
-		result := This new (this)
-		result append(value)
+		result := This new(this). append(value)
+		result
+	}
+	operator == (other: This) -> Bool {
+		leftString := this toString()
+		rightString := other toString()
+		result := leftString == rightString
+		leftString free()
+		rightString free()
+		result
+	}
+	operator == (value: String) -> Bool {
+		leftString := this toString()
+		result := leftString == value
+		leftString free()
 		result
 	}
 }
 operator + (value: String, stringBuilder: StringBuilder) -> StringBuilder {
-	result := StringBuilder new (stringBuilder)
-	result prepend(value)
+	result := StringBuilder new(stringBuilder). prepend(value)
+	result
+}
+operator == (value: String, stringBuilder: StringBuilder) -> Bool {
+	stringBuilderString := stringBuilder toString()
+	result := stringBuilderString == value
+	stringBuilderString free()
 	result
 }

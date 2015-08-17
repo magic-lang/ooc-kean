@@ -66,6 +66,23 @@ StringBuilderTest: class extends Fixture {
 			expect(sb5 count, is equal to(2))
 			expect(sb5 toString(), is equal to("Hello World"))
 		})
+		this add("== operator", func {
+			sb := StringBuilder new("Hello")
+			sb2 := StringBuilder new("Hello")
+			sb3 := StringBuilder new("World")
+			sbsb2 := sb == sb2
+			sbsb3 := sb == sb3
+			expect(sbsb2, is equal to(true))
+			expect(sbsb3, is equal to(false))
+			sbHello := sb == "Hello"
+			sbWorld := sb == "World"
+			expect(sbHello, is equal to(true))
+			expect(sbWorld, is equal to(false))
+			sbHello = "Hello" == sb
+			sbWorld = "World" == sb
+			expect(sbHello, is equal to(true))
+			expect(sbWorld, is equal to(false))
+		})
 	}
 }
 StringBuilderTest new() run()
