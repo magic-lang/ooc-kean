@@ -61,6 +61,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	}
 	clear: override func {
 		this _bind()
+		Fbo setClearColor(this clearColor red as Float / 255)
 		this _renderTarget clear()
 		this _unbind()
 	}
@@ -70,7 +71,10 @@ OpenGLES3Canvas: class extends GpuCanvas {
 OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 	target ::= this _target as GpuYuv420Semiplanar
 
-	init: func (image: OpenGLES3Yuv420Semiplanar, context: GpuContext) { super(image, context) }
+	init: func (image: OpenGLES3Yuv420Semiplanar, context: GpuContext) {
+		super(image, context)
+		this target uv canvas clearColor = ColorBgra new(128, 128, 128, 128)
+	}
 	onRecycle: func
 	_draw: func (image: OpenGLES3Yuv420Semiplanar) {
 		this target y canvas _view = this _view
