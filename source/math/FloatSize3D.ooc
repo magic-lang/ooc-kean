@@ -36,9 +36,9 @@ FloatSize3D: cover {
 		(this width abs() pow(p) + this height abs() pow(p)) pow(1 / p)
 	}
 	scalarProduct: func (other: This) -> Float { this width * other width + this height * other height + this depth * other depth }
-	vectorProduct: func (other: This) -> This { 
+	vectorProduct: func (other: This) -> This {
 		This new(
-			this height * other depth - other height * this depth, 
+			this height * other depth - other height * this depth,
 			-(this width * other depth - other width * this depth),
 			this width * other height - other width * this height
 		)
@@ -52,8 +52,8 @@ FloatSize3D: cover {
 	floor: func -> This { This new(this width floor(), this height floor(), this height floor()) }
 	minimum: func (ceiling: This) -> This { This new(Float minimum(this width, ceiling width), Float minimum(this height, ceiling height), Float minimum(this depth, ceiling depth)) }
 	maximum: func (floor: This) -> This { This new(Float maximum(this width, floor width), Float maximum(this height, floor height), Float maximum(this depth, floor depth)) }
-	clamp: func (floor, ceiling: This) -> This { 
-		This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height), this depth clamp(floor depth, ceiling depth)) 
+	clamp: func (floor, ceiling: This) -> This {
+		This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height), this depth clamp(floor depth, ceiling depth))
 	}
 	operator + (other: This) -> This { This new(this width + other width, this height + other height, this depth + other depth) }
 	operator - (other: This) -> This { This new(this width - other width, this height - other height, this depth - other depth) }
@@ -72,7 +72,7 @@ FloatSize3D: cover {
 	operator >= (other: This) -> Bool { this width >= other width && this height >= other height && this depth >= other depth }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this width toString()}, #{this height toString()}, #{this depth toString()}" }
-	parse: static func(input: String) -> This {
+	parse: static func (input: String) -> This {
 		array := input split(',')
 		This new (array[0] toFloat(), array[1] toFloat(), array[2] toFloat())
 	}
@@ -81,4 +81,3 @@ operator * (left: Float, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(le
 operator / (left: Float, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left / right width, left / right height, left / right depth) }
 operator * (left: Int, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left * right width, left * right height, left * right depth) }
 operator / (left: Int, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left / right width, left / right height, left / right depth) }
-

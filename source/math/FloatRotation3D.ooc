@@ -47,9 +47,9 @@ FloatRotation3D: cover {
 			this _updateQuaternion()
 		}
 	}
-	init: func@ ~full(=_roll, =_pitch, =_yaw) { this _updateQuaternion() }
+	init: func@ ~full (=_roll, =_pitch, =_yaw) { this _updateQuaternion() }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
-	init: func@ ~fromPoint(point: FloatPoint3D) { this init(point x, point y, point z) }
+	init: func@ ~fromPoint (point: FloatPoint3D) { this init(point x, point y, point z) }
 	init: func@ ~fromQuaternion (=_quaternion)
 	createFromQuaternion: static func (quaternion: Quaternion) -> This {
 		This new(quaternion rotationX, quaternion rotationY, quaternion rotationZ)
@@ -57,13 +57,13 @@ FloatRotation3D: cover {
 	_updateQuaternion: func {
 		this _quaternion = Quaternion createRotationX(this _roll) * Quaternion createRotationY(this _pitch) * Quaternion createRotationZ(this _yaw)
 	}
-	getTransform: func(zDistance: Float) -> FloatTransform2D {
+	getTransform: func (zDistance: Float) -> FloatTransform2D {
 		FloatTransform2D createXRotation(this _roll, zDistance) *
 		FloatTransform2D createYRotation(this _pitch, zDistance) *
 		FloatTransform2D createZRotation(this _yaw)
 	}
-	clamp: func ~point(floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
-	clamp: func ~float(floor, ceiling: Float) -> This { This new(this x clamp(floor, ceiling), this y clamp(floor, ceiling), this z clamp(floor, ceiling)) }
+	clamp: func ~point (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
+	clamp: func ~float (floor, ceiling: Float) -> This { This new(this x clamp(floor, ceiling), this y clamp(floor, ceiling), this z clamp(floor, ceiling)) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
 	operator - (other: This) -> This { This new(this x - other x, this y - other y, this z - other z) }
 	operator - -> This { This new(-this x, -this y, -this z) }
@@ -85,9 +85,6 @@ FloatRotation3D: cover {
 operator * (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left * right x, left * right y, left * right z) }
 operator / (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left / right x, left / right y, left / right z) }
 operator - (left: Float, right: FloatRotation3D) -> FloatRotation3D { FloatRotation3D new(left - right x, left - right y, left - right z) }
-
-
-
 
 /*NewFloatRotation3D: cover {
 	_x, _y, _z: Float
