@@ -28,28 +28,28 @@ FloatVectorListTest: class extends Fixture {
 	init: func {
 		super("FloatVectorList")
 		this add("sum", func {
-
+			//TODO: Implement
 		})
 		this add("maxValue", func {
-
+			//TODO: Implement
 		})
 		this add("mean", func {
-
+			//TODO: Implement
 		})
 		this add("variance", func {
-
+			//TODO: Implement
 		})
 		this add("standard deviation", func {
-
+			//TODO: Implement
 		})
 		this add("sort", func {
-
+			//TODO: Implement
 		})
 		this add("accumulate", func {
-
+			//TODO: Implement
 		})
 		this add("copy", func {
-
+			//TODO: Implement
 		})
 		this add("getSlice", func {
 			list := FloatVectorList new()
@@ -62,31 +62,31 @@ FloatVectorListTest: class extends Fixture {
 			expect(slice[1] == 3.0f)
 		})
 		this add("operator + (This)", func {
-
+			//TODO: Implement
 		})
 		this add("add into", func {
-
+			//TODO: Implement
 		})
 		this add("operator - (This)", func {
-
+			//TODO: Implement
 		})
 		this add("operator * (Float)", func {
-
+			//TODO: Implement
 		})
 		this add("operator / (Float)", func {
-
+			//TODO: Implement
 		})
 		this add("operator + (Float)", func {
-
+			//TODO: Implement
 		})
 		this add("operator - (Float)", func {
-
+			//TODO: Implement
 		})
 		this add("array index", func {
-
+			//TODO: Implement
 		})
 		this add("to string", func {
-
+			//TODO: Implement
 		})
 		this add("median", func {
 			list := FloatVectorList new()
