@@ -11,7 +11,6 @@ LineStyle: enum {
 }
 
 LinePlotData2D: class extends PlotData2D {
-
 	lineStyle: LineStyle { get set }
 
 	init: func ~default (lineStyle := LineStyle Solid) {
