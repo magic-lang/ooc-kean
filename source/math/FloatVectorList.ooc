@@ -30,7 +30,7 @@ FloatVectorList: class extends VectorList<Float> {
 		this super(other _vector)
 		this _count = other count
 	}
-	toVectorList: func() -> VectorList<Float> {
+	toVectorList: func -> VectorList<Float> {
 		result := VectorList<Float> new()
 		result _vector = this _vector
 		result _count = this count
@@ -57,29 +57,31 @@ FloatVectorList: class extends VectorList<Float> {
 	variance: Float {
 		get {
 			squaredSum := 0.0f
+			meanValue := this mean
 			for (i in 0..this count)
-				squaredSum += pow((this[i] - this mean), 2.0f)
+				squaredSum += pow((this[i] - meanValue), 2.0f)
 			squaredSum / this count
 		}
 	}
-	standardDeviation ::= sqrt(this variance)
+	standardDeviation ::= this variance sqrt()
 	sort: func {
 		inOrder := false
+		vector := this _vector _backend as Float*
 		while (!inOrder) {
 			inOrder = true
 			for (i in 0..count - 1) {
-				if (this[i] > this[i + 1]) {
+				if (vector[i] > vector[i + 1]) {
 					inOrder = false
-					tmp := this[i]
-					this[i] = this[i + 1]
-					this[i + 1] = tmp
+					tmp := vector[i]
+					vector[i] = vector[i + 1]
+					vector[i + 1] = tmp
 				}
 			}
 		}
 	}
 	accumulate: func -> This {
 		result := This new(this _count)
-		sum := 0
+		sum := 0.0f
 		for (i in 0..this _count) {
 			sum += this[i]
 			result add(sum)
@@ -141,14 +143,15 @@ FloatVectorList: class extends VectorList<Float> {
 	operator []= (index: Int, item: Float) {
 		this _vector[index] = item
 	}
-	toString: func() -> String {
+	toString: func -> String {
 		result := ""
 		for (i in 0..this _count)
 			result = result >> this[i] toString() >> "\n"
 		result
 	}
-	divideByMaxValue: func () -> This {
-		this maxValue != 0 ? (this / this maxValue) : this copy()
+	divideByMaxValue: func -> This {
+		max := this maxValue
+		max != 0 ? (this / max) : this copy()
 	}
 	getOnes: static func (count: Float) -> This {
 		result := This new(count)
@@ -245,12 +248,12 @@ FloatVectorList: class extends VectorList<Float> {
 		result
 	}
 	movingMedianFilter: func (windowSize: Int) -> This {
-		result := FloatVectorList new()
+		result := This new(this count)
 		start := -((windowSize - 1) / 2)
 		for (i in 0..this count) {
 			range := (start..(start + windowSize - 1)) + i
 			elementsInWindow := this getSlice(range clamp(0, this count-1))
-			result add((elementsInWindow as FloatVectorList) median())
+			result add((elementsInWindow as This) median())
 			elementsInWindow free()
 		}
 		result
