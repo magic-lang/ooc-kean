@@ -135,9 +135,12 @@ VectorList: class <T> {
 			result add(this[indices[i]])
 		result
 	}
-	getSlice: func (range: Range) -> This<T> {
-		result := This<T> new(range count)
-		this getSliceInto(range, result&)
+	getSlice: func (start, end: Int) -> This<T> {
+		resultCount := end - start + 1
+		result := This<T> new(resultCount)
+		result _count = resultCount
+		source := (this pointer as Long + (start * (T size))) as Pointer
+		memcpy(result pointer, source, resultCount * (T size))
 		result
 	}
 	getSliceInto: func (range: Range, buffer: This<T>@) {
