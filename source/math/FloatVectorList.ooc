@@ -66,14 +66,15 @@ FloatVectorList: class extends VectorList<Float> {
 	standardDeviation ::= this variance sqrt()
 	sort: func {
 		inOrder := false
+		vector := this _vector _backend as Float*
 		while (!inOrder) {
 			inOrder = true
 			for (i in 0..count - 1) {
-				if (this[i] > this[i + 1]) {
+				if (vector[i] > vector[i + 1]) {
 					inOrder = false
-					tmp := this[i]
-					this[i] = this[i + 1]
-					this[i + 1] = tmp
+					tmp := vector[i]
+					vector[i] = vector[i + 1]
+					vector[i + 1] = tmp
 				}
 			}
 		}
