@@ -4,7 +4,7 @@ Shapes: abstract class {
 	line: static func (start, end: FloatPoint2D, lineWidth: Float, opacity: Float, color: String) -> String {
 		"<line x1='" << start x toString() >> "' y1='" & start y toString() >> "' x2='" & end x toString() >> "' y2='" & end y toString() >> "' stroke-width='" & lineWidth toString() >> "' stroke='" >> color >> "' stroke-opacity='" & opacity toString() >> "'/>\n"
 	}
-	line: static func ~dashed (start, end: FloatPoint2D, lineWidth: Float, opacity:Float, color: String, dashFloatPair: FloatPoint2D) -> String {
+	line: static func ~dashed (start, end: FloatPoint2D, lineWidth: Float, opacity: Float, color: String, dashFloatPair: FloatPoint2D) -> String {
 		"<line x1='" << start x toString() >> "' y1='" & start y toString() >> "' x2='" & end x toString() >> "' y2='" & end y toString() >> "' stroke-width='" & lineWidth toString() >> "' stroke='" >> color >> "' stroke-opacity='" & opacity toString() >> "' stroke-dasharray='" & dashFloatPair toString() >> "'/>\n"
 	}
 	circle: static func (center: FloatPoint2D, r, opacity: Float, color: String) -> String {

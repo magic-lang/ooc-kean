@@ -19,7 +19,6 @@ use ooc-base
 import Debug
 
 version(debugTests) {
-
 	Debug initialize(func (message: String) {println(message)})
 	Debug _level = DebugLevel Everything as Int
 
@@ -78,5 +77,4 @@ version(debugTests) {
 	Debug print("second print", 1)
 	Debug print("third print", 2)
 	Debug printProfilerData()*/
-
 }
