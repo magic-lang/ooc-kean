@@ -67,22 +67,22 @@ OpenGLES3Context: class extends GpuContext {
 		result := match (mapType) {
 			case GpuMapType defaultmap =>
 				match (gpuImage) {
-					case (gpuImage : GpuMonochrome) => this _monochromeMapDefault
-					case (gpuImage : GpuUv) => this _uvMapDefault
-					case (gpuImage : GpuBgr) => this _bgrMapDefault
-					case (gpuImage : GpuBgra) => this _bgraMapDefault
+					case (image : GpuMonochrome) => this _monochromeMapDefault
+					case (image : GpuUv) => this _uvMapDefault
+					case (image : GpuBgr) => this _bgrMapDefault
+					case (image : GpuBgra) => this _bgraMapDefault
 					case => null
 				}
 			case GpuMapType transform =>
 				match (gpuImage) {
-					case (gpuImage : GpuMonochrome) => this _monochromeMapTransform
-					case (gpuImage : GpuUv) => this _uvMapTransform
+					case (image : GpuMonochrome) => this _monochromeMapTransform
+					case (image : GpuUv) => this _uvMapTransform
 					case => null
 				}
 			case GpuMapType pack =>
 				match (gpuImage) {
-					case (gpuImage : GpuMonochrome) => this _packMonochrome
-					case (gpuImage : GpuUv) => this _packUv
+					case (image : GpuMonochrome) => this _packMonochrome
+					case (image : GpuUv) => this _packUv
 					case => null
 				}
 			case => null
@@ -194,8 +194,8 @@ OpenGLES3Context: class extends GpuContext {
 	setViewport: func (viewport: IntBox2D) { Fbo setViewport(viewport left, viewport top, viewport width, viewport height) }
 	packToRgba: func (source: GpuImage, target: GpuBgra, viewport: IntBox2D) {
 		map := match(source) {
-			case source: GpuMonochrome => this _packMonochrome
-			case source: GpuUv => this _packUv
+			case sourceImage: GpuMonochrome => this _packMonochrome
+			case sourceImage: GpuUv => this _packUv
 		} as OpenGLES3MapPack
 		map imageWidth = source size width
 		map channels = source channels

@@ -41,7 +41,8 @@ Quaternion: cover {
 	isNull ::= (this w == 0.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
 	norm ::= (this real squared() + (this imaginary norm) squared()) sqrt()
 	normalized ::= this / this norm
-	rotation ::= 2.0f * (this logarithm imaginary) norm
+	logarithmImaginaryNorm ::= ((this logarithm) imaginary) norm
+	rotation ::= 2.0f * this logarithmImaginaryNorm
 	conjugate ::= This new(this real, -(this imaginary))
 	transform ::= this toFloatTransform3D()
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
