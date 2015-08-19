@@ -238,22 +238,23 @@ FloatVectorList: class extends VectorList<Float> {
 	/* calculate median without copying and sorting the vector
 			WARNING: this function can partially rearange the elements in vector
 	*/
-	fastMedian: func -> Float {
-		data := this _vector _backend as Float*
-		result := This _nthElement(this _vector _backend as Float*, 0, this count - 1, this count / 2)
-		if (Int even(this count))
-			result = (result + This _nthElement(this _vector _backend as Float*, 0, this count - 1, this count / 2 - 1)) / 2
+	fastMedian: func (start := 0, end := this count - 1) -> Float {
+		count := end - start + 1
+		result := This _nthElement(this _vector _backend as Float*, start, end, count / 2)
+		if (Int even(count))
+			result = (result + This _nthElement(this _vector _backend as Float*, start, end, count / 2 - 1)) / 2
 		result
 	}
 	movingMedianFilter: func (windowSize: Int) -> This {
 		result := This new(this count)
+		windowBuffer := This new(windowSize)
 		start := -((windowSize - 1) / 2)
-		for (i in 0 .. this count) {
-			range := (start .. (start + windowSize - 1)) + i
-			elementsInWindow := this getSlice(range clamp(0, this count-1))
-			result add((elementsInWindow as This) fastMedian())
-			elementsInWindow free()
+		for (i in 0..this count) {
+			range := ((start..(start + windowSize - 1)) + i) clamp(0, this count-1)
+			this getSliceInto(range, windowBuffer&)
+			result add((windowBuffer as This) fastMedian(0, range count - 1))
 		}
+		windowBuffer free()
 		result
 	}
 	_swap: static func (array: Float*, i, j: Int) {
