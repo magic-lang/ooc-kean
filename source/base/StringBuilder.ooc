@@ -17,45 +17,59 @@
 use ooc-collections
 
 StringBuilder: class {
-	_stringList := VectorList<String> new()
+	_stringList := VectorList<String> new(32, false)
+	_freeList := VectorList<Bool> new()
 
 	count ::= this _stringList count
 
 	init: func ~default
-	init: func ~string (value: String) {
+	init: func ~string (value: String, free := true) {
 		this init()
-		this append(value)
+		this append(value, free)
 	}
 	init: func ~this (original: This) {
 		this init()
 		// This leaks memory
-		/*original _stringList apply( func (value: String) { this append(value) })*/
-		for (i in 0..original count)
-			append(original[i])
+		//original _stringList apply( func (value: String) { this appendClone(value) })
+		for (i in 0..original count) {
+			this appendClone(original[i])
+		}
 	}
 	free: func {
-		_stringList free()
+		for (i in 0.._freeList count)
+			if(_freeList[i])
+				_stringList[i] free()
+		this _stringList free()
+		this _freeList free()
 		super()
 	}
 	copy: func -> This {
 		This new(this)
 	}
-
-	append: func ~String (value: String) {
+	append: func ~String (value: String, free := true) {
+		this _stringList add(value)
+		this _freeList add(free)
+	}
+	appendClone: func ~String (value: String) {
 		this _stringList add(value clone())
+		this _freeList add(true)
 	}
 	append: func ~This (other: This) {
 		for (i in 0..other count)
-			this append(other[i])
+			this appendClone(other[i])
 	}
-	prepend: func ~String (value: String) {
+	prepend: func ~String (value: String, free := true) {
+		this _stringList insert(0, value)
+		this _freeList insert(0, free)
+	}
+	prependClone: func ~String (value: String) {
 		this _stringList insert(0, value clone())
+		this _freeList insert(0, true)
 	}
 	prepend: func ~This (other: This) {
 		for (i in 0..other count)
-			prepend(other[other count -1 -i])
+			prependClone(other[other count -1 -i])
 	}
-
 	toString: func -> String {
 		result := ""
 		for (i in 0..this _stringList count)
@@ -73,11 +87,11 @@ StringBuilder: class {
 		this _stringList[index] = value
 	}
 	operator + (other: This) -> This {
-		result := This new(this). append(other)
+		result := This new(this).append(other)
 		result
 	}
 	operator + (value: String) -> This {
-		result := This new(this). append(value)
+		result := This new(this).append(value)
 		result
 	}
 	operator == (other: This) -> Bool {
@@ -95,8 +109,9 @@ StringBuilder: class {
 		result
 	}
 }
+
 operator + (value: String, stringBuilder: StringBuilder) -> StringBuilder {
-	result := StringBuilder new(stringBuilder). prepend(value)
+	result := StringBuilder new(stringBuilder).prepend(value)
 	result
 }
 operator == (value: String, stringBuilder: StringBuilder) -> Bool {

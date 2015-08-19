@@ -114,8 +114,6 @@ VectorList: class <T> {
 		result := This<S> new(this count)
 		for(i in 0..this count) {
 			result[i] = function(this[i])
-			this[i] as Int toString() println()
-			result[i] as String println()
 		}
 		result
 	}
