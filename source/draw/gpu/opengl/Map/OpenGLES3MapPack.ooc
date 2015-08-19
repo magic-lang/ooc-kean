@@ -122,12 +122,7 @@ OpenGLES3MapUnpackRgbaToMonochrome: class extends OpenGLES3MapUnpack {
 		out float outColor;
 		void main() {
 			int pixelIndex = int(float(targetWidth) * fragmentTextureCoordinate.z) % 4;
-			vec4 texel = texture(texture0, fragmentTextureCoordinate.xy).rgba;
-			lowp float r = float(clamp((1 - pixelIndex), 0, 1));
-			lowp float g = (1.0f - r) * float(clamp((2 - pixelIndex), 0, 1));
-			lowp float a = float(clamp((pixelIndex - 2), 0, 1));
-			lowp float b = (1.0f - a) * float(clamp((pixelIndex - 1), 0, 1));
-			outColor = r * texel.r + g * texel.g + b * texel.b + a * texel.a;
+			outColor = texture(texture0, fragmentTextureCoordinate.xy)[pixelIndex];
 		}"
 }
 OpenGLES3MapUnpackRgbaToUv: class extends OpenGLES3MapUnpack {
@@ -150,11 +145,8 @@ OpenGLES3MapUnpackRgbaToUv: class extends OpenGLES3MapUnpack {
 		out vec2 outColor;
 		void main() {
 			int pixelIndex = int(float(targetWidth) * fragmentTextureCoordinate.z) % 2;
-			vec4 texel = texture(texture0, fragmentTextureCoordinate.xy).rgba;
-			lowp float left = float(1 - pixelIndex);
-			lowp float right = float(pixelIndex);
-			float resultX = left * texel.r + right * texel.b;
-			float resultY = left * texel.g + right * texel.a;
-			outColor = vec2(resultX, resultY);
+			vec4 texel = texture(texture0, fragmentTextureCoordinate.xy);
+			vec2 mask = vec2(float(1 - pixelIndex), float(pixelIndex));
+			outColor = vec2(mask.x * texel.r + mask.y * texel.b, mask.x * texel.g + mask.y * texel.a);
 		}"
 }
