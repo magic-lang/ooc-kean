@@ -33,6 +33,10 @@ StringBuilderTest: class extends Fixture {
 			sb append(" World")
 			expect(sb count, is equal to(2))
 			expect(sb toString(), is equal to("Hello World"))
+			myString := " String"
+			sb appendClone(myString)
+			expect(sb count, is equal to(3))
+			expect(sb toString(), is equal to("Hello World String"))
 			sb2 := StringBuilder new("Dlrow olleh ")
 			sb2 append(sb)
 			expect(sb2 count, is equal to(3))
@@ -43,6 +47,10 @@ StringBuilderTest: class extends Fixture {
 			sb prepend("Hello ")
 			expect(sb count, is equal to(2))
 			expect(sb toString(), is equal to("Hello World"))
+			myString := " String"
+			sb prependClone(myString)
+			expect(sb count, is equal to(3))
+			expect(sb toString(), is equal to("Hello World String"))
 			sb2 := StringBuilder new(" Dlrow olleh")
 			sb2 prepend(sb)
 			expect(sb2 count, is equal to(3))

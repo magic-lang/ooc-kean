@@ -37,8 +37,8 @@ StringBuilder: class {
 	}
 	free: func {
 		for (i in 0.._freeList count)
-			if(_freeList[i])
-				_stringList[i] free()
+			if(this _freeList[i])
+				this _stringList[i] free()
 		this _stringList free()
 		this _freeList free()
 		super()
@@ -79,12 +79,14 @@ StringBuilder: class {
 	println: func {
 		this toString() println().free()
 	}
-
 	operator [] (index: Int) -> String {
 		this _stringList[index]
 	}
 	operator []= (index: Int, value: String) {
+		if (this _freeList[index])
+			this _stringList[index] free()
 		this _stringList[index] = value
+		this _freeList[index] = true
 	}
 	operator + (other: This) -> This {
 		result := This new(this).append(other)
