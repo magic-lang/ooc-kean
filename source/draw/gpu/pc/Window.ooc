@@ -35,7 +35,7 @@ Window: class extends GpuSurface {
 	init: /* internal */ func (size: IntSize2D, title := "Window title") {
 		this _native = X11Window new(size width, size height, title)
 		context := OpenGLES3Context new(this _native)
-		super(size, context, OpenGLES3MapDefaultTexture new(this context))
+		super(size, context, OpenGLES3MapDefaultTexture new(this context), IntTransform2D createScaling(1, -1))
 
 		/* BEGIN Ugly hack to force the window to resize outside screen */
 		this refresh()
@@ -66,25 +66,9 @@ Window: class extends GpuSurface {
 		}
 		result
 	}
-	draw: func ~gpuImage (image: GpuImage) {
+	draw: override func ~GpuImage (image: GpuImage) {
 		this map = this _getTransformMap(image)
-		this map model = this _createModelTransform(image size)
-		this map view = FloatTransform3D createScaling(1.0f, -1.0f, 1.0f) * this _view
-		this map projection = this _projection
-		this draw(func {
-			image bind(0)
-			this context drawQuad()
-		})
-	}
-	draw: func (image: Image) {
-		if (image instanceOf?(GpuImage)) { this draw(image as GpuImage) }
-		else if (image instanceOf?(RasterImage)) {
-			temp := this context createGpuImage(image as RasterImage)
-			this draw(temp as GpuImage)
-			temp free()
-		}
-		else
-			Debug raise("Trying to draw unsupported image format to Window!!")
+		super(image)
 	}
 	clear: func { this _native clear() }
 	refresh: func {

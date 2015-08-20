@@ -40,26 +40,6 @@ OpenGLES3Canvas: class extends GpuCanvas {
 		this reset()
 		this _renderTarget invalidate()
 	}
-	draw: func ~packed (image: GpuPacked) {
-		this map model = this _createModelTransform(image size)
-		this map view = this _view
-		this map projection = this _projection
-
-		this draw(func {
-			image bind(0)
-			this context drawQuad()
-		})
-	}
-	draw: func (image: Image) {
-		if (image instanceOf?(GpuPacked)) { this draw(image as GpuPacked) }
-		else if (image instanceOf?(RasterPacked)) {
-			temp := this context createGpuImage(image as RasterPacked)
-			this draw(temp as GpuPacked)
-			temp free()
-		}
-		else
-			Debug raise("Trying to draw unsupported image format to OpenGLES3Canvas!")
-	}
 	clear: override func {
 		this _bind()
 		Fbo setClearColor(this clearColor red as Float / 255)
@@ -77,25 +57,16 @@ OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 		this target uv canvas clearColor = ColorBgra new(128, 128, 128, 128)
 	}
 	onRecycle: func
-	_draw: func (image: OpenGLES3Yuv420Semiplanar) {
-		this target y canvas _view = this _view
-		this target y canvas focalLength = this _focalLength
-		this target y canvas draw(image y)
-		this target uv canvas _view = FloatTransform3D createTranslation(-this _view m / 2.0f, -this _view n / 2.0f, -this _view o / 2.0f) * this _view
-		this target uv canvas focalLength = this _focalLength / 2.0f
-		this target uv canvas draw(image uv)
-	}
-	draw: func (image: Image) {
-		if (image instanceOf?(RasterYuv420Semiplanar)) {
-			temp := this _context createGpuImage(image as RasterYuv420Semiplanar) as OpenGLES3Yuv420Semiplanar
-			this _draw(temp)
-			temp free()
+	draw: override func ~GpuImage (image: GpuImage) {
+		if (image instanceOf?(GpuYuv420Semiplanar)) {
+			gpuImage := image as GpuYuv420Semiplanar
+			this target y canvas _view = this _view
+			this target y canvas focalLength = this _focalLength
+			this target y canvas draw(gpuImage y)
+			this target uv canvas _view = FloatTransform3D createTranslation(-this _view m / 2.0f, -this _view n / 2.0f, -this _view o / 2.0f) * this _view
+			this target uv canvas focalLength = this _focalLength / 2.0f
+			this target uv canvas draw(gpuImage uv)
 		}
-		else if (image instanceOf?(OpenGLES3Yuv420Semiplanar)) {
-			this _draw(image as OpenGLES3Yuv420Semiplanar)
-		}
-		else
-			Debug raise("Trying to draw unsupported image format to OpenGLES3Yuv420Semiplanar")
 	}
 	drawLines: override func (pointList: VectorList<FloatPoint2D>) { this target y canvas drawLines(pointList) }
 	drawBox: override func (box: FloatBox2D) { this target y canvas drawBox(box) }
