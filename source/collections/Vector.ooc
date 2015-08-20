@@ -60,7 +60,7 @@ Vector: abstract class <T> {
 		result
 	}
 	copy: func ~within (sourceStart, targetStart: Int, capacity := 0) {
-		this copy(sourceStart, this, targetStart, capacity)
+		this copy(sourceStart, this as This<T>, targetStart, capacity)
 	}
 	copy: func ~to (sourceStart: Int, target: This<T>, targetStart: Int, capacity := 0) {
 		if (capacity < 1)
