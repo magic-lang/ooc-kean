@@ -4,11 +4,11 @@ import OpenGLES3Map
 OpenGLES3MapPack: abstract class extends OpenGLES3Map {
 	imageWidth: Int { get set }
 	channels: Int { get set }
-	transform: FloatTransform3D { get set }
+	transform: FloatTransform3D
 	init: func (fragmentSource: String, context: GpuContext) {
 		super(This vertexSource, fragmentSource, context)
 		this channels = 1
-		this transform = FloatTransform3D identity
+		this transform = FloatTransform3D createScaling(1.0f, -1.0f, 1.0f)
 	}
 	use: override func {
 		super()
