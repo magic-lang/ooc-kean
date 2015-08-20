@@ -19,7 +19,7 @@ use ooc-draw
 use ooc-collections
 use ooc-base
 
-import GpuContext, GpuMap
+import GpuContext, GpuMap, GpuImage
 
 GpuSurface: abstract class {
 	clearColor: ColorBgra { get set }
@@ -31,11 +31,10 @@ GpuSurface: abstract class {
 	_model: FloatTransform3D
 	_view: FloatTransform3D
 	_projection: FloatTransform3D
-	_toReference: FloatTransform3D
 	_toLocal: FloatTransform3D
 	transform: FloatTransform3D {
-		get { this _view }
-		set(value) { this _view = FloatTransform3D createScaling(1.0f, -1.0f, 1.0f) * value * FloatTransform3D createScaling(1.0f, -1.0f, 1.0f) }
+		get { this _toLocal * this _view * this _toLocal }
+		set(value) { this _view = this _toLocal * value * this _toLocal }
 	}
 	_focalLength: Float
 	focalLength: Float {
@@ -43,12 +42,14 @@ GpuSurface: abstract class {
 		set(value) {
 			this _focalLength = value
 			if (this _focalLength > 0.0f) {
-				this _projection = FloatTransform3D new(2.0f * this _focalLength / this size width, 0.0f, 0.0f, 0.0f, 0.0f,
-					2.0f * this _focalLength / this size height, 0.0f, 0.0f, 0.0f, 0.0f, -(this farPlane + this nearPlane) / (this farPlane - this nearPlane),
-					-1.0f, 0.0f, 0.0f, -2.0f * this farPlane * this nearPlane / (this farPlane - this nearPlane), 0.0f) * this _toLocal
+				a := 2.0f * this _focalLength / this size width
+				f := -(this _coordinateTransform e as Float) * 2.0f * this _focalLength / this size height
+				k := (this farPlane + this nearPlane) / (this farPlane - this nearPlane)
+				o := 2.0f * this farPlane * this nearPlane / (this farPlane - this nearPlane)
+				this _projection = FloatTransform3D new(a, 0.0f, 0.0f, 0.0f, 0.0f, f, 0.0f, 0.0f, 0.0f, 0.0f, k, -1.0f, 0.0f, 0.0f, o, 0.0f)
 			}
 			else
-				this _projection = FloatTransform3D createScaling(2.0f / this size width, 2.0f / this size height, 1.0f) * this _toLocal
+				this _projection = FloatTransform3D createScaling(2.0f / this size width, -(this _coordinateTransform e as Float) * 2.0f / this size height, 1.0f)
 			this _model = this _createModelTransform(this size)
 		}
 	}
@@ -56,13 +57,16 @@ GpuSurface: abstract class {
 	farPlane: Float { get set }
 	map: GpuMap { get set }
 	_defaultMap: GpuMap
-	init: func (=_size, =_context, =_defaultMap) { this reset() }
+	_textureTransform: IntTransform2D
+	_coordinateTransform := IntTransform2D identity
+
+	flipY: static FloatTransform3D = FloatTransform3D createTranslation(0.0f, 1.0f, 0.0f) * FloatTransform3D createScaling(1.0f, -1.0f, 1.0f)
+	init: func (=_size, =_context, =_defaultMap, =_coordinateTransform) { this reset() }
 	_createModelTransform: func (size: IntSize2D) -> FloatTransform3D {
-		FloatTransform3D createTranslation(0.0f, 0.0f, this focalLength) * FloatTransform3D createScaling(size width / 2.0f, size height / 2.0f, 1.0f)
+		FloatTransform3D createTranslation(0.0f, 0.0f, -this focalLength) * FloatTransform3D createScaling(size width / 2.0f, size height / 2.0f, 1.0f)
 	}
 	reset: virtual func {
 		this _toLocal = FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
-		this _toReference = this _toLocal inverse
 		this clearColor = ColorBgra new(0, 0, 0, 0)
 		this viewport = IntBox2D new(this size)
 		this focalLength = 0.0f
@@ -84,7 +88,25 @@ GpuSurface: abstract class {
 		this _unbind()
 		this reset()
 	}
-	draw: abstract func (image: Image)
+	draw: func ~UnknownFormat (image: Image) {
+		if (image instanceOf?(GpuImage)) { this draw~GpuImage(image as GpuImage) }
+		else if (image instanceOf?(RasterImage)) {
+			temp := this _context createGpuImage(image as RasterImage)
+			this draw~GpuImage(temp as GpuImage)
+			temp free()
+		}
+		else
+			Debug raise("Trying to draw unsupported image format to OpenGLES3Canvas!")
+	}
+	draw: virtual func ~GpuImage (image: GpuImage) {
+		this map model = this _createModelTransform(image size)
+		this map view = this _view
+		this map projection = this _projection
+		this draw(func {
+			image bind(0)
+			this _context drawQuad()
+		})
+	}
 	drawLines: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawLines(pointList, this _projection * this _toLocal) }) }
 	drawBox: virtual func (box: FloatBox2D) { this draw(func { this _context drawBox(box, this _projection * this _toLocal) }) }
 	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawPoints(pointList, this _projection * this _toLocal) }) }
