@@ -72,8 +72,7 @@ GpuImage: abstract class extends Image {
 	//TODO: Implement abstract functions
 	resizeTo: override func (size: IntSize2D) -> This {
 		result := this create(size) as This
-		result canvas transform = FloatTransform3D createScaling(size width as Float / this size width, size height as Float / this size height, 1.0f)
-		result canvas draw(this)
+		result canvas draw(this, size)
 		result
 	}
 	copy: func -> This { raise("Using unimplemented function copy in GpuImage class"); null }
