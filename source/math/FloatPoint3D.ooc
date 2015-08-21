@@ -63,7 +63,7 @@ FloatPoint3D: cover {
 	operator == (other: This) -> Bool { this x == other x && this y == other y && this z == other z }
 	operator != (other: This) -> Bool { this x != other x || this y != other y || this z != other z }
 	operator < (other: This) -> Bool { this x < other x && this y < other y && this z < other z }
-	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z}
+	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
 	operator as -> String { this toString() }

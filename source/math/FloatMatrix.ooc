@@ -21,7 +21,7 @@ FloatMatrix : cover {
 	// x = column
 	// y = row
 	dimensions: IntSize2D
-	Dimensions: IntSize2D {get {this dimensions}}
+	Dimensions: IntSize2D { get { this dimensions } }
 	elements: Float[]
 
 	init: func@ ~IntSize2D (= dimensions)
@@ -64,12 +64,12 @@ FloatMatrix : cover {
 	// <summary>
 	// True if the matrix is a square matrix.
 	// </summary>
-	isSquare: Bool { get {this Dimensions width == this Dimensions height} }
+	isSquare: Bool { get { this Dimensions width == this Dimensions height } }
 
 	// <summary>
 	// Minimum of maxtrix dimensions.
 	// </summary>
-	order: Int { get { Int minimum~two(this dimensions height, this dimensions width) }}
+	order: Int { get { Int minimum~two(this dimensions height, this dimensions width) } }
 
 	// <summary>
 	// Creates a copy of the current matrix.

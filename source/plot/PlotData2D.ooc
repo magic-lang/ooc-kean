@@ -3,7 +3,7 @@ use ooc-collections
 use ooc-math
 
 PlotData2D: abstract class {
-	label: String { get set}
+	label: String { get set }
 	lineWidth: Float { get set }
 	legendOffset: Float { get set }
 	colorBgra: ColorBgra { get set }
