@@ -112,7 +112,7 @@ FloatVectorListTest: class extends Fixture {
 			list add(4.0f)
 			copy := list copy()
 			expect(list count == copy count)
-			for (i in 0..list count)
+			for (i in 0 .. list count)
 				expect(copy[i], is equal to(list[i]) within(tolerance))
 			list free()
 			copy free()

@@ -19,20 +19,20 @@ use ooc-base
 import Debug
 
 version(debugTests) {
-	Debug initialize(func (message: String) {println(message)})
+	Debug initialize(func (message: String) { println(message) })
 	Debug _level = DebugLevel Everything as Int
 
 	testfunction: func {
 		profiling_test := Profiler new("testfunction", 2)
 		profiling_test start()
-		for (i in 0 .. 10000) {}
+		for (i in 0 .. 10000) { }
 		profiling_test stop()
 	}
 
 	testfunction2: func {
 		profiling_test := Profiler new("testfunction2", 1)
 		profiling_test start()
-		for (i in 0 .. 1000) {}
+		for (i in 0 .. 1000) { }
 		profiling_test stop()
 	}
 
@@ -40,15 +40,15 @@ version(debugTests) {
 	profiling := Profiler new("main", 1)
 
 	profiling start()
-	for (i in 0 .. 10) {}
+	for (i in 0 .. 10) { }
 	profiling stop()
 
 	profiling start()
-	for (i in 0 .. 100_000_000) {}
+	for (i in 0 .. 100_000_000) { }
 	profiling stop()
 
 	profiling start()
-	for (i in 0 .. 10000) {}
+	for (i in 0 .. 10000) { }
 	profiling stop()
 
 	testfunction()

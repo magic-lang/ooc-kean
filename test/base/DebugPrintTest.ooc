@@ -18,7 +18,7 @@
 use ooc-base
 import Debug
 version(debugTests) {
-	Debug initialize(func (message: String) {println(message)})
+	Debug initialize(func (message: String) { println(message) } )
 	Debug _level = 3
 	Debug print("TEST1", 2)
 
