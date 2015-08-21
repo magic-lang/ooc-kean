@@ -24,7 +24,6 @@ import FloatComplex
 import lang/IO
 
 FloatComplexTest: class extends Fixture {
-
 	complexNumber0 := FloatComplex new (2, 1)
 	complexNumber1 := FloatComplex new (3, 2)
 	complexNumber2 := FloatComplex new (5, 3)

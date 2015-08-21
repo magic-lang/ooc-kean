@@ -39,7 +39,7 @@ FloatVectorList: class extends VectorList<Float> {
 	sum: Float {
 		get {
 			result := 0.0f
-			for (i in 0..this count)
+			for (i in 0 .. this count)
 				result += this[i]
 			result
 		}
@@ -47,7 +47,7 @@ FloatVectorList: class extends VectorList<Float> {
 	maxValue: Float {
 		get {
 			result := Float negativeInfinity
-			for (i in 0..this count)
+			for (i in 0 .. this count)
 				if (result < this[i])
 					result = this[i]
 			result
@@ -58,7 +58,7 @@ FloatVectorList: class extends VectorList<Float> {
 		get {
 			squaredSum := 0.0f
 			meanValue := this mean
-			for (i in 0..this count)
+			for (i in 0 .. this count)
 				squaredSum += pow((this[i] - meanValue), 2.0f)
 			squaredSum / this count
 		}
@@ -69,7 +69,7 @@ FloatVectorList: class extends VectorList<Float> {
 		vector := this _vector _backend as Float*
 		while (!inOrder) {
 			inOrder = true
-			for (i in 0..count - 1) {
+			for (i in 0 .. count - 1) {
 				if (vector[i] > vector[i + 1]) {
 					inOrder = false
 					tmp := vector[i]
@@ -82,7 +82,7 @@ FloatVectorList: class extends VectorList<Float> {
 	accumulate: func -> This {
 		result := This new(this _count)
 		sum := 0.0f
-		for (i in 0..this _count) {
+		for (i in 0 .. this _count) {
 			sum += this[i]
 			result add(sum)
 		}
@@ -90,38 +90,38 @@ FloatVectorList: class extends VectorList<Float> {
 	}
 	absolute: func -> This {
 		result := This new(this _count)
-		for (i in 0..this _count)
+		for (i in 0 .. this _count)
 			result add(this[i] abs())
 		result
 	}
 	copy: func -> This {
 		result := This new(this _count)
-		for (i in 0..this _count)
+		for (i in 0 .. this _count)
 			result add(this[i])
 		result
 	}
 	operator + (other: This) -> This {
 		result := This new()
 		minimumCount := this count < other count ? this count : other count
-		for (i in 0..minimumCount)
+		for (i in 0 .. minimumCount)
 			result add(this[i] + other[i])
 		result
 	}
 	addInto: func (other: This) {
 		minimumCount := Int minimum(this count, other count)
-		for (i in 0..minimumCount)
+		for (i in 0 .. minimumCount)
 			this[i] = this[i] + other[i]
 	}
 	operator - (other: This) -> This {
 		result := This new()
 		minimumCount := this count < other count ? this count : other count
-		for (i in 0..minimumCount)
+		for (i in 0 .. minimumCount)
 			result add(this[i] - other[i])
 		result
 	}
 	operator * (value: Float) -> This {
 		result := This new()
-		for (i in 0..this _count)
+		for (i in 0 .. this _count)
 			result add(this[i] * value)
 		result
 	}
@@ -130,7 +130,7 @@ FloatVectorList: class extends VectorList<Float> {
 	}
 	operator + (value: Float) -> This {
 		result := This new()
-		for (i in 0..this _count)
+		for (i in 0 .. this _count)
 			result add(this[i] + value)
 		result
 	}
@@ -145,7 +145,7 @@ FloatVectorList: class extends VectorList<Float> {
 	}
 	toString: func -> String {
 		result := ""
-		for (i in 0..this _count)
+		for (i in 0 .. this _count)
 			result = result >> this[i] toString() >> "\n"
 		result
 	}
@@ -155,32 +155,32 @@ FloatVectorList: class extends VectorList<Float> {
 	}
 	getOnes: static func (count: Float) -> This {
 		result := This new(count)
-		for (i in 0..count)
+		for (i in 0 .. count)
 			result add(1.0f)
 		result
 	}
 	getZeros: static func (count: Float) -> This {
 		result := This new()
-		for (i in 0..count)
+		for (i in 0 .. count)
 			result add(0.0f)
 		result
 	}
 	toFloatComplexVectorList: func -> FloatComplexVectorList {
 		result := FloatComplexVectorList new()
-		for (i in 0..this _count)
+		for (i in 0 .. this _count)
 			result add(FloatComplex new(this[i], 0))
 		result
 	}
 	convolve: func (kernel: This) -> This {
 		result := This new(this count)
-		for (i in 0..this count)
+		for (i in 0 .. this count)
 			result add(convolveAt(i, kernel))
 		result
 	}
 	convolveAt: func (index: Int, kernel: This) -> Float {
 		halfSize := round((kernel count - 1) / 2) as Int
 		result := 0.0f
-		for (kernelIndex in -halfSize..halfSize + 1)
+		for (kernelIndex in -halfSize .. halfSize + 1)
 			result = result + this[(index + kernelIndex) clamp(0, this count - 1)] * kernel[halfSize + kernelIndex]
 		result
 	}
@@ -190,10 +190,10 @@ FloatVectorList: class extends VectorList<Float> {
 	gaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
 		result := This new(size)
 		factor := 1.0f / (sqrt(2.0f * Float pi) * sigma)
-		for (i in 0..size)
+		for (i in 0 .. size)
 			result add(factor * pow(Float e, -0.5f * ((i - (size - 1.0f) / 2.0f) squared()) / (sigma squared())))
 		sum := result sum
-		for (i in 0..size)
+		for (i in 0 .. size)
 			result[i] = result[i] / sum
 		result
 	}
@@ -202,10 +202,10 @@ FloatVectorList: class extends VectorList<Float> {
 	}
 	forwardGaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
 		result := This gaussianKernel(size, sigma)
-		for (i in 0..(size - 1) / 2)
+		for (i in 0 .. (size - 1) / 2)
 			result[i] = 0.0f
 		sum := result sum
-		for (i in 0..size)
+		for (i in 0 .. size)
 			result[i] = result[i] / sum
 		result
 	}
@@ -215,7 +215,7 @@ FloatVectorList: class extends VectorList<Float> {
 	backwardGaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
 		result := This new(size)
 		forwardGaussian := This forwardGaussianKernel(size, sigma)
-		for (i in 0..size)
+		for (i in 0 .. size)
 			result add(forwardGaussian[size - i - 1])
 		forwardGaussian free()
 		result
@@ -223,7 +223,7 @@ FloatVectorList: class extends VectorList<Float> {
 	getWaveletTransform: func (levels: Int) -> VectorList<This> {
 		result := VectorList<This> new(levels)
 		previous := this
-		for (level in 0..levels) {
+		for (level in 0 .. levels) {
 			size := 1 + pow(2, level + 1)
 			kernel := This gaussianKernel(size)
 			filtered := this convolve(kernel)
@@ -250,8 +250,8 @@ FloatVectorList: class extends VectorList<Float> {
 	movingMedianFilter: func (windowSize: Int) -> This {
 		result := This new(this count)
 		start := -((windowSize - 1) / 2)
-		for (i in 0..this count) {
-			range := (start..(start + windowSize - 1)) + i
+		for (i in 0 .. this count) {
+			range := (start .. (start + windowSize - 1)) + i
 			elementsInWindow := this getSlice(range clamp(0, this count-1))
 			result add((elementsInWindow as This) median())
 			elementsInWindow free()

@@ -36,7 +36,7 @@ FloatConvexHull2D: class {
 	}
 	contains: func ~Point (point: FloatPoint2D) -> Bool {
 		result := true
-		for (i in 0..this count - 1)
+		for (i in 0 .. this count - 1)
 			if (This _isOnLeft(this _points[i], this _points[i + 1], point)) {
 				result = false
 				break
@@ -47,7 +47,7 @@ FloatConvexHull2D: class {
 	}
 	contains: func ~ConvexHull (other: This) -> Bool {
 		result := true
-		for (i in 0..other count)
+		for (i in 0 .. other count)
 			if (!this contains(other points[i])) {
 				result = false
 				break
@@ -60,7 +60,7 @@ FloatConvexHull2D: class {
 	transform: func (transform: FloatTransform2D) -> This {
 		// TODO: Re-compute convex hull from new points if necessary, i.e. if transform changes order of points
 		newPoints := VectorList<FloatPoint2D> new(this count)
-		for (i in 0..this count)
+		for (i in 0 .. this count)
 			newPoints add(transform * this _points[i])
 		This new(newPoints)
 	}
@@ -71,9 +71,9 @@ FloatConvexHull2D: class {
 		this _points free()
 		super()
 	}
-	toString: func () -> String {
+	toString: func -> String {
 		result := ""
-		for (i in 0..this count)
+		for (i in 0 .. this count)
 			result = result >> "(" & this _points[i] toString() >> ") "
 		result
 	}

@@ -23,7 +23,7 @@ FloatComplex: cover {
 	real, imaginary: Float
 	init: func@ (=real, =imaginary)
 	init: func@ ~default { this init(0.0f, 0.0f) }
-	conjugate ::= FloatComplex new(this real, - this imaginary)
+	conjugate ::= This new(this real, - this imaginary)
 	absoluteValue ::= (this real pow(2) + this imaginary pow(2)) sqrt()
 	operator + (other: This) -> This { This new(this real + other real, this imaginary + other imaginary) }
 	operator - (other: This) -> This { This new(this real - other real, this imaginary - other imaginary) }
@@ -56,7 +56,7 @@ FloatComplex: cover {
 	logarithm: func -> This {
 		This new(this absoluteValue log(), atan2(this imaginary, this real))
 	}
-	rootOfUnity: static func (n: Int, k:= 1) -> This {
+	rootOfUnity: static func (n: Int, k := 1) -> This {
 		This new(0, 2 * k * PI / n) exponential()
 	}
 }

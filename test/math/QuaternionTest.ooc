@@ -265,7 +265,7 @@ QuaternionTest: class extends Fixture {
 			expect(quaternion z, is equal to(0.707106f) within(tolerance))
 		})
 		this add("fromFloatTransform3D_1", func {
-			matrix := quaternion0 toFloatTransform3D();
+			matrix := quaternion0 toFloatTransform3D()
 			quaternion := Quaternion new(matrix)
 			normalized := quaternion0 normalized
 			expect(quaternion w, is equal to(normalized w) within(tolerance))
@@ -274,7 +274,7 @@ QuaternionTest: class extends Fixture {
 			expect(quaternion z, is equal to(normalized z) within(tolerance))
 		})
 		this add("fromFloatTransform3D_2", func {
-			matrix := quaternion3 toFloatTransform3D();
+			matrix := quaternion3 toFloatTransform3D()
 			quaternion := Quaternion new(matrix)
 			normalized := quaternion3 normalized
 			expect(quaternion w, is equal to(normalized w) within(tolerance))

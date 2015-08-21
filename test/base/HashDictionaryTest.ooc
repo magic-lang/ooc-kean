@@ -156,9 +156,7 @@ HashDictionaryTest: class extends Fixture {
 			expect(dictionary3 getAsType("Fifth", String) == "Almost")
 			expect(dictionary3 getAsType("Sixth", Int) == 1002)
 			expect(dictionary3 getAsType("Sixth", String) == null)
-
 		})
-
 	}
 }
 HashDictionaryTest new() run()

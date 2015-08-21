@@ -4,7 +4,6 @@ use ooc-unit
 import os/Time
 
 BlockedQueueTest: class extends Fixture {
-
 	init: func {
 		queue := BlockedQueue<Int> new()
 
