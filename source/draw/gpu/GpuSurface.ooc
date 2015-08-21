@@ -65,6 +65,11 @@ GpuSurface: abstract class {
 	_createModelTransform: func (size: IntSize2D) -> FloatTransform3D {
 		FloatTransform3D createTranslation(0.0f, 0.0f, -this focalLength) * FloatTransform3D createScaling(size width / 2.0f, size height / 2.0f, 1.0f)
 	}
+	_createTextureTransform: static func (imageSize: IntSize2D, box: IntBox2D) -> FloatTransform3D {
+		scaling := FloatTransform3D createScaling(box size width as Float / imageSize width, box size height as Float / imageSize height, 1.0f)
+		translation := FloatTransform3D createTranslation(box leftTop x as Float / imageSize width, box leftTop y as Float / imageSize height, 0.0f)
+		translation * scaling
+	}
 	reset: virtual func {
 		this _toLocal = FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
 		this clearColor = ColorBgra new(0, 0, 0, 0)
@@ -88,25 +93,29 @@ GpuSurface: abstract class {
 		this _unbind()
 		this reset()
 	}
-	draw: func ~UnknownFormat (image: Image) {
-		if (image instanceOf?(GpuImage)) { this draw~GpuImage(image as GpuImage) }
-		else if (image instanceOf?(RasterImage)) {
-			temp := this _context createGpuImage(image as RasterImage)
-			this draw~GpuImage(temp as GpuImage)
-			temp free()
-		}
-		else
-			Debug raise("Trying to draw unsupported image format to OpenGLES3Canvas!")
-	}
-	draw: virtual func ~GpuImage (image: GpuImage) {
-		this map model = this _createModelTransform(image size)
+	draw: virtual func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D) {
+		this map model = this _createModelTransform(destination size)
 		this map view = this _view
 		this map projection = this _projection
+		this map textureTransform = This _createTextureTransform(image size, source)
 		this draw(func {
 			image bind(0)
 			this _context drawQuad()
 		})
 	}
+	draw: func ~Image (image: Image, source: IntBox2D, destination: IntBox2D) {
+		if (image instanceOf?(GpuImage)) { this draw~GpuImage(image as GpuImage, source, destination) }
+		else if (image instanceOf?(RasterImage)) {
+			temp := this _context createGpuImage(image as RasterImage)
+			this draw~GpuImage(temp as GpuImage, source, destination)
+			temp free()
+		}
+		else
+			Debug raise("Trying to draw unsupported image format to OpenGLES3Canvas!")
+	}
+	draw: func ~DefaultImage (image: Image) { this draw(image, IntBox2D new(image size), IntBox2D new(image size)) }
+	draw: func ~Destination (image: Image, destination: IntBox2D) { this draw(image, IntBox2D new(image size), destination)}
+	draw: func ~DestinationSize (image: Image, targetSize: IntSize2D) { this draw(image, IntBox2D new(targetSize)) }
 	drawLines: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawLines(pointList, this _projection * this _toLocal) }) }
 	drawBox: virtual func (box: FloatBox2D) { this draw(func { this _context drawBox(box, this _projection * this _toLocal) }) }
 	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawPoints(pointList, this _projection * this _toLocal) }) }
