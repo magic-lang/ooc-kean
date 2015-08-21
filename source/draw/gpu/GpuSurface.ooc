@@ -50,7 +50,7 @@ GpuSurface: abstract class {
 			}
 			else
 				this _projection = FloatTransform3D createScaling(2.0f / this size width, -(this _coordinateTransform e as Float) * 2.0f / this size height, 1.0f)
-			this _model = this _createModelTransform(this size)
+			this _model = this _createModelTransform(IntBox2D new(this size))
 		}
 	}
 	nearPlane: Float { get set }
@@ -59,11 +59,14 @@ GpuSurface: abstract class {
 	_defaultMap: GpuMap
 	_textureTransform: IntTransform2D
 	_coordinateTransform := IntTransform2D identity
-
-	flipY: static FloatTransform3D = FloatTransform3D createTranslation(0.0f, 1.0f, 0.0f) * FloatTransform3D createScaling(1.0f, -1.0f, 1.0f)
-	init: func (=_size, =_context, =_defaultMap, =_coordinateTransform) { this reset() }
-	_createModelTransform: func (size: IntSize2D) -> FloatTransform3D {
-		FloatTransform3D createTranslation(0.0f, 0.0f, -this focalLength) * FloatTransform3D createScaling(size width / 2.0f, size height / 2.0f, 1.0f)
+	init: func (=_size, =_context, =_defaultMap, =_coordinateTransform) {
+		this _toLocal = FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
+		this reset()
+	}
+	_createModelTransform: func (box: IntBox2D) -> FloatTransform3D {
+		toReference := FloatTransform3D createTranslation((box size width - this size width) / 2, (this size height - box size height) / 2, 0.0f)
+		translation := this _toLocal * FloatTransform3D createTranslation(box leftTop x, box leftTop y, this focalLength) * this _toLocal
+ 		translation * toReference * FloatTransform3D createScaling(box size width / 2.0f, box size height / 2.0f, 1.0f)
 	}
 	_createTextureTransform: static func (imageSize: IntSize2D, box: IntBox2D) -> FloatTransform3D {
 		scaling := FloatTransform3D createScaling(box size width as Float / imageSize width, box size height as Float / imageSize height, 1.0f)
@@ -71,7 +74,6 @@ GpuSurface: abstract class {
 		translation * scaling
 	}
 	reset: virtual func {
-		this _toLocal = FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
 		this clearColor = ColorBgra new(0, 0, 0, 0)
 		this viewport = IntBox2D new(this size)
 		this focalLength = 0.0f
@@ -94,7 +96,7 @@ GpuSurface: abstract class {
 		this reset()
 	}
 	draw: virtual func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D) {
-		this map model = this _createModelTransform(destination size)
+		this map model = this _createModelTransform(destination)
 		this map view = this _view
 		this map projection = this _projection
 		this map textureTransform = This _createTextureTransform(image size, source)
