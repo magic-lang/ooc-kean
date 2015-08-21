@@ -66,9 +66,9 @@ Window: class extends GpuSurface {
 		}
 		result
 	}
-	draw: override func ~GpuImage (image: GpuImage) {
+	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D) {
 		this map = this _getTransformMap(image)
-		super(image)
+		super(image, source, destination)
 	}
 	clear: func { this _native clear() }
 	refresh: func {
