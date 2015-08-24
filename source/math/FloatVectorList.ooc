@@ -65,19 +65,7 @@ FloatVectorList: class extends VectorList<Float> {
 	}
 	standardDeviation ::= this variance sqrt()
 	sort: func {
-		inOrder := false
-		vector := this _vector _backend as Float*
-		while (!inOrder) {
-			inOrder = true
-			for (i in 0 .. count - 1) {
-				if (vector[i] > vector[i + 1]) {
-					inOrder = false
-					tmp := vector[i]
-					vector[i] = vector[i + 1]
-					vector[i + 1] = tmp
-				}
-			}
-		}
+		This _quicksort(this _vector _backend as Float*, 0, this count - 1)
 	}
 	accumulate: func -> This {
 		result := This new(this _count)
@@ -247,15 +235,94 @@ FloatVectorList: class extends VectorList<Float> {
 		tempVector free()
 		result
 	}
+	/* calculate median without copying and sorting the vector
+			WARNING: this function can partially rearange the elements in vector
+	*/
+	fastMedian: func (start := 0, end := this count - 1) -> Float {
+		count := end - start + 1
+		result := This _nthElement(this _vector _backend as Float*, start, end, count / 2)
+		if (Int even(count))
+			result = (result + This _nthElement(this _vector _backend as Float*, start, end, count / 2 - 1)) / 2
+		result
+	}
 	movingMedianFilter: func (windowSize: Int) -> This {
 		result := This new(this count)
+		windowBuffer := This new(windowSize)
 		start := -((windowSize - 1) / 2)
 		for (i in 0 .. this count) {
-			range := (start .. (start + windowSize - 1)) + i
-			elementsInWindow := this getSlice(range clamp(0, this count-1))
-			result add((elementsInWindow as This) median())
-			elementsInWindow free()
+			range := ((start .. (start + windowSize - 1)) + i) clamp(0, this count-1)
+			this getSliceInto(range, (windowBuffer as VectorList<Float>)&)
+			result add((windowBuffer as This) fastMedian(0, range count - 1))
 		}
+		windowBuffer free()
 		result
+	}
+	_swap: static func (array: Float*, i, j: Int) {
+		t := array[i]
+		array[i] = array[j]
+		array[j] = t
+	}
+	/* partition the array so that all elements less than array[pivot] are moved before this element
+		and all elements greater than array[pivot] are after it
+		end should be the last valid array index in the range
+	*/
+	_partition: static func (array: Float*, start, end, pivot: Int) -> Int {
+		pivotValue := array[pivot]
+		This _swap(array, pivot, end)
+		result := start
+		for (i in start .. end)
+			if (array[i] < pivotValue) {
+				This _swap(array, result, i)
+				++result
+			}
+		This _swap(array, result, end)
+		result
+	}
+	/*
+	pivot selection strategy which should result in best performance
+	for quicksort and nthElement algorithms on partially sorted data
+		end should be the last valid array index in the range
+	*/
+	_medianOfThree: static func (array: Float*, start, end: Int) -> Int {
+		mid := (start + end) / 2
+		if (array[start] > array[mid])
+			This _swap(array, mid, start)
+		if (array[mid] > array[end])
+			This _swap(array, mid, end)
+		if (array[start] > array[end])
+			This _swap(array, start, end)
+		mid
+	}
+
+	/* return n-th smallest element in the array[start:end] range
+		end should be the last valid array index in the range
+	*/
+	_nthElement: static func (array: Float*, start, end, n: Int) -> Float {
+		if (start == end)
+			array[start]
+		else {
+			pivot := This _partition(array, start, end, This _medianOfThree(array, start, end))
+			if (pivot == n)
+				array[n]
+			else if (n < pivot)
+				_nthElement(array, start, pivot - 1, n)
+			else
+				_nthElement(array, pivot + 1, end, n)
+		}
+	}
+
+	/* sort the input array in the range [start,end]
+		end should be the last valid array index in the range
+	*/
+	_quicksort: static func (array: Float*, start, end: Int) {
+		if (end == start + 1 && array[start] > array[end])
+			This _swap(array, start, end)
+		else if (start < end) {
+			pivot := This _partition(array, start, end, This _medianOfThree(array, start, end))
+			if (pivot > start)
+				This _quicksort(array, start, pivot - 1)
+			if (pivot < end)
+				This _quicksort(array, pivot + 1, end)
+		}
 	}
 }
