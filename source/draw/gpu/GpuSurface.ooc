@@ -57,7 +57,6 @@ GpuSurface: abstract class {
 	farPlane: Float { get set }
 	map: GpuMap { get set }
 	_defaultMap: GpuMap
-	_textureTransform: IntTransform2D
 	_coordinateTransform := IntTransform2D identity
 	init: func (=_size, =_context, =_defaultMap, =_coordinateTransform) {
 		this _toLocal = FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
@@ -95,15 +94,16 @@ GpuSurface: abstract class {
 		this _unbind()
 		this reset()
 	}
-	draw: virtual func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D) {
+	draw: func ~WithoutBind (destination: IntBox2D) {
 		this map model = this _createModelTransform(destination)
 		this map view = this _view
 		this map projection = this _projection
+		this draw(func { this _context drawQuad() })
+	}
+	draw: virtual func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D) {
+		image bind(0)
 		this map textureTransform = This _createTextureTransform(image size, source)
-		this draw(func {
-			image bind(0)
-			this _context drawQuad()
-		})
+		this draw(destination)
 	}
 	draw: func ~Image (image: Image, source: IntBox2D, destination: IntBox2D) {
 		if (image instanceOf?(GpuImage)) { this draw~GpuImage(image as GpuImage, source, destination) }
@@ -117,7 +117,7 @@ GpuSurface: abstract class {
 	}
 	draw: func ~DefaultImage (image: Image) { this draw(image, IntBox2D new(image size), IntBox2D new(image size)) }
 	draw: func ~Destination (image: Image, destination: IntBox2D) { this draw(image, IntBox2D new(image size), destination)}
-	draw: func ~DestinationSize (image: Image, targetSize: IntSize2D) { this draw(image, IntBox2D new(targetSize)) }
+	draw: func ~TargetSize (image: Image, targetSize: IntSize2D) { this draw(image, IntBox2D new(targetSize)) }
 	drawLines: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawLines(pointList, this _projection * this _toLocal) }) }
 	drawBox: virtual func (box: FloatBox2D) { this draw(func { this _context drawBox(box, this _projection * this _toLocal) }) }
 	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawPoints(pointList, this _projection * this _toLocal) }) }
