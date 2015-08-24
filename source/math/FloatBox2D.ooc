@@ -114,12 +114,10 @@ FloatBox2D: cover {
 			this intersection(other)
 	}
 	operator + (other: FloatPoint2D) -> This { This new(this leftTop + other, this size) }
-	//FIXME: Unary minus bug
 	operator - (other: FloatPoint2D) -> This { This new(this leftTop - other, this size) }
 	operator + (other: FloatSize2D) -> This { This new(this leftTop, this size + other) }
 	operator * (other: FloatSize2D) -> This { This new(this leftTop * other, this size * other) }
 	operator / (other: FloatSize2D) -> This { This new(this leftTop / other, this size / other) }
-	//FIXME: Unary minus bug again
 	operator - (other: FloatSize2D) -> This { This new(this leftTop, this size - other) }
 	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }
 	operator != (other: This) -> Bool { !(this == other) }
