@@ -96,11 +96,9 @@ IntBox2D: cover {
 			intersection(other)
 	}
 	operator + (other: IntPoint2D) -> This { This new(this leftTop + other, this size) }
-	//FIXME: Unary minus bug
-	operator - (other: IntPoint2D) -> This { This new(this leftTop + (-other), this size) }
+	operator - (other: IntPoint2D) -> This { This new(this leftTop - other, this size) }
 	operator + (other: IntSize2D) -> This { This new(this leftTop, this size + other) }
-	//FIXME: Unary minus bug again
-	operator - (other: IntSize2D) -> This { This new(this leftTop, this size + (-other)) }
+	operator - (other: IntSize2D) -> This { This new(this leftTop, this size - other) }
 	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }
 	operator != (other: This) -> Bool { !(this == other) }
 	toFloatBox2D: func -> FloatBox2D { FloatBox2D new(this left, this top, this width, this height) }
