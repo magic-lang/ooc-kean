@@ -110,16 +110,6 @@ FloatTransform2D: cover {
 	create: static func (translation: FloatSize2D, scale, rotation: Float) -> This {
 		This new(rotation cos() * scale, rotation sin() * scale, -rotation sin() * scale, rotation cos() * scale, translation width, translation height)
 	}
-	create: static func ~fromEuclid (euclidTransform: FloatEuclidTransform) -> This {
-		k := euclidTransform k
-		translation := This createTranslation(euclidTransform translationX, euclidTransform translationY)
-		scaling := This createScaling(euclidTransform scaling)
-		rotationX := This createXRotation(euclidTransform rotationX, k)
-		rotationY := This createYRotation(euclidTransform rotationY, k)
-		rotationZ := This createZRotation(euclidTransform rotationZ)
-		//return scaling * translation * rotationZ * rotationY * rotationX
-		return translation * scaling * rotationZ * rotationY * rotationX
-	}
 	create: static func ~reduced (translation: FloatSize2D, rotation: Float) -> This { This create(translation, 1.0f, rotation) }
 	createTranslation: static func (xDelta, yDelta: Float) -> This { This new(1.0f, 0.0f, 0.0f, 1.0f, xDelta, yDelta) }
 	createTranslation: static func ~float (delta: Float) -> This { This createTranslation(delta, delta) }
