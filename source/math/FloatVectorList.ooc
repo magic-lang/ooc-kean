@@ -251,7 +251,7 @@ FloatVectorList: class extends VectorList<Float> {
 		start := -((windowSize - 1) / 2)
 		for (i in 0..this count) {
 			range := ((start..(start + windowSize - 1)) + i) clamp(0, this count-1)
-			this getSliceInto(range, windowBuffer&)
+			this getSliceInto(range, (windowBuffer as VectorList<Float>)&)
 			result add((windowBuffer as This) fastMedian(0, range count - 1))
 		}
 		windowBuffer free()
