@@ -124,7 +124,7 @@ VectorList: class <T> {
 		this getSliceInto(range, result&)
 		result
 	}
-	getSliceInto: func(range: Range, buffer: This<T>@) {
+	getSliceInto: func (range: Range, buffer: This<T>@) {
 		if (buffer _vector capacity < range count)
 			buffer _vector resize(range count)
 		buffer _count = range count

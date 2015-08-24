@@ -249,8 +249,8 @@ FloatVectorList: class extends VectorList<Float> {
 		result := This new(this count)
 		windowBuffer := This new(windowSize)
 		start := -((windowSize - 1) / 2)
-		for (i in 0..this count) {
-			range := ((start..(start + windowSize - 1)) + i) clamp(0, this count-1)
+		for (i in 0 .. this count) {
+			range := ((start .. (start + windowSize - 1)) + i) clamp(0, this count-1)
 			this getSliceInto(range, (windowBuffer as VectorList<Float>)&)
 			result add((windowBuffer as This) fastMedian(0, range count - 1))
 		}
@@ -270,7 +270,7 @@ FloatVectorList: class extends VectorList<Float> {
 		pivotValue := array[pivot]
 		This _swap(array, pivot, end)
 		result := start
-		for (i in start..end)
+		for (i in start .. end)
 			if (array[i] < pivotValue) {
 				This _swap(array, result, i)
 				++result
