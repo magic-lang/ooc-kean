@@ -65,7 +65,7 @@ OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 			this target y canvas draw(gpuImage y, source, destination)
 			this target uv canvas _view = FloatTransform3D createTranslation(-this _view m / 2.0f, -this _view n / 2.0f, -this _view o / 2.0f) * this _view
 			this target uv canvas focalLength = this _focalLength / 2.0f
-			this target uv canvas draw(gpuImage uv, IntBox2D new(source size / 2), IntBox2D new(destination size / 2))
+			this target uv canvas draw(gpuImage uv, IntBox2D new(source leftTop / 2, source size / 2), IntBox2D new(destination leftTop / 2, destination size / 2))
 		}
 	}
 	drawLines: override func (pointList: VectorList<FloatPoint2D>) { this target y canvas drawLines(pointList) }
