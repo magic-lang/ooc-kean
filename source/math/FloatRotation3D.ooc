@@ -24,17 +24,13 @@ FloatRotation3D: cover {
 	identity: static This { get { This new(Quaternion identity) } }
 	inverse ::= This new(this _quaternion inverse)
 	normalized ::= This new(this _quaternion normalized)
-	x: Float
-	y: Float
-	z: Float
+	x := 0.0f
+	y := 0.0f
+	z := 0.0f
 	init: func@ ~full(=x, =y, =z) { }
 	init: func@ ~fromPoint(point: FloatPoint3D) { this init(point x, point y, point z) }
 	init: func@ ~default { this init(Quaternion new(0.0f, 0.0f, 0.0f, 0.0f)) }
-	init: func@ ~fromQuaternion (=_quaternion) {
-		this x = 0.0f
-		this y = 0.0f
-		this z = 0.0f
-	}
+	init: func@ ~fromQuaternion (=_quaternion)
 	getTransform: func(zDistance: Float) -> FloatTransform2D {
 		FloatTransform2D createXRotation(this x, zDistance) *
 		FloatTransform2D createYRotation(this y, zDistance) *
