@@ -65,7 +65,7 @@ FloatTransform2D: cover {
 	scaling ::= (this scalingX + this scalingY) / 2.0f
 	scalingX ::= (this a * this a + this b * this b) sqrt()
 	scalingY ::= (this d * this d + this e * this e) sqrt()
-	rotation ::= this b atan2(this a)
+	rotationZ ::= this b atan2(this a)
 	inverse: This { get {
 		determinant := this determinant
 		This new(
@@ -82,8 +82,8 @@ FloatTransform2D: cover {
 	}}
 	isProjective ::= this determinant != 0.0f
 	isAffine ::= this c == 0.0f && this f == 0.0f && this i == 1.0f
-	isSimilarity ::= this == This create(this translation, this scaling, this rotation)
-	isEuclidian ::= this == This create(this translation, this rotation)
+	isSimilarity ::= this == This create(this translation, this scaling, this rotationZ)
+	isEuclidian ::= this == This create(this translation, this rotationZ)
 	isIdentity ::= (this a == 1.0f && this e == 1.0f && this i == 1.0f) && (this b == 0.0f && this c == 0.0f && this d == 0.0f && this f == 0.0f && this g == 0.0f && this h == 0.0f)
 	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i)
 	init: func@ ~reduced (a, b, d, e, g, h: Float) { this init(a, b, 0.0f, d, e, 0.0f, g, h, 1.0f) }
@@ -92,7 +92,7 @@ FloatTransform2D: cover {
 	setScaling: func (scaling: Float) -> This { this scale(scaling / this scaling) }
 	setXScaling: func (scaling: Float) -> This { this scale(scaling / this scalingX, 1.0f) }
 	setYScaling: func (scaling: Float) -> This { this scale(1.0f, scaling / this scalingY) }
-	setRotation: func (rotation: Float) -> This { this rotate(rotation - this rotation) }
+	setRotation: func (rotation: Float) -> This { this rotate(rotation - this rotationZ) }
 	translate: func (xDelta, yDelta: Float) -> This { this createTranslation(xDelta, yDelta) * this }
 	translate: func ~float (delta: Float) -> This { this translate(delta, delta) }
 	translate: func ~point (delta: FloatPoint2D) -> This { this translate(delta x, delta y) }
@@ -119,14 +119,6 @@ FloatTransform2D: cover {
 	createScaling: static func ~float (factor: Float) -> This { This createScaling(factor, factor) }
 	createScaling: static func ~size (factor: FloatSize2D) -> This { This createScaling(factor width, factor height) }
 	createZRotation: static func (angle: Float) -> This { This new(angle cos(), angle sin(), -angle sin(), angle cos(), 0.0f, 0.0f) }
-	createXRotation: static func (angle, k: Float) -> This { This new(1 / cos(angle), 0.0f, 0.0f, 0.0f, 1, tan(angle) * k, 0.0f, -tan(angle) / k, 1) }
-	createYRotation: static func (angle, k: Float) -> This { This new(1, 0.0f, tan(angle) * k, 0.0f, 1 / cos(angle), 0.0f, -tan(angle) / k, 0.0f, 1) }
-	createZRotation: static func ~pivot (angle: Float, pivot: FloatPoint2D) -> This {
-		one := 1.0f
-		sine := angle sin()
-		cosine := angle cos()
-		This new(cosine, sine, -sine, cosine, (one - cosine) * pivot x + sine * pivot y, -sine * pivot x + (one - cosine) * pivot y)
-	}
 	createSkewingX: static func (angle: Float) -> This { This new(1.0f, 0.0f, angle sin(), 1.0f, 0.0f, 0.0f) }
 	createSkewingY: static func (angle: Float) -> This { This new(1.0f, angle sin(), 0.0f, 1.0f, 0.0f, 0.0f) }
 	createReflectionX: static func -> This { This new(-1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f) }
@@ -177,29 +169,6 @@ FloatTransform2D: cover {
 		this g == other g &&
 		this h == other h &&
 		this i == other i
-	}
-	to3DTransformArray: func -> Float* {
-		array := gc_malloc(Float size * 16) as Float*
-		this to3DTransformArray(array)
-		array
-	}
-	to3DTransformArray: func ~proc (array: Float*) {
-		array[0] = this a
-		array[1] = this b
-		array[2] = 0.0f
-		array[3] = this c
-		array[4] = this d
-		array[5] = this e
-		array[6] = 0.0f
-		array[7] = this f
-		array[8] = 0.0f
-		array[9] = 0.0f
-		array[10] = 1.0f
-		array[11] = 0.0f
-		array[12] = this g
-		array[13] = this h
-		array[14] = 0.0f
-		array[15] = this i
 	}
 	operator != (other: This) -> Bool { !(this == other) }
 	operator as -> String { this toString() }

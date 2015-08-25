@@ -31,11 +31,6 @@ FloatRotation3D: cover {
 	init: func@ ~fromPoint(point: FloatPoint3D) { this init(point x, point y, point z) }
 	init: func@ ~default { this init(Quaternion new(0.0f, 0.0f, 0.0f, 0.0f)) }
 	init: func@ ~fromQuaternion (=_quaternion)
-	getTransform: func(zDistance: Float) -> FloatTransform2D {
-		FloatTransform2D createXRotation(this x, zDistance) *
-		FloatTransform2D createYRotation(this y, zDistance) *
-		FloatTransform2D createZRotation(this z)
-	}
 
 	clamp: func ~point(floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
 	clamp: func ~float(floor, ceiling: Float) -> This { This new(this x clamp(floor, ceiling), this y clamp(floor, ceiling), this z clamp(floor, ceiling)) }
