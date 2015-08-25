@@ -19,6 +19,7 @@ import FloatSize2D
 import FloatSize3D
 import FloatPoint2D
 import FloatPoint3D
+import FloatTransform2D
 import text/StringTokenizer
 import structs/ArrayList
 
@@ -117,6 +118,9 @@ FloatTransform3D: cover {
 	init: func@ ~withoutBottomRow (a, b, c, e, f, g, i, j, k, m, n, o: Float) { this init(a, b, c, 0.0f, e, f, g, 0.0f, i, j, k, 0.0f, m, n, o, 1.0f) }
 //	init: func@ ~reduced (a, b, d, e, g, h: Float) { this init(a, b, 0.0f, d, e, 0.0f, g, h, 1.0f) }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f) }
+	init: func@ ~fromFloatTransform2D (transform: FloatTransform2D) {
+		this init(transform a, transform b, 0.0f, transform c, transform d, transform e, 0.0f, transform f, 0.0f, 0.0f, 1.0f, 0.0f, transform g, transform h, 0.0f, transform i)
+	}
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f) } }
 //	setTranslation: func(translation: FloatSize2D) -> This { this translate(translation - this Translation) }
 	setScaling: func (scaling: Float) -> This { this scale(scaling / this scaling) }
