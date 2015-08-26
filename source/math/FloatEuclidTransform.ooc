@@ -23,8 +23,9 @@ FloatEuclidTransform: cover {
 	translation: FloatPoint3D
 	scaling: Float
 
-	init: func@ ~default {
-		this init(FloatPoint3D new(), FloatRotation3D identity, 1.0f)
-	}
+	inverse ::= This new(-this translation, -this rotation, 1.0f / this scaling)
+
+	init: func@ ~default { this init(FloatPoint3D new(), FloatRotation3D identity, 1.0f) }
+	init: func@ ~translationAndRotation (translation: FloatPoint3D, rotation: FloatRotation3D) { this init(translation, rotation, 1.0f) }
 	init: func@ ~full (=translation, =rotation, =scaling)
 }
