@@ -77,8 +77,8 @@ VectorList: class <T> {
 	}
 	reverse: func -> This<T> {
 		result := This<T> new(this _count)
-		for (i in 1 .. (this _count + 1))
-			result add(this[this _count - i])
+		for (i in 0 .. this _count)
+			result add(this[(this _count - 1) - i])
 		result
 	}
 	operator [] (index: Int) -> T {
