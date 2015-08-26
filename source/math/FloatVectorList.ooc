@@ -30,7 +30,7 @@ FloatVectorList: class extends VectorList<Float> {
 		this super(other _vector)
 		this _count = other count
 	}
-	toVectorList: func() -> VectorList<Float> {
+	toVectorList: func -> VectorList<Float> {
 		result := VectorList<Float> new(this count)
 		result _vector = this _vector
 		result _count = this count
@@ -99,14 +99,14 @@ FloatVectorList: class extends VectorList<Float> {
 	}
 	reverse: func -> This {
 		result := This new(this _count)
-		for (i in 1..(this _count + 1))
+		for (i in 1 .. (this _count + 1))
 			result add(this[this _count - i])
 		result
 	}
 	operator + (other: This) -> This {
 		minimumCount := this count < other count ? this count : other count
 		result := This new(minimumCount)
-		for (i in 0..minimumCount)
+		for (i in 0 .. minimumCount)
 			result add(this[i] + other[i])
 		result
 	}
@@ -118,27 +118,27 @@ FloatVectorList: class extends VectorList<Float> {
 	operator - (other: This) -> This {
 		minimumCount := this count < other count ? this count : other count
 		result := This new(minimumCount)
-		for (i in 0..minimumCount)
+		for (i in 0 .. minimumCount)
 			result add(this[i] - other[i])
 		result
 	}
 	operator * (other: This) -> This {
 		minimumCount := this count < other count ? this count : other count
 		result := This new(minimumCount)
-		for (i in 0..minimumCount)
+		for (i in 0 .. minimumCount)
 			result add(this[i] * other[i])
 		result
 	}
 	operator / (other: This) -> This {
 		minimumCount := this count < other count ? this count : other count
 		result := This new(minimumCount)
-		for (i in 0..minimumCount)
+		for (i in 0 .. minimumCount)
 			result add(this[i] / other[i])
 		result
 	}
 	operator * (value: Float) -> This {
 		result := This new(this _count)
-		for (i in 0..this _count)
+		for (i in 0 .. this _count)
 			result add(this[i] * value)
 		result
 	}
@@ -147,7 +147,7 @@ FloatVectorList: class extends VectorList<Float> {
 	}
 	operator + (value: Float) -> This {
 		result := This new(this _count)
-		for (i in 0..this _count)
+		for (i in 0 .. this _count)
 			result add(this[i] + value)
 		result
 	}
@@ -156,7 +156,7 @@ FloatVectorList: class extends VectorList<Float> {
 	}
 	operator - -> This {
 		result := This new(this _count)
-		for (i in 0..this _count)
+		for (i in 0 .. this _count)
 			result add(-this[i])
 		result
 	}
@@ -169,7 +169,7 @@ FloatVectorList: class extends VectorList<Float> {
 	operator || (other: This) -> This {
 		minimumCount := this count < other count ? this count : other count
 		result := This new(minimumCount)
-		for (i in 0..minimumCount)
+		for (i in 0 .. minimumCount)
 			result add(this[i] > 0.0f ? 1.0f : (other[i] > 0.0f ? 1.0f : 0.0f))
 		result
 	}
@@ -191,19 +191,19 @@ FloatVectorList: class extends VectorList<Float> {
 	}
 	getZeros: static func (count: Float) -> This {
 		result := This new(count)
-		for (i in 0..count)
+		for (i in 0 .. count)
 			result add(0.0f)
 		result
 	}
 	exp: func -> This {
 		result := This new(this _count)
-		for (i in 0..this _count)
+		for (i in 0 .. this _count)
 			result add(this[i] exp())
 		result
 	}
 	toFloatComplexVectorList: func -> FloatComplexVectorList {
 		result := FloatComplexVectorList new(this _count)
-		for (i in 0..this _count)
+		for (i in 0 .. this _count)
 			result add(FloatComplex new(this[i], 0))
 		result
 	}
@@ -380,7 +380,7 @@ FloatVectorList: class extends VectorList<Float> {
 	}
 	clamp: func (floor, ceiling: Float) -> This {
 		result := This new(this _count)
-		for (i in 0..this _count)
+		for (i in 0 .. this _count)
 			result add(this[i] clamp(floor, ceiling))
 		result
 	}

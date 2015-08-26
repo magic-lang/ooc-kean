@@ -31,7 +31,7 @@ BoolVectorList: class extends VectorList<Bool> {
 	}
 	totalTrues: func -> Int {
 		result := 0
-		for (i in 0..this count)
+		for (i in 0 .. this count)
 			result += (this[i] ? 1 : 0)
 		result
 	}
@@ -47,20 +47,20 @@ BoolVectorList: class extends VectorList<Bool> {
 	/*operator && (other: This) -> This {
 		minimumCount := this count < other count ? this count : other count
 		result := This new(minimumCount)
-		for (i in 0..minimumCount)
+		for (i in 0 .. minimumCount)
 			result add(this[i] && other[i])
 		result
 	}
 	operator || (other: This) -> This {
 		minimumCount := this count < other count ? this count : other count
 		result := This new(minimumCount)
-		for (i in 0..minimumCount)
+		for (i in 0 .. minimumCount)
 			result add(this[i] || other[i])
 		result
 	}*/
 	reverse: func -> This {
 		result := This new(this _count)
-		for (i in 1..(this _count + 1))
+		for (i in 1 .. (this _count + 1))
 			result add(this[this _count - i])
 		result
 	}
@@ -68,7 +68,7 @@ BoolVectorList: class extends VectorList<Bool> {
 		result := This new(this _count)
 		halfSize := round((elementSize - 1) / 2) as Int
 		currentSequence := This new()
-		for (i in 0..this _count) {
+		for (i in 0 .. this _count) {
 			currentSequence = this getSlice((i - halfSize) clamp(0, this count - 1), (i + halfSize) clamp(0, this count - 1))
 			result add(currentSequence totalTrues() == currentSequence count)
 		}
@@ -78,7 +78,7 @@ BoolVectorList: class extends VectorList<Bool> {
 		result := This new(this _count)
 		halfSize := round((elementSize - 1) / 2) as Int
 		currentSequence := This new()
-		for (i in 0..this _count) {
+		for (i in 0 .. this _count) {
 			currentSequence = this getSlice((i - halfSize) clamp(0, this count - 1), (i + halfSize) clamp(0, this count - 1))
 			result add(currentSequence totalTrues() > 0)
 		}
@@ -92,27 +92,27 @@ BoolVectorList: class extends VectorList<Bool> {
 	}
 	toFloatVectorList: func (floatForFalse := 0.0f, floatForTrue := 1.0f) -> FloatVectorList {
 			result := FloatVectorList new(this _count)
-		for (i in 0..this _count)
+		for (i in 0 .. this _count)
 			result add(this[i] ? floatForTrue : floatForFalse)
 		result
 	}
-	toString: func() -> String {
+	toString: func -> String {
 		result := ""
-		for (i in 0..this _count)
+		for (i in 0 .. this _count)
 			result = result >> this[i] toString() >> "\n"
 		result
 	}
 	or: func (other: This) -> This {
 		minimumCount := this count < other count ? this count : other count
 		result := This new(minimumCount)
-		for (i in 0..minimumCount)
+		for (i in 0 .. minimumCount)
 			result add(this[i] || other[i])
 		result
 	}
 	and: func (other: This) -> This {
 		minimumCount := this count < other count ? this count : other count
 		result := This new(minimumCount)
-		for (i in 0..minimumCount)
+		for (i in 0 .. minimumCount)
 			result add(this[i] && other[i])
 		result
 	}
