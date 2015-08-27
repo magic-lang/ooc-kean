@@ -88,7 +88,6 @@ OpenGLES3Context: class extends GpuContext {
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D) {
 		positions := pointList pointer
-		//this _pointsShader use()
 		this _pointsShader projection = projection
 		this _pointsShader use()
 		Points draw(positions, pointList count, 2)
