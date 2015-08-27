@@ -1,4 +1,5 @@
 use ooc-base
+use ooc-collections
 use ooc-math
 use ooc-draw-gpu
 use ooc-draw-gpu-pc
@@ -123,6 +124,38 @@ GpuSurfaceTest: class extends Fixture {
 			correctImage free(); rasterFromGpu free(); gpuImage free()
 			window free()
 		})
+		this add("draw shapes", func {
+			correctImage := RasterMonochrome open("test/draw/gpu/pc/output/correct/shapes.png")
+			window := Window new(IntSize2D new(600, 600))
+			gpuContext := window context
+			gpuImage := gpuContext createMonochrome(sourceSize)
+			viewport := gpuImage canvas viewport
+			trianglePoints := VectorList<FloatPoint2D> new()
+			lineLength := 200.0f
+			trianglePoints add(FloatPoint2D new(-lineLength, lineLength / 2.0f))
+			trianglePoints add(FloatPoint2D new (lineLength, lineLength / 2.0f))
+			trianglePoints add(FloatPoint2D new(0.0f, -lineLength))
+			trianglePoints add(FloatPoint2D new(-lineLength, lineLength / 2.0f))
+			gpuImage canvas drawLines(trianglePoints)
+			gpuImage canvas drawBox(FloatBox2D new(-lineLength, -lineLength, lineLength * 2.0f, lineLength * 2.0f))
+			//
+			// NOTE! The circle use a point size of 1.0f (OpenGLES3MapPoints in OpenGLES3Map.ooc)
+			//
+			theta := 0.0f
+			step := Float pi / 20.0f
+			origo_x := 0.0f
+			origo_y := 0.0f
+			radius := lineLength
+			circlePoints := VectorList<FloatPoint2D> new()
+			while (theta <= 360.0f) {
+				circlePoints add(FloatPoint2D new(origo_x + radius * theta cos(), origo_y - radius * theta sin()))
+				theta += step
+			}
+			gpuImage canvas drawPoints(circlePoints)
+			rasterFromGpu := gpuImage toRaster()
+			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+		})
+
 	}
 }
 
