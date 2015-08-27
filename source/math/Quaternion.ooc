@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import FloatPoint3D
-import FloatRotation3D
 import FloatTransform2D
 import FloatTransform3D
 import math
@@ -115,41 +114,6 @@ Quaternion: cover {
 		y := a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2
 		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2
 		return This new(w, x, y, z)
-	}
-	getEulerAngles: func -> FloatRotation3D {
-		// http://www.jldoty.com/code/DirectX/YPRfromUF/YPRfromUF.html
-		// Should be used in order Yaw -> Pitch -> Roll or Pitch -> Yaw -> Roll,
-		// According to jldoty it should be Roll -> Pitch -> Yaw, but this doesn't work
-		//
-		// Forward, up and right might need to be changed depending on phone coordinate system and camera direction
-		// World coordinates: x axis -> west, y axis -> north, z axis -> up
-		// Forward is direction of camera.
-		forward := FloatPoint3D new(0.0f, 0.0f, -1.0f)
-		up := FloatPoint3D new(1.0f, 0.0f, 0.0f)
-		right := FloatPoint3D new(0.0f, -1.0f, 0.0f)
-
-		forwardRotated := this apply(forward)
-		upRotated := this apply(up)
-
-		pitch := asin(-forwardRotated z) - Float pi / 2.0f
-		yaw := atan2(forwardRotated y, forwardRotated x)
-
-		yawTransform := FloatTransform2D new(cos(yaw), sin(yaw), 0.0f, -sin(yaw), cos(yaw), 0.0f, 0.0f, 0.0f, 1.0f)
-		pitchTransform := FloatTransform2D new(cos(pitch), 0.0f, -sin(pitch), 0.0f, 1.0f, 0.0f, sin(pitch), 0.0f, cos(pitch))
-		yawAndPitch := yawTransform * pitchTransform
-
-		upYawPitch := yawAndPitch * up
-		rightYawPitch := yawAndPitch * right
-
-		roll: Float
-		if (Float absolute(rightYawPitch x) > Float absolute(rightYawPitch y) && Float absolute(rightYawPitch x) > Float absolute(rightYawPitch z))
-			roll = asin((upYawPitch scalarProduct(upRotated) * upYawPitch x - upRotated x) / rightYawPitch x)
-		else if (Float absolute(rightYawPitch y) > Float absolute(rightYawPitch z))
-			roll = asin((upYawPitch scalarProduct(upRotated) * upYawPitch y - upRotated y) / rightYawPitch y)
-		else
-			roll = asin((upYawPitch scalarProduct(upRotated) * upYawPitch z - upRotated z) / rightYawPitch z)
-
-		FloatRotation3D new(pitch, -yaw, roll)
 	}
 	distance: func (other: This) -> Float {
 		(this - other) norm
