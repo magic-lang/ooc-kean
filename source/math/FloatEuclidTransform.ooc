@@ -18,6 +18,7 @@ import math
 import FloatPoint3D
 import FloatRotation3D
 import FloatTransform2D
+import FloatTransform3D
 
 FloatEuclidTransform: cover {
 	rotation: FloatRotation3D
@@ -25,7 +26,7 @@ FloatEuclidTransform: cover {
 	scaling: Float
 
 	inverse ::= This new(-this translation, this rotation inverse, 1.0f / this scaling)
-	transform ::= FloatTransform2D createScaling(this scaling) * FloatTransform2D createTranslation(this translation x, this translation y)
+	transform ::= FloatTransform3D createScaling(this scaling, this scaling, 1.0f) * FloatTransform3D createTranslation(this translation) * this rotation transform
 
 	init: func@ ~default { this init(FloatPoint3D new(), FloatRotation3D identity, 1.0f) }
 	init: func@ ~translationAndRotation (translation: FloatPoint3D, rotation: FloatRotation3D) { this init(translation, rotation, 1.0f) }

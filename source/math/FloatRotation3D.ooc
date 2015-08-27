@@ -14,9 +14,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
-import FloatPoint3D
-import FloatTransform2D
-import FloatTransform3D
 import Quaternion
 
 FloatRotation3D: cover {
@@ -24,7 +21,8 @@ FloatRotation3D: cover {
 	identity: static This { get { This new(Quaternion identity) } }
 	inverse ::= This new(this _quaternion inverse)
 	normalized ::= This new(this _quaternion normalized)
-	transform ::= this toFloatTransform3D()
+	transform ::= this _quaternion transform
+
 	init: func@ ~default { this init(Quaternion new(0.0f, 0.0f, 0.0f, 0.0f)) }
 	init: func@ ~fromQuaternion (=_quaternion)
 
@@ -38,9 +36,6 @@ FloatRotation3D: cover {
 	createRotationZ: static func (angle: Float) -> This { This new(Quaternion createRotationZ(angle)) }
 	sphericalLinearInterpolation: func (other: This, factor: Float) -> This {
 		This new(this _quaternion sphericalLinearInterpolation(other _quaternion, factor))
-	}
-	toFloatTransform3D: func -> FloatTransform3D {
-		this _quaternion toFloatTransform3D()
 	}
 	angle: func (other: This) -> Float {
 		result := acos(Float absolute(this _quaternion dotProduct(other _quaternion))) as Float

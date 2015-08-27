@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import FloatPoint3D
-import FloatTransform2D
 import FloatTransform3D
 import math
 
@@ -222,22 +221,7 @@ Quaternion: cover {
 	operator * (value: FloatPoint3D) -> FloatPoint3D {
 		(this * This new(0.0f, value) * this inverse) imaginary
 	}
-	operator [] (index: Int) -> Float {
-		result := 0.0f
-		match (index) {
-			case 0 => result = this w
-			case 1 => result = this x
-			case 2 => result = this y
-			case 3 => result = this z
-			case => raise("Quaternion: Invalid index: #{index}, valid indices are 0-3.")
-		}
-		result
-	}
 	operator as -> String { this toString() }
-	toArray: func -> Float[] {
-		result := [this w, this x, this y, this z]
-		result
-	}
 	dotProduct: func (other: This) -> Float {
 		this w * other w + this x * other x + this y * other y + this z * other z
 	}
@@ -274,9 +258,6 @@ Quaternion: cover {
 			0.0f,
 			0.0f
 		)
-	}
-	relativeQuaternion: func (other: This) -> This {
-		other * this inverse
 	}
 	relativeFromVelocity: static func (angularVelocity: FloatPoint3D) -> This {
 		result := This identity
