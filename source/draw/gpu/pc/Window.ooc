@@ -60,8 +60,8 @@ Window: class extends GpuSurface {
 	_bind: override func { this _native bind() }
 	_getTransformMap: func (gpuImage: GpuImage) -> GpuMap {
 		result := match(gpuImage) {
-			case (gpuImage: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgra
-			case (gpuImage: GpuMonochrome) => this _monochromeToBgra
+			case (image: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgra
+			case (image: GpuMonochrome) => this _monochromeToBgra
 			case => this context getMap(gpuImage, GpuMapType transform)
 		}
 		result
