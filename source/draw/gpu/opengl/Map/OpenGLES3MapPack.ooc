@@ -5,72 +5,78 @@ OpenGLES3MapPack: abstract class extends OpenGLES3Map {
 	imageWidth: Int { get set }
 	channels: Int { get set }
 	transform: FloatTransform3D
-	init: func (fragmentSource: String, context: GpuContext) {
-		super(This vertexSource, fragmentSource, context)
+	init: func (vertexSource: String, fragmentSource: String, context: GpuContext) {
+		super(vertexSource, fragmentSource, context)
 		this channels = 1
 		this transform = FloatTransform3D createScaling(1.0f, -1.0f, 1.0f)
 	}
 	use: override func {
 		super()
 		this program setUniform("texture0", 0)
+		texelOffset := 1.0f / this imageWidth
+		this program setUniform("texelOffset", texelOffset)
 		offset := (2.0f / channels - 0.5f) / this imageWidth
-		this program setUniform("offset", offset)
+		this program setUniform("xOffset", offset)
 		this program setUniform("transform", this transform)
 	}
+}
+OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
+	init: func (context: GpuContext) { super(This vertexSource, This fragmentSource, context) }
 	vertexSource: static String ="
 		#version 300 es
 		precision mediump float;
 		uniform mat4 transform;
-		uniform float offset;
+		uniform float xOffset;
+		uniform float texelOffset;
 		layout(location = 0) in vec2 vertexPosition;
 		layout(location = 1) in vec2 textureCoordinate;
-		out vec2 fragmentTextureCoordinate;
+		out vec2 fragmentTextureCoordinate[4];
 		void main() {
-			fragmentTextureCoordinate = textureCoordinate - vec2(offset, 0);
+			fragmentTextureCoordinate[0] = textureCoordinate + vec2(-xOffset, 0);
+			fragmentTextureCoordinate[1] = textureCoordinate + vec2(texelOffset - xOffset, 0);
+			fragmentTextureCoordinate[2] = textureCoordinate + vec2(2.0f * texelOffset - xOffset, 0);
+			fragmentTextureCoordinate[3] = textureCoordinate + vec2(3.0f * texelOffset - xOffset, 0);
 			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
 		}"
-}
-OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
-	init: func (context: GpuContext) { super(This fragmentSource, context) }
-	use: override func {
-		super()
-		texelOffset := 1.0f / this imageWidth
-		this program setUniform("texelOffset", texelOffset)
-	}
 	fragmentSource: static String ="
 		#version 300 es
 		precision mediump float;
 		uniform sampler2D texture0;
-		uniform float texelOffset;
-		in highp vec2 fragmentTextureCoordinate;
+		in highp vec2 fragmentTextureCoordinate[4];
 		out vec4 outColor;
 		void main() {
-			vec2 texelOffsetCoord = vec2(texelOffset, 0);
-			float r = texture(texture0, fragmentTextureCoordinate).x;
-			float g = texture(texture0, fragmentTextureCoordinate + texelOffsetCoord).x;
-			float b = texture(texture0, fragmentTextureCoordinate + 2.0f*texelOffsetCoord).x;
-			float a = texture(texture0, fragmentTextureCoordinate + 3.0f*texelOffsetCoord).x;
+			float r = texture(texture0, fragmentTextureCoordinate[0]).x;
+			float g = texture(texture0, fragmentTextureCoordinate[1]).x;
+			float b = texture(texture0, fragmentTextureCoordinate[2]).x;
+			float a = texture(texture0, fragmentTextureCoordinate[3]).x;
 			outColor = vec4(r, g, b, a);
 		}"
 }
 OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
-	init: func (context: GpuContext) { super(This fragmentSource, context) }
-	use: override func {
-		super()
-		texelOffset := 1.0f / this imageWidth
-		this program setUniform("texelOffset", texelOffset)
-	}
+	init: func (context: GpuContext) { super(This vertexSource, This fragmentSource, context) }
+	vertexSource: static String ="
+		#version 300 es
+		precision mediump float;
+		uniform mat4 transform;
+		uniform float xOffset;
+		uniform float texelOffset;
+		layout(location = 0) in vec2 vertexPosition;
+		layout(location = 1) in vec2 textureCoordinate;
+		out vec2 fragmentTextureCoordinate[2];
+		void main() {
+			fragmentTextureCoordinate[0] = textureCoordinate + vec2(-xOffset, 0);
+			fragmentTextureCoordinate[1] = textureCoordinate + vec2(texelOffset - xOffset, 0);
+			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
+		}"
 	fragmentSource: static String ="
 		#version 300 es
 		precision mediump float;
 		uniform sampler2D texture0;
-		uniform float texelOffset;
-		in highp vec2 fragmentTextureCoordinate;
+		in highp vec2 fragmentTextureCoordinate[2];
 		out vec4 outColor;
 		void main() {
-			vec2 texelOffsetCoord = vec2(texelOffset, 0);
-			vec2 rg = texture(texture0, fragmentTextureCoordinate).rg;
-			vec2 ba = texture(texture0, fragmentTextureCoordinate + texelOffsetCoord).rg;
+			vec2 rg = texture(texture0, fragmentTextureCoordinate[0]).rg;
+			vec2 ba = texture(texture0, fragmentTextureCoordinate[1]).rg;
 			outColor = vec4(rg.x, rg.y, ba.x, ba.y);
 		}"
 }
