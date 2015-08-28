@@ -238,7 +238,12 @@ FloatVectorList: class extends VectorList<Float> {
 	/* calculate median without copying and sorting the vector
 			WARNING: this function can partially rearange the elements in vector
 	*/
-	fastMedian: func (start := 0, end := this count - 1) -> Float {
+	fastMedian: func (start := 0, end := -1) -> Float {
+		/*workaround for the compiler bug
+		non-constant default function value is not calculated correctly
+		*/
+		if (end < 0)
+			end = this count - 1
 		count := end - start + 1
 		result := This _nthElement(this _vector _backend as Float*, start, end, count / 2)
 		if (Int even(count))
