@@ -66,18 +66,18 @@ Texture: class {
 	generateMipmap: func {
 		version(debugGL) { validateStart() }
 		this bind(0)
-		glGenerateMipmap(GL_TEXTURE_2D)
+		glGenerateMipmap(this _target)
 		version(debugGL) { validateEnd("Texture generateMipmap") }
 	}
 	bind: func (unit: UInt) {
 		version(debugGL) { validateStart() }
 		glActiveTexture(GL_TEXTURE0 + unit)
-		glBindTexture(GL_TEXTURE_2D, this _backend)
+		glBindTexture(this _target, this _backend)
 		version(debugGL) { validateEnd("Texture bind") }
 	}
 	unbind: func {
 		version(debugGL) { validateStart() }
-		glBindTexture(GL_TEXTURE_2D, 0)
+		glBindTexture(this _target, 0)
 		version(debugGL) { validateEnd("Texture unbind") }
 	}
 	upload: func (pixels: Pointer, stride: Int) {
