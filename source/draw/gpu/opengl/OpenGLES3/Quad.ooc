@@ -23,7 +23,7 @@ Quad: class {
 		version(debugGL) { validateStart() }
 		positions := [-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f] as Float*
 		textureCoordinates := [0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f] as Float*
-		this vao = Vao create(positions, textureCoordinates, 4, 2)
+		this vao = Vao new(positions, textureCoordinates, 4, 2)
 		version(debugGL) { validateEnd("quad init") }
 	}
 	free: func {

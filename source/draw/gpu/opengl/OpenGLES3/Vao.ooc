@@ -21,14 +21,7 @@ Vao: class {
 	backend: UInt
 	positionLayout: const static UInt = 0
 	textureCoordinateLayout: const static UInt = 1
-	init: func
-	free: func {
-		glDeleteVertexArrays(1, backend&)
-		super()
-	}
-	bind: func { glBindVertexArray(backend) }
-	unbind: func { glBindVertexArray(0) }
-	_generate: func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> Bool {
+	init: func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> Bool {
 		version(debugGL) { Debug print("Allocating OpenGL VAO") }
 		//Currently using 2 attributes: vertex position and texture coordinate
 		attributeCount := 2
@@ -58,11 +51,11 @@ Vao: class {
 		glBindBuffer(GL_ARRAY_BUFFER, 0)
 		glBindVertexArray(0)
 		glDeleteBuffers(1, vertexBuffer&)
-
-		true
 	}
-	create: static func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> This {
-		result := This new()
-		result _generate(positions, textureCoordinates, vertexCount, dimensions) ? result : null
+	free: func {
+		glDeleteVertexArrays(1, backend&)
+		super()
 	}
+	bind: func { glBindVertexArray(backend) }
+	unbind: func { glBindVertexArray(0) }
 }
