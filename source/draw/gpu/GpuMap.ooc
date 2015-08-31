@@ -15,12 +15,6 @@
 // along with this _program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
 
-GpuMapType: enum {
-	defaultmap
-	transform
-	pack
-	blendMap
-}
 
 GpuMap: abstract class {
 	model: FloatTransform3D { get set }

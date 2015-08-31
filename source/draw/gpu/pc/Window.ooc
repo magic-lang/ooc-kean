@@ -25,7 +25,6 @@ import X11/include/x11
 
 Window: class extends GpuSurface {
 	_native: NativeWindow
-
 	_monochromeToBgra: OpenGLES3MapMonochromeToBgra
 	_yuvSemiplanarToBgra: OpenGLES3MapYuvSemiplanarToBgra
 
@@ -58,17 +57,15 @@ Window: class extends GpuSurface {
 		(native as X11Window) free()
 	}
 	_bind: override func { this _native bind() }
-	_getTransformMap: func (gpuImage: GpuImage) -> GpuMap {
-		result := match(gpuImage) {
-			case (image: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgra
-			case (image: GpuMonochrome) => this _monochromeToBgra
-			case => this context getMap(gpuImage, GpuMapType transform)
+	_getDefaultMap: override func (image: Image) -> GpuMap {
+		result := match(image) {
+			case (i: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgra
+			case (i: RasterYuv420Semiplanar) => this _yuvSemiplanarToBgra
+			case (i: GpuMonochrome) => this _monochromeToBgra
+			case (i: RasterMonochrome) => this _monochromeToBgra
+			case => this context defaultMap
 		}
 		result
-	}
-	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D) {
-		this map = this _getTransformMap(image)
-		super(image, source, destination)
 	}
 	clear: func { this _native clear() }
 	refresh: func {
