@@ -16,18 +16,29 @@
 
 use ooc-math
 use ooc-draw
-import GpuMonochrome, GpuCanvas, GpuPlanar, GpuUv, GpuContext
+import GpuMonochrome, GpuCanvas, GpuUv, GpuContext, GpuImage
 
-GpuYuv420Semiplanar: abstract class extends GpuPlanar {
+GpuYuv420Semiplanar: class extends GpuImage {
 	_y: GpuMonochrome
 	y ::= this _y
 	_uv: GpuUv
 	uv ::= this _uv
 
 	init: func (=_y, =_uv, context: GpuContext) {
-		super(this _y size, context)
+		super(this _y size, 3, context)
+		this coordinateSystem = this _y coordinateSystem
 		this _y referenceCount increase()
 		this _uv referenceCount increase()
+	}
+	init: func ~fromRaster (rasterImage: RasterYuv420Semiplanar, context: GpuContext) {
+		y := context createGpuImage(rasterImage y) as GpuMonochrome
+		uv := context createGpuImage(rasterImage uv) as GpuUv
+		this init(y, uv, context)
+	}
+	init: func ~empty (size: IntSize2D, context: GpuContext) {
+		y := context createMonochrome(size)
+		uv := context createUv(size / 2)
+		this init(y, uv, context)
 	}
 	free: override func {
 		this y referenceCount decrease()
@@ -65,12 +76,10 @@ GpuYuv420Semiplanar: abstract class extends GpuPlanar {
 		target
 	}
 	toRasterDefault: func -> RasterImage {
-		y := this _y toRaster()
-		uv := this _uv toRaster()
-		result := RasterYuv420Semiplanar new(y as RasterMonochrome, uv as RasterUv)
-		result
+		y := this _y toRaster() as RasterMonochrome
+		uv := this _uv toRaster() as RasterUv
+		RasterYuv420Semiplanar new(y, uv)
 	}
-	create: override func (size: IntSize2D) -> This {
-		this _context createYuv420Semiplanar(size)
-	}
+	create: override func (size: IntSize2D) -> This { this _context createYuv420Semiplanar(size) }
+	_createCanvas: override func -> GpuCanvas { GpuCanvasYuv420Semiplanar new(this, this _context) }
 }

@@ -38,9 +38,6 @@ GpuContext: abstract class {
 	createBgr: abstract func (size: IntSize2D) -> GpuBgr
 	createBgra: abstract func (size: IntSize2D) -> GpuBgra
 	createUv: abstract func (size: IntSize2D) -> GpuUv
-	createYuv420Semiplanar: abstract func (size: IntSize2D) -> GpuYuv420Semiplanar
-	createYuv420Semiplanar: abstract func ~fromImages (y: GpuMonochrome, uv: GpuUv) -> GpuYuv420Semiplanar
-	createYuv420Planar: abstract func (size: IntSize2D) -> GpuYuv420Planar
 	createYuv422Semipacked: abstract func (size: IntSize2D) -> GpuYuv422Semipacked
 	createGpuImage: abstract func (rasterImage: RasterImage) -> GpuImage
 	createFence: abstract func -> GpuFence
@@ -59,4 +56,10 @@ GpuContext: abstract class {
 	drawPoints: abstract func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D)
 	drawQuad: abstract func
 	enableBlend: abstract func (blend: Bool)
+
+	createYuv420Semiplanar: func (size: IntSize2D) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(size, this) }
+	createYuv420Semiplanar: func ~fromImages (y: GpuMonochrome, uv: GpuUv) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(y, uv, this) }
+	createYuv420Semiplanar: func ~fromRaster (raster: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(raster, this) }
+	createYuv420Planar: func (size: IntSize2D) -> GpuYuv420Planar { GpuYuv420Planar new(size, this) }
+	createYuv420Planar: func ~fromRaster (raster: RasterYuv420Planar) -> GpuYuv420Planar { GpuYuv420Planar new(raster, this) }
 }
