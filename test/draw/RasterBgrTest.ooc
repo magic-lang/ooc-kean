@@ -38,6 +38,13 @@ RasterBgrTest: class extends Fixture {
 			expect(image1 equals(image2))
 			image1 free(); image2 free()
 		})
+		this add("BGR to Monochrome", func {
+			image1 := RasterBgr open(this sourceSpace)
+			image2 := RasterMonochrome convertFrom(image1)
+			image3 := RasterMonochrome open("test/draw/input/correct/Bgr-Monochrome-Space.png")
+			expect(image2 distance(image3), is equal to(0.0f))
+			image1 free(); image2 free(); image3 free()
+		})
 	}
 }
 
