@@ -58,7 +58,7 @@ Window: class extends GpuSurface {
 	}
 	_bind: override func { this _native bind() }
 	_getDefaultMap: override func (image: Image) -> GpuMap {
-		result := match(image) {
+		result := match (image) {
 			case (i: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgra
 			case (i: RasterYuv420Semiplanar) => this _yuvSemiplanarToBgra
 			case (i: GpuMonochrome) => this _monochromeToBgra

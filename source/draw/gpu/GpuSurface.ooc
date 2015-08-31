@@ -116,7 +116,7 @@ GpuSurface: abstract class {
 	draw: func ~ImageDestination (image: Image, destination: IntBox2D) { this draw(image, IntBox2D new(image size), destination) }
 	draw: func ~Image (image: Image) { this draw(image, IntBox2D new(image size)) }
 	draw: func ~ImageTargetSize (image: Image, targetSize: IntSize2D) { this draw(image, IntBox2D new(targetSize)) }
-	draw: func ~ImageMap (image: Image, map: GpuMap) { this draw(image, IntBox2D new(image size), IntBox2D new(image size), map)}
+	draw: func ~ImageMap (image: Image, map: GpuMap) { this draw(image, IntBox2D new(image size), IntBox2D new(image size), map) }
 	draw: func ~ImageDestinationMap (image: Image, destination: IntBox2D, map: GpuMap) { this draw(image, IntBox2D new(image size), destination, map) }
 
 	drawLines: virtual func (pointList: VectorList<FloatPoint2D>) {

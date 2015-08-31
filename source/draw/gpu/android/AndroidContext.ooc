@@ -39,7 +39,7 @@ AndroidContext: class extends OpenGLES3Context {
 	getPacker: func (size: IntSize2D) -> OpenGLES3Bgra {
 		result: OpenGLES3Bgra = null
 		index := -1
-		for (i in 0..this _packers count) {
+		for (i in 0 .. this _packers count) {
 			if (this _packers[i] size == size) {
 				index = i
 				break
@@ -88,7 +88,7 @@ AndroidContext: class extends OpenGLES3Context {
 		if (!this isAligned(gpuImage channels * gpuImage size width))
 			result = super(gpuImage, async)
 		else {
-			result = match(gpuImage) {
+			result = match (gpuImage) {
 				case (image : GpuUv) => this toRaster(image, async)
 				case (image : GpuMonochrome) => this toRaster(image, async)
 				case => super(gpuImage)
@@ -96,11 +96,11 @@ AndroidContext: class extends OpenGLES3Context {
 		}
 		result
 	}
-	toRasterAsync: func~monochrome (gpuImage: GpuMonochrome) -> (RasterImage, GpuFence) {
+	toRasterAsync: func ~monochrome (gpuImage: GpuMonochrome) -> (RasterImage, GpuFence) {
 		(buffer, fence) := this toBuffer(gpuImage, this _packMonochrome)
 		(RasterMonochrome new(buffer, gpuImage size), fence)
 	}
-	toRasterAsync: func~uv (gpuImage: GpuUv) -> (RasterImage, GpuFence) {
+	toRasterAsync: func ~uv (gpuImage: GpuUv) -> (RasterImage, GpuFence) {
 		(buffer, fence) := this toBuffer(gpuImage, this _packUv)
 		(RasterUv new(buffer, gpuImage size), fence)
 	}
@@ -110,10 +110,10 @@ AndroidContext: class extends OpenGLES3Context {
 		if (!this isAligned(gpuImage channels * gpuImage size width))
 			(imageResult, fenceResult) = super(gpuImage)
 		else {
-			match(gpuImage) {
+			match (gpuImage) {
 				case (image : GpuMonochrome) => (imageResult, fenceResult) = this toRasterAsync(image)
 				case (image : GpuUv) => (imageResult, fenceResult) = this toRasterAsync(image)
-				case => Debug raise("Unknown format in toRasterAsync");
+				case => Debug raise("Unknown format in toRasterAsync")
 			}
 		}
 		(imageResult, fenceResult)
