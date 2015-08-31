@@ -45,9 +45,9 @@ RasterMonochrome: class extends RasterPacked {
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
 		end := this buffer pointer as Long + this buffer size
 		rowLength := this size width * this bytesPerPixel
-		for (row in this buffer pointer as Long..end) {
+		for (row in this buffer pointer as Long .. end) {
 			rowEnd := row + rowLength
-			for (source: Long in row..rowEnd)
+			for (source: Long in row .. rowEnd)
 				action((source as ColorMonochrome*)@)
 			row += this stride - 1
 		}
@@ -61,28 +61,28 @@ RasterMonochrome: class extends RasterPacked {
 //		else if (this size != other size)
 //			FIXME
 		else {
-			for (y in 0..this size height)
-				for (x in 0..this size width) {
-					c := this[x,y]
-					o := (other as RasterMonochrome)[x,y]
+			for (y in 0 .. this size height)
+				for (x in 0 .. this size width) {
+					c := this[x, y]
+					o := (other as This)[x, y]
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in Int maximum~two(0, y - 2)..Int minimum~two(y + 3, this size height))
-							for (otherX in Int maximum~two(0, x - 2)..Int minimum~two(x + 3, this size width))
+						for (otherY in Int maximum~two(0, y - 2) .. Int minimum~two(y + 3, this size height))
+							for (otherX in Int maximum~two(0, x - 2) .. Int minimum~two(x + 3, this size width))
 								if (otherX != x || otherY != y) {
-									pixel := (other as RasterMonochrome)[otherX, otherY]
+									pixel := (other as This)[otherX, otherY]
 									if (maximum y < pixel y)
-										maximum y = pixel y;
+										maximum y = pixel y
 									else if (minimum y > pixel y)
 										minimum y = pixel y
 								}
-						distance := 0.0f;
+						distance := 0.0f
 						if (c y < minimum y)
 							distance += (minimum y - c y) as Float squared()
 						else if (c y > maximum y)
 							distance += (c y - maximum y) as Float squared()
-						result += distance sqrt();
+						result += distance sqrt()
 					}
 				}
 			result /= ((this size width squared() + this size height squared()) as Float sqrt())
@@ -105,7 +105,7 @@ RasterMonochrome: class extends RasterPacked {
 	save: override func (filename: String) -> Int {
 		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this size width * this bytesPerPixel)
 	}
-	convertFrom: static func(original: RasterImage) -> This {
+	convertFrom: static func (original: RasterImage) -> This {
 		result := This new(original size)
 		row := result buffer pointer as Long
 		rowLength := result stride
@@ -125,16 +125,16 @@ RasterMonochrome: class extends RasterPacked {
 	}
 
 	// get the derivative on small window, region is window's global location on image, window is left top centered.
-	getFirstDerivativeWindowOptimized: func(region: IntBox2D, imageX, imageY: FloatImage) {
+	getFirstDerivativeWindowOptimized: func (region: IntBox2D, imageX, imageY: FloatImage) {
 		step := 2
 		sourceWidth := this size width
-		source := this buffer pointer + region leftTop y * sourceWidth  // this getValue [x,y]
+		source := this buffer pointer + region leftTop y * sourceWidth // this getValue [x,y]
 		destinationX := imageX pointer
 		destinationY := imageY pointer
 
 		// Ix & Iy  centered difference approximation with 4th error order, centered window
-		for (y in (region leftTop y)..(region rightBottom y)) {
-			for (x in (region leftTop x)..(region rightBottom x)) {
+		for (y in (region leftTop y) .. (region rightBottom y)) {
+			for (x in (region leftTop x) .. (region rightBottom x)) {
 				destinationX@ =	(
 					8 * source[x + step] -
 					8 * source[x - step] +
@@ -155,11 +155,11 @@ RasterMonochrome: class extends RasterPacked {
 		}
 	}
 	// get the derivative on small window, region is window's global location on image, window is left top centered.
-	getFirstDerivativeWindow: func(region: IntBox2D, imageX, imageY: FloatImage) {
+	getFirstDerivativeWindow: func (region: IntBox2D, imageX, imageY: FloatImage) {
 		step := 3
 		// Ix & Iy  centered difference approximation with 4th error order, centered window
-		for (y in (region leftTop y)..(region rightBottom y)) {
-			for (x in (region leftTop x)..(region rightBottom x)) {
+		for (y in (region leftTop y) .. (region rightBottom y)) {
+			for (x in (region leftTop x) .. (region rightBottom x)) {
 				imageX[x - region leftTop x, y - region leftTop y] = (
 					8 * this getValue(x + step, y) -
 					8 * this getValue(x - step, y) +
@@ -168,8 +168,8 @@ RasterMonochrome: class extends RasterPacked {
 				) as Float / (12.0f * step)
 			}
 		}
-		for (y in (region leftTop y)..(region rightBottom y)) {
-			for (x in (region leftTop x)..(region rightBottom x)) {
+		for (y in (region leftTop y) .. (region rightBottom y)) {
+			for (x in (region leftTop x) .. (region rightBottom x)) {
 				imageY[x - region leftTop x, y - region leftTop y] = (
 					8 * this getValue(x, y + step) -
 					8 * this getValue(x, y - step) +
@@ -187,12 +187,12 @@ RasterMonochrome: class extends RasterPacked {
 		ColorMonochrome new(this buffer pointer[y * this stride + x])
 	}
 
-	getValue: func(x, y: Int) -> UInt8 {
+	getValue: func (x, y: Int) -> UInt8 {
 		version(safe) {
 			if (x > this size width || y > this size height || x < 0 || y < 0)
 				raise("Accessing RasterMonochrome index out of range in getValue")
 		}
-		return(this buffer pointer[y * this stride + x])
+		(this buffer pointer[y * this stride + x])
 	}
 
 	operator []= (x, y: Int, value: ColorMonochrome) {
@@ -208,7 +208,7 @@ RasterMonochrome: class extends RasterPacked {
 			if (y > this size height || y < 0)
 				raise("Accessing RasterMonochrome index out of range in getRow")
 		}
-		for (x in 0..(this size width))
+		for (x in 0 .. (this size width))
 				result add(this buffer pointer[y * this stride + x] as Float)
 		result
 	}
@@ -219,7 +219,7 @@ RasterMonochrome: class extends RasterPacked {
 			if (x > this size width || x < 0)
 				raise("Accessing RasterMonochrome index out of range in getColumn")
 		}
-		for (y in 0..(this size height))
+		for (y in 0 .. (this size height))
 				result add(this buffer pointer[y * this stride + x] as Float)
 		result
 	}

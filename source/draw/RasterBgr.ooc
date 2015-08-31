@@ -39,9 +39,9 @@ RasterBgr: class extends RasterPacked {
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		end := this buffer pointer as Long + this buffer size
 		rowLength := this size width * this bytesPerPixel
-		for (row: Long in this buffer pointer as Long..end) {
+		for (row: Long in this buffer pointer as Long .. end) {
 			rowEnd := row + rowLength
-			for (source: Long in row..rowEnd) {
+			for (source: Long in row .. rowEnd) {
 				action((source as ColorBgr*)@)
 				source += 2
 			}
@@ -63,17 +63,17 @@ RasterBgr: class extends RasterPacked {
 //		else if (this size != other size)
 //			FIXME
 		else {
-			for (y in 0..this size height)
-				for (x in 0..this size width) {
+			for (y in 0 .. this size height)
+				for (x in 0 .. this size width) {
 					c := this[x, y]
-					o := (other as RasterBgr)[x, y]
+					o := (other as This)[x, y]
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in Int maximum~two(0, y - this distanceRadius)..Int minimum~two(y + 1 + this distanceRadius, this size height))
-							for (otherX in Int maximum~two(0, x - this distanceRadius)..Int minimum~two(x + 1 + this distanceRadius, this size width))
+						for (otherY in Int maximum~two(0, y - this distanceRadius) .. Int minimum~two(y + 1 + this distanceRadius, this size height))
+							for (otherX in Int maximum~two(0, x - this distanceRadius) .. Int minimum~two(x + 1 + this distanceRadius, this size width))
 								if (otherX != x || otherY != y) {
-									pixel := (other as RasterBgr)[otherX, otherY]
+									pixel := (other as This)[otherX, otherY]
 									if (maximum blue < pixel blue)
 										maximum blue = pixel blue
 									else if (minimum blue > pixel blue)
@@ -87,7 +87,7 @@ RasterBgr: class extends RasterPacked {
 									else if (minimum red > pixel red)
 										minimum red = pixel red
 								}
-						distance := 0.0f;
+						distance := 0.0f
 						if (c blue < minimum blue)
 							distance += (minimum blue - c blue) as Float squared()
 						else if (c blue > maximum blue)
@@ -100,7 +100,7 @@ RasterBgr: class extends RasterPacked {
 							distance += (minimum red - c red) as Float squared()
 						else if (c red > maximum red)
 							distance += (c red - maximum red) as Float squared()
-						result += (distance) sqrt() / 3;
+						result += (distance) sqrt() / 3
 					}
 				}
 			result /= ((this size width squared() + this size height squared()) as Float sqrt())
@@ -123,7 +123,7 @@ RasterBgr: class extends RasterPacked {
 	save: override func (filename: String) -> Int {
 		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this stride)
 	}
-	convertFrom: static func(original: RasterImage) -> This {
+	convertFrom: static func (original: RasterImage) -> This {
 		result := This new(original size)
 		row := result buffer pointer as Long
 		rowLength := result size width

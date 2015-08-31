@@ -89,8 +89,8 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		width := this size width
 		height := this size height
 
-		for (y in 0..height) {
-			for (x in 0..width) {
+		for (y in 0 .. height) {
+			for (x in 0 .. width) {
 				action(ColorYuv new(ySource@, uSource@, vSource@))
 				ySource += 1
 				if (x % 2 == 1) {
@@ -123,7 +123,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		this y[x, y] = ColorMonochrome new(value y)
 		this uv[x / 2, y / 2] = ColorUv new(value u, value v)
 	}
-	convertFrom: static func(original: RasterImage) -> This {
+	convertFrom: static func (original: RasterImage) -> This {
 		result := This new(original size)
 		//		"RasterYuv420 init ~fromRasterImage, original: (#{original size}), this: (#{this size}), y stride #{this y stride}" println()
 		y := 0

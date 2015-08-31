@@ -41,7 +41,7 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 			}
 		}
 	}
-	init: func (y: RasterMonochrome, u: RasterMonochrome, v: RasterMonochrome) {
+	init: func (y, u, v: RasterMonochrome) {
 		super(y size)
 		this _y = y
 		this _y referenceCount increase()
@@ -75,17 +75,17 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 //		else if (this size != other size)
 //			FIXME
 		else {
-			for (y in 0..this size height)
-				for (x in 0..this size width) {
+			for (y in 0 .. this size height)
+				for (x in 0 .. this size width) {
 					c := this[x, y]
-					o := (other as RasterYuvPlanar)[x, y]
+					o := (other as This)[x, y]
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in Int maximum~two(0, y - this distanceRadius)..Int minimum~two(y + 1 + this distanceRadius, this size height))
-							for (otherX in Int maximum~two(0, x - this distanceRadius)..Int minimum~two(x + 1 + this distanceRadius, this size width))
-								if (otherX != x || otherY != y)	{
-									pixel := (other as RasterYuvPlanar)[otherX, otherY]
+						for (otherY in Int maximum~two(0, y - this distanceRadius) .. Int minimum~two(y + 1 + this distanceRadius, this size height))
+							for (otherX in Int maximum~two(0, x - this distanceRadius) .. Int minimum~two(x + 1 + this distanceRadius, this size width))
+								if (otherX != x || otherY != y) {
+									pixel := (other as This)[otherX, otherY]
 									if (maximum y < pixel y)
 										maximum y = pixel y
 									else if (minimum y > pixel y)
@@ -99,7 +99,7 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 									else if (minimum v > pixel v)
 										minimum v = pixel v
 								}
-						distance := 0.0f;
+						distance := 0.0f
 						if (c y < minimum y)
 							distance += (minimum y - c y) as Float squared()
 						else if (c y > maximum y)
@@ -112,7 +112,7 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 							distance += (minimum v - c v) as Float squared()
 						else if (c v > maximum v)
 							distance += (c v - maximum v) as Float squared()
-						result += (distance) sqrt() / 3;
+						result += (distance) sqrt() / 3
 					}
 				}
 			result /= ((this size width squared() + this size height squared()) as Float sqrt())
@@ -122,6 +122,6 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 //	openResource(assembly: ???, name: String) {
 //		Image openResource
 //	}
-	abstract operator [] (x, y: Int) -> ColorYuv {}
-	abstract operator []= (x, y: Int, value: ColorYuv) {}
+	abstract operator [] (x, y: Int) -> ColorYuv
+	abstract operator []= (x, y: Int, value: ColorYuv)
 }

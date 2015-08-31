@@ -85,7 +85,7 @@ ColorUv: cover {
 	distance: func (other: This) -> Float {
 		((this u - other u) as Float pow(2) + (this v - other v) as Float pow(2)) / 2.0f sqrt()
 	}
-	equals: func ~uv (other: This) -> Bool {this u == other u && this v == other v }
+	equals: func ~uv (other: This) -> Bool { this u == other u && this v == other v }
 	equals: func ~monochrome (other: ColorMonochrome) -> Bool { false }
 	equals: func ~yuv (other: ColorYuv) -> Bool { false }
 	equals: func ~bgr (other: ColorBgr) -> Bool { false }

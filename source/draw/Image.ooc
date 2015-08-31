@@ -67,7 +67,7 @@ Image: abstract class {
 	copy: abstract func -> This
 	copy: abstract func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This
 //	shift: abstract func (offset: IntSize2D) -> This
-	flush: func { }
+	flush: func
 	finish: func -> Bool { true }
 	distance: virtual abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
