@@ -23,94 +23,94 @@ PFNGLEGLIMAGETARGETTEXTURE2DOESPROC_OOC: cover from PFNGLEGLIMAGETARGETTEXTURE2D
  *-----------------------------------------------------------------------*/
 
 /* Extensions */
-GL_TEXTURE_EXTERNAL_OES: extern const UInt
-GL_REQUIRED_TEXTURE_IMAGE_UNITS_OES: extern const UInt
+GL_TEXTURE_EXTERNAL_OES,
+GL_REQUIRED_TEXTURE_IMAGE_UNITS_OES,
 
 /* OpenGL ES core versions */
-GL_ES_VERSION_3_0: extern const UInt
-GL_ES_VERSION_2_0: extern const UInt
+GL_ES_VERSION_3_0,
+GL_ES_VERSION_2_0,
 
 /* OpenGL ES 2.0 */
 
 /* ClearBufferMask */
-GL_DEPTH_BUFFER_BIT: extern const UInt
-GL_STENCIL_BUFFER_BIT: extern const UInt
-GL_COLOR_BUFFER_BIT: extern const UInt
+GL_DEPTH_BUFFER_BIT,
+GL_STENCIL_BUFFER_BIT,
+GL_COLOR_BUFFER_BIT,
 
 /* Boolean */
-GL_FALSE: extern const UInt
-GL_TRUE: extern const UInt
+GL_FALSE,
+GL_TRUE,
 
 /* BeginMode */
-GL_POINTS: extern const UInt
-GL_LINES: extern const UInt
-GL_LINE_LOOP: extern const UInt
-GL_LINE_STRIP: extern const UInt
-GL_TRIANGLES: extern const UInt
-GL_TRIANGLE_STRIP: extern const UInt
-GL_TRIANGLE_FAN: extern const UInt
+GL_POINTS,
+GL_LINES,
+GL_LINE_LOOP,
+GL_LINE_STRIP,
+GL_TRIANGLES,
+GL_TRIANGLE_STRIP,
+GL_TRIANGLE_FAN,
 
 /* BlendingFactorDest */
-GL_ZERO: extern const UInt
-GL_ONE: extern const UInt
-GL_SRC_COLOR: extern const UInt
-GL_ONE_MINUS_SRC_COLOR: extern const UInt
-GL_SRC_ALPHA: extern const UInt
-GL_ONE_MINUS_SRC_ALPHA: extern const UInt
-GL_DST_ALPHA: extern const UInt
-GL_ONE_MINUS_DST_ALPHA: extern const UInt
+GL_ZERO,
+GL_ONE,
+GL_SRC_COLOR,
+GL_ONE_MINUS_SRC_COLOR,
+GL_SRC_ALPHA,
+GL_ONE_MINUS_SRC_ALPHA,
+GL_DST_ALPHA,
+GL_ONE_MINUS_DST_ALPHA,
 
 /* BlendingFactorSrc */
 /*      GL_ZERO */
 /*      GL_ONE */
-GL_DST_COLOR: extern const UInt
-GL_ONE_MINUS_DST_COLOR: extern const UInt
-GL_SRC_ALPHA_SATURATE: extern const UInt
+GL_DST_COLOR,
+GL_ONE_MINUS_DST_COLOR,
+GL_SRC_ALPHA_SATURATE,
 /*      GL_SRC_ALPHA */
 /*      GL_ONE_MINUS_SRC_ALPHA */
 /*      GL_DST_ALPHA */
 /*      GL_ONE_MINUS_DST_ALPHA */
 
 /* BlendEquationSeparate */
-GL_FUNC_ADD: extern const UInt
-GL_BLEND_EQUATION: extern const UInt
-GL_BLEND_EQUATION_RGB: extern const UInt    /* same as BLEND_EQUATION */
-GL_BLEND_EQUATION_ALPHA: extern const UInt
+GL_FUNC_ADD,
+GL_BLEND_EQUATION,
+GL_BLEND_EQUATION_RGB, /* same as BLEND_EQUATION */
+GL_BLEND_EQUATION_ALPHA,
 
 /* BlendSubtract */
-GL_FUNC_SUBTRACT: extern const UInt
-GL_FUNC_REVERSE_SUBTRACT: extern const UInt
+GL_FUNC_SUBTRACT,
+GL_FUNC_REVERSE_SUBTRACT,
 
 /* Separate Blend Functions */
-GL_BLEND_DST_RGB: extern const UInt
-GL_BLEND_SRC_RGB: extern const UInt
-GL_BLEND_DST_ALPHA: extern const UInt
-GL_BLEND_SRC_ALPHA: extern const UInt
-GL_CONSTANT_COLOR: extern const UInt
-GL_ONE_MINUS_CONSTANT_COLOR: extern const UInt
-GL_CONSTANT_ALPHA: extern const UInt
-GL_ONE_MINUS_CONSTANT_ALPHA: extern const UInt
-GL_BLEND_COLOR: extern const UInt
+GL_BLEND_DST_RGB,
+GL_BLEND_SRC_RGB,
+GL_BLEND_DST_ALPHA,
+GL_BLEND_SRC_ALPHA,
+GL_CONSTANT_COLOR,
+GL_ONE_MINUS_CONSTANT_COLOR,
+GL_CONSTANT_ALPHA,
+GL_ONE_MINUS_CONSTANT_ALPHA,
+GL_BLEND_COLOR,
 
 /* Buffer Objects */
-GL_ARRAY_BUFFER: extern const UInt
-GL_ELEMENT_ARRAY_BUFFER: extern const UInt
-GL_ARRAY_BUFFER_BINDING: extern const UInt
-GL_ELEMENT_ARRAY_BUFFER_BINDING: extern const UInt
+GL_ARRAY_BUFFER,
+GL_ELEMENT_ARRAY_BUFFER,
+GL_ARRAY_BUFFER_BINDING,
+GL_ELEMENT_ARRAY_BUFFER_BINDING,
 
-GL_STREAM_DRAW: extern const UInt
-GL_STATIC_DRAW: extern const UInt
-GL_DYNAMIC_DRAW: extern const UInt
+GL_STREAM_DRAW,
+GL_STATIC_DRAW,
+GL_DYNAMIC_DRAW,
 
-GL_BUFFER_SIZE: extern const UInt
-GL_BUFFER_USAGE: extern const UInt
+GL_BUFFER_SIZE,
+GL_BUFFER_USAGE,
 
-GL_CURRENT_VERTEX_ATTRIB: extern const UInt
+GL_CURRENT_VERTEX_ATTRIB,
 
 /* CullFaceMode */
-GL_FRONT: extern const UInt
-GL_BACK: extern const UInt
-GL_FRONT_AND_BACK: extern const UInt
+GL_FRONT,
+GL_BACK,
+GL_FRONT_AND_BACK,
 
 /* DepthFunction */
 /*      GL_NEVER */
@@ -123,77 +123,77 @@ GL_FRONT_AND_BACK: extern const UInt
 /*      GL_ALWAYS */
 
 /* EnableCap */
-GL_TEXTURE_2D: extern const UInt
-GL_CULL_FACE: extern const UInt
-GL_BLEND: extern const UInt
-GL_DITHER: extern const UInt
-GL_STENCIL_TEST: extern const UInt
-GL_DEPTH_TEST: extern const UInt
-GL_SCISSOR_TEST: extern const UInt
-GL_POLYGON_OFFSET_FILL: extern const UInt
-GL_SAMPLE_ALPHA_TO_COVERAGE: extern const UInt
-GL_SAMPLE_COVERAGE: extern const UInt
+GL_TEXTURE_2D,
+GL_CULL_FACE,
+GL_BLEND,
+GL_DITHER,
+GL_STENCIL_TEST,
+GL_DEPTH_TEST,
+GL_SCISSOR_TEST,
+GL_POLYGON_OFFSET_FILL,
+GL_SAMPLE_ALPHA_TO_COVERAGE,
+GL_SAMPLE_COVERAGE,
 
 /* ErrorCode */
-GL_NO_ERROR: extern const UInt
-GL_INVALID_ENUM: extern const UInt
-GL_INVALID_VALUE: extern const UInt
-GL_INVALID_OPERATION: extern const UInt
-GL_OUT_OF_MEMORY: extern const UInt
+GL_NO_ERROR,
+GL_INVALID_ENUM,
+GL_INVALID_VALUE,
+GL_INVALID_OPERATION,
+GL_OUT_OF_MEMORY,
 
 /* FrontFaceDirection */
-GL_CW: extern const UInt
-GL_CCW: extern const UInt
+GL_CW,
+GL_CCW,
 
 /* GetPName */
-GL_LINE_WIDTH: extern const UInt
-GL_ALIASED_POINT_SIZE_RANGE: extern const UInt
-GL_ALIASED_LINE_WIDTH_RANGE: extern const UInt
-GL_CULL_FACE_MODE: extern const UInt
-GL_FRONT_FACE: extern const UInt
-GL_DEPTH_RANGE: extern const UInt
-GL_DEPTH_WRITEMASK: extern const UInt
-GL_DEPTH_CLEAR_VALUE: extern const UInt
-GL_DEPTH_FUNC: extern const UInt
-GL_STENCIL_CLEAR_VALUE: extern const UInt
-GL_STENCIL_FUNC: extern const UInt
-GL_STENCIL_FAIL: extern const UInt
-GL_STENCIL_PASS_DEPTH_FAIL: extern const UInt
-GL_STENCIL_PASS_DEPTH_PASS: extern const UInt
-GL_STENCIL_REF: extern const UInt
-GL_STENCIL_VALUE_MASK: extern const UInt
-GL_STENCIL_WRITEMASK: extern const UInt
-GL_STENCIL_BACK_FUNC: extern const UInt
-GL_STENCIL_BACK_FAIL: extern const UInt
-GL_STENCIL_BACK_PASS_DEPTH_FAIL: extern const UInt
-GL_STENCIL_BACK_PASS_DEPTH_PASS: extern const UInt
-GL_STENCIL_BACK_REF: extern const UInt
-GL_STENCIL_BACK_VALUE_MASK: extern const UInt
-GL_STENCIL_BACK_WRITEMASK: extern const UInt
-GL_VIEWPORT: extern const UInt
-GL_SCISSOR_BOX: extern const UInt
+GL_LINE_WIDTH,
+GL_ALIASED_POINT_SIZE_RANGE,
+GL_ALIASED_LINE_WIDTH_RANGE,
+GL_CULL_FACE_MODE,
+GL_FRONT_FACE,
+GL_DEPTH_RANGE,
+GL_DEPTH_WRITEMASK,
+GL_DEPTH_CLEAR_VALUE,
+GL_DEPTH_FUNC,
+GL_STENCIL_CLEAR_VALUE,
+GL_STENCIL_FUNC,
+GL_STENCIL_FAIL,
+GL_STENCIL_PASS_DEPTH_FAIL,
+GL_STENCIL_PASS_DEPTH_PASS,
+GL_STENCIL_REF,
+GL_STENCIL_VALUE_MASK,
+GL_STENCIL_WRITEMASK,
+GL_STENCIL_BACK_FUNC,
+GL_STENCIL_BACK_FAIL,
+GL_STENCIL_BACK_PASS_DEPTH_FAIL,
+GL_STENCIL_BACK_PASS_DEPTH_PASS,
+GL_STENCIL_BACK_REF,
+GL_STENCIL_BACK_VALUE_MASK,
+GL_STENCIL_BACK_WRITEMASK,
+GL_VIEWPORT,
+GL_SCISSOR_BOX,
 /*      GL_SCISSOR_TEST */
-GL_COLOR_CLEAR_VALUE: extern const UInt
-GL_COLOR_WRITEMASK: extern const UInt
-GL_UNPACK_ALIGNMENT: extern const UInt
-GL_PACK_ALIGNMENT: extern const UInt
-GL_MAX_TEXTURE_SIZE: extern const UInt
-GL_MAX_VIEWPORT_DIMS: extern const UInt
-GL_SUBPIXEL_BITS: extern const UInt
-GL_RED_BITS: extern const UInt
-GL_GREEN_BITS: extern const UInt
-GL_BLUE_BITS: extern const UInt
-GL_ALPHA_BITS: extern const UInt
-GL_DEPTH_BITS: extern const UInt
-GL_STENCIL_BITS: extern const UInt
-GL_POLYGON_OFFSET_UNITS: extern const UInt
+GL_COLOR_CLEAR_VALUE,
+GL_COLOR_WRITEMASK,
+GL_UNPACK_ALIGNMENT,
+GL_PACK_ALIGNMENT,
+GL_MAX_TEXTURE_SIZE,
+GL_MAX_VIEWPORT_DIMS,
+GL_SUBPIXEL_BITS,
+GL_RED_BITS,
+GL_GREEN_BITS,
+GL_BLUE_BITS,
+GL_ALPHA_BITS,
+GL_DEPTH_BITS,
+GL_STENCIL_BITS,
+GL_POLYGON_OFFSET_UNITS,
 /*      GL_POLYGON_OFFSET_FILL */
-GL_POLYGON_OFFSET_FACTOR: extern const UInt
-GL_TEXTURE_BINDING_2D: extern const UInt
-GL_SAMPLE_BUFFERS: extern const UInt
-GL_SAMPLES: extern const UInt
-GL_SAMPLE_COVERAGE_VALUE: extern const UInt
-GL_SAMPLE_COVERAGE_INVERT: extern const UInt
+GL_POLYGON_OFFSET_FACTOR,
+GL_TEXTURE_BINDING_2D,
+GL_SAMPLE_BUFFERS,
+GL_SAMPLES,
+GL_SAMPLE_COVERAGE_VALUE,
+GL_SAMPLE_COVERAGE_INVERT,
 
 /* GetTextureParameter */
 /*      GL_TEXTURE_MAG_FILTER */
@@ -201,559 +201,559 @@ GL_SAMPLE_COVERAGE_INVERT: extern const UInt
 /*      GL_TEXTURE_WRAP_S */
 /*      GL_TEXTURE_WRAP_T */
 
-GL_NUM_COMPRESSED_TEXTURE_FORMATS: extern const UInt
-GL_COMPRESSED_TEXTURE_FORMATS: extern const UInt
+GL_NUM_COMPRESSED_TEXTURE_FORMATS,
+GL_COMPRESSED_TEXTURE_FORMATS,
 
 /* HintMode */
-GL_DONT_CARE: extern const UInt
-GL_FASTEST: extern const UInt
-GL_NICEST: extern const UInt
+GL_DONT_CARE,
+GL_FASTEST,
+GL_NICEST,
 
 /* HintTarget */
-GL_GENERATE_MIPMAP_HINT: extern const UInt
+GL_GENERATE_MIPMAP_HINT,
 
 /* DataType */
-GL_BYTE: extern const UInt
-GL_UNSIGNED_BYTE: extern const UInt
-GL_SHORT: extern const UInt
-GL_UNSIGNED_SHORT: extern const UInt
-GL_INT: extern const UInt
-GL_UNSIGNED_INT: extern const UInt
-GL_FLOAT: extern const UInt
-GL_FIXED: extern const UInt
+GL_BYTE,
+GL_UNSIGNED_BYTE,
+GL_SHORT,
+GL_UNSIGNED_SHORT,
+GL_INT,
+GL_UNSIGNED_INT,
+GL_FLOAT,
+GL_FIXED,
 
 /* PixelFormat */
-GL_DEPTH_COMPONENT: extern const UInt
-GL_ALPHA: extern const UInt
-GL_RGB: extern const UInt
-GL_RGBA: extern const UInt
-GL_LUMINANCE: extern const UInt
-GL_LUMINANCE_ALPHA: extern const UInt
+GL_DEPTH_COMPONENT,
+GL_ALPHA,
+GL_RGB,
+GL_RGBA,
+GL_LUMINANCE,
+GL_LUMINANCE_ALPHA,
 
 /* PixelType */
 /*      GL_UNSIGNED_BYTE */
-GL_UNSIGNED_SHORT_4_4_4_4: extern const UInt
-GL_UNSIGNED_SHORT_5_5_5_1: extern const UInt
-GL_UNSIGNED_SHORT_5_6_5: extern const UInt
+GL_UNSIGNED_SHORT_4_4_4_4,
+GL_UNSIGNED_SHORT_5_5_5_1,
+GL_UNSIGNED_SHORT_5_6_5,
 
 /* Shaders */
-GL_FRAGMENT_SHADER: extern const UInt
-GL_VERTEX_SHADER: extern const UInt
-GL_MAX_VERTEX_ATTRIBS: extern const UInt
-GL_MAX_VERTEX_UNIFORM_VECTORS: extern const UInt
-GL_MAX_VARYING_VECTORS: extern const UInt
-GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS: extern const UInt
-GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS: extern const UInt
-GL_MAX_TEXTURE_IMAGE_UNITS: extern const UInt
-GL_MAX_FRAGMENT_UNIFORM_VECTORS: extern const UInt
-GL_SHADER_TYPE: extern const UInt
-GL_DELETE_STATUS: extern const UInt
-GL_LINK_STATUS: extern const UInt
-GL_VALIDATE_STATUS: extern const UInt
-GL_ATTACHED_SHADERS: extern const UInt
-GL_ACTIVE_UNIFORMS: extern const UInt
-GL_ACTIVE_UNIFORM_MAX_LENGTH: extern const UInt
-GL_ACTIVE_ATTRIBUTES: extern const UInt
-GL_ACTIVE_ATTRIBUTE_MAX_LENGTH: extern const UInt
-GL_SHADING_LANGUAGE_VERSION: extern const UInt
-GL_CURRENT_PROGRAM: extern const UInt
+GL_FRAGMENT_SHADER,
+GL_VERTEX_SHADER,
+GL_MAX_VERTEX_ATTRIBS,
+GL_MAX_VERTEX_UNIFORM_VECTORS,
+GL_MAX_VARYING_VECTORS,
+GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,
+GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS,
+GL_MAX_TEXTURE_IMAGE_UNITS,
+GL_MAX_FRAGMENT_UNIFORM_VECTORS,
+GL_SHADER_TYPE,
+GL_DELETE_STATUS,
+GL_LINK_STATUS,
+GL_VALIDATE_STATUS,
+GL_ATTACHED_SHADERS,
+GL_ACTIVE_UNIFORMS,
+GL_ACTIVE_UNIFORM_MAX_LENGTH,
+GL_ACTIVE_ATTRIBUTES,
+GL_ACTIVE_ATTRIBUTE_MAX_LENGTH,
+GL_SHADING_LANGUAGE_VERSION,
+GL_CURRENT_PROGRAM,
 
 /* StencilFunction */
-GL_NEVER: extern const UInt
-GL_LESS: extern const UInt
-GL_EQUAL: extern const UInt
-GL_LEQUAL: extern const UInt
-GL_GREATER: extern const UInt
-GL_NOTEQUAL: extern const UInt
-GL_GEQUAL: extern const UInt
-GL_ALWAYS: extern const UInt
+GL_NEVER,
+GL_LESS,
+GL_EQUAL,
+GL_LEQUAL,
+GL_GREATER,
+GL_NOTEQUAL,
+GL_GEQUAL,
+GL_ALWAYS,
 
 /* StencilOp */
 /*      GL_ZERO */
-GL_KEEP: extern const UInt
-GL_REPLACE: extern const UInt
-GL_INCR: extern const UInt
-GL_DECR: extern const UInt
-GL_INVERT: extern const UInt
-GL_INCR_WRAP: extern const UInt
-GL_DECR_WRAP: extern const UInt
+GL_KEEP,
+GL_REPLACE,
+GL_INCR,
+GL_DECR,
+GL_INVERT,
+GL_INCR_WRAP,
+GL_DECR_WRAP,
 
 /* StringName */
-GL_VENDOR: extern const UInt
-GL_RENDERER: extern const UInt
-GL_VERSION: extern const UInt
-GL_EXTENSIONS: extern const UInt
+GL_VENDOR,
+GL_RENDERER,
+GL_VERSION,
+GL_EXTENSIONS,
 
 /* TextureMagFilter */
-GL_NEAREST: extern const UInt
-GL_LINEAR: extern const UInt
+GL_NEAREST,
+GL_LINEAR,
 
 /* TextureMinFilter */
 /*      GL_NEAREST */
 /*      GL_LINEAR */
-GL_NEAREST_MIPMAP_NEAREST: extern const UInt
-GL_LINEAR_MIPMAP_NEAREST: extern const UInt
-GL_NEAREST_MIPMAP_LINEAR: extern const UInt
-GL_LINEAR_MIPMAP_LINEAR: extern const UInt
+GL_NEAREST_MIPMAP_NEAREST,
+GL_LINEAR_MIPMAP_NEAREST,
+GL_NEAREST_MIPMAP_LINEAR,
+GL_LINEAR_MIPMAP_LINEAR,
 
 /* TextureParameterName */
-GL_TEXTURE_MAG_FILTER: extern const UInt
-GL_TEXTURE_MIN_FILTER: extern const UInt
-GL_TEXTURE_WRAP_S: extern const UInt
-GL_TEXTURE_WRAP_T: extern const UInt
+GL_TEXTURE_MAG_FILTER,
+GL_TEXTURE_MIN_FILTER,
+GL_TEXTURE_WRAP_S,
+GL_TEXTURE_WRAP_T,
 
 /* TextureTarget */
 /*      GL_TEXTURE_2D */
-GL_TEXTURE: extern const UInt
+GL_TEXTURE,
 
-GL_TEXTURE_CUBE_MAP: extern const UInt
-GL_TEXTURE_BINDING_CUBE_MAP: extern const UInt
-GL_TEXTURE_CUBE_MAP_POSITIVE_X: extern const UInt
-GL_TEXTURE_CUBE_MAP_NEGATIVE_X: extern const UInt
-GL_TEXTURE_CUBE_MAP_POSITIVE_Y: extern const UInt
-GL_TEXTURE_CUBE_MAP_NEGATIVE_Y: extern const UInt
-GL_TEXTURE_CUBE_MAP_POSITIVE_Z: extern const UInt
-GL_TEXTURE_CUBE_MAP_NEGATIVE_Z: extern const UInt
-GL_MAX_CUBE_MAP_TEXTURE_SIZE: extern const UInt
+GL_TEXTURE_CUBE_MAP,
+GL_TEXTURE_BINDING_CUBE_MAP,
+GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
+GL_MAX_CUBE_MAP_TEXTURE_SIZE,
 
 /* TextureUnit */
-GL_TEXTURE0: extern const UInt
-GL_TEXTURE1: extern const UInt
-GL_TEXTURE2: extern const UInt
-GL_TEXTURE3: extern const UInt
-GL_TEXTURE4: extern const UInt
-GL_TEXTURE5: extern const UInt
-GL_TEXTURE6: extern const UInt
-GL_TEXTURE7: extern const UInt
-GL_TEXTURE8: extern const UInt
-GL_TEXTURE9: extern const UInt
-GL_TEXTURE10: extern const UInt
-GL_TEXTURE11: extern const UInt
-GL_TEXTURE12: extern const UInt
-GL_TEXTURE13: extern const UInt
-GL_TEXTURE14: extern const UInt
-GL_TEXTURE15: extern const UInt
-GL_TEXTURE16: extern const UInt
-GL_TEXTURE17: extern const UInt
-GL_TEXTURE18: extern const UInt
-GL_TEXTURE19: extern const UInt
-GL_TEXTURE20: extern const UInt
-GL_TEXTURE21: extern const UInt
-GL_TEXTURE22: extern const UInt
-GL_TEXTURE23: extern const UInt
-GL_TEXTURE24: extern const UInt
-GL_TEXTURE25: extern const UInt
-GL_TEXTURE26: extern const UInt
-GL_TEXTURE27: extern const UInt
-GL_TEXTURE28: extern const UInt
-GL_TEXTURE29: extern const UInt
-GL_TEXTURE30: extern const UInt
-GL_TEXTURE31: extern const UInt
-GL_ACTIVE_TEXTURE: extern const UInt
+GL_TEXTURE0,
+GL_TEXTURE1,
+GL_TEXTURE2,
+GL_TEXTURE3,
+GL_TEXTURE4,
+GL_TEXTURE5,
+GL_TEXTURE6,
+GL_TEXTURE7,
+GL_TEXTURE8,
+GL_TEXTURE9,
+GL_TEXTURE10,
+GL_TEXTURE11,
+GL_TEXTURE12,
+GL_TEXTURE13,
+GL_TEXTURE14,
+GL_TEXTURE15,
+GL_TEXTURE16,
+GL_TEXTURE17,
+GL_TEXTURE18,
+GL_TEXTURE19,
+GL_TEXTURE20,
+GL_TEXTURE21,
+GL_TEXTURE22,
+GL_TEXTURE23,
+GL_TEXTURE24,
+GL_TEXTURE25,
+GL_TEXTURE26,
+GL_TEXTURE27,
+GL_TEXTURE28,
+GL_TEXTURE29,
+GL_TEXTURE30,
+GL_TEXTURE31,
+GL_ACTIVE_TEXTURE,
 
 /* TextureWrapMode */
-GL_REPEAT: extern const UInt
-GL_CLAMP_TO_EDGE: extern const UInt
-GL_MIRRORED_REPEAT: extern const UInt
+GL_REPEAT,
+GL_CLAMP_TO_EDGE,
+GL_MIRRORED_REPEAT,
 
 /* Uniform Types */
-GL_FLOAT_VEC2: extern const UInt
-GL_FLOAT_VEC3: extern const UInt
-GL_FLOAT_VEC4: extern const UInt
-GL_INT_VEC2: extern const UInt
-GL_INT_VEC3: extern const UInt
-GL_INT_VEC4: extern const UInt
-GL_BOOL: extern const UInt
-GL_BOOL_VEC2: extern const UInt
-GL_BOOL_VEC3: extern const UInt
-GL_BOOL_VEC4: extern const UInt
-GL_FLOAT_MAT2: extern const UInt
-GL_FLOAT_MAT3: extern const UInt
-GL_FLOAT_MAT4: extern const UInt
-GL_SAMPLER_2D: extern const UInt
-GL_SAMPLER_CUBE: extern const UInt
+GL_FLOAT_VEC2,
+GL_FLOAT_VEC3,
+GL_FLOAT_VEC4,
+GL_INT_VEC2,
+GL_INT_VEC3,
+GL_INT_VEC4,
+GL_BOOL,
+GL_BOOL_VEC2,
+GL_BOOL_VEC3,
+GL_BOOL_VEC4,
+GL_FLOAT_MAT2,
+GL_FLOAT_MAT3,
+GL_FLOAT_MAT4,
+GL_SAMPLER_2D,
+GL_SAMPLER_CUBE,
 
 /* Vertex Arrays */
-GL_VERTEX_ATTRIB_ARRAY_ENABLED: extern const UInt
-GL_VERTEX_ATTRIB_ARRAY_SIZE: extern const UInt
-GL_VERTEX_ATTRIB_ARRAY_STRIDE: extern const UInt
-GL_VERTEX_ATTRIB_ARRAY_TYPE: extern const UInt
-GL_VERTEX_ATTRIB_ARRAY_NORMALIZED: extern const UInt
-GL_VERTEX_ATTRIB_ARRAY_POINTER: extern const UInt
-GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: extern const UInt
+GL_VERTEX_ATTRIB_ARRAY_ENABLED,
+GL_VERTEX_ATTRIB_ARRAY_SIZE,
+GL_VERTEX_ATTRIB_ARRAY_STRIDE,
+GL_VERTEX_ATTRIB_ARRAY_TYPE,
+GL_VERTEX_ATTRIB_ARRAY_NORMALIZED,
+GL_VERTEX_ATTRIB_ARRAY_POINTER,
+GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING,
 
 /* Read Format */
-GL_IMPLEMENTATION_COLOR_READ_TYPE: extern const UInt
-GL_IMPLEMENTATION_COLOR_READ_FORMAT: extern const UInt
+GL_IMPLEMENTATION_COLOR_READ_TYPE,
+GL_IMPLEMENTATION_COLOR_READ_FORMAT,
 
 /* Shader Source */
-GL_COMPILE_STATUS: extern const UInt
-GL_INFO_LOG_LENGTH: extern const UInt
-GL_SHADER_SOURCE_LENGTH: extern const UInt
-GL_SHADER_COMPILER: extern const UInt
+GL_COMPILE_STATUS,
+GL_INFO_LOG_LENGTH,
+GL_SHADER_SOURCE_LENGTH,
+GL_SHADER_COMPILER,
 
 /* Shader Binary */
-GL_SHADER_BINARY_FORMATS: extern const UInt
-GL_NUM_SHADER_BINARY_FORMATS: extern const UInt
+GL_SHADER_BINARY_FORMATS,
+GL_NUM_SHADER_BINARY_FORMATS,
 
 /* Shader Precision-Specified Types */
-GL_LOW_FLOAT: extern const UInt
-GL_MEDIUM_FLOAT: extern const UInt
-GL_HIGH_FLOAT: extern const UInt
-GL_LOW_INT: extern const UInt
-GL_MEDIUM_INT: extern const UInt
-GL_HIGH_INT: extern const UInt
+GL_LOW_FLOAT,
+GL_MEDIUM_FLOAT,
+GL_HIGH_FLOAT,
+GL_LOW_INT,
+GL_MEDIUM_INT,
+GL_HIGH_INT,
 
 /* Framebuffer Object. */
-GL_FRAMEBUFFER: extern const UInt
-GL_RENDERBUFFER: extern const UInt
+GL_FRAMEBUFFER,
+GL_RENDERBUFFER,
 
-GL_RGBA4: extern const UInt
-GL_RGB5_A1: extern const UInt
-GL_RGB565: extern const UInt
-GL_DEPTH_COMPONENT16: extern const UInt
-GL_STENCIL_INDEX8: extern const UInt
+GL_RGBA4,
+GL_RGB5_A1,
+GL_RGB565,
+GL_DEPTH_COMPONENT16,
+GL_STENCIL_INDEX8,
 
-GL_RENDERBUFFER_WIDTH: extern const UInt
-GL_RENDERBUFFER_HEIGHT: extern const UInt
-GL_RENDERBUFFER_INTERNAL_FORMAT: extern const UInt
-GL_RENDERBUFFER_RED_SIZE: extern const UInt
-GL_RENDERBUFFER_GREEN_SIZE: extern const UInt
-GL_RENDERBUFFER_BLUE_SIZE: extern const UInt
-GL_RENDERBUFFER_ALPHA_SIZE: extern const UInt
-GL_RENDERBUFFER_DEPTH_SIZE: extern const UInt
-GL_RENDERBUFFER_STENCIL_SIZE: extern const UInt
+GL_RENDERBUFFER_WIDTH,
+GL_RENDERBUFFER_HEIGHT,
+GL_RENDERBUFFER_INTERNAL_FORMAT,
+GL_RENDERBUFFER_RED_SIZE,
+GL_RENDERBUFFER_GREEN_SIZE,
+GL_RENDERBUFFER_BLUE_SIZE,
+GL_RENDERBUFFER_ALPHA_SIZE,
+GL_RENDERBUFFER_DEPTH_SIZE,
+GL_RENDERBUFFER_STENCIL_SIZE,
 
-GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: extern const UInt
-GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: extern const UInt
-GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: extern const UInt
-GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: extern const UInt
+GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE,
+GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME,
+GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL,
+GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE,
 
-GL_COLOR_ATTACHMENT0: extern const UInt
-GL_DEPTH_ATTACHMENT: extern const UInt
-GL_STENCIL_ATTACHMENT: extern const UInt
+GL_COLOR_ATTACHMENT0,
+GL_DEPTH_ATTACHMENT,
+GL_STENCIL_ATTACHMENT,
 
-GL_NONE: extern const UInt
+GL_NONE,
 
-GL_FRAMEBUFFER_COMPLETE: extern const UInt
-GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT             : extern const UInt
-GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT     : extern const UInt
-GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS             : extern const UInt
-GL_FRAMEBUFFER_UNSUPPORTED                       : extern const UInt
+GL_FRAMEBUFFER_COMPLETE,
+GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT,
+GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT,
+GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS,
+GL_FRAMEBUFFER_UNSUPPORTED,
 
-GL_FRAMEBUFFER_BINDING                           : extern const UInt
-GL_RENDERBUFFER_BINDING                          : extern const UInt
-GL_MAX_RENDERBUFFER_SIZE                         : extern const UInt
+GL_FRAMEBUFFER_BINDING,
+GL_RENDERBUFFER_BINDING,
+GL_MAX_RENDERBUFFER_SIZE,
 
-GL_INVALID_FRAMEBUFFER_OPERATION                 : extern const UInt
+GL_INVALID_FRAMEBUFFER_OPERATION,
 
 /* OpenGL ES 3.0 */
 
-GL_READ_BUFFER                                   : extern const UInt
-GL_UNPACK_ROW_LENGTH                             : extern const UInt
-GL_UNPACK_SKIP_ROWS                              : extern const UInt
-GL_UNPACK_SKIP_PIXELS                            : extern const UInt
-GL_PACK_ROW_LENGTH                               : extern const UInt
-GL_PACK_SKIP_ROWS                                : extern const UInt
-GL_PACK_SKIP_PIXELS                              : extern const UInt
-GL_COLOR                                         : extern const UInt
-GL_DEPTH                                         : extern const UInt
-GL_STENCIL                                       : extern const UInt
-GL_RED                                           : extern const UInt
-GL_RGB8                                          : extern const UInt
-GL_RGBA8                                         : extern const UInt
-GL_RGB10_A2                                      : extern const UInt
-GL_TEXTURE_BINDING_3D                            : extern const UInt
-GL_UNPACK_SKIP_IMAGES                            : extern const UInt
-GL_UNPACK_IMAGE_HEIGHT                           : extern const UInt
-GL_TEXTURE_3D                                    : extern const UInt
-GL_TEXTURE_WRAP_R                                : extern const UInt
-GL_MAX_3D_TEXTURE_SIZE                           : extern const UInt
-GL_UNSIGNED_INT_2_10_10_10_REV                   : extern const UInt
-GL_MAX_ELEMENTS_VERTICES                         : extern const UInt
-GL_MAX_ELEMENTS_INDICES                          : extern const UInt
-GL_TEXTURE_MIN_LOD                               : extern const UInt
-GL_TEXTURE_MAX_LOD                               : extern const UInt
-GL_TEXTURE_BASE_LEVEL                            : extern const UInt
-GL_TEXTURE_MAX_LEVEL                             : extern const UInt
-GL_MIN                                           : extern const UInt
-GL_MAX                                           : extern const UInt
-GL_DEPTH_COMPONENT24                             : extern const UInt
-GL_MAX_TEXTURE_LOD_BIAS                          : extern const UInt
-GL_TEXTURE_COMPARE_MODE                          : extern const UInt
-GL_TEXTURE_COMPARE_FUNC                          : extern const UInt
-GL_CURRENT_QUERY                                 : extern const UInt
-GL_QUERY_RESULT                                  : extern const UInt
-GL_QUERY_RESULT_AVAILABLE                        : extern const UInt
-GL_BUFFER_MAPPED                                 : extern const UInt
-GL_BUFFER_MAP_POINTER                            : extern const UInt
-GL_STREAM_READ                                   : extern const UInt
-GL_STREAM_COPY                                   : extern const UInt
-GL_STATIC_READ                                   : extern const UInt
-GL_STATIC_COPY                                   : extern const UInt
-GL_DYNAMIC_READ                                  : extern const UInt
-GL_DYNAMIC_COPY                                  : extern const UInt
-GL_MAX_DRAW_BUFFERS                              : extern const UInt
-GL_DRAW_BUFFER0                                  : extern const UInt
-GL_DRAW_BUFFER1                                  : extern const UInt
-GL_DRAW_BUFFER2                                  : extern const UInt
-GL_DRAW_BUFFER3                                  : extern const UInt
-GL_DRAW_BUFFER4                                  : extern const UInt
-GL_DRAW_BUFFER5                                  : extern const UInt
-GL_DRAW_BUFFER6                                  : extern const UInt
-GL_DRAW_BUFFER7                                  : extern const UInt
-GL_DRAW_BUFFER8                                  : extern const UInt
-GL_DRAW_BUFFER9                                  : extern const UInt
-GL_DRAW_BUFFER10                                 : extern const UInt
-GL_DRAW_BUFFER11                                 : extern const UInt
-GL_DRAW_BUFFER12                                 : extern const UInt
-GL_DRAW_BUFFER13                                 : extern const UInt
-GL_DRAW_BUFFER14                                 : extern const UInt
-GL_DRAW_BUFFER15                                 : extern const UInt
-GL_MAX_FRAGMENT_UNIFORM_COMPONENTS               : extern const UInt
-GL_MAX_VERTEX_UNIFORM_COMPONENTS                 : extern const UInt
-GL_SAMPLER_3D                                    : extern const UInt
-GL_SAMPLER_2D_SHADOW                             : extern const UInt
-GL_FRAGMENT_SHADER_DERIVATIVE_HINT               : extern const UInt
-GL_PIXEL_PACK_BUFFER                             : extern const UInt
-GL_PIXEL_UNPACK_BUFFER                           : extern const UInt
-GL_PIXEL_PACK_BUFFER_BINDING                     : extern const UInt
-GL_PIXEL_UNPACK_BUFFER_BINDING                   : extern const UInt
-GL_FLOAT_MAT2x3                                  : extern const UInt
-GL_FLOAT_MAT2x4                                  : extern const UInt
-GL_FLOAT_MAT3x2                                  : extern const UInt
-GL_FLOAT_MAT3x4                                  : extern const UInt
-GL_FLOAT_MAT4x2                                  : extern const UInt
-GL_FLOAT_MAT4x3                                  : extern const UInt
-GL_SRGB                                          : extern const UInt
-GL_SRGB8                                         : extern const UInt
-GL_SRGB8_ALPHA8                                  : extern const UInt
-GL_COMPARE_REF_TO_TEXTURE                        : extern const UInt
-GL_MAJOR_VERSION                                 : extern const UInt
-GL_MINOR_VERSION                                 : extern const UInt
-GL_NUM_EXTENSIONS                                : extern const UInt
-GL_RGBA32F                                       : extern const UInt
-GL_RGB32F                                        : extern const UInt
-GL_RGBA16F                                       : extern const UInt
-GL_RGB16F                                        : extern const UInt
-GL_VERTEX_ATTRIB_ARRAY_INTEGER                   : extern const UInt
-GL_MAX_ARRAY_TEXTURE_LAYERS                      : extern const UInt
-GL_MIN_PROGRAM_TEXEL_OFFSET                      : extern const UInt
-GL_MAX_PROGRAM_TEXEL_OFFSET                      : extern const UInt
-GL_MAX_VARYING_COMPONENTS                        : extern const UInt
-GL_TEXTURE_2D_ARRAY                              : extern const UInt
-GL_TEXTURE_BINDING_2D_ARRAY                      : extern const UInt
-GL_R11F_G11F_B10F                                : extern const UInt
-GL_UNSIGNED_INT_10F_11F_11F_REV                  : extern const UInt
-GL_RGB9_E5                                       : extern const UInt
-GL_UNSIGNED_INT_5_9_9_9_REV                      : extern const UInt
-GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH         : extern const UInt
-GL_TRANSFORM_FEEDBACK_BUFFER_MODE                : extern const UInt
-GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS    : extern const UInt
-GL_TRANSFORM_FEEDBACK_VARYINGS                   : extern const UInt
-GL_TRANSFORM_FEEDBACK_BUFFER_START               : extern const UInt
-GL_TRANSFORM_FEEDBACK_BUFFER_SIZE                : extern const UInt
-GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN         : extern const UInt
-GL_RASTERIZER_DISCARD                            : extern const UInt
-GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS : extern const UInt
-GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS       : extern const UInt
-GL_INTERLEAVED_ATTRIBS                           : extern const UInt
-GL_SEPARATE_ATTRIBS                              : extern const UInt
-GL_TRANSFORM_FEEDBACK_BUFFER                     : extern const UInt
-GL_TRANSFORM_FEEDBACK_BUFFER_BINDING             : extern const UInt
-GL_RGBA32UI                                      : extern const UInt
-GL_RGB32UI                                       : extern const UInt
-GL_RGBA16UI                                      : extern const UInt
-GL_RGB16UI                                       : extern const UInt
-GL_RGBA8UI                                       : extern const UInt
-GL_RGB8UI                                        : extern const UInt
-GL_RGBA32I                                       : extern const UInt
-GL_RGB32I                                        : extern const UInt
-GL_RGBA16I                                       : extern const UInt
-GL_RGB16I                                        : extern const UInt
-GL_RGBA8I                                        : extern const UInt
-GL_RGB8I                                         : extern const UInt
-GL_RED_INTEGER                                   : extern const UInt
-GL_RGB_INTEGER                                   : extern const UInt
-GL_RGBA_INTEGER                                  : extern const UInt
-GL_SAMPLER_2D_ARRAY                              : extern const UInt
-GL_SAMPLER_2D_ARRAY_SHADOW                       : extern const UInt
-GL_SAMPLER_CUBE_SHADOW                           : extern const UInt
-GL_UNSIGNED_INT_VEC2                             : extern const UInt
-GL_UNSIGNED_INT_VEC3                             : extern const UInt
-GL_UNSIGNED_INT_VEC4                             : extern const UInt
-GL_INT_SAMPLER_2D                                : extern const UInt
-GL_INT_SAMPLER_3D                                : extern const UInt
-GL_INT_SAMPLER_CUBE                              : extern const UInt
-GL_INT_SAMPLER_2D_ARRAY                          : extern const UInt
-GL_UNSIGNED_INT_SAMPLER_2D                       : extern const UInt
-GL_UNSIGNED_INT_SAMPLER_3D                       : extern const UInt
-GL_UNSIGNED_INT_SAMPLER_CUBE                     : extern const UInt
-GL_UNSIGNED_INT_SAMPLER_2D_ARRAY                 : extern const UInt
-GL_BUFFER_ACCESS_FLAGS                           : extern const UInt
-GL_BUFFER_MAP_LENGTH                             : extern const UInt
-GL_BUFFER_MAP_OFFSET                             : extern const UInt
-GL_DEPTH_COMPONENT32F                            : extern const UInt
-GL_DEPTH32F_STENCIL8                             : extern const UInt
-GL_FLOAT_32_UNSIGNED_INT_24_8_REV                : extern const UInt
-GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING         : extern const UInt
-GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE         : extern const UInt
-GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE               : extern const UInt
-GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE             : extern const UInt
-GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE              : extern const UInt
-GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE             : extern const UInt
-GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE             : extern const UInt
-GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE           : extern const UInt
-GL_FRAMEBUFFER_DEFAULT                           : extern const UInt
-GL_FRAMEBUFFER_UNDEFINED                         : extern const UInt
-GL_DEPTH_STENCIL_ATTACHMENT                      : extern const UInt
-GL_DEPTH_STENCIL                                 : extern const UInt
-GL_UNSIGNED_INT_24_8                             : extern const UInt
-GL_DEPTH24_STENCIL8                              : extern const UInt
-GL_UNSIGNED_NORMALIZED                           : extern const UInt
-GL_DRAW_FRAMEBUFFER_BINDING                      : extern const UInt
-GL_READ_FRAMEBUFFER                              : extern const UInt
-GL_DRAW_FRAMEBUFFER                              : extern const UInt
-GL_READ_FRAMEBUFFER_BINDING                      : extern const UInt
-GL_RENDERBUFFER_SAMPLES                          : extern const UInt
-GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER          : extern const UInt
-GL_MAX_COLOR_ATTACHMENTS                         : extern const UInt
-GL_COLOR_ATTACHMENT1                             : extern const UInt
-GL_COLOR_ATTACHMENT2                             : extern const UInt
-GL_COLOR_ATTACHMENT3                             : extern const UInt
-GL_COLOR_ATTACHMENT4                             : extern const UInt
-GL_COLOR_ATTACHMENT5                             : extern const UInt
-GL_COLOR_ATTACHMENT6                             : extern const UInt
-GL_COLOR_ATTACHMENT7                             : extern const UInt
-GL_COLOR_ATTACHMENT8                             : extern const UInt
-GL_COLOR_ATTACHMENT9                             : extern const UInt
-GL_COLOR_ATTACHMENT10                            : extern const UInt
-GL_COLOR_ATTACHMENT11                            : extern const UInt
-GL_COLOR_ATTACHMENT12                            : extern const UInt
-GL_COLOR_ATTACHMENT13                            : extern const UInt
-GL_COLOR_ATTACHMENT14                            : extern const UInt
-GL_COLOR_ATTACHMENT15                            : extern const UInt
-GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE            : extern const UInt
-GL_MAX_SAMPLES                                   : extern const UInt
-GL_HALF_FLOAT                                    : extern const UInt
-GL_MAP_READ_BIT                                  : extern const UInt
-GL_MAP_WRITE_BIT                                 : extern const UInt
-GL_MAP_INVALIDATE_RANGE_BIT                      : extern const UInt
-GL_MAP_INVALIDATE_BUFFER_BIT                     : extern const UInt
-GL_MAP_FLUSH_EXPLICIT_BIT                        : extern const UInt
-GL_MAP_UNSYNCHRONIZED_BIT                        : extern const UInt
-GL_RG                                            : extern const UInt
-GL_RG_INTEGER                                    : extern const UInt
-GL_R8                                            : extern const UInt
-GL_RG8                                           : extern const UInt
-GL_R16F                                          : extern const UInt
-GL_R32F                                          : extern const UInt
-GL_RG16F                                         : extern const UInt
-GL_RG32F                                         : extern const UInt
-GL_R8I                                           : extern const UInt
-GL_R8UI                                          : extern const UInt
-GL_R16I                                          : extern const UInt
-GL_R16UI                                         : extern const UInt
-GL_R32I                                          : extern const UInt
-GL_R32UI                                         : extern const UInt
-GL_RG8I                                          : extern const UInt
-GL_RG8UI                                         : extern const UInt
-GL_RG16I                                         : extern const UInt
-GL_RG16UI                                        : extern const UInt
-GL_RG32I                                         : extern const UInt
-GL_RG32UI                                        : extern const UInt
-GL_VERTEX_ARRAY_BINDING                          : extern const UInt
-GL_R8_SNORM                                      : extern const UInt
-GL_RG8_SNORM                                     : extern const UInt
-GL_RGB8_SNORM                                    : extern const UInt
-GL_RGBA8_SNORM                                   : extern const UInt
-GL_SIGNED_NORMALIZED                             : extern const UInt
-GL_PRIMITIVE_RESTART_FIXED_INDEX                 : extern const UInt
-GL_COPY_READ_BUFFER                              : extern const UInt
-GL_COPY_WRITE_BUFFER                             : extern const UInt
-GL_COPY_READ_BUFFER_BINDING                      : extern const UInt
-GL_COPY_WRITE_BUFFER_BINDING                     : extern const UInt
-GL_UNIFORM_BUFFER                                : extern const UInt
-GL_UNIFORM_BUFFER_BINDING                        : extern const UInt
-GL_UNIFORM_BUFFER_START                          : extern const UInt
-GL_UNIFORM_BUFFER_SIZE                           : extern const UInt
-GL_MAX_VERTEX_UNIFORM_BLOCKS                     : extern const UInt
-GL_MAX_FRAGMENT_UNIFORM_BLOCKS                   : extern const UInt
-GL_MAX_COMBINED_UNIFORM_BLOCKS                   : extern const UInt
-GL_MAX_UNIFORM_BUFFER_BINDINGS                   : extern const UInt
-GL_MAX_UNIFORM_BLOCK_SIZE                        : extern const UInt
-GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS        : extern const UInt
-GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS      : extern const UInt
-GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT               : extern const UInt
-GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH          : extern const UInt
-GL_ACTIVE_UNIFORM_BLOCKS                         : extern const UInt
-GL_UNIFORM_TYPE                                  : extern const UInt
-GL_UNIFORM_SIZE                                  : extern const UInt
-GL_UNIFORM_NAME_LENGTH                           : extern const UInt
-GL_UNIFORM_BLOCK_INDEX                           : extern const UInt
-GL_UNIFORM_OFFSET                                : extern const UInt
-GL_UNIFORM_ARRAY_STRIDE                          : extern const UInt
-GL_UNIFORM_MATRIX_STRIDE                         : extern const UInt
-GL_UNIFORM_IS_ROW_MAJOR                          : extern const UInt
-GL_UNIFORM_BLOCK_BINDING                         : extern const UInt
-GL_UNIFORM_BLOCK_DATA_SIZE                       : extern const UInt
-GL_UNIFORM_BLOCK_NAME_LENGTH                     : extern const UInt
-GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS                 : extern const UInt
-GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES          : extern const UInt
-GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER     : extern const UInt
-GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER   : extern const UInt
-GL_INVALID_INDEX                                 : extern const UInt
-GL_MAX_VERTEX_OUTPUT_COMPONENTS                  : extern const UInt
-GL_MAX_FRAGMENT_INPUT_COMPONENTS                 : extern const UInt
-GL_MAX_SERVER_WAIT_TIMEOUT                       : extern const UInt
-GL_OBJECT_TYPE                                   : extern const UInt
-GL_SYNC_CONDITION                                : extern const UInt
-GL_SYNC_STATUS                                   : extern const UInt
-GL_SYNC_FLAGS                                    : extern const UInt
-GL_SYNC_FENCE                                    : extern const UInt
-GL_SYNC_GPU_COMMANDS_COMPLETE                    : extern const UInt
-GL_UNSIGNALED                                    : extern const UInt
-GL_SIGNALED                                      : extern const UInt
-GL_ALREADY_SIGNALED                              : extern const UInt
-GL_TIMEOUT_EXPIRED                               : extern const UInt
-GL_CONDITION_SATISFIED                           : extern const UInt
-GL_WAIT_FAILED                                   : extern const UInt
-GL_SYNC_FLUSH_COMMANDS_BIT                       : extern const UInt
-GL_TIMEOUT_IGNORED                               : extern const UInt
-GL_VERTEX_ATTRIB_ARRAY_DIVISOR                   : extern const UInt
-GL_ANY_SAMPLES_PASSED                            : extern const UInt
-GL_ANY_SAMPLES_PASSED_CONSERVATIVE               : extern const UInt
-GL_SAMPLER_BINDING                               : extern const UInt
-GL_RGB10_A2UI                                    : extern const UInt
-GL_TEXTURE_SWIZZLE_R                             : extern const UInt
-GL_TEXTURE_SWIZZLE_G                             : extern const UInt
-GL_TEXTURE_SWIZZLE_B                             : extern const UInt
-GL_TEXTURE_SWIZZLE_A                             : extern const UInt
-GL_GREEN                                         : extern const UInt
-GL_BLUE                                          : extern const UInt
-GL_INT_2_10_10_10_REV                            : extern const UInt
-GL_TRANSFORM_FEEDBACK                            : extern const UInt
-GL_TRANSFORM_FEEDBACK_PAUSED                     : extern const UInt
-GL_TRANSFORM_FEEDBACK_ACTIVE                     : extern const UInt
-GL_TRANSFORM_FEEDBACK_BINDING                    : extern const UInt
-GL_PROGRAM_BINARY_RETRIEVABLE_HINT               : extern const UInt
-GL_PROGRAM_BINARY_LENGTH                         : extern const UInt
-GL_NUM_PROGRAM_BINARY_FORMATS                    : extern const UInt
-GL_PROGRAM_BINARY_FORMATS                        : extern const UInt
-GL_COMPRESSED_R11_EAC                            : extern const UInt
-GL_COMPRESSED_SIGNED_R11_EAC                     : extern const UInt
-GL_COMPRESSED_RG11_EAC                           : extern const UInt
-GL_COMPRESSED_SIGNED_RG11_EAC                    : extern const UInt
-GL_COMPRESSED_RGB8_ETC2                          : extern const UInt
-GL_COMPRESSED_SRGB8_ETC2                         : extern const UInt
-GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2      : extern const UInt
-GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2     : extern const UInt
-GL_COMPRESSED_RGBA8_ETC2_EAC                     : extern const UInt
-GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC              : extern const UInt
-GL_TEXTURE_IMMUTABLE_FORMAT                      : extern const UInt
-GL_MAX_ELEMENT_INDEX                             : extern const UInt
-GL_NUM_SAMPLE_COUNTS                             : extern const UInt
-GL_TEXTURE_IMMUTABLE_LEVELS                      : extern const UInt
+GL_READ_BUFFER,
+GL_UNPACK_ROW_LENGTH,
+GL_UNPACK_SKIP_ROWS,
+GL_UNPACK_SKIP_PIXELS,
+GL_PACK_ROW_LENGTH,
+GL_PACK_SKIP_ROWS,
+GL_PACK_SKIP_PIXELS,
+GL_COLOR,
+GL_DEPTH,
+GL_STENCIL,
+GL_RED,
+GL_RGB8,
+GL_RGBA8,
+GL_RGB10_A2,
+GL_TEXTURE_BINDING_3D,
+GL_UNPACK_SKIP_IMAGES,
+GL_UNPACK_IMAGE_HEIGHT,
+GL_TEXTURE_3D,
+GL_TEXTURE_WRAP_R,
+GL_MAX_3D_TEXTURE_SIZE,
+GL_UNSIGNED_INT_2_10_10_10_REV,
+GL_MAX_ELEMENTS_VERTICES,
+GL_MAX_ELEMENTS_INDICES,
+GL_TEXTURE_MIN_LOD,
+GL_TEXTURE_MAX_LOD,
+GL_TEXTURE_BASE_LEVEL,
+GL_TEXTURE_MAX_LEVEL,
+GL_MIN,
+GL_MAX,
+GL_DEPTH_COMPONENT24,
+GL_MAX_TEXTURE_LOD_BIAS,
+GL_TEXTURE_COMPARE_MODE,
+GL_TEXTURE_COMPARE_FUNC,
+GL_CURRENT_QUERY,
+GL_QUERY_RESULT,
+GL_QUERY_RESULT_AVAILABLE,
+GL_BUFFER_MAPPED,
+GL_BUFFER_MAP_POINTER,
+GL_STREAM_READ,
+GL_STREAM_COPY,
+GL_STATIC_READ,
+GL_STATIC_COPY,
+GL_DYNAMIC_READ,
+GL_DYNAMIC_COPY,
+GL_MAX_DRAW_BUFFERS,
+GL_DRAW_BUFFER0,
+GL_DRAW_BUFFER1,
+GL_DRAW_BUFFER2,
+GL_DRAW_BUFFER3,
+GL_DRAW_BUFFER4,
+GL_DRAW_BUFFER5,
+GL_DRAW_BUFFER6,
+GL_DRAW_BUFFER7,
+GL_DRAW_BUFFER8,
+GL_DRAW_BUFFER9,
+GL_DRAW_BUFFER10,
+GL_DRAW_BUFFER11,
+GL_DRAW_BUFFER12,
+GL_DRAW_BUFFER13,
+GL_DRAW_BUFFER14,
+GL_DRAW_BUFFER15,
+GL_MAX_FRAGMENT_UNIFORM_COMPONENTS,
+GL_MAX_VERTEX_UNIFORM_COMPONENTS,
+GL_SAMPLER_3D,
+GL_SAMPLER_2D_SHADOW,
+GL_FRAGMENT_SHADER_DERIVATIVE_HINT,
+GL_PIXEL_PACK_BUFFER,
+GL_PIXEL_UNPACK_BUFFER,
+GL_PIXEL_PACK_BUFFER_BINDING,
+GL_PIXEL_UNPACK_BUFFER_BINDING,
+GL_FLOAT_MAT2x3,
+GL_FLOAT_MAT2x4,
+GL_FLOAT_MAT3x2,
+GL_FLOAT_MAT3x4,
+GL_FLOAT_MAT4x2,
+GL_FLOAT_MAT4x3,
+GL_SRGB,
+GL_SRGB8,
+GL_SRGB8_ALPHA8,
+GL_COMPARE_REF_TO_TEXTURE,
+GL_MAJOR_VERSION,
+GL_MINOR_VERSION,
+GL_NUM_EXTENSIONS,
+GL_RGBA32F,
+GL_RGB32F,
+GL_RGBA16F,
+GL_RGB16F,
+GL_VERTEX_ATTRIB_ARRAY_INTEGER,
+GL_MAX_ARRAY_TEXTURE_LAYERS,
+GL_MIN_PROGRAM_TEXEL_OFFSET,
+GL_MAX_PROGRAM_TEXEL_OFFSET,
+GL_MAX_VARYING_COMPONENTS,
+GL_TEXTURE_2D_ARRAY,
+GL_TEXTURE_BINDING_2D_ARRAY,
+GL_R11F_G11F_B10F,
+GL_UNSIGNED_INT_10F_11F_11F_REV,
+GL_RGB9_E5,
+GL_UNSIGNED_INT_5_9_9_9_REV,
+GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH,
+GL_TRANSFORM_FEEDBACK_BUFFER_MODE,
+GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS,
+GL_TRANSFORM_FEEDBACK_VARYINGS,
+GL_TRANSFORM_FEEDBACK_BUFFER_START,
+GL_TRANSFORM_FEEDBACK_BUFFER_SIZE,
+GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN,
+GL_RASTERIZER_DISCARD,
+GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS ,
+GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS,
+GL_INTERLEAVED_ATTRIBS,
+GL_SEPARATE_ATTRIBS,
+GL_TRANSFORM_FEEDBACK_BUFFER,
+GL_TRANSFORM_FEEDBACK_BUFFER_BINDING,
+GL_RGBA32UI,
+GL_RGB32UI,
+GL_RGBA16UI,
+GL_RGB16UI,
+GL_RGBA8UI,
+GL_RGB8UI,
+GL_RGBA32I,
+GL_RGB32I,
+GL_RGBA16I,
+GL_RGB16I,
+GL_RGBA8I,
+GL_RGB8I,
+GL_RED_INTEGER,
+GL_RGB_INTEGER,
+GL_RGBA_INTEGER,
+GL_SAMPLER_2D_ARRAY,
+GL_SAMPLER_2D_ARRAY_SHADOW,
+GL_SAMPLER_CUBE_SHADOW,
+GL_UNSIGNED_INT_VEC2,
+GL_UNSIGNED_INT_VEC3,
+GL_UNSIGNED_INT_VEC4,
+GL_INT_SAMPLER_2D,
+GL_INT_SAMPLER_3D,
+GL_INT_SAMPLER_CUBE,
+GL_INT_SAMPLER_2D_ARRAY,
+GL_UNSIGNED_INT_SAMPLER_2D,
+GL_UNSIGNED_INT_SAMPLER_3D,
+GL_UNSIGNED_INT_SAMPLER_CUBE,
+GL_UNSIGNED_INT_SAMPLER_2D_ARRAY,
+GL_BUFFER_ACCESS_FLAGS,
+GL_BUFFER_MAP_LENGTH,
+GL_BUFFER_MAP_OFFSET,
+GL_DEPTH_COMPONENT32F,
+GL_DEPTH32F_STENCIL8,
+GL_FLOAT_32_UNSIGNED_INT_24_8_REV,
+GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING,
+GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE,
+GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE,
+GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE,
+GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE,
+GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE,
+GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE,
+GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE,
+GL_FRAMEBUFFER_DEFAULT,
+GL_FRAMEBUFFER_UNDEFINED,
+GL_DEPTH_STENCIL_ATTACHMENT,
+GL_DEPTH_STENCIL,
+GL_UNSIGNED_INT_24_8,
+GL_DEPTH24_STENCIL8,
+GL_UNSIGNED_NORMALIZED,
+GL_DRAW_FRAMEBUFFER_BINDING,
+GL_READ_FRAMEBUFFER,
+GL_DRAW_FRAMEBUFFER,
+GL_READ_FRAMEBUFFER_BINDING,
+GL_RENDERBUFFER_SAMPLES,
+GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER,
+GL_MAX_COLOR_ATTACHMENTS,
+GL_COLOR_ATTACHMENT1,
+GL_COLOR_ATTACHMENT2,
+GL_COLOR_ATTACHMENT3,
+GL_COLOR_ATTACHMENT4,
+GL_COLOR_ATTACHMENT5,
+GL_COLOR_ATTACHMENT6,
+GL_COLOR_ATTACHMENT7,
+GL_COLOR_ATTACHMENT8,
+GL_COLOR_ATTACHMENT9,
+GL_COLOR_ATTACHMENT10,
+GL_COLOR_ATTACHMENT11,
+GL_COLOR_ATTACHMENT12,
+GL_COLOR_ATTACHMENT13,
+GL_COLOR_ATTACHMENT14,
+GL_COLOR_ATTACHMENT15,
+GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE,
+GL_MAX_SAMPLES,
+GL_HALF_FLOAT,
+GL_MAP_READ_BIT,
+GL_MAP_WRITE_BIT,
+GL_MAP_INVALIDATE_RANGE_BIT,
+GL_MAP_INVALIDATE_BUFFER_BIT,
+GL_MAP_FLUSH_EXPLICIT_BIT,
+GL_MAP_UNSYNCHRONIZED_BIT,
+GL_RG,
+GL_RG_INTEGER,
+GL_R8,
+GL_RG8,
+GL_R16F,
+GL_R32F,
+GL_RG16F,
+GL_RG32F,
+GL_R8I,
+GL_R8UI,
+GL_R16I,
+GL_R16UI,
+GL_R32I,
+GL_R32UI,
+GL_RG8I,
+GL_RG8UI,
+GL_RG16I,
+GL_RG16UI,
+GL_RG32I,
+GL_RG32UI,
+GL_VERTEX_ARRAY_BINDING,
+GL_R8_SNORM,
+GL_RG8_SNORM,
+GL_RGB8_SNORM,
+GL_RGBA8_SNORM,
+GL_SIGNED_NORMALIZED,
+GL_PRIMITIVE_RESTART_FIXED_INDEX,
+GL_COPY_READ_BUFFER,
+GL_COPY_WRITE_BUFFER,
+GL_COPY_READ_BUFFER_BINDING,
+GL_COPY_WRITE_BUFFER_BINDING,
+GL_UNIFORM_BUFFER,
+GL_UNIFORM_BUFFER_BINDING,
+GL_UNIFORM_BUFFER_START,
+GL_UNIFORM_BUFFER_SIZE,
+GL_MAX_VERTEX_UNIFORM_BLOCKS,
+GL_MAX_FRAGMENT_UNIFORM_BLOCKS,
+GL_MAX_COMBINED_UNIFORM_BLOCKS,
+GL_MAX_UNIFORM_BUFFER_BINDINGS,
+GL_MAX_UNIFORM_BLOCK_SIZE,
+GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS,
+GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS,
+GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT,
+GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH,
+GL_ACTIVE_UNIFORM_BLOCKS,
+GL_UNIFORM_TYPE,
+GL_UNIFORM_SIZE,
+GL_UNIFORM_NAME_LENGTH,
+GL_UNIFORM_BLOCK_INDEX,
+GL_UNIFORM_OFFSET,
+GL_UNIFORM_ARRAY_STRIDE,
+GL_UNIFORM_MATRIX_STRIDE,
+GL_UNIFORM_IS_ROW_MAJOR,
+GL_UNIFORM_BLOCK_BINDING,
+GL_UNIFORM_BLOCK_DATA_SIZE,
+GL_UNIFORM_BLOCK_NAME_LENGTH,
+GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS,
+GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES,
+GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER,
+GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER,
+GL_INVALID_INDEX,
+GL_MAX_VERTEX_OUTPUT_COMPONENTS,
+GL_MAX_FRAGMENT_INPUT_COMPONENTS,
+GL_MAX_SERVER_WAIT_TIMEOUT,
+GL_OBJECT_TYPE,
+GL_SYNC_CONDITION,
+GL_SYNC_STATUS,
+GL_SYNC_FLAGS,
+GL_SYNC_FENCE,
+GL_SYNC_GPU_COMMANDS_COMPLETE,
+GL_UNSIGNALED,
+GL_SIGNALED,
+GL_ALREADY_SIGNALED,
+GL_TIMEOUT_EXPIRED,
+GL_CONDITION_SATISFIED,
+GL_WAIT_FAILED,
+GL_SYNC_FLUSH_COMMANDS_BIT,
+GL_TIMEOUT_IGNORED,
+GL_VERTEX_ATTRIB_ARRAY_DIVISOR,
+GL_ANY_SAMPLES_PASSED,
+GL_ANY_SAMPLES_PASSED_CONSERVATIVE,
+GL_SAMPLER_BINDING,
+GL_RGB10_A2UI,
+GL_TEXTURE_SWIZZLE_R,
+GL_TEXTURE_SWIZZLE_G,
+GL_TEXTURE_SWIZZLE_B,
+GL_TEXTURE_SWIZZLE_A,
+GL_GREEN,
+GL_BLUE,
+GL_INT_2_10_10_10_REV,
+GL_TRANSFORM_FEEDBACK,
+GL_TRANSFORM_FEEDBACK_PAUSED,
+GL_TRANSFORM_FEEDBACK_ACTIVE,
+GL_TRANSFORM_FEEDBACK_BINDING,
+GL_PROGRAM_BINARY_RETRIEVABLE_HINT,
+GL_PROGRAM_BINARY_LENGTH,
+GL_NUM_PROGRAM_BINARY_FORMATS,
+GL_PROGRAM_BINARY_FORMATS,
+GL_COMPRESSED_R11_EAC,
+GL_COMPRESSED_SIGNED_R11_EAC,
+GL_COMPRESSED_RG11_EAC,
+GL_COMPRESSED_SIGNED_RG11_EAC,
+GL_COMPRESSED_RGB8_ETC2,
+GL_COMPRESSED_SRGB8_ETC2,
+GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,
+GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2,
+GL_COMPRESSED_RGBA8_ETC2_EAC,
+GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC,
+GL_TEXTURE_IMMUTABLE_FORMAT,
+GL_MAX_ELEMENT_INDEX,
+GL_NUM_SAMPLE_COUNTS,
+GL_TEXTURE_IMMUTABLE_LEVELS: extern const UInt
 
 /* OpenGL ES 2.0 */
 
