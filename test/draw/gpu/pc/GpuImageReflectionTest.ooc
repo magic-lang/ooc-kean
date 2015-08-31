@@ -14,7 +14,7 @@ GpuImageReflectionTest: class extends Fixture {
 		super("GpuImageReflectionTest")
 		sourceImage := RasterBgra open("test/draw/gpu/pc/input/Flower.png")
 		this add("GPU reflection X (BGRA)", func {
-			correctImage := RasterBgra open("test/draw/gpu/pc/output/correct/reflection_bgra_X.png")
+			correctImage := RasterBgra open("test/draw/gpu/pc/correct/reflection_bgra_X.png")
 			gpuImage := gpuContext createBgra(sourceImage size)
 			gpuImage canvas clear()
 			gpuImage canvas transform = FloatTransform3D createReflectionX()
@@ -23,7 +23,7 @@ GpuImageReflectionTest: class extends Fixture {
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 		})
 		this add("GPU reflection Y (BGRA)", func {
-			correctImage := RasterBgra open("test/draw/gpu/pc/output/correct/reflection_bgra_Y.png")
+			correctImage := RasterBgra open("test/draw/gpu/pc/correct/reflection_bgra_Y.png")
 			gpuImage := gpuContext createBgra(sourceImage size)
 			gpuImage canvas clear()
 			gpuImage canvas transform = FloatTransform3D createReflectionY()
@@ -32,7 +32,7 @@ GpuImageReflectionTest: class extends Fixture {
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 		})
 		this add("GPU reflection Z (BGRA)", func {
-			correctImage := RasterBgra open("test/draw/gpu/pc/output/correct/reflection_bgra_Z.png")
+			correctImage := RasterBgra open("test/draw/gpu/pc/correct/reflection_bgra_Z.png")
 			gpuImage := gpuContext createBgra(sourceImage size)
 			gpuImage canvas clear()
 			gpuImage canvas transform = FloatTransform3D createReflectionZ()

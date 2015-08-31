@@ -16,7 +16,7 @@ GpuSurfaceTest: class extends Fixture {
 		sourceImage := RasterBgra open("test/draw/gpu/pc/input/quad1.png")
 		sourceSize := sourceImage size
 		this add("draw red quadrant scale 1:1", func {
-			correctImage := RasterBgra open("test/draw/gpu/pc/output/correct/quadrant_red.png")
+			correctImage := RasterBgra open("test/draw/gpu/pc/correct/quadrant_red.png")
 			window := Window new(IntSize2D new(800, 800))
 			gpuContext := window context
 			gpuImage := gpuContext createBgra(sourceSize)
@@ -29,7 +29,7 @@ GpuSurfaceTest: class extends Fixture {
 			window free()
 		})
 		this add("draw yellow quadrant scale 1:1", func {
-			correctImage := RasterBgra open("test/draw/gpu/pc/output/correct/quadrant_yellow.png")
+			correctImage := RasterBgra open("test/draw/gpu/pc/correct/quadrant_yellow.png")
 			window := Window new(IntSize2D new(800, 800))
 			gpuContext := window context
 			gpuImage := gpuContext createBgra(sourceSize)
@@ -42,7 +42,7 @@ GpuSurfaceTest: class extends Fixture {
 			window free()
 		})
 		this add("draw blue quadrant scale 1:1", func {
-			correctImage := RasterBgra open("test/draw/gpu/pc/output/correct/quadrant_blue.png")
+			correctImage := RasterBgra open("test/draw/gpu/pc/correct/quadrant_blue.png")
 			window := Window new(IntSize2D new(800, 800))
 			gpuContext := window context
 			gpuImage := gpuContext createBgra(sourceSize)
@@ -55,7 +55,7 @@ GpuSurfaceTest: class extends Fixture {
 			window free()
 		})
 		this add("draw green quadrant scale 1:1", func {
-			correctImage := RasterBgra open("test/draw/gpu/pc/output/correct/quadrant_green.png")
+			correctImage := RasterBgra open("test/draw/gpu/pc/correct/quadrant_green.png")
 			window := Window new(IntSize2D new(800, 800))
 			gpuContext := window context
 			gpuImage := gpuContext createBgra(sourceSize)
@@ -68,11 +68,11 @@ GpuSurfaceTest: class extends Fixture {
 			window free()
 		})
 		this add("draw combined quadrants", func {
-			quadrantRed := RasterBgra open("test/draw/gpu/pc/output/correct/quadrant_red.png")
-			quadrantYellow := RasterBgra open("test/draw/gpu/pc/output/correct/quadrant_yellow.png")
-			quadrantBlue := RasterBgra open("test/draw/gpu/pc/output/correct/quadrant_blue.png")
-			quadrantGreen := RasterBgra open("test/draw/gpu/pc/output/correct/quadrant_green.png")
-			correctImage := RasterBgra open("test/draw/gpu/pc/output/correct/quad.png")
+			quadrantRed := RasterBgra open("test/draw/gpu/pc/correct/quadrant_red.png")
+			quadrantYellow := RasterBgra open("test/draw/gpu/pc/correct/quadrant_yellow.png")
+			quadrantBlue := RasterBgra open("test/draw/gpu/pc/correct/quadrant_blue.png")
+			quadrantGreen := RasterBgra open("test/draw/gpu/pc/correct/quadrant_green.png")
+			correctImage := RasterBgra open("test/draw/gpu/pc/correct/quad.png")
 			window := Window new(IntSize2D new(800, 800))
 			gpuContext := window context
 			gpuImage := gpuContext createBgra(sourceSize)
@@ -92,7 +92,7 @@ GpuSurfaceTest: class extends Fixture {
 			window free()
 		})
 		this add("draw red quadrant zoomed", func {
-			correctImage := RasterBgra open("test/draw/gpu/pc/output/correct/quadrant_red_zoom.png")
+			correctImage := RasterBgra open("test/draw/gpu/pc/correct/quadrant_red_zoom.png")
 			window := Window new(IntSize2D new(800, 800))
 			gpuContext := window context
 			gpuImage := gpuContext createBgra(sourceSize)
@@ -108,7 +108,7 @@ GpuSurfaceTest: class extends Fixture {
 			window free()
 		})
 		this add("draw quad 1:4 scale top left bottom right and 180deg x rotation", func {
-			correctImage := RasterBgra open("test/draw/gpu/pc/output/correct/quad_scaled_top_left_bottom_right_180deg_x_rotation.png")
+			correctImage := RasterBgra open("test/draw/gpu/pc/correct/quad_scaled_top_left_bottom_right_180deg_x_rotation.png")
 			window := Window new(IntSize2D new(800, 800))
 			gpuContext := window context
 			gpuImage := gpuContext createBgra(sourceSize)
@@ -125,7 +125,7 @@ GpuSurfaceTest: class extends Fixture {
 			window free()
 		})
 		this add("draw shapes", func {
-			correctImage := RasterMonochrome open("test/draw/gpu/pc/output/correct/shapes.png")
+			correctImage := RasterMonochrome open("test/draw/gpu/pc/correct/shapes.png")
 			window := Window new(IntSize2D new(600, 600))
 			gpuContext := window context
 			gpuImage := gpuContext createMonochrome(sourceSize)
