@@ -31,13 +31,13 @@ StringBuilder: class {
 		this init()
 		// This leaks memory
 		//original _stringList apply( func (value: String) { this appendClone(value) })
-		for (i in 0..original count) {
+		for (i in 0 .. original count) {
 			this appendClone(original[i])
 		}
 	}
 	free: func {
-		for (i in 0.._freeList count)
-			if(this _freeList[i])
+		for (i in 0 .. _freeList count)
+			if (this _freeList[i])
 				this _stringList[i] free()
 		this _stringList free()
 		this _freeList free()
@@ -55,7 +55,7 @@ StringBuilder: class {
 		this _freeList add(true)
 	}
 	append: func ~This (other: This) {
-		for (i in 0..other count)
+		for (i in 0 .. other count)
 			this appendClone(other[i])
 	}
 	prepend: func ~String (value: String, free := true) {
@@ -67,12 +67,12 @@ StringBuilder: class {
 		this _freeList insert(0, true)
 	}
 	prepend: func ~This (other: This) {
-		for (i in 0..other count)
+		for (i in 0 .. other count)
 			prependClone(other[other count -1 -i])
 	}
 	toString: func -> String {
 		result := ""
-		for (i in 0..this _stringList count)
+		for (i in 0 .. this _stringList count)
 			result = result >> this _stringList[i]
 		result
 	}
