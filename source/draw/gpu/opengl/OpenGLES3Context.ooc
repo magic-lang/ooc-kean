@@ -19,7 +19,7 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-opengl
 use ooc-collections
-import GpuImageBin, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv420Semiplanar, OpenGLES3Yuv420Planar, OpenGLES3Yuv422Semipacked, OpenGLES3Fence
+import GpuImageBin, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv422Semipacked, OpenGLES3Fence
 import Map/OpenGLES3Map, Map/OpenGLES3MapPack
 import OpenGLES3/Context, OpenGLES3/NativeWindow, OpenGLES3/Lines
 
@@ -149,13 +149,6 @@ OpenGLES3Context: class extends GpuContext {
 			result upload(raster)
 		result
 	}
-	createYuv420Semiplanar: func (size: IntSize2D) -> GpuImage { OpenGLES3Yuv420Semiplanar new(size, this) }
-	createYuv420Semiplanar: func ~fromImages (y: GpuMonochrome, uv: GpuUv) -> GpuYuv420Semiplanar {
-		OpenGLES3Yuv420Semiplanar new(y as OpenGLES3Monochrome, uv as OpenGLES3Uv, this)
-	}
-	_createYuv420Semiplanar: func (raster: RasterYuv420Semiplanar) -> GpuImage { OpenGLES3Yuv420Semiplanar new(raster, this) }
-	createYuv420Planar: func (size: IntSize2D) -> GpuImage { OpenGLES3Yuv420Planar new(size, this) }
-	_createYuv420Planar: func (raster: RasterYuv420Planar) -> GpuImage { OpenGLES3Yuv420Planar new(raster, this) }
 	createYuv422Semipacked: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType yuv422, size)
 		if (result == null)
@@ -176,8 +169,8 @@ OpenGLES3Context: class extends GpuContext {
 			case image: RasterBgr => this _createBgr(image)
 			case image: RasterBgra => this _createBgra(image)
 			case image: RasterUv => this _createUv(image)
-			case image: RasterYuv420Semiplanar => this _createYuv420Semiplanar(image)
-			case image: RasterYuv420Planar => this _createYuv420Planar(image)
+			case image: RasterYuv420Semiplanar => this createYuv420Semiplanar(image)
+			case image: RasterYuv420Planar => this createYuv420Planar(image)
 			case image: RasterYuv422Semipacked => this _createYuv422Semipacked(image)
 			case => Debug raise("Unknown input format in OpenGLES3Context createGpuImage"); null
 		}
