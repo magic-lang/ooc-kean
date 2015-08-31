@@ -67,7 +67,7 @@ IntSize2D: cover {
 		array free()
 		result
 	}
-	new: unmangled(kean_math_intSize2D_new) static func ~API (width: Int, height: Int) -> This { This new(width, height) }
+	new: unmangled (kean_math_intSize2D_new) static func ~API (width, height: Int) -> This { This new(width, height) }
 }
 operator * (left: Int, right: IntSize2D) -> IntSize2D { IntSize2D new(left * right width, left * right height) }
 operator / (left: Int, right: IntSize2D) -> IntSize2D { IntSize2D new(left / right width, left / right height) }

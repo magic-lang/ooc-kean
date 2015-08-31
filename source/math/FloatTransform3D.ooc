@@ -206,15 +206,15 @@ FloatTransform3D: cover {
 		this o == other o &&
 		this p == other p
 	}
-	transformProjected: func(point: FloatPoint2D, focalLength: Float) -> FloatPoint2D {
+	transformProjected: func (point: FloatPoint2D, focalLength: Float) -> FloatPoint2D {
 		transformedWorldPoint := this * FloatPoint3D new(point x, point y, focalLength)
 		this project(transformedWorldPoint, focalLength)
 	}
-	project: func(point: FloatPoint3D, focalLength: Float) -> FloatPoint2D {
+	project: func (point: FloatPoint3D, focalLength: Float) -> FloatPoint2D {
 		projectedPoint := This createProjection(focalLength) * point / point z
 		FloatPoint2D new(projectedPoint x, projectedPoint y)
 	}
-	createProjection: static func(focalLength: Float) -> This {
+	createProjection: static func (focalLength: Float) -> This {
 		This new(focalLength, 0, 0, 0, 0, focalLength, 0, 0, 0, 0, focalLength, 1.0f, 0, 0, 0, 0)
 	}
 	operator != (other: This) -> Bool { !(this == other) }

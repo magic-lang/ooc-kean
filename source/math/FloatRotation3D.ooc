@@ -27,13 +27,13 @@ FloatRotation3D: cover {
 	x := 0.0f
 	y := 0.0f
 	z := 0.0f
-	init: func@ ~full(=x, =y, =z) { }
-	init: func@ ~fromPoint(point: FloatPoint3D) { this init(point x, point y, point z) }
+	init: func@ ~full (=x, =y, =z)
+	init: func@ ~fromPoint (point: FloatPoint3D) { this init(point x, point y, point z) }
 	init: func@ ~default { this init(Quaternion new(0.0f, 0.0f, 0.0f, 0.0f)) }
 	init: func@ ~fromQuaternion (=_quaternion)
 
-	clamp: func ~point(floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
-	clamp: func ~float(floor, ceiling: Float) -> This { This new(this x clamp(floor, ceiling), this y clamp(floor, ceiling), this z clamp(floor, ceiling)) }
+	clamp: func ~point (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
+	clamp: func ~float (floor, ceiling: Float) -> This { This new(this x clamp(floor, ceiling), this y clamp(floor, ceiling), this z clamp(floor, ceiling)) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
 	operator - (other: This) -> This { This new(this x - other x, this y - other y, this z - other z) }
 	operator - -> This { This new(-this x, -this y, -this z) }
@@ -54,10 +54,10 @@ FloatRotation3D: cover {
 	toFloatTransform3D: func -> FloatTransform3D {
 		this _quaternion toFloatTransform3D()
 	}
-	dotProduct: func(other: This) -> Float {
+	dotProduct: func (other: This) -> Float {
 		this _quaternion dotProduct(other _quaternion)
 	}
-	angle: func(other: This) -> Float {
+	angle: func (other: This) -> Float {
 		result := acos(Float absolute(this dotProduct(other))) as Float
 		result = result == result ? result : 0.0f
 	}
