@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2014 - Simon Mika <simon@mika.se>
+ *
+ * This sofware is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software. If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
 use ooc-unit
 use ooc-math
 use ooc-base
@@ -126,9 +143,15 @@ QuaternionTest: class extends Fixture {
 							distX := this angleDistance(quaternion0 rotationX, quaternion1 rotationX)
 							distY := this angleDistance(quaternion0 rotationY, quaternion1 rotationY)
 							distZ := this angleDistance(quaternion0 rotationZ, quaternion1 rotationZ)
-							expect(distX > 0.0f - tolerance && distX < 0.0f + tolerance)
-							expect(distY > 0.0f - tolerance && distY < 0.0f + tolerance)
-							expect(distZ > 0.0f - tolerance && distZ < 0.0f + tolerance)
+							//expect(distX > 0.0f - tolerance && distX < 0.0f + tolerance)
+							expect(distX < 0.0f + tolerance)
+							expect(distX > 0.0f - tolerance)
+							//expect(distY > 0.0f - tolerance && distY < 0.0f + tolerance)
+							expect(distY < 0.0f + tolerance)
+							expect(distY > 0.0f - tolerance)
+							//expect(distZ > 0.0f - tolerance && distZ < 0.0f + tolerance)
+							expect(distZ < 0.0f + tolerance)
+							expect(distZ > 0.0f - tolerance)
 						}
 				r += 30
 			}
@@ -138,7 +161,9 @@ QuaternionTest: class extends Fixture {
 			pitch := Float toRadians(-30.0f)
 			yaw := Float toRadians(45.0f)
 			quaternion := Quaternion createRotationZ(yaw) * Quaternion createRotationY(pitch) * Quaternion createRotationX(roll)
-			expLog := quaternion exponential logarithm
+			//expLog := quaternion exponential logarithm
+			exp := (quaternion exponential)
+			expLog := exp logarithm
 			expect(expLog real, is equal to(quaternion real) within(tolerance))
 		})
 		this add("logarithmExponential", func {
@@ -146,7 +171,9 @@ QuaternionTest: class extends Fixture {
 			pitch := Float toRadians(-30.0f)
 			yaw := Float toRadians(45.0f)
 			quaternion := Quaternion createRotationZ(yaw) * Quaternion createRotationY(pitch) * Quaternion createRotationX(roll)
-			logExp := quaternion logarithm exponential
+			//logExp := quaternion logarithm exponential
+			log := quaternion logarithm
+			logExp := log exponential
 			expect(logExp real, is equal to(quaternion real) within(tolerance))
 		})
 		this add("exponentialLogarithmDistance", func {
@@ -154,7 +181,9 @@ QuaternionTest: class extends Fixture {
 			pitch := Float toRadians(-30.0f)
 			yaw := Float toRadians(45.0f)
 			quaternion := Quaternion createRotationZ(yaw) * Quaternion createRotationY(pitch) * Quaternion createRotationX(roll)
-			expLog := quaternion exponential logarithm
+			//expLog := quaternion exponential logarithm
+			exp := quaternion exponential
+			expLog := exp logarithm
 			expect(expLog imaginary distance(quaternion imaginary), is equal to(0.0f) within(tolerance))
 		})
 		this add("logarithmExponentialDistance", func {
@@ -162,7 +191,9 @@ QuaternionTest: class extends Fixture {
 			pitch := Float toRadians(-30.0f)
 			yaw := Float toRadians(45.0f)
 			quaternion := Quaternion createRotationZ(yaw) * Quaternion createRotationY(pitch) * Quaternion createRotationX(roll)
-			logExp := quaternion exponential logarithm
+			//logExp := quaternion exponential logarithm
+			exp := quaternion exponential
+			logExp := exp logarithm
 			expect(logExp imaginary distance(quaternion imaginary), is equal to(0.0f) within(tolerance))
 		})
 		this add("toFloatTransform3D_1", func {

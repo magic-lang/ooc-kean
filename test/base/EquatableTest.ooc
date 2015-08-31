@@ -36,7 +36,7 @@ EquatableImplementation: class implements IEquatable<This> {
 		this value toString()
 	}
 	create: static func (value: Int) -> IEquatable<Int> {
-		This new(value)
+		This new(value) as IEquatable<Int>
 	}
 }
 EquatableTest new() run()
