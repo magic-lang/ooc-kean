@@ -213,7 +213,7 @@ OpenGLES3MapPoints: class extends OpenGLES3Map {
 	pointSize: Float { get set }
 	projection: FloatTransform3D { get set }
 	init: func (context: GpuContext) {
-		this pointSize = 5.0f
+		this pointSize = 1.0f
 		this color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
 		super(This vertexSource, This fragmentSource, context)
 	}

@@ -191,9 +191,6 @@ ImageFileTest: class extends Fixture {
 			semiplanar := RasterYuv420Semiplanar openRaw(source, IntSize2D new(636, 424))
 			semiplanar save(destination)
 		})
-		this add("Last", func {
-			expect(1, is equal to(1))
-		})
 	}
 }
 ImageFileTest new() run()

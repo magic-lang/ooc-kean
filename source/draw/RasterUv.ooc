@@ -123,10 +123,11 @@ RasterUv: class extends RasterPacked {
 		// FIXME: Find a better way to do this using Dispose() or something
 		memcpy(buffer pointer, data, x * y * requiredComponents)
 		StbImage free(data)
-		This new(RasterBgr new(buffer, IntSize2D new (x, y)))
+		// Is it neccessary to create a RasterBgr here?
+		This new(RasterBgr new(buffer, IntSize2D new(x, y)))
 	}
 	save: override func (filename: String) -> Int {
-		bgr := RasterBgr new(this)
+		bgr := RasterBgr new(this buffer, this size)
 		result := StbImage writePng(filename, bgr size width, bgr size height, bgr bytesPerPixel, bgr buffer pointer, bgr size width * 3)
 		bgr free()
 		result
