@@ -130,15 +130,11 @@ AndroidContext: class extends OpenGLES3Context {
 		this _unpackRgbaToMonochrome targetSize = target y size
 		this _unpackRgbaToMonochrome sourceSize = source size
 		this _unpackRgbaToMonochrome transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
-		//TODO: Verify adaptation to new kean
-		target y canvas map = this _unpackRgbaToMonochrome
-		target y canvas draw(source)
+		target y canvas draw(source, this _unpackRgbaToMonochrome)
 		this _unpackRgbaToUv targetSize = target uv size
 		this _unpackRgbaToUv sourceSize = source size
 		this _unpackRgbaToUv transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
-		//TODO: Verify adaptation to new kean
-		target uv canvas map = this _unpackRgbaToUv
-		target uv canvas draw(source)
+		target uv canvas draw(source, this _unpackRgbaToUv)
 		target
 	}
 

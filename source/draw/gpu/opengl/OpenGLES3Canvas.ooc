@@ -36,10 +36,7 @@ OpenGLES3Canvas: class extends GpuCanvas {
 	}
 	_bind: override func { this _renderTarget bind() }
 	_unbind: override func { this _renderTarget unbind() }
-	onRecycle: func {
-		this reset()
-		this _renderTarget invalidate()
-	}
+	onRecycle: func { this _renderTarget invalidate() }
 	clear: override func {
 		this _bind()
 		Fbo setClearColor(this clearColor red as Float / 255)
@@ -57,15 +54,15 @@ OpenGLES3CanvasYuv420Semiplanar: class extends GpuCanvas {
 		this target uv canvas clearColor = ColorBgra new(128, 128, 128, 128)
 	}
 	onRecycle: func
-	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D) {
+	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
 		if (image instanceOf?(GpuYuv420Semiplanar)) {
 			gpuImage := image as GpuYuv420Semiplanar
 			this target y canvas _view = this _view
 			this target y canvas focalLength = this _focalLength
-			this target y canvas draw(gpuImage y, source, destination)
+			this target y canvas draw(gpuImage y, source, destination, map)
 			this target uv canvas _view = FloatTransform3D createTranslation(-this _view m / 2.0f, -this _view n / 2.0f, -this _view o / 2.0f) * this _view
 			this target uv canvas focalLength = this _focalLength / 2.0f
-			this target uv canvas draw(gpuImage uv, IntBox2D new(source leftTop / 2, source size / 2), IntBox2D new(destination leftTop / 2, destination size / 2))
+			this target uv canvas draw(gpuImage uv, IntBox2D new(source leftTop / 2, source size / 2), IntBox2D new(destination leftTop / 2, destination size / 2), map)
 		}
 	}
 	drawLines: override func (pointList: VectorList<FloatPoint2D>) { this target y canvas drawLines(pointList) }

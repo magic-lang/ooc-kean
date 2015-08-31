@@ -55,12 +55,17 @@ GpuSurface: abstract class {
 	}
 	nearPlane: Float { get set }
 	farPlane: Float { get set }
-	map: GpuMap { get set }
 	_defaultMap: GpuMap
 	_coordinateTransform := IntTransform2D identity
 	init: func (=_size, =_context, =_defaultMap, =_coordinateTransform) {
 		this _toLocal = FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
-		this reset()
+		this clearColor = ColorBgra new(0, 0, 0, 0)
+		this viewport = IntBox2D new(this size)
+		this focalLength = 0.0f
+		this nearPlane = 1.0f
+		this farPlane = 10000.0f
+		this _view = FloatTransform3D identity
+		this blend = false
 	}
 	_createModelTransform: func (box: IntBox2D) -> FloatTransform3D {
 		toReference := FloatTransform3D createTranslation((box size width - this size width) / 2, (this size height - box size height) / 2, 0.0f)
@@ -72,16 +77,7 @@ GpuSurface: abstract class {
 		translation := FloatTransform3D createTranslation(box leftTop x as Float / imageSize width, box leftTop y as Float / imageSize height, 0.0f)
 		translation * scaling
 	}
-	reset: virtual func {
-		this clearColor = ColorBgra new(0, 0, 0, 0)
-		this viewport = IntBox2D new(this size)
-		this focalLength = 0.0f
-		this nearPlane = 1.0f
-		this farPlane = 10000.0f
-		this _view = FloatTransform3D identity
-		this blend = false
-		this map = this _defaultMap
-	}
+	_getDefaultMap: virtual func (image: Image) -> GpuMap { this _defaultMap }
 	_bind: virtual func
 	_unbind: virtual func
 	clear: abstract func
@@ -89,35 +85,40 @@ GpuSurface: abstract class {
 		this _bind()
 		this _context setViewport(this viewport)
 		this _context enableBlend(this blend)
-		this map use()
 		action()
 		this _unbind()
-		this reset()
 	}
-	draw: func ~WithoutBind (destination: IntBox2D) {
-		this map model = this _createModelTransform(destination)
-		this map view = this _view
-		this map projection = this _projection
-		this draw(func { this _context drawQuad() })
+	draw: func ~WithoutBind (destination: IntBox2D, map: GpuMap) {
+		map model = this _createModelTransform(destination)
+		map view = this _view
+		map projection = this _projection
+		this draw(func {
+			map use()
+			this _context drawQuad()
+		})
 	}
-	draw: virtual func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D) {
+	draw: virtual func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
 		image bind(0)
-		this map textureTransform = This _createTextureTransform(image size, source)
-		this draw(destination)
+		map textureTransform = This _createTextureTransform(image size, source)
+		this draw(destination, map)
 	}
-	draw: func ~Image (image: Image, source: IntBox2D, destination: IntBox2D) {
-		if (image instanceOf?(GpuImage)) { this draw~GpuImage(image as GpuImage, source, destination) }
+	draw: func ~Full (image: Image, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
+		if (image instanceOf?(GpuImage)) { this draw(image as GpuImage, source, destination, map) }
 		else if (image instanceOf?(RasterImage)) {
 			temp := this _context createGpuImage(image as RasterImage)
-			this draw~GpuImage(temp as GpuImage, source, destination)
+			this draw(temp as GpuImage, source, destination, map)
 			temp free()
 		}
 		else
 			Debug raise("Trying to draw unsupported image format to OpenGLES3Canvas!")
 	}
-	draw: func ~DefaultImage (image: Image) { this draw(image, IntBox2D new(image size), IntBox2D new(image size)) }
-	draw: func ~Destination (image: Image, destination: IntBox2D) { this draw(image, IntBox2D new(image size), destination)}
-	draw: func ~TargetSize (image: Image, targetSize: IntSize2D) { this draw(image, IntBox2D new(targetSize)) }
+	draw: func ~ImageSourceDestination (image: Image, source: IntBox2D, destination: IntBox2D) { this draw(image, source, destination, this _getDefaultMap(image)) }
+	draw: func ~ImageDestination (image: Image, destination: IntBox2D) { this draw(image, IntBox2D new(image size), destination) }
+	draw: func ~Image (image: Image) { this draw(image, IntBox2D new(image size)) }
+	draw: func ~ImageTargetSize (image: Image, targetSize: IntSize2D) { this draw(image, IntBox2D new(targetSize)) }
+	draw: func ~ImageMap (image: Image, map: GpuMap) { this draw(image, IntBox2D new(image size), IntBox2D new(image size), map)}
+	draw: func ~ImageDestinationMap (image: Image, destination: IntBox2D, map: GpuMap) { this draw(image, IntBox2D new(image size), destination, map) }
+
 	drawLines: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawLines(pointList, this _projection * this _toLocal) }) }
 	drawBox: virtual func (box: FloatBox2D) { this draw(func { this _context drawBox(box, this _projection * this _toLocal) }) }
 	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawPoints(pointList, this _projection * this _toLocal) }) }

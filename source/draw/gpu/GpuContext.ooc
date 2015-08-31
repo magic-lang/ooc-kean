@@ -27,6 +27,7 @@ AlignWidth: enum {
 
 GpuContext: abstract class {
 	_imageBin := GpuImageBin new()
+	defaultMap: GpuMap { get { null } }
 	init: func
 	free: override func {
 		this _imageBin free()
@@ -47,7 +48,6 @@ GpuContext: abstract class {
 	recycle: abstract func ~image (gpuImage: GpuImage)
 	toRaster: virtual func (gpuImage: GpuImage, async: Bool = false) -> RasterImage { gpuImage toRasterDefault() }
 	toRasterAsync: virtual func (gpuImage: GpuImage) -> (RasterImage, GpuFence) { Debug raise("toRasterAsync unimplemented") }
-	getMap: abstract func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap
 	getMaxContexts: func -> Int { 1 }
 	setViewport: abstract func (viewport: IntBox2D)
 	getCurrentIndex: func -> Int { 0 }

@@ -25,14 +25,13 @@ import OpenGLES3/Context, OpenGLES3/NativeWindow, OpenGLES3/Lines
 
 OpenGLES3Context: class extends GpuContext {
 	_backend: Context
-	_defaultMap: OpenGLES3MapDefaultTexture
 	_transformTextureMap: OpenGLES3MapTransformTexture
 	_packMonochrome: OpenGLES3MapPackMonochrome
 	_packUv: OpenGLES3MapPackUv
 	_linesShader: OpenGLES3MapLines
 	_pointsShader: OpenGLES3MapPoints
-
 	_quad: Quad
+	defaultMap: GpuMap { get { this _transformTextureMap } }
 
 	init: func (context: Context) {
 		super()
@@ -42,7 +41,6 @@ OpenGLES3Context: class extends GpuContext {
 		this _pointsShader = OpenGLES3MapPoints new(this)
 		this _backend = context
 		this _quad = Quad create()
-		this _defaultMap = OpenGLES3MapDefaultTexture new(this)
 		this _transformTextureMap = OpenGLES3MapTransformTexture new(this)
 	}
 	init: func ~unshared { this init(Context create()) }
@@ -50,7 +48,6 @@ OpenGLES3Context: class extends GpuContext {
 	init: func ~window (nativeWindow: NativeWindow) { this init(Context create(nativeWindow)) }
 	free: override func {
 		this _backend makeCurrent()
-		this _defaultMap free()
 		this _transformTextureMap free()
 		this _packMonochrome free()
 		this _packUv free()
@@ -94,20 +91,6 @@ OpenGLES3Context: class extends GpuContext {
 		this _pointsShader use()
 		this _pointsShader projection = projection
 		Points draw(positions, pointList count, 2)
-	}
-	getMap: func (gpuImage: GpuImage, mapType := GpuMapType defaultmap) -> GpuMap {
-		result := match (mapType) {
-			case GpuMapType defaultmap => this _defaultMap
-			case GpuMapType transform => this _transformTextureMap
-			case GpuMapType pack =>
-				match (gpuImage) {
-					case (image : GpuMonochrome) => this _packMonochrome
-					case (image : GpuUv) => this _packUv
-					case => null
-				}
-			case => Debug raise("Could not find Map implementation of specified type"); null
-		}
-		result
 	}
 	searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage { this _imageBin find(type, size) }
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
@@ -209,9 +192,8 @@ OpenGLES3Context: class extends GpuContext {
 		} as OpenGLES3MapPack
 		map imageWidth = source size width
 		map channels = source channels
-		target canvas map = map
 		target canvas viewport = viewport
-		target canvas draw(source)
+		target canvas draw(source, map)
 	}
 	createFence: func -> GpuFence { OpenGLES3Fence new() }
 	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) {
