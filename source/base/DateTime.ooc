@@ -271,6 +271,3 @@ DateTime: cover {
 		year >= 1 && month in?(1 .. 13) && day in?(1 .. This daysInMonth(year, month) + 1)
 	}
 }
-
-operator += (date: DateTime@, span: TimeSpan) { date _ticks += span ticks }
-operator -= (date: DateTime@, span: TimeSpan) { date _ticks -= span ticks }

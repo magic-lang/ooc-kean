@@ -44,7 +44,7 @@ ComparableImplementation: class implements IComparable<ComparableImplementation>
 		this value toString()
 	}
 	create: static func (.value) -> IComparable<This> {
-		This new(value)
+		This new(value) as IComparable<This>
 	}
 }
 ComparableTest new() run()
