@@ -26,7 +26,7 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 	}
 	init: func (size: IntSize2D, context: GpuContext) { this init(size, size width, null, CoordinateSystem YUpward, context) }
 	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) { super(texture, size, context) }
-	init: func ~fromRaster(rasterImage: RasterMonochrome, context: GpuContext) {
+	init: func ~fromRaster (rasterImage: RasterMonochrome, context: GpuContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: func -> RasterImage {

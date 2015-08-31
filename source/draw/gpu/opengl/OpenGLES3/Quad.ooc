@@ -33,7 +33,7 @@ Quad: class {
 	draw: func {
 		version(debugGL) { validateStart() }
 		this vao bind()
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)
 		this vao unbind()
 		version(debugGL) { validateEnd("quad draw") }
 	}

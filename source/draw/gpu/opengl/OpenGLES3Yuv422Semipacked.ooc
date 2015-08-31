@@ -42,5 +42,4 @@ OpenGLES3Yuv422Semipacked: class extends GpuYuv422Semipacked {
 		result clearColor = ColorBgra new(128, 128, 128, 128)
 		result
 	}
-
 }
