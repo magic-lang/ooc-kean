@@ -25,7 +25,7 @@ IntShell2D: cover {
 	leftTop ::= IntPoint2D new(this left, this top)
 	intSize2D ::= IntSize2D new(this left + this right, this top + this bottom)
 	balance ::= IntPoint2D new(this right - this left, this bottom - this top)
-	isZero ::= this left == 0 && this right == 0 && this top == 0 && this bottom == 0 
+	isZero ::= this left == 0 && this right == 0 && this top == 0 && this bottom == 0
 	notZero ::= this left != 0 && this right != 0 && this top != 0 && this bottom != 0
 	init: func@ (=left, =right, =top, =bottom)
 	init: func@ ~fromFloat (value: Int) { this init(value, value) }

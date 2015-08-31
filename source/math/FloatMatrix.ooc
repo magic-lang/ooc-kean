@@ -18,16 +18,15 @@ import math
 use ooc-math
 
 FloatMatrix : cover {
-
 	// x = column
 	// y = row
 	dimensions: IntSize2D
-	Dimensions: IntSize2D {get {this dimensions}}
+	Dimensions: IntSize2D { get { this dimensions } }
 	elements: Float[]
 
 	init: func@ ~IntSize2D (= dimensions)
 	init: func@ ~nullConstructor { this init(0, 0) }
-	init: func@ (width: Int, height: Int) {
+	init: func@ (width, height: Int) {
 		this init(IntSize2D new(width, height))
 		this elements = Float[width * height] new()
 	}
@@ -39,7 +38,7 @@ FloatMatrix : cover {
 	// <returns>Identity matrix of given order.</returns>
 	identity: static func@ (order: Int) -> This {
 		result := This new (order, order)
-		for (i in 0..order) {
+		for (i in 0 .. order) {
 			result elements[i + result dimensions width * i] = 1.0f
 		}
 		result
@@ -51,7 +50,7 @@ FloatMatrix : cover {
 	// <param name="x">Column number of a matrix.</param>
 	// <param name="y">Row number of a matrix.</param>
 	// <returns></returns>
-	get: func@ (x: Int, y: Int) -> Float { this elements[x + dimensions width * y] }
+	get: func@ (x, y: Int) -> Float { this elements[x + dimensions width * y] }
 
 	// <summary>
 	// Set an element in a matrix at position(x,y).
@@ -65,18 +64,18 @@ FloatMatrix : cover {
 	// <summary>
 	// True if the matrix is a square matrix.
 	// </summary>
-	isSquare: Bool { get {this Dimensions width  == this Dimensions height} }
+	isSquare: Bool { get { this Dimensions width == this Dimensions height } }
 
 	// <summary>
 	// Minimum of maxtrix dimensions.
 	// </summary>
-	order: Int { get {Int minimum~two(this dimensions height, this dimensions width)}}
+	order: Int { get { Int minimum~two(this dimensions height, this dimensions width) } }
 
 	// <summary>
 	// Creates a copy of the current matrix.
 	// </summary>
 	// <returns>Return a copy of the current matrix.</returns>
-	copy: func@ () -> This {
+	copy: func@ -> This {
 		result := This new(this dimensions width, this dimensions height)
 		memcpy(result elements data, this elements data, this dimensions area * Float size)
 		result
@@ -86,13 +85,11 @@ FloatMatrix : cover {
 	// Tranpose matrix. Creates a new matrix being the transpose of the current matrix.
 	// </summary>
 	// <returns>Return current matrix tranposed.</returns>
-	transpose: func@ () -> This {
+	transpose: func@ -> This {
 		result := This new (this dimensions height, this dimensions width)
-		for (y in 0..this dimensions height) {
-			for (x in 0..this dimensions width) {
+		for (y in 0 .. this dimensions height)
+			for (x in 0 .. this dimensions width)
 				result elements[y + this dimensions height * x] = this elements[x + this dimensions width * y]
-			}
-		}
 		result
 	}
 
@@ -101,11 +98,11 @@ FloatMatrix : cover {
 	// </summary>
 	// <param name="row1">First row</param>
 	// <param name="row2">Second row</param>
-	swaprows: func@ (row1: Int, row2: Int) -> Void {
+	swaprows: func@ (row1, row2: Int) {
 		order := this order
 		buffer: Float
 		if (row1 != row2) {
-			for (i in 0..order) {
+			for (i in 0 .. order) {
 				buffer = this elements[i + this dimensions width * row1]
 				this elements[i + this dimensions width * row1] = this elements[i + this dimensions width * row2]
 				this elements[i + this dimensions width * row2] = buffer
@@ -115,8 +112,8 @@ FloatMatrix : cover {
 
 	toString: func@ -> String {
 		result: String = ""
-		for (y in 0..this dimensions height) {
-			for (x in 0..this dimensions width) {
+		for (y in 0 .. this dimensions height) {
+			for (x in 0 .. this dimensions width) {
  				result += this get(x, y) toString() + ", "
 			}
 			result += "; "
@@ -138,25 +135,25 @@ FloatMatrix : cover {
 		u := this copy()
 		p := This identity(order)
 
-		for (position in 0..order - 1) {
+		for (position in 0 .. order - 1) {
 			pivotRow: Int = position
-			for (y in position + 1..u dimensions height)
+			for (y in position + 1 .. u dimensions height)
 					if (abs(u elements[position + u dimensions width * position]) < abs(u elements[position + u dimensions width * y]))
 						pivotRow = y
 			p swaprows(position, pivotRow)
 			u swaprows(position, pivotRow)
 
 			if (u elements[position + u dimensions width * position] != 0) {
-				for (y in position + 1..order) {
+				for (y in position + 1 .. order) {
 					pivot := u elements[position + u dimensions width * y] / u elements[position + u dimensions width * position]
-					for (x in position..order)
+					for (x in position .. order)
 						u elements[x + u dimensions width * y] = u elements[x + u dimensions width * y] - pivot * u elements[x + u dimensions width * position]
 					u elements[position + u dimensions width * y] = pivot
 				}
 			}
 		}
-		for (y in 0..order)
-			for (x in 0..y) {
+		for (y in 0 .. order)
+			for (x in 0 .. y) {
 				l elements[x + l dimensions width * y] = u elements[x + u dimensions width * y]
 				u elements[x + u dimensions width * y] = 0
 			}
@@ -178,7 +175,7 @@ FloatMatrix : cover {
 			if (this isSquare) {
 				lup := this lupDecomposition()
 				temp := lup[2] * y
-				temp2:= temp forwardSubstitution(lup[0])
+				temp2 := temp forwardSubstitution(lup[0])
 				result = temp2 backwardSubstitution(lup[1])
 				temp dispose()
 				temp2 dispose()
@@ -219,10 +216,10 @@ FloatMatrix : cover {
 	// <returns>Solution x.</returns>
 	forwardSubstitution: func@ (lower: This) -> This {
 		result := This new(this dimensions width, this dimensions height)
-		for (x in 0..this dimensions width) {
-			for (y in 0..this dimensions height) {
+		for (x in 0 .. this dimensions width) {
+			for (y in 0 .. this dimensions height) {
 				accumulator := this elements[x + this dimensions width * y]
-				for (x2 in 0..y) {
+				for (x2 in 0 .. y) {
 					accumulator -= lower elements[x2 + lower dimensions width * y] * result elements[x + result dimensions width * x2]
 				}
 				value := lower elements[y + lower dimensions width * y]
@@ -243,18 +240,18 @@ FloatMatrix : cover {
 	// <returns>Solution x.</returns>
 	backwardSubstitution: func@ (upper: This) -> This {
 		result := This new(this dimensions width, this dimensions height)
-		for (x in 0..this dimensions width) {
+		for (x in 0 .. this dimensions width) {
 			y: Int = 0
-			for (antiY in 0..this dimensions height) {
+			for (antiY in 0 .. this dimensions height) {
 				y = this dimensions height - 1 - antiY
 				accumulator := this elements[x + this dimensions width * y]
-				for (x2 in y + 1..upper dimensions width) {
+				for (x2 in y + 1 .. upper dimensions width) {
 					accumulator -= upper elements[x2 + upper dimensions width * y] * result elements[x + result dimensions width * x2]
 				}
 				value := upper elements[y + upper dimensions width * y]
-				if (value != 0) {
+				if (value != 0)
 					result elements[x + result dimensions width * y] = accumulator / value
-				} else {
+				else {
 					/*DivisionByZeroException new() throw()*/
 				}
 			}
@@ -267,7 +264,6 @@ FloatMatrix : cover {
 			gc_free(this elements data)
 		}
 	}
-
 }
 
 // <summary>
@@ -280,10 +276,10 @@ operator * (left: FloatMatrix, right: FloatMatrix) -> FloatMatrix {
 	if (left dimensions width != right dimensions height)
 		InvalidDimensionsException new() throw()
 	result := FloatMatrix new (right dimensions width, left dimensions height)
-	for (x in 0..right dimensions width) {
-		for (y in 0..left dimensions height) {
+	for (x in 0 .. right dimensions width) {
+		for (y in 0 .. left dimensions height) {
 			temp := result elements[x + result dimensions width * y]
-			for (z in 0..left dimensions width) {
+			for (z in 0 .. left dimensions width) {
 				temp += left elements[z + left dimensions width * y] * right elements[x + right dimensions width * z]
 			}
 			result elements[x + result dimensions width * y] = temp
@@ -293,9 +289,9 @@ result
 }
 
 DivisionByZeroException: class extends Exception {
-	init: func@ ()
+	init: func@
 }
 
 InvalidDimensionsException: class extends Exception {
-	init: func@ ()
+	init: func@
 }

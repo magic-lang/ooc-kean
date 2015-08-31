@@ -85,5 +85,5 @@ Test: class {
 	name: String
 	action: Func
 	init: func (=name, =action)
-	run: func {	this action()	}
+	run: func { this action() }
 }

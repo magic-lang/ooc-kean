@@ -102,11 +102,11 @@ getToken: func (reader: Reader, token: Token*) {
             end := reader mark()
             reader reset(beginning)
             length := (end - beginning - 1) as SizeT
-            
+
             buff := Buffer new(length)
             buff setLength(length)
             reader read(buff data, 0, length)
-            
+
             // advance '"'
             reader read()
             s := String new(buff)
@@ -177,7 +177,7 @@ getToken: func (reader: Reader, token: Token*) {
                 length := (end - beginning - 1) as SizeT
                 s := Buffer new(length)
                 s setLength(length)
-                
+
                 reader reset(beginning)
                 reader read(s data, 0, length)
                 token@ type = TokenType Number
@@ -312,7 +312,7 @@ Parser: class {
     }
 
     getRoot: func <T> (T: Class) -> T {
-        stack get(0, T) as T
+        stack get(0, T)
     }
 
     pushSimpleValue: func (token: Token@) {
@@ -527,4 +527,3 @@ parse: func <T> (reader: Reader, T: Class) -> T {
 parse: func ~string <T> (s: String, T: Class) -> T {
     parse(StringReader new(s), T)
 }
-

@@ -78,7 +78,7 @@ FloatEuclidTransform: cover {
 		this rotationZ == other rotationZ &&
 		this scaling == other scaling
 	}
-	weight: func(other, weight: This) -> This {
+	weight: func (other, weight: This) -> This {
 		This new(
 			this translationX * weight translationX + other translationX * (1 - weight translationX),
 			this translationY * weight translationY + other translationY * (1 - weight translationY),
@@ -100,7 +100,7 @@ FloatEuclidTransform: cover {
 	operator * (value: Float) -> This {
 		This new(this translationX * value, this translationY * value, this rotationX * value, this rotationY * value, this rotationZ * value, (this scaling - 1) * value + 1)
 	}
-	toImageCoordinates: func(zDistance: Float) -> This {
+	toImageCoordinates: func (zDistance: Float) -> This {
 		correction := FloatRotation3D new(this rotation) getTransform(zDistance) * FloatPoint2D new(0.0f, 0.0f)
 		This new(
 			this translationX + correction x,
@@ -110,7 +110,7 @@ FloatEuclidTransform: cover {
 			this rotationZ,
 			this scaling)
 	}
-	toCameraCoordinates: func(zDistance: Float) -> This {
+	toCameraCoordinates: func (zDistance: Float) -> This {
 		correction := FloatRotation3D new(-this rotation) getTransform(zDistance) * FloatPoint2D new(0.0f, 0.0f)
 		This new(
 			this translationX + correction x,
@@ -121,11 +121,11 @@ FloatEuclidTransform: cover {
 			this scaling)
 	}
 	toString: func -> String {
-        " tx: " << "%8f" formatFloat(this translationX) >>
-        " ty: " & "%8f" formatFloat(this translationY) >>
-        " Scale: " & "%8f" formatFloat(this scaling) >>
-        " Rx: " & "%8f" formatFloat(this rotationX) >>
-        " Ry: " & "%8f" formatFloat(this rotationY) >>
-        " Rz: " & "%8f" formatFloat(this rotationZ)
-    }
+		" tx: " << "%8f" formatFloat(this translationX) >>
+		" ty: " & "%8f" formatFloat(this translationY) >>
+		" Scale: " & "%8f" formatFloat(this scaling) >>
+		" Rx: " & "%8f" formatFloat(this rotationX) >>
+		" Ry: " & "%8f" formatFloat(this rotationY) >>
+		" Rz: " & "%8f" formatFloat(this rotationZ)
+	}
 }

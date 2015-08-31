@@ -59,7 +59,7 @@ FloatTransform2D: cover {
 		}
 		result
 	}
-	determinant ::=	this a * this e * this i + this d * this h * this c	+ this g * this b * this f - this g * this e * this c - this d * this b * this i - this a * this h * this f
+	determinant ::= this a * this e * this i + this d * this h * this c + this g * this b * this f - this g * this e * this c - this d * this b * this i - this a * this h * this f
 
 	translation ::= FloatSize2D new(this g, this h)
 	scaling ::= (this scalingX + this scalingY) / 2.0f
@@ -88,7 +88,7 @@ FloatTransform2D: cover {
 	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i)
 	init: func@ ~reduced (a, b, d, e, g, h: Float) { this init(a, b, 0.0f, d, e, 0.0f, g, h, 1.0f) }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f) }
-	setTranslation: func(translation: FloatSize2D) -> This { this translate(translation - this translation) }
+	setTranslation: func (translation: FloatSize2D) -> This { this translate(translation - this translation) }
 	setScaling: func (scaling: Float) -> This { this scale(scaling / this scaling) }
 	setXScaling: func (scaling: Float) -> This { this scale(scaling / this scalingX, 1.0f) }
 	setYScaling: func (scaling: Float) -> This { this scale(1.0f, scaling / this scalingY) }
@@ -112,11 +112,11 @@ FloatTransform2D: cover {
 	}
 	create: static func ~fromEuclid (euclidTransform: FloatEuclidTransform) -> This {
 		k := euclidTransform k
-		translation := FloatTransform2D createTranslation(euclidTransform translationX, euclidTransform translationY)
-		scaling := FloatTransform2D createScaling(euclidTransform scaling)
-		rotationX := FloatTransform2D createXRotation(euclidTransform rotationX, k)
-		rotationY := FloatTransform2D createYRotation(euclidTransform rotationY, k)
-		rotationZ := FloatTransform2D createZRotation(euclidTransform rotationZ)
+		translation := This createTranslation(euclidTransform translationX, euclidTransform translationY)
+		scaling := This createScaling(euclidTransform scaling)
+		rotationX := This createXRotation(euclidTransform rotationX, k)
+		rotationY := This createYRotation(euclidTransform rotationY, k)
+		rotationZ := This createZRotation(euclidTransform rotationZ)
 		//return scaling * translation * rotationZ * rotationY * rotationX
 		return translation * scaling * rotationZ * rotationY * rotationX
 	}
@@ -129,8 +129,8 @@ FloatTransform2D: cover {
 	createScaling: static func ~float (factor: Float) -> This { This createScaling(factor, factor) }
 	createScaling: static func ~size (factor: FloatSize2D) -> This { This createScaling(factor width, factor height) }
 	createZRotation: static func (angle: Float) -> This { This new(angle cos(), angle sin(), -angle sin(), angle cos(), 0.0f, 0.0f) }
-	createXRotation: static func (angle: Float, k: Float) -> This { This new(1 / cos(angle), 0.0f, 0.0f, 0.0f, 1, tan(angle) * k, 0.0f, -tan(angle) / k, 1) }
-	createYRotation: static func (angle: Float, k: Float) -> This { This new(1, 0.0f, tan(angle) * k, 0.0f, 1 / cos(angle), 0.0f, -tan(angle) / k, 0.0f, 1) }
+	createXRotation: static func (angle, k: Float) -> This { This new(1 / cos(angle), 0.0f, 0.0f, 0.0f, 1, tan(angle) * k, 0.0f, -tan(angle) / k, 1) }
+	createYRotation: static func (angle, k: Float) -> This { This new(1, 0.0f, tan(angle) * k, 0.0f, 1 / cos(angle), 0.0f, -tan(angle) / k, 0.0f, 1) }
 	createZRotation: static func ~pivot (angle: Float, pivot: FloatPoint2D) -> This {
 		one := 1.0f
 		sine := angle sin()
@@ -214,8 +214,8 @@ FloatTransform2D: cover {
 	operator != (other: This) -> Bool { !(this == other) }
 	operator as -> String { this toString() }
 	toString: func -> String {
-		"%8f" format(this a) + ", " +"%8f" format(this b) + ", " +"%8f" format(this c) + "\t" +
-		"%8f" format(this d) + ", " +"%8f" format(this e) + ", " +"%8f" format(this f) + "\t" +
-		"%8f" format(this g) + ", " +"%8f" format(this h) + ", " +"%8f" format(this i) + "\t"
+		"%8f" formatFloat(this a) >> ", " & "%8f" formatFloat(this b) >> ", " & "%8f" formatFloat(this c) >> "\t" & \
+		"%8f" formatFloat(this d) >> ", " & "%8f" formatFloat(this e) >> ", " & "%8f" formatFloat(this f) >> "\t" & \
+		"%8f" formatFloat(this g) >> ", " & "%8f" formatFloat(this h) >> ", " & "%8f" formatFloat(this i) >> "\t"
 	}
 }

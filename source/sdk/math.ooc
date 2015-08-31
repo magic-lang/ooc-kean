@@ -202,6 +202,14 @@ extend Double {
 	toDegrees: static func(value: This) -> This {
 		180.0 / PI * value
 	}
+	clamp: func(floor: Double, ceiling: Double) -> This {
+		if (this > ceiling)
+			ceiling
+		else if (this < floor)
+			floor
+		else
+			this
+	}
 }
 
 extend Float {

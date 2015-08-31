@@ -80,7 +80,7 @@ IntBox2D: cover {
 	contains: func ~float (point: FloatPoint2D) -> Bool {
 		this left <= point x && point x < this right && this top <= point y && point y < this bottom
 	}
-	contains: func ~box (box: IntBox2D) -> Bool { this intersection(box) == box }
+	contains: func ~box (box: This) -> Bool { this intersection(box) == box }
 	operator + (other: This) -> This {
 		if (this empty)
 			other
@@ -96,11 +96,9 @@ IntBox2D: cover {
 			intersection(other)
 	}
 	operator + (other: IntPoint2D) -> This { This new(this leftTop + other, this size) }
-	//FIXME: Unary minus bug
-	operator - (other: IntPoint2D) -> This { This new(this leftTop + (-other), this size) }
+	operator - (other: IntPoint2D) -> This { This new(this leftTop - other, this size) }
 	operator + (other: IntSize2D) -> This { This new(this leftTop, this size + other) }
-	//FIXME: Unary minus bug again
-	operator - (other: IntSize2D) -> This { This new(this leftTop, this size + (-other)) }
+	operator - (other: IntSize2D) -> This { This new(this leftTop, this size - other) }
 	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }
 	operator != (other: This) -> Bool { !(this == other) }
 	toFloatBox2D: func -> FloatBox2D { FloatBox2D new(this left, this top, this width, this height) }
@@ -114,8 +112,8 @@ IntBox2D: cover {
 	create: static func ~fromFloats (left, top, width, height: Int) -> This { This new(left, top, width, height) }
 	createAround: static func (center: IntPoint2D, size: IntSize2D) -> This { This new(center + (-size) / 2, size) }
 	bounds: func (left, right, top, bottom: Int) -> This { This new(left, top, right - left, bottom - top) }
-	bounds: func ~fromArray (points: IntPoint2D[]) -> IntBox2D { this bounds(points as ArrayList<IntPoint2D>) }
-	bounds: func ~fromList (points: ArrayList<IntPoint2D>) -> IntBox2D {
+	bounds: func ~fromArray (points: IntPoint2D[]) -> This { this bounds(points as ArrayList<IntPoint2D>) }
+	bounds: func ~fromList (points: ArrayList<IntPoint2D>) -> This {
 		xMinimum := 0
 		xMaximum := xMinimum
 		yMinimum := xMinimum

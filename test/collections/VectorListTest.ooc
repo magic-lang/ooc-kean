@@ -22,7 +22,6 @@ VectorTest: class extends Fixture {
 	init: func {
 		super("VectorList")
 		this add("VectorList cover create", func {
-
 			vectorList := VectorList<Int> new() as VectorList<Int>
 
 			expect(vectorList count, is equal to(0))

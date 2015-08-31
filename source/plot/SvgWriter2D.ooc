@@ -56,7 +56,7 @@ SvgWriter2D: class {
 	free: override func {
 		svgPlots free()
 		file free()
-		super();
+		super()
 	}
 
 	addPlot: func (svgPlot: SvgPlot) {

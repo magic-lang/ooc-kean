@@ -4,7 +4,6 @@ use ooc-unit
 import os/Time
 
 SynchronizedQueueTest: class extends Fixture {
-
 	init: func {
 		queue := SynchronizedQueue<Int> new()
 

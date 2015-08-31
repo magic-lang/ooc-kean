@@ -45,7 +45,7 @@ EventTest: class extends Fixture {
 			counter1 := 0
 			counter2 := 0
 			e := Event1<Int> new()
-			e += Event1<Int> new(func(delta: Int) {	counter0 += delta	})
+			e += Event1<Int> new(func (delta: Int) { counter0 += delta })
 			expect(counter0, is equal to(0))
 			expect(counter1, is equal to(0))
 			expect(counter2, is equal to(0))
@@ -53,7 +53,7 @@ EventTest: class extends Fixture {
 			expect(counter0, is equal to(1))
 			expect(counter1, is equal to(0))
 			expect(counter2, is equal to(0))
-			e += (Event1<Int> new(func(delta: Int) {	counter1 += delta	}))
+			e += (Event1<Int> new(func (delta: Int) { counter1 += delta }))
 			e call(1)
 			expect(counter0, is equal to(2))
 			expect(counter1, is equal to(1))
@@ -64,7 +64,7 @@ EventTest: class extends Fixture {
 			expect(counter2, is equal to(0))
 			/* Not working */
 			//e += (func (delta: Int) {	delta toString() println(); counter2 += delta	})
-			e = e add(func (delta: Int) {	counter2 += delta	})
+			e = e add(func (delta: Int) { counter2 += delta })
 			e call(-1337)
 			expect(counter0, is equal to(2))
 			expect(counter1, is equal to(1))
@@ -82,7 +82,7 @@ EventTest: class extends Fixture {
 			string1 := ""
 			string2 := ""
 			e := Event2<Int, String> new()
-			e += Event2<Int, String> new(func(delta: Int, s: String) {	counter0 += delta; string0 += s	})
+			e += Event2<Int, String> new(func (delta: Int, s: String) { counter0 += delta; string0 += s })
 			expect(counter0, is equal to(0))
 			expect(counter1, is equal to(0))
 			expect(counter2, is equal to(0))
@@ -96,7 +96,7 @@ EventTest: class extends Fixture {
 			expect(string0, is equal to("a"))
 			expect(string1, is equal to(""))
 			expect(string2, is equal to(""))
-			e += (Event2<Int, String> new(func(delta: Int, s: String) {	counter1 += delta; string1 += s	}))
+			e += (Event2<Int, String> new(func (delta: Int, s: String) { counter1 += delta; string1 += s }))
 			e call(1, "b")
 			expect(counter0, is equal to(2))
 			expect(counter1, is equal to(1))
@@ -113,7 +113,7 @@ EventTest: class extends Fixture {
 			expect(string2, is equal to(""))
 			/* Not working */
 			//e += (func (delta: Int, s: String) { counter2 += delta; string2 += s})
-			e = e add(func (delta: Int, s: String) {	counter2 += delta; string2 += s	})
+			e = e add(func (delta: Int, s: String) { counter2 += delta; string2 += s })
 			e call(-1337, "d")
 			expect(counter0, is equal to(2))
 			expect(counter1, is equal to(1))
@@ -121,7 +121,6 @@ EventTest: class extends Fixture {
 			expect(string0, is equal to("abcd"))
 			expect(string1, is equal to("bcd"))
 			expect(string2, is equal to("d"))
-
 	}
 }
 IntCell: class {

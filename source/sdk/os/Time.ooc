@@ -64,8 +64,8 @@ version(!windows) {
 /* implementation */
 
 Time: class {
-	__time_microsec_base := static This runTime
-    __time_millisec_base := static This __time_microsec_base() / 1000
+	__time_microsec_base := static This runTime()
+    __time_millisec_base := static This __time_microsec_base / 1000
 
     /**
         Returns the current date + time as a human-readable string without a trailing newline character.
@@ -135,7 +135,7 @@ Time: class {
         }
         return -1
     }
-	
+
 	/**
 		Gets the number of microseconds elapsed since program start.
 	*/

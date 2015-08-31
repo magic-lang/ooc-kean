@@ -41,7 +41,8 @@ Quaternion: cover {
 	isNull ::= (this w == 0.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
 	norm ::= (this real squared() + (this imaginary norm) squared()) sqrt()
 	normalized ::= this / this norm
-	rotation ::= 2.0f * (this logarithm imaginary) norm
+	logarithmImaginaryNorm ::= ((this logarithm) imaginary) norm
+	rotation ::= 2.0f * this logarithmImaginaryNorm
 	conjugate ::= This new(this real, -(this imaginary))
 	transform ::= this toFloatTransform3D()
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
@@ -109,11 +110,11 @@ Quaternion: cover {
 	hamiltonProduct: static func (left, right: This) -> This {
 		(a1, b1, c1, d1) := (left w, left x, left y, left z)
 		(a2, b2, c2, d2) := (right w, right x, right y, right z)
-		w := a1 * a2 - b1 * b2 - c1 * c2 - d1 * d2;
-		x := a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2;
-		y := a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2;
-		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2;
-		return This new(w, x, y, z);
+		w := a1 * a2 - b1 * b2 - c1 * c2 - d1 * d2
+		x := a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2
+		y := a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2
+		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2
+		return This new(w, x, y, z)
 	}
 	getEulerAngles: func -> FloatRotation3D {
 		// http://www.jldoty.com/code/DirectX/YPRfromUF/YPRfromUF.html
@@ -273,14 +274,14 @@ Quaternion: cover {
 		result := [this w, this x, this y, this z]
 		result
 	}
-	dotProduct: func(other: Quaternion) -> Float {
+	dotProduct: func (other: This) -> Float {
 		this w * other w + this x * other x + this y * other y + this z * other z
 	}
-	sphericalLinearInterpolation: func(other: Quaternion, factor: Float) -> This {
+	sphericalLinearInterpolation: func (other: This, factor: Float) -> This {
 		cosAngle := this dotProduct(other)
 		longPath := cosAngle < 0.0f
 		angle := acos(Float absolute(cosAngle))
-		result: Quaternion
+		result: This
 		if (angle < 1e-10)
 			result = this * (1 - factor) + other * factor
 		else {
@@ -310,14 +311,14 @@ Quaternion: cover {
 			0.0f
 		)
 	}
-	relativeQuaternion: func(other: Quaternion) -> Quaternion {
+	relativeQuaternion: func (other: This) -> This {
 		other * this inverse
 	}
 	toString: func -> String {
 		"Real: " << "%8f" formatFloat(this real) >>
 		" Imaginary: " & "%8f" formatFloat(this imaginary x) >> " " & "%8f" formatFloat(this imaginary y) >> " " & "%8f" formatFloat(this imaginary z)
 	}
-	new: unmangled(kean_math_quaternion_new) static func ~API (w: Float, x: Float, y: Float, z: Float) -> This { This new(w, x, y, z) }
+	new: unmangled (kean_math_quaternion_new) static func ~API (w, x, y, z: Float) -> This { This new(w, x, y, z) }
 }
 operator * (value: Float, other: Quaternion) -> Quaternion {
 	other * value
