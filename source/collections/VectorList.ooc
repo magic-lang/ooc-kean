@@ -145,7 +145,7 @@ VectorList: class <T> {
 		this getSliceInto(start, end, result&)
 	}
 	getSliceInto: func ~indices (start, end: Int, buffer: This<T>@) {
-		length := end - start
+		length := end - start + 1
 		if (buffer _vector capacity < length)
 			buffer _vector resize(length)
 		buffer _count = length
