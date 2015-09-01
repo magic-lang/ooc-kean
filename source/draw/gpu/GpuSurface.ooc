@@ -92,10 +92,10 @@ GpuSurface: abstract class {
 		map model = this _createModelTransform(destination)
 		map view = this _view
 		map projection = this _projection
-		this draw(func {
-			map use()
-			this _context drawQuad()
-		})
+		map use()
+		f := func { this _context drawQuad() }
+		this draw(f)
+		(f as Closure) dispose()
 	}
 	draw: virtual func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
 		image bind(0)
@@ -119,7 +119,19 @@ GpuSurface: abstract class {
 	draw: func ~ImageMap (image: Image, map: GpuMap) { this draw(image, IntBox2D new(image size), IntBox2D new(image size), map)}
 	draw: func ~ImageDestinationMap (image: Image, destination: IntBox2D, map: GpuMap) { this draw(image, IntBox2D new(image size), destination, map) }
 
-	drawLines: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawLines(pointList, this _projection * this _toLocal) }) }
-	drawBox: virtual func (box: FloatBox2D) { this draw(func { this _context drawBox(box, this _projection * this _toLocal) }) }
-	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>) { this draw(func { this _context drawPoints(pointList, this _projection * this _toLocal) }) }
+	drawLines: virtual func (pointList: VectorList<FloatPoint2D>) {
+		f := func { this _context drawLines(pointList, this _projection * this _toLocal) }
+		this draw(f)
+		(f as Closure) dispose()
+	}
+	drawBox: virtual func (box: FloatBox2D) {
+		f := func { this _context drawBox(box, this _projection * this _toLocal) }
+		this draw(f)
+		(f as Closure) dispose()
+	}
+	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>) {
+		f := func { this _context drawPoints(pointList, this _projection * this _toLocal) }
+		this draw(f)
+		(f as Closure) dispose()
+	}
 }
