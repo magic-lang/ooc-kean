@@ -41,7 +41,7 @@ BoolVectorList: class extends VectorList<Bool> {
 	operator []= (index: Int, item: Bool) {
 		this _vector[index] = item
 	}
-	/*operator && (other: This) -> This {
+	operator && (other: This) -> This {
 		minimumCount := this count < other count ? this count : other count
 		result := This new(minimumCount)
 		for (i in 0 .. minimumCount)
@@ -54,7 +54,7 @@ BoolVectorList: class extends VectorList<Bool> {
 		for (i in 0 .. minimumCount)
 			result add(this[i] || other[i])
 		result
-	}*/
+	}
 	reverse: func -> This {
 		result := This new(this _count)
 		for (i in 1 .. (this _count + 1))
@@ -101,20 +101,6 @@ BoolVectorList: class extends VectorList<Bool> {
 		result := ""
 		for (i in 0 .. this _count)
 			result = result >> this[i] toString() >> "\n"
-		result
-	}
-	or: func (other: This) -> This {
-		minimumCount := this count < other count ? this count : other count
-		result := This new(minimumCount)
-		for (i in 0 .. minimumCount)
-			result add(this[i] || other[i])
-		result
-	}
-	and: func (other: This) -> This {
-		minimumCount := this count < other count ? this count : other count
-		result := This new(minimumCount)
-		for (i in 0 .. minimumCount)
-			result add(this[i] && other[i])
 		result
 	}
 }
