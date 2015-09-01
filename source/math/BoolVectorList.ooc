@@ -56,10 +56,7 @@ BoolVectorList: class extends VectorList<Bool> {
 		result
 	}
 	reverse: func -> This {
-		result := This new(this _count)
-		for (i in 1 .. (this _count + 1))
-			result add(this[this _count - i])
-		result
+		(this as VectorList<Bool>) reverse() as This
 	}
 	erosion: func (structuringElementSize: Int) -> This {
 		result := This new(this _count)
