@@ -140,17 +140,12 @@ VectorList: class <T> {
 			result add(this[indices[i]])
 		result
 	}
-	getSlice: func (start, end: Int) -> This<T> {
-		result := This<T> new(end - start + 1)
-		this getSliceInto(start, end, result&)
+	getSlice: func ~range (range: Range) -> This<T> {
+		result := This<T> new(range count)
+		this getSliceInto(range, result&)
 	}
-	getSliceInto: func ~indices (start, end: Int, buffer: This<T>@) {
-		length := end - start + 1
-		if (buffer _vector capacity < length)
-			buffer _vector resize(length)
-		buffer _count = length
-		source := (this _vector _backend + (start * (T size))) as Pointer
-		memcpy(buffer pointer, source, length * (T size))
+	getSlice: func ~indices (start, end: Int) -> This<T> {
+		this getSliceInto(start .. end)
 	}
 	getSliceInto: func ~range (range: Range, buffer: This<T>@) {
 		if (buffer _vector capacity < range count)
@@ -158,5 +153,8 @@ VectorList: class <T> {
 		buffer _count = range count
 		source := (this _vector _backend + (range min * (T size))) as Pointer
 		memcpy(buffer pointer, source, range count * (T size))
+	}
+	getSliceInto: func ~indices (start, end: Int, buffer: This<T>@) {
+		getSliceInto(start .. end, buffer)
 	}
 }
