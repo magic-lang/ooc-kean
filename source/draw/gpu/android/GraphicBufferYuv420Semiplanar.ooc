@@ -16,7 +16,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		ptr := _buffer lock()
 		_buffer unlock()
 		length := 3 * this _stride * size height / 2
-		byteBuffer := ByteBuffer new(ptr, length, func (buffer: ByteBuffer) {} )
+		byteBuffer := ByteBuffer new(ptr, length, func (buffer: ByteBuffer))
 		super(byteBuffer, size, 1, 1)
 	}
 	init: func (backend: Pointer, nativeBuffer: Pointer, handle: Pointer, size: IntSize2D, format: GraphicBufferFormat, stride: Int, uvOffset: Int) {
