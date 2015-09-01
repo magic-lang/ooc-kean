@@ -10,8 +10,8 @@ GraphicBufferAlignTest: class extends Fixture {
 		this add("Align", func {
 			GraphicBuffer _alignedWidth = Int[5] new()
 
-			for(i in 0..5) {
-				GraphicBuffer _alignedWidth[i] = (i+1)*16
+			for (i in 0 .. 5) {
+				GraphicBuffer _alignedWidth[i] = (i + 1) * 16
 				println("Unpadded width: " + GraphicBuffer _alignedWidth[i])
 			}
 			expect((GraphicBuffer alignWidth(5) == 16), is true)
@@ -36,7 +36,6 @@ GraphicBufferAlignTest: class extends Fixture {
 			expect((GraphicBuffer alignWidth(65, AlignWidth Ceiling) == 80), is true)
 			expect((GraphicBuffer alignWidth(80, AlignWidth Ceiling) == 80), is true)
 			expect((GraphicBuffer alignWidth(90, AlignWidth Ceiling) == 80), is true)
-
 		})
 	}
 }
