@@ -6,7 +6,7 @@ use ooc-opengl
 use ooc-base
 import os/Time
 
-Debug initialize(func(s: String) { println(s) })
+Debug initialize(func (s: String) { println(s) })
 
 yuvSize := IntSize2D new(1280, 720)
 rgbaSize := IntSize2D new(yuvSize width / 4, 3 * yuvSize height / 2)
@@ -17,18 +17,18 @@ rasterRgba := RasterBgra new(rgbaSize)
 rgbaPtr := rasterRgba buffer pointer
 
 //Set Y values
-for (i in 0..yuvSize area)
+for (i in 0 .. yuvSize area)
 	rgbaPtr[i] = 2 * i % 255
 rgbaPtr += yuvSize area
 
 //Set padding
-for (i in 0..paddedBytes) {
+for (i in 0 .. paddedBytes) {
 	rgbaPtr[i] = 0
 }
 rgbaPtr += paddedBytes
 
 //Set UV values
-for (i in 0..yuvSize width * yuvSize height / 2)
+for (i in 0 .. yuvSize width * yuvSize height / 2)
 	rgbaPtr[i] = i % 255
 
 window := Window create(yuvSize)
@@ -48,7 +48,7 @@ target uv canvas draw(gpuRgba, unpackRgbaToUv, Viewport new(target uv size))
 yuvRaster := target toRaster() as RasterYuv420Semiplanar
 
 yPtr := yuvRaster y buffer pointer
-for (i in 0..1280 * 720) {
+for (i in 0 .. 1280 * 720) {
 	value: UInt = yPtr[i]
 	expected: UInt = 2* i % 255
 	if (value != expected)
@@ -56,7 +56,7 @@ for (i in 0..1280 * 720) {
 }
 
 uvPtr := yuvRaster uv buffer pointer
-for (i in 0..1280 * 360) {
+for (i in 0 .. 1280 * 360) {
 	value: UInt = uvPtr[i]
 	expected: UInt = i % 255
 	if (value != i % 255) {
@@ -66,7 +66,7 @@ for (i in 0..1280 * 360) {
 }
 //yuvRaster save("test.png")
 
-for (i in 0..100) {
+for (i in 0 .. 100) {
 	window draw(target)
 	window refresh()
 	Time sleepMilli(30)
