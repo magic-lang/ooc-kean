@@ -1,8 +1,11 @@
 sudo: false
 addons:
   apt:
+    sources:
+    - precise-updates
     packages:
     - libgles2-mesa-dev
+    - libgles2-mesa-dev-lts-raring
     - libgc-dev
     - wget
 before_script:
