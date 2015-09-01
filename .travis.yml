@@ -2,6 +2,7 @@ sudo: false
 addons:
   apt:
     packages:
+    - libgles2-mesa-dev
     - libgc-dev
     - wget
 before_script:
