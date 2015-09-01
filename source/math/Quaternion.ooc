@@ -22,7 +22,7 @@ import math
 Quaternion: cover {
 	real: Float
 	imaginary: FloatPoint3D
-	precision := 0.000001f
+	precision: static Float = 1.0e-6f
 	// q = w + xi + yj + zk
 	w ::= this real
 	x ::= this imaginary x
@@ -40,7 +40,7 @@ Quaternion: cover {
 	isIdentity ::= (this w == 1.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
 	isNull ::= (this w == 0.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
 	norm ::= (this real squared() + (this imaginary norm) squared()) sqrt()
-	normalized ::= (this / this norm) as Quaternion
+	normalized ::= (this / this norm) as This
 	logarithmImaginaryNorm ::= ((this logarithm) imaginary) norm
 	rotation ::= 2.0f * this logarithmImaginaryNorm
 	conjugate ::= This new(this real, -(this imaginary))
@@ -158,7 +158,7 @@ Quaternion: cover {
 		get {
 			result: Float
 			value := this w * this y - this z * this x
-			if ((value abs() - 0.5f) abs() < this precision)
+			if ((value abs() - 0.5f) abs() < This precision)
 				result = 0.0f
 			else
 				result = (2.0f * (this w * this x + this y * this z)) atan2(1.0f - 2.0f * (this x squared() + this y squared()))
@@ -169,7 +169,7 @@ Quaternion: cover {
 		get {
 			result: Float
 			value := this w * this y - this z * this x
-			if ((value abs() - 0.5f) abs() < this precision)
+			if ((value abs() - 0.5f) abs() < This precision)
 				result = Float sign(value) * (Float pi / 2.0f)
 			else
 				result = ((2.0f * value) clamp(-1, 1)) asin()
@@ -180,7 +180,7 @@ Quaternion: cover {
 		get {
 			result: Float
 			value := this w * this y - this z * this x
-			if ((value abs() - 0.5f) abs() < this precision)
+			if ((value abs() - 0.5f) abs() < This precision)
 				result = 2.0f * (this z atan2(this w))
 			else
 				result = (2.0f * (this w * this z + this x * this y)) atan2(1.0f - 2.0f * (this y squared() + this z squared()))
@@ -280,9 +280,9 @@ Quaternion: cover {
 	sphericalLinearInterpolation: func (other: This, factor: Float) -> This {
 		cosAngle := this dotProduct(other)
 		longPath := cosAngle < 0.0f
-		angle := acos(Float absolute(cosAngle))
+		angle := acos(Float absolute(cosAngle) as Float clamp(-1.0f, 1.0f))
 		result: This
-		if (angle < 1e-10)
+		if (angle < 1.0e-8f)
 			result = this * (1 - factor) + other * factor
 		else {
 			thisFactor := sin((1 - factor) * angle) / sin(angle)
@@ -313,6 +313,19 @@ Quaternion: cover {
 	}
 	relativeQuaternion: func (other: This) -> This {
 		other * this inverse
+	}
+	relativeFromVelocity: static func (angularVelocity: FloatPoint3D) -> This {
+		result := This identity
+		angle := sqrt(angularVelocity x * angularVelocity x + angularVelocity y * angularVelocity y + angularVelocity z * angularVelocity z)
+		if (angle > 1.0e-8f) {
+			result = This new(
+				cos(angle / 2.0f),
+				angularVelocity x * sin(angle / 2.0f) / angle,
+				angularVelocity y * sin(angle / 2.0f) / angle,
+				angularVelocity z * sin(angle / 2.0f) / angle
+				)
+		}
+		result
 	}
 	toString: func -> String {
 		"Real: " << "%8f" formatFloat(this real) >>

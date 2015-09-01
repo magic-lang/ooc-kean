@@ -22,7 +22,7 @@ GpuTexture: abstract class {
 	generateMipmap: abstract func
 	bind: abstract func (unit: UInt)
 	unbind: abstract func
-	upload: abstract func(pointer: UInt8*, stride: UInt)
+	upload: abstract func (pointer: UInt8*, stride: UInt)
 	setMagFilter: abstract func (linear: Bool)
 	setMinFilter: abstract func (linear: Bool)
 }

@@ -16,9 +16,9 @@
 
 use ooc-math
 use ooc-draw
-import GpuMonochrome, GpuCanvas, GpuPlanar, GpuContext
+import GpuMonochrome, GpuCanvas, GpuContext, GpuImage
 
-GpuYuv420Planar: abstract class extends GpuPlanar {
+GpuYuv420Planar: class extends GpuImage {
 	_y: GpuMonochrome
 	y ::= this _y
 	_u: GpuMonochrome
@@ -26,10 +26,26 @@ GpuYuv420Planar: abstract class extends GpuPlanar {
 	_v: GpuMonochrome
 	v ::= this _v
 	init: func (=_y, =_u, =_v, context: GpuContext) {
-		super(this _y size, context)
+		super(this _y size, 3, context)
 		this _y referenceCount increase()
 		this _u referenceCount increase()
 		this _v referenceCount increase()
+	}
+	init: func ~gpuImages (y: GpuMonochrome, u: GpuMonochrome, v: GpuMonochrome, context: GpuContext) {
+		this init(y, u, v, context)
+		this coordinateSystem = y coordinateSystem
+	}
+	init: func ~empty (size: IntSize2D, context: GpuContext) {
+		y := context createMonochrome(size)
+		u := context createMonochrome(IntSize2D new(size width / 2, size height / 2))
+		v := context createMonochrome(IntSize2D new(size width / 2, size height / 2))
+		this init(y, u, v, context)
+	}
+	init: func ~fromRaster (rasterImage: RasterYuv420Planar, context: GpuContext) {
+		y := context createGpuImage(rasterImage y) as GpuMonochrome
+		u := context createGpuImage(rasterImage u) as GpuMonochrome
+		v := context createGpuImage(rasterImage v) as GpuMonochrome
+		this init(y, u, v, context)
 	}
 	free: override func {
 		this y referenceCount decrease()
@@ -74,10 +90,10 @@ GpuYuv420Planar: abstract class extends GpuPlanar {
 		target
 	}
 	toRasterDefault: func -> RasterImage {
-		y := this _y toRaster()
-		u := this _u toRaster()
-		v := this _v toRaster()
-		result := RasterYuv420Planar new(y as RasterMonochrome, u as RasterMonochrome, v as RasterMonochrome)
-		result
+		y := this _y toRaster() as RasterMonochrome
+		u := this _u toRaster() as RasterMonochrome
+		v := this _v toRaster() as RasterMonochrome
+		RasterYuv420Planar new(y, u, v)
 	}
+	_createCanvas: override func -> GpuCanvas { GpuCanvasYuv420Planar new(this, this _context) }
 }

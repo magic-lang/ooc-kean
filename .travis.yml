@@ -1,7 +1,11 @@
 sudo: false
 addons:
   apt:
+    sources:
+    - precise-updates
     packages:
+    - libgles2-mesa-dev
+    - libgles2-mesa-dev-lts-raring
     - libgc-dev
     - wget
 before_script:
@@ -32,5 +36,5 @@ script:
   - node ./magic
   - echo "travis_fold:end:magic folding ends"
   - echo "travis_fold:start:test folding starts"
-  - ./test.sh nogpu -Dnogpu
+  - ./test.sh draw/gpu/android/Align
   - echo "travis_fold:end:test folding ends"

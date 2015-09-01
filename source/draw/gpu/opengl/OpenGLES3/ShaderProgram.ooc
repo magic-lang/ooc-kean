@@ -142,7 +142,7 @@ ShaderProgram: class {
 		glUniformMatrix4fv(glGetUniformLocation(this _backend, name), 1, 0, value& as Float*)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~Matrix4x4") }
 	}
-	setUniform: func ~Vector3(name: String, value: FloatPoint3D) {
+	setUniform: func ~Vector3 (name: String, value: FloatPoint3D) {
 		version(debugGL) { validateStart() }
 		glUniform3fv(glGetUniformLocation(this _backend, name), 1, value& as Float*)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~Vector3") }
@@ -155,14 +155,14 @@ ShaderProgram: class {
 	// _glCompileShader wraps the call to glCompileShader so that we can isolate this call from the rest
 	// of the calls in _compileShader and be independent of debug symbols for the shared library.
 	_glCompileShader: func (shaderID: UInt) { glCompileShader(shaderID) }
-	_compileShader: func(source: String, shaderID: UInt) -> Bool {
+	_compileShader: func (source: String, shaderID: UInt) -> Bool {
 		version(debugGL) { validateStart() }
 		glShaderSource(shaderID, 1, (source toCString())&, null)
 		this _glCompileShader(shaderID)
 
 		success: Int
 		glGetShaderiv(shaderID, GL_COMPILE_STATUS, success&)
-		if (!success){
+		if (!success) {
 			source println()
 			logSize: Int = 0
 			glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, logSize&)
@@ -178,7 +178,7 @@ ShaderProgram: class {
 		version(debugGL) { validateEnd("ShaderProgram _compileShader") }
 		success != 0
 	}
-	_compileShaders: func(vertexSource: String, fragmentSource: String) -> Bool {
+	_compileShaders: func (vertexSource, fragmentSource: String) -> Bool {
 		version(debugGL) { validateStart() }
 		vertexShaderID := glCreateShader(GL_VERTEX_SHADER)
 		fragmentShaderID := glCreateShader(GL_FRAGMENT_SHADER)
@@ -201,12 +201,11 @@ ShaderProgram: class {
 		version(debugGL) { validateEnd("ShaderProgram _compileShaders") }
 		success
 	}
-	create: static func (vertexSource: String, fragmentSource: String) -> This {
+	create: static func (vertexSource, fragmentSource: String) -> This {
 		version(debugGL) { validateStart() }
 		result := This new()
 		result = result _compileShaders(vertexSource, fragmentSource) ? result : null
 		version(debugGL) { validateEnd("ShaderProgram create") }
 		result
 	}
-
 }

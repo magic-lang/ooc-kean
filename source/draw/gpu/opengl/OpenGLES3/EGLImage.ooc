@@ -55,7 +55,7 @@ EGLImage: class extends Texture {
 			This _initialized = true
 		}
 	}
-	create: static func(type: TextureType, width: Int, height: Int, nativeBuffer: Pointer, display: Pointer) -> This {
+	create: static func (type: TextureType, width: Int, height: Int, nativeBuffer: Pointer, display: Pointer) -> This {
 		This initialize()
 		result: This = null
 		if (type == TextureType rgba || type == TextureType rgb || type == TextureType bgr || type == TextureType rgb || type == TextureType yv12) {

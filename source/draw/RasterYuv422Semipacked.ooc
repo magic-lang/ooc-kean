@@ -35,7 +35,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 	bytesPerPixel: Int { get { 2 } }
 	init: func ~allocate (size: IntSize2D) { super~allocate(size) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, this bytesPerPixel * size width) }
-	init: func ~fromRasterImage (original: RasterImage) { super(original)	}
+	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	createFrom: func ~fromRasterImage (original: RasterImage) {
 		// TODO: What does this function even do?
 //		"RasterYuv420 init ~fromRasterImage, original: (#{original size}), this: (#{this size}), y stride #{this y stride}" println()
@@ -85,9 +85,9 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		width := this size width
 		height := this size height
 
-		for (y in 0..height) {
-			for (x in 0..width) {
-				action(ColorYuv new((source+1)@, (source - 2*(x % 2))@, (source + 2*((x + 1) % 2))@))
+		for (y in 0 .. height) {
+			for (x in 0 .. width) {
+				action(ColorYuv new((source + 1)@, (source - 2*(x % 2))@, (source + 2*((x + 1) % 2))@))
 				source += 2
 			}
 			row += this stride

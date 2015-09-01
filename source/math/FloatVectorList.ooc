@@ -23,7 +23,7 @@ FloatVectorList: class extends VectorList<Float> {
 	init: func ~default {
 		this super()
 	}
-	init: func ~heap (capacity: Int){
+	init: func ~heap (capacity: Int) {
 		super(capacity)
 	}
 	init: func ~fromVectorList (other: VectorList<Float>) {
@@ -49,6 +49,15 @@ FloatVectorList: class extends VectorList<Float> {
 			result := Float negativeInfinity
 			for (i in 0 .. this count)
 				if (result < this[i])
+					result = this[i]
+			result
+		}
+	}
+	minValue: Float {
+		get {
+			result := Float positiveInfinity
+			for (i in 0 .. this count)
+				if (result > this[i])
 					result = this[i]
 			result
 		}

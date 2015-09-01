@@ -39,7 +39,7 @@ AndroidContext: class extends OpenGLES3Context {
 	getPacker: func (size: IntSize2D) -> OpenGLES3Bgra {
 		result: OpenGLES3Bgra = null
 		index := -1
-		for (i in 0..this _packers count) {
+		for (i in 0 .. this _packers count) {
 			if (this _packers[i] size == size) {
 				index = i
 				break
@@ -57,10 +57,7 @@ AndroidContext: class extends OpenGLES3Context {
 	toBuffer: func (gpuImage: GpuImage, packMap: OpenGLES3MapPack) -> (ByteBuffer, GpuFence) {
 		packSize := IntSize2D new(gpuImage size width / (4 / gpuImage channels), gpuImage size height)
 		gpuRgba := this getPacker(packSize)
-		packMap imageWidth = gpuImage size width
-		gpuImage setMagFilter(false)
-		gpuImage setMinFilter(false)
-		gpuRgba canvas draw(gpuImage, packMap, IntBox2D new(gpuRgba size))
+		this packToRgba(gpuImage, gpuRgba, IntBox2D new(gpuRgba size))
 		fence := this createFence()
 		fence sync()
 		androidTexture := gpuRgba texture as AndroidTexture
@@ -91,7 +88,7 @@ AndroidContext: class extends OpenGLES3Context {
 		if (!this isAligned(gpuImage channels * gpuImage size width))
 			result = super(gpuImage, async)
 		else {
-			result = match(gpuImage) {
+			result = match (gpuImage) {
 				case (image : GpuUv) => this toRaster(image, async)
 				case (image : GpuMonochrome) => this toRaster(image, async)
 				case => super(gpuImage)
@@ -99,11 +96,11 @@ AndroidContext: class extends OpenGLES3Context {
 		}
 		result
 	}
-	toRasterAsync: func~monochrome (gpuImage: GpuMonochrome) -> (RasterImage, GpuFence) {
+	toRasterAsync: func ~monochrome (gpuImage: GpuMonochrome) -> (RasterImage, GpuFence) {
 		(buffer, fence) := this toBuffer(gpuImage, this _packMonochrome)
 		(RasterMonochrome new(buffer, gpuImage size), fence)
 	}
-	toRasterAsync: func~uv (gpuImage: GpuUv) -> (RasterImage, GpuFence) {
+	toRasterAsync: func ~uv (gpuImage: GpuUv) -> (RasterImage, GpuFence) {
 		(buffer, fence) := this toBuffer(gpuImage, this _packUv)
 		(RasterUv new(buffer, gpuImage size), fence)
 	}
@@ -113,10 +110,10 @@ AndroidContext: class extends OpenGLES3Context {
 		if (!this isAligned(gpuImage channels * gpuImage size width))
 			(imageResult, fenceResult) = super(gpuImage)
 		else {
-			match(gpuImage) {
+			match (gpuImage) {
 				case (image : GpuMonochrome) => (imageResult, fenceResult) = this toRasterAsync(image)
 				case (image : GpuUv) => (imageResult, fenceResult) = this toRasterAsync(image)
-				case => Debug raise("Unknown format in toRasterAsync");
+				case => Debug raise("Unknown format in toRasterAsync")
 			}
 		}
 		(imageResult, fenceResult)
@@ -132,45 +129,15 @@ AndroidContext: class extends OpenGLES3Context {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
 		this _unpackRgbaToMonochrome targetSize = target y size
 		this _unpackRgbaToMonochrome sourceSize = source size
-		target y canvas draw(source, _unpackRgbaToMonochrome, IntBox2D new(target y size))
+		this _unpackRgbaToMonochrome transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
+		target y canvas draw(source, this _unpackRgbaToMonochrome)
 		this _unpackRgbaToUv targetSize = target uv size
 		this _unpackRgbaToUv sourceSize = source size
-		target uv canvas draw(source, _unpackRgbaToUv, IntBox2D new(target uv size))
+		this _unpackRgbaToUv transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
+		target uv canvas draw(source, this _unpackRgbaToUv)
 		target
 	}
 
-	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }
-	isAligned: override func (width: Int) -> Bool { GraphicBuffer isAligned(width) }
-}
-
-AndroidContextManager: class extends GpuContextManager {
-	_motherContext: AndroidContext
-	_sharedContexts: Bool
-	_mutex: Mutex
-	currentContext: AndroidContext { get { this _getContext() as AndroidContext } }
-	init: func (contexts: Int, sharedContexts := false) {
-		super(contexts)
-		this _sharedContexts = sharedContexts
-		this _mutex = Mutex new()
-	}
-	_createContext: func -> GpuContext {
-		result: GpuContext
-		if (this _sharedContexts) {
-			this _mutex lock()
-			if (this _motherContext == null) {
-				this _motherContext = AndroidContext new()
-				result = this _motherContext
-			} else
-				result = AndroidContext new(this _motherContext)
-			this _mutex unlock()
-		} else
-			result = AndroidContext new()
-		result
-	}
-	createBgra: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> OpenGLES3Bgra { this currentContext createBgra(buffer) }
-	unpackBgraToYuv420Semiplanar: func (source: GpuBgra, targetSize: IntSize2D) -> GpuYuv420Semiplanar {
-		this currentContext unpackBgraToYuv420Semiplanar(source, targetSize)
-	}
 	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }
 	isAligned: override func (width: Int) -> Bool { GraphicBuffer isAligned(width) }
 }

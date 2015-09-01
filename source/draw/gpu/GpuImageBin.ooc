@@ -37,7 +37,7 @@ GpuImageBin: class {
 		this _yuv422 = VectorList<GpuImage> new()
 	}
 	_cleanList: static func (list: VectorList<GpuImage>) {
-		for (i in 0..list count)
+		for (i in 0 .. list count)
 			list[i] _recyclable = false
 		list clear()
 	}
@@ -86,7 +86,7 @@ GpuImageBin: class {
 	_search: func (size: IntSize2D, list: VectorList<GpuImage>) -> GpuImage {
 		result := null
 		index := -1
-		for (i in 0..list count) {
+		for (i in 0 .. list count) {
 			image := list[i]
 			if (image size width == size width && image size height == size height) {
 				index = i
