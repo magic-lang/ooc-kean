@@ -152,7 +152,6 @@ TimeSpan: cover {
 	}
 }
 
-
 operator + (left: Int, right: TimeSpan) -> TimeSpan { right + left }
 operator + (left: Int64, right: TimeSpan) -> TimeSpan { right + left }
 operator + (left: Double, right: TimeSpan) -> TimeSpan { right + left }

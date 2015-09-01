@@ -31,7 +31,7 @@ RasterUv: class extends RasterPacked {
 	init: func ~allocateStride (size: IntSize2D, stride: UInt) { super(size, stride) }
 	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntSize2D, stride: UInt) { super(buffer, size, stride) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { this init(buffer, size, this bytesPerPixel * size width) }
-	init: func ~fromRasterImage (original: RasterImage) { super(original)	}
+	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This {
 		result := This new(this)
@@ -49,8 +49,8 @@ RasterUv: class extends RasterPacked {
 		width := this size width
 		height := this size height
 
-		for (y in 0..height) {
-			for (x in 0..width) {
+		for (y in 0 .. height) {
+			for (x in 0 .. width) {
 				action(ColorYuv new(128, uSource@, vSource@))
 				uSource += 2
 				vSource += 2
@@ -64,7 +64,6 @@ RasterUv: class extends RasterPacked {
 		this apply(ColorConvert fromYuv(action))
 	}
 
-
 	distance: func (other: Image) -> Float {
 		result := 0.0f
 		if (!other)
@@ -74,17 +73,17 @@ RasterUv: class extends RasterPacked {
 //		else if (this size != other size)
 //			FIXME
 		else {
-			for (y in 0..this size height)
-				for (x in 0..this size width) {
+			for (y in 0 .. this size height)
+				for (x in 0 .. this size width) {
 					c := this[x, y]
-					o := (other as RasterUv)[x, y]
+					o := (other as This)[x, y]
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in Int maximum~two(0, y - this distanceRadius)..Int minimum~two(y + 1 + this distanceRadius, this size height))
-							for (otherX in Int maximum~two(0, x - this distanceRadius)..Int minimum~two(x + 1 + this distanceRadius, this size width))
+						for (otherY in Int maximum~two(0, y - this distanceRadius) .. Int minimum~two(y + 1 + this distanceRadius, this size height))
+							for (otherX in Int maximum~two(0, x - this distanceRadius) .. Int minimum~two(x + 1 + this distanceRadius, this size width))
 								if (otherX != x || otherY != y) {
-									pixel := (other as RasterUv)[otherX, otherY]
+									pixel := (other as This)[otherX, otherY]
 									if (maximum u < pixel u)
 										maximum u = pixel u
 									else if (minimum u > pixel u)
@@ -94,7 +93,7 @@ RasterUv: class extends RasterPacked {
 									else if (minimum v > pixel v)
 										minimum v = pixel v
 								}
-						distance := 0.0f;
+						distance := 0.0f
 						if (c u < minimum u)
 							distance += (minimum u - c u) as Float squared()
 						else if (c u > maximum u)
@@ -103,7 +102,7 @@ RasterUv: class extends RasterPacked {
 							distance += (minimum v - c v) as Float squared()
 						else if (c v > maximum v)
 							distance += (c v - maximum v) as Float squared()
-						result += (distance) sqrt() / 3;
+						result += (distance) sqrt() / 3
 					}
 				}
 			result /= ((this size width squared() + this size height squared()) as Float sqrt())
@@ -132,7 +131,7 @@ RasterUv: class extends RasterPacked {
 		bgr free()
 		result
 	}
-	convertFrom: static func(original: RasterImage) -> This {
+	convertFrom: static func (original: RasterImage) -> This {
 		result := This new(original)
 		row := result buffer pointer
 		rowLength := result size width

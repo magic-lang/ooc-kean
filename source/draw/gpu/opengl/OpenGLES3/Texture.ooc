@@ -185,11 +185,10 @@ Texture: class {
 	}
 	create: static func (type: TextureType, width: UInt, height: UInt, stride: UInt, pixels := null, allocate : Bool = true) -> This {
 		version(debugGL) { validateStart() }
-		result := Texture new(type, width, height)
+		result := This new(type, width, height)
 		success := result _generate(pixels, stride, allocate)
 		result = success ? result : null
 		version(debugGL) { validateEnd("Texture create") }
 		result
 	}
-
 }

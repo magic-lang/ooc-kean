@@ -21,7 +21,7 @@ use ooc-math
 Lines: class {
 	draw: static func (positions: Float*, count: Int, dimensions: Int, lineWidth: Float) {
 		glLineWidth(lineWidth)
-		glBindVertexArray(0);
+		glBindVertexArray(0)
 		glEnableVertexAttribArray(0)
 		glVertexAttribPointer(0, dimensions, GL_FLOAT, 0, 0, positions)
 		glDrawArrays(GL_LINE_STRIP, 0, count)
@@ -30,7 +30,7 @@ Lines: class {
 }
 Points: class {
 	draw: static func (positions: Float*, count: Int, dimensions: Int) {
-		glBindVertexArray(0);
+		glBindVertexArray(0)
 		glEnableVertexAttribArray(0)
 		glVertexAttribPointer(0, dimensions, GL_FLOAT, 0, 0, positions)
 		glDrawArrays(GL_POINTS, 0, count)

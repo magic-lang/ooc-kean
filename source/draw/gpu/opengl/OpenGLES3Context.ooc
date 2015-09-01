@@ -179,7 +179,7 @@ OpenGLES3Context: class extends GpuContext {
 	setViewport: func (viewport: IntBox2D) { Fbo setViewport(viewport) }
 	enableBlend: func (blend: Bool) { Fbo enableBlend(blend) }
 	packToRgba: func (source: GpuImage, target: GpuBgra, viewport: IntBox2D) {
-		map := match(source) {
+		map := match (source) {
 			case sourceImage: GpuMonochrome => this _packMonochrome
 			case sourceImage: GpuUv => this _packUv
 		} as OpenGLES3MapPack

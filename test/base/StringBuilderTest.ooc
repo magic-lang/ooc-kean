@@ -39,22 +39,22 @@ StringBuilderTest: class extends Fixture {
 			expect(sb toString(), is equal to("Hello World String"))
 			sb2 := StringBuilder new("Dlrow olleh ")
 			sb2 append(sb)
-			expect(sb2 count, is equal to(3))
-			expect(sb2 toString(), is equal to("Dlrow olleh Hello World"))
+			expect(sb2 count, is equal to(4))
+			expect(sb2 toString(), is equal to("Dlrow olleh Hello World String"))
 		})
 		this add("prepend", func {
 			sb := StringBuilder new("World")
 			sb prepend("Hello ")
 			expect(sb count, is equal to(2))
 			expect(sb toString(), is equal to("Hello World"))
-			myString := " String"
+			myString := "String "
 			sb prependClone(myString)
 			expect(sb count, is equal to(3))
-			expect(sb toString(), is equal to("Hello World String"))
+			expect(sb toString(), is equal to("String Hello World"))
 			sb2 := StringBuilder new(" Dlrow olleh")
 			sb2 prepend(sb)
-			expect(sb2 count, is equal to(3))
-			expect(sb2 toString(), is equal to("Hello World Dlrow olleh"))
+			expect(sb2 count, is equal to(4))
+			expect(sb2 toString(), is equal to("String Hello World Dlrow olleh"))
 		})
 		this add("copy", func {
 			sb := StringBuilder new("Hello World")

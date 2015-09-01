@@ -27,7 +27,7 @@ import Color
 
 RasterYuv420Planar: class extends RasterYuvPlanar {
 	stride ::= this _y stride
-	init: func ~fromRasterImages (y: RasterMonochrome, u: RasterMonochrome, v: RasterMonochrome) { super(y, u, v) }
+	init: func ~fromRasterImages (y, u, v: RasterMonochrome) { super(y, u, v) }
 	init: func ~allocateOffset (size: IntSize2D, stride: UInt, uOffset: UInt, vOffset: UInt) {
 		(yImage, uImage, vImage) := This _allocate(size, stride, uOffset, vOffset)
 		this init(yImage, uImage, vImage)
@@ -41,7 +41,7 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 	init: func ~fromThis (original: This) {
 		uOffset := original stride * original size height
 		vOffset := uOffset + original stride * original size height / 4
-		(yImage, uImage, vImage) := RasterYuv420Planar _allocate(original size, original stride, uOffset, vOffset)
+		(yImage, uImage, vImage) := This _allocate(original size, original stride, uOffset, vOffset)
 		super(original, yImage, uImage, vImage)
 	}
 	_allocate: static func (size: IntSize2D, stride: UInt, uOffset: UInt, vOffset: UInt) -> (RasterMonochrome, RasterMonochrome, RasterMonochrome) {
@@ -75,8 +75,8 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		width := this size width
 		height := this size height
 
-		for (y in 0..height) {
-			for (x in 0..width) {
+		for (y in 0 .. height) {
+			for (x in 0 .. width) {
 				action(ColorYuv new(ySource@, uSource@, vSource@))
 				ySource += 1
 				if (x % 2 == 1) {
@@ -95,7 +95,7 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		}
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) { this apply(ColorConvert fromYuv(action)) }
-	convertFrom: static func(original: RasterImage) -> This {
+	convertFrom: static func (original: RasterImage) -> This {
 		result := This new(original size)
 		y := 0
 		x := 0
@@ -136,11 +136,11 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 	}
 	operator [] (x, y: Int) -> ColorYuv {
 		ColorYuv new(0, 0, 0)
-		ColorYuv new(this y[x, y] y, this u [x/2, y/2] y, this v [x/2, y/2] y)
+		ColorYuv new(this y[x, y] y, this u [x / 2, y / 2] y, this v [x / 2, y / 2] y)
 	}
 	operator []= (x, y: Int, value: ColorYuv) {
 		this y[x, y] = ColorMonochrome new(value y)
-		this u[x/2, y/2] = ColorMonochrome new(value u)
-		this v[x/2, y/2] = ColorMonochrome new(value v)
+		this u[x / 2, y / 2] = ColorMonochrome new(value u)
+		this v[x / 2, y / 2] = ColorMonochrome new(value v)
 	}
 }

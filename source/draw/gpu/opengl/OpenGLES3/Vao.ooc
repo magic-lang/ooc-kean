@@ -26,8 +26,8 @@ Vao: class {
 		//Currently using 2 attributes: vertex position and texture coordinate
 		attributeCount := 2
 		packedArray: Float[attributeCount * vertexCount * dimensions]
-		for(i in 0..vertexCount) {
-			for(j in 0..dimensions) {
+		for (i in 0 .. vertexCount) {
+			for (j in 0 .. dimensions) {
 				packedArray[attributeCount * dimensions * i + j] = positions[dimensions * i + j]
 				packedArray[attributeCount * dimensions * i + j + dimensions] = textureCoordinates[dimensions * i + j]
 			}

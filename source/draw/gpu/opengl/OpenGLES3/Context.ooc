@@ -32,7 +32,7 @@ Context: class {
 	makeCurrent: func -> Bool {
 		result := eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0
 		version(debugGL) {
-			if(result)
+			if (result)
 				printVersionInfo()
 		}
 		result
@@ -45,7 +45,7 @@ Context: class {
 		eglChooseConfig(this _eglDisplay, configAttribs, matchingConfigs[0]&, numConfigs, numConfigs&)
 		chosenConfig: Pointer = null
 
-		for (i in 0..numConfigs) {
+		for (i in 0 .. numConfigs) {
 			success: UInt
 			red, green, blue, alpha: Int
 			success = eglGetConfigAttrib(this _eglDisplay, matchingConfigs[i], EGL_RED_SIZE, red&)
@@ -60,7 +60,7 @@ Context: class {
 		}
 		chosenConfig
 	}
-	_generateContext: func (shared: Pointer, config: Pointer) {
+	_generateContext: func (shared, config: Pointer) {
 		contextAttribs := [
 			EGL_CONTEXT_CLIENT_VERSION, 3,
 			EGL_NONE] as Int*
