@@ -22,21 +22,18 @@ BoolVectorList: class extends VectorList<Bool> {
 	init: func ~default {
 		this super()
 	}
-	init: func ~heap (capacity: Int){
+	init: func ~heap (capacity: Int) {
 		super(capacity)
 	}
 	init: func ~fromVectorList (other: VectorList<Bool>) {
 		this super(other _vector)
 		this _count = other count
 	}
-	totalTrues: func -> Int {
-		result := 0
+	tally: func (tallyTrues: Bool) -> Int {
+		trues := 0
 		for (i in 0 .. this count)
-			result += (this[i] ? 1 : 0)
-		result
-	}
-	totalFalses: func -> Int {
-		this _count - totalTrues()
+			trues += (this[i] ? 1 : 0)
+		tallyTrues ? trues : this _count - trues
 	}
 	operator [] <T> (index: Int) -> T {
 		this as VectorList<Bool> _vector[index]
@@ -64,34 +61,38 @@ BoolVectorList: class extends VectorList<Bool> {
 			result add(this[this _count - i])
 		result
 	}
-	erosion: func (elementSize: Int) -> This {
+	erosion: func (structuringElementSize: Int) -> This {
 		result := This new(this _count)
-		halfSize := round((elementSize - 1) / 2) as Int
-		currentSequence := This new()
+		halfSize := round((structuringElementSize - 1) / 2) as Int
+		currentSequence := This new(structuringElementSize)
 		for (i in 0 .. this _count) {
-			currentSequence = this getSlice((i - halfSize) clamp(0, this count - 1), (i + halfSize) clamp(0, this count - 1))
-			result add(currentSequence totalTrues() == currentSequence count)
+			startIndex := (i - halfSize) clamp(0, this count - 1)
+			endIndex := (i + halfSize) clamp(0, this count - 1)
+			this getSliceInto(startIndex, endIndex, (currentSequence as This)&)
+			result add(currentSequence tally(true) == currentSequence count)
 		}
 		result
 	}
-	dilation: func (elementSize: Int) -> This {
+	dilation: func (structuringElementSize: Int) -> This {
 		result := This new(this _count)
-		halfSize := round((elementSize - 1) / 2) as Int
-		currentSequence := This new()
+		halfSize := round((structuringElementSize - 1) / 2) as Int
+		currentSequence := This new(structuringElementSize)
 		for (i in 0 .. this _count) {
-			currentSequence = this getSlice((i - halfSize) clamp(0, this count - 1), (i + halfSize) clamp(0, this count - 1))
-			result add(currentSequence totalTrues() > 0)
+			startIndex := (i - halfSize) clamp(0, this count - 1)
+			endIndex := (i + halfSize) clamp(0, this count - 1)
+			this getSliceInto(startIndex, endIndex, (currentSequence as This)&)
+			result add(currentSequence tally(true) > 0)
 		}
 		result
 	}
-	opening: func (elementSize: Int) -> This {
-		erosion(elementSize) dilation(elementSize)
+	opening: func (structuringElementSize: Int) -> This {
+		this erosion(structuringElementSize) dilation(structuringElementSize)
 	}
-	closing: func (elementSize: Int) -> This {
-		dilation(elementSize) erosion(elementSize)
+	closing: func (structuringElementSize: Int) -> This {
+		this dilation(structuringElementSize) erosion(structuringElementSize)
 	}
 	toFloatVectorList: func (floatForFalse := 0.0f, floatForTrue := 1.0f) -> FloatVectorList {
-			result := FloatVectorList new(this _count)
+		result := FloatVectorList new(this _count)
 		for (i in 0 .. this _count)
 			result add(this[i] ? floatForTrue : floatForFalse)
 		result
