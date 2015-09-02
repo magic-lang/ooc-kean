@@ -117,18 +117,6 @@ FloatVectorListTest: class extends Fixture {
 			list free()
 			copy free()
 		})
-		this add("getSlice", func {
-			list := FloatVectorList new()
-			list add(1.0f)
-			list add(2.0f)
-			list add(3.0f)
-			list add(4.0f)
-			slice := list getSlice(1 .. 2)
-			expect(slice[0] == 2.0f)
-			expect(slice[1] == 3.0f)
-			list free()
-			slice free()
-		})
 		this add("operator + (This)", func {
 			list1 := FloatVectorList new()
 			list2 := FloatVectorList new()

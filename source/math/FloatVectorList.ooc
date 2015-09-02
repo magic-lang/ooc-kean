@@ -31,7 +31,7 @@ FloatVectorList: class extends VectorList<Float> {
 		this _count = other count
 	}
 	toVectorList: func -> VectorList<Float> {
-		result := VectorList<Float> new()
+		result := VectorList<Float> new(this count)
 		result _vector = this _vector
 		result _count = this count
 		result
@@ -97,9 +97,12 @@ FloatVectorList: class extends VectorList<Float> {
 			result add(this[i])
 		result
 	}
+	reverse: func -> This {
+		(this as VectorList<Float>) reverse() as This
+	}
 	operator + (other: This) -> This {
-		result := This new()
 		minimumCount := this count < other count ? this count : other count
+		result := This new(minimumCount)
 		for (i in 0 .. minimumCount)
 			result add(this[i] + other[i])
 		result
@@ -110,14 +113,28 @@ FloatVectorList: class extends VectorList<Float> {
 			this[i] = this[i] + other[i]
 	}
 	operator - (other: This) -> This {
-		result := This new()
 		minimumCount := this count < other count ? this count : other count
+		result := This new(minimumCount)
 		for (i in 0 .. minimumCount)
 			result add(this[i] - other[i])
 		result
 	}
+	operator * (other: This) -> This {
+		minimumCount := this count < other count ? this count : other count
+		result := This new(minimumCount)
+		for (i in 0 .. minimumCount)
+			result add(this[i] * other[i])
+		result
+	}
+	operator / (other: This) -> This {
+		minimumCount := this count < other count ? this count : other count
+		result := This new(minimumCount)
+		for (i in 0 .. minimumCount)
+			result add(this[i] / other[i])
+		result
+	}
 	operator * (value: Float) -> This {
-		result := This new()
+		result := This new(this _count)
 		for (i in 0 .. this _count)
 			result add(this[i] * value)
 		result
@@ -126,7 +143,7 @@ FloatVectorList: class extends VectorList<Float> {
 		this * (1.0f / value)
 	}
 	operator + (value: Float) -> This {
-		result := This new()
+		result := This new(this _count)
 		for (i in 0 .. this _count)
 			result add(this[i] + value)
 		result
@@ -134,11 +151,24 @@ FloatVectorList: class extends VectorList<Float> {
 	operator - (value: Float) -> This {
 		this + (-value)
 	}
+	operator - -> This {
+		result := This new(this _count)
+		for (i in 0 .. this _count)
+			result add(-this[i])
+		result
+	}
 	operator [] <T> (index: Int) -> T {
 		this as VectorList<Float> _vector[index]
 	}
 	operator []= (index: Int, item: Float) {
 		this _vector[index] = item
+	}
+	operator || (other: This) -> This {
+		minimumCount := this count < other count ? this count : other count
+		result := This new(minimumCount)
+		for (i in 0 .. minimumCount)
+			result add(this[i] > 0.0f ? 1.0f : (other[i] > 0.0f ? 1.0f : 0.0f))
+		result
 	}
 	toString: func -> String {
 		result := ""
@@ -157,13 +187,19 @@ FloatVectorList: class extends VectorList<Float> {
 		result
 	}
 	getZeros: static func (count: Float) -> This {
-		result := This new()
+		result := This new(count)
 		for (i in 0 .. count)
 			result add(0.0f)
 		result
 	}
+	exp: func -> This {
+		result := This new(this _count)
+		for (i in 0 .. this _count)
+			result add(this[i] exp())
+		result
+	}
 	toFloatComplexVectorList: func -> FloatComplexVectorList {
-		result := FloatComplexVectorList new()
+		result := FloatComplexVectorList new(this _count)
 		for (i in 0 .. this _count)
 			result add(FloatComplex new(this[i], 0))
 		result
@@ -265,7 +301,7 @@ FloatVectorList: class extends VectorList<Float> {
 		start := -((windowSize - 1) / 2)
 		for (i in 0 .. this count) {
 			range := ((start .. (start + windowSize - 1)) + i) clamp(0, this count-1)
-			this getSliceInto(range, (windowBuffer as VectorList<Float>)&)
+			this getSliceInto(range, (windowBuffer as VectorList<Float>))
 			result add((windowBuffer as This) fastMedian(0, range count - 1))
 		}
 		windowBuffer free()
@@ -338,5 +374,11 @@ FloatVectorList: class extends VectorList<Float> {
 			if (pivot < end)
 				This _quicksort(array, pivot + 1, end)
 		}
+	}
+	clamp: func (floor, ceiling: Float) -> This {
+		result := This new(this _count)
+		for (i in 0 .. this _count)
+			result add(this[i] clamp(floor, ceiling))
+		result
 	}
 }

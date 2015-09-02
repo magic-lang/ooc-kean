@@ -75,7 +75,12 @@ VectorList: class <T> {
 		this _vector free()
 		super()
 	}
-
+	reverse: func -> This<T> {
+		result := This<T> new(this _count)
+		for (i in 0 .. this _count)
+			result add(this[(this _count - 1) - i])
+		result
+	}
 	operator [] (index: Int) -> T {
 		this _vector[index]
 	}
@@ -135,16 +140,22 @@ VectorList: class <T> {
 			result add(this[indices[i]])
 		result
 	}
-	getSlice: func (range: Range) -> This<T> {
+	getSlice: func ~range (range: Range) -> This<T> {
 		result := This<T> new(range count)
-		this getSliceInto(range, result&)
+		this getSliceInto(range, result)
 		result
 	}
-	getSliceInto: func (range: Range, buffer: This<T>@) {
+	getSlice: func ~indices (start, end: Int) -> This<T> {
+		this getSlice(start .. end)
+	}
+	getSliceInto: func ~range (range: Range, buffer: This<T>) {
 		if (buffer _vector capacity < range count)
 			buffer _vector resize(range count)
 		buffer _count = range count
 		source := (this _vector _backend + (range min * (T size))) as Pointer
 		memcpy(buffer pointer, source, range count * (T size))
+	}
+	getSliceInto: func ~indices (start, end: Int, buffer: This<T>) {
+		this getSliceInto(start .. end, buffer)
 	}
 }
