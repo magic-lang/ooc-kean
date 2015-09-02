@@ -186,18 +186,6 @@ Quaternion: cover {
 	operator != (other: This) -> Bool {
 		!(this == other)
 	}
-	operator < (other: This) -> Bool {
-		this w < other w && this x < other x && this y < other y && this z < other z
-	}
-	operator > (other: This) -> Bool {
-		this w > other w && this x > other x && this y > other y && this z > other z
-	}
-	operator <= (other: This) -> Bool {
-		this w <= other w && this x <= other x && this y <= other y && this z <= other z
-	}
-	operator >= (other: This) -> Bool {
-		this w >= other w && this x >= other x && this y >= other y && this z >= other z
-	}
 	operator + (other: This) -> This {
 		This new(this real + other real, this imaginary + other imaginary)
 	}

@@ -29,10 +29,6 @@ FloatRotation3D: cover {
 	operator * (other: This) -> This { This new(this _quaternion * other _quaternion) }
 	operator == (other: This) -> Bool { this _quaternion == other _quaternion }
 	operator != (other: This) -> Bool { this _quaternion != other _quaternion }
-	operator < (other: This) -> Bool { this _quaternion < other _quaternion }
-	operator > (other: This) -> Bool { this _quaternion > other _quaternion }
-	operator <= (other: This) -> Bool { this _quaternion <= other _quaternion }
-	operator >= (other: This) -> Bool { this _quaternion >= other _quaternion }
 	createRotationZ: static func (angle: Float) -> This { This new(Quaternion createRotationZ(angle)) }
 	sphericalLinearInterpolation: func (other: This, factor: Float) -> This {
 		This new(this _quaternion sphericalLinearInterpolation(other _quaternion, factor))
