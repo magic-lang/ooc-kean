@@ -16,6 +16,7 @@
  */
 
 use ooc-base
+use ooc-math
 import include/gles, Texture, DebugGL
 
 Fbo: class {
@@ -30,10 +31,10 @@ Fbo: class {
 	}
 	bind: func { glBindFramebuffer(GL_FRAMEBUFFER, this _backend) }
 	unbind: func { glBindFramebuffer(GL_FRAMEBUFFER, 0) }
-	scissor: static func (x: Int, y: Int, width: Int, height: Int) { glScissor(x, y, width, height) }
+	scissor: static func (x, y, width, height: Int) { glScissor(x, y, width, height) }
 	clear: static func { glClear(GL_COLOR_BUFFER_BIT) }
 	setClearColor: static func (color: Float) { glClearColor(color, color, color, color) }
-	readPixels: func () -> ByteBuffer {
+	readPixels: func -> ByteBuffer {
 		version(debugGL) { Debug print("Warning: Using slow glReadPixels!") }
 		version(debugGL) { validateStart() }
 		width := this _width
@@ -60,7 +61,7 @@ Fbo: class {
 		glGenFramebuffers(1, this _backend&)
 		this bind()
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture _backend, 0)
-		status: UInt = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		status: UInt = glCheckFramebufferStatus(GL_FRAMEBUFFER)
 		if (status != GL_FRAMEBUFFER_COMPLETE) {
 			statusMessage := getErrorMessage(status)
 			errorMessage := "Framebuffer Object creation failed with status: " + statusMessage + " for texture of size " +
@@ -90,16 +91,16 @@ Fbo: class {
 		this unbind()
 		version(debugGL) { validateEnd("fbo invalidate") }
 	}
-	setViewport: static func (x: UInt, y: UInt, width: UInt, height: UInt) {
+	setViewport: static func (viewport: IntBox2D) {
 		version(debugGL) { validateStart() }
 		//glEnable(GL_SCISSOR_TEST)
 		//glScissor(x, y, width, height)
-		glViewport(x, y, width, height)
+		glViewport(viewport left, viewport top, viewport width, viewport height)
 		version(debugGL) { validateEnd("fbo setViewport") }
 	}
-	create: static func (texture: Texture, width: UInt, height: UInt) -> This {
+	create: static func (texture: Texture, size: IntSize2D) -> This {
 		version(debugGL) { validateStart() }
-		result := This new(width, height)
+		result := This new(size width, size height)
 		result = result _generate(texture) ? result : null
 		version(debugGL) { validateEnd("fbo create") }
 		result

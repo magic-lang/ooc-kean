@@ -19,13 +19,13 @@ import include/gles
 
 NativeWindow: abstract class {
 	_display: Pointer
-	display: Pointer { get { _display} }
+	display: Pointer { get { _display } }
 	_backend: Long
-	backend: Long { get { _backend} }
+	backend: Long { get { _backend } }
 	_width: UInt
 	_height: UInt
 
-	setViewport: func (x: UInt, y: UInt, width: UInt, height: UInt) { glViewport(x, y, width, height) }
+	setViewport: func (x, y, width, height: UInt) { glViewport(x, y, width, height) }
 	clear: func { glClear(GL_COLOR_BUFFER_BIT) }
 	bind: func { glBindFramebuffer(GL_FRAMEBUFFER, 0) }
 }

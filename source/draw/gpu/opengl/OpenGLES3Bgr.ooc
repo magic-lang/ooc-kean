@@ -14,30 +14,22 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with This software. If not, see <http://www.gnu.org/licenses/>.
 */
-
+use ooc-base
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 import OpenGLES3/Texture, OpenGLES3Canvas, OpenGLES3Texture
 
 OpenGLES3Bgr: class extends GpuBgr {
-	init: func (size: IntSize2D, context: GpuContext) {
-		this init(size, size width * this _channels, null, context)
-	}
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
+	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
 		super(OpenGLES3Texture createBgr(size, stride, data), size, context)
+		this coordinateSystem = coordinateSystem
 	}
-	toRasterDefault: func -> RasterImage {
-		raise("toRaster not implemented for BGR")
-		null
+	init: func (size: IntSize2D, context: GpuContext) { this init(size, size width * this _channels, null, CoordinateSystem YUpward, context) }
+	init: func ~fromRaster (rasterImage: RasterBgr, context: GpuContext) {
+		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
-	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas create(this, this _context) }
-	create: static func ~fromRaster (rasterImage: RasterBgr, context: GpuContext) -> This {
-		result := This new(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
-		result
-	}
-	create: static func ~empty (size: IntSize2D, context: GpuContext) -> This {
-		result := This new(size, context)
-		result texture != null ? result : null
-	}
+	toRasterDefault: func -> RasterImage { Debug raise("toRaster not implemented for BGR"); null }
+	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas new(this, this _context) }
+	create: override func (size: IntSize2D) -> This { this _context createBgr(size) as This }
 }

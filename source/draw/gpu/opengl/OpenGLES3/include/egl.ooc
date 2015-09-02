@@ -176,21 +176,21 @@ EGL_ALPHA_FORMAT_PRE: extern const UInt
 EGL_IMAGE_PRESERVED_KHR: extern const UInt
 EGL_NATIVE_BUFFER_ANDROID: extern const UInt
 __eglMustCastToProperFunctionPointerType_OOC: cover from __eglMustCastToProperFunctionPointerType
-eglGetProcAddress: extern func(procname: CString) -> Func
+eglGetProcAddress: extern func (procname: CString) -> Func
 PFNEGLCREATEIMAGEKHRPROC_OOC: cover from PFNEGLCREATEIMAGEKHRPROC
 PFNEGLDESTROYIMAGEKHRPROC_OOC: cover from PFNEGLDESTROYIMAGEKHRPROC
 
-eglMakeCurrent: extern func(display: Pointer, draw: Pointer, read: Pointer, context: Pointer) -> UInt
-eglDestroyContext: extern func(display: Pointer, context: Pointer) -> UInt
-eglDestroySurface: extern func(display: Pointer, surface: Pointer)
-eglGetDisplay: extern func(nativeDisplay: Pointer) -> Pointer
-eglInitialize: extern func(display: Pointer, major: Int*, minor: Int*) -> UInt
-eglBindAPI: extern func(api: UInt) -> UInt
-eglChooseConfig: extern func(display: Pointer, attribList: Int*, configs: Pointer*, configSize: Int, numConfig: Int*) -> UInt
-eglCreateWindowSurface: extern func(display: Pointer, config: Pointer, window: ULong, attribList: Int*) -> Pointer
-eglCreatePbufferSurface: extern func(display: Pointer, config: Pointer, attridList: Int*) -> Pointer
-eglCreateContext: extern func(display: Pointer, config: Pointer, sharedContext: Pointer, attribList: Int*) -> Pointer
-eglGetConfigAttrib: extern func(display: Pointer, config: Pointer, attribute: Int, value: Int*) -> UInt
-eglSwapBuffers: extern func(display: Pointer, surface: Pointer)
-eglTerminate: extern func(display: Pointer) -> Pointer
+eglMakeCurrent: extern func (display, draw, read, context: Pointer) -> UInt
+eglDestroyContext: extern func (display, context: Pointer) -> UInt
+eglDestroySurface: extern func (display, surface: Pointer)
+eglGetDisplay: extern func (nativeDisplay: Pointer) -> Pointer
+eglInitialize: extern func (display: Pointer, major: Int*, minor: Int*) -> UInt
+eglBindAPI: extern func (api: UInt) -> UInt
+eglChooseConfig: extern func (display: Pointer, attribList: Int*, configs: Pointer*, configSize: Int, numConfig: Int*) -> UInt
+eglCreateWindowSurface: extern func (display: Pointer, config: Pointer, window: ULong, attribList: Int*) -> Pointer
+eglCreatePbufferSurface: extern func (display: Pointer, config: Pointer, attridList: Int*) -> Pointer
+eglCreateContext: extern func (display: Pointer, config: Pointer, sharedContext: Pointer, attribList: Int*) -> Pointer
+eglGetConfigAttrib: extern func (display: Pointer, config: Pointer, attribute: Int, value: Int*) -> UInt
+eglSwapBuffers: extern func (display, surface: Pointer)
+eglTerminate: extern func (display: Pointer) -> Pointer
 eglGetError: extern func -> UInt

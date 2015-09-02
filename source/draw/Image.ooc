@@ -33,12 +33,10 @@ Image: abstract class {
 	coordinateSystem: CoordinateSystem {
 		get
 		set (value) {
-			if (this coordinateSystem != value) {
-				this coordinateSystem = value
-				this transform = IntTransform2D createScaling(
-					(value & CoordinateSystem XLeftward) == CoordinateSystem XLeftward ? -1 : 1,
-					(value & CoordinateSystem YUpward) == CoordinateSystem YUpward ? -1 : 1)
-			}
+			this coordinateSystem = value
+			this transform = IntTransform2D createScaling(
+				(value & CoordinateSystem XLeftward) == CoordinateSystem XLeftward ? -1 : 1,
+				(value & CoordinateSystem YUpward) == CoordinateSystem YUpward ? -1 : 1)
 		}
 	}
 	crop: IntShell2D { get set }
@@ -69,7 +67,7 @@ Image: abstract class {
 	copy: abstract func -> This
 	copy: abstract func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This
 //	shift: abstract func (offset: IntSize2D) -> This
-	flush: func { }
+	flush: func
 	finish: func -> Bool { true }
 	distance: virtual abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }

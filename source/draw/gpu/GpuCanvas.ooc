@@ -18,23 +18,82 @@ use ooc-math
 use ooc-draw
 use ooc-base
 use ooc-collections
+import GpuImage, GpuMap, GpuSurface, GpuContext, GpuYuv420Semiplanar, GpuYuv420Planar
 
-import GpuImage, GpuMap, GpuSurface, GpuContext, structs/LinkedList
-
-GpuCanvas: abstract class {
+GpuCanvas: abstract class extends GpuSurface {
 	_target: GpuImage
-	_size: IntSize2D
-	_context: GpuContext
-	blend := false
-	init: func (=_target, =_context)
-	draw: abstract func (image: Image)
-	draw: abstract func ~transform2D (image: Image, transform: FloatTransform2D)
-	draw: abstract func ~withmap (image: Image, map: GpuMap, viewport: IntBox2D)
-	draw: abstract func ~withmapTwoImages (image1: Image, image2: Image, map: GpuMap, viewport: IntBox2D)
-	clear: abstract func
-	drawLines: virtual func (transformList: VectorList<FloatPoint2D>)
-	drawBox: virtual func (box: FloatBox2D)
-	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>)
-	readPixels: virtual func -> ByteBuffer { raise("Trying to read pixels in unimplemented readPixels function"); null }
+	init: func (=_target, context: GpuContext) { super(this _target size, context, context defaultMap, IntTransform2D identity) }
+	readPixels: virtual func -> ByteBuffer { Debug raise("Trying to read pixels in unimplemented readPixels function"); null }
 	onRecycle: abstract func
+}
+
+GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
+	target ::= this _target as GpuYuv420Semiplanar
+	transform: FloatTransform3D {
+		get { this _view }
+		set(value) {
+			this _view = this _toLocal * value * this _toLocal
+			this target y canvas _view = this _view
+			this target uv canvas _view = FloatTransform3D createTranslation(-this _view m / 2.0f, -this _view n / 2.0f, -this _view o / 2.0f) * this _view
+		}
+	}
+	focalLength: Float {
+		get { this _focalLength }
+		set(value) {
+			this _focalLength = value
+			this target y canvas focalLength = value
+			this target uv canvas focalLength = value / 2
+		}
+	}
+
+	init: func (image: GpuYuv420Semiplanar, context: GpuContext) {
+		super(image, context)
+		this target uv canvas clearColor = ColorBgra new(128, 128, 128, 128)
+	}
+	onRecycle: func
+	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
+		gpuImage := image as GpuYuv420Semiplanar
+		this target y canvas draw(gpuImage y, source, destination, map)
+		this target uv canvas draw(gpuImage uv, IntBox2D new(source leftTop / 2, source size / 2), IntBox2D new(destination leftTop / 2, destination size / 2), map)
+	}
+	drawLines: override func (pointList: VectorList<FloatPoint2D>) { this target y canvas drawLines(pointList) }
+	drawBox: override func (box: FloatBox2D) { this target y canvas drawBox(box) }
+	drawPoints: override func (pointList: VectorList<FloatPoint2D>) { this target y canvas drawPoints(pointList) }
+	clear: override func {
+		this target y canvas clear()
+		this target uv canvas clear()
+	}
+}
+
+GpuCanvasYuv420Planar: class extends GpuCanvas {
+	target := this _target as GpuYuv420Planar
+
+	init: func (image: GpuYuv420Planar, context: GpuContext) { super(image, context) }
+	onRecycle: func
+	_draw: func (image: GpuYuv420Planar) {
+		this target y canvas draw(image y)
+		this target u canvas draw(image u)
+		this target v canvas draw(image v)
+	}
+	draw: func (image: Image) {
+		if (image instanceOf?(RasterYuv420Planar)) {
+			temp := this _context createGpuImage(image as RasterYuv420Planar) as GpuYuv420Planar
+			this _draw(temp)
+			temp free()
+		}
+		else if (image instanceOf?(GpuYuv420Planar)) {
+			temp := image as GpuYuv420Planar
+			this _draw(temp)
+		}
+		else
+			Debug raise("Trying to draw unsupported image format to GpuYuv420Planar")
+	}
+	drawLines: override func (pointList: VectorList<FloatPoint2D>) { this target y canvas drawLines(pointList) }
+	drawBox: override func (box: FloatBox2D) { this target y canvas drawBox(box) }
+	drawPoints: override func (pointList: VectorList<FloatPoint2D>) { this target y canvas drawPoints(pointList) }
+	clear: override func {
+		this target y canvas clear()
+		this target u canvas clear()
+		this target v canvas clear()
+	}
 }

@@ -51,7 +51,7 @@ Fence: class {
 	}
 	sync: func {
 		this _mutex lock()
-		if(this _backend != null)
+		if (this _backend != null)
 			glDeleteSync(this _backend)
 		this _backend = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0)
 		version(debugGL) { if (this _backend as Int == 0) Debug print("glFenceSync failed!") }
@@ -65,5 +65,4 @@ Fence: class {
 		this _syncCondition free()
 		super()
 	}
-
 }

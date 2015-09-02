@@ -21,20 +21,13 @@ Vao: class {
 	backend: UInt
 	positionLayout: const static UInt = 0
 	textureCoordinateLayout: const static UInt = 1
-	init: func
-	free: func {
-		glDeleteVertexArrays(1, backend&)
-		super()
-	}
-	bind: func { glBindVertexArray(backend) }
-	unbind: func { glBindVertexArray(0) }
-	_generate: func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> Bool {
+	init: func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> Bool {
 		version(debugGL) { Debug print("Allocating OpenGL VAO") }
 		//Currently using 2 attributes: vertex position and texture coordinate
 		attributeCount := 2
-		packedArray := gc_malloc(attributeCount * vertexCount * dimensions * Float size) as Float*
-		for(i in 0..vertexCount) {
-			for(j in 0..dimensions) {
+		packedArray: Float[attributeCount * vertexCount * dimensions]
+		for (i in 0 .. vertexCount) {
+			for (j in 0 .. dimensions) {
 				packedArray[attributeCount * dimensions * i + j] = positions[dimensions * i + j]
 				packedArray[attributeCount * dimensions * i + j + dimensions] = textureCoordinates[dimensions * i + j]
 			}
@@ -46,7 +39,7 @@ Vao: class {
 		glGenBuffers(1, vertexBuffer&)
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer)
-		glBufferData(GL_ARRAY_BUFFER, Float size * attributeCount * vertexCount * dimensions, packedArray, GL_STATIC_DRAW)
+		glBufferData(GL_ARRAY_BUFFER, Float size * attributeCount * vertexCount * dimensions, packedArray[0]&, GL_STATIC_DRAW)
 
 		positionOffset : ULong = 0
 		textureCoordinateOffset : ULong = Float size * dimensions
@@ -58,13 +51,11 @@ Vao: class {
 		glBindBuffer(GL_ARRAY_BUFFER, 0)
 		glBindVertexArray(0)
 		glDeleteBuffers(1, vertexBuffer&)
-
-		gc_free(packedArray)
-
-		true
 	}
-	create: static func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> This {
-		result := This new()
-		result _generate(positions, textureCoordinates, vertexCount, dimensions) ? result : null
+	free: func {
+		glDeleteVertexArrays(1, backend&)
+		super()
 	}
+	bind: func { glBindVertexArray(backend) }
+	unbind: func { glBindVertexArray(0) }
 }

@@ -12,8 +12,8 @@ validateEnd: func (location: String) {
 
 validate: func (message: String) {
 	glError := glGetError()
-	if(glError != GL_NO_ERROR) {
-		errorMessage := "OpenGL error " + message + ": "  + getErrorMessage(glError)
+	if (glError != GL_NO_ERROR) {
+		errorMessage := "OpenGL error " + message + ": " + getErrorMessage(glError)
 		Debug print(errorMessage)
 		raise(errorMessage)
 	}
@@ -23,7 +23,7 @@ printGlError: func {
 	Debug print("EGL error: " + eglGetError() toString())
 }
 getErrorMessage: func (errorCode: Int) -> String {
-	result := match(errorCode) {
+	result := match (errorCode) {
 		case 36054 => "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT"
 		case 36055 => "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"
 		case 36056 => "GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS"
@@ -49,7 +49,7 @@ queryExtension: func (extension: String) -> Bool {
 printExtensions: func {
 	array := getExtensionList()
 	Debug print("OpenGL extensions:")
-	for(i in 0..array size)
+	for (i in 0 .. array size)
 		Debug print(array[i])
 }
 printVersionInfo: func {
