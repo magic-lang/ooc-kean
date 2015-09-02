@@ -155,7 +155,6 @@ GpuSurfaceTest: class extends Fixture {
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 		})
-
 	}
 }
 
