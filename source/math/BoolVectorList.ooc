@@ -65,7 +65,7 @@ BoolVectorList: class extends VectorList<Bool> {
 		for (i in 0 .. this _count) {
 			startIndex := (i - halfSize) clamp(0, this count - 1)
 			endIndex := (i + halfSize) clamp(0, this count - 1)
-			this getSliceInto(startIndex, endIndex, (currentSequence as This)&)
+			this getSliceInto(startIndex, endIndex, (currentSequence as This))
 			result add(currentSequence tally(true) == currentSequence count)
 		}
 		result
@@ -77,7 +77,7 @@ BoolVectorList: class extends VectorList<Bool> {
 		for (i in 0 .. this _count) {
 			startIndex := (i - halfSize) clamp(0, this count - 1)
 			endIndex := (i + halfSize) clamp(0, this count - 1)
-			this getSliceInto(startIndex, endIndex, (currentSequence as This)&)
+			this getSliceInto(startIndex, endIndex, (currentSequence as This))
 			result add(currentSequence tally(true) > 0)
 		}
 		result
