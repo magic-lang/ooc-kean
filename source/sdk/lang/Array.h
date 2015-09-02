@@ -14,6 +14,7 @@
 
 
 #define _lang_array__Array_new(type, size) ((_lang_array__Array) { size, array_malloc((size) * sizeof(type)) });
+#define CONST_CHAR_CAST(x) (const char* const*) (x)
 
 #if defined(safe)
 #define _lang_array__Array_get(array, index, type) ( \
@@ -41,4 +42,3 @@ typedef struct {
 } _lang_array__Array;
 
 #endif // ___lang_array___
-
