@@ -18,6 +18,8 @@
 use ooc-math
 import include/gles, DebugGL
 
+CONST_CHAR_CAST: extern func (CString*) -> const CString*
+
 ShaderProgram: class {
 	_backend: UInt
 	init: func
@@ -157,7 +159,7 @@ ShaderProgram: class {
 	_glCompileShader: func (shaderID: UInt) { glCompileShader(shaderID) }
 	_compileShader: func (source: String, shaderID: UInt) -> Bool {
 		version(debugGL) { validateStart() }
-		glShaderSource(shaderID, 1, (source toCString())&, null)
+		glShaderSource(shaderID, 1, CONST_CHAR_CAST((source toCString()&)), null)
 		this _glCompileShader(shaderID)
 
 		success: Int
