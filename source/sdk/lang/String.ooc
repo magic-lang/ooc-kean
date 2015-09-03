@@ -1,3 +1,11 @@
+include ./StringExtension
+
+extend String {
+    // This function only exists to silence a warning when calling OpenGL's glShaderSource function.
+    // It requires a const char * const * argument, but since ooc doesn't have const, we need to
+    // cast the char * into a const char * const * by using this C macro, defined in StringExtension.h.
+    toConstCharPointerConstPointer: static extern(CONST_CHAR_POINTER_CONST_POINTER_CAST) func (CString*) -> const CString*
+}
 
 /**
  * The String class represents character strings.
