@@ -157,7 +157,7 @@ ShaderProgram: class {
 	_glCompileShader: func (shaderID: UInt) { glCompileShader(shaderID) }
 	_compileShader: func (source: String, shaderID: UInt) -> Bool {
 		version(debugGL) { validateStart() }
-		glShaderSource(shaderID, 1, (source toCString())&, null)
+		glShaderSource(shaderID, 1, String toConstCharPointerConstPointer(source toCString()&), null)
 		this _glCompileShader(shaderID)
 
 		success: Int
