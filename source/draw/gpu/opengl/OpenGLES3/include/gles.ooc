@@ -855,7 +855,14 @@ glRenderbufferStorage: extern func (target: UInt, internalformat: UInt, width: I
 glSampleCoverage: extern func (value: Float, invert: UInt)
 glScissor: extern func (x, y, width, height: Int)
 glShaderBinary: extern func (n: Int, shaders: UInt*, binaryformat: UInt, binary: Pointer, length: Int)
+
+include ./ConstCast
+CONST_CHAR_CAST: extern func (CString*) -> const CString*
 glShaderSource: extern func (shader: UInt, count: Int, string: Char**, length: Pointer)
+glShaderSource: func ~string (shader: UInt, count: Int, string: String, length: Pointer) {
+	glShaderSource(shader, count, CONST_CHAR_CAST((string toCString()&)), length)
+}
+
 glStencilFunc: extern func (function: UInt, ref: Int, mask: UInt)
 glStencilFuncSeparate: extern func (face: UInt, function: UInt, ref: Int, mask: UInt)
 glStencilMask: extern func (mask: UInt)
