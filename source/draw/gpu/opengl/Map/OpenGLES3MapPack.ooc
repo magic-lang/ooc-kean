@@ -7,7 +7,7 @@ OpenGLES3MapPack: abstract class extends OpenGLES3Map {
 	channels: Int { get set }
 	transform: FloatTransform3D
 	sourceHeight: Int { get set }
-	offsetX := 0.0f
+	paddingOffset := 0.0f
 	init: func (vertexSource: String, fragmentSource: String, context: GpuContext) {
 		super(vertexSource, fragmentSource, context)
 		this channels = 1
@@ -21,7 +21,7 @@ OpenGLES3MapPack: abstract class extends OpenGLES3Map {
 		offset := (2.0f / channels - 0.5f) / this imageWidth
 		this program setUniform("xOffset", offset)
 		this program setUniform("transform", this transform)
-		this program setUniform("offsetX", this offsetX)
+		this program setUniform("paddingOffset", this paddingOffset)
 		this program setUniform("rowUnit", 1.0f / this sourceHeight)
 	}
 }
@@ -62,14 +62,41 @@ OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
 		precision mediump float;
 		uniform mat4 transform;
 		uniform float xOffset;
-		uniform float offsetX;
 		uniform float texelOffset;
 		layout(location = 0) in vec2 vertexPosition;
 		layout(location = 1) in vec2 textureCoordinate;
 		out vec2 fragmentTextureCoordinate[2];
 		void main() {
-			fragmentTextureCoordinate[0] = textureCoordinate + vec2(-xOffset - offsetX, 0);
-			fragmentTextureCoordinate[1] = textureCoordinate + vec2(texelOffset - xOffset - offsetX, 0);
+			fragmentTextureCoordinate[0] = textureCoordinate + vec2(-xOffset, 0);
+			fragmentTextureCoordinate[1] = textureCoordinate + vec2(texelOffset - xOffset, 0);
+			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, -1, 1);
+		}"
+	fragmentSource: static String ="#version 300 es
+		precision mediump float;
+		uniform sampler2D texture0;
+		uniform float rowUnit;
+		in highp vec2 fragmentTextureCoordinate[2];
+		out vec4 outColor;
+		void main() {
+			vec2 rg = texture(texture0, fragmentTextureCoordinate[0]).rg;
+			vec2 ba = texture(texture0, fragmentTextureCoordinate[1]).rg;
+			outColor = vec4(rg.x, rg.y, ba.x, ba.y);
+		}"
+}
+OpenGLES3MapPackUvPadded: class extends OpenGLES3MapPack {
+	init: func (context: GpuContext) { super(This vertexSource, This fragmentSource, context) }
+	vertexSource: static String ="#version 300 es
+		precision mediump float;
+		uniform mat4 transform;
+		uniform float xOffset;
+		uniform float paddingOffset;
+		uniform float texelOffset;
+		layout(location = 0) in vec2 vertexPosition;
+		layout(location = 1) in vec2 textureCoordinate;
+		out vec2 fragmentTextureCoordinate[2];
+		void main() {
+			fragmentTextureCoordinate[0] = textureCoordinate + vec2(-xOffset - paddingOffset, 0);
+			fragmentTextureCoordinate[1] = textureCoordinate + vec2(texelOffset - xOffset - paddingOffset, 0);
 			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, -1, 1);
 		}"
 	fragmentSource: static String ="#version 300 es
@@ -96,7 +123,6 @@ OpenGLES3MapUnpack: abstract class extends OpenGLES3Map {
 	sourceSize: IntSize2D { get set }
 	targetSize: IntSize2D { get set }
 	transform: FloatTransform3D { get set }
-	offsetX := 0.0f
 	init: func (fragmentSource: String, context: GpuContext) {
 		super(This vertexSource, fragmentSource, context)
 		this transform = FloatTransform3D identity
@@ -152,7 +178,32 @@ OpenGLES3MapUnpackRgbaToUv: class extends OpenGLES3MapUnpack {
 		this program setUniform("startY", startY)
 		scaleY := 1.0f - startY
 		this program setUniform("scaleY", scaleY)
-		this program setUniform("offsetX", this offsetX)
+	}
+	fragmentSource: static String ="#version 300 es
+		precision mediump float;
+		uniform sampler2D texture0;
+		uniform int targetWidth;
+		in highp vec4 fragmentTextureCoordinate;
+		out vec2 outColor;
+		void main() {
+			int pixelIndex = int(float(targetWidth) * fragmentTextureCoordinate.z) % 2;
+			vec4 texel = texture(texture0, fragmentTextureCoordinate.xy);
+			vec2 mask = vec2(float(1 - pixelIndex), float(pixelIndex));
+			outColor = vec2(mask.x * texel.r + mask.y * texel.b, mask.x * texel.g + mask.y * texel.a);
+		}"
+}
+OpenGLES3MapUnpackRgbaToUvPadded: class extends OpenGLES3MapUnpack {
+	paddingOffset := 0.0f
+	init: func (context: GpuContext) { super(This fragmentSource, context) }
+	use: override func {
+		super()
+		scaleX := (this targetSize width as Float) / (2 * this sourceSize width)
+		this program setUniform("scaleX", scaleX)
+		startY := (this sourceSize height - this targetSize height) as Float / this sourceSize height
+		this program setUniform("startY", startY)
+		scaleY := 1.0f - startY
+		this program setUniform("scaleY", scaleY)
+		this program setUniform("paddingOffset", this paddingOffset)
 		rowUnit:= 1.0f / this sourceSize height
 		this program setUniform("rowUnit", rowUnit)
 	}
@@ -161,11 +212,11 @@ OpenGLES3MapUnpackRgbaToUv: class extends OpenGLES3MapUnpack {
 		uniform sampler2D texture0;
 		uniform int targetWidth;
 		uniform float rowUnit;
-		uniform float offsetX;
+		uniform float paddingOffset;
 		in highp vec4 fragmentTextureCoordinate;
 		out vec2 outColor;
 		void main() {
-			vec2 shiftedCoor = vec2(fragmentTextureCoordinate.x + offsetX, fragmentTextureCoordinate.y);
+			vec2 shiftedCoor = vec2(fragmentTextureCoordinate.x + paddingOffset, fragmentTextureCoordinate.y);
 			if (shiftedCoor.x > 1.0) {
 				shiftedCoor = vec2(fract(shiftedCoor.x), shiftedCoor.y + rowUnit);
 			}
