@@ -15,8 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 use ooc-base
-import include/egl
-import include/gles
+import include/[egl, gles]
 import Texture
 EGLImage: class extends Texture {
 	_eglBackend: Pointer
