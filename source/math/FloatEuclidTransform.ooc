@@ -15,97 +15,30 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import math
-import FloatSize2D
-import FloatPoint2D
 import FloatPoint3D
 import FloatRotation3D
 import FloatTransform2D
-import Quaternion
+import FloatTransform3D
 
 FloatEuclidTransform: cover {
-	translationX, translationY, rotationX, rotationY, rotationZ, scaling: Float
-	rotation ::= FloatPoint3D new(rotationX, rotationY, rotationZ)
-	imageWidth := 1920
-	fov := 50.0f
-	k ::= tan(this fov * 0.01745329252f / 2.0f) / (this imageWidth / 2)
-	isProjective ::= this rotationX != 0 || this rotationY != 0
-	isIdentity ::= this rotationX == 0 && this rotationY == 0 && this rotationZ == 0 && this translationX == 0 && this translationY == 0 && this scaling == 1
-	init: func@ ~fromTransform2Dreduced (transform: FloatTransform2D) {
-		this init(transform, this imageWidth, this fov)
+	rotation: FloatRotation3D
+	translation: FloatPoint3D
+	scaling: Float
+
+	inverse ::= This new(-this translation, this rotation inverse, 1.0f / this scaling)
+	transform ::= FloatTransform3D createScaling(this scaling, this scaling, 1.0f) * FloatTransform3D createTranslation(this translation) * this rotation transform
+
+	init: func@ ~default { this init(FloatPoint3D new(), FloatRotation3D identity, 1.0f) }
+	init: func@ ~translationAndRotation (translation: FloatPoint3D, rotation: FloatRotation3D) { this init(translation, rotation, 1.0f) }
+	init: func@ ~full (=translation, =rotation, =scaling)
+	init: func@ ~fromTransform (transform: FloatTransform2D) {
+		rotationZ := atan(- transform d / transform a)
+		scaling := ((transform a * transform a + transform b * transform b) sqrt() + (transform d * transform d + transform e * transform e) sqrt()) / 2.0f
+		this init(FloatPoint3D new(transform g, transform h, 0.0f), FloatRotation3D createRotationZ(rotationZ), scaling)
 	}
-	init: func@ ~fromTransform2D (transform: FloatTransform2D, =imageWidth, =fov) {
-		H1 := transform a
-		H2 := transform b
-		H3 := transform c
-		H4 := transform d
-		H5 := transform e
-		H6 := transform f
-		H7 := transform g
-		H8 := transform h
-		this rotationX = atan(H6 / this k)
-		this rotationY = atan(H3 / this k * cos(this rotationX))
-		K1 := cos(this rotationX)
-		K2 := sin(this rotationX)
-		K3 := cos(this rotationY)
-		K4 := sin(this rotationY)
-		K5 := tan(this rotationX)
-		K6 := tan(this rotationY)
-		this rotationZ = atan((K3 * (1.0f + K6 * K6) * (H7 * this k * K5 - H4)) / (H1 * (K1 + K5 * K2) - H4 * K5 * K6 - H7 * this k * K6))
-		if (this isProjective)
-			this scaling = (K2 * K3 * H1 - K4 * H4 + 0.00000000001f) / (cos(this rotationZ) * K5 * (K3 + K4 * K6) + sin(this rotationZ) * K6 + 0.00000000001f)
-		else
-			this scaling = ((H1 * H1 + H2 * H2) sqrt() + (H4 * H4 + H5 * H5) sqrt()) / 2.0f
-		this translationX = H7 + this scaling / this k * (cos(this rotationZ) * K6 - sin(this rotationZ) * K5 / K3)
-		this translationY = H8 + this scaling / this k * (sin(this rotationZ) * K6 + cos(this rotationZ) * K5 / K3)
-	}
-	init: func@ ~reduced (=translationX, =translationY, =rotationX, =rotationY, =rotationZ, =scaling)
-	init: func@ ~full (=translationX, =translationY, =rotationX, =rotationY, =rotationZ, =scaling, =imageWidth, =fov)
-	init: func@ ~default {
-		this translationX = 0.0f
-		this translationY = 0.0f
-		this rotationX = 0.0f
-		this rotationY = 0.0f
-		this rotationZ = 0.0f
-		this scaling = 1.0f
-	}
-	identity: static This { get { This new() } }
-	inverse ::= This new(-this translationX, -this translationY, -this rotationX, -this rotationY, -this rotationZ, 1 / this scaling)
-	operator == (other: This) -> Bool {
-		this translationX == other translationX &&
-		this translationY == other translationY &&
-		this rotationX == other rotationX &&
-		this rotationY == other rotationY &&
-		this rotationZ == other rotationZ &&
-		this scaling == other scaling
-	}
-	weight: func (other, weight: This) -> This {
-		This new(
-			this translationX * weight translationX + other translationX * (1 - weight translationX),
-			this translationY * weight translationY + other translationY * (1 - weight translationY),
-			this rotationX * weight rotationX + other rotationX * (1 - weight rotationX),
-			this rotationY * weight rotationY + other rotationY * (1 - weight rotationY),
-			this rotationZ * weight rotationZ + other rotationZ * (1 - weight rotationZ),
-			this scaling * weight scaling + other scaling * (1 - weight scaling)
-			)
-	}
-	operator + (other: This) -> This {
-		This new(this translationX + other translationX, this translationY + other translationY, this rotationX + other rotationX, this rotationY + other rotationY, this rotationZ + other rotationZ, this scaling * other scaling)
-	}
-	operator - (other: This) -> This {
-		This new(this translationX - other translationX, this translationY - other translationY, this rotationX - other rotationX, this rotationY - other rotationY, this rotationZ - other rotationZ, this scaling / other scaling)
-	}
-	operator / (value: Float) -> This {
-		This new(this translationX / value, this translationY / value, this rotationX / value, this rotationY / value, this rotationZ / value, (this scaling - 1) / value + 1)
-	}
-	operator * (value: Float) -> This {
-		This new(this translationX * value, this translationY * value, this rotationX * value, this rotationY * value, this rotationZ * value, (this scaling - 1) * value + 1)
-	}
+	operator + (other: This) -> This { This new(this translation + other translation, this rotation * other rotation, this scaling * other scaling) }
+	operator - (other: This) -> This { This new(this translation - other translation, this rotation * other rotation inverse, this scaling / other scaling) }
 	toString: func -> String {
-		" tx: " << "%8f" formatFloat(this translationX) >>
-		" ty: " & "%8f" formatFloat(this translationY) >>
-		" Scale: " & "%8f" formatFloat(this scaling) >>
-		" Rx: " & "%8f" formatFloat(this rotationX) >>
-		" Ry: " & "%8f" formatFloat(this rotationY) >>
-		" Rz: " & "%8f" formatFloat(this rotationZ)
+		"Translation: " << this translation toString() >> " Rotation: " & this rotation toString() >> " Scaling: " & this scaling toString()
 	}
 }

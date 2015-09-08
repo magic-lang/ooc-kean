@@ -368,12 +368,6 @@ extend Float {
 		result := coefficient toString() >> "E" & power toString()
 		result
 	}
-	getTranslationFromRotation: static func (rotation, zDistance: This) -> This {
-		sin(rotation) / zDistance
-	}
-	getRotationFromTranslation: static func (translation, zDistance: This) -> This {
-		asin(translation * zDistance)
-	}
 }
 
 extend LDouble {
