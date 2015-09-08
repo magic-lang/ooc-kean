@@ -17,10 +17,11 @@ use ooc-base
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
+use ooc-opengl
 use ooc-collections
 import GpuImageBin, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv422Semipacked, OpenGLES3Fence
 import Map/OpenGLES3Map, Map/OpenGLES3MapPack
-import OpenGLES3/[Context, NativeWindow, Lines, Quad]
+import OpenGLES3/Context, OpenGLES3/NativeWindow, OpenGLES3/Lines
 
 OpenGLES3Context: class extends GpuContext {
 	_backend: Context
@@ -178,15 +179,16 @@ OpenGLES3Context: class extends GpuContext {
 		}
 	}
 	update: func { this _backend swapBuffers() }
-	setViewport: func (viewport: IntBox2D) { this _backend setViewport(viewport) }
-	enableBlend: func (blend: Bool) { this _backend enableBlend(blend) }
-	packToRgba: func (source: GpuImage, target: GpuBgra, viewport: IntBox2D) {
+	setViewport: func (viewport: IntBox2D) { Fbo setViewport(viewport) }
+	enableBlend: func (blend: Bool) { Fbo enableBlend(blend) }
+	packToRgba: func (source: GpuImage, target: GpuBgra, viewport: IntBox2D, padding: Float) {
 		map := match (source) {
 			case sourceImage: GpuMonochrome => this _packMonochrome
 			case sourceImage: GpuUv => this _packUv
 		} as OpenGLES3MapPack
 		map imageWidth = source size width
 		map channels = source channels
+<<<<<<< HEAD
 		map sourceHeight = target size height
 		target canvas viewport = viewport
 		target canvas draw(source, map)
@@ -200,6 +202,9 @@ OpenGLES3Context: class extends GpuContext {
 		map imageWidth = source size width
 		map channels = source channels
 		map paddingOffset = tempOffset
+=======
+		map offsetX = padding
+>>>>>>> Adapted changes for nexus7.
 		map sourceHeight = target size height
 		target canvas viewport = viewport
 		target canvas draw(source, map)
