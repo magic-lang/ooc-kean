@@ -15,7 +15,9 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 use ooc-base
-import include/egl, NativeWindow, DebugGL
+use ooc-math
+import include/[egl, gles]
+import NativeWindow, DebugGL
 
 Context: class {
 	_eglContext: Pointer
@@ -136,6 +138,20 @@ Context: class {
 			shared = sharedContext _eglContext
 		this _generateContext(shared, chosenConfig)
 		this makeCurrent()
+	}
+	setViewport: func (viewport: IntBox2D) {
+		version(debugGL) { validateStart() }
+		glViewport(viewport left, viewport top, viewport width, viewport height)
+		version(debugGL) { validateEnd("context setViewport") }
+	}
+	enableBlend: func (on: Bool) {
+		version(debugGL) { validateStart() }
+		if (on) {
+			glEnable(GL_BLEND)
+			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR)
+		} else
+			glDisable(GL_BLEND)
+		version(debugGL) { validateEnd("context enableBlend") }
 	}
 	create: static func ~shared (window: NativeWindow, sharedContext: This = null) -> This {
 		version(debugGL) { Debug print("Creating OpenGL context") }

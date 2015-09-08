@@ -22,6 +22,7 @@ use ooc-base
 import AndroidTexture, GraphicBuffer
 import threading/Thread
 import math
+
 AndroidContext: class extends OpenGLES3Context {
 	_unpackRgbaToMonochrome := OpenGLES3MapUnpackRgbaToMonochrome new(this)
 	_unpackRgbaToUv := OpenGLES3MapUnpackRgbaToUv new(this)

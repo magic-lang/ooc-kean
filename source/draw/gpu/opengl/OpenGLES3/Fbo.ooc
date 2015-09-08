@@ -91,27 +91,11 @@ Fbo: class {
 		this unbind()
 		version(debugGL) { validateEnd("fbo invalidate") }
 	}
-	setViewport: static func (viewport: IntBox2D) {
-		version(debugGL) { validateStart() }
-		//glEnable(GL_SCISSOR_TEST)
-		//glScissor(x, y, width, height)
-		glViewport(viewport left, viewport top, viewport width, viewport height)
-		version(debugGL) { validateEnd("fbo setViewport") }
-	}
 	create: static func (texture: Texture, size: IntSize2D) -> This {
 		version(debugGL) { validateStart() }
 		result := This new(size width, size height)
 		result = result _generate(texture) ? result : null
 		version(debugGL) { validateEnd("fbo create") }
 		result
-	}
-	enableBlend: static func (on: Bool) {
-		version(debugGL) { validateStart() }
-		if (on) {
-			glEnable(GL_BLEND)
-			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR)
-		} else
-			glDisable(GL_BLEND)
-		version(debugGL) { validateEnd("fbo enableBlend") }
 	}
 }
