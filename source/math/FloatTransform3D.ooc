@@ -207,12 +207,12 @@ FloatTransform3D: cover {
 		this o == other o &&
 		this p == other p
 	}
-	transformProjected: func ~FloatPoint2D (point: FloatPoint2D, focalLength: Float) -> FloatPoint2D {
+	transformAndProject: func ~FloatPoint2D (point: FloatPoint2D, focalLength: Float) -> FloatPoint2D {
 		transformedWorldPoint := this * FloatPoint3D new(point x, point y, focalLength)
 		this project(transformedWorldPoint, focalLength)
 	}
-	transformProjected: func ~FloatBox2D (box: FloatBox2D, focalLength: Float) -> FloatBox2D {
-		FloatBox2D new(this transformProjected(box leftTop, focalLength), this transformProjected(box rightBottom, focalLength))
+	transformAndProject: func ~FloatBox2D (box: FloatBox2D, focalLength: Float) -> FloatBox2D {
+		FloatBox2D new(this transformAndProject(box leftTop, focalLength), this transformAndProject(box rightBottom, focalLength))
 	}
 	project: func (point: FloatPoint3D, focalLength: Float) -> FloatPoint2D {
 		projectedPoint := This createProjection(focalLength) * point / point z
