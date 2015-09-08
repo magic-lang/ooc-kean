@@ -1,4 +1,4 @@
-use ooc-math
+/*use ooc-math
 use ooc-draw
 use ooc-draw-gpu-pc
 use ooc-draw-gpu
@@ -70,4 +70,4 @@ for (i in 0 .. 100) {
 	window draw(target)
 	window refresh()
 	Time sleepMilli(30)
-}
+}*/
