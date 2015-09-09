@@ -70,11 +70,6 @@ GpuYuv420Semiplanar: class extends GpuImage {
 		this _y setMinFilter(linear)
 		this _uv setMinFilter(linear)
 	}
-	resizeTo: func (size: IntSize2D) -> This {
-		target := this _context createYuv420Semiplanar(size)
-		target canvas draw(this)
-		target
-	}
 	toRasterDefault: func -> RasterImage {
 		y := this _y toRaster() as RasterMonochrome
 		uv := this _uv toRaster() as RasterUv
