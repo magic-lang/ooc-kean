@@ -141,7 +141,6 @@ OpenGLES3MapYuvPlanarToBgra: class extends OpenGLES3MapTransform {
 		uniform sampler2D texture2;
 		in vec2 fragmentTextureCoordinate;
 		out vec4 outColor;
-		// Convert yuva to rgba
 		vec4 YuvToRgba(vec4 t)
 		{
 			mat4 matrix = mat4(1, 1, 1, 0,
@@ -170,7 +169,6 @@ OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapTransform {
 		uniform sampler2D texture1;
 		in vec2 fragmentTextureCoordinate;
 		out vec4 outColor;
-		// Convert yuva to rgba
 		vec4 YuvToRgba(vec4 t)
 		{
 			mat4 matrix = mat4(1, 1, 1, 0,
