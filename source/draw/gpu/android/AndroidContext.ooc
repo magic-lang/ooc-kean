@@ -129,16 +129,13 @@ AndroidContext: class extends OpenGLES3Context {
 		result
 	}
 	unpackBgraToYuv420Semiplanar: func (source: GpuBgra, targetSize: IntSize2D) -> GpuYuv420Semiplanar {
-	unpackBgraToYuv420Semiplanar: func (source: GpuBgra, targetSize: IntSize2D, padding: Float) -> GpuYuv420Semiplanar {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
 		this _unpackRgbaToMonochrome targetSize = target y size
 		this _unpackRgbaToMonochrome sourceSize = source size
-		this _unpackRgbaToMonochrome offsetX = padding
 		this _unpackRgbaToMonochrome transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
 		target y canvas draw(source, this _unpackRgbaToMonochrome)
 		this _unpackRgbaToUv targetSize = target uv size
 		this _unpackRgbaToUv sourceSize = source size
-		this _unpackRgbaToUv offsetX = padding
 		this _unpackRgbaToUv transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
 		target uv canvas draw(source, this _unpackRgbaToUv)
 		target
