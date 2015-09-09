@@ -51,6 +51,7 @@ GpuContext: abstract class {
 	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }
 	isAligned: virtual func (width: Int) -> Bool { true }
 	packToRgba: abstract func (source: GpuImage, target: GpuBgra, viewport: IntBox2D)
+	packToRgba: abstract func  ~padded (source: GpuImage, target: GpuBgra, viewport: IntBox2D, padding: Int)
 	drawLines: abstract func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D)
 	drawBox: abstract func (box: FloatBox2D, transform: FloatTransform3D)
 	drawPoints: abstract func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D)

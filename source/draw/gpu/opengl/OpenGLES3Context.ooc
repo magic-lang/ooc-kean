@@ -27,6 +27,7 @@ OpenGLES3Context: class extends GpuContext {
 	_transformTextureMap: OpenGLES3MapTransformTexture
 	_packMonochrome: OpenGLES3MapPackMonochrome
 	_packUv: OpenGLES3MapPackUv
+	_packUvPadded: OpenGLES3MapPackUvPadded
 	_linesShader: OpenGLES3MapLines
 	_pointsShader: OpenGLES3MapPoints
 	_quad: Quad
@@ -36,6 +37,7 @@ OpenGLES3Context: class extends GpuContext {
 		super()
 		this _packMonochrome = OpenGLES3MapPackMonochrome new(this)
 		this _packUv = OpenGLES3MapPackUv new(this)
+		this _packUvPadded = OpenGLES3MapPackUvPadded new(this)
 		this _linesShader = OpenGLES3MapLines new(this)
 		this _pointsShader = OpenGLES3MapPoints new(this)
 		this _backend = context
@@ -50,6 +52,7 @@ OpenGLES3Context: class extends GpuContext {
 		this _transformTextureMap free()
 		this _packMonochrome free()
 		this _packUv free()
+		this _packUvPadded free()
 		this _linesShader free()
 		this _pointsShader free()
 		this _backend free()
@@ -177,6 +180,7 @@ OpenGLES3Context: class extends GpuContext {
 	update: func { this _backend swapBuffers() }
 	setViewport: func (viewport: IntBox2D) { this _backend setViewport(viewport) }
 	enableBlend: func (blend: Bool) { this _backend enableBlend(blend) }
+
 	packToRgba: func (source: GpuImage, target: GpuBgra, viewport: IntBox2D) {
 		map := match (source) {
 			case sourceImage: GpuMonochrome => this _packMonochrome
@@ -184,6 +188,20 @@ OpenGLES3Context: class extends GpuContext {
 		} as OpenGLES3MapPack
 		map imageWidth = source size width
 		map channels = source channels
+		map sourceHeight = target size height
+		target canvas viewport = viewport
+		target canvas draw(source, map)
+	}
+	packToRgba: func ~padded (source: GpuImage, target: GpuBgra, viewport: IntBox2D, padding: Int) {
+		tempOffset := padding as Float / (target size width * 4) as Float
+		map := match (source) {
+				case sourceImage: GpuMonochrome => this _packMonochrome
+				case sourceImage: GpuUv => this _packUvPadded
+		} as OpenGLES3MapPack
+		map imageWidth = source size width
+		map channels = source channels
+		map paddingOffset = tempOffset
+		map sourceHeight = target size height
 		target canvas viewport = viewport
 		target canvas draw(source, map)
 	}

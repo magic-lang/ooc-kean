@@ -53,8 +53,7 @@ OpenGLES3Map: abstract class extends GpuMap {
 }
 OpenGLES3MapDefault: abstract class extends OpenGLES3Map {
 	init: func (fragmentSource: String, context: GpuContext) { super(This vertexSource, fragmentSource, context) }
-	vertexSource: static String ="
-		#version 300 es
+	vertexSource: static String ="#version 300 es
 		precision highp float;
 		layout(location = 0) in vec2 vertexPosition;
 		layout(location = 1) in vec2 textureCoordinate;
@@ -72,8 +71,7 @@ OpenGLES3MapDefaultTexture: class extends OpenGLES3MapDefault {
 		super()
 		this program setUniform("texture0", 0)
 	}
-	fragmentSource: static String ="
-		#version 300 es
+	fragmentSource: static String ="#version 300 es
 		precision highp float;
 		uniform sampler2D texture0;
 		in vec2 fragmentTextureCoordinate;
@@ -90,8 +88,7 @@ OpenGLES3MapTransform: abstract class extends OpenGLES3Map {
 		this program setUniform("transform", finalTransform)
 		this program setUniform("textureTransform", this textureTransform)
 	}
-	vertexSource: static String ="
-		#version 300 es
+	vertexSource: static String ="#version 300 es
 		precision highp float;
 		uniform mat4 transform;
 		uniform mat4 textureTransform;
@@ -108,8 +105,7 @@ OpenGLES3MapTransform: abstract class extends OpenGLES3Map {
 }
 OpenGLES3MapTransformTexture: class extends OpenGLES3MapTransform {
 	init: func (context: GpuContext) { super(This fragmentSource, context) }
-	fragmentSource: static String ="
-		#version 300 es
+	fragmentSource: static String ="#version 300 es
 		precision highp float;
 		uniform sampler2D texture0;
 		in vec2 fragmentTextureCoordinate;
@@ -120,8 +116,7 @@ OpenGLES3MapTransformTexture: class extends OpenGLES3MapTransform {
 }
 OpenGLES3MapMonochromeToBgra: class extends OpenGLES3MapDefaultTexture {
 	init: func (context: GpuContext) { super(This customFragmentSource, context) }
-	customFragmentSource: static String ="
-		#version 300 es
+	customFragmentSource: static String ="#version 300 es
 		precision highp float;
 		uniform sampler2D texture0;
 		in vec2 fragmentTextureCoordinate;
@@ -139,8 +134,7 @@ OpenGLES3MapYuvPlanarToBgra: class extends OpenGLES3MapTransform {
 		this program setUniform("texture1", 1)
 		this program setUniform("texture2", 2)
 	}
-	fragmentSource: static String ="
-		#version 300 es
+	fragmentSource: static String ="#version 300 es
 		precision highp float;
 		uniform sampler2D texture0;
 		uniform sampler2D texture1;
@@ -170,8 +164,7 @@ OpenGLES3MapYuvSemiplanarToBgra: class extends OpenGLES3MapTransform {
 		this program setUniform("texture0", 0)
 		this program setUniform("texture1", 1)
 	}
-	fragmentSource: static String ="
-		#version 300 es
+	fragmentSource: static String ="#version 300 es
 		precision highp float;
 		uniform sampler2D texture0;
 		uniform sampler2D texture1;
@@ -199,8 +192,7 @@ OpenGLES3MapLines: class extends OpenGLES3MapTransform {
 		super()
 		this program setUniform("color", this color)
 	}
-	fragmentSource: static String ="
-		#version 300 es
+	fragmentSource: static String ="#version 300 es
 		precision highp float;
 		uniform vec3 color;
 		out vec4 outColor;
@@ -223,8 +215,7 @@ OpenGLES3MapPoints: class extends OpenGLES3Map {
 		this program setUniform("pointSize", this pointSize)
 		this program setUniform("transform", this projection)
 	}
-	vertexSource: static String ="
-		#version 300 es
+	vertexSource: static String ="#version 300 es
 		precision highp float;
 		uniform float pointSize;
 		uniform mat4 transform;
@@ -233,8 +224,7 @@ OpenGLES3MapPoints: class extends OpenGLES3Map {
 			gl_PointSize = pointSize;
 			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
 		}"
-	fragmentSource: static String ="
-		#version 300 es
+	fragmentSource: static String ="#version 300 es
 		precision highp float;
 		uniform vec3 color;
 		out vec4 outColor;

@@ -26,6 +26,7 @@ import math
 AndroidContext: class extends OpenGLES3Context {
 	_unpackRgbaToMonochrome := OpenGLES3MapUnpackRgbaToMonochrome new(this)
 	_unpackRgbaToUv := OpenGLES3MapUnpackRgbaToUv new(this)
+	_unpackRgbaToUvPadded := OpenGLES3MapUnpackRgbaToUvPadded new(this)
 	_packers := VectorList<OpenGLES3Bgra> new()
 	init: func { super() }
 	init: func ~other (other: This) { super(other) }
@@ -33,6 +34,7 @@ AndroidContext: class extends OpenGLES3Context {
 		this _backend makeCurrent()
 		this _unpackRgbaToMonochrome free()
 		this _unpackRgbaToUv free()
+		this _unpackRgbaToUvPadded free()
 		this _packers free()
 		super()
 	}
@@ -136,6 +138,20 @@ AndroidContext: class extends OpenGLES3Context {
 		this _unpackRgbaToUv sourceSize = source size
 		this _unpackRgbaToUv transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
 		target uv canvas draw(source, this _unpackRgbaToUv)
+		target
+	}
+	unpackBgraToYuv420Semiplanar: func ~padded (source: GpuBgra, targetSize: IntSize2D, padding: Int) -> GpuYuv420Semiplanar {
+		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
+		tempOffset := padding as Float / (source size width * 4) as Float
+		this _unpackRgbaToMonochrome targetSize = target y size
+		this _unpackRgbaToMonochrome sourceSize = source size
+		this _unpackRgbaToMonochrome transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
+		target y canvas draw(source, this _unpackRgbaToMonochrome)
+		this _unpackRgbaToUvPadded targetSize = target uv size
+		this _unpackRgbaToUvPadded sourceSize = source size
+		this _unpackRgbaToUvPadded paddingOffset = tempOffset
+		this _unpackRgbaToUvPadded transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
+		target uv canvas draw(source, this _unpackRgbaToUvPadded)
 		target
 	}
 
