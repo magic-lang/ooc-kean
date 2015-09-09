@@ -75,7 +75,7 @@ GpuImage: abstract class extends Image {
 		result canvas draw(this, size)
 		result
 	}
-	copy: func -> This { raise("Using unimplemented function copy in GpuImage class"); null }
+	copy: override func -> This { this resizeTo(this size) }
 	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This { raise("Using unimplemented function copy ~fromParams in GpuImage class"); null }
 	shift: func (offset: IntSize2D) -> This { raise("Using unimplemented function shift in GpuImage class"); null }
 	distance: func (other: This) -> Float { raise("Using unimplemented function distance in GpuImage class"); 0.0f }
