@@ -56,12 +56,7 @@ GpuContext: abstract class {
 	drawPoints: abstract func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D)
 	drawQuad: abstract func
 	enableBlend: abstract func (blend: Bool)
-	finish: func {
-		fence := this createFence()
-		fence sync()
-		fence wait()
-		fence free()
-	}
+	finish: func { this createFence() sync() . wait() . free() }
 
 	createYuv420Semiplanar: func (size: IntSize2D) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(size, this) }
 	createYuv420Semiplanar: func ~fromImages (y: GpuMonochrome, uv: GpuUv) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(y, uv, this) }

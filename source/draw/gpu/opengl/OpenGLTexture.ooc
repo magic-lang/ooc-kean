@@ -41,16 +41,7 @@ OpenGLTexture: class extends GpuTexture {
 	bind: func (unit: UInt) { this backend bind(unit) }
 	unbind: func { this backend unbind() }
 	upload: func (pointer: UInt8*, stride: UInt) { this backend upload(pointer, stride) }
-	createBgr: static func (size: IntSize2D, stride: UInt, data: Pointer) -> This {
-		This new(Texture create(TextureType bgr, size width, size height, stride, data))
-	}
-	createBgra: static func (size: IntSize2D, stride: UInt, data: Pointer) -> This {
-		This new(Texture create(TextureType bgra, size width, size height, stride, data))
-	}
-	createMonochrome: static func (size: IntSize2D, stride: UInt, data: Pointer) -> This {
-		This new(Texture create(TextureType monochrome, size width, size height, stride, data))
-	}
-	createUv: static func (size: IntSize2D, stride: UInt, data: Pointer) -> This {
-		This new(Texture create(TextureType uv, size width, size height, stride, data))
+	create: static func (type: TextureType, size: IntSize2D, stride: UInt, data: Pointer) -> This {
+		This new(Texture create(type, size width, size height, stride, data))
 	}
 }

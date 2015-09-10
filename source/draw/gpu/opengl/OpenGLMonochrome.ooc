@@ -18,10 +18,11 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 import OpenGLCanvas, Map/OpenGLMap, Map/OpenGLMapPack, OpenGLTexture
+import backend/gles3/Texture
 
 OpenGLMonochrome: class extends GpuMonochrome {
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
-		super(OpenGLTexture createMonochrome(size, stride, data), size, context)
+		super(OpenGLTexture create(TextureType monochrome, size, stride, data), size, context)
 		this coordinateSystem = coordinateSystem
 	}
 	init: func (size: IntSize2D, context: GpuContext) { this init(size, size width, null, CoordinateSystem YUpward, context) }

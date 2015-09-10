@@ -22,7 +22,7 @@ import backend/gles3/Texture, OpenGLCanvas, Map/OpenGLMap, Map/OpenGLMapPack, Op
 
 OpenGLUv: class extends GpuUv {
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
-		super(OpenGLTexture createUv(size, stride, data), size, context)
+		super(OpenGLTexture create(TextureType uv, size, stride, data), size, context)
 		this coordinateSystem = coordinateSystem
 	}
 	init: func (size: IntSize2D, context: GpuContext) {

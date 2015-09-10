@@ -25,7 +25,7 @@ OpenGLYuv422Semipacked: class extends GpuYuv422Semipacked {
 		init(size, size width * 2, null, context)
 	}
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, context: GpuContext) {
-		super(OpenGLTexture createUv(size, stride, data), size, context)
+		super(OpenGLTexture create(TextureType uv, size, stride, data), size, context)
 	}
 	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) {
 		super(texture, size, context)

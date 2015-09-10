@@ -22,7 +22,7 @@ import backend/gles3/Texture, OpenGLCanvas, OpenGLTexture
 
 OpenGLBgra: class extends GpuBgra {
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
-		super(OpenGLTexture createBgra(size, stride, data), size, context)
+		super(OpenGLTexture create(TextureType bgra, size, stride, data), size, context)
 		this coordinateSystem = coordinateSystem
 	}
 	init: func (size: IntSize2D, context: GpuContext) { this init(size, size width * this _channels, null, CoordinateSystem YUpward, context) }
