@@ -1,4 +1,8 @@
 Name: ooc Plot
 Description: Plot functionality library.
 SourcePath: source/plot
-Imports: LinePlotData2D, ScatterPlotData2D, PlotData2D, SvgPlot, SvgWriter2D
+Imports: LinePlotData2D
+Imports: ScatterPlotData2D
+Imports: PlotData2D
+Imports: SvgPlot
+Imports: SvgWriter2D
