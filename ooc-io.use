@@ -1,4 +1,0 @@
-Name: ooc IO
-Description: IO functionality library.
-SourcePath: source/io
-Imports: CsvReader
