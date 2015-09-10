@@ -162,7 +162,7 @@ OpenGLES3Context: class extends GpuContext {
 			result upload(raster)
 		result
 	}
-	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
+	createGpuImage: override func (rasterImage: RasterImage) -> GpuImage {
 		match (rasterImage) {
 			case image: RasterMonochrome => this _createMonochrome(image)
 			case image: RasterBgr => this _createBgr(image)

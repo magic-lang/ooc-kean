@@ -19,7 +19,7 @@ use ooc-opengl
 use ooc-draw
 use ooc-math
 use ooc-base
-import AndroidTexture, GraphicBuffer
+import AndroidTexture, GraphicBuffer, GraphicBufferYuv420Semiplanar
 import threading/Thread
 import math
 
@@ -35,6 +35,18 @@ AndroidContext: class extends OpenGLES3Context {
 		this _unpackRgbaToUv free()
 		this _packers free()
 		super()
+	}
+	createGpuImage: override func (rasterImage: RasterImage) -> GpuImage {
+		result: GpuImage
+		if (rasterImage instanceOf?(GraphicBufferYuv420Semiplanar)) {
+			graphicBufferImage := rasterImage as GraphicBufferYuv420Semiplanar
+			rgba := graphicBufferImage toRgba(this)
+			result = this unpackBgraToYuv420Semiplanar(rgba, rasterImage size)
+			rgba free()
+		}
+		else
+			result = super(rasterImage)
+		result
 	}
 	recyclePacker: func (packer: OpenGLES3Bgra) { this _packers add(packer) }
 	getPacker: func (size: IntSize2D) -> OpenGLES3Bgra {
