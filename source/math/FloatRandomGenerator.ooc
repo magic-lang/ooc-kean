@@ -70,7 +70,7 @@ FloatGaussianRandomGenerator: class extends FloatRandomGenerator {
 		if (first == 0.0f)
 			first = Float minimumValue
 		second := this _backend next()
-		value := sqrt(-2.0f * log(first)) * cos(2.0f * PI * second)
+		value := (-2.0f * first log()) sqrt() * (2.0f * Float pi * second) cos()
 		value * this _sigma + this _mu
 	}
 }
