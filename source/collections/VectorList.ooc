@@ -118,7 +118,7 @@ VectorList: class <T> {
 	map: func <T, S> (function: Func(T) -> S) -> This<S> {
 		result := This<S> new(this count)
 		for (i in 0 .. this count) {
-			result[i] = function(this[i])
+			result add(function(this[i]))
 		}
 		result
 	}
