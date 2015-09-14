@@ -1,4 +1,6 @@
-sudo: false
+sudo: required
+services:
+  - docker
 addons:
   apt:
     packages:
@@ -6,7 +8,7 @@ addons:
     - wget
 before_script:
   - # sudo apt-get update
-  - # sudo apt-get -y -qq install libgles2-mesa-dev
+  - sudo apt-get -y -qq install libgles2-mesa-dev
   - tmp="$(wget -O - https://github.com/cogneco/rock/releases/latest | grep -o '\<download/rock_.*deb\>')"
   - echo $tmp
   - wget https://github.com/cogneco/rock/releases/$tmp
@@ -32,5 +34,5 @@ script:
   - node ./magic
   - echo "travis_fold:end:magic folding ends"
   - echo "travis_fold:start:test folding starts"
-  - ./test.sh nogpu -Dnogpu
+  - ./test.sh
   - echo "travis_fold:end:test folding ends"
