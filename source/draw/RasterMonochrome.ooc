@@ -189,7 +189,7 @@ RasterMonochrome: class extends RasterPacked {
 
 	getValue: func (x, y: Int) -> UInt8 {
 		version(safe) {
-			if (x > this size width || y > this size height || x < 0 || y < 0)
+			if (x >= this size width || y >= this size height || x < 0 || y < 0)
 				raise("Accessing RasterMonochrome index out of range in getValue")
 		}
 		(this buffer pointer[y * this stride + x])
@@ -197,30 +197,35 @@ RasterMonochrome: class extends RasterPacked {
 
 	operator []= (x, y: Int, value: ColorMonochrome) {
 		version(safe) {
-			if (x > this size width || y > this size height || x < 0 || y < 0)
+			if (x >= this size width || y >= this size height || x < 0 || y < 0)
 				raise("Accessing RasterMonochrome index out of range in set operator")
 		}
 		((this buffer pointer + y * this stride) as ColorMonochrome* + x)@ = value
 	}
-	getRow: func (y: Int) -> FloatVectorList {
-		result := FloatVectorList new()
-		version(safe) {
-			if (y > this size height || y < 0)
-				raise("Accessing RasterMonochrome index out of range in getRow")
-		}
-		for (x in 0 .. (this size width))
-				result add(this buffer pointer[y * this stride + x] as Float)
+	getRow: func (row: Int) -> FloatVectorList {
+		result := FloatVectorList new(this size width)
+		this getRowInto(row, result)
 		result
 	}
-
-	getColumn: func (x: Int) -> FloatVectorList {
-		result := FloatVectorList new()
+	getRowInto: func (row: Int, vector: FloatVectorList) {
 		version(safe) {
-			if (x > this size width || x < 0)
+			if (row >= this size height || row < 0)
+				raise("Accessing RasterMonochrome index out of range in getRow")
+		}
+		for (column in 0 .. this size width)
+			vector add(this buffer pointer[row * this stride + column] as Float)
+	}
+	getColumn: func (column: Int) -> FloatVectorList {
+		result := FloatVectorList new(this size height)
+		this getColumnInto(column, result)
+		result
+	}
+	getColumnInto: func (column: Int, vector: FloatVectorList) {
+		version(safe) {
+			if (column >= this size width || column < 0)
 				raise("Accessing RasterMonochrome index out of range in getColumn")
 		}
-		for (y in 0 .. (this size height))
-				result add(this buffer pointer[y * this stride + x] as Float)
-		result
+		for (row in 0 .. this size height)
+			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
 }

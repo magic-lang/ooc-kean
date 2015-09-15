@@ -38,6 +38,25 @@ RasterMonochromeTest: class extends Fixture {
 			expect(image1 equals(image2))
 			image1 free(); image2 free()
 		})
+		this add("getRow and getColumn", func{
+			size := IntSize2D new(500, 256)
+			image := RasterMonochrome new(size)
+			for (row in 0 .. size height)
+				for (column in 0 .. size width)
+					image[column, row] = ColorMonochrome new(row)
+			for (column in 0 .. size width) {
+				columnData := image getColumn(column)
+				expect(columnData count == size height)
+				for (i in 0 .. columnData count)
+					expect(columnData[i] as UInt8 == i)
+			}
+			for (row in 0 .. size height) {
+				rowData := image getRow(row)
+				expect(rowData count == size width)
+				for (i in 0 .. rowData count)
+					expect(rowData[i] as UInt8 == row)
+			}
+		})
 		/*this add("distance, convertFrom RasterBgra", func {
 			source := this sourceFlower
 			output := "test/draw/output/RasterBgrToMonochrome.png"
