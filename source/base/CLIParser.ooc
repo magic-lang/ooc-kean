@@ -91,7 +91,7 @@ CLIParser: class {
 			if (tokens[i] _type == TokenType Short) {
 				for (j in 0 .. this _arguments count) {
 					if (this _arguments[j] _shortIdentifier == tokens[i] _value) {
-							argument = this _arguments[j]
+						argument = this _arguments[j]
 					}
 				}
 			} else if (tokens[i] _type == TokenType Long) {

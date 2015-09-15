@@ -33,9 +33,9 @@ Vector: abstract class <T> {
 	_free: func ~range (start, end: Int) {
 		if (this _freeContent && T inheritsFrom?(Object)) {
 			for (i in start .. end) {
-					old := this[i] as Object
-					if (old != null)
-						old free()
+				old := this[i] as Object
+				if (old != null)
+					old free()
 			}
 		}
 	}

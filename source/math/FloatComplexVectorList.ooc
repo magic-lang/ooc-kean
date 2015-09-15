@@ -157,7 +157,7 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	createDefault: static func ~withValue (capacity: Int, value: FloatComplex) -> This {
 		result := This new(capacity)
 		for (i in 0 .. capacity)
-				result add(value)
+			result add(value)
 		result
 	}
 }
