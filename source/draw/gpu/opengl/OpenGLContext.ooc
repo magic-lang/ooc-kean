@@ -20,7 +20,7 @@ use ooc-draw-gpu
 use ooc-collections
 import GpuImageBin, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLYuv422Semipacked, OpenGLFence
 import Map/OpenGLMap, Map/OpenGLMapPack
-import backend/gles3/[Context, NativeWindow, Lines, Quad]
+import backend/gles3/[Context, NativeWindow, Renderer]
 
 OpenGLContext: class extends GpuContext {
 	_backend: Context
@@ -29,7 +29,8 @@ OpenGLContext: class extends GpuContext {
 	_packUv: OpenGLMapPackUv
 	_linesShader: OpenGLMapLines
 	_pointsShader: OpenGLMapPoints
-	_quad: Quad
+	_renderer: Renderer
+	renderer ::= this _renderer
 	defaultMap: GpuMap { get { this _transformTextureMap } }
 
 	init: func (context: Context) {
@@ -39,8 +40,8 @@ OpenGLContext: class extends GpuContext {
 		this _linesShader = OpenGLMapLines new(this)
 		this _pointsShader = OpenGLMapPoints new(this)
 		this _backend = context
-		this _quad = Quad create()
 		this _transformTextureMap = OpenGLMapTransformTexture new(this)
+		this _renderer = Renderer new()
 	}
 	init: func ~unshared { this init(Context create()) }
 	init: func ~shared (other: This) { this init(Context create(other _backend)) }
@@ -53,20 +54,20 @@ OpenGLContext: class extends GpuContext {
 		this _linesShader free()
 		this _pointsShader free()
 		this _backend free()
-		this _quad free()
+		this _renderer free()
 		super()
 	}
 	recycle: func ~image (gpuImage: GpuImage) { this _imageBin add(gpuImage) }
-	drawQuad: func { this _quad draw() }
+	drawQuad: func { this _renderer drawQuad() }
 	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D) {
 		positions := pointList pointer as Float*
 		this _linesShader color = FloatPoint3D new(0.0f, 0.0f, 0.0f)
 		this _linesShader projection = projection
 		this _linesShader use()
-		Lines draw(positions, pointList count, 2, 3.5f)
+		this _renderer drawLines(positions, pointList count, 2, 3.5f)
 		this _linesShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
 		this _linesShader use()
-		Lines draw(positions, pointList count, 2, 1.5f)
+		this _renderer drawLines(positions, pointList count, 2, 1.5f)
 	}
 	drawBox: func (box: FloatBox2D, projection: FloatTransform3D) {
 		positions: Float[10]
@@ -83,13 +84,13 @@ OpenGLContext: class extends GpuContext {
 		this _linesShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
 		this _linesShader projection = projection
 		this _linesShader use()
-		Lines draw(positions[0]&, 5, 2, 1.5f)
+		this _renderer drawLines(positions[0]&, 5, 2, 1.5f)
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D) {
 		positions := pointList pointer
 		this _pointsShader projection = projection
 		this _pointsShader use()
-		Points draw(positions, pointList count, 2)
+		this _renderer drawPoints(positions, pointList count, 2)
 	}
 	searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage { this _imageBin find(type, size) }
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
