@@ -41,11 +41,11 @@ XSizeHintsOoc: cover from XSizeHints {
 	x, y: extern Int
 	width, height: extern Int
 	min_width, min_height: extern Int
- 	max_width, max_height: extern Int
+	max_width, max_height: extern Int
 	width_inc, height_inc: extern Int
 	min_aspect, max_aspect: extern Aspect
 	base_width, base_height: extern Int
- 	win_gravity: extern Int
+	win_gravity: extern Int
 }
 
 XSetWindowAttributesOoc: cover from XSetWindowAttributes {
