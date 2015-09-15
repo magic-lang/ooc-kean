@@ -11,7 +11,7 @@ import os/Time
 
 GpuImageReflectionTest: class extends Fixture {
 	init: func {
-		super("GpuImageReflectionTest")
+		super("GpuImageReflectionWithoutWindowTest")
 		sourceImage := RasterBgra open("test/draw/gpu/pc/input/Flower.png")
 		this add("GPU reflection X (BGRA)", func {
 			correctImage := RasterBgra open("test/draw/gpu/pc/correct/reflection_bgra_X.png")
