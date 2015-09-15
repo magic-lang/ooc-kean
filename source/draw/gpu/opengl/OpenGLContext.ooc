@@ -156,7 +156,6 @@ OpenGLContext: class extends GpuContext {
 			case image: RasterBgra => this _createBgra(image)
 			case image: RasterUv => this _createUv(image)
 			case image: RasterYuv420Semiplanar => this createYuv420Semiplanar(image)
-			case image: RasterYuv420Planar => this createYuv420Planar(image)
 			case => Debug raise("Unknown input format in OpenGLContext createGpuImage"); null
 		}
 	}

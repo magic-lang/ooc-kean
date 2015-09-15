@@ -17,7 +17,7 @@ use ooc-math
 use ooc-draw
 use ooc-base
 use ooc-collections
-import GpuImage, GpuMonochrome, GpuUv, GpuBgr, GpuBgra, GpuYuv420Semiplanar, GpuYuv420Planar, GpuImageBin, GpuSurface, GpuMap, GpuFence
+import GpuImage, GpuMonochrome, GpuUv, GpuBgr, GpuBgra, GpuYuv420Semiplanar, GpuImageBin, GpuSurface, GpuMap, GpuFence
 
 AlignWidth: enum {
 	Nearest
@@ -60,6 +60,4 @@ GpuContext: abstract class {
 	createYuv420Semiplanar: func (size: IntSize2D) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(size, this) }
 	createYuv420Semiplanar: func ~fromImages (y: GpuMonochrome, uv: GpuUv) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(y, uv, this) }
 	createYuv420Semiplanar: func ~fromRaster (raster: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(raster, this) }
-	createYuv420Planar: func (size: IntSize2D) -> GpuYuv420Planar { GpuYuv420Planar new(size, this) }
-	createYuv420Planar: func ~fromRaster (raster: RasterYuv420Planar) -> GpuYuv420Planar { GpuYuv420Planar new(raster, this) }
 }

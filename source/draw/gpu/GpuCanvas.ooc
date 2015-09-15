@@ -18,7 +18,7 @@ use ooc-math
 use ooc-draw
 use ooc-base
 use ooc-collections
-import GpuImage, GpuMap, GpuSurface, GpuContext, GpuYuv420Semiplanar, GpuYuv420Planar
+import GpuImage, GpuMap, GpuSurface, GpuContext, GpuYuv420Semiplanar
 
 GpuCanvas: abstract class extends GpuSurface {
 	_target: GpuImage
@@ -62,38 +62,5 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
 	clear: override func {
 		this target y canvas clear()
 		this target uv canvas clear()
-	}
-}
-
-GpuCanvasYuv420Planar: class extends GpuCanvas {
-	target := this _target as GpuYuv420Planar
-
-	init: func (image: GpuYuv420Planar, context: GpuContext) { super(image, context) }
-	onRecycle: func
-	_draw: func (image: GpuYuv420Planar) {
-		this target y canvas draw(image y)
-		this target u canvas draw(image u)
-		this target v canvas draw(image v)
-	}
-	draw: func (image: Image) {
-		if (image instanceOf?(RasterYuv420Planar)) {
-			temp := this _context createGpuImage(image as RasterYuv420Planar) as GpuYuv420Planar
-			this _draw(temp)
-			temp free()
-		}
-		else if (image instanceOf?(GpuYuv420Planar)) {
-			temp := image as GpuYuv420Planar
-			this _draw(temp)
-		}
-		else
-			Debug raise("Trying to draw unsupported image format to GpuYuv420Planar")
-	}
-	drawLines: override func (pointList: VectorList<FloatPoint2D>) { this target y canvas drawLines(pointList) }
-	drawBox: override func (box: FloatBox2D) { this target y canvas drawBox(box) }
-	drawPoints: override func (pointList: VectorList<FloatPoint2D>) { this target y canvas drawPoints(pointList) }
-	clear: override func {
-		this target y canvas clear()
-		this target u canvas clear()
-		this target v canvas clear()
 	}
 }

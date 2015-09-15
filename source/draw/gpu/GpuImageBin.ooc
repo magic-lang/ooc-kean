@@ -17,7 +17,7 @@
 use ooc-collections
 use ooc-math
 use ooc-base
-import GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
+import GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar
 import threading/Thread
 
 GpuImageBin: class {
