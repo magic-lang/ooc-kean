@@ -17,7 +17,7 @@ use ooc-math
 use ooc-draw
 use ooc-base
 use ooc-collections
-import GpuImage, GpuMonochrome, GpuUv, GpuBgr, GpuBgra, GpuYuv420Semiplanar, GpuImageBin, GpuSurface, GpuMap, GpuFence
+import GpuImage, GpuMonochrome, GpuUv, GpuBgr, GpuBgra, GpuYuv420Semiplanar, GpuSurface, GpuMap, GpuFence
 
 AlignWidth: enum {
 	Nearest
@@ -26,14 +26,8 @@ AlignWidth: enum {
 }
 
 GpuContext: abstract class {
-	_imageBin := GpuImageBin new()
 	defaultMap: GpuMap { get { null } }
 	init: func
-	free: override func {
-		this _imageBin free()
-		super()
-	}
-	clean: virtual func { this _imageBin clean() }
 	createMonochrome: abstract func (size: IntSize2D) -> GpuMonochrome
 	createBgr: abstract func (size: IntSize2D) -> GpuBgr
 	createBgra: abstract func (size: IntSize2D) -> GpuBgra

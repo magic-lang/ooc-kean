@@ -18,7 +18,7 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 use ooc-collections
-import GpuImageBin, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence
+import OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence
 import Map/OpenGLMap, Map/OpenGLMapPack
 import backend/gles3/[Context, NativeWindow, Renderer]
 
@@ -57,7 +57,10 @@ OpenGLContext: class extends GpuContext {
 		this _renderer free()
 		super()
 	}
-	recycle: func ~image (gpuImage: GpuImage) { this _imageBin add(gpuImage) }
+	recycle: func ~image (gpuImage: GpuImage) {
+		gpuImage _recyclable = false
+		gpuImage free()
+	}
 	drawQuad: func { this _renderer drawQuad() }
 	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D) {
 		positions := pointList pointer as Float*
@@ -92,7 +95,7 @@ OpenGLContext: class extends GpuContext {
 		this _pointsShader use()
 		this _renderer drawPoints(positions, pointList count, 2)
 	}
-	searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage { this _imageBin find(type, size) }
+	searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage { null }
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType monochrome, size)
 		if (result == null)
