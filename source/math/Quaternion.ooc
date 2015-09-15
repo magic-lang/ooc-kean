@@ -85,7 +85,7 @@ Quaternion: cover {
 		this init(w, x, y, z)
 	}
 	apply: func (vector: FloatPoint3D) -> FloatPoint3D {
- 		vectorQuaternion := This new(0.0f, vector)
+		vectorQuaternion := This new(0.0f, vector)
 		result := hamiltonProduct(hamiltonProduct(this, vectorQuaternion), this inverse)
 		FloatPoint3D new(result x, result y, result z)
 	}

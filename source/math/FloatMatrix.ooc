@@ -114,12 +114,12 @@ FloatMatrix : cover {
 		result: String = ""
 		for (y in 0 .. this dimensions height) {
 			for (x in 0 .. this dimensions width) {
- 				result += this get(x, y) toString() + ", "
+				result += this get(x, y) toString() + ", "
 			}
 			result += "; "
 		}
 		result
-	 }
+	}
 
 	// <summary>
 	// See http://en.wikipedia.org/wiki/LUP_decomposition.
