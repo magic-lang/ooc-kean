@@ -18,7 +18,7 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 use ooc-collections
-import GpuImageBin, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLYuv422Semipacked, OpenGLFence
+import GpuImageBin, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence
 import Map/OpenGLMap, Map/OpenGLMapPack
 import backend/gles3/[Context, NativeWindow, Renderer]
 
@@ -149,21 +149,7 @@ OpenGLContext: class extends GpuContext {
 			result upload(raster)
 		result
 	}
-	createYuv422Semipacked: func (size: IntSize2D) -> GpuImage {
-		result := this searchImageBin(GpuImageType yuv422, size)
-		if (result == null)
-			result = OpenGLYuv422Semipacked new(size, this)
-		result
-	}
-	_createYuv422Semipacked: func (raster: RasterYuv422Semipacked) -> GpuImage {
-		result := this searchImageBin(GpuImageType yuv422, raster size)
-		if (result == null)
-			result = OpenGLYuv422Semipacked new(raster, this)
-		else
-			result upload(raster)
-		result
-	}
-	createGpuImage: override func (rasterImage: RasterImage) -> GpuImage {
+	createGpuImage: func (rasterImage: RasterImage) -> GpuImage {
 		match (rasterImage) {
 			case image: RasterMonochrome => this _createMonochrome(image)
 			case image: RasterBgr => this _createBgr(image)
@@ -171,7 +157,6 @@ OpenGLContext: class extends GpuContext {
 			case image: RasterUv => this _createUv(image)
 			case image: RasterYuv420Semiplanar => this createYuv420Semiplanar(image)
 			case image: RasterYuv420Planar => this createYuv420Planar(image)
-			case image: RasterYuv422Semipacked => this _createYuv422Semipacked(image)
 			case => Debug raise("Unknown input format in OpenGLContext createGpuImage"); null
 		}
 	}

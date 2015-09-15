@@ -17,7 +17,7 @@
 use ooc-collections
 use ooc-math
 use ooc-base
-import GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuYuv422Semipacked
+import GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar
 import threading/Thread
 
 GpuImageBin: class {
@@ -25,7 +25,6 @@ GpuImageBin: class {
 	_bgr: VectorList<GpuImage>
 	_bgra: VectorList<GpuImage>
 	_uv: VectorList<GpuImage>
-	_yuv422: VectorList<GpuImage>
 	_mutex: Mutex
 	_limit := 15
 	init: func {
@@ -34,7 +33,6 @@ GpuImageBin: class {
 		this _bgr = VectorList<GpuImage> new()
 		this _bgra = VectorList<GpuImage> new()
 		this _uv = VectorList<GpuImage> new()
-		this _yuv422 = VectorList<GpuImage> new()
 	}
 	_cleanList: static func (list: VectorList<GpuImage>) {
 		for (i in 0 .. list count)
@@ -47,7 +45,6 @@ GpuImageBin: class {
 		This _cleanList(this _bgr)
 		This _cleanList(this _bgra)
 		This _cleanList(this _uv)
-		This _cleanList(this _yuv422)
 		this _mutex unlock()
 	}
 	free: override func {
@@ -56,7 +53,6 @@ GpuImageBin: class {
 		this _bgr free()
 		this _bgra free()
 		this _uv free()
-		this _yuv422 free()
 		this _mutex destroy()
 		super()
 	}
@@ -78,7 +74,6 @@ GpuImageBin: class {
 			case (i: GpuBgr) => this _add(i, this _bgr)
 			case (i: GpuBgra) => this _add(i, this _bgra)
 			case (i: GpuUv) => this _add(i, this _uv)
-			case (i: GpuYuv422Semipacked) => this _add(i, this _yuv422)
 			case => Debug raise("Unknown format in GpuImageBin add()")
 		}
 		this _mutex unlock()
@@ -105,7 +100,6 @@ GpuImageBin: class {
 			case GpuImageType uv => this _search(size, this _uv)
 			case GpuImageType bgr => this _search(size, this _bgr)
 			case GpuImageType bgra => this _search(size, this _bgra)
-			case GpuImageType yuv422 => this _search(size, this _yuv422)
 			case => null
 		}
 		this _mutex unlock()
