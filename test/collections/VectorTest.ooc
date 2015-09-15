@@ -192,6 +192,7 @@ VectorTest: class extends Fixture {
 			stackVector free()
 		})
 
+		/* Activate test when [] supports references.
 		this add("cover by reference in heap vector", func {
 			heapVector := HeapVector<MyCover> new(3) as Vector<MyCover>
 			// Test default value
@@ -210,6 +211,7 @@ VectorTest: class extends Fixture {
 			expect(heapVector[2] content, is equal to(4))
 			heapVector free()
 		})
+		*/
 
 		this add("nested heap vector", func {
 			sizeX := 2
