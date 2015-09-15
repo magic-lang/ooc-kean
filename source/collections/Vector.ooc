@@ -126,9 +126,10 @@ HeapVector: class <T> extends Vector<T> {
 			if (index >= this capacity || index < 0)
 				raise("Accessing Vector index out of range in set operator")
 		}
-		if (T inheritsFrom?(Object)) {
+		if (this _freeContent && T inheritsFrom?(Object)) {
 			old := this[index] as Object
-			old free()
+			if (old != null)
+				old free()
 		}
 		this _backend[index] = item
 	}
