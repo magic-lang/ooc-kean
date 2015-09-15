@@ -8,7 +8,7 @@ addons:
     - wget
 before_script:
   - # sudo apt-get update
-  - sudo apt-get -y -qq install libgles2-mesa-dev
+  - sudo apt-get -y -qq install libgles2-mesa-dev libegl1-mesa-drivers
   - tmp="$(wget -O - https://github.com/cogneco/rock/releases/latest | grep -o '\<download/rock_.*deb\>')"
   - echo $tmp
   - wget https://github.com/cogneco/rock/releases/$tmp
