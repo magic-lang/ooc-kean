@@ -18,6 +18,13 @@
 use ooc-unit
 use ooc-collections
 
+MyCover: cover {
+	content: Int
+	init: func@ (=content)
+	init: func@ ~default { this init(0) }
+	increase: func { this content += 1 }
+}
+
 VectorTest: class extends Fixture {
 	init: func {
 		super("Vector")
@@ -183,6 +190,36 @@ VectorTest: class extends Fixture {
 			expect(stackVector[0], is equal to(oldValue))
 
 			stackVector free()
+		})
+
+		/* Activate test when [] supports references.
+		this add("cover by reference in heap vector", func {
+			heapVector := HeapVector<MyCover> new(3) as Vector<MyCover>
+			// Test default value
+			expect(heapVector capacity, is equal to(3))
+			expect(heapVector[0] content, is equal to(0))
+			// Test assignment by value
+			heapVector[2] = MyCover new(3)
+			expect(heapVector[2] content, is equal to(3))
+			// Test side effects by reference
+			// This test requires the [] operands to pass pointers instead of values.
+			// It is dangerous to reallocate a collection while pointers are referring
+			// directly to the allocation since resizing will free the memory.
+			// If you need a persistent pointer to cover element or a flat subset of the
+			// element within the same allocation, you must put each cover in a cell.
+			heapVector[2] increase()
+			expect(heapVector[2] content, is equal to(4))
+			heapVector free()
+		})
+		*/
+
+		this add("nested heap vector", func {
+			sizeX := 2
+			sizeY := 3
+			heapVector := HeapVector<HeapVector<MyCover>> new(sizeX)
+			for (i in 0 .. sizeX)
+				heapVector[i] = HeapVector<MyCover> new(sizeY)
+			heapVector free()
 		})
 	}
 }
