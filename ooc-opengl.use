@@ -1,6 +1,25 @@
 Name: ooc OpenGL ES 3
 Description: Wrapper for OpenGL ES 3
 SourcePath: source/draw/gpu/opengl
-Requires: ooc-base, ooc-math, ooc-unit, ooc-draw, ooc-draw-gpu
-Imports: OpenGLES3/DebugGL, OpenGLES3/Texture, OpenGLES3/EGLImage, OpenGLES3/Quad, OpenGLES3/Context, OpenGLES3/NativeWindow, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Monochrome, OpenGLES3Uv, OpenGLES3Canvas, Map/OpenGLES3Map, Map/OpenGLES3MapPack, OpenGLES3/Fbo, OpenGLES3Context, OpenGLES3VolumeMonochrome
+Requires: ooc-base
+Requires: ooc-math
+Requires: ooc-unit
+Requires: ooc-draw
+Requires: ooc-draw-gpu
+Imports: OpenGLES3/DebugGL
+Imports: OpenGLES3/Texture
+Imports: OpenGLES3/EGLImage
+Imports: OpenGLES3/Quad
+Imports: OpenGLES3/Context
+Imports: OpenGLES3/NativeWindow
+Imports: OpenGLES3Bgr
+Imports: OpenGLES3Bgra
+Imports: OpenGLES3Monochrome
+Imports: OpenGLES3Uv
+Imports: OpenGLES3Canvas
+Imports: Map/OpenGLES3Map
+Imports: Map/OpenGLES3MapPack
+Imports: OpenGLES3/Fbo
+Imports: OpenGLES3Context
+Imports: OpenGLES3VolumeMonochrome
 Libs: -lEGL

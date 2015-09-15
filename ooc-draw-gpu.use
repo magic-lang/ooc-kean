@@ -1,6 +1,25 @@
 Name: ooc Draw GPU
 Description: GPU accelerated versions of ooc-draw classes.
 SourcePath: source/draw/gpu
-Requires: ooc-base, ooc-math, ooc-unit, ooc-draw
-Imports: GpuTexture, GpuImage, GpuPacked, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuYuv422Semipacked, GpuCanvas, GpuSurface, GpuMap, GpuContext, GpuImageBin, GpuFence
-Libs: -lEGL, -lGLESv2
+Requires: ooc-base
+Requires: ooc-math
+Requires: ooc-unit
+Requires: ooc-draw
+Imports: GpuTexture
+Imports: GpuImage
+Imports: GpuPacked
+Imports: GpuMonochrome
+Imports: GpuBgr
+Imports: GpuBgra
+Imports: GpuUv
+Imports: GpuYuv420Semiplanar
+Imports: GpuYuv420Planar
+Imports: GpuYuv422Semipacked
+Imports: GpuCanvas
+Imports: GpuSurface
+Imports: GpuMap
+Imports: GpuContext
+Imports: GpuImageBin
+Imports: GpuFence
+Libs: -lEGL
+Libs: -lGLESv2
