@@ -34,5 +34,5 @@ script:
   - node ./magic
   - echo "travis_fold:end:magic folding ends"
   - echo "travis_fold:start:test folding starts"
-  - ./test.sh
+  - ./test.sh draw/gpu/pc/GpuImageReflectionWithoutWindow
   - echo "travis_fold:end:test folding ends"
