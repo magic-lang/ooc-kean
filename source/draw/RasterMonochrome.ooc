@@ -135,7 +135,7 @@ RasterMonochrome: class extends RasterPacked {
 		// Ix & Iy  centered difference approximation with 4th error order, centered window
 		for (y in (region leftTop y) .. (region rightBottom y)) {
 			for (x in (region leftTop x) .. (region rightBottom x)) {
-				destinationX@ =	(
+				destinationX@ = (
 					8 * source[x + step] -
 					8 * source[x - step] +
 					source[x - 2 * step] -
@@ -143,7 +143,7 @@ RasterMonochrome: class extends RasterPacked {
 				) as Float / (12.0f * step)
 				destinationX += 1
 
-				destinationY@ =	(
+				destinationY@ = (
 					8 * source[x + sourceWidth * step] -
 					8 * source[x - sourceWidth * step] +
 					source[x - sourceWidth * 2 * step] -
