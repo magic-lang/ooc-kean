@@ -18,11 +18,11 @@ use ooc-base
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3/Texture, OpenGLES3Canvas, OpenGLES3Texture
+import backend/gles3/Texture, OpenGLCanvas, OpenGLTexture
 
-OpenGLES3Bgr: class extends GpuBgr {
+OpenGLBgr: class extends GpuBgr {
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
-		super(OpenGLES3Texture createBgr(size, stride, data), size, context)
+		super(OpenGLTexture createBgr(size, stride, data), size, context)
 		this coordinateSystem = coordinateSystem
 	}
 	init: func (size: IntSize2D, context: GpuContext) { this init(size, size width * this _channels, null, CoordinateSystem YUpward, context) }
@@ -30,6 +30,6 @@ OpenGLES3Bgr: class extends GpuBgr {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: func -> RasterImage { Debug raise("toRaster not implemented for BGR"); null }
-	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas new(this, this _context) }
+	_createCanvas: func -> GpuCanvas { OpenGLCanvas new(this, this _context) }
 	create: override func (size: IntSize2D) -> This { this _context createBgr(size) as This }
 }

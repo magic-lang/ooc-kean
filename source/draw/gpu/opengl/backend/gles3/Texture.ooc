@@ -16,7 +16,7 @@
  */
 use ooc-math
 use ooc-base
-import include/gles, DebugGL
+import include/gles3, DebugGL
 import Context
 
 TextureType: enum {

@@ -18,9 +18,9 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3/VolumeTexture
+import backend/gles3/VolumeTexture
 
-OpenGLES3VolumeMonochrome: class {
+OpenGLVolumeMonochrome: class {
 	_backend: VolumeTexture
 	init: func (size: IntSize3D, pixels: UInt8* = null) {
 		this _backend = VolumeTexture new(size width, size height, size depth, pixels)

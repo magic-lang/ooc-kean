@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import include/gles
+import include/gles3
 
 NativeWindow: abstract class {
 	_display: Pointer

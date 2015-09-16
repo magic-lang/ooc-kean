@@ -139,7 +139,7 @@ GpuSurfaceTest: class extends Fixture {
 			gpuImage canvas drawLines(trianglePoints)
 			gpuImage canvas drawBox(FloatBox2D new(-lineLength, -lineLength, lineLength * 2.0f, lineLength * 2.0f))
 			//
-			// NOTE! The circle use a point size of 1.0f (OpenGLES3MapPoints in OpenGLES3Map.ooc)
+			// NOTE! The circle use a point size of 1.0f (OpenGLMapPoints in OpenGLMap.ooc)
 			//
 			theta := 0.0f
 			step := Float pi / 20.0f

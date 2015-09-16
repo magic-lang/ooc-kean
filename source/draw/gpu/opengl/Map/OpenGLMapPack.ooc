@@ -1,7 +1,7 @@
 use ooc-math
 use ooc-draw-gpu
-import OpenGLES3Map
-OpenGLES3MapPack: abstract class extends OpenGLES3Map {
+import OpenGLMap
+OpenGLMapPack: abstract class extends OpenGLMap {
 	imageWidth: Int { get set }
 	channels: Int { get set }
 	transform: FloatTransform3D
@@ -20,7 +20,7 @@ OpenGLES3MapPack: abstract class extends OpenGLES3Map {
 		this program setUniform("transform", this transform)
 	}
 }
-OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
+OpenGLMapPackMonochrome: class extends OpenGLMapPack {
 	init: func (context: GpuContext) { super(This vertexSource, This fragmentSource, context) }
 	vertexSource: static String = "#version 300 es
 		precision mediump float;
@@ -50,7 +50,7 @@ OpenGLES3MapPackMonochrome: class extends OpenGLES3MapPack {
 			outColor = vec4(r, g, b, a);
 		}"
 }
-OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
+OpenGLMapPackUv: class extends OpenGLMapPack {
 	init: func (context: GpuContext) { super(This vertexSource, This fragmentSource, context) }
 	vertexSource: static String = "#version 300 es
 		precision mediump float;
@@ -76,7 +76,7 @@ OpenGLES3MapPackUv: class extends OpenGLES3MapPack {
 			outColor = vec4(rg.x, rg.y, ba.x, ba.y);
 		}"
 }
-OpenGLES3MapUnpack: abstract class extends OpenGLES3Map {
+OpenGLMapUnpack: abstract class extends OpenGLMap {
 	sourceSize: IntSize2D { get set }
 	targetSize: IntSize2D { get set }
 	transform: FloatTransform3D { get set }
@@ -104,7 +104,7 @@ OpenGLES3MapUnpack: abstract class extends OpenGLES3Map {
 			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
 		}"
 }
-OpenGLES3MapUnpackRgbaToMonochrome: class extends OpenGLES3MapUnpack {
+OpenGLMapUnpackRgbaToMonochrome: class extends OpenGLMapUnpack {
 	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	use: override func {
 		super()
@@ -125,7 +125,7 @@ OpenGLES3MapUnpackRgbaToMonochrome: class extends OpenGLES3MapUnpack {
 			outColor = texture(texture0, fragmentTextureCoordinate.xy)[pixelIndex];
 		}"
 }
-OpenGLES3MapUnpackRgbaToUv: class extends OpenGLES3MapUnpack {
+OpenGLMapUnpackRgbaToUv: class extends OpenGLMapUnpack {
 	init: func (context: GpuContext) { super(This fragmentSource, context) }
 	use: override func {
 		super()

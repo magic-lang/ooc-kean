@@ -16,7 +16,7 @@
  */
 use ooc-base
 import os/Time
-import include/gles
+import include/gles3
 import threading/native/ConditionUnix
 import threading/Thread
 Fence: class {

@@ -18,11 +18,11 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3/Texture, OpenGLES3Canvas, Map/OpenGLES3Map, Map/OpenGLES3MapPack, OpenGLES3Texture
+import backend/gles3/Texture, OpenGLCanvas, Map/OpenGLMap, Map/OpenGLMapPack, OpenGLTexture
 
-OpenGLES3Uv: class extends GpuUv {
+OpenGLUv: class extends GpuUv {
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
-		super(OpenGLES3Texture createUv(size, stride, data), size, context)
+		super(OpenGLTexture createUv(size, stride, data), size, context)
 		this coordinateSystem = coordinateSystem
 	}
 	init: func (size: IntSize2D, context: GpuContext) {
@@ -43,7 +43,7 @@ OpenGLES3Uv: class extends GpuUv {
 		result
 	}
 	_createCanvas: func -> GpuCanvas {
-		result := OpenGLES3Canvas new(this, this _context)
+		result := OpenGLCanvas new(this, this _context)
 		result clearColor = ColorBgra new(128, 128, 128, 128)
 		result
 	}

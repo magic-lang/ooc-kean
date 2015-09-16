@@ -18,29 +18,29 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 use ooc-collections
-import GpuImageBin, OpenGLES3Monochrome, OpenGLES3Bgr, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Yuv422Semipacked, OpenGLES3Fence
-import Map/OpenGLES3Map, Map/OpenGLES3MapPack
-import OpenGLES3/[Context, NativeWindow, Lines, Quad]
+import GpuImageBin, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLYuv422Semipacked, OpenGLFence
+import Map/OpenGLMap, Map/OpenGLMapPack
+import backend/gles3/[Context, NativeWindow, Lines, Quad]
 
-OpenGLES3Context: class extends GpuContext {
+OpenGLContext: class extends GpuContext {
 	_backend: Context
-	_transformTextureMap: OpenGLES3MapTransformTexture
-	_packMonochrome: OpenGLES3MapPackMonochrome
-	_packUv: OpenGLES3MapPackUv
-	_linesShader: OpenGLES3MapLines
-	_pointsShader: OpenGLES3MapPoints
+	_transformTextureMap: OpenGLMapTransformTexture
+	_packMonochrome: OpenGLMapPackMonochrome
+	_packUv: OpenGLMapPackUv
+	_linesShader: OpenGLMapLines
+	_pointsShader: OpenGLMapPoints
 	_quad: Quad
 	defaultMap: GpuMap { get { this _transformTextureMap } }
 
 	init: func (context: Context) {
 		super()
-		this _packMonochrome = OpenGLES3MapPackMonochrome new(this)
-		this _packUv = OpenGLES3MapPackUv new(this)
-		this _linesShader = OpenGLES3MapLines new(this)
-		this _pointsShader = OpenGLES3MapPoints new(this)
+		this _packMonochrome = OpenGLMapPackMonochrome new(this)
+		this _packUv = OpenGLMapPackUv new(this)
+		this _linesShader = OpenGLMapLines new(this)
+		this _pointsShader = OpenGLMapPoints new(this)
 		this _backend = context
 		this _quad = Quad create()
-		this _transformTextureMap = OpenGLES3MapTransformTexture new(this)
+		this _transformTextureMap = OpenGLMapTransformTexture new(this)
 	}
 	init: func ~unshared { this init(Context create()) }
 	init: func ~shared (other: This) { this init(Context create(other _backend)) }
@@ -95,13 +95,13 @@ OpenGLES3Context: class extends GpuContext {
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType monochrome, size)
 		if (result == null)
-			result = OpenGLES3Monochrome new(size, this)
+			result = OpenGLMonochrome new(size, this)
 		result
 	}
 	_createMonochrome: func (raster: RasterMonochrome) -> GpuImage {
 		result := this searchImageBin(GpuImageType monochrome, raster size)
 		if (result == null)
-			result = OpenGLES3Monochrome new(raster, this)
+			result = OpenGLMonochrome new(raster, this)
 		else
 			result upload(raster)
 		result
@@ -109,13 +109,13 @@ OpenGLES3Context: class extends GpuContext {
 	createUv: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType uv, size)
 		if (result == null)
-			result = OpenGLES3Uv new(size, this)
+			result = OpenGLUv new(size, this)
 		result
 	}
 	_createUv: func (raster: RasterUv) -> GpuImage {
 		result := this searchImageBin(GpuImageType uv, raster size)
 		if (result == null)
-			result = OpenGLES3Uv new(raster, this)
+			result = OpenGLUv new(raster, this)
 		else
 			result upload(raster)
 		result
@@ -123,13 +123,13 @@ OpenGLES3Context: class extends GpuContext {
 	createBgr: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType bgr, size)
 		if (result == null)
-			result = OpenGLES3Bgr new(size, this)
+			result = OpenGLBgr new(size, this)
 		result
 	}
 	_createBgr: func (raster: RasterBgr) -> GpuImage {
 		result := this searchImageBin(GpuImageType bgr, raster size)
 		if (result == null)
-			result = OpenGLES3Bgr new(raster, this)
+			result = OpenGLBgr new(raster, this)
 		else
 			result upload(raster)
 		result
@@ -137,13 +137,13 @@ OpenGLES3Context: class extends GpuContext {
 	createBgra: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType bgra, size)
 		if (result == null)
-			result = OpenGLES3Bgra new(size, this)
+			result = OpenGLBgra new(size, this)
 		result
 	}
 	_createBgra: func (raster: RasterBgra) -> GpuImage {
 		result := this searchImageBin(GpuImageType bgra, raster size)
 		if (result == null)
-			result = OpenGLES3Bgra new(raster, this)
+			result = OpenGLBgra new(raster, this)
 		else
 			result upload(raster)
 		result
@@ -151,13 +151,13 @@ OpenGLES3Context: class extends GpuContext {
 	createYuv422Semipacked: func (size: IntSize2D) -> GpuImage {
 		result := this searchImageBin(GpuImageType yuv422, size)
 		if (result == null)
-			result = OpenGLES3Yuv422Semipacked new(size, this)
+			result = OpenGLYuv422Semipacked new(size, this)
 		result
 	}
 	_createYuv422Semipacked: func (raster: RasterYuv422Semipacked) -> GpuImage {
 		result := this searchImageBin(GpuImageType yuv422, raster size)
 		if (result == null)
-			result = OpenGLES3Yuv422Semipacked new(raster, this)
+			result = OpenGLYuv422Semipacked new(raster, this)
 		else
 			result upload(raster)
 		result
@@ -171,7 +171,7 @@ OpenGLES3Context: class extends GpuContext {
 			case image: RasterYuv420Semiplanar => this createYuv420Semiplanar(image)
 			case image: RasterYuv420Planar => this createYuv420Planar(image)
 			case image: RasterYuv422Semipacked => this _createYuv422Semipacked(image)
-			case => Debug raise("Unknown input format in OpenGLES3Context createGpuImage"); null
+			case => Debug raise("Unknown input format in OpenGLContext createGpuImage"); null
 		}
 	}
 	update: func { this _backend swapBuffers() }
@@ -181,13 +181,13 @@ OpenGLES3Context: class extends GpuContext {
 		map := match (source) {
 			case sourceImage: GpuMonochrome => this _packMonochrome
 			case sourceImage: GpuUv => this _packUv
-		} as OpenGLES3MapPack
+		} as OpenGLMapPack
 		map imageWidth = source size width
 		map channels = source channels
 		target canvas viewport = viewport
 		target canvas draw(source, map)
 	}
-	createFence: func -> GpuFence { OpenGLES3Fence new() }
+	createFence: func -> GpuFence { OpenGLFence new() }
 	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) {
 		result := this toRaster(gpuImage, true)
 		fence := this createFence()

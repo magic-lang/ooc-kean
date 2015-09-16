@@ -23,10 +23,10 @@ import AndroidTexture, GraphicBuffer, GraphicBufferYuv420Semiplanar
 import threading/Thread
 import math
 
-AndroidContext: class extends OpenGLES3Context {
-	_unpackRgbaToMonochrome := OpenGLES3MapUnpackRgbaToMonochrome new(this)
-	_unpackRgbaToUv := OpenGLES3MapUnpackRgbaToUv new(this)
-	_packers := VectorList<OpenGLES3Bgra> new()
+AndroidContext: class extends OpenGLContext {
+	_unpackRgbaToMonochrome := OpenGLMapUnpackRgbaToMonochrome new(this)
+	_unpackRgbaToUv := OpenGLMapUnpackRgbaToUv new(this)
+	_packers := VectorList<OpenGLBgra> new()
 	init: func { super() }
 	init: func ~other (other: This) { super(other) }
 	free: override func {
@@ -48,9 +48,9 @@ AndroidContext: class extends OpenGLES3Context {
 			result = super(rasterImage)
 		result
 	}
-	recyclePacker: func (packer: OpenGLES3Bgra) { this _packers add(packer) }
-	getPacker: func (size: IntSize2D) -> OpenGLES3Bgra {
-		result: OpenGLES3Bgra = null
+	recyclePacker: func (packer: OpenGLBgra) { this _packers add(packer) }
+	getPacker: func (size: IntSize2D) -> OpenGLBgra {
+		result: OpenGLBgra = null
 		index := -1
 		for (i in 0 .. this _packers count) {
 			if (this _packers[i] size == size) {
@@ -60,14 +60,14 @@ AndroidContext: class extends OpenGLES3Context {
 		}
 		if (index == -1) {
 			androidTexture := this createAndroidRgba(size)
-			result = OpenGLES3Bgra new(androidTexture, this)
+			result = OpenGLBgra new(androidTexture, this)
 			result _recyclable = false
 		}
 		else
 			result = this _packers remove(index)
 		result
 	}
-	toBuffer: func (gpuImage: GpuImage, packMap: OpenGLES3MapPack) -> (ByteBuffer, GpuFence) {
+	toBuffer: func (gpuImage: GpuImage, packMap: OpenGLMapPack) -> (ByteBuffer, GpuFence) {
 		packSize := IntSize2D new(gpuImage size width / (4 / gpuImage channels), gpuImage size height)
 		gpuRgba := this getPacker(packSize)
 		this packToRgba(gpuImage, gpuRgba, IntBox2D new(gpuRgba size))
@@ -132,9 +132,9 @@ AndroidContext: class extends OpenGLES3Context {
 		(imageResult, fenceResult)
 	}
 	createAndroidRgba: func (size: IntSize2D) -> AndroidRgba { AndroidRgba new(size, this _backend _eglDisplay) }
-	createBgra: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> OpenGLES3Bgra {
+	createBgra: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> OpenGLBgra {
 		androidTexture := AndroidRgba new(buffer, this _backend _eglDisplay)
-		result := OpenGLES3Bgra new(androidTexture, this)
+		result := OpenGLBgra new(androidTexture, this)
 		result _recyclable = false
 		result
 	}

@@ -1,7 +1,7 @@
 use ooc-draw-gpu
-import OpenGLES3/Fence
+import backend/gles3/Fence
 
-OpenGLES3Fence: class extends GpuFence {
+OpenGLFence: class extends GpuFence {
 	_backend := Fence new()
 	init: func
 	free: override func {

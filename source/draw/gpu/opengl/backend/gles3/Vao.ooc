@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 use ooc-base
-import include/gles
+import include/gles3
 
 Vao: class {
 	backend: UInt
