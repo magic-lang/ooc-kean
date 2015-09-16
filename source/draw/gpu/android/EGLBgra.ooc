@@ -28,4 +28,9 @@ EGLBgra: class extends OpenGLES3Bgra {
 	init: func ~fromSize (size: IntSize2D, context: AndroidContext) {
 		this init(GraphicBuffer new(size, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage Rendertarget), context)
 	}
+	free: override func {
+		this _recyclable = false
+		this _buffer free()
+		super()
+	}
 }
