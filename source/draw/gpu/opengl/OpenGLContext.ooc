@@ -18,7 +18,7 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 use ooc-collections
-import OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence
+import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, RecycleBin
 import Map/OpenGLMap, Map/OpenGLMapPack
 import backend/gles3/[Context, NativeWindow, Renderer]
 
@@ -31,6 +31,7 @@ OpenGLContext: class extends GpuContext {
 	_pointsShader: OpenGLMapPoints
 	_renderer: Renderer
 	defaultMap: GpuMap { get { this _transformTextureMap } }
+	_recycleBin := RecycleBin new()
 
 	init: func (context: Context) {
 		super()
@@ -54,6 +55,7 @@ OpenGLContext: class extends GpuContext {
 		this _pointsShader free()
 		this _backend free()
 		this _renderer free()
+		this _recycleBin free()
 		super()
 	}
 	getMaxContexts: func -> Int { 1 }
@@ -92,15 +94,16 @@ OpenGLContext: class extends GpuContext {
 		this _pointsShader use()
 		this _renderer drawPoints(positions, pointList count, 2)
 	}
-	searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage { null }
+	recycle: func (image: OpenGLPacked) { this _recycleBin add(image) }
+	_searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage { this _recycleBin find(type, size) }
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
-		result := this searchImageBin(GpuImageType monochrome, size)
+		result := this _searchImageBin(GpuImageType monochrome, size)
 		if (result == null)
 			result = OpenGLMonochrome new(size, this)
 		result
 	}
 	_createMonochrome: func (raster: RasterMonochrome) -> GpuImage {
-		result := this searchImageBin(GpuImageType monochrome, raster size)
+		result := this _searchImageBin(GpuImageType monochrome, raster size)
 		if (result == null)
 			result = OpenGLMonochrome new(raster, this)
 		else
@@ -108,13 +111,13 @@ OpenGLContext: class extends GpuContext {
 		result
 	}
 	createUv: func (size: IntSize2D) -> GpuImage {
-		result := this searchImageBin(GpuImageType uv, size)
+		result := this _searchImageBin(GpuImageType uv, size)
 		if (result == null)
 			result = OpenGLUv new(size, this)
 		result
 	}
 	_createUv: func (raster: RasterUv) -> GpuImage {
-		result := this searchImageBin(GpuImageType uv, raster size)
+		result := this _searchImageBin(GpuImageType uv, raster size)
 		if (result == null)
 			result = OpenGLUv new(raster, this)
 		else
@@ -122,13 +125,13 @@ OpenGLContext: class extends GpuContext {
 		result
 	}
 	createBgr: func (size: IntSize2D) -> GpuImage {
-		result := this searchImageBin(GpuImageType bgr, size)
+		result := this _searchImageBin(GpuImageType bgr, size)
 		if (result == null)
 			result = OpenGLBgr new(size, this)
 		result
 	}
 	_createBgr: func (raster: RasterBgr) -> GpuImage {
-		result := this searchImageBin(GpuImageType bgr, raster size)
+		result := this _searchImageBin(GpuImageType bgr, raster size)
 		if (result == null)
 			result = OpenGLBgr new(raster, this)
 		else
@@ -136,13 +139,13 @@ OpenGLContext: class extends GpuContext {
 		result
 	}
 	createBgra: func (size: IntSize2D) -> GpuImage {
-		result := this searchImageBin(GpuImageType bgra, size)
+		result := this _searchImageBin(GpuImageType bgra, size)
 		if (result == null)
 			result = OpenGLBgra new(size, this)
 		result
 	}
 	_createBgra: func (raster: RasterBgra) -> GpuImage {
-		result := this searchImageBin(GpuImageType bgra, raster size)
+		result := this _searchImageBin(GpuImageType bgra, raster size)
 		if (result == null)
 			result = OpenGLBgra new(raster, this)
 		else

@@ -33,10 +33,16 @@ OpenGLES3Packed: abstract class extends GpuImage {
 	_channels: UInt
 	channels ::= this _channels
 	context ::= this _context as OpenGLES3Context
+	_recyclable := true
+	recyclable ::= this _recyclable
 	init: func (=_backend, =_channels, context: OpenGLES3Context) { super(this _backend size, context) }
 	free: override func {
-		this _backend free()
-		super()
+		if (this recyclable)
+			this context recycle(this)
+		else {
+			this _backend free()
+			super()
+		}
 	}
 	upload: override func (image: RasterImage) {
 		if (image instanceOf?(RasterPacked)) {
