@@ -55,6 +55,9 @@ Iterator: abstract class <T> extends Iterable<T> {
 	next: abstract func -> T
 	remove: abstract func -> Bool
 	iterator: func -> Iterator<T> {this}
+	map: func<T, S> (function: Func(T) -> S) -> This<S> {
+		_MappingIterator<T, S> new(this, function)
+	}
 }
 
 BackIterator: abstract class <T> extends Iterator<T> {
@@ -78,4 +81,23 @@ ReverseIterator: class <T> extends BackIterator<T> {
 	remove: func -> Bool { iterator remove() }
 	reversed: func -> BackIterator<T> { iterator }
 	iterator: func -> ReverseIterator<T> { this }
+}
+
+_MappingIterator: class <T, S> extends Iterator<S> {
+	_backend: Iterator<T>
+	_mapFunction: Func(T) -> S
+	init: func(=_backend, =_mapFunction)
+	free: func {
+		this _backend free()
+		super()
+	}
+	hasNext?: func -> Bool {
+		this _backend hasNext?()
+	}
+	next: func -> S {
+		this _mapFunction(this _backend next())
+	}
+	remove: func -> Bool {
+		this _backend remove()
+	}
 }
