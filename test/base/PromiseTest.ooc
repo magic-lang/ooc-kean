@@ -9,12 +9,12 @@ PromiseTest: class extends Fixture {
 		super("Promise")
 		this add("basic", func {
 			p := ThreadedPromise< Cell<Int> > new(func -> Cell<Int> {
-				Time sleepSec (1)
-				Cell<Int> new (42)
+				Time sleepSec(1)
+				Cell<Int> new(42)
 			})
 			p2 := ThreadedPromise< Cell<Int> > new(func -> Cell<Int> {
-				Time sleepSec (2)
-				Cell<Int> new (-5)
+				Time sleepSec(2)
+				Cell<Int> new(-5)
 			})
 
 			r := p wait()

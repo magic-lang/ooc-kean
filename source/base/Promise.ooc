@@ -8,30 +8,30 @@ PromiseState: enum {
 	Error
 }
 
-Promise: abstract class<T> {
+Promise: abstract class <T> {
 	_result: T
 	_state: PromiseState
 	state ::= this _state
 
 	init: func
 
-	wait: abstract func -> T { _result }
+	wait: abstract func -> T { this _result }
 
-	wait: virtual func ~timeout (seconds: Double) -> T { _result }
+	wait: virtual func ~timeout (seconds: Double) -> T { this _result }
 
 	cancel: virtual func -> Bool { false }
 
 	_execute: virtual func
 }
 
-ThreadedPromise : class<T> extends Promise<T> {
+ThreadedPromise : class <T> extends Promise <T> {
 	_mutex := Mutex new()
 	_thread: Thread
 	_task: Func
 	_exception: Exception
 
 	init: func (task: Func -> T) {
-		this _task = func () -> Void {
+		this _task = func -> Void {
 			try {
 				temporary := task()
 				this _mutex lock()
@@ -39,8 +39,8 @@ ThreadedPromise : class<T> extends Promise<T> {
 				this _state = PromiseState Completed
 				this _mutex unlock()
 			}
-			catch (e: Exception) {
-				this _exception = e
+			catch (exception: Exception) {
+				this _exception = exception
 			}
 		}
 
@@ -48,20 +48,19 @@ ThreadedPromise : class<T> extends Promise<T> {
 	}
 
 	wait: func -> T {
-		Running := true
+		running := true
 
-		while (Running) {
+		while (running) {
 			Time sleepMilli(10)
 			_mutex lock()
 			if (this _state != PromiseState Running) {
-			Running = false
+				running = false
 			}
 			_mutex unlock()
 		}
 
-		if (this _state == PromiseState Error) {
+		if (this _state == PromiseState Error)
 			_exception throw()
-		}
 
 		_result
 	}
@@ -81,7 +80,7 @@ ThreadedPromise : class<T> extends Promise<T> {
 			this _state = PromiseState Running
 
 			this _thread = Thread new(||
-			this _task()
+				this _task()
 			)
 
 			this _thread start()
