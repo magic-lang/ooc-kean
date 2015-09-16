@@ -19,7 +19,7 @@ use ooc-opengl
 use ooc-draw
 use ooc-math
 use ooc-base
-import GraphicBuffer, EGLBgra
+import GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLBgra
 import threading/Thread
 import math
 
