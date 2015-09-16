@@ -1,10 +1,3 @@
-/*
-- abstrakt klass
-+ wait
-+
-+ isDone()?
-+ state
-*/
 import threading/Thread
 import os/Time
 
