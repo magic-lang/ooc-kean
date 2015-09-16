@@ -140,8 +140,8 @@ ImageFileTest: class extends Fixture {
 			yuv420 := RasterYuv420Planar new(bgra)
 			monochrome := RasterMonochrome new(yuv420)
 			monochrome save(destination)
-		})
-*/		this add("convert RasterBgra to RasterYuv420Semiplanar", func {
+		})*/
+		this add("convert RasterBgra to RasterYuv420Semiplanar", func {
 			source := "test/draw/input/Barn.png"
 			destination := "test/draw/output/RasterBgra-RasterYuv420Semiplanar-RasterMonochrome.png"
 			bgra := RasterBgra open(source)
@@ -164,8 +164,8 @@ ImageFileTest: class extends Fixture {
 			yuv420 := RasterYuv420Planar new(bgr)
 			bgr2 := RasterBgr new(yuv420)
 			bgr2 save(destination)
-		})
-*/		this add("convert RasterBgra to RasterYuv420Semiplanar and back again", func {
+		})*/
+		this add("convert RasterBgra to RasterYuv420Semiplanar and back again", func {
 			source := "test/draw/input/Flower.png"
 			destination := "test/draw/output/RasterBgr-RasterYuv420Semiplanar-RasterBgr.png"
 			bgr := RasterBgr open(source)
