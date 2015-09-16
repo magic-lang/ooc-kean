@@ -24,6 +24,12 @@ MyCover: cover {
 	init: func@ ~default { this init(0) }
 	increase: func { this content += 1 }
 }
+MyClass: class {
+	content: Int
+	init: func (=content)
+	init: func ~default { this init(0) }
+	increase: func { this content += 1 }
+}
 
 VectorTest: class extends Fixture {
 	init: func {
@@ -214,12 +220,27 @@ VectorTest: class extends Fixture {
 		*/
 
 		this add("nested heap vector", func {
-			sizeX := 2
-			sizeY := 3
-			heapVector := HeapVector<HeapVector<MyCover>> new(sizeX)
-			for (i in 0 .. sizeX)
-				heapVector[i] = HeapVector<MyCover> new(sizeY)
-			heapVector free()
+			sizeX := 10
+			sizeY := 10
+			additionTable := HeapVector<HeapVector<MyClass>> new(sizeX)
+			for (i in 0 .. sizeX) {
+				additionTable[i] = HeapVector<MyClass> new(sizeY)
+				for (j in 0 .. sizeY) {
+					additionTable[i][j] = MyClass new(i + j)
+				}
+			}
+			// Array access requires casting to the correct type when a collection holds a generic collection
+			// 2 + 4 = 6
+			expect((additionTable[2] as HeapVector<MyClass>)[4] content, is equal to(6))
+			// Write that 1 + 2 = 12 just to confuse
+			(additionTable[1] as HeapVector<MyClass>)[2] content = 12
+			// Confirm that 1 + 2 = 12 according to the new logic
+			expect((additionTable[1] as HeapVector<MyClass>)[2] content, is equal to(12))
+			// Increase the value of 1 + 2 to 13
+			(additionTable[1] as HeapVector<MyClass>)[2] increase()
+			// Confirm that 1 + 2 = 13 according to the new logic
+			expect((additionTable[1] as HeapVector<MyClass>)[2] content, is equal to(13))
+			additionTable free()
 		})
 	}
 }
