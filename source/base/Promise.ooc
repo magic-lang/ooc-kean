@@ -5,46 +5,91 @@
 + isDone()?
 + state
 */
+import threading/Thread
+import os/Time
 
-PromiseResult: enum {
-  RUNNING
-	FINISHED
-  CANCELLED
-  ERROR
+PromiseState: enum {
+  Running
+	Completed
+  Cancelled
+  Error
 }
 
-//TODO abstract?
-Promise: class <T> {
+Promise: abstract class<T> {
   _result: T
-  _state: PromiseResult
-  _task: Func
+  _state: PromiseState
 
   state ::= this _state
-  result ::= this _result
 
-  init: func(= _task) {
+  init: func() { }
+
+  wait: abstract func -> T { _result}
+
+  wait: virtual func ~timeout (seconds: Double) -> T { _result}
+
+  cancel: virtual func() -> Bool { false }
+
+  _execute: virtual func { }
+}
+
+ThreadedPromise : class<T> extends Promise<T> {
+  _mutex := Mutex new()
+  _thread: Thread
+  _task: Func
+
+  init: func (task: Func -> T) {
+    this _task = func () -> Void {
+        temporary := task()
+        this _mutex lock()
+        this _result = temporary
+        this _state = PromiseState Completed
+        this _mutex unlock()
+    }
+
     this _execute()
   }
 
-  wait: func() -> Void {
-    while (this _state == PromiseResult RUNNING) {}
+  wait: func -> T {
+    Running := true
+
+    while (Running) {
+      Time sleepMilli(10)
+      _mutex lock()
+      if (this _state != PromiseState Running) {
+        Running = false
+      }
+      _mutex unlock()
+    }
+
+    if (this _state == PromiseState Error) {
+      // Vhat to do on error?
+    }
+
+    _result
   }
 
-  // Missing: wait with timeout
+  wait: func ~timeout (seconds: Double) -> T {
+    _thread.wait(seconds)
+    _result
+  }
 
-  /*getState: func() -> PromiseResult {
+  cancel: func () -> Void {
+    //How to terminate thread?
 
-   }*/
+    this _state = PromiseState Cancelled
+  }
 
-  //TODO parallelize
-  _execute: func {
+  _execute: override func {
     try {
-      this _result = this _task()
-      this _state = PromiseResult FINISHED
+      this _state = PromiseState Running
+
+      this _thread = Thread new(||
+        this _task()
+      )
+
+      this _thread start()
     } catch (e: Exception) {
-      this _state = PromiseResult ERROR
+      this _state = PromiseState Error
     }
   }
-
-
 }

@@ -2,24 +2,25 @@ use ooc-base
 use ooc-unit
 use ooc-math
 import math
+import os/Time
 
 PromiseTest: class extends Fixture {
 	init: func {
 		super("Promise")
-		this add("constructors", func {
-      max := func () -> Int {
-          200
-      }
+		this add("basic", func {
+      p := ThreadedPromise< Cell<Int> > new(func() -> Cell<Int> {
+        Time sleepSec (1)
+        Cell<Int> new (42)
+      })
+      p2 := ThreadedPromise< Cell<Int> > new(func() -> Cell<Int> {
+        Time sleepSec (2)
+        Cell<Int> new (-5)
+      })
 
-      p := Promise<Int> new(max)
-
-			/*t := Text new(c"test string", 5)
-			expect(t toString() == "test ")
-			t = Text new("string")
-			t2 := Text new("str")
-			t free()
-			expect(t count == 0)
-			expect(t isEmpty)*/
+      r := p wait()
+      expect (r[Int] == 42)
+      r2 := p2 wait()
+      expect (r2[Int] == -5)
 		})
 	}
 }
