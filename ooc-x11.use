@@ -1,0 +1,5 @@
+Name: ooc UI
+Description: User interface stuff
+SourcePath: source/ui/X11
+Imports: X11Window
+Libs: -lX11

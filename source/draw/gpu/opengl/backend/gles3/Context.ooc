@@ -16,9 +16,10 @@
  */
 use ooc-base
 use ooc-math
+use ooc-ui
 import ../egl/egl
 import include/gles3
-import NativeWindow, DebugGL
+import DebugGL
 
 Context: class {
 	_eglContext: Pointer

@@ -1,0 +1,4 @@
+Name: ooc UI
+Description: User interface stuff
+SourcePath: source/ui
+Imports: NativeWindow

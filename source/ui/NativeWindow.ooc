@@ -14,13 +14,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-
+use ooc-math
 NativeWindow: abstract class {
 	_display: Pointer
-	display: Pointer { get { _display } }
+	display ::= this _display
 	_backend: Long
-	backend: Long { get { _backend } }
+	backend ::= this _backend
 	_size: IntSize2D
+	size ::= this _size
 
 	init: func (=_size, =_backend, =_display)
 }

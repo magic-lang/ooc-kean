@@ -11,7 +11,6 @@ Imports: backend/gles3/Texture
 Imports: backend/gles3/EGLImage
 Imports: backend/gles3/Quad
 Imports: backend/gles3/Context
-Imports: backend/gles3/NativeWindow
 Imports: backend/gles3/Fbo
 Imports: OpenGLPacked
 Imports: OpenGLBgr
@@ -22,6 +21,7 @@ Imports: OpenGLCanvas
 Imports: OpenGLSurface
 Imports: OpenGLContext
 Imports: OpenGLVolumeMonochrome
+Imports: OpenGLWindow
 Imports: Map/OpenGLMap
 Imports: Map/OpenGLMapPack
 Libs: -lEGL
