@@ -56,7 +56,7 @@ Window: class extends OpenGLSurface {
 		super()
 		(native as X11Window) free()
 	}
-	_bind: override func { this _native bind() }
+	_bind: override func
 	_unbind: override func
 	_getDefaultMap: override func (image: Image) -> GpuMap {
 		result := match (image) {
@@ -68,9 +68,6 @@ Window: class extends OpenGLSurface {
 		}
 		result
 	}
-	clear: func { this _native clear() }
-	refresh: func {
-		this context update()
-		this clear()
-	}
+	refresh: func { this context update() }
+	clear: override func
 }
