@@ -20,22 +20,23 @@ use ooc-base
 use ooc-collections
 use ooc-draw
 use ooc-draw-gpu
-import backend/gles3/[Fbo, Quad, Texture]
-import OpenGLBgr, Map/OpenGLMap, OpenGLBgra, OpenGLUv, OpenGLMonochrome, OpenGLContext
+import backend/gles3/[Fbo, Texture]
+import OpenGLBgr, Map/OpenGLMap, OpenGLBgra, OpenGLUv, OpenGLMonochrome, OpenGLContext, OpenGLPacked, OpenGLSurface
 
-OpenGLCanvas: class extends GpuCanvas {
+OpenGLCanvas: class extends OpenGLSurface {
+	_target: OpenGLPacked
 	_renderTarget: Fbo
 	context ::= this _context as OpenGLContext
-	init: func (image: GpuPacked, context: GpuContext) {
-		super(image, context)
-		this _renderTarget = Fbo create(image texture _backend as Texture, image size)
+	init: func (=_target, context: OpenGLContext) {
+		super(this _target size, context, context defaultMap, IntTransform2D identity)
+		this _renderTarget = Fbo create(this _target _backend as Texture, this _target size)
 	}
 	free: override func {
 		this _renderTarget free()
 		super()
 	}
-	_bind: override func { this _renderTarget bind() }
-	_unbind: override func { this _renderTarget unbind() }
+	_bind: func { this _renderTarget bind() }
+	_unbind: func { this _renderTarget unbind() }
 	onRecycle: func { this _renderTarget invalidate() }
 	clear: override func {
 		this _bind()

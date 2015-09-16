@@ -19,7 +19,7 @@ use ooc-opengl
 use ooc-draw
 use ooc-math
 use ooc-base
-import AndroidTexture, GraphicBuffer, GraphicBufferYuv420Semiplanar
+import GraphicBuffer, EGLBgra
 import threading/Thread
 import math
 
@@ -58,38 +58,33 @@ AndroidContext: class extends OpenGLContext {
 				break
 			}
 		}
-		if (index == -1) {
-			androidTexture := this createAndroidRgba(size)
-			result = OpenGLBgra new(androidTexture, this)
-			result _recyclable = false
-		}
-		else
-			result = this _packers remove(index)
-		result
+		index == -1 ? EGLBgra new(size, this) : this _packers remove(index)
 	}
 	toBuffer: func (gpuImage: GpuImage, packMap: OpenGLMapPack) -> (ByteBuffer, GpuFence) {
-		packSize := IntSize2D new(gpuImage size width / (4 / gpuImage channels), gpuImage size height)
+		channels := (gpuImage as OpenGLPacked) channels
+		packSize := IntSize2D new(gpuImage size width / (4 / channels), gpuImage size height)
 		gpuRgba := this getPacker(packSize)
 		this packToRgba(gpuImage, gpuRgba, IntBox2D new(gpuRgba size))
 		fence := this createFence()
 		fence sync()
-		androidTexture := gpuRgba texture as AndroidTexture
-		sourcePointer := androidTexture lock(false)
-		buffer := ByteBuffer new(sourcePointer, androidTexture stride * androidTexture size height,
+		eglImage := gpuRgba as EGLBgra
+		sourcePointer := eglImage buffer lock(false)
+		length := channels * eglImage size width * eglImage size height
+		buffer := ByteBuffer new(sourcePointer, length,
 			func (buffer: ByteBuffer) {
-				androidTexture unlock()
+				eglImage buffer unlock()
 				this recyclePacker(gpuRgba)
 			})
 		(buffer, fence)
 	}
-	toRaster: func ~monochrome (gpuImage: GpuMonochrome, async: Bool) -> RasterImage {
+	toRaster: func ~monochrome (gpuImage: OpenGLMonochrome, async: Bool) -> RasterImage {
 		(buffer, fence) := this toBuffer(gpuImage, this _packMonochrome)
 		if (!async)
 			fence wait()
 		fence free()
 		RasterMonochrome new(buffer, gpuImage size)
 	}
-	toRaster: func ~uv (gpuImage: GpuUv, async: Bool) -> RasterImage {
+	toRaster: func ~uv (gpuImage: OpenGLUv, async: Bool) -> RasterImage {
 		(buffer, fence) := this toBuffer(gpuImage, this _packUv)
 		if (!async)
 			fence wait()
@@ -97,48 +92,35 @@ AndroidContext: class extends OpenGLContext {
 		RasterUv new(buffer, gpuImage size)
 	}
 	toRaster: override func (gpuImage: GpuImage, async: Bool = false) -> RasterImage {
-		result: RasterImage = null
-		if (!this isAligned(gpuImage channels * gpuImage size width))
-			result = super(gpuImage, async)
-		else {
-			result = match (gpuImage) {
-				case (image : GpuUv) => this toRaster(image, async)
-				case (image : GpuMonochrome) => this toRaster(image, async)
-				case => super(gpuImage)
-			}
+		match (gpuImage) {
+			case (image : OpenGLMonochrome) =>
+				this isAligned(image channels * image size width) ? this toRaster(image, async) : super(image)
+			case (image : OpenGLUv) =>
+				this isAligned(image channels * image size width) ? this toRaster(image, async) : super(image)
+			case => super(gpuImage)
 		}
-		result
 	}
-	toRasterAsync: func ~monochrome (gpuImage: GpuMonochrome) -> (RasterImage, GpuFence) {
+	toRasterAsync: func ~monochrome (gpuImage: OpenGLMonochrome) -> (RasterImage, GpuFence) {
 		(buffer, fence) := this toBuffer(gpuImage, this _packMonochrome)
 		(RasterMonochrome new(buffer, gpuImage size), fence)
 	}
-	toRasterAsync: func ~uv (gpuImage: GpuUv) -> (RasterImage, GpuFence) {
+	toRasterAsync: func ~uv (gpuImage: OpenGLUv) -> (RasterImage, GpuFence) {
 		(buffer, fence) := this toBuffer(gpuImage, this _packUv)
 		(RasterUv new(buffer, gpuImage size), fence)
 	}
 	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) {
-		imageResult: RasterImage
+		rasterResult: RasterImage
 		fenceResult: GpuFence
-		if (!this isAligned(gpuImage channels * gpuImage size width))
-			(imageResult, fenceResult) = super(gpuImage)
-		else {
-			match (gpuImage) {
-				case (image : GpuMonochrome) => (imageResult, fenceResult) = this toRasterAsync(image)
-				case (image : GpuUv) => (imageResult, fenceResult) = this toRasterAsync(image)
-				case => Debug raise("Unknown format in toRasterAsync")
-			}
-		}
-		(imageResult, fenceResult)
+		aligned := this isAligned(gpuImage size width)
+		if (aligned && gpuImage instanceOf?(OpenGLMonochrome))
+			(rasterResult, fenceResult) = this toRasterAsync(gpuImage as OpenGLMonochrome)
+		else if (aligned && gpuImage instanceOf?(OpenGLUv))
+			(rasterResult, fenceResult) = this toRasterAsync(gpuImage as OpenGLUv)
+		else
+			(rasterResult, fenceResult) = super(gpuImage)
+		(rasterResult, fenceResult)
 	}
-	createAndroidRgba: func (size: IntSize2D) -> AndroidRgba { AndroidRgba new(size, this _backend _eglDisplay) }
-	createBgra: func ~fromGraphicBuffer (buffer: GraphicBuffer) -> OpenGLBgra {
-		androidTexture := AndroidRgba new(buffer, this _backend _eglDisplay)
-		result := OpenGLBgra new(androidTexture, this)
-		result _recyclable = false
-		result
-	}
-	unpackBgraToYuv420Semiplanar: func (source: GpuBgra, targetSize: IntSize2D) -> GpuYuv420Semiplanar {
+	unpackBgraToYuv420Semiplanar: func (source: GpuImage, targetSize: IntSize2D) -> GpuYuv420Semiplanar {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
 		this _unpackRgbaToMonochrome targetSize = target y size
 		this _unpackRgbaToMonochrome sourceSize = source size
@@ -150,7 +132,6 @@ AndroidContext: class extends OpenGLContext {
 		target uv canvas draw(source, this _unpackRgbaToUv)
 		target
 	}
-
 	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }
 	isAligned: override func (width: Int) -> Bool { GraphicBuffer isAligned(width) }
 }

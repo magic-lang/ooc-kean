@@ -1,11 +1,29 @@
+/*
+* Copyright (C) 2014 - Simon Mika <simon@mika.se>
+*
+* This sofware is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later version.
+*
+* This software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public License
+* along with This software. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 use ooc-math
 use ooc-draw-gpu
 import OpenGLMap
+import OpenGLContext
 OpenGLMapPack: abstract class extends OpenGLMap {
 	imageWidth: Int { get set }
 	channels: Int { get set }
 	transform: FloatTransform3D
-	init: func (vertexSource: String, fragmentSource: String, context: GpuContext) {
+	init: func (vertexSource: String, fragmentSource: String, context: OpenGLContext) {
 		super(vertexSource, fragmentSource, context)
 		this channels = 1
 		this transform = FloatTransform3D createScaling(1.0f, -1.0f, 1.0f)
@@ -21,7 +39,7 @@ OpenGLMapPack: abstract class extends OpenGLMap {
 	}
 }
 OpenGLMapPackMonochrome: class extends OpenGLMapPack {
-	init: func (context: GpuContext) { super(This vertexSource, This fragmentSource, context) }
+	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
 	vertexSource: static String = "#version 300 es
 		precision mediump float;
 		uniform mat4 transform;
@@ -51,7 +69,7 @@ OpenGLMapPackMonochrome: class extends OpenGLMapPack {
 		}"
 }
 OpenGLMapPackUv: class extends OpenGLMapPack {
-	init: func (context: GpuContext) { super(This vertexSource, This fragmentSource, context) }
+	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
 	vertexSource: static String = "#version 300 es
 		precision mediump float;
 		uniform mat4 transform;
@@ -80,7 +98,7 @@ OpenGLMapUnpack: abstract class extends OpenGLMap {
 	sourceSize: IntSize2D { get set }
 	targetSize: IntSize2D { get set }
 	transform: FloatTransform3D { get set }
-	init: func (fragmentSource: String, context: GpuContext) {
+	init: func (fragmentSource: String, context: OpenGLContext) {
 		super(This vertexSource, fragmentSource, context)
 		this transform = FloatTransform3D identity
 	}
@@ -105,7 +123,7 @@ OpenGLMapUnpack: abstract class extends OpenGLMap {
 		}"
 }
 OpenGLMapUnpackRgbaToMonochrome: class extends OpenGLMapUnpack {
-	init: func (context: GpuContext) { super(This fragmentSource, context) }
+	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
 	use: override func {
 		super()
 		scaleX := (this targetSize width as Float) / (4 * this sourceSize width)
@@ -126,7 +144,7 @@ OpenGLMapUnpackRgbaToMonochrome: class extends OpenGLMapUnpack {
 		}"
 }
 OpenGLMapUnpackRgbaToUv: class extends OpenGLMapUnpack {
-	init: func (context: GpuContext) { super(This fragmentSource, context) }
+	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
 	use: override func {
 		super()
 		scaleX := (this targetSize width as Float) / (2 * this sourceSize width)

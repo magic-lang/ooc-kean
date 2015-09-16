@@ -41,25 +41,22 @@ InterpolationType: enum {
 Texture: class {
 	_backend: UInt
 	backend: UInt { get { this _backend } }
-	width: UInt
-	height: UInt
-	type: TextureType
-	format: UInt
-	internalFormat: UInt
+	_size: IntSize2D
+	size ::= this _size
+	_type: TextureType
+	_format: UInt
+	_internalFormat: UInt
 	_bytesPerPixel: UInt
 	_target: UInt = GL_TEXTURE_2D
 
-	init: func (type: TextureType, width: UInt, height: UInt) {
+	init: func (=_type, =_size) {
 		version(debugGL) { validateStart() }
-		this width = width
-		this height = height
-		this type = type
-		this _setInternalFormats(type)
+		this _setInternalFormats(this _type)
 		version(debugGL) { validateEnd("Texture init") }
 	}
 	free: override func {
 		version(debugGL) { validateStart() }
-		glDeleteTextures(1, _backend&)
+		glDeleteTextures(1, this _backend&)
 		version(debugGL) { validateEnd("Texture free") }
 		super()
 	}
@@ -84,10 +81,10 @@ Texture: class {
 		version(debugGL) { validateStart() }
 		pixelStride := stride / this _bytesPerPixel
 		glBindTexture(this _target, this _backend)
-		if (pixelStride != this width) {
+		if (pixelStride != this size width) {
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
 		}
-		glTexSubImage2D(this _target, 0, 0, 0, this width, this height, this format, GL_UNSIGNED_BYTE, pixels)
+		glTexSubImage2D(this _target, 0, 0, 0, this size width, this size height, this _format, GL_UNSIGNED_BYTE, pixels)
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
 		unbind()
 		version(debugGL) { validateEnd("Texture upload") }
@@ -96,32 +93,32 @@ Texture: class {
 		version(debugGL) { validateStart() }
 		match type {
 			case TextureType monochrome =>
-				this internalFormat = GL_R8
-				this format = GL_RED
+				this _internalFormat = GL_R8
+				this _format = GL_RED
 				this _bytesPerPixel = 1
 			case TextureType rgba =>
-				this internalFormat = GL_RGBA8
-				this format = GL_RGBA
+				this _internalFormat = GL_RGBA8
+				this _format = GL_RGBA
 				this _bytesPerPixel = 4
 			case TextureType rgb =>
-				this internalFormat = GL_RGB8
-				this format = GL_RGB
+				this _internalFormat = GL_RGB8
+				this _format = GL_RGB
 				this _bytesPerPixel = 3
 			case TextureType bgra =>
-				this internalFormat = GL_RGBA8
-				this format = GL_RGBA
+				this _internalFormat = GL_RGBA8
+				this _format = GL_RGBA
 				this _bytesPerPixel = 4
 			case TextureType bgr =>
-				this internalFormat = GL_RGB8
-				this format = GL_RGB
+				this _internalFormat = GL_RGB8
+				this _format = GL_RGB
 				this _bytesPerPixel = 3
 			case TextureType uv =>
-				this internalFormat = GL_RG8
-				this format = GL_RG
+				this _internalFormat = GL_RG8
+				this _format = GL_RG
 				this _bytesPerPixel = 2
 			case TextureType yv12 =>
-				this internalFormat = GL_R8
-				this format = GL_RED
+				this _internalFormat = GL_R8
+				this _format = GL_RED
 				this _bytesPerPixel = 1
 				this _target = GL_TEXTURE_EXTERNAL_OES
 			case =>
@@ -175,17 +172,17 @@ Texture: class {
 	_allocate: func (pixels: Pointer, stride: Int) {
 		version(debugGL) { Debug print("Allocating OpenGL Texture") }
 		pixelStride := stride / this _bytesPerPixel
-		if (pixelStride != this width) {
+		if (pixelStride != this size width) {
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
 		}
-		glTexImage2D(this _target, 0, this internalFormat, this width, this height, 0, this format, GL_UNSIGNED_BYTE, pixels)
+		glTexImage2D(this _target, 0, this _internalFormat, this size width, this size height, 0, this _format, GL_UNSIGNED_BYTE, pixels)
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
 		version(debugGL) { validateEnd("Texture _allocate") }
 		true
 	}
-	create: static func (type: TextureType, width: UInt, height: UInt, stride: UInt, pixels := null, allocate : Bool = true) -> This {
+	create: static func (type: TextureType, size: IntSize2D, stride: UInt, pixels := null, allocate : Bool = true) -> This {
 		version(debugGL) { validateStart() }
-		result := This new(type, width, height)
+		result := This new(type, size)
 		success := result _generate(pixels, stride, allocate)
 		result = success ? result : null
 		version(debugGL) { validateEnd("Texture create") }

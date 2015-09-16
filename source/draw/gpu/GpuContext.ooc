@@ -17,7 +17,7 @@ use ooc-math
 use ooc-draw
 use ooc-base
 use ooc-collections
-import GpuImage, GpuMonochrome, GpuUv, GpuBgr, GpuBgra, GpuYuv420Semiplanar, GpuSurface, GpuMap, GpuFence
+import GpuImage, GpuSurface, GpuMap, GpuFence, GpuYuv420Semiplanar
 
 AlignWidth: enum {
 	Nearest
@@ -28,30 +28,22 @@ AlignWidth: enum {
 GpuContext: abstract class {
 	defaultMap: GpuMap { get { null } }
 	init: func
-	createMonochrome: abstract func (size: IntSize2D) -> GpuMonochrome
-	createBgr: abstract func (size: IntSize2D) -> GpuBgr
-	createBgra: abstract func (size: IntSize2D) -> GpuBgra
-	createUv: abstract func (size: IntSize2D) -> GpuUv
+	createMonochrome: abstract func (size: IntSize2D) -> GpuImage
+	createBgr: abstract func (size: IntSize2D) -> GpuImage
+	createBgra: abstract func (size: IntSize2D) -> GpuImage
+	createUv: abstract func (size: IntSize2D) -> GpuImage
 	createGpuImage: abstract func (rasterImage: RasterImage) -> GpuImage
 	createFence: abstract func -> GpuFence
+	createYuv420Semiplanar: func (size: IntSize2D) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(size, this) }
+	createYuv420Semiplanar: func ~fromImages (y: GpuImage, uv: GpuImage) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(y, uv, this) }
+	createYuv420Semiplanar: func ~fromRaster (raster: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(raster, this) }
+
 	update: abstract func
-	recycle: abstract func ~image (gpuImage: GpuImage)
-	toRaster: virtual func (gpuImage: GpuImage, async: Bool = false) -> RasterImage { gpuImage toRasterDefault() }
-	toRasterAsync: virtual func (gpuImage: GpuImage) -> (RasterImage, GpuFence) { Debug raise("toRasterAsync unimplemented") }
-	getMaxContexts: func -> Int { 1 }
-	setViewport: abstract func (viewport: IntBox2D)
-	getCurrentIndex: func -> Int { 0 }
 	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }
 	isAligned: virtual func (width: Int) -> Bool { true }
-	packToRgba: abstract func (source: GpuImage, target: GpuBgra, viewport: IntBox2D)
-	drawLines: abstract func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D)
-	drawBox: abstract func (box: FloatBox2D, transform: FloatTransform3D)
-	drawPoints: abstract func (pointList: VectorList<FloatPoint2D>, transform: FloatTransform3D)
-	drawQuad: abstract func
-	enableBlend: abstract func (blend: Bool)
+	packToRgba: abstract func (source: GpuImage, target: GpuImage, viewport: IntBox2D)
 	finish: func { this createFence() sync() . wait() . free() }
 
-	createYuv420Semiplanar: func (size: IntSize2D) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(size, this) }
-	createYuv420Semiplanar: func ~fromImages (y: GpuMonochrome, uv: GpuUv) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(y, uv, this) }
-	createYuv420Semiplanar: func ~fromRaster (raster: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(raster, this) }
+	toRaster: virtual func (gpuImage: GpuImage, async: Bool = false) -> RasterImage { gpuImage toRasterDefault() }
+	toRasterAsync: virtual func (gpuImage: GpuImage) -> (RasterImage, GpuFence) { Debug raise("toRasterAsync unimplemented") }
 }

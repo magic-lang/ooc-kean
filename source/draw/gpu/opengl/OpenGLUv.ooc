@@ -18,34 +18,33 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import backend/gles3/Texture, OpenGLCanvas, Map/OpenGLMap, Map/OpenGLMapPack, OpenGLTexture
+import backend/gles3/Texture, OpenGLCanvas, Map/[OpenGLMap, OpenGLMapPack], OpenGLPacked, OpenGLContext
 
-OpenGLUv: class extends GpuUv {
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
-		super(OpenGLTexture create(TextureType uv, size, stride, data), size, context)
+OpenGLUv: class extends OpenGLPacked {
+	channelCount: static Int = 2
+	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
+		super(Texture create(TextureType uv, size, stride, data), This channelCount, context)
 		this coordinateSystem = coordinateSystem
 	}
-	init: func (size: IntSize2D, context: GpuContext) {
-		this init(size, size width * 2, null, CoordinateSystem YUpward, context)
+	init: func (size: IntSize2D, context: OpenGLContext) {
+		this init(size, size width * This channelCount, null, CoordinateSystem YUpward, context)
 	}
-	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) {
-		super(texture, size, context)
-	}
-	init: func ~fromRaster (rasterImage: RasterUv, context: GpuContext) {
+	init: func ~fromTexture (texture: Texture, context: OpenGLContext) { super(texture, This channelCount, context) }
+	init: func ~fromRaster (rasterImage: RasterUv, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: func -> RasterImage {
-		packed := this _context createBgra(IntSize2D new(this size width / 2, this size height))
-		this _context packToRgba(this, packed, IntBox2D new(packed size))
+		packed := this context createBgra(IntSize2D new(this size width / 2, this size height))
+		this context packToRgba(this, packed, IntBox2D new(packed size))
 		buffer := packed canvas readPixels()
 		result := RasterUv new(buffer, this size)
 		packed free()
 		result
 	}
-	_createCanvas: func -> GpuCanvas {
-		result := OpenGLCanvas new(this, this _context)
+	_createCanvas: override func -> GpuSurface {
+		result := super()
 		result clearColor = ColorBgra new(128, 128, 128, 128)
 		result
 	}
-	create: override func (size: IntSize2D) -> This { this _context createUv(size) as This }
+	create: override func (size: IntSize2D) -> This { this context createUv(size) as This }
 }

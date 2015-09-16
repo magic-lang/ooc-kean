@@ -16,23 +16,29 @@
 
 use ooc-math
 use ooc-draw
-import GpuMonochrome, GpuCanvas, GpuUv, GpuContext, GpuImage
+import GpuContext, GpuImage, GpuSurface, GpuCanvas
 
 GpuYuv420Semiplanar: class extends GpuImage {
-	_y: GpuMonochrome
+	_y: GpuImage
 	y ::= this _y
-	_uv: GpuUv
+	_uv: GpuImage
 	uv ::= this _uv
-
+	filter: Bool {
+		get
+		set(value) {
+			this _y filter = value
+			this _uv filter = value
+		}
+	}
 	init: func (=_y, =_uv, context: GpuContext) {
-		super(this _y size, 3, context)
+		super(this _y size, context)
 		this coordinateSystem = this _y coordinateSystem
 		this _y referenceCount increase()
 		this _uv referenceCount increase()
 	}
 	init: func ~fromRaster (rasterImage: RasterYuv420Semiplanar, context: GpuContext) {
-		y := context createGpuImage(rasterImage y) as GpuMonochrome
-		uv := context createGpuImage(rasterImage uv) as GpuUv
+		y := context createGpuImage(rasterImage y)
+		uv := context createGpuImage(rasterImage uv)
 		this init(y, uv, context)
 	}
 	init: func ~empty (size: IntSize2D, context: GpuContext) {
@@ -45,36 +51,22 @@ GpuYuv420Semiplanar: class extends GpuImage {
 		this uv referenceCount decrease()
 		super()
 	}
-	bind: func (unit: UInt) {
-		this _y bind(unit)
-		this _uv bind(unit + 1)
-	}
-	unbind: func {
-		this _y unbind()
-		this _uv unbind()
-	}
-	upload: func (raster: RasterImage) {
-		semiPlanar := raster as RasterYuv420Semiplanar
-		this _y upload(semiPlanar y)
-		this _uv upload(semiPlanar uv)
-	}
-	generateMipmap: func {
-		this _y generateMipmap()
-		this _uv generateMipmap()
-	}
-	setMagFilter: func (linear: Bool) {
-		this _y setMagFilter(linear)
-		this _uv setMagFilter(linear)
-	}
-	setMinFilter: func (linear: Bool) {
-		this _y setMinFilter(linear)
-		this _uv setMinFilter(linear)
-	}
 	toRasterDefault: func -> RasterImage {
 		y := this _y toRaster() as RasterMonochrome
 		uv := this _uv toRaster() as RasterUv
 		RasterYuv420Semiplanar new(y, uv)
 	}
 	create: override func (size: IntSize2D) -> This { this _context createYuv420Semiplanar(size) }
-	_createCanvas: override func -> GpuCanvas { GpuCanvasYuv420Semiplanar new(this, this _context) }
+	_createCanvas: override func -> GpuSurface { GpuCanvasYuv420Semiplanar new(this, this _context) }
+	upload: override func (image: RasterImage) {
+		if (image instanceOf?(RasterYuv420Semiplanar)) {
+			raster := image as RasterYuv420Semiplanar
+			this _y upload(raster y)
+			this _uv upload(raster uv)
+		}
+	}
+	bind: override func (unit: UInt) {
+		this _y bind(unit)
+		this _uv bind(unit + 1)
+	}
 }

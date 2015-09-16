@@ -30,7 +30,6 @@ OpenGLContext: class extends GpuContext {
 	_linesShader: OpenGLMapLines
 	_pointsShader: OpenGLMapPoints
 	_renderer: Renderer
-	renderer ::= this _renderer
 	defaultMap: GpuMap { get { this _transformTextureMap } }
 
 	init: func (context: Context) {
@@ -57,10 +56,8 @@ OpenGLContext: class extends GpuContext {
 		this _renderer free()
 		super()
 	}
-	recycle: func ~image (gpuImage: GpuImage) {
-		gpuImage _recyclable = false
-		gpuImage free()
-	}
+	getMaxContexts: func -> Int { 1 }
+	getCurrentIndex: func -> Int { 0 }
 	drawQuad: func { this _renderer drawQuad() }
 	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D) {
 		positions := pointList pointer as Float*
@@ -165,13 +162,14 @@ OpenGLContext: class extends GpuContext {
 	update: func { this _backend swapBuffers() }
 	setViewport: func (viewport: IntBox2D) { this _backend setViewport(viewport) }
 	enableBlend: func (blend: Bool) { this _backend enableBlend(blend) }
-	packToRgba: func (source: GpuImage, target: GpuBgra, viewport: IntBox2D) {
+	packToRgba: func (source: GpuImage, target: GpuImage, viewport: IntBox2D) {
+		channels := 1
 		map := match (source) {
-			case sourceImage: GpuMonochrome => this _packMonochrome
-			case sourceImage: GpuUv => this _packUv
+			case sourceImage: OpenGLMonochrome => this _packMonochrome
+			case sourceImage: OpenGLUv => channels = 2; this _packUv
 		} as OpenGLMapPack
 		map imageWidth = source size width
-		map channels = source channels
+		map channels = channels
 		target canvas viewport = viewport
 		target canvas draw(source, map)
 	}

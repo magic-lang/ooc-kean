@@ -18,22 +18,22 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import backend/gles3/Texture, OpenGLCanvas, OpenGLTexture
+import backend/gles3/Texture, OpenGLCanvas, OpenGLPacked, OpenGLContext
 
-OpenGLBgra: class extends GpuBgra {
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
-		super(OpenGLTexture create(TextureType bgra, size, stride, data), size, context)
+OpenGLBgra: class extends OpenGLPacked {
+	channelCount: static Int = 4
+	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
+		super(Texture create(TextureType bgra, size, stride, data), This channelCount, context)
 		this coordinateSystem = coordinateSystem
 	}
-	init: func (size: IntSize2D, context: GpuContext) { this init(size, size width * this _channels, null, CoordinateSystem YUpward, context) }
-	init: func ~fromGpuTexture (texture: GpuTexture, context: GpuContext) { super(texture, texture size, context) }
-	init: func ~fromRaster (rasterImage: RasterBgra, context: GpuContext) {
+	init: func (size: IntSize2D, context: OpenGLContext) { this init(size, size width * This channelCount, null, CoordinateSystem YUpward, context) }
+	init: func ~fromTexture (texture: Texture, context: OpenGLContext) { super(texture, This channelCount, context) }
+	init: func ~fromRaster (rasterImage: RasterBgra, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: func -> RasterImage {
 		buffer := this canvas readPixels()
 		RasterBgra new(buffer, this size)
 	}
-	_createCanvas: func -> GpuCanvas { OpenGLCanvas new(this, this _context) }
-	create: override func (size: IntSize2D) -> This { this _context createBgra(size) as This }
+	create: override func (size: IntSize2D) -> This { this context createBgra(size) as This }
 }

@@ -78,30 +78,10 @@ GpuSurface: abstract class {
 		translation * scaling
 	}
 	_getDefaultMap: virtual func (image: Image) -> GpuMap { this _defaultMap }
-	_bind: virtual func
-	_unbind: virtual func
 	clear: abstract func
-	draw: func ~general (action: Func) {
-		this _bind()
-		this _context setViewport(this viewport)
-		this _context enableBlend(this blend)
-		action()
-		this _unbind()
-	}
-	draw: func ~WithoutBind (destination: IntBox2D, map: GpuMap) {
-		map model = this _createModelTransform(destination)
-		map view = this _view
-		map projection = this _projection
-		map use()
-		f := func { this _context drawQuad() }
-		this draw(f)
-		(f as Closure) dispose()
-	}
-	draw: virtual func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
-		image bind(0)
-		map textureTransform = This _createTextureTransform(image size, source)
-		this draw(destination, map)
-	}
+	draw: virtual func (action: Func)
+	draw: virtual func ~WithoutBind (destination: IntBox2D, map: GpuMap)
+	draw: abstract func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap)
 	draw: func ~Full (image: Image, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
 		if (image instanceOf?(GpuImage)) { this draw(image as GpuImage, source, destination, map) }
 		else if (image instanceOf?(RasterImage)) {
@@ -119,19 +99,8 @@ GpuSurface: abstract class {
 	draw: func ~ImageMap (image: Image, map: GpuMap) { this draw(image, IntBox2D new(image size), IntBox2D new(image size), map) }
 	draw: func ~ImageDestinationMap (image: Image, destination: IntBox2D, map: GpuMap) { this draw(image, IntBox2D new(image size), destination, map) }
 
-	drawLines: virtual func (pointList: VectorList<FloatPoint2D>) {
-		f := func { this _context drawLines(pointList, this _projection * this _toLocal) }
-		this draw(f)
-		(f as Closure) dispose()
-	}
-	drawBox: virtual func (box: FloatBox2D) {
-		f := func { this _context drawBox(box, this _projection * this _toLocal) }
-		this draw(f)
-		(f as Closure) dispose()
-	}
-	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>) {
-		f := func { this _context drawPoints(pointList, this _projection * this _toLocal) }
-		this draw(f)
-		(f as Closure) dispose()
-	}
+	drawLines: virtual func (pointList: VectorList<FloatPoint2D>)
+	drawBox: virtual func (box: FloatBox2D)
+	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>)
+	readPixels: virtual func -> ByteBuffer { raise("readPixels unimplemented!") }
 }

@@ -17,27 +17,27 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLCanvas, Map/OpenGLMap, Map/OpenGLMapPack, OpenGLTexture
+import OpenGLPacked, OpenGLCanvas, Map/OpenGLMap, Map/OpenGLMapPack, OpenGLContext
 import backend/gles3/Texture
 
-OpenGLMonochrome: class extends GpuMonochrome {
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
-		super(OpenGLTexture create(TextureType monochrome, size, stride, data), size, context)
+OpenGLMonochrome: class extends OpenGLPacked {
+	channelCount: static Int = 1
+	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
+		super(Texture create(TextureType monochrome, size, stride, data), This channelCount, context)
 		this coordinateSystem = coordinateSystem
 	}
-	init: func (size: IntSize2D, context: GpuContext) { this init(size, size width, null, CoordinateSystem YUpward, context) }
-	init: func ~fromTexture (texture: GpuTexture, size: IntSize2D, context: GpuContext) { super(texture, size, context) }
-	init: func ~fromRaster (rasterImage: RasterMonochrome, context: GpuContext) {
+	init: func (size: IntSize2D, context: OpenGLContext) { this init(size, size width, null, CoordinateSystem YUpward, context) }
+	init: func ~fromTexture (texture: Texture, context: OpenGLContext) { super(texture, This channelCount, context) }
+	init: func ~fromRaster (rasterImage: RasterMonochrome, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: func -> RasterImage {
-		packed := this _context createBgra(IntSize2D new(this size width / 4, this size height))
-		this _context packToRgba(this, packed, IntBox2D new(packed size))
+		packed := this context createBgra(IntSize2D new(this size width / 4, this size height))
+		this context packToRgba(this, packed, IntBox2D new(packed size))
 		buffer := packed canvas readPixels()
 		result := RasterMonochrome new(buffer, this size)
 		packed free()
 		result
 	}
-	_createCanvas: func -> GpuCanvas { OpenGLCanvas new(this, this _context) }
-	create: override func (size: IntSize2D) -> This { this _context createMonochrome(size) as This }
+	create: override func (size: IntSize2D) -> This { this context createMonochrome(size) as This }
 }

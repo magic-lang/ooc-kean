@@ -7,6 +7,5 @@ Requires: ooc-unit
 Requires: ooc-draw
 Requires: ooc-draw-gpu
 Imports: AndroidContext
-Imports: AndroidTexture
 Imports: GraphicBuffer
 Imports: GraphicBufferYuv420Semiplanar

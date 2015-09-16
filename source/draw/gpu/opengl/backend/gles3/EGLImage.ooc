@@ -14,6 +14,7 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
+use ooc-math
 use ooc-base
 import ../egl/egl
 import include/gles3
@@ -23,8 +24,8 @@ EGLImage: class extends Texture {
 	_eglDisplay: Pointer
 	_nativeBuffer: Pointer
 	/* PRIVATE CONSTRUCTOR, USE STATIC CREATE FUNCTION!!! */
-	init: func (type: TextureType, width: Int, height: Int, =_nativeBuffer, =_eglDisplay) {
-		super(type, width, height)
+	init: func (type: TextureType, size: IntSize2D, =_nativeBuffer, =_eglDisplay) {
+		super(type, size)
 		this _genTexture()
 		this bindSibling()
 		/*textureUnitCount: Int
@@ -55,11 +56,11 @@ EGLImage: class extends Texture {
 			This _initialized = true
 		}
 	}
-	create: static func (type: TextureType, width: Int, height: Int, nativeBuffer: Pointer, display: Pointer) -> This {
+	create: static func (type: TextureType, size: IntSize2D, nativeBuffer: Pointer, display: Pointer) -> This {
 		This initialize()
 		result: This = null
 		if (type == TextureType rgba || type == TextureType rgb || type == TextureType bgr || type == TextureType rgb || type == TextureType yv12) {
-			result = This new(type, width, height, nativeBuffer, display)
+			result = This new(type, size, nativeBuffer, display)
 		}
 		result
 	}

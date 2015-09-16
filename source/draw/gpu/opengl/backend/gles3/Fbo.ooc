@@ -20,11 +20,11 @@ use ooc-math
 import include/gles3, Texture, DebugGL
 
 Fbo: class {
+	_size: IntSize2D
+	size ::= this _size
 	_backend: UInt
-	_width: UInt
-	_height: UInt
 
-	init: func (=_width, =_height)
+	init: func (=_size)
 	free: func {
 		glDeleteFramebuffers(1, _backend&)
 		super()
@@ -37,8 +37,8 @@ Fbo: class {
 	readPixels: func -> ByteBuffer {
 		version(debugGL) { Debug print("Warning: Using slow glReadPixels!") }
 		version(debugGL) { validateStart() }
-		width := this _width
-		height := this _height
+		width := this size width
+		height := this size height
 		buffer := ByteBuffer new(width * height * 4)
 		ptr := buffer pointer
 		this bind()
@@ -65,7 +65,7 @@ Fbo: class {
 		if (status != GL_FRAMEBUFFER_COMPLETE) {
 			statusMessage := getErrorMessage(status)
 			errorMessage := "Framebuffer Object creation failed with status: " + statusMessage + " for texture of size " +
-			texture width toString() + " x " + texture height toString()
+			texture size width toString() + " x " + texture size height toString()
 			Debug print(errorMessage)
 			raise(errorMessage)
 		}
@@ -93,7 +93,7 @@ Fbo: class {
 	}
 	create: static func (texture: Texture, size: IntSize2D) -> This {
 		version(debugGL) { validateStart() }
-		result := This new(size width, size height)
+		result := This new(size)
 		result = result _generate(texture) ? result : null
 		version(debugGL) { validateEnd("fbo create") }
 		result
