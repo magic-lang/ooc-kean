@@ -99,14 +99,14 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	}
 	discreteFourierTransform: static func (input: This) -> This {
 		result := This createDefault(input count)
-		for (i in 0 .. (input count))
-			for (j in 0 .. (input count))
+		for (i in 0 .. input count)
+			for (j in 0 .. input count)
 				result[i] = result[i] + input[j] * FloatComplex rootOfUnity(input count, -i * j)
 		result
 	}
 	inverseDiscreteFourierTransform: static func (input: This) -> This {
-		conjugates := This new()
-		for (i in 0 .. (input count))
+		conjugates := This new(input count)
+		for (i in 0 .. input count)
 			conjugates add(input[i] conjugate)
 		result := This discreteFourierTransform(conjugates)
 		conjugates free()
@@ -115,14 +115,13 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		result
 	}
 	fastFourierTransform: static func (input: This) -> This {
-		result: This
+		result := This createDefault(input count)
 		if (input count == 1)
-			result = input
+			result[0] = input[0]
 		else {
-			result = createDefault(input count)
 			halfLength: Int = input count / 2
-			evenInput := This new()
-			oddInput := This new()
+			evenInput := This new(halfLength)
+			oddInput := This new(halfLength)
 			for (i in 0 .. halfLength) {
 				evenInput add(input[2 * i])
 				oddInput add(input[2 * i + 1])
@@ -134,18 +133,20 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 				result[i] = evenOutput[i] + root * oddOutput[i]
 				result[halfLength + i] = evenOutput[i] - root * oddOutput[i]
 			}
+			evenInput free()
+			oddInput free()
 			evenOutput free()
 			oddOutput free()
 		}
 		result
 	}
 	inverseFastFourierTransform: static func (input: This) -> This {
-		conjugates := This new()
-		for (i in 0 .. (input count))
+		conjugates := This new(input count)
+		for (i in 0 .. input count)
 			conjugates add(input[i] conjugate)
 		result := This fastFourierTransform(conjugates)
 		conjugates free()
-		for (i in 0 .. (result count))
+		for (i in 0 .. result count)
 			result[i] = (result[i] conjugate) / (input count)
 		result
 	}
