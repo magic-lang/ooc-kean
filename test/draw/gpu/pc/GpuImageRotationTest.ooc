@@ -75,7 +75,6 @@ GpuImageRotationTest: class extends Fixture {
 		})
 	}
 }
-window := Window new(IntSize2D new(800, 800))
-gpuContext := window context
+gpuContext := OpenGLES3Context new()
 GpuImageRotationTest new() run()
-window free()
+gpuContext free()

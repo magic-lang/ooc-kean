@@ -50,7 +50,6 @@ GpuImageTranslationTest: class extends Fixture {
 		image canvas transform = FloatTransform3D createTranslation(x, y, z)
 	}
 }
-window := Window new(IntSize2D new(800, 800))
-gpuContext := window context
+gpuContext := OpenGLES3Context new()
 GpuImageTranslationTest new() run()
-window free()
+gpuContext free()
