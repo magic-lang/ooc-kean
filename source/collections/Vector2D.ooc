@@ -17,17 +17,17 @@
 
 Vector2D: class <T> {
 	_backend: T*
-	_capacityRows: Int
-	_capacityColumns: Int
-	capacityRows ::= this _capacityRows
-	capacityColumns ::= this _capacityColumns
+	_rowCapacity: Int
+	_columnCapacity: Int
+	rowCapacity ::= this _rowCapacity
+	columnCapacity ::= this _columnCapacity
 	_freeContent: Bool
 
-	init: func ~preallocated (=_backend, =_capacityRows, =_capacityColumns, freeContent := true)
-	init: func (=_capacityRows, =_capacityColumns, freeContent := true) {
+	init: func ~preallocated (=_backend, =_rowCapacity, =_columnCapacity, freeContent := true)
+	init: func (=_rowCapacity, =_columnCapacity, freeContent := true) {
 		this _freeContent = freeContent
-		this _allocate(capacityRows, capacityColumns)
-		memset(this _backend, 0, capacityRows * capacityColumns * T size)
+		this _allocate(rowCapacity, columnCapacity)
+		memset(this _backend, 0, rowCapacity * columnCapacity * T size)
 	}
 
 	_allocate: func (rows, columns: Int) {
@@ -35,18 +35,18 @@ Vector2D: class <T> {
 	}
 
 	free: override func {
-		if (!(this instanceOf?(Vector2D)))
+		if (!(this instanceOf?(This)))
 			gc_free(this _backend)
 		super()
 	}
 
-	_elementPosition: func(row, column: Int) -> Int {
-		result := capacityRows * row + column
+	_elementPosition: func (row, column: Int) -> Int {
+		result := rowCapacity * row + column
 	}
 
 	operator [] (row, column: Int) -> T {
 		version (safe) {
-			if (row >= capacityRows || row < 0 || column >= capacityColumns || column < 0)
+			if (row >= rowCapacity || row < 0 || column >= columnCapacity || column < 0)
 				raise("Accessing Vector2D index out of range in get operator")
 		}
 		this _backend[_elementPosition(row, column)]
@@ -54,7 +54,7 @@ Vector2D: class <T> {
 
 	operator []= (row, column: Int, item: T) {
 		version (safe) {
-			if (row >= capacityRows || row < 0 || column >= capacityColumns || column < 0)
+			if (row >= rowCapacity || row < 0 || column >= columnCapacity || column < 0)
 				raise("Accessing Vector2D index out of range in set operator")
 		}
 		this _backend[_elementPosition(row, column)] = item

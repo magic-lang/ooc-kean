@@ -21,10 +21,10 @@ use ooc-collections
 Vector2DTest: class extends Fixture {
 	init: func {
 		super("Vector2D")
-		this add("vecor2d list cover create", func {
-			vector2d := Vector2D<Int> new(10, 10)
-			expect(vector2d capacityRows, is equal to(10))
-			expect(vector2d capacityColumns, is equal to(10))
+		this add("vector2d list cover create", func {
+			vector2D := Vector2D<Int> new(10, 10)
+			expect(vector2D rowCapacity, is equal to(10))
+			expect(vector2D columnCapacity, is equal to(10))
 
 			/*s: String
 			println()
@@ -38,22 +38,22 @@ Vector2DTest: class extends Fixture {
 
 			for (i in 0 .. 10)
 				for (j in 0 .. 10)
-					expect(vector2d[i, j], is equal to(0))
-			for (i in 0 .. 10)
-			  for (j in 0 .. 10)
-				vector2d[i, j] = i*j
+					expect(vector2D[i, j], is equal to(0))
 			for (i in 0 .. 10)
 				for (j in 0 .. 10)
-				expect(vector2d[i, j], is equal to(i*j))
+					vector2D[i, j] = i*j
+			for (i in 0 .. 10)
+				for (j in 0 .. 10)
+					expect(vector2D[i, j], is equal to(i*j))
 			// Change all values to 10
 			for (i in 0 .. 10)
 				for (j in 0 .. 10)
-					vector2d[i, j] = 10
+					vector2D[i, j] = 10
 			for (i in 0 .. 10)
 				for (j in 0 .. 10)
-					expect(vector2d[i, j], is equal to(10))
+					expect(vector2D[i, j], is equal to(10))
 
-			vector2d free()
+			vector2D free()
 		})
 	}
 }
