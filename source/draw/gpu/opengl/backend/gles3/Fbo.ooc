@@ -35,7 +35,6 @@ Fbo: class {
 	clear: static func { glClear(GL_COLOR_BUFFER_BIT) }
 	setClearColor: static func (color: Float) { glClearColor(color, color, color, color) }
 	readPixels: func -> ByteBuffer {
-		version(debugGL) { Debug print("Warning: Using slow glReadPixels!") }
 		version(debugGL) { validateStart() }
 		width := this size width
 		height := this size height
