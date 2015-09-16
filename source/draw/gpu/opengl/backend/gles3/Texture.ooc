@@ -56,6 +56,7 @@ Texture: class {
 	}
 	free: override func {
 		version(debugGL) { validateStart() }
+		version(debugGL) { Debug print("Freeing OpenGL Texture") }
 		glDeleteTextures(1, this _backend&)
 		version(debugGL) { validateEnd("Texture free") }
 		super()
