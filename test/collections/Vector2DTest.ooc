@@ -26,25 +26,15 @@ Vector2DTest: class extends Fixture {
 			expect(vector2D rowCapacity, is equal to(10))
 			expect(vector2D columnCapacity, is equal to(10))
 
-			/*s: String
-			println()
-			for (i in 0..10) {
-				s = ""
-				for (j in 0..10) {
-					s = s + vector2d[i, j] toString() + ", "
-				}
-				s println()
-			}*/
-
 			for (i in 0 .. 10)
 				for (j in 0 .. 10)
 					expect(vector2D[i, j], is equal to(0))
 			for (i in 0 .. 10)
 				for (j in 0 .. 10)
-					vector2D[i, j] = i*j
+					vector2D[i, j] = i * j
 			for (i in 0 .. 10)
 				for (j in 0 .. 10)
-					expect(vector2D[i, j], is equal to(i*j))
+					expect(vector2D[i, j], is equal to(i * j))
 			// Change all values to 10
 			for (i in 0 .. 10)
 				for (j in 0 .. 10)

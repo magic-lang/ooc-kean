@@ -29,34 +29,27 @@ Vector2D: class <T> {
 		this _allocate(rowCapacity, columnCapacity)
 		memset(this _backend, 0, rowCapacity * columnCapacity * T size)
 	}
-
 	_allocate: func (rows, columns: Int) {
 		this _backend = gc_realloc(this _backend, rows * columns * T size)
 	}
-
 	free: override func {
-		if (!(this instanceOf?(This)))
-			gc_free(this _backend)
-		super()
+		gc_free(this _backend)
 	}
-
-	_elementPosition: func (row, column: Int) -> Int {
-		result := rowCapacity * row + column
+	_elementPosition: func (row, column: Int, columnCount := this columnCapacity) -> Int {
+		result := columnCount * row + column
 	}
-
 	operator [] (row, column: Int) -> T {
 		version (safe) {
-			if (row >= rowCapacity || row < 0 || column >= columnCapacity || column < 0)
+			if (row >= this rowCapacity || row < 0 || column >= this columnCapacity || column < 0)
 				raise("Accessing Vector2D index out of range in get operator")
 		}
-		this _backend[_elementPosition(row, column)]
+		this _backend[this _elementPosition(row, column)]
 	}
-
 	operator []= (row, column: Int, item: T) {
 		version (safe) {
-			if (row >= rowCapacity || row < 0 || column >= columnCapacity || column < 0)
+			if (row >= this rowCapacity || row < 0 || column >= this columnCapacity || column < 0)
 				raise("Accessing Vector2D index out of range in set operator")
 		}
-		this _backend[_elementPosition(row, column)] = item
+		this _backend[this _elementPosition(row, column)] = item
 	}
 }
