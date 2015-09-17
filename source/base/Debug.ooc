@@ -38,7 +38,7 @@ Debug: class {
 			This printFunction(printOut)
 		}
 	}
-	registerCallback: unmangled (kean_base_debug_registerCallback) static func (print: Pointer) {
+	kean_base_debug_registerCallback: unmangled static func (print: Pointer) {
 		f := (print, null) as Func (Char*)
 		This initialize(func (s: String) { f(s toCString()) })
 	}
