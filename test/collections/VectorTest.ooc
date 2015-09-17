@@ -24,6 +24,12 @@ MyCover: cover {
 	init: func@ ~default { this init(0) }
 	increase: func { this content += 1 }
 }
+MyClass: class {
+	content: Int
+	init: func (=content)
+	init: func ~default { this init(0) }
+	increase: func { this content += 1 }
+}
 
 VectorTest: class extends Fixture {
 	init: func {
@@ -213,13 +219,47 @@ VectorTest: class extends Fixture {
 		})
 		*/
 
-		this add("nested heap vector", func {
-			sizeX := 2
-			sizeY := 3
-			heapVector := HeapVector<HeapVector<MyCover>> new(sizeX)
-			for (i in 0 .. sizeX)
-				heapVector[i] = HeapVector<MyCover> new(sizeY)
-			heapVector free()
+		this add("nested heap vector using cover", func {
+			sizeX := 10
+			sizeY := 10
+			additionTable := HeapVector<Vector<MyCover>> new(sizeX, false)
+			for (i in 0 .. sizeX) {
+				additionTable[i] = HeapVector<MyCover> new(sizeY, false)
+				for (j in 0 .. sizeY)
+					additionTable[i][j] = MyCover new(i + j)
+			}
+			// Array access requires casting to the correct type when a collection holds a generic collection
+			// 2 + 4 = 6
+			expect((additionTable[2] as Vector<MyCover>)[4] content, is equal to(6))
+			// Write that 1 + 2 = 12 just to confuse
+			// Since the [] operator can't give a reference to the content attribute, the whole cover must be replaced.
+			(additionTable[1] as Vector<MyCover>)[2] = MyCover new(12)
+			// Confirm that 1 + 2 = 12 according to the new logic
+			expect((additionTable[1] as Vector<MyCover>)[2] content, is equal to(12))
+			additionTable free()
+		})
+
+		this add("nested heap vector using class", func {
+			sizeX := 10
+			sizeY := 10
+			additionTable := HeapVector<Vector<MyClass>> new(sizeX)
+			for (i in 0 .. sizeX) {
+				additionTable[i] = HeapVector<MyClass> new(sizeY)
+				for (j in 0 .. sizeY)
+					additionTable[i][j] = MyClass new(i + j)
+			}
+			// Array access requires casting to the correct type when a collection holds a generic collection
+			// 2 + 4 = 6
+			expect((additionTable[2] as Vector<MyClass>)[4] content, is equal to(6))
+			// Write that 1 + 2 = 12 just to confuse
+			(additionTable[1] as Vector<MyClass>)[2] content = 12
+			// Confirm that 1 + 2 = 12 according to the new logic
+			expect((additionTable[1] as Vector<MyClass>)[2] content, is equal to(12))
+			// Increase the value of 1 + 2 to 13
+			(additionTable[1] as Vector<MyClass>)[2] increase()
+			// Confirm that 1 + 2 = 13 according to the new logic
+			expect((additionTable[1] as Vector<MyClass>)[2] content, is equal to(13))
+			additionTable free()
 		})
 	}
 }
