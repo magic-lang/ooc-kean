@@ -17,11 +17,11 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3Canvas, Map/OpenGLES3Map, Map/OpenGLES3MapPack, OpenGLES3Texture
+import OpenGLCanvas, Map/OpenGLMap, Map/OpenGLMapPack, OpenGLTexture
 
-OpenGLES3Monochrome: class extends GpuMonochrome {
+OpenGLMonochrome: class extends GpuMonochrome {
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
-		super(OpenGLES3Texture createMonochrome(size, stride, data), size, context)
+		super(OpenGLTexture createMonochrome(size, stride, data), size, context)
 		this coordinateSystem = coordinateSystem
 	}
 	init: func (size: IntSize2D, context: GpuContext) { this init(size, size width, null, CoordinateSystem YUpward, context) }
@@ -37,6 +37,6 @@ OpenGLES3Monochrome: class extends GpuMonochrome {
 		packed free()
 		result
 	}
-	_createCanvas: func -> GpuCanvas { OpenGLES3Canvas new(this, this _context) }
+	_createCanvas: func -> GpuCanvas { OpenGLCanvas new(this, this _context) }
 	create: override func (size: IntSize2D) -> This { this _context createMonochrome(size) as This }
 }

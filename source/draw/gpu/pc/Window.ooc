@@ -25,24 +25,24 @@ import X11/include/x11
 
 Window: class extends GpuSurface {
 	_native: NativeWindow
-	_monochromeToBgra: OpenGLES3MapMonochromeToBgra
-	_yuvSemiplanarToBgra: OpenGLES3MapYuvSemiplanarToBgra
+	_monochromeToBgra: OpenGLMapMonochromeToBgra
+	_yuvSemiplanarToBgra: OpenGLMapYuvSemiplanarToBgra
 
-	context ::= this _context as OpenGLES3Context
+	context ::= this _context as OpenGLContext
 	size ::= this _size
 
 	init: /* internal */ func (size: IntSize2D, title := "Window title") {
 		this _native = X11Window new(size width, size height, title)
-		context := OpenGLES3Context new(this _native)
-		super(size, context, OpenGLES3MapDefaultTexture new(this context), IntTransform2D createScaling(1, -1))
+		context := OpenGLContext new(this _native)
+		super(size, context, OpenGLMapDefaultTexture new(this context), IntTransform2D createScaling(1, -1))
 
 		/* BEGIN Ugly hack to force the window to resize outside screen */
 		this refresh()
 		(this _native as X11Window) resize(size)
 		/* END */
 
-		this _monochromeToBgra = OpenGLES3MapMonochromeToBgra new(this context)
-		this _yuvSemiplanarToBgra = OpenGLES3MapYuvSemiplanarToBgra new(this context)
+		this _monochromeToBgra = OpenGLMapMonochromeToBgra new(this context)
+		this _yuvSemiplanarToBgra = OpenGLMapYuvSemiplanarToBgra new(this context)
 
 		XSelectInput(this _native display, this _native _backend, KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask)
 		XkbSetDetectableAutoRepeat(this _native display, true, null) as Void

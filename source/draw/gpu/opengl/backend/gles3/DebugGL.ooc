@@ -1,5 +1,6 @@
 use ooc-base
-import include/[egl, gles]
+import ../egl/egl
+import include/gles3
 import text/StringTokenizer
 import structs/ArrayList
 

@@ -110,7 +110,7 @@ GpuSurface: abstract class {
 			temp free()
 		}
 		else
-			Debug raise("Trying to draw unsupported image format to OpenGLES3Canvas!")
+			Debug raise("Trying to draw unsupported image format to OpenGLCanvas!")
 	}
 	draw: func ~ImageSourceDestination (image: Image, source: IntBox2D, destination: IntBox2D) { this draw(image, source, destination, this _getDefaultMap(image)) }
 	draw: func ~ImageDestination (image: Image, destination: IntBox2D) { this draw(image, IntBox2D new(image size), destination) }

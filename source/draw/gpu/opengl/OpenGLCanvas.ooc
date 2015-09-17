@@ -20,12 +20,12 @@ use ooc-base
 use ooc-collections
 use ooc-draw
 use ooc-draw-gpu
+import backend/gles3/[Fbo, Quad, Texture]
+import OpenGLBgr, Map/OpenGLMap, OpenGLBgra, OpenGLUv, OpenGLMonochrome, OpenGLContext
 
-import OpenGLES3/Fbo, OpenGLES3/Quad, OpenGLES3/Texture, OpenGLES3Bgr, Map/OpenGLES3Map, OpenGLES3Bgra, OpenGLES3Uv, OpenGLES3Monochrome, OpenGLES3Context
-
-OpenGLES3Canvas: class extends GpuCanvas {
+OpenGLCanvas: class extends GpuCanvas {
 	_renderTarget: Fbo
-	context ::= this _context as OpenGLES3Context
+	context ::= this _context as OpenGLContext
 	init: func (image: GpuPacked, context: GpuContext) {
 		super(image, context)
 		this _renderTarget = Fbo create(image texture _backend as Texture, image size)

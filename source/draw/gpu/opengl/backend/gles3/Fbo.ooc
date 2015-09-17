@@ -17,7 +17,7 @@
 
 use ooc-base
 use ooc-math
-import include/gles, Texture, DebugGL
+import include/gles3, Texture, DebugGL
 
 Fbo: class {
 	_backend: UInt
