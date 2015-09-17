@@ -26,8 +26,8 @@ Vector2D: class <T> {
 	init: func ~preallocated (=_backend, =_rowCapacity, =_columnCapacity, freeContent := true)
 	init: func (=_rowCapacity, =_columnCapacity, freeContent := true) {
 		this _freeContent = freeContent
-		this _allocate(rowCapacity, columnCapacity)
-		memset(this _backend, 0, rowCapacity * columnCapacity * T size)
+		this _allocate(this rowCapacity, this columnCapacity)
+		memset(this _backend, 0, this rowCapacity * this columnCapacity * T size)
 	}
 	_allocate: func (rows, columns: Int) {
 		this _backend = gc_realloc(this _backend, rows * columns * T size)
@@ -37,6 +37,52 @@ Vector2D: class <T> {
 	}
 	_elementPosition: func (row, column: Int, columnCount := this columnCapacity) -> Int {
 		columnCount * row + column
+	}
+	resize: func (newRowCapacity, newColumnCapacity: Int) {
+		temporaryResult: T*
+
+		maximumRowCapacity := this rowCapacity > newRowCapacity ? newRowCapacity : this rowCapacity
+		maximumColumnCapacity := this columnCapacity > newColumnCapacity ? newColumnCapacity : this columnCapacity
+
+		if (newRowCapacity == this rowCapacity && newColumnCapacity == this columnCapacity)
+			return
+
+		temporaryResult = gc_calloc(newRowCapacity * newColumnCapacity, T size)
+
+		for (r in 0 .. maximumRowCapacity)
+			memcpy(temporaryResult[T size * this _elementPosition(r, 0, newRowCapacity)]&,
+				this _backend[T size * this _elementPosition(r, 0)]&, maximumColumnCapacity * T size)
+
+		this free()
+		this init(temporaryResult, newRowCapacity, newColumnCapacity)
+	}
+	move: func (sourceRowStart, sourceColumnStart, targetRowStart, targetColumnStart: Int, rowCapacity := 0, columnCapacity := 0) {
+		sourceRowIndex, targetRowIndex: Int
+
+		if (rowCapacity < 1)
+			rowCapacity = this rowCapacity - sourceRowStart
+		if (columnCapacity < 1)
+			columnCapacity = this columnCapacity - sourceColumnStart
+		if (targetRowStart + rowCapacity > this rowCapacity)
+			rowCapacity = this rowCapacity - targetRowStart
+		if (targetColumnStart + columnCapacity > this columnCapacity)
+			columnCapacity = this columnCapacity - targetColumnStart
+
+		for (r in 0 .. rowCapacity) {
+			if (sourceRowStart > targetRowStart) {
+				// Move row-wise from top to bottom.
+				sourceRowIndex = sourceRowStart + r
+				targetRowIndex = sourceRowIndex - sourceRowStart + targetRowStart
+			}
+			else {
+				//Move row-wise from bottom to top
+				targetRowIndex = rowCapacity + targetRowStart - r - 1
+				sourceRowIndex = targetRowIndex - targetRowStart + sourceRowStart
+			}
+
+			memmove(_backend[T size * this _elementPosition(targetRowIndex, targetColumnStart)]&,
+				this _backend[T size * this _elementPosition(sourceRowIndex, sourceColumnStart)]&, columnCapacity * T size)
+		}
 	}
 	operator [] (row, column: Int) -> T {
 		version (safe) {

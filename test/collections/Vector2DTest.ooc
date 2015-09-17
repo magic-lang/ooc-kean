@@ -43,6 +43,73 @@ Vector2DTest: class extends Fixture {
 				for (j in 0 .. 10)
 					expect(vector2D[i, j], is equal to(10))
 
+			// Increase array size to 20x20
+			vector2D resize(20, 20)
+			expect(vector2D rowCapacity, is equal to(20))
+			expect(vector2D columnCapacity, is equal to(20))
+			for (i in 0 .. 20)
+				for (j in 0 .. 20)
+					vector2D[i, j] = i * 20 + j
+			for (i in 0 .. 20)
+				for (j in 0 .. 20)
+					expect(vector2D[i, j], is equal to(i * 20 + j))
+			for (i in 0 .. 20)
+				for (j in 0 .. 20)
+					vector2D[i, j] = 20
+
+			for (i in 0 .. 20)
+				for (j in 0 .. 20)
+					expect(vector2D[i, j], is equal to(20))
+			vector2D resize(15, 15)
+			expect(vector2D rowCapacity, is equal to(15))
+			expect(vector2D columnCapacity, is equal to(15))
+
+			for (i in 0 .. 15)
+				for (j in 0 .. 15)
+					expect(vector2D[i, j], is equal to(20))
+
+			for (i in 0 .. 15)
+				for (j in 0 .. 15)
+					vector2D[i, j] = 15
+
+			isNotTheValue := is not equal to(15)
+			for (i in 16 .. 20)
+				for (j in 16 .. 20)
+					expect(vector2D[i, j], isNotTheValue)
+
+			// Decrease array size below original size
+			vector2D resize(5, 5)
+			expect(vector2D rowCapacity, is equal to(5))
+			expect(vector2D columnCapacity, is equal to(5))
+			for (i in 0 .. 5)
+				for (j in 0 .. 5)
+					vector2D[i, j] = 5
+			for (i in 0 .. 5)
+				for (j in 0 .. 5)
+					expect(vector2D[i, j], is equal to(5))
+
+			// Copy tests
+			vector2D resize(3, 3)
+			for (i in 0 .. 3)
+				for (j in 0 .. 3)
+					vector2D[i, j] = i
+			oldValue := vector2D[1, 1]
+			vector2D move(1, 1, 0, 0)
+			expect(vector2D[0, 0], is equal to(oldValue))
+
+			vector2D resize(10, 10)
+			for (i in 0 .. 10)
+				for (j in 0 .. 10)
+					vector2D[i, j] = i * j
+
+			vector2D resize(20, 20)
+			for (i in 0 .. 10)
+				for (j in 0 .. 10)
+					vector2D move(i, i, i + 1, i + 1)
+			for (i in 0 .. 10)
+				for (j in 0 .. 10)
+					expect(vector2D[i, j], is equal to(0))
+
 			vector2D free()
 		})
 	}
