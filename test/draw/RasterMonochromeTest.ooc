@@ -38,7 +38,7 @@ RasterMonochromeTest: class extends Fixture {
 			expect(image1 equals(image2))
 			image1 free(); image2 free()
 		})
-		this add("getRow and getColumn", func{
+		this add("getRow and getColumn", func {
 			size := IntSize2D new(500, 256)
 			image := RasterMonochrome new(size)
 			for (row in 0 .. size height)

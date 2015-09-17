@@ -29,7 +29,7 @@ TextBuilderTest: class extends Fixture {
 			tb := TextBuilder new(c"World", 5)
 			tb prepend(c"Hello ", 6)
 			expect(tb count, is equal to(2))
-			expect(tb  == "Hello World")
+			expect(tb == "Hello World")
 			tb prepend(c"String ", 7)
 			expect(tb count, is equal to(3))
 			expect(tb == "String Hello World")

@@ -145,7 +145,7 @@ VectorTest: class extends Fixture {
 
 			// Insert 0 .. 20
 			for (i in 0 .. 20)
-					stackVector[i] = i
+				stackVector[i] = i
 			for (i in 0 .. 20)
 				expect(stackVector[i], is equal to(i))
 			// Change all values to 20

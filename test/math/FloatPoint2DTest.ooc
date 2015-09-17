@@ -41,7 +41,7 @@ FloatPoint2DTest: class extends Fixture {
 			expect(this vector0 x, is equal to(22.221f))
 			expect(this vector0 y, is equal to(-3.1f))
 		})
-		this add("swap", func	{
+		this add("swap", func {
 			result := this vector0 swap()
 			expect(result x, is equal to(this vector0 y))
 			expect(result y, is equal to(this vector0 x))
