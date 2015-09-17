@@ -17,12 +17,14 @@
 use ooc-base
 use ooc-math
 use ooc-ui
-import egl/egl
 import gles3/Gles3Context
-/*import gl3/GL3Context*/
 import GLQuad, GLShaderProgram, GLTexture, GLFramebufferObject, GLFence, GLVolumeTexture, GLRenderer
 
 GLContext: abstract class {
+	_eglContext: Pointer
+	_eglDisplay: Pointer
+	_eglSurface: Pointer
+
 	makeCurrent: abstract func -> Bool
 	swapBuffers: abstract func
 	setViewport: abstract func (viewport: IntBox2D)
@@ -37,17 +39,11 @@ GLContext: abstract class {
 	createRenderer: abstract func -> GLRenderer
 
 	createContext: static func ~shared (window: NativeWindow, sharedContext: This = null) -> This {
-		result := Gles3Context create(window, sharedContext as Gles3Context)
-		/*if (result == null)
-			result := GL3Context create(window, sharedContext as GL3Context)*/
-
-		result
+		// This function will check if a context creation succeded and if not try to create a context for another opgengl version
+		Gles3Context create(window, sharedContext as Gles3Context)
 	}
 	createContext: static func ~pbufferShared (sharedContext: This = null) -> This {
-		result := Gles3Context create(sharedContext as Gles3Context)
-		/*if (result == null)
-			result := GL3Context create(sharedContext as GL3Context)*/
-
-		result
+		// This function will check if a context creation succeded and if not try to create a context for another opgengl version
+		Gles3Context create(sharedContext as Gles3Context)
 	}
 }

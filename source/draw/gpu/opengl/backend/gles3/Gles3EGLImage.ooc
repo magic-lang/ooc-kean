@@ -14,14 +14,13 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
-use ooc-math
 use ooc-base
-import egl/egl
-import gles3/include/gles3
-import ../EGLImage
+use ooc-math
+import ../egl/egl
+import ../GLTexture
 import Gles3Texture
 
-Gles3EGLImage: abstract class extends EGLImage, Gles3Texture {
+Gles3EGLImage: class extends Gles3Texture {
 	_eglBackend: Pointer
 	_eglDisplay: Pointer
 	_nativeBuffer: Pointer

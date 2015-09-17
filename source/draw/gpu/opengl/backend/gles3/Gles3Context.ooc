@@ -22,10 +22,6 @@ import include/gles3
 import DebugGL
 
 Gles3Context: class extends GLContext {
-	_eglContext: Pointer
-	_eglDisplay: Pointer
-	_eglSurface: Pointer
-
 	init: func
 	free: override func {
 		eglMakeCurrent(this _eglDisplay, null, null, null)
@@ -75,6 +71,10 @@ Gles3Context: class extends GLContext {
 				EGL_CONTEXT_CLIENT_VERSION, 2,
 				EGL_NONE] as Int*
 			this _eglContext = eglCreateContext(this _eglDisplay, config, shared, contextAttribs)
+			if (this _eglContext == null)
+				raise("Failed to create OpenGL ES 3 or OpenGL ES 2 context")
+			else
+				"WARNING: Using OpenGL ES 2" println()
 		}
 	}
 	_generate: func (window: NativeWindow, sharedContext: This) -> Bool {
