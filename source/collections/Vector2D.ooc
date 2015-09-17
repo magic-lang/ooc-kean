@@ -15,6 +15,8 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
+import math
+
 Vector2D: class <T> {
 	_backend: T*
 	_rowCapacity: Int
@@ -39,22 +41,28 @@ Vector2D: class <T> {
 		columnCount * row + column
 	}
 	resize: func (newRowCapacity, newColumnCapacity: Int) {
-		temporaryResult: T*
+		if (newColumnCapacity == this columnCapacity)
+			if (newRowCapacity == this rowCapacity)
+				return
+			else
+				_allocate(newRowCapacity, newColumnCapacity)
+		else {
+			temporaryResult: T*
+			minimumRowCapacity := Int minimum(this rowCapacity, newRowCapacity)
+			minimumColumnCapacity := Int minimum(this columnCapacity, newColumnCapacity)
 
-		maximumRowCapacity := this rowCapacity > newRowCapacity ? newRowCapacity : this rowCapacity
-		maximumColumnCapacity := this columnCapacity > newColumnCapacity ? newColumnCapacity : this columnCapacity
+			if (newColumnCapacity > this columnCapacity && newRowCapacity > this rowCapacity)
+				temporaryResult = gc_calloc(newRowCapacity * newColumnCapacity, T size)
+			else
+				temporaryResult = gc_malloc(newRowCapacity * newColumnCapacity * T size)
 
-		if (newRowCapacity == this rowCapacity && newColumnCapacity == this columnCapacity)
-			return
+			for (row in 0 .. minimumRowCapacity)
+				memcpy(temporaryResult[T size * this _elementPosition(row, 0, newRowCapacity)]&,
+					this _backend[T size * this _elementPosition(row, 0)]&, minimumColumnCapacity * T size)
 
-		temporaryResult = gc_calloc(newRowCapacity * newColumnCapacity, T size)
-
-		for (r in 0 .. maximumRowCapacity)
-			memcpy(temporaryResult[T size * this _elementPosition(r, 0, newRowCapacity)]&,
-				this _backend[T size * this _elementPosition(r, 0)]&, maximumColumnCapacity * T size)
-
-		this free()
-		this init(temporaryResult, newRowCapacity, newColumnCapacity)
+			this free()
+			this init(temporaryResult, newRowCapacity, newColumnCapacity)
+		}
 	}
 	move: func (sourceRowStart, sourceColumnStart, targetRowStart, targetColumnStart: Int, rowCapacity := 0, columnCapacity := 0) {
 		sourceRowIndex, targetRowIndex: Int
@@ -68,15 +76,15 @@ Vector2D: class <T> {
 		if (targetColumnStart + columnCapacity > this columnCapacity)
 			columnCapacity = this columnCapacity - targetColumnStart
 
-		for (r in 0 .. rowCapacity) {
+		for (row in 0 .. rowCapacity) {
 			if (sourceRowStart > targetRowStart) {
 				// Move row-wise from top to bottom.
-				sourceRowIndex = sourceRowStart + r
+				sourceRowIndex = sourceRowStart + row
 				targetRowIndex = sourceRowIndex - sourceRowStart + targetRowStart
 			}
 			else {
 				//Move row-wise from bottom to top
-				targetRowIndex = rowCapacity + targetRowStart - r - 1
+				targetRowIndex = rowCapacity + targetRowStart - row - 1
 				sourceRowIndex = targetRowIndex - targetRowStart + sourceRowStart
 			}
 
