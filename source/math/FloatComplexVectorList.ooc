@@ -116,29 +116,42 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	}
 	fastFourierTransform: static func (input: This) -> This {
 		result := This createDefault(input count)
-		if (input count == 1)
-			result[0] = input[0]
-		else {
-			halfLength: Int = input count / 2
-			evenInput := This new(halfLength)
-			oddInput := This new(halfLength)
-			for (i in 0 .. halfLength) {
-				evenInput add(input[2 * i])
-				oddInput add(input[2 * i + 1])
-			}
-			evenOutput := This fastFourierTransform(evenInput)
-			oddOutput := This fastFourierTransform(oddInput)
-			for (i in 0 .. halfLength) {
-				root := FloatComplex rootOfUnity(input count, -i)
-				result[i] = evenOutput[i] + root * oddOutput[i]
-				result[halfLength + i] = evenOutput[i] - root * oddOutput[i]
-			}
-			evenInput free()
-			oddInput free()
-			evenOutput free()
-			oddOutput free()
+		if (input count > 0) {
+			buffer := This createFFTBuffer(input count)
+			This fastFourierTransformInto(input, result, buffer)
+			buffer free()
 		}
 		result
+	}
+	fastFourierTransformInPlace: static func (input: This) {
+		if (input count > 0) {
+			buffer := This createFFTBuffer(input count)
+			This fastFourierTransformInto(input, input, buffer)
+			buffer free()
+		}
+	}
+	/* for input of size N, buffer size needs to be at least log2(N)*N*/
+	fastFourierTransform: static func ~withBuffer (input, buffer: This) -> This {
+		result := This createDefault(input count)
+		if (input count > 0)
+			This fastFourierTransformInto(input, result, buffer)
+		result
+	}
+	fastFourierTransformInPlace: static func ~withBuffer (input, buffer: This) {
+		This fastFourierTransformInto(input, input, buffer)
+	}
+	fastFourierTransformInto: static func (input, result: This) {
+		if (input count > 0) {
+			buffer := This createFFTBuffer(input count)
+			This fastFourierTransformInto(input, result, buffer)
+			buffer free()
+		}
+	}
+	fastFourierTransformInto: static func ~withBuffer (input, result, buffer: This) {
+		This _fastFourierTransformHelper(input, 0, input count, buffer, 0, result, 0)
+	}
+	createFFTBuffer: static func (inputSize: Int) -> This {
+		This createDefault(This _fastFourierTransformBufferSize(inputSize))
 	}
 	inverseFastFourierTransform: static func (input: This) -> This {
 		conjugates := This new(input count)
@@ -160,5 +173,33 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		for (i in 0 .. capacity)
 			result add(value)
 		result
+	}
+	_fastFourierTransformBufferSize: static func (inputSize: Int) -> Int {
+		logValue := inputSize as Float log2()
+		(logValue + 1.0f) floor() * inputSize
+	}
+	_fastFourierTransformHelper: static func (input: This, start, count: Int, buffer: This, bufferOffset: Int, result: This, resultOffset: Int) {
+		version (safe) {
+			if (buffer count < This _fastFourierTransformBufferSize(count))
+				raise("Buffer size too small in fastFourierTransform")
+		}
+		if (count == 1)
+			result[resultOffset] = input[start]
+		else {
+			halfLength: Int = count / 2
+			for (i in 0 .. halfLength) {
+				buffer[bufferOffset + i] = input[start + 2 * i]
+				buffer[bufferOffset + i + halfLength] = input[start + 2 * i + 1]
+			}
+			This _fastFourierTransformHelper(buffer, bufferOffset, halfLength, buffer, bufferOffset + count, result, resultOffset)
+			This _fastFourierTransformHelper(buffer, bufferOffset + halfLength, halfLength, buffer, bufferOffset + count, result, resultOffset + halfLength)
+			for (i in 0 .. halfLength) {
+				root := FloatComplex rootOfUnity(count, -i)
+				even := result[resultOffset + i]
+				odd := result[resultOffset + i + halfLength]
+				result[resultOffset + i] = even + root * odd
+				result[resultOffset + i + halfLength] = even - root * odd
+			}
+		}
 	}
 }
