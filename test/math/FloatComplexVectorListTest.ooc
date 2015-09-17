@@ -42,16 +42,26 @@ FloatComplexVectorListTest: class extends Fixture {
 		this add("discrete fourier transform", func {
 			result := FloatComplexVectorList discreteFourierTransform(complexNumberArray)
 			result = FloatComplexVectorList inverseDiscreteFourierTransform(result)
-			for (i in 0 .. (complexNumberArray count)) {
+			for (i in 0 .. (complexNumberArray count))
 				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
-			}
 		})
 		this add("fast fourier transform", func {
 			result := FloatComplexVectorList fastFourierTransform(complexNumberArray)
+			resultInPlace := complexNumberArray copy()
+			FloatComplexVectorList fastFourierTransformInPlace(resultInPlace)
+			expect((result[0] - FloatComplex new(8, 5)) absoluteValue < tolerance, is true)
+			expect((result[1] - FloatComplex new(0, -7)) absoluteValue < tolerance, is true)
+			expect((result[2] - FloatComplex new(6, 3)) absoluteValue < tolerance, is true)
+			expect((result[3] - FloatComplex new(-6, 3)) absoluteValue < tolerance, is true)
+			for (i in 0 .. result count)
+				expect((result[i] - resultInPlace[i]) absoluteValue < tolerance, is true)
 			result = FloatComplexVectorList inverseFastFourierTransform(result)
-			for (i in 0 .. (complexNumberArray count)) {
+			for (i in 0 .. (complexNumberArray count))
 				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
-			}
+			fftBuffer := FloatComplexVectorList createFFTBuffer(complexNumberArray count)
+			result = FloatComplexVectorList fastFourierTransform(complexNumberArray, fftBuffer)
+			for (i in 0 .. (complexNumberArray count))
+				expect((result[i] - resultInPlace[i]) absoluteValue < tolerance, is true)
 		})
 	}
 }
