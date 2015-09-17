@@ -25,6 +25,10 @@ log: extern(log) func ~Double (Double) -> Double
 log: extern(logf) func ~Float (Float) -> Float
 log: extern(logl) func ~Long (LDouble) -> LDouble
 
+log2: extern(log2) func ~Double (Double) -> Double
+log2: extern(log2f) func ~Float (Float) -> Float
+log2: extern(log2l) func ~Long (LDouble) -> LDouble
+
 log10: extern(log10) func ~Double (Double) -> Double
 log10: extern(log10f) func ~Float (Float) -> Float
 log10: extern(log10l) func ~Long (LDouble) -> LDouble
@@ -185,6 +189,7 @@ extend Double {
     exp: extern(exp) func -> This
 
     log: extern(log) func -> This
+    log2: extern(log2) func -> This
     log10: extern(log10) func -> This
 
     mod: extern(fmod) func (This) -> This
@@ -234,6 +239,7 @@ extend Float {
     exp: extern(expf) func -> This
 
     log: extern(logf) func -> This
+    log2: extern(log2f) func -> This
     log10: extern(log10f) func -> This
 
     mod: extern(fmodf) func (This) -> This
@@ -392,6 +398,7 @@ extend LDouble {
     exp: extern(expl) func -> This
 
     log: extern(logl) func -> This
+    log2: extern(log2l) func -> This
     log10: extern(log10l) func -> This
 
     mod: extern(fmodl) func (This) -> This
