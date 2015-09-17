@@ -38,5 +38,5 @@ FloatRotation3D: cover {
 		result = result == result ? result : 0.0f
 	}
 	toString: func -> String { this _quaternion toString() }
-	kean_math_floatRotation3D_new: unmangled static func ~API (quaternion: Quaternion) -> This { This new(quaternion) }
+	kean_math_floatRotation3D_new: unmangled static func (quaternion: Quaternion) -> This { This new(quaternion) }
 }

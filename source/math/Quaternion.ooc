@@ -264,7 +264,7 @@ Quaternion: cover {
 		"Real: " << "%8f" formatFloat(this real) >>
 		" Imaginary: " & "%8f" formatFloat(this imaginary x) >> " " & "%8f" formatFloat(this imaginary y) >> " " & "%8f" formatFloat(this imaginary z)
 	}
-	new: unmangled (kean_math_quaternion_new) static func ~API (w, x, y, z: Float) -> This { This new(w, x, y, z) }
+	kean_math_quaternion_new: unmangled static func (w, x, y, z: Float) -> This { This new(w, x, y, z) }
 }
 operator * (value: Float, other: Quaternion) -> Quaternion {
 	other * value

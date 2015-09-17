@@ -72,7 +72,7 @@ DateTime: cover {
 	}
 	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
 	kean_base_dateTime_getTicks: unmangled func -> UInt64 { this _ticks }
-	new: unmangled (kean_base_dateTime_new) static func ~API (ticks: UInt64) -> This { This new(ticks) }
+	kean_base_dateTime_new: unmangled static func (ticks: UInt64) -> This { This new(ticks) }
 
 	millisecond: func -> Int {
 		This _ticksToDateTimeHelper(this ticks) millisecond

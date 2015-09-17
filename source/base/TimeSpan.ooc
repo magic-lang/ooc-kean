@@ -25,7 +25,7 @@ TimeSpan: cover {
 		this _ticks = DateTime timeToTicks(hour, minute, second, millisecond)
 	}
 	kean_base_timeSpan_getTicks: unmangled func -> Int64 { this _ticks }
-	new: unmangled (kean_base_timeSpan_new) static func ~Api (ticks: Int64) -> This { This new(ticks) }
+	kean_base_timeSpan_new: unmangled static func (ticks: Int64) -> This { This new(ticks) }
 	negate: func -> This { This new(-1 * this ticks) }
 	elapsedMilliseconds: func -> Int64 {
 		this ticks / DateTime ticksPerMillisecond
