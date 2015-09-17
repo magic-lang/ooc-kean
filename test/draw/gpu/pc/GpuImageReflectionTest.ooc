@@ -43,6 +43,6 @@ GpuImageReflectionTest: class extends Fixture {
 	}
 }
 
-gpuContext := OpenGLES3Context new()
+gpuContext := OpenGLContext new()
 GpuImageReflectionTest new() run()
 gpuContext free()
