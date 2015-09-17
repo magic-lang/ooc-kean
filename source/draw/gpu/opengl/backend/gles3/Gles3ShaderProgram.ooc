@@ -14,12 +14,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-
 use ooc-math
-import include/gles3, DebugGL
+import include/gles3
+import ../GLShaderProgram
+import Gles3Debug
 
-ShaderProgram: class {
+Gles3ShaderProgram: class extends GLShaderProgram {
 	_backend: UInt
+
 	init: func
 	use: func {
 		version(debugGL) { validateStart() }
@@ -200,12 +202,5 @@ ShaderProgram: class {
 		}
 		version(debugGL) { validateEnd("ShaderProgram _compileShaders") }
 		success
-	}
-	create: static func (vertexSource, fragmentSource: String) -> This {
-		version(debugGL) { validateStart() }
-		result := This new()
-		result = result _compileShaders(vertexSource, fragmentSource) ? result : null
-		version(debugGL) { validateEnd("ShaderProgram create") }
-		result
 	}
 }

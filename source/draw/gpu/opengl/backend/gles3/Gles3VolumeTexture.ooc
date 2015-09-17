@@ -17,8 +17,9 @@
 use ooc-math
 use ooc-base
 import include/gles3
-import Context
-VolumeTexture: class {
+import ../GLVolumeTexture
+
+Gles3VolumeTexture: class extends GLVolumeTexture {
 	_backend: UInt
 	backend: UInt { get { this _backend } }
 	width, height, depth: UInt

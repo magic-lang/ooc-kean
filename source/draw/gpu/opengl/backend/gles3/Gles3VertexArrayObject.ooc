@@ -16,12 +16,14 @@
  */
 use ooc-base
 import include/gles3
+import ../GLVertexArrayObject
 
-Vao: class {
+Gles3VertexArrayObject: class extends GLVertexArrayObject {
 	backend: UInt
 	positionLayout: const static UInt = 0
 	textureCoordinateLayout: const static UInt = 1
-	init: func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> Bool {
+
+	init: func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) {
 		version(debugGL) { Debug print("Allocating OpenGL VAO") }
 		//Currently using 2 attributes: vertex position and texture coordinate
 		attributeCount := 2
@@ -54,7 +56,6 @@ Vao: class {
 	}
 	free: func {
 		glDeleteVertexArrays(1, backend&)
-		super()
 	}
 	bind: func { glBindVertexArray(backend) }
 	unbind: func { glBindVertexArray(0) }

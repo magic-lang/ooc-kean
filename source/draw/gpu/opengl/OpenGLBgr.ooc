@@ -18,12 +18,12 @@ use ooc-base
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import backend/gles3/Texture, OpenGLCanvas, OpenGLPacked, OpenGLContext
+import backend/GLTexture, OpenGLCanvas, OpenGLPacked, OpenGLContext
 
 OpenGLBgr: class extends OpenGLPacked {
 	channelCount: static Int = 3
 	init: func (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
-		super(Texture create(TextureType bgr, size, stride, data, true), This channelCount, context)
+		super(context _backend createTexture(TextureType bgr, size, stride, data, true), This channelCount, context)
 		this coordinateSystem = coordinateSystem
 	}
 	init: func ~empty (size: IntSize2D, context: OpenGLContext) {

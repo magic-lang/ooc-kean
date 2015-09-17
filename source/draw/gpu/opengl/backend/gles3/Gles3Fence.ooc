@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+
 use ooc-base
 import os/Time
 import include/gles3
+import ../GLFence
 import threading/Thread
-Fence: class {
-	_backend: Pointer = null
-	_syncCondition: WaitCondition
-	_mutex: Mutex
+
+Fence: class extends GLFence {
 	init: func {
 		this _mutex = Mutex new()
 		this _syncCondition = WaitCondition new()

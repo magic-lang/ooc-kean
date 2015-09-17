@@ -14,18 +14,17 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
-use ooc-math
 use ooc-base
-import ../egl/egl
-import include/gles3
-import Texture
-EGLImage: class extends Texture {
+import egl/egl
+import GLTexture
+
+EGLImage: abstract class extends GLTexture {
 	_eglBackend: Pointer
 	_eglDisplay: Pointer
 	_nativeBuffer: Pointer
 	/* PRIVATE CONSTRUCTOR, USE STATIC CREATE FUNCTION!!! */
-	init: func (type: TextureType, size: IntSize2D, =_nativeBuffer, =_eglDisplay) {
-		super(type, size)
+	/*init: func (type: TextureType, width: Int, height: Int, =_nativeBuffer, =_eglDisplay) {
+		super(type, width, height)
 		this _genTexture()
 		this bindSibling()
 		/*textureUnitCount: Int
@@ -33,16 +32,12 @@ EGLImage: class extends Texture {
 		Debug print("Texture units needed: " + textureUnitCount toString())
 		glIsEnabled(GL_TEXTURE_EXTERNAL_OES)
 		*/
-	}
+	}*/
 	free: override func {
 		This _eglDestroyImageKHR(this _eglDisplay, this _eglBackend)
 		super()
 	}
-	bindSibling: func {
-		eglImageAttributes := [EGL_IMAGE_PRESERVED_KHR, EGL_FALSE, EGL_NONE] as Int*
-		this _eglBackend = This _eglCreateImageKHR(this _eglDisplay, EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID, this _nativeBuffer, eglImageAttributes)
-		This _glEGLImageTargetTexture2DOES(this _target, this _eglBackend)
-	}
+	bindSibling: abstract func
 
 	_eglCreateImageKHR: static Func(Pointer, Pointer, UInt, Pointer, Int*) -> Pointer
 	_eglDestroyImageKHR: static Func(Pointer, Pointer)
@@ -56,12 +51,12 @@ EGLImage: class extends Texture {
 			This _initialized = true
 		}
 	}
-	create: static func (type: TextureType, size: IntSize2D, nativeBuffer: Pointer, display: Pointer) -> This {
+	/*create: static func (type: TextureType, width: Int, height: Int, nativeBuffer: Pointer, display: Pointer) -> This {
 		This initialize()
 		result: This = null
 		if (type == TextureType rgba || type == TextureType rgb || type == TextureType bgr || type == TextureType rgb || type == TextureType yv12) {
-			result = This new(type, size, nativeBuffer, display)
+			result = This new(type, width, height, nativeBuffer, display)
 		}
 		result
-	}
+	}*/
 }

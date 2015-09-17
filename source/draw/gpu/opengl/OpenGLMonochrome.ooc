@@ -23,11 +23,11 @@ import backend/gles3/Texture
 OpenGLMonochrome: class extends OpenGLPacked {
 	channelCount: static Int = 1
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
-		super(Texture create(TextureType monochrome, size, stride, data), This channelCount, context)
+		super(context _backend createTexture(TextureType monochrome, size, stride, data), This channelCount, context)
 		this coordinateSystem = coordinateSystem
 	}
 	init: func (size: IntSize2D, context: OpenGLContext) { this init(size, size width, null, CoordinateSystem YUpward, context) }
-	init: func ~fromTexture (texture: Texture, context: OpenGLContext) { super(texture, This channelCount, context) }
+	init: func ~fromTexture (texture: GLTexture, context: OpenGLContext) { super(texture, This channelCount, context) }
 	init: func ~fromRaster (rasterImage: RasterMonochrome, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}

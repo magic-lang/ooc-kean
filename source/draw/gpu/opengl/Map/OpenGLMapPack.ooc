@@ -18,7 +18,7 @@
 use ooc-math
 use ooc-draw-gpu
 import OpenGLMap
-import OpenGLContext
+import ../OpenGLContext
 OpenGLMapPack: abstract class extends OpenGLMap {
 	imageWidth: Int { get set }
 	channels: Int { get set }

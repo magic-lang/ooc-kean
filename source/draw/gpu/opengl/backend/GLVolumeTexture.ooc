@@ -12,28 +12,11 @@
 * Lesser General Public License for more details.
 *
 * You should have received a copy of the GNU Lesser General Public License
-* along with This software. If not, see <http://www.gnu.org/licenses/>.
+* along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-math
-use ooc-draw
-use ooc-draw-gpu
-import backend/[GLVolumeTexture, GLContext]
-import OpenGLContext
-
-OpenGLVolumeMonochrome: class {
-	_backend: GLVolumeTexture
-	init: func (size: IntSize3D, pixels: UInt8* = null, context: OpenGLContext) {
-		this _backend = context as GLContext createVolumeTexture(size width, size height, size depth, pixels)
-	}
-	bind: func (unit: UInt) {
-		this _backend bind(unit)
-	}
-	upload: func (pixels: UInt8*) {
-		this _backend upload(pixels)
-	}
-	free: override func {
-		this _backend free()
-		super()
-	}
+GLVolumeTexture: abstract class {
+	bind: abstract func (unit: UInt)
+	unbind: abstract func
+	upload: abstract func (pixels: UInt8*)
 }

@@ -16,33 +16,11 @@
  */
 use ooc-math
 use ooc-base
-import include/gles3, DebugGL
-import Context
+import include/gles3
+import ../GLTexture
+import Gles3Debug
 
-TextureType: enum {
-	monochrome
-	rgba
-	rgb
-	bgr
-	bgra
-	uv
-	yv12
-}
-
-InterpolationType: enum {
-	Nearest
-	Linear
-	LinearMipmapNearest
-	LinearMipmapLinear
-	NearestMipmapNearest
-	NearestMipmapLinear
-}
-
-Texture: class {
-	_backend: UInt
-	backend: UInt { get { this _backend } }
-	_size: IntSize2D
-	size ::= this _size
+Gles3Texture: class extends GLTexture {
 	_type: TextureType
 	_format: UInt
 	_internalFormat: UInt
@@ -180,13 +158,5 @@ Texture: class {
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
 		version(debugGL) { validateEnd("Texture _allocate") }
 		true
-	}
-	create: static func (type: TextureType, size: IntSize2D, stride: UInt, pixels := null, allocate : Bool = true) -> This {
-		version(debugGL) { validateStart() }
-		result := This new(type, size)
-		success := result _generate(pixels, stride, allocate)
-		result = success ? result : null
-		version(debugGL) { validateEnd("Texture create") }
-		result
 	}
 }
