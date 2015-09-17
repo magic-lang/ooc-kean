@@ -5,6 +5,7 @@ Requires: ooc-unit
 Requires: ooc-base
 Requires: ooc-sdk-lite
 Imports: Vector
+Imports: Vector2D
 Imports: VectorList
 Imports: PointerVector
 Imports: PointerVectorList
