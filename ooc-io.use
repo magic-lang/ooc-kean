@@ -2,6 +2,5 @@ Name: ooc IO
 Description: IO library
 SourcePath: source/io
 Requires: ooc-base
-Requires: ooc-sdk
 Requires: ooc-unit
 Imports: CsvReader
