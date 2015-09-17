@@ -17,11 +17,11 @@
 use ooc-collections
 use ooc-math
 use ooc-draw-gpu
-import OpenGLES3Context, OpenGLES3/Renderer
+import OpenGLContext, backend/gles3/Renderer
 
-OpenGLES3Surface: abstract class extends GpuSurface {
-	context ::= this _context as OpenGLES3Context
-	init: func (size: IntSize2D, context: OpenGLES3Context, defaultMap: GpuMap, coordinateTransform: IntTransform2D) {
+OpenGLSurface: abstract class extends GpuSurface {
+	context ::= this _context as OpenGLContext
+	init: func (size: IntSize2D, context: OpenGLContext, defaultMap: GpuMap, coordinateTransform: IntTransform2D) {
 		super(size, context, defaultMap, coordinateTransform)
 	}
 	_bind: abstract func

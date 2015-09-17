@@ -17,9 +17,9 @@
 
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLES3/Texture, OpenGLES3Context, OpenGLES3Canvas
+import backend/gles3/Texture, OpenGLContext, OpenGLCanvas
 
-OpenGLES3Packed: abstract class extends GpuImage {
+OpenGLPacked: abstract class extends GpuImage {
 	_filter: Bool
 	filter: Bool {
 		get { this _filter }
@@ -32,10 +32,10 @@ OpenGLES3Packed: abstract class extends GpuImage {
 	backend ::= this _backend
 	_channels: UInt
 	channels ::= this _channels
-	context ::= this _context as OpenGLES3Context
+	context ::= this _context as OpenGLContext
 	_recyclable := true
 	recyclable ::= this _recyclable
-	init: func (=_backend, =_channels, context: OpenGLES3Context) { super(this _backend size, context) }
+	init: func (=_backend, =_channels, context: OpenGLContext) { super(this _backend size, context) }
 	free: override func {
 		if (this recyclable)
 			this context recycle(this)
@@ -51,5 +51,5 @@ OpenGLES3Packed: abstract class extends GpuImage {
 		}
 	}
 	bind: override func (unit: UInt) { this _backend bind(unit) }
-	_createCanvas: override func -> GpuSurface { OpenGLES3Canvas new(this, this context) }
+	_createCanvas: override func -> GpuSurface { OpenGLCanvas new(this, this context) }
 }

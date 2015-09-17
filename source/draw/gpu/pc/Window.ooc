@@ -23,7 +23,7 @@ use ooc-base
 import X11/X11Window
 import X11/include/x11
 
-Window: class extends OpenGLES3Surface {
+Window: class extends OpenGLSurface {
 	_native: NativeWindow
 	_monochromeToBgra: OpenGLMapMonochromeToBgra
 	_yuvSemiplanarToBgra: OpenGLMapYuvSemiplanarToBgra
@@ -62,7 +62,7 @@ Window: class extends OpenGLES3Surface {
 		result := match (image) {
 			case (i: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgra
 			case (i: RasterYuv420Semiplanar) => this _yuvSemiplanarToBgra
-			case (i: OpenGLES3Monochrome) => this _monochromeToBgra
+			case (i: OpenGLMonochrome) => this _monochromeToBgra
 			case (i: RasterMonochrome) => this _monochromeToBgra
 			case => this context defaultMap
 		}

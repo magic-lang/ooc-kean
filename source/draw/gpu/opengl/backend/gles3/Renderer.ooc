@@ -1,6 +1,6 @@
 
 import Quad
-import include/gles
+import include/gles3
 Renderer: class {
 	_quad: Quad
 	init: func { this _quad = Quad new() }

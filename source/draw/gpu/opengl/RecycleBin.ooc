@@ -18,16 +18,16 @@ use ooc-collections
 use ooc-math
 use ooc-base
 use ooc-draw-gpu
-import OpenGLES3Packed, OpenGLES3Monochrome, OpenGLES3Bgra, OpenGLES3Bgr, OpenGLES3Uv
+import OpenGLPacked, OpenGLMonochrome, OpenGLBgra, OpenGLBgr, OpenGLUv
 
 RecycleBin: class {
-	_monochrome := VectorList<OpenGLES3Monochrome> new()
-	_bgr := VectorList<OpenGLES3Bgr> new()
-	_bgra := VectorList<OpenGLES3Bgra> new()
-	_uv := VectorList<OpenGLES3Uv> new()
+	_monochrome := VectorList<OpenGLMonochrome> new()
+	_bgr := VectorList<OpenGLBgr> new()
+	_bgra := VectorList<OpenGLBgra> new()
+	_uv := VectorList<OpenGLUv> new()
 	_limit := 15
 	init: func
-	_cleanList: static func (list: VectorList<OpenGLES3Packed>) {
+	_cleanList: static func (list: VectorList<OpenGLPacked>) {
 		for (i in 0 .. list count)
 			list[i] _recyclable = false
 		list clear()
@@ -46,7 +46,7 @@ RecycleBin: class {
 		this _uv free()
 		super()
 	}
-	_add: func (image: OpenGLES3Packed, list: VectorList<OpenGLES3Packed>) {
+	_add: func (image: OpenGLPacked, list: VectorList<OpenGLPacked>) {
 		if (list count >= this _limit) {
 			version(debugGL) Debug print("GpuImageBin full; freeing one GpuImage")
 			// We need to make sure the image will be destroyed instead of recycled
@@ -56,16 +56,16 @@ RecycleBin: class {
 		}
 		list add(image)
 	}
-	add: func (image: OpenGLES3Packed) {
+	add: func (image: OpenGLPacked) {
 		match (image) {
-			case (i: OpenGLES3Monochrome) => this _add(i, this _monochrome)
-			case (i: OpenGLES3Bgr) => this _add(i, this _bgr)
-			case (i: OpenGLES3Bgra) => this _add(i, this _bgra)
-			case (i: OpenGLES3Uv) => this _add(i, this _uv)
+			case (i: OpenGLMonochrome) => this _add(i, this _monochrome)
+			case (i: OpenGLBgr) => this _add(i, this _bgr)
+			case (i: OpenGLBgra) => this _add(i, this _bgra)
+			case (i: OpenGLUv) => this _add(i, this _uv)
 			case => Debug raise("Unknown format in GpuImageBin add()")
 		}
 	}
-	_search: func (size: IntSize2D, list: VectorList<OpenGLES3Packed>) -> OpenGLES3Packed {
+	_search: func (size: IntSize2D, list: VectorList<OpenGLPacked>) -> OpenGLPacked {
 		result := null
 		index := -1
 		for (i in 0 .. list count) {
@@ -79,7 +79,7 @@ RecycleBin: class {
 			result = list remove(index)
 		result
 	}
-	find: func (type: GpuImageType, size: IntSize2D) -> OpenGLES3Packed {
+	find: func (type: GpuImageType, size: IntSize2D) -> OpenGLPacked {
 		match (type) {
 			case GpuImageType monochrome => this _search(size, this _monochrome)
 			case GpuImageType uv => this _search(size, this _uv)

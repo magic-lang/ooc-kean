@@ -19,7 +19,7 @@ use ooc-math
 use ooc-opengl
 import GraphicBuffer, AndroidContext
 
-EGLBgra: class extends OpenGLES3Bgra {
+EGLBgra: class extends OpenGLBgra {
 	_buffer: GraphicBuffer
 	buffer ::= this _buffer
 	init: func ~fromGraphicBuffer (=_buffer, context: AndroidContext) {
