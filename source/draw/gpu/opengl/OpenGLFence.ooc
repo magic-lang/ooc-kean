@@ -5,7 +5,7 @@ import OpenGLContext
 OpenGLFence: class extends GpuFence {
 	_backend: GLFence
 	init: func (context: OpenGLContext) {
-		_backend = context as GLContext createFence()
+		this _backend = context backend as GLContext createFence()
 	}
 	free: override func {
 		this _backend free()

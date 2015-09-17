@@ -25,6 +25,7 @@ import backend/gles3/[Context, Renderer]
 
 OpenGLContext: class extends GpuContext {
 	_backend: GLContext
+	backend ::= this _backend
 	_transformTextureMap: OpenGLMapTransformTexture
 	_packMonochrome: OpenGLMapPackMonochrome
 	_packUv: OpenGLMapPackUv
