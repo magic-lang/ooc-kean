@@ -6,12 +6,6 @@ Requires: ooc-math
 Requires: ooc-unit
 Requires: ooc-draw
 Requires: ooc-draw-gpu
-Imports: backend/gles3/DebugGL
-Imports: backend/gles3/Texture
-Imports: backend/gles3/EGLImage
-Imports: backend/gles3/Quad
-Imports: backend/gles3/Context
-Imports: backend/gles3/Fbo
 Imports: OpenGLPacked
 Imports: OpenGLBgr
 Imports: OpenGLBgra
@@ -19,9 +13,14 @@ Imports: OpenGLMonochrome
 Imports: OpenGLUv
 Imports: OpenGLCanvas
 Imports: OpenGLSurface
+Imports: Map/OpenGLMap
+Imports: Map/OpenGLMapPack
 Imports: OpenGLContext
 Imports: OpenGLVolumeMonochrome
 Imports: OpenGLWindow
-Imports: Map/OpenGLMap
-Imports: Map/OpenGLMapPack
+Imports: AndroidContext
+Imports: EGLBgra
+Imports: GraphicBuffer
+Imports: GraphicBufferYuv420Semiplanar
+
 Libs: -lEGL
