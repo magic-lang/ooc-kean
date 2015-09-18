@@ -3,7 +3,7 @@ use ooc-draw
 use ooc-math
 use ooc-base
 use ooc-draw-gpu
-import GraphicBuffer, AndroidContext
+import GraphicBuffer, AndroidContext, EGLBgra
 GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	_buffer: GraphicBuffer
 	buffer ::= this _buffer
@@ -26,14 +26,15 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		this _buffer free()
 		super()
 	}
-	toRgba: func (context: AndroidContext) -> GpuBgra {
+	toRgba: func (context: AndroidContext) -> GpuImage {
 		padding := this _uvOffset - this _stride * this _size height
 		extraRows := Int align(padding, this _stride) / this _stride
 		height := this _size height + this _size height / 2 + extraRows
 		width := this _stride / 4
 		rgbaBuffer := GraphicBuffer new(this buffer handle, IntSize2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage Rendertarget)
-		result := context createBgra(rgbaBuffer)
+		result := EGLBgra new(rgbaBuffer, context)
 		result coordinateSystem = this coordinateSystem
+		result
 	}
 	kean_draw_gpu_android_graphicBufferYuv420Semiplanar_new: unmangled static func (backend: Pointer, nativeBuffer: Pointer, handle: Pointer, size: IntSize2D, stride: Int, format: GraphicBufferFormat, uvOffset: Int) -> This {
 		This new(backend, nativeBuffer, handle, size, format, stride, uvOffset)

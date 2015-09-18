@@ -18,18 +18,20 @@ use ooc-base
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import backend/gles3/Texture, OpenGLCanvas, OpenGLTexture
+import backend/gles3/Texture, OpenGLCanvas, OpenGLPacked, OpenGLContext
 
-OpenGLBgr: class extends GpuBgr {
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: GpuContext) {
-		super(OpenGLTexture createBgr(size, stride, data), size, context)
+OpenGLBgr: class extends OpenGLPacked {
+	channelCount: static Int = 3
+	init: func (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
+		super(Texture create(TextureType bgr, size, stride, data, true), This channelCount, context)
 		this coordinateSystem = coordinateSystem
 	}
-	init: func (size: IntSize2D, context: GpuContext) { this init(size, size width * this _channels, null, CoordinateSystem YUpward, context) }
-	init: func ~fromRaster (rasterImage: RasterBgr, context: GpuContext) {
+	init: func ~empty (size: IntSize2D, context: OpenGLContext) {
+		this init(size, size width * This channelCount, null, CoordinateSystem YUpward, context)
+	}
+	init: func ~fromRaster (rasterImage: RasterBgr, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: func -> RasterImage { Debug raise("toRaster not implemented for BGR"); null }
-	_createCanvas: func -> GpuCanvas { OpenGLCanvas new(this, this _context) }
-	create: override func (size: IntSize2D) -> This { this _context createBgr(size) as This }
+	create: override func (size: IntSize2D) -> This { this context createBgr(size) as This }
 }

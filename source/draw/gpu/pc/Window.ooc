@@ -23,7 +23,7 @@ use ooc-base
 import X11/X11Window
 import X11/include/x11
 
-Window: class extends GpuSurface {
+Window: class extends OpenGLSurface {
 	_native: NativeWindow
 	_monochromeToBgra: OpenGLMapMonochromeToBgra
 	_yuvSemiplanarToBgra: OpenGLMapYuvSemiplanarToBgra
@@ -57,11 +57,12 @@ Window: class extends GpuSurface {
 		(native as X11Window) free()
 	}
 	_bind: override func { this _native bind() }
+	_unbind: override func
 	_getDefaultMap: override func (image: Image) -> GpuMap {
 		result := match (image) {
 			case (i: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgra
 			case (i: RasterYuv420Semiplanar) => this _yuvSemiplanarToBgra
-			case (i: GpuMonochrome) => this _monochromeToBgra
+			case (i: OpenGLMonochrome) => this _monochromeToBgra
 			case (i: RasterMonochrome) => this _monochromeToBgra
 			case => this context defaultMap
 		}

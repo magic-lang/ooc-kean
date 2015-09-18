@@ -17,38 +17,26 @@
 use ooc-collections
 use ooc-math
 use ooc-base
-import GpuImage, GpuMonochrome, GpuBgr, GpuBgra, GpuUv, GpuYuv420Semiplanar, GpuYuv420Planar, GpuYuv422Semipacked
-import threading/Thread
+use ooc-draw-gpu
+import OpenGLPacked, OpenGLMonochrome, OpenGLBgra, OpenGLBgr, OpenGLUv
 
-GpuImageBin: class {
-	_monochrome: VectorList<GpuImage>
-	_bgr: VectorList<GpuImage>
-	_bgra: VectorList<GpuImage>
-	_uv: VectorList<GpuImage>
-	_yuv422: VectorList<GpuImage>
-	_mutex: Mutex
+RecycleBin: class {
+	_monochrome := VectorList<OpenGLMonochrome> new()
+	_bgr := VectorList<OpenGLBgr> new()
+	_bgra := VectorList<OpenGLBgra> new()
+	_uv := VectorList<OpenGLUv> new()
 	_limit := 15
-	init: func {
-		this _mutex = Mutex new()
-		this _monochrome = VectorList<GpuImage> new()
-		this _bgr = VectorList<GpuImage> new()
-		this _bgra = VectorList<GpuImage> new()
-		this _uv = VectorList<GpuImage> new()
-		this _yuv422 = VectorList<GpuImage> new()
-	}
-	_cleanList: static func (list: VectorList<GpuImage>) {
+	init: func
+	_cleanList: static func (list: VectorList<OpenGLPacked>) {
 		for (i in 0 .. list count)
 			list[i] _recyclable = false
 		list clear()
 	}
 	clean: func {
-		this _mutex lock()
 		This _cleanList(this _monochrome)
 		This _cleanList(this _bgr)
 		This _cleanList(this _bgra)
 		This _cleanList(this _uv)
-		This _cleanList(this _yuv422)
-		this _mutex unlock()
 	}
 	free: override func {
 		this clean()
@@ -56,11 +44,9 @@ GpuImageBin: class {
 		this _bgr free()
 		this _bgra free()
 		this _uv free()
-		this _yuv422 free()
-		this _mutex destroy()
 		super()
 	}
-	_add: func (image: GpuImage, list: VectorList<GpuImage>) {
+	_add: func (image: OpenGLPacked, list: VectorList<OpenGLPacked>) {
 		if (list count >= this _limit) {
 			version(debugGL) Debug print("GpuImageBin full; freeing one GpuImage")
 			// We need to make sure the image will be destroyed instead of recycled
@@ -70,20 +56,16 @@ GpuImageBin: class {
 		}
 		list add(image)
 	}
-	add: func (image: GpuImage) {
-		version(safe) Debug raise("Added a GpuImage to the bin without permission to recycle images.")
-		this _mutex lock()
+	add: func (image: OpenGLPacked) {
 		match (image) {
-			case (i: GpuMonochrome) => this _add(i, this _monochrome)
-			case (i: GpuBgr) => this _add(i, this _bgr)
-			case (i: GpuBgra) => this _add(i, this _bgra)
-			case (i: GpuUv) => this _add(i, this _uv)
-			case (i: GpuYuv422Semipacked) => this _add(i, this _yuv422)
+			case (i: OpenGLMonochrome) => this _add(i, this _monochrome)
+			case (i: OpenGLBgr) => this _add(i, this _bgr)
+			case (i: OpenGLBgra) => this _add(i, this _bgra)
+			case (i: OpenGLUv) => this _add(i, this _uv)
 			case => Debug raise("Unknown format in GpuImageBin add()")
 		}
-		this _mutex unlock()
 	}
-	_search: func (size: IntSize2D, list: VectorList<GpuImage>) -> GpuImage {
+	_search: func (size: IntSize2D, list: VectorList<OpenGLPacked>) -> OpenGLPacked {
 		result := null
 		index := -1
 		for (i in 0 .. list count) {
@@ -97,18 +79,13 @@ GpuImageBin: class {
 			result = list remove(index)
 		result
 	}
-	find: func (type: GpuImageType, size: IntSize2D) -> GpuImage {
-		this _mutex lock()
-		result := null
-		result = match (type) {
+	find: func (type: GpuImageType, size: IntSize2D) -> OpenGLPacked {
+		match (type) {
 			case GpuImageType monochrome => this _search(size, this _monochrome)
 			case GpuImageType uv => this _search(size, this _uv)
 			case GpuImageType bgr => this _search(size, this _bgr)
 			case GpuImageType bgra => this _search(size, this _bgra)
-			case GpuImageType yuv422 => this _search(size, this _yuv422)
 			case => null
 		}
-		this _mutex unlock()
-		result
 	}
 }
