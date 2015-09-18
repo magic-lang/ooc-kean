@@ -16,9 +16,11 @@
 
 use ooc-math
 use ooc-base
+import io/File
 import ByteBuffer into ByteBuffer
 import math
 import structs/ArrayList
+import StbImage
 import RasterImage
 import RasterBgra
 import RasterBgr
@@ -80,5 +82,11 @@ RasterPacked: abstract class extends RasterImage {
 	}
 	asRasterPacked: func (other: This) -> This {
 		other
+	}
+	save: override func (filename: String) -> Int {
+		file := File new(filename)
+		folder := file parent . mkdirs() . free()
+		file free()
+		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this size width * this bytesPerPixel)
 	}
 }
