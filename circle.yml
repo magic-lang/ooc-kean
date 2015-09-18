@@ -1,3 +1,12 @@
+machine:
+  environment:
+    PATH: $PATH:/home/ubuntu/ooc-kean
+dependencies:
+  pre:
+  - sudo apt-get -y -qq install libgles2-mesa-dev libegl1-mesa-drivers libgl1-mesa-dri
 test:
   override:
-  - echo "Hello Circle CI!"
+  - ./install_magic.sh
+  - node ./magic
+  - ./install_rock.sh
+  - ./test.sh
