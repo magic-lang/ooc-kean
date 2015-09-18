@@ -1,4 +1,4 @@
-[![Build Status](https://secure.travis-ci.org/cogneco/ooc-kean.png?branch=master)](http://travis-ci.org/cogneco/ooc-kean)
+[![Circle CI](https://circleci.com/gh/cogneco/ooc-kean.svg?style=svg)](https://circleci.com/gh/cogneco/ooc-kean)
 ooc-kean
 ========
 
