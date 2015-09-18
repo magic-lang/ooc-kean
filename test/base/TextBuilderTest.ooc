@@ -24,6 +24,10 @@ TextBuilderTest: class extends Fixture {
 			tb append(c" data", 5)
 			expect(tb count == 3)
 			expect(tb == "test test data")
+			tb append('a')
+			tb append('b')
+			tb append('c')
+			expect(tb == "test test dataabc")
 		})
 		this add("prepend", func {
 			tb := TextBuilder new(c"World", 5)
@@ -37,6 +41,10 @@ TextBuilderTest: class extends Fixture {
 			tb2 prepend(tb)
 			expect(tb2 count, is equal to(4))
 			expect(tb2 == "String Hello World in ooc")
+			tb prepend('x')
+			tb prepend('y')
+			tb prepend('z')
+			expect(tb == "zyxString Hello World")
 		})
 		this add("copy", func {
 			sb := TextBuilder new(c"Hello World", 11)
