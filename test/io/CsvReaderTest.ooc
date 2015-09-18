@@ -12,21 +12,27 @@ CsvReaderTest: class extends Fixture {
 			rowCounter := 0
 			for (row in reader) {
 				for (i in 0 .. row count)
-					expect(row[i], is equal to(((i + 1) + rowCounter * 3) toString()))
+					expect(row[i] toString(), is equal to(((i + 1) + rowCounter * 3) toString()))
 				++rowCounter
 			}
 			reader free()
 		})
-		this add("strings", func {
+		this add("string literals", func {
 			filename := Text new(c"test/io/input/strings.csv", 25)
 			reader := CsvReader open(filename)
-			textBuilder := TextBuilder new()
+			correctTexts := [Text new(c"mary had a little lamb", 22), Text new(c"hello from row #2", 17)]
+			position := 0
 			for (row in reader) {
+				textBuilder := TextBuilder new()
 				for (i in 0 .. row count)
 					textBuilder append(row[i])
+				expect(textBuilder toText(), is equal to(correctTexts[position]))
+				correctTexts[position] free()
+				textBuilder free()
+				++position
 			}
-			expect(textBuilder toString(), is equal to("mary had a little lamb"))
-			textBuilder free()
+			correctTexts free()
+			filename free()
 			reader free()
 		})
 	}
