@@ -28,99 +28,99 @@ Vector2DTest: class extends Fixture {
 		vector2D := Vector2D<Int> new(sizeM, sizeM)
 		super("Vector2D")
 		this add("capacity", func {
-			expect(vector2D rowCapacity, is equal to(sizeM))
-			expect(vector2D columnCapacity, is equal to(sizeM))
+			expect(vector2D rowCount, is equal to(sizeM))
+			expect(vector2D columnCount, is equal to(sizeM))
 		})
 		this add("get/set operators", func {
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					expect(vector2D[i, j], is equal to(0))
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					vector2D[i, j] = i * j
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					expect(vector2D[i, j], is equal to(i * j))
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					expect(vector2D[row, column], is equal to(0))
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					vector2D[row, column] = row * column
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					expect(vector2D[row, column], is equal to(row * column))
 			// Change all values to 10
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					vector2D[i, j] = sizeM
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					expect(vector2D[i, j], is equal to(sizeM))
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					vector2D[row, column] = sizeM
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					expect(vector2D[row, column], is equal to(sizeM))
 		})
 		this add("resize increase", func {
 			// Increase array size to 20x20
 			vector2D resize(sizeXL, sizeXL)
-			expect(vector2D rowCapacity, is equal to(sizeXL))
-			expect(vector2D columnCapacity, is equal to(sizeXL))
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					vector2D[i, j] = i * sizeXL + j
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					expect(vector2D[i, j], is equal to(i * sizeXL + j))
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					vector2D[i, j] = sizeXL
+			expect(vector2D rowCount, is equal to(sizeXL))
+			expect(vector2D columnCount, is equal to(sizeXL))
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					vector2D[row, column] = row * sizeXL + column
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					expect(vector2D[row, column], is equal to(row * sizeXL + column))
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					vector2D[row, column] = sizeXL
 
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					expect(vector2D[i, j], is equal to(sizeXL))
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					expect(vector2D[row, column], is equal to(sizeXL))
 		})
 		this add("resize decrease", func {
 			// Resize back to original size
 			vector2D resize(sizeL, sizeL)
-			expect(vector2D rowCapacity, is equal to(sizeL))
-			expect(vector2D columnCapacity, is equal to(sizeL))
+			expect(vector2D rowCount, is equal to(sizeL))
+			expect(vector2D columnCount, is equal to(sizeL))
 
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					expect(vector2D[i, j], is equal to(sizeXL))
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					expect(vector2D[row, column], is equal to(sizeXL))
 
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					vector2D[i, j] = sizeL
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					vector2D[row, column] = sizeL
 
 			isNotTheValue := is not equal to(sizeL)
-			for (i in 16 .. vector2D rowCapacity)
-				for (j in 16 .. vector2D columnCapacity)
-					expect(vector2D[i, j], isNotTheValue)
+			for (row in 16 .. vector2D rowCount)
+				for (column in 16 .. vector2D columnCount)
+					expect(vector2D[row, column], isNotTheValue)
 		})
 		this add("resize decrease 2", func {
 			// Decrease array size below original size
 			vector2D resize(sizeS, sizeS)
-			expect(vector2D rowCapacity, is equal to(sizeS))
-			expect(vector2D columnCapacity, is equal to(sizeS))
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					vector2D[i, j] = sizeS
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					expect(vector2D[i, j], is equal to(sizeS))
+			expect(vector2D rowCount, is equal to(sizeS))
+			expect(vector2D columnCount, is equal to(sizeS))
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					vector2D[row, column] = sizeS
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					expect(vector2D[row, column], is equal to(sizeS))
 		})
 		this add("move", func {
 			// Move tests
 			vector2D resize(sizeXS, sizeXS)
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					vector2D[i, j] = i * j
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					vector2D[row, column] = row * column
 			oldValue := vector2D[1, 1]
 			vector2D move(1, 1, 0, 0)
 			expect(vector2D[0, 0], is equal to(oldValue))
 
 			vector2D resize(sizeL, sizeL)
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					vector2D[i, j] = i * j
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					vector2D[row, column] = row * column
 
 			vector2D resize(sizeXL, sizeXL)
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					vector2D move(i, i, i + 1, i + 1)
-			for (i in 0 .. vector2D rowCapacity)
-				for (j in 0 .. vector2D columnCapacity)
-					expect(vector2D[i, j], is equal to(0))
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					vector2D move(row, row, row + 1, row + 1)
+			for (row in 0 .. vector2D rowCount)
+				for (column in 0 .. vector2D columnCount)
+					expect(vector2D[row, column], is equal to(0))
 		})
 	}
 }
