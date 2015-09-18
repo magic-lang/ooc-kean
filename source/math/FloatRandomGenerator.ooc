@@ -39,7 +39,6 @@ FloatUniformRandomGenerator: class extends FloatRandomGenerator {
 	init: func ~withParameters (=_min, =_max, seed := Time microtime()) {
 		this _state = seed
 	}
-	free: func
 	next: func -> Float {
 		this _state = 214013 * this _state + 2531011
 		value := ((((this _state >> 16) & 0x7fff) % 10000) as Float) / 10000.0f
@@ -62,8 +61,9 @@ FloatGaussianRandomGenerator: class extends FloatRandomGenerator {
 	}
 	init: func ~withBackend (=_backend)
 	init: func ~withBackendAndParameters (=_mu, =_sigma, =_backend)
-	free: func {
+	free: override func {
 		this _backend free()
+		super()
 	}
 	next: func -> Float {
 		first := this _backend next()
