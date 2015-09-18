@@ -55,7 +55,7 @@ Iterator: abstract class <T> extends Iterable<T> {
 	next: abstract func -> T
 	remove: abstract func -> Bool
 	iterator: func -> Iterator<T> {this}
-	map: func<T, S> (function: Func(T) -> S) -> This<S> {
+	map: func<T, S> (S: Class, function: Func(T) -> S) -> This<S> {
 		_MappingIterator<T, S> new(this, function)
 	}
 }
