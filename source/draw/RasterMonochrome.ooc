@@ -52,6 +52,22 @@ RasterMonochrome: class extends RasterPacked {
 			row += this stride - 1
 		}
 	}
+	resizeTo: override func (size: IntSize2D) -> This {
+		result: This
+		if (this size == size)
+			result = this copy()
+		else {
+			result = This new(size)
+			for (row in 0 .. size height) {
+				srcRow := (this size height * row) / size height
+				for (column in 0 .. size width) {
+					srcColumn := (this size width * column) / size width
+					result[column, row] = this[srcColumn, srcRow]
+				}
+			}
+		}
+		result
+	}
 	distance: override func (other: Image) -> Float {
 		result := 0.0f
 		if (!other)
