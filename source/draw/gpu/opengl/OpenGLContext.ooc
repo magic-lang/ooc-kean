@@ -98,7 +98,7 @@ OpenGLContext: class extends GpuContext {
 	_searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage { this _recycleBin find(type, size) }
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
 		result := this _searchImageBin(GpuImageType monochrome, size)
-		result == null ? OpenGLMonochrome new(size, this) : result
+		result == null ? OpenGLMonochrome new(size, this) as GpuImage : result
 	}
 	_createMonochrome: func (raster: RasterMonochrome) -> GpuImage {
 		result := this _searchImageBin(GpuImageType monochrome, raster size)
@@ -110,7 +110,7 @@ OpenGLContext: class extends GpuContext {
 	}
 	createUv: func (size: IntSize2D) -> GpuImage {
 		result := this _searchImageBin(GpuImageType uv, size)
-		result == null ? OpenGLUv new(size, this) : result
+		result == null ? OpenGLUv new(size, this) as GpuImage : result
 	}
 	_createUv: func (raster: RasterUv) -> GpuImage {
 		result := this _searchImageBin(GpuImageType uv, raster size)
@@ -122,7 +122,7 @@ OpenGLContext: class extends GpuContext {
 	}
 	createBgr: func (size: IntSize2D) -> GpuImage {
 		result := this _searchImageBin(GpuImageType bgr, size)
-		result == null ? OpenGLBgr new(size, this) : result
+		result == null ? OpenGLBgr new(size, this) as GpuImage : result
 	}
 	_createBgr: func (raster: RasterBgr) -> GpuImage {
 		result := this _searchImageBin(GpuImageType bgr, raster size)
@@ -134,7 +134,7 @@ OpenGLContext: class extends GpuContext {
 	}
 	createBgra: func (size: IntSize2D) -> GpuImage {
 		result := this _searchImageBin(GpuImageType bgra, size)
-		result == null ? OpenGLBgra new(size, this) : result
+		result == null ? OpenGLBgra new(size, this) as GpuImage : result
 	}
 	_createBgra: func (raster: RasterBgra) -> GpuImage {
 		result := this _searchImageBin(GpuImageType bgra, raster size)

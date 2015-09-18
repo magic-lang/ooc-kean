@@ -24,7 +24,7 @@ GpuYuv420Semiplanar: class extends GpuImage {
 	_uv: GpuImage
 	uv ::= this _uv
 	filter: Bool {
-		get
+		get { this _y filter }
 		set(value) {
 			this _y filter = value
 			this _uv filter = value

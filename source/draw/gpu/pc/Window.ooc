@@ -73,5 +73,4 @@ Window: class extends OpenGLSurface {
 		this context update()
 		this clear()
 	}
-
 }
