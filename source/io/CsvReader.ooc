@@ -4,7 +4,7 @@ import io/[File, FileReader]
 
 // TODO: Use Text instead of String
 
-CsvReader: class extends Iterator<VectorList<String>> {
+CsvReader: class extends Iterator<VectorList<Text>> {
 	_fileReader: FileReader
 	init: func (=_fileReader)
 	free: func {
@@ -14,7 +14,7 @@ CsvReader: class extends Iterator<VectorList<String>> {
 		}
 		super()
 	}
-	open: static func (filename: String) -> This {
+	open: static func (filename: Text) -> This {
 		result: This
 		file := File new(filename)
 		if (file exists?())
@@ -27,54 +27,54 @@ CsvReader: class extends Iterator<VectorList<String>> {
 	hasNext?: func -> Bool {
 		this _fileReader hasNext?()
 	}
-	next: func -> VectorList<String> {
-		result: VectorList<String>
+	next: func -> VectorList<Text> {
+		result: VectorList<Text>
 		if (this hasNext?()) {
 			readCharacter: Char
-			stringBuilder := StringBuilder new()
+			textBuilder := TextBuilder new()
 			while (this _fileReader hasNext?() && ((readCharacter = this _fileReader read()) != '\n' && readCharacter != '\0'))
-				stringBuilder append(readCharacter toString())
-			result = this _parseRow(stringBuilder toString())
-			stringBuilder free()
+				textBuilder append(readCharacter)
+			result = this _parseRow(textBuilder toText())
+			textBuilder free()
 		}
 		result
 	}
-	_parseRow: func (rowData: String) -> VectorList<String> {
-		result := VectorList<String> new()
-		rowDataLength := rowData length()
+	_parseRow: func (rowData: Text) -> VectorList<Text> {
+		result := VectorList<Text> new()
+		rowDataLength := rowData count
 		position := 0
 		readCharacter: Char
 		for (i in 0 .. rowDataLength) {
-			stringBuilder := StringBuilder new()
+			textBuilder := TextBuilder new()
 			while (i < rowDataLength && ((readCharacter = rowData[i]) != ';')) {
 				++i
 				match (readCharacter) {
 					case ' ' =>
 						continue
 					case '"' =>
-						stringBuilder append(this _extractStringLiteral(rowData, i&))
+						textBuilder append(this _extractStringLiteral(rowData, i&))
 					case =>
-						stringBuilder append(readCharacter toString())
+						textBuilder append(readCharacter)
 				}
 			}
-			result add(stringBuilder toString())
-			stringBuilder free()
+			result add(textBuilder toText())
+			textBuilder free()
 		}
 		rowData free()
 		result
 	}
-	_extractStringLiteral: func (rowData: String, position: Int*) -> String {
-		result: String
+	_extractStringLiteral: func (rowData: Text, position: Int*) -> Text {
+		result: Text
 		readCharacter: Char
-		stringBuilder := StringBuilder new()
-		rowDataLength := rowData length()
+		textBuilder := TextBuilder new()
+		rowDataLength := rowData count
 		while (position@ < rowDataLength && (readCharacter = rowData[position@]) != '"') {
-			stringBuilder append(rowData[position@] toString())
+			textBuilder append(rowData[position@])
 			++position@
 		}
 		++position@
-		result = stringBuilder toString()
-		stringBuilder free()
+		result = textBuilder toText()
+		textBuilder free()
 		result
 	}
 }
