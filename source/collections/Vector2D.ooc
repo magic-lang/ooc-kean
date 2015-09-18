@@ -36,7 +36,7 @@ Vector2D: class <T> {
 		gc_free(this _backend)
 	}
 	_elementPosition: func (row, column: Int, columnCount := this columnCapacity) -> Int {
-		result := columnCount * row + column
+		columnCount * row + column
 	}
 	operator [] (row, column: Int) -> T {
 		version (safe) {
