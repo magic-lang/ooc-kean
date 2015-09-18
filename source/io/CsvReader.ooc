@@ -67,7 +67,8 @@ CsvReader: class extends Iterator<VectorList<String>> {
 		result: String
 		readCharacter: Char
 		stringBuilder := StringBuilder new()
-		while (position@ < rowData length() && (readCharacter = rowData[position@]) != '"') {
+		rowDataLength := rowData length()
+		while (position@ < rowDataLength && (readCharacter = rowData[position@]) != '"') {
 			stringBuilder append(rowData[position@] toString())
 			++position@
 		}
