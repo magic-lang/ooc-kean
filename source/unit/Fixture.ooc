@@ -16,7 +16,7 @@
  */
 
 use ooc-base
-import ./Constraints
+import Constraints
 import structs/ArrayList
 
 Fixture: abstract class {
