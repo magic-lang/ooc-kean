@@ -42,14 +42,17 @@ CsvReader: class extends Iterator<VectorList<String>> {
 	_parseRow: func (rowData: String) -> VectorList<String> {
 		result := VectorList<String> new()
 		rowDataLength := rowData length()
+		position := 0
 		readCharacter: Char
 		for (i in 0 .. rowDataLength) {
 			stringBuilder := StringBuilder new()
-			while (i < rowDataLength && ((readCharacter = rowData[i]) != ';' && readCharacter != '\0')) {
+			while (i < rowDataLength && ((readCharacter = rowData[i]) != ';')) {
 				++i
 				match (readCharacter) {
 					case ' ' =>
 						continue
+					case '"' =>
+						stringBuilder append(this _extractStringLiteral(rowData, i&))
 					case =>
 						stringBuilder append(readCharacter toString())
 				}
@@ -58,6 +61,19 @@ CsvReader: class extends Iterator<VectorList<String>> {
 			stringBuilder free()
 		}
 		rowData free()
+		result
+	}
+	_extractStringLiteral: func (rowData: String, position: Int*) -> String {
+		result: String
+		readCharacter: Char
+		stringBuilder := StringBuilder new()
+		while (position@ < rowData length() && (readCharacter = rowData[position@]) != '"') {
+			stringBuilder append(rowData[position@] toString())
+			++position@
+		}
+		++position@
+		result = stringBuilder toString()
+		stringBuilder free()
 		result
 	}
 }
