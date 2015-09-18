@@ -20,8 +20,9 @@ import os/Time
 IntRandomGenerator: class {
 	_backend: FloatRandomGenerator
 	init: func ~withBackend (=_backend)
-	free: func {
+	free: override func {
 		this _backend free()
+		super()
 	}
 	next: func -> Int {
 		this _backend next() as Int
