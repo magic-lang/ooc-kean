@@ -45,6 +45,9 @@ TextBuilder: class {
 	copy: func -> This {
 		This new(this)
 	}
+	append: func ~char (c: Char) {
+		this append(Text new(c&, 1, Owner Stack) give())
+	}
 	append: func ~cstring (value: CString, length: Int) {
 		this append(Text new(value, length))
 	}
@@ -54,6 +57,9 @@ TextBuilder: class {
 	append: func (other: This) {
 		for (i in 0 .. other count)
 			this append(other[i] copy())
+	}
+	prepend: func ~char (c: Char) {
+		this prepend(Text new(c&, 1, Owner Stack) give())
 	}
 	prepend: func ~cstring (value: CString, length: Int) {
 		this prepend(Text new(value, length))
