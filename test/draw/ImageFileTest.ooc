@@ -33,7 +33,7 @@ ImageFileTest: class extends Fixture {
 				failureReason = StbImage failureReason()
 				failureReason toString() println()
 			}
-		})
+		})/*
 		this add("open JPEG", func {
 			source := "test/draw/input/Flower.jpg"
 			destination := "test/draw/output/outputJPEG.png"
@@ -53,7 +53,7 @@ ImageFileTest: class extends Fixture {
 				failureReason = StbImage failureReason()
 				failureReason toString() println()
 			}
-		})
+		})*/
 		this add("open png RasterBgra", func {
 			source := "test/draw/input/Space.png"
 			destination := "test/draw/output/pngRasterBgra.png"
@@ -66,7 +66,7 @@ ImageFileTest: class extends Fixture {
 			image := RasterBgr open(source)
 			image save(destination)
 		})
-		this add("open png RasterMonochrome", func {
+		/*this add("open png RasterMonochrome", func {
 			source := "test/draw/input/Barn.png"
 			destination := "test/draw/output/pngRasterMonochrome.png"
 			image := RasterMonochrome open(source)
@@ -83,14 +83,13 @@ ImageFileTest: class extends Fixture {
 			destination := "test/draw/output/jpgRasterBgr.png"
 			image := RasterBgr open(source)
 			image save(destination)
-		})
+		})*/
 		this add("open jpg RasterMonochrome", func {
 			source := "test/draw/input/Hercules.jpg"
 			destination := "test/draw/output/jpgRasterMonochrome.png"
 			image := RasterMonochrome open(source)
 			image save(destination)
 		})
-		//TODO: Make these work
 		this add("convert RasterMonochrome to RasterBgra", func {
 			source := "test/draw/input/Space.jpg"
 			destination := "test/draw/output/RasterMonochrome-RasterBgra.png"
