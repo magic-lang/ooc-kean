@@ -127,7 +127,7 @@ RasterUv: class extends RasterPacked {
 	}
 	save: override func (filename: String) -> Int {
 		bgr := RasterBgr new(this buffer, this size)
-		result := StbImage writePng(filename, bgr size width, bgr size height, bgr bytesPerPixel, bgr buffer pointer, bgr size width * 3)
+		result := bgr save(filename)
 		bgr free()
 		result
 	}
