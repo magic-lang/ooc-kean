@@ -104,7 +104,7 @@ Text: cover {
 	}
 	free: func@ -> Bool {
 		result: Bool
-		if (result = (this _owner != Owner Literal && this _owner != Owner Stack && this _buffer != null)) {
+		if ((result = (this _owner != Owner Literal && this _owner != Owner Stack && this _buffer != null))) {
 			gc_free(this _buffer)
 			this _buffer = null
 			this _count = 0
@@ -252,8 +252,8 @@ Text: cover {
 	}
 	_changeOwnership: func@ (target: Owner) -> Bool {
 		result: Bool
-		if (result = (target != this _owner && target != Owner Stack && target != Owner Literal)) {
-			if (result = (this _owner == Owner Stack || this _owner == Owner Literal)) {
+		if ((result = (target != this _owner && target != Owner Stack && target != Owner Literal))) {
+			if ((result = (this _owner == Owner Stack || this _owner == Owner Literal))) {
 				source := this _buffer
 				this _allocateAndCopy(source, this count)
 			}
