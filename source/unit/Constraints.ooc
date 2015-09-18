@@ -103,6 +103,10 @@ EqualModifier: class extends Modifier {
 		}
 		CompareConstraint new(this, correct, f)
 	}
+	to: func ~text (correct: Text) -> CompareConstraint {
+		f := func (value, c: Object) -> Bool { value as Cell<Text> get() == c as Cell<Text> get() }
+		CompareConstraint new(this, Cell<Text> new(correct), f)
+	}
 	to: func ~boolean (correct: Bool) -> CompareConstraint {
 		f := func (value, c: Object) -> Bool { value as Cell<Bool> get() == c as Cell<Bool> get() }
 		CompareConstraint new(this, Cell<Bool> new(correct), f)

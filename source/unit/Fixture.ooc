@@ -15,6 +15,7 @@
  * along with this software. If not, see<http://www.gnu.org/licenses/>.
  */
 
+use ooc-base
 import ./Constraints
 import structs/ArrayList
 
@@ -56,6 +57,9 @@ Fixture: abstract class {
 	expect: static func (value: Object, constraint: Constraint) {
 		if (!constraint verify(value))
 			TestFailedException new(value, constraint) throw()
+	}
+	expect: static func ~text (value: Text, constraint: Constraint) {
+		This expect(Cell new(value), constraint)
 	}
 	expect: static func ~boolean (value: Bool, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
