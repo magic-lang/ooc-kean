@@ -16,7 +16,7 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 	}
 	open: static func (filename: Text) -> This {
 		result: This
-		file := File new(filename)
+		file := File new(filename toString())
 		if (file exists?())
 			result = This new(FileReader new(file))
 		file free()
