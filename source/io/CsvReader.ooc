@@ -2,8 +2,6 @@ use ooc-base
 use ooc-collections
 import io/[File, FileReader]
 
-// TODO: Use Text instead of String
-
 CsvReader: class extends Iterator<VectorList<Text>> {
 	_fileReader: FileReader
 	init: func (=_fileReader)
@@ -50,6 +48,10 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 				++i
 				match (readCharacter) {
 					case ' ' =>
+						continue
+					case '\t' =>
+						continue
+					case '\r' =>
 						continue
 					case '"' =>
 						textBuilder append(this _extractStringLiteral(rowData, i&))
