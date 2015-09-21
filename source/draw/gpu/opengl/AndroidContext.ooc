@@ -26,7 +26,7 @@ import math
 AndroidContext: class extends OpenGLContext {
 	_unpackRgbaToMonochrome := OpenGLMapUnpackRgbaToMonochrome new(this)
 	_unpackRgbaToUv := OpenGLMapUnpackRgbaToUv new(this)
-	_packers := VectorList<OpenGLBgra> new()
+	_packers := VectorList<EGLBgra> new()
 	init: func { super() }
 	init: func ~other (other: This) { super(other) }
 	free: override func {
@@ -48,9 +48,9 @@ AndroidContext: class extends OpenGLContext {
 			result = super(rasterImage)
 		result
 	}
-	recyclePacker: func (packer: OpenGLBgra) { this _packers add(packer) }
-	getPacker: func (size: IntSize2D) -> OpenGLBgra {
-		result: OpenGLBgra = null
+	recyclePacker: func (packer: EGLBgra) { this _packers add(packer) }
+	getPacker: func (size: IntSize2D) -> EGLBgra {
+		result: EGLBgra = null
 		index := -1
 		for (i in 0 .. this _packers count) {
 			if (this _packers[i] size == size) {
