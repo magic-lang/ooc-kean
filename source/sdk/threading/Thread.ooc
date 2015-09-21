@@ -69,6 +69,8 @@ Thread: abstract class {
      */
     wait: abstract func ~timed (seconds: Double) -> Bool
 
+    cancel: abstract func -> Bool
+
     /**
      * @return true if the thread is still running, false otherwise
      */

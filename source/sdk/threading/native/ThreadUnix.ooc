@@ -38,6 +38,10 @@ version(unix || apple) {
             false
         }
 
+        cancel: func -> Bool {
+            this alive?() && (pthread_cancel(this pthread) == 0)
+        }
+
         alive?: func -> Bool {
             pthread_kill(pthread, 0) == 0
         }
@@ -119,5 +123,6 @@ version(unix || apple) {
     }
     pthread_kill: extern func (thread: PThread, signal: Int) -> Int
     pthread_self: extern func -> PThread
+    pthread_cancel: extern func (thread: PThread) -> Int
     sched_yield: extern func -> Int
 }

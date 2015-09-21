@@ -46,6 +46,10 @@ version(windows) {
             }
         }
 
+        cancel: func -> Bool {
+            this alive?() && TerminateThread(this handle, 0)
+        }
+
         alive?: func -> Bool {
             result := WaitForSingleObject(handle, 0)
 
@@ -87,6 +91,7 @@ version(windows) {
     GetCurrentThread: extern func -> Handle
     WaitForSingleObject: extern func (...) -> Long
     SwitchToThread: extern func -> Bool
+    TerminateThread: extern func (...) -> Bool
 
     INFINITE: extern Long
     WAIT_OBJECT_0: extern Long
