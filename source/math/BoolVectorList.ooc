@@ -68,6 +68,7 @@ BoolVectorList: class extends VectorList<Bool> {
 			this getSliceInto(startIndex, endIndex, (currentSequence as This))
 			result add(currentSequence tally(true) == currentSequence count)
 		}
+		currentSequence free()
 		result
 	}
 	dilation: func (structuringElementSize: Int) -> This {
@@ -80,13 +81,21 @@ BoolVectorList: class extends VectorList<Bool> {
 			this getSliceInto(startIndex, endIndex, (currentSequence as This))
 			result add(currentSequence tally(true) > 0)
 		}
+		currentSequence free()
 		result
 	}
 	opening: func (structuringElementSize: Int) -> This {
-		this erosion(structuringElementSize) dilation(structuringElementSize)
+		erodedList := this erosion(structuringElementSize)
+		result := erodedList dilation(structuringElementSize)
+		erodedList free()
+		result
+
 	}
 	closing: func (structuringElementSize: Int) -> This {
-		this dilation(structuringElementSize) erosion(structuringElementSize)
+		dilatedList := this dilation(structuringElementSize)
+		result := dilatedList erosion(structuringElementSize)
+		dilatedList free()
+		result
 	}
 	toFloatVectorList: func (floatForFalse := 0.0f, floatForTrue := 1.0f) -> FloatVectorList {
 		result := FloatVectorList new(this _count)
