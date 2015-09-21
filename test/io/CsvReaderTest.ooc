@@ -13,8 +13,10 @@ CsvReaderTest: class extends Fixture {
 			for (row in reader) {
 				for (i in 0 .. row count)
 					expect(row[i] toString(), is equal to(((i + 1) + rowCounter * 3) toString()))
+				row free()
 				++rowCounter
 			}
+			filename free()
 			reader free()
 		})
 		this add("string literals", func {
@@ -27,6 +29,7 @@ CsvReaderTest: class extends Fixture {
 				for (i in 0 .. row count)
 					textBuilder append(row[i])
 				expect(textBuilder toText(), is equal to(correctTexts[position]))
+				row free()
 				correctTexts[position] free()
 				textBuilder free()
 				++position
