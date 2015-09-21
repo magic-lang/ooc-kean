@@ -89,7 +89,6 @@ BoolVectorList: class extends VectorList<Bool> {
 		result := erodedList dilation(structuringElementSize)
 		erodedList free()
 		result
-
 	}
 	closing: func (structuringElementSize: Int) -> This {
 		dilatedList := this dilation(structuringElementSize)
