@@ -1,92 +1,116 @@
 import threading/Thread
 import os/Time
 
-PromiseState: enum {
-	Running
-	Completed
+_PromiseState: enum {
+	Unfinished
+	Finished
 	Cancelled
-	Error
 }
 
-Promise: abstract class <T> {
-	_result: T
-	_state: PromiseState
-	state ::= this _state
-
+Promise: abstract class {
+	_state : _PromiseState
 	init: func
-
-	wait: abstract func -> T { this _result }
-
-	wait: virtual func ~timeout (seconds: Double) -> T { this _result }
-
+	wait: abstract func -> Bool
 	cancel: virtual func -> Bool { false }
-
-	_execute: virtual func
+	start: static func (action: Func) -> This {
+		_ThreadPromise new(action)
+	}
 }
 
-ThreadedPromise : class <T> extends Promise <T> {
-	_mutex := Mutex new()
+_ThreadPromise: class extends Promise {
+	_action: Func
 	_thread: Thread
+	_mutex := Mutex new()
+	init: func (=_action) {
+		super()
+		this _state = _PromiseState Unfinished
+		this _action = func {
+			_action()
+			this _mutex lock()
+			if (this _state != _PromiseState Cancelled)
+				this _state = _PromiseState Finished
+			this _mutex unlock()
+		}
+		this _thread = Thread new(|| this _action() )
+		this _thread start()
+	}
+	free: func {
+		_thread free()
+		super()
+	}
+	wait: func -> Bool {
+		this _thread wait()
+		status := false
+		this _mutex lock()
+		status = this _state == _PromiseState Finished
+		this _mutex unlock()
+		status
+	}
+	cancel: override func -> Bool {
+		status := false
+		this _mutex lock()
+		if (this _state == _PromiseState Unfinished) {
+			this _state = _PromiseState Cancelled
+			status = true
+		}
+		this _mutex unlock()
+		status
+	}
+}
+
+ResultPromise: abstract class <T> {
+	_state: _PromiseState
+	init: func
+	wait: abstract func -> Bool
+	wait: abstract func ~default (defaultValue: T) -> T
+	cancel: virtual func -> Bool { false }
+	start: static func<S> (S: Class, action: Func -> S) -> This<S> {
+		_ThreadResultPromise<S> new(action)
+	}
+}
+
+_ThreadResultPromise: class <T> extends ResultPromise<T> {
+	_result: T
+	_action: Func -> T
 	_task: Func
-	_exception: Exception
-
-	init: func (task: Func -> T) {
-		this _task = func -> Void {
-			try {
-				temporary := task()
-				this _mutex lock()
-				this _result = temporary
-				this _state = PromiseState Completed
-				this _mutex unlock()
+	_thread: Thread
+	_mutex := Mutex new()
+	init: func (=_action) {
+		super()
+		this _state = _PromiseState Unfinished
+		this _task = func {
+			this _result = this _action()
+			this _mutex lock()
+			if (this _state != _PromiseState Cancelled) {
+				this _state = _PromiseState Finished
 			}
-			catch (exception: Exception) {
-				this _exception = exception
-			}
+			this _mutex unlock()
 		}
-
-		this _execute()
+		this _thread = Thread new(|| this _task() )
+		this _thread start()
 	}
-
-	wait: func -> T {
-		running := true
-
-		while (running) {
-			Time sleepMilli(10)
-			_mutex lock()
-			if (this _state != PromiseState Running) {
-				running = false
-			}
-			_mutex unlock()
+	free: func {
+		_thread free()
+		_mutex destroy()
+		super()
+	}
+	wait: func -> Bool {
+		this _thread wait()
+		(this _state == _PromiseState Finished)
+	}
+	wait: func ~default (defaultValue: T) -> T {
+		status := this wait()
+		status ? this _result : defaultValue
+	}
+	cancel: override func -> Bool {
+		// How to end thread?
+		status := false
+		this _mutex lock()
+		if (this _state == _PromiseState Unfinished) {
+			this _state = _PromiseState Cancelled
+			status = true
 		}
-
-		if (this _state == PromiseState Error)
-			_exception throw()
-
-		_result
-	}
-
-	wait: func ~timeout (seconds: Double) -> T {
-		_thread.wait(seconds)
-		_result
-	}
-
-	cancel: func -> Void {
-		this _state = PromiseState Cancelled
-		//How to terminate thread?
-	}
-
-	_execute: override func {
-		try {
-			this _state = PromiseState Running
-
-			this _thread = Thread new(||
-				this _task()
-			)
-
-			this _thread start()
-		} catch (exception: Exception) {
-			this _state = PromiseState Error
-			this _exception = exception
-		}
+		this _mutex unlock()
+		status
 	}
 }
