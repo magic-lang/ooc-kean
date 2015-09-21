@@ -35,7 +35,8 @@ PlotData2D: abstract class {
 	}
 
 	free: override func {
-		dataSeries free()
+		this dataSeries free()
+		this color free()
 		super()
 	}
 
