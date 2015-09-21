@@ -22,9 +22,7 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 	}
 	remove: func -> Bool { false }
 	iterator: func -> This { this }
-	hasNext?: func -> Bool {
-		this _fileReader hasNext?()
-	}
+	hasNext?: func -> Bool { this _fileReader hasNext?() }
 	next: func -> VectorList<Text> {
 		result: VectorList<Text>
 		if (this hasNext?()) {
