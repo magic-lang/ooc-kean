@@ -57,6 +57,17 @@ RasterMonochromeTest: class extends Fixture {
 					expect(rowData[i] as UInt8 == row)
 			}
 		})
+		this add("resize", func {
+			size := IntSize2D new(13, 5)
+			image := RasterMonochrome open(this sourceFlower)
+			image2 := image resizeTo(image size / 2)
+			expect(image2 size == image size / 2)
+			image2 = image2 resizeTo(image size)
+			expect(image2 size == image size)
+			expect(image distance(image2) < image size width / 10)
+			image2 = image2 resizeTo(size)
+			expect(image2 size == size)
+		})
 		/*this add("distance, convertFrom RasterBgra", func {
 			source := this sourceFlower
 			output := "test/draw/output/RasterBgrToMonochrome.png"
