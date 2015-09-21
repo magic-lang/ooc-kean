@@ -48,8 +48,9 @@ X11Window: class extends NativeWindow {
 		/*this refresh()
 		this resize(size)*/
 		/* END */
-		/*XSelectInput(display, backend, KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask)
-		XkbSetDetectableAutoRepeat(display, true, null) as Void*/
+		
+		XSelectInput(display, backend, KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask)
+		XkbSetDetectableAutoRepeat(display, true, null) as Void
 	}
 	resize: func (size: IntSize2D) { XResizeWindow(this display, this backend, size width, size height) }
 	free: override func {
