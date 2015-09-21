@@ -40,13 +40,12 @@ Vector2D: class <T> {
 	}
 	resize: func (newRowCount, newColumnCount: Int) {
 		if (newColumnCount == this columnCount) {
-			if (newRowCount == this rowCount)
-				return
-			this _allocate(newRowCount, newColumnCount)
-			this _rowCount = newRowCount
-			this _columnCount = newColumnCount
-		}
-		else {
+			if (newRowCount != this rowCount) {
+				this _allocate(newRowCount, newColumnCount)
+				this _rowCount = newRowCount
+				this _columnCount = newColumnCount
+			}
+		} else {
 			temporaryResult: T*
 			minimumRowCount := Int minimum(this rowCount, newRowCount)
 			minimumColumnCount := Int minimum(this columnCount, newColumnCount)
@@ -81,8 +80,7 @@ Vector2D: class <T> {
 				// Move row-wise from top to bottom.
 				sourceRowIndex = sourceRowStart + row
 				targetRowIndex = sourceRowIndex - sourceRowStart + targetRowStart
-			}
-			else {
+			} else {
 				//Move row-wise from bottom to top
 				targetRowIndex = rowCount + targetRowStart - row - 1
 				sourceRowIndex = targetRowIndex - targetRowStart + sourceRowStart
