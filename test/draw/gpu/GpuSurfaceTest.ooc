@@ -106,7 +106,7 @@ GpuSurfaceTest: class extends Fixture {
 			gpuImage canvas transform = FloatTransform3D createRotationX(Float toRadians(180.0f))
 			gpuImage canvas draw(sourceImage, quadrantBottomRight)
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is equal to(0.0f) within(0.05f))
 			correctImage free(); rasterFromGpu free(); gpuImage free()
 		})
 		this add("draw shapes", func {
