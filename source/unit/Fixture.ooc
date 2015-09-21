@@ -40,7 +40,7 @@ Fixture: abstract class {
 				test run()
 			} catch (e: TestFailedException) {
 				e test = test
-				e message = test name
+				e message = test name + " " + e message
 				result = r = false
 				failures add(e)
 			}
@@ -54,27 +54,27 @@ Fixture: abstract class {
 		exit(result ? 0 : 1)
 	}
 	is ::= static IsConstraints new()
-	expect: static func (value: Object, constraint: Constraint) {
+	expect: static func (value: Object, constraint: Constraint, message := "") {
 		if (!constraint verify(value))
-			TestFailedException new(value, constraint) throw()
+			TestFailedException new(value, constraint, message) throw()
 	}
 	expect: static func ~text (value: Text, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
 	}
 	expect: static func ~boolean (value: Bool, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
+		This expect(Cell new(value), constraint, "was #{value}")
 	}
 	expect: static func ~integer (value: Int, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
+		This expect(Cell new(value), constraint, "was #{value}")
 	}
 	expect: static func ~float (value: Float, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
+		This expect(Cell new(value), constraint, "was #{value}")
 	}
 	expect: static func ~double (value: Double, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
+		This expect(Cell new(value), constraint, "was #{value}")
 	}
 	expect: static func ~isTrue (value: Bool) {
-		This expect(Cell new(value), is true)
+		This expect(Cell new(value), is true, "was #{value}")
 	}
 }
 TestFailedException: class extends Exception {
