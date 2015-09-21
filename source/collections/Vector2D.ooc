@@ -22,11 +22,9 @@ Vector2D: class <T> {
 	_columnCount: Int
 	rowCount ::= this _rowCount
 	columnCount ::= this _columnCount
-	_freeContent: Bool
 
-	init: func ~preallocated (=_backend, =_rowCount, =_columnCount, freeContent := true)
-	init: func (=_rowCount, =_columnCount, freeContent := true) {
-		this _freeContent = freeContent
+	init: func ~preallocated (=_backend, =_rowCount, =_columnCount)
+	init: func (=_rowCount, =_columnCount) {
 		this _allocate(this rowCount, this columnCount)
 		memset(this _backend, 0, this rowCount * this columnCount * T size)
 	}
@@ -35,19 +33,19 @@ Vector2D: class <T> {
 	}
 	free: override func {
 		gc_free(this _backend)
+		super()
 	}
-	_elementPosition: func (row, column: Int, columnCount := this columnCapacity) -> Int {
+	_elementPosition: func (row, column: Int, columnCount := this columnCount) -> Int {
 		columnCount * row + column
 	}
 	resize: func (newRowCount, newColumnCount: Int) {
-		if (newColumnCount == this columnCount)
+		if (newColumnCount == this columnCount) {
 			if (newRowCount == this rowCount)
 				return
-			else {
-				this _allocate(newRowCount, newColumnCount)
-				this _rowCount = newRowCount
-				this _columnCount = newColumnCount
-			}
+			this _allocate(newRowCount, newColumnCount)
+			this _rowCount = newRowCount
+			this _columnCount = newColumnCount
+		}
 		else {
 			temporaryResult: T*
 			minimumRowCount := Int minimum(this rowCount, newRowCount)
@@ -62,7 +60,7 @@ Vector2D: class <T> {
 				memcpy(temporaryResult[T size * this _elementPosition(row, 0, newColumnCount)]&,
 					this _backend[T size * this _elementPosition(row, 0)]&, minimumColumnCount * T size)
 
-			this free()
+			gc_free(this _backend)
 			this init(temporaryResult, newRowCount, newColumnCount)
 		}
 	}
@@ -70,13 +68,13 @@ Vector2D: class <T> {
 		sourceRowIndex, targetRowIndex: Int
 
 		if (rowCount < 1)
-			rowCount = this rowCount - sourceColumnStart
+			rowCount = this rowCount - sourceRowStart
 		if (columnCount < 1)
-			columnCount = this columnCount - sourceRowStart
-		if (targetColumnStart + rowCount > this rowCount)
-			rowCount = this rowCount - targetColumnStart
-		if (targetRowStart + columnCount > this columnCount)
-			columnCount = this columnCount - targetRowStart
+			columnCount = this columnCount - sourceColumnStart
+		if (targetRowStart + rowCount > this rowCount)
+			rowCount = this rowCount - targetRowStart
+		if (targetColumnStart + columnCount > this columnCount)
+			columnCount = this columnCount - targetColumnStart
 
 		for (row in 0 .. rowCount) {
 			if (sourceRowStart > targetRowStart) {
