@@ -63,7 +63,8 @@ OpenGLMapDefault: abstract class extends OpenGLMap {
 			vec4 position = vec4(vertexPosition.x, vertexPosition.y, 0, 1);
 			fragmentTextureCoordinate = textureCoordinate;
 			gl_Position = position;
-		}"
+		}
+		"
 }
 OpenGLMapDefaultTexture: class extends OpenGLMapDefault {
 	init: func (context: OpenGLContext, fragmentSource: String)
@@ -79,7 +80,8 @@ OpenGLMapDefaultTexture: class extends OpenGLMapDefault {
 		out vec4 outColor;
 		void main() {
 			outColor = texture(texture0, fragmentTextureCoordinate).rgba;
-		}"
+		}
+		"
 }
 OpenGLMapTransform: abstract class extends OpenGLMap {
 	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
@@ -102,7 +104,8 @@ OpenGLMapTransform: abstract class extends OpenGLMap {
 			vec4 texCoord = (textureTransform * vec4(textureCoordinate, 1, 1));
 			fragmentTextureCoordinate = texCoord.xy;
 			gl_Position = transformedPosition;
-		}"
+		}
+		"
 }
 OpenGLMapTransformTexture: class extends OpenGLMapTransform {
 	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
@@ -113,7 +116,8 @@ OpenGLMapTransformTexture: class extends OpenGLMapTransform {
 		out vec4 outColor;
 		void main() {
 			outColor = texture(texture0, fragmentTextureCoordinate).rgba;
-		}"
+		}
+		"
 }
 OpenGLMapMonochromeToBgra: class extends OpenGLMapDefaultTexture {
 	init: func (context: OpenGLContext) { super(This customFragmentSource, context) }
@@ -125,7 +129,8 @@ OpenGLMapMonochromeToBgra: class extends OpenGLMapDefaultTexture {
 		void main() {
 			float colorSample = texture(texture0, fragmentTextureCoordinate).r;
 			outColor = vec4(colorSample, colorSample, colorSample, 1.0f);
-		}"
+		}
+		"
 }
 OpenGLMapYuvPlanarToBgra: class extends OpenGLMapTransform {
 	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
@@ -155,7 +160,8 @@ OpenGLMapYuvPlanarToBgra: class extends OpenGLMapTransform {
 			float u = texture(texture1, fragmentTextureCoordinate).r;
 			float v = texture(texture2, fragmentTextureCoordinate).r;
 			outColor = YuvToRgba(vec4(y, v - 0.5f, u - 0.5f, 1.0f));
-		}"
+		}
+		"
 }
 OpenGLMapYuvSemiplanarToBgra: class extends OpenGLMapTransform {
 	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
@@ -182,7 +188,8 @@ OpenGLMapYuvSemiplanarToBgra: class extends OpenGLMapTransform {
 			float y = texture(texture0, fragmentTextureCoordinate).r;
 			vec2 uv = texture(texture1, fragmentTextureCoordinate).rg;
 			outColor = YuvToRgba(vec4(y, uv.r - 0.5f, uv.g - 0.5f, 1.0f));
-		}"
+		}
+		"
 }
 OpenGLMapLines: class extends OpenGLMapTransform {
 	color: FloatPoint3D { get set }
@@ -197,7 +204,8 @@ OpenGLMapLines: class extends OpenGLMapTransform {
 		out vec4 outColor;
 		void main() {
 			outColor = vec4(color.r, color.g, color.b, 1.0f);
-		}"
+		}
+		"
 }
 OpenGLMapPoints: class extends OpenGLMap {
 	color: FloatPoint3D { get set }
@@ -222,12 +230,14 @@ OpenGLMapPoints: class extends OpenGLMap {
 		void main() {
 			gl_PointSize = pointSize;
 			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
-		}"
+		}
+		"
 	fragmentSource: static String = "#version 300 es
 		precision highp float;
 		uniform vec3 color;
 		out vec4 outColor;
 		void main() {
 			outColor = vec4(color.r, color.g, color.b, 1.0f);
-		}"
+		}
+		"
 }

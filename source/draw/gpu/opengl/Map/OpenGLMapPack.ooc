@@ -54,7 +54,8 @@ OpenGLMapPackMonochrome: class extends OpenGLMapPack {
 			fragmentTextureCoordinate[2] = textureCoordinate + vec2(2.0f * texelOffset - xOffset, 0);
 			fragmentTextureCoordinate[3] = textureCoordinate + vec2(3.0f * texelOffset - xOffset, 0);
 			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
-		}"
+		}
+		"
 	fragmentSource: static String = "#version 300 es
 		precision mediump float;
 		uniform sampler2D texture0;
@@ -66,7 +67,8 @@ OpenGLMapPackMonochrome: class extends OpenGLMapPack {
 			float b = texture(texture0, fragmentTextureCoordinate[2]).x;
 			float a = texture(texture0, fragmentTextureCoordinate[3]).x;
 			outColor = vec4(r, g, b, a);
-		}"
+		}
+		"
 }
 OpenGLMapPackUv: class extends OpenGLMapPack {
 	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
@@ -82,7 +84,8 @@ OpenGLMapPackUv: class extends OpenGLMapPack {
 			fragmentTextureCoordinate[0] = textureCoordinate + vec2(-xOffset, 0);
 			fragmentTextureCoordinate[1] = textureCoordinate + vec2(texelOffset - xOffset, 0);
 			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
-		}"
+		}
+		"
 	fragmentSource: static String = "#version 300 es
 		precision mediump float;
 		uniform sampler2D texture0;
@@ -92,7 +95,8 @@ OpenGLMapPackUv: class extends OpenGLMapPack {
 			vec2 rg = texture(texture0, fragmentTextureCoordinate[0]).rg;
 			vec2 ba = texture(texture0, fragmentTextureCoordinate[1]).rg;
 			outColor = vec4(rg.x, rg.y, ba.x, ba.y);
-		}"
+		}
+		"
 }
 OpenGLMapUnpack: abstract class extends OpenGLMap {
 	sourceSize: IntSize2D { get set }
@@ -120,7 +124,8 @@ OpenGLMapUnpack: abstract class extends OpenGLMap {
 		void main() {
 			fragmentTextureCoordinate = vec4(scaleX * textureCoordinate.x, startY + scaleY * textureCoordinate.y, textureCoordinate);
 			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
-		}"
+		}
+		"
 }
 OpenGLMapUnpackRgbaToMonochrome: class extends OpenGLMapUnpack {
 	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
@@ -141,7 +146,8 @@ OpenGLMapUnpackRgbaToMonochrome: class extends OpenGLMapUnpack {
 		void main() {
 			int pixelIndex = int(float(targetWidth) * fragmentTextureCoordinate.z) % 4;
 			outColor = texture(texture0, fragmentTextureCoordinate.xy)[pixelIndex];
-		}"
+		}
+		"
 }
 OpenGLMapUnpackRgbaToUv: class extends OpenGLMapUnpack {
 	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
@@ -165,5 +171,6 @@ OpenGLMapUnpackRgbaToUv: class extends OpenGLMapUnpack {
 			vec4 texel = texture(texture0, fragmentTextureCoordinate.xy);
 			vec2 mask = vec2(float(1 - pixelIndex), float(pixelIndex));
 			outColor = vec2(mask.x * texel.r + mask.y * texel.b, mask.x * texel.g + mask.y * texel.a);
-		}"
+		}
+		"
 }
