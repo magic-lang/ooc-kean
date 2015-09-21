@@ -50,7 +50,7 @@ GpuImageRotationTest: class extends Fixture {
 			gpuImage canvas transform = FloatTransform3D createRotationX(smallRotation)
 			gpuImage canvas draw(sourceImage)
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is equal to(0.0f) within(0.005f))
 		})
 		this add("GPU rotation small Y (BGRA)", func {
 			correctImage := RasterBgra open("test/draw/gpu/correct/rotation_small_bgra_Y.png")

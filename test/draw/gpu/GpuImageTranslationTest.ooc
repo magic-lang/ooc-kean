@@ -41,7 +41,7 @@ GpuImageTranslationTest: class extends Fixture {
 			this translateGpuImage(gpuImage, 0.0f, 0.0f, zTranslation)
 			gpuImage canvas draw(sourceImage)
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is equal to(0.0f) within(1.0f))
 		})
 	}
 	translateGpuImage: func (image: GpuImage, x, y, z: Float) {
