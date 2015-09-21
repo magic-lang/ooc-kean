@@ -147,12 +147,24 @@ Context: class {
 	}
 	enableBlend: func (on: Bool) {
 		version(debugGL) { validateStart() }
-		if (on) {
+		if (on)
 			glEnable(GL_BLEND)
-			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR)
-		} else
+		else
 			glDisable(GL_BLEND)
 		version(debugGL) { validateEnd("context enableBlend") }
+	}
+	blend: func ~constant (factor: Float) {
+		version(debugGL) { validateStart() }
+		glEnable(GL_BLEND)
+		glBlendColor(factor, factor, factor, factor)
+		glBlendFunc(GL_CONSTANT_COLOR, GL_ONE_MINUS_CONSTANT_COLOR)
+		version(debugGL) { validateEnd("context blend~constant") }
+	}
+	blend: func ~alphaMonochrome {
+		version(debugGL) { validateStart() }
+		glEnable(GL_BLEND)
+		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR)
+		version(debugGL) { validateEnd("context blend~alphaMonochrome") }
 	}
 	create: static func ~shared (window: NativeWindow, sharedContext: This = null) -> This {
 		version(debugGL) { Debug print("Creating OpenGL context") }

@@ -156,8 +156,6 @@ OpenGLContext: class extends GpuContext {
 		}
 	}
 	update: func { this _backend swapBuffers() }
-	setViewport: func (viewport: IntBox2D) { this _backend setViewport(viewport) }
-	enableBlend: func (blend: Bool) { this _backend enableBlend(blend) }
 	packToRgba: func (source: GpuImage, target: GpuImage, viewport: IntBox2D) {
 		channels := 1
 		map := match (source) {
