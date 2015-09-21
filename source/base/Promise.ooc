@@ -31,7 +31,7 @@ _ThreadPromise: class extends Promise {
 				this _state = _PromiseState Finished
 			this _mutex unlock()
 		}
-		this _thread = Thread new(|| this _action() )
+		this _thread = Thread new(|| this _action())
 		this _thread start()
 	}
 	free: func {
@@ -47,6 +47,7 @@ _ThreadPromise: class extends Promise {
 		status
 	}
 	cancel: override func -> Bool {
+		//TODO: Cancel thread
 		status := false
 		this _mutex lock()
 		if (this _state == _PromiseState Unfinished) {
@@ -70,7 +71,7 @@ ResultPromise: abstract class <T> {
 }
 
 _ThreadResultPromise: class <T> extends ResultPromise<T> {
-	_result: T
+	_result: Cell<T>
 	_action: Func -> T
 	_task: Func
 	_thread: Thread
@@ -79,14 +80,14 @@ _ThreadResultPromise: class <T> extends ResultPromise<T> {
 		super()
 		this _state = _PromiseState Unfinished
 		this _task = func {
-			this _result = this _action()
+			temporary := this _action()
+			this _result = Cell<T> new(temporary)
 			this _mutex lock()
-			if (this _state != _PromiseState Cancelled) {
+			if (this _state != _PromiseState Cancelled)
 				this _state = _PromiseState Finished
-			}
 			this _mutex unlock()
 		}
-		this _thread = Thread new(|| this _task() )
+		this _thread = Thread new(|| this _task())
 		this _thread start()
 	}
 	free: func {
@@ -100,10 +101,10 @@ _ThreadResultPromise: class <T> extends ResultPromise<T> {
 	}
 	wait: func ~default (defaultValue: T) -> T {
 		status := this wait()
-		status ? this _result : defaultValue
+		status ? this _result[T] : defaultValue
 	}
 	cancel: override func -> Bool {
-		// How to end thread?
+		//TODO: Cancel thread
 		status := false
 		this _mutex lock()
 		if (this _state == _PromiseState Unfinished) {
