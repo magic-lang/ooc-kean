@@ -132,6 +132,17 @@ Cell: class <T> {
     __destroy__: func {
 	     gc_free(this val)
     }
+	// TODO: Move this to an extension in ooc-kean later
+	toString: func -> String {
+		match T {
+			case Int =>
+				(this val as Int) toString()
+			case Float =>
+				"%.8f" formatFloat(this val as Float)
+			case =>
+				raise("[Cell] toString() is not implemented on the specified type")
+		}
+	}
 }
 
 operator [] <T> (c: Cell<T>, T: Class) -> T {
