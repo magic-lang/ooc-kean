@@ -8,7 +8,6 @@ Imports: IComparable
 Imports: OnOff
 Imports: ByteBuffer
 Imports: IDisposable
-Imports: HashDictionary
 Imports: DateTime
 Imports: TimeSpan
 Imports: Synchronized
