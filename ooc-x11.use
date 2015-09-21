@@ -1,5 +1,5 @@
-Name: ooc UI
-Description: User interface stuff
-SourcePath: source/ui/X11
+Name: ooc X11
+Description: X11 implementations for ooc
+SourcePath: source/ui/x11
 Imports: X11Window
 Libs: -lX11
