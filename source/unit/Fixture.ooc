@@ -48,8 +48,18 @@ Fixture: abstract class {
 		)
 		(result ? " done" : " failed") println()
 		if (!result)
-			for (f in failures)
-				"  -> '%s'" printfln(f message)
+			for (f in failures) {
+				// If the constraint is a CompareConstraint and the value being tested is a Cell,
+				// we extract the tested value and the expected (correct) value so we can show it to the
+				// user. A toString() method has been implemented in Cell, which currently only deals with
+				// Int and Float.
+				if (f constraint instanceOf?(CompareConstraint) && f value instanceOf?(Cell)) {
+					correctValue := (f constraint as CompareConstraint) correct as Cell
+					testedValue := f value as Cell
+					"  -> '%s': expected '%s', found '%s'" printfln(f message, correctValue toString(), testedValue toString())
+				} else
+					"  -> '%s'" printfln(f message)
+			}
 		failures free()
 		exit(result ? 0 : 1)
 	}
