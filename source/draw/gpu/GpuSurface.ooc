@@ -27,6 +27,7 @@ GpuSurface: abstract class {
 	_size: IntSize2D
 	size ::= this _size
 	blend: Bool { get set }
+	opacity: Float { get set }
 	_context: GpuContext
 	_model: FloatTransform3D
 	_view: FloatTransform3D
@@ -66,6 +67,7 @@ GpuSurface: abstract class {
 		this farPlane = 10000.0f
 		this _view = FloatTransform3D identity
 		this blend = false
+		this opacity = 1.0f
 	}
 	_createModelTransform: func (box: IntBox2D) -> FloatTransform3D {
 		toReference := FloatTransform3D createTranslation((box size width - this size width) / 2, (this size height - box size height) / 2, 0.0f)
