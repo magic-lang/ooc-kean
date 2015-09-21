@@ -16,8 +16,8 @@
 */
 
 use ooc-math
-use ooc-opengl
-import GraphicBuffer, AndroidContext
+import GraphicBuffer, AndroidContext, OpenGLBgra
+import backend/gles3/[EGLImage, Texture, Context]
 
 EGLBgra: class extends OpenGLBgra {
 	_buffer: GraphicBuffer

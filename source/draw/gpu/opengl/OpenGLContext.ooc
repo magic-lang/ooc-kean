@@ -18,9 +18,10 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 use ooc-collections
+use ooc-ui
 import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, RecycleBin
 import Map/OpenGLMap, Map/OpenGLMapPack
-import backend/gles3/[Context, NativeWindow, Renderer]
+import backend/gles3/[Context, Renderer]
 
 OpenGLContext: class extends GpuContext {
 	_backend: Context

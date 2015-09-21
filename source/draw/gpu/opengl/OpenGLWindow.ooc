@@ -19,58 +19,35 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-opengl
 use ooc-base
+use ooc-ui
 
-import X11/X11Window
-import X11/include/x11
-
-Window: class extends OpenGLSurface {
-	_native: NativeWindow
+OpenGLWindow: class extends OpenGLSurface {
 	_monochromeToBgra: OpenGLMapMonochromeToBgra
 	_yuvSemiplanarToBgra: OpenGLMapYuvSemiplanarToBgra
-
-	context ::= this _context as OpenGLContext
-	size ::= this _size
-
-	init: /* internal */ func (size: IntSize2D, title := "Window title") {
-		this _native = X11Window new(size width, size height, title)
-		context := OpenGLContext new(this _native)
-		super(size, context, OpenGLMapDefaultTexture new(this context), IntTransform2D createScaling(1, -1))
-
-		/* BEGIN Ugly hack to force the window to resize outside screen */
-		this refresh()
-		(this _native as X11Window) resize(size)
-		/* END */
-
-		this _monochromeToBgra = OpenGLMapMonochromeToBgra new(this context)
-		this _yuvSemiplanarToBgra = OpenGLMapYuvSemiplanarToBgra new(this context)
-
-		XSelectInput(this _native display, this _native _backend, KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask)
-		XkbSetDetectableAutoRepeat(this _native display, true, null) as Void
+	init: func (native: NativeWindow) {
+		context := OpenGLContext new(native)
+		super(native size, context, OpenGLMapDefaultTexture new(context), IntTransform2D createScaling(1, -1))
+		this _monochromeToBgra = OpenGLMapMonochromeToBgra new(context)
+		this _yuvSemiplanarToBgra = OpenGLMapYuvSemiplanarToBgra new(context)
 	}
 	free: override func {
 		this _yuvSemiplanarToBgra free()
 		this _monochromeToBgra free()
 		this _defaultMap free()
-		native := this _native
 		this _context free()
 		super()
-		(native as X11Window) free()
 	}
-	_bind: override func { this _native bind() }
+	_bind: override func
 	_unbind: override func
 	_getDefaultMap: override func (image: Image) -> GpuMap {
-		result := match (image) {
+		match (image) {
 			case (i: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgra
 			case (i: RasterYuv420Semiplanar) => this _yuvSemiplanarToBgra
 			case (i: OpenGLMonochrome) => this _monochromeToBgra
 			case (i: RasterMonochrome) => this _monochromeToBgra
 			case => this context defaultMap
 		}
-		result
 	}
-	clear: func { this _native clear() }
-	refresh: func {
-		this context update()
-		this clear()
-	}
+	refresh: func { this context update() }
+	clear: override func
 }

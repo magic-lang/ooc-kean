@@ -1,8 +1,8 @@
 use ooc-math
 use ooc-unit
-use ooc-draw-gpu-android
 use ooc-draw-gpu
 use ooc-base
+use ooc-opengl
 
 GraphicBufferAlignTest: class extends Fixture {
 	init: func {
