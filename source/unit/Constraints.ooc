@@ -193,15 +193,17 @@ CompareConstraint: class extends Constraint {
 	}
 }
 CompareWithinConstraint: class extends CompareConstraint {
+	precision: Double
 	init: func (parent: Modifier, .correct, .comparer) {
 		super(parent, correct, comparer, ComparisonType Equal)
 	}
 	within: func ~float (precision: Float) -> CompareConstraint {
+		this precision = precision as Double
 		this comparer = func (value, correct: Object) -> Bool { this testChild(value) }
 		f := func (value, correct: Object) -> Bool { (value as Cell<Float> get() - correct as Cell<Float> get()) abs() < precision }
 		CompareConstraint new(this, this correct, f, ComparisonType Within)
 	}
-	within: func ~double (precision: Double) -> CompareConstraint {
+	within: func ~double (=precision) -> CompareConstraint {
 		this comparer = func (value, correct: Object) -> Bool { this testChild(value) }
 		f := func (value, correct: Object) -> Bool { (value as Cell<Double> get() - correct as Cell<Double> get()) abs() < precision }
 		CompareConstraint new(this, this correct, f, ComparisonType Within)
