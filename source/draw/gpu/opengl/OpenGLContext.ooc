@@ -34,17 +34,16 @@ OpenGLContext: class extends GpuContext {
 	defaultMap: GpuMap { get { this _transformTextureMap } }
 	_recycleBin := RecycleBin new()
 
-	init: func (context: Context) {
+	init: func ~backend (=_backend) {
 		super()
 		this _packMonochrome = OpenGLMapPackMonochrome new(this)
 		this _packUv = OpenGLMapPackUv new(this)
 		this _linesShader = OpenGLMapLines new(this)
 		this _pointsShader = OpenGLMapPoints new(this)
-		this _backend = context
 		this _transformTextureMap = OpenGLMapTransformTexture new(this)
 		this _renderer = Renderer new()
 	}
-	init: func ~unshared { this init(Context create()) }
+	init: func { this init(Context create()) }
 	init: func ~shared (other: This) { this init(Context create(other _backend)) }
 	init: func ~window (nativeWindow: NativeWindow) { this init(Context create(nativeWindow)) }
 	free: override func {
