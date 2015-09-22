@@ -18,7 +18,8 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import backend/gles3/Texture, OpenGLCanvas, Map/[OpenGLMap, OpenGLMapPack], OpenGLPacked, OpenGLContext
+import backend/GLTexture
+import OpenGLCanvas, OpenGLPacked, OpenGLContext, Map/[OpenGLMap, OpenGLMapPack]
 
 OpenGLUv: class extends OpenGLPacked {
 	channelCount: static Int = 2

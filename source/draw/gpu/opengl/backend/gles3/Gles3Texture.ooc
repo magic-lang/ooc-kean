@@ -21,14 +21,13 @@ import ../GLTexture
 import Gles3Debug
 
 Gles3Texture: class extends GLTexture {
-	_type: TextureType
 	_format: UInt
 	_internalFormat: UInt
 	_bytesPerPixel: UInt
-	_target: UInt = GL_TEXTURE_2D
 
 	init: func (=_type, =_size) {
 		version(debugGL) { validateStart() }
+		_target = GL_TEXTURE_2D
 		this _setInternalFormats(this _type)
 		version(debugGL) { validateEnd("Texture init") }
 	}

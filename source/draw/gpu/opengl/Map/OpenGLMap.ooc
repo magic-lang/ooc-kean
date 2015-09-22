@@ -18,8 +18,7 @@
 use ooc-base
 use ooc-math
 use ooc-draw-gpu
-
-import backend/gles3/ShaderProgram
+import backend/GLShaderProgram
 import OpenGLContext
 
 OpenGLMap: abstract class extends GpuMap {

@@ -18,10 +18,14 @@ use ooc-base
 use ooc-math
 use ooc-ui
 import ../egl/egl
+import ../[GLContext, GLTexture]
 import include/gles3
-import DebugGL
+import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture
 
 Gles3Context: class extends GLContext {
+	_eglContext: Pointer
+	_eglSurface: Pointer
+
 	init: func
 	free: override func {
 		eglMakeCurrent(this _eglDisplay, null, null, null)

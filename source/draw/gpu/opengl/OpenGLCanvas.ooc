@@ -20,7 +20,7 @@ use ooc-base
 use ooc-collections
 use ooc-draw
 use ooc-draw-gpu
-import backend/gles3/[Fbo, Texture]
+import backend/[GLFramebufferObject, GLTexture]
 import OpenGLBgr, Map/OpenGLMap, OpenGLBgra, OpenGLUv, OpenGLMonochrome, OpenGLContext, OpenGLPacked, OpenGLSurface
 
 OpenGLCanvas: class extends OpenGLSurface {

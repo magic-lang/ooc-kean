@@ -21,10 +21,8 @@ import gles3/Gles3Context
 import GLQuad, GLShaderProgram, GLTexture, GLFramebufferObject, GLFence, GLVolumeTexture, GLRenderer
 
 GLContext: abstract class {
-	_eglContext: Pointer
 	_eglDisplay: Pointer
-	_eglSurface: Pointer
-
+	
 	makeCurrent: abstract func -> Bool
 	swapBuffers: abstract func
 	setViewport: abstract func (viewport: IntBox2D)

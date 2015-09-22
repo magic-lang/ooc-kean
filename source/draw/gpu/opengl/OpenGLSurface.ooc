@@ -17,7 +17,8 @@
 use ooc-collections
 use ooc-math
 use ooc-draw-gpu
-import OpenGLContext, backend/GLRenderer
+import OpenGLContext
+import backend/GLRenderer
 
 OpenGLSurface: abstract class extends GpuSurface {
 	context ::= this _context as OpenGLContext
@@ -28,8 +29,8 @@ OpenGLSurface: abstract class extends GpuSurface {
 	_unbind: abstract func
 	draw: override func (action: Func) {
 		this _bind()
-		this context setViewport(this viewport)
-		this context enableBlend(this blend)
+		this context backend setViewport(this viewport)
+		this context backend enableBlend(this blend)
 		action()
 		this _unbind()
 	}

@@ -21,7 +21,7 @@ use ooc-collections
 use ooc-ui
 import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, RecycleBin
 import Map/OpenGLMap, Map/OpenGLMapPack
-import backend/gles3/[Context, Renderer]
+import backend/[GLContext, GLRenderer]
 
 OpenGLContext: class extends GpuContext {
 	_backend: GLContext

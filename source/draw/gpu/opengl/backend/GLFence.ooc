@@ -19,13 +19,15 @@ import os/Time
 import threading/native/ConditionUnix
 import threading/Thread
 
+ULLONG_MAX: extern const UInt64
+
 GLFence: abstract class {
 	_backend: Pointer = null
-	_syncCondition: ConditionUnix
-	_mutex: Mutex
-	
+	_syncCondition := ConditionUnix new()
+	_mutex := Mutex new()
+
 	init: func
-	clientWait: abstract func (timeout: UInt64 = 0)
+	clientWait: abstract func (timeout: UInt64 = ULLONG_MAX)
 	wait: abstract func
 	sync: abstract func
 	free: override func { super() }

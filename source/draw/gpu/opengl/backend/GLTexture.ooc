@@ -40,7 +40,10 @@ GLTexture: abstract class {
 	backend: UInt { get { this _backend } }
 	_size: IntSize2D
 	size ::= this _size
+	_type: TextureType
+	_target: UInt
 
+	init: func (=_type, =_size)
 	generateMipmap: abstract func
 	bind: abstract func (unit: UInt)
 	unbind: abstract func

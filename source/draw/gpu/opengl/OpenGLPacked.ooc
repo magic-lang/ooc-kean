@@ -17,7 +17,8 @@
 
 use ooc-draw
 use ooc-draw-gpu
-import backend/GLTexture, OpenGLContext, OpenGLCanvas
+import backend/GLTexture
+import OpenGLContext, OpenGLCanvas
 
 OpenGLPacked: abstract class extends GpuImage {
 	_filter: Bool

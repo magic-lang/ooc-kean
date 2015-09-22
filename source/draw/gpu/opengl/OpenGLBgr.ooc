@@ -18,7 +18,8 @@ use ooc-base
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import backend/GLTexture, OpenGLCanvas, OpenGLPacked, OpenGLContext
+import backend/GLTexture
+import OpenGLCanvas, OpenGLPacked, OpenGLContext
 
 OpenGLBgr: class extends OpenGLPacked {
 	channelCount: static Int = 3

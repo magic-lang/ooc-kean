@@ -21,12 +21,9 @@ import include/gles3
 import ../GLFence
 import threading/Thread
 
-Fence: class extends GLFence {
-	init: func {
-		this _mutex = Mutex new()
-		this _syncCondition = WaitCondition new()
-	}
-	clientWait: func (timeout: UInt64 = GL_TIMEOUT_IGNORED) {
+Gles3Fence: class extends GLFence {
+	init: func { super() }
+	clientWait: func (timeout: UInt64 = ULLONG_MAX) {
 		this _mutex lock()
 		if (this _backend == null)
 			this _syncCondition wait(this _mutex)

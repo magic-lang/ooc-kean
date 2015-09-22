@@ -18,7 +18,7 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 import OpenGLPacked, OpenGLCanvas, Map/OpenGLMap, Map/OpenGLMapPack, OpenGLContext
-import backend/gles3/Texture
+import backend/GLTexture
 
 OpenGLMonochrome: class extends OpenGLPacked {
 	channelCount: static Int = 1

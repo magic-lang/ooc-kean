@@ -16,24 +16,21 @@
 */
 use ooc-base
 use ooc-math
-import ../egl/egl
-import ../GLTexture
-import Gles3Texture
+import egl/egl
+import GLTexture, GLContext
 
-Gles3EGLImage: class extends Gles3Texture {
+EGLImage: class extends GLTexture {
 	_eglBackend: Pointer
 	_eglDisplay: Pointer
 	_nativeBuffer: Pointer
+	_backendTexture: GLTexture
 	/* PRIVATE CONSTRUCTOR, USE STATIC CREATE FUNCTION!!! */
-	init: func (type: TextureType, size: IntSize2D, =_nativeBuffer, =_eglDisplay) {
+	init: func (type: TextureType, size: IntSize2D, =_nativeBuffer, context: GLContext) {
 		super(type, size)
-		this _genTexture()
+		this _eglDisplay = context _eglDisplay
+		this _backendTexture = context createTexture(type, size, size width, null, false)
+		/*this _backendTexture bind()*/
 		this bindSibling()
-		/*textureUnitCount: Int
-		glGetTexParameteriv(GL_TEXTURE_EXTERNAL_OES, GL_REQUIRED_TEXTURE_IMAGE_UNITS_OES, textureUnitCount&)
-		Debug print("Texture units needed: " + textureUnitCount toString())
-		glIsEnabled(GL_TEXTURE_EXTERNAL_OES)
-		*/
 	}
 	free: override func {
 		This _eglDestroyImageKHR(this _eglDisplay, this _eglBackend)
@@ -57,12 +54,18 @@ Gles3EGLImage: class extends Gles3Texture {
 			This _initialized = true
 		}
 	}
-	create: static func (type: TextureType, size: IntSize2D, nativeBuffer: Pointer, display: Pointer) -> This {
+	create: static func (type: TextureType, size: IntSize2D, nativeBuffer: Pointer, context: GLContext) -> This {
 		This initialize()
 		result: This = null
 		if (type == TextureType rgba || type == TextureType rgb || type == TextureType bgr || type == TextureType rgb || type == TextureType yv12) {
-			result = This new(type, size, nativeBuffer, display)
+			result = This new(type, size, nativeBuffer, context)
 		}
 		result
 	}
+	generateMipmap: func { _backendTexture generateMipmap() }
+	bind: func (unit: UInt) { _backendTexture bind(unit) }
+	unbind: func { _backendTexture unbind() }
+	upload: func (pixels: Pointer, stride: Int) { _backendTexture upload(pixels, stride) }
+	setMagFilter: func (interpolation: InterpolationType) { _backendTexture setMagFilter(interpolation) }
+	setMinFilter: func (interpolation: InterpolationType) { _backendTexture setMinFilter(interpolation) }
 }
