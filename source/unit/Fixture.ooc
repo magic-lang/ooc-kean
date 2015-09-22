@@ -72,12 +72,12 @@ Fixture: abstract class {
 				result append(" less than")
 			case ComparisonType GreaterThan =>
 				result append(" greater than")
-			/*case ComparisonType Within =>
-				result append(" within")*/
-			case =>
-				raise ("[Fixture] Unsupported comparison type")
+			case ComparisonType Within =>
+				result append(" equal to")
 		}
 		result append(" '%s', was '%s'" format(rightValue toString(), leftValue toString()))
+		if (constraint type == ComparisonType Within)
+			result append(" [tolerance: %.8f]" formatDouble((constraint parent as CompareWithinConstraint) precision))		
 		result toString()
 	}
 	is ::= static IsConstraints new()
