@@ -30,7 +30,6 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 	_parseRow: func (rowData: Text) -> VectorList<Text> {
 		result := VectorList<Text> new()
 		rowDataLength := rowData count
-		position := 0
 		readCharacter: Char
 		for (i in 0 .. rowDataLength) {
 			textBuilder := TextBuilder new()
