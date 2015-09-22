@@ -22,7 +22,7 @@ CsvWriter: class {
 		this _fileWriter write("\n")
 	}
 	open: static func (filename: Text) -> This {
-		result: This
+		result: This = null
 		file := File new(filename toString())
 		result = This new(FileWriter new(file))
 		file free()
