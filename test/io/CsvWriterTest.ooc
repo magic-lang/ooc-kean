@@ -17,7 +17,7 @@ CsvWriterTest: class extends Fixture {
 			outputFilename := Text new(c"test/io/output/3x3_temp.csv", 27)
 			writer := CsvWriter open(outputFilename)
 			for (i in 0 .. csvRecords count)
-				writer writeRow(csvRecords[i])
+				writer write(csvRecords[i])
 			writer free()
 			// Open temporary file and verify content
 			reader = CsvReader open(outputFilename)
