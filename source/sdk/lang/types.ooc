@@ -137,8 +137,12 @@ Cell: class <T> {
 		match T {
 			case Int =>
 				(this val as Int) toString()
+			case UInt =>
+				(this val as UInt) toString()
 			case Float =>
 				"%.8f" formatFloat(this val as Float)
+			case Double =>
+				"%.12f" formatDouble(this val as Double)
 			case =>
 				raise("[Cell] toString() is not implemented on the specified type")
 		}
