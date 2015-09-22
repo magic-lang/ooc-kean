@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+ 
 use ooc-math
 import include/gles3
 import ../GLShaderProgram
@@ -23,16 +24,16 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 	_backend: UInt
 
 	init: func
-	use: func {
-		version(debugGL) { validateStart() }
-		glUseProgram(this _backend)
-		version(debugGL) { validateEnd("ShaderProgram use") }
-	}
-	free: func {
+	free: override func {
 		version(debugGL) { validateStart() }
 		glDeleteProgram(this _backend)
 		version(debugGL) { validateEnd("ShaderProgram dispose") }
 		super()
+	}
+	use: func {
+		version(debugGL) { validateStart() }
+		glUseProgram(this _backend)
+		version(debugGL) { validateEnd("ShaderProgram use") }
 	}
 	setUniform: func ~Array (name: String, array: Float*, count: Int) {
 		version(debugGL) { validateStart() }

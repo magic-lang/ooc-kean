@@ -14,6 +14,7 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
+
 use ooc-base
 use ooc-math
 import egl/egl
@@ -57,7 +58,7 @@ EGLImage: class extends GLTexture {
 	create: static func (type: TextureType, size: IntSize2D, nativeBuffer: Pointer, context: GLContext) -> This {
 		This initialize()
 		result: This = null
-		if (type == TextureType rgba || type == TextureType rgb || type == TextureType bgr || type == TextureType rgb || type == TextureType yv12) {
+		if (type == TextureType Rgba || type == TextureType Rgb || type == TextureType Bgr || type == TextureType Rgb || type == TextureType Yv12) {
 			result = This new(type, size, nativeBuffer, context)
 		}
 		result

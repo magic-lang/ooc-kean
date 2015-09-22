@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with This software. If not, see <http://www.gnu.org/licenses/>.
  */
+ 
 import include/gles3
 import ../GLQuad
 import Gles3VertexArrayObject, Gles3Debug
@@ -26,7 +27,10 @@ Gles3Quad: class extends GLQuad {
 		this vao = Gles3VertexArrayObject new(positions, textureCoordinates, 4, 2)
 		version(debugGL) { validateEnd("quad init") }
 	}
-	free: func { this vao free() }
+	free: func {
+		this vao free()
+		super()
+	}
 	draw: func {
 		version(debugGL) { validateStart() }
 		this vao bind()

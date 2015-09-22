@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+ 
 use ooc-base
 use ooc-math
 import include/gles3
@@ -21,13 +22,10 @@ import ../GLFramebufferObject
 import Gles3Texture, Gles3Debug
 
 Gles3FramebufferObject: class extends GLFramebufferObject {
-	_size: IntSize2D
-	size ::= this _size
-	_backend: UInt
-
-	init: func (=_size)
-	free: func {
+	init: func (=_size) { super() }
+	free: override func {
 		glDeleteFramebuffers(1, _backend&)
+		super()
 	}
 	bind: func { glBindFramebuffer(GL_FRAMEBUFFER, this _backend) }
 	unbind: func { glBindFramebuffer(GL_FRAMEBUFFER, 0) }

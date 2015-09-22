@@ -14,6 +14,7 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
+
 use ooc-math
 use ooc-base
 import include/gles3
@@ -34,7 +35,7 @@ Gles3VolumeTexture: class extends GLVolumeTexture {
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE)
 		glTexImage3D(GL_TEXTURE_3D, 0, GL_R8, this width, this height, this depth, 0, GL_RED, GL_UNSIGNED_BYTE, pixels)
 	}
-	free: func {
+	free: override func {
 		glDeleteTextures(1, _backend&)
 		super()
 	}

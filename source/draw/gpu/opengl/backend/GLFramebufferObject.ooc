@@ -14,10 +14,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+ 
 use ooc-base
 use ooc-math
 
 GLFramebufferObject: abstract class {
+	_size: IntSize2D
+	size ::= this _size
+	_backend: UInt
+
+	init: func (=_size)
+	free: override func { super() }
 	bind: abstract func
 	unbind: abstract func
 	clear: abstract func

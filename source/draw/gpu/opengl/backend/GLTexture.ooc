@@ -14,16 +14,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+
  use ooc-math
 
 TextureType: enum {
-	monochrome
-	rgba
-	rgb
-	bgr
-	bgra
-	uv
-	yv12
+	Monochrome
+	Rgba
+	Rgb
+	Bgr
+	Bgra
+	Uv
+	Yv12
 }
 
 InterpolationType: enum {
@@ -44,6 +45,7 @@ GLTexture: abstract class {
 	_target: UInt
 
 	init: func (=_type, =_size)
+	free: override func { super() }
 	generateMipmap: abstract func
 	bind: abstract func (unit: UInt)
 	unbind: abstract func

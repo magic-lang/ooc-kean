@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+
 use ooc-base
 use ooc-math
 use ooc-ui
@@ -32,6 +33,7 @@ Gles3Context: class extends GLContext {
 		eglDestroyContext(this _eglDisplay, this _eglContext)
 		eglDestroySurface(this _eglDisplay, this _eglSurface)
 		eglTerminate(this _eglDisplay)
+		super()
 	}
 	makeCurrent: func -> Bool {
 		result := eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0
@@ -181,7 +183,7 @@ Gles3Context: class extends GLContext {
 		version(debugGL) { validateStart() }
 		result := Gles3Quad new()
 		result = (result vao != null) ? result : null
-		version(debugGL) { validateEnd("quad create") }
+		version(debugGL) { validateEnd("Quad create") }
 		result
 	}
 	createShaderProgram: func (vertexSource, fragmentSource: String) -> Gles3ShaderProgram {
@@ -191,7 +193,7 @@ Gles3Context: class extends GLContext {
 		version(debugGL) { validateEnd("ShaderProgram create") }
 		result
 	}
-	createTexture: func (type: TextureType, size: IntSize2D, stride: UInt, pixels := null, allocate : Bool = true) -> Gles3Texture {
+	createTexture: func (type: TextureType, size: IntSize2D, stride: UInt, pixels := null, allocate := true) -> Gles3Texture {
 		version(debugGL) { validateStart() }
 		result := Gles3Texture new(type, size)
 		success := result _generate(pixels, stride, allocate)
@@ -203,7 +205,7 @@ Gles3Context: class extends GLContext {
 		version(debugGL) { validateStart() }
 		result := Gles3FramebufferObject new(size)
 		result = result _generate(texture as Gles3Texture) ? result : null
-		version(debugGL) { validateEnd("fbo create") }
+		version(debugGL) { validateEnd("FramebufferObject create") }
 		result
 	}
 	createFence: func -> Gles3Fence {

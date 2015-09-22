@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+
 use ooc-base
 import include/gles3
 import ../GLVertexArrayObject
@@ -23,7 +24,7 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 	positionLayout: const static UInt = 0
 	textureCoordinateLayout: const static UInt = 1
 
-	init: func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) {
+	init: func (positions, textureCoordinates: Float*, vertexCount, dimensions: UInt) {
 		version(debugGL) { Debug print("Allocating OpenGL VAO") }
 		//Currently using 2 attributes: vertex position and texture coordinate
 		attributeCount := 2
@@ -54,8 +55,9 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 		glBindVertexArray(0)
 		glDeleteBuffers(1, vertexBuffer&)
 	}
-	free: func {
+	free: override func {
 		glDeleteVertexArrays(1, backend&)
+		super()
 	}
 	bind: func { glBindVertexArray(backend) }
 	unbind: func { glBindVertexArray(0) }

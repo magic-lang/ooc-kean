@@ -24,7 +24,7 @@ import OpenGLCanvas, OpenGLPacked, OpenGLContext, Map/[OpenGLMap, OpenGLMapPack]
 OpenGLUv: class extends OpenGLPacked {
 	channelCount: static Int = 2
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
-		super(context _backend createTexture(TextureType uv, size, stride, data), This channelCount, context)
+		super(context _backend createTexture(TextureType Uv, size, stride, data), This channelCount, context)
 		this coordinateSystem = coordinateSystem
 	}
 	init: func (size: IntSize2D, context: OpenGLContext) {

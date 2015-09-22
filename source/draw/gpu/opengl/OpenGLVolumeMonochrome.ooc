@@ -24,7 +24,7 @@ import OpenGLContext
 OpenGLVolumeMonochrome: class {
 	_backend: GLVolumeTexture
 	init: func (size: IntSize3D, pixels: UInt8* = null, context: OpenGLContext) {
-		this _backend = context as GLContext createVolumeTexture(size width, size height, size depth, pixels)
+		this _backend = context backend createVolumeTexture(size width, size height, size depth, pixels)
 	}
 	bind: func (unit: UInt) {
 		this _backend bind(unit)

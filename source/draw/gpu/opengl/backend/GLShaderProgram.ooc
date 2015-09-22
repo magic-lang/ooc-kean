@@ -14,9 +14,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+ 
 use ooc-math
 
 GLShaderProgram: abstract class {
+	free: override func { super() }
 	use: abstract func
 	setUniform: abstract func ~Array (name: String, array: Float*, count: Int)
 	setUniform: abstract func ~Int (name: String, value: Int)

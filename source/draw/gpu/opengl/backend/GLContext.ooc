@@ -14,6 +14,7 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
+
 use ooc-base
 use ooc-math
 use ooc-ui
@@ -22,12 +23,12 @@ import GLQuad, GLShaderProgram, GLTexture, GLFramebufferObject, GLFence, GLVolum
 
 GLContext: abstract class {
 	_eglDisplay: Pointer
-	
+
+	free: override func { super() }
 	makeCurrent: abstract func -> Bool
 	swapBuffers: abstract func
 	setViewport: abstract func (viewport: IntBox2D)
 	enableBlend: abstract func (on: Bool)
-
 	createFence: abstract func -> GLFence
 	createFramebufferObject: abstract func (texture: GLTexture, size: IntSize2D) -> GLFramebufferObject
 	createQuad: abstract func -> GLQuad
@@ -35,13 +36,12 @@ GLContext: abstract class {
 	createTexture: abstract func (type: TextureType, size: IntSize2D, stride: UInt, pixels := null, allocate : Bool = true) -> GLTexture
 	createVolumeTexture: abstract func (width, height, depth: UInt, pixels: UInt8*) -> GLVolumeTexture
 	createRenderer: abstract func -> GLRenderer
-
 	createContext: static func ~shared (window: NativeWindow, sharedContext: This = null) -> This {
-		// This function will check if a context creation succeded and if not try to create a context for another opgengl version
+		// This function will check whether a context creation succeeded and if not try to create a context for another OpenGL version
 		Gles3Context create(window, sharedContext as Gles3Context)
 	}
 	createContext: static func ~pbufferShared (sharedContext: This = null) -> This {
-		// This function will check if a context creation succeded and if not try to create a context for another opgengl version
+		// This function will check whether a context creation succeeded and if not try to create a context for another OpenGL version
 		Gles3Context create(sharedContext as Gles3Context)
 	}
 }

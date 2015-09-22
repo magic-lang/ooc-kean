@@ -14,15 +14,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import Gles3Quad
 import include/gles3
 import ../GLRenderer
 
 Gles3Renderer: class extends GLRenderer {
 	init: func { this _quad = Gles3Quad new() }
-	free: override func { this _quad free() }
+	free: override func {
+		this _quad free()
+		super()
+	}
 	drawQuad: func { this _quad draw() }
-	drawLines: func (positions: Float*, count: Int, dimensions: Int, lineWidth: Float) {
+	drawLines: func (positions: Float*, count, dimensions: Int, lineWidth: Float) {
 		glLineWidth(lineWidth)
 		glBindVertexArray(0)
 		glEnableVertexAttribArray(0)
@@ -30,7 +34,7 @@ Gles3Renderer: class extends GLRenderer {
 		glDrawArrays(GL_LINE_STRIP, 0, count)
 		glDisableVertexAttribArray(0)
 	}
-	drawPoints: func (positions: Float*, count: Int, dimensions: Int) {
+	drawPoints: func (positions: Float*, count, dimensions: Int) {
 		glBindVertexArray(0)
 		glEnableVertexAttribArray(0)
 		glVertexAttribPointer(0, dimensions, GL_FLOAT, 0, 0, positions)

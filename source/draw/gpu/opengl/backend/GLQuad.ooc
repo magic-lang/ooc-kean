@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with This software. If not, see <http://www.gnu.org/licenses/>.
  */
+ 
 import GLVertexArrayObject
 
 GLQuad: abstract class {
 	vao: GLVertexArrayObject
-
+	free: override func { super() }
 	draw: abstract func
 }

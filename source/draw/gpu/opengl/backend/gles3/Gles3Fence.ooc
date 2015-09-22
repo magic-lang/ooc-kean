@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-
+ 
 use ooc-base
 import os/Time
 import include/gles3
@@ -23,6 +23,12 @@ import threading/Thread
 
 Gles3Fence: class extends GLFence {
 	init: func { super() }
+	free: override func {
+		glDeleteSync(this _backend)
+		this _mutex destroy()
+		this _syncCondition free()
+		super()
+	}
 	clientWait: func (timeout: UInt64 = ULLONG_MAX) {
 		this _mutex lock()
 		if (this _backend == null)
@@ -54,11 +60,5 @@ Gles3Fence: class extends GLFence {
 		this _mutex unlock()
 		this _syncCondition broadcast()
 		glFlush()
-	}
-	free: override func {
-		glDeleteSync(this _backend)
-		this _mutex destroy()
-		this _syncCondition free()
-		super()
 	}
 }

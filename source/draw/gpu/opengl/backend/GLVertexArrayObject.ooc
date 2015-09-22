@@ -15,7 +15,8 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-GLVertexArrayObject: abstract class {	
+GLVertexArrayObject: abstract class {
+	free: override func { super() }
 	bind: abstract func
 	unbind: abstract func
 }

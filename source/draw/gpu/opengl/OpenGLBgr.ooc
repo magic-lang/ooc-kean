@@ -14,6 +14,7 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with This software. If not, see <http://www.gnu.org/licenses/>.
 */
+
 use ooc-base
 use ooc-math
 use ooc-draw
@@ -24,7 +25,7 @@ import OpenGLCanvas, OpenGLPacked, OpenGLContext
 OpenGLBgr: class extends OpenGLPacked {
 	channelCount: static Int = 3
 	init: func (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
-		super(context _backend createTexture(TextureType bgr, size, stride, data, true), This channelCount, context)
+		super(context _backend createTexture(TextureType Bgr, size, stride, data, true), This channelCount, context)
 		this coordinateSystem = coordinateSystem
 	}
 	init: func ~empty (size: IntSize2D, context: OpenGLContext) {
