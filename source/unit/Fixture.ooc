@@ -50,18 +50,35 @@ Fixture: abstract class {
 		if (!result)
 			for (f in failures) {
 				// If the constraint is a CompareConstraint and the value being tested is a Cell,
-				// we extract the tested value and the expected (correct) value so we can show it to the
-				// user. A toString() method has been implemented in Cell, which currently only deals with
-				// Int and Float.
+				// we create a friendly message for the user.
 				if (f constraint instanceOf?(CompareConstraint) && f value instanceOf?(Cell)) {
-					correctValue := (f constraint as CompareConstraint) correct as Cell
-					testedValue := f value as Cell
-					"  -> '%s': expected '%s', found '%s'" printfln(f message, correctValue toString(), testedValue toString())
+					(this createFailureMessage(f)) printfln()
 				} else
 					"  -> '%s'" printfln(f message)
 			}
 		failures free()
 		exit(result ? 0 : 1)
+	}
+	createFailureMessage: func (failure: TestFailedException) -> String {
+		constraint := failure constraint as CompareConstraint
+		// Left is the tested value, right is the correct/expected value
+		leftValue := failure value as Cell
+		rightValue := constraint correct as Cell
+		result := StringBuilder new("  -> '%s': expected" format(failure message))
+		match (constraint type) {
+			case ComparisonType Equal =>
+				result append(" equal to")
+			case ComparisonType LessThan =>
+				result append(" less than")
+			case ComparisonType GreaterThan =>
+				result append(" greater than")
+			/*case ComparisonType Within =>
+				result append(" within")*/
+			case =>
+				raise ("[Fixture] Unsupported comparison type")
+		}
+		result append(" '%s', was '%s'" format(rightValue toString(), leftValue toString()))
+		result toString()
 	}
 	is ::= static IsConstraints new()
 	expect: static func (value: Object, constraint: Constraint) {
