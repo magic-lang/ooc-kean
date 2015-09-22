@@ -2,7 +2,6 @@ use ooc-collections
 
 import structs/LinkedList
 import threading/Thread
-import threading/native/ConditionUnix
 
 ThreadJob: class {
 	_body: Func
@@ -15,7 +14,7 @@ ThreadJob: class {
 }
 
 SynchronizedThreadJob: class extends ThreadJob {
-	_finishedCondition := ConditionUnix new()
+	_finishedCondition := WaitCondition new()
 	_mutex := Mutex new()
 	_finished := false
 	finished ::= this _finished
@@ -57,7 +56,7 @@ ThreadPool: class {
 	_threads: Thread[]
 	_jobs := BlockedQueue<ThreadJob> new()
 	_mutex := Mutex new()
-	_allFinishedCondition := ConditionUnix new()
+	_allFinishedCondition := WaitCondition new()
 	_activeJobs: Int
 	_threadCount: Int
 	threadCount ::= this _threadCount

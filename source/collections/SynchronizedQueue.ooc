@@ -1,6 +1,5 @@
 import Queue
 import threading/Thread
-import threading/native/ConditionUnix
 
 SynchronizedQueue: class <T> extends Queue<T> {
 	_mutex := Mutex new()
@@ -51,7 +50,7 @@ SynchronizedQueue: class <T> extends Queue<T> {
 }
 
 BlockedQueue: class <T> extends SynchronizedQueue<T> {
-	_populated := ConditionUnix new()
+	_populated := WaitCondition new()
 	init: func { super() }
 	free: override func {
 		this _populated free()

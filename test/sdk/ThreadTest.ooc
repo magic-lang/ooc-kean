@@ -1,7 +1,6 @@
 use ooc-unit
 use ooc-base
 import threading/Thread
-import threading/native/ConditionUnix
 import os/Time
 
 ThreadTest: class extends Fixture {
@@ -26,7 +25,7 @@ ThreadTest: class extends Fixture {
 		expectedValue := 1_000
 		value := Cell<Int> new(0)
 		mutex := Mutex new()
-		startedCondition := ConditionUnix new()
+		startedCondition := WaitCondition new()
 		job := func {
 			startedCondition broadcast()
 			mutex unlock()

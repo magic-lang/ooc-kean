@@ -1,6 +1,7 @@
 import native/[ThreadUnix, ThreadWin32]
 import native/[MutexUnix, MutexWin32]
 import native/[ThreadLocalUnix, ThreadLocalWin32]
+import native/ConditionUnix
 
 /**
  * A thread is a thread of execution in a program. Multiple threads
@@ -288,4 +289,23 @@ ThreadLocal: abstract class <T> {
         Return true if there is any data set.
       */ 
     hasValue?: abstract func -> Bool
+}
+
+WaitCondition: abstract class {
+
+    new: static func -> This {
+        version (unix || apple) {
+            return ConditionUnix new() as This
+        }
+        Exception new(This, "Unsupported platform!\n") throw()
+        null
+    }
+
+    wait: abstract func (mutex: Mutex) -> Bool
+
+    signal: abstract func -> Bool
+
+    broadcast: abstract func -> Bool
+    
+    destroy: abstract func -> Bool
 }
