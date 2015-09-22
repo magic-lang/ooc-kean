@@ -77,7 +77,7 @@ Fixture: abstract class {
 		}
 		result append(" '%s', was '%s'" format(rightValue toString(), leftValue toString()))
 		if (constraint type == ComparisonType Within)
-			result append(" [tolerance: %.8f]" formatDouble((constraint parent as CompareWithinConstraint) precision))		
+			result append(" [tolerance: %.8f]" formatDouble((constraint parent as CompareWithinConstraint) precision))
 		result toString()
 	}
 	is ::= static IsConstraints new()
