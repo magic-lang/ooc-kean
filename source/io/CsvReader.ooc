@@ -12,14 +12,6 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		}
 		super()
 	}
-	open: static func (filename: Text) -> This {
-		result: This
-		file := File new(filename toString())
-		if (file exists?())
-			result = This new(FileReader new(file))
-		file free()
-		result
-	}
 	remove: func -> Bool { false }
 	iterator: func -> This { this }
 	hasNext?: func -> Bool { this _fileReader hasNext?() }
@@ -75,6 +67,14 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		++position@
 		result = textBuilder toText()
 		textBuilder free()
+		result
+	}
+	open: static func (filename: Text) -> This {
+		result: This
+		file := File new(filename toString())
+		if (file exists?())
+			result = This new(FileReader new(file))
+		file free()
 		result
 	}
 }
