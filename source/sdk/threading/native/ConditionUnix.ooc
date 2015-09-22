@@ -12,7 +12,7 @@ pthread_cond_destroy: extern func (cond: PThreadCond*) -> Int
 import ../Thread
 import MutexUnix
 
-ConditionUnix: class {
+ConditionUnix: class extends WaitCondition {
   _backend: PThreadCond*
 
   init: func {

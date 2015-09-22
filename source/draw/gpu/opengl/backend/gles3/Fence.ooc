@@ -17,15 +17,14 @@
 use ooc-base
 import os/Time
 import include/gles3
-import threading/native/ConditionUnix
 import threading/Thread
 Fence: class {
 	_backend: Pointer = null
-	_syncCondition: ConditionUnix
+	_syncCondition: WaitCondition
 	_mutex: Mutex
 	init: func {
 		this _mutex = Mutex new()
-		this _syncCondition = ConditionUnix new()
+		this _syncCondition = WaitCondition new()
 	}
 	clientWait: func (timeout: UInt64 = GL_TIMEOUT_IGNORED) {
 		this _mutex lock()
