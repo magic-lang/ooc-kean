@@ -32,6 +32,8 @@ IntegerTest: class extends Fixture {
 		isNotEqualTo42 := is not equal to(42)
 		this add("0 is not equal to 42", func { expect(0, isNotEqualTo42) })
 		this add("0 is equal to -0", func { expect(0, is equal to(-0)) })
+		this add("0 is less than 1", func { expect(0, is less than(1)) })
+		this add("0.0 is greater than -1", func { expect(0, is greater than(-1)) })
 	}
 }
 IntegerTest new() run()
