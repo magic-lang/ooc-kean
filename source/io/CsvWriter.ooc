@@ -19,7 +19,7 @@ CsvWriter: class {
 			if (i < row count - 1)
 				this _fileWriter write(";")
 		}
-		this _fileWriter write("\n")
+		this _fileWriter write("\r\n")
 	}
 	open: static func (filename: Text) -> This {
 		result: This = null
