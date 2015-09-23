@@ -39,7 +39,11 @@ version(unix || apple) {
         }
 
         cancel: func -> Bool {
-            this alive?() && (pthread_cancel(this pthread) == 0)
+          version (android) {
+            Exception new(This, "Unsupported platform!\n") throw()
+          } else
+            return this alive?() && (pthread_cancel(this pthread) == 0)
+          false
         }
 
         alive?: func -> Bool {
