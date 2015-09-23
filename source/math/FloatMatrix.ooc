@@ -94,6 +94,19 @@ FloatMatrix : cover {
 	}
 
 	// <summary>
+	// Calculates the trace of a square matrix.
+	// </summary>
+	// <returns>The trace of the matrix.</returns>
+	trace: func -> Float {
+		if (!this isSquare)
+			InvalidDimensionsException new() throw()
+		result := 0.0f
+		for (i in 0 .. this dimensions height)
+			result += this get(i, i)
+		result
+	}
+
+	// <summary>
 	// Swaps the position of two rows
 	// </summary>
 	// <param name="row1">First row</param>
@@ -282,6 +295,58 @@ operator * (left: FloatMatrix, right: FloatMatrix) -> FloatMatrix {
 			for (z in 0 .. left dimensions width) {
 				temp += left elements[z + left dimensions width * y] * right elements[x + right dimensions width * z]
 			}
+			result elements[x + result dimensions width * y] = temp
+		}
+	}
+result
+}
+
+// <summary>
+// Multiplication of scalar and matrix.
+// </summary>
+// <param name="left">Left matrix in the subtraction.</param>
+// <param name="right">Right matrix in the subtraction.</param>
+// <returns>Difference of left and right matrices.</returns>
+operator * (left: Float, right: FloatMatrix) -> FloatMatrix {
+	result := FloatMatrix new(right dimensions width, right dimensions height)
+	for (x in 0 .. right dimensions width)
+		for (y in 0 .. right dimensions height)
+			result elements[x + right dimensions width * y] = left * right elements[x + right dimensions width * y]
+	result
+}
+
+// <summary>
+// Addition of matrices.
+// </summary>
+// <param name="left">Left matrix in the addition.</param>
+// <param name="right">Right matrix in the addition.</param>
+// <returns>Sum of left and right matrices.</returns>
+operator + (left: FloatMatrix, right: FloatMatrix) -> FloatMatrix {
+	if (left dimensions width != right dimensions width || left dimensions height != right dimensions height)
+		InvalidDimensionsException new() throw()
+	result := FloatMatrix new (left dimensions width, left dimensions height)
+	for (x in 0 .. right dimensions width) {
+		for (y in 0 .. right dimensions height) {
+			temp := left elements[x + left dimensions width * y] + right elements[x + right dimensions width * y]
+			result elements[x + result dimensions width * y] = temp
+		}
+	}
+result
+}
+
+// <summary>
+// Subtraction of matrices.
+// </summary>
+// <param name="left">Left matrix in the subtraction.</param>
+// <param name="right">Right matrix in the subtraction.</param>
+// <returns>Difference of left and right matrices.</returns>
+operator - (left: FloatMatrix, right: FloatMatrix) -> FloatMatrix {
+	if (left dimensions width != right dimensions width || left dimensions height != right dimensions height)
+		InvalidDimensionsException new() throw()
+	result := FloatMatrix new (left dimensions width, left dimensions height)
+	for (x in 0 .. right dimensions width) {
+		for (y in 0 .. right dimensions height) {
+			temp := left elements[x + left dimensions width * y] - right elements[x + right dimensions width * y]
 			result elements[x + result dimensions width * y] = temp
 		}
 	}
