@@ -24,24 +24,19 @@ version(unix || apple) {
         }
 
         wait: func ~timed (seconds: Double) -> Bool {
-            version (!apple) {
-                ts: TimeSpec
-                __setupTimeout(ts&, seconds)
-                    
-                result := pthread_timedjoin_np(pthread, null, ts&)
-                return (result == 0)
-            }
+          version (apple || android) { return __fake_timedjoin(seconds) }
+          else {
+            ts: TimeSpec
+            __setupTimeout(ts&, seconds)
 
-            version (apple) {
-                return __fake_timedjoin(seconds)
-            }
-            false
+            result := pthread_timedjoin_np(pthread, null, ts&)
+            return (result == 0)
+          }
+          false
         }
 
         cancel: func -> Bool {
-          version (android) {
-            Exception new(This, "Unsupported platform!\n") throw()
-          } else
+          version (!android)
             return this alive?() && (pthread_cancel(this pthread) == 0)
           false
         }
@@ -93,7 +88,7 @@ version(unix || apple) {
                 seconds -= 0.02
                 if (!alive?()) {
                     // successfully joined
-                    return true 
+                    return true
                 }
             }
             false
@@ -112,7 +107,7 @@ version(unix || apple) {
         tv_nsec: extern Long
     }
 
-    version (!apple) {
+    version (!apple && !android) {
         // Using proto here as defining '_GNU_SOURCE' seems to cause more trouble than anything else...
         pthread_timedjoin_np: extern proto func (thread: PThread, retval: Pointer, abstime: TimeSpec*) -> Int
     }
