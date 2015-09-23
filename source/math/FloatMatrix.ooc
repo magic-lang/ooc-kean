@@ -302,20 +302,6 @@ result
 }
 
 // <summary>
-// Multiplication of scalar and matrix.
-// </summary>
-// <param name="left">Left matrix in the subtraction.</param>
-// <param name="right">Right matrix in the subtraction.</param>
-// <returns>Difference of left and right matrices.</returns>
-operator * (left: Float, right: FloatMatrix) -> FloatMatrix {
-	result := FloatMatrix new(right dimensions width, right dimensions height)
-	for (x in 0 .. right dimensions width)
-		for (y in 0 .. right dimensions height)
-			result elements[x + right dimensions width * y] = left * right elements[x + right dimensions width * y]
-	result
-}
-
-// <summary>
 // Addition of matrices.
 // </summary>
 // <param name="left">Left matrix in the addition.</param>
@@ -351,6 +337,20 @@ operator - (left: FloatMatrix, right: FloatMatrix) -> FloatMatrix {
 		}
 	}
 result
+}
+
+// <summary>
+// Multiplication of scalar and matrix.
+// </summary>
+// <param name="left">Scalar in the multiplication.</param>
+// <param name="right">Matrix in the multiplication.</param>
+// <returns>Product of the sclar and matrix.</returns>
+operator * (left: Float, right: FloatMatrix) -> FloatMatrix {
+	result := FloatMatrix new (right dimensions width, right dimensions height)
+	for (x in 0 .. right dimensions width)
+		for (y in 0 .. right dimensions height)
+			result elements[x + right dimensions width * y] = left * right elements[x + right dimensions width * y]
+	result
 }
 
 DivisionByZeroException: class extends Exception {
