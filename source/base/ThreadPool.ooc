@@ -155,7 +155,7 @@ ThreadPool: class {
 		for (i in 0 .. this _threadCount) {
 			this _threads[i] free()
 			this _threadMutexes[i] destroy()
-		}			
+		}
 		gc_free(this _threads data)
 		this _tasks free()
 		this _allFinishedCondition free()
