@@ -42,14 +42,12 @@ RecycleBin: class {
 		this _mutex unlock()
 	}
 	free: override func {
-		this _mutex lock()
 		this clean()
 		this _monochrome free()
 		this _bgr free()
 		this _bgra free()
 		this _uv free()
-		this _mutex unlock()
-		this _mutex free()
+		this _mutex destroy()
 		super()
 	}
 	_add: func (image: OpenGLPacked, list: VectorList<OpenGLPacked>) {
