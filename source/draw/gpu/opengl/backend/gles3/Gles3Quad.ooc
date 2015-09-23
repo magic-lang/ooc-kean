@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with This software. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 import include/gles3
 import ../GLQuad
 import Gles3VertexArrayObject, Gles3Debug
