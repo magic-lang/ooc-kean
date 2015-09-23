@@ -44,9 +44,9 @@ OpenGLContext: class extends GpuContext {
 		this _transformTextureMap = OpenGLMapTransformTexture new(this)
 		this _renderer = _backend createRenderer()
 	}
-	init: func { this init(Context create()) }
-	init: func ~shared (other: This) { this init(Context create(other _backend)) }
-	init: func ~window (nativeWindow: NativeWindow) { this init(Context create(nativeWindow)) }
+	init: func { this init(GLContext createContext()) }
+	init: func ~shared (other: This) { this init(GLContext createContext(other _backend)) }
+	init: func ~window (nativeWindow: NativeWindow) { this init(GLContext createContext(nativeWindow)) }
 	free: override func {
 		this _backend makeCurrent()
 		this _transformTextureMap free()
