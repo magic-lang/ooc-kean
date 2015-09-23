@@ -47,7 +47,7 @@ _ThreadPromise: class extends Promise {
 		status
 	}
 	cancel: override func -> Bool {
-		//TODO: Cancel thread
+		this _thread cancel()
 		status := false
 		this _mutex lock()
 		if (this _state == _PromiseState Unfinished) {
@@ -104,7 +104,7 @@ _ThreadResultPromise: class <T> extends ResultPromise<T> {
 		status ? this _result[T] : defaultValue
 	}
 	cancel: override func -> Bool {
-		//TODO: Cancel thread
+		this _thread cancel()
 		status := false
 		this _mutex lock()
 		if (this _state == _PromiseState Unfinished) {
