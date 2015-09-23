@@ -16,11 +16,10 @@
  */
 
 use ooc-base
+use ooc-math
 import os/Time
 import threading/native/ConditionUnix
 import threading/Thread
-
-ULLONG_MAX: extern const UInt64
 
 GLFence: abstract class {
 	_backend: Pointer = null
@@ -28,7 +27,11 @@ GLFence: abstract class {
 	_mutex := Mutex new()
 
 	init: func
-	free: override func { super() }
+	free: override func {
+		this _mutex destroy()
+		this _syncCondition free()
+		super()
+	}
 	clientWait: abstract func (timeout: UInt64 = ULLONG_MAX)
 	wait: abstract func
 	sync: abstract func
