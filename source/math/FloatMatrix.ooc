@@ -25,7 +25,6 @@ FloatMatrix : cover {
 	elements: Float[]
 
 	init: func@ ~IntSize2D (= dimensions)
-	init: func@ ~nullConstructor { this init(0, 0) }
 	init: func@ (width, height: Int) {
 		this init(IntSize2D new(width, height))
 		this elements = Float[width * height] new()
