@@ -15,6 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import FloatPoint3D
 import FloatTransform3D
+import FloatMatrix
+import VectorList
 import math
 
 Quaternion: cover {
@@ -259,6 +261,76 @@ Quaternion: cover {
 				)
 		}
 		result
+	}
+	weightedMeanOfQuaternions: static func (quaternions: VectorList<Quaternion>, weights: Float[]) -> Quaternion {
+		// Implementation of the QUEST algorithm. For variable meanings, see original publication:
+		// M.D. Shuster and S.D. Oh, "Three-Axis Attitude Determination from Vector Observations", 1981
+		// [http://www.malcolmdshuster.com/Pub_1981a_J_TRIAD-QUEST_scan.pdf]
+		// TODO: Fix singularity problem when the angle is close to PI, using sequential rotations
+		// TODO: Optimze for the special case when the reference vectors are the xyz axes
+		vectorCount := 3 * quaternions count
+		referenceVectors := FloatMatrix new(vectorCount, 3)
+		observationVectors := FloatMatrix new(vectorCount, 3)
+		for (i in 0 .. quaternions count)
+			Quaternion _createVectorMeasurementsForQuest(quaternions[i], i, referenceVectors, observationVectors)
+		Quaternion _normalizeFloatArray(weights, quaternions count)
+
+		B := FloatMatrix new(3, 3)
+		w := FloatMatrix new(1, 3)
+		v := FloatMatrix new(1, 3)
+		for (n in 0 .. vectorCount) {
+			for (i in 0 .. referenceVectors dimensions height) {
+				v set(0, i, referenceVectors get(n, i))
+				w set(0, i, observationVectors get(n, i))
+			}
+			B += weights[n / 3] / 3.0f * w * v transpose()
+		}
+		S := B + B transpose()
+
+		temporaryZ := FloatPoint3D new()
+		for (n in 0 .. vectorCount)
+			temporaryZ += weights[n / 3] / 3.0f * FloatPoint3D new(observationVectors get(n, 0), observationVectors get(n, 1), observationVectors get(n, 2)) vectorProduct(FloatPoint3D new(referenceVectors get(n, 0), referenceVectors get(n, 1), referenceVectors get(n, 2)))
+		Quaternion _copyFloatPoint3DToFloatMatrixColumn(Z := FloatMatrix new(1, 3), temporaryZ, 0, 0)
+
+		// TODO: Implement Newton-Raphson for better estimation of max(eigenvalue) (Eq. 70 in the article).
+		// For this, the adjugate and determinant matrix operations are needed
+		maximumEigenvalue := 1.0f
+		linearCoefficients := (maximumEigenvalue + B trace()) * FloatMatrix identity(3) - S
+		Y := linearCoefficients solve(Z)
+
+		constant := 1.0f / sqrt(1.0f + ((Y transpose() * Y) get(0, 0) as Float))
+		vector := FloatMatrix new(1, 4)
+		vector set(0, 3, 1.0f)
+		for (i in 0 .. 3)
+			vector set(i, 0, Y get(i, 0))
+		q := constant * vector
+		Quaternion new(q get(3, 0), -q get(0, 0), -q get(1, 0), -q get(2, 0))
+	}
+	_createVectorMeasurementsForQuest: static func (quaternion: Quaternion, index: Int, V, W: FloatMatrix) {
+		xAxis := FloatPoint3D new(1.0f, 0.0f, 0.0f)
+		yAxis := FloatPoint3D new(0.0f, 1.0f, 0.0f)
+		zAxis := FloatPoint3D new(0.0f, 0.0f, 1.0f)
+		Quaternion _copyFloatPoint3DToFloatMatrixColumn(V, xAxis, index * 3 + 0, 0)
+		Quaternion _copyFloatPoint3DToFloatMatrixColumn(V, yAxis, index * 3 + 1, 0)
+		Quaternion _copyFloatPoint3DToFloatMatrixColumn(V, zAxis, index * 3 + 2, 0)
+		xAxisRotated := quaternion * xAxis
+		yAxisRotated := quaternion * yAxis
+		zAxisRotated := quaternion * zAxis
+		Quaternion _copyFloatPoint3DToFloatMatrixColumn(W, xAxisRotated, index * 3 + 0, 0)
+		Quaternion _copyFloatPoint3DToFloatMatrixColumn(W, yAxisRotated, index * 3 + 1, 0)
+		Quaternion _copyFloatPoint3DToFloatMatrixColumn(W, zAxisRotated, index * 3 + 2, 0)
+	}
+	_copyFloatPoint3DToFloatMatrixColumn: static func (matrix: FloatMatrix, point: FloatPoint3D, xOffset, yOffset: Int) {
+		matrix set(xOffset, yOffset + 0, point x)
+		matrix set(xOffset, yOffset + 1, point y)
+		matrix set(xOffset, yOffset + 2, point z)
+	}
+	_normalizeFloatArray: static func (array: Float[], length: Int) {
+		arraySum := 0.0f
+		for (i in 0 .. length)
+			arraySum += array[i]
+		for (i in 0 .. length)
+			array[i] /= arraySum
 	}
 	toString: func -> String {
 		"Real: " << "%8f" formatFloat(this real) >>
