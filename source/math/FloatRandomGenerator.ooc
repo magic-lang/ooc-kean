@@ -50,14 +50,16 @@ FloatGaussianRandomGenerator: class extends FloatRandomGenerator {
 	_backend: FloatUniformRandomGenerator
 	_mu := 0.0f
 	_sigma := 1.0f
+	_secondValue : Float
+	_hasSecond := false
 	init: func {
-		this _backend = FloatUniformRandomGenerator new()
+		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f - Float minimumValue)
 	}
 	init: func ~withSeed (seed: Int) {
-		this _backend = FloatUniformRandomGenerator new(seed)
+		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f - Float minimumValue, seed)
 	}
 	init: func ~withParameters (=_mu, =_sigma, seed := Time microtime()) {
-		this _backend = FloatUniformRandomGenerator new(seed)
+		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f - Float minimumValue, seed)
 	}
 	init: func ~withBackend (=_backend)
 	init: func ~withBackendAndParameters (=_mu, =_sigma, =_backend)
@@ -66,11 +68,20 @@ FloatGaussianRandomGenerator: class extends FloatRandomGenerator {
 		super()
 	}
 	next: func -> Float {
-		first := this _backend next()
-		if (first == 0.0f)
-			first = Float minimumValue
-		second := this _backend next()
-		value := (-2.0f * first log()) sqrt() * (2.0f * Float pi * second) cos()
-		value * this _sigma + this _mu
+		result : Float
+		if (this _hasSecond) {
+			result = this _secondValue
+			this _hasSecond = false
+		}
+		else {
+			scale := (-2.0f * (this _backend next()) log()) sqrt()
+			trigValue := (2.0f * Float pi * (this _backend next()))
+			value := scale * trigValue cos()
+			secondValue := scale * trigValue sin()
+			result = value * this _sigma + this _mu
+			this _secondValue = secondValue * this _sigma + this _mu
+			this _hasSecond = true
+		}
+		result
 	}
 }

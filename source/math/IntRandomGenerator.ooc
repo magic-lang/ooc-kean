@@ -15,17 +15,35 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-math
+import math
 import os/Time
 
-IntRandomGenerator: class {
-	_backend: FloatRandomGenerator
-	init: func ~withBackend (=_backend)
-	free: override func {
-		this _backend free()
-		super()
+IntUniformRandomGenerator: class {
+	_state, _min, _max, _range: Int
+	init: func (seed := Time microtime()) {
+		this _min = 0
+		this _max = 32767
+		this _state = seed
+		this _range = this _max - this _min + 1
+	}
+	init: func ~withParameters (=_min, =_max, seed := Time microtime()) {
+		this _state = seed
+		this _range = this _max - this _min + 1
+	}
+	_generate: func -> Int {
+		this _state = 214013 * this _state + 2531011
+		(this _state >> 16) & 0x7FFF
+	}
+	next: func ~fast -> Int {
+		value := this _generate()
+		this _min + (value % this _range)
 	}
 	next: func -> Int {
-		this _backend next() as Int
+		valuea := this _generate()
+		valueb := this _generate()
+		valuec := this _generate()
+		result := (valuea as Int << 16) | (valueb as Int << 1) | (valuec & 1)
+		this _min + (result % this _range)
 	}
 	next: func ~withCount (count: Int) -> Int[] {
 		result := Int[count] new()
@@ -35,35 +53,47 @@ IntRandomGenerator: class {
 	}
 }
 
-IntUniformRandomGenerator: class extends IntRandomGenerator {
+IntGaussianRandomGenerator: class {
+	_mu := 0.0f
+	_sigma := 1.0f
+	_hasSecond := false
+	_secondValue : Float
+	_backend: FloatUniformRandomGenerator
 	init: func {
-		super(FloatUniformRandomGenerator new(0, 100))
+		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f - Float minimumValue)
+	}
+	free: func {
+		this _backend free()
 	}
 	init: func ~withSeed (seed: Int) {
-		super(FloatUniformRandomGenerator new(0, 100, seed))
+		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f - Float minimumValue, seed)
 	}
-	init: func ~withParameters (min, max: Int, seed := Time microtime()) {
-		super(FloatUniformRandomGenerator new(min, max, seed))
+	init: func ~withParameters (=_mu, =_sigma, seed := Time microtime()) {
+		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f - Float minimumValue, seed)
 	}
-}
-
-IntGaussianRandomGenerator: class extends IntRandomGenerator {
-	init: func {
-		super(FloatGaussianRandomGenerator new(0.0f, 10.0f))
+	init: func ~withUniformBackend (=_backend)
+	init: func ~withUniformBackendAndParameters (=_mu, =_sigma, =_backend)
+	next: func -> Int {
+		result : Float
+		if (this _hasSecond) {
+			result = this _secondValue
+			this _hasSecond = false
+		}
+		else {
+			scale := (-2.0f * (this _backend next()) log()) sqrt()
+			trigValue := (2.0f * Float pi * (this _backend next()))
+			value := scale * trigValue cos()
+			secondValue := scale * trigValue sin()
+			result = value * this _sigma + this _mu
+			this _secondValue = secondValue * this _sigma + this _mu
+			this _hasSecond = true
+		}
+		result as Int
 	}
-	init: func ~withSeed (seed: Int) {
-		super(FloatGaussianRandomGenerator new(0.0f, 10.0f, seed))
-	}
-	init: func ~withParameters (mu, sigma: Float, seed := Time microtime()) {
-		super(FloatGaussianRandomGenerator new(mu, sigma, seed))
-	}
-	init: func ~withBackend (backend: FloatGaussianRandomGenerator) {
-		super(backend)
-	}
-	init: func ~withUniformBackend (backend: FloatUniformRandomGenerator) {
-		super(FloatGaussianRandomGenerator new~withBackendAndParameters(0.0f, 10.0f, backend))
-	}
-	init: func ~withUniformBackendAndParameters (mu, sigma: Float, backend: FloatUniformRandomGenerator) {
-		super(FloatGaussianRandomGenerator new~withBackendAndParameters(mu, sigma, backend))
+	next: func ~withCount (count: Int) -> Int[] {
+		result := Int[count] new()
+		for (i in 0 .. count)
+			result[i] = this next()
+		result
 	}
 }
