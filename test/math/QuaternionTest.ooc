@@ -18,6 +18,7 @@
 use ooc-unit
 use ooc-math
 use ooc-base
+use ooc-collections
 import math
 import lang/IO
 
@@ -36,6 +37,8 @@ QuaternionTest: class extends Fixture {
 	quaternion10 := Quaternion new(0.12f, 0.4472136f, 0.8366f, 0.316227766f)
 	point0 := FloatPoint3D new(22.221f, -3.1f, 10.0f)
 	point1 := FloatPoint3D new(12.221f, 13.1f, 20.0f)
+	quaternion := Quaternion new()
+	quaternionList := VectorList<Quaternion> new()
 	init: func {
 		super("Quaternion")
 		tolerance := 0.0001f
@@ -280,6 +283,36 @@ QuaternionTest: class extends Fixture {
 			expect(interpolated x, is equal to(0.05838604f) within(tolerance))
 			expect(interpolated y, is equal to(0.10923036f) within(tolerance))
 			expect(interpolated z, is equal to(0.99080002f) within(tolerance))
+		})
+		this add("weightedMeanOfQuaternions_X", func {
+			quaternionList clear()
+			quaternionList add(quaternion createRotationX(0.70f))
+			quaternionList add(quaternion createRotationX(0.78f))
+			quaternionList add(quaternion createRotationX(0.86f))
+			weights := Float[quaternionList count] new()
+			for (i in 0 .. quaternionList count)
+				weights[i] = 1
+			expect(Quaternion weightedMeanOfQuaternions(quaternionList, weights) rotationX, is equal to(0.78f) within(0.05f))
+		})
+		this add("weightedMeanOfQuaternions_Y", func {
+			quaternionList clear()
+			quaternionList add(quaternion createRotationY(0.12f))
+			quaternionList add(quaternion createRotationY(0.20f))
+			quaternionList add(quaternion createRotationY(0.28f))
+			weights := Float[quaternionList count] new()
+			for (i in 0 .. quaternionList count)
+				weights[i] = 1
+			expect(Quaternion weightedMeanOfQuaternions(quaternionList, weights) rotationY, is equal to(0.20f) within(0.05f))
+		})
+		this add("weightedMeanOfQuaternions_Z", func {
+			quaternionList clear()
+			quaternionList add(quaternion createRotationZ(-1.78f))
+			quaternionList add(quaternion createRotationZ(-1.7f))
+			quaternionList add(quaternion createRotationZ(-1.62f))
+			weights := Float[quaternionList count] new()
+			for (i in 0 .. quaternionList count)
+				weights[i] = 1
+			expect(Quaternion weightedMeanOfQuaternions(quaternionList, weights) rotationZ, is equal to(-1.7f) within(0.05f))
 		})
 	}
 }
