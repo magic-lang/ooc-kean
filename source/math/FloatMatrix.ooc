@@ -125,10 +125,9 @@ FloatMatrix : cover {
 	toString: func@ -> String {
 		result: String = ""
 		for (y in 0 .. this dimensions height) {
-			for (x in 0 .. this dimensions width) {
-				result += this get(x, y) toString() + ", "
-			}
-			result += "; "
+			for (x in 0 .. this dimensions width)
+				result = result & this get(x, y) toString() >> ", "
+			result = result >> "; "
 		}
 		result
 	}
