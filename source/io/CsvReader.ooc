@@ -54,16 +54,16 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		rowData free()
 		result
 	}
-	_extractStringLiteral: func (rowData: Text, position: Int*) -> Text {
+	_extractStringLiteral: func (rowData: Text, position: Int@) -> Text {
 		result: Text
 		readCharacter: Char
 		textBuilder := TextBuilder new()
 		rowDataLength := rowData count
-		while (position@ < rowDataLength && (readCharacter = rowData[position@]) != '"') {
-			textBuilder append(rowData[position@])
-			++position@
+		while (position < rowDataLength && (readCharacter = rowData[position]) != '"') {
+			textBuilder append(rowData[position])
+			position += 1
 		}
-		++position@
+		position += 1
 		result = textBuilder toText()
 		textBuilder free()
 		result
