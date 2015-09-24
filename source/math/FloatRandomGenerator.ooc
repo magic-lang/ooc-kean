@@ -27,22 +27,30 @@ FloatRandomGenerator: abstract class {
 }
 
 FloatUniformRandomGenerator: class extends FloatRandomGenerator {
-	_state: Int
-	_min := 0.0f
-	_max := 1.0f
+	_state: UInt
+	_min, _max, _rangeCoefficient: Float
+	minimum ::= this _min
+	maximum ::= this _max
 	init: func {
 		this _state = Time microtime()
+		this updateRange(0.0f, 1.0f)
 	}
 	init: func ~withSeed (seed: Int) {
 		this _state = seed
+		this updateRange(0.0f, 1.0f)
 	}
-	init: func ~withParameters (=_min, =_max, seed := Time microtime()) {
+	init: func ~withParameters (min, max: Float, seed := Time microtime()) {
 		this _state = seed
+		this updateRange(min, max)
+	}
+	updateRange: func (=_min, =_max) {
+		this _rangeCoefficient = (1.0f / 4294967295.0f) * (this _max - this _min)
 	}
 	next: func -> Float {
-		this _state = 214013 * this _state + 2531011
-		value := ((((this _state >> 16) & 0x7fff) % 10000) as Float) / 10000.0f
-		Float linearInterpolation(this _min, this _max, value)
+		this _state ^= (this _state << 5)
+		this _state ^= (this _state >> 13)
+		this _state ^= (this _state << 6)
+		this _min + (this _state as Float) * (this _rangeCoefficient)
 	}
 }
 
@@ -53,19 +61,22 @@ FloatGaussianRandomGenerator: class extends FloatRandomGenerator {
 	_secondValue : Float
 	_hasSecond := false
 	init: func {
-		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f - Float minimumValue)
+		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f)
 	}
 	init: func ~withSeed (seed: Int) {
-		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f - Float minimumValue, seed)
+		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f, seed)
 	}
 	init: func ~withParameters (=_mu, =_sigma, seed := Time microtime()) {
-		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f - Float minimumValue, seed)
+		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f, seed)
 	}
 	init: func ~withBackend (=_backend)
 	init: func ~withBackendAndParameters (=_mu, =_sigma, =_backend)
 	free: override func {
 		this _backend free()
 		super()
+	}
+	setRange: func (=_mu, =_sigma) {
+		_hasSecond = false
 	}
 	next: func -> Float {
 		result : Float

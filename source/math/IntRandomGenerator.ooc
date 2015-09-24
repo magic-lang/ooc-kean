@@ -20,29 +20,35 @@ import os/Time
 
 IntUniformRandomGenerator: class {
 	_state, _min, _max, _range: Int
+	_shortRange: Bool
+	minimum ::= this _min
+	maximum ::= this _max
 	init: func (seed := Time microtime()) {
-		this _min = 0
-		this _max = 32767
+		this setRange(0, Int maximumValue)
 		this _state = seed
-		this _range = this _max - this _min + 1
 	}
-	init: func ~withParameters (=_min, =_max, seed := Time microtime()) {
+	init: func ~withParameters (min, max: Int, seed := Time microtime()) {
+		this setRange(min, max)
 		this _state = seed
-		this _range = this _max - this _min + 1
 	}
 	_generate: func -> Int {
 		this _state = 214013 * this _state + 2531011
 		(this _state >> 16) & 0x7FFF
 	}
-	next: func ~fast -> Int {
-		value := this _generate()
-		this _min + (value % this _range)
+	setRange: func (=_min, =_max) {
+		this _range = this _max - this _min + 1
+		this _shortRange = (this _range < 0x7FFF)
 	}
 	next: func -> Int {
-		valuea := this _generate()
-		valueb := this _generate()
-		valuec := this _generate()
-		result := (valuea as Int << 16) | (valueb as Int << 1) | (valuec & 1)
+		result : Int
+		first := this _generate()
+		if (this _shortRange)
+			result = first
+		else {
+			second := this _generate()
+			third := this _generate()
+			result = (first as Int << 16) | (second as Int << 1) | (third & 1)
+		}
 		this _min + (result % this _range)
 	}
 	next: func ~withCount (count: Int) -> Int[] {
@@ -54,41 +60,25 @@ IntUniformRandomGenerator: class {
 }
 
 IntGaussianRandomGenerator: class {
-	_mu := 0.0f
-	_sigma := 1.0f
-	_hasSecond := false
-	_secondValue : Float
-	_backend: FloatUniformRandomGenerator
+	_backend: FloatRandomGenerator
 	init: func {
-		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f - Float minimumValue)
+		this _backend = FloatGaussianRandomGenerator new(0.0f, 1.0f)
 	}
 	init: func ~withSeed (seed: Int) {
-		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f - Float minimumValue, seed)
+		this _backend = FloatGaussianRandomGenerator new(0.0f, 1.0f, seed)
 	}
-	init: func ~withParameters (=_mu, =_sigma, seed := Time microtime()) {
-		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f - Float minimumValue, seed)
+	init: func ~withParameters (mu, sigma: Float, seed := Time microtime()) {
+		this _backend = FloatGaussianRandomGenerator new(mu, sigma, seed)
 	}
 	init: func ~withUniformBackend (=_backend)
-	init: func ~withUniformBackendAndParameters (=_mu, =_sigma, =_backend)
+	init: func ~withUniformBackendAndParameters (mu, sigma: Float, backend: FloatUniformRandomGenerator) {
+		this _backend = FloatGaussianRandomGenerator new~withBackendAndParameters(mu, sigma, backend)
+	}
 	free: func {
 		this _backend free()
 	}
 	next: func -> Int {
-		result : Float
-		if (this _hasSecond) {
-			result = this _secondValue
-			this _hasSecond = false
-		}
-		else {
-			scale := (-2.0f * (this _backend next()) log()) sqrt()
-			trigValue := (2.0f * Float pi * (this _backend next()))
-			value := scale * trigValue cos()
-			secondValue := scale * trigValue sin()
-			result = value * this _sigma + this _mu
-			this _secondValue = secondValue * this _sigma + this _mu
-			this _hasSecond = true
-		}
-		result as Int
+		this _backend next() as Int
 	}
 	next: func ~withCount (count: Int) -> Int[] {
 		result := Int[count] new()
