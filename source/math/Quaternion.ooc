@@ -262,7 +262,7 @@ Quaternion: cover {
 		}
 		result
 	}
-	weightedMeanOfQuaternions: static func (quaternions: VectorList<Quaternion>, weights: Float[]) -> Quaternion {
+	weightedMeanOfQuaternions: static func (quaternions: VectorList<This>, weights: Float[]) -> This {
 		// Implementation of the QUEST algorithm. For variable meanings, see original publication:
 		// M.D. Shuster and S.D. Oh, "Three-Axis Attitude Determination from Vector Observations", 1981
 		// [http://www.malcolmdshuster.com/Pub_1981a_J_TRIAD-QUEST_scan.pdf]
@@ -272,8 +272,8 @@ Quaternion: cover {
 		referenceVectors := FloatMatrix new(vectorCount, 3)
 		observationVectors := FloatMatrix new(vectorCount, 3)
 		for (i in 0 .. quaternions count)
-			Quaternion _createVectorMeasurementsForQuest(quaternions[i], i, referenceVectors, observationVectors)
-		Quaternion _normalizeFloatArray(weights, quaternions count)
+			This _createVectorMeasurementsForQuest(quaternions[i], i, referenceVectors, observationVectors)
+		This _normalizeFloatArray(weights, quaternions count)
 
 		B := FloatMatrix new(3, 3)
 		w := FloatMatrix new(1, 3)
@@ -290,7 +290,7 @@ Quaternion: cover {
 		temporaryZ := FloatPoint3D new()
 		for (n in 0 .. vectorCount)
 			temporaryZ += weights[n / 3] / 3.0f * FloatPoint3D new(observationVectors get(n, 0), observationVectors get(n, 1), observationVectors get(n, 2)) vectorProduct(FloatPoint3D new(referenceVectors get(n, 0), referenceVectors get(n, 1), referenceVectors get(n, 2)))
-		Quaternion _copyFloatPoint3DToFloatMatrixColumn(Z := FloatMatrix new(1, 3), temporaryZ, 0, 0)
+		This _copyFloatPoint3DToFloatMatrixColumn(Z := FloatMatrix new(1, 3), temporaryZ, 0, 0)
 
 		// TODO: Implement Newton-Raphson for better estimation of max(eigenvalue) (Eq. 70 in the article).
 		// For this, the adjugate and determinant matrix operations are needed
@@ -304,21 +304,21 @@ Quaternion: cover {
 		for (i in 0 .. 3)
 			vector set(i, 0, Y get(i, 0))
 		q := constant * vector
-		Quaternion new(q get(3, 0), -q get(0, 0), -q get(1, 0), -q get(2, 0))
+		This new(q get(3, 0), -q get(0, 0), -q get(1, 0), -q get(2, 0))
 	}
-	_createVectorMeasurementsForQuest: static func (quaternion: Quaternion, index: Int, V, W: FloatMatrix) {
+	_createVectorMeasurementsForQuest: static func (quaternion: This, index: Int, V, W: FloatMatrix) {
 		xAxis := FloatPoint3D new(1.0f, 0.0f, 0.0f)
 		yAxis := FloatPoint3D new(0.0f, 1.0f, 0.0f)
 		zAxis := FloatPoint3D new(0.0f, 0.0f, 1.0f)
-		Quaternion _copyFloatPoint3DToFloatMatrixColumn(V, xAxis, index * 3 + 0, 0)
-		Quaternion _copyFloatPoint3DToFloatMatrixColumn(V, yAxis, index * 3 + 1, 0)
-		Quaternion _copyFloatPoint3DToFloatMatrixColumn(V, zAxis, index * 3 + 2, 0)
+		This _copyFloatPoint3DToFloatMatrixColumn(V, xAxis, index * 3 + 0, 0)
+		This _copyFloatPoint3DToFloatMatrixColumn(V, yAxis, index * 3 + 1, 0)
+		This _copyFloatPoint3DToFloatMatrixColumn(V, zAxis, index * 3 + 2, 0)
 		xAxisRotated := quaternion * xAxis
 		yAxisRotated := quaternion * yAxis
 		zAxisRotated := quaternion * zAxis
-		Quaternion _copyFloatPoint3DToFloatMatrixColumn(W, xAxisRotated, index * 3 + 0, 0)
-		Quaternion _copyFloatPoint3DToFloatMatrixColumn(W, yAxisRotated, index * 3 + 1, 0)
-		Quaternion _copyFloatPoint3DToFloatMatrixColumn(W, zAxisRotated, index * 3 + 2, 0)
+		This _copyFloatPoint3DToFloatMatrixColumn(W, xAxisRotated, index * 3 + 0, 0)
+		This _copyFloatPoint3DToFloatMatrixColumn(W, yAxisRotated, index * 3 + 1, 0)
+		This _copyFloatPoint3DToFloatMatrixColumn(W, zAxisRotated, index * 3 + 2, 0)
 	}
 	_copyFloatPoint3DToFloatMatrixColumn: static func (matrix: FloatMatrix, point: FloatPoint3D, xOffset, yOffset: Int) {
 		matrix set(xOffset, yOffset + 0, point x)
