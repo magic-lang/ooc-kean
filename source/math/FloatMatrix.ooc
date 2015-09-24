@@ -24,10 +24,11 @@ FloatMatrix : cover {
 	Dimensions: IntSize2D { get { this dimensions } }
 	elements: Float[]
 
-	init: func@ ~IntSize2D (= dimensions)
+	init: func@ ~IntSize2D (= dimensions) {
+		this elements = Float[dimensions area] new()
+	}
 	init: func@ (width, height: Int) {
 		this init(IntSize2D new(width, height))
-		this elements = Float[width * height] new()
 	}
 
 	// <summary>
