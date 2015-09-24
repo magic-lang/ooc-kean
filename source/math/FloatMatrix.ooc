@@ -113,13 +113,12 @@ FloatMatrix : cover {
 	swaprows: func@ (row1, row2: Int) {
 		order := this order
 		buffer: Float
-		if (row1 != row2) {
+		if (row1 != row2)
 			for (i in 0 .. order) {
 				buffer = this elements[i + row1 * this dimensions width]
 				this elements[i + row1 * this dimensions width] = this elements[i + row2 * this dimensions width]
 				this elements[i + row2 * this dimensions width] = buffer
 			}
-		}
 	}
 
 	toString: func@ -> String {
@@ -154,14 +153,13 @@ FloatMatrix : cover {
 			p swaprows(position, pivotRow)
 			u swaprows(position, pivotRow)
 
-			if (u elements[position + u dimensions width * position] != 0) {
+			if (u elements[position + u dimensions width * position] != 0)
 				for (y in position + 1 .. order) {
 					pivot := u elements[position + y * u dimensions width] / u elements[position + position * u dimensions width]
 					for (x in position .. order)
 						u elements[x + y * u dimensions width] = u elements[x + y * u dimensions width] - pivot * u elements[x + position * u dimensions width]
 					u elements[position + y * u dimensions width] = pivot
 				}
-			}
 		}
 		for (y in 0 .. order)
 			for (x in 0 .. y) {
@@ -183,7 +181,7 @@ FloatMatrix : cover {
 		if (this dimensions width > this dimensions height)
 			InvalidDimensionsException new() throw()
 		// TODO: This can probably be cleaned up...
-		else {
+		else
 			if (this isSquare) {
 				lup := this lupDecomposition()
 				temp := lup[2] * y
@@ -213,7 +211,6 @@ FloatMatrix : cover {
 				lup[2] free()
 				lup free()
 			}
-		}
 		result
 	}
 
