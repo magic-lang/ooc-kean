@@ -31,7 +31,12 @@ OpenGLSurface: abstract class extends GpuSurface {
 	draw: override func (action: Func) {
 		this _bind()
 		this context backend setViewport(this viewport)
-		this context backend enableBlend(this blend)
+		if (this opacity < 1.0f)
+			this context backend blend(this opacity)
+		else if (this blend)
+			this context backend blend()
+		else
+			this context backend enableBlend(false)
 		action()
 		this _unbind()
 	}
