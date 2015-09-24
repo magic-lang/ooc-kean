@@ -296,9 +296,8 @@ FloatMatrix : cover {
 		if (this dimensions != other dimensions)
 			raise("Invalid dimensions in FloatMatrix + operator: dimensions must match!")
 		result := This new(this dimensions)
-		for (x in 0 .. this dimensions width)
-			for (y in 0 .. this dimensions height)
-				result elements[x + y * result dimensions width] = this elements[x + y * this dimensions width] + other elements[x + y * other dimensions width]
+		for (i in 0 .. this dimensions area)
+			result elements[i] = this elements[i] + other elements[i]
 		result
 	}
 
@@ -306,18 +305,16 @@ FloatMatrix : cover {
 		if (this dimensions != other dimensions)
 			raise("Invalid dimensions in FloatMatrix - operator: dimensions must match!")
 		result := This new(this dimensions)
-		for (x in 0 .. this dimensions width)
-			for (y in 0 .. this dimensions height)
-				result elements[x + y * result dimensions width] = this elements[x + y * this dimensions width] - other elements[x + y * other dimensions width]
+		for (i in 0 .. this dimensions area)
+			result elements[i] = this elements[i] - other elements[i]
 		result
 	}
 }
 
 operator * (left: Float, right: FloatMatrix) -> FloatMatrix {
 	result := FloatMatrix new(right dimensions)
-	for (x in 0 .. right dimensions width)
-		for (y in 0 .. right dimensions height)
-			result elements[x + y * right dimensions width] = left * right elements[x + y * right dimensions width]
+	for (i in 0 .. right dimensions area)
+		result elements[i] = left * right elements[i]
 	result
 }
 
