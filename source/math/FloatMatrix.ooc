@@ -50,7 +50,7 @@ FloatMatrix : cover {
 	// <param name="x">Column number of a matrix.</param>
 	// <param name="y">Row number of a matrix.</param>
 	// <returns></returns>
-	get: func@ (x, y: Int) -> Float { this elements[x + dimensions width * y] }
+	get: func@ (x, y: Int) -> Float { this elements[x + this dimensions width * y] }
 
 	// <summary>
 	// Set an element in a matrix at position(x,y).
@@ -59,7 +59,7 @@ FloatMatrix : cover {
 	// <param name="y">Row number of a matrix.</param>
 	// <param name="value">The value set at (x,y).</param>
 	// <returns></returns>
-	set: func@ (x: Int, y: Int, value: Float) { this elements[x + dimensions width * y] = value }
+	set: func@ (x: Int, y: Int, value: Float) { this elements[x + this dimensions width * y] = value }
 
 	// <summary>
 	// True if the matrix is a square matrix.
