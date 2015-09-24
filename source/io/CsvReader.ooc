@@ -2,6 +2,8 @@ use ooc-base
 use ooc-collections
 import io/[File, FileReader]
 
+// TODO: Handle multi-line string literals
+
 CsvReader: class extends Iterator<VectorList<Text>> {
 	_fileReader: FileReader
 	init: func (=_fileReader)
@@ -33,7 +35,7 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		readCharacter: Char
 		for (i in 0 .. rowDataLength) {
 			textBuilder := TextBuilder new()
-			while (i < rowDataLength && ((readCharacter = rowData[i]) != ';')) {
+			while (i < rowDataLength && ((readCharacter = rowData[i]) != ',')) {
 				++i
 				match (readCharacter) {
 					case ' ' =>
