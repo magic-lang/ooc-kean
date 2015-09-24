@@ -20,12 +20,12 @@ use ooc-math
 FloatMatrix : cover {
 	// x = column
 	// y = row
-	dimensions: IntSize2D
-	Dimensions: IntSize2D { get { this dimensions } }
+	_dimensions: IntSize2D
+	dimensions: IntSize2D { get { this _dimensions } }
 	elements: Float[]
 
-	init: func@ ~IntSize2D (= dimensions) {
-		this elements = Float[dimensions area] new()
+	init: func@ ~IntSize2D (=_dimensions) {
+		this elements = Float[_dimensions area] new()
 	}
 	init: func@ (width, height: Int) {
 		this init(IntSize2D new(width, height))
@@ -64,7 +64,7 @@ FloatMatrix : cover {
 	// <summary>
 	// True if the matrix is a square matrix.
 	// </summary>
-	isSquare: Bool { get { this Dimensions width == this Dimensions height } }
+	isSquare: Bool { get { this dimensions width == this dimensions height } }
 
 	// <summary>
 	// Minimum of maxtrix dimensions.
