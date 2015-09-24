@@ -27,9 +27,16 @@ SynchronizedQueue: class <T> extends Queue<T> {
 		success
 	}
 	dequeue: func -> (T, Bool) {
+		// No need to lock because the backend is not called directly
 		result: T
 		success := this dequeue(result&)
 		(result, success)
+	}
+	dequeue: func ~functional (onEmpty: T) -> T {
+		this _mutex lock()
+		result := this _backend dequeue(onEmpty)
+		this _mutex unlock()
+		result
 	}
 	peek: func ~out (result: T*) -> Bool {
 		this _mutex lock()
@@ -38,9 +45,16 @@ SynchronizedQueue: class <T> extends Queue<T> {
 		success
 	}
 	peek: func -> (T, Bool) {
+		// No need to lock because the backend is not called directly
 		result: T
 		success := this peek(result&)
 		(result, success)
+	}
+	peek: func ~functional (onEmpty: T) -> T {
+		this _mutex lock()
+		result := this _backend peek(onEmpty)
+		this _mutex unlock()
+		result
 	}
 	clear: func {
 		this _mutex lock()
