@@ -62,9 +62,6 @@ IntGaussianRandomGenerator: class {
 	init: func {
 		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f - Float minimumValue)
 	}
-	free: func {
-		this _backend free()
-	}
 	init: func ~withSeed (seed: Int) {
 		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f - Float minimumValue, seed)
 	}
@@ -73,6 +70,9 @@ IntGaussianRandomGenerator: class {
 	}
 	init: func ~withUniformBackend (=_backend)
 	init: func ~withUniformBackendAndParameters (=_mu, =_sigma, =_backend)
+	free: func {
+		this _backend free()
+	}
 	next: func -> Int {
 		result : Float
 		if (this _hasSecond) {
