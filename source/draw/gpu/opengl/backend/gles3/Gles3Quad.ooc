@@ -27,7 +27,7 @@ Gles3Quad: class extends GLQuad {
 		this vao = Gles3VertexArrayObject new(positions, textureCoordinates, 4, 2)
 		version(debugGL) { validateEnd("quad init") }
 	}
-	free: func {
+	free: override func {
 		this vao free()
 		super()
 	}
