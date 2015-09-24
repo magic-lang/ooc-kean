@@ -15,9 +15,17 @@ CsvWriter: class {
 	}
 	write: func (row: VectorList<Text>) {
 		for (i in 0 .. row count) {
-			this _fileWriter file write(row[i] toString())
+			value := TextBuilder new (row[i])
+			for (k in 0 .. row[i] count)
+				if (this _isWhitespace(row[i][k])) {
+					value prepend('\"')
+					value append('\"')
+					break
+				}
 			if (i < row count - 1)
-				this _fileWriter write(";")
+				value append(',')
+			this _fileWriter file write(value toString())
+			value free()
 		}
 		this _fileWriter write("\r\n")
 	}
@@ -27,5 +35,8 @@ CsvWriter: class {
 		result = This new(FileWriter new(file))
 		file free()
 		result
+	}
+	_isWhitespace: func (value: Char) -> Bool {
+		value == '\t' || value == ' ' || value  == '\r' || value == '\n'
 	}
 }
