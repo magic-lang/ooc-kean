@@ -277,74 +277,43 @@ FloatMatrix : cover {
 			gc_free(this elements data)
 		}
 	}
-}
 
-// <summary>
-// Multiplication of matrices.
-// </summary>
-// <param name="left">Left matrix in the multiplication.</param>
-// <param name="right">Right matrix in the multiplication.</param>
-// <returns>Product of left and right matrices.</returns>
-operator * (left: FloatMatrix, right: FloatMatrix) -> FloatMatrix {
-	if (left dimensions width != right dimensions height)
-		InvalidDimensionsException new() throw()
-	result := FloatMatrix new (right dimensions width, left dimensions height)
-	for (x in 0 .. right dimensions width) {
-		for (y in 0 .. left dimensions height) {
-			temp := result elements[x + result dimensions width * y]
-			for (z in 0 .. left dimensions width) {
-				temp += left elements[z + left dimensions width * y] * right elements[x + right dimensions width * z]
+	operator * (other: This) -> This {
+		if (this dimensions width != other dimensions height)
+			raise("Invalid dimensions in FloatMatrix * operator: left width must match right height!")
+		result := This new (other dimensions width, this dimensions height)
+		for (x in 0 .. other dimensions width) {
+			for (y in 0 .. this dimensions height) {
+				temp := result elements[x + result dimensions width * y]
+				for (z in 0 .. this dimensions width)
+					temp += this elements[z + this dimensions width * y] * other elements[x + other dimensions width * z]
+				result elements[x + result dimensions width * y] = temp
 			}
-			result elements[x + result dimensions width * y] = temp
 		}
+	result
 	}
-result
+
+	operator + (other: This) -> This {
+		if (this dimensions != other dimensions)
+			raise("Invalid dimensions in FloatMatrix + operator: dimensions must match!")
+		result := This new (this dimensions width, this dimensions height)
+		for (x in 0 .. this dimensions width)
+			for (y in 0 .. this dimensions height)
+				result elements[x + result dimensions width * y] = this elements[x + this dimensions width * y] + other elements[x + other dimensions width * y]
+	result
+	}
+
+	operator - (other: This) -> This {
+		if (this dimensions != other dimensions)
+			raise("Invalid dimensions in FloatMatrix - operator: dimensions must match!")
+		result := This new (this dimensions width, this dimensions height)
+		for (x in 0 .. this dimensions width)
+			for (y in 0 .. this dimensions height)
+				result elements[x + result dimensions width * y] = this elements[x + this dimensions width * y] - other elements[x + other dimensions width * y]
+	result
+	}
 }
 
-// <summary>
-// Addition of matrices.
-// </summary>
-// <param name="left">Left matrix in the addition.</param>
-// <param name="right">Right matrix in the addition.</param>
-// <returns>Sum of left and right matrices.</returns>
-operator + (left: FloatMatrix, right: FloatMatrix) -> FloatMatrix {
-	if (left dimensions width != right dimensions width || left dimensions height != right dimensions height)
-		InvalidDimensionsException new() throw()
-	result := FloatMatrix new (left dimensions width, left dimensions height)
-	for (x in 0 .. right dimensions width) {
-		for (y in 0 .. right dimensions height) {
-			temp := left elements[x + left dimensions width * y] + right elements[x + right dimensions width * y]
-			result elements[x + result dimensions width * y] = temp
-		}
-	}
-result
-}
-
-// <summary>
-// Subtraction of matrices.
-// </summary>
-// <param name="left">Left matrix in the subtraction.</param>
-// <param name="right">Right matrix in the subtraction.</param>
-// <returns>Difference of left and right matrices.</returns>
-operator - (left: FloatMatrix, right: FloatMatrix) -> FloatMatrix {
-	if (left dimensions width != right dimensions width || left dimensions height != right dimensions height)
-		InvalidDimensionsException new() throw()
-	result := FloatMatrix new (left dimensions width, left dimensions height)
-	for (x in 0 .. right dimensions width) {
-		for (y in 0 .. right dimensions height) {
-			temp := left elements[x + left dimensions width * y] - right elements[x + right dimensions width * y]
-			result elements[x + result dimensions width * y] = temp
-		}
-	}
-result
-}
-
-// <summary>
-// Multiplication of scalar and matrix.
-// </summary>
-// <param name="left">Scalar in the multiplication.</param>
-// <param name="right">Matrix in the multiplication.</param>
-// <returns>Product of the sclar and matrix.</returns>
 operator * (left: Float, right: FloatMatrix) -> FloatMatrix {
 	result := FloatMatrix new (right dimensions width, right dimensions height)
 	for (x in 0 .. right dimensions width)
