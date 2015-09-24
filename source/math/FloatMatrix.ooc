@@ -189,29 +189,29 @@ FloatMatrix : cover {
 				temp := lup[2] * y
 				temp2 := temp forwardSubstitution(lup[0])
 				result = temp2 backwardSubstitution(lup[1])
-				temp dispose()
-				temp2 dispose()
-				lup[0] dispose()
-				lup[1] dispose()
-				lup[2] dispose()
-				gc_free(lup data)
+				temp free()
+				temp2 free()
+				lup[0] free()
+				lup[1] free()
+				lup[2] free()
+				lup free()
 			} else {
 				temp1 := this transpose()
 				temp2 := temp1 * this
 				lup := temp2 lupDecomposition()
-				temp2 dispose()
+				temp2 free()
 				temp2 = lup[2] * temp1
-				temp1 dispose()
+				temp1 free()
 				temp1 = temp2 * y
-				temp2 dispose()
+				temp2 free()
 				temp2 = temp1 forwardSubstitution(lup[0])
 				result = temp2 backwardSubstitution(lup[1])
-				temp1 dispose()
-				temp2 dispose()
-				lup[0] dispose()
-				lup[1] dispose()
-				lup[2] dispose()
-				gc_free(lup data)
+				temp1 free()
+				temp2 free()
+				lup[0] free()
+				lup[1] free()
+				lup[2] free()
+				lup free()
 			}
 		}
 		result
@@ -271,10 +271,11 @@ FloatMatrix : cover {
 		result
 	}
 
+	free: func { this elements free() }
+
+	//TODO: Remove this function once all callers have been updated to call free instead.
 	dispose: func {
-		version(!gc) {
-			gc_free(this elements data)
-		}
+		this free()
 	}
 
 	operator * (other: This) -> This {
