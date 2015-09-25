@@ -82,8 +82,8 @@ FloatComplexTest: class extends Fixture {
 			expect((FloatComplex parse("-2.00 +1.00i")) == FloatComplex new (-2, 1), is true)
 		})
 		this add("exponential", func {
-			expect(this complexNumber0 exponential() real, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary cos()))
-			expect(this complexNumber0 exponential() imaginary, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary sin()))
+			expect(this complexNumber0 exponential() real, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary cos()) within(tolerance))
+			expect(this complexNumber0 exponential() imaginary, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary sin()) within(tolerance))
 		})
 	}
 }
