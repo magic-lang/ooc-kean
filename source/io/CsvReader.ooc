@@ -35,7 +35,7 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		readCharacter: Char
 		for (i in 0 .. rowDataLength) {
 			textBuilder := TextBuilder new()
-			while (i < rowDataLength && ((readCharacter = rowData[i]) != This delimeter)) {
+			while (i < rowDataLength && ((readCharacter = rowData[i]) != This delimiter)) {
 				++i
 				match (readCharacter) {
 					case ' ' =>
@@ -70,7 +70,7 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		textBuilder free()
 		result
 	}
-	delimeter ::= static ','
+	delimiter ::= static ','
 	open: static func (filename: Text) -> This {
 		result: This = null
 		file := File new(filename toString())
