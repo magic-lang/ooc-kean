@@ -20,14 +20,18 @@ import os/Time
 import include/gles3
 import ../GLFence
 import threading/Thread
+import Gles3Debug
 
 Gles3Fence: class extends GLFence {
 	init: func { super() }
 	free: override func {
+		version(debugGL) { validateStart() }
 		glDeleteSync(this _backend)
+		version(debugGL) { validateEnd("Fence free") }
 		super()
 	}
 	clientWait: func (timeout: UInt64 = ULLONG_MAX) {
+		version(debugGL) { validateStart() }
 		this _mutex lock()
 		if (this _backend == null)
 			this _syncCondition wait(this _mutex)
@@ -44,12 +48,16 @@ Gles3Fence: class extends GLFence {
 			}
 		} else
 			glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, timeout)
+		version(debugGL) { validateEnd("Fence clientWait") }
 	}
 	wait: func {
+		version(debugGL) { validateStart() }
 		glFlush()
 		glWaitSync(this _backend, 0, GL_TIMEOUT_IGNORED)
+		version(debugGL) { validateEnd("Fence wait") }
 	}
 	sync: func {
+		version(debugGL) { validateStart() }
 		this _mutex lock()
 		if (this _backend != null)
 			glDeleteSync(this _backend)
@@ -58,5 +66,6 @@ Gles3Fence: class extends GLFence {
 		this _mutex unlock()
 		this _syncCondition broadcast()
 		glFlush()
+		version(debugGL) { validateEnd("Fence sync") }
 	}
 }

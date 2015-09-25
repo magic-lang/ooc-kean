@@ -18,6 +18,7 @@
 use ooc-base
 import include/gles3
 import ../GLVertexArrayObject
+import Gles3Debug
 
 Gles3VertexArrayObject: class extends GLVertexArrayObject {
 	backend: UInt
@@ -26,6 +27,7 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 
 	init: func (positions, textureCoordinates: Float*, vertexCount, dimensions: UInt) {
 		version(debugGL) { Debug print("Allocating OpenGL VAO") }
+		version(debugGL) { validateStart() }
 		//Currently using 2 attributes: vertex position and texture coordinate
 		attributeCount := 2
 		packedArray: Float[attributeCount * vertexCount * dimensions]
@@ -54,11 +56,22 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 		glBindBuffer(GL_ARRAY_BUFFER, 0)
 		glBindVertexArray(0)
 		glDeleteBuffers(1, vertexBuffer&)
+		version(debugGL) { validateEnd("VertexArrayObject init") }
 	}
 	free: override func {
+		version(debugGL) { validateStart() }
 		glDeleteVertexArrays(1, backend&)
+		version(debugGL) { validateEnd("VertexArrayObject free") }
 		super()
 	}
-	bind: func { glBindVertexArray(backend) }
-	unbind: func { glBindVertexArray(0) }
+	bind: func {
+		version(debugGL) { validateStart() }
+		glBindVertexArray(backend)
+		version(debugGL) { validateEnd("VertexArrayObject bind") }
+	}
+	unbind: func {
+		version(debugGL) { validateStart() }
+		glBindVertexArray(0)
+		version(debugGL) { validateEnd("VertexArrayObject unbind") }
+	 }
 }

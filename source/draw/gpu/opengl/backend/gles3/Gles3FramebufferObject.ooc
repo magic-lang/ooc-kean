@@ -24,14 +24,36 @@ import Gles3Texture, Gles3Debug
 Gles3FramebufferObject: class extends GLFramebufferObject {
 	init: func (=_size) { super() }
 	free: override func {
+		version(debugGL) { validateStart() }
 		glDeleteFramebuffers(1, _backend&)
+		version(debugGL) { validateEnd("FramebufferObject free") }
 		super()
 	}
-	bind: func { glBindFramebuffer(GL_FRAMEBUFFER, this _backend) }
-	unbind: func { glBindFramebuffer(GL_FRAMEBUFFER, 0) }
-	scissor: static func (x, y, width, height: Int) { glScissor(x, y, width, height) }
-	clear: static func { glClear(GL_COLOR_BUFFER_BIT) }
-	setClearColor: func (color: Float) { glClearColor(color, color, color, color) }
+	bind: func {
+		version(debugGL) { validateStart() }
+		glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
+		version(debugGL) { validateEnd("FramebufferObject bind") }
+	}
+	unbind: func {
+		version(debugGL) { validateStart() }
+		glBindFramebuffer(GL_FRAMEBUFFER, 0)
+		version(debugGL) { validateEnd("FramebufferObject unbind") }
+	}
+	scissor: static func (x, y, width, height: Int) {
+		version(debugGL) { validateStart() }
+		glScissor(x, y, width, height)
+		version(debugGL) { validateEnd("FramebufferObject scissor") }
+	}
+	clear: static func {
+		version(debugGL) { validateStart() }
+		glClear(GL_COLOR_BUFFER_BIT)
+		version(debugGL) { validateEnd("FramebufferObject clear") }
+	}
+	setClearColor: func (color: Float) {
+		version(debugGL) { validateStart() }
+		glClearColor(color, color, color, color)
+		version(debugGL) { validateEnd("FramebufferObject setClearColor") }
+	}
 	readPixels: func -> ByteBuffer {
 		version(debugGL) { validateStart() }
 		width := this size width

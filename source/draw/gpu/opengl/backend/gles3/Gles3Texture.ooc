@@ -142,6 +142,7 @@ Gles3Texture: class extends GLTexture {
 		glTexParameteri(this _target, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 		glTexParameteri(this _target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
 		glTexParameteri(this _target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+		version(debugGL) { validateEnd("Texture _genTexture") }
 	}
 	_generate: func (pixels: Pointer, stride: Int, allocate := true) -> Bool {
 		this _genTexture()
@@ -151,6 +152,7 @@ Gles3Texture: class extends GLTexture {
 	}
 	_allocate: func (pixels: Pointer, stride: Int) {
 		version(debugGL) { Debug print("Allocating OpenGL Texture") }
+		version(debugGL) { validateStart() }
 		pixelStride := stride / this _bytesPerPixel
 		if (pixelStride != this size width) {
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
