@@ -105,7 +105,7 @@ FloatMatrix : cover {
 			raise("Invalid dimensions")
 		result := 0.0f
 		for (i in 0 .. this height)
-			result += this get(i, i)
+			result += this[i, i]
 		result
 	}
 
@@ -129,7 +129,7 @@ FloatMatrix : cover {
 		result: String = ""
 		for (y in 0 .. this height) {
 			for (x in 0 .. this width)
-				result = result & this get(x, y) toString() >> ", "
+				result = result & this[x, y] toString() >> ", "
 			result = result >> "; "
 		}
 		result
