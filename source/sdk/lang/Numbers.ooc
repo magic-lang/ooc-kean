@@ -60,7 +60,7 @@ UShort: cover from unsigned short extends ULLong
 //LONG_MIN,  LONG_MAX  : extern const static Long
 //ULONG_MAX          : extern const static ULong
 //LLONG_MIN, LLONG_MAX : extern const static LLong
-//ULLONG_MAX             : extern const static ULLong
+ULLONG_MAX             : extern const static ULLong
 
 INT_MAX := 2147483647
 INT_MIN := -INT_MAX - 1

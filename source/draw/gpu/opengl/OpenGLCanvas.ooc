@@ -20,16 +20,16 @@ use ooc-base
 use ooc-collections
 use ooc-draw
 use ooc-draw-gpu
-import backend/gles3/[Fbo, Texture]
+import backend/[GLFramebufferObject, GLTexture]
 import OpenGLBgr, Map/OpenGLMap, OpenGLBgra, OpenGLUv, OpenGLMonochrome, OpenGLContext, OpenGLPacked, OpenGLSurface
 
 OpenGLCanvas: class extends OpenGLSurface {
 	_target: OpenGLPacked
-	_renderTarget: Fbo
+	_renderTarget: GLFramebufferObject
 	context ::= this _context as OpenGLContext
 	init: func (=_target, context: OpenGLContext) {
 		super(this _target size, context, context defaultMap, IntTransform2D identity)
-		this _renderTarget = Fbo create(this _target _backend as Texture, this _target size)
+		this _renderTarget = context _backend createFramebufferObject(this _target _backend as GLTexture, this _target size)
 	}
 	free: override func {
 		this _renderTarget free()
@@ -40,7 +40,7 @@ OpenGLCanvas: class extends OpenGLSurface {
 	onRecycle: func { this _renderTarget invalidate() }
 	clear: override func {
 		this _bind()
-		Fbo setClearColor(this clearColor red as Float / 255)
+		this _renderTarget setClearColor(this clearColor red as Float / 255)
 		this _renderTarget clear()
 		this _unbind()
 	}

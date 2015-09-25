@@ -21,16 +21,17 @@ use ooc-collections
 use ooc-ui
 import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, RecycleBin
 import Map/OpenGLMap, Map/OpenGLMapPack
-import backend/gles3/[Context, Renderer]
+import backend/[GLContext, GLRenderer]
 
 OpenGLContext: class extends GpuContext {
-	_backend: Context
+	_backend: GLContext
+	backend ::= this _backend
 	_transformTextureMap: OpenGLMapTransformTexture
 	_packMonochrome: OpenGLMapPackMonochrome
 	_packUv: OpenGLMapPackUv
 	_linesShader: OpenGLMapLines
 	_pointsShader: OpenGLMapPoints
-	_renderer: Renderer
+	_renderer: GLRenderer
 	defaultMap: GpuMap { get { this _transformTextureMap } }
 	_recycleBin := RecycleBin new()
 
@@ -41,11 +42,11 @@ OpenGLContext: class extends GpuContext {
 		this _linesShader = OpenGLMapLines new(this)
 		this _pointsShader = OpenGLMapPoints new(this)
 		this _transformTextureMap = OpenGLMapTransformTexture new(this)
-		this _renderer = Renderer new()
+		this _renderer = _backend createRenderer()
 	}
-	init: func { this init(Context create()) }
-	init: func ~shared (other: This) { this init(Context create(other _backend)) }
-	init: func ~window (nativeWindow: NativeWindow) { this init(Context create(nativeWindow)) }
+	init: func { this init(GLContext createContext()) }
+	init: func ~shared (other: This) { this init(GLContext createContext(other _backend)) }
+	init: func ~window (nativeWindow: NativeWindow) { this init(GLContext createContext(nativeWindow)) }
 	free: override func {
 		this _backend makeCurrent()
 		this _transformTextureMap free()
@@ -166,7 +167,7 @@ OpenGLContext: class extends GpuContext {
 		target canvas viewport = viewport
 		target canvas draw(source, map)
 	}
-	createFence: func -> GpuFence { OpenGLFence new() }
+	createFence: func -> GpuFence { OpenGLFence new(this) }
 	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) {
 		result := this toRaster(gpuImage, true)
 		fence := this createFence()

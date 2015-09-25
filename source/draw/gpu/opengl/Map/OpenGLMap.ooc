@@ -18,22 +18,21 @@
 use ooc-base
 use ooc-math
 use ooc-draw-gpu
-
-import backend/gles3/ShaderProgram
+import backend/GLShaderProgram
 import OpenGLContext
 
 OpenGLMap: abstract class extends GpuMap {
 	_vertexSource: String
 	_fragmentSource: String
-	_program: ShaderProgram[]
-	program: ShaderProgram { get { this _program[this _context getCurrentIndex()] } }
+	_program: GLShaderProgram[]
+	program: GLShaderProgram { get { this _program[this _context getCurrentIndex()] } }
 	_context: OpenGLContext
 	init: func (vertexSource: String, fragmentSource: String, context: OpenGLContext) {
 		super()
 		this _vertexSource = vertexSource
 		this _fragmentSource = fragmentSource
 		this _context = context
-		this _program = ShaderProgram[context getMaxContexts()] new()
+		this _program = GLShaderProgram[context getMaxContexts()] new()
 		if (vertexSource == null || fragmentSource == null)
 			Debug raise("Vertex or fragment shader source not set")
 	}
@@ -48,7 +47,7 @@ OpenGLMap: abstract class extends GpuMap {
 	use: override func {
 		currentIndex := this _context getCurrentIndex()
 		if (this _program[currentIndex] == null)
-			this _program[currentIndex] = ShaderProgram create(this _vertexSource, this _fragmentSource)
+			this _program[currentIndex] = this _context as OpenGLContext _backend createShaderProgram(this _vertexSource, this _fragmentSource)
 		this _program[currentIndex] use()
 	}
 }

@@ -17,23 +17,43 @@
 
 use ooc-base
 use ooc-math
-import include/gles3, Texture, DebugGL
+import include/gles3
+import ../GLFramebufferObject
+import Gles3Texture, Gles3Debug
 
-Fbo: class {
-	_size: IntSize2D
-	size ::= this _size
-	_backend: UInt
-
-	init: func (=_size)
-	free: func {
+Gles3FramebufferObject: class extends GLFramebufferObject {
+	init: func (=_size) { super() }
+	free: override func {
+		version(debugGL) { validateStart() }
 		glDeleteFramebuffers(1, _backend&)
+		version(debugGL) { validateEnd("FramebufferObject free") }
 		super()
 	}
-	bind: func { glBindFramebuffer(GL_FRAMEBUFFER, this _backend) }
-	unbind: func { glBindFramebuffer(GL_FRAMEBUFFER, 0) }
-	scissor: static func (x, y, width, height: Int) { glScissor(x, y, width, height) }
-	clear: static func { glClear(GL_COLOR_BUFFER_BIT) }
-	setClearColor: static func (color: Float) { glClearColor(color, color, color, color) }
+	bind: func {
+		version(debugGL) { validateStart() }
+		glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
+		version(debugGL) { validateEnd("FramebufferObject bind") }
+	}
+	unbind: func {
+		version(debugGL) { validateStart() }
+		glBindFramebuffer(GL_FRAMEBUFFER, 0)
+		version(debugGL) { validateEnd("FramebufferObject unbind") }
+	}
+	scissor: static func (x, y, width, height: Int) {
+		version(debugGL) { validateStart() }
+		glScissor(x, y, width, height)
+		version(debugGL) { validateEnd("FramebufferObject scissor") }
+	}
+	clear: static func {
+		version(debugGL) { validateStart() }
+		glClear(GL_COLOR_BUFFER_BIT)
+		version(debugGL) { validateEnd("FramebufferObject clear") }
+	}
+	setClearColor: func (color: Float) {
+		version(debugGL) { validateStart() }
+		glClearColor(color, color, color, color)
+		version(debugGL) { validateEnd("FramebufferObject setClearColor") }
+	}
 	readPixels: func -> ByteBuffer {
 		version(debugGL) { validateStart() }
 		width := this size width
@@ -48,14 +68,14 @@ Fbo: class {
 		version(debugGL) { validateEnd("fbo readPixels") }
 		buffer
 	}
-	setTarget: func (texture: Texture) {
+	setTarget: func (texture: Gles3Texture) {
 		version(debugGL) { validateStart() }
 		glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture _backend, 0)
 		glBindFramebuffer(GL_FRAMEBUFFER, 0)
 		version(debugGL) { validateEnd("fbo setTarget") }
 	}
-	_generate: func ~fromTextures (texture: Texture) -> Bool {
+	_generate: func ~fromTextures (texture: Gles3Texture) -> Bool {
 		version(debugGL) { validateStart() }
 		glGenFramebuffers(1, this _backend&)
 		this bind()
@@ -89,12 +109,5 @@ Fbo: class {
 		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, att&)
 		this unbind()
 		version(debugGL) { validateEnd("fbo invalidate") }
-	}
-	create: static func (texture: Texture, size: IntSize2D) -> This {
-		version(debugGL) { validateStart() }
-		result := This new(size)
-		result = result _generate(texture) ? result : null
-		version(debugGL) { validateEnd("fbo create") }
-		result
 	}
 }

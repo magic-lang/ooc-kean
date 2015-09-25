@@ -14,15 +14,20 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+
 use ooc-base
 import include/gles3
+import ../GLVertexArrayObject
+import Gles3Debug
 
-Vao: class {
+Gles3VertexArrayObject: class extends GLVertexArrayObject {
 	backend: UInt
 	positionLayout: const static UInt = 0
 	textureCoordinateLayout: const static UInt = 1
-	init: func (positions: Float*, textureCoordinates: Float*, vertexCount: UInt, dimensions: UInt) -> Bool {
+
+	init: func (positions, textureCoordinates: Float*, vertexCount, dimensions: UInt) {
 		version(debugGL) { Debug print("Allocating OpenGL VAO") }
+		version(debugGL) { validateStart() }
 		//Currently using 2 attributes: vertex position and texture coordinate
 		attributeCount := 2
 		packedArray: Float[attributeCount * vertexCount * dimensions]
@@ -51,11 +56,22 @@ Vao: class {
 		glBindBuffer(GL_ARRAY_BUFFER, 0)
 		glBindVertexArray(0)
 		glDeleteBuffers(1, vertexBuffer&)
+		version(debugGL) { validateEnd("VertexArrayObject init") }
 	}
-	free: func {
+	free: override func {
+		version(debugGL) { validateStart() }
 		glDeleteVertexArrays(1, backend&)
+		version(debugGL) { validateEnd("VertexArrayObject free") }
 		super()
 	}
-	bind: func { glBindVertexArray(backend) }
-	unbind: func { glBindVertexArray(0) }
+	bind: func {
+		version(debugGL) { validateStart() }
+		glBindVertexArray(backend)
+		version(debugGL) { validateEnd("VertexArrayObject bind") }
+	}
+	unbind: func {
+		version(debugGL) { validateStart() }
+		glBindVertexArray(0)
+		version(debugGL) { validateEnd("VertexArrayObject unbind") }
+	}
 }

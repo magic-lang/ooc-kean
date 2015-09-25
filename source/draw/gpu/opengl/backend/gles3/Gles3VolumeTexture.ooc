@@ -14,16 +14,20 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
+
 use ooc-math
 use ooc-base
 import include/gles3
-import Context
-VolumeTexture: class {
+import ../GLVolumeTexture
+import Gles3Debug
+
+Gles3VolumeTexture: class extends GLVolumeTexture {
 	_backend: UInt
 	backend: UInt { get { this _backend } }
 	width, height, depth: UInt
 
 	init: func (=width, =height, =depth, pixels: UInt8*) {
+		version(debugGL) { validateStart() }
 		glGenTextures(1, _backend&)
 		glBindTexture(GL_TEXTURE_3D, _backend)
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
@@ -32,19 +36,30 @@ VolumeTexture: class {
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE)
 		glTexImage3D(GL_TEXTURE_3D, 0, GL_R8, this width, this height, this depth, 0, GL_RED, GL_UNSIGNED_BYTE, pixels)
+		version(debugGL) { validateEnd("VolumeTexture init") }
 	}
-	free: func {
+	free: override func {
+		version(debugGL) { validateStart() }
 		glDeleteTextures(1, _backend&)
+		version(debugGL) { validateEnd("VolumeTexture free") }
 		super()
 	}
 	bind: func (unit: UInt) {
+		version(debugGL) { validateStart() }
 		glActiveTexture(GL_TEXTURE0 + unit)
 		glBindTexture(GL_TEXTURE_3D, this _backend)
+		version(debugGL) { validateEnd("VolumeTexture bind") }
 	}
-	unbind: func { glBindTexture(GL_TEXTURE_3D, 0) }
+	unbind: func {
+		version(debugGL) { validateStart() }
+		glBindTexture(GL_TEXTURE_3D, 0)
+		version(debugGL) { validateEnd("VolumeTexture unbind") }
+	}
 	upload: func (pixels: UInt8*) {
+		version(debugGL) { validateStart() }
 		glBindTexture(GL_TEXTURE_3D, this _backend)
 		glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, this width, this height, this depth, GL_RED, GL_UNSIGNED_BYTE, pixels)
 		this unbind()
+		version(debugGL) { validateEnd("VolumeTexture upload") }
 	}
 }

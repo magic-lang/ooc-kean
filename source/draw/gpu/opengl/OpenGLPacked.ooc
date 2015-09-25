@@ -17,7 +17,8 @@
 
 use ooc-draw
 use ooc-draw-gpu
-import backend/gles3/Texture, OpenGLContext, OpenGLCanvas
+import backend/GLTexture
+import OpenGLContext, OpenGLCanvas
 
 OpenGLPacked: abstract class extends GpuImage {
 	_filter: Bool
@@ -28,7 +29,7 @@ OpenGLPacked: abstract class extends GpuImage {
 			this _backend setMinFilter(InterpolationType Linear)
 		}
 	}
-	_backend: Texture
+	_backend: GLTexture
 	backend ::= this _backend
 	_channels: UInt
 	channels ::= this _channels
