@@ -19,10 +19,14 @@ use ooc-collections
 
 TextBuilder: class {
 	_data := VectorList<Text> new(32, false)
-	count ::= this _data count
+	_count: Int
+	count ::= this _count
 
 	init: func ~default
-	init: func ~vector (=_data)
+	init: func ~vectorList (data: VectorList<Text>) {
+		for (i in 0 .. data count)
+			this append(data[i])
+	}
 	init: func ~text (value: Text) {
 		this init()
 		this append(value)
@@ -32,9 +36,7 @@ TextBuilder: class {
 		this append(value, length)
 	}
 	init: func ~this (original: This) {
-		this init()
-		for (i in 0 .. original count)
-			this append(original[i] copy())
+		this init(original toText())
 	}
 	free: func {
 		for (i in 0 .. this count)
@@ -46,36 +48,34 @@ TextBuilder: class {
 		This new(this)
 	}
 	append: func ~char (c: Char) {
-		this append(Text new(c&, 1, Owner Stack) give())
+		this append(Text new(c&, 1, Owner Stack) copy())
 	}
 	append: func ~cstring (value: CString, length: Int) {
 		this append(Text new(value, length))
 	}
 	append: func ~text (value: Text) {
+		this _count += value count
 		this _data add(value)
 	}
 	append: func (other: This) {
 		for (i in 0 .. other count)
-			this append(other[i] copy())
+			this append(other _data[i] copy())
 	}
 	prepend: func ~char (c: Char) {
-		this prepend(Text new(c&, 1, Owner Stack) give())
+		this prepend(Text new(c&, 1, Owner Stack) copy())
 	}
 	prepend: func ~cstring (value: CString, length: Int) {
 		this prepend(Text new(value, length))
 	}
 	prepend: func ~text (value: Text) {
+		this _count += value count
 		this _data insert(0, value)
 	}
 	prepend: func ~This (other: This) {
-		for (i in 0 .. other count)
-			prepend(other[other count -1 -i] copy())
+		this prepend(other toText())
 	}
 	toString: func -> String {
-		result := ""
-		for (i in 0 .. this _data count)
-			result = result << this _data[i] toString()
-		result
+		this toText() toString()
 	}
 	toText: func -> Text {
 		this join(Text empty)
@@ -84,33 +84,35 @@ TextBuilder: class {
 		this join(Text new(separator&, 1, Owner Stack))
 	}
 	join: func ~withText (separator: Text) -> Text {
-		totalLength := separator count * (this count - 1)
+		length := separator count * (this _data count - 1) + this count
 		buffer := null as CString
-		for (i in 0 .. this count)
-			totalLength += this[i] count
-		if (totalLength > 0) {
-			buffer = gc_malloc(totalLength)
+		if (length > 0) {
+			buffer = gc_malloc(length)
 			offset := 0
-			for (i in 0 .. this count) {
-				memcpy(buffer + offset, this[i] raw, this[i] count)
-				offset += this[i] count
+			for (i in 0 .. this _data count) {
+				memcpy(buffer + offset, this _data[i] raw, this _data[i] count)
+				offset += this _data[i] count
 				if (separator count > 0 && i < this count - 1) {
 					memcpy(buffer + offset, separator raw, separator count)
 					offset += separator count
 				}
 			}
 		}
-		Text new(buffer, totalLength, Owner Caller)
+		Text new(buffer, length, Owner Caller)
 	}
 	println: func {
 		this toString() println().free()
 	}
-	operator [] (index: Int) -> Text {
-		this _data[index]
-	}
-	operator []= (index: Int, value: Text) {
-		this _data[index] free(Owner Callee)
-		this _data[index] = value
+	operator [] (index: Int) -> Char {
+		i := index
+		position := 0
+		c := this _data[position] count // Needed c for some strange reason.
+		while (c <= index) {
+			index -= c
+			++position
+			c = this _data[position] count
+		}
+		this _data[position][index]
 	}
 	operator + (other: This) -> This {
 		result := This new(this).append(other)
@@ -121,23 +123,22 @@ TextBuilder: class {
 		result
 	}
 	operator == (other: This) -> Bool {
-		first := this toText()
-		second := other toText()
-		result := first == second
-		first free()
-		second free()
+		result := this count == other count
+		i := 0
+		while (i < this count && (result &= this[i] == other[i]))
+			++i
 		result
 	}
 	operator == (string: String) -> Bool {
-		value := this toText()
-		result := value == string
-		value free()
-		result
+		this == Text new(string)
 	}
 	operator == (text: Text) -> Bool {
-		value := this toText()
-		result := value == text
-		value free()
+		t := text take()
+		result := this count == t count
+		i := 0
+		while (i < this count && (result &= this[i] == t[i]))
+			++i
+		text free(Owner Callee)
 		result
 	}
 }

@@ -17,40 +17,39 @@
 
 use ooc-base
 use ooc-collections
-use ooc-math
 import math
 
 Text: cover {
-	_buffer: CString
-	_count: Int
-	_owner: Owner
-	count ::= this _count
-	isEmpty ::= this _count == 0
-	raw ::= this _buffer
-	init: func@ {
-		this _buffer = null
-		this _count = 0
-		this _owner = Owner Unknown
+	_buffer: OwnedBuffer
+	count ::= this _buffer size
+	isEmpty ::= this count == 0
+	raw ::= this _buffer pointer as CString
+	init: func@ ~empty {
+		this init(OwnedBuffer new())
 	}
+	init: func@ (=_buffer)
 	init: func@ ~fromStringLiteral (string: CString) {
 		this init(string, strlen(string))
 	}
-	init: func@ ~fromStringLiteralWithCount (string: CString, =_count) {
-		this _buffer = string
-		this _owner = Owner Literal
-	}
 	init: func@ ~fromString (string: String) {
-		this init(string _buffer data, string length(), Owner Literal)
+		this init(string _buffer data, string length(), Owner Unknown)
 	}
-	init: func@ ~fromData (=_buffer, =_count, =_owner)
-	copy: func -> This {
-		this slice(0, this count)
+	init: func@ ~fromData (string: CString, count: Int, owner := Owner Static) {
+		this init(OwnedBuffer new(string as UInt8*, count, owner))
+	}
+	copy: func -> This { // call by value, creates copy of cover
+		result := This new(this _buffer copy())
+		this free(Owner Callee)
+		result
 	}
 	operator == (string: String) -> Bool {
 		this == This new(string)
 	}
 	operator == (other: This) -> Bool {
-		(this count == other count) && (memcmp(this raw, other raw, this count) == 0)
+		result := (this count == other count) && (memcmp(this raw, other raw, this count) == 0)
+		this free(Owner Callee)
+		other free(Owner Callee)
+		result
 	}
 	beginsWith: func (other: This) -> Bool {
 		this slice(0, Int minimum~two(other count, this count)) == other
@@ -58,8 +57,10 @@ Text: cover {
 	beginsWith: func ~string (other: String) -> Bool {
 		this beginsWith(This new(other))
 	}
-	beginsWith: func ~char (c: Char) -> Bool {
-		(this count > 0) && (this _buffer[0] == c)
+	beginsWith: func ~character (character: Char) -> Bool {
+		result := (this count > 0) && (this raw[0] == character)
+		this free(Owner Callee)
+		result
 	}
 	endsWith: func (other: This) -> Bool {
 		this slice(Int maximum~two(0, this count - other count), Int minimum~two(other count, this count)) == other
@@ -67,55 +68,59 @@ Text: cover {
 	endsWith: func ~string (other: String) -> Bool {
 		this endsWith(This new(other))
 	}
-	endsWith: func ~char (c: Char) -> Bool {
-		(this count > 0) && (this _buffer[this count - 1] == c)
-	}
-	find: func ~char (c: Char, start := 0) -> Int {
-		result := -1
-		for (i in start .. this count)
-			if (this[i] == c) {
-				result = i
-				break
-			}
+	endsWith: func ~character (character: Char) -> Bool {
+		result := (this count > 0) && (this raw[this count - 1] == character)
+		this free(Owner Callee)
 		result
 	}
-	find: func ~text (text: This, start := 0) -> Int {
+	find: func ~character (character: Char, start := 0) -> Int {
 		result := -1
-		for (i in start .. this count - text count + 1)
-			if (this slice(i, text count) == text) {
+		t := this take()
+		for (i in start .. t count)
+			if (t[i] == character) {
 				result = i
 				break
 			}
+		this free(Owner Callee)
+		result
+	}
+	find: func ~text (needle: This, start := 0) -> Int {
+		result := -1
+		t := this take()
+		n := needle take()
+		for (i in start .. t count - n count + 1)
+			if (t slice(i, n count) == n) {
+				result = i
+				break
+			}
+		this free(Owner Callee)
+		needle free(Owner Callee)
 		result
 	}
 	find: func ~string (string: String, start := 0) -> Int {
 		this find(This new(string), start)
 	}
 	operator [] (index: Int) -> Char {
-		this _buffer [index]
+		result := this raw[index]
+		this free(Owner Callee)
+		result
 	}
 	operator [] (range: Range) -> This {
 		this slice(range min, range count)
 	}
-	take: func@ -> Bool {
-		this _changeOwnership(Owner Caller)
+	take: func -> This { // call by value -> modifies copy of cover
+		this _buffer = this _buffer take()
+		this
 	}
-	give: func -> This {
-		result := this copy()
-		result _changeOwnership(Owner Callee)
-		result
+	give: func -> This { // call by value -> modifies copy of cover
+		this _buffer = this _buffer give()
+		this
 	}
 	free: func@ -> Bool {
-		result: Bool
-		if ((result = (this _owner != Owner Literal && this _owner != Owner Stack && this _buffer != null))) {
-			gc_free(this _buffer)
-			this _buffer = null
-			this _count = 0
-		}
-		result
+		this _buffer free()
 	}
 	free: func@ ~withCriteria (criteria: Owner) -> Bool {
-		this _owner == criteria && this free()
+		this _buffer free(criteria)
 	}
 	slice: func (start, distance: Int) -> This {
 		count := abs(distance)
@@ -123,10 +128,11 @@ Text: cover {
 			start = this count + start
 		if (distance < 0)
 			start -= count
-		if (start < this count)
-			This new(this _buffer + start, Int minimum~two(count, this count - start), Owner Literal)
-		else
-			This empty
+		result := start < this count ? This new(this raw + start, Int minimum~two(count, this count - start), Owner Unknown) : This empty
+		if (this _buffer _owner == Owner Callee)
+			result = result copy() // TODO: Could we be smarter here?
+		this free(Owner Callee)
+		result
 	}
 	split: func ~withChar (separator: Char) -> VectorList<This> {
 		this split(This new(separator&, 1, Owner Stack))
@@ -135,72 +141,85 @@ Text: cover {
 		this split(This new(separator))
 	}
 	split: func ~withText (separator: This) -> VectorList<This> {
+		t := this take()
+		s := separator take()
 		result := VectorList<This> new()
 		start := 0
-		pos := this find(separator)
-		while (pos != -1) {
-			if (pos > start)
-				result add(this slice(start, pos - start))
-			start = pos + separator count
-			pos = this find(separator, start)
+		position := t find(s)
+		while (position != -1) {
+			if (position > start)
+				result add(t slice(start, position - start))
+			start = position + s count
+			position = t find(s, start)
 		}
-		if (start < this count && pos == -1)
-			result add(this slice(start, this count - start))
+		if (start < t count && position == -1)
+			result add(t slice(start, t count - start))
+		this free(Owner Callee)
+		separator free(Owner Callee)
 		result
 	}
 	toString: func -> String {
-		String new(this _buffer, this count)
+		result := String new(this raw, this count)
+		this free(Owner Callee)
+		result
 	}
 	toInt: func -> Int {
-		this toLLong() as Int
+		result := this toLLong() as Int
+		this free(Owner Callee)
+		result
 	}
 	toLong: func -> Long {
-		this toLLong() as Long
+		result := this toLLong() as Long
+		this free(Owner Callee)
+		result
 	}
 	toLLong: func -> LLong {
-		this toLLong~inBase(this _detectNumericBase())
+		result := this toLLong~inBase(this _detectNumericBase())
+		this free(Owner Callee)
+		result
 	}
 	toInt: func ~inBase (base: Int) -> Int {
-		this toLLong~inBase(base) as Int
+		result := this toLLong~inBase(base) as Int
+		this free(Owner Callee)
+		result
 	}
 	toLong: func ~inBase (base: Int) -> LLong {
-		this toLLong~inBase(base) as Long
+		result := this toLLong~inBase(base) as Long
+		this free(Owner Callee)
+		result
 	}
 	toLLong: func ~inBase (base: Int) -> LLong {
-		result := 0 as LLong
-		if (this isEmpty == false) {
-			if (this[0] == '-')
-				result = -1 * this slice(1, this count - 1) toULong~inBase(base)
-			else
-				result = this toULong~inBase(base) as LLong
-		}
+		t := this take()
+		result := t isEmpty ? 0 : (t[0] == '-' ? -1 * t slice(1, t count - 1) toULong(base) : t toULong(base) as LLong)
+		this free(Owner Callee)
 		result
 	}
 	toULong: func -> ULong {
 		this toULong~inBase(this _detectNumericBase())
 	}
 	toULong: func ~inBase (base: Int) -> ULong {
+		t := this take()
 		result := 0 as ULong
-		if (this isEmpty == false) {
+		if (!t isEmpty) {
 			lastValidIndex := -1
 			start := 0
-			if (base == 16 && this beginsWith(This new(c"0x", 2))) {
+			if (base == 16 && t beginsWith(This new(c"0x", 2))) {
 				start += 2
 				lastValidIndex += 2
 			}
-			for (i in start .. this count) {
-				if (This _isNumeric(this[i], base))
-					++lastValidIndex
-				else
+			for (i in start .. t count) {
+				if (!This _isNumeric(t[i], base))
 					break
+				++lastValidIndex
 			}
 			power := 1 as ULong
 			while (lastValidIndex >= 0) {
-				result += power * This _toInt(this[lastValidIndex], base)
+				result += power * This _toInt(t[lastValidIndex], base)
 				--lastValidIndex
 				power *= base
 			}
 		}
+		this free(Owner Callee)
 		result
 	}
 	toFloat: func -> Float {
@@ -210,28 +229,29 @@ Text: cover {
 		this toLDouble() as Double
 	}
 	toLDouble: func -> LDouble {
+		t := this take()
 		result := 0.0 as LDouble
-		if (!this isEmpty) {
+		if (!t isEmpty) {
 			sign := 1
 			start := 0
-			if (this[0] == '-') {
+			if (t[0] == '-') {
 				start = 1
 				sign = -1
 			}
 			index := this count
-			for (i in start .. this count) {
-				if (!This _isNumeric(this[i], 10)) {
+			for (i in start .. t count) {
+				if (!This _isNumeric(t[i], 10)) {
 					index = i
 					break
 				}
 			}
-			result = this slice(start, index - start) toLLong~inBase(10)
-			if (index > -1 && index < this count) {
-				if (this[index] == '.') {
+			result = t slice(start, index - start) toLLong~inBase(10)
+			if (index > -1 && index < t count) {
+				if (t[index] == '.') {
 					power := 0.1
-					for (i in index + 1 .. this count) {
-						if (This _isNumeric(this[i], 10)) {
-							result += power * This _toInt(this[i], 10)
+					for (i in index + 1 .. t count) {
+						if (This _isNumeric(t[i], 10)) {
+							result += power * This _toInt(t[i], 10)
 							power /= 10
 						} else {
 							index = i
@@ -239,28 +259,12 @@ Text: cover {
 						}
 					}
 				}
-				if (this[index] == 'e' || this[index] == 'E') {
-					exponent := this slice(index + 1, this count - index) toInt~inBase(10)
+				if (t[index] == 'e' || t[index] == 'E') {
+					exponent := t slice(index + 1, t count - index) toInt~inBase(10)
 					result = result * pow(10, exponent)
 				}
 			}
 			result *= sign
-		}
-		result
-	}
-	_allocateAndCopy: func@ (source: CString, size: Int) {
-		this _count = size
-		this _buffer = gc_malloc(size)
-		memcpy(this _buffer, source, size)
-	}
-	_changeOwnership: func@ (target: Owner) -> Bool {
-		result: Bool
-		if ((result = (target != this _owner && target != Owner Stack && target != Owner Literal))) {
-			if ((result = (this _owner == Owner Stack || this _owner == Owner Literal))) {
-				source := this _buffer
-				this _allocateAndCopy(source, this count)
-			}
-			this _owner = target
 		}
 		result
 	}
@@ -270,15 +274,15 @@ Text: cover {
 			result = 16
 		result
 	}
-	_isNumeric: static func (c: Char, base: Int) -> Bool {
+	_isNumeric: static func (character: Char, base: Int) -> Bool {
 		version(safe) {
 			if (base < 2 || (base > 10 && base != 16))
 				raise("Unsupported numeric base in Text")
 		}
 		lastValidDigit := base < 10 ? '0' + (base - 1) : '9'
-		result := (c >= '0') && (c <= lastValidDigit)
+		result := (character >= '0') && (character <= lastValidDigit)
 		if (!result && base == 16)
-			result = (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')
+			result = (character >= 'a' && character <= 'f') || (character >= 'A' && character <= 'F')
 		result
 	}
 	_toInt: static func (c: Char, base: Int) -> Int {
