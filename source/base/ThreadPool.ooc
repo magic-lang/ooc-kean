@@ -6,15 +6,16 @@ import threading/native/ConditionUnix
 import os/Time
 
 _Task: abstract class {
+	_mutexUpdateTime: static Int = 1
 	_state := _PromiseState Unfinished
-	_freeDirectly: Bool //TODO: Måste något freeas eller kan vi ta bort detta?
+	_freeDirectly: Bool
 	_mutex: Mutex
 	mutex ::= this _mutex
 	init: func(=_mutex)
 	run: abstract func (mutex: Mutex)
 	wait: func -> Bool {
 		status := false
-		while (true) {
+		while (!status) {
 			this _mutex lock()
 			if (this _state != _PromiseState Unfinished) {
 				status = (this _state == _PromiseState Finished)
@@ -22,7 +23,7 @@ _Task: abstract class {
 				break
 			}
 			this _mutex unlock()
-			Time sleepMilli(10)
+			Time sleepMilli(This _mutexUpdateTime)
 		}
 		status
 	}
@@ -97,10 +98,7 @@ _TaskFuture: class <T> extends Future<T> {
 		status ? this _task _result[T] : defaultValue
 	}
 	getResult: func (defaultValue: T) -> T {
-		status: Bool
-		this _task _mutex lock()
-		status = (this _task _state == _PromiseState Finished)
-		this _task _mutex unlock()
+		status := (this _task _state == _PromiseState Finished)
 		status ? this _task _result[T] : defaultValue
 	}
 	cancel: override func -> Bool {
@@ -111,7 +109,7 @@ _TaskFuture: class <T> extends Future<T> {
 
 ThreadPool: class {
 	_globalmutex := Mutex new()
-	_threads: Thread[] //TODO: Implement Worker class to make code nicer
+	_threads: Thread[]
 	_threadMutexes: Mutex[]
 	_tasks := BlockedQueue<_Task> new()
 	_threadCount: Int
@@ -126,6 +124,7 @@ ThreadPool: class {
 			this _threads[i] start()
 		}
 	}
+	//TODO: Implement free with timeout
 	free: override func {
 		for (i in 0 .. this _threadCount) {
 			this _threads[i] free()
@@ -162,6 +161,4 @@ ThreadPool: class {
 		this _add(task)
 		_TaskFuture new(task)
 	}
-	// TODO wait removed, breaks code
-	// TODO waitAll removed, breaks code
 }

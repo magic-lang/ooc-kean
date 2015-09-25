@@ -35,23 +35,26 @@ SynchronizedQueueTest: class extends Fixture {
 			expect(queue count, is equal to(0))
 
 			pool := ThreadPool new(3)
+			promises := Promise[100+200+200+20] new()
 			/* Enqueue values asynchronously */
 			for (i in 0 .. 100)
-				pool add(func1)
+				promises[i] = pool getPromise(func1)
 
 			/* Peek values asynchronously */
 			for (i in 0 .. 200)
-				pool add(func2)
+				promises[100+i] = pool getPromise(func2)
 
 			/* Dequeue values asynchronously */
 			for (i in 0 .. 200)
-				pool add(func3)
+				promises[100+200+i] = pool getPromise(func3)
 
 			/* Peek values asynchronously in empty Queue */
 			for (i in 0 .. 20)
-				pool add(func4)
+				promises[100+200+20+i] = pool getPromise(func4)
 
-			pool waitAll()
+			for (i in 0 .. 100+200+200) {
+				promises[i] wait()
+			}
 
 			expect(queue empty)
 			expect(queue count, is equal to(0))
