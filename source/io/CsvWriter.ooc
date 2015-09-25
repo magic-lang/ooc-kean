@@ -37,6 +37,6 @@ CsvWriter: class {
 		result
 	}
 	_isWhitespace: func (value: Char) -> Bool {
-		value == '\t' || value == ' ' || value  == '\r' || value == '\n'
+		value == '\t' || value == ' ' || value == '\r' || value == '\n'
 	}
 }
