@@ -31,16 +31,19 @@ EGLImage: class extends GLTexture {
 		this _eglDisplay = context _eglDisplay
 		this _backendTexture = context createTexture(type, size, size width, null, false)
 		/*this _backendTexture bind()*/
+		_backend = _backendTexture _backend
+		_target = _backendTexture _target
 		this bindSibling()
 	}
 	free: override func {
 		This _eglDestroyImageKHR(this _eglDisplay, this _eglBackend)
+		_backendTexture free()
 		super()
 	}
 	bindSibling: func {
 		eglImageAttributes := [EGL_IMAGE_PRESERVED_KHR, EGL_FALSE, EGL_NONE] as Int*
 		this _eglBackend = This _eglCreateImageKHR(this _eglDisplay, EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID, this _nativeBuffer, eglImageAttributes)
-		This _glEGLImageTargetTexture2DOES(this _target, this _eglBackend)
+		This _glEGLImageTargetTexture2DOES(this _backendTexture _target, this _eglBackend)
 	}
 
 	_eglCreateImageKHR: static Func(Pointer, Pointer, UInt, Pointer, Int*) -> Pointer
@@ -63,10 +66,10 @@ EGLImage: class extends GLTexture {
 		}
 		result
 	}
-	generateMipmap: func { _backendTexture generateMipmap() }
-	bind: func (unit: UInt) { _backendTexture bind(unit) }
-	unbind: func { _backendTexture unbind() }
-	upload: func (pixels: Pointer, stride: Int) { _backendTexture upload(pixels, stride) }
-	setMagFilter: func (interpolation: InterpolationType) { _backendTexture setMagFilter(interpolation) }
-	setMinFilter: func (interpolation: InterpolationType) { _backendTexture setMinFilter(interpolation) }
+	generateMipmap: func { this _backendTexture generateMipmap() }
+	bind: func (unit: UInt) { this _backendTexture bind(unit) }
+	unbind: func { this _backendTexture unbind() }
+	upload: func (pixels: Pointer, stride: Int) { this _backendTexture upload(pixels, stride) }
+	setMagFilter: func (interpolation: InterpolationType) { this _backendTexture setMagFilter(interpolation) }
+	setMinFilter: func (interpolation: InterpolationType) { this _backendTexture setMinFilter(interpolation) }
 }

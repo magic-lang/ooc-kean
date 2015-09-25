@@ -73,5 +73,5 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 		version(debugGL) { validateStart() }
 		glBindVertexArray(0)
 		version(debugGL) { validateEnd("VertexArrayObject unbind") }
-	 }
+	}
 }
