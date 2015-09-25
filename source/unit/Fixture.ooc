@@ -94,10 +94,19 @@ Fixture: abstract class {
 	expect: static func ~integer (value: Int, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
 	}
+	expect: static func ~long (value: Long, constraint: Constraint) {
+		This expect(Cell new(value), constraint)
+	}
+	expect: static func ~ulong (value: ULong, constraint: Constraint) {
+		This expect(Cell new(value), constraint)
+	}
 	expect: static func ~float (value: Float, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
 	}
 	expect: static func ~double (value: Double, constraint: Constraint) {
+		This expect(Cell new(value), constraint)
+	}
+	expect: static func ~ldouble (value: LDouble, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
 	}
 	expect: static func ~isTrue (value: Bool) {

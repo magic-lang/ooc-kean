@@ -137,12 +137,18 @@ Cell: class <T> {
 		match T {
 			case Int =>
 				(this val as Int) toString()
+			case Long =>
+				(this val as Long) toString()
 			case UInt =>
 				(this val as UInt) toString()
+			case ULong =>
+				(this val as ULong) toString()
 			case Float =>
 				"%.8f" formatFloat(this val as Float)
 			case Double =>
 				"%.12f" formatDouble(this val as Double)
+			case LDouble =>
+				"%.12f" formatLDouble(this val as LDouble)
 			case =>
 				raise("[Cell] toString() is not implemented on the specified type")
 		}
