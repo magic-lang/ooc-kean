@@ -33,20 +33,22 @@ FloatUniformRandomGenerator: class extends FloatRandomGenerator {
 	maximum ::= this _max
 	init: func {
 		this _state = Time microtime()
-		this updateRange(0.0f, 1.0f)
+		this setRange(0.0f, 1.0f)
 	}
 	init: func ~withSeed (seed: Int) {
 		this _state = seed
-		this updateRange(0.0f, 1.0f)
+		this setRange(0.0f, 1.0f)
 	}
 	init: func ~withParameters (min, max: Float, seed := Time microtime()) {
 		this _state = seed
-		this updateRange(min, max)
+		this setRange(min, max)
 	}
-	updateRange: func (=_min, =_max) {
-		this _rangeCoefficient = (1.0f / 4294967295.0f) * (this _max - this _min)
+	setRange: func (=_min, =_max) {
+		UnsignedIntMax := 4294967295U
+		this _rangeCoefficient = (1.0f / UnsignedIntMax as Float) * (this _max - this _min)
 	}
 	next: func -> Float {
+		//Based on www.irrelevantconclusion.com/2012/02/pretty-fast-random-floats-on-ps3/
 		this _state ^= (this _state << 5)
 		this _state ^= (this _state >> 13)
 		this _state ^= (this _state << 6)
@@ -59,7 +61,7 @@ FloatGaussianRandomGenerator: class extends FloatRandomGenerator {
 	_mu := 0.0f
 	_sigma := 1.0f
 	_secondValue : Float
-	_hasSecond := false
+	_hasSecondValue := false
 	init: func {
 		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f)
 	}
@@ -76,22 +78,22 @@ FloatGaussianRandomGenerator: class extends FloatRandomGenerator {
 		super()
 	}
 	setRange: func (=_mu, =_sigma) {
-		_hasSecond = false
+		_hasSecondValue = false
 	}
 	next: func -> Float {
 		result : Float
-		if (this _hasSecond) {
+		if (this _hasSecondValue) {
 			result = this _secondValue
-			this _hasSecond = false
-		}
-		else {
+			this _hasSecondValue = false
+		} else {
+			// Box-Muller transform: https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
 			scale := (-2.0f * (this _backend next()) log()) sqrt()
 			trigValue := (2.0f * Float pi * (this _backend next()))
 			value := scale * trigValue cos()
 			secondValue := scale * trigValue sin()
 			result = value * this _sigma + this _mu
 			this _secondValue = secondValue * this _sigma + this _mu
-			this _hasSecond = true
+			this _hasSecondValue = true
 		}
 		result
 	}

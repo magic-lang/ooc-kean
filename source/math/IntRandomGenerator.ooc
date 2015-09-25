@@ -32,12 +32,14 @@ IntUniformRandomGenerator: class {
 		this _state = seed
 	}
 	_generate: func -> Int {
+		// Based on Intel fast_rand()
+		// https://software.intel.com/en-us/articles/fast-random-number-generator-on-the-intel-pentiumr-4-processor/
 		this _state = 214013 * this _state + 2531011
-		(this _state >> 16) & 0x7FFF
+		(this _state >> 16) & Short maximumValue
 	}
 	setRange: func (=_min, =_max) {
 		this _range = this _max - this _min + 1
-		this _shortRange = (this _range < 0x7FFF)
+		this _shortRange = (this _range < Short maximumValue)
 	}
 	next: func -> Int {
 		result : Int
@@ -60,7 +62,7 @@ IntUniformRandomGenerator: class {
 }
 
 IntGaussianRandomGenerator: class {
-	_backend: FloatRandomGenerator
+	_backend: FloatGaussianRandomGenerator
 	init: func {
 		this _backend = FloatGaussianRandomGenerator new(0.0f, 1.0f)
 	}
@@ -74,8 +76,12 @@ IntGaussianRandomGenerator: class {
 	init: func ~withUniformBackendAndParameters (mu, sigma: Float, backend: FloatUniformRandomGenerator) {
 		this _backend = FloatGaussianRandomGenerator new~withBackendAndParameters(mu, sigma, backend)
 	}
-	free: func {
+	free: override func {
 		this _backend free()
+		super()
+	}
+	setRange: func (mu, sigma: Float) {
+		this _backend setRange(mu, sigma)
 	}
 	next: func -> Int {
 		this _backend next() as Int
