@@ -64,6 +64,8 @@ UShort: cover from unsigned short extends ULLong
 
 INT_MAX := 2147483647
 INT_MIN := -INT_MAX - 1
+SHRT_MIN : extern Short
+SHRT_MAX : extern Short
 INFINITY: extern Double
 NAN: extern Double
 FLT_MIN: extern Float
