@@ -18,6 +18,8 @@ TextTest: class extends Fixture {
 			t free()
 			expect(t count == 0)
 			expect(t isEmpty)
+			expect(Text new(c"from const") == "from const")
+			expect(Text new(c"12345") count == 5)
 		})
 		this add("ownership", func {
 			t := Text new(c"vidhance", 8)
