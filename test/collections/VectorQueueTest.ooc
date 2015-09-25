@@ -2,6 +2,19 @@ use ooc-unit
 use ooc-base
 use ooc-collections
 
+MyCover: cover {
+	content: Int
+	init: func@ (=content)
+	init: func@ ~default { this init(0) }
+	increase: func { this content += 1 }
+}
+MyClass: class {
+	content: Int
+	init: func (=content)
+	init: func ~default { this init(0) }
+	increase: func { this content += 1 }
+}
+
 VectorQueueTest: class extends Fixture {
 	init: func {
 		super("VectorQueue")
@@ -120,6 +133,28 @@ VectorQueueTest: class extends Fixture {
 					((-i) toString() + " -> " + queue[-i] toString()) println()
 			for (i in 1 .. 11)
 				expect(queue[-i], is equal to(15 - i))
+			queue free()
+		})
+		this add("Dequeue using default value", func {
+			queue := VectorQueue<MyCover> new(2)
+			queue enqueue(MyCover new(1))
+			queue enqueue(MyCover new(2))
+			expect(queue peek~functional(MyCover new(0)) content, is equal to(1))
+			expect(queue dequeue~functional(MyCover new(7)) content, is equal to(1))
+			expect(queue dequeue~functional(MyCover new(3)) content, is equal to(2))
+			expect(queue empty, is equal to(true))
+			expect(queue dequeue~functional(MyCover new(4)) content, is equal to(4))
+			queue free()
+		})
+		this add("Dequeue using default null", func {
+			queue := VectorQueue<MyClass> new(2)
+			queue enqueue(MyClass new(1))
+			queue enqueue(MyClass new(2))
+			expect(queue peek~functional(MyClass new(5)) content, is equal to(1))
+			expect(queue dequeue~functional(MyClass new(7)) content, is equal to(1))
+			expect(queue dequeue~functional(MyClass new(3)) content, is equal to(2))
+			expect(queue empty, is equal to(true))
+			expect(queue dequeue~functional(null), is equal to(null))
 			queue free()
 		})
 	}
