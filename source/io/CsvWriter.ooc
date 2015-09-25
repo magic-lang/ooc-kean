@@ -23,7 +23,7 @@ CsvWriter: class {
 					break
 				}
 			if (i < row count - 1)
-				value append(',')
+				value append(CsvReader delimeter)
 			this _fileWriter file write(value toString())
 			value free()
 		}
