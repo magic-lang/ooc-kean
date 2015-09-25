@@ -51,7 +51,8 @@ FloatMatrix : cover {
 	// <param name="x">Column number of a matrix.</param>
 	// <param name="y">Row number of a matrix.</param>
 	// <returns></returns>
-	get: func@ (x, y: Int) -> Float { this elements[x + this width * y] }
+	get: func@ (x, y: Int) -> Float { this elements[x + this width * y] } //TODO Deprecated, remove when no longer used
+	operator [] (x, y: Int) -> Float { this elements[x + dimensions width * y] }
 
 	// <summary>
 	// Set an element in a matrix at position(x,y).
@@ -60,7 +61,8 @@ FloatMatrix : cover {
 	// <param name="y">Row number of a matrix.</param>
 	// <param name="value">The value set at (x,y).</param>
 	// <returns></returns>
-	set: func@ (x, y: Int, value: Float) { this elements[x + this width * y] = value }
+	set: func@ (x, y: Int, value: Float) { this elements[x + this width * y] = value } //TODO Deprecated, remove when no longer used
+	operator []= (x, y: Int, value: Float) -> Float { this elements[x + dimensions width * y] = value }
 
 	// <summary>
 	// True if the matrix is a square matrix.
@@ -100,7 +102,7 @@ FloatMatrix : cover {
 	// <returns>The trace of the matrix.</returns>
 	trace: func -> Float {
 		if (!this isSquare)
-			InvalidDimensionsException new() throw()
+			raise("Invalid dimensions")
 		result := 0.0f
 		for (i in 0 .. this height)
 			result += this get(i, i)
@@ -141,7 +143,7 @@ FloatMatrix : cover {
 	// <returns>Returns the Lup decomposition. L = [0], U = [1], P = [2].</returns>
 	lupDecomposition: func@ -> This[] {
 		if (!this isSquare)
-			InvalidDimensionsException new() throw()
+			raise("Invalid dimensions")
 		order := this order
 		l := This identity(order)
 		u := this copy()
@@ -181,7 +183,7 @@ FloatMatrix : cover {
 	solve: func@ (y: This) -> This {
 		result: This
 		if (this width > this height)
-			InvalidDimensionsException new() throw()
+			raise("Invalid dimensions")
 		// TODO: This can probably be cleaned up...
 		else
 			if (this isSquare) {
@@ -236,10 +238,8 @@ FloatMatrix : cover {
 				value := lower elements[y + y * lower width]
 				if (value != 0)
 					result elements[x + y * result width] = accumulator / value
-				else {
-					// TODO: What do we do about this?
-					/*DivisionByZeroException new() throw()*/
-				}
+				else
+					raise("Division by zero")
 			}
 		result
 	}
@@ -260,10 +260,8 @@ FloatMatrix : cover {
 				value := upper elements[y + y * upper width]
 				if (value != 0)
 					result elements[x + y * result width] = accumulator / value
-				else {
-					// TODO: What do we do about this?
-					/*DivisionByZeroException new() throw()*/
-				}
+				else
+					raise("Division by zero")
 			}
 		}
 		result
@@ -315,12 +313,4 @@ operator * (left: Float, right: FloatMatrix) -> FloatMatrix {
 	for (i in 0 .. right dimensions area)
 		result elements[i] = left * right elements[i]
 	result
-}
-
-DivisionByZeroException: class extends Exception {
-	init: func@
-}
-
-InvalidDimensionsException: class extends Exception {
-	init: func@
 }
