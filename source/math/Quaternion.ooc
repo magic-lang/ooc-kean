@@ -284,6 +284,8 @@ Quaternion: cover {
 			B += weights[n / 3] / 3.0f * w * v transpose()
 		}
 		S := B + B transpose()
+		w free()
+		v free()
 
 		temporaryZ := FloatPoint3D new()
 		for (n in 0 .. vectorCount)
@@ -301,6 +303,12 @@ Quaternion: cover {
 		for (i in 0 .. 3)
 			vector set(i, 0, Y get(i, 0))
 		q := constant * vector
+
+		referenceVectors free()
+		observationVectors free()
+		B free()
+		Z free()
+		vector free()
 		This new(q get(3, 0), -q get(0, 0), -q get(1, 0), -q get(2, 0))
 	}
 	_createVectorMeasurementsForQuest: static func (quaternions: VectorList<This>, V, W: FloatMatrix) {
