@@ -11,7 +11,6 @@ _Task: abstract class {
 	_freeDirectly: Bool
 	_mutex: Mutex
 	mutex ::= this _mutex
-	init: func(=_mutex)
 	run: abstract func (mutex: Mutex)
 	wait: func -> Bool {
 		status := false
