@@ -10,11 +10,11 @@ ThreadPoolTest: class extends Fixture {
 		this add("threaded_noresult", func {
 			pool := ThreadPool new()
 			loopLength := 100_000_000
-			promise1 := pool addWait(func { for (i in 0 .. loopLength) { } } )
-			promise2 := pool addWait(func { for (i in 0 .. loopLength) { } } )
-			promise3 := pool addWait(func { for (i in 0 .. loopLength) { } } )
-			promise4 := pool addWait(func { for (i in 0 .. loopLength) { } } )
-			promise5 := pool addWait(func { for (i in 0 .. loopLength) { } } )
+			promise1 := pool getPromise(func { for (i in 0 .. loopLength) { } } )
+			promise2 := pool getPromise(func { for (i in 0 .. loopLength) { } } )
+			promise3 := pool getPromise(func { for (i in 0 .. loopLength) { } } )
+			promise4 := pool getPromise(func { for (i in 0 .. loopLength) { } } )
+			promise5 := pool getPromise(func { for (i in 0 .. loopLength) { } } )
 			promise4 cancel()
 			expect(promise1 wait())
 			expect(promise2 wait())
@@ -30,9 +30,9 @@ ThreadPoolTest: class extends Fixture {
 		})
 		this add("threaded_result", func {
 			pool := ThreadPool new()
-			promise := pool addWaitResult(func { for (i in 0 .. 100_000_000) { } Text new(c"pass", 4) } )
-			promise2 := pool addWaitResult(func { for (i in 0 .. 100_000_000) { } "pass" } )
-			promise3 := pool addWaitResult(func { for (i in 0 .. 100_000_000) { } 123_456_789 } )
+			promise := pool getFuture(func { for (i in 0 .. 100_000_000) { } Text new(c"pass", 4) } )
+			promise2 := pool getFuture(func { for (i in 0 .. 100_000_000) { } "pass" } )
+			promise3 := pool getFuture(func { for (i in 0 .. 100_000_000) { } 123_456_789 } )
 			result := promise wait(Text new(c"fail", 4))
 			result2 := promise2 wait("fail")
 			result3 := promise3 wait(0)
@@ -48,7 +48,7 @@ ThreadPoolTest: class extends Fixture {
 		})
 		this add("threaded_result_cancel", func {
 			pool := ThreadPool new()
-			promise := pool addWaitResult(func { for (i in 0 .. 100_000_000) { } "finished" } )
+			promise := pool getFuture(func { for (i in 0 .. 100_000_000) { } "finished" } )
 			promise cancel()
 			result := promise wait("cancelled")
 			expect(result == "cancelled")

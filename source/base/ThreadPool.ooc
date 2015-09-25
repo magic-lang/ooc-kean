@@ -1,64 +1,68 @@
 use ooc-collections
 use ooc-base
-
 import structs/LinkedList
 import threading/Thread
 import threading/native/ConditionUnix
 import os/Time
 
-_TaskState: enum {
-	Unfinished
-	Finished
-	Cancelled
-}
-
-_Task: class {
+_Task: abstract class {
+	_state := _PromiseState Unfinished
+	_freeDirectly: Bool //TODO: Måste något freeas eller kan vi ta bort detta?
 	_mutex: Mutex
-	_action: Func
-	_state : _TaskState
-	_freeDirectly: Bool
-	init: func (=_action, =_mutex) {
-		_state = _TaskState Unfinished
-		_mutex = Mutex new()
+	mutex ::= this _mutex
+	init: func(=_mutex)
+	run: abstract func (mutex: Mutex)
+	wait: func -> Bool {
+		status := false
+		while (true) {
+			this _mutex lock()
+			if (this _state != _PromiseState Unfinished) {
+				status = (this _state == _PromiseState Finished)
+				this _mutex unlock()
+				break
+			}
+			this _mutex unlock()
+			Time sleepMilli(10)
+		}
+		status
 	}
-	free: override func {
-		if (this _state != _TaskState Unfinished)
-			this _freeDirectly = true
-		else
-			super()
+	cancel: func -> Bool {
+		status := false
+		this _mutex lock()
+		if (this _state == _PromiseState Unfinished) {
+			this _state = _PromiseState Cancelled
+			status = true
+		}
+		this _mutex unlock()
+		status
 	}
-	run: virtual func (=_mutex) {
-		this _action()
-		_mutex lock()
-		if (this _state != _TaskState Cancelled)
-			this _state = _TaskState Finished
-		_mutex unlock()
+	_finishedTask: func {
+		this _mutex lock()
+		if (this _state != _PromiseState Cancelled)
+			this _state = _PromiseState Finished
+		this _mutex unlock()
 		if (this _freeDirectly)
 			this free()
+	}
+}
+
+_ActionTask: class extends _Task {
+	_action: Func
+	init: func (=_action, =_mutex)
+	run: func (=_mutex) {
+		this _action()
+		this _finishedTask()
 	}
 }
 
 _ResultTask: class <T> extends _Task {
 	_result: Cell<T>
-	_resultAction: Func -> T
-	init: func (=_resultAction, =_mutex) {
-		this _state = _TaskState Unfinished
-	}
-	free: func {
-		if (this _state != _TaskState Unfinished)
-			this _freeDirectly = true
-		else
-			super()
-	}
-	run: override func (=_mutex) {
-		temporary := Cell<T> new(this _resultAction())
-		this _mutex lock()
+	_action: Func -> T
+	init: func (=_action, =_mutex)
+	run: func (=_mutex) {
+		temporary := Cell<T> new(this _action())
 		this _result = temporary
-		if (this _state != _TaskState Cancelled)
-			this _state = _TaskState Finished
-		if (this _freeDirectly)
-			this free()
-		this _mutex unlock()
+		this _finishedTask()
 	}
 }
 
@@ -70,75 +74,46 @@ _TaskPromise: class extends Promise {
 		super()
 	}
 	wait: override func -> Bool {
-		status := false
-		while (true) {
-			this _task _mutex lock()
-			if (this _task _state != _TaskState Unfinished) {
-				status = (this _task _state == _TaskState Finished)
-				this _task _mutex unlock()
-				break
-			}
-			this _task _mutex unlock()
-			Time sleepMilli(10)
-		}
-		status
+		this _task wait()
 	}
 	cancel: override func -> Bool {
-		status := false
-		this _task _mutex lock()
-		if (this _task _state == _TaskState Unfinished) {
-			this _task _state = _TaskState Cancelled
-			status = true
-		}
-		this _task _mutex unlock()
-		status
+		//TODO: Interrupt executing thread and have it move on to the next task in queue
+		this _task cancel()
 	}
 }
 
-_ResultTaskPromise: class <T> extends ResultPromise<T> {
-	_resultTask: _ResultTask<T>
-	init: func (=_resultTask)
+_TaskFuture: class <T> extends Future<T> {
+	_task: _ResultTask<T>
+	init: func (=_task)
 	free: override func {
-		this _resultTask free()
+		this _task free()
 		super()
 	}
-	wait: func -> Bool {
-		status := false
-		while (true) {
-			this _resultTask _mutex lock()
-			if (this _resultTask _state != _TaskState Unfinished) {
-				status = (this _resultTask _state == _TaskState Finished)
-				this _resultTask _mutex unlock()
-				break
-			}
-			this _resultTask _mutex unlock()
-			Time sleepMilli(100)
-		}
-		status
+	wait: override func -> Bool {
+		this _task wait()
 	}
 	wait: func ~default (defaultValue: T) -> T {
 		status := this wait()
-		status ? this _resultTask _result[T] : defaultValue
+		status ? this _task _result[T] : defaultValue
+	}
+	getResult: func (defaultValue: T) -> T {
+		status: Bool
+		this _task _mutex lock()
+		status = (this _task _state == _PromiseState Finished)
+		this _task _mutex unlock()
+		status ? this _task _result[T] : defaultValue
 	}
 	cancel: override func -> Bool {
-		status := false
-		this _resultTask _mutex lock()
-		if (this _resultTask _state == _TaskState Unfinished) {
-			this _resultTask _state = _TaskState Cancelled
-			status = true
-		}
-		this _resultTask _mutex unlock()
-		status
+		//TODO: Interrupt executing thread and have it move on to the next task in queue
+		this _task cancel()
 	}
 }
 
 ThreadPool: class {
 	_globalmutex := Mutex new()
-	_threads: Thread[]
+	_threads: Thread[] //TODO: Implement Worker class to make code nicer
 	_threadMutexes: Mutex[]
 	_tasks := BlockedQueue<_Task> new()
-	_allFinishedCondition := WaitCondition new()
-	_activeJobs: Int
 	_threadCount: Int
 	threadCount ::= this _threadCount
 	init: func (threadCount := 4) {
@@ -147,7 +122,7 @@ ThreadPool: class {
 		this _threadMutexes = Mutex[threadCount] new()
 		for (i in 0 .. threadCount) {
 			this _threadMutexes[i] = Mutex new()
-			this _threads[i] = Thread new(|| threadLoop(i))
+			this _threads[i] = Thread new(|| _threadLoop(i))
 			this _threads[i] start()
 		}
 	}
@@ -156,48 +131,37 @@ ThreadPool: class {
 			this _threads[i] free()
 			this _threadMutexes[i] destroy()
 		}
-		gc_free(this _threads data)
+		this _threads free()
+		this _threadMutexes free()
 		this _tasks free()
-		this _allFinishedCondition free()
 		this _globalmutex destroy()
 		super()
 	}
-	threadLoop: func (threadId: Int) {
+	_threadLoop: func (identifier: Int) {
 		while (true) {
 			job := this _tasks wait()
-			job run(this _threadMutexes[threadId])
+			job run(this _threadMutexes[identifier])
 			this _globalmutex lock()
-			this _activeJobs -= 1
-			if (this _activeJobs == 0) {
-				this _allFinishedCondition broadcast()
-			}
 			this _globalmutex unlock()
 		}
 	}
 	_add: func (task: _Task) -> Void {
-		this _globalmutex lock()
-		this _activeJobs += 1
-		this _globalmutex unlock()
 		this _tasks enqueue(task)
 	}
 	add: func (action: Func) {
-		task := _Task new(action, this _globalmutex)
+		task := _ActionTask new(action, this _globalmutex)
 		this _add(task)
 	}
-	addWait: func (action: Func) -> Promise {
-		task := _Task new(action, this _globalmutex)
+	getPromise: func (action: Func) -> Promise {
+		task := _ActionTask new(action, this _globalmutex)
 		this _add(task)
 		_TaskPromise new(task)
 	}
-	addWaitResult: func ~result <T> (action: Func -> T) -> ResultPromise<T> {
-		task := _ResultTask<T> new(action, this _globalmutex)
+	getFuture: func <T> (action: Func -> T) -> Future<T> {
+		task := _ResultTask <T> new(action, this _globalmutex)
 		this _add(task)
-		_ResultTaskPromise new(task)
+		_TaskFuture new(task)
 	}
-	waitAll: func {
-		this _globalmutex lock()
-		if (this _activeJobs > 0)
-			this _allFinishedCondition wait(this _globalmutex)
-		this _globalmutex unlock()
-	}
+	// TODO wait removed, breaks code
+	// TODO waitAll removed, breaks code
 }
