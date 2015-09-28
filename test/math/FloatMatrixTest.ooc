@@ -4,8 +4,9 @@ import math
 import lang/IO
 
 FloatMatrixTest: class extends Fixture {
-matrix := FloatMatrix new (3, 3)
-matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
+	matrix := FloatMatrix new (3, 3)
+	matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
+	matrixNull := FloatMatrix new(0, 0)
 
 	init: func {
 		super ("FloatMatrix")
@@ -25,6 +26,9 @@ matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
 		this add("dimensions", func {
 			expect(matrixNonSquare dimensions width, is equal to(2))
 			expect(matrixNonSquare dimensions height, is equal to(3))
+			expect(matrixNull width, is equal to (0))
+			expect(matrixNull height, is equal to (0))
+			expect(matrixNull isNull)
 		})
 
 		this add("elements", func {

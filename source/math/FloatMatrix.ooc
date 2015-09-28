@@ -51,8 +51,13 @@ FloatMatrix : cover {
 	// <param name="x">Column number of a matrix.</param>
 	// <param name="y">Row number of a matrix.</param>
 	// <returns></returns>
-	get: func@ (x, y: Int) -> Float { this[x, y] } //TODO Deprecated, remove when no longer used
-	operator [] (x, y: Int) -> Float { this elements[x + y * this width] }
+	operator [] (x, y: Int) -> Float {
+		version (safe) {
+			if (x + y * this width >= this width * this height || x + y * this width < 0)
+				raise("Accessing Vector index out of range in get operator")
+		}
+		this elements[x + y * this width]
+	}
 	// NOTE: Because rock doesn't understand the concept of inline functions,
 	// this function has been inlined manually in many places in this file for performance reasons.
 
@@ -63,8 +68,13 @@ FloatMatrix : cover {
 	// <param name="y">Row number of a matrix.</param>
 	// <param name="value">The value set at (x,y).</param>
 	// <returns></returns>
-	set: func@ (x, y: Int, value: Float) { this[x, y] = value } //TODO Deprecated, remove when no longer used
-	operator []= (x, y: Int, value: Float) { this elements[x + y * this width] = value }
+	operator []= (x, y: Int, value: Float) {
+		version (safe) {
+			if (x + y * this width >= this width * this height || x + y * this width < 0)
+				raise("Accessing Vector index out of range in get operator")
+		}
+		this elements[x + y * this width] = value
+	}
 	// NOTE: Because rock doesn't understand the concept of inline functions,
 	// this function has been inlined manually in many places in this file for performance reasons.
 
@@ -222,10 +232,7 @@ FloatMatrix : cover {
 		result
 	}
 
-	//TODO: Shouldn't this be a property?
-	isNull: func -> Bool {
-		this dimensions empty
-	}
+	isNull ::= this dimensions empty
 
 	// <summary>
 	// Forward solver lower * x = y. Current object is y.
@@ -272,11 +279,6 @@ FloatMatrix : cover {
 	}
 
 	free: func { this elements free() }
-
-	//TODO: Remove this function once all callers have been updated to call free instead.
-	dispose: func {
-		this free()
-	}
 
 	operator * (other: This) -> This {
 		if (this width != other height)
