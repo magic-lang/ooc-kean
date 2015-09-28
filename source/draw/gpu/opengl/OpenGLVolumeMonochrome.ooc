@@ -18,12 +18,13 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import backend/gles3/VolumeTexture
+import backend/[GLVolumeTexture, GLContext]
+import OpenGLContext
 
 OpenGLVolumeMonochrome: class {
-	_backend: VolumeTexture
-	init: func (size: IntSize3D, pixels: UInt8* = null) {
-		this _backend = VolumeTexture new(size width, size height, size depth, pixels)
+	_backend: GLVolumeTexture
+	init: func (size: IntSize3D, pixels: UInt8* = null, context: OpenGLContext) {
+		this _backend = context backend createVolumeTexture(size width, size height, size depth, pixels)
 	}
 	bind: func (unit: UInt) {
 		this _backend bind(unit)

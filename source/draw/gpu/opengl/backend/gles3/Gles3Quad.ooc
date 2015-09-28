@@ -15,18 +15,19 @@
  * along with This software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import include/gles3, Vao, DebugGL
+import include/gles3
+import ../GLQuad
+import Gles3VertexArrayObject, Gles3Debug
 
-Quad: class {
-	vao: Vao
+Gles3Quad: class extends GLQuad {
 	init: func {
 		version(debugGL) { validateStart() }
 		positions := [-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f] as Float*
 		textureCoordinates := [0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f] as Float*
-		this vao = Vao new(positions, textureCoordinates, 4, 2)
+		this vao = Gles3VertexArrayObject new(positions, textureCoordinates, 4, 2)
 		version(debugGL) { validateEnd("quad init") }
 	}
-	free: func {
+	free: override func {
 		this vao free()
 		super()
 	}
@@ -36,12 +37,5 @@ Quad: class {
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)
 		this vao unbind()
 		version(debugGL) { validateEnd("quad draw") }
-	}
-	create: static func -> This {
-		version(debugGL) { validateStart() }
-		result := This new()
-		result = (result vao != null) ? result : null
-		version(debugGL) { validateEnd("quad create") }
-		result
 	}
 }

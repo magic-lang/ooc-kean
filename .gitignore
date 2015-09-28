@@ -38,4 +38,4 @@ rock_tmp
 /source/Constraints
 
 # Test output
-/test/draw/output
+/test/*/output

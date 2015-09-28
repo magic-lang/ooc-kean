@@ -14,19 +14,24 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+
 use ooc-base
 import os/Time
 import include/gles3
+import ../GLFence
 import threading/Thread
-Fence: class {
-	_backend: Pointer = null
-	_syncCondition: WaitCondition
-	_mutex: Mutex
-	init: func {
-		this _mutex = Mutex new()
-		this _syncCondition = WaitCondition new()
+import Gles3Debug
+
+Gles3Fence: class extends GLFence {
+	init: func { super() }
+	free: override func {
+		version(debugGL) { validateStart() }
+		glDeleteSync(this _backend)
+		version(debugGL) { validateEnd("Fence free") }
+		super()
 	}
-	clientWait: func (timeout: UInt64 = GL_TIMEOUT_IGNORED) {
+	clientWait: func (timeout: UInt64 = ULLONG_MAX) {
+		version(debugGL) { validateStart() }
 		this _mutex lock()
 		if (this _backend == null)
 			this _syncCondition wait(this _mutex)
@@ -43,12 +48,16 @@ Fence: class {
 			}
 		} else
 			glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, timeout)
+		version(debugGL) { validateEnd("Fence clientWait") }
 	}
 	wait: func {
+		version(debugGL) { validateStart() }
 		glFlush()
 		glWaitSync(this _backend, 0, GL_TIMEOUT_IGNORED)
+		version(debugGL) { validateEnd("Fence wait") }
 	}
 	sync: func {
+		version(debugGL) { validateStart() }
 		this _mutex lock()
 		if (this _backend != null)
 			glDeleteSync(this _backend)
@@ -57,11 +66,6 @@ Fence: class {
 		this _mutex unlock()
 		this _syncCondition broadcast()
 		glFlush()
-	}
-	free: override func {
-		glDeleteSync(this _backend)
-		this _mutex destroy()
-		this _syncCondition free()
-		super()
+		version(debugGL) { validateEnd("Fence sync") }
 	}
 }

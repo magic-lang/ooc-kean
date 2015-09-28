@@ -14,43 +14,22 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+
 use ooc-math
 use ooc-base
-import include/gles3, DebugGL
-import Context
+import include/gles3
+import ../GLTexture
+import Gles3Debug
 
-TextureType: enum {
-	monochrome
-	rgba
-	rgb
-	bgr
-	bgra
-	uv
-	yv12
-}
-
-InterpolationType: enum {
-	Nearest
-	Linear
-	LinearMipmapNearest
-	LinearMipmapLinear
-	NearestMipmapNearest
-	NearestMipmapLinear
-}
-
-Texture: class {
-	_backend: UInt
-	backend: UInt { get { this _backend } }
-	_size: IntSize2D
-	size ::= this _size
-	_type: TextureType
+Gles3Texture: class extends GLTexture {
 	_format: UInt
 	_internalFormat: UInt
 	_bytesPerPixel: UInt
-	_target: UInt = GL_TEXTURE_2D
 
 	init: func (=_type, =_size) {
 		version(debugGL) { validateStart() }
+		super()
+		_target = GL_TEXTURE_2D
 		this _setInternalFormats(this _type)
 		version(debugGL) { validateEnd("Texture init") }
 	}
@@ -93,31 +72,31 @@ Texture: class {
 	_setInternalFormats: func (type: TextureType) {
 		version(debugGL) { validateStart() }
 		match type {
-			case TextureType monochrome =>
+			case TextureType Monochrome =>
 				this _internalFormat = GL_R8
 				this _format = GL_RED
 				this _bytesPerPixel = 1
-			case TextureType rgba =>
+			case TextureType Rgba =>
 				this _internalFormat = GL_RGBA8
 				this _format = GL_RGBA
 				this _bytesPerPixel = 4
-			case TextureType rgb =>
+			case TextureType Rgb =>
 				this _internalFormat = GL_RGB8
 				this _format = GL_RGB
 				this _bytesPerPixel = 3
-			case TextureType bgra =>
+			case TextureType Bgra =>
 				this _internalFormat = GL_RGBA8
 				this _format = GL_RGBA
 				this _bytesPerPixel = 4
-			case TextureType bgr =>
+			case TextureType Bgr =>
 				this _internalFormat = GL_RGB8
 				this _format = GL_RGB
 				this _bytesPerPixel = 3
-			case TextureType uv =>
+			case TextureType Uv =>
 				this _internalFormat = GL_RG8
 				this _format = GL_RG
 				this _bytesPerPixel = 2
-			case TextureType yv12 =>
+			case TextureType Yv12 =>
 				this _internalFormat = GL_R8
 				this _format = GL_RED
 				this _bytesPerPixel = 1
@@ -163,6 +142,7 @@ Texture: class {
 		glTexParameteri(this _target, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 		glTexParameteri(this _target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
 		glTexParameteri(this _target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+		version(debugGL) { validateEnd("Texture _genTexture") }
 	}
 	_generate: func (pixels: Pointer, stride: Int, allocate := true) -> Bool {
 		this _genTexture()
@@ -172,6 +152,7 @@ Texture: class {
 	}
 	_allocate: func (pixels: Pointer, stride: Int) {
 		version(debugGL) { Debug print("Allocating OpenGL Texture") }
+		version(debugGL) { validateStart() }
 		pixelStride := stride / this _bytesPerPixel
 		if (pixelStride != this size width) {
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
@@ -180,13 +161,5 @@ Texture: class {
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
 		version(debugGL) { validateEnd("Texture _allocate") }
 		true
-	}
-	create: static func (type: TextureType, size: IntSize2D, stride: UInt, pixels := null, allocate : Bool = true) -> This {
-		version(debugGL) { validateStart() }
-		result := This new(type, size)
-		success := result _generate(pixels, stride, allocate)
-		result = success ? result : null
-		version(debugGL) { validateEnd("Texture create") }
-		result
 	}
 }

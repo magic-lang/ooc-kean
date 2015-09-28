@@ -14,17 +14,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+
 use ooc-base
 use ooc-math
 use ooc-ui
 import ../egl/egl
+import ../[GLContext, GLTexture]
 import include/gles3
-import DebugGL
+import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture
 
-Context: class {
+Gles3Context: class extends GLContext {
 	_eglContext: Pointer
-	_eglDisplay: Pointer
 	_eglSurface: Pointer
+
 	init: func
 	free: override func {
 		eglMakeCurrent(this _eglDisplay, null, null, null)
@@ -71,10 +73,10 @@ Context: class {
 		this _eglContext = eglCreateContext(this _eglDisplay, config, shared, contextAttribs)
 		if (this _eglContext == null) {
 			"Failed to create OpenGL ES 3 context, trying with OpenGL ES 2 instead" println()
-			contextAttribsGLES2 := [
+			contextAttribs = [
 				EGL_CONTEXT_CLIENT_VERSION, 2,
 				EGL_NONE] as Int*
-			this _eglContext = eglCreateContext(this _eglDisplay, config, shared, contextAttribsGLES2)
+			this _eglContext = eglCreateContext(this _eglDisplay, config, shared, contextAttribs)
 			if (this _eglContext == null)
 				raise("Failed to create OpenGL ES 3 or OpenGL ES 2 context")
 			else
@@ -175,5 +177,53 @@ Context: class {
 		version(debugGL) { Debug print("Creating OpenGL context") }
 		result := This new()
 		result _generate(sharedContext) ? result : null
+	}
+
+	createQuad: func -> Gles3Quad {
+		version(debugGL) { validateStart() }
+		result := Gles3Quad new()
+		result = (result vao != null) ? result : null
+		version(debugGL) { validateEnd("Quad create") }
+		result
+	}
+	createShaderProgram: func (vertexSource, fragmentSource: String) -> Gles3ShaderProgram {
+		version(debugGL) { validateStart() }
+		result := Gles3ShaderProgram new()
+		result = result _compileShaders(vertexSource, fragmentSource) ? result : null
+		version(debugGL) { validateEnd("ShaderProgram create") }
+		result
+	}
+	createTexture: func (type: TextureType, size: IntSize2D, stride: UInt, pixels := null, allocate := true) -> Gles3Texture {
+		version(debugGL) { validateStart() }
+		result := Gles3Texture new(type, size)
+		success := result _generate(pixels, stride, allocate)
+		result = success ? result : null
+		version(debugGL) { validateEnd("Texture create") }
+		result
+	}
+	createFramebufferObject: func (texture: GLTexture, size: IntSize2D) -> Gles3FramebufferObject {
+		version(debugGL) { validateStart() }
+		result := Gles3FramebufferObject new(size)
+		result = result _generate(texture as Gles3Texture) ? result : null
+		version(debugGL) { validateEnd("FramebufferObject create") }
+		result
+	}
+	createFence: func -> Gles3Fence {
+		version(debugGL) { validateStart() }
+		result := Gles3Fence new()
+		version(debugGL) { validateEnd("Fence create") }
+		result
+	}
+	createVolumeTexture: func (width, height, depth: UInt, pixels: UInt8*) -> Gles3VolumeTexture {
+		version(debugGL) { validateStart() }
+		result := Gles3VolumeTexture new(width, height, depth, pixels)
+		version(debugGL) { validateEnd("VolumeTexture create") }
+		result
+	}
+	createRenderer: func -> Gles3Renderer {
+		version(debugGL) { validateStart() }
+		result := Gles3Renderer new()
+		version(debugGL) { validateEnd("Renderer create") }
+		result
 	}
 }

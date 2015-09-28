@@ -1,7 +1,7 @@
 import native/[ThreadUnix, ThreadWin32]
 import native/[MutexUnix, MutexWin32]
 import native/[ThreadLocalUnix, ThreadLocalWin32]
-import native/ConditionUnix
+import native/[ConditionUnix, ConditionWin32]
 
 /**
  * A thread is a thread of execution in a program. Multiple threads
@@ -296,6 +296,9 @@ WaitCondition: abstract class {
     new: static func -> This {
         version (unix || apple) {
             return ConditionUnix new() as This
+        }
+        version (windows) {
+            return ConditionWin32 new() as This
         }
         Exception new(This, "Unsupported platform!\n") throw()
         null

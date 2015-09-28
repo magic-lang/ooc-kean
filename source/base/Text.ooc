@@ -32,7 +32,10 @@ Text: cover {
 		this _count = 0
 		this _owner = Owner Unknown
 	}
-	init: func@ ~fromStringLiteral (string: CString, =_count) {
+	init: func@ ~fromStringLiteral (string: CString) {
+		this init(string, strlen(string))
+	}
+	init: func@ ~fromStringLiteralWithCount (string: CString, =_count) {
 		this _buffer = string
 		this _owner = Owner Literal
 	}

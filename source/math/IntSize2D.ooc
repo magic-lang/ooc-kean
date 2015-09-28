@@ -22,6 +22,7 @@ import structs/ArrayList
 IntSize2D: cover {
 	width, height: Int
 	area ::= this width * this height
+	square ::= this width == this height
 	empty ::= !(this width > 0 && this height > 0)
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
