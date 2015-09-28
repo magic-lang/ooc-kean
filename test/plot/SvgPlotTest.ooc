@@ -5,6 +5,7 @@ use ooc-collections
 use ooc-draw
 import math
 import math/Random
+import io/File
 
 log := VectorList<FloatPoint2D> new()
 sin := VectorList<FloatPoint2D> new()
@@ -82,7 +83,11 @@ formatPlot xAxis gridOn = false // defaults to true, set to false if grid is not
 formatPlot xAxis roundAxisEndpoints = false // defaults to true, if set to false the axis endpoints will be equal to the data's endpoints
 
 // Write plots to file
-filename := "example.svg"
+filename := "test/plot/output/"
+file := File new(filename)
+folder := file parent . mkdirs() . free()
+file free()
+filename = filename + "example.svg"
 writer := SvgWriter2D new(filename, logPlot)
 writer addPlot(scatterPlot)
 writer addPlot(trigonometryPlot)
