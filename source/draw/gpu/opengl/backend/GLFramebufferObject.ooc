@@ -24,7 +24,6 @@ GLFramebufferObject: abstract class {
 	_backend: UInt
 
 	init: func (=_size)
-	free: override func { super() }
 	bind: abstract func
 	unbind: abstract func
 	clear: abstract func

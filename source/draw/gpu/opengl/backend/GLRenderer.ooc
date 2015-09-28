@@ -19,7 +19,6 @@ import GLQuad
 
 GLRenderer: abstract class {
 	_quad: GLQuad
-	free: override func { super() }
 	drawQuad: abstract func
 	drawLines: abstract func (positions: Float*, count: Int, dimensions: Int, lineWidth: Float)
 	drawPoints: abstract func (positions: Float*, count: Int, dimensions: Int)

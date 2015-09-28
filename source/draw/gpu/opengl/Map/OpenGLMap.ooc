@@ -51,6 +51,34 @@ OpenGLMap: abstract class extends GpuMap {
 		this _program[currentIndex] use()
 	}
 }
+OpenGLMapMesh: class extends OpenGLMap {
+	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
+	use: override func {
+		super()
+		this program setUniform("projection", this projection)
+	}
+	vertexSource: static String = "#version 300 es
+		precision highp float;
+		uniform mat4 projection;
+		layout(location = 0) in vec3 vertexPosition;
+		layout(location = 1) in vec2 textureCoordinate;
+		out vec2 fragmentTextureCoordinate;
+		void main() {
+			vec4 position = vec4(vertexPosition, 1);
+			fragmentTextureCoordinate = textureCoordinate;
+			gl_Position = projection * position;
+		}
+		"
+	fragmentSource: static String = "#version 300 es
+		precision highp float;
+		uniform sampler2D texture0;
+		in vec2 fragmentTextureCoordinate;
+		out vec4 outColor;
+		void main() {
+			outColor = texture(texture0, fragmentTextureCoordinate).rgba;
+		}
+		"
+}
 OpenGLMapDefault: abstract class extends OpenGLMap {
 	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
 	vertexSource: static String = "#version 300 es

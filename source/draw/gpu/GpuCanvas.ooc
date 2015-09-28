@@ -18,7 +18,7 @@ use ooc-math
 use ooc-draw
 use ooc-base
 use ooc-collections
-import GpuImage, GpuMap, GpuSurface, GpuContext, GpuYuv420Semiplanar
+import GpuImage, GpuMap, GpuSurface, GpuContext, GpuYuv420Semiplanar, GpuMesh
 
 GpuCanvasYuv420Semiplanar: class extends GpuSurface {
 	_target: GpuYuv420Semiplanar
@@ -54,5 +54,10 @@ GpuCanvasYuv420Semiplanar: class extends GpuSurface {
 	clear: override func {
 		this _target y canvas clear()
 		this _target uv canvas clear()
+	}
+	draw: override func ~mesh (image: Image, mesh: GpuMesh) {
+		yuv := image as GpuYuv420Semiplanar
+		this _target y canvas draw(yuv y, mesh)
+		this _target uv canvas draw(yuv uv, mesh)
 	}
 }

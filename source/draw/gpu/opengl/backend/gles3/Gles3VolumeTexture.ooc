@@ -24,9 +24,10 @@ import Gles3Debug
 Gles3VolumeTexture: class extends GLVolumeTexture {
 	_backend: UInt
 	backend: UInt { get { this _backend } }
-	width, height, depth: UInt
+	_size: IntSize3D
+	size ::= this _size
 
-	init: func (=width, =height, =depth, pixels: UInt8*) {
+	init: func (=_size, pixels: UInt8*) {
 		version(debugGL) { validateStart() }
 		glGenTextures(1, _backend&)
 		glBindTexture(GL_TEXTURE_3D, _backend)
@@ -35,7 +36,7 @@ Gles3VolumeTexture: class extends GLVolumeTexture {
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE)
-		glTexImage3D(GL_TEXTURE_3D, 0, GL_R8, this width, this height, this depth, 0, GL_RED, GL_UNSIGNED_BYTE, pixels)
+		glTexImage3D(GL_TEXTURE_3D, 0, GL_R8, this size width, this size height, this size depth, 0, GL_RED, GL_UNSIGNED_BYTE, pixels)
 		version(debugGL) { validateEnd("VolumeTexture init") }
 	}
 	free: override func {
@@ -58,7 +59,7 @@ Gles3VolumeTexture: class extends GLVolumeTexture {
 	upload: func (pixels: UInt8*) {
 		version(debugGL) { validateStart() }
 		glBindTexture(GL_TEXTURE_3D, this _backend)
-		glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, this width, this height, this depth, GL_RED, GL_UNSIGNED_BYTE, pixels)
+		glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, this size width, this size height, this size depth, GL_RED, GL_UNSIGNED_BYTE, pixels)
 		this unbind()
 		version(debugGL) { validateEnd("VolumeTexture upload") }
 	}
