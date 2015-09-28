@@ -88,13 +88,19 @@ matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
 			x := A solve(y)
 			checkAllElements(x, [-70.0f, 231.0f, -296.0f, 172.0f, -38.0f])
 		})
+
+		this add("set and get", func {
+			matrix = createMatrix(3, 3, [1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f])
+			matrix[0, 0] = 42.0f
+			expect(matrix[0, 0] == 42.0f)
+		})
 	}
 
 	createMatrix: func (width: Int, height: Int, values: Float[]) -> FloatMatrix {
 		result := FloatMatrix new(width, height)
 		for (x in 0 .. width) {
 			for (y in 0 .. height) {
-				result set(x, y, values[x * height + y])
+				result[x, y] = values[x * height + y]
 			}
 		}
 		result
@@ -107,7 +113,7 @@ matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
 		// 2 5
 		for (x in 0 .. matrix dimensions width) {
 			for (y in 0 .. matrix dimensions height) {
-				expect(matrix get(x, y), is equal to(values[x *matrix dimensions height + y]))
+				expect(matrix[x, y], is equal to(values[x * matrix dimensions height + y]))
 			}
 		}
 	}
