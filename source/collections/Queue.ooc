@@ -89,10 +89,12 @@ VectorQueue: class <T> extends Queue<T> {
 		(result, success)
 	}
 	peek: func ~default (fallback: T) -> T {
+		result: T
 		if (this empty)
-			fallback
+			result = fallback
 		else
-			this _backend[this _head]
+			result = this _backend[this _head]
+		result
 	}
 	_resize: func {
 		oldCapacity := this _capacity
