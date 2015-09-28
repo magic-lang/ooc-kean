@@ -52,7 +52,7 @@ FloatMatrix : cover {
 	// <param name="y">Row number of a matrix.</param>
 	// <returns></returns>
 	get: func@ (x, y: Int) -> Float { this[x, y] } //TODO Deprecated, remove when no longer used
-	operator [] (x, y: Int) -> Float { this elements[x + this width * y] }
+	operator [] (x, y: Int) -> Float { this elements[x + y * this width] }
 
 	// <summary>
 	// Set an element in a matrix at position(x,y).
@@ -62,7 +62,7 @@ FloatMatrix : cover {
 	// <param name="value">The value set at (x,y).</param>
 	// <returns></returns>
 	set: func@ (x, y: Int, value: Float) { this[x, y] = value } //TODO Deprecated, remove when no longer used
-	operator []= (x, y: Int, value: Float) { this elements[x + this width * y] = value }
+	operator []= (x, y: Int, value: Float) { this elements[x + y * this width] = value }
 
 	// <summary>
 	// True if the matrix is a square matrix.
