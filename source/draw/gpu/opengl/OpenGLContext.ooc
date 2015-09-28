@@ -19,7 +19,7 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-collections
 use ooc-ui
-import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, RecycleBin
+import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, OpenGLMesh, RecycleBin
 import Map/OpenGLMap, Map/OpenGLMapPack
 import backend/[GLContext, GLRenderer]
 
@@ -31,6 +31,8 @@ OpenGLContext: class extends GpuContext {
 	_packUv: OpenGLMapPackUv
 	_linesShader: OpenGLMapLines
 	_pointsShader: OpenGLMapPoints
+	_meshShader: OpenGLMapMesh
+	meshShader ::= this _meshShader
 	_renderer: GLRenderer
 	defaultMap: GpuMap { get { this _transformTextureMap } }
 	_recycleBin := RecycleBin new()
@@ -43,6 +45,7 @@ OpenGLContext: class extends GpuContext {
 		this _pointsShader = OpenGLMapPoints new(this)
 		this _transformTextureMap = OpenGLMapTransformTexture new(this)
 		this _renderer = _backend createRenderer()
+		this _meshShader = OpenGLMapMesh new(this)
 	}
 	init: func { this init(GLContext createContext()) }
 	init: func ~shared (other: This) { this init(GLContext createContext(other _backend)) }
@@ -54,6 +57,7 @@ OpenGLContext: class extends GpuContext {
 		this _packUv free()
 		this _linesShader free()
 		this _pointsShader free()
+		this _meshShader free()
 		this _backend free()
 		this _renderer free()
 		this _recycleBin free()
@@ -174,4 +178,11 @@ OpenGLContext: class extends GpuContext {
 		fence sync()
 		(result, fence)
 	}
+	createMesh: override func (positions: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
+		toGL := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
+		for (i in 0 .. positions length)
+			positions[i] = toGL * positions[i]
+		OpenGLMesh new(positions, textureCoordinates, this)
+	}
+
 }

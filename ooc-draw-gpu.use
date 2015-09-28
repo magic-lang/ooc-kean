@@ -11,5 +11,6 @@ Imports: GpuSurface
 Imports: GpuMap
 Imports: GpuContext
 Imports: GpuFence
+Imports: GpuMesh
 Libs: -lEGL
 Libs: -lGLESv2

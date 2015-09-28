@@ -19,9 +19,9 @@ use ooc-base
 use ooc-math
 use ooc-ui
 import ../egl/egl
-import ../[GLContext, GLTexture]
+import ../[GLContext, GLTexture, GLVertexArrayObject]
 import include/gles3
-import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture
+import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture, Gles3VertexArrayObject
 
 Gles3Context: class extends GLContext {
 	_eglContext: Pointer
@@ -225,5 +225,8 @@ Gles3Context: class extends GLContext {
 		result := Gles3Renderer new()
 		version(debugGL) { validateEnd("Renderer create") }
 		result
+	}
+	createVertexArrayObject: override func (positions: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GLVertexArrayObject {
+		Gles3VertexArrayObject new(positions, textureCoordinates)
 	}
 }

@@ -19,7 +19,7 @@ use ooc-base
 use ooc-math
 use ooc-ui
 import gles3/Gles3Context
-import GLQuad, GLShaderProgram, GLTexture, GLFramebufferObject, GLFence, GLVolumeTexture, GLRenderer
+import GLQuad, GLShaderProgram, GLTexture, GLFramebufferObject, GLFence, GLVolumeTexture, GLRenderer, GLVertexArrayObject
 
 GLContext: abstract class {
 	_eglDisplay: Pointer
@@ -38,6 +38,7 @@ GLContext: abstract class {
 	createTexture: abstract func (type: TextureType, size: IntSize2D, stride: UInt, pixels := null, allocate : Bool = true) -> GLTexture
 	createVolumeTexture: abstract func (width, height, depth: UInt, pixels: UInt8*) -> GLVolumeTexture
 	createRenderer: abstract func -> GLRenderer
+	createVertexArrayObject: abstract func (positions: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GLVertexArrayObject
 	createContext: static func ~shared (window: NativeWindow, sharedContext: This = null) -> This {
 		// This function will check whether a context creation succeeded and if not try to create a context for another OpenGL version
 		Gles3Context create(window, sharedContext as Gles3Context)

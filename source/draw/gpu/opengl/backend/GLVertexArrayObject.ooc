@@ -19,4 +19,5 @@ GLVertexArrayObject: abstract class {
 	free: override func { super() }
 	bind: abstract func
 	unbind: abstract func
+	draw: abstract func
 }
