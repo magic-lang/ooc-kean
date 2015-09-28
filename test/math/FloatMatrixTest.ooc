@@ -5,8 +5,8 @@ import lang/IO
 
 FloatMatrixTest: class extends Fixture {
 	matrix := FloatMatrix new (3, 3)
-	matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
-	matrixNull := FloatMatrix new(0, 0)
+	nonSquareMatrix := FloatMatrix new (IntSize2D new(2, 3))
+	nullMatrix := FloatMatrix new(0, 0)
 
 	init: func {
 		super ("FloatMatrix")
@@ -16,19 +16,19 @@ FloatMatrixTest: class extends Fixture {
 		})
 
 		this add("isSquare", func {
-			expect(!matrixNonSquare isSquare && matrix isSquare)
+			expect(!nonSquareMatrix isSquare && matrix isSquare)
 		})
 
 		this add("order", func {
-			expect(matrixNonSquare order, is equal to(2))
+			expect(nonSquareMatrix order, is equal to(2))
 		})
 
 		this add("dimensions", func {
-			expect(matrixNonSquare dimensions width, is equal to(2))
-			expect(matrixNonSquare dimensions height, is equal to(3))
-			expect(matrixNull width, is equal to (0))
-			expect(matrixNull height, is equal to (0))
-			expect(matrixNull isNull)
+			expect(nonSquareMatrix dimensions width, is equal to(2))
+			expect(nonSquareMatrix dimensions height, is equal to(3))
+			expect(nullMatrix width, is equal to (0))
+			expect(nullMatrix height, is equal to (0))
+			expect(nullMatrix isNull)
 		})
 
 		this add("elements", func {
