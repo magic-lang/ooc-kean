@@ -51,8 +51,8 @@ FloatMatrix : cover {
 	// <param name="x">Column number of a matrix.</param>
 	// <param name="y">Row number of a matrix.</param>
 	// <returns></returns>
-	get: func@ (x, y: Int) -> Float { this elements[x + this width * y] } //TODO Deprecated, remove when no longer used
-	operator [] (x, y: Int) -> Float { this elements[x + dimensions width * y] }
+	get: func@ (x, y: Int) -> Float { this[x, y] } //TODO Deprecated, remove when no longer used
+	operator [] (x, y: Int) -> Float { this elements[x + this width * y] }
 
 	// <summary>
 	// Set an element in a matrix at position(x,y).
@@ -61,8 +61,8 @@ FloatMatrix : cover {
 	// <param name="y">Row number of a matrix.</param>
 	// <param name="value">The value set at (x,y).</param>
 	// <returns></returns>
-	set: func@ (x, y: Int, value: Float) { this elements[x + this width * y] = value } //TODO Deprecated, remove when no longer used
-	operator []= (x, y: Int, value: Float) -> Float { this elements[x + dimensions width * y] = value }
+	set: func@ (x, y: Int, value: Float) { this[x, y] = value } //TODO Deprecated, remove when no longer used
+	operator []= (x, y: Int, value: Float) { this elements[x + this width * y] = value }
 
 	// <summary>
 	// True if the matrix is a square matrix.
@@ -102,7 +102,7 @@ FloatMatrix : cover {
 	// <returns>The trace of the matrix.</returns>
 	trace: func -> Float {
 		if (!this isSquare)
-			raise("Invalid dimensions")
+			raise("Invalid dimensions in FloatMatrix trace")
 		result := 0.0f
 		for (i in 0 .. this height)
 			result += this[i, i]
@@ -143,7 +143,7 @@ FloatMatrix : cover {
 	// <returns>Returns the Lup decomposition. L = [0], U = [1], P = [2].</returns>
 	lupDecomposition: func@ -> This[] {
 		if (!this isSquare)
-			raise("Invalid dimensions")
+			raise("Invalid dimensions in FloatMatrix lupDecomposition")
 		order := this order
 		l := This identity(order)
 		u := this copy()
@@ -183,7 +183,7 @@ FloatMatrix : cover {
 	solve: func@ (y: This) -> This {
 		result: This
 		if (this width > this height)
-			raise("Invalid dimensions")
+			raise("Invalid dimensions in FloatMatrix solve")
 		// TODO: This can probably be cleaned up...
 		else
 			if (this isSquare) {
@@ -239,7 +239,7 @@ FloatMatrix : cover {
 				if (value != 0)
 					result elements[x + y * result width] = accumulator / value
 				else
-					raise("Division by zero")
+					raise("Division by zero in FloatMatrix forwardSubstitution")
 			}
 		result
 	}
@@ -261,7 +261,7 @@ FloatMatrix : cover {
 				if (value != 0)
 					result elements[x + y * result width] = accumulator / value
 				else
-					raise("Division by zero")
+					raise("Division by zero in FloatMatrix backwardSubstitution")
 			}
 		}
 		result

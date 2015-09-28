@@ -100,7 +100,7 @@ matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
 		result := FloatMatrix new(width, height)
 		for (x in 0 .. width) {
 			for (y in 0 .. height) {
-				result set(x, y, values[x * height + y])
+				result[x, y] = values[x * height + y]
 			}
 		}
 		result
@@ -113,7 +113,7 @@ matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
 		// 2 5
 		for (x in 0 .. matrix dimensions width) {
 			for (y in 0 .. matrix dimensions height) {
-				expect(matrix[x, y], is equal to(values[x *matrix dimensions height + y]))
+				expect(matrix[x, y], is equal to(values[x * matrix dimensions height + y]))
 			}
 		}
 	}
