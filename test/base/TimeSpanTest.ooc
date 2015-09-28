@@ -48,19 +48,19 @@ TimeSpanTest: class extends Fixture {
 			expect(TimeSpan day() * 6 + TimeSpan day() == TimeSpan week())
 			expect(TimeSpan second() + TimeSpan second() == TimeSpan second() * 2)
 			t = TimeSpan second()
-			t = t + 1.2
+			t = t + 1.25
 			expect(t elapsedSeconds() == 2)
-			expect(t elapsedMilliseconds() == 2200)
+			expect(t elapsedMilliseconds() == 2250)
 			expect(t + 1.9 == 1.9 + t)
 			expect(1.0 + TimeSpan new(0) == TimeSpan second())
-			expect((1.9 + TimeSpan second() + 3.1) elapsedMilliseconds() == 6000)
+			expect((0.9 + TimeSpan second() + 3.1) elapsedMilliseconds() == 5000)
 			t += 800 * DateTime ticksPerMillisecond
-			expect(t elapsedMilliseconds() == 3000)
+			expect(t elapsedMilliseconds() == 3050)
 			t += 0.5
-			expect(t elapsedMilliseconds() == 3500)
+			expect(t elapsedMilliseconds() == 3550)
 			t -= 2.5
-			expect(t elapsedMilliseconds() == 1000)
-			t -= 1000 * DateTime ticksPerMillisecond
+			expect(t elapsedMilliseconds() == 1050)
+			t -= 1050 * DateTime ticksPerMillisecond
 			expect(t ticks == 0)
 			t = TimeSpan second()
 			t *= 4
