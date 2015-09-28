@@ -2,6 +2,8 @@ use ooc-base
 use ooc-collections
 import io/[File, FileReader]
 
+// TODO: Handle multi-line string literals
+
 CsvReader: class extends Iterator<VectorList<Text>> {
 	_fileReader: FileReader
 	init: func (=_fileReader)
@@ -33,7 +35,7 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		readCharacter: Char
 		for (i in 0 .. rowDataLength) {
 			textBuilder := TextBuilder new()
-			while (i < rowDataLength && ((readCharacter = rowData[i]) != ';')) {
+			while (i < rowDataLength && ((readCharacter = rowData[i]) != This delimiter)) {
 				++i
 				match (readCharacter) {
 					case ' ' =>
@@ -54,20 +56,21 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		rowData free()
 		result
 	}
-	_extractStringLiteral: func (rowData: Text, position: Int*) -> Text {
+	_extractStringLiteral: func (rowData: Text, position: Int@) -> Text {
 		result: Text
 		readCharacter: Char
 		textBuilder := TextBuilder new()
 		rowDataLength := rowData count
-		while (position@ < rowDataLength && (readCharacter = rowData[position@]) != '"') {
-			textBuilder append(rowData[position@])
-			++position@
+		while (position < rowDataLength && (readCharacter = rowData[position]) != '"') {
+			textBuilder append(rowData[position])
+			position += 1
 		}
-		++position@
+		position += 1
 		result = textBuilder toText()
 		textBuilder free()
 		result
 	}
+	delimiter ::= static ','
 	open: static func (filename: Text) -> This {
 		result: This = null
 		file := File new(filename toString())
