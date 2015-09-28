@@ -53,7 +53,7 @@ FloatMatrix : cover {
 	// <returns></returns>
 	operator [] (x, y: Int) -> Float {
 		version (safe) {
-			if (x + y * this width >= this width * this height || x + y * this width < 0)
+			if (x < 0 || y < 0 || x >= this width || y >= this height)
 				raise("Accessing matrix element out of range in get operator")
 		}
 		this elements[x + y * this width]
@@ -70,7 +70,7 @@ FloatMatrix : cover {
 	// <returns></returns>
 	operator []= (x, y: Int, value: Float) {
 		version (safe) {
-			if (x + y * this width >= this width * this height || x + y * this width < 0)
+			if (x < 0 || y < 0 || x >= this width || y >= this height)
 				raise("Accessing matrix element out of range in set operator")
 		}
 		this elements[x + y * this width] = value
