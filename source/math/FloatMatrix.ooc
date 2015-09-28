@@ -116,9 +116,7 @@ FloatMatrix : cover {
 	// </summary>
 	// <returns>Return a copy of the current matrix.</returns>
 	copy: func -> This {
-		result := This new(this dimensions)
-		memcpy(result elements, this elements, this dimensions area * Float size)
-		result
+		This new(this _elements copy(), this dimensions)
 	}
 
 	// <summary>
@@ -130,6 +128,7 @@ FloatMatrix : cover {
 		for (y in 0 .. this height)
 			for (x in 0 .. this width)
 				result elements[y + x * this height] = this elements[x + y * this width]
+		this free(Owner Callee)
 		result
 	}
 
@@ -143,6 +142,7 @@ FloatMatrix : cover {
 		result := 0.0f
 		for (i in 0 .. this height)
 			result += this[i, i]
+		this free(Owner Callee)
 		result
 	}
 
@@ -255,6 +255,7 @@ FloatMatrix : cover {
 				lup[2] free()
 				lup free()
 			}
+		y free(Owner Callee)
 		result
 	}
 
@@ -279,6 +280,8 @@ FloatMatrix : cover {
 				else
 					raise("Division by zero in FloatMatrix forwardSubstitution")
 			}
+		this free(Owner Callee)
+		lower free(Owner Callee)
 		result
 	}
 
@@ -302,6 +305,8 @@ FloatMatrix : cover {
 					raise("Division by zero in FloatMatrix backwardSubstitution")
 			}
 		}
+		this free(Owner Callee)
+		upper free(Owner Callee)
 		result
 	}
 	take: func@ -> This {
@@ -330,6 +335,8 @@ FloatMatrix : cover {
 				result elements[x + y * result width] = temp
 			}
 		}
+		this free(Owner Callee)
+		other free(Owner Callee)
 		result
 	}
 
@@ -339,6 +346,8 @@ FloatMatrix : cover {
 		result := This new(this dimensions)
 		for (i in 0 .. this dimensions area)
 			result elements[i] = this elements[i] + other elements[i]
+		this free(Owner Callee)
+		other free(Owner Callee)
 		result
 	}
 
@@ -348,6 +357,8 @@ FloatMatrix : cover {
 		result := This new(this dimensions)
 		for (i in 0 .. this dimensions area)
 			result elements[i] = this elements[i] - other elements[i]
+		this free(Owner Callee)
+		other free(Owner Callee)
 		result
 	}
 }
@@ -356,5 +367,6 @@ operator * (left: Float, right: FloatMatrix) -> FloatMatrix {
 	result := FloatMatrix new(right dimensions)
 	for (i in 0 .. right dimensions area)
 		result elements[i] = left * right elements[i]
+	right free(Owner Callee)
 	result
 }
