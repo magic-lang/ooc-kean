@@ -2,7 +2,6 @@ use ooc-collections
 use ooc-base
 import structs/LinkedList
 import threading/Thread
-import threading/native/ConditionUnix
 import os/Time
 
 _Task: abstract class {
@@ -107,7 +106,7 @@ _TaskFuture: class <T> extends Future<T> {
 }
 
 ThreadPool: class {
-	_globalmutex := Mutex new()
+	_globalMutex := Mutex new()
 	_threads: Thread[]
 	_threadMutexes: Mutex[]
 	_tasks := BlockedQueue<_Task> new()
@@ -132,31 +131,31 @@ ThreadPool: class {
 		this _threads free()
 		this _threadMutexes free()
 		this _tasks free()
-		this _globalmutex destroy()
+		this _globalMutex destroy()
 		super()
 	}
 	_threadLoop: func (identifier: Int) {
 		while (true) {
 			job := this _tasks wait()
 			job run(this _threadMutexes[identifier])
-			this _globalmutex lock()
-			this _globalmutex unlock()
+			this _globalMutex lock()
+			this _globalMutex unlock()
 		}
 	}
 	_add: func (task: _Task) -> Void {
 		this _tasks enqueue(task)
 	}
 	add: func (action: Func) {
-		task := _ActionTask new(action, this _globalmutex)
+		task := _ActionTask new(action, this _globalMutex)
 		this _add(task)
 	}
 	getPromise: func (action: Func) -> Promise {
-		task := _ActionTask new(action, this _globalmutex)
+		task := _ActionTask new(action, this _globalMutex)
 		this _add(task)
 		_TaskPromise new(task)
 	}
 	getFuture: func <T> (action: Func -> T) -> Future<T> {
-		task := _ResultTask <T> new(action, this _globalmutex)
+		task := _ResultTask <T> new(action, this _globalMutex)
 		this _add(task)
 		_TaskFuture new(task)
 	}

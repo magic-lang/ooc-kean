@@ -1,9 +1,12 @@
 use ooc-draw-gpu
-import backend/gles3/Fence
+import backend/[GLFence, GLContext]
+import OpenGLContext
 
 OpenGLFence: class extends GpuFence {
-	_backend := Fence new()
-	init: func
+	_backend: GLFence
+	init: func (context: OpenGLContext) {
+		this _backend = context backend as GLContext createFence()
+	}
 	free: override func {
 		this _backend free()
 		super()

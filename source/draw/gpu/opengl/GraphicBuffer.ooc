@@ -17,6 +17,7 @@ use ooc-math
 use ooc-base
 use ooc-draw-gpu
 import math
+
 GraphicBufferFormat: enum {
 	Rgba8888 = 1
 	Yv12

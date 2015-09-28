@@ -14,11 +14,12 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
+
 use ooc-collections
 use ooc-math
 use ooc-base
 use ooc-draw-gpu
-import OpenGLPacked, OpenGLMonochrome, OpenGLBgra, OpenGLBgr, OpenGLUv
+import OpenGLPacked, OpenGLMonochrome, OpenGLBgra, OpenGLBgr, OpenGLUv, threading/Thread
 
 RecycleBin: class {
 	_monochrome := VectorList<OpenGLMonochrome> new()
@@ -26,6 +27,7 @@ RecycleBin: class {
 	_bgra := VectorList<OpenGLBgra> new()
 	_uv := VectorList<OpenGLUv> new()
 	_limit := 15
+	_mutex := Mutex new()
 	init: func
 	_cleanList: static func (list: VectorList<OpenGLPacked>) {
 		for (i in 0 .. list count)
@@ -33,10 +35,12 @@ RecycleBin: class {
 		list clear()
 	}
 	clean: func {
+		this _mutex lock()
 		This _cleanList(this _monochrome)
 		This _cleanList(this _bgr)
 		This _cleanList(this _bgra)
 		This _cleanList(this _uv)
+		this _mutex unlock()
 	}
 	free: override func {
 		this clean()
@@ -44,9 +48,11 @@ RecycleBin: class {
 		this _bgr free()
 		this _bgra free()
 		this _uv free()
+		this _mutex destroy()
 		super()
 	}
 	_add: func (image: OpenGLPacked, list: VectorList<OpenGLPacked>) {
+		this _mutex lock()
 		if (list count >= this _limit) {
 			version(debugGL) Debug print("GpuImageBin full; freeing one GpuImage")
 			// We need to make sure the image will be destroyed instead of recycled
@@ -55,6 +61,7 @@ RecycleBin: class {
 			temp free()
 		}
 		list add(image)
+		this _mutex unlock()
 	}
 	add: func (image: OpenGLPacked) {
 		match (image) {
@@ -68,6 +75,7 @@ RecycleBin: class {
 	_search: func (size: IntSize2D, list: VectorList<OpenGLPacked>) -> OpenGLPacked {
 		result := null
 		index := -1
+		this _mutex lock()
 		for (i in 0 .. list count) {
 			image := list[i]
 			if (image size width == size width && image size height == size height) {
@@ -77,6 +85,7 @@ RecycleBin: class {
 		}
 		if (index != -1)
 			result = list remove(index)
+		this _mutex unlock()
 		result
 	}
 	find: func (type: GpuImageType, size: IntSize2D) -> OpenGLPacked {

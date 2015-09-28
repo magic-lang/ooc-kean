@@ -1,8 +1,6 @@
 use ooc-base
-use ooc-collections
-import threading/Thread
-import os/Time
 use ooc-unit
+import threading/Thread
 
 ThreadPoolTest: class extends Fixture {
 	init: func {

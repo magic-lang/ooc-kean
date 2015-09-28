@@ -11,18 +11,21 @@ Queue: abstract class <T> {
 	//TODO: This is how we want it to look but we get problems compiling
 	dequeue: abstract func -> (T, Bool)
 	peek: abstract func -> (T, Bool)
-	//TODO: This works much better and will do for now
+	// Obsoleted from using template pointers that are not reliable in the compiler's type safety
 	dequeue: abstract func ~out (result: T*) -> Bool
 	peek: abstract func ~out (result: T*) -> Bool
-
+	// Yet another interface to go around compiler bugs
+	// T must be nullable or have a reserved value to know when it failed
+	dequeue: abstract func ~default (fallback: T) -> T
+	peek: abstract func ~default (fallback: T) -> T
 	//new: static func -> Queue<T> { VectorQueue<T> new() }
 }
 
 VectorQueue: class <T> extends Queue<T> {
 	_backend: T*
 	_capacity := 0
-	_head := 0
-	_tail := 0
+	_head := 0 // Index of oldest element
+	_tail := 0 // Index of newest element
 	capacity ::= this _capacity
 	full ::= this _count == this _capacity
 	_chunkCount := 32
@@ -64,6 +67,14 @@ VectorQueue: class <T> extends Queue<T> {
 		success := this dequeue(result&)
 		(result, success)
 	}
+	dequeue: func ~default (fallback: T) -> T {
+		result := this peek(fallback)
+		if (!this empty) {
+			this _count -= 1
+			this _head = (this _head + 1) % this _capacity
+		}
+		result
+	}
 	peek: func ~out (result: T*) -> Bool {
 		success := true
 		if (this empty)
@@ -76,6 +87,14 @@ VectorQueue: class <T> extends Queue<T> {
 		result: T
 		success := this peek(result&)
 		(result, success)
+	}
+	peek: func ~default (fallback: T) -> T {
+		result: T
+		if (this empty)
+			result = fallback
+		else
+			result = this _backend[this _head]
+		result
 	}
 	_resize: func {
 		oldCapacity := this _capacity

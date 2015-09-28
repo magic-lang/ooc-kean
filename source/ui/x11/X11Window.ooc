@@ -44,13 +44,10 @@ X11Window: class extends NativeWindow {
 		XStoreName(display, backend, title)
 		super(size, backend, display)
 
-		/* BEGIN Ugly hack to force the window to resize outside screen */
-		/*this refresh()
-		this resize(size)*/
-		/* END */
-		
 		XSelectInput(display, backend, KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask)
 		XkbSetDetectableAutoRepeat(display, true, null) as Void
+
+		this resize(size)
 	}
 	resize: func (size: IntSize2D) { XResizeWindow(this display, this backend, size width, size height) }
 	free: override func {

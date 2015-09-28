@@ -47,6 +47,8 @@ FloatSize2D: cover {
 	floor: func -> This { This new(this width floor(), this height floor()) }
 	minimum: func (ceiling: This) -> This { This new(Float minimum(this width, ceiling width), Float minimum(this height, ceiling height)) }
 	maximum: func (floor: This) -> This { This new(Float maximum(this width, floor width), Float maximum(this height, floor height)) }
+	minimum: func ~Float (ceiling: Float) -> This { this minimum(This new(ceiling)) }
+	maximum: func ~Float (floor: Float) -> This { this maximum(This new(floor)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height)) }
 	operator + (other: This) -> This { This new(this width + other width, this height + other height) }
 	operator + (other: FloatPoint2D) -> This { This new(this width + other x, this height + other y) }

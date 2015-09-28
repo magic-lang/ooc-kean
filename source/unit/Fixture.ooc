@@ -33,7 +33,7 @@ Fixture: abstract class {
 	run: func {
 		failures := ArrayList<TestFailedException> new()
 		result := true
-		(this name + " ") print()
+		This _print(this name + " ")
 		this tests each(|test|
 			r := true
 			try {
@@ -44,9 +44,9 @@ Fixture: abstract class {
 				result = r = false
 				failures add(e)
 			}
-			(r ? "." : "f") print()
+			This _print(r ? "." : "f")
 		)
-		(result ? " done" : " failed") println()
+		This _print(result ? " done\n" : " failed\n")
 		if (!result)
 			for (f in failures) {
 				// If the constraint is a CompareConstraint and the value being tested is a Cell,
@@ -94,14 +94,27 @@ Fixture: abstract class {
 	expect: static func ~integer (value: Int, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
 	}
+	expect: static func ~long (value: Long, constraint: Constraint) {
+		This expect(Cell new(value), constraint)
+	}
+	expect: static func ~ulong (value: ULong, constraint: Constraint) {
+		This expect(Cell new(value), constraint)
+	}
 	expect: static func ~float (value: Float, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
 	}
 	expect: static func ~double (value: Double, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
 	}
+	expect: static func ~ldouble (value: LDouble, constraint: Constraint) {
+		This expect(Cell new(value), constraint)
+	}
 	expect: static func ~isTrue (value: Bool) {
 		This expect(Cell new(value), is true)
+	}
+	_print: static func (string: String) {
+		string print()
+		fflush(stdout)
 	}
 }
 TestFailedException: class extends Exception {

@@ -27,6 +27,7 @@ ThreadTest: class extends Fixture {
 		mutex := Mutex new()
 		startedCondition := WaitCondition new()
 		job := func {
+			mutex lock()
 			startedCondition broadcast()
 			mutex unlock()
 			while (value get() < expectedValue) {
@@ -42,8 +43,8 @@ ThreadTest: class extends Fixture {
 		thread free()
 		value set(0)
 		thread = Thread new(|| job())
-		expect(thread start())
 		mutex lock()
+		expect(thread start())
 		startedCondition wait(mutex)
 		expect(thread cancel())
 		expect(thread wait())

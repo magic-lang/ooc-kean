@@ -14,34 +14,36 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
-use ooc-math
+
 use ooc-base
-import ../egl/egl
-import include/gles3
-import Texture
-EGLImage: class extends Texture {
+use ooc-math
+import egl/egl
+import GLTexture, GLContext
+
+EGLImage: class extends GLTexture {
 	_eglBackend: Pointer
 	_eglDisplay: Pointer
 	_nativeBuffer: Pointer
+	_backendTexture: GLTexture
 	/* PRIVATE CONSTRUCTOR, USE STATIC CREATE FUNCTION!!! */
-	init: func (type: TextureType, size: IntSize2D, =_nativeBuffer, =_eglDisplay) {
+	init: func (type: TextureType, size: IntSize2D, =_nativeBuffer, context: GLContext) {
 		super(type, size)
-		this _genTexture()
+		this _eglDisplay = context _eglDisplay
+		this _backendTexture = context createTexture(type, size, size width, null, false)
+		/*this _backendTexture bind()*/
+		_backend = _backendTexture _backend
+		_target = _backendTexture _target
 		this bindSibling()
-		/*textureUnitCount: Int
-		glGetTexParameteriv(GL_TEXTURE_EXTERNAL_OES, GL_REQUIRED_TEXTURE_IMAGE_UNITS_OES, textureUnitCount&)
-		Debug print("Texture units needed: " + textureUnitCount toString())
-		glIsEnabled(GL_TEXTURE_EXTERNAL_OES)
-		*/
 	}
 	free: override func {
 		This _eglDestroyImageKHR(this _eglDisplay, this _eglBackend)
+		_backendTexture free()
 		super()
 	}
 	bindSibling: func {
 		eglImageAttributes := [EGL_IMAGE_PRESERVED_KHR, EGL_FALSE, EGL_NONE] as Int*
 		this _eglBackend = This _eglCreateImageKHR(this _eglDisplay, EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID, this _nativeBuffer, eglImageAttributes)
-		This _glEGLImageTargetTexture2DOES(this _target, this _eglBackend)
+		This _glEGLImageTargetTexture2DOES(this _backendTexture _target, this _eglBackend)
 	}
 
 	_eglCreateImageKHR: static Func(Pointer, Pointer, UInt, Pointer, Int*) -> Pointer
@@ -56,12 +58,18 @@ EGLImage: class extends Texture {
 			This _initialized = true
 		}
 	}
-	create: static func (type: TextureType, size: IntSize2D, nativeBuffer: Pointer, display: Pointer) -> This {
+	create: static func (type: TextureType, size: IntSize2D, nativeBuffer: Pointer, context: GLContext) -> This {
 		This initialize()
 		result: This = null
-		if (type == TextureType rgba || type == TextureType rgb || type == TextureType bgr || type == TextureType rgb || type == TextureType yv12) {
-			result = This new(type, size, nativeBuffer, display)
+		if (type == TextureType Rgba || type == TextureType Rgb || type == TextureType Bgr || type == TextureType Rgb || type == TextureType Yv12) {
+			result = This new(type, size, nativeBuffer, context)
 		}
 		result
 	}
+	generateMipmap: func { this _backendTexture generateMipmap() }
+	bind: func (unit: UInt) { this _backendTexture bind(unit) }
+	unbind: func { this _backendTexture unbind() }
+	upload: func (pixels: Pointer, stride: Int) { this _backendTexture upload(pixels, stride) }
+	setMagFilter: func (interpolation: InterpolationType) { this _backendTexture setMagFilter(interpolation) }
+	setMinFilter: func (interpolation: InterpolationType) { this _backendTexture setMinFilter(interpolation) }
 }
