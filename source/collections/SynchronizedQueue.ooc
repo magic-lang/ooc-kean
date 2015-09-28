@@ -32,9 +32,9 @@ SynchronizedQueue: class <T> extends Queue<T> {
 		success := this dequeue(result&)
 		(result, success)
 	}
-	dequeue: func ~default (onEmpty: T) -> T {
+	dequeue: func ~default (fallback: T) -> T {
 		this _mutex lock()
-		result := this _backend dequeue(onEmpty)
+		result := this _backend dequeue(fallback)
 		this _mutex unlock()
 		result
 	}
@@ -50,9 +50,9 @@ SynchronizedQueue: class <T> extends Queue<T> {
 		success := this peek(result&)
 		(result, success)
 	}
-	peek: func ~default (onEmpty: T) -> T {
+	peek: func ~default (fallback: T) -> T {
 		this _mutex lock()
-		result := this _backend peek(onEmpty)
+		result := this _backend peek(fallback)
 		this _mutex unlock()
 		result
 	}

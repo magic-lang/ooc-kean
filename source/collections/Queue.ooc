@@ -16,8 +16,8 @@ Queue: abstract class <T> {
 	peek: abstract func ~out (result: T*) -> Bool
 	// Yet another interface to go around compiler bugs
 	// T must be nullable or have a reserved value to know when it failed
-	dequeue: abstract func ~default (onEmpty: T) -> T
-	peek: abstract func ~default (onEmpty: T) -> T
+	dequeue: abstract func ~default (fallback: T) -> T
+	peek: abstract func ~default (fallback: T) -> T
 	//new: static func -> Queue<T> { VectorQueue<T> new() }
 }
 
@@ -67,8 +67,8 @@ VectorQueue: class <T> extends Queue<T> {
 		success := this dequeue(result&)
 		(result, success)
 	}
-	dequeue: func ~default (onEmpty: T) -> T {
-		result := this peek(onEmpty)
+	dequeue: func ~default (fallback: T) -> T {
+		result := this peek(fallback)
 		if (!this empty) {
 			this _count -= 1
 			this _head = (this _head + 1) % this _capacity
@@ -88,9 +88,9 @@ VectorQueue: class <T> extends Queue<T> {
 		success := this peek(result&)
 		(result, success)
 	}
-	peek: func ~default (onEmpty: T) -> T {
+	peek: func ~default (fallback: T) -> T {
 		if (this empty)
-			onEmpty
+			fallback
 		else
 			this _backend[this _head]
 	}
