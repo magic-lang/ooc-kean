@@ -52,10 +52,10 @@ FloatMatrixTest: class extends Fixture {
 
 		this add("swapRows", func {
 			matrix = createMatrix(3, 3, [1.0f, -2.0f, 3.0f, -4.0f, 5.0f, -6.5f, 7.4f, -8.3f, 9.2f])
-			matrix swaprows(0, 1)
+			matrix swapRows(0, 1)
 			checkAllElements(matrix, [-2.0f, 1.0f, 3.0f, 5.0f, -4.0f, -6.5f, -8.3f, 7.4f, 9.2f])
 			matrix = createMatrix(2, 3, [1.0f, -2.0f, 3.0f, -4.0f, 5.0f, -6.5f])
-			matrix swaprows(0, 1)
+			matrix swapRows(0, 1)
 			checkAllElements(matrix, [-2.0f, 1.0f, 3.0f, 5.0f, -4.0f, -6.5f])
 		})
 

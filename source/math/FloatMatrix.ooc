@@ -40,7 +40,7 @@ FloatMatrix : cover {
 	// </summary>
 	// <param name="order">Order of matrix to be created.</param>
 	// <returns>Identity matrix of given order.</returns>
-	identity: static func@ (order: Int) -> This {
+	identity: static func (order: Int) -> This {
 		result := This new(order, order)
 		for (i in 0 .. order)
 			result elements[i + result width * i] = 1.0f
@@ -115,7 +115,7 @@ FloatMatrix : cover {
 	// Creates a copy of the current matrix.
 	// </summary>
 	// <returns>Return a copy of the current matrix.</returns>
-	copy: func@ -> This {
+	copy: func -> This {
 		result := This new(this dimensions)
 		memcpy(result elements, this elements, this dimensions area * Float size)
 		result
@@ -125,7 +125,7 @@ FloatMatrix : cover {
 	// Tranpose matrix. Creates a new matrix being the transpose of the current matrix.
 	// </summary>
 	// <returns>Return current matrix tranposed.</returns>
-	transpose: func@ -> This {
+	transpose: func -> This {
 		result := This new(this dimensions swap())
 		for (y in 0 .. this height)
 			for (x in 0 .. this width)
@@ -149,24 +149,24 @@ FloatMatrix : cover {
 	// <summary>
 	// Swaps the position of two rows
 	// </summary>
-	// <param name="row1">First row</param>
-	// <param name="row2">Second row</param>
-	swaprows: func@ (row1, row2: Int) {
-		version (safe) {
-			if (row1 < 0 || row2 < 0 || row1 >= this height || row2 >= this height)
-				raise("Invalid row choices in FloatMatrix swaprows")
-		}
+	// <param name="first">First row</param>
+	// <param name="second">Second row</param>
+	swapRows: func@ (first, second: Int) {
 		order := this order
 		buffer: Float
-		if (row1 != row2)
+		if (first != second)
 			for (i in 0 .. order) {
-				buffer = this elements[i + row1 * this width]
-				this elements[i + row1 * this width] = this elements[i + row2 * this width]
-				this elements[i + row2 * this width] = buffer
+				buffer = this elements[i + first * this width]
+				this elements[i + first * this width] = this elements[i + second * this width]
+				this elements[i + second * this width] = buffer
 			}
 	}
-
-	toString: func@ -> String {
+	// TODO: DEPRECATED
+	swaprows: func@ (first, second: Int) {
+		c"FloatMatrix swaprows deprecated" println()
+		this swapRows(first, second)
+	}
+	toString: func -> String {
 		result: String = ""
 		for (y in 0 .. this height) {
 			for (x in 0 .. this width)
@@ -182,7 +182,7 @@ FloatMatrix : cover {
 	// where L is lower triangular, U is upper triangular, and P is a permutation matrix.
 	// </summary>
 	// <returns>Returns the Lup decomposition. L = [0], U = [1], P = [2].</returns>
-	lupDecomposition: func@ -> This[] {
+	lupDecomposition: func -> This[] {
 		if (!this isSquare)
 			raise("Invalid dimensions in FloatMatrix lupDecomposition")
 		order := this order
@@ -195,8 +195,8 @@ FloatMatrix : cover {
 			for (y in position + 1 .. u height)
 				if (abs(u elements[position + position * u width]) < abs(u elements[position + y * u width]))
 					pivotRow = y
-			p swaprows(position, pivotRow)
-			u swaprows(position, pivotRow)
+			p swapRows(position, pivotRow)
+			u swapRows(position, pivotRow)
 
 			if (u elements[position + u width * position] != 0)
 				for (y in position + 1 .. order) {
@@ -211,8 +211,7 @@ FloatMatrix : cover {
 				l elements[x + y * l width] = u elements[x + y * u width]
 				u elements[x + y * u width] = 0
 			}
-		result := [l, u, p]
-		result
+		[l, u, p] // TODO: change to Tuple
 	}
 
 	// <summary>
@@ -221,7 +220,7 @@ FloatMatrix : cover {
 	// </summary>
 	// <param name="y">The right hand column y vector of the equation system.</param>
 	// <returns>Return the least square solution to the system.</returns>
-	solve: func@ (y: This) -> This {
+	solve: func (y: This) -> This {
 		result: This
 		if (this width > this height)
 			raise("Invalid dimensions in FloatMatrix solve")
@@ -259,6 +258,7 @@ FloatMatrix : cover {
 		result
 	}
 
+	// TODO: Better name?
 	isNull ::= this dimensions empty
 
 	// <summary>
@@ -266,7 +266,7 @@ FloatMatrix : cover {
 	// </summary>
 	// <param name="lower">Lower triangual matrix.</param>
 	// <returns>Solution x.</returns>
-	forwardSubstitution: func@ (lower: This) -> This {
+	forwardSubstitution: func (lower: This) -> This {
 		result := This new(this dimensions)
 		for (x in 0 .. this width)
 			for (y in 0 .. this height) {
@@ -287,7 +287,7 @@ FloatMatrix : cover {
 	// </summary>
 	// <param name="lower">Upper triangual matrix.</param>
 	// <returns>Solution x.</returns>
-	backwardSubstitution: func@ (upper: This) -> This {
+	backwardSubstitution: func (upper: This) -> This {
 		result := This new(this dimensions)
 		for (x in 0 .. this width) {
 			for (antiY in 0 .. this height) {
