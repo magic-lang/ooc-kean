@@ -18,12 +18,11 @@
 use ooc-base
 use ooc-math
 import os/Time
-import threading/native/ConditionUnix
 import threading/Thread
 
 GLFence: abstract class {
 	_backend: Pointer = null
-	_syncCondition := ConditionUnix new()
+	_syncCondition := WaitCondition new()
 	_mutex := Mutex new()
 
 	init: func
