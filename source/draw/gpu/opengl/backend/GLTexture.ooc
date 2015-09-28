@@ -45,7 +45,6 @@ GLTexture: abstract class {
 	_target: UInt
 
 	init: func (=_type, =_size)
-	free: override func { super() }
 	generateMipmap: abstract func
 	bind: abstract func (unit: UInt)
 	unbind: abstract func

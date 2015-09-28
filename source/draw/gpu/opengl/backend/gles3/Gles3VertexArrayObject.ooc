@@ -26,51 +26,40 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 	positionLayout: const static UInt = 0
 	textureCoordinateLayout: const static UInt = 1
 	_vertexCount: Int
-
-	init: func (positions, textureCoordinates: Float*, vertexCount, dimensions: UInt) {
-		version(debugGL) { validateStart() }
-		attributeCount := 2
-		packedArray: Float[attributeCount * vertexCount * dimensions]
-		for (i in 0 .. vertexCount) {
-			for (j in 0 .. dimensions) {
-				packedArray[attributeCount * dimensions * i + j] = positions[dimensions * i + j]
-				packedArray[attributeCount * dimensions * i + j + dimensions] = textureCoordinates[dimensions * i + j]
-			}
-		}
-		this _generate(packedArray[0]&, 2, vertexCount)
-	}
-	init: func ~twoDimensions (positions: FloatPoint2D[], textureCoordinates: FloatPoint2D[]) {
-		vertexCount := positions length
+	
+	init: func ~twoDimensions (vertices, textureCoordinates: FloatPoint2D[]) {
+		vertexCount := vertices length
 		this _vertexCount = vertexCount
 		floatsPerVertex := 4
 		packedArray: Float[floatsPerVertex * vertexCount]
 		for (i in 0 .. vertexCount) {
 			//Positions
-			packedArray[floatsPerVertex * i + 0] = positions[i] x
-			packedArray[floatsPerVertex * i + 1] = positions[i] y
+			packedArray[floatsPerVertex * i + 0] = vertices[i] x
+			packedArray[floatsPerVertex * i + 1] = vertices[i] y
 			//Texture coordinates
 			packedArray[floatsPerVertex * i + 2] = textureCoordinates[i] x
 			packedArray[floatsPerVertex * i + 3] = textureCoordinates[i] y
 		}
 		this _generate(packedArray[0]&, 2, vertexCount)
 	}
-	init: func ~threeDimensions (positions: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
-		vertexCount := positions length
+	init: func ~threeDimensions (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
+		vertexCount := vertices length
 		this _vertexCount = vertexCount
 		floatsPerVertex := 5
 		packedArray: Float[vertexCount * floatsPerVertex]
 		for (i in 0 .. vertexCount) {
 			//Positions
-			packedArray[floatsPerVertex * i + 0] = positions[i] x
-			packedArray[floatsPerVertex * i + 1] = positions[i] y
-			packedArray[floatsPerVertex * i + 2] = positions[i] z
+			packedArray[floatsPerVertex * i + 0] = vertices[i] x
+			packedArray[floatsPerVertex * i + 1] = vertices[i] y
+			packedArray[floatsPerVertex * i + 2] = vertices[i] z
 			//Texture coordinates
 			packedArray[floatsPerVertex * i + 3] = textureCoordinates[i] x
 			packedArray[floatsPerVertex * i + 4] = textureCoordinates[i] y
 		}
 		this _generate(packedArray[0]&, 3, vertexCount)
 	}
-	_generate: func (packedArray: Float*, dimensions: Int, vertexCount: Int) {
+	_generate: func (packedArray: Float*, dimensions, vertexCount: Int) {
+		version(debugGL) { validateStart() }
 		glGenVertexArrays(1, this _backend&)
 		glBindVertexArray(this _backend)
 
@@ -89,7 +78,7 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 		glBindBuffer(GL_ARRAY_BUFFER, 0)
 		glBindVertexArray(0)
 		glDeleteBuffers(1, vertexBuffer&)
-		version(debugGL) { validateEnd("VertexArrayObject init") }
+		version(debugGL) { validateEnd("VertexArrayObject _generate") }
 	}
 	free: override func {
 		version(debugGL) { validateStart() }
@@ -109,7 +98,9 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 	}
 	draw: func {
 		this bind()
+		version(debugGL) { validateStart() }
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, this _vertexCount)
+		version(debugGL) { validateEnd("VertexArrayObject draw") }
 		this unbind()
 	}
 }

@@ -178,11 +178,10 @@ OpenGLContext: class extends GpuContext {
 		fence sync()
 		(result, fence)
 	}
-	createMesh: override func (positions: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
+	createMesh: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
 		toGL := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
-		for (i in 0 .. positions length)
-			positions[i] = toGL * positions[i]
-		OpenGLMesh new(positions, textureCoordinates, this)
+		for (i in 0 .. vertices length)
+			vertices[i] = toGL * vertices[i]
+		OpenGLMesh new(vertices, textureCoordinates, this)
 	}
-
 }

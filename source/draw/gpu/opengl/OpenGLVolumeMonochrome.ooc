@@ -24,14 +24,10 @@ import OpenGLContext
 OpenGLVolumeMonochrome: class {
 	_backend: GLVolumeTexture
 	init: func (size: IntSize3D, pixels: UInt8* = null, context: OpenGLContext) {
-		this _backend = context backend createVolumeTexture(size width, size height, size depth, pixels)
+		this _backend = context backend createVolumeTexture(size, pixels)
 	}
-	bind: func (unit: UInt) {
-		this _backend bind(unit)
-	}
-	upload: func (pixels: UInt8*) {
-		this _backend upload(pixels)
-	}
+	bind: func (unit: UInt) { this _backend bind(unit) }
+	upload: func (pixels: UInt8*) { this _backend upload(pixels) }
 	free: override func {
 		this _backend free()
 		super()

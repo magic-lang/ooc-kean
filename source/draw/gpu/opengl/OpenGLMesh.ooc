@@ -21,8 +21,8 @@ import backend/GLVertexArrayObject
 
 OpenGLMesh: class extends GpuMesh {
 	_backend: GLVertexArrayObject
-	init: func (positions: FloatPoint3D[], textureCoordinates: FloatPoint2D[], context: OpenGLContext) {
-		this _backend = context backend createVertexArrayObject(positions, textureCoordinates)
+	init: func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], context: OpenGLContext) {
+		this _backend = context backend createVertexArrayObject(vertices, textureCoordinates)
 	}
 	free: override func {
 		this _backend free()

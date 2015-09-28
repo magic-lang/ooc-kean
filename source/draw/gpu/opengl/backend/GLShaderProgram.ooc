@@ -18,7 +18,6 @@
 use ooc-math
 
 GLShaderProgram: abstract class {
-	free: override func { super() }
 	use: abstract func
 	setUniform: abstract func ~Array (name: String, array: Float*, count: Int)
 	setUniform: abstract func ~Int (name: String, value: Int)
