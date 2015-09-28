@@ -15,6 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import math
+use ooc-base
 use ooc-math
 
 FloatMatrix : cover {
@@ -24,15 +25,16 @@ FloatMatrix : cover {
 	dimensions ::= this _dimensions
 	width ::= this _dimensions width
 	height ::= this _dimensions height
-	elements: Float[]
+	_elements: OwnedBuffer
+	elements ::= this _elements pointer as Float*
 
+	init: func@ ~buffer (=_elements, =_dimensions)
 	init: func@ ~IntSize2D (=_dimensions) {
-		this elements = Float[_dimensions area] new()
+		this init(OwnedBuffer new(_dimensions area * Float size), dimensions)
 	}
 	init: func@ (width, height: Int) {
 		this init(IntSize2D new(width, height))
 	}
-
 	// <summary>
 	// Creates an identity matrix of given order.
 	// </summary>
@@ -115,7 +117,7 @@ FloatMatrix : cover {
 	// <returns>Return a copy of the current matrix.</returns>
 	copy: func@ -> This {
 		result := This new(this dimensions)
-		memcpy(result elements data, this elements data, this dimensions area * Float size)
+		memcpy(result elements, this elements, this dimensions area * Float size)
 		result
 	}
 
@@ -302,8 +304,19 @@ FloatMatrix : cover {
 		}
 		result
 	}
-
-	free: func { this elements free() }
+	take: func@ -> This {
+		this _elements take()
+		this
+	}
+	give: func -> This {
+		This new(this _elements give(), this dimensions)
+	}
+	free: func@ -> Bool {
+		this _elements free()
+	}
+	free: func@ ~withCriteria (criteria: Owner) -> Bool {
+		this _elements free(criteria)
+	}
 
 	operator * (other: This) -> This {
 		if (this width != other height)
