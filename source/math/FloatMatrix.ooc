@@ -54,7 +54,7 @@ FloatMatrix : cover {
 	operator [] (x, y: Int) -> Float {
 		version (safe) {
 			if (x + y * this width >= this width * this height || x + y * this width < 0)
-				raise("Accessing Vector index out of range in get operator")
+				raise("Accessing matrix element out of range in get operator")
 		}
 		this elements[x + y * this width]
 	}
@@ -71,7 +71,7 @@ FloatMatrix : cover {
 	operator []= (x, y: Int, value: Float) {
 		version (safe) {
 			if (x + y * this width >= this width * this height || x + y * this width < 0)
-				raise("Accessing Vector index out of range in get operator")
+				raise("Accessing matrix element out of range in set operator")
 		}
 		this elements[x + y * this width] = value
 	}
@@ -129,6 +129,10 @@ FloatMatrix : cover {
 	// <param name="row1">First row</param>
 	// <param name="row2">Second row</param>
 	swaprows: func@ (row1, row2: Int) {
+		version (safe) {
+			if (row1 < 0 || row2 < 0 || row1 >= this height || row2 >= this height)
+				raise("Invalid row choices in FloatMatrix swaprows")
+		}
 		order := this order
 		buffer: Float
 		if (row1 != row2)
