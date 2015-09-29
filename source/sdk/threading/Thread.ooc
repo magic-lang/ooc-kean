@@ -309,6 +309,4 @@ WaitCondition: abstract class {
     signal: abstract func -> Bool
 
     broadcast: abstract func -> Bool
-    
-    destroy: abstract func -> Bool
 }
