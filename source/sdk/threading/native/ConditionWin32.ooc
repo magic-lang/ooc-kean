@@ -18,8 +18,19 @@ version(windows) {
 		_waitingEvents := ArrayList<Handle> new()
 		_waitingForRelease := ArrayList<Handle> new()
 		init: func
+		// do not destroy wait condition while threads are still waiting on it
 		free: override func {
-			this destroy()
+			this _mutex lock()
+			//waiting threads should have a chance to wake up
+			for (i in 0 .. this _waitingEvents size) {
+				SetEvent(this _waitingEvents[i])
+				Thread yield()
+			}
+			for (i in 0 .. this _waitingForRelease size)
+				CloseHandle(this _waitingForRelease[i])
+			for (i in 0 .. this _waitingEvents size)
+				CloseHandle(this _waitingEvents[i])
+			this _mutex unlock()
 			this _waitingEvents free()
 			this _waitingForRelease free()
 			this _mutex destroy()
@@ -65,23 +76,6 @@ version(windows) {
 			}
 			toSignal free()
 			result
-		}
-		// do not destroy wait condition while threads are still waiting on it
-		destroy: func -> Bool {
-			this _mutex lock()
-			//waiting threads should have a chance to wake up
-			for (i in 0 .. this _waitingEvents size) {
-				SetEvent(this _waitingEvents[i])
-				Thread yield()
-			}
-			for (i in 0 .. this _waitingForRelease size)
-				CloseHandle(this _waitingForRelease[i])
-			for (i in 0 .. this _waitingEvents size)
-				CloseHandle(this _waitingEvents[i])
-			this _waitingEvents clear()
-			this _waitingForRelease clear()
-			this _mutex unlock()
-			true
 		}
 	}
 }

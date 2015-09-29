@@ -24,14 +24,13 @@ ConditionUnix: class extends WaitCondition {
     	raise("Something went wrong when calling pthread_cond_init")
   }
   free: override func {
-    this destroy()
+    pthread_cond_destroy(this _backend)
     gc_free(this _backend)
     super()
   }
   wait: func (mutex: Mutex) -> Bool { pthread_cond_wait(this _backend, mutex as PThreadMutex*) == 0 }
   signal: func -> Bool { pthread_cond_signal(this _backend) == 0 }
   broadcast: func -> Bool { pthread_cond_broadcast(this _backend) == 0 }
-  destroy: func -> Bool { pthread_cond_destroy(this _backend) == 0 }
 }
 
 }
