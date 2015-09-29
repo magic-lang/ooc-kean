@@ -15,6 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
 import IntSize3D
+import IntPoint2D
 import text/StringTokenizer
 import structs/ArrayList
 
@@ -22,6 +23,7 @@ IntPoint3D: cover {
 	x, y, z: Int
 	init: func@ (=x, =y, =z)
 	init: func@ ~default { this init(0, 0, 0) }
+	init: func@ ~fromPoint2D (point: IntPoint2D, z := 0) { this init(point x, point y, z) }
 	scalarProduct: func (other: This) -> Int { this x * other x + this y * other y + this z * other z }
 	minimum: func (ceiling: This) -> This { This new(Int minimum~two(this x, ceiling x), Int minimum~two(this y, ceiling y), Int minimum~two(this z, ceiling z)) }
 	maximum: func (floor: This) -> This { This new(Int maximum~two(this x, floor x), Int maximum~two(this y, floor y), Int maximum~two(this z, floor z)) }
