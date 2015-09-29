@@ -56,11 +56,9 @@ SynchronizedQueueTest: class extends Fixture {
 			for (i in 0 .. limitD)
 				promises[limitA + limitB + limitC + i] = pool getPromise(func4)
 
-			//TODO This is not pretty but replaces waitAll for now
-			for (i in 0 .. limitA + limitB + limitC + limitD) {
-				promises[i] wait()
-				promises[i] free()
-			}
+			//TODO This is not pretty but replaces waitAll for now (PromiseCollector will replace this)
+			for (i in 0 .. limitA + limitB + limitC + limitD)
+				promises[i] wait() . free()
 
 			expect(queue empty)
 			expect(queue count, is equal to(0))

@@ -78,12 +78,10 @@ BlockedQueueTest: class extends Fixture {
 				Time sleepMilli(10)
 			}
 
-			//TODO This is not pretty but replaces waitAll for now
-			for (i in 0 .. limitA + limitB + limitC + limitD + limitE + limitF) {
-				promises[i] wait()
-				promises[i] free()
-			}
-				
+			//TODO This is not pretty but replaces waitAll for now (PromiseCollector will replace this)
+			for (i in 0 .. limitA + limitB + limitC + limitD + limitE + limitF)
+				promises[i] wait() . free()
+
 			expect(queue empty)
 
 			promises free()
