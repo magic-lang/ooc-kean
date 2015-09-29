@@ -11,7 +11,7 @@ TextBuilderTest: class extends Fixture {
 			text := tb toText()
 			expect(text count, is equal to(7))
 			expect(text == "vidflow")
-			tb = TextBuilder new(Text new("1,2,3").split(','))
+			tb = TextBuilder new(Text new("1,2,3") split(','))
 			text = tb join(';')
 			expect(text == "1;2;3")
 			tb free()

@@ -20,12 +20,11 @@ use ooc-collections
 import math
 
 Text: cover {
-	_buffer: OwnedBuffer
-	count ::= this _buffer size
+	_buffer: TextBuffer
+	count ::= this _buffer count
 	isEmpty ::= this count == 0
-	raw ::= this _buffer pointer as CString
 	init: func@ ~empty {
-		this init(OwnedBuffer new())
+		this init(TextBuffer new())
 	}
 	init: func@ (=_buffer)
 	init: func@ ~fromStringLiteral (string: CString) {
@@ -34,23 +33,32 @@ Text: cover {
 	init: func@ ~fromString (string: String) {
 		this init(string _buffer data, string length(), Owner Unknown)
 	}
+	init: func@ ~fromCharacter (character: Char) {
+		this init(character&, 1, Owner Stack)
+		this = this copy()
+	}
 	init: func@ ~fromData (string: CString, count: Int, owner := Owner Static) {
-		this init(OwnedBuffer new(string as UInt8*, count, owner))
+		this init(TextBuffer new(string, count, owner))
 	}
 	copy: func -> This { // call by value, creates copy of cover
 		result := This new(this _buffer copy())
 		this free(Owner Callee)
 		result
 	}
+	copyTo: func (buffer: TextBuffer) -> Int {
+		this _buffer copyTo(buffer)
+	}
 	operator == (string: String) -> Bool {
 		this == This new(string)
 	}
 	operator == (other: This) -> Bool {
-		result := (this count == other count) && (memcmp(this raw, other raw, this count) == 0)
+		result := this _buffer == other _buffer
 		this free(Owner Callee)
 		other free(Owner Callee)
 		result
 	}
+	operator != (other: String) -> Bool { !(this == other) }
+	operator != (other: This) -> Bool { !(this == other) }
 	beginsWith: func (other: This) -> Bool {
 		this slice(0, Int minimum~two(other count, this count)) == other
 	}
@@ -58,7 +66,7 @@ Text: cover {
 		this beginsWith(This new(other))
 	}
 	beginsWith: func ~character (character: Char) -> Bool {
-		result := (this count > 0) && (this raw[0] == character)
+		result := (this count > 0) && (this _buffer[0] == character)
 		this free(Owner Callee)
 		result
 	}
@@ -69,7 +77,7 @@ Text: cover {
 		this endsWith(This new(other))
 	}
 	endsWith: func ~character (character: Char) -> Bool {
-		result := (this count > 0) && (this raw[this count - 1] == character)
+		result := (this count > 0) && (this _buffer[this count - 1] == character)
 		this free(Owner Callee)
 		result
 	}
@@ -101,7 +109,7 @@ Text: cover {
 		this find(This new(string), start)
 	}
 	operator [] (index: Int) -> Char {
-		result := this raw[index]
+		result := this _buffer[index]
 		this free(Owner Callee)
 		result
 	}
@@ -116,6 +124,10 @@ Text: cover {
 		this _buffer = this _buffer give()
 		this
 	}
+	claim: func -> This { // call by value -> modifies copy of cover
+		this _buffer = this _buffer claim()
+		this
+	}
 	free: func@ -> Bool {
 		this _buffer free()
 	}
@@ -123,43 +135,37 @@ Text: cover {
 		this _buffer free(criteria)
 	}
 	slice: func (start, distance: Int) -> This {
-		count := abs(distance)
-		if (start < 0)
-			start = this count + start
-		if (distance < 0)
-			start -= count
-		result := start < this count ? This new(this raw + start, Int minimum~two(count, this count - start), Owner Unknown) : This empty
-		if (this _buffer _owner == Owner Callee)
+		result := This new(this _buffer slice(start, distance))
+		if (this _buffer owner == Owner Callee)
 			result = result copy() // TODO: Could we be smarter here?
 		this free(Owner Callee)
 		result
 	}
-	split: func ~withChar (separator: Char) -> VectorList<This> {
-		this split(This new(separator&, 1, Owner Stack))
-	}
-	split: func ~withString (separator: String) -> VectorList<This> {
+	split: func ~character (separator: Char) -> VectorList<This> {
 		this split(This new(separator))
 	}
-	split: func ~withText (separator: This) -> VectorList<This> {
+	split: func ~string (separator: String) -> VectorList<This> {
+		this split(This new(separator))
+	}
+	split: func ~text (separator: This) -> VectorList<This> {
 		t := this take()
 		s := separator take()
 		result := VectorList<This> new()
 		start := 0
-		position := t find(s)
-		while (position != -1) {
-			if (position > start)
-				result add(t slice(start, position - start))
-			start = position + s count
-			position = t find(s, start)
+		while (start <= t count) {
+			next := t find(s, start)
+			if (next < 0)
+				next = t count + 1
+			p := t[start .. next - 1]
+			result add(p)
+			start = next + s count
 		}
-		if (start < t count && position == -1)
-			result add(t slice(start, t count - start))
 		this free(Owner Callee)
 		separator free(Owner Callee)
 		result
 	}
 	toString: func -> String {
-		result := String new(this raw, this count)
+		result := String new(this _buffer raw, this count)
 		this free(Owner Callee)
 		result
 	}
@@ -306,5 +312,4 @@ Text: cover {
 
 operator == (left: String, right: Text) -> Bool { Text new(left) == right }
 operator != (left: String, right: Text) -> Bool { !(left == right) }
-operator != (left: Text, right: String) -> Bool { !(left == right) }
-operator != (left: Text, right: Text) -> Bool { !(left == right) }
+operator []= (left: TextBuffer, range: Range, right: Text) { right _buffer copyTo(left slice(range min, range max - range min)) }

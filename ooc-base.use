@@ -23,5 +23,6 @@ Imports: CLIParser
 Imports: StringBuilder
 Imports: Owner
 Imports: OwnedBuffer
+Imports: TextBuffer
 Imports: Text
 Imports: TextBuilder

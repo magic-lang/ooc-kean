@@ -55,7 +55,7 @@ TextBuilder: class {
 	}
 	append: func ~text (value: Text) {
 		this _count += value count
-		this _data add(value)
+		this _data add(value claim())
 	}
 	append: func (other: This) {
 		for (i in 0 .. other count)
@@ -69,7 +69,7 @@ TextBuilder: class {
 	}
 	prepend: func ~text (value: Text) {
 		this _count += value count
-		this _data insert(0, value)
+		this _data insert(0, value claim())
 	}
 	prepend: func ~This (other: This) {
 		this prepend(other toText())
@@ -81,24 +81,26 @@ TextBuilder: class {
 		this join(Text empty)
 	}
 	join: func ~withChar (separator: Char) -> Text {
-		this join(Text new(separator&, 1, Owner Stack))
+		this join(Text new(separator))
 	}
 	join: func ~withText (separator: Text) -> Text {
 		length := separator count * (this _data count - 1) + this count
-		buffer := null as CString
+		result: TextBuffer
 		if (length > 0) {
-			buffer = gc_malloc(length)
+			result = TextBuffer new(length)
 			offset := 0
 			for (i in 0 .. this _data count) {
-				memcpy(buffer + offset, this _data[i] raw, this _data[i] count)
+				this _data[i] copyTo(result slice(offset))
 				offset += this _data[i] count
 				if (separator count > 0 && i < this count - 1) {
-					memcpy(buffer + offset, separator raw, separator count)
+					separator copyTo(result slice(offset))
 					offset += separator count
 				}
 			}
 		}
-		Text new(buffer, length, Owner Caller)
+		else
+			result = TextBuffer empty
+		Text new(result)
 	}
 	println: func {
 		this toString() println().free()
