@@ -59,6 +59,12 @@ FloatMatrixTest: class extends Fixture {
 			checkAllElements(matrix, [-2.0f, 1.0f, 3.0f, 5.0f, -4.0f, -6.5f])
 		})
 
+		this add("setVertical", func {
+			matrix = createMatrix(3, 3, [0, 0, 0, 0, 0, 0, 0, 0, 0])
+			matrix setVertical(1, 0, FloatPoint3D new(1.0f, 2.0f, 3.0f))
+			checkAllElements(matrix, [0, 0, 0, 1.0f, 2.0f, 3.0f, 0, 0, 0])
+		})
+
 		this add("multiplication", func {
 			matrix = createMatrix(3, 3, [1.0f, 0, 0, 0, 0, 3.0f, 7.0f, 0, 0])
 			checkAllElements(matrix * matrix, [1.0f, 0, 0, 21.0f, 0, 0, 7.0f, 0, 0])
