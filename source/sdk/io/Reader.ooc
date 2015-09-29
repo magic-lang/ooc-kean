@@ -135,7 +135,10 @@ Reader: abstract class {
        and return the result
      */
     readLine: func -> String {
-        readUntil('\n') trimRight('\r')
+        line := readUntil('\n')
+        result := line trimRight('\r')
+        line free()
+        result
     }
 
     /**
