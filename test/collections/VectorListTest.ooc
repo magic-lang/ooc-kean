@@ -179,13 +179,6 @@ VectorTest: class extends Fixture {
 			expect(newList[2], is equal to("3"))
 			list free(); newList free()
 		})
-			/*this add("VectorList fold", func {
-				list := VectorList<Int> new()
-				list add(0)
-				list add(1)
-				list add(2)
-				str := list fold(|value,value2| value toString() + value2, "test")
-			})*/
 	}
 }
 VectorTest new() run()
