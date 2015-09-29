@@ -1,6 +1,4 @@
 use ooc-base
-import threading/Thread
-import os/Time
 use ooc-unit
 
 PromiseTest: class extends Fixture {

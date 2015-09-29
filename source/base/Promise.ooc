@@ -1,3 +1,4 @@
+use ooc-base
 import threading/Thread
 import os/Time
 
@@ -14,6 +15,12 @@ Promise: abstract class {
 	cancel: virtual func -> Bool { false }
 	start: static func (action: Func) -> This {
 		_ThreadPromise new(action)
+	}
+	operator + (other: This) -> PromiseCollector {
+		collector := PromiseCollector new()
+		collector add(this)
+		collector add(other)
+		collector
 	}
 }
 

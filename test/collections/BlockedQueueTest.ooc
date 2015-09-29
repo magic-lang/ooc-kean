@@ -39,38 +39,49 @@ BlockedQueueTest: class extends Fixture {
 			expect(queue count, is equal to(0))
 
 			pool := ThreadPool new(8)
+			limitA := 100
+			limitB := 200
+			limitC := 200
+			limitD := 20
+			limitE := 4
+			limitF := 4
+			promises := PromiseCollector new()
+
 			/* Enqueue values asynchronously */
-			for (i in 0 .. 100)
-				pool add(func1)
+			for (i in 0 .. limitA)
+				promises += pool getPromise(func1)
 
 			/* Peek values asynchronously */
-			for (i in 0 .. 200)
-				pool add(func2)
+			for (i in 0 .. limitB)
+				promises += pool getPromise(func2)
 
 			/* Dequeue values asynchronously */
-			for (i in 0 .. 200)
-				pool add(func3)
+			for (i in 0 .. limitC)
+				promises += pool getPromise(func3)
 
 			/* Peek values asynchronously in empty Queue */
-			for (i in 0 .. 20)
-				pool add(func4)
+			for (i in 0 .. limitD)
+				promises += pool getPromise(func4)
 
-			pool waitAll()
+			promises wait()
 
 			expect(queue empty)
 			expect(queue count, is equal to(0))
 
 			for (i in 0 .. 4) {
-				pool add(func5)
+				promises += pool getPromise(func5)
 				Time sleepMilli(10)
 			}
 			for (i in 0 .. 4) {
-				pool add(func1)
+				promises += pool getPromise(func1)
 				Time sleepMilli(10)
 			}
-			pool waitAll()
+
+			promises wait()
+
 			expect(queue empty)
 
+			promises free()
 			queue free()
 			pool free()
 		})
