@@ -158,4 +158,18 @@ VectorList: class <T> {
 	getSliceInto: func ~indices (start, end: Int, buffer: This<T>) {
 		this getSliceInto(start .. end, buffer)
 	}
+	iterator: func -> Iterator<T> { _VectorListIterator<T> new(this) }
+}
+
+_VectorListIterator: class <T> extends Iterator<T> {
+	_backend: VectorList<T>
+	_position: UInt
+	init: func (=_backend)
+	hasNext?: func -> Bool { this _position < this _backend count }
+	next: func -> T {
+		result := this _backend[this _position]
+		this _position += 1
+		result
+	}
+	remove: func -> Bool { false }
 }
