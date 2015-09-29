@@ -45,6 +45,36 @@ FloatMatrix : cover {
 		result
 	}
 
+	setColumn: func (x: Int, values: ...) {
+		if (x < 0 || x >= this width)
+			raise("Column index out of range in FloatMatrix setColumn")
+		if (values count != this height)
+			raise("Number of values must match matrix height in FloatMatrix setColumn")
+		y := 0
+		values each (|value|
+			match value {
+				case floatValue: Float => this[x, y] = floatValue
+				case => raise("Values must be of type Float in FloatMatrix setColumn")
+			}
+			y += 1
+		)
+	}
+
+	setColumn: func ~floatpoint3d (x: Int, vector: FloatPoint3D) {
+		if (this height != 3)
+			raise("Matrix must be of height 3 in FloatMatrix setColumn")
+		this setColumn(x, vector x, vector y, vector z)
+	}
+
+	getColumn: func (x: Int) -> This {
+		if (x < 0 || x >= this width)
+			raise("Column index out of range in FloatMatrix getColumn")
+		result := This new(1, this height)
+		for (y in 0 .. this height)
+			result[0, y] = this[x, y]
+		result
+	}
+
 	// <summary>
 	// Get an element in a matrix at position(x,y).
 	// </summary>
