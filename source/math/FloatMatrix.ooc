@@ -46,10 +46,8 @@ FloatMatrix : cover {
 	}
 
 	setVertical: func (xOffset, yOffset: Int, vector: FloatPoint3D) {
-		version (safe) {
-			if (xOffset < 0 || xOffset >= this width)
-				raise("Column index out of range in FloatMatrix setVertical")
-		}
+		if (xOffset < 0 || xOffset >= this width)
+			raise("Column index out of range in FloatMatrix setVertical")
 		if (this height - yOffset < 3)
 			raise("Element positions exceed matrix dimensions in FloatMatrix setVertical")
 		this[xOffset, yOffset] = vector x
