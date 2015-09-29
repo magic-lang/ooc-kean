@@ -49,9 +49,9 @@ FloatMatrix : cover {
 		version (safe) {
 			if (xOffset < 0 || xOffset >= this width)
 				raise("Column index out of range in FloatMatrix setVertical")
-			if (this height - yOffset < 3)
-				raise("Element positions exceed matrix dimensions in FloatMatrix setVertical")
 		}
+		if (this height - yOffset < 3)
+			raise("Element positions exceed matrix dimensions in FloatMatrix setVertical")
 		this[xOffset, yOffset] = vector x
 		this[xOffset, yOffset + 1] = vector y
 		this[xOffset, yOffset + 2] = vector z
