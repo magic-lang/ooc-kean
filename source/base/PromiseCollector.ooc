@@ -8,6 +8,7 @@ PromiseCollector: class {
 	}
 	free: func {
 		this _backend free()
+		super()
 	}
 	add: func (promise: Promise) {
 		this _backend add(promise)
