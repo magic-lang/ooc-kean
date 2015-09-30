@@ -109,14 +109,17 @@ Worker: class {
 	_thread: Thread
 	_tasks: BlockedQueue<_Task>
 	_mutex := Mutex new()
+	_threadClosure: Func
 	mutex ::= this _mutex
 	init: func (=_tasks) {
-		this _thread = Thread new(|| this _threadLoop())
+		this _threadClosure = func { this _threadLoop() }
+		this _thread = Thread new(this _threadClosure)
 		this _thread start()
 	}
 	free: override func {
 		this _thread free()
-		this _mutex lock()
+		(this _threadClosure as Closure) dispose()
+ 		this _mutex lock()
 		this _mutex destroy()
 		super()
 	}

@@ -21,21 +21,24 @@ _ThreadPromise: class extends Promise {
 	_action: Func
 	_thread: Thread
 	_mutex := Mutex new()
-	init: func (=_action) {
+	init: func (task: Func) {
 		super()
 		this _state = _PromiseState Unfinished
 		this _action = func {
-			_action()
+			task()
 			this _mutex lock()
 			if (this _state != _PromiseState Cancelled)
 				this _state = _PromiseState Finished
 			this _mutex unlock()
 		}
-		this _thread = Thread new(|| this _action())
+		this _thread = Thread new(this _action)
 		this _thread start()
 	}
-	free: func {
-		_thread free()
+	free: override func {
+		this _thread wait()
+		this _thread free()
+		(this _action as Closure) dispose()
+		this _mutex destroy()
 		super()
 	}
 	wait: func -> Bool {
@@ -69,27 +72,28 @@ Future: abstract class <T> {
 
 _ThreadFuture: class <T> extends Future<T> {
 	_result: Cell<T>
-	_action: Func -> T
-	_task: Func
+	_action: Func
 	_thread: Thread
 	_mutex := Mutex new()
-	init: func (=_action) {
+	init: func (task: Func -> T) {
 		super()
 		this _state = _PromiseState Unfinished
-		this _task = func {
-			temporary := this _action()
+		this _action = func {
+			temporary := task()
 			this _result = Cell<T> new(temporary)
 			this _mutex lock()
 			if (this _state != _PromiseState Cancelled)
 				this _state = _PromiseState Finished
 			this _mutex unlock()
 		}
-		this _thread = Thread new(|| this _task())
+		this _thread = Thread new(this _action)
 		this _thread start()
 	}
-	free: func {
-		_thread free()
-		_mutex destroy()
+	free: override func {
+		this _thread wait()
+		this _thread free()
+		(this _action as Closure) dispose()
+		this _mutex destroy()
 		super()
 	}
 	wait: func -> Bool {
