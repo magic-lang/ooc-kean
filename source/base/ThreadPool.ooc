@@ -119,7 +119,7 @@ Worker: class {
 	free: override func {
 		this _thread free()
 		(this _threadClosure as Closure) dispose()
- 		this _mutex lock()
+		this _mutex lock()
 		this _mutex destroy()
 		super()
 	}
