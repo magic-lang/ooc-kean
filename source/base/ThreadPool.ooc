@@ -6,7 +6,6 @@ import os/Time
 
 _Task: abstract class {
 	_state := _PromiseState Unfinished
-	_freeDirectly: Bool
 	_mutex: Mutex
 	mutex ::= this _mutex
 	run: abstract func (mutex: Mutex)
@@ -40,8 +39,6 @@ _Task: abstract class {
 		if (this _state != _PromiseState Cancelled)
 			this _state = _PromiseState Finished
 		this _mutex unlock()
-		if (this _freeDirectly)
-			this free()
 	}
 }
 
@@ -117,9 +114,9 @@ Worker: class {
 		this _thread start()
 	}
 	free: override func {
+		//FIXME this _thread cancel() // Should be here to prevent memory leaks, but causes segfaults
 		this _thread free()
 		(this _threadClosure as Closure) dispose()
-		this _mutex lock()
 		this _mutex destroy()
 		super()
 	}

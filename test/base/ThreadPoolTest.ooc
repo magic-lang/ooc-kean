@@ -67,13 +67,11 @@ ThreadPoolTest: class extends Fixture {
 		})
 		this add("threaded_result_cancel", func {
 			pool := ThreadPool new()
-			future := pool getFuture(func { for (i in 0 .. 100_000_000) { } "finished" } )
+			future := pool getFuture(func { for (i in 0 .. 100_000_000) { } "pass" } )
 			future cancel()
-			result := future wait("cancelled")
-			expect(result == "cancelled")
-			future free()
-			result free()
-			pool free()
+			comparison := "fail"
+			result := future wait(comparison)
+			expect(result == comparison)
 		})
 	}
 }
