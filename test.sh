@@ -1,7 +1,6 @@
 #!/bin/bash
 export OOC_LIBS=$(dirname `pwd`)
 ARGS=""
-FAILED=false
 TESTS_USE_FILE="tests.use"
 if [ -e rock_arguments.txt ]
 	then
@@ -36,8 +35,9 @@ do
 	fi
 done
 echo "Main: ./test/Tests.ooc" >> "$TESTS_USE_FILE"
-rock -q -lpthread --gc=off -r $ARGS $FLAGS $TESTS_USE_FILE 2>&1
-if [ "$FAILED" = true ]
+rock -q -x -lpthread --gc=off $ARGS $FLAGS $TESTS_USE_FILE 2>&1
+./Tests
+if [[ !( $? == 0 ) ]]
 then
 	exit 1
 else
