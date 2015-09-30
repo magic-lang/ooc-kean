@@ -15,6 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
 import FloatPoint3D
+import IntPoint3D
+import IntSize3D
 import text/StringTokenizer
 import structs/ArrayList
 
@@ -70,6 +72,8 @@ FloatSize3D: cover {
 	operator > (other: This) -> Bool { this width > other width && this height > other height && this depth > other depth }
 	operator <= (other: This) -> Bool { this width <= other width && this height <= other height && this depth <= other depth }
 	operator >= (other: This) -> Bool { this width >= other width && this height >= other height && this depth >= other depth }
+	toIntSize3D: func -> IntSize3D { IntSize3D new(this width as Int, this height as Int, this depth as Int) }
+	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this width, this height, this depth) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this width toString()}, #{this height toString()}, #{this depth toString()}" }
 	parse: static func (input: String) -> This {

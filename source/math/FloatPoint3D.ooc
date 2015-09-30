@@ -15,6 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
 import FloatPoint2D
+import IntPoint3D
 import text/StringTokenizer
 import structs/ArrayList
 
@@ -67,6 +68,7 @@ FloatPoint3D: cover {
 	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
+	toIntPoint3D: func -> IntPoint3D { IntPoint3D new(this x floor() as Int, this y floor() as Int, this z floor() as Int) }
 	operator as -> String { this toString() }
 	toString: func -> String { "%.8f" formatFloat(this x) >> ", " & "%.8f" formatFloat(this y) >> ", " & "%.8f" formatFloat(this z) }
 	parse: static func (input: String) -> This {
