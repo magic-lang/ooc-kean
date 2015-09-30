@@ -59,4 +59,4 @@ t start()
 for (i in 0 .. 8) { }
 t stop()
 
-"TimerTest [TODO: Not implemented as a fixture!]"
+"TimerTest [TODO: Not implemented as a fixture!]" printfln()
