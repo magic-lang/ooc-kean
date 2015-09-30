@@ -16,6 +16,7 @@
 */
 
 use ooc-base
+use ooc-unit
 import Debug
 
 version(debugTests) {
@@ -78,3 +79,5 @@ version(debugTests) {
 	Debug print("third print", 2)
 	Debug printProfilerData()*/
 }
+
+"ProfilingTest [TODO: Not implemented as a fixture!]" printfln()

@@ -96,3 +96,5 @@ writer addPlot(unitCirclePlot)
 writer addPlot(symmetricUnitCirclePlot)
 writer addPlot(formatPlot)
 writer write()
+
+"SvgPlotTest [TODO: Not implemented as a fixture!]" printfln()

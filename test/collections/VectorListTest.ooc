@@ -18,7 +18,7 @@
 use ooc-unit
 use ooc-collections
 
-VectorTest: class extends Fixture {
+VectorListTest: class extends Fixture {
 	init: func {
 		super("VectorList")
 		this add("VectorList cover create", func {
@@ -202,4 +202,4 @@ VectorTest: class extends Fixture {
 		})
 	}
 }
-VectorTest new() run()
+VectorListTest new() run()
