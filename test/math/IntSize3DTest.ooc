@@ -47,12 +47,6 @@ IntSize3DTest: class extends Fixture {
 			expect(this vector0 height, is equal to(-3))
 			expect(this vector0 depth, is equal to(8))
 		})
-		this add("swap", func {
-			result := this vector0 swap()
-			expect(result width, is equal to(this vector0 height))
-			expect(result height, is equal to(this vector0 width))
-			expect(result depth, is equal to(this vector0 depth))
-		})
 		this add("casting", func {
 			value := "10, 20, 0"
 			expect(this vector3 toString(), is equal to(value))
