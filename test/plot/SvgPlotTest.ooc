@@ -6,6 +6,12 @@ use ooc-draw
 import math
 import io/File
 
+SvgPlotTest: class extends Fixture {
+	init: func {
+		super("SvgPlotTest [TODO: Not implemented as a fixture!]")
+	}
+}
+
 log := VectorList<FloatPoint2D> new()
 sin := VectorList<FloatPoint2D> new()
 cos := VectorList<FloatPoint2D> new()

@@ -1,7 +1,8 @@
 use ooc-base
+use ooc-unit
 
-b := ByteBuffer new(4000)
-b referenceCount decrease()
-b = ByteBuffer new(4000)
-b referenceCount decrease()
-ByteBuffer clean()
+ByteBufferTest: class extends Fixture {
+	init: func {
+		super("ByteBufferTest [TODO: Not implemented as a fixture!]")
+	}
+}

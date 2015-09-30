@@ -16,7 +16,14 @@
 */
 
 use ooc-base
+use ooc-unit
 import Debug
+
+ProfilingTest: class extends Fixture {
+	init: func {
+		super("ProfilingTest [TODO: Not implemented as a fixture!]")
+	}
+}
 
 version(debugTests) {
 	Debug initialize(func (message: String) { println(message) })

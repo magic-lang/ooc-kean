@@ -1,6 +1,13 @@
 use ooc-base
+use ooc-unit
 import threading/Thread
 import os/Time
+
+ThreadPoolTest: class extends Fixture {
+	init: func {
+		super("ThreadPoolTest [TODO: Not implemented as a fixture!]")
+	}
+}
 
 version(debugTests) {
 	threadedTest: func {

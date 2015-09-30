@@ -16,7 +16,13 @@
 */
 
 use ooc-base
+use ooc-unit
 
+TimerTest: class extends Fixture {
+	init: func {
+		super("TimerTest [TODO: Not implemented as a fixture!]")
+	}
+}
 Debug initialize(func (message: String) { println(message) })
 
 testfunction: func {

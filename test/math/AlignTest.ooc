@@ -1,4 +1,5 @@
 use ooc-math
+use ooc-unit
 import math
 
 version(debugTests) {
@@ -7,4 +8,10 @@ version(debugTests) {
 
 	for (i in 0 .. 66)
 		println(Int align(i, 1) toString())
+}
+
+AlignTest: class extends Fixture {
+	init: func {
+		super("AlignTest [TODO: Not implemented as a fixture!]")
+	}
 }

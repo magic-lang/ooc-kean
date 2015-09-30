@@ -1,5 +1,12 @@
 use ooc-base
+use ooc-unit
 import threading/Thread, os/Time
+
+SynchronizedTest: class extends Fixture {
+	init: func {
+		super("SynchronizedTest [TODO: Not implemented as a fixture!]")
+	}
+}
 
 TestClass: class implements IDisposable {
 	refCounter: ReferenceCounter

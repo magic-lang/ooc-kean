@@ -16,8 +16,15 @@
 */
 
 use ooc-draw
+use ooc-unit
 import ../../source/draw/CreateAlphaByteString
 import io/[File, FileWriter]
+
+CreateAlphaByteStringTest: class extends Fixture {
+	init: func {
+		super("CreateAlphaByteStringTest [TODO: Not implemented]")
+    }
+}
 
 outputData := CreateAlphaByteString makeAlphaString("test/draw/input/logo.png", "logo")
 filename := "test/draw/output/"
