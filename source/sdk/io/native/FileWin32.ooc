@@ -90,8 +90,8 @@ version(windows) {
          * @return true if it's a directory (return false if it doesn't exist)
          */
         dir?: func -> Bool {
-            (ffd, ok) := _getFindData()
-            return (ok) && ((ffd attr) & FILE_ATTRIBUTE_DIRECTORY) != 0
+            res := GetFileAttributes(path as CString)
+            (res & FILE_ATTRIBUTE_DIRECTORY) != 0
         }
 
         /**

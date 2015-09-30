@@ -15,6 +15,8 @@
  * along with This software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use ooc-math
+
 import include/gles3
 import ../GLQuad
 import Gles3VertexArrayObject, Gles3Debug
@@ -22,9 +24,19 @@ import Gles3VertexArrayObject, Gles3Debug
 Gles3Quad: class extends GLQuad {
 	init: func {
 		version(debugGL) { validateStart() }
-		positions := [-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f] as Float*
-		textureCoordinates := [0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f] as Float*
-		this vao = Gles3VertexArrayObject new(positions, textureCoordinates, 4, 2)
+		vertices := FloatPoint2D[4] new()
+		vertices[0] = FloatPoint2D new(-1.0f, -1.0f)
+		vertices[1] = FloatPoint2D new(-1.0f, 1.0f)
+		vertices[2] = FloatPoint2D new(1.0f, -1.0f)
+		vertices[3] = FloatPoint2D new(1.0f, 1.0f)
+		textureCoordinates := FloatPoint2D[4] new()
+		textureCoordinates[0] = FloatPoint2D new(0.0f, 1.0f)
+		textureCoordinates[1] = FloatPoint2D new(0.0f, 0.0f)
+		textureCoordinates[2] = FloatPoint2D new(1.0f, 1.0f)
+		textureCoordinates[3] = FloatPoint2D new(1.0f, 0.0f)
+		this vao = Gles3VertexArrayObject new(vertices, textureCoordinates)
+		vertices free()
+		textureCoordinates free()
 		version(debugGL) { validateEnd("quad init") }
 	}
 	free: override func {

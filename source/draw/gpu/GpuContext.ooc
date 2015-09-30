@@ -17,7 +17,7 @@ use ooc-math
 use ooc-draw
 use ooc-base
 use ooc-collections
-import GpuImage, GpuSurface, GpuMap, GpuFence, GpuYuv420Semiplanar
+import GpuImage, GpuSurface, GpuMap, GpuFence, GpuYuv420Semiplanar, GpuMesh
 
 AlignWidth: enum {
 	Nearest
@@ -37,6 +37,7 @@ GpuContext: abstract class {
 	createYuv420Semiplanar: func (size: IntSize2D) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(size, this) }
 	createYuv420Semiplanar: func ~fromImages (y, uv: GpuImage) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(y, uv, this) }
 	createYuv420Semiplanar: func ~fromRaster (raster: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(raster, this) }
+	createMesh: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GpuMesh
 
 	update: abstract func
 	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }

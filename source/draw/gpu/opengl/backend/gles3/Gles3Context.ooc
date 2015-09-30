@@ -19,9 +19,9 @@ use ooc-base
 use ooc-math
 use ooc-ui
 import ../egl/egl
-import ../[GLContext, GLTexture]
+import ../[GLContext, GLTexture, GLVertexArrayObject]
 import include/gles3
-import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture
+import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture, Gles3VertexArrayObject
 
 Gles3Context: class extends GLContext {
 	_eglContext: Pointer
@@ -180,26 +180,17 @@ Gles3Context: class extends GLContext {
 	}
 
 	createQuad: func -> Gles3Quad {
-		version(debugGL) { validateStart() }
 		result := Gles3Quad new()
-		result = (result vao != null) ? result : null
-		version(debugGL) { validateEnd("Quad create") }
-		result
+		(result vao != null) ? result : null
 	}
 	createShaderProgram: func (vertexSource, fragmentSource: String) -> Gles3ShaderProgram {
-		version(debugGL) { validateStart() }
 		result := Gles3ShaderProgram new()
-		result = result _compileShaders(vertexSource, fragmentSource) ? result : null
-		version(debugGL) { validateEnd("ShaderProgram create") }
-		result
+		result _compileShaders(vertexSource, fragmentSource) ? result : null
 	}
 	createTexture: func (type: TextureType, size: IntSize2D, stride: UInt, pixels := null, allocate := true) -> Gles3Texture {
-		version(debugGL) { validateStart() }
 		result := Gles3Texture new(type, size)
 		success := result _generate(pixels, stride, allocate)
-		result = success ? result : null
-		version(debugGL) { validateEnd("Texture create") }
-		result
+		success ? result : null
 	}
 	createFramebufferObject: func (texture: GLTexture, size: IntSize2D) -> Gles3FramebufferObject {
 		version(debugGL) { validateStart() }
@@ -208,22 +199,12 @@ Gles3Context: class extends GLContext {
 		version(debugGL) { validateEnd("FramebufferObject create") }
 		result
 	}
-	createFence: func -> Gles3Fence {
-		version(debugGL) { validateStart() }
-		result := Gles3Fence new()
-		version(debugGL) { validateEnd("Fence create") }
-		result
+	createFence: func -> Gles3Fence { Gles3Fence new() }
+	createVolumeTexture: func (size: IntSize3D, pixels: UInt8*) -> Gles3VolumeTexture {
+		Gles3VolumeTexture new(size, pixels)
 	}
-	createVolumeTexture: func (width, height, depth: UInt, pixels: UInt8*) -> Gles3VolumeTexture {
-		version(debugGL) { validateStart() }
-		result := Gles3VolumeTexture new(width, height, depth, pixels)
-		version(debugGL) { validateEnd("VolumeTexture create") }
-		result
-	}
-	createRenderer: func -> Gles3Renderer {
-		version(debugGL) { validateStart() }
-		result := Gles3Renderer new()
-		version(debugGL) { validateEnd("Renderer create") }
-		result
+	createRenderer: func -> Gles3Renderer { Gles3Renderer new() }
+	createVertexArrayObject: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GLVertexArrayObject {
+		Gles3VertexArrayObject new(vertices, textureCoordinates)
 	}
 }

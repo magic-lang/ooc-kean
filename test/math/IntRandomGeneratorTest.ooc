@@ -5,22 +5,6 @@ import math
 IntRandomGeneratorTest: class extends Fixture {
 	init: func {
 		super("IntRandomGenerator")
-		this add("creating generators with backends", func {
-			valuesCount := 1_000_000
-			generator := IntRandomGenerator new(FloatUniformRandomGenerator new(0.0f, 20.0f))
-			for (i in 0 .. valuesCount)
-				expect(Int absolute(generator next()) <= 20)
-			generator free()
-			generator = IntGaussianRandomGenerator new(FloatUniformRandomGenerator new(0.0f, 5.0f))
-			countEqual := 0
-			for (i in 0 .. valuesCount) {
-				first := generator next()
-				second := generator next()
-				if (first == second)
-					++countEqual
-			}
-			expect(countEqual < valuesCount)
-		})
 		this add("seeds", func {
 			valuesCount := 1_000_000
 			countEqual := 0
@@ -69,4 +53,5 @@ IntRandomGeneratorTest: class extends Fixture {
 		})
 	}
 }
+
 IntRandomGeneratorTest new() run()

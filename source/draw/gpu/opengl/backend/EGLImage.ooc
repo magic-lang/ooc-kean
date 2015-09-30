@@ -30,14 +30,13 @@ EGLImage: class extends GLTexture {
 		super(type, size)
 		this _eglDisplay = context _eglDisplay
 		this _backendTexture = context createTexture(type, size, size width, null, false)
-		/*this _backendTexture bind()*/
-		_backend = _backendTexture _backend
-		_target = _backendTexture _target
+		this _backend = this _backendTexture _backend
+		this _target = this _backendTexture _target
 		this bindSibling()
 	}
 	free: override func {
 		This _eglDestroyImageKHR(this _eglDisplay, this _eglBackend)
-		_backendTexture free()
+		this _backendTexture free()
 		super()
 	}
 	bindSibling: func {
@@ -51,20 +50,16 @@ EGLImage: class extends GLTexture {
 	_glEGLImageTargetTexture2DOES: static Func(UInt, Pointer)
 	_initialized: static Bool = false
 	initialize: static func {
-		if (!This _initialized) {
-			This _eglCreateImageKHR = (eglGetProcAddress("eglCreateImageKHR" toCString()), null) as Func(Pointer, Pointer, UInt, Pointer, Int*) -> Pointer
-			This _eglDestroyImageKHR = (eglGetProcAddress("eglDestroyImageKHR" toCString()), null) as Func(Pointer, Pointer)
-			This _glEGLImageTargetTexture2DOES = (eglGetProcAddress("glEGLImageTargetTexture2DOES" toCString()), null) as Func(UInt, Pointer)
-			This _initialized = true
-		}
+		This _eglCreateImageKHR = (eglGetProcAddress("eglCreateImageKHR" toCString()), null) as Func(Pointer, Pointer, UInt, Pointer, Int*) -> Pointer
+		This _eglDestroyImageKHR = (eglGetProcAddress("eglDestroyImageKHR" toCString()), null) as Func(Pointer, Pointer)
+		This _glEGLImageTargetTexture2DOES = (eglGetProcAddress("glEGLImageTargetTexture2DOES" toCString()), null) as Func(UInt, Pointer)
+		This _initialized = true
 	}
 	create: static func (type: TextureType, size: IntSize2D, nativeBuffer: Pointer, context: GLContext) -> This {
-		This initialize()
-		result: This = null
-		if (type == TextureType Rgba || type == TextureType Rgb || type == TextureType Bgr || type == TextureType Rgb || type == TextureType Yv12) {
-			result = This new(type, size, nativeBuffer, context)
-		}
-		result
+		if (!This _initialized)
+			This initialize()
+		(type == TextureType Rgba || type == TextureType Rgb || type == TextureType Bgr || type == TextureType Rgb || type == TextureType Yv12) ?
+		This new(type, size, nativeBuffer, context) : null
 	}
 	generateMipmap: func { this _backendTexture generateMipmap() }
 	bind: func (unit: UInt) { this _backendTexture bind(unit) }

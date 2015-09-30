@@ -54,6 +54,11 @@ floor: extern(floorl) func ~Long (LDouble) -> LDouble
 
    - Scott
  */
+ extend Short {
+	 minimumValue ::= static SHRT_MIN
+	 maximumValue ::= static SHRT_MAX
+}
+
 extend Int {
 	modulo: func(divisor: This) -> This {
 		if (divisor < 0) {

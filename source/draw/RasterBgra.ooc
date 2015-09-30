@@ -37,22 +37,23 @@ RasterBgra: class extends RasterPacked {
 		result
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
-		end := this buffer pointer as Long + this buffer size
-		rowLength := this size width * this bytesPerPixel
-		for (row: Long in this buffer pointer as Long .. end) {
-			rowEnd := row + rowLength
-			for (source: Long in row .. rowEnd) {
-				action((source as ColorBgr*)@)
-				source += 3
+		for (row in 0 .. this size height) {
+			source := this buffer pointer + row * this stride
+			for (pixel in 0 .. this size width) {
+				pixelPointer := (source + pixel * this bytesPerPixel) as ColorBgr*
+				action(pixelPointer@)
 			}
-			row += this stride - 1
 		}
 	}
 	apply: func ~yuv (action: Func(ColorYuv)) {
-		this apply(ColorConvert fromBgr(action))
+		convert := ColorConvert fromBgr(action)
+		this apply(convert)
+		(convert as Closure) dispose()
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
-		this apply(ColorConvert fromBgr(action))
+		convert := ColorConvert fromBgr(action)
+		this apply(convert)
+		(convert as Closure) dispose()
 	}
 	distance: func (other: Image) -> Float {
 		result := 0.0f
@@ -144,6 +145,7 @@ RasterBgra: class extends RasterPacked {
 			}
 		}
 		original apply(f)
+		(f as Closure) dispose()
 		result
 	}
 	operator [] (x, y: Int) -> ColorBgra { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorBgra* + x)@ : ColorBgra new(0, 0, 0, 0) }

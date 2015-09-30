@@ -19,6 +19,5 @@ import GLVertexArrayObject
 
 GLQuad: abstract class {
 	vao: GLVertexArrayObject
-	free: override func { super() }
 	draw: abstract func
 }

@@ -35,3 +35,5 @@ func2: func {
 
 thread1 wait()
 thread2 wait()
+
+"SynchronizedTest [TODO: Not implemented as a fixture!]"

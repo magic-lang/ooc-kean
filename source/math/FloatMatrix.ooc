@@ -45,14 +45,40 @@ FloatMatrix : cover {
 		result
 	}
 
+	setVertical: func (xOffset, yOffset: Int, vector: FloatPoint3D) {
+		if (xOffset < 0 || xOffset >= this width)
+			raise("Column index out of range in FloatMatrix setVertical")
+		if (this height - yOffset < 3)
+			raise("Element positions exceed matrix dimensions in FloatMatrix setVertical")
+		this[xOffset, yOffset] = vector x
+		this[xOffset, yOffset + 1] = vector y
+		this[xOffset, yOffset + 2] = vector z
+	}
+
+	getColumn: func (x: Int) -> This {
+		version (safe) {
+			if (x < 0 || x >= this width)
+				raise("Column index out of range in FloatMatrix getColumn")
+		}
+		result := This new(1, this height)
+		for (y in 0 .. this height)
+			result[0, y] = this[x, y]
+		result
+	}
+
 	// <summary>
 	// Get an element in a matrix at position(x,y).
 	// </summary>
 	// <param name="x">Column number of a matrix.</param>
 	// <param name="y">Row number of a matrix.</param>
 	// <returns></returns>
-	get: func@ (x, y: Int) -> Float { this[x, y] } //TODO Deprecated, remove when no longer used
-	operator [] (x, y: Int) -> Float { this elements[x + y * this width] }
+	operator [] (x, y: Int) -> Float {
+		version (safe) {
+			if (x < 0 || y < 0 || x >= this width || y >= this height)
+				raise("Accessing matrix element out of range in get operator")
+		}
+		this elements[x + y * this width]
+	}
 	// NOTE: Because rock doesn't understand the concept of inline functions,
 	// this function has been inlined manually in many places in this file for performance reasons.
 
@@ -63,8 +89,13 @@ FloatMatrix : cover {
 	// <param name="y">Row number of a matrix.</param>
 	// <param name="value">The value set at (x,y).</param>
 	// <returns></returns>
-	set: func@ (x, y: Int, value: Float) { this[x, y] = value } //TODO Deprecated, remove when no longer used
-	operator []= (x, y: Int, value: Float) { this elements[x + y * this width] = value }
+	operator []= (x, y: Int, value: Float) {
+		version (safe) {
+			if (x < 0 || y < 0 || x >= this width || y >= this height)
+				raise("Accessing matrix element out of range in set operator")
+		}
+		this elements[x + y * this width] = value
+	}
 	// NOTE: Because rock doesn't understand the concept of inline functions,
 	// this function has been inlined manually in many places in this file for performance reasons.
 
@@ -119,6 +150,10 @@ FloatMatrix : cover {
 	// <param name="row1">First row</param>
 	// <param name="row2">Second row</param>
 	swaprows: func@ (row1, row2: Int) {
+		version (safe) {
+			if (row1 < 0 || row2 < 0 || row1 >= this height || row2 >= this height)
+				raise("Invalid row choices in FloatMatrix swaprows")
+		}
 		order := this order
 		buffer: Float
 		if (row1 != row2)
@@ -222,10 +257,7 @@ FloatMatrix : cover {
 		result
 	}
 
-	//TODO: Shouldn't this be a property?
-	isNull: func -> Bool {
-		this dimensions empty
-	}
+	isNull ::= this dimensions empty
 
 	// <summary>
 	// Forward solver lower * x = y. Current object is y.
@@ -272,11 +304,6 @@ FloatMatrix : cover {
 	}
 
 	free: func { this elements free() }
-
-	//TODO: Remove this function once all callers have been updated to call free instead.
-	dispose: func {
-		this free()
-	}
 
 	operator * (other: This) -> This {
 		if (this width != other height)

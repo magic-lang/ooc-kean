@@ -38,6 +38,11 @@ FloatEuclidTransform: cover {
 	}
 	operator + (other: This) -> This { This new(this translation + other translation, this rotation * other rotation, this scaling * other scaling) }
 	operator - (other: This) -> This { This new(this translation - other translation, this rotation * other rotation inverse, this scaling / other scaling) }
+	operator == (other: This) -> Bool {
+		this translation == other translation &&
+		this rotation == other rotation &&
+		this scaling == other scaling
+	}
 	toString: func -> String {
 		"Translation: " << this translation toString() >> " Rotation: " & this rotation toString() >> " Scaling: " & this scaling toString()
 	}

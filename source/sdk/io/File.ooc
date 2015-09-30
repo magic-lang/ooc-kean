@@ -251,6 +251,7 @@ File: abstract class {
         p := parent
         if (p) {
             p mkdirs(mode)
+            p free()
         }
         mkdir()
     }
@@ -466,7 +467,9 @@ File: abstract class {
      * @param dstFile the file to copy to
      */
     copyTo: func(dstFile: This) {
-        dstFile parent mkdirs()
+        dstParent := dstFile parent
+        dstParent mkdirs()
+        dstParent free()
 
         src := FileReader new(this)
         dst := FileWriter new(dstFile)
@@ -477,8 +480,11 @@ File: abstract class {
             num := src read(buffer data, 0, max)
             dst write(buffer data, num)
         }
+        buffer free()
         dst close()
         src close()
+        dst free()
+        src free()
     }
 
     /**

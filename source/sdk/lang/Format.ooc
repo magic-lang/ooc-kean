@@ -452,7 +452,6 @@ getEntityInfoOne: inline func <T> (info: FSInfoStruct@, va: T*, start: Char*, en
         else InvalidFormatException new(start) throw()
         info precision = 0
         if(p@ == '*') {
-            info precision = T as Int
             if (p < end) p += 1
             else InvalidFormatException new(start) throw()
         }

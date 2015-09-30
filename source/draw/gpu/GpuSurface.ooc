@@ -19,7 +19,7 @@ use ooc-draw
 use ooc-collections
 use ooc-base
 
-import GpuContext, GpuMap, GpuImage
+import GpuContext, GpuMap, GpuImage, GpuMesh
 
 GpuSurface: abstract class {
 	clearColor: ColorBgra { get set }
@@ -100,6 +100,8 @@ GpuSurface: abstract class {
 	draw: func ~ImageTargetSize (image: Image, targetSize: IntSize2D) { this draw(image, IntBox2D new(targetSize)) }
 	draw: func ~ImageMap (image: Image, map: GpuMap) { this draw(image, IntBox2D new(image size), IntBox2D new(image size), map) }
 	draw: func ~ImageDestinationMap (image: Image, destination: IntBox2D, map: GpuMap) { this draw(image, IntBox2D new(image size), destination, map) }
+
+	draw: virtual func ~mesh (image: Image, mesh: GpuMesh) { Debug raise("draw~mesh unimplemented!") }
 
 	drawLines: virtual func (pointList: VectorList<FloatPoint2D>)
 	drawBox: virtual func (box: FloatBox2D)

@@ -86,7 +86,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 		this add("gaussian distribution", func {
 			expectedMean := -3.0f
 			expectedDeviation := 12.0f
-			tolerance := 0.8f
+			tolerance := 0.9f
 			generator := FloatGaussianRandomGenerator new(expectedMean, expectedDeviation)
 			values := generator next(1_000_000)
 			mean := 0.0f

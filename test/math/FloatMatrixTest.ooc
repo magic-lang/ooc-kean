@@ -4,8 +4,9 @@ import math
 import lang/IO
 
 FloatMatrixTest: class extends Fixture {
-matrix := FloatMatrix new (3, 3)
-matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
+	matrix := FloatMatrix new (3, 3)
+	nonSquareMatrix := FloatMatrix new (IntSize2D new(2, 3))
+	nullMatrix := FloatMatrix new(0, 0)
 
 	init: func {
 		super ("FloatMatrix")
@@ -15,16 +16,19 @@ matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
 		})
 
 		this add("isSquare", func {
-			expect(!matrixNonSquare isSquare && matrix isSquare)
+			expect(!nonSquareMatrix isSquare && matrix isSquare)
 		})
 
 		this add("order", func {
-			expect(matrixNonSquare order, is equal to(2))
+			expect(nonSquareMatrix order, is equal to(2))
 		})
 
 		this add("dimensions", func {
-			expect(matrixNonSquare dimensions width, is equal to(2))
-			expect(matrixNonSquare dimensions height, is equal to(3))
+			expect(nonSquareMatrix dimensions width, is equal to(2))
+			expect(nonSquareMatrix dimensions height, is equal to(3))
+			expect(nullMatrix width, is equal to (0))
+			expect(nullMatrix height, is equal to (0))
+			expect(nullMatrix isNull)
 		})
 
 		this add("elements", func {
@@ -53,6 +57,12 @@ matrixNonSquare := FloatMatrix new (IntSize2D new(2, 3))
 			matrix = createMatrix(2, 3, [1.0f, -2.0f, 3.0f, -4.0f, 5.0f, -6.5f])
 			matrix swaprows(0, 1)
 			checkAllElements(matrix, [-2.0f, 1.0f, 3.0f, 5.0f, -4.0f, -6.5f])
+		})
+
+		this add("setVertical", func {
+			matrix = createMatrix(3, 3, [0, 0, 0, 0, 0, 0, 0, 0, 0])
+			matrix setVertical(1, 0, FloatPoint3D new(1.0f, 2.0f, 3.0f))
+			checkAllElements(matrix, [0, 0, 0, 1.0f, 2.0f, 3.0f, 0, 0, 0])
 		})
 
 		this add("multiplication", func {

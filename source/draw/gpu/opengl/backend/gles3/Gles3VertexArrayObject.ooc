@@ -16,62 +16,91 @@
  */
 
 use ooc-base
+use ooc-math
 import include/gles3
 import ../GLVertexArrayObject
 import Gles3Debug
 
 Gles3VertexArrayObject: class extends GLVertexArrayObject {
-	backend: UInt
+	_backend: UInt
 	positionLayout: const static UInt = 0
 	textureCoordinateLayout: const static UInt = 1
-
-	init: func (positions, textureCoordinates: Float*, vertexCount, dimensions: UInt) {
-		version(debugGL) { Debug print("Allocating OpenGL VAO") }
-		version(debugGL) { validateStart() }
-		//Currently using 2 attributes: vertex position and texture coordinate
-		attributeCount := 2
-		packedArray: Float[attributeCount * vertexCount * dimensions]
+	_vertexCount: Int
+	
+	init: func ~twoDimensions (vertices, textureCoordinates: FloatPoint2D[]) {
+		vertexCount := vertices length
+		this _vertexCount = vertexCount
+		floatsPerVertex := 4
+		packedArray: Float[floatsPerVertex * vertexCount]
 		for (i in 0 .. vertexCount) {
-			for (j in 0 .. dimensions) {
-				packedArray[attributeCount * dimensions * i + j] = positions[dimensions * i + j]
-				packedArray[attributeCount * dimensions * i + j + dimensions] = textureCoordinates[dimensions * i + j]
-			}
+			//Positions
+			packedArray[floatsPerVertex * i + 0] = vertices[i] x
+			packedArray[floatsPerVertex * i + 1] = vertices[i] y
+			//Texture coordinates
+			packedArray[floatsPerVertex * i + 2] = textureCoordinates[i] x
+			packedArray[floatsPerVertex * i + 3] = textureCoordinates[i] y
 		}
+		this _generate(packedArray[0]&, 2, vertexCount)
+	}
+	init: func ~threeDimensions (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
+		vertexCount := vertices length
+		this _vertexCount = vertexCount
+		floatsPerVertex := 5
+		packedArray: Float[vertexCount * floatsPerVertex]
+		for (i in 0 .. vertexCount) {
+			//Positions
+			packedArray[floatsPerVertex * i + 0] = vertices[i] x
+			packedArray[floatsPerVertex * i + 1] = vertices[i] y
+			packedArray[floatsPerVertex * i + 2] = vertices[i] z
+			//Texture coordinates
+			packedArray[floatsPerVertex * i + 3] = textureCoordinates[i] x
+			packedArray[floatsPerVertex * i + 4] = textureCoordinates[i] y
+		}
+		this _generate(packedArray[0]&, 3, vertexCount)
+	}
+	_generate: func (packedArray: Float*, dimensions, vertexCount: Int) {
+		version(debugGL) { validateStart() }
+		glGenVertexArrays(1, this _backend&)
+		glBindVertexArray(this _backend)
 
-		glGenVertexArrays(1, backend&)
-		glBindVertexArray(backend)
 		vertexBuffer: UInt
 		glGenBuffers(1, vertexBuffer&)
-
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer)
-		glBufferData(GL_ARRAY_BUFFER, Float size * attributeCount * vertexCount * dimensions, packedArray[0]&, GL_STATIC_DRAW)
+		glBufferData(GL_ARRAY_BUFFER, (2 + dimensions) * Float size * vertexCount, packedArray, GL_STATIC_DRAW)
 
 		positionOffset : ULong = 0
 		textureCoordinateOffset : ULong = Float size * dimensions
-		glVertexAttribPointer(positionLayout, dimensions, GL_FLOAT, GL_FALSE, Float size * dimensions * attributeCount, positionOffset as Pointer)
+		glVertexAttribPointer(positionLayout, dimensions, GL_FLOAT, GL_FALSE, Float size * (2 + dimensions), positionOffset as Pointer)
 		glEnableVertexAttribArray(positionLayout)
-		glVertexAttribPointer(textureCoordinateLayout, dimensions, GL_FLOAT, GL_FALSE, Float size * dimensions * attributeCount, textureCoordinateOffset as Pointer)
+		glVertexAttribPointer(textureCoordinateLayout, 2, GL_FLOAT, GL_FALSE, Float size * (2 + dimensions), textureCoordinateOffset as Pointer)
 		glEnableVertexAttribArray(textureCoordinateLayout)
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0)
 		glBindVertexArray(0)
 		glDeleteBuffers(1, vertexBuffer&)
-		version(debugGL) { validateEnd("VertexArrayObject init") }
+		version(debugGL) { validateEnd("VertexArrayObject _generate") }
 	}
 	free: override func {
 		version(debugGL) { validateStart() }
-		glDeleteVertexArrays(1, backend&)
+		glDeleteVertexArrays(1, this _backend&)
 		version(debugGL) { validateEnd("VertexArrayObject free") }
 		super()
 	}
 	bind: func {
 		version(debugGL) { validateStart() }
-		glBindVertexArray(backend)
+		glBindVertexArray(this _backend)
 		version(debugGL) { validateEnd("VertexArrayObject bind") }
 	}
 	unbind: func {
 		version(debugGL) { validateStart() }
 		glBindVertexArray(0)
 		version(debugGL) { validateEnd("VertexArrayObject unbind") }
+	}
+	draw: func {
+		this bind()
+		version(debugGL) { validateStart() }
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, this _vertexCount)
+		version(debugGL) { validateEnd("VertexArrayObject draw") }
+		this unbind()
 	}
 }

@@ -17,7 +17,7 @@
 
 use ooc-collections
 use ooc-base
-import CLIParser
+use ooc-unit
 
 vHandle: func {
 	println("v flag action")
@@ -34,7 +34,10 @@ lpthread: func {
 zHandle: func {
 	println("z flag action")
 }
-main: func (argc: Int, argv: CString*) {
+//
+// TODO: This can not be a main() function, as it collides with main() in the generated test
+//
+/*main: func (argc: Int, argv: CString*) {
 	inputList := VectorList<String> new()
 	for (i in 1 .. argc) {
 		arg := argv[i] toString()
@@ -51,4 +54,5 @@ main: func (argc: Int, argv: CString*) {
 	parser add("path", "p", 1, "", Event1<String> new(func (message: String) { println(message) } ))
 	parser add("level", "l", 1 , "", Event1<String> new(func (level: String) { _level := (level as Int) } ))
 	parser parse(inputList, argc-1)
-}
+}*/
+"CLIParserTest [TODO: Not implemented as a fixture!]" println()

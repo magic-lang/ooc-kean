@@ -16,7 +16,6 @@
 */
 
 GLVolumeTexture: abstract class {
-	free: override func { super() }
 	bind: abstract func (unit: UInt)
 	unbind: abstract func
 	upload: abstract func (pixels: UInt8*)
