@@ -6,7 +6,7 @@ PromiseCollector: class {
 	init: func {
 		this _backend = VectorList<Promise> new()
 	}
-	free: func {
+	free: override func {
 		this _backend free()
 		super()
 	}
