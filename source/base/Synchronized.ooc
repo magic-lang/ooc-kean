@@ -21,7 +21,7 @@ Synchronized: class {
 	init: func ~default { this init(Mutex new()) }
 	free: override func {
 		if (this _lock != null)
-			this _lock destroy()
+			this _lock free()
 		this _lock = null
 //		this _lock free()
 		super()

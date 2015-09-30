@@ -140,16 +140,6 @@ Mutex: abstract class {
     }
 
     /**
-       Destroy a mutex and its associated ressources.
-
-       Don't call destroy() twice on the same mutex - doing that
-       results in undefined behavior.
-     */
-    destroy: final func {
-        ooc_mutex_destroy(this)
-    }
-
-    /**
        Acquire this mutex for the current thread. No other thread may
        acquire it until it's released (with the unlock() method)
 
@@ -157,10 +147,7 @@ Mutex: abstract class {
        called from thread B, then thread B will sleep until thread A
        calls unlock() on it.
      */
-    lock: final func {
-        // must be defined in native/
-        ooc_mutex_lock(this)
-    }
+    lock: abstract func
 
     /**
        Unlock this mutex, allowing other threads to acquire it.
@@ -168,12 +155,9 @@ Mutex: abstract class {
        Don't try to unlock an already unlocked mutex - doing that
        results in undefined behavior
      */
-    unlock: final func {
-        // must be defined in native/
-        ooc_mutex_unlock(this)
-    }
+    unlock: abstract func
 
-    with: final func (f: Func) {
+    with: func (f: Func) {
         lock()
         f()
         unlock()
@@ -189,7 +173,7 @@ Mutex: abstract class {
  * To avoid portions of code to be executed by several threads in parallel,
  * potentially yielding incorrect results
  */
-RecursiveMutex: abstract class {
+RecursiveMutex: abstract class extends Mutex {
 
     /**
        :return: an intialized mutex, unlocked.
@@ -213,16 +197,6 @@ RecursiveMutex: abstract class {
     }
 
     /**
-       Destroy a mutex and its associated ressources.
-
-       Don't call destroy() twice on the same mutex - doing that
-       results in undefined behavior.
-     */
-    destroy: final func {
-        ooc_recursive_mutex_destroy(this)
-    }
-
-    /**
        Acquire this mutex for the current thread. No other thread may
        acquire it until it's released (with the unlock() method)
 
@@ -230,20 +204,17 @@ RecursiveMutex: abstract class {
        called from thread B, then thread B will sleep until thread A
        calls unlock() on it.
      */
-    lock: final func {
-        // must be defined in native/
-        ooc_recursive_mutex_lock(this)
-    }
+    lock: abstract func
 
     /**
        Unlock this mutex, allowing other threads to acquire it.
-     */
-    unlock: final func {
-        // must be defined in native/
-        ooc_recursive_mutex_unlock(this)
-    }
 
-    with: final func (f: Func) {
+       Don't try to unlock an already unlocked mutex - doing that
+       results in undefined behavior
+     */
+    unlock: abstract func
+
+    with: func (f: Func) {
         lock()
         f()
         unlock()

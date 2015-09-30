@@ -33,7 +33,7 @@ version(windows) {
 			this _mutex unlock()
 			this _waitingEvents free()
 			this _waitingForRelease free()
-			this _mutex destroy()
+			this _mutex free()
 			super()
 		}
 		wait: func (mutex: Mutex) -> Bool {
