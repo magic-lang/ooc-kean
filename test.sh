@@ -2,6 +2,10 @@
 export OOC_LIBS=$(dirname `pwd`)
 ARGS=""
 FAILED=false
+TEST_DIRECTORY="./test"
+SOURCE_DIRECTORY="./source"
+TESTS_USE_FILE="tests_generated.use"
+TESTS_SOURCE_FILE="tests_generated.ooc"
 if [ -e rock_arguments.txt ]
 	then
 		ARGS=$(cat rock_arguments.txt)
@@ -26,29 +30,21 @@ then
 else
 	TESTS=$TESTS"Test.ooc"
 fi
+echo "SourcePath: ." > "$TESTS_USE_FILE"
+echo "use ${TESTS_USE_FILE%.*}" > "$TESTS_SOURCE_FILE"
+echo "main: func {" >> "$TESTS_SOURCE_FILE"
 for TEST in $TESTS
 do
 	if [[ !( $1 == "nogpu" && $TEST == *"/gpu/"* ) ]]
 	then
-		OUTPUT=$(rock -q -lpthread --gc=off $ARGS $FLAGS $TEST 2>&1 )
-		if [[ !( $? == 0 ) ]]
-		then
-			echo -e $OUTPUT
-			echo "Compilation failed of test: $TEST"
-			exit 2
-		fi
-		NAME=${TEST##*/}
-		NAME=${NAME%.*}
-		#echo $TEST
-		./$NAME
-		if [[ !( $? == 0 ) ]]
-		then
-			echo "Failed test: $TEST"
-			FAILED=true
-		fi
-		rm -f $NAME
+		echo "Imports: ${TEST%.*}" >> "$TESTS_USE_FILE"
+		echo "    $(basename ${TEST%.*}) new() run()" >> "$TESTS_SOURCE_FILE"
 	fi
 done
+echo "   exit(0)" >> "$TESTS_SOURCE_FILE"
+echo "}" >> "$TESTS_SOURCE_FILE"
+echo "Main: $TESTS_SOURCE_FILE" >> "$TESTS_USE_FILE"
+rock -q -lpthread --gc=off -r $ARGS $FLAGS $TESTS_USE_FILE 2>&1
 if [ "$FAILED" = true ]
 then
 	exit 1
