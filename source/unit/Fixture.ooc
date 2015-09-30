@@ -30,7 +30,7 @@ Fixture: abstract class {
 		test := Test new(name, action)
 		this add(test)
 	}
-	run: func {
+	run: func -> Bool {
 		failures := ArrayList<TestFailedException> new()
 		result := true
 		This _print(this name + " ")
@@ -58,7 +58,7 @@ Fixture: abstract class {
 					"  -> '%s' (expect: %i)" printfln(f message, f expect)
 			}
 		failures free()
-		exit(result ? 0 : 1)
+		result
 	}
 	createFailureMessage: func (failure: TestFailedException) -> String {
 		constraint := failure constraint as CompareConstraint
