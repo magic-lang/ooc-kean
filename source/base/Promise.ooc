@@ -105,9 +105,8 @@ _ThreadFuture: class <T> extends Future<T> {
 		status ? this _result[T] : defaultValue
 	}
 	getResult: func (defaultValue: T) -> T {
-		status: Bool
 		this _mutex lock()
-		status = (this _state == _PromiseState Finished)
+		status := (this _state == _PromiseState Finished)
 		this _mutex unlock()
 		status ? this _result[T] : defaultValue
 	}
