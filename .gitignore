@@ -39,3 +39,4 @@ rock_tmp
 
 # Test output
 /test/*/output
+tests.use
