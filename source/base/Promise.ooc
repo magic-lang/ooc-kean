@@ -40,11 +40,7 @@ _ThreadPromise: class extends Promise {
 	}
 	wait: func -> Bool {
 		this _thread wait()
-		status := false
-		this _mutex lock()
-		status = this _state == _PromiseState Finished
-		this _mutex unlock()
-		status
+		this _state == _PromiseState Finished
 	}
 	cancel: override func -> Bool {
 		this _thread cancel()

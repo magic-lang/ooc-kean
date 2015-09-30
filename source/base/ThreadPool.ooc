@@ -5,13 +5,13 @@ import threading/Thread
 import os/Time
 
 _Task: abstract class {
-	_mutexUpdateTime: static Int = 1
 	_state := _PromiseState Unfinished
 	_freeDirectly: Bool
 	_mutex: Mutex
 	mutex ::= this _mutex
 	run: abstract func (mutex: Mutex)
 	wait: func -> Bool {
+		_mutexUpdateTime: static Int = 1
 		status := false
 		while (!status) {
 			this _mutex lock()
@@ -21,7 +21,7 @@ _Task: abstract class {
 				break
 			}
 			this _mutex unlock()
-			Time sleepMilli(This _mutexUpdateTime)
+			Time sleepMilli(_mutexUpdateTime)
 		}
 		status
 	}
@@ -105,42 +105,50 @@ _TaskFuture: class <T> extends Future<T> {
 	}
 }
 
+Worker: class {
+	_thread: Thread
+	_tasks: BlockedQueue<_Task>
+	_mutex := Mutex new()
+	mutex ::= this _mutex
+	init: func (=_tasks) {
+		this _thread = Thread new(|| this _threadLoop())
+		this _thread start()
+	}
+	free: override func {
+		this _thread free()
+		this _mutex lock()
+		this _mutex destroy()
+		super()
+	}
+	_threadLoop: func {
+		while (true) {
+			job := this _tasks wait()
+			job run(this _mutex)
+		}
+	}
+}
+
 ThreadPool: class {
 	_globalMutex := Mutex new()
-	_threads: Thread[]
-	_threadMutexes: Mutex[]
+	_workers: Worker[]
 	_tasks := BlockedQueue<_Task> new()
 	_threadCount: Int
 	threadCount ::= this _threadCount
 	init: func (threadCount := 4) {
 		this _threadCount = threadCount
-		this _threads = Thread[threadCount] new()
-		this _threadMutexes = Mutex[threadCount] new()
-		for (i in 0 .. threadCount) {
-			this _threadMutexes[i] = Mutex new()
-			this _threads[i] = Thread new(|| _threadLoop(i))
-			this _threads[i] start()
-		}
+		this _workers = Worker[threadCount] new()
+		for (i in 0 .. threadCount)
+			this _workers[i] = Worker new(this _tasks)
 	}
 	//TODO: Implement free with timeout
 	free: override func {
 		for (i in 0 .. this _threadCount) {
-			this _threads[i] free()
-			this _threadMutexes[i] destroy()
+			this _workers[i] free()
 		}
-		this _threads free()
-		this _threadMutexes free()
+		this _workers free()
 		this _tasks free()
 		this _globalMutex destroy()
 		super()
-	}
-	_threadLoop: func (identifier: Int) {
-		while (true) {
-			job := this _tasks wait()
-			job run(this _threadMutexes[identifier])
-			this _globalMutex lock()
-			this _globalMutex unlock()
-		}
 	}
 	_add: func (task: _Task) -> Void {
 		this _tasks enqueue(task)
