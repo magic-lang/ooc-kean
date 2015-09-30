@@ -10,8 +10,4 @@ version(debugTests) {
 		println(Int align(i, 1) toString())
 }
 
-AlignTest: class extends Fixture {
-	init: func {
-		super("AlignTest [TODO: Not implemented as a fixture!]")
-	}
-}
+"AlignTest [TODO: Not implemented as a fixture!]" printfln()

@@ -1,15 +1,8 @@
 use ooc-math
 use ooc-draw
 use ooc-base
-use ooc-unit
 import math
 import structs/Stack
-
-MemTest: class extends Fixture {
-	init: func {
-		super("MemTest [TODO: Not implemented as a fixture!]")
-	}
-}
 
 Foo: class {
 	bar := Bar new()
@@ -49,3 +42,5 @@ Dog: class {
 		pool push(this)
 	}
 }
+
+"MemTest [TODO: Not implemented as a fixture!]" printfln()

@@ -48,7 +48,7 @@ Fixture: abstract class {
 			This _print(r ? "." : "f")
 		)
 		This _print(result ? " done\n" : " failed\n")
-		if (!result)
+		if (!result) {
 			for (f in failures) {
 				// If the constraint is a CompareConstraint and the value being tested is a Cell,
 				// we create a friendly message for the user.
@@ -57,6 +57,8 @@ Fixture: abstract class {
 				else
 					"  -> '%s' (expect: %i)" printfln(f message, f expect)
 			}
+			This _testsFailed = true
+		}
 		failures free()
 		result
 	}
@@ -119,6 +121,8 @@ Fixture: abstract class {
 		string print()
 		fflush(stdout)
 	}
+	_testsFailed: static Bool
+	testsFailed: static Bool { get { This _testsFailed } }
 }
 TestFailedException: class extends Exception {
 	test: Test

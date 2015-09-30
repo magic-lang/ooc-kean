@@ -18,13 +18,6 @@
 use ooc-collections
 use ooc-base
 use ooc-unit
-import CLIParser
-
-CLIParserTest: class extends Fixture {
-	init: func {
-		super("CLIParserTest [TODO: Not implemented as a fixture!]")
-	}
-}
 
 vHandle: func {
 	println("v flag action")
@@ -62,3 +55,4 @@ zHandle: func {
 	parser add("level", "l", 1 , "", Event1<String> new(func (level: String) { _level := (level as Int) } ))
 	parser parse(inputList, argc-1)
 }*/
+"CLIParserTest [TODO: Not implemented as a fixture!]" println()

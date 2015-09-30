@@ -20,12 +20,6 @@ use ooc-unit
 import ../../source/draw/CreateAlphaByteString
 import io/[File, FileWriter]
 
-CreateAlphaByteStringTest: class extends Fixture {
-	init: func {
-		super("CreateAlphaByteStringTest [TODO: Not implemented]")
-    }
-}
-
 outputData := CreateAlphaByteString makeAlphaString("test/draw/input/logo.png", "logo")
 filename := "test/draw/output/"
 file := File new(filename)
@@ -34,3 +28,5 @@ file free()
 fw := FileWriter new(filename + "DataFile.ooc")
 fw write(outputData)
 fw close()
+
+"CreateAlphaByteStringTest [TODO: Not implemented as a fixture!]" printfln()

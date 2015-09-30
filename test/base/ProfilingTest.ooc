@@ -19,12 +19,6 @@ use ooc-base
 use ooc-unit
 import Debug
 
-ProfilingTest: class extends Fixture {
-	init: func {
-		super("ProfilingTest [TODO: Not implemented as a fixture!]")
-	}
-}
-
 version(debugTests) {
 	Debug initialize(func (message: String) { println(message) })
 	Debug _level = DebugLevel Everything as Int
@@ -85,3 +79,5 @@ version(debugTests) {
 	Debug print("third print", 2)
 	Debug printProfilerData()*/
 }
+
+"ProfilingTest [TODO: Not implemented as a fixture!]" printfln()

@@ -16,14 +16,6 @@
 */
 
 use ooc-base
-use ooc-unit
-import Debug
-
-DebugPrintTest: class extends Fixture {
-	init: func {
-		super("DebugPrintTest [TODO: Not implemented as a fixture!]")
-	}
-}
 
 version(debugTests) {
 	Debug initialize(func (message: String) { println(message) } )
@@ -32,3 +24,5 @@ version(debugTests) {
 
 	Debug print("TEST2", 3)
 }
+
+"DebugPrintTest [TODO: Not implemented as a fixture!]"
