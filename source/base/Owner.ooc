@@ -18,7 +18,7 @@
 Owner: enum {
 	Unknown,
 	Stack,
-	Literal,
+	Static,
 	Caller,
 	Callee
 }

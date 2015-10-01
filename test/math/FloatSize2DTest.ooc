@@ -89,8 +89,10 @@ FloatSize2DTest: class extends Fixture {
 			expect(FloatSize2D basisX angle(-FloatSize2D basisX), is equal to(PI as Float) within(this precision))
 			expect(FloatSize2D basisX angle(-FloatSize2D basisY), is equal to(-PI as Float / 2.0f) within(this precision))
 		})
-		this add("casts", func {
-//			FIXME: We have no integer versions of anything yet
+		this add("int casts", func {
+			vector := vector0 toIntSize2D()
+			expect(vector width, is equal to(22))
+			expect(vector height, is equal to(-3))
 		})
 	}
 }

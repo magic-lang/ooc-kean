@@ -8,7 +8,7 @@ FloatPoint3DTest: class extends Fixture {
 	point0 := FloatPoint3D new (22.0f, -3.0f, 10.0f)
 	point1 := FloatPoint3D new (12.0f, 13.0f, 20.0f)
 	point2 := FloatPoint3D new (34.0f, 10.0f, 30.0f)
-	point3 := FloatPoint3D new (10.0f, 20.0f, 30.0f)
+	point3 := FloatPoint3D new (10.1f, 20.2f, 30.3f)
 	init: func {
 		super("FloatPoint3D")
 		this add("norm", func {
@@ -52,13 +52,16 @@ FloatPoint3DTest: class extends Fixture {
 			expect(this point0 z, is equal to(10.0f))
 		})
 		this add("casting", func {
-			value := "10.00000000, 20.00000000, 30.00000000"
-			expect(this point3 toString(), is equal to(value))
+			value := "12.00000000, 13.00000000, 20.00000000"
+			expect(this point1 toString(), is equal to(value))
 //			FIXME: Equals interface
 //			expect(FloatSize2D parse(value), is equal to(this vector3))
 		})
-		this add("casts", func {
-//			FIXME: We have no integer versions of anything yet
+		this add("int casts", func {
+			point := point3 toIntPoint3D()
+			expect(point x, is equal to(10))
+			expect(point y, is equal to(20))
+			expect(point z, is equal to(30))
 		})
 	}
 }
