@@ -152,5 +152,3 @@ TextLiteralTest: class extends Fixture {
 }
 
 TextLiteralTest new() run()
-
-
