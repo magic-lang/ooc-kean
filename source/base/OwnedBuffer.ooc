@@ -81,6 +81,10 @@ OwnedBuffer: cover {
 	}
 	copyTo: func (destination: This) -> Int {
 		result := 0
+		version (safe) {
+			if (destination _owner == Owner Static)
+				raise("Can not copy to static memory.")
+		}
 		if (this _pointer != null && this _size != 0 && destination _pointer != null && destination _size != 0) {
 			result = Int minimum(this _size, destination _size)
 			memcpy(destination _pointer, this _pointer, result)
