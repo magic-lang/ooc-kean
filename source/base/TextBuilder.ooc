@@ -48,7 +48,7 @@ TextBuilder: class {
 		This new(this)
 	}
 	append: func ~char (c: Char) {
-		this append(Text new(c&, 1, Owner Stack) copy())
+		this append(Text new(c) copy())
 	}
 	append: func ~cstring (value: CString, length: Int) {
 		this append(Text new(value, length))
@@ -62,7 +62,7 @@ TextBuilder: class {
 			this append(other _data[i] copy())
 	}
 	prepend: func ~char (c: Char) {
-		this prepend(Text new(c&, 1, Owner Stack) copy())
+		this prepend(Text new(c) copy())
 	}
 	prepend: func ~cstring (value: CString, length: Int) {
 		this prepend(Text new(value, length))

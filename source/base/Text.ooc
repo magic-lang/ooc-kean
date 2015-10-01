@@ -312,4 +312,4 @@ Text: cover {
 
 operator == (left: String, right: Text) -> Bool { Text new(left) == right }
 operator != (left: String, right: Text) -> Bool { !(left == right) }
-operator []= (left: TextBuffer, range: Range, right: Text) { right _buffer copyTo(left slice(range min, range max - range min)) }
+operator []= (left: TextBuffer, range: Range, right: Text) { right _buffer copyTo(left slice(range min, range count)) }
