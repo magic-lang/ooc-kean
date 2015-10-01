@@ -114,7 +114,7 @@ Worker: class {
 		this _thread start()
 	}
 	free: override func {
-		//FIXME this _thread cancel() // Should be here to prevent memory leaks, but causes segfaults
+		this _thread wait()
 		this _thread free()
 		(this _threadClosure as Closure) dispose()
 		this _mutex destroy()
@@ -122,8 +122,12 @@ Worker: class {
 	}
 	_threadLoop: func {
 		while (true) {
-			job := this _tasks wait()
-			job run(this _mutex)
+			isOk := true
+			job := this _tasks wait(isOk&)
+			if (isOk)
+				job run(this _mutex)
+			else
+				break
 		}
 	}
 }
@@ -140,8 +144,8 @@ ThreadPool: class {
 		for (i in 0 .. threadCount)
 			this _workers[i] = Worker new(this _tasks)
 	}
-	//TODO: Implement free with timeout
 	free: override func {
+		this _tasks cancel()
 		for (i in 0 .. this _threadCount) {
 			this _workers[i] free()
 		}
