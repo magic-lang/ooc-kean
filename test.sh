@@ -35,7 +35,7 @@ do
 	fi
 done
 echo "Main: ./test/Tests.ooc" >> "$TESTS_USE_FILE"
-rm .libs/tests-linux64.*
+rm -f .libs/tests-linux64.*
 rock -q -lpthread --gc=off $ARGS $FLAGS $TESTS_USE_FILE 2>&1
 ./Tests
 if [[ !( $? == 0 ) ]]
