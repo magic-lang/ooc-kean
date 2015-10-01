@@ -56,7 +56,10 @@ IntBox2DTest: class extends Fixture {
 		})
 		this add("swap", func {
 			swapped := this box0 swap()
-			expect(swapped top, is equal to()
+			expect(swapped top, is equal to(this box0 left))
+			expect(swapped left, is equal to(this box0 top))
+			expect(swapped width, is equal to(this box0 height))
+			expect(swapped height, is equal to(this box0 width))
 		})
 		this add("contains~IntPoint2DVectorList", func {
 			box := IntBox2D new(-2, -1, 3, 3)
