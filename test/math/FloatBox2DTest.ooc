@@ -23,19 +23,38 @@ FloatBox2DTest: class extends Fixture {
 		})
 		this add("leftTop", func {
 			leftTop := this box0 leftTop
-			expect(leftTop x, is equal to(1.0f))
-			expect(leftTop y, is equal to(2.0f))
+			expect(leftTop x, is equal to(1.0f) within (this precision))
+			expect(leftTop y, is equal to(2.0f) within (this precision))
 		})
 		this add("size", func {
 			size := this box0 size
-			expect(size width, is equal to(3.0f))
-			expect(size height, is equal to(4.0f))
+			expect(size width, is equal to(3.0f) within (this precision))
+			expect(size height, is equal to(4.0f) within (this precision))
 		})
-		this add("addition", func)
-		this add("subtraction", func)
-		this add("scalar multiplication", func)
+		this add("addition, union", func {
+			result := box0 + box1
+			expect(result left, is equal to(1.0f) within (this precision))
+			expect(result top, is equal to(2.0f) within (this precision))
+			expect(result width, is equal to(5.0f) within (this precision))
+			expect(result height, is equal to(4.0f) within (this precision))
+			expect(result == box0 union(box1))
+		})
+		this add("subtraction, intersection", func {
+			result := box0 - box2
+			resultb := box2 - box0
+			expect(result == resultb)
+			expect(result top, is equal to(2.0f) within(this precision))
+			expect(result left, is equal to(2.0f) within(this precision))
+			expect(result width, is equal to(2.0f) within(this precision))
+			expect(result height, is equal to(2.0f) within(this precision))
+			expect(result == box0 intersection(box2))
+		})
 		this add("casts", func {
-//			FIXME: We have no integer versions of anything yet
+			intVersion := this box0 toIntBox2D()
+			expect(intVersion left, is equal to(1))
+			expect(intVersion top, is equal to(2))
+			expect(intVersion right, is equal to(4))
+			expect(intVersion bottom, is equal to(6))
 		})
 		this add("contains~FloatPoint2DVectorList", func {
 			box := FloatBox2D new(-2.0f, -1.0f, 3.0f, 3.0f)

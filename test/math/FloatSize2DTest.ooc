@@ -90,9 +90,42 @@ FloatSize2DTest: class extends Fixture {
 			expect(FloatSize2D basisX angle(-FloatSize2D basisY), is equal to(-PI as Float / 2.0f) within(this precision))
 		})
 		this add("int casts", func {
-			vector := vector0 toIntSize2D()
+			vector := this vector0 toIntSize2D()
 			expect(vector width, is equal to(22))
 			expect(vector height, is equal to(-3))
+		})
+		this add("minimum maximum", func {
+			_max := this vector0 maximum(this vector1)
+			_min := this vector0 minimum(this vector1)
+			expect(_max width, is equal to(22.221f) within(this precision))
+			expect(_max height, is equal to(13.1f) within(this precision))
+			expect(_min width, is equal to(12.221f) within(this precision))
+			expect(_min height, is equal to(-3.1f) within(this precision))
+		})
+		this add("rounding", func {
+			_round := this vector1 round()
+			_ceiling := this vector1 ceiling()
+			_floor := this vector1 floor()
+			expect(_round width, is equal to(12.0f) within(this precision))
+			expect(_round height, is equal to(13.0f) within(this precision))
+			expect(_ceiling width, is equal to(13.0f) within(this precision))
+			expect(_ceiling height, is equal to(14.0f) within(this precision))
+			expect(_floor width, is equal to(12.0f) within(this precision))
+			expect(_floor height, is equal to(13.0f) within(this precision))
+		})
+		this add("p norm", func {
+			onenorm := this vector0 pNorm(1)
+			euclidean := this vector0 pNorm(2)
+			expect(onenorm, is equal to(25.321f) within(this precision))
+			expect(euclidean, is equal to(22.436f) within(0.01f))
+		})
+		this add("clamp", func {
+			clamped := this vector1 clamp(this vector0, this vector2)
+			expect(clamped width, is equal to(22.221f) within(this precision))
+			expect(clamped height, is equal to(10.0f) within(this precision))
+		})
+		this add("scalar product", func {
+			expect(this vector0 scalarProduct(this vector1), is equal to (230.95f) within(0.01f))
 		})
 	}
 }

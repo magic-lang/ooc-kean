@@ -87,7 +87,8 @@ FloatRandomGeneratorTest: class extends Fixture {
 			expectedMean := -3.0f
 			expectedDeviation := 12.0f
 			tolerance := 0.9f
-			generator := FloatGaussianRandomGenerator new(expectedMean, expectedDeviation)
+			generator := FloatGaussianRandomGenerator new(expectedMean - 1.0f, expectedDeviation - 1.0f)
+			generator setRange(expectedMean, expectedDeviation)
 			values := generator next(1_000_000)
 			mean := 0.0f
 			for (i in 0 .. values length)
@@ -99,6 +100,23 @@ FloatRandomGeneratorTest: class extends Fixture {
 			deviation = sqrt(deviation / values length)
 			expect(Float absolute(mean - expectedMean) < tolerance)
 			expect(Float absolute(deviation - expectedDeviation) < tolerance)
+		})
+		this add("uniform range", func {
+			uniformGenerator := FloatUniformRandomGenerator new()
+			uniformGenerator setRange(-25000.0f, 25000.0f)
+			uniformLowest = 25000.0f
+			uniformHighest = -25000.0f
+			for (i in 0 .. 100_000) {
+				value := uniformGenerator next()
+				if (value > uniformHighest)
+					uniformHighest = value
+				else if (value < uniformLowest)
+					uniformLowest = value
+			}
+			expect(uniformLowest >= uniformGenerator minimum)
+			expect(uniformHighest <= uniformGenerator maximum)
+			expect(uniformLowest >= -25000.0f)
+			expect(uniformHighest <= 25000.0f)
 		})
 	}
 }

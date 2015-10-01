@@ -84,6 +84,14 @@ FloatComplexTest: class extends Fixture {
 		this add("exponential", func {
 			expect(this complexNumber0 exponential() real, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary cos()) within(tolerance))
 			expect(this complexNumber0 exponential() imaginary, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary sin()) within(tolerance))
+			expect(this complexNumber2 exponential() logarithm() real, is equal to(this complexNumber2 real) within(tolerance))
+			expect(this complexNumber2 exponential() logarithm() imaginary, is equal to(this complexNumber2 imaginary) within(tolerance))
+		})
+		this add("conjugate", func {
+			expect(this complexNumber0 conjugate real, is equal to(this complexNumber0 real))
+			expect(this complexNumber0 conjugate imaginary, is equal to(-this complexNumber0 imaginary))
+			conjugateProduct := this complexNumber1 * this complexNumber1 conjugate
+			expect(conjugateProduct real, is equal to (this complexNumber1 absoluteValue * this complexNumber1 absoluteValue) within(tolerance))
 		})
 	}
 }

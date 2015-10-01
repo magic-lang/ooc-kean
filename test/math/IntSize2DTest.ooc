@@ -58,6 +58,9 @@ IntSize2DTest: class extends Fixture {
 			expect(vector width, is equal to(22.0f) within(this precision))
 			expect(vector height, is equal to(-3.0f) within(this precision))
 		})
+		this add("scalar product", func {
+			expect(this vector0 scalarProduct(this vector1), is equal to (225))
+		})
 	}
 }
 IntSize2DTest new() run()

@@ -3,10 +3,13 @@ use ooc-math
 import math
 import lang/IO
 
+
+
 FloatMatrixTest: class extends Fixture {
 	matrix := FloatMatrix new (3, 3)
 	nonSquareMatrix := FloatMatrix new (IntSize2D new(2, 3))
 	nullMatrix := FloatMatrix new(0, 0)
+	tolerance := 0.0001f
 
 	init: func {
 		super ("FloatMatrix")
@@ -99,10 +102,27 @@ FloatMatrixTest: class extends Fixture {
 			checkAllElements(x, [-70.0f, 231.0f, -296.0f, 172.0f, -38.0f])
 		})
 
+		this add("LUP decomposition", func {
+			A := createMatrix(3, 3, [10.0f, -3.0f, 5.0f, -7.0f, 2.0f, -1.0f, 0.0f, 6.0f, 5.0f])
+			lup := A lupDecomposition()
+			checkAllElements(lup[0], [1.0f, 0.5f, -0.3f, 0.0f, 1.0f, -0.04f, 0.0f, 0.0f, 1.0f])
+			checkAllElements(lup[1], [10.0f, 0.0f, 0.0f, -7.0f, 2.5f, 0.0f, 0.0f, 5.0f, 6.2f])
+			checkAllElements(lup[2], [1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f])
+		})
+
 		this add("set and get", func {
 			matrix = createMatrix(3, 3, [1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f])
 			matrix[0, 0] = 42.0f
 			expect(matrix[0, 0] == 42.0f)
+		})
+
+		this add("print columns", func {
+			A := createMatrix(3, 3, [1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f])
+			column := A getColumn(1)
+			expect(column toString() == "4.00; 5.00; 6.00; ")
+			expect(A toString() == "1.00, 4.00, 7.00; 2.00, 5.00, 8.00; 3.00, 6.00, 9.00; ")
+			A free()
+			column free()
 		})
 	}
 
@@ -123,7 +143,7 @@ FloatMatrixTest: class extends Fixture {
 		// 2 5
 		for (x in 0 .. matrix dimensions width) {
 			for (y in 0 .. matrix dimensions height) {
-				expect(matrix[x, y], is equal to(values[x * matrix dimensions height + y]))
+				expect(matrix[x, y], is equal to(values[x * matrix dimensions height + y]) within(this tolerance))
 			}
 		}
 	}

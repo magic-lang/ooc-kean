@@ -29,11 +29,53 @@ IntBox2DTest: class extends Fixture {
 			expect(size width, is equal to(3))
 			expect(size height, is equal to(4))
 		})
-		this add("addition", func)
-		this add("subtraction", func)
-		this add("scalar multiplication", func)
+		this add("addition, union", func {
+			result := box0 + box1
+			expect(result left, is equal to(1))
+			expect(result top, is equal to(2))
+			expect(result width, is equal to(5))
+			expect(result height, is equal to(4))
+			expect(result == box0 union(box1))
+		})
+		this add("subtraction, intersection", func {
+			result := box0 - box2
+			resultb := box2 - box0
+			expect(result == resultb)
+			expect(result top, is equal to(2))
+			expect(result left, is equal to(2))
+			expect(result width, is equal to(2))
+			expect(result height, is equal to(2))
+			expect(result == box0 intersection(box2))
+		})
 		this add("casts", func {
-//			FIXME: We have no integer versions of anything yet
+			floatVersion := this box0 toFloatBox2D()
+			expect(floatVersion left, is equal to(1.0f) within(0.01f))
+			expect(floatVersion top, is equal to(2.0f) within(0.01f))
+			expect(floatVersion right, is equal to(4.0f) within(0.01f))
+			expect(floatVersion bottom, is equal to(6.0f) within(0.01f))
+		})
+		this add("swap", func {
+			swapped := this box0 swap()
+			expect(swapped top, is equal to()
+		})
+		this add("contains~IntPoint2DVectorList", func {
+			box := IntBox2D new(-2, -1, 3, 3)
+			list := IntPoint2DVectorList new()
+			list add(IntPoint2D new(0, 1))
+			list add(IntPoint2D new(-2, 2))
+			list add(IntPoint2D new(-2, -2))
+			list add(IntPoint2D new(0, 0))
+			inBox := box contains~IntPoint2DVectorList(list)
+			expect(inBox count, is equal to(3))
+			expect(inBox[0], is equal to(0))
+			expect(inBox[1], is equal to(1))
+			expect(inBox[2], is equal to(3))
+		})
+		this add("pad", func {
+
+		})
+		this add("bounds", func {
+
 		})
 	}
 }

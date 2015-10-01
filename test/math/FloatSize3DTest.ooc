@@ -9,6 +9,7 @@ FloatSize3DTest: class extends Fixture {
 	vector1 := FloatSize3D new (12.0f, 13.0f, 20.0f)
 	vector2 := FloatSize3D new (34.0f, 10.0f, 30.0f)
 	vector3 := FloatSize3D new (10.0f, 20.0f, 30.0f)
+	vector4 := FloatSize3D new (10.1f, 20.7f, 30.3f)
 	init: func {
 		super("FloatSize3D")
 		this add("norm", func {
@@ -67,6 +68,42 @@ FloatSize3DTest: class extends Fixture {
 			expect(vector width, is equal to(22))
 			expect(vector height, is equal to(-3))
 			expect(vector depth, is equal to(10))
+		})
+		this add("minimum maximum", func {
+			_max := this vector0 maximum(this vector1)
+			_min := this vector0 minimum(this vector1)
+			expect(_max width, is equal to(22.221f) within(this precision))
+			expect(_max height, is equal to(13.1f) within(this precision))
+			expect(_max depth, is equal to(20.0f) within(this precision))
+			expect(_min width, is equal to(12.221f) within(this precision))
+			expect(_min height, is equal to(-3.1f) within(this precision))
+			expect(_min depth, is equal to(10.0f) within(this precision))
+		})
+		this add("rounding", func {
+			expect(_round width, is equal to(10.0f) within(this precision))
+			expect(_round height, is equal to(21.0f) within(this precision))
+			expect(_round depth, is equal to(30.0f) within(this precision))
+			expect(_ceiling width, is equal to(11.0f) within(this precision))
+			expect(_ceiling height, is equal to(21.0f) within(this precision))
+			expect(_ceiling depth, is equal to(31.0f) within(this precision))
+			expect(_floor width, is equal to(10.0f) within(this precision))
+			expect(_floor height, is equal to(20.0f) within(this precision))
+			expect(_floor depth, is equal to(30.0f) within(this precision))
+		})
+		this add("p norm", func {
+			onenorm := this vector0 pNorm(1)
+			euclidean := this vector0 pNorm(2)
+			expect(onenorm, is equal to(35.0f) within(this precision))
+			expect(euclidean, is equal to(26.702f) within(0.01f))
+		})
+		this add("clamp", func {
+			clamped := this vector1 clamp(this vector0, this vector2)
+			expect(clamped width, is equal to(12.0f) within(this precision))
+			expect(clamped height, is equal to(10.0f) within(this precision))
+			expect(clamped height, is equal to(20.0f) within(this precision))
+		})
+		this add("scalar product", func {
+			expect(this vector0 scalarProduct(this vector1), is equal to (425.0f) within(this precision))
 		})
 	}
 }
