@@ -5,7 +5,7 @@ import math
 
 TextLiteralTest: class extends Fixture {
 	init: func {
-		super("Text")
+		super("TextLiteral")
 		this add("constructors", func {
 			t := Text new(c"test string", 5)
 			expect(t toString() == "test ")
@@ -23,14 +23,13 @@ TextLiteralTest: class extends Fixture {
 		})
 		this add("ownership", func {
 			t := Text new(c"vidhance", 8)
-			t free()
 			expect(t count == 8)
 			t take()
 			t free()
 			expect(t count == 0)
 			t = Text new(c"a string", 8)
 			t free()
-			expect(t isEmpty == false)
+			expect(t isEmpty)
 			t = t give()
 			t free()
 			expect(t isEmpty)
@@ -80,18 +79,21 @@ TextLiteralTest: class extends Fixture {
 			expect(parts[4] == "4")
 			t = t";;;0;;1;;;2;;3;"
 			parts = t split(";")
-			expect(parts count == 4)
-			expect(parts[0] == "0")
-			expect(parts[1] == "1")
-			expect(parts[2] == "2")
-			expect(parts[3] == "3")
+			expect(parts count == 12)
+			expect(parts[0] == Text empty)
+			expect(parts[3] == "0")
+			expect(parts[5] == "1")
+			expect(parts[8] == "2")
+			expect(parts[10] == "3")
 			t = t"</br>simple</br>text</br></br>to</br>split"
 			parts = t split(Text new(c"</br>", 5))
-			expect(parts count == 4)
-			expect(parts[0] == "simple")
-			expect(parts[1] == "text")
-			expect(parts[2] == "to")
-			expect(parts[3] == "split")
+			expect(parts count == 6)
+			expect(parts[0] == Text empty)
+			expect(parts[1] == "simple")
+			expect(parts[2] == "text")
+			expect(parts[3] == Text empty)
+			expect(parts[4] == "to")
+			expect(parts[5] == "split")
 		})
 		this add("Convert to Int", func {
 			expect(t"1" toInt(), is equal to(1))

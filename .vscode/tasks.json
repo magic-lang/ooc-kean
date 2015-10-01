@@ -10,9 +10,13 @@
 	"version": "0.1.0",
 	"command": "./test.sh",
 	"isShellCommand": true,
-	"showOutput": "silent",
+	"args": [
+		"all",
+		"--allerrors"
+	],
+	"showOutput": "always",
 	"problemMatcher": {
-		"fileLocation": ["relative", "${workspaceRoot}"],
+		"fileLocation": ["relative", "${workspaceRoot}/source"],
 		"pattern": {
 			"regexp": "^(.*):(\\d+):(\\d+):?\\s+(error|warning):?\\s+(.*)$",
 			"file": 1,
