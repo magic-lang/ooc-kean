@@ -299,6 +299,9 @@ Text: cover {
 	}
 	empty: static This { get { This new() } }
 }
+makeTextLiteral: func (str: CString, strLen: Int) -> Text {
+	Text new(str, strLen)
+}
 
 operator == (left: String, right: Text) -> Bool { Text new(left) == right }
 operator != (left: String, right: Text) -> Bool { !(left == right) }
