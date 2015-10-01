@@ -5,7 +5,7 @@ import math
 
 TextLiteralTest: class extends Fixture {
 	init: func {
-		super("Text")
+		super("TextLiteral")
 		this add("constructors", func {
 			t := Text new(c"test string", 5)
 			expect(t toString() == "test ")
