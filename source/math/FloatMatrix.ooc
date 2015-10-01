@@ -167,8 +167,9 @@ FloatMatrix : cover {
 	toString: func@ -> String {
 		result: String = ""
 		for (y in 0 .. this height) {
-			for (x in 0 .. this width)
+			for (x in 0 .. this width - 1)
 				result = result & this[x, y] toString() >> ", "
+			result = result & this[this width - 1, y] toString()
 			result = result >> "; "
 		}
 		result
@@ -228,8 +229,8 @@ FloatMatrix : cover {
 			if (this isSquare) {
 				lup := this lupDecomposition()
 				temp := lup[2] * y
-				temp2 := temp forwardSubstitution(lup[0])
-				result = temp2 backwardSubstitution(lup[1])
+				temp2 := temp _forwardSubstitution(lup[0])
+				result = temp2 _backwardSubstitution(lup[1])
 				temp free()
 				temp2 free()
 				lup[0] free()
@@ -245,8 +246,8 @@ FloatMatrix : cover {
 				temp1 free()
 				temp1 = temp2 * y
 				temp2 free()
-				temp2 = temp1 forwardSubstitution(lup[0])
-				result = temp2 backwardSubstitution(lup[1])
+				temp2 = temp1 _forwardSubstitution(lup[0])
+				result = temp2 _backwardSubstitution(lup[1])
 				temp1 free()
 				temp2 free()
 				lup[0] free()
@@ -264,7 +265,7 @@ FloatMatrix : cover {
 	// </summary>
 	// <param name="lower">Lower triangual matrix.</param>
 	// <returns>Solution x.</returns>
-	forwardSubstitution: func@ (lower: This) -> This {
+	_forwardSubstitution: func@ (lower: This) -> This {
 		result := This new(this dimensions)
 		for (x in 0 .. this width)
 			for (y in 0 .. this height) {
@@ -275,7 +276,7 @@ FloatMatrix : cover {
 				if (value != 0)
 					result elements[x + y * result width] = accumulator / value
 				else
-					raise("Division by zero in FloatMatrix forwardSubstitution")
+					raise("Division by zero in FloatMatrix _forwardSubstitution")
 			}
 		result
 	}
@@ -285,7 +286,7 @@ FloatMatrix : cover {
 	// </summary>
 	// <param name="lower">Upper triangual matrix.</param>
 	// <returns>Solution x.</returns>
-	backwardSubstitution: func@ (upper: This) -> This {
+	_backwardSubstitution: func@ (upper: This) -> This {
 		result := This new(this dimensions)
 		for (x in 0 .. this width) {
 			for (antiY in 0 .. this height) {
@@ -297,7 +298,7 @@ FloatMatrix : cover {
 				if (value != 0)
 					result elements[x + y * result width] = accumulator / value
 				else
-					raise("Division by zero in FloatMatrix backwardSubstitution")
+					raise("Division by zero in FloatMatrix _backwardSubstitution")
 			}
 		}
 		result
