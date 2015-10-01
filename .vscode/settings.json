@@ -6,6 +6,7 @@
 	"files.exclude": {
 		"**/.git": true,
 		".libs": true,
-		"rock_tmp": true
+		"rock_tmp": true,
+		".vscode/": true
 	}
 }
