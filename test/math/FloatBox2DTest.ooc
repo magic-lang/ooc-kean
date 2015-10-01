@@ -9,6 +9,7 @@ FloatBox2DTest: class extends Fixture {
 	box0 := FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f)
 	box1 := FloatBox2D new (4.0f, 3.0f, 2.0f, 1.0f)
 	box2 := FloatBox2D new (2.0f, 1.0f, 4.0f, 3.0f)
+	box3 := FloatBox2D new (2.6f, 1.2f, 4.9f, 3.01f)
 	init: func {
 		super("FloatBox2D")
 		this add("equality", func {
@@ -74,6 +75,33 @@ FloatBox2DTest: class extends Fixture {
 			paddedBox := box pad~fraction(0.1f)
 			shrunkBox := paddedBox shrink(1.0f / 11.0f)
 			expect(box == shrunkBox, is true)
+		})
+		this add("rounding", func {
+			_round := this box3 round()
+			_ceiling := this box3 ceiling()
+			_floor := this box3 floor()
+
+			expect(_round left, is equal to(3.0f) within(this precision))
+			expect(_round top, is equal to(1.0f) within(this precision))
+			expect(_round width, is equal to(5.0f) within(this precision))
+			expect(_round height, is equal to(3.0f) within(this precision))
+
+			expect(_ceiling left, is equal to(3.0f) within(this precision))
+			expect(_ceiling top, is equal to(2.0f) within(this precision))
+			expect(_ceiling width, is equal to(5.0f) within(this precision))
+			expect(_ceiling height, is equal to(4.0f) within(this precision))
+
+			expect(_floor left, is equal to(2.0f) within(this precision))
+			expect(_floor top, is equal to(1.0f) within(this precision))
+			expect(_floor width, is equal to(4.0f) within(this precision))
+			expect(_floor height, is equal to(3.0f) within(this precision))
+		})
+		this add("swap", func {
+			swapped := this box0 swap()
+			expect(swapped top, is equal to(this box0 left))
+			expect(swapped left, is equal to(this box0 top))
+			expect(swapped width, is equal to(this box0 height))
+			expect(swapped height, is equal to(this box0 width))
 		})
 	}
 }

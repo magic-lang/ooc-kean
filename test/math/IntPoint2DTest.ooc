@@ -49,6 +49,27 @@ IntPoint2DTest: class extends Fixture {
 			expect(point x, is equal to(22.0f) within(this precision))
 			expect(point y, is equal to(-3.0f) within(this precision))
 		})
+		this add("minimum maximum", func {
+			_max := this point0 maximum(this point1)
+			_min := this point0 minimum(this point1)
+			expect(_max x, is equal to(22))
+			expect(_max y, is equal to(13))
+			expect(_min x, is equal to(12))
+			expect(_min y, is equal to(-3))
+		})
+		this add("scalar product", func {
+			product := this point0 scalarProduct(this point1)
+			expect(product, is equal to(225))
+		})
+		this add("clamp", func {
+			result := point1 clamp(point0, point2)
+			expect(result x, is equal to(22))
+			expect(result y, is equal to(10))
+		})
+		this add("distance", func {
+			_distance := point0 distance(point1)
+			expect(_distance, is equal to(18.87f) within(0.01f))
+		})
 	}
 }
 IntPoint2DTest new() run()

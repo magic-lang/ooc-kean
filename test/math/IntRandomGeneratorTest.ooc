@@ -55,8 +55,8 @@ IntRandomGeneratorTest: class extends Fixture {
 		this add("uniform range", func {
 			uniformGenerator := IntUniformRandomGenerator new()
 			uniformGenerator setRange(-250000, 250000)
-			uniformLowest = 250000
-			uniformHighest = -250000
+			uniformLowest := 250000
+			uniformHighest := -250000
 			for (i in 0 .. 100_000) {
 				value := uniformGenerator next()
 				if (value > uniformHighest)

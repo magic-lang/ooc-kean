@@ -3,8 +3,6 @@ use ooc-math
 import math
 import lang/IO
 
-
-
 FloatMatrixTest: class extends Fixture {
 	matrix := FloatMatrix new (3, 3)
 	nonSquareMatrix := FloatMatrix new (IntSize2D new(2, 3))

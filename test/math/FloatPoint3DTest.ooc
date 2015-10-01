@@ -9,6 +9,7 @@ FloatPoint3DTest: class extends Fixture {
 	point1 := FloatPoint3D new (12.0f, 13.0f, 20.0f)
 	point2 := FloatPoint3D new (34.0f, 10.0f, 30.0f)
 	point3 := FloatPoint3D new (10.1f, 20.2f, 30.3f)
+	point4 := FloatPoint3D new (10.1f, 20.7f, 30.3f)
 	init: func {
 		super("FloatPoint3D")
 		this add("norm", func {
@@ -62,6 +63,30 @@ FloatPoint3DTest: class extends Fixture {
 			expect(point x, is equal to(10))
 			expect(point y, is equal to(20))
 			expect(point z, is equal to(30))
+		})
+		this add("minimum maximum", func {
+			_max := this point0 maximum(this point1)
+			_min := this point0 minimum(this point1)
+			expect(_max x, is equal to(22.0f) within(this precision))
+			expect(_max y, is equal to(13.0f) within(this precision))
+			expect(_max z, is equal to(20.0f) within(this precision))
+			expect(_min x, is equal to(12.0f) within(this precision))
+			expect(_min y, is equal to(-3.0f) within(this precision))
+			expect(_min z, is equal to(10.0f) within(this precision))
+		})
+		this add("rounding", func {
+			_round := this point4 round()
+			_ceiling := this point4 ceiling()
+			_floor := this point4 floor()
+			expect(_round x, is equal to(10.0f) within(this precision))
+			expect(_round y, is equal to(21.0f) within(this precision))
+			expect(_round z, is equal to(30.0f) within(this precision))
+			expect(_ceiling x, is equal to(11.0f) within(this precision))
+			expect(_ceiling y, is equal to(21.0f) within(this precision))
+			expect(_ceiling z, is equal to(31.0f) within(this precision))
+			expect(_floor x, is equal to(10.0f) within(this precision))
+			expect(_floor y, is equal to(20.0f) within(this precision))
+			expect(_floor z, is equal to(30.0f) within(this precision))
 		})
 	}
 }

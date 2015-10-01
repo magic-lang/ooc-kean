@@ -34,8 +34,8 @@ FloatSize3D: cover {
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	pNorm: func (p: Float) -> Float {
 		p == 1 ?
-		this width abs() + this height abs() :
-		(this width abs() pow(p) + this height abs() pow(p)) pow(1 / p)
+		this width abs() + this height abs() + this depth abs() :
+		(this width abs() pow(p) + this height abs() pow(p) + this depth abs() pow(p)) pow(1 / p)
 	}
 	scalarProduct: func (other: This) -> Float { this width * other width + this height * other height + this depth * other depth }
 	vectorProduct: func (other: This) -> This {
@@ -51,7 +51,7 @@ FloatSize3D: cover {
 	distance: func (other: This) -> Float { (this - other) norm }
 	round: func -> This { This new(this width round(), this height round(), this depth round()) }
 	ceiling: func -> This { This new(this width ceil(), this height ceil(), this depth ceil()) }
-	floor: func -> This { This new(this width floor(), this height floor(), this height floor()) }
+	floor: func -> This { This new(this width floor(), this height floor(), this depth floor()) }
 	minimum: func (ceiling: This) -> This { This new(Float minimum(this width, ceiling width), Float minimum(this height, ceiling height), Float minimum(this depth, ceiling depth)) }
 	maximum: func (floor: This) -> This { This new(Float maximum(this width, floor width), Float maximum(this height, floor height), Float maximum(this depth, floor depth)) }
 	clamp: func (floor, ceiling: This) -> This {

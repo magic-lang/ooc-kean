@@ -102,6 +102,38 @@ FloatPoint2DTest: class extends Fixture {
 			expect(point x, is equal to(10))
 			expect(point y, is equal to(20))
 		})
+		this add("minimum maximum", func {
+			_max := this point0 maximum(this point1)
+			_min := this point0 minimum(this point1)
+			expect(_max x, is equal to(22.221f) within(this precision))
+			expect(_max y, is equal to(13.1f) within(this precision))
+			expect(_min x, is equal to(12.221f) within(this precision))
+			expect(_min y, is equal to(-3.1f) within(this precision))
+		})
+		this add("rounding", func {
+			_round := this point1 round()
+			_ceiling := this point1 ceiling()
+			_floor := this point1 floor()
+			expect(_round x, is equal to(12.0f) within(this precision))
+			expect(_round y, is equal to(13.0f) within(this precision))
+			expect(_ceiling x, is equal to(13.0f) within(this precision))
+			expect(_ceiling y, is equal to(14.0f) within(this precision))
+			expect(_floor x, is equal to(12.0f) within(this precision))
+			expect(_floor y, is equal to(13.0f) within(this precision))
+		})
+		this add("p norm", func {
+			onenorm := this point0 pNorm(1)
+			euclidean := this point0 pNorm(2)
+			expect(onenorm, is equal to(25.321f) within(this precision))
+			expect(euclidean, is equal to(22.436f) within(0.01f))
+		})
+		this add("scalar product", func {
+			expect(this point0 scalarProduct(this point1), is equal to (230.95f) within(0.01f))
+		})
+		this add("distance", func {
+			_distance := point0 distance(point1)
+			expect(_distance, is equal to(19.04f) within(0.01f))
+		})
 	}
 }
 FloatPoint2DTest new() run()

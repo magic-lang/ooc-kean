@@ -104,8 +104,8 @@ FloatRandomGeneratorTest: class extends Fixture {
 		this add("uniform range", func {
 			uniformGenerator := FloatUniformRandomGenerator new()
 			uniformGenerator setRange(-25000.0f, 25000.0f)
-			uniformLowest = 25000.0f
-			uniformHighest = -25000.0f
+			uniformLowest := 25000.0f
+			uniformHighest := -25000.0f
 			for (i in 0 .. 100_000) {
 				value := uniformGenerator next()
 				if (value > uniformHighest)

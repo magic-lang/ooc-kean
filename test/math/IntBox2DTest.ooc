@@ -61,24 +61,16 @@ IntBox2DTest: class extends Fixture {
 			expect(swapped width, is equal to(this box0 height))
 			expect(swapped height, is equal to(this box0 width))
 		})
-		this add("contains~IntPoint2DVectorList", func {
-			box := IntBox2D new(-2, -1, 3, 3)
-			list := IntPoint2DVectorList new()
-			list add(IntPoint2D new(0, 1))
-			list add(IntPoint2D new(-2, 2))
-			list add(IntPoint2D new(-2, -2))
-			list add(IntPoint2D new(0, 0))
-			inBox := box contains~IntPoint2DVectorList(list)
-			expect(inBox count, is equal to(3))
-			expect(inBox[0], is equal to(0))
-			expect(inBox[1], is equal to(1))
-			expect(inBox[2], is equal to(3))
-		})
 		this add("pad", func {
-
 		})
 		this add("bounds", func {
-
+		})
+		this add("contains~FloatPoint2DVectorList", func {
+			box := IntBox2D new(-2, -1, 3, 3)
+			inside := IntPoint2D new(0, 1)
+			outside := FloatPoint2D new(-2.0f, 2.0f)
+			expect(box contains(inside))
+			expect(!box contains(outside))
 		})
 	}
 }

@@ -61,6 +61,14 @@ IntSize2DTest: class extends Fixture {
 		this add("scalar product", func {
 			expect(this vector0 scalarProduct(this vector1), is equal to (225))
 		})
+		this add("minimum maximum", func {
+			_max := vector0 maximum(this vector1)
+			_min := vector0 minimum(this vector1)
+			expect(_max width, is equal to(22))
+			expect(_max height, is equal to(13))
+			expect(_min width, is equal to(12))
+			expect(_min height, is equal to(-3))
+		})
 	}
 }
 IntSize2DTest new() run()
