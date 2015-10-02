@@ -15,6 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
 use ooc-base
+use ooc-draw
 use ooc-draw-gpu
 import math
 
