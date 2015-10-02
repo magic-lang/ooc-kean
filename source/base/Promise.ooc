@@ -28,30 +28,29 @@ _ThreadPromise: class extends Promise {
 	_action: Func
 	_thread: Thread
 	_mutex := Mutex new()
-	init: func (=_action) {
+	init: func (task: Func) {
 		super()
 		this _state = _PromiseState Unfinished
 		this _action = func {
-			_action()
+			task()
 			this _mutex lock()
 			if (this _state != _PromiseState Cancelled)
 				this _state = _PromiseState Finished
 			this _mutex unlock()
 		}
-		this _thread = Thread new(|| this _action())
+		this _thread = Thread new(this _action)
 		this _thread start()
 	}
-	free: func {
-		_thread free()
+	free: override func {
+		this _thread wait()
+		this _thread free()
+		(this _action as Closure) dispose()
+		this _mutex destroy()
 		super()
 	}
 	wait: func -> Bool {
 		this _thread wait()
-		status := false
-		this _mutex lock()
-		status = this _state == _PromiseState Finished
-		this _mutex unlock()
-		status
+		this _state == _PromiseState Finished
 	}
 	cancel: override func -> Bool {
 		this _thread cancel()
@@ -66,40 +65,42 @@ _ThreadPromise: class extends Promise {
 	}
 }
 
-ResultPromise: abstract class <T> {
+Future: abstract class <T> {
 	_state: _PromiseState
 	init: func
 	wait: abstract func -> Bool
 	wait: abstract func ~default (defaultValue: T) -> T
+	getResult: abstract func (defaultValue: T) -> T
 	cancel: virtual func -> Bool { false }
 	start: static func<S> (S: Class, action: Func -> S) -> This<S> {
-		_ThreadResultPromise<S> new(action)
+		_ThreadFuture<S> new(action)
 	}
 }
 
-_ThreadResultPromise: class <T> extends ResultPromise<T> {
+_ThreadFuture: class <T> extends Future<T> {
 	_result: Cell<T>
-	_action: Func -> T
-	_task: Func
+	_action: Func
 	_thread: Thread
 	_mutex := Mutex new()
-	init: func (=_action) {
+	init: func (task: Func -> T) {
 		super()
 		this _state = _PromiseState Unfinished
-		this _task = func {
-			temporary := this _action()
+		this _action = func {
+			temporary := task()
 			this _result = Cell<T> new(temporary)
 			this _mutex lock()
 			if (this _state != _PromiseState Cancelled)
 				this _state = _PromiseState Finished
 			this _mutex unlock()
 		}
-		this _thread = Thread new(|| this _task())
+		this _thread = Thread new(this _action)
 		this _thread start()
 	}
-	free: func {
-		_thread free()
-		_mutex destroy()
+	free: override func {
+		this _thread wait()
+		this _thread free()
+		(this _action as Closure) dispose()
+		this _mutex destroy()
 		super()
 	}
 	wait: func -> Bool {
@@ -108,6 +109,12 @@ _ThreadResultPromise: class <T> extends ResultPromise<T> {
 	}
 	wait: func ~default (defaultValue: T) -> T {
 		status := this wait()
+		status ? this _result[T] : defaultValue
+	}
+	getResult: func (defaultValue: T) -> T {
+		this _mutex lock()
+		status := (this _state == _PromiseState Finished)
+		this _mutex unlock()
 		status ? this _result[T] : defaultValue
 	}
 	cancel: override func -> Bool {

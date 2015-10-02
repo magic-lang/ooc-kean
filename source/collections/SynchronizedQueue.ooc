@@ -65,6 +65,7 @@ SynchronizedQueue: class <T> extends Queue<T> {
 
 BlockedQueue: class <T> extends SynchronizedQueue<T> {
 	_populated := WaitCondition new()
+	_canceled := false
 	init: func { super() }
 	free: override func {
 		this _populated free()
@@ -74,12 +75,25 @@ BlockedQueue: class <T> extends SynchronizedQueue<T> {
 		super(item)
 		this _populated signal()
 	}
-	wait: func -> T {
+	cancel: func {
+		this _mutex lock()
+		this _canceled = true
+		this _mutex unlock()
+		this _populated broadcast()
+	}
+	wait: func (isOk := null as Bool*) -> T {
 		result: T
 		this _mutex lock()
-		while (this empty)
+		while (this empty) {
 			this _populated wait(this _mutex)
-		this _backend dequeue(result&) as Void // Ignore the return value to avoid build warning
+			if (this _canceled) {
+				if (isOk)
+					isOk@ = false
+				break
+			}
+		}
+		if (!this _canceled)
+			this _backend dequeue(result&) as Void // Ignore the return value to avoid build warning
 		this _mutex unlock()
 		result
 	}
