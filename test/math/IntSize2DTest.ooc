@@ -87,6 +87,17 @@ IntSize2DTest: class extends Fixture {
 			expect(sqrttwo width, is equal to(1))
 			expect(sqrttwo height, is equal to(1))
 		})
+		this add("area, square, empty", func {
+			_rectangle := IntSize2D new(10, 20)
+			_square := IntSize2D new(5, 5)
+			_empty := IntSize2D new()
+			expect(_rectangle area, is equal to(200))
+			expect(_square square, is equal to(true))
+			expect(_rectangle square, is equal to(false))
+			expect(_empty empty, is equal to(true))
+			expect(_square empty, is equal to(false))
+			expect(_empty area, is equal to(0))
+		})
 	}
 }
 IntSize2DTest new() run()

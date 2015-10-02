@@ -84,6 +84,13 @@ IntSize3DTest: class extends Fixture {
 			expect(even height, is equal to(-3)) //FIXME Incorrect due to mod operator not correct about negative numbers
 			expect(even depth, is equal to(8))
 		})
+		this add("volume, empty", func {
+			_empty := IntSize3D new()
+			expect(_empty empty, is equal to(true))
+			expect(this vector1 empty, is equal to(false))
+			expect(this vector1 volume, is equal to(-1248))
+			expect(_empty volume, is equal to(0))
+		})
 	}
 }
 

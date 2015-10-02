@@ -44,8 +44,8 @@ FloatSize2DTest: class extends Fixture {
 		})
 		this add("swap", func {
 			result := this vector0 swap()
-			expect(result width, is equal to(this vector0 height))
-			expect(result height, is equal to(this vector0 width))
+			expect(result width, is equal to(this vector0 height) within(this precision))
+			expect(result height, is equal to(this vector0 width) within(this precision))
 		})
 		this add("casting", func {
 			value := "10.00, 20.00"
@@ -55,8 +55,8 @@ FloatSize2DTest: class extends Fixture {
 		})
 		this add("float casts", func {
 			point := vector3 toFloatPoint2D()
-			expect(point x, is equal to(vector3 width))
-			expect(point y, is equal to(vector3 height))
+			expect(point x, is equal to(vector3 width) within(this precision))
+			expect(point y, is equal to(vector3 height) within(this precision))
 		})
 		this add("polar 0", func {
 			point := FloatSize2D new()
@@ -65,23 +65,23 @@ FloatSize2DTest: class extends Fixture {
 		})
 		this add("polar 1", func {
 			point := FloatSize2D new(1, 0)
-			expect(point norm, is equal to(1.0f))
+			expect(point norm, is equal to(1.0f) within(this precision))
 			expect(point azimuth, is equal to(0))
 		})
 		this add("polar 2", func {
 			point := FloatSize2D new(0, 1)
-			expect(point norm, is equal to(1.0f))
-			expect(point azimuth, is equal to(PI as Float / 2.0f))
+			expect(point norm, is equal to(1.0f) within(this precision))
+			expect(point azimuth, is equal to(PI as Float / 2.0f) within(this precision))
 		})
 		this add("polar 3", func {
 			point := FloatSize2D new(0, -5)
-			expect(point norm, is equal to(5.0f))
-			expect(point azimuth, is equal to(PI as Float / -2.0f))
+			expect(point norm, is equal to(5.0f) within(this precision))
+			expect(point azimuth, is equal to(PI as Float / -2.0f) within(this precision))
 		})
 		this add("polar 4", func {
 			point := FloatSize2D new(-1, 0)
-			expect(point norm, is equal to(1.0f))
-			expect(point azimuth, is equal to(PI as Float))
+			expect(point norm, is equal to(1.0f) within(this precision))
+			expect(point azimuth, is equal to(PI as Float) within(this precision))
 		})
 		this add("polar 5", func {
 			point := FloatSize2D new(-3, 0)
@@ -142,6 +142,14 @@ FloatSize2DTest: class extends Fixture {
 			expect(interpolate2 height, is equal to(5.0f) within(0.01f))
 			expect(interpolate3 width, is equal to(this vector1 width) within(this precision))
 			expect(interpolate3 height, is equal to(this vector1 height) within(this precision))
+		})
+		this add("area, length, empty", func {
+			_empty := FloatSize2D new()
+			expect(this vector0 area, is equal to(-68.89f) within(0.01f))
+			expect(this vector0 length, is equal to(22.44f) within(0.01f))
+			expect(_empty empty, is equal to(true))
+			expect(_empty area, is equal to(0.0f) within(this precision))
+			//expect(this vector0 empty, is equal to(false)) //FIXME This crashes Fixture
 		})
 	}
 }

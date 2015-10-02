@@ -134,6 +134,17 @@ FloatSize3DTest: class extends Fixture {
 			expect(first angle(second), is equal to(2.221f) within(0.01f))
 			expect(first distance(second), is equal to(13.74f) within(0.01f))
 		})
+		this add("length, empty", func {
+			_empty := FloatSize3D new()
+			expect(this vector0 length, is equal to(24.35f) within(0.01f))
+			expect(_empty empty, is equal to(true))
+			expect(_empty volume, is equal to(0.0f) within(this precision))
+			expect(this vector0 empty, is equal to(false))
+		})
+		this add("azimuth", func {
+			myvector := FloatSize3D new(1.0, 5.5, 0.1)
+			expect(myvector azimuth, is equal to(atan2(5.5, 1.0) as Float) within(this precision))
+		})
 	}
 }
 FloatSize3DTest new() run()
