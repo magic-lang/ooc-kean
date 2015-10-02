@@ -22,6 +22,12 @@ PromiseCollector: class {
 		}
 		status
 	}
+	cancel: func -> Bool {
+		status := true
+		for (i in 0 .. this _backend count)
+			status = status && this _backend[i] cancel()
+		status
+	}
 	clear: func {
 		this _backend clear()
 	}
