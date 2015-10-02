@@ -72,6 +72,18 @@ IntSize3DTest: class extends Fixture {
 			expect(_min height, is equal to(-3))
 			expect(_min depth, is equal to(-8))
 		})
+		this add("clamp", func {
+			result := this vector1 clamp(this vector0, this vector2)
+			expect(result width, is equal to(22))
+			expect(result height, is equal to(10))
+			expect(result depth, is equal to(8))
+		})
+		this add("fillEven", func {
+			even := IntSize3D fillEven(this vector0)
+			expect(even width, is equal to(22))
+			expect(even height, is equal to(-3)) //FIXME Incorrect due to mod operator not correct about negative numbers
+			expect(even depth, is equal to(8))
+		})
 	}
 }
 

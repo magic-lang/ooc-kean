@@ -88,6 +88,41 @@ FloatPoint3DTest: class extends Fixture {
 			expect(_floor y, is equal to(20.0f) within(this precision))
 			expect(_floor z, is equal to(30.0f) within(this precision))
 		})
+		this add("clamp", func {
+			clamped := this point1 clamp(this point0, this point2)
+			expect(clamped x, is equal to(22.0f) within(this precision))
+			expect(clamped y, is equal to(10.0f) within(this precision))
+			expect(clamped z, is equal to(20.0f) within(this precision))
+		})
+		this add("distance", func {
+			_distance := point0 distance(point1)
+			expect(_distance, is equal to(21.354f) within(0.01f))
+		})
+		this add("interpolation", func {
+			interpolate1 := FloatPoint3D linearInterpolation(this point0, this point1, 0.0f)
+			interpolate2 := FloatPoint3D linearInterpolation(this point0, this point1, 0.5f)
+			interpolate3 := FloatPoint3D linearInterpolation(this point0, this point1, 1.0f)
+			expect(interpolate1 x, is equal to(this point0 x) within(this precision))
+			expect(interpolate1 y, is equal to(this point0 y) within(this precision))
+			expect(interpolate1 z, is equal to(this point0 z) within(this precision))
+			expect(interpolate2 x, is equal to(17.0f) within(0.01f))
+			expect(interpolate2 y, is equal to(5.0f) within(0.01f))
+			expect(interpolate2 z, is equal to(15.0f) within(0.01f))
+			expect(interpolate3 x, is equal to(this point1 x) within(this precision))
+			expect(interpolate3 y, is equal to(this point1 y) within(this precision))
+			expect(interpolate3 z, is equal to(this point1 z) within(this precision))
+		})
+		this add("angle", func {
+			first := FloatPoint3D new(2.0f, -3.0f, 5.0f)
+			second := FloatPoint3D new(5.0f, 3.0f, -7.0f)
+			expect(first angle(second), is equal to(2.221f) within(0.01f))
+		})
+		this add("spherical", func {
+			point := FloatPoint3D spherical(5.0f, 1.23f, 0.57f)
+			expect(point x, is equal to(0.90f) within(0.01f))
+			expect(point y, is equal to(2.54f) within(0.01f))
+			expect(point z, is equal to(4.21f) within(0.01f))
+		})
 	}
 }
 FloatPoint3DTest new() run()

@@ -50,6 +50,9 @@ IntSize2DTest: class extends Fixture {
 		this add("casting", func {
 			value := "10, 20"
 			expect(this vector3 toString(), is equal to(value))
+			point := this vector3 toIntPoint2D()
+			expect(point x, is equal to(this vector3 width))
+			expect(point y, is equal to(this vector3 height))
 //			FIXME: Equals interface
 //			expect(IntSize2D parse(value), is equal to(this vector3))
 		})
@@ -68,6 +71,21 @@ IntSize2DTest: class extends Fixture {
 			expect(_max height, is equal to(13))
 			expect(_min width, is equal to(12))
 			expect(_min height, is equal to(-3))
+		})
+		this add("clamp", func {
+			result := vector1 clamp(this vector0, this vector2)
+			expect(result width, is equal to(22))
+			expect(result height, is equal to(10))
+		})
+		this add("fillEven", func {
+			even := IntSize2D fillEven(this vector1)
+			expect(even width, is equal to(12))
+			expect(even height, is equal to(14))
+		})
+		this add("polar", func {
+			sqrttwo := IntSize2D polar(1.415f, 0.785f)
+			expect(sqrttwo width, is equal to(1))
+			expect(sqrttwo height, is equal to(1))
 		})
 	}
 }

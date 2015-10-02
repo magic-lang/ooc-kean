@@ -93,6 +93,18 @@ FloatComplexTest: class extends Fixture {
 			conjugateProduct := this complexNumber1 * this complexNumber1 conjugate
 			expect(conjugateProduct real, is equal to (this complexNumber1 absoluteValue * this complexNumber1 absoluteValue) within(tolerance))
 		})
+		this add("roots of unity", func {
+			expect(FloatComplex rootOfUnity(5, 1) real, is equal to(1.0f) within(tolerance))
+			expect(FloatComplex rootOfUnity(5, 1) imaginary, is equal to(0.0f) within(tolerance))
+			expect(FloatComplex rootOfUnity(5, 2) real, is equal to(0.309f) within(tolerance))
+			expect(FloatComplex rootOfUnity(5, 2) imaginary, is equal to(0.951f) within(tolerance))
+			expect(FloatComplex rootOfUnity(5, 3) real, is equal to(-0.809f) within(tolerance))
+			expect(FloatComplex rootOfUnity(5, 3) imaginary, is equal to(0.588f) within(tolerance))
+			expect(FloatComplex rootOfUnity(5, 4) real, is equal to(-0.809f) within(tolerance))
+			expect(FloatComplex rootOfUnity(5, 4) imaginary, is equal to(-0.588f) within(tolerance))
+			expect(FloatComplex rootOfUnity(5, 5) real, is equal to(0.309f) within(tolerance))
+			expect(FloatComplex rootOfUnity(5, 5) imaginary, is equal to(-0.951f) within(tolerance))
+		})
 	}
 }
 FloatComplexTest new() run()

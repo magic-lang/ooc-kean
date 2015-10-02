@@ -1,5 +1,6 @@
 use ooc-unit
 use ooc-math
+import VectorList
 import math
 import lang/IO
 
@@ -61,9 +62,28 @@ IntBox2DTest: class extends Fixture {
 			expect(swapped width, is equal to(this box0 height))
 			expect(swapped height, is equal to(this box0 width))
 		})
-		this add("pad", func {
+		this add("pad and shrink ~fraction", func {
+			padding := 2
+			box := IntBox2D new(-2, -1, 3, 3)
+			paddedBox := box pad(padding)
+			expect(paddedBox left, is equal to(box left - padding))
+			expect(paddedBox top, is equal to(box top - padding))
+			expect(paddedBox width, is equal to(box width + 2*padding))
+			expect(paddedBox height, is equal to(box height + 2*padding))
 		})
 		this add("bounds", func {
+			points := VectorList<IntPoint2D> new()
+			points add(IntPoint2D new(1, 2))
+			points add(IntPoint2D new(-1, -2))
+			points add(IntPoint2D new(1, 3))
+			points add(IntPoint2D new(-2, 4))
+			points add(IntPoint2D new(0, 0))
+			points add(IntPoint2D new(-1, 3))
+			box := IntBox2D bounds(points)
+			expect(box left, is equal to(-2))
+			expect(box top, is equal to(-2))
+			expect(box right, is equal to(1))
+			expect(box bottom, is equal to(4))
 		})
 		this add("contains~FloatPoint2DVectorList", func {
 			box := IntBox2D new(-2, -1, 3, 3)
@@ -71,6 +91,23 @@ IntBox2DTest: class extends Fixture {
 			outside := FloatPoint2D new(-2.0f, 2.0f)
 			expect(box contains(inside))
 			expect(!box contains(outside))
+		})
+		this add("toString", func {
+			expect(this box0 toString() == "1, 2, 3, 4")
+		})
+		this add("parse", func {
+			box := IntBox2D parse("1, 2, 3, 4")
+			expect(box left, is equal to(1))
+			expect(box top, is equal to(2))
+			expect(box right, is equal to(1+3))
+			expect(box bottom, is equal to(2+4))
+		})
+		this add("createAround", func {
+			box := IntBox2D createAround(IntPoint2D new(1, 1), IntSize2D new(4, 4))
+			expect(box left, is equal to(-1))
+			expect(box top, is equal to(-1))
+			expect(box right, is equal to(3))
+			expect(box bottom, is equal to(3))
 		})
 	}
 }

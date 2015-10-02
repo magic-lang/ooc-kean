@@ -37,10 +37,10 @@ FloatPoint3D: cover {
 	init: func@ ~fromPoint2D (point: FloatPoint2D, z := 0.0f) { this init(point x, point y, z) }
 	scalarProduct: func (other: This) -> Float { this x * other x + this y * other y + this z * other z }
 	vectorProduct: func (other: This) -> This { This new(this y * other z - other y * this z, -(this x * other z - other x * this z), this x * other y - other x * this y) }
-	spherical: func (radius, azimuth, elevation: Float) -> This {
+	spherical: static func (radius, azimuth, elevation: Float) -> This {
 		This new(radius * (azimuth cos()) * (elevation sin()), radius * (azimuth sin()) * (elevation sin()), radius * (elevation cos()))
 	}
-	angles: func (rx, ry, n: Float) -> This {
+	angles: static func (rx, ry, n: Float) -> This {
 		z := n*n sqrt() / (1 + ry tan() squared() + rx tan() squared())
 		This new(z * (ry tan()), z * (rx tan()), z)
 	}

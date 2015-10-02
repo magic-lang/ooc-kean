@@ -102,6 +102,11 @@ FloatPoint2DTest: class extends Fixture {
 			expect(point x, is equal to(10))
 			expect(point y, is equal to(20))
 		})
+		this add("float casts", func {
+			vector := point3 toFloatSize2D()
+			expect(vector width, is equal to(point3 x))
+			expect(vector height, is equal to(point3 y))
+		})
 		this add("minimum maximum", func {
 			_max := this point0 maximum(this point1)
 			_min := this point0 minimum(this point1)
@@ -133,6 +138,22 @@ FloatPoint2DTest: class extends Fixture {
 		this add("distance", func {
 			_distance := point0 distance(point1)
 			expect(_distance, is equal to(19.04f) within(0.01f))
+		})
+		this add("clamp", func {
+			clamped := this point1 clamp(this point0, this point2)
+			expect(clamped x, is equal to(22.221f) within(this precision))
+			expect(clamped y, is equal to(10.0f) within(this precision))
+		})
+		this add("interpolation", func {
+			interpolate1 := FloatPoint2D linearInterpolation(this point0, this point1, 0.0f)
+			interpolate2 := FloatPoint2D linearInterpolation(this point0, this point1, 0.5f)
+			interpolate3 := FloatPoint2D linearInterpolation(this point0, this point1, 1.0f)
+			expect(interpolate1 x, is equal to(this point0 x) within(this precision))
+			expect(interpolate1 y, is equal to(this point0 y) within(this precision))
+			expect(interpolate2 x, is equal to(17.22f) within(0.01f))
+			expect(interpolate2 y, is equal to(5.0f) within(0.01f))
+			expect(interpolate3 x, is equal to(this point1 x) within(this precision))
+			expect(interpolate3 y, is equal to(this point1 y) within(this precision))
 		})
 	}
 }

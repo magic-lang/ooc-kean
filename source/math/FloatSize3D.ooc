@@ -46,7 +46,7 @@ FloatSize3D: cover {
 		)
 	}
 	angle: func (other: This) -> Float {
-		(this scalarProduct(other) / (this norm * other norm)) clamp(-1.0f, 1.0f) acos() * (this width * other height - this height * other width < 0.0f ? -1.0f : 1.0f)
+		(this scalarProduct(other) / (this norm * other norm)) acos() * (this width * other height - this height * other width < 0.0f ? -1.0f : 1.0f)
 	}
 	distance: func (other: This) -> Float { (this - other) norm }
 	round: func -> This { This new(this width round(), this height round(), this depth round()) }
@@ -79,6 +79,9 @@ FloatSize3D: cover {
 	parse: static func (input: String) -> This {
 		array := input split(',')
 		This new (array[0] toFloat(), array[1] toFloat(), array[2] toFloat())
+	}
+	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
+		This new(Float linearInterpolation(a width, b width, ratio), Float linearInterpolation(a height, b height, ratio), Float linearInterpolation(a depth, b depth, ratio))
 	}
 }
 operator * (left: Float, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left * right width, left * right height, left * right depth) }

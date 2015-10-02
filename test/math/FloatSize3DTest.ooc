@@ -64,10 +64,16 @@ FloatSize3DTest: class extends Fixture {
 //			expect(FloatSize2D parse(value), is equal to(this vector3))
 		})
 		this add("int casts", func {
-			vector := vector0 toIntSize3D()
+			vector := this vector0 toIntSize3D()
 			expect(vector width, is equal to(22))
 			expect(vector height, is equal to(-3))
 			expect(vector depth, is equal to(10))
+		})
+		this add("float casts", func {
+			point := this vector0 toFloatPoint3D()
+			expect(point x, is equal to(this vector0 width) within(this precision))
+			expect(point y, is equal to(this vector0 height) within(this precision))
+			expect(point z, is equal to(this vector0 depth) within(this precision))
 		})
 		this add("minimum maximum", func {
 			_max := this vector0 maximum(this vector1)
@@ -107,6 +113,26 @@ FloatSize3DTest: class extends Fixture {
 		})
 		this add("scalar product", func {
 			expect(this vector0 scalarProduct(this vector1), is equal to (425.0f) within(this precision))
+		})
+		this add("interpolation", func {
+			interpolate1 := FloatSize3D linearInterpolation(this vector0, this vector1, 0.0f)
+			interpolate2 := FloatSize3D linearInterpolation(this vector0, this vector1, 0.5f)
+			interpolate3 := FloatSize3D linearInterpolation(this vector0, this vector1, 1.0f)
+			expect(interpolate1 width, is equal to(this vector0 width) within(this precision))
+			expect(interpolate1 height, is equal to(this vector0 height) within(this precision))
+			expect(interpolate1 depth, is equal to(this vector0 depth) within(this precision))
+			expect(interpolate2 width, is equal to(17.0f) within(0.01f))
+			expect(interpolate2 height, is equal to(5.0f) within(0.01f))
+			expect(interpolate2 depth, is equal to(15.0f) within(0.01f))
+			expect(interpolate3 width, is equal to(this vector1 width) within(this precision))
+			expect(interpolate3 height, is equal to(this vector1 height) within(this precision))
+			expect(interpolate3 depth, is equal to(this vector1 depth) within(this precision))
+		})
+		this add("angle and distance", func {
+			first := FloatSize3D new(2.0f, -3.0f, 5.0f)
+			second := FloatSize3D new(5.0f, 3.0f, -7.0f)
+			expect(first angle(second), is equal to(2.221f) within(0.01f))
+			expect(first distance(second), is equal to(13.74f) within(0.01f))
 		})
 	}
 }

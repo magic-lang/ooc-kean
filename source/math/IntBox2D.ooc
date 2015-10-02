@@ -18,6 +18,7 @@ import IntPoint2D
 import IntSize2D
 import FloatPoint2D
 import FloatBox2D
+import VectorList
 import text/StringTokenizer
 import structs/ArrayList
 use ooc-math
@@ -108,12 +109,17 @@ IntBox2D: cover {
 		array := input split(',')
 		This new(array[0] toInt(), array[1] toInt(), array[2] toInt(), array[3] toInt())
 	}
-	create: static func (leftTop: IntPoint2D, size: IntSize2D) -> This { This new(leftTop, size) }
-	create: static func ~fromFloats (left, top, width, height: Int) -> This { This new(left, top, width, height) }
 	createAround: static func (center: IntPoint2D, size: IntSize2D) -> This { This new(center + (-size) / 2, size) }
-	bounds: func (left, right, top, bottom: Int) -> This { This new(left, top, right - left, bottom - top) }
-	bounds: func ~fromArray (points: IntPoint2D[]) -> This { this bounds(points as ArrayList<IntPoint2D>) }
-	bounds: func ~fromList (points: ArrayList<IntPoint2D>) -> This {
+	bounds: static func (left, right, top, bottom: Int) -> This { This new(left, top, right - left, bottom - top) }
+	bounds: static func ~fromArray (points: IntPoint2D[]) -> This {
+		pointsAsVectorList := VectorList<IntPoint2D> new()
+		for (i in 0 .. points length)
+			pointsAsVectorList add(points[i])
+		result := This bounds(pointsAsVectorList)
+		pointsAsVectorList free()
+		result
+	}
+	bounds: static func ~fromList (points: VectorList<IntPoint2D>) -> This {
 		xMinimum := 0
 		xMaximum := xMinimum
 		yMinimum := xMinimum

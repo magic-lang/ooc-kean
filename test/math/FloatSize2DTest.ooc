@@ -53,6 +53,11 @@ FloatSize2DTest: class extends Fixture {
 //			FIXME: Equals interface
 //			expect(FloatSize2D parse(value), is equal to(this vector3))
 		})
+		this add("float casts", func {
+			point := vector3 toFloatPoint2D()
+			expect(point x, is equal to(vector3 width))
+			expect(point y, is equal to(vector3 height))
+		})
 		this add("polar 0", func {
 			point := FloatSize2D new()
 			expect(point norm, is equal to(0))
@@ -126,6 +131,17 @@ FloatSize2DTest: class extends Fixture {
 		})
 		this add("scalar product", func {
 			expect(this vector0 scalarProduct(this vector1), is equal to (230.95f) within(0.01f))
+		})
+		this add("interpolation", func {
+			interpolate1 := FloatSize2D linearInterpolation(this vector0, this vector1, 0.0f)
+			interpolate2 := FloatSize2D linearInterpolation(this vector0, this vector1, 0.5f)
+			interpolate3 := FloatSize2D linearInterpolation(this vector0, this vector1, 1.0f)
+			expect(interpolate1 width, is equal to(this vector0 width) within(this precision))
+			expect(interpolate1 height, is equal to(this vector0 height) within(this precision))
+			expect(interpolate2 width, is equal to(17.22f) within(0.01f))
+			expect(interpolate2 height, is equal to(5.0f) within(0.01f))
+			expect(interpolate3 width, is equal to(this vector1 width) within(this precision))
+			expect(interpolate3 height, is equal to(this vector1 height) within(this precision))
 		})
 	}
 }
