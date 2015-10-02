@@ -133,8 +133,8 @@ FloatBox2DTest: class extends Fixture {
 			box := FloatBox2D parse("1.0, 2.0, 3.0, 4.0")
 			expect(box left, is equal to(1.0f) within(this precision))
 			expect(box top, is equal to(2.0f) within(this precision))
-			expect(box right, is equal to(1.0f+3.0f) within(this precision))
-			expect(box bottom, is equal to(2.0f+4.0f) within(this precision))
+			expect(box right, is equal to(1.0f + 3.0f) within(this precision))
+			expect(box bottom, is equal to(2.0f + 4.0f) within(this precision))
 		})
 		this add("createAround", func {
 			box := FloatBox2D createAround(FloatPoint2D new(1.0f, 1.0f), FloatSize2D new(4.0f, 4.0f))

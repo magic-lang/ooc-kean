@@ -99,8 +99,8 @@ IntBox2DTest: class extends Fixture {
 			box := IntBox2D parse("1, 2, 3, 4")
 			expect(box left, is equal to(1))
 			expect(box top, is equal to(2))
-			expect(box right, is equal to(1+3))
-			expect(box bottom, is equal to(2+4))
+			expect(box right, is equal to(1 + 3))
+			expect(box bottom, is equal to(2 + 4))
 		})
 		this add("createAround", func {
 			box := IntBox2D createAround(IntPoint2D new(1, 1), IntSize2D new(4, 4))
