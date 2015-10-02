@@ -1,94 +1,92 @@
 use ooc-base
 use ooc-collections
 use ooc-unit
-import os/Time
+import threading/Thread
 
 BlockedQueueTest: class extends Fixture {
 	init: func {
-		queue := BlockedQueue<Int> new()
-
-		func1 := func { queue enqueue(123) }
-		func2 := func {
-			result: Int
-			success := queue peek(result&)
-			expect(success)
-			expect(result == 123)
-		}
-		func3 := func {
-			result: Int
-			success := queue dequeue(result&)
-			if (success)
-				expect(result == 123)
-			else
-				expect(queue empty)
-		}
-		func4 := func {
-			result: Int
-			success := queue peek(result&)
-			expect(!success)
-			expect(queue empty)
-		}
-		func5 := func {
-			result := queue wait()
-			expect(result == 123)
-		}
-
 		super("BlockedQueue")
-		this add("BlockedQueue cover create", func {
-			expect(queue empty)
-			expect(queue count, is equal to(0))
-
-			pool := ThreadPool new(8)
-			limitA := 100
-			limitB := 200
-			limitC := 200
-			limitD := 20
-			limitE := 4
-			limitF := 4
-			promises := Promise[limitA + limitB + limitC + limitD + limitE + limitF] new()
-			/* Enqueue values asynchronously */
-			for (i in 0 .. limitA)
-				promises[i] = pool getPromise(func1)
-
-			/* Peek values asynchronously */
-			for (i in 0 .. limitB)
-				promises[limitA + i] = pool getPromise(func2)
-
-			/* Dequeue values asynchronously */
-			for (i in 0 .. limitC)
-				promises[limitA + limitB + i] = pool getPromise(func3)
-
-			/* Peek values asynchronously in empty Queue */
-			for (i in 0 .. limitD)
-				promises[limitA + limitB + limitC + i] = pool getPromise(func4)
-
-			//TODO This is not pretty but replaces waitAll for now
-			for (i in 0 .. limitA + limitB + limitC + limitD)
-				promises[i] wait()
-
-			expect(queue empty)
-			expect(queue count, is equal to(0))
-
-			for (i in 0 .. 4) {
-				promises[limitA + limitB + limitC + limitD + i] = pool getPromise(func5)
-				Time sleepMilli(10)
+		this add("cover", This _testWithCover)
+		this add("class", This _testWithClass)
+	}
+	_testWithCover: static func {
+		queue := BlockedQueue<Int> new()
+		numberOfThreads := 8
+		countPerThread := 20_000
+		totalCount := numberOfThreads * countPerThread
+		produce := func {
+			for (i in 0 .. totalCount) {
+				queue enqueue(i)
+				Thread yield()
 			}
-			for (i in 0 .. 4) {
-				promises[limitA + limitB + limitC + limitD + limitE + i] = pool getPromise(func1)
-				Time sleepMilli(10)
+		}
+		consume := func {
+			for (i in 0 .. countPerThread) {
+				value := queue wait()
+				expect(value < totalCount)
 			}
-
-			//TODO This is not pretty but replaces waitAll for now (PromiseCollector will replace this)
-			for (i in 0 .. limitA + limitB + limitC + limitD + limitE + limitF)
-				promises[i] wait() . free()
-
-			expect(queue empty)
-
-			promises free()
-			queue free()
-			pool free()
-		})
+		}
+		queue enqueue(0)
+		threads := Thread[numberOfThreads] new()
+		for (i in 0 .. numberOfThreads) {
+			threads[i] = Thread new(consume)
+			threads[i] start()
+		}
+		producer := Thread new(produce)
+		producer start()
+		producer wait()
+		for (i in 0 .. numberOfThreads) {
+			threads[i] wait()
+			threads[i] free()
+		}
+		expect(queue count, is equal to(1))
+		queue clear()
+		expect(queue count, is equal to(0))
+		producer free()
+		threads free()
+		(produce as Closure) dispose()
+		(consume as Closure) dispose()
+		queue free()
+	}
+	_testWithClass: static func {
+		queue := BlockedQueue<Cell<Int>> new()
+		numberOfThreads := 8
+		countPerThread := 20_000
+		totalCount := numberOfThreads * countPerThread
+		produce := func {
+			for (i in 0 .. countPerThread) {
+				queue enqueue(Cell<Int> new(i))
+				Thread yield()
+			}
+		}
+		consume := func {
+			for (i in 0 .. totalCount) {
+				value := queue wait()
+				expect(value get() < totalCount)
+				value free()
+			}
+		}
+		consumer := Thread new(consume)
+		consumer start()
+		threads := Thread[numberOfThreads] new()
+		for (i in 0 .. numberOfThreads) {
+			threads[i] = Thread new(produce)
+			threads[i] start()
+		}
+		for (i in 0 .. numberOfThreads) {
+			threads[i] wait()
+			threads[i] free()
+		}
+		consumer wait()
+		expect(queue count, is equal to(0))
+		consumer free()
+		threads free()
+		(produce as Closure) dispose()
+		(consume as Closure) dispose()
+		queue free()
 	}
 }
 
-BlockedQueueTest new() run()
+test := BlockedQueueTest new()
+test run()
+test free()
