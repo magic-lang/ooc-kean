@@ -62,8 +62,11 @@ FloatSize3DTest: class extends Fixture {
 //			FIXME: Equals interface
 //			expect(FloatSize2D parse(value), is equal to(this vector3))
 		})
-		this add("casts", func {
-//			FIXME: We have no integer versions of anything yet
+		this add("int casts", func {
+			vector := vector0 toIntSize3D()
+			expect(vector width, is equal to(22))
+			expect(vector height, is equal to(-3))
+			expect(vector depth, is equal to(10))
 		})
 	}
 }

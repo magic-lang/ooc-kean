@@ -18,7 +18,7 @@
 use ooc-unit
 use ooc-collections
 
-VectorTest: class extends Fixture {
+VectorListTest: class extends Fixture {
 	init: func {
 		super("VectorList")
 		this add("VectorList cover create", func {
@@ -179,13 +179,27 @@ VectorTest: class extends Fixture {
 			expect(newList[2], is equal to("3"))
 			list free(); newList free()
 		})
-			/*this add("VectorList fold", func {
-				list := VectorList<Int> new()
-				list add(0)
-				list add(1)
-				list add(2)
-				str := list fold(|value,value2| value toString() + value2, "test")
-			})*/
+		this add("Iterator leak", func {
+			list := VectorList<Int> new()
+			list add(1)
+			list add(2)
+			list add(4)
+			// Convenient, but leaks the iterator instance.
+			for ((index, item) in list)
+				expect(item, is equal to(list[index]))
+			list free()
+		})
+		this add("Iterator correct", func {
+			list := VectorList<Int> new()
+			list add(8)
+			list add(16)
+			list add(32)
+			iterator := list iterator()
+			for ((index, item) in iterator)
+				expect(item, is equal to(list[index]))
+			iterator free()
+			list free()
+		})
 	}
 }
-VectorTest new() run()
+VectorListTest new() run()

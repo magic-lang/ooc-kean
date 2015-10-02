@@ -30,11 +30,12 @@ Fixture: abstract class {
 		test := Test new(name, action)
 		this add(test)
 	}
-	run: func {
+	run: func -> Bool {
 		failures := ArrayList<TestFailedException> new()
 		result := true
 		This _print(this name + " ")
 		this tests each(|test|
+			This _expectCount = 0
 			r := true
 			try {
 				test run()
@@ -47,17 +48,19 @@ Fixture: abstract class {
 			This _print(r ? "." : "f")
 		)
 		This _print(result ? " done\n" : " failed\n")
-		if (!result)
+		if (!result) {
 			for (f in failures) {
 				// If the constraint is a CompareConstraint and the value being tested is a Cell,
 				// we create a friendly message for the user.
-				if (f constraint instanceOf?(CompareConstraint) && f value instanceOf?(Cell)) {
+				if (f constraint instanceOf?(CompareConstraint) && f value instanceOf?(Cell))
 					(this createFailureMessage(f)) printfln()
-				} else
-					"  -> '%s'" printfln(f message)
+				else
+					"  -> '%s' (expect: %i)" printfln(f message, f expect)
 			}
+			This _testsFailed = true
+		}
 		failures free()
-		exit(result ? 0 : 1)
+		result
 	}
 	createFailureMessage: func (failure: TestFailedException) -> String {
 		constraint := failure constraint as CompareConstraint
@@ -81,9 +84,11 @@ Fixture: abstract class {
 		result toString()
 	}
 	is ::= static IsConstraints new()
+	_expectCount: static Int = 0
 	expect: static func (value: Object, constraint: Constraint) {
+		++This _expectCount
 		if (!constraint verify(value))
-			TestFailedException new(value, constraint) throw()
+			TestFailedException new(value, constraint, This _expectCount) throw()
 	}
 	expect: static func ~text (value: Text, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
@@ -116,12 +121,15 @@ Fixture: abstract class {
 		string print()
 		fflush(stdout)
 	}
+	_testsFailed: static Bool
+	testsFailed: static Bool { get { This _testsFailed } }
 }
 TestFailedException: class extends Exception {
 	test: Test
 	value: Object
 	constraint: Constraint
-	init: func (=value, =constraint, message := "") {
+	expect: Int
+	init: func (=value, =constraint, =expect, message := "") {
 		this message = message
 	}
 }

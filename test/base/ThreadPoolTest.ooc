@@ -27,3 +27,5 @@ version(debugTests) {
 	durationUnthreaded := Time measure(|| unthreadedTest() )
 	println("Duration unthreaded: " + durationUnthreaded toString())
 }
+
+"ThreadPoolTest [TODO: Not implemented as a fixture!]" printfln()

@@ -42,3 +42,5 @@ Dog: class {
 		pool push(this)
 	}
 }
+
+"MemTest [TODO: Not implemented as a fixture!]" printfln()

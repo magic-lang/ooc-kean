@@ -108,7 +108,9 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		}
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
-		this apply(ColorConvert fromYuv(action))
+		convert := ColorConvert fromYuv(action)
+		this apply(convert)
+		(convert as Closure) dispose()
 	}
 
 //	FIXME
@@ -134,15 +136,17 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		uvRow := result uv buffer pointer
 		vDestination := uvRow
 		uDestination := uvRow + 1
+		totalOffset := 0
 		//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
 		f := func (color: ColorYuv) {
 			(yDestination)@ = color y
 			yDestination += 1
-			if (x % 2 == 0 && y % 2 == 0) {
+			if (x % 2 == 0 && y % 2 == 0 && totalOffset < result uv buffer size) {
 				uDestination@ = color u
 				uDestination += 2
 				vDestination@ = color v
 				vDestination += 2
+				totalOffset += 2
 			}
 			x += 1
 			if (x >= width) {
@@ -158,6 +162,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 			}
 		}
 		original apply(f)
+		(f as Closure) dispose()
 		result
 	}
 	open: static func (filename: String) -> This {

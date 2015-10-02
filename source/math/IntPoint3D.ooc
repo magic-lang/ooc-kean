@@ -16,6 +16,7 @@
 import math
 import IntSize3D
 import IntPoint2D
+import FloatPoint3D
 import text/StringTokenizer
 import structs/ArrayList
 
@@ -45,6 +46,7 @@ IntPoint3D: cover {
 	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
+	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this x as Float, this y as Float, this z as Float) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}, #{this z toString()}" }
 	parse: static func (input: String) -> This {

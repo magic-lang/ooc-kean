@@ -4,6 +4,7 @@ import math
 import lang/IO
 
 IntSize2DTest: class extends Fixture {
+	precision := 1.0e-5f
 	vector0 := IntSize2D new (22, -3)
 	vector1 := IntSize2D new (12, 13)
 	vector2 := IntSize2D new (34, 10)
@@ -52,8 +53,10 @@ IntSize2DTest: class extends Fixture {
 //			FIXME: Equals interface
 //			expect(IntSize2D parse(value), is equal to(this vector3))
 		})
-		this add("casts", func {
-//			FIXME: We have no integer versions of anything yet
+		this add("float casts", func {
+			vector := vector0 toFloatSize2D()
+			expect(vector width, is equal to(22.0f) within(this precision))
+			expect(vector height, is equal to(-3.0f) within(this precision))
 		})
 	}
 }
