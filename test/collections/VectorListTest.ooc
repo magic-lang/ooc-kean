@@ -159,6 +159,7 @@ VectorListTest: class extends Fixture {
 			list apply(|value|
 				expect(value, is equal to(c))
 				c += 1)
+			list free()
 		})
 		this add("VectorList modify", func {
 			list := VectorList<Int> new()
@@ -171,6 +172,7 @@ VectorListTest: class extends Fixture {
 			list apply(|value|
 				expect(value, is equal to(c))
 				c += 1)
+			list free()
 		})
 		this add("VectorList map", func {
 			list := VectorList<Int> new()
@@ -220,6 +222,7 @@ VectorListTest: class extends Fixture {
 			expect(point[0] == list[0])
 			expect(point[1] == list[1])
 			expect(point[2] == list[2])
+			list free()
 		})
 		this add("VectorList sort", func {
 			//TODO Current way of sorting not supported by Rock
@@ -249,6 +252,7 @@ VectorListTest: class extends Fixture {
 			expect(iterator hasNext?(), is equal to(false))
 			secondIterator := list iterator()
 			expect(secondIterator next(), is equal to(8))
+			secondIterator free()
 			iterator free()
 			list free()
 		})
