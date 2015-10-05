@@ -148,8 +148,24 @@ TextTest: class extends Fixture {
 			expect(Text new("1e0") toFloat(), is equal to(1.0f) within(tolerance))
 			expect(Text new("5E-2") toFloat(), is equal to(0.05f) within(tolerance))
 			expect(Text new("2E12") toLDouble(), is equal to(2.0 * pow(10, 12) as LDouble) within(tolerance as LDouble))
+			expect(Text new("2E12") toDouble(), is equal to(2.0 * pow(10, 12) as Double) within(tolerance as Double))
 			expect(Text new("6.5E5") toFloat(), is equal to(6.5f * pow(10, 5) as Float) within(tolerance))
 			expect(Text new("-34.5E-2") toFloat(), is equal to(-0.345f) within(tolerance))
+		})
+		this add("MakeTextLiteral", func {
+			mytext := makeTextLiteral(c"Hello", 5)
+			mytext2 := t"Hello"
+			expect(mytext == mytext2)
+		})
+		this add("copyTo", func {
+			t := Text new("test string")
+			buffer := TextBuffer new(11)
+			t copyTo(buffer)
+			t2 := Text new(buffer)
+			expect(t == t2)
+			t free()
+			println(t2 toString())
+			t2 free()
 		})
 	}
 }

@@ -7,7 +7,6 @@ ByteBufferTest: class extends Fixture {
 		this add("set data", func {
 			buffer := ByteBuffer new(1024)
 			expect(buffer size, is equal to(1024))
-			expect(buffer referenceCount count, is equal to(1))
 			for (i in 0 .. 1024 / 8)
 				buffer pointer[i] = i
 			for (i in 0 .. 1024 / 8)
