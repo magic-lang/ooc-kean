@@ -142,8 +142,13 @@ VectorListTest: class extends Fixture {
 			expect(slice count == 2)
 			expect(slice[0] == 2.0f)
 			expect(slice[1] == 3.0f)
+			sliceInto := VectorList<Float> new()
+			list getSliceInto(Range new(1, 2), sliceInto)
+			expect(sliceInto[0] == 2.0f)
+			expect(sliceInto[1] == 3.0f)
 			list free()
 			slice free()
+			sliceInto free()
 		})
 		this add("VectorList apply", func {
 			list := VectorList<Int> new()
@@ -179,6 +184,49 @@ VectorListTest: class extends Fixture {
 			expect(newList[2], is equal to("3"))
 			list free(); newList free()
 		})
+		this add("VectorList reverse", func {
+			list := VectorList<Int> new()
+			list add(8)
+			list add(16)
+			list add(64)
+			list add(128)
+			reversed := list reverse()
+			expect(reversed[0] == 128)
+			expect(reversed[1] == 64)
+			expect(reversed[2] == 16)
+			expect(reversed[3] == 8)
+			list free()
+			reversed free()
+		})
+		this add("VectorList remove", func {
+			list := VectorList<Int> new()
+			list add(8)
+			list add(16)
+			list add(32)
+			list add(64)
+			expect(list empty, is equal to(false))
+			while (!list empty) {
+				list removeAt(0)
+			}
+			expect(list empty, is equal to(true))
+			list free()
+		})
+		this add("VectorList direct vector access", func {
+			list := VectorList<Int> new()
+			list add(8)
+			list add(16)
+			list add(32)
+			point := list pointer as Int*
+			expect(point[0] == list[0])
+			expect(point[1] == list[1])
+			expect(point[2] == list[2])
+		})
+		this add("VectorList sort", func {
+			//FIXME Current way of sorting not supported by Rock
+		})
+		this add("VectorList fold", func {
+			//FIXME Current way of folding not supported by Rock
+		})
 		this add("Iterator leak", func {
 			list := VectorList<Int> new()
 			list add(1)
@@ -195,8 +243,12 @@ VectorListTest: class extends Fixture {
 			list add(16)
 			list add(32)
 			iterator := list iterator()
+			expect(iterator hasNext?(), is equal to(true))
 			for ((index, item) in iterator)
 				expect(item, is equal to(list[index]))
+			expect(iterator hasNext?(), is equal to(false))			
+			secondIterator := list iterator()
+			expect(secondIterator next(), is equal to(8))			
 			iterator free()
 			list free()
 		})
