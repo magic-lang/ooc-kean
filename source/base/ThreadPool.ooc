@@ -160,9 +160,8 @@ ThreadPool: class {
 	}
 	free: override func {
 		this _tasks cancel()
-		for (i in 0 .. this _threadCount) {
+		for (i in 0 .. this _threadCount)
 			this _workers[i] free()
-		}
 		this _workers free()
 		this _tasks free()
 		this _globalMutex destroy()
