@@ -70,7 +70,7 @@ HashDictionary: class {
 		if (_myHashBag contains?(key))
 			this remove(key)
 		this _myHashBag put(key, value)
-	}	
+	}
 	remove: func (key: String) -> Bool {
 		this _myHashBag remove(key)
 	}
