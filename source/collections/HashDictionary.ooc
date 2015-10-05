@@ -3,7 +3,7 @@ import structs/[HashBag, HashMap, ArrayList]
 HashDictionary: class {
 	_myHashBag: HashBag
 	_capacity: Int
-	size ::= this _myHashBag size()
+	count ::= this _myHashBag size()
 	empty ::= this _myHashBag empty?()
 	
 	init: func { init ~withCapacity(10) }
@@ -43,9 +43,8 @@ HashDictionary: class {
 		result := defaultValue
 		if (_myHashBag contains?(key)) {
 			storedType := this _myHashBag getClass(key)
-			if (T inheritsFrom?(storedType)) {
+			if (T inheritsFrom?(storedType))
 				result = this _myHashBag getEntry(key, T) value as T
-			}
 		}
 		result
 	}
