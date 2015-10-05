@@ -69,8 +69,17 @@ _TaskPromise: class extends Promise {
 		this _task free()
 		super()
 	}
-	wait: override func -> Bool {
+	wait: func -> Bool {
 		this _task wait()
+	}
+	wait: func ~timeout (seconds: Double) -> Bool {
+		timer := ClockTimer new()
+		status := false
+		while (timer stop() < seconds && !status) {
+			status = this _task _state == _PromiseState Unfinished
+		}
+		timer free()
+		status
 	}
 	cancel: override func -> Bool {
 		//TODO: Interrupt executing thread and have it move on to the next task in queue
@@ -85,12 +94,17 @@ _TaskFuture: class <T> extends Future<T> {
 		this _task free()
 		super()
 	}
-	wait: override func -> Bool {
+	wait: func -> Bool {
 		this _task wait()
-	}
-	wait: func ~default (defaultValue: T) -> T {
-		status := this wait()
-		status ? this _task _result[T] : defaultValue
+	}	
+	wait: func ~timeout (seconds: Double) -> Bool {
+		timer := ClockTimer new()
+		status := false
+		while (timer stop() < seconds && !status) {
+			status = this _task _state == _PromiseState Unfinished
+		}
+		timer free()
+		status
 	}
 	getResult: func (defaultValue: T) -> T {
 		status := (this _task _state == _PromiseState Finished)

@@ -22,6 +22,15 @@ PromiseCollector: class {
 		}
 		status
 	}
+	wait: func ~timeout (seconds: Double, haltOnCancel := false) -> Bool {
+		status := true
+		for (i in 0 .. this _backend count) {
+			status = status && this _backend[i] wait(seconds)
+			if (!status && haltOnCancel)
+				break
+		}
+		status
+	}
 	cancel: func -> Bool {
 		status := true
 		for (i in 0 .. this _backend count)

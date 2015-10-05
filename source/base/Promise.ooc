@@ -12,6 +12,7 @@ Promise: abstract class {
 	_state : _PromiseState
 	init: func
 	wait: abstract func -> Bool
+	wait: abstract func ~timeout (seconds: Double) -> Bool
 	cancel: virtual func -> Bool { false }
 	start: static func (action: Func) -> This {
 		_ThreadPromise new(action)
@@ -54,6 +55,11 @@ _ThreadPromise: class extends Promise {
 			this _thread wait()
 		this _state == _PromiseState Finished
 	}
+	wait: func ~timeout (seconds: Double) -> Bool {
+		if (this _state == _PromiseState Unfinished)
+			this _thread wait(seconds)
+		this _state == _PromiseState Finished
+	}
 	cancel: override func -> Bool {
 		this _thread cancel()
 		status := false
@@ -71,7 +77,15 @@ Future: abstract class <T> {
 	_state: _PromiseState
 	init: func
 	wait: abstract func -> Bool
-	wait: abstract func ~default (defaultValue: T) -> T
+	wait: abstract func ~timeout (seconds: Double) -> Bool
+	wait: virtual func ~default (defaultValue: T) -> T {
+		status := this wait()
+		status ? this getResult(defaultValue) : defaultValue
+	}
+	wait: virtual func ~defaulttimeout (seconds: Double, defaultValue: T) -> T {
+		status := this wait(seconds)
+		status ? this getResult(defaultValue) : defaultValue
+	}
 	getResult: abstract func (defaultValue: T) -> T
 	cancel: virtual func -> Bool { false }
 	start: static func<S> (S: Class, action: Func -> S) -> This<S> {
@@ -109,16 +123,15 @@ _ThreadFuture: class <T> extends Future<T> {
 	wait: func -> Bool {
 		if (this _state == _PromiseState Unfinished)
 			this _thread wait()
-		(this _state == _PromiseState Finished)
+		this _state == _PromiseState Finished
 	}
-	wait: func ~default (defaultValue: T) -> T {
-		status := this wait()
-		status ? this _result[T] : defaultValue
+	wait: func ~timeout (seconds: Double) -> Bool {
+		if (this _state == _PromiseState Unfinished)
+			this _thread wait(seconds)
+		this _state == _PromiseState Finished
 	}
 	getResult: func (defaultValue: T) -> T {
-		this _mutex lock()
 		status := (this _state == _PromiseState Finished)
-		this _mutex unlock()
 		status ? this _result[T] : defaultValue
 	}
 	cancel: override func -> Bool {
