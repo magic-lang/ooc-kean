@@ -1,3 +1,4 @@
+use ooc-base
 use ooc-collections
 use ooc-unit
 import structs/ArrayList
@@ -26,7 +27,7 @@ TestCover: cover {
 HashDictionaryTest: class extends Fixture {
 	init: func {
 		super("HashDictionary")
-		this add("Int", func {
+		/*this add("Int", func {
 			dictionary := HashDictionary new()
 			dictionary add("IntegerValue", 1)
 			expect(dictionary get("IntegerValue", 0) == 1, is true)
@@ -97,19 +98,23 @@ HashDictionaryTest: class extends Fixture {
 			expect(dictionary2 get("Second", "Default") == "Second", is true)
 			expect(dictionary2 get("First", "Default") == "First", is true)
 			expect(dictionary2 get("Int", 0) == 1, is true)
-		})
+		})*/
 
 		this add("Get from primitive", func {
 			dictionary := HashDictionary new()
 			dictionary add("First", 1337)
-			expect(dictionary getAsType("First", Int) == 1337)
-			expect(dictionary getAsType("First", String) == null)
-			//expect(dictionary getAsType("Second", Int) == null) //FIXME Can we do this without obnoxious Pointer-To-Int warnings?
-			expect(dictionary getAsType("First", Cell<TestCover>) == null)
-			expect(dictionary getAsType("First", TestClass) == null)
+			dictionary add("First2", TestClass new(1337, "String"))
+			expect(dictionary getAsType("First", Int), is equal to(1337))
+			text := dictionary getAsType("First", Text)
+			println(text toString())
+			//expect(dictionary getAsType("First", Text) == null)
+			//expect(dictionary getAsType("Second", Int) == null)
+			//element2 := dictionary getAsType("First", Cell<TestCover>)
+			//expect(element2[Int] == 1337)
+			//expect(dictionary getAsType("First", TestClass) == null)
 		})
 
-		this add("Get from cover", func {
+		/*this add("Get from cover", func {
 			dictionary := HashDictionary new()
 			testCover := TestCover new(1337, "String")
 			dictionary add("First", Cell new(testCover))
@@ -118,9 +123,9 @@ HashDictionaryTest: class extends Fixture {
 			expect(dictionary getAsType("Second", Cell<TestCover>) == null)
 			//expect(dictionary getAsType("First", Int) == null) //FIXME Can we do this without obnoxious Pointer-To-Int warnings?
 			expect(dictionary getAsType("First", TestClass) == null)
-		})
+		})*/
 
-		this add("Get from class", func {
+		/*this add("Get from class", func {
 			dictionary := HashDictionary new()
 			dictionary add("First", TestClass new(1337, "String"))
 			expect(dictionary getAsType("First", TestClass) intVal == 1337)
@@ -128,8 +133,8 @@ HashDictionaryTest: class extends Fixture {
 			expect(dictionary getAsType("Second", TestClass) == null)
 			//expect(dictionary getAsType("First", Int) == null) //FIXME Can we do this without obnoxious Pointer-To-Int warnings?
 			expect(dictionary getAsType("First", Cell<TestCover>) == null)
-		})
-		this add("Merge", func {
+		})*/
+		/*this add("Merge", func {
 			dictionary := HashDictionary new()
 			dictionary add("First", 1337)
 			dictionary add("Second", "Foo")
@@ -172,7 +177,7 @@ HashDictionaryTest: class extends Fixture {
 			dictionary remove("First")
 			expect(dictionary count == 0)
 			expect(dictionary empty == true)
-		})
+		})*/
 	}
 }
 HashDictionaryTest new() run()

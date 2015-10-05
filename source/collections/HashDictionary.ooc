@@ -48,13 +48,22 @@ HashDictionary: class {
 		}
 		result
 	}
-	/* WARNING: The Class parameter for Covers must be Cell<Cover> */
 	getAsType: func <T>(key: String, T: Class) -> T {
 		result := null
 		if (this _myHashBag contains?(key)) {
 			storedType := this _myHashBag getClass(key)
-			if (T inheritsFrom?(storedType))
-				result = this _myHashBag getEntry(key, T) value as T
+			entryValue := this _myHashBag getEntry(key, storedType) value
+			if (storedType inheritsFrom?(Cell)) {
+				entryValueCell := (entryValue as Cell<T>*)@
+				if (T inheritsFrom?(entryValueCell type))
+					result = entryValueCell get()
+				//value := 
+				//if (T inheritsFrom?(storedType get()))
+				//result = (entryValue as Cell<T>*)@ get()
+			}
+				
+			else if (T inheritsFrom?(storedType))
+				result = entryValue as T
 		}
 		result
 	}
@@ -68,7 +77,15 @@ HashDictionary: class {
 	add: func <T> (key: String, value: T) -> Bool {
 		if (_myHashBag contains?(key))
 			this remove(key)
-		this _myHashBag put(key, value)
+		if (T inheritsFrom?(Object)) {
+			this _myHashBag put(key, value)
+			println("added class")			
+		}			
+		else {
+			cellValue := Cell<T> new(value, T)
+			this _myHashBag put(key, cellValue)
+			println("added cover in cell")
+		}
 	}
 	remove: func (key: String) -> Bool {
 		this _myHashBag remove(key)
