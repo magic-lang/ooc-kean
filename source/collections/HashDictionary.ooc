@@ -38,18 +38,23 @@ HashDictionary: class {
 		result _myHashBag myMap merge!(other _myHashBag myMap)
 		result
 	}
-	/* WARNING: The defaultValue parameter for Covers must be new Cell(cover) */
 	get: func <T> (key: String, defaultValue: T) -> T {
 		result := defaultValue
 		if (_myHashBag contains?(key)) {
 			storedType := this _myHashBag getClass(key)
-			if (T inheritsFrom?(storedType))
+			entryValue := this _myHashBag getEntry(key, storedType) value
+			if (storedType inheritsFrom?(Cell)) {
+				entryValueCell := (entryValue as Cell<T>*)@
+				if (T inheritsFrom?(entryValueCell type))
+					result = entryValueCell get()
+			}
+			else if (T inheritsFrom?(storedType))
 				result = this _myHashBag getEntry(key, T) value as T
 		}
 		result
 	}
-	getAsType: func <T>(key: String, T: Class) -> T {
-		result := null
+	getAsType: func <T>(key: String, T: Class, defaultValue: T) -> T {
+		result := defaultValue
 		if (this _myHashBag contains?(key)) {
 			storedType := this _myHashBag getClass(key)
 			entryValue := this _myHashBag getEntry(key, storedType) value
@@ -57,11 +62,7 @@ HashDictionary: class {
 				entryValueCell := (entryValue as Cell<T>*)@
 				if (T inheritsFrom?(entryValueCell type))
 					result = entryValueCell get()
-				//value := 
-				//if (T inheritsFrom?(storedType get()))
-				//result = (entryValue as Cell<T>*)@ get()
 			}
-				
 			else if (T inheritsFrom?(storedType))
 				result = entryValue as T
 		}
@@ -73,18 +74,14 @@ HashDictionary: class {
 	getEntry: func <V> (key: String, V: Class) -> HashEntry<String, Pointer> {
 		this _myHashBag getEntry(key, V)
 	}
-	/* WARNING: Covers must be wrapped into a Cell before adding to the dictionary */
 	add: func <T> (key: String, value: T) -> Bool {
 		if (_myHashBag contains?(key))
 			this remove(key)
-		if (T inheritsFrom?(Object)) {
+		if (T inheritsFrom?(Object))
 			this _myHashBag put(key, value)
-			println("added class")			
-		}			
 		else {
 			cellValue := Cell<T> new(value, T)
 			this _myHashBag put(key, cellValue)
-			println("added cover in cell")
 		}
 	}
 	remove: func (key: String) -> Bool {
