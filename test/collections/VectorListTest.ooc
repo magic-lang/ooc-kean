@@ -222,10 +222,10 @@ VectorListTest: class extends Fixture {
 			expect(point[2] == list[2])
 		})
 		this add("VectorList sort", func {
-			//FIXME Current way of sorting not supported by Rock
+			//TODO Current way of sorting not supported by Rock
 		})
 		this add("VectorList fold", func {
-			//FIXME Current way of folding not supported by Rock
+			//TODO Current way of folding not supported by Rock
 		})
 		this add("Iterator leak", func {
 			list := VectorList<Int> new()

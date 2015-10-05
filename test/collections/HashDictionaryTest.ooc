@@ -104,7 +104,7 @@ HashDictionaryTest: class extends Fixture {
 			dictionary add("First", 1337)
 			expect(dictionary getAsType("First", Int) == 1337)
 			expect(dictionary getAsType("First", String) == null)
-			expect(dictionary getAsType("Second", Int) == null)
+			//expect(dictionary getAsType("Second", Int) == null) //FIXME Can we do this without obnoxious Pointer-To-Int warnings?
 			expect(dictionary getAsType("First", Cell<TestCover>) == null)
 			expect(dictionary getAsType("First", TestClass) == null)
 		})
@@ -116,18 +116,17 @@ HashDictionaryTest: class extends Fixture {
 			expect(dictionary getAsType("First", Cell<TestCover>) get() intVal == 1337)
 			expect(dictionary getAsType("First", Cell<TestCover>) get() stringVal == "String")
 			expect(dictionary getAsType("Second", Cell<TestCover>) == null)
-			expect(dictionary getAsType("First", Int) == null)
+			//expect(dictionary getAsType("First", Int) == null) //FIXME Can we do this without obnoxious Pointer-To-Int warnings?
 			expect(dictionary getAsType("First", TestClass) == null)
 		})
 
 		this add("Get from class", func {
 			dictionary := HashDictionary new()
 			dictionary add("First", TestClass new(1337, "String"))
-
 			expect(dictionary getAsType("First", TestClass) intVal == 1337)
 			expect(dictionary getAsType("First", TestClass) stringVal == "String")
 			expect(dictionary getAsType("Second", TestClass) == null)
-			expect(dictionary getAsType("First", Int) == null)
+			//expect(dictionary getAsType("First", Int) == null) //FIXME Can we do this without obnoxious Pointer-To-Int warnings?
 			expect(dictionary getAsType("First", Cell<TestCover>) == null)
 		})
 		this add("Merge", func {
@@ -156,6 +155,23 @@ HashDictionaryTest: class extends Fixture {
 			expect(dictionary3 getAsType("Fifth", String) == "Almost")
 			expect(dictionary3 getAsType("Sixth", Int) == 1002)
 			expect(dictionary3 getAsType("Sixth", String) == null)
+		})
+		this add("Sizes", func {
+			dictionary := HashDictionary new()
+			dictionary add("First", 1)
+			dictionary add("Second", 2)
+			dictionary add("Third", 3)
+			expect(dictionary size == 3)
+			expect(dictionary empty == false)
+			expect(dictionary contains("Second") == true)
+			dictionary remove("Second")
+			expect(dictionary size == 2)
+			expect(dictionary empty == false)
+			expect(dictionary contains("Second") == false)
+			dictionary remove("Third")
+			dictionary remove("First")
+			expect(dictionary size == 0)
+			expect(dictionary empty == true)
 		})
 	}
 }
