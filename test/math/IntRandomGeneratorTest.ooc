@@ -53,23 +53,6 @@ IntRandomGeneratorTest: class extends Fixture {
 			expect(Int absolute(mean - expectedMean) < 2)
 			expect(Int absolute(deviation - expectedDeviation) < 2)
 		})
-		/*this add("measurement", func {
-			timer := ClockTimer new()
-			timer start()
-			uniform := IntUniformRandomGenerator new(-250, 720)
-			sum := 0
-			for (i in 0 .. 900) {
-				sum += uniform next()
-			}
-			println(timer stop() toString())
-			uniform free()
-			timer start()
-			sum2 := 0
-			for (j in 0 .. 900) {
-				sum += Random randInt(-250, 720)
-			}
-			println(timer stop() toString())
-		})*/
 	}
 }
 

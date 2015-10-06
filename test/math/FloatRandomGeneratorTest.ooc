@@ -102,23 +102,6 @@ FloatRandomGeneratorTest: class extends Fixture {
 			expect(Float absolute(mean - expectedMean) < tolerance)
 			expect(Float absolute(deviation - expectedDeviation) < tolerance)
 		})
-		/*this add("measurement", func {
-			timer := ClockTimer new()
-			timer start()
-			uniform := FloatUniformRandomGenerator new(-250.0f, 750.0f)
-			sum := 0.0f
-			for (i in 0 .. 1000) {
-				sum += uniform next()
-			}
-			println(timer stop() toString())
-			uniform free()
-			timer start()
-			sum2 := 0.0f
-			for (j in 0 .. 1000) {
-				sum += Random randFloat() * 1000.0f - 250.0f
-			}
-			println(timer stop() toString())
-		})*/
 	}
 }
 FloatRandomGeneratorTest new() run()
