@@ -61,7 +61,8 @@ _ThreadPromise: class extends Promise {
 		this _state == _PromiseState Finished
 	}
 	cancel: override func -> Bool {
-		this _thread cancel()
+		if (this _state == _PromiseState Unfinished)
+			this _thread cancel()
 		status := false
 		this _mutex lock()
 		if (this _state == _PromiseState Unfinished) {
@@ -147,7 +148,8 @@ _ThreadFuture: class <T> extends Future<T> {
 		result
 	}
 	cancel: override func -> Bool {
-		this _thread cancel()
+		if (this _state == _PromiseState Unfinished)
+			this _thread cancel()
 		status := false
 		this _mutex lock()
 		if (this _state == _PromiseState Unfinished) {
