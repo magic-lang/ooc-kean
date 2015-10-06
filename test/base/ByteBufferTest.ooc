@@ -37,7 +37,7 @@ ByteBufferTest: class extends Fixture {
 			for (i in 0 .. 1024 / 8)
 				buffer pointer[i] = i
 			slice := buffer slice(10, 8)
-			buffer free()
+			buffer referenceCount decrease()
 			expect(slice size, is equal to(8))
 			expect(slice pointer[0] as Int, is equal to(10))
 			slice free()
