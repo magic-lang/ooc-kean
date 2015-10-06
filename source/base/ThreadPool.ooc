@@ -79,11 +79,10 @@ _TaskPromise: class extends Promise {
 		this _task wait()
 	}
 	wait: func ~timeout (seconds: Double) -> Bool {
-		timer := ClockTimer new()
+		timer := ClockTimer new() . start()
 		status := false
-		while (timer stop() < seconds && !status) {
-			status = this _task _state == _PromiseState Unfinished
-		}
+		while (timer stop() / 1000.0 < seconds && !status)
+			status = (this _task _state != _PromiseState Unfinished)
 		timer free()
 		status
 	}
@@ -104,11 +103,10 @@ _TaskFuture: class <T> extends Future<T> {
 		this _task wait()
 	}	
 	wait: func ~timeout (seconds: Double) -> Bool {
-		timer := ClockTimer new()
+		timer := ClockTimer new() . start()
 		status := false
-		while (timer stop() < seconds && !status) {
-			status = this _task _state == _PromiseState Unfinished
-		}
+		while (timer stop() / 1000.0 < seconds && !status)
+			status = (this _task _state != _PromiseState Unfinished)
 		timer free()
 		status
 	}
