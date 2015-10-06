@@ -39,38 +39,52 @@ BlockedQueueTest: class extends Fixture {
 			expect(queue count, is equal to(0))
 
 			pool := ThreadPool new(8)
+			limitA := 100
+			limitB := 200
+			limitC := 200
+			limitD := 20
+			limitE := 4
+			limitF := 4
+			promises := Promise[limitA + limitB + limitC + limitD + limitE + limitF] new()
 			/* Enqueue values asynchronously */
-			for (i in 0 .. 100)
-				pool add(func1)
+			for (i in 0 .. limitA)
+				promises[i] = pool getPromise(func1)
 
 			/* Peek values asynchronously */
-			for (i in 0 .. 200)
-				pool add(func2)
+			for (i in 0 .. limitB)
+				promises[limitA + i] = pool getPromise(func2)
 
 			/* Dequeue values asynchronously */
-			for (i in 0 .. 200)
-				pool add(func3)
+			for (i in 0 .. limitC)
+				promises[limitA + limitB + i] = pool getPromise(func3)
 
 			/* Peek values asynchronously in empty Queue */
-			for (i in 0 .. 20)
-				pool add(func4)
+			for (i in 0 .. limitD)
+				promises[limitA + limitB + limitC + i] = pool getPromise(func4)
 
-			pool waitAll()
+			//TODO This is not pretty but replaces waitAll for now
+			for (i in 0 .. limitA + limitB + limitC + limitD)
+				promises[i] wait()
 
 			expect(queue empty)
 			expect(queue count, is equal to(0))
 
 			for (i in 0 .. 4) {
-				pool add(func5)
+				promises[limitA + limitB + limitC + limitD + i] = pool getPromise(func5)
 				Time sleepMilli(10)
 			}
 			for (i in 0 .. 4) {
-				pool add(func1)
+				promises[limitA + limitB + limitC + limitD + limitE + i] = pool getPromise(func1)
 				Time sleepMilli(10)
 			}
-			pool waitAll()
+
+			//TODO This is not pretty but replaces waitAll for now (PromiseCollector will replace this)
+			for (i in 0 .. limitA + limitB + limitC + limitD + limitE + limitF)
+				promises[i] wait() . free()
+
 			expect(queue empty)
 
+			promises free()
 			queue free()
 			pool free()
 		})
