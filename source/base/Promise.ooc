@@ -94,16 +94,22 @@ Future: abstract class <T> {
 }
 
 _ThreadFuture: class <T> extends Future<T> {
-	_result: Cell<T>
+	_result: Object
 	_action: Func
 	_thread: Thread
 	_mutex := Mutex new()
+	_hasCover := false
 	init: func (task: Func -> T) {
 		super()
 		this _state = _PromiseState Unfinished
 		this _action = func {
 			temporary := task()
-			this _result = Cell<T> new(temporary)
+			if (T inheritsFrom?(Object))
+				this _result = temporary
+			else {
+				this _result = Cell<T> new(temporary)
+				this _hasCover = true
+			}
 			this _mutex lock()
 			if (this _state != _PromiseState Cancelled)
 				this _state = _PromiseState Finished
@@ -131,8 +137,14 @@ _ThreadFuture: class <T> extends Future<T> {
 		this _state == _PromiseState Finished
 	}
 	getResult: func (defaultValue: T) -> T {
-		status := (this _state == _PromiseState Finished)
-		status ? this _result[T] : defaultValue
+		result := defaultValue
+		if (this _state == _PromiseState Finished) {
+			if (this _hasCover)
+				result = this _result as Cell<T> get()
+			else
+				result = this _result
+		}
+		result
 	}
 	cancel: override func -> Bool {
 		this _thread cancel()

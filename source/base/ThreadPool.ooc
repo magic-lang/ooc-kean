@@ -52,12 +52,18 @@ _ActionTask: class extends _Task {
 }
 
 _ResultTask: class <T> extends _Task {
-	_result: Cell<T>
+	_result: Object
 	_action: Func -> T
+	_hasCover := false
 	init: func (=_action, =_mutex)
 	run: func (=_mutex) {
-		temporary := Cell<T> new(this _action())
-		this _result = temporary
+		temporary := this _action()
+		if (T inheritsFrom?(Object))
+			this _result = temporary
+		else {
+			this _result = Cell<T> new(temporary)
+			this _hasCover = true
+		}
 		this _finishedTask()
 	}
 }
@@ -107,8 +113,14 @@ _TaskFuture: class <T> extends Future<T> {
 		status
 	}
 	getResult: func (defaultValue: T) -> T {
-		status := (this _task _state == _PromiseState Finished)
-		status ? this _task _result[T] : defaultValue
+		result := defaultValue
+		if (this _task _state == _PromiseState Finished) {
+			if (this _task _hasCover)
+				result = this _task _result as Cell<T> get()
+			else
+				result = this _task _result
+		}
+		result
 	}
 	cancel: override func -> Bool {
 		//TODO: Interrupt executing thread and have it move on to the next task in queue
