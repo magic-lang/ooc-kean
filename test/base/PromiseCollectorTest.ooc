@@ -54,7 +54,7 @@ PromiseCollectorTest: class extends Fixture {
 			}
 			expect(promises wait(0.01) == false)
 			expect(promises wait() == true)
-			promises free()			
+			promises free()
 		})
 	}
 }

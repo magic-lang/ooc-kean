@@ -101,7 +101,7 @@ _TaskFuture: class <T> extends Future<T> {
 	}
 	wait: func -> Bool {
 		this _task wait()
-	}	
+	}
 	wait: func ~timeout (seconds: Double) -> Bool {
 		timer := ClockTimer new() . start()
 		status := false

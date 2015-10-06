@@ -29,6 +29,7 @@ _ThreadPromise: class extends Promise {
 	_action: Func
 	_thread: Thread
 	_mutex := Mutex new()
+	_threadAlive := true
 	init: func (task: Func) {
 		super()
 		this _state = _PromiseState Unfinished
@@ -43,7 +44,7 @@ _ThreadPromise: class extends Promise {
 		this _thread start()
 	}
 	free: override func {
-		if (this _state == _PromiseState Unfinished)
+		if (this _threadAlive)
 			this _thread wait()
 		this _thread free()
 		(this _action as Closure) dispose()
@@ -51,26 +52,23 @@ _ThreadPromise: class extends Promise {
 		super()
 	}
 	wait: func -> Bool {
-		if (this _state == _PromiseState Unfinished)
-			this _thread wait()
+		if (this _threadAlive)
+			if (this _thread wait())
+				this _threadAlive = false
 		this _state == _PromiseState Finished
 	}
 	wait: func ~timeout (seconds: Double) -> Bool {
-		if (this _state == _PromiseState Unfinished)
-			this _thread wait(seconds)
+		if (this _threadAlive)
+			if (this _thread wait(seconds))
+				this _threadAlive = false
 		this _state == _PromiseState Finished
 	}
 	cancel: override func -> Bool {
-		if (this _state == _PromiseState Unfinished)
-			this _thread cancel()
-		status := false
-		this _mutex lock()
 		if (this _state == _PromiseState Unfinished) {
+			this _thread cancel()
 			this _state = _PromiseState Cancelled
-			status = true
 		}
-		this _mutex unlock()
-		status
+		this _state == _PromiseState Cancelled
 	}
 }
 
@@ -100,6 +98,7 @@ _ThreadFuture: class <T> extends Future<T> {
 	_thread: Thread
 	_mutex := Mutex new()
 	_hasCover := false
+	_threadAlive := true
 	init: func (task: Func -> T) {
 		super()
 		this _state = _PromiseState Unfinished
@@ -120,7 +119,7 @@ _ThreadFuture: class <T> extends Future<T> {
 		this _thread start()
 	}
 	free: override func {
-		if (this _state == _PromiseState Unfinished)
+		if (this _threadAlive)
 			this _thread wait()
 		this _thread free()
 		(this _action as Closure) dispose()
@@ -128,13 +127,15 @@ _ThreadFuture: class <T> extends Future<T> {
 		super()
 	}
 	wait: func -> Bool {
-		if (this _state == _PromiseState Unfinished)
-			this _thread wait()
+		if (this _threadAlive)
+			if (this _thread wait())
+				this _threadAlive = false
 		this _state == _PromiseState Finished
 	}
 	wait: func ~timeout (seconds: Double) -> Bool {
-		if (this _state == _PromiseState Unfinished)
-			this _thread wait(seconds)
+		if (this _threadAlive)
+			if (this _thread wait(seconds))
+				this _threadAlive = false
 		this _state == _PromiseState Finished
 	}
 	getResult: func (defaultValue: T) -> T {
@@ -148,15 +149,10 @@ _ThreadFuture: class <T> extends Future<T> {
 		result
 	}
 	cancel: override func -> Bool {
-		if (this _state == _PromiseState Unfinished)
-			this _thread cancel()
-		status := false
-		this _mutex lock()
 		if (this _state == _PromiseState Unfinished) {
+			this _thread cancel()
 			this _state = _PromiseState Cancelled
-			status = true
 		}
-		this _mutex unlock()
-		status
+		this _state == _PromiseState Unfinished
 	}
 }

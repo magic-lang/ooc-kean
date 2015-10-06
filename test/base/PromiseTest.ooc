@@ -22,17 +22,20 @@ PromiseTest: class extends Fixture {
 			promise2 := Promise start(this counter)
 			promise3 := Promise start(this counter)
 			promise4 := Promise start(this counter)
+			promise5 := Promise start(this counter)
 			promise2 cancel()
 			expect(promise wait())
 			expect(promise2 wait(), is equal to(false))
 			expect(promise3 wait(), is equal to(true))
 			expect(promise4 wait())
+			expect(promise5 wait())
 			(counter as Closure) dispose()
 			(quickcounter as Closure) dispose()
 			promise free()
 			promise2 free()
 			promise3 free()
 			promise4 free()
+			promise5 free()
 		})
 		this add("Future", func {
 			future := Future start(Text, func { for (i in 0 .. 100_000_000) { } t"job1" } )
@@ -67,7 +70,7 @@ PromiseTest: class extends Fixture {
 		this add("Wait with timeout", func {
 			promise := Promise start(this counter)
 			promise2 := Promise start(this counter)
-			future := Future start(Text, func { for (i in 0 .. 100_000_000) { } t"job1" } )
+			future := Future start(Text, func { for (i in 0 .. 10_000_000) { } t"job1" } )
 			promise wait(0.01)
 			future wait(0.01)
 			promise cancel()
@@ -81,7 +84,7 @@ PromiseTest: class extends Fixture {
 			expect(result == t"cancel")
 			result free()
 			promise free()
-			future free()			
+			future free()
 		})
 	}
 }
