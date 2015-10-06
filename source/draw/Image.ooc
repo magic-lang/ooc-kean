@@ -17,6 +17,7 @@
 use ooc-math
 use ooc-base
 import math
+import PaintEngine
 
 CoordinateSystem: enum {
 	Default = 0x00,
@@ -74,4 +75,5 @@ Image: abstract class {
 	isValidIn: func (x, y: Int) -> Bool {
 		return (x >= 0 && x < this size width && y >= 0 && y < this size height)
 	}
+	createPaintEngine: virtual func -> PaintEngine { null }
 }

@@ -16,7 +16,7 @@
 
 use ooc-math
 use ooc-draw
-import GpuContext, GpuImage, GpuSurface, GpuCanvas
+import GpuContext, GpuImage, GpuSurface, GpuCanvas, GpuPaintEngine
 
 GpuYuv420Semiplanar: class extends GpuImage {
 	_y: GpuImage
@@ -69,4 +69,5 @@ GpuYuv420Semiplanar: class extends GpuImage {
 		this _y bind(unit)
 		this _uv bind(unit + 1)
 	}
+	createPaintEngine: override func -> PaintEngine { GpuPaintEngine new(this) }
 }
