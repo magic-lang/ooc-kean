@@ -61,7 +61,7 @@ HashDictionaryTest: class extends Fixture {
 			expect(dictionary get("TestClassValue", this defaultClass) intVal == 1, is true)
 			expect(dictionary get("Nonexistent", this defaultClass) intVal == 0, is true)
 		})
-		this add("ArrayList", func {
+		this add("VectorList", func {
 			dictionary := HashDictionary new()
 			VectorListDefault := VectorList<String> new()
 			VectorListDefault add("zero")
@@ -100,13 +100,13 @@ HashDictionaryTest: class extends Fixture {
 		this add("Get from primitive", func {
 			dictionary := HashDictionary new()
 			dictionary add("First", 1337)
-			dictionary add("First2", TestClass new(1337, "String"))
+			dictionary add("Second", TestClass new(1337, "String"))
 			expect(dictionary getAsType("First", Int, 0), is equal to(1337))
 			expect(dictionary getAsType("First", Text, t"null") == t"null")
 			expect(dictionary getAsType("Second", Int, 0) == 0)
 			expect(dictionary getAsType("First", TestCover, defaultCover) intVal == 0)
 			expect(dictionary getAsType("First", TestClass, null) == null)
-			expect(dictionary getAsType("First2", TestClass, null) intVal == 1337)
+			expect(dictionary getAsType("Second", TestClass, null) intVal == 1337)
 		})
 		this add("Get from cover", func {
 			dictionary := HashDictionary new()
