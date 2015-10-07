@@ -34,7 +34,7 @@ FloatSize2D: cover {
 	pNorm: func (p: Float) -> Float {
 		p == 1 ?
 		this width abs() + this height abs() :
-		(this width abs() pow(p) + this height abs() pow(p)) pow(1 / p)
+		(this width abs() pow(p) + this height abs() pow(p)) pow(1.0f / p)
 	}
 	scalarProduct: func (other: This) -> Float { this width * other width + this height * other height }
 	angle: func (other: This) -> Float {

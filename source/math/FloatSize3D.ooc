@@ -35,7 +35,7 @@ FloatSize3D: cover {
 	pNorm: func (p: Float) -> Float {
 		p == 1 ?
 		this width abs() + this height abs() + this depth abs() :
-		(this width abs() pow(p) + this height abs() pow(p) + this depth abs() pow(p)) pow(1 / p)
+		(this width abs() pow(p) + this height abs() pow(p) + this depth abs() pow(p)) pow(1.0f / p)
 	}
 	scalarProduct: func (other: This) -> Float { this width * other width + this height * other height + this depth * other depth }
 	vectorProduct: func (other: This) -> This {
