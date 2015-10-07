@@ -48,7 +48,7 @@ RecycleBin: class {
 		this _bgr free()
 		this _bgra free()
 		this _uv free()
-		this _mutex destroy()
+		this _mutex free()
 		super()
 	}
 	_add: func (image: OpenGLPacked, list: VectorList<OpenGLPacked>) {

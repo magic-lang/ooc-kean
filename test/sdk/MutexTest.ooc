@@ -29,7 +29,7 @@ MutexTest: class extends Fixture {
 			threads[i] free()
 		}
 		threads free()
-		mutex destroy()
+		mutex free()
 		expect(value get() == countPerThread * threadCount)
 	}
 }

@@ -23,52 +23,39 @@ version(unix || apple) {
      * pthreads implementation of mutexes.
      */
     MutexUnix: class extends Mutex {
-
-        new: static func -> Mutex {
-            mut := gc_malloc(PThreadMutex size) as PThreadMutex*
-            pthread_mutex_init(mut, null)
-            mut as Mutex
+      _backend: PThreadMutex
+        init: func {
+            pthread_mutex_init(this _backend&, null)
         }
-
+        free: override func {
+          pthread_mutex_destroy(this _backend&)
+          super()
+        }
+        lock: func {
+            pthread_mutex_lock(this _backend&)
+        }
+        unlock: func {
+            pthread_mutex_unlock(this _backend&)
+        }
     }
 
-    ooc_mutex_lock: inline unmangled func (m: Mutex) {
-        pthread_mutex_lock(m as PThreadMutex*)
-    }
-
-    ooc_mutex_unlock: inline unmangled func (m: Mutex) {
-        pthread_mutex_unlock(m as PThreadMutex*)
-    }
-
-    ooc_mutex_destroy: inline unmangled func (m: Mutex) {
-        pthread_mutex_destroy(m as PThreadMutex*)
-        gc_free(m)
-    }
-
-    RecursiveMutexUnix: class extends Mutex {
-
-        new: static func -> RecursiveMutex {
-            mut := gc_malloc(PThreadMutex size) as PThreadMutex*
+    RecursiveMutexUnix: class extends RecursiveMutex {
+        _backend: PThreadMutex
+        init: func {
         attr: PThreadMutexAttr
         pthread_mutexattr_init(attr&)
         pthread_mutexattr_settype(attr&, PTHREAD_MUTEX_RECURSIVE)
-            pthread_mutex_init(mut, attr&)
-            mut as RecursiveMutex
+        pthread_mutex_init(this _backend&, attr&)
         }
-
+        free: override func {
+          pthread_mutex_destroy(this _backend&)
+          super()
+        }
+        lock: func {
+            pthread_mutex_lock(this _backend&)
+        }
+        unlock: func {
+            pthread_mutex_unlock(this _backend&)
+        }
     }
-
-    ooc_recursive_mutex_lock: inline unmangled func (m: RecursiveMutex) {
-        pthread_mutex_lock(m as PThreadMutex*)
-    }
-
-    ooc_recursive_mutex_unlock: inline unmangled func (m: RecursiveMutex) {
-        pthread_mutex_unlock(m as PThreadMutex*)
-    }
-
-    ooc_recursive_mutex_destroy: inline unmangled func (m: RecursiveMutex) {
-        pthread_mutex_destroy(m as PThreadMutex*)
-    }
-
-
 }

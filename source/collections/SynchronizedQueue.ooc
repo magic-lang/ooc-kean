@@ -12,7 +12,7 @@ SynchronizedQueue: class <T> extends Queue<T> {
 	}
 	free: override func {
 		this _backend free()
-		this _mutex destroy()
+		this _mutex free()
 		super()
 	}
 	enqueue: override func (item: T) {
