@@ -1,7 +1,5 @@
 use ooc-unit
 use ooc-math
-use ooc-base
-import math/Random
 import math
 
 FloatRandomGeneratorTest: class extends Fixture {

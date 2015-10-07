@@ -6,7 +6,6 @@ import threading/Thread
 SynchronizedQueueTest: class extends Fixture {
 	init: func {
 		super("SynchronizedQueue")
-
 		this add("single thread", func {
 			count := 10_000
 			queue := SynchronizedQueue<Int> new()

@@ -1,8 +1,6 @@
 use ooc-unit
 use ooc-math
 import math
-use ooc-base
-import math/Random
 
 IntRandomGeneratorTest: class extends Fixture {
 	init: func {
