@@ -27,7 +27,7 @@ GLFence: abstract class {
 
 	init: func
 	free: override func {
-		this _mutex destroy()
+		this _mutex free()
 		this _syncCondition free()
 		super()
 	}

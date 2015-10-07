@@ -141,7 +141,7 @@ Worker: class {
 		this _thread wait()
 		this _thread free()
 		(this _threadClosure as Closure) dispose()
-		this _mutex destroy()
+		this _mutex free()
 		super()
 	}
 	_threadLoop: func {
@@ -174,7 +174,7 @@ ThreadPool: class {
 			this _workers[i] free()
 		this _workers free()
 		this _tasks free()
-		this _globalMutex destroy()
+		this _globalMutex free()
 		super()
 	}
 	_add: func (task: _Task) -> Void {
