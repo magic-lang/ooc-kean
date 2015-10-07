@@ -9,7 +9,7 @@ TestClass: class {
 
 PromiseTest: class extends Fixture {
 	counter := func {
-		for (i in 0 .. 100_000_000) { }
+		for (i in 0 .. 50_000_000) { }
 	}
 	quickcounter := func {
 		for (i in 0 .. 10) { }
@@ -38,11 +38,11 @@ PromiseTest: class extends Fixture {
 			promise5 free()
 		})
 		this add("Future", func {
-			future := Future start(Text, func { for (i in 0 .. 100_000_000) { } t"job1" } )
-			future2 := Future start(TestClass, func { for (i in 0 .. 100_000_000) { } TestClass new() } )
-			future3 := Future start(Text, func { for (i in 0 .. 100_000_000) { } t"job3" } )
-			future4 := Future start(Text, func { for (i in 0 .. 100_000_000) { } t"job4" } )
-			future5 := Future start(Int, func { for (i in 0 .. 100_000) { } 42 } )
+			future := Future start(Text, func { for (i in 0 .. 50_000_000) { } t"job1" } )
+			future2 := Future start(TestClass, func { for (i in 0 .. 50_000_000) { } TestClass new() } )
+			future3 := Future start(Text, func { for (i in 0 .. 50_000_000) { } t"job3" } )
+			future4 := Future start(Text, func { for (i in 0 .. 50_000_000) { } t"job4" } )
+			future5 := Future start(Int, func { for (i in 0 .. 50_000) { } 42 } )
 			future cancel()
 			compare := t"cancelled"
 			result2 := future2 wait~default(null)

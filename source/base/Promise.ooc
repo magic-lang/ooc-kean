@@ -28,17 +28,14 @@ Promise: abstract class {
 _ThreadPromise: class extends Promise {
 	_action: Func
 	_thread: Thread
-	_mutex := Mutex new()
 	_threadAlive := true
 	init: func (task: Func) {
 		super()
 		this _state = _PromiseState Unfinished
 		this _action = func {
 			task()
-			this _mutex lock()
 			if (this _state != _PromiseState Cancelled)
 				this _state = _PromiseState Finished
-			this _mutex unlock()
 		}
 		this _thread = Thread new(this _action)
 		this _thread start()
@@ -48,7 +45,6 @@ _ThreadPromise: class extends Promise {
 			this _thread wait()
 		this _thread free()
 		(this _action as Closure) dispose()
-		this _mutex destroy()
 		super()
 	}
 	wait: func -> Bool {
@@ -96,7 +92,6 @@ _ThreadFuture: class <T> extends Future<T> {
 	_result: Object
 	_action: Func
 	_thread: Thread
-	_mutex := Mutex new()
 	_hasCover := false
 	_threadAlive := true
 	init: func (task: Func -> T) {
@@ -110,10 +105,8 @@ _ThreadFuture: class <T> extends Future<T> {
 				this _result = Cell<T> new(temporary)
 				this _hasCover = true
 			}
-			this _mutex lock()
 			if (this _state != _PromiseState Cancelled)
 				this _state = _PromiseState Finished
-			this _mutex unlock()
 		}
 		this _thread = Thread new(this _action)
 		this _thread start()
@@ -123,7 +116,6 @@ _ThreadFuture: class <T> extends Future<T> {
 			this _thread wait()
 		this _thread free()
 		(this _action as Closure) dispose()
-		this _mutex destroy()
 		super()
 	}
 	wait: func -> Bool {

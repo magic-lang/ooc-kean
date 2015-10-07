@@ -3,6 +3,7 @@ use ooc-collections
 
 PromiseCollector: class {
 	_backend : VectorList<Promise>
+	count ::= this _backend count
 	init: func {
 		this _backend = VectorList<Promise> new()
 	}

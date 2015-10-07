@@ -5,10 +5,10 @@ PromiseCollectorTest: class extends Fixture {
 	init: func {
 		super("PromiseCollector")
 		this add("simple (+ operator)", func {
-			promise := Promise start(func { for (i in 0 .. 100_000_000) { } } )
-			promise2 := Promise start(func { for (i in 0 .. 100_000_000) { } } )
-			promise3 := Promise start(func { for (i in 0 .. 100_000_000) { } } )
-			promise4 := Promise start(func { for (i in 0 .. 100_000_000) { } } )
+			promise := Promise start(func { for (i in 0 .. 10_000_000) { } } )
+			promise2 := Promise start(func { for (i in 0 .. 10_000_000) { } } )
+			promise3 := Promise start(func { for (i in 0 .. 10_000_000) { } } )
+			promise4 := Promise start(func { for (i in 0 .. 10_000_000) { } } )
 			promises := promise + promise2 + promise3 + promise4
 			expect(promises wait())
 			promises free()
@@ -17,16 +17,16 @@ PromiseCollectorTest: class extends Fixture {
 			promises := PromiseCollector new()
 
 			for (j in 0 .. 5) {
-				promises += Promise start(func { for (i in 0 .. 100_000_000) { } } )
+				promises += Promise start(func { for (i in 0 .. 10_000_000) { } } )
 			}
 
-			extra := Promise start(func { for (i in 0 .. 100_000_000) { } } )
+			extra := Promise start(func { for (i in 0 .. 10_000_000) { } } )
 			extra cancel()
 			promises += extra
 
 			others := PromiseCollector new()
 			for (j in 0 .. 5) {
-				others += Promise start(func { for (i in 0 .. 100_000_000) { } } )
+				others += Promise start(func { for (i in 0 .. 10_000_000) { } } )
 			}
 			promises += others
 
@@ -36,21 +36,23 @@ PromiseCollectorTest: class extends Fixture {
 			promises free()
 		})
 		this add("clear old promises", func {
-			promise := Promise start(func { for (i in 0 .. 100_000_000) { } } )
+			promise := Promise start(func { for (i in 0 .. 10_000_000) { } } )
 			promise cancel()
-			promise2 := Promise start(func { for (i in 0 .. 100_000_000) { } } )
+			promise2 := Promise start(func { for (i in 0 .. 10_000_000) { } } )
 			promises := promise + promise2
+			expect(promises count, is equal to(2))
 			expect(!promises wait())
 			promises clear()
-			promises += Promise start(func { for (i in 0 .. 100_000_000) { } } )
-			promises += Promise start(func { for (i in 0 .. 100_000_000) { } } )
+			expect(promises count, is equal to(0))
+			promises += Promise start(func { for (i in 0 .. 10_000_000) { } } )
+			promises += Promise start(func { for (i in 0 .. 10_000_000) { } } )
 			expect(promises wait())
 			promises clear()
 		})
 		this add("wait with timeout", func {
 			promises := PromiseCollector new()
 			for (j in 0 .. 5) {
-				promises += Promise start(func { for (i in 0 .. 100_000_000) { } } )
+				promises += Promise start(func { for (i in 0 .. 50_000_000) { } } )
 			}
 			expect(promises wait(0.01) == false)
 			expect(promises wait() == true)
