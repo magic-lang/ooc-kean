@@ -33,6 +33,7 @@ RasterMonochrome: class extends RasterPacked {
 	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This {
 		result := This new(this)
+		result _buffer = ByteBuffer new(this _buffer size)
 		this buffer copyTo(result buffer)
 		result
 	}

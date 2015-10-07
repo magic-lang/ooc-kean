@@ -68,6 +68,11 @@ RasterMonochromeTest: class extends Fixture {
 			image2 = image2 resizeTo(size)
 			expect(image2 size == size)
 		})
+		this add("copy", func {
+			image := RasterMonochrome open(this sourceFlower)
+			image2 := image copy()
+			expect(image size == image2 size)
+		})
 		/*this add("distance, convertFrom RasterBgra", func {
 			source := this sourceFlower
 			output := "test/draw/output/RasterBgrToMonochrome.png"
