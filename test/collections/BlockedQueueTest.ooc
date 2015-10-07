@@ -38,6 +38,7 @@ BlockedQueueTest: class extends Fixture {
 		for (i in 0 .. numberOfThreads) {
 			threads[i] wait()
 			threads[i] free()
+		}
 		expect(queue count, is equal to(1))
 		queue clear()
 		expect(queue count, is equal to(0))
