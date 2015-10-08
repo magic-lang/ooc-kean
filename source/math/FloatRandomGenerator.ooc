@@ -17,6 +17,7 @@ import math
 import os/Time
 
 FloatRandomGenerator: abstract class {
+	permanentSeed: static UInt = 0
 	next: abstract func -> Float
 	next: func ~withCount (count: Int) -> Float[] {
 		result := Float[count] new()
@@ -29,24 +30,21 @@ FloatRandomGenerator: abstract class {
 FloatUniformRandomGenerator: class extends FloatRandomGenerator {
 	_state: UInt
 	_min, _max, _rangeCoefficient: Float
+	_unsignedIntMaxAsFloat : static Float = 4294967295U as Float
 	minimum ::= this _min
 	maximum ::= this _max
-	init: func {
-		this _state = Time microtime()
-		this setRange(0.0f, 1.0f)
-	}
-	init: func ~withSeed (seed: Int) {
-		this _state = seed
+	init: func (seed := Time microtime()) {
+		this _state = FloatRandomGenerator permanentSeed != 0 ? This permanentSeed : seed
 		this setRange(0.0f, 1.0f)
 	}
 	init: func ~withParameters (min, max: Float, seed := Time microtime()) {
-		this _state = seed
+		this _state = FloatRandomGenerator permanentSeed != 0 ? This permanentSeed : seed
 		this setRange(min, max)
 	}
 	setRange: func (=_min, =_max) {
-		UnsignedIntMax := 4294967295U
-		this _rangeCoefficient = (1.0f / UnsignedIntMax as Float) * (this _max - this _min)
+		this _rangeCoefficient = (1.0f / This _unsignedIntMaxAsFloat) * (this _max - this _min)
 	}
+	setSeed: func (=_state)
 	next: func -> Float {
 		//Based on www.irrelevantconclusion.com/2012/02/pretty-fast-random-floats-on-ps3/
 		this _state ^= (this _state << 5)
@@ -79,6 +77,9 @@ FloatGaussianRandomGenerator: class extends FloatRandomGenerator {
 	}
 	setRange: func (=_mu, =_sigma) {
 		_hasSecondValue = false
+	}
+	setSeed: func (state: UInt) {
+		this _backend setSeed(state)
 	}
 	next: func -> Float {
 		result : Float

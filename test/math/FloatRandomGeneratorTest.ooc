@@ -100,6 +100,24 @@ FloatRandomGeneratorTest: class extends Fixture {
 			expect(Float absolute(mean - expectedMean) < tolerance)
 			expect(Float absolute(deviation - expectedDeviation) < tolerance)
 		})
+		this add("set seed", func {
+			generator1 := FloatUniformRandomGenerator new(0, 100)
+			generator1 setSeed(123456)
+			expect(generator1 next(), is equal to(5.99f) within(0.01f))
+			expect(generator1 next(), is equal to(54.54f) within(0.01f))
+			expect(generator1 next(), is equal to(20.76f) within(0.01f))
+		})
+		this add("global seed", func {
+			FloatRandomGenerator permanentSeed = 123455
+			generator1 := FloatUniformRandomGenerator new(0, 100)
+			expect(generator1 next(), is equal to(5.98f) within(0.01f))
+			expect(generator1 next(), is equal to(57.96f) within(0.01f))
+			expect(generator1 next(), is equal to(8.52f) within(0.01f))
+			generator2 := FloatUniformRandomGenerator new(0, 100)
+			expect(generator2 next(), is equal to(5.98f) within(0.01f))
+			expect(generator2 next(), is equal to(57.96f) within(0.01f))
+			expect(generator2 next(), is equal to(8.52f) within(0.01f))
+		})
 	}
 }
 FloatRandomGeneratorTest new() run()

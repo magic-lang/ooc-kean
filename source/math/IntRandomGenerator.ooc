@@ -18,18 +18,29 @@ use ooc-math
 import math
 import os/Time
 
-IntUniformRandomGenerator: class {
+IntRandomGenerator: abstract class {
+	permanentSeed: static Int = 0
+	next: abstract func -> Int
+	next: func ~withCount (count: Int) -> Int[] {
+		result := Int[count] new()
+		for (i in 0 .. count)
+			result[i] = this next()
+		result
+	}
+}
+
+IntUniformRandomGenerator: class extends IntRandomGenerator {
 	_state, _min, _max, _range: Int
 	_shortRange: Bool
 	minimum ::= this _min
 	maximum ::= this _max
 	init: func (seed := Time microtime()) {
 		this setRange(0, Int maximumValue)
-		this _state = seed
+		this _state = IntRandomGenerator permanentSeed != 0 ? This permanentSeed : seed
 	}
 	init: func ~withParameters (min, max: Int, seed := Time microtime()) {
 		this setRange(min, max)
-		this _state = seed
+		this _state = IntRandomGenerator permanentSeed != 0 ? This permanentSeed : seed
 	}
 	_generate: func -> Int {
 		// Based on Intel fast_rand()
@@ -41,6 +52,7 @@ IntUniformRandomGenerator: class {
 		this _range = this _max - this _min + 1
 		this _shortRange = (this _range < Short maximumValue)
 	}
+	setSeed: func (=_state)
 	next: func -> Int {
 		result : Int
 		first := this _generate()
@@ -53,15 +65,9 @@ IntUniformRandomGenerator: class {
 		}
 		this _min + (result % this _range)
 	}
-	next: func ~withCount (count: Int) -> Int[] {
-		result := Int[count] new()
-		for (i in 0 .. count)
-			result[i] = this next()
-		result
-	}
 }
 
-IntGaussianRandomGenerator: class {
+IntGaussianRandomGenerator: class extends IntRandomGenerator {
 	_backend: FloatGaussianRandomGenerator
 	init: func {
 		this _backend = FloatGaussianRandomGenerator new(0.0f, 1.0f)
@@ -83,13 +89,10 @@ IntGaussianRandomGenerator: class {
 	setRange: func (mu, sigma: Float) {
 		this _backend setRange(mu, sigma)
 	}
+	setSeed: func (seed: UInt) {
+		this _backend setSeed(seed)
+	}
 	next: func -> Int {
 		this _backend next() as Int
-	}
-	next: func ~withCount (count: Int) -> Int[] {
-		result := Int[count] new()
-		for (i in 0 .. count)
-			result[i] = this next()
-		result
 	}
 }
