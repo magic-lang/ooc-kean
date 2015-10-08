@@ -164,7 +164,6 @@ TextTest: class extends Fixture {
 			t2 := Text new(buffer)
 			expect(t == t2)
 			t free()
-			println(t2 toString())
 			t2 free()
 		})
 	}
