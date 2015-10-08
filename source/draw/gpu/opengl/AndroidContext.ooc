@@ -38,14 +38,19 @@ AndroidContext: class extends OpenGLContext {
 	}
 	createGpuImage: override func (rasterImage: RasterImage) -> GpuImage {
 		result: GpuImage
-		if (rasterImage instanceOf?(GraphicBufferYuv420Semiplanar)) {
-			graphicBufferImage := rasterImage as GraphicBufferYuv420Semiplanar
-			rgba := graphicBufferImage toRgba(this)
-			result = this unpackBgraToYuv420Semiplanar(rgba, rasterImage size)
-			rgba free()
+		version (optiGraphicbufferupload) {
+			if (rasterImage instanceOf?(GraphicBufferYuv420Semiplanar)) {
+				graphicBufferImage := rasterImage as GraphicBufferYuv420Semiplanar
+				rgba := graphicBufferImage toRgba(this)
+				result = this unpackBgraToYuv420Semiplanar(rgba, rasterImage size)
+				rgba free()
+			}
+			else
+				result = super(rasterImage)
 		}
-		else
+		else {
 			result = super(rasterImage)
+		}
 		result
 	}
 	recyclePacker: func (packer: EGLBgra) { this _packers add(packer) }
