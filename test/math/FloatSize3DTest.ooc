@@ -100,8 +100,8 @@ FloatSize3DTest: class extends Fixture {
 			expect(_floor depth, is equal to(30.0f) within(this precision))
 		})
 		this add("p norm", func {
-			onenorm := this vector0 pNorm(1)
-			euclidean := this vector0 pNorm(2)
+			onenorm := this vector0 pNorm(1.0f)
+			euclidean := this vector0 pNorm(2.0f)
 			expect(onenorm, is equal to(35.0f) within(this precision))
 			expect(euclidean, is equal to(24.352f) within(0.01f))
 		})

@@ -58,6 +58,12 @@ FloatPoint3DTest: class extends Fixture {
 //			FIXME: Equals interface
 //			expect(FloatSize2D parse(value), is equal to(this vector3))
 		})
+		this add("p norm", func {
+			onenorm := this point0 pNorm(1.0f)
+			euclidean := this point0 pNorm(2.0f)
+			expect(onenorm, is equal to(35.0f) within(this precision))
+			expect(euclidean, is equal to(24.352f) within(0.01f))
+		})
 		this add("int casts", func {
 			point := point3 toIntPoint3D()
 			expect(point x, is equal to(10))

@@ -119,8 +119,8 @@ FloatSize2DTest: class extends Fixture {
 			expect(_floor height, is equal to(13.0f) within(this precision))
 		})
 		this add("p norm", func {
-			onenorm := this vector0 pNorm(1)
-			euclidean := this vector0 pNorm(2)
+			onenorm := this vector0 pNorm(1.0f)
+			euclidean := this vector0 pNorm(2.0f)
 			expect(onenorm, is equal to(25.321f) within(this precision))
 			expect(euclidean, is equal to(22.436f) within(0.01f))
 		})
