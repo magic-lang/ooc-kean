@@ -2,3 +2,4 @@
 .libs
 rock_tmp
 source/sdk
+test/draw/output
