@@ -34,14 +34,15 @@ CreateAlphaByteString: class {
 		}
 		ip = ipbuffer pointer as Int*
 		for (i in 0 .. ipbuffer size / 4) {
-			imageArray = imageArray + ip[i] toString() + ", "
+			imageArray = imageArray + ip[i] toString() + ","
 			counter += 1
-			if (i % 32 == 0) {
+			if (i % 32 == 0)
 				imageArray = imageArray + "\n"
-			}
+			else
+				imageArray = imageArray + " "
 		}
 		imageArray = imageArray + "]"
-		result := name + "Image" + ": StaticOverlayImages \n" + name + "Image image = " + imageArray + "\n"
+		result := name + "Image" + ": StaticOverlayImages\n" + name + "Image image = " + imageArray + "\n"
 		result = result + name + "Image size = IntSize2D new(" + image size width toString() + ", " + image size height toString() + ")\n"
 		result
 	}
