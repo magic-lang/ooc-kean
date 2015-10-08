@@ -21,13 +21,17 @@ import text/StringTokenizer
 import structs/ArrayList
 
 IntShell2D: cover {
-	left, right, top, bottom: Int
+	_left, _right, _top, _bottom: Int
+	left ::= this _left
+	right ::= this _right
+	top ::= this _top
+	bottom ::= this _bottom
 	leftTop ::= IntPoint2D new(this left, this top)
-	intSize2D ::= IntSize2D new(this left + this right, this top + this bottom)
+	size ::= IntSize2D new(this left + this right, this top + this bottom)
 	balance ::= IntPoint2D new(this right - this left, this bottom - this top)
 	isZero ::= this left == 0 && this right == 0 && this top == 0 && this bottom == 0
 	notZero ::= this left != 0 && this right != 0 && this top != 0 && this bottom != 0
-	init: func@ (=left, =right, =top, =bottom)
+	init: func@ (=_left, =_right, =_top, =_bottom)
 	init: func@ ~fromFloat (value: Int) { this init(value, value) }
 	init: func@ ~fromFloats (x, y: Int) { this init(x, x, y, y) }
 	init: func@ ~default { this init(0) }
