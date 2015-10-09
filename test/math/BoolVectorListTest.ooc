@@ -15,6 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use ooc-base
 use ooc-math
 use ooc-unit
 import math
@@ -43,26 +44,10 @@ BoolVectorListTest: class extends Fixture {
 			expect(!reversed[4])
 			expect(reversed[5])
 			list free()
+			reversed free()
 		})
-		
 		this add("dilation", func {
-			list := BoolVectorList new() //1100001110001110
-			list add(true)
-			list add(true)
-			list add(false)
-			list add(false)
-			list add(false)
-			list add(false)
-			list add(true)
-			list add(true)
-			list add(true)
-			list add(false)
-			list add(false)
-			list add(false)
-			list add(true)
-			list add(true)
-			list add(true)
-			list add(false)
+			list := this _createFromText(t"1100 0011 1000 1110")
 			dilated := list dilation(3)
 			expect(dilated[2])
 			expect(!dilated[3])
@@ -74,25 +59,8 @@ BoolVectorListTest: class extends Fixture {
 			list free()
 			dilated free()
 		})
-		
 		this add("erosion", func {
-			list := BoolVectorList new() //1100001110001110
-			list add(true)
-			list add(true)
-			list add(false)
-			list add(false)
-			list add(false)
-			list add(false)
-			list add(true)
-			list add(true)
-			list add(true)
-			list add(false)
-			list add(false)
-			list add(false)
-			list add(true)
-			list add(true)
-			list add(true)
-			list add(false)
+			list := this _createFromText(t"1100 0011 1000 1110")
 			eroded := list erosion(3)
 			expect(!eroded[1])
 			expect(!eroded[2])
@@ -108,17 +76,8 @@ BoolVectorListTest: class extends Fixture {
 			list free()
 			eroded free()
 		})
-		
 		this add("opening", func {
-			list := BoolVectorList new() //11011001
-			list add(true)
-			list add(true)
-			list add(false)
-			list add(true)
-			list add(true)
-			list add(false)
-			list add(false)
-			list add(true)
+			list := this _createFromText(t"1101 1001")
 			opened := list opening(3)
 			expect(opened[0])
 			expect(opened[1])
@@ -131,17 +90,8 @@ BoolVectorListTest: class extends Fixture {
 			list free()
 			opened free()
 		})
-		
 		this add("closing", func {
-			list := BoolVectorList new() //11011001
-			list add(true)
-			list add(true)
-			list add(false)
-			list add(true)
-			list add(true)
-			list add(false)
-			list add(false)
-			list add(true)
+			list := this _createFromText(t"1101 1001")
 			closed := list closing(3)
 			expect(closed[0])
 			expect(closed[1])
@@ -154,20 +104,9 @@ BoolVectorListTest: class extends Fixture {
 			list free()
 			closed free()
 		})
-		
 		this add("logical operators", func {
-			list := BoolVectorList new() //11010
-			list add(true)
-			list add(true)
-			list add(false)
-			list add(true)
-			list add(false)
-			other := BoolVectorList new() //10001
-			other add(true)
-			other add(false)
-			other add(false)
-			other add(false)
-			other add(true)
+			list := this _createFromText(t"11010")
+			other := this _createFromText(t"10001")
 			listAndOther := list && other
 			listOrOther := list || other
 			expect(listAndOther tally(true), is equal to(1))
@@ -177,6 +116,16 @@ BoolVectorListTest: class extends Fixture {
 			listAndOther free()
 			listOrOther free()
 		})
+	}
+	_createFromText: func (content: Text) -> BoolVectorList {
+		result := BoolVectorList new()
+		for (i in 0 .. content count) {
+			if (content[i] == '1')
+				result add(true)
+			else if (content[i] == '0')
+				result add(false)
+		}
+		result
 	}
 }
 
