@@ -66,17 +66,17 @@ FloatSize2DTest: class extends Fixture {
 		this add("polar 2", func {
 			point := FloatSize2D new(0, 1)
 			expect(point norm, is equal to(1.0f) within(this precision))
-			expect(point azimuth, is equal to(PI as Float / 2.0f) within(this precision))
+			expect(point azimuth, is equal to(Float pi / 2.0f) within(this precision))
 		})
 		this add("polar 3", func {
 			point := FloatSize2D new(0, -5)
 			expect(point norm, is equal to(5.0f) within(this precision))
-			expect(point azimuth, is equal to(PI as Float / -2.0f) within(this precision))
+			expect(point azimuth, is equal to(Float pi / -2.0f) within(this precision))
 		})
 		this add("polar 4", func {
 			point := FloatSize2D new(-1, 0)
 			expect(point norm, is equal to(1.0f) within(this precision))
-			expect(point azimuth, is equal to(PI as Float) within(this precision))
+			expect(point azimuth, is equal to(Float pi) within(this precision))
 		})
 		this add("polar 5", func {
 			point := FloatSize2D new(-3, 0)
@@ -85,9 +85,9 @@ FloatSize2DTest: class extends Fixture {
 		})
 		this add("angles", func {
 			expect(FloatSize2D basisX angle(FloatSize2D basisX), is equal to(0.0f) within(this precision))
-			expect(FloatSize2D basisX angle(FloatSize2D basisY), is equal to(PI as Float / 2.0f) within(this precision))
-			expect(FloatSize2D basisX angle(-FloatSize2D basisX), is equal to(PI as Float) within(this precision))
-			expect(FloatSize2D basisX angle(-FloatSize2D basisY), is equal to(-PI as Float / 2.0f) within(this precision))
+			expect(FloatSize2D basisX angle(FloatSize2D basisY), is equal to(Float pi / 2.0f) within(this precision))
+			expect(FloatSize2D basisX angle(-FloatSize2D basisX), is equal to(Float pi) within(this precision))
+			expect(FloatSize2D basisX angle(-FloatSize2D basisY), is equal to(-(Float pi) / 2.0f) within(this precision))
 		})
 		this add("int casts", func {
 			vector := this vector0 toIntSize2D()

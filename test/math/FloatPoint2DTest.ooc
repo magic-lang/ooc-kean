@@ -65,17 +65,17 @@ FloatPoint2DTest: class extends Fixture {
 		this add("polar 2", func {
 			point := FloatPoint2D new(0, 1)
 			expect(point norm, is equal to(1.0f))
-			expect(point azimuth, is equal to(PI as Float / 2.0f))
+			expect(point azimuth, is equal to(Float pi / 2.0f))
 		})
 		this add("polar 3", func {
 			point := FloatPoint2D new(0, -5)
 			expect(point norm, is equal to(5.0f))
-			expect(point azimuth, is equal to(PI as Float / -2.0f))
+			expect(point azimuth, is equal to(Float pi / -2.0f))
 		})
 		this add("polar 4", func {
 			point := FloatPoint2D new(-1, 0)
 			expect(point norm, is equal to(1.0f))
-			expect(point azimuth, is equal to(PI as Float))
+			expect(point azimuth, is equal to(Float pi))
 		})
 		this add("polar 5", func {
 			point := FloatPoint2D new(-3, 0)
@@ -84,9 +84,9 @@ FloatPoint2DTest: class extends Fixture {
 		})
 		this add("angles", func {
 			expect(FloatPoint2D basisX angle(FloatPoint2D basisX), is equal to(0.0f) within(this precision))
-			expect(FloatPoint2D basisX angle(FloatPoint2D basisY), is equal to(PI as Float / 2.0f) within(this precision))
-			expect(FloatPoint2D basisX angle(-FloatPoint2D basisX), is equal to(PI as Float) within(this precision))
-			expect(FloatPoint2D basisX angle(-FloatPoint2D basisY), is equal to(-PI as Float / 2.0f) within(this precision))
+			expect(FloatPoint2D basisX angle(FloatPoint2D basisY), is equal to(Float pi / 2.0f) within(this precision))
+			expect(FloatPoint2D basisX angle(-FloatPoint2D basisX), is equal to(Float pi) within(this precision))
+			expect(FloatPoint2D basisX angle(-FloatPoint2D basisY), is equal to(-(Float pi) / 2.0f) within(this precision))
 		})
 		this add("minimum", func {
 			expect((this point0 minimum(this point1)) x, is equal to((this point1) x))
@@ -140,8 +140,8 @@ FloatPoint2DTest: class extends Fixture {
 		})
 		this add("clamp", func {
 			clamped := this point1 clamp(this point0, this point2)
-			expect(clamped x, is equal to(22.221f) within(this precision))
-			expect(clamped y, is equal to(10.0f) within(this precision))
+			expect(clamped x, is equal to(this point0 x) within(this precision))
+			expect(clamped y, is equal to(this point2 y) within(this precision))
 		})
 		this add("interpolation", func {
 			interpolate1 := FloatPoint2D linearInterpolation(this point0, this point1, 0.0f)

@@ -137,11 +137,9 @@ FloatMatrixTest: class extends Fixture {
 		// 0 3
 		// 1 4
 		// 2 5
-		for (x in 0 .. matrix dimensions width) {
-			for (y in 0 .. matrix dimensions height) {
+		for (x in 0 .. matrix dimensions width)
+			for (y in 0 .. matrix dimensions height)
 				expect(matrix[x, y], is equal to(values[x * matrix dimensions height + y]) within(this tolerance))
-			}
-		}
 	}
 }
 FloatMatrixTest new() run()

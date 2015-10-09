@@ -58,12 +58,12 @@ IntPoint2DTest: class extends Fixture {
 			expect(product, is equal to(225))
 		})
 		this add("clamp", func {
-			result := point1 clamp(point0, point2)
-			expect(result x, is equal to(22))
-			expect(result y, is equal to(10))
+			result := point1 clamp(this point0, this point2)
+			expect(result x, is equal to(this point0 x))
+			expect(result y, is equal to(this point2 y))
 		})
 		this add("distance", func {
-			distance := point0 distance(point1)
+			distance := this point0 distance(this point1)
 			expect(distance, is equal to(18.87f) within(0.01f))
 		})
 	}
