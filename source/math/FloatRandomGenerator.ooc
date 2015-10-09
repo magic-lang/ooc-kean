@@ -30,7 +30,6 @@ FloatRandomGenerator: abstract class {
 FloatUniformRandomGenerator: class extends FloatRandomGenerator {
 	_state: UInt
 	_min, _max, _rangeCoefficient: Float
-	_unsignedIntMaxAsFloat : static Float = 4294967295U as Float
 	minimum ::= this _min
 	maximum ::= this _max
 	init: func (seed := Time microtime()) {
@@ -42,7 +41,7 @@ FloatUniformRandomGenerator: class extends FloatRandomGenerator {
 		this setRange(min, max)
 	}
 	setRange: func (=_min, =_max) {
-		this _rangeCoefficient = (1.0f / This _unsignedIntMaxAsFloat) * (this _max - this _min)
+		this _rangeCoefficient = (1.0f / UINT_MAX as Float) * (this _max - this _min)
 	}
 	setSeed: func (=_state)
 	next: func -> Float {
