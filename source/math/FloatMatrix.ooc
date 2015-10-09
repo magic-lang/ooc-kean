@@ -24,27 +24,23 @@ FloatMatrix : cover {
 	dimensions ::= this _dimensions
 	width ::= this _dimensions width
 	height ::= this _dimensions height
+	isNull ::= this dimensions empty
+	isSquare ::= this width == this height
+	order ::= Int minimum~two(this height, this width)
 	elements: Float[]
-
 	init: func@ ~IntSize2D (=_dimensions) {
 		this elements = Float[_dimensions area] new()
 	}
 	init: func@ (width, height: Int) {
 		this init(IntSize2D new(width, height))
 	}
-
-	// <summary>
-	// Creates an identity matrix of given order.
-	// </summary>
-	// <param name="order">Order of matrix to be created.</param>
-	// <returns>Identity matrix of given order.</returns>
+	free: func { this elements free() }
 	identity: static func@ (order: Int) -> This {
 		result := This new(order, order)
 		for (i in 0 .. order)
 			result elements[i + result width * i] = 1.0f
 		result
 	}
-
 	setVertical: func (xOffset, yOffset: Int, vector: FloatPoint3D) {
 		if (xOffset < 0 || xOffset >= this width)
 			raise("Column index out of range in FloatMatrix setVertical")
@@ -54,7 +50,6 @@ FloatMatrix : cover {
 		this[xOffset, yOffset + 1] = vector y
 		this[xOffset, yOffset + 2] = vector z
 	}
-
 	getColumn: func (x: Int) -> This {
 		version (safe) {
 			if (x < 0 || x >= this width)
@@ -65,13 +60,7 @@ FloatMatrix : cover {
 			result[0, y] = this[x, y]
 		result
 	}
-
-	// <summary>
-	// Get an element in a matrix at position(x,y).
-	// </summary>
-	// <param name="x">Column number of a matrix.</param>
-	// <param name="y">Row number of a matrix.</param>
-	// <returns></returns>
+	
 	operator [] (x, y: Int) -> Float {
 		version (safe) {
 			if (x < 0 || y < 0 || x >= this width || y >= this height)
@@ -82,13 +71,6 @@ FloatMatrix : cover {
 	// NOTE: Because rock doesn't understand the concept of inline functions,
 	// this function has been inlined manually in many places in this file for performance reasons.
 
-	// <summary>
-	// Set an element in a matrix at position(x,y).
-	// </summary>
-	// <param name="x">Column number of a matrix.</param>
-	// <param name="y">Row number of a matrix.</param>
-	// <param name="value">The value set at (x,y).</param>
-	// <returns></returns>
 	operator []= (x, y: Int, value: Float) {
 		version (safe) {
 			if (x < 0 || y < 0 || x >= this width || y >= this height)
@@ -99,30 +81,11 @@ FloatMatrix : cover {
 	// NOTE: Because rock doesn't understand the concept of inline functions,
 	// this function has been inlined manually in many places in this file for performance reasons.
 
-	// <summary>
-	// True if the matrix is a square matrix.
-	// </summary>
-	isSquare ::= this width == this height
-
-	// <summary>
-	// Minimum of matrix dimensions.
-	// </summary>
-	order ::= Int minimum~two(this height, this width)
-
-	// <summary>
-	// Creates a copy of the current matrix.
-	// </summary>
-	// <returns>Return a copy of the current matrix.</returns>
 	copy: func@ -> This {
 		result := This new(this dimensions)
 		memcpy(result elements data, this elements data, this dimensions area * Float size)
 		result
 	}
-
-	// <summary>
-	// Tranpose matrix. Creates a new matrix being the transpose of the current matrix.
-	// </summary>
-	// <returns>Return current matrix tranposed.</returns>
 	transpose: func@ -> This {
 		result := This new(this dimensions swap())
 		for (y in 0 .. this height)
@@ -130,11 +93,6 @@ FloatMatrix : cover {
 				result elements[y + x * this height] = this elements[x + y * this width]
 		result
 	}
-
-	// <summary>
-	// Calculates the trace of a square matrix.
-	// </summary>
-	// <returns>The trace of the matrix.</returns>
 	trace: func -> Float {
 		if (!this isSquare)
 			raise("Invalid dimensions in FloatMatrix trace")
@@ -143,12 +101,6 @@ FloatMatrix : cover {
 			result += this[i, i]
 		result
 	}
-
-	// <summary>
-	// Swaps the position of two rows
-	// </summary>
-	// <param name="row1">First row</param>
-	// <param name="row2">Second row</param>
 	swaprows: func@ (row1, row2: Int) {
 		version (safe) {
 			if (row1 < 0 || row2 < 0 || row1 >= this height || row2 >= this height)
@@ -163,7 +115,6 @@ FloatMatrix : cover {
 				this elements[i + row2 * this width] = buffer
 			}
 	}
-
 	toString: func@ -> String {
 		result: String = ""
 		for (y in 0 .. this height) {
@@ -175,12 +126,9 @@ FloatMatrix : cover {
 		result
 	}
 
-	// <summary>
-	// See http://en.wikipedia.org/wiki/LUP_decomposition.
 	// Lup decomposition of the current matrix. Recall that Lup decomposition is A = LUP,
 	// where L is lower triangular, U is upper triangular, and P is a permutation matrix.
-	// </summary>
-	// <returns>Returns the Lup decomposition. L = [0], U = [1], P = [2].</returns>
+	// See http://en.wikipedia.org/wiki/LUP_decomposition.
 	lupDecomposition: func@ -> This[] {
 		if (!this isSquare)
 			raise("Invalid dimensions in FloatMatrix lupDecomposition")
@@ -214,12 +162,8 @@ FloatMatrix : cover {
 		result
 	}
 
-	// <summary>
 	// Lup least square solver A * x = y.
-	// The current matrix determines the matrix A above.
-	// </summary>
-	// <param name="y">The right hand column y vector of the equation system.</param>
-	// <returns>Return the least square solution to the system.</returns>
+	// If overdetermined, returns the least square solution to the system.
 	solve: func@ (y: This) -> This {
 		result: This
 		if (this width > this height)
@@ -258,13 +202,7 @@ FloatMatrix : cover {
 		result
 	}
 
-	isNull ::= this dimensions empty
-
-	// <summary>
-	// Forward solver lower * x = y. Current object is y.
-	// </summary>
-	// <param name="lower">Lower triangual matrix.</param>
-	// <returns>Solution x.</returns>
+	// Forward solver lower * x = y for a lower triangular matrix. Current object is y.
 	_forwardSubstitution: func@ (lower: This) -> This {
 		result := This new(this dimensions)
 		for (x in 0 .. this width)
@@ -281,11 +219,7 @@ FloatMatrix : cover {
 		result
 	}
 
-	// <summary>
-	// Backward solver upper * x = y. Current object is y.
-	// </summary>
-	// <param name="lower">Upper triangual matrix.</param>
-	// <returns>Solution x.</returns>
+	// Backward solver upper * x = y for an upper triangular matrix. Current object is y.
 	_backwardSubstitution: func@ (upper: This) -> This {
 		result := This new(this dimensions)
 		for (x in 0 .. this width) {
@@ -303,9 +237,6 @@ FloatMatrix : cover {
 		}
 		result
 	}
-
-	free: func { this elements free() }
-
 	operator * (other: This) -> This {
 		if (this width != other height)
 			raise("Invalid dimensions in FloatMatrix * operator: left width must match right height!")
@@ -320,7 +251,6 @@ FloatMatrix : cover {
 		}
 		result
 	}
-
 	operator + (other: This) -> This {
 		if (this dimensions != other dimensions)
 			raise("Invalid dimensions in FloatMatrix + operator: dimensions must match!")
@@ -329,7 +259,6 @@ FloatMatrix : cover {
 			result elements[i] = this elements[i] + other elements[i]
 		result
 	}
-
 	operator - (other: This) -> This {
 		if (this dimensions != other dimensions)
 			raise("Invalid dimensions in FloatMatrix - operator: dimensions must match!")
