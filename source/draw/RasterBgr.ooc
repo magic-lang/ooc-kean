@@ -142,5 +142,13 @@ RasterBgr: class extends RasterPacked {
 	}
 	operator [] (x, y: Int) -> ColorBgr { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorBgr* + x)@ : ColorBgr new(0, 0, 0) }
 	operator []= (x, y: Int, value: ColorBgr) { ((this buffer pointer + y * this stride) as ColorBgr* + x)@ = value }
+	swapRedBlue: func {
+		this swapChannels(0, 2)
+	}
+	redBlueSwapped: func -> This {
+		result := this copy()
+		result swapRedBlue()
+		result
+	}
 	createPaintEngine: override func -> PaintEngine { BgrPaintEngine new(this) }
 }
