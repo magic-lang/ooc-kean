@@ -16,12 +16,12 @@
  */
 
 use ooc-base
+use ooc-collections
 import Constraints
-import structs/ArrayList
 
 Fixture: abstract class {
 	name: String
-	tests := ArrayList<Test> new()
+	tests := VectorList<Test> new()
 	init: func (=name)
 	add: func (test: Test) {
 		this tests add(test)
@@ -31,10 +31,10 @@ Fixture: abstract class {
 		this add(test)
 	}
 	run: func -> Bool {
-		failures := ArrayList<TestFailedException> new()
+		failures := VectorList<TestFailedException> new()
 		result := true
 		This _print(this name + " ")
-		this tests each(|test|
+		for (test in tests) {
 			This _expectCount = 0
 			r := true
 			try {
@@ -46,14 +46,14 @@ Fixture: abstract class {
 				failures add(e)
 			}
 			This _print(r ? "." : "f")
-		)
+		}
 		This _print(result ? " done\n" : " failed\n")
 		if (!result) {
 			for (f in failures) {
 				// If the constraint is a CompareConstraint and the value being tested is a Cell,
 				// we create a friendly message for the user.
 				if (f constraint instanceOf?(CompareConstraint) && f value instanceOf?(Cell))
-					(this createFailureMessage(f)) printfln()
+					(this createFailureMessage(f) toString()) println()
 				else
 					"  -> '%s' (expect: %i)" printfln(f message, f expect)
 			}
@@ -62,26 +62,28 @@ Fixture: abstract class {
 		failures free()
 		result
 	}
-	createFailureMessage: func (failure: TestFailedException) -> String {
+	createFailureMessage: func (failure: TestFailedException) -> Text {
 		constraint := failure constraint as CompareConstraint
 		// Left is the tested value, right is the correct/expected value
 		leftValue := failure value as Cell
 		rightValue := constraint correct as Cell
-		result := StringBuilder new("  -> '%s': expected" format(failure message))
+		result := TextBuilder new(t"  -> ")
+		result append(Text new(failure message))
+		result append(t": expected")
 		match (constraint type) {
 			case ComparisonType Equal =>
-				result append(" equal to")
+				result append(t" equal to")
 			case ComparisonType LessThan =>
-				result append(" less than")
+				result append(t" less than")
 			case ComparisonType GreaterThan =>
-				result append(" greater than")
+				result append(t" greater than")
 			case ComparisonType Within =>
-				result append(" equal to")
+				result append(t" equal to")
 		}
-		result append(" '%s', was '%s'" format(rightValue toString(), leftValue toString()))
+		result append(Text new(" '%s', was '%s'" format(rightValue toString(), leftValue toString())))
 		if (constraint type == ComparisonType Within)
-			result append(" [tolerance: %.8f]" formatDouble((constraint parent as CompareWithinConstraint) precision))
-		result toString()
+			result append(Text new(" [tolerance: %.8f]" formatDouble((constraint parent as CompareWithinConstraint) precision)))
+		result join(' ')
 	}
 	is ::= static IsConstraints new()
 	_expectCount: static Int = 0
