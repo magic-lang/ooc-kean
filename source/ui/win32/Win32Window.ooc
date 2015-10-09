@@ -1,0 +1,72 @@
+/*
+ * Copyright (C) 2015 - Simon Mika <simon@mika.se>
+ *
+ * This sofware is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software. If not, see <http://www.gnu.org/licenses/>.
+ */
+use ooc-ui
+use ooc-math
+use ooc-draw
+import include/win32
+
+Win32Window: class extends NativeWindow {
+	init: func (size: IntSize2D, title: String) {
+		windowClassName := "Window class" as CString
+		display := GetModuleHandle(null)
+		windowClass: WNDCLASSEXA_OOC
+		windowClass cbSize = WNDCLASSEXA_OOC size
+		windowClass style = 0
+		windowClass lpfnWndProc = This defaultWindowProcedure
+		windowClass cbClsExtra = 0
+		windowClass cbWndExtra = 0
+		windowClass hInstance = display
+		windowClass hIcon = LoadIcon(null, IDI_APPLICATION)
+		windowClass hCursor = LoadCursor(null, IDC_ARROW)
+		windowClass hbrBackground = (COLOR_WINDOW+1) as HBRUSH
+		windowClass lpszMenuName = null
+		windowClass lpszClassName = windowClassName
+		windowClass hIconSm = LoadIcon(null, IDI_APPLICATION)
+		if(!RegisterClassEx(windowClass&))
+			raise("Unable to register win32 window class. Error code: " + GetLastError() toString())
+		backend := CreateWindowEx(WS_EX_CLIENTEDGE, windowClassName, title as CString, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, size width, size height, null, null, display, null)
+		if(backend == null)
+			raise("Unable to create win32 window. Error code: " + GetLastError() toString())
+		super(size, backend, display)
+		"" println()
+		ShowWindow(backend, SW_SHOWDEFAULT)
+		UpdateWindow(backend)
+	}
+	draw: func (image: RasterBgra) {
+		paintStruct: PAINTSTRUCT_OOC
+		bitmap: BITMAP_OOC
+		InvalidateRect(this backend as HWND, null, false)
+		bitmapHandle := CreateBitmap(image size width, image size height, 1, 32, image buffer pointer)
+		deviceContext := BeginPaint(this backend as HWND, paintStruct&)
+		deviceContextMemory := CreateCompatibleDC(deviceContext)
+		oldBitmap := SelectObject(deviceContextMemory, bitmapHandle)
+		GetObject(bitmapHandle, BITMAP_OOC size, bitmap&)
+		BitBlt(deviceContext, 0, 0, bitmap bmWidth, bitmap bmHeight, deviceContextMemory, 0, 0, SRCCOPY)
+		SelectObject(deviceContextMemory, oldBitmap)
+		DeleteDC(deviceContextMemory)
+		EndPaint(this backend as HWND, paintStruct&)
+	}
+	defaultWindowProcedure: static func (backend: HWND, message: UInt, wParam: WPARAM, lParam: LPARAM) -> LRESULT {
+		match(message) {
+			case WM_CLOSE =>
+				DestroyWindow(backend)
+			case WM_DESTROY =>
+				PostQuitMessage(0)
+		}
+		return DefWindowProc(backend, message, wParam, lParam)
+	}
+}
