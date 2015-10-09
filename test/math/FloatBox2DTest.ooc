@@ -42,8 +42,8 @@ FloatBox2DTest: class extends Fixture {
 		})
 		this add("subtraction, intersection", func {
 			result := box0 - box2
-			resultb := box2 - box0
-			expect(result == resultb)
+			other := box2 - box0
+			expect(result == other)
 			expect(result top, is equal to(2.0f) within(this precision))
 			expect(result left, is equal to(2.0f) within(this precision))
 			expect(result width, is equal to(2.0f) within(this precision))
@@ -51,11 +51,11 @@ FloatBox2DTest: class extends Fixture {
 			expect(result == box0 intersection(box2))
 		})
 		this add("casts", func {
-			intVersion := this box0 toIntBox2D()
-			expect(intVersion left, is equal to(1))
-			expect(intVersion top, is equal to(2))
-			expect(intVersion right, is equal to(4))
-			expect(intVersion bottom, is equal to(6))
+			intBox := this box0 toIntBox2D()
+			expect(intBox left, is equal to(1))
+			expect(intBox top, is equal to(2))
+			expect(intBox right, is equal to(4))
+			expect(intBox bottom, is equal to(6))
 		})
 		this add("contains~FloatPoint2DVectorList", func {
 			box := FloatBox2D new(-2.0f, -1.0f, 3.0f, 3.0f)
@@ -77,24 +77,24 @@ FloatBox2DTest: class extends Fixture {
 			expect(box == shrunkBox, is true)
 		})
 		this add("rounding", func {
-			_round := this box3 round()
-			_ceiling := this box3 ceiling()
-			_floor := this box3 floor()
+			round := this box3 round()
+			ceiling := this box3 ceiling()
+			floor := this box3 floor()
 
-			expect(_round left, is equal to(3.0f) within(this precision))
-			expect(_round top, is equal to(1.0f) within(this precision))
-			expect(_round width, is equal to(5.0f) within(this precision))
-			expect(_round height, is equal to(3.0f) within(this precision))
+			expect(round left, is equal to(3.0f) within(this precision))
+			expect(round top, is equal to(1.0f) within(this precision))
+			expect(round width, is equal to(5.0f) within(this precision))
+			expect(round height, is equal to(3.0f) within(this precision))
 
-			expect(_ceiling left, is equal to(3.0f) within(this precision))
-			expect(_ceiling top, is equal to(2.0f) within(this precision))
-			expect(_ceiling width, is equal to(5.0f) within(this precision))
-			expect(_ceiling height, is equal to(4.0f) within(this precision))
+			expect(ceiling left, is equal to(3.0f) within(this precision))
+			expect(ceiling top, is equal to(2.0f) within(this precision))
+			expect(ceiling width, is equal to(5.0f) within(this precision))
+			expect(ceiling height, is equal to(4.0f) within(this precision))
 
-			expect(_floor left, is equal to(2.0f) within(this precision))
-			expect(_floor top, is equal to(1.0f) within(this precision))
-			expect(_floor width, is equal to(4.0f) within(this precision))
-			expect(_floor height, is equal to(3.0f) within(this precision))
+			expect(floor left, is equal to(2.0f) within(this precision))
+			expect(floor top, is equal to(1.0f) within(this precision))
+			expect(floor width, is equal to(4.0f) within(this precision))
+			expect(floor height, is equal to(3.0f) within(this precision))
 		})
 		this add("swap", func {
 			swapped := this box0 swap()
@@ -104,9 +104,9 @@ FloatBox2DTest: class extends Fixture {
 			expect(swapped height, is equal to(this box0 width))
 		})
 		this add("adaptTo", func {
-			small := FloatBox2D new(1.0f, 1.0f, 1.0f, 1.0f)
-			large := FloatBox2D new(3.0f, 3.0f, 2.0f, 2.0f)
-			adapted := small adaptTo(large, 0.5f)
+			smallBox := FloatBox2D new(1.0f, 1.0f, 1.0f, 1.0f)
+			largeBox := FloatBox2D new(3.0f, 3.0f, 2.0f, 2.0f)
+			adapted := smallBox adaptTo(largeBox, 0.5f)
 			expect(adapted center x, is equal to(2.75f) within(this precision))
 			expect(adapted center y, is equal to(2.75f) within(this precision))
 			expect(adapted width, is equal to(1.5f) within(this precision))
@@ -128,6 +128,7 @@ FloatBox2DTest: class extends Fixture {
 			expect(box top, is equal to(-2.0f) within(this precision))
 			expect(box right, is equal to(1.0f) within(this precision))
 			expect(box bottom, is equal to(4.0f) within(this precision))
+			points free()
 		})
 		this add("parse", func {
 			box := FloatBox2D parse("1.0, 2.0, 3.0, 4.0")

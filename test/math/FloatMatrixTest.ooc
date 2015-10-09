@@ -124,13 +124,11 @@ FloatMatrixTest: class extends Fixture {
 		})
 	}
 
-	createMatrix: func (width: Int, height: Int, values: Float[]) -> FloatMatrix {
+	createMatrix: func (width, height: Int, values: Float[]) -> FloatMatrix {
 		result := FloatMatrix new(width, height)
-		for (x in 0 .. width) {
-			for (y in 0 .. height) {
+		for (x in 0 .. width)
+			for (y in 0 .. height)
 				result[x, y] = values[x * height + y]
-			}
-		}
 		result
 	}
 

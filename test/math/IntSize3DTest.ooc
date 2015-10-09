@@ -13,9 +13,6 @@ IntSize3DTest: class extends Fixture {
 		super("IntSize3D")
 		this add("equality", func {
 			point := IntSize3D new()
-//			FIXME: There is no equals interface yet
-//			expect(this vector0, is equal to(this vector0))
-//			expect(this vector0 equals(this vector0 as Object), is true)
 			expect(this vector0 == this vector0, is true)
 			expect(this vector0 != this vector1, is true)
 			expect(this vector0 == point, is false)
@@ -50,8 +47,6 @@ IntSize3DTest: class extends Fixture {
 		this add("casting", func {
 			value := "10, 20, 0"
 			expect(this vector3 toString(), is equal to(value))
-//			FIXME: Equals interface
-//			expect(IntSize2D parse(value), is equal to(this vector3))
 		})
 		this add("float casts", func {
 			vector := vector0 toFloatSize3D()

@@ -25,17 +25,12 @@ FloatSize3DTest: class extends Fixture {
 			expect(this vector0 scalarProduct(this vector1), is equal to(425.0f) within(this precision))
 		})
 		this add("vector product", func {
-			//FIXME: Equals interface
-//			expect(this vector0 vectorProduct(this vector1), is equal to(-(this vector1 vectorProduct(this vector0))))
 			expect(this vector0 vectorProduct(this vector1) width, is equal to(-190.0f) within(this precision))
 			expect(this vector0 vectorProduct(this vector1) height, is equal to(-320.0f) within(this precision))
 			expect(this vector0 vectorProduct(this vector1) depth, is equal to(322.0f) within(this precision))
 		})
 		this add("equality", func {
 			size := FloatSize3D new()
-//			FIXME: There is no equals interface yet
-//			expect(this vector0, is equal to(this vector0))
-//			expect(this vector0 equals(this vector0 as Object), is true)
 			expect(this vector0 == this vector0, is true)
 			expect(this vector0 != this vector1, is true)
 			expect(this vector0 == size, is false)
@@ -60,8 +55,6 @@ FloatSize3DTest: class extends Fixture {
 		this add("casting", func {
 			value := "10.00, 20.00, 30.00"
 			expect(this vector3 toString(), is equal to(value))
-//			FIXME: Equals interface
-//			expect(FloatSize2D parse(value), is equal to(this vector3))
 		})
 		this add("int casts", func {
 			vector := this vector0 toIntSize3D()
@@ -100,10 +93,10 @@ FloatSize3DTest: class extends Fixture {
 			expect(_floor depth, is equal to(30.0f) within(this precision))
 		})
 		this add("p norm", func {
-			onenorm := this vector0 pNorm(1.0f)
-			euclidean := this vector0 pNorm(2.0f)
-			expect(onenorm, is equal to(35.0f) within(this precision))
-			expect(euclidean, is equal to(24.352f) within(0.01f))
+			oneNorm := this vector0 pNorm(1.0f)
+			euclideanNorm := this vector0 pNorm(2.0f)
+			expect(oneNorm, is equal to(35.0f) within(this precision))
+			expect(euclideanNorm, is equal to(24.352f) within(0.01f))
 		})
 		this add("clamp", func {
 			clamped := this vector1 clamp(this vector0, this vector2)

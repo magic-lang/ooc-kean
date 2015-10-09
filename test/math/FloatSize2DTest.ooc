@@ -13,9 +13,6 @@ FloatSize2DTest: class extends Fixture {
 		super("FloatSize2D")
 		this add("equality", func {
 			point := FloatSize2D new()
-//			FIXME: There is no equals interface yet
-//			expect(this vector0, is equal to(this vector0))
-//			expect(this vector0 equals(this vector0 as Object), is true)
 			expect(this vector0 == this vector0, is true)
 			expect(this vector0 != this vector1, is true)
 			expect(this vector0 == point, is false)
@@ -50,8 +47,6 @@ FloatSize2DTest: class extends Fixture {
 		this add("casting", func {
 			value := "10.00, 20.00"
 			expect(this vector3 toString(), is equal to(value))
-//			FIXME: Equals interface
-//			expect(FloatSize2D parse(value), is equal to(this vector3))
 		})
 		this add("float casts", func {
 			point := vector3 toFloatPoint2D()
@@ -119,10 +114,10 @@ FloatSize2DTest: class extends Fixture {
 			expect(_floor height, is equal to(13.0f) within(this precision))
 		})
 		this add("p norm", func {
-			onenorm := this vector0 pNorm(1.0f)
-			euclidean := this vector0 pNorm(2.0f)
-			expect(onenorm, is equal to(25.321f) within(this precision))
-			expect(euclidean, is equal to(22.436f) within(0.01f))
+			oneNorm := this vector0 pNorm(1.0f)
+			euclideanNorm := this vector0 pNorm(2.0f)
+			expect(oneNorm, is equal to(25.321f) within(this precision))
+			expect(euclideanNorm, is equal to(22.436f) within(0.01f))
 		})
 		this add("clamp", func {
 			clamped := this vector1 clamp(this vector0, this vector2)

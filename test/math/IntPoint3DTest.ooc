@@ -13,9 +13,6 @@ IntPoint3DTest: class extends Fixture {
 		super("IntPoint3D")
 		this add("equality", func {
 			point := IntPoint3D new()
-//			FIXME: There is no equals interface yet
-//			expect(this point0, is equal to(this point0))
-//			expect(this point0 equals(this point0 as Object), is true)
 			expect(this point0 == this point0, is true)
 			expect(this point0 != this point1, is true)
 			expect(this point0 == point, is false)
@@ -50,8 +47,6 @@ IntPoint3DTest: class extends Fixture {
 		this add("casting", func {
 			value := "10, 20, 0"
 			expect(this point3 toString(), is equal to(value))
-//			FIXME: Equals interface
-//			expect(IntSize2D parse(value), is equal to(this point3))
 		})
 		this add("float casts", func {
 			point := point0 toFloatPoint3D()
@@ -60,14 +55,14 @@ IntPoint3DTest: class extends Fixture {
 			expect(point z, is equal to(8.0f) within(this precision))
 		})
 		this add("minimum maximum", func {
-			_max := this point0 maximum(this point1)
-			_min := this point0 minimum(this point1)
-			expect(_max x, is equal to(22))
-			expect(_max y, is equal to(13))
-			expect(_max z, is equal to(8))
-			expect(_min x, is equal to(12))
-			expect(_min y, is equal to(-3))
-			expect(_min z, is equal to(-8))
+			max := this point0 maximum(this point1)
+			min := this point0 minimum(this point1)
+			expect(max x, is equal to(22))
+			expect(max y, is equal to(13))
+			expect(max z, is equal to(8))
+			expect(min x, is equal to(12))
+			expect(min y, is equal to(-3))
+			expect(min z, is equal to(-8))
 		})
 		this add("scalar product", func {
 			product := this point0 scalarProduct(this point1)

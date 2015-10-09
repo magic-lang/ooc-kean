@@ -13,9 +13,6 @@ IntSize2DTest: class extends Fixture {
 		super("IntSize2D")
 		this add("equality", func {
 			point := IntSize2D new()
-//			FIXME: There is no equals interface yet
-//			expect(this vector0, is equal to(this vector0))
-//			expect(this vector0 equals(this vector0 as Object), is true)
 			expect(this vector0 == this vector0, is true)
 			expect(this vector0 != this vector1, is true)
 			expect(this vector0 == point, is false)
@@ -53,8 +50,6 @@ IntSize2DTest: class extends Fixture {
 			point := this vector3 toIntPoint2D()
 			expect(point x, is equal to(this vector3 width))
 			expect(point y, is equal to(this vector3 height))
-//			FIXME: Equals interface
-//			expect(IntSize2D parse(value), is equal to(this vector3))
 		})
 		this add("float casts", func {
 			vector := vector0 toFloatSize2D()

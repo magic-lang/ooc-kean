@@ -21,16 +21,12 @@ FloatPoint3DTest: class extends Fixture {
 			expect(this point0 scalarProduct(this point1), is equal to(425.0f) within(this precision))
 		})
 		this add("scalar multiplication", func {
-//			FIXME: Equals interface
-//			expect(this point0 vectorProduct(this point1), is equal to(-(this point1 vectorProduct(point0))))
 			expect(this point0 vectorProduct(this point1) x, is equal to(-190.0f) within(this precision))
 			expect(this point0 vectorProduct(this point1) y, is equal to(-320.0f) within(this precision))
 			expect(this point0 vectorProduct(this point1) z, is equal to(322.0f) within(this precision))
 		})
 		this add("equality", func {
 			point := FloatPoint3D new()
-//			expect(this vector0, is equal to(this vector0))
-//			expect(this vector0 equals(this vector0 as Object), is true)
 			expect(this point0 == this point0, is true)
 			expect(this point0 != this point1, is true)
 			expect(this point0 == point, is false)
@@ -55,14 +51,12 @@ FloatPoint3DTest: class extends Fixture {
 		this add("casting", func {
 			value := "12.00000000, 13.00000000, 20.00000000"
 			expect(this point1 toString(), is equal to(value))
-//			FIXME: Equals interface
-//			expect(FloatSize2D parse(value), is equal to(this vector3))
 		})
 		this add("p norm", func {
-			onenorm := this point0 pNorm(1.0f)
-			euclidean := this point0 pNorm(2.0f)
-			expect(onenorm, is equal to(35.0f) within(this precision))
-			expect(euclidean, is equal to(24.352f) within(0.01f))
+			oneNorm := this point0 pNorm(1.0f)
+			euclideanNorm := this point0 pNorm(2.0f)
+			expect(oneNorm, is equal to(35.0f) within(this precision))
+			expect(euclideanNorm, is equal to(24.352f) within(0.01f))
 		})
 		this add("int casts", func {
 			point := point3 toIntPoint3D()

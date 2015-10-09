@@ -26,7 +26,7 @@ FloatSize3D: cover {
 	length ::= this norm
 	empty ::= this width == 0 || this height == 0 || this depth == 0
 	norm ::= (this width squared() + this height squared() + this depth squared()) sqrt()
-	azimuth ::= atan2(this height, this width) as Float
+	azimuth ::= this height atan2(this width)
 	basisX: static This { get { This new(1, 0, 0) } }
 	basisY: static This { get { This new(0, 1, 0) } }
 	basisZ: static This { get { This new(0, 0, 1) } }

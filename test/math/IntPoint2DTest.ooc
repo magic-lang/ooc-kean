@@ -13,8 +13,6 @@ IntPoint2DTest: class extends Fixture {
 		super("IntPoint2D")
 		this add("equality", func {
 			point := IntPoint2D new()
-//			expect(this point0, is equal to(this point0))
-//			expect(this point0 equals(this point0 as Object), is true)
 			expect(this point0 == this point0, is true)
 			expect(this point0 != this point1, is true)
 			expect(this point0 == point, is false)
@@ -41,8 +39,6 @@ IntPoint2DTest: class extends Fixture {
 		this add("casting", func {
 			value := "10, 20"
 			expect(this point3 toString(), is equal to(value))
-//			FIXME: Equals interface
-//			expect(FloatSize2D parse(value), is equal to(this point3))
 		})
 		this add("float casts", func {
 			point := point0 toFloatPoint2D()
@@ -50,12 +46,12 @@ IntPoint2DTest: class extends Fixture {
 			expect(point y, is equal to(-3.0f) within(this precision))
 		})
 		this add("minimum maximum", func {
-			_max := this point0 maximum(this point1)
-			_min := this point0 minimum(this point1)
-			expect(_max x, is equal to(22))
-			expect(_max y, is equal to(13))
-			expect(_min x, is equal to(12))
-			expect(_min y, is equal to(-3))
+			max := this point0 maximum(this point1)
+			min := this point0 minimum(this point1)
+			expect(max x, is equal to(22))
+			expect(max y, is equal to(13))
+			expect(min x, is equal to(12))
+			expect(min y, is equal to(-3))
 		})
 		this add("scalar product", func {
 			product := this point0 scalarProduct(this point1)
@@ -67,8 +63,8 @@ IntPoint2DTest: class extends Fixture {
 			expect(result y, is equal to(10))
 		})
 		this add("distance", func {
-			_distance := point0 distance(point1)
-			expect(_distance, is equal to(18.87f) within(0.01f))
+			distance := point0 distance(point1)
+			expect(distance, is equal to(18.87f) within(0.01f))
 		})
 	}
 }
