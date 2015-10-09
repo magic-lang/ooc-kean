@@ -40,8 +40,8 @@ IntBox2DTest: class extends Fixture {
 		})
 		this add("subtraction, intersection", func {
 			result := box0 - box2
-			resultb := box2 - box0
-			expect(result == resultb)
+			other := box2 - box0
+			expect(result == other)
 			expect(result top, is equal to(2))
 			expect(result left, is equal to(2))
 			expect(result width, is equal to(2))
@@ -49,11 +49,11 @@ IntBox2DTest: class extends Fixture {
 			expect(result == box0 intersection(box2))
 		})
 		this add("casts", func {
-			floatVersion := this box0 toFloatBox2D()
-			expect(floatVersion left, is equal to(1.0f) within(0.01f))
-			expect(floatVersion top, is equal to(2.0f) within(0.01f))
-			expect(floatVersion right, is equal to(4.0f) within(0.01f))
-			expect(floatVersion bottom, is equal to(6.0f) within(0.01f))
+			floatBox := this box0 toFloatBox2D()
+			expect(floatBox left, is equal to(1.0f) within(0.01f))
+			expect(floatBox top, is equal to(2.0f) within(0.01f))
+			expect(floatBox right, is equal to(4.0f) within(0.01f))
+			expect(floatBox bottom, is equal to(6.0f) within(0.01f))
 		})
 		this add("swap", func {
 			swapped := this box0 swap()

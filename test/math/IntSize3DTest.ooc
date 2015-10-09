@@ -58,14 +58,14 @@ IntSize3DTest: class extends Fixture {
 			expect(this vector0 scalarProduct(this vector1), is equal to (161))
 		})
 		this add("minimum maximum", func {
-			_max := this vector0 maximum(this vector1)
-			_min := this vector0 minimum(this vector1)
-			expect(_max width, is equal to(22))
-			expect(_max height, is equal to(13))
-			expect(_max depth, is equal to(8))
-			expect(_min width, is equal to(12))
-			expect(_min height, is equal to(-3))
-			expect(_min depth, is equal to(-8))
+			max := this vector0 maximum(this vector1)
+			min := this vector0 minimum(this vector1)
+			expect(max width, is equal to(22))
+			expect(max height, is equal to(13))
+			expect(max depth, is equal to(8))
+			expect(min width, is equal to(12))
+			expect(min height, is equal to(-3))
+			expect(min depth, is equal to(-8))
 		})
 		this add("clamp", func {
 			result := this vector1 clamp(this vector0, this vector2)
@@ -80,11 +80,11 @@ IntSize3DTest: class extends Fixture {
 			expect(even depth, is equal to(8))
 		})
 		this add("volume, empty", func {
-			_empty := IntSize3D new()
-			expect(_empty empty, is equal to(true))
+			empty := IntSize3D new()
+			expect(empty empty, is true)
 			expect(this vector1 empty, is equal to(false))
 			expect(this vector1 volume, is equal to(-1248))
-			expect(_empty volume, is equal to(0))
+			expect(empty volume, is equal to(0))
 		})
 	}
 }

@@ -103,9 +103,9 @@ FloatRandomGeneratorTest: class extends Fixture {
 		})
 		this add("uniform range", func {
 			uniformGenerator := FloatUniformRandomGenerator new()
-			uniformGenerator setRange(-25000.0f, 25000.0f)
-			uniformLowest := 25000.0f
-			uniformHighest := -25000.0f
+			uniformGenerator setRange(-25_000.0f, 25_000.0f)
+			uniformLowest := 25_000.0f
+			uniformHighest := -25_000.0f
 			for (i in 0 .. 100_000) {
 				value := uniformGenerator next()
 				if (value > uniformHighest)
@@ -115,8 +115,8 @@ FloatRandomGeneratorTest: class extends Fixture {
 			}
 			expect(uniformLowest >= uniformGenerator minimum)
 			expect(uniformHighest <= uniformGenerator maximum)
-			expect(uniformLowest >= -25000.0f)
-			expect(uniformHighest <= 25000.0f)
+			expect(uniformLowest >= -25_000.0f)
+			expect(uniformHighest <= 25_000.0f)
 		})
 	}
 }
