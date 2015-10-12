@@ -135,6 +135,8 @@ Cell: class <T> {
 	// TODO: Move this to an extension in ooc-kean later
 	toString: func -> String {
 		match T {
+			case Bool =>
+				(this val as Bool) toString()
 			case Int =>
 				(this val as Int) toString()
 			case Long =>

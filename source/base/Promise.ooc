@@ -39,7 +39,7 @@ _ThreadPromise: class extends Promise {
 			this _thread wait()
 		this _thread free()
 		(this _action as Closure) dispose()
-		this _mutex destroy()
+		this _mutex free()
 		super()
 	}
 	wait: func -> Bool {
@@ -97,7 +97,7 @@ _ThreadFuture: class <T> extends Future<T> {
 			this _thread wait()
 		this _thread free()
 		(this _action as Closure) dispose()
-		this _mutex destroy()
+		this _mutex free()
 		super()
 	}
 	wait: func -> Bool {
