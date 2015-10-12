@@ -1,0 +1,14 @@
+version: 1.0.{build}
+os: Windows Server 2012 R2
+environment:
+  PATH: C:\MinGW\bin;C:\msys64\usr\bin;%PATH%
+install:
+- cmd: >-
+    bash install_rock.sh
+
+    mv rock.exe C:\msys64\usr\bin\
+
+    mingw-get install pthreads
+build: off
+test_script:
+- cmd: bash test.sh nogpu
