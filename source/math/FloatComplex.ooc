@@ -57,7 +57,7 @@ FloatComplex: cover {
 		This new(this absoluteValue log(), this imaginary atan2(this real))
 	}
 	rootOfUnity: static func (n: Int, k := 1) -> This {
-		This new(0, 2 * k * PI / n) exponential()
+		This new(0.0f, 2.0f * k * Float pi / n) exponential()
 	}
 }
 operator * (left: Float, right: FloatComplex) -> FloatComplex { FloatComplex new(left * right real, left * right imaginary) }

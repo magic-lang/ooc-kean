@@ -111,7 +111,7 @@ FloatMatrixTest: class extends Fixture {
 		this add("set and get", func {
 			matrix = createMatrix(3, 3, [1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f])
 			matrix[0, 0] = 42.0f
-			expect(matrix[0, 0] == 42.0f)
+			expect(matrix[0, 0], is equal to(42.0f) within(this tolerance))
 		})
 
 		this add("print columns", func {
