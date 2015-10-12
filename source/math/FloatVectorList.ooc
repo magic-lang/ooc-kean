@@ -24,11 +24,17 @@ FloatVectorList: class extends VectorList<Float> {
 		this super()
 	}
 	init: func ~heap (capacity: Int) {
-		super(capacity)
+		this super(capacity)
 	}
 	init: func ~fromVectorList (other: VectorList<Float>) {
 		this super(other _vector)
 		this _count = other count
+	}
+	init: func ~withValue (capacity: Int, value: Float) -> This {
+		this super(capacity)
+		for (i in 0 .. capacity)
+			this add(value)
+		this
 	}
 	toVectorList: func -> VectorList<Float> {
 		result := VectorList<Float> new(this count)
@@ -181,16 +187,10 @@ FloatVectorList: class extends VectorList<Float> {
 		max != 0 ? (this / max) : this copy()
 	}
 	getOnes: static func (count: Float) -> This {
-		result := This new(count)
-		for (i in 0 .. count)
-			result add(1.0f)
-		result
+		This new(count, 1.0f) // TODO Deprecated, will be removed once all uses have been removed
 	}
 	getZeros: static func (count: Float) -> This {
-		result := This new(count)
-		for (i in 0 .. count)
-			result add(0.0f)
-		result
+		This new(count, 1.0f) // TODO Deprecated, will be removed once all uses have been removed
 	}
 	exp: func -> This {
 		result := This new(this _count)
