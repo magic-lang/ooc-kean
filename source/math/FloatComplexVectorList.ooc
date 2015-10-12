@@ -21,17 +21,17 @@ import math
 
 FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	init: func ~default {
-		this super()
+		super()
 	}
 	init: func ~capacity (capacity: Int) {
-		this super(capacity)
+		super(capacity)
 	}
 	init: func ~fromVectorList (other: VectorList<FloatComplex>) {
-		this super(other _vector)
+		super(other _vector)
 		this _count = other count
 	}
 	init: func ~withValue (capacity: Int, value: FloatComplex) -> This {
-		this super(capacity)
+		super(capacity)
 		for (i in 0 .. capacity)
 			this add(value)
 		this

@@ -297,8 +297,8 @@ FloatVectorListTest: class extends Fixture {
 			list add(-6.0f)
 			list add(4.0f)
 			list add(-7.0f)
-			_absolute := list absolute()
-			expect(_absolute sum, is equal to(20.0f) within(tolerance))
+			absolute := list absolute()
+			expect(absolute sum, is equal to(20.0f) within(tolerance))
 		})
 		this add("reverse", func {
 			list := FloatVectorList new()
