@@ -22,6 +22,8 @@ import RasterImage
 import StbImage
 import Image
 import Color
+import PaintEngine
+import RasterPaintEngine
 
 RasterBgr: class extends RasterPacked {
 	bytesPerPixel: Int { get { 3 } }
@@ -140,4 +142,5 @@ RasterBgr: class extends RasterPacked {
 	}
 	operator [] (x, y: Int) -> ColorBgr { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorBgr* + x)@ : ColorBgr new(0, 0, 0) }
 	operator []= (x, y: Int, value: ColorBgr) { ((this buffer pointer + y * this stride) as ColorBgr* + x)@ = value }
+	createPaintEngine: override func -> PaintEngine { BgrPaintEngine new(this) }
 }
