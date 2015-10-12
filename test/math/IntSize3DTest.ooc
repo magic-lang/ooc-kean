@@ -82,7 +82,7 @@ IntSize3DTest: class extends Fixture {
 		this add("volume, empty", func {
 			empty := IntSize3D new()
 			expect(empty empty, is true)
-			expect(this vector1 empty, is equal to(false))
+			expect(this vector1 empty, is false)
 			expect(this vector1 volume, is equal to(-1248))
 			expect(empty volume, is equal to(0))
 		})

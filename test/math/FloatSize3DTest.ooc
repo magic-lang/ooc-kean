@@ -130,9 +130,9 @@ FloatSize3DTest: class extends Fixture {
 		this add("length, empty", func {
 			empty := FloatSize3D new()
 			expect(this vector0 length, is equal to(24.35f) within(0.01f))
-			expect(empty empty, is equal to(true))
+			expect(empty empty, is true)
 			expect(empty volume, is equal to(0.0f) within(this precision))
-			expect(this vector0 empty, is equal to(false))
+			expect(this vector0 empty, is false)
 		})
 		this add("azimuth", func {
 			myvector := FloatSize3D new(1.0, 5.5, 0.1)
