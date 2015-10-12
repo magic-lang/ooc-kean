@@ -30,11 +30,10 @@ FloatVectorList: class extends VectorList<Float> {
 		super(other _vector)
 		this _count = other count
 	}
-	init: func ~withValue (capacity: Int, value: Float) -> This {
+	init: func ~withValue (capacity: Int, value: Float) {
 		super(capacity)
 		for (i in 0 .. capacity)
 			this add(value)
-		this
 	}
 	toVectorList: func -> VectorList<Float> {
 		result := VectorList<Float> new(this count)
