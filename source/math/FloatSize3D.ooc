@@ -46,7 +46,7 @@ FloatSize3D: cover {
 		)
 	}
 	angle: func (other: This) -> Float {
-		(this scalarProduct(other) / (this norm * other norm)) acos() * (this width * other height - this height * other width < 0.0f ? -1.0f : 1.0f)
+		(this scalarProduct(other) / (this norm * other norm)) clamp(-1.0f, 1.0f) acos() * (this width * other height - this height * other width < 0.0f ? -1.0f : 1.0f)
 	}
 	distance: func (other: This) -> Float { (this - other) norm }
 	round: func -> This { This new(this width round(), this height round(), this depth round()) }

@@ -34,7 +34,7 @@ IntSize2D: cover {
 	minimum: func (ceiling: This) -> This { This new(Int minimum~two(this width, ceiling width), Int minimum~two(this height, ceiling height)) }
 	maximum: func (floor: This) -> This { This new(Int maximum~two(this width, floor width), Int maximum~two(this height, floor height)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height)) }
-	fillEven: static func (other: This) -> This { This new(other width + (other width % 2 == 1 ? 1 : 0), other height + (other height % 2 == 1 ? 1 : 0)) }
+	fillEven: static func (other: This) -> This { This new(other width + (Int odd(other width) ? 1 : 0), other height + (Int odd(other height) ? 1 : 0)) }
 	operator + (other: This) -> This { This new(this width + other width, this height + other height) }
 	operator + (other: IntPoint2D) -> This { This new(this width + other x, this height + other y) }
 	operator - (other: This) -> This { This new(this width - other width, this height - other height) }
