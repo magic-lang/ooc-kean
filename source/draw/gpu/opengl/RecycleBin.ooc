@@ -21,6 +21,7 @@ use ooc-base
 use ooc-draw-gpu
 import OpenGLPacked, OpenGLMonochrome, OpenGLBgra, OpenGLBgr, OpenGLUv, threading/Thread
 
+version(!gpuOff) {
 RecycleBin: class {
 	_monochrome := VectorList<OpenGLMonochrome> new()
 	_bgr := VectorList<OpenGLBgr> new()
@@ -97,4 +98,5 @@ RecycleBin: class {
 			case => null
 		}
 	}
+}
 }

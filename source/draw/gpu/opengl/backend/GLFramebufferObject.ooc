@@ -18,6 +18,7 @@
 use ooc-base
 use ooc-math
 
+version(!gpuOff) {
 GLFramebufferObject: abstract class {
 	_size: IntSize2D
 	size ::= this _size
@@ -30,4 +31,5 @@ GLFramebufferObject: abstract class {
 	setClearColor: abstract func (color: Float)
 	readPixels: abstract func -> ByteBuffer
 	invalidate: abstract func
+}
 }

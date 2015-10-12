@@ -21,6 +21,7 @@ import include/gles3
 import ../GLVolumeTexture
 import Gles3Debug
 
+version(!gpuOff) {
 Gles3VolumeTexture: class extends GLVolumeTexture {
 	_backend: UInt
 	backend: UInt { get { this _backend } }
@@ -63,4 +64,5 @@ Gles3VolumeTexture: class extends GLVolumeTexture {
 		this unbind()
 		version(debugGL) { validateEnd("VolumeTexture upload") }
 	}
+}
 }

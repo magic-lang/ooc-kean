@@ -20,6 +20,7 @@ use ooc-collections
 import PaintEngine
 import GpuImage, GpuCanvas
 
+version(!gpuOff) {
 GpuPaintEngine: class extends PaintEngine {
 	_image: GpuImage
 	init: func (=_image) { super() }
@@ -45,4 +46,5 @@ GpuPaintEngine: class extends PaintEngine {
 	drawBox: override func ~withFloatBox2D (box: FloatBox2D) {
 		this _image canvas drawBox(box)
 	}
+}
 }

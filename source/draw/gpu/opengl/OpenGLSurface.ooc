@@ -22,6 +22,7 @@ use ooc-draw-gpu
 import OpenGLContext
 import backend/GLRenderer
 
+version(!gpuOff) {
 OpenGLSurface: abstract class extends GpuSurface {
 	context ::= this _context as OpenGLContext
 	init: func (size: IntSize2D, context: OpenGLContext, defaultMap: GpuMap, coordinateTransform: IntTransform2D) {
@@ -80,4 +81,5 @@ OpenGLSurface: abstract class extends GpuSurface {
 		this draw(f)
 		(f as Closure) dispose()
 	}
+}
 }

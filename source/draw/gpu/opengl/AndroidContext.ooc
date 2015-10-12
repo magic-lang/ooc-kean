@@ -23,6 +23,7 @@ import Map/OpenGLMapPack
 import threading/Thread
 import math
 
+version(!gpuOff) {
 AndroidContext: class extends OpenGLContext {
 	_unpackRgbaToMonochrome := OpenGLMapUnpackRgbaToMonochrome new(this)
 	_unpackRgbaToUv := OpenGLMapUnpackRgbaToUv new(this)
@@ -139,4 +140,5 @@ AndroidContext: class extends OpenGLContext {
 	}
 	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }
 	isAligned: override func (width: Int) -> Bool { GraphicBuffer isAligned(width) }
+}
 }
