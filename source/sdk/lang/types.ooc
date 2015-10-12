@@ -135,6 +135,8 @@ Cell: class <T> {
 	// TODO: Move this to an extension in ooc-kean later
 	toString: func -> String {
 		match T {
+			case Char =>
+				(this val as Char) toString()
 			case Bool =>
 				(this val as Bool) toString()
 			case Int =>
@@ -151,6 +153,10 @@ Cell: class <T> {
 				"%.12f" formatDouble(this val as Double)
 			case LDouble =>
 				"%.12f" formatLDouble(this val as LDouble)
+			case Int64 =>
+				(this val as Int64) toString()
+			case UInt64 =>
+				(this val as UInt64) toString()
 			case =>
 				raise("[Cell] toString() is not implemented on the specified type")
 		}
