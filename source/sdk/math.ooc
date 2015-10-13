@@ -59,6 +59,10 @@ floor: extern(floorl) func ~Long (LDouble) -> LDouble
 	 maximumValue ::= static SHRT_MAX
 }
 
+extend Int64 {
+	modulo: func(divisor: Int) -> This { this - divisor * (this / divisor) }
+}
+
 extend Int {
 	modulo: func(divisor: This) -> This {
 		if (divisor < 0) {
