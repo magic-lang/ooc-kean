@@ -131,7 +131,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		return result
 	}
 	save: func (filename: String) {
-		bgr := RasterBgr new(this)
+		bgr := RasterBgr convertFrom(this)
 		bgr save(filename)
 		bgr referenceCount decrease()
 	}
