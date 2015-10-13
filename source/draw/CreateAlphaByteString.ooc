@@ -33,7 +33,7 @@ CreateAlphaByteString: class {
 		ip = ipbuffer pointer as Int*
 		if (ipbuffer size > 3)
 			imageArray += ip[0] toString()
-		for (i in 0 .. ipbuffer size / 4)
+		for (i in 1 .. ipbuffer size / 4)
 			imageArray += "," + (i % 32 == 0 ? "\n" : " ") + ip[i] toString()
 		imageArray += "]"
 		result := name + "Image" + ": StaticOverlayImages\n" + name + "Image image = " + imageArray + "\n"
