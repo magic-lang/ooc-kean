@@ -15,6 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+version(!gpuOff) {
 use ooc-base
 use ooc-math
 use ooc-ui
@@ -207,4 +208,5 @@ Gles3Context: class extends GLContext {
 	createVertexArrayObject: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GLVertexArrayObject {
 		Gles3VertexArrayObject new(vertices, textureCoordinates)
 	}
+}
 }

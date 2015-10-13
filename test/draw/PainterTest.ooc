@@ -106,30 +106,32 @@ PainterTest: class extends Fixture {
 			output free()
 		})
 		this add("gpu", func {
-			input := "test/draw/input/Flower.png"
-			output := "test/draw/output/painter_gpuYuv.png"
-			image := RasterYuv420Semiplanar open(input)
-			context := OpenGLContext new()
-			gpuImage := context createGpuImage(image)
-			painter := Painter new(gpuImage)
-			painter setPen(Pen new(ColorBgr new(255, 255, 255)))
-			shiftX := image size width / 2
-			shiftY := image size height / 2
-			for (i in 0 .. image size width / 10)
-				painter drawLine(IntPoint2D new(i * 10 - shiftX, -shiftY), IntPoint2D new(i * 10 - shiftX, shiftY))
-			for (i in 0 .. image size height / 10)
-				painter drawLine(IntPoint2D new(-shiftX, i * 10 - shiftY), IntPoint2D new(shiftX, i * 10 - shiftY))
-			rasterImage := gpuImage toRasterAsync()
-			rasterImage save(output)
-			original := RasterYuv420Semiplanar open(output)
-			expect(original distance(rasterImage) > 0.0f)
-			original free()
-			painter free()
-			rasterImage free()
-			image free()
-			input free()
-			output free()
-			context free()
+			version(!gpuOff) {
+				input := "test/draw/input/Flower.png"
+				output := "test/draw/output/painter_gpuYuv.png"
+				image := RasterYuv420Semiplanar open(input)
+				context := OpenGLContext new()
+				gpuImage := context createGpuImage(image)
+				painter := Painter new(gpuImage)
+				painter setPen(Pen new(ColorBgr new(255, 255, 255)))
+				shiftX := image size width / 2
+				shiftY := image size height / 2
+				for (i in 0 .. image size width / 10)
+					painter drawLine(IntPoint2D new(i * 10 - shiftX, -shiftY), IntPoint2D new(i * 10 - shiftX, shiftY))
+				for (i in 0 .. image size height / 10)
+					painter drawLine(IntPoint2D new(-shiftX, i * 10 - shiftY), IntPoint2D new(shiftX, i * 10 - shiftY))
+				rasterImage := gpuImage toRasterAsync()
+				rasterImage save(output)
+				original := RasterYuv420Semiplanar open(output)
+				expect(original distance(rasterImage) > 0.0f)
+				original free()
+				painter free()
+				rasterImage free()
+				image free()
+				input free()
+				output free()
+				context free()
+			}
 		})
 	}
 }

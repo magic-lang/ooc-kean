@@ -21,6 +21,7 @@ use ooc-draw-gpu
 import backend/GLShaderProgram
 import OpenGLContext
 
+version(!gpuOff) {
 OpenGLMap: abstract class extends GpuMap {
 	_vertexSource: String
 	_fragmentSource: String
@@ -267,4 +268,5 @@ OpenGLMapPoints: class extends OpenGLMap {
 			outColor = vec4(color.r, color.g, color.b, 1.0f);
 		}
 		"
+}
 }

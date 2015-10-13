@@ -15,6 +15,7 @@
 // along with this _program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
 
+version(!gpuOff) {
 GpuMap: abstract class {
 	model: FloatTransform3D { get set }
 	view: FloatTransform3D { get set }
@@ -27,4 +28,5 @@ GpuMap: abstract class {
 		this projection = FloatTransform3D identity
 		this textureTransform = FloatTransform3D identity
 	}
+}
 }

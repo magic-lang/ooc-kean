@@ -20,6 +20,7 @@ import include/gles3
 import ../GLShaderProgram
 import Gles3Debug
 
+version(!gpuOff) {
 Gles3ShaderProgram: class extends GLShaderProgram {
 	_backend: UInt
 
@@ -204,4 +205,5 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 		version(debugGL) { validateEnd("ShaderProgram _compileShaders") }
 		success
 	}
+}
 }

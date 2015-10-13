@@ -19,6 +19,7 @@ use ooc-math
 use ooc-base
 import GpuContext, GpuFence, GpuSurface
 
+version(!gpuOff) {
 GpuImageType: enum {
 	monochrome
 	rgba
@@ -67,4 +68,5 @@ GpuImage: abstract class extends Image {
 	toRasterDefault: abstract func -> RasterImage
 	_createCanvas: abstract func -> GpuSurface
 	bind: abstract func (unit: UInt)
+}
 }

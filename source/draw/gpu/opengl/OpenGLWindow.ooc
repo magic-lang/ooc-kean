@@ -21,6 +21,7 @@ use ooc-opengl
 use ooc-base
 use ooc-ui
 
+version(!gpuOff) {
 OpenGLWindow: class extends OpenGLSurface {
 	_monochromeToBgra: OpenGLMapMonochromeToBgra
 	_yuvSemiplanarToBgra: OpenGLMapYuvSemiplanarToBgra
@@ -50,4 +51,5 @@ OpenGLWindow: class extends OpenGLSurface {
 	}
 	refresh: func { this context update() }
 	clear: override func
+}
 }

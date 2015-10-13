@@ -19,6 +19,8 @@ use ooc-math
 use ooc-draw-gpu
 import OpenGLMap
 import ../OpenGLContext
+
+version(!gpuOff) {
 OpenGLMapPack: abstract class extends OpenGLMap {
 	imageWidth: Int { get set }
 	channels: Int { get set }
@@ -173,4 +175,5 @@ OpenGLMapUnpackRgbaToUv: class extends OpenGLMapUnpack {
 			outColor = vec2(mask.x * texel.r + mask.y * texel.b, mask.x * texel.g + mask.y * texel.a);
 		}
 		"
+}
 }
