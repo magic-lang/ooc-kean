@@ -11,4 +11,4 @@ install:
     mingw-get install pthreads
 build: off
 test_script:
-- cmd: bash test.sh nogpu
+- cmd: bash test.sh nogpu -DgpuOff
