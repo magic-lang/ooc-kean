@@ -31,13 +31,9 @@ RasterBgra: class extends RasterPacked {
 	init: func ~allocateStride (size: IntSize2D, stride: UInt) { super(size, stride) }
 	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntSize2D, stride: UInt) { super(buffer, size, stride) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { this init(buffer, size, this bytesPerPixel * size width) }
-	init: func ~fromRasterImage (original: RasterImage) { super(original) }
+	init: func ~fromRasterImage (original: This) { super(original) }
 	create: func (size: IntSize2D) -> Image { This new(size) }
-	copy: func -> This {
-		result := This new(this)
-		this buffer copyTo(result buffer)
-		result
-	}
+	copy: func -> This { This new(this) }
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		for (row in 0 .. this size height) {
 			source := this buffer pointer + row * this stride
@@ -170,6 +166,14 @@ RasterBgra: class extends RasterPacked {
 			(top * (left * topLeft red + (1 - left) * topRight red) + (1 - top) * (left * bottomLeft red + (1 - left) * bottomRight red)),
 			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
 		)
+	}
+	swapRedBlue: func {
+		this swapChannels(0, 2)
+	}
+	redBlueSwapped: func -> This {
+		result := this copy()
+		result swapRedBlue()
+		result
 	}
 	createPaintEngine: override func -> PaintEngine { BgraPaintEngine new(this) }
 }

@@ -23,6 +23,7 @@ import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFe
 import Map/OpenGLMap, Map/OpenGLMapPack
 import backend/[GLContext, GLRenderer]
 
+version(!gpuOff) {
 OpenGLContext: class extends GpuContext {
 	_backend: GLContext
 	backend ::= this _backend
@@ -187,4 +188,5 @@ OpenGLContext: class extends GpuContext {
 			vertices[i] = toGL * vertices[i]
 		OpenGLMesh new(vertices, textureCoordinates, this)
 	}
+}
 }

@@ -21,6 +21,7 @@ use ooc-base
 
 import GpuContext, GpuMap, GpuImage, GpuMesh
 
+version(!gpuOff) {
 GpuSurface: abstract class {
 	clearColor: ColorBgra { get set }
 	viewport: IntBox2D { get set }
@@ -107,4 +108,5 @@ GpuSurface: abstract class {
 	drawBox: virtual func (box: FloatBox2D)
 	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>)
 	readPixels: virtual func -> ByteBuffer { raise("readPixels unimplemented!") }
+}
 }

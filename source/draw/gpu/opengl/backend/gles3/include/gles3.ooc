@@ -15,6 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
+version(!gpuOff) {
 include GLES3/gl3, GLES3/gl3ext, GLES3/gl3platform, GLES2/gl2ext
 PFNGLEGLIMAGETARGETTEXTURE2DOESPROC_OOC: cover from PFNGLEGLIMAGETARGETTEXTURE2DOESPROC
 
@@ -1015,3 +1016,4 @@ glInvalidateSubFramebuffer: extern func (target: UInt, numAttachments: Int, atta
 glTexStorage2D: extern func (target: UInt, levels: Int, internalformat: UInt, width: Int, height: Int)
 glTexStorage3D: extern func (target: UInt, levels: Int, internalformat: UInt, width: Int, height: Int, depth: Int)
 glGetInternalformativ: extern func (target: UInt, internalformat: UInt, pname: UInt, bufSize: Int, params: Int*)
+}

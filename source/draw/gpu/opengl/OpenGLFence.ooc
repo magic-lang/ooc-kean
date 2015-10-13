@@ -18,6 +18,7 @@ use ooc-draw-gpu
 import backend/[GLFence, GLContext]
 import OpenGLContext
 
+version(!gpuOff) {
 OpenGLFence: class extends GpuFence {
 	_backend: GLFence
 	init: func (context: OpenGLContext) {
@@ -30,4 +31,5 @@ OpenGLFence: class extends GpuFence {
 	wait: func { this _backend clientWait() }
 	gpuWait: func { this _backend wait() }
 	sync: func { this _backend sync() }
+}
 }

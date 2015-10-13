@@ -22,6 +22,7 @@ use ooc-base
 use ooc-draw-gpu
 import GraphicBuffer, AndroidContext, EGLBgra
 
+version(!gpuOff) {
 GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	_buffer: GraphicBuffer
 	buffer ::= this _buffer
@@ -57,4 +58,5 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	kean_draw_gpu_android_graphicBufferYuv420Semiplanar_new: unmangled static func (backend: Pointer, nativeBuffer: Pointer, handle: Pointer, size: IntSize2D, stride: Int, format: GraphicBufferFormat, uvOffset: Int) -> This {
 		This new(backend, nativeBuffer, handle, size, format, stride, uvOffset)
 	}
+}
 }

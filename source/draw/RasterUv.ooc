@@ -31,13 +31,9 @@ RasterUv: class extends RasterPacked {
 	init: func ~allocateStride (size: IntSize2D, stride: UInt) { super(size, stride) }
 	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntSize2D, stride: UInt) { super(buffer, size, stride) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { this init(buffer, size, this bytesPerPixel * size width) }
-	init: func ~fromRasterImage (original: RasterImage) { super(original) }
+	init: func ~fromRasterImage (original: This) { super(original) }
 	create: func (size: IntSize2D) -> Image { This new(size) }
-	copy: func -> This {
-		result := This new(this)
-		this buffer copyTo(result buffer)
-		result
-	}
+	copy: func -> This { This new(this) }
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))
 	}
@@ -123,7 +119,7 @@ RasterUv: class extends RasterPacked {
 		memcpy(buffer pointer, data, x * y * requiredComponents)
 		StbImage free(data)
 		// Is it neccessary to create a RasterBgr here?
-		This new(RasterBgr new(buffer, IntSize2D new(x, y)))
+		This convertFrom(RasterBgr new(buffer, IntSize2D new(x, y)))
 	}
 	save: override func (filename: String) -> Int {
 		bgr := RasterBgr new(this buffer, this size)
@@ -132,7 +128,7 @@ RasterUv: class extends RasterPacked {
 		result
 	}
 	convertFrom: static func (original: RasterImage) -> This {
-		result := This new(original)
+		result := This new(original size)
 		row := result buffer pointer
 		rowLength := result size width
 		rowEnd := row as ColorUv* + rowLength

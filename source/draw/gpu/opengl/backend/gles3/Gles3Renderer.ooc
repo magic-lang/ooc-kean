@@ -20,6 +20,7 @@ import include/gles3
 import ../GLRenderer
 import Gles3Debug
 
+version(!gpuOff) {
 Gles3Renderer: class extends GLRenderer {
 	init: func { this _quad = Gles3Quad new() }
 	free: override func {
@@ -46,4 +47,5 @@ Gles3Renderer: class extends GLRenderer {
 		glDisableVertexAttribArray(0)
 		version(debugGL) { validateEnd("FramebufferObject drawPoints") }
 	}
+}
 }

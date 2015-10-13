@@ -4,6 +4,7 @@ import include/gles3
 import text/StringTokenizer
 import structs/ArrayList
 
+version(!gpuOff) {
 validateStart: func {
 	validate("from unknown location")
 }
@@ -61,4 +62,5 @@ printVersionInfo: func {
 	Debug print("OpenGL vendor: %s" format(vendor))
 	Debug print("OpenGL renderer: %s" format(renderer))
 	Debug print("OpenGL version: %s" format(version))
+}
 }

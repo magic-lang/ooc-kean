@@ -21,6 +21,7 @@ import include/gles3
 import ../GLQuad
 import Gles3VertexArrayObject, Gles3Debug
 
+version(!gpuOff) {
 Gles3Quad: class extends GLQuad {
 	init: func {
 		version(debugGL) { validateStart() }
@@ -50,4 +51,5 @@ Gles3Quad: class extends GLQuad {
 		this vao unbind()
 		version(debugGL) { validateEnd("quad draw") }
 	}
+}
 }
