@@ -16,6 +16,7 @@
 */
 
 use ooc-base
+import math
 
 TimeSpan: cover {
 	_ticks: Int64 = 0
@@ -44,6 +45,37 @@ TimeSpan: cover {
 	}
 	elapsedWeeks: func -> Int64 {
 		this ticks / DateTime ticksPerWeek
+	}
+	defaultFormat: static const String = "%w weeks, %d days, %h hours, %m minutes, %s seconds, %z milliseconds"
+	toString: func -> String {
+		this toStringFormat(This defaultFormat)
+	}
+	// supported formatting expressions:
+	//  %w - weeks (rounded down)
+	//  %d - days (<7)
+	//  %h - hours (<24)
+	//  %m - minutes (<60)
+	//  %s - seconds (<60)
+	//  %z - milliseconds (<1000)	
+	//  %D - days (based on total ticks)
+	//  %H - hours (based on total ticks)
+	//  %M - minutes (based on total ticks)
+	//  %S - seconds (based on total ticks)
+	//  %Z - milliseconds (based on total ticks)	
+	toStringFormat: func (format: String) -> String {
+		result := format
+		result = result replaceAll("%w", "%d" format(this elapsedWeeks()))
+		result = result replaceAll("%D", "%d" format(this elapsedDays()))
+		result = result replaceAll("%H", "%d" format(this elapsedHours()))
+		result = result replaceAll("%M", "%d" format(this elapsedMinutes()))
+		result = result replaceAll("%S", "%d" format(this elapsedSeconds()))
+		result = result replaceAll("%Z", "%d" format(this elapsedMilliseconds()))
+		result = result replaceAll("%d", "%d" format(this elapsedDays() modulo(7)))
+		result = result replaceAll("%h", "%d" format(this elapsedHours() modulo(24)))
+		result = result replaceAll("%m", "%d" format(this elapsedMinutes() modulo(60)))
+		result = result replaceAll("%s", "%d" format(this elapsedSeconds() modulo(60)))
+		result = result replaceAll("%z", "%d" format(this elapsedMilliseconds() modulo(1000)))
+		result
 	}
 	operator + (value: Int) -> This {
 		This new(this ticks + value)
