@@ -23,10 +23,10 @@ Win32Window: class extends NativeWindow {
 	init: func (size: IntSize2D, title: String) {
 		windowClassName := "Window class" as CString
 		display := GetModuleHandle(null)
-		windowClass: WNDCLASSEXA_OOC
-		windowClass cbSize = WNDCLASSEXA_OOC size
+		windowClass: WndClassEXA
+		windowClass cbSize = WndClassEXA size
 		windowClass style = 0
-		windowClass lpfnWndProc = This defaultWindowProcedure
+		windowClass lpfnWndProc = This _defaultWindowProcedure
 		windowClass cbClsExtra = 0
 		windowClass cbWndExtra = 0
 		windowClass hInstance = display
@@ -42,25 +42,24 @@ Win32Window: class extends NativeWindow {
 		if(backend == null)
 			raise("Unable to create win32 window. Error code: " + GetLastError() toString())
 		super(size, backend, display)
-		"" println()
 		ShowWindow(backend, SW_SHOWDEFAULT)
 		UpdateWindow(backend)
 	}
 	draw: func (image: RasterBgra) {
-		paintStruct: PAINTSTRUCT_OOC
-		bitmap: BITMAP_OOC
+		paintStruct: PaintStruct
+		bitmap: Bitmap
 		InvalidateRect(this backend as HWND, null, false)
 		bitmapHandle := CreateBitmap(image size width, image size height, 1, 32, image buffer pointer)
 		deviceContext := BeginPaint(this backend as HWND, paintStruct&)
 		deviceContextMemory := CreateCompatibleDC(deviceContext)
 		oldBitmap := SelectObject(deviceContextMemory, bitmapHandle)
-		GetObject(bitmapHandle, BITMAP_OOC size, bitmap&)
+		GetObject(bitmapHandle, Bitmap size, bitmap&)
 		BitBlt(deviceContext, 0, 0, bitmap bmWidth, bitmap bmHeight, deviceContextMemory, 0, 0, SRCCOPY)
 		SelectObject(deviceContextMemory, oldBitmap)
 		DeleteDC(deviceContextMemory)
 		EndPaint(this backend as HWND, paintStruct&)
 	}
-	defaultWindowProcedure: static func (backend: HWND, message: UInt, wParam: WPARAM, lParam: LPARAM) -> LRESULT {
+	_defaultWindowProcedure: static func (backend: HWND, message: UInt, wParam: WPARAM, lParam: LPARAM) -> LRESULT {
 		match(message) {
 			case WM_CLOSE =>
 				DestroyWindow(backend)
