@@ -26,6 +26,8 @@ import RasterUv
 import Image
 import Color
 import RasterBgr
+import PaintEngine
+import RasterPaintEngine
 import StbImage
 import io/File
 import io/FileReader
@@ -249,4 +251,5 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		fileWriter write(this uv buffer pointer as Char*, this uv buffer size)
 		fileWriter close()
 	}
+	createPaintEngine: override func -> PaintEngine { Yuv420PaintEngine new(this) }
 }

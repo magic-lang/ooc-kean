@@ -22,6 +22,8 @@ import RasterImage
 import StbImage
 import Image
 import Color
+import PaintEngine
+import RasterPaintEngine
 
 RasterBgra: class extends RasterPacked {
 	bytesPerPixel: Int { get { 4 } }
@@ -169,4 +171,5 @@ RasterBgra: class extends RasterPacked {
 			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
 		)
 	}
+	createPaintEngine: override func -> PaintEngine { BgraPaintEngine new(this) }
 }
