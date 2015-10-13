@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
+
 include windows
 
 LPSTR: cover from Char*
@@ -51,11 +52,11 @@ WndClassEXA: cover from WNDCLASSEXA {
 	hIcon, hIconSm: extern HICON
 	hCursor: extern HCURSOR
 	hbrBackground: extern HBRUSH
-	lpszMenuName,	lpszClassName: extern LPSTR
+	lpszMenuName, lpszClassName: extern LPSTR
 }
 Bitmap: cover from BITMAP {
-	bmType,	bmWidth, bmHeight, bmWidthBytes: extern Long
-	bmPlanes,	bmBitsPixel: extern Short
+	bmType, bmWidth, bmHeight, bmWidthBytes: extern Long
+	bmPlanes, bmBitsPixel: extern Short
 	bmBits: extern LPVOID
 }
 
@@ -82,7 +83,7 @@ UpdateWindow: extern func (hWnd: HWND) -> Bool
 DestroyWindow: extern func (hWnd: HWND) -> Bool
 PostQuitMessage: extern func (nExitCode: Int)
 DefWindowProc: extern func (hWnd: HWND, Msg: UInt, wParam: WPARAM, lParam: LPARAM) -> LRESULT
-PeekMessage: extern func(lpMsg: LPMSG, hWnd: HWND, WMsgFilterMin, wMsgFilterMax: UInt, wRemoveMsg: UInt) -> Bool
+PeekMessage: extern func (lpMsg: LPMSG, hWnd: HWND, WMsgFilterMin, wMsgFilterMax: UInt, wRemoveMsg: UInt) -> Bool
 TranslateMessage: extern func (lpMsg: Msg*) -> Bool
 DispatchMessage: extern func (lpMsg: Msg*) -> LRESULT
 GetLastError: extern func -> Int
@@ -96,4 +97,4 @@ GetObject: extern func (hgdiobj: HGDIOBJ, cbBuffer: Int, lpvObject: LPVOID) -> I
 BitBlt: extern func (hdcDest: HDC, nXDest, nYDest, nWidth, nHeight: Int, hdcSrc: HDC, nXSrc, nYSrc, dwRop: Int)
 DeleteDC: extern func (hdcMem: HDC) -> Bool
 EndPaint: extern func (hwnd: HWND, ps: PaintStruct*) -> Bool
-InvalidateRect: extern func(hwnd: HWND, lpRect: Rect*, bErase: Bool) -> Bool
+InvalidateRect: extern func (hwnd: HWND, lpRect: Rect*, bErase: Bool) -> Bool

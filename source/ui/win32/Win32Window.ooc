@@ -32,18 +32,22 @@ Win32Window: class extends NativeWindow {
 		windowClass hInstance = display
 		windowClass hIcon = LoadIcon(null, IDI_APPLICATION)
 		windowClass hCursor = LoadCursor(null, IDC_ARROW)
-		windowClass hbrBackground = (COLOR_WINDOW+1) as HBRUSH
+		windowClass hbrBackground = (COLOR_WINDOW + 1) as HBRUSH
 		windowClass lpszMenuName = null
 		windowClass lpszClassName = windowClassName
 		windowClass hIconSm = LoadIcon(null, IDI_APPLICATION)
-		if(!RegisterClassEx(windowClass&))
+		if (!RegisterClassEx(windowClass&))
 			raise("Unable to register win32 window class. Error code: " + GetLastError() toString())
 		backend := CreateWindowEx(WS_EX_CLIENTEDGE, windowClassName, title as CString, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, size width, size height, null, null, display, null)
-		if(backend == null)
+		if (backend == null)
 			raise("Unable to create win32 window. Error code: " + GetLastError() toString())
 		super(size, backend, display)
 		ShowWindow(backend, SW_SHOWDEFAULT)
 		UpdateWindow(backend)
+	}
+	free: override func {
+		DestroyWindow(this backend as HWND)
+		super()
 	}
 	draw: func (image: RasterBgra) {
 		paintStruct: PaintStruct
@@ -60,7 +64,7 @@ Win32Window: class extends NativeWindow {
 		EndPaint(this backend as HWND, paintStruct&)
 	}
 	_defaultWindowProcedure: static func (backend: HWND, message: UInt, wParam: WPARAM, lParam: LPARAM) -> LRESULT {
-		match(message) {
+		match (message) {
 			case WM_CLOSE =>
 				DestroyWindow(backend)
 			case WM_DESTROY =>
