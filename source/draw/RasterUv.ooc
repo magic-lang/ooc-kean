@@ -123,7 +123,7 @@ RasterUv: class extends RasterPacked {
 		memcpy(buffer pointer, data, x * y * requiredComponents)
 		StbImage free(data)
 		// Is it neccessary to create a RasterBgr here?
-		This new(RasterBgr new(buffer, IntSize2D new(x, y)))
+		This convertFrom(RasterBgr new(buffer, IntSize2D new(x, y)))
 	}
 	save: override func (filename: String) -> Int {
 		bgr := RasterBgr new(this buffer, this size)
@@ -132,7 +132,7 @@ RasterUv: class extends RasterPacked {
 		result
 	}
 	convertFrom: static func (original: RasterImage) -> This {
-		result := This new(original)
+		result := This new(original size)
 		row := result buffer pointer
 		rowLength := result size width
 		rowEnd := row as ColorUv* + rowLength
