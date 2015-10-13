@@ -57,6 +57,7 @@ TimeSpan: cover {
 	//  %m - minutes (<60)
 	//  %s - seconds (<60)
 	//  %z - milliseconds (<1000)	
+	//  %z - milliseconds (<1000)
 	//  %D - days (based on total ticks)
 	//  %H - hours (based on total ticks)
 	//  %M - minutes (based on total ticks)
