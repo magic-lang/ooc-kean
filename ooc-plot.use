@@ -3,6 +3,7 @@ Description: Plot functionality library.
 SourcePath: source/plot
 Imports: LinePlotData2D
 Imports: ScatterPlotData2D
+Imports: ShapePlotData2D
 Imports: PlotData2D
 Imports: SvgPlot
 Imports: SvgWriter2D
