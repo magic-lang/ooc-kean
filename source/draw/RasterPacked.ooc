@@ -44,6 +44,7 @@ RasterPacked: abstract class extends RasterImage {
 	}
 	init: func ~fromOriginal (original: This) {
 		super(original)
+		this _buffer = original buffer copy()
 		this _stride = original stride
 	}
 	free: override func {
