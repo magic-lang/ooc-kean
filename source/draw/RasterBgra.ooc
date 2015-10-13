@@ -167,5 +167,13 @@ RasterBgra: class extends RasterPacked {
 			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
 		)
 	}
+	swapRedBlue: func {
+		this swapChannels(0, 2)
+	}
+	redBlueSwapped: func -> This {
+		result := this copy()
+		result swapRedBlue()
+		result
+	}
 	createPaintEngine: override func -> PaintEngine { BgraPaintEngine new(this) }
 }

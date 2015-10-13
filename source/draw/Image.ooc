@@ -30,6 +30,8 @@ CoordinateSystem: enum {
 Image: abstract class {
 	_size: IntSize2D
 	size ::= this _size
+	width ::= this size width
+	height ::= this size height
 	transform: IntTransform2D { get set }
 	coordinateSystem: CoordinateSystem {
 		get
