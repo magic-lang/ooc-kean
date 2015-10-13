@@ -35,19 +35,17 @@ RasterBgr: class extends RasterPacked {
 	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This { This new(this) }
 	apply: func ~bgr (action: Func(ColorBgr)) {
-		end := this buffer pointer as Long + this buffer size
-		rowLength := this size width * this bytesPerPixel
-		for (row: Long in this buffer pointer as Long .. end) {
-			rowEnd := row + rowLength
-			for (source: Long in row .. rowEnd) {
-				action((source as ColorBgr*)@)
-				source += 2
+		for (row in 0 .. this size height)
+			for (pixel in 0 .. this size width) {
+				pointer := this buffer pointer + pixel * this bytesPerPixel + row * this stride
+				color := (pointer as ColorBgr*)@
+				action(color)
 			}
-			row += this stride - 1
-		}
 	}
 	apply: func ~yuv (action: Func(ColorYuv)) {
-		this apply(ColorConvert fromBgr(action))
+		f := ColorConvert fromBgr(action)
+		this apply(f)
+		(f as Closure) dispose()
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
 		this apply(ColorConvert fromBgr(action))

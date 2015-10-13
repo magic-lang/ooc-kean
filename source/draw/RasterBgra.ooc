@@ -38,8 +38,9 @@ RasterBgra: class extends RasterPacked {
 		for (row in 0 .. this size height) {
 			source := this buffer pointer + row * this stride
 			for (pixel in 0 .. this size width) {
-				pixelPointer := (source + pixel * this bytesPerPixel) as ColorBgr*
-				action(pixelPointer@)
+				pixelPointer := (source + pixel * this bytesPerPixel)
+				color := (pixelPointer as ColorBgr*)@
+				action(color)
 			}
 		}
 	}
