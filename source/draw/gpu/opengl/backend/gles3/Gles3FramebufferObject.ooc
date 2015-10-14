@@ -82,12 +82,14 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		this bind()
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture _backend, 0)
 		status: UInt = glCheckFramebufferStatus(GL_FRAMEBUFFER)
-		if (status != GL_FRAMEBUFFER_COMPLETE) {
-			statusMessage := getErrorMessage(status)
-			errorMessage := "Framebuffer Object creation failed with status: " + statusMessage + " for texture of size " +
-			texture size width toString() + " x " + texture size height toString()
-			Debug print(errorMessage)
-			raise(errorMessage)
+		if (status != GL_NO_ERROR) {
+			if (status != GL_FRAMEBUFFER_COMPLETE) {
+				statusMessage := getErrorMessage(status)
+				errorMessage := "Framebuffer Object creation failed with status: " + statusMessage + " for texture of size " +
+				texture size width toString() + " x " + texture size height toString()
+				Debug print(errorMessage)
+				raise(errorMessage)
+			}
 		}
 		this unbind()
 		version(debugGL) { validateEnd("fbo _generate") }
