@@ -6,3 +6,4 @@ Imports: ScatterPlotData2D
 Imports: PlotData2D
 Imports: SvgPlot
 Imports: SvgWriter2D
+Imports: svg/Shapes
