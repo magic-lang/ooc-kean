@@ -7,11 +7,8 @@ PlotData2D: abstract class {
 	lineWidth: Float = 1.0f
 	legendOffset: Float = 5.0f
 	colorBgra: ColorBgra
-	color: String
-	opacity: Float
 	init: func (=label, =colorBgra)
 	free: override func {
-		this color free()
 		this label free()
 		super()
 	}

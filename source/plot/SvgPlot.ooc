@@ -12,7 +12,7 @@ SvgPlot: class {
 	fontSize: Int { get set }
 	xAxis: Axis { get set }
 	yAxis: Axis { get set }
-	colorList: VectorList<String> { get set }
+	colorList: VectorList<ColorBgra> { get set }
 	colorCount := 0
 	symmetric: Bool
 
@@ -105,12 +105,8 @@ SvgPlot: class {
 		if (!datasets empty) {
 			noneColor := ColorBgra new(0, 0, 0, 0)
 			for (j in 0 .. datasets count) {
-				if (noneColor != datasets[j] colorBgra) {
-					datasets[j] color = datasets[j] colorBgra svgRGBToString()
-					datasets[j] opacity = ((datasets[j] colorBgra svgRGBAlpha()) as Float) / 255.0f
-				} else {
-					datasets[j] color = colorList[this colorCount % this colorList count]
-					datasets[j] opacity = 1
+				if (noneColor == datasets[j] colorBgra) {
+					datasets[j] colorBgra = colorList[this colorCount % this colorList count]
 					this colorCount += 1
 				}
 			}
@@ -118,17 +114,17 @@ SvgPlot: class {
 	}
 
 	fillColorList: func {
-		this colorList = VectorList<String> new()
-		this colorList add("crimson")
-		this colorList add("black")
-		this colorList add("darkmagenta")
-		this colorList add("seagreen")
-		this colorList add("dodgerblue")
-		this colorList add("darkorange")
-		this colorList add("hotpink")
-		this colorList add("lightgreen")
-		this colorList add("yellowgreen")
-		this colorList add("red")
+		this colorList = VectorList<ColorBgra> new(10, false)
+		this colorList add(ColorBgra new(100, 0, 0, 255))
+		this colorList add(ColorBgra new(0, 0, 0, 255))
+		this colorList add(ColorBgra new(50, 0, 50, 255))
+		this colorList add(ColorBgra new(0, 50, 0, 255))
+		this colorList add(ColorBgra new(0, 20, 40, 255))
+		this colorList add(ColorBgra new(100, 50, 0, 255))
+		this colorList add(ColorBgra new(200, 0, 100, 255))
+		this colorList add(ColorBgra new(0, 255, 0, 255))
+		this colorList add(ColorBgra new(128, 255, 0, 255))
+		this colorList add(ColorBgra new(0, 200, 0, 255))
 	}
 
 	setLegends: func (size, plotAreaSize: FloatSize2D) -> String {

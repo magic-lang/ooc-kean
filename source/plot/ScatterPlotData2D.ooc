@@ -42,12 +42,12 @@ ScatterPlotData2D: class extends PlotData2D {
 				match (this shape) {
 					case Shape Circle =>
 						r := this scalingRelativeLineWidth / 2.0f * this lineWidth
-						result = result & Shapes circle(FloatPoint2D new((transform * this dataSeries[i]) x, (transform * this dataSeries[i]) y), r, this opacity, this color)
+						result = result & Shapes circle(FloatPoint2D new((transform * this dataSeries[i]) x, (transform * this dataSeries[i]) y), r, this colorBgra)
 					case Shape Square =>
 						x := (transform * this dataSeries[i]) x - this scalingRelativeLineWidth / 2.0f * this lineWidth
 						y := (transform * this dataSeries[i]) y - this scalingRelativeLineWidth / 2.0f * this lineWidth
 						width := this scalingRelativeLineWidth * this lineWidth
-						result = result & Shapes rect(x, y, width, width, this opacity, this color)
+						result = result & Shapes rect(x, y, width, width, this colorBgra)
 					case =>
 						result = result >> ""
 				}
@@ -63,12 +63,12 @@ ScatterPlotData2D: class extends PlotData2D {
 		halfLineHeight := (fontSize as Float) / 2.0f
 		match (this shape) {
 			case Shape Circle =>
-				result = result & Shapes circle(FloatPoint2D new(start x + halfLineHeight, start y), size / 2.0f, this opacity, this color)
+				result = result & Shapes circle(FloatPoint2D new(start x + halfLineHeight, start y), size / 2.0f, this colorBgra)
 			case Shape Square =>
-				result = result & Shapes rect(FloatPoint2D new(start x, start y - halfLineHeight), FloatPoint2D new(size, size), this opacity, this color)
+				result = result & Shapes rect(FloatPoint2D new(start x, start y - halfLineHeight), FloatPoint2D new(size, size), this colorBgra)
 			case =>
 		}
-		result = result & Shapes text(FloatPoint2D new(start x + fontSize as Float, start y + halfLineHeight), this label, fontSize, this opacity, this color)
+		result = result & Shapes text(FloatPoint2D new(start x + fontSize as Float, start y + halfLineHeight), this label, fontSize, this colorBgra)
 		result
 	}
 

@@ -38,7 +38,7 @@ ShapePlotData2D: class extends PlotData2D {
 				area := FloatBox2D new(pointA, pointB)
 				match (this _shapes[i] shape) {
 					case Shape Rectangle =>
-						result = result & Shapes rect(area left, area top, area width, area height, this opacity, this color)
+						result = result & Shapes rect(area left, area top, area width, area height, this colorBgra)
 					case =>
 						result = result >> ""
 				}
@@ -52,8 +52,8 @@ ShapePlotData2D: class extends PlotData2D {
 		start := FloatPoint2D new(this legendOffset as Float, this legendOffset + (fontSize * legendCount) as Float - (fontSize as Float) / 2.0f)
 		size := (fontSize as Float) * 0.8f
 		halfLineHeight := (fontSize as Float) / 2.0f
-		result = result & Shapes rect(FloatPoint2D new(start x, start y - halfLineHeight), FloatPoint2D new(size, size), this opacity, this color)
-		result = result & Shapes text(FloatPoint2D new(start x + fontSize as Float, start y + halfLineHeight), this label, fontSize, this opacity, this color)
+		result = result & Shapes rect(FloatPoint2D new(start x, start y - halfLineHeight), FloatPoint2D new(size, size), this colorBgra)
+		result = result & Shapes text(FloatPoint2D new(start x + fontSize as Float, start y + halfLineHeight), this label, fontSize, this colorBgra)
 		result
 	}
 
