@@ -7,9 +7,7 @@ import math
 import io/File
 
 log := VectorList<FloatPoint2D> new()
-sin := VectorList<FloatPoint2D> new()
 cos := VectorList<FloatPoint2D> new()
-sinMinusCos := VectorList<FloatPoint2D> new()
 unitCircle := VectorList<FloatPoint2D> new()
 scatter := VectorList<FloatPoint2D> new()
 parabola := VectorList<FloatPoint2D> new()
@@ -17,9 +15,7 @@ sparseParabola := VectorList<FloatPoint2D> new()
 randomGenerator := IntUniformRandomGenerator new(0, 100)
 for (i in -200 .. 201) {
 	log add(FloatPoint2D new((201 + i as Float) * 100, log((201 + i as Float)) * 100))
-	sin add(FloatPoint2D new(i as Float / 20, sin(i as Float / 20)))
 	cos add(FloatPoint2D new(i as Float / 20, cos(i as Float / 20)))
-	sinMinusCos add(FloatPoint2D new(i as Float / 20, sin(i as Float / 20) - cos(i as Float / 20)))
 	unitCircle add(FloatPoint2D new(i as Float / 200, sqrt(1 - pow(i as Float / 200, 2))))
 	scatter add(FloatPoint2D new(randomGenerator next() as Float, randomGenerator next() as Float))
 	parabola add(FloatPoint2D new(i as Float / 20, pow(i as Float / 20, 2)))
@@ -40,20 +36,22 @@ scatterData := ScatterPlotData2D new(scatter, "Random numbers")
 scatterPlot := SvgPlot new(scatterData, "Simplest use-case with scatter plot")
 
 // Multiple shapes in one plot
-sinData := LinePlotData2D new(sin, "sin(x)")
 cosData := LinePlotData2D new(cos, "cos(x)")
-shapesData := ShapePlotData2D new("Shapes", ColorBgra new(0, 0, 0, 128))
-shapesData addRectangle(FloatBox2D new(-3, 0, 2, 1)) // Default
-shapesData addRectangle(FloatBox2D new(-1, 0, 2, 1), ColorBgra new(0, 0, 200, 128)) // Red
-shapesData addRectangle(FloatBox2D new(1, 0, 2, 1), ColorBgra new(0, 200, 0, 128)) // Green
-shapesData addRectangle(FloatBox2D new(3, 0, 2, 1), ColorBgra new(200, 0, 0, 128)) // Blue
-sinMinusCosData := LinePlotData2D new(sinMinusCos, "sin(x) - cos(x)")
-shapePlot := SvgPlot new(sinData, "Multiple shapes in one plot")
-shapePlot addDataset(cosData)
-shapePlot addDataset(sinMinusCosData)
+shapesData := ShapePlotData2D new("Mixed shapes", ColorBgra new(0, 0, 0, 128))
+shapesData addRectangle(FloatBox2D new(-4, 2, 8, 1)) // Default
+shapesData addRectangle(FloatBox2D new(-4, -3, 8, 1)) // Default
+shapesData addCircle(FloatPoint2D new(-3.1416, 0), 1, ColorBgra new(0, 0, 200, 128)) // Red
+shapesData addCircle(FloatPoint2D new(0, 0), 1, ColorBgra new(0, 200, 0, 128)) // Green
+shapesData addCircle(FloatPoint2D new(3.1416, 0), 1, ColorBgra new(200, 0, 0, 128)) // Blue
+shapePlot := SvgPlot new(cosData, "Multiple shapes in one plot")
 shapePlot addDataset(shapesData)
 shapePlot xAxis label = "x"
 shapePlot yAxis label = "y"
+shapePlot xAxis min = -4
+shapePlot xAxis max = 4
+shapePlot yAxis min = -4
+shapePlot yAxis max = 4
+shapePlot symmetric = true
 
 // Adjustment of axis endpoints
 unitCircleData := LinePlotData2D new(unitCircle, "Unit circle")
@@ -67,7 +65,7 @@ unitCirclePlot yAxis max = 1.5
 
 // Symmetric plot
 symmetricUnitCircleData := LinePlotData2D new(unitCircle, "Unit circle")
-symmetricUnitCirclePlot := SvgPlot new(unitCircleData, "Unit circle plot with symmetic set to true")
+symmetricUnitCirclePlot := SvgPlot new(unitCircleData, "Unit circle plot with symmetric set to true")
 symmetricUnitCirclePlot xAxis label = "x"
 symmetricUnitCirclePlot yAxis label = "y"
 symmetricUnitCirclePlot symmetric = true
