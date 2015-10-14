@@ -20,6 +20,12 @@ ShapePlotData2D: class extends PlotData2D {
 	addRectangle: func (box: FloatBox2D, colorBgra := ColorBgra new()) {
 		this _shapes add(AnyShape new(Shape Rectangle, box, colorBgra))
 	}
+	addCircle: func (center: FloatPoint2D, radius: Float, colorBgra := ColorBgra new()) {
+		this addEllipse(center, radius, radius, colorBgra)
+	}
+	addEllipse: func (center: FloatPoint2D, radiusX, radiusY: Float, colorBgra := ColorBgra new()) {
+		this _shapes add(AnyShape new(Shape Ellipse, FloatBox2D new(center x - radiusX, center y - radiusY, radiusX * 2.0f, radiusY * 2.0f), colorBgra))
+	}
 	free: override func {
 		this _shapes free()
 		super()
@@ -37,6 +43,8 @@ ShapePlotData2D: class extends PlotData2D {
 				match (this _shapes[i] shape) {
 					case Shape Rectangle =>
 						result = result & Shapes rect(area left, area top, area width, area height, color)
+					case Shape Ellipse =>
+						result = result & Shapes ellipse(area center, area width * 0.5f, area height * 0.5f, color)
 					case =>
 						// Unknown shapes are drawn as red boxes
 						result = result & Shapes rect(area left, area top, area width, area height, colorBgra new(0, 0, 255, 255))
