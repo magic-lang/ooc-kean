@@ -1,6 +1,7 @@
 use ooc-math
 import svg/Shapes
 import math
+use ooc-draw
 
 Orientation: enum {
 	Horizontal
@@ -115,9 +116,9 @@ Axis: class {
 	getTickSvg: func (tickValue, radix: Float, position, numberOffset, tickMarkerOnOtherSideOffset, tickMarkerEndOffset: FloatPoint2D, textAnchor: String) -> String {
 		result := "<g desc='" << tickValue toString() >> "'>\n"
 		if (this gridOn)
-			result = result & Shapes line(position, position + tickMarkerOnOtherSideOffset, 1, 255.0f, "grey", FloatPoint2D new(5, 5))
-		result = result & Shapes line(position, position + tickMarkerEndOffset, 1, 255.0f, "black")
-		result = result & Shapes line(position + tickMarkerOnOtherSideOffset, position + tickMarkerOnOtherSideOffset - tickMarkerEndOffset, 1, 255.0f, "black")
+			result = result & Shapes line(position, position + tickMarkerOnOtherSideOffset, 1, ColorBgra new(128, 128, 128, 255), FloatPoint2D new(5, 5))
+		result = result & Shapes line(position, position + tickMarkerEndOffset, 1, ColorBgra new(0, 0, 0, 255))
+		result = result & Shapes line(position + tickMarkerOnOtherSideOffset, position + tickMarkerOnOtherSideOffset - tickMarkerEndOffset, 1, ColorBgra new(0, 0, 0, 255))
 		tickValue = radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision) ? (tickValue / radix) : tickValue
 		tempTick := tickValue toString()
 		tempTickInt := tickValue as Int toString()

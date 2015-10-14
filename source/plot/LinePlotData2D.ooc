@@ -47,7 +47,7 @@ LinePlotData2D: class extends PlotData2D {
 	getSvg: func (transform: FloatTransform2D) -> String {
 		result := ""
 		if (!this dataSeries empty) {
-			result = result & "<path stroke='" + this color >> "' stroke-opacity='" & this opacity toString() >> "' fill='none' stroke-width='" & this lineWidth toString() >> "' d='M " & ((transform * this dataSeries[0]) x) toString() >> " " & ((transform * this dataSeries[0]) y) toString() >> " L "
+			result = result & "<path stroke='" + Shapes getColor(this colorBgra) >> "' stroke-opacity='" & Shapes getOpacity(this colorBgra) >> "' fill='none' stroke-width='" & this lineWidth toString() >> "' d='M " & ((transform * this dataSeries[0]) x) toString() >> " " & ((transform * this dataSeries[0]) y) toString() >> " L "
 			for (j in 1 .. this dataSeries count)
 				result = result & ((transform * this dataSeries[j]) x) toString() >> " " & ((transform * this dataSeries[j]) y) toString() >> " "
 			result = result >> "' "
@@ -69,13 +69,13 @@ LinePlotData2D: class extends PlotData2D {
 		end := FloatPoint2D new(this legendOffset + fontSize, start y)
 		match (this lineStyle) {
 			case LineStyle Dashed =>
-				result = Shapes line(start, end, this lineWidth, this opacity, this color, FloatPoint2D new((this lineWidth * 5) as Float, (this lineWidth * 5) as Float))
+				result = Shapes line(start, end, this lineWidth, this colorBgra, FloatPoint2D new((this lineWidth * 5) as Float, (this lineWidth * 5) as Float))
 			case LineStyle Dotted =>
-				result = Shapes line(start, end, this lineWidth, this opacity, this color, FloatPoint2D new(this lineWidth as Float, this lineWidth as Float))
+				result = Shapes line(start, end, this lineWidth, this colorBgra, FloatPoint2D new(this lineWidth as Float, this lineWidth as Float))
 			case => // LineStyle Solid
-				result = Shapes line(start, end, this lineWidth, this opacity, this color)
+				result = Shapes line(start, end, this lineWidth, this colorBgra)
 		}
-		result = result & Shapes text(FloatPoint2D new(end x, end y + fontSize / 3), this label, fontSize, this opacity, this color)
+		result = result & Shapes text(FloatPoint2D new(end x, end y + fontSize / 3), this label, fontSize, this colorBgra)
 		result
 	}
 
