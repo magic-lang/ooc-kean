@@ -42,12 +42,18 @@ scatterPlot := SvgPlot new(scatterData, "Simplest use-case with scatter plot")
 // Multiple shapes in one plot
 sinData := LinePlotData2D new(sin, "sin(x)")
 cosData := LinePlotData2D new(cos, "cos(x)")
+shapesData := ShapePlotData2D new("Shapes", ColorBgra new(0, 0, 0, 128))
+shapesData addRectangle(FloatBox2D new(-3, 0, 2, 1)) // Default
+shapesData addRectangle(FloatBox2D new(-1, 0, 2, 1), ColorBgra new(0, 0, 200, 128)) // Red
+shapesData addRectangle(FloatBox2D new(1, 0, 2, 1), ColorBgra new(0, 200, 0, 128))	// Green
+shapesData addRectangle(FloatBox2D new(3, 0, 2, 1), ColorBgra new(200, 0, 0, 128)) // Blue
 sinMinusCosData := LinePlotData2D new(sinMinusCos, "sin(x) - cos(x)")
-trigonometryPlot := SvgPlot new(sinData, "Multiple shapes in one plot")
-trigonometryPlot addDataset(cosData)
-trigonometryPlot addDataset(sinMinusCosData)
-trigonometryPlot xAxis label = "x"
-trigonometryPlot yAxis label = "y"
+shapePlot := SvgPlot new(sinData, "Multiple shapes in one plot")
+shapePlot addDataset(cosData)
+shapePlot addDataset(sinMinusCosData)
+shapePlot addDataset(shapesData)
+shapePlot xAxis label = "x"
+shapePlot yAxis label = "y"
 
 // Adjustment of axis endpoints
 unitCircleData := LinePlotData2D new(unitCircle, "Unit circle")
@@ -91,7 +97,7 @@ file free()
 filename = filename + "example.svg"
 writer := SvgWriter2D new(filename, logPlot)
 writer addPlot(scatterPlot)
-writer addPlot(trigonometryPlot)
+writer addPlot(shapePlot)
 writer addPlot(unitCirclePlot)
 writer addPlot(symmetricUnitCirclePlot)
 writer addPlot(formatPlot)
