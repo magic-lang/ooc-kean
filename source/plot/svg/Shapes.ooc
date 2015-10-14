@@ -29,3 +29,10 @@ Shapes: abstract class {
 		"<text id='" + text >> "' x='" & position x toString() >> "' y='" & position y toString() >> "' font-size='" & fontSize toString() >> "px' text-anchor='" >> textAnchor >> "' fill='" >> color >> "' fill-opacity='" & opacity toString() >> "'>" >> text >> "</text>\n"
 	}
 }
+
+Shape: enum {
+	Circle
+	Ellipse
+	Square
+	Rectangle
+}
