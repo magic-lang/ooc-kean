@@ -8,7 +8,8 @@ import svg/Shapes
 AnyShape: cover {
 	shape: Shape
 	region: FloatBox2D
-	init: func@ (=shape, =region)
+	colorBgra: ColorBgra
+	init: func@ (=shape, =region, =colorBgra)
 }
 
 ShapePlotData2D: class extends PlotData2D {
@@ -19,8 +20,8 @@ ShapePlotData2D: class extends PlotData2D {
 		this _shapes = VectorList<AnyShape> new()
 	}
 
-	addRectangle: func (box: FloatBox2D) {
-		this _shapes add(AnyShape new(Shape Rectangle, box))
+	addRectangle: func (box: FloatBox2D, colorBgra := ColorBgra new()) {
+		this _shapes add(AnyShape new(Shape Rectangle, box, colorBgra))
 	}
 
 	free: override func {
@@ -31,14 +32,16 @@ ShapePlotData2D: class extends PlotData2D {
 	getSvg: func (transform: FloatTransform2D) -> String {
 		result := ""
 		if (!this _shapes empty) {
+			noneColor := ColorBgra new(0, 0, 0, 0)
 			for (i in 0 .. this _shapes count) {
 				object := this _shapes[i]
 				pointA := transform * (object region leftTop)
 				pointB := transform * (object region rightBottom)
 				area := FloatBox2D new(pointA, pointB)
+				color := (noneColor == object colorBgra) ? this colorBgra : object colorBgra
 				match (this _shapes[i] shape) {
 					case Shape Rectangle =>
-						result = result & Shapes rect(area left, area top, area width, area height, this colorBgra)
+						result = result & Shapes rect(area left, area top, area width, area height, color)
 					case =>
 						result = result >> ""
 				}
