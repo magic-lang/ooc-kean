@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-
+version(windows){
 include windows
 
 LPSTR: cover from Char*
@@ -98,3 +98,4 @@ BitBlt: extern func (hdcDest: HDC, nXDest, nYDest, nWidth, nHeight: Int, hdcSrc:
 DeleteDC: extern func (hdcMem: HDC) -> Bool
 EndPaint: extern func (hwnd: HWND, ps: PaintStruct*) -> Bool
 InvalidateRect: extern func (hwnd: HWND, lpRect: Rect*, bErase: Bool) -> Bool
+}
