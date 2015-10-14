@@ -22,7 +22,7 @@ validate: func (message: String) {
 }
 printGlError: func {
 	Debug print("OpenGL error: " + getErrorMessage(glGetError()))
-	Debug print("EGL error: " + eglGetError() toString())
+	Debug print("EGL error: " + getEglErrorMessage(eglGetError()))
 }
 getErrorMessage: func (errorCode: Int) -> String {
 	result := match (errorCode) {
@@ -32,7 +32,23 @@ getErrorMessage: func (errorCode: Int) -> String {
 		case 1280 => "GL_INVALID_ENUM"
 		case 1281 => "GL_INVALID_VALUE"
 		case 1282 => "GL_INVALID_OPERATION"
+		case 1286 => "GL_INVALID_FRAMEBUFFER_OPERATION"
+		case 0 => "GL_NO_ERROR"
 		case => "ERROR CODE: " + errorCode toString()
+	}
+	result
+}
+getEglErrorMessage: func (errorCode: Int) -> String {
+	result := match (errorCode) {
+		case 12288 => "EGL_SUCCESS"
+		case 12290 => "EGL_BAD_ACCESS"
+		case 12291 => "EGL_BAD_ALLOC"
+		case 12292 => "EGL_BAD_ATTRIBUTE"
+		case 12297 => "EGL_BAD_MATCH"
+		case 12300 => "EGL_BAD_PARAMETER"
+		case 12301 => "EGL_BAD_SURFACE"
+		case 12302 => "EGL_CONTEXT_LOST"
+		case => "Unknown ERROR CODE: " + errorCode toString()
 	}
 	result
 }
