@@ -9,10 +9,10 @@ Shapes: abstract class {
 		((bgra alpha as Float) / 255.0f) toString()
 	}
 	line: static func (start, end: FloatPoint2D, lineWidth: Float, color: ColorBgra) -> String {
-		"<line x1='" << start x toString() >> "' y1='" & start y toString() >> "' x2='" & end x toString() >> "' y2='" & end y toString() >> "' stroke-width='" & lineWidth toString() >> "' stroke='" >> This getColor(color) >> "' stroke-opacity='" >> This getOpacity(color) >> "'/>\n"
+		"<line x1='" << start x toString() >> "' y1='" & start y toString() >> "' x2='" & end x toString() >> "' y2='" & end y toString() >> "' stroke-width='" & lineWidth toString() >> "' stroke-linecap='round' stroke='" >> This getColor(color) >> "' stroke-opacity='" >> This getOpacity(color) >> "'/>\n"
 	}
 	line: static func ~dashed (start, end: FloatPoint2D, lineWidth: Float, color: ColorBgra, dashFloatPair: FloatPoint2D) -> String {
-		"<line x1='" << start x toString() >> "' y1='" & start y toString() >> "' x2='" & end x toString() >> "' y2='" & end y toString() >> "' stroke-width='" & lineWidth toString() >> "' stroke='" >> This getColor(color) >> "' stroke-opacity='" >> This getOpacity(color) >> "' stroke-dasharray='" & dashFloatPair toString() >> "'/>\n"
+		"<line x1='" << start x toString() >> "' y1='" & start y toString() >> "' x2='" & end x toString() >> "' y2='" & end y toString() >> "' stroke-width='" & lineWidth toString() >> "' stroke-linecap='round' stroke='" >> This getColor(color) >> "' stroke-opacity='" >> This getOpacity(color) >> "' stroke-dasharray='" & dashFloatPair toString() >> "'/>\n"
 	}
 	circle: static func (center: FloatPoint2D, r: Float, color: ColorBgra) -> String {
 		This ellipse(center, r, r, color)
