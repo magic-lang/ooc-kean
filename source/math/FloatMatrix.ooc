@@ -231,36 +231,17 @@ FloatMatrix : cover {
 		// TODO: This can probably be cleaned up...
 		else
 			if (this isSquare) {
-				lup := this lupDecomposition()
-				temp := lup[2] * y
-				temp2 := temp forwardSubstitution(lup[0])
-				result = temp2 backwardSubstitution(lup[1])
-				temp free()
-				temp2 free()
-				lup[0] free()
-				lup[1] free()
-				lup[2] free()
-				lup free()
+				(l, u, p) := this lupDecomposition()
+				result = (p * y) forwardSubstitution(l) backwardSubstitution(u)
 			} else {
-				temp1 := this transpose()
-				temp2 := temp1 * this
-				lup := temp2 lupDecomposition()
-				temp2 free()
-				temp2 = lup[2] * temp1
-				temp1 free()
-				temp1 = temp2 * y
-				temp2 free()
-				temp2 = temp1 forwardSubstitution(lup[0])
-				result = temp2 backwardSubstitution(lup[1])
-				temp1 free()
-				temp2 free()
-				lup[0] free()
-				lup[1] free()
-				lup[2] free()
-				lup free()
+				outerProduct := (this transpose() * this) take()
+				(l, u, p) := outerProduct lupDecomposition()
+				result = (p * this transpose() * y) forwardSubstitution(l) backwardSubstitution(u)
+				outerProduct free()
 			}
 		y free(Owner Callee)
-		result
+		this free(Owner Callee)
+		result give()
 	}
 
 	// TODO: Better name?
