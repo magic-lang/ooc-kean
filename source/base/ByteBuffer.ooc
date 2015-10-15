@@ -29,6 +29,7 @@ ByteBuffer: class {
 	_referenceCount: ReferenceCounter
 	referenceCount ::= this _referenceCount
 	_owner: Bool
+	_forceFree := false
 
 	init: func (=_pointer, =_size, owner := false) {
 		this _referenceCount = ReferenceCounter new(this)
@@ -43,6 +44,10 @@ ByteBuffer: class {
 			this _pointer = null
 		}
 		super()
+	}
+	forceFree: func {
+		this _forceFree = true
+		this free()
 	}
 	zero: func ~whole { memset(_pointer, 0, _size) }
 	zero: func ~range (offset, length: Int) { memset(_pointer + offset, 0, length) }
@@ -88,24 +93,23 @@ _RecoverableByteBuffer: class extends ByteBuffer {
 	_recover: Func (ByteBuffer)
 	init: func (pointer: UInt8*, size: Int, =_recover) { super(pointer, size, false) }
 	free: override func {
-		if ((this _recover as Closure) thunk)
+		if (!this _forceFree)
 			this _recover(this)
-		else
-			raise("_RecoverableByteBuffer has no recover function!")
+		else {
+			(this _recover as Closure) dispose()
+			super()
+		}
 	}
 }
 _RecyclableByteBuffer: class extends ByteBuffer {
-	_recyclable := true
 	init: func (pointer: UInt8*, size: Int) { super(pointer, size, true) }
 	free: override func {
-		if (this _recyclable) {
+		if (!this _forceFree) {
 			This _lock lock()
 			bin := This _getBin(this size)
 			while (bin count > 20) {
 				version(debugByteBuffer) { Debug print("ByteBuffer bin full; freeing one ByteBuffer") }
-				b := bin remove(0)
-				b _recyclable = false
-				b free()
+				bin remove(0) forceFree()
 			}
 			this referenceCount _count = 0
 			bin add(this)
@@ -145,11 +149,8 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		//		size < 10000 ? This smallRecycleBin : size < 100000 ? This mediumRecycleBin : This largeRecycleBin
 	}
 	_cleanList: static func (list: VectorList<This>) {
-		while (list count > 0) {
-			b := list remove(0)
-			b _recyclable = false
-			b free()
-		}
+		while (list count > 0)
+			list remove(0) forceFree()
 	}
 	_clean: static func {
 		This _cleanList(This _smallRecycleBin)
