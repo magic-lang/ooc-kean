@@ -8,7 +8,19 @@ _Task: abstract class {
 	_state := _PromiseState Unfinished
 	_mutex: Mutex
 	mutex ::= this _mutex
+	_freeOnCompletion := false
 	init: func (=_mutex)
+	free: override func {
+		this _mutex lock()
+		if (this _state == _PromiseState Unfinished) {
+			this _freeOnCompletion = true
+			this _mutex unlock()
+		}
+		else {
+			this _mutex unlock()
+			super()
+		}
+	}
 	run: abstract func
 	wait: func -> Bool {
 		_mutexUpdateTime: static Int = 1
@@ -40,6 +52,8 @@ _Task: abstract class {
 		if (this _state != _PromiseState Cancelled)
 			this _state = _PromiseState Finished
 		this _mutex unlock()
+		if (this _freeOnCompletion)
+			this free()
 	}
 }
 
@@ -148,7 +162,12 @@ ThreadPool: class {
 		super()
 	}
 	_add: func (task: _Task) -> Void { this _tasks enqueue(task) }
-	add: func (action: Func) { this _add(_ActionTask new(action, this _globalMutex)) }
+	add: func (action: Func) {
+		task := _ActionTask new(action, this _globalMutex)
+		this _add(task)
+		//Enable free after completion
+		task free()
+	}
 	getPromise: func (action: Func) -> Promise {
 		task := _ActionTask new(action, this _globalMutex)
 		this _add(task)
