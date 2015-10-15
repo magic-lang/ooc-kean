@@ -1,0 +1,14 @@
+Name: ooc Base
+Description: ooc Net library adapted from the built in SDK.
+SourcePath: source/net
+Imports: Address
+Imports: berkeley
+Imports: DNS
+Imports: Exceptions
+Imports: ServerSocket
+Imports: Socket
+Imports: TCPSocket
+Imports: translation
+Imports: UDPSocket
+Imports: utilities
+
