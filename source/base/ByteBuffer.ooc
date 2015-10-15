@@ -44,15 +44,9 @@ ByteBuffer: class {
 		}
 		super()
 	}
-	zero: func ~whole {
-		memset(_pointer, 0, _size)
-	}
-	zero: func ~range (offset, length: Int) {
-		memset(_pointer + offset, 0, length)
-	}
-	slice: func (offset, size: Int) -> This {
-		_SlicedByteBuffer new(this, offset, size)
-	}
+	zero: func ~whole { memset(_pointer, 0, _size) }
+	zero: func ~range (offset, length: Int) { memset(_pointer + offset, 0, length) }
+	slice: func (offset, size: Int) -> This { _SlicedByteBuffer new(this, offset, size) }
 	copy: func -> This {
 		result := This new(this size)
 		memcpy(result pointer, this pointer, this size)
@@ -94,11 +88,10 @@ _RecoverableByteBuffer: class extends ByteBuffer {
 	_recover: Func (ByteBuffer)
 	init: func (pointer: UInt8*, size: Int, =_recover) { super(pointer, size, false) }
 	free: override func {
-		if ((this _recover as Closure) thunk) {
+		if ((this _recover as Closure) thunk)
 			this _recover(this)
-		} else {
-			raise("ByteBuffer __destroy__() has no thunk!")
-		}
+		else
+			raise("_RecoverableByteBuffer has no recover function!")
 	}
 }
 _RecyclableByteBuffer: class extends ByteBuffer {
