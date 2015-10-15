@@ -28,16 +28,20 @@ ByteBuffer: class {
 	size ::= this _size
 	_referenceCount: ReferenceCounter
 	referenceCount ::= this _referenceCount
+	_owner: Bool
 
-	init: func (=_pointer, =_size) {
+	init: func (=_pointer, =_size, owner := false) {
 		this _referenceCount = ReferenceCounter new(this)
+		this _owner = owner
 	}
-	__destroy__: func {
+	free: override func {
 		if (this _referenceCount != null)
 			this _referenceCount free()
 		this _referenceCount = null
-		gc_free(this _pointer)
-		this _pointer = null
+		if (this _owner) {
+			gc_free(this _pointer)
+			this _pointer = null
+		}
 		super()
 	}
 	zero: func ~whole {
@@ -62,24 +66,20 @@ ByteBuffer: class {
 	copyTo: func (other: This, start: Int, destination: Int, length: Int) {
 		memcpy(other pointer + destination, this pointer + start, length)
 	}
-	new: static func ~size (size: Int) -> This {
-		_RecyclableByteBuffer new(size)
-	}
+	new: static func ~size (size: Int) -> This { _RecyclableByteBuffer new(size) }
 	new: static func ~recover (pointer: UInt8*, size: Int, recover: Func (This)) -> This {
 		_RecoverableByteBuffer new(pointer, size, recover)
 	}
-	clean: static func {
-		_RecyclableByteBuffer _clean()
-	}
+	clean: static func { _RecyclableByteBuffer _clean() }
 }
 _SlicedByteBuffer: class extends ByteBuffer {
 	_parent: ByteBuffer
 	_offset: Int
 	init: func (=_parent, =_offset, size: Int) {
 		_parent referenceCount increase()
-		super(_parent pointer + _offset, size)
+		super(_parent pointer + _offset, size, false)
 	}
-	__destroy__: func {
+	free: override func {
 		if (this _parent != null)
 			this _parent referenceCount decrease()
 		this _parent = null
@@ -87,13 +87,12 @@ _SlicedByteBuffer: class extends ByteBuffer {
 		if (this _referenceCount != null)
 			this _referenceCount free()
 		this _referenceCount = null
+		super()
 	}
 }
 _RecoverableByteBuffer: class extends ByteBuffer {
 	_recover: Func (ByteBuffer)
-	init: func (pointer: UInt8*, size: Int, =_recover) {
-		super(pointer, size)
-	}
+	init: func (pointer: UInt8*, size: Int, =_recover) { super(pointer, size, false) }
 	free: override func {
 		if ((this _recover as Closure) thunk) {
 			this _recover(this)
@@ -104,7 +103,7 @@ _RecoverableByteBuffer: class extends ByteBuffer {
 }
 _RecyclableByteBuffer: class extends ByteBuffer {
 	_recyclable := true
-	init: func (pointer: UInt8*, size: Int) { super(pointer, size) }
+	init: func (pointer: UInt8*, size: Int) { super(pointer, size, true) }
 	free: override func {
 		if (this _recyclable) {
 			This _lock lock()
