@@ -197,7 +197,7 @@ List: abstract class <T> extends BackIterable<T> {
         currentIndex := Time microtime()
 
         while(!indexes empty?()) {
-            currentIndex = 214013 * currentIndex + 2531011 //Copied directly from source/base/IntRandomGenerator
+            currentIndex = 214013 * currentIndex + 2531011 // Copied directly from source/math/IntRandomGenerator
             currentIndex = ((currentIndex >> 16) & Short maximumValue) % indexes getSize()
             shuffled add(this[indexes removeAt(currentIndex)])
         }
