@@ -18,9 +18,11 @@ _Task: abstract class {
 		}
 		else {
 			this _mutex unlock()
+			this _free()
 			super()
 		}
 	}
+	_free: virtual func
 	run: abstract func
 	wait: func -> Bool {
 		_mutexUpdateTime: static Int = 1
@@ -60,6 +62,7 @@ _Task: abstract class {
 _ActionTask: class extends _Task {
 	_action: Func
 	init: func (=_action, mutex: Mutex) { super(mutex) }
+	_free: override func { (this _action as Closure) dispose() }
 	run: override func {
 		this _action()
 		this _finishedTask()
@@ -70,6 +73,7 @@ _ResultTask: class <T> extends _Task {
 	_result: Cell<T>
 	_action: Func -> T
 	init: func (=_action, mutex: Mutex) { super(mutex) }
+	_free: override func { (this _action as Closure) dispose() }
 	run: override func {
 		temporary := Cell<T> new(this _action())
 		this _result = temporary
