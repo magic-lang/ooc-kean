@@ -1,4 +1,4 @@
-Name: ooc Base
+Name: ooc Net
 Description: ooc Net library adapted from the built in SDK.
 SourcePath: source/net
 Imports: Address
