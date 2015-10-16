@@ -1,7 +1,7 @@
 use ooc-base
 import threading/Thread, os/Time
 
-TestClass: class implements IDisposable {
+TestClass: class {
 	refCounter: ReferenceCounter
 	init: func {
 		refCounter = ReferenceCounter new(this)

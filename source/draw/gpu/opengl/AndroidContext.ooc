@@ -23,6 +23,7 @@ import Map/OpenGLMapPack
 import threading/Thread
 import math
 
+version(!gpuOff) {
 AndroidContext: class extends OpenGLContext {
 	_unpackRgbaToMonochrome := OpenGLMapUnpackRgbaToMonochrome new(this)
 	_unpackRgbaToUv := OpenGLMapUnpackRgbaToUv new(this)
@@ -38,14 +39,19 @@ AndroidContext: class extends OpenGLContext {
 	}
 	createGpuImage: override func (rasterImage: RasterImage) -> GpuImage {
 		result: GpuImage
-		if (rasterImage instanceOf?(GraphicBufferYuv420Semiplanar)) {
-			graphicBufferImage := rasterImage as GraphicBufferYuv420Semiplanar
-			rgba := graphicBufferImage toRgba(this)
-			result = this unpackBgraToYuv420Semiplanar(rgba, rasterImage size)
-			rgba free()
+		version (optiGraphicbufferupload) {
+			if (rasterImage instanceOf?(GraphicBufferYuv420Semiplanar)) {
+				graphicBufferImage := rasterImage as GraphicBufferYuv420Semiplanar
+				rgba := graphicBufferImage toRgba(this)
+				result = this unpackBgraToYuv420Semiplanar(rgba, rasterImage size)
+				rgba free()
+			}
+			else
+				result = super(rasterImage)
 		}
-		else
+		else {
 			result = super(rasterImage)
+		}
 		result
 	}
 	recyclePacker: func (packer: EGLBgra) { this _packers add(packer) }
@@ -134,4 +140,5 @@ AndroidContext: class extends OpenGLContext {
 	}
 	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }
 	isAligned: override func (width: Int) -> Bool { GraphicBuffer isAligned(width) }
+}
 }

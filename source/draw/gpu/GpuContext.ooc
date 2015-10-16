@@ -17,15 +17,11 @@ use ooc-math
 use ooc-draw
 use ooc-base
 use ooc-collections
+import AbstractContext
 import GpuImage, GpuSurface, GpuMap, GpuFence, GpuYuv420Semiplanar, GpuMesh
 
-AlignWidth: enum {
-	Nearest
-	Floor
-	Ceiling
-}
-
-GpuContext: abstract class {
+version(!gpuOff) {
+GpuContext: abstract class extends AbstractContext {
 	defaultMap: GpuMap { get { null } }
 	init: func
 	createMonochrome: abstract func (size: IntSize2D) -> GpuImage
@@ -40,11 +36,10 @@ GpuContext: abstract class {
 	createMesh: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GpuMesh
 
 	update: abstract func
-	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }
-	isAligned: virtual func (width: Int) -> Bool { true }
 	packToRgba: abstract func (source: GpuImage, target: GpuImage, viewport: IntBox2D)
 	finish: func { this createFence() sync() . wait() . free() }
 
 	toRaster: virtual func (gpuImage: GpuImage, async: Bool = false) -> RasterImage { gpuImage toRasterDefault() }
 	toRasterAsync: virtual func (gpuImage: GpuImage) -> (RasterImage, GpuFence) { Debug raise("toRasterAsync unimplemented") }
+}
 }

@@ -1,13 +1,8 @@
 Name: ooc Base
 Description: ooc Base library that complements the built in SDK.
 SourcePath: source/base
-Imports: IEquatable
-Imports: IEquatableWithin
 Imports: Order
-Imports: IComparable
-Imports: OnOff
 Imports: ByteBuffer
-Imports: IDisposable
 Imports: DateTime
 Imports: TimeSpan
 Imports: Synchronized
@@ -21,7 +16,6 @@ Imports: Timer
 Imports: Debug
 Imports: Profiler
 Imports: CLIParser
-Imports: StringBuilder
 Imports: Owner
 Imports: OwnedBuffer
 Imports: TextBuffer

@@ -19,6 +19,7 @@ use ooc-draw-gpu
 import OpenGLContext
 import backend/GLVertexArrayObject
 
+version(!gpuOff) {
 OpenGLMesh: class extends GpuMesh {
 	_backend: GLVertexArrayObject
 	init: func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], context: OpenGLContext) {
@@ -29,4 +30,5 @@ OpenGLMesh: class extends GpuMesh {
 		super()
 	}
 	draw: override func { this _backend draw() }
+}
 }

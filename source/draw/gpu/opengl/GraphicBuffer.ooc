@@ -15,9 +15,11 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
 use ooc-base
+use ooc-draw
 use ooc-draw-gpu
 import math
 
+version(!gpuOff) {
 GraphicBufferFormat: enum {
 	Rgba8888 = 1
 	Yv12
@@ -135,4 +137,5 @@ GraphicBuffer: class {
 		}
 		result
 	}
+}
 }

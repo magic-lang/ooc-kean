@@ -19,10 +19,11 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-collections
 use ooc-ui
-import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, OpenGLMesh, RecycleBin
+import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, OpenGLMesh, OpenGLCanvas, RecycleBin
 import Map/OpenGLMap, Map/OpenGLMapPack
 import backend/[GLContext, GLRenderer]
 
+version(!gpuOff) {
 OpenGLContext: class extends GpuContext {
 	_backend: GLContext
 	backend ::= this _backend
@@ -99,7 +100,10 @@ OpenGLContext: class extends GpuContext {
 		this _pointsShader use()
 		this _renderer drawPoints(positions, pointList count, 2)
 	}
-	recycle: func (image: OpenGLPacked) { this _recycleBin add(image) }
+	recycle: virtual func (image: OpenGLPacked) {
+		(image canvas as OpenGLCanvas) onRecycle()
+		this _recycleBin add(image)
+	}
 	_searchImageBin: func (type: GpuImageType, size: IntSize2D) -> GpuImage { this _recycleBin find(type, size) }
 	createMonochrome: func (size: IntSize2D) -> GpuImage {
 		result := this _searchImageBin(GpuImageType monochrome, size)
@@ -184,4 +188,5 @@ OpenGLContext: class extends GpuContext {
 			vertices[i] = toGL * vertices[i]
 		OpenGLMesh new(vertices, textureCoordinates, this)
 	}
+}
 }

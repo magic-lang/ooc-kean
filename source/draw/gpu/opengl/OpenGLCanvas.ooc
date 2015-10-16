@@ -23,6 +23,7 @@ use ooc-draw-gpu
 import backend/[GLFramebufferObject, GLTexture]
 import OpenGLBgr, Map/OpenGLMap, OpenGLBgra, OpenGLUv, OpenGLMonochrome, OpenGLContext, OpenGLPacked, OpenGLSurface
 
+version(!gpuOff) {
 OpenGLCanvas: class extends OpenGLSurface {
 	_target: OpenGLPacked
 	_renderTarget: GLFramebufferObject
@@ -45,4 +46,5 @@ OpenGLCanvas: class extends OpenGLSurface {
 		this _unbind()
 	}
 	readPixels: override func -> ByteBuffer { this _renderTarget readPixels() }
+}
 }

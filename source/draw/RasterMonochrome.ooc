@@ -22,6 +22,8 @@ import RasterImage
 import StbImage
 import Image, FloatImage
 import Color
+import PaintEngine
+import RasterPaintEngine
 
 RasterMonochrome: class extends RasterPacked {
 	bytesPerPixel: Int { get { 1 } }
@@ -29,13 +31,9 @@ RasterMonochrome: class extends RasterPacked {
 	init: func ~allocateStride (size: IntSize2D, stride: UInt) { super(size, stride) }
 	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntSize2D, stride: UInt) { super(buffer, size, stride) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { this init(buffer, size, this bytesPerPixel * size width) }
-	init: func ~fromRasterImage (original: RasterImage) { super(original) }
+	init: func ~fromRasterImage (original: This) { super(original) }
 	create: func (size: IntSize2D) -> Image { This new(size) }
-	copy: func -> This {
-		result := This new(this)
-		this buffer copyTo(result buffer)
-		result
-	}
+	copy: func -> This { This new(this) }
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		this apply(ColorConvert fromMonochrome(action))
 	}
@@ -241,4 +239,5 @@ RasterMonochrome: class extends RasterPacked {
 		for (row in 0 .. this size height)
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
+	createPaintEngine: override func -> PaintEngine { MonochromePaintEngine new(this) }
 }

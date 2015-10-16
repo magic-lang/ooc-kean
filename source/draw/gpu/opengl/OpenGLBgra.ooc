@@ -21,6 +21,7 @@ use ooc-draw-gpu
 import backend/GLTexture
 import OpenGLCanvas, OpenGLPacked, OpenGLContext
 
+version(!gpuOff) {
 OpenGLBgra: class extends OpenGLPacked {
 	channelCount: static Int = 4
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
@@ -37,4 +38,5 @@ OpenGLBgra: class extends OpenGLPacked {
 		RasterBgra new(buffer, this size)
 	}
 	create: override func (size: IntSize2D) -> This { this context createBgra(size) as This }
+}
 }

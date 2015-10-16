@@ -19,6 +19,7 @@ use ooc-math
 import GraphicBuffer, AndroidContext, OpenGLBgra
 import backend/[GLTexture, GLContext, EGLImage]
 
+version(!gpuOff) {
 EGLBgra: class extends OpenGLBgra {
 	_buffer: GraphicBuffer
 	buffer ::= this _buffer
@@ -33,4 +34,5 @@ EGLBgra: class extends OpenGLBgra {
 		this _buffer free()
 		super()
 	}
+}
 }
