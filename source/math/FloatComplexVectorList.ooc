@@ -73,8 +73,12 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	}
 	addInto: func (other: This) {
 		minimumCount := Int minimum(this count, other count)
-		for (i in 0 .. minimumCount)
-			this[i] = this[i] + other[i]
+		thisPointer := (this pointer as FloatComplex*)
+		otherPointer := (other pointer as FloatComplex*)
+		for (i in 0 .. minimumCount) {
+			thisPointer[i] real = thisPointer[i] real + otherPointer[i] real
+			thisPointer[i] imaginary = thisPointer[i] imaginary + otherPointer[i] imaginary
+		}
 	}
 	operator + (value: FloatComplex) -> This {
 		result := This new()
