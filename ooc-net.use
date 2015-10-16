@@ -11,3 +11,8 @@ Imports: TCPSocket
 Imports: translation
 Imports: UDPSocket
 Imports: utilities
+
+version (windows) {
+  # Under MinGW, we need that lib to use winsock
+  Libs: -lws2_32
+}
