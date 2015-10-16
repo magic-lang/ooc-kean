@@ -118,10 +118,6 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 			result /= ((this size width squared() + this size height squared()) as Float sqrt())
 		}
 	}
-//	FIXME
-//	openResource(assembly: ???, name: String) {
-//		Image openResource
-//	}
 	abstract operator [] (x, y: Int) -> ColorYuv
 	abstract operator []= (x, y: Int, value: ColorYuv)
 }

@@ -104,10 +104,6 @@ RasterBgr: class extends RasterPacked {
 			result /= ((this size width squared() + this size height squared()) as Float sqrt())
 		}
 	}
-//	FIXME
-//	openResource(assembly: ???, name: String) {
-//		Image openResource
-//	}
 	open: static func (filename: String) -> This {
 		x, y, n: Int
 		requiredComponents := 3

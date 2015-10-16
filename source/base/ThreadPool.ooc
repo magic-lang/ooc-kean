@@ -8,7 +8,8 @@ _Task: abstract class {
 	_state := _PromiseState Unfinished
 	_mutex: Mutex
 	mutex ::= this _mutex
-	run: abstract func (mutex: Mutex)
+	init: func (=_mutex)
+	run: abstract func
 	wait: func -> Bool {
 		_mutexUpdateTime: static Int = 1
 		status := false
@@ -44,8 +45,8 @@ _Task: abstract class {
 
 _ActionTask: class extends _Task {
 	_action: Func
-	init: func (=_action, =_mutex)
-	run: func (=_mutex) {
+	init: func (=_action, mutex: Mutex) { super(mutex) }
+	run: override func {
 		this _action()
 		this _finishedTask()
 	}
@@ -54,8 +55,8 @@ _ActionTask: class extends _Task {
 _ResultTask: class <T> extends _Task {
 	_result: Cell<T>
 	_action: Func -> T
-	init: func (=_action, =_mutex)
-	run: func (=_mutex) {
+	init: func (=_action, mutex: Mutex) { super(mutex) }
+	run: override func {
 		temporary := Cell<T> new(this _action())
 		this _result = temporary
 		this _finishedTask()
@@ -69,9 +70,7 @@ _TaskPromise: class extends Promise {
 		this _task free()
 		super()
 	}
-	wait: override func -> Bool {
-		this _task wait()
-	}
+	wait: override func -> Bool { this _task wait() }
 	cancel: override func -> Bool {
 		//TODO: Interrupt executing thread and have it move on to the next task in queue
 		this _task cancel()
@@ -85,9 +84,7 @@ _TaskFuture: class <T> extends Future<T> {
 		this _task free()
 		super()
 	}
-	wait: override func -> Bool {
-		this _task wait()
-	}
+	wait: override func -> Bool { this _task wait() }
 	wait: func ~default (defaultValue: T) -> T {
 		status := this wait()
 		status ? this _task _result[T] : defaultValue
@@ -105,9 +102,7 @@ _TaskFuture: class <T> extends Future<T> {
 Worker: class {
 	_thread: Thread
 	_tasks: BlockedQueue<_Task>
-	_mutex := Mutex new()
 	_threadClosure: Func
-	mutex ::= this _mutex
 	init: func (=_tasks) {
 		this _threadClosure = func { this _threadLoop() }
 		this _thread = Thread new(this _threadClosure)
@@ -117,7 +112,6 @@ Worker: class {
 		this _thread wait()
 		this _thread free()
 		(this _threadClosure as Closure) dispose()
-		this _mutex free()
 		super()
 	}
 	_threadLoop: func {
@@ -125,7 +119,7 @@ Worker: class {
 			isOk := true
 			job := this _tasks wait(isOk&)
 			if (isOk)
-				job run(this _mutex)
+				job run()
 			else
 				break
 		}
@@ -146,21 +140,15 @@ ThreadPool: class {
 	}
 	free: override func {
 		this _tasks cancel()
-		for (i in 0 .. this _threadCount) {
+		for (i in 0 .. this _threadCount)
 			this _workers[i] free()
-		}
 		this _workers free()
 		this _tasks free()
 		this _globalMutex free()
 		super()
 	}
-	_add: func (task: _Task) -> Void {
-		this _tasks enqueue(task)
-	}
-	add: func (action: Func) {
-		task := _ActionTask new(action, this _globalMutex)
-		this _add(task)
-	}
+	_add: func (task: _Task) -> Void { this _tasks enqueue(task) }
+	add: func (action: Func) { this _add(_ActionTask new(action, this _globalMutex)) }
 	getPromise: func (action: Func) -> Promise {
 		task := _ActionTask new(action, this _globalMutex)
 		this _add(task)
