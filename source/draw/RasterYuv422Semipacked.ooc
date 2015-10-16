@@ -96,11 +96,6 @@ RasterYuv422Semipacked: class extends RasterPacked {
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
 		this apply(ColorConvert fromYuv(action))
 	}
-
-//	FIXME
-//	openResource(assembly: ???, name: String) {
-//		Image openResource
-//	}
 	operator [] (x, y: Int) -> ColorYuv {
 		result := ColorYuv new()
 		if (this isValidIn(x, y)) {
