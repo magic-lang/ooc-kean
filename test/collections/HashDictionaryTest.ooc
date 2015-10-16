@@ -32,8 +32,8 @@ HashDictionaryTest: class extends Fixture {
 		this add("Int", func {
 			dictionary := HashDictionary new()
 			dictionary add("IntegerValue", 1)
-			expect(dictionary get("IntegerValue", 0) == 1, is true)
-			expect(dictionary get("Nonexistent", 0), is equal to(0), is true)
+			expect(dictionary get("IntegerValue", 0), is equal to(1))
+			expect(dictionary get("Nonexistent", 0), is equal to(0))
 		})
 		this add("String", func {
 			dictionary := HashDictionary new()
@@ -49,8 +49,8 @@ HashDictionaryTest: class extends Fixture {
 			dictionary add("TestClassValue", testCover)
 			expect(dictionary get("TestClassValue", this defaultCover) stringVal == "String", is true)
 			expect(dictionary get("Nonexistent", this defaultCover) stringVal == "Default", is true)
-			expect(dictionary get("TestClassValue", this defaultCover) intVal == 1, is true)
-			expect(dictionary get("Nonexistent", this defaultCover) intVal, is equal to(0), is true)
+			expect(dictionary get("TestClassValue", this defaultCover) intVal, is equal to(1))
+			expect(dictionary get("Nonexistent", this defaultCover) intVal, is equal to(0))
 		})
 		this add("Class", func {
 			dictionary := HashDictionary new()
@@ -58,8 +58,8 @@ HashDictionaryTest: class extends Fixture {
 			dictionary add("TestClassValue", testClass)
 			expect(dictionary get("TestClassValue", this defaultClass) stringVal == "String", is true)
 			expect(dictionary get("Nonexistent", this defaultClass) stringVal == "Default", is true)
-			expect(dictionary get("TestClassValue", this defaultClass) intVal == 1, is true)
-			expect(dictionary get("Nonexistent", this defaultClass) intVal, is equal to(0), is true)
+			expect(dictionary get("TestClassValue", this defaultClass) intVal, is equal to(1))
+			expect(dictionary get("Nonexistent", this defaultClass) intVal, is equal to(0))
 		})
 		this add("VectorList", func {
 			dictionary := HashDictionary new()
