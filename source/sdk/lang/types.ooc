@@ -122,10 +122,8 @@ Closure: cover {
 /** An object storing a value and its class. */
 Cell: class <T> {
     val: __onheap__ T
-    type: Class = null
 
     init: func(=val)
-    init: func ~withtype(=val, =type)
     init: func ~noval
 
     set: func (=val)

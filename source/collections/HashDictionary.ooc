@@ -45,7 +45,7 @@ HashDictionary: class {
 			entryValue := this _hashBag getEntry(key, storedType) value
 			if (storedType inheritsFrom?(Cell)) {
 				entryValueCell := (entryValue as Cell<T>*)@
-				if (T inheritsFrom?(entryValueCell type))
+				if (T inheritsFrom?(entryValueCell T))
 					result = entryValueCell get()
 			}
 			else if (T inheritsFrom?(storedType))
@@ -60,7 +60,7 @@ HashDictionary: class {
 			entryValue := this _hashBag getEntry(key, storedType) value
 			if (storedType inheritsFrom?(Cell)) {
 				entryValueCell := (entryValue as Cell<T>*)@
-				if (T inheritsFrom?(entryValueCell type))
+				if (T inheritsFrom?(entryValueCell T))
 					result = entryValueCell get()
 			}
 			else if (T inheritsFrom?(storedType))
@@ -80,7 +80,7 @@ HashDictionary: class {
 		if (T inheritsFrom?(Object))
 			this _hashBag put(key, value)
 		else {
-			cellValue := Cell<T> new(value, T)
+			cellValue := Cell<T> new(value)
 			this _hashBag put(key, cellValue)
 		}
 	}
