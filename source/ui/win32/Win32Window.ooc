@@ -19,7 +19,7 @@ use ooc-math
 use ooc-draw
 import include/win32
 
-version(windows){
+version(windows) {
 Win32Window: class extends NativeWindow {
 	init: func (size: IntSize2D, title: String) {
 		windowClassName := "Window class" as CString
