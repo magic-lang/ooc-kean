@@ -113,9 +113,9 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		}
 	}
 	open: static func (filename: String) -> This {
-		x, y, totalComponents: Int
+		x, y, imageComponents: Int
 		requiredComponents := 3
-		data := StbImage load(filename, x&, y&, totalComponents&, requiredComponents)
+		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
 		bgr := RasterBgr new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y))
 		result := This new(bgr)
 		bgr referenceCount decrease()
