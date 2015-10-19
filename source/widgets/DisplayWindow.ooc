@@ -25,7 +25,7 @@ DisplayWindow: abstract class {
 	draw: abstract func (image: Image)
 	refresh: virtual func
 	create: static func (size: IntSize2D, title: String) -> This {
-		version(unix || apple)
+		version((unix || apple) && !gpuOff)
 			return UnixWindow new(size, title)
 		version(windows)
 			return Win32DisplayWindow new(size, title)
