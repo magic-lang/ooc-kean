@@ -22,13 +22,14 @@ import Color
 
 Pen: cover {
 	color: ColorBgra { get set }
+	width: Float { get set }
 	alpha ::= this color alpha
-	alphaAsFloat ::= this alpha as Float / 255.0f
-	init: func@ (=color)
-	init: func@ ~withBgr (colorBgr: ColorBgr) {
-		this color = colorBgr toBgra()
-	}
-	setApha: func@ (alpha: UInt8) {
+	alphaAsFloat ::= this alpha as Float / 255.0
+	init: func@ (=color, =width)
+	init: func@ ~color (color: ColorBgra) { this init(color, 1.0f) }
+	init: func@ ~default { this init(ColorBgra new()) }
+	init: func@ ~withBgr (colorBgr: ColorBgr) { this init(colorBgr toBgra()) }
+	setAlpha: func@ (alpha: UInt8) {
 		this color = ColorBgra new(this color toBgr(), alpha)
 	}
 	setAlpha: func@ ~withFloat (value: Float) {
