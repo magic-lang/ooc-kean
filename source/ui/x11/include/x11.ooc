@@ -15,6 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
+version(unix || apple) {
 include X11/Xlib
 include X11/Xatom
 include X11/Xutil
@@ -755,4 +756,5 @@ Key: enum {
 	NewSheqelSign = XK_NewSheqelSign
 	DongSign = XK_DongSign
 	EuroSign = XK_EuroSign
+}
 }
