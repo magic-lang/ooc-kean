@@ -38,8 +38,8 @@ GpuYuv420Semiplanar: class extends GpuImage {
 		this _uv referenceCount increase()
 	}
 	init: func ~fromRaster (rasterImage: RasterYuv420Semiplanar, context: GpuContext) {
-		y := context createGpuImage(rasterImage y)
-		uv := context createGpuImage(rasterImage uv)
+		y := context createImage(rasterImage y)
+		uv := context createImage(rasterImage uv)
 		this init(y, uv, context)
 	}
 	init: func ~empty (size: IntSize2D, context: GpuContext) {

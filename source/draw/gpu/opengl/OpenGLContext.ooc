@@ -153,14 +153,14 @@ OpenGLContext: class extends GpuContext {
 			result upload(raster)
 		result
 	}
-	createGpuImage: virtual override func (rasterImage: RasterImage) -> GpuImage {
+	createImage: virtual override func (rasterImage: RasterImage) -> GpuImage {
 		match (rasterImage) {
 			case image: RasterMonochrome => this _createMonochrome(image)
 			case image: RasterBgr => this _createBgr(image)
 			case image: RasterBgra => this _createBgra(image)
 			case image: RasterUv => this _createUv(image)
 			case image: RasterYuv420Semiplanar => this createYuv420Semiplanar(image)
-			case => Debug raise("Unknown input format in OpenGLContext createGpuImage"); null
+			case => Debug raise("Unknown input format in OpenGLContext createImage"); null
 		}
 	}
 	update: func { this _backend swapBuffers() }
