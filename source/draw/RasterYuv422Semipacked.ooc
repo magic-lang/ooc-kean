@@ -36,8 +36,8 @@ RasterYuv422Semipacked: class extends RasterPacked {
 	init: func ~allocate (size: IntSize2D) { super~allocate(size) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, this bytesPerPixel * size width) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
-	/*createFrom: func ~fromRasterImage (original: RasterImage) {
-		// TODO: What does this function even do?
+	createFrom: func ~fromRasterImage (original: RasterImage) {
+		// TODO: Figure out what this function does and whether to remove it
 //		"RasterYuv420 init ~fromRasterImage, original: (#{original size}), this: (#{this size}), y stride #{this y stride}" println()
 		y := 0
 		x := 0
@@ -64,7 +64,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 			}
 		}
 		original apply(f)
-	}*/
+	}
 	create: func (size: IntSize2D) -> Image {
 		result := This new(size)
 		result crop = this crop
