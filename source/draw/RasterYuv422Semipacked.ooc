@@ -116,11 +116,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		x, y, n: Int
 		requiredComponents := 3
 		data := StbImage load(filename, x&, y&, n&, requiredComponents)
-		buffer := ByteBuffer new(x * y * requiredComponents)
-		// FIXME: Find a better way to do this using Dispose() or something
-		memcpy(buffer pointer, data, x * y * requiredComponents)
-		StbImage free(data)
-		bgr := RasterBgr new(buffer, IntSize2D new(x, y))
+		bgr := RasterBgr new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y))
 		result := This new(bgr)
 		bgr referenceCount decrease()
 		return result
