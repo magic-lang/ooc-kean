@@ -60,7 +60,7 @@ floor: extern(floorl) func ~Long (LDouble) -> LDouble
 }
 
 extend Int64 {
-	modulo: func(divisor: Int) -> This { this - divisor * (this / divisor) }
+	modulo: func(divisor: This) -> This { this - divisor * (this / divisor) }
 }
 
 extend Int {
