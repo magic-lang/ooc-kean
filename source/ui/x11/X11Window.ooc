@@ -18,6 +18,7 @@ use ooc-math
 use ooc-ui
 import include/x11
 
+version(unix || apple) {
 X11Window: class extends NativeWindow {
 	init: func (size: IntSize2D, title: String) {
 		/* Note: ":0" is the usual identifier for the default display but this should be read from the DISPLAY variable in the system by passing null as parameter,
@@ -54,4 +55,5 @@ X11Window: class extends NativeWindow {
 		XCloseDisplay(this display)
 		super()
 	}
+}
 }
