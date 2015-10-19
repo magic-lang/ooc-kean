@@ -23,7 +23,6 @@ Synchronized: class {
 		if (this _lock != null)
 			this _lock free()
 		this _lock = null
-//		this _lock free()
 		super()
 	}
 	lock: func {
