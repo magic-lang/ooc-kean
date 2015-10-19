@@ -32,19 +32,11 @@ Synchronized: class {
 	unlock: func {
 		this _lock unlock()
 	}
-
 	lock: func ~action (action: Func) {
 		this lock()
-//		try {
-			action()
-			this unlock()
-//		} catch(e: Exception) {
-//			this unlock()
-//			e throw()
-//		}
-//		FIXME: What is this commented-out code doing here?
+		action()
+		this unlock()
 	}
-
 	lockFunc: func <T> (function: Func -> T) -> T {
 		result: T
 		this lock()

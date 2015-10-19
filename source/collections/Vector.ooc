@@ -112,8 +112,7 @@ HeapVector: class <T> extends Vector<T> {
 
 	operator [] (index: Int) -> T {
 		version (safe) {
-			// TODO: Should we also check that index < count?
-			if (index >= this capacity || index < 0)
+			if (index >= this capacity || index < 0 || index >= this capacity)
 				raise("Accessing Vector index out of range in set operator")
 		}
 		this _backend[index]
@@ -121,9 +120,7 @@ HeapVector: class <T> extends Vector<T> {
 
 	operator []= (index: Int, item: T) {
 		version (safe) {
-			// TODO: Should we also check that index < count?
-			// TODO: Should this affect count, if index > count?
-			if (index >= this capacity || index < 0)
+			if (index >= this capacity || index < 0 || index >= this capacity)
 				raise("Accessing Vector index out of range in set operator")
 		}
 		if (this _freeContent && T inheritsFrom?(Object)) {
