@@ -49,9 +49,11 @@ IntPoint2D: cover {
 	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x as Float, this y as Float) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
-	parse: static func (input: String) -> This {
+	parse: static func (input: Text) -> This {
 		array := input split(',')
-		This new(array[0] toInt(), array[1] toInt())
+		result := This new(array[0] toInt(), array[1] toInt())
+		array free()
+		result
 	}
 }
 operator * (left: Int, right: IntPoint2D) -> IntPoint2D { IntPoint2D new(left * right x, left * right y) }

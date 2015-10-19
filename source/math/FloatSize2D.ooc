@@ -74,9 +74,11 @@ FloatSize2D: cover {
 	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this width, this height) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this width toString()}, #{this height toString()}" }
-	parse: static func (input: String) -> This {
+	parse: static func (input: Text) -> This {
 		array := input split(',')
-		This new (array[0] toFloat(), array[1] toFloat())
+		result := This new (array[0] toFloat(), array[1] toFloat())
+		array free()
+		result
 	}
 	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
 		This new(Float linearInterpolation(a width, b width, ratio), Float linearInterpolation(a height, b height, ratio))

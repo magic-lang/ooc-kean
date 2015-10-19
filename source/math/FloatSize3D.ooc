@@ -76,9 +76,11 @@ FloatSize3D: cover {
 	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this width, this height, this depth) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this width toString()}, #{this height toString()}, #{this depth toString()}" }
-	parse: static func (input: String) -> This {
+	parse: static func (input: Text) -> This {
 		array := input split(',')
-		This new (array[0] toFloat(), array[1] toFloat(), array[2] toFloat())
+		result := This new (array[0] toFloat(), array[1] toFloat(), array[2] toFloat())
+		array free()
+		result
 	}
 }
 operator * (left: Float, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left * right width, left * right height, left * right depth) }

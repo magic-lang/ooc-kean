@@ -103,9 +103,11 @@ IntBox2D: cover {
 	toFloatBox2D: func -> FloatBox2D { FloatBox2D new(this left, this top, this width, this height) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
-	parse: static func (input: String) -> This {
+	parse: static func (input: Text) -> This {
 		array := input split(',')
-		This new(array[0] toInt(), array[1] toInt(), array[2] toInt(), array[3] toInt())
+		result := This new(array[0] toInt(), array[1] toInt(), array[2] toInt(), array[3] toInt())
+		array free()
+		result
 	}
 	create: static func (leftTop: IntPoint2D, size: IntSize2D) -> This { This new(leftTop, size) }
 	create: static func ~fromFloats (left, top, width, height: Int) -> This { This new(left, top, width, height) }
