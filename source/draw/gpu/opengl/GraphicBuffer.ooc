@@ -93,37 +93,17 @@ GraphicBuffer: class {
 		memcpy(This _alignedWidth data, alignedWidth, count * Int size)
 	}
 	alignWidth: static func (width: Int, align := AlignWidth Nearest) -> Int {
-		//TODO: Clean this messy function and remove check for empty array
-		result: Int
-		if (This _alignedWidth length == 0) {
-			result = width
+		version (safe) {
+			if (This _alignedWidth length == 0)
+				return width
 		}
-		else {
-			result = This _alignedWidth[0]
-			match (align) {
-				case AlignWidth Nearest => {
-					for (i in 0 .. This _alignedWidth length) {
-						currentWidth := This _alignedWidth[i]
-						if (abs(result - width) > abs(currentWidth - width))
-							result = currentWidth
-					}
-				}
-				case AlignWidth Floor => {
-					for (i in 0 .. This _alignedWidth length) {
-						currentWidth := This _alignedWidth[i]
-						if (abs(result - width) > abs(currentWidth - width) && currentWidth <= width)
-							result = currentWidth
-					}
-				}
-				case AlignWidth Ceiling => {
-					result = This _alignedWidth[This _alignedWidth length-1]
-					for (i in 0 .. This _alignedWidth length) {
-						currentWidth := This _alignedWidth[i]
-						if (abs(result - width) > abs(currentWidth - width) && currentWidth >= width)
-							result = currentWidth
-					}
-				}
-			}
+		result := align == AlignWidth Ceiling ? This _alignedWidth[This _alignedWidth length-1] : This _alignedWidth[0]
+		for (i in 0 .. This _alignedWidth length) {
+			currentWidth := This _alignedWidth[i]
+			if ((abs(result - width) > abs(currentWidth - width) && align == AlignWidth Nearest) ||
+				(abs(result - width) > abs(currentWidth - width) && currentWidth <= width && align == AlignWidth Floor) ||
+				(abs(result - width) > abs(currentWidth - width) && currentWidth >= width && align == AlignWidth Ceiling))
+				result = currentWidth
 		}
 		result
 	}
