@@ -71,10 +71,10 @@ FloatComplexVectorListTest: class extends Fixture {
 			list add(FloatComplex new(-1, 8))
 			sum := list sum
 			mean := list mean
-			expect(sum real, is equal to(6.0f) within(tolerance))
-			expect(sum imaginary, is equal to(4.0f) within(tolerance))
-			expect(mean real, is equal to(1.5f) within(tolerance))
-			expect(mean imaginary, is equal to(1.0f) within(tolerance))
+			expect(sum real == 6.0f)
+			expect(sum imaginary == 4.0f)
+			expect(mean real == 1.5f)
+			expect(mean imaginary == 1.0f) //FIXME getting errors using "is equal to" here because... ooc (expected 1.00000000 got 1.00000000)
 		})
 		this add("real, imaginary lists", func {
 			list := FloatComplexVectorList new()

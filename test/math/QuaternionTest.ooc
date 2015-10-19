@@ -70,13 +70,11 @@ QuaternionTest: class extends Fixture {
 		this add("inverse", func {
 			inverse := this quaternion2 inverse
 			product := this quaternion2 * inverse
-			expect(product real == 1.0f)
-			expect(product x > -tolerance) //FIXME The standard "is equal to(0.0) within(tolerance)" does not work here?
-			expect(product y > -tolerance)
-			expect(product z > -tolerance)
-			expect(product x < tolerance)
-			expect(product y < tolerance)
-			expect(product z < tolerance)
+			//productReal := 
+			expect(product real as Float, is equal to(1.0f) within(tolerance))
+			expect(product x as Float, is equal to(0.0f) within(tolerance))
+			expect(product y as Float, is equal to(0.0f) within(tolerance))
+			expect(product z as Float, is equal to(0.0f) within(tolerance))
 		})
 		this add("conjugate", func {
 			conjugate := quaternion5 conjugate
