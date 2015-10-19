@@ -67,8 +67,7 @@ IntBox2D: cover {
 		height := Int maximum~two(0, Int minimum~two(this bottom, other bottom) - top)
 		This new(left, top, width, height)
 	}
-	//FIXME: Union is a keyword in C and so cannot be used for methods, but the name should be box__union something, so there shouldn't be a problem. Compiler bug?
-	union: func ~box (other: This) -> This {
+	union: func ~box (other: This) -> This { // Rock bug: Union without suffix cannot be used because the C name conflicts with keyword "union"
 		left := Int minimum~two(this left, other left)
 		top := Int minimum~two(this top, other top)
 		width := Int maximum~two(0, Int maximum(this right, other right) - left)

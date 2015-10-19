@@ -20,6 +20,7 @@ use ooc-base
 use ooc-collections
 import GpuImage, GpuMap, GpuSurface, GpuContext, GpuYuv420Semiplanar, GpuMesh
 
+version(!gpuOff) {
 GpuCanvasYuv420Semiplanar: class extends GpuSurface {
 	_target: GpuYuv420Semiplanar
 	transform: FloatTransform3D {
@@ -60,4 +61,5 @@ GpuCanvasYuv420Semiplanar: class extends GpuSurface {
 		this _target y canvas draw(yuv y, mesh)
 		this _target uv canvas draw(yuv uv, mesh)
 	}
+}
 }

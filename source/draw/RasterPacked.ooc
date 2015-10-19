@@ -44,6 +44,7 @@ RasterPacked: abstract class extends RasterImage {
 	}
 	init: func ~fromOriginal (original: This) {
 		super(original)
+		this _buffer = original buffer copy()
 		this _stride = original stride
 	}
 	free: override func {
@@ -88,5 +89,19 @@ RasterPacked: abstract class extends RasterImage {
 		folder := file parent . mkdirs() . free()
 		file free()
 		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this size width * this bytesPerPixel)
+	}
+	swapChannels: func (first, second: Int) {
+		version(safe) {
+			if (first > this bytesPerPixel || second > this bytesPerPixel)
+				raise("Channel number too large")
+		}
+		pointer := this buffer pointer
+		index := 0
+		while (index < this buffer size) {
+			value := pointer[index + first]
+			pointer[index + first] = pointer[index + second]
+			pointer[index + second] = value
+			index += this bytesPerPixel
+		}
 	}
 }

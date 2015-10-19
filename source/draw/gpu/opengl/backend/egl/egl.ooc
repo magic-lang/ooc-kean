@@ -15,6 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
+version(!gpuOff) {
 include EGL/egl, EGL/eglext
 
 // EGL 3
@@ -194,3 +195,4 @@ eglGetConfigAttrib: extern func (display: Pointer, config: Pointer, attribute: I
 eglSwapBuffers: extern func (display, surface: Pointer)
 eglTerminate: extern func (display: Pointer) -> Pointer
 eglGetError: extern func -> UInt
+}

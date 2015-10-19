@@ -26,6 +26,8 @@ import RasterUv
 import Image
 import Color
 import RasterBgr
+import PaintEngine
+import RasterPaintEngine
 import StbImage
 import io/File
 import io/FileReader
@@ -170,11 +172,6 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		this apply(convert)
 		(convert as Closure) dispose()
 	}
-
-//	FIXME
-//	openResource(assembly: ???, name: String) {
-//		Image openResource
-//	}
 	operator [] (x, y: Int) -> ColorYuv {
 		ColorYuv new(this y[x, y] y, this uv [x / 2, y / 2] u, this uv [x / 2, y / 2] v)
 	}
@@ -249,4 +246,5 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		fileWriter write(this uv buffer pointer as Char*, this uv buffer size)
 		fileWriter close()
 	}
+	createPaintEngine: override func -> PaintEngine { Yuv420PaintEngine new(this) }
 }

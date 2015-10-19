@@ -21,6 +21,7 @@ import include/gles3
 import ../GLVertexArrayObject
 import Gles3Debug
 
+version(!gpuOff) {
 Gles3VertexArrayObject: class extends GLVertexArrayObject {
 	_backend: UInt
 	positionLayout: const static UInt = 0
@@ -103,4 +104,5 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 		version(debugGL) { validateEnd("VertexArrayObject draw") }
 		this unbind()
 	}
+}
 }

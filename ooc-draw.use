@@ -8,6 +8,9 @@ Imports: AbstractContext
 Imports: CpuContext
 Imports: Color
 Imports: Image
+Imports: Painter
+Imports: PaintEngine
+Imports: RasterPaintEngine
 Imports: RasterBgr
 Imports: RasterBgra
 Imports: RasterUv

@@ -70,8 +70,7 @@ FloatBox2D: cover {
 		height := Float maximum(0, (Float minimum(this bottom, other bottom) - top))
 		This new(left, top, width, height)
 	}
-	//FIXME: Union is a keyword in C and so cannot be used for methods, but the name should be box__union something, so there shouldn't be a problem. Compiler bug?
-	union: func ~box (other: This) -> This {
+	union: func ~box (other: This) -> This { // Rock bug: Union without suffix cannot be used because the C name conflicts with keyword "union"
 		left := Float minimum(this left, other left)
 		top := Float minimum(this top, other top)
 		width := Float maximum(0, (Float maximum(this right, other right) - left))

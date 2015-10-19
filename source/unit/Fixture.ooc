@@ -92,6 +92,9 @@ Fixture: abstract class {
 		if (!constraint verify(value))
 			TestFailedException new(value, constraint, This _expectCount) throw()
 	}
+	expect: static func ~char (value: Char, constraint: Constraint) {
+		This expect(Cell new(value), constraint)
+	}
 	expect: static func ~text (value: Text, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
 	}
@@ -118,6 +121,12 @@ Fixture: abstract class {
 	}
 	expect: static func ~isTrue (value: Bool) {
 		This expect(Cell new(value), is true)
+	}
+	expect: static func ~int64 (value: Int64, constraint: Constraint) {
+		This expect(Cell new(value), constraint)
+	}
+	expect: static func ~uint64 (value: UInt64, constraint: Constraint) {
+		This expect(Cell new(value), constraint)
 	}
 	_print: static func (string: String) {
 		string print()

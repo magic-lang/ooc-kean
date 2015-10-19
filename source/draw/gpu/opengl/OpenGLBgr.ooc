@@ -22,6 +22,7 @@ use ooc-draw-gpu
 import backend/GLTexture
 import OpenGLCanvas, OpenGLPacked, OpenGLContext
 
+version(!gpuOff) {
 OpenGLBgr: class extends OpenGLPacked {
 	channelCount: static Int = 3
 	init: func (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
@@ -36,4 +37,5 @@ OpenGLBgr: class extends OpenGLPacked {
 	}
 	toRasterDefault: func -> RasterImage { Debug raise("toRaster not implemented for BGR"); null }
 	create: override func (size: IntSize2D) -> This { this context createBgr(size) as This }
+}
 }

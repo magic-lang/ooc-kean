@@ -20,6 +20,7 @@ import include/gles3
 import ../GLShaderProgram
 import Gles3Debug
 
+version(!gpuOff) {
 Gles3ShaderProgram: class extends GLShaderProgram {
 	_backend: UInt
 
@@ -150,18 +151,10 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 		glUniform3fv(glGetUniformLocation(this _backend, name), 1, value& as Float*)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~Vector3") }
 	}
-	// glCompileShader leaks 3 bytes on each call, and there is nothing we can do about it.
-	// Normally, we would just suppress this tiny, but verbose, error for valgrind leak checks. However,
-	// depending on your graphics driver, the shared library containing glCompileShader will unload
-	// before the program exits, which results in valgrind being unable to read its debug symbols,
-	// and so we cannot reliably suppress this leak check by suppressing glCompileShader directly.
-	// _glCompileShader wraps the call to glCompileShader so that we can isolate this call from the rest
-	// of the calls in _compileShader and be independent of debug symbols for the shared library.
-	_glCompileShader: func (shaderID: UInt) { glCompileShader(shaderID) }
 	_compileShader: func (source: String, shaderID: UInt) -> Bool {
 		version(debugGL) { validateStart() }
 		glShaderSource(shaderID, 1, source, null)
-		this _glCompileShader(shaderID)
+		glCompileShader(shaderID)
 
 		success: Int
 		glGetShaderiv(shaderID, GL_COMPILE_STATUS, success&)
@@ -204,4 +197,5 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 		version(debugGL) { validateEnd("ShaderProgram _compileShaders") }
 		success
 	}
+}
 }

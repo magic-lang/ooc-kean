@@ -118,15 +118,19 @@ DateTime: cover {
 		result := format
 		data := This _ticksToDateTimeHelper(this ticks)
 		result = result replaceAll("%yyyy", "%d" format(data year))
-		result = result replaceAll("%yy", "%d" format(data year % 100))
+		result = result replaceAll("%yy", "%02d" format(data year % 100))
 		result = result replaceAll("%MM", "%02d" format(data month))
 		result = result replaceAll("%dd", "%02d" format(data day))
 		result = result replaceAll("%M", "%d" format(data month))
 		result = result replaceAll("%d", "%d" format(data day))
 		result = result replaceAll("%hh", "%02d" format(data hour))
 		result = result replaceAll("%mm", "%02d" format(data minute))
-		result = result replaceAll("%ss", "%d" format(data second))
-		result = result replaceAll("%zzzz", "%d" format(data millisecond))
+		result = result replaceAll("%ss", "%02d" format(data second))
+		result = result replaceAll("%h", "%d" format(data hour))
+		result = result replaceAll("%m", "%d" format(data minute))
+		result = result replaceAll("%s", "%d" format(data second))
+		result = result replaceAll("%zzz", "%03d" format(data millisecond))
+		result = result replaceAll("%z", "%d" format(data millisecond))
 		result
 	}
 

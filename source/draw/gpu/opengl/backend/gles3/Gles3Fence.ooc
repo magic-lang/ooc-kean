@@ -22,6 +22,7 @@ import ../GLFence
 import threading/Thread
 import Gles3Debug
 
+version(!gpuOff) {
 Gles3Fence: class extends GLFence {
 	init: func { super() }
 	free: override func {
@@ -68,4 +69,5 @@ Gles3Fence: class extends GLFence {
 		glFlush()
 		version(debugGL) { validateEnd("Fence sync") }
 	}
+}
 }

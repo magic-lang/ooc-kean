@@ -78,8 +78,12 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	}
 	addInto: func (other: This) {
 		minimumCount := Int minimum(this count, other count)
-		for (i in 0 .. minimumCount)
-			this[i] = this[i] + other[i]
+		thisPointer := (this pointer as FloatComplex*)
+		otherPointer := (other pointer as FloatComplex*)
+		for (i in 0 .. minimumCount) {
+			thisPointer[i] real = thisPointer[i] real + otherPointer[i] real
+			thisPointer[i] imaginary = thisPointer[i] imaginary + otherPointer[i] imaginary
+		}
 	}
 	operator + (value: FloatComplex) -> This {
 		result := This new()
@@ -182,22 +186,25 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 			if (buffer count < This _fastFourierTransformBufferSize(count))
 				raise("Buffer size too small in fastFourierTransform")
 		}
+		resultBuffer := result pointer as FloatComplex*
+		inputBuffer := input pointer as FloatComplex*
+		temporaryBuffer := buffer pointer as FloatComplex*
 		if (count == 1)
-			result[resultOffset] = input[start]
+			resultBuffer[resultOffset] = inputBuffer[start]
 		else {
 			halfLength: Int = count / 2
 			for (i in 0 .. halfLength) {
-				buffer[bufferOffset + i] = input[start + 2 * i]
-				buffer[bufferOffset + i + halfLength] = input[start + 2 * i + 1]
+				temporaryBuffer[bufferOffset + i] = inputBuffer[start + 2 * i]
+				temporaryBuffer[bufferOffset + i + halfLength] = inputBuffer[start + 2 * i + 1]
 			}
 			This _fastFourierTransformHelper(buffer, bufferOffset, halfLength, buffer, bufferOffset + count, result, resultOffset)
 			This _fastFourierTransformHelper(buffer, bufferOffset + halfLength, halfLength, buffer, bufferOffset + count, result, resultOffset + halfLength)
 			for (i in 0 .. halfLength) {
-				root := FloatComplex rootOfUnity(count, -i)
-				even := result[resultOffset + i]
-				odd := result[resultOffset + i + halfLength]
-				result[resultOffset + i] = even + root * odd
-				result[resultOffset + i + halfLength] = even - root * odd
+				rootTimesOdd := FloatComplex rootOfUnity(count, -i) * resultBuffer[resultOffset + i + halfLength]
+				resultBuffer[resultOffset + i + halfLength] real = resultBuffer[resultOffset + i] real - rootTimesOdd real
+				resultBuffer[resultOffset + i + halfLength] imaginary = resultBuffer[resultOffset + i] imaginary - rootTimesOdd imaginary
+				resultBuffer[resultOffset + i] real = resultBuffer[resultOffset + i] real + rootTimesOdd real
+				resultBuffer[resultOffset + i] imaginary = resultBuffer[resultOffset + i] imaginary + rootTimesOdd imaginary
 			}
 		}
 	}
