@@ -51,7 +51,6 @@ GpuImage: abstract class extends Image {
 		}
 		super()
 	}
-	//TODO: Implement abstract functions
 	resizeTo: override func (size: IntSize2D) -> This {
 		result := this create(size) as This
 		result canvas draw(this, size)

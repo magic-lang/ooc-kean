@@ -60,16 +60,16 @@ RasterImage: abstract class extends Image {
 		result
 	}
 	open: static func ~unknownType (filename: String) -> This {
-		x, y, n: Int
-		data := StbImage load(filename, x&, y&, n&, 0)
+		x, y, totalComponents: Int
+		data := StbImage load(filename, x&, y&, totalComponents&, 0)
 		result: This
-		match (n) {
+		match (totalComponents) {
 			case 1 =>
-				result = RasterMonochrome new(ByteBuffer new(data as UInt8*, x * y * n), IntSize2D new (x, y))
+				result = RasterMonochrome new(ByteBuffer new(data as UInt8*, x * y * totalComponents), IntSize2D new (x, y))
 			case 3 =>
-				result = RasterBgr new(ByteBuffer new(data as UInt8*, x * y * n), IntSize2D new (x, y))
+				result = RasterBgr new(ByteBuffer new(data as UInt8*, x * y * totalComponents), IntSize2D new (x, y))
 			case 4 =>
-				result = RasterBgra new(ByteBuffer new(data as UInt8*, x * y * n), IntSize2D new (x, y))
+				result = RasterBgra new(ByteBuffer new(data as UInt8*, x * y * totalComponents), IntSize2D new (x, y))
 			case =>
 				raise("Unsupported number of channels in image")
 		}

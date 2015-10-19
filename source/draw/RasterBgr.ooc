@@ -105,9 +105,9 @@ RasterBgr: class extends RasterPacked {
 		}
 	}
 	open: static func (filename: String) -> This {
-		x, y, n: Int
+		x, y, totalComponents: Int
 		requiredComponents := 3
-		data := StbImage load(filename, x&, y&, n&, requiredComponents)
+		data := StbImage load(filename, x&, y&, totalComponents&, requiredComponents)
 		This new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y))
 	}
 	convertFrom: static func (original: RasterImage) -> This {

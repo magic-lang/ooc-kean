@@ -36,7 +36,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 	init: func ~allocate (size: IntSize2D) { super~allocate(size) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, this bytesPerPixel * size width) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
-	createFrom: func ~fromRasterImage (original: RasterImage) {
+	/*createFrom: func ~fromRasterImage (original: RasterImage) {
 		// TODO: What does this function even do?
 //		"RasterYuv420 init ~fromRasterImage, original: (#{original size}), this: (#{this size}), y stride #{this y stride}" println()
 		y := 0
@@ -64,7 +64,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 			}
 		}
 		original apply(f)
-	}
+	}*/
 	create: func (size: IntSize2D) -> Image {
 		result := This new(size)
 		result crop = this crop
@@ -113,9 +113,9 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		}
 	}
 	open: static func (filename: String) -> This {
-		x, y, n: Int
+		x, y, totalComponents: Int
 		requiredComponents := 3
-		data := StbImage load(filename, x&, y&, n&, requiredComponents)
+		data := StbImage load(filename, x&, y&, totalComponents&, requiredComponents)
 		bgr := RasterBgr new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y))
 		result := This new(bgr)
 		bgr referenceCount decrease()
