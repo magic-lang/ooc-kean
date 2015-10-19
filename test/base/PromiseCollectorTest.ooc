@@ -16,18 +16,16 @@ PromiseCollectorTest: class extends Fixture {
 		this add("advanced (+= operator)", func {
 			promises := PromiseCollector new()
 
-			for (j in 0 .. 5) {
+			for (j in 0 .. 5)
 				promises += Promise start(func { for (i in 0 .. 10_000_000) { } } )
-			}
 
 			extra := Promise start(func { for (i in 0 .. 10_000_000) { } } )
 			extra cancel()
 			promises += extra
 
 			others := PromiseCollector new()
-			for (j in 0 .. 5) {
+			for (j in 0 .. 5)
 				others += Promise start(func { for (i in 0 .. 10_000_000) { } } )
-			}
 			promises += others
 
 			expect(others wait())
@@ -51,9 +49,8 @@ PromiseCollectorTest: class extends Fixture {
 		})
 		this add("wait with timeout", func {
 			promises := PromiseCollector new()
-			for (j in 0 .. 5) {
+			for (j in 0 .. 5)
 				promises += Promise start(func { for (i in 0 .. 50_000_000) { } } )
-			}
 			expect(promises wait(0.01) == false)
 			expect(promises wait() == true)
 			promises free()
