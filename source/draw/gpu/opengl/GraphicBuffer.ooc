@@ -100,9 +100,10 @@ GraphicBuffer: class {
 		}
 		for (i in 0 .. This _alignedWidth length) {
 			currentWidth := This _alignedWidth[i]
-			if ((abs(result - width) > abs(currentWidth - width) && align == AlignWidth Nearest) ||
-				(abs(result - width) > abs(currentWidth - width) && currentWidth <= width && align == AlignWidth Floor) ||
-				(abs(result - width) > abs(currentWidth - width) && currentWidth >= width && align == AlignWidth Ceiling))
+			if (abs(result - width) > abs(currentWidth - width) && 
+				(align == AlignWidth Nearest ||
+				(currentWidth <= width && align == AlignWidth Floor) ||
+				(currentWidth >= width && align == AlignWidth Ceiling)))
 				result = currentWidth
 		}
 		result
