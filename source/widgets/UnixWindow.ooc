@@ -22,7 +22,7 @@ use ooc-draw
 use ooc-opengl
 use ooc-x11
 
-version(unix || apple) {
+version((unix || apple) && !gpuOff) {
 UnixWindow: class extends DisplayWindow {
 	_xWindow: X11Window
 	_openGLWindow: OpenGLWindow
