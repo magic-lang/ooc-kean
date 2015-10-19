@@ -18,6 +18,7 @@ import IntPoint3D
 import FloatSize3D
 import text/StringTokenizer
 import structs/ArrayList
+use ooc-base
 
 IntSize3D: cover {
 	width, height, depth: Int

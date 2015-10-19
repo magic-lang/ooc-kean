@@ -1,4 +1,5 @@
 use ooc-unit
+use ooc-base
 use ooc-math
 import math
 import lang/IO
@@ -59,8 +60,9 @@ FloatSize3DTest: class extends Fixture {
 		this add("casting", func {
 			value := "10.00, 20.00, 30.00"
 			expect(this vector3 toString(), is equal to(value))
-//			FIXME: Equals interface
-//			expect(FloatSize2D parse(value), is equal to(this vector3))
+			expect(FloatSize3D parse(t"10.0,20.0,30.0") width, is equal to(this vector3 width))
+			expect(FloatSize3D parse(t"10.0,20.0,30.0") height, is equal to(this vector3 height))
+			expect(FloatSize3D parse(t"10.0,20.0,30.0") depth, is equal to(this vector3 depth))
 		})
 		this add("int casts", func {
 			vector := vector0 toIntSize3D()

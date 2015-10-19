@@ -19,6 +19,7 @@ import IntSize2D
 import IntBox2D
 import text/StringTokenizer
 import structs/ArrayList
+use ooc-base
 
 IntShell2D: cover {
 	left, right, top, bottom: Int

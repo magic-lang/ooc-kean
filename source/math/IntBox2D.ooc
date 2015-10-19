@@ -20,6 +20,7 @@ import FloatPoint2D
 import FloatBox2D
 import text/StringTokenizer
 import structs/ArrayList
+use ooc-base
 use ooc-math
 
 IntBox2D: cover {

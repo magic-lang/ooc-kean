@@ -18,6 +18,7 @@ import IntPoint2D
 import FloatSize2D
 import text/StringTokenizer
 import structs/ArrayList
+use ooc-base
 
 IntSize2D: cover {
 	width, height: Int

@@ -19,6 +19,7 @@ import IntPoint2D
 import FloatPoint3D
 import text/StringTokenizer
 import structs/ArrayList
+use ooc-base
 
 IntPoint3D: cover {
 	x, y, z: Int

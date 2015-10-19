@@ -1,4 +1,5 @@
 use ooc-unit
+use ooc-base
 use ooc-math
 import math
 import lang/IO
@@ -41,8 +42,8 @@ IntPoint2DTest: class extends Fixture {
 		this add("casting", func {
 			value := "10, 20"
 			expect(this point3 toString(), is equal to(value))
-//			FIXME: Equals interface
-//			expect(FloatSize2D parse(value), is equal to(this point3))
+			expect(IntPoint2D parse(t"34,10") x, is equal to(this point2 x))
+			expect(IntPoint2D parse(t"34,10") y, is equal to(this point2 y))
 		})
 		this add("float casts", func {
 			point := point0 toFloatPoint2D()

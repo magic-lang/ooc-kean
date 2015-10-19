@@ -19,6 +19,7 @@ import FloatSize2D
 import FloatBox2D
 import text/StringTokenizer
 import structs/ArrayList
+use ooc-base
 
 FloatShell2D: cover {
 	left, right, top, bottom: Float

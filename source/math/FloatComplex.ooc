@@ -18,6 +18,7 @@
 import math
 import text/StringTokenizer
 import structs/ArrayList
+use ooc-base
 
 FloatComplex: cover {
 	real, imaginary: Float
