@@ -17,7 +17,7 @@
 use ooc-base
 use ooc-collections
 use ooc-math
-import PaintEngine
+import PaintEngine, Pen
 import Image
 
 /*
