@@ -61,16 +61,6 @@ OpenGLSurface: abstract class extends GpuSurface {
 		this draw(f)
 		(f as Closure) dispose()
 	}
-	drawBox: override func (box: FloatBox2D) {
-		positions := VectorList<FloatPoint2D> new()
-		positions add(box leftTop)
-		positions add(box rightTop)
-		positions add(box rightBottom)
-		positions add(box leftBottom)
-		positions add(box leftTop)
-		this drawLines(positions)
-		positions free()
-	}
 	drawPoints: override func (pointList: VectorList<FloatPoint2D>) {
 		f := func { this context drawPoints(pointList, this _projection * this _toLocal) }
 		this draw(f)

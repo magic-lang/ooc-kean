@@ -20,8 +20,33 @@ use ooc-collections
 
 Canvas: abstract class {
 	init: func
-	drawLines: virtual func (pointList: VectorList<FloatPoint2D>) { raise("drawLines unimplemented!") }
-	drawBox: virtual func (box: FloatBox2D) { raise("drawBox unimplemented!") }
-	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>) { raise("drawPoints unimplemented!") }
+	drawPoint: func ~withIntPoint2D (position: IntPoint2D) {
+		this drawPoint(FloatPoint2D new(position x as Float, position y as Float))
+	}
+	drawPoint: func ~withFloatPoint2D (position: FloatPoint2D) {
+		list := VectorList<FloatPoint2D> new()
+		list add(position)
+		this drawPoints(list)
+		list free()
+	}
+	drawLine: func ~withFloatPoint2D (start, end: FloatPoint2D) {
+		list := VectorList<FloatPoint2D> new()
+		list add(start) . add(end)
+		this drawLines(list)
+		list free()
+	}
+	drawPoints: abstract func (pointList: VectorList<FloatPoint2D>) { raise("drawPoints unimplemented!") }
+	drawLines: abstract func (lines: VectorList<FloatPoint2D>)
+	drawBox: virtual func (box: FloatBox2D) {
+		positions := VectorList<FloatPoint2D> new()
+		positions add(box leftTop)
+		positions add(box rightTop)
+		positions add(box rightBottom)
+		positions add(box leftBottom)
+		positions add(box leftTop)
+		this drawLines(positions)
+		positions free()
+	}
+
 	readPixels: virtual func -> ByteBuffer { raise("readPixels unimplemented!") }
 }
