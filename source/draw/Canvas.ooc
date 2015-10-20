@@ -22,9 +22,6 @@ Canvas: abstract class {
 	_size: IntSize2D
 	size ::= this _size
 	init: func (=_size)
-	drawPoint: virtual func ~withIntPoint2D (position: IntPoint2D) {
-		this drawPoint(FloatPoint2D new(position x as Float, position y as Float))
-	}
 	drawPoint: virtual func (position: FloatPoint2D) {
 		list := VectorList<FloatPoint2D> new()
 		list add(position)
