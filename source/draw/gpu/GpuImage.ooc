@@ -43,13 +43,6 @@ GpuImage: abstract class extends Image {
 	}
 	_context: GpuContext
 	init: func (size: IntSize2D, =_context) { super(size) }
-	free: override func {
-		if (this _canvas != null) {
-			this _canvas free()
-			this _canvas = null
-		}
-		super()
-	}
 	resizeTo: override func (size: IntSize2D) -> This {
 		result := this create(size) as This
 		result canvas draw(this, size)

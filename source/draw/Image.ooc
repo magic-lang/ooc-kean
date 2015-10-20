@@ -70,6 +70,9 @@ Image: abstract class {
 		if (this referenceCount != null)
 			this referenceCount free()
 		this _referenceCount = null
+		if (this _canvas != null)
+			this _canvas free()
+		this _canvas = null
 		super()
 	}
 	resizeWithin: func (restriction: IntSize2D) -> This {
