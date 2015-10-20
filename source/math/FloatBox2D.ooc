@@ -41,6 +41,7 @@ FloatBox2D: cover {
 	bottomCenter ::= FloatPoint2D new(this center x, this bottom)
 	empty ::= this size empty
 	init: func@ (=leftTop, =size)
+	init: func@ ~fromIntBox2D (box: IntBox2D) { this init(box left, box top, box width, box height) }
 	init: func@ ~fromPoints (first, second: FloatPoint2D) {
 		left := Float minimum(first x, second x)
 		top := Float minimum(first y, second y)
