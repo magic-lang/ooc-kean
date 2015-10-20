@@ -17,11 +17,14 @@
 use ooc-base
 use ooc-math
 use ooc-collections
+import Pen
 
 Canvas: abstract class {
 	_size: IntSize2D
 	size ::= this _size
-	init: func (=_size)
+	_pen: Pen
+	pen: Pen { get { this _pen } set(value) { this _pen = value } }
+	init: func (=_size) { this pen = Pen new() }
 	drawPoint: virtual func (position: FloatPoint2D) {
 		list := VectorList<FloatPoint2D> new()
 		list add(position)

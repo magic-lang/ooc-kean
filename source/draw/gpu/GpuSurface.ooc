@@ -23,8 +23,6 @@ import GpuContext, GpuMap, GpuImage, GpuMesh
 
 version(!gpuOff) {
 GpuSurface: abstract class extends Canvas {
-	_pen: Pen
-	pen: Pen { get { this _pen } set(value) { this _pen = value } }
 	viewport: IntBox2D { get set }
 	blend: Bool { get set }
 	opacity: Float { get set }
@@ -68,7 +66,6 @@ GpuSurface: abstract class extends Canvas {
 		this _view = FloatTransform3D identity
 		this blend = false
 		this opacity = 1.0f
-		this pen = Pen new()
 	}
 	_createModelTransform: func (box: IntBox2D) -> FloatTransform3D {
 		toReference := FloatTransform3D createTranslation((box size width - this size width) / 2, (this size height - box size height) / 2, 0.0f)
