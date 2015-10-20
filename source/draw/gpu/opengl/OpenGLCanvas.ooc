@@ -41,7 +41,7 @@ OpenGLCanvas: class extends OpenGLSurface {
 	onRecycle: func { this _renderTarget invalidate() }
 	clear: override func {
 		this _bind()
-		this _renderTarget setClearColor(this clearColor red as Float / 255)
+		this _renderTarget setClearColor(this clearColor)
 		this _renderTarget clear()
 		this _unbind()
 	}
