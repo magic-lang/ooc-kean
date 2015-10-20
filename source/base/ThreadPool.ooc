@@ -46,7 +46,7 @@ _Task: abstract class {
 _ActionTask: class extends _Task {
 	_action: Func
 	init: func (=_action, mutex: Mutex) { super(mutex) }
-	run: func {
+	run: override func {
 		this _action()
 		this _finishedTask()
 	}
@@ -57,7 +57,7 @@ _ResultTask: class <T> extends _Task {
 	_action: Func -> T
 	_hasCover := false
 	init: func (=_action, mutex: Mutex) { super(mutex) }
-	run: func {
+	run: override func {
 		temporary := this _action()
 		if (T inheritsFrom?(Object))
 			this _result = temporary
@@ -80,8 +80,11 @@ _TaskPromise: class extends Promise {
 	wait: func ~timeout (seconds: Double) -> Bool {
 		timer := ClockTimer new() . start()
 		status := false
-		while (timer stop() / 1000.0 < seconds && !status)
+		while (timer stop() / 1000.0 < seconds && !status) {
 			status = (this _task _state != _PromiseState Unfinished)
+			if (!status)
+				Time sleepMilli(20)
+		}
 		timer free()
 		status
 	}
@@ -102,8 +105,11 @@ _TaskFuture: class <T> extends Future<T> {
 	wait: func ~timeout (seconds: Double) -> Bool {
 		timer := ClockTimer new() . start()
 		status := false
-		while (timer stop() / 1000.0 < seconds && !status)
+		while (timer stop() / 1000.0 < seconds && !status) {
 			status = (this _task _state != _PromiseState Unfinished)
+			if (!status)
+				Time sleepMilli(20)
+		}
 		timer free()
 		status
 	}
