@@ -44,7 +44,7 @@ GpuCanvasYuv420Semiplanar: class extends GpuSurface {
 		get { this _pen }
 		set(value) {
 			this _pen = value
-			yuv := this pen color toYuv()
+			yuv := value color toYuv()
 			this _target y canvas pen = Pen new(ColorBgra new(yuv y, 0, 0, 255), this pen width)
 			this _target uv canvas pen = Pen new(ColorBgra new(yuv u, yuv v, 0, 255), this pen width)
 		}
@@ -59,8 +59,18 @@ GpuCanvasYuv420Semiplanar: class extends GpuSurface {
 		this _target y canvas draw(gpuImage y, source, destination, map)
 		this _target uv canvas draw(gpuImage uv, IntBox2D new(source leftTop / 2, source size / 2), IntBox2D new(destination leftTop / 2, destination size / 2), map)
 	}
-	drawLines: override func (pointList: VectorList<FloatPoint2D>) { this _target y canvas drawLines(pointList) }
-	drawBox: override func (box: FloatBox2D) { this _target y canvas drawBox(box) }
+	drawLines: override func (pointList: VectorList<FloatPoint2D>) {
+		this _target y canvas drawLines(pointList)
+		uvLines := VectorList<FloatPoint2D> new()
+		for (i in 0 .. pointList count)
+			uvLines add(pointList[i] / 2.0f)
+		this _target uv canvas drawLines(uvLines)
+		uvLines free()
+	}
+	drawBox: override func (box: FloatBox2D) {
+		this _target y canvas drawBox(box)
+		this _target uv canvas drawBox(FloatBox2D new(box leftTop / 2.0f, box size / 2.0f))
+	}
 	drawPoints: override func (pointList: VectorList<FloatPoint2D>) { this _target y canvas drawPoints(pointList) }
 	fill: override func {
 		this _target y canvas fill()
