@@ -52,9 +52,9 @@ GpuCanvasYuv420Semiplanar: class extends GpuSurface {
 	drawLines: override func (pointList: VectorList<FloatPoint2D>) { this _target y canvas drawLines(pointList) }
 	drawBox: override func (box: FloatBox2D) { this _target y canvas drawBox(box) }
 	drawPoints: override func (pointList: VectorList<FloatPoint2D>) { this _target y canvas drawPoints(pointList) }
-	clear: override func {
-		this _target y canvas clear()
-		this _target uv canvas clear()
+	fill: override func {
+		this _target y canvas fill()
+		this _target uv canvas fill()
 	}
 	draw: override func ~mesh (image: Image, mesh: GpuMesh) {
 		yuv := image as GpuYuv420Semiplanar
