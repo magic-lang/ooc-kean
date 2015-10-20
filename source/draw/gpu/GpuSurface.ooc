@@ -22,7 +22,7 @@ use ooc-base
 import GpuContext, GpuMap, GpuImage, GpuMesh
 
 version(!gpuOff) {
-GpuSurface: abstract class {
+GpuSurface: abstract class extends Canvas {
 	_pen: Pen
 	pen: Pen { get { this _pen } set(value) { this _pen = value } }
 	viewport: IntBox2D { get set }
@@ -105,10 +105,5 @@ GpuSurface: abstract class {
 	draw: func ~ImageDestinationMap (image: Image, destination: IntBox2D, map: GpuMap) { this draw(image, IntBox2D new(image size), destination, map) }
 
 	draw: virtual func ~mesh (image: Image, mesh: GpuMesh) { Debug raise("draw~mesh unimplemented!") }
-
-	drawLines: virtual func (pointList: VectorList<FloatPoint2D>)
-	drawBox: virtual func (box: FloatBox2D)
-	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>)
-	readPixels: virtual func -> ByteBuffer { raise("readPixels unimplemented!") }
 }
 }

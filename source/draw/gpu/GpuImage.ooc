@@ -34,12 +34,11 @@ GpuImageType: enum {
 
 GpuImage: abstract class extends Image {
 	filter: Bool { get set }
-	_canvas: GpuSurface
 	canvas: GpuSurface {
 		get {
 			if (this _canvas == null)
-				this _canvas = this _createCanvas()
-			this _canvas
+				this _canvas = this _createCanvas() as GpuSurface
+			this _canvas as GpuSurface
 		}
 	}
 	_context: GpuContext
@@ -64,7 +63,6 @@ GpuImage: abstract class extends Image {
 	toRaster: func (async: Bool = false) -> RasterImage { this _context toRaster(this, async) }
 	toRasterAsync: func -> (RasterImage, GpuFence) { this _context toRasterAsync(this) }
 	toRasterDefault: abstract func -> RasterImage
-	_createCanvas: abstract func -> GpuSurface
 	bind: abstract func (unit: UInt)
 }
 }

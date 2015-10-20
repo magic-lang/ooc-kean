@@ -17,6 +17,7 @@
 use ooc-math
 use ooc-base
 import math
+import Canvas
 import PaintEngine
 
 CoordinateSystem: enum {
@@ -46,6 +47,15 @@ Image: abstract class {
 	wrap: Bool { get set }
 	_referenceCount: ReferenceCounter
 	referenceCount ::= this _referenceCount
+
+	_canvas: Canvas
+	canvas: Canvas {
+		get {
+			if (this _canvas == null)
+				this _canvas = this _createCanvas()
+			this _canvas
+		}
+	}
 	init: func (=_size) {
 		this _referenceCount = ReferenceCounter new(this)
 		this coordinateSystem = CoordinateSystem Default
@@ -77,4 +87,5 @@ Image: abstract class {
 		return (x >= 0 && x < this size width && y >= 0 && y < this size height)
 	}
 	createPaintEngine: virtual func -> PaintEngine { null }
+	_createCanvas: virtual func -> Canvas { null }
 }
