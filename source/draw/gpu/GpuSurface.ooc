@@ -26,8 +26,6 @@ GpuSurface: abstract class extends Canvas {
 	_pen: Pen
 	pen: Pen { get { this _pen } set(value) { this _pen = value } }
 	viewport: IntBox2D { get set }
-	_size: IntSize2D
-	size ::= this _size
 	blend: Bool { get set }
 	opacity: Float { get set }
 	_context: GpuContext
@@ -60,9 +58,10 @@ GpuSurface: abstract class extends Canvas {
 	farPlane: Float { get set }
 	_defaultMap: GpuMap
 	_coordinateTransform := IntTransform2D identity
-	init: func (=_size, =_context, =_defaultMap, =_coordinateTransform) {
+	init: func (size: IntSize2D, =_context, =_defaultMap, =_coordinateTransform) {
+		super(size)
 		this _toLocal = FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
-		this viewport = IntBox2D new(this size)
+		this viewport = IntBox2D new(size)
 		this focalLength = 0.0f
 		this nearPlane = 1.0f
 		this farPlane = 10000.0f

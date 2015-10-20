@@ -19,17 +19,19 @@ use ooc-math
 use ooc-collections
 
 Canvas: abstract class {
-	init: func
-	drawPoint: func ~withIntPoint2D (position: IntPoint2D) {
+	_size: IntSize2D
+	size ::= this _size
+	init: func (=_size)
+	drawPoint: virtual func ~withIntPoint2D (position: IntPoint2D) {
 		this drawPoint(FloatPoint2D new(position x as Float, position y as Float))
 	}
-	drawPoint: func ~withFloatPoint2D (position: FloatPoint2D) {
+	drawPoint: virtual func (position: FloatPoint2D) {
 		list := VectorList<FloatPoint2D> new()
 		list add(position)
 		this drawPoints(list)
 		list free()
 	}
-	drawLine: func ~withFloatPoint2D (start, end: FloatPoint2D) {
+	drawLine: virtual func (start, end: FloatPoint2D) {
 		list := VectorList<FloatPoint2D> new()
 		list add(start) . add(end)
 		this drawLines(list)
