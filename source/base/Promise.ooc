@@ -9,7 +9,7 @@ _PromiseState: enum {
 }
 
 Promise: abstract class {
-	_state : _PromiseState
+	_state: _PromiseState
 	init: func
 	wait: abstract func -> Bool
 	wait: abstract func ~timeout (seconds: Double) -> Bool
@@ -41,8 +41,9 @@ _ThreadPromise: class extends Promise {
 		this _thread start()
 	}
 	free: override func {
+		//TODO: If we don't want to wait, set a freeOnCompletion flag instead, and check it once the thread task finishes
 		if (this _threadAlive)
-			this _thread wait()
+			this _thread wait() 
 		this _thread free()
 		(this _action as Closure) dispose()
 		super()
@@ -112,6 +113,7 @@ _ThreadFuture: class <T> extends Future<T> {
 		this _thread start()
 	}
 	free: override func {
+		//TODO: If we don't want to wait set a freeOnCompletion flag instead, and check it once the thread task finishes
 		if (this _threadAlive)
 			this _thread wait()
 		this _thread free()

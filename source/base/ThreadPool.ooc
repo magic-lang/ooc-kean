@@ -83,7 +83,7 @@ _TaskPromise: class extends Promise {
 		while (timer stop() / 1000.0 < seconds && !status) {
 			status = (this _task _state != _PromiseState Unfinished)
 			if (!status)
-				Time sleepMilli(20)
+				Time sleepMilli(10)
 		}
 		timer free()
 		status
@@ -108,7 +108,7 @@ _TaskFuture: class <T> extends Future<T> {
 		while (timer stop() / 1000.0 < seconds && !status) {
 			status = (this _task _state != _PromiseState Unfinished)
 			if (!status)
-				Time sleepMilli(20)
+				Time sleepMilli(10)
 		}
 		timer free()
 		status
