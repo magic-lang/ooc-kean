@@ -22,8 +22,6 @@ import RasterImage
 import StbImage
 import Image
 import Color
-import PaintEngine
-import RasterPaintEngine
 import Canvas, RasterCanvas
 
 BgraRasterCanvas: class extends RasterCanvas {
@@ -184,6 +182,5 @@ RasterBgra: class extends RasterPacked {
 		result swapRedBlue()
 		result
 	}
-	createPaintEngine: override func -> PaintEngine { BgraPaintEngine new(this) }
 	_createCanvas: override func -> Canvas { BgraRasterCanvas new(this) }
 }

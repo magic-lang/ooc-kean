@@ -22,8 +22,6 @@ import RasterImage
 import StbImage
 import Image, FloatImage
 import Color
-import PaintEngine
-import RasterPaintEngine
 import Canvas, RasterCanvas
 
 MonochromeRasterCanvas: class extends RasterCanvas {
@@ -246,6 +244,5 @@ RasterMonochrome: class extends RasterPacked {
 		for (row in 0 .. this size height)
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
-	createPaintEngine: override func -> PaintEngine { MonochromePaintEngine new(this) }
 	_createCanvas: override func -> Canvas { MonochromeRasterCanvas new(this) }
 }

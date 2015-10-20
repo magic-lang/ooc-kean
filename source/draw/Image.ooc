@@ -18,7 +18,6 @@ use ooc-math
 use ooc-base
 import math
 import Canvas
-import PaintEngine
 
 CoordinateSystem: enum {
 	Default = 0x00,
@@ -89,6 +88,5 @@ Image: abstract class {
 	isValidIn: func (x, y: Int) -> Bool {
 		return (x >= 0 && x < this size width && y >= 0 && y < this size height)
 	}
-	createPaintEngine: virtual func -> PaintEngine { null }
 	_createCanvas: virtual func -> Canvas { null }
 }
