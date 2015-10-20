@@ -91,12 +91,19 @@ FloatMatrixTest: class extends Fixture {
 			checkAllElements(a - a give(), [0, 0, 0, 0, 0, 0, 0, 0, 0])
 		})
 
-		this add("solver", func {
+		this add("solver (square)", func {
 			// Solve a * x = y
-			a := createMatrix(5, 5, [ 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 1.0f, 3.0f, 6.0f, 10.0f, 15.0f, 1.0f, 4.0f, 10.0f, 20.0f, 35.0f, 1.0f, 5.0f, 15.0f, 35.0f, 70.0f ])
-			y := createMatrix(1, 5, [ -1.0f, 2.0f, -3.0f, 4.0f, 5.0f])
+			a := createMatrix(5, 5, [1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 1.0f, 3.0f, 6.0f, 10.0f, 15.0f, 1.0f, 4.0f, 10.0f, 20.0f, 35.0f, 1.0f, 5.0f, 15.0f, 35.0f, 70.0f])
+			y := createMatrix(1, 5, [-1.0f, 2.0f, -3.0f, 4.0f, 5.0f])
 			x := a solve(y)
 			checkAllElements(x, [-70.0f, 231.0f, -296.0f, 172.0f, -38.0f])
+		})
+
+		this add("solver (non-square)", func {
+			a := createMatrix(2, 3, [2.0f, 0.0f, 4.0f, 2.0f, 4.0f, 6.0f])
+			y := createMatrix(1, 3, [1.0f, -2.0f, 1.0f])
+			x := a solve(y)
+			checkAllElements(x, [1.0f, -0.5f])
 		})
 
 		this add("set and get", func {
