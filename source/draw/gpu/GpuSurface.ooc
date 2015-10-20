@@ -23,7 +23,8 @@ import GpuContext, GpuMap, GpuImage, GpuMesh
 
 version(!gpuOff) {
 GpuSurface: abstract class {
-	clearColor: ColorBgra { get set }
+	_pen: Pen
+	pen: Pen { get { this _pen } set(value) { this _pen = value } }
 	viewport: IntBox2D { get set }
 	_size: IntSize2D
 	size ::= this _size
@@ -61,7 +62,6 @@ GpuSurface: abstract class {
 	_coordinateTransform := IntTransform2D identity
 	init: func (=_size, =_context, =_defaultMap, =_coordinateTransform) {
 		this _toLocal = FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
-		this clearColor = ColorBgra new(0, 0, 0, 0)
 		this viewport = IntBox2D new(this size)
 		this focalLength = 0.0f
 		this nearPlane = 1.0f
@@ -69,6 +69,7 @@ GpuSurface: abstract class {
 		this _view = FloatTransform3D identity
 		this blend = false
 		this opacity = 1.0f
+		this pen = Pen new()
 	}
 	_createModelTransform: func (box: IntBox2D) -> FloatTransform3D {
 		toReference := FloatTransform3D createTranslation((box size width - this size width) / 2, (this size height - box size height) / 2, 0.0f)
