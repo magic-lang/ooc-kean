@@ -34,6 +34,17 @@ import io/FileReader
 import io/Reader
 import io/FileWriter
 import io/BinarySequence
+import Canvas, RasterCanvas
+
+Yuv420RasterCanvas: class extends RasterCanvas {
+	target ::= this _target as RasterYuv420Semiplanar
+	init: func (image: RasterYuv420Semiplanar) { super(image) }
+	_drawPoint: override func (x, y: Int) {
+		position := this _map(IntPoint2D new(x, y))
+		if (this target isValidIn(position x, position y))
+			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toYuv())
+	}
+}
 
 RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	stride ::= this _y stride
@@ -251,4 +262,5 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		fileWriter close()
 	}
 	createPaintEngine: override func -> PaintEngine { Yuv420PaintEngine new(this) }
+	_createCanvas: override func -> Canvas { Yuv420RasterCanvas new(this) }
 }

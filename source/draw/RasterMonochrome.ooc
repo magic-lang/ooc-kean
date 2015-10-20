@@ -24,6 +24,17 @@ import Image, FloatImage
 import Color
 import PaintEngine
 import RasterPaintEngine
+import Canvas, RasterCanvas
+
+MonochromeRasterCanvas: class extends RasterCanvas {
+	target ::= this _target as RasterMonochrome
+	init: func (image: RasterMonochrome) { super(image) }
+	_drawPoint: override func (x, y: Int){
+		position := this _map(IntPoint2D new(x, y))
+		if (this target isValidIn(position x, position y))
+			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toMonochrome())
+	}
+}
 
 RasterMonochrome: class extends RasterPacked {
 	bytesPerPixel: Int { get { 1 } }
@@ -236,4 +247,5 @@ RasterMonochrome: class extends RasterPacked {
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
 	createPaintEngine: override func -> PaintEngine { MonochromePaintEngine new(this) }
+	_createCanvas: override func -> Canvas { MonochromeRasterCanvas new(this) }
 }
