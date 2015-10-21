@@ -29,8 +29,8 @@ OwnedBuffer: cover {
 	init: func@ {
 		this init(null, 0, Owner Unknown)
 	}
-	init: func@ ~fromSize (size: Int) {
-		this init(gc_malloc(size), size, Owner Caller)
+	init: func@ ~fromSize (size: Int, owner := Owner Caller) {
+		this init(gc_malloc(size), size, owner)
 	}
 	init: func@ ~fromData (=_pointer, =_size, =_owner)
 	take: func -> This { // call by value -> modifies copy of cover
