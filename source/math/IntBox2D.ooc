@@ -124,7 +124,8 @@ IntBox2D: cover {
 		yMinimum := xMinimum
 		yMaximum := xMinimum
 		initialized := false
-		for (point in points) {
+		for (i in 0 .. points count) {
+			point := points[i]
 			if (!initialized) {
 				initialized = true
 				xMinimum = point x
