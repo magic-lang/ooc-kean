@@ -164,11 +164,7 @@ FloatMatrix : cover {
 				this elements[i + second * this width] = buffer
 			}
 	}
-	// TODO: DEPRECATED
-	swaprows: func@ (first, second: Int) {
-		c"FloatMatrix swaprows deprecated" println()
-		this swapRows(first, second)
-	}
+
 	toString: func -> String {
 		result: String = ""
 		for (y in 0 .. this height) {
@@ -185,7 +181,7 @@ FloatMatrix : cover {
 	// where L is lower triangular, U is upper triangular, and P is a permutation matrix.
 	// </summary>
 	// <returns>Returns the Lup decomposition. L = [0], U = [1], P = [2].</returns>
-	lupDecomposition: func -> (This, This, This) {
+	_lupDecomposition: func -> (This, This, This) {
 		if (!this isSquare)
 			raise("Invalid dimensions in FloatMatrix lupDecomposition")
 		order := this order
@@ -225,19 +221,19 @@ FloatMatrix : cover {
 	// <param name="y">The right hand column y vector of the equation system.</param>
 	// <returns>Return the least square solution to the system.</returns>
 	solve: func (y: This) -> This {
+		version (safe) {
+			if (this width > this height)
+				raise("Invalid dimensions in FloatMatrix solve")
+		}
 		result: This
 		t := this take()
-		if (t width > t height)
-			raise("Invalid dimensions in FloatMatrix solve")
-		// TODO: This can probably be cleaned up...
-		else
-			if (t isSquare) {
-				(l, u, p) := t lupDecomposition()
-				result = (p * y take()) forwardSubstitution(l) backwardSubstitution(u)
-			} else {
-				(l, u, p) := (t transpose() * t) lupDecomposition()
-				result = (p * t transpose() * y take()) forwardSubstitution(l) backwardSubstitution(u)
-			}
+		if (t isSquare) {
+			(l, u, p) := t _lupDecomposition()
+			result = (p * y take()) _forwardSubstitution(l) _backwardSubstitution(u)
+		} else {
+			(l, u, p) := (t transpose() * t) _lupDecomposition()
+			result = (p * t transpose() * y take()) _forwardSubstitution(l) _backwardSubstitution(u)
+		}
 		y free(Owner Receiver)
 		this free(Owner Receiver)
 		result
@@ -251,7 +247,7 @@ FloatMatrix : cover {
 	// </summary>
 	// <param name="lower">Lower triangual matrix.</param>
 	// <returns>Solution x.</returns>
-	forwardSubstitution: func (lower: This) -> This {
+	_forwardSubstitution: func (lower: This) -> This {
 		result := This new(this dimensions)
 		for (x in 0 .. this width)
 			for (y in 0 .. this height) {
@@ -274,7 +270,7 @@ FloatMatrix : cover {
 	// </summary>
 	// <param name="lower">Upper triangual matrix.</param>
 	// <returns>Solution x.</returns>
-	backwardSubstitution: func (upper: This) -> This {
+	_backwardSubstitution: func (upper: This) -> This {
 		result := This new(this dimensions)
 		for (x in 0 .. this width) {
 			for (antiY in 0 .. this height) {
