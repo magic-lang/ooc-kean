@@ -9,7 +9,6 @@ Queue: abstract class <T> {
 	enqueue: virtual func (item: T) //FIXME: This should be abstract but it messes up for sub-subclasses that overrides
 	dequeue: abstract func ~default (fallback: T) -> T
 	peek: abstract func ~default (fallback: T) -> T
-	//new: static func -> Queue<T> { VectorQueue<T> new() }
 }
 
 VectorQueue: class <T> extends Queue<T> {

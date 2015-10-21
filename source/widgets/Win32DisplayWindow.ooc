@@ -36,5 +36,8 @@ Win32DisplayWindow: class extends DisplayWindow {
 		this _backend draw(raster)
 		raster referenceCount decrease()
 	}
+	refresh: override func {
+		_backend peekMessage()
+	}
 }
 }
