@@ -40,7 +40,7 @@ TextBuilder: class {
 	}
 	free: func {
 		for (i in 0 .. this count)
-			this _data[i] free(Owner Callee)
+			this _data[i] free(Owner Receiver)
 		this _data free()
 		super()
 	}
@@ -140,7 +140,7 @@ TextBuilder: class {
 		i := 0
 		while (i < this count && (result &= this[i] == t[i]))
 			++i
-		text free(Owner Callee)
+		text free(Owner Receiver)
 		result
 	}
 }

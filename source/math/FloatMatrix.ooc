@@ -30,7 +30,7 @@ FloatMatrix : cover {
 
 	init: func@ ~buffer (=_elements, =_dimensions)
 	init: func@ ~IntSize2D (=_dimensions) {
-		this init(OwnedBuffer new(_dimensions area * Float size, Owner Caller), dimensions)
+		this init(OwnedBuffer new(_dimensions area * Float size), dimensions)
 	}
 	init: func@ (width, height: Int) {
 		this init(IntSize2D new(width, height))
@@ -44,7 +44,7 @@ FloatMatrix : cover {
 		result := This new(order, order)
 		for (i in 0 .. order)
 			result elements[i + result width * i] = 1.0f
-		result give()
+		result
 	}
 
 	setVertical: func (xOffset, yOffset: Int, vector: FloatPoint3D) {
@@ -65,8 +65,8 @@ FloatMatrix : cover {
 		result := This new(1, this height)
 		for (y in 0 .. this height)
 			result[0, y] = this[x, y]
-		this free(Owner Callee)
-		result give()
+		this free(Owner Receiver)
+		result
 	}
 
 	// <summary>
@@ -118,7 +118,7 @@ FloatMatrix : cover {
 	// <returns>Return a copy of the current matrix.</returns>
 	copy: func -> This {
 		result := This new(this _elements copy(), this dimensions)
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 
@@ -131,8 +131,8 @@ FloatMatrix : cover {
 		for (y in 0 .. this height)
 			for (x in 0 .. this width)
 				result elements[y + x * this height] = this elements[x + y * this width]
-		this free(Owner Callee)
-		result give()
+		this free(Owner Receiver)
+		result
 	}
 
 	// <summary>
@@ -145,7 +145,7 @@ FloatMatrix : cover {
 		result := 0.0f
 		for (i in 0 .. this height)
 			result += this[i, i]
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 
@@ -190,7 +190,7 @@ FloatMatrix : cover {
 			raise("Invalid dimensions in FloatMatrix lupDecomposition")
 		order := this order
 		l := This identity(order)
-		u := this copy()
+		u := this take() copy()
 		p := This identity(order)
 
 		for (position in 0 .. order - 1) {
@@ -214,8 +214,8 @@ FloatMatrix : cover {
 				l elements[x + y * l width] = u elements[x + y * u width]
 				u elements[x + y * u width] = 0
 			}
-		this free(Owner Callee)
-		(l give(), u give(), p give())
+		this free(Owner Receiver)
+		(l, u, p)
 	}
 
 	// <summary>
@@ -226,22 +226,21 @@ FloatMatrix : cover {
 	// <returns>Return the least square solution to the system.</returns>
 	solve: func (y: This) -> This {
 		result: This
-		if (this width > this height)
+		t := this take()
+		if (t width > t height)
 			raise("Invalid dimensions in FloatMatrix solve")
 		// TODO: This can probably be cleaned up...
 		else
-			if (this isSquare) {
-				(l, u, p) := this lupDecomposition()
-				result = (p * y) forwardSubstitution(l) backwardSubstitution(u)
+			if (t isSquare) {
+				(l, u, p) := t lupDecomposition()
+				result = (p * y take()) forwardSubstitution(l) backwardSubstitution(u)
 			} else {
-				outerProduct := (this transpose() * this) take()
-				(l, u, p) := outerProduct lupDecomposition()
-				result = (p * this transpose() * y) forwardSubstitution(l) backwardSubstitution(u)
-				outerProduct free()
+				(l, u, p) := (t transpose() * t) lupDecomposition()
+				result = (p * t transpose() * y take()) forwardSubstitution(l) backwardSubstitution(u)
 			}
-		y free(Owner Callee)
-		this free(Owner Callee)
-		result give()
+		y free(Owner Receiver)
+		this free(Owner Receiver)
+		result
 	}
 
 	// TODO: Better name?
@@ -265,9 +264,9 @@ FloatMatrix : cover {
 				else
 					raise("Division by zero in FloatMatrix forwardSubstitution")
 			}
-		this free(Owner Callee)
-		lower free(Owner Callee)
-		result give()
+		this free(Owner Receiver)
+		lower free(Owner Receiver)
+		result
 	}
 
 	// <summary>
@@ -290,9 +289,9 @@ FloatMatrix : cover {
 					raise("Division by zero in FloatMatrix backwardSubstitution")
 			}
 		}
-		this free(Owner Callee)
-		upper free(Owner Callee)
-		result give()
+		this free(Owner Receiver)
+		upper free(Owner Receiver)
+		result
 	}
 	take: func -> This { // call by value -> modifies copy of cover
 		this _elements = this _elements take()
@@ -321,9 +320,9 @@ FloatMatrix : cover {
 				result elements[x + y * result width] = temp
 			}
 		}
-		this free(Owner Callee)
-		other free(Owner Callee)
-		result give()
+		this free(Owner Receiver)
+		other free(Owner Receiver)
+		result
 	}
 
 	operator + (other: This) -> This {
@@ -332,9 +331,9 @@ FloatMatrix : cover {
 		result := This new(this dimensions)
 		for (i in 0 .. this dimensions area)
 			result elements[i] = this elements[i] + other elements[i]
-		this free(Owner Callee)
-		other free(Owner Callee)
-		result give()
+		this free(Owner Receiver)
+		other free(Owner Receiver)
+		result
 	}
 
 	operator - (other: This) -> This {
@@ -343,9 +342,9 @@ FloatMatrix : cover {
 		result := This new(this dimensions)
 		for (i in 0 .. this dimensions area)
 			result elements[i] = this elements[i] - other elements[i]
-		this free(Owner Callee)
-		other free(Owner Callee)
-		result give()
+		this free(Owner Receiver)
+		other free(Owner Receiver)
+		result
 	}
 
 	operator += (other: This) {
@@ -353,7 +352,7 @@ FloatMatrix : cover {
 			raise("Invalid dimensions in FloatMatrix += operator: dimensions must match!")
 		for (i in 0 .. this dimensions area)
 			this elements[i] += other elements[i]
-		other free(Owner Callee)
+		other free(Owner Receiver)
 	}
 
 	operator -= (other: This) {
@@ -361,7 +360,7 @@ FloatMatrix : cover {
 			raise("Invalid dimensions in FloatMatrix -= operator: dimensions must match!")
 		for (i in 0 .. this dimensions area)
 			this elements[i] -= other elements[i]
-		other free(Owner Callee)
+		other free(Owner Receiver)
 	}
 }
 
@@ -369,6 +368,6 @@ operator * (left: Float, right: FloatMatrix) -> FloatMatrix {
 	result := FloatMatrix new(right dimensions)
 	for (i in 0 .. right dimensions area)
 		result elements[i] = left * right elements[i]
-	right free(Owner Callee)
-	result give()
+	right free(Owner Receiver)
+	result
 }

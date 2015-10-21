@@ -19,6 +19,6 @@ Owner: enum {
 	Unknown,
 	Stack,
 	Static,
-	Caller,
-	Callee
+	Sender,
+	Receiver
 }
