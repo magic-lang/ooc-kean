@@ -63,17 +63,17 @@ FloatBox2D: cover {
 	shrink: func ~fraction (margin: Float) -> This {
 		this pad(-margin * this height / 2.0f)
 	}
+	setSize: func (size: FloatSize2D) -> This {
+		This createAround(this center, size)
+	}
 	scale: func (value: Float) -> This {
-		sizeChange := this size - (this size * value)
-		This new(this leftTop + (sizeChange / 2.0f), this size - sizeChange)
+		This createAround(this center, value * this size)
 	}
-	enlarge: func (size: FloatSize2D) -> This {
-		sizeChange := (size - this size) maximum~Float(0.0f)
-		This new(this leftTop - (sizeChange / 2.0f), this size + sizeChange)
+	enlargeTo: func (size: FloatSize2D) -> This {
+		This createAround(this center, this size + ((size - this size) maximum~Float(0.0f)))
 	}
-	reduce: func (size: FloatSize2D) -> This {
-		sizeChange := (size - this size) minimum~Float(0.0f)
-		This new(this leftTop - (sizeChange / 2.0f), this size + sizeChange)
+	reduceTo: func (size: FloatSize2D) -> This {
+		This createAround(this center, this size + ((size - this size) minimum~Float(0.0f)))
 	}
 	intersection: func (other: This) -> This {
 		left := Float maximum(this left, other left)
