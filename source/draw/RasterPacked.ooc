@@ -82,4 +82,5 @@ RasterPacked: abstract class extends RasterImage {
 			index += this bytesPerPixel
 		}
 	}
+	kean_draw_rasterPacked_getData: unmangled func -> Void* { this buffer pointer }
 }

@@ -245,4 +245,9 @@ RasterMonochrome: class extends RasterPacked {
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
 	_createCanvas: override func -> Canvas { MonochromeRasterCanvas new(this) }
+	kean_draw_rasterMonochrome_new: static unmangled func (width, height, stride: Int, data: Void*) -> This {
+		result := This new(IntSize2D new(width, height), stride)
+		memcpy(result buffer pointer, data, height * stride)
+		result
+	}
 }

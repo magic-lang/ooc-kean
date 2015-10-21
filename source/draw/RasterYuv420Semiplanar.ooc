@@ -260,4 +260,12 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		fileWriter close()
 	}
 	_createCanvas: override func -> Canvas { Yuv420RasterCanvas new(this) }
+	kean_draw_rasterYuv420Semiplanar_new: static unmangled func (width, height, stride: Int, monochromeData: Void*, uvData: Void*) -> This {
+		result := This new(IntSize2D new(width, height), stride)
+		memcpy(result uv buffer pointer, uvData, (height / 2) * stride)
+		memcpy(result y buffer pointer, monochromeData, height * stride)
+		result
+	}
+	kean_draw_rasterYuv420Semiplanar_getMonochromeData: unmangled func -> Void* { this y buffer pointer }
+	kean_draw_rasterYuv420Semiplanar_getUvData: unmangled func -> Void* { this uv buffer pointer }
 }
