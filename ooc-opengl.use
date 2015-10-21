@@ -22,5 +22,5 @@ Imports: AndroidContext
 Imports: EGLBgra
 Imports: GraphicBuffer
 Imports: GraphicBufferYuv420Semiplanar
-
-Libs: -lEGL
+version (linux || apple || android)
+	Libs: -lEGL
