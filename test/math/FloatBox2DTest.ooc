@@ -56,9 +56,9 @@ FloatBox2DTest: class extends Fixture {
 			shrunkBox := paddedBox shrink(1.0f / 11.0f)
 			expect(box == shrunkBox, is true)
 		})
-		this add("setSize", func {
+		this add("resizeTo", func {
 			box := FloatBox2D new(1.0f, 1.0f, 4.0f, 4.0f)
-			changedBox := box setSize(FloatSize2D new(2.0f, 2.0f))
+			changedBox := box resizeTo(FloatSize2D new(2.0f, 2.0f))
 			expect(changedBox left, is equal to(2.0f) within(this precision))
 			expect(changedBox right, is equal to(4.0f) within(this precision))
 			expect(changedBox top, is equal to(2.0f) within(this precision))

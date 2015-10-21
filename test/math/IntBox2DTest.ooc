@@ -35,9 +35,9 @@ IntBox2DTest: class extends Fixture {
 		this add("casts", func {
 //			FIXME: We have no integer versions of anything yet
 		})
-		this add("setSize", func {
+		this add("resizeTo", func {
 			box := IntBox2D new(1, 1, 4, 4)
-			changedBox := box setSize(IntSize2D new(2, 2))
+			changedBox := box resizeTo(IntSize2D new(2, 2))
 			expect(changedBox left, is equal to(2))
 			expect(changedBox right, is equal to(4))
 			expect(changedBox top, is equal to(2))
