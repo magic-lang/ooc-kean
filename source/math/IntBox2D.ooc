@@ -68,7 +68,7 @@ IntBox2D: cover {
 	enlargeTo: func (size: IntSize2D) -> This {
 		This createAround(this center, this size + ((size - this size) maximum~Int(0)))
 	}
-	reduceTo: func (size: IntSize2D) -> This {
+	shrinkTo: func (size: IntSize2D) -> This {
 		This createAround(this center, this size + ((size - this size) minimum~Int(0)))
 	}
 	intersection: func (other: This) -> This {

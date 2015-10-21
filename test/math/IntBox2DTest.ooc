@@ -68,8 +68,8 @@ IntBox2DTest: class extends Fixture {
 		})
 		this add("reduce", func {
 			box := IntBox2D new(1, 1, 4, 4)
-			reducedBox := box reduceTo(IntSize2D new(2, 2))
-			notReducedBox := box reduceTo(IntSize2D new(6, 6))
+			reducedBox := box shrinkTo(IntSize2D new(2, 2))
+			notReducedBox := box shrinkTo(IntSize2D new(6, 6))
 			expect(reducedBox left, is equal to(2))
 			expect(reducedBox top, is equal to(2))
 			expect(reducedBox right, is equal to(4))

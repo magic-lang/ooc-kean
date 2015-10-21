@@ -89,8 +89,8 @@ FloatBox2DTest: class extends Fixture {
 		})
 		this add("reduce", func {
 			box := FloatBox2D new(1.0f, 1.0f, 4.0f, 4.0f)
-			reducedBox := box reduceTo(FloatSize2D new(2.0f, 2.0f))
-			notReducedBox := box reduceTo(FloatSize2D new(6.0f, 6.0f))
+			reducedBox := box shrinkTo(FloatSize2D new(2.0f, 2.0f))
+			notReducedBox := box shrinkTo(FloatSize2D new(6.0f, 6.0f))
 			expect(reducedBox left, is equal to(2.0f) within(this precision))
 			expect(reducedBox top, is equal to(2.0f) within(this precision))
 			expect(reducedBox right, is equal to(4.0f) within(this precision))

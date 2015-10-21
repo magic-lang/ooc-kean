@@ -72,7 +72,7 @@ FloatBox2D: cover {
 	enlargeTo: func (size: FloatSize2D) -> This {
 		This createAround(this center, this size + ((size - this size) maximum~Float(0.0f)))
 	}
-	reduceTo: func (size: FloatSize2D) -> This {
+	shrinkTo: func (size: FloatSize2D) -> This {
 		This createAround(this center, this size + ((size - this size) minimum~Float(0.0f)))
 	}
 	intersection: func (other: This) -> This {
