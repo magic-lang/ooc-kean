@@ -46,4 +46,5 @@ FloatEuclidTransform: cover {
 	toString: func -> String {
 		"Translation: " << this translation toString() >> " Rotation: " & this rotation toString() >> " Scaling: " & this scaling toString()
 	}
+	kean_math_floatEuclidTransform_toFloatTransform3D: unmangled func -> FloatTransform3D { this transform }
 }
