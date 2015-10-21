@@ -9,11 +9,11 @@ Queue: abstract class <T> {
 	//FIXME: This should be abstract but it messes up for sub-subclasses that overrides
 	enqueue: virtual func (item: T)
 	//TODO: This is how we want it to look but we get problems compiling
-	dequeue: abstract func -> (T, Bool)
-	peek: abstract func -> (T, Bool)
+	//dequeue: abstract func -> (T, Bool)
+	//peek: abstract func -> (T, Bool)
 	// Obsoleted from using template pointers that are not reliable in the compiler's type safety
-	dequeue: abstract func ~out (result: T*) -> Bool
-	peek: abstract func ~out (result: T*) -> Bool
+	//dequeue: abstract func ~out (result: T*) -> Bool
+	//peek: abstract func ~out (result: T*) -> Bool
 	// Yet another interface to go around compiler bugs
 	// T must be nullable or have a reserved value to know when it failed
 	dequeue: abstract func ~default (fallback: T) -> T
@@ -51,7 +51,7 @@ VectorQueue: class <T> extends Queue<T> {
 		this _tail = (this _tail + 1) % this _capacity
 		this _count += 1
 	}
-	dequeue: func ~out (result: T*) -> Bool {
+	/*dequeue: func ~out (result: T*) -> Bool {
 		success := true
 		if (this empty)
 			success = false
@@ -66,7 +66,7 @@ VectorQueue: class <T> extends Queue<T> {
 		result: T
 		success := this dequeue(result&)
 		(result, success)
-	}
+	}*/
 	dequeue: func ~default (fallback: T) -> T {
 		result := this peek(fallback)
 		if (!this empty) {
@@ -75,7 +75,7 @@ VectorQueue: class <T> extends Queue<T> {
 		}
 		result
 	}
-	peek: func ~out (result: T*) -> Bool {
+	/*peek: func ~out (result: T*) -> Bool {
 		success := true
 		if (this empty)
 			success = false
@@ -87,7 +87,7 @@ VectorQueue: class <T> extends Queue<T> {
 		result: T
 		success := this peek(result&)
 		(result, success)
-	}
+	}*/
 	peek: func ~default (fallback: T) -> T {
 		result: T
 		if (this empty)
