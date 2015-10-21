@@ -111,7 +111,7 @@ PainterTest: class extends Fixture {
 				output := "test/draw/output/painter_gpuYuv.png"
 				image := RasterYuv420Semiplanar open(input)
 				context := OpenGLContext new()
-				gpuImage := context createGpuImage(image)
+				gpuImage := context createImage(image)
 				painter := Painter new(gpuImage)
 				painter setPen(Pen new(ColorBgr new(255, 255, 255)))
 				shiftX := image size width / 2

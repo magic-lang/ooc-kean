@@ -23,7 +23,7 @@ CpuContext: class extends AbstractContext {
 	createBgr: func (size: IntSize2D) -> RasterBgr { RasterBgr new(size) }
 	createBgra: func (size: IntSize2D) -> RasterBgra { RasterBgra new(size) }
 	createUv: func (size: IntSize2D) -> RasterUv { RasterUv new(size) }
-	createGpuImage: func (rasterImage: RasterImage) -> RasterImage { rasterImage copy() }
+	createImage: func (rasterImage: RasterImage) -> RasterImage { rasterImage copy() }
 	createYuv420Semiplanar: func (size: IntSize2D) -> RasterYuv420Semiplanar { RasterYuv420Semiplanar new(size) }
 	createYuv420Semiplanar: func ~fromImages (y, uv: Image) -> RasterYuv420Semiplanar { RasterYuv420Semiplanar new(y as RasterMonochrome, uv as RasterUv) }
 	createYuv420Semiplanar: func ~fromRaster (raster: RasterYuv420Semiplanar) -> RasterYuv420Semiplanar { raster copy() }

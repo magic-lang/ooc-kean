@@ -53,10 +53,10 @@ FloatMatrixTest: class extends Fixture {
 
 		this add("swapRows", func {
 			matrix = createMatrix(3, 3, [1.0f, -2.0f, 3.0f, -4.0f, 5.0f, -6.5f, 7.4f, -8.3f, 9.2f])
-			matrix swaprows(0, 1)
+			matrix swapRows(0, 1)
 			checkAllElements(matrix, [-2.0f, 1.0f, 3.0f, 5.0f, -4.0f, -6.5f, -8.3f, 7.4f, 9.2f])
 			matrix = createMatrix(2, 3, [1.0f, -2.0f, 3.0f, -4.0f, 5.0f, -6.5f])
-			matrix swaprows(0, 1)
+			matrix swapRows(0, 1)
 			checkAllElements(matrix, [-2.0f, 1.0f, 3.0f, 5.0f, -4.0f, -6.5f])
 		})
 
@@ -79,33 +79,32 @@ FloatMatrixTest: class extends Fixture {
 		})
 
 		this add("addition", func {
-			A := createMatrix(3, 3, [1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f])
-			B := createMatrix(3, 3, [9.0f, 8.0f, 7.0f, 6.0f, 5.0f, 4.0f, 3.0f, 2.0f, 1.0f])
-			checkAllElements(A + B, [10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f])
-			checkAllElements(A + B + A, [11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f, 17.0f, 18.0f, 19.0f])
+			a := createMatrix(3, 3, [1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f]) take()
+			b := createMatrix(3, 3, [9.0f, 8.0f, 7.0f, 6.0f, 5.0f, 4.0f, 3.0f, 2.0f, 1.0f]) take()
+			checkAllElements(a + b, [10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f])
+			checkAllElements(a + b give() + a give(), [11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f, 17.0f, 18.0f, 19.0f])
 		})
 
 		this add("subtraction", func {
-			A := createMatrix(3, 3, [1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f])
-			B := createMatrix(3, 3, [9.0f, 8.0f, 7.0f, 6.0f, 5.0f, 4.0f, 3.0f, 2.0f, 1.0f])
-			checkAllElements(A - B, [-8.0f, -6.0f, -4.0f, -2.0f, 0.0f, 2.0f, 4.0f, 6.0f, 8.0f])
-			checkAllElements(A - A, [0, 0, 0, 0, 0, 0, 0, 0, 0])
+			a := createMatrix(3, 3, [1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f]) take()
+			b := createMatrix(3, 3, [9.0f, 8.0f, 7.0f, 6.0f, 5.0f, 4.0f, 3.0f, 2.0f, 1.0f])
+			checkAllElements(a - b, [-8.0f, -6.0f, -4.0f, -2.0f, 0.0f, 2.0f, 4.0f, 6.0f, 8.0f])
+			checkAllElements(a - a give(), [0, 0, 0, 0, 0, 0, 0, 0, 0])
 		})
 
-		this add("solver", func {
-			// Solve A * x = y
-			A := createMatrix(5, 5, [ 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 1.0f, 3.0f, 6.0f, 10.0f, 15.0f, 1.0f, 4.0f, 10.0f, 20.0f, 35.0f, 1.0f, 5.0f, 15.0f, 35.0f, 70.0f ])
-			y := createMatrix(1, 5, [ -1.0f, 2.0f, -3.0f, 4.0f, 5.0f])
-			x := A solve(y)
+		this add("solver (square)", func {
+			// Solve a * x = y
+			a := createMatrix(5, 5, [1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 1.0f, 3.0f, 6.0f, 10.0f, 15.0f, 1.0f, 4.0f, 10.0f, 20.0f, 35.0f, 1.0f, 5.0f, 15.0f, 35.0f, 70.0f])
+			y := createMatrix(1, 5, [-1.0f, 2.0f, -3.0f, 4.0f, 5.0f])
+			x := a solve(y)
 			checkAllElements(x, [-70.0f, 231.0f, -296.0f, 172.0f, -38.0f])
 		})
 
-		this add("LUP decomposition", func {
-			A := createMatrix(3, 3, [10.0f, -3.0f, 5.0f, -7.0f, 2.0f, -1.0f, 0.0f, 6.0f, 5.0f])
-			lup := A lupDecomposition()
-			checkAllElements(lup[0], [1.0f, 0.5f, -0.3f, 0.0f, 1.0f, -0.04f, 0.0f, 0.0f, 1.0f])
-			checkAllElements(lup[1], [10.0f, 0.0f, 0.0f, -7.0f, 2.5f, 0.0f, 0.0f, 5.0f, 6.2f])
-			checkAllElements(lup[2], [1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f])
+		this add("solver (non-square)", func {
+			a := createMatrix(2, 3, [2.0f, 0.0f, 4.0f, 2.0f, 4.0f, 6.0f])
+			y := createMatrix(1, 3, [1.0f, -2.0f, 1.0f])
+			x := a solve(y)
+			checkAllElements(x, [1.0f, -0.5f])
 		})
 
 		this add("set and get", func {

@@ -15,6 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import math
+use ooc-base
 use ooc-math
 
 FloatMatrix : cover {
@@ -24,22 +25,30 @@ FloatMatrix : cover {
 	dimensions ::= this _dimensions
 	width ::= this _dimensions width
 	height ::= this _dimensions height
-	isNull ::= this dimensions empty
+	isNull ::= this dimensions empty // TODO: Better name?
 	isSquare ::= this width == this height
 	order ::= Int minimum~two(this height, this width)
-	elements: Float[]
+	_elements: OwnedBuffer
+	elements ::= this _elements pointer as Float*
+
+	init: func@ ~buffer (=_elements, =_dimensions)
 	init: func@ ~IntSize2D (=_dimensions) {
-		this elements = Float[_dimensions area] new()
+		this init(OwnedBuffer new(_dimensions area * Float size, Owner Caller), dimensions)
 	}
 	init: func@ (width, height: Int) {
 		this init(IntSize2D new(width, height))
 	}
-	free: func { this elements free() }
-	identity: static func@ (order: Int) -> This {
+	free: func@ -> Bool {
+		this _elements free()
+	}
+	free: func@ ~withCriteria (criteria: Owner) -> Bool {
+		this _elements free(criteria)
+	}
+	identity: static func (order: Int) -> This {
 		result := This new(order, order)
 		for (i in 0 .. order)
 			result elements[i + result width * i] = 1.0f
-		result
+		result give()
 	}
 	setVertical: func (xOffset, yOffset: Int, vector: FloatPoint3D) {
 		if (xOffset < 0 || xOffset >= this width)
@@ -58,9 +67,11 @@ FloatMatrix : cover {
 		result := This new(1, this height)
 		for (y in 0 .. this height)
 			result[0, y] = this[x, y]
-		result
+		this free(Owner Callee)
+		result give()
 	}
-	
+	// NOTE: Because rock doesn't understand the concept of inline functions,
+	// this function has been inlined manually in many places in this file for performance reasons.
 	operator [] (x, y: Int) -> Float {
 		version (safe) {
 			if (x < 0 || y < 0 || x >= this width || y >= this height)
@@ -70,7 +81,6 @@ FloatMatrix : cover {
 	}
 	// NOTE: Because rock doesn't understand the concept of inline functions,
 	// this function has been inlined manually in many places in this file for performance reasons.
-
 	operator []= (x, y: Int, value: Float) {
 		version (safe) {
 			if (x < 0 || y < 0 || x >= this width || y >= this height)
@@ -78,20 +88,18 @@ FloatMatrix : cover {
 		}
 		this elements[x + y * this width] = value
 	}
-	// NOTE: Because rock doesn't understand the concept of inline functions,
-	// this function has been inlined manually in many places in this file for performance reasons.
-
-	copy: func@ -> This {
-		result := This new(this dimensions)
-		memcpy(result elements data, this elements data, this dimensions area * Float size)
+	copy: func -> This {
+		result := This new(this _elements copy(), this dimensions)
+		this free(Owner Callee)
 		result
 	}
-	transpose: func@ -> This {
+	transpose: func -> This {
 		result := This new(this dimensions swap())
 		for (y in 0 .. this height)
 			for (x in 0 .. this width)
 				result elements[y + x * this height] = this elements[x + y * this width]
-		result
+		this free(Owner Callee)
+		result give()
 	}
 	trace: func -> Float {
 		if (!this isSquare)
@@ -99,21 +107,23 @@ FloatMatrix : cover {
 		result := 0.0f
 		for (i in 0 .. this height)
 			result += this[i, i]
+		this free(Owner Callee)
 		result
 	}
-	swaprows: func@ (row1, row2: Int) {
-		version (safe) {
-			if (row1 < 0 || row2 < 0 || row1 >= this height || row2 >= this height)
-				raise("Invalid row choices in FloatMatrix swaprows")
-		}
+	swapRows: func@ (first, second: Int) {
 		order := this order
 		buffer: Float
-		if (row1 != row2)
+		if (first != second)
 			for (i in 0 .. order) {
-				buffer = this elements[i + row1 * this width]
-				this elements[i + row1 * this width] = this elements[i + row2 * this width]
-				this elements[i + row2 * this width] = buffer
+				buffer = this elements[i + first * this width]
+				this elements[i + first * this width] = this elements[i + second * this width]
+				this elements[i + second * this width] = buffer
 			}
+	}
+	// TODO: DEPRECATED
+	swaprows: func@ (first, second: Int) {
+		c"FloatMatrix swaprows deprecated" println()
+		this swapRows(first, second)
 	}
 	toString: func@ -> String {
 		result: String = ""
@@ -125,11 +135,10 @@ FloatMatrix : cover {
 		}
 		result
 	}
-
 	// Lup decomposition of the current matrix. Recall that Lup decomposition is A = LUP,
 	// where L is lower triangular, U is upper triangular, and P is a permutation matrix.
 	// See http://en.wikipedia.org/wiki/LUP_decomposition.
-	lupDecomposition: func@ -> This[] {
+	lupDecomposition: func -> (This, This, This) {
 		if (!this isSquare)
 			raise("Invalid dimensions in FloatMatrix lupDecomposition")
 		order := this order
@@ -142,8 +151,8 @@ FloatMatrix : cover {
 			for (y in position + 1 .. u height)
 				if (abs(u elements[position + position * u width]) < abs(u elements[position + y * u width]))
 					pivotRow = y
-			p swaprows(position, pivotRow)
-			u swaprows(position, pivotRow)
+			p swapRows(position, pivotRow)
+			u swapRows(position, pivotRow)
 
 			if (u elements[position + u width * position] != 0)
 				for (y in position + 1 .. order) {
@@ -158,52 +167,31 @@ FloatMatrix : cover {
 				l elements[x + y * l width] = u elements[x + y * u width]
 				u elements[x + y * u width] = 0
 			}
-		result := [l, u, p]
-		result
+		this free(Owner Callee)
+		(l give(), u give(), p give())
 	}
-
 	// Lup least square solver A * x = y.
 	// If overdetermined, returns the least square solution to the system.
-	solve: func@ (y: This) -> This {
+	solve: func (y: This) -> This {
 		result: This
 		if (this width > this height)
 			raise("Invalid dimensions in FloatMatrix solve")
-		// TODO: This can probably be cleaned up...
 		else
 			if (this isSquare) {
-				lup := this lupDecomposition()
-				temp := lup[2] * y
-				temp2 := temp _forwardSubstitution(lup[0])
-				result = temp2 _backwardSubstitution(lup[1])
-				temp free()
-				temp2 free()
-				lup[0] free()
-				lup[1] free()
-				lup[2] free()
-				lup free()
+				(l, u, p) := this lupDecomposition()
+				result = (p * y) forwardSubstitution(l) backwardSubstitution(u)
 			} else {
-				temp1 := this transpose()
-				temp2 := temp1 * this
-				lup := temp2 lupDecomposition()
-				temp2 free()
-				temp2 = lup[2] * temp1
-				temp1 free()
-				temp1 = temp2 * y
-				temp2 free()
-				temp2 = temp1 _forwardSubstitution(lup[0])
-				result = temp2 _backwardSubstitution(lup[1])
-				temp1 free()
-				temp2 free()
-				lup[0] free()
-				lup[1] free()
-				lup[2] free()
-				lup free()
+				outerProduct := (this transpose() * this) take()
+				(l, u, p) := outerProduct lupDecomposition()
+				result = (p * this transpose() * y) forwardSubstitution(l) backwardSubstitution(u)
+				outerProduct free()
 			}
-		result
+		y free(Owner Callee)
+		this free(Owner Callee)
+		result give()
 	}
-
 	// Forward solver lower * x = y for a lower triangular matrix. Current object is y.
-	_forwardSubstitution: func@ (lower: This) -> This {
+	forwardSubstitution: func (lower: This) -> This {
 		result := This new(this dimensions)
 		for (x in 0 .. this width)
 			for (y in 0 .. this height) {
@@ -214,13 +202,14 @@ FloatMatrix : cover {
 				if (value != 0)
 					result elements[x + y * result width] = accumulator / value
 				else
-					raise("Division by zero in FloatMatrix _forwardSubstitution")
+					raise("Division by zero in FloatMatrix forwardSubstitution")
 			}
-		result
+		this free(Owner Callee)
+		lower free(Owner Callee)
+		result give()
 	}
-
 	// Backward solver upper * x = y for an upper triangular matrix. Current object is y.
-	_backwardSubstitution: func@ (upper: This) -> This {
+	backwardSubstitution: func (upper: This) -> This {
 		result := This new(this dimensions)
 		for (x in 0 .. this width) {
 			for (antiY in 0 .. this height) {
@@ -232,10 +221,20 @@ FloatMatrix : cover {
 				if (value != 0)
 					result elements[x + y * result width] = accumulator / value
 				else
-					raise("Division by zero in FloatMatrix _backwardSubstitution")
+					raise("Division by zero in FloatMatrix backwardSubstitution")
 			}
 		}
-		result
+		this free(Owner Callee)
+		upper free(Owner Callee)
+		result give()
+	}
+	take: func -> This { // call by value -> modifies copy of cover
+		this _elements = this _elements take()
+		this
+	}
+	give: func -> This { // call by value -> modifies copy of cover
+		this _elements = this _elements give()
+		this
 	}
 	operator * (other: This) -> This {
 		if (this width != other height)
@@ -249,7 +248,9 @@ FloatMatrix : cover {
 				result elements[x + y * result width] = temp
 			}
 		}
-		result
+		this free(Owner Callee)
+		other free(Owner Callee)
+		result give()
 	}
 	operator + (other: This) -> This {
 		if (this dimensions != other dimensions)
@@ -257,7 +258,9 @@ FloatMatrix : cover {
 		result := This new(this dimensions)
 		for (i in 0 .. this dimensions area)
 			result elements[i] = this elements[i] + other elements[i]
-		result
+		this free(Owner Callee)
+		other free(Owner Callee)
+		result give()
 	}
 	operator - (other: This) -> This {
 		if (this dimensions != other dimensions)
@@ -265,7 +268,23 @@ FloatMatrix : cover {
 		result := This new(this dimensions)
 		for (i in 0 .. this dimensions area)
 			result elements[i] = this elements[i] - other elements[i]
-		result
+		this free(Owner Callee)
+		other free(Owner Callee)
+		result give()
+	}
+	operator += (other: This) {
+		if (this dimensions != other dimensions)
+			raise("Invalid dimensions in FloatMatrix += operator: dimensions must match!")
+		for (i in 0 .. this dimensions area)
+			this elements[i] += other elements[i]
+		other free(Owner Callee)
+	}
+	operator -= (other: This) {
+		if (this dimensions != other dimensions)
+			raise("Invalid dimensions in FloatMatrix -= operator: dimensions must match!")
+		for (i in 0 .. this dimensions area)
+			this elements[i] -= other elements[i]
+		other free(Owner Callee)
 	}
 }
 
@@ -273,5 +292,6 @@ operator * (left: Float, right: FloatMatrix) -> FloatMatrix {
 	result := FloatMatrix new(right dimensions)
 	for (i in 0 .. right dimensions area)
 		result elements[i] = left * right elements[i]
-	result
+	right free(Owner Callee)
+	result give()
 }

@@ -37,7 +37,7 @@ AndroidContext: class extends OpenGLContext {
 		this _packers free()
 		super()
 	}
-	createGpuImage: override func (rasterImage: RasterImage) -> GpuImage {
+	createImage: override func (rasterImage: RasterImage) -> GpuImage {
 		result: GpuImage
 		version (optiGraphicbufferupload) {
 			if (rasterImage instanceOf?(GraphicBufferYuv420Semiplanar)) {
