@@ -17,6 +17,7 @@
 use ooc-math
 use ooc-base
 import math
+import PaintEngine
 
 CoordinateSystem: enum {
 	Default = 0x00,
@@ -29,6 +30,8 @@ CoordinateSystem: enum {
 Image: abstract class {
 	_size: IntSize2D
 	size ::= this _size
+	width ::= this size width
+	height ::= this size height
 	transform: IntTransform2D { get set }
 	coordinateSystem: CoordinateSystem {
 		get
@@ -66,7 +69,6 @@ Image: abstract class {
 	create: virtual func (size: IntSize2D) -> This { raise("Image type not implemented."); null }
 	copy: abstract func -> This
 	copy: abstract func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This
-//	shift: abstract func (offset: IntSize2D) -> This
 	flush: func
 	finish: func -> Bool { true }
 	distance: virtual abstract func (other: This) -> Float
@@ -74,4 +76,5 @@ Image: abstract class {
 	isValidIn: func (x, y: Int) -> Bool {
 		return (x >= 0 && x < this size width && y >= 0 && y < this size height)
 	}
+	createPaintEngine: virtual func -> PaintEngine { null }
 }

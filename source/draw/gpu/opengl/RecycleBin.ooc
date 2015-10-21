@@ -21,6 +21,7 @@ use ooc-base
 use ooc-draw-gpu
 import OpenGLPacked, OpenGLMonochrome, OpenGLBgra, OpenGLBgr, OpenGLUv, threading/Thread
 
+version(!gpuOff) {
 RecycleBin: class {
 	_monochrome := VectorList<OpenGLMonochrome> new()
 	_bgr := VectorList<OpenGLBgr> new()
@@ -48,7 +49,7 @@ RecycleBin: class {
 		this _bgr free()
 		this _bgra free()
 		this _uv free()
-		this _mutex destroy()
+		this _mutex free()
 		super()
 	}
 	_add: func (image: OpenGLPacked, list: VectorList<OpenGLPacked>) {
@@ -97,4 +98,5 @@ RecycleBin: class {
 			case => null
 		}
 	}
+}
 }

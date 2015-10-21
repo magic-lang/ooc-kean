@@ -20,6 +20,7 @@ use ooc-draw-gpu
 import backend/GLTexture
 import OpenGLContext, OpenGLCanvas
 
+version(!gpuOff) {
 OpenGLPacked: abstract class extends GpuImage {
 	_filter: Bool
 	filter: Bool {
@@ -53,4 +54,5 @@ OpenGLPacked: abstract class extends GpuImage {
 	}
 	bind: override func (unit: UInt) { this _backend bind(unit) }
 	_createCanvas: override func -> GpuSurface { OpenGLCanvas new(this, this context) }
+}
 }

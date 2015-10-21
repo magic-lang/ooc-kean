@@ -15,6 +15,33 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-IEquatable: interface <T> {
-	equals: func (other: T) -> Bool
+import DisplayWindow
+use ooc-draw-gpu
+use ooc-math
+use ooc-draw
+use ooc-opengl
+use ooc-x11
+
+version((unix || apple) && !gpuOff) {
+UnixWindow: class extends DisplayWindow {
+	_xWindow: X11Window
+	_openGLWindow: OpenGLWindow
+	context ::= this _openGLWindow context
+	init: func (size: IntSize2D, title: String) {
+		super()
+		this _xWindow = X11Window new(size, title)
+		this _openGLWindow = OpenGLWindow new(this _xWindow)
+	}
+	free: override func {
+		this _openGLWindow free()
+		this _xWindow free()
+		super()
+	}
+	draw: override func (image: Image) {
+		this _openGLWindow draw(image as GpuImage)
+	}
+	refresh: override func {
+		this _openGLWindow refresh()
+	}
+}
 }

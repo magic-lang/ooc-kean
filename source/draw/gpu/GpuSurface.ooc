@@ -21,6 +21,7 @@ use ooc-base
 
 import GpuContext, GpuMap, GpuImage, GpuMesh
 
+version(!gpuOff) {
 GpuSurface: abstract class {
 	clearColor: ColorBgra { get set }
 	viewport: IntBox2D { get set }
@@ -87,7 +88,7 @@ GpuSurface: abstract class {
 	draw: func ~Full (image: Image, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
 		if (image instanceOf?(GpuImage)) { this draw(image as GpuImage, source, destination, map) }
 		else if (image instanceOf?(RasterImage)) {
-			temp := this _context createGpuImage(image as RasterImage)
+			temp := this _context createImage(image as RasterImage)
 			this draw(temp as GpuImage, source, destination, map)
 			temp free()
 		}
@@ -107,4 +108,5 @@ GpuSurface: abstract class {
 	drawBox: virtual func (box: FloatBox2D)
 	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>)
 	readPixels: virtual func -> ByteBuffer { raise("readPixels unimplemented!") }
+}
 }

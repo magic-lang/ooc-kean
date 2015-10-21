@@ -21,6 +21,7 @@ import include/gles3
 import ../GLFramebufferObject
 import Gles3Texture, Gles3Debug
 
+version(!gpuOff) {
 Gles3FramebufferObject: class extends GLFramebufferObject {
 	init: func (=_size) { super() }
 	free: override func {
@@ -110,4 +111,5 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		this unbind()
 		version(debugGL) { validateEnd("fbo invalidate") }
 	}
+}
 }

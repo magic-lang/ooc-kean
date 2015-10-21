@@ -21,6 +21,7 @@ import include/gles3
 import ../GLTexture
 import Gles3Debug
 
+version(!gpuOff) {
 Gles3Texture: class extends GLTexture {
 	_format: UInt
 	_internalFormat: UInt
@@ -35,7 +36,6 @@ Gles3Texture: class extends GLTexture {
 	}
 	free: override func {
 		version(debugGL) { validateStart() }
-		version(debugGL) { Debug print("Freeing OpenGL Texture") }
 		glDeleteTextures(1, this _backend&)
 		version(debugGL) { validateEnd("Texture free") }
 		super()
@@ -162,4 +162,5 @@ Gles3Texture: class extends GLTexture {
 		version(debugGL) { validateEnd("Texture _allocate") }
 		true
 	}
+}
 }

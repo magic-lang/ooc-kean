@@ -17,6 +17,7 @@
 
 use ooc-math
 
+version(!gpuOff) {
 GLShaderProgram: abstract class {
 	use: abstract func
 	setUniform: abstract func ~Array (name: String, array: Float*, count: Int)
@@ -42,4 +43,5 @@ GLShaderProgram: abstract class {
 	setUniform: abstract func ~Matrix3x3 (name: String, value: FloatTransform2D)
 	setUniform: abstract func ~Matrix4x4 (name: String, value: FloatTransform3D)
 	setUniform: abstract func ~Vector3 (name: String, value: FloatPoint3D)
+}
 }

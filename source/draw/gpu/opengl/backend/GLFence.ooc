@@ -20,6 +20,7 @@ use ooc-math
 import os/Time
 import threading/Thread
 
+version(!gpuOff) {
 GLFence: abstract class {
 	_backend: Pointer = null
 	_syncCondition := WaitCondition new()
@@ -27,11 +28,12 @@ GLFence: abstract class {
 
 	init: func
 	free: override func {
-		this _mutex destroy()
+		this _mutex free()
 		this _syncCondition free()
 		super()
 	}
 	clientWait: abstract func (timeout: UInt64 = ULLONG_MAX)
 	wait: abstract func
 	sync: abstract func
+}
 }

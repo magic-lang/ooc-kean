@@ -45,7 +45,26 @@ RasterBgraTest: class extends Fixture {
 			expect(image2 distance(image3), is equal to(0.0f))
 			image1 free(); image2 free(); image3 free()
 		})
+		this add("swapped RB", func {
+			output := "test/draw/output/rbswapped_bgra.png"
+			image := RasterBgra open(this sourceFlower)
+			image2 := RasterBgra open(this sourceFlower)
+			image swapRedBlue()
+			image save(output)
+			for (row in 0 .. image height)
+				for (column in 0 .. image width) {
+					pixel1 := image[column, row]
+					pixel2 := image2[column, row]
+					expect(pixel1 red == pixel2 blue)
+					expect(pixel1 green == pixel2 green)
+					expect(pixel1 blue == pixel2 red)
+					expect(pixel1 alpha == pixel2 alpha)
+				}
+			image free()
+			image2 free()
+			output free()
+		})
 	}
 }
 
-RasterBgraTest new() run()
+RasterBgraTest new() run() . free()

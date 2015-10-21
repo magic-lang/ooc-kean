@@ -17,7 +17,9 @@
 
 import GLVertexArrayObject
 
+version(!gpuOff) {
 GLQuad: abstract class {
 	vao: GLVertexArrayObject
 	draw: abstract func
+}
 }

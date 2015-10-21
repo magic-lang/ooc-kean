@@ -14,8 +14,30 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-import Order
 
-IComparable: interface <T> {
-	compare: func (other: T) -> Order
+import DisplayWindow
+use ooc-math
+use ooc-draw
+use ooc-win32
+
+version(windows) {
+Win32DisplayWindow: class extends DisplayWindow {
+	_backend: Win32Window
+	init: func (size: IntSize2D, title: String) {
+		super()
+		this _backend = Win32Window new(size, title)
+	}
+	free: override func {
+		this _backend free()
+		super()
+	}
+	draw: override func (image: Image) {
+		raster := RasterBgra convertFrom(image as RasterImage)
+		this _backend draw(raster)
+		raster referenceCount decrease()
+	}
+	refresh: override func {
+		_backend peekMessage()
+	}
+}
 }

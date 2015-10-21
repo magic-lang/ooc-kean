@@ -21,6 +21,7 @@ use ooc-draw-gpu
 import backend/[GLVolumeTexture, GLContext]
 import OpenGLContext
 
+version(!gpuOff) {
 OpenGLVolumeMonochrome: class {
 	_backend: GLVolumeTexture
 	init: func (size: IntSize3D, pixels: UInt8* = null, context: OpenGLContext) {
@@ -32,4 +33,5 @@ OpenGLVolumeMonochrome: class {
 		this _backend free()
 		super()
 	}
+}
 }

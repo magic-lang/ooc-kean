@@ -15,26 +15,21 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-unit
-use ooc-base
+use ooc-draw
+use ooc-math
+import UnixWindow
+import Win32DisplayWindow
 
-DisposableTest: class extends Fixture {
-	init: func {
-		super("Disposable")
-		this add("dispose", func {
-			c := DisposableImplementation new()
-			d := c as IDisposable
-			expect(c disposed, is false)
-			d dispose()
-			expect(c disposed, is true)
-		})
+DisplayWindow: abstract class {
+	init: func (size: IntSize2D, title: String)
+	draw: abstract func (image: Image)
+	refresh: virtual func
+	create: static func (size: IntSize2D, title: String) -> This {
+		version((unix || apple) && !gpuOff)
+			return UnixWindow new(size, title)
+		version(windows)
+			return Win32DisplayWindow new(size, title)
+		raise("Platform not supported (DisplayWindow)")
+		null
 	}
 }
-DisposableImplementation: class implements IDisposable {
-	disposed := false
-	init: func
-	dispose: func {
-		this disposed = true
-	}
-}
-DisposableTest new() run()

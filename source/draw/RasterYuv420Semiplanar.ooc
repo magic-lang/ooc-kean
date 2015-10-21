@@ -26,6 +26,8 @@ import RasterUv
 import Image
 import Color
 import RasterBgr
+import PaintEngine
+import RasterPaintEngine
 import StbImage
 import io/File
 import io/FileReader
@@ -51,31 +53,89 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		this init(yImage, uvImage)
 	}
 	_allocate: static func (size: IntSize2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
-		length := uvOffset + stride * size height / 2
+		length := uvOffset + stride * (size height + 1) / 2
 		buffer := ByteBuffer new(length)
 		This _createSubimages(buffer, size, stride, uvOffset)
 	}
 	_createSubimages: static func (buffer: ByteBuffer, size: IntSize2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
 		yLength := stride * size height
 		uvLength := stride * size height / 2
-		(RasterMonochrome new(buffer slice(0, yLength), size, stride), RasterUv new(buffer slice(uvOffset, uvLength), size / 2, stride))
+		(RasterMonochrome new(buffer slice(0, yLength), size, stride), RasterUv new(buffer slice(uvOffset, uvLength), This _uvSize(size), stride))
 	}
-
-	/*shift: func (offset: IntSize2D) -> Image {
-		result : This
-		y = this y shift(offset) as RasterMonochrome
-		uv = this uv shift(offset / 2) as RasterMonochrome
-		result = This new(this size)
-		result buffer copyFrom(y buffer, 0, 0, y length)
-		result buffer copyFrom(uv buffer, 0, y length, uv length)
-		result
-	}*/
+	_uvSize: static func (size: IntSize2D) -> IntSize2D {
+		IntSize2D new(size width / 2 + (Int odd(size width) ? 1 : 0), size height / 2 + (Int odd(size height) ? 1 : 0))
+	}
 	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This {
 		result := This new(this)
 		this y buffer copyTo(result y buffer)
 		this uv buffer copyTo(result uv buffer)
 		result
+	}
+	resizeTo: override func (size: IntSize2D) -> This {
+		result: This
+		if (this size == size)
+			result = this copy()
+		else {
+			result = This new(size, size width + (Int odd(size width) ? 1 : 0))
+			this resizeInto(result)
+		}
+		result
+	}
+	resizeInto: func (target: This) {
+		thisYBuffer := this y buffer pointer
+		targetYBuffer := target y buffer pointer
+		for (row in 0 .. target size height) {
+			srcRow := (this size height * row) / target size height
+			thisStride := srcRow * this y stride
+			targetStride := row * target y stride
+			for (column in 0 .. target size width) {
+				srcColumn := (this size width * column) / target size width
+				targetYBuffer[column + targetStride] = thisYBuffer[srcColumn + thisStride]
+			}
+		}
+		targetSizeHalf := target size / 2
+		thisSizeHalf := this size / 2
+		thisUvBuffer := this uv buffer pointer as ColorUv*
+		targetUvBuffer := target uv buffer pointer as ColorUv*
+		if (Int odd(target size height))
+			targetSizeHalf = IntSize2D new(targetSizeHalf width, targetSizeHalf height + 1)
+		for (row in 0 .. targetSizeHalf height) {
+			srcRow := (thisSizeHalf height * row) / targetSizeHalf height
+			thisStride := srcRow * this uv stride / 2
+			targetStride := row * target uv stride / 2
+			for (column in 0 .. targetSizeHalf width) {
+				srcColumn := (thisSizeHalf width * column) / targetSizeHalf width
+				targetUvBuffer[column + targetStride] = thisUvBuffer[srcColumn + thisStride]
+			}
+		}
+	}
+	crop: func (region: FloatBox2D) -> This {
+		size := region size toIntSize2D()
+		result := This new(size, size width + (Int odd(size width) ? 1 : 0)) as This
+		this cropInto(region, result)
+		result
+	}
+	cropInto: func (region: FloatBox2D, target: This) {
+		thisYBuffer := this y buffer pointer
+		targetYBuffer := target y buffer pointer
+		for (row in region top .. region size height + region top) {
+			thisStride := row * this y stride
+			targetStride := ((row - region top) as Int) * target y stride
+			for (column in region left .. region size width + region left)
+				targetYBuffer[(column - region left) as Int + targetStride] = thisYBuffer[column + thisStride]
+		}
+		regionSizeHalf := region size / 2
+		regionTopHalf := region top / 2
+		regionLeftHalf := region left / 2
+		thisUvBuffer := this uv buffer pointer as ColorUv*
+		targetUvBuffer := target uv buffer pointer as ColorUv*
+		for (row in regionTopHalf .. regionSizeHalf height + regionTopHalf) {
+			thisStride := row * this uv stride / 2
+			targetStride := ((row - regionTopHalf) as Int) * target uv stride / 2
+			for (column in regionLeftHalf .. regionSizeHalf width + regionLeftHalf)
+				targetUvBuffer[(column - regionLeftHalf) as Int + targetStride] = thisUvBuffer[column + thisStride]
+		}
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))
@@ -112,13 +172,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		this apply(convert)
 		(convert as Closure) dispose()
 	}
-
-//	FIXME
-//	openResource(assembly: ???, name: String) {
-//		Image openResource
-//	}
 	operator [] (x, y: Int) -> ColorYuv {
-		ColorYuv new(0, 0, 0)
 		ColorYuv new(this y[x, y] y, this uv [x / 2, y / 2] u, this uv [x / 2, y / 2] v)
 	}
 	operator []= (x, y: Int, value: ColorYuv) {
@@ -192,4 +246,5 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		fileWriter write(this uv buffer pointer as Char*, this uv buffer size)
 		fileWriter close()
 	}
+	createPaintEngine: override func -> PaintEngine { Yuv420PaintEngine new(this) }
 }

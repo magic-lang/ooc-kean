@@ -1,65 +1,142 @@
 use ooc-base
 use ooc-collections
 use ooc-unit
-import os/Time
+import threading/Thread
 
 SynchronizedQueueTest: class extends Fixture {
 	init: func {
-		queue := SynchronizedQueue<Int> new()
-
-		func1 := func { queue enqueue(123) }
-		func2 := func {
-			result: Int
-			success := queue peek(result&)
-			expect(success)
-			expect(result == 123)
-		}
-		func3 := func {
-			result: Int
-			success := queue dequeue(result&)
-			if (success)
-				expect(result == 123)
-			else
-				expect(queue empty)
-		}
-		func4 := func {
-			result: Int
-			success := queue peek(result&)
-			expect(!success)
-			expect(queue empty)
-		}
-
 		super("SynchronizedQueue")
-		this add("SynchronizedQueue cover create", func {
-			expect(queue empty)
+		this add("single thread", func {
+			count := 10_000
+			queue := SynchronizedQueue<Int> new()
+			for (i in 0 .. count) {
+				queue enqueue(i)
+				value: Int
+				expect(queue peek(value&))
+				expect(value, is equal to(0))
+				expect(queue count, is equal to(i + 1))
+			}
+			expect(queue count, is equal to(count))
+			for (i in 0 .. count) {
+				value: Int
+				expect(queue dequeue(value&))
+				expect(value, is equal to(i))
+			}
 			expect(queue count, is equal to(0))
-
-			pool := ThreadPool new(3)
-			/* Enqueue values asynchronously */
-			for (i in 0 .. 100)
-				pool add(func1)
-
-			/* Peek values asynchronously */
-			for (i in 0 .. 200)
-				pool add(func2)
-
-			/* Dequeue values asynchronously */
-			for (i in 0 .. 200)
-				pool add(func3)
-
-			/* Peek values asynchronously in empty Queue */
-			for (i in 0 .. 20)
-				pool add(func4)
-
-			pool waitAll()
-
-			expect(queue empty)
-			expect(queue count, is equal to(0))
-
 			queue free()
-			pool free()
 		})
+		this add("single thread (class)", func {
+			count := 10_000
+			queue := SynchronizedQueue<Cell<ULong>> new()
+			for (i in 0 .. count) {
+				queue enqueue(Cell<ULong> new(i))
+				expect(queue count, is equal to(i + 1))
+			}
+			defaultValue := Cell<ULong> new(count + 1)
+			for (i in 0 .. count) {
+				value := queue dequeue(defaultValue)
+				expect(value != defaultValue)
+				value free()
+			}
+			value := queue dequeue(defaultValue)
+			expect(value, is equal to(defaultValue))
+			defaultValue free()
+			queue free()
+		})
+		this add("multiple threads", This _testMultipleThreads)
+		this add("multiple threads (class)", This _testMultipleThreadsWithClass)
+		this add("clear and empty", func {
+			queue := SynchronizedQueue<Cell<ULong>> new()
+			for (i in 0 .. 10) {
+				queue enqueue(Cell<ULong> new(i))
+				expect(queue count, is equal to(i + 1))
+			}
+			expect(queue empty, is false)
+			queue clear()
+			expect(queue empty, is true)
+		})
+	}
+	_testMultipleThreads: static func {
+		numberOfThreads := 8
+		countPerThread := 10_000
+		queue := SynchronizedQueue<Int> new()
+		threads := Thread[numberOfThreads] new()
+		job := func {
+			for (i in 0 .. countPerThread)
+				queue enqueue(i)
+		}
+		for (i in 0 .. numberOfThreads) {
+			threads[i] = Thread new(job)
+			threads[i] start()
+		}
+		for (i in 0 .. numberOfThreads) {
+			threads[i] wait()
+			threads[i] free()
+		}
+		expect(queue count, is equal to(numberOfThreads * countPerThread))
+		(job as Closure) dispose()
+		job = func {
+			for (i in 0 .. countPerThread) {
+				value: Int
+				expect(queue dequeue(value&))
+				expect(value >= 0 && value < countPerThread)
+			}
+		}
+		for (i in 0 .. numberOfThreads) {
+			threads[i] = Thread new(job)
+			threads[i] start()
+		}
+		for (i in 0 .. numberOfThreads) {
+			threads[i] wait()
+			threads[i] free()
+		}
+		expect(queue count, is equal to(0))
+		(job as Closure) dispose()
+		threads free()
+		queue free()
+	}
+	_testMultipleThreadsWithClass: static func {
+		numberOfThreads := 8
+		countPerThread := 10_000
+		queue := SynchronizedQueue<Cell<Int>> new()
+		threads := Thread[numberOfThreads] new()
+		job := func {
+			for (i in 0 .. countPerThread)
+				queue enqueue(Cell<Int> new(i))
+		}
+		for (i in 0 .. numberOfThreads) {
+			threads[i] = Thread new(job)
+			threads[i] start()
+		}
+		for (i in 0 .. numberOfThreads) {
+			threads[i] wait()
+			threads[i] free()
+		}
+		expect(queue count, is equal to(numberOfThreads * countPerThread))
+		(job as Closure) dispose()
+		job = func {
+			for (i in 0 .. countPerThread) {
+				value: Cell<Int>
+				expect(queue dequeue(value&))
+				expect(value get() >= 0 && value get() < countPerThread)
+				value free()
+			}
+		}
+		for (i in 0 .. numberOfThreads) {
+			threads[i] = Thread new(job)
+			threads[i] start()
+		}
+		for (i in 0 .. numberOfThreads) {
+			threads[i] wait()
+			threads[i] free()
+		}
+		expect(queue count, is equal to(0))
+		(job as Closure) dispose()
+		threads free()
+		queue free()
 	}
 }
 
-SynchronizedQueueTest new() run()
+test := SynchronizedQueueTest new()
+test run()
+test free()

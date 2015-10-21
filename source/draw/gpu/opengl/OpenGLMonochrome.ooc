@@ -21,6 +21,7 @@ use ooc-draw-gpu
 import OpenGLPacked, OpenGLCanvas, Map/OpenGLMap, Map/OpenGLMapPack, OpenGLContext
 import backend/GLTexture
 
+version(!gpuOff) {
 OpenGLMonochrome: class extends OpenGLPacked {
 	channelCount: static Int = 1
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
@@ -41,4 +42,5 @@ OpenGLMonochrome: class extends OpenGLPacked {
 		result
 	}
 	create: override func (size: IntSize2D) -> This { this context createMonochrome(size) as This }
+}
 }
