@@ -65,11 +65,11 @@ IntBox2D: cover {
 	}
 	enlarge: func (size: IntSize2D) -> This {
 		sizeChange := (size - this size) maximum~Int(0)
-		This new(this leftTop - (sizeChange / 2.0f), this size + sizeChange)
+		This new(this leftTop - (sizeChange / 2), this size + sizeChange)
 	}
 	reduce: func (size: IntSize2D) -> This {
 		sizeChange := (size - this size) minimum~Int(0)
-		This new(this leftTop - (sizeChange / 2.0f), this size + sizeChange)
+		This new(this leftTop - (sizeChange / 2), this size + sizeChange)
 	}
 	intersection: func (other: This) -> This {
 		left := Int maximum~two(this left, other left)
