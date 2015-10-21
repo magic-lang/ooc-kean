@@ -43,7 +43,7 @@ _ThreadPromise: class extends Promise {
 	free: override func {
 		//TODO: If we don't want to wait, set a freeOnCompletion flag instead, and check it once the thread task finishes
 		if (this _threadAlive)
-			this _thread wait() 
+			this _thread wait()
 		this _thread free()
 		(this _action as Closure) dispose()
 		super()
