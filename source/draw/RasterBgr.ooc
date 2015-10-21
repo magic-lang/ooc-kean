@@ -105,14 +105,10 @@ RasterBgr: class extends RasterPacked {
 		}
 	}
 	open: static func (filename: String) -> This {
-		x, y, n: Int
+		x, y, imageComponents: Int
 		requiredComponents := 3
-		data := StbImage load(filename, x&, y&, n&, requiredComponents)
-		result := This new(IntSize2D new(x, y))
-		memcpy(result buffer pointer, data, x * y * requiredComponents)
-		// FIXME: Find a better way to do this using Dispose() or something
-		StbImage free(data)
-		result
+		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
+		This new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y))
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result := This new(original size)

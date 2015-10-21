@@ -69,7 +69,6 @@ Image: abstract class {
 	create: virtual func (size: IntSize2D) -> This { raise("Image type not implemented."); null }
 	copy: abstract func -> This
 	copy: abstract func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This
-//	shift: abstract func (offset: IntSize2D) -> This
 	flush: func
 	finish: func -> Bool { true }
 	distance: virtual abstract func (other: This) -> Float

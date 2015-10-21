@@ -82,9 +82,17 @@ VectorList: class <T> {
 		result
 	}
 	operator [] (index: Int) -> T {
+		version (safe) {
+			if (index >= this count)
+				raise("Accessing VectorList index out of range in get operator")
+		}
 		this _vector[index]
 	}
 	operator []= (index: Int, item: T) {
+		version (safe) {
+			if (index >= this count)
+				raise("Accessing VectorList index out of range in set operator")
+		}
 		this _vector[index] = item
 	}
 	sort: func (greaterThan: Func (T, T) -> Bool) {
