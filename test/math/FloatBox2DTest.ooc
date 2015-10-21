@@ -56,6 +56,19 @@ FloatBox2DTest: class extends Fixture {
 			shrunkBox := paddedBox shrink(1.0f / 11.0f)
 			expect(box == shrunkBox, is true)
 		})
+		this add("scale", func {
+			box := FloatBox2D new(1.0f, 1.0f, 4.0f, 4.0f)
+			doubledBox := box scale(2.0f)
+			halfBox := box scale(0.5f)
+			expect(doubledBox left, is equal to(-1.0f) within(this precision))
+			expect(doubledBox right, is equal to(7.0f) within(this precision))
+			expect(doubledBox top, is equal to(-1.0f) within(this precision))
+			expect(doubledBox bottom, is equal to(7.0f) within(this precision))
+			expect(halfBox left, is equal to(2.0f) within(this precision))
+			expect(halfBox right, is equal to(4.0f) within(this precision))
+			expect(halfBox top, is equal to(2.0f) within(this precision))
+			expect(halfBox bottom, is equal to(4.0f) within(this precision))
+		})
 	}
 }
 FloatBox2DTest new() run()

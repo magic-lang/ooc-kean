@@ -63,6 +63,10 @@ FloatBox2D: cover {
 	shrink: func ~fraction (margin: Float) -> This {
 		this pad(-margin * this height / 2.0f)
 	}
+	scale: func (value: Float) -> This {
+		sizeChange := this size - (this size * value)
+		This new(this leftTop + (sizeChange / 2.0f), this size - sizeChange)
+	}	
 	intersection: func (other: This) -> This {
 		left := Float maximum(this left, other left)
 		top := Float maximum(this top, other top)

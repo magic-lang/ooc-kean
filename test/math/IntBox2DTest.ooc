@@ -35,6 +35,19 @@ IntBox2DTest: class extends Fixture {
 		this add("casts", func {
 //			FIXME: We have no integer versions of anything yet
 		})
+		this add("scale", func {
+			box := FloatBox2D new(1, 1, 4, 4)
+			doubledBox := box scale(2.0f)
+			halfBox := box scale(0.5f)
+			expect(doubledBox left, is equal to(-1))
+			expect(doubledBox right, is equal to(7))
+			expect(doubledBox top, is equal to(-1))
+			expect(doubledBox bottom, is equal to(7))
+			expect(halfBox left, is equal to(2))
+			expect(halfBox right, is equal to(4))
+			expect(halfBox top, is equal to(2))
+			expect(halfBox bottom, is equal to(4))
+		})
 	}
 }
 IntBox2DTest new() run()
