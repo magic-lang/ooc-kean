@@ -7,7 +7,7 @@ import os/Time
 _Task: abstract class {
 	_state := _PromiseState Unfinished
 	_mutex: Mutex
-	mutex ::= this _mutex
+	_waitCondition := WaitCondition new()
 	_freeOnCompletion := false
 	init: func (=_mutex)
 	free: override func {
@@ -15,29 +15,21 @@ _Task: abstract class {
 		if (this _state == _PromiseState Unfinished) {
 			this _freeOnCompletion = true
 			this _mutex unlock()
-		}
-		else {
-			this _mutex unlock()
+		} else {
 			this _free()
+			this _waitCondition free()
+			this _mutex unlock()
 			super()
 		}
 	}
-	_free: virtual func
+	_free: abstract func
 	run: abstract func
 	wait: func -> Bool {
-		_mutexUpdateTime: static Int = 1
-		status := false
-		while (!status) {
-			this _mutex lock()
-			if (this _state != _PromiseState Unfinished) {
-				status = (this _state == _PromiseState Finished)
-				this _mutex unlock()
-				break
-			}
-			this _mutex unlock()
-			Time sleepMilli(_mutexUpdateTime)
-		}
-		status
+		this _mutex lock()
+		while (this _state == _PromiseState Unfinished)
+			this _waitCondition wait(this _mutex)
+		this _mutex unlock()
+		this _state == _PromiseState Finished
 	}
 	cancel: func -> Bool {
 		status := false
@@ -53,9 +45,13 @@ _Task: abstract class {
 		this _mutex lock()
 		if (this _state != _PromiseState Cancelled)
 			this _state = _PromiseState Finished
-		this _mutex unlock()
-		if (this _freeOnCompletion)
+		if (this _freeOnCompletion) {
+			this _mutex unlock()
 			this free()
+		} else {
+			this _mutex unlock()
+			this _waitCondition broadcast()
+		}
 	}
 }
 
