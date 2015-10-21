@@ -69,6 +69,26 @@ FloatBox2DTest: class extends Fixture {
 			expect(halfBox top, is equal to(2.0f) within(this precision))
 			expect(halfBox bottom, is equal to(4.0f) within(this precision))
 		})
+		this add("enlarge", func {
+			box := FloatBox2D new(1.0f, 1.0f, 4.0f, 4.0f)
+			enlargedBox := box enlarge(FloatSize2D new(6.0f, 6.0f))
+			notEnlargedBox := box enlarge(FloatSize2D new(3.0f, 3.0f))
+			expect(enlargedBox left, is equal to(0.0f) within(this precision))
+			expect(enlargedBox top, is equal to(0.0f) within(this precision))
+			expect(enlargedBox right, is equal to(6.0f) within(this precision))
+			expect(enlargedBox bottom, is equal to(6.0f) within(this precision))
+			expect(notEnlargedBox == box, is true)
+		})
+		this add("reduce", func {
+			box := FloatBox2D new(1.0f, 1.0f, 4.0f, 4.0f)
+			reducedBox := box reduce(FloatSize2D new(2.0f, 2.0f))
+			notReducedBox := box reduce(FloatSize2D new(6.0f, 6.0f))
+			expect(reducedBox left, is equal to(2.0f) within(this precision))
+			expect(reducedBox top, is equal to(2.0f) within(this precision))
+			expect(reducedBox right, is equal to(4.0f) within(this precision))
+			expect(reducedBox bottom, is equal to(4.0f) within(this precision))
+			expect(notReducedBox == box, is true)
+		})
 	}
 }
 FloatBox2DTest new() run()

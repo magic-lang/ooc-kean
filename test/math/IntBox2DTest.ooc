@@ -36,7 +36,7 @@ IntBox2DTest: class extends Fixture {
 //			FIXME: We have no integer versions of anything yet
 		})
 		this add("scale", func {
-			box := FloatBox2D new(1, 1, 4, 4)
+			box := IntBox2D new(1, 1, 4, 4)
 			doubledBox := box scale(2.0f)
 			halfBox := box scale(0.5f)
 			expect(doubledBox left, is equal to(-1))
@@ -47,6 +47,26 @@ IntBox2DTest: class extends Fixture {
 			expect(halfBox right, is equal to(4))
 			expect(halfBox top, is equal to(2))
 			expect(halfBox bottom, is equal to(4))
+		})
+		this add("enlarge", func {
+			box := IntBox2D new(1, 1, 4, 4)
+			enlargedBox := box enlarge(IntSize2D new(6, 6))
+			notEnlargedBox := box enlarge(IntSize2D new(3, 3))
+			expect(enlargedBox left, is equal to(0))
+			expect(enlargedBox top, is equal to(0))
+			expect(enlargedBox right, is equal to(6))
+			expect(enlargedBox bottom, is equal to(6))
+			expect(notEnlargedBox == box, is true)
+		})
+		this add("reduce", func {
+			box := IntBox2D new(1, 1, 4, 4)
+			reducedBox := box reduce(IntSize2D new(2, 2))
+			notReducedBox := box reduce(IntSize2D new(6, 6))
+			expect(reducedBox left, is equal to(2))
+			expect(reducedBox top, is equal to(2))
+			expect(reducedBox right, is equal to(4))
+			expect(reducedBox bottom, is equal to(4))
+			expect(notReducedBox == box, is true)
 		})
 	}
 }
