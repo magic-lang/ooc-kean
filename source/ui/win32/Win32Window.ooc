@@ -64,6 +64,13 @@ Win32Window: class extends NativeWindow {
 		DeleteDC(deviceContextMemory)
 		EndPaint(this backend as HWND, paintStruct&)
 	}
+	peekMessage: func {
+		msg: Msg
+		if (PeekMessage(msg&, null, 0, 0, PM_REMOVE)) {
+			TranslateMessage(msg&)
+			DispatchMessage(msg&)
+		}
+	}
 	_defaultWindowProcedure: static func (backend: HWND, message: UInt, wParam: WPARAM, lParam: LPARAM) -> LRESULT {
 		match (message) {
 			case WM_CLOSE =>
