@@ -66,10 +66,10 @@ IntBox2D: cover {
 		This createAround(this center, value * this size)
 	}
 	enlargeTo: func (size: IntSize2D) -> This {
-		This createAround(this center, this size + ((size - this size) maximum~Int(0)))
+		This createAround(this center, IntSize2D maximum(this size, size))
 	}
 	shrinkTo: func (size: IntSize2D) -> This {
-		This createAround(this center, this size + ((size - this size) minimum~Int(0)))
+		This createAround(this center, IntSize2D minimum(this size, size))
 	}
 	intersection: func (other: This) -> This {
 		left := Int maximum~two(this left, other left)
