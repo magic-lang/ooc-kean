@@ -2,5 +2,5 @@ Name: ooc X11
 Description: X11 implementations for ooc
 SourcePath: source/ui/x11
 Imports: X11Window
-version(!windows)
+version(linux)
 	Libs: -lX11
