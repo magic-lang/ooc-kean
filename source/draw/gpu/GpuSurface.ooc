@@ -79,7 +79,6 @@ GpuSurface: abstract class extends Canvas {
 	}
 	_getDefaultMap: virtual func (image: Image) -> GpuMap { this _defaultMap }
 	clear: func { this fill() }
-	fill: abstract func
 	draw: virtual func (action: Func)
 	draw: virtual func ~WithoutBind (destination: IntBox2D, map: GpuMap)
 	draw: abstract func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap)

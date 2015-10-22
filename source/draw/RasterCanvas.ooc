@@ -24,6 +24,7 @@ RasterCanvas: abstract class extends Canvas {
 	pen: Pen { get set }
 	_target: RasterImage
 	init: func(=_target) { super(this _target size) }
+	fill: override func { raise("RasterCanvas fill unimplemented!") }
 	drawPoint: override func (point: FloatPoint2D) { this _drawPoint(point x as Int, point y as Int) }
 	_drawPoint: abstract func (x, y: Int)
 	drawPoints: override func (pointList: VectorList<FloatPoint2D>) {

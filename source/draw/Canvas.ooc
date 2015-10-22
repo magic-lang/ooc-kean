@@ -49,4 +49,5 @@ Canvas: abstract class {
 		this drawLines(positions)
 		positions free()
 	}
+	fill: abstract func
 }
