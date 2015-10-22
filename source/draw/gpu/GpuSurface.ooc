@@ -82,10 +82,7 @@ GpuSurface: abstract class extends Canvas {
 		else
 			Debug raise("Trying to draw unsupported image format to OpenGLCanvas!")
 	}
-	draw: func ~ImageSourceDestination (image: Image, source: IntBox2D, destination: IntBox2D) { this draw(image, source, destination, this _getDefaultMap(image)) }
-	draw: func ~ImageDestination (image: Image, destination: IntBox2D) { this draw(image, IntBox2D new(image size), destination) }
-	draw: func ~Image (image: Image) { this draw(image, IntBox2D new(image size)) }
-	draw: func ~ImageTargetSize (image: Image, targetSize: IntSize2D) { this draw(image, IntBox2D new(targetSize)) }
+	draw: override func ~ImageSourceDestination (image: Image, source: IntBox2D, destination: IntBox2D) { this draw(image, source, destination, this _getDefaultMap(image)) }
 	draw: func ~ImageMap (image: Image, map: GpuMap) { this draw(image, IntBox2D new(image size), IntBox2D new(image size), map) }
 	draw: func ~ImageDestinationMap (image: Image, destination: IntBox2D, map: GpuMap) { this draw(image, IntBox2D new(image size), destination, map) }
 
