@@ -101,5 +101,6 @@ GpuSurface: abstract class extends Canvas {
 	draw: func ~ImageDestinationMap (image: Image, destination: IntBox2D, map: GpuMap) { this draw(image, IntBox2D new(image size), destination, map) }
 
 	draw: virtual func ~mesh (image: Image, mesh: GpuMesh) { Debug raise("draw~mesh unimplemented!") }
+	readPixels: virtual func -> ByteBuffer { raise("readPixels unimplemented!") }
 }
 }

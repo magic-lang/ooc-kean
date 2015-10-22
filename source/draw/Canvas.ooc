@@ -49,6 +49,4 @@ Canvas: abstract class {
 		this drawLines(positions)
 		positions free()
 	}
-
-	readPixels: virtual func -> ByteBuffer { raise("readPixels unimplemented!") }
 }
