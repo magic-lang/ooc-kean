@@ -22,9 +22,9 @@ import Pen
 Canvas: abstract class {
 	_size: IntSize2D
 	size ::= this _size
-	_pen: Pen
+	_pen := Pen new()
 	pen: Pen { get { this _pen } set(value) { this _pen = value } }
-	init: func (=_size) { this pen = Pen new() }
+	init: func (=_size)
 	drawPoint: virtual func (position: FloatPoint2D) {
 		list := VectorList<FloatPoint2D> new()
 		list add(position)
@@ -37,7 +37,7 @@ Canvas: abstract class {
 		this drawLines(list)
 		list free()
 	}
-	drawPoints: abstract func (pointList: VectorList<FloatPoint2D>) { raise("drawPoints unimplemented!") }
+	drawPoints: abstract func (pointList: VectorList<FloatPoint2D>)
 	drawLines: abstract func (lines: VectorList<FloatPoint2D>)
 	drawBox: virtual func (box: FloatBox2D) {
 		positions := VectorList<FloatPoint2D> new()
