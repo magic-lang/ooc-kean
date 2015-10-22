@@ -35,7 +35,7 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		readCharacter: Char
 		for (i in 0 .. rowDataLength) {
 			textBuilder := TextBuilder new()
-			while (i < rowDataLength && ((readCharacter = rowData[i]) != This delimiter)) {
+			while (i < rowDataLength && ((readCharacter = rowData take()[i]) != This delimiter)) {
 				++i
 				match (readCharacter) {
 					case ' ' =>
@@ -45,7 +45,7 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 					case '\r' =>
 						continue
 					case '"' =>
-						textBuilder append(this _extractStringLiteral(rowData, i&))
+						textBuilder append(this _extractStringLiteral(rowData take(), i&))
 					case =>
 						textBuilder append(readCharacter)
 				}

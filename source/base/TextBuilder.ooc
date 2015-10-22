@@ -114,7 +114,7 @@ TextBuilder: class {
 			++position
 			c = this _data[position] count
 		}
-		this _data[position][index]
+		this _data[position] take()[index]
 	}
 	operator + (other: This) -> This {
 		result := This new(this).append(other)
