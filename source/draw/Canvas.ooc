@@ -24,7 +24,18 @@ Canvas: abstract class {
 	size ::= this _size
 	_pen := Pen new()
 	pen: Pen { get { this _pen } set(value) { this _pen = value } }
-	init: func (=_size)
+	viewport: IntBox2D { get set }
+	blend: Bool { get set }
+	opacity: Float { get set }
+	_transform := FloatTransform3D identity
+	transform: FloatTransform3D { get { this _transform } set(value) { this _transform = value } }
+	focalLength: Float { get set }
+	init: func (=_size) {
+		this viewport = IntBox2D new(size)
+		this focalLength = 0.0f
+		this blend = false
+		this opacity = 1.0f
+	}
 	drawPoint: virtual func (position: FloatPoint2D) {
 		list := VectorList<FloatPoint2D> new()
 		list add(position)

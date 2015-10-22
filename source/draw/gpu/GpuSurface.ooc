@@ -23,17 +23,17 @@ import GpuContext, GpuMap, GpuImage, GpuMesh
 
 version(!gpuOff) {
 GpuSurface: abstract class extends Canvas {
-	viewport: IntBox2D { get set }
-	blend: Bool { get set }
-	opacity: Float { get set }
 	_context: GpuContext
 	_model: FloatTransform3D
-	_view: FloatTransform3D
+	_view := FloatTransform3D identity
 	_projection: FloatTransform3D
-	_toLocal: FloatTransform3D
+	_toLocal := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
 	transform: FloatTransform3D {
-		get { this _toLocal * this _view * this _toLocal }
-		set(value) { this _view = this _toLocal * value * this _toLocal }
+		get { this _transform }
+		set(value) {
+			this _transform = value
+			this _view = this _toLocal * value * this _toLocal
+		}
 	}
 	_focalLength: Float
 	focalLength: Float {
@@ -43,8 +43,8 @@ GpuSurface: abstract class extends Canvas {
 			if (this _focalLength > 0.0f) {
 				a := 2.0f * this _focalLength / this size width
 				f := -(this _coordinateTransform e as Float) * 2.0f * this _focalLength / this size height
-				k := (this farPlane + this nearPlane) / (this farPlane - this nearPlane)
-				o := 2.0f * this farPlane * this nearPlane / (this farPlane - this nearPlane)
+				k := (this _farPlane + this _nearPlane) / (this _farPlane - this _nearPlane)
+				o := 2.0f * this _farPlane * this _nearPlane / (this _farPlane - this _nearPlane)
 				this _projection = FloatTransform3D new(a, 0.0f, 0.0f, 0.0f, 0.0f, f, 0.0f, 0.0f, 0.0f, 0.0f, k, -1.0f, 0.0f, 0.0f, o, 0.0f)
 			}
 			else
@@ -52,21 +52,11 @@ GpuSurface: abstract class extends Canvas {
 			this _model = this _createModelTransform(IntBox2D new(this size))
 		}
 	}
-	nearPlane: Float { get set }
-	farPlane: Float { get set }
+	_nearPlane := 1.0f
+	_farPlane := 10000.0f
 	_defaultMap: GpuMap
 	_coordinateTransform := IntTransform2D identity
-	init: func (size: IntSize2D, =_context, =_defaultMap, =_coordinateTransform) {
-		super(size)
-		this _toLocal = FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
-		this viewport = IntBox2D new(size)
-		this focalLength = 0.0f
-		this nearPlane = 1.0f
-		this farPlane = 10000.0f
-		this _view = FloatTransform3D identity
-		this blend = false
-		this opacity = 1.0f
-	}
+	init: func (size: IntSize2D, =_context, =_defaultMap, =_coordinateTransform) { super(size) }
 	_createModelTransform: func (box: IntBox2D) -> FloatTransform3D {
 		toReference := FloatTransform3D createTranslation((box size width - this size width) / 2, (this size height - box size height) / 2, 0.0f)
 		translation := this _toLocal * FloatTransform3D createTranslation(box leftTop x, box leftTop y, this focalLength) * this _toLocal
