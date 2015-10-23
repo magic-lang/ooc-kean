@@ -121,22 +121,27 @@ RasterBgra: class extends RasterPacked {
 		This new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y))
 	}
 	convertFrom: static func (original: RasterImage) -> This {
-		result := This new(original size)
-		row := result buffer pointer as Long
-		rowLength := result stride
-		rowEnd := row + rowLength
-		destination := row as ColorBgra*
-		f := func (color: ColorBgr) {
-			(destination as ColorBgra*)@ = ColorBgra new(color, 255)
-			destination += 1
-			if (destination >= rowEnd) {
-				row += result stride
-				destination = row as ColorBgra*
-				rowEnd = row + rowLength
+		result: This
+		if (original instanceOf?(This))
+			result = (original as This) copy()
+		else {
+			result = This new(original size)
+			row := result buffer pointer as Long
+			rowLength := result stride
+			rowEnd := row + rowLength
+			destination := row as ColorBgra*
+			f := func (color: ColorBgr) {
+				(destination as ColorBgra*)@ = ColorBgra new(color, 255)
+				destination += 1
+				if (destination >= rowEnd) {
+					row += result stride
+					destination = row as ColorBgra*
+					rowEnd = row + rowLength
+				}
 			}
+			original apply(f)
+			(f as Closure) dispose()
 		}
-		original apply(f)
-		(f as Closure) dispose()
 		result
 	}
 	operator [] (x, y: Int) -> ColorBgra { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorBgra* + x)@ : ColorBgra new(0, 0, 0, 0) }

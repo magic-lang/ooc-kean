@@ -118,21 +118,27 @@ RasterUv: class extends RasterPacked {
 		result
 	}
 	convertFrom: static func (original: RasterImage) -> This {
-		result := This new(original size)
-		row := result buffer pointer
-		rowLength := result size width
-		rowEnd := row as ColorUv* + rowLength
-		destination := row as ColorUv*
-		f := func (color: ColorYuv) {
-			(destination as ColorUv*)@ = ColorUv new(color u, color v)
-			destination += 1
-			if (destination >= rowEnd) {
-				row += result stride
-				destination = row as ColorUv*
-				rowEnd = row as ColorUv* + rowLength
+		result: This
+		if (original instanceOf?(This))
+			result = (original as This) copy()
+		else {
+			result = This new(original size)
+			row := result buffer pointer
+			rowLength := result size width
+			rowEnd := row as ColorUv* + rowLength
+			destination := row as ColorUv*
+			f := func (color: ColorYuv) {
+				(destination as ColorUv*)@ = ColorUv new(color u, color v)
+				destination += 1
+				if (destination >= rowEnd) {
+					row += result stride
+					destination = row as ColorUv*
+					rowEnd = row as ColorUv* + rowLength
+				}
 			}
+			original apply(f)
+			(f as Closure) dispose()
 		}
-		original apply(f)
 		result
 	}
 

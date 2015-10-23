@@ -182,41 +182,45 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		this uv[x / 2, y / 2] = ColorUv new(value u, value v)
 	}
 	convertFrom: static func (original: RasterImage) -> This {
-		result := This new(original size)
-		//		"RasterYuv420 init ~fromRasterImage, original: (#{original size}), this: (#{this size}), y stride #{this y stride}" println()
-		y := 0
-		x := 0
-		width := result size width
-		yRow := result y buffer pointer
-		yDestination := yRow
-		uvRow := result uv buffer pointer
-		uvDestination := uvRow
-		totalOffset := 0
-		//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
-		f := func (color: ColorYuv) {
-			yDestination@ = color y
-			yDestination += 1
-			if (x % 2 == 0 && y % 2 == 0 && totalOffset < result uv buffer size) {
-				uvDestination@ = color v
-				uvDestination += 1
-				uvDestination@ = color u
-				uvDestination += 1
-				totalOffset += 2
-			}
-			x += 1
-			if (x >= width) {
-				x = 0
-				y += 1
-				yRow += result y stride
-				yDestination = yRow
-				if (y % 2 == 0) {
-					uvRow += result uv stride
-					uvDestination = uvRow
+		result: This
+		if (original instanceOf?(This))
+			result = (original as This) copy()
+		else {
+			result = This new(original size)
+			y := 0
+			x := 0
+			width := result size width
+			yRow := result y buffer pointer
+			yDestination := yRow
+			uvRow := result uv buffer pointer
+			uvDestination := uvRow
+			totalOffset := 0
+			//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
+			f := func (color: ColorYuv) {
+				yDestination@ = color y
+				yDestination += 1
+				if (x % 2 == 0 && y % 2 == 0 && totalOffset < result uv buffer size) {
+					uvDestination@ = color v
+					uvDestination += 1
+					uvDestination@ = color u
+					uvDestination += 1
+					totalOffset += 2
+				}
+				x += 1
+				if (x >= width) {
+					x = 0
+					y += 1
+					yRow += result y stride
+					yDestination = yRow
+					if (y % 2 == 0) {
+						uvRow += result uv stride
+						uvDestination = uvRow
+					}
 				}
 			}
+			original apply(f)
+			(f as Closure) dispose()
 		}
-		original apply(f)
-		(f as Closure) dispose()
 		result
 	}
 	open: static func (filename: String) -> This {
