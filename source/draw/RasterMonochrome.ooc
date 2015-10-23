@@ -41,14 +41,12 @@ RasterMonochrome: class extends RasterPacked {
 		this apply(ColorConvert fromMonochrome(action))
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
-		end := this buffer pointer as Long + this buffer size
-		rowLength := this size width * this bytesPerPixel
-		for (row in this buffer pointer as Long .. end) {
-			rowEnd := row + rowLength
-			for (source: Long in row .. rowEnd)
-				action((source as ColorMonochrome*)@)
-			row += this stride - 1
-		}
+		pointer := this buffer pointer as ColorMonochrome*
+		for (row in 0 .. this height)
+			for (column in 0 .. this width) {
+				pixel := pointer + row * this stride + column
+				action(pixel@)
+			}
 	}
 	resizeTo: override func (size: IntSize2D) -> This {
 		result: This
