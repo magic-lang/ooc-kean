@@ -6,7 +6,7 @@ Queue: abstract class <T> {
 	empty ::= this count == 0
 	init: func
 	clear: abstract func
-	enqueue: virtual func (item: T) //FIXME: This should be abstract but it messes up for sub-subclasses that overrides
+	enqueue: abstract func (item: T)
 	dequeue: abstract func ~default (fallback: T) -> T
 	peek: abstract func ~default (fallback: T) -> T
 }
@@ -34,7 +34,7 @@ VectorQueue: class <T> extends Queue<T> {
 		this _tail = 0
 		this _count = 0
 	}
-	enqueue: override func (item: T) {
+	enqueue: func (item: T) {
 		if (this full)
 			this _resize()
 		this _backend[this _tail] = item
