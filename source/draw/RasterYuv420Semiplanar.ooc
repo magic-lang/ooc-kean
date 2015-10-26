@@ -138,7 +138,9 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		}
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
-		this apply(ColorConvert fromYuv(action))
+		convert := ColorConvert fromYuv(action)
+		this apply(convert)
+		(convert as Closure) dispose()
 	}
 	apply: func ~yuv (action: Func (ColorYuv)) {
 		yRow := this y buffer pointer
