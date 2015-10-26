@@ -29,18 +29,18 @@ OwnedBuffer: cover {
 	init: func@ {
 		this init(null, 0, Owner Unknown)
 	}
-	init: func@ ~fromSize (size: Int, owner := Owner Caller) {
+	init: func@ ~fromSize (size: Int, owner := Owner Receiver) {
 		this init(gc_malloc(size), size, owner)
 	}
 	init: func@ ~fromData (=_pointer, =_size, =_owner)
 	take: func -> This { // call by value -> modifies copy of cover
-		if (this _owner == Owner Callee && this _pointer != null)
-			this _owner = Owner Caller
+		if (this _owner == Owner Receiver && this _pointer != null)
+			this _owner = Owner Sender
 		this
 	}
 	give: func -> This { // call by value -> modifies copy of cover
-		if (this _owner == Owner Caller && this _pointer != null)
-			this _owner = Owner Callee
+		if (this _owner == Owner Sender && this _pointer != null)
+			this _owner = Owner Receiver
 		this
 	}
 	claim: func -> This {
@@ -74,7 +74,7 @@ OwnedBuffer: cover {
 		if (this _pointer != null && this _size != 0) {
 			result = This new(this _size)
 			this copyTo(result)
-			this _owner = Owner Caller
+			this _owner = Owner Receiver
 		} else
 			result = this
 		result
