@@ -292,7 +292,7 @@ Quaternion: cover {
 
 		// TODO: Implement Newton-Raphson for better estimation of max(eigenvalue) (Eq. 70 in the article).
 		// For this, the adjugate and determinant matrix operations are needed
-		maximumEigenvalue := 1.0f
+		maximumEigenvalue := This _approximateMaximumEigenvalueForQuest(matrixQuantityS, vectorQuantityZ, 1.0f, 5)
 		linearCoefficients := ((maximumEigenvalue + attitudeProfile trace()) * FloatMatrix identity(3) - matrixQuantityS)
 		gibbsVector := linearCoefficients solve(vectorQuantityZ)
 
@@ -314,6 +314,29 @@ Quaternion: cover {
 		gibbsVector free()
 		quaternionValues free()
 		result
+	}
+	_approximateMaximumEigenvalueForQuest: static func (matrixQuantityS, vectorQuantityZ: FloatMatrix, initialGuess: Float, maximumIterationCount := 20) -> Float {
+		sigma := 0.5f * matrixQuantityS trace()
+		constantA := sigma squared() - matrixQuantityS adjugate() trace()
+		temporary := vectorQuantityZ transpose() * vectorQuantityZ
+		constantB := sigma squared() + temporary[0, 0]
+		temporary free()
+		temporary = vectorQuantityZ transpose() * matrixQuantityS * vectorQuantityZ
+		constantC := matrixQuantityS determinant() + temporary[0, 0]
+		temporary free()
+		temporary = vectorQuantityZ transpose() * matrixQuantityS * matrixQuantityS * vectorQuantityZ
+		constantD := temporary[0, 0]
+		temporary free()
+
+		for (_ in 0 .. maximumIterationCount) {
+			functionValue := pow(initialGuess, 4) - (constantA + constantB) * initialGuess squared() - constantC * initialGuess + (constantA * constantB + constantC * sigma - constantD)
+			derivativeValue := 4 * pow(initialGuess, 3) + 2 * (constantA + constantB) * initialGuess - constantC
+			fraction := functionValue / derivativeValue
+			initialGuess -= fraction
+			if (Float absolute(fraction) < 1.0e-6f)
+				break
+		}
+		initialGuess
 	}
 	_createVectorMeasurementsForQuest: static func (quaternions: VectorList<This>) -> (FloatMatrix, FloatMatrix) {
 		referenceVectors := FloatMatrix new(3 * quaternions count, 3) take()
