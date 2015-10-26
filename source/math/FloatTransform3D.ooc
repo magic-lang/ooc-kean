@@ -37,7 +37,7 @@ FloatTransform3D: cover {
 		result := 0.0f
 		version (safe) {
 			if (x < 0 || x > 3 || y < 0 || y > 3)
-				raise("Out of bounds in FloatTransform3D get operator")
+				raise("Out of bounds in FloatTransform3D get operator (#{x}, #{y})")
 		}
 		match (x) {
 			case 0 =>
@@ -93,10 +93,8 @@ FloatTransform3D: cover {
 		// If the determinant is 0, the resulting transform will be full of NaN values.
 		// No FloatTransform3D instance should have a determinant of 0, so
 		// throw an exception, because something has gone wrong, somewhere.
-		version (safe) {
-			if (determinant == 0)
-				raise("Determinant is zero in FloatTransform3D inverse()")
-		}
+		if (determinant == 0)
+			raise("Determinant is zero in FloatTransform3D inverse()")
 		a := (this f * this k * this p + this j * this o * this h + this n * this g * this l - this f * this o * this l - this j * this g * this p - this n * this k * this h) / determinant
 		e := (this e * this o * this l + this i * this g * this p + this m * this k * this h - this e * this k * this p - this i * this o * this h - this m * this g * this l) / determinant
 		i := (this e * this j * this p + this i * this n * this h + this m * this f * this l - this e * this n * this l - this i * this f * this p - this m * this j * this h) / determinant

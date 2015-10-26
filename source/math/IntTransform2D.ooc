@@ -32,7 +32,7 @@ IntTransform2D: cover {
 	operator [] (x, y: Int) -> Int {
 		version (safe) {
 			if (x < 0 || x > 2 || y < 0 || y > 2)
-				raise("Out of bounds in IntTransform2D get operator")
+				raise("Out of bounds in IntTransform2D get operator (#{x}, #{y})")
 		}
 		result := 0
 		match (x) {
@@ -61,10 +61,8 @@ IntTransform2D: cover {
 	translation ::= IntSize2D new(this g, this h)
 	inverse: This { get {
 		determinant := this determinant
-		version (safe) {
-			if (determinant == 0)
-				raise("Determinant is zero in FloatTransform2D inverse()")
-		}
+		if (determinant == 0)
+			raise("Determinant is zero in FloatTransform2D inverse()")
 		This new(
 			(this e * this i - this h * this f) / determinant,
 			(this h * this c - this b * this i) / determinant,
