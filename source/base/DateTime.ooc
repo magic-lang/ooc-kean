@@ -279,12 +279,12 @@ DateTime: cover {
 	kean_base_dateTime_fromDateTime: unmangled static func (year, month, day, hour, minute, second, millisecond: Int) -> This {
 		This new(year, month, day, hour, minute, second, millisecond)
 	}
-	kean_base_dateTime_now: unmangled static func -> This { This now }
-	kean_base_dateTime_millisecond: unmangled func -> Int { this millisecond() }
-	kean_base_dateTime_second: unmangled func -> Int { this second() }
-	kean_base_dateTime_minute: unmangled func -> Int { this minute() }
-	kean_base_dateTime_hour: unmangled func -> Int { this hour() }
-	kean_base_dateTime_day: unmangled func -> Int { this day() }
-	kean_base_dateTime_month: unmangled func -> Int { this month() }
-	kean_base_dateTime_year: unmangled func -> Int { this year() }
+	kean_base_dateTime_getNow: unmangled static func -> This { This now }
+	kean_base_dateTime_getMillisecond: unmangled func -> Int { this millisecond() }
+	kean_base_dateTime_getSecond: unmangled func -> Int { this second() }
+	kean_base_dateTime_getMinute: unmangled func -> Int { this minute() }
+	kean_base_dateTime_getHour: unmangled func -> Int { this hour() }
+	kean_base_dateTime_getDay: unmangled func -> Int { this day() }
+	kean_base_dateTime_getMonth: unmangled func -> Int { this month() }
+	kean_base_dateTime_getYear: unmangled func -> Int { this year() }
 }

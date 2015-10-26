@@ -151,25 +151,19 @@ TimeSpan: cover {
 	kean_base_timeSpan_new: unmangled static func (ticks: Int64) -> This { This new(ticks) }
 	kean_base_timeSpan_fromData: unmangled static func (hour, minute, second, millisecond: Int) -> This { This new(hour, minute, second, millisecond) }
 	kean_base_timeSpan_getTicks: unmangled func -> Int64 { this _ticks }
-	kean_base_timeSpan_negated: unmangled func -> This { this negate() }
-	kean_base_timeSpan_elapsedMilliseconds: unmangled func -> Int64 { this elapsedMilliseconds() }
-	kean_base_timeSpan_elapsedSeconds: unmangled func -> Int64 { this elapsedSeconds() }
-	kean_base_timeSpan_elapsedMinutes: unmangled func -> Int64 { this elapsedMinutes() }
-	kean_base_timeSpan_elapsedHours: unmangled func -> Int64 { this elapsedHours() }
-	kean_base_timeSpan_elapsedDays: unmangled func -> Int64 { this elapsedDays() }
-	kean_base_timeSpan_elapsedWeeks: unmangled func -> Int64 { this elapsedWeeks() }
-	kean_base_timeSpan_millisecond: unmangled static func -> This { This millisecond() }
-	kean_base_timeSpan_milliseconds: unmangled static func (count: Double) -> This { This milliseconds(count) }
-	kean_base_timeSpan_second: unmangled static func -> This { This second() }
-	kean_base_timeSpan_seconds: unmangled static func (count: Double) -> This { This seconds(count) }
-	kean_base_timeSpan_minute: unmangled static func -> This { This minute() }
-	kean_base_timeSpan_minutes: unmangled static func (count: Double) -> This { This minutes(count) }
-	kean_base_timeSpan_hour: unmangled static func -> This { This hour() }
-	kean_base_timeSpan_hours: unmangled static func (count: Double) -> This { This hours(count) }
-	kean_base_timeSpan_day: unmangled static func -> This { This day() }
-	kean_base_timeSpan_days: unmangled static func (count: Double) -> This { This days(count) }
-	kean_base_timeSpan_week: unmangled static func -> This { This week() }
-	kean_base_timeSpan_weeks: unmangled static func (count: Double) -> This { This weeks(count) }
+	kean_base_timeSpan_getNegated: unmangled func -> This { this negate() }
+	kean_base_timeSpan_getTotalMilliseconds: unmangled func -> Int64 { this elapsedMilliseconds() }
+	kean_base_timeSpan_getTotalSeconds: unmangled func -> Int64 { this elapsedSeconds() }
+	kean_base_timeSpan_getTotalMinutes: unmangled func -> Int64 { this elapsedMinutes() }
+	kean_base_timeSpan_getTotalHours: unmangled func -> Int64 { this elapsedHours() }
+	kean_base_timeSpan_getTotalDays: unmangled func -> Int64 { this elapsedDays() }
+	kean_base_timeSpan_getTotalWeeks: unmangled func -> Int64 { this elapsedWeeks() }
+	kean_base_timeSpan_fromMilliseconds: unmangled static func (count: Double) -> This { This milliseconds(count) }
+	kean_base_timeSpan_fromSeconds: unmangled static func (count: Double) -> This { This seconds(count) }
+	kean_base_timeSpan_fromMinutes: unmangled static func (count: Double) -> This { This minutes(count) }
+	kean_base_timeSpan_fromHours: unmangled static func (count: Double) -> This { This hours(count) }
+	kean_base_timeSpan_fromDays: unmangled static func (count: Double) -> This { This days(count) }
+	kean_base_timeSpan_fromWeeks: unmangled static func (count: Double) -> This { This weeks(count) }
 }
 
 operator + (left: Int, right: TimeSpan) -> TimeSpan { right + left }
