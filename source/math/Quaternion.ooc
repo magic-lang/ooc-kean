@@ -276,56 +276,60 @@ Quaternion: cover {
 		// Z - vectorQuantityZ
 		// TODO: Fix singularity problem when the angle is close to PI, using sequential rotations
 		vectorCount := 3 * quaternions count
-		referenceVectors := FloatMatrix new(vectorCount, 3)
-		observationVectors := FloatMatrix new(vectorCount, 3)
-		This _createVectorMeasurementsForQuest(quaternions, referenceVectors, observationVectors)
+		(referenceVectors, observationVectors) := This _createVectorMeasurementsForQuest(quaternions)
 		This _normalizeFloatArray(weights, quaternions count)
 
-		attitudeProfile := FloatMatrix new(3, 3)
+		attitudeProfile := FloatMatrix new(3, 3) take()
 		for (currentVector in 0 .. vectorCount)
 			attitudeProfile += weights[currentVector / 3] / 3.0f * observationVectors getColumn(currentVector) * referenceVectors getColumn(currentVector) transpose()
-		matrixQuantityS := attitudeProfile + attitudeProfile transpose()
+		matrixQuantityS := (attitudeProfile + attitudeProfile transpose()) take()
 
+		vectorQuantityZ := FloatMatrix new(1, 3) take()
 		temporaryZ := FloatPoint3D new()
 		for (currentVector in 0 .. vectorCount)
 			temporaryZ += weights[currentVector / 3] / 3.0f * FloatPoint3D new(observationVectors[currentVector, 0], observationVectors[currentVector, 1], observationVectors[currentVector, 2]) vectorProduct(FloatPoint3D new(referenceVectors[currentVector, 0], referenceVectors[currentVector, 1], referenceVectors[currentVector, 2]))
-		(vectorQuantityZ := FloatMatrix new(1, 3)) setVertical(0, 0, temporaryZ)
+		vectorQuantityZ setVertical(0, 0, temporaryZ)
 
 		// TODO: Implement Newton-Raphson for better estimation of max(eigenvalue) (Eq. 70 in the article).
 		// For this, the adjugate and determinant matrix operations are needed
 		maximumEigenvalue := 1.0f
-		gibbsVector := ((maximumEigenvalue + attitudeProfile trace()) * FloatMatrix identity(3) - matrixQuantityS) solve(vectorQuantityZ)
+		linearCoefficients := ((maximumEigenvalue + attitudeProfile trace()) * FloatMatrix identity(3) - matrixQuantityS)
+		gibbsVector := linearCoefficients solve(vectorQuantityZ)
 
-		constant := 1.0f / sqrt(1.0f + ((gibbsVector transpose() * gibbsVector)[0, 0] as Float))
+		gibbsVectorSquaredNorm := 0.0f
+		for (index in 0 .. gibbsVector height)
+			gibbsVectorSquaredNorm += gibbsVector[0, index] squared()
 		vector := FloatMatrix new(1, 4)
-		vector [0, 3] =  1.0f
+		vector [0, 3] = 1.0f
 		for (index in 0 .. 3)
 			vector[index, 0] = gibbsVector[index, 0]
-		quaternionValues := constant * vector
+		quaternionValues := (1.0f / sqrt(1.0f + gibbsVectorSquaredNorm as Float)) * vector
 		result := This new(quaternionValues[3, 0], -quaternionValues[0, 0], -quaternionValues[1, 0], -quaternionValues[2, 0])
 
 		referenceVectors free()
 		observationVectors free()
 		attitudeProfile free()
-		vectorQuantityZ free()
 		matrixQuantityS free()
-		vector free()
+		vectorQuantityZ free()
 		gibbsVector free()
 		quaternionValues free()
 		result
 	}
-	_createVectorMeasurementsForQuest: static func (quaternions: VectorList<This>, V, W: FloatMatrix) {
+	_createVectorMeasurementsForQuest: static func (quaternions: VectorList<This>) -> (FloatMatrix, FloatMatrix) {
+		referenceVectors := FloatMatrix new(3 * quaternions count, 3) take()
+		observationVectors := FloatMatrix new(3 * quaternions count, 3) take()
 		xAxis := FloatPoint3D new(1.0f, 0.0f, 0.0f)
 		yAxis := FloatPoint3D new(0.0f, 1.0f, 0.0f)
 		zAxis := FloatPoint3D new(0.0f, 0.0f, 1.0f)
 		for (index in 0 .. quaternions count) {
-			V setVertical(index * 3, 0, xAxis)
-			V setVertical(index * 3 + 2, 0, zAxis)
-			V setVertical(index * 3 + 1, 0, yAxis)
-			W setVertical(index * 3, 0, quaternions[index] * xAxis)
-			W setVertical(index * 3 + 1, 0, quaternions[index] * yAxis)
-			W setVertical(index * 3 + 2, 0, quaternions[index] * zAxis)
+			referenceVectors setVertical(index * 3, 0, xAxis)
+			referenceVectors setVertical(index * 3 + 2, 0, zAxis)
+			referenceVectors setVertical(index * 3 + 1, 0, yAxis)
+			observationVectors setVertical(index * 3, 0, quaternions[index] * xAxis)
+			observationVectors setVertical(index * 3 + 1, 0, quaternions[index] * yAxis)
+			observationVectors setVertical(index * 3 + 2, 0, quaternions[index] * zAxis)
 		}
+		(referenceVectors, observationVectors)
 	}
 	_normalizeFloatArray: static func (array: Float[], length: Int) {
 		arraySum := 0.0f
