@@ -33,29 +33,29 @@ FloatTransform2D: cover {
 	a, b, c, d, e, f, g, h, i: Float
 	operator [] (x, y: Int) -> Float {
 		result := 0.0f
+		version (safe) {
+			if (x < 0 || x > 2 || y < 0 || y > 2)
+				raise("Out of bounds in FloatTransform2D get operator (#{x}, #{y})")
+		}
 		match (x) {
 			case 0 =>
 				match (y) {
 					case 0 => result = this a
 					case 1 => result = this b
 					case 2 => result = this c
-					case => OutOfBoundsException new(y, 3) throw()
 				}
 			case 1 =>
 				match (y) {
 					case 0 => result = this d
 					case 1 => result = this e
 					case 2 => result = this f
-					case => OutOfBoundsException new(y, 3) throw()
 				}
 			case 2 =>
 				match (y) {
 					case 0 => result = this g
 					case 1 => result = this h
 					case 2 => result = this i
-					case => OutOfBoundsException new(y, 3) throw()
 				}
-			case => OutOfBoundsException new(x, 3) throw()
 		}
 		result
 	}
@@ -68,6 +68,8 @@ FloatTransform2D: cover {
 	rotationZ ::= this b atan2(this a)
 	inverse: This { get {
 		determinant := this determinant
+		if (determinant == 0)
+			raise("Determinant is zero in FloatTransform2D inverse()")
 		This new(
 			(this e * this i - this h * this f) / determinant,
 			(this h * this c - this b * this i) / determinant,
