@@ -20,6 +20,7 @@ use ooc-collections
 import Constraints
 
 Fixture: abstract class {
+	totalTime: static Double
 	name: String
 	tests := VectorList<Test> new()
 	init: func (=name)
@@ -33,7 +34,7 @@ Fixture: abstract class {
 	run: func -> Bool {
 		failures := VectorList<TestFailedException> new()
 		result := true
-		This _print(this name + " ")
+		This _print(DateTime now toStringFormat("%hh:%mm:%ss") + " " + this name + " ")
 		timer := ClockTimer new() . start()
 		for (test in tests) {
 			This _expectCount = 0
@@ -49,7 +50,9 @@ Fixture: abstract class {
 			This _print(r ? "." : "f")
 		}
 		This _print(result ? " done" : " failed")
-		This _print(" in %.2f s\n" format(timer stop() / 1000.0))
+		testTime := timer stop() / 1000.0
+		This totalTime += testTime
+		This _print(" in %.2fs, total: %.2fs\n" format(testTime, This totalTime))
 		if (!result) {
 			for (f in failures) {
 				// If the constraint is a CompareConstraint and the value being tested is a Cell,
