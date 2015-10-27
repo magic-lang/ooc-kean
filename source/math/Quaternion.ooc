@@ -263,7 +263,7 @@ Quaternion: cover {
 		}
 		result
 	}
-	weightedQuaternionMean: static func (quaternions: VectorList<This>, weights: FloatVectorList) -> This {
+	weightedMean: static func (quaternions: VectorList<This>, weights: FloatVectorList) -> This {
 		// Implementation of the QUEST algorithm. Original publication:
 		// M.D. Shuster and S.D. Oh, "Three-Axis Attitude Determination from Vector Observations", 1981
 		// [http://www.malcolmdshuster.com/Pub_1981a_J_TRIAD-QUEST_scan.pdf]
