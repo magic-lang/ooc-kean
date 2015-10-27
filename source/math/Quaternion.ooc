@@ -13,8 +13,11 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+use ooc-collections
 import FloatPoint3D
+import FloatVectorList
 import FloatTransform3D
+import FloatMatrix
 import math
 
 Quaternion: cover {
@@ -259,6 +262,99 @@ Quaternion: cover {
 				)
 		}
 		result
+	}
+	weightedQuaternionMean: static func (quaternions: VectorList<This>, weights: FloatVectorList) -> This {
+		// Implementation of the QUEST algorithm. Original publication:
+		// M.D. Shuster and S.D. Oh, "Three-Axis Attitude Determination from Vector Observations", 1981
+		// [http://www.malcolmdshuster.com/Pub_1981a_J_TRIAD-QUEST_scan.pdf]
+		// Equation symbol - variable name conversions:
+		// B - attitudeProfile
+		// q - quaternionValues
+		// S - matrixQuantityS
+		// V - referenceVectors
+		// W - observationVectors
+		// Y - gibbsVector
+		// Z - vectorQuantityZ
+		// TODO: Fix singularity problem when the angle is close to PI, using sequential rotations
+		(referenceVectors, observationVectors) := This _createVectorMeasurementsForQuest(quaternions)
+		normalizedWeights := weights / weights sum
+
+		attitudeProfile := FloatMatrix new(3, 3) take()
+		for (currentVector in 0 .. referenceVectors width)
+			attitudeProfile += normalizedWeights[currentVector / 3] / 3.0f * observationVectors getColumn(currentVector) * referenceVectors getColumn(currentVector) transpose()
+		matrixQuantityS := (attitudeProfile + attitudeProfile transpose()) take()
+
+		vectorQuantityZ := FloatMatrix new(1, 3) take()
+		temporaryZ := FloatPoint3D new()
+		for (currentVector in 0 .. referenceVectors width) {
+			currentObservationVector := FloatPoint3D new(observationVectors[currentVector, 0], observationVectors[currentVector, 1], observationVectors[currentVector, 2])
+			currentReferenceVector := FloatPoint3D new(referenceVectors[currentVector, 0], referenceVectors[currentVector, 1], referenceVectors[currentVector, 2])
+			temporaryZ += normalizedWeights[currentVector / 3] / 3.0f * currentObservationVector vectorProduct(currentReferenceVector)
+		}
+		vectorQuantityZ setVertical(0, 0, temporaryZ)
+
+		maximumEigenvalue := This _approximateMaximumEigenvalueForQuest(matrixQuantityS, vectorQuantityZ, 1.0f, 5)
+		linearCoefficients := ((maximumEigenvalue + attitudeProfile trace()) * FloatMatrix identity(3) - matrixQuantityS)
+		gibbsVector := linearCoefficients solve(vectorQuantityZ)
+
+		gibbsVectorSquaredNorm := 0.0f
+		for (index in 0 .. gibbsVector height)
+			gibbsVectorSquaredNorm += gibbsVector[0, index] squared()
+		vector := FloatMatrix new(1, 4)
+		vector[0, 3] = 1.0f
+		for (index in 0 .. 3)
+			vector[index, 0] = gibbsVector[index, 0]
+		quaternionValues := (1.0f / sqrt(1.0f + gibbsVectorSquaredNorm)) * vector
+		result := This new(quaternionValues[3, 0], -quaternionValues[0, 0], -quaternionValues[1, 0], -quaternionValues[2, 0])
+
+		normalizedWeights free()
+		referenceVectors free()
+		observationVectors free()
+		attitudeProfile free()
+		matrixQuantityS free()
+		vectorQuantityZ free()
+		gibbsVector free()
+		quaternionValues free()
+		result
+	}
+	_approximateMaximumEigenvalueForQuest: static func (matrixQuantityS, vectorQuantityZ: FloatMatrix, initialGuess: Float, maximumIterationCount := 20) -> Float {
+		sigma := 0.5f * matrixQuantityS trace()
+		constantA := sigma squared() - matrixQuantityS adjugate() trace()
+		temporary := vectorQuantityZ transpose() * vectorQuantityZ
+		constantB := sigma squared() + temporary[0, 0]
+		temporary free()
+		temporary = vectorQuantityZ transpose() * matrixQuantityS * vectorQuantityZ
+		constantC := matrixQuantityS determinant() + temporary[0, 0]
+		temporary free()
+		temporary = vectorQuantityZ transpose() * matrixQuantityS * matrixQuantityS * vectorQuantityZ
+		constantD := temporary[0, 0]
+		temporary free()
+
+		for (_ in 0 .. maximumIterationCount) {
+			functionValue := pow(initialGuess, 4) - (constantA + constantB) * initialGuess squared() - constantC * initialGuess + (constantA * constantB + constantC * sigma - constantD)
+			derivativeValue := 4 * pow(initialGuess, 3) + 2 * (constantA + constantB) * initialGuess - constantC
+			fraction := functionValue / derivativeValue
+			initialGuess -= fraction
+			if (Float absolute(fraction) < 1.0e-6f)
+				break
+		}
+		initialGuess
+	}
+	_createVectorMeasurementsForQuest: static func (quaternions: VectorList<This>) -> (FloatMatrix, FloatMatrix) {
+		referenceVectors := FloatMatrix new(3 * quaternions count, 3) take()
+		observationVectors := FloatMatrix new(3 * quaternions count, 3) take()
+		xAxis := FloatPoint3D new(1.0f, 0.0f, 0.0f)
+		yAxis := FloatPoint3D new(0.0f, 1.0f, 0.0f)
+		zAxis := FloatPoint3D new(0.0f, 0.0f, 1.0f)
+		for (index in 0 .. quaternions count) {
+			referenceVectors setVertical(index * 3, 0, xAxis)
+			referenceVectors setVertical(index * 3 + 1, 0, yAxis)
+			referenceVectors setVertical(index * 3 + 2, 0, zAxis)
+			observationVectors setVertical(index * 3, 0, quaternions[index] * xAxis)
+			observationVectors setVertical(index * 3 + 1, 0, quaternions[index] * yAxis)
+			observationVectors setVertical(index * 3 + 2, 0, quaternions[index] * zAxis)
+		}
+		(referenceVectors, observationVectors)
 	}
 	toString: func -> String {
 		"Real: " << "%8f" formatFloat(this real) >>
