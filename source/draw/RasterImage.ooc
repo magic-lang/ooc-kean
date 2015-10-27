@@ -40,7 +40,7 @@ RasterImage: abstract class extends Image {
 	}
 	copy: abstract func -> This
 	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {
-		transform = (this transform toFloatTransform2D()) * transform * (this transform toFloatTransform2D()) inverse
+		transform = (this transform) * transform * (this transform) inverse
 		mappingTransform := FloatTransform2D createTranslation(this size width / 2, this size height / 2) * transform
 		upperLeft := mappingTransform * FloatPoint2D new(-size width / 2, -size width / 2)
 		upperRight := mappingTransform * FloatPoint2D new(size width / 2, -size width / 2)

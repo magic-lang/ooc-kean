@@ -29,7 +29,7 @@ OpenGLCanvas: class extends OpenGLSurface {
 	_renderTarget: GLFramebufferObject
 	context ::= this _context as OpenGLContext
 	init: func (=_target, context: OpenGLContext) {
-		super(this _target size, context, context defaultMap, IntTransform2D identity)
+		super(this _target size, context, context defaultMap, FloatTransform2D identity)
 		this _renderTarget = context _backend createFramebufferObject(this _target _backend as GLTexture, this _target size)
 	}
 	free: override func {

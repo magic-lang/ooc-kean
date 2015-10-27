@@ -25,7 +25,7 @@ import backend/GLRenderer
 version(!gpuOff) {
 OpenGLSurface: abstract class extends GpuSurface {
 	context ::= this _context as OpenGLContext
-	init: func (size: IntSize2D, context: OpenGLContext, defaultMap: GpuMap, coordinateTransform: IntTransform2D) {
+	init: func (size: IntSize2D, context: OpenGLContext, defaultMap: GpuMap, coordinateTransform: FloatTransform2D) {
 		super(size, context, defaultMap, coordinateTransform)
 	}
 	_bind: abstract func
