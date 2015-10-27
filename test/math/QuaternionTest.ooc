@@ -45,6 +45,10 @@ QuaternionTest: class extends Fixture {
 			expect(this quaternion3 != this quaternion4)
 			expect(this quaternion1 != this quaternion4, is false)
 		})
+		this add("properties", func {
+			expect(this quaternion7 isIdentity)
+			expect((this quaternion7 - this quaternion7) isNull)
+		})
 		this add("addition", func {
 			expect(this quaternion0 + this quaternion1 == this quaternion2)
 		})
@@ -54,11 +58,23 @@ QuaternionTest: class extends Fixture {
 		this add("multiplication", func {
 			expect(this quaternion0 * this quaternion1 == this quaternion3)
 		})
+		this add("dot product", func {
+			expect(this quaternion0 dotProduct(this quaternion1), is equal to(1410.25f) within(tolerance))
+		})
 		this add("scalarMultiplication", func {
 			expect((-1.0f) * this quaternion0 == -this quaternion0)
 		})
 		this add("norm", func {
 			expect(this quaternion0 norm, is equal to(65.5991592f))
+		})
+		this add("inverse", func {
+			inverse := this quaternion2 inverse
+			product := this quaternion2 * inverse
+			//productReal := 
+			expect(product real as Float, is equal to(1.0f) within(tolerance))
+			expect(product x as Float, is equal to(0.0f) within(tolerance))
+			expect(product y as Float, is equal to(0.0f) within(tolerance))
+			expect(product z as Float, is equal to(0.0f) within(tolerance))
 		})
 		this add("conjugate", func {
 			conjugate := quaternion5 conjugate
@@ -280,6 +296,9 @@ QuaternionTest: class extends Fixture {
 			expect(interpolated x, is equal to(0.05838604f) within(tolerance))
 			expect(interpolated y, is equal to(0.10923036f) within(tolerance))
 			expect(interpolated z, is equal to(0.99080002f) within(tolerance))
+		})
+		this add("toString", func {
+			expect(this quaternion0 toString() == "Real: 33.000000 Imaginary: 10.000000 -12.000000 54.500000")
 		})
 	}
 }
