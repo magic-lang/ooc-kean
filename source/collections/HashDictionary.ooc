@@ -53,21 +53,6 @@ HashDictionary: class {
 		}
 		result
 	}
-	getAsType: func <T>(key: String, T: Class, defaultValue: T) -> T {
-		result := defaultValue
-		if (this _hashBag contains?(key)) {
-			storedType := this _hashBag getClass(key)
-			entryValue := this _hashBag getEntry(key, storedType) value
-			if (storedType inheritsFrom?(Cell)) {
-				entryValueCell := (entryValue as Cell<T>*)@
-				if (T inheritsFrom?(entryValueCell T))
-					result = entryValueCell get()
-			}
-			else if (T inheritsFrom?(storedType))
-				result = entryValue as T
-		}
-		result
-	}
 	getClass: func (key: String) -> Class {
 		this _hashBag getClass(key)
 	}
@@ -100,7 +85,6 @@ HashDictionary: class {
 
 extend HashEntry {
 	dispose: func {
-//		free(this key as String _buffer)
 		free(this key)
 		free(this value)
 		if (this next != null) {
