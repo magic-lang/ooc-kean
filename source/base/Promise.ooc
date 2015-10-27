@@ -93,7 +93,6 @@ _ThreadFuture: class <T> extends Future<T> {
 	_result: Object
 	_action: Func
 	_thread: Thread
-	_hasCover := false
 	_threadAlive := true
 	init: func (task: Func -> T) {
 		super()
@@ -102,10 +101,8 @@ _ThreadFuture: class <T> extends Future<T> {
 			temporary := task()
 			if (T inheritsFrom?(Object))
 				this _result = temporary
-			else {
+			else
 				this _result = Cell<T> new(temporary)
-				this _hasCover = true
-			}
 			if (this _state != _PromiseState Cancelled)
 				this _state = _PromiseState Finished
 		}
@@ -134,12 +131,11 @@ _ThreadFuture: class <T> extends Future<T> {
 	}
 	getResult: func (defaultValue: T) -> T {
 		result := defaultValue
-		if (this _state == _PromiseState Finished) {
-			if (this _hasCover)
-				result = this _result as Cell<T> get()
-			else
+		if (this _state == _PromiseState Finished && this _result != null)
+			if (T inheritsFrom?(Object))
 				result = this _result
-		}
+			else
+				result = (this _result as Cell<T>) get()
 		result
 	}
 	cancel: override func -> Bool {
