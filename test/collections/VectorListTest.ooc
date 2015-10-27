@@ -21,6 +21,7 @@ use ooc-collections
 VectorListTest: class extends Fixture {
 	init: func {
 		super("VectorList")
+		tolerance := 0.00001f
 		this add("VectorList cover create", func {
 			vectorList := VectorList<Int> new() as VectorList<Int>
 
@@ -140,10 +141,15 @@ VectorListTest: class extends Fixture {
 			list add(4.0f)
 			slice := list getSlice(1, 2)
 			expect(slice count == 2)
-			expect(slice[0] == 2.0f)
-			expect(slice[1] == 3.0f)
+			expect(slice[0], is equal to(2.0f) within(tolerance))
+			expect(slice[1], is equal to(3.0f) within(tolerance))
+			sliceInto := VectorList<Float> new()
+			list getSliceInto(Range new(1, 2), sliceInto)
+			expect(sliceInto[0], is equal to(2.0f) within(tolerance))
+			expect(sliceInto[1], is equal to(3.0f) within(tolerance))
 			list free()
 			slice free()
+			sliceInto free()
 		})
 		this add("VectorList apply", func {
 			list := VectorList<Int> new()
@@ -154,6 +160,7 @@ VectorListTest: class extends Fixture {
 			list apply(|value|
 				expect(value, is equal to(c))
 				c += 1)
+			list free()
 		})
 		this add("VectorList modify", func {
 			list := VectorList<Int> new()
@@ -166,6 +173,7 @@ VectorListTest: class extends Fixture {
 			list apply(|value|
 				expect(value, is equal to(c))
 				c += 1)
+			list free()
 		})
 		this add("VectorList map", func {
 			list := VectorList<Int> new()
@@ -178,6 +186,50 @@ VectorListTest: class extends Fixture {
 			expect(newList[1], is equal to("2"))
 			expect(newList[2], is equal to("3"))
 			list free(); newList free()
+		})
+		this add("VectorList reverse", func {
+			list := VectorList<Int> new()
+			list add(8)
+			list add(16)
+			list add(64)
+			list add(128)
+			reversed := list reverse()
+			expect(reversed[0], is equal to(128))
+			expect(reversed[1], is equal to(64))
+			expect(reversed[2], is equal to(16))
+			expect(reversed[3], is equal to(8))
+			list free()
+			reversed free()
+		})
+		this add("VectorList remove", func {
+			list := VectorList<Int> new()
+			list add(8)
+			list add(16)
+			list add(32)
+			list add(64)
+			expect(list empty, is false)
+			while (!list empty) {
+				list removeAt(0)
+			}
+			expect(list empty, is true)
+			list free()
+		})
+		this add("VectorList direct vector access", func {
+			list := VectorList<Int> new()
+			list add(8)
+			list add(16)
+			list add(32)
+			point := list pointer as Int*
+			expect(point[0], is equal to(list[0]))
+			expect(point[1], is equal to(list[1]))
+			expect(point[2], is equal to(list[2]))
+			list free()
+		})
+		this add("VectorList sort", func {
+			//TODO Current way of sorting not supported by Rock
+		})
+		this add("VectorList fold", func {
+			//TODO Current way of folding not supported by Rock
 		})
 		this add("Iterator leak", func {
 			list := VectorList<Int> new()
@@ -195,8 +247,13 @@ VectorListTest: class extends Fixture {
 			list add(16)
 			list add(32)
 			iterator := list iterator()
+			expect(iterator hasNext?(), is true)
 			for ((index, item) in iterator)
 				expect(item, is equal to(list[index]))
+			expect(iterator hasNext?(), is false)
+			secondIterator := list iterator()
+			expect(secondIterator next(), is equal to(8))
+			secondIterator free()
 			iterator free()
 			list free()
 		})

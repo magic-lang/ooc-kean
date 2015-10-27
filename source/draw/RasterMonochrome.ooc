@@ -41,14 +41,12 @@ RasterMonochrome: class extends RasterPacked {
 		this apply(ColorConvert fromMonochrome(action))
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
-		end := this buffer pointer as Long + this buffer size
-		rowLength := this size width * this bytesPerPixel
-		for (row in this buffer pointer as Long .. end) {
-			rowEnd := row + rowLength
-			for (source: Long in row .. rowEnd)
-				action((source as ColorMonochrome*)@)
-			row += this stride - 1
-		}
+		pointer := this buffer pointer as ColorMonochrome*
+		for (row in 0 .. this height)
+			for (column in 0 .. this width) {
+				pixel := pointer + row * this stride + column
+				action(pixel@)
+			}
 	}
 	resizeTo: override func (size: IntSize2D) -> This {
 		result: This
@@ -103,14 +101,10 @@ RasterMonochrome: class extends RasterPacked {
 		}
 	}
 	open: static func (filename: String) -> This {
-		x, y, n: Int
+		x, y, imageComponents: Int
 		requiredComponents := 1
-		data := StbImage load(filename, x&, y&, n&, requiredComponents)
-		buffer := ByteBuffer new(x * y * requiredComponents)
-		// FIXME: Find a better way to do this using Dispose() or something
-		memcpy(buffer pointer, data, x * y * requiredComponents)
-		StbImage free(data)
-		This new(buffer, IntSize2D new(x, y))
+		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
+		This new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y))
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result := This new(original size)

@@ -24,15 +24,8 @@ FloatTransform3DTest: class extends Fixture {
 		})
 		this add("determinant", func {
 			expect(transform0 determinant, is equal to(6.0f) within(this precision))
-			exception := false
 			transform := FloatTransform3D new()
-			try {
-				value := transform inverse
-			} catch {
-				exception = true
-			}
-			expect(exception, is true)
-			expect(transform determinant, is equal to(0.0f))
+			expect(transform determinant, is equal to(0.0f) within(this precision))
 		})
 		this add("inverse transform", func {
 			transform := FloatTransform3D new(0.035711678574190f, 0.849129305868777f, 0.933993247757551f, 0.678735154857773f, 0.757740130578333f, 0.743132468124916f, 0.392227019534168f, 0.655477890177557f, 0.171186687811562f, 0.706046088019609f, 0.031832846377421f, 0.276922984960890f)

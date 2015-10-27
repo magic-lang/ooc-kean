@@ -223,7 +223,7 @@ FloatVectorList: class extends VectorList<Float> {
 		result := This new(size)
 		factor := 1.0f / (sqrt(2.0f * Float pi) * sigma)
 		for (i in 0 .. size)
-			result add(factor * pow(Float e, -0.5f * ((i - (size - 1.0f) / 2.0f) squared()) / (sigma squared())))
+			result add((factor * pow(Float e, -0.5f * ((i - (size - 1.0f) / 2.0f) squared()) / (sigma squared()))) as Float)
 		sum := result sum
 		for (i in 0 .. size)
 			result[i] = result[i] / sum

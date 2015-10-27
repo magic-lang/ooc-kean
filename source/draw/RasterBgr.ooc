@@ -35,22 +35,22 @@ RasterBgr: class extends RasterPacked {
 	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This { This new(this) }
 	apply: func ~bgr (action: Func(ColorBgr)) {
-		end := this buffer pointer as Long + this buffer size
-		rowLength := this size width * this bytesPerPixel
-		for (row: Long in this buffer pointer as Long .. end) {
-			rowEnd := row + rowLength
-			for (source: Long in row .. rowEnd) {
-				action((source as ColorBgr*)@)
-				source += 2
+		for (row in 0 .. this size height)
+			for (pixel in 0 .. this size width) {
+				pointer := this buffer pointer + pixel * this bytesPerPixel + row * this stride
+				color := (pointer as ColorBgr*)@
+				action(color)
 			}
-			row += this stride - 1
-		}
 	}
 	apply: func ~yuv (action: Func(ColorYuv)) {
-		this apply(ColorConvert fromBgr(action))
+		convert := ColorConvert fromBgr(action)
+		this apply(convert)
+		(convert as Closure) dispose()
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
-		this apply(ColorConvert fromBgr(action))
+		convert := ColorConvert fromBgr(action)
+		this apply(convert)
+		(convert as Closure) dispose()
 	}
 	distance: func (other: Image) -> Float {
 		result := 0.0f
@@ -105,14 +105,10 @@ RasterBgr: class extends RasterPacked {
 		}
 	}
 	open: static func (filename: String) -> This {
-		x, y, n: Int
+		x, y, imageComponents: Int
 		requiredComponents := 3
-		data := StbImage load(filename, x&, y&, n&, requiredComponents)
-		result := This new(IntSize2D new(x, y))
-		memcpy(result buffer pointer, data, x * y * requiredComponents)
-		// FIXME: Find a better way to do this using Dispose() or something
-		StbImage free(data)
-		result
+		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
+		This new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y))
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result := This new(original size)
@@ -130,6 +126,7 @@ RasterBgr: class extends RasterPacked {
 			}
 		}
 		original apply(f)
+		(f as Closure) dispose()
 		result
 	}
 	operator [] (x, y: Int) -> ColorBgr { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorBgr* + x)@ : ColorBgr new(0, 0, 0) }

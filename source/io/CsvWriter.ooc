@@ -17,7 +17,7 @@ CsvWriter: class {
 		for (i in 0 .. row count) {
 			value := TextBuilder new(row[i])
 			for (k in 0 .. row[i] count)
-				if (this _isWhitespace(row[i][k])) {
+				if (this _isWhitespace(row[i] take()[k])) {
 					value prepend('\"')
 					value append('\"')
 					break
