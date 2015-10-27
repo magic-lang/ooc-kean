@@ -185,7 +185,7 @@ FloatMatrix : cover {
 		y free(Owner Receiver)
 		this free(Owner Receiver)
 		result
-	}	
+	}
 	// Forward solver lower * x = y for a lower triangular matrix. Current object is y.
 	_forwardSubstitution: func (lower: This) -> This {
 		result := This new(this dimensions)
