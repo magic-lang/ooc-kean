@@ -34,7 +34,7 @@ FloatComplexTest: class extends Fixture {
 	complexNumberArray[2] = complexNumber2
 	complexNumberArray[3] = complexNumber3
 
-	tolerance := 0.00001
+	tolerance := 0.00001f
 
 	init: func {
 		super("FloatComplex")
@@ -47,25 +47,25 @@ FloatComplexTest: class extends Fixture {
 			expect((this complexNumber2 - this complexNumber1) imaginary, is equal to(this complexNumber0 imaginary))
 		})
 		this add("negative", func {
-			expect((-this complexNumber0) real == -2, is true)
-			expect((-this complexNumber0) imaginary == -1, is true)
+			expect((-this complexNumber0) real, is equal to(-2.0f) within(tolerance))
+			expect((-this complexNumber0) imaginary, is equal to(-1.0f) within(tolerance))
 		})
 		this add("mulitplication", func {
-			expect((this complexNumber0 * this complexNumber1) real == 4, is true)
-			expect((this complexNumber0 * this complexNumber1) imaginary == 7, is true)
+			expect((this complexNumber0 * this complexNumber1) real, is equal to(4.0f) within(tolerance))
+			expect((this complexNumber0 * this complexNumber1) imaginary, is equal to(7.0f) within(tolerance))
 		})
 		this add("scalar multiplication", func {
 			expect(((-1.0f) * this complexNumber0) real, is equal to((-complexNumber0) real))
 			expect(((-1.0f) * this complexNumber0) imaginary, is equal to((-complexNumber0) imaginary))
 		})
 		this add("division", func {
-			expect((complexNumber2 / complexNumber0) real == 2.6f, is true)
-			expect((complexNumber2 / complexNumber0) imaginary == 0.2f, is true)
+			expect((complexNumber2 / complexNumber0) real, is equal to(2.6f) within(tolerance))
+			expect((complexNumber2 / complexNumber0) imaginary, is equal to(0.2f) within(tolerance))
 		})
 		// TODO: Add tests for compound assignment operators
 		this add("equality", func {
-			expect(this complexNumber0 real == 2, is true)
-			expect(this complexNumber0 imaginary == 1, is true)
+			expect(this complexNumber0 real, is equal to(2.0f) within(tolerance))
+			expect(this complexNumber0 imaginary, is equal to(1.0f) within(tolerance))
 			expect(this complexNumber0 == this complexNumber0, is true)
 			expect(this complexNumber0 != this complexNumber1, is true)
 			expect(this complexNumber1 == this complexNumber2, is false)
@@ -83,6 +83,26 @@ FloatComplexTest: class extends Fixture {
 		this add("exponential", func {
 			expect(this complexNumber0 exponential() real, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary cos()) within(tolerance))
 			expect(this complexNumber0 exponential() imaginary, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary sin()) within(tolerance))
+			expect(this complexNumber2 exponential() logarithm() real, is equal to(this complexNumber2 real) within(tolerance))
+			expect(this complexNumber2 exponential() logarithm() imaginary, is equal to(this complexNumber2 imaginary) within(tolerance))
+		})
+		this add("conjugate", func {
+			expect(this complexNumber0 conjugate real, is equal to(this complexNumber0 real))
+			expect(this complexNumber0 conjugate imaginary, is equal to(-this complexNumber0 imaginary))
+			conjugateProduct := this complexNumber1 * this complexNumber1 conjugate
+			expect(conjugateProduct real, is equal to (this complexNumber1 absoluteValue * this complexNumber1 absoluteValue) within(tolerance))
+		})
+		this add("roots of unity", func {
+			expect(FloatComplex rootOfUnity(5, 0) real, is equal to(1.0f) within(0.01f))
+			expect(FloatComplex rootOfUnity(5, 0) imaginary, is equal to(0.0f) within(0.01f))
+			expect(FloatComplex rootOfUnity(5, 1) real, is equal to(0.309f) within(0.01f))
+			expect(FloatComplex rootOfUnity(5, 1) imaginary, is equal to(0.951f) within(0.01f))
+			expect(FloatComplex rootOfUnity(5, 2) real, is equal to(-0.809f) within(0.01f))
+			expect(FloatComplex rootOfUnity(5, 2) imaginary, is equal to(0.588f) within(0.01f))
+			expect(FloatComplex rootOfUnity(5, 3) real, is equal to(-0.809f) within(0.01f))
+			expect(FloatComplex rootOfUnity(5, 3) imaginary, is equal to(-0.588f) within(0.01f))
+			expect(FloatComplex rootOfUnity(5, 4) real, is equal to(0.309f) within(0.01f))
+			expect(FloatComplex rootOfUnity(5, 4) imaginary, is equal to(-0.951f) within(0.01f))
 		})
 	}
 }
