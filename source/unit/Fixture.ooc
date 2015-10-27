@@ -34,6 +34,7 @@ Fixture: abstract class {
 		failures := VectorList<TestFailedException> new()
 		result := true
 		This _print(this name + " ")
+		timer := ClockTimer new() . start()
 		for (test in tests) {
 			This _expectCount = 0
 			r := true
@@ -47,7 +48,8 @@ Fixture: abstract class {
 			}
 			This _print(r ? "." : "f")
 		}
-		This _print(result ? " done\n" : " failed\n")
+		This _print(result ? " done" : " failed")
+		This _print(" in %.2f s\n" format(timer stop() / 1000.0))
 		if (!result) {
 			for (f in failures) {
 				// If the constraint is a CompareConstraint and the value being tested is a Cell,
@@ -60,6 +62,7 @@ Fixture: abstract class {
 			This _testsFailed = true
 		}
 		failures free()
+		timer free()
 		result
 	}
 	createFailureMessage: func (failure: TestFailedException) -> Text {
