@@ -52,7 +52,7 @@ FloatBox2DTest: class extends Fixture {
 		})
 		this add("pad and shrink ~fraction", func {
 			box := FloatBox2D new(-2.0f, -1.0f, 3.0f, 3.0f)
-			paddedBox := box pad~fraction(0.1f)
+			paddedBox := box enlarge(0.1f)
 			shrunkBox := paddedBox shrink(1.0f / 11.0f)
 			expect(box == shrunkBox, is true)
 		})

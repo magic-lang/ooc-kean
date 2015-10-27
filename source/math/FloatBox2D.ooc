@@ -57,14 +57,14 @@ FloatBox2D: cover {
 	}
 	pad: func ~fromFloat (pad: Float) -> This { this pad(pad, pad, pad, pad) }
 	pad: func ~fromSize (pad: FloatSize2D) -> This { this pad(pad width, pad width, pad height, pad height) }
-	pad: func ~fraction (pad: Float) -> This {
-		this pad(pad * this size / 2.0f)
-	}
 	padFractionAverage: func (pad: Float) -> This {
 		this pad(pad * (this size width + this size height) / 2.0f)
 	}
+	enlarge: func (margin: Float) -> This {
+		this pad(margin * this size / 2.0f)
+	}
 	shrink: func ~fraction (margin: Float) -> This {
-		this pad(-margin * this height / 2.0f)
+		this pad(-margin * this size / 2.0f)
 	}
 	intersection: func (other: This) -> This {
 		left := Float maximum(this left, other left)
