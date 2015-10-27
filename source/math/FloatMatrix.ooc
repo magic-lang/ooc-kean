@@ -134,7 +134,7 @@ FloatMatrix : cover {
 	// Lup decomposition of the current matrix. Recall that Lup decomposition is A = LUP,
 	// where L is lower triangular, U is upper triangular, and P is a permutation matrix.
 	// See http://en.wikipedia.org/wiki/LUP_decomposition.
-	lupDecomposition: func -> (This, This, This) {
+	_lupDecomposition: func -> (This, This, This) {
 		if (!this isSquare)
 			raise("Invalid dimensions in FloatMatrix lupDecomposition")
 		order := this order
@@ -185,8 +185,7 @@ FloatMatrix : cover {
 		y free(Owner Receiver)
 		this free(Owner Receiver)
 		result
-	}
-	
+	}	
 	// Forward solver lower * x = y for a lower triangular matrix. Current object is y.
 	_forwardSubstitution: func (lower: This) -> This {
 		result := This new(this dimensions)
