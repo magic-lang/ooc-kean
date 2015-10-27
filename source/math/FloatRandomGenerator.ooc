@@ -33,11 +33,11 @@ FloatUniformRandomGenerator: class extends FloatRandomGenerator {
 	minimum ::= this _min
 	maximum ::= this _max
 	init: func (seed := Time microtime()) {
-		this _state = FloatRandomGenerator permanentSeed != 0 ? This permanentSeed : seed
+		this _state = This permanentSeed != 0 ? This permanentSeed : seed
 		this setRange(0.0f, 1.0f)
 	}
 	init: func ~withParameters (min, max: Float, seed := Time microtime()) {
-		this _state = FloatRandomGenerator permanentSeed != 0 ? This permanentSeed : seed
+		this _state = This permanentSeed != 0 ? This permanentSeed : seed
 		this setRange(min, max)
 	}
 	setRange: func (=_min, =_max) {

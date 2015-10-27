@@ -36,11 +36,11 @@ IntUniformRandomGenerator: class extends IntRandomGenerator {
 	maximum ::= this _max
 	init: func (seed := Time microtime()) {
 		this setRange(0, Int maximumValue)
-		this _state = IntRandomGenerator permanentSeed != 0 ? This permanentSeed : seed
+		this _state = This permanentSeed != 0 ? This permanentSeed : seed
 	}
 	init: func ~withParameters (min, max: Int, seed := Time microtime()) {
 		this setRange(min, max)
-		this _state = IntRandomGenerator permanentSeed != 0 ? This permanentSeed : seed
+		this _state = This permanentSeed != 0 ? This permanentSeed : seed
 	}
 	_generate: func -> Int {
 		// Based on Intel fast_rand()
