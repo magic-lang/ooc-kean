@@ -284,7 +284,7 @@ QuaternionTest: class extends Fixture {
 			expect(interpolated y, is equal to(0.10923036f) within(tolerance))
 			expect(interpolated z, is equal to(0.99080002f) within(tolerance))
 		})
-		this add("weightedMeanOfQuaternions_X", func {
+		this add("weightedQuaternionMean_X", func {
 			quaternionList clear()
 			quaternionList add(quaternion createRotationX(0.70f))
 			quaternionList add(quaternion createRotationX(0.78f))
@@ -292,9 +292,9 @@ QuaternionTest: class extends Fixture {
 			weights := Float[quaternionList count] new()
 			for (i in 0 .. quaternionList count)
 				weights[i] = 1.0f
-			expect(Quaternion weightedMeanOfQuaternions(quaternionList, weights) rotationX, is equal to(0.78f) within(0.001f))
+			expect(Quaternion weightedQuaternionMean(quaternionList, weights) rotationX, is equal to(0.78f) within(0.001f))
 		})
-		this add("weightedMeanOfQuaternions_Y", func {
+		this add("weightedQuaternionMean_Y", func {
 			quaternionList clear()
 			quaternionList add(quaternion createRotationY(0.12f))
 			quaternionList add(quaternion createRotationY(0.20f))
@@ -302,9 +302,9 @@ QuaternionTest: class extends Fixture {
 			weights := Float[quaternionList count] new()
 			for (i in 0 .. quaternionList count)
 				weights[i] = 1.0f
-			expect(Quaternion weightedMeanOfQuaternions(quaternionList, weights) rotationY, is equal to(0.20f) within(0.001f))
+			expect(Quaternion weightedQuaternionMean(quaternionList, weights) rotationY, is equal to(0.20f) within(0.001f))
 		})
-		this add("weightedMeanOfQuaternions_Z", func {
+		this add("weightedQuaternionMean_Z", func {
 			quaternionList clear()
 			quaternionList add(quaternion createRotationZ(-1.78f))
 			quaternionList add(quaternion createRotationZ(-1.7f))
@@ -312,7 +312,7 @@ QuaternionTest: class extends Fixture {
 			weights := Float[quaternionList count] new()
 			for (i in 0 .. quaternionList count)
 				weights[i] = 1.0f
-			expect(Quaternion weightedMeanOfQuaternions(quaternionList, weights) rotationZ, is equal to(-1.7f) within(0.001f))
+			expect(Quaternion weightedQuaternionMean(quaternionList, weights) rotationZ, is equal to(-1.7f) within(0.001f))
 		})
 	}
 }

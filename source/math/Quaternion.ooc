@@ -262,7 +262,7 @@ Quaternion: cover {
 		}
 		result
 	}
-	weightedMeanOfQuaternions: static func (quaternions: VectorList<This>, weights: Float[]) -> This {
+	weightedQuaternionMean: static func (quaternions: VectorList<This>, weights: Float[]) -> This {
 		// Implementation of the QUEST algorithm. Original publication:
 		// M.D. Shuster and S.D. Oh, "Three-Axis Attitude Determination from Vector Observations", 1981
 		// [http://www.malcolmdshuster.com/Pub_1981a_J_TRIAD-QUEST_scan.pdf]
@@ -275,23 +275,23 @@ Quaternion: cover {
 		// Y - gibbsVector
 		// Z - vectorQuantityZ
 		// TODO: Fix singularity problem when the angle is close to PI, using sequential rotations
-		vectorCount := 3 * quaternions count
 		(referenceVectors, observationVectors) := This _createVectorMeasurementsForQuest(quaternions)
-		This _normalizeFloatArray(weights, quaternions count)
+		This _normalizeFloatArrayForQuest(weights, quaternions count)
 
 		attitudeProfile := FloatMatrix new(3, 3) take()
-		for (currentVector in 0 .. vectorCount)
+		for (currentVector in 0 .. referenceVectors width)
 			attitudeProfile += weights[currentVector / 3] / 3.0f * observationVectors getColumn(currentVector) * referenceVectors getColumn(currentVector) transpose()
 		matrixQuantityS := (attitudeProfile + attitudeProfile transpose()) take()
 
 		vectorQuantityZ := FloatMatrix new(1, 3) take()
 		temporaryZ := FloatPoint3D new()
-		for (currentVector in 0 .. vectorCount)
-			temporaryZ += weights[currentVector / 3] / 3.0f * FloatPoint3D new(observationVectors[currentVector, 0], observationVectors[currentVector, 1], observationVectors[currentVector, 2]) vectorProduct(FloatPoint3D new(referenceVectors[currentVector, 0], referenceVectors[currentVector, 1], referenceVectors[currentVector, 2]))
+		for (currentVector in 0 .. referenceVectors width) {
+			currentObservationVector := FloatPoint3D new(observationVectors[currentVector, 0], observationVectors[currentVector, 1], observationVectors[currentVector, 2])
+			currentReferenceVector := FloatPoint3D new(referenceVectors[currentVector, 0], referenceVectors[currentVector, 1], referenceVectors[currentVector, 2])
+			temporaryZ += weights[currentVector / 3] / 3.0f * currentObservationVector vectorProduct(currentReferenceVector)
+		}
 		vectorQuantityZ setVertical(0, 0, temporaryZ)
 
-		// TODO: Implement Newton-Raphson for better estimation of max(eigenvalue) (Eq. 70 in the article).
-		// For this, the adjugate and determinant matrix operations are needed
 		maximumEigenvalue := This _approximateMaximumEigenvalueForQuest(matrixQuantityS, vectorQuantityZ, 1.0f, 5)
 		linearCoefficients := ((maximumEigenvalue + attitudeProfile trace()) * FloatMatrix identity(3) - matrixQuantityS)
 		gibbsVector := linearCoefficients solve(vectorQuantityZ)
@@ -300,10 +300,10 @@ Quaternion: cover {
 		for (index in 0 .. gibbsVector height)
 			gibbsVectorSquaredNorm += gibbsVector[0, index] squared()
 		vector := FloatMatrix new(1, 4)
-		vector [0, 3] = 1.0f
+		vector[0, 3] = 1.0f
 		for (index in 0 .. 3)
 			vector[index, 0] = gibbsVector[index, 0]
-		quaternionValues := (1.0f / sqrt(1.0f + gibbsVectorSquaredNorm as Float)) * vector
+		quaternionValues := (1.0f / sqrt(1.0f + gibbsVectorSquaredNorm)) * vector
 		result := This new(quaternionValues[3, 0], -quaternionValues[0, 0], -quaternionValues[1, 0], -quaternionValues[2, 0])
 
 		referenceVectors free()
@@ -346,15 +346,15 @@ Quaternion: cover {
 		zAxis := FloatPoint3D new(0.0f, 0.0f, 1.0f)
 		for (index in 0 .. quaternions count) {
 			referenceVectors setVertical(index * 3, 0, xAxis)
-			referenceVectors setVertical(index * 3 + 2, 0, zAxis)
 			referenceVectors setVertical(index * 3 + 1, 0, yAxis)
+			referenceVectors setVertical(index * 3 + 2, 0, zAxis)
 			observationVectors setVertical(index * 3, 0, quaternions[index] * xAxis)
 			observationVectors setVertical(index * 3 + 1, 0, quaternions[index] * yAxis)
 			observationVectors setVertical(index * 3 + 2, 0, quaternions[index] * zAxis)
 		}
 		(referenceVectors, observationVectors)
 	}
-	_normalizeFloatArray: static func (array: Float[], length: Int) {
+	_normalizeFloatArrayForQuest: static func (array: Float[], length: Int) {
 		arraySum := 0.0f
 		for (index in 0 .. length)
 			arraySum += array[index]
