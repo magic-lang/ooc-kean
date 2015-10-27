@@ -32,11 +32,11 @@ FloatUniformRandomGenerator: class extends FloatRandomGenerator {
 	_min, _max, _rangeCoefficient: Float
 	minimum ::= this _min
 	maximum ::= this _max
-	init: func (seed := Time microtime()) {
+	init: func (seed: UInt = Time microtime() as UInt) {
 		this _state = This permanentSeed != 0 ? This permanentSeed : seed
 		this setRange(0.0f, 1.0f)
 	}
-	init: func ~withParameters (min, max: Float, seed := Time microtime()) {
+	init: func ~withParameters (min, max: Float, seed: UInt = Time microtime() as UInt) {
 		this _state = This permanentSeed != 0 ? This permanentSeed : seed
 		this setRange(min, max)
 	}
@@ -62,10 +62,10 @@ FloatGaussianRandomGenerator: class extends FloatRandomGenerator {
 	init: func {
 		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f)
 	}
-	init: func ~withSeed (seed: Int) {
+	init: func ~withSeed (seed: UInt) {
 		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f, seed)
 	}
-	init: func ~withParameters (=_mu, =_sigma, seed := Time microtime()) {
+	init: func ~withParameters (=_mu, =_sigma, seed: UInt = Time microtime() as UInt) {
 		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f, seed)
 	}
 	init: func ~withBackend (=_backend)
