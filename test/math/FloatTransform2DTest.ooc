@@ -17,8 +17,6 @@ FloatTransform2DTest: class extends Fixture {
 		super("FloatTransform2D")
 		this add("equality", func {
 			transform := FloatTransform2D new()
-//			expect(this transform0, is equal to(this transform0))
-//			expect(this transform0 equals(this transform0 as Object), is true)
 			expect(this transform0 == this transform0, is true)
 			expect(this transform0 == this transform1, is false)
 			expect(this transform0 == transform, is false)
@@ -26,13 +24,13 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform == this transform0, is false)
 		})
 		this add("inverse transform", func {
-//			expect(this transform0 Inverse, is equal to(this transform3))
+			expect(this transform0 inverse == this transform3)
 		})
 		this add("multiplication, transform - transform", func {
-//			expect(this transform0 * this transform1, is equal to(this transform2))
+			expect(this transform0 * this transform1 == this transform2)
 		})
 		this add("multiplication, transform - point", func {
-//			expect(this transform0 * this point0, is equal to(this point1))
+			expect(this transform0 * this point0 == this point1)
 		})
 		this add("create zero transform", func {
 			transform := FloatTransform2D new()
@@ -60,7 +58,7 @@ FloatTransform2DTest: class extends Fixture {
 		})
 		this add("rotate", func {
 			identity := FloatTransform2D identity
-			angle := PI as Float / 9.0f
+			angle := Float pi / 9.0f
 			transform := FloatTransform2D createZRotation(angle)
 			transform = transform rotate(-angle)
 			expect(transform a, is equal to(1.0f) within(this precision))
@@ -104,7 +102,7 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform i, is equal to(1.0f) within(this precision))
 		})
 		this add("create rotation", func {
-			angle := PI as Float / 9.0f
+			angle := Float pi / 9.0f
 			transform := FloatTransform2D createZRotation(angle)
 			expect(transform a, is equal to(angle cos()) within(this precision))
 			expect(transform b, is equal to(angle sin()) within(this precision))

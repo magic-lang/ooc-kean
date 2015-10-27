@@ -28,7 +28,7 @@ FloatPoint2D: cover {
 	pNorm: func (p: Float) -> Float {
 		p == 1 ?
 		this x abs() + this y abs() :
-		(this x abs() pow(p) + this y abs() pow(p)) pow(1 / p)
+		(this x abs() pow(p) + this y abs() pow(p)) pow(1.0f / p)
 	}
 	scalarProduct: func (other: This) -> Float { this x * other x + this y * other y }
 	angle: func (other: This) -> Float {
