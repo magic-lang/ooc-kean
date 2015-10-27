@@ -72,10 +72,10 @@ IntGaussianRandomGenerator: class extends IntRandomGenerator {
 	init: func {
 		this _backend = FloatGaussianRandomGenerator new(0.0f, 1.0f)
 	}
-	init: func ~withSeed (seed: Int) {
+	init: func ~withSeed (seed: UInt) {
 		this _backend = FloatGaussianRandomGenerator new(0.0f, 1.0f, seed)
 	}
-	init: func ~withParameters (mu, sigma: Float, seed := Time microtime()) {
+	init: func ~withParameters (mu, sigma: Float, seed: UInt = Time microtime() as UInt) {
 		this _backend = FloatGaussianRandomGenerator new(mu, sigma, seed)
 	}
 	init: func ~withUniformBackend (=_backend)
