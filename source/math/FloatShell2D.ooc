@@ -28,9 +28,9 @@ FloatShell2D: cover {
 	isZero ::= this left == 0 && this right == 0 && this top == 0 && this bottom == 0
 	notZero ::= this left != 0 && this right != 0 && this top != 0 && this bottom != 0
 	init: func@ (=left, =right, =top, =bottom)
-	init: func@ ~fromFloat (value: Float) { this init(value, value) }
+	init: func@ ~fromFloat (value: Float) { this init(value, value, value, value) }
 	init: func@ ~fromFloats (x, y: Float) { this init(x, x, y, y) }
-	init: func@ ~default { this init(0.0f) }
+	init: func@ ~default { this init(0.0f, 0.0f, 0.0f, 0.0f) }
 	decrease: func (size: FloatSize2D) -> FloatBox2D { FloatBox2D new(this left, this top, size width - this left - this right, size height - this top - this bottom) }
 	increase: func (size: FloatSize2D) -> FloatBox2D { FloatBox2D new(-this left, -this right, size width + this left + this right, size height + this top + this bottom) }
 	decrease: func ~byBox (box: FloatBox2D) -> FloatBox2D {
