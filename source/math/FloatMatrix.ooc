@@ -331,7 +331,9 @@ FloatMatrix : cover {
 			if (this width != 3)
 				raise("Determinant implemented only for 3x3 matrices in FloatMatrix")
 		}
-		result := this[0, 0] * (this[1, 1] * this[2, 2] - this[2, 1] * this[1, 2]) - this[1, 0] * (this[0, 1] * this[2, 2] - this[2, 1] * this[0, 2]) + this[2, 0] * (this[0, 1] * this[1, 2] - this[1, 1] * this[0, 2])
+		result := this[0, 0] * (this[1, 1] * this[2, 2] - this[2, 1] * this[1, 2]) -
+			this[1, 0] * (this[0, 1] * this[2, 2] - this[2, 1] * this[0, 2]) +
+			this[2, 0] * (this[0, 1] * this[1, 2] - this[1, 1] * this[0, 2])
 		this free(Owner Receiver)
 		result
 	}
@@ -405,16 +407,16 @@ FloatMatrix : cover {
 			this elements[i] -= other elements[i]
 		other free(Owner Receiver)
 	}
+
+	operator * (other: Float) -> This {
+		result := This new(this dimensions)
+		for (i in 0 .. this dimensions area)
+			result elements[i] = other * this elements[i]
+		this free(Owner Receiver)
+		result
+	}
 }
 
 operator * (left: Float, right: FloatMatrix) -> FloatMatrix {
-	result := FloatMatrix new(right dimensions)
-	for (i in 0 .. right dimensions area)
-		result elements[i] = left * right elements[i]
-	right free(Owner Receiver)
-	result
-}
-
-operator * (left: FloatMatrix, right: Float) -> FloatMatrix {
 	right * left
 }
