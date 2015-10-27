@@ -289,9 +289,9 @@ QuaternionTest: class extends Fixture {
 			quaternionList add(quaternion createRotationX(0.70f))
 			quaternionList add(quaternion createRotationX(0.78f))
 			quaternionList add(quaternion createRotationX(0.86f))
-			weights := Float[quaternionList count] new()
+			weights := FloatVectorList new()
 			for (i in 0 .. quaternionList count)
-				weights[i] = 1.0f
+				weights add(1.0f)
 			expect(Quaternion weightedQuaternionMean(quaternionList, weights) rotationX, is equal to(0.78f) within(0.001f))
 		})
 		this add("weightedQuaternionMean_Y", func {
@@ -299,9 +299,9 @@ QuaternionTest: class extends Fixture {
 			quaternionList add(quaternion createRotationY(0.12f))
 			quaternionList add(quaternion createRotationY(0.20f))
 			quaternionList add(quaternion createRotationY(0.28f))
-			weights := Float[quaternionList count] new()
+			weights := FloatVectorList new()
 			for (i in 0 .. quaternionList count)
-				weights[i] = 1.0f
+				weights add(1.0f)
 			expect(Quaternion weightedQuaternionMean(quaternionList, weights) rotationY, is equal to(0.20f) within(0.001f))
 		})
 		this add("weightedQuaternionMean_Z", func {
@@ -309,9 +309,9 @@ QuaternionTest: class extends Fixture {
 			quaternionList add(quaternion createRotationZ(-1.78f))
 			quaternionList add(quaternion createRotationZ(-1.7f))
 			quaternionList add(quaternion createRotationZ(-1.62f))
-			weights := Float[quaternionList count] new()
+			weights := FloatVectorList new()
 			for (i in 0 .. quaternionList count)
-				weights[i] = 1.0f
+				weights add(1.0f)
 			expect(Quaternion weightedQuaternionMean(quaternionList, weights) rotationZ, is equal to(-1.7f) within(0.001f))
 		})
 	}

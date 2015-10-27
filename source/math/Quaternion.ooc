@@ -13,10 +13,11 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+use ooc-collections
 import FloatPoint3D
+import FloatVectorList
 import FloatTransform3D
 import FloatMatrix
-import VectorList
 import math
 
 Quaternion: cover {
@@ -262,7 +263,7 @@ Quaternion: cover {
 		}
 		result
 	}
-	weightedQuaternionMean: static func (quaternions: VectorList<This>, weights: Float[]) -> This {
+	weightedQuaternionMean: static func (quaternions: VectorList<This>, weights: FloatVectorList) -> This {
 		// Implementation of the QUEST algorithm. Original publication:
 		// M.D. Shuster and S.D. Oh, "Three-Axis Attitude Determination from Vector Observations", 1981
 		// [http://www.malcolmdshuster.com/Pub_1981a_J_TRIAD-QUEST_scan.pdf]
@@ -276,11 +277,11 @@ Quaternion: cover {
 		// Z - vectorQuantityZ
 		// TODO: Fix singularity problem when the angle is close to PI, using sequential rotations
 		(referenceVectors, observationVectors) := This _createVectorMeasurementsForQuest(quaternions)
-		This _normalizeFloatArrayForQuest(weights, quaternions count)
+		normalizedWeights := weights / weights sum
 
 		attitudeProfile := FloatMatrix new(3, 3) take()
 		for (currentVector in 0 .. referenceVectors width)
-			attitudeProfile += weights[currentVector / 3] / 3.0f * observationVectors getColumn(currentVector) * referenceVectors getColumn(currentVector) transpose()
+			attitudeProfile += normalizedWeights[currentVector / 3] / 3.0f * observationVectors getColumn(currentVector) * referenceVectors getColumn(currentVector) transpose()
 		matrixQuantityS := (attitudeProfile + attitudeProfile transpose()) take()
 
 		vectorQuantityZ := FloatMatrix new(1, 3) take()
@@ -288,7 +289,7 @@ Quaternion: cover {
 		for (currentVector in 0 .. referenceVectors width) {
 			currentObservationVector := FloatPoint3D new(observationVectors[currentVector, 0], observationVectors[currentVector, 1], observationVectors[currentVector, 2])
 			currentReferenceVector := FloatPoint3D new(referenceVectors[currentVector, 0], referenceVectors[currentVector, 1], referenceVectors[currentVector, 2])
-			temporaryZ += weights[currentVector / 3] / 3.0f * currentObservationVector vectorProduct(currentReferenceVector)
+			temporaryZ += normalizedWeights[currentVector / 3] / 3.0f * currentObservationVector vectorProduct(currentReferenceVector)
 		}
 		vectorQuantityZ setVertical(0, 0, temporaryZ)
 
@@ -306,6 +307,7 @@ Quaternion: cover {
 		quaternionValues := (1.0f / sqrt(1.0f + gibbsVectorSquaredNorm)) * vector
 		result := This new(quaternionValues[3, 0], -quaternionValues[0, 0], -quaternionValues[1, 0], -quaternionValues[2, 0])
 
+		normalizedWeights free()
 		referenceVectors free()
 		observationVectors free()
 		attitudeProfile free()
@@ -353,13 +355,6 @@ Quaternion: cover {
 			observationVectors setVertical(index * 3 + 2, 0, quaternions[index] * zAxis)
 		}
 		(referenceVectors, observationVectors)
-	}
-	_normalizeFloatArrayForQuest: static func (array: Float[], length: Int) {
-		arraySum := 0.0f
-		for (index in 0 .. length)
-			arraySum += array[index]
-		for (index in 0 .. length)
-			array[index] /= arraySum
 	}
 	toString: func -> String {
 		"Real: " << "%8f" formatFloat(this real) >>
