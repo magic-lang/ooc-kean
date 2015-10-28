@@ -140,7 +140,7 @@ VectorListTest: class extends Fixture {
 			list add(3.0f)
 			list add(4.0f)
 			slice := list getSlice(1, 2)
-			expect(slice count == 2)
+			expect(slice count, is equal to(2))
 			expect(slice[0], is equal to(2.0f) within(tolerance))
 			expect(slice[1], is equal to(3.0f) within(tolerance))
 			sliceInto := VectorList<Float> new()
@@ -208,9 +208,8 @@ VectorListTest: class extends Fixture {
 			list add(32)
 			list add(64)
 			expect(list empty, is false)
-			while (!list empty) {
+			while (!list empty)
 				list removeAt(0)
-			}
 			expect(list empty, is true)
 			list free()
 		})

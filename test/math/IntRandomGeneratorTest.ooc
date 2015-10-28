@@ -51,6 +51,24 @@ IntRandomGeneratorTest: class extends Fixture {
 			expect(Int absolute(mean - expectedMean) < 2)
 			expect(Int absolute(deviation - expectedDeviation) < 2)
 		})
+		this add("set seed", func {
+			generator1 := IntUniformRandomGenerator new(0, 100)
+			generator1 setSeed(123456)
+			expect(generator1 next(), is equal to(79))
+			expect(generator1 next(), is equal to(93))
+			expect(generator1 next(), is equal to(50))
+		})
+		this add("global seed", func {
+			IntRandomGenerator permanentSeed = 123455
+			generator1 := IntUniformRandomGenerator new(0, 100)
+			expect(generator1 next(), is equal to(76))
+			expect(generator1 next(), is equal to(51))
+			expect(generator1 next(), is equal to(6))
+			generator2 := IntUniformRandomGenerator new(0, 100)
+			expect(generator2 next(), is equal to(76))
+			expect(generator2 next(), is equal to(51))
+			expect(generator2 next(), is equal to(6))
+		})
 	}
 }
 
