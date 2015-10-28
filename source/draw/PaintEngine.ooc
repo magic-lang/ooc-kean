@@ -24,9 +24,8 @@ Pen: cover {
 	color: ColorBgra { get set }
 	width: Float { get set }
 	alpha ::= this color alpha
-	alphaAsFloat ::= this alpha as Float / 255.0
-	init: func@ (=color, =width)
-	init: func@ ~color (color: ColorBgra) { this init(color, 1.0f) }
+	alphaAsFloat ::= this alpha as Float / 255.0f
+	init: func@ (=color, width := 1.0f) { this width = width }
 	init: func@ ~default { this init(ColorBgra new()) }
 	init: func@ ~withBgr (colorBgr: ColorBgr) { this init(colorBgr toBgra()) }
 	setAlpha: func@ (alpha: UInt8) {
