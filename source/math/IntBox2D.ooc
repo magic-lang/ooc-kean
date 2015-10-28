@@ -60,6 +60,18 @@ IntBox2D: cover {
 	}
 	pad: func ~fromFloat (pad: Int) -> This { this pad(pad, pad, pad, pad) }
 	pad: func ~fromSize (pad: IntSize2D) -> This { this pad(pad width, pad width, pad height, pad height) }
+	resizeTo: func (size: IntSize2D) -> This {
+		This createAround(this center, size)
+	}
+	scale: func (value: Float) -> This {
+		This createAround(this center, value * this size)
+	}
+	enlargeTo: func (size: IntSize2D) -> This {
+		This createAround(this center, IntSize2D maximum(this size, size))
+	}
+	shrinkTo: func (size: IntSize2D) -> This {
+		This createAround(this center, IntSize2D minimum(this size, size))
+	}
 	intersection: func (other: This) -> This {
 		left := Int maximum~two(this left, other left)
 		top := Int maximum~two(this top, other top)
