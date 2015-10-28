@@ -2,17 +2,15 @@ import structs/[HashBag, HashMap, ArrayList]
 
 HashDictionary: class {
 	_hashBag: HashBag
-	_capacity: Int
 	count ::= this _hashBag size()
 	empty ::= this _hashBag empty?()
-	
 	init: func { init ~withCapacity(10) }
-	init: func ~withCapacity (=_capacity) {
-		this _hashBag = HashBag new(this _capacity)
+	init: func ~withCapacity (capacity: Int) {
+		this _hashBag = HashBag new(capacity)
 	}
 	init: func ~copy (other: This) {
 		hashMapClone := other _hashBag myMap clone()
-		this _hashBag = HashBag new(other _capacity)
+		this _hashBag = HashBag new(other _hashBag myMap capacity)
 		this _hashBag myMap = hashMapClone
 	}
 	free: override func {
