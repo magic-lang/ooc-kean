@@ -116,6 +116,11 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 		glUniform3f(glGetUniformLocation(this _backend, name), value x, value y, value z)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatPoint3D") }
 	}
+	setUniform: func ~FloatPoint4D (name: String, value: FloatPoint4D) {
+		version(debugGL) { validateStart() }
+		glUniform4fv(glGetUniformLocation(this _backend, name), 1, value& as Float*)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatPoint3D") }
+	}
 	setUniform: func ~FloatSize3D (name: String, value: FloatSize3D) {
 		version(debugGL) { validateStart() }
 		glUniform3f(glGetUniformLocation(this _backend, name), value width, value height, value depth)

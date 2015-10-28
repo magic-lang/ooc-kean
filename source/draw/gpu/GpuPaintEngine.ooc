@@ -25,25 +25,31 @@ GpuPaintEngine: class extends PaintEngine {
 	_image: GpuImage
 	init: func (=_image) { super() }
 	drawPoint: override func (x, y: Int) {
+		this _image canvas pen = this pen
 		this drawPoint~withFloat(x, y)
 	}
 	drawPoint: override func ~withFloat (x, y: Float) {
+		this _image canvas pen = this pen
 		vector := VectorList<FloatPoint2D> new().add(FloatPoint2D new(x, y))
 		this _image canvas drawPoints(vector)
 		vector free()
 	}
 	drawPoint: virtual func ~withFloatPoint2D (position: FloatPoint2D) {
+		this _image canvas pen = this pen
 		this drawPoint~withFloat(position x, position y)
 	}
 	drawLine: override func ~withFloatPoint2D (start, end: FloatPoint2D) {
+		this _image canvas pen = this pen
 		line := VectorList<FloatPoint2D> new().add(start).add(end)
 		this _image canvas drawLines(line)
 		line free()
 	}
 	drawLines: override func (lines: VectorList<FloatPoint2D>) {
+		this _image canvas pen = this pen
 		this _image canvas drawLines(lines)
 	}
 	drawBox: override func ~withFloatBox2D (box: FloatBox2D) {
+		this _image canvas pen = this pen
 		this _image canvas drawBox(box)
 	}
 }
