@@ -107,21 +107,27 @@ RasterMonochrome: class extends RasterPacked {
 		This new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y))
 	}
 	convertFrom: static func (original: RasterImage) -> This {
-		result := This new(original size)
-		row := result buffer pointer as Long
-		rowLength := result stride
-		rowEnd := row + rowLength
-		destination := row
-		f := func (color: ColorMonochrome) {
-			(destination as ColorMonochrome*)@ = color
-			destination += 1
-			if (destination >= rowEnd) {
-				row += result stride
-				destination = row
-				rowEnd = row + rowLength
+		result: This
+		if (original instanceOf?(This))
+			result = (original as This) copy()
+		else {
+			result = This new(original size)
+			row := result buffer pointer as Long
+			rowLength := result stride
+			rowEnd := row + rowLength
+			destination := row
+			f := func (color: ColorMonochrome) {
+				(destination as ColorMonochrome*)@ = color
+				destination += 1
+				if (destination >= rowEnd) {
+					row += result stride
+					destination = row
+					rowEnd = row + rowLength
+				}
 			}
+			original apply(f)
+			(f as Closure) dispose()
 		}
-		original apply(f)
 		result
 	}
 

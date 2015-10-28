@@ -37,15 +37,9 @@ Synchronized: class {
 		this unlock()
 	}
 	lockFunc: func <T> (function: Func -> T) -> T {
-		result: T
 		this lock()
-		try {
-			result = function()
-			this unlock()
-		} catch (e: Exception) {
-			this unlock()
-			e throw()
-		}
+		result := function()
+		this unlock()
 		result
 	}
 }

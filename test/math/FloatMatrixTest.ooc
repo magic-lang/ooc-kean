@@ -111,6 +111,21 @@ FloatMatrixTest: class extends Fixture {
 			matrix[0, 0] = 42.0f
 			expect(matrix[0, 0] == 42.0f)
 		})
+
+		this add("adjugate", func {
+			matrix = createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f])
+			checkAllElements(matrix adjugate(), [8.f, -14.f, 22.f, 44.f, -23.f, 13.f, -40.f, 43.f, -29.f])
+		})
+
+		this add("cofactors", func {
+			matrix = createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f])
+			checkAllElements(matrix cofactors(), [8.f, 44.f, -40.f, -14.f, -23.f, 43.f, 22.f, 13.f, -29.f])
+		})
+
+		this add("determinant", func {
+			matrix = createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f])
+			expect(matrix determinant(), is equal to(108.0f))
+		})
 	}
 
 	createMatrix: func (width: Int, height: Int, values: Float[]) -> FloatMatrix {
