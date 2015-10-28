@@ -41,7 +41,7 @@ GpuCanvasYuv420Semiplanar: class extends GpuSurface {
 	}
 
 	init: func (=_target, context: GpuContext) {
-		super(this _target size, context, context defaultMap, IntTransform2D identity)
+		super(this _target size, context, context defaultMap, FloatTransform2D identity)
 		this _target uv canvas clearColor = ColorBgra new(128, 128, 128, 128)
 	}
 	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap) {

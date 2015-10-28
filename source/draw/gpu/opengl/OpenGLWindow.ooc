@@ -27,7 +27,7 @@ OpenGLWindow: class extends OpenGLSurface {
 	_yuvSemiplanarToBgra: OpenGLMapYuvSemiplanarToBgra
 	init: func (native: NativeWindow) {
 		context := OpenGLContext new(native)
-		super(native size, context, OpenGLMapDefaultTexture new(context), IntTransform2D createScaling(1, -1))
+		super(native size, context, OpenGLMapDefaultTexture new(context), FloatTransform2D createScaling(1.0f, -1.0f))
 		this _monochromeToBgra = OpenGLMapMonochromeToBgra new(context)
 		this _yuvSemiplanarToBgra = OpenGLMapYuvSemiplanarToBgra new(context)
 	}

@@ -32,14 +32,14 @@ Image: abstract class {
 	size ::= this _size
 	width ::= this size width
 	height ::= this size height
-	transform: IntTransform2D { get set }
+	transform: FloatTransform2D { get set }
 	coordinateSystem: CoordinateSystem {
 		get
 		set (value) {
 			this coordinateSystem = value
-			this transform = IntTransform2D createScaling(
-				(value & CoordinateSystem XLeftward) == CoordinateSystem XLeftward ? -1 : 1,
-				(value & CoordinateSystem YUpward) == CoordinateSystem YUpward ? -1 : 1)
+			this transform = FloatTransform2D createScaling(
+				(value & CoordinateSystem XLeftward) == CoordinateSystem XLeftward ? -1.0f : 1.0f,
+				(value & CoordinateSystem YUpward) == CoordinateSystem YUpward ? -1.0f : 1.0f)
 		}
 	}
 	crop: IntShell2D { get set }

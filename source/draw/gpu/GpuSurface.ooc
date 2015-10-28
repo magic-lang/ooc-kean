@@ -58,7 +58,7 @@ GpuSurface: abstract class {
 	nearPlane: Float { get set }
 	farPlane: Float { get set }
 	_defaultMap: GpuMap
-	_coordinateTransform := IntTransform2D identity
+	_coordinateTransform := FloatTransform2D identity
 	init: func (=_size, =_context, =_defaultMap, =_coordinateTransform) {
 		this _toLocal = FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
 		this clearColor = ColorBgra new(0, 0, 0, 0)
