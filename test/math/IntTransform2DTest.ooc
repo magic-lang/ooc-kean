@@ -4,7 +4,6 @@ import math
 import lang/IO
 
 IntTransform2DTest: class extends Fixture {
-	precision := 1.0e-5f
 	transform0 := IntTransform2D new(3, 1, 2, 1, 5, 7)
 	transform1 := IntTransform2D new(7, 4, 2, 5, 7, 6)
 	transform2 := IntTransform2D new(29, 11, 16, 7, 38, 20)
