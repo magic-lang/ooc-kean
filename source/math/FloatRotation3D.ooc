@@ -19,7 +19,7 @@ import Quaternion
 FloatRotation3D: cover {
 	_quaternion: Quaternion
 	identity: static This { get { This new(Quaternion identity) } }
-	inverse ::= This new(this _quaternion inverse)
+	inverse ::= This new(this _quaternion conjugate) //FIXME Should this be conjugate or inverse?
 	normalized ::= This new(this _quaternion normalized)
 	transform ::= this _quaternion transform
 
