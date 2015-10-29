@@ -75,13 +75,7 @@ FloatMatrixTest: class extends Fixture {
 
 		this add("multiplication (scalar)", func {
 			matrix = createMatrix(3, 3, [1.0f, 0, 0, 0, 2.0f, 0, 0, 0, 3.0f])
-			product := 2.0f * matrix
-			expect(product[0, 0] > 2.0f - this tolerance, is true) //FIXME checkAllElements fails here for some reason
-			expect(product[0, 0] < 2.0f + this tolerance, is true)
-			expect(product[1, 1] > 4.0f - this tolerance, is true)
-			expect(product[1, 1] < 4.0f + this tolerance, is true)
-			expect(product[2, 2] > 6.0f - this tolerance, is true)
-			expect(product[2, 2] < 6.0f + this tolerance, is true)
+			checkAllElements(2.0f * matrix, [2.0f, 0, 0, 0, 4.0f, 0, 0, 0, 6.0f])
 		})
 
 		this add("addition", func {
@@ -137,11 +131,9 @@ FloatMatrixTest: class extends Fixture {
 
 	createMatrix: func (width: Int, height: Int, values: Float[]) -> FloatMatrix {
 		result := FloatMatrix new(width, height) take()
-		for (x in 0 .. width) {
-			for (y in 0 .. height) {
+		for (x in 0 .. width)
+			for (y in 0 .. height)
 				result[x, y] = values[x * height + y]
-			}
-		}
 		result
 	}
 
@@ -150,11 +142,9 @@ FloatMatrixTest: class extends Fixture {
 		// 0 3
 		// 1 4
 		// 2 5
-		for (x in 0 .. matrix dimensions width) {
-			for (y in 0 .. matrix dimensions height) {
+		for (x in 0 .. matrix dimensions width)
+			for (y in 0 .. matrix dimensions height)
 				expect(matrix[x, y], is equal to(values[x * matrix dimensions height + y]) within(this tolerance))
-			}
-		}
 	}
 }
 FloatMatrixTest new() run()
