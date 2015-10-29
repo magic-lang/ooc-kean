@@ -72,9 +72,15 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		result
 	}
 	delimiter ::= static ','
-	open: static func (filename: Text) -> This {
+	open: static func ~text (filename: Text) -> This {
+		filenameString := filename toString()
+		result := This open(filenameString)
+		filenameString free()
+		result
+	}
+	open: static func ~string (filename: String) -> This {
 		result: This = null
-		file := File new(filename toString())
+		file := File new(filename)
 		if (file exists?())
 			result = This new(FileReader new(file))
 		file free()
