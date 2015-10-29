@@ -1,7 +1,7 @@
 
 // sdk
 import threading/Thread
-import structs/[Stack, LinkedList]
+import structs/Stack
 import lang/Backtrace
 
 include setjmp, assert, errno
