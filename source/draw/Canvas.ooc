@@ -61,7 +61,7 @@ Canvas: abstract class {
 		positions free()
 	}
 	fill: abstract func
-	draw: abstract func ~ImageSourceDestination (image: Image, source: IntBox2D, destination: IntBox2D)
+	draw: abstract func ~ImageSourceDestination (image: Image, source, destination: IntBox2D)
 	draw: func ~ImageDestination (image: Image, destination: IntBox2D) { this draw(image, IntBox2D new(image size), destination) }
 	draw: func ~Image (image: Image) { this draw(image, IntBox2D new(image size)) }
 	draw: func ~ImageTargetSize (image: Image, targetSize: IntSize2D) { this draw(image, IntBox2D new(targetSize)) }

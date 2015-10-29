@@ -21,15 +21,14 @@ import math
 import Image, Canvas, Pen, RasterImage
 
 RasterCanvas: abstract class extends Canvas {
-	pen: Pen { get set }
 	_target: RasterImage
-	init: func(=_target) { super(this _target size) }
+	init: func (=_target) { super(this _target size) }
 	fill: override func { raise("RasterCanvas fill unimplemented!") }
-	draw: override func ~ImageSourceDestination (image: Image, source: IntBox2D, destination: IntBox2D) { Debug raise("RasterCanvas draw~ImageSourceDestination unimplemented!") }
+	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) { Debug raise("RasterCanvas draw~ImageSourceDestination unimplemented!") }
 	drawPoint: override func (point: FloatPoint2D) { this _drawPoint(point x as Int, point y as Int) }
 	_drawPoint: abstract func (x, y: Int)
 	drawPoints: override func (pointList: VectorList<FloatPoint2D>) {
-		for (i in 0.. pointList count)
+		for (i in 0 .. pointList count)
 			this drawPoint(pointList[i])
 	}
 	_drawLine: func (start, end: IntPoint2D) {
