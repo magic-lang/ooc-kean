@@ -6,7 +6,7 @@ import threading/Thread
 BlockedQueueTest: class extends Fixture {
 	init: func {
 		super("BlockedQueue")
-		this add("cover", This _testWithCover)
+		version (!windows) { this add("cover", This _testWithCover) }
 		this add("class", This _testWithClass)
 	}
 	_testWithCover: static func {
