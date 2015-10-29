@@ -7,6 +7,7 @@ FloatMatrixTest: class extends Fixture {
 	matrix := FloatMatrix new (3, 3)
 	nonSquareMatrix := FloatMatrix new (IntSize2D new(2, 3))
 	nullMatrix := FloatMatrix new(0, 0)
+	precision := 1.0e-5f
 
 	init: func {
 		super ("FloatMatrix")
@@ -130,11 +131,9 @@ FloatMatrixTest: class extends Fixture {
 
 	createMatrix: func (width: Int, height: Int, values: Float[]) -> FloatMatrix {
 		result := FloatMatrix new(width, height) take()
-		for (x in 0 .. width) {
-			for (y in 0 .. height) {
+		for (x in 0 .. width)
+			for (y in 0 .. height)
 				result[x, y] = values[x * height + y]
-			}
-		}
 		result
 	}
 
@@ -143,11 +142,9 @@ FloatMatrixTest: class extends Fixture {
 		// 0 3
 		// 1 4
 		// 2 5
-		for (x in 0 .. matrix dimensions width) {
-			for (y in 0 .. matrix dimensions height) {
-				expect(matrix[x, y], is equal to(values[x * matrix dimensions height + y]))
-			}
-		}
+		for (x in 0 .. matrix dimensions width)
+			for (y in 0 .. matrix dimensions height)
+				expect(matrix[x, y], is equal to(values[x * matrix dimensions height + y]) within(this precision))
 	}
 }
 FloatMatrixTest new() run()
