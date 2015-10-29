@@ -154,4 +154,9 @@ RasterBgr: class extends RasterPacked {
 		result
 	}
 	_createCanvas: override func -> Canvas { BgrRasterCanvas new(this) }
+	kean_draw_rasterBgr_new: static unmangled func (width, height, stride: Int, data: Void*) -> This {
+		result := This new(IntSize2D new(width, height), stride)
+		memcpy(result buffer pointer, data, height * stride)
+		result
+	}
 }
