@@ -7,8 +7,6 @@ install:
     bash install_rock.sh
 
     mv rock.exe C:\msys64\usr\bin\
-
-    mingw-get install pthreads
 build: off
 test_script:
 - cmd: bash test.sh nogpu -DgpuOff
