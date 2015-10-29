@@ -140,7 +140,9 @@ version (!windows) {
             handle = dlopen(path, RTLD_LAZY)
             if (!handle) {
                 // try adding ".so" or ".dylib"
-                handle = dlopen(path + suffix, RTLD_LAZY)
+                fullPath := path + suffix
+                handle = dlopen(fullPath, RTLD_LAZY)
+                fullPath free()
             }
 
             success = (handle != null)
