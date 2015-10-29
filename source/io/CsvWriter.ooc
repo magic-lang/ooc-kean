@@ -29,10 +29,17 @@ CsvWriter: class {
 		}
 		this _fileWriter write("\r\n")
 	}
-	open: static func (filename: Text) -> This {
+	open: static func ~text (filename: Text) -> This {
+		filenameString := filename toString()
+		result := This open(filenameString)
+		filenameString free()
+		result
+	}
+	open: static func ~string (filename: String) -> This {
 		result: This = null
-		file := File new(filename toString())
-		result = This new(FileWriter new(file))
+		file := File new(filename)
+		if (file exists?())
+			result = This new(FileWriter new(file))
 		file free()
 		result
 	}
