@@ -8,9 +8,9 @@ RangeTest: class extends Fixture {
 		super("Range")
 		this add("properties", func {
 			range := 0 .. 10
-			expect(range min == 0)
-			expect(range max == 10)
-			expect(range count == 11)
+			expect(range min, is equal to(0))
+			expect(range max, is equal to(10))
+			expect(range count, is equal to(11))
 		})
 		this add("equals", func {
 			range := 0 .. 10
@@ -34,18 +34,18 @@ RangeTest: class extends Fixture {
 			highRange := 6 .. 10
 			lowerRange := 0 .. 1
 			higherRange := 20 .. 21
-			expect(range clamp(range) min == range min)
-			expect(range clamp(range) max == range max)
-			expect(range clamp(smallRange) min == smallRange min)
-			expect(range clamp(smallRange) max == smallRange max)
-			expect(range clamp(lowRange) min == range min)
-			expect(range clamp(lowRange) max == lowRange max)
-			expect(range clamp(highRange) min == highRange min)
-			expect(range clamp(highRange) max == range max)
-			expect(range clamp(lowerRange) min == lowerRange max)
-			expect(range clamp(lowerRange) max == lowerRange max)
-			expect(range clamp(higherRange) min == higherRange min)
-			expect(range clamp(higherRange) max == higherRange min)
+			expect(range clamp(range) min, is equal to(range min))
+			expect(range clamp(range) max, is equal to(range max))
+			expect(range clamp(smallRange) min, is equal to(smallRange min))
+			expect(range clamp(smallRange) max, is equal to(smallRange max))
+			expect(range clamp(lowRange) min, is equal to(range min))
+			expect(range clamp(lowRange) max, is equal to(lowRange max))
+			expect(range clamp(highRange) min, is equal to(highRange min))
+			expect(range clamp(highRange) max, is equal to(range max))
+			expect(range clamp(lowerRange) min, is equal to(lowerRange max))
+			expect(range clamp(lowerRange) max, is equal to(lowerRange max))
+			expect(range clamp(higherRange) min, is equal to(higherRange min))
+			expect(range clamp(higherRange) max, is equal to(higherRange min))
 		})
 	}
 }

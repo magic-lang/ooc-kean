@@ -66,7 +66,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 				z := generator3 next()
 				if (x == z)
 					++countEqual
-				expect(x == y)
+				expect(x, is equal to(y))
 			}
 			expect(countEqual < valuesCount)
 		})
