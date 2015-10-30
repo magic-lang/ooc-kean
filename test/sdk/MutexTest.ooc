@@ -21,7 +21,7 @@ MutexTest: class extends Fixture {
 			}
 		}
 		for (i in 0 .. threads length) {
-			threads[i] = Thread new(|| job())
+			threads[i] = Thread new(job)
 			expect(threads[i] start())
 		}
 		for (i in 0 .. threads length) {

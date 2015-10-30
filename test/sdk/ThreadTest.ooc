@@ -14,7 +14,7 @@ ThreadTest: class extends Fixture {
 		job := func {
 			threadStarted set(1)
 		}
-		thread := Thread new(|| job())
+		thread := Thread new(job)
 		expect(threadStarted get(), is equal to(0))
 		expect(thread start())
 		expect(thread wait())
