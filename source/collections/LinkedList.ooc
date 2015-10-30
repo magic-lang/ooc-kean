@@ -22,7 +22,7 @@ LinkedList: class <T> {
 	}
 	add: func ~withIndex (index: SSizeT, data: T) {
 		if (index > 0 && index < this size) {
-			prevNode := getNode(index - 1)
+			prevNode := this getNode(index - 1)
 			nextNode := prevNode next
 			node := Node<T> new(prevNode, nextNode, data)
 			prevNode next = node
@@ -101,8 +101,8 @@ LinkedList: class <T> {
 	removeAt: func (index: SSizeT) -> T {
 		item := null
 		if (this _head next != this _head && 0 <= index && index < this _size) {
-			toRemove := getNode(index)
-			removeNode(toRemove)
+			toRemove := this getNode(index)
+			this removeNode(toRemove)
 			item = toRemove data
 		} else
 			raise("Index out of bounds in LinkedList removeAt")
@@ -110,7 +110,7 @@ LinkedList: class <T> {
 	}
 	remove: func (data: T) -> Bool {
 		result := false
-		i := indexOf(data)
+		i := this indexOf(data)
 		if (i != -1) {
 			removeAt(i)
 			result = true
