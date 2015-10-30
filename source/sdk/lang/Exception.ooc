@@ -34,7 +34,10 @@ exceptionStack := ThreadLocal<Stack<StackFrame>> new()
 _exception := ThreadLocal<Exception> new()
 _EXCEPTION: Int = 1
 
+stackFramesToDelete := Stack<StackFrame> new()
+
 _pushStackFrame: inline func -> StackFrame {
+  _cleanupStackFrames()
     stack: Stack<StackFrame>
     if(!exceptionStack hasValue?()) {
         stack = Stack<StackFrame> new()
@@ -44,7 +47,20 @@ _pushStackFrame: inline func -> StackFrame {
     }
     buf := StackFrame new()
     stack push(buf)
+    exceptionStack set(stack)
     buf
+}
+
+_markStackFrame: inline func (frame: StackFrame) {
+  stackFramesToDelete push(frame)
+}
+
+_cleanupStackFrames: inline func {
+  while (stackFramesToDelete empty?() == false) {
+    frame := stackFramesToDelete pop() as StackFrame
+    if (frame)
+      gc_free(frame as Void*)
+  }
 }
 
 _setException: inline func (e: Exception) {
@@ -55,8 +71,14 @@ _getException: inline func -> Exception {
     _exception get()
 }
 
-_popStackFrame: inline func -> StackFrame {
-    exceptionStack get() as Stack<StackFrame> pop() as StackFrame
+_popStackFrame: inline func {
+    frame := exceptionStack get() as Stack<StackFrame> pop() as StackFrame
+    if (frame)
+      gc_free(frame as Void*)
+}
+
+_takeStackFrame: func -> StackFrame {
+  exceptionStack get() as Stack<StackFrame> pop() as StackFrame
 }
 
 _hasStackFrame: inline func -> Bool {
@@ -102,19 +124,19 @@ raise: func ~withClass(clazz: Class, msg: String) {
  * Base class for all exceptions that can be thrown
  */
 Exception: class {
-    backtraces: LinkedList<Backtrace> = LinkedList<Backtrace> new()
+    backtraces := Stack<Backtrace> new()
 
     addBacktrace: func {
         bt := BacktraceHandler get() backtrace()
         if (bt) {
-            backtraces add(bt)
+            backtraces push(bt)
         }
     }
 
     printBacktrace: func {
         h := BacktraceHandler get()
-        for (backtrace in backtraces) {
-            stderr write(h backtraceSymbols(backtrace))
+        for (i in 0 .. this backtraces size) {
+            stderr write(h backtraceSymbols(this backtraces peek(i)))
         }
     }
 
@@ -130,8 +152,7 @@ Exception: class {
      * @param origin The class throwing this exception
      * @param message A short text explaning why the exception was thrown
      */
-    init: func  (=origin, =message) {
-    }
+    init: func  (=origin, =message)
 
     /**
      * Create an exception
@@ -142,6 +163,15 @@ Exception: class {
         init(null, message)
     }
 
+    free: override func {
+      while (this backtraces empty?() == false) {
+        backtrace := this backtraces pop() as Backtrace
+        if (backtrace)
+          backtrace free()
+      }
+      this backtraces free()
+      super()
+    }
 
     /**
      * @return the exception's message, nicely formatted
@@ -172,6 +202,7 @@ Exception: class {
      * Throw this exception
      */
     throw: func {
+        _cleanupStackFrames()
         _setException(this)
         addBacktrace()
         if(!_hasStackFrame()) {
@@ -191,7 +222,8 @@ Exception: class {
                 abort()
             }
         } else {
-            frame := _popStackFrame()
+            frame := _takeStackFrame()
+            _markStackFrame(frame)
             frame@ buf longJmp(_EXCEPTION)
         }
     }
@@ -204,12 +236,15 @@ Exception: class {
     }
 
     getCurrentBacktrace: static func -> String {
+        result: String
         h := BacktraceHandler get()
         bt := h backtrace()
         if (bt) {
-            return h backtraceSymbols(bt)
-        }
-        "[no backtrace] use a debugger!\n"
+            result = h backtraceSymbols(bt)
+            bt free()
+        } else
+          result ="[no backtrace] use a debugger!\n"
+        result
     }
 }
 

@@ -41,6 +41,7 @@ FloatBox2D: cover {
 	bottomCenter ::= FloatPoint2D new(this center x, this bottom)
 	empty ::= this size empty
 	init: func@ (=leftTop, =size)
+	init: func@ ~fromIntBox2D (box: IntBox2D) { this init(box left, box top, box width, box height) }
 	init: func@ ~fromPoints (first, second: FloatPoint2D) {
 		left := Float minimum(first x, second x)
 		top := Float minimum(first y, second y)
@@ -65,6 +66,18 @@ FloatBox2D: cover {
 	}
 	shrink: func ~fraction (margin: Float) -> This {
 		this pad(-margin * this height / 2.0f)
+	}
+	resizeTo: func (size: FloatSize2D) -> This {
+		This createAround(this center, size)
+	}
+	scale: func (value: Float) -> This {
+		This createAround(this center, value * this size)
+	}
+	enlargeTo: func (size: FloatSize2D) -> This {
+		This createAround(this center, FloatSize2D maximum(this size, size))
+	}
+	shrinkTo: func (size: FloatSize2D) -> This {
+		This createAround(this center, FloatSize2D minimum(this size, size))
 	}
 	intersection: func (other: This) -> This {
 		left := Float maximum(this left, other left)

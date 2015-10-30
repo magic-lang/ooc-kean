@@ -17,6 +17,7 @@
 
 use ooc-base
 use ooc-math
+use ooc-draw
 import include/gles3
 import ../GLFramebufferObject
 import Gles3Texture, Gles3Debug
@@ -50,9 +51,10 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		glClear(GL_COLOR_BUFFER_BIT)
 		version(debugGL) { validateEnd("FramebufferObject clear") }
 	}
-	setClearColor: func (color: Float) {
+	setClearColor: func (color: ColorBgra) {
 		version(debugGL) { validateStart() }
-		glClearColor(color, color, color, color)
+		normalized := color normalized
+		glClearColor(normalized x, normalized y, normalized z, normalized w)
 		version(debugGL) { validateEnd("FramebufferObject setClearColor") }
 	}
 	readPixels: func -> ByteBuffer {

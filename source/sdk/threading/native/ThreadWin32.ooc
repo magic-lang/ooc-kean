@@ -47,7 +47,9 @@ version(windows) {
         }
 
         cancel: func -> Bool {
-            this alive?() && TerminateThread(this handle, 0)
+            false
+            //this alive?() && TerminateThread(this handle, 0)
+            //TODO Find a better way to terminate Win32 threads, if any 
         }
 
         alive?: func -> Bool {

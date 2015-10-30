@@ -17,7 +17,7 @@
 use ooc-math
 use ooc-base
 import math
-import PaintEngine
+import Canvas
 
 CoordinateSystem: enum {
 	Default = 0x00,
@@ -25,6 +25,11 @@ CoordinateSystem: enum {
 	XLeftward = 0x01,
 	YDownward = 0x00,
 	YUpward = 0x02
+}
+
+TransformMethod: enum {
+	Fast, // nearest neighbour
+	Smooth // bilinear
 }
 
 Image: abstract class {
@@ -46,6 +51,15 @@ Image: abstract class {
 	wrap: Bool { get set }
 	_referenceCount: ReferenceCounter
 	referenceCount ::= this _referenceCount
+
+	_canvas: Canvas
+	canvas: Canvas {
+		get {
+			if (this _canvas == null)
+				this _canvas = this _createCanvas()
+			this _canvas
+		}
+	}
 	init: func (=_size) {
 		this _referenceCount = ReferenceCounter new(this)
 		this coordinateSystem = CoordinateSystem Default
@@ -60,12 +74,18 @@ Image: abstract class {
 		if (this referenceCount != null)
 			this referenceCount free()
 		this _referenceCount = null
+		if (this _canvas != null)
+			this _canvas free()
+		this _canvas = null
 		super()
 	}
 	resizeWithin: func (restriction: IntSize2D) -> This {
 		this resizeTo(((this size toFloatSize2D()) * Float minimum(restriction width as Float / this size width as Float, restriction height as Float / this size height as Float)) toIntSize2D())
 	}
 	resizeTo: abstract func (size: IntSize2D) -> This
+	resizeTo: virtual func ~withMethod (size: IntSize2D, method: TransformMethod) -> This {
+		this resizeTo(size)
+	}
 	create: virtual func (size: IntSize2D) -> This { raise("Image type not implemented."); null }
 	copy: abstract func -> This
 	copy: abstract func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This
@@ -76,5 +96,6 @@ Image: abstract class {
 	isValidIn: func (x, y: Int) -> Bool {
 		return (x >= 0 && x < this size width && y >= 0 && y < this size height)
 	}
-	createPaintEngine: virtual func -> PaintEngine { null }
+	_createCanvas: virtual func -> Canvas { null }
+	kean_draw_image_free: unmangled func { this referenceCount decrease() }
 }

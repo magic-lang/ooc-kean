@@ -224,6 +224,55 @@ FloatMatrix : cover {
 		upper free(Owner Receiver)
 		result
 	}
+
+	cofactors: func -> This {
+		// TODO: At some point, when needed, implement for the general case.
+		version(safe) {
+			if (!this isSquare)
+				raise("Matrix must be square in FloatMatrix cofactors")
+			if (this width != 3)
+				raise("Cofactors implemented only for 3x3 matrices in FloatMatrix")
+		}
+		result := This new(this dimensions)
+		result[0, 0] = this[1, 1] * this[2, 2] - this[2, 1] * this[1, 2]
+		result[1, 0] = - (this[0, 1] * this[2, 2] - this[2, 1] * this[0, 2])
+		result[2, 0] = this[0, 1] * this[1, 2] - this[1, 1] * this[0, 2]
+		result[0, 1] = - (this[1, 0] * this[2, 2] - this[2, 0] * this[1, 2])
+		result[1, 1] = this[0, 0] * this[2, 2] - this[2, 0] * this[0, 2]
+		result[2, 1] = - (this[0, 0] * this[1, 2] - this[1, 0] * this[0, 2])
+		result[0, 2] = this[1, 0] * this[2, 1] - this[2, 0] * this[1, 1]
+		result[1, 2] = - (this[0, 0] * this[2, 1] - this[2, 0] * this[0, 1])
+		result[2, 2] = this[0, 0] * this[1, 1] - this[1, 0] * this[0, 1]
+		this free(Owner Receiver)
+		result
+	}
+
+	adjugate: func -> This {
+		// TODO: At some point, when needed, implement for the general case.
+		version(safe) {
+			if (!this isSquare)
+				raise("Matrix must be square in FloatMatrix adjugate")
+			if (this width != 3)
+				raise("Adjugate implemented only for 3x3 matrices in FloatMatrix")
+		}
+		this cofactors() transpose()
+	}
+
+	determinant: func -> Float {
+		// TODO: At some point, when needed, implement for the general case.
+		version(safe) {
+			if (!this isSquare)
+				raise("Matrix must be square in FloatMatrix determinant")
+			if (this width != 3)
+				raise("Determinant implemented only for 3x3 matrices in FloatMatrix")
+		}
+		result := this[0, 0] * (this[1, 1] * this[2, 2] - this[2, 1] * this[1, 2]) -
+			this[1, 0] * (this[0, 1] * this[2, 2] - this[2, 1] * this[0, 2]) +
+			this[2, 0] * (this[0, 1] * this[1, 2] - this[1, 1] * this[0, 2])
+		this free(Owner Receiver)
+		result
+	}
+
 	take: func -> This { // call by value -> modifies copy of cover
 		this _elements = this _elements take()
 		this
@@ -282,12 +331,16 @@ FloatMatrix : cover {
 			this elements[i] -= other elements[i]
 		other free(Owner Receiver)
 	}
+
+	operator * (other: Float) -> This {
+		result := This new(this dimensions)
+		for (i in 0 .. this dimensions area)
+			result elements[i] = other * this elements[i]
+		this free(Owner Receiver)
+		result
+	}
 }
 
 operator * (left: Float, right: FloatMatrix) -> FloatMatrix {
-	result := FloatMatrix new(right dimensions)
-	for (i in 0 .. right dimensions area)
-		result elements[i] = left * right elements[i]
-	right free(Owner Receiver)
-	result
+	right * left
 }

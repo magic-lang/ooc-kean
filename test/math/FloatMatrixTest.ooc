@@ -7,7 +7,7 @@ FloatMatrixTest: class extends Fixture {
 	matrix := FloatMatrix new (3, 3)
 	nonSquareMatrix := FloatMatrix new (IntSize2D new(2, 3))
 	nullMatrix := FloatMatrix new(0, 0)
-	tolerance := 0.0001f
+	precision := 1.0e-5f
 
 	init: func {
 		super ("FloatMatrix")
@@ -111,7 +111,7 @@ FloatMatrixTest: class extends Fixture {
 		this add("set and get", func {
 			matrix = createMatrix(3, 3, [1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f])
 			matrix[0, 0] = 42.0f
-			expect(matrix[0, 0], is equal to(42.0f) within(this tolerance))
+			expect(matrix[0, 0], is equal to(42.0f) within(this precision))
 		})
 
 		this add("print columns", func {
@@ -120,10 +120,25 @@ FloatMatrixTest: class extends Fixture {
 			expect(column toString() == "4.00; 5.00; 6.00; ")
 			expect(A toString() == "1.00, 4.00, 7.00; 2.00, 5.00, 8.00; 3.00, 6.00, 9.00; ")
 		})
+
+		this add("adjugate", func {
+			matrix = createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f])
+			checkAllElements(matrix adjugate(), [8.f, -14.f, 22.f, 44.f, -23.f, 13.f, -40.f, 43.f, -29.f])
+		})
+
+		this add("cofactors", func {
+			matrix = createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f])
+			checkAllElements(matrix cofactors(), [8.f, 44.f, -40.f, -14.f, -23.f, 43.f, 22.f, 13.f, -29.f])
+		})
+
+		this add("determinant", func {
+			matrix = createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f])
+			expect(matrix determinant(), is equal to(108.0f))
+		})
 	}
 
 	createMatrix: func (width, height: Int, values: Float[]) -> FloatMatrix {
-		result := FloatMatrix new(width, height)
+		result := FloatMatrix new(width, height) take()
 		for (x in 0 .. width)
 			for (y in 0 .. height)
 				result[x, y] = values[x * height + y]
@@ -137,7 +152,7 @@ FloatMatrixTest: class extends Fixture {
 		// 2 5
 		for (x in 0 .. matrix dimensions width)
 			for (y in 0 .. matrix dimensions height)
-				expect(matrix[x, y], is equal to(values[x * matrix dimensions height + y]) within(this tolerance))
+				expect(matrix[x, y], is equal to(values[x * matrix dimensions height + y]) within(this precision))
 	}
 }
 FloatMatrixTest new() run()

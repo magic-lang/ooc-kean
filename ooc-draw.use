@@ -8,9 +8,6 @@ Imports: AbstractContext
 Imports: CpuContext
 Imports: Color
 Imports: Image
-Imports: Painter
-Imports: PaintEngine
-Imports: RasterPaintEngine
 Imports: RasterBgr
 Imports: RasterBgra
 Imports: RasterUv
@@ -24,6 +21,8 @@ Imports: RasterYuvSemiplanar
 Imports: RasterYuv420Semiplanar
 Imports: RasterYuv422Semipacked
 Imports: FloatImage
-Additionals: source/draw/stb_image.c
-Additionals: source/draw/stb_image_write.c
+Imports: Canvas
+Imports: Pen
+Additionals: source/draw/stb_image/stb_image.c
+Additionals: source/draw/stb_image/stb_image_write.c
 Libs: -lm

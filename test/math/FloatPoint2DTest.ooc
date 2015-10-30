@@ -49,7 +49,6 @@ FloatPoint2DTest: class extends Fixture {
 		this add("casting", func {
 			value := "10.00, 20.00"
 			expect(this point3 toString(), is equal to(value))
-//			FIXME: Equals interface
 			expect((FloatPoint2D parse(value)) x, is equal to((this point3) x))
 			expect((FloatPoint2D parse(value)) y, is equal to((this point3) y))
 		})
@@ -66,17 +65,17 @@ FloatPoint2DTest: class extends Fixture {
 		this add("polar 2", func {
 			point := FloatPoint2D new(0, 1)
 			expect(point norm, is equal to(1.0f))
-			expect(point azimuth, is equal to(PI as Float / 2.0f))
+			expect(point azimuth, is equal to(Float pi / 2.0f))
 		})
 		this add("polar 3", func {
 			point := FloatPoint2D new(0, -5)
 			expect(point norm, is equal to(5.0f))
-			expect(point azimuth, is equal to(PI as Float / -2.0f))
+			expect(point azimuth, is equal to(Float pi / -2.0f))
 		})
 		this add("polar 4", func {
 			point := FloatPoint2D new(-1, 0)
 			expect(point norm, is equal to(1.0f))
-			expect(point azimuth, is equal to(PI as Float))
+			expect(point azimuth, is equal to(Float pi))
 		})
 		this add("polar 5", func {
 			point := FloatPoint2D new(-3, 0)
@@ -85,9 +84,9 @@ FloatPoint2DTest: class extends Fixture {
 		})
 		this add("angles", func {
 			expect(FloatPoint2D basisX angle(FloatPoint2D basisX), is equal to(0.0f) within(this precision))
-			expect(FloatPoint2D basisX angle(FloatPoint2D basisY), is equal to(PI as Float / 2.0f) within(this precision))
-			expect(FloatPoint2D basisX angle(-FloatPoint2D basisX), is equal to(PI as Float) within(this precision))
-			expect(FloatPoint2D basisX angle(-FloatPoint2D basisY), is equal to(-PI as Float / 2.0f) within(this precision))
+			expect(FloatPoint2D basisX angle(FloatPoint2D basisY), is equal to(Float pi / 2.0f) within(this precision))
+			expect(FloatPoint2D basisX angle(-FloatPoint2D basisX), is equal to(Float pi) within(this precision))
+			expect(FloatPoint2D basisX angle(-FloatPoint2D basisY), is equal to(-(Float pi) / 2.0f) within(this precision))
 		})
 		this add("minimum", func {
 			expect((this point0 minimum(this point1)) x, is equal to((this point1) x))
@@ -101,6 +100,59 @@ FloatPoint2DTest: class extends Fixture {
 			point := point3 toIntPoint2D()
 			expect(point x, is equal to(10))
 			expect(point y, is equal to(20))
+		})
+		this add("float casts", func {
+			vector := point3 toFloatSize2D()
+			expect(vector width, is equal to(point3 x))
+			expect(vector height, is equal to(point3 y))
+		})
+		this add("minimum maximum", func {
+			max := this point0 maximum(this point1)
+			min := this point0 minimum(this point1)
+			expect(max x, is equal to(22.221f) within(this precision))
+			expect(max y, is equal to(13.1f) within(this precision))
+			expect(min x, is equal to(12.221f) within(this precision))
+			expect(min y, is equal to(-3.1f) within(this precision))
+		})
+		this add("rounding", func {
+			round := this point1 round()
+			ceiling := this point1 ceiling()
+			floor := this point1 floor()
+			expect(round x, is equal to(12.0f) within(this precision))
+			expect(round y, is equal to(13.0f) within(this precision))
+			expect(ceiling x, is equal to(13.0f) within(this precision))
+			expect(ceiling y, is equal to(14.0f) within(this precision))
+			expect(floor x, is equal to(12.0f) within(this precision))
+			expect(floor y, is equal to(13.0f) within(this precision))
+		})
+		this add("p norm", func {
+			oneNorm := this point0 pNorm(1)
+			euclideanNorm := this point0 pNorm(2)
+			expect(oneNorm, is equal to(25.321f) within(this precision))
+			expect(euclideanNorm, is equal to(22.436f) within(0.01f))
+		})
+		this add("scalar product", func {
+			expect(this point0 scalarProduct(this point1), is equal to (230.95f) within(0.01f))
+		})
+		this add("distance", func {
+			distance := point0 distance(point1)
+			expect(distance, is equal to(19.04f) within(0.01f))
+		})
+		this add("clamp", func {
+			clamped := this point1 clamp(this point0, this point2)
+			expect(clamped x, is equal to(this point0 x) within(this precision))
+			expect(clamped y, is equal to(this point2 y) within(this precision))
+		})
+		this add("interpolation", func {
+			interpolate1 := FloatPoint2D linearInterpolation(this point0, this point1, 0.0f)
+			interpolate2 := FloatPoint2D linearInterpolation(this point0, this point1, 0.5f)
+			interpolate3 := FloatPoint2D linearInterpolation(this point0, this point1, 1.0f)
+			expect(interpolate1 x, is equal to(this point0 x) within(this precision))
+			expect(interpolate1 y, is equal to(this point0 y) within(this precision))
+			expect(interpolate2 x, is equal to(17.22f) within(0.01f))
+			expect(interpolate2 y, is equal to(5.0f) within(0.01f))
+			expect(interpolate3 x, is equal to(this point1 x) within(this precision))
+			expect(interpolate3 y, is equal to(this point1 y) within(this precision))
 		})
 	}
 }

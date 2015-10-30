@@ -9,7 +9,6 @@ Imports: Vector2D
 Imports: VectorList
 Imports: PointerVector
 Imports: PointerVectorList
-Imports: SortedVectorList
 Imports: Queue
 Imports: SynchronizedQueue
 Imports: HashDictionary

@@ -1,0 +1,18 @@
+Name: ooc Net
+Description: ooc Net library adapted from the built in SDK.
+SourcePath: source/net
+Imports: Address
+Imports: berkeley
+Imports: DNS
+Imports: Exceptions
+Imports: ServerSocket
+Imports: Socket
+Imports: TCPSocket
+Imports: translation
+Imports: UDPSocket
+Imports: utilities
+
+version (windows) {
+  # Under MinGW, we need that lib to use winsock
+  Libs: -lws2_32
+}

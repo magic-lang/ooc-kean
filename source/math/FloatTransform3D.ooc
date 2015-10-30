@@ -208,7 +208,7 @@ FloatTransform3D: cover {
 	}
 	transformAndProject: func ~FloatPoint2D (point: FloatPoint2D, focalLength: Float) -> FloatPoint2D {
 		transformedWorldPoint := this * FloatPoint3D new(point x, point y, focalLength)
-		this project(transformedWorldPoint, focalLength)
+		focalLength < Float epsilon ? FloatPoint2D new(transformedWorldPoint x, transformedWorldPoint y) : this project(transformedWorldPoint, focalLength)
 	}
 	transformAndProject: func ~FloatBox2D (box: FloatBox2D, focalLength: Float) -> FloatBox2D {
 		FloatBox2D new(this transformAndProject(box leftTop, focalLength), this transformAndProject(box rightBottom, focalLength))
@@ -228,4 +228,7 @@ FloatTransform3D: cover {
 		"%.8f" formatFloat(this c) >> ", " & "%.8f" formatFloat(this g) >> ", " & "%.8f" formatFloat(this k) >> ", " & "%.8f" formatFloat(this o) >> "\n" & \
 		"%.8f" formatFloat(this d) >> ", " & "%.8f" formatFloat(this h) >> ", " & "%.8f" formatFloat(this l) >> ", " & "%.8f" formatFloat(this p)
 	}
+	kean_math_floatTransform3D_getTranslation: unmangled func -> FloatSize3D { this translation }
+	kean_math_floatTransform3D_getScaling: unmangled func -> FloatSize3D { FloatSize3D new(this scalingX, this scalingY, this scalingZ) }
+	kean_math_floatTransform3D_getInverse: unmangled func -> This { this inverse }
 }

@@ -1,68 +1,48 @@
-import structs/ArrayList
-
-Stack: class <T> extends BackIterable<T> {
-    data: ArrayList<T>
-    
-    size: SSizeT {
-        get {
-            data != null ? data size : 0		
-        }
-    }
-    
-    init: func {
-        data = ArrayList<T> new()
-    }
-
-    push: func(element: T) {
-        data add(element)
-    }
-    
-    pop: func -> T {
-        if (empty?())
-            Exception new(This, "Trying to pop an empty stack.") throw()
-            
-        return data removeAt(lastIndex())
-    }
-    
-    peek: func -> T {
-        if (empty?())
-            Exception new(This, "Trying to peek an empty stack.") throw()
-                
-        return data last()
-    }
-
-    peek: func ~index (index: SSizeT) -> T {
-        mysize := data size
-        if (index < 1)
-            Exception new(This, "Trying to peek(%d)! index must be >= 1 <= size" format(index)) throw()
-
-        if (index > mysize)
-            Exception new(This, "Trying to peek(%d) a stack of size %d" format(index, mysize)) throw()
-
-        return data get(mysize - index)
-    }
-
-    indexOf: func(element: T) -> SSizeT {
-        return data indexOf(element)
-    }
-	
-    getSize: func -> SSizeT {	
-        return data size
-    }
-    
-    empty?: func -> Bool {
-        return data empty?()
-    }
-    
-    lastIndex: func -> Int {
-        return size - 1
-    }
-
-    clear: func {
-        data clear()
-    }
-
-    iterator: func -> BackIterator<T> { data iterator() }
-
-    backIterator: func -> BackIterator<T> { data backIterator() }
+Stack: class <T> {
+	_data: T*
+	_size: SizeT = 0
+	_capacity: SizeT = 8
+	size ::= this _size
+	isEmpty ::= this size == 0
+	init: func {
+		this _data = gc_malloc(this _capacity * T size)
+	}
+	free: override func {
+		gc_free(this _data)
+		super()
+	}
+	push: func (element: T) {
+		if (this size >= this _capacity)
+			this _grow()
+		this _data[this size] = element
+		++this _size
+	}
+	pop: func -> T {
+		version(safe)
+			if (this isEmpty)
+				Exception new(This, "Trying to pop an empty stack.") throw()
+		this _data[--this _size]
+	}
+	peek: func (index := 0) -> T {
+		version(safe)
+			if (index < 0)
+				Exception new(This, "Trying to peek(%d)! index must be >= 1 <= size" format(index)) throw()
+			else if (index >= this size)
+				Exception new(This, "Trying to peek(%d) a stack of size %d" format(index, this size)) throw()
+		this _data[index]
+	}
+	//TODO: remove this function, exists only for compatibility with current codebase
+	empty?: func -> Bool {
+		this isEmpty
+	}
+	clear: func {
+		this _size = 0
+	}
+	_grow: func {
+		if (this _capacity < 4096)
+			this _capacity *= 2
+		else
+			this _capacity += 2048
+		this _data = gc_realloc(this _data, this _capacity * T size)
+	}
 }

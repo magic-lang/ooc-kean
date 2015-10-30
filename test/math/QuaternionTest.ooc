@@ -18,6 +18,7 @@
 use ooc-unit
 use ooc-math
 use ooc-base
+use ooc-collections
 import math
 import lang/IO
 
@@ -36,6 +37,7 @@ QuaternionTest: class extends Fixture {
 	quaternion10 := Quaternion new(0.12f, 0.4472136f, 0.8366f, 0.316227766f)
 	point0 := FloatPoint3D new(22.221f, -3.1f, 10.0f)
 	point1 := FloatPoint3D new(12.221f, 13.1f, 20.0f)
+	quaternionList := VectorList<Quaternion> new()
 	init: func {
 		super("Quaternion")
 		tolerance := 0.0001f
@@ -44,6 +46,10 @@ QuaternionTest: class extends Fixture {
 			expect(this quaternion2 == this quaternion3, is false)
 			expect(this quaternion3 != this quaternion4)
 			expect(this quaternion1 != this quaternion4, is false)
+		})
+		this add("properties", func {
+			expect(this quaternion7 isIdentity)
+			expect((this quaternion7 - this quaternion7) isNull)
 		})
 		this add("addition", func {
 			expect(this quaternion0 + this quaternion1 == this quaternion2)
@@ -54,11 +60,23 @@ QuaternionTest: class extends Fixture {
 		this add("multiplication", func {
 			expect(this quaternion0 * this quaternion1 == this quaternion3)
 		})
+		this add("dot product", func {
+			expect(this quaternion0 dotProduct(this quaternion1), is equal to(1410.25f) within(tolerance))
+		})
 		this add("scalarMultiplication", func {
 			expect((-1.0f) * this quaternion0 == -this quaternion0)
 		})
 		this add("norm", func {
 			expect(this quaternion0 norm, is equal to(65.5991592f))
+		})
+		this add("inverse", func {
+			inverse := this quaternion2 inverse
+			product := this quaternion2 * inverse
+			//productReal := 
+			expect(product real as Float, is equal to(1.0f) within(tolerance))
+			expect(product x as Float, is equal to(0.0f) within(tolerance))
+			expect(product y as Float, is equal to(0.0f) within(tolerance))
+			expect(product z as Float, is equal to(0.0f) within(tolerance))
 		})
 		this add("conjugate", func {
 			conjugate := quaternion5 conjugate
@@ -280,6 +298,39 @@ QuaternionTest: class extends Fixture {
 			expect(interpolated x, is equal to(0.05838604f) within(tolerance))
 			expect(interpolated y, is equal to(0.10923036f) within(tolerance))
 			expect(interpolated z, is equal to(0.99080002f) within(tolerance))
+		})
+		this add("toString", func {
+			expect(this quaternion0 toString() == "Real: 33.000000 Imaginary: 10.000000 -12.000000 54.500000")
+		})
+		this add("weightedQuaternionMean_X", func {
+			quaternionList clear()
+			quaternionList add(Quaternion createRotationX(0.70f))
+			quaternionList add(Quaternion createRotationX(0.78f))
+			quaternionList add(Quaternion createRotationX(0.86f))
+			weights := FloatVectorList new()
+			for (i in 0 .. quaternionList count)
+				weights add(1.0f)
+			expect(Quaternion weightedMean(quaternionList, weights) rotationX, is equal to(0.78f) within(0.001f))
+		})
+		this add("weightedQuaternionMean_Y", func {
+			quaternionList clear()
+			quaternionList add(Quaternion createRotationY(0.12f))
+			quaternionList add(Quaternion createRotationY(0.20f))
+			quaternionList add(Quaternion createRotationY(0.28f))
+			weights := FloatVectorList new()
+			for (i in 0 .. quaternionList count)
+				weights add(1.0f)
+			expect(Quaternion weightedMean(quaternionList, weights) rotationY, is equal to(0.20f) within(0.001f))
+		})
+		this add("weightedQuaternionMean_Z", func {
+			quaternionList clear()
+			quaternionList add(Quaternion createRotationZ(-1.78f))
+			quaternionList add(Quaternion createRotationZ(-1.7f))
+			quaternionList add(Quaternion createRotationZ(-1.62f))
+			weights := FloatVectorList new()
+			for (i in 0 .. quaternionList count)
+				weights add(1.0f)
+			expect(Quaternion weightedMean(quaternionList, weights) rotationZ, is equal to(-1.7f) within(0.001f))
 		})
 	}
 }

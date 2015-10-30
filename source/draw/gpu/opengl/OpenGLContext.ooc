@@ -67,32 +67,12 @@ OpenGLContext: class extends GpuContext {
 	getMaxContexts: func -> Int { 1 }
 	getCurrentIndex: func -> Int { 0 }
 	drawQuad: func { this _renderer drawQuad() }
-	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D) {
+	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen := Pen new()) {
 		positions := pointList pointer as Float*
-		this _linesShader color = FloatPoint3D new(0.0f, 0.0f, 0.0f)
 		this _linesShader projection = projection
+		this _linesShader color = pen color normalized
 		this _linesShader use()
-		this _renderer drawLines(positions, pointList count, 2, 3.5f)
-		this _linesShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
-		this _linesShader use()
-		this _renderer drawLines(positions, pointList count, 2, 1.5f)
-	}
-	drawBox: func (box: FloatBox2D, projection: FloatTransform3D) {
-		positions: Float[10]
-		positions[0] = box leftTop x
-		positions[1] = box leftTop y
-		positions[2] = box rightTop x
-		positions[3] = box rightTop y
-		positions[4] = box rightBottom x
-		positions[5] = box rightBottom y
-		positions[6] = box leftBottom x
-		positions[7] = box leftBottom y
-		positions[8] = box leftTop x
-		positions[9] = box leftTop y
-		this _linesShader color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
-		this _linesShader projection = projection
-		this _linesShader use()
-		this _renderer drawLines(positions[0]&, 5, 2, 1.5f)
+		this _renderer drawLines(positions, pointList count, 2, pen width)
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D) {
 		positions := pointList pointer
