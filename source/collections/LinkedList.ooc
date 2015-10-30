@@ -2,21 +2,22 @@ import structs/List
 
 LinkedList: class <T> {
 	_size = 0 : SizeT
-	size ::= _size as Int
-	head: Node<T>
+	size ::= this _size as Int
+	_head: Node<T>
+	head ::= this _head
 	init: func {
-		this head = Node<T> new()
-		this head prev = this head
-		this head next = this head
+		this _head = Node<T> new()
+		this _head prev = this _head
+		this _head next = this _head
 	}
 	free: override func {
 		this clear()
 		super()
 	}
 	add: func (data: T) {
-		node := Node<T> new(this head prev, head, data)
-		this head prev next = node
-		this head prev = node
+		node := Node<T> new(this _head prev, this _head, data)
+		this _head prev next = node
+		this _head prev = node
 		this _size += 1
 	}
 	add: func ~withIndex (index: SSizeT, data: T) {
@@ -27,12 +28,12 @@ LinkedList: class <T> {
 			prevNode next = node
 			nextNode prev = node
 			this _size += 1
-		} else if (index > 0 && index == _size) {
+		} else if (index > 0 && index == this _size) {
 			this add(data)
 		} else if (index == 0) {
-			node := Node<T> new(this head, head next, data)
-			this head next prev = node
-			this head next = node
+			node := Node<T> new(this _head, this _head next, data)
+			this _head next prev = node
+			this _head next = node
 			_size += 1
 		} else
 			raise("Index out of bounds in LinkedList add~withIndex")
@@ -41,11 +42,11 @@ LinkedList: class <T> {
 		this getNode(index) data
 	}
 	getNode: func (index: SSizeT) -> Node<T> {
-		if (index < 0 || index >= _size)
+		if (index < 0 || index >= this _size)
 			raise("Index out of bounds in LinkedList getNode")
 		i := 0
-		current := this head next
-		while (current next != this head && i < index) {
+		current := this _head next
+		while (current next != this _head && i < index) {
 			current = current next
 			i += 1
 		}
@@ -54,14 +55,14 @@ LinkedList: class <T> {
 	clear: func {
 		while (this size > 0)
 			this removeAt(0)
-		this head next = this head
-		this head prev = this head
+		this _head next = this _head
+		this _head prev = this _head
 	}
 	indexOf: func (data: T) -> SSizeT {
-		current := head next
+		current := this _head next
 		i := 0
 		index := -1
-		while (current != this head) {
+		while (current != this _head) {
 			if (memcmp(current data, data, T size) == 0) {
 				index = i
 				break
@@ -72,10 +73,10 @@ LinkedList: class <T> {
 		index
 	}
 	lastIndexOf: func (data: T) -> SSizeT {
-		current := this head prev
-		i := _size - 1
+		current := this _head prev
+		i := this _size - 1
 		index := -1
-		while (current != this head) {
+		while (current != this _head) {
 			if (memcmp(current data, data, T size) == 0) {
 				index = i
 				break
@@ -87,19 +88,19 @@ LinkedList: class <T> {
 	}
 	first: func -> T {
 		data := null
-		if (head next != this head)
-			data = this head next data
+		if (this _head next != this _head)
+			data = this _head next data
 		data
 	}
 	last: func -> T {
 		data := null
-		if (this head prev != this head)
-			data = this head prev data
+		if (this _head prev != this _head)
+			data = this _head prev data
 		data
 	}
 	removeAt: func (index: SSizeT) -> T {
 		item := null
-		if (head next != head && 0 <= index && index < _size) {
+		if (this _head next != this _head && 0 <= index && index < this _size) {
 			toRemove := getNode(index)
 			removeNode(toRemove)
 			item = toRemove data
@@ -122,12 +123,12 @@ LinkedList: class <T> {
 		toRemove prev = null
 		toRemove next = null
 		toRemove free()
-		_size -= 1
+		this _size -= 1
 	}
 	removeLast: func -> Bool {
 		result := false
-		if (head prev != head) {
-			removeNode(head prev)
+		if (this _head prev != this _head) {
+			removeNode(this _head prev)
 			result = true
 		}
 		result
