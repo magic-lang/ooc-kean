@@ -188,6 +188,7 @@ ColorBgra: cover {
 	blue: UInt8 { get { this bgr blue } set (value) { this bgr blue = value } }
 	green: UInt8 { get { this bgr green } set (value) { this bgr green = value } }
 	red: UInt8 { get { this bgr red } set (value) { this bgr red = value } }
+	normalized ::= FloatPoint4D new(this blue as Float / 255, this green as Float / 255, this red as Float / 255, this alpha as Float / 255)
 	init: func@ (=bgr, =alpha)
 	init: func@ ~default { this init(0, 0, 0, 0) }
 	init: func@ ~uint8 (b, g, r, a: UInt8) { this init(ColorBgr new(b, g, r), a) }

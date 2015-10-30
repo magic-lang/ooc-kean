@@ -36,7 +36,7 @@ Quaternion: cover {
 	// z = this y
 	// w = this z
 
-	inverse ::= This new(this w, -this x, -this y, -this z)
+	inverse ::= This new(this w / (this norm * this norm), -this x / (this norm * this norm), -this y / (this norm * this norm), -this z / (this norm * this norm))
 	isValid ::= (this w == this w && this x == this x && this y == this y && this z == this z)
 	isIdentity ::= (this w == 1.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
 	isNull ::= (this w == 0.0f && this x == 0.0f && this y == 0.0f && this z == 0.0f)
@@ -89,7 +89,7 @@ Quaternion: cover {
 	}
 	apply: func (vector: FloatPoint3D) -> FloatPoint3D {
 		vectorQuaternion := This new(0.0f, vector)
-		result := hamiltonProduct(hamiltonProduct(this, vectorQuaternion), this inverse)
+		result := hamiltonProduct(hamiltonProduct(this, vectorQuaternion), this conjugate) //FIXME Should this be conjugate or inverse?
 		FloatPoint3D new(result x, result y, result z)
 	}
 	createRotation: static func (angle: Float, direction: FloatPoint3D) -> This {
@@ -210,7 +210,7 @@ Quaternion: cover {
 		This new(realResult, imaginaryResult)
 	}
 	operator * (value: FloatPoint3D) -> FloatPoint3D {
-		(this * This new(0.0f, value) * this inverse) imaginary
+		(this * This new(0.0f, value) * this conjugate) imaginary //FIXME Should this be conjugate or inverse?
 	}
 	operator as -> String { this toString() }
 	dotProduct: func (other: This) -> Float {

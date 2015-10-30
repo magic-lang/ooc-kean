@@ -22,8 +22,17 @@ import RasterImage
 import StbImage
 import Image, FloatImage
 import Color
-import PaintEngine
-import RasterPaintEngine
+import Canvas, RasterCanvas
+
+MonochromeRasterCanvas: class extends RasterCanvas {
+	target ::= this _target as RasterMonochrome
+	init: func (image: RasterMonochrome) { super(image) }
+	_drawPoint: override func (x, y: Int) {
+		position := this _map(IntPoint2D new(x, y))
+		if (this target isValidIn(position x, position y))
+			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toMonochrome())
+	}
+}
 
 RasterMonochrome: class extends RasterPacked {
 	bytesPerPixel: Int { get { 1 } }
@@ -49,20 +58,61 @@ RasterMonochrome: class extends RasterPacked {
 			}
 	}
 	resizeTo: override func (size: IntSize2D) -> This {
+		this resizeTo(size, TransformMethod Smooth) as This
+	}
+	resizeTo: override func ~withMethod (size: IntSize2D, method: TransformMethod) -> This {
 		result: This
 		if (this size == size)
 			result = this copy()
 		else {
 			result = This new(size)
-			for (row in 0 .. size height) {
-				srcRow := (this size height * row) / size height
-				for (column in 0 .. size width) {
-					srcColumn := (this size width * column) / size width
-					result[column, row] = this[srcColumn, srcRow]
-				}
+			match (method) {
+				case TransformMethod Smooth => This _resizeBilinear(this, result)
+				case => This _resizeNearestNeighbour(this, result)
 			}
 		}
 		result
+	}
+	_resizeNearestNeighbour: static func (source, result: This) {
+		resultBuffer := result buffer pointer
+		sourceBuffer := source buffer pointer
+		for (row in 0 .. result size height) {
+			sourceRow := (source size height * row) / result size height
+			for (column in 0 .. result size width) {
+				sourceColumn := (source size width * column) / result size width
+				resultBuffer[column + result stride * row] = sourceBuffer[sourceColumn + source stride * sourceRow]
+			}
+		}
+	}
+	_resizeBilinear: static func (source, result: This) {
+		resultBuffer := result buffer pointer
+		sourceBuffer := source buffer pointer
+		for (row in 0 .. result size height) {
+			sourceRow := ((source size height as Float) * row) / result size height
+			sourceRowUp := sourceRow floor() as Int
+			weightDown := sourceRow - sourceRowUp as Float
+			sourceRowDown := (sourceRow - weightDown) as Int + 1
+			rowDownValid := sourceRowDown < source size height
+			if (!rowDownValid)
+				weightDown = 0.0f
+			for (column in 0 .. result size width) {
+				sourceColumn := ((source size width as Float) * column) / result size width
+				sourceColumnLeft := sourceColumn floor() as Int
+				weightRight := sourceColumn - sourceColumnLeft as Float
+				sourceColumnRight := (sourceColumn - weightRight) as Int + 1
+				columnRightValid := sourceColumnRight < source size width
+				if (!columnRightValid)
+					weightRight = 0.0f
+				valueRowUp := (1.0f - weightRight) * sourceBuffer[sourceColumnLeft + sourceRowUp * source stride]
+				if (columnRightValid)
+					valueRowUp += weightRight * sourceBuffer[sourceColumnRight + sourceRowUp * source stride]
+				valueRowDown := 0.0f
+				if (rowDownValid)
+					valueRowDown += (1.0f - weightRight) * sourceBuffer[sourceColumnLeft + sourceRowDown * source stride] + (columnRightValid ? (weightRight * sourceBuffer[sourceColumnRight + sourceRowDown * source stride]) : 0.0f)
+				pixelValue := weightDown * valueRowDown + (1.0f - weightDown) * valueRowUp
+				resultBuffer[column + row * result stride] = pixelValue as UInt8
+			}
+		}
 	}
 	distance: override func (other: Image) -> Float {
 		result := 0.0f
@@ -235,5 +285,10 @@ RasterMonochrome: class extends RasterPacked {
 		for (row in 0 .. this size height)
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
-	createPaintEngine: override func -> PaintEngine { MonochromePaintEngine new(this) }
+	_createCanvas: override func -> Canvas { MonochromeRasterCanvas new(this) }
+	kean_draw_rasterMonochrome_new: static unmangled func (width, height, stride: Int, data: Void*) -> This {
+		result := This new(IntSize2D new(width, height), stride)
+		memcpy(result buffer pointer, data, height * stride)
+		result
+	}
 }

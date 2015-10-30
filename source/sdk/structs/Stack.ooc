@@ -13,6 +13,11 @@ Stack: class <T> extends BackIterable<T> {
         data = ArrayList<T> new()
     }
 
+    free: override func {
+      this data free()
+      super()
+    }
+
     push: func(element: T) {
         data add(element)
     }

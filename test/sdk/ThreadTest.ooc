@@ -7,7 +7,7 @@ ThreadTest: class extends Fixture {
 	init: func {
 		super("Thread")
 		this add("starting thread", This _testStartingThread)
-		this add("canceling thread", This _testCancelation)
+		version (!windows) { this add("canceling thread", This _testCancelation) }
 	}
 	_testStartingThread: static func {
 		threadStarted := Cell<Int> new(0)

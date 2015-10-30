@@ -22,8 +22,17 @@ import RasterImage
 import StbImage
 import Image
 import Color
-import PaintEngine
-import RasterPaintEngine
+import Canvas, RasterCanvas
+
+BgrRasterCanvas: class extends RasterCanvas {
+	target ::= this _target as RasterBgr
+	init: func (image: RasterBgr) { super(image) }
+	_drawPoint: override func (x, y: Int) {
+		position := this _map(IntPoint2D new(x, y))
+		if (this target isValidIn(position x, position y))
+			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toBgr())
+	}
+}
 
 RasterBgr: class extends RasterPacked {
 	bytesPerPixel: Int { get { 3 } }
@@ -144,5 +153,10 @@ RasterBgr: class extends RasterPacked {
 		result swapRedBlue()
 		result
 	}
-	createPaintEngine: override func -> PaintEngine { BgrPaintEngine new(this) }
+	_createCanvas: override func -> Canvas { BgrRasterCanvas new(this) }
+	kean_draw_rasterBgr_new: static unmangled func (width, height, stride: Int, data: Void*) -> This {
+		result := This new(IntSize2D new(width, height), stride)
+		memcpy(result buffer pointer, data, height * stride)
+		result
+	}
 }

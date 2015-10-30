@@ -102,10 +102,10 @@ IntTransform2DTest: class extends Fixture {
 		this add("create rotation", func {
 			angle := Float pi
 			transform := IntTransform2D createZRotation(angle)
-			expect(transform a, is equal to(angle cos() as Int))
-			expect(transform b, is equal to(angle sin() as Int))
-			expect(transform d, is equal to(-angle sin() as Int))
-			expect(transform e, is equal to(angle cos() as Int))
+			expect(transform a, is equal to(-1))
+			expect(transform b, is equal to(0))
+			expect(transform d, is equal to(0))
+			expect(transform e, is equal to(-1))
 			expect(transform g, is equal to(0))
 			expect(transform h, is equal to(0))
 		})
