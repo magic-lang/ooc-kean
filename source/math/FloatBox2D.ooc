@@ -62,10 +62,10 @@ FloatBox2D: cover {
 		this pad(fraction * (this size width + this size height) / 2.0f)
 	}
 	enlarge: func (fraction: Float) -> This {
-		this pad(fraction * this size / 2.0f)
+		this scale(1.0f + fraction)
 	}
 	shrink: func (fraction: Float) -> This {
-		this pad(-fraction * this size / 2.0f)
+		this scale(1.0f - fraction)
 	}
 	resizeTo: func (size: FloatSize2D) -> This {
 		This createAround(this center, size)
