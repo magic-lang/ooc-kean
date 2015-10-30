@@ -55,9 +55,9 @@ RasterBgrTest: class extends Fixture {
 				for (column in 0 .. image width) {
 					pixel1 := image[column, row]
 					pixel2 := image2[column, row]
-					expect(pixel1 red == pixel2 blue)
-					expect(pixel1 green == pixel2 green)
-					expect(pixel1 blue == pixel2 red)
+					expect(pixel1 red, is equal to(pixel2 blue))
+					expect(pixel1 green, is equal to(pixel2 green))
+					expect(pixel1 blue, is equal to(pixel2 red))
 				}
 			image free()
 			image2 free()
