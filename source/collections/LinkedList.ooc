@@ -5,15 +5,19 @@ LinkedList: class <T> {
 	size ::= _size as Int
 	head: Node<T>
 	init: func {
-		head = Node<T> new()
-		head prev = head
-		head next = head
+		this head = Node<T> new()
+		this head prev = this head
+		this head next = this head
+	}
+	free: override func {
+		this clear()
+		super()
 	}
 	add: func (data: T) {
-		node := Node<T> new(head prev, head, data)
-		head prev next = node
-		head prev = node
-		_size += 1
+		node := Node<T> new(this head prev, head, data)
+		this head prev next = node
+		this head prev = node
+		this _size += 1
 	}
 	add: func ~withIndex (index: SSizeT, data: T) {
 		if (index > 0 && index < this size) {
@@ -22,41 +26,42 @@ LinkedList: class <T> {
 			node := Node<T> new(prevNode, nextNode, data)
 			prevNode next = node
 			nextNode prev = node
-			_size += 1
+			this _size += 1
 		} else if (index > 0 && index == _size) {
-			add(data)
+			this add(data)
 		} else if (index == 0) {
-			node := Node<T> new(head, head next, data)
-			head next prev = node
-			head next = node
+			node := Node<T> new(this head, head next, data)
+			this head next prev = node
+			this head next = node
 			_size += 1
 		} else
 			raise("Index out of bounds in LinkedList add~withIndex")
 	}
 	get: func (index: SSizeT) -> T {
-		getNode(index) data
+		this getNode(index) data
 	}
 	getNode: func (index: SSizeT) -> Node<T> {
 		if (index < 0 || index >= _size)
 			raise("Index out of bounds in LinkedList getNode")
 		i := 0
-		current := head next
-		while (current next != head && i < index) {
+		current := this head next
+		while (current next != this head && i < index) {
 			current = current next
 			i += 1
 		}
 		current
 	}
 	clear: func {
-		head next = head
-		head prev = head
-		_size = 0
+		while (this size > 0)
+			this removeAt(0)
+		this head next = this head
+		this head prev = this head
 	}
 	indexOf: func (data: T) -> SSizeT {
 		current := head next
 		i := 0
 		index := -1
-		while (current != head) {
+		while (current != this head) {
 			if (memcmp(current data, data, T size) == 0) {
 				index = i
 				break
@@ -67,10 +72,10 @@ LinkedList: class <T> {
 		index
 	}
 	lastIndexOf: func (data: T) -> SSizeT {
-		current := head prev
+		current := this head prev
 		i := _size - 1
 		index := -1
-		while (current != head) {
+		while (current != this head) {
 			if (memcmp(current data, data, T size) == 0) {
 				index = i
 				break
@@ -81,16 +86,16 @@ LinkedList: class <T> {
 		index
 	}
 	first: func -> T {
-		if (head next != head)
-			return head next data
-		else
-			return null
+		data := null
+		if (head next != this head)
+			data = this head next data
+		data
 	}
 	last: func -> T {
-		if (head prev != head)
-			return head prev data
-		else
-			return null
+		data := null
+		if (this head prev != this head)
+			data = this head prev data
+		data
 	}
 	removeAt: func (index: SSizeT) -> T {
 		item := null
@@ -116,6 +121,7 @@ LinkedList: class <T> {
 		toRemove next prev = toRemove prev
 		toRemove prev = null
 		toRemove next = null
+		toRemove free()
 		_size -= 1
 	}
 	removeLast: func -> Bool {
@@ -127,10 +133,10 @@ LinkedList: class <T> {
 		result
 	}
 	set: func (index: SSizeT, data: T) -> T {
-		node := getNode(index)
-		ret := node data
+		node := this getNode(index)
+		previousData := node data
 		node data = data
-		ret
+		previousData
 	}
 	copy: func -> This<T> {
 		other := This<T> new()
@@ -146,10 +152,11 @@ operator []= <T>(list: LinkedList<T>, index: Int, value: T) { list set(index, va
 Node: class <T> {
 	prev: This<T>
 	next: This<T>
-	data: T
+	data: T //TODO: Auto-wrap covers in Cell<T>
 	init: func
 	init: func ~withParams (=prev, =next, =data)
-	__destroy__: func {
-		gc_free(data)
+	free: override func {
+		//gc_malloc(data)
+		super()
 	}
 }

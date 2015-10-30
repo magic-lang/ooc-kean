@@ -10,7 +10,6 @@ LinkedListTest: class extends Fixture {
 			linkedlist add(2)
 			linkedlist add(5)
 			linkedlist add(7)
-			linkedlist removeAt(1)
 			first := linkedlist first()
 			expect(first, is equal to(7))
 		})
