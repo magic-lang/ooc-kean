@@ -36,10 +36,8 @@ CsvWriter: class {
 		result
 	}
 	open: static func ~string (filename: String) -> This {
-		result: This = null
 		file := File new(filename)
-		if (file exists?())
-			result = This new(FileWriter new(file))
+		result := This new(FileWriter new(file))
 		file free()
 		result
 	}
