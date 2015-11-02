@@ -11,7 +11,9 @@ LinkedListTest: class extends Fixture {
 			linkedlist add(5)
 			linkedlist add(7)
 			first := linkedlist first()
-			expect(first, is equal to(7))
+			last := linkedlist last()
+			expect(first, is equal to(2))
+			expect(last, is equal to(7))
 		})
 		this add("Size and clear", func {
 			linkedlist := LinkedList<Int> new()
