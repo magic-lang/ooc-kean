@@ -12,30 +12,42 @@ LineStyle: enum {
 
 LinePlotData2D: class extends PlotData2D {
 	lineStyle: LineStyle { get set }
+	dataSeries: VectorList<FloatPoint2D> { get set }
 
 	init: func ~default (lineStyle := LineStyle Solid) {
-		super()
+		super("", ColorBgra new())
+		this dataSeries = VectorList<FloatPoint2D> new()
 		this lineStyle = lineStyle
 	}
 
-	init: func ~dataSeries (dataSeries: VectorList<FloatPoint2D>, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
-		super(dataSeries, label, colorBgra)
+	init: func ~dataSeries (=dataSeries, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
+		super(label, colorBgra)
 		this lineStyle = lineStyle
 	}
 
-	init: func ~color (dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra, lineStyle := LineStyle Solid) {
-		this init(dataSeries, "", colorBgra, lineStyle)
+	init: func ~color (=dataSeries, colorBgra: ColorBgra, lineStyle := LineStyle Solid) {
+		super("", colorBgra)
+		this lineStyle = lineStyle
 	}
 
 	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
-		super(xSeries, ySeries, label, colorBgra)
+		this dataSeries = VectorList<FloatPoint2D> new()
+		for (i in 0 .. ySeries count) {
+			this dataSeries add(FloatPoint2D new(xSeries != null ? xSeries[i] : (i + 1) as Float, ySeries[i]))
+		}
+		super(label, colorBgra)
 		this lineStyle = lineStyle
+	}
+
+	free: override func {
+		this dataSeries free()
+		super()
 	}
 
 	getSvg: func (transform: FloatTransform2D) -> String {
 		result := ""
 		if (!this dataSeries empty) {
-			result = result & "<path stroke='" + this color >> "' stroke-opacity='" & this opacity toString() >> "' fill='none' stroke-width='" & this lineWidth toString() >> "' d='M " & ((transform * this dataSeries[0]) x) toString() >> " " & ((transform * this dataSeries[0]) y) toString() >> " L "
+			result = result & "<path stroke='" + Shapes getColor(this colorBgra) >> "' stroke-opacity='" & Shapes getOpacity(this colorBgra) >> "' fill='none' stroke-width='" & this lineWidth toString() >> "' d='M " & ((transform * this dataSeries[0]) x) toString() >> " " & ((transform * this dataSeries[0]) y) toString() >> " L "
 			for (j in 1 .. this dataSeries count)
 				result = result & ((transform * this dataSeries[j]) x) toString() >> " " & ((transform * this dataSeries[j]) y) toString() >> " "
 			result = result >> "' "
@@ -57,13 +69,37 @@ LinePlotData2D: class extends PlotData2D {
 		end := FloatPoint2D new(this legendOffset + fontSize, start y)
 		match (this lineStyle) {
 			case LineStyle Dashed =>
-				result = Shapes line(start, end, this lineWidth, this opacity, this color, FloatPoint2D new((this lineWidth * 5) as Float, (this lineWidth * 5) as Float))
+				result = Shapes line(start, end, this lineWidth, this colorBgra, FloatPoint2D new((this lineWidth * 5) as Float, (this lineWidth * 5) as Float))
 			case LineStyle Dotted =>
-				result = Shapes line(start, end, this lineWidth, this opacity, this color, FloatPoint2D new(this lineWidth as Float, this lineWidth as Float))
+				result = Shapes line(start, end, this lineWidth, this colorBgra, FloatPoint2D new(this lineWidth as Float, this lineWidth as Float))
 			case => // LineStyle Solid
-				result = Shapes line(start, end, this lineWidth, this opacity, this color)
+				result = Shapes line(start, end, this lineWidth, this colorBgra)
 		}
-		result = result & Shapes text(FloatPoint2D new(end x, end y + fontSize / 3), this label, fontSize, this opacity, this color)
+		result = result & Shapes text(FloatPoint2D new(end x, end y + fontSize / 3), this label, fontSize, this colorBgra)
+		result
+	}
+
+	minValues: override func -> FloatPoint2D {
+		result: FloatPoint2D
+		if (this dataSeries empty)
+			result = FloatPoint2D new()
+		else {
+			result = this dataSeries[0]
+			for (i in 1 .. this dataSeries count)
+				result = result minimum(this dataSeries[i])
+		}
+		result
+	}
+
+	maxValues: override func -> FloatPoint2D {
+		result: FloatPoint2D
+		if (this dataSeries empty)
+			result = FloatPoint2D new()
+		else {
+			result = this dataSeries[0]
+			for (i in 1 .. this dataSeries count)
+				result = result maximum(this dataSeries[i])
+		}
 		result
 	}
 }
