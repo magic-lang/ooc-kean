@@ -39,18 +39,17 @@ ByteBuffer: class {
 		if (this _referenceCount != null)
 			this _referenceCount free()
 		this _referenceCount = null
-		if (this _owner) {
+		if (this _owner)
 			gc_free(this _pointer)
-			this _pointer = null
-		}
+		this _pointer = null
 		super()
 	}
 	forceFree: func {
 		this _forceFree = true
 		this free()
 	}
-	zero: func ~whole { memset(_pointer, 0, _size) }
-	zero: func ~range (offset, length: Int) { memset(_pointer + offset, 0, length) }
+	zero: func ~whole { memset(this _pointer, 0, _size) }
+	zero: func ~range (offset, length: Int) { memset(this _pointer + offset, 0, length) }
 	slice: func (offset, size: Int) -> This { _SlicedByteBuffer new(this, offset, size) }
 	copy: func -> This {
 		result := This new(this size)
@@ -76,22 +75,18 @@ _SlicedByteBuffer: class extends ByteBuffer {
 	_offset: Int
 	init: func (=_parent, =_offset, size: Int) {
 		_parent referenceCount increase()
-		super(_parent pointer + _offset, size, false)
+		super(_parent pointer + _offset, size)
 	}
 	free: override func {
 		if (this _parent != null)
 			this _parent referenceCount decrease()
 		this _parent = null
-		this _pointer = null
-		if (this _referenceCount != null)
-			this _referenceCount free()
-		this _referenceCount = null
 		super()
 	}
 }
 _RecoverableByteBuffer: class extends ByteBuffer {
 	_recover: Func (ByteBuffer)
-	init: func (pointer: UInt8*, size: Int, =_recover) { super(pointer, size, false) }
+	init: func (pointer: UInt8*, size: Int, =_recover) { super(pointer, size) }
 	free: override func {
 		if (!this _forceFree)
 			this _recover(this)
@@ -140,13 +135,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 	_mediumRecycleBin := static VectorList<This> new()
 	_largeRecycleBin := static VectorList<This> new()
 	_getBin: static func (size: Int) -> VectorList<This> {
-		if (size < 10000)
-			This _smallRecycleBin
-		else if (size < 100000)
-			This _mediumRecycleBin
-		else
-			This _largeRecycleBin
-		//		size < 10000 ? This smallRecycleBin : size < 100000 ? This mediumRecycleBin : This largeRecycleBin
+		size < 10000 ? This _smallRecycleBin : (size < 100000 ? This _mediumRecycleBin : This _largeRecycleBin)
 	}
 	_cleanList: static func (list: VectorList<This>) {
 		while (list count > 0)
