@@ -4,6 +4,7 @@ Stack: class <T> {
 	_capacity: SizeT = 8
 	size ::= this _size
 	isEmpty ::= this size == 0
+	top ::= this peek()
 	init: func {
 		this _data = gc_malloc(this _capacity * T size)
 	}
@@ -29,11 +30,7 @@ Stack: class <T> {
 				Exception new(This, "Trying to peek(%d)! index must be >= 1 <= size" format(index)) throw()
 			else if (index >= this size)
 				Exception new(This, "Trying to peek(%d) a stack of size %d" format(index, this size)) throw()
-		this _data[index]
-	}
-	//TODO: remove this function, exists only for compatibility with current codebase
-	empty?: func -> Bool {
-		this isEmpty
+		this _data[this size - index - 1]
 	}
 	clear: func {
 		this _size = 0

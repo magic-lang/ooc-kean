@@ -56,7 +56,7 @@ _markStackFrame: inline func (frame: StackFrame) {
 }
 
 _cleanupStackFrames: inline func {
-  while (stackFramesToDelete empty?() == false) {
+  while (!stackFramesToDelete isEmpty) {
     frame := stackFramesToDelete pop() as StackFrame
     if (frame)
       gc_free(frame as Void*)
@@ -164,7 +164,7 @@ Exception: class {
     }
 
     free: override func {
-      while (this backtraces empty?() == false) {
+      while (!this backtraces isEmpty) {
         backtrace := this backtraces pop() as Backtrace
         if (backtrace)
           backtrace free()
