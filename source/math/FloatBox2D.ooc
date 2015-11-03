@@ -150,22 +150,16 @@ FloatBox2D: cover {
 	}
 	createAround: static func (center: FloatPoint2D, size: FloatSize2D) -> This { This new(center - (size / 2.0f), size) }
 	bounds: static func (left, right, top, bottom: Float) -> This { This new(left, top, right - left, bottom - top) }
-	bounds: static func ~fromArray (points: FloatPoint2D[]) -> This {
-		pointsAsVectorList := FloatPoint2DVectorList new()
-		for (i in 0 .. points length)
-			pointsAsVectorList add(points[i])
-		result := This bounds(pointsAsVectorList)
-		pointsAsVectorList free()
-		result
-	}
-	bounds: static func ~fromList (points: VectorList<FloatPoint2D>) -> This {
+	bounds: static func ~fromArray (points: FloatPoint2D[]) -> This { This bounds(points data, points count) }
+	bounds: static func ~fromList (points: VectorList<FloatPoint2D>) -> This { This bounds(points pointer as This*, points count) }
+	bounds: static func ~fromPointer (data: This*, count: Int) {
 		xMinimum := 0.0f
 		xMaximum := xMinimum
 		yMinimum := xMinimum
 		yMaximum := xMinimum
 		initialized := false
-		for (i in 0 .. points count) {
-			point := points[i]
+		for (i in 0 .. count) {
+			point := data[i]
 			if (!initialized) {
 				initialized = true
 				xMinimum = point x
