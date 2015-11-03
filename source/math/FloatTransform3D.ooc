@@ -21,6 +21,7 @@ import FloatPoint2D
 import FloatPoint3D
 import FloatBox2D
 import FloatTransform2D
+import VectorList
 import text/StringTokenizer
 import structs/ArrayList
 
@@ -212,6 +213,14 @@ FloatTransform3D: cover {
 	}
 	transformAndProject: func ~FloatBox2D (box: FloatBox2D, focalLength: Float) -> FloatBox2D {
 		FloatBox2D new(this transformAndProject(box leftTop, focalLength), this transformAndProject(box rightBottom, focalLength))
+	}
+	transformAndProjectCorners: func (box: FloatBox2D, focalLength: Float) -> VectorList<FloatPoint2D> {
+		result := VectorList<FloatPoint2D> new()
+		result add(this transformAndProject(box leftTop, focalLength))
+		result add(this transformAndProject(box leftBottom, focalLength))
+		result add(this transformAndProject(box rightBottom, focalLength))
+		result add(this transformAndProject(box rightTop, focalLength))
+		result
 	}
 	project: func (point: FloatPoint3D, focalLength: Float) -> FloatPoint2D {
 		projectedPoint := This createProjection(focalLength) * point / point z
