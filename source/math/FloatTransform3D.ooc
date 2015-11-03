@@ -21,7 +21,6 @@ import FloatPoint2D
 import FloatPoint3D
 import FloatBox2D
 import FloatTransform2D
-import text/StringTokenizer
 import structs/ArrayList
 
 // The 3D transform is a 4x4 homogeneous coordinate matrix.

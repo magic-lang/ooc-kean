@@ -2,7 +2,6 @@
 // sdk
 import os/[Env, Dynlib, ShellUtils]
 import io/[File, StringReader]
-import text/StringTokenizer
 import structs/[ArrayList, List]
 
 // sdk internals

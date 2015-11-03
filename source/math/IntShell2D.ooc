@@ -17,7 +17,6 @@ import math
 import IntPoint2D
 import IntSize2D
 import IntBox2D
-import text/StringTokenizer
 import structs/ArrayList
 
 IntShell2D: cover {

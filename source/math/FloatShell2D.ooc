@@ -17,7 +17,6 @@ import math
 import FloatPoint2D
 import FloatSize2D
 import FloatBox2D
-import text/StringTokenizer
 import structs/ArrayList
 
 FloatShell2D: cover {
