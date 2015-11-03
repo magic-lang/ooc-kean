@@ -70,7 +70,7 @@ PromiseTest: class extends Fixture {
 		this add("Wait with timeout", func {
 			promise := Promise start(this counter)
 			promise2 := Promise start(this counter)
-			future := Future start(Text, func { for (i in 0 .. 10_000_000) { } t"job1" } )
+			future := Future start(Text, func { for (i in 0 .. 50_000_000) { } t"job1" } )
 			promise wait(0.01)
 			future wait(0.01)
 			promise cancel()

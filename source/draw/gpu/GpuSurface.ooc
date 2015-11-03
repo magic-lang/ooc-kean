@@ -22,21 +22,18 @@ use ooc-base
 import GpuContext, GpuMap, GpuImage, GpuMesh
 
 version(!gpuOff) {
-GpuSurface: abstract class {
-	clearColor: ColorBgra { get set }
-	viewport: IntBox2D { get set }
-	_size: IntSize2D
-	size ::= this _size
-	blend: Bool { get set }
-	opacity: Float { get set }
+GpuSurface: abstract class extends Canvas {
 	_context: GpuContext
 	_model: FloatTransform3D
-	_view: FloatTransform3D
+	_view := FloatTransform3D identity
 	_projection: FloatTransform3D
-	_toLocal: FloatTransform3D
+	_toLocal := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
 	transform: FloatTransform3D {
-		get { this _toLocal * this _view * this _toLocal }
-		set(value) { this _view = this _toLocal * value * this _toLocal }
+		get { this _transform }
+		set(value) {
+			this _transform = value
+			this _view = this _toLocal * value * this _toLocal
+		}
 	}
 	_focalLength: Float
 	focalLength: Float {
@@ -46,8 +43,8 @@ GpuSurface: abstract class {
 			if (this _focalLength > 0.0f) {
 				a := 2.0f * this _focalLength / this size width
 				f := -(this _coordinateTransform e as Float) * 2.0f * this _focalLength / this size height
-				k := (this farPlane + this nearPlane) / (this farPlane - this nearPlane)
-				o := 2.0f * this farPlane * this nearPlane / (this farPlane - this nearPlane)
+				k := (this _farPlane + this _nearPlane) / (this _farPlane - this _nearPlane)
+				o := 2.0f * this _farPlane * this _nearPlane / (this _farPlane - this _nearPlane)
 				this _projection = FloatTransform3D new(a, 0.0f, 0.0f, 0.0f, 0.0f, f, 0.0f, 0.0f, 0.0f, 0.0f, k, -1.0f, 0.0f, 0.0f, o, 0.0f)
 			}
 			else
@@ -55,21 +52,11 @@ GpuSurface: abstract class {
 			this _model = this _createModelTransform(IntBox2D new(this size))
 		}
 	}
-	nearPlane: Float { get set }
-	farPlane: Float { get set }
+	_nearPlane := 1.0f
+	_farPlane := 10000.0f
 	_defaultMap: GpuMap
 	_coordinateTransform := IntTransform2D identity
-	init: func (=_size, =_context, =_defaultMap, =_coordinateTransform) {
-		this _toLocal = FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
-		this clearColor = ColorBgra new(0, 0, 0, 0)
-		this viewport = IntBox2D new(this size)
-		this focalLength = 0.0f
-		this nearPlane = 1.0f
-		this farPlane = 10000.0f
-		this _view = FloatTransform3D identity
-		this blend = false
-		this opacity = 1.0f
-	}
+	init: func (size: IntSize2D, =_context, =_defaultMap, =_coordinateTransform) { super(size) }
 	_createModelTransform: func (box: IntBox2D) -> FloatTransform3D {
 		toReference := FloatTransform3D createTranslation((box size width - this size width) / 2, (this size height - box size height) / 2, 0.0f)
 		translation := this _toLocal * FloatTransform3D createTranslation(box leftTop x, box leftTop y, this focalLength) * this _toLocal
@@ -81,10 +68,10 @@ GpuSurface: abstract class {
 		translation * scaling
 	}
 	_getDefaultMap: virtual func (image: Image) -> GpuMap { this _defaultMap }
-	clear: abstract func
+	clear: func { this fill() }
 	draw: virtual func (action: Func)
 	draw: virtual func ~WithoutBind (destination: IntBox2D, map: GpuMap)
-	draw: abstract func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap)
+	draw: abstract func ~GpuImage (image: GpuImage, source, destination: IntBox2D, map: GpuMap)
 	draw: func ~Full (image: Image, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
 		if (image instanceOf?(GpuImage)) { this draw(image as GpuImage, source, destination, map) }
 		else if (image instanceOf?(RasterImage)) {
@@ -95,18 +82,11 @@ GpuSurface: abstract class {
 		else
 			Debug raise("Trying to draw unsupported image format to OpenGLCanvas!")
 	}
-	draw: func ~ImageSourceDestination (image: Image, source: IntBox2D, destination: IntBox2D) { this draw(image, source, destination, this _getDefaultMap(image)) }
-	draw: func ~ImageDestination (image: Image, destination: IntBox2D) { this draw(image, IntBox2D new(image size), destination) }
-	draw: func ~Image (image: Image) { this draw(image, IntBox2D new(image size)) }
-	draw: func ~ImageTargetSize (image: Image, targetSize: IntSize2D) { this draw(image, IntBox2D new(targetSize)) }
+	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) { this draw(image, source, destination, this _getDefaultMap(image)) }
 	draw: func ~ImageMap (image: Image, map: GpuMap) { this draw(image, IntBox2D new(image size), IntBox2D new(image size), map) }
 	draw: func ~ImageDestinationMap (image: Image, destination: IntBox2D, map: GpuMap) { this draw(image, IntBox2D new(image size), destination, map) }
 
 	draw: virtual func ~mesh (image: Image, mesh: GpuMesh) { Debug raise("draw~mesh unimplemented!") }
-
-	drawLines: virtual func (pointList: VectorList<FloatPoint2D>)
-	drawBox: virtual func (box: FloatBox2D)
-	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>)
 	readPixels: virtual func -> ByteBuffer { raise("readPixels unimplemented!") }
 }
 }

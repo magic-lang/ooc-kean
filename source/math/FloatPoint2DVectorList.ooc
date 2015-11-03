@@ -39,7 +39,7 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 		result
 	}
 	mean: func -> FloatPoint2D {
-		sum() / this _count
+		this sum() / this _count
 	}
 	getX: func -> FloatVectorList {
 		result := FloatVectorList new()
@@ -59,9 +59,9 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 	}
 	medianPosition: func -> FloatPoint2D {
 		result := FloatPoint2D new()
-		sortedX := getX()
+		sortedX := this getX()
 		sortedX sort()
-		sortedY := getY()
+		sortedY := this getY()
 		sortedY sort()
 		result x = sortedX[sortedX count / 2]
 		result y = sortedY[sortedY count / 2]

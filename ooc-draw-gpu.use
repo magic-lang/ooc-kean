@@ -12,7 +12,6 @@ Imports: GpuMap
 Imports: GpuContext
 Imports: GpuFence
 Imports: GpuMesh
-Imports: GpuPaintEngine
 version (linux || apple || android) {
 	Libs: -lEGL
 	Libs: -lGLESv2

@@ -76,4 +76,10 @@ RasterImage: abstract class extends Image {
 		result
 	}
 	save: virtual func (filename: String) -> Int { Debug raise("RasterImage save unimplemented for format!"); 0 }
+	kean_draw_rasterImage_getStride: unmangled func -> UInt { this stride }
+	kean_draw_rasterImage_save: unmangled func (path: const Char*) {
+		pathString := String new(path)
+		this save(pathString)
+		pathString free()
+	}
 }

@@ -26,14 +26,23 @@ import RasterUv
 import Image
 import Color
 import RasterBgr
-import PaintEngine
-import RasterPaintEngine
 import StbImage
 import io/File
 import io/FileReader
 import io/Reader
 import io/FileWriter
 import io/BinarySequence
+import Canvas, RasterCanvas
+
+Yuv420RasterCanvas: class extends RasterCanvas {
+	target ::= this _target as RasterYuv420Semiplanar
+	init: func (image: RasterYuv420Semiplanar) { super(image) }
+	_drawPoint: override func (x, y: Int) {
+		position := this _map(IntPoint2D new(x, y))
+		if (this target isValidIn(position x, position y))
+			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toYuv())
+	}
+}
 
 RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	stride ::= this _y stride
@@ -250,5 +259,13 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		fileWriter write(this uv buffer pointer as Char*, this uv buffer size)
 		fileWriter close()
 	}
-	createPaintEngine: override func -> PaintEngine { Yuv420PaintEngine new(this) }
+	_createCanvas: override func -> Canvas { Yuv420RasterCanvas new(this) }
+	kean_draw_rasterYuv420Semiplanar_new: static unmangled func (width, height, stride: Int, monochromeData, uvData: Void*) -> This {
+		result := This new(IntSize2D new(width, height), stride)
+		memcpy(result uv buffer pointer, uvData, (height / 2) * stride)
+		memcpy(result y buffer pointer, monochromeData, height * stride)
+		result
+	}
+	kean_draw_rasterYuv420Semiplanar_getMonochromeData: unmangled func -> Void* { this y buffer pointer }
+	kean_draw_rasterYuv420Semiplanar_getUvData: unmangled func -> Void* { this uv buffer pointer }
 }

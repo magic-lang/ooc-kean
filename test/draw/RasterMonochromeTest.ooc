@@ -12,7 +12,7 @@ RasterMonochromeTest: class extends Fixture {
 		this add("equals 1", func {
 			image1 := RasterMonochrome open(this sourceFlower)
 			image2 := RasterMonochrome open(this sourceSpace)
-			expect(image1 equals(image1))
+			expect(image1 equals(image1), is true)
 			expect(image1 equals(image2), is false)
 			image1 free(); image2 free()
 		})
@@ -21,7 +21,7 @@ RasterMonochromeTest: class extends Fixture {
 			image1 := RasterMonochrome open(this sourceFlower)
 			image1 save(output)
 			image2 := RasterMonochrome open(output)
-			expect(image1 equals(image2))
+			expect(image1 equals(image2), is true)
 			image1 free(); image2 free()
 		})
 		this add("distance, same image", func {
@@ -46,27 +46,44 @@ RasterMonochromeTest: class extends Fixture {
 					image[column, row] = ColorMonochrome new(row)
 			for (column in 0 .. size width) {
 				columnData := image getColumn(column)
-				expect(columnData count == size height)
+				expect(columnData count, is equal to(size height))
 				for (i in 0 .. columnData count)
-					expect(columnData[i] as UInt8 == i)
+					expect(columnData[i] as Int, is equal to(i))
 			}
 			for (row in 0 .. size height) {
 				rowData := image getRow(row)
-				expect(rowData count == size width)
+				expect(rowData count, is equal to(size width))
 				for (i in 0 .. rowData count)
-					expect(rowData[i] as UInt8 == row)
+					expect(rowData[i] as Int, is equal to(row))
 			}
+			image free()
 		})
 		this add("resize", func {
+			outputFast := "test/draw/output/RasterMonochrome_upscaledFast.png"
+			outputSmooth := "test/draw/output/RasterMonochrome_upscaledSmooth.png"
 			size := IntSize2D new(13, 5)
 			image := RasterMonochrome open(this sourceFlower)
 			image2 := image resizeTo(image size / 2)
 			expect(image2 size == image size / 2)
-			image2 = image2 resizeTo(image size)
-			expect(image2 size == image size)
-			expect(image distance(image2) < image size width / 10)
-			image2 = image2 resizeTo(size)
-			expect(image2 size == size)
+			image3 := image2 resizeTo(image size)
+			expect(image3 size == image size)
+			expect(image distance(image3) < image size width / 10)
+			image3 referenceCount decrease()
+			image3 = image2 resizeTo(size)
+			expect(image3 size == size)
+			image3 referenceCount decrease()
+			image2 referenceCount decrease()
+			image2 = image resizeTo(image size / 4)
+			image referenceCount decrease()
+			image = image2 resizeTo(image2 size * 4, TransformMethod Fast)
+			image save(outputFast)
+			image referenceCount decrease()
+			image = image2 resizeTo(image2 size * 4, TransformMethod Smooth)
+			image save(outputSmooth)
+			image referenceCount decrease()
+			image2 referenceCount decrease()
+			outputFast free()
+			outputSmooth free()
 		})
 		this add("copy", func {
 			image := RasterMonochrome open(this sourceFlower)
@@ -89,4 +106,6 @@ RasterMonochromeTest: class extends Fixture {
 	}
 }
 
-RasterMonochromeTest new() run()
+test := RasterMonochromeTest new()
+test run()
+test free()
