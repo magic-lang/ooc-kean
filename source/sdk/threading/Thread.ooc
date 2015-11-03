@@ -110,6 +110,12 @@ Thread: abstract class {
 
 }
 
+MutexType: enum {
+	Safe,
+	Unsafe,
+	Global
+}
+
 /**
  * A mutex is a mechanism used for synchronizing threads.
  *
@@ -120,23 +126,24 @@ Mutex: abstract class {
 
     /**
        :return: an intialized mutex, unlocked.
-
-       IMPORTANT: mutexes are special beasts. Don't attempt to access
-       the class of a mutex. Depending on the underlying implementation,
-       it may not be a real ooc object but only a pointer.
      */
-    new: static func -> This {
-
-        version (unix || apple) {
-            return MutexUnix new()
-        }
-        version (windows) {
-            return MutexWin32 new()
-        }
-
-        Exception new(This, "Unsupported platform!\n") throw()
-        null
-
+    new: static func (mutexType := MutexType Safe) -> This {
+		result: This
+		match (mutexType) {
+			case MutexType Safe => {
+				version (unix || apple)
+					result = MutexUnix new()
+				version (windows)
+					result = MutexWin32 new()
+				if (result == null)
+					Exception new(This, "Unsupported platform!\n") throw()
+			}
+			case MutexType Unsafe =>
+				result = MutexUnsafe new()
+			case =>
+				result = MutexGlobal new()
+		}
+        result
     }
 
     /**
@@ -163,6 +170,26 @@ Mutex: abstract class {
         unlock()
     }
 
+}
+
+MutexUnsafe: class extends Mutex {
+	init: func
+	lock: override func
+	unlock: override func
+}
+
+MutexGlobal: class extends Mutex {
+	_globalMutex := static Mutex new(MutexType Safe)
+	init: func
+	lock: override func {
+		This _globalMutex lock()
+	}
+	unlock: override func {
+		This _globalMutex unlock()
+	}
+	cleanup: static func {
+		This _globalMutex free()
+	}
 }
 
 /**
