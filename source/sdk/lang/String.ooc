@@ -290,8 +290,8 @@ String: class extends Iterable<Char> {
     }
 
     toCString: func -> CString { _buffer data as CString }
-	
-	split: func ~withChar (c: Char, maxTokens: SSizeT) -> ArrayList<This> {
+
+    split: func ~withChar (c: Char, maxTokens: SSizeT) -> ArrayList<This> {
         _bufArrayListToStrArrayList(_buffer split(c, maxTokens))
     }
 

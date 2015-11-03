@@ -665,8 +665,8 @@ Buffer: class extends Iterable<Char> {
             NegativeLengthException new(This, len) throw()
         }
     }
-	
-	split: func ~withChar(c: Char, maxTokens: SSizeT) -> ArrayList<This> {
+
+    split: func ~withChar(c: Char, maxTokens: SSizeT) -> ArrayList<This> {
         split(c&, 1, maxTokens)
     }
 
@@ -726,7 +726,6 @@ Buffer: class extends Iterable<Char> {
         findResults free()
         result
     }
-
 }
 
 NegativeLengthException: class extends Exception {
