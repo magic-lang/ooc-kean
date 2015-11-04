@@ -63,13 +63,13 @@ RasterBgr: class extends RasterPacked {
 	}
 	distance: func (other: Image) -> Float {
 		result := 0.0f
-		if (!other)
+		if (!other || (this size != other size))
 			result = Float maximumValue
-//		else if (!other instanceOf?(This))
-//			FIXME
-//		else if (this size != other size)
-//			FIXME
-		else {
+		else if (!other instanceOf?(This)) {
+			converted := This convertFrom(other as RasterImage)
+			result = this distance(converted)
+			converted referenceCount decrease()
+		} else {
 			for (y in 0 .. this size height)
 				for (x in 0 .. this size width) {
 					c := this[x, y]
