@@ -58,16 +58,16 @@ RasterMonochrome: class extends RasterPacked {
 			}
 	}
 	resizeTo: override func (size: IntSize2D) -> This {
-		this resizeTo(size, TransformMethod Smooth) as This
+		this resizeTo(size, InterpolationMode Smooth) as This
 	}
-	resizeTo: override func ~withMethod (size: IntSize2D, method: TransformMethod) -> This {
+	resizeTo: override func ~withMethod (size: IntSize2D, method: InterpolationMode) -> This {
 		result: This
 		if (this size == size)
 			result = this copy()
 		else {
 			result = This new(size)
 			match (method) {
-				case TransformMethod Smooth => This _resizeBilinear(this, result)
+				case InterpolationMode Smooth => This _resizeBilinear(this, result)
 				case => This _resizeNearestNeighbour(this, result)
 			}
 		}
