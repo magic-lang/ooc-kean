@@ -5,8 +5,8 @@ import text/StringTokenizer
 import structs/ArrayList
 
 version(!gpuOff) {
-validateStart: func {
-	validate("from unknown location")
+validateStart: func (location: String) {
+	validate("before " + location + " from unknown location")
 }
 validateEnd: func (location: String) {
 	validate("in " + location)
@@ -43,6 +43,7 @@ getEglErrorMessage: func (errorCode: Int) -> String {
 		case 12290 => "EGL_BAD_ACCESS"
 		case 12291 => "EGL_BAD_ALLOC"
 		case 12292 => "EGL_BAD_ATTRIBUTE"
+		case 12294 => "EGL_BAD_CONTEXT"
 		case 12297 => "EGL_BAD_MATCH"
 		case 12300 => "EGL_BAD_PARAMETER"
 		case 12301 => "EGL_BAD_SURFACE"

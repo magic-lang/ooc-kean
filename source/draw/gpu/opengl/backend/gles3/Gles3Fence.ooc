@@ -26,13 +26,13 @@ version(!gpuOff) {
 Gles3Fence: class extends GLFence {
 	init: func { super() }
 	free: override func {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Fence free") }
 		glDeleteSync(this _backend)
 		version(debugGL) { validateEnd("Fence free") }
 		super()
 	}
 	clientWait: func (timeout: UInt64 = ULLONG_MAX) {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Fence clientWait") }
 		this _mutex lock()
 		if (this _backend == null)
 			this _syncCondition wait(this _mutex)
@@ -52,13 +52,13 @@ Gles3Fence: class extends GLFence {
 		version(debugGL) { validateEnd("Fence clientWait") }
 	}
 	wait: func {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Fence wait") }
 		glFlush()
 		glWaitSync(this _backend, 0, GL_TIMEOUT_IGNORED)
 		version(debugGL) { validateEnd("Fence wait") }
 	}
 	sync: func {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Fence sync") }
 		this _mutex lock()
 		if (this _backend != null)
 			glDeleteSync(this _backend)
