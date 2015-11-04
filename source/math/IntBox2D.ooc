@@ -120,7 +120,7 @@ IntBox2D: cover {
 		array := input split(',')
 		This new(array[0] toInt(), array[1] toInt(), array[2] toInt(), array[3] toInt())
 	}
-	createAround: static func (center: IntPoint2D, size: IntSize2D) -> This { This new(center + (-size) / 2, size) }
+	createAround: static func (center: IntPoint2D, size: IntSize2D) -> This { This new(center - (size / 2), size) }
 	bounds: static func (left, right, top, bottom: Int) -> This { This new(left, top, right - left, bottom - top) }
 	bounds: static func ~fromArray (points: IntPoint2D[]) -> This {
 		pointsAsVectorList := VectorList<IntPoint2D> new()
