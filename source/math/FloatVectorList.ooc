@@ -381,4 +381,88 @@ FloatVectorList: class extends VectorList<Float> {
 			result add(this[i] clamp(floor, ceiling))
 		result
 	}
+	findMaxIndex: func -> (Int, Float) {
+		result := Float negativeInfinity
+		index := 0
+		for (i in 0 .. this count)
+			if (result < this[i]) {
+				result = this[i]
+				index = i
+			}
+		(index, result)
+	}
+	crossCorrelation: func (other: This, vectorLength: Int) -> Float {
+		upperPart := 0.0f
+		lowerPart := 0.0f
+		lowerPart2 := 0.0f
+		for (i in 0 .. vectorLength) {
+			upperPart += ((this[i] - this mean) * (other[i] - other mean))
+			lowerPart += ((this[i] - this mean) * (this[i] - this mean))
+			lowerPart2 += ((other[i] - other mean) * (other[i] - other mean))
+		}
+		upperPart / sqrt(lowerPart * lowerPart2)
+	}
+	shift: func (offset: Int, filledValue := 0.0f) -> This {
+		result := This new(this count)
+		if (offset < 0) {
+			for (i in 0 .. this count) {
+				if ((i - offset) <= this count)
+					result add(this[i - offset])
+				else
+					result add(filledValue)
+			}
+		}
+		else {
+			for (i in 0 .. this count) {
+				if (i < offset)
+					result add(filledValue)
+				else
+					result add(this[i - offset])
+			}
+		}
+		result
+	}
+	// offset < 0 means it shifts to left
+	findCrossCorrelationOffset: func (other: This, offsetStart, offsetEnd: Int) -> CorrelationData {
+		println("There are " + this count toString() + " points, please wait for calculating...")
+		crossCorrelation := This new(this count)
+		printf("calculating.")
+		for (offset in offsetStart .. offsetEnd) {
+			crossCorrelation add(this shift(offset) crossCorrelation(other, other count))
+			printf(".")
+		}
+		(index, maxValue) := crossCorrelation findMaxIndex()
+		println("finished")
+		index = (index < (offsetEnd - offsetStart) / 2) ? (index + offsetStart) : (index - offsetEnd)
+
+		result := CorrelationData new(index, maxValue, crossCorrelation)
+	}
+	//input: how many points there will be mroe between two origin points.
+	// this is a Linear interpolation way to have highier precision
+	higherPrecision: func (numberOfPoint: Int) -> This {
+		if (numberOfPoint != 0) {
+			newCount := this count + numberOfPoint * (this count - 1)
+			result := This new(newCount)
+			precision := (numberOfPoint + 1) as Float
+			for (ind in 0 .. newCount) {
+				if (Float modulo(ind as Float, precision) == 0.0f)
+					result add(this[ind / precision])
+				else {
+					ratio := Float modulo(ind as Float, precision) / precision
+					difference := this[ind / precision + 1] - this[ind / precision]
+					tempResult := this[ind / precision] + ratio * difference
+					result add(tempResult)
+				}
+			}
+			result
+		}
+		else
+			this
+	}
+}
+CorrelationData: cover {
+	index: Int
+	maxValue: Float
+	crossCorrelation: FloatVectorList
+	init: func@ (=index, =maxValue, =crossCorrelation)
 }
