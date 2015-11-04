@@ -294,6 +294,48 @@ FloatVectorListTest: class extends Fixture {
 			list free()
 			filtered free()
 		})
+		this add("higher Precision", func {
+			list := FloatVectorList new()
+			list add(2.0f)
+			list add(1.0f)
+			list add(6.0f)
+			list add(4.0f)
+			list add(7.0f)
+			numberOfPointsBetween := 1
+			tempLists := list higherPrecision(numberOfPointsBetween)
+
+			expect(tempLists count == (list count + numberOfPointsBetween * (list count - 1)))
+			expect(tempLists[0], is equal to(2.0f) within(tolerance))
+			expect(tempLists[1], is equal to(1.5f) within(tolerance))
+			expect(tempLists[2], is equal to(1.0f) within(tolerance))
+			expect(tempLists[3], is equal to(3.5f) within(tolerance))
+			list free()
+			tempLists free()
+		})
+		this add("find CrossCorrelation Offset", func {
+			list := FloatVectorList new()
+			list add(2.0f)
+			list add(1.0f)
+			list add(6.0f)
+			list add(4.0f)
+			list add(7.0f)
+			tempLists0 := list shift(-2)
+			tempLists1 := list shift(2)
+			tempLists2 := list shift(0)
+
+			temp0 := list findCrossCorrelationOffset(tempLists0, -5, 5)
+			temp1 := list findCrossCorrelationOffset(tempLists1, -5, 5)
+			temp2 := list findCrossCorrelationOffset(tempLists2, -5, 5)
+
+			expect(temp0 index == -2)
+			expect(temp1 index == 2)
+			expect(temp2 index == 0)
+			expect(temp2 maxValue, is equal to(1.0f) within(tolerance))
+			list free()
+			tempLists0 free()
+			tempLists1 free()
+			tempLists2 free()
+		})
 	}
 }
 FloatVectorListTest new() run()
