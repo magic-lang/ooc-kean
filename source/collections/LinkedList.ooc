@@ -28,13 +28,13 @@ LinkedList: class <T> {
 			prevNode next = node
 			nextNode prev = node
 			this _size += 1
-		} else if (index > 0 && index == this _size) {
+		} else if (index > 0 && index == this _size)
 			this add(data&)
-		} else if (index == 0) {
+		else if (index == 0) {
 			node := Node<T> new(this _head, this _head next, data&)
 			this _head next prev = node
 			this _head next = node
-			_size += 1
+			this _size += 1
 		} else
 			raise("Index out of bounds in LinkedList add~withIndex")
 	}
