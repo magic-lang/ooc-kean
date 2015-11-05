@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+use ooc-collections
 import math
 import FloatSize2D
 import FloatSize3D
@@ -21,7 +22,6 @@ import FloatPoint2D
 import FloatPoint3D
 import FloatBox2D
 import FloatTransform2D
-import VectorList
 import text/StringTokenizer
 import structs/ArrayList
 
