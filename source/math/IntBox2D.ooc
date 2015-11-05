@@ -122,22 +122,16 @@ IntBox2D: cover {
 	}
 	createAround: static func (center: IntPoint2D, size: IntSize2D) -> This { This new(center - (size / 2), size) }
 	bounds: static func (left, right, top, bottom: Int) -> This { This new(left, top, right - left, bottom - top) }
-	bounds: static func ~fromArray (points: IntPoint2D[]) -> This {
-		pointsAsVectorList := VectorList<IntPoint2D> new()
-		for (i in 0 .. points length)
-			pointsAsVectorList add(points[i])
-		result := This bounds(pointsAsVectorList)
-		pointsAsVectorList free()
-		result
-	}
-	bounds: static func ~fromList (points: VectorList<IntPoint2D>) -> This {
+	bounds: static func ~fromArray (points: IntPoint2D[]) -> This { This bounds(points data, points length) }
+	bounds: static func ~fromList (points: VectorList<IntPoint2D>) -> This { This bounds(points pointer as IntPoint2D*, points count) }
+	bounds: static func ~fromPointer (data: IntPoint2D*, count: Int) -> This {
 		xMinimum := 0
 		xMaximum := xMinimum
 		yMinimum := xMinimum
 		yMaximum := xMinimum
 		initialized := false
-		for (i in 0 .. points count) {
-			point := points[i]
+		for (i in 0 .. count) {
+			point := data[i]
 			if (!initialized) {
 				initialized = true
 				xMinimum = point x
