@@ -53,7 +53,7 @@ BacktraceHandler: class {
         } else {
             // fall back on execinfo? still informative
             version (linux || apple) {
-                if (!WARNED_ABOUT_FALLBACK) {
+                if (!This WARNED_ABOUT_FALLBACK) {
                     stderr write("[lang/Backtrace] Falling back on execinfo.. (build extension if you want fancy backtraces)\n")
                     This WARNED_ABOUT_FALLBACK = true
                 }
@@ -62,7 +62,7 @@ BacktraceHandler: class {
             }
 
             // no such luck, use a debugger :(
-            if (!WARNED_ABOUT_FALLBACK) {
+            if (!This WARNED_ABOUT_FALLBACK) {
                 stderr write("[lang/Backtrace] No backtrace extension nor execinfo - use a debugger!\n")
                 This WARNED_ABOUT_FALLBACK = true
             }
