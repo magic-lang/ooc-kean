@@ -153,6 +153,26 @@ RasterBgr: class extends RasterPacked {
 		result swapRedBlue()
 		result
 	}
+	transformed: func (transform: FloatTransform2D, method := TransformMethod Smooth) -> This {
+		result: This
+		if (transform isIdentity)
+			result = this copy()
+		else {
+			inverse := transform inverse
+			box := FloatBox2D new(FloatPoint2D new(), this size toFloatSize2D())
+			topLeft := transform * box leftTop
+			topRight := transform * box rightTop
+			bottomLeft := transform * box leftBottom
+			bottomRight := transform * box rightBottom
+			result = This new(IntSize2D new(topLeft distance(topRight), topLeft distance(bottomLeft)))
+			for (row in 0 .. result height)
+				for (column in 0 .. result width) {
+					position := (inverse * FloatPoint2D new(column, row)) toIntPoint2D()
+					result[column, row] = this[position x, position y]
+				}
+		}
+		result
+	}
 	_createCanvas: override func -> Canvas { BgrRasterCanvas new(this) }
 	kean_draw_rasterBgr_new: static unmangled func (width, height, stride: Int, data: Void*) -> This {
 		result := This new(IntSize2D new(width, height), stride)

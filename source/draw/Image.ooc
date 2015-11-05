@@ -73,18 +73,18 @@ Image: abstract class {
 		this _canvas = null
 		super()
 	}
-	resizeWithin: func (restriction: IntSize2D) -> This {
-		this resizeTo(((this size toFloatSize2D()) * Float minimum(restriction width as Float / this size width as Float, restriction height as Float / this size height as Float)) toIntSize2D())
-	}
+	create: virtual func (size: IntSize2D) -> This { raise("Image type not implemented."); null }
+	copy: abstract func -> This
+	distance: virtual abstract func (other: This) -> Float
+	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
 	resizeTo: abstract func (size: IntSize2D) -> This
 	resizeTo: virtual func ~withMethod (size: IntSize2D, method: TransformMethod) -> This {
 		this resizeTo(size)
 	}
-	create: virtual func (size: IntSize2D) -> This { raise("Image type not implemented."); null }
-	copy: abstract func -> This
-	copy: abstract func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This
-	distance: virtual abstract func (other: This) -> Float
-	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
+	transformed: virtual func (transform: FloatTransform2D, method := TransformMethod Smooth) -> This {
+		raise("transformed() not implemented!")
+		null
+	}
 	isValidIn: func (x, y: Int) -> Bool {
 		return (x >= 0 && x < this size width && y >= 0 && y < this size height)
 	}
