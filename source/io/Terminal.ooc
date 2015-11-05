@@ -13,7 +13,7 @@ Terminal: class {
 	setAttribute: static func (attribute: TerminalAttribute) {
 		This _output(attribute as Int)
 	}
-	reset: static func { 
+	reset: static func {
 		This setAttribute(TerminalAttribute reset)
 	}
 	_output: static func (code: Int) {
