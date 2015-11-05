@@ -45,8 +45,8 @@ GpuCanvasYuv420Semiplanar: class extends GpuSurface {
 		set(value) {
 			this _pen = value
 			yuv := value color toYuv()
-			this _target y canvas pen = Pen new(ColorBgra new(yuv y, 0, 0, 255), value width)
-			this _target uv canvas pen = Pen new(ColorBgra new(yuv u, yuv v, 0, 255), value width)
+			this _target y canvas pen = Pen new(ColorBgra new(yuv y, 0, 0, 255), this pen width)
+			this _target uv canvas pen = Pen new(ColorBgra new(yuv u, yuv v, 0, 255), this pen width)
 		}
 	}
 
