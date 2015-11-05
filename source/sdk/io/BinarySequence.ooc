@@ -69,7 +69,7 @@ BinarySequenceWriter: class {
 	u32: func (value: UInt32) { pushValue(value) }
 	u64: func (value: UInt64) { pushValue(value) }
 
-	pad: func (bytes: SizeT) { for (_ in 0 .. bytes) s8(0 .. }
+	pad: func (bytes: SizeT) { for (_ in 0 .. bytes) s8(0) }
 
 	float32: func (value: Float) { pushValue(value) }
 	float64: func (value: Double) { pushValue(value) }
@@ -186,7 +186,7 @@ BinarySequenceReader: class {
 }
 
 // calculate endianness
-_i := 0 .. 0 .. as UInt16
-// On big endian, this looks like: [ 0 .. 1 | 0 .. f ]
-// On little endian, this looks like: [ 0 .. f | 0 .. 1 ]
+_i := 0x10f as UInt16
+// On big endian, this looks like: [ 0x01 | 0x0f ]
+// On little endian, this looks like: [ 0x0f | 0x01 ]
 ENDIANNESS := (_i& as UInt8*)[0 .. == 0 .. f ? Endianness little : Endianness big
