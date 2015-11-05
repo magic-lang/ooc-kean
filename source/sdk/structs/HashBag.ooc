@@ -11,6 +11,14 @@ HashBag: class {
     init: func ~withCapacity(capacity: Int) {
         myMap = HashMap<String, Cell<Pointer>> new(capacity)
     }
+    free: override func {
+      iterator := this myMap backIterator()
+      while (iterator hasNext?())
+        iterator next() free()
+      iterator free()
+      this myMap free()
+      super()
+    }
 
     /** Fetch the value. If it doesn't exist in the HashMap or the types don't
         match, throw an Exception. */
@@ -45,7 +53,7 @@ HashBag: class {
 
     put: func <T> (key: String, value: T) -> Bool {
         tmp := Cell<T> new(value)
-        return myMap put(key, tmp)
+        this myMap put(key, tmp)
     }
 
     add: func <T> (key: String, value: T) -> Bool {
@@ -75,7 +83,7 @@ HashBag: class {
                 this hashbag's `blub` value.
             `blab#0`
                 Get the `blab` value, which is a Bag, and get the first
-                (0) element. 
+                (0) element.
     */
     getPath: func <T> (path: String, T: Class) -> T {
         // the current position in our path string
@@ -104,4 +112,3 @@ HashBag: class {
         get(currentKey toString(), T)
     }
 }
-

@@ -14,15 +14,7 @@ HashDictionary: class {
 		this _hashBag myMap = hashMapClone
 	}
 	free: override func {
-		free(this _hashBag myMap keys data)
-		free(this _hashBag myMap keys)
-		for (i in 0 .. (this _hashBag myMap capacity)) {
-			next := (this _hashBag myMap buckets[i])
-			next dispose()
-		}
-		free(this _hashBag myMap buckets data)
-		free(this _hashBag myMap)
-		free(this _hashBag)
+		this _hashBag free()
 		super()
 	}
 	clone: func -> This {
@@ -78,17 +70,5 @@ HashDictionary: class {
 	}
 	getPath: func <T> (path: String, T: Class) -> T {
 		this _hashBag getPath(path, T)
-	}
-}
-
-extend HashEntry {
-	dispose: func {
-		free(this key)
-		free(this value)
-		if (this next != null) {
-			temp := this next@
-			temp dispose()
-			free(this next)
-		}
 	}
 }
