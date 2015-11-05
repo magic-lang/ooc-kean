@@ -37,7 +37,6 @@ FloatConvexHull2D: class {
 	}
 	init: func ~fromBox (box: FloatBox2D) {
 		this _points = VectorList<FloatPoint2D> new(4)
-		this _hull = VectorList<FloatPoint2D> new(4)
 		this _points add(box leftTop)
 		this _points add(box leftBottom)
 		this _points add(box rightBottom)
@@ -76,15 +75,13 @@ FloatConvexHull2D: class {
 	}
 	computeHull: func {
 		if (this _hull)
-			this _hull clear()
-		else
-			this _hull = VectorList<FloatPoint2D> new()
-		
+			this _hull free()
 		if (this _points count <= 2)
 			this _hull = this _points copy()
 		else {
 			// Uses the Quickhull algorithm if more than two points, average complexity O(n log n)
 			// http://www.cse.yorku.ca/~aaw/Hang/quick_hull/Algorithm.html
+			this _hull = VectorList<FloatPoint2D> new()
 			leftMostIndex := 0
 			rightMostIndex := 0
 			for (i in 0 .. this _points count)
@@ -106,6 +103,8 @@ FloatConvexHull2D: class {
 			this _findHull(leftSet, leftEndpoint, rightEndpoint)
 			this _hull add(rightEndpoint)
 			this _findHull(rightSet, rightEndpoint, leftEndpoint)
+			leftSet free()
+			rightSet free()
 		}
 	}
 	_findHull: func (currentSet: VectorList<FloatPoint2D>, leftPoint, rightPoint: FloatPoint2D) {
@@ -133,8 +132,9 @@ FloatConvexHull2D: class {
 			this _findHull(outsideLeft, leftPoint, maximumDistancePoint)
 			this _hull add(maximumDistancePoint)
 			this _findHull(outsideRight, maximumDistancePoint, rightPoint)
+			outsideLeft free()
+			outsideRight free()
 		}
-		currentSet free()
 	}
 	_hullLinePseudoDistance: static func (leftPoint, rightPoint, queryPoint: FloatPoint2D) -> Float {
 		((rightPoint y - leftPoint y) * (leftPoint x - queryPoint x)) - ((rightPoint x - leftPoint x) * (leftPoint y - queryPoint y))
