@@ -225,7 +225,13 @@ VectorListTest: class extends Fixture {
 			list free()
 		})
 		this add("VectorList sort", func {
-			//TODO Current way of sorting not supported by Rock
+			list := VectorList<Int> new()
+			list add(8); list add(16); list add(32)
+			sortedList := list copy()
+			sortedList sort(|v1, v2| v1 < v2)
+			count := list count
+			for (value in sortedList)
+				expect(value, is equal to(list[--count]))
 		})
 		this add("VectorList fold", func {
 			//TODO Current way of folding not supported by Rock
