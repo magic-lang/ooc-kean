@@ -66,7 +66,7 @@ AndroidContext: class extends OpenGLContext {
 		}
 		index == -1 ? EGLBgra new(size, this) : this _packers remove(index)
 	}
-	toBuffer: func (gpuImage: GpuImage, packMap: OpenGLMapPack) -> (ByteBuffer, GpuFence) {
+	toBuffer: func (gpuImage: GpuImage, packMap: GpuMap) -> (ByteBuffer, GpuFence) {
 		channels := (gpuImage as OpenGLPacked) channels
 		packSize := IntSize2D new(gpuImage size width / (4 / channels), gpuImage size height)
 		gpuRgba := this getPacker(packSize)
@@ -129,13 +129,25 @@ AndroidContext: class extends OpenGLContext {
 	}
 	unpackBgraToYuv420Semiplanar: func (source: GpuImage, targetSize: IntSize2D) -> GpuYuv420Semiplanar {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
-		this _unpackRgbaToMonochrome targetSize = target y size
-		this _unpackRgbaToMonochrome sourceSize = source size
-		this _unpackRgbaToMonochrome transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
+		sourceSize := source size
+		this _unpackRgbaToMonochrome add("texture0", source)
+		this _unpackRgbaToMonochrome add("targetWidth", target y size width as Int)
+		this _unpackRgbaToMonochrome add("transform", FloatTransform3D createScaling(source transform a, -source transform e, 1.0f))
+		scaleX := (targetSize width as Float) / (4 * sourceSize width)
+		this _unpackRgbaToMonochrome add("scaleX", scaleX)
+		scaleY := targetSize height as Float / sourceSize height
+		this _unpackRgbaToMonochrome add("scaleY", scaleY)
+		this _unpackRgbaToMonochrome add("startY", 0.0f)
 		target y canvas draw(source, this _unpackRgbaToMonochrome)
-		this _unpackRgbaToUv targetSize = target uv size
-		this _unpackRgbaToUv sourceSize = source size
-		this _unpackRgbaToUv transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
+
+		uvSize := target uv size
+		scaleX = (uvSize width as Float) / (2 * sourceSize width)
+		this _unpackRgbaToUv add("scaleX", scaleX)
+		startY := (sourceSize height - uvSize height) as Float / sourceSize height
+		this _unpackRgbaToUv add("startY", startY)
+		scaleY = 1.0f - startY
+		this _unpackRgbaToUv add("scaleY", scaleY)
+		this _unpackRgbaToUv add("transform", FloatTransform3D createScaling(source transform a, -source transform e, 1.0f))
 		target uv canvas draw(source, this _unpackRgbaToUv)
 		target
 	}

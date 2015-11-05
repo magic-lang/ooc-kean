@@ -151,10 +151,11 @@ OpenGLContext: class extends GpuContext {
 		map := match (source) {
 			case sourceImage: OpenGLMonochrome => this _packMonochrome
 			case sourceImage: OpenGLUv => channels = 2; this _packUv
-		} as OpenGLMapPack
-		map imageWidth = source size width
-		map channels = channels
+		}
 		map add("texture0", source)
+		map add("texelOffset", 1.0f / source size width)
+		map add("xOffset", (2.0f / channels - 0.5f) / source size width)
+		map add("transform", FloatTransform3D createScaling(1.0f, -1.0f, 1.0f))
 		target canvas viewport = viewport
 		target canvas draw(source, map)
 	}

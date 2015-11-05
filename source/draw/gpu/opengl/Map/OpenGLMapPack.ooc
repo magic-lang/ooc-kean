@@ -21,26 +21,7 @@ import OpenGLMap
 import ../OpenGLContext
 
 version(!gpuOff) {
-OpenGLMapPack: abstract class extends OpenGLMap {
-	imageWidth: Int { get set }
-	channels: Int { get set }
-	transform: FloatTransform3D
-	init: func (vertexSource: String, fragmentSource: String, context: OpenGLContext) {
-		super(vertexSource, fragmentSource, context)
-		this channels = 1
-		this transform = FloatTransform3D createScaling(1.0f, -1.0f, 1.0f)
-	}
-	use: override func {
-		super()
-		this program setUniform("texture0", 0)
-		texelOffset := 1.0f / this imageWidth
-		this program setUniform("texelOffset", texelOffset)
-		offset := (2.0f / channels - 0.5f) / this imageWidth
-		this program setUniform("xOffset", offset)
-		this program setUniform("transform", this transform)
-	}
-}
-OpenGLMapPackMonochrome: class extends OpenGLMapPack {
+OpenGLMapPackMonochrome: class extends OpenGLMap {
 	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
 	vertexSource: static String = "#version 300 es
 		precision mediump float;
@@ -72,7 +53,7 @@ OpenGLMapPackMonochrome: class extends OpenGLMapPack {
 		}
 		"
 }
-OpenGLMapPackUv: class extends OpenGLMapPack {
+OpenGLMapPackUv: class extends OpenGLMap {
 	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
 	vertexSource: static String = "#version 300 es
 		precision mediump float;
@@ -101,19 +82,7 @@ OpenGLMapPackUv: class extends OpenGLMapPack {
 		"
 }
 OpenGLMapUnpack: abstract class extends OpenGLMap {
-	sourceSize: IntSize2D { get set }
-	targetSize: IntSize2D { get set }
-	transform: FloatTransform3D { get set }
-	init: func (fragmentSource: String, context: OpenGLContext) {
-		super(This vertexSource, fragmentSource, context)
-		this transform = FloatTransform3D identity
-	}
-	use: override func {
-		super()
-		this program setUniform("texture0", 0)
-		this program setUniform("targetWidth", this targetSize width)
-		this program setUniform("transform", this transform)
-	}
+	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
 	vertexSource: static String = "#version 300 es
 		precision mediump float;
 		uniform float startY;
@@ -131,14 +100,6 @@ OpenGLMapUnpack: abstract class extends OpenGLMap {
 }
 OpenGLMapUnpackRgbaToMonochrome: class extends OpenGLMapUnpack {
 	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
-	use: override func {
-		super()
-		scaleX := (this targetSize width as Float) / (4 * this sourceSize width)
-		this program setUniform("scaleX", scaleX)
-		scaleY := targetSize height as Float / sourceSize height
-		this program setUniform("scaleY", scaleY)
-		this program setUniform("startY", 0.0f)
-	}
 	fragmentSource: static String = "#version 300 es
 		precision mediump float;
 		uniform sampler2D texture0;
@@ -153,15 +114,6 @@ OpenGLMapUnpackRgbaToMonochrome: class extends OpenGLMapUnpack {
 }
 OpenGLMapUnpackRgbaToUv: class extends OpenGLMapUnpack {
 	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
-	use: override func {
-		super()
-		scaleX := (this targetSize width as Float) / (2 * this sourceSize width)
-		this program setUniform("scaleX", scaleX)
-		startY := (sourceSize height - targetSize height) as Float / sourceSize height
-		this program setUniform("startY", startY)
-		scaleY := 1.0f - startY
-		this program setUniform("scaleY", scaleY)
-	}
 	fragmentSource: static String = "#version 300 es
 		precision mediump float;
 		uniform sampler2D texture0;
