@@ -50,11 +50,9 @@ FloatConvexHull2D: class {
 	}
 	contains: func ~Point (point: FloatPoint2D) -> Bool {
 		result := true
-		for (i in 0 .. this _hull count - 1)
-			if (result && This _isOnLeft(this _hull[i], this _hull[i + 1], point))
+		for (i in 0 .. this _hull count)
+			if (result && This _isOnLeft(this _hull[i], this _hull[(i + 1) % this _hull count], point))
 				result = false
-		if (This _isOnLeft(this _hull[this _hull count - 1], this _hull[0], point))
-			result = false
 		result
 	}
 	contains: func ~ConvexHull (other: This) -> Bool {
