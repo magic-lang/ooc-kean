@@ -21,55 +21,126 @@ import FloatTransform2D
 import text/StringTokenizer
 
 FloatConvexHull2D: class {
-	// Points must be in clockwise order
-	// TODO: Implement computation of convex hull from a set of points
 	_points: VectorList<FloatPoint2D>
+	_hull: VectorList<FloatPoint2D> = null
 	points ::= this _points
+	hull ::= this _hull
 	count ::= this _points count
-	init: func ~fromPoints (=_points) // Note: Does not compute the convex hull, only assigns it
+	init: func ~fromPoints (=_points, computeHull := false) { //TODO: Compute the convex hull per default
+		// Note, if hull is not computed, points must be in clockwise order
+		if (computeHull)
+			this computeHull()
+		else {
+			this _hull = VectorList<FloatPoint2D> new(this _points count)
+			this _hull = this _points copy()
+		}
+	}
 	init: func ~fromBox (box: FloatBox2D) {
 		this _points = VectorList<FloatPoint2D> new(4)
+		this _hull = VectorList<FloatPoint2D> new(4)
 		this _points add(box leftTop)
 		this _points add(box leftBottom)
 		this _points add(box rightBottom)
 		this _points add(box rightTop)
+		this _hull = this _points copy()
+	}
+	free: override func {
+		this _points free()
+		this _hull free()
+		super()
 	}
 	contains: func ~Point (point: FloatPoint2D) -> Bool {
 		result := true
-		for (i in 0 .. this count - 1)
-			if (This _isOnLeft(this _points[i], this _points[i + 1], point)) {
+		for (i in 0 .. this _hull count - 1)
+			if (result && This _isOnLeft(this _hull[i], this _hull[i + 1], point))
 				result = false
-				break
-			}
-		if (This _isOnLeft(this _points[this count - 1], this _points[0], point))
+		if (This _isOnLeft(this _hull[this _hull count - 1], this _hull[0], point))
 			result = false
 		result
 	}
 	contains: func ~ConvexHull (other: This) -> Bool {
 		result := true
 		for (i in 0 .. other count)
-			if (!this contains(other points[i])) {
+			if (result && !this contains(other points[i]))
 				result = false
-				break
-			}
 		result
 	}
 	contains: func ~FloatBox2D (box: FloatBox2D) -> Bool {
 		this contains(box leftBottom) && this contains(box rightBottom) && this contains(box leftTop) && this contains(box rightTop)
 	}
 	transform: func (transform: FloatTransform2D) -> This {
-		// TODO: Re-compute convex hull from new points if necessary, i.e. if transform changes order of points
 		newPoints := VectorList<FloatPoint2D> new(this count)
 		for (i in 0 .. this count)
 			newPoints add(transform * this _points[i])
 		This new(newPoints)
 	}
-	_isOnLeft: static func (leftPoint, rightPoint, queryPoint: FloatPoint2D) -> Bool {
-		(rightPoint x - leftPoint x) * (queryPoint y - leftPoint y) > (rightPoint y - leftPoint y) * (queryPoint x - leftPoint x)
+	computeHull: func {
+		if (this _hull)
+			this _hull clear()
+		else
+			this _hull = VectorList<FloatPoint2D> new()
+		
+		if (this _points count <= 2)
+			this _hull = this _points copy()
+		else {
+			// Uses the Quickhull algorithm if more than two points, average complexity O(n log n)
+			// http://www.cse.yorku.ca/~aaw/Hang/quick_hull/Algorithm.html
+			leftMostIndex := 0
+			rightMostIndex := 0
+			for (i in 0 .. this _points count)
+				if (this _points[i] x < this _points[leftMostIndex] x)
+					leftMostIndex = i
+				else if (this _points[i] x > this _points[rightMostIndex] x)
+					rightMostIndex = i
+			leftEndpoint := this _points[leftMostIndex]
+			rightEndpoint := this _points[rightMostIndex]
+			leftSet := VectorList<FloatPoint2D> new()
+			rightSet := VectorList<FloatPoint2D> new()
+			for (i in 0 .. this _points count)
+				if (i != leftMostIndex && i != rightMostIndex)
+					if (This _isOnLeft(this _points[leftMostIndex], this _points[rightMostIndex], this _points[i]))
+						leftSet add(this _points[i])
+					else
+						rightSet add(this _points[i])
+			this _hull add(leftEndpoint)
+			this _findHull(leftSet, leftEndpoint, rightEndpoint)
+			this _hull add(rightEndpoint)
+			this _findHull(rightSet, rightEndpoint, leftEndpoint)
+		}
 	}
-	free: override func {
-		this _points free()
-		super()
+	_findHull: func (currentSet: VectorList<FloatPoint2D>, leftPoint, rightPoint: FloatPoint2D) {
+		if (currentSet count == 1)
+			this _hull add(currentSet[0])
+		else if (currentSet count > 1) {
+			maximumDistance := Float negativeInfinity
+			maximumDistanceIndex := -1
+			for (i in 0 .. currentSet count) {
+				distance := This _hullLinePseudoDistance(leftPoint, rightPoint, currentSet[i])
+				if (distance > maximumDistance) {
+					maximumDistance = distance
+					maximumDistanceIndex = i
+				}
+			}
+			maximumDistancePoint := currentSet[maximumDistanceIndex]
+			outsideLeft := VectorList<FloatPoint2D> new()
+			outsideRight := VectorList<FloatPoint2D> new()
+			for (i in 0 .. currentSet count)
+				if (i != maximumDistanceIndex)
+					if (This _isOnLeft(leftPoint, maximumDistancePoint, currentSet[i]))
+						outsideLeft add(currentSet[i])
+					else if (This _isOnLeft(maximumDistancePoint, rightPoint, currentSet[i]))
+						outsideRight add(currentSet[i])
+			this _findHull(outsideLeft, leftPoint, maximumDistancePoint)
+			this _hull add(maximumDistancePoint)
+			this _findHull(outsideRight, maximumDistancePoint, rightPoint)
+		}
+		currentSet free()
+	}
+	_hullLinePseudoDistance: static func (leftPoint, rightPoint, queryPoint: FloatPoint2D) -> Float {
+		((rightPoint y - leftPoint y) * (leftPoint x - queryPoint x)) - ((rightPoint x - leftPoint x) * (leftPoint y - queryPoint y))
+	}
+	_isOnLeft: static func (leftPoint, rightPoint, queryPoint: FloatPoint2D) -> Bool {
+		(rightPoint y - leftPoint y) * (queryPoint x - leftPoint x) < (rightPoint x - leftPoint x) * (queryPoint y - leftPoint y)
 	}
 	toString: func -> String {
 		result := ""

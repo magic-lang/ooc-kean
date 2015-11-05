@@ -52,6 +52,29 @@ FloatConvexHull2DTest: class extends Fixture {
 			hull free()
 		})
 		
+		this add("hull computation", func {
+			points := VectorList<FloatPoint2D> new()
+			points add(FloatPoint2D new(1.0f, 0.0f)) //hull
+			points add(FloatPoint2D new(-1.0f, 0.0f)) //hull
+			points add(FloatPoint2D new(-1.0f, -1.0f)) // hull
+			points add(FloatPoint2D new(-0.9f, -0.5f)) // inside
+			points add(FloatPoint2D new(0.0f, 1.0f)) //inside
+			points add(FloatPoint2D new(0.0f, 0.0f)) // inside
+			points add(FloatPoint2D new(0.0f, -1.0f)) //hull
+			points add(FloatPoint2D new(0.5f, 2.0f)) // hull
+			points add(FloatPoint2D new(-0.5f, 0)) // inside
+			
+			convexHull := FloatConvexHull2D new(points, true)
+			expect(convexHull count, is equal to(9))
+			expect(convexHull _hull count, is equal to(5))
+			expect(convexHull contains(FloatPoint2D new(0.0f, 0.0f)), is true)
+			expect(convexHull contains(FloatPoint2D new(0.5f, 1.5f)), is true)
+			expect(convexHull contains(FloatPoint2D new(-0.5f, 1.5f)), is false)
+			expect(convexHull contains(FloatPoint2D new(-0.5f, 0.05f)), is true)
+			expect(convexHull contains(FloatPoint2D new(-0.9f, -0.9f)), is true)
+			expect(convexHull contains(FloatPoint2D new(-1.01f, -1.0f)), is false)
+		})
+
 		this add("contains, hull", func {
 			bigSquare := FloatBox2D new(1.0f, 1.0f, 4.0f, 4.0f)
 			bigHull := FloatConvexHull2D new(bigSquare)
