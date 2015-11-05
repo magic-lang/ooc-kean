@@ -50,7 +50,7 @@ Writer: abstract class {
 		:param bufferSize: size in bytes of the internal transfer buffer
 		:return: total bytes transfered
 	*/
-	write: func ~fromReader(source: Reader, bufferSize: SizeT) -> SizeT {
+	write: func ~fromReader (source: Reader, bufferSize: SizeT) -> SizeT {
 		buffer := Buffer new(bufferSize)
 		cursor, bytesTransfered: Int
 		cursor = 0; bytesTransfered = 0

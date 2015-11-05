@@ -23,9 +23,9 @@ Reader: abstract class {
 	 * Read a bufferfull at most, and return the number of bytes read
 	 */
 	read: func ~buffer (buffer: Buffer) -> SizeT {
-	   count := read(buffer data, 0, buffer capacity)
-	   buffer size = count
-	   count
+		count := read(buffer data, 0, buffer capacity)
+		buffer size = count
+		count
 	}
 
 
@@ -33,7 +33,7 @@ Reader: abstract class {
 	 * Read till the end of stream, return result as a string.
 	 */
 	readAll: func -> String {
-		in  := Buffer new(4096)
+		in := Buffer new(4096)
 		out := Buffer new(4096)
 		while (hasNext?()) {
 			readBytes := read(in)
@@ -209,7 +209,7 @@ Reader: abstract class {
 	 *
 	 * :return: true on success
 	 */
-	seek: abstract func (offset: Long, mode: SeekMode) ->  Bool
+	seek: abstract func (offset: Long, mode: SeekMode) -> Bool
 
 	/**
 	   Attempt to reset the stream to the given mark
@@ -222,7 +222,7 @@ Reader: abstract class {
 	   Skip the given number of bytes.
 	   If `offset` is negative, we will attempt to rewind the stream
 	 */
-	skip: func(offset: Int) {
+	skip: func (offset: Int) {
 		seek(offset, SeekMode CUR)
 	}
 

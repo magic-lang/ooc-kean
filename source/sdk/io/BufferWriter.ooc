@@ -45,7 +45,7 @@ BufferWriter: class extends Writer {
 	}
 
 	seek: func (p: Long) {
-		if(p < 0 || p > buffer size) {
+		if (p < 0 || p > buffer size) {
 			Exception new("Seeking out of bounds! p = %d, size = %d" format(p, buffer size)) throw()
 		}
 		pos = p

@@ -28,13 +28,13 @@ File: abstract class {
 	nameWithoutExtension: String { get { getNameWithoutExtension() } }
 	pathWithoutExtension: String { get { getPathWithoutExtension() } }
 	rectifySeparator: func {
-		if (this dir?() && !this path endsWith?(File separator)) {
+		if (this dir?() && !this path endsWith?(This separator)) {
 			oldPath := this path
-			this path = oldPath + File separator
+			this path = oldPath + This separator
 			oldPath free()
 		}
-		else if (!this dir?() && this path endsWith?(File separator)) {
-			newPath := this path trimRight(File separator)
+		else if (!this dir?() && this path endsWith?(This separator)) {
+			newPath := this path trimRight(This separator)
 			this path free()
 			this path = newPath
 		}
@@ -166,7 +166,7 @@ File: abstract class {
 		if (!this dir?()) {
 			index := this path lastIndexOf('.')
 			if (index > 0)
-   				result = this path substring(index+1)
+				result = this path substring(index + 1)
 		}
 		result
 	}
@@ -377,7 +377,7 @@ File: abstract class {
 	 * @return true if the file was found (cb returned false at some point),
 	 * or false if it wasn't.
 	 */
-	find: func (name: String, cb: Func (File) -> Bool) -> Bool {
+	find: func (name: String, cb: Func (This) -> Bool) -> Bool {
 
 		if (getName() == name) {
 			if (!cb(this)) {
@@ -418,7 +418,7 @@ File: abstract class {
 	 * Do a 'shallow search' for a file with a given
 	 * name.
 	 */
-	findShallow: func (name: String, level: Int, cb: Func (File) -> Bool) -> Bool {
+	findShallow: func (name: String, level: Int, cb: Func (This) -> Bool) -> Bool {
 		fName := getName()
 		if (fName == name) {
 			if (!cb(this)) {
@@ -466,7 +466,7 @@ File: abstract class {
 	 *
 	 * @param dstFile the file to copy to
 	 */
-	copyTo: func(dstFile: This) {
+	copyTo: func (dstFile: This) {
 		dstParent := dstFile parent
 		dstParent mkdirs()
 		dstParent free()
@@ -548,15 +548,15 @@ File: abstract class {
 	 *
 	 * This method will return a File with path "sub/path"
 	 */
-	rebase: func (base: File) -> This {
-		left := base getReducedFile() getAbsolutePath() replaceAll(File separator, '/')
-		full := getReducedFile() getAbsolutePath() replaceAll(File separator, '/')
+	rebase: func (base: This) -> This {
+		left := base getReducedFile() getAbsolutePath() replaceAll(This separator, '/')
+		full := getReducedFile() getAbsolutePath() replaceAll(This separator, '/')
 
 		if (!left endsWith?("/")) {
 			left = left + "/"
 		}
 		right := full substring(left size)
-		File new(right)
+		This new(right)
 	}
 
 	/**
@@ -594,7 +594,7 @@ File: abstract class {
 
 		args each(|arg|
 			path := match arg {
-				case f: File =>
+				case f: This =>
 					f path
 				case s: String =>
 					s

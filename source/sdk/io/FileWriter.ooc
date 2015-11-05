@@ -70,7 +70,7 @@ FileWriter: class extends Writer {
 		init(fileName, false)
 	}
 
-	createTempFile: static func (pattern: String, mode: String) -> This {
+	createTempFile: static func (pattern, mode: String) -> This {
 	version (!windows) {
 		return new(fdopen(mkstemp(pattern), mode))
 	}

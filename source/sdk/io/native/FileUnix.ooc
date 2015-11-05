@@ -21,7 +21,7 @@ rewinddir: extern func (DIR*)
 seekdir: extern func (DIR*, Long)
 telldir: extern func (DIR*) -> Long
 
-realpath: extern func (path: CString, resolved: CString) -> CString
+realpath: extern func (path, resolved: CString) -> CString
 
 version (linux) {
 	include unistd | (__USE_BSD), sys/stat | (__USE_BSD), sys/types | (__USE_BSD), stdlib | (__USE_BSD), limits
@@ -36,7 +36,7 @@ version (unix || apple) {
 	File separator = '/'
 	File pathDelimiter = ':'
 
-	_getcwd: extern(getcwd) func (buf: CString, size: SizeT) -> CString
+	_getcwd: extern (getcwd) func (buf: CString, size: SizeT) -> CString
 
 	ooc_get_cwd: unmangled func -> String {
 		result := Buffer new(File MAX_PATH_LENGTH)
@@ -69,8 +69,8 @@ version (unix || apple) {
 
 	lstat: extern func (CString, FileStat*) -> Int
 	chmod: extern func (CString, ModeT) -> Int
-	_mkdir: extern(mkdir) func (CString, ModeT) -> Int
-	_mkfifo: extern(mkfifo) func (CString, ModeT) -> Int
+	_mkdir: extern (mkdir) func (CString, ModeT) -> Int
+	_mkfifo: extern (mkfifo) func (CString, ModeT) -> Int
 	remove: extern func (path: CString) -> Int
 	_remove: unmangled func (file: File) -> Bool {
 		// returns 0 on success
@@ -185,14 +185,14 @@ version (unix || apple) {
 		 * set the executable bit on this file's permissions for
 		 * current user, group, and other.
 		 */
-	   setExecutable: func (exec: Bool) -> Bool {
+		 setExecutable: func (exec: Bool) -> Bool {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			if (res != 0) return false // couldn't get file mode
 
 			mode := result st_mode
 			if (exec) {
-				mode |=  (S_IXUSR | S_IXGRP | S_IXOTH)
+				mode |= (S_IXUSR | S_IXGRP | S_IXOTH)
 			} else {
 				mode &= ~(S_IXUSR | S_IXGRP | S_IXOTH)
 			}
@@ -286,7 +286,7 @@ version (unix || apple) {
 					s := String new(entry@ name, entry@ name length())
 					match T {
 						case String => result add(s)
-						case		=> result add(File new(this, s))
+						case => result add(File new(this, s))
 					}
 				}
 				entry = readdir(dir)

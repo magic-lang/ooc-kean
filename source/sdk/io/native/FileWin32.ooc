@@ -18,13 +18,13 @@ version(windows) {
 	 * This makes sense, since most fs(es) on Win32 are case-insensitive
 	 */
 	FindData: cover from WIN32_FIND_DATA {
-		attr:		   extern(dwFileAttributes) Long // DWORD
-		fileSizeLow:	extern(nFileSizeLow)	 Long // DWORD
-		fileSizeHigh:   extern(nFileSizeHigh)	Long // DWORD
-		creationTime:   extern(ftCreationTime)   FileTime
-		lastAccessTime: extern(ftLastAccessTime) FileTime
-		lastWriteTime:  extern(ftLastWriteTime)  FileTime
-		fileName:	   extern(cFileName)		CString
+		attr: extern (dwFileAttributes) Long // DWORD
+		fileSizeLow: extern (nFileSizeLow) Long // DWORD
+		fileSizeHigh: extern (nFileSizeHigh) Long // DWORD
+		creationTime: extern (ftCreationTime) FileTime
+		lastAccessTime: extern (ftLastAccessTime) FileTime
+		lastWriteTime: extern (ftLastWriteTime) FileTime
+		fileName: extern (cFileName) CString
 	}
 
 	/*
@@ -171,7 +171,7 @@ version(windows) {
 		* set the executable bit on this file's permissions for
 		* current user, group, and other.
 		*/
-	   setExecutable: func (exec: Bool) -> Bool {
+		setExecutable: func (exec: Bool) -> Bool {
 			// see comment for 'executable?'
 			false
 		}
@@ -261,7 +261,7 @@ version(windows) {
 					s := ffd fileName toString()
 					match T {
 						case String => result add(s)
-						case		=> result add(File new(this, s))
+						case => result add(File new(this, s))
 					}
 				}
 				running = FindNextFile(hFile, ffd&)
@@ -275,7 +275,7 @@ version(windows) {
 			result := in replaceAll("/", "\\")
 			if (result size >= 2 && result[1] == ':') {
 				// normalize "c:\Dev" to "C:\Dev"
-				result = result[0..1] toUpper() + result[1..-1]
+				result = result[0 .. 1] toUpper() + result[1 .. -1]
 			}
 			result
 		}
