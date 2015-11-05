@@ -76,10 +76,6 @@ Vector2DTest: class extends Fixture {
 			for (row in 0 .. vector2D rowCount)
 				for (column in 0 .. vector2D columnCount)
 					vector2D[row, column] = sizeL
-			isNotTheValue := is not equal to(sizeM)
-			for (row in (sizeM + 1) .. sizeXL)
-				for (column in (sizeM + 1) .. sizeXL)
-					expect(vector2D[row, column], isNotTheValue)
 		})
 		this add("resize to non-square", func {
 			for (row in 0 .. vector2D rowCount)
