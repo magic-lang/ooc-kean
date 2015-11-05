@@ -9,7 +9,7 @@ include dirent
 DIR: extern cover
 
 DirEnt: cover from struct dirent {
-	name: extern(d_name) CString
+	name: extern (d_name) CString
 	/* TODO: the struct has more members, actually */
 }
 
@@ -185,7 +185,7 @@ version (unix || apple) {
 		 * set the executable bit on this file's permissions for
 		 * current user, group, and other.
 		 */
-		 setExecutable: func (exec: Bool) -> Bool {
+		setExecutable: func (exec: Bool) -> Bool {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			if (res != 0) return false // couldn't get file mode

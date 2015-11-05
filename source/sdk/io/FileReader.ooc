@@ -53,7 +53,7 @@ FileReader: class extends Reader {
 	/**
 	 * Init a file reader from an FStream
 	 */
-	init: func ~fromFStream (=file) {}
+	init: func ~fromFStream (=file)
 
 	/**
 	 * Read at most `bytesToRead` bytes and writes them at offset `offset` into `dest`

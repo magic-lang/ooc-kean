@@ -6,7 +6,7 @@ import io/Reader
 BufferReader: class extends Reader {
 	buffer: Buffer
 
-	init: func ~withBuffer (=buffer) {}
+	init: func ~withBuffer (=buffer)
 
 	buffer: func -> Buffer {
 		return buffer

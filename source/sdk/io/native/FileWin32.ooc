@@ -38,7 +38,7 @@ version(windows) {
 	/*
 	 * file-related functions from Win32
 	 */
-	FindFirstFile: extern(FindFirstFileA) func (CString, FindData*) -> Handle
+	FindFirstFile: extern (FindFirstFileA) func (CString, FindData*) -> Handle
 	FindNextFile: extern func (Handle, FindData*) -> Bool
 	FindClose: extern func (Handle)
 	GetFileAttributes: extern func (CString) -> ULong
@@ -102,7 +102,7 @@ version(windows) {
 			// (and no, FILE_ATTRIBUTE_NORMAL isn't true when we need it..)
 			(ffd, ok) := _getFindData()
 			return (ok) &&
-					(((ffd attr) & FILE_ATTRIBUTE_DIRECTORY	) == 0) &&
+					(((ffd attr) & FILE_ATTRIBUTE_DIRECTORY) == 0) &&
 					(((ffd attr) & FILE_ATTRIBUTE_REPARSE_POINT) == 0)
 		}
 
@@ -252,7 +252,7 @@ version(windows) {
 			hFile := FindFirstFile(searchPath toCString(), ffd&)
 
 			if (hFile == INVALID_HANDLE_VALUE) {
-			  return result
+				return result
 			}
 
 			running := true
