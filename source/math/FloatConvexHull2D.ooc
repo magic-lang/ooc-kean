@@ -22,7 +22,7 @@ import text/StringTokenizer
 
 FloatConvexHull2D: class {
 	_points: VectorList<FloatPoint2D>
-	_hull: VectorList<FloatPoint2D> = null
+	_hull: VectorList<FloatPoint2D>
 	points ::= this _points
 	hull ::= this _hull
 	count ::= this _points count
@@ -30,10 +30,8 @@ FloatConvexHull2D: class {
 		// Note, if hull is not computed, points must be in clockwise order
 		if (computeHull)
 			this computeHull()
-		else {
-			this _hull = VectorList<FloatPoint2D> new(this _points count)
+		else
 			this _hull = this _points copy()
-		}
 	}
 	init: func ~fromBox (box: FloatBox2D) {
 		this _points = VectorList<FloatPoint2D> new(4)
