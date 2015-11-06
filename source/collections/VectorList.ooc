@@ -129,7 +129,7 @@ VectorList: class <T> {
 			result add(function(this[i]))
 		result
 	}
-	fold: func <T, S> (function: Func(T, S) -> S, initial: S) -> S {
+	fold: func <S> (S: Class, function: Func(T, S) -> S, initial: S) -> S {
 		for (i in 0 .. this count)
 			initial = function(this[i], initial)
 		initial
