@@ -65,6 +65,7 @@ Profiler: class {
 	}
 	resetAll: static func { This _profilers apply(func (profiler: This) { profiler reset() }) }
 	dispose: static func {
+		This printResults()
 		This _profilers free()
 		This _profilers = null
 	}
