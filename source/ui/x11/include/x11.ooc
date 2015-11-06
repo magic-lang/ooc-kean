@@ -72,6 +72,8 @@ XEventOoc: cover from XEvent {
 	xkey: extern XKeyEventOoc
 }
 
+GraphicsContextX11: cover from GC
+
 XOpenDisplay: extern func (displayName: Char*) -> Pointer
 XCloseDisplay: extern func (display: Pointer) -> Int
 XCreateWindow: extern func (display: Pointer, window: Long, x, y: Int,
@@ -86,6 +88,23 @@ XFlush: extern func (display: Pointer)
 XSendEvent: extern func (display: Pointer, window: Long, propagate: Bool, event_mask: Long, event_send: XEventOoc*)
 XClearWindow: extern func (display: Pointer, window: Long)
 XMoveWindow: extern func (display: Pointer, window: Long, x, y: Int)
+XDefaultScreen: extern func (display: Pointer) -> Int
+DefaultDepth: extern func (display: Pointer, screen: Int) -> Int
+XSetBackground: extern func (...)
+XCreateGC: extern func (...) -> GraphicsContextX11
+XFreeGC: extern func (...)
+XDestroyWindow: extern func (...)
+
+XImageOoc: cover from XImage {
+	width, height, xoffset, format: Int
+	data: Char*
+	byteOrder, bitmapUnit, bitmapBitOrder, bitmapPad, depth, bytesPerLine, bitsPerPixel: Int
+	redMask, greenMask, blueMask: ULong
+}
+XCreateImage: extern func (...) -> XImageOoc*
+XPutImage: extern func (...)
+XDestroyImage: extern func (image: XImageOoc*)
+XPutPixel: extern func (...)
 
 XKeyEventOoc: cover from XKeyEvent {
 	type: extern Int
@@ -104,6 +123,8 @@ XKeyEventOoc: cover from XKeyEvent {
 	keycode: extern UInt
 	sameScreen: extern (same_screen) Bool
 }
+
+ZPixmap: extern const Long
 
 //XNextEvent: extern func(Pointer, XEvent) -> Int
 

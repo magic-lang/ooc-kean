@@ -22,19 +22,45 @@ use ooc-draw
 use ooc-opengl
 use ooc-x11
 
-version((unix || apple) && !gpuOff) {
-UnixWindow: class extends DisplayWindow {
+version(unix || apple) {
+UnixWindowBase: class extends DisplayWindow {
 	_xWindow: X11Window
-	_openGLWindow: OpenGLWindow
-	context ::= this _openGLWindow context
 	init: func (size: IntSize2D, title: String) {
 		super()
 		this _xWindow = X11Window new(size, title)
+	}
+	free: override func {
+		this _xWindow free()
+		super()
+	}
+	draw: override func (image: Image) {
+		if (image instanceOf?(RasterBgra))
+			this _xWindow draw(image as RasterBgra)
+		else {
+			raster := RasterBgra convertFrom(image as RasterImage)
+			this _xWindow draw(raster)
+			raster referenceCount decrease()
+		}
+	}
+	create: static func (size: IntSize2D, title: String) -> This {
+		result: This
+		version(gpuOff)
+			result = This new(size, title)
+		else
+			result = UnixWindow new(size, title)
+		result
+	}
+}
+version(!gpuOff) {
+UnixWindow: class extends UnixWindowBase {
+	_openGLWindow: OpenGLWindow
+	context ::= this _openGLWindow context
+	init: func (size: IntSize2D, title: String) {
+		super(size, title)
 		this _openGLWindow = OpenGLWindow new(this _xWindow)
 	}
 	free: override func {
 		this _openGLWindow free()
-		this _xWindow free()
 		super()
 	}
 	draw: override func (image: Image) {
@@ -43,5 +69,6 @@ UnixWindow: class extends DisplayWindow {
 	refresh: override func {
 		this _openGLWindow refresh()
 	}
+}
 }
 }
