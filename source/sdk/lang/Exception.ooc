@@ -54,15 +54,12 @@ ExceptionContext: class {
 		frame
 	}
 	cleanupStackFrames: func {
-		while (!this _stackFramesToDelete isEmpty) {
-			frame := this _stackFramesToDelete pop()
-			if (frame)
+		while (!this _stackFramesToDelete isEmpty)
+			if ((frame := this _stackFramesToDelete pop()))
 				frame free()
-		}
 	}
 	popStackFrame: func {
-		frame := this _localFrames get() pop()
-		if (frame)
+		if ((frame := this _localFrames get() pop()))
 			frame free()
 		this cleanupStackFrames()
 	}
