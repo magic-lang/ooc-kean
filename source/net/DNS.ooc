@@ -1,4 +1,4 @@
-import structs/LinkedList
+use ooc-collections
 import os/System
 import berkeley, Address, Exceptions, Socket
 

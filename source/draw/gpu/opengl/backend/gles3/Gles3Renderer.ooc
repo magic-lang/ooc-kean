@@ -29,7 +29,7 @@ Gles3Renderer: class extends GLRenderer {
 	}
 	drawQuad: func { this _quad draw() }
 	drawLines: func (positions: Float*, count, dimensions: Int, lineWidth: Float) {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Renderer drawLines") }
 		glLineWidth(lineWidth)
 		glBindVertexArray(0)
 		glEnableVertexAttribArray(0)
@@ -39,13 +39,13 @@ Gles3Renderer: class extends GLRenderer {
 		version(debugGL) { validateEnd("Renderer drawLines") }
 	}
 	drawPoints: func (positions: Float*, count, dimensions: Int) {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Renderer drawPoints") }
 		glBindVertexArray(0)
 		glEnableVertexAttribArray(0)
 		glVertexAttribPointer(0, dimensions, GL_FLOAT, 0, 0, positions)
 		glDrawArrays(GL_POINTS, 0, count)
 		glDisableVertexAttribArray(0)
-		version(debugGL) { validateEnd("FramebufferObject drawPoints") }
+		version(debugGL) { validateEnd("Renderer drawPoints") }
 	}
 }
 }
