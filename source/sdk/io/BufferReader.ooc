@@ -4,69 +4,68 @@ import io/Reader
  * Implement the Reader interface for Buffer.
  */
 BufferReader: class extends Reader {
-    buffer: Buffer
+	buffer: Buffer
 
-    init: func ~withBuffer (=buffer) {}
+	init: func ~withBuffer (=buffer)
 
-    buffer: func -> Buffer {
-        return buffer
-    }
+	buffer: func -> Buffer {
+		return buffer
+	}
 
-    close: func {
-        // nothing to close.
-    }
+	close: func {
+		// nothing to close.
+	}
 
-    read: func (dest: Char*, destOffset: Int, maxRead: Int) -> SizeT {
-        if (marker >= buffer size) {
-            Exception new(This, "Buffer overflow! Offset is larger than buffer size.") throw()
-        }
+	read: func (dest: Char*, destOffset: Int, maxRead: Int) -> SizeT {
+		if (marker >= buffer size) {
+			Exception new(This, "Buffer overflow! Offset is larger than buffer size.") throw()
+		}
 
-        copySize := (marker + maxRead > buffer size ? buffer size - marker : maxRead)
-        memcpy(dest, buffer data + marker, copySize)
-        marker += copySize
-        
-        copySize
-    }
+		copySize := (marker + maxRead > buffer size ? buffer size - marker : maxRead)
+		memcpy(dest, buffer data + marker, copySize)
+		marker += copySize
 
-    peek: func -> Char {
-        buffer get(marker)
-    }
+		copySize
+	}
 
-    read: func ~char -> Char {
-        c := buffer get(marker)
-        marker += 1
-        c
-    }
+	peek: func -> Char {
+		buffer get(marker)
+	}
 
-    hasNext?: func -> Bool {
-        return marker < buffer size
-    }
+	read: func ~char -> Char {
+		c := buffer get(marker)
+		marker += 1
+		c
+	}
 
-    seek: func (offset: Long, mode: SeekMode) -> Bool {
-        match mode {
-            case SeekMode SET =>
-                marker = offset
-            case SeekMode CUR =>
-                marker += offset
-            case SeekMode END =>
-                marker = buffer size + offset
-        }
-        _clampMarker()
-        true
-    }
+	hasNext?: func -> Bool {
+		return marker < buffer size
+	}
 
-    _clampMarker: func {
-        if (marker < 0) {
-            marker = 0
-        }
+	seek: func (offset: Long, mode: SeekMode) -> Bool {
+		match mode {
+			case SeekMode SET =>
+				marker = offset
+			case SeekMode CUR =>
+				marker += offset
+			case SeekMode END =>
+				marker = buffer size + offset
+		}
+		_clampMarker()
+		true
+	}
 
-        if (marker >= buffer size) {
-            marker = buffer size - 1
-        }
-    }
+	_clampMarker: func {
+		if (marker < 0) {
+			marker = 0
+		}
 
-    mark: func -> Long {
-        return marker
-    }
+		if (marker >= buffer size) {
+			marker = buffer size - 1
+		}
+	}
+
+	mark: func -> Long {
+		return marker
+	}
 }
-
