@@ -1,4 +1,3 @@
-import os/Time, math, structs/ArrayList /* for List shuffle */
 import structs/HashMap /* for getStandardEquals() - should probably move that in a separate Module */
 
 /**
@@ -184,24 +183,6 @@ List: abstract class <T> extends BackIterable<T> {
                 list2 remove(x); list1 add(x)
             }
         }
-    }
-
-    /**
-       Return a list with all the elements in a random order
-     */
-    shuffle: func -> This<T> {
-        shuffled := emptyClone()
-
-        indexes := ArrayList<Int> new()
-        for(i in 0..getSize()) indexes add(i)
-        currentIndex := Time microtime()
-
-        while(!indexes empty?()) {
-            currentIndex = 214013 * currentIndex + 2531011 // Copied directly from source/math/IntRandomGenerator
-            currentIndex = ((currentIndex >> 16) & Short maximumValue) % indexes getSize()
-            shuffled add(this[indexes removeAt(currentIndex)])
-        }
-        shuffled
     }
 
     /**
