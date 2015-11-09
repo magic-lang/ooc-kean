@@ -112,14 +112,8 @@ version(unix || apple) {
 		pthread_timedjoin_np: extern proto func (thread: PThread, retval: Pointer, abstime: TimeSpec*) -> Int
 	}
 
-	version (gc) {
-		pthread_create: extern (GC_pthread_create) func (threadPtr: PThread*, attrPtr: Pointer, startRoutine: Pointer, userArgument: Pointer) -> Int
-		pthread_join: extern (GC_pthread_join) func (thread: PThread, retval: Pointer*) -> Int
-	}
-	version (!gc) {
-		pthread_create: extern func (threadPtr: PThread*, attrPtr: Pointer, startRoutine: Pointer, userArgument: Pointer) -> Int
-		pthread_join: extern func (thread: PThread, retval: Pointer*) -> Int
-	}
+	pthread_create: extern func (threadPtr: PThread*, attrPtr: Pointer, startRoutine: Pointer, userArgument: Pointer) -> Int
+	pthread_join: extern func (thread: PThread, retval: Pointer*) -> Int
 	pthread_kill: extern func (thread: PThread, signal: Int) -> Int
 	pthread_self: extern func -> PThread
 	pthread_cancel: extern func (thread: PThread) -> Int

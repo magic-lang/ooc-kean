@@ -81,15 +81,7 @@ version(windows) {
 	// http://support.microsoft.com/kb/104641/en-us
 	// CreateThread: extern func (...) -> Handle
 
-	version (gc) {
-		// Use Boehm-provided replacement for _beginthreadex
-		_beginthreadex: extern (GC_beginthreadex) func (security: Pointer, stackSize: UInt, startAddress: Pointer, arglist: Pointer, initflag: UInt, thrdaddr: UInt*) -> Handle
-	}
-
-	version (!gc) {
-		_beginthreadex: extern func (security: Pointer, stackSize: UInt, startAddress: Pointer, arglist: Pointer, initflag: UInt, thrdaddr: UInt*) -> Handle
-	}
-
+	_beginthreadex: extern func (security: Pointer, stackSize: UInt, startAddress: Pointer, arglist: Pointer, initflag: UInt, thrdaddr: UInt*) -> Handle
 	GetCurrentThread: extern func -> Handle
 	WaitForSingleObject: extern func (...) -> Long
 	SwitchToThread: extern func -> Bool
