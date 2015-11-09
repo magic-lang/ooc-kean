@@ -72,11 +72,6 @@ IntSize2DTest: class extends Fixture {
 			expect(result width, is equal to(22))
 			expect(result height, is equal to(10))
 		})
-		this add("fillEven", func {
-			even := IntSize2D fillEven(this vector1)
-			expect(even width, is equal to(12))
-			expect(even height, is equal to(14))
-		})
 		this add("polar", func {
 			sqrttwo := IntSize2D polar(1.415f, 0.785f)
 			expect(sqrttwo width, is equal to(1))

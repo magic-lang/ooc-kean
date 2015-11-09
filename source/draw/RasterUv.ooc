@@ -17,7 +17,6 @@
 use ooc-math
 use ooc-base
 import math
-import structs/ArrayList
 import RasterPacked
 import RasterImage
 import RasterBgr

@@ -73,12 +73,6 @@ IntSize3DTest: class extends Fixture {
 			expect(result height, is equal to(10))
 			expect(result depth, is equal to(8))
 		})
-		this add("fillEven", func {
-			even := IntSize3D fillEven(this vector0)
-			expect(even width, is equal to(22))
-			expect(even height, is equal to(-2))
-			expect(even depth, is equal to(8))
-		})
 		this add("volume, empty", func {
 			empty := IntSize3D new()
 			expect(empty empty, is true)

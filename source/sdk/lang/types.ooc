@@ -129,8 +129,9 @@ Cell: class <T> {
     set: func (=val)
     get: func -> T { val }
 
-    __destroy__: func {
+    free: override func {
         gc_free(this val)
+        super()
     }
     // TODO: Move this to an extension in ooc-kean later
     toString: func -> String {

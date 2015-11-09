@@ -6,73 +6,73 @@ import io/Reader
  */
 Writer: abstract class {
 
-    /**
-       Write a single character to this stream
-     */
-    write: abstract func ~chr (chr: Char)
+	/**
+	   Write a single character to this stream
+	 */
+	write: abstract func ~chr (chr: Char)
 
-    /**
-       Write a given number of bytes to this stream, and return
-       the number that has been effectively written.
-     */
-    write: abstract func (bytes: CString, length: SizeT) -> SizeT
+	/**
+	   Write a given number of bytes to this stream, and return
+	   the number that has been effectively written.
+	 */
+	write: abstract func (bytes: CString, length: SizeT) -> SizeT
 
-    /**
-       Write a string to this stream.
-     */
-    write: func ~implicitLength (str: String) -> SizeT {
-        write(str _buffer data, str size)
-    }
+	/**
+	   Write a string to this stream.
+	 */
+	write: func ~implicitLength (str: String) -> SizeT {
+		write(str _buffer data, str size)
+	}
 
-    /**
-     Write a buffer to this stream.
-    */
-    write: func ~bufImplicitLength (buffer: Buffer) -> SizeT {
-        write(buffer data, buffer size)
-    }
-    
-    /**
-       Write part of a string to this stream.
-     */
-    write: func ~strGivenLength (str: String, length: SizeT) -> SizeT {
-        write(str _buffer data, length)
-    }
+	/**
+	 Write a buffer to this stream.
+	*/
+	write: func ~bufImplicitLength (buffer: Buffer) -> SizeT {
+		write(buffer data, buffer size)
+	}
 
-    /**
-       Equivalent of printf, but used to write to this stream.
-     */
-    writef: final func (fmt: String, args: ...) {
-        write(fmt format(args as VarArgs))
-    }
-    /**
-        Copies data from a Reader into this Writer.
+	/**
+	   Write part of a string to this stream.
+	 */
+	write: func ~strGivenLength (str: String, length: SizeT) -> SizeT {
+		write(str _buffer data, length)
+	}
 
-        :param bufferSize: size in bytes of the internal transfer buffer
-        :return: total bytes transfered
-    */
-    write: func ~fromReader(source: Reader, bufferSize: SizeT) -> SizeT {
-        buffer := Buffer new(bufferSize)
-        cursor, bytesTransfered: Int
-        cursor = 0; bytesTransfered = 0
+	/**
+	   Equivalent of printf, but used to write to this stream.
+	 */
+	writef: final func (fmt: String, args: ...) {
+		write(fmt format(args as VarArgs))
+	}
+	/**
+		Copies data from a Reader into this Writer.
 
-        while (source hasNext?()) {
-            buffer setLength( source read(buffer data, cursor, bufferSize) )
-            bytesTransfered += this write(buffer data, buffer size)
-        }
+		:param bufferSize: size in bytes of the internal transfer buffer
+		:return: total bytes transfered
+	*/
+	write: func ~fromReader (source: Reader, bufferSize: SizeT) -> SizeT {
+		buffer := Buffer new(bufferSize)
+		cursor, bytesTransfered: Int
+		cursor = 0; bytesTransfered = 0
 
-        return bytesTransfered
-    }
+		while (source hasNext?()) {
+			buffer setLength( source read(buffer data, cursor, bufferSize) )
+			bytesTransfered += this write(buffer data, buffer size)
+		}
 
-    /**
-        Same as write(source, bufferSize) except uses a default buffer size of 8192 bytes.
-    */
-    write: func ~fromReaderDefaultBufferSize (source: Reader) {
-        write(source, 8192)
-    }
+		return bytesTransfered
+	}
 
-    /**
-       Close this writer and free the associated system resources, if any.
-     */
-    close: abstract func
+	/**
+		Same as write(source, bufferSize) except uses a default buffer size of 8192 bytes.
+	*/
+	write: func ~fromReaderDefaultBufferSize (source: Reader) {
+		write(source, 8192)
+	}
+
+	/**
+	   Close this writer and free the associated system resources, if any.
+	 */
+	close: abstract func
 
 }

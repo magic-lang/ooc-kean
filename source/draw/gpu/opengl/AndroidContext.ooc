@@ -77,9 +77,10 @@ AndroidContext: class extends OpenGLContext {
 		sourcePointer := eglImage buffer lock(false)
 		length := channels * eglImage size width * eglImage size height
 		buffer := ByteBuffer new(sourcePointer, length,
-			func (buffer: ByteBuffer) {
+			func (b: ByteBuffer) {
 				eglImage buffer unlock()
 				this recyclePacker(gpuRgba)
+				b forceFree()
 			})
 		(buffer, fence)
 	}

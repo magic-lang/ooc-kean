@@ -17,13 +17,12 @@ import math
 import IntPoint2D
 import IntSize2D
 import IntBox2D
-import text/StringTokenizer
 import structs/ArrayList
 
 IntShell2D: cover {
 	left, right, top, bottom: Int
 	leftTop ::= IntPoint2D new(this left, this top)
-	intSize2D ::= IntSize2D new(this left + this right, this top + this bottom)
+	size ::= IntSize2D new(this left + this right, this top + this bottom)
 	balance ::= IntPoint2D new(this right - this left, this bottom - this top)
 	isZero ::= this left == 0 && this right == 0 && this top == 0 && this bottom == 0
 	notZero ::= this left != 0 && this right != 0 && this top != 0 && this bottom != 0

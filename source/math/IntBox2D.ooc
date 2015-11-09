@@ -19,7 +19,6 @@ import IntSize2D
 import FloatPoint2D
 import FloatBox2D
 import VectorList
-import text/StringTokenizer
 import structs/ArrayList
 use ooc-math
 

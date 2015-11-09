@@ -16,7 +16,6 @@
 import math
 import IntPoint2D
 import FloatSize2D
-import text/StringTokenizer
 import structs/ArrayList
 
 IntSize2D: cover {
@@ -36,7 +35,6 @@ IntSize2D: cover {
 	minimum: func ~Int (ceiling: Int) -> This { this minimum(This new(ceiling)) }
 	maximum: func ~Int (floor: Int) -> This { this maximum(This new(floor)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height)) }
-	fillEven: static func (other: This) -> This { This new(other width + (Int odd(other width) ? 1 : 0), other height + (Int odd(other height) ? 1 : 0)) }
 	operator + (other: This) -> This { This new(this width + other width, this height + other height) }
 	operator + (other: IntPoint2D) -> This { This new(this width + other x, this height + other y) }
 	operator - (other: This) -> This { This new(this width - other width, this height - other height) }
