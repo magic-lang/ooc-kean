@@ -98,7 +98,9 @@ version(windows) {
 			// our definition of a file: neither a directory or a link
 			// (and no, FILE_ATTRIBUTE_NORMAL isn't true when we need it..)
 			(ffd, ok) := _getFindData()
-			return (ok) && (((ffd attr) & FILE_ATTRIBUTE_DIRECTORY) == 0) && (((ffd attr) & FILE_ATTRIBUTE_REPARSE_POINT) == 0)
+			return (ok) &&
+				(((ffd attr) & FILE_ATTRIBUTE_DIRECTORY) == 0) &&
+				(((ffd attr) & FILE_ATTRIBUTE_REPARSE_POINT) == 0)
 		}
 
 		/**
