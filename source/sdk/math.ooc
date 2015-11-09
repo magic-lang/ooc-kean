@@ -99,7 +99,7 @@ extend Int {
 	// TODO: Avoid using this, consider removing it.
 	maximum: static func ~multiple (value: This, values: ...) -> This {
 		values each(|v|
-			if ((v as This *)@ > value)
+			if ((v as This*)@ > value)
 				value = v
 		)
 		value
@@ -110,7 +110,7 @@ extend Int {
 	// TODO: Avoid using this, consider removing it.
 	minimum: static func ~multiple (value: This, values: ...) -> This {
 		values each(|v|
-			if ((v as This *)@ < value)
+			if ((v as This*)@ < value)
 				value = v
 		)
 		value
