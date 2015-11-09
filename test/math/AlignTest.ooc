@@ -2,12 +2,18 @@ use ooc-math
 use ooc-unit
 import math
 
-version(debugTests) {
-	res1 := Int align(720, 64)
-	println(res1 toString())
-
-	for (i in 0 .. 66)
-		println(Int align(i, 1) toString())
+AlignTest: class extends Fixture {
+	init: func {
+		super("AlignTest")
+		this add("align to 64", func {
+			result := Int align(720, 64)
+			expect(result, is equal to(768))
+		})
+		this add("align to 1", func {
+			for (i in 0 .. 66)
+				expect(Int align(i, 1), is equal to(i))
+		})
+	}
 }
 
-"AlignTest [TODO: Not implemented as a fixture!]" printfln()
+AlignTest new() run()
