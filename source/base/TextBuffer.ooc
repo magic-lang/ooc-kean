@@ -19,10 +19,34 @@ use ooc-base
 
 TextBuffer: cover {
 	_backend: OwnedBuffer
-	raw ::= this _backend pointer as Char*
-	count ::= this _backend size
-	owner ::= this _backend owner
-	isOwned ::= this _backend isOwned
+	raw: Char* {
+		get {
+			result := this _backend pointer as Char*
+			this free(Owner Receiver)
+			result
+		}
+	}
+	count: Int {
+		get {
+			result := this _backend size
+			this free(Owner Receiver)
+			result
+		}
+	}
+	owner: Owner {
+		get {
+			result := this _backend owner
+			this free(Owner Receiver)
+			result
+		}
+	}
+	isOwned: Bool {
+		get {
+			result := this _backend isOwned
+			this free(Owner Receiver)
+			result
+		}	
+	}
 	init: func@ ~empty {
 		this init(OwnedBuffer new())
 	}
@@ -31,6 +55,9 @@ TextBuffer: cover {
 	}
 	init: func@ ~fromData (data: Char*, count: Int, owner := Owner Unknown) {
 		this init(OwnedBuffer new(data as UInt8*, count, owner))
+	}
+	init: func@ ~fromBuffer (buffer: Buffer) {
+		this init(buffer data, buffer size)
 	}
 	init: func@ (=_backend)
 	take: func -> This { // call by value -> modifies copy of cover
@@ -65,6 +92,13 @@ TextBuffer: cover {
 	}
 	copyTo: func (destination: This) -> Int {
 		this _backend copyTo(destination _backend)
+	}
+	toString: func -> String {
+		t := this take()
+		result := Buffer new()
+		result append(t raw, t count)
+		this free(Owner Receiver)
+		String new(result)
 	}
 	operator [] (index: Int) -> Char {
 		this raw[index]

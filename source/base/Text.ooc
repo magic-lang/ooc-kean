@@ -21,8 +21,20 @@ import math
 
 Text: cover {
 	_buffer: TextBuffer
-	count ::= this _buffer count
-	isEmpty ::= this count == 0
+	count: Int {
+		get {
+			result := this _buffer count
+			this free(Owner Receiver)
+			result
+		}
+	}
+	isEmpty: Bool {
+		get {
+			result := this _buffer count == 0
+			this free(Owner Receiver)
+			result
+		}
+	}
 	init: func@ ~empty {
 		this init(TextBuffer new())
 	}
@@ -53,12 +65,22 @@ Text: cover {
 	}
 	operator == (other: This) -> Bool {
 		result := this _buffer == other _buffer
+		if (this _buffer raw != other _buffer raw)
+			other free(Owner Receiver)
 		this free(Owner Receiver)
-		other free(Owner Receiver)
 		result
 	}
 	operator != (other: String) -> Bool { !(this == other) }
 	operator != (other: This) -> Bool { !(this == other) }
+	operator + (other: This) -> This {
+		result := TextBuffer new(this take() count + other take() count)
+		this _buffer copyTo(result)
+		other _buffer copyTo(result slice(this take() count))
+		if (this _buffer raw != other _buffer raw)
+			other free(Owner Receiver)
+		this free(Owner Receiver)
+		Text new(result)
+	}
 	beginsWith: func (other: This) -> Bool {
 		this slice(0, Int minimum~two(other count, this count)) == other
 	}
@@ -174,34 +196,22 @@ Text: cover {
 		this slice(leftPosition, rightPosition - leftPosition + 1)
 	}
 	toString: func -> String {
-		result := String new(this _buffer raw, this count)
-		this free(Owner Receiver)
-		result
+		this _buffer toString()
 	}
 	toInt: func -> Int {
-		result := this toLLong() as Int
-		this free(Owner Receiver)
-		result
+		this toLLong() as Int
 	}
 	toLong: func -> Long {
-		result := this toLLong() as Long
-		this free(Owner Receiver)
-		result
+		this toLLong() as Long
 	}
 	toLLong: func -> LLong {
-		result := this toLLong~inBase(this _detectNumericBase())
-		this free(Owner Receiver)
-		result
+		this toLLong~inBase(this _detectNumericBase())
 	}
 	toInt: func ~inBase (base: Int) -> Int {
-		result := this toLLong~inBase(base) as Int
-		this free(Owner Receiver)
-		result
+		this toLLong~inBase(base) as Int
 	}
 	toLong: func ~inBase (base: Int) -> LLong {
-		result := this toLLong~inBase(base) as Long
-		this free(Owner Receiver)
-		result
+		this toLLong~inBase(base) as Long
 	}
 	toLLong: func ~inBase (base: Int) -> LLong {
 		t := this take() trim()
@@ -218,7 +228,7 @@ Text: cover {
 		if (!t isEmpty) {
 			lastValidIndex := -1
 			start := 0
-			if (base == 16 && t beginsWith(This new(c"0x", 2))) {
+			if (base == 16 && t beginsWith(t"0x")) {
 				start += 2
 				lastValidIndex += 2
 			}
@@ -302,7 +312,7 @@ Text: cover {
 	}
 	_toInt: static func (c: Char, base: Int) -> Int {
 		result := 0
-		if (_isNumeric(c, base)) {
+		if (This _isNumeric(c, base)) {
 			if (base != 16)
 				result = (c - '0') as Int
 			else {

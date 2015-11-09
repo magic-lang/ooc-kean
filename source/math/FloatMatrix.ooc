@@ -129,6 +129,7 @@ FloatMatrix : cover {
 			result = result & this[this width - 1, y] toString()
 			result = result >> "; "
 		}
+		this free(Owner Receiver)
 		result
 	}
 	// Lup decomposition of the current matrix. Recall that Lup decomposition is A = LUP,
@@ -200,8 +201,9 @@ FloatMatrix : cover {
 				else
 					raise("Division by zero in FloatMatrix forwardSubstitution")
 			}
+		if (this elements != lower elements)
+			lower free(Owner Receiver)
 		this free(Owner Receiver)
-		lower free(Owner Receiver)
 		result
 	}
 	// Backward solver upper * x = y for an upper triangular matrix. Current object is y.
@@ -220,8 +222,9 @@ FloatMatrix : cover {
 					raise("Division by zero in FloatMatrix backwardSubstitution")
 			}
 		}
+		if (this elements != upper elements)
+			upper free(Owner Receiver)
 		this free(Owner Receiver)
-		upper free(Owner Receiver)
 		result
 	}
 
@@ -293,8 +296,9 @@ FloatMatrix : cover {
 				result elements[x + y * result width] = temp
 			}
 		}
+		if (this elements != other elements)
+			other free(Owner Receiver)
 		this free(Owner Receiver)
-		other free(Owner Receiver)
 		result
 	}
 	operator + (other: This) -> This {
@@ -303,8 +307,9 @@ FloatMatrix : cover {
 		result := This new(this dimensions)
 		for (i in 0 .. this dimensions area)
 			result elements[i] = this elements[i] + other elements[i]
+		if (this elements != other elements)
+			other free(Owner Receiver)
 		this free(Owner Receiver)
-		other free(Owner Receiver)
 		result
 	}
 	operator - (other: This) -> This {
@@ -313,8 +318,9 @@ FloatMatrix : cover {
 		result := This new(this dimensions)
 		for (i in 0 .. this dimensions area)
 			result elements[i] = this elements[i] - other elements[i]
+		if (this elements != other elements)
+			other free(Owner Receiver)
 		this free(Owner Receiver)
-		other free(Owner Receiver)
 		result
 	}
 	operator += (other: This) {
