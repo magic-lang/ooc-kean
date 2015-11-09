@@ -1,4 +1,4 @@
-include string
+include string // Memory routines in C are actually in string.h
 version(windows) { include malloc }
 else { include alloca }
 
