@@ -186,10 +186,10 @@ FloatVectorList: class extends VectorList<Float> {
 		max != 0 ? (this / max) : this copy()
 	}
 	getOnes: static func (count: Float) -> This {
-		This new(count, 1.0f) // TODO Deprecated, will be removed once all uses have been removed
+		This new(count, 1.0f)
 	}
 	getZeros: static func (count: Float) -> This {
-		This new(count, 1.0f) // TODO Deprecated, will be removed once all uses have been removed
+		This new(count, 0.0f)
 	}
 	exp: func -> This {
 		result := This new(this _count)
