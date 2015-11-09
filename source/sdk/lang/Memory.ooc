@@ -13,8 +13,8 @@ gc_calloc: extern(calloc) func (nmemb: SizeT, size: SizeT) -> Pointer
 gc_free: extern(free) func (ptr: Pointer)
 
 //TODO Remove the above declarations once they're no longer used - only use the following:
-malloc: extern(malloc) func (SizeT) -> Pointer
-calloc: extern(calloc) func (SizeT, SizeT) -> Pointer
+malloc: extern func (SizeT) -> Pointer
+calloc: extern func (SizeT, SizeT) -> Pointer
 memset: extern func (Pointer, Int, SizeT) -> Pointer
 memcmp: extern func (Pointer, Pointer, SizeT) -> Int
 memmove: extern func (Pointer, Pointer, SizeT)
