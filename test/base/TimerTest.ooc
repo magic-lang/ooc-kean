@@ -28,11 +28,13 @@ TimerTest: class extends Fixture {
 		this add("basic use of Timer", func {
 			fast := this timerTestFunction(1_000)
 			slow := this timerTestFunction(10_000_000)
+			"%f, %f" printfln(fast, slow)
 			expect(slow > fast, is true)
 		})
 		this add("basic use of ClockTimer", func {
 			fast := this clockTimerTestFunction(1_000)
 			slow := this clockTimerTestFunction(10_000_000)
+			"%f, %f" printfln(fast, slow)
 			expect(slow > fast, is true)
 		})
 	}
