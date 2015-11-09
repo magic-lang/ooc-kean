@@ -36,9 +36,6 @@ version(linux || apple) {
     _SC_NPROCESSORS_ONLN: extern Int
 }
 
-// for backwards compatibility, please use the namespaced version instead
-numProcessors: func -> Int { System numProcessors() }
-
 System: class {
 
     numProcessors: static func -> Int {
