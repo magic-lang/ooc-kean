@@ -16,7 +16,7 @@ Object: abstract class {
 
     free: virtual func {
       this __destroy__()
-      gc_free(this)
+      free(this)
     }
 
     /** return true if *class* is a subclass of *T*. */
