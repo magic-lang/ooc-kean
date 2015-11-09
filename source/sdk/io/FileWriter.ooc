@@ -9,7 +9,6 @@ import os/Pipe, os/native/PipeUnix
  * mingw, rewind()/mark() won't work correctly.
  */
 FileWriter: class extends Writer {
-
 	/** The underlying file descriptor */
 	file: FStream
 
@@ -97,7 +96,6 @@ FileWriter: class extends Writer {
 	write: func ~chr (chr: Char) {
 		file write(chr)
 	}
-
 
 	/**
 	   Close this writer and free the associated system resources, if any.

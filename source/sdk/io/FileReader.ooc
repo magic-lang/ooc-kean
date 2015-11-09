@@ -8,7 +8,6 @@ import io/[Reader, File]
  * mingw, rewind()/mark() won't work correctly.
  */
 FileReader: class extends Reader {
-
 	fileName: String
 
 	/** The underlying file descriptor */
@@ -108,5 +107,4 @@ FileReader: class extends Reader {
 	close: func {
 		file close()
 	}
-
 }
