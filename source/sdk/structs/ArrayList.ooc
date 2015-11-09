@@ -35,7 +35,7 @@ ArrayList: class <T> extends List<T> {
     }
     
     free: override func {
-        gc_free(this data)
+        free(this data)
         super()
     }
 

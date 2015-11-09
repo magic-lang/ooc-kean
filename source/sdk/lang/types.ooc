@@ -112,7 +112,7 @@ Closure: cover {
     dispose: func {
       if (this context != null)
       {
-        gc_free(this context)
+        free(this context)
         this context = null
         this thunk = null
       }
@@ -130,7 +130,7 @@ Cell: class <T> {
     get: func -> T { val }
 
     free: override func {
-        gc_free(this val)
+        free(this val)
         super()
     }
     // TODO: Move this to an extension in ooc-kean later

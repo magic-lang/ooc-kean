@@ -9,7 +9,7 @@ Stack: class <T> {
 		this _data = gc_malloc(this _capacity * T size)
 	}
 	free: override func {
-		gc_free(this _data)
+		free(this _data)
 		super()
 	}
 	push: func (element: T) {
