@@ -135,10 +135,15 @@ Text: cover {
 		this _buffer free(criteria)
 	}
 	slice: func (start, distance: Int) -> This {
-		result := This new(this _buffer slice(start, distance))
-		if (this _buffer owner == Owner Receiver)
-			result = result copy() // TODO: Could we be smarter here?
-		this free(Owner Receiver)
+		result: This
+		if (start == 0 && distance == this count)
+			result = this
+		else {
+			result = This new(this _buffer slice(start, distance))
+			if (this _buffer owner == Owner Receiver)
+				result = result copy() // TODO: Could we be smarter here?
+			this free(Owner Receiver)
+		}
 		result
 	}
 	split: func ~character (separator: Char) -> VectorList<This> {
