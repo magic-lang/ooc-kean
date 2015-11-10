@@ -170,10 +170,9 @@ Text: cover {
 		result
 	}
 	trim: func -> This {
-		length := this count
 		leftPosition := 0
-		rightPosition := length - 1
-		while (leftPosition < length && this _buffer[leftPosition] whitespace?())
+		rightPosition := this count - 1
+		while (leftPosition < this count && this _buffer[leftPosition] whitespace?())
 			++leftPosition
 		while (rightPosition > leftPosition && this _buffer[rightPosition] whitespace?())
 			--rightPosition
