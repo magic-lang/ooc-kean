@@ -170,8 +170,6 @@ TextTest: class extends Fixture {
 			paddedText := t"  \t test \n test \r\n\t "
 			trimmedText := paddedText trim()
 			expect(trimmedText == t"test \n test")
-			paddedText free()
-			trimmedText free()
 		})
 	}
 }
