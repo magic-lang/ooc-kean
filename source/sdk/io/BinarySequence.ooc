@@ -39,8 +39,7 @@ BinarySequenceWriter: class {
 	writer: Writer
 	endianness := ENDIANNESS
 
-	init: func (=writer) {
-	}
+	init: func (=writer)
 
 	_pushByte: func (byte: Octet) {
 		writer write(byte as Char) // TODO?

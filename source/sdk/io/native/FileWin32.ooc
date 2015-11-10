@@ -1,10 +1,8 @@
-
 import native/win32/[types, errors]
 import structs/ArrayList
 import ../File
 
 version(windows) {
-
 	include windows | (_WIN32_WINNT=0x0500)
 
 	// separators
@@ -71,7 +69,6 @@ version(windows) {
 	 * Win32 implementation of File
 	 */
 	FileWin32: class extends File {
-
 		init: func ~win32 (.path) {
 			this path = _normalizePath(path)
 		}
@@ -102,8 +99,8 @@ version(windows) {
 			// (and no, FILE_ATTRIBUTE_NORMAL isn't true when we need it..)
 			(ffd, ok) := _getFindData()
 			return (ok) &&
-					(((ffd attr) & FILE_ATTRIBUTE_DIRECTORY) == 0) &&
-					(((ffd attr) & FILE_ATTRIBUTE_REPARSE_POINT) == 0)
+				(((ffd attr) & FILE_ATTRIBUTE_DIRECTORY) == 0) &&
+				(((ffd attr) & FILE_ATTRIBUTE_REPARSE_POINT) == 0)
 		}
 
 		/**
@@ -295,7 +292,5 @@ version(windows) {
 		getChildren: func -> ArrayList<File> {
 			_getChildren ( File )
 		}
-
 	}
-
 }

@@ -36,6 +36,12 @@ Event: class {
 			this _tail call()
 		this _head()
 	}
+	free: override func {
+		(this _head as Closure) dispose()
+		if (this _tail != null)
+			this _tail free()
+		super()
+	}
 }
 Event1: class <T> {
 	_head: Func(T)
@@ -110,5 +116,11 @@ Event2: class <T0, T1> { // TODO: Write tests and fix this
 		if (this _tail != null)
 			this _tail call(argument0, argument1)
 		this _head(argument0, argument1)
+	}
+	free: override func {
+		(this _head as Closure) dispose()
+		if (this _tail != null)
+			this _tail free()
+		super()
 	}
 }
