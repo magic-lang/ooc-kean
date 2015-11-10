@@ -17,7 +17,6 @@ import math
 import IntSize3D
 import IntPoint2D
 import FloatPoint3D
-import text/StringTokenizer
 import structs/ArrayList
 
 IntPoint3D: cover {

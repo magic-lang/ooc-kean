@@ -18,7 +18,6 @@ use ooc-math
 use ooc-base
 import ByteBuffer into ByteBuffer
 import math
-import structs/ArrayList
 import Image
 import RasterImage
 

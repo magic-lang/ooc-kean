@@ -18,7 +18,6 @@ import math
 import FloatPoint2D
 import FloatBox2D
 import FloatTransform2D
-import text/StringTokenizer
 
 FloatConvexHull2D: class {
 	_points: VectorList<FloatPoint2D>

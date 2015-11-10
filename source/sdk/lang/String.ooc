@@ -290,6 +290,42 @@ String: class extends Iterable<Char> {
     }
 
     toCString: func -> CString { _buffer data as CString }
+
+    split: func ~withChar (c: Char, maxTokens: SSizeT) -> ArrayList<This> {
+        _bufArrayListToStrArrayList(_buffer split(c, maxTokens))
+    }
+
+    split: func ~withStringWithoutmaxTokens (s: This) -> ArrayList<This> {
+        _bufArrayListToStrArrayList(_buffer split(s _buffer, -1))
+    }
+
+    split: func ~withCharWithoutmaxTokens(c: Char) -> ArrayList<This> {
+        bufferSplit := _buffer split(c)
+        result := _bufArrayListToStrArrayList(bufferSplit)
+        bufferSplit free()
+        result
+    }
+
+    split: func ~withStringWithEmpties( s: This, empties: Bool) -> ArrayList<This> {
+        _bufArrayListToStrArrayList(_buffer split(s _buffer, empties))
+    }
+
+    split: func ~withCharWithEmpties(c: Char, empties: Bool) -> ArrayList<This> {
+        _bufArrayListToStrArrayList(_buffer split(c, empties))
+    }
+
+    /**
+     * Split a string to form a list of tokens delimited by `delimiter`
+     *
+     * @param delimiter String that separates tokens
+     * @param maxTokens Maximum number of tokens
+     *   - if positive, the last token will be the rest of the string, if any.
+     *   - if negative, the string will be fully split into tokens
+     *   - if zero, it will return all non-empty elements
+     */
+    split: func ~str (delimiter: This, maxTokens: SSizeT) -> ArrayList<This> {
+        _bufArrayListToStrArrayList(_buffer split(delimiter _buffer, maxTokens))
+    }
 }
 
 /* conversions C world -> String */

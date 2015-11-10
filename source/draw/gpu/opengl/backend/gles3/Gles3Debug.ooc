@@ -1,7 +1,6 @@
 use ooc-base
 import ../egl/egl
 import include/gles3
-import text/StringTokenizer
 import structs/ArrayList
 
 version(!gpuOff) {

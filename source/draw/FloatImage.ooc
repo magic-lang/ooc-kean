@@ -1,4 +1,4 @@
-import math, math
+import math
 use ooc-math
 FloatImage : class {
 	// x = column
