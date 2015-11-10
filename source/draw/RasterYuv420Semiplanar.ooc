@@ -17,7 +17,6 @@
 use ooc-math
 use ooc-base
 import math
-import structs/ArrayList
 import RasterPacked
 import RasterImage
 import RasterYuvSemiplanar
@@ -31,7 +30,6 @@ import io/File
 import io/FileReader
 import io/Reader
 import io/FileWriter
-import io/BinarySequence
 import Canvas, RasterCanvas
 
 Yuv420RasterCanvas: class extends RasterCanvas {

@@ -2,7 +2,6 @@
 // sdk
 import os/[Env, Dynlib, ShellUtils]
 import io/[File, StringReader]
-import text/StringTokenizer
 import structs/[ArrayList, List]
 
 // sdk internals
@@ -12,6 +11,7 @@ BacktraceHandler: class {
 
     // constants
     BACKTRACE_LENGTH := static 128
+    WARNED_ABOUT_FALLBACK := static false
     
     // singleton
     instance: static This
@@ -52,13 +52,19 @@ BacktraceHandler: class {
         } else {
             // fall back on execinfo? still informative
             version (linux || apple) {
-                stderr write("[lang/Backtrace] Falling back on execinfo.. (build extension if you want fancy backtraces)\n")
+                if (!This WARNED_ABOUT_FALLBACK) {
+                    stderr write("[lang/Backtrace] Falling back on execinfo.. (build extension if you want fancy backtraces)\n")
+                    This WARNED_ABOUT_FALLBACK = true
+                }
                 length := backtrace(buffer, BACKTRACE_LENGTH)
                 return Backtrace new(buffer, length)
             }
 
             // no such luck, use a debugger :(
-            stderr write("[lang/Backtrace] No backtrace extension nor execinfo - use a debugger!\n")
+            if (!This WARNED_ABOUT_FALLBACK) {
+                stderr write("[lang/Backtrace] No backtrace extension nor execinfo - use a debugger!\n")
+                This WARNED_ABOUT_FALLBACK = true
+            }
             gc_free(buffer)
             return null
         }

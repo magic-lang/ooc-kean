@@ -19,7 +19,6 @@ import FloatSize2D
 import FloatPoint2D
 import FloatBox2D
 import IntTransform2D
-import text/StringTokenizer
 import structs/ArrayList
 import FloatEuclidTransform, FloatTransform3D, FloatPoint3D
 

@@ -51,8 +51,8 @@ PromiseCollectorTest: class extends Fixture {
 			promises := PromiseCollector new()
 			for (j in 0 .. 5)
 				promises += Promise start(func { for (i in 0 .. 50_000_000) { } } )
-			expect(promises wait(0.01) == false)
-			expect(promises wait() == true)
+			expect(promises wait(0.01), is false)
+			expect(promises wait(), is true)
 			promises free()
 		})
 	}

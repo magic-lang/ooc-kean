@@ -1,6 +1,5 @@
 use ooc-collections
 use ooc-base
-import structs/LinkedList
 import threading/Thread
 import os/Time
 

@@ -18,7 +18,6 @@ use ooc-unit
 use ooc-math
 use ooc-collections
 import math
-import text/StringTokenizer
 import structs/ArrayList
 import FloatComplex
 import lang/IO

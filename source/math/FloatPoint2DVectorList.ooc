@@ -69,6 +69,23 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 		sortedY free()
 		result
 	}
+	getMean: func (indices: VectorList<Int>) -> FloatPoint2D {
+		result := FloatPoint2D new()
+		indicesCount := indices count
+		if (indicesCount > 0) {
+			buffer := this pointer as FloatPoint2D*
+			indicesBuffer := indices pointer as Int*
+			for (i in 0 .. indicesCount) {
+				index := indicesBuffer[i]
+				element := buffer[index]
+				result x = result x + element x
+				result y = result y + element y
+			}
+			result x = result x / indicesCount
+			result y = result y / indicesCount
+		}
+		result
+	}
 	operator + (value: FloatPoint2D) -> This {
 		result := This new()
 		for (i in 0 .. this _count)

@@ -4,7 +4,6 @@
 */
 
 import berkeley, translation, Socket, Address, Exceptions
-import text/StringTokenizer
 
 /**
 	Is the IP provided valid as either IPv6 or IPv4? (Returns type, from AddressFamily)

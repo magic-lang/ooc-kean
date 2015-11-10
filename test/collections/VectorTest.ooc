@@ -73,10 +73,6 @@ VectorTest: class extends Fixture {
 			for (i in 0 .. 15)
 				heapVector[i] = 15
 
-			isNotTheValue := is not equal to(15)
-			for (i in 16 .. 20)
-				expect(heapVector[i], isNotTheValue)
-
 			// Decrease array size below original size
 			heapVector resize(5)
 			expect(heapVector capacity, is equal to(5))
@@ -84,9 +80,6 @@ VectorTest: class extends Fixture {
 				heapVector[i] = 5
 			for (i in 0 .. 5)
 				expect(heapVector[i], is equal to(5))
-			isNotTheValue = is not equal to(5)
-			for (i in 6 .. 20)
-				expect(heapVector[i], isNotTheValue)
 
 			// Copy tests
 			heapVector resize(3)
@@ -159,10 +152,6 @@ VectorTest: class extends Fixture {
 				stackVector[i] = 20
 			for (i in 0 .. 20)
 				expect(stackVector[i], is equal to(20))
-			// Test if elements above size=20 also changed
-			isNotTheValue := is not equal to(20)
-			for (i in 21 .. 30)
-				expect(stackVector[i], isNotTheValue)
 
 			stackVector resize(40)
 
@@ -175,9 +164,6 @@ VectorTest: class extends Fixture {
 				stackVector[i] = 10
 			for (i in 0 .. 10)
 				expect(stackVector[i], is equal to(10))
-			isNotTheValue = is not equal to(10)
-			for (i in 11 .. 30)
-				expect(stackVector[i], isNotTheValue)
 
 			// Copy tests
 			stackVector resize(3)

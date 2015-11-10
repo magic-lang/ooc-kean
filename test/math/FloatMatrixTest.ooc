@@ -67,10 +67,11 @@ FloatMatrixTest: class extends Fixture {
 		})
 
 		this add("multiplication", func {
-			matrix = createMatrix(3, 3, [1.0f, 0, 0, 0, 0, 3.0f, 7.0f, 0, 0])
-			checkAllElements(matrix * matrix, [1.0f, 0, 0, 21.0f, 0, 0, 7.0f, 0, 0])
-			matrix = createMatrix(2, 3, [1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f])
-			checkAllElements(matrix transpose() * matrix, [14.0f, 32.0f, 32.0f, 77.0f])
+			a := createMatrix(3, 3, [1.0f, 0, 0, 0, 0, 3.0f, 7.0f, 0, 0]) take()
+			checkAllElements(a * a, [1.0f, 0, 0, 21.0f, 0, 0, 7.0f, 0, 0])
+			b := createMatrix(2, 3, [1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f]) take()
+			transpose := b transpose()
+			checkAllElements(transpose * b, [14.0f, 32.0f, 32.0f, 77.0f])
 		})
 
 		this add("multiplication (scalar)", func {
@@ -110,7 +111,14 @@ FloatMatrixTest: class extends Fixture {
 		this add("set and get", func {
 			matrix = createMatrix(3, 3, [1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f])
 			matrix[0, 0] = 42.0f
-			expect(matrix[0, 0] == 42.0f)
+			expect(matrix[0, 0], is equal to(42.0f) within(this precision))
+		})
+
+		this add("print columns", func {
+			A := createMatrix(3, 3, [1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f]) take()
+			column := A getColumn(1)
+			expect(column toString() == "4.00; 5.00; 6.00; ")
+			expect(A toString() == "1.00, 4.00, 7.00; 2.00, 5.00, 8.00; 3.00, 6.00, 9.00; ")
 		})
 
 		this add("adjugate", func {
@@ -129,7 +137,7 @@ FloatMatrixTest: class extends Fixture {
 		})
 	}
 
-	createMatrix: func (width: Int, height: Int, values: Float[]) -> FloatMatrix {
+	createMatrix: func (width, height: Int, values: Float[]) -> FloatMatrix {
 		result := FloatMatrix new(width, height) take()
 		for (x in 0 .. width)
 			for (y in 0 .. height)

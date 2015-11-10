@@ -12,7 +12,7 @@ RasterMonochromeTest: class extends Fixture {
 		this add("equals 1", func {
 			image1 := RasterMonochrome open(this sourceFlower)
 			image2 := RasterMonochrome open(this sourceSpace)
-			expect(image1 equals(image1))
+			expect(image1 equals(image1), is true)
 			expect(image1 equals(image2), is false)
 			image1 free(); image2 free()
 		})
@@ -21,7 +21,7 @@ RasterMonochromeTest: class extends Fixture {
 			image1 := RasterMonochrome open(this sourceFlower)
 			image1 save(output)
 			image2 := RasterMonochrome open(output)
-			expect(image1 equals(image2))
+			expect(image1 equals(image2), is true)
 			image1 free(); image2 free()
 		})
 		this add("distance, same image", func {
@@ -46,15 +46,15 @@ RasterMonochromeTest: class extends Fixture {
 					image[column, row] = ColorMonochrome new(row)
 			for (column in 0 .. size width) {
 				columnData := image getColumn(column)
-				expect(columnData count == size height)
+				expect(columnData count, is equal to(size height))
 				for (i in 0 .. columnData count)
-					expect(columnData[i] as UInt8 == i)
+					expect(columnData[i] as Int, is equal to(i))
 			}
 			for (row in 0 .. size height) {
 				rowData := image getRow(row)
-				expect(rowData count == size width)
+				expect(rowData count, is equal to(size width))
 				for (i in 0 .. rowData count)
-					expect(rowData[i] as UInt8 == row)
+					expect(rowData[i] as Int, is equal to(row))
 			}
 			image free()
 		})

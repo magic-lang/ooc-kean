@@ -18,7 +18,6 @@ import math
 import IntSize2D
 import IntPoint2D
 import FloatTransform2D
-import text/StringTokenizer
 import structs/ArrayList
 
 // The 2D transform is a 3x3 homogeneous coordinate matrix.

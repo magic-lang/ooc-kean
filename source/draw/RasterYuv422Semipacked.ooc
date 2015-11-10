@@ -17,7 +17,6 @@
 use ooc-math
 use ooc-base
 import math
-import structs/ArrayList
 import RasterPacked
 import RasterImage
 import RasterMonochrome
@@ -29,7 +28,6 @@ import io/File
 import io/FileReader
 import io/Reader
 import io/FileWriter
-import io/BinarySequence
 
 RasterYuv422Semipacked: class extends RasterPacked {
 	bytesPerPixel: Int { get { 2 } }
