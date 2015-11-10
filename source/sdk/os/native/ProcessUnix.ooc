@@ -1,4 +1,4 @@
-import structs/[HashMap, ArrayList, List]
+import structs/[ArrayList, List]
 import ../[Env, Process, wait, unistd, Pipe]
 import PipeUnix
 
