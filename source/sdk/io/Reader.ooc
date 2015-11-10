@@ -1,10 +1,8 @@
-
 /**
  * The reader interface provides a medium-indendant way to read characters
  * from a source, e.g. a file, a string, an URL, etc.
  */
 Reader: abstract class {
-
 	/** Position in the stream. Not supported by all reader types */
 	marker: Long
 
@@ -27,7 +25,6 @@ Reader: abstract class {
 		buffer size = count
 		count
 	}
-
 
 	/**
 	 * Read till the end of stream, return result as a string.
@@ -151,7 +148,6 @@ Reader: abstract class {
 		skipUntil('\n')
 	}
 
-
 	/**
 	   Read every line, and call `f` on it until `f` returns false
 	   or we have reached the end of the file.
@@ -230,7 +226,6 @@ Reader: abstract class {
 	   Close this reader and free the associated system resources, if any.
 	 */
 	close: abstract func
-
 }
 
 SeekMode: enum {
@@ -245,9 +240,7 @@ SeekMode: enum {
 }
 
 SeekingNotSupported: class extends Exception {
-
 	init: func (.origin) {
 		super(origin, "Seeking is not supported for this source")
 	}
-
 }

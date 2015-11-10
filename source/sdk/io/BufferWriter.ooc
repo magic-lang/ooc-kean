@@ -4,7 +4,6 @@ import io/Writer
  * Implement the Writer interface for Writer
  */
 BufferWriter: class extends Writer {
-
 	buffer: Buffer
 	pos: Long
 
@@ -19,9 +18,7 @@ BufferWriter: class extends Writer {
 		return buffer
 	}
 
-	close: func {
-		/* do nothing. */
-	}
+	close: func
 
 	_makeRoom: func (len: Long) {
 		// re-allocate if needed...
@@ -71,5 +68,4 @@ BufferWriter: class extends Writer {
 		vsnprintf(buffer data + pos, length + 1, fmt, list)
 		pos += length
 	}
-
 }
