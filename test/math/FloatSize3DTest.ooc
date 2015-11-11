@@ -59,7 +59,7 @@ FloatSize3DTest: class extends Fixture {
 		})
 		this add("casting", func {
 			value := "10.00, 20.00, 30.00"
-			parseText := t"10.0,20.0,30.0"
+			parseText := Text new(value)
 			expect(this vector3 toString(), is equal to(value))
 			expect(FloatSize3D parse(parseText) width, is equal to(this vector3 width))
 			expect(FloatSize3D parse(parseText) height, is equal to(this vector3 height))

@@ -50,10 +50,10 @@ IntSize2DTest: class extends Fixture {
 		})
 		this add("casting", func {
 			value := "10, 20"
-			parseText := t"34,10"
+			parseText := Text new(value)
 			expect(this vector3 toString(), is equal to(value))
-			expect(IntSize2D parse(parseText) width, is equal to(this vector2 width))
-			expect(IntSize2D parse(parseText) height, is equal to(this vector2 height))
+			expect(IntSize2D parse(parseText) width, is equal to(this vector3 width))
+			expect(IntSize2D parse(parseText) height, is equal to(this vector3 height))
 		})
 		this add("float casts", func {
 			vector := vector0 toFloatSize2D()

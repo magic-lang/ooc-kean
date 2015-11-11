@@ -50,11 +50,11 @@ IntSize3DTest: class extends Fixture {
 		})
 		this add("casting", func {
 			value := "10, 20, 0"
-			parseText := t"34,10,0"
+			parseText := Text new(value)
 			expect(this vector3 toString(), is equal to(value))
-			expect(IntSize3D parse(parseText) width, is equal to(this vector2 width))
-			expect(IntSize3D parse(parseText) height, is equal to(this vector2 height))
-			expect(IntSize3D parse(parseText) depth, is equal to(this vector2 depth))
+			expect(IntSize3D parse(parseText) width, is equal to(this vector3 width))
+			expect(IntSize3D parse(parseText) height, is equal to(this vector3 height))
+			expect(IntSize3D parse(parseText) depth, is equal to(this vector3 depth))
 		})
 		this add("float casts", func {
 			vector := vector0 toFloatSize3D()
