@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+use ooc-collections
 import math
 import FloatSize2D
 import FloatSize3D
@@ -211,6 +212,14 @@ FloatTransform3D: cover {
 	}
 	transformAndProject: func ~FloatBox2D (box: FloatBox2D, focalLength: Float) -> FloatBox2D {
 		FloatBox2D new(this transformAndProject(box leftTop, focalLength), this transformAndProject(box rightBottom, focalLength))
+	}
+	transformAndProjectCorners: func (box: FloatBox2D, focalLength: Float) -> VectorList<FloatPoint2D> {
+		result := VectorList<FloatPoint2D> new()
+		result add(this transformAndProject(box leftTop, focalLength))
+		result add(this transformAndProject(box leftBottom, focalLength))
+		result add(this transformAndProject(box rightBottom, focalLength))
+		result add(this transformAndProject(box rightTop, focalLength))
+		result
 	}
 	project: func (point: FloatPoint3D, focalLength: Float) -> FloatPoint2D {
 		projectedPoint := This createProjection(focalLength) * point / point z

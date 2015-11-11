@@ -204,7 +204,7 @@ Text: cover {
 		result
 	}
 	toLLong: func ~inBase (base: Int) -> LLong {
-		t := this take()
+		t := this take() trim()
 		result := t isEmpty ? 0 : (t[0] == '-' ? -1 * t slice(1, t count - 1) toULong(base) : t toULong(base) as LLong)
 		this free(Owner Receiver)
 		result
@@ -213,7 +213,7 @@ Text: cover {
 		this toULong~inBase(this _detectNumericBase())
 	}
 	toULong: func ~inBase (base: Int) -> ULong {
-		t := this take()
+		t := this take() trim()
 		result := 0 as ULong
 		if (!t isEmpty) {
 			lastValidIndex := -1
@@ -244,7 +244,7 @@ Text: cover {
 		this toLDouble() as Double
 	}
 	toLDouble: func -> LDouble {
-		t := this take()
+		t := this take() trim()
 		result := 0.0 as LDouble
 		if (!t isEmpty) {
 			sign := 1
