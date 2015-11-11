@@ -47,11 +47,10 @@ IntPoint3DTest: class extends Fixture {
 		})
 		this add("casting", func {
 			value := "10, 20, 0"
-			parseText := t"34,10,0"
 			expect(this point3 toString(), is equal to(value))
-			expect(IntPoint3D parse(parseText) x, is equal to(this point2 x))
-			expect(IntPoint3D parse(parseText) y, is equal to(this point2 y))
-			expect(IntPoint3D parse(parseText) z, is equal to(this point2 z))
+			expect(IntPoint3D parse(Text new(value)) x, is equal to(this point3 x))
+			expect(IntPoint3D parse(Text new(value)) y, is equal to(this point3 y))
+			expect(IntPoint3D parse(Text new(value)) z, is equal to(this point3 z))
 		})
 		this add("float casts", func {
 			point := point0 toFloatPoint3D()

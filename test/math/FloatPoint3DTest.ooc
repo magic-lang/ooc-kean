@@ -51,11 +51,10 @@ FloatPoint3DTest: class extends Fixture {
 		})
 		this add("casting", func {
 			value := "12.00000000, 13.00000000, 20.00000000"
-			parseText := t"10.1,20.2,30.3"
 			expect(this point1 toString(), is equal to(value))
-			expect(FloatPoint3D parse(parseText) x, is equal to(this point3 x))
-			expect(FloatPoint3D parse(parseText) y, is equal to(this point3 y))
-			expect(FloatPoint3D parse(parseText) z, is equal to(this point3 z))
+			expect(FloatPoint3D parse(Text new(value)) x, is equal to(this point1 x))
+			expect(FloatPoint3D parse(Text new(value)) y, is equal to(this point1 y))
+			expect(FloatPoint3D parse(Text new(value)) z, is equal to(this point1 z))
 		})
 		this add("p norm", func {
 			oneNorm := this point0 pNorm(1.0f)

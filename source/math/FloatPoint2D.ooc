@@ -66,7 +66,7 @@ FloatPoint2D: cover {
 	toString: func -> String { this x toString() & ", " clone() & this y toString() }
 	parse: static func (input: Text) -> This {
 		array := input split(',')
-		result := This new(array[0] trim() toFloat(), array[1] trim() toFloat())
+		result := This new(array[0] toFloat(), array[1] toFloat())
 		array free()
 		result
 	}
