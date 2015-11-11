@@ -145,6 +145,9 @@ Time: class {
             gettimeofday(tv&, null)
             return ((tv tv_usec + tv tv_sec * 1_000_000) - __time_millisec_base) as UInt
         }
+		version(windows) {
+            return This runTime() * (1000 as UInt)
+        }
         return -1
 	}
 
