@@ -65,7 +65,7 @@ BacktraceHandler: class {
                 stderr write("[lang/Backtrace] No backtrace extension nor execinfo - use a debugger!\n")
                 This WARNED_ABOUT_FALLBACK = true
             }
-            gc_free(buffer)
+            free(buffer)
             return null
         }
     }
@@ -270,7 +270,7 @@ Backtrace: class {
     init: func(=buffer, =length)
     free: override func {
       if (this buffer)
-        gc_free(this buffer)
+        free(this buffer)
       super()
     }
 }

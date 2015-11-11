@@ -25,7 +25,7 @@ ConditionUnix: class extends WaitCondition {
 	}
 	free: override func {
 		pthread_cond_destroy(this _backend)
-		gc_free(this _backend)
+		free(this _backend)
 		super()
 	}
 	wait: func (mutex: Mutex) -> Bool {
