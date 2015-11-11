@@ -73,13 +73,13 @@ FloatComplexTest: class extends Fixture {
 		})
 		this add("toString and parse", func {
 			expect(this complexNumber0 toString(), is equal to("2.00 +1.00i"))
-			expect((FloatComplex parse(t"2.00 1.00")) == this complexNumber0, is true)
+			expect((FloatComplex parse(t"2.00 +1.00i")) == this complexNumber0, is true)
 			expect(this complexNumber3 toString(), is equal to("-2.00 -1.00i"))
-			expect((FloatComplex parse(t"-2.00 -1.00")) == this complexNumber3, is true)
+			expect((FloatComplex parse(t"-2.00 -1.00i")) == this complexNumber3, is true)
 			expect(FloatComplex new (2, -1) toString(), is equal to("2.00 -1.00i"))
-			expect((FloatComplex parse(t"2.00 -1.00")) == FloatComplex new (2, -1), is true)
+			expect((FloatComplex parse(t"2.00 -1.00i")) == FloatComplex new (2, -1), is true)
 			expect(FloatComplex new (-2, 1) toString(), is equal to("-2.00 +1.00i"))
-			expect((FloatComplex parse(t"-2.00 1.00")) == FloatComplex new (-2, 1), is true)
+			expect((FloatComplex parse(t"-2.00 +1.00i")) == FloatComplex new (-2, 1), is true)
 		})
 		this add("exponential", func {
 			expect(this complexNumber0 exponential() real, is equal to(this complexNumber0 real exp() * this complexNumber0 imaginary cos()) within(tolerance))
