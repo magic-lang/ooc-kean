@@ -68,12 +68,8 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
 	}
 	distance: func (other: Image) -> Float {
 		result := 0.0f
-		if (!other)
+		if (!other || (this size != other size) || !other instanceOf?(This))
 			result = Float maximumValue
-//		else if (!other instanceOf?(This))
-//			FIXME
-//		else if (this size != other size)
-//			FIXME
 		else {
 			for (y in 0 .. this size height)
 				for (x in 0 .. this size width) {
