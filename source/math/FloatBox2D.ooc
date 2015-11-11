@@ -111,18 +111,13 @@ FloatBox2D: cover {
 				result add(i)
 		result
 	}
-	separatedDistance: func (point: FloatPoint2D) -> FloatPoint2D {
-		distanceX := Float absolute(point x - this center x) - this width / 2.f
-		distanceY := Float absolute(point y - this center y) - this height / 2.f
-		FloatPoint2D new(distanceX, distanceY) maximum(FloatPoint2D new(0.f, 0.f))
+	distance: func (point: FloatPoint2D) -> FloatSize2D {
+		((point - this center) toFloatSize2D() absolute - this size / 2.f) maximum(FloatSize2D new())
 	}
-	distance: func (point: FloatPoint2D) -> Float {
-		this separatedDistance(point) norm
-	}
-	maximumSeparatedDistance: func (points: VectorList<FloatPoint2D>) -> FloatPoint2D {
-		result := FloatPoint2D new(0.f, 0.f)
+	maximumDistance: func (points: VectorList<FloatPoint2D>) -> FloatSize2D {
+		result := FloatSize2D new()
 		for (index in 0 .. points count)
-			result = FloatPoint2D maximum(this separatedDistance(points[index]), result)
+			result = FloatSize2D maximum(this distance(points[index]), result)
 		result
 	}
 	round: func -> This { This new(this leftTop round(), this size round()) }
