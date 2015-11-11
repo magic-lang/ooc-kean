@@ -25,6 +25,7 @@ FloatSize2D: cover {
 	empty ::= !(this width > 0 && this height > 0)
 	norm ::= (this width squared() + this height squared()) sqrt()
 	azimuth ::= this height atan2(this width)
+	absolute ::= This new(Float absolute(this width), Float absolute(this height))
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
 	init: func@ (=width, =height)
