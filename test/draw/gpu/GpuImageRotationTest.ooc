@@ -45,6 +45,7 @@ GpuImageRotationTest: class extends Fixture {
 		this add("GPU rotation small X (BGRA)", func {
 			correctImage := RasterBgra open("test/draw/gpu/correct/rotation_small_bgra_X.png")
 			gpuImage := gpuContext createBgra(sourceImage size)
+			gpuImage canvas pen = Pen new(ColorBgra new())
 			gpuImage canvas clear()
 			gpuImage canvas focalLength = focalLength
 			gpuImage canvas transform = FloatTransform3D createRotationX(smallRotation)
@@ -55,6 +56,7 @@ GpuImageRotationTest: class extends Fixture {
 		this add("GPU rotation small Y (BGRA)", func {
 			correctImage := RasterBgra open("test/draw/gpu/correct/rotation_small_bgra_Y.png")
 			gpuImage := gpuContext createBgra(sourceImage size)
+			gpuImage canvas pen = Pen new(ColorBgra new())
 			gpuImage canvas clear()
 			gpuImage canvas focalLength = focalLength
 			gpuImage canvas transform = FloatTransform3D createRotationY(smallRotation)
@@ -65,6 +67,7 @@ GpuImageRotationTest: class extends Fixture {
 		this add("GPU rotation small Z (BGRA)", func {
 			correctImage := RasterBgra open("test/draw/gpu/correct/rotation_small_bgra_Z.png")
 			gpuImage := gpuContext createBgra(sourceImage size)
+			gpuImage canvas pen = Pen new(ColorBgra new())
 			gpuImage canvas clear()
 			gpuImage canvas focalLength = focalLength
 			gpuImage canvas transform = FloatTransform3D createRotationZ(smallRotation)

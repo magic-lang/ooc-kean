@@ -166,6 +166,11 @@ TextTest: class extends Fixture {
 			text free()
 			text2 free()
 		})
+		this add("trim", func {
+			paddedText := t"  \t test \n test \r\n\t "
+			trimmedText := paddedText trim()
+			expect(trimmedText == t"test \n test")
+		})
 	}
 }
 
