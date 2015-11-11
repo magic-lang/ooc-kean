@@ -27,7 +27,17 @@ OpenGLMap: abstract class extends GpuMap {
 	_vertexSource: String
 	_fragmentSource: String
 	_program: GLShaderProgram[]
-	program: GLShaderProgram { get { this _program[this _context getCurrentIndex()] } }
+	program: GLShaderProgram {
+		get {
+			index := this _context getCurrentIndex()
+			result := this _program[index]
+			if (result == null) {
+				result = this _context _backend createShaderProgram(this _vertexSource, this _fragmentSource)
+				this _program[index] = result
+			}
+			result
+		}
+	}
 	_context: OpenGLContext
 	init: func (vertexSource: String, fragmentSource: String, context: OpenGLContext) {
 		super()
@@ -46,12 +56,7 @@ OpenGLMap: abstract class extends GpuMap {
 		this _program free()
 		super()
 	}
-	use: override func {
-		currentIndex := this _context getCurrentIndex()
-		if (this _program[currentIndex] == null)
-			this _program[currentIndex] = this _context as OpenGLContext _backend createShaderProgram(this _vertexSource, this _fragmentSource)
-		this _program[currentIndex] use()
-	}
+	use: override func { this program use() }
 }
 OpenGLMapMesh: class extends OpenGLMap {
 	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
