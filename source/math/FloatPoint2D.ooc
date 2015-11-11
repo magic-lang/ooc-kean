@@ -15,7 +15,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
 import FloatSize2D
-import text/StringTokenizer
 import structs/ArrayList
 import IntPoint2D
 use ooc-base
@@ -28,8 +27,8 @@ FloatPoint2D: cover {
 	init: func@ ~default { this init(0.0f, 0.0f) }
 	pNorm: func (p: Float) -> Float {
 		p == 1 ?
-		this x abs() + this y abs() :
-		(this x abs() pow(p) + this y abs() pow(p)) pow(1 / p)
+			this x abs() + this y abs() :
+			(this x abs() pow(p) + this y abs() pow(p)) pow(1.0f / p)
 	}
 	scalarProduct: func (other: This) -> Float { this x * other x + this y * other y }
 	angle: func (other: This) -> Float {
@@ -67,7 +66,7 @@ FloatPoint2D: cover {
 	toString: func -> String { this x toString() & ", " clone() & this y toString() }
 	parse: static func (input: Text) -> This {
 		array := input split(',')
-		result := This new(array[0] toFloat(), array[1] toFloat())
+		result := This new(array[0] trim() toFloat(), array[1] trim() toFloat())
 		array free()
 		result
 	}

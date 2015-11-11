@@ -17,7 +17,7 @@ CsvWriter: class {
 		for (i in 0 .. row count) {
 			value := TextBuilder new(row[i])
 			for (k in 0 .. row[i] count)
-				if (this _isWhitespace(row[i][k])) {
+				if (this _isWhitespace(row[i] take()[k])) {
 					value prepend('\"')
 					value append('\"')
 					break
@@ -29,10 +29,15 @@ CsvWriter: class {
 		}
 		this _fileWriter write("\r\n")
 	}
-	open: static func (filename: Text) -> This {
-		result: This = null
-		file := File new(filename toString())
-		result = This new(FileWriter new(file))
+	open: static func ~text (filename: Text) -> This {
+		filenameString := filename toString()
+		result := This open(filenameString)
+		filenameString free()
+		result
+	}
+	open: static func ~string (filename: String) -> This {
+		file := File new(filename)
+		result := This new(FileWriter new(file))
 		file free()
 		result
 	}

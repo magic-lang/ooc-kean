@@ -26,133 +26,93 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 
 	init: func
 	free: override func {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("ShaderProgram dispose") }
 		glDeleteProgram(this _backend)
 		version(debugGL) { validateEnd("ShaderProgram dispose") }
 		super()
 	}
-	use: func {
-		version(debugGL) { validateStart() }
+	use: override func {
+		version(debugGL) { validateStart("ShaderProgram use") }
 		glUseProgram(this _backend)
 		version(debugGL) { validateEnd("ShaderProgram use") }
 	}
-	setUniform: func ~Array (name: String, array: Float*, count: Int) {
-		version(debugGL) { validateStart() }
-		glUniform1fv(glGetUniformLocation(this _backend, name), count, array)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~Array") }
-	}
-	setUniform: func ~Int (name: String, value: Int) {
-		version(debugGL) { validateStart() }
+	setUniform: override func ~Int (name: String, value: Int) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~Int") }
 		glUniform1i(glGetUniformLocation(this _backend, name), value)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~Int") }
 	}
-	setUniform: func ~Int2 (name: String, a, b: Int) {
-		version(debugGL) { validateStart() }
-		glUniform2i(glGetUniformLocation(this _backend, name), a, b)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~Int2") }
-	}
-	setUniform: func ~Int3 (name: String, a, b, c: Int) {
-		version(debugGL) { validateStart() }
-		glUniform3i(glGetUniformLocation(this _backend, name), a, b, c)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~Int3") }
-	}
-	setUniform: func ~Int4 (name: String, a, b, c, d: Int) {
-		version(debugGL) { validateStart() }
-		glUniform4i(glGetUniformLocation(this _backend, name), a, b, c, d)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~Int4") }
-	}
-	setUniform: func ~IntPoint2D (name: String, value: IntPoint2D) {
-		version(debugGL) { validateStart() }
+	setUniform: override func ~IntPoint2D (name: String, value: IntPoint2D) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~IntPoint2D") }
 		glUniform2i(glGetUniformLocation(this _backend, name), value x, value y)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~IntPoint2D") }
 	}
-	setUniform: func ~IntSize2D (name: String, value: IntSize2D) {
-		version(debugGL) { validateStart() }
-		glUniform2i(glGetUniformLocation(this _backend, name), value width, value height)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~IntSize2D") }
-	}
-	setUniform: func ~IntPoint3D (name: String, value: IntPoint3D) {
-		version(debugGL) { validateStart() }
+	setUniform: override func ~IntPoint3D (name: String, value: IntPoint3D) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~IntPoint3D") }
 		glUniform3i(glGetUniformLocation(this _backend, name), value x, value y, value z)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~IntPoint3D") }
 	}
-	setUniform: func ~IntSize3D (name: String, value: IntSize3D) {
-		version(debugGL) { validateStart() }
+	setUniform: override func ~IntSize2D (name: String, value: IntSize2D) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~IntSize2D") }
+		glUniform2i(glGetUniformLocation(this _backend, name), value width, value height)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~IntSize2D") }
+	}
+	setUniform: override func ~IntSize3D (name: String, value: IntSize3D) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~IntSize3D") }
 		glUniform3i(glGetUniformLocation(this _backend, name), value width, value height, value depth)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~IntSize3D") }
 	}
-	setUniform: func ~Float (name: String, value: Float) {
-		version(debugGL) { validateStart() }
-		glUniform1f(glGetUniformLocation(this _backend, name), value)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~Float") }
-	}
-	setUniform: func ~Float2 (name: String, a, b: Float) {
-		version(debugGL) { validateStart() }
-		glUniform2f(glGetUniformLocation(this _backend, name), a, b)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~Float2") }
-	}
-	setUniform: func ~Float3 (name: String, a, b, c: Float) {
-		version(debugGL) { validateStart() }
-		glUniform3f(glGetUniformLocation(this _backend, name), a, b, c)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~Float3") }
-	}
-	setUniform: func ~Float4 (name: String, a, b, c, d: Float) {
-		version(debugGL) { validateStart() }
-		glUniform4f(glGetUniformLocation(this _backend, name), a, b, c, d)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~Float4") }
-	}
-	setUniform: func ~FloatPoint2D (name: String, value: FloatPoint2D) {
-		version(debugGL) { validateStart() }
-		glUniform2f(glGetUniformLocation(this _backend, name), value x, value y)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatPoint2D") }
-	}
-	setUniform: func ~FloatSize2D (name: String, value: FloatSize2D) {
-		version(debugGL) { validateStart() }
-		glUniform2f(glGetUniformLocation(this _backend, name), value width, value height)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatSize2D") }
-	}
-	setUniform: func ~FloatPoint3D (name: String, value: FloatPoint3D) {
-		version(debugGL) { validateStart() }
-		glUniform3f(glGetUniformLocation(this _backend, name), value x, value y, value z)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatPoint3D") }
-	}
-	setUniform: func ~FloatSize3D (name: String, value: FloatSize3D) {
-		version(debugGL) { validateStart() }
-		glUniform3f(glGetUniformLocation(this _backend, name), value width, value height, value depth)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatSize3D") }
-	}
-	setUniform: func ~IntArray (name: String, count: Int, value: Int*) {
-		version(debugGL) { validateStart() }
+	setUniform: override func ~IntArray (name: String, value: Int*, count: Int) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~IntArray") }
 		glUniform1iv(glGetUniformLocation(this _backend, name), count, value)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~IntArray") }
 	}
-	setUniform: func ~FloatArray (name: String, count: Int, value: Float*) {
-		version(debugGL) { validateStart() }
+	setUniform: override func ~Float (name: String, value: Float) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~Float") }
+		glUniform1f(glGetUniformLocation(this _backend, name), value)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~Float") }
+	}
+	setUniform: override func ~FloatPoint2D (name: String, value: FloatPoint2D) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~FloatPoint2D") }
+		glUniform2f(glGetUniformLocation(this _backend, name), value x, value y)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatPoint2D") }
+	}
+	setUniform: override func ~FloatPoint3D (name: String, value: FloatPoint3D) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~FloatPoint3D") }
+		glUniform3f(glGetUniformLocation(this _backend, name), value x, value y, value z)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatPoint3D") }
+	}
+	setUniform: override func ~FloatPoint4D (name: String, value: FloatPoint4D) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~FloatPoint4D") }
+		glUniform4f(glGetUniformLocation(this _backend, name), value x, value y, value z, value w)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatPoint4D") }
+	}
+	setUniform: override func ~FloatSize2D (name: String, value: FloatSize2D) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~FloatSize2D") }
+		glUniform2f(glGetUniformLocation(this _backend, name), value width, value height)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatSize2D") }
+	}
+	setUniform: override func ~FloatSize3D (name: String, value: FloatSize3D) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~FloatSize3D") }
+		glUniform3f(glGetUniformLocation(this _backend, name), value width, value height, value depth)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatSize3D") }
+	}
+	setUniform: override func ~FloatArray (name: String, value: Float*, count: Int) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~FloatArray") }
 		glUniform1fv(glGetUniformLocation(this _backend, name), count, value)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatArray") }
 	}
-	setUniform: func ~Matrix4x4arr (name: String, value: Float*) {
-		version(debugGL) { validateStart() }
-		glUniformMatrix4fv(glGetUniformLocation(this _backend, name), 1, 0, value)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~Matrix4x4arr") }
-	}
-	setUniform: func ~Matrix3x3 (name: String, value: FloatTransform2D) {
-		version(debugGL) { validateStart() }
+	setUniform: override func ~Matrix3x3 (name: String, value: FloatTransform2D) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~Matrix3x3") }
 		glUniformMatrix3fv(glGetUniformLocation(this _backend, name), 1, 0, value& as Float*)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~Matrix3x3") }
 	}
-	setUniform: func ~Matrix4x4 (name: String, value: FloatTransform3D) {
-		version(debugGL) { validateStart() }
+	setUniform: override func ~Matrix4x4 (name: String, value: FloatTransform3D) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~Matrix4x4") }
 		glUniformMatrix4fv(glGetUniformLocation(this _backend, name), 1, 0, value& as Float*)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~Matrix4x4") }
 	}
-	setUniform: func ~Vector3 (name: String, value: FloatPoint3D) {
-		version(debugGL) { validateStart() }
-		glUniform3fv(glGetUniformLocation(this _backend, name), 1, value& as Float*)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~Vector3") }
-	}
 	_compileShader: func (source: String, shaderID: UInt) -> Bool {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("ShaderProgram _compileShader") }
 		glShaderSource(shaderID, 1, source, null)
 		glCompileShader(shaderID)
 
@@ -175,7 +135,7 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 		success != 0
 	}
 	_compileShaders: func (vertexSource, fragmentSource: String) -> Bool {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("ShaderProgram _compileShaders") }
 		vertexShaderID := glCreateShader(GL_VERTEX_SHADER)
 		fragmentShaderID := glCreateShader(GL_FRAGMENT_SHADER)
 		success := _compileShader(vertexSource, vertexShaderID)

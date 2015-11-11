@@ -666,6 +666,66 @@ Buffer: class extends Iterable<Char> {
         }
     }
 
+    split: func ~withChar(c: Char, maxTokens: SSizeT) -> ArrayList<This> {
+        split(c&, 1, maxTokens)
+    }
+
+    /** split s and return *all* elements, including empties */
+    split: func ~withStringWithoutmaxTokens(s: This) -> ArrayList<This> {
+        split(s data, s size, -1)
+    }
+
+    split: func ~withCharWithoutmaxTokens(c: Char) -> ArrayList<This> {
+        split(c&, 1, -1)
+    }
+
+    split: func ~withBufWithEmpties(s: This, empties: Bool) -> ArrayList<This> {
+        split(s data, s size, empties ? -1 : 0)
+    }
+
+    split: func ~withCharWithEmpties(c: Char, empties: Bool) -> ArrayList<This> {
+        split(c&, 1, empties ? -1 : 0)
+    }
+
+    /**
+     * Split a buffer to form a list of tokens delimited by `delimiter`
+     *
+     * @param delimiter Buffer that separates tokens
+     * @param maxTokens Maximum number of tokens
+     *   - if positive, the last token will be the rest of the string, if any.
+     *   - if negative, the string will be fully split into tokens
+     *   - if zero, it will return all non-empty elements
+     */
+    split: func ~buf (delimiter: This, maxTokens: SSizeT) -> ArrayList<This> {
+        split(delimiter data, delimiter size, maxTokens)
+    }
+
+    split: func ~pointer (delimiter: Char*, delimiterLength: SizeT, maxTokens: SSizeT) -> ArrayList<This> {
+        findResults := findAll(delimiter, delimiterLength, true)
+        maxItems := ((maxTokens <= 0) || (maxTokens > findResults size + 1)) ? findResults size + 1 : maxTokens
+        result := ArrayList<This> new(maxItems)
+        sstart: SizeT = 0 //source (this) start pos
+        
+        for (item in 0..findResults size) {
+            if ((maxTokens > 0) && (result size == maxItems - 1)) break
+            
+            sdist := findResults[item] - sstart // bytes to copy
+            if (maxTokens != 0 || sdist > 0) {
+                b := This new ((data + sstart) as CString, sdist)
+                result add(b)
+            }
+            sstart += sdist + delimiterLength
+        }
+
+        if(result size < maxItems) {
+            sdist := size - sstart // bytes to copy
+            b := new((data + sstart) as CString, sdist)
+            result add(b)
+        }
+        
+        findResults free()
+        result
+    }
 }
 
 NegativeLengthException: class extends Exception {

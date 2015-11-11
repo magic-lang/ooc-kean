@@ -50,7 +50,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		extraRows := Int align(padding, this _stride) / this _stride
 		height := this _size height + this _size height / 2 + extraRows
 		width := this _stride / 4
-		rgbaBuffer := GraphicBuffer new(this buffer handle, IntSize2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage Rendertarget)
+		rgbaBuffer := GraphicBuffer new(this buffer handle, IntSize2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget)
 		result := EGLBgra new(rgbaBuffer, context)
 		result coordinateSystem = this coordinateSystem
 		result

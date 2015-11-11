@@ -1,5 +1,0 @@
-Name: siphash
-Description: SipHash implementation in C
-SourcePath: hash
-Imports: siphash
-Additionals: ./hash/csiphash.c

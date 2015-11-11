@@ -17,7 +17,6 @@
 use ooc-math
 use ooc-base
 import math
-import structs/ArrayList
 import RasterPacked
 import RasterImage
 import RasterBgr
@@ -62,13 +61,13 @@ RasterUv: class extends RasterPacked {
 
 	distance: func (other: Image) -> Float {
 		result := 0.0f
-		if (!other)
+		if (!other || (this size != other size))
 			result = Float maximumValue
-//		else if (!other instanceOf?(This))
-//			FIXME
-//		else if (this size != other size)
-//			FIXME
-		else {
+		else if (!other instanceOf?(This)) {
+			converted := This convertFrom(other as RasterImage)
+			result = this distance(converted)
+			converted referenceCount decrease()
+		} else {
 			for (y in 0 .. this size height)
 				for (x in 0 .. this size width) {
 					c := this[x, y]
@@ -105,15 +104,11 @@ RasterUv: class extends RasterPacked {
 		}
 	}
 	open: static func (filename: String) -> This {
-		x, y, n: Int
+		x, y, imageComponents: Int
 		requiredComponents := 3
-		data := StbImage load(filename, x&, y&, n&, requiredComponents)
-		buffer := ByteBuffer new(x * y * requiredComponents)
-		// FIXME: Find a better way to do this using Dispose() or something
-		memcpy(buffer pointer, data, x * y * requiredComponents)
-		StbImage free(data)
-		// Is it neccessary to create a RasterBgr here?
-		This convertFrom(RasterBgr new(buffer, IntSize2D new(x, y)))
+		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
+		//FIXME: Is it neccessary to create a RasterBgr here?
+		This convertFrom(RasterBgr new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y)))
 	}
 	save: override func (filename: String) -> Int {
 		bgr := RasterBgr new(this buffer, this size)
@@ -122,21 +117,27 @@ RasterUv: class extends RasterPacked {
 		result
 	}
 	convertFrom: static func (original: RasterImage) -> This {
-		result := This new(original size)
-		row := result buffer pointer
-		rowLength := result size width
-		rowEnd := row as ColorUv* + rowLength
-		destination := row as ColorUv*
-		f := func (color: ColorYuv) {
-			(destination as ColorUv*)@ = ColorUv new(color u, color v)
-			destination += 1
-			if (destination >= rowEnd) {
-				row += result stride
-				destination = row as ColorUv*
-				rowEnd = row as ColorUv* + rowLength
+		result: This
+		if (original instanceOf?(This))
+			result = (original as This) copy()
+		else {
+			result = This new(original size)
+			row := result buffer pointer
+			rowLength := result size width
+			rowEnd := row as ColorUv* + rowLength
+			destination := row as ColorUv*
+			f := func (color: ColorYuv) {
+				(destination as ColorUv*)@ = ColorUv new(color u, color v)
+				destination += 1
+				if (destination >= rowEnd) {
+					row += result stride
+					destination = row as ColorUv*
+					rowEnd = row as ColorUv* + rowLength
+				}
 			}
+			original apply(f)
+			(f as Closure) dispose()
 		}
-		original apply(f)
 		result
 	}
 

@@ -17,6 +17,7 @@
 
 use ooc-base
 use ooc-math
+use ooc-draw
 use ooc-draw-gpu
 import backend/GLShaderProgram
 import OpenGLContext
@@ -26,7 +27,17 @@ OpenGLMap: abstract class extends GpuMap {
 	_vertexSource: String
 	_fragmentSource: String
 	_program: GLShaderProgram[]
-	program: GLShaderProgram { get { this _program[this _context getCurrentIndex()] } }
+	program: GLShaderProgram {
+		get {
+			index := this _context getCurrentIndex()
+			result := this _program[index]
+			if (result == null) {
+				result = this _context _backend createShaderProgram(this _vertexSource, this _fragmentSource)
+				this _program[index] = result
+			}
+			result
+		}
+	}
 	_context: OpenGLContext
 	init: func (vertexSource: String, fragmentSource: String, context: OpenGLContext) {
 		super()
@@ -45,12 +56,7 @@ OpenGLMap: abstract class extends GpuMap {
 		this _program free()
 		super()
 	}
-	use: override func {
-		currentIndex := this _context getCurrentIndex()
-		if (this _program[currentIndex] == null)
-			this _program[currentIndex] = this _context as OpenGLContext _backend createShaderProgram(this _vertexSource, this _fragmentSource)
-		this _program[currentIndex] use()
-	}
+	use: override func { this program use() }
 }
 OpenGLMapMesh: class extends OpenGLMap {
 	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
@@ -220,7 +226,7 @@ OpenGLMapYuvSemiplanarToBgra: class extends OpenGLMapTransform {
 		"
 }
 OpenGLMapLines: class extends OpenGLMapTransform {
-	color: FloatPoint3D { get set }
+	color: FloatPoint4D { get set }
 	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
 	use: override func {
 		super()
@@ -228,20 +234,19 @@ OpenGLMapLines: class extends OpenGLMapTransform {
 	}
 	fragmentSource: static String = "#version 300 es
 		precision highp float;
-		uniform vec3 color;
+		uniform vec4 color;
 		out vec4 outColor;
 		void main() {
-			outColor = vec4(color.r, color.g, color.b, 1.0f);
+			outColor = color;
 		}
 		"
 }
 OpenGLMapPoints: class extends OpenGLMap {
-	color: FloatPoint3D { get set }
+	color: FloatPoint4D { get set }
 	pointSize: Float { get set }
 	projection: FloatTransform3D { get set }
 	init: func (context: OpenGLContext) {
 		this pointSize = 1.0f
-		this color = FloatPoint3D new(1.0f, 1.0f, 1.0f)
 		super(This vertexSource, This fragmentSource, context)
 	}
 	use: override func {
@@ -262,10 +267,10 @@ OpenGLMapPoints: class extends OpenGLMap {
 		"
 	fragmentSource: static String = "#version 300 es
 		precision highp float;
-		uniform vec3 color;
+		uniform vec4 color;
 		out vec4 outColor;
 		void main() {
-			outColor = vec4(color.r, color.g, color.b, 1.0f);
+			outColor = color;
 		}
 		"
 }

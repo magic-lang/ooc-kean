@@ -34,24 +34,15 @@ GpuImageType: enum {
 
 GpuImage: abstract class extends Image {
 	filter: Bool { get set }
-	_canvas: GpuSurface
 	canvas: GpuSurface {
 		get {
 			if (this _canvas == null)
-				this _canvas = this _createCanvas()
-			this _canvas
+				this _canvas = this _createCanvas() as GpuSurface
+			this _canvas as GpuSurface
 		}
 	}
 	_context: GpuContext
 	init: func (size: IntSize2D, =_context) { super(size) }
-	free: override func {
-		if (this _canvas != null) {
-			this _canvas free()
-			this _canvas = null
-		}
-		super()
-	}
-	//TODO: Implement abstract functions
 	resizeTo: override func (size: IntSize2D) -> This {
 		result := this create(size) as This
 		result canvas draw(this, size)
@@ -59,14 +50,12 @@ GpuImage: abstract class extends Image {
 	}
 	copy: override func -> This { this resizeTo(this size) }
 	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This { raise("Using unimplemented function copy ~fromParams in GpuImage class"); null }
-	shift: func (offset: IntSize2D) -> This { raise("Using unimplemented function shift in GpuImage class"); null }
 	distance: func (other: This) -> Float { raise("Using unimplemented function distance in GpuImage class"); 0.0f }
 
 	upload: abstract func (image: RasterImage)
 	toRaster: func (async: Bool = false) -> RasterImage { this _context toRaster(this, async) }
 	toRasterAsync: func -> (RasterImage, GpuFence) { this _context toRasterAsync(this) }
 	toRasterDefault: abstract func -> RasterImage
-	_createCanvas: abstract func -> GpuSurface
 	bind: abstract func (unit: UInt)
 }
 }

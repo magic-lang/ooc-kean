@@ -18,7 +18,7 @@ IntRandomGeneratorTest: class extends Fixture {
 				z := generator3 next()
 				if (x == z)
 					++countEqual
-				expect(x == y)
+				expect(x, is equal to(y))
 			}
 			expect(countEqual < valuesCount)
 		})
@@ -38,7 +38,8 @@ IntRandomGeneratorTest: class extends Fixture {
 		this add("gaussian distribution", func {
 			expectedMean := 2
 			expectedDeviation := 12
-			generator := IntGaussianRandomGenerator new(expectedMean, expectedDeviation)
+			generator := IntGaussianRandomGenerator new(expectedMean - 1, expectedDeviation - 1)
+			generator setRange(expectedMean, expectedDeviation)
 			values := generator next(1_000_000)
 			mean := 0
 			for (i in 0 .. values length)
@@ -50,6 +51,41 @@ IntRandomGeneratorTest: class extends Fixture {
 			deviation = sqrt(deviation / values length)
 			expect(Int absolute(mean - expectedMean) < 2)
 			expect(Int absolute(deviation - expectedDeviation) < 2)
+		})
+		this add("uniform range", func {
+			uniformGenerator := IntUniformRandomGenerator new()
+			uniformGenerator setRange(-250_000, 250_000)
+			uniformLowest := 250_000
+			uniformHighest := -250_000
+			for (i in 0 .. 100_000) {
+				value := uniformGenerator next()
+				if (value > uniformHighest)
+					uniformHighest = value
+				else if (value < uniformLowest)
+					uniformLowest = value
+			}
+			expect(uniformLowest >= uniformGenerator minimum)
+			expect(uniformHighest <= uniformGenerator maximum)
+			expect(uniformLowest >= -250_000)
+			expect(uniformHighest <= 250_000)
+		})
+		this add("set seed", func {
+			generator1 := IntUniformRandomGenerator new(0, 100)
+			generator1 setSeed(123456)
+			expect(generator1 next(), is equal to(79))
+			expect(generator1 next(), is equal to(93))
+			expect(generator1 next(), is equal to(50))
+		})
+		this add("global seed", func {
+			IntRandomGenerator permanentSeed = 123455
+			generator1 := IntUniformRandomGenerator new(0, 100)
+			expect(generator1 next(), is equal to(76))
+			expect(generator1 next(), is equal to(51))
+			expect(generator1 next(), is equal to(6))
+			generator2 := IntUniformRandomGenerator new(0, 100)
+			expect(generator2 next(), is equal to(76))
+			expect(generator2 next(), is equal to(51))
+			expect(generator2 next(), is equal to(6))
 		})
 	}
 }

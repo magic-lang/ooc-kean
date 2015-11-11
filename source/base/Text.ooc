@@ -35,14 +35,14 @@ Text: cover {
 	}
 	init: func@ ~fromCharacter (character: Char) {
 		this init(character&, 1, Owner Stack)
-		this = this copy()
+		this = this claim()
 	}
 	init: func@ ~fromData (string: CString, count: Int, owner := Owner Static) {
 		this init(TextBuffer new(string, count, owner))
 	}
 	copy: func -> This { // call by value, creates copy of cover
 		result := This new(this _buffer copy())
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 	copyTo: func (buffer: TextBuffer) -> Int {
@@ -53,8 +53,8 @@ Text: cover {
 	}
 	operator == (other: This) -> Bool {
 		result := this _buffer == other _buffer
-		this free(Owner Callee)
-		other free(Owner Callee)
+		this free(Owner Receiver)
+		other free(Owner Receiver)
 		result
 	}
 	operator != (other: String) -> Bool { !(this == other) }
@@ -67,7 +67,7 @@ Text: cover {
 	}
 	beginsWith: func ~character (character: Char) -> Bool {
 		result := (this count > 0) && (this _buffer[0] == character)
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 	endsWith: func (other: This) -> Bool {
@@ -78,7 +78,7 @@ Text: cover {
 	}
 	endsWith: func ~character (character: Char) -> Bool {
 		result := (this count > 0) && (this _buffer[this count - 1] == character)
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 	find: func ~character (character: Char, start := 0) -> Int {
@@ -89,7 +89,7 @@ Text: cover {
 				result = i
 				break
 			}
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 	find: func ~text (needle: This, start := 0) -> Int {
@@ -101,8 +101,8 @@ Text: cover {
 				result = i
 				break
 			}
-		this free(Owner Callee)
-		needle free(Owner Callee)
+		this free(Owner Receiver)
+		needle free(Owner Receiver)
 		result
 	}
 	find: func ~string (string: String, start := 0) -> Int {
@@ -110,7 +110,7 @@ Text: cover {
 	}
 	operator [] (index: Int) -> Char {
 		result := this _buffer[index]
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 	operator [] (range: Range) -> This {
@@ -136,9 +136,9 @@ Text: cover {
 	}
 	slice: func (start, distance: Int) -> This {
 		result := This new(this _buffer slice(start, distance))
-		if (this _buffer owner == Owner Callee)
+		if (this _buffer owner == Owner Receiver)
 			result = result copy() // TODO: Could we be smarter here?
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 	split: func ~character (separator: Char) -> VectorList<This> {
@@ -160,44 +160,44 @@ Text: cover {
 			result add(p)
 			start = next + s count
 		}
-		this free(Owner Callee)
-		separator free(Owner Callee)
+		this free(Owner Receiver)
+		separator free(Owner Receiver)
 		result
 	}
 	toString: func -> String {
 		result := String new(this _buffer raw, this count)
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 	toInt: func -> Int {
 		result := this toLLong() as Int
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 	toLong: func -> Long {
 		result := this toLLong() as Long
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 	toLLong: func -> LLong {
 		result := this toLLong~inBase(this _detectNumericBase())
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 	toInt: func ~inBase (base: Int) -> Int {
 		result := this toLLong~inBase(base) as Int
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 	toLong: func ~inBase (base: Int) -> LLong {
 		result := this toLLong~inBase(base) as Long
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 	toLLong: func ~inBase (base: Int) -> LLong {
 		t := this take()
 		result := t isEmpty ? 0 : (t[0] == '-' ? -1 * t slice(1, t count - 1) toULong(base) : t toULong(base) as LLong)
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 	toULong: func -> ULong {
@@ -225,7 +225,7 @@ Text: cover {
 				power *= base
 			}
 		}
-		this free(Owner Callee)
+		this free(Owner Receiver)
 		result
 	}
 	toFloat: func -> Float {

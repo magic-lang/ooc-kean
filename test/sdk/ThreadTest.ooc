@@ -7,18 +7,18 @@ ThreadTest: class extends Fixture {
 	init: func {
 		super("Thread")
 		this add("starting thread", This _testStartingThread)
-		this add("canceling thread", This _testCancelation)
+		version (!windows) { this add("canceling thread", This _testCancelation) }
 	}
 	_testStartingThread: static func {
 		threadStarted := Cell<Int> new(0)
 		job := func {
 			threadStarted set(1)
 		}
-		thread := Thread new(|| job())
-		expect(threadStarted get() == 0)
+		thread := Thread new(job)
+		expect(threadStarted get(), is equal to(0))
 		expect(thread start())
 		expect(thread wait())
-		expect(threadStarted get() == 1)
+		expect(threadStarted get(), is equal to(1))
 		thread free()
 	}
 	_testCancelation: static func {
@@ -36,13 +36,13 @@ ThreadTest: class extends Fixture {
 				Time sleepMilli(1)
 			}
 		}
-		thread := Thread new(|| job())
+		thread := Thread new(job)
 		expect(thread start())
 		thread wait()
-		expect(value get() == expectedValue)
+		expect(value get(), is equal to(expectedValue))
 		thread free()
 		value set(0)
-		thread = Thread new(|| job())
+		thread = Thread new(job)
 		mutex lock()
 		expect(thread start())
 		startedCondition wait(mutex)

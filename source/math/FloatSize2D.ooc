@@ -16,7 +16,6 @@
 import math
 import FloatPoint2D
 import IntSize2D
-import text/StringTokenizer
 import structs/ArrayList
 use ooc-base
 

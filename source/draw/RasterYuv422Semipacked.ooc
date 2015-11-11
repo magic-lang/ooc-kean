@@ -17,7 +17,6 @@
 use ooc-math
 use ooc-base
 import math
-import structs/ArrayList
 import RasterPacked
 import RasterImage
 import RasterMonochrome
@@ -29,7 +28,6 @@ import io/File
 import io/FileReader
 import io/Reader
 import io/FileWriter
-import io/BinarySequence
 
 RasterYuv422Semipacked: class extends RasterPacked {
 	bytesPerPixel: Int { get { 2 } }
@@ -37,7 +35,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, this bytesPerPixel * size width) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	createFrom: func ~fromRasterImage (original: RasterImage) {
-		// TODO: What does this function even do?
+		// TODO: Figure out what this function does and whether to remove it
 //		"RasterYuv420 init ~fromRasterImage, original: (#{original size}), this: (#{this size}), y stride #{this y stride}" println()
 		y := 0
 		x := 0
@@ -113,14 +111,10 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		}
 	}
 	open: static func (filename: String) -> This {
-		x, y, n: Int
+		x, y, imageComponents: Int
 		requiredComponents := 3
-		data := StbImage load(filename, x&, y&, n&, requiredComponents)
-		buffer := ByteBuffer new(x * y * requiredComponents)
-		// FIXME: Find a better way to do this using Dispose() or something
-		memcpy(buffer pointer, data, x * y * requiredComponents)
-		StbImage free(data)
-		bgr := RasterBgr new(buffer, IntSize2D new(x, y))
+		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
+		bgr := RasterBgr new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y))
 		result := This new(bgr)
 		bgr referenceCount decrease()
 		return result

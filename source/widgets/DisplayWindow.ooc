@@ -26,7 +26,7 @@ DisplayWindow: abstract class {
 	refresh: virtual func
 	create: static func (size: IntSize2D, title: String) -> This {
 		version(unix || apple)
-			return UnixWindow new(size, title)
+			return UnixWindow create(size, title)
 		version(windows)
 			return Win32DisplayWindow new(size, title)
 		raise("Platform not supported (DisplayWindow)")

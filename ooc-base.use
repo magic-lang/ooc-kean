@@ -9,6 +9,7 @@ Imports: Synchronized
 Imports: ReferenceCounter
 Imports: Event
 Imports: Promise
+Imports: PromiseCollector
 Imports: ThreadPool
 Imports: Container
 Imports: Timer

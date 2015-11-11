@@ -37,7 +37,7 @@ AndroidContext: class extends OpenGLContext {
 		this _packers free()
 		super()
 	}
-	createGpuImage: override func (rasterImage: RasterImage) -> GpuImage {
+	createImage: override func (rasterImage: RasterImage) -> GpuImage {
 		result: GpuImage
 		version (optiGraphicbufferupload) {
 			if (rasterImage instanceOf?(GraphicBufferYuv420Semiplanar)) {
@@ -77,9 +77,10 @@ AndroidContext: class extends OpenGLContext {
 		sourcePointer := eglImage buffer lock(false)
 		length := channels * eglImage size width * eglImage size height
 		buffer := ByteBuffer new(sourcePointer, length,
-			func (buffer: ByteBuffer) {
+			func (b: ByteBuffer) {
 				eglImage buffer unlock()
 				this recyclePacker(gpuRgba)
+				b forceFree()
 			})
 		(buffer, fence)
 	}

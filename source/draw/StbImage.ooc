@@ -1,6 +1,6 @@
 use ooc-draw
-include ./stb_image
-include ./stb_image_write
+include ./stb_image/stb_image
+include ./stb_image/stb_image_write
 
 StbImage: class {
 	load: extern (stbi_load) static func (filename: CString, x, y, n: Int*, req_comp: Int) -> UChar*

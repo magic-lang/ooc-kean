@@ -51,6 +51,7 @@ Win32Window: class extends NativeWindow {
 		super()
 	}
 	draw: func (image: RasterBgra) {
+		image swapRedBlue()
 		paintStruct: PaintStruct
 		bitmap: Bitmap
 		InvalidateRect(this backend as HWND, null, false)
@@ -63,6 +64,13 @@ Win32Window: class extends NativeWindow {
 		SelectObject(deviceContextMemory, oldBitmap)
 		DeleteDC(deviceContextMemory)
 		EndPaint(this backend as HWND, paintStruct&)
+	}
+	peekMessage: func {
+		msg: Msg
+		if (PeekMessage(msg&, null, 0, 0, PM_REMOVE)) {
+			TranslateMessage(msg&)
+			DispatchMessage(msg&)
+		}
 	}
 	_defaultWindowProcedure: static func (backend: HWND, message: UInt, wParam: WPARAM, lParam: LPARAM) -> LRESULT {
 		match (message) {

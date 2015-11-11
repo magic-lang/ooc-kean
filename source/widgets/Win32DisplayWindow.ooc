@@ -18,7 +18,7 @@
 import DisplayWindow
 use ooc-math
 use ooc-draw
-import win32/Win32Window
+use ooc-win32
 
 version(windows) {
 Win32DisplayWindow: class extends DisplayWindow {
@@ -35,6 +35,9 @@ Win32DisplayWindow: class extends DisplayWindow {
 		raster := RasterBgra convertFrom(image as RasterImage)
 		this _backend draw(raster)
 		raster referenceCount decrease()
+	}
+	refresh: override func {
+		_backend peekMessage()
 	}
 }
 }

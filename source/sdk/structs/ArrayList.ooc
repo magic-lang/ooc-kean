@@ -34,8 +34,9 @@ ArrayList: class <T> extends List<T> {
         capacity = _size
     }
     
-    __destroy__: func {
-    	gc_free(this data)
+    free: override func {
+        gc_free(this data)
+        super()
     }
 
     add: func (element: T) {

@@ -50,6 +50,6 @@ OpenGLWindow: class extends OpenGLSurface {
 		}
 	}
 	refresh: func { this context update() }
-	clear: override func
+	fill: override func
 }
 }
