@@ -20,7 +20,7 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 import backend/GLShaderProgram
-import OpenGLContext
+import OpenGLContext, OpenGLPacked
 
 version(!gpuOff) {
 OpenGLMap: abstract class extends GpuMap {
@@ -56,7 +56,43 @@ OpenGLMap: abstract class extends GpuMap {
 		this _program free()
 		super()
 	}
-	use: override func { this program use() }
+	use: override func {
+		textureCount := 0
+		action := func (key: String, value: Object) {
+			program := this program
+			if (value instanceOf?(Cell)) {
+				cell := value as Cell
+				match (cell T) {
+					case Int => program setUniform(key, cell as Cell<Int> get())
+					case IntPoint2D => program setUniform(key, cell as Cell<IntPoint2D> get())
+					case IntPoint3D => program setUniform(key, cell as Cell<IntPoint3D> get())
+					case IntSize2D => program setUniform(key, cell as Cell<IntSize2D> get())
+					case IntSize3D => program setUniform(key, cell as Cell<IntSize3D> get())
+					case Float => program setUniform(key, cell as Cell<Float> get())
+					case FloatPoint2D => program setUniform(key, cell as Cell<FloatPoint2D> get())
+					case FloatPoint3D => program setUniform(key, cell as Cell<FloatPoint3D> get())
+					case FloatPoint4D => program setUniform(key, cell as Cell<FloatPoint4D> get())
+					case FloatSize2D => program setUniform(key, cell as Cell<FloatSize2D> get())
+					case FloatSize3D => program setUniform(key, cell as Cell<FloatSize3D> get())
+					case FloatTransform2D => program setUniform(key, cell as Cell<FloatTransform2D> get())
+					case FloatTransform3D => program setUniform(key, cell as Cell<FloatTransform3D> get())
+					case => Debug raise("Invalid cover type in OpenGLMap use!")
+				}
+			}
+			else
+				match (value) {
+					case image: OpenGLPacked => {
+						image backend bind(textureCount)
+						program setUniform(key, textureCount)
+						textureCount += 1
+					}
+					case => Debug raise("Invalid object type in OpenGLMap use!")
+				}
+		}
+		this apply(action)
+		(action as Closure) dispose()
+		this program use()
+	}
 }
 OpenGLMapMesh: class extends OpenGLMap {
 	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
