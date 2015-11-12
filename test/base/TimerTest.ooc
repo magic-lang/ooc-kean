@@ -16,47 +16,40 @@
 */
 
 use ooc-base
+use ooc-unit
+import math
 
-Debug initialize(func (message: String) { println(message) })
-
-testfunction: func {
-	t_test := Timer new()
-	t_test start()
-	for (i in 0 .. 10000) { }
-	t_test stop()
+TimerTest: class extends Fixture {
+	timer := Timer new()
+	clockTimer := ClockTimer new()
+	
+	init: func {
+		super("Timer")
+		this add("basic use of Timer", func {
+			fast := this timerTestFunction(1_000)
+			slow := this timerTestFunction(10_000_000)
+			expect(slow > fast, is true)
+		})
+		this add("basic use of ClockTimer", func {
+			fast := this clockTimerTestFunction(1_000)
+			slow := this clockTimerTestFunction(10_000_000)
+			expect(slow > fast, is true)
+		})
+	}
+	
+	timerTestFunction: func (loopLength: Int) -> Double {
+		sum := 0
+		this timer start()
+		for (i in 0 .. loopLength) { sum = (sum + i) % 10 }
+		this timer stop()
+	}
+	
+	clockTimerTestFunction: func (loopLength: Int) -> Double {
+		sum := 0
+		this clockTimer start()
+		for (i in 0 .. loopLength) { sum = (sum + i) % 10 }
+		this clockTimer stop()
+	}
 }
 
-y: Double
-t := Timer new()
-
-t start()
-for (i in 0 .. 10) { }
-t stop()
-
-t start()
-for (i in 0 .. 100000000) { }
-t stop()
-
-t start()
-for (i in 0 .. 10000) { }
-t stop()
-
-testfunction()
-
-t start()
-for (i in 0 .. 1000000000) { }
-t stop()
-
-t start()
-for (i in 0 .. 100) { }
-t stop()
-
-t start()
-for (i in 0 .. 50) { }
-t stop()
-
-t start()
-for (i in 0 .. 8) { }
-t stop()
-
-"TimerTest [TODO: Not implemented as a fixture!]" printfln()
+TimerTest new() run()

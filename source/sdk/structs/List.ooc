@@ -1,4 +1,3 @@
-import math/Random, structs/ArrayList /* for List shuffle */
 import structs/HashMap /* for getStandardEquals() - should probably move that in a separate Module */
 
 /**
@@ -184,22 +183,6 @@ List: abstract class <T> extends BackIterable<T> {
                 list2 remove(x); list1 add(x)
             }
         }
-    }
-
-    /**
-       Return a list with all the elements in a random order
-     */
-    shuffle: func -> This<T> {
-        shuffled := emptyClone()
-
-        indexes := ArrayList<Int> new()
-        for(i in 0..getSize()) indexes add(i)
-
-        while(!indexes empty?()) {
-            i := Random randRange(0, indexes getSize())
-            shuffled add(this[indexes removeAt(i)])
-        }
-        shuffled
     }
 
     /**

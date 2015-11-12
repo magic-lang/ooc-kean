@@ -21,9 +21,10 @@ import include/gles3
 import ../GLQuad
 import Gles3VertexArrayObject, Gles3Debug
 
+version(!gpuOff) {
 Gles3Quad: class extends GLQuad {
 	init: func {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Quad init") }
 		vertices := FloatPoint2D[4] new()
 		vertices[0] = FloatPoint2D new(-1.0f, -1.0f)
 		vertices[1] = FloatPoint2D new(-1.0f, 1.0f)
@@ -37,17 +38,18 @@ Gles3Quad: class extends GLQuad {
 		this vao = Gles3VertexArrayObject new(vertices, textureCoordinates)
 		vertices free()
 		textureCoordinates free()
-		version(debugGL) { validateEnd("quad init") }
+		version(debugGL) { validateEnd("Quad init") }
 	}
 	free: override func {
 		this vao free()
 		super()
 	}
 	draw: func {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Quad draw") }
 		this vao bind()
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)
 		this vao unbind()
-		version(debugGL) { validateEnd("quad draw") }
+		version(debugGL) { validateEnd("Quad draw") }
 	}
+}
 }

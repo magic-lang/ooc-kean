@@ -17,7 +17,6 @@
 use ooc-math
 use ooc-base
 import math
-import structs/ArrayList
 import RasterPlanar
 import RasterPacked
 import RasterImage
@@ -68,12 +67,8 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 	}
 	distance: func (other: Image) -> Float {
 		result := 0.0f
-		if (!other)
+		if (!other || (this size != other size) || !other instanceOf?(This))
 			result = Float maximumValue
-//		else if (!other instanceOf?(This))
-//			FIXME
-//		else if (this size != other size)
-//			FIXME
 		else {
 			for (y in 0 .. this size height)
 				for (x in 0 .. this size width) {
@@ -118,10 +113,6 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 			result /= ((this size width squared() + this size height squared()) as Float sqrt())
 		}
 	}
-//	FIXME
-//	openResource(assembly: ???, name: String) {
-//		Image openResource
-//	}
 	abstract operator [] (x, y: Int) -> ColorYuv
 	abstract operator []= (x, y: Int, value: ColorYuv)
 }

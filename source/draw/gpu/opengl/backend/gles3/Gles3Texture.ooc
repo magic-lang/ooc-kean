@@ -21,43 +21,44 @@ import include/gles3
 import ../GLTexture
 import Gles3Debug
 
+version(!gpuOff) {
 Gles3Texture: class extends GLTexture {
 	_format: UInt
 	_internalFormat: UInt
 	_bytesPerPixel: UInt
 
 	init: func (=_type, =_size) {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Texture init") }
 		super()
 		_target = GL_TEXTURE_2D
 		this _setInternalFormats(this _type)
 		version(debugGL) { validateEnd("Texture init") }
 	}
 	free: override func {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Texture free") }
 		glDeleteTextures(1, this _backend&)
 		version(debugGL) { validateEnd("Texture free") }
 		super()
 	}
 	generateMipmap: func {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Texture generateMipmap") }
 		this bind(0)
 		glGenerateMipmap(this _target)
 		version(debugGL) { validateEnd("Texture generateMipmap") }
 	}
 	bind: func (unit: UInt) {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Texture bind") }
 		glActiveTexture(GL_TEXTURE0 + unit)
 		glBindTexture(this _target, this _backend)
 		version(debugGL) { validateEnd("Texture bind") }
 	}
 	unbind: func {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Texture unbind") }
 		glBindTexture(this _target, 0)
 		version(debugGL) { validateEnd("Texture unbind") }
 	}
 	upload: func (pixels: Pointer, stride: Int) {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Texture upload") }
 		pixelStride := stride / this _bytesPerPixel
 		glBindTexture(this _target, this _backend)
 		if (pixelStride != this size width) {
@@ -69,7 +70,7 @@ Gles3Texture: class extends GLTexture {
 		version(debugGL) { validateEnd("Texture upload") }
 	}
 	_setInternalFormats: func (type: TextureType) {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Texture _setInternalFormats") }
 		match type {
 			case TextureType Monochrome =>
 				this _internalFormat = GL_R8
@@ -106,7 +107,7 @@ Gles3Texture: class extends GLTexture {
 		version(debugGL) { validateEnd("Texture _setInternalFormats") }
 	}
 	setMagFilter: func (interpolation: InterpolationType) {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Texture setMagFilter") }
 		this bind(0)
 		interpolationType := match (interpolation) {
 			case InterpolationType Nearest => GL_NEAREST
@@ -118,7 +119,7 @@ Gles3Texture: class extends GLTexture {
 		version(debugGL) { validateEnd("Texture setMagFilter") }
 	}
 	setMinFilter: func (interpolation: InterpolationType) {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Texture setMinFilter") }
 		this bind(0)
 		interpolationType := match (interpolation) {
 			case InterpolationType Nearest => GL_NEAREST
@@ -134,7 +135,7 @@ Gles3Texture: class extends GLTexture {
 		version(debugGL) { validateEnd("Texture setMinFilter") }
 	}
 	_genTexture: func {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Texture _genTexture") }
 		glGenTextures(1, this _backend&)
 		glBindTexture(this _target, this _backend)
 		glTexParameteri(this _target, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
@@ -151,7 +152,7 @@ Gles3Texture: class extends GLTexture {
 	}
 	_allocate: func (pixels: Pointer, stride: Int) {
 		version(debugGL) { Debug print("Allocating OpenGL Texture") }
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Texture _allocate") }
 		pixelStride := stride / this _bytesPerPixel
 		if (pixelStride != this size width) {
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
@@ -161,4 +162,5 @@ Gles3Texture: class extends GLTexture {
 		version(debugGL) { validateEnd("Texture _allocate") }
 		true
 	}
+}
 }

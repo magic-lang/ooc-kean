@@ -16,8 +16,9 @@
 
 use ooc-math
 use ooc-draw
-import GpuContext, GpuImage, GpuSurface, GpuCanvas, GpuPaintEngine
+import GpuContext, GpuImage, GpuSurface, GpuCanvas
 
+version(!gpuOff) {
 GpuYuv420Semiplanar: class extends GpuImage {
 	_y: GpuImage
 	y ::= this _y
@@ -37,8 +38,8 @@ GpuYuv420Semiplanar: class extends GpuImage {
 		this _uv referenceCount increase()
 	}
 	init: func ~fromRaster (rasterImage: RasterYuv420Semiplanar, context: GpuContext) {
-		y := context createGpuImage(rasterImage y)
-		uv := context createGpuImage(rasterImage uv)
+		y := context createImage(rasterImage y)
+		uv := context createImage(rasterImage uv)
 		this init(y, uv, context)
 	}
 	init: func ~empty (size: IntSize2D, context: GpuContext) {
@@ -69,5 +70,5 @@ GpuYuv420Semiplanar: class extends GpuImage {
 		this _y bind(unit)
 		this _uv bind(unit + 1)
 	}
-	createPaintEngine: override func -> PaintEngine { GpuPaintEngine new(this) }
+}
 }

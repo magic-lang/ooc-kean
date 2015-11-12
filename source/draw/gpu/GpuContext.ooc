@@ -20,6 +20,7 @@ use ooc-collections
 import AbstractContext
 import GpuImage, GpuSurface, GpuMap, GpuFence, GpuYuv420Semiplanar, GpuMesh
 
+version(!gpuOff) {
 GpuContext: abstract class extends AbstractContext {
 	defaultMap: GpuMap { get { null } }
 	init: func
@@ -27,7 +28,7 @@ GpuContext: abstract class extends AbstractContext {
 	createBgr: abstract func (size: IntSize2D) -> GpuImage
 	createBgra: abstract func (size: IntSize2D) -> GpuImage
 	createUv: abstract func (size: IntSize2D) -> GpuImage
-	createGpuImage: abstract func (rasterImage: RasterImage) -> GpuImage
+	createImage: abstract func (rasterImage: RasterImage) -> GpuImage
 	createFence: abstract func -> GpuFence
 	createYuv420Semiplanar: func (size: IntSize2D) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(size, this) }
 	createYuv420Semiplanar: func ~fromImages (y, uv: GpuImage) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(y, uv, this) }
@@ -40,4 +41,5 @@ GpuContext: abstract class extends AbstractContext {
 
 	toRaster: virtual func (gpuImage: GpuImage, async: Bool = false) -> RasterImage { gpuImage toRasterDefault() }
 	toRasterAsync: virtual func (gpuImage: GpuImage) -> (RasterImage, GpuFence) { Debug raise("toRasterAsync unimplemented") }
+}
 }

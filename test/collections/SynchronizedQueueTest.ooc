@@ -1,6 +1,7 @@
 use ooc-base
 use ooc-collections
 use ooc-unit
+import math
 import threading/Thread
 
 SynchronizedQueueTest: class extends Fixture {
@@ -12,14 +13,14 @@ SynchronizedQueueTest: class extends Fixture {
 			for (i in 0 .. count) {
 				queue enqueue(i)
 				value: Int
-				expect(queue peek(value&))
+				value = queue peek(Int minimumValue)
 				expect(value, is equal to(0))
 				expect(queue count, is equal to(i + 1))
 			}
 			expect(queue count, is equal to(count))
 			for (i in 0 .. count) {
 				value: Int
-				expect(queue dequeue(value&))
+				value = queue dequeue(Int minimumValue)
 				expect(value, is equal to(i))
 			}
 			expect(queue count, is equal to(0))
@@ -34,7 +35,7 @@ SynchronizedQueueTest: class extends Fixture {
 			}
 			defaultValue := Cell<ULong> new(count + 1)
 			for (i in 0 .. count) {
-				value := queue dequeue(defaultValue)
+				value := queue dequeue(null)
 				expect(value != defaultValue)
 				value free()
 			}
@@ -45,6 +46,16 @@ SynchronizedQueueTest: class extends Fixture {
 		})
 		this add("multiple threads", This _testMultipleThreads)
 		this add("multiple threads (class)", This _testMultipleThreadsWithClass)
+		this add("clear and empty", func {
+			queue := SynchronizedQueue<Cell<ULong>> new()
+			for (i in 0 .. 10) {
+				queue enqueue(Cell<ULong> new(i))
+				expect(queue count, is equal to(i + 1))
+			}
+			expect(queue empty, is false)
+			queue clear()
+			expect(queue empty, is true)
+		})
 	}
 	_testMultipleThreads: static func {
 		numberOfThreads := 8
@@ -67,8 +78,7 @@ SynchronizedQueueTest: class extends Fixture {
 		(job as Closure) dispose()
 		job = func {
 			for (i in 0 .. countPerThread) {
-				value: Int
-				expect(queue dequeue(value&))
+				value := queue dequeue(Int minimumValue)
 				expect(value >= 0 && value < countPerThread)
 			}
 		}
@@ -107,7 +117,7 @@ SynchronizedQueueTest: class extends Fixture {
 		job = func {
 			for (i in 0 .. countPerThread) {
 				value: Cell<Int>
-				expect(queue dequeue(value&))
+				value = queue dequeue(null)
 				expect(value get() >= 0 && value get() < countPerThread)
 				value free()
 			}

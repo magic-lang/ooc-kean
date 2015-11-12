@@ -19,7 +19,6 @@ use ooc-base
 import io/File
 import ByteBuffer into ByteBuffer
 import math
-import structs/ArrayList
 import StbImage
 import RasterImage
 import RasterBgra
@@ -53,28 +52,6 @@ RasterPacked: abstract class extends RasterImage {
 		this _buffer = null
 		super()
 	}
-	/*shift: func (offset: IntSize2D) -> Image {
-		result: RasterImage
-		if (this instanceOf?(RasterMonochrome))
-			result = RasterMonochrome new(this size)
-		else if (this instanceOf?(RasterBgr))
-			result = RasterBgr new(this size)
-		else if (this instanceOf?(RasterBgra))
-			result = RasterBgra new(this size)
-//		else if (this instanceOf?(RasterYuyv))
-//			result = RasterYuyv new(this size)
-		// FIXME: Use this line if and when Yuyv is implemented
-//		offsetX := Int modulo(this instanceOf?(RasterYuyv) && Int modulo(offset width, 2) != 0 ? offset width + 1 : offset width, this size width)
-		offsetX := Int modulo(offset width, this size width)
-		length := (this size width - offsetX) * this bytesPerPixel
-		line := this size width * this bytesPerPixel
-		for (y in 0..this size height) {
-			destination := Int modulo(y + offset height, this size height) * this stride
-			result buffer copyFrom(this buffer, this stride * y, destination + offsetX * this bytesPerPixel, length)
-			result buffer copyFrom(this buffer, this stride * y + length, destination, line - length)
-		}
-		result
-	}*/
 	equals: func (other: Image) -> Bool {
 		other instanceOf?(This) && this bytesPerPixel == (other as This) bytesPerPixel && this as Image equals(other)
 	}
@@ -104,4 +81,5 @@ RasterPacked: abstract class extends RasterImage {
 			index += this bytesPerPixel
 		}
 	}
+	kean_draw_rasterPacked_getData: unmangled func -> Void* { this buffer pointer }
 }

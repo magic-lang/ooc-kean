@@ -30,12 +30,13 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		result
 	}
 	_parseRow: func (rowData: Text) -> VectorList<Text> {
+		row := rowData take()
 		result := VectorList<Text> new()
-		rowDataLength := rowData count
+		rowLength := row count
 		readCharacter: Char
-		for (i in 0 .. rowDataLength) {
+		for (i in 0 .. rowLength) {
 			textBuilder := TextBuilder new()
-			while (i < rowDataLength && ((readCharacter = rowData[i]) != This delimiter)) {
+			while (i < rowLength && ((readCharacter = row[i]) != This delimiter)) {
 				++i
 				match (readCharacter) {
 					case ' ' =>
@@ -45,7 +46,7 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 					case '\r' =>
 						continue
 					case '"' =>
-						textBuilder append(this _extractStringLiteral(rowData, i&))
+						textBuilder append(this _extractStringLiteral(row, i&))
 					case =>
 						textBuilder append(readCharacter)
 				}
@@ -71,9 +72,15 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		result
 	}
 	delimiter ::= static ','
-	open: static func (filename: Text) -> This {
+	open: static func ~text (filename: Text) -> This {
+		filenameString := filename toString()
+		result := This open(filenameString)
+		filenameString free()
+		result
+	}
+	open: static func ~string (filename: String) -> This {
 		result: This = null
-		file := File new(filename toString())
+		file := File new(filename)
 		if (file exists?())
 			result = This new(FileReader new(file))
 		file free()

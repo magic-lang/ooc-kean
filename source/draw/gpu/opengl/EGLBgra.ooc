@@ -19,6 +19,7 @@ use ooc-math
 import GraphicBuffer, AndroidContext, OpenGLBgra
 import backend/[GLTexture, GLContext, EGLImage]
 
+version(!gpuOff) {
 EGLBgra: class extends OpenGLBgra {
 	_buffer: GraphicBuffer
 	buffer ::= this _buffer
@@ -26,11 +27,12 @@ EGLBgra: class extends OpenGLBgra {
 		super(EGLImage create(TextureType Rgba, this _buffer size, this _buffer nativeBuffer, context backend), context)
 	}
 	init: func ~fromSize (size: IntSize2D, context: AndroidContext) {
-		this init(GraphicBuffer new(size, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage Rendertarget), context)
+		this init(GraphicBuffer new(size, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget), context)
 	}
 	free: override func {
 		this _recyclable = false
 		this _buffer free()
 		super()
 	}
+}
 }

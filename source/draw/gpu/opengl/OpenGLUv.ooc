@@ -21,6 +21,7 @@ use ooc-draw-gpu
 import backend/GLTexture
 import OpenGLCanvas, OpenGLPacked, OpenGLContext, Map/[OpenGLMap, OpenGLMapPack]
 
+version(!gpuOff) {
 OpenGLUv: class extends OpenGLPacked {
 	channelCount: static Int = 2
 	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
@@ -44,8 +45,9 @@ OpenGLUv: class extends OpenGLPacked {
 	}
 	_createCanvas: override func -> GpuSurface {
 		result := super()
-		result clearColor = ColorBgra new(128, 128, 128, 128)
+		result pen = Pen new(ColorBgra new(128, 128, 128, 128))
 		result
 	}
 	create: override func (size: IntSize2D) -> This { this context createUv(size) as This }
+}
 }

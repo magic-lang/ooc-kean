@@ -15,6 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+version(!gpuOff) {
 use ooc-base
 use ooc-math
 use ooc-ui
@@ -143,38 +144,38 @@ Gles3Context: class extends GLContext {
 		this makeCurrent()
 	}
 	setViewport: func (viewport: IntBox2D) {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Context setViewport") }
 		glViewport(viewport left, viewport top, viewport width, viewport height)
-		version(debugGL) { validateEnd("context setViewport") }
+		version(debugGL) { validateEnd("Context setViewport") }
 	}
 	enableBlend: func (on: Bool) {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Context enableBlend") }
 		if (on)
 			glEnable(GL_BLEND)
 		else
 			glDisable(GL_BLEND)
-		version(debugGL) { validateEnd("context enableBlend") }
+		version(debugGL) { validateEnd("Context enableBlend") }
 	}
 	blend: func ~constant (factor: Float) {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Context blend~constant") }
 		glEnable(GL_BLEND)
 		glBlendColor(factor, factor, factor, factor)
 		glBlendFunc(GL_CONSTANT_COLOR, GL_ONE_MINUS_CONSTANT_COLOR)
-		version(debugGL) { validateEnd("context blend~constant") }
+		version(debugGL) { validateEnd("Context blend~constant") }
 	}
 	blend: func ~alphaMonochrome {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Context blend~alphaMonochrome") }
 		glEnable(GL_BLEND)
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR)
-		version(debugGL) { validateEnd("context blend~alphaMonochrome") }
+		version(debugGL) { validateEnd("Context blend~alphaMonochrome") }
 	}
 	create: static func ~shared (window: NativeWindow, sharedContext: This = null) -> This {
-		version(debugGL) { Debug print("Creating OpenGL context") }
+		version(debugGL) { Debug print("Creating OpenGL Context") }
 		result := This new()
 		result _generate(window, sharedContext) ? result : null
 	}
 	create: static func ~pbufferShared (sharedContext: This = null) -> This {
-		version(debugGL) { Debug print("Creating OpenGL context") }
+		version(debugGL) { Debug print("Creating OpenGL Context") }
 		result := This new()
 		result _generate(sharedContext) ? result : null
 	}
@@ -193,10 +194,10 @@ Gles3Context: class extends GLContext {
 		success ? result : null
 	}
 	createFramebufferObject: func (texture: GLTexture, size: IntSize2D) -> Gles3FramebufferObject {
-		version(debugGL) { validateStart() }
+		version(debugGL) { validateStart("Context createFramebufferObject") }
 		result := Gles3FramebufferObject new(size)
 		result = result _generate(texture as Gles3Texture) ? result : null
-		version(debugGL) { validateEnd("FramebufferObject create") }
+		version(debugGL) { validateEnd("Context createFramebufferObject") }
 		result
 	}
 	createFence: func -> Gles3Fence { Gles3Fence new() }
@@ -207,4 +208,5 @@ Gles3Context: class extends GLContext {
 	createVertexArrayObject: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GLVertexArrayObject {
 		Gles3VertexArrayObject new(vertices, textureCoordinates)
 	}
+}
 }

@@ -98,11 +98,11 @@ TextTest: class extends Fixture {
 		})
 		this add("Convert to Int", func {
 			expect(Text new("1") toInt(), is equal to(1))
-			expect(Text new("-1") toInt(), is equal to(-1))
+			expect(Text new("  -1 ") toInt(), is equal to(-1))
 			expect(Text new("-932") toInt(), is equal to(-932))
 			expect(Text new("871") toInt(), is equal to(871))
 			expect(Text new("bad") toInt(), is equal to(0))
-			expect(Text new("123one") toInt(), is equal to(123))
+			expect(Text new(" \t 123one \n   ") toInt(), is equal to(123))
 			expect(Text new("101") toInt(), is equal to(101))
 			for (i in 1 .. 100)
 				for (j in 1 .. 100)
@@ -122,20 +122,20 @@ TextTest: class extends Fixture {
 			expect(Text new("101") toInt~inBase(2), is equal to(5))
 			expect(Text new("101") toInt~inBase(8), is equal to(8 * 8 + 1))
 			expect(Text new("101") toInt~inBase(7), is equal to(7 * 7 + 1))
-			expect(Text new("654") toInt~inBase(6), is equal to(0))
+			expect(Text new(" 654  ") toInt~inBase(6), is equal to(0))
 			expect(Text new("654") toInt~inBase(7), is equal to(4 + 5 * 7 + 6 * 7 * 7))
 		})
 		this add("Convert to Long and ULong", func {
 			expect(Text new(INT_MAX toString()) toLong(), is equal to(INT_MAX))
 			expect(Text new("0xDEADBEEF") toULong(), is equal to(3735928559))
-			expect(Text new("-9") toULong(), is equal to(0))
-			expect(Text new("-9") toLLong(), is equal to(-9))
-			expect(Text new("-9") toLong(), is equal to(-9))
+			expect(Text new("  -9  ") toULong(), is equal to(0))
+			expect(Text new("  -9  ") toLLong(), is equal to(-9))
+			expect(Text new("   -9 ") toLong(), is equal to(-9))
 		})
 		this add("Convert to Float", func {
 			tolerance := 0.001f
 			expect(Text new("1") toFloat(), is equal to(1.0f) within(tolerance))
-			expect(Text new("-1.0") toFloat(), is equal to(-1.0f) within(tolerance))
+			expect(Text new(" -1.0  ") toFloat(), is equal to(-1.0f) within(tolerance))
 			expect(Text new("-1.") toFloat(), is equal to(-1.0f) within(tolerance))
 			expect(Text new("22.5") toFloat(), is equal to(22.5f) within(tolerance))
 			expect(Text new("123.763") toFloat(), is equal to(123.763f) within(tolerance))
@@ -147,10 +147,10 @@ TextTest: class extends Fixture {
 			tolerance := 0.001f
 			expect(Text new("1e0") toFloat(), is equal to(1.0f) within(tolerance))
 			expect(Text new("5E-2") toFloat(), is equal to(0.05f) within(tolerance))
-			expect(Text new("2E12") toLDouble(), is equal to(2.0 * pow(10, 12) as LDouble) within(tolerance as LDouble))
+			expect(Text new("  2E12 ") toLDouble(), is equal to(2.0 * pow(10, 12) as LDouble) within(tolerance as LDouble))
 			expect(Text new("2E12") toDouble(), is equal to(2.0 * pow(10, 12) as Double) within(tolerance as Double))
 			expect(Text new("6.5E5") toFloat(), is equal to(6.5f * pow(10, 5) as Float) within(tolerance))
-			expect(Text new("-34.5E-2") toFloat(), is equal to(-0.345f) within(tolerance))
+			expect(Text new(" -34.5E-2 ") toFloat(), is equal to(-0.345f) within(tolerance))
 		})
 		this add("MakeTextLiteral", func {
 			text := makeTextLiteral(c"Hello", 5)
@@ -165,6 +165,11 @@ TextTest: class extends Fixture {
 			expect(text == text2)
 			text free()
 			text2 free()
+		})
+		this add("trim", func {
+			paddedText := t"  \t test \n test \r\n\t "
+			trimmedText := paddedText trim()
+			expect(trimmedText == t"test \n test")
 		})
 	}
 }

@@ -10,8 +10,8 @@ FileTest: class extends Fixture {
 		this add("creating directory", func {
 			file := File new(this _testOutput)
 			file mkdirs()
-			expect(file exists?())
-			expect(file dir?())
+			expect(file exists?(), is true)
+			expect(file dir?(), is true)
 			file free()
 		})
 		this add("copy", func {
@@ -29,9 +29,9 @@ FileTest: class extends Fixture {
 			file copyTo(fileCopy)
 			reader := FileReader new(pathCopy)
 			expect(reader hasNext?())
-			expect(reader read() == 'a')
-			expect(reader read() == 'b')
-			expect(reader read() == 'c')
+			expect(reader read(), is equal to('a'))
+			expect(reader read(), is equal to('b'))
+			expect(reader read(), is equal to('c'))
 			reader close()
 			reader free()
 			file rm()
@@ -43,9 +43,9 @@ FileTest: class extends Fixture {
 		})
 		this add("cleanup", func {
 			file := File new(this _testOutput)
-			expect(file exists?())
+			expect(file exists?(), is true)
 			file rm()
-			expect(file exists?() == false)
+			expect(file exists?(), is false)
 			file free()
 		})
 	}

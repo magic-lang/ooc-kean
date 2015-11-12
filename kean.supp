@@ -1,0 +1,24 @@
+{
+   fixture_getis
+   Memcheck:Leak
+   ...
+   fun:Fixture__Fixture___getis__
+}
+{
+   fixture_expect
+   Memcheck:Leak
+   ...
+   fun:Fixture__Fixture_expect_*
+}
+{
+   fixture_getequal
+   Memcheck:Leak
+   ...
+   fun:Constraints__IsConstraints___getequal__
+}
+{
+   datetime_tostringformat
+   Memcheck:Leak
+   ...
+   fun:DateTime__DateTime_toStringFormat
+}

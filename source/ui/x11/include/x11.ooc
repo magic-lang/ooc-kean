@@ -15,6 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
+version(unix || apple) {
 include X11/Xlib
 include X11/Xatom
 include X11/Xutil
@@ -71,6 +72,8 @@ XEventOoc: cover from XEvent {
 	xkey: extern XKeyEventOoc
 }
 
+GraphicsContextX11: cover from GC
+
 XOpenDisplay: extern func (displayName: Char*) -> Pointer
 XCloseDisplay: extern func (display: Pointer) -> Int
 XCreateWindow: extern func (display: Pointer, window: Long, x, y: Int,
@@ -85,6 +88,23 @@ XFlush: extern func (display: Pointer)
 XSendEvent: extern func (display: Pointer, window: Long, propagate: Bool, event_mask: Long, event_send: XEventOoc*)
 XClearWindow: extern func (display: Pointer, window: Long)
 XMoveWindow: extern func (display: Pointer, window: Long, x, y: Int)
+XDefaultScreen: extern func (display: Pointer) -> Int
+DefaultDepth: extern func (display: Pointer, screen: Int) -> Int
+XSetBackground: extern func (...)
+XCreateGC: extern func (...) -> GraphicsContextX11
+XFreeGC: extern func (...)
+XDestroyWindow: extern func (...)
+
+XImageOoc: cover from XImage {
+	width, height, xoffset, format: Int
+	data: Char*
+	byteOrder, bitmapUnit, bitmapBitOrder, bitmapPad, depth, bytesPerLine, bitsPerPixel: Int
+	redMask, greenMask, blueMask: ULong
+}
+XCreateImage: extern func (...) -> XImageOoc*
+XPutImage: extern func (...)
+XDestroyImage: extern func (image: XImageOoc*)
+XPutPixel: extern func (...)
 
 XKeyEventOoc: cover from XKeyEvent {
 	type: extern Int
@@ -103,6 +123,8 @@ XKeyEventOoc: cover from XKeyEvent {
 	keycode: extern UInt
 	sameScreen: extern (same_screen) Bool
 }
+
+ZPixmap: extern const Long
 
 //XNextEvent: extern func(Pointer, XEvent) -> Int
 
@@ -129,12 +151,12 @@ Button3 : extern const UInt
 Button4 : extern const UInt
 Button5 : extern const UInt
 
-MouseButton: enum {
-	Left = Button1
-	Middle = Button2
-	Right = Button3
-	WheelUp = Button4
-	WheelDown = Button5
+MouseButton: class {
+	Left: static extern (Button1) const UInt
+	Middle: static extern (Button2) const UInt
+	Right: static extern (Button3) const UInt
+	WheelUp: static extern (Button4) const UInt
+	WheelDown: static extern (Button5) const UInt
 }
 
 XK_VoidSymbol,
@@ -468,291 +490,262 @@ XK_NewSheqelSign,
 XK_DongSign,
 XK_EuroSign: extern const ULong
 
-Key: enum {
-	BackSpace = XK_BackSpace
-	Tab = XK_Tab
-	Linefeed = XK_Linefeed
-	Clear = XK_Clear
-	Return = XK_Return
-	Pause = XK_Pause
-	ScrollLock = XK_Scroll_Lock
-	SysReq = XK_Sys_Req
-	Escape = XK_Escape
-	Delete = XK_Delete
-	Home = XK_Home
-	Left = XK_Left
-	Up = XK_Up
-	Right = XK_Right
-	Down = XK_Down
-	Prior = XK_Prior
-	PageUp = XK_Page_Up
-	Next = XK_Next
-	PageDown = XK_Page_Down
-	End = XK_End
-	Begin = XK_Begin
-	Select = XK_Select
-	Print = XK_Print
-	Execute = XK_Execute
-	Insert = XK_Insert
-	Undo = XK_Undo
-	Redo = XK_Redo
-	Menu = XK_Menu
-	Find = XK_Find
-	Cancel = XK_Cancel
-	Help = XK_Help
-	Break = XK_Break
-	ModeSwitch = XK_Mode_switch
-	ScriptSwitch = XK_script_switch
-	NumLock = XK_Num_Lock
-	KeypadSpace = XK_KP_Space
-	KeypadTab = XK_KP_Tab
-	KeypadEnter = XK_KP_Enter
-	KeypadF1 = XK_KP_F1
-	KeypadF2 = XK_KP_F2
-	KeypadF3 = XK_KP_F3
-	KeypadF4 = XK_KP_F4
-	KeypadHome = XK_KP_Home
-	KeypadLeft = XK_KP_Left
-	KeypadUp = XK_KP_Up
-	KeypadRight = XK_KP_Right
-	KeypadDown = XK_KP_Down
-	KeypadPrior = XK_KP_Prior
-	KeypadPageUp = XK_KP_Page_Up
-	KeypadNext = XK_KP_Next
-	KeypadPageDown = XK_KP_Page_Down
-	KeypadEnd = XK_KP_End
-	KeypadBegin = XK_KP_Begin
-	KeypadInsert = XK_KP_Insert
-	KeypadDelete = XK_KP_Delete
-	KeypadEqual = XK_KP_Equal
-	KeypadMultiply = XK_KP_Multiply
-	KeypadAdd = XK_KP_Add
-	KeypadSeparator = XK_KP_Separator
-	KeypadSubtract = XK_KP_Subtract
-	KeypadDecimal = XK_KP_Decimal
-	KeypadDivide = XK_KP_Divide
-	Keypad0 = XK_KP_0
-	Keypad1 = XK_KP_1
-	Keypad2 = XK_KP_2
-	Keypad3 = XK_KP_3
-	Keypad4 = XK_KP_4
-	Keypad5 = XK_KP_5
-	Keypad6 = XK_KP_6
-	Keypad7 = XK_KP_7
-	Keypad8 = XK_KP_8
-	Keypad9 = XK_KP_9
-	F1 = XK_F1
-	F2 = XK_F2
-	F3 = XK_F3
-	F4 = XK_F4
-	F5 = XK_F5
-	F6 = XK_F6
-	F7 = XK_F7
-	F8 = XK_F8
-	F9 = XK_F9
-	F10 = XK_F10
-	F11 = XK_F11
-	L1 = XK_L1
-	F12 = XK_F12
-	L2 = XK_L2
-	F13 = XK_F13
-	L3 = XK_L3
-	F14 = XK_F14
-	L4 = XK_L4
-	F15 = XK_F15
-	L5 = XK_L5
-	F16 = XK_F16
-	L6 = XK_L6
-	F17 = XK_F17
-	L7 = XK_L7
-	F18 = XK_F18
-	L8 = XK_L8
-	F19 = XK_F19
-	L9 = XK_L9
-	F20 = XK_F20
-	L10 = XK_L10
-	F21 = XK_F21
-	R1 = XK_R1
-	F22 = XK_F22
-	R2 = XK_R2
-	F23 = XK_F23
-	R3 = XK_R3
-	F24 = XK_F24
-	R4 = XK_R4
-	F25 = XK_F25
-	R5 = XK_R5
-	F26 = XK_F26
-	R6 = XK_R6
-	F27 = XK_F27
-	R7 = XK_R7
-	F28 = XK_F28
-	R8 = XK_R8
-	F29 = XK_F29
-	R9 = XK_R9
-	F30 = XK_F30
-	R10 = XK_R10
-	F31 = XK_F31
-	R11 = XK_R11
-	F32 = XK_F32
-	R12 = XK_R12
-	F33 = XK_F33
-	R13 = XK_R13
-	F34 = XK_F34
-	R14 = XK_R14
-	F35 = XK_F35
-	R15 = XK_R15
-	LeftShift = XK_Shift_L
-	RightShift = XK_Shift_R
-	LeftControl = XK_Control_L
-	RightControl = XK_Control_R
-	CapsLock = XK_Caps_Lock
-	ShiftLock = XK_Shift_Lock
-	LeftMeta = XK_Meta_L
-	RightMeta = XK_Meta_R
-	LeftAlt = XK_Alt_L
-	RightAlt = XK_Alt_R
-	LeftSuper = XK_Super_L
-	RightSuper = XK_Super_R
-	LeftHyper = XK_Hyper_L
-	RightHyper = XK_Hyper_R
-	/*IBM3270Duplicate = XK_3270_Duplicate
-	IBM3270FieldMark = XK_3270_FieldMark
-	IBM3270Right2 = XK_3270_Right2
-	IBM3270Left2 = XK_3270_Left2
-	IBM3270BackTab = XK_3270_BackTab
-	IBM3270EraseEOF = XK_3270_EraseEOF
-	IBM3270EraseInput = XK_3270_EraseInput
-	IBM3270Reset = XK_3270_Reset
-	IBM3270Quit = XK_3270_Quit
-	IBM3270PA1 = XK_3270_PA1
-	IBM3270PA2 = XK_3270_PA2
-	IBM3270PA3 = XK_3270_PA3
-	IBM3270Test = XK_3270_Test
-	IBM3270Attn = XK_3270_Attn
-	IBM3270CursorBlink = XK_3270_CursorBlink
-	IBM3270AltCursor = XK_3270_AltCursor
-	IBM3270KeyClick = XK_3270_KeyClick
-	IBM3270Jump = XK_3270_Jump
-	IBM3270Ident = XK_3270_Ident
-	IBM3270Rule = XK_3270_Rule
-	IBM3270Copy = XK_3270_Copy
-	IBM3270Play = XK_3270_Play
-	IBM3270Setup = XK_3270_Setup
-	IBM3270Record = XK_3270_Record
-	IBM3270ChangeScreen = XK_3270_ChangeScreen
-	IBM3270DeleteWord = XK_3270_DeleteWord
-	IBM3270ExSelect = XK_3270_ExSelect
-	IBM3270CursorSelect = XK_3270_CursorSelect
-	IBM3270PrintScreen = XK_3270_PrintScreen
-	IBM3270Enter = XK_3270_Enter*/
-	Space = XK_space
-	Exclam = XK_exclam
-	Quotedbl = XK_quotedbl
-	Numbersign = XK_numbersign
-	Dollar = XK_dollar
-	Percent = XK_percent
-	Ampersand = XK_ampersand
-	Apostrophe = XK_apostrophe
-	RightQuote = XK_quoteright
-	LeftParenthesis = XK_parenleft
-	RightParenthesis = XK_parenright
-	Asterisk = XK_asterisk
-	Plus = XK_plus
-	Comma = XK_comma
-	Minus = XK_minus
-	Period = XK_period
-	Slash = XK_slash
-	Number0 = XK_0
-	Number1 = XK_1
-	Number2 = XK_2
-	Number3 = XK_3
-	Number4 = XK_4
-	Number5 = XK_5
-	Number6 = XK_6
-	Number7 = XK_7
-	Number8 = XK_8
-	Number9 = XK_9
-	Colon = XK_colon
-	Semicolon = XK_semicolon
-	Less = XK_less
-	Equal = XK_equal
-	Greater = XK_greater
-	Question = XK_question
-	At = XK_at
-	A = XK_A
-	B = XK_B
-	C = XK_C
-	D = XK_D
-	E = XK_E
-	F = XK_F
-	G = XK_G
-	H = XK_H
-	I = XK_I
-	J = XK_J
-	K = XK_K
-	L = XK_L
-	M = XK_M
-	N = XK_N
-	O = XK_O
-	P = XK_P
-	Q = XK_Q
-	R = XK_R
-	S = XK_S
-	T = XK_T
-	U = XK_U
-	V = XK_V
-	W = XK_W
-	X = XK_X
-	Y = XK_Y
-	Z = XK_Z
-	LeftBracket = XK_bracketleft
-	Backslash = XK_backslash
-	RightBracket = XK_bracketright
-	AsciiCircum = XK_asciicircum
-	Underscore = XK_underscore
-	Grave = XK_grave
-	LeftQuote = XK_quoteleft
-	a = XK_a
-	b = XK_b
-	c = XK_c
-	d = XK_d
-	e = XK_e
-	f = XK_f
-	g = XK_g
-	h = XK_h
-	i = XK_i
-	j = XK_j
-	k = XK_k
-	l = XK_l
-	m = XK_m
-	n = XK_n
-	o = XK_o
-	p = XK_p
-	q = XK_q
-	r = XK_r
-	s = XK_s
-	t = XK_t
-	u = XK_u
-	v = XK_v
-	w = XK_w
-	x = XK_x
-	y = XK_y
-	z = XK_z
-	LeftBrace = XK_braceleft
-	Bar = XK_bar
-	RightBrace = XK_braceright
-	AsciiTilde = XK_asciitilde
-	EcuSign = XK_EcuSign
-	ColonSign = XK_ColonSign
-	CruzeiroSign = XK_CruzeiroSign
-	FFrancSign = XK_FFrancSign
-	LiraSign = XK_LiraSign
-	MillSign = XK_MillSign
-	NairaSign = XK_NairaSign
-	PesetaSign = XK_PesetaSign
-	RupeeSign = XK_RupeeSign
-	WonSign = XK_WonSign
-	NewSheqelSign = XK_NewSheqelSign
-	DongSign = XK_DongSign
-	EuroSign = XK_EuroSign
+Key: class {
+	BackSpace: static extern (XK_BackSpace) const ULong
+	Tab: static extern (XK_Tab) const ULong
+	Linefeed: static extern (XK_Linefeed) const ULong
+	Clear: static extern (XK_Clear) const ULong
+	Return: static extern (XK_Return) const ULong
+	Pause: static extern (XK_Pause) const ULong
+	ScrollLock: static extern (XK_Scroll_Lock) const ULong
+	SysReq: static extern (XK_Sys_Req) const ULong
+	Escape: static extern (XK_Escape) const ULong
+	Delete: static extern (XK_Delete) const ULong
+	Home: static extern (XK_Home) const ULong
+	Left: static extern (XK_Left) const ULong
+	Up: static extern (XK_Up) const ULong
+	Right: static extern (XK_Right) const ULong
+	Down: static extern (XK_Down) const ULong
+	Prior: static extern (XK_Prior) const ULong
+	PageUp: static extern (XK_Page_Up) const ULong
+	Next: static extern (XK_Next) const ULong
+	PageDown: static extern (XK_Page_Down) const ULong
+	End: static extern (XK_End) const ULong
+	Begin: static extern (XK_Begin) const ULong
+	Select: static extern (XK_Select) const ULong
+	Print: static extern (XK_Print) const ULong
+	Execute: static extern (XK_Execute) const ULong
+	Insert: static extern (XK_Insert) const ULong
+	Undo: static extern (XK_Undo) const ULong
+	Redo: static extern (XK_Redo) const ULong
+	Menu: static extern (XK_Menu) const ULong
+	Find: static extern (XK_Find) const ULong
+	Cancel: static extern (XK_Cancel) const ULong
+	Help: static extern (XK_Help) const ULong
+	Break: static extern (XK_Break) const ULong
+	ModeSwitch: static extern (XK_Mode_switch) const ULong
+	ScriptSwitch: static extern (XK_script_switch) const ULong
+	NumLock: static extern (XK_Num_Lock) const ULong
+	KeypadSpace: static extern (XK_KP_Space) const ULong
+	KeypadTab: static extern (XK_KP_Tab) const ULong
+	KeypadEnter: static extern (XK_KP_Enter) const ULong
+	KeypadF1: static extern (XK_KP_F1) const ULong
+	KeypadF2: static extern (XK_KP_F2) const ULong
+	KeypadF3: static extern (XK_KP_F3) const ULong
+	KeypadF4: static extern (XK_KP_F4) const ULong
+	KeypadHome: static extern (XK_KP_Home) const ULong
+	KeypadLeft: static extern (XK_KP_Left) const ULong
+	KeypadUp: static extern (XK_KP_Up) const ULong
+	KeypadRight: static extern (XK_KP_Right) const ULong
+	KeypadDown: static extern (XK_KP_Down) const ULong
+	KeypadPrior: static extern (XK_KP_Prior) const ULong
+	KeypadPageUp: static extern (XK_KP_Page_Up) const ULong
+	KeypadNext: static extern (XK_KP_Next) const ULong
+	KeypadPageDown: static extern (XK_KP_Page_Down) const ULong
+	KeypadEnd: static extern (XK_KP_End) const ULong
+	KeypadBegin: static extern (XK_KP_Begin) const ULong
+	KeypadInsert: static extern (XK_KP_Insert) const ULong
+	KeypadDelete: static extern (XK_KP_Delete) const ULong
+	KeypadEqual: static extern (XK_KP_Equal) const ULong
+	KeypadMultiply: static extern (XK_KP_Multiply) const ULong
+	KeypadAdd: static extern (XK_KP_Add) const ULong
+	KeypadSeparator: static extern (XK_KP_Separator) const ULong
+	KeypadSubtract: static extern (XK_KP_Subtract) const ULong
+	KeypadDecimal: static extern (XK_KP_Decimal) const ULong
+	KeypadDivide: static extern (XK_KP_Divide) const ULong
+	Keypad0: static extern (XK_KP_0) const ULong
+	Keypad1: static extern (XK_KP_1) const ULong
+	Keypad2: static extern (XK_KP_2) const ULong
+	Keypad3: static extern (XK_KP_3) const ULong
+	Keypad4: static extern (XK_KP_4) const ULong
+	Keypad5: static extern (XK_KP_5) const ULong
+	Keypad6: static extern (XK_KP_6) const ULong
+	Keypad7: static extern (XK_KP_7) const ULong
+	Keypad8: static extern (XK_KP_8) const ULong
+	Keypad9: static extern (XK_KP_9) const ULong
+	F1: static extern (XK_F1) const ULong
+	F2: static extern (XK_F2) const ULong
+	F3: static extern (XK_F3) const ULong
+	F4: static extern (XK_F4) const ULong
+	F5: static extern (XK_F5) const ULong
+	F6: static extern (XK_F6) const ULong
+	F7: static extern (XK_F7) const ULong
+	F8: static extern (XK_F8) const ULong
+	F9: static extern (XK_F9) const ULong
+	F10: static extern (XK_F10) const ULong
+	F11: static extern (XK_F11) const ULong
+	L1: static extern (XK_L1) const ULong
+	F12: static extern (XK_F12) const ULong
+	L2: static extern (XK_L2) const ULong
+	F13: static extern (XK_F13) const ULong
+	L3: static extern (XK_L3) const ULong
+	F14: static extern (XK_F14) const ULong
+	L4: static extern (XK_L4) const ULong
+	F15: static extern (XK_F15) const ULong
+	L5: static extern (XK_L5) const ULong
+	F16: static extern (XK_F16) const ULong
+	L6: static extern (XK_L6) const ULong
+	F17: static extern (XK_F17) const ULong
+	L7: static extern (XK_L7) const ULong
+	F18: static extern (XK_F18) const ULong
+	L8: static extern (XK_L8) const ULong
+	F19: static extern (XK_F19) const ULong
+	L9: static extern (XK_L9) const ULong
+	F20: static extern (XK_F20) const ULong
+	L10: static extern (XK_L10) const ULong
+	F21: static extern (XK_F21) const ULong
+	R1: static extern (XK_R1) const ULong
+	F22: static extern (XK_F22) const ULong
+	R2: static extern (XK_R2) const ULong
+	F23: static extern (XK_F23) const ULong
+	R3: static extern (XK_R3) const ULong
+	F24: static extern (XK_F24) const ULong
+	R4: static extern (XK_R4) const ULong
+	F25: static extern (XK_F25) const ULong
+	R5: static extern (XK_R5) const ULong
+	F26: static extern (XK_F26) const ULong
+	R6: static extern (XK_R6) const ULong
+	F27: static extern (XK_F27) const ULong
+	R7: static extern (XK_R7) const ULong
+	F28: static extern (XK_F28) const ULong
+	R8: static extern (XK_R8) const ULong
+	F29: static extern (XK_F29) const ULong
+	R9: static extern (XK_R9) const ULong
+	F30: static extern (XK_F30) const ULong
+	R10: static extern (XK_R10) const ULong
+	F31: static extern (XK_F31) const ULong
+	R11: static extern (XK_R11) const ULong
+	F32: static extern (XK_F32) const ULong
+	R12: static extern (XK_R12) const ULong
+	F33: static extern (XK_F33) const ULong
+	R13: static extern (XK_R13) const ULong
+	F34: static extern (XK_F34) const ULong
+	R14: static extern (XK_R14) const ULong
+	F35: static extern (XK_F35) const ULong
+	R15: static extern (XK_R15) const ULong
+	LeftShift: static extern (XK_Shift_L) const ULong
+	RightShift: static extern (XK_Shift_R) const ULong
+	LeftControl: static extern (XK_Control_L) const ULong
+	RightControl: static extern (XK_Control_R) const ULong
+	CapsLock: static extern (XK_Caps_Lock) const ULong
+	ShiftLock: static extern (XK_Shift_Lock) const ULong
+	LeftMeta: static extern (XK_Meta_L) const ULong
+	RightMeta: static extern (XK_Meta_R) const ULong
+	LeftAlt: static extern (XK_Alt_L) const ULong
+	RightAlt: static extern (XK_Alt_R) const ULong
+	LeftSuper: static extern (XK_Super_L) const ULong
+	RightSuper: static extern (XK_Super_R) const ULong
+	LeftHyper: static extern (XK_Hyper_L) const ULong
+	RightHyper: static extern (XK_Hyper_R) const ULong
+	Space: static extern (XK_space) const ULong
+	Exclam: static extern (XK_exclam) const ULong
+	Quotedbl: static extern (XK_quotedbl) const ULong
+	Numbersign: static extern (XK_numbersign) const ULong
+	Dollar: static extern (XK_dollar) const ULong
+	Percent: static extern (XK_percent) const ULong
+	Ampersand: static extern (XK_ampersand) const ULong
+	Apostrophe: static extern (XK_apostrophe) const ULong
+	RightQuote: static extern (XK_quoteright) const ULong
+	LeftParenthesis: static extern (XK_parenleft) const ULong
+	RightParenthesis: static extern (XK_parenright) const ULong
+	Asterisk: static extern (XK_asterisk) const ULong
+	Plus: static extern (XK_plus) const ULong
+	Comma: static extern (XK_comma) const ULong
+	Minus: static extern (XK_minus) const ULong
+	Period: static extern (XK_period) const ULong
+	Slash: static extern (XK_slash) const ULong
+	Number0: static extern (XK_0) const ULong
+	Number1: static extern (XK_1) const ULong
+	Number2: static extern (XK_2) const ULong
+	Number3: static extern (XK_3) const ULong
+	Number4: static extern (XK_4) const ULong
+	Number5: static extern (XK_5) const ULong
+	Number6: static extern (XK_6) const ULong
+	Number7: static extern (XK_7) const ULong
+	Number8: static extern (XK_8) const ULong
+	Number9: static extern (XK_9) const ULong
+	Colon: static extern (XK_colon) const ULong
+	Semicolon: static extern (XK_semicolon) const ULong
+	Less: static extern (XK_less) const ULong
+	Equal: static extern (XK_equal) const ULong
+	Greater: static extern (XK_greater) const ULong
+	Question: static extern (XK_question) const ULong
+	At: static extern (XK_at) const ULong
+	A: static extern (XK_A) const ULong
+	B: static extern (XK_B) const ULong
+	C: static extern (XK_C) const ULong
+	D: static extern (XK_D) const ULong
+	E: static extern (XK_E) const ULong
+	F: static extern (XK_F) const ULong
+	G: static extern (XK_G) const ULong
+	H: static extern (XK_H) const ULong
+	I: static extern (XK_I) const ULong
+	J: static extern (XK_J) const ULong
+	K: static extern (XK_K) const ULong
+	L: static extern (XK_L) const ULong
+	M: static extern (XK_M) const ULong
+	N: static extern (XK_N) const ULong
+	O: static extern (XK_O) const ULong
+	P: static extern (XK_P) const ULong
+	Q: static extern (XK_Q) const ULong
+	R: static extern (XK_R) const ULong
+	S: static extern (XK_S) const ULong
+	T: static extern (XK_T) const ULong
+	U: static extern (XK_U) const ULong
+	V: static extern (XK_V) const ULong
+	W: static extern (XK_W) const ULong
+	X: static extern (XK_X) const ULong
+	Y: static extern (XK_Y) const ULong
+	Z: static extern (XK_Z) const ULong
+	LeftBracket: static extern (XK_bracketleft) const ULong
+	Backslash: static extern (XK_backslash) const ULong
+	RightBracket: static extern (XK_bracketright) const ULong
+	AsciiCircum: static extern (XK_asciicircum) const ULong
+	Underscore: static extern (XK_underscore) const ULong
+	Grave: static extern (XK_grave) const ULong
+	LeftQuote: static extern (XK_quoteleft) const ULong
+	a: static extern (XK_a) const ULong
+	b: static extern (XK_b) const ULong
+	c: static extern (XK_c) const ULong
+	d: static extern (XK_d) const ULong
+	e: static extern (XK_e) const ULong
+	f: static extern (XK_f) const ULong
+	g: static extern (XK_g) const ULong
+	h: static extern (XK_h) const ULong
+	i: static extern (XK_i) const ULong
+	j: static extern (XK_j) const ULong
+	k: static extern (XK_k) const ULong
+	l: static extern (XK_l) const ULong
+	m: static extern (XK_m) const ULong
+	n: static extern (XK_n) const ULong
+	o: static extern (XK_o) const ULong
+	p: static extern (XK_p) const ULong
+	q: static extern (XK_q) const ULong
+	r: static extern (XK_r) const ULong
+	s: static extern (XK_s) const ULong
+	t: static extern (XK_t) const ULong
+	u: static extern (XK_u) const ULong
+	v: static extern (XK_v) const ULong
+	w: static extern (XK_w) const ULong
+	x: static extern (XK_x) const ULong
+	y: static extern (XK_y) const ULong
+	z: static extern (XK_z) const ULong
+	LeftBrace: static extern (XK_braceleft) const ULong
+	Bar: static extern (XK_bar) const ULong
+	RightBrace: static extern (XK_braceright) const ULong
+	AsciiTilde: static extern (XK_asciitilde) const ULong
+	EcuSign: static extern (XK_EcuSign) const ULong
+	ColonSign: static extern (XK_ColonSign) const ULong
+	CruzeiroSign: static extern (XK_CruzeiroSign) const ULong
+	FFrancSign: static extern (XK_FFrancSign) const ULong
+	LiraSign: static extern (XK_LiraSign) const ULong
+	MillSign: static extern (XK_MillSign) const ULong
+	NairaSign: static extern (XK_NairaSign) const ULong
+	PesetaSign: static extern (XK_PesetaSign) const ULong
+	RupeeSign: static extern (XK_RupeeSign) const ULong
+	WonSign: static extern (XK_WonSign) const ULong
+	NewSheqelSign: static extern (XK_NewSheqelSign) const ULong
+	DongSign: static extern (XK_DongSign) const ULong
+	EuroSign: static extern (XK_EuroSign) const ULong
+}
 }

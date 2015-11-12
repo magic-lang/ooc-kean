@@ -20,6 +20,7 @@ use ooc-math
 import egl/egl
 import GLTexture, GLContext
 
+version(!gpuOff) {
 EGLImage: class extends GLTexture {
 	_eglBackend: Pointer
 	_eglDisplay: Pointer
@@ -67,4 +68,5 @@ EGLImage: class extends GLTexture {
 	upload: func (pixels: Pointer, stride: Int) { this _backendTexture upload(pixels, stride) }
 	setMagFilter: func (interpolation: InterpolationType) { this _backendTexture setMagFilter(interpolation) }
 	setMinFilter: func (interpolation: InterpolationType) { this _backendTexture setMinFilter(interpolation) }
+}
 }

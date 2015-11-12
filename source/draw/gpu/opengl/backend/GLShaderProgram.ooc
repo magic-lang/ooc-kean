@@ -17,29 +17,23 @@
 
 use ooc-math
 
+version(!gpuOff) {
 GLShaderProgram: abstract class {
 	use: abstract func
-	setUniform: abstract func ~Array (name: String, array: Float*, count: Int)
 	setUniform: abstract func ~Int (name: String, value: Int)
-	setUniform: abstract func ~Int2 (name: String, a, b: Int)
-	setUniform: abstract func ~Int3 (name: String, a, b, c: Int)
-	setUniform: abstract func ~Int4 (name: String, a, b, c, d: Int)
 	setUniform: abstract func ~IntPoint2D (name: String, value: IntPoint2D)
-	setUniform: abstract func ~IntSize2D (name: String, value: IntSize2D)
 	setUniform: abstract func ~IntPoint3D (name: String, value: IntPoint3D)
+	setUniform: abstract func ~IntSize2D (name: String, value: IntSize2D)
 	setUniform: abstract func ~IntSize3D (name: String, value: IntSize3D)
+	setUniform: abstract func ~IntArray (name: String, value: Int*, count: Int)
 	setUniform: abstract func ~Float (name: String, value: Float)
-	setUniform: abstract func ~Float2 (name: String, a, b: Float)
-	setUniform: abstract func ~Float3 (name: String, a, b, c: Float)
-	setUniform: abstract func ~Float4 (name: String, a, b, c, d: Float)
 	setUniform: abstract func ~FloatPoint2D (name: String, value: FloatPoint2D)
-	setUniform: abstract func ~FloatSize2D (name: String, value: FloatSize2D)
 	setUniform: abstract func ~FloatPoint3D (name: String, value: FloatPoint3D)
+	setUniform: abstract func ~FloatPoint4D (name: String, value: FloatPoint4D)
+	setUniform: abstract func ~FloatSize2D (name: String, value: FloatSize2D)
 	setUniform: abstract func ~FloatSize3D (name: String, value: FloatSize3D)
-	setUniform: abstract func ~IntArray (name: String, count: Int, value: Int*)
-	setUniform: abstract func ~FloatArray (name: String, count: Int, value: Float*)
-	setUniform: abstract func ~Matrix4x4arr (name: String, value: Float*)
+	setUniform: abstract func ~FloatArray (name: String, value: Float*, count: Int)
 	setUniform: abstract func ~Matrix3x3 (name: String, value: FloatTransform2D)
 	setUniform: abstract func ~Matrix4x4 (name: String, value: FloatTransform3D)
-	setUniform: abstract func ~Vector3 (name: String, value: FloatPoint3D)
+}
 }

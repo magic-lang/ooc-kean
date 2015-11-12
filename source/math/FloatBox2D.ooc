@@ -18,7 +18,6 @@ import FloatPoint2D
 import FloatSize2D
 import IntBox2D
 import FloatPoint2DVectorList
-import text/StringTokenizer
 import structs/ArrayList
 use ooc-collections
 
@@ -41,6 +40,7 @@ FloatBox2D: cover {
 	bottomCenter ::= FloatPoint2D new(this center x, this bottom)
 	empty ::= this size empty
 	init: func@ (=leftTop, =size)
+	init: func@ ~fromIntBox2D (box: IntBox2D) { this init(box left, box top, box width, box height) }
 	init: func@ ~fromPoints (first, second: FloatPoint2D) {
 		left := Float minimum(first x, second x)
 		top := Float minimum(first y, second y)
@@ -60,8 +60,23 @@ FloatBox2D: cover {
 	pad: func ~fraction (pad: Float) -> This {
 		this pad(pad * this size / 2.0f)
 	}
+	padFractionAverage: func (pad: Float) -> This {
+		this pad(pad * (this size width + this size height) / 2.0f)
+	}
 	shrink: func ~fraction (margin: Float) -> This {
 		this pad(-margin * this height / 2.0f)
+	}
+	resizeTo: func (size: FloatSize2D) -> This {
+		This createAround(this center, size)
+	}
+	scale: func (value: Float) -> This {
+		This createAround(this center, value * this size)
+	}
+	enlargeTo: func (size: FloatSize2D) -> This {
+		This createAround(this center, FloatSize2D maximum(this size, size))
+	}
+	shrinkTo: func (size: FloatSize2D) -> This {
+		This createAround(this center, FloatSize2D minimum(this size, size))
 	}
 	intersection: func (other: This) -> This {
 		left := Float maximum(this left, other left)
@@ -70,8 +85,7 @@ FloatBox2D: cover {
 		height := Float maximum(0, (Float minimum(this bottom, other bottom) - top))
 		This new(left, top, width, height)
 	}
-	//FIXME: Union is a keyword in C and so cannot be used for methods, but the name should be box__union something, so there shouldn't be a problem. Compiler bug?
-	union: func ~box (other: This) -> This {
+	union: func ~box (other: This) -> This { // Rock bug: Union without suffix cannot be used because the C name conflicts with keyword "union"
 		left := Float minimum(this left, other left)
 		top := Float minimum(this top, other top)
 		width := Float maximum(0, (Float maximum(this right, other right) - left))
@@ -94,6 +108,15 @@ FloatBox2D: cover {
 		for (i in 0 .. list count)
 			if (this contains(list[i]))
 				result add(i)
+		result
+	}
+	distance: func (point: FloatPoint2D) -> FloatSize2D {
+		((point - this center) toFloatSize2D() absolute - this size / 2.f) maximum(FloatSize2D new())
+	}
+	maximumDistance: func (points: VectorList<FloatPoint2D>) -> FloatSize2D {
+		result := FloatSize2D new()
+		for (index in 0 .. points count)
+			result = FloatSize2D maximum(this distance(points[index]), result)
 		result
 	}
 	round: func -> This { This new(this leftTop round(), this size round()) }

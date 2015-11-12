@@ -15,8 +15,10 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+version(!gpuOff) {
 GLVertexArrayObject: abstract class {
 	bind: abstract func
 	unbind: abstract func
 	draw: abstract func
+}
 }

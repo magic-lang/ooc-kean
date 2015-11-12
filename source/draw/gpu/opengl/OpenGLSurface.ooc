@@ -22,6 +22,7 @@ use ooc-draw-gpu
 import OpenGLContext
 import backend/GLRenderer
 
+version(!gpuOff) {
 OpenGLSurface: abstract class extends GpuSurface {
 	context ::= this _context as OpenGLContext
 	init: func (size: IntSize2D, context: OpenGLContext, defaultMap: GpuMap, coordinateTransform: IntTransform2D) {
@@ -56,12 +57,7 @@ OpenGLSurface: abstract class extends GpuSurface {
 		this draw(destination, map)
 	}
 	drawLines: override func (pointList: VectorList<FloatPoint2D>) {
-		f := func { this context drawLines(pointList, this _projection * this _toLocal) }
-		this draw(f)
-		(f as Closure) dispose()
-	}
-	drawBox: override func (box: FloatBox2D) {
-		f := func { this context drawBox(box, this _projection * this _toLocal) }
+		f := func { this context drawLines(pointList, this _projection * this _toLocal, this pen) }
 		this draw(f)
 		(f as Closure) dispose()
 	}
@@ -80,4 +76,5 @@ OpenGLSurface: abstract class extends GpuSurface {
 		this draw(f)
 		(f as Closure) dispose()
 	}
+}
 }

@@ -17,7 +17,6 @@
 use ooc-math
 use ooc-base
 import math
-import structs/ArrayList
 import RasterPacked
 import RasterImage
 import RasterYuvPlanar
@@ -96,42 +95,48 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) { this apply(ColorConvert fromYuv(action)) }
 	convertFrom: static func (original: RasterImage) -> This {
-		result := This new(original size)
-		y := 0
-		x := 0
-		width := result size width
-		yRow := result y buffer pointer
-		yDestination := yRow
-		uRow := result u buffer pointer
-		uDestination := uRow
-		vRow := result v buffer pointer
-		vDestination := vRow
-		//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
-		f := func (color: ColorYuv) {
-			(yDestination)@ = color y
-			yDestination += 1
-			if (x % 2 == 0 && y % 2 == 0) {
-				uDestination@ = color u
-				uDestination += 1
-				vDestination@ = color v
-				vDestination += 1
-			}
-			x += 1
-			if (x >= width) {
-				x = 0
-				y += 1
+		result: This
+		if (original instanceOf?(This))
+			result = (original as This) copy()
+		else {
+			result = This new(original size)
+			y := 0
+			x := 0
+			width := result size width
+			yRow := result y buffer pointer
+			yDestination := yRow
+			uRow := result u buffer pointer
+			uDestination := uRow
+			vRow := result v buffer pointer
+			vDestination := vRow
+			//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
+			f := func (color: ColorYuv) {
+				(yDestination)@ = color y
+				yDestination += 1
+				if (x % 2 == 0 && y % 2 == 0) {
+					uDestination@ = color u
+					uDestination += 1
+					vDestination@ = color v
+					vDestination += 1
+				}
+				x += 1
+				if (x >= width) {
+					x = 0
+					y += 1
 
-				yRow += result y stride
-				yDestination = yRow
-				if (y % 2 == 0) {
-					uRow += result u stride
-					uDestination = uRow
-					vRow += result v stride
-					vDestination = vRow
+					yRow += result y stride
+					yDestination = yRow
+					if (y % 2 == 0) {
+						uRow += result u stride
+						uDestination = uRow
+						vRow += result v stride
+						vDestination = vRow
+					}
 				}
 			}
+			original apply(f)
+			(f as Closure) dispose()
 		}
-		original apply(f)
 		result
 	}
 	operator [] (x, y: Int) -> ColorYuv {

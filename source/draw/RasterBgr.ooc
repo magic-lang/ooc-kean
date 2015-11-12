@@ -22,8 +22,17 @@ import RasterImage
 import StbImage
 import Image
 import Color
-import PaintEngine
-import RasterPaintEngine
+import Canvas, RasterCanvas
+
+BgrRasterCanvas: class extends RasterCanvas {
+	target ::= this _target as RasterBgr
+	init: func (image: RasterBgr) { super(image) }
+	_drawPoint: override func (x, y: Int) {
+		position := this _map(IntPoint2D new(x, y))
+		if (this target isValidIn(position x, position y))
+			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toBgr())
+	}
+}
 
 RasterBgr: class extends RasterPacked {
 	bytesPerPixel: Int { get { 3 } }
@@ -35,32 +44,32 @@ RasterBgr: class extends RasterPacked {
 	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This { This new(this) }
 	apply: func ~bgr (action: Func(ColorBgr)) {
-		end := this buffer pointer as Long + this buffer size
-		rowLength := this size width * this bytesPerPixel
-		for (row: Long in this buffer pointer as Long .. end) {
-			rowEnd := row + rowLength
-			for (source: Long in row .. rowEnd) {
-				action((source as ColorBgr*)@)
-				source += 2
+		for (row in 0 .. this size height)
+			for (pixel in 0 .. this size width) {
+				pointer := this buffer pointer + pixel * this bytesPerPixel + row * this stride
+				color := (pointer as ColorBgr*)@
+				action(color)
 			}
-			row += this stride - 1
-		}
 	}
 	apply: func ~yuv (action: Func(ColorYuv)) {
-		this apply(ColorConvert fromBgr(action))
+		convert := ColorConvert fromBgr(action)
+		this apply(convert)
+		(convert as Closure) dispose()
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
-		this apply(ColorConvert fromBgr(action))
+		convert := ColorConvert fromBgr(action)
+		this apply(convert)
+		(convert as Closure) dispose()
 	}
 	distance: func (other: Image) -> Float {
 		result := 0.0f
-		if (!other)
+		if (!other || (this size != other size))
 			result = Float maximumValue
-//		else if (!other instanceOf?(This))
-//			FIXME
-//		else if (this size != other size)
-//			FIXME
-		else {
+		else if (!other instanceOf?(This)) {
+			converted := This convertFrom(other as RasterImage)
+			result = this distance(converted)
+			converted referenceCount decrease()
+		} else {
 			for (y in 0 .. this size height)
 				for (x in 0 .. this size width) {
 					c := this[x, y]
@@ -104,36 +113,34 @@ RasterBgr: class extends RasterPacked {
 			result /= ((this size width squared() + this size height squared()) as Float sqrt())
 		}
 	}
-//	FIXME
-//	openResource(assembly: ???, name: String) {
-//		Image openResource
-//	}
 	open: static func (filename: String) -> This {
-		x, y, n: Int
+		x, y, imageComponents: Int
 		requiredComponents := 3
-		data := StbImage load(filename, x&, y&, n&, requiredComponents)
-		result := This new(IntSize2D new(x, y))
-		memcpy(result buffer pointer, data, x * y * requiredComponents)
-		// FIXME: Find a better way to do this using Dispose() or something
-		StbImage free(data)
-		result
+		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
+		This new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y))
 	}
 	convertFrom: static func (original: RasterImage) -> This {
-		result := This new(original size)
-		row := result buffer pointer as Long
-		rowLength := result size width
-		rowEnd := row as ColorBgr* + rowLength
-		destination := row as ColorBgr*
-		f := func (color: ColorBgr) {
-			(destination as ColorBgr*)@ = color
-			destination += 1
-			if (destination >= rowEnd) {
-				row += result stride
-				destination = row as ColorBgr*
-				rowEnd = row as ColorBgr* + rowLength
+		result: This
+		if (original instanceOf?(This))
+			result = (original as This) copy()
+		else {
+			result = This new(original size)
+			row := result buffer pointer as Long
+			rowLength := result size width
+			rowEnd := row as ColorBgr* + rowLength
+			destination := row as ColorBgr*
+			f := func (color: ColorBgr) {
+				(destination as ColorBgr*)@ = color
+				destination += 1
+				if (destination >= rowEnd) {
+					row += result stride
+					destination = row as ColorBgr*
+					rowEnd = row as ColorBgr* + rowLength
+				}
 			}
+			original apply(f)
+			(f as Closure) dispose()
 		}
-		original apply(f)
 		result
 	}
 	operator [] (x, y: Int) -> ColorBgr { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorBgr* + x)@ : ColorBgr new(0, 0, 0) }
@@ -146,5 +153,10 @@ RasterBgr: class extends RasterPacked {
 		result swapRedBlue()
 		result
 	}
-	createPaintEngine: override func -> PaintEngine { BgrPaintEngine new(this) }
+	_createCanvas: override func -> Canvas { BgrRasterCanvas new(this) }
+	kean_draw_rasterBgr_new: static unmangled func (width, height, stride: Int, data: Void*) -> This {
+		result := This new(IntSize2D new(width, height), stride)
+		memcpy(result buffer pointer, data, height * stride)
+		result
+	}
 }

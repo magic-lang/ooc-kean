@@ -18,7 +18,6 @@ import IntPoint2D
 import IntSize2D
 import FloatPoint2D
 import FloatBox2D
-import text/StringTokenizer
 import structs/ArrayList
 use ooc-math
 
@@ -59,6 +58,18 @@ IntBox2D: cover {
 	}
 	pad: func ~fromFloat (pad: Int) -> This { this pad(pad, pad, pad, pad) }
 	pad: func ~fromSize (pad: IntSize2D) -> This { this pad(pad width, pad width, pad height, pad height) }
+	resizeTo: func (size: IntSize2D) -> This {
+		This createAround(this center, size)
+	}
+	scale: func (value: Float) -> This {
+		This createAround(this center, value * this size)
+	}
+	enlargeTo: func (size: IntSize2D) -> This {
+		This createAround(this center, IntSize2D maximum(this size, size))
+	}
+	shrinkTo: func (size: IntSize2D) -> This {
+		This createAround(this center, IntSize2D minimum(this size, size))
+	}
 	intersection: func (other: This) -> This {
 		left := Int maximum~two(this left, other left)
 		top := Int maximum~two(this top, other top)
@@ -66,8 +77,7 @@ IntBox2D: cover {
 		height := Int maximum~two(0, Int minimum~two(this bottom, other bottom) - top)
 		This new(left, top, width, height)
 	}
-	//FIXME: Union is a keyword in C and so cannot be used for methods, but the name should be box__union something, so there shouldn't be a problem. Compiler bug?
-	union: func ~box (other: This) -> This {
+	union: func ~box (other: This) -> This { // Rock bug: Union without suffix cannot be used because the C name conflicts with keyword "union"
 		left := Int minimum~two(this left, other left)
 		top := Int minimum~two(this top, other top)
 		width := Int maximum~two(0, Int maximum(this right, other right) - left)

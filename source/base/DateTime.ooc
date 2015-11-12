@@ -71,8 +71,6 @@ DateTime: cover {
 			raise ("invalid input specified for constructor(year,month,day,hour,minute,second,ms)")
 	}
 	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
-	kean_base_dateTime_getTicks: unmangled func -> UInt64 { this _ticks }
-	kean_base_dateTime_new: unmangled static func (ticks: UInt64) -> This { This new(ticks) }
 
 	millisecond: func -> Int {
 		This _ticksToDateTimeHelper(this ticks) millisecond
@@ -118,15 +116,19 @@ DateTime: cover {
 		result := format
 		data := This _ticksToDateTimeHelper(this ticks)
 		result = result replaceAll("%yyyy", "%d" format(data year))
-		result = result replaceAll("%yy", "%d" format(data year % 100))
+		result = result replaceAll("%yy", "%02d" format(data year % 100))
 		result = result replaceAll("%MM", "%02d" format(data month))
 		result = result replaceAll("%dd", "%02d" format(data day))
 		result = result replaceAll("%M", "%d" format(data month))
 		result = result replaceAll("%d", "%d" format(data day))
 		result = result replaceAll("%hh", "%02d" format(data hour))
 		result = result replaceAll("%mm", "%02d" format(data minute))
-		result = result replaceAll("%ss", "%d" format(data second))
-		result = result replaceAll("%zzzz", "%d" format(data millisecond))
+		result = result replaceAll("%ss", "%02d" format(data second))
+		result = result replaceAll("%h", "%d" format(data hour))
+		result = result replaceAll("%m", "%d" format(data minute))
+		result = result replaceAll("%s", "%d" format(data second))
+		result = result replaceAll("%zzz", "%03d" format(data millisecond))
+		result = result replaceAll("%z", "%d" format(data millisecond))
 		result
 	}
 
@@ -270,4 +272,19 @@ DateTime: cover {
 	dateIsValid: static func (year, month, day: Int) -> Bool {
 		year >= 1 && month in?(1 .. 13) && day in?(1 .. This daysInMonth(year, month) + 1)
 	}
+	kean_base_dateTime_getTicks: unmangled func -> UInt64 { this _ticks }
+	kean_base_dateTime_new: unmangled static func (ticks: UInt64) -> This { This new(ticks) }
+	kean_base_dateTime_fromDate: unmangled static func (year, month, day: Int) -> This { This new(year, month, day) }
+	kean_base_dateTime_fromTime: unmangled static func (hour, minute, second, millisecond: Int) -> This { This new(hour, minute, second, millisecond) }
+	kean_base_dateTime_fromDateTime: unmangled static func (year, month, day, hour, minute, second, millisecond: Int) -> This {
+		This new(year, month, day, hour, minute, second, millisecond)
+	}
+	kean_base_dateTime_getNow: unmangled static func -> This { This now }
+	kean_base_dateTime_getMillisecond: unmangled func -> Int { this millisecond() }
+	kean_base_dateTime_getSecond: unmangled func -> Int { this second() }
+	kean_base_dateTime_getMinute: unmangled func -> Int { this minute() }
+	kean_base_dateTime_getHour: unmangled func -> Int { this hour() }
+	kean_base_dateTime_getDay: unmangled func -> Int { this day() }
+	kean_base_dateTime_getMonth: unmangled func -> Int { this month() }
+	kean_base_dateTime_getYear: unmangled func -> Int { this year() }
 }

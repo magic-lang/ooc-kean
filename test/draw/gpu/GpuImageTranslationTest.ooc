@@ -19,6 +19,7 @@ GpuImageTranslationTest: class extends Fixture {
 		this add("GPU translate X (BGRA)", func {
 			correctImage := RasterBgra open("test/draw/gpu/correct/translation_bgra_X.png")
 			gpuImage := gpuContext createBgra(sourceImage size)
+			gpuImage canvas pen = Pen new(ColorBgra new())
 			gpuImage canvas focalLength = focalLength
 			this translateGpuImage(gpuImage, xTranslation, 0.0f, 0.0f)
 			gpuImage canvas draw(sourceImage)
@@ -28,6 +29,7 @@ GpuImageTranslationTest: class extends Fixture {
 		this add("GPU translate Y (BGRA)", func {
 			correctImage := RasterBgra open("test/draw/gpu/correct/translation_bgra_Y.png")
 			gpuImage := gpuContext createBgra(sourceImage size)
+			gpuImage canvas pen = Pen new(ColorBgra new())
 			gpuImage canvas focalLength = focalLength
 			this translateGpuImage(gpuImage, 0.0f, yTranslation, 0.0f)
 			gpuImage canvas draw(sourceImage)
@@ -37,6 +39,7 @@ GpuImageTranslationTest: class extends Fixture {
 		this add("GPU translate Z (BGRA)", func {
 			correctImage := RasterBgra open("test/draw/gpu/correct/translation_bgra_Z.png")
 			gpuImage := gpuContext createBgra(sourceImage size)
+			gpuImage canvas pen = Pen new(ColorBgra new())
 			gpuImage canvas focalLength = focalLength
 			this translateGpuImage(gpuImage, 0.0f, 0.0f, zTranslation)
 			gpuImage canvas draw(sourceImage)

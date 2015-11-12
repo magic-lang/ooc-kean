@@ -129,32 +129,28 @@ Cell: class <T> {
     set: func (=val)
     get: func -> T { val }
 
-    __destroy__: func {
-	     gc_free(this val)
+    free: override func {
+        gc_free(this val)
+        super()
     }
-	// TODO: Move this to an extension in ooc-kean later
-	toString: func -> String {
-		match T {
-			case Bool =>
-				(this val as Bool) toString()
-			case Int =>
-				(this val as Int) toString()
-			case Long =>
-				(this val as Long) toString()
-			case UInt =>
-				(this val as UInt) toString()
-			case ULong =>
-				(this val as ULong) toString()
-			case Float =>
-				"%.8f" formatFloat(this val as Float)
-			case Double =>
-				"%.12f" formatDouble(this val as Double)
-			case LDouble =>
-				"%.12f" formatLDouble(this val as LDouble)
-			case =>
-				raise("[Cell] toString() is not implemented on the specified type")
-		}
-	}
+    // TODO: Move this to an extension in ooc-kean later
+    toString: func -> String {
+        match (this val) {
+            case value: Bool => value toString()
+            case value: Char => value toString()
+            case value: Int => value toString()
+            case value: Long => value toString()
+            case value: Int64 => value toString()
+            case value: UInt => value toString()
+            case value: ULong => value toString()
+            case value: UInt64 => value toString()
+            case value: Float => "%.8f" formatFloat(value)
+            case value: Double => "%.12f" formatDouble(value)
+            case value: LDouble => "%.12f" formatLDouble(value)            
+            case =>
+                raise("[Cell] toString() is not implemented on the specified type")
+        }
+    }
 }
 
 operator [] <T> (c: Cell<T>, T: Class) -> T {

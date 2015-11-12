@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+use ooc-collections
 import math
 import FloatSize2D
 import FloatSize3D
@@ -21,7 +22,6 @@ import FloatPoint2D
 import FloatPoint3D
 import FloatBox2D
 import FloatTransform2D
-import text/StringTokenizer
 import structs/ArrayList
 
 // The 3D transform is a 4x4 homogeneous coordinate matrix.
@@ -35,6 +35,10 @@ FloatTransform3D: cover {
 	a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p: Float
 	operator [] (x, y: Int) -> Float {
 		result := 0.0f
+		version (safe) {
+			if (x < 0 || x > 3 || y < 0 || y > 3)
+				raise("Out of bounds in FloatTransform3D get operator (#{x}, #{y})")
+		}
 		match (x) {
 			case 0 =>
 				match (y) {
@@ -42,7 +46,6 @@ FloatTransform3D: cover {
 					case 1 => result = this b
 					case 2 => result = this c
 					case 3 => result = this d
-					case => OutOfBoundsException new(y, 4) throw()
 				}
 			case 1 =>
 				match (y) {
@@ -50,7 +53,6 @@ FloatTransform3D: cover {
 					case 1 => result = this f
 					case 2 => result = this g
 					case 3 => result = this h
-					case => OutOfBoundsException new(y, 4) throw()
 				}
 			case 2 =>
 				match (y) {
@@ -58,7 +60,6 @@ FloatTransform3D: cover {
 					case 1 => result = this j
 					case 2 => result = this k
 					case 3 => result = this l
-					case => OutOfBoundsException new(y, 4) throw()
 				}
 			case 3 =>
 				match (y) {
@@ -66,9 +67,7 @@ FloatTransform3D: cover {
 					case 1 => result = this n
 					case 2 => result = this o
 					case 3 => result = this p
-					case => OutOfBoundsException new(y, 4) throw()
 				}
-			case => OutOfBoundsException new(x, 4) throw()
 		}
 		result
 	}
@@ -95,7 +94,7 @@ FloatTransform3D: cover {
 		// No FloatTransform3D instance should have a determinant of 0, so
 		// throw an exception, because something has gone wrong, somewhere.
 		if (determinant == 0)
-			raise("determinant is zero in FloatTransform3D inverse()!")
+			raise("Determinant is zero in FloatTransform3D inverse()")
 		a := (this f * this k * this p + this j * this o * this h + this n * this g * this l - this f * this o * this l - this j * this g * this p - this n * this k * this h) / determinant
 		e := (this e * this o * this l + this i * this g * this p + this m * this k * this h - this e * this k * this p - this i * this o * this h - this m * this g * this l) / determinant
 		i := (this e * this j * this p + this i * this n * this h + this m * this f * this l - this e * this n * this l - this i * this f * this p - this m * this j * this h) / determinant
@@ -209,10 +208,18 @@ FloatTransform3D: cover {
 	}
 	transformAndProject: func ~FloatPoint2D (point: FloatPoint2D, focalLength: Float) -> FloatPoint2D {
 		transformedWorldPoint := this * FloatPoint3D new(point x, point y, focalLength)
-		this project(transformedWorldPoint, focalLength)
+		focalLength < Float epsilon ? FloatPoint2D new(transformedWorldPoint x, transformedWorldPoint y) : this project(transformedWorldPoint, focalLength)
 	}
 	transformAndProject: func ~FloatBox2D (box: FloatBox2D, focalLength: Float) -> FloatBox2D {
 		FloatBox2D new(this transformAndProject(box leftTop, focalLength), this transformAndProject(box rightBottom, focalLength))
+	}
+	transformAndProjectCorners: func (box: FloatBox2D, focalLength: Float) -> VectorList<FloatPoint2D> {
+		result := VectorList<FloatPoint2D> new()
+		result add(this transformAndProject(box leftTop, focalLength))
+		result add(this transformAndProject(box leftBottom, focalLength))
+		result add(this transformAndProject(box rightBottom, focalLength))
+		result add(this transformAndProject(box rightTop, focalLength))
+		result
 	}
 	project: func (point: FloatPoint3D, focalLength: Float) -> FloatPoint2D {
 		projectedPoint := This createProjection(focalLength) * point / point z
@@ -229,4 +236,7 @@ FloatTransform3D: cover {
 		"%.8f" formatFloat(this c) >> ", " & "%.8f" formatFloat(this g) >> ", " & "%.8f" formatFloat(this k) >> ", " & "%.8f" formatFloat(this o) >> "\n" & \
 		"%.8f" formatFloat(this d) >> ", " & "%.8f" formatFloat(this h) >> ", " & "%.8f" formatFloat(this l) >> ", " & "%.8f" formatFloat(this p)
 	}
+	kean_math_floatTransform3D_getTranslation: unmangled func -> FloatSize3D { this translation }
+	kean_math_floatTransform3D_getScaling: unmangled func -> FloatSize3D { FloatSize3D new(this scalingX, this scalingY, this scalingZ) }
+	kean_math_floatTransform3D_getInverse: unmangled func -> This { this inverse }
 }
