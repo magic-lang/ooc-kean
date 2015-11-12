@@ -11,24 +11,19 @@ AnyShape: cover {
 	colorBgra: ColorBgra
 	init: func@ (=shape, =region, =colorBgra)
 }
-
 ShapePlotData2D: class extends PlotData2D {
 	_shapes: VectorList<AnyShape>
-
 	init: func (label := "", colorBgra := ColorBgra new()) {
 		super(label, colorBgra)
 		this _shapes = VectorList<AnyShape> new()
 	}
-
 	addRectangle: func (box: FloatBox2D, colorBgra := ColorBgra new()) {
 		this _shapes add(AnyShape new(Shape Rectangle, box, colorBgra))
 	}
-
 	free: override func {
 		this _shapes free()
 		super()
 	}
-
 	getSvg: func (transform: FloatTransform2D) -> String {
 		result := ""
 		if (!this _shapes empty) {
@@ -43,47 +38,44 @@ ShapePlotData2D: class extends PlotData2D {
 					case Shape Rectangle =>
 						result = result & Shapes rect(area left, area top, area width, area height, color)
 					case =>
-						result = result >> ""
+						// Unknown shapes are drawn as red boxes
+						result = result & Shapes rect(area left, area top, area width, area height, colorBgra new(0, 0, 255, 255))
 				}
 			}
 		}
 		result
 	}
-
 	getSvgLegend: func (legendCount, fontSize: Int) -> String {
 		result := ""
 		start := FloatPoint2D new(this legendOffset as Float, this legendOffset + (fontSize * legendCount) as Float - (fontSize as Float) / 2.0f)
 		size := (fontSize as Float) * 0.8f
 		halfLineHeight := (fontSize as Float) / 2.0f
 		result = result & Shapes rect(FloatPoint2D new(start x, start y - halfLineHeight), FloatPoint2D new(size, size), this colorBgra)
-		result = result & Shapes text(FloatPoint2D new(start x + fontSize as Float, start y + halfLineHeight), this label, fontSize, this colorBgra)
-		result
+		result & Shapes text(FloatPoint2D new(start x + fontSize as Float, start y + halfLineHeight), this label, fontSize, this colorBgra)
 	}
-
 	minValues: override func -> FloatPoint2D {
 		result: FloatPoint2D
 		if (this _shapes empty)
 			result = FloatPoint2D new()
 		else {
-			object := this _shapes[0] // Convert rvalue to lvalue
+			object := this _shapes[0]
 			result = object region leftTop
 			for (i in 1 .. this _shapes count) {
-				object := this _shapes[i] // Convert rvalue to lvalue
+				object := this _shapes[i]
 				result = result minimum(object region leftTop)
 			}
 		}
 		result
 	}
-
 	maxValues: override func -> FloatPoint2D {
 		result: FloatPoint2D
 		if (this _shapes empty)
 			result = FloatPoint2D new()
 		else {
-			object := this _shapes[0] // Convert rvalue to lvalue
+			object := this _shapes[0]
 			result = object region rightBottom
 			for (i in 1 .. this _shapes count) {
-				object := this _shapes[i] // Convert rvalue to lvalue
+				object := this _shapes[i]
 				result = result maximum(object region rightBottom)
 			}
 		}

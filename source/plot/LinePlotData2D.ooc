@@ -9,41 +9,33 @@ LineStyle: enum {
 	Dashed
 	Dotted
 }
-
 LinePlotData2D: class extends PlotData2D {
 	lineStyle: LineStyle { get set }
 	dataSeries: VectorList<FloatPoint2D> { get set }
-
 	init: func ~default (lineStyle := LineStyle Solid) {
 		super("", ColorBgra new())
 		this dataSeries = VectorList<FloatPoint2D> new()
 		this lineStyle = lineStyle
 	}
-
 	init: func ~dataSeries (=dataSeries, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
 		super(label, colorBgra)
 		this lineStyle = lineStyle
 	}
-
 	init: func ~color (=dataSeries, colorBgra: ColorBgra, lineStyle := LineStyle Solid) {
 		super("", colorBgra)
 		this lineStyle = lineStyle
 	}
-
 	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
-		this dataSeries = VectorList<FloatPoint2D> new()
-		for (i in 0 .. ySeries count) {
-			this dataSeries add(FloatPoint2D new(xSeries != null ? xSeries[i] : (i + 1) as Float, ySeries[i]))
-		}
 		super(label, colorBgra)
+		this dataSeries = VectorList<FloatPoint2D> new()
+		for (i in 0 .. ySeries count)
+			this dataSeries add(FloatPoint2D new(xSeries != null ? xSeries[i] : (i + 1) as Float, ySeries[i]))
 		this lineStyle = lineStyle
 	}
-
 	free: override func {
 		this dataSeries free()
 		super()
 	}
-
 	getSvg: func (transform: FloatTransform2D) -> String {
 		result := ""
 		if (!this dataSeries empty) {
@@ -62,7 +54,6 @@ LinePlotData2D: class extends PlotData2D {
 		}
 		result
 	}
-
 	getSvgLegend: func (legendCount, fontSize: Int) -> String {
 		result: String
 		start := FloatPoint2D new(this legendOffset, this legendOffset + (fontSize * legendCount - fontSize / 2) as Float)
@@ -75,10 +66,8 @@ LinePlotData2D: class extends PlotData2D {
 			case => // LineStyle Solid
 				result = Shapes line(start, end, this lineWidth, this colorBgra)
 		}
-		result = result & Shapes text(FloatPoint2D new(end x, end y + fontSize / 3), this label, fontSize, this colorBgra)
-		result
+		result & Shapes text(FloatPoint2D new(end x, end y + fontSize / 3), this label, fontSize, this colorBgra)
 	}
-
 	minValues: override func -> FloatPoint2D {
 		result: FloatPoint2D
 		if (this dataSeries empty)
@@ -90,7 +79,6 @@ LinePlotData2D: class extends PlotData2D {
 		}
 		result
 	}
-
 	maxValues: override func -> FloatPoint2D {
 		result: FloatPoint2D
 		if (this dataSeries empty)
