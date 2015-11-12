@@ -39,7 +39,7 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 	setUniform: override func ~Int (name: String, value: Int) {
 		version(debugGL) { validateStart("ShaderProgram setUniform~Int") }
 		glUniform1i(glGetUniformLocation(this _backend, name), value)
-		version(debugGL) { validateEnd("ShaderProgram setUniform~Int") }
+		version(debugGL) { validateEnd("ShaderProgram setUniform~Int name:%s value:%d" format(name, value)) }
 	}
 	setUniform: override func ~IntPoint2D (name: String, value: IntPoint2D) {
 		version(debugGL) { validateStart("ShaderProgram setUniform~IntPoint2D") }
