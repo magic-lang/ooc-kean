@@ -3,7 +3,7 @@ use ooc-draw
 
 Shapes: abstract class {
 	getColor: static func (bgra: ColorBgra) -> String {
-		"rgb(" clone() & bgra bgr red toString() & "," clone() & bgra bgr green toString() & "," clone() & bgra bgr blue toString() & ")" clone()
+		"rgb(" << bgra bgr red toString() >> "," & bgra bgr green toString() >> "," & bgra bgr blue toString() >> ")"
 	}
 	getOpacity: static func (bgra: ColorBgra) -> String {
 		((bgra alpha as Float) / 255.0f) toString()
