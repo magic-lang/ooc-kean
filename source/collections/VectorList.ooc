@@ -123,14 +123,13 @@ VectorList: class <T> {
 		for (i in 0 .. this count)
 			this[i] = function(this[i])
 	}
-	map: func <T, S> (function: Func(T) -> S) -> This<S> {
+	map: func <S> (function: Func(T) -> S) -> This<S> {
 		result := This<S> new(this count)
-		for (i in 0 .. this count) {
+		for (i in 0 .. this count)
 			result add(function(this[i]))
-		}
 		result
 	}
-	fold: func <T, S> (function: Func(T, S) -> S, initial: S) -> S {
+	fold: func <S> (S: Class, function: Func(T, S) -> S, initial: S) -> S {
 		for (i in 0 .. this count)
 			initial = function(this[i], initial)
 		initial
