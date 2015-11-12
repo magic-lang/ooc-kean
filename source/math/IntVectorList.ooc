@@ -20,13 +20,13 @@ import FloatVectorList
 
 IntVectorList: class extends VectorList<Int> {
 	init: func ~default {
-		this super()
+		super()
 	}
 	init: func ~heap (capacity: Int) {
 		super(capacity)
 	}
 	init: func ~fromVectorList (other: VectorList<Int>) {
-		this super(other _vector)
+		super(other _vector)
 		this _count = other count
 	}
 	copy: func -> This {
