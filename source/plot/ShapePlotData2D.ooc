@@ -48,8 +48,8 @@ ShapePlotData2D: class extends PlotData2D {
 	getSvgLegend: func (legendCount, fontSize: Int) -> String {
 		result := ""
 		start := FloatPoint2D new(this legendOffset as Float, this legendOffset + (fontSize * legendCount) as Float - (fontSize as Float) / 2.0f)
-		size := (fontSize as Float) * 0.8f
-		halfLineHeight := (fontSize as Float) / 2.0f
+		size := 0.8f * fontSize
+		halfLineHeight := 0.5f * fontSize
 		result = result & Shapes rect(FloatPoint2D new(start x, start y - halfLineHeight), FloatPoint2D new(size, size), this colorBgra)
 		result & Shapes text(FloatPoint2D new(start x + fontSize as Float, start y + halfLineHeight), this label, fontSize, this colorBgra)
 	}

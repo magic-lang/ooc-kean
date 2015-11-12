@@ -51,8 +51,8 @@ ScatterPlotData2D: class extends PlotData2D {
 	getSvgLegend: func (legendCount, fontSize: Int) -> String {
 		result := ""
 		start := FloatPoint2D new(this legendOffset as Float, this legendOffset + (fontSize * legendCount) as Float - (fontSize as Float) / 2.0f)
-		size := (fontSize as Float) * 0.8f
-		halfLineHeight := (fontSize as Float) / 2.0f
+		size := 0.8f * fontSize
+		halfLineHeight := 0.5f * fontSize
 		match (this shape) {
 			case Shape Circle =>
 				result = result & Shapes circle(FloatPoint2D new(start x + halfLineHeight, start y), size / 2.0f, this colorBgra)

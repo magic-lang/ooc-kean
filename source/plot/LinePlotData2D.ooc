@@ -56,7 +56,7 @@ LinePlotData2D: class extends PlotData2D {
 	}
 	getSvgLegend: func (legendCount, fontSize: Int) -> String {
 		result: String
-		start := FloatPoint2D new(this legendOffset, this legendOffset + (fontSize * legendCount - fontSize / 2) as Float)
+		start := FloatPoint2D new(this legendOffset, this legendOffset + (fontSize * legendCount as Float) - (0.5f * fontSize))
 		end := FloatPoint2D new(this legendOffset + fontSize, start y)
 		match (this lineStyle) {
 			case LineStyle Dashed =>
