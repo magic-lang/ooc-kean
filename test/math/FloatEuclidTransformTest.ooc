@@ -1,8 +1,6 @@
 use ooc-unit
 use ooc-math
 use ooc-collections
-import math
-import lang/IO
 
 FloatEuclidTransformTest: class extends Fixture {
 	tolerance := 1.0e-5f
@@ -11,8 +9,8 @@ FloatEuclidTransformTest: class extends Fixture {
 		this add("convolveCenter translations 1", func {
 			euclidTransforms := VectorList<FloatEuclidTransform> new(5)
 			kernel := FloatVectorList new(5)
-			for (i in 0..5) {
-				euclidTransforms add(FloatEuclidTransform new(FloatPoint3D new(i,i,i), FloatRotation3D identity))
+			for (i in 0 .. 5) {
+				euclidTransforms add(FloatEuclidTransform new(FloatPoint3D new(i, i, i), FloatRotation3D identity))
 				kernel add(0.2f)
 			}
 			result := FloatEuclidTransform convolveCenter(euclidTransforms, kernel)
@@ -28,12 +26,12 @@ FloatEuclidTransformTest: class extends Fixture {
 		this add("convolveCenter translations 2", func {
 			euclidTransforms := VectorList<FloatEuclidTransform> new(5)
 			kernel := FloatVectorList gaussianKernel(5)
-			for (i in 0..5)
-				euclidTransforms add(FloatEuclidTransform new(FloatPoint3D new(i,i,i), FloatRotation3D identity))
+			for (i in 0 .. 5)
+				euclidTransforms add(FloatEuclidTransform new(FloatPoint3D new(i, i, i), FloatRotation3D identity))
 			result := FloatEuclidTransform convolveCenter(euclidTransforms, kernel)
 
 			expectedResult := 0.0f
-			for (i in 0..euclidTransforms count)
+			for (i in 0 .. euclidTransforms count)
 				expectedResult += kernel[i] * euclidTransforms[i] translation x
 
 			expect(result translation x, is equal to (expectedResult) within(this tolerance))
@@ -48,7 +46,7 @@ FloatEuclidTransformTest: class extends Fixture {
 			euclidTransforms := VectorList<FloatEuclidTransform> new(5)
 			quaternions := VectorList<Quaternion> new(5)
 			kernel := FloatVectorList gaussianKernel(5)
-			for (i in 0..5) {
+			for (i in 0 .. 5) {
 				rotation := FloatRotation3D createRotationZ(i)
 				quaternions add(rotation _quaternion)
 				euclidTransforms add(FloatEuclidTransform new(FloatPoint3D new(), rotation))
