@@ -66,9 +66,5 @@ GpuYuv420Semiplanar: class extends GpuImage {
 			this _uv upload(raster uv)
 		}
 	}
-	bind: override func (unit: UInt) {
-		this _y bind(unit)
-		this _uv bind(unit + 1)
-	}
 }
 }
