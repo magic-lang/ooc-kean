@@ -52,9 +52,11 @@ FloatEuclidTransform: cover {
 			result scaling = 0.0f
 			quaternions := VectorList<Quaternion> new(euclidTransforms count)
 			for (i in 0 .. euclidTransforms count) {
-				result translation = result translation + euclidTransforms[i] translation * kernel[i]
-				result scaling = result scaling + euclidTransforms[i] scaling * kernel[i]
-				rotation := euclidTransforms[i] rotation
+				euclidTransform := euclidTransforms[i]
+				weight := kernel[i]
+				result translation = result translation + euclidTransform translation * weight
+				result scaling = result scaling + euclidTransform scaling * weight
+				rotation := euclidTransform rotation
 				quaternions add(rotation _quaternion)
 			}
 			result rotation = FloatRotation3D new(Quaternion weightedMean(quaternions, kernel))
