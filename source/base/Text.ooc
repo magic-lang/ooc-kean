@@ -79,7 +79,7 @@ Text: cover {
 		if (this _buffer raw != other _buffer raw)
 			other free(Owner Receiver)
 		this free(Owner Receiver)
-		Text new(result)
+		This new(result)
 	}
 	beginsWith: func (other: This) -> Bool {
 		this slice(0, Int minimum~two(other count, this count)) == other

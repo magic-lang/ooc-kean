@@ -45,7 +45,7 @@ TextBuffer: cover {
 			result := this _backend isOwned
 			this free(Owner Receiver)
 			result
-		}	
+		}
 	}
 	init: func@ ~empty {
 		this init(OwnedBuffer new())

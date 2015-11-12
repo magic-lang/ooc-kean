@@ -301,7 +301,7 @@ Quaternion: cover {
 		for (index in 0 .. gibbsVector height)
 			gibbsVectorSquaredNorm += gibbsVector[0, index] squared()
 
-		result := Quaternion new(1.0f, -gibbsVector[0, 0], -gibbsVector[0, 1], -gibbsVector[0, 2])
+		result := This new(1.0f, -gibbsVector[0, 0], -gibbsVector[0, 1], -gibbsVector[0, 2])
 		result *= 1.0f / sqrt(1.0f + gibbsVectorSquaredNorm)
 
 		normalizedWeights free()
