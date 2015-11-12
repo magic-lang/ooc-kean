@@ -57,6 +57,7 @@ OpenGLMap: abstract class extends GpuMap {
 		super()
 	}
 	use: override func {
+		this program use()
 		textureCount := 0
 		action := func (key: String, value: Object) {
 			program := this program
@@ -91,7 +92,6 @@ OpenGLMap: abstract class extends GpuMap {
 		}
 		this apply(action)
 		(action as Closure) dispose()
-		this program use()
 	}
 }
 OpenGLMapMesh: class extends OpenGLMap {
