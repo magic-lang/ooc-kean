@@ -21,20 +21,16 @@ import math
 
 Text: cover {
 	_buffer: TextBuffer
-	count: Int {
-		get {
+	count: Int { get {
 			result := this _buffer count
 			this free(Owner Receiver)
 			result
-		}
-	}
-	isEmpty: Bool {
-		get {
+	}}
+	isEmpty: Bool { get {
 			result := this _buffer count == 0
 			this free(Owner Receiver)
 			result
-		}
-	}
+	}}
 	init: func@ ~empty {
 		this init(TextBuffer new())
 	}

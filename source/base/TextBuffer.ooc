@@ -19,34 +19,26 @@ use ooc-base
 
 TextBuffer: cover {
 	_backend: OwnedBuffer
-	raw: Char* {
-		get {
+	raw: Char* { get {
 			result := this _backend pointer as Char*
 			this free(Owner Receiver)
 			result
-		}
-	}
-	count: Int {
-		get {
+	}}
+	count: Int { get {
 			result := this _backend size
 			this free(Owner Receiver)
 			result
-		}
-	}
-	owner: Owner {
-		get {
+	}}
+	owner: Owner { get {
 			result := this _backend owner
 			this free(Owner Receiver)
 			result
-		}
-	}
-	isOwned: Bool {
-		get {
+	}}
+	isOwned: Bool { get {
 			result := this _backend isOwned
 			this free(Owner Receiver)
 			result
-		}
-	}
+	}}
 	init: func@ ~empty {
 		this init(OwnedBuffer new())
 	}

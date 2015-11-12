@@ -22,48 +22,36 @@ FloatMatrix : cover {
 	// x = column
 	// y = row
 	_dimensions: IntSize2D
-	dimensions: IntSize2D {
-		get {
+	dimensions: IntSize2D { get {
 			result := this _dimensions
 			this free(Owner Receiver)
 			result
-		}
-	}
-	width: Int {
-		get {
+	}}
+	width: Int { get {
 			result := this _dimensions width
 			this free(Owner Receiver)
 			result
-		}
-	}
-	height: Int {
-		get {
+	}}
+	height: Int { get {
 			result := this _dimensions height
 			this free(Owner Receiver)
 			result
-		}
-	}
-	isNull: Bool { // TODO: Better name?
-		get {
+	}}
+	isNull: Bool { get { // TODO: Better name?
 			result := this _dimensions empty
 			this free(Owner Receiver)
 			result
-		}
-	}
-	isSquare: Bool {
-		get {
+	}}
+	isSquare: Bool { get {
 			result := this _dimensions width == this _dimensions height
 			this free(Owner Receiver)
 			result
-		}
-	}
-	order: Int {
-		get {
+	}}
+	order: Int { get {
 			result := Int minimum~two(this _dimensions height, this _dimensions width)
 			this free(Owner Receiver)
 			result
-		}
-	}
+	}}
 	_elements: OwnedBuffer
 	elements ::= this _elements pointer as Float*
 
