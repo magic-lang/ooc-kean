@@ -36,7 +36,6 @@ FloatConvexHull2DTest: class extends Fixture {
 			expect(hull contains(FloatPoint2D new(0.9f, 0.01f)), is true)
 			expect(hull contains(FloatPoint2D new(-0.1f, 0.0f)), is false)
 			expect(hull count, is equal to(3))
-			expect(hull points == trianglePoints)
 			hull free()
 		})
 		
@@ -65,8 +64,7 @@ FloatConvexHull2DTest: class extends Fixture {
 			points add(FloatPoint2D new(-0.5f, 0)) // inside
 			
 			convexHull := FloatConvexHull2D new(points, true)
-			expect(convexHull count, is equal to(9))
-			expect(convexHull _hull count, is equal to(5))
+			expect(convexHull count, is equal to(5))
 			expect(convexHull contains(FloatPoint2D new(0.0f, 0.0f)), is true)
 			expect(convexHull contains(FloatPoint2D new(0.5f, 1.5f)), is true)
 			expect(convexHull contains(FloatPoint2D new(-0.5f, 1.5f)), is false)
