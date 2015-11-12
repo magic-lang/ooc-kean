@@ -49,9 +49,9 @@ IntVectorList: class extends VectorList<Int> {
 			for (i in 0 .. result count - 1)
 				if (result[i] > result[i + 1]) {
 					inOrder = false
-					tmp := result[i]
+					temporary := result[i]
 					result[i] = result[i + 1]
-					result[i + 1] = tmp
+					result[i + 1] = temporary
 				}
 		}
 		result
