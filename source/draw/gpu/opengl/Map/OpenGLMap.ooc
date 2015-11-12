@@ -20,7 +20,7 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 import backend/GLShaderProgram
-import OpenGLContext, OpenGLPacked
+import OpenGLContext, OpenGLPacked, OpenGLVolumeMonochrome
 
 version(!gpuOff) {
 OpenGLMap: abstract class extends GpuMap {
@@ -84,6 +84,11 @@ OpenGLMap: abstract class extends GpuMap {
 				match (value) {
 					case image: OpenGLPacked => {
 						image backend bind(textureCount)
+						program setUniform(key, textureCount)
+						textureCount += 1
+					}
+					case image: OpenGLVolumeMonochrome => {
+						image _backend bind(textureCount)
 						program setUniform(key, textureCount)
 						textureCount += 1
 					}
