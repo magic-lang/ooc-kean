@@ -63,6 +63,25 @@ RasterBgrTest: class extends Fixture {
 			image2 free()
 			output free()
 		})
+		this add("transformed", func {
+			outputScaled := "test/draw/output/RasterBgrTest_rescaled.png"
+			outputMirrored := "test/draw/output/RasterBgrTest_mirrored.png"
+			outputRotated := "test/draw/output/RasterBgrTest_rotated.png"
+			image := RasterBgr open(this sourceFlower)
+			result := image transformed(FloatTransform2D createScaling(0.55, 1.5))
+			result save(outputScaled)
+			result referenceCount decrease()
+			result = image transformed(FloatTransform2D createTranslation(image width / 2, image height / 2) * FloatTransform2D createReflectionY() * FloatTransform2D createTranslation(-image width / 2, -image height / 2))
+			result save(outputMirrored)
+			result referenceCount decrease()
+			result = image transformed(FloatTransform2D createTranslation(image width / 2, image height / 2) * FloatTransform2D createZRotation(3.14 / 4) * FloatTransform2D createTranslation(-image width / 2, -image height / 2))
+			result save(outputRotated)
+			result referenceCount decrease()
+			image referenceCount decrease()
+			outputMirrored free()
+			outputScaled free()
+			outputRotated free()
+		})
 	}
 }
 
