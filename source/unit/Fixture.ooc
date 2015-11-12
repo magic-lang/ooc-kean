@@ -21,9 +21,24 @@ import Constraints
 
 Fixture: abstract class {
 	totalTime: static Double
+	exitHandlerRegistered: static Bool
+	failureNames: static VectorList<String>
 	name: String
 	tests := VectorList<Test> new()
-	init: func (=name)
+	printFailures: static func {
+		if (This failureNames && (This failureNames count > 0)) {
+			"Failed tests: %i [" printf(This failureNames count)
+			for (i in 0 .. This failureNames count - 1)
+				(This failureNames[i] + ", ") print()
+			(This failureNames[This failureNames count -1] + ']') println()
+		}
+	}
+	init: func (=name) {
+		if (!This exitHandlerRegistered) {
+			This exitHandlerRegistered = true
+			atexit(This printFailures)
+		}
+	}
 	add: func (test: Test) {
 		this tests add(test)
 	}
@@ -48,6 +63,11 @@ Fixture: abstract class {
 				failures add(e)
 			}
 			This _print(r ? "." : "f")
+		}
+		if (!result) {
+			if (!This failureNames)
+				This failureNames = VectorList<String> new()
+			This failureNames add(this name)
 		}
 		This _print(result ? " done" : " failed")
 		testTime := timer stop() / 1000.0
