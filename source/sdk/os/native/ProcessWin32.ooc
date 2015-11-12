@@ -1,4 +1,4 @@
-import structs/[HashMap, ArrayList]
+import structs/ArrayList
 import ../Process, PipeWin32
 import native/win32/[types, errors]
 
