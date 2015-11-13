@@ -68,7 +68,7 @@ version(windows) {
 	// http://support.microsoft.com/kb/104641/en-us
 	// CreateThread: extern func (...) -> Handle
 
-	_beginthreadex: extern func (security: Pointer, stackSize: UInt, startAddress: Pointer, arglist: Pointer, initflag: UInt, thrdaddr: UInt*) -> Handle
+	_beginthreadex: extern func (security: Pointer, stackSize: UInt, startAddress, arglist: Pointer, initflag: UInt, thrdaddr: UInt*) -> Handle
 	GetCurrentThread: extern func -> Handle
 	WaitForSingleObject: extern func (...) -> Long
 	SwitchToThread: extern func -> Bool
