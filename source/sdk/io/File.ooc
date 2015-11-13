@@ -16,7 +16,6 @@ import native/[FileWin32, FileUnix]
  * 'writing a String', see the FileReader and FileWriter classes
  */
 File: abstract class {
-
 	/** The path we're representing */
 	path: String { get set }
 
@@ -377,7 +376,6 @@ File: abstract class {
 	 * or false if it wasn't.
 	 */
 	find: func (name: String, cb: Func (This) -> Bool) -> Bool {
-
 		if (getName() == name) {
 			if (!cb(this)) {
 				// abort if caller is happy
@@ -441,7 +439,6 @@ File: abstract class {
 		}
 
 		false
-
 	}
 
 	/**
@@ -611,7 +608,6 @@ File: abstract class {
 	toString: func -> String {
 		"File(#{path})"
 	}
-
 }
 
 _isDirHardlink?: inline func (dir: CString) -> Bool {

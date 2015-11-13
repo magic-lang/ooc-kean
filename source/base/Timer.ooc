@@ -31,6 +31,7 @@ Timer: class {
 		this _min = INFINITY
 		this _max = 0.0
 	}
+	// Note: On Windows, there is only millisecond precision
 	start: virtual func { this _startTime = (Time runTimeMicro() as Double) }
 	stop: virtual func -> Double {
 		this _endTime = (Time runTimeMicro() as Double)

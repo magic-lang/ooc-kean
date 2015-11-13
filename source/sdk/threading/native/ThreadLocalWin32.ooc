@@ -11,23 +11,18 @@ version(windows) {
 		values := HashMap<Long, T> new()
 		valuesMutex := Mutex new()
 
-		init: func ~windows {
-
-		}
-
+		init: func ~windows
 		set: func (value: T) {
 			valuesMutex lock()
 			values put(GetCurrentThreadId(), value)
 			valuesMutex unlock()
 		}
-
 		get: func -> T {
 			valuesMutex lock()
 			value := values get(GetCurrentThreadId())
 			valuesMutex unlock()
 			value
 		}
-
 		hasValue?: func -> Bool {
 			valuesMutex lock()
 			has := values contains?(GetCurrentThreadId())

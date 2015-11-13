@@ -58,16 +58,16 @@ RasterMonochrome: class extends RasterPacked {
 			}
 	}
 	resizeTo: override func (size: IntSize2D) -> This {
-		this resizeTo(size, TransformMethod Smooth) as This
+		this resizeTo(size, InterpolationMode Smooth) as This
 	}
-	resizeTo: override func ~withMethod (size: IntSize2D, method: TransformMethod) -> This {
+	resizeTo: override func ~withMethod (size: IntSize2D, method: InterpolationMode) -> This {
 		result: This
 		if (this size == size)
 			result = this copy()
 		else {
 			result = This new(size)
 			match (method) {
-				case TransformMethod Smooth => This _resizeBilinear(this, result)
+				case InterpolationMode Smooth => This _resizeBilinear(this, result)
 				case => This _resizeNearestNeighbour(this, result)
 			}
 		}
@@ -76,53 +76,57 @@ RasterMonochrome: class extends RasterPacked {
 	_resizeNearestNeighbour: static func (source, result: This) {
 		resultBuffer := result buffer pointer
 		sourceBuffer := source buffer pointer
-		for (row in 0 .. result size height) {
-			sourceRow := (source size height * row) / result size height
-			for (column in 0 .. result size width) {
-				sourceColumn := (source size width * column) / result size width
-				resultBuffer[column + result stride * row] = sourceBuffer[sourceColumn + source stride * sourceRow]
+		(resultWidth, resultHeight, resultStride) := (result size width, result size height, result stride)
+		(sourceWidth, sourceHeight, sourceStride) := (source size width, source size height, source stride)
+		for (row in 0 .. resultHeight) {
+			sourceRow := (sourceHeight * row) / resultHeight
+			for (column in 0 .. resultWidth) {
+				sourceColumn := (sourceWidth * column) / resultWidth
+				resultBuffer[column + resultStride * row] = sourceBuffer[sourceColumn + sourceStride * sourceRow]
 			}
 		}
 	}
 	_resizeBilinear: static func (source, result: This) {
 		resultBuffer := result buffer pointer
 		sourceBuffer := source buffer pointer
-		for (row in 0 .. result size height) {
-			sourceRow := ((source size height as Float) * row) / result size height
+		(resultWidth, resultHeight, resultStride) := (result size width, result size height, result stride)
+		(sourceWidth, sourceHeight, sourceStride) := (source size width, source size height, source stride)
+		for (row in 0 .. resultHeight) {
+			sourceRow := ((sourceHeight as Float) * row) / resultHeight
 			sourceRowUp := sourceRow floor() as Int
 			weightDown := sourceRow - sourceRowUp as Float
 			sourceRowDown := (sourceRow - weightDown) as Int + 1
-			rowDownValid := sourceRowDown < source size height
+			rowDownValid := sourceRowDown < sourceHeight
 			if (!rowDownValid)
 				weightDown = 0.0f
-			for (column in 0 .. result size width) {
-				sourceColumn := ((source size width as Float) * column) / result size width
+			for (column in 0 .. resultWidth) {
+				sourceColumn := ((sourceWidth as Float) * column) / resultWidth
 				sourceColumnLeft := sourceColumn floor() as Int
 				weightRight := sourceColumn - sourceColumnLeft as Float
 				sourceColumnRight := (sourceColumn - weightRight) as Int + 1
-				columnRightValid := sourceColumnRight < source size width
+				columnRightValid := sourceColumnRight < sourceWidth
 				if (!columnRightValid)
 					weightRight = 0.0f
-				valueRowUp := (1.0f - weightRight) * sourceBuffer[sourceColumnLeft + sourceRowUp * source stride]
+				valueRowUp := (1.0f - weightRight) * sourceBuffer[sourceColumnLeft + sourceRowUp * sourceStride]
 				if (columnRightValid)
-					valueRowUp += weightRight * sourceBuffer[sourceColumnRight + sourceRowUp * source stride]
+					valueRowUp += weightRight * sourceBuffer[sourceColumnRight + sourceRowUp * sourceStride]
 				valueRowDown := 0.0f
 				if (rowDownValid)
-					valueRowDown += (1.0f - weightRight) * sourceBuffer[sourceColumnLeft + sourceRowDown * source stride] + (columnRightValid ? (weightRight * sourceBuffer[sourceColumnRight + sourceRowDown * source stride]) : 0.0f)
+					valueRowDown += (1.0f - weightRight) * sourceBuffer[sourceColumnLeft + sourceRowDown * sourceStride] + (columnRightValid ? (weightRight * sourceBuffer[sourceColumnRight + sourceRowDown * sourceStride]) : 0.0f)
 				pixelValue := weightDown * valueRowDown + (1.0f - weightDown) * valueRowUp
-				resultBuffer[column + row * result stride] = pixelValue as UInt8
+				resultBuffer[column + row * resultStride] = pixelValue as UInt8
 			}
 		}
 	}
 	distance: override func (other: Image) -> Float {
 		result := 0.0f
-		if (!other)
+		if (!other || (this size != other size))
 			result = Float maximumValue
-//		else if (!other instanceOf?(This))
-//			FIXME
-//		else if (this size != other size)
-//			FIXME
-		else {
+		else if (!other instanceOf?(This)) {
+			converted := This convertFrom(other as RasterImage)
+			result = this distance(converted)
+			converted referenceCount decrease()
+		} else {
 			for (y in 0 .. this size height)
 				for (x in 0 .. this size width) {
 					c := this[x, y]

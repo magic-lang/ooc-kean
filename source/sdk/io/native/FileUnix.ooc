@@ -31,7 +31,6 @@ version (!linux) {
 }
 
 version (unix || apple) {
-
 	// separators
 	File separator = '/'
 	File pathDelimiter = ':'
@@ -81,7 +80,6 @@ version (unix || apple) {
 	 * Unix (POSIX) implementation of File
 	 */
 	FileUnix: class extends File {
-
 		init: func ~unix (=path)
 
 		/**
@@ -293,7 +291,6 @@ version (unix || apple) {
 			}
 			closedir(dir)
 			return result
-
 		}
 
 		getChildrenNames: func -> ArrayList<String> {
@@ -312,5 +309,4 @@ version (unix || apple) {
 			_mkfifo(path as CString, mode as ModeT)
 		}
 	}
-
 }

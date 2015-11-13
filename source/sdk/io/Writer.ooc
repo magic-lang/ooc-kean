@@ -5,7 +5,6 @@ import io/Reader
  * bytes to anything.
  */
 Writer: abstract class {
-
 	/**
 	   Write a single character to this stream
 	 */
@@ -74,5 +73,4 @@ Writer: abstract class {
 	   Close this writer and free the associated system resources, if any.
 	 */
 	close: abstract func
-
 }
