@@ -1,4 +1,4 @@
-import structs/HashMap /* for getStandardEquals() - should probably move that in a separate Module */
+import lang/equalities
 
 /**
  * List interface for a data container
