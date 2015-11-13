@@ -134,8 +134,8 @@ Text: cover {
 	free: func@ ~withCriteria (criteria: Owner) -> Bool {
 		this _buffer free(criteria)
 	}
-	slice: func (start, distance: Int) -> This {
-		result := This new(this _buffer slice(start, distance))
+	slice: func (start: Int, distance := INT_MAX) -> This {
+		result := This new(this _buffer slice(start, distance == INT_MAX ? this count - start : distance))
 		if (this _buffer owner == Owner Receiver)
 			result = result copy() // TODO: Could we be smarter here?
 		this free(Owner Receiver)
