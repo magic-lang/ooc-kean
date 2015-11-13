@@ -57,14 +57,14 @@ FloatBox2D: cover {
 	}
 	pad: func ~fromFloat (pad: Float) -> This { this pad(pad, pad, pad, pad) }
 	pad: func ~fromSize (pad: FloatSize2D) -> This { this pad(pad width, pad width, pad height, pad height) }
-	pad: func ~fraction (pad: Float) -> This {
-		this pad(pad * this size / 2.0f)
+	enlargeEvenly: func (fraction: Float) -> This {
+		this pad(fraction * (this size width + this size height) / 2.0f)
 	}
-	padFractionAverage: func (pad: Float) -> This {
-		this pad(pad * (this size width + this size height) / 2.0f)
+	enlarge: func (fraction: Float) -> This {
+		this scale(1.0f + fraction)
 	}
-	shrink: func ~fraction (margin: Float) -> This {
-		this pad(-margin * this height / 2.0f)
+	shrink: func (fraction: Float) -> This {
+		this scale(1.0f - fraction)
 	}
 	resizeTo: func (size: FloatSize2D) -> This {
 		This createAround(this center, size)
@@ -108,6 +108,15 @@ FloatBox2D: cover {
 		for (i in 0 .. list count)
 			if (this contains(list[i]))
 				result add(i)
+		result
+	}
+	distance: func (point: FloatPoint2D) -> FloatSize2D {
+		((point - this center) toFloatSize2D() absolute - this size / 2.f) maximum(FloatSize2D new())
+	}
+	maximumDistance: func (points: VectorList<FloatPoint2D>) -> FloatSize2D {
+		result := FloatSize2D new()
+		for (index in 0 .. points count)
+			result = FloatSize2D maximum(this distance(points[index]), result)
 		result
 	}
 	round: func -> This { This new(this leftTop round(), this size round()) }

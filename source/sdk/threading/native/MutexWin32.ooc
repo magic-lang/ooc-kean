@@ -2,10 +2,8 @@ import ../Thread
 import native/win32/[types, errors]
 
 version(windows) {
-
 	include windows
 
-	/* covers & extern functions */
 	CreateMutex: extern func (Pointer, Bool, Pointer) -> Handle
 	ReleaseMutex: extern func (Handle)
 	CloseHandle: extern func (Handle)
@@ -13,9 +11,6 @@ version(windows) {
 	WaitForSingleObject: extern func (...) -> Long // laziness
 	INFINITE: extern Long
 
-	/**
-	 * Win32 implementation of mutexes.
-	 */
 	MutexWin32: class extends Mutex {
 		_backend: Handle
 		init: func {

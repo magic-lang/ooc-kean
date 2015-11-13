@@ -34,6 +34,7 @@ ReferenceCounterTest: class extends Fixture {
 		isAlive: Bool
 		object := TestObject new(isAlive&)
 		counter := ReferenceCounter new(object)
+		counter isSafe = true
 		numberOfThreads := 8
 		countPerThread := 500
 		threads := Thread[numberOfThreads] new()

@@ -136,9 +136,9 @@ Exception: class {
 	}
 	formatMessage: func -> String {
 		if (this origin)
-			"[%s in %s]: %s\n" format(This class name toCString(), this origin name toCString(), this message ? this message toCString() : "<no message>" toCString())
+			"[%s in %s]: %s\n" format(this class name toCString(), this origin name toCString(), this message ? this message toCString() : "<no message>" toCString())
 		else
-			"[%s]: %s\n" format(This class name toCString(), this message ? this message toCString() : "<no message>" toCString())
+			"[%s]: %s\n" format(this class name toCString(), this message ? this message toCString() : "<no message>" toCString())
 	}
 	print: func {
 		this printMessage()

@@ -134,8 +134,8 @@ Text: cover {
 	free: func@ ~withCriteria (criteria: Owner) -> Bool {
 		this _buffer free(criteria)
 	}
-	slice: func (start, distance: Int) -> This {
-		result := This new(this _buffer slice(start, distance))
+	slice: func (start: Int, distance := INT_MAX) -> This {
+		result := This new(this _buffer slice(start, distance == INT_MAX ? this count - start : distance))
 		if (this _buffer owner == Owner Receiver)
 			result = result copy() // TODO: Could we be smarter here?
 		this free(Owner Receiver)
@@ -163,6 +163,15 @@ Text: cover {
 		this free(Owner Receiver)
 		separator free(Owner Receiver)
 		result
+	}
+	trim: func -> This {
+		leftPosition := 0
+		rightPosition := this count - 1
+		while (leftPosition < this count && this _buffer[leftPosition] whitespace?())
+			++leftPosition
+		while (rightPosition > leftPosition && this _buffer[rightPosition] whitespace?())
+			--rightPosition
+		this slice(leftPosition, rightPosition - leftPosition + 1)
 	}
 	toString: func -> String {
 		result := String new(this _buffer raw, this count)
@@ -195,7 +204,7 @@ Text: cover {
 		result
 	}
 	toLLong: func ~inBase (base: Int) -> LLong {
-		t := this take()
+		t := this take() trim()
 		result := t isEmpty ? 0 : (t[0] == '-' ? -1 * t slice(1, t count - 1) toULong(base) : t toULong(base) as LLong)
 		this free(Owner Receiver)
 		result
@@ -204,7 +213,7 @@ Text: cover {
 		this toULong~inBase(this _detectNumericBase())
 	}
 	toULong: func ~inBase (base: Int) -> ULong {
-		t := this take()
+		t := this take() trim()
 		result := 0 as ULong
 		if (!t isEmpty) {
 			lastValidIndex := -1
@@ -235,7 +244,7 @@ Text: cover {
 		this toLDouble() as Double
 	}
 	toLDouble: func -> LDouble {
-		t := this take()
+		t := this take() trim()
 		result := 0.0 as LDouble
 		if (!t isEmpty) {
 			sign := 1

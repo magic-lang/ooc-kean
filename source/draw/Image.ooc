@@ -27,7 +27,7 @@ CoordinateSystem: enum {
 	YUpward = 0x02
 }
 
-TransformMethod: enum {
+InterpolationMode: enum {
 	Fast, // nearest neighbour
 	Smooth // bilinear
 }
@@ -37,20 +37,14 @@ Image: abstract class {
 	size ::= this _size
 	width ::= this size width
 	height ::= this size height
-	transform: IntTransform2D { get set }
-	coordinateSystem: CoordinateSystem {
-		get
-		set (value) {
-			this coordinateSystem = value
-			this transform = IntTransform2D createScaling(
-				(value & CoordinateSystem XLeftward) == CoordinateSystem XLeftward ? -1 : 1,
-				(value & CoordinateSystem YUpward) == CoordinateSystem YUpward ? -1 : 1)
-		}
-	}
+	coordinateSystem: CoordinateSystem { get set }
 	crop: IntShell2D { get set }
 	wrap: Bool { get set }
 	_referenceCount: ReferenceCounter
 	referenceCount ::= this _referenceCount
+	transform ::= IntTransform2D createScaling(
+			(this coordinateSystem & CoordinateSystem XLeftward) == CoordinateSystem XLeftward ? -1 : 1,
+			(this coordinateSystem & CoordinateSystem YUpward) == CoordinateSystem YUpward ? -1 : 1)
 
 	_canvas: Canvas
 	canvas: Canvas {
@@ -83,7 +77,7 @@ Image: abstract class {
 		this resizeTo(((this size toFloatSize2D()) * Float minimum(restriction width as Float / this size width as Float, restriction height as Float / this size height as Float)) toIntSize2D())
 	}
 	resizeTo: abstract func (size: IntSize2D) -> This
-	resizeTo: virtual func ~withMethod (size: IntSize2D, method: TransformMethod) -> This {
+	resizeTo: virtual func ~withMethod (size: IntSize2D, method: InterpolationMode) -> This {
 		this resizeTo(size)
 	}
 	create: virtual func (size: IntSize2D) -> This { raise("Image type not implemented."); null }

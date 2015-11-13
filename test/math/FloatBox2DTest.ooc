@@ -70,9 +70,9 @@ FloatBox2DTest: class extends Fixture {
 			expect(inBox[1], is equal to(1))
 			expect(inBox[2], is equal to(3))
 		})
-		this add("pad and shrink ~fraction", func {
+		this add("enlarge and shrink", func {
 			box := FloatBox2D new(-2.0f, -1.0f, 3.0f, 3.0f)
-			paddedBox := box pad~fraction(0.1f)
+			paddedBox := box enlarge(0.1f)
 			shrunkBox := paddedBox shrink(1.0f / 11.0f)
 			expect(box == shrunkBox, is true)
 		})
@@ -144,6 +144,11 @@ FloatBox2DTest: class extends Fixture {
 			expect(box right, is equal to(3.0f) within(this precision))
 			expect(box bottom, is equal to(3.0f) within(this precision))
 		})
+		this add("enlargeEvenly", func {
+			box := FloatBox2D new(-3.0f, -1.0f, 3.0f, 3.0f)
+			paddedBox := box enlargeEvenly(2.0f)
+			expect(paddedBox == FloatBox2D new(-9.0f, -7.0f, 15.0f, 15.0f))
+		})
 		this add("resizeTo", func {
 			box := FloatBox2D new(1.0f, 1.0f, 4.0f, 4.0f)
 			changedBox := box resizeTo(FloatSize2D new(2.0f, 2.0f))
@@ -184,6 +189,24 @@ FloatBox2DTest: class extends Fixture {
 			expect(reducedBox right, is equal to(4.0f) within(this precision))
 			expect(reducedBox bottom, is equal to(4.0f) within(this precision))
 			expect(notReducedBox == box, is true)
+		})
+		this add("box to point distance", func {
+			box := FloatBox2D new(-10.f, -10.f, 20.f, 20.f)
+			points := VectorList<FloatPoint2D> new()
+			points add(FloatPoint2D new(5.f, 5.f))
+			points add(FloatPoint2D new(15.f, 0.f))
+			points add(FloatPoint2D new(0.f, -17.f))
+			points add(FloatPoint2D new(11.f, -12.f))
+			separatedDistance := box distance(points[0])
+			expect(separatedDistance width, is equal to(0.f) within(this precision))
+			expect(separatedDistance height, is equal to(0.f) within(this precision))
+			separatedDistance = box distance(points[3])
+			expect(separatedDistance width, is equal to(1.f) within(this precision))
+			expect(separatedDistance height, is equal to(2.f) within(this precision))
+			maximumSeparatedDistance := box maximumDistance(points)
+			expect(maximumSeparatedDistance width, is equal to(5.f) within(this precision))
+			expect(maximumSeparatedDistance height, is equal to(7.f) within(this precision))
+			points free()
 		})
 	}
 }

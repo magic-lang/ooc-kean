@@ -1,7 +1,6 @@
 import ../Thread
 
 version(unix || apple) {
-
 	include pthread | (_XOPEN_SOURCE=500)
 	include unistd
 
@@ -19,9 +18,6 @@ version(unix || apple) {
 
 	PTHREAD_MUTEX_RECURSIVE: extern Int
 
-	/**
-	 * pthreads implementation of mutexes.
-	 */
 	MutexUnix: class extends Mutex {
 		_backend: PThreadMutex
 		init: func {
