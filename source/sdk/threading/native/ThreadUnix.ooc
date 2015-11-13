@@ -16,23 +16,21 @@ version(unix || apple) {
 			(result == 0)
 		}
 		wait: func ~timed (seconds: Double) -> Bool {
-			status := false
+			result := false
 			version (apple || android)
-				status = __fake_timedjoin(seconds)
+				result = __fake_timedjoin(seconds)
 			else {
 				ts: TimeSpec
 				__setupTimeout(ts&, seconds)
-
-				result := pthread_timedjoin_np(pthread, null, ts&)
-				status = (result == 0)
+				result = (pthread_timedjoin_np(pthread, null, ts&) == 0)
 			}
-			status
+			result
 		}
 		cancel: func -> Bool {
-			status := false
+			result := false
 			version (!android)
-				status = this alive?() && (pthread_cancel(this pthread) == 0)
-			status
+				result = this alive?() && (pthread_cancel(this pthread) == 0)
+			result
 		}
 		alive?: func -> Bool {
 			pthread_kill(pthread, 0) == 0
@@ -65,14 +63,14 @@ version(unix || apple) {
 		}
 		__fake_timedjoin: func (seconds: Double) -> Bool {
 			//TODO: This *is* fake, use WaitCondition instead
-			status := false
-			while (seconds > 0.0 && !status) {
+			result := false
+			while (seconds > 0.0 && !result) {
 				Time sleepMilli(20)
 				seconds -= 0.02
 				if (!alive?())
-					status = true
+					result = true
 			}
-			status
+			result
 		}
 	}
 
