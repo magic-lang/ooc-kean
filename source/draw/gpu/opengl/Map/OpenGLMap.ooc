@@ -92,7 +92,7 @@ OpenGLMap: abstract class extends GpuMap {
 						program setUniform(key, textureCount)
 						textureCount += 1
 					}
-					case => Debug raise("Invalid object type in OpenGLMap use!")
+					case => Debug raise("Invalid object type in OpenGLMap use: %s" format(value class name))
 				}
 		}
 		this apply(action)
