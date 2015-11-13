@@ -25,11 +25,16 @@ Event: class {
 	}
 	init: func (=_head)
 	init: func ~add (=_head, =_tail)
-	operator + (action: Func) -> This {
-		This new(action, this)
+	add: func (action: Func) -> This {
+		this add(This new(action, null))
 	}
-	operator + (event: This) -> This {
-		event != null ? This new(event _head, this) + event _tail : this
+	add: func ~withEvent (event: This) -> This {
+		if (event)
+			if (this _tail)
+				this _tail add(event)
+			else
+				this _tail = event
+		this
 	}
 	call: func {
 		if (this _tail != null)
@@ -54,22 +59,15 @@ Event1: class <T> {
 	init: func (=_head)
 	init: func ~add (=_head, =_tail)
 	add: func (action: Func(T)) -> This<T> {
-		This<T> new(action, this)
+		this add(This<T> new(action, null))
 	}
-	add: func ~event <T> (other: This<T>) -> This<T> {
-		if (other == null)
-			this
-		else
-			This<T> new(other _head, this) add(other _tail)
-	}
-	/* Does not work */
-	/*
-	operator + (action: Func(T)) -> This<T> {
-		This<T> new(action, this)
-	}
-	*/
-	operator + (event: This<T>) -> This<T> {
-		event != null ? This<T> new(event _head, this) + event _tail : this
+	add: func ~withEvent (event: This<T>) -> This<T> {
+		if (event)
+			if (this _tail)
+				this _tail add(event)
+			else
+				this _tail = event
+		this
 	}
 	call: func (argument: T) {
 		if (this _tail != null)
@@ -95,22 +93,15 @@ Event2: class <T0, T1> { // TODO: Write tests and fix this
 	init: func (=_head)
 	init: func ~add (=_head, =_tail)
 	add: func (action: Func(T0, T1)) -> This<T0, T1> {
-		This<T0, T1> new(action, this)
+		this add(This<T0, T1> new(action, null))
 	}
-	add: func ~event <T0, T1> (other: This<T0, T1>) -> This<T0, T1> {
-		if (other == null)
-			this
-		else
-			This<T0, T1> new(other _head, this) add(other _tail)
-	}
-	/* Does not work */
-	/*
-	operator + (action: Func(T0, T1)) -> This<T0, T1> {
-		Event2 new(action, this)
-	}
-	*/
-	operator + (event: This<T0, T1>) -> This<T0, T1> {
-		event != null ? This new(event _head, this) + event _tail : this
+	add: func ~withEvent (event: This<T0, T1>) -> This<T0, T1> {
+		if (event)
+			if (this _tail)
+				this _tail add(event)
+			else
+				this _tail = event
+		this
 	}
 	call: func (argument0: T0, argument1: T1) {
 		if (this _tail != null)
