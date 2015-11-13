@@ -77,6 +77,8 @@ GpuCanvasYuv420Semiplanar: class extends GpuSurface {
 		this _target uv canvas fill()
 	}
 	draw: override func ~mesh (image: GpuImage, mesh: GpuMesh) {
+		if (!image instanceOf?(GpuYuv420Semiplanar))
+			Debug raise("Invalid input format in GpuYuv420SemiplanarCanvas::draw~mesh")
 		yuv := image as GpuYuv420Semiplanar
 		this _target y canvas draw(yuv y, mesh)
 		this _target uv canvas draw(yuv uv, mesh)
