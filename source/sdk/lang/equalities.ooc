@@ -1,8 +1,6 @@
 // The following functions were moved from HashMap.ooc
 
-/* this function seem is called by List */
 getStandardEquals: func <T> (T: Class) -> Func <T> (T, T) -> Bool {
-    // choose comparing function for key type
     if(T == String) {
         stringEquals
     } else if(T == CString) {
@@ -26,7 +24,6 @@ stringEquals: func <K> (k1, k2: K) -> Bool {
 cstringEquals: func <K> (k1, k2: K) -> Bool {
     k1 as CString == k2 as CString
 }
-
 
 pointerEquals: func <K> (k1, k2: K) -> Bool {
     k1 as Pointer == k2 as Pointer
