@@ -1,0 +1,6 @@
+Name: ooc CLI
+Description: CLI helpers
+SourcePath: source/cli
+Requires: ooc-collections
+Requires: ooc-base
+Imports: ArgumentParser
