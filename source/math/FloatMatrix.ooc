@@ -23,34 +23,34 @@ FloatMatrix : cover {
 	// y = row
 	_dimensions: IntSize2D
 	dimensions: IntSize2D { get {
-			result := this _dimensions
-			this free(Owner Receiver)
-			result
+		result := this _dimensions
+		this free(Owner Receiver)
+		result
 	}}
 	width: Int { get {
-			result := this _dimensions width
-			this free(Owner Receiver)
-			result
+		result := this _dimensions width
+		this free(Owner Receiver)
+		result
 	}}
 	height: Int { get {
-			result := this _dimensions height
-			this free(Owner Receiver)
-			result
+		result := this _dimensions height
+		this free(Owner Receiver)
+		result
 	}}
 	isNull: Bool { get { // TODO: Better name?
-			result := this _dimensions empty
-			this free(Owner Receiver)
-			result
+		result := this _dimensions empty
+		this free(Owner Receiver)
+		result
 	}}
 	isSquare: Bool { get {
-			result := this _dimensions width == this _dimensions height
-			this free(Owner Receiver)
-			result
+		result := this _dimensions width == this _dimensions height
+		this free(Owner Receiver)
+		result
 	}}
 	order: Int { get {
-			result := Int minimum~two(this _dimensions height, this _dimensions width)
-			this free(Owner Receiver)
-			result
+		result := Int minimum~two(this _dimensions height, this _dimensions width)
+		this free(Owner Receiver)
+		result
 	}}
 	_elements: OwnedBuffer
 	elements ::= this _elements pointer as Float*
