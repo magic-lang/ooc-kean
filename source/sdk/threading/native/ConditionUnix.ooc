@@ -1,6 +1,4 @@
-
 version(unix || apple) {
-
 include pthread
 PThreadCond: cover from pthread_cond_t
 PThreadCondAttr: cover from pthread_condattr_t
@@ -37,6 +35,5 @@ ConditionUnix: class extends WaitCondition {
 	}
 	signal: func -> Bool { pthread_cond_signal(this _backend) == 0 }
 	broadcast: func -> Bool { pthread_cond_broadcast(this _backend) == 0 }
-	}
-
+}
 }

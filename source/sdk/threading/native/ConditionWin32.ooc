@@ -1,5 +1,4 @@
 version(windows) {
-
 	import ../Thread
 	import native/win32/[types, errors]
 	import MutexWin32
