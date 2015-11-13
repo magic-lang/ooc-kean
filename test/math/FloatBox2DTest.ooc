@@ -50,7 +50,7 @@ FloatBox2DTest: class extends Fixture {
 			expect(inBox[1], is equal to(1))
 			expect(inBox[2], is equal to(3))
 		})
-		this add("enlarge and shrink ~fraction", func {
+		this add("enlarge and shrink", func {
 			box := FloatBox2D new(-2.0f, -1.0f, 3.0f, 3.0f)
 			paddedBox := box enlarge(0.1f)
 			shrunkBox := paddedBox shrink(1.0f / 11.0f)
