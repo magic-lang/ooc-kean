@@ -40,9 +40,9 @@ cosData := LinePlotData2D new(cos, "cos(x)")
 shapesData := ShapePlotData2D new("Mixed shapes", ColorBgra new(0, 0, 0, 128))
 shapesData addRectangle(FloatBox2D new(-4, 2, 8, 1)) // Default
 shapesData addRectangle(FloatBox2D new(-4, -3, 8, 1)) // Default
-shapesData addCircle(FloatPoint2D new(-3.1416, 0), 1, ColorBgra new(0, 0, 200, 128)) // Red
+shapesData addCircle(FloatPoint2D new(-Float pi, 0), 1, ColorBgra new(0, 0, 200, 128)) // Red
 shapesData addCircle(FloatPoint2D new(0, 0), 1, ColorBgra new(0, 200, 0, 128)) // Green
-shapesData addCircle(FloatPoint2D new(3.1416, 0), 1, ColorBgra new(200, 0, 0, 128)) // Blue
+shapesData addCircle(FloatPoint2D new(Float pi, 0), 1, ColorBgra new(200, 0, 0, 128)) // Blue
 shapePlot := SvgPlot new(cosData, "Multiple shapes in one plot")
 shapePlot addDataset(shapesData)
 shapePlot xAxis label = "x"
