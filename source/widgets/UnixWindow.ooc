@@ -21,6 +21,7 @@ use ooc-math
 use ooc-draw
 use ooc-opengl
 use ooc-x11
+import include/x11
 
 version(unix || apple) {
 UnixWindowBase: class extends DisplayWindow {
@@ -40,6 +41,16 @@ UnixWindowBase: class extends DisplayWindow {
 			raster := RasterBgra convertFrom(image as RasterImage)
 			this _xWindow draw(raster)
 			raster referenceCount decrease()
+		}
+	}
+	processEvents: override func {
+		while (XPending(this _xWindow display)) {
+			event: XEventOoc
+			XNextEvent(this _xWindow display, event&)
+			if ((event type == ButtonPress) && this _mousePressHandler)
+				this _mousePressHandler call(IntPoint2D new(event xkey x, event xkey y))
+			if ((event type == ButtonRelease) && this _mouseReleaseHandler)
+				this _mouseReleaseHandler call(IntPoint2D new(event xkey x, event xkey y))
 		}
 	}
 	create: static func (size: IntSize2D, title: String) -> This {

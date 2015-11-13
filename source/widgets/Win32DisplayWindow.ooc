@@ -39,5 +39,6 @@ Win32DisplayWindow: class extends DisplayWindow {
 	refresh: override func {
 		_backend peekMessage()
 	}
+	processEvents: func
 }
 }

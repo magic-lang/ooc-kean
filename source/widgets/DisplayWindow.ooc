@@ -15,13 +15,23 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use ooc-base
 use ooc-draw
 use ooc-math
 import UnixWindow
 import Win32DisplayWindow
 
 DisplayWindow: abstract class {
+	_mousePressHandler: Event1<IntPoint2D>
+	_mouseReleaseHandler: Event1<IntPoint2D>
 	init: func (size: IntSize2D, title: String)
+	free: override func {
+		if (this _mousePressHandler)
+			this _mousePressHandler free()
+		if (this _mouseReleaseHandler)
+			this _mouseReleaseHandler free()
+		super()
+	}
 	draw: abstract func (image: Image)
 	refresh: virtual func
 	create: static func (size: IntSize2D, title: String) -> This {
@@ -31,5 +41,18 @@ DisplayWindow: abstract class {
 			return Win32DisplayWindow new(size, title)
 		raise("Platform not supported (DisplayWindow)")
 		null
+	}
+	processEvents: abstract func
+	addMousePressHandler: func (handler: Event1<IntPoint2D>) {
+		if (!this _mousePressHandler)
+			this _mousePressHandler = handler
+		else
+			this _mousePressHandler = this _mousePressHandler add(handler)
+	}
+	addMouseReleaseHandler: func (handler: Event1<IntPoint2D>) {
+		if (!this _mouseReleaseHandler)
+			this _mouseReleaseHandler = handler
+		else
+			this _mouseReleaseHandler = this _mouseReleaseHandler add(handler)
 	}
 }
