@@ -37,20 +37,14 @@ Image: abstract class {
 	size ::= this _size
 	width ::= this size width
 	height ::= this size height
-	transform: IntTransform2D { get set }
-	coordinateSystem: CoordinateSystem {
-		get
-		set (value) {
-			this coordinateSystem = value
-			this transform = IntTransform2D createScaling(
-				(value & CoordinateSystem XLeftward) == CoordinateSystem XLeftward ? -1 : 1,
-				(value & CoordinateSystem YUpward) == CoordinateSystem YUpward ? -1 : 1)
-		}
-	}
+	coordinateSystem: CoordinateSystem { get set }
 	crop: IntShell2D { get set }
 	wrap: Bool { get set }
 	_referenceCount: ReferenceCounter
 	referenceCount ::= this _referenceCount
+	transform ::= IntTransform2D createScaling(
+			(this coordinateSystem & CoordinateSystem XLeftward) == CoordinateSystem XLeftward ? -1 : 1,
+			(this coordinateSystem & CoordinateSystem YUpward) == CoordinateSystem YUpward ? -1 : 1)
 
 	_canvas: Canvas
 	canvas: Canvas {

@@ -7,10 +7,17 @@ import ArrayList
 HashEntry: cover {
 
     key, value: Pointer
-    next: HashEntry*
+    next: HashEntry* = null
 
-    init: func@ ~keyVal (=key, =value) {
-        next = null
+    init: func@ ~keyVal (=key, =value)
+    free: func {
+      free(this key)
+      free(this value)
+      if (this next != null) {
+        temp := this next@
+        temp free()
+        free(this next)
+      }
     }
 
 }
@@ -208,6 +215,14 @@ HashMap: class <K, V> extends BackIterable<V> {
         T = V // workarounds ftw
     }
 
+    free: override func {
+      for (i in 0 .. this buckets length)
+        this buckets[i] free()
+      this buckets free()
+      this keys free()
+      super()
+    }
+
     /**
      * Retrieve the HashEntry associated with a key.
      * @param key The key associated with the HashEntry
@@ -385,11 +400,13 @@ HashMap: class <K, V> extends BackIterable<V> {
 
         prev = null : HashEntry*
         entry: HashEntry* = (buckets data as HashEntry*)[hash]&
-
-        if(entry@ key == null) return false
+        if (entry@ key == null) return false
 
         while (true) {
             if (keyEquals(entry@ key as K, key)) {
+              free(entry@ key)
+              free(entry@ value)
+
                 if(prev) {
                     // re-connect the previous to the next one
                     prev@ next = entry@ next
@@ -421,7 +438,6 @@ HashMap: class <K, V> extends BackIterable<V> {
                 return false
             }
         }
-
         return false
     }
 

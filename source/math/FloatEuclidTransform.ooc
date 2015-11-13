@@ -14,11 +14,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+use ooc-collections
 import math
 import FloatPoint3D
 import FloatRotation3D
 import FloatTransform2D
 import FloatTransform3D
+import FloatVectorList
+import Quaternion
 
 FloatEuclidTransform: cover {
 	rotation: FloatRotation3D
@@ -42,6 +45,24 @@ FloatEuclidTransform: cover {
 		this translation == other translation &&
 		this rotation == other rotation &&
 		this scaling == other scaling
+	}
+	convolveCenter: static func (euclidTransforms: VectorList<This>, kernel: FloatVectorList) -> This {
+		result := This new()
+		if (euclidTransforms count > 0) {
+			result scaling = 0.0f
+			quaternions := VectorList<Quaternion> new(euclidTransforms count)
+			for (i in 0 .. euclidTransforms count) {
+				euclidTransform := euclidTransforms[i]
+				weight := kernel[i]
+				result translation = result translation + euclidTransform translation * weight
+				result scaling = result scaling + euclidTransform scaling * weight
+				rotation := euclidTransform rotation
+				quaternions add(rotation _quaternion)
+			}
+			result rotation = FloatRotation3D new(Quaternion weightedMean(quaternions, kernel))
+			quaternions free()
+		}
+		result
 	}
 	toString: func -> String {
 		"Translation: " << this translation toString() >> " Rotation: " & this rotation toString() >> " Scaling: " & this scaling toString()

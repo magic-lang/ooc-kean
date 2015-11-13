@@ -110,6 +110,15 @@ FloatBox2D: cover {
 				result add(i)
 		result
 	}
+	distance: func (point: FloatPoint2D) -> FloatSize2D {
+		((point - this center) toFloatSize2D() absolute - this size / 2.f) maximum(FloatSize2D new())
+	}
+	maximumDistance: func (points: VectorList<FloatPoint2D>) -> FloatSize2D {
+		result := FloatSize2D new()
+		for (index in 0 .. points count)
+			result = FloatSize2D maximum(this distance(points[index]), result)
+		result
+	}
 	round: func -> This { This new(this leftTop round(), this size round()) }
 	ceiling: func -> This { This new(this leftTop ceiling(), this size ceiling()) }
 	floor: func -> This { This new(this leftTop floor(), this size floor()) }
