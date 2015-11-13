@@ -30,10 +30,7 @@ IntVectorList: class extends VectorList<Int> {
 		this _count = other count
 	}
 	copy: func -> This {
-		result := This new(this _count)
-		for (i in 0 .. this _count)
-			result add(this[i])
-		result
+		this as VectorList<Int> copy() as This
 	}
 	operator [] <T> (index: Int) -> T {
 		this as VectorList<Int> _vector[index]
@@ -56,8 +53,8 @@ IntVectorList: class extends VectorList<Int> {
 		}
 		result
 	}
-	compress: func -> This {
 	// Returns a new, sorted list of unique elements, e.g. [1,2,1,5,2,7,6,7,7] -> [1,2,5,6,7]
+	compress: func -> This {
 		result := This new()
 		if (this count > 0) {
 			sortedList := this sort()
