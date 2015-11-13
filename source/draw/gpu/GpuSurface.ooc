@@ -19,7 +19,7 @@ use ooc-draw
 use ooc-collections
 use ooc-base
 
-import GpuContext, GpuMap, GpuImage, GpuMesh
+import GpuContext, GpuMap, GpuImage, GpuMesh, GpuYuv420Semiplanar
 
 version(!gpuOff) {
 GpuSurface: abstract class extends Canvas {
@@ -72,21 +72,23 @@ GpuSurface: abstract class extends Canvas {
 	draw: virtual func (action: Func)
 	draw: virtual func ~WithoutBind (destination: IntBox2D, map: GpuMap)
 	draw: abstract func ~GpuImage (image: GpuImage, source, destination: IntBox2D, map: GpuMap)
-	draw: func ~Full (image: Image, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
-		if (image instanceOf?(GpuImage)) { this draw(image as GpuImage, source, destination, map) }
-		else if (image instanceOf?(RasterImage)) {
-			temp := this _context createImage(image as RasterImage)
-			this draw(temp as GpuImage, source, destination, map)
-			temp free()
-		}
+	draw: func ~ImageMap (image: GpuImage, map: GpuMap) { this draw~GpuImage(image, IntBox2D new(image size), IntBox2D new(image size), map) }
+	draw: func ~ImageDestinationMap (image: GpuImage, destination: IntBox2D, map: GpuMap) { this draw~GpuImage(image, IntBox2D new(image size), destination, map) }
+	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) {
+		map := this _getDefaultMap(image)
+		temporary: GpuImage = null
+		if (image instanceOf?(GpuImage))
+			temporary = image as GpuImage
+		else if (image instanceOf?(RasterImage))
+			temporary = this _context createImage(image as RasterImage)
 		else
-			Debug raise("Trying to draw unsupported image format to OpenGLCanvas!")
+			Debug raise("Invalid image type in GpuSurface!")
+		map add("texture0", temporary)
+		this draw(temporary, source, destination, map)
+		if (image != temporary)
+			temporary free()
 	}
-	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) { this draw(image, source, destination, this _getDefaultMap(image)) }
-	draw: func ~ImageMap (image: Image, map: GpuMap) { this draw(image, IntBox2D new(image size), IntBox2D new(image size), map) }
-	draw: func ~ImageDestinationMap (image: Image, destination: IntBox2D, map: GpuMap) { this draw(image, IntBox2D new(image size), destination, map) }
-
-	draw: virtual func ~mesh (image: Image, mesh: GpuMesh) { Debug raise("draw~mesh unimplemented!") }
+	draw: virtual func ~mesh (image: GpuImage, mesh: GpuMesh) { Debug raise("draw~mesh unimplemented!") }
 	readPixels: virtual func -> ByteBuffer { raise("readPixels unimplemented!") }
 }
 }

@@ -52,10 +52,6 @@ OpenGLSurface: abstract class extends GpuSurface {
 		(f as Closure) dispose()
 	}
 	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
-		match (image) {
-			case yuv: GpuYuv420Semiplanar => map add("texture0", yuv y); map add("texture1", yuv uv)
-			case => map add("texture0", image)
-		}
 		map textureTransform = This _createTextureTransform(image size, source)
 		this draw(destination, map)
 	}
@@ -69,7 +65,7 @@ OpenGLSurface: abstract class extends GpuSurface {
 		this draw(f)
 		(f as Closure) dispose()
 	}
-	draw: override func ~mesh (image: Image, mesh: GpuMesh) {
+	draw: override func ~mesh (image: GpuImage, mesh: GpuMesh) {
 		f := func {
 			this context meshShader add("texture0", image)
 			this context meshShader projection = this _projection
