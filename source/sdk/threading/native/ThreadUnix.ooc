@@ -66,13 +66,11 @@ version(unix || apple) {
 		__fake_timedjoin: func (seconds: Double) -> Bool {
 			//TODO: This *is* fake, use WaitCondition instead
 			status := false
-			while (seconds > 0.0) {
+			while (seconds > 0.0 && !status) {
 				Time sleepMilli(20)
 				seconds -= 0.02
-				if (!alive?()) {
-					// successfully joined
+				if (!alive?())
 					status = true
-				}
 			}
 			status
 		}
