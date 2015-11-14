@@ -18,8 +18,8 @@ import IntPoint2D
 import IntSize2D
 import FloatPoint2D
 import FloatBox2D
-import VectorList
 import structs/ArrayList
+use ooc-collections
 use ooc-math
 
 IntBox2D: cover {
