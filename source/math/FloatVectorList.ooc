@@ -185,11 +185,13 @@ FloatVectorList: class extends VectorList<Float> {
 		max := this maxValue
 		max != 0 ? (this / max) : this copy()
 	}
-	getOnes: static func (count: Float) -> This {
+	getOnes: static func (count: Int) -> This {
 		This new(count, 1.0f)
 	}
-	getZeros: static func (count: Float) -> This {
-		This new(count, 0.0f)
+	getZeros: static func (count: Int) -> This {
+		result := This new(count)
+		result _count = count
+		result
 	}
 	exp: func -> This {
 		result := This new(this _count)

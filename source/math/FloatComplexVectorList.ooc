@@ -106,9 +106,13 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 			result = result >> this[i] toString() >> "\n"
 		result
 	}
+	getZeros: static func (count: Int) -> This {
+		result := This new(count)
+		result _count = count
+		result
+	}
 	discreteFourierTransform: static func (input: This) -> This {
-		result := This new(input count)
-		result _count = input count
+		result := This getZeros(input count)
 		for (i in 0 .. input count)
 			for (j in 0 .. input count)
 				result[i] = result[i] + input[j] * FloatComplex rootOfUnity(input count, -i * j)
@@ -125,8 +129,7 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		result
 	}
 	fastFourierTransform: static func (input: This) -> This {
-		result := This new(input count)
-		result _count = input count
+		result := This getZeros(input count)
 		if (input count > 0) {
 			buffer := This createFFTBuffer(input count)
 			This fastFourierTransformInto(input, result, buffer)
@@ -143,8 +146,7 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	}
 	/* for input of size N, buffer size needs to be at least log2(N)*N*/
 	fastFourierTransform: static func ~withBuffer (input, buffer: This) -> This {
-		result := This new(input count)
-		result _count = input count
+		result := This getZeros(input count)
 		if (input count > 0)
 			This fastFourierTransformInto(input, result, buffer)
 		result
@@ -164,8 +166,7 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	}
 	createFFTBuffer: static func (inputSize: Int) -> This {
 		bufferSize := This _fastFourierTransformBufferSize(inputSize)
-		result := This new(bufferSize)
-		result _count = bufferSize
+		result := This getZeros(bufferSize)
 		result
 	}
 	inverseFastFourierTransform: static func (input: This) -> This {
