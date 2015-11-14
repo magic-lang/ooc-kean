@@ -49,11 +49,10 @@ FloatSize2DTest: class extends Fixture {
 			expect(result height, is equal to(this vector0 width))
 		})
 		this add("casting", func {
-			value := "10.00, 20.00"
-			parseText := Text new(value)
-			expect(this vector3 toString(), is equal to(value))
-			expect(FloatSize2D parse(parseText) width, is equal to(this vector3 width))
-			expect(FloatSize2D parse(parseText) height, is equal to(this vector3 height))
+			value := t"10.00, 20.00"
+			expect(this vector3 toString(), is equal to(value toString()))
+			expect(FloatSize2D parse(value) width, is equal to(this vector3 width))
+			expect(FloatSize2D parse(value) height, is equal to(this vector3 height))
 		})
 		this add("polar 0", func {
 			point := FloatSize2D new()

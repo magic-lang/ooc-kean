@@ -48,10 +48,10 @@ FloatPoint2DTest: class extends Fixture {
 			expect(result y, is equal to(this point0 x))
 		})
 		this add("casting", func {
-			value := "10.00, 20.00"
-			expect(this point3 toString(), is equal to(value))
-			expect((FloatPoint2D parse(Text new(value))) x, is equal to((this point3) x))
-			expect((FloatPoint2D parse(Text new(value))) y, is equal to((this point3) y))
+			value := t"10.00, 20.00"
+			expect(this point3 toString(), is equal to(value toString()))
+			expect(FloatPoint2D parse(value) x, is equal to(this point3 x))
+			expect(FloatPoint2D parse(value) y, is equal to(this point3 y))
 		})
 		this add("polar 0", func {
 			point := FloatPoint2D new()
