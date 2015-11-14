@@ -163,8 +163,9 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		This _fastFourierTransformHelper(input, 0, input count, buffer, 0, result, 0)
 	}
 	createFFTBuffer: static func (inputSize: Int) -> This {
-		result := This new(This _fastFourierTransformBufferSize(inputSize))
-		result _count = inputSize
+		bufferSize := This _fastFourierTransformBufferSize(inputSize)
+		result := This new(bufferSize)
+		result _count = bufferSize
 		result
 	}
 	inverseFastFourierTransform: static func (input: This) -> This {

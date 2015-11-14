@@ -34,7 +34,7 @@ FloatComplexTest: class extends Fixture {
 	complexNumberArray[2] = complexNumber2
 	complexNumberArray[3] = complexNumber3
 
-	tolerance := 0.00001f
+	tolerance := 1.0e-5f
 
 	init: func {
 		super("FloatComplex")
