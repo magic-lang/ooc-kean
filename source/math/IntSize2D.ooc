@@ -17,6 +17,7 @@ import math
 import IntPoint2D
 import FloatSize2D
 import structs/ArrayList
+use ooc-base
 
 IntSize2D: cover {
 	width, height: Int
@@ -60,12 +61,9 @@ IntSize2D: cover {
 	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this width, this height) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this width toString()}, #{this height toString()}" }
-	parse: static func (input: String) -> This {
-		//TODO: split should return something that is easier to clean up than an ArrayList is.
+	parse: static func (input: Text) -> This {
 		array := input split(',')
 		result := This new (array[0] toInt(), array[1] toInt())
-		array[0] free()
-		array[1] free()
 		array free()
 		result
 	}

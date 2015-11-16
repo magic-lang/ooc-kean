@@ -17,6 +17,7 @@ import math
 import FloatPoint2D
 import IntPoint3D
 import structs/ArrayList
+use ooc-base
 
 FloatPoint3D: cover {
 	x, y, z: Float
@@ -75,9 +76,11 @@ FloatPoint3D: cover {
 	toIntPoint3D: func -> IntPoint3D { IntPoint3D new(this x as Int, this y as Int, this z as Int) }
 	operator as -> String { this toString() }
 	toString: func -> String { "%.8f" formatFloat(this x) >> ", " & "%.8f" formatFloat(this y) >> ", " & "%.8f" formatFloat(this z) }
-	parse: static func (input: String) -> This {
+	parse: static func (input: Text) -> This {
 		array := input split(',')
-		This new(array[0] toFloat(), array[1] toFloat(), array[2] toFloat())
+		result := This new(array[0] toFloat(), array[1] toFloat(), array[2] toFloat())
+		array free()
+		result
 	}
 	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
 		This new(Float linearInterpolation(a x, b x, ratio), Float linearInterpolation(a y, b y, ratio), Float linearInterpolation(a z, b z, ratio))

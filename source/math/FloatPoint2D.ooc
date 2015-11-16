@@ -17,6 +17,7 @@ import math
 import FloatSize2D
 import structs/ArrayList
 import IntPoint2D
+use ooc-base
 
 FloatPoint2D: cover {
 	x, y: Float
@@ -63,9 +64,11 @@ FloatPoint2D: cover {
 	toFloatSize2D: func -> FloatSize2D { FloatSize2D new(this x, this y) }
 	operator as -> String { this toString() }
 	toString: func -> String { this x toString() & ", " clone() & this y toString() }
-	parse: static func (input: String) -> This {
+	parse: static func (input: Text) -> This {
 		array := input split(',')
-		This new(array[0] toFloat(), array[1] toFloat())
+		result := This new(array[0] toFloat(), array[1] toFloat())
+		array free()
+		result
 	}
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }

@@ -17,6 +17,7 @@ import math
 import IntPoint3D
 import FloatSize3D
 import structs/ArrayList
+use ooc-base
 
 IntSize3D: cover {
 	width, height, depth: Int
@@ -54,9 +55,11 @@ IntSize3D: cover {
 	toFloatSize3D: func -> FloatSize3D { FloatSize3D new(this width as Float, this height as Float, this depth as Float) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this width toString()}, #{this height toString()}, #{this depth toString()}" }
-	parse: static func (input: String) -> This {
+	parse: static func (input: Text) -> This {
 		array := input split(',')
-		This new (array[0] toInt(), array[1] toInt(), array[2] toInt())
+		result := This new (array[0] toInt(), array[1] toInt(), array[2] toInt())
+		array free()
+		result
 	}
 }
 operator * (left: Int, right: IntSize3D) -> IntSize3D { IntSize3D new(left * right width, left * right height, left * right depth) }
