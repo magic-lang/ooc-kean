@@ -45,15 +45,9 @@ TextBuilder: class {
 		this _data free()
 		super()
 	}
-	copy: func -> This {
-		This new(this)
-	}
-	append: func ~char (c: Char) {
-		this append(Text new(c))
-	}
-	append: func ~cstring (value: CString, length: Int) {
-		this append(Text new(value, length))
-	}
+	copy: func -> This { This new(this) }
+	append: func ~char (c: Char) { this append(Text new(c)) }
+	append: func ~cstring (value: CString, length: Int) { this append(Text new(value, length)) }
 	append: func ~text (value: Text) {
 		this _count += value take() count
 		this _data add(value claim())
@@ -62,12 +56,8 @@ TextBuilder: class {
 		for (i in 0 .. other count)
 			this append(other _data[i] copy())
 	}
-	prepend: func ~char (c: Char) {
-		this prepend(Text new(c))
-	}
-	prepend: func ~cstring (value: CString, length: Int) {
-		this prepend(Text new(value, length))
-	}
+	prepend: func ~char (c: Char) { this prepend(Text new(c)) }
+	prepend: func ~cstring (value: CString, length: Int) { this prepend(Text new(value, length)) }
 	prepend: func ~text (value: Text) {
 		this _count += value take() count
 		this _data insert(0, value claim())
@@ -77,15 +67,9 @@ TextBuilder: class {
 		for (i in 1 .. c + 1)
 			this prepend(other _data[c - i] take() copy())
 	}
-	toString: func -> String {
-		this toText() toString()
-	}
-	toText: func -> Text {
-		this join(Text empty)
-	}
-	join: func ~withChar (separator: Char) -> Text {
-		this join(Text new(separator))
-	}
+	toString: func -> String { this toText() toString() }
+	toText: func -> Text { this join(Text empty) }
+	join: func ~withChar (separator: Char) -> Text { this join(Text new(separator)) }
 	join: func ~withText (separator: Text) -> Text {
 		s := separator take()
 		length := s count * (this _data count - 1) + this count
@@ -107,9 +91,7 @@ TextBuilder: class {
 			result = TextBuffer empty
 		Text new(result give())
 	}
-	println: func {
-		this toString() println().free()
-	}
+	println: func { this toString() println().free() }
 	operator [] (index: Int) -> Char {
 		i := index
 		position := 0
@@ -121,12 +103,8 @@ TextBuilder: class {
 		}
 		this _data[position] take()[index]
 	}
-	operator + (other: This) -> This {
-		this append(other)
-	}
-	operator + (value: Text) -> This {
-		this append(value)
-	}
+	operator + (other: This) -> This { this append(other) }
+	operator + (value: Text) -> This { this append(value) }
 	operator == (other: This) -> Bool {
 		result := this count == other count
 		i := 0
@@ -134,9 +112,7 @@ TextBuilder: class {
 			++i
 		result
 	}
-	operator == (string: String) -> Bool {
-		this == Text new(string)
-	}
+	operator == (string: String) -> Bool { this == Text new(string) }
 	operator == (text: Text) -> Bool {
 		t := text take()
 		result := this count == t count
@@ -146,9 +122,7 @@ TextBuilder: class {
 		text free(Owner Receiver)
 		result
 	}
-	operator != (text: Text) -> Bool {
-		!(this == text)
-	}
+	operator != (text: Text) -> Bool { !(this == text) }
 }
 
 operator == (left: String, right: TextBuilder) -> Bool { right == left }
