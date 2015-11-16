@@ -16,6 +16,7 @@
  */
 
 use ooc-math
+use ooc-draw
 
 version(!gpuOff) {
 GLShaderProgram: abstract class {
@@ -30,6 +31,11 @@ GLShaderProgram: abstract class {
 	setUniform: abstract func ~FloatPoint2D (name: String, value: FloatPoint2D)
 	setUniform: abstract func ~FloatPoint3D (name: String, value: FloatPoint3D)
 	setUniform: abstract func ~FloatPoint4D (name: String, value: FloatPoint4D)
+	setUniform: abstract func ~ColorBgr (name: String, value: ColorBgr)
+	setUniform: abstract func ~ColorBgra (name: String, value: ColorBgra)
+	setUniform: abstract func ~ColorUv (name: String, value: ColorUv)
+	setUniform: abstract func ~ColorYuv (name: String, value: ColorYuv)
+	setUniform: abstract func ~ColorYuva (name: String, value: ColorYuva)
 	setUniform: abstract func ~FloatSize2D (name: String, value: FloatSize2D)
 	setUniform: abstract func ~FloatSize3D (name: String, value: FloatSize3D)
 	setUniform: abstract func ~FloatArray (name: String, value: Float*, count: Int)
