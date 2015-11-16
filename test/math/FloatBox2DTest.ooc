@@ -120,6 +120,15 @@ FloatBox2DTest: class extends Fixture {
 			expect(maximumSeparatedDistance height, is equal to(7.f) within(this precision))
 			points free()
 		})
+		this add("interpolate", func {
+			a := FloatBox2D new(1.0f, 5.0f, 3.0f, 4.0f)
+			b := FloatBox2D new(4.0f, -1.0f, 0.0f, 1.0f)
+			interpolatedBox := FloatBox2D linearInterpolation(a, b, 1.0f / 3.0f)
+			expect(interpolatedBox left, is equal to(2.0f) within(this precision))
+			expect(interpolatedBox top, is equal to(3.0f) within(this precision))
+			expect(interpolatedBox width, is equal to(2.0f) within(this precision))
+			expect(interpolatedBox height, is equal to(3.0f) within(this precision))
+		})
 	}
 }
 FloatBox2DTest new() run()
