@@ -14,9 +14,6 @@ IntSize2DTest: class extends Fixture {
 		super("IntSize2D")
 		this add("equality", func {
 			point := IntSize2D new()
-//			FIXME: There is no equals interface yet
-//			expect(this vector0, is equal to(this vector0))
-//			expect(this vector0 equals(this vector0 as Object), is true)
 			expect(this vector0 == this vector0, is true)
 			expect(this vector0 != this vector1, is true)
 			expect(this vector0 == point, is false)
@@ -58,6 +55,38 @@ IntSize2DTest: class extends Fixture {
 			vector := vector0 toFloatSize2D()
 			expect(vector width, is equal to(22.0f) within(this precision))
 			expect(vector height, is equal to(-3.0f) within(this precision))
+		})
+		this add("scalar product", func {
+			expect(this vector0 scalarProduct(this vector1), is equal to (225))
+		})
+		this add("minimum maximum", func {
+			max := vector0 maximum(this vector1)
+			min := vector0 minimum(this vector1)
+			expect(max width, is equal to(22))
+			expect(max height, is equal to(13))
+			expect(min width, is equal to(12))
+			expect(min height, is equal to(-3))
+		})
+		this add("clamp", func {
+			result := vector1 clamp(this vector0, this vector2)
+			expect(result width, is equal to(22))
+			expect(result height, is equal to(10))
+		})
+		this add("polar", func {
+			sqrttwo := IntSize2D polar(1.415f, 0.785f)
+			expect(sqrttwo width, is equal to(1))
+			expect(sqrttwo height, is equal to(1))
+		})
+		this add("area, square, empty", func {
+			rectangle := IntSize2D new(10, 20)
+			square := IntSize2D new(5, 5)
+			empty := IntSize2D new()
+			expect(rectangle area, is equal to(200))
+			expect(square square, is true)
+			expect(rectangle square, is false)
+			expect(empty empty, is true)
+			expect(square empty, is false)
+			expect(empty area, is equal to(0))
 		})
 	}
 }
