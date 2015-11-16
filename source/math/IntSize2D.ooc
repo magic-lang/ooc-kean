@@ -36,7 +36,6 @@ IntSize2D: cover {
 	minimum: func ~Int (ceiling: Int) -> This { this minimum(This new(ceiling)) }
 	maximum: func ~Int (floor: Int) -> This { this maximum(This new(floor)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height)) }
-	fillEven: static func (other: This) -> This { This new(other width + (other width % 2 == 1 ? 1 : 0), other height + (other height % 2 == 1 ? 1 : 0)) }
 	operator + (other: This) -> This { This new(this width + other width, this height + other height) }
 	operator + (other: IntPoint2D) -> This { This new(this width + other x, this height + other y) }
 	operator - (other: This) -> This { This new(this width - other width, this height - other height) }
@@ -56,7 +55,7 @@ IntSize2D: cover {
 	operator > (other: This) -> Bool { this width > other width && this height > other height }
 	operator <= (other: This) -> Bool { this width <= other width && this height <= other height }
 	operator >= (other: This) -> Bool { this width >= other width && this height >= other height }
-	polar: static func (radius, azimuth: Int) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
+	polar: static func (radius, azimuth: Float) -> This { This new((radius * cos(azimuth)) as Int, (radius * sin(azimuth)) as Int) }
 	toFloatSize2D: func -> FloatSize2D { FloatSize2D new(this width as Float, this height as Float) }
 	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this width, this height) }
 	operator as -> String { this toString() }

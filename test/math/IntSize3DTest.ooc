@@ -14,9 +14,6 @@ IntSize3DTest: class extends Fixture {
 		super("IntSize3D")
 		this add("equality", func {
 			point := IntSize3D new()
-//			FIXME: There is no equals interface yet
-//			expect(this vector0, is equal to(this vector0))
-//			expect(this vector0 equals(this vector0 as Object), is true)
 			expect(this vector0 == this vector0, is true)
 			expect(this vector0 != this vector1, is true)
 			expect(this vector0 == point, is false)
@@ -60,6 +57,32 @@ IntSize3DTest: class extends Fixture {
 			expect(vector width, is equal to(22.0f) within(this precision))
 			expect(vector height, is equal to(-3.0f) within(this precision))
 			expect(vector depth, is equal to(8.0f) within(this precision))
+		})
+		this add("scalar product", func {
+			expect(this vector0 scalarProduct(this vector1), is equal to (161))
+		})
+		this add("minimum maximum", func {
+			max := this vector0 maximum(this vector1)
+			min := this vector0 minimum(this vector1)
+			expect(max width, is equal to(22))
+			expect(max height, is equal to(13))
+			expect(max depth, is equal to(8))
+			expect(min width, is equal to(12))
+			expect(min height, is equal to(-3))
+			expect(min depth, is equal to(-8))
+		})
+		this add("clamp", func {
+			result := this vector1 clamp(this vector0, this vector2)
+			expect(result width, is equal to(22))
+			expect(result height, is equal to(10))
+			expect(result depth, is equal to(8))
+		})
+		this add("volume, empty", func {
+			empty := IntSize3D new()
+			expect(empty empty, is true)
+			expect(this vector1 empty, is false)
+			expect(this vector1 volume, is equal to(-1248))
+			expect(empty volume, is equal to(0))
 		})
 	}
 }
