@@ -79,8 +79,8 @@ FloatConvexHull2D: class {
 					leftMostIndex = i
 				else if (points[i] x > points[rightMostIndex] x)
 					rightMostIndex = i
-			leftEndpoint := points[leftMostIndex]
-			rightEndpoint := points[rightMostIndex]
+			leftEndpoint := points remove(leftMostIndex)
+			rightEndpoint := points remove(rightMostIndex)
 			leftSet := VectorList<FloatPoint2D> new()
 			rightSet := VectorList<FloatPoint2D> new()
 			for (i in 0 .. points count) {
