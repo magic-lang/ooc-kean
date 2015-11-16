@@ -114,8 +114,8 @@ ColorYuv: cover {
 	// TODO: use valid default colors
 	init: func@ ~default { this init(0, 0, 0) }
 	init: func@ ~int (y, u, v: Int) { this init(y as UInt8, u as UInt8, v as UInt8) }
-	init: func@ ~float (y, u, v: Float) { this init(y*255.0f clamp(0.0f, 255.0f) as UInt8, u*255.0f clamp(0.0f, 255.0f) as UInt8, v*255.0f clamp(0.0f, 255.0f) as UInt8) }
-	init: func@ ~double (y, u, v: Double) { this init(y*255.0f clamp(0.0f, 255.0f) as UInt8, u*255.0f clamp(0.0f, 255.0f) as UInt8, v*255.0f clamp(0.0f, 255.0f) as UInt8) }
+	init: func@ ~float (y, u, v: Float) { this init(y * 255.0f clamp(0.0f, 255.0f) as UInt8, u * 255.0f clamp(0.0f, 255.0f) as UInt8, v * 255.0f clamp(0.0f, 255.0f) as UInt8) }
+	init: func@ ~double (y, u, v: Double) { this init(y * 255.0f clamp(0.0f, 255.0f) as UInt8, u * 255.0f clamp(0.0f, 255.0f) as UInt8, v * 255.0f clamp(0.0f, 255.0f) as UInt8) }
 	copy: func -> This { This new(this y, this u, this v) }
 	toMonochrome: func -> ColorMonochrome { ColorMonochrome new(this y) }
 	toYuv: func -> This { this copy() }
