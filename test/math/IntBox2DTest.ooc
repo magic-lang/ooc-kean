@@ -1,5 +1,6 @@
 use ooc-unit
 use ooc-math
+use ooc-base
 import VectorList
 import math
 import lang/IO
@@ -96,7 +97,7 @@ IntBox2DTest: class extends Fixture {
 			expect(this box0 toString() == "1, 2, 3, 4")
 		})
 		this add("parse", func {
-			box := IntBox2D parse("1, 2, 3, 4")
+			box := IntBox2D parse(t"1, 2, 3, 4")
 			expect(box left, is equal to(1))
 			expect(box top, is equal to(2))
 			expect(box right, is equal to(1 + 3))

@@ -19,6 +19,7 @@ import FloatSize2D
 import IntBox2D
 import FloatPoint2DVectorList
 import structs/ArrayList
+use ooc-base
 use ooc-collections
 
 FloatBox2D: cover {
@@ -152,9 +153,11 @@ FloatBox2D: cover {
 		This createAround(newCenter, newSize)
 	}
 	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
-	parse: static func (input: String) -> This {
+	parse: static func (input: Text) -> This {
 		array := input split(',')
-		This new(array[0] toFloat(), array[1] toFloat(), array[2] toFloat(), array[3] toFloat())
+		result := This new(array[0] toFloat(), array[1] toFloat(), array[2] toFloat(), array[3] toFloat())
+		array free()
+		result
 	}
 	createAround: static func (center: FloatPoint2D, size: FloatSize2D) -> This { This new(center - (size / 2.0f), size) }
 	bounds: static func (left, right, top, bottom: Float) -> This { This new(left, top, right - left, bottom - top) }

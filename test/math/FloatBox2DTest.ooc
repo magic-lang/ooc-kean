@@ -1,6 +1,7 @@
 use ooc-unit
 use ooc-math
 use ooc-collections
+use ooc-base
 import math
 import lang/IO
 
@@ -131,7 +132,7 @@ FloatBox2DTest: class extends Fixture {
 			points free()
 		})
 		this add("parse", func {
-			box := FloatBox2D parse("1.0, 2.0, 3.0, 4.0")
+			box := FloatBox2D parse(t"1.0, 2.0, 3.0, 4.0")
 			expect(box left, is equal to(1.0f) within(this precision))
 			expect(box top, is equal to(2.0f) within(this precision))
 			expect(box right, is equal to(1.0f + 3.0f) within(this precision))

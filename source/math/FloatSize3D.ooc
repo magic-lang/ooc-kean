@@ -18,6 +18,7 @@ import FloatPoint3D
 import IntPoint3D
 import IntSize3D
 import structs/ArrayList
+use ooc-base
 
 FloatSize3D: cover {
 	width, height, depth: Float
@@ -75,9 +76,11 @@ FloatSize3D: cover {
 	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this width, this height, this depth) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this width toString()}, #{this height toString()}, #{this depth toString()}" }
-	parse: static func (input: String) -> This {
+	parse: static func (input: Text) -> This {
 		array := input split(',')
-		This new (array[0] toFloat(), array[1] toFloat(), array[2] toFloat())
+		result := This new (array[0] toFloat(), array[1] toFloat(), array[2] toFloat())
+		array free()
+		result
 	}
 	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
 		This new(Float linearInterpolation(a width, b width, ratio), Float linearInterpolation(a height, b height, ratio), Float linearInterpolation(a depth, b depth, ratio))
