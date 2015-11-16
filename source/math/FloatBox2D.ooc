@@ -34,7 +34,7 @@ FloatBox2D: cover {
 	rightTop ::= FloatPoint2D new(this right, this top)
 	leftBottom ::= FloatPoint2D new(this left, this bottom)
 	rightBottom ::= this leftTop + this size
-	center ::= this leftTop + (this size / 2.0f)
+	center ::= this leftTop + this size / 2.0f
 	leftCenter ::= FloatPoint2D new(this left, this center y)
 	rightCenter ::= FloatPoint2D new(this right, this center y)
 	topCenter ::= FloatPoint2D new(this center x, this top)
