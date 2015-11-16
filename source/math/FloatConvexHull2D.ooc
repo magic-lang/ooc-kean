@@ -42,15 +42,19 @@ FloatConvexHull2D: class {
 	contains: func ~Point (point: FloatPoint2D) -> Bool {
 		result := true
 		for (i in 0 .. this count)
-			if (result && This _isOnLeft(this _points[i], this _points[(i + 1) % this count], point))
+			if (This _isOnLeft(this _points[i], this _points[(i + 1) % this count], point)) {
 				result = false
+				break
+			}
 		result
 	}
 	contains: func ~ConvexHull (other: This) -> Bool {
 		result := true
 		for (i in 0 .. other count)
-			if (result && !this contains(other _points[i]))
+			if (!this contains(other _points[i])) {
 				result = false
+				break
+			}
 		result
 	}
 	contains: func ~FloatBox2D (box: FloatBox2D) -> Bool {
