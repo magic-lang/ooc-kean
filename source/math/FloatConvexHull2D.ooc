@@ -74,7 +74,7 @@ FloatConvexHull2D: class {
 			this _points clear()
 			leftMostIndex := 0
 			rightMostIndex := 0
-			for (i in 0 .. points count)
+			for (i in 1 .. points count)
 				if (points[i] x < points[leftMostIndex] x)
 					leftMostIndex = i
 				else if (points[i] x > points[rightMostIndex] x)
