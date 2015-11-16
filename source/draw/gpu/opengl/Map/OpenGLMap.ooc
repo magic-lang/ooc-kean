@@ -20,7 +20,7 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 import backend/GLShaderProgram
-import OpenGLContext, OpenGLPacked
+import OpenGLContext, OpenGLPacked, OpenGLVolumeMonochrome
 
 version(!gpuOff) {
 OpenGLMap: abstract class extends GpuMap {
@@ -57,6 +57,7 @@ OpenGLMap: abstract class extends GpuMap {
 		super()
 	}
 	use: override func {
+		this program use()
 		textureCount := 0
 		action := func (key: String, value: Object) {
 			program := this program
@@ -86,12 +87,16 @@ OpenGLMap: abstract class extends GpuMap {
 						program setUniform(key, textureCount)
 						textureCount += 1
 					}
-					case => Debug raise("Invalid object type in OpenGLMap use!")
+					case image: OpenGLVolumeMonochrome => {
+						image _backend bind(textureCount)
+						program setUniform(key, textureCount)
+						textureCount += 1
+					}
+					case => Debug raise("Invalid object type in OpenGLMap use: %s" format(value class name))
 				}
 		}
 		this apply(action)
 		(action as Closure) dispose()
-		this program use()
 	}
 }
 OpenGLMapMesh: class extends OpenGLMap {

@@ -39,7 +39,6 @@ GpuCanvasYuv420Semiplanar: class extends GpuSurface {
 			this _target uv canvas focalLength = value / 2
 		}
 	}
-
 	pen: Pen {
 		get { this _pen }
 		set(value) {
@@ -59,6 +58,11 @@ GpuCanvasYuv420Semiplanar: class extends GpuSurface {
 		this _target y canvas draw(gpuImage y, source, destination, map)
 		this _target uv canvas draw(gpuImage uv, IntBox2D new(source leftTop / 2, source size / 2), IntBox2D new(destination leftTop / 2, destination size / 2), map)
 	}
+	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) {
+		gpuImage := image as GpuYuv420Semiplanar
+		this _target y canvas draw(gpuImage y, source, destination)
+		this _target uv canvas draw(gpuImage uv, IntBox2D new(source leftTop / 2, source size / 2), IntBox2D new(destination leftTop / 2, destination size / 2))
+	}
 	drawLines: override func (pointList: VectorList<FloatPoint2D>) {
 		this _target y canvas drawLines(pointList)
 		uvLines := VectorList<FloatPoint2D> new()
@@ -72,7 +76,9 @@ GpuCanvasYuv420Semiplanar: class extends GpuSurface {
 		this _target y canvas fill()
 		this _target uv canvas fill()
 	}
-	draw: override func ~mesh (image: Image, mesh: GpuMesh) {
+	draw: override func ~mesh (image: GpuImage, mesh: GpuMesh) {
+		if (!image instanceOf?(GpuYuv420Semiplanar))
+			Debug raise("Invalid input format in GpuYuv420SemiplanarCanvas::draw~mesh")
 		yuv := image as GpuYuv420Semiplanar
 		this _target y canvas draw(yuv y, mesh)
 		this _target uv canvas draw(yuv uv, mesh)

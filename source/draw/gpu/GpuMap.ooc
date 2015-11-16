@@ -14,14 +14,16 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this _program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-math
+use ooc-base
 use ooc-collections
 
 _MapEntry: class {
 	key: String
 	value: Object
-	init: func (=key, =value)
+	_ownsObject: Bool
+	init: func (=key, =value, =_ownsObject)
 	free: override func {
-		if (this value instanceOf?(Cell))
+		if (this _ownsObject)
 			this value free()
 		super()
 	}
@@ -34,15 +36,15 @@ _Map: class {
 		this _entries free()
 		super()
 	}
-	add: func (key: String, value: Object) {
+	add: func (key: String, value: Object, ownsObject: Bool) {
 		entry := this get(key)
 		if (entry != null) {
-			if (entry value instanceOf?(Cell))
+			if (entry _ownsObject)
 				entry value free()
 			entry value = value
 		}
 		else
-			this _entries add(_MapEntry new(key, value))
+			this _entries add(_MapEntry new(key, value, ownsObject))
 	}
 	get: func (key: String) -> _MapEntry {
 		result: _MapEntry = null
@@ -78,9 +80,9 @@ GpuMap: abstract class {
 	use: virtual func
 	add: func <T> (key: String, value: T) {
 		if (T inheritsFrom?(Object))
-			this _bindings add(key, value as Object)
+			this _bindings add(key, value as Object, false)
 		else
-			this _bindings add(key, Cell<T> new(value))
+			this _bindings add(key, Cell<T> new(value), true)
 	}
 	get: func (key: String) -> Object { this _bindings get(key) value }
 	apply: func (action: Func (String, Object)) { this _bindings apply(action) }

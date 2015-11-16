@@ -152,6 +152,7 @@ OpenGLContext: class extends GpuContext {
 		} as OpenGLMapPack
 		map imageWidth = source size width
 		map channels = channels
+		map add("texture0", source)
 		target canvas viewport = viewport
 		target canvas draw(source, map)
 	}

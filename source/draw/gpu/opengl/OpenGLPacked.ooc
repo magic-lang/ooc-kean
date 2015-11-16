@@ -52,7 +52,6 @@ OpenGLPacked: abstract class extends GpuImage {
 			this _backend upload(raster buffer pointer, raster stride)
 		}
 	}
-	bind: override func (unit: UInt) { this _backend bind(unit) }
 	_createCanvas: override func -> GpuSurface { OpenGLCanvas new(this, this context) }
 }
 }
