@@ -127,28 +127,23 @@ AndroidContext: class extends OpenGLContext {
 			(rasterResult, fenceResult) = super(gpuImage)
 		(rasterResult, fenceResult)
 	}
+	_unpack: static func (source: GpuImage, target: GpuImage, map: GpuMap, targetWidth: Int, transform: FloatTransform3D, scaleX: Float, scaleY: Float, startY: Float) {
+		map add("texture0", source)
+		map add("targetWidth", targetWidth)
+		map add("transform", transform)
+		map add("scaleX", scaleX)
+		map add("scaleY", scaleY)
+		map add("startY", startY)
+		target canvas draw(source, map)
+	}
 	unpackBgraToYuv420Semiplanar: func (source: GpuImage, targetSize: IntSize2D) -> GpuYuv420Semiplanar {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
 		sourceSize := source size
-		this _unpackRgbaToMonochrome add("texture0", source)
-		this _unpackRgbaToMonochrome add("targetWidth", target y size width as Int)
-		this _unpackRgbaToMonochrome add("transform", FloatTransform3D createScaling(source transform a, -source transform e, 1.0f))
-		scaleX := (targetSize width as Float) / (4 * sourceSize width)
-		this _unpackRgbaToMonochrome add("scaleX", scaleX)
-		scaleY := targetSize height as Float / sourceSize height
-		this _unpackRgbaToMonochrome add("scaleY", scaleY)
-		this _unpackRgbaToMonochrome add("startY", 0.0f)
-		target y canvas draw(source, this _unpackRgbaToMonochrome)
-
+		transform := FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
+		This _unpack(source, target y, this _unpackRgbaToMonochrome, targetSize width, transform, targetSize width as Float / (4 * sourceSize width), targetSize height as Float / sourceSize height, 0.0f)
 		uvSize := target uv size
-		scaleX = (uvSize width as Float) / (2 * sourceSize width)
-		this _unpackRgbaToUv add("scaleX", scaleX)
 		startY := (sourceSize height - uvSize height) as Float / sourceSize height
-		this _unpackRgbaToUv add("startY", startY)
-		scaleY = 1.0f - startY
-		this _unpackRgbaToUv add("scaleY", scaleY)
-		this _unpackRgbaToUv add("transform", FloatTransform3D createScaling(source transform a, -source transform e, 1.0f))
-		target uv canvas draw(source, this _unpackRgbaToUv)
+		This _unpack(source, target uv, this _unpackRgbaToUv, uvSize width, transform, (uvSize width as Float) / (2 * sourceSize width), 1.0f - startY, startY)
 		target
 	}
 	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }
