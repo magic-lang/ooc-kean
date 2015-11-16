@@ -56,7 +56,7 @@ FloatMatrix : cover {
 	elements ::= this _elements pointer as Float*
 
 	init: func@ ~buffer (=_elements, =_dimensions)
-	init: func@ ~IntSize2D (=_dimensions) {
+	init: func@ ~IntSize2D (._dimensions) {
 		this init(OwnedBuffer new(_dimensions area * Float size), _dimensions)
 	}
 	init: func@ (width, height: Int) {
