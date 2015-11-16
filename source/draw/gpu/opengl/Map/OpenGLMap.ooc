@@ -27,7 +27,7 @@ OpenGLMap: abstract class extends GpuMap {
 	_vertexSource: String
 	_fragmentSource: String
 	_program: GLShaderProgram[]
-	program: GLShaderProgram {
+	_currentProgram: GLShaderProgram {
 		get {
 			index := this _context getCurrentIndex()
 			result := this _program[index]
@@ -57,10 +57,10 @@ OpenGLMap: abstract class extends GpuMap {
 		super()
 	}
 	use: override func {
-		this program use()
+		this _currentProgram use()
 		textureCount := 0
 		action := func (key: String, value: Object) {
-			program := this program
+			program := this _currentProgram
 			if (value instanceOf?(Cell)) {
 				cell := value as Cell
 				match (cell T) {
