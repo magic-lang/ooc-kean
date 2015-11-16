@@ -39,18 +39,12 @@ TextBuffer: cover {
 		this free(Owner Receiver)
 		result
 	}}
-	init: func@ ~empty {
-		this init(OwnedBuffer new())
-	}
-	init: func@ ~fromSize (size: Int) {
-		this init(OwnedBuffer new(size))
-	}
+	init: func@ ~empty { this init(OwnedBuffer new()) }
+	init: func@ ~fromSize (size: Int) { this init(OwnedBuffer new(size)) }
 	init: func@ ~fromData (data: Char*, count: Int, owner := Owner Unknown) {
 		this init(OwnedBuffer new(data as UInt8*, count, owner))
 	}
-	init: func@ ~fromBuffer (buffer: Buffer) {
-		this init(buffer data, buffer size)
-	}
+	init: func@ ~fromBuffer (buffer: Buffer) { this init(buffer data, buffer size) }
 	init: func@ (=_backend)
 	take: func -> This { // call by value -> modifies copy of cover
 		this _backend = this _backend take()
@@ -64,12 +58,8 @@ TextBuffer: cover {
 		this _backend = this _backend claim()
 		this
 	}
-	free: func@ -> Bool {
-		this _backend free()
-	}
-	free: func@ ~withCriteria (criteria: Owner) -> Bool {
-		this _backend free(criteria)
-	}
+	free: func@ -> Bool { this _backend free() }
+	free: func@ ~withCriteria (criteria: Owner) -> Bool { this _backend free(criteria) }
 	slice: func ~untilEnd (start: Int) -> This {
 		this _backend = this _backend slice(start)
 		this
@@ -82,9 +72,7 @@ TextBuffer: cover {
 		this _backend = this _backend copy()
 		this
 	}
-	copyTo: func (destination: This) -> Int {
-		this _backend copyTo(destination _backend)
-	}
+	copyTo: func (destination: This) -> Int { this _backend copyTo(destination _backend) }
 	toString: func -> String {
 		t := this take()
 		result := Buffer new()
@@ -92,20 +80,10 @@ TextBuffer: cover {
 		this free(Owner Receiver)
 		String new(result)
 	}
-	operator [] (index: Int) -> Char {
-		this raw[index]
-	}
-	operator [] (range: Range) -> This {
-		this slice(range min, range max - range min)
-	}
-	operator []= (index: Int, value: Char) {
-		this raw[index] = value
-	}
-	operator []= (range: Range, data: This) {
-		data copyTo(this[range])
-	}
-	operator == (other: This) -> Bool {
-		this _backend == other _backend
-	}
+	operator [] (index: Int) -> Char { this raw[index] }
+	operator [] (range: Range) -> This { this slice(range min, range max - range min) }
+	operator []= (index: Int, value: Char) { this raw[index] = value }
+	operator []= (range: Range, data: This) { data copyTo(this[range]) }
+	operator == (other: This) -> Bool { this _backend == other _backend }
 	empty: static This { get { This new() } }
 }
