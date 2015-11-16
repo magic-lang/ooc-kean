@@ -83,7 +83,12 @@ GpuSurface: abstract class extends Canvas {
 			temporary = this _context createImage(image as RasterImage)
 		else
 			Debug raise("Invalid image type in GpuSurface!")
-		map add("texture0", temporary)
+		if (temporary instanceOf?(GpuYuv420Semiplanar)) {
+			yuv := temporary as GpuYuv420Semiplanar
+			map add("texture0", yuv y)
+			map add("texture1", yuv uv)
+		} else
+			map add("texture0", temporary)
 		this draw(temporary, source, destination, map)
 		if (image != temporary)
 			temporary free()
