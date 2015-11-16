@@ -70,8 +70,8 @@ FloatConvexHull2D: class {
 		if (this count > 2) {
 			// Uses the Quickhull algorithm if more than two points, average complexity O(n log n)
 			// https://en.wikipedia.org/wiki/Quickhull
-			points := this _points copy()
-			this _points clear()
+			points := this _points
+			this _points = VectorList<FloatPoint2D> new()
 			leftMostIndex := 0
 			rightMostIndex := 0
 			for (i in 1 .. points count)
