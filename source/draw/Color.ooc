@@ -71,7 +71,6 @@ ColorUv: cover {
 		this v = color v
 	}
 	init: func@ (=u, =v)
-	// TODO: use valid default colors
 	init: func@ ~default { this init(0, 0) }
 	init: func@ ~int (i: Int) { this init(i as UInt8) }
 	init: func@ ~float (f: Float) { this init(f*255.0f clamp(0.0f, 255.0f) as UInt8) }
@@ -111,7 +110,6 @@ ColorYuv: cover {
 		this v = color v
 	}
 	init: func@ (=y, =u, =v)
-	// TODO: use valid default colors
 	init: func@ ~default { this init(0, 0, 0) }
 	init: func@ ~int (y, u, v: Int) { this init(y as UInt8, u as UInt8, v as UInt8) }
 	init: func@ ~float (y, u, v: Float) { this init(y * 255.0f clamp(0.0f, 255.0f) as UInt8, u * 255.0f clamp(0.0f, 255.0f) as UInt8, v * 255.0f clamp(0.0f, 255.0f) as UInt8) }
@@ -150,10 +148,6 @@ ColorYuva: cover {
 		this yuv = ColorYuv new(y, u, v)
 		this alpha = a
 	}
-	init: func@ ~default { this init(0, 128, 128, 255) }
-	init: func@ ~int (y, u, v, a: Int) { this init(y as UInt8, u as UInt8, v as UInt8, a as UInt8) }
-	init: func@ ~float (y, u, v, a: Float) { this init(y*255.0f clamp(0.0f, 255.0f) as UInt8, u*255.0f clamp(0.0f, 255.0f) as UInt8, v*255.0f clamp(0.0f, 255.0f) as UInt8, a*255.0f clamp(0.0f, 255.0f) as UInt8) }
-	init: func@ ~double (y, u, v, a: Double) { this init(y*255.0f clamp(0.0f, 255.0f) as UInt8, u*255.0f clamp(0.0f, 255.0f) as UInt8, v*255.0f clamp(0.0f, 255.0f) as UInt8, a*255.0f clamp(0.0f, 255.0f) as UInt8) }
 	toMonochrome: func -> ColorMonochrome { ColorMonochrome new(this yuv y) }
 	toYuv: func -> ColorYuv { this yuv }
 	toYuva: func -> This { this }
