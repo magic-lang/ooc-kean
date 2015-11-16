@@ -62,6 +62,50 @@ FloatComplexVectorListTest: class extends Fixture {
 			for (i in 0 .. (complexNumberArray count))
 				expect((result[i] - resultInPlace[i]) absoluteValue < tolerance, is true)
 		})
+		this add("sum and mean", func {
+			list := FloatComplexVectorList new()
+			list add(FloatComplex new(1, 1))
+			list add(FloatComplex new(2, -3))
+			list add(FloatComplex new(4, -2))
+			list add(FloatComplex new(-1, 8))
+			sum := list sum
+			mean := list mean
+			expect(sum real == 6.0f)
+			expect(sum imaginary == 4.0f)
+			expect(mean real == 1.5f)
+			expect(mean imaginary == 1.0f) //FIXME getting errors using "is equal to" here because... ooc (expected 1.00000000 got 1.00000000)
+		})
+		this add("real, imaginary lists", func {
+			list := FloatComplexVectorList new()
+			list add(FloatComplex new(1, 1))
+			list add(FloatComplex new(2, -3))
+			list add(FloatComplex new(4, -2))
+			reals := list real
+			imaginaries := list imaginary
+			expect(reals sum, is equal to(7.0f) within(tolerance))
+			expect(imaginaries sum == -4.0f) //FIXME getting errors using "is equal to" here because... ooc 
+		})
+		this add("createDefault", func {
+			list := FloatComplexVectorList new(3, FloatComplex new(1, 2))
+			expect(list real sum, is equal to(3.0f) within(tolerance))
+			expect(list imaginary sum, is equal to(6.0f) within(tolerance))
+		})
+		this add("addInto and operators", func {
+			list := FloatComplexVectorList new(3, FloatComplex new(1, 2))
+			originalSum := list sum
+			other := FloatComplexVectorList new(2, FloatComplex new(2, 3))
+			single := FloatComplex new(1, 1)
+			
+			list addInto(other)
+			expect(list sum == originalSum + other sum)
+			
+			added := list + single
+			subtracted := list - single
+			expect(added sum real, is equal to(10.0f) within(tolerance))
+			expect(added sum imaginary, is equal to(15.0f) within(tolerance))
+			expect(subtracted sum real, is equal to(4.0f) within(tolerance))
+			expect(subtracted sum imaginary, is equal to(9.0f) within(tolerance))
+		})
 	}
 }
 FloatComplexVectorListTest new() run()
