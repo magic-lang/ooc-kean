@@ -94,7 +94,7 @@ FloatConvexHull2D: class {
 			for (i in 0 .. points count) {
 				point := points[i]
 				(This _isOnLeft(leftEndpoint, rightEndpoint, point) ? leftSet : rightSet) add(point)
-			}				
+			}
 			this _points add(leftEndpoint)
 			this _findHull(leftSet, leftEndpoint, rightEndpoint)
 			this _points add(rightEndpoint)
