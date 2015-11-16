@@ -65,7 +65,7 @@ FloatConvexHull2D: class {
 	computeHull: func {
 		if (this count > 2) {
 			// Uses the Quickhull algorithm if more than two points, average complexity O(n log n)
-			// http://www.cse.yorku.ca/~aaw/Hang/quick_points/Algorithm.html
+			// https://en.wikipedia.org/wiki/Quickhull
 			points := this _points copy()
 			this _points clear()
 			leftMostIndex := 0
