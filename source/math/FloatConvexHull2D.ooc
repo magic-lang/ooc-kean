@@ -83,12 +83,10 @@ FloatConvexHull2D: class {
 			rightEndpoint := points[rightMostIndex]
 			leftSet := VectorList<FloatPoint2D> new()
 			rightSet := VectorList<FloatPoint2D> new()
-			for (i in 0 .. points count)
-				if (i != leftMostIndex && i != rightMostIndex)
-					if (This _isOnLeft(points[leftMostIndex], points[rightMostIndex], points[i]))
-						leftSet add(points[i])
-					else
-						rightSet add(points[i])
+			for (i in 0 .. points count) {
+				point := points[i]
+				(This _isOnLeft(leftEndpoint, rightEndpoint, point) ? leftSet : rightSet) add(point)
+			}				
 			this _points add(leftEndpoint)
 			this _findHull(leftSet, leftEndpoint, rightEndpoint)
 			this _points add(rightEndpoint)
