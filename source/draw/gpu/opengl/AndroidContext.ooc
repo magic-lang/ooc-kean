@@ -66,7 +66,7 @@ AndroidContext: class extends OpenGLContext {
 		}
 		index == -1 ? EGLBgra new(size, this) : this _packers remove(index)
 	}
-	toBuffer: func (gpuImage: GpuImage, packMap: OpenGLMapPack) -> (ByteBuffer, GpuFence) {
+	toBuffer: func (gpuImage: GpuImage, packMap: GpuMap) -> (ByteBuffer, GpuFence) {
 		channels := (gpuImage as OpenGLPacked) channels
 		packSize := IntSize2D new(gpuImage size width / (4 / channels), gpuImage size height)
 		gpuRgba := this getPacker(packSize)
@@ -127,16 +127,23 @@ AndroidContext: class extends OpenGLContext {
 			(rasterResult, fenceResult) = super(gpuImage)
 		(rasterResult, fenceResult)
 	}
+	_unpack: static func (source: GpuImage, target: GpuImage, map: GpuMap, targetWidth: Int, transform: FloatTransform3D, scaleX: Float, scaleY: Float, startY: Float) {
+		map add("texture0", source)
+		map add("targetWidth", targetWidth)
+		map add("transform", transform)
+		map add("scaleX", scaleX)
+		map add("scaleY", scaleY)
+		map add("startY", startY)
+		target canvas draw(source, map)
+	}
 	unpackBgraToYuv420Semiplanar: func (source: GpuImage, targetSize: IntSize2D) -> GpuYuv420Semiplanar {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
-		this _unpackRgbaToMonochrome targetSize = target y size
-		this _unpackRgbaToMonochrome sourceSize = source size
-		this _unpackRgbaToMonochrome transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
-		target y canvas draw(source, this _unpackRgbaToMonochrome)
-		this _unpackRgbaToUv targetSize = target uv size
-		this _unpackRgbaToUv sourceSize = source size
-		this _unpackRgbaToUv transform = FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
-		target uv canvas draw(source, this _unpackRgbaToUv)
+		sourceSize := source size
+		transform := FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
+		This _unpack(source, target y, this _unpackRgbaToMonochrome, targetSize width, transform, targetSize width as Float / (4 * sourceSize width), targetSize height as Float / sourceSize height, 0.0f)
+		uvSize := target uv size
+		startY := (sourceSize height - uvSize height) as Float / sourceSize height
+		This _unpack(source, target uv, this _unpackRgbaToUv, uvSize width, transform, (uvSize width as Float) / (2 * sourceSize width), 1.0f - startY, startY)
 		target
 	}
 	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }

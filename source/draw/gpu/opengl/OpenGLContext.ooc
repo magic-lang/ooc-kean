@@ -67,15 +67,17 @@ OpenGLContext: class extends GpuContext {
 	getMaxContexts: func -> Int { 1 }
 	getCurrentIndex: func -> Int { 0 }
 	drawQuad: func { this _renderer drawQuad() }
-	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen := Pen new()) {
+	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen: Pen) {
 		positions := pointList pointer as Float*
 		this _linesShader projection = projection
-		this _linesShader color = pen color normalized
+		this _linesShader add("color", pen color normalized)
 		this _linesShader use()
 		this _renderer drawLines(positions, pointList count, 2, pen width)
 	}
-	drawPoints: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D) {
+	drawPoints: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen: Pen) {
 		positions := pointList pointer
+		this _pointsShader add("color", pen color normalized)
+		this _pointsShader add("pointSize", pen width)
 		this _pointsShader projection = projection
 		this _pointsShader use()
 		this _renderer drawPoints(positions, pointList count, 2)
@@ -149,10 +151,11 @@ OpenGLContext: class extends GpuContext {
 		map := match (source) {
 			case sourceImage: OpenGLMonochrome => this _packMonochrome
 			case sourceImage: OpenGLUv => channels = 2; this _packUv
-		} as OpenGLMapPack
-		map imageWidth = source size width
-		map channels = channels
+		}
 		map add("texture0", source)
+		map add("texelOffset", 1.0f / source size width)
+		map add("xOffset", (2.0f / channels - 0.5f) / source size width)
+		map add("transform", FloatTransform3D createScaling(1.0f, -1.0f, 1.0f))
 		target canvas viewport = viewport
 		target canvas draw(source, map)
 	}

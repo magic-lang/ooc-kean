@@ -19,7 +19,7 @@ use ooc-collections
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLContext
+import OpenGLContext, OpenGLPacked
 import backend/GLRenderer
 
 version(!gpuOff) {
@@ -61,7 +61,7 @@ OpenGLSurface: abstract class extends GpuSurface {
 		(f as Closure) dispose()
 	}
 	drawPoints: override func (pointList: VectorList<FloatPoint2D>) {
-		f := func { this context drawPoints(pointList, this _projection * this _toLocal) }
+		f := func { this context drawPoints(pointList, this _projection * this _toLocal, this pen) }
 		this draw(f)
 		(f as Closure) dispose()
 	}
