@@ -190,4 +190,7 @@ FloatBox2D: cover {
 		}
 		This new(xMinimum, yMinimum, xMaximum - xMinimum, yMaximum - yMinimum)
 	}
+	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
+		This new(FloatPoint2D linearInterpolation(a leftTop, b leftTop, ratio), FloatSize2D linearInterpolation(a size, b size, ratio))
+	}
 }
