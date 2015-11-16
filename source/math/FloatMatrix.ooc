@@ -59,15 +59,9 @@ FloatMatrix : cover {
 	init: func@ ~IntSize2D (._dimensions) {
 		this init(OwnedBuffer new(_dimensions area * Float size), _dimensions)
 	}
-	init: func@ (width, height: Int) {
-		this init(IntSize2D new(width, height))
-	}
-	free: func@ -> Bool {
-		this _elements free()
-	}
-	free: func@ ~withCriteria (criteria: Owner) -> Bool {
-		this _elements free(criteria)
-	}
+	init: func@ (width, height: Int) { this init(IntSize2D new(width, height)) }
+	free: func@ -> Bool { this _elements free() }
+	free: func@ ~withCriteria (criteria: Owner) -> Bool { this _elements free(criteria) }
 	identity: static func (order: Int) -> This {
 		result := This new(order, order)
 		resultWidth := result take() width
@@ -156,7 +150,6 @@ FloatMatrix : cover {
 				this elements[i + second * t width] = buffer
 			}
 	}
-
 	toString: func -> String {
 		t := this take()
 		result: String = ""
@@ -268,7 +261,6 @@ FloatMatrix : cover {
 		this free(Owner Receiver)
 		result
 	}
-
 	cofactors: func -> This {
 		// TODO: At some point, when needed, implement for the general case.
 		t := this take()
@@ -291,7 +283,6 @@ FloatMatrix : cover {
 		this free(Owner Receiver)
 		result
 	}
-
 	adjugate: func -> This {
 		// TODO: At some point, when needed, implement for the general case.
 		version(safe) {
@@ -304,7 +295,6 @@ FloatMatrix : cover {
 		this free(Owner Receiver)
 		result
 	}
-
 	determinant: func -> Float {
 		// TODO: At some point, when needed, implement for the general case.
 		t := this take()
@@ -320,7 +310,6 @@ FloatMatrix : cover {
 		this free(Owner Receiver)
 		result
 	}
-
 	take: func -> This { // call by value -> modifies copy of cover
 		this _elements = this _elements take()
 		this
@@ -396,7 +385,6 @@ FloatMatrix : cover {
 			this elements[i] -= other elements[i]
 		other free(Owner Receiver)
 	}
-
 	operator * (other: Float) -> This {
 		result := This new(this take() dimensions)
 		for (i in 0 .. this take() dimensions area)
@@ -405,7 +393,4 @@ FloatMatrix : cover {
 		result
 	}
 }
-
-operator * (left: Float, right: FloatMatrix) -> FloatMatrix {
-	right * left
-}
+operator * (left: Float, right: FloatMatrix) -> FloatMatrix { right * left }
