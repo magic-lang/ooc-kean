@@ -77,9 +77,9 @@ FloatPoint3D: cover {
 	operator as -> String { this toString() }
 	toString: func -> String { "%.8f" formatFloat(this x) >> ", " & "%.8f" formatFloat(this y) >> ", " & "%.8f" formatFloat(this z) }
 	parse: static func (input: Text) -> This {
-		array := input split(',')
-		result := This new(array[0] toFloat(), array[1] toFloat(), array[2] toFloat())
-		array free()
+		parts := input split(',')
+		result := This new(parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat())
+		parts free()
 		result
 	}
 	linearInterpolation: static func (a, b: This, ratio: Float) -> This {

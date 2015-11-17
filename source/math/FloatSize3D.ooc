@@ -77,9 +77,9 @@ FloatSize3D: cover {
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this width toString()}, #{this height toString()}, #{this depth toString()}" }
 	parse: static func (input: Text) -> This {
-		array := input split(',')
-		result := This new (array[0] toFloat(), array[1] toFloat(), array[2] toFloat())
-		array free()
+		parts := input split(',')
+		result := This new (parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat())
+		parts free()
 		result
 	}
 }

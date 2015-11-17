@@ -65,9 +65,9 @@ FloatPoint2D: cover {
 	operator as -> String { this toString() }
 	toString: func -> String { this x toString() & ", " clone() & this y toString() }
 	parse: static func (input: Text) -> This {
-		array := input split(',')
-		result := This new(array[0] toFloat(), array[1] toFloat())
-		array free()
+		parts := input split(',')
+		result := This new(parts[0] toFloat(), parts[1] toFloat())
+		parts free()
 		result
 	}
 	basisX: static This { get { This new(1, 0) } }

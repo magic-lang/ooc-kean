@@ -53,9 +53,9 @@ FloatShell2D: cover {
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this left toString()}, #{this right toString()}, #{this top toString()}, #{this bottom toString()}" }
 	parse: static func (input: Text) -> This {
-		array := input split(',')
-		result := This new(array[0] toFloat(), array[1] toFloat(), array[2] toFloat(), array[3] toFloat())
-		array free()
+		parts := input split(',')
+		result := This new(parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat(), parts[3] toFloat())
+		parts free()
 		result
 	}
 }
