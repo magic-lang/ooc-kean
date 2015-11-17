@@ -94,9 +94,6 @@ DateTime: cover {
 		This _ticksToDateTimeHelper(this ticks) year
 	}
 
-	toString: func -> String {
-		this toStringFormat(This defaultFormat)
-	}
 	// <summary>
 	// Convert this object to string representation
 	// </summary>
@@ -112,7 +109,7 @@ DateTime: cover {
 	//	%ss - second
 	//	%zzzz - millisecond
 	// <param name="format">output format specification</param>
-	toStringFormat: func (format: String) -> String {
+	toString: func (format := This defaultFormat) -> String {
 		result := format
 		data := This _ticksToDateTimeHelper(this ticks)
 		result = result replaceAll("%yyyy", "%d" format(data year))

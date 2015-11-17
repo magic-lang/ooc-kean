@@ -168,15 +168,15 @@ DateTimeTest: class extends Fixture {
 		})
 		this add("toString", func {
 			date := DateTime new(1643, 12, 31, 23, 58, 59, 999)
-			expect(date toStringFormat("%yyyy-%MM-%dd %hh:%mm:%ss.%zzz"), is equal to("1643-12-31 23:58:59.999"))
-			expect(date toStringFormat("%yy-%M-%d %h:%m:%s.%z"), is equal to("43-12-31 23:58:59.999"))
+			expect(date toString("%yyyy-%MM-%dd %hh:%mm:%ss.%zzz"), is equal to("1643-12-31 23:58:59.999"))
+			expect(date toString("%yy-%M-%d %h:%m:%s.%z"), is equal to("43-12-31 23:58:59.999"))
 			date = DateTime new(1998, 7, 18, 1, 44, 31, 742)
-			expect(date toStringFormat("date is : %yy, %M, %dd; hour: %hh-%mm-%ss"), is equal to("date is : 98, 7, 18; hour: 01-44-31"))
-			expect(date toStringFormat("%yyyy/%dd/%MM"), is equal to("1998/18/07"))
-			expect(date toString() == date toStringFormat(DateTime defaultFormat))
+			expect(date toString("date is : %yy, %M, %dd; hour: %hh-%mm-%ss"), is equal to("date is : 98, 7, 18; hour: 01-44-31"))
+			expect(date toString("%yyyy/%dd/%MM"), is equal to("1998/18/07"))
+			expect(date toString() == date toString(DateTime defaultFormat))
 			date = DateTime new ~fromYearMonthDay(1, 1, 1)
-			expect(date toStringFormat("start date is: %yy %M %d, %hh-%mm-%ss-%zzz"), is equal to("start date is: 01 1 1, 00-00-00-000"))
-			expect(date toStringFormat("%h-%m-%s-%z"), is equal to("0-0-0-0"))
+			expect(date toString("start date is: %yy %M %d, %hh-%mm-%ss-%zzz"), is equal to("start date is: 01 1 1, 00-00-00-000"))
+			expect(date toString("%h-%m-%s-%z"), is equal to("0-0-0-0"))
 		})
 		this add("current time", func {
 			d := DateTime now

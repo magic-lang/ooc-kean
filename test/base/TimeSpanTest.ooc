@@ -127,9 +127,9 @@ TimeSpanTest: class extends Fixture {
 		this add("toString", func {
 			span := TimeSpan millisecond() + TimeSpan second() + TimeSpan minute() + TimeSpan hour() + TimeSpan day() + TimeSpan week()
 			expect(span toString() == "1 weeks, 1 days, 1 hours, 1 minutes, 1 seconds, 1 milliseconds")
-			expect(span toStringFormat("%D") == "8")
-			expect(TimeSpan day() toStringFormat("%H %M %S %h %m %s") == "24 1440 86400 0 0 0")
-			expect(TimeSpan hour() toStringFormat("%d %D text %m %M") == "0 0 text 0 60")
+			expect(span toString("%D") == "8")
+			expect(TimeSpan day() toString("%H %M %S %h %m %s") == "24 1440 86400 0 0 0")
+			expect(TimeSpan hour() toString("%d %D text %m %M") == "0 0 text 0 60")
 		})
 	}
 }

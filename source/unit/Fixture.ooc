@@ -49,7 +49,7 @@ Fixture: abstract class {
 	run: func -> Bool {
 		failures := VectorList<TestFailedException> new()
 		result := true
-		This _print(DateTime now toStringFormat("%hh:%mm:%ss") + " " + this name + " ")
+		This _print(DateTime now toString("%hh:%mm:%ss") + " " + this name + " ")
 		timer := ClockTimer new() . start()
 		for (test in tests) {
 			This _expectCount = 0
