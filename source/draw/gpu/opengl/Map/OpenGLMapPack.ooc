@@ -16,6 +16,7 @@
 */
 
 use ooc-math
+use ooc-base
 use ooc-draw-gpu
 import OpenGLMap
 import ../OpenGLContext
@@ -32,10 +33,11 @@ OpenGLMapPackMonochrome: class extends OpenGLMap {
 		layout(location = 1) in vec2 textureCoordinate;
 		out vec2 fragmentTextureCoordinate[4];
 		void main() {
-			fragmentTextureCoordinate[0] = textureCoordinate + vec2(-xOffset, 0);
-			fragmentTextureCoordinate[1] = textureCoordinate + vec2(texelOffset - xOffset, 0);
-			fragmentTextureCoordinate[2] = textureCoordinate + vec2(2.0f * texelOffset - xOffset, 0);
-			fragmentTextureCoordinate[3] = textureCoordinate + vec2(3.0f * texelOffset - xOffset, 0);
+			vec2 shiftedCoor = textureCoordinate - vec2(xOffset , 0);
+			fragmentTextureCoordinate[0] = shiftedCoor;
+			fragmentTextureCoordinate[1] = shiftedCoor + vec2(texelOffset, 0);
+			fragmentTextureCoordinate[2] = shiftedCoor + vec2(2.0f * texelOffset, 0);
+			fragmentTextureCoordinate[3] = shiftedCoor + vec2(3.0f * texelOffset, 0);
 			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
 		}
 		"
@@ -81,6 +83,42 @@ OpenGLMapPackUv: class extends OpenGLMap {
 		}
 		"
 }
+OpenGLMapPackUvPadded: class extends OpenGLMap {
+	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
+	vertexSource: static String ="#version 300 es
+		precision mediump float;
+		uniform mat4 transform;
+		uniform float xOffset;
+		uniform float paddingOffset;
+		uniform float texelOffset;
+		layout(location = 0) in vec2 vertexPosition;
+		layout(location = 1) in vec2 textureCoordinate;
+		out vec2 fragmentTextureCoordinate[2];
+		void main() {
+			fragmentTextureCoordinate[0] = textureCoordinate + vec2(-xOffset - paddingOffset, 0);
+			fragmentTextureCoordinate[1] = textureCoordinate + vec2(texelOffset - xOffset - paddingOffset, 0);
+			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
+		}"
+	fragmentSource: static String ="#version 300 es
+		precision mediump float;
+		uniform sampler2D texture0;
+		uniform float rowUnit;
+		in highp vec2 fragmentTextureCoordinate[2];
+		out vec4 outColor;
+		void main() {
+			vec2 shiftedCoor = vec2(fragmentTextureCoordinate[0].x, fragmentTextureCoordinate[0].y);
+			if (shiftedCoor.x < 0.0) {
+				shiftedCoor = vec2(1.0 + shiftedCoor.x, shiftedCoor.y - rowUnit);
+			}
+			vec2 rg = texture(texture0, shiftedCoor).rg;
+			shiftedCoor = vec2(fragmentTextureCoordinate[1].x, fragmentTextureCoordinate[1].y);
+			if (shiftedCoor.x < 0.0) {
+				shiftedCoor = vec2(1.0 + shiftedCoor.x, shiftedCoor.y - rowUnit);
+			}
+			vec2 ba = texture(texture0, shiftedCoor).rg;
+			outColor = vec4(rg.x, rg.y, ba.x, ba.y);
+		}"
+}
 OpenGLMapUnpack: abstract class extends OpenGLMap {
 	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
 	vertexSource: static String = "#version 300 es
@@ -94,9 +132,8 @@ OpenGLMapUnpack: abstract class extends OpenGLMap {
 		out vec4 fragmentTextureCoordinate;
 		void main() {
 			fragmentTextureCoordinate = vec4(scaleX * textureCoordinate.x, startY + scaleY * textureCoordinate.y, textureCoordinate);
-			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
-		}
-		"
+			gl_Position = transform * vec4(vertexPosition, 0, 1);
+		}"
 }
 OpenGLMapUnpackRgbaToMonochrome: class extends OpenGLMapUnpack {
 	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
@@ -127,5 +164,26 @@ OpenGLMapUnpackRgbaToUv: class extends OpenGLMapUnpack {
 			outColor = vec2(mask.x * texel.r + mask.y * texel.b, mask.x * texel.g + mask.y * texel.a);
 		}
 		"
+}
+OpenGLMapUnpackRgbaToUvPadded: class extends OpenGLMapUnpack {
+	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
+	fragmentSource: static String ="#version 300 es
+		precision mediump float;
+		uniform sampler2D texture0;
+		uniform int targetWidth;
+		uniform float rowUnit;
+		uniform float paddingOffset;
+		in highp vec4 fragmentTextureCoordinate;
+		out vec2 outColor;
+		void main() {
+			vec2 shiftedCoor = vec2(fragmentTextureCoordinate.x + paddingOffset, fragmentTextureCoordinate.y);
+			if (shiftedCoor.x > 1.0) {
+				shiftedCoor = vec2(fract(shiftedCoor.x), shiftedCoor.y + rowUnit);
+			}
+			int pixelIndex = int(float(targetWidth) * shiftedCoor.x) % 2;
+			vec4 texel = texture(texture0, shiftedCoor.xy);
+			vec2 mask = vec2(float(1 - pixelIndex), float(pixelIndex));
+			outColor = vec2(mask.x * texel.r + mask.y * texel.b, mask.x * texel.g + mask.y * texel.a);
+		}"
 }
 }

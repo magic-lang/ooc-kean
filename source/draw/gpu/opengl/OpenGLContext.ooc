@@ -30,6 +30,7 @@ OpenGLContext: class extends GpuContext {
 	_transformTextureMap: OpenGLMapTransformTexture
 	_packMonochrome: OpenGLMapPackMonochrome
 	_packUv: OpenGLMapPackUv
+	_packUvPadded: OpenGLMapPackUvPadded
 	_linesShader: OpenGLMapLines
 	_pointsShader: OpenGLMapPoints
 	_meshShader: OpenGLMapMesh
@@ -42,6 +43,7 @@ OpenGLContext: class extends GpuContext {
 		super()
 		this _packMonochrome = OpenGLMapPackMonochrome new(this)
 		this _packUv = OpenGLMapPackUv new(this)
+		this _packUvPadded = OpenGLMapPackUvPadded new(this)
 		this _linesShader = OpenGLMapLines new(this)
 		this _pointsShader = OpenGLMapPoints new(this)
 		this _transformTextureMap = OpenGLMapTransformTexture new(this)
@@ -56,6 +58,7 @@ OpenGLContext: class extends GpuContext {
 		this _transformTextureMap free()
 		this _packMonochrome free()
 		this _packUv free()
+		this _packUvPadded free()
 		this _linesShader free()
 		this _pointsShader free()
 		this _meshShader free()
@@ -146,11 +149,19 @@ OpenGLContext: class extends GpuContext {
 		}
 	}
 	update: func { this _backend swapBuffers() }
-	packToRgba: func (source: GpuImage, target: GpuImage, viewport: IntBox2D) {
+	packToRgba: func (source: GpuImage, target: GpuImage, viewport: IntBox2D, padding := 0) {
 		channels := 1
-		map := match (source) {
-			case sourceImage: OpenGLMonochrome => this _packMonochrome
-			case sourceImage: OpenGLUv => channels = 2; this _packUv
+		map: GpuMap
+		if (source instanceOf?(OpenGLMonochrome))
+			map = this _packMonochrome
+		else if (source instanceOf?(OpenGLUv)) {
+			channels = 2
+			if (padding == 0)
+				map = this _packUv
+			else {
+				map = this _packUvPadded
+				map add("paddingOffset", padding as Float / (target size width * 4))
+			}
 		}
 		map add("texture0", source)
 		map add("texelOffset", 1.0f / source size width)
