@@ -77,6 +77,11 @@ OpenGLMap: abstract class extends GpuMap {
 					case FloatSize3D => program setUniform(key, cell as Cell<FloatSize3D> get())
 					case FloatTransform2D => program setUniform(key, cell as Cell<FloatTransform2D> get())
 					case FloatTransform3D => program setUniform(key, cell as Cell<FloatTransform3D> get())
+					case ColorBgr => program setUniform(key, cell as Cell<ColorBgr> get())
+					case ColorBgra => program setUniform(key, cell as Cell<ColorBgra> get())
+					case ColorUv => program setUniform(key, cell as Cell<ColorUv> get())
+					case ColorYuv => program setUniform(key, cell as Cell<ColorYuv> get())
+					case ColorYuva => program setUniform(key, cell as Cell<ColorYuva> get())
 					case => Debug raise("Invalid cover type in OpenGLMap use!")
 				}
 			}
