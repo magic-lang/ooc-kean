@@ -16,6 +16,7 @@
  */
 
 use ooc-math
+use ooc-draw
 import include/gles3
 import ../GLShaderProgram
 import Gles3Debug
@@ -85,6 +86,31 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 		version(debugGL) { validateStart("ShaderProgram setUniform~FloatPoint4D") }
 		glUniform4f(glGetUniformLocation(this _backend, name), value x, value y, value z, value w)
 		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatPoint4D") }
+	}
+	setUniform: override func ~ColorBgr (name: String, value: ColorBgr) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~ColorBgr") }
+		glUniform3f(glGetUniformLocation(this _backend, name), (value blue as Float) / 255.0f, (value green as Float) / 255.0f, (value red as Float) / 255.0f)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~ColorBgr") }
+	}
+	setUniform: override func ~ColorBgra (name: String, value: ColorBgra) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~ColorBgra") }
+		glUniform4f(glGetUniformLocation(this _backend, name), (value bgr blue as Float) / 255.0f, (value bgr green as Float) / 255.0f, (value bgr red as Float) / 255.0f, (value alpha as Float) / 255.0f)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~ColorBgra") }
+	}
+	setUniform: override func ~ColorUv (name: String, value: ColorUv) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~ColorUv") }
+		glUniform2f(glGetUniformLocation(this _backend, name), (value u as Float) / 255.0f, (value v as Float) / 255.0f)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~ColorUv") }
+	}
+	setUniform: override func ~ColorYuv (name: String, value: ColorYuv) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~ColorYuv") }
+		glUniform3f(glGetUniformLocation(this _backend, name), (value y as Float) / 255.0f, (value u as Float) / 255.0f, (value v as Float) / 255.0f)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~ColorYuv") }
+	}
+	setUniform: override func ~ColorYuva (name: String, value: ColorYuva) {
+		version(debugGL) { validateStart("ShaderProgram setUniform~ColorYuva") }
+		glUniform4f(glGetUniformLocation(this _backend, name), (value yuv y as Float) / 255.0f, (value yuv u as Float) / 255.0f, (value yuv v as Float) / 255.0f, (value alpha as Float) / 255.0f)
+		version(debugGL) { validateEnd("ShaderProgram setUniform~ColorYuva") }
 	}
 	setUniform: override func ~FloatSize2D (name: String, value: FloatSize2D) {
 		version(debugGL) { validateStart("ShaderProgram setUniform~FloatSize2D") }
