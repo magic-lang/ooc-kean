@@ -86,11 +86,7 @@ IntBox2D: cover {
 		This new(left, top, width, height)
 	}
 	union: func ~point (point: IntPoint2D) -> This {
-		left := Int minimum~two(this left, point x)
-		top := Int minimum~two(this top, point y)
-		width := Int maximum~two(0, Int maximum~two(this right, point x) - left)
-		height := Int maximum~two(0, Int maximum~two(this bottom, point y) - top)
-		This new(left, top, width, height)
+		This new(this leftTop minimum(point), this rightBottom maximum(point))
 	}
 	contains: func (point: IntPoint2D) -> Bool {
 		this left <= point x && point x < this right && this top <= point y && point y < this bottom
