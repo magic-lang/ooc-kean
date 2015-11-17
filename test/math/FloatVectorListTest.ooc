@@ -319,6 +319,71 @@ FloatVectorListTest: class extends Fixture {
 			divided := list divideByMaxValue()
 			expect(divided sum, is equal to(-0.5f) within(tolerance))
 		})
+		this add("linear interpolation for list", func {
+			list := FloatVectorList new()
+			list add(2.0f)
+			list add(1.0f)
+			list add(6.0f)
+			list add(4.0f)
+			list add(7.0f)
+			numberOfPointsBetween := 1
+			interpolatedList := list interpolate(numberOfPointsBetween)
+
+			expect(interpolatedList count, is equal to(list count + numberOfPointsBetween * (list count - 1)))
+			expect(interpolatedList[0], is equal to(2.0f) within(tolerance))
+			expect(interpolatedList[1], is equal to(1.5f) within(tolerance))
+			expect(interpolatedList[2], is equal to(1.0f) within(tolerance))
+			expect(interpolatedList[3], is equal to(3.5f) within(tolerance))
+			list free()
+			interpolatedList free()
+		})
+		this add("find CrossCorrelation Offset", func {
+			list := FloatVectorList new()
+			list add(2.0f)
+			list add(1.0f)
+			list add(6.0f)
+			list add(4.0f)
+			list add(7.0f)
+			list add(6.0f)
+			list add(6.0f)
+			list add(4.0f)
+			list add(7.0f)
+			list add(4.0f)
+			list add(7.0f)
+			shiftedList0 := list shift(2)
+			shiftedList1 := list shift(-1)
+			shiftedList2 := list shift(0)
+
+			offsetRange := Range new(-3, 3)
+			(crossCorrelationList0, offsetValues0) := list calculateCrossCorrelation(shiftedList0, offsetRange)
+			(crossCorrelationList1, offsetValues1) := list calculateCrossCorrelation(shiftedList1, offsetRange)
+			(crossCorrelationList2, offsetValues2) := list calculateCrossCorrelation(shiftedList2, offsetRange)
+
+			maxIndex0 := crossCorrelationList0 findIndexOfMaximum()
+			maxIndex1 := crossCorrelationList1 findIndexOfMaximum()
+			maxIndex2 := crossCorrelationList2 findIndexOfMaximum()
+
+			correlationOffset0 := offsetValues0[maxIndex0]
+			correlationOffset1 := offsetValues1[maxIndex1]
+			correlationOffset2 := offsetValues2[maxIndex2]
+
+			maxValue2 := crossCorrelationList2[maxIndex2]
+
+			expect(correlationOffset0, is equal to(2.0f) within(tolerance))
+			expect(correlationOffset1, is equal to(-1.0f) within(tolerance))
+			expect(correlationOffset2, is equal to(0.0f) within(tolerance))
+			expect(maxValue2, is equal to(1.0f) within(tolerance))
+			list free()
+			shiftedList0 free()
+			shiftedList1 free()
+			shiftedList2 free()
+			crossCorrelationList0 free()
+			crossCorrelationList1 free()
+			crossCorrelationList2 free()
+			offsetValues0 free()
+			offsetValues1 free()
+			offsetValues2 free()
+		})
 	}
 }
 FloatVectorListTest new() run()
