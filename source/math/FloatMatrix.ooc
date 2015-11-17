@@ -65,8 +65,9 @@ FloatMatrix : cover {
 	identity: static func (order: Int) -> This {
 		result := This new(order, order)
 		resultWidth := result take() width
+		resultElements := result elements
 		for (i in 0 .. order)
-			result elements[i + resultWidth * i] = 1.0f
+			resultElements[i + resultWidth * i] = 1.0f
 		result
 	}
 	setVertical: func (xOffset, yOffset: Int, vector: FloatPoint3D) {
@@ -123,9 +124,11 @@ FloatMatrix : cover {
 	transpose: func -> This {
 		t := this take()
 		result := This new(t dimensions swap())
+		resultElements := result elements
+		thisElements := this elements
 		for (y in 0 .. t height)
 			for (x in 0 .. t width)
-				result elements[y + x * t height] = t elements[x + y * t width]
+				resultElements[y + x * t height] = thisElements[x + y * t width]
 		this free(Owner Receiver)
 		result
 	}
@@ -141,13 +144,13 @@ FloatMatrix : cover {
 	}
 	swapRows: func@ (first, second: Int) {
 		t := this take()
-		order := t order
 		buffer: Float
+		thisElements := this elements
 		if (first != second)
-			for (i in 0 .. order) {
-				buffer = t elements[i + first * t width]
-				this elements[i + first * t width] = t elements[i + second * t width]
-				this elements[i + second * t width] = buffer
+			for (i in 0 .. t order) {
+				buffer = thisElements[i + first * t width]
+				thisElements[i + first * t width] = thisElements[i + second * t width]
+				thisElements[i + second * t width] = buffer
 			}
 	}
 	toString: func -> String {
@@ -173,28 +176,28 @@ FloatMatrix : cover {
 		l := This identity(order)
 		u := t copy()
 		p := This identity(order)
-
+		lElements := l elements
+		uElements := u elements
 		uWidth := u take() width
 		for (position in 0 .. order - 1) {
 			pivotRow := position
 			for (y in position + 1 .. u take() height)
-				if (abs(u elements[position + position * uWidth]) < abs(u elements[position + y * uWidth]))
+				if (abs(uElements[position + position * uWidth]) < abs(uElements[position + y * uWidth]))
 					pivotRow = y
 			p swapRows(position, pivotRow)
 			u swapRows(position, pivotRow)
-
-			if (u elements[position + uWidth * position] != 0)
+			if (uElements[position + uWidth * position] != 0)
 				for (y in position + 1 .. order) {
-					pivot := u elements[position + y * uWidth] / u elements[position + position * uWidth]
+					pivot := uElements[position + y * uWidth] / uElements[position + position * uWidth]
 					for (x in position .. order)
-						u elements[x + y * uWidth] = u elements[x + y * uWidth] - pivot * u elements[x + position * uWidth]
-					u elements[position + y * uWidth] = pivot
+						uElements[x + y * uWidth] = uElements[x + y * uWidth] - pivot * uElements[x + position * uWidth]
+					uElements[position + y * uWidth] = pivot
 				}
 		}
 		for (y in 0 .. order)
 			for (x in 0 .. y) {
-				l elements[x + y * l take() width] = u elements[x + y * uWidth]
-				u elements[x + y * uWidth] = 0
+				lElements[x + y * l take() width] = uElements[x + y * uWidth]
+				uElements[x + y * uWidth] = 0
 			}
 		this free(Owner Receiver)
 		(l, u, p)
@@ -223,18 +226,21 @@ FloatMatrix : cover {
 	_forwardSubstitution: func (lower: This) -> This {
 		t := this take()
 		result := This new(t dimensions)
+		resultElements := result elements
+		thisElements := this elements
+		lowerElements := lower elements
 		for (x in 0 .. t width)
 			for (y in 0 .. t height) {
-				accumulator := this elements[x + y * t width]
+				accumulator := thisElements[x + y * t width]
 				for (x2 in 0 .. y)
-					accumulator -= lower elements[x2 + y * lower take() width] * result elements[x + x2 * result take() width]
-				value := lower elements[y + y * lower take() width]
+					accumulator -= lowerElements[x2 + y * lower take() width] * resultElements[x + x2 * result take() width]
+				value := lowerElements[y + y * lower take() width]
 				if (value != 0)
-					result elements[x + y * result take()width] = accumulator / value
+					resultElements[x + y * result take()width] = accumulator / value
 				else
 					raise("Division by zero in FloatMatrix forwardSubstitution")
 			}
-		if (this elements != lower elements)
+		if (thisElements != lowerElements)
 			lower free(Owner Receiver)
 		this free(Owner Receiver)
 		result
@@ -243,20 +249,23 @@ FloatMatrix : cover {
 	_backwardSubstitution: func (upper: This) -> This {
 		t := this take()
 		result := This new(t dimensions)
+		resultElements := result elements
+		thisElements := this elements
+		upperElements := upper elements
 		for (x in 0 .. t width) {
 			for (antiY in 0 .. t height) {
 				y := t height - 1 - antiY
-				accumulator := this elements[x + y * t width]
+				accumulator := thisElements[x + y * t width]
 				for (x2 in y + 1 .. upper take() width)
-					accumulator -= upper elements[x2 + y * upper take() width] * result elements[x + x2 * result take() width]
-				value := upper elements[y + y * upper take() width]
+					accumulator -= upperElements[x2 + y * upper take() width] * resultElements[x + x2 * result take() width]
+				value := upperElements[y + y * upper take() width]
 				if (value != 0)
-					result elements[x + y * result take() width] = accumulator / value
+					resultElements[x + y * result take() width] = accumulator / value
 				else
 					raise("Division by zero in FloatMatrix backwardSubstitution")
 			}
 		}
-		if (this elements != upper elements)
+		if (thisElements != upperElements)
 			upper free(Owner Receiver)
 		this free(Owner Receiver)
 		result
@@ -326,15 +335,18 @@ FloatMatrix : cover {
 		}
 		otherWidth := other take() width
 		result := This new(otherWidth, t height)
+		resultElements := result elements
+		thisElements := this elements
+		otherElements := other elements
 		for (x in 0 .. otherWidth) {
 			for (y in 0 .. t height) {
-				temp := result elements[x + y * otherWidth]
+				temp := resultElements[x + y * otherWidth]
 				for (z in 0 .. t width)
-					temp += this elements[z + y * t width] * other elements[x + z * otherWidth]
-				result elements[x + y * otherWidth] = temp
+					temp += thisElements[z + y * t width] * otherElements[x + z * otherWidth]
+				resultElements[x + y * otherWidth] = temp
 			}
 		}
-		if (this elements != other elements)
+		if (thisElements != otherElements)
 			other free(Owner Receiver)
 		this free(Owner Receiver)
 		result
@@ -346,9 +358,12 @@ FloatMatrix : cover {
 				raise("Invalid dimensions in FloatMatrix + operator: dimensions must match!")
 		}
 		result := This new(t dimensions)
+		resultElements := result elements
+		thisElements := this elements
+		otherElements := other elements
 		for (i in 0 .. t dimensions area)
-			result elements[i] = this elements[i] + other elements[i]
-		if (this elements != other elements)
+			resultElements[i] = thisElements[i] + otherElements[i]
+		if (thisElements != otherElements)
 			other free(Owner Receiver)
 		this free(Owner Receiver)
 		result
@@ -360,9 +375,12 @@ FloatMatrix : cover {
 				raise("Invalid dimensions in FloatMatrix - operator: dimensions must match!")
 		}
 		result := This new(t dimensions)
+		resultElements := result elements
+		thisElements := this elements
+		otherElements := other elements
 		for (i in 0 .. t dimensions area)
-			result elements[i] = this elements[i] - other elements[i]
-		if (this elements != other elements)
+			resultElements[i] = thisElements[i] - otherElements[i]
+		if (thisElements != otherElements)
 			other free(Owner Receiver)
 		this free(Owner Receiver)
 		result
@@ -372,8 +390,10 @@ FloatMatrix : cover {
 			if (this dimensions != other dimensions)
 				raise("Invalid dimensions in FloatMatrix += operator: dimensions must match!")
 		}
+		thisElements := this elements
+		otherElements := other elements
 		for (i in 0 .. this take() dimensions area)
-			this elements[i] += other elements[i]
+			thisElements[i] += otherElements[i]
 		other free(Owner Receiver)
 	}
 	operator -= (other: This) {
@@ -381,14 +401,18 @@ FloatMatrix : cover {
 			if (this take() dimensions != other take() dimensions)
 				raise("Invalid dimensions in FloatMatrix -= operator: dimensions must match!")
 		}
+		thisElements := this elements
+		otherElements := other elements
 		for (i in 0 .. this take() dimensions area)
-			this elements[i] -= other elements[i]
+			thisElements[i] -= otherElements[i]
 		other free(Owner Receiver)
 	}
 	operator * (other: Float) -> This {
 		result := This new(this take() dimensions)
+		resultElements := result elements
+		thisElements := this elements
 		for (i in 0 .. this take() dimensions area)
-			result elements[i] = other * this elements[i]
+			resultElements[i] = other * thisElements[i]
 		this free(Owner Receiver)
 		result
 	}
