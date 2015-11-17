@@ -24,9 +24,9 @@ import math
 
 version(!gpuOff) {
 AndroidContext: class extends OpenGLContext {
-	_unpackRgbaToMonochrome := OpenGLMapUnpackRgbaToMonochrome new(this)
-	_unpackRgbaToUv := OpenGLMapUnpackRgbaToUv new(this)
-	_unpackRgbaToUvPadded := OpenGLMapUnpackRgbaToUvPadded new(this)
+	_unpackRgbaToMonochrome := OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToMonochrome.frag"), this)
+	_unpackRgbaToUv := OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToUv.frag"), this)
+	_unpackRgbaToUvPadded := OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToUvPadded.frag"), this)
 	_packers := VectorList<EGLBgra> new()
 	init: func { super() }
 	init: func ~other (other: This) { super(other) }
