@@ -1,12 +1,12 @@
 use ooc-math
 import svg/Shapes
 import math
+use ooc-draw
 
 Orientation: enum {
 	Horizontal
 	Vertical
 }
-
 Axis: class {
 	visible: Bool { get set }
 	label: String { get set }
@@ -27,7 +27,6 @@ Axis: class {
 	gridOn: Bool { get set }
 	precision: Int { get set }
 	roundAxisEndpoints: Bool { get set }
-
 	init: func (=orientation, label := "") {
 		this visible = true
 		this label = label
@@ -35,12 +34,9 @@ Axis: class {
 		this precision = 3
 		this roundAxisEndpoints = true
 	}
-
 	length: func -> Float {
-		result := this max - this min
-		result
+		this max - this min
 	}
-
 	getSvg: func (plotAreaSize, margin: FloatSize2D, transform: FloatTransform2D, fontSize: Int) -> String {
 		result := ""
 		if (this visible) {
@@ -67,7 +63,6 @@ Axis: class {
 		topTickMarkerStartOffset := FloatPoint2D new(0.0f, - plotAreaSize height)
 		result = result & Shapes text(position + labelOffset, this label, this fontSize, "middle")
 		result = result & this getRadixSvg(position + radixOffset, radix, "middle")
-
 		tickValue := this getFirstTickValue()
 		position x += transform translation width + transform scalingX * tickValue
 		while (tickValue <= this max) {
@@ -75,8 +70,7 @@ Axis: class {
 			tickValue += this tick
 			position x += transform scalingX * tick
 		}
-		result = result >> "</g>\n"
-		result
+		result >> "</g>\n"
 	}
 
 	getVerticalSvg: func (plotAreaSize, margin: FloatSize2D, position: FloatPoint2D, transform: FloatTransform2D, radix: Float) -> String {
@@ -90,7 +84,6 @@ Axis: class {
 		result = result & Shapes text(position + labelOffset, this label, this fontSize, "middle")
 		result = result >> "</g>\n"
 		result = result & this getRadixSvg(position + radixOffset, radix, "end")
-
 		tickValue := this getFirstTickValue()
 		position y += transform translation height - plotAreaSize height - transform scalingY * tickValue
 		while (tickValue <= this max) {
@@ -98,10 +91,8 @@ Axis: class {
 			tickValue += this tick
 			position y -= transform scalingY * tick
 		}
-		result = result >> "</g>\n"
-		result
+		result >> "</g>\n"
 	}
-
 	getRadixSvg: func (position: FloatPoint2D, radix: Float, textAnchor: String) -> String {
 		result := ""
 		if (radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision)) {
@@ -111,23 +102,20 @@ Axis: class {
 		}
 		result
 	}
-
 	getTickSvg: func (tickValue, radix: Float, position, numberOffset, tickMarkerOnOtherSideOffset, tickMarkerEndOffset: FloatPoint2D, textAnchor: String) -> String {
 		result := "<g desc='" << tickValue toString() >> "'>\n"
 		if (this gridOn)
-			result = result & Shapes line(position, position + tickMarkerOnOtherSideOffset, 1, 255.0f, "grey", FloatPoint2D new(5, 5))
-		result = result & Shapes line(position, position + tickMarkerEndOffset, 1, 255.0f, "black")
-		result = result & Shapes line(position + tickMarkerOnOtherSideOffset, position + tickMarkerOnOtherSideOffset - tickMarkerEndOffset, 1, 255.0f, "black")
+			result = result & Shapes line(position, position + tickMarkerOnOtherSideOffset, 1, ColorBgra new(128, 128, 128, 255), FloatPoint2D new(5, 5))
+		result = result & Shapes line(position, position + tickMarkerEndOffset, 1, ColorBgra new(0, 0, 0, 255))
+		result = result & Shapes line(position + tickMarkerOnOtherSideOffset, position + tickMarkerOnOtherSideOffset - tickMarkerEndOffset, 1, ColorBgra new(0, 0, 0, 255))
 		tickValue = radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision) ? (tickValue / radix) : tickValue
 		tempTick := tickValue toString()
 		tempTickInt := tickValue as Int toString()
 		result = result & Shapes text(position + numberOffset, Float absolute(tickValue - tickValue round()) < 0.001 ? tempTickInt : tempTick, this fontSize - 4, textAnchor)
 		tempTick free()
 		tempTickInt free()
-		result = result >> "</g>\n"
-		result
+		result >> "</g>\n"
 	}
-
 	getFirstTickValue: func -> Float {
 		result: Float
 		if ((this min < this tick && this min > 0.0f) || (this min > this tick && this min < 1.0f))
@@ -136,19 +124,16 @@ Axis: class {
 			result = this min - Float modulo(this min, this tick)
 		result
 	}
-
 	getRequiredMargin: func (fontSize: Int) -> Float {
 		result: Float
 		if (this fontSize == 0)
 			this fontSize = fontSize
-
 		if (this orientation == Orientation Horizontal)
 			result = 2.5f * this fontSize as Float
 		else
 			result = (this precision + 2) * (this fontSize as Float - 4)
 		result
 	}
-
 	roundEndpoints: func {
 		if (this roundAxisEndpoints) {
 			this min = Float roundToValueDigits(this min, 2, false)
