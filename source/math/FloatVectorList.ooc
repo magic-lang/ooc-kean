@@ -15,6 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 use ooc-collections
+use ooc-base
 import math
 import FloatComplex
 import FloatComplexVectorList
@@ -380,6 +381,72 @@ FloatVectorList: class extends VectorList<Float> {
 		result := This new(this _count)
 		for (i in 0 .. this _count)
 			result add(this[i] clamp(floor, ceiling))
+		result
+	}
+	findIndexOfMaximum: func -> Int {
+		index := 0
+		thisPointer := (this pointer as Float*)
+		for (i in 1 .. this count)
+			if (thisPointer[index] < thisPointer[i])
+				index = i
+		index
+	}
+	calculateCorrelation: func (other: This, vectorLength: Int) -> Float {
+		upperPart := 0.0f
+		lowerPart1 := 0.0f
+		lowerPart2 := 0.0f
+		thisMean := this mean
+		otherMean := other mean
+		thisPointer := (this pointer as Float*)
+		otherPointer := (other pointer as Float*)
+		for (i in 0 .. vectorLength) {
+			thisValue := thisPointer[i]
+			otherValue := otherPointer[i]
+			thisDiff := (thisValue - thisMean)
+			otherDiff := (otherValue - otherMean)
+			upperPart += thisDiff * otherDiff
+			lowerPart1 += thisDiff * thisDiff
+			lowerPart2 += otherDiff * otherDiff
+		}
+		upperPart / sqrt(lowerPart1 * lowerPart2)
+	}
+	shift: func (offset: Int, filledValue := 0.0f) -> This {
+		result := This new(this count)
+		thisPointer := (this pointer as Float*)
+		for (i in 0 .. this count) {
+			index := i + offset
+			value := (index >= 0 && index < this count) ? thisPointer[index] : filledValue
+			result add(value)
+		}
+		result
+	}
+	// offset < 0 means it shifts to left, offsets contains lags to crossCorrelation
+	calculateCrossCorrelation: func (other: This, offsetRange: Range, calculateOffsets := true) -> (This, This) {
+		crossCorrelation := This new(offsetRange count)
+		offsets: This = calculateOffsets ? This new(offsetRange count) : null
+		for (offset in offsetRange min .. offsetRange max + 1) {
+			temporary := this shift(offset)
+			crossCorrelation add(temporary calculateCorrelation(other, other count))
+			if (calculateOffsets) { offsets add(offset as Float) }
+			temporary free()
+		}
+		(crossCorrelation, offsets)
+	}
+	// input: how many points there will be between two origin points.
+	// this is a Linear interpolation way to have higher precision
+	interpolate: func (numberOfPoints: Int) -> This {
+		result: This
+		if (numberOfPoints > 0 && this count > 1) {
+			result = This new(this count + numberOfPoints * (this count - 1))
+			thisPointer := (this pointer as Float*)
+			for (index1 in 0 .. this count - 1) {
+				result add(thisPointer[index1])
+				for (index2 in 1 .. numberOfPoints + 1)
+					result add(Float linearInterpolation(thisPointer[index1], thisPointer[index1 + 1], index2 as Float / (numberOfPoints + 1) as Float))
+			}
+			result add(thisPointer[this count - 1])
+		} else
+			result = this copy()
 		result
 	}
 }
