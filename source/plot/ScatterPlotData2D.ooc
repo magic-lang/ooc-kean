@@ -12,23 +12,18 @@ Shape: enum {
 ScatterPlotData2D: class extends PlotData2D {
 	shape := Shape Circle
 	scalingRelativeLineWidth := 5.0f
-
 	init: func ~default {
 		super()
 	}
-
 	init: func ~dataSeries (dataSeries: VectorList<FloatPoint2D>, label := "", colorBgra := ColorBgra new()) {
 		super(dataSeries, label, colorBgra)
 	}
-
 	init: func ~color (dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
 		super(dataSeries, "", colorBgra)
 	}
-
 	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new()) {
 		super(xSeries, ySeries, label, colorBgra)
 	}
-
 	getSvg: func (transform: FloatTransform2D) -> String {
 		result := ""
 		if (!this dataSeries empty) {
@@ -49,7 +44,6 @@ ScatterPlotData2D: class extends PlotData2D {
 		}
 		result
 	}
-
 	getSvgLegend: func (legendCount, fontSize: Int) -> String {
 		result := ""
 		start := FloatPoint2D new(this legendOffset as Float, this legendOffset + (fontSize * legendCount) as Float - (fontSize as Float) / 2.0f)
@@ -62,7 +56,6 @@ ScatterPlotData2D: class extends PlotData2D {
 				result = result & Shapes rect(FloatPoint2D new(start x, start y - halfLineHeight), FloatPoint2D new(size, size), this opacity, this color)
 			case =>
 		}
-		result = result & Shapes text(FloatPoint2D new(start x + fontSize as Float, start y + halfLineHeight), this label, fontSize, this opacity, this color)
-		result
+		result & Shapes text(FloatPoint2D new(start x + fontSize as Float, start y + halfLineHeight), this label, fontSize, this opacity, this color)
 	}
 }
