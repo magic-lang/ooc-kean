@@ -17,17 +17,6 @@
 use ooc-math
 import math
 
-//IColor: interface {
-//	set: func (color: IColor)
-//	toMonochrome: func -> ColorMonochrome
-//	toBgr: func -> ColorBgr
-//	toBgra: func -> ColorBgra
-//	toYuv: func -> ColorYuv
-//	copy: func -> IColor
-//	blend: func (factor: Float, other: IColor) -> Color
-//	distance: func (other: IColor) -> Float
-//}
-
 ColorMonochrome: cover {
 	y: UInt8
 	set: func (color: This) {
