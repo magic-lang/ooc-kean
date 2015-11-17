@@ -36,9 +36,7 @@ FloatPoint3D: cover {
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	init: func@ ~fromPoint2D (point: FloatPoint2D, z := 0.0f) { this init(point x, point y, z) }
 	pNorm: func (p: Float) -> Float {
-		p == 1 ?
-			this x abs() + this y abs() + this z abs() :
-			(this x abs() pow(p) + this y abs() pow(p) + this z abs() pow(p)) pow(1.0f / p)
+		(this x abs() pow(p) + this y abs() pow(p) + this z abs() pow(p)) pow(1.0f / p)
 	}
 	scalarProduct: func (other: This) -> Float { this x * other x + this y * other y + this z * other z }
 	vectorProduct: func (other: This) -> This { This new(this y * other z - other y * this z, -(this x * other z - other x * this z), this x * other y - other x * this y) }
