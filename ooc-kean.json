@@ -1,7 +1,7 @@
 {
 	"name" : "ooc-kean",
 	"secondary" : "ooc-vidproc",
-	"secondaryUpstream" : "vidhance",
+	"secondaryUpstream" : "vidhancee",
 	"actions" : [
 			{"task" : "rock", "dependency" : "none"}
 	]
