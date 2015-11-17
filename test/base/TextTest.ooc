@@ -158,13 +158,30 @@ TextTest: class extends Fixture {
 			expect(text == text2)
 		})
 		this add("copyTo", func {
-			text := Text new("test string")
+			text := t"test string"
 			buffer := TextBuffer new(11)
 			text copyTo(buffer)
 			text2 := Text new(buffer)
 			expect(text == text2)
 			text free()
 			text2 free()
+		})
+this add("text literal toString", func {
+			text := t"Hello World"
+			string := text toString()
+			expect(text == string)
+		})
+		this add("add operator", func {
+			correct := t"Hello World"
+			text := t"Hello" + t" World"
+			expect(text take() count == correct count)
+			for (i in 0 .. text take() count)
+				expect(text take()[i] == correct[i])
+		})
+		this add("text toString", func {
+			text := t"Hello" + t" World"
+			string := text toString()
+			expect("Hello World" == string)
 		})
 		this add("trim", func {
 			paddedText := t"  \t test \n test \r\n\t "

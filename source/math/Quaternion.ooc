@@ -269,7 +269,7 @@ Quaternion: cover {
 		// [http://www.malcolmdshuster.com/Pub_1981a_J_TRIAD-QUEST_scan.pdf]
 		// Equation symbol - variable name conversions:
 		// B - attitudeProfile
-		// q - quaternionValues
+		// q - result
 		// S - matrixQuantityS
 		// V - referenceVectors
 		// W - observationVectors
@@ -284,28 +284,25 @@ Quaternion: cover {
 			attitudeProfile += normalizedWeights[currentVector / 3] / 3.0f * observationVectors getColumn(currentVector) * referenceVectors getColumn(currentVector) transpose()
 		matrixQuantityS := (attitudeProfile + attitudeProfile transpose()) take()
 
-		vectorQuantityZ := FloatMatrix new(1, 3) take()
 		temporaryZ := FloatPoint3D new()
 		for (currentVector in 0 .. referenceVectors width) {
 			currentObservationVector := FloatPoint3D new(observationVectors[currentVector, 0], observationVectors[currentVector, 1], observationVectors[currentVector, 2])
 			currentReferenceVector := FloatPoint3D new(referenceVectors[currentVector, 0], referenceVectors[currentVector, 1], referenceVectors[currentVector, 2])
 			temporaryZ += normalizedWeights[currentVector / 3] / 3.0f * currentObservationVector vectorProduct(currentReferenceVector)
 		}
+		vectorQuantityZ := FloatMatrix new(1, 3) take()
 		vectorQuantityZ setVertical(0, 0, temporaryZ)
 
 		maximumEigenvalue := This _approximateMaximumEigenvalueForQuest(matrixQuantityS, vectorQuantityZ, 1.0f, 5)
-		linearCoefficients := ((maximumEigenvalue + attitudeProfile trace()) * FloatMatrix identity(3) - matrixQuantityS)
-		gibbsVector := linearCoefficients solve(vectorQuantityZ)
+		linearCoefficients := (maximumEigenvalue + attitudeProfile trace()) * FloatMatrix identity(3) - matrixQuantityS
+		gibbsVector := linearCoefficients solve(vectorQuantityZ) take()
 
 		gibbsVectorSquaredNorm := 0.0f
 		for (index in 0 .. gibbsVector height)
 			gibbsVectorSquaredNorm += gibbsVector[0, index] squared()
-		vector := FloatMatrix new(1, 4)
-		vector[0, 3] = 1.0f
-		for (index in 0 .. 3)
-			vector[index, 0] = gibbsVector[index, 0]
-		quaternionValues := (1.0f / sqrt(1.0f + gibbsVectorSquaredNorm)) * vector
-		result := This new(quaternionValues[3, 0], -quaternionValues[0, 0], -quaternionValues[1, 0], -quaternionValues[2, 0])
+
+		result := This new(1.0f, -gibbsVector[0, 0], -gibbsVector[0, 1], -gibbsVector[0, 2])
+		result *= 1.0f / sqrt(1.0f + gibbsVectorSquaredNorm)
 
 		normalizedWeights free()
 		referenceVectors free()
@@ -314,21 +311,14 @@ Quaternion: cover {
 		matrixQuantityS free()
 		vectorQuantityZ free()
 		gibbsVector free()
-		quaternionValues free()
 		result
 	}
 	_approximateMaximumEigenvalueForQuest: static func (matrixQuantityS, vectorQuantityZ: FloatMatrix, initialGuess: Float, maximumIterationCount := 20) -> Float {
 		sigma := 0.5f * matrixQuantityS trace()
 		constantA := sigma squared() - matrixQuantityS adjugate() trace()
-		temporary := vectorQuantityZ transpose() * vectorQuantityZ
-		constantB := sigma squared() + temporary[0, 0]
-		temporary free()
-		temporary = vectorQuantityZ transpose() * matrixQuantityS * vectorQuantityZ
-		constantC := matrixQuantityS determinant() + temporary[0, 0]
-		temporary free()
-		temporary = vectorQuantityZ transpose() * matrixQuantityS * matrixQuantityS * vectorQuantityZ
-		constantD := temporary[0, 0]
-		temporary free()
+		constantB := sigma squared() + (vectorQuantityZ transpose() * vectorQuantityZ)[0, 0]
+		constantC := matrixQuantityS determinant() + (vectorQuantityZ transpose() * matrixQuantityS * vectorQuantityZ)[0, 0]
+		constantD := (vectorQuantityZ transpose() * matrixQuantityS * matrixQuantityS * vectorQuantityZ)[0, 0]
 
 		for (_ in 0 .. maximumIterationCount) {
 			functionValue := pow(initialGuess, 4) - (constantA + constantB) * initialGuess squared() - constantC * initialGuess + (constantA * constantB + constantC * sigma - constantD)

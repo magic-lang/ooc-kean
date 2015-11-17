@@ -16,7 +16,7 @@ CsvWriter: class {
 	write: func (row: VectorList<Text>) {
 		for (i in 0 .. row count) {
 			value := TextBuilder new(row[i])
-			for (k in 0 .. row[i] count)
+			for (k in 0 .. row[i] take() count)
 				if (this _isWhitespace(row[i] take()[k])) {
 					value prepend('\"')
 					value append('\"')

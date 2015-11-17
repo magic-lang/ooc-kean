@@ -21,18 +21,20 @@ import math
 
 Text: cover {
 	_buffer: TextBuffer
-	count ::= this _buffer count
-	isEmpty ::= this count == 0
-	init: func@ ~empty {
-		this init(TextBuffer new())
-	}
+	count: Int { get {
+		result := this _buffer count
+		this free(Owner Receiver)
+		result
+	}}
+	isEmpty: Bool { get {
+		result := this _buffer count == 0
+		this free(Owner Receiver)
+		result
+	}}
+	init: func@ ~empty { this init(TextBuffer new()) }
 	init: func@ (=_buffer)
-	init: func@ ~fromStringLiteral (string: CString) {
-		this init(string, strlen(string))
-	}
-	init: func@ ~fromString (string: String) {
-		this init(string _buffer data, string length(), Owner Unknown)
-	}
+	init: func@ ~fromStringLiteral (string: CString) { this init(string, strlen(string)) }
+	init: func@ ~fromString (string: String) { this init(string _buffer data, string length(), Owner Unknown) }
 	init: func@ ~fromCharacter (character: Char) {
 		this init(character&, 1, Owner Stack)
 		this = this claim()
@@ -45,26 +47,28 @@ Text: cover {
 		this free(Owner Receiver)
 		result
 	}
-	copyTo: func (buffer: TextBuffer) -> Int {
-		this _buffer copyTo(buffer)
-	}
-	operator == (string: String) -> Bool {
-		this == This new(string)
-	}
+	copyTo: func (buffer: TextBuffer) -> Int { this _buffer copyTo(buffer) }
+	operator == (string: String) -> Bool { this == This new(string) }
 	operator == (other: This) -> Bool {
 		result := this _buffer == other _buffer
+		if (this _buffer raw != other _buffer raw)
+			other free(Owner Receiver)
 		this free(Owner Receiver)
-		other free(Owner Receiver)
 		result
 	}
 	operator != (other: String) -> Bool { !(this == other) }
 	operator != (other: This) -> Bool { !(this == other) }
-	beginsWith: func (other: This) -> Bool {
-		this slice(0, Int minimum~two(other count, this count)) == other
+	operator + (other: This) -> This {
+		result := TextBuffer new(this take() count + other take() count)
+		this _buffer copyTo(result)
+		other _buffer copyTo(result slice(this take() count))
+		if (this _buffer raw != other _buffer raw)
+			other free(Owner Receiver)
+		this free(Owner Receiver)
+		This new(result)
 	}
-	beginsWith: func ~string (other: String) -> Bool {
-		this beginsWith(This new(other))
-	}
+	beginsWith: func (other: This) -> Bool { this slice(0, Int minimum~two(other count, this count)) == other }
+	beginsWith: func ~string (other: String) -> Bool { this beginsWith(This new(other)) }
 	beginsWith: func ~character (character: Char) -> Bool {
 		result := (this count > 0) && (this _buffer[0] == character)
 		this free(Owner Receiver)
@@ -73,9 +77,7 @@ Text: cover {
 	endsWith: func (other: This) -> Bool {
 		this slice(Int maximum~two(0, this count - other count), Int minimum~two(other count, this count)) == other
 	}
-	endsWith: func ~string (other: String) -> Bool {
-		this endsWith(This new(other))
-	}
+	endsWith: func ~string (other: String) -> Bool { this endsWith(This new(other)) }
 	endsWith: func ~character (character: Char) -> Bool {
 		result := (this count > 0) && (this _buffer[this count - 1] == character)
 		this free(Owner Receiver)
@@ -105,17 +107,13 @@ Text: cover {
 		needle free(Owner Receiver)
 		result
 	}
-	find: func ~string (string: String, start := 0) -> Int {
-		this find(This new(string), start)
-	}
+	find: func ~string (string: String, start := 0) -> Int { this find(This new(string), start) }
 	operator [] (index: Int) -> Char {
 		result := this _buffer[index]
 		this free(Owner Receiver)
 		result
 	}
-	operator [] (range: Range) -> This {
-		this slice(range min, range count)
-	}
+	operator [] (range: Range) -> This { this slice(range min, range count) }
 	take: func -> This { // call by value -> modifies copy of cover
 		this _buffer = this _buffer take()
 		this
@@ -128,12 +126,8 @@ Text: cover {
 		this _buffer = this _buffer claim()
 		this
 	}
-	free: func@ -> Bool {
-		this _buffer free()
-	}
-	free: func@ ~withCriteria (criteria: Owner) -> Bool {
-		this _buffer free(criteria)
-	}
+	free: func@ -> Bool { this _buffer free() }
+	free: func@ ~withCriteria (criteria: Owner) -> Bool { this _buffer free(criteria) }
 	slice: func (start: Int, distance := INT_MAX) -> This {
 		result := This new(this _buffer slice(start, distance == INT_MAX ? this count - start : distance))
 		if (this _buffer owner == Owner Receiver)
@@ -141,12 +135,8 @@ Text: cover {
 		this free(Owner Receiver)
 		result
 	}
-	split: func ~character (separator: Char) -> VectorList<This> {
-		this split(This new(separator))
-	}
-	split: func ~string (separator: String) -> VectorList<This> {
-		this split(This new(separator))
-	}
+	split: func ~character (separator: Char) -> VectorList<This> { this split(This new(separator)) }
+	split: func ~string (separator: String) -> VectorList<This> { this split(This new(separator)) }
 	split: func ~text (separator: This) -> VectorList<This> {
 		t := this take()
 		s := separator take()
@@ -173,52 +163,26 @@ Text: cover {
 			--rightPosition
 		this slice(leftPosition, rightPosition - leftPosition + 1)
 	}
-	toString: func -> String {
-		result := String new(this _buffer raw, this count)
-		this free(Owner Receiver)
-		result
-	}
-	toInt: func -> Int {
-		result := this toLLong() as Int
-		this free(Owner Receiver)
-		result
-	}
-	toLong: func -> Long {
-		result := this toLLong() as Long
-		this free(Owner Receiver)
-		result
-	}
-	toLLong: func -> LLong {
-		result := this toLLong~inBase(this _detectNumericBase())
-		this free(Owner Receiver)
-		result
-	}
-	toInt: func ~inBase (base: Int) -> Int {
-		result := this toLLong~inBase(base) as Int
-		this free(Owner Receiver)
-		result
-	}
-	toLong: func ~inBase (base: Int) -> LLong {
-		result := this toLLong~inBase(base) as Long
-		this free(Owner Receiver)
-		result
-	}
+	toString: func -> String { this _buffer toString() }
+	toInt: func -> Int { this toLLong() as Int }
+	toLong: func -> Long { this toLLong() as Long }
+	toLLong: func -> LLong { this toLLong~inBase(this _detectNumericBase()) }
+	toInt: func ~inBase (base: Int) -> Int { this toLLong~inBase(base) as Int }
+	toLong: func ~inBase (base: Int) -> LLong { this toLLong~inBase(base) as Long }
 	toLLong: func ~inBase (base: Int) -> LLong {
 		t := this take() trim()
 		result := t isEmpty ? 0 : (t[0] == '-' ? -1 * t slice(1, t count - 1) toULong(base) : t toULong(base) as LLong)
 		this free(Owner Receiver)
 		result
 	}
-	toULong: func -> ULong {
-		this toULong~inBase(this _detectNumericBase())
-	}
+	toULong: func -> ULong { this toULong~inBase(this _detectNumericBase()) }
 	toULong: func ~inBase (base: Int) -> ULong {
 		t := this take() trim()
 		result := 0 as ULong
 		if (!t isEmpty) {
 			lastValidIndex := -1
 			start := 0
-			if (base == 16 && t beginsWith(This new(c"0x", 2))) {
+			if (base == 16 && t beginsWith(t"0x")) {
 				start += 2
 				lastValidIndex += 2
 			}
@@ -237,12 +201,8 @@ Text: cover {
 		this free(Owner Receiver)
 		result
 	}
-	toFloat: func -> Float {
-		this toLDouble() as Float
-	}
-	toDouble: func -> Double {
-		this toLDouble() as Double
-	}
+	toFloat: func -> Float { this toLDouble() as Float }
+	toDouble: func -> Double { this toLDouble() as Double }
 	toLDouble: func -> LDouble {
 		t := this take() trim()
 		result := 0.0 as LDouble
@@ -302,7 +262,7 @@ Text: cover {
 	}
 	_toInt: static func (c: Char, base: Int) -> Int {
 		result := 0
-		if (_isNumeric(c, base)) {
+		if (This _isNumeric(c, base)) {
 			if (base != 16)
 				result = (c - '0') as Int
 			else {
@@ -318,9 +278,7 @@ Text: cover {
 	}
 	empty: static This { get { This new() } }
 }
-makeTextLiteral: func (str: CString, strLen: Int) -> Text {
-	Text new(str, strLen)
-}
+makeTextLiteral: func (str: CString, strLen: Int) -> Text { Text new(str, strLen) }
 
 operator == (left: String, right: Text) -> Bool { Text new(left) == right }
 operator != (left: String, right: Text) -> Bool { !(left == right) }
