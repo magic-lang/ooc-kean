@@ -45,23 +45,19 @@ TimeSpan: cover {
 		this ticks / DateTime ticksPerWeek
 	}
 	defaultFormat: static const String = "%w weeks, %d days, %h hours, %m minutes, %s seconds, %z milliseconds"
-	toString: func -> String {
-		this toStringFormat(This defaultFormat)
-	}
 	// supported formatting expressions:
 	//  %w - weeks (rounded down)
 	//  %d - days (<7)
 	//  %h - hours (<24)
 	//  %m - minutes (<60)
 	//  %s - seconds (<60)
-	//  %z - milliseconds (<1000)	
 	//  %z - milliseconds (<1000)
 	//  %D - days (based on total ticks)
 	//  %H - hours (based on total ticks)
 	//  %M - minutes (based on total ticks)
 	//  %S - seconds (based on total ticks)
-	//  %Z - milliseconds (based on total ticks)	
-	toStringFormat: func (format: String) -> String {
+	//  %Z - milliseconds (based on total ticks)
+	toString: func (format := This defaultFormat) -> String {
 		result := format
 		result = result replaceAll("%w", "%d" format(this elapsedWeeks()))
 		result = result replaceAll("%D", "%d" format(this elapsedDays()))
