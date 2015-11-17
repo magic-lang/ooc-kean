@@ -31,7 +31,7 @@ GLShaderProgram: abstract class {
 	setUniform: abstract func ~Float3 (name: String, x, y, z: Float)
 	setUniform: abstract func ~Float4 (name: String, x, y, z, w: Float)
 	setUniform: abstract func ~FloatArray (name: String, values: Float*, count: Int)
-	setUniform: abstract func ~Matrix3x3 (name: String, value: FloatTransform2D)
-	setUniform: abstract func ~Matrix4x4 (name: String, value: FloatTransform3D)
+	setUniform: abstract func ~FloatTransform2D (name: String, value: FloatTransform2D)
+	setUniform: abstract func ~FloatTransform3D (name: String, value: FloatTransform3D)
 }
 }
