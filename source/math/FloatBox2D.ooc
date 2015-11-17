@@ -154,9 +154,9 @@ FloatBox2D: cover {
 	}
 	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
 	parse: static func (input: Text) -> This {
-		array := input split(',')
-		result := This new(array[0] toFloat(), array[1] toFloat(), array[2] toFloat(), array[3] toFloat())
-		array free()
+		parts := input split(',')
+		result := This new(parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat(), parts[3] toFloat())
+		parts free()
 		result
 	}
 	create: static func (leftTop: FloatPoint2D, size: FloatSize2D) -> This { This new(leftTop, size) }

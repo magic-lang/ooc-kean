@@ -50,9 +50,9 @@ IntPoint3D: cover {
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}, #{this z toString()}" }
 	parse: static func (input: Text) -> This {
-		array := input split(',')
-		result := This new(array[0] toInt(), array[1] toInt(), array[2] toInt())
-		array free()
+		parts := input split(',')
+		result := This new(parts[0] toInt(), parts[1] toInt(), parts[2] toInt())
+		parts free()
 		result
 	}
 }
