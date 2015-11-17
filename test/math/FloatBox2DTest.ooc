@@ -25,20 +25,20 @@ FloatBox2DTest: class extends Fixture {
 		})
 		this add("leftTop", func {
 			leftTop := this box0 leftTop
-			expect(leftTop x, is equal to(1.0f) within (this precision))
-			expect(leftTop y, is equal to(2.0f) within (this precision))
+			expect(leftTop x, is equal to(1.0f) within(this precision))
+			expect(leftTop y, is equal to(2.0f) within(this precision))
 		})
 		this add("size", func {
 			size := this box0 size
-			expect(size width, is equal to(3.0f) within (this precision))
-			expect(size height, is equal to(4.0f) within (this precision))
+			expect(size width, is equal to(3.0f) within(this precision))
+			expect(size height, is equal to(4.0f) within(this precision))
 		})
 		this add("addition, union", func {
 			result := box0 + box1
-			expect(result left, is equal to(1.0f) within (this precision))
-			expect(result top, is equal to(2.0f) within (this precision))
-			expect(result width, is equal to(5.0f) within (this precision))
-			expect(result height, is equal to(4.0f) within (this precision))
+			expect(result left, is equal to(1.0f) within(this precision))
+			expect(result top, is equal to(2.0f) within(this precision))
+			expect(result width, is equal to(5.0f) within(this precision))
+			expect(result height, is equal to(4.0f) within(this precision))
 			expect(result == box0 union(box1))
 		})
 		this add("subtraction, intersection", func {
