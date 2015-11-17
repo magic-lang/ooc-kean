@@ -19,7 +19,7 @@ use ooc-math
 use ooc-base
 use ooc-draw-gpu
 import OpenGLMap
-import ../OpenGLContext
+import OpenGLContext
 
 version(!gpuOff) {
 OpenGLMapPackMonochrome: class extends OpenGLMap {

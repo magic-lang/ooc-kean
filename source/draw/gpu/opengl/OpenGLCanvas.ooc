@@ -21,7 +21,7 @@ use ooc-collections
 use ooc-draw
 use ooc-draw-gpu
 import backend/[GLFramebufferObject, GLTexture]
-import OpenGLBgr, Map/OpenGLMap, OpenGLBgra, OpenGLUv, OpenGLMonochrome, OpenGLContext, OpenGLPacked, OpenGLSurface
+import OpenGLBgr, OpenGLMap, OpenGLBgra, OpenGLUv, OpenGLMonochrome, OpenGLContext, OpenGLPacked, OpenGLSurface
 
 version(!gpuOff) {
 OpenGLCanvas: class extends OpenGLSurface {

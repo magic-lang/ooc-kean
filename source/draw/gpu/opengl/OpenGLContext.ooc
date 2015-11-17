@@ -20,7 +20,7 @@ use ooc-draw-gpu
 use ooc-collections
 use ooc-ui
 import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, OpenGLMesh, OpenGLCanvas, RecycleBin
-import Map/OpenGLMap, Map/OpenGLMapPack
+import OpenGLMap, OpenGLMapPack
 import backend/[GLContext, GLRenderer]
 
 version(!gpuOff) {

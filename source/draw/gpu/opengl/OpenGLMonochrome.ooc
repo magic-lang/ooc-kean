@@ -18,7 +18,7 @@
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
-import OpenGLPacked, OpenGLCanvas, Map/OpenGLMap, Map/OpenGLMapPack, OpenGLContext
+import OpenGLPacked, OpenGLCanvas, OpenGLMap, OpenGLMapPack, OpenGLContext
 import backend/GLTexture
 
 version(!gpuOff) {
