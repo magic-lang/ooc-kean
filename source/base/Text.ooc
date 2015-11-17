@@ -51,7 +51,7 @@ Text: cover {
 	operator == (string: String) -> Bool { this == This new(string) }
 	operator == (other: This) -> Bool {
 		result := this _buffer == other _buffer
-		if (this _buffer raw != other _buffer raw)
+		if (this _buffer _backend pointer != other _buffer _backend pointer)
 			other free(Owner Receiver)
 		this free(Owner Receiver)
 		result
@@ -62,7 +62,7 @@ Text: cover {
 		result := TextBuffer new(this take() count + other take() count)
 		this _buffer copyTo(result)
 		other _buffer copyTo(result slice(this take() count))
-		if (this _buffer raw != other _buffer raw)
+		if (this _buffer _backend pointer != other _buffer _backend pointer)
 			other free(Owner Receiver)
 		this free(Owner Receiver)
 		This new(result)
