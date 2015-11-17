@@ -23,7 +23,7 @@ import backend/GLShaderProgram
 import OpenGLContext, OpenGLPacked, OpenGLVolumeMonochrome
 
 version(!gpuOff) {
-OpenGLMap: abstract class extends GpuMap {
+OpenGLMap: class extends GpuMap {
 	_vertexSource: String
 	_fragmentSource: String
 	_program: GLShaderProgram[]
@@ -110,7 +110,7 @@ OpenGLMapMesh: class extends OpenGLMap {
 	vertexSource: static String = slurp("shaders/mesh.vert")
 	fragmentSource: static String = slurp("shaders/mesh.frag")
 }
-OpenGLMapDefault: abstract class extends OpenGLMap {
+OpenGLMapDefault: class extends OpenGLMap {
 	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
 	vertexSource: static String = slurp("shaders/default.vert")
 }
@@ -119,7 +119,7 @@ OpenGLMapDefaultTexture: class extends OpenGLMapDefault {
 	init: func ~default (context: OpenGLContext) { this init(This fragmentSource, context) }
 	fragmentSource: static String = slurp("shaders/texture.frag")
 }
-OpenGLMapTransform: abstract class extends OpenGLMap {
+OpenGLMapTransform: class extends OpenGLMap {
 	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
 	use: override func {
 		finalTransform := this projection * this view * this model
@@ -169,7 +169,7 @@ OpenGLMapPackUvPadded: class extends OpenGLMap {
 	vertexSource: static String = slurp("shaders/packUvPadded.vert")
 	fragmentSource: static String = slurp("shaders/packUvPadded.frag")
 }
-OpenGLMapUnpack: abstract class extends OpenGLMap {
+OpenGLMapUnpack: class extends OpenGLMap {
 	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
 	vertexSource: static String = slurp("shaders/unpack.vert")
 }
