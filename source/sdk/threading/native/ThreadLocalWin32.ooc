@@ -5,10 +5,10 @@ include unistd
 version(windows) {
 	include windows
 
-	GetCurrentThreadId: extern func -> Long // TODO: also laziness.
+	GetCurrentThreadId: extern func -> ULong
 
 	ThreadLocalWin32: class <T> extends ThreadLocal<T> {
-		values := HashMap<Long, T> new()
+		values := HashMap<ULong, T> new()
 		valuesMutex := Mutex new()
 
 		init: func ~windows
