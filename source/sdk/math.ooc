@@ -54,13 +54,13 @@ floor: extern (floorl) func ~Long (LDouble) -> LDouble
 
    - Scott
  */
- extend Short {
+extend Short {
 	minimumValue ::= static SHRT_MIN
 	maximumValue ::= static SHRT_MAX
 }
 
 extend Int64 {
-	modulo: func(divisor: This) -> This { 
+	modulo: func (divisor: This) -> This { 
 		result := this - (this / divisor) * divisor
 		result < 0 ? result + divisor : result
 	}
@@ -103,24 +103,8 @@ extend Int {
 	maximum: static func ~two (first: This, second: This) -> This {
 		first > second ? first : second
 	}
-	// TODO: Avoid using this, consider removing it.
-	maximum: static func ~multiple (value: This, values: ...) -> This {
-		values each(|v|
-			if ((v as This*)@ > value)
-				value = v
-		)
-		value
-	}
 	minimum: static func ~two (first: This, second: This) -> This {
 		first < second ? first : second
-	}
-	// TODO: Avoid using this, consider removing it.
-	minimum: static func ~multiple (value: This, values: ...) -> This {
-		values each(|v|
-			if ((v as This*)@ < value)
-				value = v
-		)
-		value
 	}
 	modulo: static func ~deprecated (dividend: This, divisor: This) -> This {
 		dividend modulo(divisor)
