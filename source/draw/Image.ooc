@@ -86,7 +86,7 @@ Image: abstract class {
 	distance: virtual abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
 	isValidIn: func (x, y: Int) -> Bool {
-		return (x >= 0 && x < this size width && y >= 0 && y < this size height)
+		x >= 0 && x < this size width && y >= 0 && y < this size height
 	}
 	_createCanvas: virtual func -> Canvas { null }
 	kean_draw_image_free: unmangled func { this referenceCount decrease() }

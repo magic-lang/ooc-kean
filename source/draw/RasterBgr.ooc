@@ -35,7 +35,7 @@ BgrRasterCanvas: class extends RasterCanvas {
 }
 
 RasterBgr: class extends RasterPacked {
-	bytesPerPixel: Int { get { 3 } }
+	bytesPerPixel ::= 3
 	init: func ~allocate (size: IntSize2D) { super~allocate(size) }
 	init: func ~allocateStride (size: IntSize2D, stride: UInt) { super(size, stride) }
 	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntSize2D, stride: UInt) { super(buffer, size, stride) }

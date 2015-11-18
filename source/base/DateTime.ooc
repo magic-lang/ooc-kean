@@ -43,7 +43,7 @@ extend Time {
 				val := localtime(tt&)
 				result = DateTime new(val@ tm_year + 1900, val@ tm_mon + 1, val@ tm_mday, val@ tm_hour, val@ tm_min, val@ tm_sec, 0)
 		}
-		return result
+		result
 	}
 }
 
@@ -238,7 +238,7 @@ DateTime: cover {
 			totalDays += fourYearBlocks * This daysPerFourYears
 			result = totalDays * This ticksPerDay
 		}
-		return result
+		result
 	}
 
 	daysInYear: static func (year: Int) -> Int {
