@@ -108,7 +108,7 @@ RasterUv: class extends RasterPacked {
 		requiredComponents := 3
 		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
 		//FIXME: Is it neccessary to create a RasterBgr here?
-		This convertFrom(RasterBgr new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y)))
+		This convertFrom(RasterBgr new(ByteBuffer new(data as UInt8*, x * y * requiredComponents, true), IntSize2D new(x, y)))
 	}
 	save: override func (filename: String) -> Int {
 		bgr := RasterBgr new(this buffer, this size)
