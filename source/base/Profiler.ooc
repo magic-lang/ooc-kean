@@ -44,6 +44,11 @@ Profiler: class {
 		})
 	}
 	free: override func {
+		for (i in 0 .. This _profilers count)
+			if (this == This _profilers[i]) {
+				This _profilers removeAt(i)
+				break
+			}
 		this _timer free()
 		this _timer = null
 		this _clockTimer free()
@@ -65,6 +70,8 @@ Profiler: class {
 	}
 	resetAll: static func { This _profilers apply(func (profiler: This) { profiler reset() }) }
 	dispose: static func {
+		while (This _profilers count > 0)
+			This _profilers remove() free()
 		This _profilers free()
 		This _profilers = null
 	}
