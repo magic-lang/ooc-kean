@@ -115,7 +115,7 @@ Quaternion: cover {
 		x := a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2
 		y := a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2
 		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2
-		return This new(w, x, y, z)
+		This new(w, x, y, z)
 	}
 	distance: func (other: This) -> Float {
 		(this - other) norm
