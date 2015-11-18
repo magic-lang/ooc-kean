@@ -100,10 +100,10 @@ extend Int {
 	sign: static func (value: This) -> This {
 		value >= 0 ? 1 : -1
 	}
-	maximum: static func ~two (first: This, second: This) -> This {
+	maximum: static func (first: This, second: This) -> This {
 		first > second ? first : second
 	}
-	minimum: static func ~two (first: This, second: This) -> This {
+	minimum: static func (first: This, second: This) -> This {
 		first < second ? first : second
 	}
 	modulo: static func ~deprecated (dividend: This, divisor: This) -> This {
