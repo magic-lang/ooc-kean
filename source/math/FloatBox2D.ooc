@@ -18,7 +18,6 @@ import FloatPoint2D
 import FloatSize2D
 import IntBox2D
 import FloatPoint2DVectorList
-import structs/ArrayList
 use ooc-base
 use ooc-collections
 

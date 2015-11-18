@@ -15,7 +15,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
 import FloatSize2D
-import structs/ArrayList
 import IntPoint2D
 use ooc-base
 

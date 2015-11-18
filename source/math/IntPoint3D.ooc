@@ -13,11 +13,11 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 import math
 import IntSize3D
 import IntPoint2D
 import FloatPoint3D
-import structs/ArrayList
 use ooc-base
 
 IntPoint3D: cover {

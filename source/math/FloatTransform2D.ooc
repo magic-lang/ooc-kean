@@ -19,7 +19,6 @@ import FloatSize2D
 import FloatPoint2D
 import FloatBox2D
 import IntTransform2D
-import structs/ArrayList
 import FloatEuclidTransform, FloatTransform3D, FloatPoint3D
 
 // The 2D transform is a 3x3 homogeneous coordinate matrix.
