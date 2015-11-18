@@ -3,6 +3,6 @@
 	"secondary" : "ooc-vidproc",
 	"secondaryUpstream" : "vidhancee",
 	"actions" : [
-			{"task" : "rock", "dependency" : "none"}
+			{"task" : "./test.sh", "dependency" : "none"}
 	]
 }
