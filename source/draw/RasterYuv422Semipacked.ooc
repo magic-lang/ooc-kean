@@ -30,7 +30,7 @@ import io/Reader
 import io/FileWriter
 
 RasterYuv422Semipacked: class extends RasterPacked {
-	bytesPerPixel: Int { get { 2 } }
+	bytesPerPixel ::= 2
 	init: func ~allocate (size: IntSize2D) { super~allocate(size) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, this bytesPerPixel * size width) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }

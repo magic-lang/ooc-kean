@@ -58,7 +58,7 @@ GraphicBuffer: class {
 			}
 		}
 	}
-	length: Int { get { this stride * this size height } }
+	length ::= this stride * this size height
 	_backend: Pointer = null
 	_nativeBuffer: Pointer = null
 	nativeBuffer ::= this _nativeBuffer
