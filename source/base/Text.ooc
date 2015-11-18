@@ -49,13 +49,7 @@ Text: cover {
 	}
 	copyTo: func (buffer: TextBuffer) -> Int { this _buffer copyTo(buffer) }
 	operator == (string: String) -> Bool { this == This new(string) }
-	operator == (other: This) -> Bool {
-		result := this _buffer == other _buffer
-		if (this _buffer _backend pointer != other _buffer _backend pointer)
-			other free(Owner Receiver)
-		this free(Owner Receiver)
-		result
-	}
+	operator == (other: This) -> Bool { this _buffer == other _buffer }
 	operator != (other: String) -> Bool { !(this == other) }
 	operator != (other: This) -> Bool { !(this == other) }
 	operator + (other: This) -> This {
