@@ -84,19 +84,16 @@ OpenGLMap: abstract class extends GpuMap {
 					case ColorYuva => color := cell as Cell<ColorYuva> get(); program setUniform(key, color yuv y as Float / 255, color yuv u as Float / 255, color yuv v as Float / 255, color alpha as Float / 255)
 					case => Debug raise("Invalid cover type in OpenGLMap use!")
 				}
-			}
-			else
+			} else
 				match (value) {
-					case image: OpenGLPacked => {
+					case image: OpenGLPacked =>
 						image backend bind(textureCount)
 						program setUniform(key, textureCount)
 						textureCount += 1
-					}
-					case image: OpenGLVolumeMonochrome => {
+					case image: OpenGLVolumeMonochrome =>
 						image _backend bind(textureCount)
 						program setUniform(key, textureCount)
 						textureCount += 1
-					}
 					case => Debug raise("Invalid object type in OpenGLMap use: %s" format(value class name))
 				}
 		}
@@ -110,54 +107,17 @@ OpenGLMapMesh: class extends OpenGLMap {
 		this add("projection", this projection)
 		super()
 	}
-	vertexSource: static String = "#version 300 es
-		precision highp float;
-		uniform mat4 projection;
-		layout(location = 0) in vec3 vertexPosition;
-		layout(location = 1) in vec2 textureCoordinate;
-		out vec2 fragmentTextureCoordinate;
-		void main() {
-			vec4 position = vec4(vertexPosition, 1);
-			fragmentTextureCoordinate = textureCoordinate;
-			gl_Position = projection * position;
-		}
-		"
-	fragmentSource: static String = "#version 300 es
-		precision highp float;
-		uniform sampler2D texture0;
-		in vec2 fragmentTextureCoordinate;
-		out vec4 outColor;
-		void main() {
-			outColor = texture(texture0, fragmentTextureCoordinate).rgba;
-		}
-		"
+	vertexSource: static String = slurp("shaders/mesh.vert")
+	fragmentSource: static String = slurp("shaders/mesh.frag")
 }
 OpenGLMapDefault: abstract class extends OpenGLMap {
 	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
-	vertexSource: static String = "#version 300 es
-		precision highp float;
-		layout(location = 0) in vec2 vertexPosition;
-		layout(location = 1) in vec2 textureCoordinate;
-		out vec2 fragmentTextureCoordinate;
-		void main() {
-			vec4 position = vec4(vertexPosition.x, vertexPosition.y, 0, 1);
-			fragmentTextureCoordinate = textureCoordinate;
-			gl_Position = position;
-		}
-		"
+	vertexSource: static String = slurp("shaders/default.vert")
 }
 OpenGLMapDefaultTexture: class extends OpenGLMapDefault {
 	init: func (context: OpenGLContext, fragmentSource: String)
 	init: func ~default (context: OpenGLContext) { this init(This fragmentSource, context) }
-	fragmentSource: static String = "#version 300 es
-		precision highp float;
-		uniform sampler2D texture0;
-		in vec2 fragmentTextureCoordinate;
-		out vec4 outColor;
-		void main() {
-			outColor = texture(texture0, fragmentTextureCoordinate).rgba;
-		}
-		"
+	fragmentSource: static String = slurp("shaders/texture.frag")
 }
 OpenGLMapTransform: abstract class extends OpenGLMap {
 	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
@@ -167,125 +127,31 @@ OpenGLMapTransform: abstract class extends OpenGLMap {
 		this add("textureTransform", this textureTransform)
 		super()
 	}
-	vertexSource: static String = "#version 300 es
-		precision highp float;
-		uniform mat4 transform;
-		uniform mat4 textureTransform;
-		layout(location = 0) in vec2 vertexPosition;
-		layout(location = 1) in vec2 textureCoordinate;
-		out vec2 fragmentTextureCoordinate;
-		void main() {
-			vec4 position = vec4(vertexPosition.x, vertexPosition.y, 0, 1);
-			vec4 transformedPosition = transform * position;
-			vec4 texCoord = (textureTransform * vec4(textureCoordinate, 1, 1));
-			fragmentTextureCoordinate = texCoord.xy;
-			gl_Position = transformedPosition;
-		}
-		"
+	vertexSource: static String = slurp("shaders/transform.vert")
 }
 OpenGLMapTransformTexture: class extends OpenGLMapTransform {
 	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
-	fragmentSource: static String = "#version 300 es
-		precision highp float;
-		uniform sampler2D texture0;
-		in vec2 fragmentTextureCoordinate;
-		out vec4 outColor;
-		void main() {
-			outColor = texture(texture0, fragmentTextureCoordinate).rgba;
-		}
-		"
+	fragmentSource: static String = slurp("shaders/texture.frag")
 }
 OpenGLMapMonochromeToBgra: class extends OpenGLMapDefaultTexture {
 	init: func (context: OpenGLContext) { super(This customFragmentSource, context) }
-	customFragmentSource: static String = "#version 300 es
-		precision highp float;
-		uniform sampler2D texture0;
-		in vec2 fragmentTextureCoordinate;
-		out vec4 outColor;
-		void main() {
-			float colorSample = texture(texture0, fragmentTextureCoordinate).r;
-			outColor = vec4(colorSample, colorSample, colorSample, 1.0f);
-		}
-		"
+	customFragmentSource: static String = slurp("shaders/monochromeToBgra.frag")
 }
 OpenGLMapYuvPlanarToBgra: class extends OpenGLMapTransform {
 	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
-	fragmentSource: static String = "#version 300 es
-		precision highp float;
-		uniform sampler2D texture0;
-		uniform sampler2D texture1;
-		uniform sampler2D texture2;
-		in vec2 fragmentTextureCoordinate;
-		out vec4 outColor;
-		vec4 YuvToRgba(vec4 t)
-		{
-			mat4 matrix = mat4(1, 1, 1, 0,
-				-0.000001218894189, -0.344135678165337, 1.772000066073816, 0,
-				1.401999588657340, -0.714136155581812, 0.000000406298063, 0,
-				0, 0, 0, 1);
-				return matrix * t;
-		}
-		void main() {
-			float y = texture(texture0, fragmentTextureCoordinate).r;
-			float u = texture(texture1, fragmentTextureCoordinate).r;
-			float v = texture(texture2, fragmentTextureCoordinate).r;
-			outColor = YuvToRgba(vec4(y, v - 0.5f, u - 0.5f, 1.0f));
-		}
-		"
+	fragmentSource: static String = slurp("shaders/yuvPlanarToBgra.frag")
 }
 OpenGLMapYuvSemiplanarToBgra: class extends OpenGLMapTransform {
 	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
-	fragmentSource: static String = "#version 300 es
-		precision highp float;
-		uniform sampler2D texture0;
-		uniform sampler2D texture1;
-		in vec2 fragmentTextureCoordinate;
-		out vec4 outColor;
-		vec4 YuvToRgba(vec4 t)
-		{
-			mat4 matrix = mat4(1, 1, 1, 0,
-				-0.000001218894189, -0.344135678165337, 1.772000066073816, 0,
-				1.401999588657340, -0.714136155581812, 0.000000406298063, 0,
-				0, 0, 0, 1);
-				return matrix * t;
-		}
-		void main() {
-			float y = texture(texture0, fragmentTextureCoordinate).r;
-			vec2 uv = texture(texture1, fragmentTextureCoordinate).rg;
-			outColor = YuvToRgba(vec4(y, uv.r - 0.5f, uv.g - 0.5f, 1.0f));
-		}
-		"
+	fragmentSource: static String = slurp("shaders/yuvSemiplanarToBgra.frag")
 }
 OpenGLMapLines: class extends OpenGLMapTransform {
 	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
-	fragmentSource: static String = "#version 300 es
-		precision highp float;
-		uniform vec4 color;
-		out vec4 outColor;
-		void main() {
-			outColor = color;
-		}
-		"
+	fragmentSource: static String = slurp("shaders/color.frag")
 }
 OpenGLMapPoints: class extends OpenGLMap {
 	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
-	vertexSource: static String = "#version 300 es
-		precision highp float;
-		uniform float pointSize;
-		uniform mat4 transform;
-		layout(location = 0) in vec2 vertexPosition;
-		void main() {
-			gl_PointSize = pointSize;
-			gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
-		}
-		"
-	fragmentSource: static String = "#version 300 es
-		precision highp float;
-		uniform vec4 color;
-		out vec4 outColor;
-		void main() {
-			outColor = color;
-		}
-		"
+	vertexSource: static String = slurp("shaders/points.vert")
+	fragmentSource: static String = slurp("shaders/color.frag")
 }
 }

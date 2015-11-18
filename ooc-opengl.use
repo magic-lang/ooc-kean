@@ -13,8 +13,8 @@ Imports: OpenGLMonochrome
 Imports: OpenGLUv
 Imports: OpenGLCanvas
 Imports: OpenGLSurface
-Imports: Map/OpenGLMap
-Imports: Map/OpenGLMapPack
+Imports: OpenGLMap
+Imports: OpenGLMapPack
 Imports: OpenGLContext
 Imports: OpenGLVolumeMonochrome
 Imports: OpenGLWindow

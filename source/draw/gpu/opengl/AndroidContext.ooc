@@ -19,7 +19,7 @@ use ooc-draw
 use ooc-math
 use ooc-base
 import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLBgra, OpenGLBgra, OpenGLPacked, OpenGLMonochrome, OpenGLUv
-import Map/OpenGLMapPack
+import OpenGLMapPack
 import threading/Thread
 import math
 

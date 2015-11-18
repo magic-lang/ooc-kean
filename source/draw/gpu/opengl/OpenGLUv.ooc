@@ -19,7 +19,7 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 import backend/GLTexture
-import OpenGLCanvas, OpenGLPacked, OpenGLContext, Map/[OpenGLMap, OpenGLMapPack]
+import OpenGLCanvas, OpenGLPacked, OpenGLContext, OpenGLMap, OpenGLMapPack
 
 version(!gpuOff) {
 OpenGLUv: class extends OpenGLPacked {
