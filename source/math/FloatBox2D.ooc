@@ -87,18 +87,10 @@ FloatBox2D: cover {
 		This new(left, top, width, height)
 	}
 	union: func ~box (other: This) -> This { // Rock bug: Union without suffix cannot be used because the C name conflicts with keyword "union"
-		left := Float minimum(this left, other left)
-		top := Float minimum(this top, other top)
-		width := Float maximum(0, (Float maximum(this right, other right) - left))
-		height := Float maximum(0, (Float maximum(this bottom, other bottom) - top))
-		This new(left, top, width, height)
+		This new(this leftTop minimum(other leftTop), this rightBottom maximum(other rightBottom))
 	}
 	union: func ~point (point: FloatPoint2D) -> This {
-		left := Float minimum(this left, point x)
-		top := Float minimum(this top, point y)
-		width := Float maximum(0, Float maximum(this right, point x) - left)
-		height := Float maximum(0, Float maximum(this bottom, point y) - top)
-		This new(left, top, width, height)
+		This new(this leftTop minimum(point), this rightBottom maximum(point))
 	}
 	contains: func (point: FloatPoint2D) -> Bool {
 		this left <= point x && point x <= this right && this top <= point y && point y <= this bottom
