@@ -10,22 +10,18 @@ PlotData2D: abstract class {
 	color: String { get set }
 	opacity: Float { get set }
 	dataSeries: VectorList<FloatPoint2D> { get set }
-
 	init: func ~default {
 		this init(VectorList<FloatPoint2D> new())
 	}
-
 	init: func ~dataSeries (=dataSeries, label := "", colorBgra := ColorBgra new()) {
 		this lineWidth = 1
 		this legendOffset = 5.0f
 		this label = label
 		this colorBgra = colorBgra
 	}
-
 	init: func ~color (dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
 		this init(dataSeries, "", colorBgra)
 	}
-
 	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new()) {
 		dataSeries := VectorList<FloatPoint2D> new()
 		for (i in 0 .. ySeries count) {
@@ -33,16 +29,13 @@ PlotData2D: abstract class {
 		}
 		this init(dataSeries, label, colorBgra)
 	}
-
 	free: override func {
 		this dataSeries free()
 		this color free()
 		super()
 	}
-
 	getSvg: abstract func (transform: FloatTransform2D) -> String
 	getSvgLegend: abstract func (legendCount, fontSize: Int) -> String
-
 	minValues: func -> FloatPoint2D {
 		result: FloatPoint2D
 		if (dataSeries empty)
@@ -54,7 +47,6 @@ PlotData2D: abstract class {
 		}
 		result
 	}
-
 	maxValues: func -> FloatPoint2D {
 		result: FloatPoint2D
 		if (dataSeries empty)

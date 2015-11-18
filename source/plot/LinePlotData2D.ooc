@@ -12,26 +12,21 @@ LineStyle: enum {
 
 LinePlotData2D: class extends PlotData2D {
 	lineStyle: LineStyle { get set }
-
 	init: func ~default (lineStyle := LineStyle Solid) {
 		super()
 		this lineStyle = lineStyle
 	}
-
 	init: func ~dataSeries (dataSeries: VectorList<FloatPoint2D>, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
 		super(dataSeries, label, colorBgra)
 		this lineStyle = lineStyle
 	}
-
 	init: func ~color (dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra, lineStyle := LineStyle Solid) {
 		this init(dataSeries, "", colorBgra, lineStyle)
 	}
-
 	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
 		super(xSeries, ySeries, label, colorBgra)
 		this lineStyle = lineStyle
 	}
-
 	getSvg: func (transform: FloatTransform2D) -> String {
 		result := ""
 		if (!this dataSeries empty) {
@@ -50,7 +45,6 @@ LinePlotData2D: class extends PlotData2D {
 		}
 		result
 	}
-
 	getSvgLegend: func (legendCount, fontSize: Int) -> String {
 		result: String
 		start := FloatPoint2D new(this legendOffset, this legendOffset + (fontSize * legendCount - fontSize / 2) as Float)
@@ -63,7 +57,6 @@ LinePlotData2D: class extends PlotData2D {
 			case => // LineStyle Solid
 				result = Shapes line(start, end, this lineWidth, this opacity, this color)
 		}
-		result = result & Shapes text(FloatPoint2D new(end x, end y + fontSize / 3), this label, fontSize, this opacity, this color)
-		result
+		result & Shapes text(FloatPoint2D new(end x, end y + fontSize / 3), this label, fontSize, this opacity, this color)
 	}
 }
