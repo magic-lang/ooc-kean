@@ -19,15 +19,14 @@ use ooc-draw
 use ooc-draw-gpu
 use ooc-opengl
 use ooc-base
-use ooc-ui
 
 version(!gpuOff) {
 OpenGLWindow: class extends OpenGLSurface {
 	_monochromeToBgra: OpenGLMap
 	_yuvSemiplanarToBgra: OpenGLMapTransform
-	init: func (native: NativeWindow) {
-		context := OpenGLContext new(native)
-		super(native size, context, OpenGLMap new(slurp("shaders/texture.frag"), context), IntTransform2D createScaling(1, -1))
+	init: func (windowSize: IntSize2D, display: Pointer, nativeBackend: Long) {
+		context := OpenGLContext new(display, nativeBackend)
+		super(windowSize, context, OpenGLMap new(slurp("shaders/texture.frag"), context), IntTransform2D createScaling(1, -1))
 		this _monochromeToBgra = OpenGLMap new(slurp("shaders/monochromeToBgra.frag"), context)
 		this _yuvSemiplanarToBgra = OpenGLMapTransform new(slurp("shaders/yuvSemiplanarToBgra.frag"), context)
 	}

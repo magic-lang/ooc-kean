@@ -18,7 +18,6 @@
 version(!gpuOff) {
 use ooc-base
 use ooc-math
-use ooc-ui
 import ../egl/egl
 import ../[GLContext, GLTexture, GLVertexArrayObject]
 import include/gles3
@@ -84,8 +83,8 @@ Gles3Context: class extends GLContext {
 				"WARNING: Using OpenGL ES 2" println()
 		}
 	}
-	_generate: func (window: NativeWindow, sharedContext: This) -> Bool {
-		this _eglDisplay = eglGetDisplay(window display)
+	_generate: func (display: Pointer, nativeBackend: Long, sharedContext: This) -> Bool {
+		this _eglDisplay = eglGetDisplay(display)
 		if (this _eglDisplay == null)
 			return false
 		eglInitialize(this _eglDisplay, null, null)
@@ -97,7 +96,7 @@ Gles3Context: class extends GLContext {
 			EGL_NONE] as Int*
 		chosenConfig: Pointer = this _chooseConfig(configAttribs)
 
-		this _eglSurface = eglCreateWindowSurface(this _eglDisplay, chosenConfig, window backend, null)
+		this _eglSurface = eglCreateWindowSurface(this _eglDisplay, chosenConfig, nativeBackend, null)
 		if (this _eglSurface == null)
 			return false
 
@@ -169,10 +168,10 @@ Gles3Context: class extends GLContext {
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR)
 		version(debugGL) { validateEnd("Context blend~alphaMonochrome") }
 	}
-	create: static func ~shared (window: NativeWindow, sharedContext: This = null) -> This {
+	create: static func ~shared (display: Pointer, nativeBackend: Long, sharedContext: This = null) -> This {
 		version(debugGL) { Debug print("Creating OpenGL Context") }
 		result := This new()
-		result _generate(window, sharedContext) ? result : null
+		result _generate(display, nativeBackend, sharedContext) ? result : null
 	}
 	create: static func ~pbufferShared (sharedContext: This = null) -> This {
 		version(debugGL) { Debug print("Creating OpenGL Context") }

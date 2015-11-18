@@ -57,7 +57,7 @@ UnixWindow: class extends UnixWindowBase {
 	context ::= this _openGLWindow context
 	init: func (size: IntSize2D, title: String) {
 		super(size, title)
-		this _openGLWindow = OpenGLWindow new(this _xWindow)
+		this _openGLWindow = OpenGLWindow new(this _xWindow size, this _xWindow display, this _xWindow backend)
 	}
 	free: override func {
 		this _openGLWindow free()
