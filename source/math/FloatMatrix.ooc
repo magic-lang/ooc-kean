@@ -48,7 +48,7 @@ FloatMatrix : cover {
 		result
 	}}
 	order: Int { get {
-		result := Int minimum~two(this _dimensions height, this _dimensions width)
+		result := Int minimum(this _dimensions height, this _dimensions width)
 		this free(Owner Receiver)
 		result
 	}}

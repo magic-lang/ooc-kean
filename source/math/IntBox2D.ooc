@@ -47,8 +47,8 @@ IntBox2D: cover {
 	init: func@ ~fromInts (left, top, width, height: Int) { this init(IntPoint2D new(left, top), IntSize2D new(width, height)) }
 	//init: func@ ~fromSize (size: IntSize2D) { this init(IntPoint2D new(), size) }
 	init: func@ ~fromPoints (first, second: IntPoint2D) {
-		left := Int minimum~two(first x, second x)
-		top := Int minimum~two(first y, second y)
+		left := Int minimum(first x, second x)
+		top := Int minimum(first y, second y)
 		width := (first x - second x) abs()
 		height := (first y - second y) abs()
 		this init(left, top, width, height)
@@ -73,17 +73,17 @@ IntBox2D: cover {
 		This createAround(this center, IntSize2D minimum(this size, size))
 	}
 	intersection: func (other: This) -> This {
-		left := Int maximum~two(this left, other left)
-		top := Int maximum~two(this top, other top)
-		width := Int maximum~two(0, Int minimum~two(this right, other right) - left)
-		height := Int maximum~two(0, Int minimum~two(this bottom, other bottom) - top)
+		left := Int maximum(this left, other left)
+		top := Int maximum(this top, other top)
+		width := Int maximum(0, Int minimum(this right, other right) - left)
+		height := Int maximum(0, Int minimum(this bottom, other bottom) - top)
 		This new(left, top, width, height)
 	}
 	union: func ~box (other: This) -> This { // Rock bug: Union without suffix cannot be used because the C name conflicts with keyword "union"
-		left := Int minimum~two(this left, other left)
-		top := Int minimum~two(this top, other top)
-		width := Int maximum~two(0, Int maximum(this right, other right) - left)
-		height := Int maximum~two(0, Int maximum(this bottom, other bottom) - top)
+		left := Int minimum(this left, other left)
+		top := Int minimum(this top, other top)
+		width := Int maximum(0, Int maximum(this right, other right) - left)
+		height := Int maximum(0, Int maximum(this bottom, other bottom) - top)
 		This new(left, top, width, height)
 	}
 	union: func ~point (point: IntPoint2D) -> This {

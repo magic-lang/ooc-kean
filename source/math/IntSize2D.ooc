@@ -31,8 +31,8 @@ IntSize2D: cover {
 	init: func@ ~default { this init(0, 0) }
 	scalarProduct: func (other: This) -> Int { this width * other width + this height * other height }
 	swap: func -> This { This new(this height, this width) }
-	minimum: func (ceiling: This) -> This { This new(Int minimum~two(this width, ceiling width), Int minimum~two(this height, ceiling height)) }
-	maximum: func (floor: This) -> This { This new(Int maximum~two(this width, floor width), Int maximum~two(this height, floor height)) }
+	minimum: func (ceiling: This) -> This { This new(Int minimum(this width, ceiling width), Int minimum(this height, ceiling height)) }
+	maximum: func (floor: This) -> This { This new(Int maximum(this width, floor width), Int maximum(this height, floor height)) }
 	minimum: func ~Int (ceiling: Int) -> This { this minimum(This new(ceiling)) }
 	maximum: func ~Int (floor: Int) -> This { this maximum(This new(floor)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height)) }
