@@ -84,19 +84,16 @@ OpenGLMap: abstract class extends GpuMap {
 					case ColorYuva => color := cell as Cell<ColorYuva> get(); program setUniform(key, color yuv y as Float / 255, color yuv u as Float / 255, color yuv v as Float / 255, color alpha as Float / 255)
 					case => Debug raise("Invalid cover type in OpenGLMap use!")
 				}
-			}
-			else
+			} else
 				match (value) {
-					case image: OpenGLPacked => {
+					case image: OpenGLPacked =>
 						image backend bind(textureCount)
 						program setUniform(key, textureCount)
 						textureCount += 1
-					}
-					case image: OpenGLVolumeMonochrome => {
+					case image: OpenGLVolumeMonochrome =>
 						image _backend bind(textureCount)
 						program setUniform(key, textureCount)
 						textureCount += 1
-					}
 					case => Debug raise("Invalid object type in OpenGLMap use: %s" format(value class name))
 				}
 		}
