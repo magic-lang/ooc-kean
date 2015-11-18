@@ -128,13 +128,19 @@ FloatMatrix : cover {
 	}
 	transpose: func -> This {
 		t := this take()
-		result := This new(t dimensions swap())
-		resultElements := result elements
-		thisElements := this elements
-		for (y in 0 .. t height)
-			for (x in 0 .. t width)
-				resultElements[y + x * t height] = thisElements[x + y * t width]
-		this free(Owner Receiver)
+		result: This
+		if (t isVector && this _elements owner == Owner Receiver) {
+			result = this
+			result _dimensions = result _dimensions swap()
+		} else {
+			result = This new(t dimensions swap())
+			resultElements := result elements
+			thisElements := this elements
+			for (y in 0 .. t height)
+				for (x in 0 .. t width)
+					resultElements[y + x * t height] = thisElements[x + y * t width]
+			this free(Owner Receiver)
+		}
 		result
 	}
 	trace: func -> Float {
