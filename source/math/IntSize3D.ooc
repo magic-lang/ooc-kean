@@ -32,7 +32,6 @@ IntSize3D: cover {
 	minimum: func (ceiling: This) -> This { This new(Int minimum~two(this width, ceiling width), Int minimum~two(this height, ceiling height), Int minimum~two(this depth, ceiling depth)) }
 	maximum: func (floor: This) -> This { This new(Int maximum~two(this width, floor width), Int maximum~two(this height, floor height), Int maximum~two(this depth, floor depth)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height), this depth clamp(floor depth, ceiling depth)) }
-	fillEven: static func (other: This) -> This { This new(other width + (other width % 2 == 1 ? 1 : 0), other height + (other height % 2 == 1 ? 1 : 0), other depth + (other depth % 2 == 1 ? 1 : 0)) }
 	operator + (other: This) -> This { This new(this width + other width, this height + other height, this depth + other depth) }
 	operator + (other: IntPoint3D) -> This { This new(this width + other x, this height + other y, this depth + other z) }
 	operator - (other: This) -> This { This new(this width - other width, this height - other height, this depth - other depth) }

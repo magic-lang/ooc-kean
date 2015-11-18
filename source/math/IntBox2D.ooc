@@ -20,6 +20,7 @@ import FloatPoint2D
 import FloatBox2D
 import structs/ArrayList
 use ooc-base
+use ooc-collections
 use ooc-math
 
 IntBox2D: cover {
@@ -124,18 +125,18 @@ IntBox2D: cover {
 		parts free()
 		result
 	}
-	create: static func (leftTop: IntPoint2D, size: IntSize2D) -> This { This new(leftTop, size) }
-	create: static func ~fromFloats (left, top, width, height: Int) -> This { This new(left, top, width, height) }
-	createAround: static func (center: IntPoint2D, size: IntSize2D) -> This { This new(center + (-size) / 2, size) }
-	bounds: func (left, right, top, bottom: Int) -> This { This new(left, top, right - left, bottom - top) }
-	bounds: func ~fromArray (points: IntPoint2D[]) -> This { this bounds(points as ArrayList<IntPoint2D>) }
-	bounds: func ~fromList (points: ArrayList<IntPoint2D>) -> This {
+	createAround: static func (center: IntPoint2D, size: IntSize2D) -> This { This new(center - size / 2, size) }
+	bounds: static func (left, right, top, bottom: Int) -> This { This new(left, top, right - left, bottom - top) }
+	bounds: static func ~fromArray (points: IntPoint2D[]) -> This { This bounds(points data, points length) }
+	bounds: static func ~fromList (points: VectorList<IntPoint2D>) -> This { This bounds(points pointer as IntPoint2D*, points count) }
+	bounds: static func ~fromPointer (data: IntPoint2D*, count: Int) -> This {
 		xMinimum := 0
 		xMaximum := xMinimum
 		yMinimum := xMinimum
 		yMaximum := xMinimum
 		initialized := false
-		for (point in points) {
+		for (i in 0 .. count) {
+			point := data[i]
 			if (!initialized) {
 				initialized = true
 				xMinimum = point x
