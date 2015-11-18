@@ -13,10 +13,10 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 import math
 import IntSize2D
 import FloatPoint2D
-import structs/ArrayList
 use ooc-base
 
 IntPoint2D: cover {

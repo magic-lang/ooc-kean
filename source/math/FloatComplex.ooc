@@ -16,7 +16,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import math
-import structs/ArrayList
 use ooc-base
 
 FloatComplex: cover {

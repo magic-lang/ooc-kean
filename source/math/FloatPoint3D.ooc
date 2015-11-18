@@ -16,7 +16,6 @@
 import math
 import FloatPoint2D
 import IntPoint3D
-import structs/ArrayList
 use ooc-base
 
 FloatPoint3D: cover {

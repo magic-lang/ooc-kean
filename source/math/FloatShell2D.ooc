@@ -17,7 +17,6 @@ import math
 import FloatPoint2D
 import FloatSize2D
 import FloatBox2D
-import structs/ArrayList
 use ooc-base
 
 FloatShell2D: cover {

@@ -16,7 +16,6 @@
 import math
 import FloatPoint2D
 import IntPoint3D
-import structs/ArrayList
 
 FloatPoint4D: cover {
 	x, y, z, w: Float
