@@ -47,6 +47,11 @@ FloatMatrix : cover {
 		this free(Owner Receiver)
 		result
 	}}
+	isVector: Bool { get {
+		result := this _dimensions width == 1 || this _dimensions height == 1
+		this free(Owner Receiver)
+		result
+	}}
 	order: Int { get {
 		result := Int minimum~two(this _dimensions height, this _dimensions width)
 		this free(Owner Receiver)
