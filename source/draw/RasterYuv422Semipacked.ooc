@@ -46,7 +46,9 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		result
 	}
 	apply: func ~bgr (action: Func(ColorBgr)) {
-		this apply(ColorConvert fromYuv(action))
+		convert := ColorConvert fromYuv(action)
+		this apply(convert)
+		(convert as Closure) dispose()
 	}
 	apply: func ~yuv (action: Func (ColorYuv)) {
 		row := this buffer pointer as UInt8*
@@ -63,7 +65,9 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		}
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
-		this apply(ColorConvert fromYuv(action))
+		convert := ColorConvert fromYuv(action)
+		this apply(convert)
+		(convert as Closure) dispose()
 	}
 	operator [] (x, y: Int) -> ColorYuv {
 		result := ColorYuv new()
@@ -82,13 +86,10 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		}
 	}
 	open: static func (filename: String) -> This {
-		x, y, imageComponents: Int
-		requiredComponents := 3
-		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
-		bgr := RasterBgr new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y))
-		result := This new(bgr)
+		bgr := RasterBgr open(filename)
+		result := This convertFrom(bgr)
 		bgr referenceCount decrease()
-		return result
+		result
 	}
 	save: func (filename: String) {
 		bgr := RasterBgr convertFrom(this)
