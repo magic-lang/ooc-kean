@@ -20,19 +20,19 @@ use ooc-draw-gpu
 use ooc-collections
 use ooc-ui
 import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, OpenGLMesh, OpenGLCanvas, RecycleBin
-import OpenGLMap, OpenGLMapPack
+import OpenGLMap
 import backend/[GLContext, GLRenderer]
 
 version(!gpuOff) {
 OpenGLContext: class extends GpuContext {
 	_backend: GLContext
 	backend ::= this _backend
-	_transformTextureMap: OpenGLMapTransformTexture
-	_packMonochrome: OpenGLMapPackMonochrome
-	_packUv: OpenGLMapPackUv
-	_packUvPadded: OpenGLMapPackUvPadded
-	_linesShader: OpenGLMapLines
-	_pointsShader: OpenGLMapPoints
+	_transformTextureMap: OpenGLMapTransform
+	_packMonochrome: OpenGLMap
+	_packUv: OpenGLMap
+	_packUvPadded: OpenGLMap
+	_linesShader: OpenGLMap
+	_pointsShader: OpenGLMap
 	_meshShader: OpenGLMapMesh
 	meshShader ::= this _meshShader
 	_renderer: GLRenderer
@@ -41,12 +41,12 @@ OpenGLContext: class extends GpuContext {
 
 	init: func ~backend (=_backend) {
 		super()
-		this _packMonochrome = OpenGLMapPackMonochrome new(this)
-		this _packUv = OpenGLMapPackUv new(this)
-		this _packUvPadded = OpenGLMapPackUvPadded new(this)
-		this _linesShader = OpenGLMapLines new(this)
-		this _pointsShader = OpenGLMapPoints new(this)
-		this _transformTextureMap = OpenGLMapTransformTexture new(this)
+		this _packMonochrome = OpenGLMap new(slurp("shaders/packMonochrome.vert"), slurp("shaders/packMonochrome.frag"), this)
+		this _packUv = OpenGLMap new(slurp("shaders/packUv.vert"), slurp("shaders/packUv.frag"), this)
+		this _packUvPadded = OpenGLMap new(slurp("shaders/packUvPadded.vert"), slurp("shaders/packUvPadded.frag"), this)
+		this _linesShader = OpenGLMapTransform new(slurp("shaders/color.frag"), this)
+		this _pointsShader = OpenGLMap new(slurp("shaders/points.vert"), slurp("shaders/color.frag"), this)
+		this _transformTextureMap = OpenGLMapTransform new(slurp("shaders/texture.frag"), this)
 		this _renderer = _backend createRenderer()
 		this _meshShader = OpenGLMapMesh new(this)
 	}

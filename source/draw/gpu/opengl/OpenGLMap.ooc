@@ -23,7 +23,7 @@ import backend/GLShaderProgram
 import OpenGLContext, OpenGLPacked, OpenGLVolumeMonochrome
 
 version(!gpuOff) {
-OpenGLMap: abstract class extends GpuMap {
+OpenGLMap: class extends GpuMap {
 	_vertexSource: String
 	_fragmentSource: String
 	_program: GLShaderProgram[]
@@ -48,6 +48,7 @@ OpenGLMap: abstract class extends GpuMap {
 		if (vertexSource == null || fragmentSource == null)
 			Debug raise("Vertex or fragment shader source not set")
 	}
+	init: func ~defaultVertex (fragmentSource: String, context: OpenGLContext) { this init(slurp("shaders/default.vert"), fragmentSource, context) }
 	free: override func {
 		for (i in 0 .. this _context getMaxContexts()) {
 			if (this _program[i] != null)
@@ -110,16 +111,7 @@ OpenGLMapMesh: class extends OpenGLMap {
 	vertexSource: static String = slurp("shaders/mesh.vert")
 	fragmentSource: static String = slurp("shaders/mesh.frag")
 }
-OpenGLMapDefault: abstract class extends OpenGLMap {
-	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
-	vertexSource: static String = slurp("shaders/default.vert")
-}
-OpenGLMapDefaultTexture: class extends OpenGLMapDefault {
-	init: func (context: OpenGLContext, fragmentSource: String)
-	init: func ~default (context: OpenGLContext) { this init(This fragmentSource, context) }
-	fragmentSource: static String = slurp("shaders/texture.frag")
-}
-OpenGLMapTransform: abstract class extends OpenGLMap {
+OpenGLMapTransform: class extends OpenGLMap {
 	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
 	use: override func {
 		finalTransform := this projection * this view * this model
@@ -128,30 +120,5 @@ OpenGLMapTransform: abstract class extends OpenGLMap {
 		super()
 	}
 	vertexSource: static String = slurp("shaders/transform.vert")
-}
-OpenGLMapTransformTexture: class extends OpenGLMapTransform {
-	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
-	fragmentSource: static String = slurp("shaders/texture.frag")
-}
-OpenGLMapMonochromeToBgra: class extends OpenGLMapDefaultTexture {
-	init: func (context: OpenGLContext) { super(This customFragmentSource, context) }
-	customFragmentSource: static String = slurp("shaders/monochromeToBgra.frag")
-}
-OpenGLMapYuvPlanarToBgra: class extends OpenGLMapTransform {
-	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
-	fragmentSource: static String = slurp("shaders/yuvPlanarToBgra.frag")
-}
-OpenGLMapYuvSemiplanarToBgra: class extends OpenGLMapTransform {
-	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
-	fragmentSource: static String = slurp("shaders/yuvSemiplanarToBgra.frag")
-}
-OpenGLMapLines: class extends OpenGLMapTransform {
-	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
-	fragmentSource: static String = slurp("shaders/color.frag")
-}
-OpenGLMapPoints: class extends OpenGLMap {
-	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
-	vertexSource: static String = slurp("shaders/points.vert")
-	fragmentSource: static String = slurp("shaders/color.frag")
 }
 }

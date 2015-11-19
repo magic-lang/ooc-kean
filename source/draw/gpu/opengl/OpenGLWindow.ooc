@@ -23,13 +23,13 @@ use ooc-ui
 
 version(!gpuOff) {
 OpenGLWindow: class extends OpenGLSurface {
-	_monochromeToBgra: OpenGLMapMonochromeToBgra
-	_yuvSemiplanarToBgra: OpenGLMapYuvSemiplanarToBgra
+	_monochromeToBgra: OpenGLMap
+	_yuvSemiplanarToBgra: OpenGLMapTransform
 	init: func (native: NativeWindow) {
 		context := OpenGLContext new(native)
-		super(native size, context, OpenGLMapDefaultTexture new(context), IntTransform2D createScaling(1, -1))
-		this _monochromeToBgra = OpenGLMapMonochromeToBgra new(context)
-		this _yuvSemiplanarToBgra = OpenGLMapYuvSemiplanarToBgra new(context)
+		super(native size, context, OpenGLMap new(slurp("shaders/texture.frag"), context), IntTransform2D createScaling(1, -1))
+		this _monochromeToBgra = OpenGLMap new(slurp("shaders/monochromeToBgra.frag"), context)
+		this _yuvSemiplanarToBgra = OpenGLMapTransform new(slurp("shaders/yuvSemiplanarToBgra.frag"), context)
 	}
 	free: override func {
 		this _yuvSemiplanarToBgra free()
