@@ -84,6 +84,21 @@ TextBuffer: cover {
 	operator [] (range: Range) -> This { this slice(range min, range max - range min) }
 	operator []= (index: Int, value: Char) { this raw[index] = value }
 	operator []= (range: Range, data: This) { data copyTo(this[range]) }
-	operator == (other: This) -> Bool { this _backend == other _backend }
+	operator == (other: This) -> Bool {
+		result := this _backend == other _backend
+		if (this _backend _pointer != other _backend _pointer)
+			other free(Owner Receiver)
+		this free(Owner Receiver)
+		result
+	}
+	operator + (other: This) -> This {
+		result := This new(this take() count + other take() count)
+		this copyTo(result)
+		other copyTo(result slice(this take() count))
+		if (this _backend _pointer != other _backend _pointer)
+			other free(Owner Receiver)
+		this free(Owner Receiver)
+		result
+	}
 	empty: static This { get { This new() } }
 }
