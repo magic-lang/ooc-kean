@@ -67,7 +67,7 @@ OwnedBuffer: cover {
 			start = this _size + start
 		if (distance < 0)
 			start -= size
-		start < this size ? This new(this _pointer + start, Int minimum~two(size, this _size - start), Owner Unknown) : This empty
+		start < this size ? This new(this _pointer + start, Int minimum(size, this _size - start), Owner Unknown) : This empty
 	}
 	copy: func -> This { // call by value -> modifies copy of cover
 		result: This
