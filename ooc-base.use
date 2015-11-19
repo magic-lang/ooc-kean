@@ -20,3 +20,4 @@ Imports: OwnedBuffer
 Imports: TextBuffer
 Imports: Text
 Imports: TextBuilder
+Imports: FloatTuple
