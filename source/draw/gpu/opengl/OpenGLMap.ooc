@@ -19,6 +19,7 @@ use ooc-base
 use ooc-math
 use ooc-draw
 use ooc-draw-gpu
+use ooc-collections
 import backend/GLShaderProgram
 import OpenGLContext, OpenGLPacked, OpenGLVolumeMonochrome
 
@@ -95,6 +96,12 @@ OpenGLMap: class extends GpuMap {
 						image _backend bind(textureCount)
 						program setUniform(key, textureCount)
 						textureCount += 1
+					case vector: Vector =>
+						match (vector T) {
+							case Int => program setUniform(key, vector _backend as Int*, vector capacity)
+							case Float => program setUniform(key, vector _backend as Float*, vector capacity)
+							case => Debug raise("Invalid Vector type in OpenGLMap use")
+						}
 					case => Debug raise("Invalid object type in OpenGLMap use: %s" format(value class name))
 				}
 		}
