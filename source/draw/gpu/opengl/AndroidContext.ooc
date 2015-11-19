@@ -18,8 +18,7 @@ use ooc-collections
 use ooc-draw
 use ooc-math
 use ooc-base
-import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLBgra, OpenGLBgra, OpenGLPacked, OpenGLMonochrome, OpenGLUv
-import OpenGLMapPack
+import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLBgra, OpenGLBgra, OpenGLPacked, OpenGLMonochrome, OpenGLUv, OpenGLMap
 import threading/Thread
 import math
 

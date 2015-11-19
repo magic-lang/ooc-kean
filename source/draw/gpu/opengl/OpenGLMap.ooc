@@ -154,4 +154,35 @@ OpenGLMapPoints: class extends OpenGLMap {
 	vertexSource: static String = slurp("shaders/points.vert")
 	fragmentSource: static String = slurp("shaders/color.frag")
 }
+OpenGLMapPackMonochrome: class extends OpenGLMap {
+	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
+	vertexSource: static String = slurp("shaders/packMonochrome.vert")
+	fragmentSource: static String = slurp("shaders/packMonochrome.frag")
+}
+OpenGLMapPackUv: class extends OpenGLMap {
+	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
+	vertexSource: static String = slurp("shaders/packUv.vert")
+	fragmentSource: static String = slurp("shaders/packUv.frag")
+}
+OpenGLMapPackUvPadded: class extends OpenGLMap {
+	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
+	vertexSource: static String = slurp("shaders/packUvPadded.vert")
+	fragmentSource: static String = slurp("shaders/packUvPadded.frag")
+}
+OpenGLMapUnpack: abstract class extends OpenGLMap {
+	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
+	vertexSource: static String = slurp("shaders/unpack.vert")
+}
+OpenGLMapUnpackRgbaToMonochrome: class extends OpenGLMapUnpack {
+	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
+	fragmentSource: static String = slurp("shaders/unpackRgbaToMonochrome.frag")
+}
+OpenGLMapUnpackRgbaToUv: class extends OpenGLMapUnpack {
+	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
+	fragmentSource: static String = slurp("shaders/unpackRgbaToUv.frag")
+}
+OpenGLMapUnpackRgbaToUvPadded: class extends OpenGLMapUnpack {
+	init: func (context: OpenGLContext) { super(This fragmentSource, context) }
+	fragmentSource: static String = slurp("shaders/unpackRgbaToUvPadded.frag")
+}
 }
