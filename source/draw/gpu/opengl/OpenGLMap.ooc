@@ -74,7 +74,7 @@ OpenGLMap: class extends GpuMap {
 					case Float => program setUniform(key, cell as Cell<Float> get())
 					case FloatPoint2D => point := cell as Cell<FloatPoint2D> get(); program setUniform(key, point x, point y)
 					case FloatPoint3D => point := cell as Cell<FloatPoint3D> get(); program setUniform(key, point x, point y, point z)
-					case FloatPoint4D => point := cell as Cell<FloatPoint4D> get(); program setUniform(key, point x, point y, point z, point w)
+					case FloatTuple4 => tuple := cell as Cell<FloatTuple4> get(); program setUniform(key, tuple a, tuple b, tuple c, tuple d)
 					case FloatSize2D => size := cell as Cell<FloatSize2D> get(); program setUniform(key, size width, size height)
 					case FloatSize3D => size := cell as Cell<FloatSize3D> get(); program setUniform(key, size width, size height, size depth)
 					case FloatTransform2D => program setUniform(key, cell as Cell<FloatTransform2D> get())
