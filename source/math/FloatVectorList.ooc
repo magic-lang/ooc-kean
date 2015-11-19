@@ -438,21 +438,10 @@ FloatVectorList: class extends VectorList<Float> {
 	interpolate: func ~cubicSpline (numberOfPoints: Int) -> This {
 		result := This new(this count + numberOfPoints * (this count - 1))
 		thisPointer := this pointer as Float*
-		coefficientMatrix := FloatMatrix new(this count, this count) take()
+		coefficientMatrix := This _generateCubicSplineCoefficients(this count)
 		b := FloatMatrix new(1, this count) take()
-		coefficientMatrix[0, 0] = 2.f
-		coefficientMatrix[0, 1] = 1.f
-		b[0, 0] = 3.f * (thisPointer[1] - thisPointer[0])
-		for (index in 1 .. this count - 1) {
-			coefficientMatrix[index, index - 1] = 1.f
-			coefficientMatrix[index, index] = 4.f
-			coefficientMatrix[index, index + 1] = 1.f
-			b[0, index] = 3.f * (thisPointer[index + 1] - thisPointer[index - 1])
-		}
-		lastElementIndex := this count - 1
-		coefficientMatrix[lastElementIndex, lastElementIndex - 1] = 1.f
-		coefficientMatrix[lastElementIndex, lastElementIndex] = 2.f
-		b[0, lastElementIndex] = 3.f * (thisPointer[lastElementIndex] - thisPointer[lastElementIndex - 1])
+		for (index in 0 .. this count)
+			b[0, index] = 3.f * (thisPointer[Int minimum(this count - 1, index + 1)] - thisPointer[Int maximum(0, index - 1)])
 		// TODO: Since coefficientMatrix is tri-diagonal, there are better methods for this. Both in terms of data storage and solving.
 		constants := coefficientMatrix solve(b) take()
 		coefficientMatrix free()
@@ -471,6 +460,19 @@ FloatVectorList: class extends VectorList<Float> {
 		}
 		result add(thisPointer[this count - 1])
 		constants free()
+		result
+	}
+	_generateCubicSplineCoefficients: static func (size: Int) -> FloatMatrix {
+		result := FloatMatrix new(size, size) take()
+		result[0, 0] = 2.f
+		result[0, 1] = 1.f
+		for (index in 1 .. size - 1) {
+			result[index, index - 1] = 1.f
+			result[index, index] = 4.f
+			result[index, index + 1] = 1.f
+		}
+		result[size - 1, size - 2] = 1.f
+		result[size - 1, size - 1] = 2.f
 		result
 	}
 	// input: how many points there will be between two origin points.
