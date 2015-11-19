@@ -34,7 +34,8 @@ SvgPlot: class {
 		this datasets free()
 		this xAxis free()
 		this yAxis free()
-		this colorList free()
+		if (this colorList)
+			this colorList free()
 		super()
 	}
 	addDataset: func (dataset: PlotData2D) {
@@ -96,7 +97,7 @@ SvgPlot: class {
 					datasets[j] color = datasets[j] colorBgra svgRGBToString()
 					datasets[j] opacity = ((datasets[j] colorBgra svgRGBAlpha()) as Float) / 255.0f
 				} else {
-					datasets[j] color = colorList[this colorCount % this colorList count]
+					datasets[j] color = colorList[this colorCount % this colorList count] clone()
 					datasets[j] opacity = 1
 					this colorCount += 1
 				}
@@ -104,7 +105,7 @@ SvgPlot: class {
 		}
 	}
 	fillColorList: func {
-		this colorList = VectorList<String> new()
+		this colorList = VectorList<String> new(10, false)
 		this colorList add("crimson")
 		this colorList add("black")
 		this colorList add("darkmagenta")

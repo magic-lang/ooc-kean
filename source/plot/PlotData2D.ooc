@@ -31,7 +31,8 @@ PlotData2D: abstract class {
 	}
 	free: override func {
 		this dataSeries free()
-		this color free()
+		if (this color)
+			this color free()
 		super()
 	}
 	getSvg: abstract func (transform: FloatTransform2D) -> String

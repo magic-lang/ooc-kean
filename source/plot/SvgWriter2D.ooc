@@ -17,9 +17,7 @@ SvgWriter2D: class {
 	fontSize: Int { get set }
 	numberOfPlotsHorizontally: Int
 	init: func (=file) {
-		this svgPlots = VectorList<SvgPlot> new()
-		this size = FloatSize2D new(1920, 1080)
-		this fontSize = 14
+		this init(file, VectorList<SvgPlot> new())
 	}
 	init: func ~fileName (filename: String) {
 		this init(File new(filename))
@@ -43,13 +41,12 @@ SvgWriter2D: class {
 	init: func ~withPositioningFilename (filename: String, =numberOfPlotsHorizontally, args: ...) {
 		this init(File new(filename), args)
 	}
-	init: func ~svgPlots (file: File, svgPlots: VectorList<SvgPlot>) {
-		this init(file)
-		this svgPlots = svgPlots
-	}
 	init: func ~svgPlotsFilename (filename: String, svgPlots: VectorList<SvgPlot>) {
-		this init(File new(filename))
-		this svgPlots = svgPlots
+		this init(File new(filename), svgPlots)
+	}
+	init: func ~svgPlotsFile (=file, =svgPlots) {
+		this size = FloatSize2D new(1920, 1080)
+		this fontSize = 14
 	}
 	free: override func {
 		svgPlots free()

@@ -6,9 +6,9 @@ use ooc-draw
 import math
 import io/File
 
-log := VectorList<FloatPoint2D> new()
-sin := VectorList<FloatPoint2D> new()
-cos := VectorList<FloatPoint2D> new()
+logVector := VectorList<FloatPoint2D> new()
+sinVector := VectorList<FloatPoint2D> new()
+cosVector := VectorList<FloatPoint2D> new()
 sinMinusCos := VectorList<FloatPoint2D> new()
 unitCircle := VectorList<FloatPoint2D> new()
 scatter := VectorList<FloatPoint2D> new()
@@ -16,9 +16,9 @@ parabola := VectorList<FloatPoint2D> new()
 sparseParabola := VectorList<FloatPoint2D> new()
 randomGenerator := IntUniformRandomGenerator new(0, 100)
 for (i in -200 .. 201) {
-	log add(FloatPoint2D new((201 + i as Float) * 100, log((201 + i as Float)) * 100))
-	sin add(FloatPoint2D new(i as Float / 20, sin(i as Float / 20)))
-	cos add(FloatPoint2D new(i as Float / 20, cos(i as Float / 20)))
+	logVector add(FloatPoint2D new((201 + i as Float) * 100, log((201 + i as Float)) * 100))
+	sinVector add(FloatPoint2D new(i as Float / 20, sin(i as Float / 20)))
+	cosVector add(FloatPoint2D new(i as Float / 20, cos(i as Float / 20)))
 	sinMinusCos add(FloatPoint2D new(i as Float / 20, sin(i as Float / 20) - cos(i as Float / 20)))
 	unitCircle add(FloatPoint2D new(i as Float / 200, sqrt(1 - pow(i as Float / 200, 2))))
 	scatter add(FloatPoint2D new(randomGenerator next() as Float, randomGenerator next() as Float))
@@ -32,7 +32,7 @@ for (i in -200 .. 201) {
 randomGenerator free()
 
 // Simplest use-case with line plot
-logData := LinePlotData2D new(log, "log(x)")
+logData := LinePlotData2D new(logVector, "log(x)")
 logPlot := SvgPlot new(logData, "Simplest use-case with line plot")
 
 // Simplest use-case with scatter plot
@@ -40,8 +40,8 @@ scatterData := ScatterPlotData2D new(scatter, "Random numbers")
 scatterPlot := SvgPlot new(scatterData, "Simplest use-case with scatter plot")
 
 // Multiple shapes in one plot
-sinData := LinePlotData2D new(sin, "sin(x)")
-cosData := LinePlotData2D new(cos, "cos(x)")
+sinData := LinePlotData2D new(sinVector, "sin(x)")
+cosData := LinePlotData2D new(cosVector, "cos(x)")
 sinMinusCosData := LinePlotData2D new(sinMinusCos, "sin(x) - cos(x)")
 trigonometryPlot := SvgPlot new(sinData, "Multiple shapes in one plot")
 trigonometryPlot addDataset(cosData)
@@ -60,8 +60,8 @@ unitCirclePlot yAxis min = -1.5
 unitCirclePlot yAxis max = 1.5
 
 // Symmetric plot
-symmetricUnitCircleData := LinePlotData2D new(unitCircle, "Unit circle")
-symmetricUnitCirclePlot := SvgPlot new(unitCircleData, "Unit circle plot with symmetic set to true")
+symmetricUnitCircleData := LinePlotData2D new(unitCircle copy(), "Unit circle")
+symmetricUnitCirclePlot := SvgPlot new(symmetricUnitCircleData, "Unit circle plot with symmetic set to true")
 symmetricUnitCirclePlot xAxis label = "x"
 symmetricUnitCirclePlot yAxis label = "y"
 symmetricUnitCirclePlot symmetric = true
@@ -88,7 +88,7 @@ filename := "test/plot/output/"
 file := File new(filename)
 folder := file parent . mkdirs() . free()
 file free()
-filename = filename + "example.svg"
+filename = filename >> "example.svg"
 writer := SvgWriter2D new(filename, logPlot)
 writer addPlot(scatterPlot)
 writer addPlot(trigonometryPlot)
@@ -96,5 +96,6 @@ writer addPlot(unitCirclePlot)
 writer addPlot(symmetricUnitCirclePlot)
 writer addPlot(formatPlot)
 writer write()
+writer free()
 
 "SvgPlotTest [TODO: Not implemented as a fixture!]" printfln()
