@@ -161,7 +161,7 @@ TextTest: class extends Fixture {
 			text := t"test string"
 			buffer := TextBuffer new(11)
 			text copyTo(buffer)
-			text2 := Text new(buffer)
+			text2 := Text new(buffer) take()
 			expect(text == text2)
 			text free()
 			text2 free()
