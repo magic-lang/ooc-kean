@@ -53,8 +53,8 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 	}
 	setClearColor: func (color: ColorBgra) {
 		version(debugGL) { validateStart("FramebufferObject setClearColor") }
-		normalized := color normalized
-		glClearColor(normalized x, normalized y, normalized z, normalized w)
+		tuple := color normalized
+		glClearColor(tuple c, tuple b, tuple a, tuple d)
 		version(debugGL) { validateEnd("FramebufferObject setClearColor") }
 	}
 	readPixels: func -> ByteBuffer {
