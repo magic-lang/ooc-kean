@@ -19,6 +19,7 @@ use ooc-base
 import math
 import FloatComplex
 import FloatComplexVectorList
+import FloatMatrix
 
 FloatVectorList: class extends VectorList<Float> {
 	init: func ~default {
@@ -432,9 +433,49 @@ FloatVectorList: class extends VectorList<Float> {
 		}
 		(crossCorrelation, offsets)
 	}
+	// Assumes equi-distant samples
+	// https://en.wikipedia.org/wiki/Spline_interpolation
+	interpolate: func ~cubicSpline (numberOfPoints: Int) -> This {
+		result := This new(this count + numberOfPoints * (this count - 1))
+		thisPointer := this pointer as Float*
+		coefficientMatrix := FloatMatrix new(this count, this count) take()
+		b := FloatMatrix new(1, this count) take()
+		coefficientMatrix[0, 0] = 2.f
+		coefficientMatrix[0, 1] = 1.f
+		b[0, 0] = 3.f * (thisPointer[1] - thisPointer[0])
+		for (index in 1 .. this count - 1) {
+			coefficientMatrix[index, index - 1] = 1.f
+			coefficientMatrix[index, index] = 4.f
+			coefficientMatrix[index, index + 1] = 1.f
+			b[0, index] = 3.f * (thisPointer[index + 1] - thisPointer[index - 1])
+		}
+		lastElementIndex := this count - 1
+		coefficientMatrix[lastElementIndex, lastElementIndex - 1] = 1.f
+		coefficientMatrix[lastElementIndex, lastElementIndex] = 2.f
+		b[0, lastElementIndex] = 3.f * (thisPointer[lastElementIndex] - thisPointer[lastElementIndex - 1])
+		// TODO: Since coefficientMatrix is tri-diagonal, there are better methods for this. Both in terms of data storage and solving.
+		constants := coefficientMatrix solve(b) take()
+		coefficientMatrix free()
+		b free()
+
+		for (index1 in 0 .. this count - 1) {
+			result add(this[index1])
+			a := constants[0, index1] - (thisPointer[index1 + 1] - thisPointer[index1])
+			b := -constants[0, index1 + 1] + (thisPointer[index1 + 1] - thisPointer[index1])
+			fraction := 1.f / (numberOfPoints + 1)
+			for (index2 in 1 .. numberOfPoints + 1) {
+				x := fraction * index2
+				newPoint := (1.f - x) * thisPointer[index1] + x * thisPointer[index1 + 1] + x * (1.f - x) * (a * (1.f - x) + b * x)
+				result add(newPoint)
+			}
+		}
+		result add(thisPointer[this count - 1])
+		constants free()
+		result
+	}
 	// input: how many points there will be between two origin points.
 	// this is a Linear interpolation way to have higher precision
-	interpolate: func (numberOfPoints: Int) -> This {
+	interpolate: func ~linear (numberOfPoints: Int) -> This {
 		result: This
 		if (numberOfPoints > 0 && this count > 1) {
 			result = This new(this count + numberOfPoints * (this count - 1))
