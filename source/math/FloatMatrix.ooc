@@ -136,9 +136,11 @@ FloatMatrix : cover {
 			result = This new(t dimensions swap())
 			resultElements := result elements
 			thisElements := this elements
-			for (y in 0 .. t height)
-				for (x in 0 .. t width)
-					resultElements[y + x * t height] = thisElements[x + y * t width]
+			thisHeight := t height
+			thisWidth := t width
+			for (y in 0 .. thisHeight)
+				for (x in 0 .. thisWidth)
+					resultElements[y + x * thisHeight] = thisElements[x + y * thisWidth]
 			this free(Owner Receiver)
 		}
 		result
