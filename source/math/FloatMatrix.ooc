@@ -14,9 +14,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import math
 use ooc-base
-use ooc-math
+import math
+import IntSize2D
+import FloatPoint3D
 
 FloatMatrix : cover {
 	// x = column
