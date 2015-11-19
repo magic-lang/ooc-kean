@@ -5,7 +5,6 @@ Imports: FloatSize2D
 Imports: FloatSize3D
 Imports: FloatPoint2D
 Imports: FloatPoint3D
-Imports: FloatPoint4D
 Imports: FloatBox2D
 Imports: FloatShell2D
 Imports: FloatTransform2D
