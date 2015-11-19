@@ -410,12 +410,24 @@ FloatVectorList: class extends VectorList<Float> {
 		}
 		upperPart / sqrt(lowerPart1 * lowerPart2)
 	}
-	shift: func (offset: Int, filledValue := 0.0f) -> This {
+	shift: func ~int (offset: Int, filledValue := 0.0f) -> This {
 		result := This new(this count)
 		thisPointer := (this pointer as Float*)
 		for (i in 0 .. this count) {
 			index := i + offset
 			value := (index >= 0 && index < this count) ? thisPointer[index] : filledValue
+			result add(value)
+		}
+		result
+	}
+	shift: func ~float (shift: Float) -> This {
+		result := This new(this count)
+		thisPointer := (this pointer as Float*)
+		weight := shift - floor(shift)
+		for (i in 0 .. this count) {
+			leftIndex := (i + (floor(-shift) as Int))
+			rightIndex := (leftIndex + 1)
+			value := Float linearInterpolation(thisPointer[leftIndex clamp(0, this count - 1)], thisPointer[rightIndex clamp(0, this count - 1)], weight)
 			result add(value)
 		}
 		result

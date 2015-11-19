@@ -384,6 +384,82 @@ FloatVectorListTest: class extends Fixture {
 			offsetValues1 free()
 			offsetValues2 free()
 		})
+		this add("shift float 1", func {
+			list := FloatVectorList new()
+			list add(1.0f)
+			list add(2.0f)
+			list add(3.0f)
+			list add(1.0f)
+			list add(4.0f)
+
+			shiftedList := list shift(1.0f)
+
+			expect(shiftedList[0], is equal to(1.0f) within(tolerance))
+			expect(shiftedList[1], is equal to(1.0f) within(tolerance))
+			expect(shiftedList[2], is equal to(2.0f) within(tolerance))
+			expect(shiftedList[3], is equal to(3.0f) within(tolerance))
+			expect(shiftedList[4], is equal to(1.0f) within(tolerance))
+
+			list free()
+			shiftedList free()
+		})
+		this add("shift float 2", func {
+			list := FloatVectorList new()
+			list add(1.0f)
+			list add(2.0f)
+			list add(3.0f)
+			list add(1.0f)
+			list add(5.0f)
+
+			shiftedList := list shift(-1.0f)
+
+			expect(shiftedList[0], is equal to(2.0f) within(tolerance))
+			expect(shiftedList[1], is equal to(3.0f) within(tolerance))
+			expect(shiftedList[2], is equal to(1.0f) within(tolerance))
+			expect(shiftedList[3], is equal to(5.0f) within(tolerance))
+			expect(shiftedList[4], is equal to(5.0f) within(tolerance))
+
+			list free()
+			shiftedList free()
+		})
+		this add("shift float 3", func {
+			list := FloatVectorList new()
+			list add(1.0f)
+			list add(2.0f)
+			list add(3.0f)
+			list add(1.0f)
+			list add(5.0f)
+
+			shiftedList := list shift(0.15f)
+
+			expect(shiftedList[0], is equal to(1.0f) within(tolerance))
+			expect(shiftedList[1], is equal to(1.15f) within(tolerance))
+			expect(shiftedList[2], is equal to(2.15f) within(tolerance))
+			expect(shiftedList[3], is equal to(2.7f) within(tolerance))
+			expect(shiftedList[4], is equal to(1.6f) within(tolerance))
+
+			list free()
+			shiftedList free()
+		})
+		this add("shift float 4", func {
+			list := FloatVectorList new()
+			list add(1.0f)
+			list add(2.0f)
+			list add(3.0f)
+			list add(1.0f)
+			list add(5.0f)
+
+			shiftedList := list shift(-0.35f)
+
+			expect(shiftedList[0], is equal to(1.65f) within(tolerance))
+			expect(shiftedList[1], is equal to(2.65f) within(tolerance))
+			expect(shiftedList[2], is equal to(1.7f) within(tolerance))
+			expect(shiftedList[3], is equal to(3.6f) within(tolerance))
+			expect(shiftedList[4], is equal to(5.0f) within(tolerance))
+
+			list free()
+			shiftedList free()
+		})
 	}
 }
 FloatVectorListTest new() run()
