@@ -319,7 +319,7 @@ FloatVectorListTest: class extends Fixture {
 			divided := list divideByMaxValue()
 			expect(divided sum, is equal to(-0.5f) within(tolerance))
 		})
-		this add("linear interpolation for list", func {
+		this add("interpolate~linear", func {
 			list := FloatVectorList new()
 			list add(2.0f)
 			list add(1.0f)
@@ -327,13 +327,36 @@ FloatVectorListTest: class extends Fixture {
 			list add(4.0f)
 			list add(7.0f)
 			numberOfPointsBetween := 1
-			interpolatedList := list interpolate(numberOfPointsBetween)
+			interpolatedList := list interpolate~linear(numberOfPointsBetween)
 
 			expect(interpolatedList count, is equal to(list count + numberOfPointsBetween * (list count - 1)))
 			expect(interpolatedList[0], is equal to(2.0f) within(tolerance))
 			expect(interpolatedList[1], is equal to(1.5f) within(tolerance))
 			expect(interpolatedList[2], is equal to(1.0f) within(tolerance))
 			expect(interpolatedList[3], is equal to(3.5f) within(tolerance))
+			list free()
+			interpolatedList free()
+		})
+		this add("interpolate~cubicSpline", func {
+			list := FloatVectorList new()
+			list add(2.0f)
+			list add(1.0f)
+			list add(6.0f)
+			list add(4.0f)
+			list add(7.0f)
+			numberOfPointsBetween := 1
+			interpolatedList := list interpolate~cubicSpline(numberOfPointsBetween)
+
+			expect(interpolatedList count, is equal to(list count + numberOfPointsBetween * (list count - 1)))
+			expect(interpolatedList[0], is equal to(list[0]) within(1.0e-5f))
+			expect(interpolatedList[1], is equal to(0.67634f) within(1.0e-5f))
+			expect(interpolatedList[2], is equal to(list[1]) within(1.0e-5f))
+			expect(interpolatedList[3], is equal to(3.72098f) within(1.0e-5f))
+			expect(interpolatedList[4], is equal to(list[2]) within(1.0e-5f))
+			expect(interpolatedList[5], is equal to(5.31473f) within(1.0e-5f))
+			expect(interpolatedList[6], is equal to(list[3]) within(1.0e-5f))
+			expect(interpolatedList[7], is equal to(4.77009f) within(1.0e-5f))
+			expect(interpolatedList[8], is equal to(list[4]) within(1.0e-5f))
 			list free()
 			interpolatedList free()
 		})
