@@ -26,15 +26,12 @@ Profiler: class {
 	_profilers := static VectorList<This> new(100)
 	_name: String
 	_timer := Timer new()
-	_clockTimer := ClockTimer new()
 	init: func (=_name, debugLevel := 0) { This _profilers add(this) }
 	start: func {
 		this _timer start()
-		this _clockTimer start()
 	}
 	stop: func {
 		this _timer stop()
-		this _clockTimer stop()
 	}
 	printResults: static func {
 		This _profilers apply(func (profiler: This) {
@@ -50,9 +47,6 @@ Profiler: class {
 				break
 			}
 		this _timer free()
-		this _timer = null
-		this _clockTimer free()
-		this _clockTimer = null
 		super()
 	}
 	logResults: static func (fileName := "profiling.txt") {
@@ -66,7 +60,6 @@ Profiler: class {
 	}
 	reset: func {
 		this _timer reset()
-		this _clockTimer reset()
 	}
 	resetAll: static func { This _profilers apply(func (profiler: This) { profiler reset() }) }
 	dispose: static func {
