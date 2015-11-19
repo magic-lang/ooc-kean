@@ -16,7 +16,7 @@
 	],
 	"showOutput": "always",
 	"problemMatcher": {
-		"fileLocation": ["relative", "${workspaceRoot}/source"],
+		"fileLocation": ["absolute"],
 		"pattern": {
 			"regexp": "^(.*):(\\d+):(\\d+):?\\s+(error|warning):?\\s+(.*)$",
 			"file": 1,
