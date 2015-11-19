@@ -28,17 +28,17 @@ ByteBuffer: class {
 	size ::= this _size
 	_referenceCount: ReferenceCounter
 	referenceCount ::= this _referenceCount
-	_owner: Bool
+	_ownsMemory: Bool
 
-	init: func (=_pointer, =_size, owner := false) {
+	init: func (=_pointer, =_size, ownsMemory := false) {
 		this _referenceCount = ReferenceCounter new(this)
-		this _owner = owner
+		this _ownsMemory = ownsMemory
 	}
 	free: override func {
 		if (this _referenceCount != null)
 			this _referenceCount free()
 		this _referenceCount = null
-		if (this _owner)
+		if (this _ownsMemory)
 			gc_free(this _pointer)
 		this _pointer = null
 		super()
