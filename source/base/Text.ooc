@@ -52,15 +52,7 @@ Text: cover {
 	operator == (other: This) -> Bool { this _buffer == other _buffer }
 	operator != (other: String) -> Bool { !(this == other) }
 	operator != (other: This) -> Bool { !(this == other) }
-	operator + (other: This) -> This {
-		result := TextBuffer new(this take() count + other take() count)
-		this _buffer copyTo(result)
-		other _buffer copyTo(result slice(this take() count))
-		if (this _buffer _backend pointer != other _buffer _backend pointer)
-			other free(Owner Receiver)
-		this free(Owner Receiver)
-		This new(result)
-	}
+	operator + (other: This) -> This { This new(this _buffer + other _buffer) }
 	beginsWith: func (other: This) -> Bool { this slice(0, Int minimum(other count, this count)) == other }
 	beginsWith: func ~string (other: String) -> Bool { this beginsWith(This new(other)) }
 	beginsWith: func ~character (character: Char) -> Bool {

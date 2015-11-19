@@ -91,5 +91,14 @@ TextBuffer: cover {
 		this free(Owner Receiver)
 		result
 	}
+	operator + (other: This) -> This {
+		result := This new(this take() count + other take() count)
+		this copyTo(result)
+		other copyTo(result slice(this take() count))
+		if (this _backend _pointer != other _backend _pointer)
+			other free(Owner Receiver)
+		this free(Owner Receiver)
+		result
+	}
 	empty: static This { get { This new() } }
 }
