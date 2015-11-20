@@ -41,3 +41,4 @@ rock_tmp
 /test/*/output
 tests.use
 Tests
+*.valgrindlog
