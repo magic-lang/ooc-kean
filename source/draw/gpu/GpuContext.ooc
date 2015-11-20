@@ -24,13 +24,13 @@ version(!gpuOff) {
 GpuContext: abstract class extends AbstractContext {
 	defaultMap: GpuMap { get { null } }
 	init: func
-	createMonochrome: abstract func (size: IntSize2D) -> GpuImage
-	createBgr: abstract func (size: IntSize2D) -> GpuImage
-	createBgra: abstract func (size: IntSize2D) -> GpuImage
-	createUv: abstract func (size: IntSize2D) -> GpuImage
+	createMonochrome: abstract func (size: IntVector2D) -> GpuImage
+	createBgr: abstract func (size: IntVector2D) -> GpuImage
+	createBgra: abstract func (size: IntVector2D) -> GpuImage
+	createUv: abstract func (size: IntVector2D) -> GpuImage
 	createImage: abstract func (rasterImage: RasterImage) -> GpuImage
 	createFence: abstract func -> GpuFence
-	createYuv420Semiplanar: func (size: IntSize2D) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(size, this) }
+	createYuv420Semiplanar: func (size: IntVector2D) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(size, this) }
 	createYuv420Semiplanar: func ~fromImages (y, uv: GpuImage) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(y, uv, this) }
 	createYuv420Semiplanar: func ~fromRaster (raster: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(raster, this) }
 	createMesh: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GpuMesh

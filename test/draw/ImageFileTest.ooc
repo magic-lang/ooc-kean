@@ -207,7 +207,7 @@ ImageFileTest: class extends Fixture {
 		this add("load from bin", func {
 			source := "test/draw/output/Flower.bin"
 			destination := "test/draw/output/FromBinary.png"
-			semiplanar := RasterYuv420Semiplanar openRaw(source, IntSize2D new(636, 424))
+			semiplanar := RasterYuv420Semiplanar openRaw(source, IntVector2D new(636, 424))
 			semiplanar save(destination)
 			expect(This _fileExists(destination))
 			semiplanar free()

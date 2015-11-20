@@ -25,7 +25,7 @@ use ooc-x11
 version(unix || apple) {
 UnixWindowBase: class extends DisplayWindow {
 	_xWindow: X11Window
-	init: func (size: IntSize2D, title: String) {
+	init: func (size: IntVector2D, title: String) {
 		super()
 		this _xWindow = X11Window new(size, title)
 	}
@@ -42,7 +42,7 @@ UnixWindowBase: class extends DisplayWindow {
 			raster referenceCount decrease()
 		}
 	}
-	create: static func (size: IntSize2D, title: String) -> This {
+	create: static func (size: IntVector2D, title: String) -> This {
 		result: This
 		version(gpuOff)
 			result = This new(size, title)
@@ -55,7 +55,7 @@ version(!gpuOff) {
 UnixWindow: class extends UnixWindowBase {
 	_openGLWindow: OpenGLWindow
 	context ::= this _openGLWindow context
-	init: func (size: IntSize2D, title: String) {
+	init: func (size: IntVector2D, title: String) {
 		super(size, title)
 		this _openGLWindow = OpenGLWindow new(this _xWindow size, this _xWindow display, this _xWindow backend)
 	}

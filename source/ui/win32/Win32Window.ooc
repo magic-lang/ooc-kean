@@ -21,7 +21,7 @@ import include/win32
 
 version(windows) {
 Win32Window: class extends NativeWindow {
-	init: func (size: IntSize2D, title: String) {
+	init: func (size: IntVector2D, title: String) {
 		windowClassName := "Window class" as CString
 		display := GetModuleHandle(null)
 		windowClass: WndClassEXA

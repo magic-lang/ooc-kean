@@ -78,7 +78,7 @@ FloatShell2DTest: class extends Fixture {
 		})
 		this add("increase, decrease (size)", func {
 			shell := FloatShell2D new(1.0f)
-			size := FloatSize2D new(1.0f, 2.0f)
+			size := FloatVector2D new(1.0f, 2.0f)
 			increased := shell increase(size)
 			decreased := shell decrease(size)
 			expect(increased left, is equal to(-1.0f) within(tolerance))

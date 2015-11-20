@@ -52,7 +52,7 @@ RasterCanvasTest: class extends Fixture {
 			image := RasterYuv420Semiplanar open(input)
 			for (i in 0 .. 30) {
 				image canvas pen = Pen new(ColorBgr new((i % 10) * 25, (i % 5) * 50, (i % 3) * 80))
-				box := IntBox2D createAround(IntPoint2D new(0, 0), IntSize2D new(10 * i, 10 * i))
+				box := IntBox2D createAround(IntPoint2D new(0, 0), IntVector2D new(10 * i, 10 * i))
 				image canvas drawBox(FloatBox2D new(box))
 			}
 			image save(output)

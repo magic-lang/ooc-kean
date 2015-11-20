@@ -20,7 +20,7 @@ use ooc-collections
 import Image, Pen
 
 Canvas: abstract class {
-	_size: IntSize2D
+	_size: IntVector2D
 	size ::= this _size
 	_pen := Pen new()
 	pen: Pen { get { this _pen } set(value) { this _pen = value } }
@@ -64,5 +64,5 @@ Canvas: abstract class {
 	draw: abstract func ~ImageSourceDestination (image: Image, source, destination: IntBox2D)
 	draw: func ~ImageDestination (image: Image, destination: IntBox2D) { this draw(image, IntBox2D new(image size), destination) }
 	draw: func ~Image (image: Image) { this draw(image, IntBox2D new(image size)) }
-	draw: func ~ImageTargetSize (image: Image, targetSize: IntSize2D) { this draw(image, IntBox2D new(targetSize)) }
+	draw: func ~ImageTargetSize (image: Image, targetSize: IntVector2D) { this draw(image, IntBox2D new(targetSize)) }
 }

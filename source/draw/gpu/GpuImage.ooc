@@ -42,14 +42,14 @@ GpuImage: abstract class extends Image {
 		}
 	}
 	_context: GpuContext
-	init: func (size: IntSize2D, =_context) { super(size) }
-	resizeTo: override func (size: IntSize2D) -> This {
+	init: func (size: IntVector2D, =_context) { super(size) }
+	resizeTo: override func (size: IntVector2D) -> This {
 		result := this create(size) as This
 		result canvas draw(this, size)
 		result
 	}
 	copy: override func -> This { this resizeTo(this size) }
-	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This { raise("Using unimplemented function copy ~fromParams in GpuImage class"); null }
+	copy: func ~fromParams (size: IntVector2D, transform: FloatTransform2D) -> This { raise("Using unimplemented function copy ~fromParams in GpuImage class"); null }
 	distance: func (other: This) -> Float { raise("Using unimplemented function distance in GpuImage class"); 0.0f }
 
 	upload: abstract func (image: RasterImage)

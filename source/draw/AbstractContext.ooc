@@ -25,12 +25,12 @@ AlignWidth: enum {
 
 AbstractContext: abstract class {
 	init: func
-	createMonochrome: abstract func (size: IntSize2D) -> Image
-	createBgr: abstract func (size: IntSize2D) -> Image
-	createBgra: abstract func (size: IntSize2D) -> Image
-	createUv: abstract func (size: IntSize2D) -> Image
+	createMonochrome: abstract func (size: IntVector2D) -> Image
+	createBgr: abstract func (size: IntVector2D) -> Image
+	createBgra: abstract func (size: IntVector2D) -> Image
+	createUv: abstract func (size: IntVector2D) -> Image
 	createImage: abstract func (rasterImage: RasterImage) -> Image
-	createYuv420Semiplanar: abstract func (size: IntSize2D) -> Image
+	createYuv420Semiplanar: abstract func (size: IntVector2D) -> Image
 	createYuv420Semiplanar: abstract func ~fromImages (y, uv: Image) -> Image
 	createYuv420Semiplanar: abstract func ~fromRaster (raster: RasterYuv420Semiplanar) -> Image
 	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }

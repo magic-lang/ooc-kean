@@ -46,7 +46,7 @@ GraphicBuffer: class {
 	_alignedWidth: static Int[] = Int[0] new()
 	_format: GraphicBufferFormat
 	format ::= this _format
-	_size: IntSize2D
+	_size: IntVector2D
 	size ::= this _size
 	_pixelStride: Int
 	pixelStride ::= this _pixelStride

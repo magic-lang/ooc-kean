@@ -11,7 +11,7 @@ IntTransform2DTest: class extends Fixture {
 	transform4 := IntTransform2D new(10, 20, 30, 40, 50, 60)
 	point0 := IntPoint2D new(-7, 3)
 	point1 := IntPoint2D new(-10, 3)
-	size := IntSize2D new(10, 10)
+	size := IntVector2D new(10, 10)
 	init: func {
 		super("IntTransform2D")
 		this add("equality", func {

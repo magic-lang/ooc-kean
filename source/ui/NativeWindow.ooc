@@ -20,7 +20,7 @@ NativeWindow: abstract class {
 	display ::= this _display
 	_backend: Long
 	backend ::= this _backend
-	_size: IntSize2D
+	_size: IntVector2D
 	size ::= this _size
 
 	init: func (=_size, =_backend, =_display)

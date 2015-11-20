@@ -26,7 +26,7 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			source := RasterYuv420Semiplanar open(this _inputPath)
 			expect(Int even(source size x))
 			expect(Int even(source size y))
-			resized := source resizeTo(IntSize2D new(source size x, source size y - 1))
+			resized := source resizeTo(IntVector2D new(source size x, source size y - 1))
 			output := "test/draw/output/RasterYuv420SemiplanarTest_resizeOddHeight.png"
 			resized save(output)
 			resized free()
@@ -37,7 +37,7 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			source := RasterYuv420Semiplanar open(this _inputPath)
 			expect(Int even(source size x))
 			expect(Int even(source size y))
-			resized := source resizeTo(IntSize2D new(source size x - 1, source size y))
+			resized := source resizeTo(IntVector2D new(source size x - 1, source size y))
 			output := "test/draw/output/RasterYuv420SemiplanarTest_resizeOddWidth.png"
 			resized save(output)
 			resized free()
@@ -48,7 +48,7 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			source := RasterYuv420Semiplanar open(this _inputPath)
 			expect(Int even(source size x))
 			expect(Int even(source size y))
-			resized := source resizeTo(IntSize2D new(source size x - 1, source size y - 1))
+			resized := source resizeTo(IntVector2D new(source size x - 1, source size y - 1))
 			output := "test/draw/output/RasterYuv420SemiplanarTest_resizeOddSize.png"
 			resized save(output)
 			resized free()
@@ -58,12 +58,12 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 		this add("crop", func {
 			source := RasterYuv420Semiplanar open(this _inputPath)
 			targetSize := source size / 2
-			cropArea := FloatBox2D new(FloatPoint2D new(10, 10), targetSize toFloatSize2D())
+			cropArea := FloatBox2D new(FloatPoint2D new(10, 10), targetSize toFloatVector2D())
 			target := source crop(cropArea)
-			expect(target size == cropArea size toIntSize2D())
+			expect(target size == cropArea size toIntVector2D())
 			target free()
-			cropArea = FloatBox2D new(FloatPoint2D new(), source size toFloatSize2D())
-			target = RasterYuv420Semiplanar new(cropArea size toIntSize2D())
+			cropArea = FloatBox2D new(FloatPoint2D new(), source size toFloatVector2D())
+			target = RasterYuv420Semiplanar new(cropArea size toIntVector2D())
 			source cropInto(cropArea, target)
 			expect(target distance(source), is equal to(0.0f) within(0.001f))
 			source free()
@@ -73,7 +73,7 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			source := RasterYuv420Semiplanar open(this _inputPath)
 			expect(Int even(source size x))
 			expect(Int even(source size y))
-			resized := source crop(FloatBox2D new(FloatPoint2D new(), FloatSize2D new(source size x, source size y - 1)))
+			resized := source crop(FloatBox2D new(FloatPoint2D new(), FloatVector2D new(source size x, source size y - 1)))
 			output := "test/draw/output/RasterYuv420SemiplanarTest_cropOddHeight.png"
 			resized save(output)
 			resized free()
@@ -84,7 +84,7 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			source := RasterYuv420Semiplanar open(this _inputPath)
 			expect(Int even(source size x))
 			expect(Int even(source size y))
-			resized := source crop(FloatBox2D new(FloatPoint2D new(), FloatSize2D new(source size x - 1, source size y)))
+			resized := source crop(FloatBox2D new(FloatPoint2D new(), FloatVector2D new(source size x - 1, source size y)))
 			output := "test/draw/output/RasterYuv420SemiplanarTest_cropOddWidth.png"
 			resized save(output)
 			resized free()
@@ -95,7 +95,7 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			source := RasterYuv420Semiplanar open(this _inputPath)
 			expect(Int even(source size x))
 			expect(Int even(source size y))
-			resized := source crop(FloatBox2D new(FloatPoint2D new(), FloatSize2D new(source size x - 1, source size y - 1)))
+			resized := source crop(FloatBox2D new(FloatPoint2D new(), FloatVector2D new(source size x - 1, source size y - 1)))
 			output := "test/draw/output/RasterYuv420SemiplanarTest_cropOddSize.png"
 			resized save(output)
 			resized free()

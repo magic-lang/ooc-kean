@@ -42,7 +42,7 @@ SvgPlot: class {
 		this datasets add(dataset)
 		this setAxesMinMax()
 	}
-	getSvg: func (size: FloatSize2D, fontSize: Int) -> String {
+	getSvg: func (size: FloatVector2D, fontSize: Int) -> String {
 		if (this fontSize == 0)
 			this fontSize = fontSize
 		aspectRatio := size x / size y
@@ -59,8 +59,8 @@ SvgPlot: class {
 				this yAxis max *= aspectRatio
 			}
 		}
-		margin := FloatSize2D new(yAxis getRequiredMargin(this fontSize), xAxis getRequiredMargin(this fontSize))
-		plotAreaSize := size - FloatSize2D new(2.0f * margin x, 2.0f * margin y)
+		margin := FloatVector2D new(yAxis getRequiredMargin(this fontSize), xAxis getRequiredMargin(this fontSize))
+		plotAreaSize := size - FloatVector2D new(2.0f * margin x, 2.0f * margin y)
 		transform := FloatTransform2D createTranslation(- this xAxis min, - this yAxis min)
 		transform = transform scale(this xAxis length() != 0.0f ? plotAreaSize x / this xAxis length() : 1.0f, this yAxis length() != 0.0f ? - plotAreaSize y / this yAxis length() : -1.0f)
 		transform = transform translate(0.0f, plotAreaSize y)
@@ -117,7 +117,7 @@ SvgPlot: class {
 		this colorList add("yellowgreen")
 		this colorList add("red")
 	}
-	setLegends: func (size, plotAreaSize: FloatSize2D) -> String {
+	setLegends: func (size, plotAreaSize: FloatVector2D) -> String {
 		result := "<svg desc='Legends' x='" << ((size x - plotAreaSize x) / 2) toString() >> "' y='" & ((size y - plotAreaSize y) / 2) toString() >> "' width='" & plotAreaSize x toString() >> "' height='" & plotAreaSize y toString() >> "' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>\n<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>\n<g id='Legend' drag:enable='true'>\n"
 		legendCounter := 0
 		for (i in 0 .. this datasets count) {

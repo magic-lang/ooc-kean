@@ -16,8 +16,8 @@
 
 use ooc-collections
 import math
-import FloatSize2D
-import FloatSize3D
+import FloatVector2D
+import FloatVector3D
 import FloatPoint2D
 import FloatPoint3D
 import FloatBox2D
@@ -82,7 +82,7 @@ FloatTransform3D: cover {
 			this m * this b * this g * this l - this m * this f * this k * this d - this m * this j * this c * this h
 		}
 	}
-	translation ::= FloatSize3D new(this m, this n, this o)
+	translation ::= FloatVector3D new(this m, this n, this o)
 	scaling ::= (this scalingX + this scalingY + this scalingZ) / 3.0f
 	scalingX ::= (this a squared() + this b squared() + this c squared()) sqrt()
 	scalingY ::= (this e squared() + this f squared() + this g squared()) sqrt()
@@ -121,7 +121,7 @@ FloatTransform3D: cover {
 		this init(transform a, transform b, 0.0f, transform c, transform d, transform e, 0.0f, transform f, 0.0f, 0.0f, 1.0f, 0.0f, transform g, transform h, 0.0f, transform i)
 	}
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f) } }
-//	setTranslation: func(translation: FloatSize2D) -> This { this translate(translation - this Translation) }
+//	setTranslation: func(translation: FloatVector2D) -> This { this translate(translation - this Translation) }
 	setScaling: func (scaling: Float) -> This { this scale(scaling / this scaling) }
 	setXScaling: func (scaling: Float) -> This { this scale(scaling / this scalingX, 1.0f, 1.0f) }
 	setYScaling: func (scaling: Float) -> This { this scale(1.0f, scaling / this scalingY, 1.0f) }
@@ -129,10 +129,10 @@ FloatTransform3D: cover {
 	translate: func (xDelta, yDelta, zDelta: Float) -> This { this createTranslation(xDelta, yDelta, zDelta) * this }
 	translate: func ~float (delta: Float) -> This { this translate(delta, delta, delta) }
 	translate: func ~point (delta: FloatPoint3D) -> This { this translate(delta x, delta y, delta z) }
-	translate: func ~size (delta: FloatSize3D) -> This { this translate(delta x, delta y, delta z) }
+	translate: func ~size (delta: FloatVector3D) -> This { this translate(delta x, delta y, delta z) }
 	scale: func (xFactor, yFactor, zFactor: Float) -> This { this createScaling(xFactor, yFactor, zFactor) * this }
 	scale: func ~float (factor: Float) -> This { this scale(factor, factor, factor) }
-	scale: func ~size (factor: FloatSize3D) -> This { this scale(factor x, factor y, factor z) }
+	scale: func ~size (factor: FloatVector3D) -> This { this scale(factor x, factor y, factor z) }
 	rotateX: func (angle: Float) -> This { this createRotationX(angle) * this }
 	rotateY: func (angle: Float) -> This { this createRotationY(angle) * this }
 	rotateZ: func (angle: Float) -> This { this createRotationZ(angle) * this }
@@ -142,11 +142,11 @@ FloatTransform3D: cover {
 	create: static func (a, b, c, d, e, f, g, h, i, j, k, l: Float) -> This { This new(a, b, c, d, e, f, g, h, i, j, k, l) }
 	createTranslation: static func (xDelta, yDelta, zDelta: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, xDelta, yDelta, zDelta) }
 	createTranslation: static func ~float (delta: Float) -> This { This createTranslation(delta, delta, delta) }
-	createTranslation: static func ~size (delta: FloatSize3D) -> This { This createTranslation(delta x, delta y, delta z) }
+	createTranslation: static func ~size (delta: FloatVector3D) -> This { This createTranslation(delta x, delta y, delta z) }
 	createTranslation: static func ~point (delta: FloatPoint3D) -> This { This createTranslation(delta x, delta y, delta z) }
 	createScaling: static func (xFactor, yFactor, zFactor: Float) -> This { This new(xFactor, 0.0f, 0.0f, 0.0f, yFactor, 0.0f, 0.0f, 0.0f, zFactor, 0.0f, 0.0f, 0.0f) }
 	createScaling: static func ~float (factor: Float) -> This { This createScaling(factor, factor, factor) }
-	createScaling: static func ~size (factor: FloatSize3D) -> This { This createScaling(factor x, factor y, factor z) }
+	createScaling: static func ~size (factor: FloatVector3D) -> This { This createScaling(factor x, factor y, factor z) }
 	createRotationX: static func (angle: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, angle cos(), angle sin(), 0.0f, (-angle) sin(), angle cos(), 0.0f, 0.0f, 0.0f) }
 	createRotationY: static func (angle: Float) -> This { This new(angle cos(), 0.0f, (-angle) sin(), 0.0f, 1.0f, 0.0f, angle sin(), 0.0f, angle cos(), 0.0f, 0.0f, 0.0f) }
 	createRotationZ: static func (angle: Float) -> This { This new(angle cos(), angle sin(), 0.0f, (-angle) sin(), angle cos(), 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) }
@@ -235,7 +235,7 @@ FloatTransform3D: cover {
 		"%.8f" formatFloat(this c) >> ", " & "%.8f" formatFloat(this g) >> ", " & "%.8f" formatFloat(this k) >> ", " & "%.8f" formatFloat(this o) >> "\n" & \
 		"%.8f" formatFloat(this d) >> ", " & "%.8f" formatFloat(this h) >> ", " & "%.8f" formatFloat(this l) >> ", " & "%.8f" formatFloat(this p)
 	}
-	kean_math_floatTransform3D_getTranslation: unmangled func -> FloatSize3D { this translation }
-	kean_math_floatTransform3D_getScaling: unmangled func -> FloatSize3D { FloatSize3D new(this scalingX, this scalingY, this scalingZ) }
+	kean_math_floatTransform3D_getTranslation: unmangled func -> FloatVector3D { this translation }
+	kean_math_floatTransform3D_getScaling: unmangled func -> FloatVector3D { FloatVector3D new(this scalingX, this scalingY, this scalingZ) }
 	kean_math_floatTransform3D_getInverse: unmangled func -> This { this inverse }
 }

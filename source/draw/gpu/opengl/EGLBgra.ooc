@@ -26,7 +26,7 @@ EGLBgra: class extends OpenGLBgra {
 	init: func ~fromGraphicBuffer (=_buffer, context: AndroidContext) {
 		super(EGLImage create(TextureType Rgba, this _buffer size, this _buffer nativeBuffer, context backend), context)
 	}
-	init: func ~fromSize (size: IntSize2D, context: AndroidContext) {
+	init: func ~fromSize (size: IntVector2D, context: AndroidContext) {
 		this init(GraphicBuffer new(size, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget), context)
 	}
 	free: override func {

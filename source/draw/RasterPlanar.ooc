@@ -22,6 +22,6 @@ import Image
 import RasterImage
 
 RasterPlanar: abstract class extends RasterImage {
-	init: func (size: IntSize2D) { super(size) }
+	init: func (size: IntVector2D) { super(size) }
 	init: func ~fromOriginal (original: This) { super(original) }
 }

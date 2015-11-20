@@ -36,12 +36,12 @@ BgrRasterCanvas: class extends RasterCanvas {
 
 RasterBgr: class extends RasterPacked {
 	bytesPerPixel ::= 3
-	init: func ~allocate (size: IntSize2D) { super~allocate(size) }
-	init: func ~allocateStride (size: IntSize2D, stride: UInt) { super(size, stride) }
-	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntSize2D, stride: UInt) { super(buffer, size, stride) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { this init(buffer, size, this bytesPerPixel * size x) }
+	init: func ~allocate (size: IntVector2D) { super~allocate(size) }
+	init: func ~allocateStride (size: IntVector2D, stride: UInt) { super(size, stride) }
+	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntVector2D, stride: UInt) { super(buffer, size, stride) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D) { this init(buffer, size, this bytesPerPixel * size x) }
 	init: func ~fromRasterImage (original: This) { super(original) }
-	create: func (size: IntSize2D) -> Image { This new(size) }
+	create: func (size: IntVector2D) -> Image { This new(size) }
 	copy: func -> This { This new(this) }
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		for (row in 0 .. this size y)
@@ -117,7 +117,7 @@ RasterBgr: class extends RasterPacked {
 		x, y, imageComponents: Int
 		requiredComponents := 3
 		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
-		This new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y))
+		This new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntVector2D new(x, y))
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
@@ -155,7 +155,7 @@ RasterBgr: class extends RasterPacked {
 	}
 	_createCanvas: override func -> Canvas { BgrRasterCanvas new(this) }
 	kean_draw_rasterBgr_new: static unmangled func (width, height, stride: Int, data: Void*) -> This {
-		result := This new(IntSize2D new(width, height), stride)
+		result := This new(IntVector2D new(width, height), stride)
 		memcpy(result buffer pointer, data, height * stride)
 		result
 	}

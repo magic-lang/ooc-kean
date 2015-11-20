@@ -56,7 +56,7 @@ AndroidContext: class extends OpenGLContext {
 		result
 	}
 	recyclePacker: func (packer: EGLBgra) { this _packers add(packer) }
-	getPacker: func (size: IntSize2D) -> EGLBgra {
+	getPacker: func (size: IntVector2D) -> EGLBgra {
 		result: EGLBgra = null
 		index := -1
 		for (i in 0 .. this _packers count) {
@@ -69,7 +69,7 @@ AndroidContext: class extends OpenGLContext {
 	}
 	toBuffer: func (gpuImage: GpuImage, packMap: GpuMap) -> (ByteBuffer, GpuFence) {
 		channels := (gpuImage as OpenGLPacked) channels
-		packSize := IntSize2D new(gpuImage size x / (4 / channels), gpuImage size y)
+		packSize := IntVector2D new(gpuImage size x / (4 / channels), gpuImage size y)
 		gpuRgba := this getPacker(packSize)
 		this packToRgba(gpuImage, gpuRgba, IntBox2D new(gpuRgba size))
 		fence := this createFence()
@@ -136,7 +136,7 @@ AndroidContext: class extends OpenGLContext {
 		map add("startY", startY)
 		target canvas draw(source, map)
 	}
-	unpackBgraToYuv420Semiplanar: func (source: GpuImage, targetSize: IntSize2D, padding := 0) -> GpuYuv420Semiplanar {
+	unpackBgraToYuv420Semiplanar: func (source: GpuImage, targetSize: IntVector2D, padding := 0) -> GpuYuv420Semiplanar {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
 		sourceSize := source size
 		transform := FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)

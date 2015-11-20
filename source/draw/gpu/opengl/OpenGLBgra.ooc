@@ -24,11 +24,11 @@ import OpenGLCanvas, OpenGLPacked, OpenGLContext
 version(!gpuOff) {
 OpenGLBgra: class extends OpenGLPacked {
 	channelCount: static Int = 4
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
+	init: func ~fromPixels (size: IntVector2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
 		super(context _backend createTexture(TextureType Bgra, size, stride, data), This channelCount, context)
 		this coordinateSystem = coordinateSystem
 	}
-	init: func (size: IntSize2D, context: OpenGLContext) { this init(size, size x * This channelCount, null, CoordinateSystem YUpward, context) }
+	init: func (size: IntVector2D, context: OpenGLContext) { this init(size, size x * This channelCount, null, CoordinateSystem YUpward, context) }
 	init: func ~fromTexture (texture: GLTexture, context: OpenGLContext) { super(texture, This channelCount, context) }
 	init: func ~fromRaster (rasterImage: RasterBgra, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
@@ -37,6 +37,6 @@ OpenGLBgra: class extends OpenGLPacked {
 		buffer := this canvas readPixels()
 		RasterBgra new(buffer, this size)
 	}
-	create: override func (size: IntSize2D) -> This { this context createBgra(size) as This }
+	create: override func (size: IntVector2D) -> This { this context createBgra(size) as This }
 }
 }

@@ -77,7 +77,7 @@ IntShell2DTest: class extends Fixture {
 		})
 		this add("increase, decrease (size)", func {
 			shell := IntShell2D new(1)
-			size := IntSize2D new(1, 2)
+			size := IntVector2D new(1, 2)
 			increased := shell increase(size)
 			decreased := shell decrease(size)
 			expect(increased left, is equal to(-1))

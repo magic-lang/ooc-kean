@@ -33,7 +33,7 @@ InterpolationMode: enum {
 }
 
 Image: abstract class {
-	_size: IntSize2D
+	_size: IntVector2D
 	size ::= this _size
 	width ::= this size x
 	height ::= this size y
@@ -73,16 +73,16 @@ Image: abstract class {
 		this _canvas = null
 		super()
 	}
-	resizeWithin: func (restriction: IntSize2D) -> This {
-		this resizeTo(((this size toFloatSize2D()) * Float minimum(restriction x as Float / this size x as Float, restriction y as Float / this size y as Float)) toIntSize2D())
+	resizeWithin: func (restriction: IntVector2D) -> This {
+		this resizeTo(((this size toFloatVector2D()) * Float minimum(restriction x as Float / this size x as Float, restriction y as Float / this size y as Float)) toIntVector2D())
 	}
-	resizeTo: abstract func (size: IntSize2D) -> This
-	resizeTo: virtual func ~withMethod (size: IntSize2D, method: InterpolationMode) -> This {
+	resizeTo: abstract func (size: IntVector2D) -> This
+	resizeTo: virtual func ~withMethod (size: IntVector2D, method: InterpolationMode) -> This {
 		this resizeTo(size)
 	}
-	create: virtual func (size: IntSize2D) -> This { raise("Image type not implemented."); null }
+	create: virtual func (size: IntVector2D) -> This { raise("Image type not implemented."); null }
 	copy: abstract func -> This
-	copy: abstract func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This
+	copy: abstract func ~fromParams (size: IntVector2D, transform: FloatTransform2D) -> This
 	distance: virtual abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
 	isValidIn: func (x, y: Int) -> Bool {

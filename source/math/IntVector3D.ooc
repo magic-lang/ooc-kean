@@ -16,10 +16,10 @@
 
 import math
 import IntPoint3D
-import FloatSize3D
+import FloatVector3D
 use ooc-base
 
-IntSize3D: cover {
+IntVector3D: cover {
 	x, y, z: Int
 	volume ::= this x * this y * this z
 	empty ::= this x == 0 || this y == 0 || this z == 0
@@ -51,7 +51,7 @@ IntSize3D: cover {
 	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
-	toFloatSize3D: func -> FloatSize3D { FloatSize3D new(this x as Float, this y as Float, this z as Float) }
+	toFloatVector3D: func -> FloatVector3D { FloatVector3D new(this x as Float, this y as Float, this z as Float) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}, #{this z toString()}" }
 	parse: static func (input: Text) -> This {
@@ -61,7 +61,7 @@ IntSize3D: cover {
 		result
 	}
 }
-operator * (left: Int, right: IntSize3D) -> IntSize3D { IntSize3D new(left * right x, left * right y, left * right z) }
-operator / (left: Int, right: IntSize3D) -> IntSize3D { IntSize3D new(left / right x, left / right y, left / right z) }
-operator * (left: Float, right: IntSize3D) -> IntSize3D { IntSize3D new(left * right x, left * right y, left * right z) }
-operator / (left: Float, right: IntSize3D) -> IntSize3D { IntSize3D new(left / right x, left / right y, left / right z) }
+operator * (left: Int, right: IntVector3D) -> IntVector3D { IntVector3D new(left * right x, left * right y, left * right z) }
+operator / (left: Int, right: IntVector3D) -> IntVector3D { IntVector3D new(left / right x, left / right y, left / right z) }
+operator * (left: Float, right: IntVector3D) -> IntVector3D { IntVector3D new(left * right x, left * right y, left * right z) }
+operator / (left: Float, right: IntVector3D) -> IntVector3D { IntVector3D new(left / right x, left / right y, left / right z) }

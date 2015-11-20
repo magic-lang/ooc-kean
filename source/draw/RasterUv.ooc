@@ -26,12 +26,12 @@ import Color
 
 RasterUv: class extends RasterPacked {
 	bytesPerPixel ::= 2
-	init: func ~allocate (size: IntSize2D) { super~allocate(size) }
-	init: func ~allocateStride (size: IntSize2D, stride: UInt) { super(size, stride) }
-	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntSize2D, stride: UInt) { super(buffer, size, stride) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { this init(buffer, size, this bytesPerPixel * size x) }
+	init: func ~allocate (size: IntVector2D) { super~allocate(size) }
+	init: func ~allocateStride (size: IntVector2D, stride: UInt) { super(size, stride) }
+	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntVector2D, stride: UInt) { super(buffer, size, stride) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D) { this init(buffer, size, this bytesPerPixel * size x) }
 	init: func ~fromRasterImage (original: This) { super(original) }
-	create: func (size: IntSize2D) -> Image { This new(size) }
+	create: func (size: IntVector2D) -> Image { This new(size) }
 	copy: func -> This { This new(this) }
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))
@@ -108,7 +108,7 @@ RasterUv: class extends RasterPacked {
 		requiredComponents := 3
 		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
 		//FIXME: Is it neccessary to create a RasterBgr here?
-		This convertFrom(RasterBgr new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntSize2D new(x, y)))
+		This convertFrom(RasterBgr new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntVector2D new(x, y)))
 	}
 	save: override func (filename: String) -> Int {
 		bgr := RasterBgr new(this buffer, this size)

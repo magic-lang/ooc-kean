@@ -24,7 +24,7 @@ version(!gpuOff) {
 OpenGLWindow: class extends OpenGLSurface {
 	_monochromeToBgra: OpenGLMap
 	_yuvSemiplanarToBgra: OpenGLMapTransform
-	init: func (windowSize: IntSize2D, display: Pointer, nativeBackend: Long) {
+	init: func (windowSize: IntVector2D, display: Pointer, nativeBackend: Long) {
 		context := OpenGLContext new(display, nativeBackend)
 		super(windowSize, context, OpenGLMap new(slurp("shaders/texture.frag"), context), IntTransform2D createScaling(1, -1))
 		this _monochromeToBgra = OpenGLMap new(slurp("shaders/monochromeToBgra.frag"), context)

@@ -15,14 +15,14 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
 import FloatPoint2D
-import FloatSize2D
+import FloatVector2D
 import FloatBox2D
 use ooc-base
 
 FloatShell2D: cover {
 	left, right, top, bottom: Float
 	leftTop ::= FloatPoint2D new(this left, this top)
-	size ::= FloatSize2D new(this left + this right, this top + this bottom)
+	size ::= FloatVector2D new(this left + this right, this top + this bottom)
 	balance ::= FloatPoint2D new(this right - this left, this bottom - this top)
 	isZero ::= this left == 0 && this right == 0 && this top == 0 && this bottom == 0
 	notZero ::= this left != 0 && this right != 0 && this top != 0 && this bottom != 0
@@ -30,8 +30,8 @@ FloatShell2D: cover {
 	init: func@ ~fromFloat (value: Float) { this init(value, value, value, value) }
 	init: func@ ~fromFloats (x, y: Float) { this init(x, x, y, y) }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f, 0.0f) }
-	decrease: func (size: FloatSize2D) -> FloatBox2D { FloatBox2D new(this left, this top, size x - this left - this right, size y - this top - this bottom) }
-	increase: func (size: FloatSize2D) -> FloatBox2D { FloatBox2D new(-this left, -this right, size x + this left + this right, size y + this top + this bottom) }
+	decrease: func (size: FloatVector2D) -> FloatBox2D { FloatBox2D new(this left, this top, size x - this left - this right, size y - this top - this bottom) }
+	increase: func (size: FloatVector2D) -> FloatBox2D { FloatBox2D new(-this left, -this right, size x + this left + this right, size y + this top + this bottom) }
 	decrease: func ~byBox (box: FloatBox2D) -> FloatBox2D {
 		FloatBox2D new(box leftTop x + this left, box leftTop y + this top, box size x - this left - this right, box size y - this top - this bottom)
 	}

@@ -25,17 +25,17 @@ import OpenGLCanvas, OpenGLPacked, OpenGLContext
 version(!gpuOff) {
 OpenGLBgr: class extends OpenGLPacked {
 	channelCount: static Int = 3
-	init: func (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
+	init: func (size: IntVector2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
 		super(context _backend createTexture(TextureType Bgr, size, stride, data, true), This channelCount, context)
 		this coordinateSystem = coordinateSystem
 	}
-	init: func ~empty (size: IntSize2D, context: OpenGLContext) {
+	init: func ~empty (size: IntVector2D, context: OpenGLContext) {
 		this init(size, size x * This channelCount, null, CoordinateSystem YUpward, context)
 	}
 	init: func ~fromRaster (rasterImage: RasterBgr, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: func -> RasterImage { Debug raise("toRaster not implemented for BGR"); null }
-	create: override func (size: IntSize2D) -> This { this context createBgr(size) as This }
+	create: override func (size: IntVector2D) -> This { this context createBgr(size) as This }
 }
 }

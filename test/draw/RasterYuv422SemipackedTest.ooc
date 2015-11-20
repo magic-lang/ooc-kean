@@ -18,7 +18,7 @@ RasterYuv422SemipackedTest: class extends Fixture {
 			raster save(outputPath)
 			outputPath free()
 			raster referenceCount decrease()
-			size := IntSize2D new(256, 256)
+			size := IntVector2D new(256, 256)
 			raster = RasterYuv422Semipacked new(size)
 			expect(size x, is equal to(raster width))
 			expect(size y, is equal to(raster height))

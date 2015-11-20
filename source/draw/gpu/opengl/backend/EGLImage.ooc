@@ -27,7 +27,7 @@ EGLImage: class extends GLTexture {
 	_nativeBuffer: Pointer
 	_backendTexture: GLTexture
 	/* PRIVATE CONSTRUCTOR, USE STATIC CREATE FUNCTION!!! */
-	init: func (type: TextureType, size: IntSize2D, =_nativeBuffer, context: GLContext) {
+	init: func (type: TextureType, size: IntVector2D, =_nativeBuffer, context: GLContext) {
 		super(type, size)
 		this _eglDisplay = context _eglDisplay
 		this _backendTexture = context createTexture(type, size, size x, null, false)
@@ -56,7 +56,7 @@ EGLImage: class extends GLTexture {
 		This _glEGLImageTargetTexture2DOES = (eglGetProcAddress("glEGLImageTargetTexture2DOES" toCString()), null) as Func(UInt, Pointer)
 		This _initialized = true
 	}
-	create: static func (type: TextureType, size: IntSize2D, nativeBuffer: Pointer, context: GLContext) -> This {
+	create: static func (type: TextureType, size: IntVector2D, nativeBuffer: Pointer, context: GLContext) -> This {
 		if (!This _initialized)
 			This initialize()
 		(type == TextureType Rgba || type == TextureType Rgb || type == TextureType Bgr || type == TextureType Rgb || type == TextureType Yv12) ?

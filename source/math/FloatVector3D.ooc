@@ -17,10 +17,10 @@
 import math
 import FloatPoint3D
 import IntPoint3D
-import IntSize3D
+import IntVector3D
 use ooc-base
 
-FloatSize3D: cover {
+FloatVector3D: cover {
 	x, y, z: Float
 	volume ::= this x * this y * this z
 	length ::= this norm
@@ -70,7 +70,7 @@ FloatSize3D: cover {
 	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
-	toIntSize3D: func -> IntSize3D { IntSize3D new(this x as Int, this y as Int, this z as Int) }
+	toIntVector3D: func -> IntVector3D { IntVector3D new(this x as Int, this y as Int, this z as Int) }
 	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this x, this y, this z) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}, #{this z toString()}" }
@@ -84,7 +84,7 @@ FloatSize3D: cover {
 		This new(Float linearInterpolation(a x, b x, ratio), Float linearInterpolation(a y, b y, ratio), Float linearInterpolation(a z, b z, ratio))
 	}
 }
-operator * (left: Float, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left * right x, left * right y, left * right z) }
-operator / (left: Float, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left / right x, left / right y, left / right z) }
-operator * (left: Int, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left * right x, left * right y, left * right z) }
-operator / (left: Int, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left / right x, left / right y, left / right z) }
+operator * (left: Float, right: FloatVector3D) -> FloatVector3D { FloatVector3D new(left * right x, left * right y, left * right z) }
+operator / (left: Float, right: FloatVector3D) -> FloatVector3D { FloatVector3D new(left / right x, left / right y, left / right z) }
+operator * (left: Int, right: FloatVector3D) -> FloatVector3D { FloatVector3D new(left * right x, left * right y, left * right z) }
+operator / (left: Int, right: FloatVector3D) -> FloatVector3D { FloatVector3D new(left / right x, left / right y, left / right z) }
