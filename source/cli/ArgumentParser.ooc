@@ -27,8 +27,11 @@ _Argument: class {
 	_textAction: Event1<Text>
 	_listAction: Event1<VectorList<Text>>
 	init: func (=_longIdentifier, =_shortIdentifier, =_parameters, =_action)
+	init: func ~noShort (=_longIdentifier, =_parameters, =_action)
 	init: func ~parameter (=_longIdentifier, =_shortIdentifier, =_parameters, =_textAction)
+	init: func ~parameterNoShort (=_longIdentifier, =_parameters, =_textAction)
 	init: func ~parameters (=_longIdentifier, =_shortIdentifier, =_parameters, =_listAction)
+	init: func ~parametersNoShort (=_longIdentifier, =_parameters, =_listAction)
 	init: func ~default (=_textAction)
 	free: override func {
 		this _longIdentifier free(Owner Receiver)
@@ -57,11 +60,20 @@ ArgumentParser: class {
 	add: func (longIdentifier: Text, shortIdentifier: Char, action: Event) {
 		this _arguments add(_Argument new(longIdentifier claim(), shortIdentifier, 0, action))
 	}
+	add: func ~noShort (longIdentifier: Text, action: Event) {
+		this _arguments add(_Argument new(longIdentifier claim(), 0, action))
+	}
 	add: func ~parameter (longIdentifier: Text, shortIdentifier: Char, action: Event1<Text>) {
 		this _arguments add(_Argument new(longIdentifier claim(), shortIdentifier, 1, action))
 	}
+	add: func ~parameterNoShort (longIdentifier: Text, action: Event1<Text>) {
+		this _arguments add(_Argument new(longIdentifier claim(), 1, action))
+	}
 	add: func ~parameters (longIdentifier: Text, shortIdentifier: Char, parameters: Int, action: Event1<VectorList<Text>>) {
 		this _arguments add(_Argument new(longIdentifier claim(), shortIdentifier, parameters, action))
+	}
+	add: func ~parametersNoShort (longIdentifier: Text, parameters: Int, action: Event1<VectorList<Text>>) {
+		this _arguments add(_Argument new(longIdentifier claim(), parameters, action))
 	}
 	addDefault: func (action: Event1<Text>) {
 		this _defaultArgument = _Argument new(action)
