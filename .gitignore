@@ -39,5 +39,6 @@ rock_tmp
 
 # Test output
 /test/*/output
+/test/profilerTest.log
 tests.use
 Tests
