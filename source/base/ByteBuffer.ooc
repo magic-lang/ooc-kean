@@ -28,25 +28,20 @@ ByteBuffer: class {
 	size ::= this _size
 	_referenceCount: ReferenceCounter
 	referenceCount ::= this _referenceCount
-	_owner: Bool
-	_forceFree := false
+	_ownsMemory: Bool
 
-	init: func (=_pointer, =_size, owner := false) {
+	init: func (=_pointer, =_size, ownsMemory := false) {
 		this _referenceCount = ReferenceCounter new(this)
-		this _owner = owner
+		this _ownsMemory = ownsMemory
 	}
 	free: override func {
 		if (this _referenceCount != null)
 			this _referenceCount free()
 		this _referenceCount = null
-		if (this _owner)
+		if (this _ownsMemory)
 			gc_free(this _pointer)
 		this _pointer = null
 		super()
-	}
-	forceFree: func {
-		this _forceFree = true
-		this free()
 	}
 	zero: func ~whole { memset(this _pointer, 0, _size) }
 	zero: func ~range (offset, length: Int) { memset(this _pointer + offset, 0, length) }
@@ -65,7 +60,7 @@ ByteBuffer: class {
 		memcpy(other pointer + destination, this pointer + start, length)
 	}
 	new: static func ~size (size: Int) -> This { _RecyclableByteBuffer new(size) }
-	new: static func ~recover (pointer: UInt8*, size: Int, recover: Func (This)) -> This {
+	new: static func ~recover (pointer: UInt8*, size: Int, recover: Func (This) -> Bool) -> This {
 		_RecoverableByteBuffer new(pointer, size, recover)
 	}
 	clean: static func { _RecyclableByteBuffer _clean() }
@@ -85,12 +80,10 @@ _SlicedByteBuffer: class extends ByteBuffer {
 	}
 }
 _RecoverableByteBuffer: class extends ByteBuffer {
-	_recover: Func (ByteBuffer)
+	_recover: Func (ByteBuffer) -> Bool
 	init: func (pointer: UInt8*, size: Int, =_recover) { super(pointer, size) }
 	free: override func {
-		if (!this _forceFree)
-			this _recover(this)
-		else {
+		if (!this _recover(this)) {
 			(this _recover as Closure) dispose()
 			super()
 		}
@@ -98,13 +91,17 @@ _RecoverableByteBuffer: class extends ByteBuffer {
 }
 _RecyclableByteBuffer: class extends ByteBuffer {
 	init: func (pointer: UInt8*, size: Int) { super(pointer, size, true) }
+	_forceFree: func {
+		this _size = 0
+		this free()
+	}
 	free: override func {
-		if (!this _forceFree) {
+		if (this size > 0) {
 			This _lock lock()
 			bin := This _getBin(this size)
 			while (bin count > 20) {
 				version(debugByteBuffer) { Debug print("ByteBuffer bin full; freeing one ByteBuffer") }
-				bin remove(0) forceFree()
+				bin remove(0) _forceFree()
 			}
 			this referenceCount _count = 0
 			bin add(this)
@@ -139,7 +136,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 	}
 	_cleanList: static func (list: VectorList<This>) {
 		while (list count > 0)
-			list remove(0) forceFree()
+			list remove(0) _forceFree()
 	}
 	_clean: static func {
 		This _cleanList(This _smallRecycleBin)
