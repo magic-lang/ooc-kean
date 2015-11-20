@@ -21,7 +21,7 @@ import math
 import lang/IO
 
 FloatVectorListTest: class extends Fixture {
-	tolerance := 0.000001f
+	tolerance := 1.0e-5f
 
 	init: func {
 		super("FloatVectorList")
@@ -348,15 +348,15 @@ FloatVectorListTest: class extends Fixture {
 			interpolatedList := list interpolateCubicSpline(numberOfPointsBetween)
 
 			expect(interpolatedList count, is equal to(list count + numberOfPointsBetween * (list count - 1)))
-			expect(interpolatedList[0], is equal to(list[0]) within(1.0e-5f))
-			expect(interpolatedList[1], is equal to(0.67634f) within(1.0e-5f))
-			expect(interpolatedList[2], is equal to(list[1]) within(1.0e-5f))
-			expect(interpolatedList[3], is equal to(3.72098f) within(1.0e-5f))
-			expect(interpolatedList[4], is equal to(list[2]) within(1.0e-5f))
-			expect(interpolatedList[5], is equal to(5.31473f) within(1.0e-5f))
-			expect(interpolatedList[6], is equal to(list[3]) within(1.0e-5f))
-			expect(interpolatedList[7], is equal to(4.77009f) within(1.0e-5f))
-			expect(interpolatedList[8], is equal to(list[4]) within(1.0e-5f))
+			expect(interpolatedList[0], is equal to(list[0]) within(tolerance))
+			expect(interpolatedList[1], is equal to(0.67634f) within(tolerance))
+			expect(interpolatedList[2], is equal to(list[1]) within(tolerance))
+			expect(interpolatedList[3], is equal to(3.72098f) within(tolerance))
+			expect(interpolatedList[4], is equal to(list[2]) within(tolerance))
+			expect(interpolatedList[5], is equal to(5.31473f) within(tolerance))
+			expect(interpolatedList[6], is equal to(list[3]) within(tolerance))
+			expect(interpolatedList[7], is equal to(4.77009f) within(tolerance))
+			expect(interpolatedList[8], is equal to(list[4]) within(tolerance))
 			list free()
 			interpolatedList free()
 		})
