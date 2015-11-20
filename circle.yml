@@ -6,7 +6,6 @@ dependencies:
   - sudo apt-get -y -qq install libgles2-mesa-dev libegl1-mesa-drivers libgl1-mesa-dri
 test:
   override:
-  - ./install_magic.sh
+  - ./tools/ci/install_ci_tools.sh
   - node ./magic
-  - ./install_rock.sh
   - ./test.sh
