@@ -75,15 +75,14 @@ AndroidContext: class extends OpenGLContext {
 		fence := this createFence()
 		fence sync()
 		eglImage := gpuRgba as EGLBgra
-		sourcePointer := eglImage buffer lock(false)
+		sourcePointer := eglImage buffer lock(false) as UInt8*
 		length := channels * eglImage size width * eglImage size height
-		buffer := ByteBuffer new(sourcePointer, length,
-			func (b: ByteBuffer) {
-				eglImage buffer unlock()
-				this recyclePacker(gpuRgba)
-				b forceFree()
-			})
-		(buffer, fence)
+		recover := func (b: ByteBuffer) -> Bool {
+			eglImage buffer unlock()
+			this recyclePacker(gpuRgba)
+			false
+		}
+		(ByteBuffer new(sourcePointer, length, recover), fence)
 	}
 	toRaster: func ~monochrome (gpuImage: OpenGLMonochrome, async: Bool) -> RasterImage {
 		(buffer, fence) := this toBuffer(gpuImage, this _packMonochrome)

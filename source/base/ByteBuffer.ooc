@@ -65,7 +65,7 @@ ByteBuffer: class {
 		memcpy(other pointer + destination, this pointer + start, length)
 	}
 	new: static func ~size (size: Int) -> This { _RecyclableByteBuffer new(size) }
-	new: static func ~recover (pointer: UInt8*, size: Int, recover: Func (This)) -> This {
+	new: static func ~recover (pointer: UInt8*, size: Int, recover: Func (This) -> Bool) -> This {
 		_RecoverableByteBuffer new(pointer, size, recover)
 	}
 	clean: static func { _RecyclableByteBuffer _clean() }
@@ -85,12 +85,10 @@ _SlicedByteBuffer: class extends ByteBuffer {
 	}
 }
 _RecoverableByteBuffer: class extends ByteBuffer {
-	_recover: Func (ByteBuffer)
+	_recover: Func (ByteBuffer) -> Bool
 	init: func (pointer: UInt8*, size: Int, =_recover) { super(pointer, size) }
 	free: override func {
-		if (!this _forceFree)
-			this _recover(this)
-		else {
+		if (!this _recover(this)) {
 			(this _recover as Closure) dispose()
 			super()
 		}
