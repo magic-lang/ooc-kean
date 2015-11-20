@@ -139,6 +139,10 @@ FloatPoint2DTest: class extends Fixture {
 			distance := point0 distance(point1)
 			expect(distance, is equal to(19.04f) within(0.01f))
 		})
+		this add("distanceSquared", func {
+			distance := point0 distanceSquared(point1)
+			expect(distance, is equal to(362.44f) within(0.01f))
+		})
 		this add("clamp", func {
 			clamped := this point1 clamp(this point0, this point2)
 			expect(clamped x, is equal to(this point0 x) within(this precision))
