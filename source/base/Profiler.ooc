@@ -22,11 +22,10 @@ import io/FileWriter
 import Timer
 
 Profiler: class {
-	_debugLevel: Int
 	_profilers := static VectorList<This> new(100)
 	_name: String
 	_timer := Timer new()
-	init: func (=_name, debugLevel := 0) { This _profilers add(this) }
+	init: func (=_name) { This _profilers add(this) }
 	start: func {
 		this _timer start()
 	}
