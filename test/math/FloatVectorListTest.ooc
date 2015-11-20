@@ -319,7 +319,7 @@ FloatVectorListTest: class extends Fixture {
 			divided := list divideByMaxValue()
 			expect(divided sum, is equal to(-0.5f) within(tolerance))
 		})
-		this add("interpolate~linear", func {
+		this add("interpolateLinear", func {
 			list := FloatVectorList new()
 			list add(2.0f)
 			list add(1.0f)
@@ -327,7 +327,7 @@ FloatVectorListTest: class extends Fixture {
 			list add(4.0f)
 			list add(7.0f)
 			numberOfPointsBetween := 1
-			interpolatedList := list interpolate~linear(numberOfPointsBetween)
+			interpolatedList := list interpolateLinear(numberOfPointsBetween)
 
 			expect(interpolatedList count, is equal to(list count + numberOfPointsBetween * (list count - 1)))
 			expect(interpolatedList[0], is equal to(2.0f) within(tolerance))
@@ -337,7 +337,7 @@ FloatVectorListTest: class extends Fixture {
 			list free()
 			interpolatedList free()
 		})
-		this add("interpolate~cubicSpline", func {
+		this add("interpolateCubicSpline", func {
 			list := FloatVectorList new()
 			list add(2.0f)
 			list add(1.0f)
@@ -345,7 +345,7 @@ FloatVectorListTest: class extends Fixture {
 			list add(4.0f)
 			list add(7.0f)
 			numberOfPointsBetween := 1
-			interpolatedList := list interpolate~cubicSpline(numberOfPointsBetween)
+			interpolatedList := list interpolateCubicSpline(numberOfPointsBetween)
 
 			expect(interpolatedList count, is equal to(list count + numberOfPointsBetween * (list count - 1)))
 			expect(interpolatedList[0], is equal to(list[0]) within(1.0e-5f))

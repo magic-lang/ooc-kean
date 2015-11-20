@@ -435,17 +435,17 @@ FloatVectorList: class extends VectorList<Float> {
 	}
 	// Assumes equi-distant samples
 	// https://en.wikipedia.org/wiki/Spline_interpolation
-	interpolate: func ~cubicSpline (numberOfPoints: Int) -> This {
+	interpolateCubicSpline: func (numberOfPoints: Int) -> This {
 		result := This new(this count + numberOfPoints * (this count - 1))
 		thisPointer := this pointer as Float*
 		coefficientMatrix := This _generateCubicSplineCoefficients(this count)
-		b := FloatMatrix new(1, this count) take()
+		rightHandSide := FloatMatrix new(1, this count) take()
 		for (index in 0 .. this count)
-			b[0, index] = 3.f * (thisPointer[Int minimum(this count - 1, index + 1)] - thisPointer[Int maximum(0, index - 1)])
+			rightHandSide[0, index] = 3.f * (thisPointer[Int minimum(this count - 1, index + 1)] - thisPointer[Int maximum(0, index - 1)])
 		// TODO: Since coefficientMatrix is tri-diagonal, there are better methods for this. Both in terms of data storage and solving.
-		constants := coefficientMatrix solve(b) take()
+		constants := coefficientMatrix solve(rightHandSide) take()
 		coefficientMatrix free()
-		b free()
+		rightHandSide free()
 
 		for (index1 in 0 .. this count - 1) {
 			result add(this[index1])
@@ -454,8 +454,8 @@ FloatVectorList: class extends VectorList<Float> {
 			fraction := 1.f / (numberOfPoints + 1)
 			for (index2 in 1 .. numberOfPoints + 1) {
 				x := fraction * index2
-				newPoint := (1.f - x) * thisPointer[index1] + x * thisPointer[index1 + 1] + x * (1.f - x) * (a * (1.f - x) + b * x)
-				result add(newPoint)
+				newValue := (1.f - x) * thisPointer[index1] + x * thisPointer[index1 + 1] + x * (1.f - x) * (a * (1.f - x) + b * x)
+				result add(newValue)
 			}
 		}
 		result add(thisPointer[this count - 1])
@@ -477,7 +477,7 @@ FloatVectorList: class extends VectorList<Float> {
 	}
 	// input: how many points there will be between two origin points.
 	// this is a Linear interpolation way to have higher precision
-	interpolate: func ~linear (numberOfPoints: Int) -> This {
+	interpolateLinear: func (numberOfPoints: Int) -> This {
 		result: This
 		if (numberOfPoints > 0 && this count > 1) {
 			result = This new(this count + numberOfPoints * (this count - 1))
