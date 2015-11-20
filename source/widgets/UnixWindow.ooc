@@ -20,7 +20,7 @@ use ooc-draw-gpu
 use ooc-math
 use ooc-draw
 use ooc-opengl
-use ooc-x11
+use ooc-ui
 
 version(unix || apple) {
 UnixWindowBase: class extends DisplayWindow {

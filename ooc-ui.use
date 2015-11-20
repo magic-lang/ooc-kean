@@ -2,3 +2,9 @@ Name: ooc UI
 Description: User interface stuff
 SourcePath: source/ui
 Imports: NativeWindow
+Imports: x11/X11Window
+Imports: win32/Win32Window
+version(windows)
+	Libs: -lgdi32
+version(!windows)
+	Libs: -lX11

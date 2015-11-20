@@ -1,6 +1,0 @@
-Name: ooc win32
-Description: win32 implementations for ooc
-SourcePath: source/ui/win32
-Imports: Win32Window
-version(windows)
-	Libs: -lgdi32
