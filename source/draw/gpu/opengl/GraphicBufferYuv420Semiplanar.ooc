@@ -54,7 +54,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		result coordinateSystem = this coordinateSystem
 		result
 	}
-	kean_draw_gpu_android_graphicBufferYuv420Semiplanar_new: unmangled static func (backend: Pointer, nativeBuffer: Pointer, handle: Pointer, size: IntVector2D, stride: Int, format: GraphicBufferFormat, uvOffset: Int) -> This {
+	kean_draw_graphicBufferYuv420Semiplanar_new: unmangled static func (backend, nativeBuffer, handle: Pointer, size: IntVector2D, stride: Int, format: GraphicBufferFormat, uvOffset: Int) -> This {
 		This new(backend, nativeBuffer, handle, size, format, stride, uvOffset)
 	}
 }
