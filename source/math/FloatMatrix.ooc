@@ -48,6 +48,11 @@ FloatMatrix : cover {
 		this free(Owner Receiver)
 		result
 	}}
+	isVector: Bool { get {
+		result := this _dimensions width == 1 || this _dimensions height == 1
+		this free(Owner Receiver)
+		result
+	}}
 	order: Int { get {
 		result := Int minimum(this _dimensions height, this _dimensions width)
 		this free(Owner Receiver)
@@ -124,13 +129,21 @@ FloatMatrix : cover {
 	}
 	transpose: func -> This {
 		t := this take()
-		result := This new(t dimensions swap())
-		resultElements := result elements
-		thisElements := this elements
-		for (y in 0 .. t height)
-			for (x in 0 .. t width)
-				resultElements[y + x * t height] = thisElements[x + y * t width]
-		this free(Owner Receiver)
+		result: This
+		if (t isVector && this _elements owner == Owner Receiver) {
+			result = this
+			result _dimensions = result _dimensions swap()
+		} else {
+			result = This new(t dimensions swap())
+			resultElements := result elements
+			thisElements := this elements
+			thisHeight := t height
+			thisWidth := t width
+			for (y in 0 .. thisHeight)
+				for (x in 0 .. thisWidth)
+					resultElements[y + x * thisHeight] = thisElements[x + y * thisWidth]
+			this free(Owner Receiver)
+		}
 		result
 	}
 	trace: func -> Float {
