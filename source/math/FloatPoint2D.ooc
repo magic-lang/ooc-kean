@@ -32,6 +32,10 @@ FloatPoint2D: cover {
 		(this scalarProduct(other) / (this norm * other norm)) clamp(-1, 1) acos() * (this x * other y - this y * other x < 0 ? -1 : 1)
 	}
 	distance: func (other: This) -> Float { (this - other) norm }
+	distanceSquared: func (other: This) -> Float {
+		distanceVector := this - other
+		distanceVector x * distanceVector x + distanceVector y * distanceVector y
+	}
 	swap: func -> This { This new(this y, this x) }
 	round: func -> This { This new(this x round(), this y round()) }
 	ceiling: func -> This { This new(this x ceil(), this y ceil()) }
