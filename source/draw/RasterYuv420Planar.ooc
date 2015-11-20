@@ -32,27 +32,27 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		this init(yImage, uImage, vImage)
 	}
 	init: func ~allocateStride (size: IntSize2D, stride: UInt) {
-		yLength := stride * size height
-		uLength := stride * size height / 4
+		yLength := stride * size y
+		uLength := stride * size y / 4
 		this init(size, stride, yLength, yLength + uLength)
 	}
-	init: func ~allocate (size: IntSize2D) { this init(size, size width) }
+	init: func ~allocate (size: IntSize2D) { this init(size, size x) }
 	init: func ~fromThis (original: This) {
-		uOffset := original stride * original size height
-		vOffset := uOffset + original stride * original size height / 4
+		uOffset := original stride * original size y
+		vOffset := uOffset + original stride * original size y / 4
 		(yImage, uImage, vImage) := This _allocate(original size, original stride, uOffset, vOffset)
 		super(original, yImage, uImage, vImage)
 	}
 	_allocate: static func (size: IntSize2D, stride: UInt, uOffset: UInt, vOffset: UInt) -> (RasterMonochrome, RasterMonochrome, RasterMonochrome) {
-		yLength := stride * size height
-		uLength := stride * size height / 4
+		yLength := stride * size y
+		uLength := stride * size y / 4
 		vLength := uLength
 		length := vOffset + vLength
 		buffer := ByteBuffer new(length)
 		(
 			RasterMonochrome new(buffer slice(0, yLength), size, stride),
-			RasterMonochrome new(buffer slice(uOffset, uLength), IntSize2D new(size width / 2, size height / 4), stride / 2),
-			RasterMonochrome new(buffer slice(vOffset, vLength), IntSize2D new(size width / 2, size height / 4), stride / 2)
+			RasterMonochrome new(buffer slice(uOffset, uLength), IntSize2D new(size x / 2, size y / 4), stride / 2),
+			RasterMonochrome new(buffer slice(vOffset, vLength), IntSize2D new(size x / 2, size y / 4), stride / 2)
 		)
 	}
 	create: func (size: IntSize2D) -> Image { This new(size) }
@@ -71,8 +71,8 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		uSource := uRow
 		vRow := this v buffer pointer
 		vSource := vRow
-		width := this size width
-		height := this size height
+		width := this size x
+		height := this size y
 
 		for (y in 0 .. height) {
 			for (x in 0 .. width) {
@@ -102,7 +102,7 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 			result = This new(original size)
 			y := 0
 			x := 0
-			width := result size width
+			width := result size x
 			yRow := result y buffer pointer
 			yDestination := yRow
 			uRow := result u buffer pointer

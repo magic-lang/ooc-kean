@@ -43,7 +43,7 @@ Axis: class {
 			if (this fontSize == 0)
 				this fontSize = fontSize
 			this tick = this length()
-			position := FloatPoint2D new(margin width, margin height + plotAreaSize height)
+			position := FloatPoint2D new(margin x, margin y + plotAreaSize y)
 			radix := Float getRadix(this length(), this precision)
 			if (this orientation == Orientation Horizontal)
 				result = this getHorizontalSvg(plotAreaSize, margin, position, transform, radix)
@@ -54,15 +54,15 @@ Axis: class {
 	}
 	getHorizontalSvg: func (plotAreaSize, margin: FloatSize2D, position: FloatPoint2D, transform: FloatTransform2D, radix: Float) -> String {
 		result := "<g desc='X-axis data'>\n"
-		labelOffset := FloatPoint2D new(plotAreaSize width / 2.0f, 3.0f + (this fontSize - 4) + this fontSize)
+		labelOffset := FloatPoint2D new(plotAreaSize x / 2.0f, 3.0f + (this fontSize - 4) + this fontSize)
 		numberOffset := FloatPoint2D new(0.0f, 3.0f + (this fontSize - 4))
-		radixOffset := FloatPoint2D new(plotAreaSize width + margin width / 2.0f, numberOffset y)
+		radixOffset := FloatPoint2D new(plotAreaSize x + margin x / 2.0f, numberOffset y)
 		tickMarkerEndOffset := FloatPoint2D new(0.0f, -5.0f)
-		topTickMarkerStartOffset := FloatPoint2D new(0.0f, - plotAreaSize height)
+		topTickMarkerStartOffset := FloatPoint2D new(0.0f, - plotAreaSize y)
 		result = result & Shapes text(position + labelOffset, this label, this fontSize, "middle")
 		result = result & this getRadixSvg(position + radixOffset, radix, "middle")
 		tickValue := this getFirstTickValue()
-		position x += transform translation width + transform scalingX * tickValue
+		position x += transform translation x + transform scalingX * tickValue
 		while (tickValue <= this max) {
 			result = result & this getTickSvg(tickValue, radix, position, numberOffset, topTickMarkerStartOffset, tickMarkerEndOffset, "middle")
 			tickValue += this tick
@@ -72,17 +72,17 @@ Axis: class {
 	}
 	getVerticalSvg: func (plotAreaSize, margin: FloatSize2D, position: FloatPoint2D, transform: FloatTransform2D, radix: Float) -> String {
 		result := "<g desc='Y-axis data'>\n"
-		labelOffset := FloatPoint2D new(- (log10(Float maximum(this max, Float absolute(this min)) / radix) + 3.0f) * 0.6f * (this fontSize - 4.0f), - plotAreaSize height / 2.0f)
+		labelOffset := FloatPoint2D new(- (log10(Float maximum(this max, Float absolute(this min)) / radix) + 3.0f) * 0.6f * (this fontSize - 4.0f), - plotAreaSize y / 2.0f)
 		numberOffset := FloatPoint2D new(- 0.6f * (this fontSize - 4.0f), (this fontSize - 4.0f) / 3.0f)
-		radixOffset := FloatPoint2D new(numberOffset x, - plotAreaSize height - margin height / 2 + this fontSize / 3.0f)
+		radixOffset := FloatPoint2D new(numberOffset x, - plotAreaSize y - margin y / 2 + this fontSize / 3.0f)
 		tickMarkerEndOffset := FloatPoint2D new(5.0f, 0.0f)
-		rightTickMarkerStartOffset := FloatPoint2D new(plotAreaSize width, 0.0f)
+		rightTickMarkerStartOffset := FloatPoint2D new(plotAreaSize x, 0.0f)
 		result = result >> "<g desc='rotated Y-axis' transform='rotate(-90," & (position x + labelOffset x) toString() >> "," & (position y + labelOffset y) toString() >> ")'>\n"
 		result = result & Shapes text(position + labelOffset, this label, this fontSize, "middle")
 		result = result >> "</g>\n"
 		result = result & this getRadixSvg(position + radixOffset, radix, "end")
 		tickValue := this getFirstTickValue()
-		position y += transform translation height - plotAreaSize height - transform scalingY * tickValue
+		position y += transform translation y - plotAreaSize y - transform scalingY * tickValue
 		while (tickValue <= this max) {
 			result = result & this getTickSvg(tickValue, radix, position, numberOffset, rightTickMarkerStartOffset, tickMarkerEndOffset, "end")
 			tickValue += this tick

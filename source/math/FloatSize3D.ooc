@@ -21,59 +21,59 @@ import IntSize3D
 use ooc-base
 
 FloatSize3D: cover {
-	width, height, depth: Float
-	volume ::= this width * this height * this depth
+	x, y, z: Float
+	volume ::= this x * this y * this z
 	length ::= this norm
-	empty ::= this width == 0 || this height == 0 || this depth == 0
-	norm ::= (this width squared() + this height squared() + this depth squared()) sqrt()
-	azimuth ::= this height atan2(this width)
+	empty ::= this x == 0 || this y == 0 || this z == 0
+	norm ::= (this x squared() + this y squared() + this z squared()) sqrt()
+	azimuth ::= this y atan2(this x)
 	basisX: static This { get { This new(1, 0, 0) } }
 	basisY: static This { get { This new(0, 1, 0) } }
 	basisZ: static This { get { This new(0, 0, 1) } }
-	init: func@ (=width, =height, =depth)
+	init: func@ (=x, =y, =z)
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	pNorm: func (p: Float) -> Float {
-		(this width abs() pow(p) + this height abs() pow(p) + this depth abs() pow(p)) pow(1.0f / p)
+		(this x abs() pow(p) + this y abs() pow(p) + this z abs() pow(p)) pow(1.0f / p)
 	}
-	scalarProduct: func (other: This) -> Float { this width * other width + this height * other height + this depth * other depth }
+	scalarProduct: func (other: This) -> Float { this x * other x + this y * other y + this z * other z }
 	vectorProduct: func (other: This) -> This {
 		This new(
-			this height * other depth - other height * this depth,
-			-(this width * other depth - other width * this depth),
-			this width * other height - other width * this height
+			this y * other z - other y * this z,
+			-(this x * other z - other x * this z),
+			this x * other y - other x * this y
 		)
 	}
 	angle: func (other: This) -> Float {
-		(this scalarProduct(other) / (this norm * other norm)) clamp(-1.0f, 1.0f) acos() * (this width * other height - this height * other width < 0.0f ? -1.0f : 1.0f)
+		(this scalarProduct(other) / (this norm * other norm)) clamp(-1.0f, 1.0f) acos() * (this x * other y - this y * other x < 0.0f ? -1.0f : 1.0f)
 	}
 	distance: func (other: This) -> Float { (this - other) norm }
-	round: func -> This { This new(this width round(), this height round(), this depth round()) }
-	ceiling: func -> This { This new(this width ceil(), this height ceil(), this depth ceil()) }
-	floor: func -> This { This new(this width floor(), this height floor(), this depth floor()) }
-	minimum: func (ceiling: This) -> This { This new(Float minimum(this width, ceiling width), Float minimum(this height, ceiling height), Float minimum(this depth, ceiling depth)) }
-	maximum: func (floor: This) -> This { This new(Float maximum(this width, floor width), Float maximum(this height, floor height), Float maximum(this depth, floor depth)) }
+	round: func -> This { This new(this x round(), this y round(), this z round()) }
+	ceiling: func -> This { This new(this x ceil(), this y ceil(), this z ceil()) }
+	floor: func -> This { This new(this x floor(), this y floor(), this z floor()) }
+	minimum: func (ceiling: This) -> This { This new(Float minimum(this x, ceiling x), Float minimum(this y, ceiling y), Float minimum(this z, ceiling z)) }
+	maximum: func (floor: This) -> This { This new(Float maximum(this x, floor x), Float maximum(this y, floor y), Float maximum(this z, floor z)) }
 	clamp: func (floor, ceiling: This) -> This {
-		This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height), this depth clamp(floor depth, ceiling depth))
+		This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z))
 	}
-	operator + (other: This) -> This { This new(this width + other width, this height + other height, this depth + other depth) }
-	operator - (other: This) -> This { This new(this width - other width, this height - other height, this depth - other depth) }
-	operator - -> This { This new(-this width, -this height, -this depth) }
-	operator * (other: This) -> This { This new(this width * other width, this height * other height, this depth * other depth) }
-	operator / (other: This) -> This { This new(this width / other width, this height / other height, this depth / other depth) }
-	operator * (other: Float) -> This { This new(this width * other, this height * other, this depth * other) }
-	operator / (other: Float) -> This { This new(this width / other, this height / other, this depth / other) }
-	operator * (other: Int) -> This { This new(this width * other, this height * other, this depth * other) }
-	operator / (other: Int) -> This { This new(this width / other, this height / other, this depth / other) }
-	operator == (other: This) -> Bool { this width == other width && this height == other height && this depth == other depth }
+	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
+	operator - (other: This) -> This { This new(this x - other x, this y - other y, this z - other z) }
+	operator - -> This { This new(-this x, -this y, -this z) }
+	operator * (other: This) -> This { This new(this x * other x, this y * other y, this z * other z) }
+	operator / (other: This) -> This { This new(this x / other x, this y / other y, this z / other z) }
+	operator * (other: Float) -> This { This new(this x * other, this y * other, this z * other) }
+	operator / (other: Float) -> This { This new(this x / other, this y / other, this z / other) }
+	operator * (other: Int) -> This { This new(this x * other, this y * other, this z * other) }
+	operator / (other: Int) -> This { This new(this x / other, this y / other, this z / other) }
+	operator == (other: This) -> Bool { this x == other x && this y == other y && this z == other z }
 	operator != (other: This) -> Bool { !(this == other) }
-	operator < (other: This) -> Bool { this width < other width && this height < other height && this depth < other depth }
-	operator > (other: This) -> Bool { this width > other width && this height > other height && this depth > other depth }
-	operator <= (other: This) -> Bool { this width <= other width && this height <= other height && this depth <= other depth }
-	operator >= (other: This) -> Bool { this width >= other width && this height >= other height && this depth >= other depth }
-	toIntSize3D: func -> IntSize3D { IntSize3D new(this width as Int, this height as Int, this depth as Int) }
-	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this width, this height, this depth) }
+	operator < (other: This) -> Bool { this x < other x && this y < other y && this z < other z }
+	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z }
+	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
+	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
+	toIntSize3D: func -> IntSize3D { IntSize3D new(this x as Int, this y as Int, this z as Int) }
+	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this x, this y, this z) }
 	operator as -> String { this toString() }
-	toString: func -> String { "#{this width toString()}, #{this height toString()}, #{this depth toString()}" }
+	toString: func -> String { "#{this x toString()}, #{this y toString()}, #{this z toString()}" }
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new (parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat())
@@ -81,10 +81,10 @@ FloatSize3D: cover {
 		result
 	}
 	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
-		This new(Float linearInterpolation(a width, b width, ratio), Float linearInterpolation(a height, b height, ratio), Float linearInterpolation(a depth, b depth, ratio))
+		This new(Float linearInterpolation(a x, b x, ratio), Float linearInterpolation(a y, b y, ratio), Float linearInterpolation(a z, b z, ratio))
 	}
 }
-operator * (left: Float, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left * right width, left * right height, left * right depth) }
-operator / (left: Float, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left / right width, left / right height, left / right depth) }
-operator * (left: Int, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left * right width, left * right height, left * right depth) }
-operator / (left: Int, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left / right width, left / right height, left / right depth) }
+operator * (left: Float, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left * right x, left * right y, left * right z) }
+operator / (left: Float, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left / right x, left / right y, left / right z) }
+operator * (left: Int, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left * right x, left * right y, left * right z) }
+operator / (left: Int, right: FloatSize3D) -> FloatSize3D { FloatSize3D new(left / right x, left / right y, left / right z) }

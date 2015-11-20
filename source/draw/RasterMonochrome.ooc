@@ -39,7 +39,7 @@ RasterMonochrome: class extends RasterPacked {
 	init: func ~allocate (size: IntSize2D) { super~allocate(size) }
 	init: func ~allocateStride (size: IntSize2D, stride: UInt) { super(size, stride) }
 	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntSize2D, stride: UInt) { super(buffer, size, stride) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { this init(buffer, size, this bytesPerPixel * size width) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { this init(buffer, size, this bytesPerPixel * size x) }
 	init: func ~fromRasterImage (original: This) { super(original) }
 	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This { This new(this) }
@@ -51,8 +51,8 @@ RasterMonochrome: class extends RasterPacked {
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
 		pointer := this buffer pointer as ColorMonochrome*
-		for (row in 0 .. this height)
-			for (column in 0 .. this width) {
+		for (row in 0 .. this size y)
+			for (column in 0 .. this size x) {
 				pixel := pointer + row * this stride + column
 				action(pixel@)
 			}
@@ -76,8 +76,8 @@ RasterMonochrome: class extends RasterPacked {
 	_resizeNearestNeighbour: static func (source, result: This) {
 		resultBuffer := result buffer pointer
 		sourceBuffer := source buffer pointer
-		(resultWidth, resultHeight, resultStride) := (result size width, result size height, result stride)
-		(sourceWidth, sourceHeight, sourceStride) := (source size width, source size height, source stride)
+		(resultWidth, resultHeight, resultStride) := (result size x, result size y, result stride)
+		(sourceWidth, sourceHeight, sourceStride) := (source size x, source size y, source stride)
 		for (row in 0 .. resultHeight) {
 			sourceRow := (sourceHeight * row) / resultHeight
 			for (column in 0 .. resultWidth) {
@@ -89,8 +89,8 @@ RasterMonochrome: class extends RasterPacked {
 	_resizeBilinear: static func (source, result: This) {
 		resultBuffer := result buffer pointer
 		sourceBuffer := source buffer pointer
-		(resultWidth, resultHeight, resultStride) := (result size width, result size height, result stride)
-		(sourceWidth, sourceHeight, sourceStride) := (source size width, source size height, source stride)
+		(resultWidth, resultHeight, resultStride) := (result size x, result size y, result stride)
+		(sourceWidth, sourceHeight, sourceStride) := (source size x, source size y, source stride)
 		for (row in 0 .. resultHeight) {
 			sourceRow := ((sourceHeight as Float) * row) / resultHeight
 			sourceRowUp := sourceRow floor() as Int
@@ -127,15 +127,15 @@ RasterMonochrome: class extends RasterPacked {
 			result = this distance(converted)
 			converted referenceCount decrease()
 		} else {
-			for (y in 0 .. this size height)
-				for (x in 0 .. this size width) {
+			for (y in 0 .. this size y)
+				for (x in 0 .. this size x) {
 					c := this[x, y]
 					o := (other as This)[x, y]
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in Int maximum(0, y - 2) .. Int minimum(y + 3, this size height))
-							for (otherX in Int maximum(0, x - 2) .. Int minimum(x + 3, this size width))
+						for (otherY in Int maximum(0, y - 2) .. Int minimum(y + 3, this size y))
+							for (otherX in Int maximum(0, x - 2) .. Int minimum(x + 3, this size x))
 								if (otherX != x || otherY != y) {
 									pixel := (other as This)[otherX, otherY]
 									if (maximum y < pixel y)
@@ -151,7 +151,7 @@ RasterMonochrome: class extends RasterPacked {
 						result += distance sqrt()
 					}
 				}
-			result /= ((this size width squared() + this size height squared()) as Float sqrt())
+			result /= ((this size x squared() + this size y squared()) as Float sqrt())
 		}
 	}
 	open: static func (filename: String) -> This {
@@ -188,7 +188,7 @@ RasterMonochrome: class extends RasterPacked {
 	// get the derivative on small window, region is window's global location on image, window is left top centered.
 	getFirstDerivativeWindowOptimized: func (region: IntBox2D, imageX, imageY: FloatImage) {
 		step := 2
-		sourceWidth := this size width
+		sourceWidth := this size x
 		source := this buffer pointer + region leftTop y * sourceWidth // this getValue [x,y]
 		destinationX := imageX pointer
 		destinationY := imageY pointer
@@ -250,7 +250,7 @@ RasterMonochrome: class extends RasterPacked {
 
 	getValue: func (x, y: Int) -> UInt8 {
 		version(safe) {
-			if (x >= this size width || y >= this size height || x < 0 || y < 0)
+			if (x >= this size x || y >= this size y || x < 0 || y < 0)
 				raise("Accessing RasterMonochrome index out of range in getValue")
 		}
 		(this buffer pointer[y * this stride + x])
@@ -258,35 +258,35 @@ RasterMonochrome: class extends RasterPacked {
 
 	operator []= (x, y: Int, value: ColorMonochrome) {
 		version(safe) {
-			if (x >= this size width || y >= this size height || x < 0 || y < 0)
+			if (x >= this size x || y >= this size y || x < 0 || y < 0)
 				raise("Accessing RasterMonochrome index out of range in set operator")
 		}
 		((this buffer pointer + y * this stride) as ColorMonochrome* + x)@ = value
 	}
 	getRow: func (row: Int) -> FloatVectorList {
-		result := FloatVectorList new(this size width)
+		result := FloatVectorList new(this size x)
 		this getRowInto(row, result)
 		result
 	}
 	getRowInto: func (row: Int, vector: FloatVectorList) {
 		version(safe) {
-			if (row >= this size height || row < 0)
+			if (row >= this size y || row < 0)
 				raise("Accessing RasterMonochrome index out of range in getRow")
 		}
-		for (column in 0 .. this size width)
+		for (column in 0 .. this size x)
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
 	getColumn: func (column: Int) -> FloatVectorList {
-		result := FloatVectorList new(this size height)
+		result := FloatVectorList new(this size y)
 		this getColumnInto(column, result)
 		result
 	}
 	getColumnInto: func (column: Int, vector: FloatVectorList) {
 		version(safe) {
-			if (column >= this size width || column < 0)
+			if (column >= this size x || column < 0)
 				raise("Accessing RasterMonochrome index out of range in getColumn")
 		}
-		for (row in 0 .. this size height)
+		for (row in 0 .. this size y)
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
 	_createCanvas: override func -> Canvas { MonochromeRasterCanvas new(this) }

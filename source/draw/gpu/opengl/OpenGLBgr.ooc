@@ -30,7 +30,7 @@ OpenGLBgr: class extends OpenGLPacked {
 		this coordinateSystem = coordinateSystem
 	}
 	init: func ~empty (size: IntSize2D, context: OpenGLContext) {
-		this init(size, size width * This channelCount, null, CoordinateSystem YUpward, context)
+		this init(size, size x * This channelCount, null, CoordinateSystem YUpward, context)
 	}
 	init: func ~fromRaster (rasterImage: RasterBgr, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)

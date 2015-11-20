@@ -49,10 +49,10 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		(yImage, uvImage) := This _allocate(size, stride, uvOffset)
 		this init(yImage, uvImage)
 	}
-	init: func ~allocateStride (size: IntSize2D, stride: UInt) { this init(size, stride, stride * size height) }
-	init: func ~allocate (size: IntSize2D) { this init(size, size width) }
+	init: func ~allocateStride (size: IntSize2D, stride: UInt) { this init(size, stride, stride * size y) }
+	init: func ~allocate (size: IntSize2D) { this init(size, size x) }
 	init: func ~fromThis (original: This) {
-		(yImage, uvImage) := This _allocate(original size, original stride, original stride * original size height)
+		(yImage, uvImage) := This _allocate(original size, original stride, original stride * original size y)
 		super(original, yImage, uvImage)
 	}
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, stride: UInt, uvOffset: UInt) {
@@ -60,17 +60,17 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		this init(yImage, uvImage)
 	}
 	_allocate: static func (size: IntSize2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
-		length := uvOffset + stride * (size height + 1) / 2
+		length := uvOffset + stride * (size y + 1) / 2
 		buffer := ByteBuffer new(length)
 		This _createSubimages(buffer, size, stride, uvOffset)
 	}
 	_createSubimages: static func (buffer: ByteBuffer, size: IntSize2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
-		yLength := stride * size height
-		uvLength := stride * size height / 2
+		yLength := stride * size y
+		uvLength := stride * size y / 2
 		(RasterMonochrome new(buffer slice(0, yLength), size, stride), RasterUv new(buffer slice(uvOffset, uvLength), This _uvSize(size), stride))
 	}
 	_uvSize: static func (size: IntSize2D) -> IntSize2D {
-		IntSize2D new(size width / 2 + (Int odd(size width) ? 1 : 0), size height / 2 + (Int odd(size height) ? 1 : 0))
+		IntSize2D new(size x / 2 + (Int odd(size x) ? 1 : 0), size y / 2 + (Int odd(size y) ? 1 : 0))
 	}
 	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This {
@@ -84,7 +84,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		if (this size == size)
 			result = this copy()
 		else {
-			result = This new(size, size width + (Int odd(size width) ? 1 : 0))
+			result = This new(size, size x + (Int odd(size x) ? 1 : 0))
 			this resizeInto(result)
 		}
 		result
@@ -92,12 +92,12 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	resizeInto: func (target: This) {
 		thisYBuffer := this y buffer pointer
 		targetYBuffer := target y buffer pointer
-		for (row in 0 .. target size height) {
-			srcRow := (this size height * row) / target size height
+		for (row in 0 .. target size y) {
+			srcRow := (this size y * row) / target size y
 			thisStride := srcRow * this y stride
 			targetStride := row * target y stride
-			for (column in 0 .. target size width) {
-				srcColumn := (this size width * column) / target size width
+			for (column in 0 .. target size x) {
+				srcColumn := (this size x * column) / target size x
 				targetYBuffer[column + targetStride] = thisYBuffer[srcColumn + thisStride]
 			}
 		}
@@ -105,31 +105,31 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		thisSizeHalf := this size / 2
 		thisUvBuffer := this uv buffer pointer as ColorUv*
 		targetUvBuffer := target uv buffer pointer as ColorUv*
-		if (Int odd(target size height))
-			targetSizeHalf = IntSize2D new(targetSizeHalf width, targetSizeHalf height + 1)
-		for (row in 0 .. targetSizeHalf height) {
-			srcRow := (thisSizeHalf height * row) / targetSizeHalf height
+		if (Int odd(target size y))
+			targetSizeHalf = IntSize2D new(targetSizeHalf x, targetSizeHalf y + 1)
+		for (row in 0 .. targetSizeHalf y) {
+			srcRow := (thisSizeHalf y * row) / targetSizeHalf y
 			thisStride := srcRow * this uv stride / 2
 			targetStride := row * target uv stride / 2
-			for (column in 0 .. targetSizeHalf width) {
-				srcColumn := (thisSizeHalf width * column) / targetSizeHalf width
+			for (column in 0 .. targetSizeHalf x) {
+				srcColumn := (thisSizeHalf x * column) / targetSizeHalf x
 				targetUvBuffer[column + targetStride] = thisUvBuffer[srcColumn + thisStride]
 			}
 		}
 	}
 	crop: func (region: FloatBox2D) -> This {
 		size := region size toIntSize2D()
-		result := This new(size, size width + (Int odd(size width) ? 1 : 0)) as This
+		result := This new(size, size x + (Int odd(size x) ? 1 : 0)) as This
 		this cropInto(region, result)
 		result
 	}
 	cropInto: func (region: FloatBox2D, target: This) {
 		thisYBuffer := this y buffer pointer
 		targetYBuffer := target y buffer pointer
-		for (row in region top .. region size height + region top) {
+		for (row in region top .. region size y + region top) {
 			thisStride := row * this y stride
 			targetStride := ((row - region top) as Int) * target y stride
-			for (column in region left .. region size width + region left)
+			for (column in region left .. region size x + region left)
 				targetYBuffer[(column - region left) as Int + targetStride] = thisYBuffer[column + thisStride]
 		}
 		regionSizeHalf := region size / 2
@@ -137,10 +137,10 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		regionLeftHalf := region left / 2
 		thisUvBuffer := this uv buffer pointer as ColorUv*
 		targetUvBuffer := target uv buffer pointer as ColorUv*
-		for (row in regionTopHalf .. regionSizeHalf height + regionTopHalf) {
+		for (row in regionTopHalf .. regionSizeHalf y + regionTopHalf) {
 			thisStride := row * this uv stride / 2
 			targetStride := ((row - regionTopHalf) as Int) * target uv stride / 2
-			for (column in regionLeftHalf .. regionSizeHalf width + regionLeftHalf)
+			for (column in regionLeftHalf .. regionSizeHalf x + regionLeftHalf)
 				targetUvBuffer[(column - regionLeftHalf) as Int + targetStride] = thisUvBuffer[column + thisStride]
 		}
 	}
@@ -155,8 +155,8 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		uvRow := this uv buffer pointer
 		vSource := uvRow
 		uSource := uvRow + 1
-		width := this size width
-		height := this size height
+		width := this size x
+		height := this size y
 
 		for (y in 0 .. height) {
 			for (x in 0 .. width) {
@@ -196,7 +196,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 			result = This new(original size)
 			y := 0
 			x := 0
-			width := result size width
+			width := result size x
 			yRow := result y buffer pointer
 			yDestination := yRow
 			uvRow := result uv buffer pointer

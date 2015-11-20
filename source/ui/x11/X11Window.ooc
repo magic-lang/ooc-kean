@@ -42,14 +42,14 @@ X11Window: class extends NativeWindow {
 		root: Long = DefaultRootWindow(display)
 		swa: XSetWindowAttributesOoc
 		swa eventMask = ExposureMask | PointerMotionMask | KeyPressMask | ButtonPressMask
-		backend := XCreateWindow(display, root, 0, 0, size width, size height, 0u, CopyFromParent as Int, InputOutput as UInt, null, CWEventMask, swa&)
+		backend := XCreateWindow(display, root, 0, 0, size x, size y, 0u, CopyFromParent as Int, InputOutput as UInt, null, CWEventMask, swa&)
 
 		this _x11GraphicsContext = XCreateGC(display, backend, 0, 0)
 		XSetBackground(display, this _x11GraphicsContext, 0)
 		//Disable fit to screen
 		sh: XSizeHintsOoc
-		sh width = sh min_width = size width
-		sh height = sh min_height = size height
+		sh width = sh min_width = size x
+		sh height = sh min_height = size y
 		sh flags = PSize | PMinSize | PPosition
 		XSetWMNormalHints(display, backend, sh&)
 
@@ -62,7 +62,7 @@ X11Window: class extends NativeWindow {
 
 		this resize(size)
 	}
-	resize: func (size: IntSize2D) { XResizeWindow(this display, this backend, size width, size height) }
+	resize: func (size: IntSize2D) { XResizeWindow(this display, this backend, size x, size y) }
 	free: override func {
 		if (this _xImage)
 			XDestroyImage(this _xImage)

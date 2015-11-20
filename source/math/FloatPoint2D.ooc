@@ -44,14 +44,14 @@ FloatPoint2D: cover {
 	maximum: func (floor: This) -> This { This new(Float maximum(this x, floor x), Float maximum(this y, floor y)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
-	operator + (other: FloatSize2D) -> This { This new(this x + other width, this y + other height) }
+	operator + (other: FloatSize2D) -> This { This new(this x + other x, this y + other y) }
 	operator - (other: This) -> This { This new(this x - other x, this y - other y) }
-	operator - (other: FloatSize2D) -> This { This new(this x - other width, this y - other height) }
+	operator - (other: FloatSize2D) -> This { This new(this x - other x, this y - other y) }
 	operator - -> This { This new(-this x, -this y) }
 	operator * (other: This) -> This { This new(this x * other x, this y * other y) }
-	operator * (other: FloatSize2D) -> This { This new(this x * other width, this y * other height) }
+	operator * (other: FloatSize2D) -> This { This new(this x * other x, this y * other y) }
 	operator / (other: This) -> This { This new(this x / other x, this y / other y) }
-	operator / (other: FloatSize2D) -> This { This new(this x / other width, this y / other height) }
+	operator / (other: FloatSize2D) -> This { This new(this x / other x, this y / other y) }
 	operator * (other: Float) -> This { This new(this x * other, this y * other) }
 	operator / (other: Float) -> This { This new(this x / other, this y / other) }
 	operator == (other: This) -> Bool { this x == other x && this y == other y }

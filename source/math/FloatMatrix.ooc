@@ -29,12 +29,12 @@ FloatMatrix : cover {
 		result
 	}}
 	width: Int { get {
-		result := this _dimensions width
+		result := this _dimensions x
 		this free(Owner Receiver)
 		result
 	}}
 	height: Int { get {
-		result := this _dimensions height
+		result := this _dimensions y
 		this free(Owner Receiver)
 		result
 	}}
@@ -44,17 +44,17 @@ FloatMatrix : cover {
 		result
 	}}
 	isSquare: Bool { get {
-		result := this _dimensions width == this _dimensions height
+		result := this _dimensions square
 		this free(Owner Receiver)
 		result
 	}}
 	isVector: Bool { get {
-		result := this _dimensions width == 1 || this _dimensions height == 1
+		result := this _dimensions x == 1 || this _dimensions y == 1
 		this free(Owner Receiver)
 		result
 	}}
 	order: Int { get {
-		result := Int minimum(this _dimensions height, this _dimensions width)
+		result := Int minimum(this _dimensions x, this _dimensions y)
 		this free(Owner Receiver)
 		result
 	}}

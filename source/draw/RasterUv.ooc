@@ -29,7 +29,7 @@ RasterUv: class extends RasterPacked {
 	init: func ~allocate (size: IntSize2D) { super~allocate(size) }
 	init: func ~allocateStride (size: IntSize2D, stride: UInt) { super(size, stride) }
 	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntSize2D, stride: UInt) { super(buffer, size, stride) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { this init(buffer, size, this bytesPerPixel * size width) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { this init(buffer, size, this bytesPerPixel * size x) }
 	init: func ~fromRasterImage (original: This) { super(original) }
 	create: func (size: IntSize2D) -> Image { This new(size) }
 	copy: func -> This { This new(this) }
@@ -41,8 +41,8 @@ RasterUv: class extends RasterPacked {
 		uSource := uvRow
 		vRow := uvRow + 1
 		vSource := vRow
-		width := this size width
-		height := this size height
+		width := this size x
+		height := this size y
 
 		for (y in 0 .. height) {
 			for (x in 0 .. width) {
@@ -68,15 +68,15 @@ RasterUv: class extends RasterPacked {
 			result = this distance(converted)
 			converted referenceCount decrease()
 		} else {
-			for (y in 0 .. this size height)
-				for (x in 0 .. this size width) {
+			for (y in 0 .. this size y)
+				for (x in 0 .. this size x) {
 					c := this[x, y]
 					o := (other as This)[x, y]
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in Int maximum(0, y - this distanceRadius) .. Int minimum(y + 1 + this distanceRadius, this size height))
-							for (otherX in Int maximum(0, x - this distanceRadius) .. Int minimum(x + 1 + this distanceRadius, this size width))
+						for (otherY in Int maximum(0, y - this distanceRadius) .. Int minimum(y + 1 + this distanceRadius, this size y))
+							for (otherX in Int maximum(0, x - this distanceRadius) .. Int minimum(x + 1 + this distanceRadius, this size x))
 								if (otherX != x || otherY != y) {
 									pixel := (other as This)[otherX, otherY]
 									if (maximum u < pixel u)
@@ -100,7 +100,7 @@ RasterUv: class extends RasterPacked {
 						result += (distance) sqrt() / 3
 					}
 				}
-			result /= ((this size width squared() + this size height squared()) as Float sqrt())
+			result /= ((this size x squared() + this size y squared()) as Float sqrt())
 		}
 	}
 	open: static func (filename: String) -> This {
@@ -123,7 +123,7 @@ RasterUv: class extends RasterPacked {
 		else {
 			result = This new(original size)
 			row := result buffer pointer
-			rowLength := result size width
+			rowLength := result size x
 			rowEnd := row as ColorUv* + rowLength
 			destination := row as ColorUv*
 			f := func (color: ColorYuv) {

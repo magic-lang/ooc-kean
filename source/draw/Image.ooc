@@ -35,8 +35,8 @@ InterpolationMode: enum {
 Image: abstract class {
 	_size: IntSize2D
 	size ::= this _size
-	width ::= this size width
-	height ::= this size height
+	width ::= this size x
+	height ::= this size y
 	coordinateSystem: CoordinateSystem { get set }
 	crop: IntShell2D { get set }
 	wrap: Bool { get set }
@@ -74,7 +74,7 @@ Image: abstract class {
 		super()
 	}
 	resizeWithin: func (restriction: IntSize2D) -> This {
-		this resizeTo(((this size toFloatSize2D()) * Float minimum(restriction width as Float / this size width as Float, restriction height as Float / this size height as Float)) toIntSize2D())
+		this resizeTo(((this size toFloatSize2D()) * Float minimum(restriction x as Float / this size x as Float, restriction y as Float / this size y as Float)) toIntSize2D())
 	}
 	resizeTo: abstract func (size: IntSize2D) -> This
 	resizeTo: virtual func ~withMethod (size: IntSize2D, method: InterpolationMode) -> This {
@@ -86,7 +86,7 @@ Image: abstract class {
 	distance: virtual abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
 	isValidIn: func (x, y: Int) -> Bool {
-		x >= 0 && x < this size width && y >= 0 && y < this size height
+		x >= 0 && x < this size x && y >= 0 && y < this size y
 	}
 	_createCanvas: virtual func -> Canvas { null }
 	kean_draw_image_free: unmangled func { this referenceCount decrease() }

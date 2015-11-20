@@ -67,7 +67,7 @@ SvgWriter2D: class {
 	prepareOutput: func -> String {
 		result := "<?xml version='1.0' standalone='no'?>\n"
 		result = result >> "<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>\n"
-		result = result >> "<svg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.1' width='" & this size width toString() >> "' height='" & this size height toString() >> "'>\n"
+		result = result >> "<svg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.1' width='" & this size x toString() >> "' height='" & this size y toString() >> "'>\n"
 		result = result >> "<rect desc='background' width='100%' height='100%' fill='white'/>\n"
 		if (!this svgPlots empty) {
 			numPlotsX: Int
@@ -84,12 +84,12 @@ SvgWriter2D: class {
 				numPlotsX = numberOfPlotsHorizontally
 				numPlotsY = ceil(this svgPlots count as Float / numPlotsX as Float) as Int
 			}
-			plotSize := FloatSize2D new(this size width / numPlotsX, this size height / numPlotsY)
+			plotSize := FloatSize2D new(this size x / numPlotsX, this size y / numPlotsY)
 			position := FloatPoint2D new()
 			for (i in 0 .. this svgPlots count) {
-				position x = plotSize width * Int modulo(i, numPlotsX)
-				position y = plotSize height * (i / numPlotsX)
-				result = result >> "<svg desc='Plot " & (i + 1) toString() >> "' x='" & position x toString() >> "' y='" & position y toString() >> "' width='" & plotSize width toString() >> "' height='" & plotSize height toString() >> "'>\n"
+				position x = plotSize x * Int modulo(i, numPlotsX)
+				position y = plotSize y * (i / numPlotsX)
+				result = result >> "<svg desc='Plot " & (i + 1) toString() >> "' x='" & position x toString() >> "' y='" & position y toString() >> "' width='" & plotSize x toString() >> "' height='" & plotSize y toString() >> "'>\n"
 				result = result & svgPlots[i] getSvg(plotSize, fontSize)
 				result = result >> "</svg>\n"
 			}

@@ -32,7 +32,7 @@ import io/FileWriter
 RasterYuv422Semipacked: class extends RasterPacked {
 	bytesPerPixel ::= 2
 	init: func ~allocate (size: IntSize2D) { super~allocate(size) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, this bytesPerPixel * size width) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, this bytesPerPixel * size x) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: func (size: IntSize2D) -> Image {
 		result := This new(size)
@@ -53,8 +53,8 @@ RasterYuv422Semipacked: class extends RasterPacked {
 	apply: func ~yuv (action: Func (ColorYuv)) {
 		row := this buffer pointer as UInt8*
 		source := row
-		width := this size width
-		height := this size height
+		width := this size x
+		height := this size y
 
 		for (y in 0 .. height) {
 			for (x in 0 .. width) {
@@ -109,7 +109,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 			result = This new(original size)
 			y := 0
 			x := 0
-			width := result size width
+			width := result size x
 			row := result buffer pointer as UInt8*
 			destination := row
 			f := func (color: ColorYuv) {

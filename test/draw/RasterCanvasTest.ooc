@@ -12,8 +12,8 @@ RasterCanvasTest: class extends Fixture {
 			output := "test/draw/output/RasterCanvas_Bgr.png"
 			image := RasterBgr open(input)
 			image canvas pen = Pen new(ColorBgr new(0, 255, 0))
-			halfWidth := image size width / 2
-			halfHeight := image size height / 2
+			halfWidth := image size x / 2
+			halfHeight := image size y / 2
 			start := FloatPoint2D new(-halfWidth, -halfHeight)
 			end := FloatPoint2D new(halfWidth, halfHeight)
 			image canvas drawLine(start, end)
@@ -34,9 +34,9 @@ RasterCanvasTest: class extends Fixture {
 			output := "test/draw/output/RasterCanvas_Bgra.png"
 			image := RasterBgra open(input)
 			image canvas pen = Pen new(ColorBgr new(128, 0, 128))
-			for (row in 0 .. image size height / 3)
-				for (column in 0 .. image size width / 3)
-					image canvas drawPoint(FloatPoint2D new(column * 3 - image size width / 2, row * 3 - image size height / 2))
+			for (row in 0 .. image size y / 3)
+				for (column in 0 .. image size x / 3)
+					image canvas drawPoint(FloatPoint2D new(column * 3 - image size x / 2, row * 3 - image size y / 2))
 			image save(output)
 			original := RasterBgra open(input)
 			//FIXME: This doesn't test if correctly drawn, only if the image has been modified
@@ -69,11 +69,11 @@ RasterCanvasTest: class extends Fixture {
 			output := "test/draw/output/RasterCanvas_Monochrome.png"
 			image := RasterMonochrome open(input)
 			image canvas pen = Pen new(ColorBgr new(255, 255, 255))
-			shiftX := image size width / 2
-			shiftY := image size height / 2
-			for (i in 0 .. image size width / 10)
+			shiftX := image size x / 2
+			shiftY := image size y / 2
+			for (i in 0 .. image size x / 10)
 				image canvas drawLine(FloatPoint2D new(i * 10 - shiftX, -shiftY), FloatPoint2D new(i * 10 - shiftX, shiftY))
-			for (i in 0 .. image size height / 10)
+			for (i in 0 .. image size y / 10)
 				image canvas drawLine(FloatPoint2D new(-shiftX, i * 10 - shiftY), FloatPoint2D new(shiftX, i * 10 - shiftY))
 			image save(output)
 			original := RasterMonochrome open(input)
@@ -89,12 +89,12 @@ RasterCanvasTest: class extends Fixture {
 			output := "test/draw/output/RasterCanvas_MonochromeWithAlpha.png"
 			image := RasterMonochrome open(input)
 			image canvas pen = Pen new(ColorBgra new(255, 255, 255, 100))
-			shiftX := image size width / 2
-			shiftY := image size height / 2
+			shiftX := image size x / 2
+			shiftY := image size y / 2
 			factor := 2
-			for (i in 0 .. image size width / factor)
+			for (i in 0 .. image size x / factor)
 				image canvas drawLine(FloatPoint2D new(i * factor - shiftX, -shiftY), FloatPoint2D new(i * factor - shiftX, shiftY))
-			for (i in 0 .. image size height / factor)
+			for (i in 0 .. image size y / factor)
 				image canvas drawLine(FloatPoint2D new(-shiftX, i * factor - shiftY), FloatPoint2D new(shiftX, i * factor - shiftY))
 			image save(output)
 			original := RasterMonochrome open(input)

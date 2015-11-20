@@ -158,8 +158,8 @@ FloatTransform2DTest: class extends Fixture {
 		})
 		this add("get ScalingX", func {
 			translation := this transform0 translation
-			expect(translation width, is equal to(5.0f) within(this precision))
-			expect(translation height, is equal to(7.0f) within(this precision))
+			expect(translation x, is equal to(5.0f) within(this precision))
+			expect(translation y, is equal to(7.0f) within(this precision))
 		})
 	}
 }

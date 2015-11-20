@@ -31,13 +31,13 @@ IntShell2D: cover {
 	init: func@ ~fromFloat (value: Int) { this init(value, value) }
 	init: func@ ~fromFloats (x, y: Int) { this init(x, x, y, y) }
 	init: func@ ~default { this init(0) }
-	decrease: func (size: IntSize2D) -> IntBox2D { IntBox2D new(this left, this top, size width - this left - this right, size height - this top - this bottom) }
-	increase: func (size: IntSize2D) -> IntBox2D { IntBox2D new(-this left, -this right, size width + this left + this right, size height + this top + this bottom) }
+	decrease: func (size: IntSize2D) -> IntBox2D { IntBox2D new(this left, this top, size x - this left - this right, size y - this top - this bottom) }
+	increase: func (size: IntSize2D) -> IntBox2D { IntBox2D new(-this left, -this right, size x + this left + this right, size y + this top + this bottom) }
 	decrease: func ~byBox (box: IntBox2D) -> IntBox2D {
-		IntBox2D new(box leftTop x + this left, box leftTop y + this top, box size width - this left - this right, box size height - this top - this bottom)
+		IntBox2D new(box leftTop x + this left, box leftTop y + this top, box size x - this left - this right, box size y - this top - this bottom)
 	}
 	increase: func ~byBox (box: IntBox2D) -> IntBox2D {
-		IntBox2D new(box leftTop x - this left, box leftTop y - this top, box size width + this left + this right, box size height + this top + this bottom)
+		IntBox2D new(box leftTop x - this left, box leftTop y - this top, box size x + this left + this right, box size y + this top + this bottom)
 	}
 	operator + (other: This) -> This { This new(this left + other left, this right + other right, this top + other top, this bottom + other bottom) }
 	operator - (other: This) -> This { This new(this left - other left, this right - other right, this top - other top, this bottom - other bottom) }

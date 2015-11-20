@@ -41,18 +41,18 @@ RasterMonochromeTest: class extends Fixture {
 		this add("getRow and getColumn", func {
 			size := IntSize2D new(500, 256)
 			image := RasterMonochrome new(size)
-			for (row in 0 .. size height)
-				for (column in 0 .. size width)
+			for (row in 0 .. size y)
+				for (column in 0 .. size x)
 					image[column, row] = ColorMonochrome new(row)
-			for (column in 0 .. size width) {
+			for (column in 0 .. size x) {
 				columnData := image getColumn(column)
-				expect(columnData count, is equal to(size height))
+				expect(columnData count, is equal to(size y))
 				for (i in 0 .. columnData count)
 					expect(columnData[i] as Int, is equal to(i))
 			}
-			for (row in 0 .. size height) {
+			for (row in 0 .. size y) {
 				rowData := image getRow(row)
-				expect(rowData count, is equal to(size width))
+				expect(rowData count, is equal to(size x))
 				for (i in 0 .. rowData count)
 					expect(rowData[i] as Int, is equal to(row))
 			}
@@ -67,7 +67,7 @@ RasterMonochromeTest: class extends Fixture {
 			expect(image2 size == image size / 2)
 			image3 := image2 resizeTo(image size)
 			expect(image3 size == image size)
-			expect(image distance(image3) < image size width / 10)
+			expect(image distance(image3) < image size x / 10)
 			image3 referenceCount decrease()
 			image3 = image2 resizeTo(size)
 			expect(image3 size == size)

@@ -28,7 +28,7 @@ OpenGLBgra: class extends OpenGLPacked {
 		super(context _backend createTexture(TextureType Bgra, size, stride, data), This channelCount, context)
 		this coordinateSystem = coordinateSystem
 	}
-	init: func (size: IntSize2D, context: OpenGLContext) { this init(size, size width * This channelCount, null, CoordinateSystem YUpward, context) }
+	init: func (size: IntSize2D, context: OpenGLContext) { this init(size, size x * This channelCount, null, CoordinateSystem YUpward, context) }
 	init: func ~fromTexture (texture: GLTexture, context: OpenGLContext) { super(texture, This channelCount, context) }
 	init: func ~fromRaster (rasterImage: RasterBgra, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)

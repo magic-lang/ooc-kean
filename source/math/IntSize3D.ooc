@@ -20,40 +20,40 @@ import FloatSize3D
 use ooc-base
 
 IntSize3D: cover {
-	width, height, depth: Int
-	volume ::= this width * this height * this depth
-	empty ::= this width == 0 || this height == 0 || this depth == 0
+	x, y, z: Int
+	volume ::= this x * this y * this z
+	empty ::= this x == 0 || this y == 0 || this z == 0
 	basisX: static This { get { This new(1, 0, 0) } }
 	basisY: static This { get { This new(0, 1, 0) } }
 	basisZ: static This { get { This new(0, 0, 1) } }
-	init: func@ (=width, =height, =depth)
+	init: func@ (=x, =y, =z)
 	init: func@ ~default { this init(0, 0, 0) }
-	scalarProduct: func (other: This) -> Int { this width * other width + this height * other height + this depth * other depth }
-	minimum: func (ceiling: This) -> This { This new(Int minimum(this width, ceiling width), Int minimum(this height, ceiling height), Int minimum(this depth, ceiling depth)) }
-	maximum: func (floor: This) -> This { This new(Int maximum(this width, floor width), Int maximum(this height, floor height), Int maximum(this depth, floor depth)) }
-	clamp: func (floor, ceiling: This) -> This { This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height), this depth clamp(floor depth, ceiling depth)) }
-	operator + (other: This) -> This { This new(this width + other width, this height + other height, this depth + other depth) }
-	operator + (other: IntPoint3D) -> This { This new(this width + other x, this height + other y, this depth + other z) }
-	operator - (other: This) -> This { This new(this width - other width, this height - other height, this depth - other depth) }
-	operator - (other: IntPoint3D) -> This { This new(this width - other x, this height - other y, this depth - other z) }
-	operator - -> This { This new(-this width, -this height, -this depth) }
-	operator * (other: This) -> This { This new(this width * other width, this height * other height, this depth * other depth) }
-	operator * (other: IntPoint3D) -> This { This new(this width * other x, this height * other y, this depth * other z) }
-	operator / (other: This) -> This { This new(this width / other width, this height / other height, this depth / other depth) }
-	operator / (other: IntPoint3D) -> This { This new(this width / other x, this height / other y, this depth / other z) }
-	operator * (other: Float) -> This { This new(this width * other, this height * other, this depth * other) }
-	operator / (other: Float) -> This { This new(this width / other, this height / other, this depth / other) }
-	operator * (other: Int) -> This { This new(this width * other, this height * other, this depth * other) }
-	operator / (other: Int) -> This { This new(this width / other, this height / other, this depth / other) }
-	operator == (other: This) -> Bool { this width == other width && this height == other height && this depth == other depth }
+	scalarProduct: func (other: This) -> Int { this x * other x + this y * other y + this z * other z }
+	minimum: func (ceiling: This) -> This { This new(Int minimum(this x, ceiling x), Int minimum(this y, ceiling y), Int minimum(this z, ceiling z)) }
+	maximum: func (floor: This) -> This { This new(Int maximum(this x, floor x), Int maximum(this y, floor y), Int maximum(this z, floor z)) }
+	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
+	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
+	operator + (other: IntPoint3D) -> This { This new(this x + other x, this y + other y, this z + other z) }
+	operator - (other: This) -> This { This new(this x - other x, this y - other y, this z - other z) }
+	operator - (other: IntPoint3D) -> This { This new(this x - other x, this y - other y, this z - other z) }
+	operator - -> This { This new(-this x, -this y, -this z) }
+	operator * (other: This) -> This { This new(this x * other x, this y * other y, this z * other z) }
+	operator * (other: IntPoint3D) -> This { This new(this x * other x, this y * other y, this z * other z) }
+	operator / (other: This) -> This { This new(this x / other x, this y / other y, this z / other z) }
+	operator / (other: IntPoint3D) -> This { This new(this x / other x, this y / other y, this z / other z) }
+	operator * (other: Float) -> This { This new(this x * other, this y * other, this z * other) }
+	operator / (other: Float) -> This { This new(this x / other, this y / other, this z / other) }
+	operator * (other: Int) -> This { This new(this x * other, this y * other, this z * other) }
+	operator / (other: Int) -> This { This new(this x / other, this y / other, this z / other) }
+	operator == (other: This) -> Bool { this x == other x && this y == other y && this z == other z }
 	operator != (other: This) -> Bool { !(this == other) }
-	operator < (other: This) -> Bool { this width < other width && this height < other height && this depth < other depth }
-	operator > (other: This) -> Bool { this width > other width && this height > other height && this depth > other depth }
-	operator <= (other: This) -> Bool { this width <= other width && this height <= other height && this depth <= other depth }
-	operator >= (other: This) -> Bool { this width >= other width && this height >= other height && this depth >= other depth }
-	toFloatSize3D: func -> FloatSize3D { FloatSize3D new(this width as Float, this height as Float, this depth as Float) }
+	operator < (other: This) -> Bool { this x < other x && this y < other y && this z < other z }
+	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z }
+	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
+	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
+	toFloatSize3D: func -> FloatSize3D { FloatSize3D new(this x as Float, this y as Float, this z as Float) }
 	operator as -> String { this toString() }
-	toString: func -> String { "#{this width toString()}, #{this height toString()}, #{this depth toString()}" }
+	toString: func -> String { "#{this x toString()}, #{this y toString()}, #{this z toString()}" }
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new (parts[0] toInt(), parts[1] toInt(), parts[2] toInt())
@@ -61,7 +61,7 @@ IntSize3D: cover {
 		result
 	}
 }
-operator * (left: Int, right: IntSize3D) -> IntSize3D { IntSize3D new(left * right width, left * right height, left * right depth) }
-operator / (left: Int, right: IntSize3D) -> IntSize3D { IntSize3D new(left / right width, left / right height, left / right depth) }
-operator * (left: Float, right: IntSize3D) -> IntSize3D { IntSize3D new(left * right width, left * right height, left * right depth) }
-operator / (left: Float, right: IntSize3D) -> IntSize3D { IntSize3D new(left / right width, left / right height, left / right depth) }
+operator * (left: Int, right: IntSize3D) -> IntSize3D { IntSize3D new(left * right x, left * right y, left * right z) }
+operator / (left: Int, right: IntSize3D) -> IntSize3D { IntSize3D new(left / right x, left / right y, left / right z) }
+operator * (left: Float, right: IntSize3D) -> IntSize3D { IntSize3D new(left * right x, left * right y, left * right z) }
+operator / (left: Float, right: IntSize3D) -> IntSize3D { IntSize3D new(left / right x, left / right y, left / right z) }

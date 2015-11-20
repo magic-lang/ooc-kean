@@ -79,7 +79,7 @@ RecycleBin: class {
 		this _mutex lock()
 		for (i in 0 .. list count) {
 			image := list[i]
-			if (image size width == size width && image size height == size height) {
+			if (image size == size) {
 				index = i
 				break
 			}

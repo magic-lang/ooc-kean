@@ -70,15 +70,15 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 		if (!other || (this size != other size) || !other instanceOf?(This))
 			result = Float maximumValue
 		else {
-			for (y in 0 .. this size height)
-				for (x in 0 .. this size width) {
+			for (y in 0 .. this size y)
+				for (x in 0 .. this size x) {
 					c := this[x, y]
 					o := (other as This)[x, y]
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in Int maximum(0, y - this distanceRadius) .. Int minimum(y + 1 + this distanceRadius, this size height))
-							for (otherX in Int maximum(0, x - this distanceRadius) .. Int minimum(x + 1 + this distanceRadius, this size width))
+						for (otherY in Int maximum(0, y - this distanceRadius) .. Int minimum(y + 1 + this distanceRadius, this size y))
+							for (otherX in Int maximum(0, x - this distanceRadius) .. Int minimum(x + 1 + this distanceRadius, this size x))
 								if (otherX != x || otherY != y) {
 									pixel := (other as This)[otherX, otherY]
 									if (maximum y < pixel y)
@@ -110,7 +110,7 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 						result += (distance) sqrt() / 3
 					}
 				}
-			result /= ((this size width squared() + this size height squared()) as Float sqrt())
+			result /= this size length
 		}
 	}
 	abstract operator [] (x, y: Int) -> ColorYuv

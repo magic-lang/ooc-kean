@@ -104,8 +104,8 @@ FloatPoint2DTest: class extends Fixture {
 		})
 		this add("float casts", func {
 			vector := point3 toFloatSize2D()
-			expect(vector width, is equal to(point3 x))
-			expect(vector height, is equal to(point3 y))
+			expect(vector x, is equal to(point3 x))
+			expect(vector y, is equal to(point3 y))
 		})
 		this add("minimum maximum", func {
 			max := this point0 maximum(this point1)

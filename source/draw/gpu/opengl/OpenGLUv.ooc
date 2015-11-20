@@ -29,14 +29,14 @@ OpenGLUv: class extends OpenGLPacked {
 		this coordinateSystem = coordinateSystem
 	}
 	init: func (size: IntSize2D, context: OpenGLContext) {
-		this init(size, size width * This channelCount, null, CoordinateSystem YUpward, context)
+		this init(size, size x * This channelCount, null, CoordinateSystem YUpward, context)
 	}
 	init: func ~fromTexture (texture: GLTexture, context: OpenGLContext) { super(texture, This channelCount, context) }
 	init: func ~fromRaster (rasterImage: RasterUv, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: func -> RasterImage {
-		packed := this context createBgra(IntSize2D new(this size width / 2, this size height))
+		packed := this context createBgra(IntSize2D new(this size x / 2, this size y))
 		this context packToRgba(this, packed, IntBox2D new(packed size))
 		buffer := packed canvas readPixels()
 		result := RasterUv new(buffer, this size)

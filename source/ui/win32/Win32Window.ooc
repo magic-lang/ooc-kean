@@ -39,7 +39,7 @@ Win32Window: class extends NativeWindow {
 		windowClass hIconSm = LoadIcon(null, IDI_APPLICATION)
 		if (!RegisterClassEx(windowClass&))
 			raise("Unable to register win32 window class. Error code: " + GetLastError() toString())
-		backend := CreateWindowEx(WS_EX_CLIENTEDGE, windowClassName, title as CString, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, size width, size height, null, null, display, null)
+		backend := CreateWindowEx(WS_EX_CLIENTEDGE, windowClassName, title as CString, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, size x, size y, null, null, display, null)
 		if (backend == null)
 			raise("Unable to create win32 window. Error code: " + GetLastError() toString())
 		super(size, backend, display)
@@ -55,7 +55,7 @@ Win32Window: class extends NativeWindow {
 		paintStruct: PaintStruct
 		bitmap: Bitmap
 		InvalidateRect(this backend as HWND, null, false)
-		bitmapHandle := CreateBitmap(image size width, image size height, 1, 32, image buffer pointer)
+		bitmapHandle := CreateBitmap(image size x, image size y, 1, 32, image buffer pointer)
 		deviceContext := BeginPaint(this backend as HWND, paintStruct&)
 		deviceContextMemory := CreateCompatibleDC(deviceContext)
 		oldBitmap := SelectObject(deviceContextMemory, bitmapHandle)
