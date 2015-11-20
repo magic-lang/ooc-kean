@@ -41,14 +41,14 @@ GpuSurface: abstract class extends Canvas {
 		set(value) {
 			this _focalLength = value
 			if (this _focalLength > 0.0f) {
-				a := 2.0f * this _focalLength / this size width
-				f := -(this _coordinateTransform e as Float) * 2.0f * this _focalLength / this size height
+				a := 2.0f * this _focalLength / this size x
+				f := -(this _coordinateTransform e as Float) * 2.0f * this _focalLength / this size y
 				k := (this _farPlane + this _nearPlane) / (this _farPlane - this _nearPlane)
 				o := 2.0f * this _farPlane * this _nearPlane / (this _farPlane - this _nearPlane)
 				this _projection = FloatTransform3D new(a, 0.0f, 0.0f, 0.0f, 0.0f, f, 0.0f, 0.0f, 0.0f, 0.0f, k, -1.0f, 0.0f, 0.0f, o, 0.0f)
 			}
 			else
-				this _projection = FloatTransform3D createScaling(2.0f / this size width, -(this _coordinateTransform e as Float) * 2.0f / this size height, 1.0f)
+				this _projection = FloatTransform3D createScaling(2.0f / this size x, -(this _coordinateTransform e as Float) * 2.0f / this size y, 1.0f)
 			this _model = this _createModelTransform(IntBox2D new(this size))
 		}
 	}
@@ -58,13 +58,13 @@ GpuSurface: abstract class extends Canvas {
 	_coordinateTransform := IntTransform2D identity
 	init: func (size: IntSize2D, =_context, =_defaultMap, =_coordinateTransform) { super(size) }
 	_createModelTransform: func (box: IntBox2D) -> FloatTransform3D {
-		toReference := FloatTransform3D createTranslation((box size width - this size width) / 2, (this size height - box size height) / 2, 0.0f)
+		toReference := FloatTransform3D createTranslation((box size x - this size x) / 2, (this size y - box size y) / 2, 0.0f)
 		translation := this _toLocal * FloatTransform3D createTranslation(box leftTop x, box leftTop y, this focalLength) * this _toLocal
-		translation * toReference * FloatTransform3D createScaling(box size width / 2.0f, box size height / 2.0f, 1.0f)
+		translation * toReference * FloatTransform3D createScaling(box size x / 2.0f, box size y / 2.0f, 1.0f)
 	}
 	_createTextureTransform: static func (imageSize: IntSize2D, box: IntBox2D) -> FloatTransform3D {
-		scaling := FloatTransform3D createScaling(box size width as Float / imageSize width, box size height as Float / imageSize height, 1.0f)
-		translation := FloatTransform3D createTranslation(box leftTop x as Float / imageSize width, box leftTop y as Float / imageSize height, 0.0f)
+		scaling := FloatTransform3D createScaling(box size x as Float / imageSize x, box size y as Float / imageSize y, 1.0f)
+		translation := FloatTransform3D createTranslation(box leftTop x as Float / imageSize x, box leftTop y as Float / imageSize y, 0.0f)
 		translation * scaling
 	}
 	_getDefaultMap: virtual func (image: Image) -> GpuMap { this _defaultMap }

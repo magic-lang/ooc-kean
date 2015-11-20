@@ -20,55 +20,56 @@ import FloatSize2D
 use ooc-base
 
 IntSize2D: cover {
-	width, height: Int
-	area ::= this width * this height
-	square ::= this width == this height
-	empty ::= !(this width > 0 && this height > 0)
+	x, y: Int
+	area ::= this x * this y
+	square ::= this x == this y
+	empty ::= !(this x > 0 && this y > 0)
+	length ::= ((this x squared() + this y squared()) as Float sqrt())
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
-	init: func@ (=width, =height)
-	init: func@ ~square (length: Int) { this width = this height = length }
+	init: func@ (=x, =y)
+	init: func@ ~square (length: Int) { this x = this y = length }
 	init: func@ ~default { this init(0, 0) }
-	scalarProduct: func (other: This) -> Int { this width * other width + this height * other height }
-	swap: func -> This { This new(this height, this width) }
-	minimum: func (ceiling: This) -> This { This new(Int minimum(this width, ceiling width), Int minimum(this height, ceiling height)) }
-	maximum: func (floor: This) -> This { This new(Int maximum(this width, floor width), Int maximum(this height, floor height)) }
+	scalarProduct: func (other: This) -> Int { this x * other x + this y * other y }
+	swap: func -> This { This new(this y, this x) }
+	minimum: func (ceiling: This) -> This { This new(Int minimum(this x, ceiling x), Int minimum(this y, ceiling y)) }
+	maximum: func (floor: This) -> This { This new(Int maximum(this x, floor x), Int maximum(this y, floor y)) }
 	minimum: func ~Int (ceiling: Int) -> This { this minimum(This new(ceiling)) }
 	maximum: func ~Int (floor: Int) -> This { this maximum(This new(floor)) }
-	clamp: func (floor, ceiling: This) -> This { This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height)) }
-	operator + (other: This) -> This { This new(this width + other width, this height + other height) }
-	operator + (other: IntPoint2D) -> This { This new(this width + other x, this height + other y) }
-	operator - (other: This) -> This { This new(this width - other width, this height - other height) }
-	operator - (other: IntPoint2D) -> This { This new(this width - other x, this height - other y) }
-	operator - -> This { This new(-this width, -this height) }
-	operator * (other: This) -> This { This new(this width * other width, this height * other height) }
-	operator * (other: IntPoint2D) -> This { This new(this width * other x, this height * other y) }
-	operator / (other: This) -> This { This new(this width / other width, this height / other height) }
-	operator / (other: IntPoint2D) -> This { This new(this width / other x, this height / other y) }
-	operator * (other: Float) -> This { This new(this width * other, this height * other) }
-	operator / (other: Float) -> This { This new(this width / other, this height / other) }
-	operator * (other: Int) -> This { This new(this width * other, this height * other) }
-	operator / (other: Int) -> This { This new(this width / other, this height / other) }
-	operator == (other: This) -> Bool { this width == other width && this height == other height }
+	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
+	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
+	operator + (other: IntPoint2D) -> This { This new(this x + other x, this y + other y) }
+	operator - (other: This) -> This { This new(this x - other x, this y - other y) }
+	operator - (other: IntPoint2D) -> This { This new(this x - other x, this y - other y) }
+	operator - -> This { This new(-this x, -this y) }
+	operator * (other: This) -> This { This new(this x * other x, this y * other y) }
+	operator * (other: IntPoint2D) -> This { This new(this x * other x, this y * other y) }
+	operator / (other: This) -> This { This new(this x / other x, this y / other y) }
+	operator / (other: IntPoint2D) -> This { This new(this x / other x, this y / other y) }
+	operator * (other: Float) -> This { This new(this x * other, this y * other) }
+	operator / (other: Float) -> This { This new(this x / other, this y / other) }
+	operator * (other: Int) -> This { This new(this x * other, this y * other) }
+	operator / (other: Int) -> This { This new(this x / other, this y / other) }
+	operator == (other: This) -> Bool { this x == other x && this y == other y }
 	operator != (other: This) -> Bool { !(this == other) }
-	operator < (other: This) -> Bool { this width < other width && this height < other height }
-	operator > (other: This) -> Bool { this width > other width && this height > other height }
-	operator <= (other: This) -> Bool { this width <= other width && this height <= other height }
-	operator >= (other: This) -> Bool { this width >= other width && this height >= other height }
+	operator < (other: This) -> Bool { this x < other x && this y < other y }
+	operator > (other: This) -> Bool { this x > other x && this y > other y }
+	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
+	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
 	polar: static func (radius, azimuth: Float) -> This { This new((radius * cos(azimuth)) as Int, (radius * sin(azimuth)) as Int) }
-	toFloatSize2D: func -> FloatSize2D { FloatSize2D new(this width as Float, this height as Float) }
-	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this width, this height) }
+	toFloatSize2D: func -> FloatSize2D { FloatSize2D new(this x as Float, this y as Float) }
+	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x, this y) }
 	operator as -> String { this toString() }
-	toString: func -> String { "#{this width toString()}, #{this height toString()}" }
+	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new (parts[0] toInt(), parts[1] toInt())
 		parts free()
 		result
 	}
-	kean_math_intSize2D_new: unmangled static func (width, height: Int) -> This { This new(width, height) }
+	kean_math_intSize2D_new: unmangled static func (x, y: Int) -> This { This new(x, y) }
 }
-operator * (left: Int, right: IntSize2D) -> IntSize2D { IntSize2D new(left * right width, left * right height) }
-operator / (left: Int, right: IntSize2D) -> IntSize2D { IntSize2D new(left / right width, left / right height) }
-operator * (left: Float, right: IntSize2D) -> IntSize2D { IntSize2D new(left * right width, left * right height) }
-operator / (left: Float, right: IntSize2D) -> IntSize2D { IntSize2D new(left / right width, left / right height) }
+operator * (left: Int, right: IntSize2D) -> IntSize2D { IntSize2D new(left * right x, left * right y) }
+operator / (left: Int, right: IntSize2D) -> IntSize2D { IntSize2D new(left / right x, left / right y) }
+operator * (left: Float, right: IntSize2D) -> IntSize2D { IntSize2D new(left * right x, left * right y) }
+operator / (left: Float, right: IntSize2D) -> IntSize2D { IntSize2D new(left / right x, left / right y) }

@@ -15,18 +15,18 @@ FloatImage : class {
 
 	operator [] (x, y: Int) -> Float {
 		version(safe) {
-			if (x > _size width || y > _size height || x < 0 || y < 0)
+			if (x > _size x || y > _size y || x < 0 || y < 0)
 				raise("Accessing FloatImage index out of range in get")
 		}
-		(this _pointer + (x + this _size width * y))@ as Float
+		(this _pointer + (x + this _size x * y))@ as Float
 	}
 
 	operator []= (x, y: Int, value: Float) {
 		version(safe) {
-			if (x > _size width || y > _size height || x < 0 || y < 0)
+			if (x > _size x || y > _size y || x < 0 || y < 0)
 				raise("Accessing FloatImage index out of range in set")
 		}
-		(this _pointer + (x + this _size width * y))@ = value
+		(this _pointer + (x + this _size x * y))@ = value
 	}
 	free: override func {
 		gc_free(this _pointer)

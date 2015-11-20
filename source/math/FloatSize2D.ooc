@@ -19,59 +19,59 @@ import IntSize2D
 use ooc-base
 
 FloatSize2D: cover {
-	width, height: Float
-	area ::= this width * this height
+	x, y: Float
+	area ::= this x * this y
 	length ::= this norm
-	empty ::= !(this width > 0 && this height > 0)
-	norm ::= (this width squared() + this height squared()) sqrt()
-	azimuth ::= this height atan2(this width)
-	absolute ::= This new(Float absolute(this width), Float absolute(this height))
+	empty ::= !(this x > 0 && this y > 0)
+	norm ::= (this x squared() + this y squared()) sqrt()
+	azimuth ::= this y atan2(this x)
+	absolute ::= This new(Float absolute(this x), Float absolute(this y))
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
-	init: func@ (=width, =height)
-	init: func@ ~square (length: Float) { this width = this height = length }
+	init: func@ (=x, =y)
+	init: func@ ~square (length: Float) { this x = this y = length }
 	init: func@ ~default { this init(0.0f, 0.0f) }
 	pNorm: func (p: Float) -> Float {
-		(this width abs() pow(p) + this height abs() pow(p)) pow(1.0f / p)
+		(this x abs() pow(p) + this y abs() pow(p)) pow(1.0f / p)
 	}
-	scalarProduct: func (other: This) -> Float { this width * other width + this height * other height }
+	scalarProduct: func (other: This) -> Float { this x * other x + this y * other y }
 	angle: func (other: This) -> Float {
-		(this scalarProduct(other) / (this norm * other norm)) clamp(-1.0f, 1.0f) acos() * (this width * other height - this height * other width < 0.0f ? -1.0f : 1.0f)
+		(this scalarProduct(other) / (this norm * other norm)) clamp(-1.0f, 1.0f) acos() * (this x * other y - this y * other x < 0.0f ? -1.0f : 1.0f)
 	}
 	distance: func (other: This) -> Float { (this - other) norm }
-	swap: func -> This { This new(this height, this width) }
-	round: func -> This { This new(this width round(), this height round()) }
-	ceiling: func -> This { This new(this width ceil(), this height ceil()) }
-	floor: func -> This { This new(this width floor(), this height floor()) }
-	minimum: func (ceiling: This) -> This { This new(Float minimum(this width, ceiling width), Float minimum(this height, ceiling height)) }
-	maximum: func (floor: This) -> This { This new(Float maximum(this width, floor width), Float maximum(this height, floor height)) }
+	swap: func -> This { This new(this y, this x) }
+	round: func -> This { This new(this x round(), this y round()) }
+	ceiling: func -> This { This new(this x ceil(), this y ceil()) }
+	floor: func -> This { This new(this x floor(), this y floor()) }
+	minimum: func (ceiling: This) -> This { This new(Float minimum(this x, ceiling x), Float minimum(this y, ceiling y)) }
+	maximum: func (floor: This) -> This { This new(Float maximum(this x, floor x), Float maximum(this y, floor y)) }
 	minimum: func ~Float (ceiling: Float) -> This { this minimum(This new(ceiling)) }
 	maximum: func ~Float (floor: Float) -> This { this maximum(This new(floor)) }
-	clamp: func (floor, ceiling: This) -> This { This new(this width clamp(floor width, ceiling width), this height clamp(floor height, ceiling height)) }
-	operator + (other: This) -> This { This new(this width + other width, this height + other height) }
-	operator + (other: FloatPoint2D) -> This { This new(this width + other x, this height + other y) }
-	operator - (other: This) -> This { This new(this width - other width, this height - other height) }
-	operator - (other: FloatPoint2D) -> This { This new(this width - other x, this height - other y) }
-	operator - -> This { This new(-this width, -this height) }
-	operator * (other: This) -> This { This new(this width * other width, this height * other height) }
-	operator * (other: FloatPoint2D) -> This { This new(this width * other x, this height * other y) }
-	operator / (other: This) -> This { This new(this width / other width, this height / other height) }
-	operator / (other: FloatPoint2D) -> This { This new(this width / other x, this height / other y) }
-	operator * (other: Float) -> This { This new(this width * other, this height * other) }
-	operator / (other: Float) -> This { This new(this width / other, this height / other) }
-	operator * (other: Int) -> This { This new(this width * other, this height * other) }
-	operator / (other: Int) -> This { This new(this width / other, this height / other) }
-	operator == (other: This) -> Bool { this width == other width && this height == other height }
+	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
+	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
+	operator + (other: FloatPoint2D) -> This { This new(this x + other x, this y + other y) }
+	operator - (other: This) -> This { This new(this x - other x, this y - other y) }
+	operator - (other: FloatPoint2D) -> This { This new(this x - other x, this y - other y) }
+	operator - -> This { This new(-this x, -this y) }
+	operator * (other: This) -> This { This new(this x * other x, this y * other y) }
+	operator * (other: FloatPoint2D) -> This { This new(this x * other x, this y * other y) }
+	operator / (other: This) -> This { This new(this x / other x, this y / other y) }
+	operator / (other: FloatPoint2D) -> This { This new(this x / other x, this y / other y) }
+	operator * (other: Float) -> This { This new(this x * other, this y * other) }
+	operator / (other: Float) -> This { This new(this x / other, this y / other) }
+	operator * (other: Int) -> This { This new(this x * other, this y * other) }
+	operator / (other: Int) -> This { This new(this x / other, this y / other) }
+	operator == (other: This) -> Bool { this x == other x && this y == other y }
 	operator != (other: This) -> Bool { !(this == other) }
-	operator < (other: This) -> Bool { this width < other width && this height < other height }
-	operator > (other: This) -> Bool { this width > other width && this height > other height }
-	operator <= (other: This) -> Bool { this width <= other width && this height <= other height }
-	operator >= (other: This) -> Bool { this width >= other width && this height >= other height }
+	operator < (other: This) -> Bool { this x < other x && this y < other y }
+	operator > (other: This) -> Bool { this x > other x && this y > other y }
+	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
+	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
 	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
-	toIntSize2D: func -> IntSize2D { IntSize2D new(this width as Int, this height as Int) }
-	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this width, this height) }
+	toIntSize2D: func -> IntSize2D { IntSize2D new(this x as Int, this y as Int) }
+	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x, this y) }
 	operator as -> String { this toString() }
-	toString: func -> String { "#{this width toString()}, #{this height toString()}" }
+	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new (parts[0] toFloat(), parts[1] toFloat())
@@ -79,10 +79,10 @@ FloatSize2D: cover {
 		result
 	}
 	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
-		This new(Float linearInterpolation(a width, b width, ratio), Float linearInterpolation(a height, b height, ratio))
+		This new(Float linearInterpolation(a x, b x, ratio), Float linearInterpolation(a y, b y, ratio))
 	}
 }
-operator * (left: Float, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left * right width, left * right height) }
-operator / (left: Float, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left / right width, left / right height) }
-operator * (left: Int, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left * right width, left * right height) }
-operator / (left: Int, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left / right width, left / right height) }
+operator * (left: Float, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left * right x, left * right y) }
+operator / (left: Float, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left / right x, left / right y) }
+operator * (left: Int, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left * right x, left * right y) }
+operator / (left: Int, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left / right x, left / right y) }

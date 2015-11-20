@@ -160,12 +160,12 @@ OpenGLContext: class extends GpuContext {
 				map = this _packUv
 			else {
 				map = this _packUvPadded
-				map add("paddingOffset", padding as Float / (target size width * 4))
+				map add("paddingOffset", padding as Float / (target size x * 4))
 			}
 		}
 		map add("texture0", source)
-		map add("texelOffset", 1.0f / source size width)
-		map add("xOffset", (2.0f / channels - 0.5f) / source size width)
+		map add("texelOffset", 1.0f / source size x)
+		map add("xOffset", (2.0f / channels - 0.5f) / source size x)
 		map add("transform", FloatTransform3D createScaling(1.0f, -1.0f, 1.0f))
 		target canvas viewport = viewport
 		target canvas draw(source, map)

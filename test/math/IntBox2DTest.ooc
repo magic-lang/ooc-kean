@@ -28,8 +28,8 @@ IntBox2DTest: class extends Fixture {
 		})
 		this add("size", func {
 			size := this box0 size
-			expect(size width, is equal to(3))
-			expect(size height, is equal to(4))
+			expect(size x, is equal to(3))
+			expect(size y, is equal to(4))
 		})
 		this add("addition, union", func {
 			result := box0 + box1

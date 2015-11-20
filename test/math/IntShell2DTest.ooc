@@ -24,8 +24,8 @@ IntShell2DTest: class extends Fixture {
 		super("IntShell2D")
 		this add("Size and position", func {
 			shell := IntShell2D new(1, 2, 3, 4)
-			expect(shell size width, is equal to(3))
-			expect(shell size height, is equal to(7))
+			expect(shell size x, is equal to(3))
+			expect(shell size y, is equal to(7))
 			expect(shell leftTop x, is equal to(1))
 			expect(shell leftTop y, is equal to(3))
 			expect(shell balance x, is equal to(1))

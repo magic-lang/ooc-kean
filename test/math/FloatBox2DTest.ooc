@@ -30,8 +30,8 @@ FloatBox2DTest: class extends Fixture {
 		})
 		this add("size", func {
 			size := this box0 size
-			expect(size width, is equal to(3.0f) within(this precision))
-			expect(size height, is equal to(4.0f) within(this precision))
+			expect(size x, is equal to(3.0f) within(this precision))
+			expect(size y, is equal to(4.0f) within(this precision))
 		})
 		this add("addition, union", func {
 			result := box0 + box1
@@ -199,14 +199,14 @@ FloatBox2DTest: class extends Fixture {
 			points add(FloatPoint2D new(0.f, -17.f))
 			points add(FloatPoint2D new(11.f, -12.f))
 			separatedDistance := box distance(points[0])
-			expect(separatedDistance width, is equal to(0.f) within(this precision))
-			expect(separatedDistance height, is equal to(0.f) within(this precision))
+			expect(separatedDistance x, is equal to(0.f) within(this precision))
+			expect(separatedDistance y, is equal to(0.f) within(this precision))
 			separatedDistance = box distance(points[3])
-			expect(separatedDistance width, is equal to(1.f) within(this precision))
-			expect(separatedDistance height, is equal to(2.f) within(this precision))
+			expect(separatedDistance x, is equal to(1.f) within(this precision))
+			expect(separatedDistance y, is equal to(2.f) within(this precision))
 			maximumSeparatedDistance := box maximumDistance(points)
-			expect(maximumSeparatedDistance width, is equal to(5.f) within(this precision))
-			expect(maximumSeparatedDistance height, is equal to(7.f) within(this precision))
+			expect(maximumSeparatedDistance x, is equal to(5.f) within(this precision))
+			expect(maximumSeparatedDistance y, is equal to(7.f) within(this precision))
 			points free()
 		})
 		this add("interpolate", func {

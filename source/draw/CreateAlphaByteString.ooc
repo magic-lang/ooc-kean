@@ -26,8 +26,8 @@ CreateAlphaByteString: class {
 		buf := image buffer as ByteBuffer
 		imageArray := "["
 		ip: Int*
-		tmp := ByteBuffer new(image size width * image size height)
-		ipbuffer := ByteBuffer new(image size width * image size height)
+		tmp := ByteBuffer new(image size area)
+		ipbuffer := ByteBuffer new(image size area)
 		for (i in 0 .. (buf size / 4))
 			ipbuffer pointer[i] = buf pointer[(i * 4) + 3]
 		ip = ipbuffer pointer as Int*
@@ -37,7 +37,7 @@ CreateAlphaByteString: class {
 			imageArray += "," + (i % 32 == 0 ? "\n" : " ") + ip[i] toString()
 		imageArray += "]"
 		result := name + "Image" + ": StaticOverlayImages\n" + name + "Image image = " + imageArray + "\n"
-		result += name + "Image size = IntSize2D new(" + image size width toString() + ", " + image size height toString() + ")\n"
+		result += name + "Image size = IntSize2D new(" + image size x toString() + ", " + image size y toString() + ")\n"
 		result
 	}
 }

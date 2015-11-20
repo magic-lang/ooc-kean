@@ -69,14 +69,14 @@ AndroidContext: class extends OpenGLContext {
 	}
 	toBuffer: func (gpuImage: GpuImage, packMap: GpuMap) -> (ByteBuffer, GpuFence) {
 		channels := (gpuImage as OpenGLPacked) channels
-		packSize := IntSize2D new(gpuImage size width / (4 / channels), gpuImage size height)
+		packSize := IntSize2D new(gpuImage size x / (4 / channels), gpuImage size y)
 		gpuRgba := this getPacker(packSize)
 		this packToRgba(gpuImage, gpuRgba, IntBox2D new(gpuRgba size))
 		fence := this createFence()
 		fence sync()
 		eglImage := gpuRgba as EGLBgra
 		sourcePointer := eglImage buffer lock(false) as UInt8*
-		length := channels * eglImage size width * eglImage size height
+		length := channels * eglImage size area
 		recover := func (b: ByteBuffer) -> Bool {
 			eglImage buffer unlock()
 			this recyclePacker(gpuRgba)
@@ -101,9 +101,9 @@ AndroidContext: class extends OpenGLContext {
 	toRaster: override func (gpuImage: GpuImage, async: Bool = false) -> RasterImage {
 		match (gpuImage) {
 			case (image : OpenGLMonochrome) =>
-				this isAligned(image channels * image size width) ? this toRaster(image, async) : super(image)
+				this isAligned(image channels * image size x) ? this toRaster(image, async) : super(image)
 			case (image : OpenGLUv) =>
-				this isAligned(image channels * image size width) ? this toRaster(image, async) : super(image)
+				this isAligned(image channels * image size x) ? this toRaster(image, async) : super(image)
 			case => super(gpuImage)
 		}
 	}
@@ -118,7 +118,7 @@ AndroidContext: class extends OpenGLContext {
 	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) {
 		rasterResult: RasterImage
 		fenceResult: GpuFence
-		aligned := this isAligned(gpuImage size width)
+		aligned := this isAligned(gpuImage size x)
 		if (aligned && gpuImage instanceOf?(OpenGLMonochrome))
 			(rasterResult, fenceResult) = this toRasterAsync(gpuImage as OpenGLMonochrome)
 		else if (aligned && gpuImage instanceOf?(OpenGLUv))
@@ -144,13 +144,13 @@ AndroidContext: class extends OpenGLContext {
 		uvMap: GpuMap = this _unpackRgbaToUv
 		if (padding > 0) {
 			uvMap = this _unpackRgbaToUvPadded
-			uvMap add("paddingOffset", padding as Float / (source size width * 4) as Float)
-			uvMap add("rowUnit", 1.0f / sourceSize height)
+			uvMap add("paddingOffset", padding as Float / (source size x * 4) as Float)
+			uvMap add("rowUnit", 1.0f / sourceSize y)
 		}
-		This _unpack(source, target y, yMap, targetSize width, transform, targetSize width as Float / (4 * sourceSize width), targetSize height as Float / sourceSize height, 0.0f)
+		This _unpack(source, target y, yMap, targetSize x, transform, targetSize x as Float / (4 * sourceSize x), targetSize y as Float / sourceSize y, 0.0f)
 		uvSize := target uv size
-		startY := (sourceSize height - uvSize height) as Float / sourceSize height
-		This _unpack(source, target uv, uvMap, uvSize width, transform, (uvSize width as Float) / (2 * sourceSize width), 1.0f - startY, startY)
+		startY := (sourceSize y - uvSize y) as Float / sourceSize y
+		This _unpack(source, target uv, uvMap, uvSize x, transform, (uvSize x as Float) / (2 * sourceSize x), 1.0f - startY, startY)
 		target
 	}
 	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }

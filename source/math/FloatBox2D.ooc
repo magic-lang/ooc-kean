@@ -24,12 +24,12 @@ use ooc-collections
 FloatBox2D: cover {
 	leftTop: FloatPoint2D
 	size: FloatSize2D
-	width ::= this size width
-	height ::= this size height
+	width ::= this size x
+	height ::= this size y
 	left ::= this leftTop x
 	top ::= this leftTop y
-	right ::= this leftTop x + this size width
-	bottom ::= this leftTop y + this size height
+	right ::= this leftTop x + this size x
+	bottom ::= this leftTop y + this size y
 	rightTop ::= FloatPoint2D new(this right, this top)
 	leftBottom ::= FloatPoint2D new(this left, this bottom)
 	rightBottom ::= this leftTop + this size
@@ -56,9 +56,9 @@ FloatBox2D: cover {
 		This new(FloatPoint2D new(this left - left, this top - top), FloatSize2D new(this width + left + right, this height + top + bottom))
 	}
 	pad: func ~fromFloat (pad: Float) -> This { this pad(pad, pad, pad, pad) }
-	pad: func ~fromSize (pad: FloatSize2D) -> This { this pad(pad width, pad width, pad height, pad height) }
+	pad: func ~fromSize (pad: FloatSize2D) -> This { this pad(pad x, pad x, pad y, pad y) }
 	enlargeEvenly: func (fraction: Float) -> This {
-		this pad(fraction * (this size width + this size height) / 2.0f)
+		this pad(fraction * (this size x + this size y) / 2.0f)
 	}
 	enlarge: func (fraction: Float) -> This {
 		this scale(1.0f + fraction)

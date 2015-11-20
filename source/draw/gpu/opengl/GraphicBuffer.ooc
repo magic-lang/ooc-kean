@@ -58,7 +58,7 @@ GraphicBuffer: class {
 			}
 		}
 	}
-	length ::= this stride * this size height
+	length ::= this stride * this size y
 	_backend: Pointer = null
 	_nativeBuffer: Pointer = null
 	nativeBuffer ::= this _nativeBuffer
@@ -67,12 +67,12 @@ GraphicBuffer: class {
 	_allocated := false
 
 	init: func (=_size, =_format, usage: GraphicBufferUsage) {
-		This _allocate(_size width, _size height, this _format as Int, usage as Int, this _backend&, this _nativeBuffer&, this _pixelStride&)
+		This _allocate(_size x, _size y, this _format as Int, usage as Int, this _backend&, this _nativeBuffer&, this _pixelStride&)
 		this _allocated = true
 	}
 	init: func ~existing (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format)
 	init: func ~fromHandle (handle: Pointer, =_size, =_pixelStride, =_format, usage: GraphicBufferUsage) {
-		This _create(_size width, _size height, _format as Int, usage as Int, _pixelStride, handle, false, this _backend&, this _nativeBuffer&)
+		This _create(_size x, _size y, _format as Int, usage as Int, _pixelStride, handle, false, this _backend&, this _nativeBuffer&)
 	}
 	free: override func {
 		if (this _allocated)

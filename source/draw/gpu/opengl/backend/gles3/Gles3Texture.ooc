@@ -61,10 +61,10 @@ Gles3Texture: class extends GLTexture {
 		version(debugGL) { validateStart("Texture upload") }
 		pixelStride := stride / this _bytesPerPixel
 		glBindTexture(this _target, this _backend)
-		if (pixelStride != this size width) {
+		if (pixelStride != this size x) {
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
 		}
-		glTexSubImage2D(this _target, 0, 0, 0, this size width, this size height, this _format, GL_UNSIGNED_BYTE, pixels)
+		glTexSubImage2D(this _target, 0, 0, 0, this size x, this size y, this _format, GL_UNSIGNED_BYTE, pixels)
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
 		unbind()
 		version(debugGL) { validateEnd("Texture upload") }
@@ -154,10 +154,10 @@ Gles3Texture: class extends GLTexture {
 		version(debugGL) { Debug print("Allocating OpenGL Texture") }
 		version(debugGL) { validateStart("Texture _allocate") }
 		pixelStride := stride / this _bytesPerPixel
-		if (pixelStride != this size width) {
+		if (pixelStride != this size x) {
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
 		}
-		glTexImage2D(this _target, 0, this _internalFormat, this size width, this size height, 0, this _format, GL_UNSIGNED_BYTE, pixels)
+		glTexImage2D(this _target, 0, this _internalFormat, this size x, this size y, 0, this _format, GL_UNSIGNED_BYTE, pixels)
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
 		version(debugGL) { validateEnd("Texture _allocate") }
 		true

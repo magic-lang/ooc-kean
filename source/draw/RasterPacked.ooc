@@ -36,10 +36,10 @@ RasterPacked: abstract class extends RasterImage {
 		super(size)
 		this _buffer referenceCount increase()
 	}
-	init: func ~allocateStride (size: IntSize2D, stride: UInt) { this init(ByteBuffer new(stride * size height), size, stride) }
+	init: func ~allocateStride (size: IntSize2D, stride: UInt) { this init(ByteBuffer new(stride * size y), size, stride) }
 	init: func ~allocate (size: IntSize2D) {
-		stride := this bytesPerPixel * size width
-		this init(ByteBuffer new(stride * size height), size, stride)
+		stride := this bytesPerPixel * size x
+		this init(ByteBuffer new(stride * size y), size, stride)
 	}
 	init: func ~fromOriginal (original: This) {
 		super(original)
@@ -65,7 +65,7 @@ RasterPacked: abstract class extends RasterImage {
 		file := File new(filename)
 		folder := file parent . mkdirs() . free()
 		file free()
-		StbImage writePng(filename, this size width, this size height, this bytesPerPixel, this buffer pointer, this size width * this bytesPerPixel)
+		StbImage writePng(filename, this size x, this size y, this bytesPerPixel, this buffer pointer, this size x * this bytesPerPixel)
 	}
 	swapChannels: func (first, second: Int) {
 		version(safe) {

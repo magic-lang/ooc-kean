@@ -59,14 +59,12 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 	}
 	readPixels: func -> ByteBuffer {
 		version(debugGL) { validateStart("FramebufferObject readPixels") }
-		width := this size width
-		height := this size height
-		buffer := ByteBuffer new(width * height * 4)
-		ptr := buffer pointer
+		buffer := ByteBuffer new(this size area * 4)
+		pointer := buffer pointer
 		this bind()
 		glPixelStorei(GL_PACK_ALIGNMENT, 1)
 		glReadBuffer(GL_COLOR_ATTACHMENT0)
-		glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ptr)
+		glReadPixels(0, 0, this size x, this size y, GL_RGBA, GL_UNSIGNED_BYTE, pointer)
 		this unbind()
 		version(debugGL) { validateEnd("FramebufferObject readPixels") }
 		buffer
@@ -87,7 +85,7 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		if (status != GL_FRAMEBUFFER_COMPLETE) {
 			statusMessage := getErrorMessage(status)
 			errorMessage := "glCheckFramebufferStatus failed with status: " + statusMessage + " for texture of size " +
-			texture size width toString() + " x " + texture size height toString()
+			texture size x toString() + " x " + texture size y toString()
 			Debug raise(errorMessage)
 		}
 		this unbind()

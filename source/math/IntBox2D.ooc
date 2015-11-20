@@ -26,12 +26,12 @@ use ooc-math
 IntBox2D: cover {
 	leftTop: IntPoint2D
 	size: IntSize2D
-	width ::= this size width
-	height ::= this size height
+	width ::= this size x
+	height ::= this size y
 	left ::= this leftTop x
 	top ::= this leftTop y
-	right ::= this leftTop x + this size width
-	bottom ::= this leftTop y + this size height
+	right ::= this leftTop x + this size x
+	bottom ::= this leftTop y + this size y
 	rightTop ::= IntPoint2D new(this right, this top)
 	leftBottom ::= IntPoint2D new(this left, this bottom)
 	rightBottom ::= this leftTop + this size
@@ -42,7 +42,7 @@ IntBox2D: cover {
 	bottomCenter ::= IntPoint2D new(this center x, this bottom)
 	empty ::= this size empty
 	init: func@ (=leftTop, =size)
-	init: func@ ~fromSizes (leftTop: IntSize2D, =size) { this leftTop = IntPoint2D new(leftTop width, leftTop height) }
+	init: func@ ~fromSizes (leftTop: IntSize2D, =size) { this leftTop = IntPoint2D new(leftTop x, leftTop y) }
 	init: func@ ~fromSize (=size) { this leftTop = IntPoint2D new() }
 	init: func@ ~fromInts (left, top, width, height: Int) { this init(IntPoint2D new(left, top), IntSize2D new(width, height)) }
 	//init: func@ ~fromSize (size: IntSize2D) { this init(IntPoint2D new(), size) }
@@ -59,7 +59,7 @@ IntBox2D: cover {
 		This new(IntPoint2D new(this left - left, this top - top), IntSize2D new(this width + left + right, this height + top + bottom))
 	}
 	pad: func ~fromFloat (pad: Int) -> This { this pad(pad, pad, pad, pad) }
-	pad: func ~fromSize (pad: IntSize2D) -> This { this pad(pad width, pad width, pad height, pad height) }
+	pad: func ~fromSize (pad: IntSize2D) -> This { this pad(pad x, pad x, pad y, pad y) }
 	resizeTo: func (size: IntSize2D) -> This {
 		This createAround(this center, size)
 	}

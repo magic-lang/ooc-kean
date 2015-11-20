@@ -30,7 +30,7 @@ EGLImage: class extends GLTexture {
 	init: func (type: TextureType, size: IntSize2D, =_nativeBuffer, context: GLContext) {
 		super(type, size)
 		this _eglDisplay = context _eglDisplay
-		this _backendTexture = context createTexture(type, size, size width, null, false)
+		this _backendTexture = context createTexture(type, size, size x, null, false)
 		this _backend = this _backendTexture _backend
 		this _target = this _backendTexture _target
 		this bindSibling()

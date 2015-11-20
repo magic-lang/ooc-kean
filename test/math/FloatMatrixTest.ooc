@@ -27,8 +27,8 @@ FloatMatrixTest: class extends Fixture {
 		})
 
 		this add("dimensions", func {
-			expect(this nonSquareMatrix dimensions width, is equal to(2))
-			expect(this nonSquareMatrix dimensions height, is equal to(3))
+			expect(this nonSquareMatrix dimensions x, is equal to(2))
+			expect(this nonSquareMatrix dimensions y, is equal to(3))
 			expect(this nullMatrix width, is equal to (0))
 			expect(this nullMatrix height, is equal to (0))
 			expect(this nullMatrix isNull)
@@ -151,9 +151,9 @@ FloatMatrixTest: class extends Fixture {
 		// 1 4
 		// 2 5
 		m := matrix take()
-		for (x in 0 .. m dimensions width)
-			for (y in 0 .. m dimensions height)
-				expect(m[x, y], is equal to(values[x * m dimensions height + y]) within(this precision))
+		for (x in 0 .. m dimensions x)
+			for (y in 0 .. m dimensions y)
+				expect(m[x, y], is equal to(values[x * m dimensions y + y]) within(this precision))
 	}
 }
 FloatMatrixTest new() run()

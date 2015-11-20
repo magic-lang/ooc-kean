@@ -274,9 +274,9 @@ FloatTransform3DTest: class extends Fixture {
 		})
 		this add("get translation", func {
 			translation := this transform0 translation
-			expect(translation width, is equal to(10.0f) within(this precision))
-			expect(translation height, is equal to(11.0f) within(this precision))
-			expect(translation depth, is equal to(12.0f) within(this precision))
+			expect(translation x, is equal to(10.0f) within(this precision))
+			expect(translation y, is equal to(11.0f) within(this precision))
+			expect(translation z, is equal to(12.0f) within(this precision))
 		})
 		this add("casting", func {
 			value := "10.00000000, 40.00000000, 70.00000000, 100.00000000\n" + \

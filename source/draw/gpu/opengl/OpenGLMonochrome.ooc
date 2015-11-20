@@ -28,13 +28,13 @@ OpenGLMonochrome: class extends OpenGLPacked {
 		super(context _backend createTexture(TextureType Monochrome, size, stride, data), This channelCount, context)
 		this coordinateSystem = coordinateSystem
 	}
-	init: func (size: IntSize2D, context: OpenGLContext) { this init(size, size width, null, CoordinateSystem YUpward, context) }
+	init: func (size: IntSize2D, context: OpenGLContext) { this init(size, size x, null, CoordinateSystem YUpward, context) }
 	init: func ~fromTexture (texture: GLTexture, context: OpenGLContext) { super(texture, This channelCount, context) }
 	init: func ~fromRaster (rasterImage: RasterMonochrome, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: func -> RasterImage {
-		packed := this context createBgra(IntSize2D new(this size width / 4, this size height))
+		packed := this context createBgra(IntSize2D new(this size x / 4, this size y))
 		this context packToRgba(this, packed, IntBox2D new(packed size))
 		buffer := packed canvas readPixels()
 		result := RasterMonochrome new(buffer, this size)
