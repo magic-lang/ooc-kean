@@ -53,7 +53,7 @@ TextBuilder: class {
 		this _data add(value claim())
 	}
 	append: func (other: This) {
-		for (i in 0 .. other count)
+		for (i in 0 .. other _data count)
 			this append(other _data[i] copy())
 	}
 	prepend: func ~char (c: Char) { this prepend(Text new(c)) }
@@ -63,7 +63,7 @@ TextBuilder: class {
 		this _data insert(0, value claim())
 	}
 	prepend: func ~This (other: This) {
-		c := other count
+		c := other _data count
 		for (i in 1 .. c + 1)
 			this prepend(other _data[c - i] take() copy())
 	}
