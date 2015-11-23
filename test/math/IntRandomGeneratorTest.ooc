@@ -6,7 +6,7 @@ IntRandomGeneratorTest: class extends Fixture {
 	init: func {
 		super("IntRandomGenerator")
 		this add("seeds", func {
-			valuesCount := 1_000_000
+			valuesCount := 100_000
 			countEqual := 0
 			seed := 26234
 			generator1 := IntUniformRandomGenerator new(seed)

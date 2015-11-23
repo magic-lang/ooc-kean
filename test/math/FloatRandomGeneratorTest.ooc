@@ -54,7 +54,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 			expect(countEqual < valuesCount)
 		})
 		this add("seeds", func {
-			valuesCount := 1_000_000
+			valuesCount := 100_000
 			countEqual := 0
 			seed := 26234
 			generator1 := FloatUniformRandomGenerator new(seed)
