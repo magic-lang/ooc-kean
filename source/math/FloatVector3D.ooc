@@ -24,7 +24,7 @@ FloatVector3D: cover {
 	x, y, z: Float
 	volume ::= this x * this y * this z
 	length ::= this norm
-	empty ::= this x == 0 || this y == 0 || this z == 0
+	empty ::= this x equals(0.0f) || this y equals(0.0f) || this z equals(0.0f)
 	norm ::= (this x squared() + this y squared() + this z squared()) sqrt()
 	azimuth ::= this y atan2(this x)
 	basisX: static This { get { This new(1, 0, 0) } }
