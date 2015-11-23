@@ -82,7 +82,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 			index := (this buffer pointer + y * this stride + x * this bytesPerPixel) as ColorMonochrome* // U or V value
 			(index + 1)@ = ColorMonochrome new(value y)
 			(index - 2*(x % 2))@ = ColorMonochrome new(value u)
-			(index - 2*((x + 1) % 2))@ = ColorMonochrome new(value v)
+			(index + 2*((x + 1) % 2))@ = ColorMonochrome new(value v)
 		}
 	}
 	open: static func (filename: String) -> This {
