@@ -15,10 +15,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
 import FloatPoint2D
-import IntSize2D
+import IntVector2D
 use ooc-base
 
-FloatSize2D: cover {
+FloatVector2D: cover {
 	x, y: Float
 	area ::= this x * this y
 	length ::= this norm
@@ -68,7 +68,7 @@ FloatSize2D: cover {
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
 	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
-	toIntSize2D: func -> IntSize2D { IntSize2D new(this x as Int, this y as Int) }
+	toIntVector2D: func -> IntVector2D { IntVector2D new(this x as Int, this y as Int) }
 	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x, this y) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
@@ -82,7 +82,7 @@ FloatSize2D: cover {
 		This new(Float linearInterpolation(a x, b x, ratio), Float linearInterpolation(a y, b y, ratio))
 	}
 }
-operator * (left: Float, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left * right x, left * right y) }
-operator / (left: Float, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left / right x, left / right y) }
-operator * (left: Int, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left * right x, left * right y) }
-operator / (left: Int, right: FloatSize2D) -> FloatSize2D { FloatSize2D new(left / right x, left / right y) }
+operator * (left: Float, right: FloatVector2D) -> FloatVector2D { FloatVector2D new(left * right x, left * right y) }
+operator / (left: Float, right: FloatVector2D) -> FloatVector2D { FloatVector2D new(left / right x, left / right y) }
+operator * (left: Int, right: FloatVector2D) -> FloatVector2D { FloatVector2D new(left * right x, left * right y) }
+operator / (left: Int, right: FloatVector2D) -> FloatVector2D { FloatVector2D new(left / right x, left / right y) }

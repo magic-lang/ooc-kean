@@ -37,7 +37,7 @@ CreateAlphaByteString: class {
 			imageArray += "," + (i % 32 == 0 ? "\n" : " ") + ip[i] toString()
 		imageArray += "]"
 		result := name + "Image" + ": StaticOverlayImages\n" + name + "Image image = " + imageArray + "\n"
-		result += name + "Image size = IntSize2D new(" + image size x toString() + ", " + image size y toString() + ")\n"
+		result += name + "Image size = IntVector2D new(" + image size x toString() + ", " + image size y toString() + ")\n"
 		result
 	}
 }

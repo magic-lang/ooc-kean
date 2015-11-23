@@ -26,11 +26,11 @@ RasterImage: abstract class extends Image {
 	distanceRadius ::= 1
 	stride: UInt { get }
 	init: func ~fromRasterImage (original: This) { super(original) }
-	init: func (size: IntSize2D) { super(size) }
+	init: func (size: IntVector2D) { super(size) }
 	apply: abstract func ~bgr (action: Func (ColorBgr))
 	apply: abstract func ~yuv (action: Func (ColorYuv))
 	apply: abstract func ~monochrome (action: Func (ColorMonochrome))
-	resizeTo: func (size: IntSize2D) -> Image {
+	resizeTo: func (size: IntVector2D) -> Image {
 		result : Image
 //	TODO: Actually resize the image
 		resized := this
@@ -38,9 +38,9 @@ RasterImage: abstract class extends Image {
 		result
 	}
 	copy: abstract func -> This
-	copy: func ~fromParams (size: IntSize2D, transform: FloatTransform2D) -> This {
+	copy: func ~fromParams (size: IntVector2D, transform: FloatTransform2D) -> This {
 		transform = (this transform toFloatTransform2D()) * transform * (this transform toFloatTransform2D()) inverse
-		mappingTransform := FloatTransform2D createTranslation(this size toFloatSize2D() / 2) * transform
+		mappingTransform := FloatTransform2D createTranslation(this size toFloatVector2D() / 2) * transform
 		upperLeft := mappingTransform * FloatPoint2D new(-size x / 2, -size x / 2)
 		upperRight := mappingTransform * FloatPoint2D new(size x / 2, -size x / 2)
 		downLeft := mappingTransform * FloatPoint2D new(-size x / 2, size x / 2)
@@ -51,10 +51,10 @@ RasterImage: abstract class extends Image {
 		upperRight = mappingTransformInverse * source rightTop
 		downLeft = mappingTransformInverse * source leftBottom
 		downRight = mappingTransformInverse * source rightBottom
-		this copy(size toFloatSize2D(), source, FloatPoint2D new(), FloatPoint2D new(), FloatPoint2D new())
+		this copy(size toFloatVector2D(), source, FloatPoint2D new(), FloatPoint2D new(), FloatPoint2D new())
 	}
-	copy: func ~fromMoreParams (size: FloatSize2D, source: FloatBox2D, upperLeft, upperRight, lowerLeft: FloatPoint2D) -> This {
-		result := RasterBgra new(size ceiling() toIntSize2D())
+	copy: func ~fromMoreParams (size: FloatVector2D, source: FloatBox2D, upperLeft, upperRight, lowerLeft: FloatPoint2D) -> This {
+		result := RasterBgra new(size ceiling() toIntVector2D())
 //		TODO: The stuff
 		result
 	}
@@ -64,11 +64,11 @@ RasterImage: abstract class extends Image {
 		result: This
 		match (imageComponents) {
 			case 1 =>
-				result = RasterMonochrome new(ByteBuffer new(data as UInt8*, x * y * imageComponents), IntSize2D new (x, y))
+				result = RasterMonochrome new(ByteBuffer new(data as UInt8*, x * y * imageComponents), IntVector2D new (x, y))
 			case 3 =>
-				result = RasterBgr new(ByteBuffer new(data as UInt8*, x * y * imageComponents), IntSize2D new (x, y))
+				result = RasterBgr new(ByteBuffer new(data as UInt8*, x * y * imageComponents), IntVector2D new (x, y))
 			case 4 =>
-				result = RasterBgra new(ByteBuffer new(data as UInt8*, x * y * imageComponents), IntSize2D new (x, y))
+				result = RasterBgra new(ByteBuffer new(data as UInt8*, x * y * imageComponents), IntVector2D new (x, y))
 			case =>
 				raise("Unsupported number of channels in image")
 		}

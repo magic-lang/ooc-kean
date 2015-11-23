@@ -39,7 +39,7 @@ RasterMonochromeTest: class extends Fixture {
 			image1 free(); image2 free()
 		})
 		this add("getRow and getColumn", func {
-			size := IntSize2D new(500, 256)
+			size := IntVector2D new(500, 256)
 			image := RasterMonochrome new(size)
 			for (row in 0 .. size y)
 				for (column in 0 .. size x)
@@ -61,7 +61,7 @@ RasterMonochromeTest: class extends Fixture {
 		this add("resize", func {
 			outputFast := "test/draw/output/RasterMonochrome_upscaledFast.png"
 			outputSmooth := "test/draw/output/RasterMonochrome_upscaledSmooth.png"
-			size := IntSize2D new(13, 5)
+			size := IntVector2D new(13, 5)
 			image := RasterMonochrome open(this sourceFlower)
 			image2 := image resizeTo(image size / 2)
 			expect(image2 size == image size / 2)

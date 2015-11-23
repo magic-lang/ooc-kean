@@ -31,11 +31,11 @@ GLContext: abstract class {
 	blend: abstract func ~constant (factor: Float)
 	blend: abstract func ~alphaMonochrome
 	createFence: abstract func -> GLFence
-	createFramebufferObject: abstract func (texture: GLTexture, size: IntSize2D) -> GLFramebufferObject
+	createFramebufferObject: abstract func (texture: GLTexture, size: IntVector2D) -> GLFramebufferObject
 	createQuad: abstract func -> GLQuad
 	createShaderProgram: abstract func (vertexSource, fragmentSource: String) -> GLShaderProgram
-	createTexture: abstract func (type: TextureType, size: IntSize2D, stride: UInt, pixels := null, allocate : Bool = true) -> GLTexture
-	createVolumeTexture: abstract func (size: IntSize3D, pixels: UInt8*) -> GLVolumeTexture
+	createTexture: abstract func (type: TextureType, size: IntVector2D, stride: UInt, pixels := null, allocate : Bool = true) -> GLTexture
+	createVolumeTexture: abstract func (size: IntVector3D, pixels: UInt8*) -> GLVolumeTexture
 	createRenderer: abstract func -> GLRenderer
 	createVertexArrayObject: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GLVertexArrayObject
 	createContext: static func ~shared (display: Pointer, nativeBackend: Long, sharedContext: This = null) -> This {

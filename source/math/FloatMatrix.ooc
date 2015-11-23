@@ -16,14 +16,14 @@
 
 use ooc-base
 import math
-import IntSize2D
+import IntVector2D
 import FloatPoint3D
 
 FloatMatrix : cover {
 	// x = column
 	// y = row
-	_dimensions: IntSize2D
-	dimensions: IntSize2D { get {
+	_dimensions: IntVector2D
+	dimensions: IntVector2D { get {
 		result := this _dimensions
 		this free(Owner Receiver)
 		result
@@ -62,10 +62,10 @@ FloatMatrix : cover {
 	elements ::= this _elements pointer as Float*
 
 	init: func@ ~buffer (=_elements, =_dimensions)
-	init: func@ ~IntSize2D (._dimensions) {
+	init: func@ ~IntVector2D (._dimensions) {
 		this init(OwnedBuffer new(_dimensions area * Float size), _dimensions)
 	}
-	init: func@ (width, height: Int) { this init(IntSize2D new(width, height)) }
+	init: func@ (width, height: Int) { this init(IntVector2D new(width, height)) }
 	free: func@ -> Bool { this _elements free() }
 	free: func@ ~withCriteria (criteria: Owner) -> Bool { this _elements free(criteria) }
 	identity: static func (order: Int) -> This {

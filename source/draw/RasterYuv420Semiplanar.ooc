@@ -45,41 +45,41 @@ Yuv420RasterCanvas: class extends RasterCanvas {
 RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	stride ::= this _y stride
 	init: func ~fromRasterImages (yImage: RasterMonochrome, uvImage: RasterUv) { super(yImage, uvImage) }
-	init: func ~allocateOffset (size: IntSize2D, stride: UInt, uvOffset: UInt) {
+	init: func ~allocateOffset (size: IntVector2D, stride: UInt, uvOffset: UInt) {
 		(yImage, uvImage) := This _allocate(size, stride, uvOffset)
 		this init(yImage, uvImage)
 	}
-	init: func ~allocateStride (size: IntSize2D, stride: UInt) { this init(size, stride, stride * size y) }
-	init: func ~allocate (size: IntSize2D) { this init(size, size x) }
+	init: func ~allocateStride (size: IntVector2D, stride: UInt) { this init(size, stride, stride * size y) }
+	init: func ~allocate (size: IntVector2D) { this init(size, size x) }
 	init: func ~fromThis (original: This) {
 		(yImage, uvImage) := This _allocate(original size, original stride, original stride * original size y)
 		super(original, yImage, uvImage)
 	}
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D, stride: UInt, uvOffset: UInt) {
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D, stride: UInt, uvOffset: UInt) {
 		(yImage, uvImage) := This _createSubimages(buffer, size, stride, uvOffset)
 		this init(yImage, uvImage)
 	}
-	_allocate: static func (size: IntSize2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
+	_allocate: static func (size: IntVector2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
 		length := uvOffset + stride * (size y + 1) / 2
 		buffer := ByteBuffer new(length)
 		This _createSubimages(buffer, size, stride, uvOffset)
 	}
-	_createSubimages: static func (buffer: ByteBuffer, size: IntSize2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
+	_createSubimages: static func (buffer: ByteBuffer, size: IntVector2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
 		yLength := stride * size y
 		uvLength := stride * size y / 2
 		(RasterMonochrome new(buffer slice(0, yLength), size, stride), RasterUv new(buffer slice(uvOffset, uvLength), This _uvSize(size), stride))
 	}
-	_uvSize: static func (size: IntSize2D) -> IntSize2D {
-		IntSize2D new(size x / 2 + (Int odd(size x) ? 1 : 0), size y / 2 + (Int odd(size y) ? 1 : 0))
+	_uvSize: static func (size: IntVector2D) -> IntVector2D {
+		IntVector2D new(size x / 2 + (Int odd(size x) ? 1 : 0), size y / 2 + (Int odd(size y) ? 1 : 0))
 	}
-	create: func (size: IntSize2D) -> Image { This new(size) }
+	create: func (size: IntVector2D) -> Image { This new(size) }
 	copy: func -> This {
 		result := This new(this)
 		this y buffer copyTo(result y buffer)
 		this uv buffer copyTo(result uv buffer)
 		result
 	}
-	resizeTo: override func (size: IntSize2D) -> This {
+	resizeTo: override func (size: IntVector2D) -> This {
 		result: This
 		if (this size == size)
 			result = this copy()
@@ -106,7 +106,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		thisUvBuffer := this uv buffer pointer as ColorUv*
 		targetUvBuffer := target uv buffer pointer as ColorUv*
 		if (Int odd(target size y))
-			targetSizeHalf = IntSize2D new(targetSizeHalf x, targetSizeHalf y + 1)
+			targetSizeHalf = IntVector2D new(targetSizeHalf x, targetSizeHalf y + 1)
 		for (row in 0 .. targetSizeHalf y) {
 			srcRow := (thisSizeHalf y * row) / targetSizeHalf y
 			thisStride := srcRow * this uv stride / 2
@@ -118,7 +118,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		}
 	}
 	crop: func (region: FloatBox2D) -> This {
-		size := region size toIntSize2D()
+		size := region size toIntVector2D()
 		result := This new(size, size x + (Int odd(size x) ? 1 : 0)) as This
 		this cropInto(region, result)
 		result
@@ -242,7 +242,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		bgr free()
 		result
 	}
-	openRaw: static func (filename: String, size: IntSize2D) -> This {
+	openRaw: static func (filename: String, size: IntVector2D) -> This {
 		fileReader := FileReader new(FStream open(filename, "rb"))
 		result := This new(size)
 		fileReader read((result y buffer pointer as Char*), 0, result y buffer size)
@@ -259,7 +259,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	}
 	_createCanvas: override func -> Canvas { Yuv420RasterCanvas new(this) }
 	kean_draw_rasterYuv420Semiplanar_new: static unmangled func (width, height, stride: Int, monochromeData, uvData: Void*) -> This {
-		result := This new(IntSize2D new(width, height), stride)
+		result := This new(IntVector2D new(width, height), stride)
 		memcpy(result uv buffer pointer, uvData, (height / 2) * stride)
 		memcpy(result y buffer pointer, monochromeData, height * stride)
 		result

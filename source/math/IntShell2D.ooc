@@ -16,14 +16,14 @@
 
 import math
 import IntPoint2D
-import IntSize2D
+import IntVector2D
 import IntBox2D
 use ooc-base
 
 IntShell2D: cover {
 	left, right, top, bottom: Int
 	leftTop ::= IntPoint2D new(this left, this top)
-	size ::= IntSize2D new(this left + this right, this top + this bottom)
+	size ::= IntVector2D new(this left + this right, this top + this bottom)
 	balance ::= IntPoint2D new(this right - this left, this bottom - this top)
 	isZero ::= this left == 0 && this right == 0 && this top == 0 && this bottom == 0
 	notZero ::= this left != 0 && this right != 0 && this top != 0 && this bottom != 0
@@ -31,8 +31,8 @@ IntShell2D: cover {
 	init: func@ ~fromFloat (value: Int) { this init(value, value) }
 	init: func@ ~fromFloats (x, y: Int) { this init(x, x, y, y) }
 	init: func@ ~default { this init(0) }
-	decrease: func (size: IntSize2D) -> IntBox2D { IntBox2D new(this left, this top, size x - this left - this right, size y - this top - this bottom) }
-	increase: func (size: IntSize2D) -> IntBox2D { IntBox2D new(-this left, -this right, size x + this left + this right, size y + this top + this bottom) }
+	decrease: func (size: IntVector2D) -> IntBox2D { IntBox2D new(this left, this top, size x - this left - this right, size y - this top - this bottom) }
+	increase: func (size: IntVector2D) -> IntBox2D { IntBox2D new(-this left, -this right, size x + this left + this right, size y + this top + this bottom) }
 	decrease: func ~byBox (box: IntBox2D) -> IntBox2D {
 		IntBox2D new(box leftTop x + this left, box leftTop y + this top, box size x - this left - this right, box size y - this top - this bottom)
 	}

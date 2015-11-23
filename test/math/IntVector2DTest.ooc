@@ -4,16 +4,16 @@ use ooc-math
 import math
 import lang/IO
 
-IntSize2DTest: class extends Fixture {
+IntVector2DTest: class extends Fixture {
 	precision := 1.0e-5f
-	vector0 := IntSize2D new (22, -3)
-	vector1 := IntSize2D new (12, 13)
-	vector2 := IntSize2D new (34, 10)
-	vector3 := IntSize2D new (10, 20)
+	vector0 := IntVector2D new (22, -3)
+	vector1 := IntVector2D new (12, 13)
+	vector2 := IntVector2D new (34, 10)
+	vector3 := IntVector2D new (10, 20)
 	init: func {
-		super("IntSize2D")
+		super("IntVector2D")
 		this add("equality", func {
-			point := IntSize2D new()
+			point := IntVector2D new()
 			expect(this vector0 == this vector0, is true)
 			expect(this vector0 != this vector1, is true)
 			expect(this vector0 == point, is false)
@@ -25,8 +25,8 @@ IntSize2DTest: class extends Fixture {
 			expect((this vector0 + this vector1) y, is equal to(this vector2 y))
 		})
 		this add("subtraction", func {
-			expect((this vector0 - this vector0) x, is equal to((IntSize2D new()) x))
-			expect((this vector0 - this vector0) y, is equal to((IntSize2D new()) y))
+			expect((this vector0 - this vector0) x, is equal to((IntVector2D new()) x))
+			expect((this vector0 - this vector0) y, is equal to((IntVector2D new()) y))
 		})
 		this add("scalar multiplication", func {
 			expect(((-1) * this vector0) x, is equal to((-vector0) x))
@@ -48,11 +48,11 @@ IntSize2DTest: class extends Fixture {
 		this add("casting", func {
 			value := t"10, 20"
 			expect(this vector3 toString(), is equal to(value toString()))
-			expect(IntSize2D parse(value) x, is equal to(this vector3 x))
-			expect(IntSize2D parse(value) y, is equal to(this vector3 y))
+			expect(IntVector2D parse(value) x, is equal to(this vector3 x))
+			expect(IntVector2D parse(value) y, is equal to(this vector3 y))
 		})
 		this add("float casts", func {
-			vector := vector0 toFloatSize2D()
+			vector := vector0 toFloatVector2D()
 			expect(vector x, is equal to(22.0f) within(this precision))
 			expect(vector y, is equal to(-3.0f) within(this precision))
 		})
@@ -73,14 +73,14 @@ IntSize2DTest: class extends Fixture {
 			expect(result y, is equal to(10))
 		})
 		this add("polar", func {
-			sqrttwo := IntSize2D polar(1.415f, 0.785f)
+			sqrttwo := IntVector2D polar(1.415f, 0.785f)
 			expect(sqrttwo x, is equal to(1))
 			expect(sqrttwo y, is equal to(1))
 		})
 		this add("area, square, empty", func {
-			rectangle := IntSize2D new(10, 20)
-			square := IntSize2D new(5, 5)
-			empty := IntSize2D new()
+			rectangle := IntVector2D new(10, 20)
+			square := IntVector2D new(5, 5)
+			empty := IntVector2D new()
 			expect(rectangle area, is equal to(200))
 			expect(square square, is true)
 			expect(rectangle square, is false)
@@ -90,4 +90,4 @@ IntSize2DTest: class extends Fixture {
 		})
 	}
 }
-IntSize2DTest new() run()
+IntVector2DTest new() run()

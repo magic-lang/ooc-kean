@@ -21,7 +21,7 @@ use ooc-math
 
 version(!gpuOff) {
 GLFramebufferObject: abstract class {
-	_size: IntSize2D
+	_size: IntVector2D
 	size ::= this _size
 	_backend: UInt
 

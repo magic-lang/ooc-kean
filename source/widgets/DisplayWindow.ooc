@@ -21,10 +21,10 @@ import UnixWindow
 import Win32DisplayWindow
 
 DisplayWindow: abstract class {
-	init: func (size: IntSize2D, title: String)
+	init: func (size: IntVector2D, title: String)
 	draw: abstract func (image: Image)
 	refresh: virtual func
-	create: static func (size: IntSize2D, title: String) -> This {
+	create: static func (size: IntVector2D, title: String) -> This {
 		version(unix || apple)
 			return UnixWindow create(size, title)
 		version(windows)

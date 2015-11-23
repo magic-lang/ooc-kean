@@ -37,7 +37,7 @@ Axis: class {
 	length: func -> Float {
 		this max - this min
 	}
-	getSvg: func (plotAreaSize, margin: FloatSize2D, transform: FloatTransform2D, fontSize: Int) -> String {
+	getSvg: func (plotAreaSize, margin: FloatVector2D, transform: FloatTransform2D, fontSize: Int) -> String {
 		result := ""
 		if (this visible) {
 			if (this fontSize == 0)
@@ -52,7 +52,7 @@ Axis: class {
 		}
 		result
 	}
-	getHorizontalSvg: func (plotAreaSize, margin: FloatSize2D, position: FloatPoint2D, transform: FloatTransform2D, radix: Float) -> String {
+	getHorizontalSvg: func (plotAreaSize, margin: FloatVector2D, position: FloatPoint2D, transform: FloatTransform2D, radix: Float) -> String {
 		result := "<g desc='X-axis data'>\n"
 		labelOffset := FloatPoint2D new(plotAreaSize x / 2.0f, 3.0f + (this fontSize - 4) + this fontSize)
 		numberOffset := FloatPoint2D new(0.0f, 3.0f + (this fontSize - 4))
@@ -70,7 +70,7 @@ Axis: class {
 		}
 		result >> "</g>\n"
 	}
-	getVerticalSvg: func (plotAreaSize, margin: FloatSize2D, position: FloatPoint2D, transform: FloatTransform2D, radix: Float) -> String {
+	getVerticalSvg: func (plotAreaSize, margin: FloatVector2D, position: FloatPoint2D, transform: FloatTransform2D, radix: Float) -> String {
 		result := "<g desc='Y-axis data'>\n"
 		labelOffset := FloatPoint2D new(- (log10(Float maximum(this max, Float absolute(this min)) / radix) + 3.0f) * 0.6f * (this fontSize - 4.0f), - plotAreaSize y / 2.0f)
 		numberOffset := FloatPoint2D new(- 0.6f * (this fontSize - 4.0f), (this fontSize - 4.0f) / 3.0f)

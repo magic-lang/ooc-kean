@@ -103,7 +103,7 @@ FloatPoint2DTest: class extends Fixture {
 			expect(point y, is equal to(20))
 		})
 		this add("float casts", func {
-			vector := point3 toFloatSize2D()
+			vector := point3 toFloatVector2D()
 			expect(vector x, is equal to(point3 x))
 			expect(vector y, is equal to(point3 y))
 		})

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
-import FloatSize2D
+import FloatVector2D
 import IntPoint2D
 use ooc-base
 
@@ -44,14 +44,14 @@ FloatPoint2D: cover {
 	maximum: func (floor: This) -> This { This new(Float maximum(this x, floor x), Float maximum(this y, floor y)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
-	operator + (other: FloatSize2D) -> This { This new(this x + other x, this y + other y) }
+	operator + (other: FloatVector2D) -> This { This new(this x + other x, this y + other y) }
 	operator - (other: This) -> This { This new(this x - other x, this y - other y) }
-	operator - (other: FloatSize2D) -> This { This new(this x - other x, this y - other y) }
+	operator - (other: FloatVector2D) -> This { This new(this x - other x, this y - other y) }
 	operator - -> This { This new(-this x, -this y) }
 	operator * (other: This) -> This { This new(this x * other x, this y * other y) }
-	operator * (other: FloatSize2D) -> This { This new(this x * other x, this y * other y) }
+	operator * (other: FloatVector2D) -> This { This new(this x * other x, this y * other y) }
 	operator / (other: This) -> This { This new(this x / other x, this y / other y) }
-	operator / (other: FloatSize2D) -> This { This new(this x / other x, this y / other y) }
+	operator / (other: FloatVector2D) -> This { This new(this x / other x, this y / other y) }
 	operator * (other: Float) -> This { This new(this x * other, this y * other) }
 	operator / (other: Float) -> This { This new(this x / other, this y / other) }
 	operator == (other: This) -> Bool { this x == other x && this y == other y }
@@ -62,7 +62,7 @@ FloatPoint2D: cover {
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
 	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
 	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x as Int, this y as Int) }
-	toFloatSize2D: func -> FloatSize2D { FloatSize2D new(this x, this y) }
+	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x, this y) }
 	operator as -> String { this toString() }
 	toString: func -> String { this x toString() & ", " clone() & this y toString() }
 	parse: static func (input: Text) -> This {

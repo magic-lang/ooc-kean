@@ -73,7 +73,7 @@ RecycleBin: class {
 			case => Debug raise("Unknown format in GpuImageBin add()")
 		}
 	}
-	_search: func (size: IntSize2D, list: VectorList<OpenGLPacked>) -> OpenGLPacked {
+	_search: func (size: IntVector2D, list: VectorList<OpenGLPacked>) -> OpenGLPacked {
 		result := null
 		index := -1
 		this _mutex lock()
@@ -89,7 +89,7 @@ RecycleBin: class {
 		this _mutex unlock()
 		result
 	}
-	find: func (type: GpuImageType, size: IntSize2D) -> OpenGLPacked {
+	find: func (type: GpuImageType, size: IntVector2D) -> OpenGLPacked {
 		match (type) {
 			case GpuImageType monochrome => this _search(size, this _monochrome)
 			case GpuImageType uv => this _search(size, this _uv)

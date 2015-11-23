@@ -4,15 +4,15 @@ use ooc-math
 import math
 import lang/IO
 
-FloatSize3DTest: class extends Fixture {
+FloatVector3DTest: class extends Fixture {
 	precision := 1.0e-4f
-	vector0 := FloatSize3D new (22.0f, -3.0f, 10.0f)
-	vector1 := FloatSize3D new (12.0f, 13.0f, 20.0f)
-	vector2 := FloatSize3D new (34.0f, 10.0f, 30.0f)
-	vector3 := FloatSize3D new (10.0f, 20.0f, 30.0f)
-	vector4 := FloatSize3D new (10.1f, 20.7f, 30.3f)
+	vector0 := FloatVector3D new (22.0f, -3.0f, 10.0f)
+	vector1 := FloatVector3D new (12.0f, 13.0f, 20.0f)
+	vector2 := FloatVector3D new (34.0f, 10.0f, 30.0f)
+	vector3 := FloatVector3D new (10.0f, 20.0f, 30.0f)
+	vector4 := FloatVector3D new (10.1f, 20.7f, 30.3f)
 	init: func {
-		super("FloatSize3D")
+		super("FloatVector3D")
 		this add("norm", func {
 			expect(this vector0 norm, is equal to(593.0f sqrt()) within(this precision))
 			expect(this vector0 norm, is equal to(this vector0 scalarProduct(this vector0) sqrt()) within(this precision))
@@ -21,7 +21,7 @@ FloatSize3DTest: class extends Fixture {
 			expect(vector3 volume, is equal to(6000.0f) within(this precision))
 		})
 		this add("scalar product", func {
-			size := FloatSize3D new()
+			size := FloatVector3D new()
 			expect(this vector0 scalarProduct(size), is equal to(0.0f) within(this precision))
 			expect(this vector0 scalarProduct(this vector1), is equal to(425.0f) within(this precision))
 		})
@@ -31,7 +31,7 @@ FloatSize3DTest: class extends Fixture {
 			expect(this vector0 vectorProduct(this vector1) z, is equal to(322.0f) within(this precision))
 		})
 		this add("equality", func {
-			size := FloatSize3D new()
+			size := FloatVector3D new()
 			expect(this vector0 == this vector0, is true)
 			expect(this vector0 != this vector1, is true)
 			expect(this vector0 == size, is false)
@@ -44,9 +44,9 @@ FloatSize3DTest: class extends Fixture {
 			expect((this vector0 + this vector1) z, is equal to(this vector2 z))
 		})
 		this add("subtraction", func {
-			expect((this vector0 - this vector0) x, is equal to((FloatSize3D new()) x))
-			expect((this vector0 - this vector0) y, is equal to((FloatSize3D new()) y))
-			expect((this vector0 - this vector0) z, is equal to((FloatSize3D new()) z))
+			expect((this vector0 - this vector0) x, is equal to((FloatVector3D new()) x))
+			expect((this vector0 - this vector0) y, is equal to((FloatVector3D new()) y))
+			expect((this vector0 - this vector0) z, is equal to((FloatVector3D new()) z))
 		})
 		this add("get values", func {
 			expect(this vector0 x, is equal to(22.0f))
@@ -56,12 +56,12 @@ FloatSize3DTest: class extends Fixture {
 		this add("casting", func {
 			value := t"10.00, 20.00, 30.00"
 			expect(this vector3 toString(), is equal to(value toString()))
-			expect(FloatSize3D parse(value) x, is equal to(this vector3 x))
-			expect(FloatSize3D parse(value) y, is equal to(this vector3 y))
-			expect(FloatSize3D parse(value) z, is equal to(this vector3 z))
+			expect(FloatVector3D parse(value) x, is equal to(this vector3 x))
+			expect(FloatVector3D parse(value) y, is equal to(this vector3 y))
+			expect(FloatVector3D parse(value) z, is equal to(this vector3 z))
 		})
 		this add("int casts", func {
-			vector := this vector0 toIntSize3D()
+			vector := this vector0 toIntVector3D()
 			expect(vector x, is equal to(22))
 			expect(vector y, is equal to(-3))
 			expect(vector z, is equal to(10))
@@ -112,9 +112,9 @@ FloatSize3DTest: class extends Fixture {
 			expect(this vector0 scalarProduct(this vector1), is equal to (425.0f) within(this precision))
 		})
 		this add("interpolation", func {
-			interpolate1 := FloatSize3D linearInterpolation(this vector0, this vector1, 0.0f)
-			interpolate2 := FloatSize3D linearInterpolation(this vector0, this vector1, 0.5f)
-			interpolate3 := FloatSize3D linearInterpolation(this vector0, this vector1, 1.0f)
+			interpolate1 := FloatVector3D linearInterpolation(this vector0, this vector1, 0.0f)
+			interpolate2 := FloatVector3D linearInterpolation(this vector0, this vector1, 0.5f)
+			interpolate3 := FloatVector3D linearInterpolation(this vector0, this vector1, 1.0f)
 			expect(interpolate1 x, is equal to(this vector0 x) within(this precision))
 			expect(interpolate1 y, is equal to(this vector0 y) within(this precision))
 			expect(interpolate1 z, is equal to(this vector0 z) within(this precision))
@@ -126,22 +126,22 @@ FloatSize3DTest: class extends Fixture {
 			expect(interpolate3 z, is equal to(this vector1 z) within(this precision))
 		})
 		this add("angle and distance", func {
-			first := FloatSize3D new(2.0f, -3.0f, 5.0f)
-			second := FloatSize3D new(5.0f, 3.0f, -7.0f)
+			first := FloatVector3D new(2.0f, -3.0f, 5.0f)
+			second := FloatVector3D new(5.0f, 3.0f, -7.0f)
 			expect(first angle(second), is equal to(2.221f) within(0.01f))
 			expect(first distance(second), is equal to(13.74f) within(0.01f))
 		})
 		this add("length, empty", func {
-			empty := FloatSize3D new()
+			empty := FloatVector3D new()
 			expect(this vector0 length, is equal to(24.35f) within(0.01f))
 			expect(empty empty, is true)
 			expect(empty volume, is equal to(0.0f) within(this precision))
 			expect(this vector0 empty, is false)
 		})
 		this add("azimuth", func {
-			myvector := FloatSize3D new(1.0, 5.5, 0.1)
+			myvector := FloatVector3D new(1.0, 5.5, 0.1)
 			expect(myvector azimuth, is equal to(5.5 atan2(1.0) as Float) within(this precision))
 		})
 	}
 }
-FloatSize3DTest new() run()
+FloatVector3DTest new() run()

@@ -15,7 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 import math
 import FloatPoint2D
-import FloatSize2D
+import FloatVector2D
 import IntBox2D
 import FloatPoint2DVectorList
 use ooc-base
@@ -23,7 +23,7 @@ use ooc-collections
 
 FloatBox2D: cover {
 	leftTop: FloatPoint2D
-	size: FloatSize2D
+	size: FloatVector2D
 	width ::= this size x
 	height ::= this size y
 	left ::= this leftTop x
@@ -48,15 +48,15 @@ FloatBox2D: cover {
 		height := (first y - second y) abs()
 		this init(left, top, width, height)
 	}
-	init: func@ ~fromFloats (left, top, width, height: Float) { this init(FloatPoint2D new(left, top), FloatSize2D new(width, height)) }
-	init: func@ ~fromSize (size: FloatSize2D) { this init(FloatPoint2D new(), size) }
-	init: func@ ~default { this init(FloatPoint2D new(), FloatSize2D new()) }
+	init: func@ ~fromFloats (left, top, width, height: Float) { this init(FloatPoint2D new(left, top), FloatVector2D new(width, height)) }
+	init: func@ ~fromSize (size: FloatVector2D) { this init(FloatPoint2D new(), size) }
+	init: func@ ~default { this init(FloatPoint2D new(), FloatVector2D new()) }
 	swap: func -> This { This new(this leftTop swap(), this size swap()) }
 	pad: func (left, right, top, bottom: Float) -> This {
-		This new(FloatPoint2D new(this left - left, this top - top), FloatSize2D new(this width + left + right, this height + top + bottom))
+		This new(FloatPoint2D new(this left - left, this top - top), FloatVector2D new(this width + left + right, this height + top + bottom))
 	}
 	pad: func ~fromFloat (pad: Float) -> This { this pad(pad, pad, pad, pad) }
-	pad: func ~fromSize (pad: FloatSize2D) -> This { this pad(pad x, pad x, pad y, pad y) }
+	pad: func ~fromSize (pad: FloatVector2D) -> This { this pad(pad x, pad x, pad y, pad y) }
 	enlargeEvenly: func (fraction: Float) -> This {
 		this pad(fraction * (this size x + this size y) / 2.0f)
 	}
@@ -66,17 +66,17 @@ FloatBox2D: cover {
 	shrink: func (fraction: Float) -> This {
 		this scale(1.0f - fraction)
 	}
-	resizeTo: func (size: FloatSize2D) -> This {
+	resizeTo: func (size: FloatVector2D) -> This {
 		This createAround(this center, size)
 	}
 	scale: func (value: Float) -> This {
 		This createAround(this center, value * this size)
 	}
-	enlargeTo: func (size: FloatSize2D) -> This {
-		This createAround(this center, FloatSize2D maximum(this size, size))
+	enlargeTo: func (size: FloatVector2D) -> This {
+		This createAround(this center, FloatVector2D maximum(this size, size))
 	}
-	shrinkTo: func (size: FloatSize2D) -> This {
-		This createAround(this center, FloatSize2D minimum(this size, size))
+	shrinkTo: func (size: FloatVector2D) -> This {
+		This createAround(this center, FloatVector2D minimum(this size, size))
 	}
 	intersection: func (other: This) -> This {
 		left := Float maximum(this left, other left)
@@ -102,13 +102,13 @@ FloatBox2D: cover {
 				result add(i)
 		result
 	}
-	distance: func (point: FloatPoint2D) -> FloatSize2D {
-		((point - this center) toFloatSize2D() absolute - this size / 2.f) maximum(FloatSize2D new())
+	distance: func (point: FloatPoint2D) -> FloatVector2D {
+		((point - this center) toFloatVector2D() absolute - this size / 2.f) maximum(FloatVector2D new())
 	}
-	maximumDistance: func (points: VectorList<FloatPoint2D>) -> FloatSize2D {
-		result := FloatSize2D new()
+	maximumDistance: func (points: VectorList<FloatPoint2D>) -> FloatVector2D {
+		result := FloatVector2D new()
 		for (index in 0 .. points count)
-			result = FloatSize2D maximum(this distance(points[index]), result)
+			result = FloatVector2D maximum(this distance(points[index]), result)
 		result
 	}
 	round: func -> This { This new(this leftTop round(), this size round()) }
@@ -130,17 +130,17 @@ FloatBox2D: cover {
 	}
 	operator + (other: FloatPoint2D) -> This { This new(this leftTop + other, this size) }
 	operator - (other: FloatPoint2D) -> This { This new(this leftTop - other, this size) }
-	operator + (other: FloatSize2D) -> This { This new(this leftTop, this size + other) }
-	operator * (other: FloatSize2D) -> This { This new(this leftTop * other, this size * other) }
-	operator / (other: FloatSize2D) -> This { This new(this leftTop / other, this size / other) }
-	operator - (other: FloatSize2D) -> This { This new(this leftTop, this size - other) }
+	operator + (other: FloatVector2D) -> This { This new(this leftTop, this size + other) }
+	operator * (other: FloatVector2D) -> This { This new(this leftTop * other, this size * other) }
+	operator / (other: FloatVector2D) -> This { This new(this leftTop / other, this size / other) }
+	operator - (other: FloatVector2D) -> This { This new(this leftTop, this size - other) }
 	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }
 	operator != (other: This) -> Bool { !(this == other) }
 	toIntBox2D: func -> IntBox2D { IntBox2D new(this left, this top, this width, this height) }
 	operator as -> String { this toString() }
 	adaptTo: func (other: This, weight: Float) -> This {
 		newCenter := FloatPoint2D linearInterpolation(this center, other center, weight)
-		newSize := FloatSize2D linearInterpolation(this size, other size, weight)
+		newSize := FloatVector2D linearInterpolation(this size, other size, weight)
 		This createAround(newCenter, newSize)
 	}
 	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
@@ -150,7 +150,7 @@ FloatBox2D: cover {
 		parts free()
 		result
 	}
-	createAround: static func (center: FloatPoint2D, size: FloatSize2D) -> This { This new(center - size / 2.0f, size) }
+	createAround: static func (center: FloatPoint2D, size: FloatVector2D) -> This { This new(center - size / 2.0f, size) }
 	bounds: static func (left, right, top, bottom: Float) -> This { This new(left, top, right - left, bottom - top) }
 	bounds: static func ~fromArray (points: FloatPoint2D[]) -> This { This bounds(points data, points length) }
 	bounds: static func ~fromList (points: VectorList<FloatPoint2D>) -> This { This bounds(points pointer as FloatPoint2D*, points count) }
@@ -182,6 +182,6 @@ FloatBox2D: cover {
 		This new(xMinimum, yMinimum, xMaximum - xMinimum, yMaximum - yMinimum)
 	}
 	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
-		This new(FloatPoint2D linearInterpolation(a leftTop, b leftTop, ratio), FloatSize2D linearInterpolation(a size, b size, ratio))
+		This new(FloatPoint2D linearInterpolation(a leftTop, b leftTop, ratio), FloatVector2D linearInterpolation(a size, b size, ratio))
 	}
 }

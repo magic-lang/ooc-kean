@@ -4,16 +4,16 @@ use ooc-math
 import math
 import lang/IO
 
-FloatSize2DTest: class extends Fixture {
+FloatVector2DTest: class extends Fixture {
 	precision := 1.0e-4f
-	vector0 := FloatSize2D new (22.221f, -3.1f)
-	vector1 := FloatSize2D new (12.221f, 13.1f)
-	vector2 := FloatSize2D new (34.442f, 10.0f)
-	vector3 := FloatSize2D new (10.0f, 20.0f)
+	vector0 := FloatVector2D new (22.221f, -3.1f)
+	vector1 := FloatVector2D new (12.221f, 13.1f)
+	vector2 := FloatVector2D new (34.442f, 10.0f)
+	vector3 := FloatVector2D new (10.0f, 20.0f)
 	init: func {
-		super("FloatSize2D")
+		super("FloatVector2D")
 		this add("equality", func {
-			point := FloatSize2D new()
+			point := FloatVector2D new()
 			expect(this vector0 == this vector0, is true)
 			expect(this vector0 != this vector1, is true)
 			expect(this vector0 == point, is false)
@@ -25,8 +25,8 @@ FloatSize2DTest: class extends Fixture {
 			expect((this vector0 + this vector1) y, is equal to(this vector2 y))
 		})
 		this add("subtraction", func {
-			expect((this vector0 - this vector0) x, is equal to(FloatSize2D new() x))
-			expect((this vector0 - this vector0) y, is equal to(FloatSize2D new() y))
+			expect((this vector0 - this vector0) x, is equal to(FloatVector2D new() x))
+			expect((this vector0 - this vector0) y, is equal to(FloatVector2D new() y))
 		})
 		this add("scalar multiplication", func {
 			expect(((-1) * this vector0) x, is equal to((-vector0) x))
@@ -48,8 +48,8 @@ FloatSize2DTest: class extends Fixture {
 		this add("casting", func {
 			value := t"10.00, 20.00"
 			expect(this vector3 toString(), is equal to(value toString()))
-			expect(FloatSize2D parse(value) x, is equal to(this vector3 x))
-			expect(FloatSize2D parse(value) y, is equal to(this vector3 y))
+			expect(FloatVector2D parse(value) x, is equal to(this vector3 x))
+			expect(FloatVector2D parse(value) y, is equal to(this vector3 y))
 		})
 		this add("float casts", func {
 			point := vector3 toFloatPoint2D()
@@ -57,43 +57,43 @@ FloatSize2DTest: class extends Fixture {
 			expect(point y, is equal to(vector3 y) within(this precision))
 		})
 		this add("polar 0", func {
-			point := FloatSize2D new()
+			point := FloatVector2D new()
 			expect(point norm, is equal to(0))
 			expect(point azimuth, is equal to(0))
 		})
 		this add("polar 1", func {
-			point := FloatSize2D new(1, 0)
+			point := FloatVector2D new(1, 0)
 			expect(point norm, is equal to(1.0f) within(this precision))
 			expect(point azimuth, is equal to(0))
 		})
 		this add("polar 2", func {
-			point := FloatSize2D new(0, 1)
+			point := FloatVector2D new(0, 1)
 			expect(point norm, is equal to(1.0f) within(this precision))
 			expect(point azimuth, is equal to(Float pi / 2.0f) within(this precision))
 		})
 		this add("polar 3", func {
-			point := FloatSize2D new(0, -5)
+			point := FloatVector2D new(0, -5)
 			expect(point norm, is equal to(5.0f) within(this precision))
 			expect(point azimuth, is equal to(Float pi / -2.0f) within(this precision))
 		})
 		this add("polar 4", func {
-			point := FloatSize2D new(-1, 0)
+			point := FloatVector2D new(-1, 0)
 			expect(point norm, is equal to(1.0f) within(this precision))
 			expect(point azimuth, is equal to(Float pi) within(this precision))
 		})
 		this add("polar 5", func {
-			point := FloatSize2D new(-3, 0)
-			point2 := FloatSize2D polar(point norm, point azimuth)
+			point := FloatVector2D new(-3, 0)
+			point2 := FloatVector2D polar(point norm, point azimuth)
 			expect(point distance(point2), is equal to(0.0f) within(this precision))
 		})
 		this add("angles", func {
-			expect(FloatSize2D basisX angle(FloatSize2D basisX), is equal to(0.0f) within(this precision))
-			expect(FloatSize2D basisX angle(FloatSize2D basisY), is equal to(Float pi / 2.0f) within(this precision))
-			expect(FloatSize2D basisX angle(-FloatSize2D basisX), is equal to(Float pi) within(this precision))
-			expect(FloatSize2D basisX angle(-FloatSize2D basisY), is equal to(-(Float pi) / 2.0f) within(this precision))
+			expect(FloatVector2D basisX angle(FloatVector2D basisX), is equal to(0.0f) within(this precision))
+			expect(FloatVector2D basisX angle(FloatVector2D basisY), is equal to(Float pi / 2.0f) within(this precision))
+			expect(FloatVector2D basisX angle(-FloatVector2D basisX), is equal to(Float pi) within(this precision))
+			expect(FloatVector2D basisX angle(-FloatVector2D basisY), is equal to(-(Float pi) / 2.0f) within(this precision))
 		})
 		this add("int casts", func {
-			vector := this vector0 toIntSize2D()
+			vector := this vector0 toIntVector2D()
 			expect(vector x, is equal to(22))
 			expect(vector y, is equal to(-3))
 		})
@@ -131,9 +131,9 @@ FloatSize2DTest: class extends Fixture {
 			expect(this vector0 scalarProduct(this vector1), is equal to (230.95f) within(0.01f))
 		})
 		this add("interpolation", func {
-			interpolate1 := FloatSize2D linearInterpolation(this vector0, this vector1, 0.0f)
-			interpolate2 := FloatSize2D linearInterpolation(this vector0, this vector1, 0.5f)
-			interpolate3 := FloatSize2D linearInterpolation(this vector0, this vector1, 1.0f)
+			interpolate1 := FloatVector2D linearInterpolation(this vector0, this vector1, 0.0f)
+			interpolate2 := FloatVector2D linearInterpolation(this vector0, this vector1, 0.5f)
+			interpolate3 := FloatVector2D linearInterpolation(this vector0, this vector1, 1.0f)
 			expect(interpolate1 x, is equal to(this vector0 x) within(this precision))
 			expect(interpolate1 y, is equal to(this vector0 y) within(this precision))
 			expect(interpolate2 x, is equal to(17.22f) within(0.01f))
@@ -142,7 +142,7 @@ FloatSize2DTest: class extends Fixture {
 			expect(interpolate3 y, is equal to(this vector1 y) within(this precision))
 		})
 		this add("area, length, empty", func {
-			empty := FloatSize2D new()
+			empty := FloatVector2D new()
 			expect(this vector0 area, is equal to(-68.89f) within(0.01f))
 			expect(this vector0 length, is equal to(22.44f) within(0.01f))
 			expect(empty empty, is true)
@@ -151,4 +151,4 @@ FloatSize2DTest: class extends Fixture {
 		})
 	}
 }
-FloatSize2DTest new() run()
+FloatVector2DTest new() run()

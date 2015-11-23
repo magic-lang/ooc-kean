@@ -187,12 +187,12 @@ Gles3Context: class extends GLContext {
 		result := Gles3ShaderProgram new()
 		result _compileShaders(vertexSource, fragmentSource) ? result : null
 	}
-	createTexture: func (type: TextureType, size: IntSize2D, stride: UInt, pixels := null, allocate := true) -> Gles3Texture {
+	createTexture: func (type: TextureType, size: IntVector2D, stride: UInt, pixels := null, allocate := true) -> Gles3Texture {
 		result := Gles3Texture new(type, size)
 		success := result _generate(pixels, stride, allocate)
 		success ? result : null
 	}
-	createFramebufferObject: func (texture: GLTexture, size: IntSize2D) -> Gles3FramebufferObject {
+	createFramebufferObject: func (texture: GLTexture, size: IntVector2D) -> Gles3FramebufferObject {
 		version(debugGL) { validateStart("Context createFramebufferObject") }
 		result := Gles3FramebufferObject new(size)
 		result = result _generate(texture as Gles3Texture) ? result : null
@@ -200,7 +200,7 @@ Gles3Context: class extends GLContext {
 		result
 	}
 	createFence: func -> Gles3Fence { Gles3Fence new() }
-	createVolumeTexture: func (size: IntSize3D, pixels: UInt8*) -> Gles3VolumeTexture {
+	createVolumeTexture: func (size: IntVector3D, pixels: UInt8*) -> Gles3VolumeTexture {
 		Gles3VolumeTexture new(size, pixels)
 	}
 	createRenderer: func -> Gles3Renderer { Gles3Renderer new() }

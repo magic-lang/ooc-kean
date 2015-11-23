@@ -25,7 +25,7 @@ version(!gpuOff) {
 Gles3VolumeTexture: class extends GLVolumeTexture {
 	_backend: UInt
 	backend: UInt { get { this _backend } }
-	_size: IntSize3D
+	_size: IntVector3D
 	size ::= this _size
 
 	init: func (=_size, pixels: UInt8*) {

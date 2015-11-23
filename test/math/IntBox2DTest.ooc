@@ -104,7 +104,7 @@ IntBox2DTest: class extends Fixture {
 			expect(box bottom, is equal to(2 + 4))
 		})
 		this add("createAround", func {
-			box := IntBox2D createAround(IntPoint2D new(1, 1), IntSize2D new(4, 4))
+			box := IntBox2D createAround(IntPoint2D new(1, 1), IntVector2D new(4, 4))
 			expect(box left, is equal to(-1))
 			expect(box top, is equal to(-1))
 			expect(box right, is equal to(3))
@@ -112,7 +112,7 @@ IntBox2DTest: class extends Fixture {
 		})
 		this add("resizeTo", func {
 			box := IntBox2D new(1, 1, 4, 4)
-			changedBox := box resizeTo(IntSize2D new(2, 2))
+			changedBox := box resizeTo(IntVector2D new(2, 2))
 			expect(changedBox left, is equal to(2))
 			expect(changedBox right, is equal to(4))
 			expect(changedBox top, is equal to(2))
@@ -133,8 +133,8 @@ IntBox2DTest: class extends Fixture {
 		})
 		this add("enlarge", func {
 			box := IntBox2D new(1, 1, 4, 4)
-			enlargedBox := box enlargeTo(IntSize2D new(6, 6))
-			notEnlargedBox := box enlargeTo(IntSize2D new(3, 3))
+			enlargedBox := box enlargeTo(IntVector2D new(6, 6))
+			notEnlargedBox := box enlargeTo(IntVector2D new(3, 3))
 			expect(enlargedBox left, is equal to(0))
 			expect(enlargedBox top, is equal to(0))
 			expect(enlargedBox right, is equal to(6))
@@ -143,8 +143,8 @@ IntBox2DTest: class extends Fixture {
 		})
 		this add("reduce", func {
 			box := IntBox2D new(1, 1, 4, 4)
-			reducedBox := box shrinkTo(IntSize2D new(2, 2))
-			notReducedBox := box shrinkTo(IntSize2D new(6, 6))
+			reducedBox := box shrinkTo(IntVector2D new(2, 2))
+			notReducedBox := box shrinkTo(IntVector2D new(6, 6))
 			expect(reducedBox left, is equal to(2))
 			expect(reducedBox top, is equal to(2))
 			expect(reducedBox right, is equal to(4))

@@ -31,13 +31,13 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	_uvOffset: Int
 	uvOffset ::= this _uvOffset
 	uvPadding ::= (this _uvOffset - this _stride * this _size y)
-	init: func ~fromBuffer (=_buffer, size: IntSize2D, =_stride, =_uvOffset) {
+	init: func ~fromBuffer (=_buffer, size: IntVector2D, =_stride, =_uvOffset) {
 		pointer := _buffer lock()
 		_buffer unlock()
 		length := 3 * this _stride * size y / 2
 		super(ByteBuffer new(pointer, length), size, _stride, _uvOffset)
 	}
-	init: func (backend: Pointer, nativeBuffer: Pointer, handle: Pointer, size: IntSize2D, format: GraphicBufferFormat, stride: Int, uvOffset: Int) {
+	init: func (backend: Pointer, nativeBuffer: Pointer, handle: Pointer, size: IntVector2D, format: GraphicBufferFormat, stride: Int, uvOffset: Int) {
 		this init(GraphicBuffer new(backend, nativeBuffer, handle, size, stride, format), size, stride, uvOffset)
 	}
 	free: override func {
@@ -49,12 +49,12 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		extraRows := Int align(padding, this _stride) / this _stride
 		height := this _size y + this _size y / 2 + extraRows
 		width := this _stride / 4
-		rgbaBuffer := GraphicBuffer new(this buffer handle, IntSize2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget)
+		rgbaBuffer := GraphicBuffer new(this buffer handle, IntVector2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget)
 		result := EGLBgra new(rgbaBuffer, context)
 		result coordinateSystem = this coordinateSystem
 		result
 	}
-	kean_draw_gpu_android_graphicBufferYuv420Semiplanar_new: unmangled static func (backend: Pointer, nativeBuffer: Pointer, handle: Pointer, size: IntSize2D, stride: Int, format: GraphicBufferFormat, uvOffset: Int) -> This {
+	kean_draw_gpu_android_graphicBufferYuv420Semiplanar_new: unmangled static func (backend: Pointer, nativeBuffer: Pointer, handle: Pointer, size: IntVector2D, stride: Int, format: GraphicBufferFormat, uvOffset: Int) -> This {
 		This new(backend, nativeBuffer, handle, size, format, stride, uvOffset)
 	}
 }

@@ -16,10 +16,10 @@
 
 import math
 import IntPoint2D
-import FloatSize2D
+import FloatVector2D
 use ooc-base
 
-IntSize2D: cover {
+IntVector2D: cover {
 	x, y: Int
 	area ::= this x * this y
 	square ::= this x == this y
@@ -57,7 +57,7 @@ IntSize2D: cover {
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
 	polar: static func (radius, azimuth: Float) -> This { This new((radius * cos(azimuth)) as Int, (radius * sin(azimuth)) as Int) }
-	toFloatSize2D: func -> FloatSize2D { FloatSize2D new(this x as Float, this y as Float) }
+	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x as Float, this y as Float) }
 	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x, this y) }
 	operator as -> String { this toString() }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
@@ -67,9 +67,9 @@ IntSize2D: cover {
 		parts free()
 		result
 	}
-	kean_math_intSize2D_new: unmangled static func (x, y: Int) -> This { This new(x, y) }
+	kean_math_intVector2D_new: unmangled static func (x, y: Int) -> This { This new(x, y) }
 }
-operator * (left: Int, right: IntSize2D) -> IntSize2D { IntSize2D new(left * right x, left * right y) }
-operator / (left: Int, right: IntSize2D) -> IntSize2D { IntSize2D new(left / right x, left / right y) }
-operator * (left: Float, right: IntSize2D) -> IntSize2D { IntSize2D new(left * right x, left * right y) }
-operator / (left: Float, right: IntSize2D) -> IntSize2D { IntSize2D new(left / right x, left / right y) }
+operator * (left: Int, right: IntVector2D) -> IntVector2D { IntVector2D new(left * right x, left * right y) }
+operator / (left: Int, right: IntVector2D) -> IntVector2D { IntVector2D new(left / right x, left / right y) }
+operator * (left: Float, right: IntVector2D) -> IntVector2D { IntVector2D new(left * right x, left * right y) }
+operator / (left: Float, right: IntVector2D) -> IntVector2D { IntVector2D new(left / right x, left / right y) }

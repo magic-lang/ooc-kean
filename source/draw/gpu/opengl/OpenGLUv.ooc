@@ -24,11 +24,11 @@ import OpenGLCanvas, OpenGLPacked, OpenGLContext, OpenGLMap
 version(!gpuOff) {
 OpenGLUv: class extends OpenGLPacked {
 	channelCount: static Int = 2
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
+	init: func ~fromPixels (size: IntVector2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
 		super(context _backend createTexture(TextureType Uv, size, stride, data), This channelCount, context)
 		this coordinateSystem = coordinateSystem
 	}
-	init: func (size: IntSize2D, context: OpenGLContext) {
+	init: func (size: IntVector2D, context: OpenGLContext) {
 		this init(size, size x * This channelCount, null, CoordinateSystem YUpward, context)
 	}
 	init: func ~fromTexture (texture: GLTexture, context: OpenGLContext) { super(texture, This channelCount, context) }
@@ -36,7 +36,7 @@ OpenGLUv: class extends OpenGLPacked {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: func -> RasterImage {
-		packed := this context createBgra(IntSize2D new(this size x / 2, this size y))
+		packed := this context createBgra(IntVector2D new(this size x / 2, this size y))
 		this context packToRgba(this, packed, IntBox2D new(packed size))
 		buffer := packed canvas readPixels()
 		result := RasterUv new(buffer, this size)
@@ -48,6 +48,6 @@ OpenGLUv: class extends OpenGLPacked {
 		result pen = Pen new(ColorBgra new(128, 128, 128, 128))
 		result
 	}
-	create: override func (size: IntSize2D) -> This { this context createUv(size) as This }
+	create: override func (size: IntVector2D) -> This { this context createUv(size) as This }
 }
 }

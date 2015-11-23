@@ -12,7 +12,7 @@ FloatTransform2DTest: class extends Fixture {
 	transform4 := FloatTransform2D new(10.0f, 20.0f, 30.0f, 40.0f, 50.0f, 60.0f)
 	point0 := FloatPoint2D new(-7.0f, 3.0f)
 	point1 := FloatPoint2D new(-10.0f, 3.0f)
-	size := FloatSize2D new(10.0f, 10.0f)
+	size := FloatVector2D new(10.0f, 10.0f)
 	init: func {
 		super("FloatTransform2D")
 		this add("equality", func {

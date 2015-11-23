@@ -139,7 +139,7 @@ FloatBox2DTest: class extends Fixture {
 			expect(box bottom, is equal to(2.0f + 4.0f) within(this precision))
 		})
 		this add("createAround", func {
-			box := FloatBox2D createAround(FloatPoint2D new(1.0f, 1.0f), FloatSize2D new(4.0f, 4.0f))
+			box := FloatBox2D createAround(FloatPoint2D new(1.0f, 1.0f), FloatVector2D new(4.0f, 4.0f))
 			expect(box left, is equal to(-1.0f) within(this precision))
 			expect(box top, is equal to(-1.0f) within(this precision))
 			expect(box right, is equal to(3.0f) within(this precision))
@@ -152,7 +152,7 @@ FloatBox2DTest: class extends Fixture {
 		})
 		this add("resizeTo", func {
 			box := FloatBox2D new(1.0f, 1.0f, 4.0f, 4.0f)
-			changedBox := box resizeTo(FloatSize2D new(2.0f, 2.0f))
+			changedBox := box resizeTo(FloatVector2D new(2.0f, 2.0f))
 			expect(changedBox left, is equal to(2.0f) within(this precision))
 			expect(changedBox right, is equal to(4.0f) within(this precision))
 			expect(changedBox top, is equal to(2.0f) within(this precision))
@@ -173,8 +173,8 @@ FloatBox2DTest: class extends Fixture {
 		})
 		this add("enlarge", func {
 			box := FloatBox2D new(1.0f, 1.0f, 4.0f, 4.0f)
-			enlargedBox := box enlargeTo(FloatSize2D new(6.0f, 6.0f))
-			notEnlargedBox := box enlargeTo(FloatSize2D new(3.0f, 3.0f))
+			enlargedBox := box enlargeTo(FloatVector2D new(6.0f, 6.0f))
+			notEnlargedBox := box enlargeTo(FloatVector2D new(3.0f, 3.0f))
 			expect(enlargedBox left, is equal to(0.0f) within(this precision))
 			expect(enlargedBox top, is equal to(0.0f) within(this precision))
 			expect(enlargedBox right, is equal to(6.0f) within(this precision))
@@ -183,8 +183,8 @@ FloatBox2DTest: class extends Fixture {
 		})
 		this add("reduce", func {
 			box := FloatBox2D new(1.0f, 1.0f, 4.0f, 4.0f)
-			reducedBox := box shrinkTo(FloatSize2D new(2.0f, 2.0f))
-			notReducedBox := box shrinkTo(FloatSize2D new(6.0f, 6.0f))
+			reducedBox := box shrinkTo(FloatVector2D new(2.0f, 2.0f))
+			notReducedBox := box shrinkTo(FloatVector2D new(6.0f, 6.0f))
 			expect(reducedBox left, is equal to(2.0f) within(this precision))
 			expect(reducedBox top, is equal to(2.0f) within(this precision))
 			expect(reducedBox right, is equal to(4.0f) within(this precision))

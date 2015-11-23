@@ -24,9 +24,9 @@ X11Window: class extends NativeWindow {
 	_x11GraphicsContext: GraphicsContextX11
 	_defaultScreen := 0
 	_displayDepth := 0
-	_cacheSize: IntSize2D
+	_cacheSize: IntVector2D
 	_xImage: XImageOoc*
-	init: func (size: IntSize2D, title: String) {
+	init: func (size: IntVector2D, title: String) {
 		this _xImage = null
 		/* Note: ":0" is the usual identifier for the default display but this should be read from the DISPLAY variable in the system by passing null as parameter,
 		i.e. this _display = XOpenDisplay(null) */
@@ -62,7 +62,7 @@ X11Window: class extends NativeWindow {
 
 		this resize(size)
 	}
-	resize: func (size: IntSize2D) { XResizeWindow(this display, this backend, size x, size y) }
+	resize: func (size: IntVector2D) { XResizeWindow(this display, this backend, size x, size y) }
 	free: override func {
 		if (this _xImage)
 			XDestroyImage(this _xImage)

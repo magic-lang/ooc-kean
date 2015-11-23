@@ -13,7 +13,7 @@ import math
 SvgWriter2D: class {
 	file: File { get set }
 	svgPlots: VectorList<SvgPlot> { get set }
-	size: FloatSize2D { get set }
+	size: FloatVector2D { get set }
 	fontSize: Int { get set }
 	numberOfPlotsHorizontally: Int
 	init: func (=file) {
@@ -45,7 +45,7 @@ SvgWriter2D: class {
 		this init(File new(filename), svgPlots)
 	}
 	init: func ~svgPlotsFile (=file, =svgPlots) {
-		this size = FloatSize2D new(1920, 1080)
+		this size = FloatVector2D new(1920, 1080)
 		this fontSize = 14
 	}
 	free: override func {
@@ -84,7 +84,7 @@ SvgWriter2D: class {
 				numPlotsX = numberOfPlotsHorizontally
 				numPlotsY = ceil(this svgPlots count as Float / numPlotsX as Float) as Int
 			}
-			plotSize := FloatSize2D new(this size x / numPlotsX, this size y / numPlotsY)
+			plotSize := FloatVector2D new(this size x / numPlotsX, this size y / numPlotsY)
 			position := FloatPoint2D new()
 			for (i in 0 .. this svgPlots count) {
 				position x = plotSize x * Int modulo(i, numPlotsX)

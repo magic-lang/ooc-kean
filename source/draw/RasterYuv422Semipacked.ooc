@@ -31,10 +31,10 @@ import io/FileWriter
 
 RasterYuv422Semipacked: class extends RasterPacked {
 	bytesPerPixel ::= 2
-	init: func ~allocate (size: IntSize2D) { super~allocate(size) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntSize2D) { super(buffer, size, this bytesPerPixel * size x) }
+	init: func ~allocate (size: IntVector2D) { super~allocate(size) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D) { super(buffer, size, this bytesPerPixel * size x) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
-	create: func (size: IntSize2D) -> Image {
+	create: func (size: IntVector2D) -> Image {
 		result := This new(size)
 		result crop = this crop
 		result wrap = this wrap
@@ -130,7 +130,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		}
 		result
 	}
-	openRaw: static func (filename: String, size: IntSize2D) -> This {
+	openRaw: static func (filename: String, size: IntVector2D) -> This {
 		fileReader := FileReader new(FStream open(filename, "rb"))
 		result := This new(size)
 		fileReader read((result buffer pointer as Char*), 0, result buffer size)

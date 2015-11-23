@@ -16,7 +16,7 @@
 
 import math
 import IntPoint2D
-import IntSize2D
+import IntVector2D
 import FloatPoint2D
 import FloatBox2D
 use ooc-base
@@ -25,7 +25,7 @@ use ooc-math
 
 IntBox2D: cover {
 	leftTop: IntPoint2D
-	size: IntSize2D
+	size: IntVector2D
 	width ::= this size x
 	height ::= this size y
 	left ::= this leftTop x
@@ -42,10 +42,10 @@ IntBox2D: cover {
 	bottomCenter ::= IntPoint2D new(this center x, this bottom)
 	empty ::= this size empty
 	init: func@ (=leftTop, =size)
-	init: func@ ~fromSizes (leftTop: IntSize2D, =size) { this leftTop = IntPoint2D new(leftTop x, leftTop y) }
+	init: func@ ~fromSizes (leftTop: IntVector2D, =size) { this leftTop = IntPoint2D new(leftTop x, leftTop y) }
 	init: func@ ~fromSize (=size) { this leftTop = IntPoint2D new() }
-	init: func@ ~fromInts (left, top, width, height: Int) { this init(IntPoint2D new(left, top), IntSize2D new(width, height)) }
-	//init: func@ ~fromSize (size: IntSize2D) { this init(IntPoint2D new(), size) }
+	init: func@ ~fromInts (left, top, width, height: Int) { this init(IntPoint2D new(left, top), IntVector2D new(width, height)) }
+	//init: func@ ~fromSize (size: IntVector2D) { this init(IntPoint2D new(), size) }
 	init: func@ ~fromPoints (first, second: IntPoint2D) {
 		left := Int minimum(first x, second x)
 		top := Int minimum(first y, second y)
@@ -53,24 +53,24 @@ IntBox2D: cover {
 		height := (first y - second y) abs()
 		this init(left, top, width, height)
 	}
-	init: func@ ~default { this init(IntPoint2D new(), IntSize2D new()) }
+	init: func@ ~default { this init(IntPoint2D new(), IntVector2D new()) }
 	swap: func -> This { This new(this leftTop swap(), this size swap()) }
 	pad: func (left, right, top, bottom: Int) -> This {
-		This new(IntPoint2D new(this left - left, this top - top), IntSize2D new(this width + left + right, this height + top + bottom))
+		This new(IntPoint2D new(this left - left, this top - top), IntVector2D new(this width + left + right, this height + top + bottom))
 	}
 	pad: func ~fromFloat (pad: Int) -> This { this pad(pad, pad, pad, pad) }
-	pad: func ~fromSize (pad: IntSize2D) -> This { this pad(pad x, pad x, pad y, pad y) }
-	resizeTo: func (size: IntSize2D) -> This {
+	pad: func ~fromSize (pad: IntVector2D) -> This { this pad(pad x, pad x, pad y, pad y) }
+	resizeTo: func (size: IntVector2D) -> This {
 		This createAround(this center, size)
 	}
 	scale: func (value: Float) -> This {
 		This createAround(this center, value * this size)
 	}
-	enlargeTo: func (size: IntSize2D) -> This {
-		This createAround(this center, IntSize2D maximum(this size, size))
+	enlargeTo: func (size: IntVector2D) -> This {
+		This createAround(this center, IntVector2D maximum(this size, size))
 	}
-	shrinkTo: func (size: IntSize2D) -> This {
-		This createAround(this center, IntSize2D minimum(this size, size))
+	shrinkTo: func (size: IntVector2D) -> This {
+		This createAround(this center, IntVector2D minimum(this size, size))
 	}
 	intersection: func (other: This) -> This {
 		left := Int maximum(this left, other left)
@@ -112,8 +112,8 @@ IntBox2D: cover {
 	}
 	operator + (other: IntPoint2D) -> This { This new(this leftTop + other, this size) }
 	operator - (other: IntPoint2D) -> This { This new(this leftTop - other, this size) }
-	operator + (other: IntSize2D) -> This { This new(this leftTop, this size + other) }
-	operator - (other: IntSize2D) -> This { This new(this leftTop, this size - other) }
+	operator + (other: IntVector2D) -> This { This new(this leftTop, this size + other) }
+	operator - (other: IntVector2D) -> This { This new(this leftTop, this size - other) }
 	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }
 	operator != (other: This) -> Bool { !(this == other) }
 	toFloatBox2D: func -> FloatBox2D { FloatBox2D new(this left, this top, this width, this height) }
@@ -125,7 +125,7 @@ IntBox2D: cover {
 		parts free()
 		result
 	}
-	createAround: static func (center: IntPoint2D, size: IntSize2D) -> This { This new(center - size / 2, size) }
+	createAround: static func (center: IntPoint2D, size: IntVector2D) -> This { This new(center - size / 2, size) }
 	bounds: static func (left, right, top, bottom: Int) -> This { This new(left, top, right - left, bottom - top) }
 	bounds: static func ~fromArray (points: IntPoint2D[]) -> This { This bounds(points data, points length) }
 	bounds: static func ~fromList (points: VectorList<IntPoint2D>) -> This { This bounds(points pointer as IntPoint2D*, points count) }

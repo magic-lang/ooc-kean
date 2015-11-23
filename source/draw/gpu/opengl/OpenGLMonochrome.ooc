@@ -24,23 +24,23 @@ import backend/GLTexture
 version(!gpuOff) {
 OpenGLMonochrome: class extends OpenGLPacked {
 	channelCount: static Int = 1
-	init: func ~fromPixels (size: IntSize2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
+	init: func ~fromPixels (size: IntVector2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
 		super(context _backend createTexture(TextureType Monochrome, size, stride, data), This channelCount, context)
 		this coordinateSystem = coordinateSystem
 	}
-	init: func (size: IntSize2D, context: OpenGLContext) { this init(size, size x, null, CoordinateSystem YUpward, context) }
+	init: func (size: IntVector2D, context: OpenGLContext) { this init(size, size x, null, CoordinateSystem YUpward, context) }
 	init: func ~fromTexture (texture: GLTexture, context: OpenGLContext) { super(texture, This channelCount, context) }
 	init: func ~fromRaster (rasterImage: RasterMonochrome, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: func -> RasterImage {
-		packed := this context createBgra(IntSize2D new(this size x / 4, this size y))
+		packed := this context createBgra(IntVector2D new(this size x / 4, this size y))
 		this context packToRgba(this, packed, IntBox2D new(packed size))
 		buffer := packed canvas readPixels()
 		result := RasterMonochrome new(buffer, this size)
 		packed free()
 		result
 	}
-	create: override func (size: IntSize2D) -> This { this context createMonochrome(size) as This }
+	create: override func (size: IntVector2D) -> This { this context createMonochrome(size) as This }
 }
 }

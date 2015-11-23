@@ -23,7 +23,7 @@ use ooc-win32
 version(windows) {
 Win32DisplayWindow: class extends DisplayWindow {
 	_backend: Win32Window
-	init: func (size: IntSize2D, title: String) {
+	init: func (size: IntVector2D, title: String) {
 		super()
 		this _backend = Win32Window new(size, title)
 	}

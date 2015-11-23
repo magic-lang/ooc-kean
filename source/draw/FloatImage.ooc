@@ -3,13 +3,13 @@ use ooc-math
 FloatImage : class {
 	// x = column
 	// y = row
-	_size: IntSize2D
+	_size: IntVector2D
 	size ::= _size
 	_pointer: Float*
 	pointer ::= this _pointer
-	init: func ~IntSize2D (=_size)
+	init: func ~IntVector2D (=_size)
 	init: func ~WidthAndHeight (width, height: Int) {
-		this _size = IntSize2D new(width, height)
+		this _size = IntVector2D new(width, height)
 		this _pointer = gc_malloc(width * height * Float instanceSize)
 	}
 

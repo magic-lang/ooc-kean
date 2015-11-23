@@ -4,16 +4,16 @@ use ooc-math
 import math
 import lang/IO
 
-IntSize3DTest: class extends Fixture {
+IntVector3DTest: class extends Fixture {
 	precision := 1.0e-5f
-	vector0 := IntSize3D new (22, -3, 8)
-	vector1 := IntSize3D new (12, 13, -8)
-	vector2 := IntSize3D new (34, 10, 0)
-	vector3 := IntSize3D new (10, 20, 0)
+	vector0 := IntVector3D new (22, -3, 8)
+	vector1 := IntVector3D new (12, 13, -8)
+	vector2 := IntVector3D new (34, 10, 0)
+	vector3 := IntVector3D new (10, 20, 0)
 	init: func {
-		super("IntSize3D")
+		super("IntVector3D")
 		this add("equality", func {
-			point := IntSize3D new()
+			point := IntVector3D new()
 			expect(this vector0 == this vector0, is true)
 			expect(this vector0 != this vector1, is true)
 			expect(this vector0 == point, is false)
@@ -26,9 +26,9 @@ IntSize3DTest: class extends Fixture {
 			expect((this vector0 + this vector1) z, is equal to(this vector2 z))
 		})
 		this add("subtraction", func {
-			expect((this vector0 - this vector0) x, is equal to((IntSize3D new()) x))
-			expect((this vector0 - this vector0) y, is equal to((IntSize3D new()) y))
-			expect((this vector0 - this vector0) z, is equal to((IntSize3D new()) z))
+			expect((this vector0 - this vector0) x, is equal to((IntVector3D new()) x))
+			expect((this vector0 - this vector0) y, is equal to((IntVector3D new()) y))
+			expect((this vector0 - this vector0) z, is equal to((IntVector3D new()) z))
 		})
 		this add("scalar multiplication", func {
 			expect(((-1) * this vector0) x, is equal to((-vector0) x))
@@ -48,12 +48,12 @@ IntSize3DTest: class extends Fixture {
 		this add("casting", func {
 			value := t"10, 20, 0"
 			expect(this vector3 toString(), is equal to(value toString()))
-			expect(IntSize3D parse(value) x, is equal to(this vector3 x))
-			expect(IntSize3D parse(value) y, is equal to(this vector3 y))
-			expect(IntSize3D parse(value) z, is equal to(this vector3 z))
+			expect(IntVector3D parse(value) x, is equal to(this vector3 x))
+			expect(IntVector3D parse(value) y, is equal to(this vector3 y))
+			expect(IntVector3D parse(value) z, is equal to(this vector3 z))
 		})
 		this add("float casts", func {
-			vector := vector0 toFloatSize3D()
+			vector := vector0 toFloatVector3D()
 			expect(vector x, is equal to(22.0f) within(this precision))
 			expect(vector y, is equal to(-3.0f) within(this precision))
 			expect(vector z, is equal to(8.0f) within(this precision))
@@ -78,7 +78,7 @@ IntSize3DTest: class extends Fixture {
 			expect(result z, is equal to(8))
 		})
 		this add("volume, empty", func {
-			empty := IntSize3D new()
+			empty := IntVector3D new()
 			expect(empty empty, is true)
 			expect(this vector1 empty, is false)
 			expect(this vector1 volume, is equal to(-1248))
@@ -87,4 +87,4 @@ IntSize3DTest: class extends Fixture {
 	}
 }
 
-IntSize3DTest new() run()
+IntVector3DTest new() run()

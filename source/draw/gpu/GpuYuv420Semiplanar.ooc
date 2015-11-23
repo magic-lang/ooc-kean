@@ -42,7 +42,7 @@ GpuYuv420Semiplanar: class extends GpuImage {
 		uv := context createImage(rasterImage uv)
 		this init(y, uv, context)
 	}
-	init: func ~empty (size: IntSize2D, context: GpuContext) {
+	init: func ~empty (size: IntVector2D, context: GpuContext) {
 		y := context createMonochrome(size)
 		uv := context createUv(size / 2)
 		this init(y, uv, context)
@@ -57,7 +57,7 @@ GpuYuv420Semiplanar: class extends GpuImage {
 		uv := this _uv toRaster() as RasterUv
 		RasterYuv420Semiplanar new(y, uv)
 	}
-	create: override func (size: IntSize2D) -> This { this _context createYuv420Semiplanar(size) }
+	create: override func (size: IntVector2D) -> This { this _context createYuv420Semiplanar(size) }
 	_createCanvas: override func -> GpuSurface { GpuCanvasYuv420Semiplanar new(this, this _context) }
 	upload: override func (image: RasterImage) {
 		if (image instanceOf?(RasterYuv420Semiplanar)) {
