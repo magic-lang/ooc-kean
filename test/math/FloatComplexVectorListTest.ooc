@@ -83,7 +83,7 @@ FloatComplexVectorListTest: class extends Fixture {
 			reals := list real
 			imaginaries := list imaginary
 			expect(reals sum, is equal to(7.0f) within(tolerance))
-			expect(imaginaries sum == -4.0f) //FIXME getting errors using "is equal to" here because... ooc 
+			expect(imaginaries sum, is equal to(-4.0f) within(tolerance))
 		})
 		this add("createDefault", func {
 			list := FloatComplexVectorList new(3, FloatComplex new(1, 2))
