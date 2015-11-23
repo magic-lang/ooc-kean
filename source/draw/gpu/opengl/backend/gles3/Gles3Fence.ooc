@@ -19,7 +19,7 @@ use ooc-base
 import os/Time
 import include/gles3
 import ../GLFence
-import threading/Thread
+import threading/[Thread,Mutex]
 import Gles3Debug
 
 version(!gpuOff) {

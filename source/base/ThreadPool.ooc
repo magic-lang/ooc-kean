@@ -1,6 +1,6 @@
 use ooc-collections
 use ooc-base
-import threading/Thread
+import threading/[Thread,Mutex,WaitCondition]
 import os/Time
 
 _Task: abstract class {

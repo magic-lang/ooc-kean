@@ -1,4 +1,4 @@
-import ../Thread
+import ../Mutex
 import native/win32/[types, errors]
 
 version(windows) {

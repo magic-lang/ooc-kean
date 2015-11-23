@@ -1,4 +1,4 @@
-import threading/Thread
+import threading/Mutex
 import Synchronized
 
 ReferenceCounter: class {

@@ -1,4 +1,5 @@
 import native/[ConditionUnix, ConditionWin32]
+import Mutex
 
 WaitCondition: abstract class {
 	new: static func -> This {

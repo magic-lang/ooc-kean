@@ -1,5 +1,6 @@
 import structs/HashMap
-import ../Thread, ThreadUnix
+import ../[ThreadLocal, Mutex]
+import ThreadUnix
 include unistd
 
 version(unix || apple) {

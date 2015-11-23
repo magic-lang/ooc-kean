@@ -1,5 +1,5 @@
 use ooc-unit
-import threading/Thread
+import threading/[Thread, Mutex]
 
 MutexTest: class extends Fixture {
 	init: func {
