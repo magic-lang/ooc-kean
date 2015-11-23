@@ -18,7 +18,6 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 use ooc-collections
-use ooc-ui
 import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, OpenGLMesh, OpenGLCanvas, RecycleBin
 import OpenGLMap
 import backend/[GLContext, GLRenderer]
@@ -52,7 +51,7 @@ OpenGLContext: class extends GpuContext {
 	}
 	init: func { this init(GLContext createContext()) }
 	init: func ~shared (other: This) { this init(GLContext createContext(other _backend)) }
-	init: func ~window (nativeWindow: NativeWindow) { this init(GLContext createContext(nativeWindow)) }
+	init: func ~window (display: Pointer, nativeBackend: Long) { this init(GLContext createContext(display, nativeBackend)) }
 	free: override func {
 		this _backend makeCurrent()
 		this _transformTextureMap free()
