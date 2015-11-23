@@ -102,9 +102,6 @@ extend Int {
 	minimum: static func (first: This, second: This) -> This {
 		first < second ? first : second
 	}
-	/*modulo: static func ~deprecated (dividend: This, divisor: This) -> This {
-		dividend modulo(divisor)
-	}*/
 	odd: static func (value: This) -> Bool {
 		value modulo(2) == 1
 	}
