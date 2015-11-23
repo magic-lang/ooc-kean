@@ -102,14 +102,14 @@ extend Int {
 	minimum: static func (first: This, second: This) -> This {
 		first < second ? first : second
 	}
-	modulo: static func ~deprecated (dividend: This, divisor: This) -> This {
+	/*modulo: static func ~deprecated (dividend: This, divisor: This) -> This {
 		dividend modulo(divisor)
-	}
+	}*/
 	odd: static func (value: This) -> Bool {
-		This modulo(value, 2) == 1
+		value modulo(2) == 1
 	}
 	even: static func (value: This) -> Bool {
-		This modulo(value, 2) == 0
+		value modulo(2) == 0
 	}
 	squared: func -> This {
 		this * this

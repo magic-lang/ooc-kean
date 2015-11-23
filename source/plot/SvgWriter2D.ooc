@@ -79,7 +79,7 @@ SvgWriter2D: class {
 					numPlotsX = 2
 				else
 					numPlotsX = 3
-				numPlotsY = Int modulo(this svgPlots count, numPlotsX) ? 1 + this svgPlots count / numPlotsX : this svgPlots count / numPlotsX
+				numPlotsY = this svgPlots count modulo(numPlotsX) ? 1 + this svgPlots count / numPlotsX : this svgPlots count / numPlotsX
 			} else {
 				numPlotsX = numberOfPlotsHorizontally
 				numPlotsY = ceil(this svgPlots count as Float / numPlotsX as Float) as Int
@@ -87,7 +87,7 @@ SvgWriter2D: class {
 			plotSize := FloatVector2D new(this size x / numPlotsX, this size y / numPlotsY)
 			position := FloatPoint2D new()
 			for (i in 0 .. this svgPlots count) {
-				position x = plotSize x * Int modulo(i, numPlotsX)
+				position x = plotSize x * (i modulo(numPlotsX))
 				position y = plotSize y * (i / numPlotsX)
 				result = result >> "<svg desc='Plot " & (i + 1) toString() >> "' x='" & position x toString() >> "' y='" & position y toString() >> "' width='" & plotSize x toString() >> "' height='" & plotSize y toString() >> "'>\n"
 				result = result & svgPlots[i] getSvg(plotSize, fontSize)
