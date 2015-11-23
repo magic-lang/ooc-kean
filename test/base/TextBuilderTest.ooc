@@ -12,7 +12,7 @@ TextBuilderTest: class extends Fixture {
 			expect(text take() count, is equal to(7))
 			expect(text == t"vidflow")
 			tb = TextBuilder new(t"1,2,3" split(','))
-			text = tb join(';')
+			text = tb join(';') take()
 			expect(text == t"1;2;3")
 			tb free()
 			text free()
