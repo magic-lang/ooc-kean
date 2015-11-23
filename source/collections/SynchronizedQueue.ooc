@@ -1,5 +1,5 @@
 import Queue
-import threading/[Thread,Mutex,WaitCondition]
+import threading/[Thread, Mutex, WaitCondition]
 
 SynchronizedQueue: class <T> extends Queue<T> {
 	_mutex := Mutex new()
