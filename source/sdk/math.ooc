@@ -60,7 +60,7 @@ extend Short {
 }
 
 extend Int64 {
-	modulo: func (divisor: This) -> This { 
+	modulo: func (divisor: This) -> This {
 		result := this - (this / divisor) * divisor
 		result < 0 ? result + divisor : result
 	}
@@ -68,14 +68,10 @@ extend Int64 {
 
 extend Int {
 	modulo: func (divisor: This) -> This {
-		if (divisor < 0) {
-			this *= -1
-			divisor *= -1
-		}
-		result := this % divisor
+		result := this
 		if (result < 0)
-			result += divisor
-		result
+			result += (((result abs() as Float) / divisor) ceil() as Int) * divisor
+		result % divisor
 	}
 	clamp: func (floor: This, ceiling: This) -> This {
 		if (this > ceiling)
@@ -281,23 +277,23 @@ extend Float {
 	minimum: static func (first: This, second: This) -> This {
 		first < second ? first : second
 	}
-	modulo: static func (dividend: This, divisor: This) -> This {
-// TODO: handle negative dividends
-//		if (dividend < 0)
-//			dividend += This ceiling(This absolute(dividend) / (Float) divisor) * divisor
-		dividend mod(divisor)
+	modulo: func (divisor: This) -> This {
+		result := this
+		if (result < 0)
+			result += ((result abs()) / divisor) ceil() * divisor
+		result mod(divisor)
 	}
 	odd: static func (value: This) -> Bool {
-		This modulo(value, 2) == 1
+		value modulo(2) == 1
 	}
 	even: static func (value: This) -> Bool {
-		This modulo(value, 2) == 0
+		value modulo(2) == 0
 	}
 	squared: func -> This {
 		this * this
 	}
 	moduloTwoPi: static func (value: This) -> This {
-		This modulo(value, 2 * This pi)
+		value modulo(2.0f * This pi)
 	}
 	minusPiToPi: static func (value: This) -> This {
 		value = This moduloTwoPi(value)
@@ -306,7 +302,7 @@ extend Float {
 		value
 	}
 	minusPiToPiOverTwo: static func (value: This) -> This {
-		value = modulo(value, This pi)
+		value = value modulo(This pi)
 		value = (value <= This pi / 2) ? value : (value - pi)
 		value = (value >= -This pi / 2) ? value : (value + pi)
 		value
