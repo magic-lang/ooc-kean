@@ -24,5 +24,3 @@ version(debugTests) {
 
 	Debug print("TEST2", 3)
 }
-
-"DebugPrintTest [TODO: Not implemented as a fixture!]" printfln()

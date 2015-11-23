@@ -28,5 +28,3 @@ file free()
 fw := FileWriter new(filename + "DataFile.ooc")
 fw write(outputData)
 fw close()
-
-"CreateAlphaByteStringTest [TODO: Not implemented as a fixture!]" printfln()
