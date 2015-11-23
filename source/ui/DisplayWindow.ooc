@@ -17,8 +17,8 @@
 
 use ooc-draw
 use ooc-math
-import UnixWindow
-import Win32DisplayWindow
+import x11/UnixWindow
+import win32/Win32DisplayWindow
 
 DisplayWindow: abstract class {
 	init: func (size: IntVector2D, title: String)

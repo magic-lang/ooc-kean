@@ -15,12 +15,12 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import DisplayWindow
 use ooc-draw-gpu
 use ooc-math
 use ooc-draw
 use ooc-opengl
-use ooc-ui
+import DisplayWindow
+import X11Window
 
 version(unix || apple) {
 UnixWindowBase: class extends DisplayWindow {
