@@ -39,7 +39,7 @@ LinkedList: class <T> {
 			raise("Index out of bounds in LinkedList add~withIndex")
 	}
 	get: func (index: SSizeT) -> T {
-		this getNode(index) data@
+		this getNode(index) data
 	}
 	getNode: func (index: SSizeT) -> Node<T> {
 		if (index < 0 || index >= this _size)
@@ -89,21 +89,20 @@ LinkedList: class <T> {
 	first: func -> T {
 		data: T
 		if (this _head next != this _head)
-			data = this _head next data@
+			data = this _head next data
 		data
 	}
 	last: func -> T {
 		data: T
 		if (this _head prev != this _head)
-			data = this _head prev data@
+			data = this _head prev data
 		data
 	}
 	removeAt: func (index: SSizeT) -> T {
-		item := null
+		item: T = null
 		if (this _head next != this _head && 0 <= index && index < this _size) {
 			toRemove := this getNode(index)
-			this removeNode(toRemove)
-			item = toRemove data
+			item = this removeNode(toRemove)
 		} else
 			raise("Index out of bounds in LinkedList removeAt")
 		item
@@ -117,13 +116,15 @@ LinkedList: class <T> {
 		}
 		result
 	}
-	removeNode: func (toRemove: Node<T>) {
+	removeNode: func (toRemove: Node<T>) -> T {
 		toRemove prev next = toRemove next
 		toRemove next prev = toRemove prev
 		toRemove prev = null
 		toRemove next = null
+		data := toRemove data
 		toRemove free()
 		this _size -= 1
+		data
 	}
 	removeLast: func -> Bool {
 		result := false
@@ -153,12 +154,20 @@ operator []= <T>(list: LinkedList<T>, index: Int, value: T) { list set(index, va
 Node: class <T> {
 	prev: This<T>
 	next: This<T>
-	data: T* //TODO: Auto-wrap covers in Cell<T>
+	_data: Cell<T>
+	data: T {
+		get { this _data get() }
+		set(value) { 
+			this _data free()
+			this _data = Cell new(value)
+		}
+	}
 	init: func
-	init: func ~withParams (=prev, =next, =data)
+	init: func ~withParams (=prev, =next, item: T) {
+		this _data = Cell new(item)
+	}
 	free: override func {
-		if (T inheritsFrom?(Object))
-			gc_free(data)
+		this _data free()
 		super()
 	}
 }
