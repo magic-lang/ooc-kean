@@ -42,3 +42,4 @@ rock_tmp
 /test/profilerTest.log
 tests.use
 Tests
+*.valgrindlog
