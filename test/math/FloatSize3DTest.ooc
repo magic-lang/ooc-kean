@@ -137,6 +137,9 @@ FloatVector3DTest: class extends Fixture {
 			expect(empty empty, is true)
 			expect(empty volume, is equal to(0.0f) within(this precision))
 			expect(this vector0 empty, is false)
+			almostZero := (0.1 + 0.1 + 0.1) - 0.3
+			empty = FloatVector3D new(almostZero, almostZero, 0.1f)
+			expect(empty empty, is true)
 		})
 		this add("azimuth", func {
 			myvector := FloatVector3D new(1.0, 5.5, 0.1)

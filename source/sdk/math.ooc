@@ -60,7 +60,7 @@ extend Short {
 }
 
 extend Int64 {
-	modulo: func (divisor: This) -> This { 
+	modulo: func (divisor: This) -> This {
 		result := this - (this / divisor) * divisor
 		result < 0 ? result + divisor : result
 	}
@@ -206,6 +206,7 @@ extend Double {
 		else
 			this
 	}
+	equals: func (other: This, tolerance := 0.0001) -> Bool { (this - other) abs() < tolerance }
 }
 
 extend Float {
@@ -360,6 +361,7 @@ extend Float {
 		result := coefficient toString() >> "E" & power toString()
 		result
 	}
+	equals: func (other: This, tolerance := 0.0001f) -> Bool { (this - other) abs() < tolerance }
 }
 
 extend LDouble {
@@ -395,4 +397,5 @@ extend LDouble {
 	ceil: extern (ceill) func -> This
 	floor: extern (floorl) func -> This
 	truncate: extern (truncl) func -> This
+	equals: func (other: This, tolerance := 0.0001) -> Bool { (this - other) abs() < tolerance }
 }

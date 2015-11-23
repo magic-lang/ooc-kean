@@ -22,7 +22,7 @@ FloatVector2D: cover {
 	x, y: Float
 	area ::= this x * this y
 	length ::= this norm
-	empty ::= !(this x > 0 && this y > 0)
+	empty ::= this x equals(0.0f) || this y equals(0.0f) || this x < 0.0f || this y < 0.0f
 	norm ::= (this x squared() + this y squared()) sqrt()
 	azimuth ::= this y atan2(this x)
 	absolute ::= This new(Float absolute(this x), Float absolute(this y))

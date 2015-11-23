@@ -148,6 +148,9 @@ FloatVector2DTest: class extends Fixture {
 			expect(empty empty, is true)
 			expect(empty area, is equal to(0.0f) within(this precision))
 			expect(this vector1 empty, is false)
+			almostZero := (0.1 + 0.1 + 0.1) - 0.3
+			empty = FloatVector2D new(almostZero, 0.1f)
+			expect(empty empty, is true)
 		})
 	}
 }
