@@ -348,15 +348,16 @@ FloatMatrix : cover {
 				raise("Invalid dimensions in FloatMatrix * operator: left width must match right height!")
 		}
 		otherWidth := other take() width
-		result := This new(otherWidth, t height)
+		(thisWidth, thisHeight) := (t width, t height)
+		result := This new(otherWidth, thisHeight)
 		resultElements := result elements
 		thisElements := this elements
 		otherElements := other elements
 		for (x in 0 .. otherWidth) {
-			for (y in 0 .. t height) {
+			for (y in 0 .. thisHeight) {
 				temp := resultElements[x + y * otherWidth]
-				for (z in 0 .. t width)
-					temp += thisElements[z + y * t width] * otherElements[x + z * otherWidth]
+				for (z in 0 .. thisWidth)
+					temp += thisElements[z + y * thisWidth] * otherElements[x + z * otherWidth]
 				resultElements[x + y * otherWidth] = temp
 			}
 		}
