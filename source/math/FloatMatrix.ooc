@@ -402,7 +402,7 @@ FloatMatrix : cover {
 	}
 	operator += (other: This) {
 		version(safe) {
-			if (this dimensions != other dimensions)
+			if (this take() dimensions != other take() dimensions)
 				raise("Invalid dimensions in FloatMatrix += operator: dimensions must match!")
 		}
 		thisElements := this elements
