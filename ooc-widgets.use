@@ -1,6 +1,0 @@
-Name: ooc display widgets
-Description: Display widgets, platform independent
-SourcePath: source/widgets
-Imports: DisplayWindow
-Imports: UnixWindow
-Imports: Win32DisplayWindow

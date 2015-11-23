@@ -18,7 +18,7 @@
 import DisplayWindow
 use ooc-math
 use ooc-draw
-use ooc-ui
+import Win32Window
 
 version(windows) {
 Win32DisplayWindow: class extends DisplayWindow {
