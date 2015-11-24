@@ -68,23 +68,10 @@ RasterMonochrome: class extends RasterPacked {
 			result = This new(size)
 			match (method) {
 				case InterpolationMode Smooth => This _resizeBilinear(this, result)
-				case => This _resizeNearestNeighbour(this, result)
+				case => RasterCanvas resizeNearestNeighbour(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, this size, result size, this stride, result stride, this bytesPerPixel)
 			}
 		}
 		result
-	}
-	_resizeNearestNeighbour: static func (source, result: This) {
-		resultBuffer := result buffer pointer
-		sourceBuffer := source buffer pointer
-		(resultWidth, resultHeight, resultStride) := (result size x, result size y, result stride)
-		(sourceWidth, sourceHeight, sourceStride) := (source size x, source size y, source stride)
-		for (row in 0 .. resultHeight) {
-			sourceRow := (sourceHeight * row) / resultHeight
-			for (column in 0 .. resultWidth) {
-				sourceColumn := (sourceWidth * column) / resultWidth
-				resultBuffer[column + resultStride * row] = sourceBuffer[sourceColumn + sourceStride * sourceRow]
-			}
-		}
 	}
 	_resizeBilinear: static func (source, result: This) {
 		resultBuffer := result buffer pointer
