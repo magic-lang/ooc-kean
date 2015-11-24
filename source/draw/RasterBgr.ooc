@@ -32,6 +32,21 @@ BgrRasterCanvas: class extends RasterCanvas {
 		if (this target isValidIn(position x, position y))
 			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toBgr())
 	}
+	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) {
+		bgr: RasterBgr = null
+		if (image instanceOf?(RasterBgr))
+			bgr = image as RasterBgr
+		else if (image instanceOf?(RasterImage))
+			bgr = RasterBgr convertFrom(image as RasterImage)
+		else
+			Debug raise("Unsupported image type in BgrRasterCanvas draw")
+		if (this target size == bgr size && this target stride == bgr stride && source == destination && source size == bgr size && source leftTop x == 0 && source leftTop y == 0)
+			memcpy(this target buffer pointer, bgr buffer pointer, this target stride * this target height)
+		else
+			RasterCanvas resizeNearestNeighbour(bgr buffer pointer as ColorBgr*, this target buffer pointer as ColorBgr*, source, destination, bgr stride, this target stride, this target bytesPerPixel)
+		if (bgr != image)
+			bgr referenceCount decrease()
+	}
 }
 
 RasterBgr: class extends RasterPacked {
@@ -62,13 +77,8 @@ RasterBgr: class extends RasterPacked {
 		(convert as Closure) free()
 	}
 	resizeTo: override func (size: IntVector2D) -> This {
-		result: This
-		if (this size == size)
-			result = this copy()
-		else {
-			result = This new(size)
-			RasterCanvas resizeNearestNeighbour(this buffer pointer as ColorBgr*, result buffer pointer as ColorBgr*, IntBox2D new(this size), IntBox2D new(result size), this stride, result stride, this bytesPerPixel)
-		}
+		result := This new(size)
+		result canvas draw(this, IntBox2D new(this size), IntBox2D new(size))
 		result
 	}
 	distance: func (other: Image) -> Float {
