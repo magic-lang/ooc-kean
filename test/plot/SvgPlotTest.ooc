@@ -97,5 +97,3 @@ writer addPlot(symmetricUnitCirclePlot)
 writer addPlot(formatPlot)
 writer write()
 writer free()
-
-"SvgPlotTest [TODO: Not implemented as a fixture!]" printfln()
