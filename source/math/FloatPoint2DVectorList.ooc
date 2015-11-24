@@ -15,6 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 use ooc-collections
+import math
 import FloatPoint2D
 import FloatVectorList
 
@@ -105,6 +106,32 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 		result := ""
 		for (i in 0 .. this _count)
 			result = result >> this[i] toString() >> "\n"
+		result
+	}
+	resampleLinear: func (start, end, interval: Float) -> This {
+		// Assumes list is sorted by x values.
+		resultCount := ((end - start) / interval) ceil() as Int + 1
+		result := This new()
+		previousIndex := 0
+		for (i in 0 .. resultCount) {
+			point := FloatPoint2D new(start + i * interval, 0.0f)
+			if (point x <= this[0] x)
+				point y = this[0] y
+			else if (point x >= this[this count - 1] x)
+				point y = this[this count - 1] y
+			else {
+				leftPoint, rightPoint: FloatPoint2D
+				for (j in previousIndex .. this count)
+					if (this[j] x <= point x) {
+						leftPoint = this[j]
+						rightPoint = this[Int minimum(j + 1, this count - 1)]
+						previousIndex = j
+					} else break
+				weight := Float absolute(point x - leftPoint x) / Float absolute(rightPoint x - leftPoint x)
+				point y = Float linearInterpolation(leftPoint y, rightPoint y, weight)
+			}
+			result add(point)
+		}
 		result
 	}
 }
