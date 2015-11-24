@@ -180,7 +180,7 @@ RasterMonochrome: class extends RasterPacked {
 		(derivativeX, derivativeY)
 	}
 	// get the derivative on small window, region is window's global location on image, window is left top centered.
-	getFirstDerivativeWindowOptimized: func (region: IntBox2D, imageX, imageY: FloatImage) {
+	getFirstDerivative: func ~window (region: IntBox2D, imageX, imageY: FloatImage) {
 		step := 2
 		sourceWidth := this size x
 		source := this buffer pointer + region leftTop y * sourceWidth // this getValue [x,y]
