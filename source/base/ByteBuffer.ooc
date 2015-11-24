@@ -17,7 +17,7 @@
 
 import lang/Memory
 use ooc-collections
-import threading/Thread
+import threading/Mutex
 import ReferenceCounter
 import Debug
 

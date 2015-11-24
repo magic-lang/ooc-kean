@@ -1,4 +1,4 @@
-import ../Thread
+import ../Mutex
 
 version(unix || apple) {
 	include pthread | (_XOPEN_SOURCE=500)

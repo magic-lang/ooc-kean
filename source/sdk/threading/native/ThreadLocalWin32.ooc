@@ -1,5 +1,6 @@
 import structs/HashMap
-import ../Thread, ThreadWin32
+import ../[ThreadLocal, Mutex]
+import ThreadWin32
 include unistd
 
 version(windows) {

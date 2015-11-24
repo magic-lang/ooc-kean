@@ -19,7 +19,8 @@ use ooc-collections
 use ooc-math
 use ooc-base
 use ooc-draw-gpu
-import OpenGLPacked, OpenGLMonochrome, OpenGLBgra, OpenGLBgr, OpenGLUv, threading/Thread
+import OpenGLPacked, OpenGLMonochrome, OpenGLBgra, OpenGLBgr, OpenGLUv
+import threading/Mutex
 
 version(!gpuOff) {
 RecycleBin: class {

@@ -1,4 +1,4 @@
-import threading/Thread
+import threading/ThreadLocal
 import structs/Stack
 import lang/Backtrace
 

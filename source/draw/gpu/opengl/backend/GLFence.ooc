@@ -18,7 +18,7 @@
 use ooc-base
 use ooc-math
 import os/Time
-import threading/Thread
+import threading/[Thread, Mutex, WaitCondition]
 
 version(!gpuOff) {
 GLFence: abstract class {
