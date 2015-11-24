@@ -9,3 +9,5 @@ test:
   - ./tools/ci/install_ci_tools.sh
   - node ./magic
   - ./test.sh
+  - rock -x
+  - ./test.sh nogpu
