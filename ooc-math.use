@@ -24,6 +24,7 @@ Imports: FloatRotation3D
 Imports: FloatVectorList
 Imports: FloatPoint2DVectorList
 Imports: FloatComplexVectorList
+Imports: FloatEuclidTransformVectorList
 Imports: FloatConvexHull2D
 Imports: BoolVectorList
 Imports: FloatRandomGenerator

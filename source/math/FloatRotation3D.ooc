@@ -22,6 +22,9 @@ FloatRotation3D: cover {
 	inverse ::= This new(this _quaternion conjugate) //FIXME Should this be conjugate or inverse?
 	normalized ::= This new(this _quaternion normalized)
 	transform ::= this _quaternion transform
+	x ::= this _quaternion rotationX
+	y ::= this _quaternion rotationY
+	z ::= this _quaternion rotationZ
 
 	init: func@ ~default { this init(Quaternion new(0.0f, 0.0f, 0.0f, 0.0f)) }
 	init: func@ ~fromQuaternion (=_quaternion)
