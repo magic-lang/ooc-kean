@@ -42,7 +42,7 @@ Event: class {
 		this _head()
 	}
 	free: override func {
-		(this _head as Closure) dispose()
+		(this _head as Closure) free()
 		if (this _tail != null)
 			this _tail free()
 		super()
@@ -75,7 +75,7 @@ Event1: class <T> {
 		this _head(argument)
 	}
 	free: override func {
-		(this _head as Closure) dispose()
+		(this _head as Closure) free()
 		if (this _tail != null)
 			this _tail free()
 		super()
@@ -109,7 +109,7 @@ Event2: class <T0, T1> { // TODO: Write tests and fix this
 		this _head(argument0, argument1)
 	}
 	free: override func {
-		(this _head as Closure) dispose()
+		(this _head as Closure) free()
 		if (this _tail != null)
 			this _tail free()
 		super()

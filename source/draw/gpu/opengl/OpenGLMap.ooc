@@ -106,7 +106,7 @@ OpenGLMap: class extends GpuMap {
 				}
 		}
 		this apply(action)
-		(action as Closure) dispose()
+		(action as Closure) free()
 	}
 }
 OpenGLMapMesh: class extends OpenGLMap {

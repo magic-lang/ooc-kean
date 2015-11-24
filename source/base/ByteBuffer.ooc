@@ -84,7 +84,7 @@ _RecoverableByteBuffer: class extends ByteBuffer {
 	init: func (pointer: UInt8*, size: Int, =_recover) { super(pointer, size) }
 	free: override func {
 		if (!this _recover(this)) {
-			(this _recover as Closure) dispose()
+			(this _recover as Closure) free()
 			super()
 		}
 	}
