@@ -67,7 +67,7 @@ RasterBgr: class extends RasterPacked {
 			result = this copy()
 		else {
 			result = This new(size)
-			RasterCanvas resizeNearestNeighbour(this buffer pointer as ColorBgr*, result buffer pointer as ColorBgr*, this size, result size, this stride, result stride, this bytesPerPixel)
+			RasterCanvas resizeNearestNeighbour(this buffer pointer as ColorBgr*, result buffer pointer as ColorBgr*, IntBox2D new(this size), IntBox2D new(result size), this stride, result stride, this bytesPerPixel)
 		}
 		result
 	}

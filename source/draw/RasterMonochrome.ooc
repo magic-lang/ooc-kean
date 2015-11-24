@@ -68,7 +68,7 @@ RasterMonochrome: class extends RasterPacked {
 			result = This new(size)
 			match (method) {
 				case InterpolationMode Smooth => This _resizeBilinear(this, result)
-				case => RasterCanvas resizeNearestNeighbour(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, this size, result size, this stride, result stride, this bytesPerPixel)
+				case => RasterCanvas resizeNearestNeighbour(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, IntBox2D new(this size), IntBox2D new(result size), this stride, result stride, this bytesPerPixel)
 			}
 		}
 		result
