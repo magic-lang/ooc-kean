@@ -209,31 +209,6 @@ RasterMonochrome: class extends RasterPacked {
 			source += sourceWidth
 		}
 	}
-	// get the derivative on small window, region is window's global location on image, window is left top centered.
-	getFirstDerivativeWindow: func (region: IntBox2D, imageX, imageY: FloatImage) {
-		step := 3
-		// Ix & Iy  centered difference approximation with 4th error order, centered window
-		for (y in (region leftTop y) .. (region rightBottom y)) {
-			for (x in (region leftTop x) .. (region rightBottom x)) {
-				imageX[x - region leftTop x, y - region leftTop y] = (
-					8 * this getValue(x + step, y) -
-					8 * this getValue(x - step, y) +
-					this getValue(x - 2 * step, y) -
-					this getValue(x + 2 * step, y)
-				) as Float / (12.0f * step)
-			}
-		}
-		for (y in (region leftTop y) .. (region rightBottom y)) {
-			for (x in (region leftTop x) .. (region rightBottom x)) {
-				imageY[x - region leftTop x, y - region leftTop y] = (
-					8 * this getValue(x, y + step) -
-					8 * this getValue(x, y - step) +
-					this getValue(x, y - 2 * step) -
-					this getValue(x, y + 2 * step)
-				) as Float / (12.0f * step)
-			}
-		}
-	}
 	operator [] (x, y: Int) -> ColorMonochrome {
 		version(safe) {
 			if (!this isValidIn(x, y))
