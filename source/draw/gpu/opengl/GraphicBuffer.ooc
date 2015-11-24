@@ -90,14 +90,14 @@ GraphicBuffer: class {
 		result
 	}
 	unlock: func { This _unlock(this _backend) }
-	kean_draw_gpu_android_graphicBuffer_registerCallbacks: unmangled static func (allocate, create, free, lock, unlock: Pointer) {
+	kean_draw_graphicBuffer_registerCallbacks: unmangled static func (allocate, create, free, lock, unlock: Pointer) {
 		This _allocate = (allocate, null) as Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
 		This _create = (create, null) as Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
 		This _free = (free, null) as Func (Pointer)
 		This _lock = (lock, null) as Func (Pointer, Int, Pointer*)
 		This _unlock = (unlock, null) as Func (Pointer)
 	}
-	kean_draw_gpu_android_graphicBuffer_configureAlignedWidth: unmangled static func (alignedWidth: Int*, count: Int) {
+	kean_draw_graphicBuffer_configureAlignedWidth: unmangled static func (alignedWidth: Int*, count: Int) {
 		This _alignedWidth = Int[count] new()
 		memcpy(This _alignedWidth data, alignedWidth, count * Int size)
 	}
