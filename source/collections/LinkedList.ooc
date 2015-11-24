@@ -154,20 +154,24 @@ operator []= <T>(list: LinkedList<T>, index: Int, value: T) { list set(index, va
 Node: class <T> {
 	prev: This<T>
 	next: This<T>
-	_data: Cell<T>
+	_data: Object
 	data: T {
-		get { this _data get() }
+		get { 
+			if (T inheritsFrom?(Object))
+				this _data
+			else
+				this _data as Cell<T> get()
+		}
 		set(value) { 
 			this _data free()
-			this _data = Cell new(value)
+			if (T inheritsFrom?(Object))
+				this _data = value
+			else
+				this _data = Cell<T> new(value)
 		}
 	}
 	init: func
 	init: func ~withParams (=prev, =next, item: T) {
 		this _data = Cell new(item)
-	}
-	free: override func {
-		this _data free()
-		super()
 	}
 }
