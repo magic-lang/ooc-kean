@@ -171,7 +171,14 @@ RasterMonochrome: class extends RasterPacked {
 		}
 		result
 	}
-
+	getFirstDerivative: func (x, y: Int) -> (Float, Float) {
+		step := 2
+		sourceWidth := this size x
+		source := this buffer pointer + y * sourceWidth
+		derivativeX := (8 * source[x + step] - 8 * source[x - step] + source[x - 2 * step] - source[x + 2 * step]) as Float / (12.0f * step)
+		derivativeY := (8 * source[x + sourceWidth * step] - 8 * source[x - sourceWidth * step] + source[x - sourceWidth * 2 * step] - source[x + sourceWidth * 2 * step]) as Float / (12.0f * step)
+		(derivativeX, derivativeY)
+	}
 	// get the derivative on small window, region is window's global location on image, window is left top centered.
 	getFirstDerivativeWindowOptimized: func (region: IntBox2D, imageX, imageY: FloatImage) {
 		step := 2
