@@ -107,7 +107,7 @@ Comparable: interface {
 Closure: cover {
     thunk: Pointer
     context: Pointer
-    dispose: func {
+    free: func {
       if (this context != null)
       {
         gc_free(this context)

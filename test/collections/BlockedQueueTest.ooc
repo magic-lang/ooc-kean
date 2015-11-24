@@ -44,8 +44,8 @@ BlockedQueueTest: class extends Fixture {
 		expect(queue count, is equal to(0))
 		producer free()
 		threads free()
-		(produce as Closure) dispose()
-		(consume as Closure) dispose()
+		(produce as Closure) free()
+		(consume as Closure) free()
 		queue free()
 	}
 	_testWithClass: static func {
@@ -81,8 +81,8 @@ BlockedQueueTest: class extends Fixture {
 		expect(queue count, is equal to(0))
 		consumer free()
 		threads free()
-		(produce as Closure) dispose()
-		(consume as Closure) dispose()
+		(produce as Closure) free()
+		(consume as Closure) free()
 		queue free()
 	}
 }

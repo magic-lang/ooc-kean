@@ -75,7 +75,7 @@ SynchronizedQueueTest: class extends Fixture {
 			threads[i] free()
 		}
 		expect(queue count, is equal to(numberOfThreads * countPerThread))
-		(job as Closure) dispose()
+		(job as Closure) free()
 		job = func {
 			for (i in 0 .. countPerThread) {
 				value := queue dequeue(Int minimumValue)
@@ -91,7 +91,7 @@ SynchronizedQueueTest: class extends Fixture {
 			threads[i] free()
 		}
 		expect(queue count, is equal to(0))
-		(job as Closure) dispose()
+		(job as Closure) free()
 		threads free()
 		queue free()
 	}
@@ -113,7 +113,7 @@ SynchronizedQueueTest: class extends Fixture {
 			threads[i] free()
 		}
 		expect(queue count, is equal to(numberOfThreads * countPerThread))
-		(job as Closure) dispose()
+		(job as Closure) free()
 		job = func {
 			for (i in 0 .. countPerThread) {
 				value: Cell<Int>
@@ -131,7 +131,7 @@ SynchronizedQueueTest: class extends Fixture {
 			threads[i] free()
 		}
 		expect(queue count, is equal to(0))
-		(job as Closure) dispose()
+		(job as Closure) free()
 		threads free()
 		queue free()
 	}

@@ -136,7 +136,7 @@ RasterUv: class extends RasterPacked {
 				}
 			}
 			original apply(f)
-			(f as Closure) dispose()
+			(f as Closure) free()
 		}
 		result
 	}

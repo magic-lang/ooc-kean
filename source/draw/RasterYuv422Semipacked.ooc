@@ -48,7 +48,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 	apply: func ~bgr (action: Func(ColorBgr)) {
 		convert := ColorConvert fromYuv(action)
 		this apply(convert)
-		(convert as Closure) dispose()
+		(convert as Closure) free()
 	}
 	apply: func ~yuv (action: Func (ColorYuv)) {
 		row := this buffer pointer as UInt8*
@@ -67,7 +67,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
 		convert := ColorConvert fromYuv(action)
 		this apply(convert)
-		(convert as Closure) dispose()
+		(convert as Closure) free()
 	}
 	operator [] (x, y: Int) -> ColorYuv {
 		result := ColorYuv new()
@@ -126,7 +126,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 				}
 			}
 			original apply(f)
-			(f as Closure) dispose()
+			(f as Closure) free()
 		}
 		result
 	}

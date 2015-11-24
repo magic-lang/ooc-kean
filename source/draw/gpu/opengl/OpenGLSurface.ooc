@@ -49,7 +49,7 @@ OpenGLSurface: abstract class extends GpuSurface {
 		map use()
 		f := func { this context drawQuad() }
 		this draw(f)
-		(f as Closure) dispose()
+		(f as Closure) free()
 	}
 	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
 		map textureTransform = This _createTextureTransform(image size, source)
@@ -58,12 +58,12 @@ OpenGLSurface: abstract class extends GpuSurface {
 	drawLines: override func (pointList: VectorList<FloatPoint2D>) {
 		f := func { this context drawLines(pointList, this _projection * this _toLocal, this pen) }
 		this draw(f)
-		(f as Closure) dispose()
+		(f as Closure) free()
 	}
 	drawPoints: override func (pointList: VectorList<FloatPoint2D>) {
 		f := func { this context drawPoints(pointList, this _projection * this _toLocal, this pen) }
 		this draw(f)
-		(f as Closure) dispose()
+		(f as Closure) free()
 	}
 	draw: override func ~mesh (image: GpuImage, mesh: GpuMesh) {
 		f := func {
@@ -73,7 +73,7 @@ OpenGLSurface: abstract class extends GpuSurface {
 			mesh draw()
 		}
 		this draw(f)
-		(f as Closure) dispose()
+		(f as Closure) free()
 	}
 }
 }

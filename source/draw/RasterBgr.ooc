@@ -54,12 +54,12 @@ RasterBgr: class extends RasterPacked {
 	apply: func ~yuv (action: Func(ColorYuv)) {
 		convert := ColorConvert fromBgr(action)
 		this apply(convert)
-		(convert as Closure) dispose()
+		(convert as Closure) free()
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) {
 		convert := ColorConvert fromBgr(action)
 		this apply(convert)
-		(convert as Closure) dispose()
+		(convert as Closure) free()
 	}
 	distance: func (other: Image) -> Float {
 		result := 0.0f
@@ -139,7 +139,7 @@ RasterBgr: class extends RasterPacked {
 				}
 			}
 			original apply(f)
-			(f as Closure) dispose()
+			(f as Closure) free()
 		}
 		result
 	}
