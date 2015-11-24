@@ -61,6 +61,16 @@ RasterBgr: class extends RasterPacked {
 		this apply(convert)
 		(convert as Closure) free()
 	}
+	resizeTo: override func (size: IntVector2D) -> This {
+		result: This
+		if (this size == size)
+			result = this copy()
+		else {
+			result = This new(size)
+			RasterCanvas resizeNearestNeighbour(this buffer pointer as ColorBgr*, result buffer pointer as ColorBgr*, this size, result size, this stride, result stride, this bytesPerPixel)
+		}
+		result
+	}
 	distance: func (other: Image) -> Float {
 		result := 0.0f
 		if (!other || (this size != other size))

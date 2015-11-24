@@ -63,6 +63,16 @@ RasterBgrTest: class extends Fixture {
 			image2 referenceCount decrease()
 			output free()
 		})
+		this add("resize", func {
+			outputFast := "test/draw/output/RasterBgr_resized.png"
+			image := RasterBgr open(this sourceSpace)
+			image2 := image resizeTo(image size * 2)
+			expect(image2 size == image size * 2)
+			image2 save(outputFast)
+			image referenceCount decrease()
+			image2 referenceCount decrease()
+			outputFast free()
+		})
 	}
 }
 

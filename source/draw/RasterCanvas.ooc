@@ -71,4 +71,17 @@ RasterCanvas: abstract class extends Canvas {
 	_map: func (point: IntPoint2D) -> IntPoint2D {
 		point + this _size / 2
 	}
+	resizeNearestNeighbour: static func <T> (sourceBuffer, resultBuffer: T*, sourceSize, resultSize: IntVector2D, sourceStride, resultStride, bytesPerPixel: Int) {
+		(resultWidth, resultHeight) := (resultSize x, resultSize y)
+		(sourceWidth, sourceHeight) := (sourceSize x, sourceSize y)
+		sourceStride /= bytesPerPixel
+		resultStride /= bytesPerPixel
+		for (row in 0 .. resultHeight) {
+			sourceRow := (sourceHeight * row) / resultHeight
+			for (column in 0 .. resultWidth) {
+				sourceColumn := (sourceWidth * column) / resultWidth
+				resultBuffer[column + resultStride * row] = sourceBuffer[sourceColumn + sourceStride * sourceRow]
+			}
+		}
+	}
 }
