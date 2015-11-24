@@ -20,13 +20,13 @@ import FloatVectorList
 
 BoolVectorList: class extends VectorList<Bool> {
 	init: func ~default {
-		this super()
+		super()
 	}
 	init: func ~heap (capacity: Int) {
 		super(capacity)
 	}
 	init: func ~fromVectorList (other: VectorList<Bool>) {
-		this super(other _vector)
+		super(other _vector)
 		this _count = other count
 	}
 	tally: func (tallyTrues: Bool) -> Int {

@@ -21,10 +21,10 @@ import FloatVectorList
 
 FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 	init: func ~default {
-		this super()
+		super()
 	}
 	init: func ~fromVectorList (other: VectorList<FloatPoint2D>) {
-		this super(other _vector)
+		super(other _vector)
 		this _count = other count
 	}
 	toVectorList: func -> VectorList<FloatPoint2D> {
