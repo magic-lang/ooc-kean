@@ -1,0 +1,7 @@
+Name: ooc Parallel
+Description: ooc library for everything related to parallel programming.
+SourcePath: source/parallel
+Imports: Promise
+Imports: PromiseCollector
+Imports: ThreadPool
+

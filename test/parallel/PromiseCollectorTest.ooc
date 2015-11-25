@@ -1,4 +1,4 @@
-use ooc-base
+use ooc-parallel
 use ooc-unit
 
 PromiseCollectorTest: class extends Fixture {

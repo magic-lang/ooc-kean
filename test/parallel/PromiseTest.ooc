@@ -1,4 +1,5 @@
 use ooc-base
+use ooc-parallel
 use ooc-unit
 
 TestClass: class {
