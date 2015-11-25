@@ -29,7 +29,7 @@ import Image
 RasterPacked: abstract class extends RasterImage {
 	_buffer: ByteBuffer
 	buffer ::= this _buffer
-	_stride: UInt
+	_stride: Int
 	stride ::= this _stride
 	bytesPerPixel: Int { get }
 	init: func (=_buffer, size: IntVector2D, =_stride) {
