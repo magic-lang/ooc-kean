@@ -88,4 +88,4 @@ OwnedBufferTest: class extends Fixture {
 	}
 }
 
-OwnedBufferTest new() run()
+OwnedBufferTest new() run() . free()

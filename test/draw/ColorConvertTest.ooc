@@ -40,4 +40,5 @@ ColorConvertTest: class extends Fixture {
 		})
 	}
 }
-ColorConvertTest new() run()
+
+ColorConvertTest new() run() . free()

@@ -153,4 +153,5 @@ IntBox2DTest: class extends Fixture {
 		})
 	}
 }
-IntBox2DTest new() run()
+
+IntBox2DTest new() run() . free()

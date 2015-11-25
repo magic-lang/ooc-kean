@@ -47,4 +47,4 @@ StackTest: class extends Fixture {
 	}
 }
 	
-StackTest new() run()
+StackTest new() run() . free()

@@ -184,4 +184,5 @@ DateTimeTest: class extends Fixture {
 		})
 	}
 }
-DateTimeTest new() run()
+
+DateTimeTest new() run() . free()

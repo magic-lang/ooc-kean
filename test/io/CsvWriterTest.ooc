@@ -39,4 +39,5 @@ CsvWriterTest: class extends Fixture {
 		file free()
 	}
 }
-CsvWriterTest new() run()
+
+CsvWriterTest new() run() . free()

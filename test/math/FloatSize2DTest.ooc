@@ -154,4 +154,5 @@ FloatVector2DTest: class extends Fixture {
 		})
 	}
 }
-FloatVector2DTest new() run()
+
+FloatVector2DTest new() run() . free()

@@ -409,4 +409,5 @@ FloatVectorListTest: class extends Fixture {
 		})
 	}
 }
-FloatVectorListTest new() run()
+
+FloatVectorListTest new() run() . free()

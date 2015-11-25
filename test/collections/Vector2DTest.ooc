@@ -122,4 +122,5 @@ Vector2DTest: class extends Fixture {
 		})
 	}
 }
-Vector2DTest new() run()
+
+Vector2DTest new() run() . free()

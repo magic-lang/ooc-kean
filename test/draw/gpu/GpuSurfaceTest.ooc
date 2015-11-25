@@ -145,5 +145,5 @@ GpuSurfaceTest: class extends Fixture {
 	}
 }
 gpuContext := OpenGLContext new()
-GpuSurfaceTest new() run()
+GpuSurfaceTest new() run() . free()
 gpuContext free()

@@ -133,4 +133,5 @@ TimeSpanTest: class extends Fixture {
 		})
 	}
 }
-TimeSpanTest new() run()
+
+TimeSpanTest new() run() . free()

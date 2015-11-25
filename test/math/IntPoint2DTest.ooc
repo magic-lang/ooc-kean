@@ -71,4 +71,5 @@ IntPoint2DTest: class extends Fixture {
 		})
 	}
 }
-IntPoint2DTest new() run()
+
+IntPoint2DTest new() run() . free()

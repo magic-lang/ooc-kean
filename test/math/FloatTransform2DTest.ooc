@@ -163,4 +163,5 @@ FloatTransform2DTest: class extends Fixture {
 		})
 	}
 }
-FloatTransform2DTest new() run()
+
+FloatTransform2DTest new() run() . free()

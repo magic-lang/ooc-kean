@@ -55,4 +55,4 @@ LinkedListTest: class extends Fixture {
 	}
 }
 
-LinkedListTest new() run()
+LinkedListTest new() run() . free()

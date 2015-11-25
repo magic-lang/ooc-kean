@@ -45,4 +45,4 @@ ByteBufferTest: class extends Fixture {
 	}
 }
 
-ByteBufferTest new() run()
+ByteBufferTest new() run() . free()

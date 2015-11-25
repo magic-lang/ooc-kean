@@ -87,4 +87,4 @@ IntVector3DTest: class extends Fixture {
 	}
 }
 
-IntVector3DTest new() run()
+IntVector3DTest new() run() . free()

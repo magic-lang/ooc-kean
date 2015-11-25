@@ -39,4 +39,5 @@ FloatTest: class extends Fixture {
 		this add("0.0 is greater than -0.00000001", func { expect(0.0f, is greater than(-0.00000001f)) })
 	}
 }
-FloatTest new() run()
+
+FloatTest new() run() . free()

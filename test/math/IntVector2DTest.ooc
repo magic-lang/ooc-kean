@@ -90,4 +90,5 @@ IntVector2DTest: class extends Fixture {
 		})
 	}
 }
-IntVector2DTest new() run()
+
+IntVector2DTest new() run() . free()

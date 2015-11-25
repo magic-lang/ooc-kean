@@ -49,4 +49,5 @@ RangeTest: class extends Fixture {
 		})
 	}
 }
-RangeTest new() run()
+
+RangeTest new() run() . free()

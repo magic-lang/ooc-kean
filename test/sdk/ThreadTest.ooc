@@ -55,4 +55,4 @@ ThreadTest: class extends Fixture {
 	}
 }
 
-ThreadTest new() run()
+ThreadTest new() run() . free()

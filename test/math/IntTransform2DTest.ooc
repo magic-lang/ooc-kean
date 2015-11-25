@@ -145,4 +145,4 @@ IntTransform2DTest: class extends Fixture {
 	}
 }
 
-IntTransform2DTest new() run()
+IntTransform2DTest new() run() . free()

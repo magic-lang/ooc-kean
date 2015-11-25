@@ -249,4 +249,5 @@ VectorTest: class extends Fixture {
 		})
 	}
 }
-VectorTest new() run()
+
+VectorTest new() run() . free()

@@ -92,4 +92,4 @@ IntShell2DTest: class extends Fixture {
 	}
 }
 
-IntShell2DTest new() run()
+IntShell2DTest new() run() . free()

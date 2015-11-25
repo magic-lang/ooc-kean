@@ -129,4 +129,4 @@ BoolVectorListTest: class extends Fixture {
 	}
 }
 
-BoolVectorListTest new() run()
+BoolVectorListTest new() run() . free()

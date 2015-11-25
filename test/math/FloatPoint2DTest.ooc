@@ -161,4 +161,5 @@ FloatPoint2DTest: class extends Fixture {
 		})
 	}
 }
-FloatPoint2DTest new() run()
+
+FloatPoint2DTest new() run() . free()

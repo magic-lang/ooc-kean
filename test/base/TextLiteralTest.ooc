@@ -153,4 +153,4 @@ TextLiteralTest: class extends Fixture {
 	}
 }
 
-TextLiteralTest new() run()
+TextLiteralTest new() run() . free()

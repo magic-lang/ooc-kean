@@ -81,4 +81,4 @@ IntPoint3DTest: class extends Fixture {
 	}
 }
 
-IntPoint3DTest new() run()
+IntPoint3DTest new() run() . free()

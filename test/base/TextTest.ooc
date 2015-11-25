@@ -191,4 +191,4 @@ this add("text literal toString", func {
 	}
 }
 
-TextTest new() run()
+TextTest new() run() . free()

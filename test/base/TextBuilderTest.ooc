@@ -81,4 +81,4 @@ TextBuilderTest: class extends Fixture {
 	}
 }
 
-TextBuilderTest new() run()
+TextBuilderTest new() run() . free()

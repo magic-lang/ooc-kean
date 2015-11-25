@@ -52,4 +52,4 @@ TimerTest: class extends Fixture {
 	}
 }
 
-TimerTest new() run()
+TimerTest new() run() . free()

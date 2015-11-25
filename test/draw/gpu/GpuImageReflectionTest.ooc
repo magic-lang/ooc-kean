@@ -43,5 +43,5 @@ GpuImageReflectionTest: class extends Fixture {
 }
 
 gpuContext := OpenGLContext new()
-GpuImageReflectionTest new() run()
+GpuImageReflectionTest new() run() . free()
 gpuContext free()

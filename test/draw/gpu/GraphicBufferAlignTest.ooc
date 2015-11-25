@@ -39,4 +39,5 @@ GraphicBufferAlignTest: class extends Fixture {
 		})
 	}
 }
-GraphicBufferAlignTest new() run()
+
+GraphicBufferAlignTest new() run() . free()
