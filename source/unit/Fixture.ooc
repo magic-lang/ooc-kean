@@ -52,7 +52,7 @@ Fixture: abstract class {
 		this add(test)
 	}
 	run: func -> Bool {
-		failures := VectorList<TestFailedException> new()
+		failures := VectorList<TestFailedException> new(32, false)
 		result := true
 		This _print(DateTime now toString("%hh:%mm:%ss") + " " + this name + " ")
 		timer := ClockTimer new() . start()
@@ -62,32 +62,33 @@ Fixture: abstract class {
 			r := true
 			try {
 				test run()
+				test free()
 			} catch (e: TestFailedException) {
-				e test = test
 				e message = test name
 				result = r = false
 				failures add(e)
 			}
 			This _print(r ? "." : "f")
-			test free()
 		}
 		if (!result) {
 			if (!This failureNames)
 				This failureNames = VectorList<String> new()
-			This failureNames add(this name)
+			This failureNames add(this name clone())
 		}
 		This _print(result ? " done" : " failed")
 		testTime := timer stop() / 1000.0
 		This totalTime += testTime
 		This _print(" in %.2fs, total: %.2fs\n" format(testTime, This totalTime))
 		if (!result) {
-			for (f in failures) {
+			for (i in 0 .. failures count) {
+				f := failures[i]
 				// If the constraint is a CompareConstraint and the value being tested is a Cell,
 				// we create a friendly message for the user.
 				if (f constraint instanceOf?(CompareConstraint) && f value instanceOf?(Cell))
 					(this createFailureMessage(f) toString()) println()
 				else
 					"  -> '%s' (expect: %i)" printfln(f message, f expect)
+				f free()
 			}
 			This _testsFailed = true
 		}
@@ -170,8 +171,8 @@ Fixture: abstract class {
 	_testsFailed: static Bool
 	testsFailed: static Bool { get { This _testsFailed } }
 }
+
 TestFailedException: class extends Exception {
-	test: Test
 	value: Object
 	constraint: Constraint
 	expect: Int
@@ -179,6 +180,7 @@ TestFailedException: class extends Exception {
 		this message = message
 	}
 }
+
 Test: class {
 	name: String
 	action: Func
