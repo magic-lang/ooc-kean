@@ -1,7 +1,7 @@
 use ooc-unit
 use ooc-draw
 use ooc-base
-use ooc-math
+use ooc-geometry
 import math
 import lang/IO
 import io/File

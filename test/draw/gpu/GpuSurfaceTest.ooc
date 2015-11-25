@@ -1,6 +1,6 @@
 use ooc-base
 use ooc-collections
-use ooc-math
+use ooc-geometry
 use ooc-draw-gpu
 use ooc-draw
 use ooc-opengl

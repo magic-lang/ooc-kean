@@ -1,4 +1,4 @@
-use ooc-math
+use ooc-geometry
 import svg/Shapes
 import math
 

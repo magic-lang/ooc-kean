@@ -16,7 +16,7 @@
  */
 
 use ooc-draw-gpu
-use ooc-math
+use ooc-geometry
 use ooc-draw
 use ooc-opengl
 import DisplayWindow

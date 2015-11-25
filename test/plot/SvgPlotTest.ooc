@@ -1,6 +1,7 @@
 use ooc-unit
 use ooc-plot
 use ooc-math
+use ooc-geometry
 use ooc-collections
 use ooc-draw
 import math

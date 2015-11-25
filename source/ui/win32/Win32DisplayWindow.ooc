@@ -16,7 +16,7 @@
  */
 
 import DisplayWindow
-use ooc-math
+use ooc-geometry
 use ooc-draw
 import Win32Window
 

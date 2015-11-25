@@ -1,5 +1,5 @@
 use ooc-unit
-use ooc-math
+use ooc-geometry
 use ooc-draw
 use ooc-draw-gpu
 use ooc-opengl

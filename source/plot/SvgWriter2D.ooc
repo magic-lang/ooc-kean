@@ -1,5 +1,5 @@
 use ooc-collections
-use ooc-math
+use ooc-geometry
 use ooc-draw
 import PlotData2D
 import Axis

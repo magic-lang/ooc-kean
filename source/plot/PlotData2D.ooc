@@ -1,6 +1,6 @@
 use ooc-draw
 use ooc-collections
-use ooc-math
+use ooc-geometry
 
 PlotData2D: abstract class {
 	label: String { get set }

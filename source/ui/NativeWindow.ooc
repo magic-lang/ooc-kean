@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-use ooc-math
+use ooc-geometry
 NativeWindow: abstract class {
 	_display: Pointer
 	display ::= this _display

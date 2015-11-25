@@ -1,6 +1,6 @@
 use ooc-base
 use ooc-unit
-use ooc-math
+use ooc-geometry
 import math
 
 TextTest: class extends Fixture {

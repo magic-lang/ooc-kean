@@ -1,6 +1,6 @@
 use ooc-unit
 use ooc-draw
-use ooc-math
+use ooc-geometry
 import math
 
 RasterYuv422SemipackedTest: class extends Fixture {
