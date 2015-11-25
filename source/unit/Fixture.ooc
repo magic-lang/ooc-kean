@@ -24,7 +24,7 @@ Fixture: abstract class {
 	exitHandlerRegistered: static Bool
 	failureNames: static VectorList<String>
 	name: String
-	tests := VectorList<Test> new()
+	tests := VectorList<Test> new(32, false)
 	printFailures: static func {
 		if (This failureNames && (This failureNames count > 0)) {
 			"Failed tests: %i [" printf(This failureNames count)
@@ -39,6 +39,11 @@ Fixture: abstract class {
 			atexit(This printFailures)
 		}
 	}
+	free: override func {
+		this tests free()
+		this name free()
+		super()
+	}
 	add: func (test: Test) {
 		this tests add(test)
 	}
@@ -51,7 +56,8 @@ Fixture: abstract class {
 		result := true
 		This _print(DateTime now toString("%hh:%mm:%ss") + " " + this name + " ")
 		timer := ClockTimer new() . start()
-		for (test in tests) {
+		for (i in 0 .. this tests count) {
+			test := tests[i]
 			This _expectCount = 0
 			r := true
 			try {
@@ -63,6 +69,7 @@ Fixture: abstract class {
 				failures add(e)
 			}
 			This _print(r ? "." : "f")
+			test free()
 		}
 		if (!result) {
 			if (!This failureNames)
@@ -117,6 +124,8 @@ Fixture: abstract class {
 		++This _expectCount
 		if (!constraint verify(value))
 			TestFailedException new(value, constraint, This _expectCount) throw()
+		else
+			constraint free()
 	}
 	expect: static func ~char (value: Char, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
@@ -175,4 +184,9 @@ Test: class {
 	action: Func
 	init: func (=name, =action)
 	run: func { this action() }
+	free: override func {
+		(this action as Closure) free()
+		this name free()
+		super()
+	}
 }
