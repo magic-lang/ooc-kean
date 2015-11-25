@@ -3,7 +3,6 @@ use ooc-math
 use ooc-draw
 use ooc-draw-gpu
 use ooc-opengl
-import RasterCanvas
 
 RasterCanvasTest: class extends Fixture {
 	init: func {
@@ -106,13 +105,13 @@ RasterCanvasTest: class extends Fixture {
 			input free()
 			output free()
 		})
-		this add("resize with box", func {
+		this add("draw bgr image", func {
 			inputFlower := "test/draw/input/Flower.png"
 			inputSpace := "test/draw/input/Space.png"
-			output := "test/draw/output/RasterCanvas_resizeWithBox.png"
-			imageFlower := RasterBgr open(inputFlower)
+			output := "test/draw/output/RasterCanvas_drawYUVonBGR.png"
+			imageFlower := RasterYuv420Semiplanar open(inputFlower)
 			outputImage := RasterBgr open(inputSpace)
-			RasterCanvas resizeNearestNeighbour(imageFlower buffer pointer as ColorBgr*, outputImage buffer pointer as ColorBgr*, IntBox2D new(imageFlower size), IntBox2D new(20, 30, 100, 250), imageFlower stride, outputImage stride, imageFlower bytesPerPixel)
+			outputImage canvas draw(imageFlower, IntBox2D new(imageFlower size), IntBox2D new(20, 30, 100, 250))
 			outputImage save(output)
 			imageFlower referenceCount decrease()
 			outputImage referenceCount decrease()
