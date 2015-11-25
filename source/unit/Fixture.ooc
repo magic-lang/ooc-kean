@@ -67,7 +67,7 @@ Fixture: abstract class {
 				e message = test name
 				result = r = false
 				failures add(e)
-			}			
+			}
 			This _print(r ? "." : "f")
 		}
 		if (!result) {
