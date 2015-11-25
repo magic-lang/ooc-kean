@@ -4,3 +4,4 @@ SourcePath: source/concurrent
 Imports: Promise
 Imports: PromiseCollector
 Imports: ThreadPool
+Imports: Process
