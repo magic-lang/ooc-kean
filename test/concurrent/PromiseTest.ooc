@@ -1,5 +1,5 @@
 use ooc-base
-use ooc-parallel
+use ooc-concurrent
 use ooc-unit
 
 TestClass: class {
