@@ -36,7 +36,8 @@ StringTest: class extends Fixture {
 		this add("code is not equal to empty", func { expect("code", isNotEqualToEmpty) })
 		isNotEqualToCode := is not equal to("code") // FIXME: Does not work to skip variable and put expression below, why?
 		this add("null is not equal to code", func { expect(null, isNotEqualToCode) })
-		this add("empty is not equal to code", func { expect("", isNotEqualToCode) })
+		isNotEqualToCode2 := is not equal to("code") // FIXME: Does not work to skip variable and put expression below, why?
+		this add("empty is not equal to code", func { expect("", isNotEqualToCode2) })
 	}
 }
 StringTest new() run()
