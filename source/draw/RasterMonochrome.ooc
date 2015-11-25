@@ -173,17 +173,17 @@ RasterMonochrome: class extends RasterPacked {
 	}
 	getFirstDerivative: func (x, y: Int) -> (Float, Float) {
 		step := 2
-		sourceWidth := this size x
-		source := this buffer pointer + y * sourceWidth
+		sourceStride := this stride
+		source := this buffer pointer + y * sourceStride
 		derivativeX := (8 * source[x + step] - 8 * source[x - step] + source[x - 2 * step] - source[x + 2 * step]) as Float / (12.0f * step)
-		derivativeY := (8 * source[x + sourceWidth * step] - 8 * source[x - sourceWidth * step] + source[x - sourceWidth * 2 * step] - source[x + sourceWidth * 2 * step]) as Float / (12.0f * step)
+		derivativeY := (8 * source[x + sourceStride * step] - 8 * source[x - sourceStride * step] + source[x - sourceStride * 2 * step] - source[x + sourceStride * 2 * step]) as Float / (12.0f * step)
 		(derivativeX, derivativeY)
 	}
 	// get the derivative on small window, region is window's global location on image, window is left top centered.
 	getFirstDerivative: func ~window (region: IntBox2D, imageX, imageY: FloatImage) {
 		step := 2
-		sourceWidth := this size x
-		source := this buffer pointer + region leftTop y * sourceWidth // this getValue [x,y]
+		sourceStride := this stride
+		source := this buffer pointer + region leftTop y * sourceStride // this getValue [x,y]
 		destinationX := imageX pointer
 		destinationY := imageY pointer
 
@@ -199,14 +199,14 @@ RasterMonochrome: class extends RasterPacked {
 				destinationX += 1
 
 				destinationY@ = (
-					8 * source[x + sourceWidth * step] -
-					8 * source[x - sourceWidth * step] +
-					source[x - sourceWidth * 2 * step] -
-					source[x + sourceWidth * 2 * step]
+					8 * source[x + sourceStride * step] -
+					8 * source[x - sourceStride * step] +
+					source[x - sourceStride * 2 * step] -
+					source[x + sourceStride * 2 * step]
 				) as Float / (12.0f * step)
 				destinationY += 1
 			}
-			source += sourceWidth
+			source += sourceStride
 		}
 	}
 	operator [] (x, y: Int) -> ColorMonochrome {
