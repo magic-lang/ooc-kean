@@ -116,9 +116,9 @@ Axis: class {
 	getFirstTickValue: func -> Float {
 		result: Float
 		if ((this min < this tick && this min > 0.0f) || (this min > this tick && this min < 1.0f))
-			result = this min + (this tick - Float modulo(this min, this tick))
+			result = this min + this tick - this min modulo(this tick)
 		else
-			result = this min - Float modulo(this min, this tick)
+			result = this min - this min modulo(this tick)
 		result
 	}
 	getRequiredMargin: func (fontSize: Int) -> Float {
