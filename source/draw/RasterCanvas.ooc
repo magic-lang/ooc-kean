@@ -88,4 +88,36 @@ RasterCanvas: abstract class extends Canvas {
 			}
 		}
 	}
+	resizeBilinear: static func <T> (sourceBuffer, resultBuffer: T*, sourceBox, resultBox: IntBox2D, sourceStride, resultStride, bytesPerPixel: Int) {
+		(resultWidth, resultHeight) := (resultBox size x, resultBox size y)
+		(sourceWidth, sourceHeight) := (sourceBox size x, sourceBox size y)
+		(sourceStartColumn, sourceStartRow) := (sourceBox leftTop x, sourceBox leftTop y)
+		(resultStartColumn, resultStartRow) := (resultBox leftTop x, resultBox leftTop y)
+		for (row in 0 .. resultHeight) {
+			sourceRow := ((sourceHeight as Float) * row) / resultHeight + sourceStartRow
+			sourceRowUp := sourceRow floor() as Int
+			weightDown := sourceRow - sourceRowUp as Float
+			sourceRowDown := (sourceRow - weightDown) as Int + 1
+			if (sourceRowDown >= sourceHeight)
+				weightDown = 0.0f
+			for (column in 0 .. resultWidth) {
+				sourceColumn := ((sourceWidth as Float) * column) / resultWidth + sourceStartColumn
+				sourceColumnLeft := sourceColumn floor() as Int
+				weightRight := sourceColumn - sourceColumnLeft as Float
+				if (sourceColumnLeft + 1 >= sourceWidth)
+					weightRight = 0.0f
+				This _blendSquare(sourceBuffer as UInt8*, resultBuffer as UInt8*, sourceStride, resultStride, sourceRowUp, sourceColumnLeft, row + resultStartRow, column + resultStartColumn, (1.0f - weightDown) * (1.0f - weightRight), (1.0f - weightDown) * weightRight, weightDown * (1.0f - weightRight), weightDown * weightRight, bytesPerPixel)
+			}
+		}
+	}
+	_blendSquare: static func (sourceBuffer, resultBuffer: UInt8*, sourceStride, resultStride, sourceRow, sourceColumn, row, column: Int, weightTopLeft, weightTopRight, weightBottomLeft, weightBottomRight: Float, bytesPerPixel: Int) {
+		finalValue: UInt8 = 0
+		for (i in 0 .. bytesPerPixel) {
+			finalValue = weightTopLeft > 0.0f ? weightTopLeft * sourceBuffer[sourceColumn * bytesPerPixel + sourceRow * sourceStride + i] : 0
+			finalValue += weightTopRight > 0.0f ? weightTopRight * sourceBuffer[(sourceColumn + 1) * bytesPerPixel + sourceRow * sourceStride + i] : 0
+			finalValue += weightBottomLeft > 0.0f ? weightBottomLeft * sourceBuffer[sourceColumn * bytesPerPixel + (sourceRow + 1) * sourceStride + i] : 0
+			finalValue += weightBottomRight > 0.0f ? weightBottomRight * sourceBuffer[(sourceColumn + 1) * bytesPerPixel + (sourceRow + 1) * sourceStride + i] : 0
+			resultBuffer[column * bytesPerPixel + row * resultStride + i] = finalValue
+		}
+	}
 }
