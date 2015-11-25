@@ -49,7 +49,6 @@ OpenGLMap: class extends GpuMap {
 		if (vertexSource == null || fragmentSource == null)
 			Debug raise("Vertex or fragment shader source not set")
 	}
-	init: func ~defaultVertex (fragmentSource: String, context: OpenGLContext) { this init(slurp("shaders/default.vert"), fragmentSource, context) }
 	free: override func {
 		for (i in 0 .. this _context getMaxContexts()) {
 			if (this _program[i] != null)
@@ -108,6 +107,7 @@ OpenGLMap: class extends GpuMap {
 		this apply(action)
 		(action as Closure) free()
 	}
+	new: static func ~default (fragmentSource: String, context: OpenGLContext) -> This { OpenGLMapTransform new(fragmentSource, context) }
 }
 OpenGLMapMesh: class extends OpenGLMap {
 	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
