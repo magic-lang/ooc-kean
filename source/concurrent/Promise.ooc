@@ -1,4 +1,4 @@
-use ooc-base
+use ooc-concurrent
 import threading/Thread
 import os/Time
 

@@ -1,5 +1,6 @@
-use ooc-collections
 use ooc-base
+use ooc-collections
+use ooc-concurrent
 import threading/[Thread, Mutex, WaitCondition]
 import os/Time
 
