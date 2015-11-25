@@ -78,5 +78,5 @@ GpuImageRotationTest: class extends Fixture {
 	}
 }
 gpuContext := OpenGLContext new()
-GpuImageRotationTest new() run()
+GpuImageRotationTest new() run() . free()
 gpuContext free()

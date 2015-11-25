@@ -133,4 +133,5 @@ FloatPoint3DTest: class extends Fixture {
 		})
 	}
 }
-FloatPoint3DTest new() run()
+
+FloatPoint3DTest new() run() . free()

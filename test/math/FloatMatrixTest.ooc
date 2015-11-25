@@ -156,4 +156,5 @@ FloatMatrixTest: class extends Fixture {
 				expect(m[x, y], is equal to(values[x * m dimensions y + y]) within(this precision))
 	}
 }
-FloatMatrixTest new() run()
+
+FloatMatrixTest new() run() . free()

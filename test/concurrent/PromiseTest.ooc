@@ -90,4 +90,4 @@ PromiseTest: class extends Fixture {
 	}
 }
 
-PromiseTest new() run()
+PromiseTest new() run() . free()

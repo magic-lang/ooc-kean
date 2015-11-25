@@ -137,4 +137,5 @@ ArgumentParserTest: class extends Fixture {
 		})
 	}
 }
-ArgumentParserTest new() run()
+
+ArgumentParserTest new() run() . free()

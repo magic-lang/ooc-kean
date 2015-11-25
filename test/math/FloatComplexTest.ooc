@@ -107,4 +107,5 @@ FloatComplexTest: class extends Fixture {
 		})
 	}
 }
-FloatComplexTest new() run()
+
+FloatComplexTest new() run() . free()

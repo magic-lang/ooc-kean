@@ -87,4 +87,4 @@ FloatEuclidTransformVectorListTest: class extends Fixture {
 	}
 }
 
-FloatEuclidTransformVectorListTest new() run()
+FloatEuclidTransformVectorListTest new() run() . free()

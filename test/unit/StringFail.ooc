@@ -40,4 +40,5 @@ StringFail: class extends Fixture {
 		this add("empty is equal to code", func { expect("", is equal to("code")) })
 	}
 }
-StringFail new() run()
+
+StringFail new() run() . free()

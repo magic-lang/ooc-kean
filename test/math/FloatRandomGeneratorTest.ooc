@@ -138,4 +138,5 @@ FloatRandomGeneratorTest: class extends Fixture {
 		})
 	}
 }
-FloatRandomGeneratorTest new() run()
+
+FloatRandomGeneratorTest new() run() . free()

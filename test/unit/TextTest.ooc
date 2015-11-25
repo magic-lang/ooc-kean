@@ -35,4 +35,5 @@ TextTest: class extends Fixture {
 		})
 	}
 }
-TextTest new() run()
+
+TextTest new() run() . free()

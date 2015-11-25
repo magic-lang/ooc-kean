@@ -96,5 +96,5 @@ import threading/Thread
 	}
 }
 
-ThreadPoolTest new() run()*/
+ThreadPoolTest new() run() . free()*/
 "ThreadPool [TODO: Temporarily suspended]" println()

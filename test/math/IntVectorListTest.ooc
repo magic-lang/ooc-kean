@@ -72,4 +72,5 @@ IntVectorListTest: class extends Fixture {
 		})
 	}
 }
-IntVectorListTest new() run()
+
+IntVectorListTest new() run() . free()

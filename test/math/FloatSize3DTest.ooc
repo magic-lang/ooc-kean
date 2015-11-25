@@ -147,4 +147,5 @@ FloatVector3DTest: class extends Fixture {
 		})
 	}
 }
-FloatVector3DTest new() run()
+
+FloatVector3DTest new() run() . free()

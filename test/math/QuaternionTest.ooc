@@ -335,4 +335,4 @@ QuaternionTest: class extends Fixture {
 	}
 }
 
-QuaternionTest new() run()
+QuaternionTest new() run() . free()

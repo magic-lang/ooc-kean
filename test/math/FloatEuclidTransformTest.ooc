@@ -62,4 +62,5 @@ FloatEuclidTransformTest: class extends Fixture {
 		})
 	}
 }
-FloatEuclidTransformTest new() run()
+
+FloatEuclidTransformTest new() run() . free()

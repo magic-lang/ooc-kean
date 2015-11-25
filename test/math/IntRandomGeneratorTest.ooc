@@ -90,4 +90,4 @@ IntRandomGeneratorTest: class extends Fixture {
 	}
 }
 
-IntRandomGeneratorTest new() run()
+IntRandomGeneratorTest new() run() . free()

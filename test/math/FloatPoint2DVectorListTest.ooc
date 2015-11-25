@@ -115,4 +115,4 @@ FloatPoint2DVectorListTest: class extends Fixture {
 	}
 }
 
-FloatPoint2DVectorListTest new() run()
+FloatPoint2DVectorListTest new() run() . free()

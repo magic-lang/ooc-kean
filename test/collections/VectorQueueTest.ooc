@@ -166,4 +166,4 @@ VectorQueueTest: class extends Fixture {
 	}
 }
 
-VectorQueueTest new() run()
+VectorQueueTest new() run() . free()

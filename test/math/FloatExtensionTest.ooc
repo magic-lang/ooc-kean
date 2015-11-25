@@ -28,4 +28,5 @@ FloatExtensionTest: class extends Fixture {
 		})
 	}
 }
-FloatExtensionTest new() run()
+
+FloatExtensionTest new() run() . free()

@@ -34,4 +34,4 @@ MutexTest: class extends Fixture {
 	}
 }
 
-MutexTest new() run()
+MutexTest new() run() . free()

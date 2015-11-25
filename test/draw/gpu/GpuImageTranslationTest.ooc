@@ -57,5 +57,5 @@ GpuImageTranslationTest: class extends Fixture {
 	}
 }
 gpuContext := OpenGLContext new()
-GpuImageTranslationTest new() run()
+GpuImageTranslationTest new() run() . free()
 gpuContext free()

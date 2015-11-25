@@ -58,4 +58,4 @@ PromiseCollectorTest: class extends Fixture {
 	}
 }
 
-PromiseCollectorTest new() run()
+PromiseCollectorTest new() run() . free()

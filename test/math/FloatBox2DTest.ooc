@@ -220,4 +220,5 @@ FloatBox2DTest: class extends Fixture {
 		})
 	}
 }
-FloatBox2DTest new() run()
+
+FloatBox2DTest new() run() . free()

@@ -45,4 +45,5 @@ FloatTupleTest: class extends Fixture {
 		})
 	}
 }
-FloatTupleTest new() run()
+
+FloatTupleTest new() run() . free()

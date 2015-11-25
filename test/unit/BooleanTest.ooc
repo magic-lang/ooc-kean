@@ -37,4 +37,5 @@ BooleanTest: class extends Fixture {
 		this add("false is equal to false", func { expect(false, is equal to(false)) })
 	}
 }
-BooleanTest new() run()
+
+BooleanTest new() run() . free()

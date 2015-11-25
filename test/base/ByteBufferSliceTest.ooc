@@ -15,4 +15,5 @@ ByteBufferSliceTest: class extends Fixture {
 		})
 	}
 }
-ByteBufferSliceTest new() run()
+
+ByteBufferSliceTest new() run() . free()

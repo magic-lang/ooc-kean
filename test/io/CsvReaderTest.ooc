@@ -52,4 +52,5 @@ CsvReaderTest: class extends Fixture {
 		row map(|value| This toFloat)
 	}
 }
-CsvReaderTest new() run()
+
+CsvReaderTest new() run() . free()

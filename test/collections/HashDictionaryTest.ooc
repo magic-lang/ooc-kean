@@ -174,4 +174,4 @@ HashDictionaryTest: class extends Fixture {
 	}
 }
 
-HashDictionaryTest new() run()
+HashDictionaryTest new() run() . free()

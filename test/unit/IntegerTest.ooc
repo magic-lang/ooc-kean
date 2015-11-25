@@ -36,4 +36,5 @@ IntegerTest: class extends Fixture {
 		this add("0.0 is greater than -1", func { expect(0, is greater than(-1)) })
 	}
 }
-IntegerTest new() run()
+
+IntegerTest new() run() . free()

@@ -287,4 +287,5 @@ FloatTransform3DTest: class extends Fixture {
 		})
 	}
 }
-FloatTransform3DTest new() run()
+
+FloatTransform3DTest new() run() . free()

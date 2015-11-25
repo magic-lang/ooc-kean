@@ -93,4 +93,4 @@ FloatShell2DTest: class extends Fixture {
 	}
 }
 
-FloatShell2DTest new() run()
+FloatShell2DTest new() run() . free()

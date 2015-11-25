@@ -39,4 +39,5 @@ DoubleTest: class extends Fixture {
 		this add("0.0 is greater than -0.00000001", func { expect(0.0, is greater than(-0.00000001)) })
 	}
 }
-DoubleTest new() run()
+
+DoubleTest new() run() . free()

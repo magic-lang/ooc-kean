@@ -220,4 +220,5 @@ ImageFileTest: class extends Fixture {
 		result
 	}
 }
-ImageFileTest new() run()
+
+ImageFileTest new() run() . free()

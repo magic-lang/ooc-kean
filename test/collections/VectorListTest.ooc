@@ -268,4 +268,4 @@ VectorListTest: class extends Fixture {
 	}
 }
 
-VectorListTest new() run()
+VectorListTest new() run() . free()

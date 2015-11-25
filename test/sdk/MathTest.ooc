@@ -28,4 +28,4 @@ MathTest: class extends Fixture {
 	}
 }
 
-MathTest new() run()
+MathTest new() run() . free()

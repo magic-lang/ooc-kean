@@ -92,4 +92,4 @@ FloatConvexHull2DTest: class extends Fixture {
 	}
 }
 
-FloatConvexHull2DTest new() run()
+FloatConvexHull2DTest new() run() . free()

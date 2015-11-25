@@ -40,4 +40,5 @@ StringTest: class extends Fixture {
 		this add("empty is not equal to code", func { expect("", isNotEqualToCode2) })
 	}
 }
-StringTest new() run()
+
+StringTest new() run() . free()

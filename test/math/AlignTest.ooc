@@ -16,4 +16,4 @@ AlignTest: class extends Fixture {
 	}
 }
 
-AlignTest new() run()
+AlignTest new() run() . free()
