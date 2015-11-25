@@ -21,8 +21,7 @@ import math
 
 version(!gpuOff) {
 GraphicBufferFormat: enum {
-	Rgba8888 = 1
-	Yv12
+	Rgba8888 = 0
 }
 GraphicBufferUsage: enum (*2) {
 	ReadNever = 1
@@ -64,18 +63,18 @@ GraphicBuffer: class {
 	nativeBuffer ::= this _nativeBuffer
 	_handle: Pointer = null
 	handle ::= this _handle
-	_allocated := false
+	_ownsMemory := false
 
 	init: func (=_size, =_format, usage: GraphicBufferUsage) {
 		This _allocate(_size x, _size y, this _format as Int, usage as Int, this _backend&, this _nativeBuffer&, this _pixelStride&)
-		this _allocated = true
+		this _ownsMemory = true
 	}
-	init: func ~existing (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format)
-	init: func ~fromHandle (handle: Pointer, =_size, =_pixelStride, =_format, usage: GraphicBufferUsage) {
+	init: func ~existing (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format, =_ownsMemory)
+	init: func ~fromHandle (handle: Pointer, =_size, =_pixelStride, =_format, usage: GraphicBufferUsage, =_ownsMemory) {
 		This _create(_size x, _size y, _format as Int, usage as Int, _pixelStride, handle, false, this _backend&, this _nativeBuffer&)
 	}
 	free: override func {
-		if (this _allocated)
+		if (this _ownsMemory)
 			This _free(this _backend)
 		super()
 	}
@@ -100,6 +99,9 @@ GraphicBuffer: class {
 	kean_draw_graphicBuffer_configureAlignedWidth: unmangled static func (alignedWidth: Int*, count: Int) {
 		This _alignedWidth = Int[count] new()
 		memcpy(This _alignedWidth data, alignedWidth, count * Int size)
+	}
+	kean_draw_graphicBuffer_new: unmangled static func (backend, nativeBuffer, handle: Pointer, size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat, ownsMemory: Bool) -> This {
+		This new(backend, nativeBuffer, handle, size, pixelStride, format, ownsMemory)
 	}
 	alignWidth: static func (width: Int, align := AlignWidth Nearest) -> Int {
 		result := width

@@ -37,9 +37,6 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		length := 3 * this _stride * size y / 2
 		super(ByteBuffer new(pointer, length), size, _stride, _uvOffset)
 	}
-	init: func (backend: Pointer, nativeBuffer: Pointer, handle: Pointer, size: IntVector2D, format: GraphicBufferFormat, stride: Int, uvOffset: Int) {
-		this init(GraphicBuffer new(backend, nativeBuffer, handle, size, stride, format), size, stride, uvOffset)
-	}
 	free: override func {
 		this _buffer free()
 		super()
@@ -49,13 +46,13 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		extraRows := Int align(padding, this _stride) / this _stride
 		height := this _size y + this _size y / 2 + extraRows
 		width := this _stride / 4
-		rgbaBuffer := GraphicBuffer new(this buffer handle, IntVector2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget)
+		rgbaBuffer := GraphicBuffer new(this buffer handle, IntVector2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget, false)
 		result := EGLBgra new(rgbaBuffer, context)
 		result coordinateSystem = this coordinateSystem
 		result
 	}
-	kean_draw_graphicBufferYuv420Semiplanar_new: unmangled static func (backend, nativeBuffer, handle: Pointer, size: IntVector2D, stride: Int, format: GraphicBufferFormat, uvOffset: Int) -> This {
-		This new(backend, nativeBuffer, handle, size, format, stride, uvOffset)
+	kean_draw_graphicBufferYuv420Semiplanar_new: unmangled static func (buffer: GraphicBuffer, size: IntVector2D, stride, uvOffset: Int) -> This {
+		This new(buffer, size, stride, uvOffset)
 	}
 }
 }
