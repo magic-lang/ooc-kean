@@ -51,7 +51,7 @@ Quaternion: cover {
 	init: func@ ~floats (w, x, y, z: Float) { this init(w, FloatPoint3D new(x, y, z)) }
 	init: func@ ~default { this init(0, 0, 0, 0) }
 	init: func@ ~floatArray (source: Float[]) { this init(source[0], source[1], source[2], source[3]) }
-	init: func@ ~fromeFloatTransform3D (transform: FloatTransform3D) {
+	init: func@ ~fromFloatTransform3D (transform: FloatTransform3D) {
 		// Farrell, Jay. A. Computation of the Quaternion from a Rotation Matrix.
 		// http://www.ee.ucr.edu/~farrell/AidedNavigation/D_App_Quaternions/Rot2Quat.pdf
 		r, s, w, x, y, z: Float
