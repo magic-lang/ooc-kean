@@ -14,7 +14,7 @@ RasterMonochromeTest: class extends Fixture {
 			image2 := RasterMonochrome open(this sourceSpace)
 			expect(image1 equals(image1), is true)
 			expect(image1 equals(image2), is false)
-			image1 free(); image2 free()
+			image1 referenceCount decrease(); image2 referenceCount decrease()
 		})
 		this add("equals 2", func {
 			output := "test/draw/output/RasterMonochrome_test.png"
@@ -22,21 +22,21 @@ RasterMonochromeTest: class extends Fixture {
 			image1 save(output)
 			image2 := RasterMonochrome open(output)
 			expect(image1 equals(image2), is true)
-			image1 free(); image2 free()
+			image1 referenceCount decrease(); image2 referenceCount decrease()
 		})
 		this add("distance, same image", func {
 			image1 := RasterMonochrome open(this sourceSpace)
 			image2 := RasterMonochrome open(this sourceSpace)
 			expect(image1 distance(image1), is equal to(0.0f))
 			expect(image1 distance(image2), is equal to(0.0f))
-			image1 free(); image2 free()
+			image1 referenceCount decrease(); image2 referenceCount decrease()
 		})
 		this add("distance, convertFrom self", func {
 			image1 := RasterMonochrome open(this sourceFlower)
 			image2 := RasterMonochrome convertFrom(image1)
 			expect(image1 distance(image2), is equal to(0.0f))
 			expect(image1 equals(image2))
-			image1 free(); image2 free()
+			image1 referenceCount decrease(); image2 referenceCount decrease()
 		})
 		this add("getRow and getColumn", func {
 			size := IntVector2D new(500, 256)
@@ -56,7 +56,7 @@ RasterMonochromeTest: class extends Fixture {
 				for (i in 0 .. rowData count)
 					expect(rowData[i] as Int, is equal to(row))
 			}
-			image free()
+			image referenceCount decrease()
 		})
 		this add("resize", func {
 			outputFast := "test/draw/output/RasterMonochrome_upscaledFast.png"
@@ -95,6 +95,8 @@ RasterMonochromeTest: class extends Fixture {
 			expect(image crop == image2 crop)
 			expect(image wrap, is equal to(image2 wrap))
 			expect(image referenceCount != image2 referenceCount)
+			image referenceCount decrease()
+			image2 referenceCount decrease()
 		})
 		/*this add("distance, convertFrom RasterBgra", func {
 			source := this sourceFlower
@@ -106,6 +108,4 @@ RasterMonochromeTest: class extends Fixture {
 	}
 }
 
-test := RasterMonochromeTest new()
-test run()
-test free()
+RasterMonochromeTest new() run() . free()

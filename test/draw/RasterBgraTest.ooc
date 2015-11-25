@@ -14,7 +14,7 @@ RasterBgraTest: class extends Fixture {
 			image2 := RasterBgra open(this sourceSpace)
 			expect(image1 equals(image1))
 			expect(image1 equals(image2), is false)
-			image1 free(); image2 free()
+			image1 referenceCount decrease(); image2 referenceCount decrease()
 		})
 		this add("equals 2", func {
 			output := "test/draw/output/RasterBgra_test.png"
@@ -22,28 +22,28 @@ RasterBgraTest: class extends Fixture {
 			image1 save(output)
 			image2 := RasterBgra open(output)
 			expect(image1 equals(image2))
-			image1 free(); image2 free()
+			image1 referenceCount decrease(); image2 referenceCount decrease()
 		})
 		this add("distance, same image", func {
 			image1 := RasterBgra open(this sourceSpace)
 			image2 := RasterBgra open(this sourceSpace)
 			expect(image1 distance(image1), is equal to(0.0f))
 			expect(image1 distance(image2), is equal to(0.0f))
-			image1 free(); image2 free()
+			image1 referenceCount decrease(); image2 referenceCount decrease()
 		})
 		this add("distance, convertFrom self", func {
 			image1 := RasterBgra open(this sourceFlower)
 			image2 := RasterBgra convertFrom(image1)
 			expect(image1 distance(image2), is equal to(0.0f))
 			expect(image1 equals(image2))
-			image1 free(); image2 free()
+			image1 referenceCount decrease(); image2 referenceCount decrease()
 		})
 		this add("BGRA to Monochrome", func {
 			image1 := RasterBgra open(this sourceSpace)
 			image2 := RasterMonochrome convertFrom(image1)
 			image3 := RasterMonochrome open("test/draw/input/correct/Bgra-Monochrome-Space.png")
 			expect(image2 distance(image3), is equal to(0.0f))
-			image1 free(); image2 free(); image3 free()
+			image1 referenceCount decrease(); image2 referenceCount decrease(); image3 referenceCount decrease()
 		})
 		this add("swapped RB", func {
 			output := "test/draw/output/rbswapped_bgra.png"
@@ -60,8 +60,8 @@ RasterBgraTest: class extends Fixture {
 					expect(pixel1 blue, is equal to(pixel2 red))
 					expect(pixel1 alpha, is equal to(pixel2 alpha))
 				}
-			image free()
-			image2 free()
+			image referenceCount decrease()
+			image2 referenceCount decrease()
 			output free()
 		})
 	}

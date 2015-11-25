@@ -15,12 +15,12 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			targetSize := sourceSize / 2
 			target := source resizeTo(targetSize)
 			expect(targetSize == target size)
-			target free()
+			target referenceCount decrease()
 			target = RasterYuv420Semiplanar new(sourceSize)
 			source resizeInto(target)
 			expect(target distance(source), is equal to(0.0f) within(0.001f))
-			source free()
-			target free()
+			source referenceCount decrease()
+			target referenceCount decrease()
 		})
 		this add("resize (odd height)", func {
 			source := RasterYuv420Semiplanar open(this _inputPath)
@@ -29,8 +29,8 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			resized := source resizeTo(IntVector2D new(source size x, source size y - 1))
 			output := "test/draw/output/RasterYuv420SemiplanarTest_resizeOddHeight.png"
 			resized save(output)
-			resized free()
-			source free()
+			resized referenceCount decrease()
+			source referenceCount decrease()
 			output free()
 		})
 		this add("resize (odd width)", func {
@@ -40,8 +40,8 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			resized := source resizeTo(IntVector2D new(source size x - 1, source size y))
 			output := "test/draw/output/RasterYuv420SemiplanarTest_resizeOddWidth.png"
 			resized save(output)
-			resized free()
-			source free()
+			resized referenceCount decrease()
+			source referenceCount decrease()
 			output free()
 		})
 		this add("resize (odd size)", func {
@@ -51,8 +51,8 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			resized := source resizeTo(IntVector2D new(source size x - 1, source size y - 1))
 			output := "test/draw/output/RasterYuv420SemiplanarTest_resizeOddSize.png"
 			resized save(output)
-			resized free()
-			source free()
+			resized referenceCount decrease()
+			source referenceCount decrease()
 			output free()
 		})
 		this add("crop", func {
@@ -66,8 +66,8 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			target = RasterYuv420Semiplanar new(cropArea size toIntVector2D())
 			source cropInto(cropArea, target)
 			expect(target distance(source), is equal to(0.0f) within(0.001f))
-			source free()
-			target free()
+			source referenceCount decrease()
+			target referenceCount decrease()
 		})
 		this add("crop (odd height)", func {
 			source := RasterYuv420Semiplanar open(this _inputPath)
@@ -76,8 +76,8 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			resized := source crop(FloatBox2D new(FloatPoint2D new(), FloatVector2D new(source size x, source size y - 1)))
 			output := "test/draw/output/RasterYuv420SemiplanarTest_cropOddHeight.png"
 			resized save(output)
-			resized free()
-			source free()
+			resized referenceCount decrease()
+			source referenceCount decrease()
 			output free()
 		})
 		this add("crop (odd width)", func {
@@ -87,8 +87,8 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			resized := source crop(FloatBox2D new(FloatPoint2D new(), FloatVector2D new(source size x - 1, source size y)))
 			output := "test/draw/output/RasterYuv420SemiplanarTest_cropOddWidth.png"
 			resized save(output)
-			resized free()
-			source free()
+			resized referenceCount decrease()
+			source referenceCount decrease()
 			output free()
 		})
 		this add("crop (odd size)", func {
@@ -98,8 +98,8 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			resized := source crop(FloatBox2D new(FloatPoint2D new(), FloatVector2D new(source size x - 1, source size y - 1)))
 			output := "test/draw/output/RasterYuv420SemiplanarTest_cropOddSize.png"
 			resized save(output)
-			resized free()
-			source free()
+			resized referenceCount decrease()
+			source referenceCount decrease()
 			output free()
 		})
 	}
@@ -111,6 +111,4 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 	}
 }
 
-test := RasterYuv420SemiplanarTest new()
-test run()
-test free()
+RasterYuv420SemiplanarTest new() run() . free()
