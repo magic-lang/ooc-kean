@@ -87,10 +87,52 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 		}
 		result
 	}
+	_swap: static func (array: FloatPoint2D*, i, j: Int) {
+		temporary := array[i]
+		array[i] = array[j]
+		array[j] = temporary
+	}
+	_partitionX: static func (array: FloatPoint2D*, start, end, pivot: Int) -> Int {
+		pivotValue := array[pivot] x
+		This _swap(array, pivot, end)
+		result := start
+		for (i in start .. end)
+			if (array[i] x < pivotValue) {
+				This _swap(array, result, i)
+				++result
+			}
+		This _swap(array, result, end)
+		result
+	}
+	_medianOfThreeX: static func (array: FloatPoint2D*, start, end: Int) -> Int {
+		mid := (start + end) / 2
+		if (array[start] x > array[mid] x)
+			This _swap(array, mid, start)
+		if (array[mid] x > array[end] x)
+			This _swap(array, mid, end)
+		if (array[start] x > array[end] x)
+			This _swap(array, start, end)
+		mid
+	}
+	_quicksortX: static func (array: FloatPoint2D*, start, end: Int) {
+		if (end == start + 1 && array[start] x > array[end] x)
+			This _swap(array, start, end)
+		else if (start < end) {
+			pivot := This _partitionX(array, start, end, This _medianOfThreeX(array, start, end))
+			if (pivot > start)
+				This _quicksortX(array, start, pivot - 1)
+			if (pivot < end)
+				This _quicksortX(array, pivot + 1, end)
+		}
+	}
+	sortByX: func {
+		This _quicksortX(this _vector _backend as FloatPoint2D*, 0, this count - 1)
+	}
 	operator + (value: FloatPoint2D) -> This {
 		result := This new()
+		thisPointer := this pointer as FloatPoint2D*
 		for (i in 0 .. this _count)
-			result add(this[i] + value)
+			result add(thisPointer[i] + value)
 		result
 	}
 	operator - (value: FloatPoint2D) -> This {
