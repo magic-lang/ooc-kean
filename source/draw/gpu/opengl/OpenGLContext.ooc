@@ -171,7 +171,7 @@ OpenGLContext: class extends GpuContext {
 	}
 	createFence: func -> GpuFence { OpenGLFence new(this) }
 	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) {
-		result := this toRaster(gpuImage, true)
+		result := this toRaster(gpuImage)
 		fence := this createFence()
 		fence sync()
 		(result, fence)
