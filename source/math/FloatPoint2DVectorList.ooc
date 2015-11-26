@@ -89,8 +89,9 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 	}
 	operator + (value: FloatPoint2D) -> This {
 		result := This new()
-		for (i in 0 .. this _count)
-			result add(this[i] + value)
+		thisPointer := this pointer as FloatPoint2D*
+		for (i in 0 .. this count)
+			result add(thisPointer[i] + value)
 		result
 	}
 	operator - (value: FloatPoint2D) -> This {
