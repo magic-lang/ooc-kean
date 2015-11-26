@@ -67,43 +67,11 @@ RasterMonochrome: class extends RasterPacked {
 		else {
 			result = This new(size)
 			match (method) {
-				case InterpolationMode Smooth => This _resizeBilinear(this, result)
+				case InterpolationMode Smooth => RasterCanvas resizeBilinear(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, IntBox2D new(this size), IntBox2D new(result size), this stride, result stride, this bytesPerPixel)
 				case => RasterCanvas resizeNearestNeighbour(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, IntBox2D new(this size), IntBox2D new(result size), this stride, result stride, this bytesPerPixel)
 			}
 		}
 		result
-	}
-	_resizeBilinear: static func (source, result: This) {
-		resultBuffer := result buffer pointer
-		sourceBuffer := source buffer pointer
-		(resultWidth, resultHeight, resultStride) := (result size x, result size y, result stride)
-		(sourceWidth, sourceHeight, sourceStride) := (source size x, source size y, source stride)
-		for (row in 0 .. resultHeight) {
-			sourceRow := ((sourceHeight as Float) * row) / resultHeight
-			sourceRowUp := sourceRow floor() as Int
-			weightDown := sourceRow - sourceRowUp as Float
-			sourceRowDown := (sourceRow - weightDown) as Int + 1
-			rowDownValid := sourceRowDown < sourceHeight
-			if (!rowDownValid)
-				weightDown = 0.0f
-			for (column in 0 .. resultWidth) {
-				sourceColumn := ((sourceWidth as Float) * column) / resultWidth
-				sourceColumnLeft := sourceColumn floor() as Int
-				weightRight := sourceColumn - sourceColumnLeft as Float
-				sourceColumnRight := (sourceColumn - weightRight) as Int + 1
-				columnRightValid := sourceColumnRight < sourceWidth
-				if (!columnRightValid)
-					weightRight = 0.0f
-				valueRowUp := (1.0f - weightRight) * sourceBuffer[sourceColumnLeft + sourceRowUp * sourceStride]
-				if (columnRightValid)
-					valueRowUp += weightRight * sourceBuffer[sourceColumnRight + sourceRowUp * sourceStride]
-				valueRowDown := 0.0f
-				if (rowDownValid)
-					valueRowDown += (1.0f - weightRight) * sourceBuffer[sourceColumnLeft + sourceRowDown * sourceStride] + (columnRightValid ? (weightRight * sourceBuffer[sourceColumnRight + sourceRowDown * sourceStride]) : 0.0f)
-				pixelValue := weightDown * valueRowDown + (1.0f - weightDown) * valueRowUp
-				resultBuffer[column + row * resultStride] = pixelValue as UInt8
-			}
-		}
 	}
 	distance: override func (other: Image) -> Float {
 		result := 0.0f
