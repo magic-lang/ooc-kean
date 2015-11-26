@@ -156,13 +156,13 @@ Node: class <T> {
 	next: This<T>
 	_data: Object = null
 	data: T {
-		get { 
+		get {
 			if (T inheritsFrom?(Object))
 				this _data
 			else
 				this _data as Cell<T> get()
 		}
-		set(value) { 
+		set(value) {
 			if (T inheritsFrom?(Object))
 				this _data = value
 			else {
