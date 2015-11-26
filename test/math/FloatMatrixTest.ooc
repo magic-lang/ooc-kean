@@ -5,9 +5,9 @@ import math
 import lang/IO
 
 FloatMatrixTest: class extends Fixture {
-	matrix := FloatMatrix new (3, 3)
-	nonSquareMatrix := FloatMatrix new (IntVector2D new(2, 3))
-	nullMatrix := FloatMatrix new(0, 0)
+	matrix := FloatMatrix new (3, 3) take()
+	nonSquareMatrix := FloatMatrix new (2, 3) take()
+	nullMatrix := FloatMatrix new(0, 0) take()
 	precision := 1.0e-5f
 
 	init: func {
@@ -27,8 +27,8 @@ FloatMatrixTest: class extends Fixture {
 		})
 
 		this add("dimensions", func {
-			expect(this nonSquareMatrix dimensions x, is equal to(2))
-			expect(this nonSquareMatrix dimensions y, is equal to(3))
+			expect(this nonSquareMatrix width, is equal to(2))
+			expect(this nonSquareMatrix height, is equal to(3))
 			expect(this nullMatrix width, is equal to (0))
 			expect(this nullMatrix height, is equal to (0))
 			expect(this nullMatrix isNull)
@@ -63,7 +63,7 @@ FloatMatrixTest: class extends Fixture {
 
 		this add("setVertical", func {
 			m := this createMatrix(3, 3, [0, 0, 0, 0, 0, 0, 0, 0, 0]) take()
-			m setVertical(1, 0, FloatPoint3D new(1.0f, 2.0f, 3.0f))
+			m setVertical(1, 0, 1.0f, 2.0f, 3.0f)
 			this checkAllElements(m give(), [0, 0, 0, 1.0f, 2.0f, 3.0f, 0, 0, 0])
 		})
 
@@ -151,9 +151,9 @@ FloatMatrixTest: class extends Fixture {
 		// 1 4
 		// 2 5
 		m := matrix take()
-		for (x in 0 .. m dimensions x)
-			for (y in 0 .. m dimensions y)
-				expect(m[x, y], is equal to(values[x * m dimensions y + y]) within(this precision))
+		for (x in 0 .. m width)
+			for (y in 0 .. m height)
+				expect(m[x, y], is equal to(values[x * m height + y]) within(this precision))
 	}
 }
 

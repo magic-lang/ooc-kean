@@ -291,7 +291,7 @@ Quaternion: cover {
 			temporaryZ += normalizedWeights[currentVector / 3] / 3.0f * currentObservationVector vectorProduct(currentReferenceVector)
 		}
 		vectorQuantityZ := FloatMatrix new(1, 3) take()
-		vectorQuantityZ setVertical(0, 0, temporaryZ)
+		vectorQuantityZ setVertical(0, 0, temporaryZ x, temporaryZ y, temporaryZ z)
 
 		maximumEigenvalue := This _approximateMaximumEigenvalueForQuest(matrixQuantityS, vectorQuantityZ, 1.0f, 5)
 		linearCoefficients := (maximumEigenvalue + attitudeProfile trace()) * FloatMatrix identity(3) - matrixQuantityS
@@ -333,16 +333,16 @@ Quaternion: cover {
 	_createVectorMeasurementsForQuest: static func (quaternions: VectorList<This>) -> (FloatMatrix, FloatMatrix) {
 		referenceVectors := FloatMatrix new(3 * quaternions count, 3) take()
 		observationVectors := FloatMatrix new(3 * quaternions count, 3) take()
-		xAxis := FloatPoint3D new(1.0f, 0.0f, 0.0f)
-		yAxis := FloatPoint3D new(0.0f, 1.0f, 0.0f)
-		zAxis := FloatPoint3D new(0.0f, 0.0f, 1.0f)
 		for (index in 0 .. quaternions count) {
-			referenceVectors setVertical(index * 3, 0, xAxis)
-			referenceVectors setVertical(index * 3 + 1, 0, yAxis)
-			referenceVectors setVertical(index * 3 + 2, 0, zAxis)
-			observationVectors setVertical(index * 3, 0, quaternions[index] * xAxis)
-			observationVectors setVertical(index * 3 + 1, 0, quaternions[index] * yAxis)
-			observationVectors setVertical(index * 3 + 2, 0, quaternions[index] * zAxis)
+			referenceVectors setVertical(index * 3, 0, 1, 0, 0)
+			referenceVectors setVertical(index * 3 + 1, 0, 0, 1, 0)
+			referenceVectors setVertical(index * 3 + 2, 0, 0, 0, 1)
+			xAxis := quaternions[index] * FloatPoint3D new(1.0f, 0.0f, 0.0f)
+			observationVectors setVertical(index * 3, 0, xAxis x, xAxis y, xAxis z)
+			yAxis := quaternions[index] * FloatPoint3D new(0.0f, 1.0f, 0.0f)
+			observationVectors setVertical(index * 3 + 1, 0, yAxis x, yAxis y, yAxis z)
+			zAxis := quaternions[index] * FloatPoint3D new(0.0f, 0.0f, 1.0f)
+			observationVectors setVertical(index * 3 + 2, 0, zAxis x, zAxis y, zAxis z)
 		}
 		(referenceVectors, observationVectors)
 	}
