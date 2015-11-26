@@ -69,7 +69,7 @@ extend Int {
 			result += (((result abs() as Float) / divisor) ceil() as Int) * divisor
 		result % divisor
 	}
-	clamp: func (floor: This, ceiling: This) -> This {
+	clamp: func (floor, ceiling: This) -> This {
 		this > ceiling ? ceiling : (this < floor ? floor : this)
 	}
 	absolute: static func (value: This) -> This {
@@ -78,10 +78,10 @@ extend Int {
 	sign: static func (value: This) -> This {
 		value >= 0 ? 1 : -1
 	}
-	maximum: static func (first: This, second: This) -> This {
+	maximum: static func (first, second: This) -> This {
 		first > second ? first : second
 	}
-	minimum: static func (first: This, second: This) -> This {
+	minimum: static func (first, second: This) -> This {
 		first < second ? first : second
 	}
 	odd: static func (value: This) -> Bool {
@@ -177,7 +177,7 @@ extend Double {
 	toDegrees: static func (value: This) -> This {
 		180.0 / This pi * value
 	}
-	clamp: func (floor, ceiling: Double) -> This {
+	clamp: func (floor, ceiling: This) -> This {
 		this > ceiling ? ceiling : (this < floor ? floor : this)
 	}
 	equals: func (other: This, tolerance := 0.0001) -> Bool { (this - other) abs() < tolerance }
@@ -224,7 +224,7 @@ extend Float {
 	ceil: extern (ceilf) func -> This
 	floor: extern (floorf) func -> This
 	truncate: extern (truncf) func -> This
-	clamp: func (floor: This, ceiling: This) -> This {
+	clamp: func (floor, ceiling: This) -> This {
 		this > ceiling ? ceiling : (this < floor ? floor : this)
 	}
 	toRadians: static func (value: This) -> This {
@@ -239,10 +239,10 @@ extend Float {
 	sign: static func (value: This) -> This {
 		value > 0.0f ? 1.0f : (value < 0.0f ? -1.0f : 0.0f)
 	}
-	maximum: static func (first: This, second: This) -> This {
+	maximum: static func (first, second: This) -> This {
 		first > second ? first : second
 	}
-	minimum: static func (first: This, second: This) -> This {
+	minimum: static func (first, second: This) -> This {
 		first < second ? first : second
 	}
 	modulo: func (divisor: This) -> This {
@@ -318,8 +318,8 @@ extend Float {
 }
 
 extend LDouble {
-	pi ::= static 3.14159_26535_89793_23846_26433_83279
-	e ::= static 2.718281828459045235360287471352662497757247093699959574966
+	pi ::= static 3.14159_26535_89793_23846_26433_83279 as This
+	e ::= static 2.718281828459045235360287471352662497757247093699959574966 as This
 	
 	cos: extern (cosl) func -> This
 	sin: extern (sinl) func -> This
