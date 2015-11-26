@@ -53,7 +53,7 @@ GpuImage: abstract class extends Image {
 	distance: func (other: This) -> Float { raise("Using unimplemented function distance in GpuImage class"); 0.0f }
 
 	upload: abstract func (image: RasterImage)
-	toRaster: func (async: Bool = false) -> RasterImage { this _context toRaster(this, async) }
+	toRaster: func -> RasterImage { this _context toRaster(this) }
 	toRasterAsync: func -> (RasterImage, GpuFence) { this _context toRasterAsync(this) }
 	toRasterDefault: abstract func -> RasterImage
 }

@@ -84,26 +84,22 @@ AndroidContext: class extends OpenGLContext {
 		}
 		(ByteBuffer new(sourcePointer, length, recover), fence)
 	}
-	toRaster: func ~monochrome (gpuImage: OpenGLMonochrome, async: Bool) -> RasterImage {
+	toRaster: func ~monochrome (gpuImage: OpenGLMonochrome) -> RasterImage {
 		(buffer, fence) := this toBuffer(gpuImage, this _packMonochrome)
-		if (!async)
-			fence wait()
 		fence free()
 		RasterMonochrome new(buffer, gpuImage size)
 	}
-	toRaster: func ~uv (gpuImage: OpenGLUv, async: Bool) -> RasterImage {
+	toRaster: func ~uv (gpuImage: OpenGLUv) -> RasterImage {
 		(buffer, fence) := this toBuffer(gpuImage, this _packUv)
-		if (!async)
-			fence wait()
 		fence free()
 		RasterUv new(buffer, gpuImage size)
 	}
-	toRaster: override func (gpuImage: GpuImage, async: Bool = false) -> RasterImage {
+	toRaster: override func (gpuImage: GpuImage) -> RasterImage {
 		match (gpuImage) {
 			case (image : OpenGLMonochrome) =>
-				this isAligned(image channels * image size x) ? this toRaster(image, async) : super(image)
+				this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
 			case (image : OpenGLUv) =>
-				this isAligned(image channels * image size x) ? this toRaster(image, async) : super(image)
+				this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
 			case => super(gpuImage)
 		}
 	}
