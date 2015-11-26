@@ -76,12 +76,14 @@ RasterCanvas: abstract class extends Canvas {
 		(sourceWidth, sourceHeight) := (sourceBox size x, sourceBox size y)
 		sourceStride /= bytesPerPixel
 		resultStride /= bytesPerPixel
+		sourceStartColumn := sourceBox leftTop x
+		sourceStartRow := sourceBox leftTop y
 		resultStartColumn := resultBox leftTop x
 		resultStartRow := resultBox leftTop y
-		for (row in sourceBox leftTop x .. resultHeight) {
-			sourceRow := (sourceHeight * row) / resultHeight
-			for (column in sourceBox leftTop y .. resultWidth) {
-				sourceColumn := (sourceWidth * column) / resultWidth
+		for (row in 0 .. resultHeight) {
+			sourceRow := (sourceHeight * row) / resultHeight + sourceStartRow
+			for (column in 0 .. resultWidth) {
+				sourceColumn := (sourceWidth * column) / resultWidth + sourceStartColumn
 				resultBuffer[(column + resultStartColumn) + resultStride * (row + resultStartRow)] = sourceBuffer[sourceColumn + sourceStride * sourceRow]
 			}
 		}
