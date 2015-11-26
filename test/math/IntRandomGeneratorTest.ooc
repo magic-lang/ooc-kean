@@ -34,6 +34,7 @@ IntRandomGeneratorTest: class extends Fixture {
 				mean += values[i]
 			mean /= values length
 			expect(Int absolute(mean - expectedMean) < tolerance)
+			values free()
 		})
 		this add("gaussian distribution", func {
 			expectedMean := 2
@@ -51,6 +52,7 @@ IntRandomGeneratorTest: class extends Fixture {
 			deviation = sqrt(deviation / values length)
 			expect(Int absolute(mean - expectedMean) < 2)
 			expect(Int absolute(deviation - expectedDeviation) < 2)
+			values free()
 		})
 		this add("uniform range", func {
 			uniformGenerator := IntUniformRandomGenerator new()
