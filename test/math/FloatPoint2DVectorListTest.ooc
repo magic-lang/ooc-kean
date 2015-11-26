@@ -112,6 +112,26 @@ FloatPoint2DVectorListTest: class extends Fixture {
 			list free()
 			resampledList free()
 		})
+		this add("sort by x", func {
+			list := FloatPoint2DVectorList new()
+			list add(FloatPoint2D new(2.0f, 1.0f))
+			list add(FloatPoint2D new(1.0f, 2.0f))
+			list add(FloatPoint2D new(3.5f, 3.0f))
+			list add(FloatPoint2D new(5.0f, 5.0f))
+			list add(FloatPoint2D new(-3.0f, 6.0f))
+			list sortByX()
+			expect(list[0] x, is equal to(-3.0f) within(tolerance))
+			expect(list[0] y, is equal to(6.0f) within(tolerance))
+			expect(list[1] x, is equal to(1.0f) within(tolerance))
+			expect(list[1] y, is equal to(2.0f) within(tolerance))
+			expect(list[2] x, is equal to(2.0f) within(tolerance))
+			expect(list[2] y, is equal to(1.0f) within(tolerance))
+			expect(list[3] x, is equal to(3.5f) within(tolerance))
+			expect(list[3] y, is equal to(3.0f) within(tolerance))
+			expect(list[4] x, is equal to(5.0f) within(tolerance))
+			expect(list[4] y, is equal to(5.0f) within(tolerance))
+			list free()
+		})
 	}
 }
 
