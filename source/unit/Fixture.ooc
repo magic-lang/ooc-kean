@@ -125,8 +125,11 @@ Fixture: abstract class {
 		++This _expectCount
 		if (!constraint verify(value))
 			TestFailedException new(value, constraint, This _expectCount) throw()
-		else
+		else {
 			constraint free()
+			if (value instanceOf?(Cell))
+				(value as Cell) free()
+		}
 	}
 	expect: static func ~char (value: Char, constraint: Constraint) {
 		This expect(Cell new(value), constraint)

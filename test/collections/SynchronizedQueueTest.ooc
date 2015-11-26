@@ -40,7 +40,7 @@ SynchronizedQueueTest: class extends Fixture {
 				value free()
 			}
 			value := queue dequeue(defaultValue)
-			expect(value, is equal to(defaultValue))
+			expect(value get(), is equal to(defaultValue get()))
 			defaultValue free()
 			queue free()
 		})

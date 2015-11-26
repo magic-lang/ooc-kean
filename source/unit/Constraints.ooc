@@ -27,11 +27,9 @@ ComparisonType: enum {
 }
 
 Modifier: abstract class {
-	parent: This
-	child: This
-	init: func {
-		this parent = null
-	}
+	parent: This = null
+	child: This = null
+	init: func
 	init: func ~parent (=parent)
 	verify: func ~parent (value: Object, =child) -> Bool {
 		this parent != null ? this parent verify(value, this): this test(value)
@@ -46,10 +44,12 @@ Modifier: abstract class {
 		this child != null && this child test(value)
 	}
 }
+
 Constraint: abstract class extends Modifier {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
 }
+
 TrueConstraint: class extends Constraint {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
@@ -57,6 +57,7 @@ TrueConstraint: class extends Constraint {
 		value as Cell<Bool> get()
 	}
 }
+
 FalseConstraint: class extends Constraint {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
@@ -64,6 +65,7 @@ FalseConstraint: class extends Constraint {
 		!value as Cell<Bool> get()
 	}
 }
+
 NullConstraint: class extends Constraint {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
@@ -71,6 +73,7 @@ NullConstraint: class extends Constraint {
 		value == null
 	}
 }
+
 EmptyConstraint: class extends Constraint {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
@@ -78,6 +81,7 @@ EmptyConstraint: class extends Constraint {
 		value != null && value instanceOf?(String) && value as String empty?()
 	}
 }
+
 NotModifier: class extends Modifier {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
@@ -92,13 +96,8 @@ NotModifier: class extends Modifier {
 	equal ::= EqualModifier new(this)
 	less ::= LessModifier new()
 	greater ::= GreaterModifier new()
-//	nan ::= NanConstraint new()
-//	unique ::= UniqueConstraint new()
-//	same ::= SameModifier new()
-//	at ::= AtModifier new()
-//	instance
-//	assignable
 }
+
 EqualModifier: class extends Modifier {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
@@ -156,6 +155,7 @@ EqualModifier: class extends Modifier {
 		CompareWithinConstraint new(this, Cell<UInt64> new(correct), f)
 	}
 }
+
 LessModifier: class extends Modifier {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
@@ -200,6 +200,7 @@ LessModifier: class extends Modifier {
 		CompareConstraint new(this, Cell<UInt64> new(right), f, ComparisonType LessThan)
 	}
 }
+
 GreaterModifier: class extends Modifier {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
@@ -244,18 +245,26 @@ GreaterModifier: class extends Modifier {
 		CompareConstraint new(this, Cell<UInt64> new(right), f, ComparisonType LessThan)
 	}
 }
+
 CompareConstraint: class extends Constraint {
 	comparer: Func (Object, Object) -> Bool
 	correct: Object
 	type: ComparisonType
-	init: func (parent: Modifier, =correct, =comparer, type: ComparisonType = ComparisonType Unspecified) {
+	init: func (parent: Modifier, =correct, =comparer, type := ComparisonType Unspecified) {
 		super(parent)
 		this type = type
 	}
 	test: override func (value: Object) -> Bool {
 		this comparer(value, this correct)
 	}
+	free: override func {
+		if (this correct instanceOf?(Cell))
+			(this correct as Cell) free()
+		(this comparer as Closure) free()
+		super()
+	}
 }
+
 CompareWithinConstraint: class extends CompareConstraint {
 	precision: LDouble
 	init: func (parent: Modifier, .correct, .comparer) {
@@ -283,6 +292,7 @@ CompareWithinConstraint: class extends CompareConstraint {
 		comparer(value, this correct)
 	}
 }
+
 IsConstraints: class {
 	init: func
 	true ::= TrueConstraint new()
@@ -293,46 +303,4 @@ IsConstraints: class {
 	equal ::= EqualModifier new()
 	less ::= LessModifier new()
 	greater ::= GreaterModifier new()
-//	nan ::= NanConstraint new()
-//	unique ::= UniqueConstraint new()
-//	same ::= SameModifier new()
-//	at ::= AtModifier new()
-//	instance
-//	assignable
 }
-/*
-	is equal to
-	is same as
-	// Comparision Constraints
-	is true
-	is false
-	is nan
-	is empty
-	is unique
-	is greater than
-	is greater than or equal to
-	is at least
-	is less than
-	is less than or equal to
-	is at most
-	// Type Constraints
-	is of type
-	is instance of type
-	is assignable from
-	// String Constraints
-	text contains
-	text does not contain
-	text starts with
-	text does not start with
-	text ends with
-	text does not end with
-	text matches
-	text does not match
-	// Collection Constraints
-	has all
-	has some
-	has none
-	is unique
-	has member
-	is subset of
-	*/
