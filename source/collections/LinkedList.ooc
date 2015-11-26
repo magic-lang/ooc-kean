@@ -1,7 +1,7 @@
 import structs/List
 
 LinkedList: class <T> {
-	_size = 0 : SizeT
+	_size := 0
 	size ::= this _size as Int
 	_head: Node<T>
 	head ::= this _head
@@ -11,7 +11,7 @@ LinkedList: class <T> {
 		this _head next = this _head
 	}
 	free: override func {
-		this clear()
+		//this clear()
 		super()
 	}
 	add: func (data: T) {
@@ -20,7 +20,7 @@ LinkedList: class <T> {
 		this _head prev = node
 		this _size += 1
 	}
-	add: func ~withIndex (index: SSizeT, data: T) {
+	add: func ~withIndex (index: Int, data: T) {
 		if (index > 0 && index < this size) {
 			prevNode := this getNode(index - 1)
 			nextNode := prevNode next
@@ -38,10 +38,10 @@ LinkedList: class <T> {
 		} else
 			raise("Index out of bounds in LinkedList add~withIndex")
 	}
-	get: func (index: SSizeT) -> T {
+	get: func (index: Int) -> T {
 		this getNode(index) data
 	}
-	getNode: func (index: SSizeT) -> Node<T> {
+	getNode: func (index: Int) -> Node<T> {
 		if (index < 0 || index >= this _size)
 			raise("Index out of bounds in LinkedList getNode")
 		i := 0
@@ -58,7 +58,7 @@ LinkedList: class <T> {
 		this _head next = this _head
 		this _head prev = this _head
 	}
-	indexOf: func (data: T) -> SSizeT {
+	indexOf: func (data: T) -> Int {
 		current := this _head next
 		i := 0
 		index := -1
@@ -72,7 +72,7 @@ LinkedList: class <T> {
 		}
 		index
 	}
-	lastIndexOf: func (data: T) -> SSizeT {
+	lastIndexOf: func (data: T) -> Int {
 		current := this _head prev
 		i := this _size - 1
 		index := -1
@@ -98,7 +98,7 @@ LinkedList: class <T> {
 			data = this _head prev data
 		data
 	}
-	removeAt: func (index: SSizeT) -> T {
+	removeAt: func (index: Int) -> T {
 		item: T = null
 		if (this _head next != this _head && 0 <= index && index < this _size) {
 			toRemove := this getNode(index)
@@ -134,7 +134,7 @@ LinkedList: class <T> {
 		}
 		result
 	}
-	set: func (index: SSizeT, data: T) -> T {
+	set: func (index: Int, data: T) -> T {
 		node := this getNode(index)
 		previousData := node data
 		node data = data
@@ -154,7 +154,7 @@ operator []= <T>(list: LinkedList<T>, index: Int, value: T) { list set(index, va
 Node: class <T> {
 	prev: This<T>
 	next: This<T>
-	_data: Object
+	_data: Object = null
 	data: T {
 		get { 
 			if (T inheritsFrom?(Object))
@@ -163,15 +163,26 @@ Node: class <T> {
 				this _data as Cell<T> get()
 		}
 		set(value) { 
-			this _data free()
 			if (T inheritsFrom?(Object))
 				this _data = value
-			else
+			else {
+				if (this _data != null) {
+					(this _data as Cell) val = null
+					(this _data as Cell) free()
+				}
 				this _data = Cell<T> new(value)
+			}
 		}
 	}
 	init: func
 	init: func ~withParams (=prev, =next, item: T) {
 		this _data = Cell new(item)
+	}
+	free: override func {
+		if (this _data instanceOf?(Cell)) {
+			(this _data as Cell) val = null
+			(this _data as Cell) free()
+		}
+		super()
 	}
 }
