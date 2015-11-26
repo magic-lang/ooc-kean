@@ -36,4 +36,6 @@ AbstractContext: abstract class {
 	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }
 	update: abstract func
 	isAligned: virtual func (width: Int) -> Bool { true }
+	_createContext := static func -> This { CpuContext new() }
+	create: static func -> This { This _createContext() }
 }
