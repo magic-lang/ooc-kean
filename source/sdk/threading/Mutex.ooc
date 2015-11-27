@@ -1,8 +1,8 @@
 import native/[MutexUnix, MutexWin32]
 
 MutexType: enum {
-	Safe,
-	Unsafe,
+	Safe
+	Unsafe
 	Global
 }
 

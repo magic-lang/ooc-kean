@@ -16,9 +16,9 @@
 */
 
 Owner: enum {
-	Unknown,
-	Stack,
-	Static,
-	Sender,
+	Unknown
+	Stack
+	Static
+	Sender
 	Receiver
 }

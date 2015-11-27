@@ -19,10 +19,10 @@ use ooc-base
 import math
 
 ComparisonType: enum {
-	Unspecified,
-	Equal,
-	LessThan,
-	GreaterThan,
+	Unspecified
+	Equal
+	LessThan
+	GreaterThan
 	Within
 }
 
