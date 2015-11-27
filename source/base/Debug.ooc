@@ -15,6 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
+use ooc-base
 import io/FileWriter
 
 DebugLevel: enum {
@@ -28,15 +29,20 @@ DebugLevel: enum {
 }
 
 Debug: class {
-	_level: static Int = DebugLevel Everything
+	_level: static DebugLevel = DebugLevel Everything
 	printFunction: static Func (String) = func (s: String) { println(s) }
 	initialize: static func (f: Func (String)) {
 		This printFunction = f
 	}
-	print: static func (printOut: String, level: Int = 1) {
+	print: static func (string: String, level := DebugLevel Everything) {
 		if (This _level == level || (This _level == DebugLevel Everything) ) {
-			This printFunction(printOut)
+			This printFunction(string)
 		}
+	}
+	print: static func ~text (text: Text, level := DebugLevel Everything) {
+		string := text toString()
+		This print(string, level)
+		string free()
 	}
 	kean_base_debug_registerCallback: unmangled static func (print: Pointer) {
 		f := (print, null) as Func (Char*)
@@ -45,5 +51,10 @@ Debug: class {
 	raise: static func (message: String) {
 		This print(message)
 		raise(message)
+	}
+	raise: static func ~text (message: Text) {
+		string := message toString()
+		This raise(string)
+		string free()
 	}
 }

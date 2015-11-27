@@ -19,8 +19,8 @@ use ooc-base
 
 version(debugTests) {
 	Debug initialize(func (message: String) { println(message) } )
-	Debug _level = 3
-	Debug print("TEST1", 2)
+	Debug _level = DebugLevel Warning
+	Debug print("TEST1", DebugLevel Notification)
 
-	Debug print("TEST2", 3)
+	Debug print("TEST2", DebugLevel Warning)
 }
