@@ -226,6 +226,14 @@ TextTest: class extends Fixture {
 			text = t"%s %s %i %i" format("test", "number", 0, 1)
 			expect(text == t"test number 0 1")
 		})
+		this add("implicit toText", func {
+			one := t"123" + 456 + 7.89f
+			expect(one == t"1234567.89")
+			two := Text new("12") + 3.45f + 6.78 + 9
+			expect(two == t"123.456.789")
+			three := t"1" + 2 + t"3" + 4
+			expect(three == t"1234")
+		})
 	}
 }
 

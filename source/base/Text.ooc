@@ -53,6 +53,30 @@ Text: cover {
 	operator != (other: String) -> Bool { !(this == other) }
 	operator != (other: This) -> Bool { !(this == other) }
 	operator + (other: This) -> This { This new(this _buffer + other _buffer) }
+	operator + (other: Int) -> This {
+		converted := other toString()
+		result := this + This new(converted)
+		converted free()
+		result
+	}
+	operator + (other: UInt) -> This {
+		converted := other toString()
+		result := this + This new(converted)
+		converted free()
+		result
+	}
+	operator + (other: Float) -> This {
+		converted := other toString()
+		result := this + This new(converted)
+		converted free()
+		result
+	}
+	operator + (other: Double) -> This {
+		converted := other toString()
+		result := this + This new(converted)
+		converted free()
+		result
+	}
 	beginsWith: func (other: This) -> Bool { this slice(0, Int minimum(other count, this count)) == other }
 	beginsWith: func ~string (other: String) -> Bool { this beginsWith(This new(other)) }
 	beginsWith: func ~character (character: Char) -> Bool {
