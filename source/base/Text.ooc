@@ -174,6 +174,14 @@ Text: cover {
 		this free(Owner Receiver)
 		result
 	}
+	print: func {
+		printf("%s", this _buffer _backend pointer as Char*)
+		this free(Owner Receiver)
+	}
+	println: func {
+		printf("%s\n", this _buffer _backend pointer as Char*)
+		this free(Owner Receiver)
+	}
 	toString: func -> String { this _buffer toString() }
 	toInt: func -> Int { this toLLong() as Int }
 	toLong: func -> Long { this toLLong() as Long }

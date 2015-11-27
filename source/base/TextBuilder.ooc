@@ -91,7 +91,7 @@ TextBuilder: class {
 			result = TextBuffer empty
 		Text new(result give())
 	}
-	println: func { this toString() println().free() }
+	println: func { this toText() println() }
 	operator [] (index: Int) -> Char {
 		i := index
 		position := 0
