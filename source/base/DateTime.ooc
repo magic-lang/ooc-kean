@@ -109,24 +109,23 @@ DateTime: cover {
 	//	%ss - second
 	//	%zzzz - millisecond
 	// <param name="format">output format specification</param>
-	toString: func (format := This defaultFormat) -> String {
-		result := format
+	toText: func (format := This defaultFormat) -> Text {
+		result := format copy()
 		data := This _ticksToDateTimeHelper(this ticks)
-		result = result replaceAll("%yyyy", "%d" format(data year))
-		result = result replaceAll("%yy", "%02d" format(data year % 100))
-		result = result replaceAll("%MM", "%02d" format(data month))
-		result = result replaceAll("%dd", "%02d" format(data day))
-		result = result replaceAll("%M", "%d" format(data month))
-		result = result replaceAll("%d", "%d" format(data day))
-		result = result replaceAll("%hh", "%02d" format(data hour))
-		result = result replaceAll("%mm", "%02d" format(data minute))
-		result = result replaceAll("%ss", "%02d" format(data second))
-		result = result replaceAll("%h", "%d" format(data hour))
-		result = result replaceAll("%m", "%d" format(data minute))
-		result = result replaceAll("%s", "%d" format(data second))
-		result = result replaceAll("%zzz", "%03d" format(data millisecond))
-		result = result replaceAll("%z", "%d" format(data millisecond))
-		result
+		result = result replaceAll(t"%yyyy", t"%d" format(data year))
+		result = result replaceAll(t"%yy", t"%02d" format(data year % 100))
+		result = result replaceAll(t"%MM", t"%02d" format(data month))
+		result = result replaceAll(t"%dd", t"%02d" format(data day))
+		result = result replaceAll(t"%M", t"%d" format(data month))
+		result = result replaceAll(t"%d", t"%d" format(data day))
+		result = result replaceAll(t"%hh", t"%02d" format(data hour))
+		result = result replaceAll(t"%mm", t"%02d" format(data minute))
+		result = result replaceAll(t"%ss", t"%02d" format(data second))
+		result = result replaceAll(t"%h", t"%d" format(data hour))
+		result = result replaceAll(t"%m", t"%d" format(data minute))
+		result = result replaceAll(t"%s", t"%d" format(data second))
+		result = result replaceAll(t"%zzz", t"%03d" format(data millisecond))
+		result replaceAll(t"%z", t"%d" format(data millisecond))
 	}
 
 	compareTo: func (other: This) -> Order {
@@ -178,7 +177,7 @@ DateTime: cover {
 	ticksPerWeek: static const UInt64 = This ticksPerDay * 7
 	ticksPerFourYears: static const Int64 = This daysPerFourYears * This ticksPerDay
 	/* default date/time printing format */
-	defaultFormat: static const String = "%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
+	defaultFormat: static const Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
 
 	now: static This {
 		get {

@@ -89,6 +89,7 @@ TextBuilder: class {
 		}
 		else
 			result = TextBuffer empty
+		separator free(Owner Receiver)
 		Text new(result give())
 	}
 	println: func { this toText() println() }

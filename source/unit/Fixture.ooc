@@ -54,7 +54,9 @@ Fixture: abstract class {
 	run: func -> Bool {
 		failures := VectorList<TestFailedException> new(32, false)
 		result := true
-		This _print(DateTime now toString("%hh:%mm:%ss") + " " + this name + " ")
+		dateString := DateTime now toText(t"%hh:%mm:%ss") toString() & " " << this name + " "
+		This _print(dateString)
+		dateString free()
 		timer := ClockTimer new() . start()
 		for (i in 0 .. this tests count) {
 			test := tests[i]
@@ -78,7 +80,9 @@ Fixture: abstract class {
 		This _print(result ? " done" : " failed")
 		testTime := timer stop() / 1000.0
 		This totalTime += testTime
-		This _print(" in %.2fs, total: %.2fs\n" format(testTime, This totalTime))
+		timeString := t" in %.2fs, total: %.2fs\n" format(testTime, This totalTime) toString()
+		This _print(timeString)
+		timeString free()
 		if (!result) {
 			for (i in 0 .. failures count) {
 				f := failures[i]
