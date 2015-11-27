@@ -15,6 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use ooc-base
 use ooc-math
 use ooc-unit
 import math
@@ -88,6 +89,13 @@ IntShell2DTest: class extends Fixture {
 			expect(decreased top, is equal to(1))
 			expect(decreased right, is equal to(0))
 			expect(decreased bottom, is equal to(1))
+		})
+		this add("parse", func {
+			shell := IntShell2D parse(t"1, 2, 3, 4")
+			expect(shell left, is equal to(1))
+			expect(shell right, is equal to(2))
+			expect(shell top, is equal to(3))
+			expect(shell bottom, is equal to(4))
 		})
 	}
 }

@@ -116,6 +116,11 @@ BoolVectorListTest: class extends Fixture {
 			listAndOther free()
 			listOrOther free()
 		})
+		this add("toFloatVectorList", func {
+			list := this _createFromText(t"11001")
+			floatList := list toFloatVectorList()
+			expect(floatList sum, is equal to(3.0f) within(0.01f))
+		})
 	}
 	_createFromText: func (content: Text) -> BoolVectorList {
 		result := BoolVectorList new()
