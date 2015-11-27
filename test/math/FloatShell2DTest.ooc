@@ -15,6 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use ooc-base
 use ooc-math
 use ooc-unit
 import math
@@ -89,6 +90,13 @@ FloatShell2DTest: class extends Fixture {
 			expect(decreased top, is equal to(1.0f) within(tolerance))
 			expect(decreased right, is equal to(0.0f) within(tolerance))
 			expect(decreased bottom, is equal to(1.0f) within(tolerance))
+		})
+		this add("parse", func {
+			shell := FloatShell2D parse(t"1.0, 2.0, 3.0, 4.0")
+			expect(shell left, is equal to(1.0f) within(tolerance))
+			expect(shell right, is equal to(2.0f) within(tolerance))
+			expect(shell top, is equal to(3.0f) within(tolerance))
+			expect(shell bottom, is equal to(4.0f) within(tolerance))
 		})
 	}
 }
