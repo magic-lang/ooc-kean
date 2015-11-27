@@ -20,10 +20,10 @@ import math
 import Canvas
 
 CoordinateSystem: enum {
-	Default = 0x00,
-	XRightward = 0x00,
-	XLeftward = 0x01,
-	YDownward = 0x00,
+	Default = 0x00
+	XRightward = 0x00
+	XLeftward = 0x01
+	YDownward = 0x00
 	YUpward = 0x02
 }
 
