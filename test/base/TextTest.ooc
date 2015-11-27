@@ -8,11 +8,15 @@ TextTest: class extends Fixture {
 		super("Text")
 		this add("constructors", func {
 			text := Text new(c"test string", 5)
-			expect(text give() toString() == "test ")
+			string := text give() toString()
+			expect(string == "test ")
+			string free()
 			text = Text new("string")
 			text2 := Text new("str")
 			expect(text count == 6)
-			expect(text toString() == "string")
+			string = text toString()
+			expect(string == "string")
+			string free()
 			expect(text isEmpty == false)
 			text = text give()
 			text free()
@@ -70,7 +74,7 @@ TextTest: class extends Fixture {
 			expect(text[123 .. 998] isEmpty)
 		})
 		this add("splitting", func {
-			text := Text new("0,1,2,3,4")
+			text := Text new(c"0,1,2,3,4")
 			parts := text split(',')
 			expect(parts count == 5)
 			expect(parts[0] == "0")
@@ -79,6 +83,7 @@ TextTest: class extends Fixture {
 			expect(parts[3] == "3")
 			expect(parts[4] == "4")
 			text = Text new(";;;0;;1;;;2;;3;")
+			parts free()
 			parts = text split(";")
 			expect(parts count == 12)
 			expect(parts[0] == Text empty)
@@ -87,6 +92,7 @@ TextTest: class extends Fixture {
 			expect(parts[8] == "2")
 			expect(parts[10] == "3")
 			text = Text new("</br>simple</br>text</br></br>to</br>split")
+			parts free()
 			parts = text split(Text new(c"</br>", 5))
 			expect(parts count == 6)
 			expect(parts[0] == Text empty)
@@ -95,6 +101,8 @@ TextTest: class extends Fixture {
 			expect(parts[3] == Text empty)
 			expect(parts[4] == "to")
 			expect(parts[5] == "split")
+			parts free()
+			text free()
 		})
 		this add("Convert to Int", func {
 			expect(Text new("1") toInt(), is equal to(1))
@@ -105,8 +113,11 @@ TextTest: class extends Fixture {
 			expect(Text new(" \t 123one \n   ") toInt(), is equal to(123))
 			expect(Text new("101") toInt(), is equal to(101))
 			for (i in 1 .. 100)
-				for (j in 1 .. 100)
-					expect(Text new((i * j) toString()) toInt(), is equal to(i * j))
+				for (j in 1 .. 100) {
+					numberString := (i * j) toString()
+					expect(Text new(numberString) toInt(), is equal to(i * j))
+					numberString free()
+				}
 		})
 		this add("Convert to Int (base 16)", func {
 			expect(Text new("bad") toInt~inBase(16), is equal to(11 * 16 * 16 + 10 * 16 + 13))
@@ -140,8 +151,11 @@ TextTest: class extends Fixture {
 			expect(Text new("22.5") toFloat(), is equal to(22.5f) within(tolerance))
 			expect(Text new("123.763") toFloat(), is equal to(123.763f) within(tolerance))
 			for (i in 1 .. 100)
-				for (j in 1 .. 100)
-					expect(Text new((0.5f * i * j) toString()) toFloat(), is equal to(0.5f * i * j) within(tolerance))
+				for (j in 1 .. 100) {
+					numberString := (0.5f * i * j) toString()
+					expect(Text new(numberString) toFloat(), is equal to(0.5f * i * j) within(tolerance))
+					numberString free()
+				}
 		})
 		this add("Convert to Float (scientific notation)", func {
 			tolerance := 0.001f
@@ -166,10 +180,11 @@ TextTest: class extends Fixture {
 			text free()
 			text2 free()
 		})
-this add("text literal toString", func {
+		this add("text literal toString", func {
 			text := t"Hello World"
 			string := text toString()
 			expect(text == string)
+			string free()
 		})
 		this add("add operator", func {
 			correct := t"Hello World"
@@ -177,16 +192,31 @@ this add("text literal toString", func {
 			expect(text take() count == correct count)
 			for (i in 0 .. text take() count)
 				expect(text take()[i] == correct[i])
+			text free()
 		})
 		this add("text toString", func {
 			text := t"Hello" + t" World"
 			string := text toString()
 			expect("Hello World" == string)
+			string free()
 		})
 		this add("trim", func {
 			paddedText := t"  \t test \n test \r\n\t "
 			trimmedText := paddedText trim()
 			expect(trimmedText == t"test \n test")
+		})
+		this add("replace all", func {
+			text := t"aa00aa00"
+			notReplaced := text replaceAll(t"xx", t"yy")
+			expect(text == notReplaced)
+			replaced := text replaceAll(t"00", t"bb")
+			expect(replaced == t"aabbaabb")
+			replaced = t"xYxYxY" replaceAll(t"x", t"y")
+			expect(replaced == t"yYyYyY")
+			replaced = t"ooc is great language" replaceAll(t"great", t"the best") replaceAll(t"ooc", t"C++")
+			expect(replaced == t"C++ is the best language")
+			replaced = t"a complicated sentence with multiple replaced words" replaceAll(t"a complicated", t"not so complicated") replaceAll(t"multiple", t"very few") replaceAll(t"words", t"letters")
+			expect(replaced == "not so complicated sentence with very few replaced letters")
 		})
 	}
 }

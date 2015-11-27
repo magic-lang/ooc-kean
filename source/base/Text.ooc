@@ -149,6 +149,31 @@ Text: cover {
 			--rightPosition
 		this slice(leftPosition, rightPosition - leftPosition + 1)
 	}
+	replaceAll: func (toReplace, newValue: This) -> This {
+		t := this take()
+		result: This
+		position := t find(toReplace)
+		if (position == -1)
+			result = t copy()
+		else {
+			previous := 0
+			result = This new()
+			toReplaceTaken := toReplace take()
+			newValueTaken := newValue take()
+			toReplaceCount := toReplaceTaken count
+			while (position > -1) {
+				result += t slice(previous, position - previous) + newValueTaken
+				previous = position + toReplaceCount
+				position = t find(toReplaceTaken, previous)
+			}
+			if (previous < t count)
+				result += t slice(previous, t count - previous)
+		}
+		toReplace free(Owner Receiver)
+		newValue free(Owner Receiver)
+		this free(Owner Receiver)
+		result
+	}
 	toString: func -> String { this _buffer toString() }
 	toInt: func -> Int { this toLLong() as Int }
 	toLong: func -> Long { this toLLong() as Long }
