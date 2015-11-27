@@ -19,6 +19,11 @@ use ooc-math
 use ooc-collections
 import Image, Pen
 
+InterpolationMode: enum {
+	Fast // nearest neighbour
+	Smooth // bilinear
+}
+
 Canvas: abstract class {
 	_size: IntVector2D
 	size ::= this _size
@@ -30,11 +35,13 @@ Canvas: abstract class {
 	_transform := FloatTransform3D identity
 	transform: FloatTransform3D { get { this _transform } set(value) { this _transform = value } }
 	focalLength: Float { get set }
+	interpolationMode: InterpolationMode { get set }
 	init: func (=_size) {
 		this viewport = IntBox2D new(size)
 		this focalLength = 0.0f
 		this blend = false
 		this opacity = 1.0f
+		this interpolationMode = InterpolationMode Fast
 	}
 	drawPoint: virtual func (position: FloatPoint2D) {
 		list := VectorList<FloatPoint2D> new()

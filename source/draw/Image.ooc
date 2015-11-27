@@ -27,11 +27,6 @@ CoordinateSystem: enum {
 	YUpward = 0x02
 }
 
-InterpolationMode: enum {
-	Fast, // nearest neighbour
-	Smooth // bilinear
-}
-
 Image: abstract class {
 	_size: IntVector2D
 	size ::= this _size
