@@ -72,7 +72,6 @@ QuaternionTest: class extends Fixture {
 		this add("inverse", func {
 			inverse := this quaternion2 inverse
 			product := this quaternion2 * inverse
-			//productReal := 
 			expect(product real as Float, is equal to(1.0f) within(tolerance))
 			expect(product x as Float, is equal to(0.0f) within(tolerance))
 			expect(product y as Float, is equal to(0.0f) within(tolerance))
@@ -86,7 +85,7 @@ QuaternionTest: class extends Fixture {
 			expect(conjugate z == -quaternion5 z)
 		})
 		this add("normalized", func {
-			normalized := quaternion0 normalized
+			normalized := quaternion0 normalized as Quaternion
 			expect(Quaternion new(1, 0, 0, 0) normalized == Quaternion identity)
 			expect(normalized w, is equal to(0.5030552f) within(tolerance))
 			expect(normalized x, is equal to(0.1524409f) within(tolerance))
@@ -249,7 +248,7 @@ QuaternionTest: class extends Fixture {
 		this add("fromFloatTransform3D_1", func {
 			matrix := quaternion0 toFloatTransform3D()
 			quaternion := Quaternion new(matrix)
-			normalized := quaternion0 normalized
+			normalized := quaternion0 normalized as Quaternion
 			expect(quaternion w, is equal to(normalized w) within(tolerance))
 			expect(quaternion x, is equal to(normalized x) within(tolerance))
 			expect(quaternion y, is equal to(normalized y) within(tolerance))
@@ -258,7 +257,7 @@ QuaternionTest: class extends Fixture {
 		this add("fromFloatTransform3D_2", func {
 			matrix := quaternion3 toFloatTransform3D()
 			quaternion := Quaternion new(matrix)
-			normalized := quaternion3 normalized
+			normalized := quaternion3 normalized as Quaternion
 			expect(quaternion w, is equal to(normalized w) within(tolerance))
 			expect(quaternion x, is equal to(normalized x) within(tolerance))
 			expect(quaternion y, is equal to(normalized y) within(tolerance))
