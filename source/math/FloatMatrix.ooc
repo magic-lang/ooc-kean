@@ -16,58 +16,56 @@
 
 use ooc-base
 import math
-import IntVector2D
-import FloatPoint3D
 
-FloatMatrix : cover {
+FloatMatrix: cover {
 	// x = column
 	// y = row
-	_dimensions: IntVector2D
-	dimensions: IntVector2D { get {
-		result := this _dimensions
-		this free(Owner Receiver)
-		result
-	}}
+	_width: Int
 	width: Int { get {
-		result := this _dimensions x
+		result := this _width
 		this free(Owner Receiver)
 		result
 	}}
+	_height: Int
 	height: Int { get {
-		result := this _dimensions y
+		result := this _height
 		this free(Owner Receiver)
 		result
 	}}
 	isNull: Bool { get { // TODO: Better name?
-		result := this _dimensions empty
+		result := this _width == 0 || this _height == 0
 		this free(Owner Receiver)
 		result
 	}}
 	isSquare: Bool { get {
-		result := this _dimensions square
+		result := this _width == this _height
 		this free(Owner Receiver)
 		result
 	}}
 	isVector: Bool { get {
-		result := this _dimensions x == 1 || this _dimensions y == 1
+		result := this _width == 1 || this _height == 1
 		this free(Owner Receiver)
 		result
 	}}
 	order: Int { get {
-		result := Int minimum(this _dimensions x, this _dimensions y)
+		result := Int minimum(this _width, this _height)
 		this free(Owner Receiver)
 		result
 	}}
 	_elements: OwnedBuffer
 	elements ::= this _elements pointer as Float*
 
-	init: func@ ~buffer (=_elements, =_dimensions)
-	init: func@ ~IntVector2D (._dimensions) {
-		this init(OwnedBuffer new(_dimensions area * Float size), _dimensions)
+	init: func@ ~buffer (=_elements, =_width, =_height)
+	init: func@ (._width, ._height) {
+		this init(OwnedBuffer new(_width * _height * Float size), _width, _height)
 	}
-	init: func@ (width, height: Int) { this init(IntVector2D new(width, height)) }
 	free: func@ -> Bool { this _elements free() }
 	free: func@ ~withCriteria (criteria: Owner) -> Bool { this _elements free(criteria) }
+	create: func -> This {
+		result := This new(this _width, this _height)
+		this free(Owner Receiver)
+		result
+	}
 	identity: static func (order: Int) -> This {
 		result := This new(order, order)
 		resultWidth := result take() width
@@ -76,7 +74,7 @@ FloatMatrix : cover {
 			resultElements[i + resultWidth * i] = 1.0f
 		result
 	}
-	setVertical: func (xOffset, yOffset: Int, vector: FloatPoint3D) {
+	setVertical: func (xOffset, yOffset: Int, x, y, z: Float) {
 		t := this take()
 		version(safe) {
 			if (xOffset < 0 || xOffset >= t width)
@@ -84,9 +82,9 @@ FloatMatrix : cover {
 			if (t height - yOffset < 3)
 				raise("Element positions exceed matrix dimensions in FloatMatrix setVertical")
 		}
-		this[xOffset, yOffset] = vector x
-		this[xOffset, yOffset + 1] = vector y
-		this[xOffset, yOffset + 2] = vector z
+		this[xOffset, yOffset] = x
+		this[xOffset, yOffset + 1] = y
+		this[xOffset, yOffset + 2] = z
 	}
 	getColumn: func (x: Int) -> This {
 		t := this take()
@@ -123,7 +121,7 @@ FloatMatrix : cover {
 		this elements[x + y * t width] = value
 	}
 	copy: func -> This {
-		result := This new(this _elements copy(), this take() dimensions)
+		result := This new(this _elements copy(), this _width, this _height)
 		this free(Owner Receiver)
 		result
 	}
@@ -132,9 +130,11 @@ FloatMatrix : cover {
 		result: This
 		if (t isVector && this _elements owner == Owner Receiver) {
 			result = this
-			result _dimensions = result _dimensions swap()
+			width := result _width
+			result _width = result _height
+			result _height = width
 		} else {
-			result = This new(t dimensions swap())
+			result = This new(t height, t width)
 			resultElements := result elements
 			thisElements := this elements
 			thisHeight := t height
@@ -239,7 +239,7 @@ FloatMatrix : cover {
 	// Forward solver lower * x = y for a lower triangular matrix. Current object is y.
 	_forwardSubstitution: func (lower: This) -> This {
 		t := this take()
-		result := This new(t dimensions)
+		result := t create()
 		resultElements := result elements
 		thisElements := this elements
 		lowerElements := lower elements
@@ -262,7 +262,7 @@ FloatMatrix : cover {
 	// Backward solver upper * x = y for an upper triangular matrix. Current object is y.
 	_backwardSubstitution: func (upper: This) -> This {
 		t := this take()
-		result := This new(t dimensions)
+		result := t create()
 		resultElements := result elements
 		thisElements := this elements
 		upperElements := upper elements
@@ -293,7 +293,7 @@ FloatMatrix : cover {
 			if (t width != 3)
 				raise("Cofactors implemented only for 3x3 matrices in FloatMatrix")
 		}
-		result := This new(t dimensions)
+		result := t create()
 		result[0, 0] = t[1, 1] * t[2, 2] - t[2, 1] * t[1, 2]
 		result[1, 0] = - (t[0, 1] * t[2, 2] - t[2, 1] * t[0, 2])
 		result[2, 0] = t[0, 1] * t[1, 2] - t[1, 1] * t[0, 2]
@@ -369,14 +369,14 @@ FloatMatrix : cover {
 	operator + (other: This) -> This {
 		t := this take()
 		version(safe) {
-			if (t dimensions != other take() dimensions)
+			if (t width != other take() width || t height != other take() height)
 				raise("Invalid dimensions in FloatMatrix + operator: dimensions must match!")
 		}
-		result := This new(t dimensions)
+		result := t create()
 		resultElements := result elements
 		thisElements := this elements
 		otherElements := other elements
-		for (i in 0 .. t dimensions area)
+		for (i in 0 .. t width * t height)
 			resultElements[i] = thisElements[i] + otherElements[i]
 		if (thisElements != otherElements)
 			other free(Owner Receiver)
@@ -386,14 +386,14 @@ FloatMatrix : cover {
 	operator - (other: This) -> This {
 		t := this take()
 		version(safe) {
-			if (t dimensions != other take() dimensions)
+			if (t width != other take() width || t height != other take() height)
 				raise("Invalid dimensions in FloatMatrix - operator: dimensions must match!")
 		}
-		result := This new(t dimensions)
+		result := t create()
 		resultElements := result elements
 		thisElements := this elements
 		otherElements := other elements
-		for (i in 0 .. t dimensions area)
+		for (i in 0 .. t width * t height)
 			resultElements[i] = thisElements[i] - otherElements[i]
 		if (thisElements != otherElements)
 			other free(Owner Receiver)
@@ -402,31 +402,31 @@ FloatMatrix : cover {
 	}
 	operator += (other: This) {
 		version(safe) {
-			if (this take() dimensions != other take() dimensions)
+			if (this _width != other _width || this _height != other _height)
 				raise("Invalid dimensions in FloatMatrix += operator: dimensions must match!")
 		}
 		thisElements := this elements
 		otherElements := other elements
-		for (i in 0 .. this take() dimensions area)
+		for (i in 0 .. this _width * this _height)
 			thisElements[i] += otherElements[i]
 		other free(Owner Receiver)
 	}
 	operator -= (other: This) {
 		version(safe) {
-			if (this take() dimensions != other take() dimensions)
+			if (this _width != other _width || this _height != other _height)
 				raise("Invalid dimensions in FloatMatrix -= operator: dimensions must match!")
 		}
 		thisElements := this elements
 		otherElements := other elements
-		for (i in 0 .. this take() dimensions area)
+		for (i in 0 .. this _width * this _height)
 			thisElements[i] -= otherElements[i]
 		other free(Owner Receiver)
 	}
 	operator * (other: Float) -> This {
-		result := This new(this take() dimensions)
+		result := this take() create()
 		resultElements := result elements
 		thisElements := this elements
-		for (i in 0 .. this take() dimensions area)
+		for (i in 0 .. this _width * this _height)
 			resultElements[i] = other * thisElements[i]
 		this free(Owner Receiver)
 		result
