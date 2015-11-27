@@ -28,6 +28,7 @@ TextBuilderTest: class extends Fixture {
 			tb append('b')
 			tb append('c')
 			expect(tb == t"test test dataabc")
+			tb free()
 		})
 		this add("prepend", func {
 			tb := TextBuilder new(t"World")
@@ -65,6 +66,7 @@ TextBuilderTest: class extends Fixture {
 			t := sb toText()
 			s := t take() toString()
 			expect(s == t)
+			s free()
 		})
 		this add("join", func {
 			tb := TextBuilder new()
