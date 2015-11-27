@@ -1,5 +1,6 @@
 import structs/[HashMap, ArrayList]
-import ../Process, PipeWin32
+import ../Process
+import os/native/PipeWin32
 import native/win32/[types, errors]
 
 version(windows) {

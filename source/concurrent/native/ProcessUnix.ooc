@@ -1,6 +1,7 @@
 import structs/[HashMap, ArrayList, List]
-import ../[Env, Process, wait, unistd, Pipe]
-import PipeUnix
+import os/[Env, wait, unistd, Pipe]
+import ../Process
+import os/native/PipeUnix
 
 version(unix || apple) {
 include errno, signal
