@@ -43,7 +43,9 @@ rm -f .libs/tests-linux64.*
 rock -q --gc=off $ARGS $FLAGS $FEATURES $TESTS_USE_FILE && ./Tests
 if [[ !( $? == 0 ) ]]
 then
+	echo "OK"
 	exit 1
 else
+	echo "FAIL"
 	exit 0
 fi
