@@ -218,6 +218,14 @@ TextTest: class extends Fixture {
 			replaced = t"a complicated sentence with multiple replaced words" replaceAll(t"a complicated", t"not so complicated") replaceAll(t"multiple", t"very few") replaceAll(t"words", t"letters")
 			expect(replaced == "not so complicated sentence with very few replaced letters")
 		})
+		this add("format test", func {
+			text := t"%i x %i" format(10, 15)
+			expect(text == t"10 x 15")
+			text = t"%02d" format(4)
+			expect(text == t"04")
+			text = t"%s %s %i %i" format("test", "number", 0, 1)
+			expect(text == t"test number 0 1")
+		})
 	}
 }
 

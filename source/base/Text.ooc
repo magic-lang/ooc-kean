@@ -182,6 +182,15 @@ Text: cover {
 		printf("%s\n", this _buffer _backend pointer as Char*)
 		this free(Owner Receiver)
 	}
+	format: func (args: ...) -> This {
+		string := this take() toString()
+		resultString := string format(args)
+		string free()
+		result := This new(resultString) copy()
+		resultString free()
+		this free(Owner Receiver)
+		result
+	}
 	toString: func -> String { this _buffer toString() }
 	toInt: func -> Int { this toLLong() as Int }
 	toLong: func -> Long { this toLLong() as Long }
