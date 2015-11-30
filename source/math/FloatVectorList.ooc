@@ -442,8 +442,7 @@ FloatVectorList: class extends VectorList<Float> {
 		rightHandSide := FloatMatrix new(1, this count) take()
 		for (index in 0 .. this count)
 			rightHandSide[0, index] = 3.f * (thisPointer[Int minimum(this count - 1, index + 1)] - thisPointer[Int maximum(0, index - 1)])
-		// TODO: Since coefficientMatrix is tri-diagonal, there are better methods for this. Both in terms of data storage and solving.
-		constants := coefficientMatrix solve(rightHandSide) take()
+		constants := coefficientMatrix solveTridiagonal(rightHandSide) take()
 		coefficientMatrix free()
 		rightHandSide free()
 

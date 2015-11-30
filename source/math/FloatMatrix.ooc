@@ -236,6 +236,48 @@ FloatMatrix: cover {
 		this free(Owner Receiver)
 		result
 	}
+	// Thomas algorithm for tridiagonal systems
+	// https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm
+	solveTridiagonal: func (y: This) -> This {
+		diagonalVector := this take() getDiagonal() take()
+		upperDiagonalVector := this take() getDiagonal(1, 0) take()
+		lowerDiagonalVector := this take() getDiagonal(0, 1) take()
+		rightHandSide := y take() copy() take()
+		diagonal := diagonalVector elements
+		upper := upperDiagonalVector elements
+		lower := lowerDiagonalVector elements
+		rhs := rightHandSide elements
+		result := diagonalVector create()
+		length := result take() height
+		upper[0] /= diagonal[0]
+		rhs[0] /= diagonal[0]
+		for (index in 1 .. length) {
+			if (index < length - 1)
+				upper[index] /= diagonal[index] - lower[index - 1] * upper[index - 1]
+			rhs[index] = (rhs[index] - lower[index - 1] * rhs[index - 1]) / (diagonal[index] - lower[index - 1] * upper[index - 1])
+		}
+		result[0, length - 1] = rhs[length - 1]
+		for (iteration in 0 .. length - 1) {
+			index := length - 2 - iteration
+			result[0, index] = rhs[index] - upper[index] * result take()[0, index + 1]
+		}
+		diagonalVector free()
+		upperDiagonalVector free()
+		lowerDiagonalVector free()
+		rightHandSide free()
+		this free(Owner Receiver)
+		y free(Owner Receiver)
+		result
+	}
+	getDiagonal: func (startX := 0, startY := 0) -> This {
+		t := this take()
+		length := Int minimum(t width - startX, t height - startY)
+		result := This new(1, length)
+		for (index in 0 .. length)
+			result[0, index] = t[startX + index, startY + index]
+		this free(Owner Receiver)
+		result
+	}
 	// Forward solver lower * x = y for a lower triangular matrix. Current object is y.
 	_forwardSubstitution: func (lower: This) -> This {
 		t := this take()
