@@ -1,10 +1,7 @@
 include math
 use math
 
-PI := 3.14159_26535_89793_23846_26433_83279
 FLT_EPSILON: extern Float
-constantE: extern (M_E) Double
-constantPi: extern (M_PI) Double
 
 abs: extern func (Int) -> Int
 
@@ -43,17 +40,8 @@ floor: extern (floor) func ~Double (Double) -> Double
 floor: extern (floorf) func ~Float (Float) -> Float
 floor: extern (floorl) func ~Long (LDouble) -> LDouble
 
-/* I don't think math.ooc should be a bunch of global functions,
-   instead it should define a bunch of methods on the numeric
-   classes. I'm going to write these methods but leave the existing
-   functions alone for the sake of compatability.
+//TODO: Define methods only on extensions, and avoid global functions. Most of them should be non-static
 
-   For future additions please define only methods and not the
-   function versions to discourage use of the deprecated function
-   versions.
-
-   - Scott
- */
 extend Short {
 	minimumValue ::= static SHRT_MIN
 	maximumValue ::= static SHRT_MAX
@@ -67,21 +55,6 @@ extend Int64 {
 }
 
 extend Int {
-	modulo: func (divisor: This) -> This {
-		result := this
-		if (result < 0)
-			result += (((result abs() as Float) / divisor) ceil() as Int) * divisor
-		result % divisor
-	}
-	clamp: func (floor: This, ceiling: This) -> This {
-		if (this > ceiling)
-			ceiling
-		else if (this < floor)
-			floor
-		else
-			this
-	}
-
 	negativeInfinity ::= static INT_MIN
 	positiveInfinity ::= static INT_MAX
 	epsilon ::= static 1
@@ -89,17 +62,26 @@ extend Int {
 	maximumValue ::= static INT_MAX
 	pi ::= static 3
 	e ::= static 2
-
+	
+	modulo: func (divisor: This) -> This {
+		result := this
+		if (result < 0)
+			result += (((result abs() as Float) / divisor) ceil() as Int) * divisor
+		result % divisor
+	}
+	clamp: func (floor, ceiling: This) -> This {
+		this > ceiling ? ceiling : (this < floor ? floor : this)
+	}
 	absolute: static func (value: This) -> This {
 		value >= 0 ? value : -1 * value
 	}
 	sign: static func (value: This) -> This {
 		value >= 0 ? 1 : -1
 	}
-	maximum: static func (first: This, second: This) -> This {
+	maximum: static func (first, second: This) -> This {
 		first > second ? first : second
 	}
-	minimum: static func (first: This, second: This) -> This {
+	minimum: static func (first, second: This) -> This {
 		first < second ? first : second
 	}
 	odd: static func (value: This) -> Bool {
@@ -137,6 +119,7 @@ extend Int {
 		result
 	}
 }
+
 extend Range {
 	clamp: func (floor, ceiling: Int) -> This {
 		this clamp(floor .. ceiling)
@@ -152,6 +135,9 @@ operator == (left, right: Range) -> Bool { left min == right min && left max == 
 operator != (left, right: Range) -> Bool { !(left == right) }
 
 extend Double {
+	pi ::= static 3.14159_26535_89793_23846_26433_83279
+	e ::= static 2.718281828459045235360287471352662497757247093699959574966
+	
 	cos: extern (cos) func -> This
 	sin: extern (sin) func -> This
 	tan: extern (tan) func -> This
@@ -186,23 +172,26 @@ extend Double {
 	truncate: extern (trunc) func -> This
 
 	toRadians: static func (value: This) -> This {
-		PI / 180.0 * value
+		This pi / 180.0 * value
 	}
 	toDegrees: static func (value: This) -> This {
-		180.0 / PI * value
+		180.0 / This pi * value
 	}
-	clamp: func (floor, ceiling: Double) -> This {
-		if (this > ceiling)
-			ceiling
-		else if (this < floor)
-			floor
-		else
-			this
+	clamp: func (floor, ceiling: This) -> This {
+		this > ceiling ? ceiling : (this < floor ? floor : this)
 	}
 	equals: func (other: This, tolerance := 0.0001) -> Bool { (this - other) abs() < tolerance }
 }
 
 extend Float {
+	negativeInfinity ::= static -(INFINITY as Float)
+	positiveInfinity ::= static INFINITY as Float
+	epsilon ::= static FLT_EPSILON
+	minimumValue ::= static FLT_MIN
+	maximumValue ::= static FLT_MAX
+	pi ::= static 3.14159_26535_89793_23846_26433_83279f
+	e ::= static 2.718281828459045235360287471352662497757247093699959574966f
+	
 	cos: extern (cosf) func -> This
 	sin: extern (sinf) func -> This
 	tan: extern (tanf) func -> This
@@ -235,23 +224,9 @@ extend Float {
 	ceil: extern (ceilf) func -> This
 	floor: extern (floorf) func -> This
 	truncate: extern (truncf) func -> This
-	clamp: func (floor: This, ceiling: This) -> This {
-		if (this > ceiling)
-			ceiling
-		else if (this < floor)
-			floor
-		else
-			this
+	clamp: func (floor, ceiling: This) -> This {
+		this > ceiling ? ceiling : (this < floor ? floor : this)
 	}
-
-	negativeInfinity ::= static -(INFINITY as Float)
-	positiveInfinity ::= static INFINITY as Float
-	epsilon ::= static FLT_EPSILON
-	minimumValue ::= static FLT_MIN
-	maximumValue ::= static FLT_MAX
-	pi ::= static 3.14159_26535_89793_23846_26433_83279f
-	e ::= static 2.718281828459045235360287471352662497757247093699959574966f
-
 	toRadians: static func (value: This) -> This {
 		This pi / 180.0f * value
 	}
@@ -262,17 +237,12 @@ extend Float {
 		value >= 0 ? value : -1 * value
 	}
 	sign: static func (value: This) -> This {
-		if (value > 0.0f)
-			1.0f
-		else if (value < 0.0f)
-			-1.0f
-		else
-			0.0f
+		value > 0.0f ? 1.0f : (value < 0.0f ? -1.0f : 0.0f)
 	}
-	maximum: static func (first: This, second: This) -> This {
+	maximum: static func (first, second: This) -> This {
 		first > second ? first : second
 	}
-	minimum: static func (first: This, second: This) -> This {
+	minimum: static func (first, second: This) -> This {
 		first < second ? first : second
 	}
 	modulo: func (divisor: This) -> This {
@@ -305,19 +275,9 @@ extend Float {
 		value = (value >= -This pi / 2) ? value : (value + pi)
 		value
 	}
-	// Linear interpolation between a and b using ratio
-	//   lerp(a, b, 0) = a
-	//   lerp(a, b, 0.5) = (a + b) / 2
-	//   lerp(a, b, 1) = b
-	//   lerp(a, a, x) = a
-	// Called "lerp" in CG and HLSL, called "mix" in GLSL
 	linearInterpolation: static func (a: This, b: This, ratio: This) -> This {
 		(ratio * (b - a)) + a
 	}
-	// Inverse to lerp returning ratio given the same a and b
-	// Precondition: a and b have different values
-	//   Getting +inf, -inf or NaN shows when the precondition is broken
-	// Postcondition: inverseLerp(a, b, lerp(a, b, r)) = r
 	inverseLinearInterpolation: static func (a: This, b: This, value: This) -> This {
 		(value - a) / (b - a)
 	}
@@ -358,6 +318,9 @@ extend Float {
 }
 
 extend LDouble {
+	pi ::= static 3.14159_26535_89793_23846_26433_83279L
+	e ::= static 2.718281828459045235360287471352662497757247093699959574966L
+	
 	cos: extern (cosl) func -> This
 	sin: extern (sinl) func -> This
 	tan: extern (tanl) func -> This
