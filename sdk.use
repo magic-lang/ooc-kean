@@ -14,3 +14,4 @@ Imports: lang/String
 Imports: lang/stdlib
 Imports: lang/types
 Imports: lang/VarArgs
+Imports: lang/Owner

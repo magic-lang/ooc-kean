@@ -11,7 +11,6 @@ Imports: Event
 Imports: Timer
 Imports: Debug
 Imports: Profiler
-Imports: Owner
 Imports: OwnedBuffer
 Imports: TextBuffer
 Imports: Text
