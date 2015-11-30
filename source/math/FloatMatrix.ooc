@@ -236,6 +236,39 @@ FloatMatrix: cover {
 		this free(Owner Receiver)
 		result
 	}
+	// Thomas algorithm for tridiagonal systems
+	// https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm
+	solveTridiagonal: func (y: This) -> This {
+		diagonal := this take() getDiagonal() take()
+		upperDiagonal := this take() getDiagonal(1, 0) take()
+		lowerDiagonal := this take() getDiagonal(0, 1) take()
+		rightHandSide := y take() copy() take()
+		d := diagonal elements
+		u := upperDiagonal elements
+		l := lowerDiagonal elements
+		rhs := rightHandSide elements
+		result := diagonal create()
+		length := result take() height
+		u[0] /= d[0]
+		rhs[0] /= d[0]
+		for (index in 1 .. length) {
+			if (index < length - 1)
+				u[index] /= d[index] - l[index - 1] * u[index - 1]
+			rhs[index] = (rhs[index] - l[index - 1] * rhs[index - 1]) / (d[index] - l[index - 1] * u[index - 1])
+		}
+		result[0, length - 1] = rhs[length - 1]
+		for (iteration in 0 .. length - 1) {
+			index := length - 2 - iteration
+			result[0, index] = rhs[index] - u[index] * result take()[0, index + 1]
+		}
+		diagonal free()
+		upperDiagonal free()
+		lowerDiagonal free()
+		rightHandSide free()
+		this free(Owner Receiver)
+		y free(Owner Receiver)
+		result
+	}
 	getDiagonal: func (x := 0, y := 0) -> This {
 		t := this take()
 		length := Int minimum(t width - x, t height - y)
