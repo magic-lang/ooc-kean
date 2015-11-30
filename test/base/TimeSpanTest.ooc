@@ -124,12 +124,12 @@ TimeSpanTest: class extends Fixture {
 			expect(TimeSpan days(14.1) elapsedWeeks() == 2)
 			expect(TimeSpan weeks(2) elapsedDays() == 14)
 		})
-		this add("toString", func {
+		this add("toText", func {
 			span := TimeSpan millisecond() + TimeSpan second() + TimeSpan minute() + TimeSpan hour() + TimeSpan day() + TimeSpan week()
-			expect(span toString() == "1 weeks, 1 days, 1 hours, 1 minutes, 1 seconds, 1 milliseconds")
-			expect(span toString("%D") == "8")
-			expect(TimeSpan day() toString("%H %M %S %h %m %s") == "24 1440 86400 0 0 0")
-			expect(TimeSpan hour() toString("%d %D text %m %M") == "0 0 text 0 60")
+			expect(span toText() == t"1 weeks, 1 days, 1 hours, 1 minutes, 1 seconds, 1 milliseconds")
+			expect(span toText(t"%D") == t"8")
+			expect(TimeSpan day() toText(t"%H %M %S %h %m %s") == t"24 1440 86400 0 0 0")
+			expect(TimeSpan hour() toText(t"%d %D text %m %M") == t"0 0 text 0 60")
 		})
 	}
 }

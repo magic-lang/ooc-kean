@@ -44,7 +44,7 @@ TimeSpan: cover {
 	elapsedWeeks: func -> Int64 {
 		this ticks / DateTime ticksPerWeek
 	}
-	defaultFormat: static const String = "%w weeks, %d days, %h hours, %m minutes, %s seconds, %z milliseconds"
+	defaultFormat: static const Text = t"%w weeks, %d days, %h hours, %m minutes, %s seconds, %z milliseconds"
 	// supported formatting expressions:
 	//  %w - weeks (rounded down)
 	//  %d - days (<7)
@@ -57,20 +57,19 @@ TimeSpan: cover {
 	//  %M - minutes (based on total ticks)
 	//  %S - seconds (based on total ticks)
 	//  %Z - milliseconds (based on total ticks)
-	toString: func (format := This defaultFormat) -> String {
-		result := format
-		result = result replaceAll("%w", "%d" format(this elapsedWeeks()))
-		result = result replaceAll("%D", "%d" format(this elapsedDays()))
-		result = result replaceAll("%H", "%d" format(this elapsedHours()))
-		result = result replaceAll("%M", "%d" format(this elapsedMinutes()))
-		result = result replaceAll("%S", "%d" format(this elapsedSeconds()))
-		result = result replaceAll("%Z", "%d" format(this elapsedMilliseconds()))
-		result = result replaceAll("%d", "%d" format(this elapsedDays() modulo(7)))
-		result = result replaceAll("%h", "%d" format(this elapsedHours() modulo(24)))
-		result = result replaceAll("%m", "%d" format(this elapsedMinutes() modulo(60)))
-		result = result replaceAll("%s", "%d" format(this elapsedSeconds() modulo(60)))
-		result = result replaceAll("%z", "%d" format(this elapsedMilliseconds() modulo(1000)))
-		result
+	toText: func (format := This defaultFormat) -> Text {
+		result := format copy()
+		result = result replaceAll(t"%w", t"%d" format(this elapsedWeeks()))
+		result = result replaceAll(t"%D", t"%d" format(this elapsedDays()))
+		result = result replaceAll(t"%H", t"%d" format(this elapsedHours()))
+		result = result replaceAll(t"%M", t"%d" format(this elapsedMinutes()))
+		result = result replaceAll(t"%S", t"%d" format(this elapsedSeconds()))
+		result = result replaceAll(t"%Z", t"%d" format(this elapsedMilliseconds()))
+		result = result replaceAll(t"%d", t"%d" format(this elapsedDays() modulo(7)))
+		result = result replaceAll(t"%h", t"%d" format(this elapsedHours() modulo(24)))
+		result = result replaceAll(t"%m", t"%d" format(this elapsedMinutes() modulo(60)))
+		result = result replaceAll(t"%s", t"%d" format(this elapsedSeconds() modulo(60)))
+		result replaceAll(t"%z", t"%d" format(this elapsedMilliseconds() modulo(1000)))
 	}
 	operator + (value: Int) -> This {
 		This new(this ticks + value)
