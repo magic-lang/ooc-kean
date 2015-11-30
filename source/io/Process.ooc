@@ -2,37 +2,26 @@ import os/Pipe
 import structs/[List, ArrayList, HashMap]
 import native/[ProcessUnix, ProcessWin32]
 
-/**
- * Allows to launch processes with arbitrary arguments, redirect
- * standard input, output, and error, get the error code, and wait
- * for the end of the execution
- */
 Process: abstract class {
-	/**
-	   Arguments passed to the executable. The first argument
-	   should be the path to the executable.
-	 */
+	// The first argument should be the path to the executable.
 	args: List<String>
 
-	/** Pipe to which standard output will be redirected if it's non-null */
+	// Pipe to which standard output will be redirected if it's non-null
 	stdOut = null: Pipe
-	/** Pipe to which standard input will be redirected if it's non-null */
+	// Pipe to which standard input will be redirected if it's non-null
 	stdIn = null: Pipe
-	/** Pipe to which standard error will be redirected if it's non-null */
+	// Pipe to which standard error will be redirected if it's non-null
 	stdErr = null: Pipe
 
-	/** Environment variables that should be defined for the launched process */
+	// Environment variables that should be defined for the launched process
 	env = null : HashMap<String, String>
 
-	/** Current working directory of the launched process */
+	// Current working directory of the launched process
 	cwd = null : String
 
-	/** PID of the child process */
+	// PID of the child process
 	pid = 0: Long
 
-	/**
-	   Create a new process from an array of arguments
-	 */
 	new: static func ~fromArray (args: String[]) -> This {
 		p := ArrayList<String> new()
 		for (i in 0 .. args length) {
@@ -42,9 +31,6 @@ Process: abstract class {
 		new(p)
 	}
 
-	/**
-	   Create a new process from a list of arguments
-	 */
 	new: static func (.args) -> This {
 		version(unix || apple) {
 			return ProcessUnix new(args) as This
@@ -56,20 +42,12 @@ Process: abstract class {
 		null
 	}
 
-	/**
-	   Create a new process with given arguments and environment
-	   variables
-	 */
 	new: static func ~withEnvFromArray (args: String[], .env) -> This {
 		p := new(args)
 		p env = env
 		p
 	}
 
-	/**
-	   Create a new process with given arguments and environment
-	   variables.
-	 */
 	new: static func ~withEnv (.args, .env) -> This {
 		p := new(args)
 		p env = env
@@ -89,39 +67,20 @@ Process: abstract class {
 	setEnv: func (=env)
 	setCwd: func (=cwd)
 
-	/** Execute the process and wait for it to end */
 	execute: func -> Int {
 		executeNoWait()
 		wait()
 	}
 
-	/**
-	 * Wait for the process to end. Bad things will happen
-	 * if you haven't called `executeNoWait` before.
-	 */
+	// Bad things will happen if you haven't called `executeNoWait` before.
 	wait: abstract func -> Int
 
-	/**
-	 * See if process has ended without hanging if it hasn't yet.
-	 * @return exit code, or -1 if process hasn't exited yet.
-	 *
-	 * Throws an Exception if can't wait for some reason.
-	 */
+	// Returns exit code, or -1 if process hasn't exited yet.
 	waitNoHang: abstract func -> Int
 
-	/**
-	 * Execute the process without waiting for it to end.
-	 * You have to call `wait` manually
-	 * @return child pid process.
-	 */
 	executeNoWait: abstract func -> Long
 
-	/**
-	 * Execute the process, and return all the output to stdout
-	 * as a string
-	 *
-	 * @return the standard output, and the exit code
-	 */
+	// Execute the process, and return all the output to stdout as a string
 	getOutput: func -> (String, Int) {
 		stdOut = Pipe new()
 		exitCode := execute()
@@ -134,12 +93,7 @@ Process: abstract class {
 		(result, exitCode)
 	}
 
-	/**
-	 * Execute the process, and return all the output to stderr
-	 * as a string
-	 *
-	 * @return the error output, and the exit code
-	 */
+	// Execute the process, and return all the output to stderr as a string
 	getErrOutput: func -> (String, Int) {
 		stdErr = Pipe new()
 		exitCode := execute()
@@ -152,9 +106,7 @@ Process: abstract class {
 		(result, exitCode)
 	}
 
-	/**
-	 * @return a representation of the command, escaped to some point.
-	 */
+	// Returns a representation of the command, escaped to some point.
 	getCommandLine: func -> String {
 		args join(" ") replaceAll("\\", "\\\\")
 	}

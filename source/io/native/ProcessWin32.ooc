@@ -39,10 +39,6 @@ ProcessWin32: class extends Process {
 		exitCode
 	}
 
-	/**
-	 * Wait for the process to end. Bad things will happen
-	 * if you haven't called `executeNoWait` before.
-	 */
 	wait: func -> Int {
 		_wait(INFINITE)
 	}
@@ -51,10 +47,6 @@ ProcessWin32: class extends Process {
 		_wait(0)
 	}
 
-	/**
-	   Execute the process without waiting for it to end.
-	   You have to call `wait` manually.
-	*/
 	executeNoWait: func -> Long {
 		if (stdIn != null || stdOut != null || stdErr != null) {
 			if (stdIn != null) {
@@ -97,25 +89,20 @@ ProcessWin32: class extends Process {
 			return -1
 		}
 
-		if (stdIn != null) {
+		if (stdIn != null)
 			stdIn close('r')
-		}
-
-		if (stdOut != null) {
+		if (stdOut != null)
 			stdOut close('w')
-		}
-		if (stdErr != null) {
+		if (stdErr != null)
 			stdErr close('w')
-		}
 
 		this pid = pi pid
-		return pi pid
+		pi pid
 	}
 
 	buildEnvironment: func -> Char* {
-		if (env == null) {
+		if (env == null)
 			return null
-		}
 
 		envLength := 1
 		env each(|k, v|
@@ -159,16 +146,13 @@ ProcessWin32: class extends Process {
 
 // extern functions
 ZeroMemory: extern func (Pointer, SizeT)
-CreateProcess: extern func (CString, CString, Pointer, Pointer,
-	Bool, Long, Pointer, CString, Pointer, Pointer) -> Bool
+CreateProcess: extern func (CString, CString, Pointer, Pointer, Bool, Long, Pointer, CString, Pointer, Pointer) -> Bool
 WaitForSingleObject: extern func (Handle, Long) -> Int
 GetExitCodeProcess: extern func (Handle, ULong*) -> Int
 CloseHandle: extern func (Handle)
 SetHandleInformation: extern func (Handle, Long, Long) -> Bool
-
 HANDLE_FLAG_INHERIT: extern Long
 HANDLE_FLAG_PROTECT_FROM_CLOSE: extern Long
-
 WAIT_ABANDONED, WAIT_OBJECT_0, WAIT_TIMEOUT, WAIT_FAILED: extern Int
 
 // covers
