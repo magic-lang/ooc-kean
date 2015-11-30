@@ -20,6 +20,8 @@ ThreadTest: class extends Fixture {
 		expect(thread wait())
 		expect(threadStarted get(), is equal to(1))
 		thread free()
+		(job as Closure) free()
+		threadStarted free()
 	}
 	_testCancelation: static func {
 		expectedValue := 1_000
@@ -52,6 +54,8 @@ ThreadTest: class extends Fixture {
 		thread free()
 		startedCondition free()
 		mutex free()
+		value free()
+		(job as Closure) free()
 	}
 }
 
