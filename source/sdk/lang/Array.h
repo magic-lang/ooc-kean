@@ -1,6 +1,5 @@
-#pragma once
-#ifndef ___lang_array___
-#define ___lang_array___
+#ifndef OOC_LANG_ARRAY_H
+#define OOC_LANG_ARRAY_H
 
 #ifdef __OOC_USE_GC__
 #define array_malloc GC_malloc
@@ -12,20 +11,13 @@
 
 #include <stdint.h>
 
-
 #define _lang_array__Array_new(type, size) ((_lang_array__Array) { size, array_malloc((size) * sizeof(type)) });
 
 #if defined(safe)
 #define _lang_array__Array_get(array, index, type) ( \
-    (index < 0 || index >= array.length) ? \
-    lang_Exception__Exception_throw((lang_Exception__Exception *) lang_Exception__OutOfBoundsException_new_noOrigin(index, array.length)), \
-    *((type*) NULL) : \
-    ((type*) array.data)[index])
+    ((type*) array.data)[(index < 0 || index >= array.length) ? lang_Exception__Exception_throw((lang_Exception__Exception *) lang_Exception__OutOfBoundsException_new_noOrigin(index, array.length)), -1 : index])
 #define _lang_array__Array_set(array, index, type, value) \
-    (index < 0 || index >= array.length) ? \
-    lang_Exception__Exception_throw((lang_Exception__Exception *) lang_Exception__OutOfBoundsException_new_noOrigin(index, array.length)), \
-    *((type*) NULL) : \
-    (((type*) array.data)[index] = value)
+    (((type*) array.data)[(index < 0 || index >= array.length) ? lang_Exception__Exception_throw((lang_Exception__Exception *) lang_Exception__OutOfBoundsException_new_noOrigin(index, array.length)), -1 : index] = value)
 #else
 #define _lang_array__Array_get(array, index, type) ( \
     ((type*) array.data)[index])
@@ -40,5 +32,4 @@ typedef struct {
     void* data;
 } _lang_array__Array;
 
-#endif // ___lang_array___
-
+#endif // OOC_LANG_ARRAY_H
