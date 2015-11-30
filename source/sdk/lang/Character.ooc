@@ -79,7 +79,7 @@ Char: cover from char {
 	toLower: extern (tolower) func -> This
 	toUpper: extern (toupper) func -> This
 	toString: func -> String {
-		String new(this & as CString, 1)
+		String new(this& as CString, 1)
 	}
 	print: func {
 		fputc(this, stdout)
