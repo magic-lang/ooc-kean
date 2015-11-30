@@ -12,6 +12,8 @@ ByteBufferSliceTest: class extends Fixture {
 			expect(yuv referenceCount _count, is equal to(2))
 			y referenceCount decrease()
 			expect(yuv referenceCount _count, is equal to(1))
+			uv referenceCount decrease()
+			yuv referenceCount decrease()
 		})
 	}
 }
