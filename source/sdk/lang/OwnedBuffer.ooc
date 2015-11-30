@@ -15,8 +15,8 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-base
 import math
+import Owner
 
 OwnedBuffer: cover {
 	_pointer: UInt8*
