@@ -202,18 +202,27 @@ parseArg: func (res: Buffer, info: FSInfoStruct*, va: VarArgsIterator*, p: Char*
 				tmp append('+')
 			if (info@ fieldwidth != 0)
 				tmp append(info@ fieldwidth toString())
-			if (info@ precision >= 0)
-				tmp append("." + info@ precision toString())
-			tmp append("f")
+			if (info@ precision >= 0) {
+				tmp append('.')
+				precisionString := info@ precision toString()
+				tmp append(precisionString)
+				precisionString free()
+			}
+			tmp append('f')
 			T := va@ getNextType()
+			toAppend: String
+			tmpString := tmp toString()
 			match T {
 				case LDouble =>
-					res append(tmp toString() cformat(argNext(va, LDouble) as LDouble))
+					toAppend = tmpString cformat(argNext(va, LDouble) as LDouble)
 				case Double =>
-					res append(tmp toString() cformat(argNext(va, Double) as Double))
+					toAppend = tmpString cformat(argNext(va, Double) as Double)
 				case => // assume everything else is Float
-					res append(tmp toString() cformat(argNext(va, Float) as Float))
+					toAppend = tmpString cformat(argNext(va, Float) as Float)
 			}
+			res append(toAppend)
+			toAppend free()
+			tmpString free()
 		case 'c' =>
 			mprintCall = false
 			i := 0
@@ -306,7 +315,7 @@ parseArgOne: func <T> (res: Buffer, info: FSInfoStruct*, va: T, p: Char*) {
 				tmp append(precisionString)
 				precisionString free()
 			}
-			tmp append("f")
+			tmp append('f')
 			tmpString := tmp toString()
 			match T {
 				case LDouble =>
