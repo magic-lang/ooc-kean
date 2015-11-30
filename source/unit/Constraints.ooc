@@ -306,14 +306,14 @@ CompareWithinConstraint: class extends CompareConstraint {
 	}
 }
 
-IsConstraints: class {
+IsConstraints: class extends Modifier {
 	init: func
-	true ::= TrueConstraint new()
-	false ::= FalseConstraint new()
-	Null ::= NullConstraint new()
-	empty ::= EmptyConstraint new()
-	not ::= NotModifier new()
-	equal ::= EqualModifier new()
-	less ::= LessModifier new()
-	greater ::= GreaterModifier new()
+	true ::= TrueConstraint new(this)
+	false ::= FalseConstraint new(this)
+	Null ::= NullConstraint new(this)
+	empty ::= EmptyConstraint new(this)
+	not ::= NotModifier new(this)
+	equal ::= EqualModifier new(this)
+	less ::= LessModifier new(this)
+	greater ::= GreaterModifier new(this)
 }
