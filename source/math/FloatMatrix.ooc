@@ -236,6 +236,15 @@ FloatMatrix: cover {
 		this free(Owner Receiver)
 		result
 	}
+	getDiagonal: func (x := 0, y := 0) -> This {
+		t := this take()
+		length := Int minimum(t width - x, t height - y)
+		result := This new(1, length)
+		for (index in 0 .. length)
+			result[0, index] = t[x + index, y + index]
+		this free(Owner Receiver)
+		result
+	}
 	// Forward solver lower * x = y for a lower triangular matrix. Current object is y.
 	_forwardSubstitution: func (lower: This) -> This {
 		t := this take()
