@@ -1,5 +1,4 @@
 import io/Writer, io/File
-import os/Pipe, os/native/PipeUnix
 
 /**
  * Implement the Writer interface for file output
@@ -104,12 +103,13 @@ FileWriter: class extends Writer {
 		file close()
 	}
 
-	asPipe: func -> Pipe {
+	// TODO: Reimplement asPipe() when this file is moved to source/io
+	/*asPipe: func -> Pipe { 
 		version(unix || apple) {
 			return PipeUnix new(-1, file no())
 		} else {
 			Exception new("FileWriter asPipe() is not supported on your platform") throw()
 		}
 		null
-	}
+	}*/
 }
