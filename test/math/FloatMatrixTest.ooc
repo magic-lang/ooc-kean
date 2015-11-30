@@ -108,6 +108,13 @@ FloatMatrixTest: class extends Fixture {
 			this checkAllElements(x, [1.0f, -0.5f])
 		})
 
+		this add("solver (tridiagonal)", func {
+			a := this createMatrix(5, 5, [1.f, 2.f, 0.f, 0.f, 0.f, 2.f, 2.f, 3.f, 0.f, 0.f, 0.f, 3.f, 3.f, 4.f, 0.f, 0.f, 0.f, 4.f, 4.f, 5.f, 0.f, 0.f, 0.f, 5.f, 5.f])
+			y := this createMatrix(1, 5, [5.f, 15.f, 31.f, 53.f, 45.f])
+			x := a solveTridiagonal(y)
+			this checkAllElements(x, [1.f, 2.f, 3.f, 4.f, 5.f])
+		})
+
 		this add("set and get", func {
 			m := this createMatrix(3, 3, [1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f])
 			m take()[0, 0] = 42.0f
