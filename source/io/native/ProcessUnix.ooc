@@ -20,7 +20,6 @@ signal: extern func (Int, Pointer)
 ProcessUnix: class extends Process {
 	init: func ~unix (=args)
 
-	/** terminate my child pid! */
 	terminate: func {
 		if (pid)
 			kill(pid, SIGTERM)
@@ -39,10 +38,6 @@ ProcessUnix: class extends Process {
 		_wait(WNOHANG)
 	}
 
-	/**
-	 * Wait for the process to end. Bad things will happen if you
-	 * haven't called `executeNoWait` before.
-	 */
 	_wait: func (options: Int) -> Int {
 		status: Int
 		result := -1
@@ -55,9 +50,9 @@ ProcessUnix: class extends Process {
 			Exception new("Process wait(): %s" format(errString toString())) throw()
 		}
 
-		if (WIFEXITED(status)) {
+		if (WIFEXITED(status))
 			result = WEXITSTATUS(status)
-		} else if (WIFSIGNALED(status)) {
+		else if (WIFSIGNALED(status)) {
 			termSig := WTERMSIG(status)
 			message := "Child received signal %d" format(termSig)
 
@@ -71,40 +66,22 @@ ProcessUnix: class extends Process {
 			}
 
 			message = message + "\n"
-			if (stdErr) {
+			if (stdErr)
 				stdErr write(message)
-			} else {
+			else
 				stderr write(message)
-			}
-
-			/*
-			if (termSig == SIGABRT) {
-				// otherwise we'll hang
-				"killing" println()
-				kill()
-				"killed!" println()
-			}
-			*/
 		}
 
 		if (result != -1) {
-			// process exited? close stuff.
-
-			if (stdOut != null) {
+			if (stdOut != null)
 				stdOut close('w')
-			}
-			if (stdErr != null) {
+			if (stdErr != null)
 				stdErr close('w')
-			}
 		}
 
-		return result
+		result
 	}
 
-	/**
-	   Execute the process without waiting for it to end.
-	   You have to call `wait` manually.
-	*/
 	executeNoWait: func -> Long {
 		pid = fork()
 		if (pid == 0) {
@@ -122,16 +99,13 @@ ProcessUnix: class extends Process {
 			}
 
 			/* amend the environment if needed */
-			if (env) {
-				for (key in env getKeys()) {
+			if (env)
+				for (key in env getKeys())
 					Env set(key, env[key], true)
-				}
-			}
 
 			/* set a new cwd? */
-			if (cwd != null) {
+			if (cwd != null)
 				chdir(cwd as CString)
-			}
 
 			/* run the stuff. */
 			cArgs : CString * = gc_malloc(Pointer size * (args getSize() + 1))
