@@ -16,3 +16,4 @@ Imports: lang/types
 Imports: lang/VarArgs
 Imports: lang/Owner
 Imports: lang/OwnedBuffer
+Imports: lang/TextBuffer
