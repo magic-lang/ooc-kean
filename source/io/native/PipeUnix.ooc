@@ -1,4 +1,5 @@
-import ../[unistd, FileDescriptor, Pipe]
+import ../Pipe
+import os/[unistd, FileDescriptor]
 
 version(unix || apple) {
 PipeUnix: class extends Pipe {

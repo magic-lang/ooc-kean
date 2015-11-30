@@ -1,4 +1,4 @@
-import os/Pipe
+import Pipe
 import structs/[List, ArrayList, HashMap]
 import native/[ProcessUnix, ProcessWin32]
 
