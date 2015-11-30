@@ -31,6 +31,19 @@ Modifier: abstract class {
 	child: This = null
 	init: func
 	init: func ~parent (=parent)
+	free: override func {
+		if (this child) {
+			if (this child parent == this)
+				this child parent = null
+			this child free()
+		}
+		if (this parent) {
+			if (this parent child == this)
+				this parent child = null
+			this parent free()
+		}
+		super()
+	}
 	verify: func ~parent (value: Object, =child) -> Bool {
 		this parent != null ? this parent verify(value, this): this test(value)
 	}
@@ -274,18 +287,18 @@ CompareWithinConstraint: class extends CompareConstraint {
 		this precision = precision as LDouble
 		this comparer = func (value, correct: Object) -> Bool { this testChild(value) }
 		f := func (value, correct: Object) -> Bool { (value as Cell<Float> get() - correct as Cell<Float> get()) abs() < precision }
-		CompareConstraint new(this, this correct, f, ComparisonType Within)
+		CompareConstraint new(this, Cell<Float> new(this correct as Cell<Float> get()), f, ComparisonType Within)
 	}
 	within: func ~double (precision: Double) -> CompareConstraint {
 		this precision = precision as Double
 		this comparer = func (value, correct: Object) -> Bool { this testChild(value) }
 		f := func (value, correct: Object) -> Bool { (value as Cell<Double> get() - correct as Cell<Double> get()) abs() < precision }
-		CompareConstraint new(this, this correct, f, ComparisonType Within)
+		CompareConstraint new(this, Cell<Double> new(this correct as Cell<Double> get()), f, ComparisonType Within)
 	}
 	within: func ~ldouble (=precision) -> CompareConstraint {
 		this comparer = func (value, correct: Object) -> Bool { this testChild(value) }
 		f := func (value, correct: Object) -> Bool { (value as Cell<LDouble> get() - correct as Cell<LDouble> get()) abs() < precision }
-		CompareConstraint new(this, this correct, f, ComparisonType Within)
+		CompareConstraint new(this, Cell<LDouble> new(this correct as Cell<LDouble> get()), f, ComparisonType Within)
 	}
 	test: override func (value: Object) -> Bool {
 		comparer := this comparer
