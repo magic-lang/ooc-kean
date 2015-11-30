@@ -16,7 +16,7 @@
  */
 
 use ooc-base
-use ooc-math
+use ooc-geometry
 import include/gles3
 import ../GLVertexArrayObject
 import Gles3Debug

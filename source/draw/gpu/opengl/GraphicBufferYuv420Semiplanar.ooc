@@ -17,7 +17,7 @@
 
 import math
 use ooc-draw
-use ooc-math
+use ooc-geometry
 use ooc-base
 use ooc-draw-gpu
 import GraphicBuffer, AndroidContext, EGLBgra

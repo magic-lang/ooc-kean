@@ -1,6 +1,6 @@
 use ooc-base
 use ooc-draw
-use ooc-math
+use ooc-geometry
 use ooc-unit
 import lang/IO
 

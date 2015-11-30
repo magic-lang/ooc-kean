@@ -1,0 +1,25 @@
+Name: ooc Geometry
+Description: Euclid Geometry functionality library for Homogenous coordinates.
+SourcePath: source/geometry
+Requires: ooc-base, ooc-collections, ooc-math
+Imports: FloatVector2D
+Imports: FloatVector3D
+Imports: FloatPoint2D
+Imports: FloatPoint3D
+Imports: FloatBox2D
+Imports: FloatShell2D
+Imports: FloatTransform2D
+Imports: FloatTransform3D
+Imports: IntVector2D
+Imports: IntVector3D
+Imports: IntPoint2D
+Imports: IntPoint3D
+Imports: IntBox2D
+Imports: IntShell2D
+Imports: IntTransform2D
+Imports: FloatEuclidTransform
+Imports: Quaternion
+Imports: FloatRotation3D
+Imports: FloatPoint2DVectorList
+Imports: FloatEuclidTransformVectorList
+Imports: FloatConvexHull2D

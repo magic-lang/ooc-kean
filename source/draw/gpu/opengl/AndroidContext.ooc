@@ -16,7 +16,7 @@
 use ooc-draw-gpu
 use ooc-collections
 use ooc-draw
-use ooc-math
+use ooc-geometry
 use ooc-base
 import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLBgra, OpenGLBgra, OpenGLPacked, OpenGLMonochrome, OpenGLUv, OpenGLMap
 import threading/Thread

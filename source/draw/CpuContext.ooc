@@ -15,7 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-base
 use ooc-draw
-use ooc-math
+use ooc-geometry
 
 CpuContext: class extends AbstractContext {
 	init: func

@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-math
+use ooc-geometry
 use ooc-draw
 import include/gles3
 import ../GLShaderProgram

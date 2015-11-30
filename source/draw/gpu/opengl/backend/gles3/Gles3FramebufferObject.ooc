@@ -16,7 +16,7 @@
  */
 
 use ooc-base
-use ooc-math
+use ooc-geometry
 use ooc-draw
 import include/gles3
 import ../GLFramebufferObject

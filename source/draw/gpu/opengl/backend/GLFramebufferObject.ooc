@@ -17,7 +17,7 @@
 
 use ooc-base
 use ooc-draw
-use ooc-math
+use ooc-geometry
 
 version(!gpuOff) {
 GLFramebufferObject: abstract class {

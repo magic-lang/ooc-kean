@@ -16,7 +16,7 @@
 */
 
 use ooc-collections
-use ooc-math
+use ooc-geometry
 use ooc-base
 use ooc-draw-gpu
 import OpenGLPacked, OpenGLMonochrome, OpenGLBgra, OpenGLBgr, OpenGLUv

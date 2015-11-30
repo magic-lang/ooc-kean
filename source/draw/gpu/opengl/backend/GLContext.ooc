@@ -16,7 +16,7 @@
 */
 
 use ooc-base
-use ooc-math
+use ooc-geometry
 import gles3/Gles3Context
 import GLQuad, GLShaderProgram, GLTexture, GLFramebufferObject, GLFence, GLVolumeTexture, GLRenderer, GLVertexArrayObject
 

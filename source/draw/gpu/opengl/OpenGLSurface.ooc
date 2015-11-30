@@ -16,7 +16,7 @@
 */
 
 use ooc-collections
-use ooc-math
+use ooc-geometry
 use ooc-draw
 use ooc-draw-gpu
 import OpenGLContext, OpenGLPacked

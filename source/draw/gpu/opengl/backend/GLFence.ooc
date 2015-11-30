@@ -16,7 +16,7 @@
  */
 
 use ooc-base
-use ooc-math
+use ooc-geometry
 import os/Time
 import threading/[Thread, Mutex, WaitCondition]
 
