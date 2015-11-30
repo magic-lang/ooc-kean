@@ -104,8 +104,11 @@ TextLiteralTest: class extends Fixture {
 			expect(t"123one" toInt(), is equal to(123))
 			expect(t"101" toInt(), is equal to(101))
 			for (i in 1 .. 100)
-				for (j in 1 .. 100)
-					expect(Text new((i * j) toString()) toInt(), is equal to(i * j))
+				for (j in 1 .. 100) {
+					numberString := (i * j) toString()
+					expect(Text new(numberString) toInt(), is equal to(i * j))
+					numberString free()
+				}
 		})
 		this add("Convert to Int (base 16)", func {
 			expect(t"bad" toInt~inBase(16), is equal to(11 * 16 * 16 + 10 * 16 + 13))
@@ -139,8 +142,11 @@ TextLiteralTest: class extends Fixture {
 			expect(t"22.5" toFloat(), is equal to(22.5f) within(tolerance))
 			expect(t"123.763" toFloat(), is equal to(123.763f) within(tolerance))
 			for (i in 1 .. 100)
-				for (j in 1 .. 100)
-					expect(Text new((0.5f * i * j) toString()) toFloat(), is equal to(0.5f * i * j) within(tolerance))
+				for (j in 1 .. 100) {
+					numberString := (0.5f * i * j) toString()
+					expect(Text new(numberString) toFloat(), is equal to(0.5f * i * j) within(tolerance))
+					numberString free()
+				}
 		})
 		this add("Convert to Float (scientific notation)", func {
 			tolerance := 0.001f
