@@ -30,11 +30,13 @@ import Canvas, RasterCanvas
 PackedRasterCanvas: abstract class extends RasterCanvas {
 	target ::= this _target as RasterPacked
 	init: func (image: RasterPacked) { super(image) }
-	_resizePacked: func <T> (sourceBuffer, resultBuffer: T*, sourceBox, resultBox: IntBox2D, sourceStride, resultStride, bytesPerPixel: Int) {
-		if (this interpolationMode == InterpolationMode Fast)
-			This _resizeNearestNeighbour(sourceBuffer, resultBuffer, sourceBox, resultBox, sourceStride, resultStride, bytesPerPixel)
+	_resizePacked: func <T> (sourceBuffer: T*, source: RasterPacked, sourceBox, resultBox: IntBox2D) {
+		if (this target size == source size && this target stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0)
+			memcpy(this target buffer pointer, sourceBuffer, this target stride * this target height)
+		else if (this interpolationMode == InterpolationMode Fast)
+			This _resizeNearestNeighbour(sourceBuffer, this target buffer pointer as T*, sourceBox, resultBox, source stride, this target stride, this target bytesPerPixel)
 		else
-			This _resizeBilinear(sourceBuffer, resultBuffer, sourceBox, resultBox, sourceStride, resultStride, bytesPerPixel)
+			This _resizeBilinear(sourceBuffer, this target buffer pointer as T*, sourceBox, resultBox, source stride, this target stride, this target bytesPerPixel)
 	}
 	_resizeNearestNeighbour: static func <T> (sourceBuffer, resultBuffer: T*, sourceBox, resultBox: IntBox2D, sourceStride, resultStride, bytesPerPixel: Int) {
 		(resultWidth, resultHeight) := (resultBox size x, resultBox size y)
