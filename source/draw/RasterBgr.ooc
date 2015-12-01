@@ -24,7 +24,7 @@ import Image
 import Color
 import Canvas, RasterCanvas
 
-BgrRasterCanvas: class extends PackedRasterCanvas {
+RasterBgrCanvas: class extends RasterPackedCanvas {
 	target ::= this _target as RasterBgr
 	init: func (image: RasterBgr) { super(image) }
 	_drawPoint: override func (x, y: Int) {
@@ -171,7 +171,7 @@ RasterBgr: class extends RasterPacked {
 		result swapRedBlue()
 		result
 	}
-	_createCanvas: override func -> Canvas { BgrRasterCanvas new(this) }
+	_createCanvas: override func -> Canvas { RasterBgrCanvas new(this) }
 	kean_draw_rasterBgr_new: static unmangled func (width, height, stride: Int, data: Void*) -> This {
 		result := This new(IntVector2D new(width, height), stride)
 		memcpy(result buffer pointer, data, height * stride)
