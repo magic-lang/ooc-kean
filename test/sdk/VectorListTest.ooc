@@ -16,7 +16,7 @@
 */
 
 use ooc-unit
-use ooc-collections
+import structs/Vector
 
 MyCover: cover {
 	content: Int
