@@ -7,8 +7,8 @@ PointerTest: class extends Fixture {
 	init: func {
 		super("Pointer")
 		this add("allocate & free", func {
-			p := Pointer allocate(1024)
-			expect(p, is not Null)
+			p := Pointer allocate(32)
+			expect(p != null)
 			expect(p free())
 		})
 	}
