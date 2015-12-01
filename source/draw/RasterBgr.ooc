@@ -24,7 +24,7 @@ import Image
 import Color
 import Canvas, RasterCanvas
 
-BgrRasterCanvas: class extends RasterCanvas {
+BgrRasterCanvas: class extends PackedRasterCanvas {
 	target ::= this _target as RasterBgr
 	init: func (image: RasterBgr) { super(image) }
 	_drawPoint: override func (x, y: Int) {

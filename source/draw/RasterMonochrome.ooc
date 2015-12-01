@@ -25,7 +25,7 @@ import Image, FloatImage
 import Color
 import Canvas, RasterCanvas
 
-MonochromeRasterCanvas: class extends RasterCanvas {
+MonochromeRasterCanvas: class extends PackedRasterCanvas {
 	target ::= this _target as RasterMonochrome
 	init: func (image: RasterMonochrome) { super(image) }
 	_drawPoint: override func (x, y: Int) {
@@ -68,8 +68,8 @@ RasterMonochrome: class extends RasterPacked {
 		else {
 			result = This new(size)
 			match (method) {
-				case InterpolationMode Smooth => RasterCanvas _resizeBilinear(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, IntBox2D new(this size), IntBox2D new(result size), this stride, result stride, this bytesPerPixel)
-				case => RasterCanvas _resizeNearestNeighbour(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, IntBox2D new(this size), IntBox2D new(result size), this stride, result stride, this bytesPerPixel)
+				case InterpolationMode Smooth => PackedRasterCanvas _resizeBilinear(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, IntBox2D new(this size), IntBox2D new(result size), this stride, result stride, this bytesPerPixel)
+				case => PackedRasterCanvas _resizeNearestNeighbour(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, IntBox2D new(this size), IntBox2D new(result size), this stride, result stride, this bytesPerPixel)
 			}
 		}
 		result
