@@ -22,15 +22,14 @@ HashBag: class {
 			Exception new(This, "Invalid value: %s" format(key)) throw() // TODO: more specific exception
 		} else {
 			storedType := getClass(key)
-			if (T inheritsFrom?(storedType)) {
-				return getEntry(key, T) value as T
-			} else {
+			if (T inheritsFrom?(storedType))
+				getEntry(key, T) value as T
+			else
 				Exception new(This, "Invalid type: %s (stored: %s)" format(T name, storedType name)) throw() // TODO: more specific exception
-			}
 		}
 	}
 	getClass: func (key: String) -> Class {
-		return myMap get(key) as Cell T
+		myMap get(key) as Cell T
 	}
 	getEntry: func <V> (key: String, V: Class) -> HashEntry<String, Pointer> {
 		entry: HashEntry

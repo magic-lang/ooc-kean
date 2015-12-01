@@ -22,18 +22,18 @@ memset(nullHashEntry&, 0, HashEntry size)
 
 intHash: func <K> (key: K) -> SizeT {
 	result: SizeT = key as Int
-	return result
+	result
 }
 
 pointerHash: func <K> (key: K) -> SizeT {
-	return (key as Pointer) as SizeT
+	(key as Pointer) as SizeT
 }
 
 charHash: func <K> (key: K) -> SizeT {
 	// both casts are necessary
 	// Casting 'key' directly to UInt would deref a pointer to UInt
 	// which would read random memory just after the char, which is not a good idea..
-	return (key as Char) as SizeT
+	(key as Char) as SizeT
 }
 
 /**
@@ -82,7 +82,7 @@ murmurHash: func <K> (keyTagazok: K) -> SizeT {
 	h *= m
 	h ^= h >> 15
 
-	return h
+	h
 }
 
 /**
@@ -103,26 +103,22 @@ ac_X31_hash: func <K> (key: K) -> SizeT {
 			s += 1
 		}
 	}
-	return h
+	h
 }
 
 getStandardHashFunc: func <T> (T: Class) -> Func <T> (T) -> SizeT {
-	if (T == String || T == CString) {
+	if (T == String || T == CString)
 		ac_X31_hash
-	} else if (T size == Pointer size) {
+	else if (T size == Pointer size)
 		pointerHash
-	} else if (T size == UInt size) {
+	else if (T size == UInt size)
 		intHash
-	} else if (T size == Char size) {
+	else if (T size == Char size)
 		charHash
-	} else {
+	else
 		murmurHash
-	}
 }
 
-/**
- * Simple hash table implementation
- */
 HashMap: class <K, V> extends BackIterable<V> {
 	_size, capacity: SizeT
 	keyEquals: Func <K> (K, K) -> Bool
@@ -137,18 +133,10 @@ HashMap: class <K, V> extends BackIterable<V> {
 		}
 	}
 
-	/**
-	 * Returns a new hash map
-	 */
-
 	init: func {
 		init(3)
 	}
 
-	/**
-	 * Returns a hash table of a specified bucket capacity.
-	 * @param UInt capacity The number of buckets to use
-	 */
 	init: func ~withCapacity (=capacity) {
 		_size = 0
 
@@ -169,10 +157,6 @@ HashMap: class <K, V> extends BackIterable<V> {
 		super()
 	}
 
-	/**
-	 * Retrieve the HashEntry associated with a key.
-	 * @param key The key associated with the HashEntry
-	 */
 	getEntry: func (key: K, result: HashEntry*) -> Bool {
 		hash : SizeT = hashKey(key) % capacity
 		entry := buckets[hash]
@@ -243,13 +227,7 @@ HashMap: class <K, V> extends BackIterable<V> {
 		this
 	}
 
-	/**
-	 * Puts a key/value pair in the hash table. If the pair already exists,
-	 * it is overwritten.
-	 * @param key The key to be hashed
-	 * @param value The value associated with the key
-	 * @return Bool
-	 */
+	// If the pair already exists, it is overwritten.
 	put: func (key: K, value: V) -> Bool {
 		hash: SizeT = hashKey(key) % capacity
 		entry: HashEntry
@@ -264,9 +242,9 @@ HashMap: class <K, V> extends BackIterable<V> {
 			if (current key != null) {
 				currentPointer := (buckets data as HashEntry*)[hash]&
 
-				while (currentPointer@ next) {
+				while (currentPointer@ next)
 					currentPointer = currentPointer@ next
-				}
+
 				newEntry := gc_malloc(HashEntry size) as HashEntry*
 
 				newEntry@ key = gc_malloc(K size)
@@ -289,54 +267,29 @@ HashMap: class <K, V> extends BackIterable<V> {
 			}
 			_size += 1
 
-			if ((_size as Float / capacity as Float) > 0.75) {
+			if ((_size as Float / capacity as Float) > 0.75)
 				resize(_size * (_size > 50000 ? 2 : 4))
-			}
 		}
-		return true
+		true
 	}
 
-	/**
-	 * Alias of put
-	 */
 	add: inline func (key: K, value: V) -> Bool {
-		return put(key, value)
+		put(key, value)
 	}
 
-	/**
-	 * Returns the value associated with the key. Returns null if the key
-	 * does not exist.
-	 * @param key The key associated with the value
-	 * @return Object
-	 */
 	get: func (key: K) -> V {
 		entry: HashEntry
-
-		if (getEntry(key, entry&)) {
+		if (getEntry(key, entry&))
 			return entry value as V
-		}
 		return null
 	}
 
-	/**
-	 * @return true if this map is empty, false if not
-	 */
 	empty?: func -> Bool { keys empty?() }
 
-	/**
-	 * Returns whether or not the key exists in the hash table.
-	 * @param key The key to check
-	 * @return Bool
-	 */
 	contains?: func (key: K) -> Bool {
 		getEntry(key, null)
 	}
 
-	/**
-	 * Removes the entry associated with the key
-	 * @param key The key to remove
-	 * @return Bool
-	 */
 	remove: func (key: K) -> Bool {
 		hash : SizeT = hashKey(key) % capacity
 
@@ -473,10 +426,5 @@ HashMapValueIterator: class <K, T> extends BackIterator<T> {
 	}
 }
 
-operator [] <K, V> (map: HashMap<K, V>, key: K) -> V {
-	map get(key)
-}
-
-operator []= <K, V> (map: HashMap<K, V>, key: K, value: V) {
-	map put(key, value)
-}
+operator [] <K, V> (map: HashMap<K, V>, key: K) -> V { map get(key) }
+operator []= <K, V> (map: HashMap<K, V>, key: K, value: V) { map put(key, value) }
