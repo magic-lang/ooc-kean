@@ -58,7 +58,7 @@ Writer: abstract class {
 			buffer setLength( source read(buffer data, cursor, bufferSize) )
 			bytesTransfered += this write(buffer data, buffer size)
 		}
-
+		buffer free()
 		return bytesTransfered
 	}
 
