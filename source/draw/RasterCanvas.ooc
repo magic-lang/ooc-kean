@@ -71,7 +71,13 @@ RasterCanvas: abstract class extends Canvas {
 	_map: func (point: IntPoint2D) -> IntPoint2D {
 		point + this _size / 2
 	}
-	resizeNearestNeighbour: static func <T> (sourceBuffer, resultBuffer: T*, sourceBox, resultBox: IntBox2D, sourceStride, resultStride, bytesPerPixel: Int) {
+	_resizePacked: func <T> (sourceBuffer, resultBuffer: T*, sourceBox, resultBox: IntBox2D, sourceStride, resultStride, bytesPerPixel: Int) {
+		if (this interpolationMode == InterpolationMode Fast)
+			This _resizeNearestNeighbour(sourceBuffer, resultBuffer, sourceBox, resultBox, sourceStride, resultStride, bytesPerPixel)
+		else
+			This _resizeBilinear(sourceBuffer, resultBuffer, sourceBox, resultBox, sourceStride, resultStride, bytesPerPixel)
+	}
+	_resizeNearestNeighbour: static func <T> (sourceBuffer, resultBuffer: T*, sourceBox, resultBox: IntBox2D, sourceStride, resultStride, bytesPerPixel: Int) {
 		(resultWidth, resultHeight) := (resultBox size x, resultBox size y)
 		(sourceWidth, sourceHeight) := (sourceBox size x, sourceBox size y)
 		sourceStride /= bytesPerPixel
@@ -88,7 +94,7 @@ RasterCanvas: abstract class extends Canvas {
 			}
 		}
 	}
-	resizeBilinear: static func <T> (sourceBuffer, resultBuffer: T*, sourceBox, resultBox: IntBox2D, sourceStride, resultStride, bytesPerPixel: Int) {
+	_resizeBilinear: static func <T> (sourceBuffer, resultBuffer: T*, sourceBox, resultBox: IntBox2D, sourceStride, resultStride, bytesPerPixel: Int) {
 		(resultWidth, resultHeight) := (resultBox size x, resultBox size y)
 		(sourceWidth, sourceHeight) := (sourceBox size x, sourceBox size y)
 		(sourceStartColumn, sourceStartRow) := (sourceBox leftTop x, sourceBox leftTop y)
