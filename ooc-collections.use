@@ -9,6 +9,5 @@ Imports: VectorList
 Imports: PointerVector
 Imports: PointerVectorList
 Imports: Queue
-Imports: SynchronizedQueue
 Imports: HashDictionary
 Imports: LinkedList
