@@ -33,11 +33,7 @@ Profiler: class {
 		this _timer stop()
 	}
 	printResults: static func {
-		This _profilers apply(func (profiler: This) {
-			outputString := profiler _name + " Time: " & ("%.3f" formatFloat(profiler _timer _result / 1000.0f)) >> " Average: " & ("%.3f" formatFloat(profiler _timer _average / 1000.0f))
-			Debug print(outputString)
-			outputString free()
-		})
+		This _logResults(func (s: String) { Debug print(s) })
 	}
 	free: override func {
 		for (i in 0 .. This _profilers count)
@@ -49,13 +45,10 @@ Profiler: class {
 		super()
 	}
 	logResults: static func (fileName := "profiling.txt") {
-		fw := FileWriter new(fileName)
-		This _profilers apply(func (profiler: This) {
-			outputString := profiler _name + " Time: " & ("%.3f" formatFloat(profiler _timer _result / 1000.0f)) >> " Average: " & ("%.3f" formatFloat(profiler _timer _average / 1000.0f))
-			fw write(outputString)
-			outputString free()
-		})
-		fw close()
+		fileWriter := FileWriter new(fileName)
+		This _logResults(func (s: String) { fileWriter write(s) })
+		fileWriter close()
+		fileWriter free()
 	}
 	reset: func {
 		this _timer reset()
@@ -66,5 +59,14 @@ Profiler: class {
 			This _profilers remove() free()
 		This _profilers free()
 		This _profilers = null
+	}
+	_logResults: static func (logMethod: Func (String)) {
+		for (i in 0 .. This _profilers count) {
+			profiler := This _profilers[i]
+			outputString := profiler _name + " Time: " & ("%.3f" formatFloat(profiler _timer _result / 1000.0f)) >> " Average: " & ("%.3f" formatFloat(profiler _timer _average / 1000.0f))
+			logMethod(outputString)
+			outputString free()
+		}
+		(logMethod as Closure) free()
 	}
 }
