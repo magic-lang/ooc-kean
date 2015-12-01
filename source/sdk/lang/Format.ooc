@@ -56,7 +56,7 @@ argNext: inline func<T> (va: VarArgsIterator*, T: Class) -> T {
 	return va@ next(T)
 }
 
-m_printn: func <T> (res: Buffer, info: FSInfoStruct@, arg: T) {
+m_printn: func <T> (res: CharBuffer, info: FSInfoStruct@, arg: T) {
 //	"m_printn" println()
 	sign: Char = '\0'
 	tmp: Char[36]
@@ -138,7 +138,7 @@ getCharPtrFromStringType: func <T> (s : T) -> Char* {
 	res : Char* = null
 	match (T) {
 		case String => res = s as String ? s as String toCString() : null
-		case Buffer => res = s as Buffer ? s as Buffer toCString() : null
+		case CharBuffer => res = s as CharBuffer ? s as CharBuffer toCString() : null
 		case CString => res = s as Char*
 		case Pointer => res = s as Char*
 		case =>
@@ -155,7 +155,7 @@ getSizeFromStringType: func<T> (s : T) -> SizeT {
 	res : SizeT = 0
 	match (T) {
 		case String => res = s as String _buffer size
-		case Buffer => res = s as Buffer size
+		case CharBuffer => res = s as CharBuffer size
 		case CString => res = s as CString length()
 		case Pointer => res = s as CString length()
 		case => InvalidTypeException new(T) throw()
@@ -163,7 +163,7 @@ getSizeFromStringType: func<T> (s : T) -> SizeT {
 	return res
 }
 
-parseArg: func (res: Buffer, info: FSInfoStruct*, va: VarArgsIterator*, p: Char*) {
+parseArg: func (res: CharBuffer, info: FSInfoStruct*, va: VarArgsIterator*, p: Char*) {
 	info@ flags |= TF_UNSIGNED
 	info@ base = 10
 	mprintCall := true
@@ -188,7 +188,7 @@ parseArg: func (res: Buffer, info: FSInfoStruct*, va: VarArgsIterator*, p: Char*
 			// reconstruct the original format statement.
 			// TODO let this do the real thing.
 			mprintCall = false
-			tmp := Buffer new()
+			tmp := CharBuffer new()
 			tmp append('%')
 			if (info@ flags & TF_ALTERNATE)
 				tmp append('#')
@@ -267,7 +267,7 @@ parseArg: func (res: Buffer, info: FSInfoStruct*, va: VarArgsIterator*, p: Char*
 	}
 }
 
-parseArgOne: func <T> (res: Buffer, info: FSInfoStruct*, va: T, p: Char*) {
+parseArgOne: func <T> (res: CharBuffer, info: FSInfoStruct*, va: T, p: Char*) {
 	info@ flags |= TF_UNSIGNED
 	info@ base = 10
 	mprintCall := true
@@ -292,7 +292,7 @@ parseArgOne: func <T> (res: Buffer, info: FSInfoStruct*, va: T, p: Char*) {
 			// reconstruct the original format statement.
 			// TODO let this do the real thing.
 			mprintCall = false
-			tmp := Buffer new()
+			tmp := CharBuffer new()
 			tmp append('%')
 			if (info@ flags & TF_ALTERNATE)
 				tmp append('#')
@@ -466,7 +466,7 @@ getEntityInfoOne: inline func <T> (info: FSInfoStruct@, va: T*, start: Char*, en
 format: func ~main <T> (fmt: T, args: ... ) -> T {
 	if (args count == 0)
 		return fmt
-	res := Buffer new(512)
+	res := CharBuffer new(512)
 	va := args iterator()
 	ptr := getCharPtrFromStringType(fmt)
 	end : Pointer = (ptr as SizeT + getSizeFromStringType(fmt) as SizeT) as Pointer
@@ -496,14 +496,14 @@ format: func ~main <T> (fmt: T, args: ... ) -> T {
 	result: T
 	match (T) {
 		case String => result = res toString()
-		case Buffer => result = res
+		case CharBuffer => result = res
 		case => result = res toCString()
 	}
 	result
 }
 
 formatOne: func ~main <T> (fmt: String, arg: T) -> String {
-	res := Buffer new(64)
+	res := CharBuffer new(64)
 	ptr : Char* = fmt toCString()
 	end : Pointer = (ptr as SizeT + fmt _buffer size as SizeT) as Pointer
 	reddit := false
@@ -535,7 +535,7 @@ formatOne: func ~main <T> (fmt: String, arg: T) -> String {
 	return result
 }
 
-extend Buffer {
+extend CharBuffer {
 	format: func (args: ...) {
 		setBuffer(format~main(this, args))
 	}

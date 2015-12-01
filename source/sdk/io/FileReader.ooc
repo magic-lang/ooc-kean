@@ -69,7 +69,7 @@ FileReader: class extends Reader {
 		file read(buffer + offset, count)
 	}
 
-	read: func ~fullBuffer (buffer: Buffer) {
+	read: func ~fullBuffer (buffer: CharBuffer) {
 		count := file read(buffer data, buffer capacity)
 		buffer size = count
 	}

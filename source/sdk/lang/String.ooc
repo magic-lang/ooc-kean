@@ -11,7 +11,7 @@ String: class extends Iterable<Char> {
      * Underlying buffer used to store a string's data.
      * Avoid direct access, as it breaks immutability.
      */
-    _buffer: Buffer
+    _buffer: CharBuffer
 
     /** Size of this string, in bytes */
     size: Int {
@@ -27,7 +27,7 @@ String: class extends Iterable<Char> {
     }
 
     init: func ~withCStrAndLength(s: CString, length: Int) {
-        _buffer = Buffer new(s, length)
+        _buffer = CharBuffer new(s, length)
     }
     free: override func {
       this _buffer free()
@@ -125,7 +125,7 @@ String: class extends Iterable<Char> {
         (_buffer clone()) map(f). toString()
     }
 
-    _bufArrayListToStrArrayList: func (x: ArrayList<Buffer>) -> ArrayList<This> {
+    _bufArrayListToStrArrayList: func (x: ArrayList<CharBuffer>) -> ArrayList<This> {
         result := ArrayList<This> new( x size )
         for (i in 0..x size) result add (x[i] toString())
         result
@@ -258,11 +258,11 @@ String: class extends Iterable<Char> {
     toDouble: func -> Double                       { _buffer toDouble() }
     toLDouble: func -> LDouble                     { _buffer toLDouble() }
 
-    iterator: func -> BufferIterator<Char> {
+    iterator: func -> CharBufferIterator<Char> {
         _buffer iterator()
     }
 
-    forward: func -> BufferIterator<Char> {
+    forward: func -> CharBufferIterator<Char> {
         _buffer forward()
     }
 
@@ -270,7 +270,7 @@ String: class extends Iterable<Char> {
         _buffer backward()
     }
 
-    backIterator: func -> BufferIterator<Char> {
+    backIterator: func -> CharBufferIterator<Char> {
         _buffer backIterator()
     }
 
@@ -280,7 +280,7 @@ String: class extends Iterable<Char> {
         numBytes := vsnprintf(null, 0, _buffer data, list)
         va_end(list)
 
-        copy := Buffer new(numBytes)
+        copy := CharBuffer new(numBytes)
         copy size = numBytes
         va_start(list, this)
         vsnprintf(copy data, numBytes + 1, _buffer data, list)
@@ -427,7 +427,7 @@ operator + (left: String, right: LDouble) -> String {
 
 // constructor to be called from string literal initializers
 makeStringLiteral: func (str: CString, strLen: Int) -> String {
-    String new(Buffer new(str, strLen, true))
+    String new(CharBuffer new(str, strLen, true))
 }
 
 // lame static function to be called by int main, so i dont have to metaprogram it

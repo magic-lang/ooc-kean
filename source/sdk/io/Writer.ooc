@@ -26,7 +26,7 @@ Writer: abstract class {
 	/**
 	 Write a buffer to this stream.
 	*/
-	write: func ~bufImplicitLength (buffer: Buffer) -> SizeT {
+	write: func ~bufImplicitLength (buffer: CharBuffer) -> SizeT {
 		write(buffer data, buffer size)
 	}
 
@@ -50,7 +50,7 @@ Writer: abstract class {
 		:return: total bytes transfered
 	*/
 	write: func ~fromReader (source: Reader, bufferSize: SizeT) -> SizeT {
-		buffer := Buffer new(bufferSize)
+		buffer := CharBuffer new(bufferSize)
 		cursor, bytesTransfered: Int
 		cursor = 0; bytesTransfered = 0
 

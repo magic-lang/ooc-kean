@@ -4,17 +4,17 @@ import io/Writer
  * Implement the Writer interface for Writer
  */
 BufferWriter: class extends Writer {
-	buffer: Buffer
+	buffer: CharBuffer
 	pos: Long
 
 	init: func {
-		buffer = Buffer new(1024)
+		buffer = CharBuffer new(1024)
 		pos = 0
 	}
 
 	init: func ~withBuffer (=buffer)
 
-	buffer: func -> Buffer {
+	buffer: func -> CharBuffer {
 		return buffer
 	}
 

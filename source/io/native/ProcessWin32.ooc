@@ -13,7 +13,7 @@ ProcessWin32: class extends Process {
 	cmdLine: String = ""
 
 	init: func ~win32 (=args) {
-		sb := Buffer new()
+		sb := CharBuffer new()
 		for (arg in args) {
 			//sb append('"'). append(arg). append("\" ")
 			sb append(arg). append(' ')

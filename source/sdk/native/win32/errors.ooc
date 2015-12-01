@@ -15,7 +15,7 @@ version(windows) {
 
 	GetWindowsErrorMessage: func (err: DWORD) -> String {
 		BUF_SIZE := 256
-		buf := Buffer new(BUF_SIZE)
+		buf := CharBuffer new(BUF_SIZE)
 		len: SSizeT = FormatMessage(
 			FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_ARGUMENT_ARRAY,
 			null,

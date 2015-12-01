@@ -208,7 +208,7 @@ IP4Address: class extends IPAddress {
 	}
 
 	toString: func -> String {
-		addrStr := Buffer new(128)
+		addrStr := CharBuffer new(128)
 		Inet ntop(family, ai&, addrStr toCString(), 128)
 		addrStr sizeFromData()
 		return addrStr toString()
@@ -309,7 +309,7 @@ IP6Address: class extends IPAddress {
 	}
 
 	toString: func -> String {
-		addrStr := Buffer new(128)
+		addrStr := CharBuffer new(128)
 		Inet ntop(family, ai&, addrStr toCString(), 128)
 		addrStr sizeFromData()
 		return addrStr toString()

@@ -30,7 +30,7 @@ Pipe: abstract class {
 		buf[howmuch] = '\0'
 		return buf toString()
 	}
-	read: func ~buffer (buf: Buffer) -> Int {
+	read: func ~buffer (buf: CharBuffer) -> Int {
 		bytesRead := read(buf data, buf capacity)
 		if (bytesRead >= 0) {
 			buf setLength(bytesRead)

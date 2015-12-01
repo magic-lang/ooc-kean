@@ -206,7 +206,7 @@ TCPSocket: class extends Socket {
 
 		:return: Number of received bytes
 	*/
-	receive: func (buffer: Buffer, length: SizeT) -> Int {
+	receive: func (buffer: CharBuffer, length: SizeT) -> Int {
 		assert (length <= buffer capacity)
 		ret := receive(buffer data, length, 0)
 		buffer setLength(ret)
@@ -291,7 +291,7 @@ TCPSocketWriter: class extends Writer {
 		va_copy(list2, list)
 		length := vsnprintf(null, 0, fmt toCString(), list2)
 		va_end (list2)
-		buffer := Buffer new (length)
+		buffer := CharBuffer new (length)
 		vsnprintf(buffer data, length + 1, fmt toCString(), list)
 		buffer setLength(length)
 		write(buffer toCString(), length)

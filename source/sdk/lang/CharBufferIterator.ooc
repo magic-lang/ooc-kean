@@ -2,10 +2,10 @@
 /**
  * iterators
  */
-BufferIterator: class <T> extends BackIterator<T> {
+CharBufferIterator: class <T> extends BackIterator<T> {
 
     i := 0
-    str: Buffer
+    str: CharBuffer
 
     init: func ~withStr (=str) {}
 

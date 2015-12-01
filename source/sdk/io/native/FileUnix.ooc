@@ -38,7 +38,7 @@ version (unix || apple) {
 	_getcwd: extern (getcwd) func (buf: CString, size: SizeT) -> CString
 
 	ooc_get_cwd: unmangled func -> String {
-		result := Buffer new(File MAX_PATH_LENGTH)
+		result := CharBuffer new(File MAX_PATH_LENGTH)
 		if (!_getcwd(result data as CString, File MAX_PATH_LENGTH)) {
 			OSException new("error trying to getcwd! ") throw()
 		}

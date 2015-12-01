@@ -52,14 +52,14 @@ System: class {
 		version (windows) {
 			bufSize: UInt32 = 0
 			GetComputerNameEx(COMPUTER_NAME_FORMAT DNS_HOSTNAME, null, bufSize&)
-			hostname := Buffer new(bufSize)
+			hostname := CharBuffer new(bufSize)
 			GetComputerNameEx(COMPUTER_NAME_FORMAT DNS_HOSTNAME, hostname data as Pointer, bufSize&)
 			hostname sizeFromData()
 			result = hostname toString()
 		}
 		version (linux || apple) {
 			BUF_SIZE = 255 : SizeT
-			hostname := Buffer new(BUF_SIZE + 1) // we alloc one byte more so we're always zero terminated
+			hostname := CharBuffer new(BUF_SIZE + 1) // we alloc one byte more so we're always zero terminated
 			// according to docs, if the hostname is longer than the buffer,
 			// the result will be truncated and zero termination is not guaranteed
 			result := gethostname(hostname data as Pointer, BUF_SIZE)

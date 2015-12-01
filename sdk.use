@@ -1,8 +1,8 @@
 Name: sdk
 Description: Lightweight ooc standard library replacement.
 SourcePath: source/sdk
-Imports: lang/Buffer
-Imports: lang/BufferIterator
+Imports: lang/CharBuffer
+Imports: lang/CharBufferIterator
 Imports: lang/Character
 Imports: lang/Exception
 Imports: lang/Format
