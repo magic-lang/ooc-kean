@@ -6,11 +6,11 @@ else { include alloca }
 // to the expense of some performance. Don't use malloc instead - existing ooc code
 // is written assuming that gc_malloc zeroes the memory.
 gc_malloc: func (size: SizeT) -> Pointer { gc_calloc(1, size) }
-gc_malloc_atomic: extern(malloc) func (size: SizeT) -> Pointer
-gc_strdup: extern(strdup) func (str: CString) -> CString
-gc_realloc: extern(realloc) func (ptr: Pointer, size: SizeT) -> Pointer
-gc_calloc: extern(calloc) func (nmemb: SizeT, size: SizeT) -> Pointer
-gc_free: extern(free) func (ptr: Pointer)
+gc_malloc_atomic: extern (malloc) func (size: SizeT) -> Pointer
+gc_strdup: extern (strdup) func (str: CString) -> CString
+gc_realloc: extern (realloc) func (ptr: Pointer, size: SizeT) -> Pointer
+gc_calloc: extern (calloc) func (nmemb, size: SizeT) -> Pointer
+gc_free: extern (free) func (ptr: Pointer)
 
 //TODO Remove the above declarations once they're no longer used - only use the following:
 malloc: extern func (SizeT) -> Pointer
