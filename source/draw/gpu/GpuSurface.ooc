@@ -62,9 +62,16 @@ GpuSurface: abstract class extends Canvas {
 		translation := this _toLocal * FloatTransform3D createTranslation(box leftTop x, box leftTop y, this focalLength) * this _toLocal
 		translation * toReference * FloatTransform3D createScaling(box size x / 2.0f, box size y / 2.0f, 1.0f)
 	}
-	_createTextureTransform: static func (imageSize: IntVector2D, box: IntBox2D) -> FloatTransform3D {
+	_createTextureTransform: static func (imageSize: IntVector2D, box: IntBox2D, flipVector: FloatVector3D) -> FloatTransform3D {
 		scaling := FloatTransform3D createScaling(box size x as Float / imageSize x, box size y as Float / imageSize y, 1.0f)
 		translation := FloatTransform3D createTranslation(box leftTop x as Float / imageSize x, box leftTop y as Float / imageSize y, 0.0f)
+		if (!(flipVector x + 1.0f)) {
+			translation a = -1.0f
+			translation m = 1.0f
+		} else if (!(flipVector y + 1.0f)) {
+			translation f = -1.0f
+			translation n = 1.0f
+		}
 		translation * scaling
 	}
 	_getDefaultMap: virtual func (image: Image) -> GpuMap { this _defaultMap }
