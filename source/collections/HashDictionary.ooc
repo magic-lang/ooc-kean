@@ -68,7 +68,4 @@ HashDictionary: class {
 	getKeys: func -> ArrayList<String> {
 		this _hashBag getKeys()
 	}
-	getPath: func <T> (path: String, T: Class) -> T {
-		this _hashBag getPath(path, T)
-	}
 }
