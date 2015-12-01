@@ -76,6 +76,15 @@ Void: cover from void
 
 Pointer: cover from Void* {
 	toString: func -> String { "%p" format(this) }
+	free: func -> Bool {
+		result := this != null
+		if (result)
+			free(this)
+		result
+	}
+	allocate: static func (size: Int) -> This {
+		malloc(size)
+	}
 }
 
 Bool: cover from bool {
