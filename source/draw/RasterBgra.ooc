@@ -127,7 +127,8 @@ RasterBgra: class extends RasterPacked {
 		x, y, imageComponents: Int
 		requiredComponents := 4
 		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
-		This new(ByteBuffer new(data as UInt8*, x * y * requiredComponents), IntVector2D new(x, y))
+		buffer := ByteBuffer new(data as UInt8*, x * y * requiredComponents, true)
+		This new(buffer, IntVector2D new(x, y))
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
