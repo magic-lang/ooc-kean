@@ -54,7 +54,7 @@ TextBuilder: class {
 	}
 	append: func (other: This) {
 		for (i in 0 .. other _data count)
-			this append(other _data[i] copy())
+			this append(other _data[i] take() copy())
 	}
 	prepend: func ~char (c: Char) { this prepend(Text new(c)) }
 	prepend: func ~cstring (value: CString, length: Int) { this prepend(Text new(value, length)) }
