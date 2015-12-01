@@ -74,7 +74,7 @@ HashDictionary: class {
 			this put(key, cellValue)
 		}
 	}
-	size: func -> Int { 
+	size: func -> Int {
 		this _hashMap size
 	}
 	remove: func (key: String) -> Bool {
