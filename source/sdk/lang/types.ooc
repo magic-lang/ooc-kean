@@ -1,5 +1,6 @@
 include stddef, stdlib, stdio, ctype, stdbool
 include ./Array
+import Owner
 
 Object: abstract class {
 	class: Class
@@ -84,12 +85,30 @@ Bool: cover from bool {
 Closure: cover {
 	thunk: Pointer
 	context: Pointer
-	free: func {
-		if (this context != null) {
+	_owner: Owner
+	owner ::= this _owner
+	isOwned ::= this _owner != Owner Unknown && this _owner != Owner Static && this _owner != Owner Stack && this context != null
+	take: func -> This { // call by value -> modifies copy of cover
+		if (this _owner == Owner Receiver && this context != null)
+			this _owner = Owner Sender
+		this
+	}
+	give: func -> This { // call by value -> modifies copy of cover
+		if (this _owner == Owner Sender && this context != null)
+			this _owner = Owner Receiver
+		this
+	}
+	free: func@ ~withCriteria (criteria: Owner) -> Bool {
+		this _owner == criteria && this free()
+	}
+	free: func@ -> Bool {
+		result := this context != null
+		if (result) {
 			gc_free(this context)
 			this context = null
 			this thunk = null
 		}
+		result
 	}
 }
 

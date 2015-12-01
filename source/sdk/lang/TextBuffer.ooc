@@ -15,7 +15,8 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-base
+import Owner
+import OwnedBuffer
 
 TextBuffer: cover {
 	_backend: OwnedBuffer
