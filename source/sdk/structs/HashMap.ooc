@@ -156,7 +156,7 @@ HashMap: class <K, V> extends BackIterable<V> {
 		this keys free()
 		super()
 	}
-
+	
 	getEntry: func (key: K, result: HashEntry*) -> Bool {
 		hash : SizeT = hashKey(key) % capacity
 		entry := buckets[hash]

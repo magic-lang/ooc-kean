@@ -1,71 +1,89 @@
-import structs/[HashBag, HashMap, ArrayList]
+import structs/[HashMap, ArrayList]
 
 HashDictionary: class {
-	_hashBag: HashBag
-	count ::= this _hashBag size()
-	empty ::= this _hashBag empty?()
+	_hashMap: HashMap<String, Cell<Pointer>>
+	count ::= this _hashMap size
+	empty ::= this _hashMap empty?()
 	init: func { init ~withCapacity(10) }
-	init: func ~withCapacity (capacity: Int) {
-		this _hashBag = HashBag new(capacity)
+	init: func ~withCapacity (capacity: SizeT) {
+		this _hashMap = HashMap<String, Cell<Pointer>> new(capacity)
 	}
 	init: func ~copy (other: This) {
-		hashMapClone := other _hashBag myMap clone()
-		this _hashBag = HashBag new(other _hashBag myMap capacity)
-		this _hashBag myMap = hashMapClone
+		hashMapClone := other _hashMap clone()
+		this _hashMap = HashMap<String, Cell<Pointer>> new(other _hashMap capacity)
+		this _hashMap = hashMapClone
 	}
 	free: override func {
-		this _hashBag free()
+		iterator := this _hashMap backIterator()
+		while (iterator hasNext?())
+			iterator next() free()
+		iterator free()
+		this _hashMap free()
 		super()
 	}
 	clone: func -> This {
 		result := This new()
-		hashMapClone := this _hashBag myMap clone()
-		result _hashBag myMap = hashMapClone
+		hashMapClone := this _hashMap clone()
+		result _hashMap = hashMapClone
 		result
 	}
 	merge: func (other: This) -> This {
 		result := this clone()
-		result _hashBag myMap merge!(other _hashBag myMap)
+		result _hashMap merge!(other _hashMap)
 		result
 	}
 	get: func <T> (key: String, defaultValue: T) -> T {
 		result := defaultValue
-		if (_hashBag contains?(key)) {
-			storedType := this _hashBag getClass(key)
-			entryValue := this _hashBag getEntry(key, storedType) value
+		if (_hashMap contains?(key)) {
+			storedType := this getClass(key)
+			entryValue := this getEntry(key, storedType) value
 			if (storedType inheritsFrom?(Cell)) {
 				entryValueCell := (entryValue as Cell<T>*)@
 				if (T inheritsFrom?(entryValueCell T))
 					result = entryValueCell get()
 			}
 			else if (T inheritsFrom?(storedType))
-				result = this _hashBag getEntry(key, T) value as T
+				result = this getEntry(key, T) value as T
 		}
 		result
 	}
 	getClass: func (key: String) -> Class {
-		this _hashBag getClass(key)
+		this _hashMap get(key) as Cell T
 	}
 	getEntry: func <V> (key: String, V: Class) -> HashEntry<String, Pointer> {
-		this _hashBag getEntry(key, V)
-	}
-	add: func <T> (key: String, value: T) -> Bool {
-		if (_hashBag contains?(key))
-			this remove(key)
-		if (T inheritsFrom?(Object))
-			this _hashBag put(key, value)
-		else {
-			cellValue := Cell<T> new(value)
-			this _hashBag put(key, cellValue)
+		entry: HashEntry
+		if (this _hashMap getEntry(key, entry&)) {
+			cell := (entry value as Cell<V>*)@ as Cell<V>
+			return HashEntry<String, V> new(key, cell val&)
+		} else {
+			none := None new()
+			return HashEntry<String, V> new(key, none&)
 		}
 	}
+	put: func <T> (key: String, value: T) -> Bool {
+		tmp := Cell<T> new(value)
+		this _hashMap put(key, tmp)
+	}
+	add: func <T> (key: String, value: T) -> Bool {
+		if (_hashMap contains?(key))
+			this remove(key)
+		if (T inheritsFrom?(Object))
+			this put(key, value)
+		else {
+			cellValue := Cell<T> new(value)
+			this put(key, cellValue)
+		}
+	}
+	size: func -> Int {
+		this _hashMap size
+	}
 	remove: func (key: String) -> Bool {
-		this _hashBag remove(key)
+		this _hashMap remove(key)
 	}
 	contains: func (key: String) -> Bool {
-		this _hashBag contains?(key)
+		this _hashMap contains?(key)
 	}
 	getKeys: func -> ArrayList<String> {
-		this _hashBag getKeys()
+		this _hashMap getKeys()
 	}
 }
