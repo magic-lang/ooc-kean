@@ -25,7 +25,7 @@ import Image, FloatImage
 import Color
 import Canvas, RasterCanvas
 
-MonochromeRasterCanvas: class extends PackedRasterCanvas {
+RasterMonochromeCanvas: class extends RasterPackedCanvas {
 	target ::= this _target as RasterMonochrome
 	init: func (image: RasterMonochrome) { super(image) }
 	_drawPoint: override func (x, y: Int) {
@@ -68,8 +68,8 @@ RasterMonochrome: class extends RasterPacked {
 		else {
 			result = This new(size)
 			match (method) {
-				case InterpolationMode Smooth => PackedRasterCanvas _resizeBilinear(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, IntBox2D new(this size), IntBox2D new(result size), this stride, result stride, this bytesPerPixel)
-				case => PackedRasterCanvas _resizeNearestNeighbour(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, IntBox2D new(this size), IntBox2D new(result size), this stride, result stride, this bytesPerPixel)
+				case InterpolationMode Smooth => RasterPackedCanvas _resizeBilinear(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, IntBox2D new(this size), IntBox2D new(result size), this stride, result stride, this bytesPerPixel)
+				case => RasterPackedCanvas _resizeNearestNeighbour(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, IntBox2D new(this size), IntBox2D new(result size), this stride, result stride, this bytesPerPixel)
 			}
 		}
 		result
@@ -228,7 +228,7 @@ RasterMonochrome: class extends RasterPacked {
 		for (row in 0 .. this size y)
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
-	_createCanvas: override func -> Canvas { MonochromeRasterCanvas new(this) }
+	_createCanvas: override func -> Canvas { RasterMonochromeCanvas new(this) }
 	kean_draw_rasterMonochrome_new: static unmangled func (width, height, stride: Int, data: Void*) -> This {
 		result := This new(IntVector2D new(width, height), stride)
 		memcpy(result buffer pointer, data, height * stride)

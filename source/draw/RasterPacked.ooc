@@ -27,7 +27,7 @@ import RasterMonochrome
 import Image
 import Canvas, RasterCanvas
 
-PackedRasterCanvas: abstract class extends RasterCanvas {
+RasterPackedCanvas: abstract class extends RasterCanvas {
 	target ::= this _target as RasterPacked
 	init: func (image: RasterPacked) { super(image) }
 	_resizePacked: func <T> (sourceBuffer: T*, source: RasterPacked, sourceBox, resultBox: IntBox2D) {
