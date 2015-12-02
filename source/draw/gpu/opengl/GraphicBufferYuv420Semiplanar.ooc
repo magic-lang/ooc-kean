@@ -36,6 +36,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	_rgba: EGLBgra = null
 	_bin := static VectorList<EGLBgra> new()
 	_mutex := static Mutex new()
+	_binSize: static Int = 20
 	init: func ~fromBuffer (=_buffer, size: IntVector2D, =_stride, =_uvOffset) {
 		pointer := _buffer lock()
 		_buffer unlock()
@@ -43,11 +44,8 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		super(ByteBuffer new(pointer, length), size, _stride, _uvOffset)
 	}
 	free: override func {
-		if (this _rgba != null) {
-			This _mutex lock()
-			This _bin add(this _rgba)
-			This _mutex unlock()
-		}
+		if (this _rgba != null)
+			This _recycle(this _rgba)
 		this _buffer free()
 		super()
 	}
@@ -64,6 +62,13 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		}
 		this _rgba coordinateSystem = this coordinateSystem
 		this _rgba
+	}
+	_recycle: static func (image: EGLBgra) {
+		This _mutex lock()
+		This _bin add(image)
+		if (This _bin count > This _binSize)
+			This _bin remove(0) free()
+		This _mutex unlock()
 	}
 	_search: static func (buffer: GraphicBuffer) -> EGLBgra {
 		This _mutex lock()
