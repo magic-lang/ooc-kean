@@ -18,7 +18,7 @@ use ooc-geometry
 use ooc-draw
 use ooc-draw-gpu
 use ooc-collections
-import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, OpenGLMesh, OpenGLCanvas, RecycleBin
+import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, OpenGLMesh, OpenGLCanvas, _RecycleBin
 import OpenGLMap
 import backend/[GLContext, GLRenderer]
 
@@ -36,7 +36,7 @@ OpenGLContext: class extends GpuContext {
 	meshShader ::= this _meshShader
 	_renderer: GLRenderer
 	defaultMap: GpuMap { get { this _transformTextureMap } }
-	_recycleBin := RecycleBin new()
+	_recycleBin := _RecycleBin new()
 
 	init: func ~backend (=_backend) {
 		super()
