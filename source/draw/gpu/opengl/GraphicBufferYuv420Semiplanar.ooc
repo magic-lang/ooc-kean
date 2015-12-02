@@ -69,9 +69,8 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		This _mutex lock()
 		result: EGLBgra = null
 		for (i in 0 .. This _bin count) {
-			image := This _bin[i]
-			if (image buffer _handle == buffer _handle) {
-				result = image
+			if (This _bin[i] buffer _handle == buffer _handle) {
+				result = This _bin remove(i)
 				break
 			}
 		}
