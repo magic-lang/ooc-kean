@@ -52,8 +52,7 @@ OpenGLSurface: abstract class extends GpuSurface {
 		(f as Closure) free()
 	}
 	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
-		flipVector := FloatVector2D new(image transform a as Float, image transform e as Float)
-		map textureTransform = This _createTextureTransform(image size, source, flipVector)
+		map textureTransform = This _createTextureTransform(image size, source)
 		this draw(destination, map)
 	}
 	drawLines: override func (pointList: VectorList<FloatPoint2D>) {
