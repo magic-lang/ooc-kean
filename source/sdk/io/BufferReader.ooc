@@ -4,11 +4,11 @@ import io/Reader
  * Implement the Reader interface for Buffer.
  */
 BufferReader: class extends Reader {
-	buffer: Buffer
+	buffer: CharBuffer
 
 	init: func ~withBuffer (=buffer)
 
-	buffer: func -> Buffer {
+	buffer: func -> CharBuffer {
 		return buffer
 	}
 

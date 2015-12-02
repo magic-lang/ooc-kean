@@ -6,7 +6,7 @@ import structs/ArrayList
  * When building a string incrementally, with multiple appends, it's best
  * to use Buffer instead of String, to avoid unnecessary allocation
  */
-Buffer: class extends Iterable<Char> {
+CharBuffer: class extends Iterable<Char> {
 
     /** size of the buffer, in bytes, e.g. how much bytes do we store currently */
     size: Int
@@ -619,11 +619,11 @@ Buffer: class extends Iterable<Char> {
     }
 
 
-    iterator: func -> BufferIterator<Char> {
-        BufferIterator<Char> new(this)
+    iterator: func -> CharBufferIterator<Char> {
+        CharBufferIterator<Char> new(this)
     }
 
-    forward: func -> BufferIterator<Char> {
+    forward: func -> CharBufferIterator<Char> {
         iterator()
     }
 
@@ -631,8 +631,8 @@ Buffer: class extends Iterable<Char> {
         backIterator() reversed()
     }
 
-    backIterator: func -> BufferIterator<Char> {
-        iter := BufferIterator<Char> new(this)
+    backIterator: func -> CharBufferIterator<Char> {
+        iter := CharBufferIterator<Char> new(this)
         iter i = length()
         return iter
     }
@@ -736,37 +736,37 @@ NegativeLengthException: class extends Exception {
 
 /* Comparisons */
 
-operator == (buff1, buff2: Buffer) -> Bool {
+operator == (buff1, buff2: CharBuffer) -> Bool {
     buff1 equals?(buff2)
 }
 
-operator != (buff1, buff2: Buffer) -> Bool {
+operator != (buff1, buff2: CharBuffer) -> Bool {
     !buff1 equals?(buff2)
 }
 
 /* Access and modification */
 
-operator [] (buffer: Buffer, index: Int) -> Char {
+operator [] (buffer: CharBuffer, index: Int) -> Char {
     buffer get(index)
 }
 
-operator []= (buffer: Buffer, index: Int, value: Char) {
+operator []= (buffer: CharBuffer, index: Int, value: Char) {
     buffer set(index, value)
 }
 
-operator [] (buffer: Buffer, range: Range) -> Buffer {
+operator [] (buffer: CharBuffer, range: Range) -> CharBuffer {
     b := buffer clone()
     b substring(range min, range max)
     b
 }
 
-operator * (buffer: Buffer, count: Int) -> Buffer {
+operator * (buffer: CharBuffer, count: Int) -> CharBuffer {
     b := buffer clone(buffer size * count)
     b times(count)
     b
 }
 
-operator + (left, right: Buffer) -> Buffer {
+operator + (left, right: CharBuffer) -> CharBuffer {
     b := left clone(left size + right size)
     b append(right)
     b

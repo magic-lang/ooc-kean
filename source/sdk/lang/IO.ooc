@@ -191,7 +191,7 @@ FStream: cover from FILE* {
 
     readLine: func (chunk: Int) -> String {
         length := 1023
-        buf := Buffer new (length)
+        buf := CharBuffer new (length)
 
         // while it's not '\n' it means not all the line has been read
         while (true) {

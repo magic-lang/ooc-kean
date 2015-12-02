@@ -68,7 +68,7 @@ BacktraceHandler: class {
 			version (linux || apple) {
 				lines = backtrace_symbols(trace buffer, trace length)
 				// nothing to format here, just a dumb platform-specific stack trace :/
-				buffer := Buffer new()
+				buffer := CharBuffer new()
 				for (i in 0 .. trace length)
 					buffer append(lines[i]). append('\n')
 				return buffer toString()
@@ -130,7 +130,7 @@ BacktraceHandler: class {
 		}
 	}
 	_format: func (lines: CString*, length: Int) -> String {
-		buffer := Buffer new()
+		buffer := CharBuffer new()
 
 		if (raw?) {
 			buffer append("[raw backtrace]\n")
@@ -203,7 +203,7 @@ TraceElement: class {
 
 	pad: static func (s: String, length: Int) -> String {
 		if (s size < length) {
-			b := Buffer new()
+			b := CharBuffer new()
 			b append(s)
 			for (i in (s size) .. length)
 				b append(' ')

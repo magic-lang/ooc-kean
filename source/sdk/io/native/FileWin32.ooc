@@ -58,7 +58,7 @@ version(windows) {
 	}
 
 	ooc_get_cwd: unmangled func -> String {
-		ret := Buffer new(File MAX_PATH_LENGTH + 1)
+		ret := CharBuffer new(File MAX_PATH_LENGTH + 1)
 		bytesWritten := GetCurrentDirectory(File MAX_PATH_LENGTH, ret data)
 		if (bytesWritten == 0) OSException new("Failed to get current directory!") throw()
 		ret setLength(bytesWritten)
@@ -223,7 +223,7 @@ version(windows) {
 		 * The absolute path, e.g. "my/dir" => "C:\current\directory\my\dir"
 		 */
 		getAbsolutePath: func -> String {
-			fullPath := Buffer new(File MAX_PATH_LENGTH)
+			fullPath := CharBuffer new(File MAX_PATH_LENGTH)
 			fullPath setLength(GetFullPathName(path toCString(), File MAX_PATH_LENGTH, fullPath data, null))
 			_normalizePath(fullPath toString())
 		}
@@ -237,7 +237,7 @@ version(windows) {
 			if (!abs exists?()) {
 				Exception new(class, "Called File getLongPath on non-existing file %s" format(abs path)) throw()
 			}
-			longPath := Buffer new(File MAX_PATH_LENGTH)
+			longPath := CharBuffer new(File MAX_PATH_LENGTH)
 			longPath setLength(GetLongPathName(abs path toCString(), longPath data, File MAX_PATH_LENGTH))
 			longPath toString()
 		}

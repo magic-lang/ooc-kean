@@ -261,7 +261,7 @@ List: abstract class <T> extends BackIterable<T> {
         result := 0
         for(item in this) {
             if(T==String) result += item as String _buffer size
-            else if (T==Buffer) result += item as Buffer size
+            else if (T==CharBuffer) result += item as CharBuffer size
             else if (T==Char) result += 1
             else result += T size
         }
@@ -271,7 +271,7 @@ List: abstract class <T> extends BackIterable<T> {
     join: func ~stringDefault -> String { join("") }
 
     join: func ~string (str: String) -> String {
-        result := Buffer new(itemsSizeInBytes())
+        result := CharBuffer new(itemsSizeInBytes())
         first := true
         for(item in this) {
             if(first)
@@ -281,7 +281,7 @@ List: abstract class <T> extends BackIterable<T> {
 
             match T {
                 case String => result append((item as String) _buffer)
-                case Buffer => result append(item as Buffer)
+                case CharBuffer => result append(item as CharBuffer)
                 case Char   => result append(item as Char)
                 case        => Exception new("You cannot use `List join` with %s instances." format(this T name toCString())) throw()
             }

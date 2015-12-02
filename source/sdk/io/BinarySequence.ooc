@@ -6,7 +6,7 @@ Endianness: enum {
 }
 
 formatOctets: func (data: Octet*, size: SizeT) -> String {
-	buf := Buffer new(size)
+	buf := CharBuffer new(size)
 	for (i in 0 .. size) {
 		buf append("%.2x " format(data[i]))
 	}
@@ -151,7 +151,7 @@ BinarySequenceReader: class {
 
 	/** pull it, null-terminated */
 	cString: func -> String {
-		buffer := Buffer new()
+		buffer := CharBuffer new()
 		while (true) {
 			value := u8()
 			if (value == 0)
@@ -168,7 +168,7 @@ BinarySequenceReader: class {
 			case 4 => u32()
 			//case => Exception new(This, "Unknown length bytes length: %d" format(lengthBytes)) throw()
 		}
-		s := Buffer new()
+		s := CharBuffer new()
 		for (i in 0 .. length) {
 			s append(u8() as Char)
 		}

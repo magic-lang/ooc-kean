@@ -45,7 +45,7 @@ TextBuffer: cover {
 	init: func@ ~fromData (data: Char*, count: Int, owner := Owner Unknown) {
 		this init(OwnedBuffer new(data as UInt8*, count, owner))
 	}
-	init: func@ ~fromBuffer (buffer: Buffer) { this init(buffer data, buffer size) }
+	init: func@ ~fromBuffer (buffer: CharBuffer) { this init(buffer data, buffer size) }
 	init: func@ (=_backend)
 	take: func -> This { // call by value -> modifies copy of cover
 		this _backend = this _backend take()
@@ -76,7 +76,7 @@ TextBuffer: cover {
 	copyTo: func (destination: This) -> Int { this _backend copyTo(destination _backend) }
 	toString: func -> String {
 		t := this take()
-		result := Buffer new()
+		result := CharBuffer new()
 		result append(t raw, t count)
 		this free(Owner Receiver)
 		String new(result)

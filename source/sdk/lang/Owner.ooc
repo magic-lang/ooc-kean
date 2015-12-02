@@ -21,4 +21,8 @@ Owner: enum {
 	Static
 	Sender
 	Receiver
+	
+	isOwned: func -> Bool {
+		this == Owner Sender || this == Owner Receiver
+	}
 }

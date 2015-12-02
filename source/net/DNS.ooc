@@ -47,7 +47,7 @@ DNS: class {
 		return reverse(SocketAddress new(ip, 0))
 	}
 	reverse: static func ~withSockAddr (sockaddr: SocketAddress) -> String {
-		hostname := Buffer new(1024)
+		hostname := CharBuffer new(1024)
 		if ((rv := getnameinfo(sockaddr addr(), sockaddr length(), hostname toCString(), 1024, null, 0, 0)) != 0) {
 			DNSError new(gai_strerror(rv as Int) as CString toString()) throw()
 		}

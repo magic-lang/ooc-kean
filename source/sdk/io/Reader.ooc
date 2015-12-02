@@ -20,7 +20,7 @@ Reader: abstract class {
 	/**
 	 * Read a bufferfull at most, and return the number of bytes read
 	 */
-	read: func ~buffer (buffer: Buffer) -> SizeT {
+	read: func ~buffer (buffer: CharBuffer) -> SizeT {
 		count := read(buffer data, 0, buffer capacity)
 		buffer size = count
 		count
@@ -30,8 +30,8 @@ Reader: abstract class {
 	 * Read till the end of stream, return result as a string.
 	 */
 	readAll: func -> String {
-		in := Buffer new(4096)
-		out := Buffer new(4096)
+		in := CharBuffer new(4096)
+		out := CharBuffer new(4096)
 		while (hasNext?()) {
 			readBytes := read(in)
 			out append(in, readBytes)
@@ -47,7 +47,7 @@ Reader: abstract class {
 	   rewinded once `end` has been read.
 	 */
 	readUntil: func (end: Char) -> String {
-		sb := Buffer new(1024) // let's be pragmatic
+		sb := CharBuffer new(1024) // let's be pragmatic
 		while (hasNext?()) {
 			c := read()
 			// FIXME this behaviour would lead to errors when reading a binary file
@@ -62,7 +62,7 @@ Reader: abstract class {
 	}
 
 	readWhile: func ~filter (filter: Func(Char) -> Bool) -> String {
-		sb := Buffer new(1024) // let's be pragmatic
+		sb := CharBuffer new(1024) // let's be pragmatic
 		while (hasNext?()) {
 			c := read()
 			if (!filter(c)) {

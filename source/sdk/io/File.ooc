@@ -586,7 +586,7 @@ File: abstract class {
 	join: static func (args: ...) -> String {
 		first := true
 
-		result := Buffer new()
+		result := CharBuffer new()
 
 		args each(|arg|
 			path := match arg {
