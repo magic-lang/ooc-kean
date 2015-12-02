@@ -70,8 +70,8 @@ GraphicBuffer: class {
 		this _ownsMemory = true
 	}
 	init: func ~existing (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format, =_ownsMemory)
-	init: func ~fromHandle (handle: Pointer, =_size, =_pixelStride, =_format, usage: GraphicBufferUsage, =_ownsMemory) {
-		This _create(_size x, _size y, _format as Int, usage as Int, _pixelStride, handle, false, this _backend&, this _nativeBuffer&)
+	init: func ~fromHandle (=_handle, =_size, =_pixelStride, =_format, usage: GraphicBufferUsage, =_ownsMemory) {
+		This _create(_size x, _size y, _format as Int, usage as Int, _pixelStride, _handle, false, this _backend&, this _nativeBuffer&)
 	}
 	free: override func {
 		if (this _ownsMemory)
