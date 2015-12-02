@@ -80,7 +80,7 @@ _popStackFrame: func -> StackFrame { exceptionContext popStackFrame() }
 _getException: func -> Exception { exceptionContext exception }
 
 version(windows) {
-	import native/win32/[types, errors]
+	import os/win32/[types, errors]
 
 	getOSErrorCode: func -> Int {
 		GetLastError()

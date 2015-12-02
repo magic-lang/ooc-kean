@@ -1,5 +1,5 @@
 import ../Mutex
-import native/win32/[types, errors]
+import os/win32/[types, errors]
 
 version(windows) {
 	include windows

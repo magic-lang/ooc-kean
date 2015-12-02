@@ -1,5 +1,5 @@
 version(windows) {
-	import native/win32/types
+	import os/win32/types
 
 	include windows
 

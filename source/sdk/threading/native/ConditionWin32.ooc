@@ -1,6 +1,6 @@
 version(windows) {
 	import ../[WaitCondition, Mutex, Thread]
-	import native/win32/[types, errors]
+	import os/win32/[types, errors]
 	import MutexWin32
 	import structs/ArrayList
 
