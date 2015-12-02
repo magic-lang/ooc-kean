@@ -20,6 +20,7 @@ use ooc-geometry
 use ooc-draw
 use ooc-draw-gpu
 use ooc-collections
+import structs/Vector
 import backend/GLShaderProgram
 import OpenGLContext, OpenGLPacked, OpenGLVolumeMonochrome
 

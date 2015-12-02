@@ -3,7 +3,6 @@ Description: Collections Library
 SourcePath: source/collections
 Requires: ooc-unit
 Requires: ooc-base
-Imports: Vector
 Imports: Vector2D
 Imports: VectorList
 Imports: PointerVector

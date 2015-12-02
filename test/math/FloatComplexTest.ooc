@@ -22,6 +22,7 @@ import math
 import structs/ArrayList
 import FloatComplex
 import lang/IO
+import structs/Vector
 
 FloatComplexTest: class extends Fixture {
 	complexNumber0 := FloatComplex new (2, 1)

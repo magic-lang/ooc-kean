@@ -18,6 +18,7 @@
 use ooc-collections
 import math
 use ooc-math
+import structs/Vector
 import FloatPoint2D
 
 FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
