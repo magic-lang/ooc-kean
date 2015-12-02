@@ -19,8 +19,10 @@ import math
 use ooc-draw
 use ooc-geometry
 use ooc-base
+use ooc-collections
 use ooc-draw-gpu
 import GraphicBuffer, AndroidContext, EGLBgra
+import threading/Mutex
 
 version(!gpuOff) {
 GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
@@ -31,6 +33,9 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	_uvOffset: Int
 	uvOffset ::= this _uvOffset
 	uvPadding ::= (this _uvOffset - this _stride * this _size y)
+	_rgba: EGLBgra = null
+	_bin := static VectorList<EGLBgra> new()
+	_mutex := static Mutex new()
 	init: func ~fromBuffer (=_buffer, size: IntVector2D, =_stride, =_uvOffset) {
 		pointer := _buffer lock()
 		_buffer unlock()
@@ -38,21 +43,47 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		super(ByteBuffer new(pointer, length), size, _stride, _uvOffset)
 	}
 	free: override func {
+		if (this _rgba != null) {
+			This _mutex lock()
+			This _bin add(this _rgba)
+			This _mutex unlock()
+		}
 		this _buffer free()
 		super()
 	}
 	toRgba: func (context: AndroidContext) -> GpuImage {
-		padding := this _uvOffset - this _stride * this _size y
-		extraRows := Int align(padding, this _stride) / this _stride
-		height := this _size y + this _size y / 2 + extraRows
-		width := this _stride / 4
-		rgbaBuffer := GraphicBuffer new(this buffer handle, IntVector2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget, false)
-		result := EGLBgra new(rgbaBuffer, context)
-		result coordinateSystem = this coordinateSystem
+		if (this _rgba == null)
+			this _rgba = This _search(this _buffer)
+		if (this _rgba == null) {
+			padding := this _uvOffset - this _stride * this _size y
+			extraRows := Int align(padding, this _stride) / this _stride
+			height := this _size y + this _size y / 2 + extraRows
+			width := this _stride / 4
+			rgbaBuffer := GraphicBuffer new(this buffer handle, IntVector2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget, false)
+			this _rgba = EGLBgra new(rgbaBuffer, context)
+		}
+		this _rgba coordinateSystem = this coordinateSystem
+		this _rgba
+	}
+	_search: static func (buffer: GraphicBuffer) -> EGLBgra {
+		This _mutex lock()
+		result: EGLBgra = null
+		for (i in 0 .. This _bin count) {
+			image := This _bin[i]
+			if (image buffer _handle == buffer _handle) {
+				result = image
+				break
+			}
+		}
+		This _mutex unlock()
 		result
 	}
-	kean_draw_graphicBufferYuv420Semiplanar_new: unmangled static func (buffer: GraphicBuffer, size: IntVector2D, stride, uvOffset: Int) -> This {
-		This new(buffer, size, stride, uvOffset)
+	clean: static func {
+		This _mutex lock()
+		for (i in 0 .. This _bin count)
+			This _bin remove(i) free()
+		This _mutex unlock()
 	}
+	kean_draw_graphicBufferYuv420Semiplanar_new: unmangled static func (buffer: GraphicBuffer, size: IntVector2D, stride, uvOffset: Int) -> This { This new(buffer, size, stride, uvOffset) }
 }
 }

@@ -45,7 +45,6 @@ AndroidContext: class extends OpenGLContext {
 				graphicBufferImage := rasterImage as GraphicBufferYuv420Semiplanar
 				rgba := graphicBufferImage toRgba(this)
 				result = this unpackBgraToYuv420Semiplanar(rgba, rasterImage size, graphicBufferImage uvPadding % graphicBufferImage stride)
-				rgba free()
 			}
 			else
 				result = super(rasterImage)
