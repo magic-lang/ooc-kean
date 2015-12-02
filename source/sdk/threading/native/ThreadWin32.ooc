@@ -1,5 +1,5 @@
 import ../Thread
-import native/win32/[types, errors]
+import os/win32/[types, errors]
 
 version(windows) {
 	ThreadWin32: class extends Thread {

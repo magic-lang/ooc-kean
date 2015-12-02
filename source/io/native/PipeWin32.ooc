@@ -1,5 +1,5 @@
 import ../Pipe
-import native/win32/[types, errors]
+import os/win32/[types, errors]
 
 version(windows) {
 PipeWin32: class extends Pipe {

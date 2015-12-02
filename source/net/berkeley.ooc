@@ -180,7 +180,7 @@ FIONREAD: extern Int
 
 // winsock needs WSAStartup to be called to work.
 version (windows) {
-import native/win32/types
+import os/win32/types
 WSADATA: extern cover
 
 WSAStartup: extern func (versionRequested: WORD, wsaData: Pointer) -> Int
