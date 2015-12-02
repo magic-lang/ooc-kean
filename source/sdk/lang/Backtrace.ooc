@@ -1,5 +1,4 @@
 import os/[Env, Dynlib, ShellUtils]
-import io/[File, StringReader]
 import structs/[ArrayList, List]
 import lang/internals/mangling
 
@@ -7,7 +6,7 @@ BacktraceHandler: class {
 	BACKTRACE_LENGTH := static 128
 	WARNED_ABOUT_FALLBACK := static false
 	instance: static This
-	lib: Dynlib
+	lib: Dynlib = null
 	fancyBacktrace: Pointer
 	fancyBacktraceSymbols: Pointer
 	fancyBacktraceWithContext: Pointer // windows-only
@@ -86,25 +85,7 @@ BacktraceHandler: class {
 			raw? = true
 		}
 
-		// try to load it from the system's search path
-		// includes the current directory on Windows
-		lib = Dynlib load("fancy_backtrace")
-
-		if (!lib) {
-			// try to load it from the current directory?
-			// makes the magic work on Linux
-			lib = Dynlib load("./fancy_backtrace")
-		}
-
-		if (!lib) {
-			// try to find in rock's path, if rock is there.
-			rockPath := ShellUtils findExecutable("rock")
-			if (rockPath) {
-				binPath := rockPath getParent()
-				path := File join(binPath, "fancy_backtrace")
-				lib = Dynlib load(path)
-			}
-		}
+		this lib = Dynlib load("fancy_backtrace") ?? Dynlib load("./fancy_backtrace")
 
 		if (lib) {
 			_initFuncs()
