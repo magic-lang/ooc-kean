@@ -28,6 +28,7 @@ FloatVector3D: cover {
 	empty ::= this x equals(0.0f) || this y equals(0.0f) || this z equals(0.0f)
 	norm ::= (this x squared() + this y squared() + this z squared()) sqrt()
 	azimuth ::= this y atan2(this x)
+	isValid ::= (this x == this x && this y == this y && this z == this z)
 	basisX: static This { get { This new(1, 0, 0) } }
 	basisY: static This { get { This new(0, 1, 0) } }
 	basisZ: static This { get { This new(0, 0, 1) } }

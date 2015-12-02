@@ -17,12 +17,13 @@
 use ooc-collections
 use ooc-math
 import FloatPoint3D
+import FloatVector3D
 import FloatTransform3D
 import math
 
 Quaternion: cover {
 	real: Float
-	imaginary: FloatPoint3D
+	imaginary: FloatVector3D
 	precision: static Float = 1.0e-6f
 	// q = w + xi + yj + zk
 	w ::= this real
@@ -48,7 +49,7 @@ Quaternion: cover {
 	transform ::= this toFloatTransform3D()
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
 	init: func@ (=real, =imaginary)
-	init: func@ ~floats (w, x, y, z: Float) { this init(w, FloatPoint3D new(x, y, z)) }
+	init: func@ ~floats (w, x, y, z: Float) { this init(w, FloatVector3D new(x, y, z)) }
 	init: func@ ~default { this init(0, 0, 0, 0) }
 	init: func@ ~floatArray (source: Float[]) { this init(source[0], source[1], source[2], source[3]) }
 	init: func@ ~fromFloatTransform3D (transform: FloatTransform3D) {
@@ -87,12 +88,12 @@ Quaternion: cover {
 		}
 		this init(w, x, y, z)
 	}
-	apply: func (vector: FloatPoint3D) -> FloatPoint3D {
+	apply: func (vector: FloatVector3D) -> FloatVector3D {
 		vectorQuaternion := This new(0.0f, vector)
 		result := hamiltonProduct(hamiltonProduct(this, vectorQuaternion), this conjugate) //FIXME Should this be conjugate or inverse?
-		FloatPoint3D new(result x, result y, result z)
+		FloatVector3D new(result x, result y, result z)
 	}
-	createRotation: static func (angle: Float, direction: FloatPoint3D) -> This {
+	createRotation: static func (angle: Float, direction: FloatVector3D) -> This {
 		halfAngle := angle / 2.0f
 		point3DNorm := direction norm
 		if (point3DNorm != 0.0f)
@@ -100,13 +101,13 @@ Quaternion: cover {
 		This new(0.0f, halfAngle * direction) exponential
 	}
 	createRotationX: static func (angle: Float) -> This {
-		This createRotation(angle, FloatPoint3D new(1.0f, 0.0f, 0.0f))
+		This createRotation(angle, FloatVector3D new(1.0f, 0.0f, 0.0f))
 	}
 	createRotationY: static func (angle: Float) -> This {
-		This createRotation(angle, FloatPoint3D new(0.0f, 1.0f, 0.0f))
+		This createRotation(angle, FloatVector3D new(0.0f, 1.0f, 0.0f))
 	}
 	createRotationZ: static func (angle: Float) -> This {
-		This createRotation(angle, FloatPoint3D new(0.0f, 0.0f, 1.0f))
+		This createRotation(angle, FloatVector3D new(0.0f, 0.0f, 1.0f))
 	}
 	hamiltonProduct: static func (left, right: This) -> This {
 		(a1, b1, c1, d1) := (left w, left x, left y, left z)
@@ -153,7 +154,7 @@ Quaternion: cover {
 			result
 		}
 	}
-	direction: FloatPoint3D {
+	direction: FloatVector3D {
 		get {
 			quaternionLogarithm := this logarithm
 			quaternionLogarithm imaginary / quaternionLogarithm imaginary norm
@@ -167,7 +168,7 @@ Quaternion: cover {
 			if (point3DNorm != 0)
 				result = This new(norm log(), (this imaginary / point3DNorm) * ((this real / norm) acos()))
 			else
-				result = This new(norm, FloatPoint3D new())
+				result = This new(norm, FloatVector3D new())
 			result
 		}
 	}
@@ -179,7 +180,7 @@ Quaternion: cover {
 			if (point3DNorm != 0)
 				result = This new(exponentialReal * point3DNorm cos(), exponentialReal * (this imaginary / point3DNorm) * point3DNorm sin())
 			else
-				result = This new(exponentialReal, FloatPoint3D new())
+				result = This new(exponentialReal, FloatVector3D new())
 			result
 		}
 	}
@@ -209,7 +210,7 @@ Quaternion: cover {
 		imaginaryResult := this real * other imaginary + this imaginary * other real + this imaginary vectorProduct(other imaginary)
 		This new(realResult, imaginaryResult)
 	}
-	operator * (value: FloatPoint3D) -> FloatPoint3D {
+	operator * (value: FloatVector3D) -> FloatVector3D {
 		(this * This new(0.0f, value) * this conjugate) imaginary //FIXME Should this be conjugate or inverse?
 	}
 	operator as -> String { this toString() }
@@ -284,10 +285,10 @@ Quaternion: cover {
 			attitudeProfile += normalizedWeights[currentVector / 3] / 3.0f * observationVectors getColumn(currentVector) * referenceVectors getColumn(currentVector) transpose()
 		matrixQuantityS := (attitudeProfile + attitudeProfile transpose()) take()
 
-		temporaryZ := FloatPoint3D new()
+		temporaryZ := FloatVector3D new()
 		for (currentVector in 0 .. referenceVectors width) {
-			currentObservationVector := FloatPoint3D new(observationVectors[currentVector, 0], observationVectors[currentVector, 1], observationVectors[currentVector, 2])
-			currentReferenceVector := FloatPoint3D new(referenceVectors[currentVector, 0], referenceVectors[currentVector, 1], referenceVectors[currentVector, 2])
+			currentObservationVector := FloatVector3D new(observationVectors[currentVector, 0], observationVectors[currentVector, 1], observationVectors[currentVector, 2])
+			currentReferenceVector := FloatVector3D new(referenceVectors[currentVector, 0], referenceVectors[currentVector, 1], referenceVectors[currentVector, 2])
 			temporaryZ += normalizedWeights[currentVector / 3] / 3.0f * currentObservationVector vectorProduct(currentReferenceVector)
 		}
 		vectorQuantityZ := FloatMatrix new(1, 3) take()
@@ -337,11 +338,11 @@ Quaternion: cover {
 			referenceVectors setVertical(index * 3, 0, 1, 0, 0)
 			referenceVectors setVertical(index * 3 + 1, 0, 0, 1, 0)
 			referenceVectors setVertical(index * 3 + 2, 0, 0, 0, 1)
-			xAxis := quaternions[index] * FloatPoint3D new(1.0f, 0.0f, 0.0f)
+			xAxis := quaternions[index] * FloatVector3D new(1.0f, 0.0f, 0.0f)
 			observationVectors setVertical(index * 3, 0, xAxis x, xAxis y, xAxis z)
-			yAxis := quaternions[index] * FloatPoint3D new(0.0f, 1.0f, 0.0f)
+			yAxis := quaternions[index] * FloatVector3D new(0.0f, 1.0f, 0.0f)
 			observationVectors setVertical(index * 3 + 1, 0, yAxis x, yAxis y, yAxis z)
-			zAxis := quaternions[index] * FloatPoint3D new(0.0f, 0.0f, 1.0f)
+			zAxis := quaternions[index] * FloatVector3D new(0.0f, 0.0f, 1.0f)
 			observationVectors setVertical(index * 3 + 2, 0, zAxis x, zAxis y, zAxis z)
 		}
 		(referenceVectors, observationVectors)
