@@ -175,12 +175,12 @@ Text: cover {
 		result
 	}
 	print: func {
-		printf("%s", this _buffer _backend pointer as Char*)
+		fwrite(this _buffer _backend pointer as Char*, 1, this _buffer _backend size, stdout)
 		this free(Owner Receiver)
 	}
 	println: func {
-		printf("%s\n", this _buffer _backend pointer as Char*)
-		this free(Owner Receiver)
+		this print()
+		t"\n" print()
 	}
 	format: func (args: ...) -> This {
 		string := this take() toString()
