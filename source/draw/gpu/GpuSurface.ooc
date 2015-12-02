@@ -19,7 +19,7 @@ use ooc-draw
 use ooc-collections
 use ooc-base
 
-import GpuContext, GpuMap, GpuImage, GpuMesh, GpuYuv420Semiplanar
+import GpuContext, GpuMap, GpuImage, GpuMesh, GpuYuv420Semiplanar, math
 
 version(!gpuOff) {
 GpuSurface: abstract class extends Canvas {
@@ -62,14 +62,15 @@ GpuSurface: abstract class extends Canvas {
 		translation := this _toLocal * FloatTransform3D createTranslation(box leftTop x, box leftTop y, this focalLength) * this _toLocal
 		translation * toReference * FloatTransform3D createScaling(box size x / 2.0f, box size y / 2.0f, 1.0f)
 	}
-	_createTextureTransform: static func (imageSize: IntVector2D, box: IntBox2D, flipVector: FloatVector3D) -> FloatTransform3D {
+	_createTextureTransform: static func (imageSize: IntVector2D, box: IntBox2D, flipVector: FloatVector2D) -> FloatTransform3D {
 		scaling := FloatTransform3D createScaling(box size x as Float / imageSize x, box size y as Float / imageSize y, 1.0f)
 		translation := FloatTransform3D createTranslation(box leftTop x as Float / imageSize x, box leftTop y as Float / imageSize y, 0.0f)
-		if (!(flipVector x + 1.0f)) {
-			translation a = -1.0f
+		if (flipVector x equals(-1.0f)) {
+			translation a = -translation a
 			translation m = 1.0f
-		} else if (!(flipVector y + 1.0f)) {
-			translation f = -1.0f
+		}
+		if (flipVector y equals(-1.0f)) {
+			translation f = -translation f
 			translation n = 1.0f
 		}
 		translation * scaling

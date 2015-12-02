@@ -16,7 +16,6 @@
 
 import math
 import IntVector2D
-import IntVector3D
 import IntPoint2D
 import FloatTransform2D
 
@@ -58,7 +57,6 @@ IntTransform2D: cover {
 	}
 	determinant ::= this a * this e * this i + this d * this h * this c + this g * this b * this f - this g * this e * this c - this d * this b * this i - this a * this h * this f
 	translation ::= IntVector2D new(this g, this h)
-	diagonal ::= IntVector3D new(this a, this e, this i)
 	inverse: This { get {
 		determinant := this determinant
 		if (determinant == 0)
