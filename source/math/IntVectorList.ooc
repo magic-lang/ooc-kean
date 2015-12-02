@@ -29,6 +29,11 @@ IntVectorList: class extends VectorList<Int> {
 		super(other _vector)
 		this _count = other count
 	}
+	init: func ~withValue (capacity, value: Int) {
+		super(capacity)
+		for (i in 0 .. capacity)
+			this add(value)
+	}
 	copy: func -> This {
 		this as VectorList<Int> copy() as This
 	}
