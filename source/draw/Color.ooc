@@ -25,6 +25,10 @@ ColorMonochrome: cover {
 	normalized ::= this y as Float / 255
 	init: func@ (=y)
 	init: func@ ~default { this init(0) }
+	init: func@ ~uint (i: UInt) { this init(i as UInt8) }
+	init: func@ ~uint16 (i: UInt16) { this init(i as UInt8) }
+	init: func@ ~uint32 (i: UInt32) { this init(i as UInt8) }
+	init: func@ ~uint64 (i: UInt64) { this init(i as UInt8) }
 	init: func@ ~int (i: Int) { this init(i as UInt8) }
 	init: func@ ~float (f: Float) { this init(f*255.0f clamp(0.0f, 255.0f) as UInt8) }
 	init: func@ ~double (d: Double) { this init(d*255.0f clamp(0.0f, 255.0f) as UInt8) }
