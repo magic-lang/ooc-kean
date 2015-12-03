@@ -144,7 +144,13 @@ Fixture: abstract class {
 	expect: static func ~boolean (value: Bool, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
 	}
-	expect: static func ~integer (value: Int, constraint: Constraint) {
+	expect: static func ~int (value: Int, constraint: Constraint) {
+		This expect(Cell new(value), constraint)
+	}
+	expect: static func ~uint (value: UInt, constraint: Constraint) {
+		This expect(Cell new(value), constraint)
+	}
+	expect: static func ~uint8 (value: UInt8, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
 	}
 	expect: static func ~long (value: Long, constraint: Constraint) {

@@ -10,7 +10,7 @@ ByteBufferTest: class extends Fixture {
 			for (i in 0 .. 1024 / 8)
 				buffer pointer[i] = i
 			for (i in 0 .. 1024 / 8)
-				expect(buffer pointer[i] as Int, is equal to(i))
+				expect(buffer pointer[i], is equal to(i))
 			buffer referenceCount decrease()
 		})
 		this add("zero", func {
@@ -19,7 +19,7 @@ ByteBufferTest: class extends Fixture {
 				buffer pointer[i] = i
 			buffer zero()
 			for (i in 0 .. 1024 / 8)
-				expect(buffer pointer[i] as Int, is equal to(0))
+				expect(buffer pointer[i], is equal to(0))
 			buffer referenceCount decrease()
 		})
 		this add("copy and copyTo", func {
@@ -29,7 +29,7 @@ ByteBufferTest: class extends Fixture {
 			buffercopy := buffer copy()
 			buffer free()
 			for (i in 0 .. 1024 / 8)
-				expect(buffercopy pointer[i] as Int, is equal to(buffer pointer[i] as Int))
+				expect(buffercopy pointer[i], is equal to(buffer pointer[i]))
 			buffercopy referenceCount decrease()
 		})
 		this add("slice", func {
@@ -39,7 +39,7 @@ ByteBufferTest: class extends Fixture {
 			slice := buffer slice(10, 8)
 			buffer referenceCount decrease()
 			expect(slice size, is equal to(8))
-			expect(slice pointer[0] as Int, is equal to(10))
+			expect(slice pointer[0], is equal to(10))
 			slice referenceCount decrease()
 		})
 	}
