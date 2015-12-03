@@ -30,7 +30,7 @@ import io/Reader
 import io/FileWriter
 import Canvas, RasterCanvas
 
-RasterYuv422SemipackedCanvas: class extends RasterCanvas {
+RasterYuv422SemipackedCanvas: class extends RasterPackedCanvas {
 	target ::= this _target as RasterYuv422Semipacked
 	init: func (image: RasterYuv422Semipacked) { super(image) }
 	_drawPoint: override func (x, y: Int) {
