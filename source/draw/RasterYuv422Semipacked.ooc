@@ -28,6 +28,17 @@ import io/File
 import io/FileReader
 import io/Reader
 import io/FileWriter
+import Canvas, RasterCanvas
+
+RasterYuv422SemipackedCanvas: class extends RasterCanvas {
+	target ::= this _target as RasterYuv422Semipacked
+	init: func (image: RasterYuv422Semipacked) { super(image) }
+	_drawPoint: override func (x, y: Int) {
+		position := this _map(IntPoint2D new(x, y))
+		if (this target isValidIn(position x, position y))
+			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toYuv())
+	}
+}
 
 RasterYuv422Semipacked: class extends RasterPacked {
 	bytesPerPixel ::= 2
@@ -101,6 +112,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		fileWriter write(this buffer pointer as Char*, this buffer size)
 		fileWriter close()
 	}
+	_createCanvas: override func -> Canvas { RasterYuv422SemipackedCanvas new(this) }
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
 		if (original instanceOf?(This))

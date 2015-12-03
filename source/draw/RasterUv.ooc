@@ -23,6 +23,20 @@ import RasterBgr
 import StbImage
 import Image
 import Color
+import Canvas, RasterCanvas
+
+RasterUvCanvas: class extends RasterCanvas {
+	target ::= this _target as RasterUv
+	init: func (image: RasterUv) { super(image) }
+	_drawPoint: override func (x, y: Int) {
+		position := this _map(IntPoint2D new(x, y))
+		if (this target isValidIn(position x, position y)) {
+			colorYuv := this pen color toYuv()
+			colorUv := ColorUv new(colorYuv u, colorYuv v)
+			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, colorUv)
+		}
+	}
+}
 
 RasterUv: class extends RasterPacked {
 	bytesPerPixel ::= 2
@@ -142,4 +156,5 @@ RasterUv: class extends RasterPacked {
 
 	operator [] (x, y: Int) -> ColorUv { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorUv* + x)@ : ColorUv new(0, 0) }
 	operator []= (x, y: Int, value: ColorUv) { ((this buffer pointer + y * this stride) as ColorUv* + x)@ = value }
+	_createCanvas: override func -> Canvas { RasterUvCanvas new(this) }
 }
