@@ -54,28 +54,16 @@ Text: cover {
 	operator != (other: This) -> Bool { !(this == other) }
 	operator + (other: This) -> This { This new(this _buffer + other _buffer) }
 	operator + (other: Int) -> This {
-		converted := other toString()
-		result := this + This new(converted)
-		converted free()
-		result
+		this + other toText() take()
 	}
 	operator + (other: UInt) -> This {
-		converted := other toString()
-		result := this + This new(converted)
-		converted free()
-		result
+		this + other toText()
 	}
 	operator + (other: Float) -> This {
-		converted := other toString()
-		result := this + This new(converted)
-		converted free()
-		result
+		this + other toText() take()
 	}
 	operator + (other: Double) -> This {
-		converted := other toString()
-		result := this + This new(converted)
-		converted free()
-		result
+		this + other toText()
 	}
 	beginsWith: func (other: This) -> Bool { this slice(0, Int minimum(other count, this count)) == other }
 	beginsWith: func ~string (other: String) -> Bool { this beginsWith(This new(other)) }
@@ -335,3 +323,33 @@ makeTextLiteral: func (str: CString, strLen: Int) -> Text { Text new(str, strLen
 operator == (left: String, right: Text) -> Bool { Text new(left) == right }
 operator != (left: String, right: Text) -> Bool { !(left == right) }
 operator []= (left: TextBuffer, range: Range, right: Text) { right _buffer copyTo(left slice(range min, range count)) }
+
+extend Int {
+	toText: func -> Text {
+		string := this toString()
+		result := Text new(string) copy()
+		string free()
+		result
+	}
+}
+
+extend UInt {
+	toText: func -> Text {
+		Text new(this toString())
+	}
+}
+
+extend Float {
+	toText: func -> Text {
+		string := this toString()
+		result := Text new(string) copy()
+		string free()
+		result
+	}
+}
+
+extend Double {
+	toText: func -> Text {
+		Text new(this toString())
+	}
+}
