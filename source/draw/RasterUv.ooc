@@ -25,7 +25,7 @@ import Image
 import Color
 import Canvas, RasterCanvas
 
-RasterUvCanvas: class extends RasterCanvas {
+RasterUvCanvas: class extends RasterPackedCanvas {
 	target ::= this _target as RasterUv
 	init: func (image: RasterUv) { super(image) }
 	_drawPoint: override func (x, y: Int) {
