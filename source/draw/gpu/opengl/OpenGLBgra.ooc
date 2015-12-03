@@ -37,6 +37,9 @@ OpenGLBgra: class extends OpenGLPacked {
 		buffer := this canvas readPixels()
 		RasterBgra new(buffer, this size)
 	}
-	create: override func (size: IntVector2D) -> This { this context createBgra(size) as This }
+	create: override func (size: IntVector2D) -> This {
+		result := this context createBgra(size) as This
+		result coordinateSystem = this coordinateSystem
+	}
 }
 }
