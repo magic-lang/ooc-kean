@@ -104,16 +104,15 @@ RasterUv: class extends RasterPacked {
 		}
 	}
 	open: static func (filename: String) -> This {
-		//FIXME: Is it neccessary to create a RasterBgr here?
 		rasterBgr := RasterBgr open(filename)
 		result := This convertFrom(rasterBgr)
 		rasterBgr referenceCount decrease()
 		result
 	}
 	save: override func (filename: String) -> Int {
-		bgr := RasterBgr new(this buffer, this size)
+		bgr := RasterBgr convertFrom(this)
 		result := bgr save(filename)
-		bgr free()
+		bgr referenceCount decrease()
 		result
 	}
 	convertFrom: static func (original: RasterImage) -> This {
