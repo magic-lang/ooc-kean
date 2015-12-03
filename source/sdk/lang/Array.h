@@ -15,9 +15,9 @@
 
 #if defined(safe)
 #define _lang_array__Array_get(array, index, type) ( \
-    ((type*) array.data)[(index < 0 || index >= array.length) ? lang_Exception__Exception_throw((lang_Exception__Exception *) lang_Exception__OutOfBoundsException_new_noOrigin(index, array.length)), -1 : index])
+    ((type*) array.data)[(index < 0 || index >= array.length) ? kean_lang_exception_outOfBoundsException_new(index, array.length), -1 : index])
 #define _lang_array__Array_set(array, index, type, value) \
-    (((type*) array.data)[(index < 0 || index >= array.length) ? lang_Exception__Exception_throw((lang_Exception__Exception *) lang_Exception__OutOfBoundsException_new_noOrigin(index, array.length)), -1 : index] = value)
+    (((type*) array.data)[(index < 0 || index >= array.length) ? kean_lang_exception_outOfBoundsException_new(index, array.length), -1 : index] = value)
 #else
 #define _lang_array__Array_get(array, index, type) ( \
     ((type*) array.data)[index])
