@@ -1,7 +1,7 @@
 {
 	"name" : "ooc-kean",
 	"secondary" : "ooc-vidproc",
-	"secondaryUpstream" : "vidhance",
+	"secondaryUpstreamasdasd" : "vidhance",
 
 	"actions" : [
 			{"task" : "./test.sh", "dependency" : "none"}
