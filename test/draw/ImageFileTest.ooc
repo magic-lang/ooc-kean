@@ -196,6 +196,16 @@ ImageFileTest: class extends Fixture {
 			expect(This _fileExists(destination))
 			semiplanar free()
 		})
+		this add("Open and save RasterUv", func {
+			source := "test/draw/input/Flower.png"
+			destination := "test/draw/output/RasterUv.png"
+			uv := RasterUv open(source)
+			uv save(destination)
+			expect(This _fileExists(destination))
+			destination free()
+			source free()
+			uv referenceCount decrease()
+		})
 		this add("save to bin", func {
 			source := "test/draw/input/Flower.png"
 			destination := "test/draw/output/Flower.bin"
