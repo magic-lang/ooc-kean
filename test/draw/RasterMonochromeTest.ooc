@@ -98,6 +98,19 @@ RasterMonochromeTest: class extends Fixture {
 			image referenceCount decrease()
 			image2 referenceCount decrease()
 		})
+		this add("color monochrome from unsigned types", func {
+			image := RasterMonochrome new(IntVector2D new(10, 10))
+			value: UInt = 128
+			value32: UInt32 = 128
+			value64: UInt64 = 128
+			image[0, 0] = ColorMonochrome new(value32)
+			image[0, 1] = ColorMonochrome new(value64)
+			image[0, 2] = ColorMonochrome new(value)
+			expect(image[0, 0] y as Int, is equal to(value32 as Int))
+			expect(image[0, 1] y as Int, is equal to(value64 as Int))
+			expect(image[0, 2] y as Int, is equal to(value as Int))
+			image referenceCount decrease()
+		})
 		/*this add("distance, convertFrom RasterBgra", func {
 			source := this sourceFlower
 			output := "test/draw/output/RasterBgrToMonochrome.png"
