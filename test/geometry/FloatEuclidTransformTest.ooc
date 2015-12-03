@@ -11,7 +11,7 @@ FloatEuclidTransformTest: class extends Fixture {
 			euclidTransforms := VectorList<FloatEuclidTransform> new(5)
 			kernel := FloatVectorList new(5)
 			for (i in 0 .. 5) {
-				euclidTransforms add(FloatEuclidTransform new(FloatPoint3D new(i, i, i), FloatRotation3D identity))
+				euclidTransforms add(FloatEuclidTransform new(FloatVector3D new(i, i, i), FloatRotation3D identity))
 				kernel add(0.2f)
 			}
 			result := FloatEuclidTransform convolveCenter(euclidTransforms, kernel)
@@ -28,7 +28,7 @@ FloatEuclidTransformTest: class extends Fixture {
 			euclidTransforms := VectorList<FloatEuclidTransform> new(5)
 			kernel := FloatVectorList gaussianKernel(5)
 			for (i in 0 .. 5)
-				euclidTransforms add(FloatEuclidTransform new(FloatPoint3D new(i, i, i), FloatRotation3D identity))
+				euclidTransforms add(FloatEuclidTransform new(FloatVector3D new(i, i, i), FloatRotation3D identity))
 			result := FloatEuclidTransform convolveCenter(euclidTransforms, kernel)
 
 			expectedResult := 0.0f
@@ -50,7 +50,7 @@ FloatEuclidTransformTest: class extends Fixture {
 			for (i in 0 .. 5) {
 				rotation := FloatRotation3D createRotationZ(i)
 				quaternions add(rotation _quaternion)
-				euclidTransforms add(FloatEuclidTransform new(FloatPoint3D new(), rotation))
+				euclidTransforms add(FloatEuclidTransform new(FloatVector3D new(), rotation))
 			}
 			result := FloatEuclidTransform convolveCenter(euclidTransforms, kernel)
 			expectedRotation := Quaternion weightedMean(quaternions, kernel)
