@@ -40,7 +40,7 @@ TextBuilder: class {
 		this append(original)
 	}
 	free: func {
-		for (i in 0 .. this count)
+		for (i in 0 .. this _data count)
 			this _data[i] free(Owner Receiver)
 		this _data free()
 		super()
