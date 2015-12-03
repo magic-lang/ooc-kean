@@ -51,6 +51,7 @@ OpenGLPacked: abstract class extends GpuImage {
 			raster := image as RasterPacked
 			this _backend upload(raster buffer pointer, raster stride)
 		}
+		this coordinateSystem = image coordinateSystem
 	}
 	_createCanvas: override func -> GpuSurface { OpenGLCanvas new(this, this context) }
 }

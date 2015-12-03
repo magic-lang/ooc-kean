@@ -16,7 +16,7 @@
 */
 
 use ooc-collections
-use ooc-geometry
+use ooc-math, ooc-geometry
 use ooc-draw
 use ooc-draw-gpu
 import OpenGLContext, OpenGLPacked
@@ -52,7 +52,8 @@ OpenGLSurface: abstract class extends GpuSurface {
 		(f as Closure) free()
 	}
 	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
-		map textureTransform = This _createTextureTransform(image size, source)
+		flipVector := FloatVector2D new(image transform a as Float, image transform e as Float)
+		map textureTransform = This _createTextureTransform(image size, source, flipVector)
 		this draw(destination, map)
 	}
 	drawLines: override func (pointList: VectorList<FloatPoint2D>) {
