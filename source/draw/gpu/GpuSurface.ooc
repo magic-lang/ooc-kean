@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-math, ooc-geometry
+use ooc-geometry
 use ooc-draw
 use ooc-collections
 use ooc-base
 
-import GpuContext, GpuMap, GpuImage, GpuMesh, GpuYuv420Semiplanar, math
+import GpuContext, GpuMap, GpuImage, GpuMesh, GpuYuv420Semiplanar
 
 version(!gpuOff) {
 GpuSurface: abstract class extends Canvas {
@@ -62,17 +62,9 @@ GpuSurface: abstract class extends Canvas {
 		translation := this _toLocal * FloatTransform3D createTranslation(box leftTop x, box leftTop y, this focalLength) * this _toLocal
 		translation * toReference * FloatTransform3D createScaling(box size x / 2.0f, box size y / 2.0f, 1.0f)
 	}
-	_createTextureTransform: static func (imageSize: IntVector2D, box: IntBox2D, flipVector: FloatVector2D) -> FloatTransform3D {
+	_createTextureTransform: static func (imageSize: IntVector2D, box: IntBox2D) -> FloatTransform3D {
 		scaling := FloatTransform3D createScaling(box size x as Float / imageSize x, box size y as Float / imageSize y, 1.0f)
 		translation := FloatTransform3D createTranslation(box leftTop x as Float / imageSize x, box leftTop y as Float / imageSize y, 0.0f)
-		if (flipVector x equals(-1.0f)) {
-			translation a = -translation a
-			translation m = 1.0f
-		}
-		if (flipVector y equals(-1.0f)) {
-			translation f = -translation f
-			translation n = 1.0f
-		}
 		translation * scaling
 	}
 	_getDefaultMap: virtual func (image: Image) -> GpuMap { this _defaultMap }
