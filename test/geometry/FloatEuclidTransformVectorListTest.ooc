@@ -24,8 +24,8 @@ FloatEuclidTransformVectorListTest: class extends Fixture {
 		tolerance := 0.0001f
 		this add("get and set", func {
 			list := FloatEuclidTransformVectorList new()
-			euclidTransform1 := FloatEuclidTransform new(FloatPoint3D new(1.0f, 2.0f, 3.0f), FloatRotation3D createRotationX(1.0f))
-			euclidTransform2 := FloatEuclidTransform new(FloatPoint3D new(5.0f, 6.0f, 7.0f), FloatRotation3D createRotationX(1.0f))
+			euclidTransform1 := FloatEuclidTransform new(FloatVector3D new(1.0f, 2.0f, 3.0f), FloatRotation3D createRotationX(1.0f))
+			euclidTransform2 := FloatEuclidTransform new(FloatVector3D new(5.0f, 6.0f, 7.0f), FloatRotation3D createRotationX(1.0f))
 			list add(euclidTransform1)
 			list add(euclidTransform2)
 			expect(list[0] translation x, is equal to(euclidTransform1 translation x) within(tolerance))
@@ -42,8 +42,8 @@ FloatEuclidTransformVectorListTest: class extends Fixture {
 		})
 		this add("get lists", func {
 			list := FloatEuclidTransformVectorList new()
-			translation1 := FloatPoint3D new(1.11f, 2.31f, 3.64f)
-			translation2 := FloatPoint3D new(2.85f, 3.18f, 4.26f)
+			translation1 := FloatVector3D new(1.11f, 2.31f, 3.64f)
+			translation2 := FloatVector3D new(2.85f, 3.18f, 4.26f)
 			rotation1 := FloatRotation3D new(Quaternion new(1.21f, 2.31f, 3.14f, 4.23f))
 			rotation2 := FloatRotation3D new(Quaternion new(2.51f, 3.12f, 4.41f, 5.42f))
 			scaling1 := 5.72f
