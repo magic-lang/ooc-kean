@@ -32,7 +32,7 @@ import io/Reader
 import io/FileWriter
 import Canvas, RasterCanvas
 
-RasterYuv420Canvas: class extends RasterCanvas {
+RasterYuv420SemiplanarCanvas: class extends RasterCanvas {
 	target ::= this _target as RasterYuv420Semiplanar
 	init: func (image: RasterYuv420Semiplanar) { super(image) }
 	_drawPoint: override func (x, y: Int) {
@@ -257,7 +257,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		fileWriter write(this uv buffer pointer as Char*, this uv buffer size)
 		fileWriter close()
 	}
-	_createCanvas: override func -> Canvas { RasterYuv420Canvas new(this) }
+	_createCanvas: override func -> Canvas { RasterYuv420SemiplanarCanvas new(this) }
 	kean_draw_rasterYuv420Semiplanar_new: static unmangled func (width, height, stride: Int, monochromeData, uvData: Void*) -> This {
 		result := This new(IntVector2D new(width, height), stride)
 		memcpy(result uv buffer pointer, uvData, (height / 2) * stride)
