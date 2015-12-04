@@ -16,10 +16,8 @@
  */
 
 use ooc-base
-import os/Time
 import include/gles3
 import ../GLFence
-import threading/[Thread, Mutex]
 import Gles3Debug
 
 version(!gpuOff) {
@@ -33,12 +31,8 @@ Gles3Fence: class extends GLFence {
 	}
 	clientWait: func (timeout: UInt64 = ULLONG_MAX) {
 		version(debugGL) { validateStart("Fence clientWait") }
-		this _mutex lock()
-		if (this _backend == null)
-			this _syncCondition wait(this _mutex)
-		this _mutex unlock()
+		result := glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, timeout)
 		version(debugGL) {
-			result := glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, timeout)
 			match (result) {
 				case GL_TIMEOUT_EXPIRED => Debug print("Fence reached timeout limit after %llu ns. Possible deadlock?" format(timeout))
 				case GL_WAIT_FAILED => Debug print("Fence wait failed!")
@@ -47,26 +41,21 @@ Gles3Fence: class extends GLFence {
 				case GL_CONDITION_SATISFIED => Debug print("Fence condition satisifed!")
 				*/
 			}
-		} else
-			glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, timeout)
+		}
 		version(debugGL) { validateEnd("Fence clientWait") }
 	}
 	wait: func {
 		version(debugGL) { validateStart("Fence wait") }
-		glFlush()
 		glWaitSync(this _backend, 0, GL_TIMEOUT_IGNORED)
+		glFlush()
 		version(debugGL) { validateEnd("Fence wait") }
 	}
 	sync: func {
 		version(debugGL) { validateStart("Fence sync") }
-		this _mutex lock()
 		if (this _backend != null)
 			glDeleteSync(this _backend)
 		this _backend = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0)
 		version(debugGL) { if (this _backend as Int == 0) Debug print("glFenceSync failed!") }
-		this _mutex unlock()
-		this _syncCondition broadcast()
-		glFlush()
 		version(debugGL) { validateEnd("Fence sync") }
 	}
 }

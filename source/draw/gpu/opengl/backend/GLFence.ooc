@@ -17,21 +17,11 @@
 
 use ooc-base
 use ooc-geometry
-import os/Time
-import threading/[Thread, Mutex, WaitCondition]
 
 version(!gpuOff) {
 GLFence: abstract class {
 	_backend: Pointer = null
-	_syncCondition := WaitCondition new()
-	_mutex := Mutex new()
-
 	init: func
-	free: override func {
-		this _mutex free()
-		this _syncCondition free()
-		super()
-	}
 	clientWait: abstract func (timeout: UInt64 = ULLONG_MAX)
 	wait: abstract func
 	sync: abstract func
