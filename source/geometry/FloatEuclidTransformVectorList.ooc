@@ -20,6 +20,7 @@ import math
 use ooc-math
 import FloatEuclidTransform
 import FloatRotation3D
+import FloatVector3D
 
 FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 	init: func ~default {
@@ -33,6 +34,14 @@ FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 		result := VectorList<FloatEuclidTransform> new()
 		result _vector = this _vector
 		result _count = this _count
+		result
+	}
+	getTranslation: func -> VectorList<FloatVector3D> {
+		result := VectorList<FloatVector3D> new()
+		for (i in 0 .. this _count) {
+			euclidTransform := this[i]
+			result add(euclidTransform translation)
+		}
 		result
 	}
 	getTranslationX: func -> FloatVectorList {
