@@ -17,7 +17,7 @@ parabola := VectorList<FloatPoint2D> new()
 sparseParabola := VectorList<FloatPoint2D> new()
 randomGenerator := IntUniformRandomGenerator new(0, 100)
 for (i in -200 .. 201) {
-	logVector add(FloatPoint2D new((201 + i as Float) * 100, log((201 + i as Float)) * 100))
+	logVector add(FloatPoint2D new((201 + i as Float) * 100, (201.0f + i) log() * 100))
 	sinVector add(FloatPoint2D new(i as Float / 20, sin(i as Float / 20)))
 	cosVector add(FloatPoint2D new(i as Float / 20, cos(i as Float / 20)))
 	sinMinusCos add(FloatPoint2D new(i as Float / 20, sin(i as Float / 20) - cos(i as Float / 20)))

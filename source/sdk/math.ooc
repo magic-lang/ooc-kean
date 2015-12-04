@@ -18,27 +18,9 @@ atan2: extern func (Double, Double) -> Double
 sqrt: extern func (Double) -> Double
 pow: extern func (Double, Double) -> Double
 
-log: extern (log) func ~Double (Double) -> Double
-log: extern (logf) func ~Float (Float) -> Float
-log: extern (logl) func ~Long (LDouble) -> LDouble
-
-log2: extern (log2) func ~Double (Double) -> Double
-log2: extern (log2f) func ~Float (Float) -> Float
-log2: extern (log2l) func ~Long (LDouble) -> LDouble
-
-log10: extern (log10) func ~Double (Double) -> Double
-log10: extern (log10f) func ~Float (Float) -> Float
-log10: extern (log10l) func ~Long (LDouble) -> LDouble
-
 round: extern (lround) func ~dl (Double) -> Long
-
-ceil: extern (ceil) func ~Double (Double) -> Double
 ceil: extern (ceilf) func ~Float (Float) -> Float
-ceil: extern (ceill) func ~Long (LDouble) -> LDouble
-
-floor: extern (floor) func ~Double (Double) -> Double
 floor: extern (floorf) func ~Float (Float) -> Float
-floor: extern (floorl) func ~Long (LDouble) -> LDouble
 
 //TODO: Define methods only on extensions, and avoid global functions. Most of them should be non-static
 
@@ -310,7 +292,7 @@ extend Float {
 	}
 	getScientificPowerString: static func (value: This) -> String {
 		(coefficient, radix) := This decomposeToCoefficientAndRadix(value, 1)
-		power := log10(radix) as Int
+		power := radix log10() as Int
 		result := coefficient toString() >> "E" & power toString()
 		result
 	}
