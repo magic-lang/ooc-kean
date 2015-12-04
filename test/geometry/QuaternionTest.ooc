@@ -100,6 +100,13 @@ QuaternionTest: class extends Fixture {
 			point2 := FloatPoint3D new(7.0f, 5.0f, 6.0f)
 			expect((quaternion * point1) distance(point2), is equal to(0.0f))
 		})
+		this add("angle", func {
+			direction := FloatPoint3D new(1.0f, 1.0f, 1.0f)
+			quaternion1 := Quaternion createRotation(Float toRadians(20.0f), direction)
+			quaternion2 := Quaternion createRotation(Float toRadians(45.0f), direction)
+			angle := Float toDegrees(quaternion1 angle(quaternion2))
+			expect(angle, is equal to(25.0f) within(tolerance))
+		})
 		this add("rotationDirectionRepresentation1", func {
 			angle := Float toRadians(30.0f)
 			direction := FloatPoint3D new(1.0f, 4.0f, 7.0f)

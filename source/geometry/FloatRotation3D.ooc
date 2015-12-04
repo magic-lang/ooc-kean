@@ -40,10 +40,7 @@ FloatRotation3D: cover {
 	sphericalLinearInterpolation: func (other: This, factor: Float) -> This {
 		This new(this _quaternion sphericalLinearInterpolation(other _quaternion, factor))
 	}
-	angle: func (other: This) -> Float {
-		result := acos(Float absolute(this _quaternion dotProduct(other _quaternion))) as Float
-		result = result == result ? result : 0.0f
-	}
+	angle: func (other: This) -> Float { this _quaternion angle(other _quaternion) }
 	toString: func -> String { this _quaternion toString() }
 	kean_math_floatRotation3D_new: unmangled static func (quaternion: Quaternion) -> This { This new(quaternion) }
 }
