@@ -31,18 +31,18 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 	target ::= this _target as RasterPacked
 	init: func (image: RasterPacked) { super(image) }
 	_resizePacked: func <T> (sourceBuffer: T*, source: RasterPacked, sourceBox, resultBox: IntBox2D) {
-		if (this target size == source size && this target stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0)
+		if (this target size == source size && this target stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0 && source coordinateSystem == this target coordinateSystem)
 			memcpy(this target buffer pointer, sourceBuffer, this target stride * this target height)
 		else if (this interpolationMode == InterpolationMode Fast)
-			This _resizeNearestNeighbour(sourceBuffer, this target buffer pointer as T*, sourceBox, resultBox, source stride, this target stride, this target bytesPerPixel)
+			This _resizeNearestNeighbour(sourceBuffer, this target buffer pointer as T*, source, this target, sourceBox, resultBox)
 		else
-			This _resizeBilinear(sourceBuffer, this target buffer pointer as T*, sourceBox, resultBox, source stride, this target stride, this target bytesPerPixel)
+			This _resizeBilinear(sourceBuffer, this target buffer pointer as T*, source, this target, sourceBox, resultBox)
 	}
-	_resizeNearestNeighbour: static func <T> (sourceBuffer, resultBuffer: T*, sourceBox, resultBox: IntBox2D, sourceStride, resultStride, bytesPerPixel: Int) {
+	_resizeNearestNeighbour: static func <T> (sourceBuffer, resultBuffer: T*, source, target: RasterPacked, sourceBox, resultBox: IntBox2D) {
+		bytesPerPixel := target bytesPerPixel
 		(resultWidth, resultHeight) := (resultBox size x, resultBox size y)
 		(sourceWidth, sourceHeight) := (sourceBox size x, sourceBox size y)
-		sourceStride /= bytesPerPixel
-		resultStride /= bytesPerPixel
+		(sourceStride, resultStride) := (source stride / bytesPerPixel, target stride / bytesPerPixel)
 		sourceStartColumn := sourceBox leftTop x
 		sourceStartRow := sourceBox leftTop y
 		resultStartColumn := resultBox leftTop x
@@ -55,11 +55,13 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 			}
 		}
 	}
-	_resizeBilinear: static func <T> (sourceBuffer, resultBuffer: T*, sourceBox, resultBox: IntBox2D, sourceStride, resultStride, bytesPerPixel: Int) {
+	_resizeBilinear: static func <T> (sourceBuffer, resultBuffer: T*, source, target: RasterPacked, sourceBox, resultBox: IntBox2D) {
+		bytesPerPixel := target bytesPerPixel
 		(resultWidth, resultHeight) := (resultBox size x, resultBox size y)
 		(sourceWidth, sourceHeight) := (sourceBox size x, sourceBox size y)
 		(sourceStartColumn, sourceStartRow) := (sourceBox leftTop x, sourceBox leftTop y)
 		(resultStartColumn, resultStartRow) := (resultBox leftTop x, resultBox leftTop y)
+		(sourceStride, resultStride) := (source stride / bytesPerPixel, target stride / bytesPerPixel)
 		for (row in 0 .. resultHeight) {
 			sourceRow := ((sourceHeight as Float) * row) / resultHeight + sourceStartRow
 			sourceRowUp := sourceRow floor() as Int
