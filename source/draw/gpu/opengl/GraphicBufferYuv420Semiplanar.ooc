@@ -59,15 +59,17 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 			width := this _stride / 4
 			rgbaBuffer := GraphicBuffer new(this buffer handle, IntVector2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget, false)
 			this _rgba = EGLBgra new(rgbaBuffer, context)
+			this _rgba referenceCount increase()
 		}
 		this _rgba coordinateSystem = this coordinateSystem
+		this _rgba referenceCount increase()
 		this _rgba
 	}
 	_recycle: static func (image: EGLBgra) {
 		This _mutex lock()
 		This _bin add(image)
 		if (This _bin count > This _binSize)
-			This _bin remove(0) free()
+			This _bin remove(0) referenceCount decrease()
 		This _mutex unlock()
 	}
 	_search: static func (buffer: GraphicBuffer) -> EGLBgra {
@@ -85,7 +87,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	clean: static func {
 		This _mutex lock()
 		for (i in 0 .. This _bin count)
-			This _bin remove(i) free()
+			This _bin remove(i) referenceCount decrease()
 		This _mutex unlock()
 	}
 	kean_draw_graphicBufferYuv420Semiplanar_new: unmangled static func (buffer: GraphicBuffer, size: IntVector2D, stride, uvOffset: Int) -> This { This new(buffer, size, stride, uvOffset) }
