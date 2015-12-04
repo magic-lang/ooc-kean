@@ -1,4 +1,4 @@
 .git
 .libs
 rock_tmp
-source/sdk
+*.h
