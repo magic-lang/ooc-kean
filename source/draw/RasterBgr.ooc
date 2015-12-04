@@ -143,6 +143,8 @@ RasterBgr: class extends RasterPacked {
 			result = (original as This) copy()
 		else {
 			result = This new(original size)
+			//TODO make it work via constructor
+			result coordinateSystem = original coordinateSystem
 			row := result buffer pointer as Long
 			rowLength := result size x
 			rowEnd := row as ColorBgr* + rowLength

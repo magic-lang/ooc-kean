@@ -38,6 +38,13 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 		else
 			This _resizeBilinear(sourceBuffer, this target buffer pointer as T*, source, this target, sourceBox, resultBox)
 	}
+	_transformCoordinates: static func (column, row, width, height: Int, coordinateSystem: CoordinateSystem) -> (Int, Int) {
+		if ((coordinateSystem & CoordinateSystem XLeftward) != 0)
+			column = width - column - 1
+		if ((coordinateSystem & CoordinateSystem YUpward) != 0)
+			row = height - row - 1
+		(column, row)
+	}
 	_resizeNearestNeighbour: static func <T> (sourceBuffer, resultBuffer: T*, source, target: RasterPacked, sourceBox, resultBox: IntBox2D) {
 		bytesPerPixel := target bytesPerPixel
 		(resultWidth, resultHeight) := (resultBox size x, resultBox size y)
@@ -51,7 +58,9 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 			sourceRow := (sourceHeight * row) / resultHeight + sourceStartRow
 			for (column in 0 .. resultWidth) {
 				sourceColumn := (sourceWidth * column) / resultWidth + sourceStartColumn
-				resultBuffer[(column + resultStartColumn) + resultStride * (row + resultStartRow)] = sourceBuffer[sourceColumn + sourceStride * sourceRow]
+				(resultColumnTransformed, resultRowTransformed) := This _transformCoordinates(column + resultStartColumn, row + resultStartRow, target width, target height, target coordinateSystem)
+				(sourceColumnTransformed, sourceRowTransformed) := This _transformCoordinates(sourceColumn, sourceRow, source width, source height, source coordinateSystem)
+				resultBuffer[resultColumnTransformed + resultStride * resultRowTransformed] = sourceBuffer[sourceColumnTransformed + sourceStride * sourceRowTransformed]
 			}
 		}
 	}
@@ -75,7 +84,11 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 				weightRight := sourceColumn - sourceColumnLeft as Float
 				if (sourceColumnLeft + 1 >= sourceWidth)
 					weightRight = 0.0f
-				This _blendSquare(sourceBuffer as UInt8*, resultBuffer as UInt8*, sourceStride, resultStride, sourceRowUp, sourceColumnLeft, row + resultStartRow, column + resultStartColumn, (1.0f - weightDown) * (1.0f - weightRight), (1.0f - weightDown) * weightRight, weightDown * (1.0f - weightRight), weightDown * weightRight, bytesPerPixel)
+				(resultColumnTransformed, resultRowTransformed) := This _transformCoordinates(column + resultStartColumn, row + resultStartRow, target width, target height, target coordinateSystem)
+				(sourceColumnLeftTransformed, sourceRowUpTransformed) := This _transformCoordinates(sourceColumnLeft, sourceRowUp, source width, source height, source coordinateSystem)
+				(topLeft, topRight) := ((1.0f - weightDown) * (1.0f - weightRight), (1.0f - weightDown) * weightRight)
+				(bottomLeft, bottomRight) := (weightDown * (1.0f - weightRight), weightDown * weightRight)
+				This _blendSquare(sourceBuffer as UInt8*, resultBuffer as UInt8*, sourceStride, resultStride, sourceRowUpTransformed, sourceColumnLeftTransformed, resultRowTransformed, resultColumnTransformed, topLeft, topRight, bottomLeft, bottomRight, bytesPerPixel)
 			}
 		}
 	}
