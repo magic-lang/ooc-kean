@@ -120,6 +120,11 @@ Quaternion: cover {
 	distance: func (other: This) -> Float {
 		(this - other) norm
 	}
+	angle: func (other: This) -> Float {
+		result := 2.0f * Float absolute(this dotProduct(other)) acos()
+		result = result == result ? result : 0.0f
+		result
+	}
 	rotationX: Float {
 		get {
 			result: Float
