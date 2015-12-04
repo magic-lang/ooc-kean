@@ -271,14 +271,8 @@ ColorConvert: cover {
 	fromYuv: static func ~monochrome (action: Func (ColorMonochrome)) -> Func (ColorYuv) {
 		func (color: ColorYuv) { action(This yuvToMonochrome(color)) }
 	}
-	// FIXME: yuvToBgr2[512..end] and yuvToBgr2[256..511] are all 0, so there's some minor room for optimization here.
-	// Also, since multidimensional arrays work now, the arrays below can be reorganized if so desired.
 	monochromeToBgr: static func (color: ColorMonochrome) -> ColorBgr {
-		ColorBgr new(
-			(This yuvToBgr2[color y] >> 8) clamp(0, 255) as UInt8,
-			(This yuvToBgr1[color y] >> 8) clamp(0, 255) as UInt8,
-			(This yuvToBgr0[color y] >> 8) clamp(0, 255) as UInt8
-		)
+		ColorBgr new(color y, color y, color y)
 	}
 	monochromeToYuv: static func (color: ColorMonochrome) -> ColorYuv {
 		ColorYuv new(color y, 128, 128)
