@@ -41,6 +41,9 @@ OpenGLMonochrome: class extends OpenGLPacked {
 		packed free()
 		result
 	}
-	create: override func (size: IntVector2D) -> This { this context createMonochrome(size) as This }
+	create: override func (size: IntVector2D) -> This {
+		result := this context createMonochrome(size) as This
+		result coordinateSystem = this coordinateSystem
+	}
 }
 }

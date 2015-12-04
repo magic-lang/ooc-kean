@@ -48,6 +48,9 @@ OpenGLUv: class extends OpenGLPacked {
 		result pen = Pen new(ColorBgra new(128, 128, 128, 128))
 		result
 	}
-	create: override func (size: IntVector2D) -> This { this context createUv(size) as This }
+	create: override func (size: IntVector2D) -> This {
+		result := this context createUv(size) as This
+		result coordinateSystem = this coordinateSystem
+	}
 }
 }

@@ -36,6 +36,9 @@ OpenGLBgr: class extends OpenGLPacked {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: func -> RasterImage { Debug raise("toRaster not implemented for BGR"); null }
-	create: override func (size: IntVector2D) -> This { this context createBgr(size) as This }
+	create: override func (size: IntVector2D) -> This {
+		result := this context createBgr(size) as This
+		result coordinateSystem = this coordinateSystem
+	}
 }
 }
