@@ -135,9 +135,17 @@ EqualModifier: class extends Modifier {
 		f := func (value, c: Object) -> Bool { value as Cell<Bool> get() == c as Cell<Bool> get() }
 		CompareConstraint new(this, Cell<Bool> new(correct), f, ComparisonType Equal)
 	}
-	to: func ~integer (correct: Int) -> CompareConstraint {
+	to: func ~int (correct: Int) -> CompareConstraint {
 		f := func (value, c: Object) -> Bool { value as Cell<Int> get() == c as Cell<Int> get() }
 		CompareConstraint new(this, Cell<Int> new(correct), f, ComparisonType Equal)
+	}
+	to: func ~uint (correct: UInt) -> CompareConstraint {
+		f := func (value, c: Object) -> Bool { value as Cell<UInt> get() == c as Cell<UInt> get() }
+		CompareConstraint new(this, Cell<UInt> new(correct), f, ComparisonType Equal)
+	}
+	to: func ~uint8 (correct: UInt8) -> CompareConstraint {
+		f := func (value, c: Object) -> Bool { value as Cell<UInt8> get() == c as Cell<UInt8> get() }
+		CompareConstraint new(this, Cell<UInt8> new(correct), f, ComparisonType Equal)
 	}
 	to: func ~long (correct: Long) -> CompareConstraint {
 		f := func (value, c: Object) -> Bool { value as Cell<Long> get() == c as Cell<Long> get() }

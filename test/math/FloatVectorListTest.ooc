@@ -73,7 +73,7 @@ FloatVectorListTest: class extends Fixture {
 			list add(20.0f)
 			list add(30.0f)
 			list add(40.0f)
-			expect(list standardDeviation, is equal to(sqrt(125.0f) as Float) within(tolerance))
+			expect(list standardDeviation, is equal to(125.0f sqrt()) within(tolerance))
 			list free()
 		})
 		this add("sort", func {
