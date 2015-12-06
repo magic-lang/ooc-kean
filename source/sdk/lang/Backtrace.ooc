@@ -1,6 +1,6 @@
 import os/[Env, Dynlib, ShellUtils]
 import structs/[ArrayList, List]
-import lang/internals/mangling
+import mangling
 
 BacktraceHandler: class {
 	BACKTRACE_LENGTH := static 128
