@@ -15,8 +15,6 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-base
-use ooc-collections
 import math
 
 Text: cover {
