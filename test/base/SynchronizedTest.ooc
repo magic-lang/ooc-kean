@@ -1,39 +1,47 @@
 use ooc-base
+use ooc-unit
 import threading/Thread, os/Time
 
-version(debugTests) {
-	TestClass: class {
-		refCounter: ReferenceCounter
-		init: func {
-			refCounter = ReferenceCounter new(this)
-		}
-		dispose: func {
-			refCounter decrease()
-		}
-	}
-	
-	obj := TestClass new()
-	
-	thread1 := Thread new(func1)
-	thread2 := Thread new(func2)
-	
-	thread1 start()
-	thread2 start()
-	
-	func1: func {
-		for (i in 0 .. 10) {
-			obj1 := obj
-			Time sleepMilli(100)
-		}
-	}
-	
-	func2: func {
-		for (i in 0 .. 10) {
-			obj2 := obj
-			Time sleepMilli(76)
-		}
-	}
-	
-	thread1 wait()
-	thread2 wait()
+TestClass: class {
+	data: Int
+	init: func { this data = 0 }
+	increment: func { this data += 1 }
+	decrement: func { this data -= 1 }
 }
+
+SynchronizedTest: class extends Fixture {
+	init: func {
+		super("Synchronized")
+		this add("two threads", func {
+			obj := TestClass new()
+			sync := Synchronized new()
+
+			thread1 := Thread new(
+				func { for (i in 0 .. 200_000) {
+					sync lock()
+					obj decrement()
+					sync unlock()
+				}
+			})
+			thread2 := Thread new(
+				func { for (i in 0 .. 200_001) {
+					sync lock()
+					obj increment()
+					sync unlock()
+				}
+			})
+			thread1 start()
+			thread2 start()
+			thread2 wait()
+			thread1 wait()
+			expect(obj data, is equal to(1))
+			
+			obj free()
+			sync free()
+			thread1 free()
+			thread2 free()
+		})
+	}
+}
+
+SynchronizedTest new() run() . free()
