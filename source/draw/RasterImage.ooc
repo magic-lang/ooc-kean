@@ -62,14 +62,16 @@ RasterImage: abstract class extends Image {
 		x, y, imageComponents: Int
 		data := StbImage load(filename, x&, y&, imageComponents&, 0)
 		result: This
+		buffer := ByteBuffer new(data as UInt8*, x * y * imageComponents, true)
 		match (imageComponents) {
 			case 1 =>
-				result = RasterMonochrome new(ByteBuffer new(data as UInt8*, x * y * imageComponents), IntVector2D new (x, y))
+				result = RasterMonochrome new(buffer, IntVector2D new(x, y))
 			case 3 =>
-				result = RasterBgr new(ByteBuffer new(data as UInt8*, x * y * imageComponents), IntVector2D new (x, y))
+				result = RasterBgr new(buffer, IntVector2D new(x, y))
 			case 4 =>
-				result = RasterBgra new(ByteBuffer new(data as UInt8*, x * y * imageComponents), IntVector2D new (x, y))
+				result = RasterBgra new(buffer, IntVector2D new(x, y))
 			case =>
+				buffer free()
 				raise("Unsupported number of channels in image")
 		}
 		result

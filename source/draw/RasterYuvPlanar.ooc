@@ -58,7 +58,12 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 		this _v = v
 		this _v referenceCount increase()
 	}
-
+	free: override func {
+		this _y referenceCount decrease()
+		this _u referenceCount decrease()
+		this _v referenceCount decrease()
+		super()
+	}
 	apply: func ~bgr (action: Func (ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))
 	}
