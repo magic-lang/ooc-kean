@@ -1,7 +1,6 @@
 use ooc-unit
 use ooc-geometry
 use ooc-base
-import VectorList
 import math
 import lang/IO
 

@@ -4,7 +4,6 @@ SourcePath: source/collections
 Requires: ooc-unit
 Requires: ooc-base
 Imports: Vector2D
-Imports: VectorList
 Imports: PointerVector
 Imports: PointerVectorList
 Imports: Queue
