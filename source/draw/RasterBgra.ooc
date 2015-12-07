@@ -40,7 +40,8 @@ RasterBgra: class extends RasterPacked {
 	init: func ~allocateStride (size: IntVector2D, stride: UInt) { super(size, stride) }
 	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntVector2D, stride: UInt) { super(buffer, size, stride) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D) { this init(buffer, size, this bytesPerPixel * size x) }
-	init: func ~fromRasterImage (original: This) { super(original) }
+	init: func ~fromRasterBgra (original: This) { super(original) }
+	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: func (size: IntVector2D) -> Image { This new(size) }
 	copy: func -> This { This new(this) }
 	apply: func ~bgr (action: Func(ColorBgr)) {
@@ -135,7 +136,7 @@ RasterBgra: class extends RasterPacked {
 		if (original instanceOf?(This))
 			result = (original as This) copy()
 		else {
-			result = This new(original size)
+			result = This new(original)
 			row := result buffer pointer as Long
 			rowLength := result stride
 			rowEnd := row + rowLength
