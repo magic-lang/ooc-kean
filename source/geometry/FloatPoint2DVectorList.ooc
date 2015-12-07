@@ -61,15 +61,10 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 		result
 	}
 	medianPosition: func -> FloatPoint2D {
-		result := FloatPoint2D new()
-		sortedX := this getX()
-		sortedX sort()
-		sortedY := this getY()
-		sortedY sort()
-		result x = sortedX[sortedX count / 2]
-		result y = sortedY[sortedY count / 2]
-		sortedX free()
-		sortedY free()
+		(xValues, yValues) := (this getX(), this getY())
+		result := FloatPoint2D new(xValues median(), yValues median())
+		xValues free()
+		yValues free()
 		result
 	}
 	getMean: func (indices: VectorList<Int>) -> FloatPoint2D {
