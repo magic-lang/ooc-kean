@@ -103,6 +103,7 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 			uSource = uRow
 			vSource = vRow
 		}
+		(action as Closure) free()
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) { this apply(ColorConvert fromYuv(action)) }
 	convertFrom: static func (original: RasterImage) -> This {
@@ -151,7 +152,6 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		result
 	}
 	operator [] (x, y: Int) -> ColorYuv {
-		ColorYuv new(0, 0, 0)
 		ColorYuv new(this y[x, y] y, this u [x / 2, y / 2] y, this v [x / 2, y / 2] y)
 	}
 	operator []= (x, y: Int, value: ColorYuv) {
