@@ -118,7 +118,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		if (original instanceOf?(This))
 			result = (original as This) copy()
 		else {
-			result = This new(original size)
+			result = This new(original)
 			y := 0
 			x := 0
 			width := result size x
