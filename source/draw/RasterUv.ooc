@@ -30,11 +30,8 @@ RasterUvCanvas: class extends RasterPackedCanvas {
 	init: func (image: RasterUv) { super(image) }
 	_drawPoint: override func (x, y: Int) {
 		position := this _map(IntPoint2D new(x, y))
-		if (this target isValidIn(position x, position y)) {
-			colorYuv := this pen color toYuv()
-			colorUv := ColorUv new(colorYuv u, colorYuv v)
-			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, colorUv)
-		}
+		if (this target isValidIn(position x, position y))
+			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toUv())
 	}
 }
 
