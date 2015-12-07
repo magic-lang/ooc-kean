@@ -9,293 +9,288 @@ import List
  * to store the list.
  */
 ArrayList: class <T> extends List<T> {
+	data : T*
+	capacity : SizeT
+	_size = 0 : SizeT
 
-    data : T*
-    capacity : SizeT
-    _size = 0 : SizeT
-    
-    size: SSizeT {
-    	get {
-            _size
-    	}
-    }
+	size: SSizeT {
+		get {
+			_size
+		}
+	}
 
-    init: func {
-        init(10)
-    }
+	init: func {
+		init(10)
+	}
 
-    init: func ~withCapacity (=capacity) {
-        data = gc_malloc(capacity * T size)
-    }
+	init: func ~withCapacity (=capacity) {
+		data = gc_malloc(capacity * T size)
+	}
 
-    init: func ~withData (.data, =_size) {
-        this data = gc_malloc(_size * T size)
-        memcpy(this data, data, _size * T size)
-        capacity = _size
-    }
-    
-    free: override func {
-        gc_free(this data)
-        super()
-    }
+	init: func ~withData (.data, =_size) {
+		this data = gc_malloc(_size * T size)
+		memcpy(this data, data, _size * T size)
+		capacity = _size
+	}
 
-    add: func (element: T) {
-        ensureCapacity(_size + 1)
-        data[_size] = element
-        _size += 1
-    }
+	free: override func {
+		gc_free(this data)
+		super()
+	}
 
-    add: func ~withIndex (index: SSizeT, element: T) {
-        if(index < 0) index = _size + index
-        if(index < 0 || index > _size) OutOfBoundsException new(This, index, _size) throw()
+	add: func (element: T) {
+		ensureCapacity(_size + 1)
+		data[_size] = element
+		_size += 1
+	}
 
-        // inserting at 0 can be optimized
-        if(index == 0) {
-            ensureCapacity(_size + 1)
-            dst, src: Octet*
-            dst = data + (T size)
-            src = data
-            memmove(dst, src, T size * _size)
-            data[0] = element
-            _size += 1
-            return
-        }
+	add: func ~withIndex (index: SSizeT, element: T) {
+		if (index < 0) index = _size + index
+		if (index < 0 || index > _size) OutOfBoundsException new(This, index, _size) throw()
 
-        if(index == _size) {
-            add(element)
-            return
-        }
+		// inserting at 0 can be optimized
+		if (index == 0) {
+			ensureCapacity(_size + 1)
+			dst, src: Octet*
+			dst = data + (T size)
+			src = data
+			memmove(dst, src, T size * _size)
+			data[0] = element
+			_size += 1
+			return
+		}
 
-        checkIndex(index)
-        ensureCapacity(_size + 1)
-        dst, src: Octet*
-        dst = data + (T size * (index + 1))
-        src = data + (T size * index)
-        bsize := (_size - index) * T size
-        memmove(dst, src, bsize)
-        data[index] = element
-        _size += 1
-    }
+		if (index == _size) {
+			add(element)
+			return
+		}
 
-    clear: func {
-        _size = 0
-    }
+		checkIndex(index)
+		ensureCapacity(_size + 1)
+		dst, src: Octet*
+		dst = data + (T size * (index + 1))
+		src = data + (T size * index)
+		bsize := (_size - index) * T size
+		memmove(dst, src, bsize)
+		data[index] = element
+		_size += 1
+	}
 
-    get: inline func(index: SSizeT) -> T {
-        if(index < 0) index = _size + index
-        if(index < 0 || index >= _size) OutOfBoundsException new(This, index, _size) throw()
-        checkIndex(index)
-        return data[index]
-    }
+	clear: func {
+		_size = 0
+	}
 
-    indexOf: func(element: T) -> SSizeT {
-        index := 0
-        while(index < _size) {
-            //if(memcmp(data + index * T size, element, T size) == 0) return index
-            if(this as List equals?(this[index], element)) return index
-            index += 1
-        }
-        return -1
-    }
+	get: inline func (index: SSizeT) -> T {
+		if (index < 0) index = _size + index
+		if (index < 0 || index >= _size) OutOfBoundsException new(This, index, _size) throw()
+		checkIndex(index)
+		return data[index]
+	}
 
-    lastIndexOf: func(element: T) -> SSizeT {
-        index := _size
-        while(index > -1) {
-            if(memcmp(data + index * T size, element, T size) == 0) return index
-            index -= 1
-        }
-        return -1
-    }
+	indexOf: func (element: T) -> SSizeT {
+		index := 0
+		while (index < _size) {
+			//if (memcmp(data + index * T size, element, T size) == 0) return index
+			if (this as List equals?(this[index], element)) return index
+			index += 1
+		}
+		return -1
+	}
 
-    removeAt: func (index: SSizeT) -> T {
-        if (index < 0) index = _size + index
-        if (index < 0 || index >= _size) OutOfBoundsException new(This, index, _size) throw()
+	lastIndexOf: func (element: T) -> SSizeT {
+		index := _size
+		while (index > -1) {
+			if (memcmp(data + index * T size, element, T size) == 0) return index
+			index -= 1
+		}
+		return -1
+	}
 
-        element := data[index]
-        memmove(data + (index * T size), data + ((index + 1) * T size), (_size - index) * T size)
-        _size -= 1
-        return element
-    }
+	removeAt: func (index: SSizeT) -> T {
+		if (index < 0) index = _size + index
+		if (index < 0 || index >= _size) OutOfBoundsException new(This, index, _size) throw()
 
-    /**
-     * Does an in-place sort, with the given comparison function
-     */
-    sort: func (greaterThan: Func (T, T) -> Bool) {
-        inOrder := false
-        while (!inOrder) {
-            inOrder = true
-            for (i in 0..size - 1) {
-                if (greaterThan(this[i], this[i + 1])) {
-                    inOrder = false
-                    tmp := this[i]
-                    this[i] = this[i + 1]
-                    this[i + 1] = tmp
-                }
-            }
-        }
-    }
+		element := data[index]
+		memmove(data + (index * T size), data + ((index + 1) * T size), (_size - index) * T size)
+		_size -= 1
+		return element
+	}
 
-    /**
-     * Removes a single instance of the specified element from this list,
-     * if it is present (optional operation).
-     * @return true if at least one occurence of the element has been
-     * removed
-     */
-    remove: func (element: T) -> Bool {
-        index := indexOf(element)
-        if(index == -1) return false
-        else {
-            removeAt(index)
-        }
-        return true
-    }
+	/**
+	 * Does an in-place sort, with the given comparison function
+	 */
+	sort: func (greaterThan: Func (T, T) -> Bool) {
+		inOrder := false
+		while (!inOrder) {
+			inOrder = true
+			for (i in 0 .. size - 1) {
+				if (greaterThan(this[i], this[i + 1])) {
+					inOrder = false
+					tmp := this[i]
+					this[i] = this[i + 1]
+					this[i + 1] = tmp
+				}
+			}
+		}
+	}
 
-    /**
-     * Replaces the element at the specified position in this list with
-     * the specified element.
-     */
-    set: func(index: Int, element: T) -> T {
-        checkIndex(index)
-        old := data[index]
-        data[index] = element
-        old
-    }
-    
-    /**
+	/**
+	 * Removes a single instance of the specified element from this list,
+	 * if it is present (optional operation).
+	 * @return true if at least one occurence of the element has been
+	 * removed
+	 */
+	remove: func (element: T) -> Bool {
+		index := indexOf(element)
+		if (index == -1) return false
+		else {
+			removeAt(index)
+		}
+		return true
+	}
+
+	/**
+	 * Replaces the element at the specified position in this list with
+	 * the specified element.
+	 */
+	set: func (index: Int, element: T) -> T {
+		checkIndex(index)
+		old := data[index]
+		data[index] = element
+		old
+	}
+
+	/**
 	* Set, but without WITHOUT RETURNING the current element.
 	*/
-	replaceAt: func(index: Int, element: T) {
+	replaceAt: func (index: Int, element: T) {
 		checkIndex(index)
 		data[index] = element
 	}
-	
-    /**
-     * @return the number of elements in this list.
-     */
-    getSize: inline func -> SizeT { _size }
 
-    /**
-     * Increases the capacity of this ArrayList instance, if necessary,
-     * to ensure that it can hold at least the number of elements
-     * specified by the minimum capacity argument.
-     */
-    ensureCapacity: inline func (newSize: SizeT) {
-        if(newSize > capacity) {            capacity = newSize * (newSize > 50000 ? 2 : 4)
-            tmpData := gc_realloc(data, capacity * T size)
-            if (tmpData) {
-                data = tmpData
-            } else {
-                OutOfMemoryException new(This) throw()
-            }
-        }
-    }
+	/**
+	 * @return the number of elements in this list.
+	 */
+	getSize: inline func -> SizeT { _size }
 
-    /** private */
-    checkIndex: inline func (index: SSizeT) {
-        if (index >= _size) {
-            OutOfBoundsException new(This, index, _size) throw()
-        }
-    }
+	/**
+	 * Increases the capacity of this ArrayList instance, if necessary,
+	 * to ensure that it can hold at least the number of elements
+	 * specified by the minimum capacity argument.
+	 */
+	ensureCapacity: inline func (newSize: SizeT) {
+		if (newSize > capacity) {
+			capacity = newSize * (newSize > 50000 ? 2 : 4)
+			tmpData := gc_realloc(data, capacity * T size)
+			if (tmpData) {
+				data = tmpData
+			} else {
+				OutOfMemoryException new(This) throw()
+			}
+		}
+	}
 
-    iterator: func -> BackIterator<T> { return ArrayListIterator<T> new(this) }
+	/** private */
+	checkIndex: inline func (index: SSizeT) {
+		if (index >= _size) {
+			OutOfBoundsException new(This, index, _size) throw()
+		}
+	}
 
-    backIterator: func -> BackIterator<T> {
-        iter := ArrayListIterator<T> new(this)
-        iter index = _size
-        return iter
-    }
+	iterator: func -> BackIterator<T> { return ArrayListIterator<T> new(this) }
 
-    clone: func -> This<T> {
-        copy := This<T> new(size)
-        copy addAll(this)
-        return copy
-    }
+	backIterator: func -> BackIterator<T> {
+		iter := ArrayListIterator<T> new(this)
+		iter index = _size
+		return iter
+	}
 
-    emptyClone: func <K> -> This<K> {
-        This<K> new()
-    }
+	clone: func -> This<T> {
+		copy := This<T> new(size)
+		copy addAll(this)
+		return copy
+	}
 
-    /** */
-    toArray: func -> Pointer {
-        data
-    }
+	emptyClone: func <K> -> This<K> {
+		This<K> new()
+	}
 
-    /** @return This<T> containing the items from this[min] through (including) this[max-1]  */
-    slice: func (min, max: SSizeT) -> This<T> {
-        if(min < 0) min = _size + min
-        if(min < 0 || min >= _size) OutOfBoundsException new(This, min, _size) throw()
+	/** */
+	toArray: func -> Pointer {
+		data
+	}
 
-        if(max < 0) max = _size + max
-        if(max < 0 || max >= _size) OutOfBoundsException new(This, max, _size) throw()
+	/** @return This<T> containing the items from this[min] through (including) this[max-1]  */
+	slice: func (min, max: SSizeT) -> This<T> {
+		if (min < 0) min = _size + min
+		if (min < 0 || min >= _size) OutOfBoundsException new(This, min, _size) throw()
 
-        // We use +1 since it's zero based, and we want the *size* instead of the last index
-        retSize := max - min + 1
+		if (max < 0) max = _size + max
+		if (max < 0 || max >= _size) OutOfBoundsException new(This, max, _size) throw()
 
-        ret := This<T> new(retSize)
-        /*for(i in min..(max + 1)) { // Used (max + 1) to compensate for Ranges being exclusive
-            ret add(this[i])
-        }*/
-        memcpy(ret data, data + (min * T size), (retSize) * T size)
-        ret _size = retSize
-        ret capacity = retSize
+		// We use +1 since it's zero based, and we want the *size* instead of the last index
+		retSize := max - min + 1
 
-        ret
-    }
+		ret := This<T> new(retSize)
+		/*for (i in min..(max + 1)) { // Used (max + 1) to compensate for Ranges being exclusive
+			ret add(this[i])
+		}*/
+		memcpy(ret data, data + (min * T size), (retSize) * T size)
+		ret _size = retSize
+		ret capacity = retSize
 
-    slice: func ~withRange (r: Range) -> This<T> {
-        slice(r min, r max)
-    }
+		ret
+	}
 
+	slice: func ~withRange (r: Range) -> This<T> {
+		slice(r min, r max)
+	}
 }
 
 ArrayListIterator: class <T> extends BackIterator<T> {
+	list: ArrayList<T>
+	index : SSizeT = 0
 
-    list: ArrayList<T>
-    index : SSizeT = 0
-    
-    _canRemove := false
+	_canRemove := false
 
-    init: func ~iter (=list)
+	init: func ~iter (=list)
 
-    hasNext?: func -> Bool { index < list size }
+	hasNext?: func -> Bool { index < list size }
 
-    next: func -> T {
-        _canRemove = true
-        index += 1
-        list get(index - 1)
-    }
+	next: func -> T {
+		_canRemove = true
+		index += 1
+		list get(index - 1)
+	}
 
-    hasPrev?: func -> Bool { index > 0 }
+	hasPrev?: func -> Bool { index > 0 }
 
-    prev: func -> T {
-        index -= 1
-        list get(index)
-    }
+	prev: func -> T {
+		index -= 1
+		list get(index)
+	}
 
-    remove: func -> Bool {
-        if (!_canRemove) {
-            IllegalIteratorOpException new(class, \
-                "ArrayListIterator remove() called twice in a single iteration - that's illegal.") throw()
-        }
-        _canRemove = false
+	remove: func -> Bool {
+		if (!_canRemove) {
+			IllegalIteratorOpException new(class, \
+				"ArrayListIterator remove() called twice in a single iteration - that's illegal.") throw()
+		}
+		_canRemove = false
 
-        list removeAt(index - 1)
+		list removeAt(index - 1)
 
-        if(index <= list size) {
-            index -= 1
-        }
+		if (index <= list size) {
+			index -= 1
+		}
 
-        true
-    }
-
+		true
+	}
 }
 
 IllegalIteratorOpException: class extends Exception {
-
-    init: func (.origin, .message) {
-        super(origin, message)
-    }
-
+	init: func (.origin, .message) {
+		super(origin, message)
+	}
 }
 
 /* Operators */
