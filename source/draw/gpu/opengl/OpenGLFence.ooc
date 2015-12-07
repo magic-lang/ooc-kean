@@ -17,19 +17,37 @@
 use ooc-draw-gpu
 import backend/[GLFence, GLContext]
 import OpenGLContext
+import threading/[Mutex, WaitCondition]
 
 version(!gpuOff) {
 OpenGLFence: class extends GpuFence {
 	_backend: GLFence
-	init: func (context: OpenGLContext) {
-		this _backend = context backend as GLContext createFence()
-	}
+	_syncCondition := WaitCondition new()
+	_mutex := Mutex new()
+	_context: OpenGLContext
+	init: func (=_context)
 	free: override func {
+		this _mutex free()
+		this _syncCondition free()
 		this _backend free()
 		super()
 	}
-	wait: func { this _backend clientWait() }
+	wait: func {
+		this _mutex lock()
+		if (this _backend == null)
+			this _syncCondition wait(this _mutex)
+		this _backend clientWait()
+		this _mutex unlock()
+	}
 	gpuWait: func { this _backend wait() }
-	sync: func { this _backend sync() }
+	sync: func {
+		this _mutex lock()
+		if (this _backend != null)
+			this _backend free()
+		this _backend = this _context backend as GLContext createFence()
+		this _backend sync()
+		this _syncCondition broadcast()
+		this _mutex unlock()
+	}
 }
 }
