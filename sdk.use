@@ -17,3 +17,4 @@ Imports: lang/VarArgs
 Imports: Owner
 Imports: OwnedBuffer
 Imports: TextBuffer
+Imports: structs/VectorList
