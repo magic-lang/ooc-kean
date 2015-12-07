@@ -33,7 +33,7 @@ GpuYuv420Semiplanar: class extends GpuImage {
 	}
 	init: func (=_y, =_uv, context: GpuContext) {
 		super(this _y size, context)
-		this coordinateSystem = this _y coordinateSystem
+		this _coordinateSystem = this _y coordinateSystem
 		this _y referenceCount increase()
 		this _uv referenceCount increase()
 	}

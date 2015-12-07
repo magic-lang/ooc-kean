@@ -27,7 +27,7 @@ OpenGLBgr: class extends OpenGLPacked {
 	channelCount: static Int = 3
 	init: func (size: IntVector2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
 		super(context _backend createTexture(TextureType Bgr, size, stride, data, true), This channelCount, context)
-		this coordinateSystem = coordinateSystem
+		this _coordinateSystem = coordinateSystem
 	}
 	init: func ~empty (size: IntVector2D, context: OpenGLContext) {
 		this init(size, size x * This channelCount, null, CoordinateSystem YUpward, context)

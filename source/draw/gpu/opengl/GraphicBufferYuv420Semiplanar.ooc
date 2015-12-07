@@ -61,7 +61,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 			this _rgba = EGLBgra new(rgbaBuffer, context)
 			this _rgba referenceCount increase()
 		}
-		this _rgba coordinateSystem = this coordinateSystem
+		this _rgba _coordinateSystem = this coordinateSystem
 		this _rgba referenceCount increase()
 		this _rgba
 	}
