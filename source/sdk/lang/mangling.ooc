@@ -1,4 +1,4 @@
-import io/[StringReader]
+import io/StringReader
 
 // Used to turn `lang_Exception__Exception_throw_impl` into `Exception throw_impl() in lang/Exception`
 Demangler: class {
