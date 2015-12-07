@@ -112,11 +112,11 @@ RasterCanvasTest: class extends Fixture {
 			imageFlower := RasterYuv420Semiplanar open(inputFlower)
 			outputImage := RasterBgr open(inputSpace)
 			outputImage canvas draw(imageFlower, IntBox2D new(imageFlower size), IntBox2D new(20, 30, 100, 250))
-			imageFlower coordinateSystem = CoordinateSystem YUpward
+			imageFlower _coordinateSystem = CoordinateSystem YUpward
 			outputImage canvas draw(imageFlower, IntBox2D new(imageFlower size), IntBox2D new(130, 30, 100, 250))
-			imageFlower coordinateSystem = CoordinateSystem XLeftward
+			imageFlower _coordinateSystem = CoordinateSystem XLeftward
 			outputImage canvas draw(imageFlower, IntBox2D new(imageFlower size), IntBox2D new(240, 30, 100, 250))
-			imageFlower coordinateSystem = CoordinateSystem XLeftward | CoordinateSystem YUpward
+			imageFlower _coordinateSystem = CoordinateSystem XLeftward | CoordinateSystem YUpward
 			outputImage canvas draw(imageFlower, IntBox2D new(imageFlower size), IntBox2D new(350, 30, 100, 250))
 			outputImage save(output)
 			imageFlower referenceCount decrease()

@@ -77,28 +77,28 @@ RasterBgrTest: class extends Fixture {
 			image := RasterBgr open(this sourceSpace)
 			image2 := image copy()
 
-			image coordinateSystem = CoordinateSystem YUpward
+			image _coordinateSystem = CoordinateSystem YUpward
 			image2 canvas draw(image)
 			for (row in 0 .. image2 height)
 				for (column in 0 .. image2 width)
 					expect(image2[column, row] == image[column, image height - row - 1])
 
-			image coordinateSystem = CoordinateSystem Default
-			image2 coordinateSystem = CoordinateSystem XLeftward | CoordinateSystem YUpward
+			image _coordinateSystem = CoordinateSystem Default
+			image2 _coordinateSystem = CoordinateSystem XLeftward | CoordinateSystem YUpward
 			image2 canvas draw(image)
 			for (row in 0 .. image2 height)
 				for (column in 0 .. image2 width)
 					expect(image2[column, row] == image[image width - column - 1, image height - row - 1])
 
-			image coordinateSystem = CoordinateSystem XLeftward
-			image2 coordinateSystem = CoordinateSystem Default
+			image _coordinateSystem = CoordinateSystem XLeftward
+			image2 _coordinateSystem = CoordinateSystem Default
 			image2 canvas draw(image)
 			for (row in 0 .. image2 height)
 				for (column in 0 .. image2 width)
 					expect(image2[column, row] == image[image width - column - 1, row])
 
-			image coordinateSystem = CoordinateSystem Default
-			image2 coordinateSystem = CoordinateSystem XRightward | CoordinateSystem YDownward
+			image _coordinateSystem = CoordinateSystem Default
+			image2 _coordinateSystem = CoordinateSystem XRightward | CoordinateSystem YDownward
 			image2 canvas draw(image)
 			for (row in 0 .. image2 height)
 				for (column in 0 .. image2 width)

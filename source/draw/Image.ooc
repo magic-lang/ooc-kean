@@ -32,7 +32,8 @@ Image: abstract class {
 	size ::= this _size
 	width ::= this size x
 	height ::= this size y
-	coordinateSystem: CoordinateSystem { get set }
+	_coordinateSystem: CoordinateSystem
+	coordinateSystem ::= this _coordinateSystem
 	crop: IntShell2D { get set }
 	wrap: Bool { get set }
 	_referenceCount: ReferenceCounter
@@ -49,13 +50,13 @@ Image: abstract class {
 			this _canvas
 		}
 	}
-	init: func (=_size) {
+	init: func (=_size, coordinateSystem := CoordinateSystem Default) {
 		this _referenceCount = ReferenceCounter new(this)
-		this coordinateSystem = CoordinateSystem Default
+		this _coordinateSystem = coordinateSystem
 	}
 	init: func ~fromImage (original: This) {
 		this init(original size)
-		this coordinateSystem = original coordinateSystem
+		this _coordinateSystem = original coordinateSystem
 		this crop = original crop
 		this wrap = original wrap
 	}

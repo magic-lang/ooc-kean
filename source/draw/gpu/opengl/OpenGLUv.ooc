@@ -26,7 +26,7 @@ OpenGLUv: class extends OpenGLPacked {
 	channelCount: static Int = 2
 	init: func ~fromPixels (size: IntVector2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
 		super(context _backend createTexture(TextureType Uv, size, stride, data), This channelCount, context)
-		this coordinateSystem = coordinateSystem
+		this _coordinateSystem = coordinateSystem
 	}
 	init: func (size: IntVector2D, context: OpenGLContext) {
 		this init(size, size x * This channelCount, null, CoordinateSystem YUpward, context)
