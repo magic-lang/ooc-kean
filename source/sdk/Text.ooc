@@ -96,6 +96,20 @@ Text: cover {
 		result
 	}
 	find: func ~string (string: String, start := 0) -> Int { this find(This new(string), start) }
+	lastIndexOf: func ~char (character: Char, start := 0) -> Int {
+		result := -1
+		t := this take()
+		index := t count - 1
+		while (index >= start) {
+			if (t[index] == character) {
+				result = index
+				break
+			}
+			--index
+		}
+		this free(Owner Receiver)
+		result
+	}
 	operator [] (index: Int) -> Char {
 		result := this _buffer[index]
 		this free(Owner Receiver)
