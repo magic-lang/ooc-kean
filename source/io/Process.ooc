@@ -1,10 +1,10 @@
 import Pipe
-import structs/[List, ArrayList, HashMap]
+import structs/[List, HashMap]
 import native/[ProcessUnix, ProcessWin32]
 
 Process: abstract class {
 	// The first argument should be the path to the executable.
-	args: List<String>
+	args: VectorList<String>
 
 	// Pipe to which standard output will be redirected if it's non-null
 	stdOut = null: Pipe
@@ -23,7 +23,7 @@ Process: abstract class {
 	pid = 0: Long
 
 	new: static func ~fromArray (args: String[]) -> This {
-		p := ArrayList<String> new()
+		p := VectorList<String> new()
 		for (i in 0 .. args length) {
 			arg := args[i]
 			p add(arg)
@@ -108,7 +108,11 @@ Process: abstract class {
 
 	// Returns a representation of the command, escaped to some point.
 	getCommandLine: func -> String {
-		args join(" ") replaceAll("\\", "\\\\")
+		result := ""
+		for (i in 0 .. args count - 1)
+			result = result << args[i] << " "
+		result = result << args[args count - 1]
+		result = result replaceAll("\\", "\\\\")
 	}
 }
 

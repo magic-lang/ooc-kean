@@ -2,7 +2,6 @@ version(windows) {
 	import ../[WaitCondition, Mutex, Thread]
 	import os/win32/[types, errors]
 	import MutexWin32
-	import structs/ArrayList
 
 	include windows
 
@@ -14,20 +13,20 @@ version(windows) {
 
 	ConditionWin32: class extends WaitCondition {
 		_mutex := Mutex new()
-		_waitingEvents := ArrayList<Handle> new()
-		_waitingForRelease := ArrayList<Handle> new()
+		_waitingEvents := VectorList<Handle> new()
+		_waitingForRelease := VectorList<Handle> new()
 		init: func
 		// do not destroy wait condition while threads are still waiting on it
 		free: override func {
 			this _mutex lock()
 			//waiting threads should have a chance to wake up
-			for (i in 0 .. this _waitingEvents size) {
+			for (i in 0 .. this _waitingEvents count) {
 				SetEvent(this _waitingEvents[i])
 				Thread yield()
 			}
-			for (i in 0 .. this _waitingForRelease size)
+			for (i in 0 .. this _waitingForRelease count)
 				CloseHandle(this _waitingForRelease[i])
-			for (i in 0 .. this _waitingEvents size)
+			for (i in 0 .. this _waitingEvents count)
 				CloseHandle(this _waitingEvents[i])
 			this _mutex unlock()
 			this _waitingEvents free()
@@ -47,9 +46,8 @@ version(windows) {
 			result := false
 			toSignal := 0 as Handle
 			this _mutex lock()
-			if (this _waitingEvents size > 0) {
-				toSignal = this _waitingEvents first()
-				this _waitingEvents removeAt(0)
+			if (this _waitingEvents count > 0) {
+				toSignal = this _waitingEvents remove(0)
 				this _waitingForRelease add(toSignal)
 			}
 			this _mutex unlock()
@@ -59,18 +57,17 @@ version(windows) {
 		}
 		broadcast: func -> Bool {
 			result := false
-			toSignal := ArrayList<Handle> new()
+			toSignal := VectorList<Handle> new()
 			this _mutex lock()
-			while (this _waitingEvents size > 0) {
-				eventId := this _waitingEvents first()
-				this _waitingEvents removeAt(0)
+			while (this _waitingEvents count > 0) {
+				eventId := this _waitingEvents remove(0)
 				this _waitingForRelease add(eventId)
 				toSignal add(eventId)
 			}
 			this _mutex unlock()
-			if (toSignal size > 0) {
+			if (toSignal count > 0) {
 				result = true
-				for (i in 0 .. toSignal size)
+				for (i in 0 .. toSignal count)
 					result = result && SetEvent(toSignal[i])
 			}
 			toSignal free()

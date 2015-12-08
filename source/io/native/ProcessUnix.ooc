@@ -1,4 +1,4 @@
-import structs/[HashMap, ArrayList, List]
+import structs/[HashMap, List]
 import os/[Env, wait, unistd]
 import ../[Process, Pipe]
 import PipeUnix
@@ -108,11 +108,11 @@ ProcessUnix: class extends Process {
 				chdir(cwd as CString)
 
 			/* run the stuff. */
-			cArgs : CString * = gc_malloc(Pointer size * (args getSize() + 1))
-			for (i in 0 .. args getSize()) {
+			cArgs : CString * = gc_malloc(Pointer size * (args count + 1))
+			for (i in 0 .. args count) {
 				cArgs[i] = args[i] toCString()
 			}
-			cArgs[args getSize()] = null // null-terminated - makes sense
+			cArgs[args count] = null // null-terminated - makes sense
 
 			signal(SIGABRT, sigabrtHandler)
 

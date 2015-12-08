@@ -38,7 +38,7 @@ File: abstract class {
 		}
 	}
 
-	children: ArrayList<This> {
+	children: VectorList<This> {
 		get {
 			getChildren()
 		}
@@ -335,13 +335,13 @@ File: abstract class {
 	 * List the name of the children of this path
 	 * Works only on directories, obviously
 	 */
-	getChildrenNames: abstract func -> ArrayList<String>
+	getChildrenNames: abstract func -> VectorList<String>
 
 	/**
 	 * List the children of this path
 	 * Works only on directories, obviously
 	 */
-	getChildren: abstract func -> ArrayList<This>
+	getChildren: abstract func -> VectorList<This>
 
 	/**
 	 * Tries to remove the file. This only works for files or empty directories

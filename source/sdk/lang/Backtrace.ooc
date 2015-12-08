@@ -1,5 +1,5 @@
 import os/[Env, Dynlib, ShellUtils]
-import structs/[ArrayList, List]
+import structs/List
 import mangling
 
 BacktraceHandler: class {
@@ -122,7 +122,7 @@ BacktraceHandler: class {
 
 		buffer append("[fancy backtrace]\n")
 		frameno := 0
-		elements := ArrayList<TraceElement> new()
+		elements := VectorList<TraceElement> new()
 
 		for (i in 0 .. length) {
 			line := lines[i] toString()

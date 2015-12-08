@@ -19,7 +19,6 @@ use ooc-base
 use ooc-math
 use ooc-collections
 import math
-import structs/ArrayList
 import FloatComplex
 import lang/IO
 import structs/Vector
