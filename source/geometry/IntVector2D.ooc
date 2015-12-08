@@ -23,7 +23,7 @@ IntVector2D: cover {
 	x, y: Int
 	area ::= this x * this y
 	square ::= this x == this y
-	empty ::= !(this x > 0 && this y > 0)
+	isZero ::= this area <= 0
 	length ::= ((this x squared() + this y squared()) as Float sqrt())
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
