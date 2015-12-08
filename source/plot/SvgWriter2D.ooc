@@ -82,7 +82,7 @@ SvgWriter2D: class {
 				numPlotsY = this svgPlots count modulo(numPlotsX) != 0 ? 1 + this svgPlots count / numPlotsX : this svgPlots count / numPlotsX
 			} else {
 				numPlotsX = numberOfPlotsHorizontally
-				numPlotsY = ceil(this svgPlots count as Float / numPlotsX as Float) as Int
+				numPlotsY = (this svgPlots count as Float / numPlotsX as Float) ceil() as Int
 			}
 			plotSize := FloatVector2D new(this size x / numPlotsX, this size y / numPlotsY)
 			position := FloatPoint2D new()

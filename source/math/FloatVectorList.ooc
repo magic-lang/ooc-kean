@@ -215,7 +215,7 @@ FloatVectorList: class extends VectorList<Float> {
 		result
 	}
 	convolveAt: func (index: Int, kernel: This) -> Float {
-		halfSize := round((kernel count - 1) / 2) as Int
+		halfSize := ((kernel count - 1) / 2.f) round() as Int
 		result := 0.0f
 		for (kernelIndex in -halfSize .. halfSize + 1)
 			result = result + this[(index + kernelIndex) clamp(0, this count - 1)] * kernel[halfSize + kernelIndex]

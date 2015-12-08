@@ -196,7 +196,7 @@ FloatMatrix: cover {
 		for (position in 0 .. order - 1) {
 			pivotRow := position
 			for (y in position + 1 .. u take() height)
-				if (abs(uElements[position + position * uWidth]) < abs(uElements[position + y * uWidth]))
+				if (uElements[position + position * uWidth] abs() < uElements[position + y * uWidth] abs())
 					pivotRow = y
 			p swapRows(position, pivotRow)
 			u swapRows(position, pivotRow)

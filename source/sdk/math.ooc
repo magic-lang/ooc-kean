@@ -3,8 +3,6 @@ use math
 
 FLT_EPSILON: extern Float
 
-abs: extern func (Int) -> Int
-
 cos: extern func (Double) -> Double
 sin: extern func (Double) -> Double
 tan: extern func (Double) -> Double
@@ -18,11 +16,8 @@ atan2: extern func (Double, Double) -> Double
 sqrt: extern func (Double) -> Double
 pow: extern func (Double, Double) -> Double
 
-round: extern (lround) func ~dl (Double) -> Long
-ceil: extern (ceilf) func ~Float (Float) -> Float
-floor: extern (floorf) func ~Float (Float) -> Float
-
-//TODO: Define methods only on extensions, and avoid global functions. Most of them should be non-static
+//TODO: Define methods only on extensions, and avoid global functions
+//TODO: Most member functions should be non-static
 
 extend Short {
 	minimumValue ::= static SHRT_MIN
@@ -281,7 +276,7 @@ extend Float {
 	roundToValueDigits: static func (value: This, valueDigits: Int, up: Bool) -> This {
 		(result, radix) := This decomposeToCoefficientAndRadix(value, valueDigits)
 		if (result != 0) {
-			result = up ? ceil(result) : floor(result)
+			result = up ? result ceil() : result floor()
 			result *= radix
 		}
 		result

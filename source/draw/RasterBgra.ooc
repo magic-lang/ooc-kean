@@ -161,13 +161,13 @@ RasterBgra: class extends RasterPacked {
 	operator []= (point: IntPoint2D, value: ColorBgra) { this[point x, point y] = value }
 	operator [] (point: FloatPoint2D) -> ColorBgra { this [point x, point y] }
 	operator [] (x, y: Float) -> ColorBgra {
-		left := x - floor(x)
-		top := y - floor(y)
+		left := x - x floor()
+		top := y - y floor()
 
-		topLeft := this[floor(x) as Int, floor(y) as Int]
-		bottomLeft := this[floor(x) as Int, ceil(y) as Int]
-		topRight := this[ceil(x) as Int, floor(y) as Int]
-		bottomRight := this[ceil(x) as Int, ceil(y) as Int]
+		topLeft := this[x floor() as Int, y floor() as Int]
+		bottomLeft := this[x floor() as Int, y ceil() as Int]
+		topRight := this[x ceil() as Int, y floor() as Int]
+		bottomRight := this[x ceil() as Int, y ceil() as Int]
 
 		ColorBgra new(
 			(top * (left * topLeft blue + (1 - left) * topRight blue) + (1 - top) * (left * bottomLeft blue + (1 - left) * bottomRight blue)),
