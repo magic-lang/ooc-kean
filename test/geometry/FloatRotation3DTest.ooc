@@ -86,6 +86,15 @@ FloatRotation3DTest: class extends Fixture {
 			angle := Float toDegrees(rotationA angle(rotationB))
 			expect(angle, is equal to(25.0f) within(tolerance))
 		})
+		this add("euler angles conversion", func {
+			x := 0.1f
+			y := 0.23f
+			z := 0.04f
+			rotation := FloatRotation3D createFromEulerAngles(x, y, z)
+			expect(x, is equal to(rotation x) within(tolerance))
+			expect(y, is equal to(rotation y) within(tolerance))
+			expect(z, is equal to(rotation z) within(tolerance))
+		})
 	}
 }
 
