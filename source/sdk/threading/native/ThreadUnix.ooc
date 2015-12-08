@@ -58,7 +58,7 @@ version(unix || apple) {
 			absSeconds: Double = nowSeconds + seconds
 
 			// And store it in a timespec, converting again...
-			ts tv_sec = floor(absSeconds) as TimeT
+			ts tv_sec = absSeconds floor() as TimeT
 			ts tv_nsec = ((absSeconds - ts tv_sec) * 1000 + 0.5) * (1_000_000 as Long)
 		}
 		__fake_timedjoin: func (seconds: Double) -> Bool {

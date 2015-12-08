@@ -62,7 +62,7 @@ OwnedBuffer: cover {
 		this slice(start, this _size - start)
 	}
 	slice: func (start, distance: Int) -> This { // call by value -> modifies copy of cover
-		size := abs(distance)
+		size := distance abs()
 		if (start < 0)
 			start = this _size + start
 		if (distance < 0)

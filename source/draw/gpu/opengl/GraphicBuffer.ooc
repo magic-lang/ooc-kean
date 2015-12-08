@@ -109,7 +109,7 @@ GraphicBuffer: class {
 			result = align == AlignWidth Ceiling ? This _alignedWidth[This _alignedWidth length-1] : This _alignedWidth[0]
 		for (i in 0 .. This _alignedWidth length) {
 			currentWidth := This _alignedWidth[i]
-			if (abs(result - width) > abs(currentWidth - width) &&
+			if ((result - width) abs() > (currentWidth - width) abs() &&
 				(align == AlignWidth Nearest ||
 				(currentWidth <= width && align == AlignWidth Floor) ||
 				(currentWidth >= width && align == AlignWidth Ceiling)))

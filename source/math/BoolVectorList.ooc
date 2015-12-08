@@ -60,7 +60,7 @@ BoolVectorList: class extends VectorList<Bool> {
 	}
 	erosion: func (structuringElementSize: Int) -> This {
 		result := This new(this _count)
-		halfSize := round((structuringElementSize - 1) / 2) as Int
+		halfSize := ((structuringElementSize - 1) / 2.f) round() as Int
 		currentSequence := This new(structuringElementSize)
 		for (i in 0 .. this _count) {
 			startIndex := (i - halfSize) clamp(0, this count - 1)
@@ -73,7 +73,7 @@ BoolVectorList: class extends VectorList<Bool> {
 	}
 	dilation: func (structuringElementSize: Int) -> This {
 		result := This new(this _count)
-		halfSize := round((structuringElementSize - 1) / 2) as Int
+		halfSize := ((structuringElementSize - 1) / 2.f) round() as Int
 		currentSequence := This new(structuringElementSize)
 		for (i in 0 .. this _count) {
 			startIndex := (i - halfSize) clamp(0, this count - 1)
