@@ -72,15 +72,15 @@ GraphicBuffer: class {
 		This _allocate(size x, size y, format as Int, usage as Int, backend&, nativeBuffer&, pixelStride&)
 		this init(backend, nativeBuffer, null, size, pixelStride, format, true)
 	}
-	init: func ~fromHandle (handle: Pointer, size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat, usage: GraphicBufferUsage, ownsMemory: Bool) {
-		backend, nativeBuffer: Pointer
-		This _createFromHandle(size x, size y, format as Int, usage as Int, pixelStride, handle, false, backend&, nativeBuffer&)
-		this init(backend, nativeBuffer, handle, size, pixelStride, format, ownsMemory)
-	}
 	free: override func {
 		if (this _ownsMemory)
 			This _free(this _backend)
 		super()
+	}
+	shallowCopy: func (size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat, usage: GraphicBufferUsage) -> This {
+		backend, nativeBuffer: Pointer
+		This _createFromHandle(size x, size y, format as Int, usage as Int, pixelStride, this _handle, false, backend&, nativeBuffer&)
+		This new(backend, nativeBuffer, handle, size, pixelStride, format, false)
 	}
 	lock: func (usage: GraphicBufferUsage) -> Pointer {
 		result: Pointer = null
