@@ -40,8 +40,8 @@ IntBox2D: cover {
 	rightCenter ::= IntPoint2D new(this right, this center y)
 	topCenter ::= IntPoint2D new(this center x, this top)
 	bottomCenter ::= IntPoint2D new(this center x, this bottom)
-	empty ::= this size empty
-	area ::= this size x * this size y
+	hasZeroArea ::= this size hasZeroArea
+	area ::= this size area
 	init: func@ (=leftTop, =size)
 	init: func@ ~fromSizes (leftTop: IntVector2D, =size) { this leftTop = IntPoint2D new(leftTop x, leftTop y) }
 	init: func@ ~fromSize (=size) { this leftTop = IntPoint2D new() }
@@ -98,15 +98,15 @@ IntBox2D: cover {
 	}
 	contains: func ~box (box: This) -> Bool { this intersection(box) == box }
 	operator + (other: This) -> This {
-		if (this empty)
+		if (this hasZeroArea)
 			other
-		else if (other empty)
+		else if (other hasZeroArea)
 			this
 		else
 			union(other)
 	}
 	operator - (other: This) -> This {
-		if (this empty || other empty)
+		if (this hasZeroArea || other hasZeroArea)
 			This new()
 		else
 			intersection(other)

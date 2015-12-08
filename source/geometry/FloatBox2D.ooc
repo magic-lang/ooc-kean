@@ -40,8 +40,8 @@ FloatBox2D: cover {
 	rightCenter ::= FloatPoint2D new(this right, this center y)
 	topCenter ::= FloatPoint2D new(this center x, this top)
 	bottomCenter ::= FloatPoint2D new(this center x, this bottom)
-	empty ::= this size empty
-	area ::= this size x * this size y
+	hasZeroArea ::= this size hasZeroArea
+	area ::= this size area
 	init: func@ (=leftTop, =size)
 	init: func@ ~fromIntBox2D (box: IntBox2D) { this init(box left, box top, box width, box height) }
 	init: func@ ~fromPoints (first, second: FloatPoint2D) {
@@ -118,15 +118,15 @@ FloatBox2D: cover {
 	ceiling: func -> This { This new(this leftTop ceiling(), this size ceiling()) }
 	floor: func -> This { This new(this leftTop floor(), this size floor()) }
 	operator + (other: This) -> This {
-		if (this empty)
+		if (this hasZeroArea)
 			other
-		else if (other empty)
+		else if (other hasZeroArea)
 			this
 		else
 			this union(other)
 	}
 	operator - (other: This) -> This {
-		if (this empty || other empty)
+		if (this hasZeroArea || other hasZeroArea)
 			This new()
 		else
 			this intersection(other)
