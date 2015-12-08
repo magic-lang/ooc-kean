@@ -339,6 +339,15 @@ QuaternionTest: class extends Fixture {
 				weights add(1.0f)
 			expect(Quaternion weightedMean(quaternionList, weights) rotationZ, is equal to(-1.7f) within(0.001f))
 		})
+		this add("euler angles conversion", func {
+			x := 0.1f
+			y := 0.23f
+			z := 0.04f
+			quaternion := Quaternion createFromEulerAngles(x, y, z)
+			expect(x - quaternion rotationX, is equal to(0.0f) within(tolerance))
+			expect(y - quaternion rotationY, is equal to(0.0f) within(tolerance))
+			expect(z - quaternion rotationZ, is equal to(0.0f) within(tolerance))
+		})
 	}
 }
 
