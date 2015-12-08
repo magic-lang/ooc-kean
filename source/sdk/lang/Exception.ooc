@@ -197,13 +197,13 @@ OSException: class extends Exception {
 }
 
 OutOfBoundsException: class extends Exception {
-	init: func (=origin, accessOffset, elementLength: SizeT) {
+	init: func (=origin, accessOffset, elementLength: Int) {
 		init(accessOffset, elementLength)
 	}
-	init: func ~noOrigin (accessOffset, elementLength: SizeT) {
-		message = "Trying to access an element at offset %d, but size is only %d!" format(accessOffset, elementLength)
+	init: func ~noOrigin (accessOffset, elementLength: Int) {
+		message = "Trying to access an element at offset %i, but size is %i!" format(accessOffset, elementLength)
 	}
-	kean_lang_exception_outOfBoundsException_new: static unmangled func (accessOffset, elementLength: SizeT) -> This {
+	kean_lang_exception_outOfBoundsException_new: static unmangled func (accessOffset, elementLength: Int) -> This {
 		This new(accessOffset, elementLength)
 	}
 }
