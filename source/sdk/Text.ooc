@@ -190,6 +190,17 @@ Text: cover {
 		this free(Owner Receiver)
 		result
 	}
+	nullTerminated: func -> This {
+		t := this take()
+		result: This
+		if (t endsWith('\0'))
+			result = this
+		else {
+			result = t + t"\0"
+			this free(Owner Receiver)
+		}
+		result
+	}
 	print: func {
 		fwrite(this _buffer _backend pointer as Char*, 1, this _buffer _backend size, stdout)
 		this free(Owner Receiver)
