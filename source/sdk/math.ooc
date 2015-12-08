@@ -39,7 +39,7 @@ extend Int {
 	maximumValue ::= static INT_MAX
 	pi ::= static 3
 	e ::= static 2
-	
+
 	modulo: func (divisor: This) -> This {
 		result := this
 		if (result < 0)
@@ -114,7 +114,8 @@ operator != (left, right: Range) -> Bool { !(left == right) }
 extend Double {
 	pi ::= static 3.14159_26535_89793_23846_26433_83279
 	e ::= static 2.718281828459045235360287471352662497757247093699959574966
-	
+	defaultTolerance ::= static 0.0001
+
 	cos: extern (cos) func -> This
 	sin: extern (sin) func -> This
 	tan: extern (tan) func -> This
@@ -157,7 +158,11 @@ extend Double {
 	clamp: func (floor, ceiling: This) -> This {
 		this > ceiling ? ceiling : (this < floor ? floor : this)
 	}
-	equals: func (other: This, tolerance := 0.0001) -> Bool { (this - other) abs() < tolerance }
+	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
+	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this - other < tolerance }
+	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this - other > tolerance }
+	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { this equals(other) || this lessThan(other) }
+	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { this equals(other) || this greaterThan(other) }
 }
 
 extend Float {
@@ -168,7 +173,8 @@ extend Float {
 	maximumValue ::= static FLT_MAX
 	pi ::= static 3.14159_26535_89793_23846_26433_83279f
 	e ::= static 2.718281828459045235360287471352662497757247093699959574966f
-	
+	defaultTolerance ::= static 0.0001f
+
 	cos: extern (cosf) func -> This
 	sin: extern (sinf) func -> This
 	tan: extern (tanf) func -> This
@@ -291,13 +297,18 @@ extend Float {
 		result := coefficient toString() >> "E" & power toString()
 		result
 	}
-	equals: func (other: This, tolerance := 0.0001f) -> Bool { (this - other) abs() < tolerance }
+	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
+	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this - other < tolerance }
+	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this - other > tolerance }
+	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { this equals(other) || this lessThan(other) }
+	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { this equals(other) || this greaterThan(other) }
 }
 
 extend LDouble {
 	pi ::= static 3.14159_26535_89793_23846_26433_83279L
 	e ::= static 2.718281828459045235360287471352662497757247093699959574966L
-	
+	defaultTolerance ::= static 0.0001L
+
 	cos: extern (cosl) func -> This
 	sin: extern (sinl) func -> This
 	tan: extern (tanl) func -> This
@@ -330,5 +341,9 @@ extend LDouble {
 	ceil: extern (ceill) func -> This
 	floor: extern (floorl) func -> This
 	truncate: extern (truncl) func -> This
-	equals: func (other: This, tolerance := 0.0001) -> Bool { (this - other) abs() < tolerance }
+	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
+	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this - other < tolerance }
+	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this - other > tolerance }
+	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { this equals(other) || this lessThan(other) }
+	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { this equals(other) || this greaterThan(other) }
 }
