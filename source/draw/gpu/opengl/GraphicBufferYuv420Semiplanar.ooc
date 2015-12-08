@@ -38,7 +38,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	_mutex := static Mutex new()
 	_binSize: static Int = 20
 	init: func ~fromBuffer (=_buffer, size: IntVector2D, =_stride, =_uvOffset) {
-		pointer := _buffer lock()
+		pointer := _buffer lock(GraphicBufferUsage ReadOften)
 		_buffer unlock()
 		length := 3 * this _stride * size y / 2
 		super(ByteBuffer new(pointer, length), size, _stride, _uvOffset)

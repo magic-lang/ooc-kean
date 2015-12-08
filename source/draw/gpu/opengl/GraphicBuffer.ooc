@@ -82,12 +82,7 @@ GraphicBuffer: class {
 			This _free(this _backend)
 		super()
 	}
-	lock: func (write := false) -> Pointer {
-		result: Pointer = null
-		This _lock(this _backend, write ? (GraphicBufferUsage WriteOften) as Int: (GraphicBufferUsage ReadOften) as Int, result&)
-		result
-	}
-	lock: func ~withUsage (usage: GraphicBufferUsage) -> Pointer {
+	lock: func (usage: GraphicBufferUsage) -> Pointer {
 		result: Pointer = null
 		This _lock(this _backend, usage as Int, result&)
 		result
