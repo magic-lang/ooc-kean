@@ -60,6 +60,12 @@ TextTest: class extends Fixture {
 			expect(text find(Text new("st"), 4) == 5)
 			expect(text find("string") == 5)
 			expect(text find(Text new("bad")) == -1)
+			expect(t"cacbcd" lastIndexOf('c'), is equal to(4))
+			expect(t"other" lastIndexOf('a'), is equal to(-1))
+			expect(t"other" lastIndexOf('o', 1), is equal to(-1))
+			expect(t"/path/to/file.txt" lastIndexOf('/'), is equal to(8))
+			expect(t"xyz" lastIndexOf('z'), is equal to(2))
+			expect(t"xyz" lastIndexOf('x'), is equal to(0))
 		})
 		this add("slicing", func {
 			text := Text new(c"text to slice", 13)
