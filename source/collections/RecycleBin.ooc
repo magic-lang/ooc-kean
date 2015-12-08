@@ -22,6 +22,7 @@ RecycleBin: class <T> {
 	//TODO: Replace with SynchronizedVectorList
 	_list: VectorList<T>
 	_size: Int
+	isEmpty ::= this _list empty
 	init: func (=_size, =_free) { this _list = VectorList<T> new(_size) }
 	free: override func {
 		this clear()
@@ -51,7 +52,7 @@ RecycleBin: class <T> {
 	}
 	clear: func {
 		this _mutex lock()
-		for (i in 0 .. this _list count)
+		while (!this isEmpty)
 			this _free(this _list remove())
 		this _mutex unlock()
 	}
