@@ -88,13 +88,21 @@ FStream: cover from FILE* {
 	 * suffix "b" = binary mode
 	 * suffix "t" = text mode (warning: tell/seek are unreliable in text mode under mingw32)
 	 */
-	open: static func (filename, mode: const String) -> This {
-		fopen(filename, mode)
+	open: static func (filename, mode: Text) -> This {
+		(filenameNull, modeNull) := (filename nullTerminated(), mode nullTerminated())
+		result := fopen(filenameNull _buffer raw, modeNull _buffer raw)
+		filenameNull free(Owner Receiver)
+		modeNull free(Owner Receiver)
+		result
 	}
 
-	open: static func ~withFlags (filename, mode: const String, flags: Int) -> This {
-		fd := open(filename, flags)
-		fdopen(fd, mode)
+	open: static func ~withFlags (filename, mode: Text, flags: Int) -> This {
+		(filenameNull, modeNull) := (filename nullTerminated(), mode nullTerminated())
+		fd := open(filenameNull _buffer raw, flags)
+		result := fdopen(fd, mode _buffer raw)
+		filenameNull free(Owner Receiver)
+		modeNull free(Owner Receiver)
+		result
 	}
 
 	/**
@@ -184,11 +192,11 @@ FStream: cover from FILE* {
 		return c
 	}
 
-	readLine: func ~defaults -> String {
+	readLine: func ~defaults -> Text {
 		readLine(1023)
 	}
 
-	readLine: func (chunk: Int) -> String {
+	readLine: func (chunk: Int) -> Text {
 		length := 1023
 		buf := CharBuffer new (length)
 
@@ -201,7 +209,10 @@ FStream: cover from FILE* {
 			if (!hasNext?()) break
 		}
 
-		return buf toString()
+		string := buf toString()
+		result := Text new(string) copy()
+		string free()
+		result
 	}
 
 	/**
@@ -229,7 +240,7 @@ FStream: cover from FILE* {
 	/**
 	 * Writes one byte to this stream
 	 */
-	write: func ~chr (chr: Char) {
+	write: func ~char (chr: Char) {
 		fputc(chr, this)
 	}
 
@@ -238,8 +249,13 @@ FStream: cover from FILE* {
 	 *
 	 * @param str The string to write
 	 */
-	write: func ~str (str: String) {
-		fputs(str _buffer data, this)
+	write: func ~string (str: String) {
+		this write(Text new(str))
+	}
+	write: func ~text (text: Text) {
+		t := text take()
+		this write(t _buffer raw, 0, t count)
+		text free(Owner Receiver)
 	}
 
 	/**
@@ -248,8 +264,10 @@ FStream: cover from FILE* {
 	 * @param str The string to write
 	 * @param length The number of bytes to write, must be <= str's length.
 	 */
-	write: func ~withLength (str: String, length: SizeT) -> SizeT {
-		write(str _buffer data, 0, length)
+	write: func ~withLength (text: Text, length: SizeT) -> SizeT {
+		result := this write(text _buffer raw, 0, length)
+		text free(Owner Receiver)
+		result
 	}
 
 	/**

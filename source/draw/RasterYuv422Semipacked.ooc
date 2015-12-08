@@ -143,7 +143,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		result
 	}
 	openRaw: static func (filename: String, size: IntVector2D) -> This {
-		fileReader := FileReader new(FStream open(filename, "rb"))
+		fileReader := FileReader new(FStream open(Text new(filename), t"rb"))
 		result := This new(size)
 		fileReader read((result buffer pointer as Char*), 0, result buffer size)
 		fileReader close()
