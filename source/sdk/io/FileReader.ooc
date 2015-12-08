@@ -8,7 +8,7 @@ import io/[Reader, File]
  * mingw, rewind()/mark() won't work correctly.
  */
 FileReader: class extends Reader {
-	fileName: String
+	fileName: Text
 
 	/** The underlying file descriptor */
 	file: FStream
@@ -17,17 +17,17 @@ FileReader: class extends Reader {
 	 * Open a file for reading in binary mode, given a `File` object.
 	 */
 	init: func ~withFile (fileObject: File) {
-		init(fileObject getPath())
+		init(Text new(fileObject getPath()))
 	}
 
 	/**
 	 * Open a file for reading in binary mode, given its name.
 	 */
-	init: func ~withName (fileName: String) {
+	init: func ~withName (fileName: Text) {
 	// mingw fseek/ftell are *really* unreliable with text mode
 	// if for some weird reason you need to open in text mode, use
 	// FileReader new(fileName, "rt")
-		init(fileName, "rb")
+		init(fileName, t"rb")
 	}
 
 	/**
@@ -41,8 +41,11 @@ FileReader: class extends Reader {
 	 * suffix "b" = binary mode
 	 * suffix "t" = text mode (warning: rewind/mark are unreliable in text mode under mingw32)
 	 */
-	init: func ~withMode (=fileName, mode: String) {
-		file = FStream open(fileName, mode)
+	init: func ~withMode (=fileName, mode: Text) {
+		(fileNameString, modeString) := (this fileName take() toString(), mode toString())
+		file = FStream open(fileNameString, modeString)
+		fileNameString free()
+		modeString free()
 		if (!file) {
 			err := getOSError()
 			Exception new(This, "Couldn't open #{fileName} for reading: #{err}") throw()
@@ -53,6 +56,11 @@ FileReader: class extends Reader {
 	 * Init a file reader from an FStream
 	 */
 	init: func ~fromFStream (=file)
+
+	free: override func {
+		this fileName free(Owner Receiver)
+		super()
+	}
 
 	/**
 	 * Read at most `bytesToRead` bytes and writes them at offset `offset` into `dest`
