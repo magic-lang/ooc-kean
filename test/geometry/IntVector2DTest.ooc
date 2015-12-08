@@ -77,15 +77,15 @@ IntVector2DTest: class extends Fixture {
 			expect(sqrttwo x, is equal to(1))
 			expect(sqrttwo y, is equal to(1))
 		})
-		this add("area, square, empty", func {
+		this add("area, square, hasZeroArea", func {
 			rectangle := IntVector2D new(10, 20)
 			square := IntVector2D new(5, 5)
 			empty := IntVector2D new()
 			expect(rectangle area, is equal to(200))
 			expect(square square, is true)
 			expect(rectangle square, is false)
-			expect(empty empty, is true)
-			expect(square empty, is false)
+			expect(empty hasZeroArea, is true)
+			expect(square hasZeroArea, is false)
 			expect(empty area, is equal to(0))
 		})
 	}

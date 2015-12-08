@@ -131,15 +131,15 @@ FloatVector3DTest: class extends Fixture {
 			expect(first angle(second), is equal to(2.221f) within(0.01f))
 			expect(first distance(second), is equal to(13.74f) within(0.01f))
 		})
-		this add("length, empty", func {
+		this add("length, hasZeroVolume", func {
 			empty := FloatVector3D new()
 			expect(this vector0 length, is equal to(24.35f) within(0.01f))
-			expect(empty empty, is true)
+			expect(empty hasZeroVolume, is true)
 			expect(empty volume, is equal to(0.0f) within(this precision))
-			expect(this vector0 empty, is false)
+			expect(this vector0 hasZeroVolume, is false)
 			almostZero := (0.1 + 0.1 + 0.1) - 0.3
 			empty = FloatVector3D new(almostZero, almostZero, 0.1f)
-			expect(empty empty, is true)
+			expect(empty hasZeroVolume, is true)
 		})
 		this add("azimuth", func {
 			myvector := FloatVector3D new(1.0, 5.5, 0.1)

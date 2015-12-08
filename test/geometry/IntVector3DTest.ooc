@@ -77,10 +77,10 @@ IntVector3DTest: class extends Fixture {
 			expect(result y, is equal to(10))
 			expect(result z, is equal to(8))
 		})
-		this add("volume, empty", func {
+		this add("volume, hasZeroVolume", func {
 			empty := IntVector3D new()
-			expect(empty empty, is true)
-			expect(this vector1 empty, is false)
+			expect(empty hasZeroVolume, is true)
+			expect(this vector1 hasZeroVolume, is false)
 			expect(this vector1 volume, is equal to(-1248))
 			expect(empty volume, is equal to(0))
 		})
