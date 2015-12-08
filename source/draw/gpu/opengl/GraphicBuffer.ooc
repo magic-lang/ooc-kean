@@ -21,7 +21,7 @@ import math
 
 version(!gpuOff) {
 GraphicBufferFormat: enum {
-	Rgba8888 = 0
+	Rgba8888
 }
 GraphicBufferUsage: enum (*2) {
 	ReadNever = 1
@@ -65,13 +65,17 @@ GraphicBuffer: class {
 	handle ::= this _handle
 	_ownsMemory := false
 
-	init: func (=_size, =_format, usage: GraphicBufferUsage) {
-		This _allocate(_size x, _size y, this _format as Int, usage as Int, this _backend&, this _nativeBuffer&, this _pixelStride&)
-		this _ownsMemory = true
+	init: func (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format, =_ownsMemory)
+	init: func ~allocate (size: IntVector2D, format: GraphicBufferFormat, usage: GraphicBufferUsage) {
+		backend, nativeBuffer: Pointer
+		pixelStride: Int
+		This _allocate(size x, size y, format as Int, usage as Int, backend&, nativeBuffer&, pixelStride&)
+		this init(backend, nativeBuffer, null, size, pixelStride, format, true)
 	}
-	init: func ~existing (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format, =_ownsMemory)
-	init: func ~fromHandle (=_handle, =_size, =_pixelStride, =_format, usage: GraphicBufferUsage, =_ownsMemory) {
-		This _create(_size x, _size y, _format as Int, usage as Int, _pixelStride, _handle, false, this _backend&, this _nativeBuffer&)
+	init: func ~fromHandle (handle: Pointer, size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat, usage: GraphicBufferUsage, ownsMemory: Bool) {
+		backend, nativeBuffer: Pointer
+		This _create(size x, size y, format as Int, usage as Int, pixelStride, handle, false, backend&, nativeBuffer&)
+		this init(backend, nativeBuffer, handle, size, pixelStride, format, ownsMemory)
 	}
 	free: override func {
 		if (this _ownsMemory)
@@ -106,7 +110,7 @@ GraphicBuffer: class {
 	alignWidth: static func (width: Int, align := AlignWidth Nearest) -> Int {
 		result := width
 		if (This _alignedWidth length > 0)
-			result = align == AlignWidth Ceiling ? This _alignedWidth[This _alignedWidth length-1] : This _alignedWidth[0]
+			result = align == AlignWidth Ceiling ? This _alignedWidth[This _alignedWidth length - 1] : This _alignedWidth[0]
 		for (i in 0 .. This _alignedWidth length) {
 			currentWidth := This _alignedWidth[i]
 			if ((result - width) abs() > (currentWidth - width) abs() &&
