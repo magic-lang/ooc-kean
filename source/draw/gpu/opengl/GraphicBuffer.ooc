@@ -38,7 +38,7 @@ GraphicBufferUsage: enum (*2) {
 
 GraphicBuffer: class {
 	_allocate: static Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
-	_create: static Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
+	_createFromHandle: static Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
 	_free: static Func (Pointer)
 	_lock: static Func (Pointer, Int, Pointer*)
 	_unlock: static Func (Pointer)
@@ -74,7 +74,7 @@ GraphicBuffer: class {
 	}
 	init: func ~fromHandle (handle: Pointer, size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat, usage: GraphicBufferUsage, ownsMemory: Bool) {
 		backend, nativeBuffer: Pointer
-		This _create(size x, size y, format as Int, usage as Int, pixelStride, handle, false, backend&, nativeBuffer&)
+		This _createFromHandle(size x, size y, format as Int, usage as Int, pixelStride, handle, false, backend&, nativeBuffer&)
 		this init(backend, nativeBuffer, handle, size, pixelStride, format, ownsMemory)
 	}
 	free: override func {
@@ -88,9 +88,9 @@ GraphicBuffer: class {
 		result
 	}
 	unlock: func { This _unlock(this _backend) }
-	kean_draw_graphicBuffer_registerCallbacks: unmangled static func (allocate, create, free, lock, unlock: Pointer) {
+	kean_draw_graphicBuffer_registerCallbacks: unmangled static func (allocate, createFromHandle, free, lock, unlock: Pointer) {
 		This _allocate = (allocate, null) as Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
-		This _create = (create, null) as Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
+		This _createFromHandle = (createFromHandle, null) as Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
 		This _free = (free, null) as Func (Pointer)
 		This _lock = (lock, null) as Func (Pointer, Int, Pointer*)
 		This _unlock = (unlock, null) as Func (Pointer)
