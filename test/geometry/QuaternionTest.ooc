@@ -344,9 +344,9 @@ QuaternionTest: class extends Fixture {
 			y := 0.23f
 			z := 0.04f
 			quaternion := Quaternion createFromEulerAngles(x, y, z)
-			expect(x - quaternion rotationX, is equal to(0.0f) within(tolerance))
-			expect(y - quaternion rotationY, is equal to(0.0f) within(tolerance))
-			expect(z - quaternion rotationZ, is equal to(0.0f) within(tolerance))
+			expect(x, is equal to(quaternion rotationX) within(tolerance))
+			expect(y, is equal to(quaternion rotationY) within(tolerance))
+			expect(z, is equal to(quaternion rotationZ) within(tolerance))
 		})
 	}
 }

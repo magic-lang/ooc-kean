@@ -19,8 +19,6 @@ use ooc-geometry
 use ooc-unit
 import math
 
-//TODO: Missing properties: x, y, z. Missing methods: createRotationX, createRotationY, createRotationZ
-
 FloatRotation3DTest: class extends Fixture {
 	quaternion0 := Quaternion new(33.0f, 10.0f, -12.0f, 54.5f)
 	quaternion1 := Quaternion new(10.0f, 17.0f, -10.0f, 14.5f)
@@ -48,12 +46,12 @@ FloatRotation3DTest: class extends Fixture {
 			rotation2 := FloatRotation3D new(this quaternion2)
 			rotation3 := FloatRotation3D new(this quaternion3)
 			rotation4 := FloatRotation3D new(this quaternion4)
-			
+
 			expect(rotation1 == rotation4)
 			expect(rotation2 == rotation3, is false)
 			expect(rotation3 != rotation4)
 			expect(rotation1 != rotation4, is false)
-			
+
 			expect(rotation0 * rotation1 == rotation3)
 		})
 		this add("normalized", func {
