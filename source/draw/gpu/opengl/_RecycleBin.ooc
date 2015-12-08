@@ -23,7 +23,7 @@ import OpenGLPacked, OpenGLMonochrome, OpenGLBgra, OpenGLBgr, OpenGLUv
 import threading/Mutex
 
 version(!gpuOff) {
-RecycleBin: class {
+_RecycleBin: class {
 	_monochrome := VectorList<OpenGLMonochrome> new()
 	_bgr := VectorList<OpenGLBgr> new()
 	_bgra := VectorList<OpenGLBgra> new()
