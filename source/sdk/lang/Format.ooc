@@ -186,7 +186,6 @@ parseArg: func (res: CharBuffer, info: FSInfoStruct*, va: VarArgsIterator*, p: C
 			info@ base = 16
 		case 'f' =>
 			// reconstruct the original format statement.
-			// TODO let this do the real thing.
 			mprintCall = false
 			tmp := CharBuffer new()
 			tmp append('%')

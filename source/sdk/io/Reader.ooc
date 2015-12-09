@@ -50,9 +50,6 @@ Reader: abstract class {
 		sb := CharBuffer new(1024) // let's be pragmatic
 		while (hasNext?()) {
 			c := read()
-			// FIXME this behaviour would lead to errors when reading a binary file
-			// for some reason, some files end with the ASCII character 8, ie. BackSpace.
-			// we definitely don't want that to end up in the String.
 			if (c == end || (!hasNext?() && c == 8)) {
 				break
 			}
