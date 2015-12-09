@@ -19,8 +19,6 @@ use ooc-geometry
 use ooc-unit
 import math
 
-//TODO: Missing properties: x, y, z. Missing methods: createRotationX, createRotationY, createRotationZ
-
 FloatRotation3DTest: class extends Fixture {
 	quaternion0 := Quaternion new(33.0f, 10.0f, -12.0f, 54.5f)
 	quaternion1 := Quaternion new(10.0f, 17.0f, -10.0f, 14.5f)
@@ -48,12 +46,12 @@ FloatRotation3DTest: class extends Fixture {
 			rotation2 := FloatRotation3D new(this quaternion2)
 			rotation3 := FloatRotation3D new(this quaternion3)
 			rotation4 := FloatRotation3D new(this quaternion4)
-			
+
 			expect(rotation1 == rotation4)
 			expect(rotation2 == rotation3, is false)
 			expect(rotation3 != rotation4)
 			expect(rotation1 != rotation4, is false)
-			
+
 			expect(rotation0 * rotation1 == rotation3)
 		})
 		this add("normalized", func {
@@ -85,6 +83,15 @@ FloatRotation3DTest: class extends Fixture {
 			rotationB := FloatRotation3D new(quaternionB)
 			angle := Float toDegrees(rotationA angle(rotationB))
 			expect(angle, is equal to(25.0f) within(tolerance))
+		})
+		this add("euler angles conversion", func {
+			x := 0.1f
+			y := 0.23f
+			z := 0.04f
+			rotation := FloatRotation3D createFromEulerAngles(x, y, z)
+			expect(x, is equal to(rotation x) within(tolerance))
+			expect(y, is equal to(rotation y) within(tolerance))
+			expect(z, is equal to(rotation z) within(tolerance))
 		})
 	}
 }

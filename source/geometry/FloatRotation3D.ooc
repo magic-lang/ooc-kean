@@ -37,6 +37,9 @@ FloatRotation3D: cover {
 	createRotationX: static func (angle: Float) -> This { This new(Quaternion createRotationX(angle)) }
 	createRotationY: static func (angle: Float) -> This { This new(Quaternion createRotationY(angle)) }
 	createRotationZ: static func (angle: Float) -> This { This new(Quaternion createRotationZ(angle)) }
+	createFromEulerAngles: static func (rotationX, rotationY, rotationZ: Float) -> This {
+		This new(Quaternion createFromEulerAngles(rotationX, rotationY, rotationZ))
+	}
 	sphericalLinearInterpolation: func (other: This, factor: Float) -> This {
 		This new(this _quaternion sphericalLinearInterpolation(other _quaternion, factor))
 	}
