@@ -36,7 +36,7 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 		else if (this interpolationMode == InterpolationMode Fast)
 			This _resizeNearestNeighbour(sourceBuffer, this target buffer pointer as T*, source, this target, sourceBox, resultBox)
 		else
-			This _resizeBilinear(sourceBuffer, this target buffer pointer as T*, source, this target, sourceBox, resultBox)
+			This _resizeBilinear(source, this target, sourceBox, resultBox)
 	}
 	_transformCoordinates: static func (column, row, width, height: Int, coordinateSystem: CoordinateSystem) -> (Int, Int) {
 		if ((coordinateSystem & CoordinateSystem XLeftward) != 0)
@@ -64,13 +64,14 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 			}
 		}
 	}
-	_resizeBilinear: static func <T> (sourceBuffer, resultBuffer: T*, source, target: RasterPacked, sourceBox, resultBox: IntBox2D) {
+	_resizeBilinear: static func (source, target: RasterPacked, sourceBox, resultBox: IntBox2D) {
 		bytesPerPixel := target bytesPerPixel
 		(resultWidth, resultHeight) := (resultBox size x, resultBox size y)
 		(sourceWidth, sourceHeight) := (sourceBox size x, sourceBox size y)
 		(sourceStartColumn, sourceStartRow) := (sourceBox leftTop x, sourceBox leftTop y)
 		(resultStartColumn, resultStartRow) := (resultBox leftTop x, resultBox leftTop y)
 		(sourceStride, resultStride) := (source stride, target stride)
+		(sourceBuffer, resultBuffer) := (source buffer pointer as UInt8*, target buffer pointer as UInt8*)
 		for (row in 0 .. resultHeight) {
 			sourceRow := ((sourceHeight as Float) * row) / resultHeight + sourceStartRow
 			sourceRowUp := sourceRow floor() as Int
@@ -88,7 +89,7 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 				(sourceColumnLeftTransformed, sourceRowUpTransformed) := This _transformCoordinates(sourceColumnLeft, sourceRowUp, source width, source height, source coordinateSystem)
 				(topLeft, topRight) := ((1.0f - weightDown) * (1.0f - weightRight), (1.0f - weightDown) * weightRight)
 				(bottomLeft, bottomRight) := (weightDown * (1.0f - weightRight), weightDown * weightRight)
-				This _blendSquare(sourceBuffer as UInt8*, resultBuffer as UInt8*, sourceStride, resultStride, sourceRowUpTransformed, sourceColumnLeftTransformed, resultRowTransformed, resultColumnTransformed, topLeft, topRight, bottomLeft, bottomRight, bytesPerPixel)
+				This _blendSquare(sourceBuffer, resultBuffer, sourceStride, resultStride, sourceRowUpTransformed, sourceColumnLeftTransformed, resultRowTransformed, resultColumnTransformed, topLeft, topRight, bottomLeft, bottomRight, bytesPerPixel)
 			}
 		}
 	}
