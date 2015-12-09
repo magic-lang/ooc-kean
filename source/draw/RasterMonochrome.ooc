@@ -33,6 +33,18 @@ RasterMonochromeCanvas: class extends RasterPackedCanvas {
 		if (this target isValidIn(position x, position y))
 			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toMonochrome())
 	}
+	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) {
+		monochrome: RasterMonochrome = null
+		if (image instanceOf?(RasterMonochrome))
+			monochrome = image as RasterMonochrome
+		else if (image instanceOf?(RasterImage))
+			monochrome = RasterMonochrome convertFrom(image as RasterImage)
+		else
+			Debug raise("Unsupported image type in RasterMonochromeCanvas draw")
+		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination)
+		if (monochrome != image)
+			monochrome referenceCount decrease()
+	}
 }
 
 RasterMonochrome: class extends RasterPacked {
@@ -63,16 +75,11 @@ RasterMonochrome: class extends RasterPacked {
 		this resizeTo(size, InterpolationMode Smooth) as This
 	}
 	resizeTo: override func ~withMethod (size: IntVector2D, method: InterpolationMode) -> This {
-		result: This
-		if (this size == size)
-			result = this copy()
-		else {
-			result = This new(size)
-			match (method) {
-				case InterpolationMode Smooth => RasterPackedCanvas _resizeBilinear(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, this, result, IntBox2D new(this size), IntBox2D new(result size))
-				case => RasterPackedCanvas _resizeNearestNeighbour(this buffer pointer as ColorMonochrome*, result buffer pointer as ColorMonochrome*, this, result, IntBox2D new(this size), IntBox2D new(result size))
-			}
-		}
+		result := This new(size)
+		result canvas interpolationMode = method
+		result canvas draw(this, IntBox2D new(this size), IntBox2D new(size))
+		//TODO will be fixed by subcanvas
+		result canvas interpolationMode = InterpolationMode Fast
 		result
 	}
 	distance: override func (other: Image) -> Float {
