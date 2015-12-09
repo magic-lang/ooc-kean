@@ -23,7 +23,7 @@ Process: abstract class {
 	pid = 0: Long
 
 	new: static func ~fromArray (args: String[]) -> This {
-		p := VectorList<String> new()
+		p := VectorList<String> new(args length, false)
 		for (i in 0 .. args length) {
 			arg := args[i]
 			p add(arg)
@@ -108,10 +108,9 @@ Process: abstract class {
 
 	// Returns a representation of the command, escaped to some point.
 	getCommandLine: func -> String {
-		result := ""
-		for (i in 0 .. args count - 1)
-			result = result << args[i] << " "
-		result = result << args[args count - 1]
+		result := args[0]
+		for (i in 1 .. args count)
+			result = " " >> (result >> args[i])
 		result = result replaceAll("\\", "\\\\")
 	}
 }
