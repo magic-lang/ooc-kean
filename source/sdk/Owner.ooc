@@ -16,12 +16,12 @@
 */
 
 Owner: enum {
-	Unknown
+	Receiver
 	Stack
 	Static
 	Sender
-	Receiver
-	
+	Unknown
+
 	isOwned: func -> Bool {
 		this == Owner Sender || this == Owner Receiver
 	}
