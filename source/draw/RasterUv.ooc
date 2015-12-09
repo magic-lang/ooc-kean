@@ -102,17 +102,17 @@ RasterUv: class extends RasterPacked {
 								}
 						distance := 0.0f
 						if (c u < minimum u)
-							distance += (minimum u - c u) as Float squared()
+							distance += (minimum u - c u) as Float squared
 						else if (c u > maximum u)
-							distance += (c u - maximum u) as Float squared()
+							distance += (c u - maximum u) as Float squared
 						if (c v < minimum v)
-							distance += (minimum v - c v) as Float squared()
+							distance += (minimum v - c v) as Float squared
 						else if (c v > maximum v)
-							distance += (c v - maximum v) as Float squared()
+							distance += (c v - maximum v) as Float squared
 						result += (distance) sqrt() / 3
 					}
 				}
-			result /= ((this size x squared() + this size y squared()) as Float sqrt())
+			result /= ((this size x squared + this size y squared) as Float sqrt())
 		}
 	}
 	open: static func (filename: String) -> This {

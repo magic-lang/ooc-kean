@@ -22,7 +22,7 @@ use ooc-base
 
 FloatPoint3D: cover {
 	x, y, z: Float
-	norm ::= (this x squared() + this y squared() + this z squared()) sqrt()
+	norm ::= (this x squared + this y squared + this z squared) sqrt()
 	azimuth ::= this y atan2(this x)
 	isValid ::= (this x == this x && this y == this y && this z == this z)
 	elevation: Float {
@@ -45,7 +45,7 @@ FloatPoint3D: cover {
 		This new(radius * (azimuth cos()) * (elevation sin()), radius * (azimuth sin()) * (elevation sin()), radius * (elevation cos()))
 	}
 	angles: static func (rx, ry, n: Float) -> This {
-		z := n*n sqrt() / (1 + ry tan() squared() + rx tan() squared())
+		z := n*n sqrt() / (1 + ry tan() squared + rx tan() squared)
 		This new(z * (ry tan()), z * (rx tan()), z)
 	}
 	angle: func (other: This) -> Float {

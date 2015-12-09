@@ -77,11 +77,11 @@ FloatRotation3DTest: class extends Fixture {
 		})
 		this add("angle", func {
 			direction := FloatPoint3D new(1.0f, 1.0f, 1.0f)
-			quaternionA := Quaternion createRotation(Float toRadians(20.0f), direction)
-			quaternionB := Quaternion createRotation(Float toRadians(45.0f), direction)
+			quaternionA := Quaternion createRotation(20.0f toRadians(), direction)
+			quaternionB := Quaternion createRotation(45.0f toRadians(), direction)
 			rotationA := FloatRotation3D new(quaternionA)
 			rotationB := FloatRotation3D new(quaternionB)
-			angle := Float toDegrees(rotationA angle(rotationB))
+			angle := (rotationA angle(rotationB)) toDegrees()
 			expect(angle, is equal to(25.0f) within(tolerance))
 		})
 		this add("euler angles conversion", func {

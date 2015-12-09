@@ -270,7 +270,7 @@ FloatTransform3DTest: class extends Fixture {
 		})
 		this add("get scaling", func {
 			scale := this transform0 scaling
-			expect(scale, is equal to(8.8150f) within(this precision))
+			expect(scale as Float, is equal to(8.8150f) within(this precision))
 		})
 		this add("get translation", func {
 			translation := this transform0 translation

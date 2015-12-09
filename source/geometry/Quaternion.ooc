@@ -39,11 +39,11 @@ Quaternion: cover {
 	isValid ::= this real == this real && this imaginary isValid
 	isIdentity ::= this real equals(1.f) && this imaginary x equals(0.f) && this imaginary y equals(0.f) && this imaginary z equals(0.f)
 	isNull ::= this real equals(0.f) && this imaginary x equals(0.f) && this imaginary y equals(0.f) && this imaginary z equals(0.f)
-	norm ::= (this real squared() + this imaginary norm squared()) sqrt()
+	norm ::= (this real squared + this imaginary norm squared) sqrt()
 	normalized ::= this / this norm
 	logarithmImaginaryNorm ::= ((this logarithm) imaginary) norm
 	conjugate ::= This new(this real, -this imaginary)
-	inverse ::= this conjugate / (this real squared() + this imaginary norm squared())
+	inverse ::= this conjugate / (this real squared + this imaginary norm squared)
 	rotation ::= 2.0f * this logarithmImaginaryNorm
 	transform ::= this toFloatTransform3D()
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
@@ -124,7 +124,7 @@ Quaternion: cover {
 		(this - other) norm
 	}
 	angle: func (other: This) -> Float {
-		result := 2.0f * Float absolute(this dotProduct(other)) acos()
+		result := 2.0f * (this dotProduct(other) absolute) acos()
 		result = result == result ? result : 0.0f
 		result
 	}
@@ -136,7 +136,7 @@ Quaternion: cover {
 			if ((value abs() - 0.5f) abs() < This precision)
 				result = 0.0f
 			else
-				result = (2.0f * (this w * this x + this y * this z)) atan2(1.0f - 2.0f * (this x squared() + this y squared()))
+				result = (2.0f * (this w * this x + this y * this z)) atan2(1.0f - 2.0f * (this x squared + this y squared))
 			result
 		}
 	}
@@ -145,7 +145,7 @@ Quaternion: cover {
 			result: Float
 			value := this w * this y - this z * this x
 			if ((value abs() - 0.5f) abs() < This precision)
-				result = Float sign(value) * (Float pi / 2.0f)
+				result = value sign * (Float pi / 2.0f)
 			else
 				result = ((2.0f * value) clamp(-1, 1)) asin()
 			result
@@ -158,7 +158,7 @@ Quaternion: cover {
 			if ((value abs() - 0.5f) abs() < This precision)
 				result = 2.0f * (this z atan2(this w))
 			else
-				result = (2.0f * (this w * this z + this x * this y)) atan2(1.0f - 2.0f * (this y squared() + this z squared()))
+				result = (2.0f * (this w * this z + this x * this y)) atan2(1.0f - 2.0f * (this y squared + this z squared))
 			result
 		}
 	}
@@ -228,7 +228,7 @@ Quaternion: cover {
 	sphericalLinearInterpolation: func (other: This, factor: Float) -> This {
 		cosAngle := this dotProduct(other)
 		longPath := cosAngle < 0.0f
-		angle := acos(Float absolute(cosAngle) as Float clamp(-1.0f, 1.0f))
+		angle := acos(cosAngle absolute clamp(-1.0f, 1.0f))
 		result: This
 		if (angle < 1.0e-8f)
 			result = this * (1 - factor) + other * factor
@@ -308,7 +308,7 @@ Quaternion: cover {
 
 		gibbsVectorSquaredNorm := 0.0f
 		for (index in 0 .. gibbsVector height)
-			gibbsVectorSquaredNorm += gibbsVector[0, index] squared()
+			gibbsVectorSquaredNorm += gibbsVector[0, index] squared
 
 		result := This new(1.0f, -gibbsVector[0, 0], -gibbsVector[0, 1], -gibbsVector[0, 2])
 		result *= 1.0f / sqrt(1.0f + gibbsVectorSquaredNorm)
@@ -324,17 +324,17 @@ Quaternion: cover {
 	}
 	_approximateMaximumEigenvalueForQuest: static func (matrixQuantityS, vectorQuantityZ: FloatMatrix, initialGuess: Float, maximumIterationCount := 20) -> Float {
 		sigma := 0.5f * matrixQuantityS trace()
-		constantA := sigma squared() - matrixQuantityS adjugate() trace()
-		constantB := sigma squared() + (vectorQuantityZ transpose() * vectorQuantityZ)[0, 0]
+		constantA := sigma squared - matrixQuantityS adjugate() trace()
+		constantB := sigma squared + (vectorQuantityZ transpose() * vectorQuantityZ)[0, 0]
 		constantC := matrixQuantityS determinant() + (vectorQuantityZ transpose() * matrixQuantityS * vectorQuantityZ)[0, 0]
 		constantD := (vectorQuantityZ transpose() * matrixQuantityS * matrixQuantityS * vectorQuantityZ)[0, 0]
 
 		for (_ in 0 .. maximumIterationCount) {
-			functionValue := pow(initialGuess, 4) - (constantA + constantB) * initialGuess squared() - constantC * initialGuess + (constantA * constantB + constantC * sigma - constantD)
+			functionValue := pow(initialGuess, 4) - (constantA + constantB) * initialGuess squared - constantC * initialGuess + (constantA * constantB + constantC * sigma - constantD)
 			derivativeValue := 4 * pow(initialGuess, 3) + 2 * (constantA + constantB) * initialGuess - constantC
 			fraction := functionValue / derivativeValue
 			initialGuess -= fraction
-			if (Float absolute(fraction) < 1.0e-6f)
+			if (fraction equals(0.f, 1.0e-6f))
 				break
 		}
 		initialGuess

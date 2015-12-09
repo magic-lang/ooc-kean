@@ -68,7 +68,7 @@ QuaternionTest: class extends Fixture {
 			expect((-1.0f) * this quaternion0 == -this quaternion0)
 		})
 		this add("norm", func {
-			expect(this quaternion0 norm, is equal to(65.5991592f))
+			expect(this quaternion0 norm as Float, is equal to(65.5991592f))
 		})
 		this add("inverse", func {
 			inverse := this quaternion2 inverse
@@ -95,29 +95,29 @@ QuaternionTest: class extends Fixture {
 		})
 		this add("actionOnVector", func {
 			direction := FloatPoint3D new(1.0f, 1.0f, 1.0f)
-			quaternion := Quaternion createRotation(Float toRadians(120.0f), direction)
+			quaternion := Quaternion createRotation(120.0f toRadians(), direction)
 			point1 := FloatPoint3D new(5.0f, 6.0f, 7.0f)
 			point2 := FloatPoint3D new(7.0f, 5.0f, 6.0f)
 			expect((quaternion * point1) distance(point2), is equal to(0.0f))
 		})
 		this add("angle", func {
 			direction := FloatPoint3D new(1.0f, 1.0f, 1.0f)
-			quaternion1 := Quaternion createRotation(Float toRadians(20.0f), direction)
-			quaternion2 := Quaternion createRotation(Float toRadians(45.0f), direction)
-			angle := Float toDegrees(quaternion1 angle(quaternion2))
+			quaternion1 := Quaternion createRotation(20.0f toRadians(), direction)
+			quaternion2 := Quaternion createRotation(45.0f toRadians(), direction)
+			angle := (quaternion1 angle(quaternion2)) toDegrees()
 			expect(angle, is equal to(25.0f) within(tolerance))
 		})
 		this add("rotationDirectionRepresentation1", func {
-			angle := Float toRadians(30.0f)
+			angle := 30.0f toRadians()
 			direction := FloatPoint3D new(1.0f, 4.0f, 7.0f)
 			direction /= direction norm
 			quaternion := Quaternion createRotation(angle, direction)
 			expect(quaternion rotation, is equal to(angle) within(tolerance))
 		})
 		this add("exponentialLogarithm", func {
-			roll := Float toRadians(20.0f)
-			pitch := Float toRadians(-30.0f)
-			yaw := Float toRadians(45.0f)
+			roll := 20.0f toRadians()
+			pitch := (-30.0f) toRadians()
+			yaw := 45.0f toRadians()
 			quaternion := Quaternion createRotationZ(yaw) * Quaternion createRotationY(pitch) * Quaternion createRotationX(roll)
 			//expLog := quaternion exponential logarithm
 			exp := (quaternion exponential)
@@ -125,9 +125,9 @@ QuaternionTest: class extends Fixture {
 			expect(expLog real, is equal to(quaternion real) within(tolerance))
 		})
 		this add("logarithmExponential", func {
-			roll := Float toRadians(20.0f)
-			pitch := Float toRadians(-30.0f)
-			yaw := Float toRadians(45.0f)
+			roll := 20.0f toRadians()
+			pitch := (-30.0f) toRadians()
+			yaw := 45.0f toRadians()
 			quaternion := Quaternion createRotationZ(yaw) * Quaternion createRotationY(pitch) * Quaternion createRotationX(roll)
 			//logExp := quaternion logarithm exponential
 			log := quaternion logarithm
@@ -135,9 +135,9 @@ QuaternionTest: class extends Fixture {
 			expect(logExp real, is equal to(quaternion real) within(tolerance))
 		})
 		this add("exponentialLogarithmDistance", func {
-			roll := Float toRadians(20.0f)
-			pitch := Float toRadians(-30.0f)
-			yaw := Float toRadians(45.0f)
+			roll := 20.0f toRadians()
+			pitch := (-30.0f) toRadians()
+			yaw := 45.0f toRadians()
 			quaternion := Quaternion createRotationZ(yaw) * Quaternion createRotationY(pitch) * Quaternion createRotationX(roll)
 			//expLog := quaternion exponential logarithm
 			exp := quaternion exponential
@@ -145,9 +145,9 @@ QuaternionTest: class extends Fixture {
 			expect(expLog imaginary distance(quaternion imaginary), is equal to(0.0f) within(tolerance))
 		})
 		this add("logarithmExponentialDistance", func {
-			roll := Float toRadians(20.0f)
-			pitch := Float toRadians(-30.0f)
-			yaw := Float toRadians(45.0f)
+			roll := 20.0f toRadians()
+			pitch := (-30.0f) toRadians()
+			yaw := 45.0f toRadians()
 			quaternion := Quaternion createRotationZ(yaw) * Quaternion createRotationY(pitch) * Quaternion createRotationX(roll)
 			//logExp := quaternion exponential logarithm
 			exp := quaternion exponential

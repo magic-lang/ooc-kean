@@ -27,24 +27,24 @@ MathTest: class extends Fixture {
 			expect(13 clamp(9, 11), is equal to(11))
 			expect((-2) clamp(-1, 5), is equal to(-1))
 
-			expect(Int absolute(-3), is equal to(3))
-			expect(Int absolute(1), is equal to(1))
+			expect((-3) absolute, is equal to(3))
+			expect(1 absolute, is equal to(1))
 
-			expect(Int sign(-3), is equal to(-1))
-			expect(Int sign(3), is equal to(1))
+			expect((-3) sign, is equal to(-1))
+			expect(3 sign, is equal to(1))
 
 			expect(Int maximum(-1, 1), is equal to(1))
 			expect(Int maximum(-1, 0), is equal to(0))
 			expect(Int minimum(-1, 1), is equal to(-1))
 			expect(Int minimum(-1, 0), is equal to(-1))
 
-			expect(Int even(2), is true)
-			expect(Int even(-4), is true)
-			expect(Int odd(0), is false)
-			expect(Int odd(-5), is true)
-			expect(Int even(7), is false)
+			expect(2 isEven, is true)
+			expect((-4) isEven, is true)
+			expect(0 isOdd, is false)
+			expect((-5) isOdd, is true)
+			expect(7 isEven, is false)
 
-			expect(5 squared(), is equal to((-5) squared()))
+			expect(5 squared, is equal to((-5) squared))
 
 			expect(Int toPowerOfTwo(7), is equal to(8))
 			expect(Int alignPowerOfTwo(62, 64), is equal to(64))
@@ -56,9 +56,9 @@ MathTest: class extends Fixture {
 			expect(4.1f modulo(4.2f), is equal to(4.1f) within(floatTolerance))
 			expect(Float moduloTwoPi(6.29f), is equal to(0.0f) within(0.01f))
 
-			expect(Float toRadians(0.0f), is equal to(0.0f) within(floatTolerance))
-			expect(Float toRadians(45.0f), is equal to(0.78539f) within(floatTolerance))
-			expect(Float toDegrees(3.1415926535f), is equal to(180.0f) within(floatTolerance))
+			expect(0.0f toRadians(), is equal to(0.0f) within(floatTolerance))
+			expect(45.0f toRadians(), is equal to(0.78539f) within(floatTolerance))
+			expect(3.1415926535f toDegrees(), is equal to(180.0f) within(floatTolerance))
 
 			expect(10.0f clamp(8.0f, 14.0f), is equal to(10.0f) within(floatTolerance))
 			expect(7.0f clamp(9.0f, 11.0f), is equal to(9.0f) within(floatTolerance))
@@ -68,18 +68,18 @@ MathTest: class extends Fixture {
 			expect(1.999f equals(2.0f), is false)
 			expect(1.99999f equals(2.0f), is true)
 
-			expect(Float absolute(-2.3f), is equal to(2.3f) within(floatTolerance))
-			expect(Float absolute(2.3f), is equal to(2.3f) within(floatTolerance))
+			expect((-2.3f) absolute, is equal to(2.3f) within(floatTolerance))
+			expect(2.3f absolute, is equal to(2.3f) within(floatTolerance))
 
-			expect(Float sign(-2.3f), is equal to(-1.0f) within(floatTolerance))
-			expect(Float sign(2.3f), is equal to(1.0f) within(floatTolerance))
+			expect((-2.3f) sign, is equal to(-1.0f) within(floatTolerance))
+			expect(2.3f sign, is equal to(1.0f) within(floatTolerance))
 
 			expect(Float maximum(-1.2f, -1.1f), is equal to(-1.1f) within(floatTolerance))
 			expect(Float maximum(-1.2f, 0.f), is equal to(0.f) within(floatTolerance))
 			expect(Float minimum(-1.2f, -1.1f), is equal to(-1.2f) within(floatTolerance))
 			expect(Float minimum(-1.2f, 0.f), is equal to(-1.2f) within(floatTolerance))
 
-			expect(10.f squared(), is equal to(100.f) within(floatTolerance))
+			expect(10.f squared, is equal to(100.f) within(floatTolerance))
 
 			expect(Float linearInterpolation(2.0f, 5.0f, 0.5f), is equal to(3.5f) within(floatTolerance))
 			expect(Float linearInterpolation(-9.0f, 1.0f, 0.1f), is equal to(-8.f) within(floatTolerance))
@@ -99,9 +99,9 @@ MathTest: class extends Fixture {
 			expect(nearZero lessThan(0.0f), is false)
 		})
 		this add("Double", func {
-			expect(Double toRadians(0.0), is equal to(0.0) within(doubleTolerance))
-			expect(Double toRadians(45.0), is equal to(0.78539) within(doubleTolerance))
-			expect(Double toDegrees(3.1415926535), is equal to(180.0) within(doubleTolerance))
+			expect(0.0 toRadians(), is equal to(0.0) within(doubleTolerance))
+			expect(45.0 toRadians(), is equal to(0.78539) within(doubleTolerance))
+			expect(3.1415926535 toDegrees(), is equal to(180.0) within(doubleTolerance))
 
 			expect(10.0 clamp(8.0, 14.0), is equal to(10.0) within(doubleTolerance))
 			expect(7.0 clamp(9.0, 11.0), is equal to(9.0) within(doubleTolerance))

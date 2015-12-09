@@ -228,7 +228,7 @@ FloatVectorList: class extends VectorList<Float> {
 		result := This new(size)
 		factor := 1.0f / (sqrt(2.0f * Float pi) * sigma)
 		for (i in 0 .. size)
-			result add((factor * pow(Float e, -0.5f * ((i - (size - 1.0f) / 2.0f) squared()) / (sigma squared()))) as Float)
+			result add((factor * pow(Float e, -0.5f * ((i - (size - 1.0f) / 2.0f) squared) / (sigma squared))) as Float)
 		sum := result sum
 		for (i in 0 .. size)
 			result[i] = result[i] / sum
@@ -277,7 +277,7 @@ FloatVectorList: class extends VectorList<Float> {
 		result: Float
 		tempVector := this copy()
 		tempVector sort()
-		if (Int odd(this count))
+		if (this count isOdd)
 			result = tempVector[this count / 2]
 		else
 			result = (tempVector[this count / 2 - 1] + tempVector[this count / 2]) / 2
@@ -295,7 +295,7 @@ FloatVectorList: class extends VectorList<Float> {
 			end = this count - 1
 		count := end - start + 1
 		result := This _nthElement(this _vector _backend as Float*, start, end, count / 2)
-		if (Int even(count))
+		if (count isEven)
 			result = (result + This _nthElement(this _vector _backend as Float*, start, end, count / 2 - 1)) / 2
 		result
 	}
