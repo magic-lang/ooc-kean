@@ -22,7 +22,7 @@ use ooc-base
 IntVector3D: cover {
 	x, y, z: Int
 	volume ::= this x * this y * this z
-	empty ::= this x == 0 || this y == 0 || this z == 0
+	hasZeroVolume ::= this volume == 0
 	basisX: static This { get { This new(1, 0, 0) } }
 	basisY: static This { get { This new(0, 1, 0) } }
 	basisZ: static This { get { This new(0, 0, 1) } }

@@ -141,16 +141,16 @@ FloatVector2DTest: class extends Fixture {
 			expect(interpolate3 x, is equal to(this vector1 x) within(this precision))
 			expect(interpolate3 y, is equal to(this vector1 y) within(this precision))
 		})
-		this add("area, length, empty", func {
+		this add("area, length, hasZeroArea", func {
 			empty := FloatVector2D new()
 			expect(this vector0 area, is equal to(-68.89f) within(0.01f))
 			expect(this vector0 length, is equal to(22.44f) within(0.01f))
-			expect(empty empty, is true)
+			expect(empty hasZeroArea, is true)
 			expect(empty area, is equal to(0.0f) within(this precision))
-			expect(this vector1 empty, is false)
+			expect(this vector1 hasZeroArea, is false)
 			almostZero := (0.1 + 0.1 + 0.1) - 0.3
 			empty = FloatVector2D new(almostZero, 0.1f)
-			expect(empty empty, is true)
+			expect(empty hasZeroArea, is true)
 		})
 	}
 }
