@@ -1,5 +1,4 @@
-import ../File, structs/ArrayList
-
+import ../File
 include dirent
 
 /*
@@ -268,7 +267,7 @@ version (unix || apple) {
 			return this
 		}
 
-		_getChildren: func <T> (T: Class) -> ArrayList<T> {
+		_getChildren: func <T> (T: Class) -> VectorList<T> {
 			if (!dir?()) {
 				Exception new(This, "Trying to get the children of the non-directory '" + path + "'!") throw()
 			}
@@ -277,7 +276,7 @@ version (unix || apple) {
 				Exception new(This, "Couldn't open directory '" + path + "' for reading!") throw()
 			}
 
-			result := ArrayList<T> new()
+			result := VectorList<T> new()
 			entry := readdir(dir)
 			while (entry != null) {
 				if (!_isDirHardlink?(entry@ name)) {
@@ -293,11 +292,11 @@ version (unix || apple) {
 			return result
 		}
 
-		getChildrenNames: func -> ArrayList<String> {
+		getChildrenNames: func -> VectorList<String> {
 			_getChildren (String)
 		}
 
-		getChildren: func -> ArrayList<File> {
+		getChildren: func -> VectorList<File> {
 			_getChildren (File)
 		}
 

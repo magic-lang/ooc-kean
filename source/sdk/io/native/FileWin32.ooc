@@ -1,5 +1,5 @@
 import os/win32/[types, errors]
-import structs/ArrayList
+import structs/VectorList
 import ../File
 
 version(windows) {
@@ -242,8 +242,8 @@ version(windows) {
 			longPath toString()
 		}
 
-		_getChildren: func <T> (T: Class) -> ArrayList<T> {
-			result := ArrayList<T> new()
+		_getChildren: func <T> (T: Class) -> VectorList<T> {
+			result := VectorList<T> new()
 			ffd: FindData
 			searchPath := path + "\\*"
 			hFile := FindFirstFile(searchPath toCString(), ffd&)
@@ -281,7 +281,7 @@ version(windows) {
 		 * List the name of the children of this path
 		 * Works only on directories, obviously
 		 */
-		getChildrenNames: func -> ArrayList<String> {
+		getChildrenNames: func -> VectorList<String> {
 			_getChildren( String )
 		}
 
@@ -289,7 +289,7 @@ version(windows) {
 		 * List the children of this path
 		 * Works only on directories, obviously
 		 */
-		getChildren: func -> ArrayList<File> {
+		getChildren: func -> VectorList<File> {
 			_getChildren ( File )
 		}
 	}
