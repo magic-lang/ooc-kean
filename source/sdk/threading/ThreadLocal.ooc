@@ -1,10 +1,5 @@
 import native/[ThreadLocalUnix, ThreadLocalWin32]
 
-/**
- * A ThreadLocal is a variable whose data is not shared by all threads
- * (as it is for normal global variables), but each thread has got
- * its own storage.
- */
 ThreadLocal: abstract class <T> {
 	new: static func <T> -> This<T> {
 		version (unix || apple) {

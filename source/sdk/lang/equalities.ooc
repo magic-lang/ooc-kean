@@ -37,8 +37,6 @@ charEquals: func <K> (k1, k2: K) -> Bool {
 	k1 as Char == k2 as Char
 }
 
-/** used when we don't have a custom comparing function for the key type */
 genericEquals: func <K> (k1, k2: K) -> Bool {
-	// FIXME rock should turn == between generic vars into a memcmp itself
 	memcmp(k1, k2, K size) == 0
 }

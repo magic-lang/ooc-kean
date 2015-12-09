@@ -1,13 +1,5 @@
 import List
 
-/**
- * Resizable-array implementation of the List interface. Implements all
- * optional list operations, and permits all elements, including null.
- *
- * In addition to implementing the List interface, this class provides
- * methods to manipulate the size of the array that is used internally
- * to store the list.
- */
 ArrayList: class <T> extends List<T> {
 	data : T*
 	capacity : SizeT
@@ -116,9 +108,6 @@ ArrayList: class <T> extends List<T> {
 		return element
 	}
 
-	/**
-	 * Does an in-place sort, with the given comparison function
-	 */
 	sort: func (greaterThan: Func (T, T) -> Bool) {
 		inOrder := false
 		while (!inOrder) {
@@ -134,12 +123,6 @@ ArrayList: class <T> extends List<T> {
 		}
 	}
 
-	/**
-	 * Removes a single instance of the specified element from this list,
-	 * if it is present (optional operation).
-	 * @return true if at least one occurence of the element has been
-	 * removed
-	 */
 	remove: func (element: T) -> Bool {
 		index := indexOf(element)
 		if (index == -1) return false
@@ -149,10 +132,6 @@ ArrayList: class <T> extends List<T> {
 		return true
 	}
 
-	/**
-	 * Replaces the element at the specified position in this list with
-	 * the specified element.
-	 */
 	set: func (index: Int, element: T) -> T {
 		checkIndex(index)
 		old := data[index]
@@ -160,24 +139,13 @@ ArrayList: class <T> extends List<T> {
 		old
 	}
 
-	/**
-	* Set, but without WITHOUT RETURNING the current element.
-	*/
 	replaceAt: func (index: Int, element: T) {
 		checkIndex(index)
 		data[index] = element
 	}
 
-	/**
-	 * @return the number of elements in this list.
-	 */
 	getSize: inline func -> SizeT { _size }
 
-	/**
-	 * Increases the capacity of this ArrayList instance, if necessary,
-	 * to ensure that it can hold at least the number of elements
-	 * specified by the minimum capacity argument.
-	 */
 	ensureCapacity: inline func (newSize: SizeT) {
 		if (newSize > capacity) {
 			capacity = newSize * (newSize > 50000 ? 2 : 4)
@@ -220,7 +188,6 @@ ArrayList: class <T> extends List<T> {
 		data
 	}
 
-	/** @return This<T> containing the items from this[min] through (including) this[max-1]  */
 	slice: func (min, max: SSizeT) -> This<T> {
 		if (min < 0) min = _size + min
 		if (min < 0 || min >= _size) OutOfBoundsException new(This, min, _size) throw()
@@ -293,7 +260,6 @@ IllegalIteratorOpException: class extends Exception {
 	}
 }
 
-/* Operators */
 operator [] <T> (list: ArrayList<T>, r: Range) -> ArrayList<T> { list slice(r) }
 operator [] <T> (list: ArrayList<T>, i: Int) -> T { list get(i) }
 operator []= <T> (list: ArrayList<T>, i: Int, element: T) { list replaceAt(i, element) }
