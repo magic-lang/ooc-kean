@@ -25,4 +25,14 @@ Owner: enum {
 	isOwned: func -> Bool {
 		this == Owner Sender || this == Owner Receiver
 	}
+	toString: func -> String {
+		match (this) {
+			case Owner Receiver => "Receiver"
+			case Owner Stack => "Stack"
+			case Owner Static => "Static"
+			case Owner Sender => "Sender"
+			case Owner Unknown => "Unknown"
+			case => "Invalid enum type in Owner"
+		}
+	}
 }
