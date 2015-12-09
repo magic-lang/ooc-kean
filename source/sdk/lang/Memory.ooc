@@ -12,7 +12,7 @@ gc_realloc: extern (realloc) func (ptr: Pointer, size: SizeT) -> Pointer
 gc_calloc: extern (calloc) func (nmemb, size: SizeT) -> Pointer
 gc_free: extern (free) func (ptr: Pointer)
 
-//TODO Remove the above declarations once they're no longer used - only use the following:
+//TODO Remove the above functions when they're no longer used, instead switch to an OOP-approach
 malloc: extern func (SizeT) -> Pointer
 calloc: extern func (SizeT, SizeT) -> Pointer
 memset: extern func (Pointer, Int, SizeT) -> Pointer

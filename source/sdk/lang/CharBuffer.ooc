@@ -1,27 +1,9 @@
 import structs/ArrayList
 
-/**
- * A Buffer is a mutable string of characters.
- *
- * When building a string incrementally, with multiple appends, it's best
- * to use Buffer instead of String, to avoid unnecessary allocation
- */
 CharBuffer: class extends Iterable<Char> {
-	/** size of the buffer, in bytes, e.g. how much bytes do we store currently */
 	size: Int
-
-	/** capacity of the buffer, in bytes, e.g. how much bytes we can store before resizing. */
 	capacity: Int = 0
-
-	/**
-	 * Original pointer to the allocated memory - a reference is kept here
-	 * so that it doesn't get collected by the Garbage Collector when we shift the pointer.
-	 * Shifting the data pointer is done in trimLeft so we don't have to memcpy all the
-	 * bytes to the left.
-	 */
 	mallocAddr: Char*
-
-	/** Data bytes, this must be passed to C functions expecting char* */
 	data: Char*
 
 	_rshift: func -> SizeT { return mallocAddr == null || data == null ? 0 : (data as SizeT - mallocAddr as SizeT) as SizeT }
@@ -34,24 +16,14 @@ CharBuffer: class extends Iterable<Char> {
 		size = newOne size
 	}
 
-	/**
-	 * Create a new, empty buffer with an 1KB capacity
-	 */
 	init: func ~empty {
 		init(1024)
 	}
 
-	/**
-	 * Create a new, empty buffer that can hold 'capacity' bytes before being resized.
-	 */
 	init: func (capacity: Int) {
 		setCapacity(capacity)
 	}
 
-	/**
-	 * Create a new String from a zero-terminated C String with known length
-	 * optional flag for stringliteral initializaion with zero copying
-	 */
 	init: func ~cStrWithLength (s: CString, length: Int, stringLiteral? := false) {
 		if (stringLiteral?) {
 			data = s
@@ -70,17 +42,8 @@ CharBuffer: class extends Iterable<Char> {
 		super()
 	}
 
-	/**
-	 * @return the number of characters in this String
-	 */
 	length: func -> Int { size }
 
-	/**
-	 * Adjust this buffer's capacity, reallocate memory if needed.
-	 *
-	 * @param newCapacity The number of bytes (not characters) this buffer
-	 * should be capable of storing
-	 */
 	setCapacity: func (newCapacity: Int) {
 		rshift := _rshift()
 		min := newCapacity + 1 + rshift
@@ -124,10 +87,7 @@ CharBuffer: class extends Iterable<Char> {
 		}
 	}
 
-	/* does a strlen on the buffers data and sets this as the size
-		call only when you're sure that the data is zero terminated
-		only needed when you pass the data to some extern function, and don't how many bytes it wrote.
-	 */
+	// call only when you're sure that the data is zero terminated
 	sizeFromData: func {
 		setLength(data as CString length())
 	}
@@ -151,7 +111,6 @@ CharBuffer: class extends Iterable<Char> {
 		if (count != 0) shiftRight (-count) // it can be so easy
 	}
 
-	/** return a copy of *this*. */
 	clone: func -> This {
 		clone(size)
 	}
@@ -169,9 +128,6 @@ CharBuffer: class extends Iterable<Char> {
 		substring(start, size)
 	}
 
-	/** *this* will be reduced to the characters in the range ``start..end``
-		The substring begins at the specified start and extends to the character at index end - 1.
-		So the length of the substring is end-start */
 	substring: func (start, end: Int) {
 		if (start < 0) start += size + 1
 		if (end < 0) end += size + 1
@@ -179,7 +135,6 @@ CharBuffer: class extends Iterable<Char> {
 		if (start > 0) shiftRight(start)
 	}
 
-	/** return a This that contains *this*, repeated *count* times. */
 	times: func (count: Int) {
 		origSize := size
 		setLength(size * count)
@@ -198,7 +153,6 @@ CharBuffer: class extends Iterable<Char> {
 		append~buf(other _buffer)
 	}
 
-	/** appends *other* to *this* */
 	append: func ~pointer (other: CString, otherLength: Int) {
 		_checkLength(otherLength)
 		origlen := size
@@ -215,12 +169,10 @@ CharBuffer: class extends Iterable<Char> {
 		append(other data, otherLength)
 	}
 
-	/** appends a char to either *this* or a clone*/
 	append: func ~char (other: Char) {
 		append(other&, 1)
 	}
 
-	/** prepends *other* to *this*. */
 	prepend: func ~buf (other: This) {
 		prepend(other data, other size)
 	}
@@ -229,7 +181,6 @@ CharBuffer: class extends Iterable<Char> {
 		prepend(other _buffer)
 	}
 
-	/** return a new string containg *other* followed by *this*. */
 	prepend: func ~pointer (other: Char*, otherLength: Int) {
 		_checkLength(otherLength)
 		if (_rshift() < otherLength) {
@@ -245,21 +196,14 @@ CharBuffer: class extends Iterable<Char> {
 		}
 	}
 
-	/** replace *this* or a clone with  *other* followed by *this*. */
 	prepend: func ~char (other: Char) {
 		prepend(other&, 1)
 	}
 
-	/** @return true if the string is empty */
 	empty?: func -> Bool {
 		size == 0
 	}
 
-	/**
-	 * Compare `length` characters of *this* with `other`, starting at
-	 * `start`.
-	 * @return true if the two strings are equal, return false if they are not.
-	 */
 	compare: func (other: This, start, length: Int) -> Bool {
 		_checkLength(length)
 		if (size < (start + length) || other size < length) {
@@ -274,36 +218,28 @@ CharBuffer: class extends Iterable<Char> {
 		true
 	}
 
-	/**
-	 * @return true if `other` and `this` are equal (in terms of being null /
-	 * having same size and content).
-	 */
 	equals?: final func (other: This) -> Bool {
 		if ((this == null) || (other == null)) return false
 		if (other size != size) return false
 		compare(other, 0, size)
 	}
 
-	/** @return true if the first characters of *this* are equal to *s*. */
 	startsWith?: func (s: This) -> Bool {
 		len := s length()
 		if (size < len) return false
 		compare(s, 0, len)
 	}
 
-	/** @return true if the first character of *this* is equal to *c*. */
 	startsWith?: func ~char (c: Char) -> Bool {
 		(size > 0) && (data[0] == c)
 	}
 
-	/** @return true if the last characters of *this* are equal to *s*. */
 	endsWith?: func (s: This) -> Bool {
 		len := s size
 		if (size < len) return false
 		compare(s, size - len, len)
 	}
 
-	/** @return true if the last character of *this* is equal to *c*. */
 	endsWith?: func ~char (c: Char) -> Bool {
 		(size > 0) && data[size-1] == c
 	}
@@ -312,11 +248,6 @@ CharBuffer: class extends Iterable<Char> {
 		find (what&, 1, offset, searchCaseSensitive)
 	}
 
-	/**
-		returns -1 when not found, otherwise the position of the first occurence of "what"
-		use offset 0 for a new search, then increase it by the last found position +1
-		look at implementation of findAll() for an example
-	*/
 	find: func (what: This, offset: Int, searchCaseSensitive := true) -> Int {
 		find~pointer(what data, what size, offset, searchCaseSensitive)
 	}
@@ -349,7 +280,6 @@ CharBuffer: class extends Iterable<Char> {
 		-1
 	}
 
-	/** returns a list of positions where buffer has been found, or an empty list if not  */
 	findAll: func ~withCase ( what : This, searchCaseSensitive := true) -> ArrayList <Int> {
 		findAll(what data, what size, searchCaseSensitive)
 	}
@@ -393,46 +323,32 @@ CharBuffer: class extends Iterable<Char> {
 		setBuffer(result)
 	}
 
-	/** replace all occurences of *oldie* with *kiddo* in place/ in a clone, if immutable is set */
 	replaceAll: func ~char (oldie, kiddo: Char) {
 		for (i in 0 .. size) {
 			if (data[i] == oldie) data[i] = kiddo
 		}
 	}
 
-	/** Transform all characters according to a transformation function */
 	map: func (f: Func (Char) -> Char) {
 		for (i in 0 .. size) {
 			data[i] = f(data[i])
 		}
 	}
 
-	/**
-	 * Converts all of the characters in this Buffer to lower case.
-	 */
 	toLower: func {
 		for (i in 0 .. size) {
 			data[i] = data[i] toLower()
 		}
 	}
 
-	/**
-	 * Converts all of the characters in this Buffer to lower case.
-	 */
 	toUpper: func {
 		for (i in 0 .. size) {
 			data[i] = data[i] toUpper()
 		}
 	}
 
-	/**
-	 * Convert this buffer to an immutable String
-	 */
 	toString: func -> String { String new(this) }
 
-	/** return the index of *c*, but only check characters ``start..length``.
-		However, the return value is the index of the *c* relative to the
-		string's beginning. If *this* does not contain *c*, return -1. */
 	indexOf: func ~char (c: Char, start: Int = 0) -> Int {
 		for (i in start .. size) {
 			if ((data + i)@ == c) return i
@@ -440,17 +356,12 @@ CharBuffer: class extends Iterable<Char> {
 		return -1
 	}
 
-	/** return the index of *s*, but only check characters ``start..length``.
-		However, the return value is relative to the *this*' first character.
-		If *this* does not contain *c*, return -1. */
 	indexOf: func ~buf (s: This, start: Int = 0) -> Int {
 		return find(s, start, false)
 	}
 
-	/** return *true* if *this* contains the character *c* */
 	contains?: func ~char (c: Char) -> Bool { indexOf(c) != -1 }
 
-	/** return *true* if *this* contains the string *s* */
 	contains?: func ~buf (s: This) -> Bool { indexOf(s) != -1 }
 
 	trim: func ~pointer (s: Char*, sLength: Int) {
@@ -462,32 +373,26 @@ CharBuffer: class extends Iterable<Char> {
 		trim(s data, s size)
 	}
 
-	/** *c* characters stripped at both ends. */
 	trim: func ~char (c: Char) {
 		trim(c&, 1)
 	}
 
-	/** whitespace characters (space, CR, LF, tab) stripped at both ends. */
 	trim: func ~whitespace {
 		trim(" \r\n\t" toCString(), 4)
 	}
 
-	/** space characters (ASCII 32) stripped from the left side. */
 	trimLeft: func ~space {
 		trimLeft(' ')
 	}
 
-	/** *c* character stripped from the left side. */
 	trimLeft: func ~char (c: Char) {
 		trimLeft(c&, 1)
 	}
 
-	/** all characters contained by *s* stripped from the left side. either from *this* or a clone */
 	trimLeft: func ~buf (s: This) {
 		trimLeft(s data, s size)
 	}
 
-	/** all characters contained by *s* stripped from the left side. either from *this* or a clone */
 	trimLeft: func ~pointer (s: Char*, sLength: Int) {
 		if (size == 0 || sLength == 0) return
 		start : Int = 0
@@ -496,23 +401,16 @@ CharBuffer: class extends Iterable<Char> {
 		shiftRight( start )
 	}
 
-	/** space characters (ASCII 32) stripped from the right side. */
 	trimRight: func ~space { trimRight(' ') }
 
-	/** *c* characters stripped from the right side. */
 	trimRight: func ~char (c: Char) {
 		trimRight(c&, 1)
 	}
 
-	/** *this* with all characters contained by *s* stripped
-		from the right side. */
 	trimRight: func ~buf (s: This) {
 		trimRight(s data, s size)
 	}
 
-	/**
-	 * @return (a copy of) *this* with all characters contained by *s* stripped from the right side
-	 */
 	trimRight: func ~pointer (s: Char*, sLength: Int) {
 		end := size
 		while (end > 0 && data[end - 1] containedIn?(s, sLength)) {
@@ -521,7 +419,6 @@ CharBuffer: class extends Iterable<Char> {
 		if (end != size) setLength(end)
 	}
 
-	/** reverses *this*. "ABBA" -> "ABBA" .no. joke. "ABC" -> "CBA" */
 	reverse: func {
 		result := this
 		bytesLeft := size
@@ -536,7 +433,6 @@ CharBuffer: class extends Iterable<Char> {
 		}
 	}
 
-	/** return the number of *what*'s occurences in *this*. */
 	count: func (what: Char) -> Int {
 		result : Int = 0
 		for (i in 0 .. size) {
@@ -545,13 +441,10 @@ CharBuffer: class extends Iterable<Char> {
 		result
 	}
 
-	/** return the number of *what*'s non-overlapping occurences in *this*. */
 	count: func ~buf (what: This) -> Int {
 		findAll(what) size
 	}
 
-	/** return the index of the last occurence of *c* in *this*.
-		If *this* does not contain *c*, return -1. */
 	lastIndexOf: func (c: Char) -> Int {
 		i : Int = size - 1
 		while (i >= 0) {
@@ -561,7 +454,6 @@ CharBuffer: class extends Iterable<Char> {
 		return -1
 	}
 
-	/** print *this* to stdout without a following newline. Flush stdout. */
 	print: func {
 		fwrite(data, 1, size, stdout)
 	}
@@ -570,7 +462,6 @@ CharBuffer: class extends Iterable<Char> {
 		fwrite(data, 1, size, stream)
 	}
 
-	/** print *this* followed by a newline. */
 	println: func {
 		print(stdout); '\n' print(stdout)
 	}
@@ -579,32 +470,16 @@ CharBuffer: class extends Iterable<Char> {
 		print(stream); '\n' print(stream)
 	}
 
-	// TODO make these faster by not simply calling the C API.
-	// now that we have the length stored we have an advantage
-
-	/** convert the string's contents to Int. */
 	toInt: func -> Int { strtol(this data, null, 10) }
 	toInt: func ~withBase (base: Int) -> Int { strtol(this data, null, base) }
-
-	/** convert the string's contents to Long. */
 	toLong: func -> Long { strtol(this data, null, 10) }
 	toLong: func ~withBase (base: Long) -> Long { strtol(this data, null, base) }
-
-	/** convert the string's contents to Long Long. */
 	toLLong: func -> LLong { strtoll(this data, null, 10) }
 	toLLong: func ~withBase (base: LLong) -> LLong { strtoll(this data, null, base) }
-
-	/** convert the string's contents to Unsigned Long. */
 	toULong: func -> ULong { strtoul(this data, null, 10) }
 	toULong: func ~withBase (base: ULong) -> ULong { strtoul(this data, null, base) }
-
-	/** convert the string's contents to Float. */
 	toFloat: func -> Float { strtof(this data, null) }
-
-	/** convert the string's contents to Double. */
 	toDouble: func -> Double { strtod(this data, null) }
-
-	/** convert the string's contents to Long Double. */
 	toLDouble: func -> LDouble {
 		version (android) {
 			return strtod(this data, null)
@@ -633,28 +508,19 @@ CharBuffer: class extends Iterable<Char> {
 		return iter
 	}
 
-	/**
-	 * @return the index-th character of this string
-	 */
 	get: final func (index: Int) -> Char {
 		if (index < 0) index = size + index
 		if (index < 0 || index >= size) OutOfBoundsException new(This, index, size) throw()
 		data[index]
 	}
 
-	/**
-	 * @return the index-th character of this string
-	 */
 	set: final func (index: Int, value: Char) {
 		if (index < 0) index = size + index
 		if (index < 0 || index >= size) OutOfBoundsException new(This, index, size) throw()
 		data[index] = value
 	}
 
-	/** @return this buffer, as an UTF8-encoded null-terminated byte array, usable by C functions */
 	toCString: func -> CString { data as CString }
-
-	// utils
 
 	_checkLength: static func (len: Int) {
 		if (len < 0) {
@@ -666,7 +532,6 @@ CharBuffer: class extends Iterable<Char> {
 		split(c&, 1, maxTokens)
 	}
 
-	/** split s and return *all* elements, including empties */
 	split: func ~withStringWithoutmaxTokens (s: This) -> ArrayList<This> {
 		split(s data, s size, -1)
 	}
@@ -730,8 +595,6 @@ NegativeLengthException: class extends Exception {
 	}
 }
 
-/* Comparisons */
-
 operator == (buff1, buff2: CharBuffer) -> Bool {
 	buff1 equals?(buff2)
 }
@@ -739,8 +602,6 @@ operator == (buff1, buff2: CharBuffer) -> Bool {
 operator != (buff1, buff2: CharBuffer) -> Bool {
 	!buff1 equals?(buff2)
 }
-
-/* Access and modification */
 
 operator [] (buffer: CharBuffer, index: Int) -> Char {
 	buffer get(index)

@@ -34,12 +34,7 @@ version(windows) {
 		}
 	}
 
-	/**
-	 * Win32 implementation of recursive mutexes.
-	 *
-	 * Apparently, Win32 mutexes are recursive by default, so this is just a
-	 * copy of `MutexWin32`, which is by
-	 */
+	// Win32 mutexes are recursive by default, so this is just a copy of `MutexWin32`
 	RecursiveMutexWin32: class extends RecursiveMutex {
 		_backend: Handle
 		init: func {

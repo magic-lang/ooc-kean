@@ -125,7 +125,6 @@ Cell: class <T> {
 		gc_free(this val)
 		super()
 	}
-	// TODO: Move this to an extension in ooc-kean later
 	toString: func -> String {
 		match (this val) {
 			case value: Bool => value toString()

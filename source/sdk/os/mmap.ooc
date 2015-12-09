@@ -1,8 +1,6 @@
-// Linux / Apple version
 version (linux || apple) {
 	include sys/mman
 
-	/* Constants */
 	PROT_EXEC: extern Int
 	PROT_WRITE: extern Int
 	PROT_READ: extern Int
@@ -35,28 +33,17 @@ version (linux || apple) {
 	MS_SYNC: extern Int
 	MS_INVALIDATE: extern Int
 
-	/* Functions */
-	/*start: Pointer, length: SizeT, prot: Int, flags: Int, fd: Int, offset: Int */
-	mmap: extern func (Pointer, SizeT, Int, Int, Int, Int) -> Pointer
-	/* start: Pointer, length: SizeT */
-	munmap: extern func (Pointer, SizeT) -> Int
-	/* addr: Pointer, length: SizeT, prot: Int */
-	mprotect: extern func (Pointer, SizeT, Int) -> Int
-	/* addr: Pointer, length: SizeT, advice: Int */
-	madvise: extern func (Pointer, SizeT, Int) -> Int
-	/* addr: Pointer, length: SizeT, vec: Char* */
-	mincore: extern func (Pointer, SizeT, Char*) -> Int
-	/* addr: Pointer, length: SizeT, inherit: Int */
-	minherit: extern func (Pointer, SizeT, Int) -> Int
-	/* addr: Pointer, length: SizeT, flags: Int */
-	msync: extern func (Pointer, SizeT, Int) -> Int
-	/* addr: Pointer, length: SizeT */
-	mlock: extern func (Pointer, SizeT) -> Int
-	/* addr: Pointer, length: SizeT */
-	munlock: extern func (Pointer, SizeT) -> Int
+	mmap: extern func (start: Pointer, length: SizeT, prot: Int, flags: Int, fd: Int, offset: Int) -> Pointer
+	munmap: extern func (start: Pointer, length: SizeT) -> Int
+	mprotect: extern func (addr: Pointer, length: SizeT, prot: Int) -> Int
+	madvise: extern func (addr: Pointer, length: SizeT, advice: Int) -> Int
+	mincore: extern func (addr: Pointer, length: SizeT, vec: Char*) -> Int
+	minherit: extern func (addr: Pointer, length: SizeT, inherit: Int) -> Int
+	msync: extern func (addr: Pointer, length: SizeT, flags: Int) -> Int
+	mlock: extern func (addr: Pointer, length: SizeT) -> Int
+	munlock: extern func (addr: Pointer, length: SizeT) -> Int
 }
 
-// Windows equivalent
 version (windows) {
 	include windows
 

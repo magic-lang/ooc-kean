@@ -37,14 +37,11 @@ charHash: func <K> (key: K) -> SizeT {
 }
 
 /**
-   Port of Austin Appleby's Murmur Hash implementation
-   http://code.google.com/p/smhasher/
-
-   :param: key The key to hash
-   :param: seed The seed value
- */
+	Port of Austin Appleby's Murmur Hash implementation
+	http://code.google.com/p/smhasher/
+*/
 murmurHash: func <K> (keyTagazok: K) -> SizeT {
-	seed: SizeT = 1 // TODO: figure out what makes a good seed value?
+	seed: SizeT = 1
 
 	len := K size
 	m = 0x5bd1e995 : const SizeT

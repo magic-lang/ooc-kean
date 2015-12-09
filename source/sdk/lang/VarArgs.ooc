@@ -1,9 +1,3 @@
-/*
- * Variable arguments are stored in there.
- *
- * This implementation is quite optimised.
- */
-
 // that thunk is needed to correctly infer the 'T'. It shows at the
 // same time the limitations of ooc generics and still how incredibly
 // powerful they are.
@@ -29,9 +23,6 @@ VarArgs: cover {
 	args, argsPtr: UInt8* // because the size of stuff (T size) is expressed in bytes
 	count: SSizeT // number of elements
 
-	/*
-	 * Iterate through the arguments
-	 */
 	each: func (f: Func <T> (T)) {
 		countdown := count
 
@@ -63,17 +54,13 @@ VarArgs: cover {
 		}
 	}
 
-	/*
-	 * private api used by C code
-	 */
+	// private api used by C code
 	init: func@ (=count, bytes: SizeT) {
 		args = gc_malloc(bytes + (count * Class size))
 		argsPtr = args
 	}
 
-	/**
-	 * Internal testing method to add arguments
-	 */
+	// Internal testing method to add arguments
 	_addValue: func@ <T> (value: T) {
 		// store the type
 		(argsPtr as Class*)@ = T
@@ -88,9 +75,6 @@ VarArgs: cover {
 		argsPtr += __pointer_align(T size)
 	}
 
-	/**
-	 * @return an iterator that can be used to retrieve every argument
-	 */
 	iterator: func -> VarArgsIterator {
 		(args, count, true) as VarArgsIterator
 	}
@@ -100,13 +84,6 @@ VarArgs: cover {
  * Can be used to iterate over variable arguments - it has more overhead
  * than each() because it involves at least one memcpy, except in a future
  * where we take advantage of generic inlining.
- *
- * Apart from that, it's a regular iterator, except that next takes the
- * type that you want to retrieve.
- *
- * The only checking done is that the size of the type you're trying
- * to get and the size of the actual type must match. Otherwise, you're
- * free to mix and match up types as you wish - just be careful.
  */
 VarArgsIterator: cover {
 	argsPtr: UInt8*
@@ -123,7 +100,6 @@ VarArgsIterator: cover {
 			Exception new(This, "Vararg underflow!") throw()
 		}
 
-		// count down!
 		countdown -= 1
 
 		nextType := (argsPtr as Class*)@ as Class
@@ -163,10 +139,8 @@ VarArgsIterator: cover {
 	}
 }
 
-// C interface
 include stdarg
 
-// variable arguments
 VaList: cover from va_list
 va_start: extern func (VaList, ...) // ap, last_arg
 va_arg: extern func (VaList, ...) // ap, type

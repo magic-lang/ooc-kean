@@ -35,10 +35,7 @@ version(windows) {
 		return li quadPart
 	}
 
-	/*
-	 * FILETIME is, in fact, an Int64 that stores the number of
-	 * 100-nanoseconds intervals from January 1st, 1601 (according to the MSDN)
-	 */
+	// FILETIME is an Int64 that stores the number of 100-nanoseconds intervals from January 1st, 1601
 	FileTime: cover from FILETIME {
 		lowDateTime: extern (dwLowDateTime) Long // DWORD
 		highDateTime: extern (dwHighDateTime) Long // DWORD

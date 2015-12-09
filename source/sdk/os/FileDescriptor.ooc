@@ -19,7 +19,7 @@ FileDescriptor: cover from Int {
 
 	read: func ~evilAlloc (len: Int) -> Pointer {
 		buf := gc_malloc(len)
-		read(buf, len) // todo: check errors
+		read(buf, len)
 		return buf
 	}
 

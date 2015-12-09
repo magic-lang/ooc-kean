@@ -42,7 +42,7 @@ BinarySequenceWriter: class {
 	init: func (=writer)
 
 	_pushByte: func (byte: Octet) {
-		writer write(byte as Char) // TODO?
+		writer write(byte as Char)
 	}
 
 	pushValue: func <T> (value: T) {
