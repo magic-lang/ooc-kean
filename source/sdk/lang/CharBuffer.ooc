@@ -377,7 +377,6 @@ CharBuffer: class extends Iterable<Char> {
 		trim(c&, 1)
 	}
 
-
 	trim: func ~whitespace {
 		trim(" \r\n\t" toCString(), 4)
 	}
