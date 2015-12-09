@@ -243,6 +243,13 @@ TextTest: class extends Fixture {
 			expect(four == two + t"0")
 			two free()
 		})
+		this add("null-terminated", func {
+			text := t"123456789\0"
+			slice := text slice(2, 2) nullTerminated()
+			expect(strlen(text _buffer raw), is equal to(9))
+			expect(strlen(slice _buffer raw), is equal to(2))
+			slice free()
+		})
 	}
 }
 

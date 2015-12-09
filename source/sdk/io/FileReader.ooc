@@ -42,10 +42,7 @@ FileReader: class extends Reader {
 	 * suffix "t" = text mode (warning: rewind/mark are unreliable in text mode under mingw32)
 	 */
 	init: func ~withMode (=fileName, mode: Text) {
-		(fileNameString, modeString) := (this fileName take() toString(), mode toString())
-		file = FStream open(fileNameString, modeString)
-		fileNameString free()
-		modeString free()
+		file = FStream open(this fileName take(), mode)
 		if (!file) {
 			err := getOSError()
 			Exception new(This, "Couldn't open #{fileName} for reading: #{err}") throw()

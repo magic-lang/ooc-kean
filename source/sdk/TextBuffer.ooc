@@ -20,11 +20,7 @@ import OwnedBuffer
 
 TextBuffer: cover {
 	_backend: OwnedBuffer
-	raw: Char* { get {
-		result := this _backend pointer as Char*
-		this free(Owner Receiver)
-		result
-	}}
+	raw ::= this _backend pointer as Char*
 	count: Int { get {
 		result := this _backend size
 		this free(Owner Receiver)

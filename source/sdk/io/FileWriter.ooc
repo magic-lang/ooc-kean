@@ -42,7 +42,7 @@ FileWriter: class extends Writer {
 	}
 
 	init: func ~withMode (fileName, mode: String) {
-		file = FStream open(fileName, mode)
+		file = FStream open(Text new(fileName), Text new(mode))
 		if (!file) {
 			// TODO: that's wrong - many other things could happen. Use strerror instead.
 			Exception new(This, "File not found: " + fileName) throw()
@@ -50,7 +50,7 @@ FileWriter: class extends Writer {
 	}
 
 	init: func ~withModeAndFlags (fileName, mode: String, flags: Int) {
-		file = FStream open(fileName, mode, flags)
+		file = FStream open(Text new(fileName), Text new(mode), flags)
 		if (!file) {
 			Exception new(This, "File not found: " + fileName) throw()
 		}
@@ -104,7 +104,7 @@ FileWriter: class extends Writer {
 	}
 
 	// TODO: Reimplement asPipe() when this file is moved to source/io
-	/*asPipe: func -> Pipe { 
+	/*asPipe: func -> Pipe {
 		version(unix || apple) {
 			return PipeUnix new(-1, file no())
 		} else {
