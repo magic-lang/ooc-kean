@@ -70,7 +70,7 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 		(sourceWidth, sourceHeight) := (sourceBox size x, sourceBox size y)
 		(sourceStartColumn, sourceStartRow) := (sourceBox leftTop x, sourceBox leftTop y)
 		(resultStartColumn, resultStartRow) := (resultBox leftTop x, resultBox leftTop y)
-		(sourceStride, resultStride) := (source stride / bytesPerPixel, target stride / bytesPerPixel)
+		(sourceStride, resultStride) := (source stride, target stride)
 		for (row in 0 .. resultHeight) {
 			sourceRow := ((sourceHeight as Float) * row) / resultHeight + sourceStartRow
 			sourceRowUp := sourceRow floor() as Int
