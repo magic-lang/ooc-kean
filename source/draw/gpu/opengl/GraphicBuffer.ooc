@@ -21,7 +21,7 @@ import math
 
 version(!gpuOff) {
 GraphicBufferFormat: enum {
-	Rgba8888 = 0
+	Rgba8888
 }
 GraphicBufferUsage: enum (*2) {
 	ReadNever = 1
@@ -38,7 +38,7 @@ GraphicBufferUsage: enum (*2) {
 
 GraphicBuffer: class {
 	_allocate: static Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
-	_create: static Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
+	_createFromHandle: static Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
 	_free: static Func (Pointer)
 	_lock: static Func (Pointer, Int, Pointer*)
 	_unlock: static Func (Pointer)
@@ -65,33 +65,32 @@ GraphicBuffer: class {
 	handle ::= this _handle
 	_ownsMemory := false
 
-	init: func (=_size, =_format, usage: GraphicBufferUsage) {
-		This _allocate(_size x, _size y, this _format as Int, usage as Int, this _backend&, this _nativeBuffer&, this _pixelStride&)
-		this _ownsMemory = true
-	}
-	init: func ~existing (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format, =_ownsMemory)
-	init: func ~fromHandle (=_handle, =_size, =_pixelStride, =_format, usage: GraphicBufferUsage, =_ownsMemory) {
-		This _create(_size x, _size y, _format as Int, usage as Int, _pixelStride, _handle, false, this _backend&, this _nativeBuffer&)
+	init: func (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format, =_ownsMemory)
+	init: func ~allocate (size: IntVector2D, format: GraphicBufferFormat, usage: GraphicBufferUsage) {
+		backend, nativeBuffer: Pointer
+		pixelStride: Int
+		This _allocate(size x, size y, format as Int, usage as Int, backend&, nativeBuffer&, pixelStride&)
+		this init(backend, nativeBuffer, null, size, pixelStride, format, true)
 	}
 	free: override func {
 		if (this _ownsMemory)
 			This _free(this _backend)
 		super()
 	}
-	lock: func (write := false) -> Pointer {
-		result: Pointer = null
-		This _lock(this _backend, write ? (GraphicBufferUsage WriteOften) as Int: (GraphicBufferUsage ReadOften) as Int, result&)
-		result
+	shallowCopy: func (size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat, usage: GraphicBufferUsage) -> This {
+		backend, nativeBuffer: Pointer
+		This _createFromHandle(size x, size y, format as Int, usage as Int, pixelStride, this _handle, false, backend&, nativeBuffer&)
+		This new(backend, nativeBuffer, handle, size, pixelStride, format, false)
 	}
-	lock: func ~withUsage (usage: GraphicBufferUsage) -> Pointer {
+	lock: func (usage: GraphicBufferUsage) -> Pointer {
 		result: Pointer = null
 		This _lock(this _backend, usage as Int, result&)
 		result
 	}
 	unlock: func { This _unlock(this _backend) }
-	kean_draw_graphicBuffer_registerCallbacks: unmangled static func (allocate, create, free, lock, unlock: Pointer) {
+	kean_draw_graphicBuffer_registerCallbacks: unmangled static func (allocate, createFromHandle, free, lock, unlock: Pointer) {
 		This _allocate = (allocate, null) as Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
-		This _create = (create, null) as Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
+		This _createFromHandle = (createFromHandle, null) as Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
 		This _free = (free, null) as Func (Pointer)
 		This _lock = (lock, null) as Func (Pointer, Int, Pointer*)
 		This _unlock = (unlock, null) as Func (Pointer)
@@ -106,7 +105,7 @@ GraphicBuffer: class {
 	alignWidth: static func (width: Int, align := AlignWidth Nearest) -> Int {
 		result := width
 		if (This _alignedWidth length > 0)
-			result = align == AlignWidth Ceiling ? This _alignedWidth[This _alignedWidth length-1] : This _alignedWidth[0]
+			result = align == AlignWidth Ceiling ? This _alignedWidth[This _alignedWidth length - 1] : This _alignedWidth[0]
 		for (i in 0 .. This _alignedWidth length) {
 			currentWidth := This _alignedWidth[i]
 			if ((result - width) abs() > (currentWidth - width) abs() &&
