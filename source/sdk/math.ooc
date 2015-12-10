@@ -159,10 +159,10 @@ extend Double {
 		this > ceiling ? ceiling : (this < floor ? floor : this)
 	}
 	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
-	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this - other < tolerance }
-	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this - other > tolerance }
-	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { this equals(other) || this lessThan(other) }
-	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { this equals(other) || this greaterThan(other) }
+	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this < other && !this equals(other) }
+	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this > other && !this equals(other) }
+	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this greaterThan(other) }
+	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this lessThan(other) }
 }
 
 extend Float {
@@ -298,10 +298,10 @@ extend Float {
 		result
 	}
 	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
-	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this - other < tolerance }
-	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this - other > tolerance }
-	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { this equals(other) || this lessThan(other) }
-	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { this equals(other) || this greaterThan(other) }
+	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this < other && !this equals(other) }
+	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this > other && !this equals(other) }
+	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this greaterThan(other) }
+	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this lessThan(other) }
 }
 
 extend LDouble {
@@ -342,8 +342,8 @@ extend LDouble {
 	floor: extern (floorl) func -> This
 	truncate: extern (truncl) func -> This
 	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
-	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this - other < tolerance }
-	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this - other > tolerance }
-	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { this equals(other) || this lessThan(other) }
-	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { this equals(other) || this greaterThan(other) }
+	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this < other && !this equals(other) }
+	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this > other && !this equals(other) }
+	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this greaterThan(other) }
+	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this lessThan(other) }
 }
