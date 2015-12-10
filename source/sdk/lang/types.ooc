@@ -127,6 +127,7 @@ Cell: class <T> {
 	}
 	toString: func -> String {
 		match (this val) {
+			case value: Text => value toString()
 			case value: Bool => value toString()
 			case value: Char => value toString()
 			case value: Int => value toString()
