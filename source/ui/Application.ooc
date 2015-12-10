@@ -15,4 +15,5 @@ Application: class {
 		this _arguments free()
 		super()
 	}
+	processEvents: virtual func
 }
