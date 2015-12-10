@@ -3,6 +3,7 @@ Description: User interface stuff
 SourcePath: source/ui
 Imports: DisplayWindow
 Imports: NativeWindow
+Imports: Application
 Imports: x11/X11Window
 Imports: x11/UnixWindow
 Imports: win32/Win32Window
