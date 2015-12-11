@@ -24,7 +24,7 @@ import Gles3Debug
 version(!gpuOff) {
 Gles3VolumeTexture: class extends GLVolumeTexture {
 	_backend: UInt
-	backend: UInt { get { this _backend } }
+	backend ::= this _backend
 	_size: IntVector3D
 	size ::= this _size
 

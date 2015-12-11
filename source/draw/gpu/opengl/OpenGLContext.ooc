@@ -35,7 +35,7 @@ OpenGLContext: class extends GpuContext {
 	_meshShader: OpenGLMapMesh
 	meshShader ::= this _meshShader
 	_renderer: GLRenderer
-	defaultMap: GpuMap { get { this _transformTextureMap } }
+	defaultMap ::= this _transformTextureMap as GpuMap
 	_recycleBin := _RecycleBin new()
 
 	init: func ~backend (=_backend) {
