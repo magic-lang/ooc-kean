@@ -5,6 +5,7 @@ Imports: GuiEvent
 Imports: DisplayWindow
 Imports: NativeWindow
 Imports: Application
+Imports: GuiApplication
 Imports: x11/X11Window
 Imports: x11/UnixWindow
 Imports: win32/Win32Window
