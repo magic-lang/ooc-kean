@@ -22,7 +22,7 @@ import GpuImage, GpuSurface, GpuMap, GpuFence, GpuYuv420Semiplanar, GpuMesh
 
 version(!gpuOff) {
 GpuContext: abstract class extends AbstractContext {
-	defaultMap: GpuMap { get { null } }
+	defaultMap ::= null as GpuMap
 	init: func
 	createMonochrome: abstract func (size: IntVector2D) -> GpuImage
 	createBgr: abstract func (size: IntVector2D) -> GpuImage

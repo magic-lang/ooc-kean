@@ -39,7 +39,7 @@ InterpolationType: enum {
 
 GLTexture: abstract class {
 	_backend: UInt
-	backend: UInt { get { this _backend } }
+	backend ::= this _backend
 	_size: IntVector2D
 	size ::= this _size
 	_type: TextureType
