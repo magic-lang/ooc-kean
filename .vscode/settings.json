@@ -2,7 +2,14 @@
 {
 	// Controls if the editor will insert spaces for tabs. Accepted values:  "auto", true, false. If set to "auto", the value will be guessed when a file is opened.
 	"editor.insertSpaces": false,
+	"files.trimTrailingWhitespace": true,
 	// Configure glob patterns for excluding files and folders.
+	"search.exclude": {
+		"**/.git": true,
+		".libs": true,
+		"rock_tmp": true,
+		".vscode/": true
+	},
 	"files.exclude": {
 		"**/.git": true,
 		".libs": true,
