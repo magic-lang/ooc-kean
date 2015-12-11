@@ -25,9 +25,9 @@ FloatVector2D: cover {
 	area ::= this x * this y
 	length ::= this norm
 	hasZeroArea ::= this area equals(0.0f)
-	norm ::= (this x squared() + this y squared()) sqrt()
+	norm ::= (this x squared + this y squared) sqrt()
 	azimuth ::= this y atan2(this x)
-	absolute ::= This new(Float absolute(this x), Float absolute(this y))
+	absolute ::= This new(this x absolute, this y absolute)
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
 	init: func@ (=x, =y)

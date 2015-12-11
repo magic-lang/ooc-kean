@@ -6,18 +6,14 @@ FLT_EPSILON: extern Float
 cos: extern func (Double) -> Double
 sin: extern func (Double) -> Double
 tan: extern func (Double) -> Double
-
 acos: extern func (Double) -> Double
 asin: extern func (Double) -> Double
 atan: extern func (Double) -> Double
-
 atan2: extern func (Double, Double) -> Double
-
 sqrt: extern func (Double) -> Double
 pow: extern func (Double, Double) -> Double
 
 //TODO: Define methods only on extensions, and avoid global functions
-//TODO: Most member functions should be non-static
 
 extend Short {
 	minimumValue ::= static SHRT_MIN
@@ -39,6 +35,11 @@ extend Int {
 	maximumValue ::= static INT_MAX
 	pi ::= static 3
 	e ::= static 2
+	absolute ::= this >= 0 ? this : -1 * this
+	sign ::= this >= 0 ? 1 : -1
+	isOdd ::= this modulo(2) == 1
+	isEven ::= this modulo(2) == 0
+	squared ::= this * this
 
 	modulo: func (divisor: This) -> This {
 		result := this
@@ -49,26 +50,11 @@ extend Int {
 	clamp: func (floor, ceiling: This) -> This {
 		this > ceiling ? ceiling : (this < floor ? floor : this)
 	}
-	absolute: static func (value: This) -> This {
-		value >= 0 ? value : -1 * value
-	}
-	sign: static func (value: This) -> This {
-		value >= 0 ? 1 : -1
-	}
 	maximum: static func (first, second: This) -> This {
 		first > second ? first : second
 	}
 	minimum: static func (first, second: This) -> This {
 		first < second ? first : second
-	}
-	odd: static func (value: This) -> Bool {
-		value modulo(2) == 1
-	}
-	even: static func (value: This) -> Bool {
-		value modulo(2) == 0
-	}
-	squared: func -> This {
-		this * this
 	}
 	align: static func (x, align: Int) -> This {
 		result := x
@@ -115,6 +101,11 @@ extend Double {
 	pi ::= static 3.14159_26535_89793_23846_26433_83279
 	e ::= static 2.718281828459045235360287471352662497757247093699959574966
 	defaultTolerance ::= static 0.0001
+	absolute ::= this >= 0.f ? this : -1.f * this
+	sign ::= this >= 0.f ? 1.f : -1.f
+	isOdd ::= this modulo(2) == 1
+	isEven ::= this modulo(2) == 0
+	squared ::= this * this
 
 	cos: extern (cos) func -> This
 	sin: extern (sin) func -> This
@@ -129,19 +120,15 @@ extend Double {
 	asinh: extern (asinh) func -> This
 	atanh: extern (atanh) func -> This
 	atan2: extern (atan2) func (This) -> This
-
 	sqrt: extern (sqrt) func -> This
 	cbrt: extern (cbrt) func -> This
 	abs: extern (fabs) func -> This
 	pow: extern (pow) func (This) -> This
 	exp: extern (exp) func -> This
-
 	log: extern (log) func -> This
 	log2: extern (log2) func -> This
 	log10: extern (log10) func -> This
-
 	mod: extern (fmod) func (This) -> This
-
 	round: extern (round) func -> This
 	roundLong: extern (lround) func -> Long
 	roundLLong: extern (llround) func -> LLong
@@ -149,14 +136,16 @@ extend Double {
 	floor: extern (floor) func -> This
 	truncate: extern (trunc) func -> This
 
-	toRadians: static func (value: This) -> This {
-		This pi / 180.0 * value
-	}
-	toDegrees: static func (value: This) -> This {
-		180.0 / This pi * value
-	}
+	toRadians: func -> This { This pi / 180.0 * this }
+	toDegrees: func -> This { 180.0 / This pi * this }
 	clamp: func (floor, ceiling: This) -> This {
 		this > ceiling ? ceiling : (this < floor ? floor : this)
+	}
+	modulo: func (divisor: This) -> This {
+		result := this
+		if (result < 0)
+			result += ((result abs()) / divisor) ceil() * divisor
+		result mod(divisor)
 	}
 	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
 	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this < other && !this equals(other) }
@@ -174,6 +163,11 @@ extend Float {
 	pi ::= static 3.14159_26535_89793_23846_26433_83279f
 	e ::= static 2.718281828459045235360287471352662497757247093699959574966f
 	defaultTolerance ::= static 0.0001f
+	absolute ::= this >= 0.f ? this : -1.f * this
+	sign ::= this >= 0.f ? 1.f : -1.f
+	isOdd ::= this modulo(2) == 1
+	isEven ::= this modulo(2) == 0
+	squared ::= this * this
 
 	cos: extern (cosf) func -> This
 	sin: extern (sinf) func -> This
@@ -188,40 +182,27 @@ extend Float {
 	asinh: extern (asinhf) func -> This
 	atanh: extern (atanhf) func -> This
 	atan2: extern (atan2f) func (This) -> This
-
 	sqrt: extern (sqrtf) func -> This
 	cbrt: extern (cbrtf) func -> This
 	abs: extern (fabsf) func -> This
 	pow: extern (powf) func (This) -> This
 	exp: extern (expf) func -> This
-
 	log: extern (logf) func -> This
 	log2: extern (log2f) func -> This
 	log10: extern (log10f) func -> This
-
 	mod: extern (fmodf) func (This) -> This
-
 	round: extern (roundf) func -> This
 	roundLong: extern (lroundf) func -> Long
 	roundLLong: extern (llroundf) func -> LLong
 	ceil: extern (ceilf) func -> This
 	floor: extern (floorf) func -> This
 	truncate: extern (truncf) func -> This
+
 	clamp: func (floor, ceiling: This) -> This {
 		this > ceiling ? ceiling : (this < floor ? floor : this)
 	}
-	toRadians: static func (value: This) -> This {
-		This pi / 180.0f * value
-	}
-	toDegrees: static func (value: This) -> This {
-		180.0f / This pi * value
-	}
-	absolute: static func (value: This) -> This {
-		value >= 0 ? value : -1 * value
-	}
-	sign: static func (value: This) -> This {
-		value > 0.0f ? 1.0f : (value < 0.0f ? -1.0f : 0.0f)
-	}
+	toRadians: func -> This { This pi / 180.0f * this }
+	toDegrees: func -> This { 180.0f / This pi * this }
 	maximum: static func (first, second: This) -> This {
 		first > second ? first : second
 	}
@@ -233,15 +214,6 @@ extend Float {
 		if (result < 0)
 			result += ((result abs()) / divisor) ceil() * divisor
 		result mod(divisor)
-	}
-	odd: static func (value: This) -> Bool {
-		value modulo(2) == 1
-	}
-	even: static func (value: This) -> Bool {
-		value modulo(2) == 0
-	}
-	squared: func -> This {
-		this * this
 	}
 	moduloTwoPi: static func (value: This) -> This {
 		value modulo(2.0f * This pi)
@@ -267,11 +239,11 @@ extend Float {
 	decomposeToCoefficientAndRadix: static func (value: This, valueDigits: Int) -> (This, This) {
 		radix := 1.0f
 		if (value != 0.0f) {
-			while (This absolute(value) >= pow(10.0f, valueDigits)) {
+			while (value absolute >= pow(10.0f, valueDigits)) {
 				value /= 10.0f
 				radix *= 10.0f
 			}
-			while (This absolute(value) - pow(10.0f, valueDigits-1) < - This epsilon) {
+			while (value absolute - pow(10.0f, valueDigits-1) < - This epsilon) {
 				value *= 10.0f
 				radix /= 10.0f
 			}
@@ -322,25 +294,22 @@ extend LDouble {
 	asinh: extern (asinhl) func -> This
 	atanh: extern (atanhl) func -> This
 	atan2: extern (atan2l) func (This) -> This
-
 	sqrt: extern (sqrtl) func -> This
 	cbrt: extern (cbrtl) func -> This
 	abs: extern (fabsl) func -> This
 	pow: extern (powl) func (This) -> This
 	exp: extern (expl) func -> This
-
 	log: extern (logl) func -> This
 	log2: extern (log2l) func -> This
 	log10: extern (log10l) func -> This
-
 	mod: extern (fmodl) func (This) -> This
-
 	round: extern (roundl) func -> This
 	roundLong: extern (lroundl) func -> Long
 	roundLLong: extern (llroundl) func -> LLong
 	ceil: extern (ceill) func -> This
 	floor: extern (floorl) func -> This
 	truncate: extern (truncl) func -> This
+
 	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
 	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this < other && !this equals(other) }
 	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this > other && !this equals(other) }

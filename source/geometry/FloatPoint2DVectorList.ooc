@@ -166,7 +166,7 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 						rightPoint = this[Int minimum(j + 1, this count - 1)]
 						previousIndex = j
 					} else break
-				weight := Float absolute(point x - leftPoint x) / Float absolute(rightPoint x - leftPoint x)
+				weight := (point x - leftPoint x) absolute / (rightPoint x - leftPoint x) absolute
 				point y = Float linearInterpolation(leftPoint y, rightPoint y, weight)
 			}
 			result add(point)

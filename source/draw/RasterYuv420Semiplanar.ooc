@@ -70,7 +70,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		(RasterMonochrome new(buffer slice(0, yLength), size, stride), RasterUv new(buffer slice(uvOffset, uvLength), This _uvSize(size), stride))
 	}
 	_uvSize: static func (size: IntVector2D) -> IntVector2D {
-		IntVector2D new(size x / 2 + (Int odd(size x) ? 1 : 0), size y / 2 + (Int odd(size y) ? 1 : 0))
+		IntVector2D new(size x / 2 + (size x isOdd ? 1 : 0), size y / 2 + (size y isOdd ? 1 : 0))
 	}
 	create: func (size: IntVector2D) -> Image { This new(size) }
 	copy: func -> This {
@@ -84,7 +84,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		if (this size == size)
 			result = this copy()
 		else {
-			result = This new(size, size x + (Int odd(size x) ? 1 : 0))
+			result = This new(size, size x + (size x isOdd ? 1 : 0))
 			this resizeInto(result)
 		}
 		result
@@ -105,7 +105,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		thisSizeHalf := this size / 2
 		thisUvBuffer := this uv buffer pointer as ColorUv*
 		targetUvBuffer := target uv buffer pointer as ColorUv*
-		if (Int odd(target size y))
+		if (target size y isOdd)
 			targetSizeHalf = IntVector2D new(targetSizeHalf x, targetSizeHalf y + 1)
 		for (row in 0 .. targetSizeHalf y) {
 			srcRow := (thisSizeHalf y * row) / targetSizeHalf y
@@ -119,7 +119,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	}
 	crop: func (region: FloatBox2D) -> This {
 		size := region size toIntVector2D()
-		result := This new(size, size x + (Int odd(size x) ? 1 : 0)) as This
+		result := This new(size, size x + (size x isOdd ? 1 : 0)) as This
 		this cropInto(region, result)
 		result
 	}

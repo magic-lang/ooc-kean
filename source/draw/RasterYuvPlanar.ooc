@@ -101,17 +101,17 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 								}
 						distance := 0.0f
 						if (c y < minimum y)
-							distance += (minimum y - c y) as Float squared()
+							distance += (minimum y - c y) as Float squared
 						else if (c y > maximum y)
-							distance += (c y - maximum y) as Float squared()
+							distance += (c y - maximum y) as Float squared
 						if (c u < minimum u)
-							distance += (minimum u - c u) as Float squared()
+							distance += (minimum u - c u) as Float squared
 						else if (c u > maximum u)
-							distance += (c u - maximum u) as Float squared()
+							distance += (c u - maximum u) as Float squared
 						if (c v < minimum v)
-							distance += (minimum v - c v) as Float squared()
+							distance += (minimum v - c v) as Float squared
 						else if (c v > maximum v)
-							distance += (c v - maximum v) as Float squared()
+							distance += (c v - maximum v) as Float squared
 						result += (distance) sqrt() / 3
 					}
 				}

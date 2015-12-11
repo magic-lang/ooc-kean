@@ -81,7 +81,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 			for (i in 0 .. values length)
 				mean += values[i]
 			mean /= values length
-			expect(Float absolute(mean - expectedMean) < tolerance)
+			expect((mean - expectedMean) absolute < tolerance)
 			values free()
 		})
 		this add("gaussian distribution", func {
@@ -99,8 +99,8 @@ FloatRandomGeneratorTest: class extends Fixture {
 			for (i in 0 .. values length)
 				deviation += (values[i] - mean) * (values[i] - mean)
 			deviation = sqrt(deviation / values length)
-			expect(Float absolute(mean - expectedMean) < tolerance)
-			expect(Float absolute(deviation - expectedDeviation) < tolerance)
+			expect((mean - expectedMean) absolute < tolerance)
+			expect((deviation - expectedDeviation) absolute < tolerance)
 			values free()
 		})
 		this add("uniform range", func {

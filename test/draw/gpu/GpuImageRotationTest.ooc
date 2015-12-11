@@ -13,8 +13,8 @@ GpuImageRotationTest: class extends Fixture {
 		super("GpuImageRotationTest")
 		sourceImage := RasterBgra open("test/draw/gpu/input/Flower.png")
 		focalLength := 500.0f
-		smallRotation := Float toRadians(10.0f)
-		flipRotation := Float toRadians(180.0f)
+		smallRotation := 10.0f toRadians()
+		flipRotation := 180.0f toRadians()
 		this add("GPU rotation flip X (BGRA)", func {
 			correctImage := RasterBgra open("test/draw/gpu/correct/rotation_flip_bgra_X.png")
 			gpuImage := gpuContext createBgra(sourceImage size)

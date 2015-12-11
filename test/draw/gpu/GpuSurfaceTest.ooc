@@ -104,9 +104,9 @@ GpuSurfaceTest: class extends Fixture {
 			viewport := gpuImage canvas viewport
 			quadrantTopLeft := IntBox2D new(viewport left, viewport top, viewport width / 2, viewport height / 2)
 			quadrantBottomRight := IntBox2D new(viewport width / 2, viewport height / 2, viewport width / 2, viewport height / 2)
-			gpuImage canvas transform = FloatTransform3D createRotationX(Float toRadians(180.0f))
+			gpuImage canvas transform = FloatTransform3D createRotationX(180.0f toRadians())
 			gpuImage canvas draw(sourceImage, quadrantTopLeft)
-			gpuImage canvas transform = FloatTransform3D createRotationX(Float toRadians(180.0f))
+			gpuImage canvas transform = FloatTransform3D createRotationX(180.0f toRadians())
 			gpuImage canvas draw(sourceImage, quadrantBottomRight)
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f) within(0.05f))

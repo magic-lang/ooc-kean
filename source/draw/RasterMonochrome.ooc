@@ -109,13 +109,13 @@ RasterMonochrome: class extends RasterPacked {
 								}
 						distance := 0.0f
 						if (c y < minimum y)
-							distance += (minimum y - c y) as Float squared()
+							distance += (minimum y - c y) as Float squared
 						else if (c y > maximum y)
-							distance += (c y - maximum y) as Float squared()
+							distance += (c y - maximum y) as Float squared
 						result += distance sqrt()
 					}
 				}
-			result /= ((this size x squared() + this size y squared()) as Float sqrt())
+			result /= (this size x squared + this size y squared as Float sqrt())
 		}
 	}
 	open: static func (filename: String) -> This {

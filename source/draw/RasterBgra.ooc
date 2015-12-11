@@ -103,21 +103,21 @@ RasterBgra: class extends RasterPacked {
 								}
 						distance := 0.0f
 						if (c blue < minimum blue)
-							distance += (minimum blue - c blue) as Float squared()
+							distance += (minimum blue - c blue) as Float squared
 						else if (c blue > maximum blue)
-							distance += (c blue - maximum blue) as Float squared()
+							distance += (c blue - maximum blue) as Float squared
 						if (c green < minimum green)
-							distance += (minimum green - c green) as Float squared()
+							distance += (minimum green - c green) as Float squared
 						else if (c green > maximum green)
-							distance += (c green - maximum green) as Float squared()
+							distance += (c green - maximum green) as Float squared
 						if (c red < minimum red)
-							distance += (minimum red - c red) as Float squared()
+							distance += (minimum red - c red) as Float squared
 						else if (c red > maximum red)
-							distance += (c red - maximum red) as Float squared()
+							distance += (c red - maximum red) as Float squared
 						if (c alpha < minimum alpha)
-							distance += (minimum alpha - c alpha) as Float squared()
+							distance += (minimum alpha - c alpha) as Float squared
 						else if (c alpha > maximum alpha)
-							distance += (c alpha - maximum alpha) as Float squared()
+							distance += (c alpha - maximum alpha) as Float squared
 						result += (distance) sqrt() / 4
 					}
 				}

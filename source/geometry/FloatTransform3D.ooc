@@ -85,9 +85,9 @@ FloatTransform3D: cover {
 	}
 	translation ::= FloatVector3D new(this m, this n, this o)
 	scaling ::= (this scalingX + this scalingY + this scalingZ) / 3.0f
-	scalingX ::= (this a squared() + this b squared() + this c squared()) sqrt()
-	scalingY ::= (this e squared() + this f squared() + this g squared()) sqrt()
-	scalingZ ::= (this i squared() + this j squared() + this k squared()) sqrt()
+	scalingX ::= (this a squared + this b squared + this c squared) sqrt()
+	scalingY ::= (this e squared + this f squared + this g squared) sqrt()
+	scalingZ ::= (this i squared + this j squared + this k squared) sqrt()
 	inverse: This { get {
 		determinant := this determinant
 		// If the determinant is 0, the resulting transform will be full of NaN values.

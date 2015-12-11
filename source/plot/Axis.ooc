@@ -72,7 +72,7 @@ Axis: class {
 	}
 	getVerticalSvg: func (plotAreaSize, margin: FloatVector2D, position: FloatPoint2D, transform: FloatTransform2D, radix: Float) -> String {
 		result := "<g desc='Y-axis data'>\n"
-		labelOffset := FloatPoint2D new(-((Float maximum(this max, Float absolute(this min)) / radix) log10() + 3.0f) * 0.6f * (this fontSize - 4.0f), - plotAreaSize y / 2.0f)
+		labelOffset := FloatPoint2D new(-((Float maximum(this max, this min absolute) / radix) log10() + 3.0f) * 0.6f * (this fontSize - 4.0f), - plotAreaSize y / 2.0f)
 		numberOffset := FloatPoint2D new(- 0.6f * (this fontSize - 4.0f), (this fontSize - 4.0f) / 3.0f)
 		radixOffset := FloatPoint2D new(numberOffset x, - plotAreaSize y - margin y / 2 + this fontSize / 3.0f)
 		tickMarkerEndOffset := FloatPoint2D new(5.0f, 0.0f)
@@ -108,7 +108,7 @@ Axis: class {
 		tickValue = radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision) ? (tickValue / radix) : tickValue
 		tempTick := tickValue toString()
 		tempTickInt := tickValue as Int toString()
-		result = result & Shapes text(position + numberOffset, Float absolute(tickValue - tickValue round()) < 0.001 ? tempTickInt : tempTick, this fontSize - 4, textAnchor)
+		result = result & Shapes text(position + numberOffset, (tickValue - tickValue round()) absolute < 0.001 ? tempTickInt : tempTick, this fontSize - 4, textAnchor)
 		tempTick free()
 		tempTickInt free()
 		result >> "</g>\n"
