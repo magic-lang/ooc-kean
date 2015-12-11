@@ -39,7 +39,7 @@ GraphicBufferUsage: enum (*2) {
 GraphicBuffer: class {
 	_allocate: static Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
 	_createFromHandle: static Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
-	_free: static Func (Pointer)
+	_free: static Func (Pointer, Bool)
 	_lock: static Func (Pointer, Int, Pointer*)
 	_unlock: static Func (Pointer)
 	_alignedWidth: static Int[] = Int[0] new()
@@ -63,9 +63,9 @@ GraphicBuffer: class {
 	nativeBuffer ::= this _nativeBuffer
 	_handle: Pointer = null
 	handle ::= this _handle
-	_ownsMemory := false
+	_ownsBackend := false
 
-	init: func (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format, =_ownsMemory)
+	init: func (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format, =_ownsBackend)
 	init: func ~allocate (size: IntVector2D, format: GraphicBufferFormat, usage: GraphicBufferUsage) {
 		backend, nativeBuffer: Pointer
 		pixelStride: Int
@@ -73,14 +73,13 @@ GraphicBuffer: class {
 		this init(backend, nativeBuffer, null, size, pixelStride, format, true)
 	}
 	free: override func {
-		if (this _ownsMemory)
-			This _free(this _backend)
+		This _free(this _backend, !this _ownsBackend)
 		super()
 	}
 	shallowCopy: func (size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat, usage: GraphicBufferUsage) -> This {
 		backend, nativeBuffer: Pointer
 		This _createFromHandle(size x, size y, format as Int, usage as Int, pixelStride, this _handle, false, backend&, nativeBuffer&)
-		This new(backend, nativeBuffer, handle, size, pixelStride, format, false)
+		This new(backend, nativeBuffer, handle, size, pixelStride, format, true)
 	}
 	lock: func (usage: GraphicBufferUsage) -> Pointer {
 		result: Pointer = null
@@ -91,7 +90,7 @@ GraphicBuffer: class {
 	kean_draw_graphicBuffer_registerCallbacks: unmangled static func (allocate, createFromHandle, free, lock, unlock: Pointer) {
 		This _allocate = (allocate, null) as Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
 		This _createFromHandle = (createFromHandle, null) as Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
-		This _free = (free, null) as Func (Pointer)
+		This _free = (free, null) as Func (Pointer, Bool)
 		This _lock = (lock, null) as Func (Pointer, Int, Pointer*)
 		This _unlock = (unlock, null) as Func (Pointer)
 	}
