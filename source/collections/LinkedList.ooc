@@ -1,8 +1,8 @@
 import structs/List
 
 LinkedList: class <T> {
-	_size = 0 : SizeT
-	size ::= this _size as Int
+	_size := 0
+	size ::= this _size
 	_head: Node<T>
 	head ::= this _head
 	init: func {
@@ -20,7 +20,7 @@ LinkedList: class <T> {
 		this _head prev = node
 		this _size += 1
 	}
-	add: func ~withIndex (index: SSizeT, data: T) {
+	add: func ~withIndex (index: Int, data: T) {
 		if (index > 0 && index < this size) {
 			prevNode := this getNode(index - 1)
 			nextNode := prevNode next
@@ -38,10 +38,10 @@ LinkedList: class <T> {
 		} else
 			raise("Index out of bounds in LinkedList add~withIndex")
 	}
-	get: func (index: SSizeT) -> T {
+	get: func (index: Int) -> T {
 		this getNode(index) data@
 	}
-	getNode: func (index: SSizeT) -> Node<T> {
+	getNode: func (index: Int) -> Node<T> {
 		if (index < 0 || index >= this _size)
 			raise("Index out of bounds in LinkedList getNode")
 		i := 0
@@ -58,7 +58,7 @@ LinkedList: class <T> {
 		this _head next = this _head
 		this _head prev = this _head
 	}
-	indexOf: func (data: T) -> SSizeT {
+	indexOf: func (data: T) -> Int {
 		current := this _head next
 		i := 0
 		index := -1
@@ -72,7 +72,7 @@ LinkedList: class <T> {
 		}
 		index
 	}
-	lastIndexOf: func (data: T) -> SSizeT {
+	lastIndexOf: func (data: T) -> Int {
 		current := this _head prev
 		i := this _size - 1
 		index := -1
@@ -98,12 +98,11 @@ LinkedList: class <T> {
 			data = this _head prev data@
 		data
 	}
-	removeAt: func (index: SSizeT) -> T {
-		item := null
+	removeAt: func (index: Int) -> T {
+		item: T = null
 		if (this _head next != this _head && 0 <= index && index < this _size) {
 			toRemove := this getNode(index)
-			this removeNode(toRemove)
-			item = toRemove data
+			item = this removeNode(toRemove)
 		} else
 			raise("Index out of bounds in LinkedList removeAt")
 		item
@@ -117,13 +116,15 @@ LinkedList: class <T> {
 		}
 		result
 	}
-	removeNode: func (toRemove: Node<T>) {
+	removeNode: func (toRemove: Node<T>) -> T {
 		toRemove prev next = toRemove next
 		toRemove next prev = toRemove prev
 		toRemove prev = null
 		toRemove next = null
+		data := toRemove data@
 		toRemove free()
 		this _size -= 1
+		data
 	}
 	removeLast: func -> Bool {
 		result := false
@@ -133,9 +134,9 @@ LinkedList: class <T> {
 		}
 		result
 	}
-	set: func (index: SSizeT, data: T) -> T {
+	set: func (index: Int, data: T) -> T {
 		node := this getNode(index)
-		previousData := node data
+		previousData := node data@
 		node data = data
 		previousData
 	}

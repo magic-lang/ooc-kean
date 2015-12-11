@@ -39,8 +39,9 @@ LinkedListTest: class extends Fixture {
 			linkedlist add(2)
 			linkedlist add(5)
 			linkedlist add(7)
-			linkedlist set(0, 42)
+			old := linkedlist set(0, 42)
 			item := linkedlist get(0)
+			expect(old, is equal to(2))
 			expect(item, is equal to(42))
 		})
 		this add("operators", func {
