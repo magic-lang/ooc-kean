@@ -7,7 +7,7 @@ import UnixWindow
 X11EventLoop: class extends EventLoop {
 	init: func
 	processEvents: override func (receiver: DisplayWindow) {
-		xWindow := (receiver as UnixWindow) _xWindow
+		xWindow := (receiver as UnixWindowBase) _xWindow
 		while (XPending(xWindow display)) {
 			event: XEventOoc
 			guiEvent: MouseEvent
