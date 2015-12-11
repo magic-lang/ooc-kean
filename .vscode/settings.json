@@ -8,12 +8,14 @@
 		"**/.git": true,
 		".libs": true,
 		"rock_tmp": true,
-		".vscode/": true
+		".vscode/": true,
+		"source/draw/stb_image": true
 	},
 	"files.exclude": {
 		"**/.git": true,
 		".libs": true,
 		"rock_tmp": true,
-		".vscode/": true
+		".vscode/": true,
+		"source/draw/stb_image": true
 	}
 }
