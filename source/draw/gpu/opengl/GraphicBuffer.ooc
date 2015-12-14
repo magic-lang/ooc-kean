@@ -63,24 +63,22 @@ GraphicBuffer: class {
 	nativeBuffer ::= this _nativeBuffer
 	_handle: Pointer = null
 	handle ::= this _handle
-	_ownsMemory := false
 
-	init: func (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format, =_ownsMemory)
+	init: func (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format)
 	init: func ~allocate (size: IntVector2D, format: GraphicBufferFormat, usage: GraphicBufferUsage) {
 		backend, nativeBuffer: Pointer
 		pixelStride: Int
 		This _allocate(size x, size y, format as Int, usage as Int, backend&, nativeBuffer&, pixelStride&)
-		this init(backend, nativeBuffer, null, size, pixelStride, format, true)
+		this init(backend, nativeBuffer, null, size, pixelStride, format)
 	}
 	free: override func {
-		if (this _ownsMemory)
-			This _free(this _backend)
+		This _free(this _backend)
 		super()
 	}
 	shallowCopy: func (size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat, usage: GraphicBufferUsage) -> This {
 		backend, nativeBuffer: Pointer
 		This _createFromHandle(size x, size y, format as Int, usage as Int, pixelStride, this _handle, false, backend&, nativeBuffer&)
-		This new(backend, nativeBuffer, handle, size, pixelStride, format, false)
+		This new(backend, nativeBuffer, handle, size, pixelStride, format)
 	}
 	lock: func (usage: GraphicBufferUsage) -> Pointer {
 		result: Pointer = null
@@ -99,8 +97,8 @@ GraphicBuffer: class {
 		This _alignedWidth = Int[count] new()
 		memcpy(This _alignedWidth data, alignedWidth, count * Int size)
 	}
-	kean_draw_graphicBuffer_new: unmangled static func (backend, nativeBuffer, handle: Pointer, size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat, ownsMemory: Bool) -> This {
-		This new(backend, nativeBuffer, handle, size, pixelStride, format, ownsMemory)
+	kean_draw_graphicBuffer_new: unmangled static func (backend, nativeBuffer, handle: Pointer, size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat) -> This {
+		This new(backend, nativeBuffer, handle, size, pixelStride, format)
 	}
 	alignWidth: static func (width: Int, align := AlignWidth Nearest) -> Int {
 		result := width
