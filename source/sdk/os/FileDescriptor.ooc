@@ -10,7 +10,7 @@ STDIN_FILENO : extern FileDescriptor
 STDOUT_FILENO: extern FileDescriptor
 STDERR_FILENO: extern FileDescriptor
 
-// FIXME deprecated ? looks like an ancestor of File
+// TODO deprecated ? looks like an ancestor of File
 
 FileDescriptor: cover from Int {
 	write: func ~string (str: String) -> Int {

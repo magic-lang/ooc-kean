@@ -22,7 +22,7 @@ RasterCanvasTest: class extends Fixture {
 			image canvas drawLine(start, end)
 			image save(output)
 			original := RasterBgr open(input)
-			//FIXME: This doesn't test if correctly drawn, only if the image has been modified
+			//TODO: This doesn't test if correctly drawn, only if the image has been modified
 			expect(original distance(image) > 0.0f)
 			original referenceCount decrease()
 			image referenceCount decrease()
@@ -39,7 +39,7 @@ RasterCanvasTest: class extends Fixture {
 					image canvas drawPoint(FloatPoint2D new(column * 3 - image size x / 2, row * 3 - image size y / 2))
 			image save(output)
 			original := RasterBgra open(input)
-			//FIXME: This doesn't test if correctly drawn, only if the image has been modified
+			//TODO: This doesn't test if correctly drawn, only if the image has been modified
 			expect(original distance(image) > 0.0f)
 			original referenceCount decrease()
 			image referenceCount decrease()
@@ -57,7 +57,7 @@ RasterCanvasTest: class extends Fixture {
 			}
 			image save(output)
 			original := RasterYuv420Semiplanar open(input)
-			//FIXME: This doesn't test if correctly drawn, only if the image has been modified
+			//TODO: This doesn't test if correctly drawn, only if the image has been modified
 			expect(original distance(image) > 0.0f)
 			original referenceCount decrease()
 			image referenceCount decrease()
@@ -77,7 +77,7 @@ RasterCanvasTest: class extends Fixture {
 				image canvas drawLine(FloatPoint2D new(-shiftX, i * 10 - shiftY), FloatPoint2D new(shiftX, i * 10 - shiftY))
 			image save(output)
 			original := RasterMonochrome open(input)
-			//FIXME: This doesn't test if correctly drawn, only if the image has been modified
+			//TODO: This doesn't test if correctly drawn, only if the image has been modified
 			expect(original distance(image) > 0.0f)
 			original referenceCount decrease()
 			image referenceCount decrease()
@@ -98,7 +98,7 @@ RasterCanvasTest: class extends Fixture {
 				image canvas drawLine(FloatPoint2D new(-shiftX, i * factor - shiftY), FloatPoint2D new(shiftX, i * factor - shiftY))
 			image save(output)
 			original := RasterMonochrome open(input)
-			//FIXME: This doesn't test if correctly drawn, only if the image has been modified
+			//TODO: This doesn't test if correctly drawn, only if the image has been modified
 			expect(original distance(image) > 0.0f)
 			original referenceCount decrease()
 			image referenceCount decrease()

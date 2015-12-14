@@ -17,10 +17,11 @@
 
 use ooc-unit
 
+// TODO: Skipping the variable and having "is not equal to" inside an expect call does not work
 StringTest: class extends Fixture {
 	init: func {
 		super("String")
-		isNull := is Null // FIXME: Does not work to skip variable and put expression below, why?
+		isNull := is Null
 		this add("null is null", func { expect(null, isNull) })
 		this add("empty is not null", func { expect("", is not Null) })
 
@@ -28,15 +29,15 @@ StringTest: class extends Fixture {
 		this add("code is not empty", func { expect("code", is not empty) })
 
 		this add("code is equal to code", func { expect("code", is equal to("code")) })
-		isNotEqualToNerd := is not equal to("nerd") // FIXME: Does not work to skip variable and put expression below, why?
+		isNotEqualToNerd := is not equal to("nerd")
 		this add("code is not equal to nerd", func { expect("code", isNotEqualToNerd) })
-		isNotEqualToNull := is not equal to(null) // FIXME: Does not work to skip variable and put expression below, why?
+		isNotEqualToNull := is not equal to(null)
 		this add("code is not equal to null", func { expect("code", isNotEqualToNull) })
-		isNotEqualToEmpty := is not equal to("") // FIXME: Does not work to skip variable and put expression below, why?
+		isNotEqualToEmpty := is not equal to("")
 		this add("code is not equal to empty", func { expect("code", isNotEqualToEmpty) })
-		isNotEqualToCode := is not equal to("code") // FIXME: Does not work to skip variable and put expression below, why?
+		isNotEqualToCode := is not equal to("code")
 		this add("null is not equal to code", func { expect(null, isNotEqualToCode) })
-		isNotEqualToCode2 := is not equal to("code") // FIXME: Does not work to skip variable and put expression below, why?
+		isNotEqualToCode2 := is not equal to("code")
 		this add("empty is not equal to code", func { expect("", isNotEqualToCode2) })
 	}
 }
