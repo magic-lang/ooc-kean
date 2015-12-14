@@ -29,11 +29,11 @@ Gles3Fence: class extends GLFence {
 		version(debugGL) { validateEnd("Fence free") }
 		super()
 	}
-	clientWait: func (timeout: UInt64 = ULLONG_MAX) {
+	clientWait: override func (timeout: UInt64 = ULLONG_MAX) -> Bool {
 		version(debugGL) { validateStart("Fence clientWait") }
-		result := glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, timeout)
+		code := glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, timeout)
 		version(debugGL) {
-			match (result) {
+			match (code) {
 				case GL_TIMEOUT_EXPIRED => Debug print("Fence reached timeout limit after %llu ns. Possible deadlock?" format(timeout))
 				case GL_WAIT_FAILED => Debug print("Fence wait failed!")
 				/*
@@ -43,14 +43,15 @@ Gles3Fence: class extends GLFence {
 			}
 		}
 		version(debugGL) { validateEnd("Fence clientWait") }
+		code == GL_CONDITION_SATISFIED || code == GL_ALREADY_SIGNALED
 	}
-	wait: func {
+	wait: override func {
 		version(debugGL) { validateStart("Fence wait") }
 		glWaitSync(this _backend, 0, GL_TIMEOUT_IGNORED)
 		glFlush()
 		version(debugGL) { validateEnd("Fence wait") }
 	}
-	sync: func {
+	sync: override func {
 		version(debugGL) { validateStart("Fence sync") }
 		if (this _backend != null)
 			glDeleteSync(this _backend)
