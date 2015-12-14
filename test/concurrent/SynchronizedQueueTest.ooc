@@ -1,7 +1,6 @@
 use ooc-base
 use ooc-concurrent
 use ooc-unit
-import math
 import threading/Thread
 
 SynchronizedQueueTest: class extends Fixture {

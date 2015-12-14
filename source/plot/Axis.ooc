@@ -1,6 +1,5 @@
 use ooc-geometry
 import svg/Shapes
-import math
 
 Orientation: enum {
 	Horizontal

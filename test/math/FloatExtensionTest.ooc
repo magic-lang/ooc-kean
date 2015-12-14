@@ -1,6 +1,5 @@
 use ooc-unit
 use ooc-math
-import math
 import lang/IO
 
 FloatExtensionTest: class extends Fixture {

@@ -16,7 +16,6 @@
  */
 use ooc-geometry
 use ooc-unit
-import math
 
 FloatEuclidTransformVectorListTest: class extends Fixture {
 	init: func {

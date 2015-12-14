@@ -17,12 +17,11 @@
 
 use ooc-base
 use ooc-unit
-import math
 
 TimerTest: class extends Fixture {
 	timer := Timer new()
 	clockTimer := ClockTimer new()
-	
+
 	init: func {
 		super("Timer")
 		this add("basic use of Timer", func {
@@ -36,14 +35,14 @@ TimerTest: class extends Fixture {
 			expect(slow > fast, is true)
 		})
 	}
-	
+
 	timerTestFunction: func (loopLength: Int) -> Double {
 		sum := 0
 		this timer start()
 		for (i in 0 .. loopLength) { sum = (sum + i) % 10 }
 		this timer stop()
 	}
-	
+
 	clockTimerTestFunction: func (loopLength: Int) -> Double {
 		sum := 0
 		this clockTimer start()

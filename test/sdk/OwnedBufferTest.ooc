@@ -1,7 +1,6 @@
 use ooc-base
 use ooc-unit
 use ooc-geometry
-import math
 
 OwnedBufferTest: class extends Fixture {
 	init: func {

@@ -19,7 +19,6 @@ use ooc-base
 use ooc-math
 use ooc-geometry
 use ooc-unit
-import math
 
 FloatShell2DTest: class extends Fixture {
 	init: func {

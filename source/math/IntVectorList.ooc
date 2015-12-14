@@ -15,7 +15,6 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 use ooc-collections
-import math
 import FloatVectorList
 
 IntVectorList: class extends VectorList<Int> {

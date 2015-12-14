@@ -18,7 +18,6 @@
 use ooc-base
 use ooc-math
 use ooc-unit
-import math
 
 BoolVectorListTest: class extends Fixture {
 	init: func {

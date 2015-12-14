@@ -1,5 +1,3 @@
-import math
-
 Queue: abstract class <T> {
 	_count := 0
 	count ::= this _count

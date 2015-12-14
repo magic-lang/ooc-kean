@@ -16,7 +16,6 @@
 */
 
 use ooc-base
-import math
 
 TimeSpan: cover {
 	_ticks: Int64 = 0

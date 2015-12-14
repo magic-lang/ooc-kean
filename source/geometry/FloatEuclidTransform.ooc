@@ -15,7 +15,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-collections
-import math
 use ooc-math
 import FloatVector3D
 import FloatRotation3D

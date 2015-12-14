@@ -1,6 +1,5 @@
 use ooc-base
 use ooc-unit
-import math
 
 MyClass: class {
 	content: Int { get set }

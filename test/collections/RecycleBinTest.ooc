@@ -1,7 +1,6 @@
 use ooc-unit
 use ooc-base
 use ooc-collections
-import math
 
 MyClass: class {
 	content: Int

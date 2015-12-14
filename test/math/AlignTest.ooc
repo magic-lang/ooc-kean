@@ -1,6 +1,5 @@
 use ooc-math
 use ooc-unit
-import math
 
 AlignTest: class extends Fixture {
 	init: func {

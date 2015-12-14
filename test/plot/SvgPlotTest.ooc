@@ -4,7 +4,6 @@ use ooc-math
 use ooc-geometry
 use ooc-collections
 use ooc-draw
-import math
 import io/File
 
 logVector := VectorList<FloatPoint2D> new()

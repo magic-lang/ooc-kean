@@ -16,7 +16,6 @@
 
 use ooc-geometry
 use ooc-base
-import math
 import Image
 import RasterBgra, RasterMonochrome, RasterBgr
 import Color

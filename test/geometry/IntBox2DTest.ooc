@@ -1,7 +1,6 @@
 use ooc-unit
 use ooc-geometry
 use ooc-base
-import math
 import lang/IO
 
 IntBox2DTest: class extends Fixture {
@@ -12,8 +11,6 @@ IntBox2DTest: class extends Fixture {
 		super("IntBox2D")
 		this add("equality", func {
 			box := IntBox2D new()
-//			expect(this vector0, is equal to(this vector0))
-//			expect(this vector0 equals(this vector0 as Object), is true)
 			expect(this box0 == this box0, is true)
 			expect(this box0 != this box1, is true)
 			expect(this box0 == box, is false)

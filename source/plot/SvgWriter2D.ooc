@@ -8,7 +8,6 @@ import io/FileWriter
 import SvgPlot
 import LinePlotData2D
 import svg/Shapes
-import math
 
 SvgWriter2D: class {
 	file: File { get set }

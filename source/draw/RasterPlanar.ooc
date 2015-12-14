@@ -17,7 +17,6 @@
 use ooc-geometry
 use ooc-base
 import ByteBuffer into ByteBuffer
-import math
 import Image
 import RasterImage
 

@@ -16,7 +16,6 @@
 
 use ooc-geometry
 use ooc-base
-import math
 import RasterPlanar
 import RasterPacked
 import RasterImage

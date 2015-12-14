@@ -1,5 +1,5 @@
-import math
 use ooc-geometry
+
 FloatImage : class {
 	// x = column
 	// y = row

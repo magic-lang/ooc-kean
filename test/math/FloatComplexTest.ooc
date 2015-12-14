@@ -18,7 +18,6 @@ use ooc-unit
 use ooc-base
 use ooc-math
 use ooc-collections
-import math
 import FloatComplex
 import lang/IO
 import structs/Vector

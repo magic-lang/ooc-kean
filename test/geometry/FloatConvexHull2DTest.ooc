@@ -18,7 +18,6 @@
 use ooc-collections
 use ooc-geometry
 use ooc-unit
-import math
 
 FloatConvexHull2DTest: class extends Fixture {
 	init: func {

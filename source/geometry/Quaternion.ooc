@@ -18,7 +18,6 @@ use ooc-collections
 use ooc-math
 import FloatPoint3D
 import FloatTransform3D
-import math
 
 Quaternion: cover {
 	real: Float

@@ -17,7 +17,6 @@
 use ooc-unit
 use ooc-math
 use ooc-collections
-import math
 import lang/IO
 
 FloatVectorListTest: class extends Fixture {

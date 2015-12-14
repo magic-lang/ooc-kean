@@ -1,6 +1,5 @@
 use ooc-unit
 use ooc-draw
-import math
 import lang/IO
 
 ColorConvertTest: class extends Fixture {

@@ -1,7 +1,6 @@
 use ooc-unit
 use ooc-draw
 use ooc-geometry
-import math
 
 RasterYuv422SemipackedTest: class extends Fixture {
 	_inputPath := "test/draw/input/Flower.png"

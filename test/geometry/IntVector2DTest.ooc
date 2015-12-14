@@ -1,7 +1,6 @@
 use ooc-unit
 use ooc-base
 use ooc-geometry
-import math
 import lang/IO
 
 IntVector2DTest: class extends Fixture {

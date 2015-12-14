@@ -16,7 +16,6 @@
  */
 
 use ooc-base
-import math
 
 ComparisonType: enum {
 	Unspecified
