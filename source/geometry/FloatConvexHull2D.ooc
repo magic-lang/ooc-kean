@@ -21,12 +21,12 @@ import FloatPoint2D
 import FloatBox2D
 import FloatTransform2D
 
-// Note: Points must be in clockwise order
+// Note: Points must be in counterclockwise order
 FloatConvexHull2D: class {
 	_points: VectorList<FloatPoint2D>
 	points ::= this _points
 	count ::= this _points count
-	init: func ~fromPoints (=_points, computeHull := false) { //TODO: Compute the convex hull per default
+	init: func ~fromPoints (=_points, computeHull := true) {
 		if (computeHull)
 			this computeHull()
 	}

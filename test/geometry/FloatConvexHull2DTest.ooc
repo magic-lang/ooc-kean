@@ -24,13 +24,13 @@ FloatConvexHull2DTest: class extends Fixture {
 	init: func {
 		super("FloatConvexHull2D")
 		tolerance := 0.0001f
-		
+
 		this add("contains, triangle", func {
 			trianglePoints := VectorList<FloatPoint2D> new()
 			trianglePoints add(FloatPoint2D new(0.0f, 0.0f))
 			trianglePoints add(FloatPoint2D new(0.0f, 1.0f))
 			trianglePoints add(FloatPoint2D new(1.0f, 0.0f))
-			hull := FloatConvexHull2D new(trianglePoints)
+			hull := FloatConvexHull2D new(trianglePoints, false)
 			expect(hull contains(FloatPoint2D new(0.1f, 0.1f)), is true)
 			expect(hull contains(FloatPoint2D new(0.7f, 0.7f)), is false)
 			expect(hull contains(FloatPoint2D new(0.9f, 0.01f)), is true)
@@ -38,7 +38,7 @@ FloatConvexHull2DTest: class extends Fixture {
 			expect(hull count, is equal to(3))
 			hull free()
 		})
-		
+
 		this add("contains, square", func {
 			square := FloatBox2D new(1.0f, 1.0f, 3.0f, 4.0f)
 			hull := FloatConvexHull2D new(square)
@@ -50,7 +50,7 @@ FloatConvexHull2DTest: class extends Fixture {
 			expect(hull contains(FloatPoint2D new(3.9f, 5.1f)), is false)
 			hull free()
 		})
-		
+
 		this add("hull computation", func {
 			points := VectorList<FloatPoint2D> new()
 			points add(FloatPoint2D new(1.0f, 0.0f)) //hull
@@ -62,8 +62,8 @@ FloatConvexHull2DTest: class extends Fixture {
 			points add(FloatPoint2D new(0.0f, -1.0f)) //hull
 			points add(FloatPoint2D new(0.5f, 2.0f)) // hull
 			points add(FloatPoint2D new(-0.5f, 0)) // inside
-			
-			convexHull := FloatConvexHull2D new(points, true)
+
+			convexHull := FloatConvexHull2D new(points)
 			expect(convexHull count, is equal to(5))
 			expect(convexHull contains(FloatPoint2D new(0.0f, 0.0f)), is true)
 			expect(convexHull contains(FloatPoint2D new(0.5f, 1.5f)), is true)
@@ -81,7 +81,7 @@ FloatConvexHull2DTest: class extends Fixture {
 			expect(bigHull contains(smallHull), is true)
 			expect(smallHull contains(bigHull), is false)
 		})
-		
+
 		this add("toString", func {
 			square := FloatBox2D new(1.0f, 1.0f, 3.0f, 4.0f)
 			hull := FloatConvexHull2D new(square)
