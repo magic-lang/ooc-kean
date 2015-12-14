@@ -1,0 +1,44 @@
+[
+	{
+		"name": "ooc-kean release build",
+		"rootDirectory": ".",
+		"command": {
+			"name": "Build ooc-kean",
+			"command": "./build.sh",
+			"arguments": []
+		},
+		"preBuildCommands": [
+			{
+				"name": "Remove temp rock files",
+				"command": "rock",
+				"arguments": ["-x"]
+			},
+			{
+				"name": "Style analysis",
+				"command": "magic",
+				"arguments": ["-s", "-t", "analyze"]
+			},
+			{
+				"name": "Run tests",
+				"command": "./test.sh",
+				"arguments": []
+			}
+		],
+		"postBuildCommands": [
+			{
+				"name": "flash device",
+				"command": "echo flash device here",
+				"arguments": []
+			}
+		]
+	},
+	{
+		"name": "Style analysis",
+		"rootDirectory": ".",
+		"command": {
+			"name": "Run style analysis",
+			"command": "magic",
+			"arguments": ["-s", "-t", "analyze"]
+		}
+	}
+]

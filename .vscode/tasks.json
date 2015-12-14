@@ -16,7 +16,7 @@
 			"taskName": "build project",
 			"suppressTaskName": true,
 			"isBuildCommand": true,
-			"args": [ "build", "${workspaceRoot}" ],
+			"args": [ "build", "-s", "-t", "--config", ".configuration/build.json", "${workspaceRoot}" ],
 			"problemMatcher": {
 				"fileLocation": ["absolute"],
 				"pattern": {
