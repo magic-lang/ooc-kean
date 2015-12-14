@@ -43,6 +43,15 @@ IntVectorList: class extends VectorList<Int> {
 	operator []= (index: Int, item: Int) {
 		this _vector[index] = item
 	}
+	contains: func (value: Int) -> Bool {
+		result := false
+		for (i in 0 .. this count)
+			if (this _vector[i] == value) {
+				result = true
+				break
+			}
+		result
+	}
 	sort: func -> This {
 		result := this copy()
 		inOrder := false
