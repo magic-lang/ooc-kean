@@ -20,7 +20,6 @@ use ooc-collections
 use ooc-unit
 use ooc-math
 use ooc-geometry
-import math
 import lang/IO
 
 QuaternionTest: class extends Fixture {

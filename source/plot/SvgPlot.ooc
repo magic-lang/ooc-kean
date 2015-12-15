@@ -3,7 +3,6 @@ use ooc-geometry
 use ooc-draw
 import Axis
 import PlotData2D
-import math
 import svg/Shapes
 
 SvgPlot: class {

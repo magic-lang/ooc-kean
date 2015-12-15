@@ -1,6 +1,5 @@
 use ooc-unit
 use ooc-draw
-import math
 
 RasterYuv420PlanarTest: class extends Fixture {
 	inputPath := "test/draw/input/Flower.png"

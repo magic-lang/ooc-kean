@@ -17,7 +17,6 @@
 use ooc-collections
 use ooc-base
 import structs/Vector
-import math
 import FloatComplex
 import FloatComplexVectorList
 import FloatMatrix

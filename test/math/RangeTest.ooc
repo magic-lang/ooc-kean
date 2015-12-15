@@ -1,6 +1,5 @@
 use ooc-unit
 use ooc-math
-import math
 import lang/IO
 
 RangeTest: class extends Fixture {

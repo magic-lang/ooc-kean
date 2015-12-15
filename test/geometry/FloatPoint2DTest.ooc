@@ -1,7 +1,6 @@
 use ooc-unit
 use ooc-base
 use ooc-geometry
-import math
 import lang/IO
 
 FloatPoint2DTest: class extends Fixture {
@@ -14,8 +13,6 @@ FloatPoint2DTest: class extends Fixture {
 		super("FloatPoint2D")
 		this add("equality", func {
 			point := FloatPoint2D new()
-//			expect(this point0, is equal to(this point0))
-//			expect(this point0 equals(this point0 as Object), is true)
 			expect(this point0 == this point0, is true)
 			expect(this point0 != this point1, is true)
 			expect(this point0 == point, is false)

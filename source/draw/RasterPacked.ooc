@@ -17,8 +17,7 @@
 use ooc-geometry
 use ooc-base
 import io/File
-import ByteBuffer into ByteBuffer
-import math
+import ByteBuffer
 import StbImage
 import RasterImage
 import RasterBgra

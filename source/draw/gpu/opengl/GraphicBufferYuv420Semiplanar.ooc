@@ -15,7 +15,6 @@
 * along with This software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import math
 use ooc-draw
 use ooc-geometry
 use ooc-base

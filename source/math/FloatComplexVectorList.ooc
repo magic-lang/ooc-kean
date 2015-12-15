@@ -14,10 +14,10 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
+
 import FloatComplex
 use ooc-collections
 import FloatVectorList
-import math
 
 FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	init: func ~default {

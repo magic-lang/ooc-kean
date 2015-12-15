@@ -1,6 +1,5 @@
 use ooc-unit
 use ooc-geometry
-import math
 import lang/IO
 
 FloatTransform2DTest: class extends Fixture {

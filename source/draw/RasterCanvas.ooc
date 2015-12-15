@@ -17,8 +17,10 @@
 use ooc-base
 use ooc-geometry
 use ooc-collections
-import math
-import Image, Canvas, Pen, RasterImage
+import Image
+import Canvas
+import Pen
+import RasterImage
 
 RasterCanvas: abstract class extends Canvas {
 	_target: RasterImage

@@ -1,5 +1,4 @@
 use ooc-unit
-import math
 
 MathTest: class extends Fixture {
 	init: func {
