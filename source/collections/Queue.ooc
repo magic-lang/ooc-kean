@@ -27,19 +27,19 @@ VectorQueue: class <T> extends Queue<T> {
 		gc_free(_backend)
 		super()
 	}
-	clear: func {
+	clear: override func {
 		this _head = 0
 		this _tail = 0
 		this _count = 0
 	}
-	enqueue: func (item: T) {
+	enqueue: override func (item: T) {
 		if (this full)
 			this _resize()
 		this _backend[this _tail] = item
 		this _tail = (this _tail + 1) % this _capacity
 		this _count += 1
 	}
-	dequeue: func ~default (fallback: T) -> T {
+	dequeue: override func ~default (fallback: T) -> T {
 		result := this peek(fallback)
 		if (!this empty) {
 			this _count -= 1
@@ -47,7 +47,7 @@ VectorQueue: class <T> extends Queue<T> {
 		}
 		result
 	}
-	peek: func ~default (fallback: T) -> T {
+	peek: override func ~default (fallback: T) -> T {
 		result: T
 		if (this empty)
 			result = fallback

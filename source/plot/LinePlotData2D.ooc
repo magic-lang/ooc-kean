@@ -27,7 +27,7 @@ LinePlotData2D: class extends PlotData2D {
 		super(xSeries, ySeries, label, colorBgra)
 		this lineStyle = lineStyle
 	}
-	getSvg: func (transform: FloatTransform2D) -> String {
+	getSvg: override func (transform: FloatTransform2D) -> String {
 		result := ""
 		if (!this dataSeries empty) {
 			result = result & "<path stroke='" + this color >> "' stroke-opacity='" & this opacity toString() >> "' fill='none' stroke-width='" & this lineWidth toString() >> "' d='M " & ((transform * this dataSeries[0]) x) toString() >> " " & ((transform * this dataSeries[0]) y) toString() >> " L "
@@ -45,7 +45,7 @@ LinePlotData2D: class extends PlotData2D {
 		}
 		result
 	}
-	getSvgLegend: func (legendCount, fontSize: Int) -> String {
+	getSvgLegend: override func (legendCount, fontSize: Int) -> String {
 		result: String
 		start := FloatPoint2D new(this legendOffset, this legendOffset + (fontSize * legendCount - fontSize / 2) as Float)
 		end := FloatPoint2D new(this legendOffset + fontSize, start y)

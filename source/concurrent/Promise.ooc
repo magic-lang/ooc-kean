@@ -51,13 +51,13 @@ _ThreadPromise: class extends Promise {
 		(this _action as Closure) free()
 		super()
 	}
-	wait: func -> Bool {
+	wait: override func -> Bool {
 		if (this _threadAlive)
 			if (this _thread wait())
 				this _threadAlive = false
 		this _state == _PromiseState Finished
 	}
-	wait: func ~timeout (seconds: Double) -> Bool {
+	wait: override func ~timeout (seconds: Double) -> Bool {
 		if (this _threadAlive)
 			if (this _thread wait(seconds))
 				this _threadAlive = false
@@ -120,19 +120,19 @@ _ThreadFuture: class <T> extends Future<T> {
 		(this _action as Closure) free()
 		super()
 	}
-	wait: func -> Bool {
+	wait: override func -> Bool {
 		if (this _threadAlive)
 			if (this _thread wait())
 				this _threadAlive = false
 		this _state == _PromiseState Finished
 	}
-	wait: func ~timeout (seconds: Double) -> Bool {
+	wait: override func ~timeout (seconds: Double) -> Bool {
 		if (this _threadAlive)
 			if (this _thread wait(seconds))
 				this _threadAlive = false
 		this _state == _PromiseState Finished
 	}
-	getResult: func (defaultValue: T) -> T {
+	getResult: override func (defaultValue: T) -> T {
 		result := defaultValue
 		if (this _state == _PromiseState Finished && this _result != null)
 			if (T inheritsFrom?(Object))

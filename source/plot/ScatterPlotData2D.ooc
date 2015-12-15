@@ -24,7 +24,7 @@ ScatterPlotData2D: class extends PlotData2D {
 	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new()) {
 		super(xSeries, ySeries, label, colorBgra)
 	}
-	getSvg: func (transform: FloatTransform2D) -> String {
+	getSvg: override func (transform: FloatTransform2D) -> String {
 		result := ""
 		if (!this dataSeries empty) {
 			for (i in 0 .. this dataSeries count) {
@@ -44,7 +44,7 @@ ScatterPlotData2D: class extends PlotData2D {
 		}
 		result
 	}
-	getSvgLegend: func (legendCount, fontSize: Int) -> String {
+	getSvgLegend: override func (legendCount, fontSize: Int) -> String {
 		result := ""
 		start := FloatPoint2D new(this legendOffset as Float, this legendOffset + (fontSize * legendCount) as Float - (fontSize as Float) / 2.0f)
 		size := (fontSize as Float) * 0.8f

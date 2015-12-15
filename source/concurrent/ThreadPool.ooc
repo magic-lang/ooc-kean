@@ -90,8 +90,8 @@ _TaskPromise: class extends Promise {
 		this _task free()
 		super()
 	}
-	wait: func -> Bool { this _task wait() }
-	wait: func ~timeout (seconds: Double) -> Bool {
+	wait: override func -> Bool { this _task wait() }
+	wait: override func ~timeout (seconds: Double) -> Bool {
 		timer := ClockTimer new() . start()
 		status := false
 		while (timer stop() / 1000.0 < seconds && !status) {
@@ -115,8 +115,8 @@ _TaskFuture: class <T> extends Future<T> {
 		this _task free()
 		super()
 	}
-	wait: func -> Bool { this _task wait() }
-	wait: func ~timeout (seconds: Double) -> Bool {
+	wait: override func -> Bool { this _task wait() }
+	wait: override func ~timeout (seconds: Double) -> Bool {
 		timer := ClockTimer new() . start()
 		status := false
 		while (timer stop() / 1000.0 < seconds && !status) {
@@ -127,7 +127,7 @@ _TaskFuture: class <T> extends Future<T> {
 		timer free()
 		status
 	}
-	getResult: func (defaultValue: T) -> T {
+	getResult: override func (defaultValue: T) -> T {
 		result := defaultValue
 		if (this _task _state == _PromiseState Finished) {
 			if (this _task _hasCover)
