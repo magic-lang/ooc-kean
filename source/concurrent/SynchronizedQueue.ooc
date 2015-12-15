@@ -20,19 +20,19 @@ SynchronizedQueue: class <T> extends Queue<T> {
 		this _backend enqueue(item)
 		this _mutex unlock()
 	}
-	dequeue: func ~default (fallback: T) -> T {
+	dequeue: override func ~default (fallback: T) -> T {
 		this _mutex lock()
 		result := this _backend dequeue(fallback)
 		this _mutex unlock()
 		result
 	}
-	peek: func ~default (fallback: T) -> T {
+	peek: override func ~default (fallback: T) -> T {
 		this _mutex lock()
 		result := this _backend peek(fallback)
 		this _mutex unlock()
 		result
 	}
-	clear: func {
+	clear: override func {
 		this _mutex lock()
 		this _backend clear()
 		this _mutex unlock()

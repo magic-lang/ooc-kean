@@ -52,7 +52,7 @@ IntUniformRandomGenerator: class extends IntRandomGenerator {
 		this _shortRange = (this _range < Short maximumValue)
 	}
 	setSeed: func (=_state)
-	next: func -> Int {
+	next: override func -> Int {
 		result : Int
 		first := this _generate()
 		if (this _shortRange)
@@ -91,7 +91,7 @@ IntGaussianRandomGenerator: class extends IntRandomGenerator {
 	setSeed: func (seed: UInt) {
 		this _backend setSeed(seed)
 	}
-	next: func -> Int {
+	next: override func -> Int {
 		this _backend next() as Int
 	}
 }

@@ -44,7 +44,7 @@ FloatUniformRandomGenerator: class extends FloatRandomGenerator {
 		this _rangeCoefficient = (1.0f / UINT_MAX as Float) * (this _max - this _min)
 	}
 	setSeed: func (=_state)
-	next: func -> Float {
+	next: override func -> Float {
 		//Based on www.irrelevantconclusion.com/2012/02/pretty-fast-random-floats-on-ps3/
 		this _state ^= (this _state << 5)
 		this _state ^= (this _state >> 13)
@@ -80,7 +80,7 @@ FloatGaussianRandomGenerator: class extends FloatRandomGenerator {
 	setSeed: func (state: UInt) {
 		this _backend setSeed(state)
 	}
-	next: func -> Float {
+	next: override func -> Float {
 		result : Float
 		if (this _hasSecondValue) {
 			result = this _secondValue

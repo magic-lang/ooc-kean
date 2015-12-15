@@ -89,7 +89,7 @@ OpenGLContext: class extends GpuContext {
 		this _recycleBin add(image)
 	}
 	_searchImageBin: func (type: GpuImageType, size: IntVector2D) -> GpuImage { this _recycleBin find(type, size) }
-	createMonochrome: func (size: IntVector2D) -> GpuImage {
+	createMonochrome: override func (size: IntVector2D) -> GpuImage {
 		result := this _searchImageBin(GpuImageType monochrome, size)
 		result == null ? OpenGLMonochrome new(size, this) as GpuImage : result
 	}
@@ -101,7 +101,7 @@ OpenGLContext: class extends GpuContext {
 			result upload(raster)
 		result
 	}
-	createUv: func (size: IntVector2D) -> GpuImage {
+	createUv: override func (size: IntVector2D) -> GpuImage {
 		result := this _searchImageBin(GpuImageType uv, size)
 		result == null ? OpenGLUv new(size, this) as GpuImage : result
 	}
@@ -113,7 +113,7 @@ OpenGLContext: class extends GpuContext {
 			result upload(raster)
 		result
 	}
-	createBgr: func (size: IntVector2D) -> GpuImage {
+	createBgr: override func (size: IntVector2D) -> GpuImage {
 		result := this _searchImageBin(GpuImageType bgr, size)
 		result == null ? OpenGLBgr new(size, this) as GpuImage : result
 	}
@@ -125,7 +125,7 @@ OpenGLContext: class extends GpuContext {
 			result upload(raster)
 		result
 	}
-	createBgra: func (size: IntVector2D) -> GpuImage {
+	createBgra: override func (size: IntVector2D) -> GpuImage {
 		result := this _searchImageBin(GpuImageType bgra, size)
 		result == null ? OpenGLBgra new(size, this) as GpuImage : result
 	}
@@ -147,7 +147,7 @@ OpenGLContext: class extends GpuContext {
 			case => Debug raise("Unknown input format in OpenGLContext createImage"); null
 		}
 	}
-	update: func { this _backend swapBuffers() }
+	update: override func { this _backend swapBuffers() }
 	packToRgba: func (source: GpuImage, target: GpuImage, viewport: IntBox2D, padding := 0) {
 		channels := 1
 		map: GpuMap

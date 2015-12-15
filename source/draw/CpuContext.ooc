@@ -19,13 +19,13 @@ use ooc-geometry
 
 CpuContext: class extends AbstractContext {
 	init: func
-	createMonochrome: func (size: IntVector2D) -> RasterMonochrome { RasterMonochrome new(size) }
-	createBgr: func (size: IntVector2D) -> RasterBgr { RasterBgr new(size) }
-	createBgra: func (size: IntVector2D) -> RasterBgra { RasterBgra new(size) }
-	createUv: func (size: IntVector2D) -> RasterUv { RasterUv new(size) }
-	createImage: func (rasterImage: RasterImage) -> RasterImage { rasterImage copy() }
-	createYuv420Semiplanar: func (size: IntVector2D) -> RasterYuv420Semiplanar { RasterYuv420Semiplanar new(size) }
-	createYuv420Semiplanar: func ~fromImages (y, uv: Image) -> RasterYuv420Semiplanar { RasterYuv420Semiplanar new(y as RasterMonochrome, uv as RasterUv) }
-	createYuv420Semiplanar: func ~fromRaster (raster: RasterYuv420Semiplanar) -> RasterYuv420Semiplanar { raster copy() }
-	update: func
+	createMonochrome: override func (size: IntVector2D) -> RasterMonochrome { RasterMonochrome new(size) }
+	createBgr: override func (size: IntVector2D) -> RasterBgr { RasterBgr new(size) }
+	createBgra: override func (size: IntVector2D) -> RasterBgra { RasterBgra new(size) }
+	createUv: override func (size: IntVector2D) -> RasterUv { RasterUv new(size) }
+	createImage: override func (rasterImage: RasterImage) -> RasterImage { rasterImage copy() }
+	createYuv420Semiplanar: override func (size: IntVector2D) -> RasterYuv420Semiplanar { RasterYuv420Semiplanar new(size) }
+	createYuv420Semiplanar: override func ~fromImages (y, uv: Image) -> RasterYuv420Semiplanar { RasterYuv420Semiplanar new(y as RasterMonochrome, uv as RasterUv) }
+	createYuv420Semiplanar: override func ~fromRaster (raster: RasterYuv420Semiplanar) -> RasterYuv420Semiplanar { raster copy() }
+	update: override func
 }
