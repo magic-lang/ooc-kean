@@ -203,8 +203,8 @@ OutOfBoundsException: class extends Exception {
 	init: func ~noOrigin (accessOffset, elementLength: Int) {
 		message = "Trying to access an element at offset %i, but size is %i!" format(accessOffset, elementLength)
 	}
-	kean_lang_exception_outOfBoundsException_new: static unmangled func (accessOffset, elementLength: Int) -> This {
-		This new(accessOffset, elementLength)
+	kean_lang_exception_outOfBoundsException_throw: static unmangled func (accessOffset, elementLength: Int) {
+		This new(accessOffset, elementLength) throw()
 	}
 }
 
