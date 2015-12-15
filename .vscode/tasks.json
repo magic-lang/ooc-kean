@@ -79,7 +79,7 @@
 			}
 		},
 		{
-			"taskName": "analyze current file",
+			"taskName": "verify current file",
 			"suppressTaskName": true,
 			"args": [ "verify", "${file}" ],
 			"problemMatcher": {
@@ -95,7 +95,7 @@
 			}
 		},
 		{
-			"taskName": "analyze project",
+			"taskName": "verify project",
 			"suppressTaskName": true,
 			"args": [ "verify", "${workspaceRoot}" ],
 			"problemMatcher": {

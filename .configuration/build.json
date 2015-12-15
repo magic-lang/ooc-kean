@@ -1,5 +1,6 @@
 {
 	"name": "ooc-kean",
+	"description": "ooc-kean build configurations",
 	"rootDirectory": "project/root/directory/here",
 	"targets": [
 		{
@@ -18,10 +19,10 @@
 			"arguments": ["-x"]
 		},
 		{
-			"name": "analyze",
+			"name": "verify",
 			"description": "Style analysis",
 			"command": "magic",
-			"arguments": ["-s", "-t", "analyze"]
+			"arguments": ["-s", "-t", "verify"]
 		},
 		{
 			"name": "test",
