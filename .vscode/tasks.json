@@ -81,7 +81,7 @@
 		{
 			"taskName": "analyze current file",
 			"suppressTaskName": true,
-			"args": [ "analyze", "${file}" ],
+			"args": [ "verify", "${file}" ],
 			"problemMatcher": {
 				"fileLocation": ["absolute"],
 				"pattern": {
@@ -97,7 +97,7 @@
 		{
 			"taskName": "analyze project",
 			"suppressTaskName": true,
-			"args": [ "analyze", "${workspaceRoot}" ],
+			"args": [ "verify", "${workspaceRoot}" ],
 			"problemMatcher": {
 				"fileLocation": ["absolute"],
 				"pattern": {
