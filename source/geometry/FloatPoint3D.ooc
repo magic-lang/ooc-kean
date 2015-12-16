@@ -23,15 +23,13 @@ FloatPoint3D: cover {
 	x, y, z: Float
 	norm ::= (this x squared + this y squared + this z squared) sqrt()
 	azimuth ::= this y atan2(this x)
-	isValid ::= (this x == this x && this y == this y && this z == this z)
-	elevation: Float {
-		get {
-			r := this norm
-			if (r != 0.0f)
-				r = (this z / r) clamp(-1.0f, 1.0f) acos()
-			r
-		}
-	}
+	isValid ::= (this x isNumber && this y isNumber && this z isNumber)
+	elevation: Float { get {
+		r := this norm
+		if (r != 0.0f)
+			r = (this z / r) clamp(-1.0f, 1.0f) acos()
+		r
+	} }
 	init: func@ (=x, =y, =z)
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	init: func@ ~fromPoint2D (point: FloatPoint2D, z := 0.0f) { this init(point x, point y, z) }
