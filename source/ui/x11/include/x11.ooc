@@ -15,7 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-version(unix || apple) {
+version((unix || apple) && !android) {
 include X11/Xlib
 include X11/Xatom
 include X11/Xutil
