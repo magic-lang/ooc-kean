@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+use ooc-base
+use ooc-collections
+use ooc-math
 import IntPoint2D
 import IntVector2D
 import FloatPoint2D
 import FloatBox2D
-use ooc-base
-use ooc-collections
-use ooc-math
 
 IntBox2D: cover {
 	leftTop: IntPoint2D
@@ -41,11 +41,17 @@ IntBox2D: cover {
 	bottomCenter ::= IntPoint2D new(this center x, this bottom)
 	hasZeroArea ::= this size hasZeroArea
 	area ::= this size area
-	init: func@ (=leftTop, =size)
-	init: func@ ~fromSizes (leftTop: IntVector2D, =size) { this leftTop = IntPoint2D new(leftTop x, leftTop y) }
-	init: func@ ~fromSize (=size) { this leftTop = IntPoint2D new() }
+	init: func@ (newLeftTop: IntPoint2D, newSize: IntVector2D) {
+		if (newSize x < 0)
+			newLeftTop x += newSize x
+		if (newSize y < 0)
+			newLeftTop y += newSize y
+		this leftTop = newLeftTop
+		this size = newSize absolute
+	}
+	init: func@ ~fromSizes (newLeftTop, newSize: IntVector2D) { this init(newLeftTop toIntPoint2D(), newSize) }
+	init: func@ ~fromSize (newSize: IntVector2D) { this init(IntPoint2D new(), newSize) }
 	init: func@ ~fromInts (left, top, width, height: Int) { this init(IntPoint2D new(left, top), IntVector2D new(width, height)) }
-	//init: func@ ~fromSize (size: IntVector2D) { this init(IntPoint2D new(), size) }
 	init: func@ ~fromPoints (first, second: IntPoint2D) {
 		left := Int minimum(first x, second x)
 		top := Int minimum(first y, second y)
@@ -105,10 +111,7 @@ IntBox2D: cover {
 			union(other)
 	}
 	operator - (other: This) -> This {
-		if (this hasZeroArea || other hasZeroArea)
-			This new()
-		else
-			intersection(other)
+		this hasZeroArea || other hasZeroArea ? This new() : this intersection(other)
 	}
 	operator + (other: IntPoint2D) -> This { This new(this leftTop + other, this size) }
 	operator - (other: IntPoint2D) -> This { This new(this leftTop - other, this size) }

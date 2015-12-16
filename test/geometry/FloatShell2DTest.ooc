@@ -86,9 +86,9 @@ FloatShell2DTest: class extends Fixture {
 			expect(increased top, is equal to(-1.0f) within(tolerance))
 			expect(increased right, is equal to(2.0f) within(tolerance))
 			expect(increased bottom, is equal to(3.0f) within(tolerance))
-			expect(decreased left, is equal to(1.0f) within(tolerance))
+			expect(decreased left, is equal to(0.0f) within(tolerance))
 			expect(decreased top, is equal to(1.0f) within(tolerance))
-			expect(decreased right, is equal to(0.0f) within(tolerance))
+			expect(decreased right, is equal to(1.0f) within(tolerance))
 			expect(decreased bottom, is equal to(1.0f) within(tolerance))
 		})
 		this add("parse", func {
