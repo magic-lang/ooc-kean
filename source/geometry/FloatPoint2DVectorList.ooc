@@ -66,7 +66,7 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 		yValues free()
 		result
 	}
-	getMean: func (indices: VectorList<Int>) -> FloatPoint2D {
+	getMean: func ~indices (indices: VectorList<Int>) -> FloatPoint2D {
 		result := FloatPoint2D new()
 		indicesCount := indices count
 		if (indicesCount > 0) {
