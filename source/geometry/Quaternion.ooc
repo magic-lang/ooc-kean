@@ -35,7 +35,7 @@ Quaternion: cover {
 	// z = this y
 	// w = this z
 
-	isValid ::= this real == this real && this imaginary isValid
+	isValid ::= this real isNumber && this imaginary isValid
 	isIdentity ::= this real equals(1.f) && this imaginary x equals(0.f) && this imaginary y equals(0.f) && this imaginary z equals(0.f)
 	isNull ::= this real equals(0.f) && this imaginary x equals(0.f) && this imaginary y equals(0.f) && this imaginary z equals(0.f)
 	norm ::= (this real squared + this imaginary norm squared) sqrt()

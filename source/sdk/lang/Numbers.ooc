@@ -55,6 +55,7 @@ UInt: cover from unsigned int extends ULLong {
 UShort: cover from unsigned short extends ULLong
 
 LDouble: cover from long double {
+	isNumber ::= this == this
 	toString: func -> String {
 		"%.2Lf" formatLDouble(this)
 	}
@@ -103,12 +104,7 @@ PtrDiff: cover from ptrdiff_t extends SSizeT
 
 Range: cover {
 	min, max: Int
-	new: static func (.min, .max) -> This {
-		this: This
-		this min = min
-		this max = max
-		return this
-	}
+	init: func@ (=min, =max)
 	reduce: func (f: Func (Int, Int) -> Int) -> Int {
 		acc := f(min, min + 1)
 		for (i in min + 2 .. max) acc = f(acc, i)
