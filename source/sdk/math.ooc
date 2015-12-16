@@ -100,6 +100,8 @@ operator != (left, right: Range) -> Bool { !(left == right) }
 extend Double {
 	pi ::= static 3.14159_26535_89793_23846_26433_83279
 	e ::= static 2.718281828459045235360287471352662497757247093699959574966
+	minimumValue ::= static DBL_MIN
+	maximumValue ::= static DBL_MAX
 	defaultTolerance ::= static 0.0001
 	absolute ::= this >= 0.f ? this : -1.f * this
 	sign ::= this >= 0.f ? 1.f : -1.f
