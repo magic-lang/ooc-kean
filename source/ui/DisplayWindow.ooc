@@ -70,7 +70,7 @@ DisplayWindow: abstract class {
 			this _keyReleaseHandler call(event)
 	}
 	create: static func (size: IntVector2D, title: String) -> This {
-		version(unix || apple)
+		version((unix || apple) && !android)
 			return UnixWindow create(size, title)
 		version(windows)
 			return Win32DisplayWindow new(size, title)

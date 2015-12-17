@@ -19,7 +19,7 @@ use ooc-ui
 import include/x11
 use ooc-draw
 
-version(unix || apple) {
+version((unix || apple) && !android) {
 X11Window: class extends NativeWindow {
 	_x11GraphicsContext: GraphicsContextX11
 	_defaultScreen := 0

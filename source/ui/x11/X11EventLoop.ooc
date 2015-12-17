@@ -4,6 +4,7 @@ import include/x11
 import ../[EventLoop, DisplayWindow, GuiEvent]
 import UnixWindow
 
+version((unix || apple) && !android) {
 X11EventLoop: class extends EventLoop {
 	init: func
 	processEvents: override func (receiver: DisplayWindow) {
@@ -20,4 +21,5 @@ X11EventLoop: class extends EventLoop {
 				guiEvent free()
 		}
 	}
+}
 }
