@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+use ooc-base
+use ooc-collections
 use ooc-math
 import FloatPoint2D
 import FloatVector2D
 import IntBox2D
 import FloatPoint2DVectorList
-use ooc-base
-use ooc-collections
 
 FloatBox2D: cover {
 	leftTop: FloatPoint2D
@@ -41,7 +41,14 @@ FloatBox2D: cover {
 	bottomCenter ::= FloatPoint2D new(this center x, this bottom)
 	hasZeroArea ::= this size hasZeroArea
 	area ::= this size area
-	init: func@ (=leftTop, =size)
+	init: func@ (newLeftTop: FloatPoint2D, newSize: FloatVector2D) {
+		if (newSize x < 0)
+			newLeftTop x += newSize x
+		if (newSize y < 0)
+			newLeftTop y += newSize y
+		this leftTop = newLeftTop
+		this size = newSize absolute
+	}
 	init: func@ ~fromIntBox2D (box: IntBox2D) { this init(box left, box top, box width, box height) }
 	init: func@ ~fromPoints (first, second: FloatPoint2D) {
 		left := Float minimum(first x, second x)
@@ -51,7 +58,7 @@ FloatBox2D: cover {
 		this init(left, top, width, height)
 	}
 	init: func@ ~fromFloats (left, top, width, height: Float) { this init(FloatPoint2D new(left, top), FloatVector2D new(width, height)) }
-	init: func@ ~fromSize (size: FloatVector2D) { this init(FloatPoint2D new(), size) }
+	init: func@ ~fromSize (newSize: FloatVector2D) { this init(FloatPoint2D new(), newSize) }
 	init: func@ ~default { this init(FloatPoint2D new(), FloatVector2D new()) }
 	swap: func -> This { This new(this leftTop swap(), this size swap()) }
 	pad: func (left, right, top, bottom: Float) -> This {

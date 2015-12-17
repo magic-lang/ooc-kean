@@ -24,6 +24,7 @@ IntVector2D: cover {
 	hasZeroArea ::= this area == 0
 	square ::= this x == this y
 	length ::= ((this x squared + this y squared) as Float sqrt())
+	absolute ::= This new(this x absolute, this y absolute)
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
 	init: func@ (=x, =y)

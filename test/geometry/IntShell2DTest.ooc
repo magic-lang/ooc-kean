@@ -85,9 +85,9 @@ IntShell2DTest: class extends Fixture {
 			expect(increased top, is equal to(-1))
 			expect(increased right, is equal to(2))
 			expect(increased bottom, is equal to(3))
-			expect(decreased left, is equal to(1))
+			expect(decreased left, is equal to(0))
 			expect(decreased top, is equal to(1))
-			expect(decreased right, is equal to(0))
+			expect(decreased right, is equal to(1))
 			expect(decreased bottom, is equal to(1))
 		})
 		this add("parse", func {
