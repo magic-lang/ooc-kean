@@ -32,6 +32,18 @@ RasterUvCanvas: class extends RasterPackedCanvas {
 		if (this target isValidIn(position x, position y))
 			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toUv())
 	}
+	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) {
+		uv: RasterUv = null
+		if (image instanceOf?(RasterUv))
+			uv = image as RasterUv
+		else if (image instanceOf?(RasterImage))
+			uv = RasterUv convertFrom(image as RasterImage)
+		else
+			Debug raise("Unsupported image type in RasterUvCanvas draw")
+		this _resizePacked(uv buffer pointer as ColorUv*, uv, source, destination)
+		if (uv != image)
+			uv referenceCount decrease()
+	}
 }
 
 RasterUv: class extends RasterPacked {
