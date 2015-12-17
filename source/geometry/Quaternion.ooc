@@ -218,7 +218,7 @@ Quaternion: cover {
 		This new(realResult, imaginaryResult)
 	}
 	operator * (value: FloatPoint3D) -> FloatPoint3D {
-		(this * This new(0.0f, value) * this conjugate) imaginary //TODO Should this be conjugate or inverse?
+		(this * This new(0.0f, value) * this inverse) imaginary
 	}
 	operator as -> String { this toString() }
 	dotProduct: func (other: This) -> Float {
