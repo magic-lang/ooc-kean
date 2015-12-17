@@ -89,11 +89,6 @@ Quaternion: cover {
 		}
 		this init(w, x, y, z)
 	}
-	apply: func (vector: FloatPoint3D) -> FloatPoint3D {
-		vectorQuaternion := This new(0.0f, vector)
-		result := hamiltonProduct(hamiltonProduct(this, vectorQuaternion), this conjugate) //TODO Should this be conjugate or inverse?
-		FloatPoint3D new(result x, result y, result z)
-	}
 	createRotation: static func (angle: Float, direction: FloatPoint3D) -> This {
 		halfAngle := angle / 2.0f
 		point3DNorm := direction norm
@@ -109,15 +104,6 @@ Quaternion: cover {
 	}
 	createRotationZ: static func (angle: Float) -> This {
 		This createRotation(angle, FloatPoint3D new(0.0f, 0.0f, 1.0f))
-	}
-	hamiltonProduct: static func (left, right: This) -> This {
-		(a1, b1, c1, d1) := (left w, left x, left y, left z)
-		(a2, b2, c2, d2) := (right w, right x, right y, right z)
-		w := a1 * a2 - b1 * b2 - c1 * c2 - d1 * d2
-		x := a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2
-		y := a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2
-		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2
-		This new(w, x, y, z)
 	}
 	distance: func (other: This) -> Float {
 		(this - other) norm
@@ -218,7 +204,7 @@ Quaternion: cover {
 		This new(realResult, imaginaryResult)
 	}
 	operator * (value: FloatPoint3D) -> FloatPoint3D {
-		(this * This new(0.0f, value) * this conjugate) imaginary //TODO Should this be conjugate or inverse?
+		(this * This new(0.0f, value) * this inverse) imaginary
 	}
 	operator as -> String { this toString() }
 	dotProduct: func (other: This) -> Float {
