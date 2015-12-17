@@ -151,8 +151,8 @@ TextLiteralTest: class extends Fixture {
 			tolerance := 0.001f
 			expect(t"1e0" toFloat(), is equal to(1.0f) within(tolerance))
 			expect(t"5E-2" toFloat(), is equal to(0.05f) within(tolerance))
-			expect(t"2E12" toLDouble(), is equal to(2.0 * pow(10, 12) as LDouble) within(tolerance as LDouble))
-			expect(t"6.5E5" toFloat(), is equal to(6.5f * pow(10, 5) as Float) within(tolerance))
+			expect(t"2E12" toLDouble(), is equal to(2.0 * (10.0 pow(12.0)) as LDouble) within(tolerance as LDouble))
+			expect(t"6.5E5" toFloat(), is equal to(6.5f * (10.f pow(5.f)) as Float) within(tolerance))
 			expect(t"-34.5E-2" toFloat(), is equal to(-0.345f) within(tolerance))
 		})
 	}

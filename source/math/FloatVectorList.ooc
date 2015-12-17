@@ -75,7 +75,7 @@ FloatVectorList: class extends VectorList<Float> {
 			squaredSum := 0.0f
 			meanValue := this mean
 			for (i in 0 .. this count)
-				squaredSum += pow((this[i] - meanValue), 2.0f)
+				squaredSum += (this[i] - meanValue) pow(2.0f)
 			squaredSum / this count
 		}
 	}
@@ -227,7 +227,7 @@ FloatVectorList: class extends VectorList<Float> {
 		result := This new(size)
 		factor := 1.0f / (sqrt(2.0f * Float pi) * sigma)
 		for (i in 0 .. size)
-			result add((factor * pow(Float e, -0.5f * ((i - (size - 1.0f) / 2.0f) squared) / (sigma squared))) as Float)
+			result add((factor * (Float e pow(-0.5f * ((i - (size - 1.0f) / 2.0f) squared) / (sigma squared)))) as Float)
 		sum := result sum
 		for (i in 0 .. size)
 			result[i] = result[i] / sum
@@ -260,7 +260,7 @@ FloatVectorList: class extends VectorList<Float> {
 		result := VectorList<This> new(levels)
 		previous := this
 		for (level in 0 .. levels) {
-			size := 1 + pow(2, level + 1)
+			size := 1 + (2 pow(level + 1))
 			kernel := This gaussianKernel(size)
 			filtered := this convolve(kernel)
 			kernel free()

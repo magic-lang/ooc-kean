@@ -315,8 +315,8 @@ Quaternion: cover {
 		constantD := (vectorQuantityZ transpose() * matrixQuantityS * matrixQuantityS * vectorQuantityZ)[0, 0]
 
 		for (_ in 0 .. maximumIterationCount) {
-			functionValue := pow(initialGuess, 4) - (constantA + constantB) * initialGuess squared - constantC * initialGuess + (constantA * constantB + constantC * sigma - constantD)
-			derivativeValue := 4 * pow(initialGuess, 3) + 2 * (constantA + constantB) * initialGuess - constantC
+			functionValue := initialGuess pow(4) - (constantA + constantB) * initialGuess squared - constantC * initialGuess + (constantA * constantB + constantC * sigma - constantD)
+			derivativeValue := 4 * (initialGuess pow(3)) + 2 * (constantA + constantB) * initialGuess - constantC
 			fraction := functionValue / derivativeValue
 			initialGuess -= fraction
 			if (fraction equals(0.f, 1.0e-6f))
