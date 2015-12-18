@@ -6,7 +6,8 @@ ProfilerTest: class extends Fixture {
 	init: func {
 		super("Profiler")
 		this add("log", func {
-			outputFile := "test/profilerTest.log"
+			this _createOutputDirectory()
+			outputFile := "test/base/output/profilerTest.log"
 			profiler := Profiler new("test")
 			profiler start()
 			for (i in 0 .. 10_000_000) { }
@@ -26,6 +27,11 @@ ProfilerTest: class extends Fixture {
 			profilerToFree free()
 			Profiler dispose()
 		})
+	}
+	_createOutputDirectory: func {
+		file := File new("test/base/output")
+		file mkdir()
+		file free()
 	}
 }
 
