@@ -3,17 +3,14 @@ use math
 
 FLT_EPSILON: extern Float
 
+// TODO: Change to Float versions
 cos: extern func (Double) -> Double
 sin: extern func (Double) -> Double
 tan: extern func (Double) -> Double
 acos: extern func (Double) -> Double
 asin: extern func (Double) -> Double
 atan: extern func (Double) -> Double
-atan2: extern func (Double, Double) -> Double
 sqrt: extern func (Double) -> Double
-pow: extern func (Double, Double) -> Double
-
-//TODO: Define methods only on extensions, and avoid global functions
 
 extend Short {
 	minimumValue ::= static SHRT_MIN
@@ -41,6 +38,9 @@ extend Int {
 	isEven ::= this modulo(2) == 0
 	squared ::= this * this
 
+	pow: func (other: This) -> This {
+		(this as Float) pow(other as Float) as Int
+	}
 	modulo: func (divisor: This) -> This {
 		result := this
 		if (result < 0)
@@ -241,11 +241,11 @@ extend Float {
 	decomposeToCoefficientAndRadix: static func (value: This, valueDigits: Int) -> (This, This) {
 		radix := 1.0f
 		if (value != 0.0f) {
-			while (value absolute >= pow(10.0f, valueDigits)) {
+			while (value absolute >= 10.0f pow(valueDigits)) {
 				value /= 10.0f
 				radix *= 10.0f
 			}
-			while (value absolute - pow(10.0f, valueDigits-1) < - This epsilon) {
+			while (value absolute - 10.0f pow(valueDigits-1) < -This epsilon) {
 				value *= 10.0f
 				radix /= 10.0f
 			}

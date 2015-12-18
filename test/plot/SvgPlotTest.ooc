@@ -20,14 +20,14 @@ for (i in -200 .. 201) {
 	sinVector add(FloatPoint2D new(i as Float / 20, sin(i as Float / 20)))
 	cosVector add(FloatPoint2D new(i as Float / 20, cos(i as Float / 20)))
 	sinMinusCos add(FloatPoint2D new(i as Float / 20, sin(i as Float / 20) - cos(i as Float / 20)))
-	unitCircle add(FloatPoint2D new(i as Float / 200, sqrt(1 - pow(i as Float / 200, 2))))
+	unitCircle add(FloatPoint2D new(i as Float / 200, sqrt(1 - (i as Float / 200) pow(2))))
 	scatter add(FloatPoint2D new(randomGenerator next() as Float, randomGenerator next() as Float))
-	parabola add(FloatPoint2D new(i as Float / 20, pow(i as Float / 20, 2)))
+	parabola add(FloatPoint2D new(i as Float / 20, (i as Float / 20) pow(2)))
 }
 for (i in -200 .. 201) {
-	unitCircle add(FloatPoint2D new(i as Float / 200, - sqrt(1 - pow(i as Float / 200, 2))))
+	unitCircle add(FloatPoint2D new(i as Float / 200, - sqrt(1 - (i as Float / 200) pow(2))))
 	if (i % 50 == 0)
-		sparseParabola add(FloatPoint2D new(i as Float / 20, pow(i as Float / 20, 2)))
+		sparseParabola add(FloatPoint2D new(i as Float / 20, (i as Float / 20) pow(2)))
 }
 randomGenerator free()
 

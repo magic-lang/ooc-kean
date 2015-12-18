@@ -278,7 +278,7 @@ Text: cover {
 				}
 				if (t[index] == 'e' || t[index] == 'E') {
 					exponent := t slice(index + 1, t count - index) toInt~inBase(10)
-					result = result * pow(10, exponent)
+					result = result * (10.0 pow(exponent))
 				}
 			}
 			result *= sign

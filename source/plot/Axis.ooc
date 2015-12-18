@@ -91,7 +91,7 @@ Axis: class {
 	}
 	getRadixSvg: func (position: FloatPoint2D, radix: Float, textAnchor: String) -> String {
 		result := ""
-		if (radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision)) {
+		if (radix >= 10 pow(this precision - 1) || radix <= 10 pow(-this precision)) {
 			scientificPower := Float getScientificPowerString(radix)
 			result = result & Shapes text(position, scientificPower, this fontSize, textAnchor)
 			scientificPower free()
@@ -104,7 +104,7 @@ Axis: class {
 			result = result & Shapes line(position, position + tickMarkerOnOtherSideOffset, 1, 255.0f, "grey", FloatPoint2D new(5, 5))
 		result = result & Shapes line(position, position + tickMarkerEndOffset, 1, 255.0f, "black")
 		result = result & Shapes line(position + tickMarkerOnOtherSideOffset, position + tickMarkerOnOtherSideOffset - tickMarkerEndOffset, 1, 255.0f, "black")
-		tickValue = radix >= pow(10, this precision - 1) || radix <= pow(10, - this precision) ? (tickValue / radix) : tickValue
+		tickValue = radix >= 10 pow(this precision - 1) || radix <= 10 pow(-this precision) ? (tickValue / radix) : tickValue
 		tempTick := tickValue toString()
 		tempTickInt := tickValue as Int toString()
 		result = result & Shapes text(position + numberOffset, (tickValue - tickValue round()) absolute < 0.001 ? tempTickInt : tempTick, this fontSize - 4, textAnchor)
