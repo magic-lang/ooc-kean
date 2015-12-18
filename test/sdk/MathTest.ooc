@@ -53,7 +53,6 @@ MathTest: class extends Fixture {
 			expect(22.3f modulo(5), is equal to(2.3f) within(floatTolerance))
 			expect((-7.3f) modulo(3), is equal to(1.7f) within(floatTolerance))
 			expect(4.1f modulo(4.2f), is equal to(4.1f) within(floatTolerance))
-			expect(Float moduloTwoPi(6.29f), is equal to(0.0f) within(0.01f))
 
 			expect(0.0f toRadians(), is equal to(0.0f) within(floatTolerance))
 			expect(45.0f toRadians(), is equal to(0.78539f) within(floatTolerance))
