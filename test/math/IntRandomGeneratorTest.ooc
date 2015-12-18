@@ -20,6 +20,7 @@ IntRandomGeneratorTest: class extends Fixture {
 				expect(x, is equal to(y))
 			}
 			expect(countEqual < valuesCount)
+			generator1 free(); generator2 free(); generator3 free()
 		})
 		this add("uniform distribution", func {
 			a := -167
@@ -34,6 +35,7 @@ IntRandomGeneratorTest: class extends Fixture {
 			mean /= values length
 			expect((mean - expectedMean) absolute < tolerance)
 			values free()
+			intGenerator free()
 		})
 		this add("gaussian distribution", func {
 			expectedMean := 2
@@ -52,6 +54,7 @@ IntRandomGeneratorTest: class extends Fixture {
 			expect((mean - expectedMean) absolute < 2)
 			expect((deviation - expectedDeviation) absolute < 2)
 			values free()
+			generator free()
 		})
 		this add("uniform range", func {
 			uniformGenerator := IntUniformRandomGenerator new()
@@ -69,6 +72,7 @@ IntRandomGeneratorTest: class extends Fixture {
 			expect(uniformHighest <= uniformGenerator maximum)
 			expect(uniformLowest >= -250_000)
 			expect(uniformHighest <= 250_000)
+			uniformGenerator free()
 		})
 		this add("set seed", func {
 			generator1 := IntUniformRandomGenerator new(0, 100)
@@ -76,6 +80,7 @@ IntRandomGeneratorTest: class extends Fixture {
 			expect(generator1 next(), is equal to(79))
 			expect(generator1 next(), is equal to(93))
 			expect(generator1 next(), is equal to(50))
+			generator1 free()
 		})
 		this add("global seed", func {
 			IntRandomGenerator permanentSeed = 123455
@@ -87,6 +92,8 @@ IntRandomGeneratorTest: class extends Fixture {
 			expect(generator2 next(), is equal to(76))
 			expect(generator2 next(), is equal to(51))
 			expect(generator2 next(), is equal to(6))
+			generator1 free()
+			generator2 free()
 		})
 	}
 }
