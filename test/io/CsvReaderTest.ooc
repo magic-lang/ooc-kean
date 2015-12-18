@@ -11,8 +11,12 @@ CsvReaderTest: class extends Fixture {
 			reader := CsvReader open(filename)
 			rowCounter := 0
 			for (row in reader) {
-				for (i in 0 .. row count)
-					expect(row[i] toString(), is equal to(((i + 1) + rowCounter * 3) toString()))
+				for (i in 0 .. row count) {
+					rowString := row[i] toString()
+					correctAnswer := ((i + 1) + rowCounter * 3) toString()
+					expect(rowString, is equal to(correctAnswer))
+					rowString free(); correctAnswer free()
+				}
 				row free()
 				++rowCounter
 			}
@@ -45,11 +49,8 @@ CsvReaderTest: class extends Fixture {
 			reader free()
 		})
 	}
-	toFloat: static func (value: Text) -> Float {
-		value toFloat()
-	}
 	toFloats: static func (row: VectorList<Text>) -> VectorList<Float> {
-		row map(|value| This toFloat)
+		row map(|value| value toFloat())
 	}
 }
 
