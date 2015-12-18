@@ -7,12 +7,16 @@ TextLiteralTest: class extends Fixture {
 		super("TextLiteral")
 		this add("constructors", func {
 			t := Text new(c"test string", 5)
-			expect(t toString() == "test ")
+			string := t toString()
+			expect(string == "test ")
+			string free()
 			t =t"string"
 			t2 := t"str"
 			expect(t count == 6)
-			expect(t toString() == "string")
-			expect(t isEmpty == false)
+			string = t toString()
+			expect(string == "string")
+			string free()
+			expect(t isEmpty, is false)
 			t = t give()
 			t free()
 			expect(t count == 0)
