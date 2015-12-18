@@ -83,20 +83,6 @@ extend Int {
 	}
 }
 
-extend Range {
-	clamp: func (floor, ceiling: Int) -> This {
-		this clamp(floor .. ceiling)
-	}
-	clamp: func ~range (other: This) -> This {
-		this min clamp(other min, other max) .. this max clamp(other min, other max)
-	}
-	count ::= this max + 1 - this min
-}
-operator - (range: Range, integer: Int) -> Range { (range min - integer) .. (range max - integer) }
-operator + (range: Range, integer: Int) -> Range { (range min + integer) .. (range max + integer) }
-operator == (left, right: Range) -> Bool { left min == right min && left max == right max }
-operator != (left, right: Range) -> Bool { !(left == right) }
-
 extend Double {
 	pi ::= static 3.14159_26535_89793_23846_26433_83279
 	e ::= static 2.718281828459045235360287471352662497757247093699959574966
@@ -217,21 +203,6 @@ extend Float {
 			result += ((result abs()) / divisor) ceil() * divisor
 		result mod(divisor)
 	}
-	moduloTwoPi: static func (value: This) -> This {
-		value modulo(2.0f * This pi)
-	}
-	minusPiToPi: static func (value: This) -> This {
-		value = This moduloTwoPi(value)
-		value = (value <= This pi) ? value : (value - 2 * pi)
-		value = (value >= -This pi) ? value : (value + 2 * pi)
-		value
-	}
-	minusPiToPiOverTwo: static func (value: This) -> This {
-		value = value modulo(This pi)
-		value = (value <= This pi / 2) ? value : (value - pi)
-		value = (value >= -This pi / 2) ? value : (value + pi)
-		value
-	}
 	linearInterpolation: static func (a: This, b: This, ratio: This) -> This {
 		(ratio * (b - a)) + a
 	}
@@ -318,3 +289,17 @@ extend LDouble {
 	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this greaterThan(other) }
 	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this lessThan(other) }
 }
+
+extend Range {
+	clamp: func (floor, ceiling: Int) -> This {
+		this clamp(floor .. ceiling)
+	}
+	clamp: func ~range (other: This) -> This {
+		this min clamp(other min, other max) .. this max clamp(other min, other max)
+	}
+	count ::= this max + 1 - this min
+}
+operator - (range: Range, integer: Int) -> Range { (range min - integer) .. (range max - integer) }
+operator + (range: Range, integer: Int) -> Range { (range min + integer) .. (range max + integer) }
+operator == (left, right: Range) -> Bool { left min == right min && left max == right max }
+operator != (left, right: Range) -> Bool { !(left == right) }
