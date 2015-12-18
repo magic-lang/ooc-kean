@@ -124,15 +124,10 @@ HashMap: class <K, V> extends BackIterable<V> {
 	buckets: HashEntry[]
 	keys: ArrayList<K>
 
-	size: SizeT {
-		get {
-			_size
-		}
-	}
+	size ::= _size
+	isEmpty ::= keys empty?()
 
-	init: func {
-		init(3)
-	}
+	init: func { init(3) }
 
 	init: func ~withCapacity (=capacity) {
 		_size = 0
@@ -145,7 +140,6 @@ HashMap: class <K, V> extends BackIterable<V> {
 
 		T = V // workarounds ftw
 	}
-
 	free: override func {
 		for (i in 0 .. this buckets length)
 			this buckets[i] free()
@@ -153,7 +147,6 @@ HashMap: class <K, V> extends BackIterable<V> {
 		this keys free()
 		super()
 	}
-	
 	getEntry: func (key: K, result: HashEntry*) -> Bool {
 		hash : SizeT = hashKey(key) % capacity
 		entry := buckets[hash]
@@ -176,7 +169,6 @@ HashMap: class <K, V> extends BackIterable<V> {
 		}
 		return false
 	}
-
 	/**
 	 * Returns the HashEntry associated with a key.
 	 * @access private
@@ -206,24 +198,22 @@ HashMap: class <K, V> extends BackIterable<V> {
 		}
 		return false
 	}
-
 	clone: func -> This<K, V> {
 		copy := This<K, V> new()
 		each(|k, v| copy put(k, v))
 		copy
 	}
-
 	merge: func (other: This<K, V>) -> This<K, V> {
 		c := clone()
 		c merge!(other)
 		c
 	}
-
 	merge!: func (other: This<K, V>) -> This<K, V> {
-		other each(|k, v| put(k, v))
+		f := func (k: K, v: V) { put(k, v) }
+		other each(f)
+		(f as Closure) free()
 		this
 	}
-
 	// If the pair already exists, it is overwritten.
 	put: func (key: K, value: V) -> Bool {
 		hash: SizeT = hashKey(key) % capacity
@@ -269,70 +259,60 @@ HashMap: class <K, V> extends BackIterable<V> {
 		}
 		true
 	}
-
 	add: inline func (key: K, value: V) -> Bool {
 		put(key, value)
 	}
-
 	get: func (key: K) -> V {
 		entry: HashEntry
 		if (getEntry(key, entry&))
 			return entry value as V
 		return null
 	}
-
-	empty?: func -> Bool { keys empty?() }
-
 	contains?: func (key: K) -> Bool {
 		getEntry(key, null)
 	}
-
 	remove: func (key: K) -> Bool {
 		hash : SizeT = hashKey(key) % capacity
-
 		prev = null : HashEntry*
 		entry: HashEntry* = (buckets data as HashEntry*)[hash]&
-		if (entry@ key == null) return false
 
-		while (true) {
-			if (keyEquals(entry@ key as K, key)) {
-				free(entry@ key)
-				free(entry@ value)
+		result := false
+		if (entry@ key != null) {
+			while (true) {
+				if (keyEquals(entry@ key as K, key)) {
+					free(entry@ key)
+					free(entry@ value)
 
-				if (prev) {
-					// re-connect the previous to the next one
-					prev@ next = entry@ next
-				} else {
-					// just put the next one instead of us
-					if (entry@ next) {
-						buckets[hash] = entry@ next@
-					} else {
+					if (prev)
+						prev@ next = entry@ next // re-connect the previous to the next one
+					else if (entry@ next)
+						buckets[hash] = entry@ next@ // just put the next one instead of us
+					else
 						buckets[hash] = nullHashEntry
-					}
-				}
-				for (i in 0 .. keys size) {
-					cKey := keys get(i)
-					if (keyEquals(key, cKey)) {
-						keys removeAt(i)
-						break
-					}
-				}
-				_size -= 1
-				return true
-			}
 
-			// do we have a next element?
-			if (entry@ next) {
-				// save the previous just to know where to reconnect
-				prev = entry
-				entry = entry@ next
-			} else {
-				return false
+					for (i in 0 .. keys size) {
+						cKey := keys get(i)
+						if (keyEquals(key, cKey)) {
+							keys removeAt(i)
+							break
+						}
+					}
+					_size -= 1
+					result = true
+					break
+				}
+
+				// do we have a next element?
+				if (entry@ next) {
+					// save the previous just to know where to reconnect
+					prev = entry
+					entry = entry@ next
+				} else
+					break
 			}
 		}
-		return false
+		result
 	}
-
 	resize: func (_capacity: SizeT) -> Bool {
 		oldCapacity := capacity
 		oldBuckets := buckets
@@ -361,36 +341,29 @@ HashMap: class <K, V> extends BackIterable<V> {
 		keys = oldKeys
 		true
 	}
-
 	iterator: func -> BackIterator<V> {
 		HashMapValueIterator<K, V> new(this)
 	}
-
 	backIterator: func -> BackIterator<V> {
 		iter := HashMapValueIterator<K, V> new(this)
 		iter index = keys getSize()
-		return iter
+		iter
 	}
-
 	clear: func {
 		_size = 0
 		for (i in 0 .. capacity)
 			buckets[i] = nullHashEntry
 		keys clear()
 	}
-
-	getSize: func -> SSizeT { _size }
-
-	getKeys: func -> ArrayList<K> { keys }
-
 	each: func ~withKeys (f: Func (K, V)) {
-		for (key in getKeys())
+		for (i in 0 .. keys size) {
+			key := keys[i]
 			f(key, get(key))
+		}
 	}
-
 	each: func (f: Func (V)) {
-		for (key in getKeys())
-			f(get(key))
+		for (i in 0 .. keys size)
+			f(get(keys[i]))
 	}
 }
 
