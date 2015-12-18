@@ -3,14 +3,14 @@ use math
 
 FLT_EPSILON: extern Float
 
-// TODO: Change to Float versions
-cos: extern func (Double) -> Double
-sin: extern func (Double) -> Double
-tan: extern func (Double) -> Double
-acos: extern func (Double) -> Double
-asin: extern func (Double) -> Double
-atan: extern func (Double) -> Double
-sqrt: extern func (Double) -> Double
+// These functions are kept global to make mathematical code easier to read
+cos: extern (cosf) func (Float) -> Float
+sin: extern (sinf) func (Float) -> Float
+tan: extern (tanf) func (Float) -> Float
+acos: extern (acosf) func (Float) -> Float
+asin: extern (asinf) func (Float) -> Float
+atan: extern (atanf) func (Float) -> Float
+sqrt: extern (sqrtf) func (Float) -> Float
 
 extend Short {
 	minimumValue ::= static SHRT_MIN
