@@ -26,6 +26,7 @@ Fixture: abstract class {
 	name: String
 	tests := VectorList<Test> new(32, false)
 	printFailures: static func {
+		"Total time: %.2f s" printfln(This totalTime)
 		if (This failureNames && (This failureNames count > 0)) {
 			"Failed tests: %i [" printf(This failureNames count)
 			for (i in 0 .. This failureNames count - 1)
@@ -80,7 +81,9 @@ Fixture: abstract class {
 		This _print(result ? " done" : " failed")
 		testTime := timer stop() / 1000.0
 		This totalTime += testTime
-		timeString := t" in %.2fs, total: %.2fs\n" format(testTime, This totalTime) toString()
+		timeString := "\n"
+		if (testTime > 0.01)
+			timeString = t" in %.2fs" format(testTime) toString() << timeString
 		This _print(timeString)
 		timeString free()
 		if (!result) {
