@@ -42,6 +42,7 @@ FloatComplexVectorListTest: class extends Fixture {
 			result = FloatComplexVectorList inverseDiscreteFourierTransform(result)
 			for (i in 0 .. (complexNumberArray count))
 				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
+			result free()
 		})
 		this add("fast fourier transform", func {
 			result := FloatComplexVectorList fastFourierTransform(complexNumberArray)
@@ -60,6 +61,7 @@ FloatComplexVectorListTest: class extends Fixture {
 			result = FloatComplexVectorList fastFourierTransform(complexNumberArray, fftBuffer)
 			for (i in 0 .. (complexNumberArray count))
 				expect((result[i] - resultInPlace[i]) absoluteValue < tolerance, is true)
+			result free()
 		})
 		this add("sum and mean", func {
 			list := FloatComplexVectorList new()
@@ -73,6 +75,7 @@ FloatComplexVectorListTest: class extends Fixture {
 			expect(sum imaginary, is equal to(4.0f) within(tolerance))
 			expect(mean real, is equal to(1.5f) within(tolerance))
 			expect(mean imaginary, is equal to(1.0f) within(tolerance))
+			list free()
 		})
 		this add("real, imaginary lists", func {
 			list := FloatComplexVectorList new()
@@ -83,11 +86,14 @@ FloatComplexVectorListTest: class extends Fixture {
 			imaginaries := list imaginary
 			expect(reals sum, is equal to(7.0f) within(tolerance))
 			expect(imaginaries sum, is equal to(-4.0f) within(tolerance))
+			list free()
 		})
 		this add("createDefault", func {
 			list := FloatComplexVectorList new(3, FloatComplex new(1, 2))
-			expect(list real sum, is equal to(3.0f) within(tolerance))
-			expect(list imaginary sum, is equal to(6.0f) within(tolerance))
+			(reals, imaginaries) := (list real, list imaginary)
+			expect(reals sum, is equal to(3.0f) within(tolerance))
+			expect(imaginaries sum, is equal to(6.0f) within(tolerance))
+			reals free(); imaginaries free(); list free()
 		})
 		this add("addInto and operators", func {
 			list := FloatComplexVectorList new(3, FloatComplex new(1, 2))
@@ -104,7 +110,14 @@ FloatComplexVectorListTest: class extends Fixture {
 			expect(added sum imaginary, is equal to(15.0f) within(tolerance))
 			expect(subtracted sum real, is equal to(4.0f) within(tolerance))
 			expect(subtracted sum imaginary, is equal to(9.0f) within(tolerance))
+
+			added free(); subtracted free(); list free(); other free()
 		})
+	}
+
+	free: override func {
+		this complexNumberArray free()
+		super()
 	}
 }
 

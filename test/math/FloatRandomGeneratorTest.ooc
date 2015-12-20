@@ -30,6 +30,8 @@ FloatRandomGeneratorTest: class extends Fixture {
 				result := generator next()
 				expect(result >= 15.0f && result <= 20.0f)
 			}
+			numbers free()
+			generator free()
 		})
 		this add("gaussian", func {
 			valuesCount := 100
@@ -51,6 +53,8 @@ FloatRandomGeneratorTest: class extends Fixture {
 				if (numbers[i] == numbers[i - 1])
 					++countEqual
 			expect(countEqual < valuesCount)
+			numbers free()
+			generator free()
 		})
 		this add("seeds", func {
 			valuesCount := 100_000
@@ -68,6 +72,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 				expect(x, is equal to(y))
 			}
 			expect(countEqual < valuesCount)
+			generator1 free(); generator2 free(); generator3 free()
 		})
 		this add("uniform distribution", func {
 			a := 2.41f
@@ -82,6 +87,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 			mean /= values length
 			expect((mean - expectedMean) absolute < tolerance)
 			values free()
+			floatGenerator free()
 		})
 		this add("gaussian distribution", func {
 			expectedMean := -3.0f
@@ -101,6 +107,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 			expect((mean - expectedMean) absolute < tolerance)
 			expect((deviation - expectedDeviation) absolute < tolerance)
 			values free()
+			generator free()
 		})
 		this add("uniform range", func {
 			uniformGenerator := FloatUniformRandomGenerator new()
@@ -118,6 +125,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 			expect(uniformHighest <= uniformGenerator maximum)
 			expect(uniformLowest >= -25_000.0f)
 			expect(uniformHighest <= 25_000.0f)
+			uniformGenerator free()
 		})
 		this add("set seed", func {
 			generator1 := FloatUniformRandomGenerator new(0, 100)
@@ -125,6 +133,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 			expect(generator1 next(), is equal to(5.99f) within(0.01f))
 			expect(generator1 next(), is equal to(54.54f) within(0.01f))
 			expect(generator1 next(), is equal to(20.76f) within(0.01f))
+			generator1 free()
 		})
 		this add("global seed", func {
 			FloatRandomGenerator permanentSeed = 123455
@@ -136,6 +145,8 @@ FloatRandomGeneratorTest: class extends Fixture {
 			expect(generator2 next(), is equal to(5.98f) within(0.01f))
 			expect(generator2 next(), is equal to(57.96f) within(0.01f))
 			expect(generator2 next(), is equal to(8.52f) within(0.01f))
+			generator1 free()
+			generator2 free()
 		})
 	}
 }

@@ -297,6 +297,7 @@ FloatVectorListTest: class extends Fixture {
 			list add(-7.0f)
 			absolute := list absolute()
 			expect(absolute sum, is equal to(20.0f) within(tolerance))
+			list free()
 		})
 		this add("reverse", func {
 			list := FloatVectorList new()
@@ -308,6 +309,7 @@ FloatVectorListTest: class extends Fixture {
 			reversed := list reverse()
 			expect(reversed[0], is equal to(-7.0f) within(tolerance))
 			expect(reversed[4], is equal to(2.0f) within(tolerance))
+			list free(); reversed free()
 		})
 		this add("divideByMaxValue", func {
 			list := FloatVectorList new()
@@ -317,6 +319,7 @@ FloatVectorListTest: class extends Fixture {
 			list add(-7.0f)
 			divided := list divideByMaxValue()
 			expect(divided sum, is equal to(-0.5f) within(tolerance))
+			list free(); divided free()
 		})
 		this add("interpolateLinear", func {
 			list := FloatVectorList new()

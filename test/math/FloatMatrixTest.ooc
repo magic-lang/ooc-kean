@@ -123,8 +123,11 @@ FloatMatrixTest: class extends Fixture {
 		this add("print columns", func {
 			a := this createMatrix(3, 3, [1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f])
 			column := a take() getColumn(1)
-			expect(column toString() == "4.00; 5.00; 6.00; ")
-			expect(a toString() == "1.00, 4.00, 7.00; 2.00, 5.00, 8.00; 3.00, 6.00, 9.00; ")
+			columnString := column toString()
+			expect(columnString == "4.00; 5.00; 6.00; ")
+			aString := a toString()
+			expect(aString == "1.00, 4.00, 7.00; 2.00, 5.00, 8.00; 3.00, 6.00, 9.00; ")
+			columnString free(); aString free()
 		})
 
 		this add("adjugate", func {
