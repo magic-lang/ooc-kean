@@ -17,6 +17,7 @@ StackTest: class extends Fixture {
 			expect(stack isEmpty, is false)
 			stack clear()
 			expect(stack isEmpty, is true)
+			stack free()
 		})
 		this add("pop, top, peek", func {
 			stack := Stack<Int> new()
@@ -30,6 +31,7 @@ StackTest: class extends Fixture {
 			expect(first - second, is equal to(1))
 			expect(first, is equal to(4999))
 			expect(second, is equal to(4998))
+			stack free()
 		})
 		this add("clearing", func {
 			stack := Stack<Int> new()
@@ -43,8 +45,9 @@ StackTest: class extends Fixture {
 			}
 			expect(stack pop(), is equal to(1))
 			expect(stack isEmpty, is true)
+			stack free()
 		})
 	}
 }
-	
+
 StackTest new() run() . free()
