@@ -3,7 +3,7 @@ import structs/[HashMap, ArrayList]
 HashDictionary: class {
 	_hashMap: HashMap<String, Cell<Pointer>>
 	count ::= this _hashMap size
-	empty ::= this _hashMap empty?()
+	isEmpty ::= this _hashMap isEmpty
 	init: func { init ~withCapacity(10) }
 	init: func ~withCapacity (capacity: SizeT) {
 		this _hashMap = HashMap<String, Cell<Pointer>> new(capacity)
@@ -74,16 +74,10 @@ HashDictionary: class {
 			this put(key, cellValue)
 		}
 	}
-	size: func -> Int {
-		this _hashMap size
-	}
 	remove: func (key: String) -> Bool {
 		this _hashMap remove(key)
 	}
 	contains: func (key: String) -> Bool {
 		this _hashMap contains?(key)
-	}
-	getKeys: func -> ArrayList<String> {
-		this _hashMap getKeys()
 	}
 }

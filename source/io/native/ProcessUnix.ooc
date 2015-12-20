@@ -100,7 +100,7 @@ ProcessUnix: class extends Process {
 
 			/* amend the environment if needed */
 			if (env)
-				for (key in env getKeys())
+				for (key in env keys)
 					Env set(key, env[key], true)
 
 			/* set a new cwd? */

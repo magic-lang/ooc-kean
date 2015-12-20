@@ -113,7 +113,7 @@ ProcessWin32: class extends Process {
 
 		envString := gc_malloc(envLength) as Char*
 		index := 0
-		for (k in env getKeys()) {
+		for (k in env keys) {
 			v := env get(k)
 
 			memcpy(envString + index, k toCString(), k size)
