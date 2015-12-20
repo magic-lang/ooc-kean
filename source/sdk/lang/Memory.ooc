@@ -15,6 +15,7 @@ gc_free: extern (free) func (ptr: Pointer)
 //TODO Remove the above functions when they're no longer used, instead switch to an OOP-approach
 malloc: extern func (SizeT) -> Pointer
 calloc: extern func (SizeT, SizeT) -> Pointer
+realloc: extern func (Pointer, SizeT) -> Pointer
 memset: extern func (Pointer, Int, SizeT) -> Pointer
 memcmp: extern func (Pointer, Pointer, SizeT) -> Int
 memmove: extern func (Pointer, Pointer, SizeT)

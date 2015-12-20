@@ -32,7 +32,13 @@ Buffer: cover {
 		}
 		result
 	}
-	reset: func (value: Int = 0) { memset(this _pointer, value, this _size) }
+	extend: func (size: Int) {
+		newPointer: Pointer = null
+		if (size > this _size)
+			newPointer = realloc(this _pointer, size)
+		if (newPointer != null)
+			this _pointer = newPointer
+	}
 	slice: func ~untilEnd (start: Int) -> This {
 		this slice(start, this _size - start)
 	}
@@ -61,6 +67,7 @@ Buffer: cover {
 		}
 		result
 	}
+	reset: func (value: Int = 0) { memset(this _pointer, value, this _size) }
 	operator [] (start: Int) -> This { this slice(start) }
 	operator [] (range: Range) -> This { this slice(range min, range count) }
 	operator []= (start: Int, data: This) { data copyTo(this[start]) }
