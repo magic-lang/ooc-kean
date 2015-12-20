@@ -24,7 +24,9 @@ CsvWriter: class {
 				}
 			if (i < row count - 1)
 				value append(CsvReader delimiter)
-			this _fileWriter file write(value toString())
+			string := value toString()
+			this _fileWriter file write(string)
+			string free()
 			value free()
 		}
 		this _fileWriter write("\r\n")

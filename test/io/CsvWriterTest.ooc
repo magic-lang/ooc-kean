@@ -24,13 +24,18 @@ CsvWriterTest: class extends Fixture {
 			reader = CsvReader open(outputFilename)
 			rowCounter := 0
 			for (row in reader) {
-				for (i in 0 .. row count)
-					expect(row[i] toString(), is equal to(((i + 1) + rowCounter * 3) toString()))
+				for (i in 0 .. row count) {
+					rowString := row[i] toString()
+					correctAnswer := ((i + 1) + rowCounter * 3) toString()
+					expect(rowString, is equal to(correctAnswer))
+					rowString free(); correctAnswer free()
+				}
 				row free()
 				++rowCounter
 			}
 			reader free()
 			outputFilename free()
+			csvRecords free()
 		})
 	}
 	_createOutputDirectory: func {
