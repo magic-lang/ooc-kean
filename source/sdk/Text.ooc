@@ -326,6 +326,10 @@ operator == (left: String, right: Text) -> Bool { Text new(left) == right }
 operator != (left: String, right: Text) -> Bool { !(left == right) }
 operator []= (left: TextBuffer, range: Range, right: Text) { right _buffer copyTo(left slice(range min, range count)) }
 
+extend Bool {
+	toText: func -> Text { this ? t"true" : t"false" }
+}
+
 extend Int {
 	toText: func -> Text {
 		string := this toString()
