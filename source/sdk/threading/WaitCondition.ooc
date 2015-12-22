@@ -2,6 +2,11 @@ import native/[ConditionUnix, ConditionWin32]
 import Mutex
 
 WaitCondition: abstract class {
+	wait: abstract func (mutex: Mutex) -> Bool
+
+	signal: abstract func -> Bool
+
+	broadcast: abstract func -> Bool
 	new: static func -> This {
 		version (unix || apple) {
 			return ConditionUnix new() as This
@@ -12,10 +17,4 @@ WaitCondition: abstract class {
 		Exception new(This, "Unsupported platform!\n") throw()
 		null
 	}
-
-	wait: abstract func (mutex: Mutex) -> Bool
-
-	signal: abstract func -> Bool
-
-	broadcast: abstract func -> Bool
 }

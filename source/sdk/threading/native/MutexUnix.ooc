@@ -36,10 +36,10 @@ version(unix || apple) {
 	RecursiveMutexUnix: class extends RecursiveMutex {
 		_backend: PThreadMutex
 		init: func {
-		attr: PThreadMutexAttr
-		pthread_mutexattr_init(attr&)
-		pthread_mutexattr_settype(attr&, PTHREAD_MUTEX_RECURSIVE)
-		pthread_mutex_init(this _backend&, attr&)
+			attr: PThreadMutexAttr
+			pthread_mutexattr_init(attr&)
+			pthread_mutexattr_settype(attr&, PTHREAD_MUTEX_RECURSIVE)
+			pthread_mutex_init(this _backend&, attr&)
 		}
 		free: override func {
 			pthread_mutex_destroy(this _backend&)
