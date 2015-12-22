@@ -183,6 +183,15 @@ FloatVectorList: class extends VectorList<Float> {
 			result = result >> this[i] toString() >> "\n"
 		result
 	}
+	toText: func -> Text {
+		result: Text
+		textBuilder := TextBuilder new()
+		for (i in 0 .. this _count)
+			textBuilder append(this[i] toText())
+		result = textBuilder join(t"\n")
+		textBuilder free()
+		result
+	}
 	divideByMaxValue: func -> This {
 		max := this maxValue
 		max != 0 ? (this / max) : this copy()
