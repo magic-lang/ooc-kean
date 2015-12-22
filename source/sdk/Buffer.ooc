@@ -32,12 +32,13 @@ Buffer: cover {
 		}
 		result
 	}
-	extend: func (size: Int) {
-		newPointer: Pointer = null
-		if (size > this _size)
+	resize: func@ (size: Int) {
+		newPointer := this _pointer
+		if (size != this _size) {
 			newPointer = realloc(this _pointer, size)
-		if (newPointer != null)
-			this _pointer = newPointer
+			this _size = size
+		}
+		this _pointer = newPointer
 	}
 	slice: func ~untilEnd (start: Int) -> This {
 		this slice(start, this _size - start)
