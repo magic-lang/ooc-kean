@@ -79,6 +79,17 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		this apply(convert)
 		(convert as Closure) free()
 	}
+	save: func (filename: String) {
+		bgr := RasterBgr convertFrom(this)
+		bgr save(filename)
+		bgr referenceCount decrease()
+	}
+	saveRaw: func (filename: String) {
+		fileWriter := FileWriter new(filename)
+		fileWriter write(this buffer pointer as Char*, this buffer size)
+		fileWriter close()
+	}
+	_createCanvas: override func -> Canvas { RasterYuv422SemipackedCanvas new(this) }
 	operator [] (x, y: Int) -> ColorYuv {
 		result := ColorYuv new()
 		if (this isValidIn(x, y)) {
@@ -101,17 +112,6 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		bgr referenceCount decrease()
 		result
 	}
-	save: func (filename: String) {
-		bgr := RasterBgr convertFrom(this)
-		bgr save(filename)
-		bgr referenceCount decrease()
-	}
-	saveRaw: func (filename: String) {
-		fileWriter := FileWriter new(filename)
-		fileWriter write(this buffer pointer as Char*, this buffer size)
-		fileWriter close()
-	}
-	_createCanvas: override func -> Canvas { RasterYuv422SemipackedCanvas new(this) }
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
 		if (original instanceOf?(This))

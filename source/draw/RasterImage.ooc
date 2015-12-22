@@ -57,6 +57,13 @@ RasterImage: abstract class extends Image {
 //		TODO: The stuff
 		result
 	}
+	save: virtual func (filename: String) -> Int { Debug raise("RasterImage save unimplemented for format!"); 0 }
+	kean_draw_rasterImage_getStride: unmangled func -> UInt { this stride }
+	kean_draw_rasterImage_save: unmangled func (path: const Char*) {
+		pathString := String new(path)
+		this save(pathString)
+		pathString free()
+	}
 	open: static func ~unknownType (filename: String) -> This {
 		x, y, imageComponents: Int
 		data := StbImage load(filename, x&, y&, imageComponents&, 0)
@@ -74,12 +81,5 @@ RasterImage: abstract class extends Image {
 				raise("Unsupported number of channels in image")
 		}
 		result
-	}
-	save: virtual func (filename: String) -> Int { Debug raise("RasterImage save unimplemented for format!"); 0 }
-	kean_draw_rasterImage_getStride: unmangled func -> UInt { this stride }
-	kean_draw_rasterImage_save: unmangled func (path: const Char*) {
-		pathString := String new(path)
-		this save(pathString)
-		pathString free()
 	}
 }

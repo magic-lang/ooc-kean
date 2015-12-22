@@ -123,6 +123,36 @@ RasterBgra: class extends RasterPacked {
 			result /= this size length
 		}
 	}
+	swapRedBlue: func {
+		this swapChannels(0, 2)
+	}
+	redBlueSwapped: func -> This {
+		result := this copy()
+		result swapRedBlue()
+		result
+	}
+	_createCanvas: override func -> Canvas { RasterBgraCanvas new(this) }
+	operator [] (x, y: Int) -> ColorBgra { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorBgra* + x)@ : ColorBgra new(0, 0, 0, 0) }
+	operator []= (x, y: Int, value: ColorBgra) { ((this buffer pointer + y * this stride) as ColorBgra* + x)@ = value }
+	operator [] (point: IntPoint2D) -> ColorBgra { this[point x, point y] }
+	operator []= (point: IntPoint2D, value: ColorBgra) { this[point x, point y] = value }
+	operator [] (point: FloatPoint2D) -> ColorBgra { this [point x, point y] }
+	operator [] (x, y: Float) -> ColorBgra {
+		left := x - x floor()
+		top := y - y floor()
+
+		topLeft := this[x floor() as Int, y floor() as Int]
+		bottomLeft := this[x floor() as Int, y ceil() as Int]
+		topRight := this[x ceil() as Int, y floor() as Int]
+		bottomRight := this[x ceil() as Int, y ceil() as Int]
+
+		ColorBgra new(
+			(top * (left * topLeft blue + (1 - left) * topRight blue) + (1 - top) * (left * bottomLeft blue + (1 - left) * bottomRight blue)),
+			(top * (left * topLeft green + (1 - left) * topRight green) + (1 - top) * (left * bottomLeft green + (1 - left) * bottomRight green)),
+			(top * (left * topLeft red + (1 - left) * topRight red) + (1 - top) * (left * bottomLeft red + (1 - left) * bottomRight red)),
+			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
+		)
+	}
 	open: static func (filename: String) -> This {
 		x, y, imageComponents: Int
 		requiredComponents := 4
@@ -154,34 +184,4 @@ RasterBgra: class extends RasterPacked {
 		}
 		result
 	}
-	operator [] (x, y: Int) -> ColorBgra { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorBgra* + x)@ : ColorBgra new(0, 0, 0, 0) }
-	operator []= (x, y: Int, value: ColorBgra) { ((this buffer pointer + y * this stride) as ColorBgra* + x)@ = value }
-	operator [] (point: IntPoint2D) -> ColorBgra { this[point x, point y] }
-	operator []= (point: IntPoint2D, value: ColorBgra) { this[point x, point y] = value }
-	operator [] (point: FloatPoint2D) -> ColorBgra { this [point x, point y] }
-	operator [] (x, y: Float) -> ColorBgra {
-		left := x - x floor()
-		top := y - y floor()
-
-		topLeft := this[x floor() as Int, y floor() as Int]
-		bottomLeft := this[x floor() as Int, y ceil() as Int]
-		topRight := this[x ceil() as Int, y floor() as Int]
-		bottomRight := this[x ceil() as Int, y ceil() as Int]
-
-		ColorBgra new(
-			(top * (left * topLeft blue + (1 - left) * topRight blue) + (1 - top) * (left * bottomLeft blue + (1 - left) * bottomRight blue)),
-			(top * (left * topLeft green + (1 - left) * topRight green) + (1 - top) * (left * bottomLeft green + (1 - left) * bottomRight green)),
-			(top * (left * topLeft red + (1 - left) * topRight red) + (1 - top) * (left * bottomLeft red + (1 - left) * bottomRight red)),
-			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
-		)
-	}
-	swapRedBlue: func {
-		this swapChannels(0, 2)
-	}
-	redBlueSwapped: func -> This {
-		result := this copy()
-		result swapRedBlue()
-		result
-	}
-	_createCanvas: override func -> Canvas { RasterBgraCanvas new(this) }
 }

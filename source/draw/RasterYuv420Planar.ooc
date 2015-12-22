@@ -53,18 +53,6 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		(yImage, uImage, vImage) := This _allocate(original size, original stride, uOffset, vOffset)
 		super(original, yImage, uImage, vImage)
 	}
-	_allocate: static func (size: IntVector2D, stride: UInt, uOffset: UInt, vOffset: UInt) -> (RasterMonochrome, RasterMonochrome, RasterMonochrome) {
-		yLength := stride * size y
-		uLength := stride * size y / 4
-		vLength := uLength
-		length := vOffset + vLength
-		buffer := ByteBuffer new(length)
-		(
-			RasterMonochrome new(buffer slice(0, yLength), size, stride),
-			RasterMonochrome new(buffer slice(uOffset, uLength), IntVector2D new(size x / 2, size y / 4), stride / 2),
-			RasterMonochrome new(buffer slice(vOffset, vLength), IntVector2D new(size x / 2, size y / 4), stride / 2)
-		)
-	}
 	create: func (size: IntVector2D) -> Image { This new(size) }
 	copy: func -> This {
 		result := This new(this)
@@ -105,6 +93,27 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		(action as Closure) free()
 	}
 	apply: func ~monochrome (action: Func(ColorMonochrome)) { this apply(ColorConvert fromYuv(action)) }
+	_createCanvas: override func -> Canvas { RasterYuv420PlanarCanvas new(this) }
+	operator [] (x, y: Int) -> ColorYuv {
+		ColorYuv new(this y[x, y] y, this u [x / 2, y / 2] y, this v [x / 2, y / 2] y)
+	}
+	operator []= (x, y: Int, value: ColorYuv) {
+		this y[x, y] = ColorMonochrome new(value y)
+		this u[x / 2, y / 2] = ColorMonochrome new(value u)
+		this v[x / 2, y / 2] = ColorMonochrome new(value v)
+	}
+	_allocate: static func (size: IntVector2D, stride: UInt, uOffset: UInt, vOffset: UInt) -> (RasterMonochrome, RasterMonochrome, RasterMonochrome) {
+		yLength := stride * size y
+		uLength := stride * size y / 4
+		vLength := uLength
+		length := vOffset + vLength
+		buffer := ByteBuffer new(length)
+		(
+			RasterMonochrome new(buffer slice(0, yLength), size, stride),
+			RasterMonochrome new(buffer slice(uOffset, uLength), IntVector2D new(size x / 2, size y / 4), stride / 2),
+			RasterMonochrome new(buffer slice(vOffset, vLength), IntVector2D new(size x / 2, size y / 4), stride / 2)
+		)
+	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
 		if (original instanceOf?(This))
@@ -150,13 +159,4 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		}
 		result
 	}
-	operator [] (x, y: Int) -> ColorYuv {
-		ColorYuv new(this y[x, y] y, this u [x / 2, y / 2] y, this v [x / 2, y / 2] y)
-	}
-	operator []= (x, y: Int, value: ColorYuv) {
-		this y[x, y] = ColorMonochrome new(value y)
-		this u[x / 2, y / 2] = ColorMonochrome new(value u)
-		this v[x / 2, y / 2] = ColorMonochrome new(value v)
-	}
-	_createCanvas: override func -> Canvas { RasterYuv420PlanarCanvas new(this) }
 }

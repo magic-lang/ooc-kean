@@ -106,8 +106,8 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 
 RasterPacked: abstract class extends RasterImage {
 	_buffer: ByteBuffer
-	buffer ::= this _buffer
 	_stride: Int
+	buffer ::= this _buffer
 	stride ::= this _stride
 	bytesPerPixel: Int { get }
 	init: func (=_buffer, size: IntVector2D, =_stride) {

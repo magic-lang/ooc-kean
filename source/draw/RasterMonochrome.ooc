@@ -117,37 +117,6 @@ RasterMonochrome: class extends RasterPacked {
 			result /= (this size x squared + this size y squared as Float sqrt())
 		}
 	}
-	open: static func (filename: String) -> This {
-		x, y, imageComponents: Int
-		requiredComponents := 1
-		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
-		buffer := ByteBuffer new(data as UInt8*, x * y * requiredComponents, true)
-		This new(buffer, IntVector2D new(x, y))
-	}
-	convertFrom: static func (original: RasterImage) -> This {
-		result: This
-		if (original instanceOf?(This))
-			result = (original as This) copy()
-		else {
-			result = This new(original)
-			row := result buffer pointer as Long
-			rowLength := result stride
-			rowEnd := row + rowLength
-			destination := row
-			f := func (color: ColorMonochrome) {
-				(destination as ColorMonochrome*)@ = color
-				destination += 1
-				if (destination >= rowEnd) {
-					row += result stride
-					destination = row
-					rowEnd = row + rowLength
-				}
-			}
-			original apply(f)
-			(f as Closure) free()
-		}
-		result
-	}
 	getFirstDerivative: func (x, y: Int) -> (Float, Float) {
 		step := 2
 		sourceStride := this stride
@@ -186,13 +155,6 @@ RasterMonochrome: class extends RasterPacked {
 			source += sourceStride
 		}
 	}
-	operator [] (x, y: Int) -> ColorMonochrome {
-		version(safe) {
-			if (!this isValidIn(x, y))
-				raise("Accessing RasterMonochrome index out of range in get operator")
-		}
-		ColorMonochrome new(this buffer pointer[y * this stride + x])
-	}
 
 	getValue: func (x, y: Int) -> UInt8 {
 		version(safe) {
@@ -202,13 +164,6 @@ RasterMonochrome: class extends RasterPacked {
 		(this buffer pointer[y * this stride + x])
 	}
 
-	operator []= (x, y: Int, value: ColorMonochrome) {
-		version(safe) {
-			if (x >= this size x || y >= this size y || x < 0 || y < 0)
-				raise("Accessing RasterMonochrome index out of range in set operator")
-		}
-		((this buffer pointer + y * this stride) as ColorMonochrome* + x)@ = value
-	}
 	getRow: func (row: Int) -> FloatVectorList {
 		result := FloatVectorList new(this size x)
 		this getRowInto(row, result)
@@ -236,6 +191,51 @@ RasterMonochrome: class extends RasterPacked {
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
 	_createCanvas: override func -> Canvas { RasterMonochromeCanvas new(this) }
+	operator [] (x, y: Int) -> ColorMonochrome {
+		version(safe) {
+			if (!this isValidIn(x, y))
+				raise("Accessing RasterMonochrome index out of range in get operator")
+		}
+		ColorMonochrome new(this buffer pointer[y * this stride + x])
+	}
+	operator []= (x, y: Int, value: ColorMonochrome) {
+		version(safe) {
+			if (x >= this size x || y >= this size y || x < 0 || y < 0)
+				raise("Accessing RasterMonochrome index out of range in set operator")
+		}
+		((this buffer pointer + y * this stride) as ColorMonochrome* + x)@ = value
+	}
+	open: static func (filename: String) -> This {
+		x, y, imageComponents: Int
+		requiredComponents := 1
+		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
+		buffer := ByteBuffer new(data as UInt8*, x * y * requiredComponents, true)
+		This new(buffer, IntVector2D new(x, y))
+	}
+	convertFrom: static func (original: RasterImage) -> This {
+		result: This
+		if (original instanceOf?(This))
+			result = (original as This) copy()
+		else {
+			result = This new(original)
+			row := result buffer pointer as Long
+			rowLength := result stride
+			rowEnd := row + rowLength
+			destination := row
+			f := func (color: ColorMonochrome) {
+				(destination as ColorMonochrome*)@ = color
+				destination += 1
+				if (destination >= rowEnd) {
+					row += result stride
+					destination = row
+					rowEnd = row + rowLength
+				}
+			}
+			original apply(f)
+			(f as Closure) free()
+		}
+		result
+	}
 	kean_draw_rasterMonochrome_new: static unmangled func (width, height, stride: Int, data: Void*) -> This {
 		result := This new(IntVector2D new(width, height), stride)
 		memcpy(result buffer pointer, data, height * stride)

@@ -26,13 +26,13 @@ InterpolationMode: enum {
 
 Canvas: abstract class {
 	_size: IntVector2D
-	size ::= this _size
 	_pen := Pen new()
+	_transform := FloatTransform3D identity
+	size ::= this _size
 	pen: Pen { get { this _pen } set(value) { this _pen = value } }
 	viewport: IntBox2D { get set }
 	blend: Bool { get set }
 	opacity: Float { get set }
-	_transform := FloatTransform3D identity
 	transform: FloatTransform3D { get { this _transform } set(value) { this _transform = value } }
 	focalLength: Float { get set }
 	interpolationMode: InterpolationMode { get set }

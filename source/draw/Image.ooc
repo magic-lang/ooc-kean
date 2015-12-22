@@ -28,20 +28,20 @@ CoordinateSystem: enum {
 
 Image: abstract class {
 	_size: IntVector2D
+	_referenceCount: ReferenceCounter
+	_coordinateSystem: CoordinateSystem
+	_canvas: Canvas
 	size ::= this _size
 	width ::= this size x
 	height ::= this size y
-	_coordinateSystem: CoordinateSystem
 	coordinateSystem ::= this _coordinateSystem
 	crop: IntShell2D { get set }
 	wrap: Bool { get set }
-	_referenceCount: ReferenceCounter
 	referenceCount ::= this _referenceCount
 	transform ::= IntTransform2D createScaling(
 			(this coordinateSystem & CoordinateSystem XLeftward) == CoordinateSystem XLeftward ? -1 : 1,
 			(this coordinateSystem & CoordinateSystem YUpward) == CoordinateSystem YUpward ? -1 : 1)
 
-	_canvas: Canvas
 	canvas: Canvas {
 		get {
 			if (this _canvas == null)
