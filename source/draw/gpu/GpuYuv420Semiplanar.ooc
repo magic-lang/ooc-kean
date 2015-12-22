@@ -21,8 +21,8 @@ import GpuContext, GpuImage, GpuSurface, GpuCanvas
 version(!gpuOff) {
 GpuYuv420Semiplanar: class extends GpuImage {
 	_y: GpuImage
-	y ::= this _y
 	_uv: GpuImage
+	y ::= this _y
 	uv ::= this _uv
 	filter: Bool {
 		get { this _y filter }

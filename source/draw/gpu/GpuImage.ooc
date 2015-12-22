@@ -33,6 +33,7 @@ GpuImageType: enum {
 }
 
 GpuImage: abstract class extends Image {
+	_context: GpuContext
 	filter: Bool { get set }
 	canvas: GpuSurface {
 		get {
@@ -41,7 +42,6 @@ GpuImage: abstract class extends Image {
 			this _canvas as GpuSurface
 		}
 	}
-	_context: GpuContext
 	init: func (size: IntVector2D, =_context) { super(size) }
 	resizeTo: override func (size: IntVector2D) -> This {
 		result := this create(size) as This

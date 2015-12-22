@@ -28,6 +28,11 @@ GpuSurface: abstract class extends Canvas {
 	_view := FloatTransform3D identity
 	_projection: FloatTransform3D
 	_toLocal := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
+	_focalLength: Float
+	_nearPlane := 1.0f
+	_farPlane := 10000.0f
+	_defaultMap: GpuMap
+	_coordinateTransform := IntTransform2D identity
 	transform: FloatTransform3D {
 		get { this _transform }
 		set(value) {
@@ -35,7 +40,6 @@ GpuSurface: abstract class extends Canvas {
 			this _view = this _toLocal * value * this _toLocal
 		}
 	}
-	_focalLength: Float
 	focalLength: Float {
 		get { this _focalLength }
 		set(value) {
@@ -52,20 +56,11 @@ GpuSurface: abstract class extends Canvas {
 			this _model = this _createModelTransform(IntBox2D new(this size))
 		}
 	}
-	_nearPlane := 1.0f
-	_farPlane := 10000.0f
-	_defaultMap: GpuMap
-	_coordinateTransform := IntTransform2D identity
 	init: func (size: IntVector2D, =_context, =_defaultMap, =_coordinateTransform) { super(size) }
 	_createModelTransform: func (box: IntBox2D) -> FloatTransform3D {
 		toReference := FloatTransform3D createTranslation((box size x - this size x) / 2, (this size y - box size y) / 2, 0.0f)
 		translation := this _toLocal * FloatTransform3D createTranslation(box leftTop x, box leftTop y, this focalLength) * this _toLocal
 		translation * toReference * FloatTransform3D createScaling(box size x / 2.0f, box size y / 2.0f, 1.0f)
-	}
-	_createTextureTransform: static func (imageSize: IntVector2D, box: IntBox2D) -> FloatTransform3D {
-		scaling := FloatTransform3D createScaling(box size x as Float / imageSize x, box size y as Float / imageSize y, 1.0f)
-		translation := FloatTransform3D createTranslation(box leftTop x as Float / imageSize x, box leftTop y as Float / imageSize y, 0.0f)
-		translation * scaling
 	}
 	_getDefaultMap: virtual func (image: Image) -> GpuMap { this _defaultMap }
 	clear: func { this fill() }
@@ -95,5 +90,10 @@ GpuSurface: abstract class extends Canvas {
 	}
 	draw: virtual func ~mesh (image: GpuImage, mesh: GpuMesh) { Debug raise("draw~mesh unimplemented!") }
 	readPixels: virtual func -> ByteBuffer { raise("readPixels unimplemented!") }
+	_createTextureTransform: static func (imageSize: IntVector2D, box: IntBox2D) -> FloatTransform3D {
+		scaling := FloatTransform3D createScaling(box size x as Float / imageSize x, box size y as Float / imageSize y, 1.0f)
+		translation := FloatTransform3D createTranslation(box leftTop x as Float / imageSize x, box leftTop y as Float / imageSize y, 0.0f)
+		translation * scaling
+	}
 }
 }

@@ -62,11 +62,11 @@ _Map: class {
 }
 version(!gpuOff) {
 GpuMap: abstract class {
+	_bindings := _Map new()
 	model: FloatTransform3D { get set }
 	view: FloatTransform3D { get set }
 	projection: FloatTransform3D { get set }
 	textureTransform: FloatTransform3D { get set }
-	_bindings := _Map new()
 	init: func {
 		this model = FloatTransform3D identity
 		this view = FloatTransform3D identity
