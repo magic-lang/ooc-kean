@@ -339,6 +339,17 @@ operator != (a1, a2: IPAddress) -> Bool {
 }
 
 SocketAddress: abstract class {
+
+	family: abstract func -> Int
+	host: abstract func -> IPAddress
+	port: abstract func -> Int
+
+	addr: abstract func -> SockAddr*
+	length: abstract func -> UInt32
+
+	toString: func -> String {
+		"[%s]:%d" format(host() toString() toCString(), port())
+	}
 	new: static func (host: IPAddress, nPort: Int) -> This {
 		if (host family == AddressFamily IP4) {
 			ip4Host := host as IP4Address
@@ -365,17 +376,6 @@ SocketAddress: abstract class {
 			NetError new("Unknown SockAddr type!") throw()
 			return null
 		}
-	}
-
-	family: abstract func -> Int
-	host: abstract func -> IPAddress
-	port: abstract func -> Int
-
-	addr: abstract func -> SockAddr*
-	length: abstract func -> UInt32
-
-	toString: func -> String {
-		"[%s]:%d" format(host() toString() toCString(), port())
 	}
 }
 
