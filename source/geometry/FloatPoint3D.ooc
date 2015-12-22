@@ -38,13 +38,6 @@ FloatPoint3D: cover {
 	}
 	scalarProduct: func (other: This) -> Float { this x * other x + this y * other y + this z * other z }
 	vectorProduct: func (other: This) -> This { This new(this y * other z - other y * this z, -(this x * other z - other x * this z), this x * other y - other x * this y) }
-	spherical: static func (radius, azimuth, elevation: Float) -> This {
-		This new(radius * (azimuth cos()) * (elevation sin()), radius * (azimuth sin()) * (elevation sin()), radius * (elevation cos()))
-	}
-	angles: static func (rx, ry, n: Float) -> This {
-		z := n*n sqrt() / (1 + ry tan() squared + rx tan() squared)
-		This new(z * (ry tan()), z * (rx tan()), z)
-	}
 	angle: func (other: This) -> Float {
 		(this scalarProduct(other) / (this norm * other norm)) clamp(-1, 1) acos() * (this x * other y - this y * other x < 0 ? -1 : 1)
 	}
@@ -56,6 +49,8 @@ FloatPoint3D: cover {
 	maximum: func (floor: This) -> This { This new(Float maximum(this x, floor x), Float maximum(this y, floor y), Float maximum(this z, floor z)) }
 	clamp: func ~point (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
 	clamp: func ~float (floor, ceiling: Float) -> This { This new(this x clamp(floor, ceiling), this y clamp(floor, ceiling), this z clamp(floor, ceiling)) }
+	toIntPoint3D: func -> IntPoint3D { IntPoint3D new(this x as Int, this y as Int, this z as Int) }
+	toString: func -> String { "%.8f" formatFloat(this x) >> ", " & "%.8f" formatFloat(this y) >> ", " & "%.8f" formatFloat(this z) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
 	operator - (other: This) -> This { This new(this x - other x, this y - other y, this z - other z) }
 	operator - -> This { This new(-this x, -this y, -this z) }
@@ -69,9 +64,14 @@ FloatPoint3D: cover {
 	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
-	toIntPoint3D: func -> IntPoint3D { IntPoint3D new(this x as Int, this y as Int, this z as Int) }
 	operator as -> String { this toString() }
-	toString: func -> String { "%.8f" formatFloat(this x) >> ", " & "%.8f" formatFloat(this y) >> ", " & "%.8f" formatFloat(this z) }
+	spherical: static func (radius, azimuth, elevation: Float) -> This {
+		This new(radius * (azimuth cos()) * (elevation sin()), radius * (azimuth sin()) * (elevation sin()), radius * (elevation cos()))
+	}
+	angles: static func (rx, ry, n: Float) -> This {
+		z := n*n sqrt() / (1 + ry tan() squared + rx tan() squared)
+		This new(z * (ry tan()), z * (rx tan()), z)
+	}
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat())

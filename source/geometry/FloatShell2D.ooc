@@ -39,19 +39,19 @@ FloatShell2D: cover {
 	increase: func ~byBox (box: FloatBox2D) -> FloatBox2D {
 		FloatBox2D new(box leftTop x - this left, box leftTop y - this top, box size x + this left + this right, box size y + this top + this bottom)
 	}
-	operator + (other: This) -> This { This new(this left + other left, this right + other right, this top + other top, this bottom + other bottom) }
-	operator - (other: This) -> This { This new(this left - other left, this right - other right, this top - other top, this bottom - other bottom) }
-	operator / (other: Float) -> This { This new(this left / other, this right / other, this top / other, this bottom / other) }
 	maximum: func (other: This) -> This {
 		This new(Float maximum(this left, other left), Float maximum(this right, other right), Float maximum(this top, other top), Float maximum(this bottom, other bottom))
 	}
 	minimum: func (other: This) -> This {
 		This new(Float minimum(this left, other left), Float minimum(this right, other right), Float minimum(this top, other top), Float minimum(this bottom, other bottom))
 	}
+	toString: func -> String { "#{this left toString()}, #{this right toString()}, #{this top toString()}, #{this bottom toString()}" }
+	operator + (other: This) -> This { This new(this left + other left, this right + other right, this top + other top, this bottom + other bottom) }
+	operator - (other: This) -> This { This new(this left - other left, this right - other right, this top - other top, this bottom - other bottom) }
+	operator / (other: Float) -> This { This new(this left / other, this right / other, this top / other, this bottom / other) }
 	operator == (other: This) -> Bool { this left == other left && this right == other right && this top == other top && this bottom == other bottom }
 	operator != (other: This) -> Bool { !(this == other) }
 	operator as -> String { this toString() }
-	toString: func -> String { "#{this left toString()}, #{this right toString()}, #{this top toString()}, #{this bottom toString()}" }
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat(), parts[3] toFloat())

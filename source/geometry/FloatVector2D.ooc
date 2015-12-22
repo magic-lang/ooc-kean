@@ -27,8 +27,6 @@ FloatVector2D: cover {
 	norm ::= (this x squared + this y squared) sqrt()
 	azimuth ::= this y atan2(this x)
 	absolute ::= This new(this x absolute, this y absolute)
-	basisX: static This { get { This new(1, 0) } }
-	basisY: static This { get { This new(0, 1) } }
 	init: func@ (=x, =y)
 	init: func@ ~square (length: Float) { this x = this y = length }
 	init: func@ ~default { this init(0.0f, 0.0f) }
@@ -49,6 +47,9 @@ FloatVector2D: cover {
 	minimum: func ~Float (ceiling: Float) -> This { this minimum(This new(ceiling)) }
 	maximum: func ~Float (floor: Float) -> This { this maximum(This new(floor)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
+	toIntVector2D: func -> IntVector2D { IntVector2D new(this x as Int, this y as Int) }
+	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x, this y) }
+	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
 	operator + (other: FloatPoint2D) -> This { This new(this x + other x, this y + other y) }
 	operator - (other: This) -> This { This new(this x - other x, this y - other y) }
@@ -68,11 +69,10 @@ FloatVector2D: cover {
 	operator > (other: This) -> Bool { this x > other x && this y > other y }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
-	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
-	toIntVector2D: func -> IntVector2D { IntVector2D new(this x as Int, this y as Int) }
-	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x, this y) }
 	operator as -> String { this toString() }
-	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
+	basisX: static This { get { This new(1, 0) } }
+	basisY: static This { get { This new(0, 1) } }
+	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new (parts[0] toFloat(), parts[1] toFloat())

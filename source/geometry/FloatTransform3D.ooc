@@ -32,44 +32,6 @@ import FloatTransform2D
 
 FloatTransform3D: cover {
 	a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p: Float
-	operator [] (x, y: Int) -> Float {
-		result := 0.0f
-		version (safe) {
-			if (x < 0 || x > 3 || y < 0 || y > 3)
-				raise("Out of bounds in FloatTransform3D get operator (#{x}, #{y})")
-		}
-		match (x) {
-			case 0 =>
-				match (y) {
-					case 0 => result = this a
-					case 1 => result = this b
-					case 2 => result = this c
-					case 3 => result = this d
-				}
-			case 1 =>
-				match (y) {
-					case 0 => result = this e
-					case 1 => result = this f
-					case 2 => result = this g
-					case 3 => result = this h
-				}
-			case 2 =>
-				match (y) {
-					case 0 => result = this i
-					case 1 => result = this j
-					case 2 => result = this k
-					case 3 => result = this l
-				}
-			case 3 =>
-				match (y) {
-					case 0 => result = this m
-					case 1 => result = this n
-					case 2 => result = this o
-					case 3 => result = this p
-				}
-		}
-		result
-	}
 	determinant: Float {
 		get {
 			this a * this f * this k * this p + this a * this j * this o * this h + this a * this n * this g * this l +
@@ -120,7 +82,6 @@ FloatTransform3D: cover {
 	init: func@ ~fromFloatTransform2D (transform: FloatTransform2D) {
 		this init(transform a, transform b, 0.0f, transform c, transform d, transform e, 0.0f, transform f, 0.0f, 0.0f, 1.0f, 0.0f, transform g, transform h, 0.0f, transform i)
 	}
-	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f) } }
 //	setTranslation: func(translation: FloatVector2D) -> This { this translate(translation - this Translation) }
 	setScaling: func (scaling: Float) -> This { this scale(scaling / this scaling) }
 	setXScaling: func (scaling: Float) -> This { this scale(scaling / this scalingX, 1.0f, 1.0f) }
@@ -139,24 +100,74 @@ FloatTransform3D: cover {
 	reflectX: func -> This { this createReflectionX() * this }
 	reflectY: func -> This { this createReflectionY() * this }
 	reflectZ: func -> This { this createReflectionZ() * this }
-	create: static func (a, b, c, d, e, f, g, h, i, j, k, l: Float) -> This { This new(a, b, c, d, e, f, g, h, i, j, k, l) }
-	createTranslation: static func (xDelta, yDelta, zDelta: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, xDelta, yDelta, zDelta) }
-	createTranslation: static func ~float (delta: Float) -> This { This createTranslation(delta, delta, delta) }
-	createTranslation: static func ~size (delta: FloatVector3D) -> This { This createTranslation(delta x, delta y, delta z) }
-	createTranslation: static func ~point (delta: FloatPoint3D) -> This { This createTranslation(delta x, delta y, delta z) }
-	createScaling: static func (xFactor, yFactor, zFactor: Float) -> This { This new(xFactor, 0.0f, 0.0f, 0.0f, yFactor, 0.0f, 0.0f, 0.0f, zFactor, 0.0f, 0.0f, 0.0f) }
-	createScaling: static func ~float (factor: Float) -> This { This createScaling(factor, factor, factor) }
-	createScaling: static func ~size (factor: FloatVector3D) -> This { This createScaling(factor x, factor y, factor z) }
-	createRotationX: static func (angle: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, angle cos(), angle sin(), 0.0f, (-angle) sin(), angle cos(), 0.0f, 0.0f, 0.0f) }
-	createRotationY: static func (angle: Float) -> This { This new(angle cos(), 0.0f, (-angle) sin(), 0.0f, 1.0f, 0.0f, angle sin(), 0.0f, angle cos(), 0.0f, 0.0f, 0.0f) }
-	createRotationZ: static func (angle: Float) -> This { This new(angle cos(), angle sin(), 0.0f, (-angle) sin(), angle cos(), 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) }
-	createRotation: static func ~pivot (transform: This, pivot: FloatPoint3D) -> This {
-		This createTranslation(pivot x, pivot y, pivot z) * transform * This createTranslation(-pivot x, -pivot y, -pivot z)
+	toString: func -> String {
+		"%.8f" formatFloat(this a) >> ", " & "%.8f" formatFloat(this e) >> ", " & "%.8f" formatFloat(this i) >> ", " & "%.8f" formatFloat(this m) >> "\n" & \
+		"%.8f" formatFloat(this b) >> ", " & "%.8f" formatFloat(this f) >> ", " & "%.8f" formatFloat(this j) >> ", " & "%.8f" formatFloat(this n) >> "\n" & \
+		"%.8f" formatFloat(this c) >> ", " & "%.8f" formatFloat(this g) >> ", " & "%.8f" formatFloat(this k) >> ", " & "%.8f" formatFloat(this o) >> "\n" & \
+		"%.8f" formatFloat(this d) >> ", " & "%.8f" formatFloat(this h) >> ", " & "%.8f" formatFloat(this l) >> ", " & "%.8f" formatFloat(this p)
 	}
-	createReflectionX: static func -> This { This new(-1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) }
-	createReflectionY: static func -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) }
-	createReflectionZ: static func -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f) }
-
+	transformAndProject: func ~FloatPoint2D (point: FloatPoint2D, focalLength: Float) -> FloatPoint2D {
+		transformedWorldPoint := this * FloatPoint3D new(point x, point y, focalLength)
+		focalLength < Float epsilon ? FloatPoint2D new(transformedWorldPoint x, transformedWorldPoint y) : this project(transformedWorldPoint, focalLength)
+	}
+	transformAndProject: func ~FloatBox2D (box: FloatBox2D, focalLength: Float) -> FloatBox2D {
+		FloatBox2D new(this transformAndProject(box leftTop, focalLength), this transformAndProject(box rightBottom, focalLength))
+	}
+	transformAndProjectCorners: func (box: FloatBox2D, focalLength: Float) -> VectorList<FloatPoint2D> {
+		result := VectorList<FloatPoint2D> new()
+		result add(this transformAndProject(box leftTop, focalLength))
+		result add(this transformAndProject(box leftBottom, focalLength))
+		result add(this transformAndProject(box rightBottom, focalLength))
+		result add(this transformAndProject(box rightTop, focalLength))
+		result
+	}
+	project: func (point: FloatPoint3D, focalLength: Float) -> FloatPoint2D {
+		projectedPoint := This createProjection(focalLength) * point / point z
+		FloatPoint2D new(projectedPoint x, projectedPoint y)
+	}
+	kean_math_floatTransform3D_getTranslation: unmangled func -> FloatVector3D { this translation }
+	kean_math_floatTransform3D_getScaling: unmangled func -> FloatVector3D { FloatVector3D new(this scalingX, this scalingY, this scalingZ) }
+	kean_math_floatTransform3D_getInverse: unmangled func -> This { this inverse }
+	operator != (other: This) -> Bool { !(this == other) }
+	operator as -> String { this toString() }
+	operator [] (x, y: Int) -> Float {
+		result := 0.0f
+		version (safe) {
+			if (x < 0 || x > 3 || y < 0 || y > 3)
+				raise("Out of bounds in FloatTransform3D get operator (#{x}, #{y})")
+		}
+		match (x) {
+			case 0 =>
+				match (y) {
+					case 0 => result = this a
+					case 1 => result = this b
+					case 2 => result = this c
+					case 3 => result = this d
+				}
+			case 1 =>
+				match (y) {
+					case 0 => result = this e
+					case 1 => result = this f
+					case 2 => result = this g
+					case 3 => result = this h
+				}
+			case 2 =>
+				match (y) {
+					case 0 => result = this i
+					case 1 => result = this j
+					case 2 => result = this k
+					case 3 => result = this l
+				}
+			case 3 =>
+				match (y) {
+					case 0 => result = this m
+					case 1 => result = this n
+					case 2 => result = this o
+					case 3 => result = this p
+				}
+		}
+		result
+	}
 	operator * (other: This) -> This {
 		This new(
 			this a * other a + this e * other b + this i * other c + this m * other d,
@@ -205,37 +216,25 @@ FloatTransform3D: cover {
 		this o == other o &&
 		this p == other p
 	}
-	transformAndProject: func ~FloatPoint2D (point: FloatPoint2D, focalLength: Float) -> FloatPoint2D {
-		transformedWorldPoint := this * FloatPoint3D new(point x, point y, focalLength)
-		focalLength < Float epsilon ? FloatPoint2D new(transformedWorldPoint x, transformedWorldPoint y) : this project(transformedWorldPoint, focalLength)
+	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f) } }
+	create: static func (a, b, c, d, e, f, g, h, i, j, k, l: Float) -> This { This new(a, b, c, d, e, f, g, h, i, j, k, l) }
+	createTranslation: static func (xDelta, yDelta, zDelta: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, xDelta, yDelta, zDelta) }
+	createTranslation: static func ~float (delta: Float) -> This { This createTranslation(delta, delta, delta) }
+	createTranslation: static func ~size (delta: FloatVector3D) -> This { This createTranslation(delta x, delta y, delta z) }
+	createTranslation: static func ~point (delta: FloatPoint3D) -> This { This createTranslation(delta x, delta y, delta z) }
+	createScaling: static func (xFactor, yFactor, zFactor: Float) -> This { This new(xFactor, 0.0f, 0.0f, 0.0f, yFactor, 0.0f, 0.0f, 0.0f, zFactor, 0.0f, 0.0f, 0.0f) }
+	createScaling: static func ~float (factor: Float) -> This { This createScaling(factor, factor, factor) }
+	createScaling: static func ~size (factor: FloatVector3D) -> This { This createScaling(factor x, factor y, factor z) }
+	createRotationX: static func (angle: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, angle cos(), angle sin(), 0.0f, (-angle) sin(), angle cos(), 0.0f, 0.0f, 0.0f) }
+	createRotationY: static func (angle: Float) -> This { This new(angle cos(), 0.0f, (-angle) sin(), 0.0f, 1.0f, 0.0f, angle sin(), 0.0f, angle cos(), 0.0f, 0.0f, 0.0f) }
+	createRotationZ: static func (angle: Float) -> This { This new(angle cos(), angle sin(), 0.0f, (-angle) sin(), angle cos(), 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) }
+	createRotation: static func ~pivot (transform: This, pivot: FloatPoint3D) -> This {
+		This createTranslation(pivot x, pivot y, pivot z) * transform * This createTranslation(-pivot x, -pivot y, -pivot z)
 	}
-	transformAndProject: func ~FloatBox2D (box: FloatBox2D, focalLength: Float) -> FloatBox2D {
-		FloatBox2D new(this transformAndProject(box leftTop, focalLength), this transformAndProject(box rightBottom, focalLength))
-	}
-	transformAndProjectCorners: func (box: FloatBox2D, focalLength: Float) -> VectorList<FloatPoint2D> {
-		result := VectorList<FloatPoint2D> new()
-		result add(this transformAndProject(box leftTop, focalLength))
-		result add(this transformAndProject(box leftBottom, focalLength))
-		result add(this transformAndProject(box rightBottom, focalLength))
-		result add(this transformAndProject(box rightTop, focalLength))
-		result
-	}
-	project: func (point: FloatPoint3D, focalLength: Float) -> FloatPoint2D {
-		projectedPoint := This createProjection(focalLength) * point / point z
-		FloatPoint2D new(projectedPoint x, projectedPoint y)
-	}
+	createReflectionX: static func -> This { This new(-1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) }
+	createReflectionY: static func -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) }
+	createReflectionZ: static func -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f) }
 	createProjection: static func (focalLength: Float) -> This {
 		This new(focalLength, 0, 0, 0, 0, focalLength, 0, 0, 0, 0, focalLength, 1.0f, 0, 0, 0, 0)
 	}
-	operator != (other: This) -> Bool { !(this == other) }
-	operator as -> String { this toString() }
-	toString: func -> String {
-		"%.8f" formatFloat(this a) >> ", " & "%.8f" formatFloat(this e) >> ", " & "%.8f" formatFloat(this i) >> ", " & "%.8f" formatFloat(this m) >> "\n" & \
-		"%.8f" formatFloat(this b) >> ", " & "%.8f" formatFloat(this f) >> ", " & "%.8f" formatFloat(this j) >> ", " & "%.8f" formatFloat(this n) >> "\n" & \
-		"%.8f" formatFloat(this c) >> ", " & "%.8f" formatFloat(this g) >> ", " & "%.8f" formatFloat(this k) >> ", " & "%.8f" formatFloat(this o) >> "\n" & \
-		"%.8f" formatFloat(this d) >> ", " & "%.8f" formatFloat(this h) >> ", " & "%.8f" formatFloat(this l) >> ", " & "%.8f" formatFloat(this p)
-	}
-	kean_math_floatTransform3D_getTranslation: unmangled func -> FloatVector3D { this translation }
-	kean_math_floatTransform3D_getScaling: unmangled func -> FloatVector3D { FloatVector3D new(this scalingX, this scalingY, this scalingZ) }
-	kean_math_floatTransform3D_getInverse: unmangled func -> This { this inverse }
 }

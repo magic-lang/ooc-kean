@@ -83,6 +83,57 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 		}
 		result
 	}
+	sortByX: func {
+		This _quicksortX(this _vector _backend as FloatPoint2D*, 0, this count - 1)
+	}
+	toString: func -> String {
+		result := ""
+		for (i in 0 .. this _count)
+			result = result >> this[i] toString() >> "\n"
+		result
+	}
+	resampleLinear: func (start, end, interval: Float) -> This {
+		// Assumes list is sorted by x values.
+		resultCount := ((end - start) / interval) ceil() as Int + 1
+		result := This new()
+		previousIndex := 0
+		for (i in 0 .. resultCount) {
+			point := FloatPoint2D new(start + i * interval, 0.0f)
+			if (point x <= this[0] x)
+				point y = this[0] y
+			else if (point x >= this[this count - 1] x)
+				point y = this[this count - 1] y
+			else {
+				leftPoint, rightPoint: FloatPoint2D
+				for (j in previousIndex .. this count)
+					if (this[j] x <= point x) {
+						leftPoint = this[j]
+						rightPoint = this[Int minimum(j + 1, this count - 1)]
+						previousIndex = j
+					} else break
+				weight := (point x - leftPoint x) absolute / (rightPoint x - leftPoint x) absolute
+				point y = Float linearInterpolation(leftPoint y, rightPoint y, weight)
+			}
+			result add(point)
+		}
+		result
+	}
+	operator + (value: FloatPoint2D) -> This {
+		result := This new()
+		thisPointer := this pointer as FloatPoint2D*
+		for (i in 0 .. this _count)
+			result add(thisPointer[i] + value)
+		result
+	}
+	operator - (value: FloatPoint2D) -> This {
+		this + (-value)
+	}
+	operator [] (index: Int) -> FloatPoint2D {
+		this _vector[index] as FloatPoint2D
+	}
+	operator []= (index: Int, item: FloatPoint2D) {
+		this _vector[index] = item
+	}
 	_swap: static func (array: FloatPoint2D*, i, j: Int) {
 		temporary := array[i]
 		array[i] = array[j]
@@ -120,56 +171,5 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 			if (pivot < end)
 				This _quicksortX(array, pivot + 1, end)
 		}
-	}
-	sortByX: func {
-		This _quicksortX(this _vector _backend as FloatPoint2D*, 0, this count - 1)
-	}
-	operator + (value: FloatPoint2D) -> This {
-		result := This new()
-		thisPointer := this pointer as FloatPoint2D*
-		for (i in 0 .. this _count)
-			result add(thisPointer[i] + value)
-		result
-	}
-	operator - (value: FloatPoint2D) -> This {
-		this + (-value)
-	}
-	operator [] (index: Int) -> FloatPoint2D {
-		this _vector[index] as FloatPoint2D
-	}
-	operator []= (index: Int, item: FloatPoint2D) {
-		this _vector[index] = item
-	}
-	toString: func -> String {
-		result := ""
-		for (i in 0 .. this _count)
-			result = result >> this[i] toString() >> "\n"
-		result
-	}
-	resampleLinear: func (start, end, interval: Float) -> This {
-		// Assumes list is sorted by x values.
-		resultCount := ((end - start) / interval) ceil() as Int + 1
-		result := This new()
-		previousIndex := 0
-		for (i in 0 .. resultCount) {
-			point := FloatPoint2D new(start + i * interval, 0.0f)
-			if (point x <= this[0] x)
-				point y = this[0] y
-			else if (point x >= this[this count - 1] x)
-				point y = this[this count - 1] y
-			else {
-				leftPoint, rightPoint: FloatPoint2D
-				for (j in previousIndex .. this count)
-					if (this[j] x <= point x) {
-						leftPoint = this[j]
-						rightPoint = this[Int minimum(j + 1, this count - 1)]
-						previousIndex = j
-					} else break
-				weight := (point x - leftPoint x) absolute / (rightPoint x - leftPoint x) absolute
-				point y = Float linearInterpolation(leftPoint y, rightPoint y, weight)
-			}
-			result add(point)
-		}
-		result
 	}
 }

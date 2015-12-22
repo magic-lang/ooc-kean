@@ -27,9 +27,6 @@ FloatVector3D: cover {
 	length ::= this norm
 	norm ::= (this x squared + this y squared + this z squared) sqrt()
 	azimuth ::= this y atan2(this x)
-	basisX: static This { get { This new(1, 0, 0) } }
-	basisY: static This { get { This new(0, 1, 0) } }
-	basisZ: static This { get { This new(0, 0, 1) } }
 	init: func@ (=x, =y, =z)
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	pNorm: func (p: Float) -> Float {
@@ -55,6 +52,9 @@ FloatVector3D: cover {
 	clamp: func (floor, ceiling: This) -> This {
 		This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z))
 	}
+	toIntVector3D: func -> IntVector3D { IntVector3D new(this x as Int, this y as Int, this z as Int) }
+	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this x, this y, this z) }
+	toString: func -> String { "#{this x toString()}, #{this y toString()}, #{this z toString()}" }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
 	operator - (other: This) -> This { This new(this x - other x, this y - other y, this z - other z) }
 	operator - -> This { This new(-this x, -this y, -this z) }
@@ -70,10 +70,10 @@ FloatVector3D: cover {
 	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
-	toIntVector3D: func -> IntVector3D { IntVector3D new(this x as Int, this y as Int, this z as Int) }
-	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this x, this y, this z) }
 	operator as -> String { this toString() }
-	toString: func -> String { "#{this x toString()}, #{this y toString()}, #{this z toString()}" }
+	basisX: static This { get { This new(1, 0, 0) } }
+	basisY: static This { get { This new(0, 1, 0) } }
+	basisZ: static This { get { This new(0, 0, 1) } }
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new (parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat())

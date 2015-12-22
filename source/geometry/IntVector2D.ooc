@@ -25,8 +25,6 @@ IntVector2D: cover {
 	square ::= this x == this y
 	length ::= ((this x squared + this y squared) as Float sqrt())
 	absolute ::= This new(this x absolute, this y absolute)
-	basisX: static This { get { This new(1, 0) } }
-	basisY: static This { get { This new(0, 1) } }
 	init: func@ (=x, =y)
 	init: func@ ~square (length: Int) { this x = this y = length }
 	init: func@ ~default { this init(0, 0) }
@@ -37,6 +35,10 @@ IntVector2D: cover {
 	minimum: func ~Int (ceiling: Int) -> This { this minimum(This new(ceiling)) }
 	maximum: func ~Int (floor: Int) -> This { this maximum(This new(floor)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
+	polar: static func (radius, azimuth: Float) -> This { This new((radius * cos(azimuth)) as Int, (radius * sin(azimuth)) as Int) }
+	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x as Float, this y as Float) }
+	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x, this y) }
+	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
 	operator + (other: IntPoint2D) -> This { This new(this x + other x, this y + other y) }
 	operator - (other: This) -> This { This new(this x - other x, this y - other y) }
@@ -56,11 +58,9 @@ IntVector2D: cover {
 	operator > (other: This) -> Bool { this x > other x && this y > other y }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
-	polar: static func (radius, azimuth: Float) -> This { This new((radius * cos(azimuth)) as Int, (radius * sin(azimuth)) as Int) }
-	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x as Float, this y as Float) }
-	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x, this y) }
 	operator as -> String { this toString() }
-	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
+	basisX: static This { get { This new(1, 0) } }
+	basisY: static This { get { This new(0, 1) } }
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new (parts[0] toInt(), parts[1] toInt())

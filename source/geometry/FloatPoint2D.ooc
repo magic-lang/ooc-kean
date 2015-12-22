@@ -44,6 +44,10 @@ FloatPoint2D: cover {
 	minimum: func (ceiling: This) -> This { This new(Float minimum(this x, ceiling x), Float minimum(this y, ceiling y)) }
 	maximum: func (floor: This) -> This { This new(Float maximum(this x, floor x), Float maximum(this y, floor y)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
+	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
+	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x as Int, this y as Int) }
+	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x, this y) }
+	toString: func -> String { this x toString() & ", " clone() & this y toString() }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
 	operator + (other: FloatVector2D) -> This { This new(this x + other x, this y + other y) }
 	operator - (other: This) -> This { This new(this x - other x, this y - other y) }
@@ -61,19 +65,15 @@ FloatPoint2D: cover {
 	operator > (other: This) -> Bool { this x > other x && this y > other y }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
-	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
-	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x as Int, this y as Int) }
-	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x, this y) }
 	operator as -> String { this toString() }
-	toString: func -> String { this x toString() & ", " clone() & this y toString() }
+	basisX: static This { get { This new(1, 0) } }
+	basisY: static This { get { This new(0, 1) } }
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toFloat(), parts[1] toFloat())
 		parts free()
 		result
 	}
-	basisX: static This { get { This new(1, 0) } }
-	basisY: static This { get { This new(0, 1) } }
 	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
 		This new(Float linearInterpolation(a x, b x, ratio), Float linearInterpolation(a y, b y, ratio))
 	}

@@ -29,6 +29,8 @@ IntPoint2D: cover {
 	minimum: func (ceiling: This) -> This { This new(Int minimum(this x, ceiling x), Int minimum(this y, ceiling y)) }
 	maximum: func (floor: This) -> This { This new(Int maximum(this x, floor x), Int maximum(this y, floor y)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
+	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x as Float, this y as Float) }
+	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
 	operator + (other: IntVector2D) -> This { This new(this x + other x, this y + other y) }
 	operator - (other: This) -> This { This new(this x - other x, this y - other y) }
@@ -46,9 +48,7 @@ IntPoint2D: cover {
 	operator > (other: This) -> Bool { this x > other x && this y > other y }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
-	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x as Float, this y as Float) }
 	operator as -> String { this toString() }
-	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toInt(), parts[1] toInt())
