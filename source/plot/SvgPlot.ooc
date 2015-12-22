@@ -6,14 +6,14 @@ import PlotData2D
 import svg/Shapes
 
 SvgPlot: class {
+	colorCount := 0
+	symmetric: Bool
 	datasets: VectorList<PlotData2D> { get set }
 	title: String { get set }
 	fontSize: Int { get set }
 	xAxis: Axis { get set }
 	yAxis: Axis { get set }
 	colorList: VectorList<String> { get set }
-	colorCount := 0
-	symmetric: Bool
 	init: func {
 		this init(VectorList<PlotData2D> new())
 	}

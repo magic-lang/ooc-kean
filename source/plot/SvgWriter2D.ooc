@@ -10,11 +10,11 @@ import LinePlotData2D
 import svg/Shapes
 
 SvgWriter2D: class {
+	numberOfPlotsHorizontally: Int
 	file: File { get set }
 	svgPlots: VectorList<SvgPlot> { get set }
 	size: FloatVector2D { get set }
 	fontSize: Int { get set }
-	numberOfPlotsHorizontally: Int
 	init: func (=file) {
 		this init(file, VectorList<SvgPlot> new())
 	}
