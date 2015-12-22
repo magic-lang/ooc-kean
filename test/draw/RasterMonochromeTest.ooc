@@ -2,7 +2,6 @@ use ooc-base
 use ooc-draw
 use ooc-geometry
 use ooc-unit
-import lang/IO
 
 RasterMonochromeTest: class extends Fixture {
 	sourceSpace := "test/draw/input/Space.png"

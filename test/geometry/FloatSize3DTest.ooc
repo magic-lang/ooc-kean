@@ -1,7 +1,6 @@
 use ooc-unit
 use ooc-base
 use ooc-geometry
-import lang/IO
 
 FloatVector3DTest: class extends Fixture {
 	precision := 1.0e-4f

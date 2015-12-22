@@ -1,7 +1,6 @@
 use ooc-unit
 use ooc-geometry
 use ooc-base
-import lang/IO
 
 IntBox2DTest: class extends Fixture {
 	box0 := IntBox2D new (1, 2, 3, 4)

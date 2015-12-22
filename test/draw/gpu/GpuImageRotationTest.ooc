@@ -4,7 +4,6 @@ use ooc-draw-gpu
 use ooc-draw
 use ooc-opengl
 use ooc-unit
-import lang/IO
 import os/Time
 
 GpuImageRotationTest: class extends Fixture {

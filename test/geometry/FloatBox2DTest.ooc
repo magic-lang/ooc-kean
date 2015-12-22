@@ -2,7 +2,6 @@ use ooc-unit
 use ooc-geometry
 use ooc-collections
 use ooc-base
-import lang/IO
 
 FloatBox2DTest: class extends Fixture {
 	precision := 1.0e-5f

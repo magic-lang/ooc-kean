@@ -2,7 +2,6 @@ use ooc-unit
 use ooc-draw
 use ooc-base
 use ooc-geometry
-import lang/IO
 import io/File
 import StbImage
 

@@ -1,6 +1,5 @@
 use ooc-unit
 use ooc-geometry
-import lang/IO
 
 FloatTransform2DTest: class extends Fixture {
 	precision := 1.0e-5f
