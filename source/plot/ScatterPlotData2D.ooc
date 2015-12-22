@@ -10,8 +10,14 @@ Shape: enum {
 }
 
 ScatterPlotData2D: class extends PlotData2D {
-	shape := Shape Circle
-	scalingRelativeLineWidth := 5.0f
+	_shape := Shape Circle
+	_scalingRelativeLineWidth := 5.0f
+	shape: Shape {
+		get { this _shape }
+		set (newShape) {
+			this _shape = newShape
+		}
+	}
 	init: func ~default {
 		super()
 	}
@@ -28,14 +34,14 @@ ScatterPlotData2D: class extends PlotData2D {
 		result := ""
 		if (!this dataSeries empty) {
 			for (i in 0 .. this dataSeries count) {
-				match (this shape) {
+				match (this _shape) {
 					case Shape Circle =>
-						r := this scalingRelativeLineWidth / 2.0f * this lineWidth
+						r := this _scalingRelativeLineWidth / 2.0f * this lineWidth
 						result = result & Shapes circle(FloatPoint2D new((transform * this dataSeries[i]) x, (transform * dataSeries[i]) y), r, this opacity, this color)
 					case Shape Square =>
-						x := (transform * this dataSeries[i]) x - this scalingRelativeLineWidth / 2.0f * this lineWidth
-						y := (transform * this dataSeries[i]) y - this scalingRelativeLineWidth / 2.0f * this lineWidth
-						width := this scalingRelativeLineWidth * this lineWidth
+						x := (transform * this dataSeries[i]) x - this _scalingRelativeLineWidth / 2.0f * this lineWidth
+						y := (transform * this dataSeries[i]) y - this _scalingRelativeLineWidth / 2.0f * this lineWidth
+						width := this _scalingRelativeLineWidth * this lineWidth
 						result = result & Shapes rect(x, y, width, width, this opacity, this color)
 					case =>
 						result = result >> ""
@@ -49,7 +55,7 @@ ScatterPlotData2D: class extends PlotData2D {
 		start := FloatPoint2D new(this legendOffset as Float, this legendOffset + (fontSize * legendCount) as Float - (fontSize as Float) / 2.0f)
 		size := (fontSize as Float) * 0.8f
 		halfLineHeight := (fontSize as Float) / 2.0f
-		match (this shape) {
+		match (this _shape) {
 			case Shape Circle =>
 				result = result & Shapes circle(FloatPoint2D new(start x + halfLineHeight, start y), size / 2.0f, this opacity, this color)
 			case Shape Square =>

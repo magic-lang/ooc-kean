@@ -6,8 +6,15 @@ import PlotData2D
 import svg/Shapes
 
 SvgPlot: class {
-	colorCount := 0
-	symmetric: Bool
+	_colorCount := 0
+	_symmetric: Bool
+	colorCount ::= this _colorCount
+	symmetric: Bool {
+		get { this _symmetric }
+		set (newValue) {
+			this _symmetric = newValue
+		}
+	}
 	datasets: VectorList<PlotData2D> { get set }
 	title: String { get set }
 	fontSize: Int { get set }
@@ -19,7 +26,7 @@ SvgPlot: class {
 	}
 	init: func ~datasets (=datasets, title := "", xAxisLabel := "", yAxisLabel := "") {
 		this title = title
-		this symmetric = false
+		this _symmetric = false
 		this xAxis = Axis new(Orientation Horizontal, xAxisLabel)
 		this yAxis = Axis new(Orientation Vertical, yAxisLabel)
 		this setAxesMinMax()
@@ -49,7 +56,7 @@ SvgPlot: class {
 		this setColor()
 		this xAxis roundEndpoints()
 		this yAxis roundEndpoints()
-		if (this symmetric && aspectRatio != 1) {
+		if (this _symmetric && aspectRatio != 1) {
 			if (aspectRatio > 1) {
 				this xAxis min *= aspectRatio
 				this xAxis max *= aspectRatio
@@ -96,9 +103,9 @@ SvgPlot: class {
 					datasets[j] color = datasets[j] colorBgra svgRGBToString()
 					datasets[j] opacity = ((datasets[j] colorBgra svgRGBAlpha()) as Float) / 255.0f
 				} else {
-					datasets[j] color = colorList[this colorCount % this colorList count] clone()
+					datasets[j] color = colorList[this _colorCount % this colorList count] clone()
 					datasets[j] opacity = 1
-					this colorCount += 1
+					this _colorCount += 1
 				}
 			}
 		}

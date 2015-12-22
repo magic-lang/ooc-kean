@@ -34,10 +34,10 @@ SvgWriter2D: class {
 	init: func ~svgPlotWithFilename (filename: String, args: ...) {
 		this init(File new(filename), args)
 	}
-	init: func ~withPositioning (file: File, =numberOfPlotsHorizontally, args: ...) {
+	init: func ~withPositioning (file: File, =_numberOfPlotsHorizontally, args: ...) {
 		this init(file, args)
 	}
-	init: func ~withPositioningFilename (filename: String, =numberOfPlotsHorizontally, args: ...) {
+	init: func ~withPositioningFilename (filename: String, =_numberOfPlotsHorizontally, args: ...) {
 		this init(File new(filename), args)
 	}
 	init: func ~svgPlotsFilename (filename: String, svgPlots: VectorList<SvgPlot>) {
@@ -71,7 +71,7 @@ SvgWriter2D: class {
 		if (!this svgPlots empty) {
 			numPlotsX: Int
 			numPlotsY: Int
-			if (this numberOfPlotsHorizontally == 0) {
+			if (this _numberOfPlotsHorizontally == 0) {
 				if (this svgPlots count == 1)
 					numPlotsX = 1
 				else if (this svgPlots count < 5)
@@ -80,7 +80,7 @@ SvgWriter2D: class {
 					numPlotsX = 3
 				numPlotsY = this svgPlots count modulo(numPlotsX) != 0 ? 1 + this svgPlots count / numPlotsX : this svgPlots count / numPlotsX
 			} else {
-				numPlotsX = numberOfPlotsHorizontally
+				numPlotsX = this _numberOfPlotsHorizontally
 				numPlotsY = (this svgPlots count as Float / numPlotsX as Float) ceil() as Int
 			}
 			plotSize := FloatVector2D new(this size x / numPlotsX, this size y / numPlotsY)
