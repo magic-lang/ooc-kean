@@ -16,6 +16,7 @@
 */
 
 import FloatComplex
+use ooc-base
 use ooc-collections
 import FloatVectorList
 
@@ -104,6 +105,15 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		result := ""
 		for (i in 0 .. this _count)
 			result = result >> this[i] toString() >> "\n"
+		result
+	}
+	toText: func -> Text {
+		result: Text
+		textBuilder := TextBuilder new()
+		for (i in 0 .. this _count)
+			textBuilder append(this[i] toText())
+		result = textBuilder join(t"\n")
+		textBuilder free()
 		result
 	}
 	getZeros: static func (count: Int) -> This {
