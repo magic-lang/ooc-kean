@@ -125,7 +125,7 @@ BoolVectorListTest: class extends Fixture {
 		this add("toText", func {
 			list := this _createFromText(t"101")
 			text := list toText()
-			expect(text, is equal to(t"true\nfalse\ntrue\n"))
+			expect(text, is equal to(t"true\nfalse\ntrue"))
 		})
 	}
 	_createFromText: func (content: Text) -> BoolVectorList {

@@ -111,11 +111,9 @@ BoolVectorList: class extends VectorList<Bool> {
 	toText: func -> Text {
 		result: Text
 		textBuilder := TextBuilder new()
-		for (i in 0 .. this _count) {
+		for (i in 0 .. this _count)
 			textBuilder append(this[i] toText())
-			textBuilder append(t"\n")
-		}
-		result = textBuilder toText()
+		result = textBuilder join(t"\n")
 		textBuilder free()
 		result
 	}
