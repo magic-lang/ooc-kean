@@ -3,16 +3,6 @@ import io/[Reader, Writer]
 
 Pipe: abstract class {
 	eof := false
-	new: static func -> This {
-		version(unix || apple) {
-			return PipeUnix new() as This
-		}
-		version(windows) {
-			return PipeWin32 new() as This
-		}
-		Exception new(This, "Unsupported platform!\n") throw()
-		null
-	}
 	read: func ~char -> Char {
 		c: Char
 		howmuch := read(c& as CString, 1)
@@ -67,6 +57,16 @@ Pipe: abstract class {
 	}
 	writer: func -> PipeWriter {
 		PipeWriter new(this)
+	}
+	new: static func -> This {
+		version(unix || apple) {
+			return PipeUnix new() as This
+		}
+		version(windows) {
+			return PipeWin32 new() as This
+		}
+		Exception new(This, "Unsupported platform!\n") throw()
+		null
 	}
 }
 

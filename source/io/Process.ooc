@@ -22,38 +22,6 @@ Process: abstract class {
 	// PID of the child process
 	pid = 0: Long
 
-	new: static func ~fromArray (args: String[]) -> This {
-		p := VectorList<String> new(args length, false)
-		for (i in 0 .. args length) {
-			arg := args[i]
-			p add(arg)
-		}
-		new(p)
-	}
-
-	new: static func (.args) -> This {
-		version(unix || apple) {
-			return ProcessUnix new(args) as This
-		}
-		version(windows) {
-			return ProcessWin32 new(args) as This
-		}
-		Exception new(This, "os/Process is unsupported on your platform!") throw()
-		null
-	}
-
-	new: static func ~withEnvFromArray (args: String[], .env) -> This {
-		p := new(args)
-		p env = env
-		p
-	}
-
-	new: static func ~withEnv (.args, .env) -> This {
-		p := new(args)
-		p env = env
-		p
-	}
-
 	/** Terminate the child process with a SIGTERM signal */
 	terminate: abstract func
 
@@ -112,6 +80,37 @@ Process: abstract class {
 		for (i in 1 .. args count)
 			result = " " >> (result >> args[i])
 		result = result replaceAll("\\", "\\\\")
+	}
+	new: static func ~fromArray (args: String[]) -> This {
+		p := VectorList<String> new(args length, false)
+		for (i in 0 .. args length) {
+			arg := args[i]
+			p add(arg)
+		}
+		new(p)
+	}
+
+	new: static func (.args) -> This {
+		version(unix || apple) {
+			return ProcessUnix new(args) as This
+		}
+		version(windows) {
+			return ProcessWin32 new(args) as This
+		}
+		Exception new(This, "os/Process is unsupported on your platform!") throw()
+		null
+	}
+
+	new: static func ~withEnvFromArray (args: String[], .env) -> This {
+		p := new(args)
+		p env = env
+		p
+	}
+
+	new: static func ~withEnv (.args, .env) -> This {
+		p := new(args)
+		p env = env
+		p
 	}
 }
 

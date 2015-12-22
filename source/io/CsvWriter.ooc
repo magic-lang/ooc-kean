@@ -31,6 +31,9 @@ CsvWriter: class {
 		}
 		this _fileWriter write("\r\n")
 	}
+	_isWhitespace: func (value: Char) -> Bool {
+		value == '\t' || value == ' ' || value == '\r' || value == '\n'
+	}
 	open: static func ~text (filename: Text) -> This {
 		filenameString := filename toString()
 		result := This open(filenameString)
@@ -42,8 +45,5 @@ CsvWriter: class {
 		result := This new(FileWriter new(file))
 		file free()
 		result
-	}
-	_isWhitespace: func (value: Char) -> Bool {
-		value == '\t' || value == ' ' || value == '\r' || value == '\n'
 	}
 }
