@@ -165,5 +165,4 @@ RasterUv: class extends RasterPacked {
 		}
 		result
 	}
-
 }

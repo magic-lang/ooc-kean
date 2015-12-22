@@ -206,6 +206,5 @@ Gles3Context: class extends GLContext {
 		result := This new()
 		result _generate(sharedContext) ? result : null
 	}
-
 }
 }
