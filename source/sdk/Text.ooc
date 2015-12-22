@@ -325,39 +325,3 @@ makeTextLiteral: func (str: CString, strLen: Int) -> Text { Text new(str, strLen
 operator == (left: String, right: Text) -> Bool { Text new(left) == right }
 operator != (left: String, right: Text) -> Bool { !(left == right) }
 operator []= (left: TextBuffer, range: Range, right: Text) { right _buffer copyTo(left slice(range min, range count)) }
-
-extend Int {
-	toText: func -> Text {
-		string := this toString()
-		result := Text new(string) copy()
-		string free()
-		result
-	}
-}
-
-extend UInt {
-	toText: func -> Text {
-		string := this toString()
-		result := Text new(string) copy()
-		string free()
-		result
-	}
-}
-
-extend Float {
-	toText: func -> Text {
-		string := this toString()
-		result := Text new(string) copy()
-		string free()
-		result
-	}
-}
-
-extend Double {
-	toText: func -> Text {
-		string := this toString()
-		result := Text new(string) copy()
-		string free()
-		result
-	}
-}

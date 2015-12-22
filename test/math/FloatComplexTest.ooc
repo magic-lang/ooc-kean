@@ -104,6 +104,12 @@ FloatComplexTest: class extends Fixture {
 			expect(FloatComplex rootOfUnity(5, 4) real, is equal to(0.309f) within(0.01f))
 			expect(FloatComplex rootOfUnity(5, 4) imaginary, is equal to(-0.951f) within(0.01f))
 		})
+		this add("toText", func {
+			complex := FloatComplex new(10, 5)
+			text := complex toText() take()
+			expect(text, is equal to(t"10.00 +5.00i"))
+			text free()
+		})
 	}
 }
 

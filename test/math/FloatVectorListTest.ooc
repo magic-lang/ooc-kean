@@ -409,6 +409,14 @@ FloatVectorListTest: class extends Fixture {
 			offsetValues1 free()
 			offsetValues2 free()
 		})
+		this add("toText", func {
+			list := FloatVectorList new()
+			list add(1.0f) . add(2.0f) . add(3.0f)
+			text := list toText() take()
+			expect(text, is equal to(t"1.00\n2.00\n3.00"))
+			text free()
+			list free()
+		})
 	}
 }
 

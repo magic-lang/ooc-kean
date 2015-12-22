@@ -113,6 +113,16 @@ FloatComplexVectorListTest: class extends Fixture {
 
 			added free(); subtracted free(); list free(); other free()
 		})
+		this add("toText", func {
+			list := FloatComplexVectorList new()
+			list add(FloatComplex new(-1, 2))
+			list add(FloatComplex new(3, -4))
+			list add(FloatComplex new(-5, 6))
+			text := list toText() take()
+			expect(text, is equal to(t"-1.00 +2.00i\n3.00 -4.00i\n-5.00 +6.00i"))
+			text free()
+			list free()
+		})
 	}
 
 	free: override func {
