@@ -14,6 +14,7 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
+use ooc-base
 use ooc-collections
 import FloatVectorList
 
@@ -83,6 +84,14 @@ IntVectorList: class extends VectorList<Int> {
 		result := ""
 		for (i in 0 .. this _count)
 			result = result >> this[i] toString() >> "\n"
+		result
+	}
+	toText: func -> Text {
+		result: Text
+		textBuilder := TextBuilder new()
+		for (i in 0 .. this _count)
+			textBuilder append(this[i] toText())
+		result = textBuilder join(t"\n")
 		result
 	}
 }
