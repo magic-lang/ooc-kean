@@ -32,6 +32,18 @@ OwnedBuffer: cover {
 		this init(gc_malloc(size), size, owner)
 	}
 	init: func@ ~fromData (=_pointer, =_size, =_owner)
+	free: func@ -> Bool {
+		result: Bool
+		if (result = this isOwned)
+			gc_free(this _pointer)
+		this _pointer = null
+		this _size = 0
+		this _owner = Owner Unknown
+		result
+	}
+	free: func@ ~withCriteria (criteria: Owner) -> Bool {
+		this _owner == criteria && this free()
+	}
 	take: func -> This { // call by value -> modifies copy of cover
 		if (this _owner == Owner Receiver && this _pointer != null)
 			this _owner = Owner Sender
@@ -44,18 +56,6 @@ OwnedBuffer: cover {
 	}
 	claim: func -> This {
 		this isOwned ? this : this copy()
-	}
-	free: func@ -> Bool {
-		result: Bool
-		if (result = this isOwned)
-			gc_free(this _pointer)
-		this _pointer = null
-		this _size = 0
-		this _owner = Owner Unknown
-		result
-	}
-	free: func@ ~withCriteria (criteria: Owner) -> Bool {
-		this _owner == criteria && this free()
 	}
 	slice: func ~untilEnd (start: Int) -> This {
 		this slice(start, this _size - start)

@@ -191,17 +191,22 @@ extend Float {
 	}
 	toRadians: func -> This { This pi / 180.0f * this }
 	toDegrees: func -> This { 180.0f / This pi * this }
-	maximum: static func (first, second: This) -> This {
-		first > second ? first : second
-	}
-	minimum: static func (first, second: This) -> This {
-		first < second ? first : second
-	}
 	modulo: func (divisor: This) -> This {
 		result := this
 		if (result < 0)
 			result += ((result abs()) / divisor) ceil() * divisor
 		result mod(divisor)
+	}
+	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
+	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this < other && !this equals(other) }
+	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this > other && !this equals(other) }
+	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this greaterThan(other) }
+	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this lessThan(other) }
+	maximum: static func (first, second: This) -> This {
+		first > second ? first : second
+	}
+	minimum: static func (first, second: This) -> This {
+		first < second ? first : second
 	}
 	linearInterpolation: static func (a: This, b: This, ratio: This) -> This {
 		(ratio * (b - a)) + a
@@ -242,11 +247,6 @@ extend Float {
 		result := coefficient toString() >> "E" & power toString()
 		result
 	}
-	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
-	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this < other && !this equals(other) }
-	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this > other && !this equals(other) }
-	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this greaterThan(other) }
-	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this lessThan(other) }
 }
 
 extend LDouble {
