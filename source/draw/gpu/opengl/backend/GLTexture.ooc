@@ -39,11 +39,11 @@ InterpolationType: enum {
 
 GLTexture: abstract class {
 	_backend: UInt
-	backend ::= this _backend
 	_size: IntVector2D
-	size ::= this _size
 	_type: TextureType
 	_target: UInt
+	backend ::= this _backend
+	size ::= this _size
 
 	init: func (=_type, =_size)
 	generateMipmap: abstract func
