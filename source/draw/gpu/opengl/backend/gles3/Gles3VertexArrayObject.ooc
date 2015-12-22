@@ -24,8 +24,6 @@ import Gles3Debug
 version(!gpuOff) {
 Gles3VertexArrayObject: class extends GLVertexArrayObject {
 	_backend: UInt
-	positionLayout: const static UInt = 0
-	textureCoordinateLayout: const static UInt = 1
 	_vertexCount: Int
 
 	init: func ~twoDimensions (vertices, textureCoordinates: FloatPoint2D[]) {
@@ -59,6 +57,12 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 		}
 		this _generate(packedArray[0]&, 3, vertexCount)
 	}
+	free: override func {
+		version(debugGL) { validateStart("VertexArrayObject free") }
+		glDeleteVertexArrays(1, this _backend&)
+		version(debugGL) { validateEnd("VertexArrayObject free") }
+		super()
+	}
 	_generate: func (packedArray: Float*, dimensions, vertexCount: Int) {
 		version(debugGL) { validateStart("VertexArrayObject _generate") }
 		glGenVertexArrays(1, this _backend&)
@@ -81,12 +85,6 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 		glDeleteBuffers(1, vertexBuffer&)
 		version(debugGL) { validateEnd("VertexArrayObject _generate") }
 	}
-	free: override func {
-		version(debugGL) { validateStart("VertexArrayObject free") }
-		glDeleteVertexArrays(1, this _backend&)
-		version(debugGL) { validateEnd("VertexArrayObject free") }
-		super()
-	}
 	bind: func {
 		version(debugGL) { validateStart("VertexArrayObject bind") }
 		glBindVertexArray(this _backend)
@@ -104,5 +102,7 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 		version(debugGL) { validateEnd("VertexArrayObject draw") }
 		this unbind()
 	}
+	positionLayout: const static UInt = 0
+	textureCoordinateLayout: const static UInt = 1
 }
 }
