@@ -40,6 +40,9 @@ FloatComplex: cover {
 	toString: func -> String {
 		this real toString() >> (this imaginary > 0 ? " +" : " ") & this imaginary toString() >> "i"
 	}
+	toText: func -> Text {
+		this real toText() + (this imaginary > 0 ? t" +" : t" ") + this imaginary toText() + t"i"
+	}
 	parse: static func (input: Text) -> This {
 		parts := input find('+') >= 0 ? input split('+') : input split(' ')
 		result := This new(parts[0] toFloat(), parts[1] toFloat())
