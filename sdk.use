@@ -7,13 +7,13 @@ Imports: lang/Character
 Imports: lang/Exception
 Imports: lang/Format
 Imports: lang/IO
-Imports: lang/Iterators
+Imports: Iterators
 Imports: lang/Memory
-Imports: lang/Numbers
+Imports: Numbers
 Imports: lang/String
-Imports: lang/stdlib
+Imports: stdlib
 Imports: lang/types
-Imports: lang/VarArgs
+Imports: VarArgs
 Imports: math
 Imports: Buffer
 Imports: Owner
