@@ -14,14 +14,14 @@ Promise: abstract class {
 	wait: abstract func -> Bool
 	wait: abstract func ~timeout (seconds: Double) -> Bool
 	cancel: virtual func -> Bool { false }
-	start: static func (action: Func) -> This {
-		_ThreadPromise new(action)
-	}
 	operator + (other: This) -> PromiseCollector {
 		collector := PromiseCollector new()
 		collector add(this)
 		collector add(other)
 		collector
+	}
+	start: static func (action: Func) -> This {
+		_ThreadPromise new(action)
 	}
 	kean_concurrent_promise_wait: unmangled func { this wait() }
 	kean_concurrent_promise_wait_timeout: unmangled func (timeout: Double) { this wait(timeout) }

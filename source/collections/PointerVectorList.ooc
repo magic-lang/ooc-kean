@@ -30,6 +30,12 @@ PointerVectorList: class {
 	}
 
 	init: func (=_vector)
+	free: override func {
+		for (i in 0 .. this count)
+			gc_free(this _vector[i])
+		this _vector free()
+		super()
+	}
 	add: func (item: Pointer) {
 		if (this _vector count <= this count) {
 			this _vector resize(this _vector count + 8)
@@ -59,13 +65,6 @@ PointerVectorList: class {
 		this _vector copy(index + 1, index)
 		this count -= 1
 		tmp
-	}
-
-	free: override func {
-		for (i in 0 .. this count)
-			gc_free(this _vector[i])
-		this _vector free()
-		super()
 	}
 
 	operator [] (index: Int) -> Pointer {

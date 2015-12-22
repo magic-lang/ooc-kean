@@ -3,7 +3,6 @@ import Synchronized
 
 ReferenceCounter: class {
 	_target: Object
-	count: static Int = 0
 	_count: Int = 0
 	_kill := false
 	_lock: Mutex
@@ -21,6 +20,12 @@ ReferenceCounter: class {
 		this _target = target
 		this _lock = Mutex new(mutexType)
 //		"  RC, #{This count}, #{this _target class name}" println()
+	}
+	free: override func {
+		This count -= 1
+//		"--RC, #{This count}, #{this _target class name}" println()
+		this _lock free()
+		super()
 	}
 	update: func (delta: Int) {
 		if (delta != 0) {
@@ -41,13 +46,8 @@ ReferenceCounter: class {
 			}
 		}
 	}
-	free: override func {
-		This count -= 1
-//		"--RC, #{This count}, #{this _target class name}" println()
-		this _lock free()
-		super()
-	}
 	increase: func { this update(1) }
 	decrease: func { this update(-1) }
 	toString: func -> String { "Object ID: " << this _target as Pointer toString() >> " Count: " & this _count toString() }
+	count: static Int = 0
 }

@@ -18,8 +18,8 @@
 PointerVector: abstract class {
 	_backend: Pointer*
 	_count: Int
-	count ::= this _count
 	_freeContent: Bool
+	count ::= this _count
 
 	init: /* protected */ func ~preallocated (=_backend, =_count, freeContent := false)
 	init: /* protected */ func (=_count, freeContent := false) {

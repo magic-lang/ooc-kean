@@ -70,7 +70,6 @@ DateTime: cover {
 		else
 			raise ("invalid input specified for constructor(year,month,day,hour,minute,second,ms)")
 	}
-	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
 
 	millisecond: func -> Int {
 		This _ticksToDateTimeHelper(this ticks) millisecond
@@ -184,7 +183,7 @@ DateTime: cover {
 			Time currentDateTime()
 		}
 	}
-
+	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
 	_ticksToDateTimeHelper: static func (totalTicks: Int64) -> DateTimeData {
 		fourYearBlocks := totalTicks / This ticksPerFourYears
 		year := 4 * fourYearBlocks

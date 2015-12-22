@@ -17,14 +17,20 @@
 
 Event: class {
 	_head: Func
-	head ::= this _head
 	_tail: This
+	head ::= this _head
 	tail ::= this _tail
 	init: func ~nil {
 		this init(func) // TODO: this is really a stupid way to create null pointer although no null text is required
 	}
 	init: func (=_head)
 	init: func ~add (=_head, =_tail)
+	free: override func {
+		(this _head as Closure) free()
+		if (this _tail != null)
+			this _tail free()
+		super()
+	}
 	add: func (action: Func) -> This {
 		this add(This new(action, null))
 	}
@@ -41,24 +47,24 @@ Event: class {
 			this _tail call()
 		this _head()
 	}
-	free: override func {
-		(this _head as Closure) free()
-		if (this _tail != null)
-			this _tail free()
-		super()
-	}
 }
 
 Event1: class <T> {
 	_head: Func(T)
-	head ::= this _head
 	_tail: This<T>
+	head ::= this _head
 	tail ::= this _tail
 	init: func ~nil {
 		this init(func (argument: T)) // TODO: this is really a stupid way to create null pointer although no null text is required
 	}
 	init: func (=_head)
 	init: func ~add (=_head, =_tail)
+	free: override func {
+		(this _head as Closure) free()
+		if (this _tail != null)
+			this _tail free()
+		super()
+	}
 	add: func (action: Func(T)) -> This<T> {
 		this add(This<T> new(action, null))
 	}
@@ -75,24 +81,24 @@ Event1: class <T> {
 			this _tail call(argument)
 		this _head(argument)
 	}
-	free: override func {
-		(this _head as Closure) free()
-		if (this _tail != null)
-			this _tail free()
-		super()
-	}
 }
 
 Event2: class <T0, T1> { // TODO: Write tests and fix this
 	_head: Func(T0, T1)
-	head ::= this _head
 	_tail: This<T0, T1>
+	head ::= this _head
 	tail ::= this _tail
 	init: func ~nil {
 		this init(func (argument0: T0, argument1: T1)) // TODO: this is really a stupid way to create null pointer although no null text is required
 	}
 	init: func (=_head)
 	init: func ~add (=_head, =_tail)
+	free: override func {
+		(this _head as Closure) free()
+		if (this _tail != null)
+			this _tail free()
+		super()
+	}
 	add: func (action: Func(T0, T1)) -> This<T0, T1> {
 		this add(This<T0, T1> new(action, null))
 	}
@@ -108,11 +114,5 @@ Event2: class <T0, T1> { // TODO: Write tests and fix this
 		if (this _tail != null)
 			this _tail call(argument0, argument1)
 		this _head(argument0, argument1)
-	}
-	free: override func {
-		(this _head as Closure) free()
-		if (this _tail != null)
-			this _tail free()
-		super()
 	}
 }

@@ -70,6 +70,14 @@ TimeSpan: cover {
 		result = result replaceAll(t"%s", t"%d" format(this elapsedSeconds() modulo(60)))
 		result replaceAll(t"%z", t"%d" format(this elapsedMilliseconds() modulo(1000)))
 	}
+	compareTo: func (other: This) -> Order {
+		if (this ticks > other ticks)
+			Order greater
+		else if (this ticks < other ticks)
+			Order less
+		else
+			Order equal
+	}
 	operator + (value: Int) -> This {
 		This new(this ticks + value)
 	}
@@ -111,14 +119,6 @@ TimeSpan: cover {
 	}
 	operator / (value: Double) -> This {
 		This new(this ticks / value)
-	}
-	compareTo: func (other: This) -> Order {
-		if (this ticks > other ticks)
-			Order greater
-		else if (this ticks < other ticks)
-			Order less
-		else
-			Order equal
 	}
 	operator == (other: This) -> Bool {
 		this compareTo(other) == Order equal
