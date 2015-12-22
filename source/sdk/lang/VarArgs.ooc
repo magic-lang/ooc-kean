@@ -23,6 +23,12 @@ VarArgs: cover {
 	args, argsPtr: UInt8* // because the size of stuff (T size) is expressed in bytes
 	count: SSizeT // number of elements
 
+	// private api used by C code
+	init: func@ (=count, bytes: SizeT) {
+		args = gc_malloc(bytes + (count * Class size))
+		argsPtr = args
+	}
+
 	each: func (f: Func <T> (T)) {
 		countdown := count
 
@@ -52,12 +58,6 @@ VarArgs: cover {
 			// skip the size of the argument - aligned on 8 bytes, that is.
 			argsPtr += __pointer_align(type size)
 		}
-	}
-
-	// private api used by C code
-	init: func@ (=count, bytes: SizeT) {
-		args = gc_malloc(bytes + (count * Class size))
-		argsPtr = args
 	}
 
 	// Internal testing method to add arguments

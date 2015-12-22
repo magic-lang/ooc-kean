@@ -113,16 +113,6 @@ Exception: class {
 	origin: Class
 	message : String
 
-	addBacktrace: func {
-		backtrace := BacktraceHandler get() backtrace()
-		if (backtrace)
-			this backtraces push(backtrace)
-	}
-	printBacktrace: func {
-		handler := BacktraceHandler get()
-		for (i in 0 .. this backtraces size)
-			stderr write(handler backtraceSymbols(this backtraces peek(i)))
-	}
 	init: func (=origin, =message)
 	init: func ~noOrigin (=message) { this init(null, message) }
 	free: override func {
@@ -133,6 +123,16 @@ Exception: class {
 		}
 		this backtraces free()
 		super()
+	}
+	addBacktrace: func {
+		backtrace := BacktraceHandler get() backtrace()
+		if (backtrace)
+			this backtraces push(backtrace)
+	}
+	printBacktrace: func {
+		handler := BacktraceHandler get()
+		for (i in 0 .. this backtraces size)
+			stderr write(handler backtraceSymbols(this backtraces peek(i)))
 	}
 	formatMessage: func -> String {
 		if (this origin)
