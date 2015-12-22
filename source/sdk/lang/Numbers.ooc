@@ -35,6 +35,12 @@ Long: cover from signed long extends LLong
 
 Int: cover from signed int extends LLong {
 	toString: func -> String { "%d" formatInt(this) }
+	toText: func -> Text {
+		string := this toString()
+		result := Text new(string) copy()
+		string free()
+		result
+	}
 }
 
 Short: cover from signed short extends LLong
@@ -50,6 +56,12 @@ ULong: cover from unsigned long extends ULLong
 
 UInt: cover from unsigned int extends ULLong {
 	toString: func -> String { "%u" formatUInt(this) }
+	toText: func -> Text {
+		string := this toString()
+		result := Text new(string) copy()
+		string free()
+		result
+	}
 }
 
 UShort: cover from unsigned short extends ULLong
@@ -65,11 +77,23 @@ Double: cover from double extends LDouble {
 	toString: func -> String {
 		"%.2f" formatDouble(this)
 	}
+	toText: func -> Text {
+		string := this toString()
+		result := Text new(string) copy()
+		string free()
+		result
+	}
 }
 
 Float: cover from float extends LDouble {
 	toString: func -> String {
 		"%.2f" formatFloat(this)
+	}
+	toText: func -> Text {
+		string := this toString()
+		result := Text new(string) copy()
+		string free()
+		result
 	}
 }
 
