@@ -25,15 +25,6 @@ Fixture: abstract class {
 	failureNames: static VectorList<String>
 	name: String
 	tests := VectorList<Test> new(32, false)
-	printFailures: static func {
-		"Total time: %.2f s" printfln(This totalTime)
-		if (This failureNames && (This failureNames count > 0)) {
-			"Failed tests: %i [" printf(This failureNames count)
-			for (i in 0 .. This failureNames count - 1)
-				(This failureNames[i] + ", ") print()
-			(This failureNames[This failureNames count -1] + ']') println()
-		}
-	}
 	init: func (=name) {
 		if (!This exitHandlerRegistered) {
 			This exitHandlerRegistered = true
@@ -126,8 +117,19 @@ Fixture: abstract class {
 			result append(Text new(" [tolerance: %.8f]" formatDouble((constraint parent as CompareWithinConstraint) precision)))
 		result join(' ')
 	}
-	is ::= static IsConstraints new()
+	_testsFailed: static Bool
 	_expectCount: static Int = 0
+	is ::= static IsConstraints new()
+	testsFailed: static Bool { get { This _testsFailed } }
+	printFailures: static func {
+		"Total time: %.2f s" printfln(This totalTime)
+		if (This failureNames && (This failureNames count > 0)) {
+			"Failed tests: %i [" printf(This failureNames count)
+			for (i in 0 .. This failureNames count - 1)
+				(This failureNames[i] + ", ") print()
+			(This failureNames[This failureNames count -1] + ']') println()
+		}
+	}
 	expect: static func (value: Object, constraint: Constraint) {
 		++This _expectCount
 		if (!constraint verify(value))
@@ -184,8 +186,6 @@ Fixture: abstract class {
 		string print()
 		fflush(stdout)
 	}
-	_testsFailed: static Bool
-	testsFailed: static Bool { get { This _testsFailed } }
 }
 
 TestFailedException: class extends Exception {
@@ -201,10 +201,10 @@ Test: class {
 	name: String
 	action: Func
 	init: func (=name, =action)
-	run: func { this action() }
 	free: override func {
 		(this action as Closure) free()
 		this name free()
 		super()
 	}
+	run: func { this action() }
 }
