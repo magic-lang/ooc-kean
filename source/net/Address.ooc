@@ -339,7 +339,6 @@ operator != (a1, a2: IPAddress) -> Bool {
 }
 
 SocketAddress: abstract class {
-
 	family: abstract func -> Int
 	host: abstract func -> IPAddress
 	port: abstract func -> Int
