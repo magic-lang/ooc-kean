@@ -36,14 +36,6 @@ _RecycleBin: class {
 			list[i] _recyclable = false
 		list clear()
 	}
-	clean: func {
-		this _mutex lock()
-		This _cleanList(this _monochrome)
-		This _cleanList(this _bgr)
-		This _cleanList(this _bgra)
-		This _cleanList(this _uv)
-		this _mutex unlock()
-	}
 	free: override func {
 		this clean()
 		this _monochrome free()
@@ -52,6 +44,14 @@ _RecycleBin: class {
 		this _uv free()
 		this _mutex free()
 		super()
+	}
+	clean: func {
+		this _mutex lock()
+		This _cleanList(this _monochrome)
+		This _cleanList(this _bgr)
+		This _cleanList(this _bgra)
+		This _cleanList(this _uv)
+		this _mutex unlock()
 	}
 	_add: func (image: OpenGLPacked, list: VectorList<OpenGLPacked>) {
 		this _mutex lock()

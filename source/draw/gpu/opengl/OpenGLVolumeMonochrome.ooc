@@ -27,10 +27,10 @@ OpenGLVolumeMonochrome: class {
 	init: func (size: IntVector3D, pixels: UInt8* = null, context: OpenGLContext) {
 		this _backend = context backend createVolumeTexture(size, pixels)
 	}
-	upload: func (pixels: UInt8*) { this _backend upload(pixels) }
 	free: override func {
 		this _backend free()
 		super()
 	}
+	upload: func (pixels: UInt8*) { this _backend upload(pixels) }
 }
 }
