@@ -4,13 +4,13 @@ import lang/equalities
  * List interface for a data container
  */
 List: abstract class <T> extends BackIterable<T> {
+	equals? := getStandardEquals(T)
+
 	size: SSizeT {
 		get {
 			getSize()
 		}
 	}
-
-	equals? := getStandardEquals(T)
 
 	/**
 	 * Appends the specified element to the end of this list.

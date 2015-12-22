@@ -30,6 +30,11 @@ VectorList: class <T> {
 		this init(HeapVector<T> new(capacity, freeContent))
 	}
 	init: func (=_vector)
+	free: override func {
+		this clear()
+		this _vector free()
+		super()
+	}
 
 	add: func (item: T) {
 		if (this _vector capacity <= this _count)
@@ -69,30 +74,11 @@ VectorList: class <T> {
 		this _vector _free(0, this _count)
 		this _count = 0
 	}
-	free: override func {
-		this clear()
-		this _vector free()
-		super()
-	}
 	reverse: func -> This<T> {
 		result := This<T> new(this _count)
 		for (i in 0 .. this _count)
 			result add(this[(this _count - 1) - i])
 		result
-	}
-	operator [] (index: Int) -> T {
-		version (safe) {
-			if (index >= this count)
-				raise("Accessing VectorList index out of range in get operator")
-		}
-		this _vector[index]
-	}
-	operator []= (index: Int, item: T) {
-		version (safe) {
-			if (index >= this count)
-				raise("Accessing VectorList index out of range in set operator")
-		}
-		this _vector[index] = item
 	}
 	sort: func (greaterThan: Func (T, T) -> Bool) {
 		inOrder := false
@@ -165,6 +151,20 @@ VectorList: class <T> {
 		this getSliceInto(start .. end, buffer)
 	}
 	iterator: func -> Iterator<T> { _VectorListIterator<T> new(this) }
+	operator [] (index: Int) -> T {
+		version (safe) {
+			if (index >= this count)
+				raise("Accessing VectorList index out of range in get operator")
+		}
+		this _vector[index]
+	}
+	operator []= (index: Int, item: T) {
+		version (safe) {
+			if (index >= this count)
+				raise("Accessing VectorList index out of range in set operator")
+		}
+		this _vector[index] = item
+	}
 }
 
 _VectorListIterator: class <T> extends Iterator<T> {
