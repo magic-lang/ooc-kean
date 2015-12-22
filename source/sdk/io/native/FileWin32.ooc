@@ -267,16 +267,6 @@ version(windows) {
 			result
 		}
 
-		_normalizePath: static func (in: String) -> String {
-			// normalize "c:/Dev" to "C:\Dev"
-			result := in replaceAll("/", "\\")
-			if (result size >= 2 && result[1] == ':') {
-				// normalize "c:\Dev" to "C:\Dev"
-				result = result[0 .. 1] toUpper() + result[1 .. -1]
-			}
-			result
-		}
-
 		/**
 		 * List the name of the children of this path
 		 * Works only on directories, obviously
@@ -291,6 +281,16 @@ version(windows) {
 		 */
 		getChildren: func -> VectorList<File> {
 			_getChildren ( File )
+		}
+
+		_normalizePath: static func (in: String) -> String {
+			// normalize "c:/Dev" to "C:\Dev"
+			result := in replaceAll("/", "\\")
+			if (result size >= 2 && result[1] == ':') {
+				// normalize "c:\Dev" to "C:\Dev"
+				result = result[0 .. 1] toUpper() + result[1 .. -1]
+			}
+			result
 		}
 	}
 }

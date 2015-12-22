@@ -68,19 +68,6 @@ FileWriter: class extends Writer {
 		init(fileName, false)
 	}
 
-	createTempFile: static func (pattern, mode: String) -> This {
-	version (!windows) {
-		return new(fdopen(mkstemp(pattern), mode))
-	}
-	version (windows) {
-		// mkstemp is missing on Windows, that sucks, but let's use the
-		// worse method instead
-		new(mktemp(pattern) toString(), mode)
-	}
-	Exception new("FileWriter createTempFile() is unsupported on your os") throw()
-	null
-	}
-
 	/**
 	   Write a given number of bytes to this file, and return
 	   the number that has been effectively written.
@@ -104,7 +91,7 @@ FileWriter: class extends Writer {
 	}
 
 	// TODO: Reimplement asPipe() when this file is moved to source/io
-	/*asPipe: func -> Pipe { 
+	/*asPipe: func -> Pipe {
 		version(unix || apple) {
 			return PipeUnix new(-1, file no())
 		} else {
@@ -112,4 +99,17 @@ FileWriter: class extends Writer {
 		}
 		null
 	}*/
+
+	createTempFile: static func (pattern, mode: String) -> This {
+	version (!windows) {
+		return new(fdopen(mkstemp(pattern), mode))
+	}
+	version (windows) {
+		// mkstemp is missing on Windows, that sucks, but let's use the
+		// worse method instead
+		new(mktemp(pattern) toString(), mode)
+	}
+	Exception new("FileWriter createTempFile() is unsupported on your os") throw()
+	null
+	}
 }

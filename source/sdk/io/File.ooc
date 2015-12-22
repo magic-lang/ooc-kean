@@ -25,6 +25,11 @@ File: abstract class {
 	extension: String { get { getExtension() } }
 	nameWithoutExtension: String { get { getNameWithoutExtension() } }
 	pathWithoutExtension: String { get { getPathWithoutExtension() } }
+	children: VectorList<This> {
+		get {
+			getChildren()
+		}
+	}
 	rectifySeparator: func {
 		if (this dir?() && !this path endsWith?(This separator)) {
 			oldPath := this path
@@ -36,46 +41,6 @@ File: abstract class {
 			this path free()
 			this path = newPath
 		}
-	}
-
-	children: VectorList<This> {
-		get {
-			getChildren()
-		}
-	}
-
-	/** Separator for path elements. Usually '/' on *nix and '\\' on Windows. */
-	separator: static Char
-
-	/** Delimiter for lists of paths. Usually ':' on *nix and ';' on Windows. */
-	pathDelimiter: static Char
-
-	/**
-	 * Maximum path length used to retrieve the current working directory (cwd)
-	 * We use our own constant
-	 */
-	MAX_PATH_LENGTH := static const 16383 // cause we alloc +1
-
-	/**
-	 * Create a File object from the given path
-	 */
-	new: static func (.path) -> This {
-		version (unix || apple) {
-			return FileUnix new(path)
-		}
-		version (windows) {
-			return FileWin32 new(path)
-		}
-		Exception new(This, "Unsupported platform!\n") throw()
-		null
-	}
-
-	/**
-	 * Create a File object, from various path elements,
-	 * which can be either File instances or Strings.
-	 */
-	new: static func ~assemble (args: ...) -> This {
-		This new(This join(args))
 	}
 
 	/**
@@ -573,6 +538,44 @@ File: abstract class {
 		getChild(file path)
 	}
 
+	toString: func -> String {
+		"File(#{path})"
+	}
+
+	/** Separator for path elements. Usually '/' on *nix and '\\' on Windows. */
+	separator: static Char
+
+	/** Delimiter for lists of paths. Usually ':' on *nix and ';' on Windows. */
+	pathDelimiter: static Char
+
+	/**
+	 * Maximum path length used to retrieve the current working directory (cwd)
+	 * We use our own constant
+	 */
+	MAX_PATH_LENGTH := static const 16383 // cause we alloc +1
+
+	/**
+	 * Create a File object from the given path
+	 */
+	new: static func (.path) -> This {
+		version (unix || apple) {
+			return FileUnix new(path)
+		}
+		version (windows) {
+			return FileWin32 new(path)
+		}
+		Exception new(This, "Unsupported platform!\n") throw()
+		null
+	}
+
+	/**
+	 * Create a File object, from various path elements,
+	 * which can be either File instances or Strings.
+	 */
+	new: static func ~assemble (args: ...) -> This {
+		This new(This join(args))
+	}
+
 	/**
 	 * @return the current working directory
 	 */
@@ -603,10 +606,6 @@ File: abstract class {
 			result append(path)
 		)
 		result toString()
-	}
-
-	toString: func -> String {
-		"File(#{path})"
 	}
 }
 
