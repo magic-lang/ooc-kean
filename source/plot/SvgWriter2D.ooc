@@ -10,7 +10,7 @@ import LinePlotData2D
 import svg/Shapes
 
 SvgWriter2D: class {
-	numberOfPlotsHorizontally: Int
+	_numberOfPlotsHorizontally: Int
 	file: File { get set }
 	svgPlots: VectorList<SvgPlot> { get set }
 	size: FloatVector2D { get set }
