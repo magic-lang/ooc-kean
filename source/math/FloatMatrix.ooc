@@ -22,13 +22,13 @@ FloatMatrix: cover {
 	_width: Int
 	_height: Int
 	_elements: OwnedBuffer
-	height: Int { get {
-		result := this _height
+	width: Int { get {
+		result := this _width
 		this free(Owner Receiver)
 		result
 	}}
-	width: Int { get {
-		result := this _width
+	height: Int { get {
+		result := this _height
 		this free(Owner Receiver)
 		result
 	}}
