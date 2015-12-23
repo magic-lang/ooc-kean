@@ -23,12 +23,12 @@ import Debug
 
 ByteBuffer: class {
 	_pointer: UInt8*
-	pointer ::= this _pointer
 	_size: Int
-	size ::= this _size
 	_referenceCount: ReferenceCounter
-	referenceCount ::= this _referenceCount
 	_ownsMemory: Bool
+	pointer ::= this _pointer
+	size ::= this _size
+	referenceCount ::= this _referenceCount
 
 	init: func (=_pointer, =_size, ownsMemory := false) {
 		this _referenceCount = ReferenceCounter new(this)
@@ -111,7 +111,10 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 			super()
 	}
 
-	// STATIC
+	_lock := static Mutex new()
+	_smallRecycleBin := static VectorList<This> new()
+	_mediumRecycleBin := static VectorList<This> new()
+	_largeRecycleBin := static VectorList<This> new()
 	new: static func ~fromSize (size: Int) -> This {
 		buffer: This = null
 		bin := This _getBin(size)
@@ -127,10 +130,6 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		version(debugByteBuffer) { if (buffer == null) Debug print("No RecyclableByteBuffer available in the bin; allocating a new one") }
 		buffer == null ? This new(gc_malloc_atomic(size), size) : buffer
 	}
-	_lock := static Mutex new()
-	_smallRecycleBin := static VectorList<This> new()
-	_mediumRecycleBin := static VectorList<This> new()
-	_largeRecycleBin := static VectorList<This> new()
 	_getBin: static func (size: Int) -> VectorList<This> {
 		size < 10000 ? This _smallRecycleBin : (size < 100000 ? This _mediumRecycleBin : This _largeRecycleBin)
 	}
