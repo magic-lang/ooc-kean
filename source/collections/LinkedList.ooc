@@ -1,8 +1,8 @@
 import structs/List
 
 LinkedList: class <T> {
-	_size := 0
 	_head: Node<T>
+	_size := 0
 	head ::= this _head
 	size ::= this _size
 	init: func {
