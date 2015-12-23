@@ -17,7 +17,6 @@
 use ooc-unit
 use ooc-math
 use ooc-collections
-import lang/IO
 
 IntVectorListTest: class extends Fixture {
 	init: func {

@@ -1,6 +1,5 @@
 use ooc-unit
 use ooc-math
-import lang/IO
 
 FloatExtensionTest: class extends Fixture {
 	precision := 1.0e-5f

@@ -1,6 +1,5 @@
 use ooc-unit
 use ooc-geometry
-import lang/IO
 
 IntTransform2DTest: class extends Fixture {
 	transform0 := IntTransform2D new(3, 1, 2, 1, 5, 7)

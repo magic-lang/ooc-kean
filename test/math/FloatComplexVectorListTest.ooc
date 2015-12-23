@@ -19,7 +19,6 @@ use ooc-math
 use ooc-collections
 import FloatComplex
 import FloatComplexVectorList
-import lang/IO
 
 FloatComplexVectorListTest: class extends Fixture {
 	complexNumber0 := FloatComplex new (2, 1)
