@@ -3,9 +3,7 @@ import Mutex
 
 WaitCondition: abstract class {
 	wait: abstract func (mutex: Mutex) -> Bool
-
 	signal: abstract func -> Bool
-
 	broadcast: abstract func -> Bool
 	new: static func -> This {
 		version (unix || apple) {
