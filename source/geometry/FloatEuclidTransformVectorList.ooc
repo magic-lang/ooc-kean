@@ -107,16 +107,16 @@ FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 		}
 		result
 	}
-	operator [] (index: Int) -> FloatEuclidTransform {
-		this _vector[index]
-	}
-	operator []= (index: Int, item: FloatEuclidTransform) {
-		this _vector[index] = item
-	}
 	toString: func -> String {
 		result := ""
 		for (i in 0 .. this _count)
 			result = result >> this[i] toString() >> "\n"
 		result
+	}
+	operator [] (index: Int) -> FloatEuclidTransform {
+		this _vector[index]
+	}
+	operator []= (index: Int, item: FloatEuclidTransform) {
+		this _vector[index] = item
 	}
 }

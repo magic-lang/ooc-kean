@@ -38,19 +38,19 @@ IntShell2D: cover {
 	increase: func ~byBox (box: IntBox2D) -> IntBox2D {
 		IntBox2D new(box leftTop x - this left, box leftTop y - this top, box size x + this left + this right, box size y + this top + this bottom)
 	}
-	operator + (other: This) -> This { This new(this left + other left, this right + other right, this top + other top, this bottom + other bottom) }
-	operator - (other: This) -> This { This new(this left - other left, this right - other right, this top - other top, this bottom - other bottom) }
-	operator / (other: Int) -> This { This new(this left / other, this right / other, this top / other, this bottom / other) }
 	maximum: func (other: This) -> This {
 		This new(Int maximum(this left, other left), Int maximum(this right, other right), Int maximum(this top, other top), Int maximum(this bottom, other bottom))
 	}
 	minimum: func (other: This) -> This {
 		This new(Int minimum(this left, other left), Int minimum(this right, other right), Int minimum(this top, other top), Int minimum(this bottom, other bottom))
 	}
+	toString: func -> String { "#{this left toString()}, #{this right toString()}, #{this top toString()}, #{this bottom toString()}" }
+	operator + (other: This) -> This { This new(this left + other left, this right + other right, this top + other top, this bottom + other bottom) }
+	operator - (other: This) -> This { This new(this left - other left, this right - other right, this top - other top, this bottom - other bottom) }
+	operator / (other: Int) -> This { This new(this left / other, this right / other, this top / other, this bottom / other) }
 	operator == (other: This) -> Bool { this left == other left && this right == other right && this top == other top && this bottom == other bottom }
 	operator != (other: This) -> Bool { !(this == other) }
 	operator as -> String { this toString() }
-	toString: func -> String { "#{this left toString()}, #{this right toString()}, #{this top toString()}, #{this bottom toString()}" }
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toInt(), parts[1] toInt(), parts[2] toInt(), parts[3] toInt())

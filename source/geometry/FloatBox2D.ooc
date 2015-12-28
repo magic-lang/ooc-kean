@@ -123,6 +123,13 @@ FloatBox2D: cover {
 	round: func -> This { This new(this leftTop round(), this size round()) }
 	ceiling: func -> This { This new(this leftTop ceiling(), this size ceiling()) }
 	floor: func -> This { This new(this leftTop floor(), this size floor()) }
+	adaptTo: func (other: This, weight: Float) -> This {
+		newCenter := FloatPoint2D linearInterpolation(this center, other center, weight)
+		newSize := FloatVector2D linearInterpolation(this size, other size, weight)
+		This createAround(newCenter, newSize)
+	}
+	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
+	toIntBox2D: func -> IntBox2D { IntBox2D new(this left, this top, this width, this height) }
 	operator + (other: This) -> This {
 		if (this hasZeroArea)
 			other
@@ -145,14 +152,7 @@ FloatBox2D: cover {
 	operator - (other: FloatVector2D) -> This { This new(this leftTop, this size - other) }
 	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }
 	operator != (other: This) -> Bool { !(this == other) }
-	toIntBox2D: func -> IntBox2D { IntBox2D new(this left, this top, this width, this height) }
 	operator as -> String { this toString() }
-	adaptTo: func (other: This, weight: Float) -> This {
-		newCenter := FloatPoint2D linearInterpolation(this center, other center, weight)
-		newSize := FloatVector2D linearInterpolation(this size, other size, weight)
-		This createAround(newCenter, newSize)
-	}
-	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat(), parts[3] toFloat())
