@@ -2,7 +2,6 @@ use ooc-base
 use ooc-collections
 use ooc-concurrent
 import threading/[Thread, Mutex, WaitCondition]
-import os/Time
 
 _Task: abstract class {
 	_state := _PromiseState Unfinished

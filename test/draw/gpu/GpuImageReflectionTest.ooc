@@ -4,7 +4,6 @@ use ooc-draw-gpu
 use ooc-draw
 use ooc-opengl
 use ooc-unit
-import os/Time
 
 GpuImageReflectionTest: class extends Fixture {
 	init: func {

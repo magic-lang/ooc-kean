@@ -1,6 +1,6 @@
 use ooc-base
 use ooc-unit
-import threading/Thread, os/Time
+import threading/Thread
 
 TestClass: class {
 	data: Int
@@ -35,7 +35,7 @@ SynchronizedTest: class extends Fixture {
 			thread2 wait()
 			thread1 wait()
 			expect(obj data, is equal to(1))
-			
+
 			obj free()
 			sync free()
 			thread1 free()

@@ -1,6 +1,5 @@
 use ooc-concurrent
 import threading/Thread
-import os/Time
 
 _PromiseState: enum {
 	Unfinished
