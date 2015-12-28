@@ -20,6 +20,7 @@ use ooc-base
 TimeSpan: cover {
 	_ticks: Int64 = 0
 	ticks ::= this _ticks
+
 	init: func@ (=_ticks)
 	init: func@ ~fromHourMinuteSec (hour, minute, second, millisecond: Int) {
 		this _ticks = DateTime timeToTicks(hour, minute, second, millisecond)

@@ -24,6 +24,7 @@ import Timer
 Profiler: class {
 	_name: String
 	_timer := Timer new()
+
 	init: func (=_name) { This _profilers add(this) }
 	free: override func {
 		for (i in 0 .. This _profilers count)
@@ -43,7 +44,9 @@ Profiler: class {
 	reset: func {
 		this _timer reset()
 	}
+
 	_profilers := static VectorList<This> new(100)
+
 	printResults: static func {
 		This _logResults(func (s: String) { Debug print(s) })
 	}
