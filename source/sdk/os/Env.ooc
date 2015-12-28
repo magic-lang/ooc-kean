@@ -40,9 +40,5 @@ Env: class {
 		result
 	}
 }
-operator [] (c: EnvClass, key: String) -> String {
-	Env get(key)
-}
-operator []= (c: EnvClass, key, value: String) {
-	Env set(key, value, true)
-}
+operator [] (c: EnvClass, key: String) -> String { Env get(key) }
+operator []= (c: EnvClass, key, value: String) { Env set(key, value, true) }
