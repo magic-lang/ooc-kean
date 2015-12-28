@@ -73,13 +73,8 @@ PointerVector: abstract class {
 			memcpy(destination, source, length)
 	}
 
-	operator [] (index: Int) -> Pointer {
-		this _backend[index]
-	}
-
-	operator []= (index: Int, item: Pointer) {
-		this _backend[index] = item
-	}
+	operator [] (index: Int) -> Pointer { this _backend[index] }
+	operator []= (index: Int, item: Pointer) { this _backend[index] = item }
 }
 
 PointerHeapVector: class extends PointerVector {

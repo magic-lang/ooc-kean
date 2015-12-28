@@ -78,66 +78,27 @@ TimeSpan: cover {
 		else
 			Order equal
 	}
-	operator + (value: Int) -> This {
-		This new(this ticks + value)
-	}
-	operator + (value: Int64) -> This {
-		This new(this ticks + value)
-	}
-	operator + (value: Double) -> This {
-		This new(this ticks + value * DateTime ticksPerSecond)
-	}
-	operator + (other: This) -> This {
-		This new(this ticks + other ticks)
-	}
-	operator - (value: Int) -> This {
-		This new(this ticks - value)
-	}
-	operator - (value: Int64) -> This {
-		This new(this ticks - value)
-	}
-	operator - (value: Double) -> This {
-		This new(this ticks - value * DateTime ticksPerSecond)
-	}
-	operator - (other: This) -> This {
-		This new(this ticks - other ticks)
-	}
-	operator * (value: Int) -> This {
-		This new(this ticks * value)
-	}
-	operator * (value: Int64) -> This {
-		This new(this ticks * value)
-	}
-	operator * (value: Double) -> This {
-		This new(this ticks * value)
-	}
-	operator / (value: Int) -> This {
-		This new(this ticks / value)
-	}
-	operator / (value: Int64) -> This {
-		This new(this ticks / value)
-	}
-	operator / (value: Double) -> This {
-		This new(this ticks / value)
-	}
-	operator == (other: This) -> Bool {
-		this compareTo(other) == Order equal
-	}
-	operator != (other: This) -> Bool {
-		! (this == other)
-	}
-	operator > (other: This) -> Bool {
-		this compareTo(other) == Order greater
-	}
-	operator < (other: This) -> Bool {
-		this compareTo(other) == Order less
-	}
-	operator >= (other: This) -> Bool {
-		! (this < other)
-	}
-	operator <= (other: This) -> Bool {
-		! (this > other)
-	}
+
+	operator + (other: This) -> This { This new(this ticks + other ticks) }
+	operator - (other: This) -> This { This new(this ticks - other ticks) }
+	operator == (other: This) -> Bool { this compareTo(other) == Order equal }
+	operator != (other: This) -> Bool { !(this == other) }
+	operator > (other: This) -> Bool { this compareTo(other) == Order greater }
+	operator < (other: This) -> Bool { this compareTo(other) == Order less }
+	operator >= (other: This) -> Bool { !(this < other) }
+	operator <= (other: This) -> Bool { !(this > other) }
+	operator + (value: Int) -> This { This new(this ticks + value) }
+	operator - (value: Int) -> This { This new(this ticks - value) }
+	operator * (value: Int) -> This { This new(this ticks * value) }
+	operator / (value: Int) -> This { This new(this ticks / value) }
+	operator + (value: Int64) -> This { This new(this ticks + value) }
+	operator - (value: Int64) -> This { This new(this ticks - value) }
+	operator * (value: Int64) -> This { This new(this ticks * value) }
+	operator / (value: Int64) -> This { This new(this ticks / value) }
+	operator + (value: Double) -> This { This new(this ticks + value * DateTime ticksPerSecond) }
+	operator - (value: Double) -> This { This new(this ticks - value * DateTime ticksPerSecond) }
+	operator * (value: Double) -> This { This new(this ticks * value) }
+	operator / (value: Double) -> This { This new(this ticks / value) }
 
 	kean_base_timeSpan_getTicks: unmangled func -> Int64 { this _ticks }
 	kean_base_timeSpan_getNegated: unmangled func -> This { this negate() }
@@ -195,11 +156,11 @@ TimeSpan: cover {
 }
 
 operator + (left: Int, right: TimeSpan) -> TimeSpan { right + left }
-operator + (left: Int64, right: TimeSpan) -> TimeSpan { right + left }
-operator + (left: Double, right: TimeSpan) -> TimeSpan { right + left }
 operator - (left: Int, right: TimeSpan) -> TimeSpan { right negate() + left }
-operator - (left: Int64, right: TimeSpan) -> TimeSpan { right negate() + left }
-operator - (left: Double, right: TimeSpan) -> TimeSpan { right negate() + left }
 operator * (left: Int, right: TimeSpan) -> TimeSpan { right * left }
+operator + (left: Int64, right: TimeSpan) -> TimeSpan { right + left }
+operator - (left: Int64, right: TimeSpan) -> TimeSpan { right negate() + left }
 operator * (left: Int64, right: TimeSpan) -> TimeSpan { right * left }
+operator + (left: Double, right: TimeSpan) -> TimeSpan { right + left }
+operator - (left: Double, right: TimeSpan) -> TimeSpan { right negate() + left }
 operator * (left: Double, right: TimeSpan) -> TimeSpan { right * left }

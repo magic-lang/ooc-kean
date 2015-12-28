@@ -89,6 +89,7 @@ Vector2D: class <T> {
 				this _backend[T size * this _elementPosition(sourceRowIndex, sourceColumnStart)]&, columnCount * T size)
 		}
 	}
+
 	operator [] (row, column: Int) -> T {
 		version (safe) {
 			if (row >= this rowCount || row < 0 || column >= this columnCount || column < 0)

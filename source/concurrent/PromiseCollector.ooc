@@ -41,18 +41,19 @@ PromiseCollector: class {
 	clear: func {
 		this _backend clear()
 	}
-	operator + (promise: Promise) -> This {
-		this add(promise)
-		this
-	}
+
 	operator + (other: This) -> This {
 		this _backend append(other _backend)
 		this
 	}
-	operator += (element: Promise) {
-		this add(element)
-	}
 	operator += (other: This) {
 		this _backend append(other _backend)
+	}
+	operator + (promise: Promise) -> This {
+		this add(promise)
+		this
+	}
+	operator += (element: Promise) {
+		this add(element)
 	}
 }

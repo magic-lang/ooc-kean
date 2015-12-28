@@ -136,33 +136,15 @@ DateTime: cover {
 			Order equal
 	}
 
-	operator - (other: This) -> TimeSpan {
-		TimeSpan new(this ticks as Int64 - other ticks as Int64)
-	}
-	operator + (span: TimeSpan) -> This {
-		This new(this ticks as Int64 + span ticks)
-	}
-	operator - (span: TimeSpan) -> This {
-		This new(this ticks as Int64 - span ticks)
-	}
-	operator == (other: This) -> Bool {
-		this compareTo(other) == Order equal
-	}
-	operator != (other: This) -> Bool {
-		this compareTo(other) != Order equal
-	}
-	operator < (other: This) -> Bool {
-		this compareTo(other) == Order less
-	}
-	operator <= (other: This) -> Bool {
-		this compareTo(other) != Order greater
-	}
-	operator > (other: This) -> Bool {
-		this compareTo(other) == Order greater
-	}
-	operator >= (other: This) -> Bool {
-		this compareTo(other) != Order less
-	}
+	operator - (other: This) -> TimeSpan { TimeSpan new(this ticks as Int64 - other ticks as Int64) }
+	operator == (other: This) -> Bool { this compareTo(other) == Order equal }
+	operator != (other: This) -> Bool { this compareTo(other) != Order equal }
+	operator < (other: This) -> Bool { this compareTo(other) == Order less }
+	operator <= (other: This) -> Bool { this compareTo(other) != Order greater }
+	operator > (other: This) -> Bool { this compareTo(other) == Order greater }
+	operator >= (other: This) -> Bool { this compareTo(other) != Order less }
+	operator + (span: TimeSpan) -> This { This new(this ticks as Int64 + span ticks) }
+	operator - (span: TimeSpan) -> This { This new(this ticks as Int64 - span ticks) }
 
 	kean_base_dateTime_getTicks: unmangled func -> UInt64 { this _ticks }
 	kean_base_dateTime_getMillisecond: unmangled func -> Int { this millisecond() }

@@ -67,10 +67,6 @@ PointerVectorList: class {
 		tmp
 	}
 
-	operator [] (index: Int) -> Pointer {
-		this _vector[index]
-	}
-	operator []= (index: Int, item: Pointer) {
-		this _vector[index] = item
-	}
+	operator [] (index: Int) -> Pointer { this _vector[index] }
+	operator []= (index: Int, item: Pointer) { this _vector[index] = item }
 }

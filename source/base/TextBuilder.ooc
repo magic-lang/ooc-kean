@@ -93,6 +93,17 @@ TextBuilder: class {
 		Text new(result give())
 	}
 	println: func { this toText() println() }
+
+	operator + (other: This) -> This {
+		this append(other)
+	}
+	operator == (other: This) -> Bool {
+		result := this count == other count
+		i := 0
+		while (i < this count && (result &= this[i] == other[i]))
+			++i
+		result
+	}
 	operator [] (index: Int) -> Char {
 		i := index
 		position := 0
@@ -104,16 +115,12 @@ TextBuilder: class {
 		}
 		this _data[position] take()[index]
 	}
-	operator + (other: This) -> This { this append(other) }
-	operator + (value: Text) -> This { this append(value) }
-	operator == (other: This) -> Bool {
-		result := this count == other count
-		i := 0
-		while (i < this count && (result &= this[i] == other[i]))
-			++i
-		result
+	operator + (value: Text) -> This {
+		this append(value)
 	}
-	operator == (string: String) -> Bool { this == Text new(string) }
+	operator != (text: Text) -> Bool {
+		!(this == text)
+	}
 	operator == (text: Text) -> Bool {
 		t := text take()
 		result := this count == t count
@@ -123,7 +130,7 @@ TextBuilder: class {
 		text free(Owner Receiver)
 		result
 	}
-	operator != (text: Text) -> Bool { !(this == text) }
+	operator == (string: String) -> Bool { this == Text new(string) }
 }
 
 operator == (left: String, right: TextBuilder) -> Bool { right == left }
