@@ -39,7 +39,7 @@ FloatRotation3D: cover {
 	operator == (other: This) -> Bool { this _quaternion == other _quaternion }
 	operator != (other: This) -> Bool { this _quaternion != other _quaternion }
 
-	identity: static This { get { This new(Quaternion identity) } }
+	identity ::= static This new(Quaternion identity)
 
 	createRotationX: static func (angle: Float) -> This { This new(Quaternion createRotationX(angle)) }
 	createRotationY: static func (angle: Float) -> This { This new(Quaternion createRotationY(angle)) }

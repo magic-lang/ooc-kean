@@ -134,7 +134,7 @@ IntTransform2D: cover {
 		this toString()
 	}
 
-	identity: static This { get { This new(1, 0, 0, 1, 0, 0) } }
+	identity ::= static This new(1, 0, 0, 1, 0, 0)
 
 	toFloatTransform2D: func -> FloatTransform2D { FloatTransform2D new(this a, this b, this c, this d, this e, this f, this g, this h, this i) }
 	create: static func (translation: IntVector2D, scale, rotation: Float) -> This {

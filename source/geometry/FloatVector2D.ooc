@@ -74,8 +74,8 @@ FloatVector2D: cover {
 	operator / (other: Int) -> This { This new(this x / other, this y / other) }
 	operator as -> String { this toString() }
 
-	basisX: static This { get { This new(1, 0) } }
-	basisY: static This { get { This new(0, 1) } }
+	basisX ::= static This new(1, 0)
+	basisY ::= static This new(0, 1)
 
 	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
 	parse: static func (input: Text) -> This {

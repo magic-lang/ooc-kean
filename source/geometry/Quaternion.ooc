@@ -207,8 +207,8 @@ Quaternion: cover {
 	operator * (value: FloatPoint3D) -> FloatPoint3D { (this * This new(0.0f, value) * this inverse) imaginary }
 	operator as -> String { this toString() }
 
-	precision: static Float = 1.0e-6f
-	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
+	precision ::= static 1.0e-6f
+	identity ::= static This new(1.0f, 0.0f, 0.0f, 0.0f)
 
 	createFromEulerAngles: static func (rotationX, rotationY, rotationZ: Float) -> This {
 		This createRotationZ(rotationZ) * This createRotationY(rotationY) * This createRotationX(rotationX)
