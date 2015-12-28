@@ -22,19 +22,9 @@ import io/FileWriter
 import Timer
 
 Profiler: class {
-	_profilers := static VectorList<This> new(100)
 	_name: String
 	_timer := Timer new()
 	init: func (=_name) { This _profilers add(this) }
-	start: func {
-		this _timer start()
-	}
-	stop: func {
-		this _timer stop()
-	}
-	printResults: static func {
-		This _logResults(func (s: String) { Debug print(s) })
-	}
 	free: override func {
 		for (i in 0 .. This _profilers count)
 			if (this == This _profilers[i]) {
@@ -44,14 +34,24 @@ Profiler: class {
 		this _timer free()
 		super()
 	}
+	start: func {
+		this _timer start()
+	}
+	stop: func {
+		this _timer stop()
+	}
+	reset: func {
+		this _timer reset()
+	}
+	_profilers := static VectorList<This> new(100)
+	printResults: static func {
+		This _logResults(func (s: String) { Debug print(s) })
+	}
 	logResults: static func (fileName := "profiling.txt") {
 		fileWriter := FileWriter new(fileName)
 		This _logResults(func (s: String) { fileWriter write(s) })
 		fileWriter close()
 		fileWriter free()
-	}
-	reset: func {
-		this _timer reset()
 	}
 	resetAll: static func { This _profilers apply(func (profiler: This) { profiler reset() }) }
 	dispose: static func {

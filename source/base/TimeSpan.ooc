@@ -70,6 +70,14 @@ TimeSpan: cover {
 		result = result replaceAll(t"%s", t"%d" format(this elapsedSeconds() modulo(60)))
 		result replaceAll(t"%z", t"%d" format(this elapsedMilliseconds() modulo(1000)))
 	}
+	compareTo: func (other: This) -> Order {
+		if (this ticks > other ticks)
+			Order greater
+		else if (this ticks < other ticks)
+			Order less
+		else
+			Order equal
+	}
 	operator + (value: Int) -> This {
 		This new(this ticks + value)
 	}
@@ -112,14 +120,6 @@ TimeSpan: cover {
 	operator / (value: Double) -> This {
 		This new(this ticks / value)
 	}
-	compareTo: func (other: This) -> Order {
-		if (this ticks > other ticks)
-			Order greater
-		else if (this ticks < other ticks)
-			Order less
-		else
-			Order equal
-	}
 	operator == (other: This) -> Bool {
 		this compareTo(other) == Order equal
 	}
@@ -138,6 +138,15 @@ TimeSpan: cover {
 	operator <= (other: This) -> Bool {
 		! (this > other)
 	}
+
+	kean_base_timeSpan_getTicks: unmangled func -> Int64 { this _ticks }
+	kean_base_timeSpan_getNegated: unmangled func -> This { this negate() }
+	kean_base_timeSpan_getTotalMilliseconds: unmangled func -> Int64 { this elapsedMilliseconds() }
+	kean_base_timeSpan_getTotalSeconds: unmangled func -> Int64 { this elapsedSeconds() }
+	kean_base_timeSpan_getTotalMinutes: unmangled func -> Int64 { this elapsedMinutes() }
+	kean_base_timeSpan_getTotalHours: unmangled func -> Int64 { this elapsedHours() }
+	kean_base_timeSpan_getTotalDays: unmangled func -> Int64 { this elapsedDays() }
+	kean_base_timeSpan_getTotalWeeks: unmangled func -> Int64 { this elapsedWeeks() }
 
 	millisecond: static func -> This {
 		This milliseconds(1)
@@ -177,14 +186,6 @@ TimeSpan: cover {
 	}
 	kean_base_timeSpan_new: unmangled static func (ticks: Int64) -> This { This new(ticks) }
 	kean_base_timeSpan_fromData: unmangled static func (hour, minute, second, millisecond: Int) -> This { This new(hour, minute, second, millisecond) }
-	kean_base_timeSpan_getTicks: unmangled func -> Int64 { this _ticks }
-	kean_base_timeSpan_getNegated: unmangled func -> This { this negate() }
-	kean_base_timeSpan_getTotalMilliseconds: unmangled func -> Int64 { this elapsedMilliseconds() }
-	kean_base_timeSpan_getTotalSeconds: unmangled func -> Int64 { this elapsedSeconds() }
-	kean_base_timeSpan_getTotalMinutes: unmangled func -> Int64 { this elapsedMinutes() }
-	kean_base_timeSpan_getTotalHours: unmangled func -> Int64 { this elapsedHours() }
-	kean_base_timeSpan_getTotalDays: unmangled func -> Int64 { this elapsedDays() }
-	kean_base_timeSpan_getTotalWeeks: unmangled func -> Int64 { this elapsedWeeks() }
 	kean_base_timeSpan_fromMilliseconds: unmangled static func (count: Double) -> This { This milliseconds(count) }
 	kean_base_timeSpan_fromSeconds: unmangled static func (count: Double) -> This { This seconds(count) }
 	kean_base_timeSpan_fromMinutes: unmangled static func (count: Double) -> This { This minutes(count) }

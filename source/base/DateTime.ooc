@@ -70,7 +70,6 @@ DateTime: cover {
 		else
 			raise ("invalid input specified for constructor(year,month,day,hour,minute,second,ms)")
 	}
-	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
 
 	millisecond: func -> Int {
 		This _ticksToDateTimeHelper(this ticks) millisecond
@@ -165,6 +164,15 @@ DateTime: cover {
 		this compareTo(other) != Order less
 	}
 
+	kean_base_dateTime_getTicks: unmangled func -> UInt64 { this _ticks }
+	kean_base_dateTime_getMillisecond: unmangled func -> Int { this millisecond() }
+	kean_base_dateTime_getSecond: unmangled func -> Int { this second() }
+	kean_base_dateTime_getMinute: unmangled func -> Int { this minute() }
+	kean_base_dateTime_getHour: unmangled func -> Int { this hour() }
+	kean_base_dateTime_getDay: unmangled func -> Int { this day() }
+	kean_base_dateTime_getMonth: unmangled func -> Int { this month() }
+	kean_base_dateTime_getYear: unmangled func -> Int { this year() }
+
 	/* number of days in year ( non-leap ) */
 	daysPerYear: static const Int = 365
 	daysPerFourYears: static const Int = 3 * This daysPerYear + 366
@@ -184,7 +192,7 @@ DateTime: cover {
 			Time currentDateTime()
 		}
 	}
-
+	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
 	_ticksToDateTimeHelper: static func (totalTicks: Int64) -> DateTimeData {
 		fourYearBlocks := totalTicks / This ticksPerFourYears
 		year := 4 * fourYearBlocks
@@ -268,7 +276,6 @@ DateTime: cover {
 	dateIsValid: static func (year, month, day: Int) -> Bool {
 		year >= 1 && month in?(1 .. 13) && day in?(1 .. This daysInMonth(year, month) + 1)
 	}
-	kean_base_dateTime_getTicks: unmangled func -> UInt64 { this _ticks }
 	kean_base_dateTime_new: unmangled static func (ticks: UInt64) -> This { This new(ticks) }
 	kean_base_dateTime_fromDate: unmangled static func (year, month, day: Int) -> This { This new(year, month, day) }
 	kean_base_dateTime_fromTime: unmangled static func (hour, minute, second, millisecond: Int) -> This { This new(hour, minute, second, millisecond) }
@@ -276,11 +283,4 @@ DateTime: cover {
 		This new(year, month, day, hour, minute, second, millisecond)
 	}
 	kean_base_dateTime_getNow: unmangled static func -> This { This now }
-	kean_base_dateTime_getMillisecond: unmangled func -> Int { this millisecond() }
-	kean_base_dateTime_getSecond: unmangled func -> Int { this second() }
-	kean_base_dateTime_getMinute: unmangled func -> Int { this minute() }
-	kean_base_dateTime_getHour: unmangled func -> Int { this hour() }
-	kean_base_dateTime_getDay: unmangled func -> Int { this day() }
-	kean_base_dateTime_getMonth: unmangled func -> Int { this month() }
-	kean_base_dateTime_getYear: unmangled func -> Int { this year() }
 }

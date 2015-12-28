@@ -44,10 +44,6 @@ Debug: class {
 		This print(string, level)
 		string free()
 	}
-	kean_base_debug_registerCallback: unmangled static func (print: Pointer) {
-		f := (print, null) as Func (Char*)
-		This initialize(func (s: String) { f(s toCString()) })
-	}
 	raise: static func (message: String) {
 		This print(message)
 		raise(message)
@@ -56,5 +52,9 @@ Debug: class {
 		string := message toString()
 		This raise(string)
 		string free()
+	}
+	kean_base_debug_registerCallback: unmangled static func (print: Pointer) {
+		f := (print, null) as Func (Char*)
+		This initialize(func (s: String) { f(s toCString()) })
 	}
 }

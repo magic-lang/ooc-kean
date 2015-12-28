@@ -14,9 +14,9 @@ VectorQueue: class <T> extends Queue<T> {
 	_capacity := 0
 	_head := 0 // Index of oldest element
 	_tail := 0 // Index of newest element
+	_chunkCount := 32
 	capacity ::= this _capacity
 	full ::= this _count == this _capacity
-	_chunkCount := 32
 
 	init: func (capacity := 32) {
 		this _capacity = capacity

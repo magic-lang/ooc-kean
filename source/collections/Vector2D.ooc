@@ -27,12 +27,12 @@ Vector2D: class <T> {
 		this _allocate(this rowCount, this columnCount)
 		memset(this _backend, 0, this rowCount * this columnCount * T size)
 	}
-	_allocate: func (rows, columns: Int) {
-		this _backend = gc_realloc(this _backend, rows * columns * T size)
-	}
 	free: override func {
 		gc_free(this _backend)
 		super()
+	}
+	_allocate: func (rows, columns: Int) {
+		this _backend = gc_realloc(this _backend, rows * columns * T size)
 	}
 	_elementPosition: func (row, column: Int, columnCount := this columnCount) -> Int {
 		columnCount * row + column
