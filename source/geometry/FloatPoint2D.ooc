@@ -21,8 +21,10 @@ use ooc-base
 
 FloatPoint2D: cover {
 	x, y: Float
+
 	norm ::= (this x * this x + this y * this y) sqrt()
 	azimuth ::= this y atan2(this x)
+
 	init: func@ (=x, =y)
 	init: func@ ~default { this init(0.0f, 0.0f) }
 	pNorm: func (p: Float) -> Float {
@@ -70,6 +72,7 @@ FloatPoint2D: cover {
 
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
+
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toFloat(), parts[1] toFloat())

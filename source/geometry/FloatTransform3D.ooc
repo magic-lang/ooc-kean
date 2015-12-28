@@ -33,6 +33,12 @@ import FloatTransform2D
 
 FloatTransform3D: cover {
 	a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p: Float
+
+	translation ::= FloatVector3D new(this m, this n, this o)
+	scaling ::= (this scalingX + this scalingY + this scalingZ) / 3.0f
+	scalingX ::= (this a squared + this b squared + this c squared) sqrt()
+	scalingY ::= (this e squared + this f squared + this g squared) sqrt()
+	scalingZ ::= (this i squared + this j squared + this k squared) sqrt()
 	determinant: Float {
 		get {
 			this a * this f * this k * this p + this a * this j * this o * this h + this a * this n * this g * this l +
@@ -45,11 +51,6 @@ FloatTransform3D: cover {
 			this m * this b * this g * this l - this m * this f * this k * this d - this m * this j * this c * this h
 		}
 	}
-	translation ::= FloatVector3D new(this m, this n, this o)
-	scaling ::= (this scalingX + this scalingY + this scalingZ) / 3.0f
-	scalingX ::= (this a squared + this b squared + this c squared) sqrt()
-	scalingY ::= (this e squared + this f squared + this g squared) sqrt()
-	scalingZ ::= (this i squared + this j squared + this k squared) sqrt()
 	inverse: This { get {
 		determinant := this determinant
 		// If the determinant is 0, the resulting transform will be full of NaN values.
@@ -73,9 +74,9 @@ FloatTransform3D: cover {
 		h := (this a * this g * this l + this e * this k * this d + this i * this c * this h - this a * this k * this h - this e * this c * this l - this i * this g * this d) / determinant
 		l := (this a * this j * this h + this e * this b * this l + this i * this f * this d - this a * this f * this l - this e * this j * this d - this i * this b * this h) / determinant
 		p := (this a * this f * this k + this e * this j * this c + this i * this b * this g - this a * this j * this g - this e * this b * this k - this i * this f * this c) / determinant
-
 		This new(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
 	}}
+
 	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i, =j, =k, =l, =m, =n, =o, =p)
 	init: func@ ~withoutBottomRow (a, b, c, e, f, g, i, j, k, m, n, o: Float) { this init(a, b, c, 0.0f, e, f, g, 0.0f, i, j, k, 0.0f, m, n, o, 1.0f) }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f) }
@@ -229,7 +230,9 @@ FloatTransform3D: cover {
 	kean_math_floatTransform3D_getTranslation: unmangled func -> FloatVector3D { this translation }
 	kean_math_floatTransform3D_getScaling: unmangled func -> FloatVector3D { FloatVector3D new(this scalingX, this scalingY, this scalingZ) }
 	kean_math_floatTransform3D_getInverse: unmangled func -> This { this inverse }
+
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f) } }
+
 	create: static func (a, b, c, d, e, f, g, h, i, j, k, l: Float) -> This { This new(a, b, c, d, e, f, g, h, i, j, k, l) }
 	createTranslation: static func (xDelta, yDelta, zDelta: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, xDelta, yDelta, zDelta) }
 	createTranslation: static func ~float (delta: Float) -> This { This createTranslation(delta, delta, delta) }

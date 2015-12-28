@@ -21,6 +21,7 @@ use ooc-math
 
 IntPoint2D: cover {
 	x, y: Int
+
 	init: func@ (=x, =y)
 	init: func@ ~default { this init(0, 0) }
 	scalarProduct: func (other: This) -> Int { this x * other x + this y * other y }

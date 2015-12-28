@@ -85,6 +85,7 @@ Quaternion: cover {
 			result = This new(realExponential, FloatPoint3D new())
 		result
 	}}
+
 	init: func@ (=real, =imaginary)
 	init: func@ ~floats (w, x, y, z: Float) { this init(w, FloatPoint3D new(x, y, z)) }
 	init: func@ ~default { this init(0, 0, 0, 0) }
@@ -189,6 +190,7 @@ Quaternion: cover {
 
 	precision: static Float = 1.0e-6f
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
+
 	createFromEulerAngles: static func (rotationX, rotationY, rotationZ: Float) -> This {
 		This createRotationZ(rotationZ) * This createRotationY(rotationY) * This createRotationX(rotationX)
 	}
@@ -285,6 +287,7 @@ Quaternion: cover {
 		}
 		result
 	}
+
 	kean_math_quaternion_new: unmangled static func (w, x, y, z: Float) -> This { This new(w, x, y, z) }
 }
 operator * (value: Float, other: Quaternion) -> Quaternion { other * value }

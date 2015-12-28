@@ -21,6 +21,7 @@ use ooc-base
 
 FloatPoint3D: cover {
 	x, y, z: Float
+
 	norm ::= (this x squared + this y squared + this z squared) sqrt()
 	normalized ::= this / this norm
 	azimuth ::= this y atan2(this x)
@@ -30,7 +31,8 @@ FloatPoint3D: cover {
 		if (r != 0.0f)
 			r = (this z / r) clamp(-1.0f, 1.0f) acos()
 		r
-	} }
+	}}
+
 	init: func@ (=x, =y, =z)
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	init: func@ ~fromPoint2D (point: FloatPoint2D, z := 0.0f) { this init(point x, point y, z) }
@@ -80,6 +82,7 @@ FloatPoint3D: cover {
 	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
 		This new(ratio linearInterpolation(a x, b x), ratio linearInterpolation(a y, b y), ratio linearInterpolation(a z, b z))
 	}
+
 	kean_math_floatPoint3D_new: unmangled static func (x, y, z: Float) -> This { This new(x, y, z) }
 }
 operator - (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left - right x, left - right y, left - right z) }
