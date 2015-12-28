@@ -12,8 +12,8 @@ Imports: lang/String
 Imports: lang/types
 Imports: Buffer
 Imports: Iterators
-Imports: math
 Imports: Numbers
+Imports: math
 Imports: Owner
 Imports: OwnedBuffer
 Imports: stdlib
