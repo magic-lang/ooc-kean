@@ -101,6 +101,7 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		textBuilder free()
 		result
 	}
+
 	operator + (value: FloatComplex) -> This {
 		result := This new()
 		for (i in 0 .. this _count)
@@ -116,6 +117,7 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	operator []= (index: Int, item: FloatComplex) {
 		this _vector[index] = item
 	}
+
 	getZeros: static func (count: Int) -> This {
 		result := This new(count)
 		result _count = count

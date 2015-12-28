@@ -88,6 +88,7 @@ IntVectorList: class extends VectorList<Int> {
 		result = textBuilder join(t"\n")
 		result
 	}
+
 	operator [] <T> (index: Int) -> T {
 		this as VectorList<Int> _vector[index]
 	}

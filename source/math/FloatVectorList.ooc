@@ -310,6 +310,13 @@ FloatVectorList: class extends VectorList<Float> {
 			result = this copy()
 		result
 	}
+
+	operator - -> This {
+		result := This new(this _count)
+		for (i in 0 .. this _count)
+			result add(-this[i])
+		result
+	}
 	operator + (other: This) -> This {
 		minimumCount := this count < other count ? this count : other count
 		result := This new(minimumCount)
@@ -338,6 +345,13 @@ FloatVectorList: class extends VectorList<Float> {
 			result add(this[i] / other[i])
 		result
 	}
+	operator || (other: This) -> This {
+		minimumCount := this count < other count ? this count : other count
+		result := This new(minimumCount)
+		for (i in 0 .. minimumCount)
+			result add(this[i] > 0.0f ? 1.0f : (other[i] > 0.0f ? 1.0f : 0.0f))
+		result
+	}
 	operator * (value: Float) -> This {
 		result := This new(this _count)
 		for (i in 0 .. this _count)
@@ -356,25 +370,13 @@ FloatVectorList: class extends VectorList<Float> {
 	operator - (value: Float) -> This {
 		this + (-value)
 	}
-	operator - -> This {
-		result := This new(this _count)
-		for (i in 0 .. this _count)
-			result add(-this[i])
-		result
-	}
 	operator [] <T> (index: Int) -> T {
 		this as VectorList<Float> _vector[index]
 	}
 	operator []= (index: Int, item: Float) {
 		this _vector[index] = item
 	}
-	operator || (other: This) -> This {
-		minimumCount := this count < other count ? this count : other count
-		result := This new(minimumCount)
-		for (i in 0 .. minimumCount)
-			result add(this[i] > 0.0f ? 1.0f : (other[i] > 0.0f ? 1.0f : 0.0f))
-		result
-	}
+
 	getOnes: static func (count: Int) -> This {
 		This new(count, 1.0f)
 	}

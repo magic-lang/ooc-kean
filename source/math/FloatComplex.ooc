@@ -35,20 +35,17 @@ FloatComplex: cover {
 	logarithm: func -> This {
 		This new(this absoluteValue log(), this imaginary atan2(this real))
 	}
+
+	operator - -> This { This new(-this real, -this imaginary) }
 	operator + (other: This) -> This { This new(this real + other real, this imaginary + other imaginary) }
 	operator - (other: This) -> This { This new(this real - other real, this imaginary - other imaginary) }
-	operator - -> This { This new(-this real, -this imaginary) }
-	operator * (other: Float) -> This { This new(other * this real, other * this imaginary) }
-	operator * (other: This) -> This {
-		This new(
-			this real * other real - this imaginary * other imaginary,
-			this real * other imaginary + this imaginary * other real
-		)
-	}
-	operator / (other: Float) -> This { This new(this real / other, this imaginary / other) }
 	operator / (other: This) -> This { (this * other conjugate) / (other absoluteValue pow(2)) }
 	operator == (other: This) -> Bool { this real == other real && this imaginary == other imaginary }
 	operator != (other: This) -> Bool { !(this == other) }
+	operator * (other: This) -> This { This new(this real * other real - this imaginary * other imaginary, this real * other imaginary + this imaginary * other real) }
+	operator * (other: Float) -> This { This new(other * this real, other * this imaginary) }
+	operator / (other: Float) -> This { This new(this real / other, this imaginary / other) }
+
 	parse: static func (input: Text) -> This {
 		parts := input find('+') >= 0 ? input split('+') : input split(' ')
 		result := This new(parts[0] toFloat(), parts[1] toFloat())
