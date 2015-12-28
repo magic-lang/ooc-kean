@@ -20,11 +20,13 @@ use ooc-base
 
 IntVector2D: cover {
 	x, y: Int
+
 	area ::= this x * this y
 	hasZeroArea ::= this area == 0
 	square ::= this x == this y
 	length ::= ((this x squared + this y squared) as Float sqrt())
 	absolute ::= This new(this x absolute, this y absolute)
+
 	init: func@ (=x, =y)
 	init: func@ ~square (length: Int) { this x = this y = length }
 	init: func@ ~default { this init(0, 0) }
@@ -63,12 +65,14 @@ IntVector2D: cover {
 
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
+
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new (parts[0] toInt(), parts[1] toInt())
 		parts free()
 		result
 	}
+
 	kean_math_intVector2D_new: unmangled static func (x, y: Int) -> This { This new(x, y) }
 }
 operator * (left: Int, right: IntVector2D) -> IntVector2D { IntVector2D new(left * right x, left * right y) }

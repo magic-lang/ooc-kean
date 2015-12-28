@@ -27,13 +27,6 @@ Quaternion: cover {
 	x ::= this imaginary x
 	y ::= this imaginary y
 	z ::= this imaginary z
-
-	// NOTE: The coordinates are represented differently in C# Kean:
-	// x = this w
-	// y = this x
-	// z = this y
-	// w = this z
-
 	isValid ::= this real isNumber && this imaginary isValid
 	isIdentity ::= this real equals(1.f) && this imaginary x equals(0.f) && this imaginary y equals(0.f) && this imaginary z equals(0.f)
 	isNull ::= this real equals(0.f) && this imaginary x equals(0.f) && this imaginary y equals(0.f) && this imaginary z equals(0.f)
@@ -108,6 +101,7 @@ Quaternion: cover {
 			result
 		}
 	}
+
 	init: func@ (=real, =imaginary)
 	init: func@ ~floats (w, x, y, z: Float) { this init(w, FloatPoint3D new(x, y, z)) }
 	init: func@ ~default { this init(0, 0, 0, 0) }
@@ -215,6 +209,7 @@ Quaternion: cover {
 
 	precision: static Float = 1.0e-6f
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
+
 	createFromEulerAngles: static func (rotationX, rotationY, rotationZ: Float) -> This {
 		This createRotationZ(rotationZ) * This createRotationY(rotationY) * This createRotationX(rotationX)
 	}
@@ -330,6 +325,7 @@ Quaternion: cover {
 		}
 		(referenceVectors, observationVectors)
 	}
+
 	kean_math_quaternion_new: unmangled static func (w, x, y, z: Float) -> This { This new(w, x, y, z) }
 }
 operator * (value: Float, other: Quaternion) -> Quaternion { other * value }

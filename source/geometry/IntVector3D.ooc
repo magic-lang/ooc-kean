@@ -20,8 +20,10 @@ use ooc-base
 
 IntVector3D: cover {
 	x, y, z: Int
+
 	volume ::= this x * this y * this z
 	hasZeroVolume ::= this volume == 0
+
 	init: func@ (=x, =y, =z)
 	init: func@ ~default { this init(0, 0, 0) }
 	scalarProduct: func (other: This) -> Int { this x * other x + this y * other y + this z * other z }
@@ -55,6 +57,7 @@ IntVector3D: cover {
 	basisX: static This { get { This new(1, 0, 0) } }
 	basisY: static This { get { This new(0, 1, 0) } }
 	basisZ: static This { get { This new(0, 0, 1) } }
+
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new (parts[0] toInt(), parts[1] toInt(), parts[2] toInt())

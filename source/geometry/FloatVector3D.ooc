@@ -22,11 +22,13 @@ use ooc-base
 
 FloatVector3D: cover {
 	x, y, z: Float
+
 	volume ::= this x * this y * this z
 	hasZeroVolume ::= this volume equals(0.0f)
 	length ::= this norm
 	norm ::= (this x squared + this y squared + this z squared) sqrt()
 	azimuth ::= this y atan2(this x)
+
 	init: func@ (=x, =y, =z)
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	pNorm: func (p: Float) -> Float {
@@ -76,6 +78,7 @@ FloatVector3D: cover {
 	basisX: static This { get { This new(1, 0, 0) } }
 	basisY: static This { get { This new(0, 1, 0) } }
 	basisZ: static This { get { This new(0, 0, 1) } }
+
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new (parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat())

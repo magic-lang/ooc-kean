@@ -29,13 +29,18 @@ import FloatEuclidTransform, FloatTransform3D, FloatPoint3D
 
 FloatTransform2D: cover {
 	a, b, c, d, e, f, g, h, i: Float
-	determinant ::= this a * this e * this i + this d * this h * this c + this g * this b * this f - this g * this e * this c - this d * this b * this i - this a * this h * this f
 
+	determinant ::= this a * this e * this i + this d * this h * this c + this g * this b * this f - this g * this e * this c - this d * this b * this i - this a * this h * this f
 	translation ::= FloatVector2D new(this g, this h)
 	scaling ::= (this scalingX + this scalingY) / 2.0f
 	scalingX ::= (this a * this a + this b * this b) sqrt()
 	scalingY ::= (this d * this d + this e * this e) sqrt()
 	rotationZ ::= this b atan2(this a)
+	isProjective ::= this determinant != 0.0f
+	isAffine ::= this c == 0.0f && this f == 0.0f && this i == 1.0f
+	isSimilarity ::= this == This create(this translation, this scaling, this rotationZ)
+	isEuclidian ::= this == This create(this translation, this rotationZ)
+	isIdentity ::= (this a == 1.0f && this e == 1.0f && this i == 1.0f) && (this b == 0.0f && this c == 0.0f && this d == 0.0f && this f == 0.0f && this g == 0.0f && this h == 0.0f)
 	inverse: This { get {
 		determinant := this determinant
 		if (determinant == 0)
@@ -52,11 +57,6 @@ FloatTransform2D: cover {
 			(this a * this e - this b * this d) / determinant
 		)
 	}}
-	isProjective ::= this determinant != 0.0f
-	isAffine ::= this c == 0.0f && this f == 0.0f && this i == 1.0f
-	isSimilarity ::= this == This create(this translation, this scaling, this rotationZ)
-	isEuclidian ::= this == This create(this translation, this rotationZ)
-	isIdentity ::= (this a == 1.0f && this e == 1.0f && this i == 1.0f) && (this b == 0.0f && this c == 0.0f && this d == 0.0f && this f == 0.0f && this g == 0.0f && this h == 0.0f)
 	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i)
 	init: func@ ~reduced (a, b, d, e, g, h: Float) { this init(a, b, 0.0f, d, e, 0.0f, g, h, 1.0f) }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f) }
@@ -167,6 +167,7 @@ FloatTransform2D: cover {
 	}
 
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f) } }
+
 	create: static func (translation: FloatVector2D, scale, rotation: Float) -> This {
 		This new(rotation cos() * scale, rotation sin() * scale, -rotation sin() * scale, rotation cos() * scale, translation x, translation y)
 	}

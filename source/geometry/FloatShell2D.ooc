@@ -22,11 +22,13 @@ use ooc-base
 
 FloatShell2D: cover {
 	left, right, top, bottom: Float
+
 	leftTop ::= FloatPoint2D new(this left, this top)
 	size ::= FloatVector2D new(this left + this right, this top + this bottom)
 	balance ::= FloatPoint2D new(this right - this left, this bottom - this top)
 	isZero ::= this left == 0 && this right == 0 && this top == 0 && this bottom == 0
 	notZero ::= this left != 0 && this right != 0 && this top != 0 && this bottom != 0
+
 	init: func@ (=left, =right, =top, =bottom)
 	init: func@ ~fromFloat (value: Float) { this init(value, value, value, value) }
 	init: func@ ~fromFloats (x, y: Float) { this init(x, x, y, y) }

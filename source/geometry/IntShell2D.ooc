@@ -21,11 +21,13 @@ use ooc-base
 
 IntShell2D: cover {
 	left, right, top, bottom: Int
+
 	leftTop ::= IntPoint2D new(this left, this top)
 	size ::= IntVector2D new(this left + this right, this top + this bottom)
 	balance ::= IntPoint2D new(this right - this left, this bottom - this top)
 	isZero ::= this left == 0 && this right == 0 && this top == 0 && this bottom == 0
 	notZero ::= this left != 0 && this right != 0 && this top != 0 && this bottom != 0
+
 	init: func@ (=left, =right, =top, =bottom)
 	init: func@ ~fromFloat (value: Int) { this init(value, value) }
 	init: func@ ~fromFloats (x, y: Int) { this init(x, x, y, y) }
