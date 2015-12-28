@@ -35,15 +35,9 @@ Profiler: class {
 		this _timer free()
 		super()
 	}
-	start: func {
-		this _timer start()
-	}
-	stop: func {
-		this _timer stop()
-	}
-	reset: func {
-		this _timer reset()
-	}
+	start: func { this _timer start() }
+	stop: func { this _timer stop() }
+	reset: func { this _timer reset() }
 
 	_profilers := static VectorList<This> new(100)
 

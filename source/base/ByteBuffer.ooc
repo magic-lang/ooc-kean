@@ -61,9 +61,7 @@ ByteBuffer: class {
 	}
 
 	new: static func ~size (size: Int) -> This { _RecyclableByteBuffer new(size) }
-	new: static func ~recover (pointer: UInt8*, size: Int, recover: Func (This) -> Bool) -> This {
-		_RecoverableByteBuffer new(pointer, size, recover)
-	}
+	new: static func ~recover (pointer: UInt8*, size: Int, recover: Func (This) -> Bool) -> This { _RecoverableByteBuffer new(pointer, size, recover) }
 	clean: static func { _RecyclableByteBuffer _clean() }
 }
 

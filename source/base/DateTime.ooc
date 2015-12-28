@@ -71,27 +71,13 @@ DateTime: cover {
 		else
 			raise ("invalid input specified for constructor(year,month,day,hour,minute,second,ms)")
 	}
-	millisecond: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) millisecond
-	}
-	second: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) second
-	}
-	minute: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) minute
-	}
-	hour: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) hour
-	}
-	day: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) day
-	}
-	month: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) month
-	}
-	year: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) year
-	}
+	millisecond: func -> Int { This _ticksToDateTimeHelper(this ticks) millisecond }
+	second: func -> Int { This _ticksToDateTimeHelper(this ticks) second }
+	minute: func -> Int { This _ticksToDateTimeHelper(this ticks) minute }
+	hour: func -> Int { This _ticksToDateTimeHelper(this ticks) hour }
+	day: func -> Int { This _ticksToDateTimeHelper(this ticks) day }
+	month: func -> Int { This _ticksToDateTimeHelper(this ticks) month }
+	year: func -> Int { This _ticksToDateTimeHelper(this ticks) year }
 	// Convert this object to string representation
 	// 	supported formatting expressions:
 	//		%yyyy - year
