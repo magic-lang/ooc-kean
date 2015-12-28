@@ -151,6 +151,7 @@ VectorList: class <T> {
 		this getSliceInto(start .. end, buffer)
 	}
 	iterator: func -> Iterator<T> { _VectorListIterator<T> new(this) }
+
 	operator [] (index: Int) -> T {
 		version (safe) {
 			if (index >= this count)

@@ -90,20 +90,12 @@ OwnedBuffer: cover {
 		}
 		result
 	}
-	operator [] (start: Int) -> This {
-		this slice(start)
-	}
-	operator [] (range: Range) -> This {
-		this slice(range min, range count)
-	}
-	operator []= (start: Int, data: This) {
-		data copyTo(this[start])
-	}
-	operator []= (range: Range, data: This) {
-		data copyTo(this[range])
-	}
-	operator == (other: This) -> Bool {
-		(this _size == other _size) && (memcmp(this _pointer, other _pointer, this _size) == 0)
-	}
+
+	operator == (other: This) -> Bool { (this _size == other _size) && (memcmp(this _pointer, other _pointer, this _size) == 0) }
+	operator [] (start: Int) -> This { this slice(start) }
+	operator []= (start: Int, data: This) { data copyTo(this[start]) }
+	operator [] (range: Range) -> This { this slice(range min, range count) }
+	operator []= (range: Range, data: This) { data copyTo(this[range]) }
+
 	empty: static This { get { This new() } }
 }

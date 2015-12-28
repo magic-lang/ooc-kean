@@ -113,15 +113,9 @@ SChar: cover from signed char extends Char
 UChar: cover from unsigned char extends Char
 WChar: cover from wchar_t
 
-operator as (value: Char) -> String {
-	value toString()
-}
-operator as (value: Char*) -> String {
-	value ? value as CString toString() : null
-}
-operator as (value: CString) -> String {
-	value ? value toString() : null
-}
+operator as (value: Char) -> String { value toString() }
+operator as (value: Char*) -> String { value ? value as CString toString() : null }
+operator as (value: CString) -> String { value ? value toString() : null }
 
 CString: cover from Char* {
 	clone: func -> This {
@@ -160,7 +154,8 @@ CString: cover from Char* {
 }
 
 operator == (str1: CString, str2: CString) -> Bool {
-	if ((str1 == null) || (str2 == null)) return false
+	if ((str1 == null) || (str2 == null))
+		return false
 	str1 equals?(str2)
 }
 

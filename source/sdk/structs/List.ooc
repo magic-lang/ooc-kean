@@ -288,7 +288,6 @@ List: abstract class <T> extends BackIterable<T> {
 	}
 }
 
-/* Operators */
 operator [] <T> (list: List<T>, i: SSizeT) -> T { list get(i) }
 operator []= <T> (list: List<T>, i: SSizeT, element: T) { list set(i, element) }
 operator += <T> (list: List<T>, element: T) { list add(element) }

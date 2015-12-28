@@ -76,10 +76,7 @@ TextBuffer: cover {
 		this free(Owner Receiver)
 		String new(result)
 	}
-	operator [] (index: Int) -> Char { (this _backend pointer as Char*)[index] }
-	operator [] (range: Range) -> This { this slice(range min, range max - range min) }
-	operator []= (index: Int, value: Char) { (this _backend pointer as Char*)[index] = value }
-	operator []= (range: Range, data: This) { data copyTo(this[range]) }
+
 	operator == (other: This) -> Bool {
 		result := this _backend == other _backend
 		if (this _backend _pointer != other _backend _pointer)
@@ -96,5 +93,10 @@ TextBuffer: cover {
 		this free(Owner Receiver)
 		result
 	}
+	operator [] (index: Int) -> Char { (this _backend pointer as Char*)[index] }
+	operator []= (index: Int, value: Char) { (this _backend pointer as Char*)[index] = value }
+	operator [] (range: Range) -> This { this slice(range min, range max - range min) }
+	operator []= (range: Range, data: This) { data copyTo(this[range]) }
+
 	empty: static This { get { This new() } }
 }
