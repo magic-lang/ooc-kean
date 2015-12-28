@@ -594,34 +594,20 @@ NegativeLengthException: class extends Exception {
 	}
 }
 
-operator == (buff1, buff2: CharBuffer) -> Bool {
-	buff1 equals?(buff2)
-}
-
-operator != (buff1, buff2: CharBuffer) -> Bool {
-	!buff1 equals?(buff2)
-}
-
-operator [] (buffer: CharBuffer, index: Int) -> Char {
-	buffer get(index)
-}
-
-operator []= (buffer: CharBuffer, index: Int, value: Char) {
-	buffer set(index, value)
-}
-
+operator == (buff1, buff2: CharBuffer) -> Bool { buff1 equals?(buff2) }
+operator != (buff1, buff2: CharBuffer) -> Bool { !buff1 equals?(buff2) }
+operator [] (buffer: CharBuffer, index: Int) -> Char { buffer get(index) }
+operator []= (buffer: CharBuffer, index: Int, value: Char) { buffer set(index, value) }
 operator [] (buffer: CharBuffer, range: Range) -> CharBuffer {
 	b := buffer clone()
 	b substring(range min, range max)
 	b
 }
-
 operator * (buffer: CharBuffer, count: Int) -> CharBuffer {
 	b := buffer clone(buffer size * count)
 	b times(count)
 	b
 }
-
 operator + (left, right: CharBuffer) -> CharBuffer {
 	b := left clone(left size + right size)
 	b append(right)
