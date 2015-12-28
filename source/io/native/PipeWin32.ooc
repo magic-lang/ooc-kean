@@ -3,15 +3,13 @@ import os/win32/[types, errors]
 
 version(windows) {
 PipeWin32: class extends Pipe {
-	readFD = 0, writeFD = 0 : Handle
+	readFD = 0, writeFD = 0: Handle
 	init: func ~twos {
 		saAttr: SecurityAttributes
-
 		// Set the bInheritHandle flag so pipe handles are inherited.
 		saAttr length = SecurityAttributes size
 		saAttr inheritHandle = true
 		saAttr securityDescriptor = null
-
 		/* Try to open a new pipe */
 		if (!CreatePipe(readFD&, writeFD&, saAttr&, 0)) {
 			WindowsException new(This, GetLastError(), "Failed to create pipe") throw()
@@ -20,28 +18,23 @@ PipeWin32: class extends Pipe {
 	read: func ~cstring (buf: CString, len: Int) -> Int {
 		bytesRead: ULong
 		success := ReadFile(readFD, buf, len, bytesRead&, null)
-
 		// normal read
-		if (success) return bytesRead
-
+		if (success)
+			return bytesRead
 		// no data
-		if (GetLastError() == ERROR_NO_DATA) return 0
-
+		if (GetLastError() == ERROR_NO_DATA)
+			return 0
 		// reached eof
 		eof = true
 		return -1
 	}
 	write: func (data: Pointer, len: Int) -> Int {
 		bytesWritten: ULong
-
 		// will either block (in blocking mode) or always return with true (in
 		// non-blocking mode) regardless of how many bytes were written.
 		success := WriteFile(writeFD, data, len as Long, bytesWritten&, null)
-
-		if (!success) {
+		if (!success)
 			WindowsException new(This, GetLastError(), "Failed to write to pipe") throw()
-		}
-
 		bytesWritten
 	}
 	// 'r' = close in reading, 'w' = close in writing

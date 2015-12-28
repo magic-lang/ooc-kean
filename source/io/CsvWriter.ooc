@@ -5,6 +5,7 @@ import io/[File, FileWriter]
 
 CsvWriter: class {
 	_fileWriter: FileWriter
+
 	init: func (=_fileWriter)
 	free: func {
 		if (this _fileWriter != null) {
@@ -34,6 +35,7 @@ CsvWriter: class {
 	_isWhitespace: func (value: Char) -> Bool {
 		value == '\t' || value == ' ' || value == '\r' || value == '\n'
 	}
+
 	open: static func ~text (filename: Text) -> This {
 		filenameString := filename toString()
 		result := This open(filenameString)
