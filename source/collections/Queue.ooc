@@ -68,6 +68,7 @@ VectorQueue: class <T> extends Queue<T> {
 		this _capacity = newCapacity
 	}
 	toString: func -> String { "Queue: count=" << this _count toString() >> " capacity=" & this _capacity toString() }
+
 	operator [] (index: Int) -> T {
 		version(safe)
 			if (index < -this count || index >= this count)
