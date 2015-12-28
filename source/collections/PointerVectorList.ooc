@@ -21,14 +21,9 @@ PointerVectorList: class {
 	_vector: PointerVector
 	_count: Int
 	count := this _count
-	init: func ~default {
-		this init(32)
-	}
 
-	init: func ~heap (capacity: Int) {
-		this init(PointerHeapVector new(capacity))
-	}
-
+	init: func ~default { this init(32) }
+	init: func ~heap (capacity: Int) { this init(PointerHeapVector new(capacity)) }
 	init: func (=_vector)
 	free: override func {
 		for (i in 0 .. this count)
@@ -37,29 +32,22 @@ PointerVectorList: class {
 		super()
 	}
 	add: func (item: Pointer) {
-		if (this _vector count <= this count) {
+		if (this _vector count <= this count)
 			this _vector resize(this _vector count + 8)
-		}
-
 		this _vector[this count] = item
 		this count += 1
 	}
-
 	remove: func ~last -> Pointer {
 		this count -= 1
 		this _vector[this count]
 	}
-
 	insert: func (index: Int, item: Pointer) {
-		if (this _vector count <= this count) {
+		if (this _vector count <= this count)
 			this _vector resize(this _vector count + 8)
-		}
-
 		this _vector copy(index, index + 1)
 		this _vector[index] = item
 		this count += 1
 	}
-
 	remove: func (index: Int) -> Pointer {
 		tmp := this _vector[index]
 		this _vector copy(index + 1, index)

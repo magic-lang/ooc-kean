@@ -19,6 +19,7 @@ Vector2D: class <T> {
 	_backend: T*
 	_rowCount: Int
 	_columnCount: Int
+
 	rowCount ::= this _rowCount
 	columnCount ::= this _columnCount
 
@@ -48,7 +49,6 @@ Vector2D: class <T> {
 			temporaryResult: T*
 			minimumRowCount := Int minimum(this rowCount, newRowCount)
 			minimumColumnCount := Int minimum(this columnCount, newColumnCount)
-
 			if (newRowCount > this rowCount && newColumnCount > this columnCount)
 				temporaryResult = gc_calloc(newRowCount * newColumnCount, T size)
 			else
@@ -64,7 +64,6 @@ Vector2D: class <T> {
 	}
 	move: func (sourceRowStart, sourceColumnStart, targetRowStart, targetColumnStart: Int, columnCount := 0, rowCount := 0) {
 		sourceRowIndex, targetRowIndex: Int
-
 		if (rowCount < 1)
 			rowCount = this rowCount - sourceRowStart
 		if (columnCount < 1)
@@ -84,7 +83,6 @@ Vector2D: class <T> {
 				targetRowIndex = rowCount + targetRowStart - row - 1
 				sourceRowIndex = targetRowIndex - targetRowStart + sourceRowStart
 			}
-
 			memmove(_backend[T size * this _elementPosition(targetRowIndex, targetColumnStart)]&,
 				this _backend[T size * this _elementPosition(sourceRowIndex, sourceColumnStart)]&, columnCount * T size)
 		}

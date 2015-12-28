@@ -22,9 +22,11 @@ RecycleBin: class <T> {
 	//TODO: Replace with SynchronizedVectorList
 	_list: VectorList<T>
 	_size: Int
+
 	count ::= this _list count
 	isFull ::= this count == this _size
 	isEmpty ::= this _list empty
+
 	init: func (=_size, =_free) { this _list = VectorList<T> new(_size) }
 	free: override func {
 		this clear()
