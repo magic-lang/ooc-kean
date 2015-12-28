@@ -191,6 +191,7 @@ RasterMonochrome: class extends RasterPacked {
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
 	_createCanvas: override func -> Canvas { RasterMonochromeCanvas new(this) }
+
 	operator [] (x, y: Int) -> ColorMonochrome {
 		version(safe) {
 			if (!this isValidIn(x, y))
@@ -205,6 +206,7 @@ RasterMonochrome: class extends RasterPacked {
 		}
 		((this buffer pointer + y * this stride) as ColorMonochrome* + x)@ = value
 	}
+
 	open: static func (filename: String) -> This {
 		x, y, imageComponents: Int
 		requiredComponents := 1
