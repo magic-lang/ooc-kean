@@ -26,6 +26,7 @@ _Argument: class {
 	_action: Event
 	_textAction: Event1<Text>
 	_listAction: Event1<VectorList<Text>>
+
 	init: func (=_longIdentifier, =_shortIdentifier, =_parameters, =_action)
 	init: func ~noShort (=_longIdentifier, =_parameters, =_action)
 	init: func ~parameter (=_longIdentifier, =_shortIdentifier, =_parameters, =_textAction)
