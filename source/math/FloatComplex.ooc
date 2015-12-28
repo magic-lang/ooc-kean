@@ -19,8 +19,10 @@ use ooc-base
 
 FloatComplex: cover {
 	real, imaginary: Float
+
 	conjugate ::= This new(this real, - this imaginary)
 	absoluteValue ::= (this real pow(2) + this imaginary pow(2)) sqrt()
+
 	init: func@ (=real, =imaginary)
 	init: func@ ~default { this init(0.0f, 0.0f) }
 	toString: func -> String {

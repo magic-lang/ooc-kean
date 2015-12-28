@@ -21,6 +21,7 @@ use ooc-collections
 import FloatVectorList
 
 FloatComplexVectorList: class extends VectorList<FloatComplex> {
+	mean ::= this sum / this _count
 	sum: FloatComplex {
 		get {
 			result := FloatComplex new()
@@ -29,7 +30,6 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 			result
 		}
 	}
-	mean ::= this sum / this _count
 	real: FloatVectorList {
 		get {
 			result := FloatVectorList new()
