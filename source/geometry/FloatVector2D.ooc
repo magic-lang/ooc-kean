@@ -56,12 +56,12 @@ FloatVector2D: cover {
 	operator - (other: This) -> This { This new(this x - other x, this y - other y) }
 	operator * (other: This) -> This { This new(this x * other x, this y * other y) }
 	operator / (other: This) -> This { This new(this x / other x, this y / other y) }
-	operator == (other: This) -> Bool { this x == other x && this y == other y }
-	operator != (other: This) -> Bool { !(this == other) }
 	operator < (other: This) -> Bool { this x < other x && this y < other y }
 	operator > (other: This) -> Bool { this x > other x && this y > other y }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
+	operator == (other: This) -> Bool { this x == other x && this y == other y }
+	operator != (other: This) -> Bool { !(this == other) }
 	operator + (other: FloatPoint2D) -> This { This new(this x + other x, this y + other y) }
 	operator - (other: FloatPoint2D) -> This { This new(this x - other x, this y - other y) }
 	operator * (other: FloatPoint2D) -> This { This new(this x * other x, this y * other y) }

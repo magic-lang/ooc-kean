@@ -36,12 +36,12 @@ IntPoint3D: cover {
 	operator - (other: This) -> This { This new(this x - other x, this y - other y, this z - other z) }
 	operator * (other: This) -> This { This new(this x * other x, this y * other y, this z * other z) }
 	operator / (other: This) -> This { This new(this x / other x, this y / other y, this z / other z) }
-	operator == (other: This) -> Bool { this x == other x && this y == other y && this z == other z }
-	operator != (other: This) -> Bool { this x != other x || this y != other y || this z != other z }
 	operator < (other: This) -> Bool { this x < other x && this y < other y && this z < other z }
 	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
+	operator == (other: This) -> Bool { this x == other x && this y == other y && this z == other z }
+	operator != (other: This) -> Bool { this x != other x || this y != other y || this z != other z }
 	operator + (other: IntVector3D) -> This { This new(this x + other x, this y + other y, this z + other z) }
 	operator - (other: IntVector3D) -> This { This new(this x - other x, this y - other y, this z - other z) }
 	operator * (other: IntVector3D) -> This { This new(this x * other x, this y * other y, this z * other z) }
