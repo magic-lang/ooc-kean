@@ -15,6 +15,7 @@ Imports: lang/stdlib
 Imports: lang/types
 Imports: lang/VarArgs
 Imports: math
+Imports: Buffer
 Imports: Owner
 Imports: OwnedBuffer
 Imports: TextBuffer
