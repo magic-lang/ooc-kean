@@ -25,7 +25,6 @@ import backend/[GLContext, GLRenderer]
 version(!gpuOff) {
 OpenGLContext: class extends GpuContext {
 	_backend: GLContext
-	backend ::= this _backend
 	_transformTextureMap: OpenGLMapTransform
 	_packMonochrome: OpenGLMap
 	_packUv: OpenGLMap
@@ -33,10 +32,11 @@ OpenGLContext: class extends GpuContext {
 	_linesShader: OpenGLMap
 	_pointsShader: OpenGLMap
 	_meshShader: OpenGLMapMesh
-	meshShader ::= this _meshShader
 	_renderer: GLRenderer
-	defaultMap ::= this _transformTextureMap as GpuMap
 	_recycleBin := _RecycleBin new()
+	backend ::= this _backend
+	meshShader ::= this _meshShader
+	defaultMap ::= this _transformTextureMap as GpuMap
 
 	init: func ~backend (=_backend) {
 		super()

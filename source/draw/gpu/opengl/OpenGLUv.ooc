@@ -23,7 +23,6 @@ import OpenGLCanvas, OpenGLPacked, OpenGLContext, OpenGLMap
 
 version(!gpuOff) {
 OpenGLUv: class extends OpenGLPacked {
-	channelCount: static Int = 2
 	init: func ~fromPixels (size: IntVector2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
 		super(context _backend createTexture(TextureType Uv, size, stride, data), This channelCount, context)
 		this _coordinateSystem = coordinateSystem
@@ -49,5 +48,6 @@ OpenGLUv: class extends OpenGLPacked {
 		result
 	}
 	create: override func (size: IntVector2D) -> This { this context createUv(size) as This }
+	channelCount: static Int = 2
 }
 }

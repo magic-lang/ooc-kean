@@ -168,17 +168,6 @@ Gles3Context: class extends GLContext {
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR)
 		version(debugGL) { validateEnd("Context blend~alphaMonochrome") }
 	}
-	create: static func ~shared (display: Pointer, nativeBackend: Long, sharedContext: This = null) -> This {
-		version(debugGL) { Debug print("Creating OpenGL Context") }
-		result := This new()
-		result _generate(display, nativeBackend, sharedContext) ? result : null
-	}
-	create: static func ~pbufferShared (sharedContext: This = null) -> This {
-		version(debugGL) { Debug print("Creating OpenGL Context") }
-		result := This new()
-		result _generate(sharedContext) ? result : null
-	}
-
 	createQuad: func -> Gles3Quad {
 		result := Gles3Quad new()
 		(result vao != null) ? result : null
@@ -206,6 +195,16 @@ Gles3Context: class extends GLContext {
 	createRenderer: func -> Gles3Renderer { Gles3Renderer new() }
 	createVertexArrayObject: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GLVertexArrayObject {
 		Gles3VertexArrayObject new(vertices, textureCoordinates)
+	}
+	create: static func ~shared (display: Pointer, nativeBackend: Long, sharedContext: This = null) -> This {
+		version(debugGL) { Debug print("Creating OpenGL Context") }
+		result := This new()
+		result _generate(display, nativeBackend, sharedContext) ? result : null
+	}
+	create: static func ~pbufferShared (sharedContext: This = null) -> This {
+		version(debugGL) { Debug print("Creating OpenGL Context") }
+		result := This new()
+		result _generate(sharedContext) ? result : null
 	}
 }
 }

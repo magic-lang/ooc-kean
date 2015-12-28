@@ -37,17 +37,14 @@ GraphicBufferUsage: enum (*2) {
 }
 
 GraphicBuffer: class {
-	_allocate: static Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
-	_createFromHandle: static Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
-	_free: static Func (Pointer)
-	_lock: static Func (Pointer, Int, Pointer*)
-	_unlock: static Func (Pointer)
-	_alignedWidth: static Int[] = Int[0] new()
 	_format: GraphicBufferFormat
-	format ::= this _format
 	_size: IntVector2D
-	size ::= this _size
 	_pixelStride: Int
+	_backend: Pointer = null
+	_nativeBuffer: Pointer = null
+	_handle: Pointer = null
+	format ::= this _format
+	size ::= this _size
 	pixelStride ::= this _pixelStride
 	stride: Int {
 		get {
@@ -58,10 +55,7 @@ GraphicBuffer: class {
 		}
 	}
 	length ::= this stride * this size y
-	_backend: Pointer = null
-	_nativeBuffer: Pointer = null
 	nativeBuffer ::= this _nativeBuffer
-	_handle: Pointer = null
 	handle ::= this _handle
 
 	init: func (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format)
@@ -86,20 +80,12 @@ GraphicBuffer: class {
 		result
 	}
 	unlock: func { This _unlock(this _backend) }
-	kean_draw_graphicBuffer_registerCallbacks: unmangled static func (allocate, createFromHandle, free, lock, unlock: Pointer) {
-		This _allocate = (allocate, null) as Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
-		This _createFromHandle = (createFromHandle, null) as Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
-		This _free = (free, null) as Func (Pointer)
-		This _lock = (lock, null) as Func (Pointer, Int, Pointer*)
-		This _unlock = (unlock, null) as Func (Pointer)
-	}
-	kean_draw_graphicBuffer_configureAlignedWidth: unmangled static func (alignedWidth: Int*, count: Int) {
-		This _alignedWidth = Int[count] new()
-		memcpy(This _alignedWidth data, alignedWidth, count * Int size)
-	}
-	kean_draw_graphicBuffer_new: unmangled static func (backend, nativeBuffer, handle: Pointer, size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat) -> This {
-		This new(backend, nativeBuffer, handle, size, pixelStride, format)
-	}
+	_allocate: static Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
+	_createFromHandle: static Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
+	_free: static Func (Pointer)
+	_lock: static Func (Pointer, Int, Pointer*)
+	_unlock: static Func (Pointer)
+	_alignedWidth: static Int[] = Int[0] new()
 	alignWidth: static func (width: Int, align := AlignWidth Nearest) -> Int {
 		result := width
 		if (This _alignedWidth length > 0)
@@ -123,6 +109,20 @@ GraphicBuffer: class {
 			}
 		}
 		result
+	}
+	kean_draw_graphicBuffer_registerCallbacks: unmangled static func (allocate, createFromHandle, free, lock, unlock: Pointer) {
+		This _allocate = (allocate, null) as Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
+		This _createFromHandle = (createFromHandle, null) as Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
+		This _free = (free, null) as Func (Pointer)
+		This _lock = (lock, null) as Func (Pointer, Int, Pointer*)
+		This _unlock = (unlock, null) as Func (Pointer)
+	}
+	kean_draw_graphicBuffer_configureAlignedWidth: unmangled static func (alignedWidth: Int*, count: Int) {
+		This _alignedWidth = Int[count] new()
+		memcpy(This _alignedWidth data, alignedWidth, count * Int size)
+	}
+	kean_draw_graphicBuffer_new: unmangled static func (backend, nativeBuffer, handle: Pointer, size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat) -> This {
+		This new(backend, nativeBuffer, handle, size, pixelStride, format)
 	}
 }
 }

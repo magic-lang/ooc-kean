@@ -58,19 +58,6 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		(yImage, uvImage) := This _createSubimages(buffer, size, stride, uvOffset)
 		this init(yImage, uvImage)
 	}
-	_allocate: static func (size: IntVector2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
-		length := uvOffset + stride * (size y + 1) / 2
-		buffer := ByteBuffer new(length)
-		This _createSubimages(buffer, size, stride, uvOffset)
-	}
-	_createSubimages: static func (buffer: ByteBuffer, size: IntVector2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
-		yLength := stride * size y
-		uvLength := stride * size y / 2
-		(RasterMonochrome new(buffer slice(0, yLength), size, stride), RasterUv new(buffer slice(uvOffset, uvLength), This _uvSize(size), stride))
-	}
-	_uvSize: static func (size: IntVector2D) -> IntVector2D {
-		IntVector2D new(size x / 2 + (size x isOdd ? 1 : 0), size y / 2 + (size y isOdd ? 1 : 0))
-	}
 	create: func (size: IntVector2D) -> Image { This new(size) }
 	copy: func -> This {
 		result := This new(this)
@@ -180,12 +167,40 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		this apply(convert)
 		(convert as Closure) free()
 	}
+	save: override func (filename: String) -> Int {
+		bgr := RasterBgr convertFrom(this)
+		result := bgr save(filename)
+		bgr free()
+		result
+	}
+	saveRaw: func (filename: String) {
+		fileWriter := FileWriter new(filename)
+		fileWriter write(this y buffer pointer as Char*, this y buffer size)
+		fileWriter write(this uv buffer pointer as Char*, this uv buffer size)
+		fileWriter close()
+	}
+	_createCanvas: override func -> Canvas { RasterYuv420SemiplanarCanvas new(this) }
 	operator [] (x, y: Int) -> ColorYuv {
 		ColorYuv new(this y[x, y] y, this uv [x / 2, y / 2] u, this uv [x / 2, y / 2] v)
 	}
 	operator []= (x, y: Int, value: ColorYuv) {
 		this y[x, y] = ColorMonochrome new(value y)
 		this uv[x / 2, y / 2] = ColorUv new(value u, value v)
+	}
+	kean_draw_rasterYuv420Semiplanar_getMonochromeData: unmangled func -> Void* { this y buffer pointer }
+	kean_draw_rasterYuv420Semiplanar_getUvData: unmangled func -> Void* { this uv buffer pointer }
+	_allocate: static func (size: IntVector2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
+		length := uvOffset + stride * (size y + 1) / 2
+		buffer := ByteBuffer new(length)
+		This _createSubimages(buffer, size, stride, uvOffset)
+	}
+	_createSubimages: static func (buffer: ByteBuffer, size: IntVector2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
+		yLength := stride * size y
+		uvLength := stride * size y / 2
+		(RasterMonochrome new(buffer slice(0, yLength), size, stride), RasterUv new(buffer slice(uvOffset, uvLength), This _uvSize(size), stride))
+	}
+	_uvSize: static func (size: IntVector2D) -> IntVector2D {
+		IntVector2D new(size x / 2 + (size x isOdd ? 1 : 0), size y / 2 + (size y isOdd ? 1 : 0))
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
@@ -235,12 +250,6 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		bgr free()
 		result
 	}
-	save: override func (filename: String) -> Int {
-		bgr := RasterBgr convertFrom(this)
-		result := bgr save(filename)
-		bgr free()
-		result
-	}
 	openRaw: static func (filename: String, size: IntVector2D) -> This {
 		fileReader := FileReader new(FStream open(filename, "rb"))
 		result := This new(size)
@@ -250,19 +259,10 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		fileReader free()
 		result
 	}
-	saveRaw: func (filename: String) {
-		fileWriter := FileWriter new(filename)
-		fileWriter write(this y buffer pointer as Char*, this y buffer size)
-		fileWriter write(this uv buffer pointer as Char*, this uv buffer size)
-		fileWriter close()
-	}
-	_createCanvas: override func -> Canvas { RasterYuv420SemiplanarCanvas new(this) }
 	kean_draw_rasterYuv420Semiplanar_new: static unmangled func (width, height, stride: Int, monochromeData, uvData: Void*) -> This {
 		result := This new(IntVector2D new(width, height), stride)
 		memcpy(result uv buffer pointer, uvData, (height / 2) * stride)
 		memcpy(result y buffer pointer, monochromeData, height * stride)
 		result
 	}
-	kean_draw_rasterYuv420Semiplanar_getMonochromeData: unmangled func -> Void* { this y buffer pointer }
-	kean_draw_rasterYuv420Semiplanar_getUvData: unmangled func -> Void* { this uv buffer pointer }
 }

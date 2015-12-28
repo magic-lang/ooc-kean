@@ -22,8 +22,8 @@ use ooc-geometry
 version(!gpuOff) {
 GLFramebufferObject: abstract class {
 	_size: IntVector2D
-	size ::= this _size
 	_backend: UInt
+	size ::= this _size
 
 	init: func (=_size)
 	bind: abstract func

@@ -123,15 +123,6 @@ AndroidContext: class extends OpenGLContext {
 			(rasterResult, fenceResult) = super(gpuImage)
 		(rasterResult, fenceResult)
 	}
-	_unpack: static func (source: GpuImage, target: GpuImage, map: GpuMap, targetWidth: Int, transform: FloatTransform3D, scaleX: Float, scaleY: Float, startY: Float) {
-		map add("texture0", source)
-		map add("targetWidth", targetWidth)
-		map add("transform", transform)
-		map add("scaleX", scaleX)
-		map add("scaleY", scaleY)
-		map add("startY", startY)
-		target canvas draw(source, map)
-	}
 	unpackBgraToYuv420Semiplanar: func (source: GpuImage, targetSize: IntVector2D, padding := 0) -> GpuYuv420Semiplanar {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
 		sourceSize := source size
@@ -151,5 +142,14 @@ AndroidContext: class extends OpenGLContext {
 	}
 	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }
 	isAligned: override func (width: Int) -> Bool { GraphicBuffer isAligned(width) }
+	_unpack: static func (source: GpuImage, target: GpuImage, map: GpuMap, targetWidth: Int, transform: FloatTransform3D, scaleX: Float, scaleY: Float, startY: Float) {
+		map add("texture0", source)
+		map add("targetWidth", targetWidth)
+		map add("transform", transform)
+		map add("scaleX", scaleX)
+		map add("scaleY", scaleY)
+		map add("startY", startY)
+		target canvas draw(source, map)
+	}
 }
 }

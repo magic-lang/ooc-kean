@@ -23,7 +23,6 @@ import backend/GLTexture
 
 version(!gpuOff) {
 OpenGLMonochrome: class extends OpenGLPacked {
-	channelCount: static Int = 1
 	init: func ~fromPixels (size: IntVector2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
 		super(context _backend createTexture(TextureType Monochrome, size, stride, data), This channelCount, context)
 		this _coordinateSystem = coordinateSystem
@@ -42,5 +41,6 @@ OpenGLMonochrome: class extends OpenGLPacked {
 		result
 	}
 	create: override func (size: IntVector2D) -> This { this context createMonochrome(size) as This }
+	channelCount: static Int = 1
 }
 }

@@ -26,16 +26,13 @@ import threading/Mutex
 version(!gpuOff) {
 GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	_buffer: GraphicBuffer
-	buffer ::= this _buffer
 	_stride: Int
-	stride ::= this _stride
 	_uvOffset: Int
+	_rgba: EGLBgra = null
+	buffer ::= this _buffer
+	stride ::= this _stride
 	uvOffset ::= this _uvOffset
 	uvPadding ::= (this _uvOffset - this _stride * this _size y)
-	_rgba: EGLBgra = null
-	_bin := static VectorList<EGLBgra> new()
-	_mutex := static Mutex new()
-	_binSize: static Int = 20
 	init: func ~fromBuffer (=_buffer, size: IntVector2D, =_stride, =_uvOffset) {
 		pointer := _buffer lock(GraphicBufferUsage ReadOften)
 		_buffer unlock()
@@ -64,6 +61,9 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		this _rgba referenceCount increase()
 		this _rgba
 	}
+	_bin := static VectorList<EGLBgra> new()
+	_mutex := static Mutex new()
+	_binSize: static Int = 20
 	_recycle: static func (image: EGLBgra) {
 		This _mutex lock()
 		This _bin add(image)

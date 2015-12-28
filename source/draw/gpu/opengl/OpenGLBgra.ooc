@@ -23,7 +23,6 @@ import OpenGLCanvas, OpenGLPacked, OpenGLContext
 
 version(!gpuOff) {
 OpenGLBgra: class extends OpenGLPacked {
-	channelCount: static Int = 4
 	init: func ~fromPixels (size: IntVector2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
 		super(context _backend createTexture(TextureType Bgra, size, stride, data), This channelCount, context)
 		this _coordinateSystem = coordinateSystem
@@ -38,5 +37,6 @@ OpenGLBgra: class extends OpenGLPacked {
 		RasterBgra new(buffer, this size)
 	}
 	create: override func (size: IntVector2D) -> This { this context createBgra(size) as This }
+	channelCount: static Int = 4
 }
 }

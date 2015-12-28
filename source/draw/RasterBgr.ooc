@@ -130,6 +130,17 @@ RasterBgr: class extends RasterPacked {
 			result /= this size length
 		}
 	}
+	swapRedBlue: func {
+		this swapChannels(0, 2)
+	}
+	redBlueSwapped: func -> This {
+		result := this copy()
+		result swapRedBlue()
+		result
+	}
+	_createCanvas: override func -> Canvas { RasterBgrCanvas new(this) }
+	operator [] (x, y: Int) -> ColorBgr { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorBgr* + x)@ : ColorBgr new(0, 0, 0) }
+	operator []= (x, y: Int, value: ColorBgr) { ((this buffer pointer + y * this stride) as ColorBgr* + x)@ = value }
 	open: static func (filename: String) -> This {
 		x, y, imageComponents: Int
 		requiredComponents := 3
@@ -161,17 +172,6 @@ RasterBgr: class extends RasterPacked {
 		}
 		result
 	}
-	operator [] (x, y: Int) -> ColorBgr { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorBgr* + x)@ : ColorBgr new(0, 0, 0) }
-	operator []= (x, y: Int, value: ColorBgr) { ((this buffer pointer + y * this stride) as ColorBgr* + x)@ = value }
-	swapRedBlue: func {
-		this swapChannels(0, 2)
-	}
-	redBlueSwapped: func -> This {
-		result := this copy()
-		result swapRedBlue()
-		result
-	}
-	_createCanvas: override func -> Canvas { RasterBgrCanvas new(this) }
 	kean_draw_rasterBgr_new: static unmangled func (width, height, stride: Int, data: Void*) -> This {
 		result := This new(IntVector2D new(width, height), stride)
 		memcpy(result buffer pointer, data, height * stride)

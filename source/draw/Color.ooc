@@ -19,9 +19,6 @@ use ooc-geometry
 
 ColorMonochrome: cover {
 	y: UInt8
-	set: func (color: This) {
-		this y = color y
-	}
 	normalized ::= this y as Float / 255
 	init: func@ (=y)
 	init: func@ ~default { this init(0) }
@@ -32,6 +29,9 @@ ColorMonochrome: cover {
 	init: func@ ~int (i: Int) { this init(i as UInt8) }
 	init: func@ ~float (f: Float) { this init(f*255.0f clamp(0.0f, 255.0f) as UInt8) }
 	init: func@ ~double (d: Double) { this init(d*255.0f clamp(0.0f, 255.0f) as UInt8) }
+	set: func (color: This) {
+		this y = color y
+	}
 	copy: func -> This { This new(this y) }
 	toMonochrome: func -> This { this copy() }
 	toUv: func -> ColorUv { ColorUv new(128, 128) }
@@ -61,16 +61,16 @@ ColorMonochrome: cover {
 
 ColorUv: cover {
 	u, v: UInt8
-	set: func (color: This) {
-		this u = color u
-		this v = color v
-	}
 	normalized ::= FloatTuple2 new(this u as Float / 255, this v as Float / 255)
 	init: func@ (=u, =v)
 	init: func@ ~default { this init(0, 0) }
 	init: func@ ~int (i: Int) { this init(i as UInt8) }
 	init: func@ ~float (f: Float) { this init(f*255.0f clamp(0.0f, 255.0f) as UInt8) }
 	init: func@ ~double (d: Double) { this init(d*255.0f clamp(0.0f, 255.0f) as UInt8) }
+	set: func (color: This) {
+		this u = color u
+		this v = color v
+	}
 	copy: func -> This { This new(this u, this v) }
 	toMonochrome: func -> ColorMonochrome { ColorMonochrome new() }
 	toUv: func -> This { this }
@@ -101,17 +101,17 @@ ColorUv: cover {
 
 ColorYuv: cover {
 	y, u, v: UInt8
-	set: func (color: This) {
-		this y = color y
-		this u = color u
-		this v = color v
-	}
 	normalized ::= FloatTuple3 new(this y as Float / 255, this u as Float / 255, this v as Float / 255)
 	init: func@ (=y, =u, =v)
 	init: func@ ~default { this init(0, 0, 0) }
 	init: func@ ~int (y, u, v: Int) { this init(y as UInt8, u as UInt8, v as UInt8) }
 	init: func@ ~float (y, u, v: Float) { this init(y * 255.0f clamp(0.0f, 255.0f) as UInt8, u * 255.0f clamp(0.0f, 255.0f) as UInt8, v * 255.0f clamp(0.0f, 255.0f) as UInt8) }
 	init: func@ ~double (y, u, v: Double) { this init(y * 255.0f clamp(0.0f, 255.0f) as UInt8, u * 255.0f clamp(0.0f, 255.0f) as UInt8, v * 255.0f clamp(0.0f, 255.0f) as UInt8) }
+	set: func (color: This) {
+		this y = color y
+		this u = color u
+		this v = color v
+	}
 	copy: func -> This { This new(this y, this u, this v) }
 	toMonochrome: func -> ColorMonochrome { ColorMonochrome new(this y) }
 	toUv: func -> ColorUv { ColorUv new(this u, this v) }
@@ -164,17 +164,17 @@ ColorYuva: cover {
 
 ColorBgr: cover {
 	blue, green, red: UInt8
-	set: func (color: This) {
-		this blue = color blue
-		this green = color green
-		this red = color red
-	}
 	normalized ::= FloatTuple3 new(this blue as Float / 255, this green as Float / 255, this red as Float / 255)
 	init: func@ (=blue, =green, =red)
 	init: func@ ~default { this init(0, 0, 0) }
 	init: func@ ~int (b, g, r: Int) { this init(b as UInt8, g as UInt8, r as UInt8) }
 	init: func@ ~float (b, g, r: Float) { this init(b*255.0f clamp(0.0f, 255.0f) as UInt8, g*255.0f clamp(0.0f, 255.0f) as UInt8, r*255.0f clamp(0.0f, 255.0f) as UInt8) }
 	init: func@ ~double (b, g, r: Double) { this init(b*255.0f clamp(0.0f, 255.0f) as UInt8, g*255.0f clamp(0.0f, 255.0f) as UInt8, r*255.0f clamp(0.0f, 255.0f) as UInt8) }
+	set: func (color: This) {
+		this blue = color blue
+		this green = color green
+		this red = color red
+	}
 	copy: func -> This { This new(this blue, this green, this red) }
 	toMonochrome: func -> ColorMonochrome { ColorMonochrome new(this toYuv() y) }
 	toUv: func -> ColorUv { this toYuv() toUv() }
@@ -192,6 +192,10 @@ ColorBgr: cover {
 	equals: func ~yuv (other: ColorYuv) -> Bool { false }
 	equals: func ~bgr (other: This) -> Bool { this blue == other blue && this green == other green && this red == other red }
 	equals: func ~bgra (other: ColorBgra) -> Bool { false }
+	svgRGBToString: func -> String {
+		result := this red toString() & "," clone() & this green toString() & "," clone() & this blue toString()
+		result
+	}
 	operator == (other: ColorMonochrome) -> Bool { this equals(other) }
 	operator == (other: ColorYuv) -> Bool { this equals(other) }
 	operator == (other: This) -> Bool { this equals(other) }
@@ -200,19 +204,11 @@ ColorBgr: cover {
 	operator != (other: ColorYuv) -> Bool { !this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 	operator != (other: ColorBgra) -> Bool { !this equals(other) }
-	svgRGBToString: func -> String {
-		result := this red toString() & "," clone() & this green toString() & "," clone() & this blue toString()
-		result
-	}
 }
 
 ColorBgra: cover {
 	bgr: ColorBgr
 	alpha: UInt8
-	set: func (color: This) {
-		this bgr = color bgr
-		this alpha = color alpha
-	}
 	blue: UInt8 { get { this bgr blue } set (value) { this bgr blue = value } }
 	green: UInt8 { get { this bgr green } set (value) { this bgr green = value } }
 	red: UInt8 { get { this bgr red } set (value) { this bgr red = value } }
@@ -223,6 +219,10 @@ ColorBgra: cover {
 	init: func@ ~int (b, g, r, a: Int) { this init(b as UInt8, g as UInt8, r as UInt8, a as UInt8) }
 	init: func@ ~float (b, g, r, a: Float) { this init(ColorBgr new(b, g, r), a*255.0f clamp(0.0f, 255.0f) as UInt8) }
 	init: func@ ~double (b, g, r, a: Double) { this init(ColorBgr new(b, g, r), a*255.0f clamp(0.0f, 255.0f) as UInt8) }
+	set: func (color: This) {
+		this bgr = color bgr
+		this alpha = color alpha
+	}
 	copy: func -> This { This new(this bgr, this alpha) }
 	toMonochrome: func -> ColorMonochrome { this bgr toMonochrome() }
 	toUv: func -> ColorUv { this toYuv() toUv() }
@@ -240,14 +240,6 @@ ColorBgra: cover {
 	equals: func ~yuv (other: ColorYuv) -> Bool { false }
 	equals: func ~bgr (other: ColorBgr) -> Bool { false }
 	equals: func ~bgra (other: This) -> Bool { this bgr equals(other bgr) && this alpha == other alpha }
-	operator == (other: ColorMonochrome) -> Bool { this equals(other) }
-	operator == (other: ColorYuv) -> Bool { this equals(other) }
-	operator == (other: ColorBgr) -> Bool { this equals(other) }
-	operator == (other: This) -> Bool { this equals(other) }
-	operator != (other: ColorMonochrome) -> Bool { !this equals(other) }
-	operator != (other: ColorYuv) -> Bool { !this equals(other) }
-	operator != (other: ColorBgr) -> Bool { !this equals(other) }
-	operator != (other: This) -> Bool { !this equals(other) }
 	svgRGBToString: func -> String {
 		result := "rgb(" clone() & this bgr svgRGBToString() & ")" clone()
 		result
@@ -256,6 +248,14 @@ ColorBgra: cover {
 		result := this alpha
 		result
 	}
+	operator == (other: ColorMonochrome) -> Bool { this equals(other) }
+	operator == (other: ColorYuv) -> Bool { this equals(other) }
+	operator == (other: ColorBgr) -> Bool { this equals(other) }
+	operator == (other: This) -> Bool { this equals(other) }
+	operator != (other: ColorMonochrome) -> Bool { !this equals(other) }
+	operator != (other: ColorYuv) -> Bool { !this equals(other) }
+	operator != (other: ColorBgr) -> Bool { !this equals(other) }
+	operator != (other: This) -> Bool { !this equals(other) }
 }
 
 ColorConvert: cover {

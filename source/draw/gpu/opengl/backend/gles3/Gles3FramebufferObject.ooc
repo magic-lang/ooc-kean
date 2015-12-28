@@ -41,16 +41,6 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0)
 		version(debugGL) { validateEnd("FramebufferObject unbind") }
 	}
-	scissor: static func (x, y, width, height: Int) {
-		version(debugGL) { validateStart("FramebufferObject scissor") }
-		glScissor(x, y, width, height)
-		version(debugGL) { validateEnd("FramebufferObject scissor") }
-	}
-	clear: static func {
-		version(debugGL) { validateStart("FramebufferObject clear") }
-		glClear(GL_COLOR_BUFFER_BIT)
-		version(debugGL) { validateEnd("FramebufferObject clear") }
-	}
 	setClearColor: func (color: ColorBgra) {
 		version(debugGL) { validateStart("FramebufferObject setClearColor") }
 		tuple := color normalized
@@ -92,6 +82,24 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		version(debugGL) { validateEnd("FramebufferObject _generate") }
 		true
 	}
+	invalidate: func {
+		version(debugGL) { validateStart("FramebufferObject invalidate") }
+		this bind()
+		att: UInt = GL_COLOR_ATTACHMENT0
+		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, att&)
+		this unbind()
+		version(debugGL) { validateEnd("FramebufferObject invalidate") }
+	}
+	scissor: static func (x, y, width, height: Int) {
+		version(debugGL) { validateStart("FramebufferObject scissor") }
+		glScissor(x, y, width, height)
+		version(debugGL) { validateEnd("FramebufferObject scissor") }
+	}
+	clear: static func {
+		version(debugGL) { validateStart("FramebufferObject clear") }
+		glClear(GL_COLOR_BUFFER_BIT)
+		version(debugGL) { validateEnd("FramebufferObject clear") }
+	}
 	finish: static func {
 		version(debugGL) { validateStart("FramebufferObject finish") }
 		glFinish()
@@ -101,14 +109,6 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		version(debugGL) { validateStart("FramebufferObject flush") }
 		glFlush()
 		version(debugGL) { validateEnd("FramebufferObject flush") }
-	}
-	invalidate: func {
-		version(debugGL) { validateStart("FramebufferObject invalidate") }
-		this bind()
-		att: UInt = GL_COLOR_ATTACHMENT0
-		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, att&)
-		this unbind()
-		version(debugGL) { validateEnd("FramebufferObject invalidate") }
 	}
 }
 }

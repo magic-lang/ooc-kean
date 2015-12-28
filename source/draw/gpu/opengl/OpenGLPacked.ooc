@@ -23,6 +23,13 @@ import OpenGLContext, OpenGLCanvas
 version(!gpuOff) {
 OpenGLPacked: abstract class extends GpuImage {
 	_filter: Bool
+	_backend: GLTexture
+	_channels: UInt
+	_recyclable := true
+	backend ::= this _backend
+	channels ::= this _channels
+	context ::= this _context as OpenGLContext
+	recyclable ::= this _recyclable
 	filter: Bool {
 		get { this _filter }
 		set(value) {
@@ -30,13 +37,6 @@ OpenGLPacked: abstract class extends GpuImage {
 			this _backend setMinFilter(InterpolationType Linear)
 		}
 	}
-	_backend: GLTexture
-	backend ::= this _backend
-	_channels: UInt
-	channels ::= this _channels
-	context ::= this _context as OpenGLContext
-	_recyclable := true
-	recyclable ::= this _recyclable
 	init: func (=_backend, =_channels, context: OpenGLContext) { super(this _backend size, context) }
 	free: override func {
 		if (this recyclable)

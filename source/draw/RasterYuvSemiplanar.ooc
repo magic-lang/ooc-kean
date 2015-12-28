@@ -26,8 +26,8 @@ import Color
 
 RasterYuvSemiplanar: abstract class extends RasterPlanar {
 	_y: RasterMonochrome
-	y ::= this _y
 	_uv: RasterUv
+	y ::= this _y
 	uv ::= this _uv
 	crop: IntShell2D {
 		get
