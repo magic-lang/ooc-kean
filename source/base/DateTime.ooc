@@ -148,11 +148,8 @@ DateTime: cover {
 	ticksPerFourYears: static Int64 = This daysPerFourYears * This ticksPerDay
 	defaultFormat: static Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
 
-	now: static This {
-		get {
-			Time currentDateTime()
-		}
-	}
+	now ::= static Time currentDateTime()
+
 	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
 	_ticksToDateTimeHelper: static func (totalTicks: Int64) -> DateTimeData {
 		fourYearBlocks := totalTicks / This ticksPerFourYears
