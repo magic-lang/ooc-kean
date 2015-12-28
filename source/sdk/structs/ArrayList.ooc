@@ -265,5 +265,4 @@ operator [] <T> (list: ArrayList<T>, i: Int) -> T { list get(i) }
 operator []= <T> (list: ArrayList<T>, i: Int, element: T) { list replaceAt(i, element) }
 operator += <T> (list: ArrayList<T>, element: T) { list add(element) }
 operator -= <T> (list: ArrayList<T>, element: T) -> Bool { list remove(element) }
-
 operator as <T> (array: T[]) -> ArrayList<T> { ArrayList<T> new(array data, array length) }

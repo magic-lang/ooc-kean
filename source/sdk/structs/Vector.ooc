@@ -76,6 +76,7 @@ Vector: abstract class <T> {
 		else
 			memcpy(destination, source, length)
 	}
+
 	operator [] (index: Int) -> T {
 		version (safe) {
 			if (index >= this capacity || index < 0)
