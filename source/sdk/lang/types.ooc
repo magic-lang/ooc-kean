@@ -5,16 +5,16 @@ import ../Owner
 Object: abstract class {
 	class: Class
 
+	free: virtual func {
+		this __destroy__()
+		free(this)
+	}
+
 	/// Instance initializer: set default values for a new instance of this class
 	__defaults__: func
 
 	/// Finalizer: cleans up any objects belonging to this instance
 	__destroy__: func
-
-	free: virtual func {
-		this __destroy__()
-		free(this)
-	}
 
 	instanceOf?: final func (T: Class) -> Bool {
 		if (!this) return false
@@ -119,13 +119,14 @@ Cell: class <T> {
 	init: func (=val)
 	init: func ~noval
 
-	set: func (=val)
-	get: func -> T { val }
-
 	free: override func {
 		gc_free(this val)
 		super()
 	}
+
+	set: func (=val)
+	get: func -> T { val }
+
 	toString: func -> String {
 		match (this val) {
 			case value: Text => value toString()

@@ -17,10 +17,10 @@
 use ooc-geometry
 NativeWindow: abstract class {
 	_display: Pointer
-	display ::= this _display
 	_backend: Long
-	backend ::= this _backend
 	_size: IntVector2D
+	display ::= this _display
+	backend ::= this _backend
 	size ::= this _size
 
 	init: func (=_size, =_backend, =_display)

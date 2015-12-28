@@ -34,17 +34,6 @@ version (unix || apple) {
 	File separator = '/'
 	File pathDelimiter = ':'
 
-	_getcwd: extern (getcwd) func (buf: CString, size: SizeT) -> CString
-
-	ooc_get_cwd: unmangled func -> String {
-		result := CharBuffer new(File MAX_PATH_LENGTH)
-		if (!_getcwd(result data as CString, File MAX_PATH_LENGTH)) {
-			OSException new("error trying to getcwd! ") throw()
-		}
-		result sizeFromData()
-		String new (result)
-	}
-
 	TimeT: cover from time_t
 	ModeT: cover from mode_t
 
@@ -70,6 +59,15 @@ version (unix || apple) {
 	_mkdir: extern (mkdir) func (CString, ModeT) -> Int
 	_mkfifo: extern (mkfifo) func (CString, ModeT) -> Int
 	remove: extern func (path: CString) -> Int
+	_getcwd: extern (getcwd) func (buf: CString, size: SizeT) -> CString
+	ooc_get_cwd: unmangled func -> String {
+		result := CharBuffer new(File MAX_PATH_LENGTH)
+		if (!_getcwd(result data as CString, File MAX_PATH_LENGTH)) {
+			OSException new("error trying to getcwd! ") throw()
+		}
+		result sizeFromData()
+		String new (result)
+	}
 	_remove: unmangled func (file: File) -> Bool {
 		// returns 0 on success
 		remove(file path) == 0

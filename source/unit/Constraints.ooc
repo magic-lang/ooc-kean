@@ -95,11 +95,6 @@ EmptyConstraint: class extends Constraint {
 }
 
 NotModifier: class extends Modifier {
-	init: func { super() }
-	init: func ~parent (parent: Modifier) { super(parent) }
-	test: override func (value: Object) -> Bool {
-		!(this testChild(value))
-	}
 	true ::= TrueConstraint new(this)
 	false ::= FalseConstraint new(this)
 	Null ::= NullConstraint new(this)
@@ -108,6 +103,11 @@ NotModifier: class extends Modifier {
 	equal ::= EqualModifier new(this)
 	less ::= LessModifier new()
 	greater ::= GreaterModifier new()
+	init: func { super() }
+	init: func ~parent (parent: Modifier) { super(parent) }
+	test: override func (value: Object) -> Bool {
+		!(this testChild(value))
+	}
 }
 
 EqualModifier: class extends Modifier {
@@ -274,14 +274,14 @@ CompareConstraint: class extends Constraint {
 		super(parent)
 		this type = type
 	}
-	test: override func (value: Object) -> Bool {
-		this comparer(value, this correct)
-	}
 	free: override func {
 		if (this correct instanceOf?(Cell))
 			(this correct as Cell) free()
 		(this comparer as Closure) free()
 		super()
+	}
+	test: override func (value: Object) -> Bool {
+		this comparer(value, this correct)
 	}
 }
 
@@ -314,7 +314,6 @@ CompareWithinConstraint: class extends CompareConstraint {
 }
 
 IsConstraints: class extends Modifier {
-	init: func
 	true ::= TrueConstraint new(this)
 	false ::= FalseConstraint new(this)
 	Null ::= NullConstraint new(this)
@@ -323,4 +322,5 @@ IsConstraints: class extends Modifier {
 	equal ::= EqualModifier new(this)
 	less ::= LessModifier new(this)
 	greater ::= GreaterModifier new(this)
+	init: func
 }

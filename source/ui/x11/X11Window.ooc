@@ -62,7 +62,6 @@ X11Window: class extends NativeWindow {
 
 		this resize(size)
 	}
-	resize: func (size: IntVector2D) { XResizeWindow(this display, this backend, size x, size y) }
 	free: override func {
 		if (this _xImage)
 			XDestroyImage(this _xImage)
@@ -71,6 +70,7 @@ X11Window: class extends NativeWindow {
 		XCloseDisplay(this display)
 		super()
 	}
+	resize: func (size: IntVector2D) { XResizeWindow(this display, this backend, size x, size y) }
 	draw: func (image: RasterBgra) {
 		if (this _cacheSize != image size) {
 			if (this _xImage)

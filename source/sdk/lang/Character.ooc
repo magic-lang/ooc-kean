@@ -124,11 +124,6 @@ operator as (value: CString) -> String {
 }
 
 CString: cover from Char* {
-	new: static func ~withLength (length: Int) -> This {
-		result := gc_malloc(length + 1) as Char*
-		result[length] = '\0'
-		result as This
-	}
 	clone: func -> This {
 		length := length()
 		copy := This new(length)
@@ -156,6 +151,11 @@ CString: cover from Char* {
 	}
 	println: func {
 		stdout write(this, 0, length()). write('\n')
+	}
+	new: static func ~withLength (length: Int) -> This {
+		result := gc_malloc(length + 1) as Char*
+		result[length] = '\0'
+		result as This
 	}
 }
 

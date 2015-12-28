@@ -18,11 +18,10 @@
 Vector: abstract class <T> {
 	_backend: T*
 	_capacity: Int
-	capacity ::= this _capacity
 	_freeContent: Bool
-
-	init: /* protected */ func ~preallocated (=_backend, =_capacity, freeContent := true)
-	init: /* protected */ func (=_capacity, freeContent := true) {
+	capacity ::= this _capacity
+	init: func ~preallocated (=_backend, =_capacity, freeContent := true)
+	init: func (=_capacity, freeContent := true) {
 		this _freeContent = freeContent
 	}
 	free: override func {

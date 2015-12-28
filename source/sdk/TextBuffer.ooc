@@ -42,6 +42,8 @@ TextBuffer: cover {
 	}
 	init: func@ ~fromBuffer (buffer: CharBuffer) { this init(buffer data, buffer size) }
 	init: func@ (=_backend)
+	free: func@ -> Bool { this _backend free() }
+	free: func@ ~withCriteria (criteria: Owner) -> Bool { this _backend free(criteria) }
 	take: func -> This { // call by value -> modifies copy of cover
 		this _backend = this _backend take()
 		this
@@ -54,8 +56,6 @@ TextBuffer: cover {
 		this _backend = this _backend claim()
 		this
 	}
-	free: func@ -> Bool { this _backend free() }
-	free: func@ ~withCriteria (criteria: Owner) -> Bool { this _backend free(criteria) }
 	slice: func ~untilEnd (start: Int) -> This {
 		this _backend = this _backend slice(start)
 		this

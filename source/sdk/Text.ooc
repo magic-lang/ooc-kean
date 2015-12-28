@@ -38,21 +38,14 @@ Text: cover {
 	init: func@ ~fromData (string: CString, count: Int, owner := Owner Static) {
 		this init(TextBuffer new(string, count, owner))
 	}
+	free: func@ -> Bool { this _buffer free() }
+	free: func@ ~withCriteria (criteria: Owner) -> Bool { this _buffer free(criteria) }
 	copy: func -> This { // call by value, creates copy of cover
 		result := This new(this _buffer copy())
 		this free(Owner Receiver)
 		result
 	}
 	copyTo: func (buffer: TextBuffer) -> Int { this _buffer copyTo(buffer) }
-	operator == (string: String) -> Bool { this == This new(string) }
-	operator == (other: This) -> Bool { this _buffer == other _buffer }
-	operator != (other: String) -> Bool { !(this == other) }
-	operator != (other: This) -> Bool { !(this == other) }
-	operator + (other: This) -> This { This new(this _buffer + other _buffer) }
-	operator + (other: Int) -> This { this + other toText() }
-	operator + (other: UInt) -> This { this + other toText() }
-	operator + (other: Float) -> This { this + other toText() }
-	operator + (other: Double) -> This { this + other toText() }
 	beginsWith: func (other: This) -> Bool { this slice(0, Int minimum(other count, this count)) == other }
 	beginsWith: func ~string (other: String) -> Bool { this beginsWith(This new(other)) }
 	beginsWith: func ~character (character: Char) -> Bool {
@@ -108,12 +101,6 @@ Text: cover {
 		this free(Owner Receiver)
 		result
 	}
-	operator [] (index: Int) -> Char {
-		result := this _buffer[index]
-		this free(Owner Receiver)
-		result
-	}
-	operator [] (range: Range) -> This { this slice(range min, range count) }
 	take: func -> This { // call by value -> modifies copy of cover
 		this _buffer = this _buffer take()
 		this
@@ -126,8 +113,6 @@ Text: cover {
 		this _buffer = this _buffer claim()
 		this
 	}
-	free: func@ -> Bool { this _buffer free() }
-	free: func@ ~withCriteria (criteria: Owner) -> Bool { this _buffer free(criteria) }
 	slice: func (start: Int, distance := INT_MAX) -> This {
 		result := This new(this _buffer slice(start, distance == INT_MAX ? this count - start : distance))
 		if (this _buffer owner == Owner Receiver)
@@ -291,6 +276,22 @@ Text: cover {
 			result = 16
 		result
 	}
+	operator == (string: String) -> Bool { this == This new(string) }
+	operator == (other: This) -> Bool { this _buffer == other _buffer }
+	operator != (other: String) -> Bool { !(this == other) }
+	operator != (other: This) -> Bool { !(this == other) }
+	operator + (other: This) -> This { This new(this _buffer + other _buffer) }
+	operator + (other: Int) -> This { this + other toText() }
+	operator + (other: UInt) -> This { this + other toText() }
+	operator + (other: Float) -> This { this + other toText() }
+	operator + (other: Double) -> This { this + other toText() }
+	operator [] (index: Int) -> Char {
+		result := this _buffer[index]
+		this free(Owner Receiver)
+		result
+	}
+	operator [] (range: Range) -> This { this slice(range min, range count) }
+	empty: static This { get { This new() } }
 	_isNumeric: static func (character: Char, base: Int) -> Bool {
 		version(safe) {
 			if (base < 2 || (base > 10 && base != 16))
@@ -318,7 +319,6 @@ Text: cover {
 		}
 		result
 	}
-	empty: static This { get { This new() } }
 }
 makeTextLiteral: func (str: CString, strLen: Int) -> Text { Text new(str, strLen) }
 

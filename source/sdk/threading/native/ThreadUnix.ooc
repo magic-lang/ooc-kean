@@ -35,11 +35,6 @@ version(unix || apple) {
 		alive?: func -> Bool {
 			pthread_kill(pthread, 0) == 0
 		}
-		_currentThread: static func -> This {
-			thread := This new(func)
-			thread pthread = pthread_self()
-			thread
-		}
 		_yield: static func -> Bool {
 			// pthread_yield is non-standard, use sched_yield instead
 			// as a bonus, this works on OSX too.
@@ -71,6 +66,11 @@ version(unix || apple) {
 					result = true
 			}
 			result
+		}
+		_currentThread: static func -> This {
+			thread := This new(func)
+			thread pthread = pthread_self()
+			thread
 		}
 	}
 

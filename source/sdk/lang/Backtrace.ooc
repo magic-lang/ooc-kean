@@ -3,9 +3,6 @@ import structs/List
 import mangling
 
 BacktraceHandler: class {
-	BACKTRACE_LENGTH := static 128
-	WARNED_ABOUT_FALLBACK := static false
-	instance: static This
 	lib: Dynlib = null
 	fancyBacktrace: Pointer
 	fancyBacktraceSymbols: Pointer
@@ -13,11 +10,6 @@ BacktraceHandler: class {
 	fancy? := true
 	raw? := false
 
-	get: static func -> This {
-		if (!instance)
-			instance = This new()
-		instance
-	}
 	backtrace: func -> Backtrace {
 		buffer := gc_malloc(Pointer size * BACKTRACE_LENGTH)
 
@@ -173,6 +165,14 @@ BacktraceHandler: class {
 			))
 		}
 		buffer toString()
+	}
+	BACKTRACE_LENGTH := static 128
+	WARNED_ABOUT_FALLBACK := static false
+	instance: static This
+	get: static func -> This {
+		if (!instance)
+			instance = This new()
+		instance
 	}
 }
 

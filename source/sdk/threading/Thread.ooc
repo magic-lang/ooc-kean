@@ -3,6 +3,15 @@ import native/[ThreadUnix, ThreadWin32]
 Thread: abstract class {
 	_code: Func
 
+	start: abstract func -> Bool
+
+	wait: abstract func -> Bool
+
+	wait: abstract func ~timed (seconds: Double) -> Bool
+
+	cancel: abstract func -> Bool
+
+	alive?: abstract func -> Bool
 	new: static func (._code) -> This {
 		version (unix || apple) {
 			return ThreadUnix new(_code) as This
@@ -13,17 +22,6 @@ Thread: abstract class {
 		Exception new(This, "Unsupported platform!\n") throw()
 		null
 	}
-
-	start: abstract func -> Bool
-
-	wait: abstract func -> Bool
-
-	wait: abstract func ~timed (seconds: Double) -> Bool
-
-	cancel: abstract func -> Bool
-
-	alive?: abstract func -> Bool
-
 	currentThread: static func -> This {
 		version (unix || apple) {
 			return ThreadUnix _currentThread()

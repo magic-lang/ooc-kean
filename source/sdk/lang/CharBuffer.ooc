@@ -6,16 +6,6 @@ CharBuffer: class extends Iterable<Char> {
 	mallocAddr: Char*
 	data: Char*
 
-	_rshift: func -> SizeT { return mallocAddr == null || data == null ? 0 : (data as SizeT - mallocAddr as SizeT) as SizeT }
-
-	/* used to overwrite the data/attributes of *this* with that of another This */
-	setBuffer: func (newOne: This) {
-		data = newOne data
-		mallocAddr = newOne mallocAddr
-		capacity = newOne capacity
-		size = newOne size
-	}
-
 	init: func ~empty {
 		init(1024)
 	}
@@ -40,6 +30,16 @@ CharBuffer: class extends Iterable<Char> {
 		if (this data != null && this capacity > 0)
 			gc_free(this mallocAddr)
 		super()
+	}
+
+	_rshift: func -> SizeT { return mallocAddr == null || data == null ? 0 : (data as SizeT - mallocAddr as SizeT) as SizeT }
+
+	/* used to overwrite the data/attributes of *this* with that of another This */
+	setBuffer: func (newOne: This) {
+		data = newOne data
+		mallocAddr = newOne mallocAddr
+		capacity = newOne capacity
+		size = newOne size
 	}
 
 	length: func -> Int { size }
@@ -522,12 +522,6 @@ CharBuffer: class extends Iterable<Char> {
 
 	toCString: func -> CString { data as CString }
 
-	_checkLength: static func (len: Int) {
-		if (len < 0) {
-			NegativeLengthException new(This, len) throw()
-		}
-	}
-
 	split: func ~withChar (c: Char, maxTokens: SSizeT) -> ArrayList<This> {
 		split(c&, 1, maxTokens)
 	}
@@ -586,6 +580,11 @@ CharBuffer: class extends Iterable<Char> {
 
 		findResults free()
 		result
+	}
+	_checkLength: static func (len: Int) {
+		if (len < 0) {
+			NegativeLengthException new(This, len) throw()
+		}
 	}
 }
 
