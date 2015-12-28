@@ -104,6 +104,7 @@ IntBox2D: cover {
 	contains: func ~box (box: This) -> Bool { this intersection(box) == box }
 	toFloatBox2D: func -> FloatBox2D { FloatBox2D new(this left, this top, this width, this height) }
 	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
+
 	operator + (other: This) -> This {
 		if (this hasZeroArea)
 			other
@@ -112,16 +113,15 @@ IntBox2D: cover {
 		else
 			union(other)
 	}
-	operator - (other: This) -> This {
-		this hasZeroArea || other hasZeroArea ? This new() : this intersection(other)
-	}
+	operator - (other: This) -> This { this hasZeroArea || other hasZeroArea ? This new() : this intersection(other) }
+	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }
+	operator != (other: This) -> Bool { !(this == other) }
 	operator + (other: IntPoint2D) -> This { This new(this leftTop + other, this size) }
 	operator - (other: IntPoint2D) -> This { This new(this leftTop - other, this size) }
 	operator + (other: IntVector2D) -> This { This new(this leftTop, this size + other) }
 	operator - (other: IntVector2D) -> This { This new(this leftTop, this size - other) }
-	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }
-	operator != (other: This) -> Bool { !(this == other) }
 	operator as -> String { this toString() }
+
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toInt(), parts[1] toInt(), parts[2] toInt(), parts[3] toInt())

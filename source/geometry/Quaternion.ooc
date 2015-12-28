@@ -197,36 +197,22 @@ Quaternion: cover {
 		"Real: " << "%8f" formatFloat(this real) >>
 		" Imaginary: " & "%8f" formatFloat(this imaginary x) >> " " & "%8f" formatFloat(this imaginary y) >> " " & "%8f" formatFloat(this imaginary z)
 	}
-	operator == (other: This) -> Bool {
-		this w == other w && this x == other x && this y == other y && this z == other z
-	}
-	operator != (other: This) -> Bool {
-		!(this == other)
-	}
-	operator + (other: This) -> This {
-		This new(this real + other real, this imaginary + other imaginary)
-	}
-	operator - (other: This) -> This {
-		this + (-other)
-	}
-	operator - -> This {
-		This new(-this real, -this imaginary)
-	}
-	operator / (value: Float) -> This {
-		This new(this w / value, this x / value, this y / value, this z / value)
-	}
-	operator * (value: Float) -> This {
-		This new(this w * value, this x * value, this y * value, this z * value)
-	}
+
 	operator * (other: This) -> This {
 		realResult := this real * other real - this imaginary scalarProduct(other imaginary)
 		imaginaryResult := this real * other imaginary + this imaginary * other real + this imaginary vectorProduct(other imaginary)
 		This new(realResult, imaginaryResult)
 	}
-	operator * (value: FloatPoint3D) -> FloatPoint3D {
-		(this * This new(0.0f, value) * this inverse) imaginary
-	}
+	operator + (other: This) -> This { This new(this real + other real, this imaginary + other imaginary) }
+	operator - (other: This) -> This { this + (-other) }
+	operator == (other: This) -> Bool { this w == other w && this x == other x && this y == other y && this z == other z }
+	operator != (other: This) -> Bool { !(this == other) }
+	operator - -> This { This new(-this real, -this imaginary) }
+	operator / (value: Float) -> This { This new(this w / value, this x / value, this y / value, this z / value) }
+	operator * (value: Float) -> This { This new(this w * value, this x * value, this y * value, this z * value) }
+	operator * (value: FloatPoint3D) -> FloatPoint3D { (this * This new(0.0f, value) * this inverse) imaginary }
 	operator as -> String { this toString() }
+
 	precision: static Float = 1.0e-6f
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }
 	createFromEulerAngles: static func (rotationX, rotationY, rotationZ: Float) -> This {
@@ -346,6 +332,4 @@ Quaternion: cover {
 	}
 	kean_math_quaternion_new: unmangled static func (w, x, y, z: Float) -> This { This new(w, x, y, z) }
 }
-operator * (value: Float, other: Quaternion) -> Quaternion {
-	other * value
-}
+operator * (value: Float, other: Quaternion) -> Quaternion { other * value }

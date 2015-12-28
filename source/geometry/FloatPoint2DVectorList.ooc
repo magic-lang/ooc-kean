@@ -118,6 +118,7 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 		}
 		result
 	}
+
 	operator + (value: FloatPoint2D) -> This {
 		result := This new()
 		thisPointer := this pointer as FloatPoint2D*
@@ -125,15 +126,10 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 			result add(thisPointer[i] + value)
 		result
 	}
-	operator - (value: FloatPoint2D) -> This {
-		this + (-value)
-	}
-	operator [] (index: Int) -> FloatPoint2D {
-		this _vector[index] as FloatPoint2D
-	}
-	operator []= (index: Int, item: FloatPoint2D) {
-		this _vector[index] = item
-	}
+	operator - (value: FloatPoint2D) -> This { this + (-value) }
+	operator [] (index: Int) -> FloatPoint2D { this _vector[index] as FloatPoint2D }
+	operator []= (index: Int, item: FloatPoint2D) { this _vector[index] = item }
+
 	_swap: static func (array: FloatPoint2D*, i, j: Int) {
 		temporary := array[i]
 		array[i] = array[j]

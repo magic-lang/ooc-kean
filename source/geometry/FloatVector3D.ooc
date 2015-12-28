@@ -55,22 +55,24 @@ FloatVector3D: cover {
 	toIntVector3D: func -> IntVector3D { IntVector3D new(this x as Int, this y as Int, this z as Int) }
 	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this x, this y, this z) }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}, #{this z toString()}" }
+
+	operator - -> This { This new(-this x, -this y, -this z) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
 	operator - (other: This) -> This { This new(this x - other x, this y - other y, this z - other z) }
-	operator - -> This { This new(-this x, -this y, -this z) }
 	operator * (other: This) -> This { This new(this x * other x, this y * other y, this z * other z) }
 	operator / (other: This) -> This { This new(this x / other x, this y / other y, this z / other z) }
-	operator * (other: Float) -> This { This new(this x * other, this y * other, this z * other) }
-	operator / (other: Float) -> This { This new(this x / other, this y / other, this z / other) }
-	operator * (other: Int) -> This { This new(this x * other, this y * other, this z * other) }
-	operator / (other: Int) -> This { This new(this x / other, this y / other, this z / other) }
-	operator == (other: This) -> Bool { this x == other x && this y == other y && this z == other z }
-	operator != (other: This) -> Bool { !(this == other) }
 	operator < (other: This) -> Bool { this x < other x && this y < other y && this z < other z }
 	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
+	operator == (other: This) -> Bool { this x == other x && this y == other y && this z == other z }
+	operator != (other: This) -> Bool { !(this == other) }
+	operator * (other: Float) -> This { This new(this x * other, this y * other, this z * other) }
+	operator / (other: Float) -> This { This new(this x / other, this y / other, this z / other) }
+	operator * (other: Int) -> This { This new(this x * other, this y * other, this z * other) }
+	operator / (other: Int) -> This { This new(this x / other, this y / other, this z / other) }
 	operator as -> String { this toString() }
+
 	basisX: static This { get { This new(1, 0, 0) } }
 	basisY: static This { get { This new(0, 1, 0) } }
 	basisZ: static This { get { This new(0, 0, 1) } }

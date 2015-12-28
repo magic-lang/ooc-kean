@@ -46,12 +46,14 @@ FloatShell2D: cover {
 		This new(Float minimum(this left, other left), Float minimum(this right, other right), Float minimum(this top, other top), Float minimum(this bottom, other bottom))
 	}
 	toString: func -> String { "#{this left toString()}, #{this right toString()}, #{this top toString()}, #{this bottom toString()}" }
+
 	operator + (other: This) -> This { This new(this left + other left, this right + other right, this top + other top, this bottom + other bottom) }
 	operator - (other: This) -> This { This new(this left - other left, this right - other right, this top - other top, this bottom - other bottom) }
-	operator / (other: Float) -> This { This new(this left / other, this right / other, this top / other, this bottom / other) }
 	operator == (other: This) -> Bool { this left == other left && this right == other right && this top == other top && this bottom == other bottom }
 	operator != (other: This) -> Bool { !(this == other) }
+	operator / (other: Float) -> This { This new(this left / other, this right / other, this top / other, this bottom / other) }
 	operator as -> String { this toString() }
+
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat(), parts[3] toFloat())

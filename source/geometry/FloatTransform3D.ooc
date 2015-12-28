@@ -125,8 +125,51 @@ FloatTransform3D: cover {
 		projectedPoint := This createProjection(focalLength) * point / point z
 		FloatPoint2D new(projectedPoint x, projectedPoint y)
 	}
-	operator != (other: This) -> Bool { !(this == other) }
-	operator as -> String { this toString() }
+
+	operator * (other: This) -> This {
+		This new(
+			this a * other a + this e * other b + this i * other c + this m * other d,
+			this b * other a + this f * other b + this j * other c + this n * other d,
+			this c * other a + this g * other b + this k * other c + this o * other d,
+			this d * other a + this h * other b + this l * other c + this p * other d,
+
+			this a * other e + this e * other f + this i * other g + this m * other h,
+			this b * other e + this f * other f + this j * other g + this n * other h,
+			this c * other e + this g * other f + this k * other g + this o * other h,
+			this d * other e + this h * other f + this l * other g + this p * other h,
+
+			this a * other i + this e * other j + this i * other k + this m * other l,
+			this b * other i + this f * other j + this j * other k + this n * other l,
+			this c * other i + this g * other j + this k * other k + this o * other l,
+			this d * other i + this h * other j + this l * other k + this p * other l,
+
+			this a * other m + this e * other n + this i * other o + this m * other p,
+			this b * other m + this f * other n + this j * other o + this n * other p,
+			this c * other m + this g * other n + this k * other o + this o * other p,
+			this d * other m + this h * other n + this l * other o + this p * other p
+		)
+	}
+	operator == (other: This) -> Bool {
+		this a == other a &&
+		this b == other b &&
+		this c == other c &&
+		this d == other d &&
+		this e == other e &&
+		this f == other f &&
+		this g == other g &&
+		this h == other h &&
+		this i == other i &&
+		this j == other j &&
+		this k == other k &&
+		this l == other l &&
+		this m == other m &&
+		this n == other n &&
+		this o == other o &&
+		this p == other p
+	}
+	operator != (other: This) -> Bool {
+		!(this == other)
+	}
 	operator [] (x, y: Int) -> Float {
 		result := 0.0f
 		version (safe) {
@@ -165,29 +208,6 @@ FloatTransform3D: cover {
 		}
 		result
 	}
-	operator * (other: This) -> This {
-		This new(
-			this a * other a + this e * other b + this i * other c + this m * other d,
-			this b * other a + this f * other b + this j * other c + this n * other d,
-			this c * other a + this g * other b + this k * other c + this o * other d,
-			this d * other a + this h * other b + this l * other c + this p * other d,
-
-			this a * other e + this e * other f + this i * other g + this m * other h,
-			this b * other e + this f * other f + this j * other g + this n * other h,
-			this c * other e + this g * other f + this k * other g + this o * other h,
-			this d * other e + this h * other f + this l * other g + this p * other h,
-
-			this a * other i + this e * other j + this i * other k + this m * other l,
-			this b * other i + this f * other j + this j * other k + this n * other l,
-			this c * other i + this g * other j + this k * other k + this o * other l,
-			this d * other i + this h * other j + this l * other k + this p * other l,
-
-			this a * other m + this e * other n + this i * other o + this m * other p,
-			this b * other m + this f * other n + this j * other o + this n * other p,
-			this c * other m + this g * other n + this k * other o + this o * other p,
-			this d * other m + this h * other n + this l * other o + this p * other p
-		)
-	}
 	operator * (other: FloatPoint3D) -> FloatPoint3D {
 		FloatPoint3D new(
 			this a * other x + this e * other y + this i * other z + this m,
@@ -195,24 +215,10 @@ FloatTransform3D: cover {
 			this c * other x + this g * other y + this k * other z + this o
 		)
 	}
-	operator == (other: This) -> Bool {
-		this a == other a &&
-		this b == other b &&
-		this c == other c &&
-		this d == other d &&
-		this e == other e &&
-		this f == other f &&
-		this g == other g &&
-		this h == other h &&
-		this i == other i &&
-		this j == other j &&
-		this k == other k &&
-		this l == other l &&
-		this m == other m &&
-		this n == other n &&
-		this o == other o &&
-		this p == other p
+	operator as -> String {
+		this toString()
 	}
+
 	kean_math_floatTransform3D_getTranslation: unmangled func -> FloatVector3D { this translation }
 	kean_math_floatTransform3D_getScaling: unmangled func -> FloatVector3D { FloatVector3D new(this scalingX, this scalingY, this scalingZ) }
 	kean_math_floatTransform3D_getInverse: unmangled func -> This { this inverse }

@@ -50,26 +50,28 @@ FloatVector2D: cover {
 	toIntVector2D: func -> IntVector2D { IntVector2D new(this x as Int, this y as Int) }
 	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x, this y) }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
-	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
-	operator + (other: FloatPoint2D) -> This { This new(this x + other x, this y + other y) }
-	operator - (other: This) -> This { This new(this x - other x, this y - other y) }
-	operator - (other: FloatPoint2D) -> This { This new(this x - other x, this y - other y) }
+
 	operator - -> This { This new(-this x, -this y) }
+	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
+	operator - (other: This) -> This { This new(this x - other x, this y - other y) }
 	operator * (other: This) -> This { This new(this x * other x, this y * other y) }
-	operator * (other: FloatPoint2D) -> This { This new(this x * other x, this y * other y) }
 	operator / (other: This) -> This { This new(this x / other x, this y / other y) }
+	operator < (other: This) -> Bool { this x < other x && this y < other y }
+	operator > (other: This) -> Bool { this x > other x && this y > other y }
+	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
+	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
+	operator == (other: This) -> Bool { this x == other x && this y == other y }
+	operator != (other: This) -> Bool { !(this == other) }
+	operator + (other: FloatPoint2D) -> This { This new(this x + other x, this y + other y) }
+	operator - (other: FloatPoint2D) -> This { This new(this x - other x, this y - other y) }
+	operator * (other: FloatPoint2D) -> This { This new(this x * other x, this y * other y) }
 	operator / (other: FloatPoint2D) -> This { This new(this x / other x, this y / other y) }
 	operator * (other: Float) -> This { This new(this x * other, this y * other) }
 	operator / (other: Float) -> This { This new(this x / other, this y / other) }
 	operator * (other: Int) -> This { This new(this x * other, this y * other) }
 	operator / (other: Int) -> This { This new(this x / other, this y / other) }
-	operator == (other: This) -> Bool { this x == other x && this y == other y }
-	operator != (other: This) -> Bool { !(this == other) }
-	operator < (other: This) -> Bool { this x < other x && this y < other y }
-	operator > (other: This) -> Bool { this x > other x && this y > other y }
-	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
-	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
 	operator as -> String { this toString() }
+
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
 	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }

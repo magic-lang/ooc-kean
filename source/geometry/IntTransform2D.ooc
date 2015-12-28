@@ -68,6 +68,34 @@ IntTransform2D: cover {
 		#{this d toString()}, #{this e toString()}, #{this f toString()}, \
 		#{this g toString()}, #{this h toString()}, #{this i toString()}"
 	}
+
+	operator * (other: This) -> This {
+		This new(
+			this a * other a + this d * other b + this g * other c,
+			this b * other a + this e * other b + this h * other c,
+			this c * other a + this f * other b + this i * other c,
+			this a * other d + this d * other e + this g * other f,
+			this b * other d + this e * other e + this h * other f,
+			this c * other d + this f * other e + this i * other f,
+			this a * other g + this d * other h + this g * other i,
+			this b * other g + this e * other h + this h * other i,
+			this c * other g + this f * other h + this i * other i
+		)
+	}
+	operator == (other: This) -> Bool {
+		this a == other a &&
+		this b == other b &&
+		this c == other c &&
+		this d == other d &&
+		this e == other e &&
+		this f == other f &&
+		this g == other g &&
+		this h == other h &&
+		this i == other i
+	}
+	operator != (other: This) -> Bool {
+		!(this == other)
+	}
 	operator [] (x, y: Int) -> Int {
 		version (safe) {
 			if (x < 0 || x > 2 || y < 0 || y > 2)
@@ -96,36 +124,14 @@ IntTransform2D: cover {
 		}
 		result
 	}
-	operator * (other: This) -> This {
-		This new(
-			this a * other a + this d * other b + this g * other c,
-			this b * other a + this e * other b + this h * other c,
-			this c * other a + this f * other b + this i * other c,
-			this a * other d + this d * other e + this g * other f,
-			this b * other d + this e * other e + this h * other f,
-			this c * other d + this f * other e + this i * other f,
-			this a * other g + this d * other h + this g * other i,
-			this b * other g + this e * other h + this h * other i,
-			this c * other g + this f * other h + this i * other i
-		)
-	}
 	operator * (other: IntPoint2D) -> IntPoint2D {
 		divisor := this c * other x + this f * other y + this i
 		IntPoint2D new((this a * other x + this d * other y + this g) / divisor, (this b * other x + this e * other y + this h) / divisor)
 	}
-	operator == (other: This) -> Bool {
-		this a == other a &&
-		this b == other b &&
-		this c == other c &&
-		this d == other d &&
-		this e == other e &&
-		this f == other f &&
-		this g == other g &&
-		this h == other h &&
-		this i == other i
+	operator as -> String {
+		this toString()
 	}
-	operator != (other: This) -> Bool { !(this == other) }
-	operator as -> String { this toString() }
+
 	identity: static This { get { This new(1, 0, 0, 1, 0, 0) } }
 	toFloatTransform2D: func -> FloatTransform2D { FloatTransform2D new(this a, this b, this c, this d, this e, this f, this g, this h, this i) }
 	create: static func (translation: IntVector2D, scale, rotation: Float) -> This {
