@@ -48,24 +48,26 @@ FloatPoint2D: cover {
 	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x as Int, this y as Int) }
 	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x, this y) }
 	toString: func -> String { this x toString() & ", " clone() & this y toString() }
-	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
-	operator + (other: FloatVector2D) -> This { This new(this x + other x, this y + other y) }
-	operator - (other: This) -> This { This new(this x - other x, this y - other y) }
-	operator - (other: FloatVector2D) -> This { This new(this x - other x, this y - other y) }
+
 	operator - -> This { This new(-this x, -this y) }
+	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
+	operator - (other: This) -> This { This new(this x - other x, this y - other y) }
 	operator * (other: This) -> This { This new(this x * other x, this y * other y) }
-	operator * (other: FloatVector2D) -> This { This new(this x * other x, this y * other y) }
 	operator / (other: This) -> This { This new(this x / other x, this y / other y) }
-	operator / (other: FloatVector2D) -> This { This new(this x / other x, this y / other y) }
-	operator * (other: Float) -> This { This new(this x * other, this y * other) }
-	operator / (other: Float) -> This { This new(this x / other, this y / other) }
 	operator == (other: This) -> Bool { this x == other x && this y == other y }
 	operator != (other: This) -> Bool { this x != other x || this y != other y }
 	operator < (other: This) -> Bool { this x < other x && this y < other y }
 	operator > (other: This) -> Bool { this x > other x && this y > other y }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
+	operator + (other: FloatVector2D) -> This { This new(this x + other x, this y + other y) }
+	operator - (other: FloatVector2D) -> This { This new(this x - other x, this y - other y) }
+	operator * (other: FloatVector2D) -> This { This new(this x * other x, this y * other y) }
+	operator / (other: FloatVector2D) -> This { This new(this x / other x, this y / other y) }
+	operator * (other: Float) -> This { This new(this x * other, this y * other) }
+	operator / (other: Float) -> This { This new(this x / other, this y / other) }
 	operator as -> String { this toString() }
+
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
 	parse: static func (input: Text) -> This {

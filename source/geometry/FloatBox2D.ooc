@@ -130,6 +130,7 @@ FloatBox2D: cover {
 	}
 	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
 	toIntBox2D: func -> IntBox2D { IntBox2D new(this left, this top, this width, this height) }
+
 	operator + (other: This) -> This {
 		if (this hasZeroArea)
 			other
@@ -144,15 +145,16 @@ FloatBox2D: cover {
 		else
 			this intersection(other)
 	}
+	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }
+	operator != (other: This) -> Bool { !(this == other) }
 	operator + (other: FloatPoint2D) -> This { This new(this leftTop + other, this size) }
 	operator - (other: FloatPoint2D) -> This { This new(this leftTop - other, this size) }
 	operator + (other: FloatVector2D) -> This { This new(this leftTop, this size + other) }
 	operator * (other: FloatVector2D) -> This { This new(this leftTop * other, this size * other) }
 	operator / (other: FloatVector2D) -> This { This new(this leftTop / other, this size / other) }
 	operator - (other: FloatVector2D) -> This { This new(this leftTop, this size - other) }
-	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }
-	operator != (other: This) -> Bool { !(this == other) }
 	operator as -> String { this toString() }
+
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat(), parts[3] toFloat())

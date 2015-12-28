@@ -41,6 +41,7 @@ FloatEuclidTransform: cover {
 	toString: func -> String {
 		"Translation: " << this translation toString() >> " Rotation: " & this rotation toString() >> " Scaling: " & this scaling toString()
 	}
+
 	operator + (other: This) -> This { This new(this translation + other translation, this rotation * other rotation, this scaling * other scaling) }
 	operator - (other: This) -> This { This new(this translation - other translation, this rotation * other rotation inverse, this scaling / other scaling) }
 	operator == (other: This) -> Bool {
@@ -48,6 +49,7 @@ FloatEuclidTransform: cover {
 		this rotation == other rotation &&
 		this scaling == other scaling
 	}
+
 	kean_math_floatEuclidTransform_toFloatTransform3D: unmangled func -> FloatTransform3D { this transform }
 	convolveCenter: static func (euclidTransforms: VectorList<This>, kernel: FloatVectorList) -> This {
 		result := This new()

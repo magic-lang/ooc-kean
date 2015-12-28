@@ -113,6 +113,7 @@ FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 			result = result >> this[i] toString() >> "\n"
 		result
 	}
+
 	operator [] (index: Int) -> FloatEuclidTransform {
 		this _vector[index]
 	}

@@ -30,24 +30,26 @@ IntPoint3D: cover {
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
 	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this x as Float, this y as Float, this z as Float) }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}, #{this z toString()}" }
-	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
-	operator + (other: IntVector3D) -> This { This new(this x + other x, this y + other y, this z + other z) }
-	operator - (other: This) -> This { This new(this x - other x, this y - other y, this z - other z) }
-	operator - (other: IntVector3D) -> This { This new(this x - other x, this y - other y, this z - other z) }
+
 	operator - -> This { This new(-this x, -this y, -this z) }
+	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
+	operator - (other: This) -> This { This new(this x - other x, this y - other y, this z - other z) }
 	operator * (other: This) -> This { This new(this x * other x, this y * other y, this z * other z) }
-	operator * (other: IntVector3D) -> This { This new(this x * other x, this y * other y, this z * other z) }
 	operator / (other: This) -> This { This new(this x / other x, this y / other y, this z / other z) }
-	operator / (other: IntVector3D) -> This { This new(this x / other x, this y / other y, this z / other z) }
-	operator * (other: Int) -> This { This new(this x * other, this y * other, this z * other) }
-	operator / (other: Int) -> This { This new(this x / other, this y / other, this z / other) }
 	operator == (other: This) -> Bool { this x == other x && this y == other y && this z == other z }
 	operator != (other: This) -> Bool { this x != other x || this y != other y || this z != other z }
 	operator < (other: This) -> Bool { this x < other x && this y < other y && this z < other z }
 	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
+	operator + (other: IntVector3D) -> This { This new(this x + other x, this y + other y, this z + other z) }
+	operator - (other: IntVector3D) -> This { This new(this x - other x, this y - other y, this z - other z) }
+	operator * (other: IntVector3D) -> This { This new(this x * other x, this y * other y, this z * other z) }
+	operator / (other: IntVector3D) -> This { This new(this x / other x, this y / other y, this z / other z) }
+	operator * (other: Int) -> This { This new(this x * other, this y * other, this z * other) }
+	operator / (other: Int) -> This { This new(this x / other, this y / other, this z / other) }
 	operator as -> String { this toString() }
+
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toInt(), parts[1] toInt(), parts[2] toInt())

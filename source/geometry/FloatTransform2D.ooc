@@ -83,6 +83,7 @@ FloatTransform2D: cover {
 		"%8f" formatFloat(this d) >> ", " & "%8f" formatFloat(this e) >> ", " & "%8f" formatFloat(this f) >> "\t" & \
 		"%8f" formatFloat(this g) >> ", " & "%8f" formatFloat(this h) >> ", " & "%8f" formatFloat(this i) >> "\t"
 	}
+
 	operator * (other: This) -> This {
 		This new(
 			this a * other a + this d * other b + this g * other c,
@@ -95,6 +96,20 @@ FloatTransform2D: cover {
 			this b * other g + this e * other h + this h * other i,
 			this c * other g + this f * other h + this i * other i
 		)
+	}
+	operator == (other: This) -> Bool {
+		this a == other a &&
+		this b == other b &&
+		this c == other c &&
+		this d == other d &&
+		this e == other e &&
+		this f == other f &&
+		this g == other g &&
+		this h == other h &&
+		this i == other i
+	}
+	operator != (other: This) -> Bool {
+		!(this == other)
 	}
 	operator * (other: FloatPoint2D) -> FloatPoint2D {
 		divisor := this c * other x + this f * other y + this i
@@ -119,19 +134,6 @@ FloatTransform2D: cover {
 			this i / value
 		)
 	}
-	operator == (other: This) -> Bool {
-		this a == other a &&
-		this b == other b &&
-		this c == other c &&
-		this d == other d &&
-		this e == other e &&
-		this f == other f &&
-		this g == other g &&
-		this h == other h &&
-		this i == other i
-	}
-	operator != (other: This) -> Bool { !(this == other) }
-	operator as -> String { this toString() }
 	operator [] (x, y: Int) -> Float {
 		result := 0.0f
 		version (safe) {
@@ -160,6 +162,10 @@ FloatTransform2D: cover {
 		}
 		result
 	}
+	operator as -> String {
+		this toString()
+	}
+
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f) } }
 	create: static func (translation: FloatVector2D, scale, rotation: Float) -> This {
 		This new(rotation cos() * scale, rotation sin() * scale, -rotation sin() * scale, rotation cos() * scale, translation x, translation y)

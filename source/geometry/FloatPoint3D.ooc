@@ -51,20 +51,22 @@ FloatPoint3D: cover {
 	clamp: func ~float (floor, ceiling: Float) -> This { This new(this x clamp(floor, ceiling), this y clamp(floor, ceiling), this z clamp(floor, ceiling)) }
 	toIntPoint3D: func -> IntPoint3D { IntPoint3D new(this x as Int, this y as Int, this z as Int) }
 	toString: func -> String { "%.8f" formatFloat(this x) >> ", " & "%.8f" formatFloat(this y) >> ", " & "%.8f" formatFloat(this z) }
+
+	operator - -> This { This new(-this x, -this y, -this z) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
 	operator - (other: This) -> This { This new(this x - other x, this y - other y, this z - other z) }
-	operator - -> This { This new(-this x, -this y, -this z) }
 	operator * (other: This) -> This { This new(this x * other x, this y * other y, this z * other z) }
 	operator / (other: This) -> This { This new(this x / other x, this y / other y, this z / other z) }
-	operator * (other: Float) -> This { This new(this x * other, this y * other, this z * other) }
-	operator / (other: Float) -> This { This new(this x / other, this y / other, this z / other) }
 	operator == (other: This) -> Bool { this x == other x && this y == other y && this z == other z }
 	operator != (other: This) -> Bool { this x != other x || this y != other y || this z != other z }
 	operator < (other: This) -> Bool { this x < other x && this y < other y && this z < other z }
 	operator > (other: This) -> Bool { this x > other x && this y > other y && this z > other z }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y && this z <= other z }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y && this z >= other z }
+	operator * (other: Float) -> This { This new(this x * other, this y * other, this z * other) }
+	operator / (other: Float) -> This { This new(this x / other, this y / other, this z / other) }
 	operator as -> String { this toString() }
+
 	spherical: static func (radius, azimuth, elevation: Float) -> This {
 		This new(radius * (azimuth cos()) * (elevation sin()), radius * (azimuth sin()) * (elevation sin()), radius * (elevation cos()))
 	}
@@ -83,8 +85,8 @@ FloatPoint3D: cover {
 	}
 	kean_math_floatPoint3D_new: unmangled static func (x, y, z: Float) -> This { This new(x, y, z) }
 }
+operator - (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left - right x, left - right y, left - right z) }
 operator * (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left * right x, left * right y, left * right z) }
 operator / (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left / right x, left / right y, left / right z) }
 operator * (left: Int, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left * right x, left * right y, left * right z) }
 operator / (left: Int, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left / right x, left / right y, left / right z) }
-operator - (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left - right x, left - right y, left - right z) }
