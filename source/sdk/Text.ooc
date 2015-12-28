@@ -276,21 +276,23 @@ Text: cover {
 			result = 16
 		result
 	}
-	operator == (string: String) -> Bool { this == This new(string) }
+
 	operator == (other: This) -> Bool { this _buffer == other _buffer }
-	operator != (other: String) -> Bool { !(this == other) }
 	operator != (other: This) -> Bool { !(this == other) }
 	operator + (other: This) -> This { This new(this _buffer + other _buffer) }
-	operator + (other: Int) -> This { this + other toText() }
-	operator + (other: UInt) -> This { this + other toText() }
+	operator [] (range: Range) -> This { this slice(range min, range count) }
+	operator == (string: String) -> Bool { this == This new(string) }
+	operator != (other: String) -> Bool { !(this == other) }
 	operator + (other: Float) -> This { this + other toText() }
 	operator + (other: Double) -> This { this + other toText() }
+	operator + (other: UInt) -> This { this + other toText() }
+	operator + (other: Int) -> This { this + other toText() }
 	operator [] (index: Int) -> Char {
 		result := this _buffer[index]
 		this free(Owner Receiver)
 		result
 	}
-	operator [] (range: Range) -> This { this slice(range min, range count) }
+
 	empty: static This { get { This new() } }
 	_isNumeric: static func (character: Char, base: Int) -> Bool {
 		version(safe) {
