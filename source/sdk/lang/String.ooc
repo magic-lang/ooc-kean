@@ -327,8 +327,8 @@ String: class extends Iterable<Char> {
 }
 
 operator + (left, right: String) -> String { left append(right) }
-operator == (left, right: String) -> Bool { str1 equals?(str2) }
-operator != (left, right: String) -> Bool { !str1 equals?(str2) }
+operator == (left, right: String) -> Bool { left equals?(right) }
+operator != (left, right: String) -> Bool { !left equals?(right) }
 operator + (left: String, right: Char) -> String { left append(right) }
 operator + (left: String, right: CString) -> String { left append(right) }
 operator + (left: String, right: LLong) -> String { left append(right toString()) }
