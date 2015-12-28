@@ -22,6 +22,8 @@ FloatMatrix: cover {
 	_width: Int
 	_height: Int
 	_elements: OwnedBuffer
+
+	elements ::= this _elements pointer as Float*
 	width: Int { get {
 		result := this _width
 		this free(Owner Receiver)
@@ -52,7 +54,6 @@ FloatMatrix: cover {
 		this free(Owner Receiver)
 		result
 	}}
-	elements ::= this _elements pointer as Float*
 
 	init: func@ ~buffer (=_elements, =_width, =_height)
 	init: func@ (._width, ._height) {
