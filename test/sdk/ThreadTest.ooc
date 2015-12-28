@@ -1,7 +1,6 @@
 use ooc-unit
 use ooc-base
 import threading/[Thread, Mutex, WaitCondition]
-import os/Time
 
 ThreadTest: class extends Fixture {
 	init: func {

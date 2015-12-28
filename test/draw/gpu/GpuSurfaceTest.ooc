@@ -5,7 +5,6 @@ use ooc-draw-gpu
 use ooc-draw
 use ooc-opengl
 use ooc-unit
-import os/Time
 
 GpuSurfaceTest: class extends Fixture {
 	init: func {

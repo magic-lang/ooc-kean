@@ -16,7 +16,6 @@
 */
 
 use ooc-base
-import os/Time
 
 DateTimeData: cover {
 	year: Int { get set }

@@ -1,4 +1,4 @@
-import ../[Thread], math, os/Time
+import ../[Thread]
 
 include unistd
 

@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
-import os/Time
+
 clock: extern func -> LLong
 CLOCKS_PER_SEC: extern const LLong
 
