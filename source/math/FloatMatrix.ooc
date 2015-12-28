@@ -456,8 +456,6 @@ FloatMatrix: cover {
 		this free(Owner Receiver)
 		result
 	}
-	// NOTE: Because rock doesn't understand the concept of inline functions,
-	// this function has been inlined manually in many places in this file for performance reasons.
 	operator [] (x, y: Int) -> Float {
 		t := this take()
 		version (safe) {
@@ -468,8 +466,6 @@ FloatMatrix: cover {
 		this free(Owner Receiver)
 		result
 	}
-	// NOTE: Because rock doesn't understand the concept of inline functions,
-	// this function has been inlined manually in many places in this file for performance reasons.
 	operator []= (x, y: Int, value: Float) {
 		t := this take()
 		version (safe) {
