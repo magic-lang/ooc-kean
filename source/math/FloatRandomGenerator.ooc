@@ -17,7 +17,7 @@
 import os/Time
 
 FloatRandomGenerator: abstract class {
-	permanentSeed: static UInt = 0
+	permanentSeed ::= static 0
 	next: abstract func -> Float
 	next: func ~withCount (count: Int) -> Float[] {
 		result := Float[count] new()
