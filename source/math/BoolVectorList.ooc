@@ -97,12 +97,9 @@ BoolVectorList: class extends VectorList<Bool> {
 		textBuilder free()
 		result
 	}
-	operator [] <T> (index: Int) -> T {
-		this as VectorList<Bool> _vector[index]
-	}
-	operator []= (index: Int, item: Bool) {
-		this _vector[index] = item
-	}
+
+	operator [] <T> (index: Int) -> T { this as VectorList<Bool> _vector[index] }
+	operator []= (index: Int, item: Bool) { this _vector[index] = item }
 	operator && (other: This) -> This {
 		minimumCount := this count < other count ? this count : other count
 		result := This new(minimumCount)

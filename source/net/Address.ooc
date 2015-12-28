@@ -378,13 +378,8 @@ SocketAddress: abstract class {
 	}
 }
 
-operator == (sa1, sa2: SocketAddress) -> Bool {
-	(sa1 family() == sa2 family()) && (memcmp(sa1 addr(), sa2 addr(), sa1 length()) == 0)
-}
-
-operator != (sa1, sa2: SocketAddress) -> Bool {
-	! (sa1 == sa2)
-}
+operator == (sa1, sa2: SocketAddress) -> Bool { (sa1 family() == sa2 family()) && (memcmp(sa1 addr(), sa2 addr(), sa1 length()) == 0) }
+operator != (sa1, sa2: SocketAddress) -> Bool { !(sa1 == sa2) }
 
 SocketAddressIP4: class extends SocketAddress {
 	sa: SockAddrIn
