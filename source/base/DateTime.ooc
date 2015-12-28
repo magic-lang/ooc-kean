@@ -136,17 +136,17 @@ DateTime: cover {
 	kean_base_dateTime_getMonth: unmangled func -> Int { this month() }
 	kean_base_dateTime_getYear: unmangled func -> Int { this year() }
 
-	daysPerYear: static const Int = 365
-	daysPerFourYears: static const Int = 3 * This daysPerYear + 366
-	nanosecondsPerTick: static const Int64 = 100
-	ticksPerMillisecond: static const Int64 = 1_000_000 / This nanosecondsPerTick
-	ticksPerSecond: static const Int64 = This ticksPerMillisecond * 1000
-	ticksPerMinute: static const Int64 = This ticksPerSecond * 60
-	ticksPerHour: static const Int64 = This ticksPerMinute * 60
-	ticksPerDay: static const Int64 = This ticksPerHour * 24
-	ticksPerWeek: static const UInt64 = This ticksPerDay * 7
-	ticksPerFourYears: static const Int64 = This daysPerFourYears * This ticksPerDay
-	defaultFormat: static const Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
+	daysPerYear: static Int = 365
+	daysPerFourYears: static Int = 3 * This daysPerYear + 366
+	nanosecondsPerTick: static Int64 = 100
+	ticksPerMillisecond: static Int64 = 1_000_000 / This nanosecondsPerTick
+	ticksPerSecond: static Int64 = This ticksPerMillisecond * 1000
+	ticksPerMinute: static Int64 = This ticksPerSecond * 60
+	ticksPerHour: static Int64 = This ticksPerMinute * 60
+	ticksPerDay: static Int64 = This ticksPerHour * 24
+	ticksPerWeek: static UInt64 = This ticksPerDay * 7
+	ticksPerFourYears: static Int64 = This daysPerFourYears * This ticksPerDay
+	defaultFormat: static Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
 
 	now: static This {
 		get {
