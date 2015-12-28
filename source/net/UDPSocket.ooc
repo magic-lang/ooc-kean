@@ -15,7 +15,6 @@ UDPSocket: class extends Socket {
 	init: func ~port (port: Int) {
 		init("0.0.0.0", port)
 	}
-
 	/**
 		Initialize the socket
 
@@ -29,7 +28,6 @@ UDPSocket: class extends Socket {
 		super(remote family(), SocketType DATAGRAM, 0)
 		type = AddressFamily IP4
 	}
-
 	/**
 		Bind the socket
 	*/
@@ -38,7 +36,6 @@ UDPSocket: class extends Socket {
 			SocketError new("Could not bind UDP socket") throw()
 		}
 	}
-
 	/**
 	   Send data through this socket
 	   :param data: The data to be sent
@@ -55,14 +52,10 @@ UDPSocket: class extends Socket {
 				dataSubstring := data as Char* + bytesSent
 				bytesSent += sendTo(descriptor, dataSubstring, length - bytesSent, flags, remote addr(), remote length())
 			}
-
-		if (bytesSent == -1) {
+		if (bytesSent == -1)
 			SocketError new("Couldn't send an UDP datagram") throw()
-		}
-
 		return bytesSent
 	}
-
 	/**
 	   Send a string through this socket
 	   :param data: The string to be sent
@@ -74,7 +67,6 @@ UDPSocket: class extends Socket {
 	send: func ~withFlags (data: String, flags: Int, resend: Bool) -> Int {
 		send(data toCString(), data size, flags, resend)
 	}
-
 	/**
 	   Send a string through this socket
 	   :param data: The string to be sent
@@ -83,7 +75,6 @@ UDPSocket: class extends Socket {
 	   :return: The number of bytes sent
 	 */
 	send: func ~withResend (data: String, resend: Bool) -> Int { send(data, 0, resend) }
-
 	/**
 	   Send a string through this socket with resend attempted for unsent data
 	   :param data: The string to be sent
@@ -91,7 +82,6 @@ UDPSocket: class extends Socket {
 	   :return: The number of bytes sent
 	 */
 	send: func (data: String) -> Int { send(data, true) }
-
 	/**
 	   Send a byte through this socket
 	   :param byte: The byte to send
@@ -100,13 +90,11 @@ UDPSocket: class extends Socket {
 	sendByte: func ~withFlags (byte: Char, flags: Int) {
 		send(byte&, Char size, flags, true)
 	}
-
 	/**
 	   Send a byte through this socket
 	   :param byte: The byte to send
 	 */
 	sendByte: func (byte: Char) { sendByte(byte, 0) }
-
 	/**
 	   Receive bytes from this socket
 	   :param buffer: Where to store the received bytes
@@ -118,15 +106,12 @@ UDPSocket: class extends Socket {
 	receive: func ~withFlags (chars: Char*, length: SizeT, flags: Int) -> Int {
 		socketLength := remote length()
 		bytesRecv := recvFrom(descriptor, chars, length, flags, remote addr(), socketLength&)
-		if (bytesRecv == -1) {
+		if (bytesRecv == -1)
 			SocketError new("Error receiveing from UDP socket") throw()
-		}
-		if (bytesRecv == 0) {
+		if (bytesRecv == 0)
 			connected? = false // disconnected!
-		}
 		return bytesRecv
 	}
-
 	/**
 		Receive bytes from this socket
 		:param buffer: Where to store the received bytes
@@ -146,7 +131,6 @@ UDPSocket: class extends Socket {
 		receive(buffer, length)
 		buffer
 	}
-
 	/**
 	   Receive a byte from this socket
 	   :param flags: Receive flags
@@ -158,7 +142,6 @@ UDPSocket: class extends Socket {
 		receive(c&, 1, 0)
 		return c
 	}
-
 	/**
 	   Receive a byte from this socket
 

@@ -6,29 +6,26 @@ Inet: class {
 			// use built-in!
 			return inet_ntop(addressFamily, address, destination, destinationSize)
 		}
-
-	// Roll our own implementation, based on:
-	// https://github.com/pkulchenko/luasocket/blob/5a58786a39bbef7ed4805821cc921f1d40f12068/src/inet.c#L512
-	match addressFamily {
-		case AddressFamily IP4 =>
-			in: SockAddrIn
-			memset(in &, 0, SockAddrIn size)
-			in sin_family = AddressFamily IP4
-			getnameinfo(in & as SockAddr*, SockAddrIn size, destination,
-			destinationSize, null, 0, NI_NUMERICHOST)
-			destination
-
-		case AddressFamily IP6 =>
-			in: SockAddrIn6
-			memset(in &, 0, SockAddrIn6 size)
-			in sin6_family = AddressFamily IP6
-			getnameinfo(in & as SockAddr*, SockAddrIn6 size, destination,
-			destinationSize, null, 0, NI_NUMERICHOST)
-			destination
-
-		case =>
-			null
-	}
+		// Roll our own implementation, based on:
+		// https://github.com/pkulchenko/luasocket/blob/5a58786a39bbef7ed4805821cc921f1d40f12068/src/inet.c#L512
+		match addressFamily {
+			case AddressFamily IP4 =>
+				in: SockAddrIn
+				memset(in &, 0, SockAddrIn size)
+				in sin_family = AddressFamily IP4
+				getnameinfo(in & as SockAddr*, SockAddrIn size, destination,
+				destinationSize, null, 0, NI_NUMERICHOST)
+				destination
+			case AddressFamily IP6 =>
+				in: SockAddrIn6
+				memset(in &, 0, SockAddrIn6 size)
+				in sin6_family = AddressFamily IP6
+				getnameinfo(in & as SockAddr*, SockAddrIn6 size, destination,
+				destinationSize, null, 0, NI_NUMERICHOST)
+				destination
+			case =>
+				null
+		}
 }
 
 pton: static func (addressFamily: Int, address: CString,
@@ -37,10 +34,8 @@ pton: static func (addressFamily: Int, address: CString,
 			// use built-in!
 			return inet_pton(addressFamily, address, destination)
 		}
-
 		// roll our own version, based on:
 		// https://github.com/diegonehab/luasocket/blob/master/src/inet.c
-
 		hints: AddrInfo
 		res: AddrInfo*
 		ret := 1

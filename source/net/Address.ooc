@@ -5,7 +5,6 @@ import berkeley, translation, Socket, Exceptions
  */
 IPAddress: abstract class {
 	family: Int
-
 	/**
 		Returns true if the address is a broadcast address.
 
@@ -13,12 +12,10 @@ IPAddress: abstract class {
 		IPv6 addresses always return false.
 	*/
 	broadcast?: abstract func -> Bool
-
 	/**
 		Returns true if the address is a wildcard (all zeros) address.
 	*/
 	wildcard?: abstract func -> Bool
-
 	/**
 		Return true if the address is a global multicast address.
 
@@ -26,7 +23,6 @@ IPAddress: abstract class {
 		IPv6 most be in the FFxF:x:x:x:x:x:x:x range.
 	*/
 	globalMulticast?: abstract func -> Bool
-
 	/**
 		Returns true if the address is IPv4 compatible.
 
@@ -34,7 +30,6 @@ IPAddress: abstract class {
 		IPv6 address must be in the ::x:x range (first 96 bits are zero).
 	*/
 	ip4Compatible?: abstract func -> Bool
-
 	/**
 		Returns true if the address is an IPv4 mapped IPv6 address.
 
@@ -42,7 +37,6 @@ IPAddress: abstract class {
 		IPv6 addresses must be in the ::FFFF:x:x range.
 	*/
 	ip4Mapped?: abstract func -> Bool
-
 	/**
 		Returns true if the address is a link local unicast address.
 
@@ -50,7 +44,6 @@ IPAddress: abstract class {
 		IPv6 addresses have 1111 1110 10 as the first 10 bits, followed by 54 zeros.
 	*/
 	linkLocal?: abstract func -> Bool
-
 	/**
 		Returns true if the address is a link local multicast address.
 
@@ -58,7 +51,6 @@ IPAddress: abstract class {
 		well-known multicast addresses.
 	*/
 	linkLocalMulticast?: abstract func -> Bool
-
 	/**
 		Returns true if the address is a loopback address.
 
@@ -66,7 +58,6 @@ IPAddress: abstract class {
 		IPv6 address must be ::1
 	*/
 	loopback?: abstract func -> Bool
-
 	/**
 		Returns true if the address is a multicast address.
 
@@ -75,7 +66,6 @@ IPAddress: abstract class {
 		IPv6 addresses are in the FFxx:x:x:x:x:x:x:x range.
 	*/
 	multicast?: abstract func -> Bool
-
 	/**
 		Returns true if the address is a node-local multicast address.
 
@@ -83,7 +73,6 @@ IPAddress: abstract class {
 		IPv6 addresses must be in the FFx1:x:x:x:x:x:x:x range.
 	*/
 	nodeLocalMulticast?: abstract func -> Bool
-
 	/**
 		Returns true if the address is an organization-local multicast address.
 
@@ -91,7 +80,6 @@ IPAddress: abstract class {
 		IPv6 addresses must be in the FFx8:x:x:x:x:x:x:x range.
 	*/
 	orgLocalMulticast?: abstract func -> Bool
-
 	/**
 		Returns true if the address is a site-local unicast address.
 
@@ -99,7 +87,6 @@ IPAddress: abstract class {
 		IPv6 addresses have 1111 1110 11 as the first 10 bits, followed by 38 zeros.
 	*/
 	siteLocal?: abstract func -> Bool
-
 	/**
 		Returns true if the address is a site-local multicast address.
 
@@ -107,14 +94,12 @@ IPAddress: abstract class {
 		IPv6 addresses are in the FFx5:x:x:x:x:x:x:x range.
 	*/
 	siteLocalMulticast?: abstract func -> Bool
-
 	/**
 		Returns true if the address is an unicast address.
 
 		An address is unicast if it is neither a wildcard, broadcast, or multicast.
 	*/
 	unicast?: func -> Bool { !wildcard?() && !broadcast?() && !multicast?() }
-
 	/**
 		Returns true if the address is a well-known multicast address.
 
@@ -122,14 +107,12 @@ IPAddress: abstract class {
 		IPv6 addresses are in the FF0x:x:x:x:x:x:x:x range.
 	*/
 	wellKnownMulticast?: abstract func -> Bool
-
 	/**
 		Masks the IP address using the given netmask, which is usually a IPv4 subnet mask.
 		Only supported for IPv4 addresses.
 		The new address is (address & mask).
 	*/
 	mask: abstract func (mask: This)
-
 	/**
 		Masks the IP address using the given netmask, which is usually a IPv4 subnet mask.
 		Only supported for IPv4 addresses.
@@ -137,14 +120,12 @@ IPAddress: abstract class {
 		The new address is (address & mask) | (set & mask).
 	*/
 	mask: abstract func ~withSet (mask, set: This)
-
 	/**
 		Is the address valid? (Does not return type)
 	*/
 	valid?: func (ip: String) -> Bool {
 		family != AddressFamily UNSPEC
 	}
-
 	/**
 		Returns a string representation of the address in presentation format.
 	*/
@@ -158,22 +139,18 @@ IP4Address: class extends IPAddress {
 		if (ipAddress empty?()) {
 			InvalidAddress new("Address must not be blank") throw()
 		}
-
 		family = AddressFamily IP4
 		if (Inet pton(family, ipAddress toCString(), ai&) == -1) {
 			InvalidAddress new("Could not parse address") throw()
 		}
 	}
-
 	init: func ~wildcard {
 		init("0.0.0.0")
 	}
-
 	init: func ~withAddr (addr: InAddr) {
 		family = AddressFamily IP4
 		memcpy(ai&, addr&, InAddr size)
 	}
-
 	broadcast?: func -> Bool { ai s_addr == INADDR_NONE }
 	wildcard?: func -> Bool { ai s_addr == INADDR_ANY }
 	globalMulticast?: func -> Bool {
@@ -206,7 +183,6 @@ IP4Address: class extends IPAddress {
 
 		ai s_addr = (ai s_addr & maskAddr s_addr) | (setAddr s_addr & ~maskAddr s_addr)
 	}
-
 	toString: func -> String {
 		addrStr := CharBuffer new(128)
 		Inet ntop(family, ai&, addrStr toCString(), 128)
@@ -230,7 +206,6 @@ IP6Address: class extends IPAddress {
 		if (ipAddress empty?()) {
 			InvalidAddress new("Address must not be blank") throw()
 		}
-
 		family = AddressFamily IP6
 		if (Inet pton(family, ipAddress toCString(), ai&) == -1) {
 			InvalidAddress new("Could not parse address") throw()
@@ -241,9 +216,7 @@ IP6Address: class extends IPAddress {
 		family = AddressFamily IP6
 		memcpy(ai&, addr&, In6Addr size)
 	}
-
 	toWords: func -> UInt16* { ai& as UInt16* }
-
 	broadcast?: func -> Bool { false }
 	wildcard?: func -> Bool {
 		words := toWords()
@@ -307,7 +280,6 @@ IP6Address: class extends IPAddress {
 	mask: func ~withSet (mask: IPAddress, set: IPAddress) {
 		NetError new("Mask is only supported with IP4 addresses") throw()
 	}
-
 	toString: func -> String {
 		addrStr := CharBuffer new(128)
 		Inet ntop(family, ai&, addrStr toCString(), 128)
@@ -316,25 +288,21 @@ IP6Address: class extends IPAddress {
 	}
 }
 
-operator == (a1, a2: IP6Address) -> Bool {
-	memcmp(a1 ai&, a2 ai&, In6Addr size) == 0
-}
-
-operator != (a1, a2: IP6Address) -> Bool {
+operator != (a1, a2: IPAddress) -> Bool {
 	! (a1 == a2)
 }
-
 operator == (a1, a2: IPAddress) -> Bool {
 	if (a1 family != a2 family)
 		return false
-
 	if (a1 family == AddressFamily IP4)
 		return (a1 as IP4Address) == (a2 as IP4Address)
 	else
 		return (a1 as IP6Address) == (a2 as IP6Address)
 }
-
-operator != (a1, a2: IPAddress) -> Bool {
+operator == (a1, a2: IP6Address) -> Bool {
+	memcmp(a1 ai&, a2 ai&, In6Addr size) == 0
+}
+operator != (a1, a2: IP6Address) -> Bool {
 	! (a1 == a2)
 }
 
@@ -342,10 +310,8 @@ SocketAddress: abstract class {
 	family: abstract func -> Int
 	host: abstract func -> IPAddress
 	port: abstract func -> Int
-
 	addr: abstract func -> SockAddr*
 	length: abstract func -> UInt32
-
 	toString: func -> String {
 		"[%s]:%d" format(host() toString() toCString(), port())
 	}
@@ -363,7 +329,6 @@ SocketAddress: abstract class {
 			return null
 		}
 	}
-
 	newFromSock: static func (addr: SockAddr*, len: UInt) -> This {
 		if (len == SockAddrIn size) {
 			return SocketAddressIP4 new(addr as SockAddrIn*)
@@ -393,11 +358,9 @@ SocketAddressIP4: class extends SocketAddress {
 	init: func ~sock (sockAddr: SockAddrIn*) {
 		memcpy(sa&, sockAddr, SockAddrIn size)
 	}
-
 	family: func -> Int { sa sin_family }
 	host: func -> IPAddress { IP4Address new(sa sin_addr) }
 	port: func -> Int { ntohs(sa sin_port) }
-
 	addr: func -> SockAddr* { (sa&) as SockAddr* }
 	length: func -> UInt32 { SockAddrIn size }
 }
@@ -414,11 +377,9 @@ SocketAddressIP6: class extends SocketAddress {
 	init: func ~sock6 (sockAddr: SockAddrIn6*) {
 		memcpy(sa&, sockAddr, SockAddrIn6 size)
 	}
-
 	family: func -> Int { sa sin6_family }
 	host: func -> IPAddress { IP6Address new(sa sin6_addr) }
 	port: func -> Int { ntohs(sa sin6_port) }
-
 	addr: func -> SockAddr* { (sa&) as SockAddr* }
 	length: func -> UInt32 { SockAddrIn6 size }
 }
