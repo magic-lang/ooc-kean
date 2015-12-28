@@ -139,8 +139,10 @@ RasterBgr: class extends RasterPacked {
 		result
 	}
 	_createCanvas: override func -> Canvas { RasterBgrCanvas new(this) }
+
 	operator [] (x, y: Int) -> ColorBgr { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorBgr* + x)@ : ColorBgr new(0, 0, 0) }
 	operator []= (x, y: Int, value: ColorBgr) { ((this buffer pointer + y * this stride) as ColorBgr* + x)@ = value }
+
 	open: static func (filename: String) -> This {
 		x, y, imageComponents: Int
 		requiredComponents := 3

@@ -127,8 +127,10 @@ RasterUv: class extends RasterPacked {
 		}
 	}
 	_createCanvas: override func -> Canvas { RasterUvCanvas new(this) }
+
 	operator [] (x, y: Int) -> ColorUv { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorUv* + x)@ : ColorUv new(0, 0) }
 	operator []= (x, y: Int, value: ColorUv) { ((this buffer pointer + y * this stride) as ColorUv* + x)@ = value }
+
 	save: override func (filename: String) -> Int {
 		bgr := RasterBgr convertFrom(this)
 		result := bgr save(filename)

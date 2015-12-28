@@ -90,6 +90,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		fileWriter close()
 	}
 	_createCanvas: override func -> Canvas { RasterYuv422SemipackedCanvas new(this) }
+
 	operator [] (x, y: Int) -> ColorYuv {
 		result := ColorYuv new()
 		if (this isValidIn(x, y)) {
@@ -106,6 +107,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 			(index + 2*((x + 1) % 2))@ = ColorMonochrome new(value v)
 		}
 	}
+
 	open: static func (filename: String) -> This {
 		bgr := RasterBgr open(filename)
 		result := This convertFrom(bgr)

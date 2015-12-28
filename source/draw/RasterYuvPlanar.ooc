@@ -117,6 +117,7 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 			result /= this size length
 		}
 	}
+
 	abstract operator [] (x, y: Int) -> ColorYuv
 	abstract operator []= (x, y: Int, value: ColorYuv)
 }

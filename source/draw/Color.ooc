@@ -49,13 +49,14 @@ ColorMonochrome: cover {
 	equals: func ~yuv (other: ColorYuv) -> Bool { false }
 	equals: func ~bgr (other: ColorBgr) -> Bool { false }
 	equals: func ~bgra (other: ColorBgra) -> Bool { false }
+
 	operator == (other: This) -> Bool { this equals(other) }
-	operator == (other: ColorYuv) -> Bool { this equals(other) }
-	operator == (other: ColorBgr) -> Bool { this equals(other) }
-	operator == (other: ColorBgra) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
+	operator == (other: ColorYuv) -> Bool { this equals(other) }
 	operator != (other: ColorYuv) -> Bool { !this equals(other) }
+	operator == (other: ColorBgr) -> Bool { this equals(other) }
 	operator != (other: ColorBgr) -> Bool { !this equals(other) }
+	operator == (other: ColorBgra) -> Bool { this equals(other) }
 	operator != (other: ColorBgra) -> Bool { !this equals(other) }
 }
 
@@ -89,13 +90,14 @@ ColorUv: cover {
 	equals: func ~yuv (other: ColorYuv) -> Bool { false }
 	equals: func ~bgr (other: ColorBgr) -> Bool { false }
 	equals: func ~bgra (other: ColorBgra) -> Bool { false }
+
 	operator == (other: This) -> Bool { this equals(other) }
-	operator == (other: ColorYuv) -> Bool { this equals(other) }
-	operator == (other: ColorBgr) -> Bool { this equals(other) }
-	operator == (other: ColorBgra) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
+	operator == (other: ColorYuv) -> Bool { this equals(other) }
 	operator != (other: ColorYuv) -> Bool { !this equals(other) }
+	operator == (other: ColorBgr) -> Bool { this equals(other) }
 	operator != (other: ColorBgr) -> Bool { !this equals(other) }
+	operator == (other: ColorBgra) -> Bool { this equals(other) }
 	operator != (other: ColorBgra) -> Bool { !this equals(other) }
 }
 
@@ -129,13 +131,14 @@ ColorYuv: cover {
 	equals: func ~yuv (other: This) -> Bool { this y == other y && this u == other u && this v == other v }
 	equals: func ~bgr (other: ColorBgr) -> Bool { false }
 	equals: func ~bgra (other: ColorBgra) -> Bool { false }
-	operator == (other: ColorMonochrome) -> Bool { this equals(other) }
+
 	operator == (other: This) -> Bool { this equals(other) }
-	operator == (other: ColorBgr) -> Bool { this equals(other) }
-	operator == (other: ColorBgra) -> Bool { this equals(other) }
-	operator != (other: ColorMonochrome) -> Bool { !this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
+	operator == (other: ColorMonochrome) -> Bool { this equals(other) }
+	operator != (other: ColorMonochrome) -> Bool { !this equals(other) }
+	operator == (other: ColorBgr) -> Bool { this equals(other) }
 	operator != (other: ColorBgr) -> Bool { !this equals(other) }
+	operator == (other: ColorBgra) -> Bool { this equals(other) }
 	operator != (other: ColorBgra) -> Bool { !this equals(other) }
 }
 
@@ -158,6 +161,7 @@ ColorYuva: cover {
 		This new(this yuv blend(factor, other yuv), (this alpha * (1 - factor) + other alpha * factor) as UInt8)
 	}
 	equals: func ~yuva (other: This) -> Bool { this yuv == other yuv && this alpha == other alpha }
+
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 }
@@ -196,13 +200,14 @@ ColorBgr: cover {
 		result := this red toString() & "," clone() & this green toString() & "," clone() & this blue toString()
 		result
 	}
-	operator == (other: ColorMonochrome) -> Bool { this equals(other) }
-	operator == (other: ColorYuv) -> Bool { this equals(other) }
+
 	operator == (other: This) -> Bool { this equals(other) }
-	operator == (other: ColorBgra) -> Bool { this equals(other) }
-	operator != (other: ColorMonochrome) -> Bool { !this equals(other) }
-	operator != (other: ColorYuv) -> Bool { !this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
+	operator == (other: ColorMonochrome) -> Bool { this equals(other) }
+	operator != (other: ColorMonochrome) -> Bool { !this equals(other) }
+	operator == (other: ColorYuv) -> Bool { this equals(other) }
+	operator != (other: ColorYuv) -> Bool { !this equals(other) }
+	operator == (other: ColorBgra) -> Bool { this equals(other) }
 	operator != (other: ColorBgra) -> Bool { !this equals(other) }
 }
 
@@ -248,14 +253,15 @@ ColorBgra: cover {
 		result := this alpha
 		result
 	}
-	operator == (other: ColorMonochrome) -> Bool { this equals(other) }
-	operator == (other: ColorYuv) -> Bool { this equals(other) }
-	operator == (other: ColorBgr) -> Bool { this equals(other) }
+
 	operator == (other: This) -> Bool { this equals(other) }
-	operator != (other: ColorMonochrome) -> Bool { !this equals(other) }
-	operator != (other: ColorYuv) -> Bool { !this equals(other) }
-	operator != (other: ColorBgr) -> Bool { !this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
+	operator == (other: ColorMonochrome) -> Bool { this equals(other) }
+	operator != (other: ColorMonochrome) -> Bool { !this equals(other) }
+	operator == (other: ColorYuv) -> Bool { this equals(other) }
+	operator != (other: ColorYuv) -> Bool { !this equals(other) }
+	operator == (other: ColorBgr) -> Bool { this equals(other) }
+	operator != (other: ColorBgr) -> Bool { !this equals(other) }
 }
 
 ColorConvert: cover {
