@@ -20,12 +20,13 @@ FloatMatrix: cover {
 	// x = column
 	// y = row
 	_width: Int
+	_height: Int
+	_elements: OwnedBuffer
 	width: Int { get {
 		result := this _width
 		this free(Owner Receiver)
 		result
 	}}
-	_height: Int
 	height: Int { get {
 		result := this _height
 		this free(Owner Receiver)
@@ -51,7 +52,6 @@ FloatMatrix: cover {
 		this free(Owner Receiver)
 		result
 	}}
-	_elements: OwnedBuffer
 	elements ::= this _elements pointer as Float*
 
 	init: func@ ~buffer (=_elements, =_width, =_height)
@@ -63,14 +63,6 @@ FloatMatrix: cover {
 	create: func -> This {
 		result := This new(this _width, this _height)
 		this free(Owner Receiver)
-		result
-	}
-	identity: static func (order: Int) -> This {
-		result := This new(order, order)
-		resultWidth := result take() width
-		resultElements := result elements
-		for (i in 0 .. order)
-			resultElements[i + resultWidth * i] = 1.0f
 		result
 	}
 	setVertical: func (xOffset, yOffset: Int, x, y, z: Float) {
@@ -96,28 +88,6 @@ FloatMatrix: cover {
 			result[0, y] = t[x, y]
 		this free(Owner Receiver)
 		result
-	}
-	// NOTE: Because rock doesn't understand the concept of inline functions,
-	// this function has been inlined manually in many places in this file for performance reasons.
-	operator [] (x, y: Int) -> Float {
-		t := this take()
-		version (safe) {
-			if (x < 0 || y < 0 || x >= t width || y >= t height)
-				raise("Accessing matrix element out of range in get operator")
-		}
-		result := t elements[x + y * t width]
-		this free(Owner Receiver)
-		result
-	}
-	// NOTE: Because rock doesn't understand the concept of inline functions,
-	// this function has been inlined manually in many places in this file for performance reasons.
-	operator []= (x, y: Int, value: Float) {
-		t := this take()
-		version (safe) {
-			if (x < 0 || y < 0 || x >= t width || y >= t height)
-				raise("Accessing matrix element out of range in set operator")
-		}
-		this elements[x + y * t width] = value
 	}
 	copy: func -> This {
 		result := This new(this _elements copy(), this _width, this _height)
@@ -395,6 +365,28 @@ FloatMatrix: cover {
 		this _elements = this _elements give()
 		this
 	}
+	// NOTE: Because rock doesn't understand the concept of inline functions,
+	// this function has been inlined manually in many places in this file for performance reasons.
+	operator [] (x, y: Int) -> Float {
+		t := this take()
+		version (safe) {
+			if (x < 0 || y < 0 || x >= t width || y >= t height)
+				raise("Accessing matrix element out of range in get operator")
+		}
+		result := t elements[x + y * t width]
+		this free(Owner Receiver)
+		result
+	}
+	// NOTE: Because rock doesn't understand the concept of inline functions,
+	// this function has been inlined manually in many places in this file for performance reasons.
+	operator []= (x, y: Int, value: Float) {
+		t := this take()
+		version (safe) {
+			if (x < 0 || y < 0 || x >= t width || y >= t height)
+				raise("Accessing matrix element out of range in set operator")
+		}
+		this elements[x + y * t width] = value
+	}
 	operator * (other: This) -> This {
 		t := this take()
 		version(safe) {
@@ -483,6 +475,14 @@ FloatMatrix: cover {
 		for (i in 0 .. this _width * this _height)
 			resultElements[i] = other * thisElements[i]
 		this free(Owner Receiver)
+		result
+	}
+	identity: static func (order: Int) -> This {
+		result := This new(order, order)
+		resultWidth := result take() width
+		resultElements := result elements
+		for (i in 0 .. order)
+			resultElements[i + resultWidth * i] = 1.0f
 		result
 	}
 }

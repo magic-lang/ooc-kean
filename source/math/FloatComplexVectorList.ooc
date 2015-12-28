@@ -21,6 +21,35 @@ use ooc-collections
 import FloatVectorList
 
 FloatComplexVectorList: class extends VectorList<FloatComplex> {
+	sum: FloatComplex {
+		get {
+			result := FloatComplex new()
+			for (i in 0 .. this _count)
+				result = result + this[i]
+			result
+		}
+	}
+	mean ::= this sum / this _count
+	real: FloatVectorList {
+		get {
+			result := FloatVectorList new()
+			for (i in 0 .. this _count) {
+				currentPoint := this[i]
+				result add(currentPoint real)
+			}
+			result
+		}
+	}
+	imaginary: FloatVectorList {
+		get {
+			result := FloatVectorList new()
+			for (i in 0 .. this _count) {
+				currentPoint := this[i]
+				result add(currentPoint imaginary)
+			}
+			result
+		}
+	}
 	init: func ~default {
 		super()
 	}
@@ -42,40 +71,11 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		result _count = this _count
 		result
 	}
-	sum: FloatComplex {
-		get {
-			result := FloatComplex new()
-			for (i in 0 .. this _count)
-				result = result + this[i]
-			result
-		}
-	}
-	mean ::= this sum / this _count
 	copy: func -> This {
 		result := This new(this _count)
 		for (i in 0 .. this _count)
 			result add(this[i])
 		result
-	}
-	real: FloatVectorList {
-		get {
-			result := FloatVectorList new()
-			for (i in 0 .. this _count) {
-				currentPoint := this[i]
-				result add(currentPoint real)
-			}
-			result
-		}
-	}
-	imaginary: FloatVectorList {
-		get {
-			result := FloatVectorList new()
-			for (i in 0 .. this _count) {
-				currentPoint := this[i]
-				result add(currentPoint imaginary)
-			}
-			result
-		}
 	}
 	addInto: func (other: This) {
 		minimumCount := Int minimum(this count, other count)
@@ -85,21 +85,6 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 			thisPointer[i] real = thisPointer[i] real + otherPointer[i] real
 			thisPointer[i] imaginary = thisPointer[i] imaginary + otherPointer[i] imaginary
 		}
-	}
-	operator + (value: FloatComplex) -> This {
-		result := This new()
-		for (i in 0 .. this _count)
-			result add(this[i] + value)
-		result
-	}
-	operator - (value: FloatComplex) -> This {
-		this + (-value)
-	}
-	operator [] <T> (index: Int) -> T {
-		this as VectorList<FloatComplex> _vector[index]
-	}
-	operator []= (index: Int, item: FloatComplex) {
-		this _vector[index] = item
 	}
 	toString: func -> String {
 		result := ""
@@ -115,6 +100,21 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		result = textBuilder join(t"\n")
 		textBuilder free()
 		result
+	}
+	operator + (value: FloatComplex) -> This {
+		result := This new()
+		for (i in 0 .. this _count)
+			result add(this[i] + value)
+		result
+	}
+	operator - (value: FloatComplex) -> This {
+		this + (-value)
+	}
+	operator [] <T> (index: Int) -> T {
+		this as VectorList<FloatComplex> _vector[index]
+	}
+	operator []= (index: Int, item: FloatComplex) {
+		this _vector[index] = item
 	}
 	getZeros: static func (count: Int) -> This {
 		result := This new(count)

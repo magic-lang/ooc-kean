@@ -35,26 +35,6 @@ BoolVectorList: class extends VectorList<Bool> {
 			trues += (this[i] ? 1 : 0)
 		tallyTrues ? trues : this _count - trues
 	}
-	operator [] <T> (index: Int) -> T {
-		this as VectorList<Bool> _vector[index]
-	}
-	operator []= (index: Int, item: Bool) {
-		this _vector[index] = item
-	}
-	operator && (other: This) -> This {
-		minimumCount := this count < other count ? this count : other count
-		result := This new(minimumCount)
-		for (i in 0 .. minimumCount)
-			result add(this[i] && other[i])
-		result
-	}
-	operator || (other: This) -> This {
-		minimumCount := this count < other count ? this count : other count
-		result := This new(minimumCount)
-		for (i in 0 .. minimumCount)
-			result add(this[i] || other[i])
-		result
-	}
 	reverse: func -> This {
 		(this as VectorList<Bool>) reverse() as This
 	}
@@ -115,6 +95,26 @@ BoolVectorList: class extends VectorList<Bool> {
 			textBuilder append(this[i] toText())
 		result = textBuilder join(t"\n")
 		textBuilder free()
+		result
+	}
+	operator [] <T> (index: Int) -> T {
+		this as VectorList<Bool> _vector[index]
+	}
+	operator []= (index: Int, item: Bool) {
+		this _vector[index] = item
+	}
+	operator && (other: This) -> This {
+		minimumCount := this count < other count ? this count : other count
+		result := This new(minimumCount)
+		for (i in 0 .. minimumCount)
+			result add(this[i] && other[i])
+		result
+	}
+	operator || (other: This) -> This {
+		minimumCount := this count < other count ? this count : other count
+		result := This new(minimumCount)
+		for (i in 0 .. minimumCount)
+			result add(this[i] || other[i])
 		result
 	}
 }

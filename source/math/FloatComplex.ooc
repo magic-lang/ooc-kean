@@ -19,10 +19,22 @@ use ooc-base
 
 FloatComplex: cover {
 	real, imaginary: Float
-	init: func@ (=real, =imaginary)
-	init: func@ ~default { this init(0.0f, 0.0f) }
 	conjugate ::= This new(this real, - this imaginary)
 	absoluteValue ::= (this real pow(2) + this imaginary pow(2)) sqrt()
+	init: func@ (=real, =imaginary)
+	init: func@ ~default { this init(0.0f, 0.0f) }
+	toString: func -> String {
+		this real toString() >> (this imaginary > 0 ? " +" : " ") & this imaginary toString() >> "i"
+	}
+	toText: func -> Text {
+		this real toText() + (this imaginary > 0 ? t" +" : t" ") + this imaginary toText() + t"i"
+	}
+	exponential: func -> This {
+		(this real) exp() * This new((this imaginary) cos(), (this imaginary) sin())
+	}
+	logarithm: func -> This {
+		This new(this absoluteValue log(), this imaginary atan2(this real))
+	}
 	operator + (other: This) -> This { This new(this real + other real, this imaginary + other imaginary) }
 	operator - (other: This) -> This { This new(this real - other real, this imaginary - other imaginary) }
 	operator - -> This { This new(-this real, -this imaginary) }
@@ -37,23 +49,11 @@ FloatComplex: cover {
 	operator / (other: This) -> This { (this * other conjugate) / (other absoluteValue pow(2)) }
 	operator == (other: This) -> Bool { this real == other real && this imaginary == other imaginary }
 	operator != (other: This) -> Bool { !(this == other) }
-	toString: func -> String {
-		this real toString() >> (this imaginary > 0 ? " +" : " ") & this imaginary toString() >> "i"
-	}
-	toText: func -> Text {
-		this real toText() + (this imaginary > 0 ? t" +" : t" ") + this imaginary toText() + t"i"
-	}
 	parse: static func (input: Text) -> This {
 		parts := input find('+') >= 0 ? input split('+') : input split(' ')
 		result := This new(parts[0] toFloat(), parts[1] toFloat())
 		parts free()
 		result
-	}
-	exponential: func -> This {
-		(this real) exp() * This new((this imaginary) cos(), (this imaginary) sin())
-	}
-	logarithm: func -> This {
-		This new(this absoluteValue log(), this imaginary atan2(this real))
 	}
 	rootOfUnity: static func (n: Int, k := 1) -> This {
 		This new(0.0f, 2.0f * k * Float pi / n) exponential()

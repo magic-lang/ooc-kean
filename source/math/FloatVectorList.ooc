@@ -22,27 +22,6 @@ import FloatComplexVectorList
 import FloatMatrix
 
 FloatVectorList: class extends VectorList<Float> {
-	init: func ~default {
-		super()
-	}
-	init: func ~heap (capacity: Int) {
-		super(capacity)
-	}
-	init: func ~fromVectorList (other: VectorList<Float>) {
-		super(other _vector)
-		this _count = other count
-	}
-	init: func ~withValue (capacity: Int, value: Float) {
-		super(capacity)
-		for (i in 0 .. capacity)
-			this add(value)
-	}
-	toVectorList: func -> VectorList<Float> {
-		result := VectorList<Float> new(this count)
-		result _vector = this _vector
-		result _count = this count
-		result
-	}
 	sum: Float {
 		get {
 			result := 0.0f
@@ -80,6 +59,27 @@ FloatVectorList: class extends VectorList<Float> {
 		}
 	}
 	standardDeviation ::= this variance sqrt()
+	init: func ~default {
+		super()
+	}
+	init: func ~heap (capacity: Int) {
+		super(capacity)
+	}
+	init: func ~fromVectorList (other: VectorList<Float>) {
+		super(other _vector)
+		this _count = other count
+	}
+	init: func ~withValue (capacity: Int, value: Float) {
+		super(capacity)
+		for (i in 0 .. capacity)
+			this add(value)
+	}
+	toVectorList: func -> VectorList<Float> {
+		result := VectorList<Float> new(this count)
+		result _vector = this _vector
+		result _count = this count
+		result
+	}
 	sort: func {
 		This _quicksort(this _vector _backend as Float*, 0, this count - 1)
 	}
@@ -107,75 +107,10 @@ FloatVectorList: class extends VectorList<Float> {
 	reverse: func -> This {
 		(this as VectorList<Float>) reverse() as This
 	}
-	operator + (other: This) -> This {
-		minimumCount := this count < other count ? this count : other count
-		result := This new(minimumCount)
-		for (i in 0 .. minimumCount)
-			result add(this[i] + other[i])
-		result
-	}
 	addInto: func (other: This) {
 		minimumCount := Int minimum(this count, other count)
 		for (i in 0 .. minimumCount)
 			this[i] = this[i] + other[i]
-	}
-	operator - (other: This) -> This {
-		minimumCount := this count < other count ? this count : other count
-		result := This new(minimumCount)
-		for (i in 0 .. minimumCount)
-			result add(this[i] - other[i])
-		result
-	}
-	operator * (other: This) -> This {
-		minimumCount := this count < other count ? this count : other count
-		result := This new(minimumCount)
-		for (i in 0 .. minimumCount)
-			result add(this[i] * other[i])
-		result
-	}
-	operator / (other: This) -> This {
-		minimumCount := this count < other count ? this count : other count
-		result := This new(minimumCount)
-		for (i in 0 .. minimumCount)
-			result add(this[i] / other[i])
-		result
-	}
-	operator * (value: Float) -> This {
-		result := This new(this _count)
-		for (i in 0 .. this _count)
-			result add(this[i] * value)
-		result
-	}
-	operator / (value: Float) -> This {
-		this * (1.0f / value)
-	}
-	operator + (value: Float) -> This {
-		result := This new(this _count)
-		for (i in 0 .. this _count)
-			result add(this[i] + value)
-		result
-	}
-	operator - (value: Float) -> This {
-		this + (-value)
-	}
-	operator - -> This {
-		result := This new(this _count)
-		for (i in 0 .. this _count)
-			result add(-this[i])
-		result
-	}
-	operator [] <T> (index: Int) -> T {
-		this as VectorList<Float> _vector[index]
-	}
-	operator []= (index: Int, item: Float) {
-		this _vector[index] = item
-	}
-	operator || (other: This) -> This {
-		minimumCount := this count < other count ? this count : other count
-		result := This new(minimumCount)
-		for (i in 0 .. minimumCount)
-			result add(this[i] > 0.0f ? 1.0f : (other[i] > 0.0f ? 1.0f : 0.0f))
-		result
 	}
 	toString: func -> String {
 		result := ""
@@ -195,14 +130,6 @@ FloatVectorList: class extends VectorList<Float> {
 	divideByMaxValue: func -> This {
 		max := this maxValue
 		max != 0 ? (this / max) : this copy()
-	}
-	getOnes: static func (count: Int) -> This {
-		This new(count, 1.0f)
-	}
-	getZeros: static func (count: Int) -> This {
-		result := This new(count)
-		result _count = count
-		result
 	}
 	exp: func -> This {
 		result := This new(this _count)
@@ -227,42 +154,6 @@ FloatVectorList: class extends VectorList<Float> {
 		result := 0.0f
 		for (kernelIndex in -halfSize .. halfSize + 1)
 			result = result + this[(index + kernelIndex) clamp(0, this count - 1)] * kernel[halfSize + kernelIndex]
-		result
-	}
-	gaussianKernel: static func ~defaultSigma (size: Int) -> This {
-		This gaussianKernel(size, size as Float / 3.0f)
-	}
-	gaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
-		result := This new(size)
-		factor := 1.0f / (sqrt(2.0f * Float pi) * sigma)
-		for (i in 0 .. size)
-			result add((factor * (Float e pow(-0.5f * ((i - (size - 1.0f) / 2.0f) squared) / (sigma squared)))) as Float)
-		sum := result sum
-		for (i in 0 .. size)
-			result[i] = result[i] / sum
-		result
-	}
-	forwardGaussianKernel: static func ~defaultSigma (size: Int) -> This {
-		This forwardGaussianKernel(size, size as Float / 3.0f)
-	}
-	forwardGaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
-		result := This gaussianKernel(size, sigma)
-		for (i in 0 .. (size - 1) / 2)
-			result[i] = 0.0f
-		sum := result sum
-		for (i in 0 .. size)
-			result[i] = result[i] / sum
-		result
-	}
-	backwardGaussianKernel: static func ~defaultSigma (size: Int) -> This {
-		This backwardGaussianKernel(size, size as Float / 3.0f)
-	}
-	backwardGaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
-		result := This new(size)
-		forwardGaussian := This forwardGaussianKernel(size, sigma)
-		for (i in 0 .. size)
-			result add(forwardGaussian[size - i - 1])
-		forwardGaussian free()
 		result
 	}
 	getWaveletTransform: func (levels: Int) -> VectorList<This> {
@@ -318,74 +209,6 @@ FloatVectorList: class extends VectorList<Float> {
 		}
 		windowBuffer free()
 		result
-	}
-	_swap: static func (array: Float*, i, j: Int) {
-		t := array[i]
-		array[i] = array[j]
-		array[j] = t
-	}
-	/* partition the array so that all elements less than array[pivot] are moved before this element
-		and all elements greater than array[pivot] are after it
-		end should be the last valid array index in the range
-	*/
-	_partition: static func (array: Float*, start, end, pivot: Int) -> Int {
-		pivotValue := array[pivot]
-		This _swap(array, pivot, end)
-		result := start
-		for (i in start .. end)
-			if (array[i] < pivotValue) {
-				This _swap(array, result, i)
-				++result
-			}
-		This _swap(array, result, end)
-		result
-	}
-	/*
-	pivot selection strategy which should result in best performance
-	for quicksort and nthElement algorithms on partially sorted data
-		end should be the last valid array index in the range
-	*/
-	_medianOfThree: static func (array: Float*, start, end: Int) -> Int {
-		mid := (start + end) / 2
-		if (array[start] > array[mid])
-			This _swap(array, mid, start)
-		if (array[mid] > array[end])
-			This _swap(array, mid, end)
-		if (array[start] > array[end])
-			This _swap(array, start, end)
-		mid
-	}
-
-	/* return n-th smallest element in the array[start:end] range
-		end should be the last valid array index in the range
-	*/
-	_nthElement: static func (array: Float*, start, end, n: Int) -> Float {
-		if (start == end)
-			array[start]
-		else {
-			pivot := This _partition(array, start, end, This _medianOfThree(array, start, end))
-			if (pivot == n)
-				array[n]
-			else if (n < pivot)
-				_nthElement(array, start, pivot - 1, n)
-			else
-				_nthElement(array, pivot + 1, end, n)
-		}
-	}
-
-	/* sort the input array in the range [start,end]
-		end should be the last valid array index in the range
-	*/
-	_quicksort: static func (array: Float*, start, end: Int) {
-		if (end == start + 1 && array[start] > array[end])
-			This _swap(array, start, end)
-		else if (start < end) {
-			pivot := This _partition(array, start, end, This _medianOfThree(array, start, end))
-			if (pivot > start)
-				This _quicksort(array, start, pivot - 1)
-			if (pivot < end)
-				This _quicksort(array, pivot + 1, end)
-		}
 	}
 	clamp: func (floor, ceiling: Float) -> This {
 		result := This new(this _count)
@@ -470,19 +293,6 @@ FloatVectorList: class extends VectorList<Float> {
 		constants free()
 		result
 	}
-	_generateCubicSplineCoefficients: static func (size: Int) -> FloatMatrix {
-		result := FloatMatrix new(size, size) take()
-		result[0, 0] = 2.f
-		result[0, 1] = 1.f
-		for (index in 1 .. size - 1) {
-			result[index, index - 1] = 1.f
-			result[index, index] = 4.f
-			result[index, index + 1] = 1.f
-		}
-		result[size - 1, size - 2] = 1.f
-		result[size - 1, size - 1] = 2.f
-		result
-	}
 	// input: how many points there will be between two origin points.
 	// this is a Linear interpolation way to have higher precision
 	interpolateLinear: func (numberOfPoints: Int) -> This {
@@ -498,6 +308,196 @@ FloatVectorList: class extends VectorList<Float> {
 			result add(thisPointer[this count - 1])
 		} else
 			result = this copy()
+		result
+	}
+	operator + (other: This) -> This {
+		minimumCount := this count < other count ? this count : other count
+		result := This new(minimumCount)
+		for (i in 0 .. minimumCount)
+			result add(this[i] + other[i])
+		result
+	}
+	operator - (other: This) -> This {
+		minimumCount := this count < other count ? this count : other count
+		result := This new(minimumCount)
+		for (i in 0 .. minimumCount)
+			result add(this[i] - other[i])
+		result
+	}
+	operator * (other: This) -> This {
+		minimumCount := this count < other count ? this count : other count
+		result := This new(minimumCount)
+		for (i in 0 .. minimumCount)
+			result add(this[i] * other[i])
+		result
+	}
+	operator / (other: This) -> This {
+		minimumCount := this count < other count ? this count : other count
+		result := This new(minimumCount)
+		for (i in 0 .. minimumCount)
+			result add(this[i] / other[i])
+		result
+	}
+	operator * (value: Float) -> This {
+		result := This new(this _count)
+		for (i in 0 .. this _count)
+			result add(this[i] * value)
+		result
+	}
+	operator / (value: Float) -> This {
+		this * (1.0f / value)
+	}
+	operator + (value: Float) -> This {
+		result := This new(this _count)
+		for (i in 0 .. this _count)
+			result add(this[i] + value)
+		result
+	}
+	operator - (value: Float) -> This {
+		this + (-value)
+	}
+	operator - -> This {
+		result := This new(this _count)
+		for (i in 0 .. this _count)
+			result add(-this[i])
+		result
+	}
+	operator [] <T> (index: Int) -> T {
+		this as VectorList<Float> _vector[index]
+	}
+	operator []= (index: Int, item: Float) {
+		this _vector[index] = item
+	}
+	operator || (other: This) -> This {
+		minimumCount := this count < other count ? this count : other count
+		result := This new(minimumCount)
+		for (i in 0 .. minimumCount)
+			result add(this[i] > 0.0f ? 1.0f : (other[i] > 0.0f ? 1.0f : 0.0f))
+		result
+	}
+	getOnes: static func (count: Int) -> This {
+		This new(count, 1.0f)
+	}
+	getZeros: static func (count: Int) -> This {
+		result := This new(count)
+		result _count = count
+		result
+	}
+	gaussianKernel: static func ~defaultSigma (size: Int) -> This {
+		This gaussianKernel(size, size as Float / 3.0f)
+	}
+	gaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
+		result := This new(size)
+		factor := 1.0f / (sqrt(2.0f * Float pi) * sigma)
+		for (i in 0 .. size)
+			result add((factor * (Float e pow(-0.5f * ((i - (size - 1.0f) / 2.0f) squared) / (sigma squared)))) as Float)
+		sum := result sum
+		for (i in 0 .. size)
+			result[i] = result[i] / sum
+		result
+	}
+	forwardGaussianKernel: static func ~defaultSigma (size: Int) -> This {
+		This forwardGaussianKernel(size, size as Float / 3.0f)
+	}
+	forwardGaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
+		result := This gaussianKernel(size, sigma)
+		for (i in 0 .. (size - 1) / 2)
+			result[i] = 0.0f
+		sum := result sum
+		for (i in 0 .. size)
+			result[i] = result[i] / sum
+		result
+	}
+	backwardGaussianKernel: static func ~defaultSigma (size: Int) -> This {
+		This backwardGaussianKernel(size, size as Float / 3.0f)
+	}
+	backwardGaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
+		result := This new(size)
+		forwardGaussian := This forwardGaussianKernel(size, sigma)
+		for (i in 0 .. size)
+			result add(forwardGaussian[size - i - 1])
+		forwardGaussian free()
+		result
+	}
+	_swap: static func (array: Float*, i, j: Int) {
+		t := array[i]
+		array[i] = array[j]
+		array[j] = t
+	}
+	/* partition the array so that all elements less than array[pivot] are moved before this element
+		and all elements greater than array[pivot] are after it
+		end should be the last valid array index in the range
+	*/
+	_partition: static func (array: Float*, start, end, pivot: Int) -> Int {
+		pivotValue := array[pivot]
+		This _swap(array, pivot, end)
+		result := start
+		for (i in start .. end)
+			if (array[i] < pivotValue) {
+				This _swap(array, result, i)
+				++result
+			}
+		This _swap(array, result, end)
+		result
+	}
+	/*
+	pivot selection strategy which should result in best performance
+	for quicksort and nthElement algorithms on partially sorted data
+		end should be the last valid array index in the range
+	*/
+	_medianOfThree: static func (array: Float*, start, end: Int) -> Int {
+		mid := (start + end) / 2
+		if (array[start] > array[mid])
+			This _swap(array, mid, start)
+		if (array[mid] > array[end])
+			This _swap(array, mid, end)
+		if (array[start] > array[end])
+			This _swap(array, start, end)
+		mid
+	}
+
+	/* return n-th smallest element in the array[start:end] range
+		end should be the last valid array index in the range
+	*/
+	_nthElement: static func (array: Float*, start, end, n: Int) -> Float {
+		if (start == end)
+			array[start]
+		else {
+			pivot := This _partition(array, start, end, This _medianOfThree(array, start, end))
+			if (pivot == n)
+				array[n]
+			else if (n < pivot)
+				_nthElement(array, start, pivot - 1, n)
+			else
+				_nthElement(array, pivot + 1, end, n)
+		}
+	}
+
+	/* sort the input array in the range [start,end]
+		end should be the last valid array index in the range
+	*/
+	_quicksort: static func (array: Float*, start, end: Int) {
+		if (end == start + 1 && array[start] > array[end])
+			This _swap(array, start, end)
+		else if (start < end) {
+			pivot := This _partition(array, start, end, This _medianOfThree(array, start, end))
+			if (pivot > start)
+				This _quicksort(array, start, pivot - 1)
+			if (pivot < end)
+				This _quicksort(array, pivot + 1, end)
+		}
+	}
+	_generateCubicSplineCoefficients: static func (size: Int) -> FloatMatrix {
+		result := FloatMatrix new(size, size) take()
+		result[0, 0] = 2.f
+		result[0, 1] = 1.f
+		for (index in 1 .. size - 1) {
+			result[index, index - 1] = 1.f
+			result[index, index] = 4.f
+			result[index, index + 1] = 1.f
+		}
+		result[size - 1, size - 2] = 1.f
+		result[size - 1, size - 1] = 2.f
 		result
 	}
 }

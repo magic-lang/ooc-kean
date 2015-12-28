@@ -37,12 +37,6 @@ IntVectorList: class extends VectorList<Int> {
 	copy: func -> This {
 		this as VectorList<Int> copy() as This
 	}
-	operator [] <T> (index: Int) -> T {
-		this as VectorList<Int> _vector[index]
-	}
-	operator []= (index: Int, item: Int) {
-		this _vector[index] = item
-	}
 	contains: func (value: Int) -> Bool {
 		result := false
 		for (i in 0 .. this count)
@@ -93,5 +87,11 @@ IntVectorList: class extends VectorList<Int> {
 			textBuilder append(this[i] toText())
 		result = textBuilder join(t"\n")
 		result
+	}
+	operator [] <T> (index: Int) -> T {
+		this as VectorList<Int> _vector[index]
+	}
+	operator []= (index: Int, item: Int) {
+		this _vector[index] = item
 	}
 }
