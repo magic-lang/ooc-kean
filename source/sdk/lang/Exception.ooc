@@ -1,6 +1,6 @@
 import threading/ThreadLocal
 import structs/Stack
-import lang/Backtrace
+import Backtrace
 
 include setjmp, assert, errno
 
