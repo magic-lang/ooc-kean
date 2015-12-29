@@ -44,49 +44,38 @@ extend Int {
 	isEven ::= this modulo(2) == 0
 	squared ::= this * this
 
-	pow: func (other: This) -> This {
-		(this as Float) pow(other as Float) as Int
-	}
+	pow: func (other: This) -> This { (this as Float) pow(other as Float) as Int }
+	clamp: func (floor, ceiling: This) -> This { this > ceiling ? ceiling : (this < floor ? floor : this) }
 	modulo: func (divisor: This) -> This {
 		result := this
 		if (result < 0)
 			result += (((result abs() as Float) / divisor) ceil() as Int) * divisor
 		result % divisor
 	}
-	clamp: func (floor, ceiling: This) -> This {
-		this > ceiling ? ceiling : (this < floor ? floor : this)
-	}
-	maximum: static func (first, second: This) -> This {
-		first > second ? first : second
-	}
-	minimum: static func (first, second: This) -> This {
-		first < second ? first : second
-	}
-	align: static func (x, align: Int) -> This {
-		result := x
-		if (align > 0) {
-			remainder := x % align
-			if (remainder > 0)
-				result = x + align - remainder
-		}
-		result
-	}
-	alignPowerOfTwo: static func (x, align: Int) -> This { align > 0 ? (x + align - 1) & ~(align - 1) : x }
-	toPowerOfTwo: static func (x: Int) -> This {
-		result := x == 0 ? 0 : 1
-		while (result < x)
-			result *= 2
-		result
-	}
-	digits: static func (x: Int) -> This {
-		result := x < 0 ? 2 : 1
-		value := This abs(x)
+	digits: func -> This {
+		result := this < 0 ? 2 : 1
+		value := this absolute
 		while (value >= 10) {
 			result += 1
 			value /= 10
 		}
 		result
 	}
+	align: func (align: Int) -> This {
+		result := this
+		if (align > 0) {
+			remainder := this % align
+			if (remainder > 0)
+				result = this + align - remainder
+		}
+		result
+	}
+	alignPowerOfTwo: func (align: Int) -> This {
+		align > 0 ? (this + align - 1) & ~(align - 1) : this
+	}
+
+	maximum: static func (x, y: This) -> This { x > y ? x : y }
+	minimum: static func (x, y: This) -> This { x < y ? x : y }
 }
 
 extend Double {
@@ -130,22 +119,23 @@ extend Double {
 	floor: extern (floor) func -> This
 	truncate: extern (trunc) func -> This
 
-	toRadians: func -> This { This pi / 180.0 * this }
-	toDegrees: func -> This { 180.0 / This pi * this }
-	clamp: func (floor, ceiling: This) -> This {
-		this > ceiling ? ceiling : (this < floor ? floor : this)
-	}
 	modulo: func (divisor: This) -> This {
 		result := this
 		if (result < 0)
 			result += ((result abs()) / divisor) ceil() * divisor
 		result mod(divisor)
 	}
+	toRadians: func -> This { This pi / 180.0 * this }
+	toDegrees: func -> This { 180.0 / This pi * this }
+	clamp: func (floor, ceiling: This) -> This { this > ceiling ? ceiling : (this < floor ? floor : this) }
 	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
 	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this < other && !this equals(other) }
 	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this > other && !this equals(other) }
 	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this greaterThan(other) }
 	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this lessThan(other) }
+
+	maximum: static func (x, y: This) -> This { x > y ? x : y }
+	minimum: static func (x, y: This) -> This { x < y ? x : y }
 }
 
 extend Float {
@@ -192,9 +182,14 @@ extend Float {
 	floor: extern (floorf) func -> This
 	truncate: extern (truncf) func -> This
 
-	clamp: func (floor, ceiling: This) -> This {
-		this > ceiling ? ceiling : (this < floor ? floor : this)
-	}
+	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
+	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this < other && !this equals(other) }
+	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this > other && !this equals(other) }
+	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this greaterThan(other) }
+	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this lessThan(other) }
+	linearInterpolation: func (a: This, b: This) -> This { (this * (b - a)) + a }
+	inverseLinearInterpolation: func (a: This, b: This) -> This { (this - a) / (b - a) }
+	clamp: func (floor, ceiling: This) -> This { this > ceiling ? ceiling : (this < floor ? floor : this) }
 	toRadians: func -> This { This pi / 180.0f * this }
 	toDegrees: func -> This { 180.0f / This pi * this }
 	modulo: func (divisor: This) -> This {
@@ -203,23 +198,9 @@ extend Float {
 			result += ((result abs()) / divisor) ceil() * divisor
 		result mod(divisor)
 	}
-	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
-	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this < other && !this equals(other) }
-	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this > other && !this equals(other) }
-	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this greaterThan(other) }
-	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this lessThan(other) }
-	maximum: static func (first, second: This) -> This {
-		first > second ? first : second
-	}
-	minimum: static func (first, second: This) -> This {
-		first < second ? first : second
-	}
-	linearInterpolation: static func (a: This, b: This, ratio: This) -> This {
-		(ratio * (b - a)) + a
-	}
-	inverseLinearInterpolation: static func (a: This, b: This, value: This) -> This {
-		(value - a) / (b - a)
-	}
+
+	maximum: static func (x, y: This) -> This { x > y ? x : y }
+	minimum: static func (x, y: This) -> This { x < y ? x : y }
 	decomposeToCoefficientAndRadix: static func (value: This, valueDigits: Int) -> (This, This) {
 		radix := 1.0f
 		if (value != 0.0f) {
