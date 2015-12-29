@@ -1,4 +1,5 @@
-import os/[Env, Dynlib, ShellUtils]
+import os/[Env, Dynlib]
+import io/File
 import structs/List
 import ../mangling
 
