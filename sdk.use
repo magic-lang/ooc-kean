@@ -2,7 +2,7 @@ Name: sdk
 Description: Lightweight ooc standard library replacement.
 SourcePath: source/sdk
 Imports: Character
-Imports: lang/Exception
+Imports: Exception
 Imports: lang/String
 Imports: lang/types
 Imports: Buffer
