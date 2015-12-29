@@ -18,7 +18,7 @@ use ooc-math
 import os/Time
 
 IntRandomGenerator: abstract class {
-	permanentSeed ::= static 0
+	permanentSeed: static UInt = 0
 	next: abstract func -> Int
 	next: func ~withCount (count: Int) -> Int[] {
 		result := Int[count] new()
