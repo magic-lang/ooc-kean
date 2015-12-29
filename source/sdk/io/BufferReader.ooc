@@ -8,6 +8,10 @@ BufferReader: class extends Reader {
 
 	init: func ~withBuffer (=buffer)
 
+	init: func ~withString (string: String) {
+		this buffer = string _buffer
+	}
+
 	buffer: func -> CharBuffer {
 		return buffer
 	}

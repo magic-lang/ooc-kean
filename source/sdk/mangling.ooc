@@ -1,11 +1,11 @@
-import io/StringReader
+import io/BufferReader
 
 // Used to turn `lang_Exception__Exception_throw_impl` into `Exception throw_impl() in lang/Exception`
 Demangler: class {
 	demangle: static func (s: String) -> FullSymbol {
 		result := FullSymbol new(s)
 		if (s contains?("__")) {
-			reader := StringReader new(s)
+			reader := BufferReader new(s)
 
 			while (reader hasNext?()) {
 				c := reader read()
