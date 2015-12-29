@@ -98,16 +98,16 @@ TimeSpan: cover {
 	kean_base_timeSpan_getTotalWeeks: unmangled func -> Int64 { this elapsedWeeks() }
 
 	millisecond: static func -> This { This milliseconds(1) }
-	milliseconds: static func (count: Double) -> This { This new(DateTime ticksPerMillisecond * count) }
 	second: static func -> This { This seconds(1) }
-	seconds: static func (count: Double) -> This { This new(DateTime ticksPerSecond * count) }
 	minute: static func -> This { This minutes(1) }
-	minutes: static func (count: Double) -> This { This new(DateTime ticksPerMinute * count) }
 	hour: static func -> This { This hours(1) }
-	hours: static func (count: Double) -> This { This new(DateTime ticksPerHour * count) }
 	day: static func -> This { This days(1) }
-	days: static func (count: Double) -> This { This new(DateTime ticksPerDay * count) }
 	week: static func -> This { This weeks(1) }
+	milliseconds: static func (count: Double) -> This { This new(DateTime ticksPerMillisecond * count) }
+	seconds: static func (count: Double) -> This { This new(DateTime ticksPerSecond * count) }
+	minutes: static func (count: Double) -> This { This new(DateTime ticksPerMinute * count) }
+	hours: static func (count: Double) -> This { This new(DateTime ticksPerHour * count) }
+	days: static func (count: Double) -> This { This new(DateTime ticksPerDay * count) }
 	weeks: static func (count: Double) -> This { This new(DateTime ticksPerWeek * count) }
 
 	kean_base_timeSpan_new: unmangled static func (ticks: Int64) -> This { This new(ticks) }
