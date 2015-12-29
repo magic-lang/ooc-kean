@@ -1,7 +1,7 @@
 import os/[Env, Dynlib]
 import io/File
 import structs/List
-import ../mangling
+import mangling
 
 BacktraceHandler: class {
 	lib: Dynlib = null
