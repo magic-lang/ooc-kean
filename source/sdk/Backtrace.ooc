@@ -23,7 +23,7 @@ BacktraceHandler: class {
 			// fall back on execinfo? still informative
 			version (linux || apple) {
 				if (!This WARNED_ABOUT_FALLBACK) {
-					stderr write("[lang/Backtrace] Falling back on execinfo.. (build extension if you want fancy backtraces)\n")
+					stderr write("[Backtrace] Falling back on execinfo.. (build extension if you want fancy backtraces)\n")
 					This WARNED_ABOUT_FALLBACK = true
 				}
 				length := backtrace(buffer, BACKTRACE_LENGTH)
@@ -32,7 +32,7 @@ BacktraceHandler: class {
 
 			// no such luck, use a debugger :(
 			if (!This WARNED_ABOUT_FALLBACK) {
-				stderr write("[lang/Backtrace] No backtrace extension nor execinfo - use a debugger!\n")
+				stderr write("[Backtrace] No backtrace extension nor execinfo - use a debugger!\n")
 				This WARNED_ABOUT_FALLBACK = true
 			}
 			gc_free(buffer)
@@ -99,7 +99,7 @@ BacktraceHandler: class {
 	_getSymbol: func (target: Pointer@, name: String) {
 		target = lib symbol(name)
 		if (!target) {
-			stderr write("[lang/Backtrace] Couldn't get %s symbol!\n" format(name))
+			stderr write("[Backtrace] Couldn't get %s symbol!\n" format(name))
 			lib = null
 		}
 	}

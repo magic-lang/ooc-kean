@@ -1,6 +1,6 @@
 import io/BufferReader
 
-// Used to turn `lang_Exception__Exception_throw_impl` into `Exception throw_impl() in lang/Exception`
+// Used to turn `Exception__Exception_throw_impl` into `Exception throw_impl()`
 Demangler: class {
 	demangle: static func (s: String) -> FullSymbol {
 		result := FullSymbol new(s)
