@@ -131,6 +131,20 @@ FloatPoint2DVectorListTest: class extends Fixture {
 			expect(list[4] y, is equal to(5.0f) within(tolerance))
 			list free()
 		})
+		this add("max and min", func {
+			list := FloatPoint2DVectorList new()
+			list add(FloatPoint2D new(2.0f, 1.0f))
+			list add(FloatPoint2D new(1.0f, 2.0f))
+			list add(FloatPoint2D new(3.5f, 3.0f))
+			list add(FloatPoint2D new(5.0f, 5.0f))
+			list add(FloatPoint2D new(-3.0f, 6.0f))
+			max := list maxValues()
+			min := list minValues()
+			expect(max x, is equal to(5.0f) within(tolerance))
+			expect(max y, is equal to(6.0f) within(tolerance))
+			expect(min x, is equal to(-3.0f) within(tolerance))
+			expect(min y, is equal to(1.0f) within(tolerance))
+		})
 	}
 }
 
