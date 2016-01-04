@@ -118,6 +118,30 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 		}
 		result
 	}
+	minValues: func -> FloatPoint2D {
+		result: FloatPoint2D
+		if (this empty)
+			result = FloatPoint2D new()
+		else {
+			thisPointer := this pointer as FloatPoint2D*
+			result = thisPointer[0]
+			for (i in 1 .. this _count)
+				result = result minimum(thisPointer[i])
+		}
+		result
+	}
+	maxValues: func -> FloatPoint2D {
+		result: FloatPoint2D
+		if (this empty)
+			result = FloatPoint2D new()
+		else {
+			thisPointer := this pointer as FloatPoint2D*
+			result = thisPointer[0]
+			for (i in 1 .. this _count)
+				result = result maximum(thisPointer[i])
+		}
+		result
+	}
 
 	operator + (value: FloatPoint2D) -> This {
 		result := This new()
@@ -126,7 +150,23 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 			result add(thisPointer[i] + value)
 		result
 	}
+	operator * (value: FloatPoint2D) -> This {
+		result := This new()
+		thisPointer := this pointer as FloatPoint2D*
+		for (i in 0 .. this _count)
+			result add(thisPointer[i] * value)
+		result
+	}
+	operator * (value: Float) -> This {
+		result := This new()
+		thisPointer := this pointer as FloatPoint2D*
+		for (i in 0 .. this _count)
+			result add(thisPointer[i] * value)
+		result
+	}
 	operator - (value: FloatPoint2D) -> This { this + (-value) }
+	operator / (value: FloatPoint2D) -> This { this * (1.0f / value) }
+	operator / (value: Float) -> This { this * (1.0f / value) }
 	operator [] (index: Int) -> FloatPoint2D { this _vector[index] as FloatPoint2D }
 	operator []= (index: Int, item: FloatPoint2D) { this _vector[index] = item }
 
