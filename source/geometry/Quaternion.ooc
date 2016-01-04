@@ -148,17 +148,13 @@ Quaternion: cover {
 		}
 		this init(w, x, y, z)
 	}
-	distance: func (other: This) -> Float {
-		(this - other) norm
-	}
+	distance: func (other: This) -> Float { (this - other) norm }
 	angle: func (other: This) -> Float {
 		result := 2.0f * (this dotProduct(other) absolute) acos()
 		result = result == result ? result : 0.0f
 		result
 	}
-	dotProduct: func (other: This) -> Float {
-		this w * other w + this x * other x + this y * other y + this z * other z
-	}
+	dotProduct: func (other: This) -> Float { this w * other w + this x * other x + this y * other y + this z * other z }
 	sphericalLinearInterpolation: func (other: This, factor: Float) -> This {
 		cosAngle := this dotProduct(other)
 		longPath := cosAngle < 0.0f
@@ -225,15 +221,9 @@ Quaternion: cover {
 			direction /= point3DNorm
 		This new(0.0f, halfAngle * direction) exponential
 	}
-	createRotationX: static func (angle: Float) -> This {
-		This createRotation(angle, FloatPoint3D new(1.0f, 0.0f, 0.0f))
-	}
-	createRotationY: static func (angle: Float) -> This {
-		This createRotation(angle, FloatPoint3D new(0.0f, 1.0f, 0.0f))
-	}
-	createRotationZ: static func (angle: Float) -> This {
-		This createRotation(angle, FloatPoint3D new(0.0f, 0.0f, 1.0f))
-	}
+	createRotationX: static func (angle: Float) -> This { This createRotation(angle, FloatPoint3D new(1.0f, 0.0f, 0.0f)) }
+	createRotationY: static func (angle: Float) -> This { This createRotation(angle, FloatPoint3D new(0.0f, 1.0f, 0.0f)) }
+	createRotationZ: static func (angle: Float) -> This { This createRotation(angle, FloatPoint3D new(0.0f, 0.0f, 1.0f)) }
 	relativeFromVelocity: static func (angularVelocity: FloatPoint3D) -> This {
 		result := This identity
 		angle := sqrt(angularVelocity x * angularVelocity x + angularVelocity y * angularVelocity y + angularVelocity z * angularVelocity z)
