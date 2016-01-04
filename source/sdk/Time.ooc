@@ -1,4 +1,4 @@
-import os/win32/types
+import os/win32
 
 version(linux) {
 	include unistd | (__USE_BSD), sys/time | (__USE_BSD), time | (__USE_BSD)
