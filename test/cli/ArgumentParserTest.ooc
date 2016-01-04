@@ -108,6 +108,7 @@ ArgumentParserTest: class extends Fixture {
 			argumentAValue: Text
 			argumentAValue = t""
 			argumentBValue: Text
+			argumentBValue = t""
 			argumentCFirstValue: Text
 			argumentCSecondValue: Text
 			argumentCThirdValue: Text
@@ -119,7 +120,7 @@ ArgumentParserTest: class extends Fixture {
 			parser add(t"argd", 2, Event1<VectorList<Text>> new(func (list: VectorList<Text>) { argumentDFirstValue = list[0]; argumentDSecondValue = list[1] }))
 			parser parse(inputList)
 			expect(argumentAValue == t"")
-			expect(argumentBValue == t"b")
+			expect(argumentBValue == t"")
 			expect(argumentCFirstValue == t"5")
 			expect(argumentCSecondValue == t"-10")
 			expect(argumentCThirdValue == t"15")
@@ -134,6 +135,37 @@ ArgumentParserTest: class extends Fixture {
 			argumentCThirdValue free()
 			argumentDFirstValue free()
 			argumentDSecondValue free()
+		})
+		this add("Compact flags", func {
+			inputList := VectorList<Text> new()
+			inputList add(t"-abc")
+			inputList add(t"default")
+			inputList add(t"--argd")
+			inputList add(t"dVal")
+			parser := ArgumentParser new()
+			argumentAValue: Text
+			argumentBValue: Text
+			argumentCValue: Text
+			argumentDValue: Text
+			defaultArgumentValue: Text
+			parser add(t"arga", 'a', Event new(func { argumentAValue = t"a" }))
+			parser add(t"argb", 'b', Event new(func { argumentBValue = t"b" }))
+			parser add(t"argc", 'c', Event new(func { argumentCValue = t"c" }))
+			parser add(t"argd", 'd', Event1<Text> new(func (parameter: Text) { argumentDValue = parameter }))
+			parser addDefault(Event1<Text> new(func (parameter: Text) { defaultArgumentValue = parameter }))
+			parser parse(inputList)
+			expect(argumentAValue == t"a")
+			expect(argumentBValue == t"b")
+			expect(argumentCValue == t"c")
+			expect(argumentDValue == t"dVal")
+			expect(defaultArgumentValue == t"default")
+			inputList free()
+			parser free()
+			argumentAValue free()
+			argumentBValue free()
+			argumentCValue free()
+			argumentDValue free()
+			defaultArgumentValue free()
 		})
 	}
 }

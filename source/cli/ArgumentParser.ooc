@@ -80,31 +80,39 @@ ArgumentParser: class {
 	}
 	parse: func (input: VectorList<Text>) {
 		parameters := VectorList<Text> new()
+		arguments := VectorList<Text> new()
 		for (i in 0 .. input count) {
 			parameters clear()
+			arguments clear()
 			current := input[i] take()
 			if (current beginsWith(t"--"))
-				current = current slice(2)
-			else if (current beginsWith(t"-"))
+				arguments add(current slice(2))
+			else if (current beginsWith(t"-")) {
 				current = current slice(1)
+				for (j in 0 .. current count)
+					arguments add(current slice(j, 1))
+			}
 			else
 				this _defaultArgument _textAction call(current)
-			if (argument := this _findArgument(current)) {
-				if (argument _parameters > 1) {
-					for (j in 0 .. argument _parameters)
-						parameters add(input[i + j + 1] take())
-					argument _listAction call(parameters)
+			for (k in 0 .. arguments count) {
+				if (argument := this _findArgument(arguments[k])) {
+					if (argument _parameters > 1) {
+						for (j in 0 .. argument _parameters)
+							parameters add(input[i + j + 1] take())
+						argument _listAction call(parameters)
+					}
+					else if (argument _parameters == 1)
+						argument _textAction call(input[i + 1] take())
+					else
+						argument _action call()
+					i += argument _parameters
 				}
-				else if (argument _parameters == 1)
-					argument _textAction call(input[i + 1] take())
-				else
-					argument _action call()
-				i += argument _parameters
 			}
 		}
 		for (i in 0 .. input count)
 			input[i] free(Owner Receiver)
 		parameters free()
+		arguments free()
 	}
 	_findArgument: func (identifier: Text) -> _Argument {
 		result: _Argument
