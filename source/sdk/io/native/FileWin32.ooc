@@ -1,4 +1,4 @@
-import os/win32/[types, errors]
+import os/win32
 import structs/VectorList
 import ../File
 

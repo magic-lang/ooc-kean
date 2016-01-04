@@ -1,6 +1,6 @@
 version(windows) {
 	import ../[WaitCondition, Mutex, Thread]
-	import os/win32/[types, errors]
+	import os/win32
 	import MutexWin32
 
 	include windows

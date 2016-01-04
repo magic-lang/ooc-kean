@@ -1,7 +1,7 @@
 import structs/HashMap
 import ../Process
 import PipeWin32
-import os/win32/[types, errors]
+import os/win32
 
 version(windows) {
 include windows
