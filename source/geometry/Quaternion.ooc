@@ -18,6 +18,7 @@ use ooc-collections
 use ooc-math
 import FloatPoint3D
 import FloatTransform3D
+import FloatVector3D
 
 Quaternion: cover {
 	real: Float
@@ -218,6 +219,19 @@ Quaternion: cover {
 	createFromEulerAngles: static func (rotationX, rotationY, rotationZ: Float) -> This {
 		This createRotationZ(rotationZ) * This createRotationY(rotationY) * This createRotationX(rotationX)
 	}
+	createFromAxisAngle: static func (rotation: FloatVector3D) {
+		result := This identity
+		angle := rotation norm
+		if (angle > 1.0e-8f) {
+			result = This new(
+				cos(angle / 2.0f),
+				rotation x * sin(angle / 2.0f) / angle,
+				rotation y * sin(angle / 2.0f) / angle,
+				rotation z * sin(angle / 2.0f) / angle
+				)
+		}
+		result
+	}
 	createRotation: static func (angle: Float, direction: FloatPoint3D) -> This {
 		halfAngle := angle / 2.0f
 		point3DNorm := direction norm
@@ -233,19 +247,6 @@ Quaternion: cover {
 	}
 	createRotationZ: static func (angle: Float) -> This {
 		This createRotation(angle, FloatPoint3D new(0.0f, 0.0f, 1.0f))
-	}
-	relativeFromVelocity: static func (angularVelocity: FloatPoint3D) -> This {
-		result := This identity
-		angle := sqrt(angularVelocity x * angularVelocity x + angularVelocity y * angularVelocity y + angularVelocity z * angularVelocity z)
-		if (angle > 1.0e-8f) {
-			result = This new(
-				cos(angle / 2.0f),
-				angularVelocity x * sin(angle / 2.0f) / angle,
-				angularVelocity y * sin(angle / 2.0f) / angle,
-				angularVelocity z * sin(angle / 2.0f) / angle
-				)
-		}
-		result
 	}
 	weightedMean: static func (quaternions: VectorList<This>, weights: FloatVectorList) -> This {
 		// Implementation of the QUEST algorithm. Original publication:
