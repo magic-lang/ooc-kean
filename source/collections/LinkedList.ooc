@@ -5,6 +5,7 @@ LinkedList: class <T> {
 	_size := 0
 	head ::= this _head
 	size ::= this _size
+
 	init: func {
 		this _head = Node<T> new()
 		this _head prev = this _head

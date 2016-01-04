@@ -188,10 +188,8 @@ WSAStartup: extern func (versionRequested: WORD, wsaData: Pointer) -> Int
 initWinsock: func {
 	data: This
 	ret := WSAStartup(MAKEWORD(2, 2), data&)
-
-	if (ret != 0) {
+	if (ret != 0)
 		raise("Could not initialize winsock 2.2")
-	}
 }
 initWinsock()
 }

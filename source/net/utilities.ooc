@@ -22,14 +22,12 @@ ipType: func (ip: String) -> Int {
 		AddressFamily UNSPEC
 	}
 }
-
 /**
 	Is the IP provided valid as either IPv6 or IPv4? (Does not return which)
 */
 validIp?: func (ip: String) -> Bool {
 	ipType(ip) != AddressFamily UNSPEC
 }
-
 getSocketAddress: func (ip: String, port: Int) -> SocketAddress {
 	ai: InAddr
 	type := ipType(ip)
@@ -43,7 +41,6 @@ getSocketAddress: func (ip: String, port: Int) -> SocketAddress {
 	addr := SocketAddressIP4 new(ai, port)
 	addr
 }
-
 getSocketAddress6: func (ip: String, port: Int) -> SocketAddress {
 	ai: In6Addr
 	type := ipType(ip)

@@ -50,6 +50,7 @@ DateTime: cover {
 	/* Number of 100 ns intervals since 00.00 1/1/1 */
 	_ticks: UInt64 = 0
 	ticks ::= this _ticks
+
 	init: func@ (=_ticks)
 	init: func@ ~fromYearMonthDay (year, month, day: Int) {
 		if (This dateIsValid(year, month, day))
@@ -69,44 +70,25 @@ DateTime: cover {
 		else
 			raise ("invalid input specified for constructor(year,month,day,hour,minute,second,ms)")
 	}
-
-	millisecond: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) millisecond
-	}
-	second: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) second
-	}
-	minute: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) minute
-	}
-	hour: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) hour
-	}
-	day: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) day
-	}
-	month: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) month
-	}
-	year: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) year
-	}
-
-	// <summary>
+	millisecond: func -> Int { This _ticksToDateTimeHelper(this ticks) millisecond }
+	second: func -> Int { This _ticksToDateTimeHelper(this ticks) second }
+	minute: func -> Int { This _ticksToDateTimeHelper(this ticks) minute }
+	hour: func -> Int { This _ticksToDateTimeHelper(this ticks) hour }
+	day: func -> Int { This _ticksToDateTimeHelper(this ticks) day }
+	month: func -> Int { This _ticksToDateTimeHelper(this ticks) month }
+	year: func -> Int { This _ticksToDateTimeHelper(this ticks) year }
 	// Convert this object to string representation
-	// </summary>
-	// supported formatting expressions:
-	//	%yyyy - year
-	//	%yy	- year as two digit number
-	//  %MM - month with leading zero
-	//	%M	- month without leading zero
-	//	%dd - day with leading zero
-	//	%d	- day without leading zero
-	//	%hh - hour
-	//	%mm - minute
-	//	%ss - second
-	//	%zzzz - millisecond
-	// <param name="format">output format specification</param>
+	// 	supported formatting expressions:
+	//		%yyyy - year
+	//		%yy	- year as two digit number
+	//  	%MM - month with leading zero
+	//		%M	- month without leading zero
+	//		%dd - day with leading zero
+	//		%d	- day without leading zero
+	//		%hh - hour
+	//		%mm - minute
+	//		%ss - second
+	//		%zzzz - millisecond
 	toText: func (format := This defaultFormat) -> Text {
 		result := format copy()
 		data := This _ticksToDateTimeHelper(this ticks)
@@ -125,7 +107,6 @@ DateTime: cover {
 		result = result replaceAll(t"%zzz", t"%03d" format(data millisecond))
 		result replaceAll(t"%z", t"%d" format(data millisecond))
 	}
-
 	compareTo: func (other: This) -> Order {
 		if (this ticks > other ticks)
 			Order greater
@@ -154,25 +135,20 @@ DateTime: cover {
 	kean_base_dateTime_getMonth: unmangled func -> Int { this month() }
 	kean_base_dateTime_getYear: unmangled func -> Int { this year() }
 
-	/* number of days in year ( non-leap ) */
-	daysPerYear: static const Int = 365
-	daysPerFourYears: static const Int = 3 * This daysPerYear + 366
-	nanosecondsPerTick: static const Int64 = 100
-	ticksPerMillisecond: static const Int64 = 1_000_000 / This nanosecondsPerTick
-	ticksPerSecond: static const Int64 = This ticksPerMillisecond * 1000
-	ticksPerMinute: static const Int64 = This ticksPerSecond * 60
-	ticksPerHour: static const Int64 = This ticksPerMinute * 60
-	ticksPerDay: static const Int64 = This ticksPerHour * 24
-	ticksPerWeek: static const UInt64 = This ticksPerDay * 7
-	ticksPerFourYears: static const Int64 = This daysPerFourYears * This ticksPerDay
-	/* default date/time printing format */
-	defaultFormat: static const Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
+	daysPerYear: static Int = 365
+	daysPerFourYears: static Int = 3 * This daysPerYear + 366
+	nanosecondsPerTick: static Int64 = 100
+	ticksPerMillisecond: static Int64 = 1_000_000 / This nanosecondsPerTick
+	ticksPerSecond: static Int64 = This ticksPerMillisecond * 1000
+	ticksPerMinute: static Int64 = This ticksPerSecond * 60
+	ticksPerHour: static Int64 = This ticksPerMinute * 60
+	ticksPerDay: static Int64 = This ticksPerHour * 24
+	ticksPerWeek: static UInt64 = This ticksPerDay * 7
+	ticksPerFourYears: static Int64 = This daysPerFourYears * This ticksPerDay
+	defaultFormat: static Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
 
-	now: static This {
-		get {
-			Time currentDateTime()
-		}
-	}
+	now ::= static Time currentDateTime()
+
 	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
 	_ticksToDateTimeHelper: static func (totalTicks: Int64) -> DateTimeData {
 		fourYearBlocks := totalTicks / This ticksPerFourYears
@@ -206,13 +182,9 @@ DateTime: cover {
 		millisecond := ticksLeft / This ticksPerMillisecond
 		DateTimeData new(year, month, days + 1, hour, minute, second, millisecond)
 	}
-
-	/* returns number of ticks for given hours, minutes and seconds */
 	timeToTicks: static func (hours, minutes, seconds, millisecond: Int) -> Int64 {
 		(hours * 3600 + minutes * 60 + seconds) * This ticksPerSecond + millisecond * This ticksPerMillisecond
 	}
-
-	/* returns number of ticks for given date at 0:00*/
 	dateToTicks: static func (year, month, day: Int) -> UInt64 {
 		result := 0 as UInt64
 		if (This dateIsValid(year, month, day)) {
@@ -228,15 +200,12 @@ DateTime: cover {
 		}
 		result
 	}
-
 	daysInYear: static func (year: Int) -> Int {
 		This daysPerYear + This isLeapYear(year)
 	}
-
 	ticksInYear: static func (year: Int) -> UInt64 {
 		This daysInYear(year) * This ticksPerDay
 	}
-
 	daysInMonth: static func (year, month: Int) -> Int {
 		if (month == 2)
 			This isLeapYear(year) ? 29 : 28
@@ -245,23 +214,20 @@ DateTime: cover {
 		else
 			month % 2 ? 30 : 31
 	}
-
 	ticksInMonth: static func (year, month: Int) -> UInt64 {
 		This ticksPerDay * This daysInMonth(year, month)
 	}
-	/* validate argument ranges for hour/minutes/seconds vaules */
 	timeIsValid: static func (hour, minute, second, millisecond: Int) -> Bool {
 		hour in?(0 .. 24) && minute in?(0 .. 60) && second in?(0 .. 60) && millisecond in?(0 .. 1000)
 	}
-	/* validate argument ranges for year/month/day values */
 	dateIsValid: static func (year, month, day: Int) -> Bool {
 		year >= 1 && month in?(1 .. 13) && day in?(1 .. This daysInMonth(year, month) + 1)
 	}
 	kean_base_dateTime_new: unmangled static func (ticks: UInt64) -> This { This new(ticks) }
+	kean_base_dateTime_getNow: unmangled static func -> This { This now }
 	kean_base_dateTime_fromDate: unmangled static func (year, month, day: Int) -> This { This new(year, month, day) }
 	kean_base_dateTime_fromTime: unmangled static func (hour, minute, second, millisecond: Int) -> This { This new(hour, minute, second, millisecond) }
 	kean_base_dateTime_fromDateTime: unmangled static func (year, month, day, hour, minute, second, millisecond: Int) -> This {
 		This new(year, month, day, hour, minute, second, millisecond)
 	}
-	kean_base_dateTime_getNow: unmangled static func -> This { This now }
 }

@@ -25,6 +25,7 @@ import FloatBox2D
 IntBox2D: cover {
 	leftTop: IntPoint2D
 	size: IntVector2D
+
 	width ::= this size x
 	height ::= this size y
 	left ::= this leftTop x
@@ -41,6 +42,7 @@ IntBox2D: cover {
 	bottomCenter ::= IntPoint2D new(this center x, this bottom)
 	hasZeroArea ::= this size hasZeroArea
 	area ::= this size area
+
 	init: func@ (newLeftTop: IntPoint2D, newSize: IntVector2D) {
 		if (newSize x < 0)
 			newLeftTop x += newSize x

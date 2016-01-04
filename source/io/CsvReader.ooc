@@ -6,6 +6,7 @@ import io/[File, FileReader]
 
 CsvReader: class extends Iterator<VectorList<Text>> {
 	_fileReader: FileReader
+
 	init: func (=_fileReader)
 	free: func {
 		if (this _fileReader != null) {
@@ -71,7 +72,9 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		textBuilder free()
 		result
 	}
+
 	delimiter ::= static ','
+
 	open: static func ~text (filename: Text) -> This {
 		filenameString := filename toString()
 		result := This open(filenameString)

@@ -20,12 +20,10 @@ DNS: class {
 		hints ai_flags = AI_CANONNAME
 		hints ai_family = socketFamily
 		hints ai_socktype = socketType
-		if ((rv := getaddrinfo(hostname, null, hints&, info&)) != 0) {
+		if ((rv := getaddrinfo(hostname, null, hints&, info&)) != 0)
 			DNSError new(gai_strerror(rv as Int) as CString toString()) throw()
-		}
 		return HostInfo new(info)
 	}
-
 	/**
 		Perform DNS lookup using the hostname.
 		Returns the first IPAddress found for the host.
@@ -38,7 +36,6 @@ DNS: class {
 		info := resolve(host, socketType, socketFamily)
 		return info addresses()[0]
 	}
-
 	/**
 		Perform a reverse DNS lookup by using the host's address.
 		Returns the hostname of the specified address.
@@ -48,13 +45,11 @@ DNS: class {
 	}
 	reverse: static func ~withSockAddr (sockaddr: SocketAddress) -> String {
 		hostname := CharBuffer new(1024)
-		if ((rv := getnameinfo(sockaddr addr(), sockaddr length(), hostname toCString(), 1024, null, 0, 0)) != 0) {
+		if ((rv := getnameinfo(sockaddr addr(), sockaddr length(), hostname toCString(), 1024, null, 0, 0)) != 0)
 			DNSError new(gai_strerror(rv as Int) as CString toString()) throw()
-		}
 		hostname sizeFromData()
 		return hostname toString()
 	}
-
 	/**
 		Returns the hostname of this system.
 	*/
@@ -76,7 +71,6 @@ DNS: class {
 HostInfo: class {
 	name: String
 	addresses: LinkedList<IPAddress>
-
 	/**
 	   Create a new HostInfo from an AddrInfo chain.
 
@@ -85,7 +79,6 @@ HostInfo: class {
 	 */
 	init: func (addrinfo: AddrInfo*) {
 		addresses = LinkedList<IPAddress> new()
-
 		name = addrinfo@ ai_canonname as CString toString()
 		info := addrinfo
 		while (info) {
@@ -99,7 +92,6 @@ HostInfo: class {
 			info = info@ ai_next
 		}
 	}
-
 	/**
 		Returns a list of IPAddress associated with this host.
 	*/

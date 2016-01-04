@@ -51,6 +51,7 @@ FloatEuclidTransform: cover {
 	}
 
 	kean_math_floatEuclidTransform_toFloatTransform3D: unmangled func -> FloatTransform3D { this transform }
+
 	convolveCenter: static func (euclidTransforms: VectorList<This>, kernel: FloatVectorList) -> This {
 		result := This new()
 		if (euclidTransforms count > 0) {

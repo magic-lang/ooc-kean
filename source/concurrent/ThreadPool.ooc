@@ -174,7 +174,9 @@ ThreadPool: class {
 	_workers: Worker[]
 	_tasks := BlockedQueue<_Task> new()
 	_threadCount: Int
+
 	threadCount ::= this _threadCount
+
 	init: func (threadCount := 4) {
 		this _threadCount = threadCount
 		this _workers = Worker[threadCount] new()
@@ -194,7 +196,6 @@ ThreadPool: class {
 	add: func (action: Func) {
 		task := _ActionTask new(action, this _globalMutex)
 		this _add(task)
-		//Enable free after completion
 		task free()
 	}
 	getPromise: func (action: Func) -> Promise {

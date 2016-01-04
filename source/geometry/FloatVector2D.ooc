@@ -21,12 +21,14 @@ use ooc-base
 
 FloatVector2D: cover {
 	x, y: Float
+
 	area ::= this x * this y
 	length ::= this norm
 	hasZeroArea ::= this area equals(0.0f)
 	norm ::= (this x squared + this y squared) sqrt()
 	azimuth ::= this y atan2(this x)
 	absolute ::= This new(this x absolute, this y absolute)
+
 	init: func@ (=x, =y)
 	init: func@ ~square (length: Float) { this x = this y = length }
 	init: func@ ~default { this init(0.0f, 0.0f) }
@@ -72,8 +74,9 @@ FloatVector2D: cover {
 	operator / (other: Int) -> This { This new(this x / other, this y / other) }
 	operator as -> String { this toString() }
 
-	basisX: static This { get { This new(1, 0) } }
-	basisY: static This { get { This new(0, 1) } }
+	basisX ::= static This new(1, 0)
+	basisY ::= static This new(0, 1)
+
 	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
 	parse: static func (input: Text) -> This {
 		parts := input split(',')

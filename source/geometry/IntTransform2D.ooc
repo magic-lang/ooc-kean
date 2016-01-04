@@ -26,8 +26,12 @@ import FloatTransform2D
 
 IntTransform2D: cover {
 	a, b, c, d, e, f, g, h, i: Int
+
 	determinant ::= this a * this e * this i + this d * this h * this c + this g * this b * this f - this g * this e * this c - this d * this b * this i - this a * this h * this f
 	translation ::= IntVector2D new(this g, this h)
+	isProjective ::= this determinant != 0
+	isAffine ::= this c == 0 && this f == 0 && this i == 1
+	isIdentity ::= (this a == 1 && this e == 1 && this i == 1) && (this b == 0 && this c == 0 && this d == 0 && this f == 0 && this g == 0 && this h == 0)
 	inverse: This { get {
 		determinant := this determinant
 		if (determinant == 0)
@@ -44,9 +48,7 @@ IntTransform2D: cover {
 			(this a * this e - this b * this d) / determinant
 		)
 	}}
-	isProjective ::= this determinant != 0
-	isAffine ::= this c == 0 && this f == 0 && this i == 1
-	isIdentity ::= (this a == 1 && this e == 1 && this i == 1) && (this b == 0 && this c == 0 && this d == 0 && this f == 0 && this g == 0 && this h == 0)
+
 	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i)
 	init: func@ ~reduced (a, b, d, e, g, h: Float) { this init(a, b, 0, d, e, 0, g, h, 1) }
 	init: func@ ~default { this init(0, 0, 0, 0, 0, 0, 0, 0, 0) }
@@ -132,7 +134,8 @@ IntTransform2D: cover {
 		this toString()
 	}
 
-	identity: static This { get { This new(1, 0, 0, 1, 0, 0) } }
+	identity ::= static This new(1, 0, 0, 1, 0, 0)
+
 	toFloatTransform2D: func -> FloatTransform2D { FloatTransform2D new(this a, this b, this c, this d, this e, this f, this g, this h, this i) }
 	create: static func (translation: IntVector2D, scale, rotation: Float) -> This {
 		This new(rotation cos() * scale, rotation sin() * scale, -rotation sin() * scale, rotation cos() * scale, translation x, translation y)

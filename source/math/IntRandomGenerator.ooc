@@ -17,7 +17,7 @@
 use ooc-math
 
 IntRandomGenerator: abstract class {
-	permanentSeed: static Int = 0
+	permanentSeed: static UInt = 0
 	next: abstract func -> Int
 	next: func ~withCount (count: Int) -> Int[] {
 		result := Int[count] new()

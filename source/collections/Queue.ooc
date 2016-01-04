@@ -15,6 +15,7 @@ VectorQueue: class <T> extends Queue<T> {
 	_head := 0 // Index of oldest element
 	_tail := 0 // Index of newest element
 	_chunkCount := 32
+
 	capacity ::= this _capacity
 	full ::= this _count == this _capacity
 

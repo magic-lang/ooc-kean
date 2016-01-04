@@ -20,9 +20,7 @@ Event: class {
 	_tail: This
 	head ::= this _head
 	tail ::= this _tail
-	init: func ~nil {
-		this init(func) // TODO: this is really a stupid way to create null pointer although no null text is required
-	}
+	init: func ~nil { this init(func) }
 	init: func (=_head)
 	init: func ~add (=_head, =_tail)
 	free: override func {
@@ -54,9 +52,7 @@ Event1: class <T> {
 	_tail: This<T>
 	head ::= this _head
 	tail ::= this _tail
-	init: func ~nil {
-		this init(func (argument: T)) // TODO: this is really a stupid way to create null pointer although no null text is required
-	}
+	init: func ~nil { this init(func (argument: T)) }
 	init: func (=_head)
 	init: func ~add (=_head, =_tail)
 	free: override func {
@@ -88,9 +84,7 @@ Event2: class <T0, T1> { // TODO: Write tests and fix this
 	_tail: This<T0, T1>
 	head ::= this _head
 	tail ::= this _tail
-	init: func ~nil {
-		this init(func (argument0: T0, argument1: T1)) // TODO: this is really a stupid way to create null pointer although no null text is required
-	}
+	init: func ~nil { this init(func (argument0: T0, argument1: T1)) }
 	init: func (=_head)
 	init: func ~add (=_head, =_tail)
 	free: override func {

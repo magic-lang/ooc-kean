@@ -9,7 +9,6 @@ ServerSocket: class extends Socket {
 	init: func ~server {
 		super(AddressFamily IP4, SocketType STREAM, 0)
 	}
-
 	/**
 		Initialize the socket.
 
@@ -27,11 +26,9 @@ ServerSocket: class extends Socket {
 		type = ipType(ip)
 		super(type, SocketType STREAM, 0)
 		bind(ip, port)
-		if (enabled) {
+		if (enabled)
 			listen()
-		}
 	}
-
 	/**
 		Bind a local port to the socket.
 	*/
@@ -39,7 +36,6 @@ ServerSocket: class extends Socket {
 		addr := SocketAddress new(IP4Address new(), port)
 		bind(addr)
 	}
-
 	/**
 		Bind a local address and port to the socket.
 	*/
@@ -54,32 +50,26 @@ ServerSocket: class extends Socket {
 					addr = getSocketAddress6(ip, port)
 			}
 			bind(addr)
-		} else {
+		} else
 			InvalidAddress new("Address must be a valid IPv4 or IPv6 IP.") throw()
-		}
 	}
-
 	/**
 		Bind a local address to the socket.
 	*/
 	bind: func ~withAddr (addr: SocketAddress) {
-		if (bind(descriptor, addr addr(), addr length()) == -1) {
+		if (bind(descriptor, addr addr(), addr length()) == -1)
 			SocketError new() throw()
-		}
 	}
-
 	/**
 		Places the socket into a listening state.
 	*/
 	listen: func (backlog: Int) -> Bool {
 		ret := listen(descriptor, backlog)
-		if (ret == -1) {
+		if (ret == -1)
 			SocketError new() throw()
-		}
 		listening? = (ret == 0)
 		listening?
 	}
-
 	/**
 		Places the socket into a listening state, using backlog variable.
 	*/
@@ -87,7 +77,6 @@ ServerSocket: class extends Socket {
 		listen(backlog)
 		listening?
 	}
-
 	/**
 		Accept an incoming connection and returns it.
 
@@ -98,13 +87,11 @@ ServerSocket: class extends Socket {
 		addr: SockAddr
 		addrSize: Int = SockAddr size
 		conn := accept(descriptor, addr&, addrSize&)
-		if (conn == -1) {
+		if (conn == -1)
 			SocketError new("Failed to accept an incoming connection.") throw()
-		}
 		sock := TCPSocket new(SocketAddress newFromSock(addr&, addrSize), conn)
 		return TCPServerReaderWriterPair new(sock)
 	}
-
 	/**
 		Run f() in a loop that calls accept()
 
@@ -113,7 +100,6 @@ ServerSocket: class extends Socket {
 	accept: func ~withClosure (f: func (TCPServerReaderWriterPair) -> Bool) {
 		if (!listening?)
 			listen()
-
 		loop(||
 			conn := accept()
 			ret := f(conn)
@@ -128,7 +114,6 @@ ServerSocket: class extends Socket {
 		)
 	}
 }
-
 /** This makes me sad, but it works and allows TCPReaderWriterPair to be
  *+ in net/TCPSocket
  */

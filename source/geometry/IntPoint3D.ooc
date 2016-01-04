@@ -21,6 +21,7 @@ use ooc-base
 
 IntPoint3D: cover {
 	x, y, z: Int
+
 	init: func@ (=x, =y, =z)
 	init: func@ ~default { this init(0, 0, 0) }
 	init: func@ ~fromPoint2D (point: IntPoint2D, z := 0) { this init(point x, point y, z) }

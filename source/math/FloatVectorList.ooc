@@ -22,6 +22,8 @@ import FloatComplexVectorList
 import FloatMatrix
 
 FloatVectorList: class extends VectorList<Float> {
+	standardDeviation ::= this variance sqrt()
+	mean ::= this sum / this count
 	sum: Float {
 		get {
 			result := 0.0f
@@ -48,7 +50,6 @@ FloatVectorList: class extends VectorList<Float> {
 			result
 		}
 	}
-	mean ::= this sum / this count
 	variance: Float {
 		get {
 			squaredSum := 0.0f
@@ -58,7 +59,6 @@ FloatVectorList: class extends VectorList<Float> {
 			squaredSum / this count
 		}
 	}
-	standardDeviation ::= this variance sqrt()
 	init: func ~default {
 		super()
 	}

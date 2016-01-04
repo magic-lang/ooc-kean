@@ -9,7 +9,6 @@ include windows
 ProcessWin32: class extends Process {
 	si: StartupInfo
 	pi: ProcessInformation
-
 	cmdLine: String = ""
 
 	init: func ~win32 (=args) {
@@ -19,7 +18,6 @@ ProcessWin32: class extends Process {
 			sb append(arg). append(' ')
 		}
 		cmdLine = sb toString()
-
 		ZeroMemory(si&, StartupInfo size)
 		si structSize = StartupInfo size
 		ZeroMemory(pi&, ProcessInformation size)
@@ -28,12 +26,10 @@ ProcessWin32: class extends Process {
 	_wait: func (duration: Long) -> Int {
 		// Wait until child process exits.
 		status := WaitForSingleObject(pi process, duration)
-
-		if (status != WAIT_OBJECT_0) return -1
-
+		if (status != WAIT_OBJECT_0)
+			return -1
 		exitCode: ULong
 		GetExitCodeProcess(pi process, exitCode&)
-
 		CloseHandle(pi thread)
 		CloseHandle(pi process)
 		exitCode
@@ -63,9 +59,7 @@ ProcessWin32: class extends Process {
 			}
 			si flags |= StartFlags UseStdHandles
 		}
-
 		envString := buildEnvironment()
-
 		// Reference: http://msdn.microsoft.com/en-us/library/ms682512%28VS.85%29.aspx
 		// Start the child process.
 		if (!CreateProcess(
@@ -103,41 +97,32 @@ ProcessWin32: class extends Process {
 	buildEnvironment: func -> Char* {
 		if (env == null)
 			return null
-
 		envLength := 1
 		env each(|k, v|
 			envLength += k size
 			envLength += v size
 			envLength += 2 // one for the =, one for the \0
 		)
-
 		envString := gc_malloc(envLength) as Char*
 		index := 0
 		for (k in env keys) {
 			v := env get(k)
-
 			memcpy(envString + index, k toCString(), k size)
 			index += k size
-
 			envString[index] = '='
 			index += 1
-
 			memcpy(envString + index, v toCString(), v size)
 			index += v size
-
 			envString[index] = '\0'
 			index += 1
 		}
-
 		envString[index] = '\0'
 		envString
 	}
-
 	terminate: func {
 		// TODO!
 		"please implement me! ProcessWin32 terminate" println()
 	}
-
 	kill: func {
 		// TODO!
 		"please implement me! ProcessWin32 kill" println()

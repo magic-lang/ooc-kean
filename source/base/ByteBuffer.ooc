@@ -25,6 +25,7 @@ ByteBuffer: class {
 	_size: Int
 	_referenceCount: ReferenceCounter
 	_ownsMemory: Bool
+
 	pointer ::= this _pointer
 	size ::= this _size
 	referenceCount ::= this _referenceCount
@@ -58,12 +59,12 @@ ByteBuffer: class {
 	copyTo: func (other: This, start: Int, destination: Int, length: Int) {
 		memcpy(other pointer + destination, this pointer + start, length)
 	}
+
 	new: static func ~size (size: Int) -> This { _RecyclableByteBuffer new(size) }
-	new: static func ~recover (pointer: UInt8*, size: Int, recover: Func (This) -> Bool) -> This {
-		_RecoverableByteBuffer new(pointer, size, recover)
-	}
+	new: static func ~recover (pointer: UInt8*, size: Int, recover: Func (This) -> Bool) -> This { _RecoverableByteBuffer new(pointer, size, recover) }
 	clean: static func { _RecyclableByteBuffer _clean() }
 }
+
 _SlicedByteBuffer: class extends ByteBuffer {
 	_parent: ByteBuffer
 	_offset: Int
@@ -78,6 +79,7 @@ _SlicedByteBuffer: class extends ByteBuffer {
 		super()
 	}
 }
+
 _RecoverableByteBuffer: class extends ByteBuffer {
 	_recover: Func (ByteBuffer) -> Bool
 	init: func (pointer: UInt8*, size: Int, =_recover) { super(pointer, size) }
@@ -88,6 +90,7 @@ _RecoverableByteBuffer: class extends ByteBuffer {
 		}
 	}
 }
+
 _RecyclableByteBuffer: class extends ByteBuffer {
 	init: func (pointer: UInt8*, size: Int) { super(pointer, size, true) }
 	_forceFree: func {
@@ -114,6 +117,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 	_smallRecycleBin := static VectorList<This> new()
 	_mediumRecycleBin := static VectorList<This> new()
 	_largeRecycleBin := static VectorList<This> new()
+
 	new: static func ~fromSize (size: Int) -> This {
 		buffer: This = null
 		bin := This _getBin(size)
