@@ -48,7 +48,7 @@ QuaternionTest: class extends Fixture {
 		})
 		this add("properties", func {
 			expect(this quaternion7 isIdentity)
-			expect((this quaternion7 - this quaternion7) isNull)
+			expect((this quaternion7 - this quaternion7) isZero)
 		})
 		this add("addition", func {
 			expect(this quaternion0 + this quaternion1 == this quaternion2)
