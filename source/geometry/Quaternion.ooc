@@ -206,7 +206,7 @@ Quaternion: cover {
 	operator - -> This { This new(-this real, -this imaginary) }
 	operator / (value: Float) -> This { This new(this w / value, this x / value, this y / value, this z / value) }
 	operator * (value: Float) -> This { This new(this w * value, this x * value, this y * value, this z * value) }
-	operator * (value: FloatPoint3D) -> FloatPoint3D { (this * This new(0.0f, value) * this inverse) imaginary }
+	operator * (value: FloatPoint3D) -> FloatPoint3D { This hamiltonProduct(This hamiltonProduct(this, This new(0.0f, value)), this inverse) imaginary }
 	operator as -> String { this toString() }
 
 	precision: static Float = 1.0e-6f
@@ -224,6 +224,15 @@ Quaternion: cover {
 	createRotationX: static func (angle: Float) -> This { This createRotation(angle, FloatPoint3D new(1.0f, 0.0f, 0.0f)) }
 	createRotationY: static func (angle: Float) -> This { This createRotation(angle, FloatPoint3D new(0.0f, 1.0f, 0.0f)) }
 	createRotationZ: static func (angle: Float) -> This { This createRotation(angle, FloatPoint3D new(0.0f, 0.0f, 1.0f)) }
+	hamiltonProduct: static func (left, right: This) -> This {
+		(a1, b1, c1, d1) := (left w, left x, left y, left z)
+		(a2, b2, c2, d2) := (right w, right x, right y, right z)
+		w := a1 * a2 - b1 * b2 - c1 * c2 - d1 * d2
+		x := a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2
+		y := a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2
+		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2
+		This new(w, x, y, z)
+	}
 	relativeFromVelocity: static func (angularVelocity: FloatPoint3D) -> This {
 		result := This identity
 		angle := sqrt(angularVelocity x * angularVelocity x + angularVelocity y * angularVelocity y + angularVelocity z * angularVelocity z)
