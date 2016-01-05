@@ -165,4 +165,7 @@ RasterPacked: abstract class extends RasterImage {
 		}
 	}
 	kean_draw_rasterPacked_getData: unmangled func -> Void* { this buffer pointer }
+	kean_draw_rasterPacked_getByteCount: unmangled func -> Int { this buffer size }
+	kean_draw_rasterPacked_getStride: unmangled func -> Int { this stride }
+	kean_draw_rasterPacked_copyData: unmangled func (destination: Char*) { memcpy(destination, this buffer pointer, this buffer size) }
 }
