@@ -26,6 +26,7 @@ FloatVector3D: cover {
 	hasZeroVolume ::= this volume equals(0.0f)
 	length ::= this norm
 	norm ::= (this x squared + this y squared + this z squared) sqrt()
+	normalized ::= this / this norm
 	azimuth ::= this y atan2(this x)
 	init: func@ (=x, =y, =z)
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
