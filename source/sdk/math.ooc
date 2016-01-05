@@ -22,6 +22,12 @@ extend Int64 {
 		result := this - (this / divisor) * divisor
 		result < 0 ? result + divisor : result
 	}
+	maximum: static func (x, y: This) -> This { x > y ? x : y }
+	minimum: static func (x, y: This) -> This { x < y ? x : y }
+}
+extend UInt64 {
+	maximum: static func (x, y: This) -> This { x > y ? x : y }
+	minimum: static func (x, y: This) -> This { x < y ? x : y }
 }
 
 extend Int {
