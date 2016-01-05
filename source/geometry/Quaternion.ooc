@@ -219,6 +219,7 @@ Quaternion: cover {
 	createRotationX: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(1.0f, 0.0f, 0.0f)) }
 	createRotationY: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(0.0f, 1.0f, 0.0f)) }
 	createRotationZ: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(0.0f, 0.0f, 1.0f)) }
+	createFromAxisAngle: static func (vector: FloatVector3D) -> This { This createRotation(vector norm, vector normalized) }
 	hamiltonProduct: static func (left, right: This) -> This {
 		(a1, b1, c1, d1) := (left w, left x, left y, left z)
 		(a2, b2, c2, d2) := (right w, right x, right y, right z)
@@ -227,19 +228,6 @@ Quaternion: cover {
 		y := a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2
 		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2
 		This new(w, x, y, z)
-	}
-	relativeFromVelocity: static func (angularVelocity: FloatPoint3D) -> This {
-		result := This identity
-		angle := sqrt(angularVelocity x * angularVelocity x + angularVelocity y * angularVelocity y + angularVelocity z * angularVelocity z)
-		if (angle > 1.0e-8f) {
-			result = This new(
-				cos(angle / 2.0f),
-				angularVelocity x * sin(angle / 2.0f) / angle,
-				angularVelocity y * sin(angle / 2.0f) / angle,
-				angularVelocity z * sin(angle / 2.0f) / angle
-				)
-		}
-		result
 	}
 	weightedMean: static func (quaternions: VectorList<This>, weights: FloatVectorList) -> This {
 		// Implementation of the QUEST algorithm. Original publication:
