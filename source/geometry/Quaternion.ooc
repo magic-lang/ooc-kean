@@ -28,12 +28,6 @@ Quaternion: cover {
 	y ::= this imaginary y
 	z ::= this imaginary z
 
-	// NOTE: The coordinates are represented differently in C# Kean:
-	// x = this w
-	// y = this x
-	// z = this y
-	// w = this z
-
 	isValid ::= this real isNumber && this imaginary isValid
 	isIdentity ::= this real equals(1.f) && this imaginary x equals(0.f) && this imaginary y equals(0.f) && this imaginary z equals(0.f)
 	isZero ::= this real equals(0.f) && this imaginary x equals(0.f) && this imaginary y equals(0.f) && this imaginary z equals(0.f)
