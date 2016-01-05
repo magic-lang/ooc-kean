@@ -79,7 +79,7 @@ Socket: abstract class {
 
 		select(descriptor + 1, descriptors&, null, null, timeout&)
 
-		if (!descriptors set?(descriptor))
+		if (!descriptors isSet(descriptor))
 			TimeoutError new("Wait on socket timedout.") throw()
 
 		return available()

@@ -46,7 +46,7 @@ ServerSocket: class extends Socket {
 	bind: func ~withIp (ip: String, port: Int) {
 		addr: SocketAddress
 		type := ipType(ip)
-		if (validIp?(ip)) {
+		if (validIp(ip)) {
 			match (type) {
 				case AddressFamily IP4 =>
 					addr = getSocketAddress(ip, port)
