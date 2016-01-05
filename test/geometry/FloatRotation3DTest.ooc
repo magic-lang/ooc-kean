@@ -75,7 +75,7 @@ FloatRotation3DTest: class extends Fixture {
 			expect(interpolated _quaternion z, is equal to(0.700140f) within(tolerance))
 		})
 		this add("angle", func {
-			direction := FloatPoint3D new(1.0f, 1.0f, 1.0f)
+			direction := FloatVector3D new(1.0f, 1.0f, 1.0f)
 			quaternionA := Quaternion createRotation(20.0f toRadians(), direction)
 			quaternionB := Quaternion createRotation(45.0f toRadians(), direction)
 			rotationA := FloatRotation3D new(quaternionA)

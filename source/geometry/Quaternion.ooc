@@ -17,6 +17,7 @@
 use ooc-collections
 use ooc-math
 import FloatPoint3D
+import FloatVector3D
 import FloatTransform3D
 
 Quaternion: cover {
@@ -208,16 +209,16 @@ Quaternion: cover {
 	createFromEulerAngles: static func (rotationX, rotationY, rotationZ: Float) -> This {
 		This createRotationZ(rotationZ) * This createRotationY(rotationY) * This createRotationX(rotationX)
 	}
-	createRotation: static func (angle: Float, direction: FloatPoint3D) -> This {
+	createRotation: static func (angle: Float, direction: FloatVector3D) -> This {
 		halfAngle := angle / 2.0f
 		point3DNorm := direction norm
 		if (point3DNorm != 0.0f)
 			direction /= point3DNorm
-		This new(0.0f, halfAngle * direction) exponential
+		This new(0.0f, (halfAngle * direction) toFloatPoint3D()) exponential
 	}
-	createRotationX: static func (angle: Float) -> This { This createRotation(angle, FloatPoint3D new(1.0f, 0.0f, 0.0f)) }
-	createRotationY: static func (angle: Float) -> This { This createRotation(angle, FloatPoint3D new(0.0f, 1.0f, 0.0f)) }
-	createRotationZ: static func (angle: Float) -> This { This createRotation(angle, FloatPoint3D new(0.0f, 0.0f, 1.0f)) }
+	createRotationX: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(1.0f, 0.0f, 0.0f)) }
+	createRotationY: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(0.0f, 1.0f, 0.0f)) }
+	createRotationZ: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(0.0f, 0.0f, 1.0f)) }
 	hamiltonProduct: static func (left, right: This) -> This {
 		(a1, b1, c1, d1) := (left w, left x, left y, left z)
 		(a2, b2, c2, d2) := (right w, right x, right y, right z)
