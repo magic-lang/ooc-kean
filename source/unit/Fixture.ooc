@@ -48,7 +48,6 @@ Fixture: abstract class {
 		result := true
 		dateString := DateTime now toText(t"%hh:%mm:%ss") toString() & " " << this name + " "
 		This _print(dateString)
-		dateString free()
 		timer := ClockTimer new() . start()
 		for (i in 0 .. this tests count) {
 			test := tests[i]
@@ -62,21 +61,20 @@ Fixture: abstract class {
 				result = r = false
 				failures add(e)
 			}
-			This _print(r ? "." : "f")
+			This _print((r ? t"." : t"f") toString())
 		}
 		if (!result) {
 			if (!This failureNames)
 				This failureNames = VectorList<String> new()
 			This failureNames add(this name clone())
 		}
-		This _print(result ? " done" : " failed")
+		This _print((result ? t" done" : t" failed") toString())
 		testTime := timer stop() / 1000.0
 		This totalTime += testTime
 		timeString := "\n"
 		if (testTime > 0.01)
-			timeString = t" in %.2fs" format(testTime) toString() << timeString
+			timeString = t" in %.2fs" format(testTime) toString() & timeString
 		This _print(timeString)
-		timeString free()
 		if (!result) {
 			for (i in 0 .. failures count) {
 				f := failures[i]
@@ -122,9 +120,9 @@ Fixture: abstract class {
 	is ::= static IsConstraints new()
 	testsFailed: static Bool { get { This _testsFailed } }
 	printFailures: static func {
-		"Total time: %.2f s" printfln(This totalTime)
+		This _print("Total time: %.2f s\n" format(This totalTime))
 		if (This failureNames && (This failureNames count > 0)) {
-			"Failed tests: %i [" printf(This failureNames count)
+			This _print("Failed tests: %i [" format(This failureNames count))
 			for (i in 0 .. This failureNames count - 1)
 				(This failureNames[i] + ", ") print()
 			(This failureNames[This failureNames count -1] + ']') println()
@@ -185,6 +183,7 @@ Fixture: abstract class {
 	_print: static func (string: String) {
 		string print()
 		fflush(stdout)
+		string free()
 	}
 }
 
