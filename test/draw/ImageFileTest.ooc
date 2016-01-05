@@ -223,7 +223,7 @@ ImageFileTest: class extends Fixture {
 	}
 	_fileExists: static func (path: String) -> Bool {
 		file := File new(path)
-		result := file exists?()
+		result := file exists()
 		file free()
 		result
 	}

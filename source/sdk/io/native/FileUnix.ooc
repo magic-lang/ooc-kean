@@ -82,7 +82,7 @@ version (unix || apple) {
 		/**
 		 * @return true if it's a directory
 		 */
-		dir?: func -> Bool {
+		dir: func -> Bool {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			(res == 0 && S_ISDIR(result st_mode))
@@ -91,7 +91,7 @@ version (unix || apple) {
 		/**
 		 * @return true if it's a file (ie. not a directory nor a symbolic link)
 		 */
-		file?: func -> Bool {
+		file: func -> Bool {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			(res == 0 && S_ISREG(result st_mode))
@@ -100,7 +100,7 @@ version (unix || apple) {
 		/**
 		 * @return true if the file is a symbolic link
 		 */
-		link?: func -> Bool {
+		link: func -> Bool {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			(res == 0 && S_ISLNK(result st_mode))
@@ -122,7 +122,7 @@ version (unix || apple) {
 		/**
 		 * @return true if the file exists
 		 */
-		exists?: func -> Bool {
+		exists: func -> Bool {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			(res == 0)
@@ -167,7 +167,7 @@ version (unix || apple) {
 		/**
 		 * @return true if a file is executable by the current owner
 		 */
-		executable?: func -> Bool {
+		executable: func -> Bool {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			match res {
@@ -234,7 +234,7 @@ version (unix || apple) {
 		/**
 		 * @return true if the function is relative to the current directory
 		 */
-		relative?: func -> Bool {
+		relative: func -> Bool {
 			// that's a bit rough, but should work most of the time
 			!path startsWith?("/")
 		}
@@ -266,7 +266,7 @@ version (unix || apple) {
 		}
 
 		_getChildren: func <T> (T: Class) -> VectorList<T> {
-			if (!dir?()) {
+			if (!dir()) {
 				Exception new(This, "Trying to get the children of the non-directory '" + path + "'!") throw()
 			}
 			dir := opendir(path as CString)
@@ -277,7 +277,7 @@ version (unix || apple) {
 			result := VectorList<T> new()
 			entry := readdir(dir)
 			while (entry != null) {
-				if (!_isDirHardlink?(entry@ name)) {
+				if (!_isDirHardlink(entry@ name)) {
 					s := String new(entry@ name, entry@ name length())
 					match T {
 						case String => result add(s)

@@ -24,7 +24,7 @@ version(unix || apple) {
 			valuesMutex unlock()
 			value
 		}
-		hasValue?: func -> Bool {
+		hasValue: func -> Bool {
 			valuesMutex lock()
 			has := values contains?(pthread_self())
 			valuesMutex unlock()

@@ -31,12 +31,12 @@ File: abstract class {
 		}
 	}
 	rectifySeparator: func {
-		if (this dir?() && !this path endsWith?(This separator)) {
+		if (this dir() && !this path endsWith?(This separator)) {
 			oldPath := this path
 			this path = oldPath + This separator
 			oldPath free()
 		}
-		else if (!this dir?() && this path endsWith?(This separator)) {
+		else if (!this dir() && this path endsWith?(This separator)) {
 			newPath := this path trimRight(This separator)
 			this path free()
 			this path = newPath
@@ -46,17 +46,17 @@ File: abstract class {
 	/**
 	 * @return true if it's a directory
 	 */
-	dir?: abstract func -> Bool
+	dir: abstract func -> Bool
 
 	/**
 	 * @return true if it's a file (ie. not a directory nor a symbolic link)
 	 */
-	file?: abstract func -> Bool
+	file: abstract func -> Bool
 
 	/**
 	 * @return true if the file is a symbolic link
 	 */
-	link?: abstract func -> Bool
+	link: abstract func -> Bool
 
 	/**
 	 * @return the size of the file, in bytes
@@ -66,7 +66,7 @@ File: abstract class {
 	/**
 	 * @return true if the file exists
 	 */
-	exists?: abstract func -> Bool
+	exists: abstract func -> Bool
 
 	/**
 	 * @return the permissions for the owner of this file
@@ -86,7 +86,7 @@ File: abstract class {
 	/**
 	 * @return true if a file is executable by the current owner
 	 */
-	executable?: abstract func -> Bool
+	executable: abstract func -> Bool
 
 	/**
 	 * set the executable bit on this file's permissions for
@@ -126,7 +126,7 @@ File: abstract class {
 
 	getExtension: func -> String {
 		result := ""
-		if (!this dir?()) {
+		if (!this dir()) {
 			index := this path lastIndexOf('.')
 			if (index > 0)
 				result = this path substring(index + 1)
@@ -151,7 +151,7 @@ File: abstract class {
 	}
 
 	hasExtension: func -> Bool {
-		(this path lastIndexOf('.') > 0) && (!this dir?())
+		(this path lastIndexOf('.') > 0) && (!this dir())
 	}
 
 	/**
@@ -237,7 +237,7 @@ File: abstract class {
 	/**
 	 * @return true if the function is relative to the current directory
 	 */
-	relative?: abstract func -> Bool
+	relative: abstract func -> Bool
 
 	/**
 	 * The absolute path, e.g. "my/dir" => "/current/directory/my/dir"
@@ -320,7 +320,7 @@ File: abstract class {
 	 * Delete a file or directory and all its children, recursively
 	 */
 	rm_rf: func -> Bool {
-		if (dir?()) {
+		if (dir()) {
 			// delete em'all!
 			for (child in getChildren()) {
 				if (!child rm_rf()) {
@@ -348,7 +348,7 @@ File: abstract class {
 			}
 		}
 
-		if (dir?()) {
+		if (dir()) {
 			children := getChildren()
 			for (child in children) {
 				if (child find(name, cb)) {
@@ -389,7 +389,7 @@ File: abstract class {
 			}
 		}
 
-		if (dir?() && level >= 0) {
+		if (dir() && level >= 0) {
 			if (fName == ".git") {
 				return false // skip
 			}
@@ -487,9 +487,9 @@ File: abstract class {
 	 * got cancelled by `f` returning false.
 	 */
 	walk: func (f: Func(This) -> Bool) -> Bool {
-		if (file?()) {
+		if (file()) {
 			if (!f(this)) return false
-		} else if (dir?()) {
+		} else if (dir()) {
 			for (child in getChildren()) {
 				if (!child walk(f)) return false
 			}
@@ -609,6 +609,6 @@ File: abstract class {
 	}
 }
 
-_isDirHardlink?: inline func (dir: CString) -> Bool {
+_isDirHardlink: inline func (dir: CString) -> Bool {
 	(dir[0] == '.') && (dir[1] == '\0' || ( dir[1] == '.' && dir[2] == '\0'))
 }

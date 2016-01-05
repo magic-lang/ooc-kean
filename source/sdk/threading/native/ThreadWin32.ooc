@@ -39,10 +39,10 @@ version(windows) {
 		}
 		cancel: func -> Bool {
 			false
-			//this alive?() && TerminateThread(this handle, 0)
+			//this alive() && TerminateThread(this handle, 0)
 			//TODO Find a better way to terminate Win32 threads, if any
 		}
-		alive?: func -> Bool {
+		alive: func -> Bool {
 			result := WaitForSingleObject(handle, 0)
 
 			// if it's equal, it has terminated, otherwise, it's still alive

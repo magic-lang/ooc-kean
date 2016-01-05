@@ -24,7 +24,7 @@ version(windows) {
 			valuesMutex unlock()
 			value
 		}
-		hasValue?: func -> Bool {
+		hasValue: func -> Bool {
 			valuesMutex lock()
 			has := values contains?(GetCurrentThreadId())
 			valuesMutex unlock()

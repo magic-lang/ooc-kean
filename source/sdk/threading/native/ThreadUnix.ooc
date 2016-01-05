@@ -29,10 +29,10 @@ version(unix || apple) {
 		cancel: func -> Bool {
 			result := false
 			version (!android)
-				result = this alive?() && (pthread_cancel(this pthread) == 0)
+				result = this alive() && (pthread_cancel(this pthread) == 0)
 			result
 		}
-		alive?: func -> Bool {
+		alive: func -> Bool {
 			pthread_kill(pthread, 0) == 0
 		}
 		_yield: static func -> Bool {
@@ -62,7 +62,7 @@ version(unix || apple) {
 			while (seconds > 0.0 && !result) {
 				Time sleepMilli(20)
 				seconds -= 0.02
-				if (!alive?())
+				if (!alive())
 					result = true
 			}
 			result

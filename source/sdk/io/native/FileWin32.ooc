@@ -51,7 +51,7 @@ version(windows) {
 	 * remove implementation
 	 */
 	_remove: unmangled func (file: File) -> Bool {
-		if (file dir?()) {
+		if (file dir()) {
 			return RemoveDirectory(file path)
 		}
 		return DeleteFile(file path)
@@ -86,7 +86,7 @@ version(windows) {
 		/**
 		 * @return true if it's a directory (return false if it doesn't exist)
 		 */
-		dir?: func -> Bool {
+		dir: func -> Bool {
 			res := GetFileAttributes(path as CString)
 			(res & FILE_ATTRIBUTE_DIRECTORY) != 0
 		}
@@ -94,7 +94,7 @@ version(windows) {
 		/**
 		 * @return true if it's a file (ie. exists and is not a directory nor a symbolic link)
 		 */
-		file?: func -> Bool {
+		file: func -> Bool {
 			// our definition of a file: neither a directory or a link
 			// (and no, FILE_ATTRIBUTE_NORMAL isn't true when we need it..)
 			(ffd, ok) := _getFindData()
@@ -106,7 +106,7 @@ version(windows) {
 		/**
 		 * @return true if the file is a symbolic link
 		 */
-		link?: func -> Bool {
+		link: func -> Bool {
 			(ffd, ok) := _getFindData()
 			return (ok) && ((ffd attr) & FILE_ATTRIBUTE_REPARSE_POINT) != 0
 		}
@@ -122,7 +122,7 @@ version(windows) {
 		/**
 		 * @return true if the file exists
 		 */
-		exists?: func -> Bool {
+		exists: func -> Bool {
 			res := GetFileAttributes(path as CString)
 			(res != INVALID_FILE_ATTRIBUTES)
 		}
@@ -154,10 +154,10 @@ version(windows) {
 		/**
 		* @return true if a file is executable by the current owner
 		*/
-		executable?: func -> Bool {
+		executable: func -> Bool {
 			// Win32 has no *simple* concept of 'executable' bit
 			// we'd have to handle ACLs, and that's a nasty can of worms.
-			// For now, `executable?` and `setExecutable` are enough
+			// For now, `executable` and `setExecutable` are enough
 			// to set basic permissions when creating files on *nix.
 			// See discussion on this commit for more details:
 			// https://github.com/nddrylliog/rock/commit/c6b8e9a23079451f2d6c6964cace8ff786f4d434
@@ -169,17 +169,17 @@ version(windows) {
 		* current user, group, and other.
 		*/
 		setExecutable: func (exec: Bool) -> Bool {
-			// see comment for 'executable?'
+			// see comment for 'executable'
 			false
 		}
 
 		mkdir: func ~withMode (mode: Int32) -> Int {
-			if (relative?()) {
+			if (relative()) {
 				return getAbsoluteFile() mkdir()
 			}
 
 			p := parent
-			if (!p exists?()) parent mkdir()
+			if (!p exists()) parent mkdir()
 			CreateDirectory(path toCString(), null) ? 0 : -1
 		}
 
@@ -214,7 +214,7 @@ version(windows) {
 		/**
 		 * @return true if the function is relative to the current directory
 		 */
-		relative?: func -> Bool {
+		relative: func -> Bool {
 			// that's a bit rough, but should work most of the time
 			!path startsWith?("/") && (path length() <= 1 || path[1] != ':')
 		}
@@ -234,7 +234,7 @@ version(windows) {
 		 */
 		getLongPath: func -> String {
 			abs := getAbsoluteFile()
-			if (!abs exists?()) {
+			if (!abs exists()) {
 				Exception new(class, "Called File getLongPath on non-existing file %s" format(abs path)) throw()
 			}
 			longPath := CharBuffer new(File MAX_PATH_LENGTH)
@@ -254,7 +254,7 @@ version(windows) {
 
 			running := true
 			while (running) {
-				if (!_isDirHardlink?(ffd fileName)) {
+				if (!_isDirHardlink(ffd fileName)) {
 					s := ffd fileName toString()
 					match T {
 						case String => result add(s)
