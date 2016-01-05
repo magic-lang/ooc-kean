@@ -17,6 +17,7 @@
 use ooc-collections
 use ooc-math
 import FloatPoint3D
+import FloatVector3D
 import FloatTransform3D
 
 Quaternion: cover {
@@ -28,15 +29,9 @@ Quaternion: cover {
 	y ::= this imaginary y
 	z ::= this imaginary z
 
-	// NOTE: The coordinates are represented differently in C# Kean:
-	// x = this w
-	// y = this x
-	// z = this y
-	// w = this z
-
 	isValid ::= this real isNumber && this imaginary isValid
 	isIdentity ::= this real equals(1.f) && this imaginary x equals(0.f) && this imaginary y equals(0.f) && this imaginary z equals(0.f)
-	isNull ::= this real equals(0.f) && this imaginary x equals(0.f) && this imaginary y equals(0.f) && this imaginary z equals(0.f)
+	isZero ::= this real equals(0.f) && this imaginary x equals(0.f) && this imaginary y equals(0.f) && this imaginary z equals(0.f)
 	norm ::= (this real squared + this imaginary norm squared) sqrt()
 	normalized ::= this / this norm
 	logarithmImaginaryNorm ::= ((this logarithm) imaginary) norm
@@ -214,16 +209,17 @@ Quaternion: cover {
 	createFromEulerAngles: static func (rotationX, rotationY, rotationZ: Float) -> This {
 		This createRotationZ(rotationZ) * This createRotationY(rotationY) * This createRotationX(rotationX)
 	}
-	createRotation: static func (angle: Float, direction: FloatPoint3D) -> This {
+	createRotation: static func (angle: Float, direction: FloatVector3D) -> This {
 		halfAngle := angle / 2.0f
 		point3DNorm := direction norm
 		if (point3DNorm != 0.0f)
 			direction /= point3DNorm
-		This new(0.0f, halfAngle * direction) exponential
+		This new(0.0f, (halfAngle * direction) toFloatPoint3D()) exponential
 	}
-	createRotationX: static func (angle: Float) -> This { This createRotation(angle, FloatPoint3D new(1.0f, 0.0f, 0.0f)) }
-	createRotationY: static func (angle: Float) -> This { This createRotation(angle, FloatPoint3D new(0.0f, 1.0f, 0.0f)) }
-	createRotationZ: static func (angle: Float) -> This { This createRotation(angle, FloatPoint3D new(0.0f, 0.0f, 1.0f)) }
+	createRotationX: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(1.0f, 0.0f, 0.0f)) }
+	createRotationY: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(0.0f, 1.0f, 0.0f)) }
+	createRotationZ: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(0.0f, 0.0f, 1.0f)) }
+	createFromAxisAngle: static func (vector: FloatVector3D) -> This { This createRotation(vector norm, vector normalized) }
 	hamiltonProduct: static func (left, right: This) -> This {
 		(a1, b1, c1, d1) := (left w, left x, left y, left z)
 		(a2, b2, c2, d2) := (right w, right x, right y, right z)
@@ -232,19 +228,6 @@ Quaternion: cover {
 		y := a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2
 		z := a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2
 		This new(w, x, y, z)
-	}
-	relativeFromVelocity: static func (angularVelocity: FloatPoint3D) -> This {
-		result := This identity
-		angle := sqrt(angularVelocity x * angularVelocity x + angularVelocity y * angularVelocity y + angularVelocity z * angularVelocity z)
-		if (angle > 1.0e-8f) {
-			result = This new(
-				cos(angle / 2.0f),
-				angularVelocity x * sin(angle / 2.0f) / angle,
-				angularVelocity y * sin(angle / 2.0f) / angle,
-				angularVelocity z * sin(angle / 2.0f) / angle
-				)
-		}
-		result
 	}
 	weightedMean: static func (quaternions: VectorList<This>, weights: FloatVectorList) -> This {
 		// Implementation of the QUEST algorithm. Original publication:

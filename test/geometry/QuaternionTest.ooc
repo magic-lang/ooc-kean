@@ -48,7 +48,7 @@ QuaternionTest: class extends Fixture {
 		})
 		this add("properties", func {
 			expect(this quaternion7 isIdentity)
-			expect((this quaternion7 - this quaternion7) isNull)
+			expect((this quaternion7 - this quaternion7) isZero)
 		})
 		this add("addition", func {
 			expect(this quaternion0 + this quaternion1 == this quaternion2)
@@ -92,14 +92,14 @@ QuaternionTest: class extends Fixture {
 			expect(normalized z, is equal to(0.8308033f) within(tolerance))
 		})
 		this add("actionOnVector", func {
-			direction := FloatPoint3D new(1.0f, 1.0f, 1.0f)
+			direction := FloatVector3D new(1.0f, 1.0f, 1.0f)
 			quaternion := Quaternion createRotation(120.0f toRadians(), direction)
 			point1 := FloatPoint3D new(5.0f, 6.0f, 7.0f)
 			point2 := FloatPoint3D new(7.0f, 5.0f, 6.0f)
 			expect((quaternion * point1) distance(point2), is equal to(0.0f))
 		})
 		this add("angle", func {
-			direction := FloatPoint3D new(1.0f, 1.0f, 1.0f)
+			direction := FloatVector3D new(1.0f, 1.0f, 1.0f)
 			quaternion1 := Quaternion createRotation(20.0f toRadians(), direction)
 			quaternion2 := Quaternion createRotation(45.0f toRadians(), direction)
 			angle := (quaternion1 angle(quaternion2)) toDegrees()
@@ -107,7 +107,7 @@ QuaternionTest: class extends Fixture {
 		})
 		this add("rotationDirectionRepresentation1", func {
 			angle := 30.0f toRadians()
-			direction := FloatPoint3D new(1.0f, 4.0f, 7.0f)
+			direction := FloatVector3D new(1.0f, 4.0f, 7.0f)
 			direction /= direction norm
 			quaternion := Quaternion createRotation(angle, direction)
 			expect(quaternion rotation, is equal to(angle) within(tolerance))
