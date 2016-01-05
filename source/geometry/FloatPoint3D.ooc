@@ -22,6 +22,7 @@ use ooc-base
 FloatPoint3D: cover {
 	x, y, z: Float
 	norm ::= (this x squared + this y squared + this z squared) sqrt()
+	normalized ::= this / this norm
 	azimuth ::= this y atan2(this x)
 	isValid ::= (this x isNumber && this y isNumber && this z isNumber)
 	elevation: Float { get {
