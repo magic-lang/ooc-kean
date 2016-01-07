@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+use ooc-base
 import IntVector2D
 import IntPoint2D
 import FloatTransform2D
@@ -67,6 +68,16 @@ IntTransform2D: cover {
 		"#{this a toString()}, #{this b toString()}, #{this c toString()}, \
 		#{this d toString()}, #{this e toString()}, #{this f toString()}, \
 		#{this g toString()}, #{this h toString()}, #{this i toString()}"
+	}
+	toText: func -> Text {
+		result: Text
+		textBuilder := TextBuilder new()
+		textBuilder append(this a toText() + t", " + this b toText() + t", " + this c toText())
+		textBuilder append(this d toText() + t", " + this e toText() + t", " + this f toText())
+		textBuilder append(this g toText() + t", " + this h toText() + t", " + this i toText())
+		result = textBuilder join(t"\t")
+		textBuilder free()
+		result
 	}
 
 	operator * (other: This) -> This {

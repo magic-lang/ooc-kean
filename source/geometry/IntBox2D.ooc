@@ -104,6 +104,7 @@ IntBox2D: cover {
 	contains: func ~box (box: This) -> Bool { this intersection(box) == box }
 	toFloatBox2D: func -> FloatBox2D { FloatBox2D new(this left, this top, this width, this height) }
 	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
+	toText: func -> Text { this leftTop toText() + t", " + this size toText() }
 
 	operator + (other: This) -> This {
 		if (this hasZeroArea)
