@@ -56,6 +56,7 @@ FloatVector3D: cover {
 	toIntVector3D: func -> IntVector3D { IntVector3D new(this x as Int, this y as Int, this z as Int) }
 	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this x, this y, this z) }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}, #{this z toString()}" }
+	toText: func -> Text { this x toText() + t", " + this y toText() + t", " + this z toText() }
 
 	operator - -> This { This new(-this x, -this y, -this z) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
