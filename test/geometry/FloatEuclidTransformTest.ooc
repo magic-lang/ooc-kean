@@ -61,6 +61,12 @@ FloatEuclidTransformTest: class extends Fixture {
 			quaternions free()
 			euclidTransforms free()
 		})
+		this add("toText", func {
+			euclidTransform := FloatEuclidTransform new()
+			text := euclidTransform toText() take()
+			expect(text, is equal to(t"Translation: 0.00, 0.00, 0.00 Rotation: Real: 1.00 Imaginary: 0.00 0.00 0.00 Scaling: 1.00"))
+			text free()
+		})
 	}
 }
 

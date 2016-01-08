@@ -82,6 +82,11 @@ IntVector3DTest: class extends Fixture {
 			expect(this vector1 volume, is equal to(-1248))
 			expect(empty volume, is equal to(0))
 		})
+		this add("toText", func {
+			text := IntVector3D new(10, 20, 30) toText() take()
+			expect(text, is equal to(t"10, 20, 30"))
+			text free()
+		})
 	}
 }
 

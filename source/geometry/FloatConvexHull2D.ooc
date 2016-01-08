@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+use ooc-base
 use ooc-collections
 use ooc-math
 import FloatPoint2D
@@ -138,6 +139,15 @@ FloatConvexHull2D: class {
 		result := ""
 		for (i in 0 .. this count)
 			result = result >> "(" & this _points[i] toString() >> ") "
+		result
+	}
+	toText: func -> Text {
+		result: Text
+		textBuilder := TextBuilder new()
+		for (i in 0 .. this count)
+			textBuilder append(t"(" + this _points[i] toText() + t")")
+		result = textBuilder join(t" ")
+		textBuilder free()
 		result
 	}
 	_pointsLinePseudoDistance: static func (leftPoint, rightPoint, queryPoint: FloatPoint2D) -> Float {

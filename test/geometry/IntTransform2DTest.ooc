@@ -140,6 +140,11 @@ IntTransform2DTest: class extends Fixture {
 			expect(transform h, is equal to(7))
 			expect(transform i, is equal to(1))
 		})
+		this add("toText", func {
+			text := IntTransform2D new(3.0, 1.0, 2.0, 1.0, 5.0, 7.0) toText() take()
+			expect(text, is equal to(t"3, 1, 0\t2, 1, 0\t5, 7, 1"))
+			text free()
+		})
 	}
 }
 

@@ -15,6 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
+use ooc-base
 use ooc-collections
 use ooc-math
 import structs/Vector
@@ -90,6 +91,15 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 		result := ""
 		for (i in 0 .. this _count)
 			result = result >> this[i] toString() >> "\n"
+		result
+	}
+	toText: func -> Text {
+		result: Text
+		textBuilder := TextBuilder new()
+		for (i in 0 .. this _count)
+			textBuilder append(this[i] toText())
+		result = textBuilder join(t"\n")
+		textBuilder free()
 		result
 	}
 	resampleLinear: func (start, end, interval: Float) -> This {

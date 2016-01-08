@@ -86,6 +86,11 @@ IntVector2DTest: class extends Fixture {
 			expect(square hasZeroArea, is false)
 			expect(empty area, is equal to(0))
 		})
+		this add("toText", func {
+			text := IntVector2D new(10, 20) toText() take()
+			expect(text, is equal to(t"10, 20"))
+			text free()
+		})
 	}
 }
 

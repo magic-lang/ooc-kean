@@ -98,6 +98,11 @@ FloatShell2DTest: class extends Fixture {
 			expect(shell top, is equal to(3.0f) within(tolerance))
 			expect(shell bottom, is equal to(4.0f) within(tolerance))
 		})
+		this add("toText", func {
+			text := FloatShell2D new(10.12f) toText() take()
+			expect(text, is equal to(t"10.12, 10.12, 10.12, 10.12"))
+			text free()
+		})
 	}
 }
 

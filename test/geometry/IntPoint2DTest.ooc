@@ -67,6 +67,11 @@ IntPoint2DTest: class extends Fixture {
 			distance := this point0 distance(this point1)
 			expect(distance, is equal to(18.87f) within(0.01f))
 		})
+		this add("toText", func {
+			text := IntPoint2D new (22, -3) toText() take()
+			expect(text, is equal to(t"22, -3"))
+			text free()
+		})
 	}
 }
 

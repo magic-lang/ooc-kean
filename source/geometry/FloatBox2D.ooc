@@ -129,6 +129,7 @@ FloatBox2D: cover {
 		This createAround(newCenter, newSize)
 	}
 	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
+	toText: func -> Text { this leftTop toText() + t", " + this size toText() }
 	toIntBox2D: func -> IntBox2D { IntBox2D new(this left, this top, this width, this height) }
 
 	operator + (other: This) -> This {

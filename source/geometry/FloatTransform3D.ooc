@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+use ooc-base
 use ooc-collections
 use ooc-math
 import FloatVector2D
@@ -105,6 +106,17 @@ FloatTransform3D: cover {
 		"%.8f" formatFloat(this b) >> ", " & "%.8f" formatFloat(this f) >> ", " & "%.8f" formatFloat(this j) >> ", " & "%.8f" formatFloat(this n) >> "\n" & \
 		"%.8f" formatFloat(this c) >> ", " & "%.8f" formatFloat(this g) >> ", " & "%.8f" formatFloat(this k) >> ", " & "%.8f" formatFloat(this o) >> "\n" & \
 		"%.8f" formatFloat(this d) >> ", " & "%.8f" formatFloat(this h) >> ", " & "%.8f" formatFloat(this l) >> ", " & "%.8f" formatFloat(this p)
+	}
+	toText: func -> Text {
+		result: Text
+		textBuilder := TextBuilder new()
+		textBuilder append(this a toText() + t", " + this e toText() + t", " + this i toText() + t", " + this m toText())
+		textBuilder append(this b toText() + t", " + this f toText() + t", " + this j toText() + t", " + this n toText())
+		textBuilder append(this c toText() + t", " + this g toText() + t", " + this k toText() + t", " + this o toText())
+		textBuilder append(this d toText() + t", " + this h toText() + t", " + this l toText() + t", " + this p toText())
+		result = textBuilder join(t"\n")
+		textBuilder free()
+		result
 	}
 	transformAndProject: func ~FloatPoint2D (point: FloatPoint2D, focalLength: Float) -> FloatPoint2D {
 		transformedWorldPoint := this * FloatPoint3D new(point x, point y, focalLength)
