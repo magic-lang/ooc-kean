@@ -16,27 +16,11 @@
 			"taskName": "build project",
 			"suppressTaskName": true,
 			"isBuildCommand": true,
-			"args": [ "build", "-s", "-t", "--config", ".configuration/build.json", "${workspaceRoot}" ],
+			"args": [ "build", "--config", ".configuration/build.json", "${workspaceRoot}" ],
 			"problemMatcher": {
 				"fileLocation": ["absolute"],
 				"pattern": {
 					"regexp": "^(.*):(\\d+):(\\d+):?\\s+(error|warning|info):?\\s+(.*)$",
-					"file": 1,
-					"line": 2,
-					"column": 3,
-					"severity": 4,
-					"message": 5
-				}
-			}
-		},
-		{
-			"taskName": "compile current file",
-			"suppressTaskName": true,
-			"args": [ "compile", "${file}" ],
-			"problemMatcher": {
-				"fileLocation": ["absolute"],
-				"pattern": {
-					"regexp": "^(.*):(\\d+):(\\d+):?\\s+(error|warning):?\\s+(.*)$",
 					"file": 1,
 					"line": 2,
 					"column": 3,
