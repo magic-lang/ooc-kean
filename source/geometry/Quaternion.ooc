@@ -222,7 +222,7 @@ Quaternion: cover {
 	createRotationX: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(1.0f, 0.0f, 0.0f)) }
 	createRotationY: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(0.0f, 1.0f, 0.0f)) }
 	createRotationZ: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(0.0f, 0.0f, 1.0f)) }
-	createFromAxisAngle: static func (vector: FloatVector3D) -> This { vector isZero ? This identity : This createRotation(vector norm, vector normalized) }
+	createFromEulerVector: static func (vector: FloatVector3D) -> This { vector isZero ? This identity : This createRotation(vector norm, vector normalized) }
 	hamiltonProduct: static func (left, right: This) -> This {
 		(a1, b1, c1, d1) := (left w, left x, left y, left z)
 		(a2, b2, c2, d2) := (right w, right x, right y, right z)
