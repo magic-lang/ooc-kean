@@ -3,7 +3,7 @@ import native/[ThreadLocalUnix, ThreadLocalWin32]
 ThreadLocal: abstract class <T> {
 	set: abstract func (value: T)
 	get: abstract func -> T
-	hasValue?: abstract func -> Bool
+	hasValue: abstract func -> Bool
 	new: static func <T> -> This<T> {
 		version (unix || apple) {
 			return ThreadLocalUnix<T> new() as This

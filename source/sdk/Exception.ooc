@@ -44,7 +44,7 @@ ExceptionContext: class {
 	init: func
 	pushStackFrame: func -> StackFrame {
 		stack: Stack<StackFrame>
-		if (!this _localFrames hasValue?())
+		if (!this _localFrames hasValue())
 			stack = Stack<StackFrame> new()
 		else
 			stack = this _localFrames get()
@@ -69,7 +69,7 @@ ExceptionContext: class {
 		frame
 	}
 	hasStackFrame: func -> Bool {
-		this _localFrames hasValue?() && this _localFrames get() size > 0
+		this _localFrames hasValue() && this _localFrames get() size > 0
 	}
 }
 

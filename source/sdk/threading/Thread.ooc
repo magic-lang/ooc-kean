@@ -11,7 +11,7 @@ Thread: abstract class {
 
 	cancel: abstract func -> Bool
 
-	alive?: abstract func -> Bool
+	alive: abstract func -> Bool
 	new: static func (._code) -> This {
 		version (unix || apple) {
 			return ThreadUnix new(_code) as This

@@ -7,13 +7,13 @@ LLong: cover from signed long long {
 	toString: func -> String { "%lld" formatLLong(this as LLong) }
 	toHexString: func -> String { "%llx" formatLLong(this as LLong) }
 
-	odd?: func -> Bool { this % 2 == 1 }
-	even?: func -> Bool { this % 2 == 0 }
+	odd: func -> Bool { this % 2 == 1 }
+	even: func -> Bool { this % 2 == 0 }
 
-	divisor?: func (divisor: Int) -> Bool {
+	divisor: func (divisor: Int) -> Bool {
 		this % divisor == 0
 	}
-	in?: func (range: Range) -> Bool {
+	in: func (range: Range) -> Bool {
 		return this >= range min && this < range max
 	}
 	times: func (fn: Func) {
@@ -47,7 +47,7 @@ Short: cover from signed short extends LLong
 
 ULLong: cover from unsigned long long extends LLong {
 	toString: func -> String { "%llu" formatULLong(this as ULLong) }
-	in?: func (range: Range) -> Bool {
+	in: func (range: Range) -> Bool {
 		this >= range min && this < range max
 	}
 }

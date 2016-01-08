@@ -251,11 +251,11 @@ DateTime: cover {
 	}
 	/* validate argument ranges for hour/minutes/seconds vaules */
 	timeIsValid: static func (hour, minute, second, millisecond: Int) -> Bool {
-		hour in?(0 .. 24) && minute in?(0 .. 60) && second in?(0 .. 60) && millisecond in?(0 .. 1000)
+		hour in(0 .. 24) && minute in(0 .. 60) && second in(0 .. 60) && millisecond in(0 .. 1000)
 	}
 	/* validate argument ranges for year/month/day values */
 	dateIsValid: static func (year, month, day: Int) -> Bool {
-		year >= 1 && month in?(1 .. 13) && day in?(1 .. This daysInMonth(year, month) + 1)
+		year >= 1 && month in(1 .. 13) && day in(1 .. This daysInMonth(year, month) + 1)
 	}
 	kean_base_dateTime_new: unmangled static func (ticks: UInt64) -> This { This new(ticks) }
 	kean_base_dateTime_fromDate: unmangled static func (year, month, day: Int) -> This { This new(year, month, day) }
