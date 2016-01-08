@@ -1,63 +1,50 @@
+include sys/types, sys/stat, unistd
+include fcntl
+
 import ../Pipe
-import os/[unistd, FileDescriptor]
+import os/unistd
 
 version(unix || apple) {
+F_SETFL, F_GETFL: extern Int
+O_NONBLOCK: extern Int
+EAGAIN: extern Int
+
+fcntl: extern func (_FileDescriptor, Int, Int) -> Int
+
+_FileDescriptor: cover from Int {
+	write: extern (write) func (Pointer, Int) -> Int
+	read: extern (read) func (Pointer, Int) -> Int
+	close: extern (close) func -> Int
+}
+
 PipeUnix: class extends Pipe {
-	readFD, writeFD: FileDescriptor
-	init: func ~withFDs (=readFD, =writeFD) {
-		if (readFD == -1 && writeFD == -1) {
-			init()
-			return
-		}
-		if (readFD == -1) {
-			fds := [-1] as Int*
-			pipe(fds)
-			this readFD = fds[0]
-			if (pipe(fds) < 0) {
-				// TODO: add detailed error message
-				Exception new(This, "Couldn't create pipe") throw()
-			}
-		}
-		if (writeFD == -1) {
-			fds := [-1] as Int*
-			pipe(fds)
-			this writeFD = fds[0]
-			if (pipe(fds) < 0) {
-				// TODO: add detailed error message
-				Exception new(This, "Couldn't create pipe") throw()
-			}
-		}
-	}
+	readFD, writeFD: _FileDescriptor
+
 	init: func ~twos {
 		fds := [-1, -1] as Int*
-
-		/* Try to open a new pipe */
-		if (pipe(fds) < 0) {
-			// TODO: add detailed error message
-			Exception new(This, "Couldn't create pipes") throw()
-		}
+		if (pipe(fds) < 0)
+			raise("Couldn't create pipes")
 		readFD = fds[0]
 		writeFD = fds[1]
 	}
 	read: func ~cstring (buf: CString, len: Int) -> Int {
-		howmuch := readFD read(buf, len)
-		if (howmuch <= 0) {
-			if (errno == EAGAIN) {
-				return 0
+		howMuch := readFD read(buf, len)
+		if (howMuch <= 0) {
+			if (errno == EAGAIN)
+				howMuch = 0
+			else {
+				eof = true
+				howMuch = -1
 			}
-			eof = true
-			return -1
 		}
-		howmuch
+		howMuch
 	}
 	write: func (data: Pointer, len: Int) -> Int {
-		return writeFD write(data, len)
+		writeFD write(data, len)
 	}
-	// arg 'r' = close in reading, 'w' = close in writing
 	close: func (end: Char) -> Int {
 		fd := _getFD(end)
-		if (fd == 0) return 0
-		fd close()
+		fd == 0 ? 0 : fd close()
 	}
 	close: func ~both {
 		readFD close()
@@ -65,26 +52,26 @@ PipeUnix: class extends Pipe {
 	}
 	setNonBlocking: func (end: Char) {
 		fd := _getFD(end)
-		if (fd == 0) return
-		fd setNonBlocking()
+		if (fd != 0) {
+			flags := fcntl(fd, F_GETFL, 0)
+			flags |= O_NONBLOCK
+			fcntl(fd, F_SETFL, flags)
+		}
 	}
 	setBlocking: func (end: Char) {
 		fd := _getFD(end)
-		if (fd == 0) return
-		fd setBlocking()
+		if (fd != 0) {
+			flags := fcntl(fd, F_GETFL, 0)
+			flags &= ~O_NONBLOCK
+			fcntl(fd, F_SETFL, flags)
+		}
 	}
-	_getFD: func (end: Char) -> FileDescriptor {
+	_getFD: func (end: Char) -> _FileDescriptor {
 		match end {
 			case 'r' => readFD
 			case 'w' => writeFD
-			case => 0 as FileDescriptor
+			case => 0 as _FileDescriptor
 		}
 	}
 }
-
-include fcntl
-include sys/stat
-include sys/types
-
-EAGAIN: extern Int
 }
