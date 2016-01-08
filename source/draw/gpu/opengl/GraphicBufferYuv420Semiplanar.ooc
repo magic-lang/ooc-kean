@@ -50,7 +50,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 			this _rgba = This _search(this _buffer)
 		if (this _rgba == null) {
 			padding := this _uvOffset - this _stride * this _size y
-			extraRows := Int align(padding, this _stride) / this _stride
+			extraRows := padding align(this _stride) / this _stride
 			height := this _size y + this _size y / 2 + extraRows
 			width := this _stride / 4
 			rgbaBuffer := this buffer shallowCopy(IntVector2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget)

@@ -45,9 +45,8 @@ MathTest: class extends Fixture {
 
 			expect(5 squared, is equal to((-5) squared))
 
-			expect(Int toPowerOfTwo(7), is equal to(8))
-			expect(Int alignPowerOfTwo(62, 64), is equal to(64))
-			expect(Int alignPowerOfTwo(137, 128), is equal to(256))
+			expect(62 alignPowerOfTwo(64), is equal to(64))
+			expect(137 alignPowerOfTwo(128), is equal to(256))
 		})
 		this add("Float", func {
 			expect(22.3f modulo(5), is equal to(2.3f) within(floatTolerance))
@@ -79,8 +78,8 @@ MathTest: class extends Fixture {
 
 			expect(10.f squared, is equal to(100.f) within(floatTolerance))
 
-			expect(Float linearInterpolation(2.0f, 5.0f, 0.5f), is equal to(3.5f) within(floatTolerance))
-			expect(Float linearInterpolation(-9.0f, 1.0f, 0.1f), is equal to(-8.f) within(floatTolerance))
+			expect(0.5f linearInterpolation(2.0f, 5.0f), is equal to(3.5f) within(floatTolerance))
+			expect(0.1f linearInterpolation(-9.0f, 1.0f), is equal to(-8.f) within(floatTolerance))
 
 			nearZero := (0.1f + 0.1f + 0.1f) - 0.3f
 			expect(nearZero equals(0.0f), is true)
