@@ -86,7 +86,7 @@ FloatVector3D: cover {
 		result
 	}
 	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
-		This new(Float linearInterpolation(a x, b x, ratio), Float linearInterpolation(a y, b y, ratio), Float linearInterpolation(a z, b z, ratio))
+		This new(ratio linearInterpolation(a x, b x), ratio linearInterpolation(a y, b y), ratio linearInterpolation(a z, b z))
 	}
 	kean_math_floatVector3D_new: unmangled static func (x, y, z: Float) -> This { This new(x, y, z) }
 }
