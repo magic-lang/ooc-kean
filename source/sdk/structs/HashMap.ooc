@@ -125,7 +125,7 @@ HashMap: class <K, V> extends BackIterable<V> {
 	keys: ArrayList<K>
 
 	size ::= _size
-	isEmpty ::= keys empty?()
+	isEmpty ::= keys empty()
 
 	init: func { init(3) }
 
@@ -268,7 +268,7 @@ HashMap: class <K, V> extends BackIterable<V> {
 			return entry value as V
 		return null
 	}
-	contains?: func (key: K) -> Bool {
+	contains: func (key: K) -> Bool {
 		getEntry(key, null)
 	}
 	remove: func (key: K) -> Bool {

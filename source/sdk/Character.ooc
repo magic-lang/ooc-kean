@@ -24,42 +24,42 @@ version (!cygwin) {
 }
 
 Char: cover from char {
-	alphaNumeric?: func -> Bool {
-		alpha?() || digit?()
+	alphaNumeric: func -> Bool {
+		alpha() || digit()
 	}
-	alpha?: func -> Bool {
-		lower?() || upper?()
+	alpha: func -> Bool {
+		lower() || upper()
 	}
-	lower?: func -> Bool {
+	lower: func -> Bool {
 		this >= 'a' && this <= 'z'
 	}
-	upper?: func -> Bool {
+	upper: func -> Bool {
 		this >= 'A' && this <= 'Z'
 	}
-	digit?: func -> Bool {
+	digit: func -> Bool {
 		this >= '0' && this <= '9'
 	}
-	octalDigit?: func -> Bool {
+	octalDigit: func -> Bool {
 		this >= '0' && this <= '7'
 	}
-	hexDigit?: func -> Bool {
-		digit?() ||
+	hexDigit: func -> Bool {
+		digit() ||
 		(this >= 'A' && this <= 'F') ||
 		(this >= 'a' && this <= 'f')
 	}
-	control?: func -> Bool {
+	control: func -> Bool {
 		(this >= 0 && this <= 31) || this == 127
 	}
-	graph?: func -> Bool {
-		printable?() && this != ' '
+	graph: func -> Bool {
+		printable() && this != ' '
 	}
-	printable?: func -> Bool {
+	printable: func -> Bool {
 		this >= 32 && this <= 126
 	}
-	punctuation?: func -> Bool {
-		printable?() && !alphaNumeric?() && this != ' '
+	punctuation: func -> Bool {
+		printable() && !alphaNumeric() && this != ' '
 	}
-	whitespace?: func -> Bool {
+	whitespace: func -> Bool {
 		this == ' ' ||
 		this == '\f' ||
 		this == '\n' ||
@@ -67,11 +67,11 @@ Char: cover from char {
 		this == '\t' ||
 		this == '\v'
 	}
-	blank?: func -> Bool {
+	blank: func -> Bool {
 		this == ' ' || this == '\t'
 	}
 	toInt: func -> Int {
-		if (digit?()) {
+		if (digit()) {
 			return (this - '0') as Int
 		}
 		return -1
@@ -95,10 +95,10 @@ Char: cover from char {
 		fputc(this, stream)
 		fputc('\n', stream)
 	}
-	containedIn?: func (s : String) -> Bool {
-		containedIn?(s _buffer data, s size)
+	containedIn: func (s : String) -> Bool {
+		containedIn(s _buffer data, s size)
 	}
-	containedIn?: func ~charWithLength (s : Char*, sLength: SizeT) -> Bool {
+	containedIn: func ~charWithLength (s : Char*, sLength: SizeT) -> Bool {
 		for (i in 0 .. sLength) {
 			if ((s + i)@ == this) return true
 		}
@@ -124,7 +124,7 @@ CString: cover from Char* {
 		memcpy(copy, this, length + 1)
 		return copy as This
 	}
-	equals?: func ( other: This) -> Bool {
+	equals: func ( other: This) -> Bool {
 		if (other == null) return false
 		l := length()
 		l2 := length()
@@ -156,7 +156,7 @@ CString: cover from Char* {
 operator == (str1: CString, str2: CString) -> Bool {
 	if ((str1 == null) || (str2 == null))
 		return false
-	str1 equals?(str2)
+	str1 equals(str2)
 }
 
 operator != (str1: CString, str2: CString) -> Bool {

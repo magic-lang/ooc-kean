@@ -61,7 +61,7 @@ getExtensionList: func -> ArrayList<String> {
 }
 queryExtension: func (extension: String) -> Bool {
 	string := getExtensions()
-	string contains?(extension)
+	string contains(extension)
 }
 printExtensions: func {
 	array := getExtensionList()

@@ -4,7 +4,7 @@ import io/BufferReader
 Demangler: class {
 	demangle: static func (s: String) -> FullSymbol {
 		result := FullSymbol new(s)
-		if (s contains?("__")) {
+		if (s contains("__")) {
 			reader := BufferReader new(s)
 
 			while (reader hasNext?()) {
@@ -23,7 +23,7 @@ Demangler: class {
 				}
 			}
 
-			if (reader peek() upper?()) {
+			if (reader peek() upper()) {
 				while (reader hasNext?()) {
 					c := reader read()
 					match c {

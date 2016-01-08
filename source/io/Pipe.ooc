@@ -49,8 +49,8 @@ Pipe: abstract class {
 	setBlocking: func (end: Char) {
 		raise("This platform doesn't support blocking pipe I/O.")
 	}
-	eof?: func -> Bool {
-		eof
+	eof: func -> Bool {
+		this eof
 	}
 	reader: func -> PipeReader {
 		PipeReader new(this)
@@ -84,7 +84,7 @@ PipeReader: class extends Reader {
 		bytesRead >= 0 ? bytesRead : 0
 	}
 	hasNext?: func -> Bool {
-		!pipe eof?()
+		!pipe eof()
 	}
 	mark: func -> Long {
 		SeekingNotSupported new(This) throw()

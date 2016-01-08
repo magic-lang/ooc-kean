@@ -216,7 +216,7 @@ version(windows) {
 		 */
 		relative: func -> Bool {
 			// that's a bit rough, but should work most of the time
-			!path startsWith?("/") && (path length() <= 1 || path[1] != ':')
+			!path startsWith("/") && (path length() <= 1 || path[1] != ':')
 		}
 
 		/**

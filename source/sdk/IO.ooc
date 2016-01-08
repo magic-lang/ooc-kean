@@ -126,7 +126,7 @@ FStream: cover from FILE* {
 	 *
 	 * That's how C I/O works.
 	 */
-	eof?: func -> Bool {
+	eof: func -> Bool {
 		feof(this) != 0
 	}
 

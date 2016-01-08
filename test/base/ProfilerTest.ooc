@@ -17,7 +17,7 @@ ProfilerTest: class extends Fixture {
 			file := File new(outputFile)
 			expect(file exists())
 			content := file read()
-			expect(content empty?(), is equal to(false))
+			expect(content empty(), is equal to(false))
 			content free()
 			file free()
 		})

@@ -8,8 +8,8 @@ BacktraceHandler: class {
 	fancyBacktrace: Pointer
 	fancyBacktraceSymbols: Pointer
 	fancyBacktraceWithContext: Pointer // windows-only
-	fancy? := true
-	raw? := false
+	fancy := true
+	raw := false
 
 	backtrace: func -> Backtrace {
 		buffer := gc_malloc(Pointer size * BACKTRACE_LENGTH)
@@ -71,11 +71,11 @@ BacktraceHandler: class {
 
 	init: func {
 		if (Env get("NO_FANCY_BACKTRACE")) {
-			fancy? = false
+			fancy = false
 			return
 		}
 		if (Env get("RAW_BACKTRACE")) {
-			raw? = true
+			raw = true
 		}
 
 		this lib = Dynlib load("fancy_backtrace") ?? Dynlib load("./fancy_backtrace")
@@ -84,7 +84,7 @@ BacktraceHandler: class {
 			_initFuncs()
 			atexit(_cleanup_backtrace)
 		} else
-			fancy? = false
+			fancy = false
 	}
 	_initFuncs: func {
 		if (!lib) return
@@ -106,7 +106,7 @@ BacktraceHandler: class {
 	_format: func (lines: CString*, length: Int) -> String {
 		buffer := CharBuffer new()
 
-		if (raw?) {
+		if (raw) {
 			buffer append("[raw backtrace]\n")
 			for (i in 0 .. length)
 				buffer append(lines[i]). append('\n')

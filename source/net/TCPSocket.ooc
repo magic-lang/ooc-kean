@@ -80,7 +80,7 @@ TCPSocket: class extends Socket {
 
 		readerWriter = TCPReaderWriterPair new(this)
 
-		connected? = true
+		connected = true
 	}
 
 	/**
@@ -90,7 +90,7 @@ TCPSocket: class extends Socket {
 	   :throws: A SocketError if something went wrong
 	 */
 	connect: func ~withClosure (f: func (TCPReaderWriterPair) -> Bool) {
-		if (!connected?)
+		if (!connected)
 			connect()
 
 		f(readerWriter)
@@ -189,13 +189,13 @@ TCPSocket: class extends Socket {
 	receive: func ~withFlags (chars: Char*, length: SizeT, flags: Int) -> Int {
 		bytesRecv := socket recv(descriptor, chars, length, flags)
 		if (bytesRecv == -1) {
-			connected? = false
+			connected = false
 			SocketError new() throw()
 		}
 		/* hasData? is true if there's data left (aka, if bytesRecv != 0),
 		 * and false otherwise
 		 */
-		hasData? = (bytesRecv != 0)
+		hasData = (bytesRecv != 0)
 		return bytesRecv
 	}
 
