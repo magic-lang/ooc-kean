@@ -145,8 +145,8 @@ FloatConvexHull2D: class {
 		result: Text
 		textBuilder := TextBuilder new()
 		for (i in 0 .. this count)
-			textBuilder append(t"(" + this _points[i] toText() + t") ")
-		result = textBuilder toText()
+			textBuilder append(t"(" + this _points[i] toText() + t")")
+		result = textBuilder join(t" ")
 		textBuilder free()
 		result
 	}
