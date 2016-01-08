@@ -26,7 +26,7 @@ ipType: func (ip: String) -> Int {
 /**
 	Is the IP provided valid as either IPv6 or IPv4? (Does not return which)
 */
-validIp?: func (ip: String) -> Bool {
+validIp: func (ip: String) -> Bool {
 	ipType(ip) != AddressFamily UNSPEC
 }
 
