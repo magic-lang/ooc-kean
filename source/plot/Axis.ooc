@@ -12,7 +12,7 @@ Axis: class {
 	min: Float { get set }
 	max: Float { get set }
 	tick: Float { get set (length) {
-		(value, radix) := Float decomposeToCoefficientAndRadix(length, 1)
+		(value, radix) := length decomposeToCoefficientAndRadix(1)
 		this tick = radix
 		if (value != 0.0f) {
 			if (length / this tick < 1.1f)
@@ -43,7 +43,7 @@ Axis: class {
 				this fontSize = fontSize
 			this tick = this length()
 			position := FloatPoint2D new(margin x, margin y + plotAreaSize y)
-			radix := Float getRadix(this length(), this precision)
+			radix := this length() getRadix(this precision)
 			if (this orientation == Orientation Horizontal)
 				result = this getHorizontalSvg(plotAreaSize, margin, position, transform, radix)
 			else
@@ -92,7 +92,7 @@ Axis: class {
 	getRadixSvg: func (position: FloatPoint2D, radix: Float, textAnchor: String) -> String {
 		result := ""
 		if (radix >= 10 pow(this precision - 1) || radix <= 10 pow(-this precision)) {
-			scientificPower := Float getScientificPowerString(radix)
+			scientificPower := radix getScientificPowerString()
 			result = result & Shapes text(position, scientificPower, this fontSize, textAnchor)
 			scientificPower free()
 		}
@@ -132,8 +132,8 @@ Axis: class {
 	}
 	roundEndpoints: func {
 		if (this roundAxisEndpoints) {
-			this min = Float roundToValueDigits(this min, 2, false)
-			this max = Float roundToValueDigits(this max, 2, true)
+			this min = this min roundToValueDigits(2, false)
+			this max = this max roundToValueDigits(2, true)
 		}
 	}
 }

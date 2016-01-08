@@ -198,11 +198,9 @@ extend Float {
 			result += ((result abs()) / divisor) ceil() * divisor
 		result mod(divisor)
 	}
-
-	maximum: static func (x, y: This) -> This { x > y ? x : y }
-	minimum: static func (x, y: This) -> This { x < y ? x : y }
-	decomposeToCoefficientAndRadix: static func (value: This, valueDigits: Int) -> (This, This) {
+	decomposeToCoefficientAndRadix: func (valueDigits: Int) -> (This, This) {
 		radix := 1.0f
+		value := this
 		if (value != 0.0f) {
 			while (value absolute >= 10.0f pow(valueDigits)) {
 				value /= 10.0f
@@ -216,24 +214,28 @@ extend Float {
 		coefficient := value
 		(coefficient, radix)
 	}
-	roundToValueDigits: static func (value: This, valueDigits: Int, up: Bool) -> This {
-		(result, radix) := This decomposeToCoefficientAndRadix(value, valueDigits)
+	roundToValueDigits: func (valueDigits: Int, up: Bool) -> This {
+		value := this
+		(result, radix) := this decomposeToCoefficientAndRadix(valueDigits)
 		if (result != 0) {
 			result = up ? result ceil() : result floor()
 			result *= radix
 		}
 		result
 	}
-	getRadix: static func (value: This, valueDigits: Int) -> This {
-		(tempValue, result) := This decomposeToCoefficientAndRadix(value, valueDigits)
+	getRadix: func (valueDigits: Int) -> This {
+		(tempValue, result) := this decomposeToCoefficientAndRadix(valueDigits)
 		result
 	}
-	getScientificPowerString: static func (value: This) -> String {
-		(coefficient, radix) := This decomposeToCoefficientAndRadix(value, 1)
+	getScientificPowerString: func -> String {
+		(coefficient, radix) := this decomposeToCoefficientAndRadix(1)
 		power := radix log10() as Int
 		result := coefficient toString() >> "E" & power toString()
 		result
 	}
+
+	maximum: static func (x, y: This) -> This { x > y ? x : y }
+	minimum: static func (x, y: This) -> This { x < y ? x : y }
 }
 
 extend LDouble {
