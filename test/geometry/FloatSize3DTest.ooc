@@ -143,6 +143,11 @@ FloatVector3DTest: class extends Fixture {
 			myvector := FloatVector3D new(1.0, 5.5, 0.1)
 			expect(myvector azimuth, is equal to(5.5f atan2(1.0f)) within(this precision))
 		})
+		this add("toText", func {
+			text := FloatVector3D new(1.0f, 2.0f, 10.00f) toText() take()
+			expect(text, is equal to(t"1.00, 2.00, 10.00"))
+			text free()
+		})
 	}
 }
 

@@ -76,6 +76,11 @@ IntPoint3DTest: class extends Fixture {
 			expect(result y, is equal to(10))
 			expect(result z, is equal to(8))
 		})
+		this add("toText", func {
+			text := IntPoint3D new (22, -3, 1) toText() take()
+			expect(text, is equal to(t"22, -3, 1"))
+			text free()
+		})
 	}
 }
 

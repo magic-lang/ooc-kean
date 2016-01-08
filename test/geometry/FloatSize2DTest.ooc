@@ -150,6 +150,11 @@ FloatVector2DTest: class extends Fixture {
 			empty = FloatVector2D new(almostZero, 0.1f)
 			expect(empty hasZeroArea, is true)
 		})
+		this add("toText", func {
+			text := FloatVector2D new(1.0f, 2.0f) toText() take()
+			expect(text, is equal to(t"1.00, 2.00"))
+			text free()
+		})
 	}
 }
 

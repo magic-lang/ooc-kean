@@ -283,6 +283,11 @@ FloatTransform3DTest: class extends Fixture {
 				"0.00000000, 0.00000000, 0.00000000, 1.00000000"
 			expect(this transform4 toString(), is equal to(value))
 		})
+		this add("toText", func {
+			text := FloatTransform3D new(1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3) toText() take()
+			expect(text, is equal to(t"1.00, 4.00, 7.00, 1.00\n2.00, 5.00, 8.00, 2.00\n3.00, 6.00, 9.00, 3.00\n0.00, 0.00, 0.00, 1.00"))
+			text free()
+		})
 	}
 }
 

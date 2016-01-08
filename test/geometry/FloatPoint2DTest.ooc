@@ -155,6 +155,11 @@ FloatPoint2DTest: class extends Fixture {
 			expect(interpolate3 x, is equal to(this point1 x) within(this precision))
 			expect(interpolate3 y, is equal to(this point1 y) within(this precision))
 		})
+		this add("toText", func {
+			text := FloatPoint2D new (10.92f, -30.12f) toText() take()
+			expect(text, is equal to(t"10.92, -30.12"))
+			text free()
+		})
 	}
 }
 

@@ -129,6 +129,11 @@ FloatPoint3DTest: class extends Fixture {
 			mypoint := FloatPoint3D new(1.0, 5.5, 0.1)
 			expect(mypoint azimuth, is equal to(5.5f atan2(1.0f)) within(this precision))
 		})
+		this add("toText", func {
+			text := FloatPoint3D new (10.92f, -30.12f, 0.52f) toText() take()
+			expect(text, is equal to(t"10.92, -30.12, 0.52"))
+			text free()
+		})
 	}
 }
 
