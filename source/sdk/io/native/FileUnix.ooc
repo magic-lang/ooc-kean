@@ -236,7 +236,7 @@ version (unix || apple) {
 		 */
 		relative: func -> Bool {
 			// that's a bit rough, but should work most of the time
-			!path startsWith?("/")
+			!path startsWith("/")
 		}
 
 		/**
@@ -244,7 +244,7 @@ version (unix || apple) {
 		 */
 		getAbsolutePath: func -> String {
 			assert(path != null)
-			assert(!path empty?())
+			assert(!path empty())
 			actualPath := gc_malloc(MAX_PATH_LENGTH) as CString
 			ret := realpath(path, actualPath)
 			if (ret == null) {

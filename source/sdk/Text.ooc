@@ -142,9 +142,9 @@ Text: cover {
 	trim: func -> This {
 		leftPosition := 0
 		rightPosition := this count - 1
-		while (leftPosition < this count && this _buffer[leftPosition] whitespace?())
+		while (leftPosition < this count && this _buffer[leftPosition] whitespace())
 			++leftPosition
-		while (rightPosition > leftPosition && this _buffer[rightPosition] whitespace?())
+		while (rightPosition > leftPosition && this _buffer[rightPosition] whitespace())
 			--rightPosition
 		this slice(leftPosition, rightPosition - leftPosition + 1)
 	}

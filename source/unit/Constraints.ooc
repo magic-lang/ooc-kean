@@ -90,7 +90,7 @@ EmptyConstraint: class extends Constraint {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
 	test: override func (value: Object) -> Bool {
-		value != null && value instanceOf?(String) && value as String empty?()
+		value != null && value instanceOf?(String) && value as String empty()
 	}
 }
 

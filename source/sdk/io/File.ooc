@@ -31,12 +31,12 @@ File: abstract class {
 		}
 	}
 	rectifySeparator: func {
-		if (this dir() && !this path endsWith?(This separator)) {
+		if (this dir() && !this path endsWith(This separator)) {
 			oldPath := this path
 			this path = oldPath + This separator
 			oldPath free()
 		}
-		else if (!this dir() && this path endsWith?(This separator)) {
+		else if (!this dir() && this path endsWith(This separator)) {
 			newPath := this path trimRight(This separator)
 			this path free()
 			this path = newPath
@@ -120,7 +120,7 @@ File: abstract class {
 	getParent: func -> This {
 		pName := parentName()
 		if (pName) return new(pName)
-		if (path != "." && !path startsWith?(This separator)) return new(".") // return the current directory
+		if (path != "." && !path startsWith(This separator)) return new(".") // return the current directory
 		return null
 	}
 
@@ -269,7 +269,7 @@ File: abstract class {
 		tokens := path split(This separator)
 		for (elem in tokens) {
 			if (elem == "..") {
-				if (!elems empty?()) {
+				if (!elems empty()) {
 					elems removeAt(elems lastIndex())
 				} else {
 					elems add(elem)
@@ -282,7 +282,7 @@ File: abstract class {
 		}
 
 		result := elems join(This separator)
-		if (path startsWith?(This separator)) {
+		if (path startsWith(This separator)) {
 			result = This separator + result
 		}
 
@@ -513,7 +513,7 @@ File: abstract class {
 		left := base getReducedFile() getAbsolutePath() replaceAll(This separator, '/')
 		full := getReducedFile() getAbsolutePath() replaceAll(This separator, '/')
 
-		if (!left endsWith?("/")) {
+		if (!left endsWith("/")) {
 			left = left + "/"
 		}
 		right := full substring(left size)

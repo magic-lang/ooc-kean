@@ -364,7 +364,7 @@ getEntityInfo: inline func (info: FSInfoStruct@, va: VarArgsIterator*, start: Ch
 
 	/* Find the field width. */
 	info fieldwidth = 0
-	while (p@ digit?()) {
+	while (p@ digit()) {
 		if (info fieldwidth > 0)
 			info fieldwidth *= 10
 		info fieldwidth += (p@ as Int - 0x30)
@@ -384,7 +384,7 @@ getEntityInfo: inline func (info: FSInfoStruct@, va: VarArgsIterator*, start: Ch
 			if (p < end) p += 1
 			else InvalidFormatException new(start) throw()
 		}
-		while (p@ digit?()) {
+		while (p@ digit()) {
 			if (info precision > 0)
 				info precision *= 10
 			info precision += (p@ as Int - 0x30)
@@ -425,7 +425,7 @@ getEntityInfoOne: inline func <T> (info: FSInfoStruct@, va: T*, start: Char*, en
 
 	/* Find the field width. */
 	info fieldwidth = 0
-	while (p@ digit?()) {
+	while (p@ digit()) {
 		if (info fieldwidth > 0)
 			info fieldwidth *= 10
 		info fieldwidth += (p@ as Int - 0x30)
@@ -443,7 +443,7 @@ getEntityInfoOne: inline func <T> (info: FSInfoStruct@, va: T*, start: Char*, en
 			if (p < end) p += 1
 			else InvalidFormatException new(start) throw()
 		}
-		while (p@ digit?()) {
+		while (p@ digit()) {
 			if (info precision > 0)
 				info precision *= 10
 			info precision += (p@ as Int - 0x30)

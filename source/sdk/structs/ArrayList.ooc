@@ -83,7 +83,7 @@ ArrayList: class <T> extends List<T> {
 		index := 0
 		while (index < _size) {
 			//if (memcmp(data + index * T size, element, T size) == 0) return index
-			if (this as List equals?(this[index], element)) return index
+			if (this as List equals(this[index], element)) return index
 			index += 1
 		}
 		return -1

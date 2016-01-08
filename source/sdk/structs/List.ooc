@@ -4,7 +4,7 @@ import lang/equalities
  * List interface for a data container
  */
 List: abstract class <T> extends BackIterable<T> {
-	equals? := getStandardEquals(T)
+	equals := getStandardEquals(T)
 
 	size: SSizeT {
 		get {
@@ -75,11 +75,11 @@ List: abstract class <T> extends BackIterable<T> {
 	/**
 	 * @return true if this list contains the specified element.
 	 */
-	contains?: func (element: T) -> Bool {
+	contains: func (element: T) -> Bool {
 		return indexOf(element) != -1
 	}
 
-	contains?: func ~filter (f: Func (T) -> Bool) -> Bool {
+	contains: func ~filter (f: Func (T) -> Bool) -> Bool {
 		result := false
 		eachUntil(|elem|
 			result |= f(elem)
@@ -105,14 +105,14 @@ List: abstract class <T> extends BackIterable<T> {
 
 	/**
 	 * @return the index of the first occurence of the given argument,
-	 * (testing for equality using the equals? method), or -1 if not found
+	 * (testing for equality using the equals method), or -1 if not found
 	 */
 	indexOf: abstract func (element: T) -> Int
 
 	/**
 	 * @return true if this list has no elements.
 	 */
-	empty?: func -> Bool {
+	empty: func -> Bool {
 		getSize() == 0
 	}
 

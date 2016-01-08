@@ -76,8 +76,8 @@ ServerSocket: class extends Socket {
 		if (ret == -1) {
 			SocketError new() throw()
 		}
-		listening? = (ret == 0)
-		listening?
+		listening = (ret == 0)
+		listening
 	}
 
 	/**
@@ -111,7 +111,7 @@ ServerSocket: class extends Socket {
 		This method will block.
 	*/
 	accept: func ~withClosure (f: func (TCPServerReaderWriterPair) -> Bool) {
-		if (!listening?)
+		if (!listening)
 			listen()
 
 		loop(||

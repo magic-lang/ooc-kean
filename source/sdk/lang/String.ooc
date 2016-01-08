@@ -35,10 +35,10 @@ String: class extends Iterable<Char> {
 		_buffer size
 	}
 
-	equals?: final func (other: This) -> Bool {
+	equals: final func (other: This) -> Bool {
 		if (this == null) return (other == null)
 		if (other == null) return false
-		_buffer equals?(other _buffer)
+		_buffer equals(other _buffer)
 	}
 
 	clone: func -> This {
@@ -91,15 +91,15 @@ String: class extends Iterable<Char> {
 		result toString()
 	}
 
-	empty?: func -> Bool { _buffer empty?() }
+	empty: func -> Bool { _buffer empty() }
 
-	startsWith?: func (s: This) -> Bool { _buffer startsWith? (s _buffer) }
+	startsWith: func (s: This) -> Bool { _buffer startsWith (s _buffer) }
 
-	startsWith?: func ~char (c: Char) -> Bool { _buffer startsWith?(c) }
+	startsWith: func ~char (c: Char) -> Bool { _buffer startsWith(c) }
 
-	endsWith?: func (s: This) -> Bool { _buffer endsWith? (s _buffer) }
+	endsWith: func (s: This) -> Bool { _buffer endsWith (s _buffer) }
 
-	endsWith?: func ~char (c: Char) -> Bool { _buffer endsWith?(c) }
+	endsWith: func ~char (c: Char) -> Bool { _buffer endsWith(c) }
 
 	find: func (what: This, offset: Int, searchCaseSensitive := true) -> Int {
 		_buffer find(what _buffer, offset, searchCaseSensitive)
@@ -150,9 +150,9 @@ String: class extends Iterable<Char> {
 
 	indexOf: func ~string (s: This, start: Int = 0) -> Int { _buffer indexOf(s _buffer, start) }
 
-	contains?: func ~char (c: Char) -> Bool { _buffer contains?(c) }
+	contains: func ~char (c: Char) -> Bool { _buffer contains(c) }
 
-	contains?: func ~string (s: This) -> Bool { _buffer contains?(s _buffer) }
+	contains: func ~string (s: This) -> Bool { _buffer contains(s _buffer) }
 
 	trim: func ~pointer (s: Char*, sLength: Int) -> This {
 		result := _buffer clone()
@@ -327,8 +327,8 @@ String: class extends Iterable<Char> {
 }
 
 operator + (left, right: String) -> String { left append(right) }
-operator == (left, right: String) -> Bool { left equals?(right) }
-operator != (left, right: String) -> Bool { !left equals?(right) }
+operator == (left, right: String) -> Bool { left equals(right) }
+operator != (left, right: String) -> Bool { !left equals(right) }
 operator + (left: String, right: Char) -> String { left append(right) }
 operator + (left: String, right: CString) -> String { left append(right) }
 operator + (left: String, right: LLong) -> String { left append(right toString()) }

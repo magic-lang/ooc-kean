@@ -18,7 +18,7 @@ getStandardEquals: func <T> (T: Class) -> Func <T> (T, T) -> Bool {
 
 stringEquals: func <K> (k1, k2: K) -> Bool {
 	assert(K == String)
-	k1 as String equals?(k2 as String)
+	k1 as String equals(k2 as String)
 }
 
 cstringEquals: func <K> (k1, k2: K) -> Bool {

@@ -14,8 +14,8 @@ CharBuffer: class extends Iterable<Char> {
 		setCapacity(capacity)
 	}
 
-	init: func ~cStrWithLength (s: CString, length: Int, stringLiteral? := false) {
-		if (stringLiteral?) {
+	init: func ~cStrWithLength (s: CString, length: Int, stringLiteral := false) {
+		if (stringLiteral) {
 			data = s
 			size = length
 			mallocAddr = null
@@ -200,7 +200,7 @@ CharBuffer: class extends Iterable<Char> {
 		prepend(other&, 1)
 	}
 
-	empty?: func -> Bool {
+	empty: func -> Bool {
 		size == 0
 	}
 
@@ -218,29 +218,29 @@ CharBuffer: class extends Iterable<Char> {
 		true
 	}
 
-	equals?: final func (other: This) -> Bool {
+	equals: final func (other: This) -> Bool {
 		if ((this == null) || (other == null)) return false
 		if (other size != size) return false
 		compare(other, 0, size)
 	}
 
-	startsWith?: func (s: This) -> Bool {
+	startsWith: func (s: This) -> Bool {
 		len := s length()
 		if (size < len) return false
 		compare(s, 0, len)
 	}
 
-	startsWith?: func ~char (c: Char) -> Bool {
+	startsWith: func ~char (c: Char) -> Bool {
 		(size > 0) && (data[0] == c)
 	}
 
-	endsWith?: func (s: This) -> Bool {
+	endsWith: func (s: This) -> Bool {
 		len := s size
 		if (size < len) return false
 		compare(s, size - len, len)
 	}
 
-	endsWith?: func ~char (c: Char) -> Bool {
+	endsWith: func ~char (c: Char) -> Bool {
 		(size > 0) && data[size-1] == c
 	}
 
@@ -360,9 +360,9 @@ CharBuffer: class extends Iterable<Char> {
 		return find(s, start, false)
 	}
 
-	contains?: func ~char (c: Char) -> Bool { indexOf(c) != -1 }
+	contains: func ~char (c: Char) -> Bool { indexOf(c) != -1 }
 
-	contains?: func ~buf (s: This) -> Bool { indexOf(s) != -1 }
+	contains: func ~buf (s: This) -> Bool { indexOf(s) != -1 }
 
 	trim: func ~pointer (s: Char*, sLength: Int) {
 		trimRight(s, sLength)
@@ -396,7 +396,7 @@ CharBuffer: class extends Iterable<Char> {
 	trimLeft: func ~pointer (s: Char*, sLength: Int) {
 		if (size == 0 || sLength == 0) return
 		start : Int = 0
-		while (start < size && (data + start)@ containedIn?(s, sLength) ) start += 1
+		while (start < size && (data + start)@ containedIn(s, sLength) ) start += 1
 		if (start == 0) return
 		shiftRight( start )
 	}
@@ -413,7 +413,7 @@ CharBuffer: class extends Iterable<Char> {
 
 	trimRight: func ~pointer (s: Char*, sLength: Int) {
 		end := size
-		while (end > 0 && data[end - 1] containedIn?(s, sLength)) {
+		while (end > 0 && data[end - 1] containedIn(s, sLength)) {
 			end -= 1
 		}
 		if (end != size) setLength(end)
@@ -594,8 +594,8 @@ NegativeLengthException: class extends Exception {
 	}
 }
 
-operator == (buff1, buff2: CharBuffer) -> Bool { buff1 equals?(buff2) }
-operator != (buff1, buff2: CharBuffer) -> Bool { !buff1 equals?(buff2) }
+operator == (buff1, buff2: CharBuffer) -> Bool { buff1 equals(buff2) }
+operator != (buff1, buff2: CharBuffer) -> Bool { !buff1 equals(buff2) }
 operator [] (buffer: CharBuffer, index: Int) -> Char { buffer get(index) }
 operator []= (buffer: CharBuffer, index: Int, value: Char) { buffer set(index, value) }
 operator [] (buffer: CharBuffer, range: Range) -> CharBuffer {
