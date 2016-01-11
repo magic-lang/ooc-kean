@@ -93,15 +93,15 @@ QuaternionTest: class extends Fixture {
 		})
 		this add("actionOnVector", func {
 			direction := FloatVector3D new(1.0f, 1.0f, 1.0f)
-			quaternion := Quaternion createRotation(120.0f toRadians(), direction)
+			quaternion := Quaternion createFromAxisAngle(direction, 120.0f toRadians())
 			point1 := FloatPoint3D new(5.0f, 6.0f, 7.0f)
 			point2 := FloatPoint3D new(7.0f, 5.0f, 6.0f)
 			expect((quaternion * point1) distance(point2), is equal to(0.0f))
 		})
 		this add("angle", func {
 			direction := FloatVector3D new(1.0f, 1.0f, 1.0f)
-			quaternion1 := Quaternion createRotation(20.0f toRadians(), direction)
-			quaternion2 := Quaternion createRotation(45.0f toRadians(), direction)
+			quaternion1 := Quaternion createFromAxisAngle(direction, 20.0f toRadians())
+			quaternion2 := Quaternion createFromAxisAngle(direction, 45.0f toRadians())
 			angle := (quaternion1 angle(quaternion2)) toDegrees()
 			expect(angle, is equal to(25.0f) within(tolerance))
 		})
