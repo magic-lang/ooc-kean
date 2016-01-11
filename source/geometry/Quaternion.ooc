@@ -240,42 +240,39 @@ Quaternion: cover {
 		// B - attitudeProfile
 		// q - result
 		// S - matrixQuantityS
-		// V - referenceVectors
 		// W - observationVectors
 		// Y - gibbsVector
 		// Z - vectorQuantityZ
 		// TODO: Fix singularity problem when the angle is close to PI, using sequential rotations
-		(referenceVectors, observationVectors) := This _createVectorMeasurementsForQuest(quaternions)
+		observationVectors := This _createVectorMeasurementsForQuest(quaternions)
 		normalizedWeights := weights / weights sum
 
 		attitudeProfile := FloatMatrix new(3, 3) take()
-		for (currentVector in 0 .. referenceVectors width)
-			attitudeProfile += normalizedWeights[currentVector / 3] / 3.0f * observationVectors getColumn(currentVector) * referenceVectors getColumn(currentVector) transpose()
-		matrixQuantityS := (attitudeProfile + attitudeProfile transpose()) take()
-
-		temporaryZ := FloatPoint3D new()
-		for (currentVector in 0 .. referenceVectors width) {
-			currentObservationVector := FloatPoint3D new(observationVectors[currentVector, 0], observationVectors[currentVector, 1], observationVectors[currentVector, 2])
-			currentReferenceVector := FloatPoint3D new(referenceVectors[currentVector, 0], referenceVectors[currentVector, 1], referenceVectors[currentVector, 2])
-			temporaryZ += normalizedWeights[currentVector / 3] / 3.0f * currentObservationVector vectorProduct(currentReferenceVector)
-		}
+		for (index in 0 .. quaternions count)
+			for (column in 0 .. 3)
+				for (row in 0 .. 3)
+					attitudeProfile[column, row] = attitudeProfile[column, row] + normalizedWeights[index] / 3.0f * observationVectors[index * 3 + column, row]
+		matrixQuantityS := FloatMatrix new(3, 3) take()
+		for (column in 0 .. 3)
+			for (row in 0 .. 3)
+				matrixQuantityS[column, row] = attitudeProfile[column, row] + attitudeProfile[row, column]
 		vectorQuantityZ := FloatMatrix new(1, 3) take()
-		vectorQuantityZ setVertical(0, 0, temporaryZ x, temporaryZ y, temporaryZ z)
-
+		for (index in 0 .. quaternions count) {
+			vectorQuantityZ[0, 0] = vectorQuantityZ[0, 0] + normalizedWeights[index] / 3.0f * (-observationVectors[index * 3 + 1, 2] + observationVectors[index * 3 + 2, 1])
+			vectorQuantityZ[0, 1] = vectorQuantityZ[0, 1] + normalizedWeights[index] / 3.0f * (observationVectors[index * 3, 2] - observationVectors[index * 3 + 2, 0])
+			vectorQuantityZ[0, 2] = vectorQuantityZ[0, 2] + normalizedWeights[index] / 3.0f * (-observationVectors[index * 3, 1] + observationVectors[index * 3 + 1, 0])
+		}
 		maximumEigenvalue := This _approximateMaximumEigenvalueForQuest(matrixQuantityS, vectorQuantityZ, 1.0f, 5)
 		linearCoefficients := (maximumEigenvalue + attitudeProfile trace()) * FloatMatrix identity(3) - matrixQuantityS
 		gibbsVector := linearCoefficients solve(vectorQuantityZ) take()
-
 		gibbsVectorSquaredNorm := 0.0f
 		for (index in 0 .. gibbsVector height)
 			gibbsVectorSquaredNorm += gibbsVector[0, index] squared
 
 		result := This new(1.0f, -gibbsVector[0, 0], -gibbsVector[0, 1], -gibbsVector[0, 2])
 		result *= 1.0f / sqrt(1.0f + gibbsVectorSquaredNorm)
-
-		normalizedWeights free()
-		referenceVectors free()
 		observationVectors free()
+		normalizedWeights free()
 		attitudeProfile free()
 		matrixQuantityS free()
 		vectorQuantityZ free()
@@ -288,7 +285,6 @@ Quaternion: cover {
 		constantB := sigma squared + (vectorQuantityZ transpose() * vectorQuantityZ)[0, 0]
 		constantC := matrixQuantityS determinant() + (vectorQuantityZ transpose() * matrixQuantityS * vectorQuantityZ)[0, 0]
 		constantD := (vectorQuantityZ transpose() * matrixQuantityS * matrixQuantityS * vectorQuantityZ)[0, 0]
-
 		for (_ in 0 .. maximumIterationCount) {
 			functionValue := initialGuess pow(4) - (constantA + constantB) * initialGuess squared - constantC * initialGuess + (constantA * constantB + constantC * sigma - constantD)
 			derivativeValue := 4 * (initialGuess pow(3)) + 2 * (constantA + constantB) * initialGuess - constantC
@@ -299,21 +295,17 @@ Quaternion: cover {
 		}
 		initialGuess
 	}
-	_createVectorMeasurementsForQuest: static func (quaternions: VectorList<This>) -> (FloatMatrix, FloatMatrix) {
-		referenceVectors := FloatMatrix new(3 * quaternions count, 3) take()
-		observationVectors := FloatMatrix new(3 * quaternions count, 3) take()
+	_createVectorMeasurementsForQuest: static func (quaternions: VectorList<This>) -> FloatMatrix {
+		result := FloatMatrix new(3 * quaternions count, 3) take()
 		for (index in 0 .. quaternions count) {
-			referenceVectors setVertical(index * 3, 0, 1, 0, 0)
-			referenceVectors setVertical(index * 3 + 1, 0, 0, 1, 0)
-			referenceVectors setVertical(index * 3 + 2, 0, 0, 0, 1)
 			xAxis := quaternions[index] * FloatPoint3D new(1.0f, 0.0f, 0.0f)
-			observationVectors setVertical(index * 3, 0, xAxis x, xAxis y, xAxis z)
+			result setVertical(index * 3, 0, xAxis x, xAxis y, xAxis z)
 			yAxis := quaternions[index] * FloatPoint3D new(0.0f, 1.0f, 0.0f)
-			observationVectors setVertical(index * 3 + 1, 0, yAxis x, yAxis y, yAxis z)
+			result setVertical(index * 3 + 1, 0, yAxis x, yAxis y, yAxis z)
 			zAxis := quaternions[index] * FloatPoint3D new(0.0f, 0.0f, 1.0f)
-			observationVectors setVertical(index * 3 + 2, 0, zAxis x, zAxis y, zAxis z)
+			result setVertical(index * 3 + 2, 0, zAxis x, zAxis y, zAxis z)
 		}
-		(referenceVectors, observationVectors)
+		result
 	}
 	kean_math_quaternion_new: unmangled static func (w, x, y, z: Float) -> This { This new(w, x, y, z) }
 }
