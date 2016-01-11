@@ -9,7 +9,7 @@ DIR: extern cover
 
 DirEnt: cover from struct dirent {
 	name: extern (d_name) CString
-	/* TODO: the struct has more members, actually */
+	// The struct has more members, actually, but we don't use them
 }
 
 closedir: extern func (DIR*) -> Int

@@ -61,7 +61,6 @@ FloatComplexTest: class extends Fixture {
 			expect((complexNumber2 / complexNumber0) real, is equal to(2.6f) within(tolerance))
 			expect((complexNumber2 / complexNumber0) imaginary, is equal to(0.2f) within(tolerance))
 		})
-		// TODO: Add tests for compound assignment operators
 		this add("equality", func {
 			expect(this complexNumber0 real, is equal to(2.0f) within(tolerance))
 			expect(this complexNumber0 imaginary, is equal to(1.0f) within(tolerance))

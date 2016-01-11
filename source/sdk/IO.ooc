@@ -174,7 +174,6 @@ FStream: cover from FILE* {
 		fread(dest, 1, bytesToRead, this)
 	}
 
-	// TODO encodings
 	readChar: func -> Char {
 		c := '\0'
 		count := fread(c&, 1, 1, this)
@@ -259,8 +258,6 @@ FStream: cover from FILE* {
 	 * offset + length must be <= strlen(str)
 	 */
 	write: func ~precise (str: Char*, offset: SizeT, length: SizeT) -> SizeT {
-		// TODO encodings
-		// TODO does offset make sense here ? it could be added to the str pointer
 		fwrite(str + offset, 1, length, this)
 	}
 }

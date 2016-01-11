@@ -289,7 +289,6 @@ parseArgOne: func <T> (res: CharBuffer, info: FSInfoStruct*, va: T, p: Char*) {
 			info@ base = 16
 		case 'f' =>
 			// reconstruct the original format statement.
-			// TODO let this do the real thing.
 			mprintCall = false
 			tmp := CharBuffer new()
 			tmp append('%')

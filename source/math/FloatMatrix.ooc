@@ -32,7 +32,7 @@ FloatMatrix: cover {
 		this free(Owner Receiver)
 		result
 	}}
-	isNull: Bool { get { // TODO: Better name?
+	isNull: Bool { get {
 		result := this _width == 0 || this _height == 0
 		this free(Owner Receiver)
 		result
