@@ -76,8 +76,8 @@ FloatRotation3DTest: class extends Fixture {
 		})
 		this add("angle", func {
 			direction := FloatVector3D new(1.0f, 1.0f, 1.0f)
-			quaternionA := Quaternion createRotation(20.0f toRadians(), direction)
-			quaternionB := Quaternion createRotation(45.0f toRadians(), direction)
+			quaternionA := Quaternion createFromAxisAngle(direction, 20.0f toRadians())
+			quaternionB := Quaternion createFromAxisAngle(direction, 45.0f toRadians())
 			rotationA := FloatRotation3D new(quaternionA)
 			rotationB := FloatRotation3D new(quaternionB)
 			angle := (rotationA angle(rotationB)) toDegrees()
