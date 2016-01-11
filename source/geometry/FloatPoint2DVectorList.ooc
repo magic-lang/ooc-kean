@@ -118,7 +118,7 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 				for (j in previousIndex .. this count)
 					if (this[j] x <= point x) {
 						leftPoint = this[j]
-						rightPoint = this[Int minimum(j + 1, this count - 1)]
+						rightPoint = this[(j + 1) minimum(this count - 1)]
 						previousIndex = j
 					} else break
 				weight := (point x - leftPoint x) absolute / (rightPoint x - leftPoint x) absolute

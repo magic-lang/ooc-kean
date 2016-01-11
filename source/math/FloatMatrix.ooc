@@ -50,7 +50,7 @@ FloatMatrix: cover {
 		result
 	}}
 	order: Int { get {
-		result := Int minimum(this _width, this _height)
+		result := this _width minimum(this _height)
 		this free(Owner Receiver)
 		result
 	}}
@@ -254,7 +254,7 @@ FloatMatrix: cover {
 	}
 	getDiagonal: func (startX := 0, startY := 0) -> This {
 		t := this take()
-		length := Int minimum(t width - startX, t height - startY)
+		length := (t width - startX) minimum(t height - startY)
 		result := This new(1, length)
 		for (index in 0 .. length)
 			result[0, index] = t[startX + index, startY + index]

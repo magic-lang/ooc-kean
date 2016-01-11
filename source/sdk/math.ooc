@@ -22,12 +22,12 @@ extend Int64 {
 		result := this - (this / divisor) * divisor
 		result < 0 ? result + divisor : result
 	}
-	maximum: func (other: This) -> { this > other ? this : other }
-	minimum: func (other: This) -> { this < other ? this : other }
+	maximum: func (other: This) -> This { this > other ? this : other }
+	minimum: func (other: This) -> This { this < other ? this : other }
 }
 extend UInt64 {
-	maximum: func (other: This) -> { this > other ? this : other }
-	minimum: func (other: This) -> { this < other ? this : other }
+	maximum: func (other: This) -> This { this > other ? this : other }
+	minimum: func (other: This) -> This { this < other ? this : other }
 }
 
 extend Int {
@@ -74,8 +74,8 @@ extend Int {
 		align > 0 ? (this + align - 1) & ~(align - 1) : this
 	}
 
-	maximum: func (other: This) -> { this > other ? this : other }
-	minimum: func (other: This) -> { this < other ? this : other }
+	maximum: func (other: This) -> This { this > other ? this : other }
+	minimum: func (other: This) -> This { this < other ? this : other }
 }
 
 extend Double {
@@ -134,8 +134,8 @@ extend Double {
 	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this greaterThan(other) }
 	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this lessThan(other) }
 
-	maximum: func (other: This) -> { this > other ? this : other }
-	minimum: func (other: This) -> { this < other ? this : other }
+	maximum: func (other: This) -> This { this > other ? this : other }
+	minimum: func (other: This) -> This { this < other ? this : other }
 }
 
 extend Float {
@@ -234,8 +234,8 @@ extend Float {
 		result
 	}
 
-	maximum: func (other: This) -> { this > other ? this : other }
-	minimum: func (other: This) -> { this < other ? this : other }
+	maximum: func (other: This) -> This { this > other ? this : other }
+	minimum: func (other: This) -> This { this < other ? this : other }
 }
 
 extend LDouble {

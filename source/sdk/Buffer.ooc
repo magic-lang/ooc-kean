@@ -49,7 +49,7 @@ Buffer: cover {
 			start = this _size + start
 		if (distance < 0)
 			start -= size
-		start < this size ? This new(this _pointer + start, Int minimum(size, this _size - start)) : This empty
+		start < this size ? This new(this _pointer + start, size minimum(this _size - start)) : This empty
 	}
 	copy: func -> This { // call by value -> modifies copy of cover
 		result: This
@@ -63,7 +63,7 @@ Buffer: cover {
 	copyTo: func (destination: This) -> Int {
 		result := 0
 		if (this _pointer != null && this _size != 0 && destination _pointer != null && destination _size != 0) {
-			result = Int minimum(this _size, destination _size)
+			result = this _size minimum(destination _size)
 			memcpy(destination _pointer, this _pointer, result)
 		}
 		result

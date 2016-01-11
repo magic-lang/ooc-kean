@@ -61,12 +61,12 @@ OwnedBuffer: cover {
 		this slice(start, this _size - start)
 	}
 	slice: func (start, distance: Int) -> This { // call by value -> modifies copy of cover
-		size := distance abs()
+		size := distance abs() as Int
 		if (start < 0)
 			start = this _size + start
 		if (distance < 0)
 			start -= size
-		start < this size ? This new(this _pointer + start, Int minimum(size, this _size - start), Owner Unknown) : This empty
+		start < this size ? This new(this _pointer + start, size minimum(this _size - start), Owner Unknown) : This empty
 	}
 	copy: func -> This { // call by value -> modifies copy of cover
 		result: This
@@ -85,7 +85,7 @@ OwnedBuffer: cover {
 				raise("Can not copy to static memory.")
 		}
 		if (this _pointer != null && this _size != 0 && destination _pointer != null && destination _size != 0) {
-			result = Int minimum(this _size, destination _size)
+			result = this _size minimum(destination _size)
 			memcpy(destination _pointer, this _pointer, result)
 		}
 		result

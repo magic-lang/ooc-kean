@@ -41,10 +41,10 @@ IntShell2D: cover {
 		IntBox2D new(box leftTop x - this left, box leftTop y - this top, box size x + this left + this right, box size y + this top + this bottom)
 	}
 	maximum: func (other: This) -> This {
-		This new(Int maximum(this left, other left), Int maximum(this right, other right), Int maximum(this top, other top), Int maximum(this bottom, other bottom))
+		This new(this left maximum(other left), this right maximum(other right), this top maximum(other top), this bottom maximum(other bottom))
 	}
 	minimum: func (other: This) -> This {
-		This new(Int minimum(this left, other left), Int minimum(this right, other right), Int minimum(this top, other top), Int minimum(this bottom, other bottom))
+		This new(this left minimum(other left), this right minimum(other right), this top minimum(other top), this bottom minimum(other bottom))
 	}
 	toString: func -> String { "#{this left toString()}, #{this right toString()}, #{this top toString()}, #{this bottom toString()}" }
 	toText: func -> Text { this left toText() + t", " + this right toText() + t", " + this top toText() + t", " + this bottom toText() }

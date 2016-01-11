@@ -42,10 +42,10 @@ FloatShell2D: cover {
 		FloatBox2D new(box leftTop x - this left, box leftTop y - this top, box size x + this left + this right, box size y + this top + this bottom)
 	}
 	maximum: func (other: This) -> This {
-		This new(Float maximum(this left, other left), Float maximum(this right, other right), Float maximum(this top, other top), Float maximum(this bottom, other bottom))
+		This new(this left maximum(other left), this right maximum(other right), this top maximum(other top), this bottom maximum(other bottom))
 	}
 	minimum: func (other: This) -> This {
-		This new(Float minimum(this left, other left), Float minimum(this right, other right), Float minimum(this top, other top), Float minimum(this bottom, other bottom))
+		This new(this left minimum(other left), this right minimum(other right), this top minimum(other top), this bottom minimum(other bottom))
 	}
 	toString: func -> String { "#{this left toString()}, #{this right toString()}, #{this top toString()}, #{this bottom toString()}" }
 	toText: func -> Text { this left toText() + t", " + this right toText() + t", " + this top toText() + t", " + this bottom toText() }
