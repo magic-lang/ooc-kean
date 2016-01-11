@@ -193,15 +193,15 @@ Quaternion: cover {
 	createFromEulerAngles: static func (rotationX, rotationY, rotationZ: Float) -> This {
 		This createRotationZ(rotationZ) * This createRotationY(rotationY) * This createRotationX(rotationX)
 	}
-	createRotation: static func (angle: Float, direction: FloatVector3D) -> This {
-		halfAngle := angle / 2.0f
-		direction = direction isZero ? direction : direction normalized
-		This new(0.0f, (halfAngle * direction) toFloatPoint3D()) exponential
+	createFromAxisAngle: static func (axis: FloatVector3D, angle: Float) -> This {
+		axis = axis isZero ? axis : axis normalized
+		halfAngle := angle / 2.f
+		This new(halfAngle cos(), (halfAngle sin() * axis) toFloatPoint3D())
 	}
-	createRotationX: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(1.0f, 0.0f, 0.0f)) }
-	createRotationY: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(0.0f, 1.0f, 0.0f)) }
-	createRotationZ: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(0.0f, 0.0f, 1.0f)) }
-	createFromEulerVector: static func (vector: FloatVector3D) -> This { vector isZero ? This identity : This createRotation(vector norm, vector normalized) }
+	createRotationX: static func (angle: Float) -> This { This createFromAxisAngle(FloatVector3D new(1.0f, 0.0f, 0.0f), angle) }
+	createRotationY: static func (angle: Float) -> This { This createFromAxisAngle(FloatVector3D new(0.0f, 1.0f, 0.0f), angle) }
+	createRotationZ: static func (angle: Float) -> This { This createFromAxisAngle(FloatVector3D new(0.0f, 0.0f, 1.0f), angle) }
+	createFromEulerVector: static func (vector: FloatVector3D) -> This { vector isZero ? This identity : This createFromAxisAngle(vector normalized, vector norm) }
 	hamiltonProduct: static func (left, right: This) -> This {
 		(a1, b1, c1, d1) := (left w, left x, left y, left z)
 		(a2, b2, c2, d2) := (right w, right x, right y, right z)
