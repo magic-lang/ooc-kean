@@ -10,13 +10,15 @@
 		"rock_tmp": true,
 		".vscode/": true,
 		"source/draw/stb_image": true,
-		"**/*.valgrindlog": true
+		"**/*.valgrindlog": true,
+		"**/*~": true
 	},
 	"files.exclude": {
 		"**/.git": true,
 		".libs": true,
 		"rock_tmp": true,
 		".vscode/": true,
-		"source/draw/stb_image": true
+		"source/draw/stb_image": true,
+		"**/*~": true
 	}
 }
