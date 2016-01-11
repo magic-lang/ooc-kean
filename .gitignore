@@ -42,3 +42,4 @@ rock_tmp
 tests.use
 Tests
 *.valgrindlog
+/coverage/

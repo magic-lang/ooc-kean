@@ -9,6 +9,7 @@
 		".libs": true,
 		"rock_tmp": true,
 		".vscode/": true,
+		"coverage/": true,
 		"source/draw/stb_image": true,
 		"**/*.valgrindlog": true,
 		"**/*~": true
@@ -18,6 +19,7 @@
 		".libs": true,
 		"rock_tmp": true,
 		".vscode/": true,
+		"coverage/": true,
 		"source/draw/stb_image": true,
 		"**/*~": true
 	}
