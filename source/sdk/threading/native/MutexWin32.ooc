@@ -8,7 +8,7 @@ version(windows) {
 	ReleaseMutex: extern func (Handle)
 	CloseHandle: extern func (Handle)
 
-	WaitForSingleObject: extern func (...) -> Long // laziness
+	WaitForSingleObject: extern func (...) -> Long
 	INFINITE: extern Long
 
 	MutexWin32: class extends Mutex {

@@ -14,7 +14,7 @@ LLong: cover from signed long long {
 		this % divisor == 0
 	}
 	in: func (range: Range) -> Bool {
-		return this >= range min && this < range max
+		this >= range min && this < range max
 	}
 	times: func (fn: Func) {
 		for (i in 0 .. this) {
@@ -27,7 +27,7 @@ LLong: cover from signed long long {
 		}
 	}
 	abs: func -> This {
-		return this >= 0 ? this : this * -1
+		this >= 0 ? this : this * -1
 	}
 }
 
@@ -74,6 +74,7 @@ LDouble: cover from long double {
 }
 
 Double: cover from double extends LDouble {
+	isNumber ::= this == this
 	toString: func -> String {
 		"%.2f" formatDouble(this)
 	}

@@ -154,6 +154,23 @@ FloatPoint2DVectorListTest: class extends Fixture {
 			text free()
 			list free()
 		})
+		this add("median and mean", func {
+			list := FloatPoint2DVectorList new()
+			list add(FloatPoint2D new(2.0f, 1.0f))
+			list add(FloatPoint2D new(1.0f, 2.0f))
+			list add(FloatPoint2D new(3.5f, 5.0f))
+			list add(FloatPoint2D new(5.0f, 4.0f))
+			list add(FloatPoint2D new(6.0f, 3.0f))
+			medianPosition := list medianPosition()
+			expect(medianPosition x, is equal to(3.5f) within(tolerance))
+			expect(medianPosition y, is equal to(3.0f) within(tolerance))
+
+			indices := VectorList<Int> new()
+			indices add(0); indices add(1); indices add(4)
+			mean := list getMean~indices(indices)
+			expect(mean x, is equal to(3.0f) within(tolerance))
+			expect(mean y, is equal to(2.0f) within(tolerance))
+		})
 	}
 }
 

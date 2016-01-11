@@ -242,6 +242,15 @@ TextTest: class extends Fixture {
 			expect(four == two + t"0")
 			two free()
 		})
+		this add("beginsWith, endsWith", func {
+			text := t"abcdefg"
+			expect(text beginsWith(t"abc"), is true)
+			expect(text beginsWith(t""), is true)
+			expect(text beginsWith(t"abC"), is false)
+			expect(text endsWith(t"fg"), is true)
+			expect(text endsWith(t""), is true)
+			expect(text endsWith(t"abc"), is false)
+		})
 	}
 }
 

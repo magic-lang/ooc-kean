@@ -19,18 +19,24 @@ use ooc-base
 use ooc-unit
 
 DebugTest: class extends Fixture {
-	outputString: String
-	
+	outputString: String = null
+
 	init: func {
 		super("Debug")
-		Debug initialize(func (message: String) { this outputString = message } )
+		Debug initialize(func (message: String) {
+			if (this outputString != null)
+				this outputString free()
+			this outputString = message clone()
+		} )
 		Debug _level = DebugLevel Everything
-		
+
 		this add("test print", func {
 			Debug print("first", DebugLevel Everything)
 			expect(this outputString, is equal to("first"))
 			Debug print("second", DebugLevel Warning)
 			expect(this outputString, is equal to("second"))
+			Debug print(t"third", DebugLevel Everything)
+			expect(this outputString, is equal to("third"))
 		})
 		this add("higher level", func {
 			Debug _level = DebugLevel Warning

@@ -204,7 +204,7 @@ List: abstract class <T> extends BackIterable<T> {
 	/**
 	 * Reverse this list (destructive)
 	 */
-	reverse!: func {
+	reverse: func ~inplace {
 		i := 0
 		j := size - 1
 		limit := j / 2
@@ -220,7 +220,7 @@ List: abstract class <T> extends BackIterable<T> {
 	 */
 	reverse: func -> This<T> {
 		copy := clone()
-		copy reverse!()
+		copy reverse~inplace()
 		copy
 	}
 

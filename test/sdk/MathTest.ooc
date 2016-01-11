@@ -47,6 +47,8 @@ MathTest: class extends Fixture {
 
 			expect(62 alignPowerOfTwo(64), is equal to(64))
 			expect(137 alignPowerOfTwo(128), is equal to(256))
+
+			expect(12345 digits(), is equal to(5))
 		})
 		this add("Float", func {
 			expect(22.3f modulo(5), is equal to(2.3f) within(floatTolerance))
@@ -94,8 +96,21 @@ MathTest: class extends Fixture {
 			expect(nearZero greaterOrEqual(0.0f), is true)
 			expect(nearZero greaterThan(0.0f), is false)
 			expect(nearZero lessThan(0.0f), is false)
+
+			(coefficient, radix) := 120.f decomposeToCoefficientAndRadix(1)
+			expect(coefficient, is equal to(1.2f) within(floatTolerance))
+			expect(radix, is equal to(100.f) within(floatTolerance))
+			secondRadix := 120.f getRadix(1)
+			expect(radix, is equal to(secondRadix) within(floatTolerance))
+			expect(123.456f getScientificPowerString(), is equal to("1.23E2"))
+			expect(123.4f roundToValueDigits(2, true), is equal to(130.f) within(floatTolerance))
+			expect(123.4f roundToValueDigits(3, false), is equal to(123.f) within(floatTolerance))
 		})
 		this add("Double", func {
+			expect(22.3 modulo(5), is equal to(2.3) within(doubleTolerance))
+			expect((-7.3) modulo(3), is equal to(1.7) within(doubleTolerance))
+			expect(4.1 modulo(4.2), is equal to(4.1) within(doubleTolerance))
+
 			expect(0.0 toRadians(), is equal to(0.0) within(doubleTolerance))
 			expect(45.0 toRadians(), is equal to(0.78539) within(doubleTolerance))
 			expect(3.1415926535 toDegrees(), is equal to(180.0) within(doubleTolerance))

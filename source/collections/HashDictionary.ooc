@@ -29,7 +29,7 @@ HashDictionary: class {
 	}
 	merge: func (other: This) -> This {
 		result := this clone()
-		result _hashMap merge!(other _hashMap)
+		result _hashMap merge~inplace(other _hashMap)
 		result
 	}
 	get: func <T> (key: String, defaultValue: T) -> T {

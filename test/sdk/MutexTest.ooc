@@ -11,12 +11,18 @@ MutexTest: class extends Fixture {
 		countPerThread := 1_000
 		mutex := Mutex new()
 		value := Cell<Int> new(0)
+
+		increaser := func {
+			value set(value get() + 1)
+		}
+
 		threads := Thread[threadCount] new()
 		job := func {
 			for (i in 0 .. countPerThread) {
 				mutex lock()
 				value set(value get() + 1)
 				mutex unlock()
+				mutex with(increaser)
 				Thread yield()
 			}
 		}
@@ -30,7 +36,7 @@ MutexTest: class extends Fixture {
 		}
 		threads free()
 		mutex free()
-		expect(value get(), is equal to(countPerThread * threadCount))
+		expect(value get(), is equal to(2 * countPerThread * threadCount))
 		(job as Closure) free()
 		value free()
 	}
