@@ -3,8 +3,7 @@ use ooc-concurrent
 use ooc-unit
 import threading/Thread
 
-//TODO Reimplement these tests once the problems with BlockedQueue have been fixed
-/*ThreadPoolTest: class extends Fixture {
+ThreadPoolTest: class extends Fixture {
 	init: func {
 		super("ThreadPool")
 		this add("threaded_noresult", func {
@@ -96,5 +95,4 @@ import threading/Thread
 	}
 }
 
-ThreadPoolTest new() run() . free()*/
-"ThreadPool [TODO: Temporarily suspended]" println()
+ThreadPoolTest new() run() . free()
