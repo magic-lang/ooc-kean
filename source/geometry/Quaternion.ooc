@@ -37,65 +37,54 @@ Quaternion: cover {
 	conjugate ::= This new(this real, -this imaginary)
 	inverse ::= this conjugate / (this real squared + this imaginary norm squared)
 	transform ::= this toFloatTransform3D()
-	// NOTE: Separation into parts assumes order of application X -> Y -> Z
-	rotationX: Float {
-		get {
-			result: Float
-			value := this w * this y - this z * this x
-			if ((value abs() - 0.5f) abs() < This precision)
-				result = 0.0f
-			else
-				result = (2.0f * (this w * this x + this y * this z)) atan2(1.0f - 2.0f * (this x squared + this y squared))
-			result
-		}
-	}
-	rotationY: Float {
-		get {
-			result: Float
-			value := this w * this y - this z * this x
-			if ((value abs() - 0.5f) abs() < This precision)
-				result = value sign * (Float pi / 2.0f)
-			else
-				result = ((2.0f * value) clamp(-1, 1)) asin()
-			result
-		}
-	}
-	rotationZ: Float {
-		get {
-			result: Float
-			value := this w * this y - this z * this x
-			if ((value abs() - 0.5f) abs() < This precision)
-				result = 2.0f * (this z atan2(this w))
-			else
-				result = (2.0f * (this w * this z + this x * this y)) atan2(1.0f - 2.0f * (this y squared + this z squared))
-			result
-		}
-	}
 	direction ::= (this logarithm imaginary) normalized
-	logarithm: This {
-		get {
-			result: This
-			norm := this norm
-			point3DNorm := this imaginary norm
-			if (point3DNorm != 0)
-				result = This new(norm log(), (this imaginary / point3DNorm) * ((this real / norm) acos()))
-			else
-				result = This new(norm, FloatPoint3D new())
-			result
-		}
-	}
-	exponential: This {
-		get {
-			result: This
-			point3DNorm := this imaginary norm
-			exponentialReal := this real exp()
-			if (point3DNorm != 0)
-				result = This new(exponentialReal * point3DNorm cos(), exponentialReal * (this imaginary / point3DNorm) * point3DNorm sin())
-			else
-				result = This new(exponentialReal, FloatPoint3D new())
-			result
-		}
-	}
+	// NOTE: Separation into parts assumes order of application X -> Y -> Z
+	rotationX: Float { get {
+		result: Float
+		value := this w * this y - this z * this x
+		if ((value abs() - 0.5f) abs() < This precision)
+			result = 0.0f
+		else
+			result = (2.0f * (this w * this x + this y * this z)) atan2(1.0f - 2.0f * (this x squared + this y squared))
+		result
+	}}
+	rotationY: Float { get {
+		result: Float
+		value := this w * this y - this z * this x
+		if ((value abs() - 0.5f) abs() < This precision)
+			result = value sign * (Float pi / 2.0f)
+		else
+			result = ((2.0f * value) clamp(-1, 1)) asin()
+		result
+	}}
+	rotationZ: Float { get {
+		result: Float
+		value := this w * this y - this z * this x
+		if ((value abs() - 0.5f) abs() < This precision)
+			result = 2.0f * (this z atan2(this w))
+		else
+			result = (2.0f * (this w * this z + this x * this y)) atan2(1.0f - 2.0f * (this y squared + this z squared))
+		result
+	}}
+	logarithm: This { get {
+		result: This
+		norm := this norm
+		if (this imaginary norm != 0)
+			result = This new(norm log(), this imaginary normalized * ((this real / norm) acos()))
+		else
+			result = This new(norm, FloatPoint3D new())
+		result
+	}}
+	exponential: This { get {
+		result: This
+		imaginaryNorm := this imaginary norm
+		realExponential := this real exp()
+		if (imaginaryNorm != 0)
+			result = This new(realExponential * imaginaryNorm cos(), realExponential * this imaginary normalized * imaginaryNorm sin())
+		else
+			result = This new(realExponential, FloatPoint3D new())
+		result
+	}}
 	init: func@ (=real, =imaginary)
 	init: func@ ~floats (w, x, y, z: Float) { this init(w, FloatPoint3D new(x, y, z)) }
 	init: func@ ~default { this init(0, 0, 0, 0) }
@@ -139,8 +128,7 @@ Quaternion: cover {
 	distance: func (other: This) -> Float { (this - other) norm }
 	angle: func (other: This) -> Float {
 		result := 2.0f * (this dotProduct(other) absolute) acos()
-		result = result == result ? result : 0.0f
-		result
+		result isNumber ? result : 0.0f
 	}
 	dotProduct: func (other: This) -> Float { this w * other w + this x * other x + this y * other y + this z * other z }
 	sphericalLinearInterpolation: func (other: This, factor: Float) -> This {
@@ -207,9 +195,7 @@ Quaternion: cover {
 	}
 	createRotation: static func (angle: Float, direction: FloatVector3D) -> This {
 		halfAngle := angle / 2.0f
-		point3DNorm := direction norm
-		if (point3DNorm != 0.0f)
-			direction /= point3DNorm
+		direction = direction isZero ? direction : direction normalized
 		This new(0.0f, (halfAngle * direction) toFloatPoint3D()) exponential
 	}
 	createRotationX: static func (angle: Float) -> This { This createRotation(angle, FloatVector3D new(1.0f, 0.0f, 0.0f)) }

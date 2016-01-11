@@ -86,6 +86,7 @@ Double: cover from double extends LDouble {
 }
 
 Float: cover from float extends LDouble {
+	isNumber ::= this == this
 	toString: func -> String {
 		"%.2f" formatFloat(this)
 	}
