@@ -44,8 +44,7 @@ FileWriter: class extends Writer {
 	init: func ~withMode (fileName, mode: String) {
 		file = FStream open(fileName, mode)
 		if (!file) {
-			// TODO: that's wrong - many other things could happen. Use strerror instead.
-			Exception new(This, "File not found: " + fileName) throw()
+			Exception new(This, "Error creating FileWriter for: " + fileName) throw()
 		}
 	}
 
@@ -89,16 +88,6 @@ FileWriter: class extends Writer {
 	close: func {
 		file close()
 	}
-
-	// TODO: Reimplement asPipe() when this file is moved to source/io
-	/*asPipe: func -> Pipe {
-		version(unix || apple) {
-			return PipeUnix new(-1, file no())
-		} else {
-			Exception new("FileWriter asPipe() is not supported on your platform") throw()
-		}
-		null
-	}*/
 
 	createTempFile: static func (pattern, mode: String) -> This {
 	version (!windows) {

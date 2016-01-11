@@ -83,7 +83,7 @@ Event1: class <T> {
 	}
 }
 
-Event2: class <T0, T1> { // TODO: Write tests and fix this
+Event2: class <T0, T1> {
 	_head: Func(T0, T1)
 	_tail: This<T0, T1>
 	head ::= this _head
