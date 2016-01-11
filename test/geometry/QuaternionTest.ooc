@@ -105,13 +105,6 @@ QuaternionTest: class extends Fixture {
 			angle := (quaternion1 angle(quaternion2)) toDegrees()
 			expect(angle, is equal to(25.0f) within(tolerance))
 		})
-		this add("rotationDirectionRepresentation1", func {
-			angle := 30.0f toRadians()
-			direction := FloatVector3D new(1.0f, 4.0f, 7.0f)
-			direction /= direction norm
-			quaternion := Quaternion createRotation(angle, direction)
-			expect(quaternion rotation, is equal to(angle) within(tolerance))
-		})
 		this add("exponentialLogarithm", func {
 			roll := 20.0f toRadians()
 			pitch := (-30.0f) toRadians()

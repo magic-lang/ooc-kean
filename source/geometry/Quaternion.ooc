@@ -34,10 +34,8 @@ Quaternion: cover {
 	isZero ::= this real equals(0.f) && this imaginary x equals(0.f) && this imaginary y equals(0.f) && this imaginary z equals(0.f)
 	norm ::= (this real squared + this imaginary norm squared) sqrt()
 	normalized ::= this / this norm
-	logarithmImaginaryNorm ::= ((this logarithm) imaginary) norm
 	conjugate ::= This new(this real, -this imaginary)
 	inverse ::= this conjugate / (this real squared + this imaginary norm squared)
-	rotation ::= 2.0f * this logarithmImaginaryNorm
 	transform ::= this toFloatTransform3D()
 	// NOTE: Separation into parts assumes order of application X -> Y -> Z
 	rotationX: Float {
@@ -73,12 +71,7 @@ Quaternion: cover {
 			result
 		}
 	}
-	direction: FloatPoint3D {
-		get {
-			quaternionLogarithm := this logarithm
-			quaternionLogarithm imaginary / quaternionLogarithm imaginary norm
-		}
-	}
+	direction ::= (this logarithm imaginary) normalized
 	logarithm: This {
 		get {
 			result: This
