@@ -273,6 +273,34 @@ QuaternionTest: class extends Fixture {
 			expect(quaternion y, is equal to(normalized y) within(tolerance))
 			expect(quaternion z, is equal to(normalized z) within(tolerance))
 		})
+		this add("axisAngle_1", func {
+			axis := FloatVector3D new(1.f, 0.f, 0.f)
+			angle := Float pi / 2.f
+			quaternion := Quaternion createFromAxisAngle(axis, angle)
+			expect(quaternion w, is equal to(0.70710678118f) within(tolerance))
+			expect(quaternion x, is equal to(0.70710678118f) within(tolerance))
+			expect(quaternion y, is equal to(0.f) within(tolerance))
+			expect(quaternion z, is equal to(0.f) within(tolerance))
+		})
+		this add("axisAngle_2", func {
+			quaternion := Quaternion new(2.f sqrt() / 2.f, 2.f sqrt() / 2.f, 0.f, 0.f)
+			(axis, angle) := quaternion toAxisAngle()
+			expect(angle, is equal to(1.57079632679f) within(tolerance))
+			expect(axis x, is equal to(1.f) within(tolerance))
+			expect(axis y, is equal to(0.f) within(tolerance))
+			expect(axis z, is equal to(0.f) within(tolerance))
+		})
+		this add("axisAngle_3", func {
+			axis := FloatVector3D new(1.f, 2.f, 3.f)
+			angle := 0.5f
+			quaternion0 := Quaternion createFromAxisAngle(axis, angle)
+			(axis, angle) = quaternion0 toAxisAngle()
+			quaternion1 := Quaternion createFromAxisAngle(axis, angle)
+			expect(quaternion0 w, is equal to(quaternion1 w) within(tolerance))
+			expect(quaternion0 x, is equal to(quaternion1 x) within(tolerance))
+			expect(quaternion0 y, is equal to(quaternion1 y) within(tolerance))
+			expect(quaternion0 z, is equal to(quaternion1 z) within(tolerance))
+		})
 		this add("sphericalLinearInterpolation_1", func {
 			interpolated := quaternion8 sphericalLinearInterpolation(quaternion9, 0.5f)
 			expect(interpolated w, is equal to(0.210042f) within(tolerance))
