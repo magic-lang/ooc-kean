@@ -131,6 +131,7 @@ Quaternion: cover {
 		result isNumber ? result : 0.0f
 	}
 	dotProduct: func (other: This) -> Float { this w * other w + this x * other x + this y * other y + this z * other z }
+	power: func (scalar: Float) -> This { (scalar * this logarithm) exponential }
 	sphericalLinearInterpolation: func (other: This, factor: Float) -> This {
 		cosAngle := this dotProduct(other)
 		longPath := cosAngle < 0.0f
