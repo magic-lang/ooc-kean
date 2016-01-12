@@ -83,7 +83,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		This _mutex unlock()
 		result
 	}
-	clean: static func {
+	free: static func ~all {
 		This _mutex lock()
 		for (i in 0 .. This _bin count)
 			This _bin remove(i) referenceCount decrease()
