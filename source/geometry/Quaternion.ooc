@@ -166,6 +166,16 @@ Quaternion: cover {
 			0.0f
 		)
 	}
+	toAxisAngle: func -> (FloatVector3D, Float) {
+		angle := 2.f * this real acos()
+		factor := (1.f - this real squared) sqrt()
+		axis := factor equals(0.f) ? FloatPoint3D new(1.f, 0.f, 0.f) : this imaginary / factor
+		(FloatVector3D new(axis x, axis y, axis z), angle)
+	}
+	toEulerVector: func -> FloatVector3D {
+		(axis, angle) := this toAxisAngle()
+		FloatVector3D new(axis x, axis y, axis z) * angle
+	}
 	toString: func -> String {
 		"Real: " << "%8f" formatFloat(this real) >>
 		" Imaginary: " & "%8f" formatFloat(this imaginary x) >> " " & "%8f" formatFloat(this imaginary y) >> " " & "%8f" formatFloat(this imaginary z)
