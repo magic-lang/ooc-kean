@@ -134,6 +134,11 @@ FloatPoint3DTest: class extends Fixture {
 			expect(text, is equal to(t"10.92, -30.12, 0.52"))
 			text free()
 		})
+		this add("elevation", func {
+			point := FloatPoint3D new(5.0f, 5.0f, 5.0f)
+			elevation := point elevation
+			"%f" printfln(elevation)
+		})
 	}
 }
 

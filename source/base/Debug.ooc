@@ -30,13 +30,13 @@ DebugLevel: enum {
 
 Debug: class {
 	_level: static DebugLevel = DebugLevel Everything
-	printFunction: static Func (String) = func (s: String) { println(s) }
+	_printFunction: static Func (String) = func (s: String) { println(s) }
 	initialize: static func (f: Func (String)) {
-		This printFunction = f
+		This _printFunction = f
 	}
 	print: static func (string: String, level := DebugLevel Everything) {
 		if (This _level == level || (This _level == DebugLevel Everything) ) {
-			This printFunction(string)
+			This _printFunction(string)
 		}
 	}
 	print: static func ~text (text: Text, level := DebugLevel Everything) {

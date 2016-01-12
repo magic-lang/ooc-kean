@@ -205,10 +205,10 @@ HashMap: class <K, V> extends BackIterable<V> {
 	}
 	merge: func (other: This<K, V>) -> This<K, V> {
 		c := clone()
-		c merge!(other)
+		c merge~inplace(other)
 		c
 	}
-	merge!: func (other: This<K, V>) -> This<K, V> {
+	merge: func ~inplace (other: This<K, V>) -> This<K, V> {
 		f := func (k: K, v: V) { put(k, v) }
 		other each(f)
 		(f as Closure) free()

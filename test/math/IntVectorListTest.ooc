@@ -48,6 +48,16 @@ IntVectorListTest: class extends Fixture {
 			list free()
 			copy free()
 		})
+		this add("contains", func {
+			list := IntVectorList new()
+			list add(-1)
+			list add(2)
+			list add(-3)
+			list add(4)
+			expect(list contains(2), is true)
+			expect(list contains(-2), is false)
+			list free()
+		})
 		this add("compress", func {
 			list := IntVectorList new()
 			list add(1)

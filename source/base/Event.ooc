@@ -21,7 +21,7 @@ Event: class {
 	head ::= this _head
 	tail ::= this _tail
 	init: func ~nil {
-		this init(func) // TODO: this is really a stupid way to create null pointer although no null text is required
+		this init(func)
 	}
 	init: func (=_head)
 	init: func ~add (=_head, =_tail)
@@ -55,7 +55,7 @@ Event1: class <T> {
 	head ::= this _head
 	tail ::= this _tail
 	init: func ~nil {
-		this init(func (argument: T)) // TODO: this is really a stupid way to create null pointer although no null text is required
+		this init(func (argument: T))
 	}
 	init: func (=_head)
 	init: func ~add (=_head, =_tail)
@@ -89,7 +89,7 @@ Event2: class <T0, T1> {
 	head ::= this _head
 	tail ::= this _tail
 	init: func ~nil {
-		this init(func (argument0: T0, argument1: T1)) // TODO: this is really a stupid way to create null pointer although no null text is required
+		this init(func (argument0: T0, argument1: T1))
 	}
 	init: func (=_head)
 	init: func ~add (=_head, =_tail)

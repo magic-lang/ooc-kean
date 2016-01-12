@@ -8,13 +8,12 @@ MutexType: enum {
 
 Mutex: abstract class {
 	lock: abstract func
-
 	unlock: abstract func
 
 	with: func (f: Func) {
-		lock()
+		this lock()
 		f()
-		unlock()
+		this unlock()
 	}
 	new: static func (mutexType := MutexType Safe) -> This {
 		result: This
@@ -59,15 +58,10 @@ MutexGlobal: class extends Mutex {
 // A recursive mutex can be locked several times in a row. unlock() should be called as many times to properly unlock it
 RecursiveMutex: abstract class extends Mutex {
 	lock: abstract func
-
 	unlock: abstract func
 
-	with: func (f: Func) {
-		lock()
-		f()
-		unlock()
-	}
 	new: static func -> This {
+		result: This = null
 		version (unix || apple) {
 			return RecursiveMutexUnix new()
 		}

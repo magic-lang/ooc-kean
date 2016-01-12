@@ -71,10 +71,6 @@ FloatPoint3D: cover {
 	spherical: static func (radius, azimuth, elevation: Float) -> This {
 		This new(radius * (azimuth cos()) * (elevation sin()), radius * (azimuth sin()) * (elevation sin()), radius * (elevation cos()))
 	}
-	angles: static func (rx, ry, n: Float) -> This {
-		z := n*n sqrt() / (1 + ry tan() squared + rx tan() squared)
-		This new(z * (ry tan()), z * (rx tan()), z)
-	}
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat())

@@ -78,12 +78,10 @@ FloatTransform3D: cover {
 	}}
 	init: func@ (=a, =b, =c, =d, =e, =f, =g, =h, =i, =j, =k, =l, =m, =n, =o, =p)
 	init: func@ ~withoutBottomRow (a, b, c, e, f, g, i, j, k, m, n, o: Float) { this init(a, b, c, 0.0f, e, f, g, 0.0f, i, j, k, 0.0f, m, n, o, 1.0f) }
-//	init: func@ ~reduced (a, b, d, e, g, h: Float) { this init(a, b, 0.0f, d, e, 0.0f, g, h, 1.0f) }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f) }
 	init: func@ ~fromFloatTransform2D (transform: FloatTransform2D) {
 		this init(transform a, transform b, 0.0f, transform c, transform d, transform e, 0.0f, transform f, 0.0f, 0.0f, 1.0f, 0.0f, transform g, transform h, 0.0f, transform i)
 	}
-//	setTranslation: func(translation: FloatVector2D) -> This { this translate(translation - this Translation) }
 	setScaling: func (scaling: Float) -> This { this scale(scaling / this scaling) }
 	setXScaling: func (scaling: Float) -> This { this scale(scaling / this scalingX, 1.0f, 1.0f) }
 	setYScaling: func (scaling: Float) -> This { this scale(1.0f, scaling / this scalingY, 1.0f) }

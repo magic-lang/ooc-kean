@@ -10,6 +10,13 @@ TestClass: class {
 }
 
 SynchronizedTest: class extends Fixture {
+	value: static Int = 0
+	otherValue: static Int = 0
+	valueIncrementer := static func { This value += 1 }
+	valueDecrementer := static func { This value -= 1 }
+	otherValueUp := static func -> Int { This value + 1 }
+	otherValueDown := static func -> Int { This value + 1 }
+
 	init: func {
 		super("Synchronized")
 		this add("two threads", func {
@@ -21,6 +28,7 @@ SynchronizedTest: class extends Fixture {
 					sync lock()
 					obj decrement()
 					sync unlock()
+					sync lock(This valueDecrementer)
 				}
 			})
 			thread2 := Thread new(
@@ -28,6 +36,7 @@ SynchronizedTest: class extends Fixture {
 					sync lock()
 					obj increment()
 					sync unlock()
+					sync lock(This valueIncrementer)
 				}
 			})
 			thread1 start()
@@ -35,6 +44,7 @@ SynchronizedTest: class extends Fixture {
 			thread2 wait()
 			thread1 wait()
 			expect(obj data, is equal to(1))
+			expect(This value, is equal to(1))
 
 			obj free()
 			sync free()

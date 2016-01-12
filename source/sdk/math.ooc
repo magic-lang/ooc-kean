@@ -84,8 +84,8 @@ extend Double {
 	minimumValue ::= static DBL_MIN
 	maximumValue ::= static DBL_MAX
 	defaultTolerance ::= static 0.0001
-	absolute ::= this >= 0.f ? this : -1.f * this
-	sign ::= this >= 0.f ? 1.f : -1.f
+	absolute ::= this >= 0.f ? this : -1.0 * this
+	sign ::= this >= 0.0 ? 1.0 : -1.0
 	isOdd ::= this modulo(2) == 1
 	isEven ::= this modulo(2) == 0
 	squared ::= this * this
