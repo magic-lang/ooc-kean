@@ -74,7 +74,6 @@ FloatVector3D: cover {
 	operator / (other: Float) -> This { This new(this x / other, this y / other, this z / other) }
 	operator * (other: Int) -> This { This new(this x * other, this y * other, this z * other) }
 	operator / (other: Int) -> This { This new(this x / other, this y / other, this z / other) }
-	operator as -> String { this toString() }
 
 	basisX: static This { get { This new(1, 0, 0) } }
 	basisY: static This { get { This new(0, 1, 0) } }

@@ -186,7 +186,6 @@ Quaternion: cover {
 	operator / (value: Float) -> This { This new(this w / value, this x / value, this y / value, this z / value) }
 	operator * (value: Float) -> This { This new(this w * value, this x * value, this y * value, this z * value) }
 	operator * (value: FloatPoint3D) -> FloatPoint3D { This hamiltonProduct(This hamiltonProduct(this, This new(0.0f, value)), this inverse) imaginary }
-	operator as -> String { this toString() }
 
 	precision: static Float = 1.0e-6f
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f) } }

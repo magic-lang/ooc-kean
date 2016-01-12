@@ -52,7 +52,6 @@ IntShell2D: cover {
 	operator == (other: This) -> Bool { this left == other left && this right == other right && this top == other top && this bottom == other bottom }
 	operator != (other: This) -> Bool { !(this == other) }
 	operator / (other: Int) -> This { This new(this left / other, this right / other, this top / other, this bottom / other) }
-	operator as -> String { this toString() }
 
 	parse: static func (input: Text) -> This {
 		parts := input split(',')

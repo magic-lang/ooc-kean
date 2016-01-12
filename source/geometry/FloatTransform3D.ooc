@@ -227,9 +227,6 @@ FloatTransform3D: cover {
 			this c * other x + this g * other y + this k * other z + this o
 		)
 	}
-	operator as -> String {
-		this toString()
-	}
 
 	kean_math_floatTransform3D_getTranslation: unmangled func -> FloatVector3D { this translation }
 	kean_math_floatTransform3D_getScaling: unmangled func -> FloatVector3D { FloatVector3D new(this scalingX, this scalingY, this scalingZ) }

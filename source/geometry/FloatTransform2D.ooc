@@ -173,9 +173,6 @@ FloatTransform2D: cover {
 		}
 		result
 	}
-	operator as -> String {
-		this toString()
-	}
 
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f) } }
 	create: static func (translation: FloatVector2D, scale, rotation: Float) -> This {
