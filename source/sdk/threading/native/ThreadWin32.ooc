@@ -7,7 +7,7 @@ version(windows) {
 		threadID: UInt
 
 		init: func ~win (=_code)
-		start:override  func -> Bool {
+		start: override func -> Bool {
 			handle = _beginthreadex(
 				null, // default security attributes
 				0, // default stack size
