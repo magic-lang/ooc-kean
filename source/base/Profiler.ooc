@@ -54,7 +54,7 @@ Profiler: class {
 		fileWriter free()
 	}
 	resetAll: static func { This _profilers apply(func (profiler: This) { profiler reset() }) }
-	dispose: static func {
+	free: static func ~all {
 		while (This _profilers count > 0)
 			This _profilers remove() free()
 		This _profilers free()

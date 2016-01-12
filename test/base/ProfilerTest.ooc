@@ -25,7 +25,7 @@ ProfilerTest: class extends Fixture {
 			profiler := Profiler new("for cleanup")
 			profilerToFree := Profiler new("to free")
 			profilerToFree free()
-			Profiler dispose()
+			Profiler free~all()
 		})
 	}
 	_createOutputDirectory: func {

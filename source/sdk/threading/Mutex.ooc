@@ -50,7 +50,7 @@ MutexGlobal: class extends Mutex {
 	unlock: override func {
 		This _globalMutex unlock()
 	}
-	cleanup: static func {
+	free: static func ~all {
 		This _globalMutex free()
 	}
 }

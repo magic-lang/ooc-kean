@@ -62,7 +62,7 @@ ByteBuffer: class {
 	new: static func ~recover (pointer: UInt8*, size: Int, recover: Func (This) -> Bool) -> This {
 		_RecoverableByteBuffer new(pointer, size, recover)
 	}
-	clean: static func { _RecyclableByteBuffer _clean() }
+	free: static func ~all { _RecyclableByteBuffer _free~all() }
 }
 _SlicedByteBuffer: class extends ByteBuffer {
 	_parent: ByteBuffer
@@ -136,7 +136,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		while (list count > 0)
 			list remove(0) _forceFree()
 	}
-	_clean: static func {
+	_free: static func ~all {
 		This _cleanList(This _smallRecycleBin)
 		This _cleanList(This _mediumRecycleBin)
 		This _cleanList(This _largeRecycleBin)
