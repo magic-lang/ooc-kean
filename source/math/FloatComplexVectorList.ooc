@@ -22,16 +22,14 @@ import FloatVectorList
 
 FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	mean ::= this sum / this _count
-	sum: FloatComplex {
-		get {
+	sum: FloatComplex { get {
 			result := FloatComplex new()
 			for (i in 0 .. this _count)
 				result = result + this[i]
 			result
 		}
 	}
-	real: FloatVectorList {
-		get {
+	real: FloatVectorList { get {
 			result := FloatVectorList new()
 			for (i in 0 .. this _count) {
 				currentPoint := this[i]
@@ -40,8 +38,7 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 			result
 		}
 	}
-	imaginary: FloatVectorList {
-		get {
+	imaginary: FloatVectorList { get {
 			result := FloatVectorList new()
 			for (i in 0 .. this _count) {
 				currentPoint := this[i]
@@ -50,6 +47,7 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 			result
 		}
 	}
+
 	init: func ~default {
 		super()
 	}

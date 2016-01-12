@@ -39,8 +39,7 @@ FloatTransform3D: cover {
 	scalingX ::= (this a squared + this b squared + this c squared) sqrt()
 	scalingY ::= (this e squared + this f squared + this g squared) sqrt()
 	scalingZ ::= (this i squared + this j squared + this k squared) sqrt()
-	determinant: Float {
-		get {
+	determinant: Float { get {
 			this a * this f * this k * this p + this a * this j * this o * this h + this a * this n * this g * this l +
 			this e * this b * this o * this l + this e * this j * this c * this p + this e * this n * this k * this d +
 			this i * this b * this g * this p + this i * this f * this o * this d + this i * this n * this c * this h +
