@@ -7,15 +7,15 @@ version(unix || apple) {
 		pthread: PThread
 
 		init: func ~unix (=_code)
-		start: func -> Bool {
+		start: override func -> Bool {
 			result := pthread_create(pthread&, null, _code as Closure thunk, _code as Closure context)
 			(result == 0)
 		}
-		wait: func -> Bool {
+		wait: override func -> Bool {
 			result := pthread_join(pthread, null)
 			(result == 0)
 		}
-		wait: func ~timed (seconds: Double) -> Bool {
+		wait: override func ~timed (seconds: Double) -> Bool {
 			result := false
 			version (apple || android)
 				result = __fake_timedjoin(seconds)
@@ -26,13 +26,13 @@ version(unix || apple) {
 			}
 			result
 		}
-		cancel: func -> Bool {
+		cancel: override func -> Bool {
 			result := false
 			version (!android)
 				result = this alive() && (pthread_cancel(this pthread) == 0)
 			result
 		}
-		alive: func -> Bool {
+		alive: override func -> Bool {
 			pthread_kill(pthread, 0) == 0
 		}
 		_yield: static func -> Bool {

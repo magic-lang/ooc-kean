@@ -251,7 +251,7 @@ String: class extends Iterable<Char> {
 	toDouble: func -> Double { _buffer toDouble() }
 	toLDouble: func -> LDouble { _buffer toLDouble() }
 
-	iterator: func -> CharBufferIterator<Char> {
+	iterator: override func -> CharBufferIterator<Char> {
 		_buffer iterator()
 	}
 

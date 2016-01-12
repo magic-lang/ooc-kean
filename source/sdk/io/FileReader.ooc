@@ -73,7 +73,7 @@ FileReader: class extends Reader {
 	 *
 	 * @return The number of bytes read.
 	 */
-	read: func (buffer: Char*, offset: Int, count: SizeT) -> SizeT {
+	read: override func (buffer: Char*, offset: Int, count: SizeT) -> SizeT {
 		file read(buffer + offset, count)
 	}
 
@@ -85,18 +85,18 @@ FileReader: class extends Reader {
 	/**
 	 * @return a single char read from this file.
 	 */
-	read: func ~char -> Char {
+	read: override func ~char -> Char {
 		file readChar()
 	}
 
 	/**
 	 * @return true if there is still data available to be read from this file
 	 */
-	hasNext?: func -> Bool {
+	hasNext?: override func -> Bool {
 		feof(file) == 0
 	}
 
-	seek: func (offset: Long, mode: SeekMode) -> Bool {
+	seek: override func (offset: Long, mode: SeekMode) -> Bool {
 		file seek(offset, match mode {
 			case SeekMode SET => SEEK_SET
 			case SeekMode CUR => SEEK_CUR
@@ -107,12 +107,12 @@ FileReader: class extends Reader {
 		}) == 0
 	}
 
-	mark: func -> Long {
+	mark: override func -> Long {
 		marker = file tell()
 		marker
 	}
 
-	close: func {
+	close: override func {
 		file close()
 	}
 }
