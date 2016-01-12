@@ -25,36 +25,32 @@ FloatVectorList: class extends VectorList<Float> {
 	standardDeviation ::= this variance sqrt()
 	mean ::= this sum / this count
 	sum: Float { get {
-			result := 0.0f
-			for (i in 0 .. this count)
-				result += this[i]
-			result
-		}
-	}
+		result := 0.0f
+		for (i in 0 .. this count)
+			result += this[i]
+		result
+	}}
 	maxValue: Float { get {
-			result := Float negativeInfinity
-			for (i in 0 .. this count)
-				if (result < this[i])
-					result = this[i]
-			result
-		}
-	}
+		result := Float negativeInfinity
+		for (i in 0 .. this count)
+			if (result < this[i])
+				result = this[i]
+		result
+	}}
 	minValue: Float { get {
-			result := Float positiveInfinity
-			for (i in 0 .. this count)
-				if (result > this[i])
-					result = this[i]
-			result
-		}
-	}
+		result := Float positiveInfinity
+		for (i in 0 .. this count)
+			if (result > this[i])
+				result = this[i]
+		result
+	}}
 	variance: Float { get {
-			squaredSum := 0.0f
-			meanValue := this mean
-			for (i in 0 .. this count)
-				squaredSum += (this[i] - meanValue) pow(2.0f)
-			squaredSum / this count
-		}
-	}
+		squaredSum := 0.0f
+		meanValue := this mean
+		for (i in 0 .. this count)
+			squaredSum += (this[i] - meanValue) pow(2.0f)
+		squaredSum / this count
+	}}
 
 	init: func ~default {
 		super()

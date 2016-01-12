@@ -40,14 +40,14 @@ FloatTransform3D: cover {
 	scalingY ::= (this e squared + this f squared + this g squared) sqrt()
 	scalingZ ::= (this i squared + this j squared + this k squared) sqrt()
 	determinant: Float { get {
-			this a * this f * this k * this p + this a * this j * this o * this h + this a * this n * this g * this l +
-			this e * this b * this o * this l + this e * this j * this c * this p + this e * this n * this k * this d +
-			this i * this b * this g * this p + this i * this f * this o * this d + this i * this n * this c * this h +
-			this m * this b * this k * this h + this m * this f * this c * this l + this m * this j * this g * this d -
-			this a * this f * this o * this l - this a * this j * this g * this p - this a * this n * this k * this h -
-			this e * this b * this k * this p - this e * this j * this o * this d - this e * this n * this c * this l -
-			this i * this b * this o * this h - this i * this f * this c * this p - this i * this n * this g * this d -
-			this m * this b * this g * this l - this m * this f * this k * this d - this m * this j * this c * this h
+		this a * this f * this k * this p + this a * this j * this o * this h + this a * this n * this g * this l +
+		this e * this b * this o * this l + this e * this j * this c * this p + this e * this n * this k * this d +
+		this i * this b * this g * this p + this i * this f * this o * this d + this i * this n * this c * this h +
+		this m * this b * this k * this h + this m * this f * this c * this l + this m * this j * this g * this d -
+		this a * this f * this o * this l - this a * this j * this g * this p - this a * this n * this k * this h -
+		this e * this b * this k * this p - this e * this j * this o * this d - this e * this n * this c * this l -
+		this i * this b * this o * this h - this i * this f * this c * this p - this i * this n * this g * this d -
+		this m * this b * this g * this l - this m * this f * this k * this d - this m * this j * this c * this h
 		}
 	}
 	inverse: This { get {
