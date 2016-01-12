@@ -67,7 +67,6 @@ FloatPoint2D: cover {
 	operator / (other: FloatVector2D) -> This { This new(this x / other x, this y / other y) }
 	operator * (other: Float) -> This { This new(this x * other, this y * other) }
 	operator / (other: Float) -> This { This new(this x / other, this y / other) }
-	operator as -> String { this toString() }
 
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }

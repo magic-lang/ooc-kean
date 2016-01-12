@@ -139,9 +139,6 @@ IntTransform2D: cover {
 		divisor := this c * other x + this f * other y + this i
 		IntPoint2D new((this a * other x + this d * other y + this g) / divisor, (this b * other x + this e * other y + this h) / divisor)
 	}
-	operator as -> String {
-		this toString()
-	}
 
 	identity: static This { get { This new(1, 0, 0, 1, 0, 0) } }
 	toFloatTransform2D: func -> FloatTransform2D { FloatTransform2D new(this a, this b, this c, this d, this e, this f, this g, this h, this i) }

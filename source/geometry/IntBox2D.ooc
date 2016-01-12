@@ -121,7 +121,6 @@ IntBox2D: cover {
 	operator - (other: IntPoint2D) -> This { This new(this leftTop - other, this size) }
 	operator + (other: IntVector2D) -> This { This new(this leftTop, this size + other) }
 	operator - (other: IntVector2D) -> This { This new(this leftTop, this size - other) }
-	operator as -> String { this toString() }
 
 	parse: static func (input: Text) -> This {
 		parts := input split(',')

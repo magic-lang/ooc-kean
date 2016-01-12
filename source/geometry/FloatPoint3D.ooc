@@ -67,7 +67,6 @@ FloatPoint3D: cover {
 	operator != (other: This) -> Bool { this x != other x || this y != other y || this z != other z }
 	operator * (other: Float) -> This { This new(this x * other, this y * other, this z * other) }
 	operator / (other: Float) -> This { This new(this x / other, this y / other, this z / other) }
-	operator as -> String { this toString() }
 
 	spherical: static func (radius, azimuth, elevation: Float) -> This {
 		This new(radius * (azimuth cos()) * (elevation sin()), radius * (azimuth sin()) * (elevation sin()), radius * (elevation cos()))

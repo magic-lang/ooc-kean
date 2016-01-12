@@ -154,7 +154,6 @@ FloatBox2D: cover {
 	operator * (other: FloatVector2D) -> This { This new(this leftTop * other, this size * other) }
 	operator / (other: FloatVector2D) -> This { This new(this leftTop / other, this size / other) }
 	operator - (other: FloatVector2D) -> This { This new(this leftTop, this size - other) }
-	operator as -> String { this toString() }
 
 	parse: static func (input: Text) -> This {
 		parts := input split(',')
