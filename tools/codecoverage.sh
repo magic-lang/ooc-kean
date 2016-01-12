@@ -9,6 +9,10 @@ fi
 
 ./test.sh $ARGS -x +--coverage +-O0
 lcov --quiet -t 'OOC Test coverage' -o $INFO_FILE -c --directory ./.libs/ooc/ --base-directory .
+lcov --quiet --remove test_coverage.info '/rock_tmp/*' -o test_coverage.info
+lcov --quiet --remove test_coverage.info '/test/*' -o test_coverage.info
+
+rm -r coverage/
 genhtml --quiet -o coverage $INFO_FILE --num-spaces 4
 rm $INFO_FILE
 

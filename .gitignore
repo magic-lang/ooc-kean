@@ -43,3 +43,4 @@ tests.use
 Tests
 *.valgrindlog
 /coverage/
+*.info
