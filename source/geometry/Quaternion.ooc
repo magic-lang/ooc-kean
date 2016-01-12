@@ -132,6 +132,7 @@ Quaternion: cover {
 		result isNumber ? result : 0.0f
 	}
 	dotProduct: func (other: This) -> Float { this w * other w + this x * other x + this y * other y + this z * other z }
+	power: func (scalar: Float) -> This { (scalar * this logarithm) exponential }
 	sphericalLinearInterpolation: func (other: This, factor: Float) -> This {
 		cosAngle := this dotProduct(other)
 		longPath := cosAngle < 0.0f
@@ -165,6 +166,16 @@ Quaternion: cover {
 			0.0f,
 			0.0f
 		)
+	}
+	toAxisAngle: func -> (FloatVector3D, Float) {
+		angle := 2.f * this real acos()
+		factor := (1.f - this real squared) sqrt()
+		axis := factor equals(0.f) ? FloatPoint3D new(1.f, 0.f, 0.f) : this imaginary / factor
+		(FloatVector3D new(axis x, axis y, axis z), angle)
+	}
+	toEulerVector: func -> FloatVector3D {
+		(axis, angle) := this toAxisAngle()
+		FloatVector3D new(axis x, axis y, axis z) * angle
 	}
 	toString: func -> String {
 		"Real: " << "%8f" formatFloat(this real) >>

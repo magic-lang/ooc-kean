@@ -145,6 +145,17 @@ QuaternionTest: class extends Fixture {
 			logExp := exp logarithm
 			expect(logExp imaginary distance(quaternion imaginary), is equal to(0.0f) within(tolerance))
 		})
+		this add("power", func {
+			quaternion := Quaternion createRotationX(Float pi / 2.f)
+			halfQuaternion := quaternion power(0.5f)
+			expect(halfQuaternion rotationX, is equal to(Float pi / 4.f) within(tolerance))
+			quaternion = Quaternion createRotationY(Float pi / 2.f)
+			quarterQuaternion := quaternion power(0.25f)
+			expect(quarterQuaternion rotationY, is equal to(Float pi / 8.f) within(tolerance))
+			quaternion = Quaternion createRotationZ(Float pi / 2.f)
+			doubleQuaternion := quaternion power(2.0f)
+			expect(doubleQuaternion rotationZ, is equal to(Float pi) within(tolerance))
+		})
 		this add("toFloatTransform3D_1", func {
 			// Results from http://www.energid.com/resources/quaternion-calculator/
 			float3DTransform := Quaternion new(0.1f, 1.0f, 0.0f, 0.0f) toFloatTransform3D()
@@ -261,6 +272,59 @@ QuaternionTest: class extends Fixture {
 			expect(quaternion x, is equal to(normalized x) within(tolerance))
 			expect(quaternion y, is equal to(normalized y) within(tolerance))
 			expect(quaternion z, is equal to(normalized z) within(tolerance))
+		})
+		this add("axisAngle_1", func {
+			axis := FloatVector3D new(1.f, 0.f, 0.f)
+			angle := Float pi / 2.f
+			quaternion := Quaternion createFromAxisAngle(axis, angle)
+			expect(quaternion w, is equal to(0.70710678118f) within(tolerance))
+			expect(quaternion x, is equal to(0.70710678118f) within(tolerance))
+			expect(quaternion y, is equal to(0.f) within(tolerance))
+			expect(quaternion z, is equal to(0.f) within(tolerance))
+		})
+		this add("axisAngle_2", func {
+			quaternion := Quaternion new(2.f sqrt() / 2.f, 2.f sqrt() / 2.f, 0.f, 0.f)
+			(axis, angle) := quaternion toAxisAngle()
+			expect(angle, is equal to(1.57079632679f) within(tolerance))
+			expect(axis x, is equal to(1.f) within(tolerance))
+			expect(axis y, is equal to(0.f) within(tolerance))
+			expect(axis z, is equal to(0.f) within(tolerance))
+		})
+		this add("axisAngle_3", func {
+			axis := FloatVector3D new(1.f, 2.f, 3.f)
+			angle := 0.5f
+			quaternion0 := Quaternion createFromAxisAngle(axis, angle)
+			(axis, angle) = quaternion0 toAxisAngle()
+			quaternion1 := Quaternion createFromAxisAngle(axis, angle)
+			expect(quaternion0 w, is equal to(quaternion1 w) within(tolerance))
+			expect(quaternion0 x, is equal to(quaternion1 x) within(tolerance))
+			expect(quaternion0 y, is equal to(quaternion1 y) within(tolerance))
+			expect(quaternion0 z, is equal to(quaternion1 z) within(tolerance))
+		})
+		this add("eulerVector_1", func {
+			vector := FloatVector3D new(Float pi / 2.f, 0.f, 0.f)
+			quaternion := Quaternion createFromEulerVector(vector)
+			expect(quaternion w, is equal to(0.70710678118f) within(tolerance))
+			expect(quaternion x, is equal to(0.70710678118f) within(tolerance))
+			expect(quaternion y, is equal to(0.f) within(tolerance))
+			expect(quaternion z, is equal to(0.f) within(tolerance))
+		})
+		this add("eulerVector_2", func {
+			quaternion := Quaternion new(2.f sqrt() / 2.f, 2.f sqrt() / 2.f, 0.f, 0.f)
+			vector := quaternion toEulerVector()
+			expect(vector x, is equal to(1.57079632679f) within(tolerance))
+			expect(vector y, is equal to(0.f) within(tolerance))
+			expect(vector z, is equal to(0.f) within(tolerance))
+		})
+		this add("eulerVector_3", func {
+			vector := FloatVector3D new(1.f, 2.f, 3.f)
+			quaternion0 := Quaternion createFromEulerVector(vector)
+			vector = quaternion0 toEulerVector()
+			quaternion1 := Quaternion createFromEulerVector(vector)
+			expect(quaternion0 w, is equal to(quaternion1 w) within(tolerance))
+			expect(quaternion0 x, is equal to(quaternion1 x) within(tolerance))
+			expect(quaternion0 y, is equal to(quaternion1 y) within(tolerance))
+			expect(quaternion0 z, is equal to(quaternion1 z) within(tolerance))
 		})
 		this add("sphericalLinearInterpolation_1", func {
 			interpolated := quaternion8 sphericalLinearInterpolation(quaternion9, 0.5f)
