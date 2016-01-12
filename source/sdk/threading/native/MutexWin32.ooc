@@ -23,13 +23,13 @@ version(windows) {
 			CloseHandle(this _backend)
 			super()
 		}
-		lock: func {
+		lock: override func {
 			WaitForSingleObject(
 				this _backend, // handle to mutex
 				INFINITE // no time-out interval
 			)
 		}
-		unlock: func {
+		unlock: override func {
 			ReleaseMutex(this _backend)
 		}
 	}
@@ -47,13 +47,13 @@ version(windows) {
 			CloseHandle(this _backend)
 			super()
 		}
-		lock: func {
+		lock: override func {
 			WaitForSingleObject(
 				this _backend, // handle to mutex
 				INFINITE // no time-out interval
 			)
 		}
-		unlock: func {
+		unlock: override func {
 			ReleaseMutex(this _backend)
 		}
 	}

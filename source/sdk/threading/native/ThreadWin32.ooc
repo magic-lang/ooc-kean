@@ -7,7 +7,7 @@ version(windows) {
 		threadID: UInt
 
 		init: func ~win (=_code)
-		start: func -> Bool {
+		start:override  func -> Bool {
 			handle = _beginthreadex(
 				null, // default security attributes
 				0, // default stack size
@@ -18,11 +18,11 @@ version(windows) {
 
 			handle != INVALID_HANDLE_VALUE
 		}
-		wait: func -> Bool {
+		wait: override func -> Bool {
 			result := WaitForSingleObject(handle, INFINITE)
 			result == WAIT_OBJECT_0
 		}
-		wait: func ~timed (seconds: Double) -> Bool {
+		wait: override func ~timed (seconds: Double) -> Bool {
 			millis := (seconds * 1000.0 + 0.5) as Long
 			result := WaitForSingleObject(handle, millis)
 
@@ -37,12 +37,12 @@ version(windows) {
 					false
 			}
 		}
-		cancel: func -> Bool {
+		cancel: override func -> Bool {
 			false
 			//this alive() && TerminateThread(this handle, 0)
 			//TODO Find a better way to terminate Win32 threads, if any
 		}
-		alive: func -> Bool {
+		alive: override func -> Bool {
 			result := WaitForSingleObject(handle, 0)
 
 			// if it's equal, it has terminated, otherwise, it's still alive

@@ -13,18 +13,18 @@ version(windows) {
 		valuesMutex := Mutex new()
 
 		init: func ~windows
-		set: func (value: T) {
+		set: override func (value: T) {
 			valuesMutex lock()
 			values put(GetCurrentThreadId(), value)
 			valuesMutex unlock()
 		}
-		get: func -> T {
+		get: override func -> T {
 			valuesMutex lock()
 			value := values get(GetCurrentThreadId())
 			valuesMutex unlock()
 			value
 		}
-		hasValue: func -> Bool {
+		hasValue: override func -> Bool {
 			valuesMutex lock()
 			has := values contains(GetCurrentThreadId())
 			valuesMutex unlock()

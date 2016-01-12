@@ -16,11 +16,11 @@ BufferReader: class extends Reader {
 		return buffer
 	}
 
-	close: func {
+	close: override func {
 		// nothing to close.
 	}
 
-	read: func (dest: Char*, destOffset: Int, maxRead: Int) -> SizeT {
+	read: override func (dest: Char*, destOffset: Int, maxRead: Int) -> SizeT {
 		if (marker >= buffer size) {
 			Exception new(This, "Buffer overflow! Offset is larger than buffer size.") throw()
 		}
@@ -36,17 +36,17 @@ BufferReader: class extends Reader {
 		buffer get(marker)
 	}
 
-	read: func ~char -> Char {
+	read: override func ~char -> Char {
 		c := buffer get(marker)
 		marker += 1
 		c
 	}
 
-	hasNext?: func -> Bool {
+	hasNext?: override func -> Bool {
 		return marker < buffer size
 	}
 
-	seek: func (offset: Long, mode: SeekMode) -> Bool {
+	seek: override func (offset: Long, mode: SeekMode) -> Bool {
 		match mode {
 			case SeekMode SET =>
 				marker = offset
@@ -69,7 +69,7 @@ BufferReader: class extends Reader {
 		}
 	}
 
-	mark: func -> Long {
+	mark: override func -> Long {
 		return marker
 	}
 }

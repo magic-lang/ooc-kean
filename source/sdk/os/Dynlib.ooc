@@ -55,10 +55,10 @@ version (windows) {
 			}
 			success = (handle != null)
 		}
-		symbol: func (name: String) -> Pointer {
+		symbol: override func (name: String) -> Pointer {
 			GetProcAddress(handle, name)
 		}
-		close: func -> Bool {
+		close: override func -> Bool {
 			FreeLibrary(handle)
 		}
 	}
@@ -83,10 +83,10 @@ version (!windows) {
 			}
 			success = (handle != null)
 		}
-		symbol: func (name: String) -> Pointer {
+		symbol: override func (name: String) -> Pointer {
 			dlsym(handle, name)
 		}
-		close: func -> Bool {
+		close: override func -> Bool {
 			dlclose(handle) == 0
 		}
 	}

@@ -13,18 +13,18 @@ version(unix || apple) {
 		valuesMutex := Mutex new()
 
 		init: func ~unix
-		set: func (value: T) {
+		set: override func (value: T) {
 			valuesMutex lock()
 			values put(pthread_self(), value)
 			valuesMutex unlock()
 		}
-		get: func -> T {
+		get: override func -> T {
 			valuesMutex lock()
 			value := values get(pthread_self())
 			valuesMutex unlock()
 			value
 		}
-		hasValue: func -> Bool {
+		hasValue: override func -> Bool {
 			valuesMutex lock()
 			has := values contains(pthread_self())
 			valuesMutex unlock()
