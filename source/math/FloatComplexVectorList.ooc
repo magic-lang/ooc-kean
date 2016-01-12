@@ -21,35 +21,30 @@ use ooc-collections
 import FloatVectorList
 
 FloatComplexVectorList: class extends VectorList<FloatComplex> {
-	sum: FloatComplex {
-		get {
-			result := FloatComplex new()
-			for (i in 0 .. this _count)
-				result = result + this[i]
-			result
-		}
-	}
 	mean ::= this sum / this _count
-	real: FloatVectorList {
-		get {
-			result := FloatVectorList new()
-			for (i in 0 .. this _count) {
-				currentPoint := this[i]
-				result add(currentPoint real)
-			}
-			result
+	sum: FloatComplex { get {
+		result := FloatComplex new()
+		for (i in 0 .. this _count)
+			result = result + this[i]
+		result
+	}}
+	real: FloatVectorList { get {
+		result := FloatVectorList new()
+		for (i in 0 .. this _count) {
+			currentPoint := this[i]
+			result add(currentPoint real)
 		}
-	}
-	imaginary: FloatVectorList {
-		get {
-			result := FloatVectorList new()
-			for (i in 0 .. this _count) {
-				currentPoint := this[i]
-				result add(currentPoint imaginary)
-			}
-			result
+		result
+	}}
+	imaginary: FloatVectorList { get {
+		result := FloatVectorList new()
+		for (i in 0 .. this _count) {
+			currentPoint := this[i]
+			result add(currentPoint imaginary)
 		}
-	}
+		result
+	}}
+
 	init: func ~default {
 		super()
 	}

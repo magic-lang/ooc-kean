@@ -24,8 +24,10 @@ import FloatTransform2D
 // Note: Points must be in counterclockwise order
 FloatConvexHull2D: class {
 	_points: VectorList<FloatPoint2D>
+
 	points ::= this _points
 	count ::= this _points count
+
 	init: func ~fromPoints (=_points, computeHull := true) {
 		if (computeHull)
 			this computeHull()
@@ -141,6 +143,7 @@ FloatConvexHull2D: class {
 			result = result >> "(" & this _points[i] toString() >> ") "
 		result
 	}
+
 	toText: func -> Text {
 		result: Text
 		textBuilder := TextBuilder new()
@@ -150,6 +153,7 @@ FloatConvexHull2D: class {
 		textBuilder free()
 		result
 	}
+
 	_pointsLinePseudoDistance: static func (leftPoint, rightPoint, queryPoint: FloatPoint2D) -> Float {
 		((rightPoint y - leftPoint y) * (leftPoint x - queryPoint x)) - ((rightPoint x - leftPoint x) * (leftPoint y - queryPoint y))
 	}
