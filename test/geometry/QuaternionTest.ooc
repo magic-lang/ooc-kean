@@ -145,6 +145,17 @@ QuaternionTest: class extends Fixture {
 			logExp := exp logarithm
 			expect(logExp imaginary distance(quaternion imaginary), is equal to(0.0f) within(tolerance))
 		})
+		this add("power", func {
+			quaternion := Quaternion createRotationX(Float pi / 2.f)
+			halfQuaternion := quaternion power(0.5f)
+			expect(halfQuaternion rotationX, is equal to(Float pi / 4.f) within(tolerance))
+			quaternion = Quaternion createRotationY(Float pi / 2.f)
+			quarterQuaternion := quaternion power(0.25f)
+			expect(quarterQuaternion rotationY, is equal to(Float pi / 8.f) within(tolerance))
+			quaternion = Quaternion createRotationZ(Float pi / 2.f)
+			doubleQuaternion := quaternion power(2.0f)
+			expect(doubleQuaternion rotationZ, is equal to(Float pi) within(tolerance))
+		})
 		this add("toFloatTransform3D_1", func {
 			// Results from http://www.energid.com/resources/quaternion-calculator/
 			float3DTransform := Quaternion new(0.1f, 1.0f, 0.0f, 0.0f) toFloatTransform3D()
