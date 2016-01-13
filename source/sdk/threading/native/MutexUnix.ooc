@@ -25,10 +25,10 @@ version(unix || apple) {
 			pthread_mutex_destroy(this _backend&)
 			super()
 		}
-		lock: func {
+		lock: override func {
 			pthread_mutex_lock(this _backend&)
 		}
-		unlock: func {
+		unlock: override func {
 			pthread_mutex_unlock(this _backend&)
 		}
 	}
@@ -45,10 +45,10 @@ version(unix || apple) {
 			pthread_mutex_destroy(this _backend&)
 			super()
 		}
-		lock: func {
+		lock: override func {
 			pthread_mutex_lock(this _backend&)
 		}
-		unlock: func {
+		unlock: override func {
 			pthread_mutex_unlock(this _backend&)
 		}
 	}

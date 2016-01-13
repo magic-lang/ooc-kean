@@ -18,7 +18,7 @@ BufferWriter: class extends Writer {
 		return buffer
 	}
 
-	close: func
+	close: override func
 
 	_makeRoom: func (len: Long) {
 		// re-allocate if needed...
@@ -31,7 +31,7 @@ BufferWriter: class extends Writer {
 		}
 	}
 
-	write: func ~chr (chr: Char) {
+	write: override func ~chr (chr: Char) {
 		_makeRoom(pos + 1)
 		buffer data[pos] = chr
 		pos += 1
@@ -48,7 +48,7 @@ BufferWriter: class extends Writer {
 		pos = p
 	}
 
-	write: func (chars: Char*, length: SizeT) -> SizeT {
+	write: override func (chars: Char*, length: SizeT) -> SizeT {
 		_makeRoom(pos + length)
 		memcpy(buffer data + pos, chars, length)
 		pos += length

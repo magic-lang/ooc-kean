@@ -222,22 +222,22 @@ ArrayListIterator: class <T> extends BackIterator<T> {
 
 	init: func ~iter (=list)
 
-	hasNext?: func -> Bool { index < list size }
+	hasNext?: override func -> Bool { index < list size }
 
-	next: func -> T {
+	next: override func -> T {
 		_canRemove = true
 		index += 1
 		list get(index - 1)
 	}
 
-	hasPrev?: func -> Bool { index > 0 }
+	hasPrev?: override func -> Bool { index > 0 }
 
-	prev: func -> T {
+	prev: override func -> T {
 		index -= 1
 		list get(index)
 	}
 
-	remove: func -> Bool {
+	remove: override func -> Bool {
 		if (!_canRemove) {
 			IllegalIteratorOpException new(class, \
 				"ArrayListIterator remove() called twice in a single iteration - that's illegal.") throw()
