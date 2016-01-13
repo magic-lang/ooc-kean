@@ -1,63 +1,39 @@
 import io/Writer
 
-/**
- * Implement the Writer interface for Writer
- */
 BufferWriter: class extends Writer {
 	buffer: CharBuffer
-	pos: Long
+	pos := 0L
 
-	init: func {
-		buffer = CharBuffer new(1024)
-		pos = 0
-	}
-
+	init: func { this init(CharBuffer new(1024)) }
 	init: func ~withBuffer (=buffer)
-
-	buffer: func -> CharBuffer {
-		return buffer
-	}
-
+	buffer: func -> CharBuffer { this buffer }
 	close: override func
-
 	_makeRoom: func (len: Long) {
-		// re-allocate if needed...
-		if (buffer capacity < len) {
-			buffer setCapacity(len * 2)
-		}
-		// and keep buffer length up to date
-		if (buffer size < len) {
-			buffer size = len
-		}
+		if (this buffer capacity < len)
+			this buffer setCapacity(len * 2)
+		if (this buffer size < len)
+			this buffer size = len
 	}
-
 	write: override func ~chr (chr: Char) {
 		_makeRoom(pos + 1)
 		buffer data[pos] = chr
-		pos += 1
+		this pos += 1
 	}
-
 	mark: func -> Long {
-		pos
+		this pos
 	}
-
 	seek: func (p: Long) {
-		if (p < 0 || p > buffer size) {
-			Exception new("Seeking out of bounds! p = %d, size = %d" format(p, buffer size)) throw()
-		}
-		pos = p
+		if (p < 0 || p > buffer size)
+			Exception new("Seeking out of bounds! p = %d, size = %d" format(p, this buffer size)) throw()
+		this pos = p
 	}
-
 	write: override func (chars: Char*, length: SizeT) -> SizeT {
-		_makeRoom(pos + length)
-		memcpy(buffer data + pos, chars, length)
-		pos += length
+		_makeRoom(this pos + length)
+		memcpy(this buffer data + pos, chars, length)
+		this pos += length
 		length
 	}
-
-	/* check out the Writer writef method for a simple varargs usage,
-	   this version here is mostly for internal usage (it is called by writef)
-	 */
+	// This version is mostly for internal usage (it is called by writef)
 	vwritef: func (fmt: String, list: VaList) {
 		list2: VaList
 		va_copy(list2, list)
@@ -65,7 +41,7 @@ BufferWriter: class extends Writer {
 		va_end(list2)
 
 		_makeRoom(pos + length + 1)
-		vsnprintf(buffer data + pos, length + 1, fmt, list)
+		vsnprintf(this buffer data + pos, length + 1, fmt, list)
 		pos += length
 	}
 }
