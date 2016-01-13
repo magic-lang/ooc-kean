@@ -84,10 +84,10 @@ FloatBox2D: cover {
 		This createAround(this center, value * this size)
 	}
 	enlargeTo: func (size: FloatVector2D) -> This {
-		This createAround(this center, FloatVector2D maximum(this size, size))
+		This createAround(this center, this size maximum(size))
 	}
 	shrinkTo: func (size: FloatVector2D) -> This {
-		This createAround(this center, FloatVector2D minimum(this size, size))
+		This createAround(this center, this size minimum(size))
 	}
 	intersection: func (other: This) -> This {
 		left := Float maximum(this left, other left)
@@ -119,7 +119,7 @@ FloatBox2D: cover {
 	maximumDistance: func (points: VectorList<FloatPoint2D>) -> FloatVector2D {
 		result := FloatVector2D new()
 		for (index in 0 .. points count)
-			result = FloatVector2D maximum(this distance(points[index]), result)
+			result = result maximum(this distance(points[index]))
 		result
 	}
 	round: func -> This { This new(this leftTop round(), this size round()) }
