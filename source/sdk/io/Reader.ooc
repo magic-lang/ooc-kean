@@ -1,34 +1,20 @@
-/**
- * The reader interface provides a medium-indendant way to read characters
- * from a source, e.g. a file, a string, an URL, etc.
- */
+SeekMode: enum {
+	SET // seek to position `offset` in the file
+	CUR // seek relative to the current read point
+	END // seek relative to the end of data
+}
+
 Reader: abstract class {
-	/** Position in the stream. Not supported by all reader types */
+	// Position in the stream. Not supported by all reader types
 	marker: Long
 
-	/**
-	   Read 'count' bytes and store them in 'chars' with offset 'offset'
-	   :return: The number of bytes read
-	 */
 	read: abstract func (chars: CString, offset: Int, count: Int) -> SizeT
-
-	/**
-	 * Read a single character, and return int
-	 */
 	read: abstract func ~char -> Char
-
-	/**
-	 * Read a bufferfull at most, and return the number of bytes read
-	 */
 	read: func ~buffer (buffer: CharBuffer) -> SizeT {
-		count := read(buffer data, 0, buffer capacity)
+		count := this read(buffer data, 0, buffer capacity)
 		buffer size = count
 		count
 	}
-
-	/**
-	 * Read till the end of stream, return result as a string.
-	 */
 	readAll: func -> String {
 		in := CharBuffer new(4096)
 		out := CharBuffer new(4096)
@@ -38,28 +24,18 @@ Reader: abstract class {
 		}
 		out toString()
 	}
-
-	/**
-	   Read the stream until character `end` is reached, and return
-	   the result
-
-	   Note that the `end` character is consumed, e.g. the stream isn't
-	   rewinded once `end` has been read.
-	 */
 	readUntil: func (end: Char) -> String {
-		sb := CharBuffer new(1024) // let's be pragmatic
-		while (hasNext?()) {
+		sb := CharBuffer new(1024)
+		while (this hasNext?()) {
 			c := read()
-			if (c == end || (!hasNext?() && c == 8)) {
+			if (c == end || (!this hasNext?() && c == 8))
 				break
-			}
 			sb append(c)
 		}
-		return sb toString()
+		sb toString()
 	}
-
 	readWhile: func ~filter (filter: Func(Char) -> Bool) -> String {
-		sb := CharBuffer new(1024) // let's be pragmatic
+		sb := CharBuffer new(1024)
 		while (hasNext?()) {
 			c := read()
 			if (!filter(c)) {
@@ -68,42 +44,30 @@ Reader: abstract class {
 			}
 			sb append(c)
 		}
-		return sb toString()
+		sb toString()
 	}
-
-	/**
-	   Read the stream until character `end` is reached.
-
-	   Acts as readUntil(), but doesn't return the result. This saves a
-	   buffer allocation.
-
-	   Note that the `end` character is consumed, e.g. the stream isn't
-	   rewinded once `end` has been read.
-	 */
 	skipUntil: func (end: Char) {
-		while (hasNext?()) {
+		while (this hasNext?()) {
 			c := read()
-			if (c == end) break
+			if (c == end)
+				break
 		}
 	}
-
 	skipUntil: func ~str (end: String) {
-		while (hasNext?()) {
+		stop := false
+		while (this hasNext?() && !stop) {
 			c := read()
 			i := 0
-			while (c == end[i]) {
+			while (c == end[i] && !stop) {
 				c = read()
 				i += 1
-				if (i >= end size) return // caught it!
+				if (i >= end size)
+					stop = true
 			}
 		}
 	}
-
-	/**
-	   Read as many `unwanted` chars as
-	 */
 	skipWhile: func (unwanted: Char) {
-		while (hasNext?()) {
+		while (this hasNext?()) {
 			c := read()
 			if (c != unwanted) {
 				rewind(1)
@@ -111,9 +75,8 @@ Reader: abstract class {
 			}
 		}
 	}
-
 	skipWhile: func ~filter (filter: Func(Char) -> Bool) {
-		while (hasNext?()) {
+		while (this hasNext?()) {
 			c := read()
 			if (!filter(c)) {
 				rewind(1)
@@ -121,123 +84,35 @@ Reader: abstract class {
 			}
 		}
 	}
-
-	/**
-	   Read a single line and return it.
-
-	   More specifically, read until a '\n', trim any '\r' character
-	   and return the result
-	 */
 	readLine: func -> String {
 		line := readUntil('\n')
 		result := line trimRight('\r')
 		line free()
 		result
 	}
-
-	/**
-	   Skip a single line.
-
-	   More specifically, skip until a '\n' character is reached.
-	   The final '\n' is consumed, ie. the stream isn't rewinded.
-	 */
 	skipLine: func {
 		skipUntil('\n')
 	}
-
-	/**
-	   Read every line, and call `f` on it until `f` returns false
-	   or we have reached the end of the file.
-
-	   :return: true if we have reached the end of the file, false
-	   if we were cancelled by `f` returning false.
-	 */
 	eachLine: func (f: Func(String) -> Bool) -> Bool {
-		while (hasNext?()) {
-			if (!f(readLine())) return false
+		result := true
+		while (this hasNext?()) {
+			if (!f(this readLine())) {
+				result = false
+				break
+			}
 		}
-		true
+		result
 	}
-
-	/**
-	   Attempts to read one character and then rewind the stream
-	   by one.
-
-	   If the underlying reader doesn't support rewinding, this may
-	   result in a runtime exception.
-	 */
 	peek: func -> Char {
 		c := read()
 		rewind(1)
 		c
 	}
-
-	/**
-	   :return: true if there's some more data to be read, false if
-	   we're at end-of-file.
-
-	   Note that it doesn't guarantee that any data is *ready* to be read.
-	   calling read() just after hasNext?() has returned true may well
-	   return 0, depending on which kind of reader you're dealing with.
-	 */
 	hasNext?: abstract func -> Bool
-
-	/**
-	   Set the mark of this stream to the current position,
-	   and return it as a long.
-	 */
 	mark: abstract func -> Long
-
-	/**
-	   Attempt to rewind this stream by the given offset.
-	 */
-	rewind: func (offset: Int) -> Bool {
-		seek(-offset, SeekMode CUR)
-	}
-
-	/**
-	 * Seeks to offset relative to whence
-	 *
-	 * Might throw an exception if the stream is not seekable
-	 *
-	 * :return: true on success
-	 */
+	rewind: func (offset: Int) -> Bool { seek(-offset, SeekMode CUR) }
 	seek: abstract func (offset: Long, mode: SeekMode) -> Bool
-
-	/**
-	   Attempt to reset the stream to the given mark
-	 */
-	reset: func (marker: Long) {
-		seek(marker, SeekMode SET)
-	}
-
-	/**
-	   Skip the given number of bytes.
-	   If `offset` is negative, we will attempt to rewind the stream
-	 */
-	skip: func (offset: Int) {
-		seek(offset, SeekMode CUR)
-	}
-
-	/**
-	   Close this reader and free the associated system resources, if any.
-	 */
+	reset: func (marker: Long) { seek(marker, SeekMode SET) }
+	skip: func (offset: Int) { seek(offset, SeekMode CUR) }
 	close: abstract func
-}
-
-SeekMode: enum {
-	/** seek to position `offset` in the file */
-	SET
-
-	/** seek relative to the current read point */
-	CUR
-
-	/** seek relative to the end of data */
-	END
-}
-
-SeekingNotSupported: class extends Exception {
-	init: func (.origin) {
-		super(origin, "Seeking is not supported for this source")
-	}
 }
