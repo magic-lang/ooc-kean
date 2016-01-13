@@ -1,32 +1,16 @@
 import io/[Reader, File]
 
-/**
- * Implement the Reader interface for file input
- *
- * By default, files are opened in binary mode. If you want to open
- * them in text mode, use the new~withMode variant, but beware: on
- * mingw, rewind()/mark() won't work correctly.
- */
 FileReader: class extends Reader {
 	fileName: Text
-
-	/** The underlying file descriptor */
 	file: FStream
 
-	/**
-	 * Open a file for reading in binary mode, given a `File` object.
-	 */
 	init: func ~withFile (fileObject: File) {
 		init(Text new(fileObject getPath()))
 	}
-
-	/**
-	 * Open a file for reading in binary mode, given its name.
-	 */
 	init: func ~withName (fileName: Text) {
-	// mingw fseek/ftell are *really* unreliable with text mode
-	// if for some weird reason you need to open in text mode, use
-	// FileReader new(fileName, "rt")
+		// mingw fseek/ftell are *really* unreliable with text mode
+		// if for some reason you need to open in text mode, use
+		// FileReader new(fileName, "rt")
 		init(fileName, t"rb")
 	}
 
@@ -52,50 +36,24 @@ FileReader: class extends Reader {
 		}
 	}
 
-	/**
-	 * Init a file reader from an FStream
-	 */
 	init: func ~fromFStream (=file)
-
 	free: override func {
 		this fileName free(Owner Receiver)
 		super()
 	}
-
-	/**
-	 * Read at most `bytesToRead` bytes and writes them at offset `offset` into `dest`
-	 *
-	 * @param dest Pointer to a memory block large enough to hold up to
-	 * `bytesToRead` bytes.
-	 * @param offset Offset from `dest` where to actually write the bytes.
-	 * @param bytesToRead Maximum number of bytes to be read. It might
-	 * read exactly `bytesToRead` bytes, or less, or even none.
-	 *
-	 * @return The number of bytes read.
-	 */
 	read: override func (buffer: Char*, offset: Int, count: SizeT) -> SizeT {
-		file read(buffer + offset, count)
+		this file read(buffer + offset, count)
 	}
-
 	read: func ~fullBuffer (buffer: CharBuffer) {
 		count := file read(buffer data, buffer capacity)
 		buffer size = count
 	}
-
-	/**
-	 * @return a single char read from this file.
-	 */
 	read: override func ~char -> Char {
-		file readChar()
+		this file readChar()
 	}
-
-	/**
-	 * @return true if there is still data available to be read from this file
-	 */
 	hasNext?: override func -> Bool {
 		feof(file) == 0
 	}
-
 	seek: override func (offset: Long, mode: SeekMode) -> Bool {
 		file seek(offset, match mode {
 			case SeekMode SET => SEEK_SET
@@ -106,13 +64,11 @@ FileReader: class extends Reader {
 				SEEK_SET
 		}) == 0
 	}
-
 	mark: override func -> Long {
-		marker = file tell()
-		marker
+		this marker = file tell()
+		this marker
 	}
-
 	close: override func {
-		file close()
+		this file close()
 	}
 }
