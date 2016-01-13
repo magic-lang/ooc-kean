@@ -1,0 +1,1058 @@
+<?xml version='1.0' standalone='no'?>
+<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.1' width='1920.00' height='1080.00'>
+<rect desc='background' width='100%' height='100%' fill='white'/>
+<svg desc='Plot 1' x='0.00' y='0.00' width='640.00' height='540.00'>
+<text id='Simplest use-case with line plot' x='320.00' y='22.17' font-size='16px' text-anchor='middle' fill='black' fill-opacity='255.00'>Simplest use-case with line plot</text>
+<g desc='X-axis data'>
+<text id='' x='320.00' y='532.00' font-size='14px' text-anchor='middle' fill='black' fill-opacity='255.00'></text>
+<text id='1.00E2' x='615.00' y='518.00' font-size='14px' text-anchor='middle' fill='black' fill-opacity='255.00'>1.00E2</text>
+<g desc='10000.00'>
+<line x1='180.71' y1='505.00' x2='180.71' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='180.71' y1='505.00' x2='180.71' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='180.71' y1='35.00' x2='180.71' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='100' x='180.71' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>100</text>
+</g>
+<g desc='20000.00'>
+<line x1='312.74' y1='505.00' x2='312.74' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='312.74' y1='505.00' x2='312.74' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='312.74' y1='35.00' x2='312.74' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='200' x='312.74' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>200</text>
+</g>
+<g desc='30000.00'>
+<line x1='444.77' y1='505.00' x2='444.77' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='444.77' y1='505.00' x2='444.77' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='444.77' y1='35.00' x2='444.77' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='300' x='444.77' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>300</text>
+</g>
+<g desc='40000.00'>
+<line x1='576.80' y1='505.00' x2='576.80' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='576.80' y1='505.00' x2='576.80' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='576.80' y1='35.00' x2='576.80' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='400' x='576.80' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>400</text>
+</g>
+</g>
+<g desc='Y-axis data'>
+<g desc='rotated Y-axis' transform='rotate(-90,15.33,270.00)'>
+<text id='' x='15.33' y='270.00' font-size='14px' text-anchor='middle' fill='black' fill-opacity='255.00'></text>
+</g>
+<g desc='0.00'>
+<line x1='50.00' y1='505.00' x2='590.00' y2='505.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='505.00' x2='55.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='505.00' x2='585.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0' x='44.00' y='508.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>0</text>
+</g>
+<g desc='100.00'>
+<line x1='50.00' y1='426.67' x2='590.00' y2='426.67' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='426.67' x2='55.00' y2='426.67' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='426.67' x2='585.00' y2='426.67' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='100' x='44.00' y='430.00' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>100</text>
+</g>
+<g desc='200.00'>
+<line x1='50.00' y1='348.33' x2='590.00' y2='348.33' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='348.33' x2='55.00' y2='348.33' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='348.33' x2='585.00' y2='348.33' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='200' x='44.00' y='351.67' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>200</text>
+</g>
+<g desc='300.00'>
+<line x1='50.00' y1='270.00' x2='590.00' y2='270.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='270.00' x2='55.00' y2='270.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='270.00' x2='585.00' y2='270.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='300' x='44.00' y='273.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>300</text>
+</g>
+<g desc='400.00'>
+<line x1='50.00' y1='191.67' x2='590.00' y2='191.67' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='191.67' x2='55.00' y2='191.67' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='191.67' x2='585.00' y2='191.67' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='400' x='44.00' y='195.00' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>400</text>
+</g>
+<g desc='500.00'>
+<line x1='50.00' y1='113.33' x2='590.00' y2='113.33' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='113.33' x2='55.00' y2='113.33' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='113.33' x2='585.00' y2='113.33' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='500' x='44.00' y='116.67' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>500</text>
+</g>
+<g desc='600.00'>
+<line x1='50.00' y1='35.00' x2='590.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='35.00' x2='55.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='35.00' x2='585.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='600' x='44.00' y='38.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>600</text>
+</g>
+</g>
+<rect desc='Plot-border' x='50.00' y='35.00' width='540.00' height='470.00' stroke='black' fill='none'/>
+<svg desc='Data' x='50.00' y='35.00' width='540.00' height='470.00'>
+<path stroke='crimson' stroke-opacity='1.00' fill='none' stroke-width='1.00' d='M 0.00 470.00 L 1.32 415.70 2.64 383.94 3.96 361.41 5.28 343.93 6.60 329.65 7.92 317.57 9.24 307.11 10.56 297.88 11.88 289.63 13.20 282.16 14.52 275.35 15.84 269.08 17.16 263.27 18.48 257.87 19.80 252.81 21.12 248.06 22.44 243.59 23.77 239.35 25.09 235.33 26.41 231.51 27.73 227.87 29.05 224.39 30.37 221.05 31.69 217.85 33.01 214.78 34.33 211.83 35.65 208.98 36.97 206.23 38.29 203.57 39.61 201.00 40.93 198.52 42.25 196.11 43.57 193.77 44.89 191.50 46.21 189.29 47.53 187.14 48.85 185.06 50.17 183.02 51.49 181.04 52.81 179.10 54.13 177.22 55.45 175.37 56.77 173.57 58.09 171.81 59.41 170.09 60.73 168.41 62.05 166.76 63.37 165.14 64.69 163.56 66.01 162.01 67.33 160.49 68.66 158.99 69.98 157.53 71.30 156.09 72.62 154.68 73.94 153.29 75.26 151.93 76.58 150.59 77.90 149.28 79.22 147.98 80.54 146.71 81.86 145.45 83.18 144.22 84.50 143.01 85.82 141.81 87.14 140.63 88.46 139.47 89.78 138.33 91.10 137.20 92.42 136.09 93.74 134.99 95.06 133.91 96.38 132.85 97.70 131.80 99.02 130.76 100.34 129.74 101.66 128.72 102.98 127.73 104.30 126.74 105.62 125.77 106.94 124.81 108.26 123.86 109.58 122.92 110.90 121.99 112.22 121.08 113.55 120.17 114.87 119.28 116.19 118.39 117.51 117.51 118.83 116.65 120.15 115.79 121.47 114.95 122.79 114.11 124.11 113.28 125.43 112.46 126.75 111.65 128.07 110.84 129.39 110.05 130.71 109.26 132.03 108.48 133.35 107.71 134.67 106.95 135.99 106.19 137.31 105.44 138.63 104.70 139.95 103.96 141.27 103.23 142.59 102.51 143.91 101.80 145.23 101.09 146.55 100.38 147.87 99.69 149.19 99.00 150.51 98.31 151.83 97.64 153.15 96.96 154.47 96.30 155.79 95.64 157.11 94.98 158.44 94.33 159.76 93.68 161.08 93.05 162.40 92.41 163.72 91.78 165.04 91.16 166.36 90.54 167.68 89.92 169.00 89.31 170.32 88.71 171.64 88.11 172.96 87.51 174.28 86.92 175.60 86.34 176.92 85.75 178.24 85.18 179.56 84.60 180.88 84.03 182.20 83.47 183.52 82.90 184.84 82.35 186.16 81.79 187.48 81.24 188.80 80.70 190.12 80.16 191.44 79.62 192.76 79.08 194.08 78.55 195.40 78.02 196.72 77.50 198.04 76.98 199.36 76.46 200.68 75.95 202.00 75.44 203.33 74.93 204.65 74.43 205.97 73.93 207.29 73.43 208.61 72.94 209.93 72.44 211.25 71.96 212.57 71.47 213.89 70.99 215.21 70.51 216.53 70.03 217.85 69.56 219.17 69.09 220.49 68.62 221.81 68.16 223.13 67.70 224.45 67.24 225.77 66.78 227.09 66.33 228.41 65.87 229.73 65.43 231.05 64.98 232.37 64.53 233.69 64.09 235.01 63.65 236.33 63.22 237.65 62.78 238.97 62.35 240.29 61.92 241.61 61.50 242.93 61.07 244.25 60.65 245.57 60.23 246.89 59.81 248.22 59.40 249.54 58.98 250.86 58.57 252.18 58.16 253.50 57.76 254.82 57.35 256.14 56.95 257.46 56.55 258.78 56.15 260.10 55.75 261.42 55.36 262.74 54.97 264.06 54.57 265.38 54.19 266.70 53.80 268.02 53.41 269.34 53.03 270.66 52.65 271.98 52.27 273.30 51.89 274.62 51.52 275.94 51.14 277.26 50.77 278.58 50.40 279.90 50.03 281.22 49.67 282.54 49.30 283.86 48.94 285.18 48.57 286.50 48.21 287.82 47.86 289.14 47.50 290.46 47.14 291.78 46.79 293.11 46.44 294.43 46.09 295.75 45.74 297.07 45.39 298.39 45.05 299.71 44.70 301.03 44.36 302.35 44.02 303.67 43.68 304.99 43.34 306.31 43.00 307.63 42.67 308.95 42.33 310.27 42.00 311.59 41.67 312.91 41.34 314.23 41.01 315.55 40.68 316.87 40.36 318.19 40.03 319.51 39.71 320.83 39.39 322.15 39.07 323.47 38.75 324.79 38.43 326.11 38.11 327.43 37.80 328.75 37.49 330.07 37.17 331.39 36.86 332.71 36.55 334.03 36.24 335.35 35.93 336.67 35.63 338.00 35.32 339.32 35.02 340.64 34.72 341.96 34.41 343.28 34.11 344.60 33.81 345.92 33.51 347.24 33.22 348.56 32.92 349.88 32.63 351.20 32.33 352.52 32.04 353.84 31.75 355.16 31.46 356.48 31.17 357.80 30.88 359.12 30.59 360.44 30.30 361.76 30.02 363.08 29.74 364.40 29.45 365.72 29.17 367.04 28.89 368.36 28.61 369.68 28.33 371.00 28.05 372.32 27.77 373.64 27.50 374.96 27.22 376.28 26.95 377.60 26.67 378.92 26.40 380.24 26.13 381.56 25.86 382.89 25.59 384.21 25.32 385.53 25.05 386.85 24.79 388.17 24.52 389.49 24.26 390.81 23.99 392.13 23.73 393.45 23.47 394.77 23.20 396.09 22.94 397.41 22.68 398.73 22.42 400.05 22.17 401.37 21.91 402.69 21.65 404.01 21.40 405.33 21.14 406.65 20.89 407.97 20.64 409.29 20.38 410.61 20.13 411.93 19.88 413.25 19.63 414.57 19.38 415.89 19.13 417.21 18.89 418.53 18.64 419.85 18.39 421.17 18.15 422.49 17.90 423.81 17.66 425.13 17.42 426.45 17.18 427.78 16.93 429.10 16.69 430.42 16.45 431.74 16.21 433.06 15.98 434.38 15.74 435.70 15.50 437.02 15.26 438.34 15.03 439.66 14.79 440.98 14.56 442.30 14.33 443.62 14.09 444.94 13.86 446.26 13.63 447.58 13.40 448.90 13.17 450.22 12.94 451.54 12.71 452.86 12.48 454.18 12.26 455.50 12.03 456.82 11.80 458.14 11.58 459.46 11.35 460.78 11.13 462.10 10.91 463.42 10.68 464.74 10.46 466.06 10.24 467.38 10.02 468.70 9.80 470.02 9.58 471.34 9.36 472.67 9.14 473.99 8.92 475.31 8.70 476.63 8.49 477.95 8.27 479.27 8.06 480.59 7.84 481.91 7.63 483.23 7.41 484.55 7.20 485.87 6.99 487.19 6.78 488.51 6.56 489.83 6.35 491.15 6.14 492.47 5.93 493.79 5.72 495.11 5.52 496.43 5.31 497.75 5.10 499.07 4.89 500.39 4.69 501.71 4.48 503.03 4.28 504.35 4.07 505.67 3.87 506.99 3.66 508.31 3.46 509.63 3.26 510.95 3.05 512.27 2.85 513.59 2.65 514.91 2.45 516.23 2.25 517.55 2.05 518.88 1.85 520.20 1.65 521.52 1.46 522.84 1.26 524.16 1.06 525.48 0.86 526.80 0.67 528.12 0.47 ' />
+</svg>
+<svg desc='Legends' x='50.00' y='35.00' width='540.00' height='470.00' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>
+<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>
+<g id='Legend' drag:enable='true'>
+<line x1='5.00' y1='12.00' x2='19.00' y2='12.00' stroke-width='1.00' stroke='crimson' stroke-opacity='1.00'/>
+<text id='log(x)' x='19.00' y='16.00' font-size='14px' text-anchor='start' fill='crimson' fill-opacity='1.00'>log(x)</text>
+</g>
+</svg>
+</svg>
+<svg desc='Plot 2' x='640.00' y='0.00' width='640.00' height='540.00'>
+<text id='Simplest use-case with scatter plot' x='320.00' y='22.17' font-size='16px' text-anchor='middle' fill='black' fill-opacity='255.00'>Simplest use-case with scatter plot</text>
+<g desc='X-axis data'>
+<text id='' x='320.00' y='532.00' font-size='14px' text-anchor='middle' fill='black' fill-opacity='255.00'></text>
+<g desc='10.00'>
+<line x1='99.09' y1='505.00' x2='99.09' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='99.09' y1='505.00' x2='99.09' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='99.09' y1='35.00' x2='99.09' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='10' x='99.09' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>10</text>
+</g>
+<g desc='20.00'>
+<line x1='153.64' y1='505.00' x2='153.64' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='153.64' y1='505.00' x2='153.64' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='153.64' y1='35.00' x2='153.64' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='20' x='153.64' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>20</text>
+</g>
+<g desc='30.00'>
+<line x1='208.18' y1='505.00' x2='208.18' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='208.18' y1='505.00' x2='208.18' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='208.18' y1='35.00' x2='208.18' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='30' x='208.18' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>30</text>
+</g>
+<g desc='40.00'>
+<line x1='262.73' y1='505.00' x2='262.73' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='262.73' y1='505.00' x2='262.73' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='262.73' y1='35.00' x2='262.73' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='40' x='262.73' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>40</text>
+</g>
+<g desc='50.00'>
+<line x1='317.27' y1='505.00' x2='317.27' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='317.27' y1='505.00' x2='317.27' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='317.27' y1='35.00' x2='317.27' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='50' x='317.27' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>50</text>
+</g>
+<g desc='60.00'>
+<line x1='371.82' y1='505.00' x2='371.82' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='371.82' y1='505.00' x2='371.82' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='371.82' y1='35.00' x2='371.82' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='60' x='371.82' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>60</text>
+</g>
+<g desc='70.00'>
+<line x1='426.36' y1='505.00' x2='426.36' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='426.36' y1='505.00' x2='426.36' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='426.36' y1='35.00' x2='426.36' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='70' x='426.36' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>70</text>
+</g>
+<g desc='80.00'>
+<line x1='480.91' y1='505.00' x2='480.91' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='480.91' y1='505.00' x2='480.91' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='480.91' y1='35.00' x2='480.91' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='80' x='480.91' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>80</text>
+</g>
+<g desc='90.00'>
+<line x1='535.45' y1='505.00' x2='535.45' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='535.45' y1='505.00' x2='535.45' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='535.45' y1='35.00' x2='535.45' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='90' x='535.45' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>90</text>
+</g>
+<g desc='100.00'>
+<line x1='590.00' y1='505.00' x2='590.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='590.00' y1='505.00' x2='590.00' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='35.00' x2='590.00' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='100' x='590.00' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>100</text>
+</g>
+</g>
+<g desc='Y-axis data'>
+<g desc='rotated Y-axis' transform='rotate(-90,20.00,270.00)'>
+<text id='' x='20.00' y='270.00' font-size='14px' text-anchor='middle' fill='black' fill-opacity='255.00'></text>
+</g>
+<g desc='0.00'>
+<line x1='50.00' y1='505.00' x2='590.00' y2='505.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='505.00' x2='55.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='505.00' x2='585.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0' x='44.00' y='508.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>0</text>
+</g>
+<g desc='10.00'>
+<line x1='50.00' y1='458.00' x2='590.00' y2='458.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='458.00' x2='55.00' y2='458.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='458.00' x2='585.00' y2='458.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='10' x='44.00' y='461.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>10</text>
+</g>
+<g desc='20.00'>
+<line x1='50.00' y1='411.00' x2='590.00' y2='411.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='411.00' x2='55.00' y2='411.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='411.00' x2='585.00' y2='411.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='20' x='44.00' y='414.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>20</text>
+</g>
+<g desc='30.00'>
+<line x1='50.00' y1='364.00' x2='590.00' y2='364.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='364.00' x2='55.00' y2='364.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='364.00' x2='585.00' y2='364.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='30' x='44.00' y='367.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>30</text>
+</g>
+<g desc='40.00'>
+<line x1='50.00' y1='317.00' x2='590.00' y2='317.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='317.00' x2='55.00' y2='317.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='317.00' x2='585.00' y2='317.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='40' x='44.00' y='320.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>40</text>
+</g>
+<g desc='50.00'>
+<line x1='50.00' y1='270.00' x2='590.00' y2='270.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='270.00' x2='55.00' y2='270.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='270.00' x2='585.00' y2='270.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='50' x='44.00' y='273.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>50</text>
+</g>
+<g desc='60.00'>
+<line x1='50.00' y1='223.00' x2='590.00' y2='223.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='223.00' x2='55.00' y2='223.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='223.00' x2='585.00' y2='223.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='60' x='44.00' y='226.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>60</text>
+</g>
+<g desc='70.00'>
+<line x1='50.00' y1='176.00' x2='590.00' y2='176.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='176.00' x2='55.00' y2='176.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='176.00' x2='585.00' y2='176.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='70' x='44.00' y='179.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>70</text>
+</g>
+<g desc='80.00'>
+<line x1='50.00' y1='129.00' x2='590.00' y2='129.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='129.00' x2='55.00' y2='129.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='129.00' x2='585.00' y2='129.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='80' x='44.00' y='132.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>80</text>
+</g>
+<g desc='90.00'>
+<line x1='50.00' y1='82.00' x2='590.00' y2='82.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='82.00' x2='55.00' y2='82.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='82.00' x2='585.00' y2='82.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='90' x='44.00' y='85.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>90</text>
+</g>
+<g desc='100.00'>
+<line x1='50.00' y1='35.00' x2='590.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='35.00' x2='55.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='35.00' x2='585.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='100' x='44.00' y='38.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>100</text>
+</g>
+</g>
+<rect desc='Plot-border' x='50.00' y='35.00' width='540.00' height='470.00' stroke='black' fill='none'/>
+<svg desc='Data' x='50.00' y='35.00' width='540.00' height='470.00'>
+<ellipse cx='490.91' cy='112.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='114.55' cy='338.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='125.45' cy='75.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='420.00' cy='75.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='278.18' cy='296.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='103.64' cy='366.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='300.00' cy='385.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='245.45' cy='42.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='207.27' cy='211.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='327.27' cy='446.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='294.55' cy='126.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='174.55' cy='253.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='54.55' cy='51.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='76.36' cy='253.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='540.00' cy='70.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='207.27' cy='390.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='267.27' cy='267.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='92.73' cy='4.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='436.36' cy='460.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='305.45' cy='108.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='436.36' cy='131.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='316.36' cy='310.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='289.09' cy='225.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='49.09' cy='470.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='60.00' cy='296.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='261.82' cy='108.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='87.27' cy='141.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='370.91' cy='423.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='392.73' cy='352.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='474.55' cy='23.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='70.91' cy='376.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='54.55' cy='258.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='414.55' cy='441.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='196.36' cy='197.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='38.18' cy='310.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='174.55' cy='451.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='174.55' cy='70.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='523.64' cy='244.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='305.45' cy='418.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='16.36' cy='286.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='354.55' cy='249.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='98.18' cy='211.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='529.09' cy='112.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='534.55' cy='37.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='278.18' cy='314.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='60.00' cy='136.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='130.91' cy='314.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='496.36' cy='56.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='327.27' cy='117.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='163.64' cy='418.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='49.09' cy='249.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='141.82' cy='84.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='523.64' cy='117.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='289.09' cy='159.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='534.55' cy='361.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='349.09' cy='122.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='207.27' cy='225.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='141.82' cy='37.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='136.36' cy='404.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='403.64' cy='183.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='240.00' cy='136.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='392.73' cy='197.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='316.36' cy='235.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='360.00' cy='103.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='327.27' cy='333.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='540.00' cy='329.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='240.00' cy='399.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='169.09' cy='347.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='278.18' cy='300.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='125.45' cy='14.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='130.91' cy='244.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='218.18' cy='399.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='180.00' cy='465.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='65.45' cy='32.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='27.27' cy='9.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='141.82' cy='239.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='10.91' cy='267.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='0.00' cy='371.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='141.82' cy='305.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='332.73' cy='437.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='512.73' cy='385.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='218.18' cy='291.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='245.45' cy='249.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='27.27' cy='145.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='0.00' cy='178.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='403.64' cy='183.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='540.00' cy='173.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='414.55' cy='37.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='332.73' cy='258.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='518.18' cy='352.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='212.73' cy='272.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='381.82' cy='47.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='278.18' cy='314.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='403.64' cy='244.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='534.55' cy='427.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='65.45' cy='23.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='16.36' cy='173.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='332.73' cy='173.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='229.09' cy='216.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='81.82' cy='206.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='218.18' cy='126.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='261.82' cy='404.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='518.18' cy='361.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='452.73' cy='61.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='27.27' cy='347.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='32.73' cy='418.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='310.91' cy='65.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='463.64' cy='399.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='365.45' cy='427.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='158.18' cy='173.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='289.09' cy='324.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='38.18' cy='244.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='125.45' cy='178.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='289.09' cy='455.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='38.18' cy='347.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='376.36' cy='94.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='136.36' cy='404.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='180.00' cy='235.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='321.82' cy='51.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='463.64' cy='263.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='32.73' cy='249.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='81.82' cy='28.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='485.45' cy='220.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='420.00' cy='37.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='496.36' cy='286.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='21.82' cy='343.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='245.45' cy='446.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='485.45' cy='314.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='185.45' cy='122.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='152.73' cy='235.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='234.55' cy='347.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='147.27' cy='37.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='125.45' cy='51.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='272.73' cy='4.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='512.73' cy='164.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='305.45' cy='427.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='109.09' cy='366.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='92.73' cy='286.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='507.27' cy='178.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='10.91' cy='155.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='289.09' cy='399.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='163.64' cy='343.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='463.64' cy='70.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='436.36' cy='324.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='229.09' cy='84.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='540.00' cy='404.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='267.27' cy='75.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='332.73' cy='206.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='338.18' cy='300.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='38.18' cy='413.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='327.27' cy='230.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='452.73' cy='263.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='441.82' cy='258.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='469.09' cy='366.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='458.18' cy='94.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='332.73' cy='427.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='49.09' cy='408.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='283.64' cy='220.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='212.73' cy='206.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='229.09' cy='352.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='65.45' cy='291.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='54.55' cy='446.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='60.00' cy='263.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='430.91' cy='277.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='185.45' cy='220.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='414.55' cy='291.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='0.00' cy='94.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='180.00' cy='159.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='27.27' cy='75.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='54.55' cy='347.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='180.00' cy='385.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='5.45' cy='61.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='338.18' cy='169.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='32.73' cy='23.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='316.36' cy='159.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='267.27' cy='136.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='430.91' cy='371.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='447.27' cy='220.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='245.45' cy='263.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='316.36' cy='131.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='283.64' cy='169.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='60.00' cy='249.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='27.27' cy='470.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='534.55' cy='282.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='305.45' cy='131.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='376.36' cy='65.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='223.64' cy='357.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='469.09' cy='18.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='32.73' cy='352.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='474.55' cy='465.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='201.82' cy='216.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='305.45' cy='216.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='425.45' cy='432.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='125.45' cy='84.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='420.00' cy='211.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='0.00' cy='51.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='212.73' cy='192.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='261.82' cy='263.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='474.55' cy='9.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='512.73' cy='470.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='245.45' cy='206.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='5.45' cy='0.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='103.64' cy='380.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='376.36' cy='441.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='87.27' cy='89.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='507.27' cy='23.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='540.00' cy='28.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='289.09' cy='460.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='458.18' cy='329.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='490.91' cy='84.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='267.27' cy='437.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='16.36' cy='310.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='103.64' cy='470.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='190.91' cy='380.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='98.18' cy='51.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='109.09' cy='267.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='272.73' cy='155.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='261.82' cy='437.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='452.73' cy='314.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='98.18' cy='98.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='87.27' cy='141.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='54.55' cy='333.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='414.55' cy='385.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='250.91' cy='371.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='261.82' cy='394.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='43.64' cy='296.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='332.73' cy='408.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='327.27' cy='216.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='387.27' cy='117.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='376.36' cy='28.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='234.55' cy='418.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='300.00' cy='437.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='294.55' cy='455.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='540.00' cy='14.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='76.36' cy='413.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='458.18' cy='418.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='27.27' cy='404.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='490.91' cy='18.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='43.64' cy='220.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='98.18' cy='277.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='398.18' cy='366.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='469.09' cy='413.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='441.82' cy='9.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='87.27' cy='173.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='180.00' cy='282.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='501.82' cy='126.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='327.27' cy='103.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='496.36' cy='253.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='425.45' cy='164.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='229.09' cy='380.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='141.82' cy='28.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='436.36' cy='361.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='507.27' cy='451.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='430.91' cy='418.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='316.36' cy='206.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='447.27' cy='286.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='518.18' cy='394.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='218.18' cy='159.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='507.27' cy='159.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='169.09' cy='98.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='529.09' cy='437.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='27.27' cy='14.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='458.18' cy='178.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='60.00' cy='122.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='163.64' cy='470.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='409.09' cy='206.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='403.64' cy='173.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='98.18' cy='112.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='38.18' cy='258.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='420.00' cy='338.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='250.91' cy='239.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='452.73' cy='164.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='534.55' cy='244.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='529.09' cy='371.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='507.27' cy='404.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='534.55' cy='159.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='240.00' cy='126.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='321.82' cy='65.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='540.00' cy='178.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='310.91' cy='390.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='316.36' cy='441.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='196.36' cy='47.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='447.27' cy='9.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='436.36' cy='192.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='387.27' cy='366.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='212.73' cy='239.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='103.64' cy='70.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='436.36' cy='418.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='496.36' cy='291.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='376.36' cy='277.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='196.36' cy='418.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='441.82' cy='404.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='32.73' cy='408.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='332.73' cy='272.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='245.45' cy='47.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='349.09' cy='23.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='480.00' cy='141.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='452.73' cy='394.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='10.91' cy='117.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='289.09' cy='14.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='54.55' cy='98.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='65.45' cy='126.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='387.27' cy='159.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='392.73' cy='56.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='158.18' cy='173.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='169.09' cy='371.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='16.36' cy='28.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='125.45' cy='390.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='436.36' cy='235.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='38.18' cy='460.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='501.82' cy='451.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='185.45' cy='32.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='32.73' cy='357.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='21.82' cy='300.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='185.45' cy='206.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='207.27' cy='291.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='343.64' cy='79.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='321.82' cy='385.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='98.18' cy='9.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='125.45' cy='446.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='32.73' cy='89.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='316.36' cy='4.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='425.45' cy='9.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='218.18' cy='404.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='54.55' cy='272.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='76.36' cy='65.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='283.64' cy='47.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='43.64' cy='404.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='125.45' cy='282.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='278.18' cy='183.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='310.91' cy='460.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='169.09' cy='300.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='447.27' cy='338.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='409.09' cy='188.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='523.64' cy='366.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='130.91' cy='258.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='98.18' cy='112.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='403.64' cy='324.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='370.91' cy='155.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='196.36' cy='197.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='501.82' cy='390.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='387.27' cy='263.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='360.00' cy='56.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='452.73' cy='14.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='458.18' cy='455.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='409.09' cy='18.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='518.18' cy='300.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='360.00' cy='258.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='240.00' cy='103.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='152.73' cy='117.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='501.82' cy='347.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='321.82' cy='89.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='398.18' cy='51.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='321.82' cy='145.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='212.73' cy='310.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='414.55' cy='126.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='294.55' cy='385.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='300.00' cy='197.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='469.09' cy='258.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='16.36' cy='408.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='529.09' cy='366.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='169.09' cy='79.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='234.55' cy='460.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='16.36' cy='37.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='420.00' cy='432.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='114.55' cy='418.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='130.91' cy='42.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='54.55' cy='18.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='207.27' cy='70.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='169.09' cy='319.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='87.27' cy='347.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='316.36' cy='329.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='267.27' cy='145.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='338.18' cy='216.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='125.45' cy='272.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='398.18' cy='376.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='414.55' cy='371.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='120.00' cy='329.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='441.82' cy='441.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='458.18' cy='249.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='152.73' cy='366.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='392.73' cy='14.10' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='540.00' cy='225.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='376.36' cy='239.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='332.73' cy='470.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='185.45' cy='319.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='507.27' cy='197.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='349.09' cy='465.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='501.82' cy='300.80' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='343.64' cy='131.60' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='321.82' cy='220.90' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='234.55' cy='23.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='250.91' cy='188.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='289.09' cy='216.20' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='87.27' cy='56.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='392.73' cy='286.70' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='278.18' cy='42.30' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='169.09' cy='446.50' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='387.27' cy='56.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='436.36' cy='329.00' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+<ellipse cx='441.82' cy='9.40' rx='2.50' ry='2.50' fill='crimson' fill-opacity='1.00'/>
+</svg>
+<svg desc='Legends' x='50.00' y='35.00' width='540.00' height='470.00' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>
+<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>
+<g id='Legend' drag:enable='true'>
+<ellipse cx='12.00' cy='12.00' rx='5.60' ry='5.60' fill='crimson' fill-opacity='1.00'/>
+<text id='Random numbers' x='19.00' y='19.00' font-size='14px' text-anchor='start' fill='crimson' fill-opacity='1.00'>Random numbers</text>
+</g>
+</svg>
+</svg>
+<svg desc='Plot 3' x='1280.00' y='0.00' width='640.00' height='540.00'>
+<text id='Multiple shapes in one plot' x='320.00' y='22.17' font-size='16px' text-anchor='middle' fill='black' fill-opacity='255.00'>Multiple shapes in one plot</text>
+<g desc='X-axis data'>
+<text id='x' x='320.00' y='532.00' font-size='14px' text-anchor='middle' fill='black' fill-opacity='255.00'>x</text>
+<g desc='-10.00'>
+<line x1='50.00' y1='505.00' x2='50.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='505.00' x2='50.00' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='50.00' y1='35.00' x2='50.00' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-10' x='50.00' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>-10</text>
+</g>
+<g desc='-5.00'>
+<line x1='185.00' y1='505.00' x2='185.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='185.00' y1='505.00' x2='185.00' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='185.00' y1='35.00' x2='185.00' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-5' x='185.00' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>-5</text>
+</g>
+<g desc='0.00'>
+<line x1='320.00' y1='505.00' x2='320.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='320.00' y1='505.00' x2='320.00' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='320.00' y1='35.00' x2='320.00' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0' x='320.00' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>0</text>
+</g>
+<g desc='5.00'>
+<line x1='455.00' y1='505.00' x2='455.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='455.00' y1='505.00' x2='455.00' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='455.00' y1='35.00' x2='455.00' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='5' x='455.00' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>5</text>
+</g>
+<g desc='10.00'>
+<line x1='590.00' y1='505.00' x2='590.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='590.00' y1='505.00' x2='590.00' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='35.00' x2='590.00' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='10' x='590.00' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>10</text>
+</g>
+</g>
+<g desc='Y-axis data'>
+<g desc='rotated Y-axis' transform='rotate(-90,18.94,270.00)'>
+<text id='y' x='18.94' y='270.00' font-size='14px' text-anchor='middle' fill='black' fill-opacity='255.00'>y</text>
+</g>
+<g desc='-1.50'>
+<line x1='50.00' y1='505.00' x2='590.00' y2='505.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='505.00' x2='55.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='505.00' x2='585.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-1.50' x='44.00' y='508.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>-1.50</text>
+</g>
+<g desc='-1.00'>
+<line x1='50.00' y1='426.67' x2='590.00' y2='426.67' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='426.67' x2='55.00' y2='426.67' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='426.67' x2='585.00' y2='426.67' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-1' x='44.00' y='430.00' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>-1</text>
+</g>
+<g desc='-0.50'>
+<line x1='50.00' y1='348.33' x2='590.00' y2='348.33' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='348.33' x2='55.00' y2='348.33' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='348.33' x2='585.00' y2='348.33' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-0.50' x='44.00' y='351.67' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>-0.50</text>
+</g>
+<g desc='0.00'>
+<line x1='50.00' y1='270.00' x2='590.00' y2='270.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='270.00' x2='55.00' y2='270.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='270.00' x2='585.00' y2='270.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0' x='44.00' y='273.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>0</text>
+</g>
+<g desc='0.50'>
+<line x1='50.00' y1='191.67' x2='590.00' y2='191.67' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='191.67' x2='55.00' y2='191.67' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='191.67' x2='585.00' y2='191.67' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0.50' x='44.00' y='195.00' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>0.50</text>
+</g>
+<g desc='1.00'>
+<line x1='50.00' y1='113.33' x2='590.00' y2='113.33' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='113.33' x2='55.00' y2='113.33' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='113.33' x2='585.00' y2='113.33' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='1' x='44.00' y='116.67' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>1</text>
+</g>
+<g desc='1.50'>
+<line x1='50.00' y1='35.00' x2='590.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='35.00' x2='55.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='35.00' x2='585.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='1.50' x='44.00' y='38.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>1.50</text>
+</g>
+</g>
+<rect desc='Plot-border' x='50.00' y='35.00' width='540.00' height='470.00' stroke='black' fill='none'/>
+<svg desc='Data' x='50.00' y='35.00' width='540.00' height='470.00'>
+<path stroke='crimson' stroke-opacity='1.00' fill='none' stroke-width='1.00' d='M 0.00 149.77 L 1.35 156.45 2.70 163.32 4.05 170.37 5.40 177.58 6.75 184.94 8.10 192.42 9.45 200.01 10.80 207.69 12.15 215.43 13.50 223.23 14.85 231.05 16.20 238.88 17.55 246.70 18.90 254.50 20.25 262.24 21.60 269.92 22.95 277.51 24.30 284.99 25.65 292.35 27.00 299.57 28.35 306.62 29.70 313.49 31.05 320.17 32.40 326.64 33.75 332.87 35.10 338.87 36.45 344.60 37.80 350.06 39.15 355.23 40.50 360.10 41.85 364.65 43.20 368.89 44.55 372.79 45.90 376.34 47.25 379.54 48.60 382.38 49.95 384.85 51.30 386.95 52.65 388.67 54.00 390.00 55.35 390.95 56.70 391.50 58.05 391.67 59.40 391.44 60.75 390.82 62.10 389.81 63.45 388.42 64.80 386.64 66.15 384.48 67.50 381.95 68.85 379.06 70.20 375.80 71.55 372.19 72.90 368.24 74.25 363.95 75.60 359.34 76.95 354.42 78.30 349.21 79.65 343.70 81.00 337.93 82.35 331.90 83.70 325.62 85.05 319.12 86.40 312.41 87.75 305.51 89.10 298.43 90.45 291.19 91.80 283.81 93.15 276.31 94.50 268.70 95.85 261.01 97.20 253.26 98.55 245.46 99.90 237.63 101.25 229.80 102.60 221.98 103.95 214.20 105.30 206.46 106.65 198.80 108.00 191.22 109.35 183.76 110.70 176.43 112.05 169.24 113.40 162.21 114.75 155.37 116.10 148.73 117.45 142.30 118.80 136.10 120.15 130.15 121.50 124.47 122.85 119.05 124.20 113.93 125.55 109.12 126.90 104.61 128.25 100.43 129.60 96.59 130.95 93.10 132.30 89.96 133.65 87.18 135.00 84.77 136.35 82.74 137.70 81.08 139.05 79.81 140.40 78.93 141.75 78.44 143.10 78.35 144.45 78.64 145.80 79.32 147.15 80.39 148.50 81.85 149.85 83.70 151.20 85.92 152.55 88.51 153.90 91.47 155.25 94.78 156.60 98.45 157.95 102.46 159.30 106.80 160.65 111.46 162.00 116.43 163.35 121.70 164.70 127.25 166.05 133.07 167.40 139.14 168.75 145.46 170.10 151.99 171.45 158.74 172.80 165.67 174.15 172.78 175.50 180.04 176.85 187.45 178.20 194.97 179.55 202.59 180.90 210.29 182.25 218.05 183.60 225.85 184.95 233.68 186.30 241.51 187.65 249.33 189.00 257.11 190.35 264.83 191.70 272.48 193.05 280.04 194.40 287.48 195.75 294.79 197.10 301.96 198.45 308.95 199.80 315.76 201.15 322.37 202.50 328.76 203.85 334.92 205.20 340.82 206.55 346.46 207.90 351.83 209.25 356.90 210.60 361.66 211.95 366.11 213.30 370.24 214.65 374.02 216.00 377.46 217.35 380.54 218.70 383.25 220.05 385.60 221.40 387.57 222.75 389.16 224.10 390.36 225.45 391.18 226.80 391.60 228.15 391.63 229.50 391.27 230.85 390.53 232.20 389.39 233.55 387.86 234.90 385.96 236.25 383.67 237.60 381.02 238.95 378.00 240.30 374.62 241.65 370.90 243.00 366.83 244.35 362.44 245.70 357.72 247.05 352.70 248.40 347.39 249.75 341.79 251.10 335.93 252.45 329.81 253.80 323.46 255.15 316.89 256.50 310.11 257.85 303.14 259.20 296.01 260.55 288.72 261.90 281.30 263.25 273.76 264.60 266.12 265.95 258.41 267.30 250.64 268.65 242.83 270.00 235.00 271.35 227.17 272.70 219.36 274.05 211.59 275.40 203.88 276.75 196.24 278.10 188.70 279.45 181.28 280.80 173.99 282.15 166.86 283.50 159.89 284.85 153.11 286.20 146.54 287.55 140.19 288.90 134.07 290.25 128.21 291.60 122.61 292.95 117.30 294.30 112.28 295.65 107.56 297.00 103.17 298.35 99.10 299.70 95.38 301.05 92.00 302.40 88.98 303.75 86.33 305.10 84.04 306.45 82.14 307.80 80.61 309.15 79.47 310.50 78.73 311.85 78.37 313.20 78.40 314.55 78.82 315.90 79.64 317.25 80.84 318.60 82.43 319.95 84.40 321.30 86.75 322.65 89.46 324.00 92.54 325.35 95.98 326.70 99.76 328.05 103.89 329.40 108.34 330.75 113.10 332.10 118.17 333.45 123.54 334.80 129.18 336.15 135.08 337.50 141.24 338.85 147.63 340.20 154.24 341.55 161.05 342.90 168.04 344.25 175.21 345.60 182.52 346.95 189.96 348.30 197.52 349.65 205.17 351.00 212.89 352.35 220.67 353.70 228.49 355.05 236.32 356.40 244.15 357.75 251.95 359.10 259.71 360.45 267.41 361.80 275.03 363.15 282.55 364.50 289.96 365.85 297.22 367.20 304.33 368.55 311.26 369.90 318.01 371.25 324.54 372.60 330.86 373.95 336.93 375.30 342.75 376.65 348.30 378.00 353.57 379.35 358.54 380.70 363.20 382.05 367.54 383.40 371.55 384.75 375.22 386.10 378.53 387.45 381.49 388.80 384.08 390.15 386.30 391.50 388.15 392.85 389.61 394.20 390.68 395.55 391.36 396.90 391.65 398.25 391.56 399.60 391.07 400.95 390.19 402.30 388.92 403.65 387.26 405.00 385.23 406.35 382.82 407.70 380.04 409.05 376.90 410.40 373.41 411.75 369.57 413.10 365.39 414.45 360.88 415.80 356.07 417.15 350.95 418.50 345.53 419.85 339.85 421.20 333.90 422.55 327.70 423.90 321.27 425.25 314.63 426.60 307.79 427.95 300.76 429.30 293.57 430.65 286.24 432.00 278.78 433.35 271.20 434.70 263.54 436.05 255.80 437.40 248.02 438.75 240.20 440.10 232.37 441.45 224.54 442.80 216.74 444.15 208.99 445.50 201.30 446.85 193.69 448.20 186.19 449.55 178.81 450.90 171.57 452.25 164.49 453.60 157.59 454.95 150.88 456.30 144.38 457.65 138.10 459.00 132.07 460.35 126.30 461.70 120.79 463.05 115.58 464.40 110.66 465.75 106.05 467.10 101.76 468.45 97.81 469.80 94.20 471.15 90.94 472.50 88.05 473.85 85.52 475.20 83.36 476.55 81.58 477.90 80.19 479.25 79.18 480.60 78.56 481.95 78.33 483.30 78.50 484.65 79.05 486.00 80.00 487.35 81.33 488.70 83.05 490.05 85.15 491.40 87.62 492.75 90.46 494.10 93.66 495.45 97.21 496.80 101.11 498.15 105.35 499.50 109.90 500.85 114.77 502.20 119.94 503.55 125.40 504.90 131.13 506.25 137.13 507.60 143.36 508.95 149.83 510.30 156.51 511.65 163.38 513.00 170.43 514.35 177.65 515.70 185.01 517.05 192.49 518.40 200.08 519.75 207.76 521.10 215.50 522.45 223.30 523.80 231.12 525.15 238.95 526.50 246.77 527.85 254.57 529.20 262.31 530.55 269.99 531.90 277.58 533.25 285.06 534.60 292.42 535.95 299.63 537.30 306.68 538.65 313.55 540.00 320.23 ' />
+<path stroke='black' stroke-opacity='1.00' fill='none' stroke-width='1.00' d='M 0.00 366.45 L 1.35 370.55 2.70 374.31 4.05 377.72 5.40 380.77 6.75 383.45 8.10 385.77 9.45 387.71 10.80 389.27 12.15 390.44 13.50 391.22 14.85 391.62 16.20 391.62 17.55 391.23 18.90 390.45 20.25 389.28 21.60 387.73 22.95 385.79 24.30 383.48 25.65 380.79 27.00 377.74 28.35 374.34 29.70 370.58 31.05 366.49 32.40 362.07 33.75 357.33 35.10 352.29 36.45 346.95 37.80 341.33 39.15 335.45 40.50 329.32 41.85 322.95 43.20 316.36 44.55 309.56 45.90 302.58 47.25 295.43 48.60 288.13 49.95 280.70 51.30 273.16 52.65 265.51 54.00 257.80 55.35 250.02 56.70 242.21 58.05 234.38 59.40 226.55 60.75 218.74 62.10 210.97 63.45 203.26 64.80 195.64 66.15 188.11 67.50 180.69 68.85 173.42 70.20 166.29 71.55 159.34 72.90 152.58 74.25 146.03 75.60 139.69 76.95 133.60 78.30 127.75 79.65 122.18 81.00 116.89 82.35 111.89 83.70 107.20 85.05 102.83 86.40 98.79 87.75 95.10 89.10 91.75 90.45 88.76 91.80 86.13 93.15 83.88 94.50 82.00 95.85 80.51 97.20 79.40 98.55 78.68 99.90 78.36 101.25 78.42 102.60 78.88 103.95 79.72 105.30 80.95 106.65 82.57 108.00 84.57 109.35 86.95 110.70 89.70 112.05 92.80 113.40 96.27 114.75 100.08 116.10 104.23 117.45 108.70 118.80 113.49 120.15 118.59 121.50 123.98 122.85 129.64 124.20 135.56 125.55 141.74 126.90 148.15 128.25 154.77 129.60 161.60 130.95 168.61 132.30 175.78 133.65 183.11 135.00 190.56 136.35 198.12 137.70 205.78 139.05 213.51 140.40 221.29 141.75 229.11 143.10 236.94 144.45 244.77 145.80 252.57 147.15 260.33 148.50 268.02 149.85 275.64 151.20 283.15 152.55 290.54 153.90 297.79 155.25 304.89 156.60 311.81 157.95 318.54 159.30 325.06 160.65 331.35 162.00 337.40 163.35 343.20 164.70 348.73 166.05 353.97 167.40 358.92 168.75 363.55 170.10 367.87 171.45 371.85 172.80 375.49 174.15 378.78 175.50 381.71 176.85 384.27 178.20 386.47 179.55 388.28 180.90 389.71 182.25 390.75 183.60 391.40 184.95 391.66 186.30 391.53 187.65 391.01 189.00 390.10 190.35 388.80 191.70 387.12 193.05 385.05 194.40 382.61 195.75 379.81 197.10 376.64 198.45 373.11 199.80 369.25 201.15 365.04 202.50 360.51 203.85 355.67 205.20 350.53 206.55 345.09 207.90 339.38 209.25 333.41 210.60 327.20 211.95 320.75 213.30 314.09 214.65 307.23 216.00 300.20 217.35 292.99 218.70 285.65 220.05 278.18 221.40 270.60 222.75 262.93 224.10 255.19 225.45 247.40 226.80 239.57 228.15 231.74 229.50 223.92 230.85 216.12 232.20 208.37 233.55 200.69 234.90 193.09 236.25 185.60 237.60 178.23 238.95 171.00 240.30 163.94 241.65 157.05 243.00 150.35 244.35 143.87 245.70 137.61 247.05 131.60 248.40 125.85 249.75 120.37 251.10 115.17 252.45 110.28 253.80 105.70 255.15 101.44 256.50 97.51 257.85 93.93 259.20 90.70 260.55 87.83 261.90 85.33 263.25 83.20 264.60 81.46 265.95 80.09 267.30 79.12 268.65 78.53 270.00 78.33 271.35 78.53 272.70 79.12 274.05 80.09 275.40 81.46 276.75 83.20 278.10 85.33 279.45 87.83 280.80 90.70 282.15 93.93 283.50 97.51 284.85 101.44 286.20 105.70 287.55 110.28 288.90 115.17 290.25 120.37 291.60 125.85 292.95 131.60 294.30 137.61 295.65 143.87 297.00 150.35 298.35 157.05 299.70 163.94 301.05 171.00 302.40 178.23 303.75 185.60 305.10 193.09 306.45 200.69 307.80 208.37 309.15 216.12 310.50 223.92 311.85 231.74 313.20 239.57 314.55 247.40 315.90 255.19 317.25 262.93 318.60 270.60 319.95 278.18 321.30 285.65 322.65 292.99 324.00 300.20 325.35 307.23 326.70 314.09 328.05 320.75 329.40 327.20 330.75 333.41 332.10 339.38 333.45 345.09 334.80 350.53 336.15 355.67 337.50 360.51 338.85 365.04 340.20 369.25 341.55 373.11 342.90 376.64 344.25 379.81 345.60 382.61 346.95 385.05 348.30 387.12 349.65 388.80 351.00 390.10 352.35 391.01 353.70 391.53 355.05 391.66 356.40 391.40 357.75 390.75 359.10 389.71 360.45 388.28 361.80 386.47 363.15 384.27 364.50 381.71 365.85 378.78 367.20 375.49 368.55 371.85 369.90 367.87 371.25 363.55 372.60 358.92 373.95 353.97 375.30 348.73 376.65 343.20 378.00 337.40 379.35 331.35 380.70 325.06 382.05 318.54 383.40 311.81 384.75 304.89 386.10 297.79 387.45 290.54 388.80 283.15 390.15 275.64 391.50 268.02 392.85 260.33 394.20 252.57 395.55 244.77 396.90 236.94 398.25 229.11 399.60 221.29 400.95 213.51 402.30 205.78 403.65 198.12 405.00 190.56 406.35 183.11 407.70 175.78 409.05 168.61 410.40 161.60 411.75 154.77 413.10 148.15 414.45 141.74 415.80 135.56 417.15 129.64 418.50 123.98 419.85 118.59 421.20 113.49 422.55 108.70 423.90 104.23 425.25 100.08 426.60 96.27 427.95 92.80 429.30 89.70 430.65 86.95 432.00 84.57 433.35 82.57 434.70 80.95 436.05 79.72 437.40 78.88 438.75 78.42 440.10 78.36 441.45 78.68 442.80 79.40 444.15 80.51 445.50 82.00 446.85 83.88 448.20 86.13 449.55 88.76 450.90 91.75 452.25 95.10 453.60 98.79 454.95 102.83 456.30 107.20 457.65 111.89 459.00 116.89 460.35 122.18 461.70 127.75 463.05 133.60 464.40 139.69 465.75 146.03 467.10 152.58 468.45 159.34 469.80 166.29 471.15 173.42 472.50 180.69 473.85 188.11 475.20 195.64 476.55 203.26 477.90 210.97 479.25 218.74 480.60 226.55 481.95 234.38 483.30 242.21 484.65 250.02 486.00 257.80 487.35 265.51 488.70 273.16 490.05 280.70 491.40 288.13 492.75 295.43 494.10 302.58 495.45 309.56 496.80 316.36 498.15 322.95 499.50 329.32 500.85 335.45 502.20 341.33 503.55 346.95 504.90 352.29 506.25 357.33 507.60 362.07 508.95 366.49 510.30 370.58 511.65 374.34 513.00 377.74 514.35 380.79 515.70 383.48 517.05 385.79 518.40 387.73 519.75 389.28 521.10 390.45 522.45 391.23 523.80 391.62 525.15 391.62 526.50 391.22 527.85 390.44 529.20 389.27 530.55 387.71 531.90 385.77 533.25 383.45 534.60 380.77 535.95 377.72 537.30 374.31 538.65 370.55 540.00 366.45 ' />
+<path stroke='darkmagenta' stroke-opacity='1.00' fill='none' stroke-width='1.00' d='M 0.00 18.32 L 1.35 20.90 2.70 24.01 4.05 27.66 5.40 31.82 6.75 36.49 8.10 41.65 9.45 47.30 10.80 53.42 12.15 59.99 13.50 67.00 14.85 74.43 16.20 82.26 17.55 90.48 18.90 99.05 20.25 107.96 21.60 117.19 22.95 126.72 24.30 136.52 25.65 146.56 27.00 156.82 28.35 167.28 29.70 177.91 31.05 188.68 32.40 199.57 33.75 210.54 35.10 221.58 36.45 232.65 37.80 243.72 39.15 254.78 40.50 265.78 41.85 276.71 43.20 287.53 44.55 298.22 45.90 308.76 47.25 319.11 48.60 329.25 49.95 339.15 51.30 348.79 52.65 358.15 54.00 367.20 55.35 375.93 56.70 384.29 58.05 392.29 59.40 399.89 60.75 407.08 62.10 413.84 63.45 420.15 64.80 426.00 66.15 431.38 67.50 436.26 68.85 440.64 70.20 444.50 71.55 447.84 72.90 450.65 74.25 452.92 75.60 454.65 76.95 455.83 78.30 456.45 79.65 456.52 81.00 456.04 82.35 455.00 83.70 453.42 85.05 451.29 86.40 448.62 87.75 445.41 89.10 441.68 90.45 437.43 91.80 432.68 93.15 427.43 94.50 421.70 95.85 415.51 97.20 408.86 98.55 401.78 99.90 394.28 101.25 386.38 102.60 378.11 103.95 369.48 105.30 360.51 106.65 351.22 108.00 341.65 109.35 331.81 110.70 321.73 112.05 311.43 113.40 300.94 114.75 290.29 116.10 279.50 117.45 268.59 118.80 257.61 120.15 246.56 121.50 235.49 122.85 224.42 124.20 213.37 125.55 202.38 126.90 191.46 128.25 180.66 129.60 169.99 130.95 159.49 132.30 149.17 133.65 139.07 135.00 129.21 136.35 119.61 137.70 110.30 139.05 101.31 140.40 92.64 141.75 84.34 143.10 76.40 144.45 68.87 145.80 61.75 147.15 55.07 148.50 48.83 149.85 43.06 151.20 37.77 152.55 32.97 153.90 28.68 155.25 24.90 156.60 21.65 157.95 18.93 159.30 16.75 160.65 15.11 162.00 14.03 163.35 13.50 164.70 13.52 166.05 14.10 167.40 15.22 168.75 16.90 170.10 19.12 171.45 21.89 172.80 25.18 174.15 29.00 175.50 33.33 176.85 38.17 178.20 43.50 179.55 49.31 180.90 55.58 182.25 62.30 183.60 69.46 184.95 77.02 186.30 84.98 187.65 93.32 189.00 102.01 190.35 111.03 191.70 120.37 193.05 129.98 194.40 139.87 195.75 149.99 197.10 160.32 198.45 170.84 199.80 181.52 201.15 192.33 202.50 203.25 203.85 214.25 205.20 225.30 206.55 236.37 207.90 247.44 209.25 258.48 210.60 269.47 211.95 280.36 213.30 291.14 214.65 301.79 216.00 312.26 217.35 322.54 218.70 332.60 220.05 342.42 221.40 351.97 222.75 361.23 224.10 370.18 225.45 378.78 226.80 387.03 228.15 394.89 229.50 402.36 230.85 409.40 232.20 416.02 233.55 422.17 234.90 427.87 236.25 433.07 237.60 437.79 238.95 442.00 240.30 445.69 241.65 448.85 243.00 451.48 244.35 453.57 245.70 455.11 247.05 456.10 248.40 456.54 249.75 456.42 251.10 455.75 252.45 454.53 253.80 452.76 255.15 450.45 256.50 447.60 257.85 444.21 259.20 440.31 260.55 435.89 261.90 430.97 263.25 425.56 264.60 419.67 265.95 413.32 267.30 406.52 268.65 399.30 270.00 391.67 271.35 383.64 272.70 375.24 274.05 366.50 275.40 357.42 276.75 348.04 278.10 338.37 279.45 328.45 280.80 318.29 282.15 307.93 283.50 297.38 284.85 286.67 286.20 275.84 287.55 264.91 288.90 253.90 290.25 242.84 291.60 231.76 292.95 220.70 294.30 209.66 295.65 198.70 297.00 187.82 298.35 177.06 299.70 166.44 301.05 156.00 302.40 145.75 303.75 135.73 305.10 125.95 306.45 116.45 307.80 107.24 309.15 98.35 310.50 89.81 311.85 81.63 313.20 73.83 314.55 66.43 315.90 59.45 317.25 52.92 318.60 46.84 319.95 41.22 321.30 36.10 322.65 31.47 324.00 27.35 325.35 23.75 326.70 20.67 328.05 18.13 329.40 16.14 330.75 14.69 332.10 13.79 333.45 13.44 334.80 13.65 336.15 14.41 337.50 15.73 338.85 17.59 340.20 19.99 341.55 22.93 342.90 26.41 344.25 30.40 345.60 34.90 346.95 39.91 348.30 45.40 349.65 51.37 351.00 57.79 352.35 64.66 353.70 71.95 355.05 79.66 356.40 87.75 357.75 96.20 359.10 105.01 360.45 114.14 361.80 123.57 363.15 133.28 364.50 143.24 365.85 153.44 367.20 163.84 368.55 174.41 369.90 185.14 371.25 195.99 372.60 206.94 373.95 217.96 375.30 229.02 376.65 240.10 378.00 251.16 379.35 262.19 380.70 273.14 382.05 284.00 383.40 294.74 384.75 305.33 386.10 315.74 387.45 325.95 388.80 335.94 390.15 345.67 391.50 355.12 392.85 364.28 394.20 373.11 395.55 381.59 396.90 389.71 398.25 397.45 399.60 404.77 400.95 411.68 402.30 418.14 403.65 424.14 405.00 429.67 406.35 434.72 407.70 439.26 409.05 443.30 410.40 446.81 411.75 449.79 413.10 452.24 414.45 454.14 415.80 455.50 417.15 456.31 418.50 456.56 419.85 456.26 421.20 455.40 422.55 454.00 423.90 452.05 425.25 449.55 426.60 446.52 427.95 442.96 429.30 438.88 430.65 434.29 432.00 429.20 433.35 423.63 434.70 417.58 436.05 411.08 437.40 404.14 438.75 396.78 440.10 389.01 441.45 380.86 442.80 372.34 444.15 363.48 445.50 354.30 446.85 344.82 448.20 335.06 449.55 325.06 450.90 314.83 452.25 304.40 453.60 293.79 454.95 283.04 456.30 272.17 457.65 261.21 459.00 250.18 460.35 239.12 461.70 228.04 463.05 216.98 464.40 205.97 465.75 195.03 467.10 184.18 468.45 173.47 469.80 162.91 471.15 152.53 472.50 142.35 473.85 132.41 475.20 122.72 476.55 113.32 477.90 104.22 479.25 95.44 480.60 87.01 481.95 78.96 483.30 71.29 484.65 64.04 486.00 57.21 487.35 50.82 488.70 44.90 490.05 39.45 491.40 34.48 492.75 30.02 494.10 26.08 495.45 22.65 496.80 19.76 498.15 17.40 499.50 15.59 500.85 14.32 502.20 13.61 503.55 13.45 504.90 13.85 506.25 14.79 507.60 16.29 508.95 18.34 510.30 20.92 511.65 24.04 513.00 27.69 514.35 31.86 515.70 36.53 517.05 41.70 518.40 47.36 519.75 53.48 521.10 60.05 522.45 67.07 523.80 74.50 525.15 82.33 526.50 90.55 527.85 99.13 529.20 108.04 530.55 117.28 531.90 126.81 533.25 136.60 534.60 146.65 535.95 156.91 537.30 167.37 538.65 178.00 540.00 188.78 ' />
+</svg>
+<svg desc='Legends' x='50.00' y='35.00' width='540.00' height='470.00' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>
+<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>
+<g id='Legend' drag:enable='true'>
+<line x1='5.00' y1='12.00' x2='19.00' y2='12.00' stroke-width='1.00' stroke='crimson' stroke-opacity='1.00'/>
+<text id='sin(x)' x='19.00' y='16.00' font-size='14px' text-anchor='start' fill='crimson' fill-opacity='1.00'>sin(x)</text>
+<line x1='5.00' y1='26.00' x2='19.00' y2='26.00' stroke-width='1.00' stroke='black' stroke-opacity='1.00'/>
+<text id='cos(x)' x='19.00' y='30.00' font-size='14px' text-anchor='start' fill='black' fill-opacity='1.00'>cos(x)</text>
+<line x1='5.00' y1='40.00' x2='19.00' y2='40.00' stroke-width='1.00' stroke='darkmagenta' stroke-opacity='1.00'/>
+<text id='sin(x) - cos(x)' x='19.00' y='44.00' font-size='14px' text-anchor='start' fill='darkmagenta' fill-opacity='1.00'>sin(x) - cos(x)</text>
+</g>
+</svg>
+</svg>
+<svg desc='Plot 4' x='0.00' y='540.00' width='640.00' height='540.00'>
+<text id='Unit circle plot with set axis endpoints' x='320.00' y='22.17' font-size='16px' text-anchor='middle' fill='black' fill-opacity='255.00'>Unit circle plot with set axis endpoints</text>
+<g desc='X-axis data'>
+<text id='x' x='320.00' y='532.00' font-size='14px' text-anchor='middle' fill='black' fill-opacity='255.00'>x</text>
+<g desc='-1.50'>
+<line x1='50.00' y1='505.00' x2='50.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='505.00' x2='50.00' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='50.00' y1='35.00' x2='50.00' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-1.50' x='50.00' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>-1.50</text>
+</g>
+<g desc='-1.00'>
+<line x1='140.00' y1='505.00' x2='140.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='140.00' y1='505.00' x2='140.00' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='140.00' y1='35.00' x2='140.00' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-1' x='140.00' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>-1</text>
+</g>
+<g desc='-0.50'>
+<line x1='230.00' y1='505.00' x2='230.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='230.00' y1='505.00' x2='230.00' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='230.00' y1='35.00' x2='230.00' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-0.50' x='230.00' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>-0.50</text>
+</g>
+<g desc='0.00'>
+<line x1='320.00' y1='505.00' x2='320.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='320.00' y1='505.00' x2='320.00' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='320.00' y1='35.00' x2='320.00' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0' x='320.00' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>0</text>
+</g>
+<g desc='0.50'>
+<line x1='410.00' y1='505.00' x2='410.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='410.00' y1='505.00' x2='410.00' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='410.00' y1='35.00' x2='410.00' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0.50' x='410.00' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>0.50</text>
+</g>
+<g desc='1.00'>
+<line x1='500.00' y1='505.00' x2='500.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='500.00' y1='505.00' x2='500.00' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='500.00' y1='35.00' x2='500.00' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='1' x='500.00' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>1</text>
+</g>
+<g desc='1.50'>
+<line x1='590.00' y1='505.00' x2='590.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='590.00' y1='505.00' x2='590.00' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='35.00' x2='590.00' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='1.50' x='590.00' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>1.50</text>
+</g>
+</g>
+<g desc='Y-axis data'>
+<g desc='rotated Y-axis' transform='rotate(-90,18.94,270.00)'>
+<text id='y' x='18.94' y='270.00' font-size='14px' text-anchor='middle' fill='black' fill-opacity='255.00'>y</text>
+</g>
+<g desc='-1.50'>
+<line x1='50.00' y1='505.00' x2='590.00' y2='505.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='505.00' x2='55.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='505.00' x2='585.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-1.50' x='44.00' y='508.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>-1.50</text>
+</g>
+<g desc='-1.00'>
+<line x1='50.00' y1='426.67' x2='590.00' y2='426.67' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='426.67' x2='55.00' y2='426.67' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='426.67' x2='585.00' y2='426.67' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-1' x='44.00' y='430.00' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>-1</text>
+</g>
+<g desc='-0.50'>
+<line x1='50.00' y1='348.33' x2='590.00' y2='348.33' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='348.33' x2='55.00' y2='348.33' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='348.33' x2='585.00' y2='348.33' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-0.50' x='44.00' y='351.67' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>-0.50</text>
+</g>
+<g desc='0.00'>
+<line x1='50.00' y1='270.00' x2='590.00' y2='270.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='270.00' x2='55.00' y2='270.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='270.00' x2='585.00' y2='270.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0' x='44.00' y='273.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>0</text>
+</g>
+<g desc='0.50'>
+<line x1='50.00' y1='191.67' x2='590.00' y2='191.67' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='191.67' x2='55.00' y2='191.67' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='191.67' x2='585.00' y2='191.67' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0.50' x='44.00' y='195.00' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>0.50</text>
+</g>
+<g desc='1.00'>
+<line x1='50.00' y1='113.33' x2='590.00' y2='113.33' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='113.33' x2='55.00' y2='113.33' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='113.33' x2='585.00' y2='113.33' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='1' x='44.00' y='116.67' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>1</text>
+</g>
+<g desc='1.50'>
+<line x1='50.00' y1='35.00' x2='590.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='35.00' x2='55.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='35.00' x2='585.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='1.50' x='44.00' y='38.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>1.50</text>
+</g>
+</g>
+<rect desc='Plot-border' x='50.00' y='35.00' width='540.00' height='470.00' stroke='black' fill='none'/>
+<svg desc='Data' x='50.00' y='35.00' width='540.00' height='470.00'>
+<path stroke='crimson' stroke-opacity='1.00' fill='none' stroke-width='1.00' d='M 90.00 235.00 L 90.90 219.35 91.80 212.90 92.70 207.97 93.60 203.82 94.50 200.19 95.40 196.91 96.30 193.91 97.20 191.13 98.10 188.53 99.00 186.08 99.90 183.76 100.80 181.55 101.70 179.44 102.60 177.42 103.50 175.47 104.40 173.60 105.30 171.79 106.20 170.04 107.10 168.35 108.00 166.71 108.90 165.12 109.80 163.57 110.70 162.06 111.60 160.59 112.50 159.15 113.40 157.76 114.30 156.39 115.20 155.05 116.10 153.75 117.00 152.47 117.90 151.22 118.80 149.99 119.70 148.79 120.60 147.62 121.50 146.46 122.40 145.33 123.30 144.22 124.20 143.13 125.10 142.05 126.00 141.00 126.90 139.96 127.80 138.95 128.70 137.95 129.60 136.96 130.50 135.99 131.40 135.04 132.30 134.10 133.20 133.18 134.10 132.27 135.00 131.37 135.90 130.49 136.80 129.62 137.70 128.77 138.60 127.93 139.50 127.10 140.40 126.28 141.30 125.47 142.20 124.68 143.10 123.89 144.00 123.12 144.90 122.36 145.80 121.60 146.70 120.86 147.60 120.13 148.50 119.41 149.40 118.70 150.30 117.99 151.20 117.30 152.10 116.62 153.00 115.94 153.90 115.28 154.80 114.62 155.70 113.97 156.60 113.33 157.50 112.70 158.40 112.08 159.30 111.46 160.20 110.86 161.10 110.26 162.00 109.67 162.90 109.08 163.80 108.51 164.70 107.94 165.60 107.38 166.50 106.82 167.40 106.28 168.30 105.74 169.20 105.20 170.10 104.68 171.00 104.16 171.90 103.65 172.80 103.14 173.70 102.64 174.60 102.15 175.50 101.66 176.40 101.18 177.30 100.71 178.20 100.24 179.10 99.78 180.00 99.32 180.90 98.87 181.80 98.43 182.70 97.99 183.60 97.56 184.50 97.14 185.40 96.72 186.30 96.30 187.20 95.89 188.10 95.49 189.00 95.09 189.90 94.70 190.80 94.31 191.70 93.93 192.60 93.56 193.50 93.19 194.40 92.82 195.30 92.46 196.20 92.11 197.10 91.76 198.00 91.41 198.90 91.07 199.80 90.74 200.70 90.41 201.60 90.09 202.50 89.77 203.40 89.45 204.30 89.14 205.20 88.84 206.10 88.54 207.00 88.24 207.90 87.95 208.80 87.67 209.70 87.39 210.60 87.11 211.50 86.84 212.40 86.57 213.30 86.31 214.20 86.05 215.10 85.80 216.00 85.55 216.90 85.31 217.80 85.07 218.70 84.83 219.60 84.60 220.50 84.37 221.40 84.15 222.30 83.93 223.20 83.72 224.10 83.51 225.00 83.31 225.90 83.11 226.80 82.91 227.70 82.72 228.60 82.53 229.50 82.35 230.40 82.17 231.30 82.00 232.20 81.83 233.10 81.66 234.00 81.50 234.90 81.34 235.80 81.19 236.70 81.04 237.60 80.89 238.50 80.75 239.40 80.61 240.30 80.48 241.20 80.35 242.10 80.23 243.00 80.11 243.90 79.99 244.80 79.88 245.70 79.77 246.60 79.66 247.50 79.56 248.40 79.47 249.30 79.37 250.20 79.28 251.10 79.20 252.00 79.12 252.90 79.04 253.80 78.97 254.70 78.90 255.60 78.84 256.50 78.77 257.40 78.72 258.30 78.66 259.20 78.62 260.10 78.57 261.00 78.53 261.90 78.49 262.80 78.46 263.70 78.43 264.60 78.40 265.50 78.38 266.40 78.36 267.30 78.35 268.20 78.34 269.10 78.34 270.00 78.33 270.90 78.34 271.80 78.34 272.70 78.35 273.60 78.36 274.50 78.38 275.40 78.40 276.30 78.43 277.20 78.46 278.10 78.49 279.00 78.53 279.90 78.57 280.80 78.62 281.70 78.66 282.60 78.72 283.50 78.77 284.40 78.84 285.30 78.90 286.20 78.97 287.10 79.04 288.00 79.12 288.90 79.20 289.80 79.28 290.70 79.37 291.60 79.47 292.50 79.56 293.40 79.66 294.30 79.77 295.20 79.88 296.10 79.99 297.00 80.11 297.90 80.23 298.80 80.35 299.70 80.48 300.60 80.61 301.50 80.75 302.40 80.89 303.30 81.04 304.20 81.19 305.10 81.34 306.00 81.50 306.90 81.66 307.80 81.83 308.70 82.00 309.60 82.17 310.50 82.35 311.40 82.53 312.30 82.72 313.20 82.91 314.10 83.11 315.00 83.31 315.90 83.51 316.80 83.72 317.70 83.93 318.60 84.15 319.50 84.37 320.40 84.60 321.30 84.83 322.20 85.07 323.10 85.31 324.00 85.55 324.90 85.80 325.80 86.05 326.70 86.31 327.60 86.57 328.50 86.84 329.40 87.11 330.30 87.39 331.20 87.67 332.10 87.95 333.00 88.24 333.90 88.54 334.80 88.84 335.70 89.14 336.60 89.45 337.50 89.77 338.40 90.09 339.30 90.41 340.20 90.74 341.10 91.07 342.00 91.41 342.90 91.76 343.80 92.11 344.70 92.46 345.60 92.82 346.50 93.19 347.40 93.56 348.30 93.93 349.20 94.31 350.10 94.70 351.00 95.09 351.90 95.49 352.80 95.89 353.70 96.30 354.60 96.72 355.50 97.14 356.40 97.56 357.30 97.99 358.20 98.43 359.10 98.87 360.00 99.32 360.90 99.78 361.80 100.24 362.70 100.71 363.60 101.18 364.50 101.66 365.40 102.15 366.30 102.64 367.20 103.14 368.10 103.65 369.00 104.16 369.90 104.68 370.80 105.20 371.70 105.74 372.60 106.28 373.50 106.82 374.40 107.38 375.30 107.94 376.20 108.51 377.10 109.08 378.00 109.67 378.90 110.26 379.80 110.86 380.70 111.46 381.60 112.08 382.50 112.70 383.40 113.33 384.30 113.97 385.20 114.62 386.10 115.28 387.00 115.94 387.90 116.62 388.80 117.30 389.70 117.99 390.60 118.70 391.50 119.41 392.40 120.13 393.30 120.86 394.20 121.60 395.10 122.36 396.00 123.12 396.90 123.89 397.80 124.68 398.70 125.47 399.60 126.28 400.50 127.10 401.40 127.93 402.30 128.77 403.20 129.62 404.10 130.49 405.00 131.37 405.90 132.27 406.80 133.18 407.70 134.10 408.60 135.04 409.50 135.99 410.40 136.96 411.30 137.95 412.20 138.95 413.10 139.96 414.00 141.00 414.90 142.05 415.80 143.13 416.70 144.22 417.60 145.33 418.50 146.46 419.40 147.62 420.30 148.79 421.20 149.99 422.10 151.22 423.00 152.47 423.90 153.75 424.80 155.05 425.70 156.39 426.60 157.76 427.50 159.15 428.40 160.59 429.30 162.06 430.20 163.57 431.10 165.12 432.00 166.71 432.90 168.35 433.80 170.04 434.70 171.79 435.60 173.60 436.50 175.47 437.40 177.42 438.30 179.44 439.20 181.55 440.10 183.76 441.00 186.08 441.90 188.53 442.80 191.13 443.70 193.91 444.60 196.91 445.50 200.19 446.40 203.82 447.30 207.97 448.20 212.90 449.10 219.35 450.00 235.00 90.00 235.00 90.90 250.65 91.80 257.10 92.70 262.03 93.60 266.18 94.50 269.81 95.40 273.09 96.30 276.09 97.20 278.87 98.10 281.47 99.00 283.92 99.90 286.24 100.80 288.45 101.70 290.56 102.60 292.58 103.50 294.53 104.40 296.40 105.30 298.21 106.20 299.96 107.10 301.65 108.00 303.29 108.90 304.88 109.80 306.43 110.70 307.94 111.60 309.41 112.50 310.85 113.40 312.24 114.30 313.61 115.20 314.95 116.10 316.25 117.00 317.53 117.90 318.78 118.80 320.01 119.70 321.21 120.60 322.38 121.50 323.54 122.40 324.67 123.30 325.78 124.20 326.87 125.10 327.95 126.00 329.00 126.90 330.04 127.80 331.05 128.70 332.05 129.60 333.04 130.50 334.01 131.40 334.96 132.30 335.90 133.20 336.82 134.10 337.73 135.00 338.63 135.90 339.51 136.80 340.38 137.70 341.23 138.60 342.07 139.50 342.90 140.40 343.72 141.30 344.53 142.20 345.32 143.10 346.11 144.00 346.88 144.90 347.64 145.80 348.40 146.70 349.14 147.60 349.87 148.50 350.59 149.40 351.30 150.30 352.01 151.20 352.70 152.10 353.38 153.00 354.06 153.90 354.72 154.80 355.38 155.70 356.03 156.60 356.67 157.50 357.30 158.40 357.92 159.30 358.54 160.20 359.14 161.10 359.74 162.00 360.33 162.90 360.92 163.80 361.49 164.70 362.06 165.60 362.62 166.50 363.18 167.40 363.72 168.30 364.26 169.20 364.80 170.10 365.32 171.00 365.84 171.90 366.35 172.80 366.86 173.70 367.36 174.60 367.85 175.50 368.34 176.40 368.82 177.30 369.29 178.20 369.76 179.10 370.22 180.00 370.68 180.90 371.13 181.80 371.57 182.70 372.01 183.60 372.44 184.50 372.86 185.40 373.28 186.30 373.70 187.20 374.11 188.10 374.51 189.00 374.91 189.90 375.30 190.80 375.69 191.70 376.07 192.60 376.44 193.50 376.81 194.40 377.18 195.30 377.54 196.20 377.89 197.10 378.24 198.00 378.59 198.90 378.93 199.80 379.26 200.70 379.59 201.60 379.91 202.50 380.23 203.40 380.55 204.30 380.86 205.20 381.16 206.10 381.46 207.00 381.76 207.90 382.05 208.80 382.33 209.70 382.61 210.60 382.89 211.50 383.16 212.40 383.43 213.30 383.69 214.20 383.95 215.10 384.20 216.00 384.45 216.90 384.69 217.80 384.93 218.70 385.17 219.60 385.40 220.50 385.63 221.40 385.85 222.30 386.07 223.20 386.28 224.10 386.49 225.00 386.69 225.90 386.89 226.80 387.09 227.70 387.28 228.60 387.47 229.50 387.65 230.40 387.83 231.30 388.00 232.20 388.17 233.10 388.34 234.00 388.50 234.90 388.66 235.80 388.81 236.70 388.96 237.60 389.11 238.50 389.25 239.40 389.39 240.30 389.52 241.20 389.65 242.10 389.77 243.00 389.89 243.90 390.01 244.80 390.12 245.70 390.23 246.60 390.34 247.50 390.44 248.40 390.53 249.30 390.63 250.20 390.72 251.10 390.80 252.00 390.88 252.90 390.96 253.80 391.03 254.70 391.10 255.60 391.16 256.50 391.23 257.40 391.28 258.30 391.34 259.20 391.38 260.10 391.43 261.00 391.47 261.90 391.51 262.80 391.54 263.70 391.57 264.60 391.60 265.50 391.62 266.40 391.64 267.30 391.65 268.20 391.66 269.10 391.66 270.00 391.67 270.90 391.66 271.80 391.66 272.70 391.65 273.60 391.64 274.50 391.62 275.40 391.60 276.30 391.57 277.20 391.54 278.10 391.51 279.00 391.47 279.90 391.43 280.80 391.38 281.70 391.34 282.60 391.28 283.50 391.23 284.40 391.16 285.30 391.10 286.20 391.03 287.10 390.96 288.00 390.88 288.90 390.80 289.80 390.72 290.70 390.63 291.60 390.53 292.50 390.44 293.40 390.34 294.30 390.23 295.20 390.12 296.10 390.01 297.00 389.89 297.90 389.77 298.80 389.65 299.70 389.52 300.60 389.39 301.50 389.25 302.40 389.11 303.30 388.96 304.20 388.81 305.10 388.66 306.00 388.50 306.90 388.34 307.80 388.17 308.70 388.00 309.60 387.83 310.50 387.65 311.40 387.47 312.30 387.28 313.20 387.09 314.10 386.89 315.00 386.69 315.90 386.49 316.80 386.28 317.70 386.07 318.60 385.85 319.50 385.63 320.40 385.40 321.30 385.17 322.20 384.93 323.10 384.69 324.00 384.45 324.90 384.20 325.80 383.95 326.70 383.69 327.60 383.43 328.50 383.16 329.40 382.89 330.30 382.61 331.20 382.33 332.10 382.05 333.00 381.76 333.90 381.46 334.80 381.16 335.70 380.86 336.60 380.55 337.50 380.23 338.40 379.91 339.30 379.59 340.20 379.26 341.10 378.93 342.00 378.59 342.90 378.24 343.80 377.89 344.70 377.54 345.60 377.18 346.50 376.81 347.40 376.44 348.30 376.07 349.20 375.69 350.10 375.30 351.00 374.91 351.90 374.51 352.80 374.11 353.70 373.70 354.60 373.28 355.50 372.86 356.40 372.44 357.30 372.01 358.20 371.57 359.10 371.13 360.00 370.68 360.90 370.22 361.80 369.76 362.70 369.29 363.60 368.82 364.50 368.34 365.40 367.85 366.30 367.36 367.20 366.86 368.10 366.35 369.00 365.84 369.90 365.32 370.80 364.80 371.70 364.26 372.60 363.72 373.50 363.18 374.40 362.62 375.30 362.06 376.20 361.49 377.10 360.92 378.00 360.33 378.90 359.74 379.80 359.14 380.70 358.54 381.60 357.92 382.50 357.30 383.40 356.67 384.30 356.03 385.20 355.38 386.10 354.72 387.00 354.06 387.90 353.38 388.80 352.70 389.70 352.01 390.60 351.30 391.50 350.59 392.40 349.87 393.30 349.14 394.20 348.40 395.10 347.64 396.00 346.88 396.90 346.11 397.80 345.32 398.70 344.53 399.60 343.72 400.50 342.90 401.40 342.07 402.30 341.23 403.20 340.38 404.10 339.51 405.00 338.63 405.90 337.73 406.80 336.82 407.70 335.90 408.60 334.96 409.50 334.01 410.40 333.04 411.30 332.05 412.20 331.05 413.10 330.04 414.00 329.00 414.90 327.95 415.80 326.87 416.70 325.78 417.60 324.67 418.50 323.54 419.40 322.38 420.30 321.21 421.20 320.01 422.10 318.78 423.00 317.53 423.90 316.25 424.80 314.95 425.70 313.61 426.60 312.24 427.50 310.85 428.40 309.41 429.30 307.94 430.20 306.43 431.10 304.88 432.00 303.29 432.90 301.65 433.80 299.96 434.70 298.21 435.60 296.40 436.50 294.53 437.40 292.58 438.30 290.56 439.20 288.45 440.10 286.24 441.00 283.92 441.90 281.47 442.80 278.87 443.70 276.09 444.60 273.09 445.50 269.81 446.40 266.18 447.30 262.03 448.20 257.10 449.10 250.65 450.00 235.00 ' />
+</svg>
+<svg desc='Legends' x='50.00' y='35.00' width='540.00' height='470.00' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>
+<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>
+<g id='Legend' drag:enable='true'>
+<line x1='5.00' y1='12.00' x2='19.00' y2='12.00' stroke-width='1.00' stroke='crimson' stroke-opacity='1.00'/>
+<text id='Unit circle' x='19.00' y='16.00' font-size='14px' text-anchor='start' fill='crimson' fill-opacity='1.00'>Unit circle</text>
+</g>
+</svg>
+</svg>
+<svg desc='Plot 5' x='640.00' y='540.00' width='640.00' height='540.00'>
+<text id='Unit circle plot with symmetic set to true' x='320.00' y='22.17' font-size='16px' text-anchor='middle' fill='black' fill-opacity='255.00'>Unit circle plot with symmetic set to true</text>
+<g desc='X-axis data'>
+<text id='x' x='320.00' y='532.00' font-size='14px' text-anchor='middle' fill='black' fill-opacity='255.00'>x</text>
+<g desc='-1.50'>
+<line x1='-21.72' y1='505.00' x2='-21.72' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='-21.72' y1='505.00' x2='-21.72' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='-21.72' y1='35.00' x2='-21.72' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-1.50' x='-21.72' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>-1.50</text>
+</g>
+<g desc='-1.00'>
+<line x1='92.19' y1='505.00' x2='92.19' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='92.19' y1='505.00' x2='92.19' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='92.19' y1='35.00' x2='92.19' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-1' x='92.19' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>-1</text>
+</g>
+<g desc='-0.50'>
+<line x1='206.09' y1='505.00' x2='206.09' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='206.09' y1='505.00' x2='206.09' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='206.09' y1='35.00' x2='206.09' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-0.50' x='206.09' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>-0.50</text>
+</g>
+<g desc='0.00'>
+<line x1='320.00' y1='505.00' x2='320.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='320.00' y1='505.00' x2='320.00' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='320.00' y1='35.00' x2='320.00' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0' x='320.00' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>0</text>
+</g>
+<g desc='0.50'>
+<line x1='433.91' y1='505.00' x2='433.91' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='433.91' y1='505.00' x2='433.91' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='433.91' y1='35.00' x2='433.91' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0.50' x='433.91' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>0.50</text>
+</g>
+<g desc='1.00'>
+<line x1='547.81' y1='505.00' x2='547.81' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='547.81' y1='505.00' x2='547.81' y2='500.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='547.81' y1='35.00' x2='547.81' y2='40.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='1' x='547.81' y='518.00' font-size='10px' text-anchor='middle' fill='black' fill-opacity='255.00'>1</text>
+</g>
+</g>
+<g desc='Y-axis data'>
+<g desc='rotated Y-axis' transform='rotate(-90,20.00,270.00)'>
+<text id='y' x='20.00' y='270.00' font-size='14px' text-anchor='middle' fill='black' fill-opacity='255.00'>y</text>
+</g>
+<g desc='-1.00'>
+<line x1='50.00' y1='505.00' x2='590.00' y2='505.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='505.00' x2='55.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='505.00' x2='585.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-1' x='44.00' y='508.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>-1</text>
+</g>
+<g desc='-0.50'>
+<line x1='50.00' y1='387.50' x2='590.00' y2='387.50' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='387.50' x2='55.00' y2='387.50' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='387.50' x2='585.00' y2='387.50' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-0.50' x='44.00' y='390.83' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>-0.50</text>
+</g>
+<g desc='0.00'>
+<line x1='50.00' y1='270.00' x2='590.00' y2='270.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='270.00' x2='55.00' y2='270.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='270.00' x2='585.00' y2='270.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0' x='44.00' y='273.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>0</text>
+</g>
+<g desc='0.50'>
+<line x1='50.00' y1='152.50' x2='590.00' y2='152.50' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='152.50' x2='55.00' y2='152.50' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='152.50' x2='585.00' y2='152.50' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0.50' x='44.00' y='155.83' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>0.50</text>
+</g>
+<g desc='1.00'>
+<line x1='50.00' y1='35.00' x2='590.00' y2='35.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='50.00' y1='35.00' x2='55.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='590.00' y1='35.00' x2='585.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='1' x='44.00' y='38.33' font-size='10px' text-anchor='end' fill='black' fill-opacity='255.00'>1</text>
+</g>
+</g>
+<rect desc='Plot-border' x='50.00' y='35.00' width='540.00' height='470.00' stroke='black' fill='none'/>
+<svg desc='Data' x='50.00' y='35.00' width='540.00' height='470.00'>
+<path stroke='crimson' stroke-opacity='1.00' fill='none' stroke-width='1.00' d='M 42.19 235.00 L 43.33 211.53 44.47 201.85 45.60 194.45 46.74 188.24 47.88 182.78 49.02 177.87 50.16 173.37 51.30 169.20 52.44 165.30 53.58 161.62 54.72 158.14 55.86 154.82 57.00 151.66 58.13 148.62 59.27 145.71 60.41 142.90 61.55 140.19 62.69 137.57 63.83 135.03 64.97 132.57 66.11 130.17 67.25 127.85 68.39 125.59 69.52 123.38 70.66 121.23 71.80 119.13 72.94 117.08 74.08 115.08 75.22 113.12 76.36 111.21 77.50 109.33 78.64 107.49 79.78 105.69 80.92 103.93 82.05 102.19 83.19 100.49 84.33 98.83 85.47 97.19 86.61 95.58 87.75 94.00 88.89 92.45 90.03 90.92 91.17 89.42 92.31 87.94 93.45 86.49 94.58 85.06 95.72 83.65 96.86 82.27 98.00 80.90 99.14 79.56 100.28 78.24 101.42 76.94 102.56 75.65 103.70 74.39 104.84 73.14 105.97 71.92 107.11 70.71 108.25 69.51 109.39 68.34 110.53 67.18 111.67 66.03 112.81 64.90 113.95 63.79 115.09 62.70 116.23 61.61 117.37 60.55 118.50 59.49 119.64 58.45 120.78 57.43 121.92 56.42 123.06 55.42 124.20 54.43 125.34 53.46 126.48 52.50 127.62 51.55 128.76 50.62 129.90 49.70 131.03 48.79 132.17 47.89 133.31 47.00 134.45 46.12 135.59 45.26 136.73 44.41 137.87 43.57 139.01 42.73 140.15 41.91 141.29 41.10 142.43 40.30 143.56 39.52 144.70 38.74 145.84 37.97 146.98 37.21 148.12 36.46 149.26 35.72 150.40 34.99 151.54 34.27 152.68 33.56 153.82 32.86 154.95 32.17 156.09 31.48 157.23 30.81 158.37 30.15 159.51 29.49 160.65 28.84 161.79 28.20 162.93 27.57 164.07 26.95 165.21 26.34 166.35 25.73 167.48 25.14 168.62 24.55 169.76 23.97 170.90 23.40 172.04 22.84 173.18 22.28 174.32 21.73 175.46 21.19 176.60 20.66 177.74 20.14 178.88 19.62 180.01 19.11 181.15 18.61 182.29 18.11 183.43 17.63 184.57 17.15 185.71 16.68 186.85 16.21 187.99 15.76 189.13 15.31 190.27 14.86 191.40 14.43 192.54 14.00 193.68 13.58 194.82 13.16 195.96 12.76 197.10 12.36 198.24 11.96 199.38 11.58 200.52 11.20 201.66 10.82 202.80 10.46 203.93 10.10 205.07 9.75 206.21 9.40 207.35 9.06 208.49 8.73 209.63 8.40 210.77 8.08 211.91 7.77 213.05 7.46 214.19 7.16 215.32 6.87 216.46 6.58 217.60 6.30 218.74 6.03 219.88 5.76 221.02 5.50 222.16 5.24 223.30 4.99 224.44 4.75 225.58 4.51 226.72 4.28 227.85 4.06 228.99 3.84 230.13 3.63 231.27 3.42 232.41 3.22 233.55 3.03 234.69 2.84 235.83 2.66 236.97 2.48 238.11 2.31 239.25 2.15 240.38 1.99 241.52 1.84 242.66 1.70 243.80 1.56 244.94 1.43 246.08 1.30 247.22 1.18 248.36 1.06 249.50 0.95 250.64 0.85 251.77 0.75 252.91 0.66 254.05 0.58 255.19 0.50 256.33 0.42 257.47 0.36 258.61 0.29 259.75 0.24 260.89 0.19 262.03 0.14 263.17 0.11 264.30 0.07 265.44 0.05 266.58 0.03 267.72 0.01 268.86 0.00 270.00 0.00 271.14 0.00 272.28 0.01 273.42 0.03 274.56 0.05 275.70 0.07 276.83 0.11 277.97 0.14 279.11 0.19 280.25 0.24 281.39 0.29 282.53 0.36 283.67 0.42 284.81 0.50 285.95 0.58 287.09 0.66 288.23 0.75 289.36 0.85 290.50 0.95 291.64 1.06 292.78 1.18 293.92 1.30 295.06 1.43 296.20 1.56 297.34 1.70 298.48 1.84 299.62 1.99 300.75 2.15 301.89 2.31 303.03 2.48 304.17 2.66 305.31 2.84 306.45 3.03 307.59 3.22 308.73 3.42 309.87 3.63 311.01 3.84 312.15 4.06 313.28 4.28 314.42 4.51 315.56 4.75 316.70 4.99 317.84 5.24 318.98 5.50 320.12 5.76 321.26 6.03 322.40 6.30 323.54 6.58 324.67 6.87 325.81 7.16 326.95 7.46 328.09 7.77 329.23 8.08 330.37 8.40 331.51 8.73 332.65 9.06 333.79 9.40 334.93 9.75 336.07 10.10 337.20 10.46 338.34 10.82 339.48 11.20 340.62 11.58 341.76 11.96 342.90 12.36 344.04 12.76 345.18 13.16 346.32 13.58 347.46 14.00 348.60 14.43 349.73 14.86 350.87 15.31 352.01 15.76 353.15 16.21 354.29 16.68 355.43 17.15 356.57 17.63 357.71 18.11 358.85 18.61 359.99 19.11 361.12 19.62 362.26 20.14 363.40 20.66 364.54 21.19 365.68 21.73 366.82 22.28 367.96 22.84 369.10 23.40 370.24 23.97 371.38 24.55 372.52 25.14 373.65 25.73 374.79 26.34 375.93 26.95 377.07 27.57 378.21 28.20 379.35 28.84 380.49 29.49 381.63 30.15 382.77 30.81 383.91 31.48 385.05 32.17 386.18 32.86 387.32 33.56 388.46 34.27 389.60 34.99 390.74 35.72 391.88 36.46 393.02 37.21 394.16 37.97 395.30 38.74 396.44 39.52 397.58 40.30 398.71 41.10 399.85 41.91 400.99 42.73 402.13 43.57 403.27 44.41 404.41 45.26 405.55 46.12 406.69 47.00 407.83 47.89 408.97 48.79 410.10 49.70 411.24 50.62 412.38 51.55 413.52 52.50 414.66 53.46 415.80 54.43 416.94 55.42 418.08 56.42 419.22 57.43 420.36 58.45 421.50 59.49 422.63 60.55 423.77 61.61 424.91 62.70 426.05 63.79 427.19 64.90 428.33 66.03 429.47 67.18 430.61 68.34 431.75 69.51 432.89 70.71 434.03 71.92 435.16 73.14 436.30 74.39 437.44 75.65 438.58 76.94 439.72 78.24 440.86 79.56 442.00 80.90 443.14 82.27 444.28 83.65 445.42 85.06 446.55 86.49 447.69 87.94 448.83 89.42 449.97 90.92 451.11 92.45 452.25 94.00 453.39 95.58 454.53 97.19 455.67 98.83 456.81 100.49 457.95 102.19 459.08 103.93 460.22 105.69 461.36 107.49 462.50 109.33 463.64 111.21 464.78 113.12 465.92 115.08 467.06 117.08 468.20 119.13 469.34 121.23 470.48 123.38 471.61 125.59 472.75 127.85 473.89 130.17 475.03 132.57 476.17 135.03 477.31 137.57 478.45 140.19 479.59 142.90 480.73 145.71 481.87 148.62 483.00 151.66 484.14 154.82 485.28 158.14 486.42 161.62 487.56 165.30 488.70 169.20 489.84 173.37 490.98 177.87 492.12 182.78 493.26 188.24 494.40 194.45 495.53 201.85 496.67 211.53 497.81 235.00 42.19 235.00 43.33 258.47 44.47 268.15 45.60 275.55 46.74 281.76 47.88 287.22 49.02 292.13 50.16 296.63 51.30 300.80 52.44 304.70 53.58 308.38 54.72 311.86 55.86 315.18 57.00 318.34 58.13 321.38 59.27 324.29 60.41 327.10 61.55 329.81 62.69 332.43 63.83 334.97 64.97 337.43 66.11 339.83 67.25 342.15 68.39 344.41 69.52 346.62 70.66 348.77 71.80 350.87 72.94 352.92 74.08 354.92 75.22 356.88 76.36 358.79 77.50 360.67 78.64 362.51 79.78 364.31 80.92 366.07 82.05 367.81 83.19 369.51 84.33 371.17 85.47 372.81 86.61 374.42 87.75 376.00 88.89 377.55 90.03 379.08 91.17 380.58 92.31 382.06 93.45 383.51 94.58 384.94 95.72 386.35 96.86 387.73 98.00 389.10 99.14 390.44 100.28 391.76 101.42 393.06 102.56 394.35 103.70 395.61 104.84 396.86 105.97 398.08 107.11 399.29 108.25 400.49 109.39 401.66 110.53 402.82 111.67 403.97 112.81 405.10 113.95 406.21 115.09 407.30 116.23 408.39 117.37 409.45 118.50 410.51 119.64 411.55 120.78 412.57 121.92 413.58 123.06 414.58 124.20 415.57 125.34 416.54 126.48 417.50 127.62 418.45 128.76 419.38 129.90 420.30 131.03 421.21 132.17 422.11 133.31 423.00 134.45 423.88 135.59 424.74 136.73 425.59 137.87 426.43 139.01 427.27 140.15 428.09 141.29 428.90 142.43 429.70 143.56 430.48 144.70 431.26 145.84 432.03 146.98 432.79 148.12 433.54 149.26 434.28 150.40 435.01 151.54 435.73 152.68 436.44 153.82 437.14 154.95 437.83 156.09 438.52 157.23 439.19 158.37 439.85 159.51 440.51 160.65 441.16 161.79 441.80 162.93 442.43 164.07 443.05 165.21 443.66 166.35 444.27 167.48 444.86 168.62 445.45 169.76 446.03 170.90 446.60 172.04 447.16 173.18 447.72 174.32 448.27 175.46 448.81 176.60 449.34 177.74 449.86 178.88 450.38 180.01 450.89 181.15 451.39 182.29 451.89 183.43 452.37 184.57 452.85 185.71 453.32 186.85 453.79 187.99 454.24 189.13 454.69 190.27 455.14 191.40 455.57 192.54 456.00 193.68 456.42 194.82 456.84 195.96 457.24 197.10 457.64 198.24 458.04 199.38 458.42 200.52 458.80 201.66 459.18 202.80 459.54 203.93 459.90 205.07 460.25 206.21 460.60 207.35 460.94 208.49 461.27 209.63 461.60 210.77 461.92 211.91 462.23 213.05 462.54 214.19 462.84 215.32 463.13 216.46 463.42 217.60 463.70 218.74 463.97 219.88 464.24 221.02 464.50 222.16 464.76 223.30 465.01 224.44 465.25 225.58 465.49 226.72 465.72 227.85 465.94 228.99 466.16 230.13 466.37 231.27 466.58 232.41 466.78 233.55 466.97 234.69 467.16 235.83 467.34 236.97 467.52 238.11 467.69 239.25 467.85 240.38 468.01 241.52 468.16 242.66 468.30 243.80 468.44 244.94 468.57 246.08 468.70 247.22 468.82 248.36 468.94 249.50 469.05 250.64 469.15 251.77 469.25 252.91 469.34 254.05 469.42 255.19 469.50 256.33 469.58 257.47 469.64 258.61 469.71 259.75 469.76 260.89 469.81 262.03 469.86 263.17 469.89 264.30 469.93 265.44 469.95 266.58 469.97 267.72 469.99 268.86 470.00 270.00 470.00 271.14 470.00 272.28 469.99 273.42 469.97 274.56 469.95 275.70 469.93 276.83 469.89 277.97 469.86 279.11 469.81 280.25 469.76 281.39 469.71 282.53 469.64 283.67 469.58 284.81 469.50 285.95 469.42 287.09 469.34 288.23 469.25 289.36 469.15 290.50 469.05 291.64 468.94 292.78 468.82 293.92 468.70 295.06 468.57 296.20 468.44 297.34 468.30 298.48 468.16 299.62 468.01 300.75 467.85 301.89 467.69 303.03 467.52 304.17 467.34 305.31 467.16 306.45 466.97 307.59 466.78 308.73 466.58 309.87 466.37 311.01 466.16 312.15 465.94 313.28 465.72 314.42 465.49 315.56 465.25 316.70 465.01 317.84 464.76 318.98 464.50 320.12 464.24 321.26 463.97 322.40 463.70 323.54 463.42 324.67 463.13 325.81 462.84 326.95 462.54 328.09 462.23 329.23 461.92 330.37 461.60 331.51 461.27 332.65 460.94 333.79 460.60 334.93 460.25 336.07 459.90 337.20 459.54 338.34 459.18 339.48 458.80 340.62 458.42 341.76 458.04 342.90 457.64 344.04 457.24 345.18 456.84 346.32 456.42 347.46 456.00 348.60 455.57 349.73 455.14 350.87 454.69 352.01 454.24 353.15 453.79 354.29 453.32 355.43 452.85 356.57 452.37 357.71 451.89 358.85 451.39 359.99 450.89 361.12 450.38 362.26 449.86 363.40 449.34 364.54 448.81 365.68 448.27 366.82 447.72 367.96 447.16 369.10 446.60 370.24 446.03 371.38 445.45 372.52 444.86 373.65 444.27 374.79 443.66 375.93 443.05 377.07 442.43 378.21 441.80 379.35 441.16 380.49 440.51 381.63 439.85 382.77 439.19 383.91 438.52 385.05 437.83 386.18 437.14 387.32 436.44 388.46 435.73 389.60 435.01 390.74 434.28 391.88 433.54 393.02 432.79 394.16 432.03 395.30 431.26 396.44 430.48 397.58 429.70 398.71 428.90 399.85 428.09 400.99 427.27 402.13 426.43 403.27 425.59 404.41 424.74 405.55 423.88 406.69 423.00 407.83 422.11 408.97 421.21 410.10 420.30 411.24 419.38 412.38 418.45 413.52 417.50 414.66 416.54 415.80 415.57 416.94 414.58 418.08 413.58 419.22 412.57 420.36 411.55 421.50 410.51 422.63 409.45 423.77 408.39 424.91 407.30 426.05 406.21 427.19 405.10 428.33 403.97 429.47 402.82 430.61 401.66 431.75 400.49 432.89 399.29 434.03 398.08 435.16 396.86 436.30 395.61 437.44 394.35 438.58 393.06 439.72 391.76 440.86 390.44 442.00 389.10 443.14 387.73 444.28 386.35 445.42 384.94 446.55 383.51 447.69 382.06 448.83 380.58 449.97 379.08 451.11 377.55 452.25 376.00 453.39 374.42 454.53 372.81 455.67 371.17 456.81 369.51 457.95 367.81 459.08 366.07 460.22 364.31 461.36 362.51 462.50 360.67 463.64 358.79 464.78 356.88 465.92 354.92 467.06 352.92 468.20 350.87 469.34 348.77 470.48 346.62 471.61 344.41 472.75 342.15 473.89 339.83 475.03 337.43 476.17 334.97 477.31 332.43 478.45 329.81 479.59 327.10 480.73 324.29 481.87 321.38 483.00 318.34 484.14 315.18 485.28 311.86 486.42 308.38 487.56 304.70 488.70 300.80 489.84 296.63 490.98 292.13 492.12 287.22 493.26 281.76 494.40 275.55 495.53 268.15 496.67 258.47 497.81 235.00 ' />
+</svg>
+<svg desc='Legends' x='50.00' y='35.00' width='540.00' height='470.00' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>
+<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>
+<g id='Legend' drag:enable='true'>
+<line x1='5.00' y1='12.00' x2='19.00' y2='12.00' stroke-width='1.00' stroke='crimson' stroke-opacity='1.00'/>
+<text id='Unit circle' x='19.00' y='16.00' font-size='14px' text-anchor='start' fill='crimson' fill-opacity='1.00'>Unit circle</text>
+</g>
+</svg>
+</svg>
+<svg desc='Plot 6' x='1280.00' y='540.00' width='640.00' height='540.00'>
+<text id='Plot showing usage of various formatting options' x='320.00' y='21.67' font-size='22px' text-anchor='middle' fill='black' fill-opacity='255.00'>Plot showing usage of various formatting options</text>
+<g desc='X-axis data'>
+<text id='x' x='320.00' y='533.00' font-size='12px' text-anchor='middle' fill='black' fill-opacity='255.00'>x</text>
+<g desc='-10.00'>
+<line x1='80.00' y1='510.00' x2='80.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='80.00' y1='30.00' x2='80.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-10' x='80.00' y='521.00' font-size='8px' text-anchor='middle' fill='black' fill-opacity='255.00'>-10</text>
+</g>
+<g desc='-5.00'>
+<line x1='200.00' y1='510.00' x2='200.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='200.00' y1='30.00' x2='200.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='-5' x='200.00' y='521.00' font-size='8px' text-anchor='middle' fill='black' fill-opacity='255.00'>-5</text>
+</g>
+<g desc='0.00'>
+<line x1='320.00' y1='510.00' x2='320.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='320.00' y1='30.00' x2='320.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0' x='320.00' y='521.00' font-size='8px' text-anchor='middle' fill='black' fill-opacity='255.00'>0</text>
+</g>
+<g desc='5.00'>
+<line x1='440.00' y1='510.00' x2='440.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='440.00' y1='30.00' x2='440.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='5' x='440.00' y='521.00' font-size='8px' text-anchor='middle' fill='black' fill-opacity='255.00'>5</text>
+</g>
+<g desc='10.00'>
+<line x1='560.00' y1='510.00' x2='560.00' y2='505.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='560.00' y1='30.00' x2='560.00' y2='35.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='10' x='560.00' y='521.00' font-size='8px' text-anchor='middle' fill='black' fill-opacity='255.00'>10</text>
+</g>
+</g>
+<g desc='Y-axis data'>
+<g desc='rotated Y-axis' transform='rotate(-90,32.00,270.00)'>
+<text id='' x='32.00' y='270.00' font-size='20px' text-anchor='middle' fill='black' fill-opacity='255.00'></text>
+</g>
+<g desc='0.00'>
+<line x1='80.00' y1='510.00' x2='560.00' y2='510.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='80.00' y1='510.00' x2='85.00' y2='510.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='560.00' y1='510.00' x2='555.00' y2='510.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='0' x='70.40' y='515.33' font-size='16px' text-anchor='end' fill='black' fill-opacity='255.00'>0</text>
+</g>
+<g desc='10.00'>
+<line x1='80.00' y1='462.00' x2='560.00' y2='462.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='80.00' y1='462.00' x2='85.00' y2='462.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='560.00' y1='462.00' x2='555.00' y2='462.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='10' x='70.40' y='467.33' font-size='16px' text-anchor='end' fill='black' fill-opacity='255.00'>10</text>
+</g>
+<g desc='20.00'>
+<line x1='80.00' y1='414.00' x2='560.00' y2='414.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='80.00' y1='414.00' x2='85.00' y2='414.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='560.00' y1='414.00' x2='555.00' y2='414.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='20' x='70.40' y='419.33' font-size='16px' text-anchor='end' fill='black' fill-opacity='255.00'>20</text>
+</g>
+<g desc='30.00'>
+<line x1='80.00' y1='366.00' x2='560.00' y2='366.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='80.00' y1='366.00' x2='85.00' y2='366.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='560.00' y1='366.00' x2='555.00' y2='366.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='30' x='70.40' y='371.33' font-size='16px' text-anchor='end' fill='black' fill-opacity='255.00'>30</text>
+</g>
+<g desc='40.00'>
+<line x1='80.00' y1='318.00' x2='560.00' y2='318.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='80.00' y1='318.00' x2='85.00' y2='318.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='560.00' y1='318.00' x2='555.00' y2='318.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='40' x='70.40' y='323.33' font-size='16px' text-anchor='end' fill='black' fill-opacity='255.00'>40</text>
+</g>
+<g desc='50.00'>
+<line x1='80.00' y1='270.00' x2='560.00' y2='270.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='80.00' y1='270.00' x2='85.00' y2='270.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='560.00' y1='270.00' x2='555.00' y2='270.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='50' x='70.40' y='275.33' font-size='16px' text-anchor='end' fill='black' fill-opacity='255.00'>50</text>
+</g>
+<g desc='60.00'>
+<line x1='80.00' y1='222.00' x2='560.00' y2='222.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='80.00' y1='222.00' x2='85.00' y2='222.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='560.00' y1='222.00' x2='555.00' y2='222.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='60' x='70.40' y='227.33' font-size='16px' text-anchor='end' fill='black' fill-opacity='255.00'>60</text>
+</g>
+<g desc='70.00'>
+<line x1='80.00' y1='174.00' x2='560.00' y2='174.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='80.00' y1='174.00' x2='85.00' y2='174.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='560.00' y1='174.00' x2='555.00' y2='174.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='70' x='70.40' y='179.33' font-size='16px' text-anchor='end' fill='black' fill-opacity='255.00'>70</text>
+</g>
+<g desc='80.00'>
+<line x1='80.00' y1='126.00' x2='560.00' y2='126.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='80.00' y1='126.00' x2='85.00' y2='126.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='560.00' y1='126.00' x2='555.00' y2='126.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='80' x='70.40' y='131.33' font-size='16px' text-anchor='end' fill='black' fill-opacity='255.00'>80</text>
+</g>
+<g desc='90.00'>
+<line x1='80.00' y1='78.00' x2='560.00' y2='78.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='80.00' y1='78.00' x2='85.00' y2='78.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='560.00' y1='78.00' x2='555.00' y2='78.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='90' x='70.40' y='83.33' font-size='16px' text-anchor='end' fill='black' fill-opacity='255.00'>90</text>
+</g>
+<g desc='100.00'>
+<line x1='80.00' y1='30.00' x2='560.00' y2='30.00' stroke-width='1.00' stroke='grey' stroke-opacity='255.00' stroke-dasharray='5.00, 5.00'/>
+<line x1='80.00' y1='30.00' x2='85.00' y2='30.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<line x1='560.00' y1='30.00' x2='555.00' y2='30.00' stroke-width='1.00' stroke='black' stroke-opacity='255.00'/>
+<text id='100' x='70.40' y='35.33' font-size='16px' text-anchor='end' fill='black' fill-opacity='255.00'>100</text>
+</g>
+</g>
+<rect desc='Plot-border' x='80.00' y='30.00' width='480.00' height='480.00' stroke='black' fill='none'/>
+<svg desc='Data' x='80.00' y='30.00' width='480.00' height='480.00'>
+<rect x='-10.00' y='-10.00' width='20.00' height='20.00' fill='rgb(0,0,255)' fill-opacity='0.59'/>
+<rect x='50.00' y='200.00' width='20.00' height='20.00' fill='rgb(0,0,255)' fill-opacity='0.59'/>
+<rect x='110.00' y='350.00' width='20.00' height='20.00' fill='rgb(0,0,255)' fill-opacity='0.59'/>
+<rect x='170.00' y='440.00' width='20.00' height='20.00' fill='rgb(0,0,255)' fill-opacity='0.59'/>
+<rect x='230.00' y='470.00' width='20.00' height='20.00' fill='rgb(0,0,255)' fill-opacity='0.59'/>
+<rect x='290.00' y='440.00' width='20.00' height='20.00' fill='rgb(0,0,255)' fill-opacity='0.59'/>
+<rect x='350.00' y='350.00' width='20.00' height='20.00' fill='rgb(0,0,255)' fill-opacity='0.59'/>
+<rect x='410.00' y='200.00' width='20.00' height='20.00' fill='rgb(0,0,255)' fill-opacity='0.59'/>
+<rect x='470.00' y='-10.00' width='20.00' height='20.00' fill='rgb(0,0,255)' fill-opacity='0.59'/>
+<path stroke='rgb(0,0,255)' stroke-opacity='0.59' fill='none' stroke-width='1.00' d='M 0.00 -0.00 L 1.20 4.79 2.40 9.55 3.60 14.29 4.80 19.01 6.00 23.70 7.20 28.37 8.40 33.01 9.60 37.63 10.80 42.23 12.00 46.80 13.20 51.35 14.40 55.87 15.60 60.37 16.80 64.85 18.00 69.30 19.20 73.73 20.40 78.13 21.60 82.51 22.80 86.87 24.00 91.20 25.20 95.51 26.40 99.79 27.60 104.05 28.80 108.29 30.00 112.50 31.20 116.69 32.40 120.85 33.60 124.99 34.80 129.11 36.00 133.20 37.20 137.27 38.40 141.31 39.60 145.33 40.80 149.33 42.00 153.30 43.20 157.25 44.40 161.17 45.60 165.07 46.80 168.95 48.00 172.80 49.20 176.63 50.40 180.43 51.60 184.21 52.80 187.97 54.00 191.70 55.20 195.41 56.40 199.09 57.60 202.75 58.80 206.39 60.00 210.00 61.20 213.59 62.40 217.15 63.60 220.69 64.80 224.21 66.00 227.70 67.20 231.17 68.40 234.61 69.60 238.03 70.80 241.43 72.00 244.80 73.20 248.15 74.40 251.47 75.60 254.77 76.80 258.05 78.00 261.30 79.20 264.53 80.40 267.73 81.60 270.91 82.80 274.07 84.00 277.20 85.20 280.31 86.40 283.39 87.60 286.45 88.80 289.49 90.00 292.50 91.20 295.49 92.40 298.45 93.60 301.39 94.80 304.31 96.00 307.20 97.20 310.07 98.40 312.91 99.60 315.73 100.80 318.53 102.00 321.30 103.20 324.05 104.40 326.77 105.60 329.47 106.80 332.15 108.00 334.80 109.20 337.43 110.40 340.03 111.60 342.61 112.80 345.17 114.00 347.70 115.20 350.21 116.40 352.69 117.60 355.15 118.80 357.59 120.00 360.00 121.20 362.39 122.40 364.75 123.60 367.09 124.80 369.41 126.00 371.70 127.20 373.97 128.40 376.21 129.60 378.43 130.80 380.63 132.00 382.80 133.20 384.95 134.40 387.07 135.60 389.17 136.80 391.25 138.00 393.30 139.20 395.33 140.40 397.33 141.60 399.31 142.80 401.27 144.00 403.20 145.20 405.11 146.40 406.99 147.60 408.85 148.80 410.69 150.00 412.50 151.20 414.29 152.40 416.05 153.60 417.79 154.80 419.51 156.00 421.20 157.20 422.87 158.40 424.51 159.60 426.13 160.80 427.73 162.00 429.30 163.20 430.85 164.40 432.37 165.60 433.87 166.80 435.35 168.00 436.80 169.20 438.23 170.40 439.63 171.60 441.01 172.80 442.37 174.00 443.70 175.20 445.01 176.40 446.29 177.60 447.55 178.80 448.79 180.00 450.00 181.20 451.19 182.40 452.35 183.60 453.49 184.80 454.61 186.00 455.70 187.20 456.77 188.40 457.81 189.60 458.83 190.80 459.83 192.00 460.80 193.20 461.75 194.40 462.67 195.60 463.57 196.80 464.45 198.00 465.30 199.20 466.13 200.40 466.93 201.60 467.71 202.80 468.47 204.00 469.20 205.20 469.91 206.40 470.59 207.60 471.25 208.80 471.89 210.00 472.50 211.20 473.09 212.40 473.65 213.60 474.19 214.80 474.71 216.00 475.20 217.20 475.67 218.40 476.11 219.60 476.53 220.80 476.93 222.00 477.30 223.20 477.65 224.40 477.97 225.60 478.27 226.80 478.55 228.00 478.80 229.20 479.03 230.40 479.23 231.60 479.41 232.80 479.57 234.00 479.70 235.20 479.81 236.40 479.89 237.60 479.95 238.80 479.99 240.00 480.00 241.20 479.99 242.40 479.95 243.60 479.89 244.80 479.81 246.00 479.70 247.20 479.57 248.40 479.41 249.60 479.23 250.80 479.03 252.00 478.80 253.20 478.55 254.40 478.27 255.60 477.97 256.80 477.65 258.00 477.30 259.20 476.93 260.40 476.53 261.60 476.11 262.80 475.67 264.00 475.20 265.20 474.71 266.40 474.19 267.60 473.65 268.80 473.09 270.00 472.50 271.20 471.89 272.40 471.25 273.60 470.59 274.80 469.91 276.00 469.20 277.20 468.47 278.40 467.71 279.60 466.93 280.80 466.13 282.00 465.30 283.20 464.45 284.40 463.57 285.60 462.67 286.80 461.75 288.00 460.80 289.20 459.83 290.40 458.83 291.60 457.81 292.80 456.77 294.00 455.70 295.20 454.61 296.40 453.49 297.60 452.35 298.80 451.19 300.00 450.00 301.20 448.79 302.40 447.55 303.60 446.29 304.80 445.01 306.00 443.70 307.20 442.37 308.40 441.01 309.60 439.63 310.80 438.23 312.00 436.80 313.20 435.35 314.40 433.87 315.60 432.37 316.80 430.85 318.00 429.30 319.20 427.73 320.40 426.13 321.60 424.51 322.80 422.87 324.00 421.20 325.20 419.51 326.40 417.79 327.60 416.05 328.80 414.29 330.00 412.50 331.20 410.69 332.40 408.85 333.60 406.99 334.80 405.11 336.00 403.20 337.20 401.27 338.40 399.31 339.60 397.33 340.80 395.33 342.00 393.30 343.20 391.25 344.40 389.17 345.60 387.07 346.80 384.95 348.00 382.80 349.20 380.63 350.40 378.43 351.60 376.21 352.80 373.97 354.00 371.70 355.20 369.41 356.40 367.09 357.60 364.75 358.80 362.39 360.00 360.00 361.20 357.59 362.40 355.15 363.60 352.69 364.80 350.21 366.00 347.70 367.20 345.17 368.40 342.61 369.60 340.03 370.80 337.43 372.00 334.80 373.20 332.15 374.40 329.47 375.60 326.77 376.80 324.05 378.00 321.30 379.20 318.53 380.40 315.73 381.60 312.91 382.80 310.07 384.00 307.20 385.20 304.31 386.40 301.39 387.60 298.45 388.80 295.49 390.00 292.50 391.20 289.49 392.40 286.45 393.60 283.39 394.80 280.31 396.00 277.20 397.20 274.07 398.40 270.91 399.60 267.73 400.80 264.53 402.00 261.30 403.20 258.05 404.40 254.77 405.60 251.47 406.80 248.15 408.00 244.80 409.20 241.43 410.40 238.03 411.60 234.61 412.80 231.17 414.00 227.70 415.20 224.21 416.40 220.69 417.60 217.15 418.80 213.59 420.00 210.00 421.20 206.39 422.40 202.75 423.60 199.09 424.80 195.41 426.00 191.70 427.20 187.97 428.40 184.21 429.60 180.43 430.80 176.63 432.00 172.80 433.20 168.95 434.40 165.07 435.60 161.17 436.80 157.25 438.00 153.30 439.20 149.33 440.40 145.33 441.60 141.31 442.80 137.27 444.00 133.20 445.20 129.11 446.40 124.99 447.60 120.85 448.80 116.69 450.00 112.50 451.20 108.29 452.40 104.05 453.60 99.79 454.80 95.51 456.00 91.20 457.20 86.87 458.40 82.51 459.60 78.13 460.80 73.73 462.00 69.30 463.20 64.85 464.40 60.37 465.60 55.87 466.80 51.35 468.00 46.80 469.20 42.23 470.40 37.63 471.60 33.01 472.80 28.37 474.00 23.70 475.20 19.01 476.40 14.29 477.60 9.55 478.80 4.79 480.00 -0.00 ' />
+</svg>
+<svg desc='Legends' x='80.00' y='30.00' width='480.00' height='480.00' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>
+<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>
+<g id='Legend' drag:enable='true'>
+<line x1='5.00' y1='15.00' x2='25.00' y2='15.00' stroke-width='1.00' stroke='rgb(0,0,255)' stroke-opacity='0.59'/>
+<text id='x²' x='25.00' y='21.00' font-size='20px' text-anchor='start' fill='rgb(0,0,255)' fill-opacity='0.59'>x²</text>
+</g>
+</svg>
+</svg>
+</svg>
