@@ -45,12 +45,12 @@ EGLImage: class extends GLTexture {
 		this _eglBackend = This _eglCreateImageKHR(this _eglDisplay, EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID, this _nativeBuffer, eglImageAttributes)
 		This _glEGLImageTargetTexture2DOES(this _backendTexture _target, this _eglBackend)
 	}
-	generateMipmap: func { this _backendTexture generateMipmap() }
-	bind: func (unit: UInt) { this _backendTexture bind(unit) }
-	unbind: func { this _backendTexture unbind() }
-	upload: func (pixels: Pointer, stride: Int) { this _backendTexture upload(pixels, stride) }
-	setMagFilter: func (interpolation: InterpolationType) { this _backendTexture setMagFilter(interpolation) }
-	setMinFilter: func (interpolation: InterpolationType) { this _backendTexture setMinFilter(interpolation) }
+	generateMipmap: override func { this _backendTexture generateMipmap() }
+	bind: override func (unit: UInt) { this _backendTexture bind(unit) }
+	unbind: override func { this _backendTexture unbind() }
+	upload: override func (pixels: Pointer, stride: Int) { this _backendTexture upload(pixels, stride) }
+	setMagFilter: override  func (interpolation: InterpolationType) { this _backendTexture setMagFilter(interpolation) }
+	setMinFilter: override func (interpolation: InterpolationType) { this _backendTexture setMinFilter(interpolation) }
 
 	_eglCreateImageKHR: static Func(Pointer, Pointer, UInt, Pointer, Int*) -> Pointer
 	_eglDestroyImageKHR: static Func(Pointer, Pointer)

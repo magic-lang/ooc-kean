@@ -46,18 +46,18 @@ Gles3VolumeTexture: class extends GLVolumeTexture {
 		version(debugGL) { validateEnd("VolumeTexture free") }
 		super()
 	}
-	bind: func (unit: UInt) {
+	bind: override func (unit: UInt) {
 		version(debugGL) { validateStart("VolumeTexture bind") }
 		glActiveTexture(GL_TEXTURE0 + unit)
 		glBindTexture(GL_TEXTURE_3D, this _backend)
 		version(debugGL) { validateEnd("VolumeTexture bind") }
 	}
-	unbind: func {
+	unbind: override func {
 		version(debugGL) { validateStart("VolumeTexture unbind") }
 		glBindTexture(GL_TEXTURE_3D, 0)
 		version(debugGL) { validateEnd("VolumeTexture unbind") }
 	}
-	upload: func (pixels: UInt8*) {
+	upload: override func (pixels: UInt8*) {
 		version(debugGL) { validateStart("VolumeTexture upload") }
 		glBindTexture(GL_TEXTURE_3D, this _backend)
 		glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, this size x, this size y, this size z, GL_RED, GL_UNSIGNED_BYTE, pixels)

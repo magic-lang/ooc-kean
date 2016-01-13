@@ -20,21 +20,21 @@ signal: extern func (Int, Pointer)
 ProcessUnix: class extends Process {
 	init: func ~unix (=args)
 
-	terminate: func {
+	terminate: override func {
 		if (pid)
 			kill(pid, SIGTERM)
 	}
 
-	kill: func {
+	kill: override func {
 		if (pid)
 			kill(pid, SIGKILL)
 	}
 
-	wait: func -> Int {
+	wait: override func -> Int {
 		_wait(0)
 	}
 
-	waitNoHang: func -> Int {
+	waitNoHang: override func -> Int {
 		_wait(WNOHANG)
 	}
 
@@ -82,7 +82,7 @@ ProcessUnix: class extends Process {
 		result
 	}
 
-	executeNoWait: func -> Long {
+	executeNoWait: override func -> Long {
 		pid = fork()
 		if (pid == 0) {
 			if (stdIn != null) {

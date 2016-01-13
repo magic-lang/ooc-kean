@@ -169,7 +169,7 @@ OpenGLContext: class extends GpuContext {
 		target canvas viewport = viewport
 		target canvas draw(source, map)
 	}
-	createFence: func -> GpuFence { OpenGLFence new(this) }
+	createFence: override func -> GpuFence { OpenGLFence new(this) }
 	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) {
 		result := this toRaster(gpuImage)
 		fence := this createFence()

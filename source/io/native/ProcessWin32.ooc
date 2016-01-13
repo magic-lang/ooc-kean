@@ -39,15 +39,15 @@ ProcessWin32: class extends Process {
 		exitCode
 	}
 
-	wait: func -> Int {
+	wait: override func -> Int {
 		_wait(INFINITE)
 	}
 
-	waitNoHang: func -> Int {
+	waitNoHang: override func -> Int {
 		_wait(0)
 	}
 
-	executeNoWait: func -> Long {
+	executeNoWait: override func -> Long {
 		if (stdIn != null || stdOut != null || stdErr != null) {
 			if (stdIn != null) {
 				si stdInput = stdIn as PipeWin32 readFD
@@ -133,11 +133,11 @@ ProcessWin32: class extends Process {
 		envString
 	}
 
-	terminate: func {
+	terminate: override func {
 		"please implement me! ProcessWin32 terminate" println()
 	}
 
-	kill: func {
+	kill: override func {
 		"please implement me! ProcessWin32 kill" println()
 	}
 }

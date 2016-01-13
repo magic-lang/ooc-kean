@@ -85,17 +85,17 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 		glDeleteBuffers(1, vertexBuffer&)
 		version(debugGL) { validateEnd("VertexArrayObject _generate") }
 	}
-	bind: func {
+	bind: override func {
 		version(debugGL) { validateStart("VertexArrayObject bind") }
 		glBindVertexArray(this _backend)
 		version(debugGL) { validateEnd("VertexArrayObject bind") }
 	}
-	unbind: func {
+	unbind: override func {
 		version(debugGL) { validateStart("VertexArrayObject unbind") }
 		glBindVertexArray(0)
 		version(debugGL) { validateEnd("VertexArrayObject unbind") }
 	}
-	draw: func {
+	draw: override func {
 		this bind()
 		version(debugGL) { validateStart("VertexArrayObject draw") }
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, this _vertexCount)

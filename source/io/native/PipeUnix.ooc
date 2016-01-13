@@ -27,7 +27,7 @@ PipeUnix: class extends Pipe {
 		readFD = fds[0]
 		writeFD = fds[1]
 	}
-	read: func ~cstring (buf: CString, len: Int) -> Int {
+	read: override func ~cstring (buf: CString, len: Int) -> Int {
 		howMuch := readFD read(buf, len)
 		if (howMuch <= 0) {
 			if (errno == EAGAIN)
@@ -39,14 +39,14 @@ PipeUnix: class extends Pipe {
 		}
 		howMuch
 	}
-	write: func (data: Pointer, len: Int) -> Int {
+	write: override func (data: Pointer, len: Int) -> Int {
 		writeFD write(data, len)
 	}
-	close: func (end: Char) -> Int {
+	close: override func (end: Char) -> Int {
 		fd := _getFD(end)
 		fd == 0 ? 0 : fd close()
 	}
-	close: func ~both {
+	close: override func ~both {
 		readFD close()
 		writeFD close()
 	}

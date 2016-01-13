@@ -54,8 +54,8 @@ RasterBgr: class extends RasterPacked {
 	init: func ~fromRasterBgr (original: This) { super(original) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: func (size: IntVector2D) -> Image { This new(size) }
-	copy: func -> This { This new(this) }
-	apply: func ~bgr (action: Func(ColorBgr)) {
+	copy: override func -> This { This new(this) }
+	apply: override func ~bgr (action: Func(ColorBgr)) {
 		for (row in 0 .. this size y)
 			for (pixel in 0 .. this size x) {
 				pointer := this buffer pointer + pixel * this bytesPerPixel + row * this stride
@@ -63,12 +63,12 @@ RasterBgr: class extends RasterPacked {
 				action(color)
 			}
 	}
-	apply: func ~yuv (action: Func(ColorYuv)) {
+	apply: override func ~yuv (action: Func(ColorYuv)) {
 		convert := ColorConvert fromBgr(action)
 		this apply(convert)
 		(convert as Closure) free()
 	}
-	apply: func ~monochrome (action: Func(ColorMonochrome)) {
+	apply: override func ~monochrome (action: Func(ColorMonochrome)) {
 		convert := ColorConvert fromBgr(action)
 		this apply(convert)
 		(convert as Closure) free()

@@ -26,14 +26,14 @@ ConditionUnix: class extends WaitCondition {
 		gc_free(this _backend)
 		super()
 	}
-	wait: func (mutex: Mutex) -> Bool {
+	wait: override func (mutex: Mutex) -> Bool {
 		version(safe) {
 			if (mutex class != MutexUnix)
 				raise("ConditionUnix can work only with MutexUnix")
 		}
 		pthread_cond_wait(this _backend, mutex as MutexUnix _backend&) == 0
 	}
-	signal: func -> Bool { pthread_cond_signal(this _backend) == 0 }
-	broadcast: func -> Bool { pthread_cond_broadcast(this _backend) == 0 }
+	signal: override func -> Bool { pthread_cond_signal(this _backend) == 0 }
+	broadcast: override func -> Bool { pthread_cond_broadcast(this _backend) == 0 }
 }
 }

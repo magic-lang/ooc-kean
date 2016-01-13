@@ -35,7 +35,7 @@ Gles3Context: class extends GLContext {
 		eglTerminate(this _eglDisplay)
 		super()
 	}
-	makeCurrent: func -> Bool {
+	makeCurrent: override func -> Bool {
 		result := eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0
 		version(debugGL) {
 			if (result)
@@ -43,7 +43,7 @@ Gles3Context: class extends GLContext {
 		}
 		result
 	}
-	swapBuffers: func { eglSwapBuffers(this _eglDisplay, this _eglSurface) }
+	swapBuffers: override func { eglSwapBuffers(this _eglDisplay, this _eglSurface) }
 	_chooseConfig: func (configAttribs: Int*) -> Pointer {
 		numConfigs: Int
 		eglChooseConfig(this _eglDisplay, configAttribs, null, 10, numConfigs&)
@@ -142,12 +142,12 @@ Gles3Context: class extends GLContext {
 		this _generateContext(shared, chosenConfig)
 		this makeCurrent()
 	}
-	setViewport: func (viewport: IntBox2D) {
+	setViewport: override func (viewport: IntBox2D) {
 		version(debugGL) { validateStart("Context setViewport") }
 		glViewport(viewport left, viewport top, viewport width, viewport height)
 		version(debugGL) { validateEnd("Context setViewport") }
 	}
-	enableBlend: func (on: Bool) {
+	enableBlend: override func (on: Bool) {
 		version(debugGL) { validateStart("Context enableBlend") }
 		if (on)
 			glEnable(GL_BLEND)
@@ -155,44 +155,44 @@ Gles3Context: class extends GLContext {
 			glDisable(GL_BLEND)
 		version(debugGL) { validateEnd("Context enableBlend") }
 	}
-	blend: func ~constant (factor: Float) {
+	blend: override func ~constant (factor: Float) {
 		version(debugGL) { validateStart("Context blend~constant") }
 		glEnable(GL_BLEND)
 		glBlendColor(factor, factor, factor, factor)
 		glBlendFunc(GL_CONSTANT_COLOR, GL_ONE_MINUS_CONSTANT_COLOR)
 		version(debugGL) { validateEnd("Context blend~constant") }
 	}
-	blend: func ~alphaMonochrome {
+	blend: override func ~alphaMonochrome {
 		version(debugGL) { validateStart("Context blend~alphaMonochrome") }
 		glEnable(GL_BLEND)
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR)
 		version(debugGL) { validateEnd("Context blend~alphaMonochrome") }
 	}
-	createQuad: func -> Gles3Quad {
+	createQuad: override func -> Gles3Quad {
 		result := Gles3Quad new()
 		(result vao != null) ? result : null
 	}
-	createShaderProgram: func (vertexSource, fragmentSource: String) -> Gles3ShaderProgram {
+	createShaderProgram: override func (vertexSource, fragmentSource: String) -> Gles3ShaderProgram {
 		result := Gles3ShaderProgram new()
 		result _compileShaders(vertexSource, fragmentSource) ? result : null
 	}
-	createTexture: func (type: TextureType, size: IntVector2D, stride: UInt, pixels := null, allocate := true) -> Gles3Texture {
+	createTexture: override func (type: TextureType, size: IntVector2D, stride: UInt, pixels := null, allocate := true) -> Gles3Texture {
 		result := Gles3Texture new(type, size)
 		success := result _generate(pixels, stride, allocate)
 		success ? result : null
 	}
-	createFramebufferObject: func (texture: GLTexture, size: IntVector2D) -> Gles3FramebufferObject {
+	createFramebufferObject: override func (texture: GLTexture, size: IntVector2D) -> Gles3FramebufferObject {
 		version(debugGL) { validateStart("Context createFramebufferObject") }
 		result := Gles3FramebufferObject new(size)
 		result = result _generate(texture as Gles3Texture) ? result : null
 		version(debugGL) { validateEnd("Context createFramebufferObject") }
 		result
 	}
-	createFence: func -> Gles3Fence { Gles3Fence new() }
-	createVolumeTexture: func (size: IntVector3D, pixels: UInt8*) -> Gles3VolumeTexture {
+	createFence: override func -> Gles3Fence { Gles3Fence new() }
+	createVolumeTexture: override func (size: IntVector3D, pixels: UInt8*) -> Gles3VolumeTexture {
 		Gles3VolumeTexture new(size, pixels)
 	}
-	createRenderer: func -> Gles3Renderer { Gles3Renderer new() }
+	createRenderer: override func -> Gles3Renderer { Gles3Renderer new() }
 	createVertexArrayObject: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GLVertexArrayObject {
 		Gles3VertexArrayObject new(vertices, textureCoordinates)
 	}
