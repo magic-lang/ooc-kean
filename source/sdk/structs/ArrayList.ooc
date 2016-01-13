@@ -5,11 +5,7 @@ ArrayList: class <T> extends List<T> {
 	capacity : SizeT
 	_size = 0 : SizeT
 
-	size: SSizeT {
-		get {
-			_size
-		}
-	}
+	size ::= _size
 
 	init: func {
 		init(10)

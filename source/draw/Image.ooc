@@ -42,13 +42,11 @@ Image: abstract class {
 			(this coordinateSystem & CoordinateSystem XLeftward) == CoordinateSystem XLeftward ? -1 : 1,
 			(this coordinateSystem & CoordinateSystem YUpward) == CoordinateSystem YUpward ? -1 : 1)
 
-	canvas: Canvas {
-		get {
-			if (this _canvas == null)
-				this _canvas = this _createCanvas()
-			this _canvas
-		}
-	}
+	canvas: Canvas { get {
+		if (this _canvas == null)
+			this _canvas = this _createCanvas()
+		this _canvas
+	}}
 	init: func (=_size, coordinateSystem := CoordinateSystem Default) {
 		this _referenceCount = ReferenceCounter new(this)
 		this _coordinateSystem = coordinateSystem

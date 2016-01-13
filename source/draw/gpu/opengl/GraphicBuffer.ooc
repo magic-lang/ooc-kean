@@ -46,14 +46,12 @@ GraphicBuffer: class {
 	format ::= this _format
 	size ::= this _size
 	pixelStride ::= this _pixelStride
-	stride: Int {
-		get {
-			match (this _format) {
-				case GraphicBufferFormat Rgba8888 => this _pixelStride * 4
-				case => this _pixelStride
-			}
+	stride: Int { get {
+		match (this _format) {
+			case GraphicBufferFormat Rgba8888 => this _pixelStride * 4
+			case => this _pixelStride
 		}
-	}
+	}}
 	length ::= this stride * this size y
 	nativeBuffer ::= this _nativeBuffer
 	handle ::= this _handle

@@ -6,11 +6,9 @@ import lang/equalities
 List: abstract class <T> extends BackIterable<T> {
 	equals := getStandardEquals(T)
 
-	size: SSizeT {
-		get {
-			getSize()
-		}
-	}
+	size: SSizeT { get {
+		this getSize()
+	}}
 
 	/**
 	 * Appends the specified element to the end of this list.
