@@ -55,11 +55,11 @@ RasterUv: class extends RasterPacked {
 	init: func ~fromRasterUv (original: This) { super(original) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: func (size: IntVector2D) -> Image { This new(size) }
-	copy: func -> This { This new(this) }
-	apply: func ~bgr (action: Func(ColorBgr)) {
+	copy: override func -> This { This new(this) }
+	apply: override func ~bgr (action: Func(ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))
 	}
-	apply: func ~yuv (action: Func(ColorYuv)) {
+	apply: override func ~yuv (action: Func(ColorYuv)) {
 		uvRow := this buffer pointer
 		uSource := uvRow
 		vRow := uvRow + 1
@@ -78,11 +78,11 @@ RasterUv: class extends RasterPacked {
 			vSource = uvRow + 1
 		}
 	}
-	apply: func ~monochrome (action: Func(ColorMonochrome)) {
+	apply: override func ~monochrome (action: Func(ColorMonochrome)) {
 		this apply(ColorConvert fromYuv(action))
 	}
 
-	distance: func (other: Image) -> Float {
+	distance: override func (other: Image) -> Float {
 		result := 0.0f
 		if (!other || (this size != other size))
 			result = Float maximumValue

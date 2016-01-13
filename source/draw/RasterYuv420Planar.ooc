@@ -54,15 +54,15 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		super(original, yImage, uImage, vImage)
 	}
 	create: func (size: IntVector2D) -> Image { This new(size) }
-	copy: func -> This {
+	copy: override func -> This {
 		result := This new(this)
 		this y buffer copyTo(result y buffer)
 		this u buffer copyTo(result u buffer)
 		this v buffer copyTo(result v buffer)
 		result
 	}
-	apply: func ~bgr (action: Func(ColorBgr)) { this apply(ColorConvert fromYuv(action)) }
-	apply: func ~yuv (action: Func (ColorYuv)) {
+	apply: override func ~bgr (action: Func(ColorBgr)) { this apply(ColorConvert fromYuv(action)) }
+	apply: override func ~yuv (action: Func (ColorYuv)) {
 		yRow := this y buffer pointer
 		ySource := yRow
 		uRow := this u buffer pointer
@@ -92,7 +92,7 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		}
 		(action as Closure) free()
 	}
-	apply: func ~monochrome (action: Func(ColorMonochrome)) { this apply(ColorConvert fromYuv(action)) }
+	apply: override func ~monochrome (action: Func(ColorMonochrome)) { this apply(ColorConvert fromYuv(action)) }
 	_createCanvas: override func -> Canvas { RasterYuv420PlanarCanvas new(this) }
 
 	operator [] (x, y: Int) -> ColorYuv {

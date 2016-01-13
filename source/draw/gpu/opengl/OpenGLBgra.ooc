@@ -32,7 +32,7 @@ OpenGLBgra: class extends OpenGLPacked {
 	init: func ~fromRaster (rasterImage: RasterBgra, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
-	toRasterDefault: func -> RasterImage {
+	toRasterDefault: override func -> RasterImage {
 		buffer := this canvas readPixels()
 		RasterBgra new(buffer, this size)
 	}
