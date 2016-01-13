@@ -29,17 +29,15 @@ OpenGLMap: class extends GpuMap {
 	_vertexSource: String
 	_fragmentSource: String
 	_program: GLShaderProgram[]
-	_currentProgram: GLShaderProgram {
-		get {
-			index := this _context getCurrentIndex()
-			result := this _program[index]
-			if (result == null) {
-				result = this _context _backend createShaderProgram(this _vertexSource, this _fragmentSource)
-				this _program[index] = result
-			}
-			result
+	_currentProgram: GLShaderProgram { get {
+		index := this _context getCurrentIndex()
+		result := this _program[index]
+		if (result == null) {
+			result = this _context _backend createShaderProgram(this _vertexSource, this _fragmentSource)
+			this _program[index] = result
 		}
-	}
+		result
+	}}
 	_context: OpenGLContext
 	init: func (vertexSource: String, fragmentSource: String, context: OpenGLContext) {
 		super()

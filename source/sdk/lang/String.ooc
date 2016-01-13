@@ -11,12 +11,7 @@ String: class extends Iterable<Char> {
 	 */
 	_buffer: CharBuffer
 
-	/** Size of this string, in bytes */
-	size: Int {
-		get {
-			_buffer size
-		}
-	}
+	size ::= _buffer size
 
 	init: func ~withBuffer (=_buffer)
 

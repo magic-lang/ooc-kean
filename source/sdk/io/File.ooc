@@ -25,11 +25,9 @@ File: abstract class {
 	extension: String { get { getExtension() } }
 	nameWithoutExtension: String { get { getNameWithoutExtension() } }
 	pathWithoutExtension: String { get { getPathWithoutExtension() } }
-	children: VectorList<This> {
-		get {
-			getChildren()
-		}
-	}
+	children: VectorList<This> { get {
+		getChildren()
+	}}
 	rectifySeparator: func {
 		if (this dir() && !this path endsWith(This separator)) {
 			oldPath := this path

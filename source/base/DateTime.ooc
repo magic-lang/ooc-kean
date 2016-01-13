@@ -168,11 +168,8 @@ DateTime: cover {
 	/* default date/time printing format */
 	defaultFormat: static const Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
 
-	now: static This {
-		get {
-			Time currentDateTime()
-		}
-	}
+	now: static This = Time currentDateTime()
+
 	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
 	_ticksToDateTimeHelper: static func (totalTicks: Int64) -> DateTimeData {
 		fourYearBlocks := totalTicks / This ticksPerFourYears
