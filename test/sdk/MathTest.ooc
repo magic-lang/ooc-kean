@@ -64,8 +64,8 @@ MathTest: class extends Fixture {
 			expect(13.0f clamp(9.0f, 11.0f), is equal to(11.0f) within(floatTolerance))
 			expect((-2.0f) clamp(-1.9f, 5.0f), is equal to(-1.9f) within(floatTolerance)) // (-2.0f) with parentheses because of bug in rock
 
-			expect(1.999f equals(2.0f), is false)
-			expect(1.99999f equals(2.0f), is true)
+			expect(1.9999999f equals(2.0f), is false)
+			expect(1.99999999f equals(2.0f), is true)
 
 			expect((-2.3f) absolute, is equal to(2.3f) within(floatTolerance))
 			expect(2.3f absolute, is equal to(2.3f) within(floatTolerance))
@@ -120,8 +120,8 @@ MathTest: class extends Fixture {
 			expect(13.0 clamp(9.0, 11.0), is equal to(11.0) within(doubleTolerance))
 			expect((-2.0) clamp(-1.9, 5.0), is equal to(-1.9) within(doubleTolerance)) // (-2.0) with parentheses because of bug in rock
 
-			expect(1.999 equals(2.0), is false)
-			expect(1.99999 equals(2.0), is true)
+			expect(1.999999999999999 equals(2.0), is false)
+			expect(1.9999999999999999 equals(2.0), is true)
 
 			nearZero := (0.1 + 0.1 + 0.1) - 0.3
 			expect(nearZero equals(0.0), is true)
