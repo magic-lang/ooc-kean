@@ -52,7 +52,7 @@ GpuYuv420Semiplanar: class extends GpuImage {
 		this uv referenceCount decrease()
 		super()
 	}
-	toRasterDefault: func -> RasterImage {
+	toRasterDefault: override func -> RasterImage {
 		y := this _y toRaster() as RasterMonochrome
 		uv := this _uv toRaster() as RasterUv
 		RasterYuv420Semiplanar new(y, uv)

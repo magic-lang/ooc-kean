@@ -29,7 +29,7 @@ RasterImage: abstract class extends Image {
 	apply: abstract func ~bgr (action: Func (ColorBgr))
 	apply: abstract func ~yuv (action: Func (ColorYuv))
 	apply: abstract func ~monochrome (action: Func (ColorMonochrome))
-	resizeTo: func (size: IntVector2D) -> Image {
+	resizeTo: override func (size: IntVector2D) -> Image {
 		result : Image
 //	TODO: Actually resize the image
 		resized := this
@@ -37,7 +37,7 @@ RasterImage: abstract class extends Image {
 		result
 	}
 	copy: abstract func -> This
-	copy: func ~fromParams (size: IntVector2D, transform: FloatTransform2D) -> This {
+	copy: override func ~fromParams (size: IntVector2D, transform: FloatTransform2D) -> This {
 		transform = (this transform toFloatTransform2D()) * transform * (this transform toFloatTransform2D()) inverse
 		mappingTransform := FloatTransform2D createTranslation(this size toFloatVector2D() / 2) * transform
 		upperLeft := mappingTransform * FloatPoint2D new(-size x / 2, -size x / 2)

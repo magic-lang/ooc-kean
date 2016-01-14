@@ -55,14 +55,14 @@ RasterMonochrome: class extends RasterPacked {
 	init: func ~fromRasterMonochrome (original: This) { super(original) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: func (size: IntVector2D) -> Image { This new(size) }
-	copy: func -> This { This new(this) }
-	apply: func ~bgr (action: Func(ColorBgr)) {
+	copy: override func -> This { This new(this) }
+	apply: override func ~bgr (action: Func(ColorBgr)) {
 		this apply(ColorConvert fromMonochrome(action))
 	}
-	apply: func ~yuv (action: Func(ColorYuv)) {
+	apply: override func ~yuv (action: Func(ColorYuv)) {
 		this apply(ColorConvert fromMonochrome(action))
 	}
-	apply: func ~monochrome (action: Func(ColorMonochrome)) {
+	apply: override func ~monochrome (action: Func(ColorMonochrome)) {
 		pointer := this buffer pointer as ColorMonochrome*
 		for (row in 0 .. this size y)
 			for (column in 0 .. this size x) {

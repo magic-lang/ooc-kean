@@ -82,7 +82,7 @@ version (unix || apple) {
 		/**
 		 * @return true if it's a directory
 		 */
-		dir: func -> Bool {
+		dir: override func -> Bool {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			(res == 0 && S_ISDIR(result st_mode))
@@ -91,7 +91,7 @@ version (unix || apple) {
 		/**
 		 * @return true if it's a file (ie. not a directory nor a symbolic link)
 		 */
-		file: func -> Bool {
+		file: override func -> Bool {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			(res == 0 && S_ISREG(result st_mode))
@@ -100,7 +100,7 @@ version (unix || apple) {
 		/**
 		 * @return true if the file is a symbolic link
 		 */
-		link: func -> Bool {
+		link: override func -> Bool {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			(res == 0 && S_ISLNK(result st_mode))
@@ -110,7 +110,7 @@ version (unix || apple) {
 		 * @return the size of the file, in bytes, or -1 if
 		 * the file doesn't exist.
 		 */
-		getSize: func -> LLong {
+		getSize: override func -> LLong {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			match res {
@@ -122,7 +122,7 @@ version (unix || apple) {
 		/**
 		 * @return true if the file exists
 		 */
-		exists: func -> Bool {
+		exists: override func -> Bool {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			(res == 0)
@@ -131,7 +131,7 @@ version (unix || apple) {
 		/**
 		 * @return the permissions for the owner of this file
 		 */
-		ownerPerm: func -> Int {
+		ownerPerm: override func -> Int {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			match res {
@@ -143,7 +143,7 @@ version (unix || apple) {
 		/**
 		 * @return the permissions for the group of this file
 		 */
-		groupPerm: func -> Int {
+		groupPerm: override func -> Int {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			match res {
@@ -155,7 +155,7 @@ version (unix || apple) {
 		/**
 		 * @return the permissions for the others (not owner, not group)
 		 */
-		otherPerm: func -> Int {
+		otherPerm: override func -> Int {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			match res {
@@ -167,7 +167,7 @@ version (unix || apple) {
 		/**
 		 * @return true if a file is executable by the current owner
 		 */
-		executable: func -> Bool {
+		executable: override func -> Bool {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			match res {
@@ -180,7 +180,7 @@ version (unix || apple) {
 		 * set the executable bit on this file's permissions for
 		 * current user, group, and other.
 		 */
-		setExecutable: func (exec: Bool) -> Bool {
+		setExecutable: override func (exec: Bool) -> Bool {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			if (res != 0) return false // couldn't get file mode
@@ -198,7 +198,7 @@ version (unix || apple) {
 		/**
 		 * @return the time of last access, or -1 if it doesn't exist
 		 */
-		lastAccessed: func -> Long {
+		lastAccessed: override func -> Long {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			match res {
@@ -210,7 +210,7 @@ version (unix || apple) {
 		/**
 		 * @return the time of last modification, or -1 if it doesn't exist
 		 */
-		lastModified: func -> Long {
+		lastModified: override func -> Long {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			match res {
@@ -222,7 +222,7 @@ version (unix || apple) {
 		/**
 		 * @return the time of creation, or -1 if it doesn't exist
 		 */
-		created: func -> Long {
+		created: override func -> Long {
 			result: FileStat
 			res := lstat(path as CString, result&)
 			match res {
@@ -234,7 +234,7 @@ version (unix || apple) {
 		/**
 		 * @return true if the function is relative to the current directory
 		 */
-		relative: func -> Bool {
+		relative: override func -> Bool {
 			// that's a bit rough, but should work most of the time
 			!path startsWith("/")
 		}
@@ -242,7 +242,7 @@ version (unix || apple) {
 		/**
 		 * The absolute path, e.g. "my/dir" => "/current/directory/my/dir"
 		 */
-		getAbsolutePath: func -> String {
+		getAbsolutePath: override func -> String {
 			assert(path != null)
 			assert(!path empty())
 			actualPath := gc_malloc(MAX_PATH_LENGTH) as CString
@@ -290,19 +290,19 @@ version (unix || apple) {
 			return result
 		}
 
-		getChildrenNames: func -> VectorList<String> {
+		getChildrenNames: override func -> VectorList<String> {
 			_getChildren (String)
 		}
 
-		getChildren: func -> VectorList<File> {
+		getChildren: override func -> VectorList<File> {
 			_getChildren (File)
 		}
 
-		mkdir: func ~withMode (mode: Int32) -> Int {
+		mkdir: override func ~withMode (mode: Int32) -> Int {
 			_mkdir(path as CString, mode as ModeT)
 		}
 
-		mkfifo: func ~withMode (mode: Int32) -> Int {
+		mkfifo: override func ~withMode (mode: Int32) -> Int {
 			_mkfifo(path as CString, mode as ModeT)
 		}
 	}

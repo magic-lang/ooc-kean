@@ -71,21 +71,21 @@ FileWriter: class extends Writer {
 	   Write a given number of bytes to this file, and return
 	   the number that has been effectively written.
 	 */
-	write: func (bytes: Char*, length: SizeT) -> SizeT {
+	write: override func (bytes: Char*, length: SizeT) -> SizeT {
 		file write(bytes, 0, length)
 	}
 
 	/**
 	   Write a single byte to this file.
 	 */
-	write: func ~chr (chr: Char) {
+	write: override func ~chr (chr: Char) {
 		file write(chr)
 	}
 
 	/**
 	   Close this writer and free the associated system resources, if any.
 	 */
-	close: func {
+	close: override func {
 		file close()
 	}
 

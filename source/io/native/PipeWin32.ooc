@@ -17,7 +17,7 @@ PipeWin32: class extends Pipe {
 			WindowsException new(This, GetLastError(), "Failed to create pipe") throw()
 		}
 	}
-	read: func ~cstring (buf: CString, len: Int) -> Int {
+	read: override func ~cstring (buf: CString, len: Int) -> Int {
 		bytesRead: ULong
 		success := ReadFile(readFD, buf, len, bytesRead&, null)
 
@@ -31,7 +31,7 @@ PipeWin32: class extends Pipe {
 		eof = true
 		return -1
 	}
-	write: func (data: Pointer, len: Int) -> Int {
+	write: override func (data: Pointer, len: Int) -> Int {
 		bytesWritten: ULong
 
 		// will either block (in blocking mode) or always return with true (in
@@ -45,12 +45,12 @@ PipeWin32: class extends Pipe {
 		bytesWritten
 	}
 	// 'r' = close in reading, 'w' = close in writing
-	close: func (end: Char) -> Int {
+	close: override func (end: Char) -> Int {
 		fd := _getFD(end)
 		if (!fd) return 0
 		CloseHandle(fd) ? 1 : 0
 	}
-	close: func ~both {
+	close: override func ~both {
 		CloseHandle(readFD)
 		CloseHandle(writeFD)
 	}

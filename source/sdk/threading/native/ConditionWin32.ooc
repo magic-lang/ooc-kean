@@ -34,7 +34,7 @@ version(windows) {
 			this _mutex free()
 			super()
 		}
-		wait: func (mutex: Mutex) -> Bool {
+		wait: override func (mutex: Mutex) -> Bool {
 			eventId := CreateEvent(null, false, false, null)
 			this _mutex lock()
 			this _waitingEvents add(eventId)
@@ -42,7 +42,7 @@ version(windows) {
 			mutex unlock()
 			(WaitForSingleObject(eventId, Infinite) == WaitSuccess)
 		}
-		signal: func -> Bool {
+		signal: override func -> Bool {
 			result := false
 			toSignal := 0 as Handle
 			this _mutex lock()
@@ -55,7 +55,7 @@ version(windows) {
 				result = SetEvent(toSignal)
 			result
 		}
-		broadcast: func -> Bool {
+		broadcast: override func -> Bool {
 			result := false
 			toSignal := VectorList<Handle> new()
 			this _mutex lock()

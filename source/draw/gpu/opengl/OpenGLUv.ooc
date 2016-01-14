@@ -34,7 +34,7 @@ OpenGLUv: class extends OpenGLPacked {
 	init: func ~fromRaster (rasterImage: RasterUv, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
-	toRasterDefault: func -> RasterImage {
+	toRasterDefault: override func -> RasterImage {
 		packed := this context createBgra(IntVector2D new(this size x / 2, this size y))
 		this context packToRgba(this, packed, IntBox2D new(packed size))
 		buffer := packed canvas readPixels()

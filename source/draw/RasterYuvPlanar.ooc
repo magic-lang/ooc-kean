@@ -63,13 +63,13 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 		this _v referenceCount decrease()
 		super()
 	}
-	apply: func ~bgr (action: Func (ColorBgr)) {
+	apply: override func ~bgr (action: Func (ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))
 	}
-	apply: func ~monochrome (action: Func (ColorMonochrome)) {
+	apply: override func ~monochrome (action: Func (ColorMonochrome)) {
 		this apply(ColorConvert fromYuv(action))
 	}
-	distance: func (other: Image) -> Float {
+	distance: override func (other: Image) -> Float {
 		result := 0.0f
 		if (!other || (this size != other size) || !other instanceOf?(This))
 			result = Float maximumValue

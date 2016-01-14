@@ -30,9 +30,9 @@ GpuContext: abstract class extends AbstractContext {
 	createUv: abstract func (size: IntVector2D) -> GpuImage
 	createImage: abstract func (rasterImage: RasterImage) -> GpuImage
 	createFence: abstract func -> GpuFence
-	createYuv420Semiplanar: func (size: IntVector2D) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(size, this) }
-	createYuv420Semiplanar: func ~fromImages (y, uv: GpuImage) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(y, uv, this) }
-	createYuv420Semiplanar: func ~fromRaster (raster: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(raster, this) }
+	createYuv420Semiplanar: override func (size: IntVector2D) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(size, this) }
+	createYuv420Semiplanar: override func ~fromImages (y, uv: GpuImage) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(y, uv, this) }
+	createYuv420Semiplanar: override func ~fromRaster (raster: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(raster, this) }
 	createMesh: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GpuMesh
 
 	update: abstract func

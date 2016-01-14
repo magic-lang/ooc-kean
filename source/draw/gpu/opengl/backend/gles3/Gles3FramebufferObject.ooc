@@ -31,23 +31,23 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		version(debugGL) { validateEnd("FramebufferObject free") }
 		super()
 	}
-	bind: func {
+	bind: override func {
 		version(debugGL) { validateStart("FramebufferObject bind") }
 		glBindFramebuffer(GL_FRAMEBUFFER, this _backend)
 		version(debugGL) { validateEnd("FramebufferObject bind") }
 	}
-	unbind: func {
+	unbind: override func {
 		version(debugGL) { validateStart("FramebufferObject unbind") }
 		glBindFramebuffer(GL_FRAMEBUFFER, 0)
 		version(debugGL) { validateEnd("FramebufferObject unbind") }
 	}
-	setClearColor: func (color: ColorBgra) {
+	setClearColor: override func (color: ColorBgra) {
 		version(debugGL) { validateStart("FramebufferObject setClearColor") }
 		tuple := color normalized
 		glClearColor(tuple c, tuple b, tuple a, tuple d)
 		version(debugGL) { validateEnd("FramebufferObject setClearColor") }
 	}
-	readPixels: func -> ByteBuffer {
+	readPixels: override func -> ByteBuffer {
 		version(debugGL) { validateStart("FramebufferObject readPixels") }
 		buffer := ByteBuffer new(this size area * 4)
 		pointer := buffer pointer
@@ -82,7 +82,7 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		version(debugGL) { validateEnd("FramebufferObject _generate") }
 		true
 	}
-	invalidate: func {
+	invalidate: override func {
 		version(debugGL) { validateStart("FramebufferObject invalidate") }
 		this bind()
 		att: UInt = GL_COLOR_ATTACHMENT0

@@ -490,7 +490,7 @@ CharBuffer: class extends Iterable<Char> {
 		0.0
 	}
 
-	iterator: func -> CharBufferIterator<Char> {
+	iterator: override func -> CharBufferIterator<Char> {
 		CharBufferIterator<Char> new(this)
 	}
 

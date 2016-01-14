@@ -70,28 +70,28 @@ Pipe: abstract class {
 PipeReader: class extends Reader {
 	pipe: Pipe
 	init: func (=pipe)
-	read: func (chars: CString, offset: Int, count: Int) -> SizeT {
+	read: override func (chars: CString, offset: Int, count: Int) -> SizeT {
 		bytesRead := pipe read(chars + offset, count)
 		// the semantics of Reader read() don't specify negative return values
 		bytesRead >= 0 ? bytesRead : 0
 	}
-	read: func ~char -> Char {
+	read: override func ~char -> Char {
 		bytesRead := pipe read()
 		// the semantics of Reader read() don't specify negative return values
 		bytesRead >= 0 ? bytesRead : 0
 	}
-	hasNext?: func -> Bool {
+	hasNext?: override func -> Bool {
 		!pipe eof()
 	}
-	mark: func -> Long {
+	mark: override func -> Long {
 		raise("Seeking is not supported for this source")
 		-1
 	}
-	seek: func (offset: Long, mode: SeekMode) -> Bool {
+	seek: override func (offset: Long, mode: SeekMode) -> Bool {
 		raise("Seeking is not supported for this source")
 		false
 	}
-	close: func {
+	close: override func {
 		pipe close('r')
 	}
 }
@@ -99,13 +99,13 @@ PipeReader: class extends Reader {
 PipeWriter: class extends Writer {
 	pipe: Pipe
 	init: func (=pipe)
-	write: func ~chr (chr: Char) {
+	write: override func ~chr (chr: Char) {
 		pipe write(chr&, 1)
 	}
-	write: func (bytes: CString, length: SizeT) -> SizeT {
+	write: override func (bytes: CString, length: SizeT) -> SizeT {
 		pipe write(bytes, length)
 	}
-	close: func {
+	close: override func {
 		pipe close('w')
 	}
 }

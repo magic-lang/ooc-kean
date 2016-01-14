@@ -50,17 +50,17 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		result wrap = this wrap
 		result
 	}
-	copy: func -> This {
+	copy: override func -> This {
 		result := This new(this size)
 		this buffer copyTo(result buffer)
 		result
 	}
-	apply: func ~bgr (action: Func(ColorBgr)) {
+	apply: override func ~bgr (action: Func(ColorBgr)) {
 		convert := ColorConvert fromYuv(action)
 		this apply(convert)
 		(convert as Closure) free()
 	}
-	apply: func ~yuv (action: Func (ColorYuv)) {
+	apply: override func ~yuv (action: Func (ColorYuv)) {
 		row := this buffer pointer as UInt8*
 		source := row
 		width := this size x
@@ -74,7 +74,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 			row += this stride
 		}
 	}
-	apply: func ~monochrome (action: Func(ColorMonochrome)) {
+	apply: override func ~monochrome (action: Func(ColorMonochrome)) {
 		convert := ColorConvert fromYuv(action)
 		this apply(convert)
 		(convert as Closure) free()

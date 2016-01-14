@@ -40,24 +40,24 @@ Gles3Texture: class extends GLTexture {
 		version(debugGL) { validateEnd("Texture free") }
 		super()
 	}
-	generateMipmap: func {
+	generateMipmap: override func {
 		version(debugGL) { validateStart("Texture generateMipmap") }
 		this bind(0)
 		glGenerateMipmap(this _target)
 		version(debugGL) { validateEnd("Texture generateMipmap") }
 	}
-	bind: func (unit: UInt) {
+	bind: override func (unit: UInt) {
 		version(debugGL) { validateStart("Texture bind") }
 		glActiveTexture(GL_TEXTURE0 + unit)
 		glBindTexture(this _target, this _backend)
 		version(debugGL) { validateEnd("Texture bind") }
 	}
-	unbind: func {
+	unbind: override func {
 		version(debugGL) { validateStart("Texture unbind") }
 		glBindTexture(this _target, 0)
 		version(debugGL) { validateEnd("Texture unbind") }
 	}
-	upload: func (pixels: Pointer, stride: Int) {
+	upload: override func (pixels: Pointer, stride: Int) {
 		version(debugGL) { validateStart("Texture upload") }
 		pixelStride := stride / this _bytesPerPixel
 		glBindTexture(this _target, this _backend)
@@ -106,7 +106,7 @@ Gles3Texture: class extends GLTexture {
 		}
 		version(debugGL) { validateEnd("Texture _setInternalFormats") }
 	}
-	setMagFilter: func (interpolation: InterpolationType) {
+	setMagFilter: override func (interpolation: InterpolationType) {
 		version(debugGL) { validateStart("Texture setMagFilter") }
 		this bind(0)
 		interpolationType := match (interpolation) {
@@ -118,7 +118,7 @@ Gles3Texture: class extends GLTexture {
 		this unbind()
 		version(debugGL) { validateEnd("Texture setMagFilter") }
 	}
-	setMinFilter: func (interpolation: InterpolationType) {
+	setMinFilter: override func (interpolation: InterpolationType) {
 		version(debugGL) { validateStart("Texture setMinFilter") }
 		this bind(0)
 		interpolationType := match (interpolation) {

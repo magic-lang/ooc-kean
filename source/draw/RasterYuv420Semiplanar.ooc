@@ -59,7 +59,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		this init(yImage, uvImage)
 	}
 	create: func (size: IntVector2D) -> Image { This new(size) }
-	copy: func -> This {
+	copy: override func -> This {
 		result := This new(this)
 		this y buffer copyTo(result y buffer)
 		this uv buffer copyTo(result uv buffer)
@@ -130,12 +130,12 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 				targetUvBuffer[(column - regionLeftHalf) as Int + targetStride] = thisUvBuffer[column + thisStride]
 		}
 	}
-	apply: func ~bgr (action: Func(ColorBgr)) {
+	apply: override func ~bgr (action: Func(ColorBgr)) {
 		convert := ColorConvert fromYuv(action)
 		this apply(convert)
 		(convert as Closure) free()
 	}
-	apply: func ~yuv (action: Func (ColorYuv)) {
+	apply: override func ~yuv (action: Func (ColorYuv)) {
 		yRow := this y buffer pointer
 		ySource := yRow
 		uvRow := this uv buffer pointer
@@ -162,7 +162,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 			uSource = uvRow + 1
 		}
 	}
-	apply: func ~monochrome (action: Func(ColorMonochrome)) {
+	apply: override func ~monochrome (action: Func(ColorMonochrome)) {
 		convert := ColorConvert fromYuv(action)
 		this apply(convert)
 		(convert as Closure) free()

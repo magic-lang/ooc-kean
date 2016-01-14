@@ -86,7 +86,7 @@ version(windows) {
 		/**
 		 * @return true if it's a directory (return false if it doesn't exist)
 		 */
-		dir: func -> Bool {
+		dir: override func -> Bool {
 			res := GetFileAttributes(path as CString)
 			(res & FILE_ATTRIBUTE_DIRECTORY) != 0
 		}
@@ -94,7 +94,7 @@ version(windows) {
 		/**
 		 * @return true if it's a file (ie. exists and is not a directory nor a symbolic link)
 		 */
-		file: func -> Bool {
+		file: override func -> Bool {
 			// our definition of a file: neither a directory or a link
 			// (and no, FILE_ATTRIBUTE_NORMAL isn't true when we need it..)
 			(ffd, ok) := _getFindData()
@@ -106,7 +106,7 @@ version(windows) {
 		/**
 		 * @return true if the file is a symbolic link
 		 */
-		link: func -> Bool {
+		link: override func -> Bool {
 			(ffd, ok) := _getFindData()
 			return (ok) && ((ffd attr) & FILE_ATTRIBUTE_REPARSE_POINT) != 0
 		}
@@ -114,7 +114,7 @@ version(windows) {
 		/**
 		 * @return the size of the file, in bytes
 		 */
-		getSize: func -> LLong {
+		getSize: override func -> LLong {
 			(ffd, ok) := _getFindData()
 			return (ok) ? toLLong(ffd fileSizeLow, ffd fileSizeHigh) : 0
 		}
@@ -122,7 +122,7 @@ version(windows) {
 		/**
 		 * @return true if the file exists
 		 */
-		exists: func -> Bool {
+		exists: override func -> Bool {
 			res := GetFileAttributes(path as CString)
 			(res != INVALID_FILE_ATTRIBUTES)
 		}
@@ -130,7 +130,7 @@ version(windows) {
 		/**
 		 * @return the permissions for the owner of this file
 		 */
-		ownerPerm: func -> Int {
+		ownerPerm: override func -> Int {
 			// Win32 permissions are not unix-like
 			return 0
 		}
@@ -138,7 +138,7 @@ version(windows) {
 		/**
 		 * @return the permissions for the group of this file
 		 */
-		groupPerm: func -> Int {
+		groupPerm: override func -> Int {
 			// Win32 permissions are not unix-like
 			return 0
 		}
@@ -146,7 +146,7 @@ version(windows) {
 		/**
 		 * @return the permissions for the others (not owner, not group)
 		 */
-		otherPerm: func -> Int {
+		otherPerm: override func -> Int {
 			// Win32 permissions are not unix-like
 			return 0
 		}
@@ -154,7 +154,7 @@ version(windows) {
 		/**
 		* @return true if a file is executable by the current owner
 		*/
-		executable: func -> Bool {
+		executable: override func -> Bool {
 			// Win32 has no *simple* concept of 'executable' bit
 			// we'd have to handle ACLs, and that's a nasty can of worms.
 			// For now, `executable` and `setExecutable` are enough
@@ -168,12 +168,12 @@ version(windows) {
 		* set the executable bit on this file's permissions for
 		* current user, group, and other.
 		*/
-		setExecutable: func (exec: Bool) -> Bool {
+		setExecutable: override func (exec: Bool) -> Bool {
 			// see comment for 'executable'
 			false
 		}
 
-		mkdir: func ~withMode (mode: Int32) -> Int {
+		mkdir: override func ~withMode (mode: Int32) -> Int {
 			if (relative()) {
 				return getAbsoluteFile() mkdir()
 			}
@@ -183,14 +183,14 @@ version(windows) {
 			CreateDirectory(path toCString(), null) ? 0 : -1
 		}
 
-		mkfifo: func ~withMode (mode: Int32) -> Int {
+		mkfifo: override func ~withMode (mode: Int32) -> Int {
 			fprintf(stderr, "FileWin32: stub mkfifo")
 		}
 
 		/**
 		 * @return the time of last access
 		 */
-		lastAccessed: func -> Long {
+		lastAccessed: override func -> Long {
 			(ffd, ok) := _getFindData()
 			return (ok) ? toTimestamp(ffd lastAccessTime) : -1
 		}
@@ -198,7 +198,7 @@ version(windows) {
 		/**
 		 * @return the time of last modification
 		 */
-		lastModified: func -> Long {
+		lastModified: override func -> Long {
 			(ffd, ok) := _getFindData()
 			return (ok) ? toTimestamp(ffd lastWriteTime) : -1
 		}
@@ -206,7 +206,7 @@ version(windows) {
 		/**
 		 * @return the time of creation
 		 */
-		created: func -> Long {
+		created: override func -> Long {
 			(ffd, ok) := _getFindData()
 			return (ok) ? toTimestamp(ffd creationTime) : -1
 		}
@@ -214,7 +214,7 @@ version(windows) {
 		/**
 		 * @return true if the function is relative to the current directory
 		 */
-		relative: func -> Bool {
+		relative: override func -> Bool {
 			// that's a bit rough, but should work most of the time
 			!path startsWith("/") && (path length() <= 1 || path[1] != ':')
 		}
@@ -222,7 +222,7 @@ version(windows) {
 		/**
 		 * The absolute path, e.g. "my/dir" => "C:\current\directory\my\dir"
 		 */
-		getAbsolutePath: func -> String {
+		getAbsolutePath: override func -> String {
 			fullPath := CharBuffer new(File MAX_PATH_LENGTH)
 			fullPath setLength(GetFullPathName(path toCString(), File MAX_PATH_LENGTH, fullPath data, null))
 			_normalizePath(fullPath toString())
@@ -271,7 +271,7 @@ version(windows) {
 		 * List the name of the children of this path
 		 * Works only on directories, obviously
 		 */
-		getChildrenNames: func -> VectorList<String> {
+		getChildrenNames: override func -> VectorList<String> {
 			_getChildren( String )
 		}
 
@@ -279,7 +279,7 @@ version(windows) {
 		 * List the children of this path
 		 * Works only on directories, obviously
 		 */
-		getChildren: func -> VectorList<File> {
+		getChildren: override func -> VectorList<File> {
 			_getChildren ( File )
 		}
 

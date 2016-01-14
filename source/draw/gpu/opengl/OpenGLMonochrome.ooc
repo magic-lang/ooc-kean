@@ -32,7 +32,7 @@ OpenGLMonochrome: class extends OpenGLPacked {
 	init: func ~fromRaster (rasterImage: RasterMonochrome, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
-	toRasterDefault: func -> RasterImage {
+	toRasterDefault: override func -> RasterImage {
 		packed := this context createBgra(IntVector2D new(this size x / 4, this size y))
 		this context packToRgba(this, packed, IntBox2D new(packed size))
 		buffer := packed canvas readPixels()

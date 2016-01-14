@@ -26,13 +26,13 @@ ArrayList: class <T> extends List<T> {
 		super()
 	}
 
-	add: func (element: T) {
+	add: override func (element: T) {
 		ensureCapacity(_size + 1)
 		data[_size] = element
 		_size += 1
 	}
 
-	add: func ~withIndex (index: SSizeT, element: T) {
+	add: override func ~withIndex (index: SSizeT, element: T) {
 		if (index < 0) index = _size + index
 		if (index < 0 || index > _size) OutOfBoundsException new(This, index, _size) throw()
 
@@ -64,18 +64,18 @@ ArrayList: class <T> extends List<T> {
 		_size += 1
 	}
 
-	clear: func {
+	clear: override func {
 		_size = 0
 	}
 
-	get: inline func (index: SSizeT) -> T {
+	get: override inline func (index: SSizeT) -> T {
 		if (index < 0) index = _size + index
 		if (index < 0 || index >= _size) OutOfBoundsException new(This, index, _size) throw()
 		checkIndex(index)
 		return data[index]
 	}
 
-	indexOf: func (element: T) -> SSizeT {
+	indexOf: override func (element: T) -> SSizeT {
 		index := 0
 		while (index < _size) {
 			//if (memcmp(data + index * T size, element, T size) == 0) return index
@@ -85,7 +85,7 @@ ArrayList: class <T> extends List<T> {
 		return -1
 	}
 
-	lastIndexOf: func (element: T) -> SSizeT {
+	lastIndexOf: override func (element: T) -> SSizeT {
 		index := _size
 		while (index > -1) {
 			if (memcmp(data + index * T size, element, T size) == 0) return index
@@ -94,7 +94,7 @@ ArrayList: class <T> extends List<T> {
 		return -1
 	}
 
-	removeAt: func (index: SSizeT) -> T {
+	removeAt: override func (index: SSizeT) -> T {
 		if (index < 0) index = _size + index
 		if (index < 0 || index >= _size) OutOfBoundsException new(This, index, _size) throw()
 
@@ -119,7 +119,7 @@ ArrayList: class <T> extends List<T> {
 		}
 	}
 
-	remove: func (element: T) -> Bool {
+	remove: override func (element: T) -> Bool {
 		index := indexOf(element)
 		if (index == -1) return false
 		else {
@@ -128,7 +128,7 @@ ArrayList: class <T> extends List<T> {
 		return true
 	}
 
-	set: func (index: Int, element: T) -> T {
+	set: override func (index: Int, element: T) -> T {
 		checkIndex(index)
 		old := data[index]
 		data[index] = element
@@ -140,7 +140,7 @@ ArrayList: class <T> extends List<T> {
 		data[index] = element
 	}
 
-	getSize: inline func -> SizeT { _size }
+	getSize: override inline func -> SizeT { _size }
 
 	ensureCapacity: inline func (newSize: SizeT) {
 		if (newSize > capacity) {
@@ -161,7 +161,7 @@ ArrayList: class <T> extends List<T> {
 		}
 	}
 
-	iterator: func -> BackIterator<T> { return ArrayListIterator<T> new(this) }
+	iterator: override func -> BackIterator<T> { return ArrayListIterator<T> new(this) }
 
 	backIterator: func -> BackIterator<T> {
 		iter := ArrayListIterator<T> new(this)
@@ -169,13 +169,13 @@ ArrayList: class <T> extends List<T> {
 		return iter
 	}
 
-	clone: func -> This<T> {
+	clone: override func -> This<T> {
 		copy := This<T> new(size)
 		copy addAll(this)
 		return copy
 	}
 
-	emptyClone: func <K> -> This<K> {
+	emptyClone: override func <K> -> This<K> {
 		This<K> new()
 	}
 

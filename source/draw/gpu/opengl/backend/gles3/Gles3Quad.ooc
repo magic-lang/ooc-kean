@@ -44,7 +44,7 @@ Gles3Quad: class extends GLQuad {
 		this vao free()
 		super()
 	}
-	draw: func {
+	draw: override func {
 		version(debugGL) { validateStart("Quad draw") }
 		this vao bind()
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)

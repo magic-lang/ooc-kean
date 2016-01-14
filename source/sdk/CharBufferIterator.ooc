@@ -4,24 +4,24 @@ CharBufferIterator: class <T> extends BackIterator<T> {
 
 	init: func ~withStr (=str)
 
-	hasNext?: func -> Bool {
+	hasNext?: override func -> Bool {
 		i < str size
 	}
 
-	next: func -> T {
+	next: override func -> T {
 		c := (str data + i)@
 		i += 1
 		return c
 	}
 
-	hasPrev?: func -> Bool {
+	hasPrev?: override func -> Bool {
 		i > 0
 	}
 
-	prev: func -> T {
+	prev: override func -> T {
 		i -= 1
 		return (str data + i)@
 	}
 
-	remove: func -> Bool { false } // this could be implemented!
+	remove: override func -> Bool { false } // this could be implemented!
 }
