@@ -1,4 +1,3 @@
-[![Circle CI](https://circleci.com/gh/cogneco/ooc-kean.svg?style=svg)](https://circleci.com/gh/cogneco/ooc-kean)
 ooc-kean
 ========
 
