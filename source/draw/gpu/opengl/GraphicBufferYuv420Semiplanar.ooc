@@ -63,7 +63,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	}
 	_bin := static VectorList<EGLBgra> new()
 	_mutex := static Mutex new()
-	_binSize: static Int = 20
+	_binSize: static Int = 100
 	_recycle: static func (image: EGLBgra) {
 		This _mutex lock()
 		This _bin add(image)
@@ -85,8 +85,8 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	}
 	free: static func ~all {
 		This _mutex lock()
-		for (i in 0 .. This _bin count)
-			This _bin remove(i) referenceCount decrease()
+		while (!This _bin empty)
+			This _bin remove() referenceCount decrease()
 		This _mutex unlock()
 	}
 	kean_draw_graphicBufferYuv420Semiplanar_new: unmangled static func (buffer: GraphicBuffer, size: IntVector2D, stride, uvOffset: Int) -> This { This new(buffer, size, stride, uvOffset) }
