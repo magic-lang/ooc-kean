@@ -49,7 +49,7 @@ EGLImage: class extends GLTexture {
 	bind: override func (unit: UInt) { this _backendTexture bind(unit) }
 	unbind: override func { this _backendTexture unbind() }
 	upload: override func (pixels: Pointer, stride: Int) { this _backendTexture upload(pixels, stride) }
-	setMagFilter: override  func (interpolation: InterpolationType) { this _backendTexture setMagFilter(interpolation) }
+	setMagFilter: override func (interpolation: InterpolationType) { this _backendTexture setMagFilter(interpolation) }
 	setMinFilter: override func (interpolation: InterpolationType) { this _backendTexture setMinFilter(interpolation) }
 
 	_eglCreateImageKHR: static Func(Pointer, Pointer, UInt, Pointer, Int*) -> Pointer
