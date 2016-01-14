@@ -6,19 +6,17 @@ Pipe: abstract class {
 	read: func ~char -> Char {
 		c: Char
 		howmuch := read(c& as CString, 1)
-
-		if (howmuch == -1) return '\0'
+		if (howmuch == -1)
+			c = '\0'
 		c
 	}
 	read: func ~string (len: Int) -> String {
 		buf := gc_malloc(len + 1) as CString
 		howmuch := read(buf, len)
-
-		if (howmuch == -1) return null // eof!
-
-		// make sure it's 0-terminated
+		if (howmuch == -1)
+			return null
 		buf[howmuch] = '\0'
-		return buf toString()
+		buf toString()
 	}
 	read: func ~buffer (buf: CharBuffer) -> Int {
 		bytesRead := read(buf data, buf capacity)
@@ -32,19 +30,18 @@ Pipe: abstract class {
 		write(str _buffer data, str length())
 	}
 	write: abstract func (data: CString, len: Int) -> Int
-	// 'r' = close in reading, 'w' = close in writing
 	close: abstract func (mode: Char) -> Int
 	close: abstract func ~both
 	setNonBlocking: func ~both {
-		setNonBlocking('r')
-		setNonBlocking('w')
+		this setNonBlocking('r')
+		this setNonBlocking('w')
 	}
 	setNonBlocking: func (end: Char) {
 		raise("This platform doesn't support non-blocking pipe I/O.")
 	}
 	SetBlocking: func ~both {
-		setBlocking('r')
-		setBlocking('w')
+		this setBlocking('r')
+		this setBlocking('w')
 	}
 	setBlocking: func (end: Char) {
 		raise("This platform doesn't support blocking pipe I/O.")
@@ -87,11 +84,11 @@ PipeReader: class extends Reader {
 		!pipe eof()
 	}
 	mark: func -> Long {
-		SeekingNotSupported new(This) throw()
+		raise("Seeking is not supported for this source")
 		-1
 	}
 	seek: func (offset: Long, mode: SeekMode) -> Bool {
-		SeekingNotSupported new(This) throw()
+		raise("Seeking is not supported for this source")
 		false
 	}
 	close: func {
