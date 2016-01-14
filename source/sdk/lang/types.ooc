@@ -42,7 +42,7 @@ Class: abstract class {
 	name: String
 
 	// Pointer to instance of super-class
-	super: const This
+	super: This
 
 	// Create a new instance of the object of type defined by this class
 	alloc: final func ~_class -> Object {

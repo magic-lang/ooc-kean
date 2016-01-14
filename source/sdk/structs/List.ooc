@@ -245,7 +245,7 @@ List: abstract class <T> extends BackIterable<T> {
 		copy
 	}
 
-	filterEach: inline func (f: Func(T) -> Bool, g: Func(T)) {
+	filterEach: func (f: Func(T) -> Bool, g: Func(T)) {
 		filter(f) each(g)
 	}
 

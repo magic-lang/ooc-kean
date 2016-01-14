@@ -51,7 +51,7 @@ FSInfoStruct: cover {
 __digits: String = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 __digits_small: String = "0123456789abcdefghijklmnopqrstuvwxyz"
 
-argNext: inline func<T> (va: VarArgsIterator*, T: Class) -> T {
+argNext: func<T> (va: VarArgsIterator*, T: Class) -> T {
 	if (!va@ hasNext?()) InvalidFormatException new(null) throw()
 	return va@ next(T)
 }
@@ -341,7 +341,7 @@ parseArgOne: func <T> (res: CharBuffer, info: FSInfoStruct*, va: T, p: Char*) {
 	}
 }
 
-getEntityInfo: inline func (info: FSInfoStruct@, va: VarArgsIterator*, start: Char*, end: Pointer) {
+getEntityInfo: func (info: FSInfoStruct@, va: VarArgsIterator*, start: Char*, end: Pointer) {
 	/* save original pointer */
 	p := start
 
@@ -403,7 +403,7 @@ getEntityInfo: inline func (info: FSInfoStruct@, va: VarArgsIterator*, start: Ch
 	info bytesProcessed = p as SizeT - start as SizeT
 }
 
-getEntityInfoOne: inline func <T> (info: FSInfoStruct@, va: T*, start: Char*, end: Pointer) {
+getEntityInfoOne: func <T> (info: FSInfoStruct@, va: T*, start: Char*, end: Pointer) {
 	/* save original pointer */
 	p := start
 	/* Find any flags. */

@@ -44,8 +44,8 @@ murmurHash: func <K> (keyTagazok: K) -> SizeT {
 	seed: SizeT = 1
 
 	len := K size
-	m = 0x5bd1e995 : const SizeT
-	r = 24 : const SSizeT
+	m = 0x5bd1e995: SizeT
+	r = 24: SSizeT
 	l := len
 
 	h : SizeT = seed ^ len
@@ -259,7 +259,7 @@ HashMap: class <K, V> extends BackIterable<V> {
 		}
 		true
 	}
-	add: inline func (key: K, value: V) -> Bool {
+	add: func (key: K, value: V) -> Bool {
 		put(key, value)
 	}
 	get: func (key: K) -> V {

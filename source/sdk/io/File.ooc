@@ -266,7 +266,7 @@ File: abstract class {
 
 	separator: static Char
 	pathDelimiter: static Char
-	MAX_PATH_LENGTH := static const 16383
+	MAX_PATH_LENGTH := static 16383
 
 	new: static func (.path) -> This {
 		version (unix || apple) {
@@ -304,6 +304,6 @@ File: abstract class {
 	}
 }
 
-_isDirHardlink: inline func (dir: CString) -> Bool {
+_isDirHardlink: func (dir: CString) -> Bool {
 	(dir[0] == '.') && (dir[1] == '\0' || ( dir[1] == '.' && dir[2] == '\0'))
 }
