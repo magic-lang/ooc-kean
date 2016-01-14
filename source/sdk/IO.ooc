@@ -88,11 +88,11 @@ FStream: cover from FILE* {
 	 * suffix "b" = binary mode
 	 * suffix "t" = text mode (warning: tell/seek are unreliable in text mode under mingw32)
 	 */
-	open: static func (filename, mode: const String) -> This {
+	open: static func (filename, mode: String) -> This {
 		fopen(filename, mode)
 	}
 
-	open: static func ~withFlags (filename, mode: const String, flags: Int) -> This {
+	open: static func ~withFlags (filename, mode: String, flags: Int) -> This {
 		fd := open(filename, flags)
 		fdopen(fd, mode)
 	}

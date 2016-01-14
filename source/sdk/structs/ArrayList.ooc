@@ -68,7 +68,7 @@ ArrayList: class <T> extends List<T> {
 		_size = 0
 	}
 
-	get: override inline func (index: SSizeT) -> T {
+	get: override func (index: SSizeT) -> T {
 		if (index < 0) index = _size + index
 		if (index < 0 || index >= _size) OutOfBoundsException new(This, index, _size) throw()
 		checkIndex(index)
@@ -140,9 +140,9 @@ ArrayList: class <T> extends List<T> {
 		data[index] = element
 	}
 
-	getSize: override inline func -> SizeT { _size }
+	getSize: override func -> SizeT { _size }
 
-	ensureCapacity: inline func (newSize: SizeT) {
+	ensureCapacity: func (newSize: SizeT) {
 		if (newSize > capacity) {
 			capacity = newSize * (newSize > 50000 ? 2 : 4)
 			tmpData := gc_realloc(data, capacity * T size)
@@ -155,7 +155,7 @@ ArrayList: class <T> extends List<T> {
 	}
 
 	/** private */
-	checkIndex: inline func (index: SSizeT) {
+	checkIndex: func (index: SSizeT) {
 		if (index >= _size) {
 			OutOfBoundsException new(This, index, _size) throw()
 		}
