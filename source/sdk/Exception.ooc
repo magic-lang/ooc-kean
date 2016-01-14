@@ -25,7 +25,7 @@ _StackFrame: cover {
 
 StackFrame: cover from _StackFrame* {
 	new: static func -> This {
-		gc_malloc(_StackFrame size)
+		calloc(1, _StackFrame size)
 	}
 	free: func {
 		gc_free(this as Void*)

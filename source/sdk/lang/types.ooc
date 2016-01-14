@@ -50,7 +50,7 @@ Class: abstract class {
 
 	// Create a new instance of the object of type defined by this class
 	alloc: final func ~_class -> Object {
-		object := gc_malloc(instanceSize) as Object
+		object := calloc(1, instanceSize) as Object
 		if (object)
 			object class = this
 		object

@@ -84,7 +84,7 @@ PointerHeapVector: class extends PointerVector {
 	}
 
 	_allocate: func (count: Int) {
-		this _backend = gc_realloc(this _backend, count * Pointer size)
+		this _backend = realloc(this _backend, count * Pointer size)
 	}
 
 	resize: override func (count: Int) {

@@ -102,7 +102,7 @@ HeapVector: class <T> extends Vector<T> {
 	}
 
 	_allocate: func (capacity: Int) {
-		this _backend = gc_realloc(this _backend, capacity * T size)
+		this _backend = realloc(this _backend, capacity * T size)
 	}
 
 	resize: override func (capacity: Int) {

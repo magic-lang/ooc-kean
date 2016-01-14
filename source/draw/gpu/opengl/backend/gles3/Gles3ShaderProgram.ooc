@@ -108,7 +108,7 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 			source println()
 			logSize: Int = 0
 			glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, logSize&)
-			compileLog := gc_malloc(logSize * Char size) as CString
+			compileLog := calloc(1, logSize * Char size) as CString
 			length: Int
 			glGetShaderInfoLog(shaderID, logSize, length&, compileLog)
 			compileLogString := compileLog toString()

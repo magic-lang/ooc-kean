@@ -25,7 +25,7 @@ VarArgs: cover {
 
 	// private api used by C code
 	init: func@ (=count, bytes: SizeT) {
-		args = gc_malloc(bytes + (count * Class size))
+		args = calloc(1, bytes + (count * Class size))
 		argsPtr = args
 	}
 

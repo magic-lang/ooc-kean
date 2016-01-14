@@ -29,7 +29,7 @@ OwnedBuffer: cover {
 		this init(null, 0, Owner Unknown)
 	}
 	init: func@ ~fromSize (size: Int, owner := Owner Receiver) {
-		this init(gc_malloc(size), size, owner)
+		this init(calloc(1, size), size, owner)
 	}
 	init: func@ ~fromData (=_pointer, =_size, =_owner)
 	free: func@ -> Bool {

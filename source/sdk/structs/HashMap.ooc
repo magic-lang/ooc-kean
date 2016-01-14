@@ -256,20 +256,20 @@ HashMap: class <K, V> extends BackIterable<V> {
 				while (currentPointer@ next)
 					currentPointer = currentPointer@ next
 
-				newEntry := gc_malloc(HashEntry size) as HashEntry*
+				newEntry := calloc(1, HashEntry size) as HashEntry*
 
-				newEntry@ key = gc_malloc(K size)
+				newEntry@ key = calloc(1, K size)
 				memcpy(newEntry@ key, key, K size)
 
-				newEntry@ value = gc_malloc(V size)
+				newEntry@ value = calloc(1, V size)
 				memcpy(newEntry@ value, value, V size)
 
 				currentPointer@ next = newEntry
 			} else {
-				entry key = gc_malloc(K size)
+				entry key = calloc(1, K size)
 				memcpy(entry key, key, K size)
 
-				entry value = gc_malloc(V size)
+				entry value = calloc(1, V size)
 				memcpy(entry value, value, V size)
 
 				entry next = null

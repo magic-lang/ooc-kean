@@ -11,7 +11,7 @@ Pipe: abstract class {
 		c
 	}
 	read: func ~string (len: Int) -> String {
-		buf := gc_malloc(len + 1) as CString
+		buf := calloc(1, len + 1) as CString
 		howmuch := read(buf, len)
 		result: String = null
 		if (howmuch != -1) {

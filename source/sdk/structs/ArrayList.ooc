@@ -10,11 +10,11 @@ ArrayList: class <T> extends BackIterable<T> {
 	}
 
 	init: func ~withCapacity (=capacity) {
-		data = gc_malloc(capacity * T size)
+		data = calloc(1, capacity * T size)
 	}
 
 	init: func ~withData (.data, =_size) {
-		this data = gc_malloc(_size * T size)
+		this data = calloc(1, _size * T size)
 		memcpy(this data, data, _size * T size)
 		capacity = _size
 	}
@@ -158,7 +158,7 @@ ArrayList: class <T> extends BackIterable<T> {
 	ensureCapacity: func (newSize: SizeT) {
 		if (newSize > capacity) {
 			capacity = newSize * (newSize > 50000 ? 2 : 4)
-			tmpData := gc_realloc(data, capacity * T size)
+			tmpData := realloc(data, capacity * T size)
 			if (tmpData) {
 				data = tmpData
 			} else {

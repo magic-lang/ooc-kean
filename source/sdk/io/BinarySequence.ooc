@@ -128,7 +128,7 @@ BinarySequenceReader: class {
 		String new(s)
 	}
 	bytes: func (length: SizeT) -> Byte* {
-		value := gc_malloc(length * Byte size) as Byte*
+		value := calloc(length, Byte size) as Byte*
 		for (i in 0 .. length)
 			value[i] = u8() as Byte
 		value

@@ -57,7 +57,7 @@ CharBuffer: class extends Iterable<Char> {
 			rs := rshift
 			if (rs) shiftLeft(rs)
 
-			tmp := gc_realloc(mallocAddr, capacity)
+			tmp := realloc(mallocAddr, capacity)
 			if (!tmp) OutOfMemoryException new(This) throw()
 
 			// if we were coming from a string literal, copy the original data as well (gc_realloc cant work on text segment)
