@@ -148,7 +148,7 @@ OpenGLContext: class extends GpuContext {
 		}
 	}
 	update: override func { this _backend swapBuffers() }
-	packToRgba: func (source: GpuImage, target: GpuImage, viewport: IntBox2D, padding := 0) {
+	packToRgba: override func (source: GpuImage, target: GpuImage, viewport: IntBox2D, padding := 0) {
 		channels := 1
 		map: GpuMap
 		if (source instanceOf?(OpenGLMonochrome))
