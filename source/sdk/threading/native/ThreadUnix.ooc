@@ -57,7 +57,6 @@ version(unix || apple) {
 			ts tv_nsec = ((absSeconds - ts tv_sec) * 1000 + 0.5) * (1_000_000 as Long)
 		}
 		__fake_timedjoin: func (seconds: Double) -> Bool {
-			//TODO: This *is* fake, use WaitCondition instead
 			result := false
 			while (seconds > 0.0 && !result) {
 				Time sleepMilli(20)
