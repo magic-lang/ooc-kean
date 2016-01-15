@@ -71,7 +71,7 @@ Axis: class {
 	}
 	getVerticalSvg: func (plotAreaSize, margin: FloatVector2D, position: FloatPoint2D, transform: FloatTransform2D, radix: Float) -> String {
 		result := "<g desc='Y-axis data'>\n"
-		labelOffset := FloatPoint2D new(-((Float maximum(this max, this min absolute) / radix) log10() + 3.0f) * 0.6f * (this fontSize - 4.0f), - plotAreaSize y / 2.0f)
+		labelOffset := FloatPoint2D new(-((this max maximum(this min absolute) / radix) log10() + 3.0f) * 0.6f * (this fontSize - 4.0f), - plotAreaSize y / 2.0f)
 		numberOffset := FloatPoint2D new(- 0.6f * (this fontSize - 4.0f), (this fontSize - 4.0f) / 3.0f)
 		radixOffset := FloatPoint2D new(numberOffset x, - plotAreaSize y - margin y / 2 + this fontSize / 3.0f)
 		tickMarkerEndOffset := FloatPoint2D new(5.0f, 0.0f)

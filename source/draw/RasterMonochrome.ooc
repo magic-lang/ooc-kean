@@ -97,8 +97,8 @@ RasterMonochrome: class extends RasterPacked {
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in Int maximum(0, y - 2) .. Int minimum(y + 3, this size y))
-							for (otherX in Int maximum(0, x - 2) .. Int minimum(x + 3, this size x))
+						for (otherY in 0 maximum(y - 2) .. (y + 3) minimum(this size y))
+							for (otherX in 0 maximum(x - 2) .. (x + 3) minimum(this size x))
 								if (otherX != x || otherY != y) {
 									pixel := (other as This)[otherX, otherY]
 									if (maximum y < pixel y)

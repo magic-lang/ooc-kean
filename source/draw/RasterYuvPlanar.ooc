@@ -81,8 +81,8 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in Int maximum(0, y - this distanceRadius) .. Int minimum(y + 1 + this distanceRadius, this size y))
-							for (otherX in Int maximum(0, x - this distanceRadius) .. Int minimum(x + 1 + this distanceRadius, this size x))
+						for (otherY in 0 maximum(y - this distanceRadius) .. (y + 1 + this distanceRadius) minimum(this size y))
+							for (otherX in 0 maximum(x - this distanceRadius) .. (y + 1 + this distanceRadius) minimum(this size x))
 								if (otherX != x || otherY != y) {
 									pixel := (other as This)[otherX, otherY]
 									if (maximum y < pixel y)

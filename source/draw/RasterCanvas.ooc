@@ -35,21 +35,21 @@ RasterCanvas: abstract class extends Canvas {
 	}
 	_drawLine: func (start, end: IntPoint2D) {
 		if (start y == end y) {
-			startX := Int minimum(start x, end x)
-			endX := Int maximum(start x, end x)
+			startX := start x minimum(end x)
+			endX := start x maximum(end x)
 			for (x in startX .. endX + 1)
 				this _drawPoint(x, start y)
 		} else if (start x == end x) {
-			startY := Int minimum(start y, end y)
-			endY := Int maximum(start y, end y)
+			startY := start y minimum(end y)
+			endY := start y maximum(end y)
 			for (y in startY .. endY + 1)
 				this _drawPoint(start x, y)
 		} else {
 			originalPen := this pen
 			originalAlpha := originalPen alphaAsFloat
 			slope := (end y - start y) as Float / (end x - start x) as Float
-			startX := Int minimum(start x, end x)
-			endX := Int maximum(start x, end x)
+			startX := start x minimum(end x)
+			endX := start x maximum(end x)
 			for (x in startX .. endX + 1) {
 				idealY := slope * (x - start x) + start y
 				floor := idealY floor()

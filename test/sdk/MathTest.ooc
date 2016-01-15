@@ -32,10 +32,10 @@ MathTest: class extends Fixture {
 			expect((-3) sign, is equal to(-1))
 			expect(3 sign, is equal to(1))
 
-			expect(Int maximum(-1, 1), is equal to(1))
-			expect(Int maximum(-1, 0), is equal to(0))
-			expect(Int minimum(-1, 1), is equal to(-1))
-			expect(Int minimum(-1, 0), is equal to(-1))
+			expect((-1) maximum(1), is equal to(1))
+			expect((-1) maximum(0), is equal to(0))
+			expect((-1) minimum(1), is equal to(-1))
+			expect((-1) minimum(0), is equal to(-1))
 
 			expect(2 isEven, is true)
 			expect((-4) isEven, is true)
@@ -73,10 +73,10 @@ MathTest: class extends Fixture {
 			expect((-2.3f) sign, is equal to(-1.0f) within(floatTolerance))
 			expect(2.3f sign, is equal to(1.0f) within(floatTolerance))
 
-			expect(Float maximum(-1.2f, -1.1f), is equal to(-1.1f) within(floatTolerance))
-			expect(Float maximum(-1.2f, 0.f), is equal to(0.f) within(floatTolerance))
-			expect(Float minimum(-1.2f, -1.1f), is equal to(-1.2f) within(floatTolerance))
-			expect(Float minimum(-1.2f, 0.f), is equal to(-1.2f) within(floatTolerance))
+			expect((-1.2f) maximum(-1.1f), is equal to(-1.1f) within(floatTolerance))
+			expect((-1.2f) maximum(0.f), is equal to(0.f) within(floatTolerance))
+			expect((-1.2f) minimum(-1.1f), is equal to(-1.2f) within(floatTolerance))
+			expect((-1.2f) minimum(0.f), is equal to(-1.2f) within(floatTolerance))
 
 			expect(10.f squared, is equal to(100.f) within(floatTolerance))
 

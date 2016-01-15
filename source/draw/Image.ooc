@@ -67,7 +67,8 @@ Image: abstract class {
 		super()
 	}
 	resizeWithin: func (restriction: IntVector2D) -> This {
-		this resizeTo(((this size toFloatVector2D()) * Float minimum(restriction x as Float / this size x as Float, restriction y as Float / this size y as Float)) toIntVector2D())
+		restrictionFraction := (restriction x as Float / this size x as Float) minimum(restriction y as Float / this size y as Float)
+		this resizeTo((this size toFloatVector2D() * restrictionFraction) toIntVector2D())
 	}
 	resizeTo: abstract func (size: IntVector2D) -> This
 	resizeTo: virtual func ~withMethod (size: IntVector2D, method: InterpolationMode) -> This {

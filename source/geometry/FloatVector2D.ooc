@@ -44,8 +44,8 @@ FloatVector2D: cover {
 	round: func -> This { This new(this x round(), this y round()) }
 	ceiling: func -> This { This new(this x ceil(), this y ceil()) }
 	floor: func -> This { This new(this x floor(), this y floor()) }
-	minimum: func (ceiling: This) -> This { This new(Float minimum(this x, ceiling x), Float minimum(this y, ceiling y)) }
-	maximum: func (floor: This) -> This { This new(Float maximum(this x, floor x), Float maximum(this y, floor y)) }
+	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y)) }
+	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y)) }
 	minimum: func ~Float (ceiling: Float) -> This { this minimum(This new(ceiling)) }
 	maximum: func ~Float (floor: Float) -> This { this maximum(This new(floor)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }

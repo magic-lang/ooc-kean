@@ -46,8 +46,8 @@ Vector2D: class <T> {
 			}
 		} else {
 			temporaryResult: T*
-			minimumRowCount := Int minimum(this rowCount, newRowCount)
-			minimumColumnCount := Int minimum(this columnCount, newColumnCount)
+			minimumRowCount := this rowCount minimum(newRowCount)
+			minimumColumnCount := this columnCount minimum(newColumnCount)
 
 			if (newRowCount > this rowCount && newColumnCount > this columnCount)
 				temporaryResult = gc_calloc(newRowCount * newColumnCount, T size)

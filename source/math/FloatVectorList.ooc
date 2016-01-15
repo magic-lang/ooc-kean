@@ -101,7 +101,7 @@ FloatVectorList: class extends VectorList<Float> {
 		(this as VectorList<Float>) reverse() as This
 	}
 	addInto: func (other: This) {
-		minimumCount := Int minimum(this count, other count)
+		minimumCount := this count minimum(other count)
 		for (i in 0 .. minimumCount)
 			this[i] = this[i] + other[i]
 	}
@@ -266,7 +266,7 @@ FloatVectorList: class extends VectorList<Float> {
 		coefficientMatrix := This _generateCubicSplineCoefficients(this count)
 		rightHandSide := FloatMatrix new(1, this count) take()
 		for (index in 0 .. this count)
-			rightHandSide[0, index] = 3.f * (thisPointer[Int minimum(this count - 1, index + 1)] - thisPointer[Int maximum(0, index - 1)])
+			rightHandSide[0, index] = 3.f * (thisPointer[(this count - 1) minimum(index + 1)] - thisPointer[0 maximum(index - 1)])
 		constants := coefficientMatrix solveTridiagonal(rightHandSide) take()
 		coefficientMatrix free()
 		rightHandSide free()

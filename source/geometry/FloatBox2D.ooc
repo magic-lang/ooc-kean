@@ -53,8 +53,8 @@ FloatBox2D: cover {
 	}
 	init: func@ ~fromIntBox2D (box: IntBox2D) { this init(box left, box top, box width, box height) }
 	init: func@ ~fromPoints (first, second: FloatPoint2D) {
-		left := Float minimum(first x, second x)
-		top := Float minimum(first y, second y)
+		left := first x minimum(second x)
+		top := first y minimum(second y)
 		width := (first x - second x) abs()
 		height := (first y - second y) abs()
 		this init(left, top, width, height)
@@ -90,10 +90,10 @@ FloatBox2D: cover {
 		This createAround(this center, this size minimum(size))
 	}
 	intersection: func (other: This) -> This {
-		left := Float maximum(this left, other left)
-		top := Float maximum(this top, other top)
-		width := Float maximum(0, (Float minimum(this right, other right) - left))
-		height := Float maximum(0, (Float minimum(this bottom, other bottom) - top))
+		left := this left maximum(other left)
+		top := this top maximum(other top)
+		width := 0 maximum(this right minimum(other right) - left)
+		height := 0 maximum(this bottom minimum(other bottom) - top)
 		This new(left, top, width, height)
 	}
 	union: func ~box (other: This) -> This { // Rock bug: Union without suffix cannot be used because the C name conflicts with keyword "union"
