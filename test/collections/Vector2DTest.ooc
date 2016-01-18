@@ -26,7 +26,6 @@ Vector2DTest: class extends Fixture {
 		sizeL := 15
 		sizeXL := 20
 		vector2D := Vector2D<Int> new(sizeM, sizeM)
-		s: String
 		super("Vector2D")
 		this add("count", func {
 			expect(vector2D rowCount, is equal to(sizeM))

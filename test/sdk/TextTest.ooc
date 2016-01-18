@@ -11,7 +11,6 @@ TextTest: class extends Fixture {
 			expect(string == "test ")
 			string free()
 			text = Text new("string")
-			text2 := Text new("str")
 			expect(text count == 6)
 			string = text toString()
 			expect(string == "string")

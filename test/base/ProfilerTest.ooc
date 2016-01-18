@@ -23,6 +23,7 @@ ProfilerTest: class extends Fixture {
 		})
 		this add("cleanup", func {
 			profiler := Profiler new("for cleanup")
+			profiler start() . stop()
 			profilerToFree := Profiler new("to free")
 			profilerToFree free()
 			Profiler free~all()

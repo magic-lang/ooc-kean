@@ -67,8 +67,8 @@ FloatMatrix: cover {
 		result
 	}
 	setVertical: func (xOffset, yOffset: Int, x, y, z: Float) {
-		t := this take()
 		version(safe) {
+			t := this take()
 			if (xOffset < 0 || xOffset >= t width)
 				raise("Column index out of range in FloatMatrix setVertical")
 			if (t height - yOffset < 3)

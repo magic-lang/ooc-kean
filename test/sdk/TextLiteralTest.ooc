@@ -11,7 +11,6 @@ TextLiteralTest: class extends Fixture {
 			expect(string == "test ")
 			string free()
 			t =t"string"
-			t2 := t"str"
 			expect(t count == 6)
 			string = t toString()
 			expect(string == "string")

@@ -141,7 +141,7 @@ Cell: class <T> {
 			case value: Float => "%.8f" formatFloat(value)
 			case value: Double => "%.12f" formatDouble(value)
 			case value: LDouble => "%.12f" formatLDouble(value)
-			case => raise("[Cell] toString() is not implemented on the specified type")
+			case => raise("[Cell] toString() is not implemented on the specified type"); null
 		}
 	}
 }

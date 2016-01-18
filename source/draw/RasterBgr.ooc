@@ -129,6 +129,7 @@ RasterBgr: class extends RasterPacked {
 				}
 			result /= this size length
 		}
+		result
 	}
 	swapRedBlue: func {
 		this swapChannels(0, 2)

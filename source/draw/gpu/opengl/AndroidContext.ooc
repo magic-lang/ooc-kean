@@ -57,7 +57,6 @@ AndroidContext: class extends OpenGLContext {
 	}
 	recyclePacker: func (packer: EGLBgra) { this _packers add(packer) }
 	getPacker: func (size: IntVector2D) -> EGLBgra {
-		result: EGLBgra = null
 		index := -1
 		for (i in 0 .. this _packers count) {
 			if (this _packers[i] size == size) {

@@ -55,7 +55,6 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform i, is equal to(1.0f) within(this precision))
 		})
 		this add("rotate", func {
-			identity := FloatTransform2D identity
 			angle := Float pi / 9.0f
 			transform := FloatTransform2D createZRotation(angle)
 			transform = transform rotate(-angle)
@@ -71,7 +70,6 @@ FloatTransform2DTest: class extends Fixture {
 		})
 		this add("scale", func {
 			scale := 20.0f
-			identity := FloatTransform2D new(scale, 0.0f, 0.0f, scale, 0.0f, 0.0f)
 			transform := FloatTransform2D createScaling(scale, scale)
 			transform = transform scale(5.0f)
 			expect(transform a, is equal to(100.0f) within(this precision))

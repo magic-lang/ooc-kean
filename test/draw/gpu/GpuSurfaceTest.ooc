@@ -86,9 +86,6 @@ GpuSurfaceTest: class extends Fixture {
 			gpuImage canvas clear()
 			viewport := gpuImage canvas viewport
 			redBox := IntBox2D new(viewport left, viewport top, viewport width / 2, viewport height / 2)
-			yellowBox := IntBox2D new(viewport width / 2, viewport top, viewport width / 2, viewport height / 2)
-			blueBox := IntBox2D new(viewport left, viewport height / 2, viewport width / 2, viewport height / 2)
-			greenBox := IntBox2D new(viewport width / 2, viewport height / 2, viewport width / 2, viewport height / 2)
 			gpuImage canvas draw(sourceImage, redBox, viewport)
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
@@ -113,7 +110,6 @@ GpuSurfaceTest: class extends Fixture {
 			correctImage := RasterMonochrome open("test/draw/gpu/correct/shapes.png")
 			gpuImage := gpuContext createMonochrome(sourceSize)
 			gpuImage canvas clear()
-			viewport := gpuImage canvas viewport
 			trianglePoints := VectorList<FloatPoint2D> new()
 			lineLength := 200.0f
 			trianglePoints add(FloatPoint2D new(-lineLength, lineLength / 2.0f))

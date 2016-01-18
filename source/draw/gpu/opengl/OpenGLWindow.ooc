@@ -41,10 +41,10 @@ OpenGLWindow: class extends OpenGLSurface {
 	_unbind: override func
 	_getDefaultMap: override func (image: Image) -> GpuMap {
 		match (image) {
-			case (i: GpuYuv420Semiplanar) => this _yuvSemiplanarToBgra
-			case (i: RasterYuv420Semiplanar) => this _yuvSemiplanarToBgra
-			case (i: OpenGLMonochrome) => this _monochromeToBgra
-			case (i: RasterMonochrome) => this _monochromeToBgra
+			case GpuYuv420Semiplanar => this _yuvSemiplanarToBgra
+			case RasterYuv420Semiplanar => this _yuvSemiplanarToBgra
+			case OpenGLMonochrome => this _monochromeToBgra
+			case RasterMonochrome => this _monochromeToBgra
 			case => this context defaultMap
 		}
 	}
