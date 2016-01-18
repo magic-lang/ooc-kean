@@ -33,6 +33,7 @@ GpuContext: abstract class extends DrawContext {
 	finish: func { this createFence() sync() . wait() . free() }
 
 	toRaster: virtual func (source: GpuImage) -> RasterImage { source toRasterDefault() }
+	toRaster: virtual func ~target (source: GpuImage, target: RasterImage) { Debug raise("Using unimplemented function GpuContext::toRaster~target")}
 	toRasterAsync: virtual func (source: GpuImage) -> (RasterImage, GpuFence) {
 		result := this toRaster(source)
 		fence := this createFence()

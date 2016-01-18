@@ -44,6 +44,7 @@ GpuImage: abstract class extends Image {
 
 	upload: abstract func (image: RasterImage)
 	toRaster: func -> RasterImage { this _context toRaster(this) }
+	toRaster: func ~target (target: RasterImage) { this _context toRaster(this, target) }
 	toRasterAsync: func -> (RasterImage, GpuFence) { this _context toRasterAsync(this) }
 	toRasterDefault: abstract func -> RasterImage
 }
