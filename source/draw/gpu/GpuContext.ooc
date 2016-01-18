@@ -36,7 +36,7 @@ GpuContext: abstract class extends AbstractContext {
 	createMesh: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GpuMesh
 
 	update: abstract func
-	packToRgba: abstract func (source: GpuImage, target: GpuImage, viewport: IntBox2D,  padding := 0)
+	packToRgba: abstract func (source: GpuImage, target: GpuImage, viewport: IntBox2D, padding := 0)
 	finish: func { this createFence() sync() . wait() . free() }
 
 	toRaster: virtual func (gpuImage: GpuImage) -> RasterImage { gpuImage toRasterDefault() }
