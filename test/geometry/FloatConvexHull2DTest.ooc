@@ -22,7 +22,6 @@ use ooc-unit
 FloatConvexHull2DTest: class extends Fixture {
 	init: func {
 		super("FloatConvexHull2D")
-		tolerance := 0.0001f
 
 		this add("contains, triangle", func {
 			trianglePoints := VectorList<FloatPoint2D> new()

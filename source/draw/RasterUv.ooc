@@ -125,6 +125,7 @@ RasterUv: class extends RasterPacked {
 				}
 			result /= ((this size x squared + this size y squared) as Float sqrt())
 		}
+		result
 	}
 	_createCanvas: override func -> Canvas { RasterUvCanvas new(this) }
 

@@ -62,13 +62,12 @@ RecursiveMutex: abstract class extends Mutex {
 
 	new: static func -> This {
 		result: This = null
-		version (unix || apple) {
-			return RecursiveMutexUnix new()
-		}
-		version (windows) {
-			return RecursiveMutexWin32 new()
-		}
-		Exception new(This, "Unsupported platform!\n") throw()
-		null
+		version (unix || apple)
+			result = RecursiveMutexUnix new()
+		version (windows)
+			result = RecursiveMutexWin32 new()
+		if (result == null)
+			Exception new(This, "Unsupported platform!\n") throw()
+		result
 	}
 }

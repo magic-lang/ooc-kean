@@ -116,6 +116,7 @@ RasterMonochrome: class extends RasterPacked {
 				}
 			result /= (this size x squared + this size y squared as Float sqrt())
 		}
+		result
 	}
 	getFirstDerivative: func (x, y: Int) -> (Float, Float) {
 		step := 2

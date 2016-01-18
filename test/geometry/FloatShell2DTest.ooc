@@ -62,6 +62,10 @@ FloatShell2DTest: class extends Fixture {
 			expect(added right, is equal to(5.5f) within(tolerance))
 			expect(added top, is equal to(6.0f) within(tolerance))
 			expect(added bottom, is equal to(6.5f) within(tolerance))
+			expect(subtracted left, is equal to(3.0f) within(tolerance))
+			expect(subtracted right, is equal to(2.5f) within(tolerance))
+			expect(subtracted top, is equal to(2.0f) within(tolerance))
+			expect(subtracted bottom, is equal to(1.5f) within(tolerance))
 		})
 		this add("increase, decrease (box)", func {
 			shell := FloatShell2D new(1.0f)

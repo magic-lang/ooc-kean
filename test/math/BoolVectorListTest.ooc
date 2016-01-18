@@ -22,7 +22,6 @@ use ooc-unit
 BoolVectorListTest: class extends Fixture {
 	init: func {
 		super("BoolVectorList")
-		tolerance := 0.0001f
 		this add("tally and reverse", func {
 			list := BoolVectorList new()
 			list add(true)

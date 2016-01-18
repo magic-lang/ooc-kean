@@ -33,8 +33,8 @@ OwnedBuffer: cover {
 	}
 	init: func@ ~fromData (=_pointer, =_size, =_owner)
 	free: func@ -> Bool {
-		result: Bool
-		if (result = this isOwned)
+		result := this isOwned
+		if (result)
 			gc_free(this _pointer)
 		this _pointer = null
 		this _size = 0

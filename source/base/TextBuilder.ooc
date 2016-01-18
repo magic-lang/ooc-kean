@@ -96,6 +96,7 @@ TextBuilder: class {
 
 	operator + (other: This) -> This {
 		this append(other)
+		this
 	}
 	operator == (other: This) -> Bool {
 		result := this count == other count
@@ -105,7 +106,6 @@ TextBuilder: class {
 		result
 	}
 	operator [] (index: Int) -> Char {
-		i := index
 		position := 0
 		c := this _data[position] take() count // Needed c for some strange reason.
 		while (c <= index) {
@@ -117,6 +117,7 @@ TextBuilder: class {
 	}
 	operator + (value: Text) -> This {
 		this append(value)
+		this
 	}
 	operator != (text: Text) -> Bool {
 		!(this == text)

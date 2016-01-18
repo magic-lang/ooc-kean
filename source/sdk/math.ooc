@@ -215,7 +215,6 @@ extend Float {
 		(coefficient, radix)
 	}
 	roundToValueDigits: func (valueDigits: Int, up: Bool) -> This {
-		value := this
 		(result, radix) := this decomposeToCoefficientAndRadix(valueDigits)
 		if (result != 0) {
 			result = up ? result ceil() : result floor()

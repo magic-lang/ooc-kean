@@ -69,7 +69,6 @@ IntTransform2DTest: class extends Fixture {
 		})
 		this add("scale", func {
 			scale := 20
-			identity := IntTransform2D new(scale, 0, 0, scale, 0, 0)
 			transform := IntTransform2D createScaling(scale, scale)
 			transform = transform scale(5)
 			expect(transform a, is equal to(100))

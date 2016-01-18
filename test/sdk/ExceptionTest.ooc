@@ -22,15 +22,19 @@ ExceptionTest: class extends Fixture {
 			expect(exceptionCount, is equal to(2 * testCount))
 		})
 		this add("empty", func {
+			count := 0
 			for (i in 0 .. 100)
 				try { }
-				catch (exception: Exception) { }
+				catch (Exception) { ++count }
+			expect(count, is equal to(0))
 		})
 		this add("break from try", func {
+			count := 0
 			for (i in 0 .. 100)
 				try {
 					break
-				} catch (exception: Exception) { }
+				} catch (Exception) { ++count }
+			expect(count, is equal to(0))
 		})
 	}
 }
