@@ -2,6 +2,7 @@ include math
 use math
 
 FLT_EPSILON: extern Float
+DBL_EPSILON: extern Double
 
 // These functions are kept global to make mathematical code easier to read
 cos: extern (cosf) func (Float) -> Float
@@ -83,7 +84,7 @@ extend Double {
 	e ::= static 2.718281828459045235360287471352662497757247093699959574966
 	minimumValue ::= static DBL_MIN
 	maximumValue ::= static DBL_MAX
-	defaultTolerance ::= static 0.0001
+	epsilon ::= static DBL_EPSILON
 	absolute ::= this >= 0.f ? this : -1.0 * this
 	sign ::= this >= 0.0 ? 1.0 : -1.0
 	isOdd ::= this modulo(2) == 1
@@ -128,11 +129,11 @@ extend Double {
 	toRadians: func -> This { This pi / 180.0 * this }
 	toDegrees: func -> This { 180.0 / This pi * this }
 	clamp: func (floor, ceiling: This) -> This { this > ceiling ? ceiling : (this < floor ? floor : this) }
-	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
-	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this < other && !this equals(other) }
-	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this > other && !this equals(other) }
-	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this greaterThan(other) }
-	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this lessThan(other) }
+	equals: func (other: This, tolerance := This epsilon) -> Bool { (this - other) abs() < tolerance }
+	lessThan: func (other: This, tolerance := This epsilon) -> Bool { this < other && !this equals(other) }
+	greaterThan: func (other: This, tolerance := This epsilon) -> Bool { this > other && !this equals(other) }
+	lessOrEqual: func (other: This, tolerance := This epsilon) -> Bool { !this greaterThan(other) }
+	greaterOrEqual: func (other: This, tolerance := This epsilon) -> Bool { !this lessThan(other) }
 
 	maximum: func (other: This) -> This { this > other ? this : other }
 	minimum: func (other: This) -> This { this < other ? this : other }
@@ -146,7 +147,6 @@ extend Float {
 	maximumValue ::= static FLT_MAX
 	pi ::= static 3.14159_26535_89793_23846_26433_83279f
 	e ::= static 2.718281828459045235360287471352662497757247093699959574966f
-	defaultTolerance ::= static 0.0001f
 	absolute ::= this >= 0.f ? this : -1.f * this
 	sign ::= this >= 0.f ? 1.f : -1.f
 	isOdd ::= this modulo(2) == 1
@@ -182,11 +182,11 @@ extend Float {
 	floor: extern (floorf) func -> This
 	truncate: extern (truncf) func -> This
 
-	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
-	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this < other && !this equals(other) }
-	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this > other && !this equals(other) }
-	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this greaterThan(other) }
-	greaterOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this lessThan(other) }
+	equals: func (other: This, tolerance := This epsilon) -> Bool { (this - other) abs() < tolerance }
+	lessThan: func (other: This, tolerance := This epsilon) -> Bool { this < other && !this equals(other) }
+	greaterThan: func (other: This, tolerance := This epsilon) -> Bool { this > other && !this equals(other) }
+	lessOrEqual: func (other: This, tolerance := This epsilon) -> Bool { !this greaterThan(other) }
+	greaterOrEqual: func (other: This, tolerance := This epsilon) -> Bool { !this lessThan(other) }
 	linearInterpolation: func (a: This, b: This) -> This { (this * (b - a)) + a }
 	inverseLinearInterpolation: func (a: This, b: This) -> This { (this - a) / (b - a) }
 	clamp: func (floor, ceiling: This) -> This { this > ceiling ? ceiling : (this < floor ? floor : this) }
