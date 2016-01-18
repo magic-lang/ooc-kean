@@ -40,7 +40,7 @@ do
 done
 echo "Main: ./test/Tests.ooc" >> "$TESTS_USE_FILE"
 rm -f .libs/tests-linux64.*
-rock -q --gc=off $ARGS $FLAGS $FEATURES $TESTS_USE_FILE && ./Tests
+rock -q --gc=off +-Wall $ARGS $FLAGS $FEATURES $TESTS_USE_FILE && ./Tests
 if [[ !( $? == 0 ) ]]
 then
 	exit 1

@@ -76,7 +76,7 @@ ExceptionContext: class {
 exceptionContext := ExceptionContext new()
 
 _pushStackFrame: func -> StackFrame { exceptionContext pushStackFrame() }
-_popStackFrame: func -> StackFrame { exceptionContext popStackFrame() }
+_popStackFrame: func { exceptionContext popStackFrame() }
 _getException: func -> Exception { exceptionContext exception }
 
 version(windows) {
