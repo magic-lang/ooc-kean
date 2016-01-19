@@ -1,0 +1,4 @@
+{
+    "coverage": ["test_coverage.info"],
+    "sourcemapped": [".libs/"]
+}
