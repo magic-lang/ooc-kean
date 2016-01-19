@@ -107,7 +107,7 @@ TextBuilder: class {
 	}
 	operator [] (index: Int) -> Char {
 		position := 0
-		c := this _data[position] take() count // Needed c for some strange reason.
+		c := this _data[position] take() count
 		while (c <= index) {
 			index -= c
 			++position
