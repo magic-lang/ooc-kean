@@ -42,15 +42,6 @@ CsvReaderTest: class extends Fixture {
 			filename free()
 			reader free()
 		})
-		this add("map", func {
-			filename := Text new(c"test/io/input/3x3.csv", 21)
-			reader := CsvReader open(filename) map(VectorList<Float>, |row| This toFloats)
-			filename free()
-			reader free()
-		})
-	}
-	toFloats: static func (row: VectorList<Text>) -> VectorList<Float> {
-		row map(|value| value toFloat())
 	}
 }
 
