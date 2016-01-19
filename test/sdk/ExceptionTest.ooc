@@ -1,4 +1,4 @@
-use ooc-unit
+use unit
 
 ExceptionTest: class extends Fixture {
 	init: func {

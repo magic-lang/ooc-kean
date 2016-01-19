@@ -1,4 +1,4 @@
-use ooc-unit
+use unit
 use math
 
 IntRandomGeneratorTest: class extends Fixture {

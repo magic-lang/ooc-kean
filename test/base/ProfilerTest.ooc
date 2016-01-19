@@ -1,5 +1,5 @@
 use base
-use ooc-unit
+use unit
 import io/File
 
 ProfilerTest: class extends Fixture {

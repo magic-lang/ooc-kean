@@ -16,7 +16,7 @@
 */
 
 use base
-use ooc-unit
+use unit
 
 TimerTest: class extends Fixture {
 	timer := Timer new()

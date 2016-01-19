@@ -15,7 +15,7 @@
  * along with this software. If not, see<http://www.gnu.org/licenses/>.
  */
 
-use ooc-unit
+use unit
 
 // TODO: Skipping the variable and having "is not equal to" inside an expect call does not work
 StringTest: class extends Fixture {

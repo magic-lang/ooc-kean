@@ -3,7 +3,7 @@ use geometry
 use draw-gpu
 use draw
 use opengl
-use ooc-unit
+use unit
 
 GpuImageTranslationTest: class extends Fixture {
 	init: func {

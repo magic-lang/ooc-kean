@@ -4,7 +4,7 @@ use geometry
 use draw-gpu
 use draw
 use opengl
-use ooc-unit
+use unit
 
 GpuSurfaceTest: class extends Fixture {
 	init: func {

@@ -1,7 +1,7 @@
 use collections
 use math
 use geometry
-use ooc-unit
+use unit
 
 FloatEuclidTransformTest: class extends Fixture {
 	tolerance := 1.0e-5f

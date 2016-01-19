@@ -1,7 +1,7 @@
 Name: Draw
 Description: Draw functionality library.
 SourcePath: source/draw
-Requires: ooc-unit
+Requires: unit
 Requires: math
 Requires: base
 Imports: DrawContext

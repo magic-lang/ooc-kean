@@ -1,7 +1,7 @@
 use base
 use draw
 use geometry
-use ooc-unit
+use unit
 
 RasterBgrTest: class extends Fixture {
 	sourceSpace := "test/draw/input/Space.png"

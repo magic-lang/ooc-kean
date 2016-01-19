@@ -1,4 +1,4 @@
-use ooc-unit
+use unit
 use math
 
 FloatRandomGeneratorTest: class extends Fixture {

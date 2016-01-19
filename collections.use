@@ -1,7 +1,7 @@
 Name: Collections
 Description: Collections Library
 SourcePath: source/collections
-Requires: ooc-unit
+Requires: unit
 Requires: base
 Imports: Vector2D
 Imports: PointerVector

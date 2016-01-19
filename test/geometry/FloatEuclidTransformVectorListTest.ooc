@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 use geometry
-use ooc-unit
+use unit
 
 FloatEuclidTransformVectorListTest: class extends Fixture {
 	init: func {

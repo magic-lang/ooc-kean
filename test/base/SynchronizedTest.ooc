@@ -1,5 +1,5 @@
 use base
-use ooc-unit
+use unit
 import threading/Thread
 
 TestClass: class {

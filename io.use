@@ -2,7 +2,7 @@ Name: IO
 Description: IO library that complements the IO library in the sdk.
 SourcePath: source/io
 Requires: base
-Requires: ooc-unit
+Requires: unit
 Imports: CsvReader
 Imports: CsvWriter
 Imports: Terminal

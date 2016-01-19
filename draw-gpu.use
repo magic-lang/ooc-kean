@@ -3,7 +3,7 @@ Description: GPU accelerated versions of draw classes.
 SourcePath: source/draw/gpu
 Requires: base
 Requires: math
-Requires: ooc-unit
+Requires: unit
 Requires: draw
 Imports: GpuImage
 Imports: GpuYuv420Semiplanar

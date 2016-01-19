@@ -1,6 +1,6 @@
 use base
 use collections
-use ooc-unit
+use unit
 
 LinkedListTest: class extends Fixture {
 	init: func {

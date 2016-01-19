@@ -1,6 +1,6 @@
 use base
 use concurrent
-use ooc-unit
+use unit
 import threading/Thread
 
 //TODO Reimplement these tests once the problems with BlockedQueue have been fixed

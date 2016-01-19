@@ -1,5 +1,5 @@
 use base
-use ooc-unit
+use unit
 use geometry
 
 TextLiteralTest: class extends Fixture {

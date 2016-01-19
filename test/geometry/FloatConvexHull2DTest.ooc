@@ -17,7 +17,7 @@
 
 use collections
 use geometry
-use ooc-unit
+use unit
 
 FloatConvexHull2DTest: class extends Fixture {
 	init: func {

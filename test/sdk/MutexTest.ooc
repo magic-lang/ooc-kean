@@ -1,4 +1,4 @@
-use ooc-unit
+use unit
 import threading/[Thread, Mutex]
 
 MutexTest: class extends Fixture {

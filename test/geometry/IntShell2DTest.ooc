@@ -18,7 +18,7 @@
 use base
 use math
 use geometry
-use ooc-unit
+use unit
 
 IntShell2DTest: class extends Fixture {
 	init: func {

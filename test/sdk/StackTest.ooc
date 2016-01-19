@@ -1,4 +1,4 @@
-use ooc-unit
+use unit
 import structs/Stack
 
 StackTest: class extends Fixture {

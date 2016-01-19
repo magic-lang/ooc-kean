@@ -17,7 +17,7 @@
 
 use base
 use math
-use ooc-unit
+use unit
 
 BoolVectorListTest: class extends Fixture {
 	init: func {

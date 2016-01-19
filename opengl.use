@@ -3,7 +3,7 @@ Description: Wrapper for OpenGL ES 3
 SourcePath: source/draw/gpu/opengl
 Requires: base
 Requires: math
-Requires: ooc-unit
+Requires: unit
 Requires: draw
 Requires: draw-gpu
 Imports: OpenGLPacked

@@ -1,6 +1,6 @@
 use base
 use concurrent
-use ooc-unit
+use unit
 import threading/Thread
 
 BlockedQueueTest: class extends Fixture {

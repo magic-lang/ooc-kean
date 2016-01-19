@@ -16,7 +16,7 @@
 */
 
 use draw
-use ooc-unit
+use unit
 import ../../source/draw/CreateAlphaByteString
 import io/[File, FileWriter, FileReader]
 

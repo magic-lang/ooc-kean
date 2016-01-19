@@ -16,7 +16,7 @@
 */
 
 use base
-use ooc-unit
+use unit
 
 DebugTest: class extends Fixture {
 	outputString: String = null

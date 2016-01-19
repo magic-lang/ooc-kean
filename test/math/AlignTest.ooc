@@ -1,5 +1,5 @@
 use math
-use ooc-unit
+use unit
 
 AlignTest: class extends Fixture {
 	init: func {

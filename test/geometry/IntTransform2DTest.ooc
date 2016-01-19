@@ -1,4 +1,4 @@
-use ooc-unit
+use unit
 use geometry
 
 IntTransform2DTest: class extends Fixture {

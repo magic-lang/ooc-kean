@@ -1,7 +1,7 @@
 use cli
 use collections
 use base
-use ooc-unit
+use unit
 
 ArgumentParserTest: class extends Fixture {
 	init: func {

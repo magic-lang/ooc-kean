@@ -1,5 +1,5 @@
 use base
-use ooc-unit
+use unit
 
 ByteBufferTest: class extends Fixture {
 	init: func {

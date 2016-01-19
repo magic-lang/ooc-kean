@@ -1,5 +1,5 @@
 use base
-use ooc-unit
+use unit
 
 MyClass: class {
 	content: Int { get set }

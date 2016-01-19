@@ -16,7 +16,7 @@
  */
 
 use base
-use ooc-unit
+use unit
 
 TextTest: class extends Fixture {
 	init: func {

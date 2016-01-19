@@ -1,4 +1,4 @@
-use ooc-unit
+use unit
 use geometry
 
 FloatTransform2DTest: class extends Fixture {

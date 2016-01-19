@@ -16,7 +16,7 @@
  */
 
 use geometry
-use ooc-unit
+use unit
 
 FloatPoint2DVectorListTest: class extends Fixture {
 	init: func {
