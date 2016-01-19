@@ -17,11 +17,11 @@ use ooc-geometry
 use ooc-draw
 use ooc-base
 use ooc-collections
-import AbstractContext
+import DrawContext
 import GpuImage, GpuSurface, GpuMap, GpuFence, GpuYuv420Semiplanar, GpuMesh
 
 version(!gpuOff) {
-GpuContext: abstract class extends AbstractContext {
+GpuContext: abstract class extends DrawContext {
 	defaultMap ::= null as GpuMap
 	init: func
 	createMonochrome: abstract func (size: IntVector2D) -> GpuImage

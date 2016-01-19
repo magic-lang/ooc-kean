@@ -4,7 +4,7 @@ SourcePath: source/draw
 Requires: ooc-unit
 Requires: ooc-math
 Requires: ooc-base
-Imports: AbstractContext
+Imports: DrawContext
 Imports: CpuContext
 Imports: Color
 Imports: Image
