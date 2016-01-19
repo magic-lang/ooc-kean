@@ -23,18 +23,27 @@ InterpolationMode: enum {
 	Smooth // bilinear
 }
 
+BrushData: cover {
+	viewport: IntBox2D
+	pen: Pen
+	transform: FloatTransform3D
+	blend: Bool
+	opacity: Float
+	focalLength: Float
+	interpolationMode: InterpolationMode
+}
+
 Brush: class {
+	brushData: BrushData
 	_size: IntVector2D
-	_pen := Pen new()
-	_transform := FloatTransform3D identity
 	size ::= this _size
-	pen: Pen { get { this _pen } set(value) { this _pen = value } }
-	viewport: IntBox2D { get set }
-	blend: Bool { get set }
-	opacity: Float { get set }
-	transform: FloatTransform3D { get { this _transform } set(value) { this _transform = value } }
-	focalLength: Float { get set }
-	interpolationMode: InterpolationMode { get set }
+	pen: Pen { get { this brushData pen } set(value) { this brushData pen = value } }
+	viewport: IntBox2D { get { this brushData viewport } set(value) { this brushData viewport = value } }
+	blend: Bool { get { this brushData blend } set(value) { this brushData blend = value } }
+	opacity: Float { get { this brushData opacity } set(value) { this brushData opacity = value } }
+	transform: FloatTransform3D { get { this brushData transform } set(value) { this brushData transform = value } }
+	focalLength: Float { get { this brushData focalLength } set(value) { this brushData focalLength = value } }
+	interpolationMode: InterpolationMode { get { this brushData interpolationMode } set(value) { this brushData interpolationMode = value } }
 	init: func (=_size) {
 		this viewport = IntBox2D new(size)
 		this focalLength = 0.0f
