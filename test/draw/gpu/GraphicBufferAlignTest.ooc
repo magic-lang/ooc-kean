@@ -1,7 +1,7 @@
 use ooc-geometry
 use ooc-unit
-use ooc-draw
-use ooc-draw-gpu
+use draw
+use draw-gpu
 use base
 use ooc-opengl
 

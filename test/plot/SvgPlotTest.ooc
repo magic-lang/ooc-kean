@@ -3,7 +3,7 @@ use ooc-plot
 use ooc-math
 use ooc-geometry
 use collections
-use ooc-draw
+use draw
 import io/[File, FileReader]
 
 SvgPlotTest: class extends Fixture {

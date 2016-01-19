@@ -1,5 +1,5 @@
-Name: ooc Concurrent
-Description: ooc library for everything related to concurrent/parallel programming.
+Name: Concurrent
+Description: library for everything related to concurrent/parallel programming.
 SourcePath: source/concurrent
 Imports: Promise
 Imports: PromiseCollector

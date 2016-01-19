@@ -4,8 +4,8 @@ SourcePath: source/draw/gpu/opengl
 Requires: base
 Requires: ooc-math
 Requires: ooc-unit
-Requires: ooc-draw
-Requires: ooc-draw-gpu
+Requires: draw
+Requires: draw-gpu
 Imports: OpenGLPacked
 Imports: OpenGLBgr
 Imports: OpenGLBgra

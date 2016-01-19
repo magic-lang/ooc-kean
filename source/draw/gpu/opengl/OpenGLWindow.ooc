@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-geometry
-use ooc-draw
-use ooc-draw-gpu
+use draw
+use draw-gpu
 use ooc-opengl
 use base
 

@@ -15,7 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-draw
+use draw
 use ooc-unit
 import ../../source/draw/CreateAlphaByteString
 import io/[File, FileWriter, FileReader]

@@ -1,6 +1,6 @@
 use collections
 use ooc-geometry
-use ooc-draw
+use draw
 import Axis
 import PlotData2D
 import svg/Shapes

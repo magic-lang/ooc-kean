@@ -17,8 +17,8 @@
 
 use collections
 use ooc-geometry
-use ooc-draw
-use ooc-draw-gpu
+use draw
+use draw-gpu
 import OpenGLContext, OpenGLPacked
 import backend/GLRenderer
 

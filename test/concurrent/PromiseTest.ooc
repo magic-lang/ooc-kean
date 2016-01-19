@@ -1,5 +1,5 @@
 use base
-use ooc-concurrent
+use concurrent
 use ooc-unit
 
 TestClass: class {

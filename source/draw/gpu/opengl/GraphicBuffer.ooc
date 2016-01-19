@@ -16,8 +16,8 @@
 
 use ooc-geometry
 use base
-use ooc-draw
-use ooc-draw-gpu
+use draw
+use draw-gpu
 
 version(!gpuOff) {
 GraphicBufferFormat: enum {

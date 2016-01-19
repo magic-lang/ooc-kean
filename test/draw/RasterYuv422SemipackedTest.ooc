@@ -1,5 +1,5 @@
 use ooc-unit
-use ooc-draw
+use draw
 use ooc-geometry
 
 RasterYuv422SemipackedTest: class extends Fixture {

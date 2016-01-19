@@ -16,7 +16,7 @@
  */
 use ooc-ui
 use ooc-geometry
-use ooc-draw
+use draw
 import include/win32
 
 version(windows) {

@@ -16,8 +16,8 @@
 */
 
 use ooc-geometry
-use ooc-draw
-use ooc-draw-gpu
+use draw
+use draw-gpu
 import OpenGLPacked, OpenGLCanvas, OpenGLMap, OpenGLContext
 import backend/GLTexture
 

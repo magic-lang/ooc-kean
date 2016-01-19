@@ -16,7 +16,7 @@
  */
 
 use ooc-geometry
-use ooc-draw
+use draw
 
 version(!gpuOff) {
 GLShaderProgram: abstract class {

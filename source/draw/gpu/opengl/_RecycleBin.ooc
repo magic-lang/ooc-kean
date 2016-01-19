@@ -18,7 +18,7 @@
 use collections
 use ooc-geometry
 use base
-use ooc-draw-gpu
+use draw-gpu
 import OpenGLPacked, OpenGLMonochrome, OpenGLBgra, OpenGLBgr, OpenGLUv
 import threading/Mutex
 

@@ -1,7 +1,7 @@
 use ooc-unit
 use ooc-geometry
-use ooc-draw
-use ooc-draw-gpu
+use draw
+use draw-gpu
 use ooc-opengl
 
 RasterCanvasTest: class extends Fixture {

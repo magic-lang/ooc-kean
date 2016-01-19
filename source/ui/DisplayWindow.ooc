@@ -16,7 +16,7 @@
  */
 
 use base
-use ooc-draw
+use draw
 use ooc-geometry
 import x11/UnixWindow
 import win32/Win32DisplayWindow

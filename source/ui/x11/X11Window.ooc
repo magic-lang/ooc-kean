@@ -17,7 +17,7 @@
 use ooc-geometry
 use ooc-ui
 import include/x11
-use ooc-draw
+use draw
 
 version((unix || apple) && !android) {
 X11Window: class extends NativeWindow {

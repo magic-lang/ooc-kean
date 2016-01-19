@@ -15,11 +15,11 @@
 * along with This software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-draw
+use draw
 use ooc-geometry
 use base
 use collections
-use ooc-draw-gpu
+use draw-gpu
 import GraphicBuffer, AndroidContext, EGLBgra
 import threading/Mutex
 

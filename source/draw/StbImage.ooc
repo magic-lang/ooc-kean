@@ -1,4 +1,4 @@
-use ooc-draw
+use draw
 include ./stb_image/stb_image
 include ./stb_image/stb_image_write
 

@@ -16,7 +16,7 @@
  */
 
 use ooc-geometry
-use ooc-draw
+use draw
 import include/gles3
 import ../GLShaderProgram
 import Gles3Debug

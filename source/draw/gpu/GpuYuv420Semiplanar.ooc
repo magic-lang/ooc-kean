@@ -15,7 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-geometry
-use ooc-draw
+use draw
 import GpuContext, GpuImage, GpuSurface, GpuCanvas
 
 version(!gpuOff) {

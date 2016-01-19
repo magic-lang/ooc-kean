@@ -16,7 +16,7 @@
  */
 
 use base
-use ooc-draw
+use draw
 use ooc-geometry
 
 version(!gpuOff) {

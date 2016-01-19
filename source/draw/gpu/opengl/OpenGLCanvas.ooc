@@ -18,8 +18,8 @@
 use ooc-geometry
 use base
 use collections
-use ooc-draw
-use ooc-draw-gpu
+use draw
+use draw-gpu
 import backend/[GLFramebufferObject, GLTexture]
 import OpenGLBgr, OpenGLMap, OpenGLBgra, OpenGLUv, OpenGLMonochrome, OpenGLContext, OpenGLPacked, OpenGLSurface
 

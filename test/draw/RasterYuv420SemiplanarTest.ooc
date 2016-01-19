@@ -1,5 +1,5 @@
 use ooc-unit
-use ooc-draw
+use draw
 use ooc-geometry
 
 RasterYuv420SemiplanarTest: class extends Fixture {

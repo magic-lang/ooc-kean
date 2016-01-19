@@ -15,7 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-geometry
-use ooc-draw-gpu
+use draw-gpu
 import OpenGLContext
 import backend/GLVertexArrayObject
 

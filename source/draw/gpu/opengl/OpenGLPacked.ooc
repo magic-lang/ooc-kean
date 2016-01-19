@@ -15,8 +15,8 @@
 * along with This software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-draw
-use ooc-draw-gpu
+use draw
+use draw-gpu
 import backend/GLTexture
 import OpenGLContext, OpenGLCanvas
 
