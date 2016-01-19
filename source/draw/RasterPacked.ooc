@@ -24,7 +24,7 @@ import RasterBgra
 import RasterBgr
 import RasterMonochrome
 import Image
-import Canvas, RasterCanvas
+import Canvas, Brush, RasterCanvas
 
 RasterPackedCanvas: abstract class extends RasterCanvas {
 	target ::= this _target as RasterPacked
