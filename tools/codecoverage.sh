@@ -14,7 +14,6 @@ lcov --quiet --remove test_coverage.info '/test/*' -o test_coverage.info
 
 rm -r coverage/
 genhtml --quiet -o coverage $INFO_FILE --num-spaces 4
-rm $INFO_FILE
 
 if which xdg-open > /dev/null
 then
