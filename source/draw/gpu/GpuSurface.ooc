@@ -34,9 +34,9 @@ GpuSurface: abstract class extends Canvas {
 	_defaultMap: GpuMap
 	_coordinateTransform := IntTransform2D identity
 	transform: FloatTransform3D {
-		get { this _transform }
+		get { this transform }
 		set(value) {
-			this _transform = value
+			this transform = value
 			this _view = this _toLocal * value * this _toLocal
 		}
 	}
