@@ -3,7 +3,7 @@ use collections
 use geometry
 use draw-gpu
 use draw
-use ooc-opengl
+use opengl
 use ooc-unit
 
 GpuSurfaceTest: class extends Fixture {

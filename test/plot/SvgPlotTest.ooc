@@ -1,5 +1,5 @@
 use ooc-unit
-use ooc-plot
+use plot
 use math
 use geometry
 use collections

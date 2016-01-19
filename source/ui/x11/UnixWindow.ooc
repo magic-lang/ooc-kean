@@ -18,7 +18,7 @@
 use draw-gpu
 use geometry
 use draw
-use ooc-opengl
+use opengl
 import DisplayWindow
 import X11Window
 

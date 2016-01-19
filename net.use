@@ -1,5 +1,5 @@
-Name: ooc Net
-Description: ooc Net library adapted from the built in SDK.
+Name: Net
+Description: Net library adapted from the built-in SDK.
 SourcePath: source/net
 Imports: Address
 Imports: berkeley

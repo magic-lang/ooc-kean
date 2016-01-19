@@ -3,7 +3,7 @@ use ooc-unit
 use draw
 use draw-gpu
 use base
-use ooc-opengl
+use opengl
 
 GraphicBufferAlignTest: class extends Fixture {
 	init: func {

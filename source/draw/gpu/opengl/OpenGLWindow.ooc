@@ -17,7 +17,7 @@
 use geometry
 use draw
 use draw-gpu
-use ooc-opengl
+use opengl
 use base
 
 version(!gpuOff) {

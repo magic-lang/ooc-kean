@@ -2,7 +2,7 @@ use base
 use geometry
 use draw-gpu
 use draw
-use ooc-opengl
+use opengl
 use ooc-unit
 
 GpuImageReflectionTest: class extends Fixture {
