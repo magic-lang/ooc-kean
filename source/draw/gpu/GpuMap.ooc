@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this _program. If not, see <http://www.gnu.org/licenses/>.
 use ooc-geometry
-use ooc-base
-use ooc-collections
+use base
+use collections
 
 _MapEntry: class {
 	key: String

@@ -16,7 +16,7 @@
  */
 
 use ooc-unit
-use ooc-base
+use base
 
 TimeSpanTest: class extends Fixture {
 	init: func {

@@ -18,7 +18,7 @@ use ooc-math
 import FloatPoint2D
 import FloatVector2D
 import FloatBox2D
-use ooc-base
+use base
 
 FloatShell2D: cover {
 	left, right, top, bottom: Float

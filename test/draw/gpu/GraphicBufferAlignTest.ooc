@@ -2,7 +2,7 @@ use ooc-geometry
 use ooc-unit
 use ooc-draw
 use ooc-draw-gpu
-use ooc-base
+use base
 use ooc-opengl
 
 GraphicBufferAlignTest: class extends Fixture {

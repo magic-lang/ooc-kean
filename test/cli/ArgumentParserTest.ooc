@@ -1,6 +1,6 @@
-use ooc-cli
-use ooc-collections
-use ooc-base
+use cli
+use collections
+use base
 use ooc-unit
 
 ArgumentParserTest: class extends Fixture {

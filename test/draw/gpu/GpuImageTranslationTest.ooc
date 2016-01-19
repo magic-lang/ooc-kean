@@ -1,4 +1,4 @@
-use ooc-base
+use base
 use ooc-geometry
 use ooc-draw-gpu
 use ooc-draw

@@ -1,5 +1,5 @@
-use ooc-base
-use ooc-collections
+use base
+use collections
 use ooc-io
 import io/[File, FileWriter]
 

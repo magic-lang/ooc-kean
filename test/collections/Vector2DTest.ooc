@@ -16,7 +16,7 @@
 */
 
 use ooc-unit
-use ooc-collections
+use collections
 
 Vector2DTest: class extends Fixture {
 	init: func {

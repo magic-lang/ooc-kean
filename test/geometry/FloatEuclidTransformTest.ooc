@@ -1,4 +1,4 @@
-use ooc-collections
+use collections
 use ooc-math
 use ooc-geometry
 use ooc-unit

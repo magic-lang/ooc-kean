@@ -1,7 +1,7 @@
 Name: ooc IO
 Description: IO library
 SourcePath: source/io
-Requires: ooc-base
+Requires: base
 Requires: ooc-unit
 Imports: CsvReader
 Imports: CsvWriter

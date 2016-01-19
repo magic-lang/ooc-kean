@@ -1,7 +1,7 @@
 Name: ooc Draw GPU
 Description: GPU accelerated versions of ooc-draw classes.
 SourcePath: source/draw/gpu
-Requires: ooc-base
+Requires: base
 Requires: ooc-math
 Requires: ooc-unit
 Requires: ooc-draw

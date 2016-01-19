@@ -1,4 +1,4 @@
-use ooc-collections
+use collections
 use ooc-geometry
 use ooc-draw
 import PlotData2D

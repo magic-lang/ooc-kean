@@ -16,7 +16,7 @@
  */
 
 use ooc-unit
-use ooc-base
+use base
 
 IntCell: class {
 	value: Int

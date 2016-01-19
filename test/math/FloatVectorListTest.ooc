@@ -16,7 +16,7 @@
 
 use ooc-unit
 use ooc-math
-use ooc-collections
+use collections
 
 FloatVectorListTest: class extends Fixture {
 	tolerance := 1.0e-5f

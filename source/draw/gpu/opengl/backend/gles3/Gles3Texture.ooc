@@ -16,7 +16,7 @@
  */
 
 use ooc-geometry
-use ooc-base
+use base
 import include/gles3
 import ../GLTexture
 import Gles3Debug

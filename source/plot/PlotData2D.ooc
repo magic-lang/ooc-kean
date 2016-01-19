@@ -1,5 +1,5 @@
 use ooc-draw
-use ooc-collections
+use collections
 use ooc-geometry
 
 PlotData2D: abstract class {

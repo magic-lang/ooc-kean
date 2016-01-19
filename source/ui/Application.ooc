@@ -1,5 +1,5 @@
-use ooc-base
-use ooc-collections
+use base
+use collections
 
 Application: class {
 	_arguments := VectorList<Text> new()

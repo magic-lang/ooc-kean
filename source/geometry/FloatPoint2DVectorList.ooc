@@ -15,8 +15,8 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-base
-use ooc-collections
+use base
+use collections
 use ooc-math
 import structs/Vector
 import FloatPoint2D

@@ -16,7 +16,7 @@
 
 import IntPoint3D
 import FloatVector3D
-use ooc-base
+use base
 
 IntVector3D: cover {
 	x, y, z: Int

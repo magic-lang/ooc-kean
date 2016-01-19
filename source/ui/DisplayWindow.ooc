@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-base
+use base
 use ooc-draw
 use ooc-geometry
 import x11/UnixWindow

@@ -16,7 +16,7 @@
  */
 
 use ooc-unit
-use ooc-base
+use base
 
 DateTimeTest: class extends Fixture {
 	init: func {

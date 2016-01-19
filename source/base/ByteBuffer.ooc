@@ -15,7 +15,7 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-collections
+use collections
 import threading/Mutex
 import ReferenceCounter
 import Debug

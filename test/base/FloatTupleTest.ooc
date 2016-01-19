@@ -16,7 +16,7 @@
  */
 
 use ooc-unit
-use ooc-base
+use base
 
 FloatTupleTest: class extends Fixture {
 	precision := 1.0e-5f

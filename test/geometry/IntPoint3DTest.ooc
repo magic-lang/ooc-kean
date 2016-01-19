@@ -1,5 +1,5 @@
 use ooc-unit
-use ooc-base
+use base
 use ooc-geometry
 
 IntPoint3DTest: class extends Fixture {

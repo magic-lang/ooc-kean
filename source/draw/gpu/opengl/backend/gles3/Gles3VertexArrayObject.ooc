@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-base
+use base
 use ooc-geometry
 import include/gles3
 import ../GLVertexArrayObject

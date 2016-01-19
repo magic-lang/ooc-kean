@@ -15,9 +15,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-unit
-use ooc-base
+use base
 use ooc-math
-use ooc-collections
+use collections
 import FloatComplex
 import structs/Vector
 

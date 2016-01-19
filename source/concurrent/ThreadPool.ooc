@@ -1,5 +1,5 @@
-use ooc-base
-use ooc-collections
+use base
+use collections
 use ooc-concurrent
 import threading/[Thread, Mutex, WaitCondition]
 

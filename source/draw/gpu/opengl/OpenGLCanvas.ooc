@@ -16,8 +16,8 @@
 */
 
 use ooc-geometry
-use ooc-base
-use ooc-collections
+use base
+use collections
 use ooc-draw
 use ooc-draw-gpu
 import backend/[GLFramebufferObject, GLTexture]

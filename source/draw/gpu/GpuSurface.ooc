@@ -16,8 +16,8 @@
 
 use ooc-geometry
 use ooc-draw
-use ooc-collections
-use ooc-base
+use collections
+use base
 
 import GpuContext, GpuMap, GpuImage, GpuMesh, GpuYuv420Semiplanar
 

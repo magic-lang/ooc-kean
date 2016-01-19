@@ -15,8 +15,8 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-collections
-use ooc-base
+use collections
+use base
 import Event
 
 _Argument: class {

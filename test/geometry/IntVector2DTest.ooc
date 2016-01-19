@@ -1,5 +1,5 @@
 use ooc-unit
-use ooc-base
+use base
 use ooc-geometry
 
 IntVector2DTest: class extends Fixture {

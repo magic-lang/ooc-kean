@@ -17,7 +17,7 @@
 import IntPoint2D
 import IntVector2D
 import IntBox2D
-use ooc-base
+use base
 
 IntShell2D: cover {
 	left, right, top, bottom: Int

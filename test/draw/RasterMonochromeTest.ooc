@@ -1,4 +1,4 @@
-use ooc-base
+use base
 use ooc-draw
 use ooc-geometry
 use ooc-unit

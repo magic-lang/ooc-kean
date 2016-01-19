@@ -18,7 +18,7 @@ use ooc-geometry
 use ooc-draw
 use ooc-draw-gpu
 use ooc-opengl
-use ooc-base
+use base
 
 version(!gpuOff) {
 OpenGLWindow: class extends OpenGLSurface {

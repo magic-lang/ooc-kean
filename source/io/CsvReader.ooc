@@ -1,5 +1,5 @@
-use ooc-base
-use ooc-collections
+use base
+use collections
 import io/[File, FileReader]
 
 CsvReader: class extends Iterator<VectorList<Text>> {

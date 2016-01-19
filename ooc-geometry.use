@@ -1,7 +1,7 @@
 Name: ooc Geometry
 Description: Euclid Geometry functionality library for Homogenous coordinates.
 SourcePath: source/geometry
-Requires: ooc-base, ooc-collections, ooc-math
+Requires: base, collections, ooc-math
 Imports: FloatVector2D
 Imports: FloatVector3D
 Imports: FloatPoint2D

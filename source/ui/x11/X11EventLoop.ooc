@@ -1,4 +1,4 @@
-use ooc-base
+use base
 use ooc-geometry
 import include/x11
 import ../[EventLoop, DisplayWindow, GuiEvent]

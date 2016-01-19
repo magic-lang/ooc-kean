@@ -1,4 +1,4 @@
-use ooc-collections
+use collections
 import os/System
 import berkeley, Address, Exceptions, Socket
 

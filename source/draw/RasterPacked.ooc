@@ -15,7 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-geometry
-use ooc-base
+use base
 import io/File
 import ByteBuffer
 import StbImage

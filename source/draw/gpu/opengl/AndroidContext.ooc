@@ -15,10 +15,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-draw-gpu
-use ooc-collections
+use collections
 use ooc-draw
 use ooc-geometry
-use ooc-base
+use base
 import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLBgra, OpenGLBgra, OpenGLPacked, OpenGLMonochrome, OpenGLUv, OpenGLMap
 import threading/Thread
 

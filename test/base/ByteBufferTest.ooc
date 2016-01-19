@@ -1,4 +1,4 @@
-use ooc-base
+use base
 use ooc-unit
 
 ByteBufferTest: class extends Fixture {

@@ -17,8 +17,8 @@
 
 use ooc-draw
 use ooc-geometry
-use ooc-base
-use ooc-collections
+use base
+use collections
 use ooc-draw-gpu
 import GraphicBuffer, AndroidContext, EGLBgra
 import threading/Mutex

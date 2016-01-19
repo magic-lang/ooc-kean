@@ -16,7 +16,7 @@
 
 use ooc-draw
 use ooc-geometry
-use ooc-base
+use base
 import GpuContext, GpuFence, GpuSurface
 
 version(!gpuOff) {
