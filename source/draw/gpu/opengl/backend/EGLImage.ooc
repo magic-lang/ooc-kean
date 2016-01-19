@@ -16,7 +16,7 @@
 */
 
 use base
-use ooc-geometry
+use geometry
 import egl/egl
 import GLTexture, GLContext
 

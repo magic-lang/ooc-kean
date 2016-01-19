@@ -1,7 +1,7 @@
 use ooc-unit
 use ooc-plot
-use ooc-math
-use ooc-geometry
+use math
+use geometry
 use collections
 use draw
 import io/[File, FileReader]

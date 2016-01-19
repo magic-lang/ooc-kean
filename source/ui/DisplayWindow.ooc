@@ -17,7 +17,7 @@
 
 use base
 use draw
-use ooc-geometry
+use geometry
 import x11/UnixWindow
 import win32/Win32DisplayWindow
 import GuiEvent

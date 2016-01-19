@@ -1,5 +1,5 @@
 use base
-use ooc-geometry
+use geometry
 import include/x11
 import ../[EventLoop, DisplayWindow, GuiEvent]
 import UnixWindow

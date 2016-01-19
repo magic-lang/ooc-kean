@@ -16,7 +16,7 @@
 */
 
 use draw
-use ooc-geometry
+use geometry
 use base
 use collections
 use draw-gpu

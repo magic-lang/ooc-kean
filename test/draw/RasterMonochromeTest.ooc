@@ -1,6 +1,6 @@
 use base
 use draw
-use ooc-geometry
+use geometry
 use ooc-unit
 
 RasterMonochromeTest: class extends Fixture {

@@ -1,5 +1,5 @@
 use ooc-unit
-use ooc-math
+use math
 
 FloatExtensionTest: class extends Fixture {
 	precision := 1.0e-5f

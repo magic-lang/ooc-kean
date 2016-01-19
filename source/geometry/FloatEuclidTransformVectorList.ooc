@@ -17,7 +17,7 @@
 
 use base
 use collections
-use ooc-math
+use math
 import FloatEuclidTransform
 import FloatRotation3D
 import FloatVector3D

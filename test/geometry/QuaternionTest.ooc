@@ -18,8 +18,8 @@
 use base
 use collections
 use ooc-unit
-use ooc-math
-use ooc-geometry
+use math
+use geometry
 
 QuaternionTest: class extends Fixture {
 	Debug initialize(func (s: String) { println(s) })

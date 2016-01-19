@@ -15,7 +15,7 @@
 * along with This software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-geometry
+use geometry
 use draw
 use draw-gpu
 import OpenGLPacked, OpenGLCanvas, OpenGLMap, OpenGLContext

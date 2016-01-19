@@ -16,7 +16,7 @@
 
 use base
 use collections
-use ooc-math
+use math
 import FloatVector2D
 import FloatVector3D
 import FloatPoint2D

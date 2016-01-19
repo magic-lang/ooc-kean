@@ -15,7 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use ooc-unit
-use ooc-math
+use math
 use collections
 
 IntVectorListTest: class extends Fixture {

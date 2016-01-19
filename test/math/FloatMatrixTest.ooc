@@ -1,6 +1,6 @@
 use base
 use ooc-unit
-use ooc-math
+use math
 
 FloatMatrixTest: class extends Fixture {
 	matrix := FloatMatrix new (3, 3) take()

@@ -1,7 +1,7 @@
 use base
 use collections
 use ooc-unit
-use ooc-io
+use io
 
 CsvReaderTest: class extends Fixture {
 	init: func {

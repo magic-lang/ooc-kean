@@ -1,5 +1,5 @@
 use base
-use ooc-geometry
+use geometry
 use draw-gpu
 use draw
 use ooc-opengl

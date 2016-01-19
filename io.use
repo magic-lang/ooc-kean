@@ -1,5 +1,5 @@
-Name: ooc IO
-Description: IO library
+Name: IO
+Description: IO library that complements the IO library in the sdk.
 SourcePath: source/io
 Requires: base
 Requires: ooc-unit

@@ -15,7 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 use base
 use draw
-use ooc-geometry
+use geometry
 
 AlignWidth: enum {
 	Nearest

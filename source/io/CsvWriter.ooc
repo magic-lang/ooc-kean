@@ -1,6 +1,6 @@
 use base
 use collections
-use ooc-io
+use io
 import io/[File, FileWriter]
 
 CsvWriter: class {

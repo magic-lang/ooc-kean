@@ -1,5 +1,5 @@
 use base
-use ooc-geometry
+use geometry
 import DisplayWindow
 import EventLoop
 import Application

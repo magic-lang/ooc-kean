@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 use ooc-ui
-use ooc-geometry
+use geometry
 use draw
 import include/win32
 

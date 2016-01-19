@@ -16,7 +16,7 @@
  */
 
 use base
-use ooc-math
+use math
 use ooc-unit
 
 BoolVectorListTest: class extends Fixture {

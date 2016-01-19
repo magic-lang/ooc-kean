@@ -17,7 +17,7 @@
 use draw-gpu
 use collections
 use draw
-use ooc-geometry
+use geometry
 use base
 import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLBgra, OpenGLBgra, OpenGLPacked, OpenGLMonochrome, OpenGLUv, OpenGLMap
 import threading/Thread

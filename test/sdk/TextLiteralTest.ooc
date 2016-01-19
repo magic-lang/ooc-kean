@@ -1,6 +1,6 @@
 use base
 use ooc-unit
-use ooc-geometry
+use geometry
 
 TextLiteralTest: class extends Fixture {
 	init: func {

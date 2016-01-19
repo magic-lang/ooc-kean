@@ -15,7 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use draw
-use ooc-geometry
+use geometry
 use base
 import GpuContext, GpuFence, GpuSurface
 

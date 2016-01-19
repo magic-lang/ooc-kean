@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use base
-use ooc-math
-use ooc-geometry
+use math
+use geometry
 import RasterPacked
 import RasterImage
 import StbImage

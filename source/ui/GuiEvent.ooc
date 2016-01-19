@@ -1,5 +1,5 @@
 use base
-use ooc-geometry
+use geometry
 
 GuiEvent: abstract class {
 	init: func

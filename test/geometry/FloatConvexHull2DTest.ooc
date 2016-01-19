@@ -16,7 +16,7 @@
  */
 
 use collections
-use ooc-geometry
+use geometry
 use ooc-unit
 
 FloatConvexHull2DTest: class extends Fixture {

@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-geometry
+use geometry
 use ooc-unit
 
 FloatRotation3DTest: class extends Fixture {

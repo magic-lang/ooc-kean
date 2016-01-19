@@ -1,6 +1,6 @@
 use collections
-use ooc-math
-use ooc-geometry
+use math
+use geometry
 use ooc-unit
 
 FloatEuclidTransformTest: class extends Fixture {

@@ -1,5 +1,5 @@
 use ooc-unit
-use ooc-math
+use math
 
 FloatRandomGeneratorTest: class extends Fixture {
 	init: func {

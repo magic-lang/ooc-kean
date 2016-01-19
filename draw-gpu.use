@@ -2,7 +2,7 @@ Name: Draw GPU
 Description: GPU accelerated versions of draw classes.
 SourcePath: source/draw/gpu
 Requires: base
-Requires: ooc-math
+Requires: math
 Requires: ooc-unit
 Requires: draw
 Imports: GpuImage

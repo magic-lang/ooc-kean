@@ -1,4 +1,4 @@
-use ooc-math
+use math
 use ooc-unit
 
 AlignTest: class extends Fixture {

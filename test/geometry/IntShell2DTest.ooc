@@ -16,8 +16,8 @@
  */
 
 use base
-use ooc-math
-use ooc-geometry
+use math
+use geometry
 use ooc-unit
 
 IntShell2DTest: class extends Fixture {

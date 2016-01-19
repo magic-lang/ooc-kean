@@ -1,4 +1,4 @@
-Name: ooc Math
+Name: Math
 Description: Math functionality library.
 SourcePath: source/math
 Imports: FloatMatrix

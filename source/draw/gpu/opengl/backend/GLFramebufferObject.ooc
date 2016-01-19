@@ -17,7 +17,7 @@
 
 use base
 use draw
-use ooc-geometry
+use geometry
 
 version(!gpuOff) {
 GLFramebufferObject: abstract class {

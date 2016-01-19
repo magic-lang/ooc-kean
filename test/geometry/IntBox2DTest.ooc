@@ -1,5 +1,5 @@
 use ooc-unit
-use ooc-geometry
+use geometry
 use base
 
 IntBox2DTest: class extends Fixture {

@@ -16,7 +16,7 @@
 
 use ooc-unit
 use base
-use ooc-math
+use math
 use collections
 import FloatComplex
 import structs/Vector

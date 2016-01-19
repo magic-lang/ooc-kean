@@ -1,6 +1,6 @@
 use ooc-unit
 use base
-use ooc-geometry
+use geometry
 
 FloatPoint2DTest: class extends Fixture {
 	precision := 1.0e-5f

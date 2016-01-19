@@ -16,7 +16,7 @@
  */
 
 use base
-use ooc-geometry
+use geometry
 use draw
 import include/gles3
 import ../GLFramebufferObject

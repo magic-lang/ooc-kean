@@ -16,7 +16,7 @@
  */
 
 use base
-use ooc-geometry
+use geometry
 
 version(!gpuOff) {
 GLFence: abstract class {

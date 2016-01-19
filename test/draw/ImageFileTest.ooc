@@ -1,7 +1,7 @@
 use ooc-unit
 use draw
 use base
-use ooc-geometry
+use geometry
 import io/File
 import StbImage
 
