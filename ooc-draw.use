@@ -22,6 +22,7 @@ Imports: RasterYuv420Semiplanar
 Imports: RasterYuv422Semipacked
 Imports: FloatImage
 Imports: Canvas
+Imports: Brush
 Imports: Pen
 Additionals: source/draw/stb_image/stb_image.c
 Additionals: source/draw/stb_image/stb_image_write.c
