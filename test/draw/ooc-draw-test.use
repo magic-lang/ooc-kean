@@ -1,8 +1,0 @@
-Name: ooc Draw Test
-Description: Draw functionality library test.
-SourcePath: .
-Requires: ooc-unit
-Requires: ooc-math
-Requires: ooc-test
-Requires: ooc-draw
-Imports: ImageFileTest
