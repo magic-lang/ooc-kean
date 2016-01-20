@@ -20,8 +20,10 @@ use ooc-collections
 import Image, Brush
 
 Canvas: abstract class extends Brush {
-	init: func (size: IntVector2D) {
-		super(size)
+	_size: IntVector2D
+	size ::= this _size
+	init: func (=_size) {
+		super(this _size)
 	}
 	drawPoint: virtual func (position: FloatPoint2D) {
 		list := VectorList<FloatPoint2D> new()

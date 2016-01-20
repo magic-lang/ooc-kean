@@ -35,8 +35,6 @@ BrushData: cover {
 
 Brush: class {
 	brushData: BrushData
-	_size: IntVector2D
-	size ::= this _size
 	pen: Pen { get { this brushData pen } set(value) { this brushData pen = value } }
 	viewport: IntBox2D { get { this brushData viewport } set(value) { this brushData viewport = value } }
 	blend: Bool { get { this brushData blend } set(value) { this brushData blend = value } }
@@ -44,7 +42,7 @@ Brush: class {
 	transform: FloatTransform3D { get { this brushData transform } set(value) { this brushData transform = value } }
 	focalLength: Float { get { this brushData focalLength } set(value) { this brushData focalLength = value } }
 	interpolationMode: InterpolationMode { get { this brushData interpolationMode } set(value) { this brushData interpolationMode = value } }
-	init: func (=_size) {
+	init: func (size: IntVector2D) {
 		this viewport = IntBox2D new(size)
 		this focalLength = 0.0f
 		this blend = false
