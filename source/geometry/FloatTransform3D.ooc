@@ -89,10 +89,10 @@ FloatTransform3D: cover {
 	translate: func (xDelta, yDelta, zDelta: Float) -> This { This createTranslation(xDelta, yDelta, zDelta) * this }
 	translate: func ~float (delta: Float) -> This { this translate(delta, delta, delta) }
 	translate: func ~point (delta: FloatPoint3D) -> This { this translate(delta x, delta y, delta z) }
-	translate: func ~size (delta: FloatVector3D) -> This { this translate(delta x, delta y, delta z) }
+	translate: func ~vector (delta: FloatVector3D) -> This { this translate(delta x, delta y, delta z) }
 	scale: func (xFactor, yFactor, zFactor: Float) -> This { This createScaling(xFactor, yFactor, zFactor) * this }
 	scale: func ~float (factor: Float) -> This { this scale(factor, factor, factor) }
-	scale: func ~size (factor: FloatVector3D) -> This { this scale(factor x, factor y, factor z) }
+	scale: func ~vector (factor: FloatVector3D) -> This { this scale(factor x, factor y, factor z) }
 	rotateX: func (angle: Float) -> This { This createRotationX(angle) * this }
 	rotateY: func (angle: Float) -> This { This createRotationY(angle) * this }
 	rotateZ: func (angle: Float) -> This { This createRotationZ(angle) * this }
@@ -235,11 +235,11 @@ FloatTransform3D: cover {
 	create: static func (a, b, c, d, e, f, g, h, i, j, k, l: Float) -> This { This new(a, b, c, d, e, f, g, h, i, j, k, l) }
 	createTranslation: static func (xDelta, yDelta, zDelta: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, xDelta, yDelta, zDelta) }
 	createTranslation: static func ~float (delta: Float) -> This { This createTranslation(delta, delta, delta) }
-	createTranslation: static func ~size (delta: FloatVector3D) -> This { This createTranslation(delta x, delta y, delta z) }
+	createTranslation: static func ~vector (delta: FloatVector3D) -> This { This createTranslation(delta x, delta y, delta z) }
 	createTranslation: static func ~point (delta: FloatPoint3D) -> This { This createTranslation(delta x, delta y, delta z) }
 	createScaling: static func (xFactor, yFactor, zFactor: Float) -> This { This new(xFactor, 0.0f, 0.0f, 0.0f, yFactor, 0.0f, 0.0f, 0.0f, zFactor, 0.0f, 0.0f, 0.0f) }
 	createScaling: static func ~float (factor: Float) -> This { This createScaling(factor, factor, factor) }
-	createScaling: static func ~size (factor: FloatVector3D) -> This { This createScaling(factor x, factor y, factor z) }
+	createScaling: static func ~vector (factor: FloatVector3D) -> This { This createScaling(factor x, factor y, factor z) }
 	createRotationX: static func (angle: Float) -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, angle cos(), angle sin(), 0.0f, (-angle) sin(), angle cos(), 0.0f, 0.0f, 0.0f) }
 	createRotationY: static func (angle: Float) -> This { This new(angle cos(), 0.0f, (-angle) sin(), 0.0f, 1.0f, 0.0f, angle sin(), 0.0f, angle cos(), 0.0f, 0.0f, 0.0f) }
 	createRotationZ: static func (angle: Float) -> This { This new(angle cos(), angle sin(), 0.0f, (-angle) sin(), angle cos(), 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f) }
