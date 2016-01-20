@@ -39,7 +39,12 @@ GpuContext: abstract class extends AbstractContext {
 	packToRgba: abstract func (source: GpuImage, target: GpuImage, viewport: IntBox2D, padding := 0)
 	finish: func { this createFence() sync() . wait() . free() }
 
-	toRaster: virtual func (gpuImage: GpuImage) -> RasterImage { gpuImage toRasterDefault() }
-	toRasterAsync: virtual func (gpuImage: GpuImage) -> (RasterImage, GpuFence) { Debug raise("toRasterAsync unimplemented") }
+	toRaster: virtual func (source: GpuImage) -> RasterImage { source toRasterDefault() }
+	toRasterAsync: virtual func (source: GpuImage) -> (RasterImage, GpuFence) {
+		result := this toRaster(source)
+		fence := this createFence()
+		fence sync()
+		(result, fence)
+	}
 }
 }
