@@ -86,19 +86,19 @@ FloatTransform3D: cover {
 	setXScaling: func (scaling: Float) -> This { this scale(scaling / this scalingX, 1.0f, 1.0f) }
 	setYScaling: func (scaling: Float) -> This { this scale(1.0f, scaling / this scalingY, 1.0f) }
 	setZScaling: func (scaling: Float) -> This { this scale(1.0f, 1.0f, scaling / this scalingZ) }
-	translate: func (xDelta, yDelta, zDelta: Float) -> This { this createTranslation(xDelta, yDelta, zDelta) * this }
+	translate: func (xDelta, yDelta, zDelta: Float) -> This { This createTranslation(xDelta, yDelta, zDelta) * this }
 	translate: func ~float (delta: Float) -> This { this translate(delta, delta, delta) }
 	translate: func ~point (delta: FloatPoint3D) -> This { this translate(delta x, delta y, delta z) }
 	translate: func ~size (delta: FloatVector3D) -> This { this translate(delta x, delta y, delta z) }
-	scale: func (xFactor, yFactor, zFactor: Float) -> This { this createScaling(xFactor, yFactor, zFactor) * this }
+	scale: func (xFactor, yFactor, zFactor: Float) -> This { This createScaling(xFactor, yFactor, zFactor) * this }
 	scale: func ~float (factor: Float) -> This { this scale(factor, factor, factor) }
 	scale: func ~size (factor: FloatVector3D) -> This { this scale(factor x, factor y, factor z) }
-	rotateX: func (angle: Float) -> This { this createRotationX(angle) * this }
-	rotateY: func (angle: Float) -> This { this createRotationY(angle) * this }
-	rotateZ: func (angle: Float) -> This { this createRotationZ(angle) * this }
-	reflectX: func -> This { this createReflectionX() * this }
-	reflectY: func -> This { this createReflectionY() * this }
-	reflectZ: func -> This { this createReflectionZ() * this }
+	rotateX: func (angle: Float) -> This { This createRotationX(angle) * this }
+	rotateY: func (angle: Float) -> This { This createRotationY(angle) * this }
+	rotateZ: func (angle: Float) -> This { This createRotationZ(angle) * this }
+	reflectX: func -> This { This createReflectionX() * this }
+	reflectY: func -> This { This createReflectionY() * this }
+	reflectZ: func -> This { This createReflectionZ() * this }
 	toString: func -> String {
 		"%.8f" formatFloat(this a) >> ", " & "%.8f" formatFloat(this e) >> ", " & "%.8f" formatFloat(this i) >> ", " & "%.8f" formatFloat(this m) >> "\n" & \
 		"%.8f" formatFloat(this b) >> ", " & "%.8f" formatFloat(this f) >> ", " & "%.8f" formatFloat(this j) >> ", " & "%.8f" formatFloat(this n) >> "\n" & \

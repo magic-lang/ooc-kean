@@ -66,18 +66,18 @@ FloatTransform2D: cover {
 	setXScaling: func (scaling: Float) -> This { this scale(scaling / this scalingX, 1.0f) }
 	setYScaling: func (scaling: Float) -> This { this scale(1.0f, scaling / this scalingY) }
 	setRotation: func (rotation: Float) -> This { this rotate(rotation - this rotationZ) }
-	translate: func (xDelta, yDelta: Float) -> This { this createTranslation(xDelta, yDelta) * this }
+	translate: func (xDelta, yDelta: Float) -> This { This createTranslation(xDelta, yDelta) * this }
 	translate: func ~float (delta: Float) -> This { this translate(delta, delta) }
 	translate: func ~point (delta: FloatPoint2D) -> This { this translate(delta x, delta y) }
 	translate: func ~size (delta: FloatVector2D) -> This { this translate(delta x, delta y) }
-	scale: func (xFactor, yFactor: Float) -> This { this createScaling(xFactor, yFactor) * this }
+	scale: func (xFactor, yFactor: Float) -> This { This createScaling(xFactor, yFactor) * this }
 	scale: func ~float (factor: Float) -> This { this scale(factor, factor) }
 	scale: func ~size (factor: FloatVector2D) -> This { this scale(factor x, factor y) }
-	rotate: func (angle: Float) -> This { this createZRotation(angle) * this }
-	skewX: func (angle: Float) -> This { this createSkewingX(angle) * this }
-	skewY: func (angle: Float) -> This { this createSkewingY(angle) * this }
-	reflectX: func -> This { this createReflectionX() * this }
-	reflectY: func -> This { this createReflectionY() * this }
+	rotate: func (angle: Float) -> This { This createZRotation(angle) * this }
+	skewX: func (angle: Float) -> This { This createSkewingX(angle) * this }
+	skewY: func (angle: Float) -> This { This createSkewingY(angle) * this }
+	reflectX: func -> This { This createReflectionX() * this }
+	reflectY: func -> This { This createReflectionY() * this }
 	toIntTransform2D: func -> IntTransform2D { IntTransform2D new(this a, this b, this c, this d, this e, this f, this g, this h, this i) }
 	toString: func -> String {
 		"%8f" formatFloat(this a) >> ", " & "%8f" formatFloat(this b) >> ", " & "%8f" formatFloat(this c) >> "\t" & \
