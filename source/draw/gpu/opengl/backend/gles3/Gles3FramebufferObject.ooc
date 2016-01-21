@@ -95,7 +95,7 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		glScissor(x, y, width, height)
 		version(debugGL) { validateEnd("FramebufferObject scissor") }
 	}
-	clear: static func {
+	clear: static final override func {
 		version(debugGL) { validateStart("FramebufferObject clear") }
 		glClear(GL_COLOR_BUFFER_BIT)
 		version(debugGL) { validateEnd("FramebufferObject clear") }
