@@ -75,25 +75,6 @@ ArrayList: class <T> extends List<T> {
 		return data[index]
 	}
 
-	indexOf: override func (element: T) -> SSizeT {
-		index := 0
-		while (index < _size) {
-			//if (memcmp(data + index * T size, element, T size) == 0) return index
-			if (this as List equals(this[index], element)) return index
-			index += 1
-		}
-		return -1
-	}
-
-	lastIndexOf: override func (element: T) -> SSizeT {
-		index := _size
-		while (index > -1) {
-			if (memcmp(data + index * T size, element, T size) == 0) return index
-			index -= 1
-		}
-		return -1
-	}
-
 	removeAt: override func (index: SSizeT) -> T {
 		if (index < 0) index = _size + index
 		if (index < 0 || index >= _size) OutOfBoundsException new(This, index, _size) throw()
@@ -117,15 +98,6 @@ ArrayList: class <T> extends List<T> {
 				}
 			}
 		}
-	}
-
-	remove: override func (element: T) -> Bool {
-		index := indexOf(element)
-		if (index == -1) return false
-		else {
-			removeAt(index)
-		}
-		return true
 	}
 
 	set: override func (index: Int, element: T) -> T {
@@ -260,5 +232,4 @@ operator [] <T> (list: ArrayList<T>, r: Range) -> ArrayList<T> { list slice(r) }
 operator [] <T> (list: ArrayList<T>, i: Int) -> T { list get(i) }
 operator []= <T> (list: ArrayList<T>, i: Int, element: T) { list replaceAt(i, element) }
 operator += <T> (list: ArrayList<T>, element: T) { list add(element) }
-operator -= <T> (list: ArrayList<T>, element: T) -> Bool { list remove(element) }
 operator as <T> (array: T[]) -> ArrayList<T> { ArrayList<T> new(array data, array length) }
