@@ -1,11 +1,7 @@
-import lang/equalities
-
 /**
  * List interface for a data container
  */
 List: abstract class <T> extends BackIterable<T> {
-	equals := getStandardEquals(T)
-
 	size: SSizeT { get {
 		this getSize()
 	}}
@@ -70,13 +66,6 @@ List: abstract class <T> extends BackIterable<T> {
 		return false
 	}
 
-	/**
-	 * @return true if this list contains the specified element.
-	 */
-	contains: func (element: T) -> Bool {
-		return indexOf(element) != -1
-	}
-
 	contains: func ~filter (f: Func (T) -> Bool) -> Bool {
 		result := false
 		eachUntil(|elem|
@@ -87,25 +76,9 @@ List: abstract class <T> extends BackIterable<T> {
 	}
 
 	/**
-	 * @return true if oldie has been replaced by kiddo
-	 */
-	replace: func (oldie, kiddo: T) -> Bool {
-		idx := indexOf(oldie)
-		if (idx == -1) return false
-		set(idx, kiddo)
-		return true
-	}
-
-	/**
 	 * @return the element at the specified position in this list.
 	 */
 	get: abstract func (index: SSizeT) -> T
-
-	/**
-	 * @return the index of the first occurence of the given argument,
-	 * (testing for equality using the equals method), or -1 if not found
-	 */
-	indexOf: abstract func (element: T) -> Int
 
 	/**
 	 * @return true if this list has no elements.
@@ -115,24 +88,10 @@ List: abstract class <T> extends BackIterable<T> {
 	}
 
 	/**
-	 * @return the index of the last occurrence of the specified object
-	 * in this list.
-	 */
-	lastIndexOf: abstract func (element: T) -> Int
-
-	/**
 	 * Removes the element at the specified position in this list.
 	 * @return the element just removed
 	 */
 	removeAt: abstract func (index: SSizeT) -> T
-
-	/**
-	 * Removes a single instance of the specified element from this list,
-	 * if it is present (optional operation).
-	 * @return true if at least one occurence of the element has been
-	 * removed
-	 */
-	remove: abstract func (element: T) -> Bool
 
 	/**
 	 * Replaces the element at the specified position in this list with
@@ -163,20 +122,6 @@ List: abstract class <T> extends BackIterable<T> {
 	emptyClone: abstract func <K> (K: Class) -> This <K>
 
 	emptyClone: func ~defaults -> This <T> { emptyClone(T) }
-
-	/**
-	   Return two sublists. The first one contains all the elements
-	   for which f evaluated to true, the second one contains all the
-	   other elements.
-	 */
-	split: func (f: Func(T) -> Bool, list1, list2: This<T>@) {
-		list1 = emptyClone(); list2 = clone()
-		for (x in this) {
-			if (f(x)) {
-				list2 remove(x); list1 add(x)
-			}
-		}
-	}
 
 	/**
 	   @return the first element of this list
@@ -289,4 +234,3 @@ List: abstract class <T> extends BackIterable<T> {
 operator [] <T> (list: List<T>, i: SSizeT) -> T { list get(i) }
 operator []= <T> (list: List<T>, i: SSizeT, element: T) { list set(i, element) }
 operator += <T> (list: List<T>, element: T) { list add(element) }
-operator -= <T> (list: List<T>, element: T) -> Bool { list remove(element) }

@@ -1,5 +1,31 @@
-import lang/equalities
 import ArrayList
+
+getStandardEquals: func <T> (T: Class) -> Func <T> (T, T) -> Bool {
+	if (T == String)
+		stringEquals
+	else if (T == CString)
+		cstringEquals
+	else if (T size == Pointer size)
+		pointerEquals
+	else if (T size == UInt size)
+		intEquals
+	else if (T size == Char size)
+		charEquals
+	else
+		genericEquals
+}
+
+stringEquals: func <K> (k1, k2: K) -> Bool { k1 as String equals(k2 as String) }
+
+cstringEquals: func <K> (k1, k2: K) -> Bool { k1 as CString == k2 as CString }
+
+pointerEquals: func <K> (k1, k2: K) -> Bool { k1 as Pointer == k2 as Pointer }
+
+intEquals: func <K> (k1, k2: K) -> Bool { k1 as Int == k2 as Int }
+
+charEquals: func <K> (k1, k2: K) -> Bool { k1 as Char == k2 as Char }
+
+genericEquals: func <K> (k1, k2: K) -> Bool { memcmp(k1, k2, K size) == 0 }
 
 HashEntry: cover {
 	key, value: Pointer
@@ -137,8 +163,6 @@ HashMap: class <K, V> extends BackIterable<V> {
 
 		keyEquals = getStandardEquals(K)
 		hashKey = getStandardHashFunc(K)
-
-		T = V // workarounds ftw
 	}
 	free: override func {
 		for (i in 0 .. this buckets length)
