@@ -58,7 +58,7 @@ BlockedQueue: class <T> extends SynchronizedQueue<T> {
 		this _populated broadcast()
 	}
 	wait: func (isOk := null as Bool*) -> T {
-		result: T
+		result: T = null
 		this _mutex lock()
 		while (this empty) {
 			this _populated wait(this _mutex)
