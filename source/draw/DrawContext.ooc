@@ -23,7 +23,7 @@ AlignWidth: enum {
 	Ceiling
 }
 
-AbstractContext: abstract class {
+DrawContext: abstract class {
 	init: func
 	createMonochrome: abstract func (size: IntVector2D) -> Image
 	createBgr: abstract func (size: IntVector2D) -> Image
