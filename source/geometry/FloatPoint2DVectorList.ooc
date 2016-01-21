@@ -114,7 +114,8 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 			else if (point x >= this[this count - 1] x)
 				point y = this[this count - 1] y
 			else {
-				leftPoint, rightPoint: FloatPoint2D
+				leftPoint := FloatPoint2D new()
+				rightPoint := FloatPoint2D new()
 				for (j in previousIndex .. this count)
 					if (this[j] x <= point x) {
 						leftPoint = this[j]

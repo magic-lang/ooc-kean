@@ -87,13 +87,13 @@ LinkedList: class <T> {
 		index
 	}
 	first: func -> T {
-		data: T
+		data: T = null
 		if (this _head next != this _head)
 			data = this _head next data@
 		data
 	}
 	last: func -> T {
-		data: T
+		data: T = null
 		if (this _head prev != this _head)
 			data = this _head prev data@
 		data
