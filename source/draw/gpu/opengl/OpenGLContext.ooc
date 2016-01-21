@@ -13,11 +13,11 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-use ooc-base
-use ooc-geometry
-use ooc-draw
-use ooc-draw-gpu
-use ooc-collections
+use base
+use geometry
+use draw
+use draw-gpu
+use collections
 import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, OpenGLMesh, OpenGLCanvas, _RecycleBin
 import OpenGLMap
 import backend/[GLContext, GLRenderer]

@@ -15,10 +15,10 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-collections
-use ooc-geometry
-use ooc-draw
-use ooc-draw-gpu
+use collections
+use geometry
+use draw
+use draw-gpu
 import OpenGLContext, OpenGLPacked
 import backend/GLRenderer
 

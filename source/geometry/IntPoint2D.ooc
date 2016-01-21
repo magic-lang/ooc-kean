@@ -16,8 +16,8 @@
 
 import IntVector2D
 import FloatPoint2D
-use ooc-base
-use ooc-math
+use base
+use math
 
 IntPoint2D: cover {
 	x, y: Int

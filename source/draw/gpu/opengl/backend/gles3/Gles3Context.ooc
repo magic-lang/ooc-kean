@@ -16,8 +16,8 @@
  */
 
 version(!gpuOff) {
-use ooc-base
-use ooc-geometry
+use base
+use geometry
 import ../egl/egl
 import ../[GLContext, GLTexture, GLVertexArrayObject]
 import include/gles3

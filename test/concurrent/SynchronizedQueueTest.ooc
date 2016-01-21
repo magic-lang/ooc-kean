@@ -1,6 +1,6 @@
-use ooc-base
-use ooc-concurrent
-use ooc-unit
+use base
+use concurrent
+use unit
 import threading/Thread
 
 SynchronizedQueueTest: class extends Fixture {

@@ -15,7 +15,7 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-base
+use base
 import include/gles3
 import ../GLFence
 import Gles3Debug

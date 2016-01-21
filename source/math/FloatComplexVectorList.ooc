@@ -16,8 +16,8 @@
 */
 
 import FloatComplex
-use ooc-base
-use ooc-collections
+use base
+use collections
 import FloatVectorList
 
 FloatComplexVectorList: class extends VectorList<FloatComplex> {

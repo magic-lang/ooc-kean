@@ -1,5 +1,5 @@
 use tests
-use ooc-unit
+use unit
 main: func {
 	exit(Fixture testsFailed ? 1 : 0)
 }

@@ -15,8 +15,8 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-unit
-use ooc-collections
+use unit
+use collections
 
 VectorListTest: class extends Fixture {
 	init: func {

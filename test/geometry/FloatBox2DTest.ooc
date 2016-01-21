@@ -1,7 +1,7 @@
-use ooc-unit
-use ooc-geometry
-use ooc-collections
-use ooc-base
+use unit
+use geometry
+use collections
+use base
 
 FloatBox2DTest: class extends Fixture {
 	precision := 1.0e-5f

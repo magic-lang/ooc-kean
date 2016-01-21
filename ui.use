@@ -1,5 +1,5 @@
-Name: ooc UI
-Description: User interface stuff
+Name: UI
+Description: User interface library
 SourcePath: source/ui
 Imports: GuiEvent
 Imports: DisplayWindow

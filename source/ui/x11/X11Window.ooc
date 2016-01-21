@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
-use ooc-geometry
-use ooc-ui
+use geometry
+use ui
 import include/x11
-use ooc-draw
+use draw
 
 version((unix || apple) && !android) {
 X11Window: class extends NativeWindow {

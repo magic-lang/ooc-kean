@@ -15,8 +15,8 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-base
-use ooc-geometry
+use base
+use geometry
 import egl/egl
 import GLTexture, GLContext
 

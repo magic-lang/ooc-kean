@@ -15,10 +15,10 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-collections
-use ooc-geometry
-use ooc-base
-use ooc-draw-gpu
+use collections
+use geometry
+use base
+use draw-gpu
 import OpenGLPacked, OpenGLMonochrome, OpenGLBgra, OpenGLBgr, OpenGLUv
 import threading/Mutex
 

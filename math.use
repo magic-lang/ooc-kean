@@ -1,3 +1,11 @@
-Name: math
-Description: math lib
-Libs: -lm
+Name: Math
+Description: Math functionality library.
+SourcePath: source/math
+Imports: FloatMatrix
+Imports: FloatComplex
+Imports: FloatVectorList
+Imports: FloatComplexVectorList
+Imports: BoolVectorList
+Imports: FloatRandomGenerator
+Imports: IntRandomGenerator
+Imports: IntVectorList

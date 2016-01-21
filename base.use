@@ -1,5 +1,5 @@
-Name: ooc Base
-Description: ooc Base library that complements the built in SDK.
+Name: Base
+Description: Base library that complements the built-in SDK.
 SourcePath: source/base
 Imports: Order
 Imports: ByteBuffer

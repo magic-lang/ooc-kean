@@ -1,5 +1,5 @@
-use ooc-base
-use ooc-unit
+use base
+use unit
 
 TextBuilderTest: class extends Fixture {
 	init: func {

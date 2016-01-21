@@ -15,8 +15,8 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-geometry
-use ooc-base
+use geometry
+use base
 import include/gles3
 import ../GLTexture
 import Gles3Debug

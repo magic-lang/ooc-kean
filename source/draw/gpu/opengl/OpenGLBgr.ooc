@@ -15,10 +15,10 @@
 * along with This software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-base
-use ooc-geometry
-use ooc-draw
-use ooc-draw-gpu
+use base
+use geometry
+use draw
+use draw-gpu
 import backend/GLTexture
 import OpenGLCanvas, OpenGLPacked, OpenGLContext
 

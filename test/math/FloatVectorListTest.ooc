@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-unit
-use ooc-math
-use ooc-collections
+use unit
+use math
+use collections
 
 FloatVectorListTest: class extends Fixture {
 	tolerance := 1.0e-5f

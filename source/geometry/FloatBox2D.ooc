@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-base
-use ooc-collections
-use ooc-math
+use base
+use collections
+use math
 import FloatPoint2D
 import FloatVector2D
 import IntBox2D

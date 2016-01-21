@@ -1,8 +1,8 @@
-Name: ooc IO
-Description: IO library
+Name: IO
+Description: IO library that complements the IO library in the sdk.
 SourcePath: source/io
-Requires: ooc-base
-Requires: ooc-unit
+Requires: base
+Requires: unit
 Imports: CsvReader
 Imports: CsvWriter
 Imports: Terminal

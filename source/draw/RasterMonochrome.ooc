@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-base
-use ooc-math
-use ooc-geometry
+use base
+use math
+use geometry
 import RasterPacked
 import RasterImage
 import StbImage

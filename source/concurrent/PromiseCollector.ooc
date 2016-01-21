@@ -1,5 +1,5 @@
-use ooc-collections
-use ooc-concurrent
+use collections
+use concurrent
 
 PromiseCollector: class {
 	_backend : VectorList<Promise>

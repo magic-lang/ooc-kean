@@ -1,9 +1,9 @@
-use ooc-unit
-use ooc-plot
-use ooc-math
-use ooc-geometry
-use ooc-collections
-use ooc-draw
+use unit
+use plot
+use math
+use geometry
+use collections
+use draw
 import io/[File, FileReader]
 
 SvgPlotTest: class extends Fixture {

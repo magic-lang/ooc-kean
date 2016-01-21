@@ -15,8 +15,8 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-geometry
-use ooc-unit
+use geometry
+use unit
 
 FloatRotation3DTest: class extends Fixture {
 	quaternion0 := Quaternion new(33.0f, 10.0f, -12.0f, 54.5f)

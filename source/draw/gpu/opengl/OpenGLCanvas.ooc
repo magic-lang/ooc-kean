@@ -15,11 +15,11 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-geometry
-use ooc-base
-use ooc-collections
-use ooc-draw
-use ooc-draw-gpu
+use geometry
+use base
+use collections
+use draw
+use draw-gpu
 import backend/[GLFramebufferObject, GLTexture]
 import OpenGLBgr, OpenGLMap, OpenGLBgra, OpenGLUv, OpenGLMonochrome, OpenGLContext, OpenGLPacked, OpenGLSurface
 

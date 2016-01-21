@@ -1,5 +1,5 @@
-use ooc-unit
-use ooc-geometry
+use unit
+use geometry
 
 FloatTransform2DTest: class extends Fixture {
 	precision := 1.0e-5f

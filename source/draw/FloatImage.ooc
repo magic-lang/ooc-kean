@@ -1,4 +1,4 @@
-use ooc-geometry
+use geometry
 
 FloatImage : class {
 	// x = column

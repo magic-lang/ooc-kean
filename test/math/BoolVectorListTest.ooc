@@ -15,9 +15,9 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-base
-use ooc-math
-use ooc-unit
+use base
+use math
+use unit
 
 BoolVectorListTest: class extends Fixture {
 	init: func {

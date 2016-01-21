@@ -1,6 +1,6 @@
-use ooc-unit
-use ooc-base
-use ooc-collections
+use unit
+use base
+use collections
 
 MyCover: cover {
 	content: Int

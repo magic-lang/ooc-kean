@@ -1,6 +1,6 @@
-use ooc-base
-use ooc-collections
-use ooc-concurrent
+use base
+use collections
+use concurrent
 import threading/[Thread, Mutex, WaitCondition]
 
 _Task: abstract class {

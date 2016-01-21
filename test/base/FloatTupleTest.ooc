@@ -15,8 +15,8 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-unit
-use ooc-base
+use unit
+use base
 
 FloatTupleTest: class extends Fixture {
 	precision := 1.0e-5f

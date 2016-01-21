@@ -1,6 +1,6 @@
-use ooc-draw
-use ooc-collections
-use ooc-geometry
+use draw
+use collections
+use geometry
 
 PlotData2D: abstract class {
 	label: String { get set }

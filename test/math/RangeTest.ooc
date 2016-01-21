@@ -1,5 +1,5 @@
-use ooc-unit
-use ooc-math
+use unit
+use math
 
 RangeTest: class extends Fixture {
 	init: func {

@@ -15,8 +15,8 @@
  * along with this software. If not, see<http://www.gnu.org/licenses/>.
  */
 
-use ooc-base
-use ooc-unit
+use base
+use unit
 
 TextTest: class extends Fixture {
 	init: func {

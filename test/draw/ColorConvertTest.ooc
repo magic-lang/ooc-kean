@@ -1,5 +1,5 @@
-use ooc-unit
-use ooc-draw
+use unit
+use draw
 
 ColorConvertTest: class extends Fixture {
 	init: func {

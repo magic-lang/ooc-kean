@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-math
+use math
 import FloatVector2D
 import IntPoint2D
-use ooc-base
+use base
 
 FloatPoint2D: cover {
 	x, y: Float

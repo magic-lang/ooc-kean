@@ -1,7 +1,7 @@
-use ooc-base
-use ooc-collections
-use ooc-unit
-use ooc-io
+use base
+use collections
+use unit
+use io
 import io/File
 CsvWriterTest: class extends Fixture {
 	init: func {

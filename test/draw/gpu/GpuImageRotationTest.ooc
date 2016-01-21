@@ -1,9 +1,9 @@
-use ooc-base
-use ooc-geometry
-use ooc-draw-gpu
-use ooc-draw
-use ooc-opengl
-use ooc-unit
+use base
+use geometry
+use draw-gpu
+use draw
+use opengl
+use unit
 
 GpuImageRotationTest: class extends Fixture {
 	init: func {

@@ -15,8 +15,8 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-geometry
-use ooc-draw
+use geometry
+use draw
 import include/gles3
 import ../GLShaderProgram
 import Gles3Debug

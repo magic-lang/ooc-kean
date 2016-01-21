@@ -15,10 +15,10 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-draw-gpu
-use ooc-geometry
-use ooc-draw
-use ooc-opengl
+use draw-gpu
+use geometry
+use draw
+use opengl
 import DisplayWindow
 import X11Window
 

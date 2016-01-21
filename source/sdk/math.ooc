@@ -1,5 +1,5 @@
 include math
-use math
+use math-lib
 
 FLT_EPSILON: extern Float
 DBL_EPSILON: extern Double

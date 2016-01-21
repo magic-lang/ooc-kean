@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-geometry
-use ooc-base
-use ooc-draw
-use ooc-draw-gpu
+use geometry
+use base
+use draw
+use draw-gpu
 
 version(!gpuOff) {
 GraphicBufferFormat: enum {

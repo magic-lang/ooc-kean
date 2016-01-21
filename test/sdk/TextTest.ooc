@@ -1,6 +1,6 @@
-use ooc-base
-use ooc-unit
-use ooc-geometry
+use base
+use unit
+use geometry
 
 TextTest: class extends Fixture {
 	init: func {

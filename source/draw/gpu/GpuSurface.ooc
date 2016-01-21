@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-geometry
-use ooc-draw
-use ooc-collections
-use ooc-base
+use geometry
+use draw
+use collections
+use base
 
 import GpuContext, GpuMap, GpuImage, GpuMesh, GpuYuv420Semiplanar
 

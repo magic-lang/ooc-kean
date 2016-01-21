@@ -15,7 +15,7 @@
 * along with This software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-geometry
+use geometry
 import GraphicBuffer, AndroidContext, OpenGLBgra
 import backend/[GLTexture, GLContext, EGLImage]
 

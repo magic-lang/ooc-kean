@@ -16,8 +16,8 @@
  */
 
 import DisplayWindow
-use ooc-geometry
-use ooc-draw
+use geometry
+use draw
 import Win32Window
 
 version(windows) {

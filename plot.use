@@ -1,4 +1,4 @@
-Name: ooc Plot
+Name: Plot
 Description: Plot functionality library.
 SourcePath: source/plot
 Imports: LinePlotData2D

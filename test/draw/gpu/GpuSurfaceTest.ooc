@@ -1,10 +1,10 @@
-use ooc-base
-use ooc-collections
-use ooc-geometry
-use ooc-draw-gpu
-use ooc-draw
-use ooc-opengl
-use ooc-unit
+use base
+use collections
+use geometry
+use draw-gpu
+use draw
+use opengl
+use unit
 
 GpuSurfaceTest: class extends Fixture {
 	init: func {

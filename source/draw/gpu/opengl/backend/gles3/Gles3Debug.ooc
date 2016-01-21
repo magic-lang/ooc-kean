@@ -1,4 +1,4 @@
-use ooc-base
+use base
 import ../egl/egl
 import include/gles3
 import structs/ArrayList

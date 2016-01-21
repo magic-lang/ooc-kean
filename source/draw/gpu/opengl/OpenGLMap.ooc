@@ -15,11 +15,11 @@
 * along with This software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-base
-use ooc-geometry
-use ooc-draw
-use ooc-draw-gpu
-use ooc-collections
+use base
+use geometry
+use draw
+use draw-gpu
+use collections
 import structs/Vector
 import backend/GLShaderProgram
 import OpenGLContext, OpenGLPacked, OpenGLVolumeMonochrome

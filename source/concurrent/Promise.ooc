@@ -1,4 +1,4 @@
-use ooc-concurrent
+use concurrent
 import threading/Thread
 
 _PromiseState: enum {

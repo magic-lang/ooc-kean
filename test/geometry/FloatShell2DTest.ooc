@@ -15,10 +15,10 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-base
-use ooc-math
-use ooc-geometry
-use ooc-unit
+use base
+use math
+use geometry
+use unit
 
 FloatShell2DTest: class extends Fixture {
 	init: func {

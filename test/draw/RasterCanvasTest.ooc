@@ -1,8 +1,8 @@
-use ooc-unit
-use ooc-geometry
-use ooc-draw
-use ooc-draw-gpu
-use ooc-opengl
+use unit
+use geometry
+use draw
+use draw-gpu
+use opengl
 
 RasterCanvasTest: class extends Fixture {
 	inputFlower := "test/draw/input/Flower.png"

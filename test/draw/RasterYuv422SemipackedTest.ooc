@@ -1,6 +1,6 @@
-use ooc-unit
-use ooc-draw
-use ooc-geometry
+use unit
+use draw
+use geometry
 
 RasterYuv422SemipackedTest: class extends Fixture {
 	_inputPath := "test/draw/input/Flower.png"

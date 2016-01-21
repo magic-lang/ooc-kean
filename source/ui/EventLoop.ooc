@@ -1,4 +1,4 @@
-use ooc-base
+use base
 import DisplayWindow
 import x11/X11EventLoop
 

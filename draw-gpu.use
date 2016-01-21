@@ -1,10 +1,10 @@
-Name: ooc Draw GPU
-Description: GPU accelerated versions of ooc-draw classes.
+Name: Draw GPU
+Description: GPU accelerated versions of draw classes.
 SourcePath: source/draw/gpu
-Requires: ooc-base
-Requires: ooc-math
-Requires: ooc-unit
-Requires: ooc-draw
+Requires: base
+Requires: math
+Requires: unit
+Requires: draw
 Imports: GpuImage
 Imports: GpuYuv420Semiplanar
 Imports: GpuSurface

@@ -15,7 +15,7 @@
  * along with this software. If not, see<http://www.gnu.org/licenses/>.
  */
 
-use ooc-unit
+use unit
 
 IntegerTest: class extends Fixture {
 	init: func {

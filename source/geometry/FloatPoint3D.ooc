@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-math
+use math
 import FloatPoint2D
 import IntPoint3D
-use ooc-base
+use base
 
 FloatPoint3D: cover {
 	x, y, z: Float

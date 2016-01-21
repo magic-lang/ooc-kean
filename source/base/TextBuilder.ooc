@@ -14,8 +14,8 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
-use ooc-base
-use ooc-collections
+use base
+use collections
 
 TextBuilder: class {
 	_data := VectorList<Text> new(32, false)

@@ -1,4 +1,4 @@
-use ooc-geometry
+use geometry
 
 Shapes: abstract class {
 	line: static func (start, end: FloatPoint2D, lineWidth: Float, opacity: Float, color: String) -> String {

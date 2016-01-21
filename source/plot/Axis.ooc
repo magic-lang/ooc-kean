@@ -1,4 +1,4 @@
-use ooc-geometry
+use geometry
 import svg/Shapes
 
 Orientation: enum {

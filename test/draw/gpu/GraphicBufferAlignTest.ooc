@@ -1,9 +1,9 @@
-use ooc-geometry
-use ooc-unit
-use ooc-draw
-use ooc-draw-gpu
-use ooc-base
-use ooc-opengl
+use geometry
+use unit
+use draw
+use draw-gpu
+use base
+use opengl
 
 GraphicBufferAlignTest: class extends Fixture {
 	init: func {

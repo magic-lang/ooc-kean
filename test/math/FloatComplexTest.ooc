@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-unit
-use ooc-base
-use ooc-math
-use ooc-collections
+use unit
+use base
+use math
+use collections
 import FloatComplex
 import structs/Vector
 

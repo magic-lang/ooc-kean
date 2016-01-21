@@ -1,11 +1,11 @@
-Name: ooc OpenGL ES 3
+Name: OpenGL ES 3
 Description: Wrapper for OpenGL ES 3
 SourcePath: source/draw/gpu/opengl
-Requires: ooc-base
-Requires: ooc-math
-Requires: ooc-unit
-Requires: ooc-draw
-Requires: ooc-draw-gpu
+Requires: base
+Requires: math
+Requires: unit
+Requires: draw
+Requires: draw-gpu
 Imports: OpenGLPacked
 Imports: OpenGLBgr
 Imports: OpenGLBgra

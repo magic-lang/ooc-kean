@@ -15,9 +15,9 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-use ooc-base
-use ooc-collections
-use ooc-math
+use base
+use collections
+use math
 import FloatEuclidTransform
 import FloatRotation3D
 import FloatVector3D

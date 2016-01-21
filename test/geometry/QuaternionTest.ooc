@@ -15,11 +15,11 @@
  * along with this software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use ooc-base
-use ooc-collections
-use ooc-unit
-use ooc-math
-use ooc-geometry
+use base
+use collections
+use unit
+use math
+use geometry
 
 QuaternionTest: class extends Fixture {
 	Debug initialize(func (s: String) { println(s) })

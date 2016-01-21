@@ -1,5 +1,5 @@
-use ooc-concurrent
-use ooc-unit
+use concurrent
+use unit
 
 PromiseCollectorTest: class extends Fixture {
 	init: func {

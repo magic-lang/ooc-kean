@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-use ooc-math
+use math
 import FloatPoint2D
 import FloatVector2D
 import FloatBox2D
-use ooc-base
+use base
 
 FloatShell2D: cover {
 	left, right, top, bottom: Float

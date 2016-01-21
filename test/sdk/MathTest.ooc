@@ -1,4 +1,4 @@
-use ooc-unit
+use unit
 
 MathTest: class extends Fixture {
 	init: func {

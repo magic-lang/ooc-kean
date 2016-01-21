@@ -1,4 +1,0 @@
-Name: ooc Unit
-Description: ooc Unit is a unit testing library for ooc (http://ooc-lang.org).
-SourcePath: source/unit
-Imports: Fixture
