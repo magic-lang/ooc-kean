@@ -29,7 +29,7 @@ Env: class {
 		set(key, value, true)
 	}
 	unset: static func (key: String) -> Int {
-		result := -1
+		result: Int
 		version(windows) {
 			// under mingw, this unsets the key
 			result = putenv((key + "=") toCString())
