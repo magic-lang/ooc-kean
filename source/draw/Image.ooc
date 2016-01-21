@@ -16,7 +16,7 @@
 
 use ooc-geometry
 use ooc-base
-import Canvas
+import Canvas, Brush
 
 CoordinateSystem: enum {
 	Default = 0x00

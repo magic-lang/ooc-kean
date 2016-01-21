@@ -71,6 +71,6 @@ RasterCanvas: abstract class extends Canvas {
 			}
 	}
 	_map: func (point: IntPoint2D) -> IntPoint2D {
-		point + this _size / 2
+		point + this size / 2
 	}
 }

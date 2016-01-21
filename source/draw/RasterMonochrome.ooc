@@ -22,7 +22,7 @@ import RasterImage
 import StbImage
 import Image, FloatImage
 import Color
-import Canvas, RasterCanvas
+import Canvas, Brush, RasterCanvas
 
 RasterMonochromeCanvas: class extends RasterPackedCanvas {
 	target ::= this _target as RasterMonochrome

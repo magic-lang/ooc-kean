@@ -17,31 +17,13 @@
 use ooc-base
 use ooc-geometry
 use ooc-collections
-import Image, Pen
+import Image, Brush
 
-InterpolationMode: enum {
-	Fast // nearest neighbour
-	Smooth // bilinear
-}
-
-Canvas: abstract class {
+Canvas: abstract class extends Brush {
 	_size: IntVector2D
-	_pen := Pen new()
-	_transform := FloatTransform3D identity
 	size ::= this _size
-	pen: Pen { get { this _pen } set(value) { this _pen = value } }
-	viewport: IntBox2D { get set }
-	blend: Bool { get set }
-	opacity: Float { get set }
-	transform: FloatTransform3D { get { this _transform } set(value) { this _transform = value } }
-	focalLength: Float { get set }
-	interpolationMode: InterpolationMode { get set }
 	init: func (=_size) {
-		this viewport = IntBox2D new(size)
-		this focalLength = 0.0f
-		this blend = false
-		this opacity = 1.0f
-		this interpolationMode = InterpolationMode Fast
+		super(this _size)
 	}
 	drawPoint: virtual func (position: FloatPoint2D) {
 		list := VectorList<FloatPoint2D> new()
