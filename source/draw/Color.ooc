@@ -29,10 +29,10 @@ ColorMonochrome: cover {
 	init: func@ ~int (i: Int) { this init(i as UInt8) }
 	init: func@ ~float (f: Float) { this init(f*255.0f clamp(0.0f, 255.0f) as UInt8) }
 	init: func@ ~double (d: Double) { this init(d*255.0f clamp(0.0f, 255.0f) as UInt8) }
-	set: func (color: This) {
+	set: func@ (color: This) {
 		this y = color y
 	}
-	copy: func -> This { This new(this y) }
+	copy: func -> This { this }
 	toMonochrome: func -> This { this copy() }
 	toUv: func -> ColorUv { ColorUv new(128, 128) }
 	toYuv: func -> ColorYuv { ColorYuv new(this y, 128, 128) }
@@ -68,11 +68,11 @@ ColorUv: cover {
 	init: func@ ~int (i: Int) { this init(i as UInt8) }
 	init: func@ ~float (f: Float) { this init(f*255.0f clamp(0.0f, 255.0f) as UInt8) }
 	init: func@ ~double (d: Double) { this init(d*255.0f clamp(0.0f, 255.0f) as UInt8) }
-	set: func (color: This) {
+	set: func@ (color: This) {
 		this u = color u
 		this v = color v
 	}
-	copy: func -> This { This new(this u, this v) }
+	copy: func -> This { this }
 	toMonochrome: func -> ColorMonochrome { ColorMonochrome new() }
 	toUv: func -> This { this }
 	toYuv: func -> ColorYuv { ColorYuv new(128, this u, this v) }
@@ -109,12 +109,12 @@ ColorYuv: cover {
 	init: func@ ~int (y, u, v: Int) { this init(y as UInt8, u as UInt8, v as UInt8) }
 	init: func@ ~float (y, u, v: Float) { this init(y * 255.0f clamp(0.0f, 255.0f) as UInt8, u * 255.0f clamp(0.0f, 255.0f) as UInt8, v * 255.0f clamp(0.0f, 255.0f) as UInt8) }
 	init: func@ ~double (y, u, v: Double) { this init(y * 255.0f clamp(0.0f, 255.0f) as UInt8, u * 255.0f clamp(0.0f, 255.0f) as UInt8, v * 255.0f clamp(0.0f, 255.0f) as UInt8) }
-	set: func (color: This) {
+	set: func@ (color: This) {
 		this y = color y
 		this u = color u
 		this v = color v
 	}
-	copy: func -> This { This new(this y, this u, this v) }
+	copy: func -> This { this }
 	toMonochrome: func -> ColorMonochrome { ColorMonochrome new(this y) }
 	toUv: func -> ColorUv { ColorUv new(this u, this v) }
 	toYuv: func -> This { this copy() }
@@ -174,12 +174,12 @@ ColorBgr: cover {
 	init: func@ ~int (b, g, r: Int) { this init(b as UInt8, g as UInt8, r as UInt8) }
 	init: func@ ~float (b, g, r: Float) { this init(b*255.0f clamp(0.0f, 255.0f) as UInt8, g*255.0f clamp(0.0f, 255.0f) as UInt8, r*255.0f clamp(0.0f, 255.0f) as UInt8) }
 	init: func@ ~double (b, g, r: Double) { this init(b*255.0f clamp(0.0f, 255.0f) as UInt8, g*255.0f clamp(0.0f, 255.0f) as UInt8, r*255.0f clamp(0.0f, 255.0f) as UInt8) }
-	set: func (color: This) {
+	set: func@ (color: This) {
 		this blue = color blue
 		this green = color green
 		this red = color red
 	}
-	copy: func -> This { This new(this blue, this green, this red) }
+	copy: func -> This { this }
 	toMonochrome: func -> ColorMonochrome { ColorMonochrome new(this toYuv() y) }
 	toUv: func -> ColorUv { this toYuv() toUv() }
 	toYuv: func -> ColorYuv { ColorConvert bgrToYuv(this) }
@@ -224,11 +224,11 @@ ColorBgra: cover {
 	init: func@ ~int (b, g, r, a: Int) { this init(b as UInt8, g as UInt8, r as UInt8, a as UInt8) }
 	init: func@ ~float (b, g, r, a: Float) { this init(ColorBgr new(b, g, r), a*255.0f clamp(0.0f, 255.0f) as UInt8) }
 	init: func@ ~double (b, g, r, a: Double) { this init(ColorBgr new(b, g, r), a*255.0f clamp(0.0f, 255.0f) as UInt8) }
-	set: func (color: This) {
+	set: func@ (color: This) {
 		this bgr = color bgr
 		this alpha = color alpha
 	}
-	copy: func -> This { This new(this bgr, this alpha) }
+	copy: func -> This { this }
 	toMonochrome: func -> ColorMonochrome { this bgr toMonochrome() }
 	toUv: func -> ColorUv { this toYuv() toUv() }
 	toYuv: func -> ColorYuv { this bgr toYuv() }
