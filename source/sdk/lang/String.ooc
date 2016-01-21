@@ -118,9 +118,9 @@ String: class extends Iterable<Char> {
 		(_buffer clone()) map(f). toString()
 	}
 
-	_bufArrayListToStrArrayList: func (x: ArrayList<CharBuffer>) -> ArrayList<This> {
-		result := ArrayList<This> new( x size )
-		for (i in 0 .. x size) result add (x[i] toString())
+	_bufArrayListToStrArrayList: func (x: VectorList<CharBuffer>) -> VectorList<This> {
+		result := VectorList<This> new( x count )
+		for (i in 0 .. x count) result add (x[i] toString())
 		result
 	}
 
@@ -284,26 +284,26 @@ String: class extends Iterable<Char> {
 
 	toCString: func -> CString { _buffer data as CString }
 
-	split: func ~withChar (c: Char, maxTokens: SSizeT) -> ArrayList<This> {
+	split: func ~withChar (c: Char, maxTokens: SSizeT) -> VectorList<This> {
 		_bufArrayListToStrArrayList(_buffer split(c, maxTokens))
 	}
 
-	split: func ~withStringWithoutmaxTokens (s: This) -> ArrayList<This> {
+	split: func ~withStringWithoutmaxTokens (s: This) -> VectorList<This> {
 		_bufArrayListToStrArrayList(_buffer split(s _buffer, -1))
 	}
 
-	split: func ~withCharWithoutmaxTokens (c: Char) -> ArrayList<This> {
+	split: func ~withCharWithoutmaxTokens (c: Char) -> VectorList<This> {
 		bufferSplit := _buffer split(c)
 		result := _bufArrayListToStrArrayList(bufferSplit)
 		bufferSplit free()
 		result
 	}
 
-	split: func ~withStringWithEmpties (s: This, empties: Bool) -> ArrayList<This> {
+	split: func ~withStringWithEmpties (s: This, empties: Bool) -> VectorList<This> {
 		_bufArrayListToStrArrayList(_buffer split(s _buffer, empties))
 	}
 
-	split: func ~withCharWithEmpties (c: Char, empties: Bool) -> ArrayList<This> {
+	split: func ~withCharWithEmpties (c: Char, empties: Bool) -> VectorList<This> {
 		_bufArrayListToStrArrayList(_buffer split(c, empties))
 	}
 
@@ -316,7 +316,7 @@ String: class extends Iterable<Char> {
 	 *   - if negative, the string will be fully split into tokens
 	 *   - if zero, it will return all non-empty elements
 	 */
-	split: func ~str (delimiter: This, maxTokens: SSizeT) -> ArrayList<This> {
+	split: func ~str (delimiter: This, maxTokens: SSizeT) -> VectorList<This> {
 		_bufArrayListToStrArrayList(_buffer split(delimiter _buffer, maxTokens))
 	}
 }

@@ -55,7 +55,7 @@ getExtensions: func -> String {
 	result: CString = glGetString(GL_EXTENSIONS) as CString
 	String new(result, result length())
 }
-getExtensionList: func -> ArrayList<String> {
+getExtensionList: func -> VectorList<String> {
 	string := getExtensions()
 	string split(' ')
 }
@@ -66,7 +66,7 @@ queryExtension: func (extension: String) -> Bool {
 printExtensions: func {
 	array := getExtensionList()
 	Debug print("OpenGL extensions:")
-	for (i in 0 .. array size)
+	for (i in 0 .. array count)
 		Debug print(array[i])
 }
 printVersionInfo: func {
