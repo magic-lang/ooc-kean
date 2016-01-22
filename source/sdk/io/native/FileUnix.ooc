@@ -65,6 +65,7 @@ version (unix || apple) {
 	close: extern func (Int) -> Int
 	_mkdir: extern (mkdir) func (CString, ModeT) -> Int
 	_mkfifo: extern (mkfifo) func (CString, ModeT) -> Int
+	umask: extern func (ModeT) -> ModeT
 	remove: extern func (path: CString) -> Int
 	_getcwd: extern (getcwd) func (buf: CString, size: SizeT) -> CString
 	ooc_get_cwd: unmangled func -> String {
@@ -203,7 +204,10 @@ version (unix || apple) {
 			} else {
 				mode &= ~(S_IXUSR | S_IXGRP | S_IXOTH)
 			}
-			fchmod(fd, mode) == 0 && close(fd) == 0
+			result := fchmod(fd, mode) == 0
+			if (close(fd) != 0)
+				result = false
+			result
 		}
 
 		/**
@@ -315,6 +319,14 @@ version (unix || apple) {
 
 		mkfifo: override func ~withMode (mode: Int32) -> Int {
 			_mkfifo(path as CString, mode as ModeT)
+		}
+
+		createTempFile: static func (pattern, mode: String) -> FStream {
+			mask := umask(S_IRUSR | S_IWUSR)
+			fd := mkstemp(pattern)
+			result: FStream = fd >= 0 ? fdopen(fd, mode) : null
+			umask(mask)
+			result
 		}
 	}
 }

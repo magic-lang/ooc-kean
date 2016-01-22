@@ -1,4 +1,5 @@
 import io/[Writer, File]
+import io/native/FileUnix
 
 FileWriter: class extends Writer {
 	file: FStream
@@ -39,7 +40,7 @@ FileWriter: class extends Writer {
 	createTempFile: static func (pattern, mode: String) -> This {
 		result: This
 		version (!windows) {
-			result = new(fdopen(mkstemp(pattern), mode))
+			result = new(FileUnix createTempFile(pattern, mode))
 		} else {
 			// mkstemp is missing on Windows
 			result = new(mktemp(pattern) toString(), mode)
