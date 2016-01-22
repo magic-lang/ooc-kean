@@ -2056,6 +2056,8 @@ static int stbi__zbuild_huffman(stbi__zhuffman *z, stbi_uc *sizelist, int num)
          if (s <= STBI__ZFAST_BITS) {
             int k = stbi__bit_reverse(next_code[s],s);
             while (k < (1 << STBI__ZFAST_BITS)) {
+               if (k < 0 || k >= sizeof(z->fast)/sizeof(z->fast[0]))
+                  return stbi__err("stbi__zbuild_huffman","invalid array index");
                z->fast[k] = (stbi__uint16) c;
                k += (1 << s);
             }
@@ -2132,6 +2134,8 @@ stbi_inline static int stbi__zhuffman_decode(stbi__zbuf *a, stbi__zhuffman *z)
    if (s == 16) return -1; // invalid code!
    // code size is s, so:
    b = (k >> (16-s)) - z->firstcode[s] + z->firstsymbol[s];
+   if (b < 0 || b >= sizeof(z->size)/sizeof(z->size[0]))
+      return stbi__err("stbi__zhuffman_decode","invalid array index");
    STBI_ASSERT(z->size[b] == s);
    a->code_buffer >>= s;
    a->num_bits -= s;
@@ -4007,8 +4011,9 @@ static stbi_uc *stbi__process_gif_raster(stbi__context *s, stbi__gif *g)
             if (first) return stbi__errpuc("no clear code", "Corrupt GIF");
 
             if (oldcode >= 0) {
+               if (avail >= 4096)
+                  return stbi__errpuc("too many codes", "Corrupt GIF");
                p = &g->codes[avail++];
-               if (avail > 4096)        return stbi__errpuc("too many codes", "Corrupt GIF");
                p->prefix = (stbi__int16) oldcode;
                p->first = g->codes[oldcode].first;
                p->suffix = (code == avail) ? p->first : g->codes[code].first;
@@ -4530,15 +4535,17 @@ STBIDEF int stbi_info(char const *filename, int *x, int *y, int *comp)
 
 STBIDEF int stbi_info_from_file(FILE *f, int *x, int *y, int *comp)
 {
-   int r, seek_result;
+   int r = -1, seek_result;
    stbi__context s;
-   long pos = ftell(f);
-   stbi__start_file(&s, f);
-   r = stbi__info_main(&s,x,y,comp);
-   seek_result = fseek(f,pos,SEEK_SET);
-   if (seek_result != 0) {
-      stbi__err("can't fseek", "fseek failed in stbi_info_from_file");
-      r = seek_result;
+   const long pos = ftell(f);
+   if (pos >= 0) {
+      stbi__start_file(&s, f);
+      r = stbi__info_main(&s,x,y,comp);
+      seek_result = fseek(f,pos,SEEK_SET);
+      if (seek_result != 0) {
+         stbi__err("can't fseek", "fseek failed in stbi_info_from_file");
+         r = seek_result;
+      }
    }
    return r;
 }
