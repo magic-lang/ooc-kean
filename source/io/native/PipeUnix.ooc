@@ -55,7 +55,8 @@ PipeUnix: class extends Pipe {
 		if (fd != 0) {
 			flags := fcntl(fd, F_GETFL, 0)
 			flags |= O_NONBLOCK
-			fcntl(fd, F_SETFL, flags)
+			if (fcntl(fd, F_SETFL, flags) == -1)
+				raise("can't change pipe to non-blocking mode")
 		}
 	}
 	setBlocking: func (end: Char) {
@@ -63,7 +64,8 @@ PipeUnix: class extends Pipe {
 		if (fd != 0) {
 			flags := fcntl(fd, F_GETFL, 0)
 			flags &= ~O_NONBLOCK
-			fcntl(fd, F_SETFL, flags)
+			if (fcntl(fd, F_SETFL, flags) == -1)
+				raise("can't change pipe to blocking mode")
 		}
 	}
 	_getFD: func (end: Char) -> _FileDescriptor {
