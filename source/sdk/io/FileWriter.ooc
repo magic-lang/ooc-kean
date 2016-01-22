@@ -37,13 +37,13 @@ FileWriter: class extends Writer {
 	close: override func { this file close() }
 
 	createTempFile: static func (pattern, mode: String) -> This {
+		result: This
 		version (!windows) {
-			return new(fdopen(mkstemp(pattern), mode))
+			result = new(fdopen(mkstemp(pattern), mode))
 		} else {
 			// mkstemp is missing on Windows
-			new(mktemp(pattern) toString(), mode)
+			result = new(mktemp(pattern) toString(), mode)
 		}
-		Exception new("FileWriter createTempFile() is unsupported on your os") throw()
-		null
+		result
 	}
 }
