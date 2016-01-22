@@ -161,7 +161,8 @@ OpenGLContext: class extends GpuContext {
 				map = this _packUvPadded
 				map add("paddingOffset", padding as Float / (target size x * 4))
 			}
-		}
+		} else
+			raise("invalid type of GpuImage in packToRgba")
 		map add("texture0", source)
 		map add("texelOffset", 1.0f / source size x)
 		map add("xOffset", (2.0f / channels - 0.5f) / source size x)
