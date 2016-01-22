@@ -234,7 +234,12 @@ Quaternion: cover {
 		// W - observationVectors
 		// Y - gibbsVector
 		// Z - vectorQuantityZ
-		// TODO: Fix singularity problem when the angle is close to PI, using sequential rotations
+		// Rotate quaternions if the angle is close to pi to avoid singularity problem
+		centerQuaternion := quaternions[quaternions count / 2]
+		preRotate := centerQuaternion angle(This identity) equals(Float pi, 0.5f)
+		if (preRotate)
+			for (index in 0 .. quaternions count)
+				quaternions[index] = centerQuaternion inverse * quaternions[index]
 		observationVectors := This _createVectorMeasurementsForQuest(quaternions)
 		normalizedWeights := weights / weights sum
 
@@ -268,7 +273,7 @@ Quaternion: cover {
 		matrixQuantityS free()
 		vectorQuantityZ free()
 		gibbsVector free()
-		result
+		preRotate ? centerQuaternion * result : result
 	}
 	_approximateMaximumEigenvalueForQuest: static func (matrixQuantityS, vectorQuantityZ: FloatMatrix, initialGuess: Float, maximumIterationCount := 20) -> Float {
 		sigma := 0.5f * matrixQuantityS trace()
