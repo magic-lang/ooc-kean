@@ -481,13 +481,14 @@ CharBuffer: class extends Iterable<Char> {
 	toFloat: func -> Float { strtof(this data, null) }
 	toDouble: func -> Double { strtod(this data, null) }
 	toLDouble: func -> LDouble {
+		result: LDouble
 		version (android) {
-			return strtod(this data, null)
+			result = strtod(this data, null)
 		}
 		version (!android) {
-			return strtold(this data, null)
+			result = strtold(this data, null)
 		}
-		0.0
+		result
 	}
 
 	iterator: override func -> CharBufferIterator<Char> {

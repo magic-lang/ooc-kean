@@ -54,6 +54,7 @@ Time: class {
 	__time_millisec_base := static This __time_microsec_base / 1000
 
 	dateTime: static func -> String {
+		result: String
 		version (windows) {
 			dateLength := GetDateFormat(LOCALE_USER_DEFAULT, 0, null, null, null, 0)
 			dateBuffer := gc_malloc(dateLength) as Char*
@@ -65,13 +66,13 @@ Time: class {
 			GetTimeFormat(LOCALE_USER_DEFAULT, 0, null, null, timeBuffer, timeLength)
 			time := String new(timeBuffer, timeLength - 1)
 
-			return "%s %s" format(date, time)
+			result = "%s %s" format(date, time)
 		} else {
 			tm: TimeT
 			time(tm&)
-			return asctime(localtime(tm&))
+			result = asctime(localtime(tm&))
 		}
-		"<unsupported platform>"
+		result
 	}
 
 	// The microseconds that have elapsed in the current minute.
