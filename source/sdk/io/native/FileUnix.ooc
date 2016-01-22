@@ -36,12 +36,16 @@ version (unix || apple) {
 
 	TimeT: cover from time_t
 	ModeT: cover from mode_t
+	INodeT: cover from ino_t
 
 	FileStat: cover from struct stat {
 		st_mode: extern ModeT
 		st_size: extern SizeT
+		st_ino: extern INodeT
 		st_atime, st_mtime, st_ctime: extern TimeT
 	}
+
+	READWRITE: extern (O_RDWR) static Int
 
 	// mode masks
 	S_ISDIR: extern func (...) -> Bool // directory
@@ -55,7 +59,10 @@ version (unix || apple) {
 	S_IRWXO, S_IROTH, S_IWOTH, S_IXOTH: extern ModeT // other
 
 	lstat: extern func (CString, FileStat*) -> Int
+	fstat: extern func (Int, FileStat*) -> Int
 	chmod: extern func (CString, ModeT) -> Int
+	fchmod: extern func (Int, ModeT) -> Int
+	close: extern func (Int) -> Int
 	_mkdir: extern (mkdir) func (CString, ModeT) -> Int
 	_mkfifo: extern (mkfifo) func (CString, ModeT) -> Int
 	remove: extern func (path: CString) -> Int
@@ -181,18 +188,22 @@ version (unix || apple) {
 		 * current user, group, and other.
 		 */
 		setExecutable: override func (exec: Bool) -> Bool {
-			result: FileStat
-			res := lstat(path as CString, result&)
+			lstatResult, fstatResult: FileStat
+			res := lstat(path as CString, lstatResult&)
 			if (res != 0) return false // couldn't get file mode
-
-			mode := result st_mode
+			fd := open(path as CString, READWRITE)
+			if (fd == -1) return false
+			res = fstat(fd, fstatResult&)
+			if (res != 0) return false
+			if (fstatResult st_ino != lstatResult st_ino || fstatResult st_mode != lstatResult st_mode)
+				return false
+			mode := fstatResult st_mode
 			if (exec) {
 				mode |= (S_IXUSR | S_IXGRP | S_IXOTH)
 			} else {
 				mode &= ~(S_IXUSR | S_IXGRP | S_IXOTH)
 			}
-
-			chmod(path as CString, mode) == 0
+			fchmod(fd, mode) == 0 && close(fd) == 0
 		}
 
 		/**
