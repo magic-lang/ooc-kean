@@ -37,6 +37,8 @@ OpenGLFence: class extends GpuFence {
 		this _mutex lock()
 		if (this _backend == null)
 			this _syncCondition wait(this _mutex)
+		if (this _backend == null)
+			raise("OpenGLFence: _backend is still null after waiting on _syncCondition")
 		result := this _backend clientWait(nanoseconds)
 		this _mutex unlock()
 		result
