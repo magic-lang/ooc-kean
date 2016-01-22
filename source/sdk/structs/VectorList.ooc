@@ -15,14 +15,11 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import structs/Vector
+import structs/[Vector, _List]
 
-VectorList: class <T> {
+VectorList: class <T> extends _List<T>{
 	_vector: Vector<T>
-	_count: Int
-	count ::= this _count
 	pointer ::= this _vector _backend as Pointer
-	empty ::= this _count == 0
 	init: func ~default {
 		this init(32)
 	}
@@ -35,52 +32,51 @@ VectorList: class <T> {
 		this _vector free()
 		super()
 	}
-
-	add: func (item: T) {
+	add: override func (item: T) {
 		if (this _vector capacity <= this _count)
 			this _vector resize(this _vector capacity + 8)
 		this _vector[this _count] = item
 		this _count += 1
 	}
-	append: func (other: This<T>) {
+	append: override func (other: This<T>) {
 		if (this _vector capacity < this _count + other count)
 			this _vector resize(this _vector capacity + other count)
 		for (i in 0 .. other count)
 			this _vector[this _count + i] = other[i]
 		this _count += other count
 	}
-	insert: func (index: Int, item: T) {
+	insert: override func (index: Int, item: T) {
 		if (this _vector capacity <= this _count)
 			this _vector resize(this _vector capacity + 8)
 		this _vector copy(index, index + 1)
 		this _vector[index] = item
 		this _count += 1
 	}
-	remove: func ~last -> T {
+	remove: override func ~last -> T {
 		this _count -= 1
 		this _vector[this _count]
 	}
-	remove: func ~atIndex (index: Int) -> T {
+	remove: override func ~atIndex (index: Int) -> T {
 		result := this _vector[index]
 		this _vector copy(index + 1, index)
 		this _count -= 1
 		result
 	}
-	removeAt: func (index: Int) {
+	removeAt: override func (index: Int) {
 		this _vector copy(index + 1, index)
 		this _count -= 1
 	}
-	clear: func {
+	clear: override func {
 		this _vector _free(0, this _count)
 		this _count = 0
 	}
-	reverse: func -> This<T> {
+	reverse: override func -> This<T> {
 		result := This<T> new(this _count)
 		for (i in 0 .. this _count)
 			result add(this[(this _count - 1) - i])
 		result
 	}
-	sort: func (greaterThan: Func (T, T) -> Bool) {
+	sort: override func (greaterThan: Func (T, T) -> Bool) {
 		inOrder := false
 		while (!inOrder) {
 			inOrder = true
@@ -94,63 +90,63 @@ VectorList: class <T> {
 			}
 		}
 	}
-	copy: func -> This<T> {
+	copy: override func -> This<T> {
 		result := This new(this _count)
 		memcpy(result pointer, this pointer, this _count * T size)
 		result _count = this _count
 		result
 	}
-	apply: func (function: Func(T)) {
+	apply: override func (function: Func(T)) {
 		for (i in 0 .. this count)
 			function(this[i])
 	}
-	modify: func (function: Func(T) -> T) {
+	modify: override func (function: Func(T) -> T) {
 		for (i in 0 .. this count)
 			this[i] = function(this[i])
 	}
-	map: func <S> (function: Func(T) -> S) -> This<S> {
+	map: override func <S> (function: Func(T) -> S) -> This<S> {
 		result := This<S> new(this count)
 		for (i in 0 .. this count)
 			result add(function(this[i]))
 		result
 	}
-	fold: func <S> (S: Class, function: Func(T, S) -> S, initial: S) -> S {
+	fold: override func <S> (S: Class, function: Func(T, S) -> S, initial: S) -> S {
 		for (i in 0 .. this count)
 			initial = function(this[i], initial)
 		initial
 	}
-	getFirstElements: func (number: Int) -> This<T> {
+	getFirstElements: override func (number: Int) -> This<T> {
 		result := This<T> new()
 		number = number < count ? number : count
 		for (i in 0 .. number)
 			result add(this _vector[i])
 		result
 	}
-	getElements: func (indices: This<Int>) -> This<T> {
+	getElements: override func (indices: This<Int>) -> This<T> {
 		result := This<T> new()
 		for (i in 0 .. indices count)
 			result add(this[indices[i]])
 		result
 	}
-	getSlice: func ~range (range: Range) -> This<T> {
+	getSlice: override func ~range (range: Range) -> This<T> {
 		result := This<T> new(range count)
 		this getSliceInto(range, result)
 		result
 	}
-	getSlice: func ~indices (start, end: Int) -> This<T> {
+	getSlice: override func ~indices (start, end: Int) -> This<T> {
 		this getSlice(start .. end)
 	}
-	getSliceInto: func ~range (range: Range, buffer: This<T>) {
+	getSliceInto: override func ~range (range: Range, buffer: This<T>) {
 		if (buffer _vector capacity < range count)
 			buffer _vector resize(range count)
 		buffer _count = range count
 		source := (this _vector _backend + (range min * (T size))) as Pointer
 		memcpy(buffer pointer, source, range count * (T size))
 	}
-	getSliceInto: func ~indices (start, end: Int, buffer: This<T>) {
+	getSliceInto: override func ~indices (start, end: Int, buffer: This<T>) {
 		this getSliceInto(start .. end, buffer)
 	}
-	iterator: func -> Iterator<T> { _VectorListIterator<T> new(this) }
+	iterator: override func -> Iterator<T> { _VectorListIterator<T> new(this) }
 
 	operator [] (index: Int) -> T {
 		version (safe) {
