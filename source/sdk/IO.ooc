@@ -94,7 +94,7 @@ FStream: cover from FILE* {
 
 	open: static func ~withFlags (filename, mode: String, flags: Int) -> This {
 		fd := open(filename, flags)
-		fdopen(fd, mode)
+		fd > 0 ? fdopen(fd, mode) : null
 	}
 
 	/**
@@ -208,13 +208,13 @@ FStream: cover from FILE* {
 	 * estimated.
 	 */
 	getSize: func -> SSizeT {
+		result: SSizeT = 0
 		prev := tell()
-
-		seek(0, SEEK_END)
-		result := tell() as SizeT
-
-		seek(prev, SEEK_SET)
-
+		if (seek(0, SEEK_END) != -1) {
+			result = tell() as SizeT
+			if (seek(prev, SEEK_SET) == -1)
+				result = 0
+		}
 		result
 	}
 
