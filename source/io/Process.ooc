@@ -1,5 +1,5 @@
 import Pipe
-import structs/[List, HashMap]
+import structs/HashMap
 import native/[ProcessUnix, ProcessWin32]
 
 Process: abstract class {
