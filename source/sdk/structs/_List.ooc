@@ -2,7 +2,6 @@ _List: abstract class <T> {
 	_count := 0
 	count ::= this _count
 	empty ::= this _count == 0
-	init: func
 	add: abstract func (item: T)
 	append: abstract func (other: This<T>)
 	insert: abstract func (index: Int, item: T)
