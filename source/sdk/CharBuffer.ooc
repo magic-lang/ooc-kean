@@ -523,23 +523,23 @@ CharBuffer: class extends Iterable<Char> {
 
 	toCString: func -> CString { data as CString }
 
-	split: func ~withChar (c: Char, maxTokens: SSizeT) -> ArrayList<This> {
+	split: func ~withChar (c: Char, maxTokens: SSizeT) -> VectorList<This> {
 		split(c&, 1, maxTokens)
 	}
 
-	split: func ~withStringWithoutmaxTokens (s: This) -> ArrayList<This> {
+	split: func ~withStringWithoutmaxTokens (s: This) -> VectorList<This> {
 		split(s data, s size, -1)
 	}
 
-	split: func ~withCharWithoutmaxTokens (c: Char) -> ArrayList<This> {
+	split: func ~withCharWithoutmaxTokens (c: Char) -> VectorList<This> {
 		split(c&, 1, -1)
 	}
 
-	split: func ~withBufWithEmpties (s: This, empties: Bool) -> ArrayList<This> {
+	split: func ~withBufWithEmpties (s: This, empties: Bool) -> VectorList<This> {
 		split(s data, s size, empties ? -1 : 0)
 	}
 
-	split: func ~withCharWithEmpties (c: Char, empties: Bool) -> ArrayList<This> {
+	split: func ~withCharWithEmpties (c: Char, empties: Bool) -> VectorList<This> {
 		split(c&, 1, empties ? -1 : 0)
 	}
 
@@ -552,18 +552,18 @@ CharBuffer: class extends Iterable<Char> {
 	 *   - if negative, the string will be fully split into tokens
 	 *   - if zero, it will return all non-empty elements
 	 */
-	split: func ~buf (delimiter: This, maxTokens: SSizeT) -> ArrayList<This> {
+	split: func ~buf (delimiter: This, maxTokens: SSizeT) -> VectorList<This> {
 		split(delimiter data, delimiter size, maxTokens)
 	}
 
-	split: func ~pointer (delimiter: Char*, delimiterLength: SizeT, maxTokens: SSizeT) -> ArrayList<This> {
+	split: func ~pointer (delimiter: Char*, delimiterLength: SizeT, maxTokens: SSizeT) -> VectorList<This> {
 		findResults := findAll(delimiter, delimiterLength, true)
 		maxItems := ((maxTokens <= 0) || (maxTokens > findResults size + 1)) ? findResults size + 1 : maxTokens
-		result := ArrayList<This> new(maxItems)
+		result := VectorList<This> new(maxItems, false)
 		sstart: SizeT = 0 //source (this) start pos
 
 		for (item in 0 .. findResults size) {
-			if ((maxTokens > 0) && (result size == maxItems - 1)) break
+			if ((maxTokens > 0) && (result count == maxItems - 1)) break
 
 			sdist := findResults[item] - sstart // bytes to copy
 			if (maxTokens != 0 || sdist > 0) {
@@ -573,7 +573,7 @@ CharBuffer: class extends Iterable<Char> {
 			sstart += sdist + delimiterLength
 		}
 
-		if (result size < maxItems) {
+		if (result count < maxItems) {
 			sdist := size - sstart // bytes to copy
 			b := new((data + sstart) as CString, sdist)
 			result add(b)

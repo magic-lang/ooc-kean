@@ -121,8 +121,8 @@ BacktraceHandler: class {
 			line := lines[i] toString()
 			tokens := line split('|') map(|x| x trim())
 
-			if (tokens size <= 4) {
-				if (tokens size >= 2) {
+			if (tokens count <= 4) {
+				if (tokens count >= 2) {
 					binary := tokens[0]
 					file := "(from %s)" format(binary)
 					symbol := tokens[2]
