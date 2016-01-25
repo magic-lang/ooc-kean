@@ -1,7 +1,6 @@
 use base
 import ../egl/egl
 import include/gles3
-import structs/ArrayList
 
 version(!gpuOff) {
 validateStart: func (location: String) {
