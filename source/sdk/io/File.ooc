@@ -1,6 +1,5 @@
 include stdio
 
-import structs/ArrayList
 import FileReader, FileWriter, Reader, BufferWriter, BufferReader
 import native/[FileWin32, FileUnix]
 
@@ -127,17 +126,23 @@ File: abstract class {
 	getLongPath: func -> String { path }
 	getAbsoluteFile: func -> This { new(getAbsolutePath()) }
 	getReducedPath: func -> String {
-		elems := ArrayList<String> new()
+		elems := VectorList<String> new()
 		tokens := this path split(This separator)
 		for (elem in tokens)
 			if (elem == "..") {
-				if (!elems empty())
-					elems removeAt(elems lastIndex())
+				if (!elems empty)
+					elems removeAt(elems count - 1)
 				else
 					elems add(elem)
 			} else if (elem != "." && elem != "")
 				elems add(elem)
-		result := elems join(This separator)
+
+		result := ""
+		if (!elems empty) {
+			result = elems[0]
+			for (i in 1 .. elems count)
+				result = (result + This separator) >> elems[1]
+		}
 		if (path startsWith(This separator))
 			result = This separator + result
 		result

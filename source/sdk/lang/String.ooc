@@ -1,14 +1,7 @@
-/**
- * The String class represents character strings.
- *
- * The String class is immutable by default, this means every writing operation
- * is done on a clone, which is then returned
- */
+import structs/ArrayList // Must be here, otherwise keyEquals in HashMap does not resolve...
+
 String: class extends Iterable<Char> {
-	/**
-	 * Underlying buffer used to store a string's data.
-	 * Avoid direct access, as it breaks immutability.
-	 */
+	// Avoid direct buffer access, as it breaks immutability.
 	_buffer: CharBuffer
 
 	size ::= _buffer size
@@ -100,7 +93,7 @@ String: class extends Iterable<Char> {
 		_buffer find(what _buffer, offset, searchCaseSensitive)
 	}
 
-	findAll: func (what: This, searchCaseSensitive := true) -> ArrayList <Int> {
+	findAll: func (what: This, searchCaseSensitive := true) -> VectorList <Int> {
 		_buffer findAll(what _buffer, searchCaseSensitive)
 	}
 
@@ -118,7 +111,7 @@ String: class extends Iterable<Char> {
 		(_buffer clone()) map(f). toString()
 	}
 
-	_bufArrayListToStrArrayList: func (x: VectorList<CharBuffer>) -> VectorList<This> {
+	_bufVectorListToStrVectorList: func (x: VectorList<CharBuffer>) -> VectorList<This> {
 		result := VectorList<This> new( x count )
 		for (i in 0 .. x count) result add (x[i] toString())
 		result
@@ -285,26 +278,26 @@ String: class extends Iterable<Char> {
 	toCString: func -> CString { _buffer data as CString }
 
 	split: func ~withChar (c: Char, maxTokens: SSizeT) -> VectorList<This> {
-		_bufArrayListToStrArrayList(_buffer split(c, maxTokens))
+		_bufVectorListToStrVectorList(_buffer split(c, maxTokens))
 	}
 
 	split: func ~withStringWithoutmaxTokens (s: This) -> VectorList<This> {
-		_bufArrayListToStrArrayList(_buffer split(s _buffer, -1))
+		_bufVectorListToStrVectorList(_buffer split(s _buffer, -1))
 	}
 
 	split: func ~withCharWithoutmaxTokens (c: Char) -> VectorList<This> {
 		bufferSplit := _buffer split(c)
-		result := _bufArrayListToStrArrayList(bufferSplit)
+		result := _bufVectorListToStrVectorList(bufferSplit)
 		bufferSplit free()
 		result
 	}
 
 	split: func ~withStringWithEmpties (s: This, empties: Bool) -> VectorList<This> {
-		_bufArrayListToStrArrayList(_buffer split(s _buffer, empties))
+		_bufVectorListToStrVectorList(_buffer split(s _buffer, empties))
 	}
 
 	split: func ~withCharWithEmpties (c: Char, empties: Bool) -> VectorList<This> {
-		_bufArrayListToStrArrayList(_buffer split(c, empties))
+		_bufVectorListToStrVectorList(_buffer split(c, empties))
 	}
 
 	/**
@@ -317,7 +310,7 @@ String: class extends Iterable<Char> {
 	 *   - if zero, it will return all non-empty elements
 	 */
 	split: func ~str (delimiter: This, maxTokens: SSizeT) -> VectorList<This> {
-		_bufArrayListToStrArrayList(_buffer split(delimiter _buffer, maxTokens))
+		_bufVectorListToStrVectorList(_buffer split(delimiter _buffer, maxTokens))
 	}
 }
 
@@ -355,22 +348,18 @@ operator << (left, right: String) -> String {
 	result
 }
 
-// constructor to be called from string literal initializers
 makeStringLiteral: func (str: CString, strLen: Int) -> String {
 	String new(CharBuffer new(str, strLen, true))
 }
 
-// lame static function to be called by int main, so i dont have to metaprogram it
-import structs/ArrayList
-
-strArrayListFromCString: func (argc: Int, argv: Char**) -> ArrayList<String> {
-	result := ArrayList<String> new()
+strVectorListFromCString: func (argc: Int, argv: Char**) -> VectorList<String> {
+	result := VectorList<String> new()
 	argc times(|i| result add(argv[i] as CString toString()))
 	result
 }
 
-strArrayListFromCString: func ~hack (argc: Int, argv: String*) -> ArrayList<String> {
-	strArrayListFromCString(argc, argv as Char**)
+strVectorListFromCString: func ~hack (argc: Int, argv: String*) -> VectorList<String> {
+	strVectorListFromCString(argc, argv as Char**)
 }
 
 strArrayFromCString: func (argc: Int, argv: Char**) -> String[] {
@@ -384,9 +373,6 @@ strArrayFromCString: func ~hack (argc: Int, argv: String*) -> String[] {
 }
 
 cStringPtrToStringPtr: func (cstr: CString*, len: Int) -> String* {
-	// Mostly to allow main to accept String*
-	// func-name sucks, I am open to all suggestions
-
 	toRet: String* = gc_malloc(Pointer size * len) // otherwise the pointers are stack-allocated
 	for (i in 0 .. len) {
 		toRet[i] = makeStringLiteral(cstr[i], cstr[i] length())

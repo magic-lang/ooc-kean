@@ -1,4 +1,4 @@
-import structs/[HashMap, ArrayList]
+import structs/HashMap
 
 HashDictionary: class {
 	_hashMap: HashMap<String, Cell<Pointer>>

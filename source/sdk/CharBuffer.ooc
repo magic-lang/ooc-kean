@@ -1,5 +1,3 @@
-import structs/ArrayList
-
 CharBuffer: class extends Iterable<Char> {
 	size: Int
 	capacity: Int = 0
@@ -280,15 +278,15 @@ CharBuffer: class extends Iterable<Char> {
 		-1
 	}
 
-	findAll: func ~withCase ( what : This, searchCaseSensitive := true) -> ArrayList <Int> {
+	findAll: func ~withCase ( what : This, searchCaseSensitive := true) -> VectorList<Int> {
 		findAll(what data, what size, searchCaseSensitive)
 	}
 
-	findAll: func ~pointer ( what : Char*, whatSize: Int, searchCaseSensitive := true) -> ArrayList <Int> {
+	findAll: func ~pointer ( what : Char*, whatSize: Int, searchCaseSensitive := true) -> VectorList<Int> {
 		if (what == null || whatSize == 0) {
-			return ArrayList <Int> new(0)
+			return VectorList<Int> new(0)
 		}
-		result := ArrayList <Int> new (size / whatSize)
+		result := VectorList<Int> new (size / whatSize)
 		offset : Int = (whatSize ) * -1
 		while (((offset = find(what, whatSize, offset + whatSize, searchCaseSensitive)) != -1)) result add (offset)
 		result
@@ -296,11 +294,11 @@ CharBuffer: class extends Iterable<Char> {
 
 	replaceAll: func ~buf (what, whit: This, searchCaseSensitive := true) {
 		findResults := findAll(what, searchCaseSensitive)
-		if (findResults == null || findResults size == 0) {
+		if (findResults == null || findResults count == 0) {
 			return
 		}
 
-		newlen: Int = size + (whit size * findResults size) - (what size * findResults size)
+		newlen: Int = size + (whit size * findResults count) - (what size * findResults count)
 		result := new(newlen)
 		result setLength(newlen)
 
@@ -442,7 +440,7 @@ CharBuffer: class extends Iterable<Char> {
 	}
 
 	count: func ~buf (what: This) -> Int {
-		findAll(what) size
+		findAll(what) count
 	}
 
 	lastIndexOf: func (c: Char) -> Int {
@@ -558,11 +556,11 @@ CharBuffer: class extends Iterable<Char> {
 
 	split: func ~pointer (delimiter: Char*, delimiterLength: SizeT, maxTokens: SSizeT) -> VectorList<This> {
 		findResults := findAll(delimiter, delimiterLength, true)
-		maxItems := ((maxTokens <= 0) || (maxTokens > findResults size + 1)) ? findResults size + 1 : maxTokens
+		maxItems := ((maxTokens <= 0) || (maxTokens > findResults count + 1)) ? findResults count + 1 : maxTokens
 		result := VectorList<This> new(maxItems, false)
 		sstart: SizeT = 0 //source (this) start pos
 
-		for (item in 0 .. findResults size) {
+		for (item in 0 .. findResults count) {
 			if ((maxTokens > 0) && (result count == maxItems - 1)) break
 
 			sdist := findResults[item] - sstart // bytes to copy
