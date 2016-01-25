@@ -126,16 +126,17 @@ XKeyEventOoc: cover from XKeyEvent {
 
 ZPixmap: extern const Long
 
-//XNextEvent: extern func(Pointer, XEvent) -> Int
-
 XKeyPressedEventOoc: extern XKeyEventOoc
 XKeyReleasedEventOoc: extern XKeyEventOoc
+XKeySymOoc: cover from KeySym
+XComposeStatusOoc: cover from XComposeStatus
 
 XNextEvent: extern func (display, XEvent: Pointer)
 XSelectInput: extern func (display: Pointer, window: ULong, eventMask: extern (event_mask) Long)
 XPending: extern func (display: Pointer) -> Int
 XkbSetDetectableAutoRepeat: extern func (display: Pointer, detectable: Bool, supported_rtrn: Pointer) -> Bool
 XLookupKeysym: extern func (keyEvent: extern (key_event) XKeyEventOoc*, index: Int) -> ULong
+XLookupString: extern func (keyEvent: XKeyEventOoc*, result: Char*, resultLength: Int, symbol: XKeySymOoc*, composeStatus: XComposeStatusOoc*)
 KeyPress: extern const Int
 KeyRelease: extern const Int
 KeyPressMask: extern const Long
