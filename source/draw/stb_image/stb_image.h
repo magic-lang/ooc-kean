@@ -784,6 +784,40 @@ static void stbi__start_callbacks(stbi__context *s, stbi_io_callbacks *c, void *
    s->img_buffer_original_end = s->img_buffer_end;
 }
 
+// this is not threadsafe
+static const char *stbi__g_failure_reason;
+
+STBIDEF const char *stbi_failure_reason(void)
+{
+   return stbi__g_failure_reason;
+}
+
+static int stbi__err(const char *str)
+{
+   stbi__g_failure_reason = str;
+   return 0;
+}
+
+static void *stbi__malloc(size_t size)
+{
+    return STBI_MALLOC(size);
+}
+
+// stbi__err - error
+// stbi__errpf - error returning pointer to float
+// stbi__errpuc - error returning pointer to unsigned char
+
+#ifdef STBI_NO_FAILURE_STRINGS
+   #define stbi__err(x,y)  0
+#elif defined(STBI_FAILURE_USERMSG)
+   #define stbi__err(x,y)  stbi__err(y)
+#else
+   #define stbi__err(x,y)  stbi__err(x)
+#endif
+
+#define stbi__errpf(x,y)   ((float *)(size_t) (stbi__err(x,y)?NULL:NULL))
+#define stbi__errpuc(x,y)  ((unsigned char *)(size_t) (stbi__err(x,y)?NULL:NULL))
+
 #ifndef STBI_NO_STDIO
 
 static int stbi__stdio_read(void *user, char *data, int size)
@@ -793,7 +827,8 @@ static int stbi__stdio_read(void *user, char *data, int size)
 
 static void stbi__stdio_skip(void *user, int n)
 {
-   fseek((FILE*) user, n, SEEK_CUR);
+   if (fseek((FILE*) user, n, SEEK_CUR) != 0)
+      stbi__err("can't fseek","fseek failed in stbi__stdio_skip");
 }
 
 static int stbi__stdio_eof(void *user)
@@ -879,40 +914,6 @@ static int      stbi__pnm_test(stbi__context *s);
 static stbi_uc *stbi__pnm_load(stbi__context *s, int *x, int *y, int *comp, int req_comp);
 static int      stbi__pnm_info(stbi__context *s, int *x, int *y, int *comp);
 #endif
-
-// this is not threadsafe
-static const char *stbi__g_failure_reason;
-
-STBIDEF const char *stbi_failure_reason(void)
-{
-   return stbi__g_failure_reason;
-}
-
-static int stbi__err(const char *str)
-{
-   stbi__g_failure_reason = str;
-   return 0;
-}
-
-static void *stbi__malloc(size_t size)
-{
-    return STBI_MALLOC(size);
-}
-
-// stbi__err - error
-// stbi__errpf - error returning pointer to float
-// stbi__errpuc - error returning pointer to unsigned char
-
-#ifdef STBI_NO_FAILURE_STRINGS
-   #define stbi__err(x,y)  0
-#elif defined(STBI_FAILURE_USERMSG)
-   #define stbi__err(x,y)  stbi__err(y)
-#else
-   #define stbi__err(x,y)  stbi__err(x)
-#endif
-
-#define stbi__errpf(x,y)   ((float *)(size_t) (stbi__err(x,y)?NULL:NULL))
-#define stbi__errpuc(x,y)  ((unsigned char *)(size_t) (stbi__err(x,y)?NULL:NULL))
 
 STBIDEF void stbi_image_free(void *retval_from_stbi_load)
 {
@@ -1055,7 +1056,8 @@ STBIDEF stbi_uc *stbi_load_from_file(FILE *f, int *x, int *y, int *comp, int req
    result = stbi__load_flip(&s,x,y,comp,req_comp);
    if (result) {
       // need to 'unget' all the characters in the IO buffer
-      fseek(f, - (int) (s.img_buffer_end - s.img_buffer), SEEK_CUR);
+      if (fseek(f, - (int) (s.img_buffer_end - s.img_buffer), SEEK_CUR) != 0)
+         stbi__err("can't fseek", "fseek failed in stbi_load_from_file");
    }
    return result;
 }
@@ -3502,6 +3504,7 @@ static int stbi__zbuild_huffman(stbi__zhuffman *z, stbi_uc *sizelist, int num)
       if (sizes[i] > (1 << i))
          return stbi__err("bad sizes", "Corrupt PNG");
    code = 0;
+   next_code[0] = 0;
    for (i=1; i < 16; ++i) {
       next_code[i] = code;
       z->firstcode[i] = (stbi__uint16) code;
@@ -3524,6 +3527,8 @@ static int stbi__zbuild_huffman(stbi__zhuffman *z, stbi_uc *sizelist, int num)
          if (s <= STBI__ZFAST_BITS) {
             int j = stbi__bit_reverse(next_code[s],s);
             while (j < (1 << STBI__ZFAST_BITS)) {
+			   if (j < 0 || j >= sizeof(z->fast)/sizeof(z->fast[0]))
+                  return stbi__err("stbi__zbuild_huffman","invalid array index");
                z->fast[j] = fastv;
                j += (1 << s);
             }
@@ -3591,6 +3596,8 @@ static int stbi__zhuffman_decode_slowpath(stbi__zbuf *a, stbi__zhuffman *z)
    if (s == 16) return -1; // invalid code!
    // code size is s, so:
    b = (k >> (16-s)) - z->firstcode[s] + z->firstsymbol[s];
+   if (b < 0 || b >= sizeof(z->value)/sizeof(z->value[0]))
+      return stbi__err("stbi__zhuffman_decode","invalid array index");
    STBI_ASSERT(z->size[b] == s);
    a->code_buffer >>= s;
    a->num_bits -= s;
@@ -3601,12 +3608,15 @@ stbi_inline static int stbi__zhuffman_decode(stbi__zbuf *a, stbi__zhuffman *z)
 {
    int b,s;
    if (a->num_bits < 16) stbi__fill_bits(a);
-   b = z->fast[a->code_buffer & STBI__ZFAST_MASK];
-   if (b) {
-      s = b >> 9;
-      a->code_buffer >>= s;
-      a->num_bits -= s;
-      return b & 511;
+   b = a->code_buffer & STBI__ZFAST_MASK;
+   if (b < sizeof(z->fast) / sizeof(z->fast[0])) {
+      b = z->fast[b];
+      if (b) {
+         s = b >> 9;
+         a->code_buffer >>= s;
+         a->num_bits -= s;
+         return b & 511;
+      }
    }
    return stbi__zhuffman_decode_slowpath(a, z);
 }
@@ -3699,6 +3709,7 @@ static int stbi__compute_huffman_codes(stbi__zbuf *a)
    int hclen = stbi__zreceive(a,4) + 4;
 
    memset(codelength_sizes, 0, sizeof(codelength_sizes));
+   memset(lencodes, 0, sizeof(lencodes));
    for (i=0; i < hclen; ++i) {
       int s = stbi__zreceive(a,3);
       codelength_sizes[length_dezigzag[i]] = (stbi_uc) s;
@@ -5750,8 +5761,9 @@ static stbi_uc *stbi__process_gif_raster(stbi__context *s, stbi__gif *g)
             if (first) return stbi__errpuc("no clear code", "Corrupt GIF");
 
             if (oldcode >= 0) {
+               if (avail >= 4096)
+                  return stbi__errpuc("too many codes", "Corrupt GIF");
                p = &g->codes[avail++];
-               if (avail > 4096)        return stbi__errpuc("too many codes", "Corrupt GIF");
                p->prefix = (stbi__int16) oldcode;
                p->first = g->codes[oldcode].first;
                p->suffix = (code == avail) ? p->first : g->codes[code].first;
@@ -6431,12 +6443,19 @@ STBIDEF int stbi_info(char const *filename, int *x, int *y, int *comp)
 
 STBIDEF int stbi_info_from_file(FILE *f, int *x, int *y, int *comp)
 {
-   int r;
+   int r=-1;
    stbi__context s;
-   long pos = ftell(f);
-   stbi__start_file(&s, f);
-   r = stbi__info_main(&s,x,y,comp);
-   fseek(f,pos,SEEK_SET);
+   const long pos = ftell(f);
+   if (pos >= 0) {
+      int seek_result;
+      stbi__start_file(&s, f);
+      r = stbi__info_main(&s,x,y,comp);
+      seek_result = fseek(f,pos,SEEK_SET);
+      if (seek_result != 0) {
+         stbi__err("can't fseek", "fseek failed in stbi_info_from_file");
+         r = seek_result;
+      }
+   }
    return r;
 }
 #endif // !STBI_NO_STDIO
