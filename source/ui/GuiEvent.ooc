@@ -5,16 +5,20 @@ GuiEvent: abstract class {
 	init: func
 }
 
-MouseEvent: class extends GuiEvent {
+InputEvent: abstract class extends GuiEvent {
 	_position: IntPoint2D
 	position ::= this _position
 	init: func (=_position)
 }
 
-KeyboardEvent: class extends GuiEvent {
+MouseEvent: class extends InputEvent {
+	init: func (position: IntPoint2D) { super(position) }
+}
+
+KeyboardEvent: class extends InputEvent {
 	_key: Char
 	key ::= this _key
-	init: func (=_key)
+	init: func (position: IntPoint2D, =_key) { super(position) }
 }
 
 RepaintEvent: class extends GuiEvent {
