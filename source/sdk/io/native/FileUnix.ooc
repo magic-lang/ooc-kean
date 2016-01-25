@@ -196,8 +196,11 @@ version (unix || apple) {
 			if (fd == -1) return false
 			res = fstat(fd, fstatResult&)
 			if (res != 0) return false
-			if (fstatResult st_ino != lstatResult st_ino || fstatResult st_mode != lstatResult st_mode)
+			if (fstatResult st_ino != lstatResult st_ino || fstatResult st_mode != lstatResult st_mode) {
+				if(close(fd) != 0)
+					raise("fstat != lstat, close(fd) failed")
 				return false
+			}
 			mode := fstatResult st_mode
 			if (exec) {
 				mode |= (S_IXUSR | S_IXGRP | S_IXOTH)
