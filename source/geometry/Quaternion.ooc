@@ -237,9 +237,11 @@ Quaternion: cover {
 		// Rotate quaternions if the angle is close to pi to avoid singularity problem
 		centerQuaternion := quaternions[quaternions count / 2]
 		preRotate := centerQuaternion angle(This identity) equals(Float pi, 0.5f)
-		if (preRotate)
+		if (preRotate) {
+			centerQuaternionInverse := centerQuaternion inverse
 			for (index in 0 .. quaternions count)
-				quaternions[index] = centerQuaternion inverse * quaternions[index]
+				quaternions[index] = centerQuaternionInverse * quaternions[index]
+		}
 		observationVectors := This _createVectorMeasurementsForQuest(quaternions)
 		normalizedWeights := weights / weights sum
 
