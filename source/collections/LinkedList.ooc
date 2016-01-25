@@ -1,5 +1,3 @@
-import structs/List
-
 LinkedList: class <T> {
 	_head: Node<T>
 	_size := 0
