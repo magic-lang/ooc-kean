@@ -35,7 +35,7 @@ OwnedBuffer: cover {
 	free: func@ -> Bool {
 		result := this isOwned
 		if (result)
-			gc_free(this _pointer)
+			memfree(this _pointer)
 		this _pointer = null
 		this _size = 0
 		this _owner = Owner Unknown

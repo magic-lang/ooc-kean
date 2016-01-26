@@ -75,7 +75,7 @@ X11Window: class extends NativeWindow {
 		if (this _cacheSize != image size) {
 			if (this _xImage)
 				XDestroyImage(this _xImage)
-			imageData := calloc(1, image height * image stride * 4)
+			imageData := calloc(image height * image stride, 4)
 			this _xImage = XCreateImage(this display, CopyFromParent, this _displayDepth, ZPixmap, 0, imageData, image width, image height, 8, 0)
 			this _cacheSize = image size
 		}

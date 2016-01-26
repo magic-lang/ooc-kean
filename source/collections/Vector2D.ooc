@@ -28,7 +28,7 @@ Vector2D: class <T> {
 		memset(this _backend, 0, this rowCount * this columnCount * T size)
 	}
 	free: override func {
-		gc_free(this _backend)
+		memfree(this _backend)
 		super()
 	}
 	_allocate: func (rows, columns: Int) {
@@ -52,13 +52,13 @@ Vector2D: class <T> {
 			if (newRowCount > this rowCount && newColumnCount > this columnCount)
 				temporaryResult = calloc(newRowCount * newColumnCount, T size)
 			else
-				temporaryResult = calloc(1, newRowCount * newColumnCount * T size)
+				temporaryResult = calloc(newRowCount * newColumnCount, T size)
 
 			for (row in 0 .. minimumRowCount)
 				memcpy(temporaryResult[T size * this _elementPosition(row, 0, newColumnCount)]&,
 					this _backend[T size * this _elementPosition(row, 0)]&, minimumColumnCount * T size)
 
-			gc_free(this _backend)
+			memfree(this _backend)
 			this init(temporaryResult, newRowCount, newColumnCount)
 		}
 	}

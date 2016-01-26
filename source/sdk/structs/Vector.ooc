@@ -26,7 +26,7 @@ Vector: abstract class <T> {
 	}
 	free: override func {
 		if (!(this instanceOf?(StackVector)))
-			gc_free(this _backend)
+			memfree(this _backend)
 		super()
 	}
 	_free: func ~range (start, end: Int) {

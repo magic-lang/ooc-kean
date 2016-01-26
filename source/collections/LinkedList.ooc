@@ -157,7 +157,7 @@ Node: class <T> {
 	init: func ~withParams (=prev, =next, =data)
 	free: override func {
 		if (T inheritsFrom?(Object))
-			gc_free(data)
+			memfree(data)
 		super()
 	}
 }

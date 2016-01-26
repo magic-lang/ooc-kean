@@ -10,17 +10,17 @@ ArrayList: class <T> extends BackIterable<T> {
 	}
 
 	init: func ~withCapacity (=capacity) {
-		data = calloc(1, capacity * T size)
+		data = calloc(capacity, T size)
 	}
 
 	init: func ~withData (.data, =_size) {
-		this data = calloc(1, _size * T size)
+		this data = calloc(_size, T size)
 		memcpy(this data, data, _size * T size)
 		capacity = _size
 	}
 
 	free: override func {
-		gc_free(this data)
+		memfree(this data)
 		super()
 	}
 

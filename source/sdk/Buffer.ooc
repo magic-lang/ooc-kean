@@ -26,7 +26,7 @@ Buffer: cover {
 	free: func@ -> Bool {
 		result := this _pointer != null && this _size != 0
 		if (result) {
-			free(this _pointer)
+			memfree(this _pointer)
 			this _pointer = null
 			this _size = 0
 		}

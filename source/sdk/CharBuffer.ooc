@@ -26,7 +26,7 @@ CharBuffer: class extends Iterable<Char> {
 
 	free: override func {
 		if (this data != null && this capacity > 0)
-			gc_free(this mallocAddr)
+			memfree(this mallocAddr)
 		super()
 	}
 

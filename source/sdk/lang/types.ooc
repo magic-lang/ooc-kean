@@ -7,7 +7,7 @@ Object: abstract class {
 
 	free: virtual func {
 		this __destroy__()
-		free(this)
+		memfree(this)
 	}
 
 	/// Instance initializer: set default values for a new instance of this class
@@ -112,7 +112,7 @@ Closure: cover {
 	free: func@ -> Bool {
 		result := this context != null
 		if (result) {
-			gc_free(this context)
+			memfree(this context)
 			this context = null
 			this thunk = null
 		}
@@ -127,7 +127,7 @@ Cell: class <T> {
 	init: func ~noval
 
 	free: override func {
-		gc_free(this val)
+		memfree(this val)
 		super()
 	}
 

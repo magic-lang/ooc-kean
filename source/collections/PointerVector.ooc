@@ -27,7 +27,7 @@ PointerVector: abstract class {
 	}
 	free: override func {
 		this _free(0, this count)
-		gc_free(this _backend)
+		memfree(this _backend)
 		super()
 	}
 	_free: func ~range (start, end: Int) {

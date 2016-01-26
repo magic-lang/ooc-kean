@@ -6,10 +6,10 @@ Stack: class <T> {
 	isEmpty ::= this size == 0
 	top ::= this peek()
 	init: func {
-		this _data = calloc(1, this _capacity * T size)
+		this _data = calloc(this _capacity, T size)
 	}
 	free: override func {
-		gc_free(this _data)
+		memfree(this _data)
 		super()
 	}
 	push: func (element: T) {

@@ -28,7 +28,7 @@ StackFrame: cover from _StackFrame* {
 		calloc(1, _StackFrame size)
 	}
 	free: func {
-		gc_free(this as Void*)
+		memfree(this as Void*)
 	}
 }
 

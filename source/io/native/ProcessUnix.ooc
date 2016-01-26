@@ -108,7 +108,7 @@ ProcessUnix: class extends Process {
 				chdir(cwd as CString)
 
 			/* run the stuff. */
-			cArgs : CString * = calloc(1, Pointer size * (args count + 1))
+			cArgs : CString * = calloc(args count + 1, Pointer size)
 			for (i in 0 .. args count) {
 				cArgs[i] = args[i] toCString()
 			}

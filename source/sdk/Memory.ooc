@@ -11,8 +11,7 @@ memset: extern func (Pointer, Int, SizeT) -> Pointer
 memcmp: extern func (Pointer, Pointer, SizeT) -> Int
 memmove: extern func (Pointer, Pointer, SizeT)
 memcpy: extern func (Pointer, Pointer, SizeT)
-free: extern func (Pointer)
-gc_free: extern (free) func (Pointer)
+memfree: extern (free) func (Pointer)
 alloca: extern func (SizeT) -> Pointer
 
 // note: sizeof is intentionally not here. sizeof(Int) will be translated

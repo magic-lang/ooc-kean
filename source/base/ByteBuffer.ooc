@@ -38,7 +38,7 @@ ByteBuffer: class {
 			this _referenceCount free()
 		this _referenceCount = null
 		if (this _ownsMemory)
-			gc_free(this _pointer)
+			memfree(this _pointer)
 		this _pointer = null
 		super()
 	}

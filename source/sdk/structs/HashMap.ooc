@@ -33,12 +33,12 @@ HashEntry: cover {
 
 	init: func@ ~keyVal (=key, =value)
 	free: func {
-		free(this key)
-		free(this value)
+		memfree(this key)
+		memfree(this value)
 		if (this next != null) {
 			temp := this next@
 			temp free()
-			free(this next)
+			memfree(this next)
 		}
 	}
 }
@@ -304,8 +304,8 @@ HashMap: class <K, V> extends BackIterable<V> {
 		if (entry@ key != null) {
 			while (true) {
 				if (keyEquals(entry@ key as K, key)) {
-					free(entry@ key)
-					free(entry@ value)
+					memfree(entry@ key)
+					memfree(entry@ value)
 
 					if (prev)
 						prev@ next = entry@ next // re-connect the previous to the next one
