@@ -1,6 +1,6 @@
-use ooc-base
-use ooc-concurrent
-use ooc-unit
+use base
+use concurrent
+use unit
 import threading/Thread
 
 SynchronizedListTest: class extends Fixture {
@@ -25,9 +25,8 @@ SynchronizedListTest: class extends Fixture {
 				expect(lastValue, is equal to(removedValue))
 			}
 			expect(list count, is equal to(800))
-			for (value in 1 .. 800) {
+			for (value in 1 .. 800)
 				list removeAt(list count - 1)
-			}
 			expect(list count, is equal to(1))
 			list free()
 		})
@@ -46,36 +45,32 @@ SynchronizedListTest: class extends Fixture {
 			list := SynchronizedList<Int> new()
 			list add(0) . add(2) . add(4) . add(6) . add(8)
 			list insert(1, 1) . insert(3, 3) . insert(5, 5) . insert(7, 7) . insert(9, 9)
-			for (value in 0 .. 10) {
+			for (value in 0 .. 10)
 				expect(list[value], is equal to(value))
-			}
 			expect(list count, is equal to(10))
 			list free()
 		})
 		this add("single thread - removeAt", func {
 			list := SynchronizedList<Int> new()
 			list add(0) . add(1) . add(2) . add(3) . add(4)
-			for (value in 0 .. 5) {
+			for (value in 0 .. 5)
 				expect(list[value], is equal to(value))
-			}
 			expect(list count, is equal to(5))
 			list free()
 		})
 		this add("Multi thread - clear", func {
 			list := SynchronizedList<Int> new()
 			expect(list count, is equal to(0))
-			for (value in 0 .. 1000) {
+			for (value in 0 .. 1000)
 				list add(value)
-			}
 			list clear()
 			expect(list count, is equal to(0))
 			list free()
 		})
 		this add("single thread - reverse", func {
 			list := SynchronizedList<Int> new()
-			for (value in 0 .. 1000) {
+			for (value in 0 .. 1000)
 				list add(value)
-			}
 			reversedList := list reverse()
 			for (value in 0 .. 1000) {
 				expect(list[value], is equal to(value))
@@ -89,9 +84,8 @@ SynchronizedListTest: class extends Fixture {
 			list := SynchronizedList<Int> new()
 			list add(Int minimumValue) . add(Int maximumValue) . add(0) . add(-10) . add(10)
 			list sort(|first, second| first < second)
-			for (value in 0 .. list count - 1) {
+			for (value in 0 .. list count - 1)
 				expect(list[value], is greater than(list[value + 1]))
-			}
 			list free()
 		})
 		this add("single thread - copy", func {
@@ -99,11 +93,11 @@ SynchronizedListTest: class extends Fixture {
 			list add(-5) . add(-4) . add(-3) . add(-2) . add(-1)
 			copiedList := list copy()
 			for (value in 0 .. list count) {
-				expect(list[value] == copiedList[value])
+				expect(list[value], is equal to (copiedList[value]))
 				incrementValue := copiedList[value]
 				incrementValue += 1
 				copiedList[value] = incrementValue
-				expect(list[value] == copiedList[value] - 1)
+				expect(list[value], is equal to(copiedList[value] - 1))
 			}
 			list free()
 			copiedList free()
@@ -112,9 +106,8 @@ SynchronizedListTest: class extends Fixture {
 			list := SynchronizedList<Int> new()
 			list add(-5) . add(-4) . add(-3) . add(-2) . add(-1)
 			list modify(|value| value += 5)
-			for (value in 0 .. list count) {
-				expect(list[value] == value)
-			}
+			for (value in 0 .. list count)
+				expect(list[value], is equal to(value))
 			list free()
 		})
 		this add("single thread - apply", func {
@@ -145,9 +138,9 @@ SynchronizedListTest: class extends Fixture {
 			list := SynchronizedList<Int> new()
 			list add(-5) . add(-4) . add(-3) . add(-2) . add(-1)
 			result := list getFirstElements(2)
-			expect(result count == 2)
-			expect(result[0] == list[0])
-			expect(result[1] == list[1])
+			expect(result count, is equal to(2))
+			expect(result[0], is equal to(list[0]))
+			expect(result[1], is equal to(list[1]))
 			list free()
 			result free()
 		})
@@ -156,9 +149,9 @@ SynchronizedListTest: class extends Fixture {
 			list add(-5) . add(-4) . add(-3) . add(-2) . add(-1)
 			indicesList := SynchronizedList<Int> new() . add(2) . add(4)
 			result := list getElements(indicesList)
-			expect(result count == 2)
-			expect(result[0] == list[2])
-			expect(result[1] == list[4])
+			expect(result count, is equal to(2))
+			expect(result[0], is equal to(list[2]))
+			expect(result[1], is equal to(list[4]))
 			list free()
 			result free()
 		})
@@ -166,16 +159,16 @@ SynchronizedListTest: class extends Fixture {
 			list := SynchronizedList<Int> new()
 			list add(-5) . add(-4) . add(-3) . add(-2) . add(-1)
 			result := list getSlice(1 .. 3)
-			expect(result count == 3)
-			expect(result[0] == list[1])
-			expect(result[1] == list[2])
-			expect(result[2] == list[3])
+			expect(result count, is equal to(3))
+			expect(result[0], is equal to(list[1]))
+			expect(result[1], is equal to(list[2]))
+			expect(result[2], is equal to(list[3]))
 			result clear()
 			result = list getSlice(1, 3)
-			expect(result count == 3)
-			expect(result[0] == list[1])
-			expect(result[1] == list[2])
-			expect(result[2] == list[3])
+			expect(result count, is equal to(3))
+			expect(result[0], is equal to(list[1]))
+			expect(result[1], is equal to(list[2]))
+			expect(result[2], is equal to(list[3]))
 			list free()
 			result free()
 		})
@@ -194,8 +187,8 @@ SynchronizedListTest: class extends Fixture {
 			list add(-5) . add(-4) . add(-3) . add(-2) . add(-1)
 			oldValue := list[0]
 			list[0] = -6
-			expect(oldValue == -5)
-			expect(list[0] == -6)
+			expect(oldValue, is equal to(-5))
+			expect(list[0], is equal to(-6))
 			list free()
 		})
 		this add("single thread (class)", func {
@@ -208,7 +201,7 @@ SynchronizedListTest: class extends Fixture {
 			}
 			for (value in 0 .. count) {
 				resultValue := list remove()
-				expect(resultValue get() , is equal to (count - value - 1))
+				expect(resultValue get(), is equal to (count - value - 1))
 				resultValue free()
 			}
 			list free()
@@ -239,46 +232,33 @@ SynchronizedListTest: class extends Fixture {
 			for (i in 0 .. countPerThread)
 				list add(i)
 		}
-		for (i in 0 .. numberOfThreads) {
-			threads[i] = Thread new(job)
-			threads[i] start()
-		}
-		for (i in 0 .. numberOfThreads) {
-			threads[i] wait()
-			threads[i] free()
-		}
+		for (i in 0 .. numberOfThreads)
+			threads[i] = Thread new(job) . start()
+		for (i in 0 .. numberOfThreads)
+			threads[i] wait() . free()
 		expect(list count, is equal to(numberOfThreads * countPerThread))
 		(job as Closure) free()
 		job = func {
 			for (i in 0 .. countPerThread) {
 				value := list remove(0)
-				expect(value >= 0 && value < countPerThread)
+				expect(value, is greater than(-1))
+				expect(value, is less than(countPerThread))
 			}
 		}
-		for (i in 0 .. numberOfThreads) {
-			threads[i] = Thread new(job)
-			threads[i] start()
-		}
-		for (i in 0 .. numberOfThreads) {
-			threads[i] wait()
-			threads[i] free()
-		}
+		for (i in 0 .. numberOfThreads)
+			threads[i] = Thread new(job) . start()
+		for (i in 0 .. numberOfThreads)
+			threads[i] wait() . free()
 		expect(list count, is equal to(0))
 		(job as Closure) free()
 		job = func {
-			for (i in 0 .. countPerThread) {
-				list add(i)
-				list remove(0)
-			}
+			for (i in 0 .. countPerThread)
+				list add(i) . remove(0)
 		}
-		for (i in 0 .. numberOfThreads) {
-			threads[i] = Thread new(job)
-			threads[i] start()
-		}
-		for (i in 0 .. numberOfThreads) {
-			threads[i] wait()
-			threads[i] free()
-		}
+		for (i in 0 .. numberOfThreads)
+			threads[i] = Thread new(job) . start()
+		for (i in 0 .. numberOfThreads)
+			threads[i] wait() . free()
 		expect(list count, is equal to(0))
 		threads free()
 		list free()
@@ -292,32 +272,24 @@ SynchronizedListTest: class extends Fixture {
 			for (i in 0 .. countPerThread)
 				list add(Cell<Int> new(i))
 		}
-		for (i in 0 .. numberOfThreads) {
-			threads[i] = Thread new(job)
-			threads[i] start()
-		}
-		for (i in 0 .. numberOfThreads) {
-			threads[i] wait()
-			threads[i] free()
-		}
+		for (i in 0 .. numberOfThreads)
+			threads[i] = Thread new(job) . start()
+		for (i in 0 .. numberOfThreads)
+			threads[i] wait() . free()
 		expect(list count, is equal to(numberOfThreads * countPerThread))
 		(job as Closure) free()
 		job = func {
 			for (i in 0 .. countPerThread) {
-				value: Cell<Int>
-				value = list remove(0)
-				expect(value get() >= 0 && value get() < countPerThread)
+				value := list remove(0)
+				expect(value get(), is greater than(-1))
+				expect(value get(), is less than(countPerThread))
 				value free()
 			}
 		}
-		for (i in 0 .. numberOfThreads) {
-			threads[i] = Thread new(job)
-			threads[i] start()
-		}
-		for (i in 0 .. numberOfThreads) {
-			threads[i] wait()
-			threads[i] free()
-		}
+		for (i in 0 .. numberOfThreads)
+			threads[i] = Thread new(job) . start()
+		for (i in 0 .. numberOfThreads)
+			threads[i] wait() . free()
 		expect(list count, is equal to(0))
 		(job as Closure) free()
 		threads free()

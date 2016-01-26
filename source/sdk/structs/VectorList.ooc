@@ -15,9 +15,9 @@
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import structs/[Vector, _List]
+import structs/[Vector, List]
 
-VectorList: class <T> extends _List<T>{
+VectorList: class <T> extends List<T>{
 	_vector: Vector<T>
 	pointer ::= this _vector _backend as Pointer
 	init: func ~default {

@@ -1,7 +1,6 @@
-import structs/[VectorList, _List]
 import threading/Mutex
 
-SynchronizedList: class <T> extends _List<T> {
+SynchronizedList: class <T> extends List<T> {
 	_mutex := Mutex new()
 	_backend : VectorList<T>
 	count ::= this _backend count
@@ -52,9 +51,7 @@ SynchronizedList: class <T> extends _List<T> {
 		this _mutex unlock()
 	}
 	clear: override func {
-		this _mutex lock()
-		this _backend clear()
-		this _mutex unlock()
+		this _mutex with(|| this _backend clear())
 	}
 	reverse: override func -> This<T> {
 		this _mutex lock()
