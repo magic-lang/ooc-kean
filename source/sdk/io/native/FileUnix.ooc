@@ -195,7 +195,11 @@ version (unix || apple) {
 			fd := open(path as CString, READWRITE)
 			if (fd == -1) return false
 			res = fstat(fd, fstatResult&)
-			if (res != 0) return false
+			if (res != 0) {
+				if(close(fd) != 0)
+					raise("fstat failed, close(fd) failed")
+				return false
+			}
 			if (fstatResult st_ino != lstatResult st_ino || fstatResult st_mode != lstatResult st_mode) {
 				if(close(fd) != 0)
 					raise("fstat != lstat, close(fd) failed")
