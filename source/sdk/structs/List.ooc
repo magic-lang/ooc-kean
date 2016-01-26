@@ -1,4 +1,4 @@
-_List: abstract class <T> {
+List: abstract class <T> {
 	_count := 0
 	count ::= this _count
 	empty ::= this _count == 0
