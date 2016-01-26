@@ -63,7 +63,8 @@ CharBuffer: class extends Iterable<Char> {
 			// if we were coming from a string literal, copy the original data as well (gc_realloc cant work on text segment)
 			if (size > 0 && mallocAddr == null) {
 				rs = 0
-				memcpy(tmp, data, size)
+				if (tmp != null && data != null)
+					memcpy(tmp, data, size)
 			}
 
 			mallocAddr = tmp
@@ -71,7 +72,8 @@ CharBuffer: class extends Iterable<Char> {
 			if (rs) shiftRight(rs)
 		}
 		// just to be sure to be always zero terminated
-		data[newCapacity] = '\0'
+		if (data)
+			data[newCapacity] = '\0'
 	}
 
 	/** sets capacity and size flag, and a zero termination */
