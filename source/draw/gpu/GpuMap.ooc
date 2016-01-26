@@ -16,6 +16,7 @@
 use geometry
 use base
 use collections
+import Map
 
 _MapEntry: class {
 	key: String
@@ -61,12 +62,8 @@ _Map: class {
 	}
 }
 version(!gpuOff) {
-GpuMap: abstract class {
+GpuMap: abstract class extends Map {
 	_bindings := _Map new()
-	model: FloatTransform3D { get set }
-	view: FloatTransform3D { get set }
-	projection: FloatTransform3D { get set }
-	textureTransform: FloatTransform3D { get set }
 	init: func {
 		this model = FloatTransform3D identity
 		this view = FloatTransform3D identity
