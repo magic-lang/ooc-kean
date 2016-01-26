@@ -17,6 +17,7 @@
 use base
 use collections
 use math
+import IntVector2D
 import FloatVector2D
 import FloatVector3D
 import FloatPoint2D
@@ -251,5 +252,21 @@ FloatTransform3D: cover {
 	createReflectionZ: static func -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f) }
 	createProjection: static func (focalLength: Float) -> This {
 		This new(focalLength, 0, 0, 0, 0, focalLength, 0, 0, 0, 0, focalLength, 1.0f, 0, 0, 0, 0)
+	}
+	referenceToNormalized: func ~float (imageSize: FloatVector2D) -> This {
+		toReference := This createScaling(imageSize x / 2.0f, imageSize y / 2.0f, 1.0f)
+		toNormalized := This createScaling(2.0f / imageSize x, 2.0f / imageSize y, 1.0f)
+		toNormalized * this * toReference
+	}
+	referenceToNormalized: func ~int (imageSize: IntVector2D) -> This {
+		this referenceToNormalized(imageSize toFloatVector2D())
+	}
+	normalizedToReference: func ~float (imageSize: FloatVector2D) -> This {
+		toReference := This createScaling(imageSize x / 2.0f, imageSize y / 2.0f, 1.0f)
+		toNormalized := This createScaling(2.0f / imageSize x, 2.0f / imageSize y, 1.0f)
+		toReference * this * toNormalized
+	}
+	normalizedToReference: func ~int (imageSize: IntVector2D) -> This {
+		this normalizedToReference(imageSize toFloatVector2D())
 	}
 }
