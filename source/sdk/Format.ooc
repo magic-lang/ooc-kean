@@ -64,15 +64,15 @@ m_printn: func <T> (res: CharBuffer, info: FSInfoStruct@, arg: T) {
 	size := info fieldwidth
 	i := 0
 
-	n: UInt64
-	signed_n: Int64
+	n: ULong
+	signed_n: Long
 
 	if (T size == 4) {
-		n = arg as UInt32
-		signed_n = arg as Int32
+		n = arg as UInt
+		signed_n = arg as Int
 	} else {
-		n = arg as UInt64
-		signed_n = arg as Int64
+		n = arg as ULong
+		signed_n = arg as Long
 	}
 
 	/* Preprocess the flags. */

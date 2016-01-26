@@ -142,9 +142,9 @@ EqualModifier: class extends Modifier {
 		f := func (value, c: Object) -> Bool { value as Cell<UInt> get() == c as Cell<UInt> get() }
 		CompareConstraint new(this, Cell<UInt> new(correct), f, ComparisonType Equal)
 	}
-	to: func ~uint8 (correct: UInt8) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<UInt8> get() == c as Cell<UInt8> get() }
-		CompareConstraint new(this, Cell<UInt8> new(correct), f, ComparisonType Equal)
+	to: func ~uint8 (correct: Byte) -> CompareConstraint {
+		f := func (value, c: Object) -> Bool { value as Cell<Byte> get() == c as Cell<Byte> get() }
+		CompareConstraint new(this, Cell<Byte> new(correct), f, ComparisonType Equal)
 	}
 	to: func ~long (correct: Long) -> CompareConstraint {
 		f := func (value, c: Object) -> Bool { value as Cell<Long> get() == c as Cell<Long> get() }
@@ -166,13 +166,13 @@ EqualModifier: class extends Modifier {
 		f := func (value, c: Object) -> Bool { value as Cell<LDouble> get() == c as Cell<LDouble> get() }
 		CompareWithinConstraint new(this, Cell<LDouble> new(correct), f)
 	}
-	to: func ~int64 (correct: Int64) -> CompareWithinConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Int64> get() == c as Cell<Int64> get() }
-		CompareWithinConstraint new(this, Cell<Int64> new(correct), f)
+	to: func ~int64 (correct: Long) -> CompareWithinConstraint {
+		f := func (value, c: Object) -> Bool { value as Cell<Long> get() == c as Cell<Long> get() }
+		CompareWithinConstraint new(this, Cell<Long> new(correct), f)
 	}
-	to: func ~uint64 (correct: UInt64) -> CompareWithinConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<UInt64> get() == c as Cell<UInt64> get() }
-		CompareWithinConstraint new(this, Cell<UInt64> new(correct), f)
+	to: func ~uint64 (correct: ULong) -> CompareWithinConstraint {
+		f := func (value, c: Object) -> Bool { value as Cell<ULong> get() == c as Cell<ULong> get() }
+		CompareWithinConstraint new(this, Cell<ULong> new(correct), f)
 	}
 }
 
@@ -211,13 +211,13 @@ LessModifier: class extends Modifier {
 		f := func (value, c: Object) -> Bool { (value as Cell<ULong> get()) < (c as Cell<ULong> get()) }
 		CompareConstraint new(this, Cell<ULong> new(right), f, ComparisonType LessThan)
 	}
-	than: func ~int64 (right: Int64) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Int64> get()) < (c as Cell<Int64> get()) }
-		CompareConstraint new(this, Cell<Int64> new(right), f, ComparisonType LessThan)
+	than: func ~int64 (right: Long) -> CompareConstraint {
+		f := func (value, c: Object) -> Bool { (value as Cell<Long> get()) < (c as Cell<Long> get()) }
+		CompareConstraint new(this, Cell<Long> new(right), f, ComparisonType LessThan)
 	}
-	than: func ~uint64 (right: UInt64) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<UInt64> get()) < (c as Cell<UInt64> get()) }
-		CompareConstraint new(this, Cell<UInt64> new(right), f, ComparisonType LessThan)
+	than: func ~uint64 (right: ULong) -> CompareConstraint {
+		f := func (value, c: Object) -> Bool { (value as Cell<ULong> get()) < (c as Cell<ULong> get()) }
+		CompareConstraint new(this, Cell<ULong> new(right), f, ComparisonType LessThan)
 	}
 }
 
@@ -256,13 +256,13 @@ GreaterModifier: class extends Modifier {
 		f := func (value, c: Object) -> Bool { (value as Cell<ULong> get()) > (c as Cell<ULong> get()) }
 		CompareConstraint new(this, Cell<ULong> new(right), f, ComparisonType GreaterThan)
 	}
-	than: func ~int64 (right: Int64) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Int64> get()) > (c as Cell<Int64> get()) }
-		CompareConstraint new(this, Cell<Int64> new(right), f, ComparisonType LessThan)
+	than: func ~int64 (right: Long) -> CompareConstraint {
+		f := func (value, c: Object) -> Bool { (value as Cell<Long> get()) > (c as Cell<Long> get()) }
+		CompareConstraint new(this, Cell<Long> new(right), f, ComparisonType LessThan)
 	}
-	than: func ~uint64 (right: UInt64) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<UInt64> get()) > (c as Cell<UInt64> get()) }
-		CompareConstraint new(this, Cell<UInt64> new(right), f, ComparisonType LessThan)
+	than: func ~uint64 (right: ULong) -> CompareConstraint {
+		f := func (value, c: Object) -> Bool { (value as Cell<ULong> get()) > (c as Cell<ULong> get()) }
+		CompareConstraint new(this, Cell<ULong> new(right), f, ComparisonType LessThan)
 	}
 }
 

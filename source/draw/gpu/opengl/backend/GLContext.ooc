@@ -35,7 +35,7 @@ GLContext: abstract class {
 	createQuad: abstract func -> GLQuad
 	createShaderProgram: abstract func (vertexSource, fragmentSource: String) -> GLShaderProgram
 	createTexture: abstract func (type: TextureType, size: IntVector2D, stride: UInt, pixels := null, allocate : Bool = true) -> GLTexture
-	createVolumeTexture: abstract func (size: IntVector3D, pixels: UInt8*) -> GLVolumeTexture
+	createVolumeTexture: abstract func (size: IntVector3D, pixels: Byte*) -> GLVolumeTexture
 	createRenderer: abstract func -> GLRenderer
 	createVertexArrayObject: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GLVertexArrayObject
 	createContext: static func ~shared (display: Pointer, nativeBackend: Long, sharedContext: This = null) -> This {

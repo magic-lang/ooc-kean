@@ -103,13 +103,13 @@ File: abstract class {
 	}
 	// Create a named pipe at the path specified by this file
 	mkfifo: func -> Int { this mkfifo(0c755) }
-	mkfifo: abstract func ~withMode (mode: Int32) -> Int
+	mkfifo: abstract func ~withMode (mode: Int) -> Int
 	// Create a directory at the path specified by this file,
 	mkdir: func -> Int { this mkdir(0c755) }
-	mkdir: abstract func ~withMode (mode: Int32) -> Int
+	mkdir: abstract func ~withMode (mode: Int) -> Int
 	// Create a directory at the path specified by this file and all the parent directories if needed
 	mkdirs: func { this mkdirs(0c755) }
-	mkdirs: func ~withMode (mode: Int32) -> Int {
+	mkdirs: func ~withMode (mode: Int) -> Int {
 		p := this parent
 		if (p) {
 			p mkdirs(mode)

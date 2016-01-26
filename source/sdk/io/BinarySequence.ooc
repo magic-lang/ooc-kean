@@ -10,26 +10,26 @@ BinarySequenceWriter: class {
 	endianness := ENDIANNESS
 
 	init: func (=writer)
-	_pushByte: func (byte: Octet) {
+	_pushByte: func (byte: SByte) {
 		writer write(byte as Char)
 	}
 	pushValue: func <T> (value: T) {
 		size := T size
 		if (endianness != ENDIANNESS)
 			value = This reverseBytes(value)
-		array := value& as Octet*
+		array := value& as SByte*
 		for (i in 0 .. size)
 			_pushByte(array[i])
 	}
 
-	s8: func (value: Int8) { pushValue(value) }
-	s16: func (value: Int16) { pushValue(value) }
-	s32: func (value: Int32) { pushValue(value) }
-	s64: func (value: Int64) { pushValue(value) }
-	u8: func (value: UInt8) { pushValue(value) }
-	u16: func (value: UInt16) { pushValue(value) }
-	u32: func (value: UInt32) { pushValue(value) }
-	u64: func (value: UInt64) { pushValue(value) }
+	s8: func (value: SByte) { pushValue(value) }
+	s16: func (value: Short) { pushValue(value) }
+	s32: func (value: Int) { pushValue(value) }
+	s64: func (value: Long) { pushValue(value) }
+	u8: func (value: Byte) { pushValue(value) }
+	u16: func (value: UShort) { pushValue(value) }
+	u32: func (value: UInt) { pushValue(value) }
+	u64: func (value: ULong) { pushValue(value) }
 	pad: func (bytes: SizeT) { for (_ in 0 .. bytes) s8(0) }
 	float32: func (value: Float) { pushValue(value) }
 	float64: func (value: Double) { pushValue(value) }
@@ -37,7 +37,7 @@ BinarySequenceWriter: class {
 	/** push it, null-terminated. */
 	cString: func (value: String) {
 		for (chr in value)
-			u8(chr as UInt8)
+			u8(chr as Byte)
 		s8(0)
 	}
 	pascalString: func (value: String, lengthBytes: SizeT) {
@@ -49,21 +49,21 @@ BinarySequenceWriter: class {
 			case 4 => u64(length)
 		}
 		for (chr in value)
-			u8(chr as UInt8)
+			u8(chr as Byte)
 	}
-	bytes: func (value: Octet*, length: SizeT) {
+	bytes: func (value: SByte*, length: SizeT) {
 		for (i in 0 .. length)
-			u8(value[i] as UInt8)
+			u8(value[i] as Byte)
 	}
 	bytes: func ~string (value: String) {
 		for (i in 0 .. value length())
-			u8(value[i] as UInt8)
+			u8(value[i] as Byte)
 	}
 	reverseBytes: static func <T> (value: T) -> T {
-		array := value& as Octet*
+		array := value& as SByte*
 		size := T size
 		reversed: T
-		reversedArray := reversed& as Octet*
+		reversedArray := reversed& as SByte*
 		for (i in 0 .. size)
 			reversedArray[size - i - 1] = array[i]
 		reversed
@@ -82,22 +82,22 @@ BinarySequenceReader: class {
 		size := T size
 		bytesRead += size
 		value: T
-		array := value& as Octet*
+		array := value& as SByte*
 		for (i in 0 .. size)
-			array[i] = reader read() as Octet
+			array[i] = reader read() as SByte
 		if (endianness != ENDIANNESS)
 			value = reverseBytes(value)
 		value
 	}
-	s8: func -> Int8 { pullValue(Int8) }
-	s16: func -> Int16 { pullValue(Int16) }
-	s32: func -> Int32 { pullValue(Int32) }
-	s64: func -> Int64 { pullValue(Int64) }
-	u8: func -> UInt8 { pullValue(UInt8) }
-	u16: func -> UInt16 { pullValue(UInt16) }
-	u32: func -> UInt32 { pullValue(UInt32) }
-	u64: func -> UInt64 { pullValue(UInt64) }
-	skip: func (bytes: UInt32) {
+	s8: func -> SByte { pullValue(SByte) }
+	s16: func -> Short { pullValue(Short) }
+	s32: func -> Int { pullValue(Int) }
+	s64: func -> Long { pullValue(Long) }
+	u8: func -> Byte { pullValue(Byte) }
+	u16: func -> UShort { pullValue(UShort) }
+	u32: func -> UInt { pullValue(UInt) }
+	u64: func -> ULong { pullValue(ULong) }
+	skip: func (bytes: UInt) {
 		for (_ in 0 .. bytes)
 			reader read()
 	}
@@ -127,14 +127,14 @@ BinarySequenceReader: class {
 		}
 		String new(s)
 	}
-	bytes: func (length: SizeT) -> Octet* {
-		value := gc_malloc(length * Octet size) as Octet*
+	bytes: func (length: SizeT) -> SByte* {
+		value := gc_malloc(length * SByte size) as SByte*
 		for (i in 0 .. length)
-			value[i] = u8() as Octet
+			value[i] = u8() as SByte
 		value
 	}
 }
 
 // calculate endianness
-_i := 0x10f as UInt16
-ENDIANNESS := (_i& as UInt8*)[0] == 0x0f ? _Endianness little : _Endianness big
+_i := 0x10f as UShort
+ENDIANNESS := (_i& as Byte*)[0] == 0x0f ? _Endianness little : _Endianness big

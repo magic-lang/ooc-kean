@@ -37,11 +37,11 @@ InAddr: cover from struct in_addr {
 }
 
 SockAddrIn6: cover from struct sockaddr_in6 {
-	sin6_family: extern UInt16
-	sin6_port: extern UInt16
-	sin6_flowinfo: extern UInt32
+	sin6_family: extern UShort
+	sin6_port: extern UShort
+	sin6_flowinfo: extern UInt
 	sin6_addr: extern In6Addr
-	sin6_scope_id: extern UInt32
+	sin6_scope_id: extern UInt
 }
 
 In6Addr: cover from struct in6_addr {
@@ -133,16 +133,16 @@ select: extern func (numfds: Int, readfds: FdSet*, writefds: FdSet*, exceptfds: 
 getsockopt: extern func (s: Int, level: Int, optname: Int, optval: Pointer, optlen: UInt) -> Int
 setsockopt: extern func (s: Int, level: Int, optname: Int, optval: Pointer, optlen: UInt) -> Int
 getaddrinfo: extern func (domain_name_or_ip: CString, service_name_or_port: CString, hints: AddrInfo*, service_information: AddrInfo**) -> Int
-getnameinfo: extern func (serviceInformation: SockAddr*, serviceInformationLength: UInt32, hostName: CString, hostNameLength: SizeT, serviceName: CString, serviceNameLength: UInt32, flags: Int) -> Int
+getnameinfo: extern func (serviceInformation: SockAddr*, serviceInformationLength: UInt, hostName: CString, hostNameLength: SizeT, serviceName: CString, serviceNameLength: UInt, flags: Int) -> Int
 freeaddrinfo: extern func (serviceInformation: AddrInfo*)
 gai_strerror: extern func (errorCode: Int) -> const Char*
 gethostbyname: extern func (domainName: CString) -> HostEntry*
 gethostbyaddr: extern func (pointerToAddress: CString, addressLength: Int, type: Int) -> HostEntry*
 getpeername: extern func (descriptor: Int, address: SockAddr*, len: UInt) -> Int
-htonl: extern func (hostlong: UInt32) -> UInt32
-htons: extern func (hostshort: UInt16) -> UInt16
-ntohl: extern func (netlong: UInt32) -> UInt32
-ntohs: extern func (netshort: UInt16) -> UInt16
+htonl: extern func (hostlong: UInt) -> UInt
+htons: extern func (hostshort: UShort) -> UShort
+ntohl: extern func (netlong: UInt) -> UInt
+ntohs: extern func (netshort: UShort) -> UShort
 fcntl: extern func (descriptor, command, argument: Int) -> Int
 
 // getnameinfo constants

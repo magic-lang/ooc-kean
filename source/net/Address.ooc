@@ -242,7 +242,7 @@ IP6Address: class extends IPAddress {
 		memcpy(ai&, addr&, In6Addr size)
 	}
 
-	toWords: func -> UInt16* { ai& as UInt16* }
+	toWords: func -> UShort* { ai& as UShort* }
 
 	broadcast: func -> Bool { false }
 	wildcard: func -> Bool {
@@ -344,7 +344,7 @@ SocketAddress: abstract class {
 	port: abstract func -> Int
 
 	addr: abstract func -> SockAddr*
-	length: abstract func -> UInt32
+	length: abstract func -> UInt
 
 	toString: func -> String {
 		"[%s]:%d" format(host() toString() toCString(), port())
@@ -399,7 +399,7 @@ SocketAddressIP4: class extends SocketAddress {
 	port: func -> Int { ntohs(sa sin_port) }
 
 	addr: func -> SockAddr* { (sa&) as SockAddr* }
-	length: func -> UInt32 { SockAddrIn size }
+	length: func -> UInt { SockAddrIn size }
 }
 
 SocketAddressIP6: class extends SocketAddress {
@@ -420,5 +420,5 @@ SocketAddressIP6: class extends SocketAddress {
 	port: func -> Int { ntohs(sa sin6_port) }
 
 	addr: func -> SockAddr* { (sa&) as SockAddr* }
-	length: func -> UInt32 { SockAddrIn6 size }
+	length: func -> UInt { SockAddrIn6 size }
 }

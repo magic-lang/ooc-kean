@@ -18,7 +18,7 @@ extend Short {
 	maximumValue ::= static SHRT_MAX
 }
 
-extend Int64 {
+extend Long {
 	modulo: func (divisor: This) -> This {
 		result := this - (this / divisor) * divisor
 		result < 0 ? result + divisor : result
@@ -26,7 +26,7 @@ extend Int64 {
 	maximum: func (other: This) -> This { this > other ? this : other }
 	minimum: func (other: This) -> This { this < other ? this : other }
 }
-extend UInt64 {
+extend ULong {
 	maximum: func (other: This) -> This { this > other ? this : other }
 	minimum: func (other: This) -> This { this < other ? this : other }
 }

@@ -61,7 +61,7 @@ VectorQueue: class <T> extends Queue<T> {
 		moveCount := oldCapacity - this _head
 		bytes := newCapacity * T size
 		this _backend = gc_realloc(this _backend, bytes)
-		sourcePtr: UInt8* = this _backend as UInt8* + (this _head * T size)
+		sourcePtr: Byte* = this _backend as Byte* + (this _head * T size)
 		destinationPtr := sourcePtr + (this _chunkCount * T size)
 		memmove(destinationPtr, sourcePtr, moveCount * T size)
 		this _head += this _chunkCount

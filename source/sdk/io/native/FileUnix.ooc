@@ -320,11 +320,11 @@ version (unix || apple) {
 			_getChildren (File)
 		}
 
-		mkdir: override func ~withMode (mode: Int32) -> Int {
+		mkdir: override func ~withMode (mode: Int) -> Int {
 			_mkdir(path as CString, mode as ModeT)
 		}
 
-		mkfifo: override func ~withMode (mode: Int32) -> Int {
+		mkfifo: override func ~withMode (mode: Int) -> Int {
 			_mkfifo(path as CString, mode as ModeT)
 		}
 

@@ -157,7 +157,7 @@ RasterMonochrome: class extends RasterPacked {
 		}
 	}
 
-	getValue: func (x, y: Int) -> UInt8 {
+	getValue: func (x, y: Int) -> Byte {
 		version(safe) {
 			if (x >= this size x || y >= this size y || x < 0 || y < 0)
 				raise("Accessing RasterMonochrome index out of range in getValue")
@@ -212,7 +212,7 @@ RasterMonochrome: class extends RasterPacked {
 		x, y, imageComponents: Int
 		requiredComponents := 1
 		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
-		buffer := ByteBuffer new(data as UInt8*, x * y * requiredComponents, true)
+		buffer := ByteBuffer new(data as Byte*, x * y * requiredComponents, true)
 		This new(buffer, IntVector2D new(x, y))
 	}
 	convertFrom: static func (original: RasterImage) -> This {

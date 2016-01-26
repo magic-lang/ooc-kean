@@ -18,29 +18,29 @@
 use base
 
 TimeSpan: cover {
-	_ticks: Int64 = 0
+	_ticks: Long = 0
 	ticks ::= this _ticks
 	init: func@ (=_ticks)
 	init: func@ ~fromHourMinuteSec (hour, minute, second, millisecond: Int) {
 		this _ticks = DateTime timeToTicks(hour, minute, second, millisecond)
 	}
 	negate: func -> This { This new(-1 * this ticks) }
-	elapsedMilliseconds: func -> Int64 {
+	elapsedMilliseconds: func -> Long {
 		this ticks / DateTime ticksPerMillisecond
 	}
-	elapsedSeconds: func -> Int64 {
+	elapsedSeconds: func -> Long {
 		this ticks / DateTime ticksPerSecond
 	}
-	elapsedMinutes: func -> Int64 {
+	elapsedMinutes: func -> Long {
 		this ticks / DateTime ticksPerMinute
 	}
-	elapsedHours: func -> Int64 {
+	elapsedHours: func -> Long {
 		this ticks / DateTime ticksPerHour
 	}
-	elapsedDays: func -> Int64 {
+	elapsedDays: func -> Long {
 		this ticks / DateTime ticksPerDay
 	}
-	elapsedWeeks: func -> Int64 {
+	elapsedWeeks: func -> Long {
 		this ticks / DateTime ticksPerWeek
 	}
 	defaultFormat: static const Text = t"%w weeks, %d days, %h hours, %m minutes, %s seconds, %z milliseconds"
@@ -91,23 +91,23 @@ TimeSpan: cover {
 	operator - (value: Int) -> This { This new(this ticks - value) }
 	operator * (value: Int) -> This { This new(this ticks * value) }
 	operator / (value: Int) -> This { This new(this ticks / value) }
-	operator + (value: Int64) -> This { This new(this ticks + value) }
-	operator - (value: Int64) -> This { This new(this ticks - value) }
-	operator * (value: Int64) -> This { This new(this ticks * value) }
-	operator / (value: Int64) -> This { This new(this ticks / value) }
+	operator + (value: Long) -> This { This new(this ticks + value) }
+	operator - (value: Long) -> This { This new(this ticks - value) }
+	operator * (value: Long) -> This { This new(this ticks * value) }
+	operator / (value: Long) -> This { This new(this ticks / value) }
 	operator + (value: Double) -> This { This new(this ticks + value * DateTime ticksPerSecond) }
 	operator - (value: Double) -> This { This new(this ticks - value * DateTime ticksPerSecond) }
 	operator * (value: Double) -> This { This new(this ticks * value) }
 	operator / (value: Double) -> This { This new(this ticks / value) }
 
-	kean_base_timeSpan_getTicks: unmangled func -> Int64 { this _ticks }
+	kean_base_timeSpan_getTicks: unmangled func -> Long { this _ticks }
 	kean_base_timeSpan_getNegated: unmangled func -> This { this negate() }
-	kean_base_timeSpan_getTotalMilliseconds: unmangled func -> Int64 { this elapsedMilliseconds() }
-	kean_base_timeSpan_getTotalSeconds: unmangled func -> Int64 { this elapsedSeconds() }
-	kean_base_timeSpan_getTotalMinutes: unmangled func -> Int64 { this elapsedMinutes() }
-	kean_base_timeSpan_getTotalHours: unmangled func -> Int64 { this elapsedHours() }
-	kean_base_timeSpan_getTotalDays: unmangled func -> Int64 { this elapsedDays() }
-	kean_base_timeSpan_getTotalWeeks: unmangled func -> Int64 { this elapsedWeeks() }
+	kean_base_timeSpan_getTotalMilliseconds: unmangled func -> Long { this elapsedMilliseconds() }
+	kean_base_timeSpan_getTotalSeconds: unmangled func -> Long { this elapsedSeconds() }
+	kean_base_timeSpan_getTotalMinutes: unmangled func -> Long { this elapsedMinutes() }
+	kean_base_timeSpan_getTotalHours: unmangled func -> Long { this elapsedHours() }
+	kean_base_timeSpan_getTotalDays: unmangled func -> Long { this elapsedDays() }
+	kean_base_timeSpan_getTotalWeeks: unmangled func -> Long { this elapsedWeeks() }
 
 	millisecond: static func -> This {
 		This milliseconds(1)
@@ -145,7 +145,7 @@ TimeSpan: cover {
 	weeks: static func (count: Double) -> This {
 		This new(DateTime ticksPerWeek * count)
 	}
-	kean_base_timeSpan_new: unmangled static func (ticks: Int64) -> This { This new(ticks) }
+	kean_base_timeSpan_new: unmangled static func (ticks: Long) -> This { This new(ticks) }
 	kean_base_timeSpan_fromData: unmangled static func (hour, minute, second, millisecond: Int) -> This { This new(hour, minute, second, millisecond) }
 	kean_base_timeSpan_fromMilliseconds: unmangled static func (count: Double) -> This { This milliseconds(count) }
 	kean_base_timeSpan_fromSeconds: unmangled static func (count: Double) -> This { This seconds(count) }
@@ -158,9 +158,9 @@ TimeSpan: cover {
 operator + (left: Int, right: TimeSpan) -> TimeSpan { right + left }
 operator - (left: Int, right: TimeSpan) -> TimeSpan { right negate() + left }
 operator * (left: Int, right: TimeSpan) -> TimeSpan { right * left }
-operator + (left: Int64, right: TimeSpan) -> TimeSpan { right + left }
-operator - (left: Int64, right: TimeSpan) -> TimeSpan { right negate() + left }
-operator * (left: Int64, right: TimeSpan) -> TimeSpan { right * left }
+operator + (left: Long, right: TimeSpan) -> TimeSpan { right + left }
+operator - (left: Long, right: TimeSpan) -> TimeSpan { right negate() + left }
+operator * (left: Long, right: TimeSpan) -> TimeSpan { right * left }
 operator + (left: Double, right: TimeSpan) -> TimeSpan { right + left }
 operator - (left: Double, right: TimeSpan) -> TimeSpan { right negate() + left }
 operator * (left: Double, right: TimeSpan) -> TimeSpan { right * left }

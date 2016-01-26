@@ -48,7 +48,7 @@ extend Time {
 
 DateTime: cover {
 	/* Number of 100 ns intervals since 00.00 1/1/1 */
-	_ticks: UInt64 = 0
+	_ticks: ULong = 0
 	ticks ::= this _ticks
 	init: func@ (=_ticks)
 	init: func@ ~fromYearMonthDay (year, month, day: Int) {
@@ -135,17 +135,17 @@ DateTime: cover {
 			Order equal
 	}
 
-	operator - (other: This) -> TimeSpan { TimeSpan new(this ticks as Int64 - other ticks as Int64) }
+	operator - (other: This) -> TimeSpan { TimeSpan new(this ticks as Long - other ticks as Long) }
 	operator == (other: This) -> Bool { this compareTo(other) == Order equal }
 	operator != (other: This) -> Bool { this compareTo(other) != Order equal }
 	operator < (other: This) -> Bool { this compareTo(other) == Order less }
 	operator <= (other: This) -> Bool { this compareTo(other) != Order greater }
 	operator > (other: This) -> Bool { this compareTo(other) == Order greater }
 	operator >= (other: This) -> Bool { this compareTo(other) != Order less }
-	operator + (span: TimeSpan) -> This { This new(this ticks as Int64 + span ticks) }
-	operator - (span: TimeSpan) -> This { This new(this ticks as Int64 - span ticks) }
+	operator + (span: TimeSpan) -> This { This new(this ticks as Long + span ticks) }
+	operator - (span: TimeSpan) -> This { This new(this ticks as Long - span ticks) }
 
-	kean_base_dateTime_getTicks: unmangled func -> UInt64 { this _ticks }
+	kean_base_dateTime_getTicks: unmangled func -> ULong { this _ticks }
 	kean_base_dateTime_getMillisecond: unmangled func -> Int { this millisecond() }
 	kean_base_dateTime_getSecond: unmangled func -> Int { this second() }
 	kean_base_dateTime_getMinute: unmangled func -> Int { this minute() }
@@ -157,21 +157,21 @@ DateTime: cover {
 	/* number of days in year ( non-leap ) */
 	daysPerYear: static const Int = 365
 	daysPerFourYears: static const Int = 3 * This daysPerYear + 366
-	nanosecondsPerTick: static const Int64 = 100
-	ticksPerMillisecond: static const Int64 = 1_000_000 / This nanosecondsPerTick
-	ticksPerSecond: static const Int64 = This ticksPerMillisecond * 1000
-	ticksPerMinute: static const Int64 = This ticksPerSecond * 60
-	ticksPerHour: static const Int64 = This ticksPerMinute * 60
-	ticksPerDay: static const Int64 = This ticksPerHour * 24
-	ticksPerWeek: static const UInt64 = This ticksPerDay * 7
-	ticksPerFourYears: static const Int64 = This daysPerFourYears * This ticksPerDay
+	nanosecondsPerTick: static const Long = 100
+	ticksPerMillisecond: static const Long = 1_000_000 / This nanosecondsPerTick
+	ticksPerSecond: static const Long = This ticksPerMillisecond * 1000
+	ticksPerMinute: static const Long = This ticksPerSecond * 60
+	ticksPerHour: static const Long = This ticksPerMinute * 60
+	ticksPerDay: static const Long = This ticksPerHour * 24
+	ticksPerWeek: static const ULong = This ticksPerDay * 7
+	ticksPerFourYears: static const Long = This daysPerFourYears * This ticksPerDay
 	/* default date/time printing format */
 	defaultFormat: static const Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
 
 	now: static This = Time currentDateTime()
 
 	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
-	_ticksToDateTimeHelper: static func (totalTicks: Int64) -> DateTimeData {
+	_ticksToDateTimeHelper: static func (totalTicks: Long) -> DateTimeData {
 		fourYearBlocks := totalTicks / This ticksPerFourYears
 		year := 4 * fourYearBlocks
 		ticksLeft := totalTicks - fourYearBlocks * This ticksPerFourYears
@@ -205,13 +205,13 @@ DateTime: cover {
 	}
 
 	/* returns number of ticks for given hours, minutes and seconds */
-	timeToTicks: static func (hours, minutes, seconds, millisecond: Int) -> Int64 {
+	timeToTicks: static func (hours, minutes, seconds, millisecond: Int) -> Long {
 		(hours * 3600 + minutes * 60 + seconds) * This ticksPerSecond + millisecond * This ticksPerMillisecond
 	}
 
 	/* returns number of ticks for given date at 0:00*/
-	dateToTicks: static func (year, month, day: Int) -> UInt64 {
-		result := 0 as UInt64
+	dateToTicks: static func (year, month, day: Int) -> ULong {
+		result := 0 as ULong
 		if (This dateIsValid(year, month, day)) {
 			totalDays := day - 1
 			for (m in 1 .. month)
@@ -230,7 +230,7 @@ DateTime: cover {
 		This daysPerYear + This isLeapYear(year)
 	}
 
-	ticksInYear: static func (year: Int) -> UInt64 {
+	ticksInYear: static func (year: Int) -> ULong {
 		This daysInYear(year) * This ticksPerDay
 	}
 
@@ -243,7 +243,7 @@ DateTime: cover {
 			month % 2 ? 30 : 31
 	}
 
-	ticksInMonth: static func (year, month: Int) -> UInt64 {
+	ticksInMonth: static func (year, month: Int) -> ULong {
 		This ticksPerDay * This daysInMonth(year, month)
 	}
 	/* validate argument ranges for hour/minutes/seconds vaules */
@@ -254,7 +254,7 @@ DateTime: cover {
 	dateIsValid: static func (year, month, day: Int) -> Bool {
 		year >= 1 && month in(1 .. 13) && day in(1 .. This daysInMonth(year, month) + 1)
 	}
-	kean_base_dateTime_new: unmangled static func (ticks: UInt64) -> This { This new(ticks) }
+	kean_base_dateTime_new: unmangled static func (ticks: ULong) -> This { This new(ticks) }
 	kean_base_dateTime_fromDate: unmangled static func (year, month, day: Int) -> This { This new(year, month, day) }
 	kean_base_dateTime_fromTime: unmangled static func (hour, minute, second, millisecond: Int) -> This { This new(hour, minute, second, millisecond) }
 	kean_base_dateTime_fromDateTime: unmangled static func (year, month, day, hour, minute, second, millisecond: Int) -> This {

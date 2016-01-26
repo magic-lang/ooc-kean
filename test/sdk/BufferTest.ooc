@@ -7,7 +7,7 @@ BufferTest: class extends Fixture {
 	init: func {
 		super("Buffer")
 		this add("constructor static", func {
-			buffer := Buffer new(c"test" as UInt8*, 4)
+			buffer := Buffer new(c"test" as Byte*, 4)
 			expect(buffer size, is equal to(4))
 		})
 		this add("constructor allocate", func {

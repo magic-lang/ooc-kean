@@ -74,7 +74,7 @@ AndroidContext: class extends OpenGLContext {
 		fence := this createFence()
 		fence sync()
 		eglImage := gpuRgba as EGLBgra
-		sourcePointer := eglImage buffer lock(GraphicBufferUsage ReadOften) as UInt8*
+		sourcePointer := eglImage buffer lock(GraphicBufferUsage ReadOften) as Byte*
 		length := channels * eglImage size area
 		recover := func (b: ByteBuffer) -> Bool {
 			eglImage buffer unlock()

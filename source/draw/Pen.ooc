@@ -25,7 +25,7 @@ Pen: cover {
 	init: func@ ~color (color: ColorBgra) { this init(color, 1.0f) }
 	init: func@ ~default { this init(ColorBgra new(0, 0, 0, 255)) }
 	init: func@ ~withBgr (colorBgr: ColorBgr) { this init(colorBgr toBgra()) }
-	setAlpha: func@ (alpha: UInt8) {
+	setAlpha: func@ (alpha: Byte) {
 		this color = ColorBgra new(this color toBgr(), alpha)
 	}
 	setAlpha: func@ ~withFloat (value: Float) {

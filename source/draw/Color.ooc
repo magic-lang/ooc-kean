@@ -18,17 +18,17 @@ use base
 use geometry
 
 ColorMonochrome: cover {
-	y: UInt8
+	y: Byte
 	normalized ::= this y as Float / 255
 	init: func@ (=y)
 	init: func@ ~default { this init(0) }
-	init: func@ ~uint (i: UInt) { this init(i as UInt8) }
-	init: func@ ~uint16 (i: UInt16) { this init(i as UInt8) }
-	init: func@ ~uint32 (i: UInt32) { this init(i as UInt8) }
-	init: func@ ~uint64 (i: UInt64) { this init(i as UInt8) }
-	init: func@ ~int (i: Int) { this init(i as UInt8) }
-	init: func@ ~float (f: Float) { this init(f*255.0f clamp(0.0f, 255.0f) as UInt8) }
-	init: func@ ~double (d: Double) { this init(d*255.0f clamp(0.0f, 255.0f) as UInt8) }
+	init: func@ ~uint (i: UInt) { this init(i as Byte) }
+	init: func@ ~uint16 (i: UShort) { this init(i as Byte) }
+	init: func@ ~uint32 (i: UInt) { this init(i as Byte) }
+	init: func@ ~uint64 (i: ULong) { this init(i as Byte) }
+	init: func@ ~int (i: Int) { this init(i as Byte) }
+	init: func@ ~float (f: Float) { this init(f*255.0f clamp(0.0f, 255.0f) as Byte) }
+	init: func@ ~double (d: Double) { this init(d*255.0f clamp(0.0f, 255.0f) as Byte) }
 	set: func@ (color: This) {
 		this y = color y
 	}
@@ -40,7 +40,7 @@ ColorMonochrome: cover {
 	toBgr: func -> ColorBgr { ColorConvert yuvToBgr(this toYuv()) }
 	toBgra: func -> ColorBgra { this toBgr() toBgra() }
 	blend: func (factor: Float, other: This) -> This {
-		This new((this y * (1 - factor) + (other y * factor)) as UInt8)
+		This new((this y * (1 - factor) + (other y * factor)) as Byte)
 	}
 	distance: func (other: This) -> Float {
 		(this y - other y) as Float abs()
@@ -61,13 +61,13 @@ ColorMonochrome: cover {
 }
 
 ColorUv: cover {
-	u, v: UInt8
+	u, v: Byte
 	normalized ::= FloatTuple2 new(this u as Float / 255, this v as Float / 255)
 	init: func@ (=u, =v)
 	init: func@ ~default { this init(0, 0) }
-	init: func@ ~int (i: Int) { this init(i as UInt8) }
-	init: func@ ~float (f: Float) { this init(f*255.0f clamp(0.0f, 255.0f) as UInt8) }
-	init: func@ ~double (d: Double) { this init(d*255.0f clamp(0.0f, 255.0f) as UInt8) }
+	init: func@ ~int (i: Int) { this init(i as Byte) }
+	init: func@ ~float (f: Float) { this init(f*255.0f clamp(0.0f, 255.0f) as Byte) }
+	init: func@ ~double (d: Double) { this init(d*255.0f clamp(0.0f, 255.0f) as Byte) }
 	set: func@ (color: This) {
 		this u = color u
 		this v = color v
@@ -80,7 +80,7 @@ ColorUv: cover {
 	toBgr: func -> ColorBgr { ColorConvert yuvToBgr(this toYuv()) }
 	toBgra: func -> ColorBgra { this toBgr() toBgra() }
 	blend: func (factor: Float, other: This) -> This {
-		This new((this u * (1 - factor) + (other u * factor)) as UInt8, (this v * (1 - factor) + (other v * factor)) as UInt8)
+		This new((this u * (1 - factor) + (other u * factor)) as Byte, (this v * (1 - factor) + (other v * factor)) as Byte)
 	}
 	distance: func (other: This) -> Float {
 		((this u - other u) as Float pow(2) + (this v - other v) as Float pow(2)) / 2.0f sqrt()
@@ -102,13 +102,13 @@ ColorUv: cover {
 }
 
 ColorYuv: cover {
-	y, u, v: UInt8
+	y, u, v: Byte
 	normalized ::= FloatTuple3 new(this y as Float / 255, this u as Float / 255, this v as Float / 255)
 	init: func@ (=y, =u, =v)
 	init: func@ ~default { this init(0, 0, 0) }
-	init: func@ ~int (y, u, v: Int) { this init(y as UInt8, u as UInt8, v as UInt8) }
-	init: func@ ~float (y, u, v: Float) { this init(y * 255.0f clamp(0.0f, 255.0f) as UInt8, u * 255.0f clamp(0.0f, 255.0f) as UInt8, v * 255.0f clamp(0.0f, 255.0f) as UInt8) }
-	init: func@ ~double (y, u, v: Double) { this init(y * 255.0f clamp(0.0f, 255.0f) as UInt8, u * 255.0f clamp(0.0f, 255.0f) as UInt8, v * 255.0f clamp(0.0f, 255.0f) as UInt8) }
+	init: func@ ~int (y, u, v: Int) { this init(y as Byte, u as Byte, v as Byte) }
+	init: func@ ~float (y, u, v: Float) { this init(y * 255.0f clamp(0.0f, 255.0f) as Byte, u * 255.0f clamp(0.0f, 255.0f) as Byte, v * 255.0f clamp(0.0f, 255.0f) as Byte) }
+	init: func@ ~double (y, u, v: Double) { this init(y * 255.0f clamp(0.0f, 255.0f) as Byte, u * 255.0f clamp(0.0f, 255.0f) as Byte, v * 255.0f clamp(0.0f, 255.0f) as Byte) }
 	set: func@ (color: This) {
 		this y = color y
 		this u = color u
@@ -122,7 +122,7 @@ ColorYuv: cover {
 	toBgr: func -> ColorBgr { ColorConvert yuvToBgr(this) }
 	toBgra: func -> ColorBgra { this toBgr() toBgra() }
 	blend: func (factor: Float, other: This) -> This {
-		This new((this y * (1 - factor) + other y * factor) as UInt8, (this u * (1 - factor) + other u * factor) as UInt8, (this v * (1 - factor) + other v * factor) as UInt8)
+		This new((this y * (1 - factor) + other y * factor) as Byte, (this u * (1 - factor) + other u * factor) as Byte, (this v * (1 - factor) + other v * factor) as Byte)
 	}
 	distance: func (other: This) -> Float {
 		((this y - other y) as Float pow(2) + (this u - other u) as Float pow(2) + (this v - other v) as Float pow(2)) / 3.0f sqrt()
@@ -144,10 +144,10 @@ ColorYuv: cover {
 
 ColorYuva: cover {
 	yuv: ColorYuv
-	alpha: UInt8
+	alpha: Byte
 	normalized ::= FloatTuple4 new(this yuv y as Float / 255, this yuv u as Float / 255, this yuv v as Float / 255, this alpha as Float / 255)
 	init: func@ (=yuv, =alpha)
-	init: func@ ~uint8 (y, u, v, a: UInt8) {
+	init: func@ ~uint8 (y, u, v, a: Byte) {
 		this yuv = ColorYuv new(y, u, v)
 		this alpha = a
 	}
@@ -158,7 +158,7 @@ ColorYuva: cover {
 	toBgr: func -> ColorBgr { this yuv toBgr() }
 	toBgra: func -> ColorBgra { ColorBgra new(this yuv toBgr(), alpha) }
 	blend: func (factor: Float, other: This) -> This {
-		This new(this yuv blend(factor, other yuv), (this alpha * (1 - factor) + other alpha * factor) as UInt8)
+		This new(this yuv blend(factor, other yuv), (this alpha * (1 - factor) + other alpha * factor) as Byte)
 	}
 	equals: func ~yuva (other: This) -> Bool { this yuv == other yuv && this alpha == other alpha }
 
@@ -167,13 +167,13 @@ ColorYuva: cover {
 }
 
 ColorBgr: cover {
-	blue, green, red: UInt8
+	blue, green, red: Byte
 	normalized ::= FloatTuple3 new(this blue as Float / 255, this green as Float / 255, this red as Float / 255)
 	init: func@ (=blue, =green, =red)
 	init: func@ ~default { this init(0, 0, 0) }
-	init: func@ ~int (b, g, r: Int) { this init(b as UInt8, g as UInt8, r as UInt8) }
-	init: func@ ~float (b, g, r: Float) { this init(b*255.0f clamp(0.0f, 255.0f) as UInt8, g*255.0f clamp(0.0f, 255.0f) as UInt8, r*255.0f clamp(0.0f, 255.0f) as UInt8) }
-	init: func@ ~double (b, g, r: Double) { this init(b*255.0f clamp(0.0f, 255.0f) as UInt8, g*255.0f clamp(0.0f, 255.0f) as UInt8, r*255.0f clamp(0.0f, 255.0f) as UInt8) }
+	init: func@ ~int (b, g, r: Int) { this init(b as Byte, g as Byte, r as Byte) }
+	init: func@ ~float (b, g, r: Float) { this init(b*255.0f clamp(0.0f, 255.0f) as Byte, g*255.0f clamp(0.0f, 255.0f) as Byte, r*255.0f clamp(0.0f, 255.0f) as Byte) }
+	init: func@ ~double (b, g, r: Double) { this init(b*255.0f clamp(0.0f, 255.0f) as Byte, g*255.0f clamp(0.0f, 255.0f) as Byte, r*255.0f clamp(0.0f, 255.0f) as Byte) }
 	set: func@ (color: This) {
 		this blue = color blue
 		this green = color green
@@ -187,7 +187,7 @@ ColorBgr: cover {
 	toBgr: func -> This { this copy() }
 	toBgra: func -> ColorBgra { ColorBgra new(this copy(), 255) }
 	blend: func (factor: Float, other: This) -> This {
-		This new((this blue * (1 - factor) + other blue * factor) as UInt8, (this green * (1 - factor) + other green * factor) as UInt8, (this red * (1 - factor) + other red * factor) as UInt8)
+		This new((this blue * (1 - factor) + other blue * factor) as Byte, (this green * (1 - factor) + other green * factor) as Byte, (this red * (1 - factor) + other red * factor) as Byte)
 	}
 	distance: func (other: This) -> Float {
 		((this blue - other blue) as Float pow(2) + (this green - other green) as Float pow(2) + (this red - other red) as Float pow(2)) / 3.0f sqrt()
@@ -213,17 +213,17 @@ ColorBgr: cover {
 
 ColorBgra: cover {
 	bgr: ColorBgr
-	alpha: UInt8
-	blue: UInt8 { get { this bgr blue } set (value) { this bgr blue = value } }
-	green: UInt8 { get { this bgr green } set (value) { this bgr green = value } }
-	red: UInt8 { get { this bgr red } set (value) { this bgr red = value } }
+	alpha: Byte
+	blue: Byte { get { this bgr blue } set (value) { this bgr blue = value } }
+	green: Byte { get { this bgr green } set (value) { this bgr green = value } }
+	red: Byte { get { this bgr red } set (value) { this bgr red = value } }
 	normalized ::= FloatTuple4 new(this blue as Float / 255, this green as Float / 255, this red as Float / 255, this alpha as Float / 255)
 	init: func@ (=bgr, =alpha)
 	init: func@ ~default { this init(0, 0, 0, 0) }
-	init: func@ ~uint8 (b, g, r, a: UInt8) { this init(ColorBgr new(b, g, r), a) }
-	init: func@ ~int (b, g, r, a: Int) { this init(b as UInt8, g as UInt8, r as UInt8, a as UInt8) }
-	init: func@ ~float (b, g, r, a: Float) { this init(ColorBgr new(b, g, r), a*255.0f clamp(0.0f, 255.0f) as UInt8) }
-	init: func@ ~double (b, g, r, a: Double) { this init(ColorBgr new(b, g, r), a*255.0f clamp(0.0f, 255.0f) as UInt8) }
+	init: func@ ~uint8 (b, g, r, a: Byte) { this init(ColorBgr new(b, g, r), a) }
+	init: func@ ~int (b, g, r, a: Int) { this init(b as Byte, g as Byte, r as Byte, a as Byte) }
+	init: func@ ~float (b, g, r, a: Float) { this init(ColorBgr new(b, g, r), a*255.0f clamp(0.0f, 255.0f) as Byte) }
+	init: func@ ~double (b, g, r, a: Double) { this init(ColorBgr new(b, g, r), a*255.0f clamp(0.0f, 255.0f) as Byte) }
 	set: func@ (color: This) {
 		this bgr = color bgr
 		this alpha = color alpha
@@ -236,7 +236,7 @@ ColorBgra: cover {
 	toBgr: func -> ColorBgr { this bgr copy() }
 	toBgra: func -> This { this copy() }
 	blend: func (factor: Float, other: This) -> This {
-		This new(this bgr blend(factor, other bgr), (this alpha * (1 - factor) + other alpha * factor) as UInt8)
+		This new(this bgr blend(factor, other bgr), (this alpha * (1 - factor) + other alpha * factor) as Byte)
 	}
 	distance: func (other: This) -> Float {
 		(this bgr distance(other bgr) * 3.0f + (this alpha - other alpha) as Float pow(2)) / 4.0f sqrt()
@@ -291,7 +291,7 @@ ColorConvert: cover {
 	}
 	bgrToMonochrome: static func (color: ColorBgr) -> ColorMonochrome {
 		ColorMonochrome new(
-			((This bgrToYuv0[color red] + This bgrToYuv0[256 + color green] + This bgrToYuv0[512 + color blue]) >> 8) clamp (0, 255) as UInt8
+			((This bgrToYuv0[color red] + This bgrToYuv0[256 + color green] + This bgrToYuv0[512 + color blue]) >> 8) clamp (0, 255) as Byte
 		)
 	}
 	yuvToMonochrome: static func (color: ColorYuv) -> ColorMonochrome {
@@ -299,16 +299,16 @@ ColorConvert: cover {
 	}
 	yuvToBgr: static func (color: ColorYuv) -> ColorBgr {
 		ColorBgr new(
-			((This yuvToBgr2[color y] + This yuvToBgr2[256 + color u] + This yuvToBgr2[512 + color v]) >> 8) clamp(0, 255) as UInt8,
-			((This yuvToBgr1[color y] + This yuvToBgr1[256 + color u] + This yuvToBgr1[512 + color v]) >> 8) clamp(0, 255) as UInt8,
-			((This yuvToBgr0[color y] + This yuvToBgr0[256 + color u] + This yuvToBgr0[512 + color v]) >> 8) clamp(0, 255) as UInt8
+			((This yuvToBgr2[color y] + This yuvToBgr2[256 + color u] + This yuvToBgr2[512 + color v]) >> 8) clamp(0, 255) as Byte,
+			((This yuvToBgr1[color y] + This yuvToBgr1[256 + color u] + This yuvToBgr1[512 + color v]) >> 8) clamp(0, 255) as Byte,
+			((This yuvToBgr0[color y] + This yuvToBgr0[256 + color u] + This yuvToBgr0[512 + color v]) >> 8) clamp(0, 255) as Byte
 		)
 	}
 	bgrToYuv: static func (color: ColorBgr) -> ColorYuv {
 		ColorYuv new(
-			((This bgrToYuv0[color red] + This bgrToYuv0[256 + color green] + This bgrToYuv0[512 + color blue]) >> 8) clamp (0, 255) as UInt8,
-			(((This bgrToYuv1[color red] + This bgrToYuv1[256 + color green] + This bgrToYuv1[512 + color blue]) >> 8) + 128) clamp(0, 255) as UInt8,
-			(((This bgrToYuv2[color red] + This bgrToYuv2[256 + color green] + This bgrToYuv2[512 + color blue]) >> 8) + 128) clamp(0, 255) as UInt8
+			((This bgrToYuv0[color red] + This bgrToYuv0[256 + color green] + This bgrToYuv0[512 + color blue]) >> 8) clamp (0, 255) as Byte,
+			(((This bgrToYuv1[color red] + This bgrToYuv1[256 + color green] + This bgrToYuv1[512 + color blue]) >> 8) + 128) clamp(0, 255) as Byte,
+			(((This bgrToYuv2[color red] + This bgrToYuv2[256 + color green] + This bgrToYuv2[512 + color blue]) >> 8) + 128) clamp(0, 255) as Byte
 		)
 	}
 	yuvToBgr0 := static [ 0, 256, 512, 768, 1024, 1280, 1536, 1792, 2048, 2304, 2560, 2816, 3072, 3328, 3584, 3840, 4096, 4352, 4608, 4864, 5120, 5376, 5632, 5888, 6144, 6400, 6656, 6912, 7168, 7424, 7680, 7936, 8192, 8448, 8704, 8960, 9216, 9472, 9728, 9984, 10240, 10496, 10752, 11008, 11264, 11520, 11776, 12032, 12288, 12544, 12800, 13056, 13312, 13568, 13824, 14080, 14336, 14592, 14848, 15104, 15360, 15616, 15872, 16128, 16384, 16640, 16896, 17152, 17408, 17664, 17920, 18176, 18432, 18688, 18944, 19200, 19456, 19712, 19968, 20224, 20480, 20736, 20992, 21248, 21504, 21760, 22016, 22272, 22528, 22784, 23040, 23296, 23552, 23808, 24064, 24320, 24576, 24832, 25088, 25344, 25600, 25856, 26112, 26368, 26624, 26880, 27136, 27392, 27648, 27904, 28160, 28416, 28672, 28928, 29184, 29440, 29696, 29952, 30208, 30464, 30720, 30976, 31232, 31488, 31744, 32000, 32256, 32512, 32768, 33024, 33280, 33536, 33792, 34048, 34304, 34560, 34816, 35072, 35328, 35584, 35840, 36096, 36352, 36608, 36864, 37120, 37376, 37632, 37888, 38144, 38400, 38656, 38912, 39168, 39424, 39680, 39936, 40192, 40448, 40704, 40960, 41216, 41472, 41728, 41984, 42240, 42496, 42752, 43008, 43264, 43520, 43776, 44032, 44288, 44544, 44800, 45056, 45312, 45568, 45824, 46080, 46336, 46592, 46848, 47104, 47360, 47616, 47872, 48128, 48384, 48640, 48896, 49152, 49408, 49664, 49920, 50176, 50432, 50688, 50944, 51200, 51456, 51712, 51968, 52224, 52480, 52736, 52992, 53248, 53504, 53760, 54016, 54272, 54528, 54784, 55040, 55296, 55552, 55808, 56064, 56320, 56576, 56832, 57088, 57344, 57600, 57856, 58112, 58368, 58624, 58880, 59136, 59392, 59648, 59904, 60160, 60416, 60672, 60928, 61184, 61440, 61696, 61952, 62208, 62464, 62720, 62976, 63232, 63488, 63744, 64000, 64256, 64512, 64768, 65024, 65280, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -45824, -45466, -45108, -44750, -44392, -44034, -43676, -43318, -42960, -42602, -42244, -41886, -41528, -41170, -40812, -40454, -40096, -39738, -39380, -39022, -38664, -38306, -37948, -37590, -37232, -36874, -36516, -36158, -35800, -35442, -35084, -34726, -34368, -34010, -33652, -33294, -32936, -32578, -32220, -31862, -31504, -31146, -30788, -30430, -30072, -29714, -29356, -28998, -28640, -28282, -27924, -27566, -27208, -26850, -26492, -26134, -25776, -25418, -25060, -24702, -24344, -23986, -23628, -23270, -22912, -22554, -22196, -21838, -21480, -21122, -20764, -20406, -20048, -19690, -19332, -18974, -18616, -18258, -17900, -17542, -17184, -16826, -16468, -16110, -15752, -15394, -15036, -14678, -14320, -13962, -13604, -13246, -12888, -12530, -12172, -11814, -11456, -11098, -10740, -10382, -10024, -9666, -9308, -8950, -8592, -8234, -7876, -7518, -7160, -6802, -6444, -6086, -5728, -5370, -5012, -4654, -4296, -3938, -3580, -3222, -2864, -2506, -2148, -1790, -1432, -1074, -716, -358, 0, 358, 716, 1074, 1432, 1790, 2148, 2506, 2864, 3222, 3580, 3938, 4296, 4654, 5012, 5370, 5728, 6086, 6444, 6802, 7160, 7518, 7876, 8234, 8592, 8950, 9308, 9666, 10024, 10382, 10740, 11098, 11456, 11814, 12172, 12530, 12888, 13246, 13604, 13962, 14320, 14678, 15036, 15394, 15752, 16110, 16468, 16826, 17184, 17542, 17900, 18258, 18616, 18974, 19332, 19690, 20048, 20406, 20764, 21122, 21480, 21838, 22196, 22554, 22912, 23270, 23628, 23986, 24344, 24702, 25060, 25418, 25776, 26134, 26492, 26850, 27208, 27566, 27924, 28282, 28640, 28998, 29356, 29714, 30072, 30430, 30788, 31146, 31504, 31862, 32220, 32578, 32936, 33294, 33652, 34010, 34368, 34726, 35084, 35442, 35800, 36158, 36516, 36874, 37232, 37590, 37948, 38306, 38664, 39022, 39380, 39738, 40096, 40454, 40812, 41170, 41528, 41886, 42244, 42602, 42960, 43318, 43676, 44034, 44392, 44750, 45108, 45466 ]
