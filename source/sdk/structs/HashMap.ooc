@@ -355,13 +355,16 @@ HashMap: class <K, V> extends BackIterable<V> {
 
 			put(entry key as K, entry value as V)
 
+			old := entry
 			while (entry next) {
 				entry = entry next@
 				put(entry key as K, entry value as V)
 			}
+			old free()
 		}
-
+		oldBuckets free()
 		// restore old keys to keep order
+		keys free()
 		keys = oldKeys
 		true
 	}

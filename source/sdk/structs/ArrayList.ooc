@@ -182,11 +182,7 @@ ArrayList: class <T> extends BackIterable<T> {
 		return iter
 	}
 
-	clone: func -> This<T> {
-		copy := This<T> new(size)
-		copy addAll(this)
-		return copy
-	}
+	clone: func -> This<T> { This<T> new(this data, size) }
 
 	emptyClone: func <K> (K: Class) -> This<K> {
 		This<K> new()
