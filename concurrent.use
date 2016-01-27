@@ -6,4 +6,5 @@ Imports: PromiseCollector
 Imports: ThreadPool
 Imports: SynchronizedQueue
 Imports: SynchronizedList
+Imports: SynchronizedResource
 Imports: RecycleBin
