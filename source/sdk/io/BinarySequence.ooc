@@ -10,14 +10,14 @@ BinarySequenceWriter: class {
 	endianness := ENDIANNESS
 
 	init: func (=writer)
-	_pushByte: func (byte: SByte) {
+	_pushByte: func (byte: Byte) {
 		writer write(byte as Char)
 	}
 	pushValue: func <T> (value: T) {
 		size := T size
 		if (endianness != ENDIANNESS)
 			value = This reverseBytes(value)
-		array := value& as SByte*
+		array := value& as Byte*
 		for (i in 0 .. size)
 			_pushByte(array[i])
 	}
@@ -51,7 +51,7 @@ BinarySequenceWriter: class {
 		for (chr in value)
 			u8(chr as Byte)
 	}
-	bytes: func (value: SByte*, length: SizeT) {
+	bytes: func (value: Byte*, length: SizeT) {
 		for (i in 0 .. length)
 			u8(value[i] as Byte)
 	}
@@ -60,10 +60,10 @@ BinarySequenceWriter: class {
 			u8(value[i] as Byte)
 	}
 	reverseBytes: static func <T> (value: T) -> T {
-		array := value& as SByte*
+		array := value& as Byte*
 		size := T size
 		reversed: T
-		reversedArray := reversed& as SByte*
+		reversedArray := reversed& as Byte*
 		for (i in 0 .. size)
 			reversedArray[size - i - 1] = array[i]
 		reversed
@@ -82,9 +82,9 @@ BinarySequenceReader: class {
 		size := T size
 		bytesRead += size
 		value: T
-		array := value& as SByte*
+		array := value& as Byte*
 		for (i in 0 .. size)
-			array[i] = reader read() as SByte
+			array[i] = reader read() as Byte
 		if (endianness != ENDIANNESS)
 			value = reverseBytes(value)
 		value
@@ -127,10 +127,10 @@ BinarySequenceReader: class {
 		}
 		String new(s)
 	}
-	bytes: func (length: SizeT) -> SByte* {
-		value := gc_malloc(length * SByte size) as SByte*
+	bytes: func (length: SizeT) -> Byte* {
+		value := gc_malloc(length * Byte size) as Byte*
 		for (i in 0 .. length)
-			value[i] = u8() as SByte
+			value[i] = u8() as Byte
 		value
 	}
 }
