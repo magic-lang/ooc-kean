@@ -98,7 +98,7 @@ FloatVectorList: class extends VectorList<Float> {
 		result
 	}
 	reverse: func -> This {
-		(this as VectorList<Float>) reverse() as This
+		super() as This
 	}
 	addInto: func (other: This) {
 		minimumCount := this count minimum(other count)

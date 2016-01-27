@@ -36,7 +36,7 @@ BoolVectorList: class extends VectorList<Bool> {
 		tallyTrues ? trues : this _count - trues
 	}
 	reverse: func -> This {
-		(this as VectorList<Bool>) reverse() as This
+		super() as This
 	}
 	erosion: func (structuringElementSize: Int) -> This {
 		result := This new(this _count)

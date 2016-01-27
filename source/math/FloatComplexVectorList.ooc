@@ -67,10 +67,7 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		result
 	}
 	copy: func -> This {
-		result := This new(this _count)
-		for (i in 0 .. this _count)
-			result add(this[i])
-		result
+		super() as This
 	}
 	addInto: func (other: This) {
 		minimumCount := this count minimum(other count)

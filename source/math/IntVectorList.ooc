@@ -35,7 +35,7 @@ IntVectorList: class extends VectorList<Int> {
 			this add(value)
 	}
 	copy: func -> This {
-		this as VectorList<Int> copy() as This
+		super() as This
 	}
 	contains: func (value: Int) -> Bool {
 		result := false
