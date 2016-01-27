@@ -8,7 +8,7 @@
 
 use unit
 use base
-use collections
+use concurrent
 
 MyClass: class {
 	content: Int
