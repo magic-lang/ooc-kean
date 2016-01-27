@@ -32,7 +32,7 @@ BackIterable: abstract class <T> extends Iterable<T> {
 		iter := iterator()
 		while (iter hasNext?())
 			iter next()
-		return iter
+		iter
 	}
 	forward: func -> BackIterator<T> { iterator() }
 	backward: func -> BackIterator<T> { backIterator() reversed() }
@@ -55,7 +55,7 @@ BackIterator: abstract class <T> extends Iterator<T> {
 	reversed: func -> ReverseIterator<T> {
 		iter := ReverseIterator<T> new()
 		iter iterator = this
-		return iter
+		iter
 	}
 }
 

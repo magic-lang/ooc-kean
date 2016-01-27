@@ -28,14 +28,12 @@ ProcessWin32: class extends Process {
 	_wait: func (duration: Long) -> Int {
 		// Wait until child process exits.
 		status := WaitForSingleObject(pi process, duration)
-
-		if (status != WAIT_OBJECT_0) return -1
-
-		exitCode: ULong
-		GetExitCodeProcess(pi process, exitCode&)
-
-		CloseHandle(pi thread)
-		CloseHandle(pi process)
+		exitCode := -1
+		if (status == WAIT_OBJECT_0) {
+			GetExitCodeProcess(pi process, exitCode&)
+			CloseHandle(pi thread)
+			CloseHandle(pi process)
+		}
 		exitCode
 	}
 

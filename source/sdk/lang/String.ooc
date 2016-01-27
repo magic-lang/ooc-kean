@@ -24,9 +24,12 @@ String: class extends Iterable<Char> {
 	}
 
 	equals: final func (other: This) -> Bool {
-		if (this == null) return (other == null)
-		if (other == null) return false
-		_buffer equals(other _buffer)
+		result := false
+		if (this == null)
+			result = (other == null)
+		else if (other != null)
+			result = _buffer equals(other _buffer)
+		result
 	}
 
 	clone: func -> This {

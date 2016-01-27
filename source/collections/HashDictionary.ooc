@@ -52,13 +52,15 @@ HashDictionary: class {
 	}
 	getEntry: func <V> (key: String, V: Class) -> HashEntry<String, Pointer> {
 		entry: HashEntry
+		result: HashEntry
 		if (this _hashMap getEntry(key, entry&)) {
 			cell := (entry value as Cell<V>*)@ as Cell<V>
-			return HashEntry<String, V> new(key, cell val&)
+			result = HashEntry<String, V> new(key, cell val&)
 		} else {
 			none := None new()
-			return HashEntry<String, V> new(key, none&)
+			result = HashEntry<String, V> new(key, none&)
 		}
+		result
 	}
 	put: func <T> (key: String, value: T) -> Bool {
 		tmp := Cell<T> new(value)

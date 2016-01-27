@@ -17,14 +17,18 @@ Object: abstract class {
 	__destroy__: func
 
 	instanceOf?: final func (T: Class) -> Bool {
-		if (!this) return false
-
-		current := class
-		while (current) {
-			if (current == T) return true
-			current = current super
+		result := false
+		if (this) {
+			current := class
+			while (current) {
+				if (current == T) {
+					result = true
+					break
+				}
+				current = current super
+			}
 		}
-		false
+		result
 	}
 }
 
@@ -47,18 +51,21 @@ Class: abstract class {
 	// Create a new instance of the object of type defined by this class
 	alloc: final func ~_class -> Object {
 		object := gc_malloc(instanceSize) as Object
-		if (object) {
+		if (object)
 			object class = this
-		}
-		return object
+		object
 	}
 	inheritsFrom?: final func ~_class (T: This) -> Bool {
+		result := false
 		current := this
 		while (current) {
-			if (current == T) return true
+			if (current == T) {
+				result = true
+				break
+			}
 			current = current super
 		}
-		false
+		result
 	}
 }
 

@@ -84,27 +84,28 @@ Gles3Context: class extends GLContext {
 		}
 	}
 	_generate: func (display: Pointer, nativeBackend: Long, sharedContext: This) -> Bool {
+		result := false
 		this _eglDisplay = eglGetDisplay(display)
-		if (this _eglDisplay == null)
-			return false
-		eglInitialize(this _eglDisplay, null, null)
-		eglBindAPI(EGL_OPENGL_ES_API)
-		configAttribs := [
-			EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-			EGL_BUFFER_SIZE, 16,
-			EGL_NONE] as Int*
-		chosenConfig: Pointer = this _chooseConfig(configAttribs)
+		if (this _eglDisplay) {
+			eglInitialize(this _eglDisplay, null, null)
+			eglBindAPI(EGL_OPENGL_ES_API)
+			configAttribs := [
+				EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+				EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+				EGL_BUFFER_SIZE, 16,
+				EGL_NONE] as Int*
+			chosenConfig: Pointer = this _chooseConfig(configAttribs)
 
-		this _eglSurface = eglCreateWindowSurface(this _eglDisplay, chosenConfig, nativeBackend, null)
-		if (this _eglSurface == null)
-			return false
-
-		shared: Pointer = null
-		if (sharedContext)
-			shared = sharedContext _eglContext
-		this _generateContext(shared, chosenConfig)
-		this makeCurrent()
+			this _eglSurface = eglCreateWindowSurface(this _eglDisplay, chosenConfig, nativeBackend, null)
+			if (this _eglSurface) {
+				shared: Pointer = null
+				if (sharedContext)
+					shared = sharedContext _eglContext
+				this _generateContext(shared, chosenConfig)
+				result = this makeCurrent()
+			}
+		}
+		result
 	}
 	_generate: func ~pbuffer (sharedContext: This) -> Bool {
 		this _eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY)
@@ -133,14 +134,16 @@ Gles3Context: class extends GLContext {
 			EGL_TEXTURE_FORMAT, EGL_NO_TEXTURE,
 			EGL_NONE] as Int*
 		this _eglSurface = eglCreatePbufferSurface(this _eglDisplay, chosenConfig, pbufferAttribs)
-		if (this _eglSurface == null)
-			return false
 
-		shared: Pointer = null
-		if (sharedContext != null)
-			shared = sharedContext _eglContext
-		this _generateContext(shared, chosenConfig)
-		this makeCurrent()
+		result := false
+		if (this _eglSurface) {
+			shared: Pointer = null
+			if (sharedContext != null)
+				shared = sharedContext _eglContext
+			this _generateContext(shared, chosenConfig)
+			result = this makeCurrent()
+		}
+		result
 	}
 	setViewport: override func (viewport: IntBox2D) {
 		version(debugGL) { validateStart("Context setViewport") }

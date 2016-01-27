@@ -180,7 +180,7 @@ FStream: cover from FILE* {
 		if (count != 1 && error()) {
 			Exception new("Trying to read a char at the end of a file!") throw()
 		}
-		return c
+		c
 	}
 
 	readLine: func ~defaults -> String {
@@ -200,7 +200,7 @@ FStream: cover from FILE* {
 			if (!hasNext?()) break
 		}
 
-		return buf toString()
+		buf toString()
 	}
 
 	/**

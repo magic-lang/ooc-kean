@@ -79,7 +79,7 @@ Win32Window: class extends NativeWindow {
 			case WM_DESTROY =>
 				PostQuitMessage(0)
 		}
-		return DefWindowProc(backend, message, wParam, lParam)
+		DefWindowProc(backend, message, wParam, lParam)
 	}
 }
 }
