@@ -93,5 +93,6 @@ version(unix || apple) {
 	pthread_kill: extern func (thread: PThread, signal: Int) -> Int
 	pthread_self: extern func -> PThread
 	pthread_cancel: extern func (thread: PThread) -> Int
+	pthread_equal: extern func (thread0, thread1: PThread) -> Int
 	sched_yield: extern func -> Int
 }

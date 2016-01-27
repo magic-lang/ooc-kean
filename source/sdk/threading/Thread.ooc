@@ -31,6 +31,23 @@ Thread: abstract class {
 		}
 		null
 	}
+	currentThreadId: static func -> Long {
+		version (unix || apple) {
+			return pthread_self() as Long
+		}
+		version (windows) {
+			return GetCurrentThread() as Long
+		}
+		0L
+	}
+	equals: static func (threadId1, threadId2: Long) -> Bool {
+		result: Bool
+		version (unix || apple)
+			result = pthread_equal(threadId1 as PThread, threadId2 as PThread) != 0
+		else
+			result = threadId1 == threadId2
+		result
+	}
 
 	yield: static func -> Bool {
 		version (unix || apple) {
