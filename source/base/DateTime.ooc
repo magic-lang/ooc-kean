@@ -155,18 +155,18 @@ DateTime: cover {
 	kean_base_dateTime_getYear: unmangled func -> Int { this year() }
 
 	/* number of days in year ( non-leap ) */
-	daysPerYear: static const Int = 365
-	daysPerFourYears: static const Int = 3 * This daysPerYear + 366
-	nanosecondsPerTick: static const Long = 100
-	ticksPerMillisecond: static const Long = 1_000_000 / This nanosecondsPerTick
-	ticksPerSecond: static const Long = This ticksPerMillisecond * 1000
-	ticksPerMinute: static const Long = This ticksPerSecond * 60
-	ticksPerHour: static const Long = This ticksPerMinute * 60
-	ticksPerDay: static const Long = This ticksPerHour * 24
-	ticksPerWeek: static const ULong = This ticksPerDay * 7
-	ticksPerFourYears: static const Long = This daysPerFourYears * This ticksPerDay
+	daysPerYear: static Int = 365
+	daysPerFourYears: static Int = 3 * This daysPerYear + 366
+	nanosecondsPerTick: static Long = 100
+	ticksPerMillisecond: static Long = 1_000_000 / This nanosecondsPerTick
+	ticksPerSecond: static Long = This ticksPerMillisecond * 1000
+	ticksPerMinute: static Long = This ticksPerSecond * 60
+	ticksPerHour: static Long = This ticksPerMinute * 60
+	ticksPerDay: static Long = This ticksPerHour * 24
+	ticksPerWeek: static Long = This ticksPerDay * 7
+	ticksPerFourYears: static Long = This daysPerFourYears * This ticksPerDay
 	/* default date/time printing format */
-	defaultFormat: static const Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
+	defaultFormat: static Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
 
 	now: static This = Time currentDateTime()
 

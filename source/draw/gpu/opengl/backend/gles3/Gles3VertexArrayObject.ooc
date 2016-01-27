@@ -102,7 +102,7 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 		version(debugGL) { validateEnd("VertexArrayObject draw") }
 		this unbind()
 	}
-	positionLayout: const static UInt = 0
-	textureCoordinateLayout: const static UInt = 1
+	positionLayout: static UInt = 0
+	textureCoordinateLayout: static UInt = 1
 }
 }
