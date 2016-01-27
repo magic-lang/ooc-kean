@@ -32,16 +32,16 @@ OpenGLCanvas: class extends OpenGLSurface {
 		gpuMap: GpuMap = drawState map as GpuMap ?? this context defaultMap
 		viewport := (drawState viewport hasZeroArea) ? IntBox2D new(this size) : drawState viewport
 		this context backend setViewport(viewport)
-		gpuMap view = _toLocal * drawState getTransformNormalized() normalizedToReference(this size) * _toLocal
+		gpuMap view = _toLocal * drawState getTransformNormalized() * _toLocal
 		if (this _focalLength > 0.0f) {
-			a := 2.0f * this _focalLength / this size x
-			f := -(this _coordinateTransform e as Float) * 2.0f * this _focalLength / this size y
+			a := this _focalLength
+			f := -(this _coordinateTransform e as Float) * this _focalLength
 			k := (this _farPlane + this _nearPlane) / (this _farPlane - this _nearPlane)
 			o := 2.0f * this _farPlane * this _nearPlane / (this _farPlane - this _nearPlane)
 			gpuMap projection = FloatTransform3D new(a, 0.0f, 0.0f, 0.0f, 0.0f, f, 0.0f, 0.0f, 0.0f, 0.0f, k, -1.0f, 0.0f, 0.0f, o, 0.0f)
 		} else
-			gpuMap projection = FloatTransform3D createScaling(2.0f / this size x, -(this _coordinateTransform e as Float) * 2.0f / this size y, 1.0f)
-		gpuMap model = this _createModelTransform(IntBox2D new(this size))
+			gpuMap projection = FloatTransform3D createScaling(1.0f, -(this _coordinateTransform e as Float), 1.0f)
+		gpuMap model = FloatTransform3D identity
 		if (drawState opacity < 1.0f)
 			this context backend blend(drawState opacity)
 		else
