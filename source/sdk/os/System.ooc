@@ -4,7 +4,7 @@ version(windows) {
 	include windows | (_WIN32_WINNT=0x0500)
 
 	SystemInfo: cover from SYSTEM_INFO {
-		numberOfProcessors: extern (dwNumberOfProcessors) UInt32
+		numberOfProcessors: extern (dwNumberOfProcessors) UInt
 	}
 
 	GetSystemInfo: extern func (SystemInfo*)
@@ -21,7 +21,7 @@ version(windows) {
 		MAX
 	}
 
-	GetComputerNameEx: extern func (COMPUTER_NAME_FORMAT, CString, UInt32*)
+	GetComputerNameEx: extern func (COMPUTER_NAME_FORMAT, CString, UInt*)
 }
 
 version(linux || apple) {
@@ -46,7 +46,7 @@ System: class {
 	hostname: static func -> String {
 		result: String
 		version (windows) {
-			bufSize: UInt32 = 0
+			bufSize: UInt = 0
 			GetComputerNameEx(COMPUTER_NAME_FORMAT DNS_HOSTNAME, null, bufSize&)
 			hostname := CharBuffer new(bufSize)
 			GetComputerNameEx(COMPUTER_NAME_FORMAT DNS_HOSTNAME, hostname data as Pointer, bufSize&)

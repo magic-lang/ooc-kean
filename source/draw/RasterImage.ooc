@@ -68,7 +68,7 @@ RasterImage: abstract class extends Image {
 		x, y, imageComponents: Int
 		data := StbImage load(filename, x&, y&, imageComponents&, 0)
 		result: This
-		buffer := ByteBuffer new(data as UInt8*, x * y * imageComponents, true)
+		buffer := ByteBuffer new(data as Byte*, x * y * imageComponents, true)
 		match (imageComponents) {
 			case 1 =>
 				result = RasterMonochrome new(buffer, IntVector2D new(x, y))

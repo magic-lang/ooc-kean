@@ -24,13 +24,13 @@ import OpenGLContext
 version(!gpuOff) {
 OpenGLVolumeMonochrome: class {
 	_backend: GLVolumeTexture
-	init: func (size: IntVector3D, pixels: UInt8* = null, context: OpenGLContext) {
+	init: func (size: IntVector3D, pixels: Byte* = null, context: OpenGLContext) {
 		this _backend = context backend createVolumeTexture(size, pixels)
 	}
 	free: override func {
 		this _backend free()
 		super()
 	}
-	upload: func (pixels: UInt8*) { this _backend upload(pixels) }
+	upload: func (pixels: Byte*) { this _backend upload(pixels) }
 }
 }

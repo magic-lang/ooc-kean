@@ -26,7 +26,7 @@ version(windows) {
 		buf setLength(len)
 
 		// rip away trailing CR LF TAB SPACES etc.
-		while ((len > 0) && (buf[len - 1] as Octet < 32)) len -= 1
+		while ((len > 0) && (buf[len - 1] as Byte < 32)) len -= 1
 		buf setLength(len)
 		buf toString()
 	}
@@ -74,7 +74,7 @@ version(windows) {
 		return li quadPart
 	}
 
-	// FILETIME is an Int64 that stores the number of 100-nanoseconds intervals from January 1st, 1601
+	// FILETIME is a Long that stores the number of 100-nanoseconds intervals from January 1st, 1601
 	FileTime: cover from FILETIME {
 		lowDateTime: extern (dwLowDateTime) Long // DWORD
 		highDateTime: extern (dwHighDateTime) Long // DWORD
@@ -100,7 +100,7 @@ version(windows) {
 		return date quadPart / 10000000
 	}
 
-	BYTE: extern cover from UInt8
+	BYTE: extern cover from Byte
 	WORD: extern cover from Int
 	DWORD: extern cover from Long
 	LPTSTR: extern cover from CString

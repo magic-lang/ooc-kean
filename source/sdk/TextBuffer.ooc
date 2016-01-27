@@ -38,7 +38,7 @@ TextBuffer: cover {
 	init: func@ ~empty { this init(OwnedBuffer new()) }
 	init: func@ ~fromSize (size: Int) { this init(OwnedBuffer new(size)) }
 	init: func@ ~fromData (data: Char*, count: Int, owner := Owner Unknown) {
-		this init(OwnedBuffer new(data as UInt8*, count, owner))
+		this init(OwnedBuffer new(data as Byte*, count, owner))
 	}
 	init: func@ ~fromBuffer (buffer: CharBuffer) { this init(buffer data, buffer size) }
 	init: func@ (=_backend)

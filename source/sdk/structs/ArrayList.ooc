@@ -37,7 +37,7 @@ ArrayList: class <T> extends BackIterable<T> {
 		// inserting at 0 can be optimized
 		if (index == 0) {
 			ensureCapacity(_size + 1)
-			dst, src: Octet*
+			dst, src: Byte*
 			dst = data + (T size)
 			src = data
 			memmove(dst, src, T size * _size)
@@ -53,7 +53,7 @@ ArrayList: class <T> extends BackIterable<T> {
 
 		checkIndex(index)
 		ensureCapacity(_size + 1)
-		dst, src: Octet*
+		dst, src: Byte*
 		dst = data + (T size * (index + 1))
 		src = data + (T size * index)
 		bsize := (_size - index) * T size

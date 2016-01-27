@@ -5,9 +5,9 @@ MathTest: class extends Fixture {
 		super("Math")
 		floatTolerance := 1.0e-5f
 		doubleTolerance := 1.0e-5
-		this add("Int64", func {
-			int64ValuePos: Int64 = 22
-			int64ValueNeg: Int64 = -7
+		this add("Long", func {
+			int64ValuePos: Long = 22
+			int64ValueNeg: Long = -7
 			expect(int64ValuePos modulo(5), is equal to(2))
 			expect(int64ValueNeg modulo(3), is equal to(2))
 			expect(int64ValueNeg modulo(1), is equal to(0))

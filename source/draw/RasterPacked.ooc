@@ -70,7 +70,7 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 		(sourceStartColumn, sourceStartRow) := (sourceBox leftTop x, sourceBox leftTop y)
 		(resultStartColumn, resultStartRow) := (resultBox leftTop x, resultBox leftTop y)
 		(sourceStride, resultStride) := (source stride, target stride)
-		(sourceBuffer, resultBuffer) := (source buffer pointer as UInt8*, target buffer pointer as UInt8*)
+		(sourceBuffer, resultBuffer) := (source buffer pointer as Byte*, target buffer pointer as Byte*)
 		for (row in 0 .. resultHeight) {
 			sourceRow := ((sourceHeight as Float) * row) / resultHeight + sourceStartRow
 			sourceRowUp := sourceRow floor() as Int
@@ -92,8 +92,8 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 			}
 		}
 	}
-	_blendSquare: static func (sourceBuffer, resultBuffer: UInt8*, sourceStride, resultStride, sourceRow, sourceColumn, row, column: Int, weightTopLeft, weightTopRight, weightBottomLeft, weightBottomRight: Float, bytesPerPixel: Int) {
-		finalValue: UInt8 = 0
+	_blendSquare: static func (sourceBuffer, resultBuffer: Byte*, sourceStride, resultStride, sourceRow, sourceColumn, row, column: Int, weightTopLeft, weightTopRight, weightBottomLeft, weightBottomRight: Float, bytesPerPixel: Int) {
+		finalValue: Byte = 0
 		for (i in 0 .. bytesPerPixel) {
 			finalValue = weightTopLeft > 0.0f ? weightTopLeft * sourceBuffer[sourceColumn * bytesPerPixel + sourceRow * sourceStride + i] : 0
 			finalValue += weightTopRight > 0.0f ? weightTopRight * sourceBuffer[(sourceColumn + 1) * bytesPerPixel + sourceRow * sourceStride + i] : 0

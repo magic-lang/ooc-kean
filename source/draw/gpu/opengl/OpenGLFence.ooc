@@ -33,7 +33,7 @@ OpenGLFence: class extends GpuFence {
 		super()
 	}
 	wait: override func -> Bool { this wait(ULLONG_MAX) }
-	wait: override func ~timeout (nanoseconds: UInt64) -> Bool {
+	wait: override func ~timeout (nanoseconds: ULong) -> Bool {
 		this _mutex lock()
 		if (this _backend == null)
 			this _syncCondition wait(this _mutex)

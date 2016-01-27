@@ -21,7 +21,7 @@ import ReferenceCounter
 import Debug
 
 ByteBuffer: class {
-	_pointer: UInt8*
+	_pointer: Byte*
 	_size: Int
 	_referenceCount: ReferenceCounter
 	_ownsMemory: Bool
@@ -59,7 +59,7 @@ ByteBuffer: class {
 		memcpy(other pointer + destination, this pointer + start, length)
 	}
 	new: static func ~size (size: Int) -> This { _RecyclableByteBuffer new(size) }
-	new: static func ~recover (pointer: UInt8*, size: Int, recover: Func (This) -> Bool) -> This {
+	new: static func ~recover (pointer: Byte*, size: Int, recover: Func (This) -> Bool) -> This {
 		_RecoverableByteBuffer new(pointer, size, recover)
 	}
 	free: static func ~all { _RecyclableByteBuffer _free~all() }
@@ -80,7 +80,7 @@ _SlicedByteBuffer: class extends ByteBuffer {
 }
 _RecoverableByteBuffer: class extends ByteBuffer {
 	_recover: Func (ByteBuffer) -> Bool
-	init: func (pointer: UInt8*, size: Int, =_recover) { super(pointer, size) }
+	init: func (pointer: Byte*, size: Int, =_recover) { super(pointer, size) }
 	free: override func {
 		if (!this _recover(this)) {
 			(this _recover as Closure) free()
@@ -89,7 +89,7 @@ _RecoverableByteBuffer: class extends ByteBuffer {
 	}
 }
 _RecyclableByteBuffer: class extends ByteBuffer {
-	init: func (pointer: UInt8*, size: Int) { super(pointer, size, true) }
+	init: func (pointer: Byte*, size: Int) { super(pointer, size, true) }
 	_forceFree: func {
 		this _size = 0
 		this free()

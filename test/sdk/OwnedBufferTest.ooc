@@ -6,7 +6,7 @@ OwnedBufferTest: class extends Fixture {
 	init: func {
 		super("OwnedBuffer")
 		this add("constructor static", func {
-			t := OwnedBuffer new(c"test" as UInt8*, 4, Owner Static)
+			t := OwnedBuffer new(c"test" as Byte*, 4, Owner Static)
 			expect(t size, is equal to(4))
 			expect(t owner == Owner Static)
 			t free()

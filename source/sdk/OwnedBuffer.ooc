@@ -18,7 +18,7 @@
 import Owner
 
 OwnedBuffer: cover {
-	_pointer: UInt8*
+	_pointer: Byte*
 	_size: Int
 	_owner: Owner
 	pointer ::= this _pointer

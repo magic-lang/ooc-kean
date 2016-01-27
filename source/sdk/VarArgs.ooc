@@ -20,7 +20,7 @@ __pointer_align: func (s: SizeT) -> SizeT {
 }
 
 VarArgs: cover {
-	args, argsPtr: UInt8* // because the size of stuff (T size) is expressed in bytes
+	args, argsPtr: Byte* // because the size of stuff (T size) is expressed in bytes
 	count: SSizeT // number of elements
 
 	// private api used by C code
@@ -86,7 +86,7 @@ VarArgs: cover {
  * where we take advantage of generic inlining.
  */
 VarArgsIterator: cover {
-	argsPtr: UInt8*
+	argsPtr: Byte*
 	countdown: SSizeT
 	first: Bool
 

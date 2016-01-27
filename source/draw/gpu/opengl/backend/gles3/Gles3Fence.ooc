@@ -29,7 +29,7 @@ Gles3Fence: class extends GLFence {
 		version(debugGL) { validateEnd("Fence free") }
 		super()
 	}
-	clientWait: override func (timeout: UInt64 = ULLONG_MAX) -> Bool {
+	clientWait: override func (timeout: ULong = ULONG_MAX) -> Bool {
 		version(debugGL) { validateStart("Fence clientWait") }
 		code := glClientWaitSync(this _backend, GL_SYNC_FLUSH_COMMANDS_BIT, timeout)
 		version(debugGL) {

@@ -771,7 +771,7 @@ glBlendEquationSeparate: extern func (modeRGB, modeAlpha: UInt)
 glBlendFunc: extern func (sfactor, dfactor: UInt)
 glBlendFuncSeparate: extern func (srcRGB, dstRGB, srcAlpha, dstAlpha: UInt)
 glBufferData: extern func (target: UInt, size: Long, data: Pointer, usage: UInt)
-glBufferSubData: extern func (target: UInt, offset: Int32, size: Int32, data: Pointer)
+glBufferSubData: extern func (target: UInt, offset: Int, size: Int, data: Pointer)
 glCheckFramebufferStatus: extern func (target: UInt) -> UInt
 glClear: extern func (mask: UInt)
 glClearColor: extern func (red, green, blue, alpha: Float)
@@ -936,8 +936,8 @@ glUniformMatrix4x3fv: extern func (location: Int, count: Int, transpose: UInt, v
 glBlitFramebuffer: extern func (srcX0: Int, srcY0: Int, srcX1: Int, srcY1: Int, dstX0: Int, dstY0: Int, dstX1: Int, dstY1: Int, mask: UInt, filter: UInt)
 glRenderbufferStorageMultisample: extern func (target: UInt, samples: Int, internalformat: UInt, width: Int, height: Int)
 glFramebufferTextureLayer: extern func (target: UInt, attachment: UInt, texture: UInt, level: Int, layer: Int)
-glMapBufferRange: extern func (target: UInt, offset: Int32, length: Int32, access: UInt) -> Pointer
-glFlushMappedBufferRange: extern func (target: UInt, offset: Int32, length: Int32)
+glMapBufferRange: extern func (target: UInt, offset: Int, length: Int, access: UInt) -> Pointer
+glFlushMappedBufferRange: extern func (target: UInt, offset: Int, length: Int)
 glBindVertexArray: extern func (array: UInt)
 glDeleteVertexArrays: extern func (n: Int, arrays: UInt*)
 glGenVertexArrays: extern func (n: Int, arrays: UInt*)
@@ -945,7 +945,7 @@ glIsVertexArray: extern func (array: UInt) -> UInt
 glGetIntegeri_v: extern func (target: UInt, index: UInt, data: Int*)
 glBeginTransformFeedback: extern func (primitiveMode: UInt)
 glEndTransformFeedback: extern func
-glBindBufferRange: extern func (target: UInt, index: UInt, buffer: UInt, offset: Int32, size: Int)
+glBindBufferRange: extern func (target: UInt, index: UInt, buffer: UInt, offset: Int, size: Int)
 glBindBufferBase: extern func (target, index, buffer: UInt)
 glTransformFeedbackVaryings: extern func (program: UInt, count: Int, varyings: Char**, bufferMode: UInt)
 glGetTransformFeedbackVarying: extern func (program: UInt, index: UInt, bufSize: Int, length: Int*, size: Int*, type: UInt*, name: Char*)
@@ -971,7 +971,7 @@ glClearBufferuiv: extern func (buffer: UInt, drawbuffer: Int, value: UInt*)
 glClearBufferfv: extern func (buffer: UInt, drawbuffer: Int, value: Float*)
 glClearBufferfi: extern func (buffer: UInt, drawbuffer: Int, depth: Float, stencil: Int)
 glGetStringi: extern func (name, index: UInt) -> Char*
-glCopyBufferSubData: extern func (readTarget: UInt, writeTarget: UInt, readOffset: Int32, writeOffset: Int32, size: Int)
+glCopyBufferSubData: extern func (readTarget: UInt, writeTarget: UInt, readOffset: Int, writeOffset: Int, size: Int)
 glGetUniformIndices: extern func (program: UInt, uniformCount: Int, uniformNames: Char**, uniformIndices: UInt*)
 glGetActiveUniformsiv: extern func (program: UInt, uniformCount: Int, uniformIndices: UInt*, pname: UInt, params: Int*)
 glGetUniformBlockIndex: extern func (program: UInt, uniformBlockName: Char*) -> UInt
@@ -983,14 +983,14 @@ glDrawElementsInstanced: extern func (mode: UInt, count: Int, type: UInt, indice
 glFenceSync: extern func (condition, flags: UInt) -> Pointer
 glIsSync: extern func (sync: Pointer) -> UInt
 glDeleteSync: extern func (sync: Pointer)
-glWaitSync: extern func (sync: Pointer, flags: UInt, timeout: UInt64)
+glWaitSync: extern func (sync: Pointer, flags: UInt, timeout: ULong)
 
-glClientWaitSync: extern func (sync: Pointer, flags: UInt, timeout: UInt64) -> UInt
+glClientWaitSync: extern func (sync: Pointer, flags: UInt, timeout: ULong) -> UInt
 
-glGetInteger64v: extern func (pname: UInt, params: Int64*)
+glGetInteger64v: extern func (pname: UInt, params: Long*)
 glGetSynciv: extern func (sync: Pointer, pname: UInt, bufSize: Int, length: Int*, values: Int*)
-glGetInteger64i_v: extern func (target: UInt, index: UInt, data: Int64*)
-glGetBufferParameteri64v: extern func (target: UInt, pname: UInt, params: Int64*)
+glGetInteger64i_v: extern func (target: UInt, index: UInt, data: Long*)
+glGetBufferParameteri64v: extern func (target: UInt, pname: UInt, params: Long*)
 glGenSamplers: extern func (count: Int, samplers: UInt*)
 glDeleteSamplers: extern func (count: Int, samplers: UInt*)
 glIsSampler: extern func (sampler: UInt) -> UInt

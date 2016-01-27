@@ -173,7 +173,7 @@ version(windows) {
 			false
 		}
 
-		mkdir: override func ~withMode (mode: Int32) -> Int {
+		mkdir: override func ~withMode (mode: Int) -> Int {
 			if (relative()) {
 				return getAbsoluteFile() mkdir()
 			}
@@ -183,7 +183,7 @@ version(windows) {
 			CreateDirectory(path toCString(), null) ? 0 : -1
 		}
 
-		mkfifo: override func ~withMode (mode: Int32) -> Int {
+		mkfifo: override func ~withMode (mode: Int) -> Int {
 			fprintf(stderr, "FileWin32: stub mkfifo")
 		}
 

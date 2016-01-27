@@ -100,8 +100,8 @@ RasterMonochromeTest: class extends Fixture {
 		this add("color monochrome from unsigned types", func {
 			image := RasterMonochrome new(IntVector2D new(10, 10))
 			value: UInt = 128
-			value32: UInt32 = 128
-			value64: UInt64 = 128
+			value32: UInt = 128
+			value64: ULong = 128
 			image[0, 0] = ColorMonochrome new(value32)
 			image[0, 1] = ColorMonochrome new(value64)
 			image[0, 2] = ColorMonochrome new(value)

@@ -189,7 +189,7 @@ Gles3Context: class extends GLContext {
 		result
 	}
 	createFence: override func -> Gles3Fence { Gles3Fence new() }
-	createVolumeTexture: override func (size: IntVector3D, pixels: UInt8*) -> Gles3VolumeTexture {
+	createVolumeTexture: override func (size: IntVector3D, pixels: Byte*) -> Gles3VolumeTexture {
 		Gles3VolumeTexture new(size, pixels)
 	}
 	createRenderer: override func -> Gles3Renderer { Gles3Renderer new() }

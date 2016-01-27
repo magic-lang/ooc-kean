@@ -75,7 +75,7 @@ murmurHash: func <K> (keyTagazok: K) -> SizeT {
 	l := len
 
 	h : SizeT = seed ^ len
-	data := (keyTagazok&) as Octet*
+	data := (keyTagazok&) as Byte*
 
 	while (true) {
 		k := (data as SizeT*)@
