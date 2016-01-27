@@ -7,6 +7,7 @@ ThreadTest: class extends Fixture {
 		super("Thread")
 		this add("starting thread", This _testStartingThread)
 		version (!windows) { this add("canceling thread", This _testCancelation) }
+		this add("thread id", This _testThreadId)
 	}
 	_testStartingThread: static func {
 		threadStarted := Cell<Int> new(0)
@@ -55,6 +56,21 @@ ThreadTest: class extends Fixture {
 		mutex free()
 		value free()
 		(job as Closure) free()
+	}
+	_testThreadId: static func {
+		myId := Thread currentThreadId()
+		otherId := Cell<Long> new(0L)
+		job := func {
+			otherId set(Thread currentThreadId())
+		}
+		thread := Thread new(job)
+		expect(thread start())
+		expect(thread wait())
+		thread free()
+		expect(Thread equals(myId, otherId get()) == false)
+		otherId free()
+		(job as Closure) free()
+		expect(Thread equals(myId, Thread currentThreadId()))
 	}
 }
 
