@@ -23,9 +23,13 @@ SynchronizedList: class <T> extends List<T> {
 		this _backend add(item)
 		this _mutex unlock()
 	}
-	append: override func (other: This<T>) {
+	append: override func (other: List<T>) {
 		this _mutex lock()
-		this _backend append(other _backend)
+		if (this _backend _vector capacity < this _backend _count + other count)
+			this _backend _vector resize(this _backend _vector capacity + other count)
+		for (i in 0 .. other count)
+			this _backend _vector[this _backend _count + i] = other[i]
+		this _backend _count += other count
 		this _mutex unlock()
 	}
 	insert: override func (index: Int, item: T) {

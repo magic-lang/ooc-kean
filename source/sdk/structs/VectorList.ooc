@@ -14,9 +14,6 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with this software. If not, see <http://www.gnu.org/licenses/>.
 */
-
-import structs/[Vector, List]
-
 VectorList: class <T> extends List<T>{
 	_vector: Vector<T>
 	pointer ::= this _vector _backend as Pointer
@@ -38,7 +35,7 @@ VectorList: class <T> extends List<T>{
 		this _vector[this _count] = item
 		this _count += 1
 	}
-	append: override func (other: This<T>) {
+	append: override func (other: List<T>) {
 		if (this _vector capacity < this _count + other count)
 			this _vector resize(this _vector capacity + other count)
 		for (i in 0 .. other count)
@@ -122,7 +119,7 @@ VectorList: class <T> extends List<T>{
 			result add(this _vector[i])
 		result
 	}
-	getElements: override func (indices: This<Int>) -> This<T> {
+	getElements: override func (indices: List<Int>) -> This<T> {
 		result := This<T> new()
 		for (i in 0 .. indices count)
 			result add(this[indices[i]])

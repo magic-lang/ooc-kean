@@ -23,4 +23,6 @@ List: abstract class <T> {
 	getSliceInto: abstract func ~range (range: Range, buffer: This<T>)
 	getSliceInto: abstract func ~indices (start, end: Int, buffer: This<T>)
 	iterator: abstract func -> Iterator<T>
+	abstract operator [] (index: Int) -> T
+	abstract operator []= (index: Int, item: T)
 }
