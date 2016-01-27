@@ -112,14 +112,14 @@ VectorList: class <T> extends List<T>{
 			initial = function(this[i], initial)
 		initial
 	}
-	getFirstElements: override func (number: Int) -> This<T> {
+	getFirstElements: override func (number: Int) -> List<T> {
 		result := This<T> new()
 		number = number < count ? number : count
 		for (i in 0 .. number)
 			result add(this _vector[i])
 		result
 	}
-	getElements: override func (indices: List<Int>) -> This<T> {
+	getElements: override func (indices: List<Int>) -> List<T> {
 		result := This<T> new()
 		for (i in 0 .. indices count)
 			result add(this[indices[i]])
@@ -133,14 +133,14 @@ VectorList: class <T> extends List<T>{
 	getSlice: override func ~indices (start, end: Int) -> This<T> {
 		this getSlice(start .. end)
 	}
-	getSliceInto: override func ~range (range: Range, buffer: This<T>) {
+	getSliceInto: final override func ~range (range: Range, buffer: This<T>) {
 		if (buffer _vector capacity < range count)
 			buffer _vector resize(range count)
 		buffer _count = range count
 		source := (this _vector _backend + (range min * (T size))) as Pointer
 		memcpy(buffer pointer, source, range count * (T size))
 	}
-	getSliceInto: override func ~indices (start, end: Int, buffer: This<T>) {
+	getSliceInto: final override func ~indices (start, end: Int, buffer: This<T>) {
 		this getSliceInto(start .. end, buffer)
 	}
 	iterator: override func -> Iterator<T> { _VectorListIterator<T> new(this) }

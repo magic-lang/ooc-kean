@@ -115,6 +115,7 @@ SynchronizedListTest: class extends Fixture {
 			list add(1) . add(2) . add(3)
 			sum := list fold(Int, |v1, v2| v1 + v2, 0)
 			expect(sum, is equal to(6))
+			list free()
 		})
 		this add("single thread - map", func {
 			list := SynchronizedList<Int> new()
@@ -133,6 +134,7 @@ SynchronizedListTest: class extends Fixture {
 			list add(1) . add(2) . add(3)
 			sum := list fold(Int, |v1, v2| v1 + v2, 0)
 			expect(sum, is equal to(6))
+			list free()
 		})
 		this add("single thread - getFirstElement", func {
 			list := SynchronizedList<Int> new()
@@ -141,8 +143,8 @@ SynchronizedListTest: class extends Fixture {
 			expect(result count, is equal to(2))
 			expect(result[0], is equal to(list[0]))
 			expect(result[1], is equal to(list[1]))
-			list free()
 			result free()
+			list free()
 		})
 		this add("single thread - getElements", func {
 			list := SynchronizedList<Int> new()
@@ -152,25 +154,26 @@ SynchronizedListTest: class extends Fixture {
 			expect(result count, is equal to(2))
 			expect(result[0], is equal to(list[2]))
 			expect(result[1], is equal to(list[4]))
-			list free()
+			indicesList free()
 			result free()
+			list free()
 		})
 		this add("single thread - getSlice", func {
 			list := SynchronizedList<Int> new()
 			list add(-5) . add(-4) . add(-3) . add(-2) . add(-1)
-			result := list getSlice(1 .. 3)
-			expect(result count, is equal to(3))
-			expect(result[0], is equal to(list[1]))
-			expect(result[1], is equal to(list[2]))
-			expect(result[2], is equal to(list[3]))
-			result clear()
-			result = list getSlice(1, 3)
-			expect(result count, is equal to(3))
-			expect(result[0], is equal to(list[1]))
-			expect(result[1], is equal to(list[2]))
-			expect(result[2], is equal to(list[3]))
+			range := list getSlice(1 .. 3)
+			expect(range count, is equal to(3))
+			expect(range[0], is equal to(list[1]))
+			expect(range[1], is equal to(list[2]))
+			expect(range[2], is equal to(list[3]))
+			range free()
+			interval := list getSlice(1, 3)
+			expect(interval count, is equal to(3))
+			expect(interval[0], is equal to(list[1]))
+			expect(interval[1], is equal to(list[2]))
+			expect(interval[2], is equal to(list[3]))
+			interval free()
 			list free()
-			result free()
 		})
 		this add("single thread - getSliceInto", func {
 			list := SynchronizedList<Float> new()
@@ -225,7 +228,7 @@ SynchronizedListTest: class extends Fixture {
 	}
 	_testMultipleThreads: static func {
 		numberOfThreads := 8
-		countPerThread := 10_000
+		countPerThread := 3_000
 		list := SynchronizedList<Int> new()
 		threads := Thread[numberOfThreads] new()
 		job := func {
@@ -260,12 +263,13 @@ SynchronizedListTest: class extends Fixture {
 		for (i in 0 .. numberOfThreads)
 			threads[i] wait() . free()
 		expect(list count, is equal to(0))
+		(job as Closure) free()
 		threads free()
 		list free()
 	}
 	_testMultipleThreadsWithClass: static func {
 		numberOfThreads := 8
-		countPerThread := 10_000
+		countPerThread := 3_000
 		list := SynchronizedList<Cell<Int>> new()
 		threads := Thread[numberOfThreads] new()
 		job := func {

@@ -2,7 +2,7 @@ import threading/Mutex
 
 SynchronizedList: class <T> extends List<T> {
 	_mutex := Mutex new()
-	_backend : VectorList<T>
+	_backend: VectorList<T>
 	count ::= this _backend count
 	empty ::= this _backend empty
 	pointer ::= this _backend pointer
@@ -23,13 +23,9 @@ SynchronizedList: class <T> extends List<T> {
 		this _backend add(item)
 		this _mutex unlock()
 	}
-	append: override func (other: List<T>) {
+	append: final override func (other: List<T>) {
 		this _mutex lock()
-		if (this _backend _vector capacity < this _backend _count + other count)
-			this _backend _vector resize(this _backend _vector capacity + other count)
-		for (i in 0 .. other count)
-			this _backend _vector[this _backend _count + i] = other[i]
-		this _backend _count += other count
+		this _backend append(other)
 		this _mutex unlock()
 	}
 	insert: override func (index: Int, item: T) {
@@ -55,7 +51,9 @@ SynchronizedList: class <T> extends List<T> {
 		this _mutex unlock()
 	}
 	clear: override func {
-		this _mutex with(|| this _backend clear())
+		this _mutex lock()
+		this _backend clear()
+		this _mutex unlock()
 	}
 	reverse: override func -> This<T> {
 		this _mutex lock()
@@ -98,17 +96,17 @@ SynchronizedList: class <T> extends List<T> {
 	}
 	getFirstElements: override func (number: Int) -> This<T> {
 		this _mutex lock()
-		result := This<T> new(this _backend getFirstElements(number))
+		result := This<T> new(this _backend getFirstElements(number) as VectorList<T>)
 		this _mutex unlock()
 		result
 	}
-	getElements: override func (indices: This<Int>) -> This<T> {
+	getElements: final override func (indices: This<Int>) -> This<T> {
 		this _mutex lock()
-		result := This<T> new(this _backend getElements(indices _backend))
+		result := This<T> new(this _backend getElements(indices _backend) as VectorList<T>)
 		this _mutex unlock()
 		result
 	}
-	getSlice: override func ~range (range: Range) -> This<T> {
+	getSlice: final override func ~range (range: Range) -> This<T> {
 		this _mutex lock()
 		result := This<T> new(this _backend getSlice(range))
 		this _mutex unlock()
@@ -120,12 +118,12 @@ SynchronizedList: class <T> extends List<T> {
 		this _mutex unlock()
 		result
 	}
-	getSliceInto: override func ~range (range: Range, buffer: This<T>) {
+	getSliceInto: final override func ~range (range: Range, buffer: This<T>) {
 		this _mutex lock()
 		this _backend getSliceInto(range, buffer)
 		this _mutex unlock()
 	}
-	getSliceInto: override func ~indices (start, end: Int, buffer: This<T>) {
+	getSliceInto: final override func ~indices (start, end: Int, buffer: This<T>) {
 		this _mutex lock()
 		this _backend getSliceInto(start, end, buffer)
 		this _mutex unlock()
