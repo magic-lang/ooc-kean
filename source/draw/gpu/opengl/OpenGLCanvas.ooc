@@ -32,7 +32,7 @@ OpenGLCanvas: class extends OpenGLSurface {
 		gpuMap: GpuMap = drawState map as GpuMap ?? this context defaultMap
 		viewport := (drawState viewport hasZeroArea) ? IntBox2D new(this size) : drawState viewport
 		this context backend setViewport(viewport)
-		gpuMap model = FloatTransform3D identity // TODO: set using a destination argument in drawState
+		gpuMap model = FloatTransform3D createTranslation(0.0f, 0.0f, this focalLength) // TODO: set using a destination argument in drawState
 		gpuMap view = _toLocal * drawState getTransformNormalized() * _toLocal
 		gpuMap projection = FloatTransform3D createProjection(this _focalLength, this _nearPlane, this _farPlane, this _coordinateTransform)
 		// Set opacity
