@@ -23,6 +23,7 @@ import FloatVector3D
 import FloatPoint2D
 import FloatPoint3D
 import FloatBox2D
+import IntTransform2D
 import FloatTransform2D
 
 // The 3D transform is a 4x4 homogeneous coordinate matrix.
@@ -252,6 +253,16 @@ FloatTransform3D: cover {
 	createReflectionZ: static func -> This { This new(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f) }
 	createProjection: static func (focalLength: Float) -> This {
 		This new(focalLength, 0, 0, 0, 0, focalLength, 0, 0, 0, 0, focalLength, 1.0f, 0, 0, 0, 0)
+	}
+	createProjection: static func ~flip (focalLength, nearPlane, farPlane: Float, coordinateTransform: IntTransform2D) -> This {
+		if (focalLength > 0.0f) {
+			a := (coordinateTransform a as Float) * focalLength
+			f := -(coordinateTransform e as Float) * focalLength
+			k := (farPlane + nearPlane) / (farPlane - nearPlane)
+			o := 2.0f * farPlane * nearPlane / (farPlane - nearPlane)
+			This new(a, 0.0f, 0.0f, 0.0f, 0.0f, f, 0.0f, 0.0f, 0.0f, 0.0f, k, -1.0f, 0.0f, 0.0f, o, 0.0f)
+		} else
+			This createScaling((coordinateTransform a as Float), -(coordinateTransform e as Float), 1.0f)
 	}
 	referenceToNormalized: func ~float (imageSize: FloatVector2D) -> This {
 		toReference := This createScaling(imageSize x / 2.0f, imageSize y / 2.0f, 1.0f)
