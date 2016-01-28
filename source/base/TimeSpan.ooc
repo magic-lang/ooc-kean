@@ -43,7 +43,7 @@ TimeSpan: cover {
 	elapsedWeeks: func -> Long {
 		this ticks / DateTime ticksPerWeek
 	}
-	defaultFormat: static const Text = t"%w weeks, %d days, %h hours, %m minutes, %s seconds, %z milliseconds"
+	defaultFormat: static Text = t"%w weeks, %d days, %h hours, %m minutes, %s seconds, %z milliseconds"
 	// supported formatting expressions:
 	//  %w - weeks (rounded down)
 	//  %d - days (<7)
