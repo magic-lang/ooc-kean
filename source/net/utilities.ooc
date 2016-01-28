@@ -1,8 +1,15 @@
+/* This file is part of magic-sdk, an sdk for the open source programming language magic.
+ *
+ * Copyright (C) 2016 magic-lang
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 /*
 	Not sure if this is the best method, but it avoids inter-dependencies
 	between UDPSocket and ServerSocket.
 */
-
 import berkeley, translation, Socket, Address, Exceptions
 
 /**

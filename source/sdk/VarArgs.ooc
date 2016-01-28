@@ -1,6 +1,11 @@
-// that thunk is needed to correctly infer the 'T'. It shows at the
-// same time the limitations of ooc generics and still how incredibly
-// powerful they are.
+/* This file is part of magic-sdk, an sdk for the open source programming language magic.
+ *
+ * Copyright (C) 2016 magic-lang
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 __va_call: func <T> (f: Func <T> (T), T: Class, arg: T) {
 	f(arg)
 }

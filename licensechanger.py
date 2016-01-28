@@ -27,6 +27,7 @@ for root, directories, filenames in os.walk('./source'):
 					# ...remove it
 					#print('\tHas old license')
 
+					# TODO: A file may not start with comments that aren't a license... then bad things happen
 					while (index < len(lines) and not '// along' in lines[index] and not '*/' in lines[index]) and ('//' in lines[index] or '*' in lines[index]):
 						#print(' '+lines[index].rstrip())
 						index += 1
