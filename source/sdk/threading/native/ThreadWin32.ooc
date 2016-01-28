@@ -45,6 +45,7 @@ ThreadWin32: class extends Thread {
 				false
 		}
 	}
+	detach: override func -> Bool { false }
 	cancel: override func -> Bool {
 		false
 		//this alive() && TerminateThread(this handle, 0)
@@ -52,7 +53,6 @@ ThreadWin32: class extends Thread {
 	}
 	alive: override func -> Bool {
 		result := WaitForSingleObject(handle, 0)
-
 		// if it's equal, it has terminated, otherwise, it's still alive
 		result != WAIT_OBJECT_0
 	}
