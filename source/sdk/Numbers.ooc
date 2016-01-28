@@ -15,6 +15,12 @@ ULLONG_MAX: extern static ULLong
 LLong: cover from signed long long {
 	toString: func -> String { "%lld" formatLLong(this as LLong) }
 	toHexString: func -> String { "%llx" formatLLong(this as LLong) }
+	toText: func -> Text {
+		string := this toString()
+		result := Text new(string) copy()
+		string free()
+		result
+	}
 
 	in: func (range: Range) -> Bool {
 		this >= range min && this < range max
@@ -36,12 +42,6 @@ Long: cover from int64_t extends LLong
 
 Int: cover from int32_t extends LLong {
 	toString: func -> String { "%d" formatInt(this) }
-	toText: func -> Text {
-		string := this toString()
-		result := Text new(string) copy()
-		string free()
-		result
-	}
 }
 
 Short: cover from int16_t extends LLong
@@ -78,13 +78,6 @@ LDBL_MIN, LDBL_MAX: extern static LDouble
 LDouble: cover from long double {
 	isNumber ::= this == this
 	toString: func -> String {
-		"%.2Lf" formatLDouble(this)
-	}
-}
-
-Double: cover from double extends LDouble {
-	isNumber ::= this == this
-	toString: func -> String {
 		"%.2f" formatDouble(this)
 	}
 	toText: func -> Text {
@@ -95,16 +88,17 @@ Double: cover from double extends LDouble {
 	}
 }
 
+Double: cover from double extends LDouble {
+	isNumber ::= this == this
+	toString: func -> String {
+		"%.2f" formatDouble(this)
+	}
+}
+
 Float: cover from float extends LDouble {
 	isNumber ::= this == this
 	toString: func -> String {
 		"%.2f" formatFloat(this)
-	}
-	toText: func -> Text {
-		string := this toString()
-		result := Text new(string) copy()
-		string free()
-		result
 	}
 }
 

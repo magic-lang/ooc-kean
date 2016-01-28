@@ -46,7 +46,7 @@ Fixture: abstract class {
 	run: func -> Bool {
 		failures := VectorList<TestFailedException> new(32, false)
 		result := true
-		dateString := DateTime now toText(t"%hh:%mm:%ss") toString() & " " << this name + " "
+		dateString := DateTime now toText(t"%hh:%mm:%ss ") + Text new(this name) + t" "
 		This _print(dateString)
 		timer := ClockTimer new() . start()
 		for (i in 0 .. this tests count) {
@@ -61,29 +61,25 @@ Fixture: abstract class {
 				result = r = false
 				failures add(e)
 			}
-			This _print((r ? t"." : t"f") toString())
+			This _print(r ? t"." : t"f")
 		}
 		if (!result) {
 			if (!This failureNames)
 				This failureNames = VectorList<String> new()
 			This failureNames add(this name clone())
 		}
-		This _print((result ? t" done" : t" failed") toString())
+		This _print(result ? t" done" : t" failed")
 		testTime := timer stop() / 1000.0
 		This totalTime += testTime
-		timeString := "\n"
-		if (testTime > 0.01)
-			timeString = t" in %.2fs" format(testTime) toString() & timeString
+		timeString := testTime > 0.01 ? t" in %.2fs\n" format(testTime) : t"\n"
 		This _print(timeString)
 		if (!result) {
 			for (i in 0 .. failures count) {
 				f := failures[i]
-				// If the constraint is a CompareConstraint and the value being tested is a Cell,
-				// we create a friendly message for the user.
 				if (f constraint instanceOf?(CompareConstraint) && f value instanceOf?(Cell))
 					(this createFailureMessage(f) toString()) println()
 				else
-					"  -> '%s' (expect: %i)" printfln(f message, f expect)
+					This _print(t"  -> '%s' (expect: %i)\n" format(f message, f expect))
 				f free()
 			}
 			This _testsFailed = true
@@ -102,15 +98,17 @@ Fixture: abstract class {
 		result append(t": expected")
 		match (constraint type) {
 			case ComparisonType Equal =>
-				result append(t" equal to")
+				result append(t"equal to")
 			case ComparisonType LessThan =>
-				result append(t" less than")
+				result append(t"less than")
 			case ComparisonType GreaterThan =>
-				result append(t" greater than")
+				result append(t"greater than")
 			case ComparisonType Within =>
-				result append(t" equal to")
+				result append(t"equal to")
 		}
-		result append(Text new(" '%s', was '%s'" format(rightValue toString(), leftValue toString())))
+		result append(rightValue toText())
+		result append(t"was")
+		result append(leftValue toText())
 		if (constraint type == ComparisonType Within)
 			result append(Text new(" [tolerance: %.8f]" formatDouble((constraint parent as CompareWithinConstraint) precision)))
 		result join(' ')
@@ -120,9 +118,9 @@ Fixture: abstract class {
 	is ::= static IsConstraints new()
 	testsFailed: static Bool { get { This _testsFailed } }
 	printFailures: static func {
-		This _print("Total time: %.2f s\n" format(This totalTime))
+		This _print(t"Total time: %.2f s\n" format(This totalTime))
 		if (This failureNames && (This failureNames count > 0)) {
-			This _print("Failed tests: %i [" format(This failureNames count))
+			This _print(t"Failed tests: %i [" format(This failureNames count))
 			for (i in 0 .. This failureNames count - 1)
 				(This failureNames[i] + ", ") print()
 			(This failureNames[This failureNames count -1] + ']') println()
@@ -180,10 +178,9 @@ Fixture: abstract class {
 	expect: static func ~ullong (value: ULLong, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
 	}
-	_print: static func (string: String) {
-		string print()
+	_print: static func (text: Text) {
+		text print()
 		fflush(stdout)
-		string free()
 	}
 }
 
