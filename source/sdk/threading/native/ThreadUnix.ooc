@@ -92,22 +92,12 @@ version (!apple && !android) {
 	pthread_timedjoin_np: extern proto func (thread: PThread, retval: Pointer, abstime: TimeSpec*) -> Int
 }
 
-<<<<<<< HEAD
 pthread_create: extern func (threadPointer: PThread*, attributePointer, startRoutine, userArgument: Pointer) -> Int
 pthread_join: extern func (thread: PThread, retval: Pointer*) -> Int
 pthread_kill: extern func (thread: PThread, signal: Int) -> Int
 pthread_self: extern func -> PThread
 pthread_cancel: extern func (thread: PThread) -> Int
 pthread_equal: extern func (thread0, thread1: PThread) -> Int
+pthread_detach: extern func (thread: PThread) -> Int
 sched_yield: extern func -> Int
-=======
-	pthread_create: extern func (threadPointer: PThread*, attributePointer, startRoutine, userArgument: Pointer) -> Int
-	pthread_join: extern func (thread: PThread, retval: Pointer*) -> Int
-	pthread_kill: extern func (thread: PThread, signal: Int) -> Int
-	pthread_self: extern func -> PThread
-	pthread_cancel: extern func (thread: PThread) -> Int
-	pthread_equal: extern func (thread0, thread1: PThread) -> Int
-	pthread_detach: extern func (thread: PThread) -> Int
-	sched_yield: extern func -> Int
->>>>>>> Changed to non-blocking free in ThreadPromise and ThreadFuture
 }
