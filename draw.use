@@ -24,6 +24,7 @@ Imports: FloatImage
 Imports: Canvas
 Imports: Pen
 Imports: Map
+Imports: DrawState
 Additionals: source/draw/stb_image/stb_image.h
 Additionals: source/draw/stb_image/stb_image_write.h
 Additionals: source/draw/stb_image/stb_image_impl.c

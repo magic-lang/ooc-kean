@@ -20,6 +20,7 @@ use collections
 import Image
 import Canvas
 import Pen
+import DrawState
 import RasterImage
 
 RasterCanvas: abstract class extends Canvas {
