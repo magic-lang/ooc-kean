@@ -91,14 +91,14 @@ Process: abstract class {
 	}
 
 	new: static func (.args) -> This {
-		version(unix || apple) {
-			return ProcessUnix new(args) as This
-		}
-		version(windows) {
-			return ProcessWin32 new(args) as This
-		}
-		Exception new(This, "os/Process is unsupported on your platform!") throw()
-		null
+		result: This = null
+		version(unix || apple)
+			result = ProcessUnix new(args) as This
+		version(windows)
+			result = ProcessWin32 new(args) as This
+		if (result == null)
+			Exception new(This, "os/Process is unsupported on your platform!") throw()
+		result
 	}
 
 	new: static func ~withEnvFromArray (args: String[], .env) -> This {

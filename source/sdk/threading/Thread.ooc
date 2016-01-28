@@ -13,32 +13,30 @@ Thread: abstract class {
 
 	alive: abstract func -> Bool
 	new: static func (._code) -> This {
-		version (unix || apple) {
-			return ThreadUnix new(_code) as This
-		}
-		version (windows) {
-			return ThreadWin32 new(_code) as This
-		}
-		Exception new(This, "Unsupported platform!\n") throw()
-		null
+		result: This = null
+		version (unix || apple)
+			result = ThreadUnix new(_code) as This
+		version (windows)
+			result = ThreadWin32 new(_code) as This
+		if (result == null)
+			Exception new(This, "Unsupported platform!\n") throw()
+		result
 	}
 	currentThread: static func -> This {
-		version (unix || apple) {
-			return ThreadUnix _currentThread()
-		}
-		version (windows) {
-			return ThreadWin32 _currentThread()
-		}
-		null
+		result: This = null
+		version (unix || apple)
+			result = ThreadUnix _currentThread()
+		version (windows)
+			result = ThreadWin32 _currentThread()
+		result
 	}
 	currentThreadId: static func -> Long {
-		version (unix || apple) {
-			return pthread_self() as Long
-		}
-		version (windows) {
-			return GetCurrentThread() as Long
-		}
-		0L
+		result: Long = 0L
+		version (unix || apple)
+			result = pthread_self() as Long
+		version (windows)
+			result = GetCurrentThread() as Long
+		result
 	}
 	equals: static func (threadId1, threadId2: Long) -> Bool {
 		result: Bool
@@ -48,14 +46,12 @@ Thread: abstract class {
 			result = threadId1 == threadId2
 		result
 	}
-
 	yield: static func -> Bool {
-		version (unix || apple) {
-			return ThreadUnix _yield()
-		}
-		version (windows) {
-			return ThreadWin32 _yield()
-		}
-		false
+		result := false
+		version (unix || apple)
+			result = ThreadUnix _yield()
+		version (windows)
+			result = ThreadWin32 _yield()
+		result
 	}
 }

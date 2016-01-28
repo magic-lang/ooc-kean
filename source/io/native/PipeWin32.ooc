@@ -19,17 +19,20 @@ PipeWin32: class extends Pipe {
 	}
 	read: override func ~cstring (buf: CString, len: Int) -> Int {
 		bytesRead: ULong
+		result := -1
 		success := ReadFile(readFD, buf, len, bytesRead&, null)
 
 		// normal read
-		if (success) return bytesRead
+		if (success)
+			result = bytesRead
 
 		// no data
-		if (GetLastError() == ERROR_NO_DATA) return 0
+		if (GetLastError() == ERROR_NO_DATA)
+			result = 0
 
 		// reached eof
 		eof = true
-		return -1
+		result
 	}
 	write: override func (data: Pointer, len: Int) -> Int {
 		bytesWritten: ULong
@@ -47,8 +50,7 @@ PipeWin32: class extends Pipe {
 	// 'r' = close in reading, 'w' = close in writing
 	close: override func (end: Char) -> Int {
 		fd := _getFD(end)
-		if (!fd) return 0
-		CloseHandle(fd) ? 1 : 0
+		fd && CloseHandle(fd) ? 1 : 0
 	}
 	close: override func ~both {
 		CloseHandle(readFD)
@@ -56,13 +58,13 @@ PipeWin32: class extends Pipe {
 	}
 	setNonBlocking: func (end: Char) {
 		fd := _getFD(end)
-		if (!fd) return
-		_setFDState(readFD, PIPE_WAIT)
+		if (fd)
+			_setFDState(readFD, PIPE_WAIT)
 	}
 	setBlocking: func (end: Char) {
 		fd := _getFD(end)
-		if (!fd) return
-		_setFDState(readFD, PIPE_WAIT)
+		if (fd)
+			_setFDState(readFD, PIPE_WAIT)
 	}
 	_getFD: func (end: Char) -> Handle {
 		match end {

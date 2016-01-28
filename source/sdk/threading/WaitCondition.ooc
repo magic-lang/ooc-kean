@@ -6,13 +6,13 @@ WaitCondition: abstract class {
 	signal: abstract func -> Bool
 	broadcast: abstract func -> Bool
 	new: static func -> This {
-		version (unix || apple) {
-			return ConditionUnix new() as This
-		}
-		version (windows) {
-			return ConditionWin32 new() as This
-		}
-		Exception new(This, "Unsupported platform!\n") throw()
-		null
+		result: This = null
+		version (unix || apple)
+			result = ConditionUnix new() as This
+		version (windows)
+			result = ConditionWin32 new() as This
+		if (result == null)
+			Exception new(This, "Unsupported platform!\n") throw()
+		result
 	}
 }

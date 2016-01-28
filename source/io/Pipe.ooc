@@ -13,10 +13,12 @@ Pipe: abstract class {
 	read: func ~string (len: Int) -> String {
 		buf := gc_malloc(len + 1) as CString
 		howmuch := read(buf, len)
-		if (howmuch == -1)
-			return null
-		buf[howmuch] = '\0'
-		buf toString()
+		result: String = null
+		if (howmuch != -1) {
+			buf[howmuch] = '\0'
+			result = buf toString()
+		}
+		result
 	}
 	read: func ~buffer (buf: CharBuffer) -> Int {
 		bytesRead := read(buf data, buf capacity)
@@ -56,14 +58,14 @@ Pipe: abstract class {
 		PipeWriter new(this)
 	}
 	new: static func -> This {
-		version(unix || apple) {
-			return PipeUnix new() as This
-		}
-		version(windows) {
-			return PipeWin32 new() as This
-		}
-		Exception new(This, "Unsupported platform!\n") throw()
-		null
+		result: This = null
+		version(unix || apple)
+			result = PipeUnix new() as This
+		version(windows)
+			result = PipeWin32 new() as This
+		if (result == null)
+			Exception new(This, "Unsupported platform!\n") throw()
+		result
 	}
 }
 
@@ -72,12 +74,10 @@ PipeReader: class extends Reader {
 	init: func (=pipe)
 	read: override func (chars: CString, offset: Int, count: Int) -> SizeT {
 		bytesRead := pipe read(chars + offset, count)
-		// the semantics of Reader read() don't specify negative return values
 		bytesRead >= 0 ? bytesRead : 0
 	}
 	read: override func ~char -> Char {
 		bytesRead := pipe read()
-		// the semantics of Reader read() don't specify negative return values
 		bytesRead >= 0 ? bytesRead : 0
 	}
 	hasNext?: override func -> Bool {

@@ -119,7 +119,7 @@ ProcessUnix: class extends Process {
 			execvp(cArgs[0], cArgs)
 			exit(errno) // don't allow the forked process to continue if execvp fails
 		}
-		return pid
+		pid
 	}
 
 	sigabrtHandler: static func {

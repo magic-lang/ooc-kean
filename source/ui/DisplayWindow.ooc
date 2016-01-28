@@ -70,11 +70,13 @@ DisplayWindow: abstract class {
 			this _keyReleaseHandler call(event)
 	}
 	create: static func (size: IntVector2D, title: String) -> This {
+		result: This = null
 		version((unix || apple) && !android)
-			return UnixWindow create(size, title)
+			result = UnixWindow create(size, title)
 		version(windows)
-			return Win32DisplayWindow new(size, title)
-		raise("Platform not supported (DisplayWindow)")
-		null
+			result = Win32DisplayWindow new(size, title)
+		if (result == null)
+			raise("Platform not supported (DisplayWindow)")
+		result
 	}
 }

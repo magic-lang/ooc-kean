@@ -12,12 +12,12 @@ BacktraceHandler: class {
 
 	backtrace: func -> Backtrace {
 		buffer := gc_malloc(Pointer size * BACKTRACE_LENGTH)
-
+		result: Backtrace = null
 		if (lib) {
 			// use fancy-backtrace, best one!
 			f := (fancyBacktrace, null) as Func (Pointer*, Int) -> Int
 			length := f(buffer, BACKTRACE_LENGTH)
-			return Backtrace new(buffer, length)
+			result = Backtrace new(buffer, length)
 		} else {
 			// fall back on execinfo? still informative
 			version (linux || apple) {
@@ -26,34 +26,36 @@ BacktraceHandler: class {
 					This WARNED_ABOUT_FALLBACK = true
 				}
 				length := backtrace(buffer, BACKTRACE_LENGTH)
-				return Backtrace new(buffer, length)
+				result = Backtrace new(buffer, length)
+			} else {
+				// no such luck, use a debugger :(
+				if (!This WARNED_ABOUT_FALLBACK) {
+					stderr write("[Backtrace] No backtrace extension nor execinfo - use a debugger!\n")
+					This WARNED_ABOUT_FALLBACK = true
+				}
+				gc_free(buffer)
 			}
-
-			// no such luck, use a debugger :(
-			if (!This WARNED_ABOUT_FALLBACK) {
-				stderr write("[Backtrace] No backtrace extension nor execinfo - use a debugger!\n")
-				This WARNED_ABOUT_FALLBACK = true
-			}
-			gc_free(buffer)
-			return null
 		}
+		result
 	}
 	backtraceWithContext: func (contextPtr: Pointer) -> Backtrace {
+		result: Backtrace = null
 		version (windows) {
 			buffer := gc_malloc(Pointer size * BACKTRACE_LENGTH) as Pointer*
 			f := (fancyBacktraceWithContext, null) as Func (Pointer*, Int, Pointer) -> Int
 			length := f(buffer, BACKTRACE_LENGTH, contextPtr)
-			return Backtrace new(buffer, length)
+			result = Backtrace new(buffer, length)
 		}
-		return null
+		result
 	}
 	backtraceSymbols: func (trace: Backtrace) -> String {
 		lines: CString* = null
+		result: String
 		if (lib) {
 			// use fancy-backtrace
 			f := (fancyBacktraceSymbols, null) as Func (Pointer*, Int) -> CString*
 			lines = f(trace buffer, trace length)
-			return _format(lines, trace length)
+			result = _format(lines, trace length)
 		} else {
 			// fall back on execinfo
 			version (linux || apple) {
@@ -62,37 +64,36 @@ BacktraceHandler: class {
 				buffer := CharBuffer new()
 				for (i in 0 .. trace length)
 					buffer append(lines[i]). append('\n')
-				return buffer toString()
-			}
+				result = buffer toString()
+			} else
+				result = "[no backtrace]"
 		}
-		"[no backtrace]"
+		result
 	}
 
 	init: func {
 		if (Env get("NO_FANCY_BACKTRACE")) {
-			fancy = false
-			return
-		}
-		if (Env get("RAW_BACKTRACE")) {
-			raw = true
-		}
+			this fancy = false
+		} else {
+			if (Env get("RAW_BACKTRACE"))
+				this raw = true
 
-		this lib = Dynlib load("fancy_backtrace") ?? Dynlib load("./fancy_backtrace")
+			this lib = Dynlib load("fancy_backtrace") ?? Dynlib load("./fancy_backtrace")
 
-		if (lib) {
-			_initFuncs()
-			atexit(_cleanup_backtrace)
-		} else
-			fancy = false
+			if (lib) {
+				_initFuncs()
+				atexit(_cleanup_backtrace)
+			} else
+				fancy = false
+		}
 	}
 	_initFuncs: func {
-		if (!lib) return
+		if (lib) {
+			_getSymbol(fancyBacktrace&, "fancy_backtrace")
+			_getSymbol(fancyBacktraceSymbols&, "fancy_backtrace_symbols")
 
-		_getSymbol(fancyBacktrace&, "fancy_backtrace")
-		_getSymbol(fancyBacktraceSymbols&, "fancy_backtrace_symbols")
-
-		version (windows) {
-			_getSymbol(fancyBacktraceWithContext&, "fancy_backtrace_with_context")
+			version (windows)
+				_getSymbol(fancyBacktraceWithContext&, "fancy_backtrace_with_context")
 		}
 	}
 	_getSymbol: func (target: Pointer@, name: String) {

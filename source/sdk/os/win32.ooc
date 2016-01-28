@@ -64,14 +64,14 @@ version(windows) {
 		li: LargeInteger
 		li lowPart = lowPart
 		li highPart = highPart
-		return li quadPart
+		li quadPart
 	}
 
 	toULLong: func ~twoPartsLargeInteger (lowPart, highPart: Long) -> ULLong {
 		li: ULargeInteger
 		li lowPart = lowPart
 		li highPart = highPart
-		return li quadPart
+		li quadPart
 	}
 
 	// FILETIME is a Long that stores the number of 100-nanoseconds intervals from January 1st, 1601
@@ -97,7 +97,7 @@ version(windows) {
 		date quadPart -= adjust quadPart
 
 		// converts back from 100-nanoseconds to seconds
-		return date quadPart / 10000000
+		date quadPart / 10000000
 	}
 
 	BYTE: extern cover from Byte

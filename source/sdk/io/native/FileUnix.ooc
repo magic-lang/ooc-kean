@@ -309,7 +309,7 @@ version (unix || apple) {
 				entry = readdir(dir)
 			}
 			closedir(dir)
-			return result
+			result
 		}
 
 		getChildrenNames: override func -> VectorList<String> {

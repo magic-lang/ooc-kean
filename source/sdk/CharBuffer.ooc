@@ -97,13 +97,14 @@ CharBuffer: class extends Iterable<Char> {
 		size and capacity is decreased accordingly  */
 	// remark: can be called with negative value (done by leftShift)
 	shiftRight: func (count: SSizeT) {
-		if (count == 0 || size == 0) return
-		c := count
-		rshift := _rshift()
-		if (c > size) c = size
-		else if (c < 0 && c abs() > rshift) c = rshift *-1
-		data += c
-		size -= c
+		if (count != 0 && size != 0) {
+			c := count
+			rshift := _rshift()
+			if (c > size) c = size
+			else if (c < 0 && c abs() > rshift) c = rshift *-1
+			data += c
+			size -= c
+		}
 	}
 
 	/* shifts back count bytes, only possible if shifted right before */
@@ -144,13 +145,13 @@ CharBuffer: class extends Iterable<Char> {
 	}
 
 	append: func ~buf (other: This) {
-		if (!other) return
-		append~pointer(other data, other size)
+		if (other)
+			append~pointer(other data, other size)
 	}
 
 	append: func ~str (other: String) {
-		if (!other) return
-		append~buf(other _buffer)
+		if (other)
+			append~buf(other _buffer)
 	}
 
 	append: func ~pointer (other: CString, otherLength: Int) {
@@ -161,8 +162,8 @@ CharBuffer: class extends Iterable<Char> {
 	}
 
 	append: func ~cstr (other: CString) {
-		if (!other) return
-		append~pointer(other, other length())
+		if (other)
+			append~pointer(other, other length())
 	}
 
 	append: func ~bufLength (other: This, otherLength: Int) {

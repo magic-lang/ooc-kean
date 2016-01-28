@@ -53,11 +53,10 @@ __digits_small: String = "0123456789abcdefghijklmnopqrstuvwxyz"
 
 argNext: func<T> (va: VarArgsIterator*, T: Class) -> T {
 	if (!va@ hasNext?()) InvalidFormatException new(null) throw()
-	return va@ next(T)
+	va@ next(T)
 }
 
 m_printn: func <T> (res: CharBuffer, info: FSInfoStruct@, arg: T) {
-//	"m_printn" println()
 	sign: Char = '\0'
 	tmp: Char[36]
 	digits := __digits
@@ -148,7 +147,7 @@ getCharPtrFromStringType: func <T> (s : T) -> Char* {
 				InvalidTypeException new(T) throw()
 			}
 	}
-	return res
+	res
 }
 
 getSizeFromStringType: func<T> (s : T) -> SizeT {
@@ -160,7 +159,7 @@ getSizeFromStringType: func<T> (s : T) -> SizeT {
 		case Pointer => res = s as CString length()
 		case => InvalidTypeException new(T) throw()
 	}
-	return res
+	res
 }
 
 parseArg: func (res: CharBuffer, info: FSInfoStruct*, va: VarArgsIterator*, p: Char*) {
@@ -529,8 +528,7 @@ formatOne: func ~main <T> (fmt: String, arg: T) -> String {
 		}
 		ptr += 1
 	}
-	result := res toString()
-	return result
+	res toString()
 }
 
 extend CharBuffer {
