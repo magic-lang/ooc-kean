@@ -134,36 +134,36 @@ Cell: class <T> {
 	set: func (=val)
 	get: func -> T { val }
 
-	toString: func -> String {
-		result: String
+	toText: func -> Text {
+		result: Text
 		if (T inheritsFrom?(Text))
-			result = (this val as Text) toString()
+			result = (this val as Text)
 		else if (T inheritsFrom?(String))
-			result = this val as String
+			result = Text new(this val as String)
 		else if (T inheritsFrom?(Bool))
-			result = (this val as Bool) toString()
+			result = (this val as Bool) toText()
 		else if (T inheritsFrom?(Char))
-			result = (this val as Char) toString()
+			result = Text new((this val as Char) toString())
 		else if (T inheritsFrom?(Int))
-			result = (this val as Int) toString()
+			result = (this val as Int) toText()
 		else if (T inheritsFrom?(Long))
-			result = (this val as Long) toString()
+			result = (this val as Long) toText()
 		else if (T inheritsFrom?(LLong))
-			result = (this val as LLong) toString()
+			result = (this val as LLong) toText()
 		else if (T inheritsFrom?(UInt))
-			result = (this val as UInt) toString()
+			result = (this val as UInt) toText()
 		else if (T inheritsFrom?(ULong))
-			result = (this val as ULong) toString()
+			result = (this val as ULong) toText()
 		else if (T inheritsFrom?(ULLong))
-			result = (this val as ULLong) toString()
+			result = (this val as ULLong) toText()
 		else if (T inheritsFrom?(Float))
-			result = "%.8f" formatFloat(this val as Float)
+			result = (this val as Float) toText()
 		else if (T inheritsFrom?(Double))
-			result = "%.12f" formatDouble(this val as Double)
+			result = (this val as Double) toText()
 		else if (T inheritsFrom?(LDouble))
-			result = "%.12f" formatLDouble(this val as LDouble)
+			result = (this val as LDouble) toText()
 		else
-			raise("[Cell] toString() is not implemented on the specified type")
+			raise("[Cell] toText() is not implemented on the specified type")
 		result
 	}
 }
