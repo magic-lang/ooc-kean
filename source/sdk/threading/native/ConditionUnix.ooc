@@ -16,14 +16,14 @@ ConditionUnix: class extends WaitCondition {
 	_backend: PThreadCond*
 
 	init: func {
-		this _backend = gc_malloc(PThreadCond size) as PThreadCond*
+		this _backend = calloc(1, PThreadCond size) as PThreadCond*
 		result := pthread_cond_init(this _backend, null)
 		if (result != 0)
 			raise("Something went wrong when calling pthread_cond_init")
 	}
 	free: override func {
 		pthread_cond_destroy(this _backend)
-		gc_free(this _backend)
+		memfree(this _backend)
 		super()
 	}
 	wait: override func (mutex: Mutex) -> Bool {

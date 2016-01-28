@@ -10,11 +10,11 @@ FloatImage : class {
 	init: func ~IntVector2D (=_size)
 	init: func ~WidthAndHeight (width, height: Int) {
 		this _size = IntVector2D new(width, height)
-		this _pointer = gc_malloc(width * height * Float instanceSize)
+		this _pointer = calloc(width * height, Float instanceSize)
 	}
 
 	free: override func {
-		gc_free(this _pointer)
+		memfree(this _pointer)
 		super()
 	}
 	operator [] (x, y: Int) -> Float {

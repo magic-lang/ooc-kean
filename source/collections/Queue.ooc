@@ -20,11 +20,11 @@ VectorQueue: class <T> extends Queue<T> {
 
 	init: func (capacity := 32) {
 		this _capacity = capacity
-		this _backend = gc_calloc(capacity as SizeT, T size)
+		this _backend = calloc(capacity as SizeT, T size)
 		super()
 	}
 	free: override func {
-		gc_free(_backend)
+		memfree(_backend)
 		super()
 	}
 	clear: override func {
@@ -60,7 +60,7 @@ VectorQueue: class <T> extends Queue<T> {
 		newCapacity := this _capacity + this _chunkCount
 		moveCount := oldCapacity - this _head
 		bytes := newCapacity * T size
-		this _backend = gc_realloc(this _backend, bytes)
+		this _backend = realloc(this _backend, bytes)
 		sourcePtr: Byte* = this _backend as Byte* + (this _head * T size)
 		destinationPtr := sourcePtr + (this _chunkCount * T size)
 		memmove(destinationPtr, sourcePtr, moveCount * T size)

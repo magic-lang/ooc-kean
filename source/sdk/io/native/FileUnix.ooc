@@ -267,7 +267,7 @@ version (unix || apple) {
 		getAbsolutePath: override func -> String {
 			assert(path != null)
 			assert(!path empty())
-			actualPath := gc_malloc(MAX_PATH_LENGTH) as CString
+			actualPath := calloc(1, MAX_PATH_LENGTH) as CString
 			ret := realpath(path, actualPath)
 			if (ret == null) {
 				OSException new("failed to get absolute path for " + path) throw()

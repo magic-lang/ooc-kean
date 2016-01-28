@@ -1,13 +1,8 @@
 #ifndef OOC_LANG_ARRAY_H
 #define OOC_LANG_ARRAY_H
 
-#ifdef __OOC_USE_GC__
-#define array_malloc GC_malloc
-#define array_free GC_free
-#else
 #define array_malloc(size) calloc(1, (size))
 #define array_free free
-#endif // GC
 
 #include <stdint.h>
 

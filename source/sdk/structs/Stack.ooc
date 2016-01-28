@@ -6,10 +6,10 @@ Stack: class <T> {
 	isEmpty ::= this size == 0
 	top ::= this peek()
 	init: func {
-		this _data = gc_malloc(this _capacity * T size)
+		this _data = calloc(this _capacity, T size)
 	}
 	free: override func {
-		gc_free(this _data)
+		memfree(this _data)
 		super()
 	}
 	push: func (element: T) {
@@ -40,6 +40,6 @@ Stack: class <T> {
 			this _capacity *= 2
 		else
 			this _capacity += 2048
-		this _data = gc_realloc(this _data, this _capacity * T size)
+		this _data = realloc(this _data, this _capacity * T size)
 	}
 }

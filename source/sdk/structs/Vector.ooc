@@ -26,7 +26,7 @@ Vector: abstract class <T> {
 	}
 	free: override func {
 		if (!(this instanceOf?(StackVector)))
-			gc_free(this _backend)
+			memfree(this _backend)
 		super()
 	}
 	_free: func ~range (start, end: Int) {
@@ -102,7 +102,7 @@ HeapVector: class <T> extends Vector<T> {
 	}
 
 	_allocate: func (capacity: Int) {
-		this _backend = gc_realloc(this _backend, capacity * T size)
+		this _backend = realloc(this _backend, capacity * T size)
 	}
 
 	resize: override func (capacity: Int) {

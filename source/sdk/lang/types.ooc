@@ -7,7 +7,7 @@ Object: abstract class {
 
 	free: virtual func {
 		this __destroy__()
-		free(this)
+		memfree(this)
 	}
 
 	/// Instance initializer: set default values for a new instance of this class
@@ -50,7 +50,7 @@ Class: abstract class {
 
 	// Create a new instance of the object of type defined by this class
 	alloc: final func ~_class -> Object {
-		object := gc_malloc(instanceSize) as Object
+		object := calloc(1, instanceSize) as Object
 		if (object)
 			object class = this
 		object
@@ -112,7 +112,7 @@ Closure: cover {
 	free: func@ -> Bool {
 		result := this context != null
 		if (result) {
-			gc_free(this context)
+			memfree(this context)
 			this context = null
 			this thunk = null
 		}
@@ -127,7 +127,7 @@ Cell: class <T> {
 	init: func ~noval
 
 	free: override func {
-		gc_free(this val)
+		memfree(this val)
 		super()
 	}
 

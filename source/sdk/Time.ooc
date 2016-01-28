@@ -57,12 +57,12 @@ Time: class {
 		result: String
 		version (windows) {
 			dateLength := GetDateFormat(LOCALE_USER_DEFAULT, 0, null, null, null, 0)
-			dateBuffer := gc_malloc(dateLength) as Char*
+			dateBuffer := calloc(1, dateLength) as Char*
 			GetDateFormat(LOCALE_USER_DEFAULT, 0, null, null, dateBuffer, dateLength)
 			date := String new(dateBuffer, dateLength - 1)
 
 			timeLength := GetTimeFormat(LOCALE_USER_DEFAULT, 0, null, null, null, 0)
-			timeBuffer := gc_malloc(timeLength) as Char*
+			timeBuffer := calloc(1, timeLength) as Char*
 			GetTimeFormat(LOCALE_USER_DEFAULT, 0, null, null, timeBuffer, timeLength)
 			time := String new(timeBuffer, timeLength - 1)
 

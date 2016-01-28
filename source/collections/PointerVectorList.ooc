@@ -32,7 +32,7 @@ PointerVectorList: class {
 	init: func (=_vector)
 	free: override func {
 		for (i in 0 .. this count)
-			gc_free(this _vector[i])
+			memfree(this _vector[i])
 		this _vector free()
 		super()
 	}

@@ -11,7 +11,7 @@ BacktraceHandler: class {
 	raw := false
 
 	backtrace: func -> Backtrace {
-		buffer := gc_malloc(Pointer size * BACKTRACE_LENGTH)
+		buffer := calloc(BACKTRACE_LENGTH, Pointer size)
 		result: Backtrace = null
 		if (lib) {
 			// use fancy-backtrace, best one!
@@ -33,7 +33,7 @@ BacktraceHandler: class {
 					stderr write("[Backtrace] No backtrace extension nor execinfo - use a debugger!\n")
 					This WARNED_ABOUT_FALLBACK = true
 				}
-				gc_free(buffer)
+				memfree(buffer)
 			}
 		}
 		result
@@ -41,7 +41,7 @@ BacktraceHandler: class {
 	backtraceWithContext: func (contextPtr: Pointer) -> Backtrace {
 		result: Backtrace = null
 		version (windows) {
-			buffer := gc_malloc(Pointer size * BACKTRACE_LENGTH) as Pointer*
+			buffer := calloc(BACKTRACE_LENGTH, Pointer size) as Pointer*
 			f := (fancyBacktraceWithContext, null) as Func (Pointer*, Int, Pointer) -> Int
 			length := f(buffer, BACKTRACE_LENGTH, contextPtr)
 			result = Backtrace new(buffer, length)
@@ -202,7 +202,7 @@ Backtrace: class {
 	init: func (=buffer, =length)
 	free: override func {
 		if (this buffer)
-			gc_free(this buffer)
+			memfree(this buffer)
 		super()
 	}
 }

@@ -147,7 +147,7 @@ CString: cover from Char* {
 		stdout write(this, 0, length()). write('\n')
 	}
 	new: static func ~withLength (length: Int) -> This {
-		result := gc_malloc(length + 1) as Char*
+		result := calloc(1, length + 1) as Char*
 		result[length] = '\0'
 		result as This
 	}

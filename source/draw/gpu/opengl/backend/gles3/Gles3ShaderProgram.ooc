@@ -108,13 +108,13 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 			source println()
 			logSize: Int = 0
 			glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, logSize&)
-			compileLog := gc_malloc(logSize * Char size) as CString
+			compileLog := calloc(logSize, Char size) as CString
 			length: Int
 			glGetShaderInfoLog(shaderID, logSize, length&, compileLog)
 			compileLogString := compileLog toString()
 			compileLogString println()
 			compileLogString free()
-			gc_free(compileLog)
+			memfree(compileLog)
 			raise("Shader compilation failed")
 		}
 		version(debugGL) { validateEnd("ShaderProgram _compileShader") }

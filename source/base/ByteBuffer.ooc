@@ -38,7 +38,7 @@ ByteBuffer: class {
 			this _referenceCount free()
 		this _referenceCount = null
 		if (this _ownsMemory)
-			gc_free(this _pointer)
+			memfree(this _pointer)
 		this _pointer = null
 		super()
 	}
@@ -127,7 +127,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		}
 		This _lock unlock()
 		version(debugByteBuffer) { if (buffer == null) Debug print("No RecyclableByteBuffer available in the bin; allocating a new one") }
-		buffer == null ? This new(gc_malloc_atomic(size), size) : buffer
+		buffer == null ? This new(malloc(size), size) : buffer
 	}
 	_getBin: static func (size: Int) -> VectorList<This> {
 		size < 10000 ? This _smallRecycleBin : (size < 100000 ? This _mediumRecycleBin : This _largeRecycleBin)

@@ -27,7 +27,7 @@ PointerVector: abstract class {
 	}
 	free: override func {
 		this _free(0, this count)
-		gc_free(this _backend)
+		memfree(this _backend)
 		super()
 	}
 	_free: func ~range (start, end: Int) {
@@ -84,7 +84,7 @@ PointerHeapVector: class extends PointerVector {
 	}
 
 	_allocate: func (count: Int) {
-		this _backend = gc_realloc(this _backend, count * Pointer size)
+		this _backend = realloc(this _backend, count * Pointer size)
 	}
 
 	resize: override func (count: Int) {
