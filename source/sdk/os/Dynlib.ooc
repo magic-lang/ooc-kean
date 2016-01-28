@@ -1,7 +1,7 @@
 use sdk-dynlib
 
 Dynlib: abstract class {
-	suffix: static String = ""
+	suffix: static String
 	path: String
 	success := false
 
@@ -22,7 +22,6 @@ Dynlib: abstract class {
 	symbol: abstract func (name: String) -> Pointer
 
 	// This must be the last called method on a given instance.
-	// If a Dynlib is not closed explicitly, it will be freed when the
 	close: abstract func -> Bool
 }
 
