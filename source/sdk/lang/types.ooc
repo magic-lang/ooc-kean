@@ -128,21 +128,36 @@ Cell: class <T> {
 	get: func -> T { val }
 
 	toString: func -> String {
-		match (this val) {
-			case value: Text => value toString()
-			case value: Bool => value toString()
-			case value: Char => value toString()
-			case value: Int => value toString()
-			case value: Long => value toString()
-			case value: Long => value toString()
-			case value: UInt => value toString()
-			case value: ULong => value toString()
-			case value: ULong => value toString()
-			case value: Float => "%.8f" formatFloat(value)
-			case value: Double => "%.12f" formatDouble(value)
-			case value: LDouble => "%.12f" formatLDouble(value)
-			case => raise("[Cell] toString() is not implemented on the specified type"); null
-		}
+		result: String
+		if (T inheritsFrom?(Text))
+			result = (this val as Text) toString()
+		else if (T inheritsFrom?(String))
+			result = this val as String
+		else if (T inheritsFrom?(Bool))
+			result = (this val as Bool) toString()
+		else if (T inheritsFrom?(Char))
+			result = (this val as Char) toString()
+		else if (T inheritsFrom?(Int))
+			result = (this val as Int) toString()
+		else if (T inheritsFrom?(Long))
+			result = (this val as Long) toString()
+		else if (T inheritsFrom?(LLong))
+			result = (this val as LLong) toString()
+		else if (T inheritsFrom?(UInt))
+			result = (this val as UInt) toString()
+		else if (T inheritsFrom?(ULong))
+			result = (this val as ULong) toString()
+		else if (T inheritsFrom?(ULLong))
+			result = (this val as ULLong) toString()
+		else if (T inheritsFrom?(Float))
+			result = "%.8f" formatFloat(this val as Float)
+		else if (T inheritsFrom?(Double))
+			result = "%.12f" formatDouble(this val as Double)
+		else if (T inheritsFrom?(LDouble))
+			result = "%.12f" formatLDouble(this val as LDouble)
+		else
+			raise("[Cell] toString() is not implemented on the specified type")
+		result
 	}
 }
 

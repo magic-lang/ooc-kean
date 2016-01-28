@@ -174,10 +174,10 @@ Fixture: abstract class {
 	expect: static func ~isTrue (value: Bool) {
 		This expect(Cell new(value), is true)
 	}
-	expect: static func ~int64 (value: Long, constraint: Constraint) {
+	expect: static func ~llong (value: LLong, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
 	}
-	expect: static func ~uint64 (value: ULong, constraint: Constraint) {
+	expect: static func ~ullong (value: ULLong, constraint: Constraint) {
 		This expect(Cell new(value), constraint)
 	}
 	_print: static func (string: String) {
