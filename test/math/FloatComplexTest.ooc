@@ -19,7 +19,6 @@ use base
 use math
 use collections
 import FloatComplex
-import structs/Vector
 
 FloatComplexTest: class extends Fixture {
 	complexNumber0 := FloatComplex new (2, 1)
