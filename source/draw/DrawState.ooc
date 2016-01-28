@@ -15,7 +15,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use geometry
-import Pen, Image, Map
+import Pen
+import Image
+import Map
 
 // Example
 // DrawState new(myImage) setMap(myShader) draw()

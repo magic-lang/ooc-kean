@@ -17,7 +17,9 @@
 use base
 use geometry
 use collections
-import Image, Pen, DrawState
+import Image
+import Pen
+import DrawState
 
 InterpolationMode: enum {
 	Fast // nearest neighbour

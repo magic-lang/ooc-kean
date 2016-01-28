@@ -29,14 +29,10 @@ OpenGLCanvas: class extends OpenGLSurface {
 	_renderTarget: GLFramebufferObject
 	context ::= this _context as OpenGLContext
 	draw: override func ~DrawState (drawState: DrawState) {
-		// Set shader
-		gpuMap: GpuMap = (drawState map == null) ? this context defaultMap : drawState map as GpuMap
-		// Set viewport
+		gpuMap: GpuMap = drawState map as GpuMap ?? this context defaultMap
 		viewport := (drawState viewport hasZeroArea) ? IntBox2D new(this size) : drawState viewport
 		this context backend setViewport(viewport)
-		// Set transform
 		gpuMap view = _toLocal * drawState getTransformNormalized() normalizedToReference(this size) * _toLocal
-		// Set model and projection matrices
 		if (this _focalLength > 0.0f) {
 			a := 2.0f * this _focalLength / this size x
 			f := -(this _coordinateTransform e as Float) * 2.0f * this _focalLength / this size y
@@ -46,15 +42,12 @@ OpenGLCanvas: class extends OpenGLSurface {
 		} else
 			gpuMap projection = FloatTransform3D createScaling(2.0f / this size x, -(this _coordinateTransform e as Float) * 2.0f / this size y, 1.0f)
 		gpuMap model = this _createModelTransform(IntBox2D new(this size))
-		// Set opacity
 		if (drawState opacity < 1.0f)
 			this context backend blend(drawState opacity)
 		else
 			this context backend enableBlend(false)
-		// Set texture
 		if (drawState inputImage)
 			gpuMap add("texture0", drawState inputImage)
-		// Draw
 		gpuMap use()
 		this _bind()
 		this context drawQuad()
