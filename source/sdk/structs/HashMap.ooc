@@ -401,7 +401,7 @@ HashMapValueIterator: class <K, T> extends BackIterator<T> {
 
 	init: func ~withMap (=map)
 
-	hasNext?: override func -> Bool { index < map keys count }
+	hasNext: override func -> Bool { index < map keys size }
 
 	next: override func -> T {
 		key := map keys[index]

@@ -198,7 +198,7 @@ FStream: cover from FILE* {
 			if (c == EOF) break
 			if (c == '\n') break
 			buf append((c & 0xFF) as Char)
-			if (!hasNext?()) break
+			if (!hasNext()) break
 		}
 
 		buf toString()
@@ -222,7 +222,7 @@ FStream: cover from FILE* {
 	/**
 	 * @see eof?()
 	 */
-	hasNext?: func -> Bool {
+	hasNext: func -> Bool {
 		feof(this) == 0
 	}
 

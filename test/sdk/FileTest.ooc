@@ -36,7 +36,7 @@ FileTest: class extends Fixture {
 			fileCopy := File new(pathCopy)
 			file copyTo(fileCopy)
 			reader := FileReader new(Text new(pathCopy))
-			expect(reader hasNext?())
+			expect(reader hasNext())
 			expect(reader read(), is equal to('a'))
 			expect(reader read(), is equal to('b'))
 			expect(reader read(), is equal to('c'))

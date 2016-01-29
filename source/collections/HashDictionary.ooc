@@ -23,7 +23,7 @@ HashDictionary: class {
 	}
 	free: override func {
 		iterator := this _hashMap backIterator()
-		while (iterator hasNext?())
+		while (iterator hasNext())
 			iterator next() free()
 		iterator free()
 		this _hashMap free()

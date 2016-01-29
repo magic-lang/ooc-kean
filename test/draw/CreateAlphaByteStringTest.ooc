@@ -33,7 +33,7 @@ CreateAlphaByteStringTest: class extends Fixture {
 			generatedBuffer := CharBuffer new()
 			comparisonBuffer := CharBuffer new()
 
-			while (generatedFile hasNext?() && comparisonFile hasNext?()) {
+			while (generatedFile hasNext() && comparisonFile hasNext()) {
 				generatedFile read(generatedBuffer)
 				comparisonFile read(comparisonBuffer)
 				generatedString := generatedBuffer toString()
@@ -41,8 +41,8 @@ CreateAlphaByteStringTest: class extends Fixture {
 				expect(generatedString, is equal to(comparisonString))
 			}
 
-			expect(generatedFile hasNext?(), is false)
-			expect(comparisonFile hasNext?(), is false)
+			expect(generatedFile hasNext(), is false)
+			expect(comparisonFile hasNext(), is false)
 
 			generatedFile free()
 			comparisonFile free()

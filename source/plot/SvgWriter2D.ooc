@@ -32,7 +32,7 @@ SvgWriter2D: class {
 	init: func ~svgPlot (file: File, args: ...) {
 		this init(file)
 		iterator := args iterator()
-		while (iterator hasNext?()) {
+		while (iterator hasNext()) {
 			match (iterator getNextType()) {
 				case SvgPlot => this addPlot(iterator next(SvgPlot))
 				case => // no action, unsupported type

@@ -167,7 +167,7 @@ _VectorListIterator: class <T> extends Iterator<T> {
 	_backend: VectorList<T>
 	_position: UInt
 	init: func (=_backend)
-	hasNext?: override func -> Bool { this _position < this _backend count }
+	hasNext: override func -> Bool { this _position < this _backend count }
 	next: override func -> T {
 		result := this _backend[this _position]
 		this _position += 1

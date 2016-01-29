@@ -223,7 +223,7 @@ File: abstract class {
 		max := 8192
 		buffer := Char[max] new()
 
-		while (src hasNext?()) {
+		while (src hasNext()) {
 			num := src read(buffer data, 0, max)
 			dst write(buffer data, num)
 		}

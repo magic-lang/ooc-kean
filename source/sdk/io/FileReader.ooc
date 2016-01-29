@@ -59,7 +59,7 @@ FileReader: class extends Reader {
 	read: override func ~char -> Char {
 		this file readChar()
 	}
-	hasNext?: override func -> Bool {
+	hasNext: override func -> Bool {
 		feof(file) == 0
 	}
 	seek: override func (offset: Long, mode: SeekMode) -> Bool {

@@ -34,7 +34,7 @@ BufferReader: class extends Reader {
 		marker += 1
 		c
 	}
-	hasNext?: override func -> Bool {
+	hasNext: override func -> Bool {
 		marker < this buffer size
 	}
 	seek: override func (offset: Long, mode: SeekMode) -> Bool {
