@@ -285,17 +285,6 @@ TCPSocketWriter: class extends Writer {
 	write: func (chars: Char*, length: SizeT) -> SizeT {
 		return dest send(chars, length, 0, true)
 	}
-
-	vwritef: func (fmt: String, list: VaList) {
-		list2: VaList
-		va_copy(list2, list)
-		length := vsnprintf(null, 0, fmt toCString(), list2)
-		va_end (list2)
-		buffer := CharBuffer new (length)
-		vsnprintf(buffer data, length + 1, fmt toCString(), list)
-		buffer setLength(length)
-		write(buffer toCString(), length)
-	}
 }
 
 TCPReaderWriterPair: class { // I thought TCPSocketReaderWriterPair was a bit too long

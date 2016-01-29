@@ -33,15 +33,4 @@ BufferWriter: class extends Writer {
 		this pos += length
 		length
 	}
-	// This version is mostly for internal usage (it is called by writef)
-	vwritef: func (fmt: String, list: VaList) {
-		list2: VaList
-		va_copy(list2, list)
-		length := vsnprintf(null, 0, fmt, list2)
-		va_end(list2)
-
-		_makeRoom(pos + length + 1)
-		vsnprintf(this buffer data + pos, length + 1, fmt, list)
-		pos += length
-	}
 }
