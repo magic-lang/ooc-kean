@@ -16,7 +16,6 @@
 */
 
 use unit
-import structs/Vector
 
 MyCover: cover {
 	content: Int

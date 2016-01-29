@@ -11,7 +11,6 @@ use geometry
 use draw
 use draw-gpu
 use collections
-import structs/Vector
 import backend/GLShaderProgram
 import OpenGLContext, OpenGLPacked, OpenGLVolumeMonochrome
 
