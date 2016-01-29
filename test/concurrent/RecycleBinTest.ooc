@@ -24,7 +24,7 @@ MyClass: class {
 			this bin add(this)
 	}
 	create: static func (content: Int) -> This {
-		matches := func (instance: This) -> Bool { content == instance content }
+		matches := func (instance: This*) -> Bool { content == instance@ content }
 		This bin search(matches) ?? This new(content)
 	}
 }
