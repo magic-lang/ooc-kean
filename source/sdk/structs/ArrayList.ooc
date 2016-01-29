@@ -323,7 +323,7 @@ ArrayListIterator: class <T> extends BackIterator<T> {
 		list get(index - 1)
 	}
 
-	hasPrev: override func -> Bool { index > 0 }
+	hasPrevious: override func -> Bool { index > 0 }
 
 	prev: override func -> T {
 		index -= 1
