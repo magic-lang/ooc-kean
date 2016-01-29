@@ -70,13 +70,13 @@ GpuSurface: abstract class extends Canvas {
 	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) {
 		map := this _getDefaultMap(image)
 		temporary: GpuImage = null
-		if (image instanceOf?(GpuImage))
+		if (image instanceOf(GpuImage))
 			temporary = image as GpuImage
-		else if (image instanceOf?(RasterImage))
+		else if (image instanceOf(RasterImage))
 			temporary = this _context createImage(image as RasterImage)
 		else
 			Debug raise("Invalid image type in GpuSurface!")
-		if (temporary instanceOf?(GpuYuv420Semiplanar)) {
+		if (temporary instanceOf(GpuYuv420Semiplanar)) {
 			yuv := temporary as GpuYuv420Semiplanar
 			map add("texture0", yuv y)
 			map add("texture1", yuv uv)

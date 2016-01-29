@@ -409,7 +409,7 @@ HashMapValueIterator: class <K, T> extends BackIterator<T> {
 		map get(key)
 	}
 
-	hasPrev?: override func -> Bool { index > 0 }
+	hasPrev: override func -> Bool { index > 0 }
 
 	prev: override func -> T {
 		index -= 1

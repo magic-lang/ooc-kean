@@ -22,7 +22,7 @@ CharBufferIterator: class <T> extends BackIterator<T> {
 		c
 	}
 
-	hasPrev?: override func -> Bool {
+	hasPrev: override func -> Bool {
 		i > 0
 	}
 

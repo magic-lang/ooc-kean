@@ -33,7 +33,7 @@ AndroidContext: class extends OpenGLContext {
 	createImage: override func (rasterImage: RasterImage) -> GpuImage {
 		result: GpuImage
 		version (optiGraphicbufferupload) {
-			if (rasterImage instanceOf?(GraphicBufferYuv420Semiplanar)) {
+			if (rasterImage instanceOf(GraphicBufferYuv420Semiplanar)) {
 				graphicBufferImage := rasterImage as GraphicBufferYuv420Semiplanar
 				rgba := graphicBufferImage toRgba(this)
 				result = this unpackBgraToYuv420Semiplanar(rgba, rasterImage size, graphicBufferImage uvPadding % graphicBufferImage stride)
@@ -106,9 +106,9 @@ AndroidContext: class extends OpenGLContext {
 		rasterResult: RasterImage
 		fenceResult: GpuFence
 		aligned := this isAligned(gpuImage size x)
-		if (aligned && gpuImage instanceOf?(OpenGLMonochrome))
+		if (aligned && gpuImage instanceOf(OpenGLMonochrome))
 			(rasterResult, fenceResult) = this toRasterAsync(gpuImage as OpenGLMonochrome)
-		else if (aligned && gpuImage instanceOf?(OpenGLUv))
+		else if (aligned && gpuImage instanceOf(OpenGLUv))
 			(rasterResult, fenceResult) = this toRasterAsync(gpuImage as OpenGLUv)
 		else
 			(rasterResult, fenceResult) = super(gpuImage)

@@ -67,7 +67,7 @@ Fixture: abstract class {
 		if (!result) {
 			for (i in 0 .. failures count) {
 				f := failures[i]
-				if (f constraint instanceOf?(CompareConstraint) && f value instanceOf?(Cell))
+				if (f constraint instanceOf(CompareConstraint) && f value instanceOf(Cell))
 					(this createFailureMessage(f) toString()) println()
 				else
 					This _print(t"  -> '%s' (expect: %i)\n" format(f message, f expect))
@@ -123,7 +123,7 @@ Fixture: abstract class {
 			TestFailedException new(value, constraint, This _expectCount) throw()
 		else {
 			constraint free()
-			if (value instanceOf?(Cell))
+			if (value instanceOf(Cell))
 				(value as Cell) free()
 		}
 	}

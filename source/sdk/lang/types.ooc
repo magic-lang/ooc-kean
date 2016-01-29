@@ -24,7 +24,7 @@ Object: abstract class {
 	/// Finalizer: cleans up any objects belonging to this instance
 	__destroy__: func
 
-	instanceOf?: final func (T: Class) -> Bool {
+	instanceOf: final func (T: Class) -> Bool {
 		result := false
 		if (this) {
 			current := class
@@ -63,7 +63,7 @@ Class: abstract class {
 			object class = this
 		object
 	}
-	inheritsFrom?: final func ~_class (T: This) -> Bool {
+	inheritsFrom: final func ~_class (T: This) -> Bool {
 		result := false
 		current := this
 		while (current) {
@@ -144,31 +144,31 @@ Cell: class <T> {
 
 	toText: func -> Text {
 		result: Text
-		if (T inheritsFrom?(Text))
+		if (T inheritsFrom(Text))
 			result = (this val as Text)
-		else if (T inheritsFrom?(String))
+		else if (T inheritsFrom(String))
 			result = Text new(this val as String)
-		else if (T inheritsFrom?(Bool))
+		else if (T inheritsFrom(Bool))
 			result = (this val as Bool) toText()
-		else if (T inheritsFrom?(Char))
+		else if (T inheritsFrom(Char))
 			result = Text new((this val as Char) toString())
-		else if (T inheritsFrom?(Int))
+		else if (T inheritsFrom(Int))
 			result = (this val as Int) toText()
-		else if (T inheritsFrom?(Long))
+		else if (T inheritsFrom(Long))
 			result = (this val as Long) toText()
-		else if (T inheritsFrom?(LLong))
+		else if (T inheritsFrom(LLong))
 			result = (this val as LLong) toText()
-		else if (T inheritsFrom?(UInt))
+		else if (T inheritsFrom(UInt))
 			result = (this val as UInt) toText()
-		else if (T inheritsFrom?(ULong))
+		else if (T inheritsFrom(ULong))
 			result = (this val as ULong) toText()
-		else if (T inheritsFrom?(ULLong))
+		else if (T inheritsFrom(ULLong))
 			result = (this val as ULLong) toText()
-		else if (T inheritsFrom?(Float))
+		else if (T inheritsFrom(Float))
 			result = (this val as Float) toText()
-		else if (T inheritsFrom?(Double))
+		else if (T inheritsFrom(Double))
 			result = (this val as Double) toText()
-		else if (T inheritsFrom?(LDouble))
+		else if (T inheritsFrom(LDouble))
 			result = (this val as LDouble) toText()
 		else
 			raise("[Cell] toText() is not implemented on the specified type")
@@ -177,7 +177,7 @@ Cell: class <T> {
 }
 
 operator [] <T> (c: Cell<T>, T: Class) -> T {
-	if (!c T inheritsFrom?(T)) {
+	if (!c T inheritsFrom(T)) {
 		Exception new(Cell, "Wants a %s, but got a %s" format(T name, c T name)) throw()
 	}
 	c val

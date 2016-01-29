@@ -57,7 +57,7 @@ Iterator: abstract class <T> extends Iterable<T> {
 }
 
 BackIterator: abstract class <T> extends Iterator<T> {
-	hasPrev?: abstract func -> Bool
+	hasPrev: abstract func -> Bool
 	prev: abstract func -> T
 	iterator: func -> This<T> { this }
 	reversed: func -> ReverseIterator<T> {
@@ -70,9 +70,9 @@ BackIterator: abstract class <T> extends Iterator<T> {
 ReverseIterator: class <T> extends BackIterator<T> {
 	iterator: BackIterator<T> = null
 	init: func
-	hasNext: override func -> Bool { iterator hasPrev?() }
+	hasNext: override func -> Bool { iterator hasPrev() }
 	next: override func -> T { iterator prev() }
-	hasPrev?: override func -> Bool { iterator hasNext() }
+	hasPrev: override func -> Bool { iterator hasNext() }
 	prev: override func -> T { iterator next() }
 	remove: override func -> Bool { iterator remove() }
 	reversed: func -> BackIterator<T> { iterator }

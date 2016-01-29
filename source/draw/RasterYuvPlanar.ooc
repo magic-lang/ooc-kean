@@ -63,7 +63,7 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 	}
 	distance: override func (other: Image) -> Float {
 		result := 0.0f
-		if (!other || (this size != other size) || !other instanceOf?(This))
+		if (!other || (this size != other size) || !other instanceOf(This))
 			result = Float maximumValue
 		else {
 			for (y in 0 .. this size y)

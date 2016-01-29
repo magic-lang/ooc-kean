@@ -80,7 +80,7 @@ _ResultTask: class <T> extends _Task {
 	_free: override func { (this _action as Closure) free() }
 	run: override func {
 		temporary := this _action()
-		if (T inheritsFrom?(Object))
+		if (T inheritsFrom(Object))
 			this _result = temporary
 		else {
 			this _result = Cell<T> new(temporary)
