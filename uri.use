@@ -1,0 +1,8 @@
+Name: ooc uri
+Description: uri parser
+SourcePath: source/uri
+Imports: Locator
+Imports: Authority
+Imports: User
+Imports: Endpoint
+Imports: Query
