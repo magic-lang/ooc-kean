@@ -35,9 +35,6 @@ fprintf: extern func (FStream, Char*, ...) -> Int
 sprintf: extern func (Char*, Char*, ...) -> Int
 snprintf: extern func (Char*, Int, Char*, ...) -> Int
 
-vprintf: extern func (Char*, VaList) -> Int
-vfprintf: extern func (FStream, Char*, VaList) -> Int
-vsprintf: extern func (Char*, Char*, VaList) -> Int
 vsnprintf: extern func (Char*, Int, Char*, VaList) -> Int
 
 fread: extern func (ptr: Pointer, size: SizeT, nmemb: SizeT, stream: FStream) -> SizeT
@@ -54,10 +51,6 @@ fputs: extern func (Char*, FStream)
 scanf: extern func (format: Char*, ...) -> Int
 fscanf: extern func (stream: FStream, format: Char*, ...) -> Int
 sscanf: extern func (str, format: Char*, ...) -> Int
-
-vscanf: extern func (format: Char*, ap: VaList) -> Int
-vfscanf: extern func (file: FILE*, format: Char*, ap: VaList) -> Int
-vsscanf: extern func (str: Char*, format: Char*, ap: VaList) -> Int
 
 fgets: extern func (str: Char*, length: SizeT, stream: FStream) -> Char*
 fgetc: extern func (stream: FStream) -> Int
