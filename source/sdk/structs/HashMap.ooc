@@ -6,8 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import ArrayList
-
 getStandardEquals: func <T> (k1, k2: T) -> Bool {
 	if (T == String)
 		stringEquals(k1, k2)
@@ -153,10 +151,10 @@ HashMap: class <K, V> extends BackIterable<V> {
 	hashKey: Func <K> (K) -> SizeT
 
 	buckets: HashEntry[]
-	keys: ArrayList<K>
+	keys: VectorList<K>
 
 	size ::= _size
-	isEmpty ::= keys empty()
+	isEmpty ::= keys empty
 
 	init: func { init(3) }
 
@@ -164,7 +162,7 @@ HashMap: class <K, V> extends BackIterable<V> {
 		_size = 0
 
 		buckets = HashEntry[capacity] new()
-		keys = ArrayList<K> new()
+		keys = VectorList<K> new(32, false)
 		hashKey = getStandardHashFunc(K)
 	}
 	free: override func {
@@ -317,8 +315,8 @@ HashMap: class <K, V> extends BackIterable<V> {
 					else
 						buckets[hash] = nullHashEntry
 
-					for (i in 0 .. keys size) {
-						cKey := keys get(i)
+					for (i in 0 .. keys count) {
+						cKey := keys[i]
 						if (getStandardEquals(key, cKey)) {
 							keys removeAt(i)
 							break
@@ -344,7 +342,7 @@ HashMap: class <K, V> extends BackIterable<V> {
 		oldCapacity := capacity
 		oldBuckets := buckets
 
-		oldKeys := keys clone()
+		oldKeys := keys copy()
 		keys clear()
 		_size = 0
 
@@ -376,7 +374,7 @@ HashMap: class <K, V> extends BackIterable<V> {
 	}
 	backIterator: func -> BackIterator<V> {
 		iter := HashMapValueIterator<K, V> new(this)
-		iter index = keys getSize()
+		iter index = keys count
 		iter
 	}
 	clear: func {
@@ -386,13 +384,13 @@ HashMap: class <K, V> extends BackIterable<V> {
 		keys clear()
 	}
 	each: func ~withKeys (f: Func (K, V)) {
-		for (i in 0 .. keys size) {
+		for (i in 0 .. keys count) {
 			key := keys[i]
 			f(key, get(key))
 		}
 	}
 	each: func (f: Func (V)) {
-		for (i in 0 .. keys size)
+		for (i in 0 .. keys count)
 			f(get(keys[i]))
 	}
 }
@@ -403,26 +401,27 @@ HashMapValueIterator: class <K, T> extends BackIterator<T> {
 
 	init: func ~withMap (=map)
 
-	hasNext?: override func -> Bool { index < map keys size }
+	hasNext?: override func -> Bool { index < map keys count }
 
 	next: override func -> T {
-		key := map keys get(index)
+		key := map keys[index]
 		index += 1
-		return map get(key)
+		map get(key)
 	}
 
 	hasPrev?: override func -> Bool { index > 0 }
 
 	prev: override func -> T {
 		index -= 1
-		key := map keys get(index)
-		return map get(key)
+		key := map keys[index]
+		map get(key)
 	}
 
 	remove: override func -> Bool {
-		result := map remove(map keys get(index))
-		if (index <= map keys size) index -= 1
-		return result
+		result := map remove(map keys[index])
+		if (index <= map keys count)
+			index -= 1
+		result
 	}
 }
 
