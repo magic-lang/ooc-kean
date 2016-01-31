@@ -215,11 +215,6 @@ Backtrace: class {
 	}
 }
 
-/*
- * Called on program exit, frees the library - absolutely necessary
- * on Win32, absolutely useless on other platforms, but doesn't hurt.
- * Sucks in any case.
- */
 _cleanup_backtrace: func {
 	h := BacktraceHandler get()
 	if (h lib)

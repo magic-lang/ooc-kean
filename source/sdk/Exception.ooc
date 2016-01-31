@@ -315,52 +315,11 @@ _setupHandlers()
 
 include stdlib
 
-/* stdlib.h -
- *
- * The  abort() first unblocks the SIGABRT signal, and then raises that
- * signal for the calling process.  This results in the abnormal
- * termination of the process unless the SIGABRT signal is caught
- * and the signal handler does not return (see longjmp(3)).
- *
- * If the abort() function causes process termination, all open streams
- * are closed and flushed.
- *
- * If the SIGABRT signal is ignored, or caught by a handler that returns,
- * the abort() function will still terminate the process.  It does this
- * by restoring the default disposition for SIGABRT and then raising
- * the signal for a second time.
- */
 abort: extern func
 
 version ((linux || apple) && !android) {
 	include signal
 
-	/* signal.h -
-	 *
-	 * This signal() facility is a simplified interface to the more general
-	 * sigaction(2) facility.  Signals allow the manipulation of a process from
-	 * outside its domain, as well as allowing the process to manipulate itself
-	 * or copies of itself (children).
-	 *
-	 * There are two general types of signals: those that cause termination of
-	 * a process and those that do not.  Signals which cause termination of a
-	 * program might result from an irrecoverable error or might be the result
-	 * of a user at a terminal typing the `interrupt' character.
-	 *
-	 * Signals are used when a process is stopped because it wishes to access
-	 * its control terminal while in the background (see tty(4)).  Signals are
-	 * optionally generated when a process resumes after being stopped, when
-	 * the status of child processes changes, or when input is ready at the
-	 * control terminal.
-	 *
-	 * Most signals result in the termination of the process receiving them, if
-	 * no action is taken; some signals instead cause the process receiving
-	 * them to be stopped, or are simply discarded if the process has not
-	 * requested otherwise.
-	 *
-	 * Except for the SIGKILL and SIGSTOP signals, the signal() function allows
-	 * for a signal to be caught, to be ignored, or to generate an interrupt.
-	 */
 	signal: extern func (sig: Int, f: Pointer) -> Pointer
 
 	SIGHUP, SIGINT, SIGILL, SIGTRAP, SIGABRT, SIGFPE, SIGBUS,
