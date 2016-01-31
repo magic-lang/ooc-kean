@@ -105,7 +105,7 @@ Process: abstract class {
 		version(windows)
 			result = ProcessWin32 new(args) as This
 		if (result == null)
-			Exception new(This, "os/Process is unsupported on your platform!") throw()
+			raise("os/Process is unsupported on your platform!")
 		result
 	}
 
@@ -120,12 +120,4 @@ Process: abstract class {
 		p env = env
 		p
 	}
-}
-
-ProcessException: class extends Exception {
-	init: super func
-}
-
-BadExecutableException: class extends ProcessException {
-	init: super func
 }

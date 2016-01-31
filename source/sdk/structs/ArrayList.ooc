@@ -331,10 +331,8 @@ ArrayListIterator: class <T> extends BackIterator<T> {
 	}
 
 	remove: override func -> Bool {
-		if (!_canRemove) {
-			IllegalIteratorOpException new(class, \
-				"ArrayListIterator remove() called twice in a single iteration - that's illegal.") throw()
-		}
+		if (!_canRemove)
+			raise("ArrayListIterator remove() called twice in a single iteration - that's illegal.")
 		_canRemove = false
 
 		list removeAt(index - 1)
@@ -344,12 +342,6 @@ ArrayListIterator: class <T> extends BackIterator<T> {
 		}
 
 		true
-	}
-}
-
-IllegalIteratorOpException: class extends Exception {
-	init: func (.origin, .message) {
-		super(origin, message)
 	}
 }
 
