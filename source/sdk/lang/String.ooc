@@ -6,8 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import structs/ArrayList // Must be here, otherwise keyEquals in HashMap does not resolve...
-
 String: class extends Iterable<Char> {
 	// Avoid direct buffer access, as it breaks immutability.
 	_buffer: CharBuffer

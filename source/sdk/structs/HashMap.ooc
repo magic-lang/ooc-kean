@@ -8,19 +8,19 @@
 
 import ArrayList
 
-getStandardEquals: func <T> (T: Class) -> Func <T> (T, T) -> Bool {
+getStandardEquals: func <T> (k1, k2: T) -> Bool {
 	if (T == String)
-		stringEquals
+		stringEquals(k1, k2)
 	else if (T == CString)
-		cstringEquals
+		cstringEquals(k1, k2)
 	else if (T size == Pointer size)
-		pointerEquals
+		pointerEquals(k1, k2)
 	else if (T size == UInt size)
-		intEquals
+		intEquals(k1, k2)
 	else if (T size == Char size)
-		charEquals
+		charEquals(k1, k2)
 	else
-		genericEquals
+		genericEquals(k1, k2)
 }
 
 stringEquals: func <K> (k1, k2: K) -> Bool { k1 as String equals(k2 as String) }
@@ -64,9 +64,7 @@ pointerHash: func <K> (key: K) -> SizeT {
 }
 
 charHash: func <K> (key: K) -> SizeT {
-	// both casts are necessary
-	// Casting 'key' directly to UInt would deref a pointer to UInt
-	// which would read random memory just after the char, which is not a good idea..
+	// both casts are necessary, casting 'key' directly to UInt would deref a pointer to UInt
 	(key as Char) as SizeT
 }
 
@@ -152,7 +150,6 @@ getStandardHashFunc: func <T> (T: Class) -> Func <T> (T) -> SizeT {
 
 HashMap: class <K, V> extends BackIterable<V> {
 	_size, capacity: SizeT
-	keyEquals: Func <K> (K, K) -> Bool
 	hashKey: Func <K> (K) -> SizeT
 
 	buckets: HashEntry[]
@@ -168,8 +165,6 @@ HashMap: class <K, V> extends BackIterable<V> {
 
 		buckets = HashEntry[capacity] new()
 		keys = ArrayList<K> new()
-
-		keyEquals = getStandardEquals(K)
 		hashKey = getStandardHashFunc(K)
 	}
 	free: override func {
@@ -186,7 +181,7 @@ HashMap: class <K, V> extends BackIterable<V> {
 		if (entry key == null) { return false }
 
 		while (true) {
-			if (keyEquals(entry key as K, key)) {
+			if (getStandardEquals(entry key as K, key)) {
 				if (result) {
 					result@ = entry
 				}
@@ -215,7 +210,7 @@ HashMap: class <K, V> extends BackIterable<V> {
 		}
 
 		while (true) {
-			if (keyEquals(entry key as K, key)) {
+			if (getStandardEquals(entry key as K, key)) {
 				if (result) {
 					result@ = entry
 				}
@@ -311,7 +306,7 @@ HashMap: class <K, V> extends BackIterable<V> {
 		result := false
 		if (entry@ key != null) {
 			while (true) {
-				if (keyEquals(entry@ key as K, key)) {
+				if (getStandardEquals(entry@ key as K, key)) {
 					memfree(entry@ key)
 					memfree(entry@ value)
 
@@ -324,7 +319,7 @@ HashMap: class <K, V> extends BackIterable<V> {
 
 					for (i in 0 .. keys size) {
 						cKey := keys get(i)
-						if (keyEquals(key, cKey)) {
+						if (getStandardEquals(key, cKey)) {
 							keys removeAt(i)
 							break
 						}
