@@ -26,75 +26,35 @@ strtod: extern func (Char*, Pointer) -> Double
 version (!cygwin) {
 	strtold: extern func (Char*, Pointer) -> LDouble
 } else {
-	strtold: func (str: Char*, p: Pointer) -> LDouble {
-		strtod(str, p) as LDouble
-	}
+	strtold: func (str: Char*, p: Pointer) -> LDouble { strtod(str, p) as LDouble }
 }
 
 Char: cover from char {
-	alphaNumeric: func -> Bool {
-		alpha() || digit()
-	}
-	alpha: func -> Bool {
-		lower() || upper()
-	}
-	lower: func -> Bool {
-		this >= 'a' && this <= 'z'
-	}
-	upper: func -> Bool {
-		this >= 'A' && this <= 'Z'
-	}
-	digit: func -> Bool {
-		this >= '0' && this <= '9'
-	}
-	octalDigit: func -> Bool {
-		this >= '0' && this <= '7'
-	}
-	hexDigit: func -> Bool {
-		digit() ||
-		(this >= 'A' && this <= 'F') ||
-		(this >= 'a' && this <= 'f')
-	}
-	control: func -> Bool {
-		(this >= 0 && this <= 31) || this == 127
-	}
-	graph: func -> Bool {
-		printable() && this != ' '
-	}
-	printable: func -> Bool {
-		this >= 32 && this <= 126
-	}
-	punctuation: func -> Bool {
-		printable() && !alphaNumeric() && this != ' '
-	}
-	whitespace: func -> Bool {
-		this == ' ' ||
-		this == '\f' ||
-		this == '\n' ||
-		this == '\r' ||
-		this == '\t' ||
-		this == '\v'
-	}
-	blank: func -> Bool {
-		this == ' ' || this == '\t'
-	}
-	toInt: func -> Int {
-		if (digit()) {
-			return (this - '0') as Int
-		}
-		return -1
-	}
 	toLower: extern (tolower) func -> This
 	toUpper: extern (toupper) func -> This
-	toString: func -> String {
-		String new(this& as CString, 1)
+	alphaNumeric: func -> Bool { this alpha() || this digit() }
+	alpha: func -> Bool { this lower() || this upper() }
+	lower: func -> Bool { this >= 'a' && this <= 'z' }
+	upper: func -> Bool { this >= 'A' && this <= 'Z' }
+	digit: func -> Bool { this >= '0' && this <= '9' }
+	octalDigit: func -> Bool { this >= '0' && this <= '7' }
+	control: func -> Bool { (this >= 0 && this <= 31) || this == 127 }
+	graph: func -> Bool { this printable() && this != ' ' }
+	printable: func -> Bool { this >= 32 && this <= 126 }
+	punctuation: func -> Bool { this printable() && !this alphaNumeric() && this != ' ' }
+	whitespace: func -> Bool { this == ' ' || this == '\f' || this == '\n' ||this == '\r' || this == '\t' || this == '\v' }
+	blank: func -> Bool { this == ' ' || this == '\t' }
+	hexDigit: func -> Bool { this digit() || (this >= 'A' && this <= 'F') || (this >= 'a' && this <= 'f') }
+	toInt: func -> Int {
+		result := -1
+		if (this digit())
+			result = (this - '0') as Int
+		result
 	}
-	print: func {
-		fputc(this, stdout)
-	}
-	print: func ~withStream (stream: FStream) {
-		fputc(this, stream)
-	}
+
+	toString: func -> String { String new(this& as CString, 1) }
+	print: func { fputc(this, stdout) }
+	print: func ~withStream (stream: FStream) { fputc(this, stream) }
 	println: func {
 		fputc(this, stdout)
 		fputc('\n', stdout)
@@ -103,14 +63,17 @@ Char: cover from char {
 		fputc(this, stream)
 		fputc('\n', stream)
 	}
-	containedIn: func (s : String) -> Bool {
-		containedIn(s _buffer data, s size)
+	containedIn: func (s: String) -> Bool {
+		this containedIn(s _buffer data, s size)
 	}
 	containedIn: func ~charWithLength (s : Char*, sLength: SizeT) -> Bool {
-		for (i in 0 .. sLength) {
-			if ((s + i)@ == this) return true
-		}
-		return false
+		result := false
+		for (i in 0 .. sLength)
+			if ((s + i)@ == this) {
+				result = true
+				break
+			}
+		result
 	}
 	compareWith: func (compareFunc: Func (Char, Char*, SizeT) -> SSizeT, target: Char*, targetSize: SizeT) -> SSizeT {
 		compareFunc(this, target, targetSize)
@@ -127,33 +90,30 @@ operator as (value: CString) -> String { value ? value toString() : null }
 
 CString: cover from Char* {
 	clone: func -> This {
-		length := length()
+		length := this length()
 		copy := This new(length)
 		memcpy(copy, this, length + 1)
-		return copy as This
+		copy as This
 	}
-	equals: func ( other: This) -> Bool {
-		if (other == null) return false
-		l := length()
-		l2 := length()
-		if (l != l2) return false
-
-		for (i in 0 .. l) {
-			if (this[i] != other[i]) return false
+	equals: func (other: This) -> Bool {
+		result := false
+		if (other != null) {
+			(length, otherLength) := (this length(), other length())
+			if (length == otherLength) {
+				result = true
+				for (i in 0 .. length)
+					if (this[i] != other[i]) {
+						result = false
+						break
+					}
+			}
 		}
-		return true
+		result
 	}
-	toString: func -> String {
-		if (this == null) return null
-		String new(this, length())
-	}
+	toString: func -> String { (this == null) ? null as String : String new(this, length()) }
 	length: extern (strlen) func -> Int
-	print: func {
-		stdout write(this, 0, length())
-	}
-	println: func {
-		stdout write(this, 0, length()). write('\n')
-	}
+	print: func { stdout write(this, 0, length()) }
+	println: func { stdout write(this, 0, length()). write('\n') }
 	new: static func ~withLength (length: Int) -> This {
 		result := calloc(1, length + 1) as Char*
 		result[length] = '\0'
@@ -161,12 +121,6 @@ CString: cover from Char* {
 	}
 }
 
-operator == (str1: CString, str2: CString) -> Bool {
-	if ((str1 == null) || (str2 == null))
-		return false
-	str1 equals(str2)
-}
+operator == (str1: CString, str2: CString) -> Bool { (str1 == null || str2 == null) ? false : str1 equals(str2) }
 
-operator != (str1: CString, str2: CString) -> Bool {
-	!(str1 == str2)
-}
+operator != (str1: CString, str2: CString) -> Bool { !(str1 == str2) }
