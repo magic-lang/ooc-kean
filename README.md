@@ -1,7 +1,5 @@
 magic-sdk (formerly ooc-kean)
 ========
-**Last updated: 2016-01-20**
-
 This is an extended SDK for `magic`, a high-level cross-platform language which transpiles into C99.
 
 ## History
