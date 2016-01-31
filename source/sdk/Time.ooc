@@ -11,8 +11,7 @@ import os/win32
 version(linux) {
 	include unistd | (__USE_BSD), sys/time | (__USE_BSD), time | (__USE_BSD)
 	//include unistd, sys/time, time
-}
-version(!linux) {
+} else {
 	include unistd, sys/time
 }
 version(windows) {
@@ -85,95 +84,93 @@ Time: class {
 
 	// The microseconds that have elapsed in the current minute.
 	microtime: static func -> LLong {
-		return microsec() as LLong + (sec() as LLong) * 1_000_000
+		microsec() as LLong + (sec() as LLong) * 1_000_000
 	}
 
 	// The microseconds that have elapsed in the current second.
 	microsec: static func -> UInt {
+		result: UInt
 		version(windows) {
 			st: SystemTime
 			GetLocalTime(st&)
-			return st wMilliseconds * 1000
+			result = st wMilliseconds * 1000
 		} else {
 			tv : TimeVal
 			gettimeofday(tv&, null)
-			return tv tv_usec
+			result = tv tv_usec
 		}
-		return -1
+		result
 	}
-
-	// The number of milliseconds elapsed since program start.
 	runTime: static func -> UInt {
+		result: UInt
 		version(windows) {
-			// NOTE: this was previously using timeGetTime, but it's
-			// a winmm.lib function and we can't afford the extra dep
-			// I believe every computer that runs ooc programs on Win32
-			// has a hardware high-performance counter, so it shouldn't be an issue
 			counter, frequency: LargeInteger
 			QueryPerformanceCounter(counter&)
 			QueryPerformanceFrequency(frequency&)
-			return ((counter quadPart * 1000) / frequency quadPart) - __time_millisec_base
+			result = ((counter quadPart * 1000) / frequency quadPart) - __time_millisec_base
 		} else {
-			return This runTimeMicro() / (1000 as UInt)
+			result = This runTimeMicro() / (1000 as UInt)
 		}
-		return -1
+		result
 	}
-	// The number of microseconds elapsed since program start.
 	runTimeMicro: static func -> UInt {
+		result: UInt
 		version(!windows) {
 			tv : TimeVal
 			gettimeofday(tv&, null)
-			return ((tv tv_usec + tv tv_sec * 1_000_000) - __time_millisec_base) as UInt
+			result = ((tv tv_usec + tv tv_sec * 1_000_000) - __time_millisec_base) as UInt
 		} else {
-			return This runTime() * (1000 as UInt)
+			result = This runTime() * (1000 as UInt)
 		}
-		return -1
+		result
 	}
-	// The number of milliseconds spent executing 'action'
 	measure: static func (action: Func) -> UInt {
 		t1 := runTime()
 		action()
 		t2 := runTime()
 		t2 - t1
 	}
-	// The seconds that have elapsed in the current minute.
+	// The seconds that have elapsed in the current minute
 	sec: static func -> UInt {
+		result: UInt
 		version(windows) {
 			st: SystemTime
 			GetLocalTime(st&)
-			return st wSecond
+			result = st wSecond
 		} else {
 			tt := time(null)
 			val := localtime(tt&)
-			return val@ tm_sec
+			result = val@ tm_sec
 		}
-		return -1
+		result
 	}
-	// The minutes that have elapsed in the current hour.
+	// The minutes that have elapsed in the current hour
 	min: static func -> UInt {
+		result: UInt
 		version(windows) {
 			st: SystemTime
 			GetLocalTime(st&)
-			return st wMinute
+			result = st wMinute
 		} else {
 			tt := time(null)
 			val := localtime(tt&)
-			return val@ tm_min
+			result = val@ tm_min
 		}
-		return -1
+		result
 	}
-	// The hours that have elapsed in the current day.
+	// The hours that have elapsed in the current day
 	hour: static func -> UInt {
+		result: UInt
 		version(windows) {
 			st: SystemTime
 			GetLocalTime(st&)
-			return st wHour
+			result = st wHour
 		} else {
 			tt := time(null)
 			val := localtime(tt&)
-			return val@ tm_hour
+			result = val@ tm_hour
 		}
-		return -1
+		result
 	}
 	sleepSec: static func (duration: Float) {
 		sleepMicro(duration * 1_000_000)
@@ -182,10 +179,9 @@ Time: class {
 		sleepMicro(duration * 1_000)
 	}
 	sleepMicro: static func (duration: UInt) {
-		version(windows) {
+		version(windows)
 			Sleep(duration / 1_000)
-		} else {
+		else
 			usleep(duration)
-		}
 	}
 }
