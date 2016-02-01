@@ -8,6 +8,7 @@
 
 use base
 use math
+import IntVector2D
 import FloatVector2D
 import FloatPoint2D
 import FloatBox2D
@@ -184,4 +185,20 @@ FloatTransform2D: cover {
 	createSkewingY: static func (angle: Float) -> This { This new(1.0f, angle sin(), 0.0f, 1.0f, 0.0f, 0.0f) }
 	createReflectionX: static func -> This { This new(-1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f) }
 	createReflectionY: static func -> This { This new(1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f) }
+	referenceToNormalized: func ~float (imageSize: FloatVector2D) -> This {
+		toReference := This createScaling(imageSize x / 2.0f, imageSize y / 2.0f)
+		toNormalized := This createScaling(2.0f / imageSize x, 2.0f / imageSize y)
+		toNormalized * this * toReference
+	}
+	referenceToNormalized: func ~int (imageSize: IntVector2D) -> This {
+		this referenceToNormalized(imageSize toFloatVector2D())
+	}
+	normalizedToReference: func ~float (imageSize: FloatVector2D) -> This {
+		toReference := This createScaling(imageSize x / 2.0f, imageSize y / 2.0f)
+		toNormalized := This createScaling(2.0f / imageSize x, 2.0f / imageSize y)
+		toReference * this * toNormalized
+	}
+	normalizedToReference: func ~int (imageSize: IntVector2D) -> This {
+		this normalizedToReference(imageSize toFloatVector2D())
+	}
 }
