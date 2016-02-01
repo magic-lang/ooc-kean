@@ -1,4 +1,4 @@
-Name: sdk-dynlib
+Name: system-dynlib
 Description: dynamic library loading component of the ooc standard library
 
 version (linux) {
