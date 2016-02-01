@@ -80,10 +80,6 @@ Char: cover from char {
 	}
 }
 
-SChar: cover from signed char extends Char
-UChar: cover from unsigned char extends Char
-WChar: cover from wchar_t
-
 operator as (value: Char) -> String { value toString() }
 operator as (value: Char*) -> String { value ? value as CString toString() : null }
 operator as (value: CString) -> String { value ? value toString() : null }
