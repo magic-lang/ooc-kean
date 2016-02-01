@@ -7,79 +7,79 @@
  */
 
 version(windows) {
-	import ../[WaitCondition, Mutex, Thread]
-	import os/win32
-	import MutexWin32
+import ../[WaitCondition, Mutex, Thread]
+import os/win32
+import MutexWin32
 
-	include windows
+include windows
 
-	CreateEvent: extern func (...) -> Handle
-	SetEvent: extern func (Handle) -> Bool
-	CloseHandle: extern func (Handle) -> Bool
-	Infinite: extern (INFINITE) Long
-	WaitSuccess: extern (WAIT_OBJECT_0) Long
+CreateEvent: extern func (...) -> Handle
+SetEvent: extern func (Handle) -> Bool
+CloseHandle: extern func (Handle) -> Bool
+Infinite: extern (INFINITE) Long
+WaitSuccess: extern (WAIT_OBJECT_0) Long
 
-	ConditionWin32: class extends WaitCondition {
-		_mutex := Mutex new()
-		_waitingEvents := VectorList<Handle> new()
-		_waitingForRelease := VectorList<Handle> new()
-		init: func
-		// do not destroy wait condition while threads are still waiting on it
-		free: override func {
-			this _mutex lock()
-			//waiting threads should have a chance to wake up
-			for (i in 0 .. this _waitingEvents count) {
-				SetEvent(this _waitingEvents[i])
-				Thread yield()
-			}
-			for (i in 0 .. this _waitingForRelease count)
-				CloseHandle(this _waitingForRelease[i])
-			for (i in 0 .. this _waitingEvents count)
-				CloseHandle(this _waitingEvents[i])
-			this _mutex unlock()
-			this _waitingEvents free()
-			this _waitingForRelease free()
-			this _mutex free()
-			super()
+ConditionWin32: class extends WaitCondition {
+	_mutex := Mutex new()
+	_waitingEvents := VectorList<Handle> new()
+	_waitingForRelease := VectorList<Handle> new()
+	init: func
+	// do not destroy wait condition while threads are still waiting on it
+	free: override func {
+		this _mutex lock()
+		//waiting threads should have a chance to wake up
+		for (i in 0 .. this _waitingEvents count) {
+			SetEvent(this _waitingEvents[i])
+			Thread yield()
 		}
-		wait: override func (mutex: Mutex) -> Bool {
-			eventId := CreateEvent(null, false, false, null)
-			this _mutex lock()
-			this _waitingEvents add(eventId)
-			this _mutex unlock()
-			mutex unlock()
-			(WaitForSingleObject(eventId, Infinite) == WaitSuccess)
-		}
-		signal: override func -> Bool {
-			result := false
-			toSignal := 0 as Handle
-			this _mutex lock()
-			if (this _waitingEvents count > 0) {
-				toSignal = this _waitingEvents remove(0)
-				this _waitingForRelease add(toSignal)
-			}
-			this _mutex unlock()
-			if (toSignal != 0)
-				result = SetEvent(toSignal)
-			result
-		}
-		broadcast: override func -> Bool {
-			result := false
-			toSignal := VectorList<Handle> new()
-			this _mutex lock()
-			while (this _waitingEvents count > 0) {
-				eventId := this _waitingEvents remove(0)
-				this _waitingForRelease add(eventId)
-				toSignal add(eventId)
-			}
-			this _mutex unlock()
-			if (toSignal count > 0) {
-				result = true
-				for (i in 0 .. toSignal count)
-					result = result && SetEvent(toSignal[i])
-			}
-			toSignal free()
-			result
-		}
+		for (i in 0 .. this _waitingForRelease count)
+			CloseHandle(this _waitingForRelease[i])
+		for (i in 0 .. this _waitingEvents count)
+			CloseHandle(this _waitingEvents[i])
+		this _mutex unlock()
+		this _waitingEvents free()
+		this _waitingForRelease free()
+		this _mutex free()
+		super()
 	}
+	wait: override func (mutex: Mutex) -> Bool {
+		eventId := CreateEvent(null, false, false, null)
+		this _mutex lock()
+		this _waitingEvents add(eventId)
+		this _mutex unlock()
+		mutex unlock()
+		(WaitForSingleObject(eventId, Infinite) == WaitSuccess)
+	}
+	signal: override func -> Bool {
+		result := false
+		toSignal := 0 as Handle
+		this _mutex lock()
+		if (this _waitingEvents count > 0) {
+			toSignal = this _waitingEvents remove(0)
+			this _waitingForRelease add(toSignal)
+		}
+		this _mutex unlock()
+		if (toSignal != 0)
+			result = SetEvent(toSignal)
+		result
+	}
+	broadcast: override func -> Bool {
+		result := false
+		toSignal := VectorList<Handle> new()
+		this _mutex lock()
+		while (this _waitingEvents count > 0) {
+			eventId := this _waitingEvents remove(0)
+			this _waitingForRelease add(eventId)
+			toSignal add(eventId)
+		}
+		this _mutex unlock()
+		if (toSignal count > 0) {
+			result = true
+			for (i in 0 .. toSignal count)
+				result = result && SetEvent(toSignal[i])
+		}
+		toSignal free()
+		result
+	}
+}
 }
