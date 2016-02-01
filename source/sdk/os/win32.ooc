@@ -13,7 +13,7 @@ version(windows) {
 
 	ERROR_HANDLE_EOF: extern Int
 
-	FormatMessage: extern func (dwFlags: DWORD, lpSource: Pointer, dwMessageId: DWORD, dwLanguageId: DWORD, lpBuffer: LPTSTR, nSize: DWORD, Arguments: VaList*) -> DWORD
+	FormatMessage: extern func (dwFlags: DWORD, lpSource: Pointer, dwMessageId: DWORD, dwLanguageId: DWORD, lpBuffer: LPTSTR, nSize: DWORD, ...) -> DWORD
 
 	FORMAT_MESSAGE_FROM_SYSTEM: extern Long
 	FORMAT_MESSAGE_IGNORE_INSERTS: extern Long
