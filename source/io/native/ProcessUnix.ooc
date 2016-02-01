@@ -12,7 +12,8 @@ import ../[Process, Pipe]
 import PipeUnix
 
 version(unix || apple) {
-include errno, signal
+include errno | (_POSIX_SOURCE)
+include signal | (_POSIX_SOURCE)
 
 errno : extern Int
 SIGTERM: extern Int

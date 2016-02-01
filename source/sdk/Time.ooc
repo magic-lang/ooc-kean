@@ -9,8 +9,9 @@
 import os/win32
 
 version(linux) {
-	include unistd | (__USE_BSD), sys/time | (__USE_BSD), time | (__USE_BSD)
-	//include unistd, sys/time, time
+	include unistd | (__USE_BSD, _BSD_SOURCE, _DEFAULT_SOURCE)
+	include sys/time | (__USE_BSD, _BSD_SOURCE, _DEFAULT_SOURCE)
+	include time | (__USE_BSD, _BSD_SOURCE, _DEFAULT_SOURCE)
 } else {
 	include unistd, sys/time
 }
