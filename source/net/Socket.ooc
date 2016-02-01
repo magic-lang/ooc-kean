@@ -28,7 +28,7 @@ Socket: abstract class {
 	init: func ~descriptor (=family, =type, =protocol, =descriptor)
 
 	close: func {
-		result : Int
+		result: Int
 
 		version(windows) {
 			result = closesocket(descriptor)

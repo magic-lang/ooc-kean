@@ -25,12 +25,12 @@ TF_PLUS := 1 << 6
 TF_UNSIGNED := 1 << 7
 
 FSInfoStruct: cover {
-	precision : Int
-	fieldwidth : Int
+	precision: Int
+	fieldwidth: Int
 	flags: SizeT
-	base : Int
+	base: Int
 	bytesProcessed: SizeT
-	length : Int
+	length: Int
 }
 
 __digits: String = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -445,7 +445,7 @@ getEntityInfoOne: func <T> (info: FSInfoStruct@, va: T*, start: Char*, end: Poin
 	info bytesProcessed = p as SizeT - start as SizeT
 }
 
-format: func ~main <T> (fmt: T, args: ... ) -> T {
+format: func ~main <T> (fmt: T, args: ...) -> T {
 	if (args count == 0)
 		return fmt
 	res := CharBuffer new(512)

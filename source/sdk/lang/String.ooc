@@ -121,7 +121,7 @@ String: class extends Iterable<Char> {
 	}
 
 	_bufVectorListToStrVectorList: func (x: VectorList<CharBuffer>) -> VectorList<This> {
-		result := VectorList<This> new( x count )
+		result := VectorList<This> new(x count)
 		for (i in 0 .. x count) result add (x[i] toString())
 		result
 	}
@@ -213,7 +213,7 @@ String: class extends Iterable<Char> {
 
 	trimRight: func ~string (s: This) -> This {
 		result := _buffer clone()
-		result trimRight~buf( s _buffer )
+		result trimRight~buf(s _buffer)
 		result toString()
 	}
 

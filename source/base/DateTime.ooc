@@ -145,7 +145,6 @@ DateTime: cover {
 	kean_base_dateTime_getMonth: unmangled func -> Int { this month() }
 	kean_base_dateTime_getYear: unmangled func -> Int { this year() }
 
-	/* number of days in year ( non-leap ) */
 	daysPerYear: static Int = 365
 	daysPerFourYears: static Int = 3 * This daysPerYear + 366
 	nanosecondsPerTick: static Long = 100
@@ -156,9 +155,7 @@ DateTime: cover {
 	ticksPerDay: static Long = This ticksPerHour * 24
 	ticksPerWeek: static Long = This ticksPerDay * 7
 	ticksPerFourYears: static Long = This daysPerFourYears * This ticksPerDay
-	/* default date/time printing format */
 	defaultFormat: static Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
-
 	now: static This = Time currentDateTime()
 
 	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }

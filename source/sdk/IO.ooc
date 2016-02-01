@@ -56,7 +56,7 @@ fgets: extern func (str: Char*, length: SizeT, stream: FStream) -> Char*
 fgetc: extern func (stream: FStream) -> Int
 
 SEEK_CUR, SEEK_SET, SEEK_END: extern Int
-fseek: extern func (stream: FStream, offset: Long, origin: Int ) -> Int
+fseek: extern func (stream: FStream, offset: Long, origin: Int) -> Int
 ftell: extern func (stream: FStream) -> Long
 
 ferror: extern func (stream: FStream) -> Int

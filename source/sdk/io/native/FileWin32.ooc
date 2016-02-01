@@ -280,7 +280,7 @@ version(windows) {
 		 * Works only on directories, obviously
 		 */
 		getChildrenNames: override func -> VectorList<String> {
-			_getChildren( String )
+			_getChildren(String)
 		}
 
 		/**
@@ -288,7 +288,7 @@ version(windows) {
 		 * Works only on directories, obviously
 		 */
 		getChildren: override func -> VectorList<File> {
-			_getChildren ( File )
+			_getChildren (File)
 		}
 
 		_normalizePath: static func (in: String) -> String {

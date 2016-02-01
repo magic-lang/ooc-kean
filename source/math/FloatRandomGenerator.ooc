@@ -47,7 +47,7 @@ FloatGaussianRandomGenerator: class extends FloatRandomGenerator {
 	_backend: FloatUniformRandomGenerator
 	_mu := 0.0f
 	_sigma := 1.0f
-	_secondValue : Float
+	_secondValue: Float
 	_hasSecondValue := false
 	init: func {
 		this _backend = FloatUniformRandomGenerator new(Float minimumValue, 1.0f)
@@ -71,7 +71,7 @@ FloatGaussianRandomGenerator: class extends FloatRandomGenerator {
 		this _backend setSeed(state)
 	}
 	next: override func -> Float {
-		result : Float
+		result: Float
 		if (this _hasSecondValue) {
 			result = this _secondValue
 			this _hasSecondValue = false

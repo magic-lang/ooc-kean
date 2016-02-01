@@ -64,8 +64,8 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer)
 		glBufferData(GL_ARRAY_BUFFER, (2 + dimensions) * Float size * vertexCount, packedArray, GL_STATIC_DRAW)
 
-		positionOffset : ULong = 0
-		textureCoordinateOffset : ULong = Float size * dimensions
+		positionOffset: ULong = 0
+		textureCoordinateOffset: ULong = Float size * dimensions
 		glVertexAttribPointer(positionLayout, dimensions, GL_FLOAT, GL_FALSE, Float size * (2 + dimensions), positionOffset as Pointer)
 		glEnableVertexAttribArray(positionLayout)
 		glVertexAttribPointer(textureCoordinateLayout, 2, GL_FLOAT, GL_FALSE, Float size * (2 + dimensions), textureCoordinateOffset as Pointer)

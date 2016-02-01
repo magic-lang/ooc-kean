@@ -35,7 +35,7 @@ TimeSpanTest: class extends Fixture {
 			expect((t + TimeSpan new(-100)) ticks == 0)
 			expect((t + TimeSpan new(-230)) ticks == -130)
 			expect((t + TimeSpan new(100)) ticks == 200)
-			expect(t2 ticks == 150 )
+			expect(t2 ticks == 150)
 			expect(TimeSpan day() * 6 + TimeSpan day() == TimeSpan week())
 			expect(TimeSpan second() + TimeSpan second() == TimeSpan second() * 2)
 			t = TimeSpan second()
@@ -75,7 +75,7 @@ TimeSpanTest: class extends Fixture {
 		this add("test negation", func {
 			t := TimeSpan new(200)
 			t = t negate()
-			expect(t ticks == -200 )
+			expect(t ticks == -200)
 			expect((t + (t negate())) ticks == 0)
 		})
 		this add("test multiplication", func {

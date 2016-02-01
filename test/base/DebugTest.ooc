@@ -18,7 +18,7 @@ DebugTest: class extends Fixture {
 			if (this outputString != null)
 				this outputString free()
 			this outputString = message clone()
-		} )
+		})
 		Debug _level = DebugLevel Everything
 
 		this add("test print", func {
