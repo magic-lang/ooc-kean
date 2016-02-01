@@ -121,8 +121,10 @@ SynchronizedListTest: class extends Fixture {
 		this add("single thread - apply", func {
 			list := SynchronizedList<Int> new()
 			list add(1) . add(2) . add(3)
-			sum := list fold(Int, |v1, v2| v1 + v2, 0)
-			expect(sum, is equal to(6))
+			c := 1
+			list apply(|value|
+				expect(value, is equal to(c))
+				c += 1)
 			list free()
 		})
 		this add("single thread - map", func {
@@ -231,8 +233,25 @@ SynchronizedListTest: class extends Fixture {
 			iterator free()
 			list free()
 		})
+		this add("single thread - search", This _testVectorListSearch)
 		this add("multiple threads", This _testMultipleThreads)
 		this add("multiple threads (class)", This _testMultipleThreadsWithClass)
+	}
+	_testVectorListSearch: static func {
+		list := SynchronizedList<Int> new()
+		matches := func (instance: Int*) -> Bool { 1 == instance@ }
+		expect(list search(matches), is equal to(-1))
+		for (i in 0 .. 10)
+			list add(i)
+		expect(list search(matches), is equal to(1))
+		(matches as Closure) free()
+		matches = func (instance: Int*) -> Bool { 9 == instance@ }
+		expect(list search(matches), is equal to(9))
+		(matches as Closure) free()
+		matches = func (instance: Int*) -> Bool { 10 == instance@ }
+		expect(list search(matches), is equal to(-1))
+		(matches as Closure) free()
+		list free()
 	}
 	_testMultipleThreads: static func {
 		numberOfThreads := 8

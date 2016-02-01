@@ -256,6 +256,23 @@ VectorListTest: class extends Fixture {
 			iterator free()
 			list free()
 		})
+		this add("VectorList search", This _testVectorListSearch)
+	}
+	_testVectorListSearch: static func {
+		list := VectorList<Int> new()
+		matches := func (instance: Int*) -> Bool { 1 == instance@ }
+		expect(list search(matches), is equal to(-1))
+		for (i in 0 .. 10)
+			list add(i)
+		expect(list search(matches), is equal to(1))
+		(matches as Closure) free()
+		matches = func (instance: Int*) -> Bool { 9 == instance@ }
+		expect(list search(matches), is equal to(9))
+		(matches as Closure) free()
+		matches = func (instance: Int*) -> Bool { 10 == instance@ }
+		expect(list search(matches), is equal to(-1))
+		(matches as Closure) free()
+		list free()
 	}
 }
 

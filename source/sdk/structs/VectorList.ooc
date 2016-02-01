@@ -65,6 +65,16 @@ VectorList: class <T> extends List<T>{
 			result add(this[(this _count - 1) - i])
 		result
 	}
+	search: override func (matches: Func (T*) -> Bool) -> Int {
+		result := -1
+		for (index in 0 .. this count) {
+			if (matches(this[index]&)) {
+				result = index
+				break
+			}
+		}
+		result
+	}
 	sort: override func (greaterThan: Func (T, T) -> Bool) {
 		inOrder := false
 		while (!inOrder) {
