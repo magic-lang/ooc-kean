@@ -264,16 +264,16 @@ CharBuffer: class extends Iterable<Char> {
 	find: func ~pointer (what: Char*, whatSize: Int, offset: Int, searchCaseSensitive := true) -> Int {
 		if (offset >= size || offset < 0 || what == null || whatSize == 0) return -1
 
-		maxpos : Int = size - whatSize // need a signed type here
+		maxpos: Int = size - whatSize // need a signed type here
 		if (maxpos < 0) return -1
 
-		found : Bool
+		found: Bool
 
 		for (sstart in offset .. (maxpos + 1)) {
 			found = true
 			for (j in 0 .. whatSize) {
 				if (searchCaseSensitive) {
-					if (data[sstart + j] != what[j] ) {
+					if (data[sstart + j] != what[j]) {
 						found = false
 						break
 					}
@@ -289,16 +289,16 @@ CharBuffer: class extends Iterable<Char> {
 		-1
 	}
 
-	findAll: func ~withCase ( what : This, searchCaseSensitive := true) -> VectorList<Int> {
+	findAll: func ~withCase (what : This, searchCaseSensitive := true) -> VectorList<Int> {
 		findAll(what data, what size, searchCaseSensitive)
 	}
 
-	findAll: func ~pointer ( what : Char*, whatSize: Int, searchCaseSensitive := true) -> VectorList<Int> {
+	findAll: func ~pointer (what : Char*, whatSize: Int, searchCaseSensitive := true) -> VectorList<Int> {
 		if (what == null || whatSize == 0) {
 			return VectorList<Int> new(0)
 		}
 		result := VectorList<Int> new (size / whatSize)
-		offset : Int = (whatSize ) * -1
+		offset := -whatSize
 		while (((offset = find(what, whatSize, offset + whatSize, searchCaseSensitive)) != -1)) result add (offset)
 		result
 	}
@@ -404,10 +404,10 @@ CharBuffer: class extends Iterable<Char> {
 
 	trimLeft: func ~pointer (s: Char*, sLength: Int) {
 		if (size == 0 || sLength == 0) return
-		start : Int = 0
-		while (start < size && (data + start)@ containedIn(s, sLength) ) start += 1
+		start: Int = 0
+		while (start < size && (data + start)@ containedIn(s, sLength)) start += 1
 		if (start == 0) return
-		shiftRight( start )
+		shiftRight(start)
 	}
 
 	trimRight: func ~space { trimRight(' ') }
@@ -443,7 +443,7 @@ CharBuffer: class extends Iterable<Char> {
 	}
 
 	count: func (what: Char) -> Int {
-		result : Int = 0
+		result: Int = 0
 		for (i in 0 .. size) {
 			if (data[i] == what) result += 1
 		}
@@ -455,7 +455,7 @@ CharBuffer: class extends Iterable<Char> {
 	}
 
 	lastIndexOf: func (c: Char) -> Int {
-		i : Int = size - 1
+		i: Int = size - 1
 		while (i >= 0) {
 			if (data[i] == c) return i
 			i -= 1

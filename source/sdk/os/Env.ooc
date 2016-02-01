@@ -27,7 +27,7 @@ Env: class {
 		result := -1
 		if (key != null && value != null) {
 			version(windows)
-				result = putenv( "%s=%s" format(key toCString(), value toCString()) toCString() )
+				result = putenv("%s=%s" format(key toCString(), value toCString()) toCString())
 			else
 				result = setenv(key toCString(), value toCString(), overwrite)
 		}

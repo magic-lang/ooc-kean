@@ -35,7 +35,7 @@ Writer: abstract class {
 		bytesTransfered = 0
 
 		while (source hasNext?()) {
-			buffer setLength( source read(buffer data, cursor, bufferSize) )
+			buffer setLength(source read(buffer data, cursor, bufferSize))
 			bytesTransfered += this write(buffer data, buffer size)
 		}
 

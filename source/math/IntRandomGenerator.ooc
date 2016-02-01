@@ -44,7 +44,7 @@ IntUniformRandomGenerator: class extends IntRandomGenerator {
 	}
 	setSeed: func (=_state)
 	next: override func -> Int {
-		result : Int
+		result: Int
 		first := this _generate()
 		if (this _shortRange)
 			result = first
