@@ -87,11 +87,7 @@ ProcessWin32: class extends Process {
 			pi& // Pointer to PROCESS_INFORMATION structure
 		)) {
 			err := GetLastError()
-			ProcessException new(This, "CreateProcess failed (error %d: %s).\n Command Line:\n %s" format(
-				err,
-				GetWindowsErrorMessage(err),
-				cmdLine
-			)) throw()
+			raise("CreateProcess failed (error %d: %s).\n Command Line:\n %s" format(err, GetWindowsErrorMessage(err), cmdLine))
 			return -1
 		}
 

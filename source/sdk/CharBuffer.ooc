@@ -592,15 +592,8 @@ CharBuffer: class extends Iterable<Char> {
 		result
 	}
 	_checkLength: static func (len: Int) {
-		if (len < 0) {
-			NegativeLengthException new(This, len) throw()
-		}
-	}
-}
-
-NegativeLengthException: class extends Exception {
-	init: func (.origin, len: Int) {
-		super(origin, "Negative length passed: %d" format(len))
+		if (len < 0)
+			raise("Negative length passed: %d" format(len))
 	}
 }
 
