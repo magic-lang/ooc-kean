@@ -64,8 +64,8 @@ System: class {
 		version (linux || apple) {
 			BUF_SIZE = 255 : SizeT
 			hostname := CharBuffer new(BUF_SIZE + 1)
-			result := gethostname(hostname data as Pointer, BUF_SIZE)
-			if (result != 0)
+			value := gethostname(hostname data as Pointer, BUF_SIZE)
+			if (value != 0)
 				Exception new("System host name longer than 256 characters!!") throw()
 			hostname sizeFromData()
 			result = hostname toString()

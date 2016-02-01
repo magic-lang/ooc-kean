@@ -41,7 +41,7 @@ SockAddrIn: cover from struct sockaddr_in {
 }
 
 InAddr: cover from struct in_addr {
-	s_addr: extern ULong // load with inet_aton()
+	s_addr: extern ULong
 }
 
 SockAddrIn6: cover from struct sockaddr_in6 {
@@ -78,9 +78,9 @@ HostEntry: cover from struct hostent {
 
 version (!windows) {
 	PollFd: cover from struct pollfd {
-	fd: extern Int
-	events: extern Short
-	revents: extern Short
+		fd: extern Int
+		events: extern Short
+		revents: extern Short
 	}
 }
 
@@ -90,10 +90,10 @@ FdSet: cover from fd_set {
 	_clr: extern (FD_CLR) static func (fd: Int, fdset: This *)
 	_zero: extern (FD_ZERO) static func (fdset: This *)
 
-	set: func@(fd: Int) { _set(fd, this &) }
-	isSet: func@(fd: Int) -> Bool { _isSet(fd, this &) }
-	clr: func@(fd: Int) { _clr(fd, this &) }
-	zero: func@ { _zero(this &) }
+	set: func@(fd: Int) { _set(fd, this&) }
+	isSet: func@(fd: Int) -> Bool { _isSet(fd, this&) }
+	clr: func@(fd: Int) { _clr(fd, this&) }
+	zero: func@ { _zero(this&) }
 }
 
 TimeVal: cover from struct timeval {
@@ -172,12 +172,6 @@ AI_CANONIDN: extern Int
 AI_IDN_ALLOW_UNASSIGNED: extern Int
 AI_IDN_USE_STD3_ASCII_RULES: extern Int
 
-// The following are deprecated
-inet_ntoa: extern func (address: InAddr) -> CString
-inet_aton: extern func (ipAddress: CString, inp: InAddr*) -> Int
-inet_addr: extern func (ipAddress: CString) -> ULong
-// end deprecated
-
 version (!windows) {
 	inet_ntop: extern func (addressFamily: Int, address: Pointer, destination: CString, destinationSize: UInt) -> CString
 	inet_pton: extern func (addressFamily: Int, address: CString, destination: Pointer) -> Int
@@ -194,12 +188,12 @@ WSADATA: extern cover
 WSAStartup: extern func (versionRequested: WORD, wsaData: Pointer) -> Int
 
 initWinsock: func {
-	data: This
+	data: WSADATA
 	ret := WSAStartup(MAKEWORD(2, 2), data&)
 
-	if (ret != 0) {
+	if (ret != 0)
 		raise("Could not initialize winsock 2.2")
-	}
 }
+
 initWinsock()
 }

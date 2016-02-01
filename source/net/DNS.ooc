@@ -19,7 +19,7 @@ DNS: class {
 		Returns information about the host that was found.
 	*/
 	resolve: static func (hostname: String) -> HostInfo {
-		return resolve(hostname, 0, 0)
+		resolve(hostname, 0, 0)
 	}
 	resolve: static func ~filter (hostname: String, socketType: Int, socketFamily: Int) -> HostInfo {
 		hints: AddrInfo
@@ -28,10 +28,9 @@ DNS: class {
 		hints ai_flags = AI_CANONNAME
 		hints ai_family = socketFamily
 		hints ai_socktype = socketType
-		if ((rv := getaddrinfo(hostname, null, hints&, info&)) != 0) {
+		if ((rv := getaddrinfo(hostname, null, hints&, info&)) != 0)
 			DNSError new(gai_strerror(rv as Int) as CString toString()) throw()
-		}
-		return HostInfo new(info)
+		HostInfo new(info)
 	}
 
 	/**
@@ -40,11 +39,11 @@ DNS: class {
 	*/
 	resolveOne: static func (host: String) -> IPAddress {
 		info := resolve(host)
-		return info addresses()[0]
+		info addresses()[0]
 	}
 	resolveOne: static func ~filter (host: String, socketType: Int, socketFamily: Int) -> IPAddress {
 		info := resolve(host, socketType, socketFamily)
-		return info addresses()[0]
+		info addresses()[0]
 	}
 
 	/**
@@ -52,7 +51,7 @@ DNS: class {
 		Returns the hostname of the specified address.
 	*/
 	reverse: static func (ip: IPAddress) -> String {
-		return reverse(SocketAddress new(ip, 0))
+		reverse(SocketAddress new(ip, 0))
 	}
 	reverse: static func ~withSockAddr (sockaddr: SocketAddress) -> String {
 		hostname := CharBuffer new(1024)
@@ -60,7 +59,7 @@ DNS: class {
 			DNSError new(gai_strerror(rv as Int) as CString toString()) throw()
 		}
 		hostname sizeFromData()
-		return hostname toString()
+		hostname toString()
 	}
 
 	/**
@@ -74,7 +73,7 @@ DNS: class {
 		Retreive host information about this system.
 	*/
 	localhost: static func -> HostInfo {
-		return resolve(hostname())
+		resolve(hostname())
 	}
 }
 

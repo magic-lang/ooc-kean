@@ -6,7 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use sdk-net
 import berkeley, Exceptions
 
 /**
@@ -20,40 +19,31 @@ Socket: abstract class {
 	hasData := false
 
 	init: func ~sock (=family, =type, =protocol) {
-		descriptor = socket(family, type, protocol)
-		if (descriptor == -1) {
+		this descriptor = socket(family, type, protocol)
+		if (descriptor == -1)
 			SocketError new(class, "Failed to create socket") throw()
-		}
 	}
 	init: func ~descriptor (=family, =type, =protocol, =descriptor)
 
 	close: func {
 		result: Int
-
-		version(windows) {
+		version (windows) {
 			result = closesocket(descriptor)
-		}
-		version (!windows) {
+		} else {
 			result = close(descriptor)
 		}
-
-		if (result == -1) {
+		if (result == -1)
 			SocketError new(class, "Failed to close socket") throw()
-		}
-
 		connected = false
 	}
 
 	ioctl: func (request: Int, arg: Pointer) {
 		version (windows) {
 			SocketError new(class, "ioctl unsupported on Windows") throw()
-		}
-
-		version (!windows) {
+		} else {
 			rt := ioctl(descriptor, request, arg)
-			if (rt != 0) {
+			if (rt != 0)
 				SocketError new(class, "ioctl failed") throw()
-			}
 		}
 	}
 
@@ -65,7 +55,7 @@ Socket: abstract class {
 	available: func -> Int {
 		result: Int
 		ioctl(FIONREAD, result&)
-		return result
+		result
 	}
 
 	/**
@@ -77,20 +67,20 @@ Socket: abstract class {
 	 :throws: A TimeoutError if the wait times out before data becomes available
 	*/
 	wait: func (timeoutSec, timeoutuSec: Int) -> Int {
-		timeout : TimeVal
-		timeout tv_sec = timeoutSec
-		timeout tv_usec = timeoutuSec
+		//timeout: TimeVal
+		//timeout tv_sec = timeoutSec
+		//timeout tv_usec = timeoutuSec
 
-		descriptors : FdSet
+		descriptors: FdSet
 		descriptors zero()
 		descriptors set(descriptor)
 
-		select(descriptor + 1, descriptors&, null, null, timeout&)
+		//select(descriptor + 1, descriptors&, null, null, timeout&)
 
 		if (!descriptors isSet(descriptor))
 			TimeoutError new("Wait on socket timedout.") throw()
 
-		return available()
+		this available()
 	}
 
 	/**
@@ -100,74 +90,53 @@ Socket: abstract class {
 	:param timeoutSec: The timeout in seconds before wait is returned without data available.
 	:throws: A TimeoutError if the wait times out before data becomes available
 	*/
-	wait: func ~justSeconds (timeoutSec: Int) -> Int {
-		return wait(timeoutSec, 0)
-	}
+	wait: func ~justSeconds (timeoutSec: Int) -> Int { this wait(timeoutSec, 0) }
 
 	/**
 	 Sets the socket to non-blocking mode
 	*/
 	setNonBlocking: func -> Int {
-	result := 0
-
-	version (windows) {
-		SocketError new(class, "setNonBlocking unsupported on Win32") throw()
-	}
-
-	version (!windows) {
-		flags := currentFlags()
-
-		result = fcntl(descriptor, SocketControls SET_SOCKET_FLAGS, flags | SocketControls NON_BLOCKING)
-	}
-
-	if (result < 0) {
-		SocketError new(class, "Could not set socket to non-blocking") throw()
-	}
-
-	return result
+		result := 0
+		version (windows) {
+			SocketError new(class, "setNonBlocking unsupported on Win32") throw()
+		} else {
+			flags := currentFlags()
+			result = fcntl(descriptor, SocketControls SET_SOCKET_FLAGS, flags | SocketControls NON_BLOCKING)
+		}
+		if (result < 0)
+			SocketError new(class, "Could not set socket to non-blocking") throw()
+		result
 	}
 
 	/**
 	 Sets the socket to blocking mode
 	*/
 	setBlocking: func -> Int {
-	result := 0
-
-	version (windows) {
-		SocketError new(class, "setBlocking unsupported on Win32") throw()
-	}
-
-	version (!windows) {
-		flags := currentFlags()
-
-		result = fcntl(descriptor, SocketControls SET_SOCKET_FLAGS, flags & ~(SocketControls NON_BLOCKING))
-	}
-
-	if (result < 0) {
-		SocketError new(class, "Could not set socket to blocking") throw()
-	}
-
-	return result
+		result := 0
+		version (windows) {
+			SocketError new(class, "setBlocking unsupported on Win32") throw()
+		} else {
+			flags := currentFlags()
+			result = fcntl(descriptor, SocketControls SET_SOCKET_FLAGS, flags & ~(SocketControls NON_BLOCKING))
+		}
+		if (result < 0)
+			SocketError new(class, "Could not set socket to blocking") throw()
+		result
 	}
 
 	/**
 	 Retrieves the current socket flags from the underlying socket
 	*/
 	currentFlags: func -> Int {
-	flags: Int = 0
-
-	version (windows) {
-		SocketError new(class, "currentFlags not supported on Win32")
-	}
-
-	version (!windows) {
-		flags = fcntl(descriptor, SocketControls GET_SOCKET_FLAGS, 0)
-		if (flags < 0) {
-			SocketError new(class, "fcntl to get current flags failed") throw()
+		flags := 0
+		version (windows) {
+			SocketError new(class, "currentFlags not supported on Win32")
+		} else {
+			flags = fcntl(descriptor, SocketControls GET_SOCKET_FLAGS, 0)
+			if (flags < 0)
+				SocketError new(class, "fcntl to get current flags failed") throw()
 		}
-	}
-
-	return flags
+		flags
 	}
 
 	/**

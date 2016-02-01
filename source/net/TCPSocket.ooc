@@ -20,20 +20,16 @@ TCPSocket: class extends Socket {
 	/**
 	  Getter for accessing `readerWriter in`
 	*/
-	in: TCPSocketReader {
-		get {
-			readerWriter in
-		}
-	}
+	in: TCPSocketReader { get {
+		readerWriter in
+	}}
 
 	/**
 	  Getter for accessing `readerWriter out`
 	*/
-	out: TCPSocketWriter {
-		get {
-			readerWriter out
-		}
-	}
+	out: TCPSocketWriter { get {
+		readerWriter out
+	}}
 
 	/**
 	   Create a new socket to a given remote address
@@ -82,12 +78,9 @@ TCPSocket: class extends Socket {
 	   :throws: A SocketError if something went wrong
 	 */
 	connect: func {
-		if (socket connect(descriptor, remote addr(), remote length()) == -1) {
+		if (socket connect(descriptor, remote addr(), remote length()) == -1)
 			SocketError new() throw()
-		}
-
 		readerWriter = TCPReaderWriterPair new(this)
-
 		connected = true
 	}
 
@@ -97,10 +90,9 @@ TCPSocket: class extends Socket {
 
 	   :throws: A SocketError if something went wrong
 	 */
-	connect: func ~withClosure (f: func (TCPReaderWriterPair) -> Bool) {
+	connect: func ~withClosure (f: Func (TCPReaderWriterPair) -> Bool) {
 		if (!connected)
-			connect()
-
+			this connect()
 		f(readerWriter)
 	}
 
@@ -108,14 +100,14 @@ TCPSocket: class extends Socket {
 	   :return: A reader that reads data from this socket
 	 */
 	reader: func -> TCPSocketReader {
-		return TCPSocketReader new(this)
+		TCPSocketReader new(this)
 	}
 
 	/**
 	   :return: A writer that writes data to this socket
 	 */
 	writer: func -> TCPSocketWriter {
-		return TCPSocketWriter new(this)
+		TCPSocketWriter new(this)
 	}
 
 	/**
@@ -139,7 +131,7 @@ TCPSocket: class extends Socket {
 		if (bytesSent == -1)
 			SocketError new() throw()
 
-		return bytesSent
+		bytesSent
 	}
 
 	/**
@@ -151,7 +143,7 @@ TCPSocket: class extends Socket {
 	   :return: The number of bytes sent
 	 */
 	send: func ~withFlags (data: String, flags: Int, resend: Bool) -> Int {
-		send(data toCString(), data size, flags, resend)
+		this send(data toCString(), data size, flags, resend)
 	}
 
 	/**
@@ -161,7 +153,7 @@ TCPSocket: class extends Socket {
 
 	   :return: The number of bytes sent
 	 */
-	send: func ~withResend (data: String, resend: Bool) -> Int { send(data, 0, resend) }
+	send: func ~withResend (data: String, resend: Bool) -> Int { this send(data, 0, resend) }
 
 	/**
 	   Send a string through this socket with resend attempted for unsent data
@@ -169,7 +161,7 @@ TCPSocket: class extends Socket {
 
 	   :return: The number of bytes sent
 	 */
-	send: func (data: String) -> Int { send(data, true) }
+	send: func (data: String) -> Int { this send(data, true) }
 
 	/**
 	   Send a byte through this socket
@@ -177,14 +169,14 @@ TCPSocket: class extends Socket {
 	   :param flags: Send flags
 	 */
 	sendByte: func ~withFlags (byte: Char, flags: Int) {
-		send(byte&, Char size, flags, true)
+		this send(byte&, Char size, flags, true)
 	}
 
 	/**
 	   Send a byte through this socket
 	   :param byte: The byte to send
 	 */
-	sendByte: func (byte: Char) { sendByte(byte, 0) }
+	sendByte: func (byte: Char) { this sendByte(byte, 0) }
 
 	/**
 	   Receive bytes from this socket
@@ -204,7 +196,7 @@ TCPSocket: class extends Socket {
 		 * and false otherwise
 		 */
 		hasData = (bytesRecv != 0)
-		return bytesRecv
+		bytesRecv
 	}
 
 	/**
@@ -229,8 +221,8 @@ TCPSocket: class extends Socket {
 	 */
 	receiveByte: func ~withFlags (flags: Int) -> Char {
 		c: Char
-		receive(c&, 1, flags)
-		return c
+		this receive(c&, 1, flags)
+		c
 	}
 
 	/**
@@ -238,42 +230,33 @@ TCPSocket: class extends Socket {
 
 	   :return: The byte read
 	 */
-	receiveByte: func -> Char { receiveByte(0) }
+	receiveByte: func -> Char { this receiveByte(0) }
 }
 
 TCPSocketReader: class extends Reader {
 	source: TCPSocket
 
 	init: func (=source) { marker = 0 }
+	close: override func { source close() }
 
-	close: func {
-		source close()
-	}
-
-	read: func (chars: Char*, offset: Int, count: Int) -> SizeT {
+	read: override func (chars: Char*, offset: Int, count: Int) -> SizeT {
 		skip(offset - marker)
 		source receive(chars, count, 0)
 	}
-
-	read: func ~char -> Char {
+	read: override func ~char -> Char {
 		source receiveByte()
 	}
-
-	hasNext: func -> Bool {
+	hasNext?: override func -> Bool {
 		source receiveByte(SocketMsgFlags PEEK)
-		source hasData?
+		source hasData
 	}
-
 	rewind: func (offset: Int) {
 		SocketError new("Sockets do not support rewind") throw()
 	}
-
-	seek: func (offset: Long, mode: SeekMode) {
+	seek: override func (offset: Long, mode: SeekMode) {
 		SocketError new("Sockets do not support seek") throw()
 	}
-
-	mark: func -> Long { marker }
-
+	mark: override func -> Long { marker }
 	reset: func (marker: Long) {
 		SocketError new("Sockets do not support reset") throw()
 	}
@@ -283,16 +266,9 @@ TCPSocketWriter: class extends Writer {
 	dest: TCPSocket
 
 	init: func (=dest)
-
-	close: func { dest close() }
-
-	write: func ~chr (chr: Char) {
-		dest sendByte(chr)
-	}
-
-	write: func (chars: Char*, length: SizeT) -> SizeT {
-		return dest send(chars, length, 0, true)
-	}
+	close: override func { dest close() }
+	write: override func ~chr (chr: Char) { dest sendByte(chr) }
+	write: override func (chars: Char*, length: SizeT) -> SizeT { dest send(chars, length, 0, true) }
 }
 
 TCPReaderWriterPair: class { // I thought TCPSocketReaderWriterPair was a bit too long
@@ -303,7 +279,6 @@ TCPReaderWriterPair: class { // I thought TCPSocketReaderWriterPair was a bit to
 		in = sock reader()
 		out = sock writer()
 	}
-
 	close: func {
 		sock close()
 	}
