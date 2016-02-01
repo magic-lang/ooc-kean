@@ -22,7 +22,6 @@ ThreadLocal: abstract class <T> {
 			Exception new(This, "Unsupported platform!\n") throw()
 		result
 	}
-
 	new: static func ~withVal <T> (val: T) -> This <T> {
 		instance := This<T> new()
 		instance set(val)

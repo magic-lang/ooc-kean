@@ -12,13 +12,9 @@ Thread: abstract class {
 	_code: Func
 
 	start: abstract func -> Bool
-
 	wait: abstract func -> Bool
-
 	wait: abstract func ~timed (seconds: Double) -> Bool
-
 	cancel: abstract func -> Bool
-
 	alive: abstract func -> Bool
 	new: static func (._code) -> This {
 		result: This = null
