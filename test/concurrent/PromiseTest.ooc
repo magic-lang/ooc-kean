@@ -95,6 +95,14 @@ PromiseTest: class extends Fixture {
 			promise free()
 			future free()
 		})
+		this add("nonblocking free", func {
+			promise2 := Promise start(this counter)
+			promise := Promise start(this counter)
+			promise free()
+			promise2 wait() . free()
+			promise2 = Promise start(this counter)
+			promise2 wait() . free()
+		})
 	}
 }
 

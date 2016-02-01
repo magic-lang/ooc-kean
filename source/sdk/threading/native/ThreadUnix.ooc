@@ -15,14 +15,9 @@ ThreadUnix: class extends Thread {
 	pthread: PThread
 
 	init: func ~unix (=_code)
-	start: override func -> Bool {
-		result := pthread_create(pthread&, null, _code as Closure thunk, _code as Closure context)
-		(result == 0)
-	}
-	wait: override func -> Bool {
-		result := pthread_join(pthread, null)
-		(result == 0)
-	}
+	start: override func -> Bool { pthread_create(pthread&, null, _code as Closure thunk, _code as Closure context) == 0 }
+	detach: override func -> Bool { pthread_detach(pthread) == 0 }
+	wait: override func -> Bool { pthread_join(pthread, null) == 0 }
 	wait: override func ~timed (seconds: Double) -> Bool {
 		result := false
 		version (apple || android)
@@ -103,5 +98,6 @@ pthread_kill: extern func (thread: PThread, signal: Int) -> Int
 pthread_self: extern func -> PThread
 pthread_cancel: extern func (thread: PThread) -> Int
 pthread_equal: extern func (thread0, thread1: PThread) -> Int
+pthread_detach: extern func (thread: PThread) -> Int
 sched_yield: extern func -> Int
 }

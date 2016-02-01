@@ -14,6 +14,7 @@ Thread: abstract class {
 	start: abstract func -> Bool
 	wait: abstract func -> Bool
 	wait: abstract func ~timed (seconds: Double) -> Bool
+	detach: abstract func -> Bool
 	cancel: abstract func -> Bool
 	alive: abstract func -> Bool
 	new: static func (._code) -> This {

@@ -39,6 +39,7 @@ _ThreadPromise: class extends Promise {
 	_action: Func
 	_thread: Thread
 	_threadAlive := true
+	_freeOnCompletion := false
 	init: func (task: Func) {
 		super()
 		this _state = _PromiseState Unfinished
@@ -46,17 +47,23 @@ _ThreadPromise: class extends Promise {
 			task()
 			if (this _state != _PromiseState Cancelled)
 				this _state = _PromiseState Finished
+			if (this _freeOnCompletion) {
+				this _threadAlive = false
+				this free()
+			}
 		}
 		this _thread = Thread new(this _action)
 		this _thread start()
 	}
 	free: override func {
-		//TODO: If we don't want to wait, set a freeOnCompletion flag instead, and check it once the thread task finishes
-		if (this _threadAlive)
-			this _thread wait()
-		this _thread free()
-		(this _action as Closure) free()
-		super()
+		if (this _threadAlive) {
+			this _freeOnCompletion = true
+			this _thread detach()
+		} else {
+			this _thread free()
+			(this _action as Closure) free()
+			super()
+		}
 	}
 	wait: override func -> Bool {
 		if (this _threadAlive)
@@ -104,6 +111,7 @@ _ThreadFuture: class <T> extends Future<T> {
 	_action: Func
 	_thread: Thread
 	_threadAlive := true
+	_freeOnCompletion := false
 	init: func (task: Func -> T) {
 		super()
 		this _state = _PromiseState Unfinished
@@ -115,17 +123,23 @@ _ThreadFuture: class <T> extends Future<T> {
 				this _result = Cell<T> new(temporary)
 			if (this _state != _PromiseState Cancelled)
 				this _state = _PromiseState Finished
+			if (this _freeOnCompletion) {
+				this _threadAlive = false
+				this free()
+			}
 		}
 		this _thread = Thread new(this _action)
 		this _thread start()
 	}
 	free: override func {
-		//TODO: If we don't want to wait set a freeOnCompletion flag instead, and check it once the thread task finishes
-		if (this _threadAlive)
-			this _thread wait()
-		this _thread free()
-		(this _action as Closure) free()
-		super()
+		if (this _threadAlive) {
+			this _freeOnCompletion = true
+			this _thread detach()
+		} else {
+			this _thread free()
+			(this _action as Closure) free()
+			super()
+		}
 	}
 	wait: override func -> Bool {
 		if (this _threadAlive)
