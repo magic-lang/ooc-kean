@@ -84,7 +84,7 @@ Time: class {
 
 	// The microseconds that have elapsed in the current minute.
 	microtime: static func -> LLong {
-		microsec() as LLong + (sec() as LLong) * 1_000_000
+		This microsec() + This sec() * 1_000_000LL
 	}
 
 	// The microseconds that have elapsed in the current second.
@@ -109,7 +109,7 @@ Time: class {
 			QueryPerformanceFrequency(frequency&)
 			result = ((counter quadPart * 1000) / frequency quadPart) - __time_millisec_base
 		} else {
-			result = This runTimeMicro() / (1000 as UInt)
+			result = This runTimeMicro() / 1000U
 		}
 		result
 	}
@@ -120,7 +120,7 @@ Time: class {
 			gettimeofday(tv&, null)
 			result = ((tv tv_usec + tv tv_sec * 1_000_000) - __time_millisec_base) as UInt
 		} else {
-			result = This runTime() * (1000 as UInt)
+			result = This runTime() * 1000U
 		}
 		result
 	}
