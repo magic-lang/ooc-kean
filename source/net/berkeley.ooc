@@ -12,7 +12,6 @@ include unistd | (__USE_BSD)
 
 version (windows) {
 	include winsock2
-	// Needs Windows XP or later for getnameinfo and getaddrinfo.
 	include ws2tcpip | (_WIN32_WINNT=0x0501)
 } else {
 	include sys/socket
@@ -61,7 +60,6 @@ AddrInfo: cover from struct addrinfo {
 	ai_family: extern Int
 	ai_socktype: extern Int
 	ai_protocol: extern Int
-
 	ai_addrlen: extern UInt
 	ai_canonname: extern Char*
 	ai_addr: extern SockAddr*
@@ -109,9 +107,7 @@ version (windows) {
 	SHUT_RD: extern Int
 	SHUT_WR: extern Int
 	SHUT_RDWR: extern Int
-}
-
-version (!windows) {
+} else {
 	SD_RECEIVE: extern Int
 	SD_SEND: extern Int
 	SD_BOTH: extern Int

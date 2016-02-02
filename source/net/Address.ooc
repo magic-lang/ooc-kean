@@ -163,14 +163,11 @@ IP4Address: class extends IPAddress {
 	ai: InAddr
 
 	init: func (ipAddress: String) {
-		if (ipAddress empty()) {
+		if (ipAddress empty())
 			InvalidAddress new("Address must not be blank") throw()
-		}
-
 		family = AddressFamily IP4
-		if (Inet pton(family, ipAddress toCString(), ai&) == -1) {
+		if (Inet pton(family, ipAddress toCString(), ai&) == -1)
 			InvalidAddress new("Could not parse address") throw()
-		}
 	}
 	init: func ~wildcard {
 		init("0.0.0.0")
@@ -181,10 +178,6 @@ IP4Address: class extends IPAddress {
 	}
 	broadcast: override func -> Bool { ai s_addr == INADDR_NONE }
 	wildcard: override func -> Bool { ai s_addr == INADDR_ANY }
-	globalMulticast: override func -> Bool {
-		addr := ntohl(ai s_addr)
-		addr >= 0xE0000100 && addr <= 0xEE000000
-	}
 	ip4Compatible: override func -> Bool { true }
 	ip4Mapped: override func -> Bool { true }
 	linkLocal: override func -> Bool { (ntohl(ai s_addr) & 0xFFFF0000) == 0xA9FE0000 }
@@ -193,21 +186,23 @@ IP4Address: class extends IPAddress {
 	multicast: override func -> Bool { (ntohl(ai s_addr) & 0xF0000000) == 0xE0000000 }
 	nodeLocalMulticast: override func -> Bool { false }
 	orgLocalMulticast: override func -> Bool { (ntohl(ai s_addr) & 0xFFFF0000) == 0xEFC00000 }
-	siteLocal: override func -> Bool {
-		addr := ntohl(ai s_addr)
-		(addr & 0xFF000000) == 0x0A000000 || (addr & 0xFFFF0000) == 0xC0A80000 || (addr >= 0xAC100000 && addr <= 0xAC1FFFFF)
-	}
 	siteLocalMulticast: override func -> Bool { (ntohl(ai s_addr) & 0xFFFF0000) == 0xEFFF0000 }
 	wellKnownMulticast: override func -> Bool { (ntohl(ai s_addr) & 0xFFFFFF00) == 0xE0000000 }
-	mask: override func (mask: IPAddress) {
-		mask(mask, This new("0.0.0.0"))
-	}
+	mask: override func (mask: IPAddress) { this mask(mask, This new("0.0.0.0")) }
 	mask: override func ~withSet (mask, set: IPAddress) {
 		if (mask family != AddressFamily IP4 || set family != AddressFamily IP4)
 			NetError new("Both mask and set must be of IP4 family") throw()
 		maskAddr := (mask as This) ai
 		setAddr := (set as This) ai
 		ai s_addr = (ai s_addr & maskAddr s_addr) | (setAddr s_addr & ~maskAddr s_addr)
+	}
+	globalMulticast: override func -> Bool {
+		addr := ntohl(ai s_addr)
+		addr >= 0xE0000100 && addr <= 0xEE000000
+	}
+	siteLocal: override func -> Bool {
+		addr := ntohl(ai s_addr)
+		(addr & 0xFF000000) == 0x0A000000 || (addr & 0xFFFF0000) == 0xC0A80000 || (addr >= 0xAC100000 && addr <= 0xAC1FFFFF)
 	}
 	toString: override func -> String {
 		addrStr := CharBuffer new(128)
@@ -218,7 +213,6 @@ IP4Address: class extends IPAddress {
 }
 
 operator == (a1, a2: IP4Address) -> Bool { memcmp(a1 ai&, a2 ai&, InAddr size) == 0 }
-
 operator != (a1, a2: IP4Address) -> Bool { !(a1 == a2) }
 
 IP6Address: class extends IPAddress {
@@ -305,14 +299,6 @@ IP6Address: class extends IPAddress {
 	}
 }
 
-operator == (a1, a2: IP6Address) -> Bool {
-	memcmp(a1 ai&, a2 ai&, In6Addr size) == 0
-}
-
-operator != (a1, a2: IP6Address) -> Bool {
-	! (a1 == a2)
-}
-
 operator == (a1, a2: IPAddress) -> Bool {
 	result := false
 	if (a1 family == a2 family)
@@ -322,10 +308,9 @@ operator == (a1, a2: IPAddress) -> Bool {
 			result = (a1 as IP6Address) == (a2 as IP6Address)
 	result
 }
-
-operator != (a1, a2: IPAddress) -> Bool {
-	! (a1 == a2)
-}
+operator != (a1, a2: IPAddress) -> Bool { !(a1 == a2) }
+operator == (a1, a2: IP6Address) -> Bool { memcmp(a1 ai&, a2 ai&, In6Addr size) == 0 }
+operator != (a1, a2: IP6Address) -> Bool { !(a1 == a2) }
 
 SocketAddress: abstract class {
 	family: abstract func -> Int
@@ -341,12 +326,10 @@ SocketAddress: abstract class {
 		if (host family == AddressFamily IP4) {
 			ip4Host := host as IP4Address
 			result = SocketAddressIP4 new(ip4Host ai, nPort)
-		}
-		else if (host family == AddressFamily IP6) {
+		} else if (host family == AddressFamily IP6) {
 			ip6Host := host as IP6Address
 			result = SocketAddressIP6 new(ip6Host ai, nPort)
-		}
-		else
+		} else
 			NetError new("Unsupported IP Address type!") throw()
 		result
 	}

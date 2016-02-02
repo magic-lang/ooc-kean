@@ -65,16 +65,12 @@ DNS: class {
 	/**
 		Returns the hostname of this system.
 	*/
-	hostname: static func -> String {
-		System hostname()
-	}
+	hostname: static func -> String { System hostname() }
 
 	/**
 		Retreive host information about this system.
 	*/
-	localhost: static func -> HostInfo {
-		resolve(hostname())
-	}
+	localhost: static func -> HostInfo { resolve(hostname()) }
 }
 
 /**
@@ -92,7 +88,6 @@ HostInfo: class {
 	 */
 	init: func (addrinfo: AddrInfo*) {
 		addresses = LinkedList<IPAddress> new()
-
 		name = addrinfo@ ai_canonname as CString toString()
 		info := addrinfo
 		while (info) {
@@ -110,7 +105,5 @@ HostInfo: class {
 	/**
 		Returns a list of IPAddress associated with this host.
 	*/
-	addresses: func -> LinkedList<IPAddress> {
-		addresses
-	}
+	addresses: func -> LinkedList<IPAddress> { this addresses }
 }

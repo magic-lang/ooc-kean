@@ -126,7 +126,7 @@ UDPSocket: class extends Socket {
 		if (bytesRecv == -1)
 			SocketError new("Error receiveing from UDP socket") throw()
 		if (bytesRecv == 0)
-			connected = false // disconnected!
+			connected = false
 		bytesRecv
 	}
 
