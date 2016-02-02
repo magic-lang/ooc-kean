@@ -36,14 +36,9 @@ Vector2D: class <T> {
 				this _columnCount = newColumnCount
 			}
 		} else {
-			temporaryResult: T*
 			minimumRowCount := this rowCount minimum(newRowCount)
 			minimumColumnCount := this columnCount minimum(newColumnCount)
-
-			if (newRowCount > this rowCount && newColumnCount > this columnCount)
-				temporaryResult = calloc(newRowCount * newColumnCount, T size)
-			else
-				temporaryResult = calloc(newRowCount * newColumnCount, T size)
+			temporaryResult: T* = calloc(newRowCount * newColumnCount, T size)
 
 			for (row in 0 .. minimumRowCount)
 				memcpy(temporaryResult[T size * this _elementPosition(row, 0, newColumnCount)]&,
