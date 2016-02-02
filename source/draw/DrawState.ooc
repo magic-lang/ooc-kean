@@ -14,6 +14,8 @@ import Map
 // Example
 // DrawState new(targetImage) setMap(shader) draw()
 
+// See README.md about input arguments and coordinate systems
+
 DrawState: cover {
 	target: Image = null
 	inputImage: Image = null
@@ -21,7 +23,7 @@ DrawState: cover {
 	opacity := 1.0f
 	_transformNormalized := FloatTransform3D identity
 	viewport := IntBox2D new(0, 0, 0, 0)
-	destination := IntBox2D new(0, 0, 0, 0) // TODO: Accept FloatBox2D
+	_destinationNormalized := FloatBox2D new(0.0f, 0.0f, 1.0f, 1.0f)
 	_sourceNormalized := FloatBox2D new(0.0f, 0.0f, 1.0f, 1.0f)
 	init: func@ ~default
 	init: func@ ~target (=target)
@@ -43,11 +45,27 @@ DrawState: cover {
 		this
 	}
 	// Local region
-	setDestination: func (destination: IntBox2D) -> This {
-		this destination = destination
-		this
+	setDestination: func ~TargetSize (destination: IntBox2D) -> This {
+		version(safe)
+			if (this target == null)
+				raise("Can't set local destination relative to a target that does not exist.")
+		this setDestination(destination, this target size)
 	}
 	// Local region
+	setDestination: func ~Int (destination: IntBox2D, imageSize: IntVector2D) -> This {
+		this setDestination(destination toFloatBox2D(), imageSize toFloatVector2D())
+	}
+	// Local region
+	setDestination: func ~Float (destination: FloatBox2D, imageSize: FloatVector2D) -> This {
+		this setDestinationNormalized(destination / imageSize)
+	}
+	// Normalized region
+	setDestinationNormalized: func (destination: FloatBox2D) -> This {
+		this _destinationNormalized = destination
+		this
+	}
+	getDestinationNormalized: func -> FloatBox2D { this _destinationNormalized }
+	// The texture coordinate source region in local coordinates
 	setSource: func ~Int (source: IntBox2D, imageSize: IntVector2D) -> This {
 		this setSource(source toFloatBox2D(), imageSize toFloatVector2D())
 	}
@@ -62,17 +80,23 @@ DrawState: cover {
 	}
 	// Normalized region
 	getSourceNormalized: func -> FloatBox2D { this _sourceNormalized }
-	// Giving a single texture as "texture0"
 	setInputImage: func (inputImage: Image) -> This {
 		this inputImage = inputImage
 		this
 	}
 	// Reference transform
-	setTransformReference: func ~targetSize (transform: FloatTransform3D) -> This {
+	setTransformReference: func ~TargetSize (transform: FloatTransform3D) -> This {
+		version(safe)
+			if (this target == null)
+				raise("Can't set reference transform relative to a target that does not exist.")
 		this setTransformNormalized(transform referenceToNormalized(this target size))
 	}
 	// Reference transform
-	setTransformReference: func ~explicit (transform: FloatTransform3D, imageSize: FloatVector2D) -> This {
+	setTransformReference: func ~ExplicitIntSize (transform: FloatTransform3D, imageSize: IntVector2D) -> This {
+		this setTransformNormalized(transform referenceToNormalized(imageSize))
+	}
+	// Reference transform
+	setTransformReference: func ~ExplicitFloatSize (transform: FloatTransform3D, imageSize: FloatVector2D) -> This {
 		this setTransformNormalized(transform referenceToNormalized(imageSize))
 	}
 	// Normalized transform
@@ -82,5 +106,10 @@ DrawState: cover {
 	}
 	// Normalized transform
 	getTransformNormalized: func -> FloatTransform3D { this _transformNormalized }
-	draw: func { this target canvas draw(this) }
+	draw: func {
+		version(safe)
+			if (this target == null)
+				raise("Can't draw without a selected target.")
+		this target canvas draw(this)
+	}
 }
