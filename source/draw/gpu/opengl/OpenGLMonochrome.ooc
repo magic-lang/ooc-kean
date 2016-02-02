@@ -9,6 +9,7 @@
 use geometry
 use draw
 use draw-gpu
+use base
 import OpenGLPacked, OpenGLCanvas, OpenGLMap, OpenGLContext
 import backend/GLTexture
 
@@ -26,7 +27,8 @@ OpenGLMonochrome: class extends OpenGLPacked {
 	toRasterDefault: override func -> RasterImage {
 		packed := this context createBgra(IntVector2D new(this size x / 4, this size y))
 		this context packToRgba(this, packed, IntBox2D new(packed size))
-		buffer := (packed canvas as OpenGLCanvas) readPixels()
+		buffer := ByteBuffer new(this size area)
+		(packed canvas as OpenGLCanvas) readPixels(buffer)
 		result := RasterMonochrome new(buffer, this size)
 		packed free()
 		result

@@ -38,9 +38,8 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		glClearColor(tuple c, tuple b, tuple a, tuple d)
 		version(debugGL) { validateEnd("FramebufferObject setClearColor") }
 	}
-	readPixels: override func -> ByteBuffer {
+	readPixels: override func(buffer: ByteBuffer) {
 		version(debugGL) { validateStart("FramebufferObject readPixels") }
-		buffer := ByteBuffer new(this size area * 4)
 		pointer := buffer pointer
 		this bind()
 		glPixelStorei(GL_PACK_ALIGNMENT, 1)
@@ -48,7 +47,6 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		glReadPixels(0, 0, this size x, this size y, GL_RGBA, GL_UNSIGNED_BYTE, pointer)
 		this unbind()
 		version(debugGL) { validateEnd("FramebufferObject readPixels") }
-		buffer
 	}
 	setTarget: func (texture: Gles3Texture) {
 		version(debugGL) { validateStart("FramebufferObject setTarget") }
