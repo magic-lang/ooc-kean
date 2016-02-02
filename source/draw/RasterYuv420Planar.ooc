@@ -45,7 +45,7 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		(yImage, uImage, vImage) := This _allocate(original size, original stride, uOffset, vOffset)
 		super(original, yImage, uImage, vImage)
 	}
-	create: func (size: IntVector2D) -> Image { This new(size) }
+	create: override func (size: IntVector2D) -> Image { This new(size) }
 	copy: override func -> This {
 		result := This new(this)
 		this y buffer copyTo(result y buffer)

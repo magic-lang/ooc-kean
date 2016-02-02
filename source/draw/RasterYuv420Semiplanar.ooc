@@ -50,7 +50,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		(yImage, uvImage) := This _createSubimages(buffer, size, stride, uvOffset)
 		this init(yImage, uvImage)
 	}
-	create: func (size: IntVector2D) -> Image { This new(size) }
+	create: override func (size: IntVector2D) -> Image { This new(size) }
 	copy: override func -> This {
 		result := This new(this)
 		this y buffer copyTo(result y buffer)
