@@ -109,12 +109,10 @@ version(windows) {
 	}
 }
 
-raise: func (message: String) {
-	Exception new(message) throw()
-}
-raise: func ~withClass (class: Class, message: String) {
-	Exception new(class, message) throw()
-}
+raise: func (message: String) { Exception new(message) throw() }
+raise: func ~withClass (class: Class, message: String) { Exception new(class, message) throw() }
+raise: func ~text (message: Text) { Exception new(message toString()) throw() }
+raise: func ~textWithClass (class: Class, message: String) { Exception new(class, message) throw() }
 
 Exception: class {
 	backtraces := Stack<Backtrace> new()
