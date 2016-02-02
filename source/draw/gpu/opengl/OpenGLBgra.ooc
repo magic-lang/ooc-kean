@@ -9,6 +9,7 @@
 use geometry
 use draw
 use draw-gpu
+use base
 import backend/GLTexture
 import OpenGLCanvas, OpenGLPacked, OpenGLContext
 
@@ -24,7 +25,8 @@ OpenGLBgra: class extends OpenGLPacked {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: override func -> RasterImage {
-		buffer := this canvas readPixels()
+		buffer := ByteBuffer new(this size area * 4)
+		(this canvas as OpenGLCanvas) readPixels(buffer)
 		RasterBgra new(buffer, this size)
 	}
 	create: override func (size: IntVector2D) -> This { this context createBgra(size) as This }
