@@ -13,7 +13,7 @@ use collections
 import GpuImage, GpuMap, GpuSurface, GpuContext, GpuYuv420Semiplanar, GpuMesh
 
 version(!gpuOff) {
-GpuCanvasYuv420Semiplanar: class extends GpuSurface {
+GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
 	_target: GpuYuv420Semiplanar
 	transform: FloatTransform3D {
 		get { this _view }

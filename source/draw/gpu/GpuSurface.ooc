@@ -14,7 +14,7 @@ use base
 import GpuContext, GpuMap, GpuImage, GpuMesh, GpuYuv420Semiplanar
 
 version(!gpuOff) {
-GpuSurface: abstract class extends Canvas {
+GpuCanvas: abstract class extends Canvas {
 	_context: GpuContext
 	_model: FloatTransform3D
 	_view := FloatTransform3D identity
@@ -75,7 +75,7 @@ GpuSurface: abstract class extends Canvas {
 		else if (image instanceOf?(RasterImage))
 			temporary = this _context createImage(image as RasterImage)
 		else
-			Debug raise("Invalid image type in GpuSurface!")
+			Debug raise("Invalid image type in GpuCanvas!")
 		if (temporary instanceOf?(GpuYuv420Semiplanar)) {
 			yuv := temporary as GpuYuv420Semiplanar
 			map add("texture0", yuv y)
