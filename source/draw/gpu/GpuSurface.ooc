@@ -82,10 +82,10 @@ GpuSurface: abstract class extends Canvas {
 	}
 	draw: virtual func ~mesh (image: GpuImage, mesh: GpuMesh) { Debug raise("draw~mesh unimplemented!") }
 	readPixels: virtual func -> ByteBuffer { raise("readPixels unimplemented!"); null }
-	_createTextureTransform: static func ~Int (imageSize: IntVector2D, box: IntBox2D) -> FloatTransform3D {
+	_createTextureTransform: static func ~LocalInt (imageSize: IntVector2D, box: IntBox2D) -> FloatTransform3D {
 		This _createTextureTransform(imageSize toFloatVector2D(), box toFloatBox2D())
 	}
-	_createTextureTransform: static func ~Float (imageSize: FloatVector2D, box: FloatBox2D) -> FloatTransform3D {
+	_createTextureTransform: static func ~LocalFloat (imageSize: FloatVector2D, box: FloatBox2D) -> FloatTransform3D {
 		This _createTextureTransform(box / imageSize)
 	}
 	_createTextureTransform: static func ~Normalized (normalizedBox: FloatBox2D) -> FloatTransform3D {
