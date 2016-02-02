@@ -42,6 +42,23 @@ BufferTest: class extends Fixture {
 			expect(s pointer == null)
 			expect(s size, is equal to(0))
 		})
+		this add("copyTo, moveTo", func {
+			buffer := Buffer new(1024)
+			other := Buffer new(1024)
+			for (i in 0 .. 1024)
+				(buffer pointer as Byte*)[i] = 128 as Byte
+			buffer copyTo(other)
+			for (i in 0 .. 1024)
+				expect((other pointer as Byte*)[i] == 128 as Byte)
+			buffer reset(0)
+			for (i in 0 .. 1024)
+				expect((buffer pointer as Byte*)[i] == 0)
+			other moveTo(buffer)
+			for (i in 0 .. 1024)
+				expect((buffer pointer as Byte*)[i] == 128 as Byte)
+			buffer free()
+			other free()
+		})
 		this add("extend", func {
 			buffer := Buffer new()
 			expect(buffer pointer == null)

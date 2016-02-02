@@ -59,6 +59,14 @@ Buffer: cover {
 		}
 		result
 	}
+	moveTo: func (destination: This) -> Int {
+		result := 0
+		if (this _pointer != null && this _size != 0 && destination _pointer != null && destination _size != 0) {
+			result = this _size minimum(destination _size)
+			memmove(destination _pointer, this _pointer, result)
+		}
+		result
+	}
 	reset: func (value: Int = 0) { memset(this _pointer, value, this _size) }
 
 	operator == (other: This) -> Bool { this _size == other _size && memcmp(this _pointer, other _pointer, this _size) == 0 }
