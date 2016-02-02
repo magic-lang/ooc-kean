@@ -30,9 +30,14 @@ Promise: abstract class {
 	kean_concurrent_promise_wait: unmangled func { this wait() }
 	kean_concurrent_promise_waitWithTimeout: unmangled func (timeout: Double) { this wait(timeout) }
 	kean_concurrent_promise_free: unmangled func { this free() }
-	start: static func (action: Func) -> This {
-		_ThreadPromise new(action)
-	}
+	start: static func (action: Func) -> This { _ThreadPromise new(action) }
+	empty: static This { get { _EmptyPromise new() } }
+}
+
+_EmptyPromise: class extends Promise {
+	init: func { super() }
+	wait: override func -> Bool { true }
+	wait: override func ~timeout (seconds: Double) -> Bool { true }
 }
 
 _ThreadPromise: class extends Promise {
