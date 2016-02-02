@@ -8,7 +8,7 @@
 
 include stddef, stdlib, stdio, ctype, stdbool
 include ./Array
-import ../Owner
+import Owner
 
 Object: abstract class {
 	class: Class
