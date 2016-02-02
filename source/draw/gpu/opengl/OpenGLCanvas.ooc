@@ -62,6 +62,6 @@ OpenGLCanvas: class extends OpenGLSurface {
 		this _renderTarget clear()
 		this _unbind()
 	}
-	readPixels: override func -> ByteBuffer { this _renderTarget readPixels() }
+	readPixels: func -> ByteBuffer { this _renderTarget readPixels() }
 }
 }
