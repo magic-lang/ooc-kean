@@ -12,7 +12,6 @@ Imports: OpenGLBgra
 Imports: OpenGLMonochrome
 Imports: OpenGLUv
 Imports: OpenGLCanvas
-Imports: OpenGLSurface
 Imports: OpenGLMap
 Imports: OpenGLContext
 Imports: OpenGLVolumeMonochrome

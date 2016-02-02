@@ -13,7 +13,7 @@ use opengl
 use base
 
 version(!gpuOff) {
-OpenGLWindow: class extends OpenGLSurface {
+OpenGLWindow: class extends OpenGLCanvas {
 	_monochromeToBgra: OpenGLMap
 	_yuvSemiplanarToBgra: OpenGLMapTransform
 	init: func (windowSize: IntVector2D, display: Pointer, nativeBackend: Long) {

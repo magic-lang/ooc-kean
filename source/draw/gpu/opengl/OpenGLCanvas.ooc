@@ -11,11 +11,11 @@ use base
 use collections
 use draw
 use draw-gpu
-import backend/[GLFramebufferObject, GLTexture]
-import OpenGLBgr, OpenGLMap, OpenGLBgra, OpenGLUv, OpenGLMonochrome, OpenGLContext, OpenGLPacked, OpenGLSurface
+import backend/[GLFramebufferObject, GLTexture, GLRenderer]
+import OpenGLBgr, OpenGLMap, OpenGLBgra, OpenGLUv, OpenGLMonochrome, OpenGLContext, OpenGLPacked
 
 version(!gpuOff) {
-OpenGLCanvas: class extends OpenGLSurface {
+OpenGLCanvas: class extends GpuSurface {
 	_target: OpenGLPacked
 	_renderTarget: GLFramebufferObject
 	context ::= this _context as OpenGLContext
@@ -45,6 +45,51 @@ OpenGLCanvas: class extends OpenGLSurface {
 		this context drawQuad()
 		this _unbind()
 	}
+	draw: override func (action: Func) {
+		this _bind()
+		this context backend setViewport(this viewport)
+		if (this opacity < 1.0f)
+			this context backend blend(this opacity)
+		else if (this blend)
+			this context backend blend()
+		else
+			this context backend enableBlend(false)
+		action()
+		this _unbind()
+	}
+	draw: override func ~WithoutBind (destination: IntBox2D, map: GpuMap) {
+		map model = this _createModelTransform(destination)
+		map view = this _view
+		map projection = this _projection
+		map use()
+		f := func { this context drawQuad() }
+		this draw(f)
+		(f as Closure) free()
+	}
+	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
+		map textureTransform = This _createTextureTransform(image size, source)
+		this draw(destination, map)
+	}
+	drawLines: override func (pointList: VectorList<FloatPoint2D>) {
+		f := func { this context drawLines(pointList, this _projection * this _toLocal, this pen) }
+		this draw(f)
+		(f as Closure) free()
+	}
+	drawPoints: override func (pointList: VectorList<FloatPoint2D>) {
+		f := func { this context drawPoints(pointList, this _projection * this _toLocal, this pen) }
+		this draw(f)
+		(f as Closure) free()
+	}
+	draw: override func ~mesh (image: GpuImage, mesh: GpuMesh) {
+		f := func {
+			this context meshShader add("texture0", image)
+			this context meshShader projection = this _projection
+			this context meshShader use()
+			mesh draw()
+		}
+		this draw(f)
+		(f as Closure) free()
+	}
 	init: func (=_target, context: OpenGLContext) {
 		super(this _target size, context, context defaultMap, IntTransform2D identity)
 		this _renderTarget = context _backend createFramebufferObject(this _target _backend as GLTexture, this _target size)
@@ -53,8 +98,8 @@ OpenGLCanvas: class extends OpenGLSurface {
 		this _renderTarget free()
 		super()
 	}
-	_bind: override func { this _renderTarget bind() }
-	_unbind: override func { this _renderTarget unbind() }
+	_bind: virtual func { this _renderTarget bind() }
+	_unbind: virtual func { this _renderTarget unbind() }
 	onRecycle: func { this _renderTarget invalidate() }
 	fill: override func {
 		this _bind()
