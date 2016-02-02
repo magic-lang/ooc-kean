@@ -53,7 +53,7 @@ SockAddrIn6: cover from struct sockaddr_in6 {
 }
 
 In6Addr: cover from struct in6_addr {
-	s6_addr: extern UChar* // 16 bytes
+	s6_addr: extern Byte* // 16 bytes
 }
 
 AddrInfo: cover from struct addrinfo {
