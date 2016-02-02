@@ -8,7 +8,7 @@
 
 use geometry
 use draw
-import GpuContext, GpuImage, GpuSurface, GpuCanvas
+import GpuContext, GpuImage, GpuSurface, GpuCanvasYuv420Semiplanar
 
 version(!gpuOff) {
 GpuYuv420Semiplanar: class extends GpuImage {
