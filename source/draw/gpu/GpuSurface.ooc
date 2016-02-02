@@ -49,10 +49,16 @@ GpuSurface: abstract class extends Canvas {
 		}
 	}
 	init: func (size: IntVector2D, =_context, =_defaultMap, =_coordinateTransform) { super(size) }
-	_createModelTransform: func (box: IntBox2D) -> FloatTransform3D {
+	_createModelTransform: func ~LocalInt (box: IntBox2D) -> FloatTransform3D {
+		this _createModelTransform(box toFloatBox2D())
+	}
+	_createModelTransform: func ~LocalFloat (box: FloatBox2D) -> FloatTransform3D {
 		toReference := FloatTransform3D createTranslation((box size x - this size x) / 2, (this size y - box size y) / 2, 0.0f)
 		translation := this _toLocal * FloatTransform3D createTranslation(box leftTop x, box leftTop y, this focalLength) * this _toLocal
 		translation * toReference * FloatTransform3D createScaling(box size x / 2.0f, box size y / 2.0f, 1.0f)
+	}
+	_createModelTransformNormalized: func (imageSize: IntVector2D, box: FloatBox2D) -> FloatTransform3D {
+		this _createModelTransform(box * imageSize toFloatVector2D())
 	}
 	_getDefaultMap: virtual func (image: Image) -> GpuMap { this _defaultMap }
 	clear: func { this fill() }
