@@ -11,7 +11,7 @@ use draw
 use base
 use collections
 import DrawContext
-import GpuImage, GpuSurface, GpuMap, GpuFence, GpuYuv420Semiplanar, GpuMesh
+import GpuImage, GpuCanvas, GpuMap, GpuFence, GpuYuv420Semiplanar, GpuMesh
 
 version(!gpuOff) {
 GpuContext: abstract class extends DrawContext {

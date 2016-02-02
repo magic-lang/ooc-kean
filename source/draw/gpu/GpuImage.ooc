@@ -9,7 +9,7 @@
 use draw
 use geometry
 use base
-import GpuContext, GpuFence, GpuSurface
+import GpuContext, GpuFence, GpuCanvas
 
 version(!gpuOff) {
 GpuImageType: enum {
@@ -27,10 +27,10 @@ GpuImageType: enum {
 GpuImage: abstract class extends Image {
 	_context: GpuContext
 	filter: Bool { get set }
-	canvas: GpuSurface { get {
+	canvas: GpuCanvas { get {
 		if (this _canvas == null)
-			this _canvas = this _createCanvas() as GpuSurface
-		this _canvas as GpuSurface
+			this _canvas = this _createCanvas() as GpuCanvas
+		this _canvas as GpuCanvas
 	}}
 	init: func (size: IntVector2D, =_context) { super(size) }
 	resizeTo: override func (size: IntVector2D) -> This {

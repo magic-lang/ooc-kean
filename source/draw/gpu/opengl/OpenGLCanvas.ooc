@@ -15,7 +15,7 @@ import backend/[GLFramebufferObject, GLTexture, GLRenderer]
 import OpenGLBgr, OpenGLMap, OpenGLBgra, OpenGLUv, OpenGLMonochrome, OpenGLContext, OpenGLPacked
 
 version(!gpuOff) {
-OpenGLCanvas: class extends GpuSurface {
+OpenGLCanvas: class extends GpuCanvas {
 	_target: OpenGLPacked
 	_renderTarget: GLFramebufferObject
 	context ::= this _context as OpenGLContext
