@@ -66,7 +66,7 @@ Image: abstract class {
 	resizeTo: virtual func ~withMethod (size: IntVector2D, method: InterpolationMode) -> This {
 		this resizeTo(size)
 	}
-	create: virtual func (size: IntVector2D) -> This { raise("Image type not implemented."); null }
+	create: virtual func (size: IntVector2D) -> This { raise("Image::create not implemented for type: %s"  format(this class name)); null }
 	copy: abstract func -> This
 	copy: abstract func ~fromParams (size: IntVector2D, transform: FloatTransform2D) -> This
 	distance: virtual abstract func (other: This) -> Float
