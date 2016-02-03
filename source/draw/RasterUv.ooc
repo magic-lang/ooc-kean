@@ -46,7 +46,7 @@ RasterUv: class extends RasterPacked {
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D) { this init(buffer, size, this bytesPerPixel * size x) }
 	init: func ~fromRasterUv (original: This) { super(original) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
-	create: func (size: IntVector2D) -> Image { This new(size) }
+	create: override func (size: IntVector2D) -> Image { This new(size) }
 	copy: override func -> This { This new(this) }
 	apply: override func ~bgr (action: Func(ColorBgr)) {
 		this apply(ColorConvert fromYuv(action))

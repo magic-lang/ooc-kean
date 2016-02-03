@@ -36,7 +36,7 @@ RasterYuv422Semipacked: class extends RasterPacked {
 	init: func ~allocate (size: IntVector2D) { super~allocate(size) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D) { super(buffer, size, this bytesPerPixel * size x) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
-	create: func (size: IntVector2D) -> Image {
+	create: override func (size: IntVector2D) -> Image {
 		result := This new(size)
 		result crop = this crop
 		result wrap = this wrap
