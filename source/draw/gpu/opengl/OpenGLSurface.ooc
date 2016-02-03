@@ -14,7 +14,7 @@ import OpenGLContext, OpenGLPacked
 import backend/GLRenderer
 
 version(!gpuOff) {
-OpenGLSurface: abstract class extends GpuSurface {
+OpenGLSurface: abstract class extends GpuCanvas {
 	context ::= this _context as OpenGLContext
 	init: func (size: IntVector2D, context: OpenGLContext, defaultMap: GpuMap, coordinateTransform: IntTransform2D) {
 		super(size, context, defaultMap, coordinateTransform)
