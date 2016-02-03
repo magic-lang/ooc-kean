@@ -198,7 +198,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
-		if (original instanceOf?(This))
+		if (original instanceOf(This))
 			result = (original as This) copy()
 		else {
 			result = This new(original size)

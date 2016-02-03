@@ -23,7 +23,7 @@ HashDictionary: class {
 	}
 	free: override func {
 		iterator := this _hashMap backIterator()
-		while (iterator hasNext?())
+		while (iterator hasNext())
 			iterator next() free()
 		iterator free()
 		this _hashMap free()
@@ -45,12 +45,12 @@ HashDictionary: class {
 		if (_hashMap contains(key)) {
 			storedType := this getClass(key)
 			entryValue := this getEntry(key, storedType) value
-			if (storedType inheritsFrom?(Cell)) {
+			if (storedType inheritsFrom(Cell)) {
 				entryValueCell := (entryValue as Cell<T>*)@
-				if (T inheritsFrom?(entryValueCell T))
+				if (T inheritsFrom(entryValueCell T))
 					result = entryValueCell get()
 			}
-			else if (T inheritsFrom?(storedType))
+			else if (T inheritsFrom(storedType))
 				result = this getEntry(key, T) value as T
 		}
 		result
@@ -77,7 +77,7 @@ HashDictionary: class {
 	add: func <T> (key: String, value: T) -> Bool {
 		if (_hashMap contains(key))
 			this remove(key)
-		if (T inheritsFrom?(Object))
+		if (T inheritsFrom(Object))
 			this put(key, value)
 		else {
 			cellValue := Cell<T> new(value)

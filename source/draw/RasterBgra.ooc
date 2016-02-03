@@ -59,7 +59,7 @@ RasterBgra: class extends RasterPacked {
 		result := 0.0f
 		if (!other || (this size != other size))
 			result = Float maximumValue
-		else if (!other instanceOf?(This)) {
+		else if (!other instanceOf(This)) {
 			converted := This convertFrom(other as RasterImage)
 			result = this distance(converted)
 			converted referenceCount decrease()
@@ -157,7 +157,7 @@ RasterBgra: class extends RasterPacked {
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
-		if (original instanceOf?(This))
+		if (original instanceOf(This))
 			result = (original as This) copy()
 		else {
 			result = This new(original)

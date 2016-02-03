@@ -26,6 +26,3 @@ alloca: extern func (SizeT) -> Pointer
 // to sizeof(Int_class()), and thus will always give the same value for
 // all types. 'Int size' should be used instead, which will be translated
 // to 'Int_class()->size'
-
-// This one is still here because rock is hard-coded to use it
-gc_malloc: func (size: SizeT) -> Pointer { calloc(1, size) }

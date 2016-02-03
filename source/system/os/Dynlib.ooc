@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use sdk-dynlib
+use system-dynlib
 
 Dynlib: abstract class {
 	suffix: static String

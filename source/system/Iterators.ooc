@@ -11,7 +11,7 @@ Iterable: abstract class <T> {
 	reduce: func (f: Func (T, T) -> T) -> T {
 		iter := iterator()
 		acc := f(iter next(), iter next())
-		while (iter hasNext?())
+		while (iter hasNext())
 			acc = f(acc, iter next())
 		acc
 	}
@@ -38,7 +38,7 @@ BackIterable: abstract class <T> extends Iterable<T> {
 	/** Returns an iterator at the back or end of the Iterable. */
 	backIterator: func -> BackIterator<T> {
 		iter := iterator()
-		while (iter hasNext?())
+		while (iter hasNext())
 			iter next()
 		iter
 	}
@@ -47,7 +47,7 @@ BackIterable: abstract class <T> extends Iterable<T> {
 }
 
 Iterator: abstract class <T> extends Iterable<T> {
-	hasNext?: abstract func -> Bool
+	hasNext: abstract func -> Bool
 	next: abstract func -> T
 	remove: abstract func -> Bool
 	iterator: override func -> This<T> { this }
@@ -57,7 +57,7 @@ Iterator: abstract class <T> extends Iterable<T> {
 }
 
 BackIterator: abstract class <T> extends Iterator<T> {
-	hasPrev?: abstract func -> Bool
+	hasPrevious: abstract func -> Bool
 	prev: abstract func -> T
 	iterator: func -> This<T> { this }
 	reversed: func -> ReverseIterator<T> {
@@ -70,9 +70,9 @@ BackIterator: abstract class <T> extends Iterator<T> {
 ReverseIterator: class <T> extends BackIterator<T> {
 	iterator: BackIterator<T> = null
 	init: func
-	hasNext?: override func -> Bool { iterator hasPrev?() }
+	hasNext: override func -> Bool { iterator hasPrevious() }
 	next: override func -> T { iterator prev() }
-	hasPrev?: override func -> Bool { iterator hasNext?() }
+	hasPrevious: override func -> Bool { iterator hasNext() }
 	prev: override func -> T { iterator next() }
 	remove: override func -> Bool { iterator remove() }
 	reversed: func -> BackIterator<T> { iterator }
@@ -87,8 +87,8 @@ _MappingIterator: class <T, S> extends Iterator<S> {
 		this _backend free()
 		super()
 	}
-	hasNext?: override func -> Bool {
-		this _backend hasNext?()
+	hasNext: override func -> Bool {
+		this _backend hasNext()
 	}
 	next: override func -> S {
 		this _mapFunction(this _backend next())

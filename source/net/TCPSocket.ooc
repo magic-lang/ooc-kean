@@ -246,7 +246,7 @@ TCPSocketReader: class extends Reader {
 	read: override func ~char -> Char {
 		source receiveByte()
 	}
-	hasNext?: override func -> Bool {
+	hasNext: override func -> Bool {
 		source receiveByte(SocketMsgFlags PEEK)
 		source hasData
 	}

@@ -144,9 +144,9 @@ OpenGLContext: class extends GpuContext {
 	packToRgba: override func (source: GpuImage, target: GpuImage, viewport: IntBox2D, padding := 0) {
 		channels := 1
 		map: GpuMap
-		if (source instanceOf?(OpenGLMonochrome))
+		if (source instanceOf(OpenGLMonochrome))
 			map = this _packMonochrome
-		else if (source instanceOf?(OpenGLUv)) {
+		else if (source instanceOf(OpenGLUv)) {
 			channels = 2
 			if (padding == 0)
 				map = this _packUv

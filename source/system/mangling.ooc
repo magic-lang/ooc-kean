@@ -15,7 +15,7 @@ Demangler: class {
 		if (s contains("__")) {
 			reader := BufferReader new(s)
 
-			while (reader hasNext?()) {
+			while (reader hasNext()) {
 				c := reader read()
 				match c {
 					case '_' =>
@@ -32,7 +32,7 @@ Demangler: class {
 			}
 
 			if (reader peek() upper()) {
-				while (reader hasNext?()) {
+				while (reader hasNext()) {
 					c := reader read()
 					match c {
 						case '_' =>

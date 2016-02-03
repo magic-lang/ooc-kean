@@ -25,7 +25,7 @@ UnixWindowBase: class extends DisplayWindow {
 		super()
 	}
 	draw: override func (image: Image) {
-		if (image instanceOf?(RasterBgra))
+		if (image instanceOf(RasterBgra))
 			this _xWindow draw(image as RasterBgra)
 		else {
 			raster := RasterBgra convertFrom(image as RasterImage)

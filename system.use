@@ -1,10 +1,10 @@
-Name: sdk
+Name: system
 Description: Lightweight ooc standard library replacement.
-SourcePath: source/sdk
+SourcePath: source/system
 Imports: Character
 Imports: Exception
-Imports: lang/String
-Imports: lang/types
+Imports: String
+Imports: types
 Imports: Buffer
 Imports: CharBuffer
 Imports: CharBufferIterator

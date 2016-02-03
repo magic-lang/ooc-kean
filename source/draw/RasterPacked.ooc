@@ -128,11 +128,11 @@ RasterPacked: abstract class extends RasterImage {
 		super()
 	}
 	equals: func (other: Image) -> Bool {
-		other instanceOf?(This) && this bytesPerPixel == (other as This) bytesPerPixel && this as Image equals(other)
+		other instanceOf(This) && this bytesPerPixel == (other as This) bytesPerPixel && this as Image equals(other)
 	}
 	distance: override func (other: Image) -> Float {
 	//distance: virtual func (other: Image) -> Float {
-		other instanceOf?(This) && this bytesPerPixel == (other as This) bytesPerPixel ? this as Image distance(other) : Float maximumValue
+		other instanceOf(This) && this bytesPerPixel == (other as This) bytesPerPixel ? this as Image distance(other) : Float maximumValue
 	}
 	asRasterPacked: func (other: This) -> This {
 		other

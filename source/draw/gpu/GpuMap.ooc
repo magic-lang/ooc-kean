@@ -69,7 +69,7 @@ GpuMap: abstract class extends Map {
 	}
 	use: virtual func
 	add: func <T> (key: String, value: T) {
-		if (T inheritsFrom?(Object))
+		if (T inheritsFrom(Object))
 			this _bindings add(key, value as Object, false)
 		else
 			this _bindings add(key, Cell<T> new(value), true)

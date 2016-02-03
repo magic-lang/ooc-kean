@@ -122,7 +122,7 @@ _ThreadFuture: class <T> extends Future<T> {
 		this _state = _PromiseState Unfinished
 		this _action = func {
 			temporary := task()
-			if (T inheritsFrom?(Object))
+			if (T inheritsFrom(Object))
 				this _result = temporary
 			else
 				this _result = Cell<T> new(temporary)
@@ -161,7 +161,7 @@ _ThreadFuture: class <T> extends Future<T> {
 	getResult: override func (defaultValue: T) -> T {
 		result := defaultValue
 		if (this _state == _PromiseState Finished && this _result != null)
-			if (T inheritsFrom?(Object))
+			if (T inheritsFrom(Object))
 				result = this _result
 			else
 				result = (this _result as Cell<T>) get()

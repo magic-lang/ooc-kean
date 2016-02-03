@@ -52,7 +52,7 @@ OpenGLMap: class extends GpuMap {
 		textureCount := 0
 		action := func (key: String, value: Object) {
 			program := this _currentProgram
-			if (value instanceOf?(Cell)) {
+			if (value instanceOf(Cell)) {
 				cell := value as Cell
 				match (cell T) {
 					case Int => program setUniform(key, cell as Cell<Int> get())

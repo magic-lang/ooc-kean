@@ -37,7 +37,7 @@ __digits: String = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 __digits_small: String = "0123456789abcdefghijklmnopqrstuvwxyz"
 
 argNext: func<T> (va: VarArgsIterator*, T: Class) -> T {
-	if (!va@ hasNext?()) InvalidFormatException new(null) throw()
+	if (!va@ hasNext()) InvalidFormatException new(null) throw()
 	va@ next(T)
 }
 
@@ -455,7 +455,7 @@ format: func ~main <T> (fmt: T, args: ...) -> T {
 	while (ptr as Pointer < end) {
 		match (ptr@) {
 			case '%' => {
-				if (va hasNext?()) {
+				if (va hasNext()) {
 					info: FSInfoStruct
 					getEntityInfo(info&, va&, ptr, end)
 					ptr += info bytesProcessed

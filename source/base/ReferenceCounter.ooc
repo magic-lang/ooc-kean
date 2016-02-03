@@ -15,7 +15,7 @@ ReferenceCounter: class {
 	_kill := false
 	_lock: Mutex
 	isSafe: Bool {
-		get { !this _lock instanceOf?(MutexUnsafe) }
+		get { !this _lock instanceOf(MutexUnsafe) }
 		set(value) {
 			if (this isSafe != value) {
 				this _lock free()

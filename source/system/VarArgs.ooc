@@ -95,7 +95,7 @@ VarArgsIterator: cover {
 	countdown: SSizeT
 	first: Bool
 
-	hasNext?: func -> Bool {
+	hasNext: func -> Bool {
 		countdown > 0
 	}
 

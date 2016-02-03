@@ -16,12 +16,12 @@ Vector: abstract class <T> {
 		this _freeContent = freeContent
 	}
 	free: override func {
-		if (!(this instanceOf?(StackVector)))
+		if (!(this instanceOf(StackVector)))
 			memfree(this _backend)
 		super()
 	}
 	_free: func ~range (start, end: Int) {
-		if (this _freeContent && T inheritsFrom?(Object)) {
+		if (this _freeContent && T inheritsFrom(Object)) {
 			for (i in start .. end) {
 				old := this[i] as Object
 				if (old != null)
@@ -114,7 +114,7 @@ HeapVector: class <T> extends Vector<T> {
 			if (index >= this capacity || index < 0)
 				raise("Accessing Vector index out of range in set operator")
 		}
-		if (this _freeContent && T inheritsFrom?(Object)) {
+		if (this _freeContent && T inheritsFrom(Object)) {
 			old := this[index] as Object
 			if (old != null)
 				old free()

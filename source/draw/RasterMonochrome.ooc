@@ -26,9 +26,9 @@ RasterMonochromeCanvas: class extends RasterPackedCanvas {
 	}
 	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) {
 		monochrome: RasterMonochrome = null
-		if (image instanceOf?(RasterMonochrome))
+		if (image instanceOf(RasterMonochrome))
 			monochrome = image as RasterMonochrome
-		else if (image instanceOf?(RasterImage))
+		else if (image instanceOf(RasterImage))
 			monochrome = RasterMonochrome convertFrom(image as RasterImage)
 		else
 			Debug raise("Unsupported image type in RasterMonochromeCanvas draw")
@@ -77,7 +77,7 @@ RasterMonochrome: class extends RasterPacked {
 		result := 0.0f
 		if (!other || (this size != other size))
 			result = Float maximumValue
-		else if (!other instanceOf?(This)) {
+		else if (!other instanceOf(This)) {
 			converted := This convertFrom(other as RasterImage)
 			result = this distance(converted)
 			converted referenceCount decrease()
@@ -209,7 +209,7 @@ RasterMonochrome: class extends RasterPacked {
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
-		if (original instanceOf?(This))
+		if (original instanceOf(This))
 			result = (original as This) copy()
 		else {
 			result = This new(original)

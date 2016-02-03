@@ -88,7 +88,7 @@ PipeReader: class extends Reader {
 		bytesRead := pipe read()
 		bytesRead >= 0 ? bytesRead : 0
 	}
-	hasNext?: override func -> Bool {
+	hasNext: override func -> Bool {
 		!pipe eof()
 	}
 	mark: override func -> Long {

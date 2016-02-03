@@ -22,13 +22,13 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 	}
 	remove: override func -> Bool { false }
 	iterator: func -> This { this }
-	hasNext?: override func -> Bool { this _fileReader hasNext?() }
+	hasNext: override func -> Bool { this _fileReader hasNext() }
 	next: final override func -> VectorList<Text> {
 		result: VectorList<Text>
-		if (this hasNext?()) {
+		if (this hasNext()) {
 			readCharacter: Char
 			textBuilder := TextBuilder new()
-			while (this _fileReader hasNext?() && ((readCharacter = this _fileReader read()) != '\n' && readCharacter != '\0'))
+			while (this _fileReader hasNext() && ((readCharacter = this _fileReader read()) != '\n' && readCharacter != '\0'))
 				textBuilder append(readCharacter)
 			result = this _parseRow(textBuilder toText())
 			textBuilder free()

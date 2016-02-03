@@ -81,7 +81,7 @@ EmptyConstraint: class extends Constraint {
 	init: func { super() }
 	init: func ~parent (parent: Modifier) { super(parent) }
 	test: override func (value: Object) -> Bool {
-		value != null && value instanceOf?(String) && value as String empty()
+		value != null && value instanceOf(String) && value as String empty()
 	}
 }
 
@@ -266,7 +266,7 @@ CompareConstraint: class extends Constraint {
 		this type = type
 	}
 	free: override func {
-		if (this correct instanceOf?(Cell))
+		if (this correct instanceOf(Cell))
 			(this correct as Cell) free()
 		(this comparer as Closure) free()
 		super()

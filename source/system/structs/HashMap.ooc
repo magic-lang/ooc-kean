@@ -401,7 +401,7 @@ HashMapValueIterator: class <K, T> extends BackIterator<T> {
 
 	init: func ~withMap (=map)
 
-	hasNext?: override func -> Bool { index < map keys count }
+	hasNext: override func -> Bool { index < map keys count }
 
 	next: override func -> T {
 		key := map keys[index]
@@ -409,7 +409,7 @@ HashMapValueIterator: class <K, T> extends BackIterator<T> {
 		map get(key)
 	}
 
-	hasPrev?: override func -> Bool { index > 0 }
+	hasPrevious: override func -> Bool { index > 0 }
 
 	prev: override func -> T {
 		index -= 1

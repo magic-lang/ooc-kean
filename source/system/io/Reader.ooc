@@ -26,7 +26,7 @@ Reader: abstract class {
 	readAll: func -> String {
 		in := CharBuffer new(4096)
 		out := CharBuffer new(4096)
-		while (hasNext?()) {
+		while (hasNext()) {
 			readBytes := read(in)
 			out append(in, readBytes)
 		}
@@ -34,9 +34,9 @@ Reader: abstract class {
 	}
 	readUntil: func (end: Char) -> String {
 		sb := CharBuffer new(1024)
-		while (this hasNext?()) {
+		while (this hasNext()) {
 			c := read()
-			if (c == end || (!this hasNext?() && c == 8))
+			if (c == end || (!this hasNext() && c == 8))
 				break
 			sb append(c)
 		}
@@ -44,7 +44,7 @@ Reader: abstract class {
 	}
 	readWhile: func ~filter (filter: Func(Char) -> Bool) -> String {
 		sb := CharBuffer new(1024)
-		while (hasNext?()) {
+		while (hasNext()) {
 			c := read()
 			if (!filter(c)) {
 				rewind(1)
@@ -55,7 +55,7 @@ Reader: abstract class {
 		sb toString()
 	}
 	skipUntil: func (end: Char) {
-		while (this hasNext?()) {
+		while (this hasNext()) {
 			c := read()
 			if (c == end)
 				break
@@ -63,7 +63,7 @@ Reader: abstract class {
 	}
 	skipUntil: func ~str (end: String) {
 		stop := false
-		while (this hasNext?() && !stop) {
+		while (this hasNext() && !stop) {
 			c := read()
 			i := 0
 			while (c == end[i] && !stop) {
@@ -75,7 +75,7 @@ Reader: abstract class {
 		}
 	}
 	skipWhile: func (unwanted: Char) {
-		while (this hasNext?()) {
+		while (this hasNext()) {
 			c := read()
 			if (c != unwanted) {
 				rewind(1)
@@ -84,7 +84,7 @@ Reader: abstract class {
 		}
 	}
 	skipWhile: func ~filter (filter: Func(Char) -> Bool) {
-		while (this hasNext?()) {
+		while (this hasNext()) {
 			c := read()
 			if (!filter(c)) {
 				rewind(1)
@@ -103,7 +103,7 @@ Reader: abstract class {
 	}
 	eachLine: func (f: Func(String) -> Bool) -> Bool {
 		result := true
-		while (this hasNext?()) {
+		while (this hasNext()) {
 			if (!f(this readLine())) {
 				result = false
 				break
@@ -116,7 +116,7 @@ Reader: abstract class {
 		rewind(1)
 		c
 	}
-	hasNext?: abstract func -> Bool
+	hasNext: abstract func -> Bool
 	mark: abstract func -> Long
 	rewind: func (offset: Int) -> Bool { seek(-offset, SeekMode CUR) }
 	seek: abstract func (offset: Long, mode: SeekMode) -> Bool
