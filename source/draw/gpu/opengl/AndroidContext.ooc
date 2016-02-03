@@ -103,7 +103,7 @@ AndroidContext: class extends OpenGLContext {
 		result: Promise
 		match (target) {
 			case (targetImage: GraphicBufferYuv420Semiplanar) =>
-				match (source)  {
+				match (source) {
 					case (sourceImage: GpuYuv420Semiplanar) =>
 						targetImageRgba := targetImage toRgba(this)
 						targetWidth := sourceImage size x / 4
