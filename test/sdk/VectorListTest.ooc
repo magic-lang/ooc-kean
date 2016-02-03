@@ -7,237 +7,273 @@
  */
 
 use unit
+use collections
 
-MyCover: cover {
-	content: Int
-	init: func@ (=content)
-	init: func@ ~default { this init(0) }
-	increase: func { this content += 1 }
-}
-MyClass: class {
-	content: Int
-	init: func (=content)
-	init: func ~default { this init(0) }
-	increase: func { this content += 1 }
-}
-
-VectorTest: class extends Fixture {
+VectorListTest: class extends Fixture {
 	init: func {
-		super("Vector")
-		this add("heap cover create", func {
-			heapVector := HeapVector<Int> new(10) as Vector<Int>
-			expect(heapVector capacity, is equal to(10))
-			expect(heapVector[0], is equal to(0))
+		super("VectorList")
+		tolerance := 0.00001f
+		this add("VectorList cover create", func {
+			vectorList := VectorList<Int> new() as VectorList<Int>
+
+			expect(vectorList count, is equal to(0))
+			vectorList add(0)
+			vectorList add(1)
+			vectorList add(2)
+
+			expect(vectorList count, is equal to(3))
+			removedInt := vectorList remove()
+			expect(vectorList count, is equal to(2))
+			expect(removedInt, is equal to(2))
+			removedInt = vectorList remove()
+			expect(vectorList count, is equal to(1))
+			expect(removedInt, is equal to(1))
+			removedInt = vectorList remove()
+			expect(vectorList count, is equal to(0))
+			expect(removedInt, is equal to(0))
+
+			expect(vectorList count, is equal to(0))
+			vectorList add(3)
+			vectorList add(4)
+			vectorList add(5)
+			expect(vectorList count, is equal to(3))
+			removedInt = vectorList remove()
+			expect(vectorList count, is equal to(2))
+			expect(removedInt, is equal to(5))
+			removedInt = vectorList remove()
+			expect(vectorList count, is equal to(1))
+			expect(removedInt, is equal to(4))
+			removedInt = vectorList remove()
+			expect(vectorList count, is equal to(0))
+			expect(removedInt, is equal to(3))
+
+			for (i in 0 .. vectorList count)
+				vectorList remove()
+			expect(vectorList count, is equal to(0))
 
 			for (i in 0 .. 10)
-				expect(heapVector[i], is equal to(0))
-			for (i in 0 .. 10)
-			// Insert 0 .. 10
-				heapVector[i] = i
-			for (i in 0 .. 10)
-				expect(heapVector[i], is equal to(i))
-			// Change all values to 10
-			for (i in 0 .. 10)
-				heapVector[i] = 10
-			for (i in 0 .. 10)
-				expect(heapVector[i], is equal to(10))
+				vectorList add(i)
+			expect(vectorList count, is equal to(10))
 
-			// Increase array size to 20
-			heapVector resize(20)
-			expect(heapVector capacity, is equal to(20))
-			for (i in 0 .. 20)
-				heapVector[i] = i
-			for (i in 0 .. 20)
-				expect(heapVector[i], is equal to(i))
-			for (i in 0 .. 20)
-				heapVector[i] = 20
+			compareInt := vectorList[3]
+			removedInt = vectorList remove(3)
+			expect(removedInt , is equal to(compareInt))
 
-			for (i in 0 .. 20)
-				expect(heapVector[i], is equal to(20))
-			heapVector resize(15)
-			expect(heapVector capacity, is equal to(15))
+			compareInt = vectorList[5]
+			removedInt = vectorList remove(5)
+			expect(removedInt, is equal to(compareInt))
 
-			for (i in 0 .. 15)
-				expect(heapVector[i], is equal to(20))
+			vectorList insert(5, 4)
+			expect(vectorList[5], is equal to(4))
 
-			for (i in 0 .. 15)
-				heapVector[i] = 15
-
-			// Decrease array size below original size
-			heapVector resize(5)
-			expect(heapVector capacity, is equal to(5))
-			for (i in 0 .. 5)
-				heapVector[i] = 5
-			for (i in 0 .. 5)
-				expect(heapVector[i], is equal to(5))
-
-			// Copy tests
-			heapVector resize(3)
-			for (i in 0 .. 3)
-				heapVector[i] = i
-			oldValue := heapVector[1]
-			heapVector copy(1, 0)
-			expect(heapVector[0], is equal to(oldValue))
-
-			heapVector resize(10)
+			vectorList clear()
+			for (i in 0 .. vectorList count)
+				expect(vectorList[i], is equal to(null))
 			for (i in 0 .. 10)
-				heapVector[i] = i
-			heapVector resize(20)
-			for (i in 0 .. 10)
-				heapVector copy(i, i + 1)
-			for (i in 0 .. 10)
-				expect(heapVector[i], is equal to(0))
-
-			// Move tests
-			heapVector resize(3)
-			for (i in 0 .. 3)
-				heapVector[i] = i
-			oldValue = heapVector[1]
-			heapVector move(1, 0)
-			expect(heapVector[0], is equal to(oldValue))
-
-			heapVector resize(10)
-			for (i in 0 .. 10)
-				heapVector[i] = i
-			heapVector resize(20)
-			for (i in 0 .. 10)
-				heapVector move(i, i + 1)
-			for (i in 0 .. 10)
-				expect(heapVector[i], is equal to(0))
-
-			heapVector free()
+				vectorList add(i)
+			expect(vectorList count, is equal to(10))
+			vectorList free()
 		})
-
-		this add("Stack cover create", func {
-			dataTMP: Int[30]
-			data := dataTMP[0]&
-
-			//stackVector := StackVector<Int> new(data[0]&, 10) as Vector<Int>
-			stackVector := StackVector<Int> new(data, 30) as Vector<Int>
-
-			expect(stackVector capacity, is equal to(30))
-			for (i in 0 .. stackVector capacity)
-				stackVector[i] = i
-			// Test case for 0 .. 30
-			for (i in 0 .. 30)
-				expect(stackVector[i], is equal to(i))
-
-			// Insert 30 in every element of array
-			for (i in 0 .. 30)
-				stackVector[i] = 30
-			for (i in 0 .. 30)
-				expect(stackVector[i], is equal to(30))
-
-			// Decrease array size to 20
-			stackVector resize(20)
-			expect(stackVector capacity, is equal to(20))
-
-			// Insert 0 .. 20
-			for (i in 0 .. 20)
-				stackVector[i] = i
-			for (i in 0 .. 20)
-				expect(stackVector[i], is equal to(i))
-			// Change all values to 20
-			for (i in 0 .. 20)
-				stackVector[i] = 20
-			for (i in 0 .. 20)
-				expect(stackVector[i], is equal to(20))
-
-			stackVector resize(40)
-
-			expect(stackVector capacity, is equal to(20))
-			stackVector resize(10)
-			expect(stackVector capacity, is equal to(10))
-			stackVector resize(14)
-			expect(stackVector capacity, is equal to(10))
-			for (i in 0 .. 10)
-				stackVector[i] = 10
-			for (i in 0 .. 10)
-				expect(stackVector[i], is equal to(10))
-
-			// Copy tests
-			stackVector resize(3)
-			for (i in 0 .. 3)
-				stackVector[i] = i
-			oldValue := stackVector[1]
-			stackVector copy(1, 0)
-			expect(stackVector[0], is equal to(oldValue))
-
-			// Move tests
-			stackVector resize(3)
-			for (i in 0 .. 3)
-				stackVector[i] = i
-			oldValue = stackVector[1]
-			stackVector move(1, 0)
-			expect(stackVector[0], is equal to(oldValue))
-
-			stackVector free()
+		this add("VectorList append", func {
+			firstList := VectorList<Int> new()
+			firstList add(0)
+			firstList add(1)
+			firstList add(2)
+			secondList := VectorList<Int> new()
+			secondList add(3)
+			secondList add(4)
+			secondList add(5)
+			firstList append(secondList)
+			expect(firstList[0], is equal to(0))
+			expect(firstList[1], is equal to(1))
+			expect(firstList[2], is equal to(2))
+			expect(firstList[3], is equal to(3))
+			expect(firstList[4], is equal to(4))
+			expect(firstList[5], is equal to(5))
+			expect(firstList count, is equal to(6))
+			firstList free()
+			secondList free()
 		})
-
-		/* Activate test when [] supports references.
-		this add("cover by reference in heap vector", func {
-			heapVector := HeapVector<MyCover> new(3) as Vector<MyCover>
-			// Test default value
-			expect(heapVector capacity, is equal to(3))
-			expect(heapVector[0] content, is equal to(0))
-			// Test assignment by value
-			heapVector[2] = MyCover new(3)
-			expect(heapVector[2] content, is equal to(3))
-			// Test side effects by reference
-			// This test requires the [] operands to pass pointers instead of values.
-			// It is dangerous to reallocate a collection while pointers are referring
-			// directly to the allocation since resizing will free the memory.
-			// If you need a persistent pointer to cover element or a flat subset of the
-			// element within the same allocation, you must put each cover in a cell.
-			heapVector[2] increase()
-			expect(heapVector[2] content, is equal to(4))
-			heapVector free()
+		this add("VectorList getFirstElements", func {
+			list := VectorList<Int> new()
+			list add(0)
+			list add(1)
+			list add(2)
+			firstResult := list getFirstElements(2)
+			secondResult := firstResult getFirstElements(5)
+			expect(secondResult count, is equal to(2))
+			expect(secondResult[0], is equal to(0))
+			expect(secondResult[1], is equal to(1))
+			list free()
+			firstResult free()
+			secondResult free()
 		})
-		*/
-
-		this add("nested heap vector using cover", func {
-			sizeX := 10
-			sizeY := 10
-			additionTable := HeapVector<Vector<MyCover>> new(sizeX, false)
-			for (i in 0 .. sizeX) {
-				additionTable[i] = HeapVector<MyCover> new(sizeY, false)
-				for (j in 0 .. sizeY)
-					additionTable[i][j] = MyCover new(i + j)
-			}
-			// Array access requires casting to the correct type when a collection holds a generic collection
-			// 2 + 4 = 6
-			expect((additionTable[2] as Vector<MyCover>)[4] content, is equal to(6))
-			// Write that 1 + 2 = 12 just to confuse
-			// Since the [] operator can't give a reference to the content attribute, the whole cover must be replaced.
-			(additionTable[1] as Vector<MyCover>)[2] = MyCover new(12)
-			// Confirm that 1 + 2 = 12 according to the new logic
-			expect((additionTable[1] as Vector<MyCover>)[2] content, is equal to(12))
-			additionTable free()
+		this add("VectorList getElements", func {
+			list := VectorList<Int> new()
+			list add(0)
+			list add(1)
+			list add(2)
+			list add(3)
+			indices := VectorList<Int> new()
+			indices add(1)
+			indices add(2)
+			newList := list getElements(indices)
+			expect(newList count, is equal to(2))
+			expect(newList[0], is equal to(1))
+			expect(newList[1], is equal to(2))
+			list free()
+			indices free()
 		})
-
-		this add("nested heap vector using class", func {
-			sizeX := 10
-			sizeY := 10
-			additionTable := HeapVector<Vector<MyClass>> new(sizeX)
-			for (i in 0 .. sizeX) {
-				additionTable[i] = HeapVector<MyClass> new(sizeY)
-				for (j in 0 .. sizeY)
-					additionTable[i][j] = MyClass new(i + j)
-			}
-			// Array access requires casting to the correct type when a collection holds a generic collection
-			// 2 + 4 = 6
-			expect((additionTable[2] as Vector<MyClass>)[4] content, is equal to(6))
-			// Write that 1 + 2 = 12 just to confuse
-			(additionTable[1] as Vector<MyClass>)[2] content = 12
-			// Confirm that 1 + 2 = 12 according to the new logic
-			expect((additionTable[1] as Vector<MyClass>)[2] content, is equal to(12))
-			// Increase the value of 1 + 2 to 13
-			(additionTable[1] as Vector<MyClass>)[2] increase()
-			// Confirm that 1 + 2 = 13 according to the new logic
-			expect((additionTable[1] as Vector<MyClass>)[2] content, is equal to(13))
-			additionTable free()
+		this add("VectorList getSlice", func {
+			list := VectorList<Float> new()
+			list add(1.0f)
+			list add(2.0f)
+			list add(3.0f)
+			list add(4.0f)
+			slice := list getSlice(1, 2)
+			expect(slice count, is equal to(2))
+			expect(slice[0], is equal to(2.0f) within(tolerance))
+			expect(slice[1], is equal to(3.0f) within(tolerance))
+			sliceInto := VectorList<Float> new()
+			list getSliceInto(Range new(1, 2), sliceInto)
+			expect(sliceInto[0], is equal to(2.0f) within(tolerance))
+			expect(sliceInto[1], is equal to(3.0f) within(tolerance))
+			list free()
+			slice free()
+			sliceInto free()
 		})
+		this add("VectorList apply", func {
+			list := VectorList<Int> new()
+			list add(0)
+			list add(1)
+			list add(2)
+			c := 0
+			list apply(|value|
+				expect(value, is equal to(c))
+				c += 1)
+			list free()
+		})
+		this add("VectorList modify", func {
+			list := VectorList<Int> new()
+			list add(0)
+			list add(1)
+			list add(2)
+
+			list modify(|value| value += 1)
+			c := 1
+			list apply(|value|
+				expect(value, is equal to(c))
+				c += 1)
+			list free()
+		})
+		this add("VectorList map", func {
+			list := VectorList<Int> new()
+			list add(0)
+			list add(1)
+			list add(2)
+			newList := list map(|value| (value + 1) toString())
+			expect(list count, is equal to(newList count))
+			expect(newList[0], is equal to("1"))
+			expect(newList[1], is equal to("2"))
+			expect(newList[2], is equal to("3"))
+			list free(); newList free()
+		})
+		this add("VectorList reverse", func {
+			list := VectorList<Int> new()
+			list add(8)
+			list add(16)
+			list add(64)
+			list add(128)
+			reversed := list reverse()
+			expect(reversed[0], is equal to(128))
+			expect(reversed[1], is equal to(64))
+			expect(reversed[2], is equal to(16))
+			expect(reversed[3], is equal to(8))
+			list free()
+			reversed free()
+		})
+		this add("VectorList remove", func {
+			list := VectorList<Int> new()
+			list add(8)
+			list add(16)
+			list add(32)
+			list add(64)
+			expect(list empty, is false)
+			while (!list empty)
+				list removeAt(0)
+			expect(list empty, is true)
+			list free()
+		})
+		this add("VectorList direct vector access", func {
+			list := VectorList<Int> new()
+			list add(8)
+			list add(16)
+			list add(32)
+			point := list pointer as Int*
+			expect(point[0], is equal to(list[0]))
+			expect(point[1], is equal to(list[1]))
+			expect(point[2], is equal to(list[2]))
+			list free()
+		})
+		this add("VectorList sort", func {
+			list := VectorList<Int> new()
+			list add(8) . add(16) . add(32)
+			sortedList := list copy()
+			sortedList sort(|v1, v2| v1 < v2)
+			count := list count
+			for (value in sortedList)
+				expect(value, is equal to(list[--count]))
+		})
+		this add("VectorList fold", func {
+			list := VectorList<Int> new()
+			list add(1) . add(2) . add(3)
+			sum := list fold(Int, |v1, v2| v1 + v2, 0)
+			expect(sum, is equal to(6))
+		})
+		this add("Iterator leak", func {
+			list := VectorList<Int> new()
+			list add(1)
+			list add(2)
+			list add(4)
+			// Convenient, but leaks the iterator instance.
+			for ((index, item) in list)
+				expect(item, is equal to(list[index]))
+			list free()
+		})
+		this add("Iterator correct", func {
+			list := VectorList<Int> new()
+			list add(8)
+			list add(16)
+			list add(32)
+			iterator := list iterator()
+			expect(iterator hasNext?(), is true)
+			for ((index, item) in iterator)
+				expect(item, is equal to(list[index]))
+			expect(iterator hasNext?(), is false)
+			secondIterator := list iterator()
+			expect(secondIterator next(), is equal to(8))
+			secondIterator free()
+			iterator free()
+			list free()
+		})
+		this add("VectorList search", This _testVectorListSearch)
+	}
+	_testVectorListSearch: static func {
+		list := VectorList<Int> new()
+		matches := func (instance: Int*) -> Bool { 1 == instance@ }
+		expect(list search(matches), is equal to(-1))
+		for (i in 0 .. 10)
+			list add(i)
+		expect(list search(matches), is equal to(1))
+		(matches as Closure) free()
+		matches = func (instance: Int*) -> Bool { 9 == instance@ }
+		expect(list search(matches), is equal to(9))
+		(matches as Closure) free()
+		matches = func (instance: Int*) -> Bool { 10 == instance@ }
+		expect(list search(matches), is equal to(-1))
+		(matches as Closure) free()
+		list free()
 	}
 }
 
-VectorTest new() run() . free()
+VectorListTest new() run() . free()
