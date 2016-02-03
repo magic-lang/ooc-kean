@@ -8,7 +8,7 @@ This project was originally a fork of the [ooc project](https://github.com/faste
 ## How to run
 To compile, you need the `magic` version of the [Rock compiler](https://github.com/magic-lang/rock). To make life easy, you might also want an editor with ooc/magic syntax highlighting support and a style enforcer. Those are available (for Ubuntu) at the [magic-tools repo](https://github.com/magic-lang/magic-tools#installation-ubuntu), which can also be used to automatically install (and update) rock.
 
-Tests can be run using the `test.sh` script. Compiling anything using this SDK requires the `--gc=off` flag to be passed along to `rock`.
+Tests can be run using the `test.sh` script.
 
 ## How to learn magic
 The above however target the original ooc language and are as such getting more and more outdated. A slightly more updated version is available [here](https://github.com/magic-lang/doc). We try our best to follow the `magic` style guide available also available there.
