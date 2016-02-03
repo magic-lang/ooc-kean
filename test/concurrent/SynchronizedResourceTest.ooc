@@ -66,7 +66,7 @@ SynchronizedResourceTest: class extends Fixture {
 	_testMultipleThreads: static func {
 		thisThreadResources := TestObject recycler _resources get(Thread currentThreadId())
 		count := thisThreadResources count
-		numberOfThreads := 8
+		numberOfThreads := 4
 		objectsPerThread := 1024
 		differentObjects := 256
 		expect(count > 0)
