@@ -19,7 +19,7 @@ DNS: class {
 		Returns information about the host that was found.
 	*/
 	resolve: static func (hostname: String) -> HostInfo {
-		return resolve(hostname, 0, 0)
+		resolve(hostname, 0, 0)
 	}
 	resolve: static func ~filter (hostname: String, socketType: Int, socketFamily: Int) -> HostInfo {
 		hints: AddrInfo
@@ -28,10 +28,9 @@ DNS: class {
 		hints ai_flags = AI_CANONNAME
 		hints ai_family = socketFamily
 		hints ai_socktype = socketType
-		if ((rv := getaddrinfo(hostname, null, hints&, info&)) != 0) {
+		if ((rv := getaddrinfo(hostname, null, hints&, info&)) != 0)
 			DNSError new(gai_strerror(rv as Int) as CString toString()) throw()
-		}
-		return HostInfo new(info)
+		HostInfo new(info)
 	}
 
 	/**
@@ -40,11 +39,11 @@ DNS: class {
 	*/
 	resolveOne: static func (host: String) -> IPAddress {
 		info := resolve(host)
-		return info addresses()[0]
+		info addresses()[0]
 	}
 	resolveOne: static func ~filter (host: String, socketType: Int, socketFamily: Int) -> IPAddress {
 		info := resolve(host, socketType, socketFamily)
-		return info addresses()[0]
+		info addresses()[0]
 	}
 
 	/**
@@ -52,7 +51,7 @@ DNS: class {
 		Returns the hostname of the specified address.
 	*/
 	reverse: static func (ip: IPAddress) -> String {
-		return reverse(SocketAddress new(ip, 0))
+		reverse(SocketAddress new(ip, 0))
 	}
 	reverse: static func ~withSockAddr (sockaddr: SocketAddress) -> String {
 		hostname := CharBuffer new(1024)
@@ -60,22 +59,18 @@ DNS: class {
 			DNSError new(gai_strerror(rv as Int) as CString toString()) throw()
 		}
 		hostname sizeFromData()
-		return hostname toString()
+		hostname toString()
 	}
 
 	/**
 		Returns the hostname of this system.
 	*/
-	hostname: static func -> String {
-		System hostname()
-	}
+	hostname: static func -> String { System hostname() }
 
 	/**
 		Retreive host information about this system.
 	*/
-	localhost: static func -> HostInfo {
-		return resolve(hostname())
-	}
+	localhost: static func -> HostInfo { resolve(hostname()) }
 }
 
 /**
@@ -93,7 +88,6 @@ HostInfo: class {
 	 */
 	init: func (addrinfo: AddrInfo*) {
 		addresses = LinkedList<IPAddress> new()
-
 		name = addrinfo@ ai_canonname as CString toString()
 		info := addrinfo
 		while (info) {
@@ -111,7 +105,5 @@ HostInfo: class {
 	/**
 		Returns a list of IPAddress associated with this host.
 	*/
-	addresses: func -> LinkedList<IPAddress> {
-		addresses
-	}
+	addresses: func -> LinkedList<IPAddress> { this addresses }
 }

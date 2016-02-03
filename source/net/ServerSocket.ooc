@@ -34,9 +34,9 @@ ServerSocket: class extends Socket {
 		ip = DNS resolveOne(ip) toString()
 		type = ipType(ip)
 		super(type, SocketType STREAM, 0)
-		bind(ip, port)
+		this bind(ip, port)
 		if (enabled) {
-			listen()
+			this listen()
 		}
 	}
 
@@ -45,7 +45,7 @@ ServerSocket: class extends Socket {
 	*/
 	bind: func (port: Int) {
 		addr := SocketAddress new(IP4Address new(), port)
-		bind(addr)
+		this bind(addr)
 	}
 
 	/**
@@ -61,19 +61,17 @@ ServerSocket: class extends Socket {
 				case AddressFamily IP6 =>
 					addr = getSocketAddress6(ip, port)
 			}
-			bind(addr)
-		} else {
+			this bind(addr)
+		} else
 			InvalidAddress new("Address must be a valid IPv4 or IPv6 IP.") throw()
-		}
 	}
 
 	/**
 		Bind a local address to the socket.
 	*/
 	bind: func ~withAddr (addr: SocketAddress) {
-		if (bind(descriptor, addr addr(), addr length()) == -1) {
+		if (bind(descriptor, addr addr(), addr length()) == -1)
 			SocketError new() throw()
-		}
 	}
 
 	/**
@@ -81,19 +79,18 @@ ServerSocket: class extends Socket {
 	*/
 	listen: func (backlog: Int) -> Bool {
 		ret := listen(descriptor, backlog)
-		if (ret == -1) {
+		if (ret == -1)
 			SocketError new() throw()
-		}
-		listening = (ret == 0)
-		listening
+		this listening = (ret == 0)
+		this listening
 	}
 
 	/**
 		Places the socket into a listening state, using backlog variable.
 	*/
 	listen: func ~nobacklog -> Bool {
-		listen(backlog)
-		listening?
+		this listen(this backlog)
+		this listening
 	}
 
 	/**
@@ -104,13 +101,12 @@ ServerSocket: class extends Socket {
 	*/
 	accept: func -> TCPServerReaderWriterPair {
 		addr: SockAddr
-		addrSize: Int = SockAddr size
+		addrSize: UInt = SockAddr size
 		conn := accept(descriptor, addr&, addrSize&)
-		if (conn == -1) {
+		if (conn == -1)
 			SocketError new("Failed to accept an incoming connection.") throw()
-		}
 		sock := TCPSocket new(SocketAddress newFromSock(addr&, addrSize), conn)
-		return TCPServerReaderWriterPair new(sock)
+		TCPServerReaderWriterPair new(sock)
 	}
 
 	/**
@@ -118,22 +114,22 @@ ServerSocket: class extends Socket {
 
 		This method will block.
 	*/
-	accept: func ~withClosure (f: func (TCPServerReaderWriterPair) -> Bool) {
-		if (!listening)
-			listen()
+	accept: func ~withClosure (f: Func (TCPServerReaderWriterPair) -> Bool) {
+		if (!this listening)
+			this listen()
 
-		loop(||
+		while (true) {
 			conn := accept()
 			ret := f(conn)
 			version (windows) {
 				shutdown(conn sock descriptor, SD_BOTH)
-			}
-			version (!windows) {
+			} else {
 				shutdown(conn sock descriptor, SHUT_RDWR)
 			}
 			conn close()
-			(conn && ret) as Bool // Break out of the loop if one of conn or ret is 0 or null
-		)
+			if ((conn && ret) as Bool)
+				break // Break out of the loop if one of conn or ret is 0 or null
+		}
 	}
 }
 
