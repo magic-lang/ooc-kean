@@ -35,7 +35,7 @@ OpenGLUv: class extends OpenGLPacked {
 		packed free()
 		result
 	}
-	_createCanvas: override func -> GpuSurface {
+	_createCanvas: override func -> GpuCanvas {
 		result := super()
 		result pen = Pen new(ColorBgra new(128, 128, 128, 128))
 		result
