@@ -1,0 +1,42 @@
+{
+	"name": "ooc-kean",
+	"description": "ooc-kean build configurations",
+	"rootDirectory": "project/root/directory/here",
+	"targets": [
+		{
+			"name": "build",
+			"description": "Build ooc-kean",
+			"command": "./build.sh",
+			"arguments": [],
+			"depends": [
+				"verify"
+			]
+		},
+		{
+			"name": "clean",
+			"description": "Remove temp rock files",
+			"command": "rock",
+			"arguments": ["-x"]
+		},
+		{
+			"name": "verify",
+			"description": "Style analysis",
+			"command": "magic",
+			"arguments": ["-s", "-t", "verify"]
+		},
+		{
+			"name": "test",
+			"description": "Run unit tests.",
+			"command": "./test.sh",
+			"arguments": [],
+			"depends": [
+				"build"
+			]
+		},
+		{
+			"name": "flash device",
+			"command": "echo flash device here",
+			"arguments": []
+		}
+	]
+}

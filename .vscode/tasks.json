@@ -8,22 +8,91 @@
 
 {
 	"version": "0.1.0",
-	"command": "./test.sh",
+	"command": "magic",
 	"isShellCommand": true,
-	"args": [
-		"all",
-		"--allerrors"
-	],
 	"showOutput": "always",
-	"problemMatcher": {
-		"fileLocation": ["absolute"],
-		"pattern": {
-			"regexp": "^(.*):(\\d+):(\\d+):?\\s+(error|warning):?\\s+(.*)$",
-			"file": 1,
-			"line": 2,
-			"column": 3,
-			"severity": 4,
-			"message": 5
+	"tasks": [
+		{
+			"taskName": "build project",
+			"suppressTaskName": true,
+			"isBuildCommand": true,
+			"args": [ "build", "--config", ".configuration/build.json", "${workspaceRoot}" ],
+			"problemMatcher": {
+				"fileLocation": ["absolute"],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):?\\s+(error|warning|info):?\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
+		},
+		{
+			"taskName": "test current file",
+			"suppressTaskName": true,
+			"args": [ "test", "${file}" ],
+			"isTestCommand": true,
+			"problemMatcher": {
+				"fileLocation": ["absolute"],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):?\\s+(error|warning):?\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
+		},
+		{
+			"taskName": "test project",
+			"suppressTaskName": true,
+			"args": [ "test", "${workspaceRoot}" ],
+			"problemMatcher": {
+				"fileLocation": ["absolute"],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):?\\s+(error|warning):?\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
+		},
+		{
+			"taskName": "verify current file",
+			"suppressTaskName": true,
+			"args": [ "verify", "${file}" ],
+			"problemMatcher": {
+				"fileLocation": ["absolute"],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):?\\s+(info):?\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
+		},
+		{
+			"taskName": "verify project",
+			"suppressTaskName": true,
+			"args": [ "verify", "${workspaceRoot}" ],
+			"problemMatcher": {
+				"fileLocation": ["absolute"],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):?\\s+(info):?\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
 		}
-	}
+	]
 }
