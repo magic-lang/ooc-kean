@@ -49,6 +49,11 @@ GpuYuv420Semiplanar: class extends GpuImage {
 		uv := this _uv toRaster() as RasterUv
 		RasterYuv420Semiplanar new(y, uv)
 	}
+	toRasterDefault: override func ~target (target: RasterImage) {
+		yuv := target as RasterYuv420Semiplanar
+		this _y toRaster(yuv y) wait() . free()
+		this _uv toRaster(yuv uv) wait() . free()
+	}
 	create: override func (size: IntVector2D) -> This { this _context createYuv420Semiplanar(size) }
 	_createCanvas: override func -> GpuCanvas { GpuCanvasYuv420Semiplanar new(this, this _context) }
 	upload: override func (image: RasterImage) {

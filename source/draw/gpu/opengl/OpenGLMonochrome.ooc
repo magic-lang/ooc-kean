@@ -25,13 +25,16 @@ OpenGLMonochrome: class extends OpenGLPacked {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: override func -> RasterImage {
+		result := RasterMonochrome new(this size)
+		this toRasterDefault(result)
+		result
+	}
+	toRasterDefault: override func ~target (target: RasterImage) {
 		packed := this context createBgra(IntVector2D new(this size x / 4, this size y))
 		this context packToRgba(this, packed, IntBox2D new(packed size))
-		buffer := ByteBuffer new(this size area)
+		buffer := (target as RasterMonochrome) buffer
 		(packed canvas as OpenGLCanvas) readPixels(buffer)
-		result := RasterMonochrome new(buffer, this size)
 		packed free()
-		result
 	}
 	create: override func (size: IntVector2D) -> This { this context createMonochrome(size) as This }
 	channelCount: static Int = 1
