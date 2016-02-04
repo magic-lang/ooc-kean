@@ -108,8 +108,9 @@ SvgPlot: class {
 			noneColor := ColorBgra new(0, 0, 0, 0)
 			for (j in 0 .. datasets count) {
 				if (noneColor != datasets[j] colorBgra) {
-					datasets[j] color = datasets[j] colorBgra svgRGBToString()
-					datasets[j] opacity = ((datasets[j] colorBgra svgRGBAlpha()) as Float) / 255.0f
+					color := datasets[j] colorBgra
+					datasets[j] color = "rgb(" clone() & color red toString() & "," clone() & color green toString() & "," clone() & color blue toString() & ")" clone()
+					datasets[j] opacity = (color alpha as Float) / 255.0f
 				} else {
 					datasets[j] color = colorList[this _colorCount % this colorList count] clone()
 					datasets[j] opacity = 1

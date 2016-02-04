@@ -121,11 +121,6 @@ ColorBgr: cover {
 	distance: func (other: This) -> Float {
 		((this blue - other blue) as Float pow(2) + (this green - other green) as Float pow(2) + (this red - other red) as Float pow(2)) / 3.0f sqrt()
 	}
-	svgRGBToString: func -> String {
-		result := this red toString() & "," clone() & this green toString() & "," clone() & this blue toString()
-		result
-	}
-
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 }
@@ -152,15 +147,6 @@ ColorBgra: cover {
 	equals: func (other: This) -> Bool { this bgr equals(other bgr) && this alpha == other alpha }
 	blend: func (factor: Float, other: This) -> This { This new(this bgr blend(factor, other bgr), (this alpha * (1 - factor) + other alpha * factor) as Byte) }
 	distance: func (other: This) -> Float { (this bgr distance(other bgr) * 3.0f + (this alpha - other alpha) as Float pow(2)) / 4.0f sqrt() }
-	svgRGBToString: func -> String {
-		result := "rgb(" clone() & this bgr svgRGBToString() & ")" clone()
-		result
-	}
-	svgRGBAlpha: func -> Int {
-		result := this alpha
-		result
-	}
-
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 }
