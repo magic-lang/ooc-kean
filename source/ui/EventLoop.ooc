@@ -9,6 +9,7 @@
 use base
 import DisplayWindow
 import x11/X11EventLoop
+import win32/Win32EventLoop
 
 EventLoop: abstract class {
 	init: func
@@ -17,8 +18,8 @@ EventLoop: abstract class {
 		result: This
 		version((unix || apple) && !android)
 			result = X11EventLoop new()
-		else
-			raise("EventLoop not implemented on this platform!")
+		version(windows)
+			result = Win32EventLoop new()
 		result
 	}
 }
