@@ -7,7 +7,7 @@ Requires: unit
 Requires: draw
 Imports: GpuImage
 Imports: GpuYuv420Semiplanar
-Imports: GpuSurface
+Imports: GpuCanvas
 Imports: GpuMap
 Imports: GpuContext
 Imports: GpuFence

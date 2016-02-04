@@ -10,7 +10,7 @@ use geometry
 use draw
 use base
 use collections
-import GpuImage, GpuMap, GpuSurface, GpuContext, GpuYuv420Semiplanar, GpuMesh
+import GpuImage, GpuMap, GpuCanvas, GpuContext, GpuYuv420Semiplanar, GpuMesh
 
 version(!gpuOff) {
 GpuCanvasYuv420Semiplanar: class extends GpuCanvas {

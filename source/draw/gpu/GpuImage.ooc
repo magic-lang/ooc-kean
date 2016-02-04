@@ -9,7 +9,7 @@
 use draw
 use geometry
 use base
-import GpuContext, GpuFence, GpuSurface
+import GpuContext, GpuFence, GpuCanvas
 
 version(!gpuOff) {
 GpuImageType: enum {
