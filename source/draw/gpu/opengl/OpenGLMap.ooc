@@ -72,7 +72,7 @@ OpenGLMap: class extends GpuMap {
 					case ColorBgra => color := cell as Cell<ColorBgra> get(); program setUniform(key, color red as Float / 255, color green as Float / 255, color blue as Float / 255, color alpha as Float / 255)
 					case ColorUv => color := cell as Cell<ColorUv> get(); program setUniform(key, color u as Float / 255, color v as Float / 255)
 					case ColorYuv => color := cell as Cell<ColorYuv> get(); program setUniform(key, color y as Float / 255, color u as Float / 255, color v as Float / 255)
-					case ColorYuva => color := cell as Cell<ColorYuva> get(); program setUniform(key, color yuv y as Float / 255, color yuv u as Float / 255, color yuv v as Float / 255, color alpha as Float / 255)
+					case ColorYuva => color := cell as Cell<ColorYuva> get(); program setUniform(key, color y as Float / 255, color u as Float / 255, color v as Float / 255, color alpha as Float / 255)
 					case => Debug raise("Invalid cover type in OpenGLMap use!")
 				}
 			} else
