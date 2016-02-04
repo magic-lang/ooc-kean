@@ -101,22 +101,19 @@ AndroidContext: class extends OpenGLContext {
 	}
 	toRaster: override func ~target (source: GpuImage, target: RasterImage) -> Promise {
 		result: Promise
-		match (target) {
-			case (targetImage: GraphicBufferYuv420Semiplanar) =>
-				match (source) {
-					case (sourceImage: GpuYuv420Semiplanar) =>
-						targetImageRgba := targetImage toRgba(this)
-						targetWidth := sourceImage size x / 4
-						padding := targetImage uvPadding % targetImage stride
-						this packToRgba(sourceImage y, targetImageRgba, IntBox2D new(0, 0, targetWidth, targetImage y size y), padding)
-						this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
-						fence := this createFence()
-						fence sync()
-						result = OpenGLPromise new(fence as OpenGLFence)
-					case => super(source, target)
-				}
-			case => super(source, target)
-		}
+		if (target instanceOf(GraphicBufferYuv420Semiplanar) && source instanceOf(GpuYuv420Semiplanar)) {
+			targetImage := target as GraphicBufferYuv420Semiplanar
+			sourceImage := source as GpuYuv420Semiplanar
+			targetImageRgba := targetImage toRgba(this)
+			targetWidth := sourceImage size x / 4
+			padding := targetImage uvPadding % targetImage stride
+			this packToRgba(sourceImage y, targetImageRgba, IntBox2D new(0, 0, targetWidth, targetImage y size y), padding)
+			this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
+			fence := this createFence()
+			fence sync()
+			result = OpenGLPromise new(fence as OpenGLFence)
+		} else
+			super(source, target)
 		result
 	}
 	toRasterAsync: func ~monochrome (gpuImage: OpenGLMonochrome) -> (RasterImage, GpuFence) {
