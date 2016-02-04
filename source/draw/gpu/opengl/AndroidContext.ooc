@@ -11,7 +11,8 @@ use collections
 use draw
 use geometry
 use base
-import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLBgra, OpenGLBgra, OpenGLPacked, OpenGLMonochrome, OpenGLUv, OpenGLMap
+use concurrent
+import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLBgra, OpenGLBgra, OpenGLPacked, OpenGLMonochrome, OpenGLUv, OpenGLMap, OpenGLFence
 import threading/Thread
 
 version(!gpuOff) {
@@ -98,7 +99,8 @@ AndroidContext: class extends OpenGLContext {
 			case => super(source)
 		}
 	}
-	toRaster: override func ~target (source: GpuImage, target: RasterImage) {
+	toRaster: override func ~target (source: GpuImage, target: RasterImage) -> Promise {
+		result: Promise
 		match (target) {
 			case (targetImage: GraphicBufferYuv420Semiplanar) =>
 				match (source)  {
@@ -108,10 +110,14 @@ AndroidContext: class extends OpenGLContext {
 						padding := targetImage uvPadding % targetImage stride
 						this packToRgba(sourceImage y, targetImageRgba, IntBox2D new(0, 0, targetWidth, targetImage y size y), padding)
 						this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
+						fence := this createFence()
+						fence sync()
+						result = OpenGLPromise new(fence as OpenGLFence)
 					case => super(source, target)
 				}
 			case => super(source, target)
 		}
+		result
 	}
 	toRasterAsync: func ~monochrome (gpuImage: OpenGLMonochrome) -> (RasterImage, GpuFence) {
 		(buffer, fence) := this toBuffer(gpuImage, this _packMonochrome)

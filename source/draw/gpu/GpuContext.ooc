@@ -10,6 +10,7 @@ use geometry
 use draw
 use base
 use collections
+use concurrent
 import DrawContext
 import GpuImage, GpuCanvas, GpuMap, GpuFence, GpuYuv420Semiplanar, GpuMesh
 
@@ -33,7 +34,7 @@ GpuContext: abstract class extends DrawContext {
 	finish: func { this createFence() sync() . wait() . free() }
 
 	toRaster: virtual func (source: GpuImage) -> RasterImage { source toRasterDefault() }
-	toRaster: virtual func ~target (source: GpuImage, target: RasterImage) { Debug raise("Using unimplemented function GpuContext::toRaster~target")}
+	toRaster: virtual func ~target (source: GpuImage, target: RasterImage) -> Promise { Debug raise("Using unimplemented function GpuContext::toRaster~target")}
 	toRasterAsync: virtual func (source: GpuImage) -> (RasterImage, GpuFence) {
 		result := this toRaster(source)
 		fence := this createFence()
