@@ -12,8 +12,8 @@ PointerVector: abstract class {
 	_freeContent: Bool
 	count ::= this _count
 
-	init: /* protected */ func ~preallocated (=_backend, =_count, freeContent := false)
-	init: /* protected */ func (=_count, freeContent := false) {
+	init: func ~preallocated (=_backend, =_count, freeContent := false)
+	init: func (=_count, freeContent := false) {
 		this _freeContent = freeContent
 	}
 	free: override func {
@@ -73,15 +73,11 @@ PointerHeapVector: class extends PointerVector {
 		super(count)
 		this _allocate(count)
 	}
-
-	_allocate: func (count: Int) {
-		this _backend = realloc(this _backend, count * Pointer size)
-	}
-
 	resize: override func (count: Int) {
 		super()
 		this _allocate(count)
 	}
+	_allocate: func (count: Int) { this _backend = realloc(this _backend, count * Pointer size) }
 }
 
 PointerStackVector: class extends PointerVector {
