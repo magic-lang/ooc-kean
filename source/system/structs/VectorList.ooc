@@ -148,17 +148,13 @@ VectorList: class <T> extends List<T>{
 	iterator: override func -> Iterator<T> { _VectorListIterator<T> new(this) }
 
 	operator [] (index: Int) -> T {
-		version (safe) {
-			if (index >= this count)
-				raise("Accessing VectorList index out of range in get operator")
-		}
+		version (safe)
+			raise(index >= this count, "Accessing VectorList index out of range in get operator")
 		this _vector[index]
 	}
 	operator []= (index: Int, item: T) {
-		version (safe) {
-			if (index >= this count)
-				raise("Accessing VectorList index out of range in set operator")
-		}
+		version (safe)
+			raise(index >= this count, "Accessing VectorList index out of range in set operator")
 		this _vector[index] = item
 	}
 }

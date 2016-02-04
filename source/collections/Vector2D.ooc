@@ -77,17 +77,13 @@ Vector2D: class <T> {
 	}
 
 	operator [] (row, column: Int) -> T {
-		version (safe) {
-			if (row >= this rowCount || row < 0 || column >= this columnCount || column < 0)
-				raise("Accessing Vector2D index out of range in get operator")
-		}
+		version (safe)
+			raise(row >= this rowCount || row < 0 || column >= this columnCount || column < 0, "Accessing Vector2D index out of range in get operator")
 		this _backend[this _elementPosition(row, column)]
 	}
 	operator []= (row, column: Int, item: T) {
-		version (safe) {
-			if (row >= this rowCount || row < 0 || column >= this columnCount || column < 0)
-				raise("Accessing Vector2D index out of range in set operator")
-		}
+		version (safe)
+			raise(row >= this rowCount || row < 0 || column >= this columnCount || column < 0, "Accessing Vector2D index out of range in set operator")
 		this _backend[this _elementPosition(row, column)] = item
 	}
 }

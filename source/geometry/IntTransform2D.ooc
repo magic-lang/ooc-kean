@@ -102,10 +102,8 @@ IntTransform2D: cover {
 		!(this == other)
 	}
 	operator [] (x, y: Int) -> Int {
-		version (safe) {
-			if (x < 0 || x > 2 || y < 0 || y > 2)
-				raise("Out of bounds in IntTransform2D get operator (#{x}, #{y})")
-		}
+		version (safe)
+			raise(x < 0 || x > 2 || y < 0 || y > 2, "Out of bounds in IntTransform2D get operator (#{x}, #{y})")
 		result := 0
 		match (x) {
 			case 0 =>

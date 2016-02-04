@@ -26,18 +26,14 @@ FloatImage : class {
 		super()
 	}
 	operator [] (x, y: Int) -> Float {
-		version(safe) {
-			if (x > _size x || y > _size y || x < 0 || y < 0)
-				raise("Accessing FloatImage index out of range in get")
-		}
+		version(safe)
+			raise(x > _size x || y > _size y || x < 0 || y < 0, "Accessing FloatImage index out of range in get")
 		(this _pointer + (x + this _size x * y))@ as Float
 	}
 
 	operator []= (x, y: Int, value: Float) {
-		version(safe) {
-			if (x > _size x || y > _size y || x < 0 || y < 0)
-				raise("Accessing FloatImage index out of range in set")
-		}
+		version(safe)
+			raise(x > _size x || y > _size y || x < 0 || y < 0, "Accessing FloatImage index out of range in set")
 		(this _pointer + (x + this _size x * y))@ = value
 	}
 }

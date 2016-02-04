@@ -150,10 +150,8 @@ RasterMonochrome: class extends RasterPacked {
 	}
 
 	getValue: func (x, y: Int) -> Byte {
-		version(safe) {
-			if (x >= this size x || y >= this size y || x < 0 || y < 0)
-				raise("Accessing RasterMonochrome index out of range in getValue")
-		}
+		version(safe)
+			raise(x >= this size x || y >= this size y || x < 0 || y < 0, "Accessing RasterMonochrome index out of range in getValue")
 		(this buffer pointer[y * this stride + x])
 	}
 
@@ -163,10 +161,8 @@ RasterMonochrome: class extends RasterPacked {
 		result
 	}
 	getRowInto: func (row: Int, vector: FloatVectorList) {
-		version(safe) {
-			if (row >= this size y || row < 0)
-				raise("Accessing RasterMonochrome index out of range in getRow")
-		}
+		version(safe)
+			raise(row >= this size y || row < 0, "Accessing RasterMonochrome index out of range in getRow")
 		for (column in 0 .. this size x)
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
@@ -176,27 +172,21 @@ RasterMonochrome: class extends RasterPacked {
 		result
 	}
 	getColumnInto: func (column: Int, vector: FloatVectorList) {
-		version(safe) {
-			if (column >= this size x || column < 0)
-				raise("Accessing RasterMonochrome index out of range in getColumn")
-		}
+		version(safe)
+			raise(column >= this size x || column < 0, "Accessing RasterMonochrome index out of range in getColumn")
 		for (row in 0 .. this size y)
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
 	_createCanvas: override func -> Canvas { RasterMonochromeCanvas new(this) }
 
 	operator [] (x, y: Int) -> ColorMonochrome {
-		version(safe) {
-			if (!this isValidIn(x, y))
-				raise("Accessing RasterMonochrome index out of range in get operator")
-		}
+		version(safe)
+			raise(!this isValidIn(x, y), "Accessing RasterMonochrome index out of range in get operator")
 		ColorMonochrome new(this buffer pointer[y * this stride + x])
 	}
 	operator []= (x, y: Int, value: ColorMonochrome) {
-		version(safe) {
-			if (x >= this size x || y >= this size y || x < 0 || y < 0)
-				raise("Accessing RasterMonochrome index out of range in set operator")
-		}
+		version(safe)
+			raise(x >= this size x || y >= this size y || x < 0 || y < 0, "Accessing RasterMonochrome index out of range in set operator")
 		((this buffer pointer + y * this stride) as ColorMonochrome* + x)@ = value
 	}
 

@@ -69,18 +69,14 @@ Vector: abstract class <T> {
 	}
 
 	operator [] (index: Int) -> T {
-		version (safe) {
-			if (index >= this capacity || index < 0)
-				raise("Accessing Vector index out of range in get operator")
-		}
+		version (safe)
+			raise(index >= this capacity || index < 0, "Accessing Vector index out of range in get operator")
 		this _backend[index]
 	}
 
 	operator []= (index: Int, item: T) {
-		version (safe) {
-			if (index >= this capacity || index < 0)
-				raise("Accessing Vector index out of range in set operator")
-		}
+		version (safe)
+			raise(index >= this capacity || index < 0, "Accessing Vector index out of range in set operator")
 		this _backend[index] = item
 	}
 }
@@ -102,18 +98,14 @@ HeapVector: class <T> extends Vector<T> {
 	}
 
 	operator [] (index: Int) -> T {
-		version (safe) {
-			if (index >= this capacity || index < 0)
-				raise("Accessing Vector index out of range in get operator")
-		}
+		version (safe)
+			raise(index >= this capacity || index < 0, "Accessing Vector index out of range in get operator")
 		this _backend[index]
 	}
 
 	operator []= (index: Int, item: T) {
-		version (safe) {
-			if (index >= this capacity || index < 0)
-				raise("Accessing Vector index out of range in set operator")
-		}
+		version (safe)
+			raise(index >= this capacity || index < 0, "Accessing Vector index out of range in set operator")
 		if (this _freeContent && T inheritsFrom(Object)) {
 			old := this[index] as Object
 			if (old != null)

@@ -175,10 +175,8 @@ FloatTransform3D: cover {
 	}
 	operator [] (x, y: Int) -> Float {
 		result := 0.0f
-		version (safe) {
-			if (x < 0 || x > 3 || y < 0 || y > 3)
-				raise("Out of bounds in FloatTransform3D get operator (#{x}, #{y})")
-		}
+		version (safe)
+			raise(x < 0 || x > 3 || y < 0 || y > 3, "Out of bounds in FloatTransform3D get operator (#{x}, #{y})")
 		match (x) {
 			case 0 =>
 				match (y) {
