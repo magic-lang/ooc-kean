@@ -14,6 +14,17 @@ use base
 use opengl
 
 ToRasterTest: class extends Fixture {
+	bgra := RasterBgra open("test/draw/gpu/input/Flower.png")
+	monochrome := RasterMonochrome open("test/draw/gpu/input/Flower.png")
+	yuv := RasterYuv420Semiplanar open("test/draw/gpu/input/Flower.png")
+	context := OpenGLContext new()
+	free: override func {
+		this bgra free()
+		this monochrome free()
+		this yuv free()
+		this context free()
+		super()
+	}
 	toRasterTestFunction: func (sourceImage: RasterImage) {
 		gpuImage := context createImage(sourceImage)
 		raster := gpuImage toRaster()
@@ -40,13 +51,4 @@ ToRasterTest: class extends Fixture {
 		this add("toRasterTarget yuv", || this toRasterTargetTestFunction(yuv))
 	}
 }
-
-bgra := RasterBgra open("test/draw/gpu/input/Flower.png")
-monochrome := RasterMonochrome open("test/draw/gpu/input/Flower.png")
-yuv := RasterYuv420Semiplanar open("test/draw/gpu/input/Flower.png")
-context := OpenGLContext new()
 ToRasterTest new() run() . free()
-context free()
-bgra free()
-monochrome free()
-yuv free()
