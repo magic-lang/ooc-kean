@@ -113,7 +113,7 @@ ProcessWin32: class extends Process {
 			envLength += 2 // one for the =, one for the \0
 		)
 
-		envString := calloc(1, envLength) as Char*
+		envString := CString new(envLength)
 		index := 0
 		for (k in env keys) {
 			v := env get(k)
