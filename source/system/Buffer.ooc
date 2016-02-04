@@ -12,8 +12,14 @@ Buffer: cover {
 	pointer ::= this _pointer
 	size ::= this _size
 	init: func@ { this init(null, 0) }
-	init: func@ ~allocate (size: Int) { this init(malloc(size), size) }
 	init: func@ ~fromData (=_pointer, =_size)
+	init: func@ ~allocate (size: Int) {
+		data := malloc(size)
+		version (safe)
+			if (data == null)
+				raise("Buffer new() had malloc(%d) return null!" format(size))
+		this init(data, size)
+	}
 	free: func@ -> Bool {
 		result := this _pointer != null && this _size != 0
 		if (result) {
@@ -27,6 +33,9 @@ Buffer: cover {
 		newPointer := this _pointer
 		if (size != this _size) {
 			newPointer = realloc(this _pointer, size)
+			version (safe)
+				if (newPointer == null)
+					raise("Buffer resize() had realloc(%d) return null!" format(size))
 			this _size = size
 		}
 		this _pointer = newPointer
