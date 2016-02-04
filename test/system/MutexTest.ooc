@@ -13,6 +13,7 @@ MutexTest: class extends Fixture {
 	init: func {
 		super("Mutex")
 		this add("basic", This _testBasicUsage)
+		this add("recursive", This _testRecursive)
 	}
 	_testBasicUsage: static func {
 		threadCount := 4
@@ -47,6 +48,40 @@ MutexTest: class extends Fixture {
 		expect(value get(), is equal to(2 * countPerThread * threadCount))
 		(job as Closure) free()
 		value free()
+	}
+	_testRecursive: static func {
+		mutex := RecursiveMutex new()
+		sum := 0
+
+		job := func {
+			mutex lock()
+			mutex lock()
+			sum += 1
+			mutex lock()
+			sum += 1
+			mutex unlock()
+			sum += 1
+			mutex unlock()
+			sum += 1
+			mutex unlock()
+		}
+		other := Thread new(job)
+		mutex lock()
+		mutex lock()
+		other start()
+		mutex lock()
+		expect(sum, is equal to(0))
+		mutex unlock()
+		sum -= 2
+		mutex unlock()
+		sum -= 1
+		expect(sum, is equal to(-3))
+		mutex unlock()
+		other wait()
+		sum -= 1
+		expect(sum, is equal to(0))
+		other free()
+		(job as Closure) free()
 	}
 }
 

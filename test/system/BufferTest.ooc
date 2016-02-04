@@ -70,6 +70,17 @@ BufferTest: class extends Fixture {
 			expect(buffer size, is equal to(8))
 			buffer free()
 		})
+		this add("slice", func {
+			buffer := Buffer new(64)
+			for (i in 0 .. 64)
+				(buffer pointer as Byte*)[i] = i as Byte
+			other := buffer slice(32, 8)
+			expect((other pointer as Byte*)[0] == 32 as Byte)
+			(buffer pointer as Byte*)[32] = 12 as Byte
+			expect((other pointer as Byte*)[0] == 12 as Byte)
+			expect(other size, is equal to(8))
+			buffer free()
+		})
 	}
 }
 
