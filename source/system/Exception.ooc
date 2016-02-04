@@ -197,9 +197,10 @@ OSException: class extends Exception {
 	}
 	init: func ~noOrigin {
 		errorCode := getOSError()
-		if ((message != null) && (!message empty())) {
+		if ((message != null) && (!message empty()))
 			message = message append(':') append(errorCode)
-		} else message = errorCode
+		else
+			message = errorCode
 	}
 }
 

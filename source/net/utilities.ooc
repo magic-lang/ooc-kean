@@ -18,16 +18,12 @@ import berkeley, translation, Socket, Address, Exceptions
 ipType: func (ip: String) -> Int {
 	atColons := ip split(":")
 	atPeriods := ip split(".")
-	if (atColons count >= 2) {
-		// 2 or more colons, assume IPv6
-		AddressFamily IP6
-	} else if (atPeriods count == 4 && atColons count == 1) {
-		// No colons, 4 sections separated by 3 periods, assume IPv4
-		AddressFamily IP4
-	} else {
-		// Who knows what was given, return UNSPEC
-		AddressFamily UNSPEC
-	}
+	if (atColons count >= 2)
+		AddressFamily IP6 // 2 or more colons, assume IPv6
+	else if (atPeriods count == 4 && atColons count == 1)
+		AddressFamily IP4 // No colons, 4 sections separated by 3 periods, assume IPv4
+	else
+		AddressFamily UNSPEC // Who knows what was given, return UNSPEC
 }
 
 /**

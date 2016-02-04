@@ -40,9 +40,8 @@ UDPSocket: class extends Socket {
 		Bind the socket
 	*/
 	bind: func {
-		if (bind(descriptor, remote addr(), remote length()) == -1) {
+		if (bind(descriptor, remote addr(), remote length()) == -1)
 			SocketError new("Could not bind UDP socket") throw()
-		}
 	}
 
 	/**
@@ -61,9 +60,8 @@ UDPSocket: class extends Socket {
 				bytesSent += sendTo(descriptor, dataSubstring, length - bytesSent, flags, remote addr(), remote length())
 			}
 
-		if (bytesSent == -1) {
+		if (bytesSent == -1)
 			SocketError new("Couldn't send an UDP datagram") throw()
-		}
 
 		bytesSent
 	}
