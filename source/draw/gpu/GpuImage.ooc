@@ -9,6 +9,7 @@
 use draw
 use geometry
 use base
+use concurrent
 import GpuContext, GpuFence, GpuCanvas
 
 version(!gpuOff) {
@@ -44,7 +45,9 @@ GpuImage: abstract class extends Image {
 
 	upload: abstract func (image: RasterImage)
 	toRaster: func -> RasterImage { this _context toRaster(this) }
+	toRaster: func ~target (target: RasterImage) -> Promise { this _context toRaster(this, target) }
 	toRasterAsync: func -> (RasterImage, GpuFence) { this _context toRasterAsync(this) }
 	toRasterDefault: abstract func -> RasterImage
+	toRasterDefault: abstract func ~target (target: RasterImage)
 }
 }

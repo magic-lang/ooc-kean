@@ -14,22 +14,41 @@ use base
 use opengl
 
 ToRasterTest: class extends Fixture {
+	bgra := RasterBgra open("test/draw/gpu/input/Flower.png")
+	monochrome := RasterMonochrome open("test/draw/gpu/input/Flower.png")
+	yuv := RasterYuv420Semiplanar open("test/draw/gpu/input/Flower.png")
+	context := OpenGLContext new()
+	free: override func {
+		this bgra free()
+		this monochrome free()
+		this yuv free()
+		this context free()
+		super()
+	}
 	toRasterTestFunction: func (sourceImage: RasterImage) {
 		gpuImage := context createImage(sourceImage)
 		raster := gpuImage toRaster()
 		expect(raster distance(sourceImage), is equal to(0.0f))
-		sourceImage free()
+		gpuImage free()
+		raster free()
+	}
+	toRasterTargetTestFunction: func (sourceImage: RasterImage) {
+		gpuImage := context createImage(sourceImage)
+		raster := sourceImage create(sourceImage size) as RasterImage
+		gpuImage toRaster(raster)
+		expect(raster distance(sourceImage), is equal to(0.0f))
 		gpuImage free()
 		raster free()
 	}
 	init: func {
 		super("ToRaster")
-		this add("toRaster bgra", || this toRasterTestFunction(RasterBgra open("test/draw/gpu/input/Flower.png")))
-		this add("toRaster monochrome", || this toRasterTestFunction(RasterMonochrome open("test/draw/gpu/input/Flower.png")))
-		this add("toRaster yuv", || this toRasterTestFunction(RasterYuv420Semiplanar open("test/draw/gpu/input/Flower.png")))
+		this add("toRaster bgra", || this toRasterTestFunction(bgra))
+		this add("toRaster monochrome", || this toRasterTestFunction(monochrome))
+		this add("toRaster yuv", || this toRasterTestFunction(yuv))
+
+		this add("toRasterTarget bgra", || this toRasterTargetTestFunction(bgra))
+		this add("toRasterTarget monochrome", || this toRasterTargetTestFunction(monochrome))
+		this add("toRasterTarget yuv", || this toRasterTargetTestFunction(yuv))
 	}
 }
-
-context := OpenGLContext new()
 ToRasterTest new() run() . free()
-context free()

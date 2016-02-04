@@ -7,6 +7,7 @@
  */
 
 use draw-gpu
+use concurrent
 import backend/[GLFence, GLContext]
 import OpenGLContext
 import threading/[Mutex, WaitCondition]
@@ -44,6 +45,21 @@ OpenGLFence: class extends GpuFence {
 		this _backend sync()
 		this _syncCondition broadcast()
 		this _mutex unlock()
+	}
+}
+
+OpenGLPromise: class extends Promise {
+	_fence: OpenGLFence
+	init: func (=_fence) { super() }
+	free: override func {
+		this _fence free()
+		super()
+	}
+	sync: func { this _fence sync() }
+	wait: override func -> Bool { this _fence wait() }
+	wait: override func ~timeout (seconds: Double) -> Bool {
+		nanoseconds := 1_000_000_000 * seconds
+		this _fence wait(nanoseconds)
 	}
 }
 }

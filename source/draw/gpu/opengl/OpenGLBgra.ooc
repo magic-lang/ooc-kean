@@ -25,9 +25,13 @@ OpenGLBgra: class extends OpenGLPacked {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
 	toRasterDefault: override func -> RasterImage {
-		buffer := ByteBuffer new(this size area * 4)
+		result := RasterBgra new(this size)
+		this toRasterDefault(result)
+		result
+	}
+	toRasterDefault: override func ~target (target: RasterImage) {
+		buffer := (target as RasterBgra) buffer
 		(this canvas as OpenGLCanvas) readPixels(buffer)
-		RasterBgra new(buffer, this size)
 	}
 	create: override func (size: IntVector2D) -> This { this context createBgra(size) as This }
 	channelCount: static Int = 4
