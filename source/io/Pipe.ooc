@@ -19,7 +19,7 @@ Pipe: abstract class {
 		c
 	}
 	read: func ~string (len: Int) -> String {
-		buf := calloc(1, len + 1) as CString
+		buf := CString new(len)
 		howmuch := read(buf, len)
 		result: String = null
 		if (howmuch != -1) {

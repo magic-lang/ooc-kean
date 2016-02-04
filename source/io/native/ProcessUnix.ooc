@@ -117,10 +117,9 @@ ProcessUnix: class extends Process {
 				chdir(cwd as CString)
 
 			/* run the stuff. */
-			cArgs : CString * = calloc(args count + 1, Pointer size)
-			for (i in 0 .. args count) {
+			cArgs: CString* = calloc(args count + 1, Pointer size)
+			for (i in 0 .. args count)
 				cArgs[i] = args[i] toCString()
-			}
 			cArgs[args count] = null // null-terminated - makes sense
 
 			signal(SIGABRT, sigabrtHandler)
