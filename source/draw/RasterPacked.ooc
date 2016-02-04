@@ -144,10 +144,8 @@ RasterPacked: abstract class extends RasterImage {
 		StbImage writePng(filename, this size x, this size y, this bytesPerPixel, this buffer pointer, this size x * this bytesPerPixel)
 	}
 	swapChannels: func (first, second: Int) {
-		version(safe) {
-			if (first > this bytesPerPixel || second > this bytesPerPixel)
-				raise("Channel number too large")
-		}
+		version(safe)
+			raise(first > this bytesPerPixel || second > this bytesPerPixel, "Channel number too large")
 		pointer := this buffer pointer
 		index := 0
 		while (index < this buffer size) {

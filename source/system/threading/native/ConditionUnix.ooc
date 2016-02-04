@@ -35,10 +35,8 @@ ConditionUnix: class extends WaitCondition {
 		super()
 	}
 	wait: override func (mutex: Mutex) -> Bool {
-		version(safe) {
-			if (mutex class != MutexUnix)
-				raise("ConditionUnix can work only with MutexUnix")
-		}
+		version(safe)
+			raise(mutex class != MutexUnix, "ConditionUnix can work only with MutexUnix")
 		pthread_cond_wait(this _backend, mutex as MutexUnix _backend&) == 0
 	}
 	signal: override func -> Bool { pthread_cond_signal(this _backend) == 0 }

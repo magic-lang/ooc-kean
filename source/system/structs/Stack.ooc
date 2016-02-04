@@ -28,16 +28,14 @@ Stack: class <T> {
 	}
 	pop: func -> T {
 		version(safe)
-			if (this isEmpty)
-				Exception new(This, "Trying to pop an empty stack.") throw()
+			raise(this isEmpty, "Trying to pop an empty stack.", This)
 		this _data[--this _size]
 	}
 	peek: func (index := 0) -> T {
-		version(safe)
-			if (index < 0)
-				Exception new(This, "Trying to peek(%d)! index must be >= 1 <= size" format(index)) throw()
-			else if (index >= this size)
-				Exception new(This, "Trying to peek(%d) a stack of size %d" format(index, this size)) throw()
+		version(safe) {
+			raise(index < 0, "Trying to peek(%d)! index must be >= 1 <= size" format(index), This)
+			raise(index >= this size, "Trying to peek(%d) a stack of size %d" format(index, this size), This)
+		}
 		this _data[this size - index - 1]
 	}
 	clear: func {

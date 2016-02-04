@@ -140,10 +140,8 @@ FloatTransform2D: cover {
 	}
 	operator [] (x, y: Int) -> Float {
 		result := 0.0f
-		version (safe) {
-			if (x < 0 || x > 2 || y < 0 || y > 2)
-				raise("Out of bounds in FloatTransform2D get operator (#{x}, #{y})")
-		}
+		version (safe)
+			raise(x < 0 || x > 2 || y < 0 || y > 2, "Out of bounds in FloatTransform2D get operator (#{x}, #{y})")
 		match (x) {
 			case 0 =>
 				match (y) {

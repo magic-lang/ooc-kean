@@ -286,10 +286,8 @@ Text: cover {
 
 	empty: static This { get { This new() } }
 	_isNumeric: static func (character: Char, base: Int) -> Bool {
-		version(safe) {
-			if (base < 2 || (base > 10 && base != 16))
-				raise("Unsupported numeric base in Text")
-		}
+		version(safe)
+			raise(base < 2 || (base > 10 && base != 16), "Unsupported numeric base in Text")
 		lastValidDigit := base < 10 ? '0' + (base - 1) : '9'
 		result := (character >= '0') && (character <= lastValidDigit)
 		if (!result && base == 16)

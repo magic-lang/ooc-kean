@@ -109,17 +109,16 @@ version(windows) {
 	}
 }
 
-raise: func (message: String) {
-	Exception new(message) throw()
-}
-raise: func ~withClass (class: Class, message: String) {
-	Exception new(class, message) throw()
+raise: func ~withClass (message: String, origin: Class = null) { Exception new(origin, message) throw() }
+raise: func ~assert (condition: Bool, message: String, origin: Class = null) {
+	if (condition)
+		raise(message, origin)
 }
 
 Exception: class {
 	backtraces := Stack<Backtrace> new()
 	origin: Class
-	message : String
+	message: String
 
 	init: func (=origin, =message)
 	init: func ~noOrigin (=message) { this init(null, message) }

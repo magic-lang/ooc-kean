@@ -177,10 +177,8 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		(logValue + 1.0f) floor() * inputSize
 	}
 	_fastFourierTransformHelper: static func (input: This, start, count: Int, buffer: This, bufferOffset: Int, result: This, resultOffset: Int) {
-		version (safe) {
-			if (buffer count < This _fastFourierTransformBufferSize(count))
-				raise("Buffer size too small in fastFourierTransform")
-		}
+		version (safe)
+			raise(buffer count < This _fastFourierTransformBufferSize(count), "Buffer size too small in fastFourierTransform")
 		resultBuffer := result pointer as FloatComplex*
 		inputBuffer := input pointer as FloatComplex*
 		temporaryBuffer := buffer pointer as FloatComplex*

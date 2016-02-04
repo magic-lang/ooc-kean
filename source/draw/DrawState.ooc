@@ -47,8 +47,7 @@ DrawState: cover {
 	// Local region
 	setDestination: func ~TargetSize (destination: IntBox2D) -> This {
 		version(safe)
-			if (this target == null)
-				raise("Can't set local destination relative to a target that does not exist.")
+			raise(this target == null, "Can't set local destination relative to a target that does not exist.")
 		this setDestination(destination, this target size)
 	}
 	// Local region
@@ -87,8 +86,7 @@ DrawState: cover {
 	// Reference transform
 	setTransformReference: func ~TargetSize (transform: FloatTransform3D) -> This {
 		version(safe)
-			if (this target == null)
-				raise("Can't set reference transform relative to a target that does not exist.")
+			raise(this target == null, "Can't set reference transform relative to a target that does not exist.")
 		this setTransformNormalized(transform referenceToNormalized(this target size))
 	}
 	// Reference transform
@@ -108,8 +106,7 @@ DrawState: cover {
 	getTransformNormalized: func -> FloatTransform3D { this _transformNormalized }
 	draw: func {
 		version(safe)
-			if (this target == null)
-				raise("Can't draw without a selected target.")
+			raise(this target == null, "Can't draw without a selected target.")
 		this target canvas draw(this)
 	}
 }
