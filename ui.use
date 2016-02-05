@@ -10,7 +10,9 @@ Imports: x11/X11Window
 Imports: x11/UnixWindow
 Imports: win32/Win32Window
 Imports: win32/Win32DisplayWindow
-version(windows)
+version(windows) {
 	Libs: -lgdi32
-version(linux)
+}
+version(linux) {
 	Libs: -lX11
+}
