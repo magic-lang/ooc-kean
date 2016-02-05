@@ -6,41 +6,17 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-getStandardEquals: func <T> (k1, k2: T) -> Bool {
-	if (T == String)
-		stringEquals(k1, k2)
-	else if (T == CString)
-		cstringEquals(k1, k2)
-	else if (T size == Pointer size)
-		pointerEquals(k1, k2)
-	else if (T size == UInt size)
-		intEquals(k1, k2)
-	else if (T size == Char size)
-		charEquals(k1, k2)
-	else
-		genericEquals(k1, k2)
-}
-
-stringEquals: func <K> (k1, k2: K) -> Bool { k1 as String equals(k2 as String) }
-
-cstringEquals: func <K> (k1, k2: K) -> Bool { k1 as CString == k2 as CString }
-
-pointerEquals: func <K> (k1, k2: K) -> Bool { k1 as Pointer == k2 as Pointer }
-
-intEquals: func <K> (k1, k2: K) -> Bool { k1 as Int == k2 as Int }
-
-charEquals: func <K> (k1, k2: K) -> Bool { k1 as Char == k2 as Char }
-
-genericEquals: func <K> (k1, k2: K) -> Bool { memcmp(k1, k2, K size) == 0 }
-
 HashEntry: cover {
-	key, value: Pointer
+	key: Pointer
+	value: Pointer
 	next: This* = null
-
+	init: func@ { this init(null, null) }
 	init: func@ ~keyVal (=key, =value)
 	free: func {
-		memfree(this key)
-		memfree(this value)
+		if (this key != null)
+			memfree(this key)
+		if (this value != null)
+			memfree(this value)
 		if (this next != null) {
 			temp := this next@
 			temp free()
@@ -49,22 +25,8 @@ HashEntry: cover {
 	}
 }
 
-nullHashEntry: HashEntry
-memset(nullHashEntry&, 0, HashEntry size)
-
-intHash: func <K> (key: K) -> SizeT {
-	result: SizeT = key as Int
-	result
-}
-
-pointerHash: func <K> (key: K) -> SizeT {
-	(key as Pointer) as SizeT
-}
-
-charHash: func <K> (key: K) -> SizeT {
-	// both casts are necessary, casting 'key' directly to UInt would deref a pointer to UInt
-	(key as Char) as SizeT
-}
+intHash: func <K> (key: K) -> SizeT { (key as Int) as SizeT }
+pointerHash: func <K> (key: K) -> SizeT { (key as Pointer) as SizeT }
 
 /**
 	Port of Austin Appleby's Murmur Hash implementation
@@ -134,36 +96,31 @@ ac_X31_hash: func <K> (key: K) -> SizeT {
 }
 
 getStandardHashFunc: func <T> (T: Class) -> Func <T> (T) -> SizeT {
-	if (T == String || T == CString)
+	if (T == String)
 		ac_X31_hash
 	else if (T size == Pointer size)
 		pointerHash
 	else if (T size == UInt size)
 		intHash
-	else if (T size == Char size)
-		charHash
 	else
 		murmurHash
 }
 
 HashMap: class <K, V> extends BackIterable<V> {
-	_size, capacity: SizeT
+	_size: SizeT
+	capacity: SizeT
 	hashKey: Func <K> (K) -> SizeT
-
 	buckets: HashEntry[]
 	keys: VectorList<K>
-
 	size ::= _size
 	isEmpty ::= keys empty
 
 	init: func { init(3) }
-
 	init: func ~withCapacity (=capacity) {
-		_size = 0
-
-		buckets = HashEntry[capacity] new()
-		keys = VectorList<K> new(32, false)
-		hashKey = getStandardHashFunc(K)
+		this _size = 0
+		this buckets = HashEntry[capacity] new()
+		this keys = VectorList<K> new(32, false)
+		this hashKey = getStandardHashFunc(K)
 	}
 	free: override func {
 		for (i in 0 .. this buckets length)
@@ -173,86 +130,69 @@ HashMap: class <K, V> extends BackIterable<V> {
 		super()
 	}
 	getEntry: func (key: K, result: HashEntry*) -> Bool {
-		hash : SizeT = hashKey(key) % capacity
-		entry := buckets[hash]
-
-		if (entry key == null) { return false }
-
-		while (true) {
-			if (getStandardEquals(entry key as K, key)) {
-				if (result) {
-					result@ = entry
+		hash: SizeT = hashKey(key) % capacity
+		entry := this buckets[hash]
+		success := false
+		if (entry key != null)
+			while (true) {
+				if (This _keyEquals(entry key as K, key)) {
+					if (result)
+						result@ = entry
+					success = true
+					break
 				}
-				return true
+				if (entry next)
+					entry = entry next@
+				else
+					break
 			}
-
-			if (entry next) {
-				entry = entry next@
-			} else {
-				return false
-			}
-		}
-		return false
+		success
 	}
-	/**
-	 * Returns the HashEntry associated with a key.
-	 * @access private
-	 * @param key The key associated with the HashEntry
-	 * @return HashEntry
-	 */
 	getEntryForHash: func (key: K, hash: SizeT, result: HashEntry*) -> Bool {
-		entry := buckets[hash]
-
-		if (entry key == null) {
-			return false
-		}
-
-		while (true) {
-			if (getStandardEquals(entry key as K, key)) {
-				if (result) {
-					result@ = entry
+		entry := this buckets[hash]
+		success := false
+		if (entry key != null)
+			while (true) {
+				if (This _keyEquals(entry key as K, key)) {
+					if (result)
+						result@ = entry
+					success = true
+					break
 				}
-				return true
+				if (entry next)
+					entry = entry next@
+				else
+					break
 			}
-
-			if (entry next) {
-				entry = entry next@
-			} else {
-				return false
-			}
-		}
-		return false
+		success
 	}
-	clone: func -> This<K, V> {
+	copy: func -> This<K, V> {
 		copy := This<K, V> new()
-		each(|k, v| copy put(k, v))
+		this each(|k, v| copy put(k, v))
 		copy
 	}
 	merge: func (other: This<K, V>) -> This<K, V> {
-		c := clone()
+		c := this copy()
 		c merge~inplace(other)
 		c
 	}
 	merge: func ~inplace (other: This<K, V>) -> This<K, V> {
-		f := func (k: K, v: V) { put(k, v) }
+		f := func (k: K, v: V) { this put(k, v) }
 		other each(f)
 		(f as Closure) free()
 		this
 	}
-	// If the pair already exists, it is overwritten.
-	put: func (key: K, value: V) -> Bool {
+	put: func (key: K, value: V) {
 		hash: SizeT = hashKey(key) % capacity
 		entry: HashEntry
 
-		if (getEntryForHash(key, hash, entry&)) {
-			// replace value if the key is already existing
+		if (this getEntryForHash(key, hash, entry&))
 			memcpy(entry value, value, V size)
-		} else {
-			keys add(key)
-
-			current := buckets[hash]
+		else {
+			this keys add(key)
+			current := this buckets[hash]
 			if (current key != null) {
-				currentPointer := (buckets data as HashEntry*)[hash]&
+				currentPointer := (this buckets data as HashEntry*)[hash]&
 
 				while (currentPointer@ next)
 					currentPointer = currentPointer@ next
@@ -277,59 +217,52 @@ HashMap: class <K, V> extends BackIterable<V> {
 
 				buckets[hash] = entry
 			}
-			_size += 1
-
-			if ((_size as Float / capacity as Float) > 0.75)
-				resize(_size * (_size > 50000 ? 2 : 4))
+			this _size += 1
+			if ((this _size as Float / this capacity as Float) > 0.75)
+				resize(this _size * (this _size > 50000 ? 2 : 4))
 		}
-		true
-	}
-	add: func (key: K, value: V) -> Bool {
-		put(key, value)
 	}
 	get: func (key: K) -> V {
 		entry: HashEntry
-		if (getEntry(key, entry&))
-			return entry value as V
-		return null
+		result: V = null
+		if (this getEntry(key, entry&))
+			result = entry value as V
+		result
 	}
 	contains: func (key: K) -> Bool {
-		getEntry(key, null)
+		this getEntry(key, null)
 	}
 	remove: func (key: K) -> Bool {
 		hash : SizeT = hashKey(key) % capacity
-		prev = null : HashEntry*
-		entry: HashEntry* = (buckets data as HashEntry*)[hash]&
+		prev: HashEntry* = null
+		entry: HashEntry* = (this buckets data as HashEntry*)[hash]&
 
 		result := false
 		if (entry@ key != null) {
 			while (true) {
-				if (getStandardEquals(entry@ key as K, key)) {
+				if (This _keyEquals(entry@ key as K, key)) {
 					memfree(entry@ key)
 					memfree(entry@ value)
 
 					if (prev)
-						prev@ next = entry@ next // re-connect the previous to the next one
+						prev@ next = entry@ next
 					else if (entry@ next)
-						buckets[hash] = entry@ next@ // just put the next one instead of us
+						this buckets[hash] = entry@ next@
 					else
-						buckets[hash] = nullHashEntry
+						this buckets[hash] = HashEntry new()
 
 					for (i in 0 .. keys count) {
 						cKey := keys[i]
-						if (getStandardEquals(key, cKey)) {
-							keys removeAt(i)
+						if (This _keyEquals(key, cKey)) {
+							this keys removeAt(i)
 							break
 						}
 					}
-					_size -= 1
+					this _size -= 1
 					result = true
 					break
 				}
-
-				// do we have a next element?
 				if (entry@ next) {
-					// save the previous just to know where to reconnect
 					prev = entry
 					entry = entry@ next
 				} else
@@ -338,88 +271,83 @@ HashMap: class <K, V> extends BackIterable<V> {
 		}
 		result
 	}
-	resize: func (_capacity: SizeT) -> Bool {
-		oldCapacity := capacity
-		oldBuckets := buckets
-
-		oldKeys := keys copy()
-		keys clear()
-		_size = 0
-
-		/* Transfer old buckets to new buckets! */
-		capacity = _capacity
-		buckets = HashEntry[capacity] new()
-
+	resize: func (_capacity: SizeT) {
+		oldCapacity := this capacity
+		oldBuckets := this buckets
+		oldKeys := this keys copy()
+		this keys clear()
+		this _size = 0
+		this capacity = _capacity
+		this buckets = HashEntry[capacity] new()
 		for (i in 0 .. oldCapacity) {
 			entry := oldBuckets[i]
-			if (entry key == null) continue
-
-			put(entry key as K, entry value as V)
-
-			old := entry
-			while (entry next) {
-				entry = entry next@
-				put(entry key as K, entry value as V)
+			if (entry key != null) {
+				this put(entry key as K, entry value as V)
+				old := entry
+				while (entry next) {
+					entry = entry next@
+					put(entry key as K, entry value as V)
+				}
+				old free()
 			}
-			old free()
 		}
 		oldBuckets free()
-		// restore old keys to keep order
-		keys free()
-		keys = oldKeys
-		true
+		this keys free()
+		this keys = oldKeys
 	}
 	iterator: override func -> BackIterator<V> {
 		HashMapValueIterator<K, V> new(this)
 	}
 	backIterator: func -> BackIterator<V> {
 		iter := HashMapValueIterator<K, V> new(this)
-		iter index = keys count
+		iter index = this keys count
 		iter
 	}
 	clear: func {
-		_size = 0
-		for (i in 0 .. capacity)
-			buckets[i] = nullHashEntry
-		keys clear()
+		this _size = 0
+		for (i in 0 .. this capacity)
+			this buckets[i] = HashEntry new()
+		this keys clear()
 	}
 	each: func ~withKeys (f: Func (K, V)) {
-		for (i in 0 .. keys count) {
+		for (i in 0 .. this keys count) {
 			key := keys[i]
 			f(key, get(key))
 		}
 	}
 	each: func (f: Func (V)) {
-		for (i in 0 .. keys count)
-			f(get(keys[i]))
+		for (i in 0 .. this keys count)
+			f(get(this keys[i]))
+	}
+	_keyEquals: static func <T> (first, second: T) -> Bool {
+		match (T) {
+			case String => first as String equals(second as String)
+			case Pointer => first as Pointer == second as Pointer
+			case Int => first as Int == second as Int
+			case => memcmp(first, second, T size) == 0
+		}
 	}
 }
 
 HashMapValueIterator: class <K, T> extends BackIterator<T> {
 	map: HashMap<K, T>
 	index := 0
-
 	init: func ~withMap (=map)
-
-	hasNext: override func -> Bool { index < map keys count }
-
+	hasNext: override func -> Bool { this index < this map keys count }
+	hasPrevious: override func -> Bool { this index > 0 }
 	next: override func -> T {
-		key := map keys[index]
+		key := this map keys[this index]
 		index += 1
-		map get(key)
+		this map get(key)
 	}
-
-	hasPrevious: override func -> Bool { index > 0 }
-
 	prev: override func -> T {
 		index -= 1
-		key := map keys[index]
-		map get(key)
+		key := this map keys[this index]
+		this map get(key)
 	}
-
 	remove: override func -> Bool {
-		result := map remove(map keys[index])
-		if (index <= map keys count)
+		result := this map remove(map keys[this index])
+		if (index <= this map keys count)
 			index -= 1
 		result
 	}

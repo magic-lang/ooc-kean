@@ -102,11 +102,11 @@ HashDictionaryTest: class extends Fixture {
 			dictionary free()
 			dictionary2 free()
 		})
-		this add("Clone", func {
+		this add("Copy", func {
 			dictionary := HashDictionary new()
 			dictionary add("First", "First")
 			dictionary add("Int", 1)
-			dictionary2 := dictionary clone()
+			dictionary2 := dictionary copy()
 			dictionary2 add ("Second", "Second")
 			expect(dictionary get("Second", "Default") == "Default", is true)
 			expect(dictionary get("First", "Default") == "First", is true)
