@@ -6,25 +6,33 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import native/[ThreadLocalUnix, ThreadLocalWin32]
+import ../structs/HashMap
+import Thread
+import Mutex
 
-ThreadLocal: abstract class <T> {
-	set: abstract func (value: T)
-	get: abstract func -> T
-	hasValue: abstract func -> Bool
-	new: static func <T> -> This<T> {
-		result: This<T> = null
-		version (unix || apple)
-			result = ThreadLocalUnix<T> new() as This
-		version (windows)
-			result = ThreadLocalWin32<T> new() as This
-		if (result == null)
-			Exception new(This, "Unsupported platform!\n") throw()
+ThreadLocal: class <T> {
+	_values := HashMap<Long, T> new()
+	_mutex := Mutex new()
+	init: func
+	set: func (value: T) {
+		this _mutex lock()
+		this _values put(Thread currentThreadId(), value)
+		this _mutex unlock()
+	}
+	get: func -> T {
+		this _mutex lock()
+		value := this _values get(Thread currentThreadId())
+		this _mutex unlock()
+		value
+	}
+	hasValue: func -> Bool {
+		this _mutex lock()
+		result := this _values contains(Thread currentThreadId())
+		this _mutex unlock()
 		result
 	}
-	new: static func ~withVal <T> (val: T) -> This <T> {
-		instance := This<T> new()
-		instance set(val)
-		instance
+	free: override func {
+		this _values free()
+		this _mutex free()
 	}
 }
