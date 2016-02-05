@@ -241,13 +241,8 @@ extend Float {
 		result
 	}
 	sineInterpolation: func -> Float {
-		result := 0.0f
 		absoluteValue := this absolute
-		if (absoluteValue > 1.0f)
-			result = 1.0f
-		else
-			result = (sin((absoluteValue - 0.5f) * pi) + 1.0f) / 2.0f
-		result
+		absoluteValue > 1.f ? 1.f : (sin((absoluteValue - 0.5f) * pi) + 1.0f) / 2.0f
 	}
 
 	maximum: func (other: This) -> This { this > other ? this : other }
