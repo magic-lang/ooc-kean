@@ -78,9 +78,8 @@ version (unix || apple) {
 	_getcwd: extern (getcwd) func (buf: CString, size: SizeT) -> CString
 	ooc_get_cwd: unmangled func -> String {
 		result := CharBuffer new(File MAX_PATH_LENGTH)
-		if (!_getcwd(result data as CString, File MAX_PATH_LENGTH)) {
+		if (!_getcwd(result data as CString, File MAX_PATH_LENGTH))
 			OSException new("error trying to getcwd! ") throw()
-		}
 		result sizeFromData()
 		String new (result)
 	}
@@ -214,11 +213,10 @@ version (unix || apple) {
 				return false
 			}
 			mode := fstatResult st_mode
-			if (exec) {
+			if (exec)
 				mode |= (S_IXUSR | S_IXGRP | S_IXOTH)
-			} else {
+			else
 				mode &= ~(S_IXUSR | S_IXGRP | S_IXOTH)
-			}
 			result := fchmod(fd, mode) == 0
 			if (close(fd) != 0)
 				result = false
@@ -277,9 +275,8 @@ version (unix || apple) {
 			assert(!path empty())
 			actualPath := calloc(1, MAX_PATH_LENGTH) as CString
 			ret := realpath(path, actualPath)
-			if (ret == null) {
+			if (ret == null)
 				OSException new("failed to get absolute path for " + path) throw()
-			}
 			actualPath toString()
 		}
 
@@ -289,20 +286,17 @@ version (unix || apple) {
 		 */
 		getAbsoluteFile: func -> File {
 			actualPath := getAbsolutePath()
-			if (path != actualPath) {
+			if (path != actualPath)
 				return File new(actualPath)
-			}
 			return this
 		}
 
 		_getChildren: func <T> (T: Class) -> VectorList<T> {
-			if (!dir()) {
+			if (!dir())
 				Exception new(This, "Trying to get the children of the non-directory '" + path + "'!") throw()
-			}
 			dir := opendir(path as CString)
-			if (!dir) {
+			if (!dir)
 				Exception new(This, "Couldn't open directory '" + path + "' for reading!") throw()
-			}
 
 			result := VectorList<T> new()
 			entry := readdir(dir)

@@ -29,15 +29,13 @@ FileWriter: class extends Writer {
 	}
 	init: func ~withMode (fileName, mode: String) {
 		this file = FStream open(fileName, mode)
-		if (!file) {
+		if (!file)
 			Exception new(This, "Error creating FileWriter for: " + fileName) throw()
-		}
 	}
 	init: func ~withModeAndFlags (fileName, mode: String, flags: Int) {
 		this file = FStream open(fileName, mode, flags)
-		if (!file) {
+		if (!file)
 			Exception new(This, "File not found: " + fileName) throw()
-		}
 	}
 	init: func ~withFStream (=file)
 	init: func ~withNameOverwrite (fileName: String) { this init(fileName, false) }

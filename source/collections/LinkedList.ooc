@@ -117,7 +117,7 @@ LinkedList: class <T> {
 		result := false
 		i := this indexOf(data)
 		if (i != -1) {
-			removeAt(i)
+			this removeAt(i)
 			result = true
 		}
 		result

@@ -57,9 +57,8 @@ version (windows) {
 		handle: HModule
 		init: func (=path) {
 			handle = LoadLibraryA(path)
-			if (!handle) {
+			if (!handle)
 				handle = LoadLibraryA(path + suffix)
-			}
 			success = (handle != null)
 		}
 		symbol: override func (name: String) -> Pointer {

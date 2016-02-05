@@ -67,26 +67,24 @@ VectorList: class <T> extends List<T>{
 	}
 	search: override func (matches: Func (T*) -> Bool) -> Int {
 		result := -1
-		for (index in 0 .. this count) {
+		for (index in 0 .. this count)
 			if (matches(this[index]&)) {
 				result = index
 				break
 			}
-		}
 		result
 	}
 	sort: override func (greaterThan: Func (T, T) -> Bool) {
 		inOrder := false
 		while (!inOrder) {
 			inOrder = true
-			for (i in 0 .. count - 1) {
+			for (i in 0 .. count - 1)
 				if (greaterThan(this[i], this[i + 1])) {
 					inOrder = false
 					tmp := this[i]
 					this[i] = this[i + 1]
 					this[i + 1] = tmp
 				}
-			}
 		}
 	}
 	copy: override func -> This<T> {

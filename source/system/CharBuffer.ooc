@@ -87,9 +87,8 @@ CharBuffer: class extends Iterable<Char> {
 	/** sets capacity and size flag, and a zero termination */
 	setLength: func (newLength: Int) {
 		if (newLength != size || newLength == 0) {
-			if (newLength > capacity || newLength == 0) {
+			if (newLength > capacity || newLength == 0)
 				setCapacity(newLength)
-			}
 			size = newLength
 			data[size] = '\0'
 		}
@@ -215,15 +214,11 @@ CharBuffer: class extends Iterable<Char> {
 
 	compare: func (other: This, start, length: Int) -> Bool {
 		_checkLength(length)
-		if (size < (start + length) || other size < length) {
+		if (size < (start + length) || other size < length)
 			return false
-		}
-
-		for (i in 0 .. length) {
-			if (data[start + i] != other[i]) {
+		for (i in 0 .. length)
+			if (data[start + i] != other[i])
 				return false
-			}
-		}
 		true
 	}
 

@@ -31,7 +31,7 @@ Demangler: class {
 				}
 			}
 
-			if (reader peek() upper()) {
+			if (reader peek() upper())
 				while (reader hasNext()) {
 					c := reader read()
 					match c {
@@ -41,7 +41,6 @@ Demangler: class {
 							result type += c
 					}
 				}
-			}
 
 			result name = reader readAll()
 		}

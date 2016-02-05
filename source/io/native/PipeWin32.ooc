@@ -21,9 +21,8 @@ PipeWin32: class extends Pipe {
 		saAttr securityDescriptor = null
 
 		/* Try to open a new pipe */
-		if (!CreatePipe(readFD&, writeFD&, saAttr&, 0)) {
+		if (!CreatePipe(readFD&, writeFD&, saAttr&, 0))
 			WindowsException new(This, GetLastError(), "Failed to create pipe") throw()
-		}
 	}
 	read: override func ~cstring (buf: CString, len: Int) -> Int {
 		bytesRead: ULong
@@ -49,9 +48,8 @@ PipeWin32: class extends Pipe {
 		// non-blocking mode) regardless of how many bytes were written.
 		success := WriteFile(writeFD, data, len as Long, bytesWritten&, null)
 
-		if (!success) {
+		if (!success)
 			WindowsException new(This, GetLastError(), "Failed to write to pipe") throw()
-		}
 
 		bytesWritten
 	}

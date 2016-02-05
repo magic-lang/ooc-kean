@@ -59,9 +59,8 @@ version(windows) {
 	 * remove implementation
 	 */
 	_remove: unmangled func (file: File) -> Bool {
-		if (file dir()) {
+		if (file dir())
 			return RemoveDirectory(file path)
-		}
 		return DeleteFile(file path)
 	}
 
@@ -182,9 +181,8 @@ version(windows) {
 		}
 
 		mkdir: override func ~withMode (mode: Int) -> Int {
-			if (relative()) {
+			if (relative())
 				return getAbsoluteFile() mkdir()
-			}
 
 			p := parent
 			if (!p exists()) parent mkdir()
@@ -242,9 +240,8 @@ version(windows) {
 		 */
 		getLongPath: func -> String {
 			abs := getAbsoluteFile()
-			if (!abs exists()) {
+			if (!abs exists())
 				Exception new(class, "Called File getLongPath on non-existing file %s" format(abs path)) throw()
-			}
 			longPath := CharBuffer new(File MAX_PATH_LENGTH)
 			longPath setLength(GetLongPathName(abs path toCString(), longPath data, File MAX_PATH_LENGTH))
 			longPath toString()
@@ -256,9 +253,8 @@ version(windows) {
 			searchPath := path + "\\*"
 			hFile := FindFirstFile(searchPath toCString(), ffd&)
 
-			if (hFile == INVALID_HANDLE_VALUE) {
+			if (hFile == INVALID_HANDLE_VALUE)
 				return result
-			}
 
 			running := true
 			while (running) {
@@ -294,10 +290,8 @@ version(windows) {
 		_normalizePath: static func (in: String) -> String {
 			// normalize "c:/Dev" to "C:\Dev"
 			result := in replaceAll("/", "\\")
-			if (result size >= 2 && result[1] == ':') {
-				// normalize "c:\Dev" to "C:\Dev"
-				result = result[0 .. 1] toUpper() + result[1 .. -1]
-			}
+			if (result size >= 2 && result[1] == ':')
+				result = result[0 .. 1] toUpper() + result[1 .. -1] // normalize "c:\Dev" to "C:\Dev"
 			result
 		}
 	}

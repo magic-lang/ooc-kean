@@ -135,12 +135,11 @@ SvgPlot: class {
 	setLegends: func (size, plotAreaSize: FloatVector2D) -> String {
 		result := "<svg desc='Legends' x='" << ((size x - plotAreaSize x) / 2) toString() >> "' y='" & ((size y - plotAreaSize y) / 2) toString() >> "' width='" & plotAreaSize x toString() >> "' height='" & plotAreaSize y toString() >> "' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:drag='http://www.codedread.com/dragsvg' onload='initializeDraggableElements();' onmouseup='mouseUp(evt)' onmousemove='mouseMove(evt)'>\n<script id='draggableLibrary' xlink:href='http://www.codedread.com/dragsvg.js'/>\n<g id='Legend' drag:enable='true'>\n"
 		legendCounter := 0
-		for (i in 0 .. this datasets count) {
+		for (i in 0 .. this datasets count)
 			if (this datasets[i] label != "") {
 				legendCounter += 1
 				result = result & this datasets[i] getSvgLegend(legendCounter, fontSize)
 			}
-		}
 		result >> "</g>\n</svg>\n"
 	}
 }
