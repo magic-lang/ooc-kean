@@ -29,14 +29,18 @@ ScatterPlotData2D: class extends PlotData2D {
 	init: func ~default {
 		super()
 	}
-	init: func ~dataSeries (dataSeries: VectorList<FloatPoint2D>, label := "", colorBgra := ColorBgra new()) {
+	init: func ~dataSeries (dataSeries: VectorList<FloatPoint2D>, label := "", colorBgra := ColorBgra new(), size := 5.f, shape := Shape Circle) {
 		super(dataSeries, label, colorBgra)
+		this _scalingRelativeLineWidth = size
+		this _shape = shape
+	}
+	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new(), size := 5.f, shape := Shape Circle) {
+		super(xSeries, ySeries, label, colorBgra)
+		this _scalingRelativeLineWidth = size
+		this _shape = shape
 	}
 	init: func ~color (dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
 		super(dataSeries, "", colorBgra)
-	}
-	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new()) {
-		super(xSeries, ySeries, label, colorBgra)
 	}
 	getSvg: override func (transform: FloatTransform2D) -> String {
 		result := ""
