@@ -16,6 +16,7 @@ ThreadTest: class extends Fixture {
 		this add("starting thread", This _testStartingThread)
 		version (!windows) { this add("canceling thread", This _testCancelation) }
 		this add("thread id", This _testThreadId)
+		this add("timed wait", This _timedJoin)
 	}
 	_testStartingThread: static func {
 		threadStarted := Cell<Int> new(0)
@@ -79,6 +80,21 @@ ThreadTest: class extends Fixture {
 		otherId free()
 		(job as Closure) free()
 		expect(Thread equals(myId, Thread currentThreadId()))
+	}
+	_timedJoin: static func {
+		job := func {
+			sum := 0
+			Time sleepMilli(200)
+			for (i in 0 .. 100_000_000)
+				sum += 1
+			Time sleepMilli(200)
+		}
+		thread := Thread new(job)
+		expect(thread start())
+		expect(thread wait(0.01) == false)
+		expect(thread wait(10.0) == true)
+		thread free()
+		(job as Closure) free()
 	}
 }
 

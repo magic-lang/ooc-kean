@@ -45,13 +45,6 @@ Char: cover from char {
 	whitespace: func -> Bool { this == ' ' || this == '\f' || this == '\n' ||this == '\r' || this == '\t' || this == '\v' }
 	blank: func -> Bool { this == ' ' || this == '\t' }
 	hexDigit: func -> Bool { this digit() || (this >= 'A' && this <= 'F') || (this >= 'a' && this <= 'f') }
-	toInt: func -> Int {
-		result := -1
-		if (this digit())
-			result = (this - '0') as Int
-		result
-	}
-
 	toString: func -> String { String new(this& as CString, 1) }
 	print: func { fputc(this, stdout) }
 	print: func ~withStream (stream: FStream) { fputc(this, stream) }
@@ -66,7 +59,7 @@ Char: cover from char {
 	containedIn: func (s: String) -> Bool {
 		this containedIn(s _buffer data, s size)
 	}
-	containedIn: func ~charWithLength (s : Char*, sLength: SizeT) -> Bool {
+	containedIn: func ~charWithLength (s: Char*, sLength: SizeT) -> Bool {
 		result := false
 		for (i in 0 .. sLength)
 			if ((s + i)@ == this) {
@@ -77,6 +70,12 @@ Char: cover from char {
 	}
 	compareWith: func (compareFunc: Func (Char, Char*, SizeT) -> SSizeT, target: Char*, targetSize: SizeT) -> SSizeT {
 		compareFunc(this, target, targetSize)
+	}
+	toInt: func -> Int {
+		result := -1
+		if (this digit())
+			result = (this - '0') as Int
+		result
 	}
 }
 

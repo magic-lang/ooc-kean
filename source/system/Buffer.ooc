@@ -49,7 +49,7 @@ Buffer: cover {
 			start = this _size + start
 		if (distance < 0)
 			start -= size
-		start < this size ? This new(this _pointer + start, size minimum(this _size - start)) : This empty
+		start < this size ? This new(this _pointer as Byte* + start, size minimum(this _size - start)) : This empty
 	}
 	copy: func -> This { // call by value -> modifies copy of cover
 		result: This
