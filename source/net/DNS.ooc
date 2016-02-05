@@ -106,4 +106,9 @@ HostInfo: class {
 		Returns a list of IPAddress associated with this host.
 	*/
 	addresses: func -> LinkedList<IPAddress> { this addresses }
+
+	free: override func {
+		this addresses free()
+		super()
+	}
 }

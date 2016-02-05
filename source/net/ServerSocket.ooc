@@ -61,7 +61,8 @@ ServerSocket: class extends Socket {
 				case AddressFamily IP6 =>
 					addr = getSocketAddress6(ip, port)
 			}
-			this bind(addr)
+			if (addr)
+				this bind(addr)
 		} else
 			InvalidAddress new("Address must be a valid IPv4 or IPv6 IP.") throw()
 	}
@@ -120,6 +121,8 @@ ServerSocket: class extends Socket {
 
 		while (true) {
 			conn := accept()
+			if (!conn)
+				break
 			ret := f(conn)
 			version (windows) {
 				shutdown(conn sock descriptor, SD_BOTH)
@@ -127,7 +130,7 @@ ServerSocket: class extends Socket {
 				shutdown(conn sock descriptor, SHUT_RDWR)
 			}
 			conn close()
-			if ((conn && ret) as Bool)
+			if (ret)
 				break // Break out of the loop if one of conn or ret is 0 or null
 		}
 	}
