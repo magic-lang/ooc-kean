@@ -68,15 +68,12 @@ BlockedQueue: class <T> extends SynchronizedQueue<T> {
 	wait: func (isOk := null as Bool*) -> T {
 		result: T = null
 		this _mutex lock()
-		while (this empty) {
+		while (this empty && !this _canceled)
 			this _populated wait(this _mutex)
-			if (this _canceled) {
-				if (isOk)
-					isOk@ = false
-				break
-			}
-		}
-		if (!this _canceled)
+		if (this _canceled) {
+			if (isOk)
+				isOk@ = false
+		} else
 			result = this _backend dequeue(result)
 		this _mutex unlock()
 		result
