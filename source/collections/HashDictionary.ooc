@@ -17,7 +17,7 @@ HashDictionary: class {
 		this _hashMap = HashMap<String, Cell<Pointer>> new(capacity)
 	}
 	init: func ~copy (other: This) {
-		hashMapClone := other _hashMap clone()
+		hashMapClone := other _hashMap copy()
 		this _hashMap = HashMap<String, Cell<Pointer>> new(other _hashMap capacity)
 		this _hashMap = hashMapClone
 	}
@@ -29,14 +29,14 @@ HashDictionary: class {
 		this _hashMap free()
 		super()
 	}
-	clone: func -> This {
+	copy: func -> This {
 		result := This new()
-		hashMapClone := this _hashMap clone()
+		hashMapClone := this _hashMap copy()
 		result _hashMap = hashMapClone
 		result
 	}
 	merge: func (other: This) -> This {
-		result := this clone()
+		result := this copy()
 		result _hashMap merge~inplace(other _hashMap)
 		result
 	}
@@ -70,11 +70,11 @@ HashDictionary: class {
 		}
 		result
 	}
-	put: func <T> (key: String, value: T) -> Bool {
+	put: func <T> (key: String, value: T) {
 		tmp := Cell<T> new(value)
 		this _hashMap put(key, tmp)
 	}
-	add: func <T> (key: String, value: T) -> Bool {
+	add: func <T> (key: String, value: T) {
 		if (_hashMap contains(key))
 			this remove(key)
 		if (T inheritsFrom(Object))
