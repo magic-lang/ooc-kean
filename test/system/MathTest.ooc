@@ -145,6 +145,13 @@ MathTest: class extends Fixture {
 			expect(nearZero greaterThan(0.0), is false)
 			expect(nearZero lessThan(0.0), is false)
 		})
+		this add("SineInterpolation", func {
+			expect(0.0f sineInterpolation(), is equal to(0.0f) within(floatTolerance))
+			expect(0.5f sineInterpolation(), is equal to(0.5f) within(floatTolerance))
+			expect(1.0f sineInterpolation(), is equal to(1.0f) within(floatTolerance))
+			expect(0.25f sineInterpolation() < 0.25f, is true)
+			expect(0.75f sineInterpolation() > 0.75f, is true)
+		})
 	}
 }
 
