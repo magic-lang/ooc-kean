@@ -10,7 +10,7 @@ import threading/ThreadLocal
 import structs/Stack
 import Backtrace
 
-include setjmp, assert, errno
+include setjmp, assert, errno, stdint
 
 version(windows) {
 	include windows
