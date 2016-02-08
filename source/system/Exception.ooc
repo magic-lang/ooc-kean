@@ -6,7 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import threading/ThreadLocal
 import Backtrace
 
 include setjmp, assert, errno, stdint
@@ -41,23 +40,17 @@ StackFrame: cover from _StackFrame* {
 
 ExceptionContext: class {
 	_exceptionJumpLabel := 1
-	_localFrames := ThreadLocal<Stack<StackFrame>> new()
-	_currentException := ThreadLocal<Exception> new()
+	_localFrames := Stack<StackFrame> new()
+	_currentException: Exception
 	_stackFramesToDelete := Stack<StackFrame> new()
 	exception: Exception {
-		get { this _currentException get() }
-		set (value) { this _currentException set(value) }
+		get { this _currentException }
+		set (value) { this _currentException = value }
 	}
 	init: func
 	pushStackFrame: func -> StackFrame {
-		stack: Stack<StackFrame>
-		if (!this _localFrames hasValue())
-			stack = Stack<StackFrame> new()
-		else
-			stack = this _localFrames get()
 		frame := StackFrame new()
-		stack push(frame)
-		this _localFrames set(stack)
+		this _localFrames push(frame)
 		frame
 	}
 	cleanupStackFrames: func {
@@ -66,17 +59,17 @@ ExceptionContext: class {
 				frame free()
 	}
 	popStackFrame: func {
-		if ((frame := this _localFrames get() pop()))
+		if ((frame := this _localFrames pop()))
 			frame free()
 		this cleanupStackFrames()
 	}
 	takeStackFrame: func -> StackFrame {
-		frame := this _localFrames get() pop()
+		frame := this _localFrames pop()
 		this _stackFramesToDelete push(frame)
 		frame
 	}
 	hasStackFrame: func -> Bool {
-		this _localFrames hasValue() && this _localFrames get() size > 0
+		!this _localFrames isEmpty
 	}
 }
 
