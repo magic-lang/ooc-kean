@@ -100,6 +100,8 @@ HostInfo: class {
 			}
 			info = info@ ai_next
 		}
+		if (addrinfo)
+			freeaddrinfo(addrinfo)
 	}
 
 	/**
