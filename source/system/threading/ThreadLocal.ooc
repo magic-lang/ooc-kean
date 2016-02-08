@@ -11,7 +11,7 @@ import Thread
 import Mutex
 
 ThreadLocal: class <T> {
-	_values := HashMap<Long, T> new()
+	_values := HashMap<ULong, T> new()
 	_mutex := Mutex new()
 	init: func
 	set: func (value: T) {
