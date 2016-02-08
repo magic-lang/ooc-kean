@@ -35,7 +35,7 @@ ToRasterTest: class extends Fixture {
 	toRasterTargetTestFunction: func (sourceImage: RasterImage) {
 		gpuImage := context createImage(sourceImage)
 		raster := sourceImage create(sourceImage size) as RasterImage
-		gpuImage toRaster(raster)
+		gpuImage toRaster(raster) wait() . free()
 		expect(raster distance(sourceImage), is equal to(0.0f))
 		gpuImage free()
 		raster free()
