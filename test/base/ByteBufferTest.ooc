@@ -50,6 +50,16 @@ ByteBufferTest: class extends Fixture {
 			expect(slice pointer[0] as Int, is equal to(10))
 			slice referenceCount decrease()
 		})
+		this add("slice 2", func {
+			yuv := ByteBuffer new(30000)
+			y := yuv slice(0, 20000)
+			uv := yuv slice(20000, 10000)
+			expect(yuv referenceCount _count, is equal to(2))
+			y referenceCount decrease()
+			expect(yuv referenceCount _count, is equal to(1))
+			uv referenceCount decrease()
+			yuv referenceCount decrease()
+		})
 	}
 }
 
