@@ -137,7 +137,7 @@ OpenGLContext: class extends GpuContext {
 			case image: RasterBgra => this _createBgra(image)
 			case image: RasterUv => this _createUv(image)
 			case image: RasterYuv420Semiplanar => this createYuv420Semiplanar(image)
-			case => Debug raise("Unknown input format in OpenGLContext createImage"); null
+			case => Debug error("Unknown input format in OpenGLContext createImage"); null
 		}
 	}
 	update: override func { this _backend swapBuffers() }

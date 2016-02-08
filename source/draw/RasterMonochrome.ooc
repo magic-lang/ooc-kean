@@ -31,7 +31,7 @@ RasterMonochromeCanvas: class extends RasterPackedCanvas {
 		else if (image instanceOf(RasterImage))
 			monochrome = RasterMonochrome convertFrom(image as RasterImage)
 		else
-			Debug raise("Unsupported image type in RasterMonochromeCanvas draw")
+			Debug error("Unsupported image type in RasterMonochromeCanvas draw")
 		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination)
 		if (monochrome != image)
 			monochrome referenceCount decrease()
