@@ -8,22 +8,21 @@
 
 use base
 use concurrent
-import threading/Thread
-import threading/Mutex
+import threading/[Thread, Mutex]
 import structs/HashMap
 
 SynchronizedResource: abstract class {
-	_threadAffinity := 0L
+	_threadAffinity: ThreadId
 	_recycle := true
 	init: func { this _threadAffinity = Thread currentThreadId() }
 	checkThreadAffinity: func -> Bool {
-		Thread equals(this _threadAffinity, Thread currentThreadId())
+		this _threadAffinity equals(Thread currentThreadId())
 	}
 }
 
 SynchronizedResourceRecycler: class {
 	_mutex := Mutex new()
-	_resources := HashMap<Long, VectorList<SynchronizedResource>> new()
+	_resources := HashMap<ThreadId, VectorList<SynchronizedResource>> new()
 	init: func
 	free: override func {
 		this _clear()
