@@ -172,6 +172,11 @@ Text: cover {
 		this print()
 		t"\n" print()
 	}
+	read: static func (length := 64) -> This {
+		input := CString new(length)
+		fgets(input, length, stdin)
+		This new(input, length + 1)
+	}
 	format: func (args: ...) -> This {
 		string := this take() toString()
 		resultString := string format(args)
