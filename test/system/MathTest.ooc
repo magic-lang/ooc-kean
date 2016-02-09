@@ -53,8 +53,11 @@ MathTest: class extends Fixture {
 
 			expect(5 squared, is equal to((-5) squared))
 
+			expect(720 align(64), is equal to(768))
 			expect(62 alignPowerOfTwo(64), is equal to(64))
 			expect(137 alignPowerOfTwo(128), is equal to(256))
+			for (i in 0 .. 66)
+				expect(i align(1), is equal to(i))
 
 			expect(12345 digits(), is equal to(5))
 		})
