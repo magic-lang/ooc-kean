@@ -35,20 +35,12 @@ Thread: abstract class {
 			result = ThreadWin32 _currentThread()
 		result
 	}
-	currentThreadId: static func -> Long {
-		result: Long = 0L
+	currentThreadId: static func -> ThreadId {
+		result: ThreadId
 		version (unix || apple)
-			result = pthread_self() as Long
+			result = pthread_self() as ThreadId
 		version (windows)
-			result = GetCurrentThread() as Long
-		result
-	}
-	equals: static func (threadId1, threadId2: Long) -> Bool {
-		result: Bool
-		version (unix || apple)
-			result = pthread_equal(threadId1 as PThread, threadId2 as PThread) != 0
-		else
-			result = threadId1 == threadId2
+			result = GetCurrentThread() as ThreadId
 		result
 	}
 	yield: static func -> Bool {
@@ -58,5 +50,25 @@ Thread: abstract class {
 		version (windows)
 			result = ThreadWin32 _yield()
 		result
+	}
+}
+
+version (unix || apple) {
+	include pthread | (_POSIX_C_SOURCE=200809L)
+
+	ThreadId: cover from PThread {
+		equals: func (other: This) -> Bool {
+			pthread_equal(this as PThread, other as PThread) != 0
+		}
+	}
+}
+
+version (windows) {
+	include windows
+
+	ThreadId: cover from DWORD {
+		equals: func (other: This) -> Bool {
+			this == other
+		}
 	}
 }

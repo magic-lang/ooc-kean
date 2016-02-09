@@ -68,7 +68,7 @@ ThreadTest: class extends Fixture {
 	}
 	_testThreadId: static func {
 		myId := Thread currentThreadId()
-		otherId := Cell<Long> new(0L)
+		otherId := Cell<ThreadId> new(0L)
 		job := func {
 			otherId set(Thread currentThreadId())
 		}
@@ -76,10 +76,10 @@ ThreadTest: class extends Fixture {
 		expect(thread start())
 		expect(thread wait())
 		thread free()
-		expect(Thread equals(myId, otherId get()) == false)
+		expect(myId equals(otherId get()) == false)
 		otherId free()
 		(job as Closure) free()
-		expect(Thread equals(myId, Thread currentThreadId()))
+		expect(myId equals(Thread currentThreadId()) == true)
 	}
 	_timedJoin: static func {
 		job := func {

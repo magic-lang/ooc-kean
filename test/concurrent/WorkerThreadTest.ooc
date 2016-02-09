@@ -12,7 +12,7 @@ use unit
 import threading/Thread
 
 WorkerThreadTest: class extends Fixture {
-	threads := static SynchronizedList<Long> new()
+	threads := static SynchronizedList<ThreadId> new()
 	sum: static Long = 0
 	taskUp := func {
 		This threads add(Thread currentThreadId())
