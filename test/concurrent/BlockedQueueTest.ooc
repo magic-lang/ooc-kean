@@ -14,16 +14,16 @@ import threading/Thread
 BlockedQueueTest: class extends Fixture {
 	init: func {
 		super("BlockedQueue")
-		version (!windows) { this add("cover", This _testWithCover) }
+		this add("cover", This _testWithCover)
 		this add("class", This _testWithClass)
 	}
 	_testWithCover: static func {
 		queue := BlockedQueue<Int> new()
-		numberOfThreads := 8
+		numberOfThreads := 4
 		countPerThread := 20_000
 		totalCount := numberOfThreads * countPerThread
 		produce := func {
-			for (i in 0 .. totalCount) {
+			for (i in 1 .. totalCount + 1) {
 				queue enqueue(i)
 				Thread yield()
 			}
@@ -32,9 +32,10 @@ BlockedQueueTest: class extends Fixture {
 			for (i in 0 .. countPerThread) {
 				value := queue wait()
 				expect(value < totalCount)
+				expect(value > 0)
 			}
 		}
-		queue enqueue(0)
+		queue enqueue(1)
 		threads := Thread[numberOfThreads] new()
 		for (i in 0 .. numberOfThreads) {
 			threads[i] = Thread new(consume)
@@ -58,7 +59,7 @@ BlockedQueueTest: class extends Fixture {
 	}
 	_testWithClass: static func {
 		queue := BlockedQueue<Cell<Int>> new()
-		numberOfThreads := 8
+		numberOfThreads := 4
 		countPerThread := 20_000
 		totalCount := numberOfThreads * countPerThread
 		produce := func {
@@ -95,6 +96,4 @@ BlockedQueueTest: class extends Fixture {
 	}
 }
 
-test := BlockedQueueTest new()
-test run()
-test free()
+BlockedQueueTest new() run() . free()
