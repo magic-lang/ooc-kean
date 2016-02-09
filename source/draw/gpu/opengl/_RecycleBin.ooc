@@ -62,7 +62,7 @@ _RecycleBin: class {
 			case (i: OpenGLBgr) => this _add(i, this _bgr)
 			case (i: OpenGLBgra) => this _add(i, this _bgra)
 			case (i: OpenGLUv) => this _add(i, this _uv)
-			case => Debug raise("Unknown format in GpuImageBin add()")
+			case => Debug error("Unknown format in GpuImageBin add()")
 		}
 	}
 	_search: func (size: IntVector2D, list: VectorList<OpenGLPacked>) -> OpenGLPacked {

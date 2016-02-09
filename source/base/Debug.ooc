@@ -34,13 +34,13 @@ Debug: class {
 		This print(string, level)
 		string free()
 	}
-	raise: static func (message: String) {
+	error: static func (message: String) {
 		This print(message)
 		raise(message)
 	}
-	raise: static func ~text (message: Text) {
+	error: static func ~text (message: Text) {
 		string := message toString()
-		This raise(string)
+		This error(string)
 		string free()
 	}
 	kean_base_debug_registerCallback: unmangled static func (print: Pointer) {

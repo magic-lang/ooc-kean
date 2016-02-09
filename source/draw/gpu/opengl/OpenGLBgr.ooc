@@ -25,8 +25,8 @@ OpenGLBgr: class extends OpenGLPacked {
 	init: func ~fromRaster (rasterImage: RasterBgr, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}
-	toRasterDefault: override func -> RasterImage { Debug raise("toRasterDefault not implemented for BGR"); null }
-	toRasterDefault: override func ~target (target: RasterImage) { Debug raise("toRasterDefault~target not implemented for BGR") }
+	toRasterDefault: override func -> RasterImage { Debug error("toRasterDefault not implemented for BGR"); null }
+	toRasterDefault: override func ~target (target: RasterImage) { Debug error("toRasterDefault~target not implemented for BGR") }
 	create: override func (size: IntVector2D) -> This { this context createBgr(size) as This }
 	channelCount: static Int = 3
 }

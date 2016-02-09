@@ -36,7 +36,7 @@ OpenGLMap: class extends GpuMap {
 		this _context = context
 		this _program = GLShaderProgram[context getMaxContexts()] new()
 		if (vertexSource == null || fragmentSource == null)
-			Debug raise("Vertex or fragment shader source not set")
+			Debug error("Vertex or fragment shader source not set")
 	}
 	init: func ~defaultVertex (fragmentSource: String, context: OpenGLContext) { this init(slurp("shaders/default.vert"), fragmentSource, context) }
 	free: override func {
@@ -73,7 +73,7 @@ OpenGLMap: class extends GpuMap {
 					case ColorUv => color := cell as Cell<ColorUv> get(); program setUniform(key, color u as Float / 255, color v as Float / 255)
 					case ColorYuv => color := cell as Cell<ColorYuv> get(); program setUniform(key, color y as Float / 255, color u as Float / 255, color v as Float / 255)
 					case ColorYuva => color := cell as Cell<ColorYuva> get(); program setUniform(key, color y as Float / 255, color u as Float / 255, color v as Float / 255, color alpha as Float / 255)
-					case => Debug raise("Invalid cover type in OpenGLMap use!")
+					case => Debug error("Invalid cover type in OpenGLMap use!")
 				}
 			} else
 				match (value) {
@@ -89,9 +89,9 @@ OpenGLMap: class extends GpuMap {
 						match (vector T) {
 							case Int => program setUniform(key, vector _backend as Int*, vector capacity)
 							case Float => program setUniform(key, vector _backend as Float*, vector capacity)
-							case => Debug raise("Invalid Vector type in OpenGLMap use")
+							case => Debug error("Invalid Vector type in OpenGLMap use")
 						}
-					case => Debug raise("Invalid object type in OpenGLMap use: %s" format(value class name))
+					case => Debug error("Invalid object type in OpenGLMap use: %s" format(value class name))
 				}
 		}
 		this apply(action)

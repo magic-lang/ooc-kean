@@ -31,7 +31,7 @@ RasterUvCanvas: class extends RasterPackedCanvas {
 		else if (image instanceOf(RasterImage))
 			uv = RasterUv convertFrom(image as RasterImage)
 		else
-			Debug raise("Unsupported image type in RasterUvCanvas draw")
+			Debug error("Unsupported image type in RasterUvCanvas draw")
 		this _resizePacked(uv buffer pointer as ColorUv*, uv, source, destination)
 		if (uv != image)
 			uv referenceCount decrease()

@@ -30,7 +30,7 @@ RasterBgrCanvas: class extends RasterPackedCanvas {
 		else if (image instanceOf(RasterImage))
 			bgr = RasterBgr convertFrom(image as RasterImage)
 		else
-			Debug raise("Unsupported image type in BgrRasterCanvas draw")
+			Debug error("Unsupported image type in BgrRasterCanvas draw")
 		this _resizePacked(bgr buffer pointer as ColorBgr*, bgr, source, destination)
 		if (bgr != image)
 			bgr referenceCount decrease()

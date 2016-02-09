@@ -75,7 +75,7 @@ GpuCanvas: abstract class extends Canvas {
 		else if (image instanceOf(RasterImage))
 			temporary = this _context createImage(image as RasterImage)
 		else
-			Debug raise("Invalid image type in GpuCanvas!")
+			Debug error("Invalid image type in GpuCanvas!")
 		if (temporary instanceOf(GpuYuv420Semiplanar)) {
 			yuv := temporary as GpuYuv420Semiplanar
 			map add("texture0", yuv y)
@@ -86,7 +86,7 @@ GpuCanvas: abstract class extends Canvas {
 		if (image != temporary)
 			temporary free()
 	}
-	draw: virtual func ~mesh (image: GpuImage, mesh: GpuMesh) { Debug raise("draw~mesh unimplemented!") }
+	draw: virtual func ~mesh (image: GpuImage, mesh: GpuMesh) { Debug error("draw~mesh unimplemented!") }
 	_createTextureTransform: static func ~LocalInt (imageSize: IntVector2D, box: IntBox2D) -> FloatTransform3D {
 		This _createTextureTransform(imageSize toFloatVector2D(), box toFloatBox2D())
 	}

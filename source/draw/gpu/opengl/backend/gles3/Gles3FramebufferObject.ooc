@@ -65,7 +65,7 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 			statusMessage := getErrorMessage(status)
 			errorMessage := "glCheckFramebufferStatus failed with status: " + statusMessage + " for texture of size " +
 			texture size x toString() + " x " + texture size y toString()
-			Debug raise(errorMessage)
+			Debug error(errorMessage)
 		}
 		this unbind()
 		version(debugGL) { validateEnd("FramebufferObject _generate") }
