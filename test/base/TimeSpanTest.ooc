@@ -114,6 +114,7 @@ TimeSpanTest: class extends Fixture {
 			expect(TimeSpan hours(2.5) elapsedMinutes() == 150)
 			expect(TimeSpan days(14.1) elapsedWeeks() == 2)
 			expect(TimeSpan weeks(2) elapsedDays() == 14)
+			expect(TimeSpan milliseconds(13) elapsedNanoseconds() == 13_000_000)
 		})
 		this add("toText", func {
 			span := TimeSpan millisecond() + TimeSpan second() + TimeSpan minute() + TimeSpan hour() + TimeSpan day() + TimeSpan week()

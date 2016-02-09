@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 use concurrent
 import threading/Thread
 
@@ -19,7 +20,7 @@ Promise: abstract class {
 	_state: _PromiseState
 	init: func
 	wait: abstract func -> Bool
-	wait: abstract func ~timeout (seconds: Double) -> Bool
+	wait: abstract func ~timeout (time: TimeSpan) -> Bool
 	cancel: virtual func -> Bool { false }
 	operator + (other: This) -> PromiseCollector {
 		collector := PromiseCollector new()
@@ -28,7 +29,7 @@ Promise: abstract class {
 		collector
 	}
 	kean_concurrent_promise_wait: unmangled func { this wait() }
-	kean_concurrent_promise_waitWithTimeout: unmangled func (timeout: Double) { this wait(timeout) }
+	kean_concurrent_promise_waitWithTimeout: unmangled func (time: TimeSpan) { this wait(time) }
 	kean_concurrent_promise_free: unmangled func { this free() }
 	start: static func (action: Func) -> This { _ThreadPromise new(action) }
 	empty: static This { get { _EmptyPromise new() } }
@@ -37,7 +38,7 @@ Promise: abstract class {
 _EmptyPromise: class extends Promise {
 	init: func { super() }
 	wait: override func -> Bool { true }
-	wait: override func ~timeout (seconds: Double) -> Bool { true }
+	wait: override func ~timeout (time: TimeSpan) -> Bool { true }
 }
 
 _ThreadPromise: class extends Promise {
@@ -76,9 +77,9 @@ _ThreadPromise: class extends Promise {
 				this _threadAlive = false
 		this _state == _PromiseState Finished
 	}
-	wait: override func ~timeout (seconds: Double) -> Bool {
+	wait: override func ~timeout (time: TimeSpan) -> Bool {
 		if (this _threadAlive)
-			if (this _thread wait(seconds))
+			if (this _thread wait(time elapsedSeconds()))
 				this _threadAlive = false
 		this _state == _PromiseState Finished
 	}
@@ -95,13 +96,13 @@ Future: abstract class <T> {
 	_state: _PromiseState
 	init: func
 	wait: abstract func -> Bool
-	wait: abstract func ~timeout (seconds: Double) -> Bool
+	wait: abstract func ~timeout (time: TimeSpan) -> Bool
 	wait: virtual func ~default (defaultValue: T) -> T {
 		status := this wait()
 		status ? this getResult(defaultValue) : defaultValue
 	}
-	wait: virtual func ~defaulttimeout (seconds: Double, defaultValue: T) -> T {
-		status := this wait(seconds)
+	wait: virtual func ~defaulttimeout (time: TimeSpan, defaultValue: T) -> T {
+		status := this wait(time)
 		status ? this getResult(defaultValue) : defaultValue
 	}
 	getResult: abstract func (defaultValue: T) -> T
@@ -152,9 +153,9 @@ _ThreadFuture: class <T> extends Future<T> {
 				this _threadAlive = false
 		this _state == _PromiseState Finished
 	}
-	wait: override func ~timeout (seconds: Double) -> Bool {
+	wait: override func ~timeout (time: TimeSpan) -> Bool {
 		if (this _threadAlive)
-			if (this _thread wait(seconds))
+			if (this _thread wait(time elapsedSeconds()))
 				this _threadAlive = false
 		this _state == _PromiseState Finished
 	}

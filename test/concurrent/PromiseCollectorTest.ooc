@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 use concurrent
 use unit
 
@@ -59,7 +60,7 @@ PromiseCollectorTest: class extends Fixture {
 			promises := PromiseCollector new()
 			for (j in 0 .. 5)
 				promises += Promise start(func { for (i in 0 .. 50_000_000) { } })
-			expect(promises wait(0.01), is false)
+			expect(promises wait(TimeSpan milliseconds(10)), is false)
 			expect(promises wait(), is true)
 			promises free()
 		})
