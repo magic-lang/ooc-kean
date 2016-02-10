@@ -15,8 +15,6 @@ version(windows) {
 		numberOfProcessors: extern (dwNumberOfProcessors) UInt
 	}
 
-	GetSystemInfo: extern func (SystemInfo*)
-
 	COMPUTER_NAME_FORMAT: enum {
 		NET_BIOS = 0
 		DNS_HOSTNAME
@@ -29,6 +27,7 @@ version(windows) {
 		MAX
 	}
 
+	GetSystemInfo: extern func (SystemInfo*)
 	GetComputerNameEx: extern func (COMPUTER_NAME_FORMAT, CString, UInt*)
 }
 
@@ -62,7 +61,7 @@ System: class {
 			result = hostname toString()
 		}
 		version (linux || apple) {
-			BUF_SIZE = 255 : SizeT
+			BUF_SIZE: SizeT = 255
 			hostname := CharBuffer new(BUF_SIZE + 1)
 			value := gethostname(hostname data as Pointer, BUF_SIZE)
 			if (value != 0)

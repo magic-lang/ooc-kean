@@ -7,24 +7,31 @@
  */
 
 import structs/HashMap
-import os/[Env, wait, unistd]
+import os/[Env, unistd]
 import ../[Process, Pipe]
 import PipeUnix
 
 version(unix || apple) {
+include sys/wait
 include errno | (_POSIX_SOURCE)
 include signal | (_POSIX_SOURCE)
+
+WEXITSTATUS: extern func (Int) -> Int
+WIFEXITED: extern func (Int) -> Int
+WIFSIGNALED: extern func (Int) -> Int
+WTERMSIG: extern func (Int) -> Int
 
 errno : extern Int
 SIGTERM: extern Int
 SIGKILL: extern Int
 SIGSEGV: extern Int
 SIGABRT: extern Int
-
 WNOHANG: extern Int
 
 kill: extern func (Long, Int)
 signal: extern func (Int, Pointer)
+wait: extern func (Int*) -> Int
+waitpid: extern func (Int, Int*, Int) -> Int
 
 ProcessUnix: class extends Process {
 	init: func ~unix (=args)
