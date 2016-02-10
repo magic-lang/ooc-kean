@@ -9,7 +9,6 @@
 use base
 use concurrent
 import threading/[Thread, Mutex]
-import structs/HashMap
 
 SynchronizedResource: abstract class {
 	_threadAffinity: ThreadId

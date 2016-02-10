@@ -6,8 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import structs/HashMap
-
 HashDictionary: class {
 	_hashMap: HashMap<String, Cell<Pointer>>
 	count ::= this _hashMap size

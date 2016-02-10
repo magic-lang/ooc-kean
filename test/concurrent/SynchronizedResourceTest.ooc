@@ -11,7 +11,6 @@ use concurrent
 use collections
 use unit
 import threading/Thread
-import structs/HashMap
 
 TestObject: class extends SynchronizedResource {
 	recycler := static SynchronizedResourceRecycler new()

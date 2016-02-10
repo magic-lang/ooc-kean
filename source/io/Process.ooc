@@ -7,7 +7,6 @@
  */
 
 import Pipe
-import structs/HashMap
 import native/[ProcessUnix, ProcessWin32]
 
 Process: abstract class {

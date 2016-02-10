@@ -7,7 +7,6 @@
  */
 
 import threading/ThreadLocal
-import structs/Stack
 import Backtrace
 
 include setjmp, assert, errno, stdint

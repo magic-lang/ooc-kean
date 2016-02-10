@@ -7,7 +7,6 @@
  */
 
 use unit
-import structs/Stack
 
 StackTest: class extends Fixture {
 	init: func {
