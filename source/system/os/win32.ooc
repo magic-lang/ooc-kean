@@ -10,11 +10,9 @@ version(windows) {
 	include windows
 
 	GetLastError: extern func -> Int
-
-	ERROR_HANDLE_EOF: extern Int
-
 	FormatMessage: extern func (dwFlags: DWORD, lpSource: Pointer, dwMessageId: DWORD, dwLanguageId: DWORD, lpBuffer: LPTSTR, nSize: DWORD, ...) -> DWORD
 
+	ERROR_HANDLE_EOF: extern Int
 	FORMAT_MESSAGE_FROM_SYSTEM: extern Long
 	FORMAT_MESSAGE_IGNORE_INSERTS: extern Long
 	FORMAT_MESSAGE_ARGUMENT_ARRAY: extern Long
@@ -40,19 +38,11 @@ version(windows) {
 	}
 
 	WindowsException: class extends Exception {
-		init: func (.origin, err: Long) {
-			super(origin, GetWindowsErrorMessage(err))
-		}
-		init: func ~withMsg (.origin, err: Long, message: String) {
-			super(origin, "%s: %s" format(message, GetWindowsErrorMessage(err)))
-		}
+		init: func (.origin, err: Long) { super(origin, GetWindowsErrorMessage(err)) }
+		init: func ~withMsg (.origin, err: Long, message: String) { super(origin, "%s: %s" format(message, GetWindowsErrorMessage(err))) }
 	}
 
 	LocaleId: cover from LCID
-
-	/*
-	 * File handle
-	 */
 	Handle: cover from HANDLE
 	INVALID_HANDLE_VALUE: extern Handle
 
@@ -84,8 +74,8 @@ version(windows) {
 
 	// FILETIME is a Long that stores the number of 100-nanoseconds intervals from January 1st, 1601
 	FileTime: cover from FILETIME {
-		lowDateTime: extern (dwLowDateTime) Long // DWORD
-		highDateTime: extern (dwHighDateTime) Long // DWORD
+		lowDateTime: extern (dwLowDateTime) Long
+		highDateTime: extern (dwHighDateTime) Long
 	}
 
 	/*
@@ -112,6 +102,5 @@ version(windows) {
 	WORD: extern cover from Int
 	DWORD: extern cover from Long
 	LPTSTR: extern cover from CString
-
 	MAKEWORD: extern func (low, high: BYTE) -> WORD
 }
