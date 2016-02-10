@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 use draw-gpu
 use concurrent
 import backend/[GLFence, GLContext]
@@ -25,14 +26,14 @@ OpenGLFence: class extends GpuFence {
 		this _backend free()
 		super()
 	}
-	wait: override func -> Bool { this wait(ULLONG_MAX) }
-	wait: override func ~timeout (nanoseconds: ULong) -> Bool {
+	wait: override func -> Bool { this wait(TimeSpan seconds(Int maximumValue)) }
+	wait: override func ~timeout (time: TimeSpan) -> Bool {
 		this _mutex lock()
 		if (this _backend == null)
 			this _syncCondition wait(this _mutex)
 		if (this _backend == null)
 			raise("OpenGLFence: _backend is still null after waiting on _syncCondition")
-		result := this _backend clientWait(nanoseconds)
+		result := this _backend clientWait(time elapsedNanoseconds())
 		this _mutex unlock()
 		result
 	}
@@ -57,9 +58,6 @@ OpenGLPromise: class extends Promise {
 	}
 	sync: func { this _fence sync() }
 	wait: override func -> Bool { this _fence wait() }
-	wait: override func ~timeout (seconds: Double) -> Bool {
-		nanoseconds := 1_000_000_000 * seconds
-		this _fence wait(nanoseconds)
-	}
+	wait: override func ~timeout (time: TimeSpan) -> Bool { this _fence wait(time) }
 }
 }

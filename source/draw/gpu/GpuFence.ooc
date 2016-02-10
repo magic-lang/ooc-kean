@@ -6,11 +6,13 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
+
 version(!gpuOff) {
 GpuFence: abstract class {
 	init: func
 	wait: abstract func -> Bool
-	wait: abstract func ~timeout (nanoseconds: ULong) -> Bool
+	wait: abstract func ~timeout (time: TimeSpan) -> Bool
 	gpuWait: abstract func
 	sync: abstract func
 }

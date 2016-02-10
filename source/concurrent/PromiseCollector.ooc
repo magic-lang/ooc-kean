@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 use collections
 use concurrent
 
@@ -31,10 +32,10 @@ PromiseCollector: class {
 		}
 		status
 	}
-	wait: func ~timeout (seconds: Double, haltOnCancel := false) -> Bool {
+	wait: func ~timeout (time: TimeSpan, haltOnCancel := false) -> Bool {
 		status := true
 		for (i in 0 .. this _backend count) {
-			status = status && this _backend[i] wait(seconds)
+			status = status && this _backend[i] wait(time)
 			if (!status && haltOnCancel)
 				break
 		}

@@ -16,6 +16,9 @@ TimeSpan: cover {
 		this _ticks = DateTime timeToTicks(hour, minute, second, millisecond)
 	}
 	negate: func -> This { This new(-1 * this ticks) }
+	elapsedNanoseconds: func -> Long {
+		this ticks * DateTime nanosecondsPerTick
+	}
 	elapsedMilliseconds: func -> Long {
 		this ticks / DateTime ticksPerMillisecond
 	}
