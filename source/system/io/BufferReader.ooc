@@ -12,10 +12,11 @@ BufferReader: class extends Reader {
 	buffer: CharBuffer
 
 	init: func ~withBuffer (=buffer)
-	init: func ~withString (string: String) {
-		this buffer = string _buffer
-	}
+	init: func ~withString (string: String) { this init(string _buffer) }
 	buffer: func -> CharBuffer { this buffer }
+	mark: override func -> Long { marker }
+	peek: func -> Char { this buffer get(marker) }
+	hasNext: override func -> Bool { marker < this buffer size }
 	close: override func
 	read: override func (dest: Char*, destOffset: Int, maxRead: Int) -> SizeT {
 		if (marker >= this buffer size)
@@ -26,16 +27,10 @@ BufferReader: class extends Reader {
 		marker += copySize
 		copySize
 	}
-	peek: func -> Char {
-		this buffer get(marker)
-	}
 	read: override func ~char -> Char {
 		c := this buffer get(marker)
 		marker += 1
 		c
-	}
-	hasNext: override func -> Bool {
-		marker < this buffer size
 	}
 	seek: override func (offset: Long, mode: SeekMode) -> Bool {
 		match mode {
@@ -54,8 +49,5 @@ BufferReader: class extends Reader {
 			marker = 0
 		if (marker >= this buffer size)
 			marker = this buffer size - 1
-	}
-	mark: override func -> Long {
-		marker
 	}
 }

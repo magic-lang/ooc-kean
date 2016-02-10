@@ -11,7 +11,9 @@ import os/win32
 
 version(windows) {
 PipeWin32: class extends Pipe {
-	readFD = 0, writeFD = 0 : Handle
+	readFD: Handle = 0
+	writeFD: Handle = 0
+
 	init: func ~twos {
 		saAttr: SecurityAttributes
 
@@ -20,7 +22,6 @@ PipeWin32: class extends Pipe {
 		saAttr inheritHandle = true
 		saAttr securityDescriptor = null
 
-		/* Try to open a new pipe */
 		if (!CreatePipe(readFD&, writeFD&, saAttr&, 0))
 			WindowsException new(This, GetLastError(), "Failed to create pipe") throw()
 	}
@@ -28,16 +29,10 @@ PipeWin32: class extends Pipe {
 		bytesRead: ULong
 		result := -1
 		success := ReadFile(readFD, buf, len, bytesRead&, null)
-
-		// normal read
 		if (success)
 			result = bytesRead
-
-		// no data
 		if (GetLastError() == ERROR_NO_DATA)
 			result = 0
-
-		// reached eof
 		eof = true
 		result
 	}

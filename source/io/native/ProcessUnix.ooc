@@ -20,7 +20,6 @@ SIGTERM: extern Int
 SIGKILL: extern Int
 SIGSEGV: extern Int
 SIGABRT: extern Int
-
 WNOHANG: extern Int
 
 kill: extern func (Long, Int)
@@ -28,25 +27,16 @@ signal: extern func (Int, Pointer)
 
 ProcessUnix: class extends Process {
 	init: func ~unix (=args)
-
 	terminate: override func {
 		if (pid)
 			kill(pid, SIGTERM)
 	}
-
 	kill: override func {
 		if (pid)
 			kill(pid, SIGKILL)
 	}
-
-	wait: override func -> Int {
-		_wait(0)
-	}
-
-	waitNoHang: override func -> Int {
-		_wait(WNOHANG)
-	}
-
+	wait: override func -> Int { this _wait(0) }
+	waitNoHang: override func -> Int { this _wait(WNOHANG) }
 	_wait: func (options: Int) -> Int {
 		status: Int
 		result := -1
@@ -70,8 +60,6 @@ ProcessUnix: class extends Process {
 					message = message + " (Segmentation fault)"
 				case SIGABRT =>
 					message = message + " (Abort)"
-				case =>
-					// pffrt.
 			}
 
 			message = message + "\n"
@@ -90,7 +78,6 @@ ProcessUnix: class extends Process {
 
 		result
 	}
-
 	executeNoWait: override func -> Long {
 		pid = fork()
 		if (pid == 0) {
@@ -107,20 +94,17 @@ ProcessUnix: class extends Process {
 				dup2(stdErr as PipeUnix writeFD, 2)
 			}
 
-			/* amend the environment if needed */
 			if (env)
 				for (key in env keys)
 					Env set(key, env[key], true)
 
-			/* set a new cwd? */
 			if (cwd != null)
 				chdir(cwd as CString)
 
-			/* run the stuff. */
 			cArgs: CString* = calloc(args count + 1, Pointer size)
 			for (i in 0 .. args count)
 				cArgs[i] = args[i] toCString()
-			cArgs[args count] = null // null-terminated - makes sense
+			cArgs[args count] = null
 
 			signal(SIGABRT, sigabrtHandler)
 
@@ -129,7 +113,6 @@ ProcessUnix: class extends Process {
 		}
 		pid
 	}
-
 	sigabrtHandler: static func {
 		"Got a sigabrt" println()
 		exit(255)

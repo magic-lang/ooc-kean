@@ -45,12 +45,10 @@ FileWriter: class extends Writer {
 
 	createTempFile: static func (pattern, mode: String) -> This {
 		result: This
-		version (!windows) {
+		version (!windows)
 			result = new(FileUnix createTempFile(pattern, mode))
-		} else {
-			// mkstemp is missing on Windows
+		else
 			result = new(mktemp(pattern) toString(), mode)
-		}
 		result
 	}
 }
