@@ -260,18 +260,12 @@ VectorListTest: class extends Fixture {
 	}
 	_testVectorListSearch: static func {
 		list := VectorList<Int> new()
-		matches := func (instance: Int*) -> Bool { 1 == instance@ }
-		expect(list search(matches), is equal to(-1))
+		expect(list search(|instance| 1 == instance), is equal to(-1))
 		for (i in 0 .. 10)
 			list add(i)
-		expect(list search(matches), is equal to(1))
-		(matches as Closure) free()
-		matches = func (instance: Int*) -> Bool { 9 == instance@ }
-		expect(list search(matches), is equal to(9))
-		(matches as Closure) free()
-		matches = func (instance: Int*) -> Bool { 10 == instance@ }
-		expect(list search(matches), is equal to(-1))
-		(matches as Closure) free()
+		expect(list search(|instance| 1 == instance), is equal to(1))
+		expect(list search(|instance| 9 == instance), is equal to(9))
+		expect(list search(|instance| 10 == instance), is equal to(-1))
 		list free()
 	}
 }

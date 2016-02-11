@@ -18,7 +18,7 @@ List: abstract class <T> {
 	removeAt: abstract func (index: Int)
 	clear: abstract func
 	reverse: abstract func -> This<T>
-	search: abstract func (matches: Func (T*) -> Bool) -> Int
+	search: abstract func (matches: Func (T) -> Bool) -> Int
 	sort: abstract func (greaterThan: Func (T, T) -> Bool)
 	copy: abstract func -> This<T>
 	apply: abstract func (function: Func(T))
