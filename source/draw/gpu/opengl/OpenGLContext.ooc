@@ -17,23 +17,6 @@ import OpenGLMap
 import backend/[GLContext, GLRenderer]
 
 version(!gpuOff) {
-_ToRasterFuture: class extends Future<RasterImage> {
-	_result: RasterImage
-	init: func (=_result) {
-		super()
-		this _result referenceCount increase()
-	}
-	free: override func {
-		this _result referenceCount decrease()
-		super()
-	}
-	wait: override func -> Bool { true }
-	wait: override func ~timeout (time: TimeSpan) -> Bool { true }
-	getResult: override final func (defaultValue: RasterImage) -> RasterImage {
-		this _result referenceCount increase()
-		this _result
-	}
-}
 _FenceToRasterFuture: class extends _ToRasterFuture {
 	_fence: GpuFence
 	init: func (result: RasterImage, =_fence) { super(result) }
