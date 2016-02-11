@@ -98,9 +98,6 @@ Reader: abstract class {
 		line free()
 		result
 	}
-	skipLine: func {
-		skipUntil('\n')
-	}
 	eachLine: func (f: Func(String) -> Bool) -> Bool {
 		result := true
 		while (this hasNext()) {
@@ -116,6 +113,7 @@ Reader: abstract class {
 		rewind(1)
 		c
 	}
+	skipLine: func { skipUntil('\n') }
 	hasNext: abstract func -> Bool
 	mark: abstract func -> Long
 	rewind: func (offset: Int) -> Bool { seek(-offset, SeekMode CUR) }

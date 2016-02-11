@@ -30,8 +30,7 @@ PipeUnix: class extends Pipe {
 
 	init: func ~twos {
 		fds := [-1, -1] as Int*
-		if (pipe(fds) < 0)
-			raise("Couldn't create pipes")
+		raise(pipe(fds) < 0, "Couldn't create pipes")
 		readFD = fds[0]
 		writeFD = fds[1]
 	}

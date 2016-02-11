@@ -34,36 +34,24 @@ Pipe: abstract class {
 			buf setLength(bytesRead)
 		bytesRead
 	}
-	read: abstract func ~cstring (buf: CString, len: Int) -> Int
-	write: func ~string (str: String) -> Int {
-		write(str _buffer data, str length())
-	}
-	write: abstract func (data: CString, len: Int) -> Int
-	close: abstract func (mode: Char) -> Int
-	close: abstract func ~both
 	setNonBlocking: func ~both {
 		this setNonBlocking('r')
 		this setNonBlocking('w')
 	}
-	setNonBlocking: func (end: Char) {
-		raise("This platform doesn't support non-blocking pipe I/O.")
-	}
-	SetBlocking: func ~both {
+	setBlocking: func ~both {
 		this setBlocking('r')
 		this setBlocking('w')
 	}
-	setBlocking: func (end: Char) {
-		raise("This platform doesn't support blocking pipe I/O.")
-	}
-	eof: func -> Bool {
-		this eof
-	}
-	reader: func -> PipeReader {
-		PipeReader new(this)
-	}
-	writer: func -> PipeWriter {
-		PipeWriter new(this)
-	}
+	read: abstract func ~cstring (buf: CString, len: Int) -> Int
+	write: func ~string (str: String) -> Int { this write(str _buffer data, str length()) }
+	write: abstract func (data: CString, len: Int) -> Int
+	close: abstract func (mode: Char) -> Int
+	close: abstract func ~both
+	setBlocking: func (end: Char) { raise("This platform doesn't support blocking pipe I/O.") }
+	setNonBlocking: func (end: Char) { raise("This platform doesn't support non-blocking pipe I/O.") }
+	eof: func -> Bool { this eof }
+	reader: func -> PipeReader { PipeReader new(this) }
+	writer: func -> PipeWriter { PipeWriter new(this) }
 	new: static func -> This {
 		result: This = null
 		version(unix || apple)
@@ -87,32 +75,16 @@ PipeReader: class extends Reader {
 		bytesRead := pipe read()
 		bytesRead >= 0 ? bytesRead : 0
 	}
-	hasNext: override func -> Bool {
-		!pipe eof()
-	}
-	mark: override func -> Long {
-		raise("Seeking is not supported for this source")
-		-1
-	}
-	seek: override func (offset: Long, mode: SeekMode) -> Bool {
-		raise("Seeking is not supported for this source")
-		false
-	}
-	close: override func {
-		pipe close('r')
-	}
+	hasNext: override func -> Bool { !this pipe eof() }
+	mark: override func -> Long { raise("Seeking is not supported for this source"); -1 }
+	seek: override func (offset: Long, mode: SeekMode) -> Bool { raise("Seeking is not supported for this source"); false }
+	close: override func { this pipe close('r') }
 }
 
 PipeWriter: class extends Writer {
 	pipe: Pipe
 	init: func (=pipe)
-	write: override func ~chr (chr: Char) {
-		pipe write(chr&, 1)
-	}
-	write: override func (bytes: CString, length: SizeT) -> SizeT {
-		pipe write(bytes, length)
-	}
-	close: override func {
-		pipe close('w')
-	}
+	write: override func ~chr (chr: Char) { this pipe write(chr&, 1) }
+	write: override func (bytes: CString, length: SizeT) -> SizeT { this pipe write(bytes, length) }
+	close: override func { this pipe close('w') }
 }

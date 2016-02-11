@@ -16,22 +16,17 @@ include windows
 ProcessWin32: class extends Process {
 	si: StartupInfo
 	pi: ProcessInformation
-
-	cmdLine: String = ""
+	cmdLine: String
 
 	init: func ~win32 (=args) {
 		sb := CharBuffer new()
-		for (arg in args) {
-			//sb append('"'). append(arg). append("\" ")
+		for (arg in args)
 			sb append(arg). append(' ')
-		}
 		cmdLine = sb toString()
-
 		ZeroMemory(si&, StartupInfo size)
 		si structSize = StartupInfo size
 		ZeroMemory(pi&, ProcessInformation size)
 	}
-
 	_wait: func (duration: Long) -> Int {
 		// Wait until child process exits.
 		status := WaitForSingleObject(pi process, duration)
@@ -43,15 +38,8 @@ ProcessWin32: class extends Process {
 		}
 		exitCode
 	}
-
-	wait: override func -> Int {
-		_wait(INFINITE)
-	}
-
-	waitNoHang: override func -> Int {
-		_wait(0)
-	}
-
+	wait: override func -> Int { this _wait(INFINITE) }
+	waitNoHang: override func -> Int { this _wait(0) }
 	executeNoWait: override func -> Long {
 		if (stdIn != null || stdOut != null || stdErr != null) {
 			if (stdIn != null) {
@@ -100,7 +88,6 @@ ProcessWin32: class extends Process {
 		this pid = pi pid
 		pi pid
 	}
-
 	buildEnvironment: func -> Char* {
 		if (env == null)
 			return null
@@ -133,14 +120,8 @@ ProcessWin32: class extends Process {
 		envString[index] = '\0'
 		envString
 	}
-
-	terminate: override func {
-		"please implement me! ProcessWin32 terminate" println()
-	}
-
-	kill: override func {
-		"please implement me! ProcessWin32 kill" println()
-	}
+	terminate: override func { "please implement me! ProcessWin32 terminate" println() }
+	kill: override func { "please implement me! ProcessWin32 kill" println() }
 }
 
 // extern functions
