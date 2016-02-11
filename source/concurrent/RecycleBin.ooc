@@ -26,9 +26,8 @@ RecycleBin: class <T> {
 			this _free(this _list remove(0))
 		this _list add(object)
 	}
-	search: func (matches: Func (T*) -> Bool) -> T {
+	search: func (matches: Func (T) -> Bool) -> T {
 		index := this _list search(matches)
-		(matches as Closure) free()
 		result: T = null
 		(index > -1) ? this _list remove(index) : result
 	}
