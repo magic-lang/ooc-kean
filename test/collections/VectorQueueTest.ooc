@@ -7,7 +7,6 @@
  */
 
 use unit
-use base
 use collections
 
 MyCover: cover {
@@ -17,15 +16,10 @@ MyCover: cover {
 	increase: func { this content += 1 }
 }
 MyClass: class {
-	instanceCount := static 0
 	content: Int
-	init: func (=content) { ++This instanceCount }
+	init: func (=content)
 	init: func ~default { this init(0) }
 	increase: func { this content += 1 }
-	free: override func {
-		--This instanceCount
-		super()
-	}
 }
 
 VectorQueueTest: class extends Fixture {
@@ -164,37 +158,6 @@ VectorQueueTest: class extends Fixture {
 			expect(queue empty, is equal to(true))
 			expect(queue dequeue(null), is equal to(null))
 			queue free()
-		})
-		this add("CircularQueue with cover", func {
-			queue := CircularQueue<Int> new(3)
-			queue enqueue(1)
-			queue enqueue(2)
-			queue enqueue(3)
-			queue enqueue(4)
-			expect(queue count, is equal to(3))
-			expect(queue dequeue(0), is equal to(2))
-			expect(queue dequeue(0), is equal to(3))
-			expect(queue dequeue(0), is equal to(4))
-			expect(queue empty, is equal to(true))
-			queue free()
-		})
-		this add("CircularQueue with class", func {
-			initialCount := MyClass instanceCount
-			queue := CircularQueue<MyClass> new(3)
-			queue enqueue(MyClass new(1))
-			queue enqueue(MyClass new(2))
-			queue enqueue(MyClass new(3))
-			queue enqueue(MyClass new(4))
-			expect(queue count, is equal to(3))
-			object := queue dequeue(null)
-			expect(object != null)
-			expect(object content, is equal to(2))
-			object free()
-			object = queue dequeue(null)
-			expect(object content, is equal to(3))
-			object free()
-			queue free()
-			expect(MyClass instanceCount, is equal to(initialCount))
 		})
 	}
 	_createQueue: func (capacity, fill: Int, replace := 0) -> VectorQueue<Int> {

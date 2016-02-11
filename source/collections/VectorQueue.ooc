@@ -6,17 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-Queue: abstract class <T> {
-	_count := 0
-	count ::= this _count
-	empty ::= this count == 0
-	init: func
-	clear: abstract func
-	enqueue: abstract func (item: T)
-	dequeue: abstract func ~default (fallback: T) -> T
-	peek: abstract func ~default (fallback: T) -> T
-}
-
 VectorQueue: class <T> extends Queue<T> {
 	_backend: T*
 	_capacity := 0
@@ -83,45 +72,4 @@ VectorQueue: class <T> extends Queue<T> {
 		position := (index >= 0 ? this _head + index : this _tail + index) modulo(this _capacity)
 		this _backend[position]
 	}
-}
-
-CircularQueue: class <T> extends Queue<T> {
-	_backend: VectorQueue<T>
-	_cleanupCallback: Func (T)
-	_maximumCapacity: Int
-	count ::= this _backend count
-	capacity ::= this _backend capacity
-	init: func ~defaultCallback (capacity: Int) {
-		callback: Func (T)
-		if (T inheritsFrom(Object))
-			callback = func (t : T) {
-				if (t != null)
-					(t as Object) free()
-			}
-		else
-			callback = func (t: T)
-		this init(capacity, callback)
-	}
-	init: func (=_maximumCapacity, =_cleanupCallback) {
-		this _backend = VectorQueue<T> new(this _maximumCapacity)
-	}
-	free: override func {
-		this clear()
-		this _backend free()
-		(this _cleanupCallback as Closure) free(Owner Receiver)
-		super()
-	}
-	clear: override func {
-		while (this count > 0)
-			this _cleanupCallback(this dequeue(null))
-		this _backend clear()
-	}
-	enqueue: override func (item: T) {
-		while (this count >= this _maximumCapacity)
-			this _cleanupCallback(this dequeue(null))
-		this _backend enqueue(item)
-	}
-	dequeue: override func ~default (fallback: T) -> T { this _backend dequeue(fallback) }
-	peek: override func ~default (fallback: T) -> T { this _backend peek(fallback) }
-	operator [] (index: Int) -> T { this _backend[index] }
 }

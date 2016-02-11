@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import Queue
+use collections
 import threading/[Thread, Mutex, WaitCondition]
 
 SynchronizedQueue: class <T> extends Queue<T> {

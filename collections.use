@@ -6,6 +6,7 @@ Requires: base
 Imports: Vector2D
 Imports: PointerVector
 Imports: PointerVectorList
-Imports: Queue
+Imports: VectorQueue
+Imports: CircularQueue
 Imports: HashDictionary
 Imports: LinkedList
