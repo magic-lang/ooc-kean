@@ -6,7 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import structs/HashMap
 import os/[Env, unistd]
 import ../[Process, Pipe]
 import PipeUnix

@@ -21,6 +21,8 @@ Imports: TextBuffer
 Imports: Text
 Imports: Time
 Imports: VarArgs
-Imports: structs/VectorList
+Imports: structs/HashMap
 Imports: structs/List
+Imports: structs/Stack
 Imports: structs/Vector
+Imports: structs/VectorList
