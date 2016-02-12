@@ -79,7 +79,7 @@ _ThreadPromise: class extends Promise {
 	}
 	wait: override func ~timeout (time: TimeSpan) -> Bool {
 		if (this _threadAlive)
-			if (this _thread wait(time elapsedSeconds()))
+			if (this _thread wait(time toSeconds()))
 				this _threadAlive = false
 		this _state == _PromiseState Finished
 	}
@@ -155,7 +155,7 @@ _ThreadFuture: class <T> extends Future<T> {
 	}
 	wait: override func ~timeout (time: TimeSpan) -> Bool {
 		if (this _threadAlive)
-			if (this _thread wait(time elapsedSeconds()))
+			if (this _thread wait(time toSeconds()))
 				this _threadAlive = false
 		this _state == _PromiseState Finished
 	}

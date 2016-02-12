@@ -15,28 +15,15 @@ TimeSpan: cover {
 	init: func@ ~fromHourMinuteSec (hour, minute, second, millisecond: Int) {
 		this _ticks = DateTime timeToTicks(hour, minute, second, millisecond)
 	}
-	negate: func -> This { This new(-1 * this ticks) }
-	elapsedNanoseconds: func -> Long {
-		this ticks * DateTime nanosecondsPerTick
-	}
-	elapsedMilliseconds: func -> Long {
-		this ticks / DateTime ticksPerMillisecond
-	}
-	elapsedSeconds: func -> Long {
-		this ticks / DateTime ticksPerSecond
-	}
-	elapsedMinutes: func -> Long {
-		this ticks / DateTime ticksPerMinute
-	}
-	elapsedHours: func -> Long {
-		this ticks / DateTime ticksPerHour
-	}
-	elapsedDays: func -> Long {
-		this ticks / DateTime ticksPerDay
-	}
-	elapsedWeeks: func -> Long {
-		this ticks / DateTime ticksPerWeek
-	}
+	negate: func -> This { This new(-this ticks) }
+	toNanoseconds: func -> Long { this ticks * DateTime nanosecondsPerTick }
+	toMilliseconds: func -> Long { this ticks / DateTime ticksPerMillisecond }
+	toSeconds: func -> Long { this ticks / DateTime ticksPerSecond }
+	toMinutes: func -> Long { this ticks / DateTime ticksPerMinute }
+	toHours: func -> Long { this ticks / DateTime ticksPerHour }
+	toDays: func -> Long { this ticks / DateTime ticksPerDay }
+	toWeeks: func -> Long { this ticks / DateTime ticksPerWeek }
+
 	defaultFormat: static Text = t"%w weeks, %d days, %h hours, %m minutes, %s seconds, %z milliseconds"
 	// supported formatting expressions:
 	//  %w - weeks (rounded down)
@@ -52,17 +39,17 @@ TimeSpan: cover {
 	//  %Z - milliseconds (based on total ticks)
 	toText: func (format := This defaultFormat) -> Text {
 		result := format copy()
-		result = result replaceAll(t"%w", t"%d" format(this elapsedWeeks()))
-		result = result replaceAll(t"%D", t"%d" format(this elapsedDays()))
-		result = result replaceAll(t"%H", t"%d" format(this elapsedHours()))
-		result = result replaceAll(t"%M", t"%d" format(this elapsedMinutes()))
-		result = result replaceAll(t"%S", t"%d" format(this elapsedSeconds()))
-		result = result replaceAll(t"%Z", t"%d" format(this elapsedMilliseconds()))
-		result = result replaceAll(t"%d", t"%d" format(this elapsedDays() modulo(7)))
-		result = result replaceAll(t"%h", t"%d" format(this elapsedHours() modulo(24)))
-		result = result replaceAll(t"%m", t"%d" format(this elapsedMinutes() modulo(60)))
-		result = result replaceAll(t"%s", t"%d" format(this elapsedSeconds() modulo(60)))
-		result replaceAll(t"%z", t"%d" format(this elapsedMilliseconds() modulo(1000)))
+		result = result replaceAll(t"%w", t"%d" format(this toWeeks()))
+		result = result replaceAll(t"%D", t"%d" format(this toDays()))
+		result = result replaceAll(t"%H", t"%d" format(this toHours()))
+		result = result replaceAll(t"%M", t"%d" format(this toMinutes()))
+		result = result replaceAll(t"%S", t"%d" format(this toSeconds()))
+		result = result replaceAll(t"%Z", t"%d" format(this toMilliseconds()))
+		result = result replaceAll(t"%d", t"%d" format(this toDays() modulo(7)))
+		result = result replaceAll(t"%h", t"%d" format(this toHours() modulo(24)))
+		result = result replaceAll(t"%m", t"%d" format(this toMinutes() modulo(60)))
+		result = result replaceAll(t"%s", t"%d" format(this toSeconds() modulo(60)))
+		result replaceAll(t"%z", t"%d" format(this toMilliseconds() modulo(1000)))
 	}
 	compareTo: func (other: This) -> Order {
 		if (this ticks > other ticks)
@@ -96,49 +83,27 @@ TimeSpan: cover {
 
 	kean_base_timeSpan_getTicks: unmangled func -> Long { this _ticks }
 	kean_base_timeSpan_getNegated: unmangled func -> This { this negate() }
-	kean_base_timeSpan_getTotalMilliseconds: unmangled func -> Long { this elapsedMilliseconds() }
-	kean_base_timeSpan_getTotalSeconds: unmangled func -> Long { this elapsedSeconds() }
-	kean_base_timeSpan_getTotalMinutes: unmangled func -> Long { this elapsedMinutes() }
-	kean_base_timeSpan_getTotalHours: unmangled func -> Long { this elapsedHours() }
-	kean_base_timeSpan_getTotalDays: unmangled func -> Long { this elapsedDays() }
-	kean_base_timeSpan_getTotalWeeks: unmangled func -> Long { this elapsedWeeks() }
+	kean_base_timeSpan_getTotalMilliseconds: unmangled func -> Long { this toMilliseconds() }
+	kean_base_timeSpan_getTotalSeconds: unmangled func -> Long { this toSeconds() }
+	kean_base_timeSpan_getTotalMinutes: unmangled func -> Long { this toMinutes() }
+	kean_base_timeSpan_getTotalHours: unmangled func -> Long { this toHours() }
+	kean_base_timeSpan_getTotalDays: unmangled func -> Long { this toDays() }
+	kean_base_timeSpan_getTotalWeeks: unmangled func -> Long { this toWeeks() }
 
-	millisecond: static func -> This {
-		This milliseconds(1)
-	}
-	milliseconds: static func (count: Double) -> This {
-		This new(DateTime ticksPerMillisecond * count)
-	}
-	second: static func -> This {
-		This seconds(1)
-	}
-	seconds: static func (count: Double) -> This {
-		This new(DateTime ticksPerSecond * count)
-	}
-	minute: static func -> This {
-		This minutes(1)
-	}
-	minutes: static func (count: Double) -> This {
-		This new(DateTime ticksPerMinute * count)
-	}
-	hour: static func -> This {
-		This hours(1)
-	}
-	hours: static func (count: Double) -> This {
-		This new(DateTime ticksPerHour * count)
-	}
-	day: static func -> This {
-		This days(1)
-	}
-	days: static func (count: Double) -> This {
-		This new(DateTime ticksPerDay * count)
-	}
-	week: static func -> This {
-		This weeks(1)
-	}
-	weeks: static func (count: Double) -> This {
-		This new(DateTime ticksPerWeek * count)
-	}
+	millisecond: static func -> This { This milliseconds(1) }
+	second: static func -> This { This seconds(1) }
+	minute: static func -> This { This minutes(1) }
+	hour: static func -> This { This hours(1) }
+	day: static func -> This { This days(1) }
+	week: static func -> This { This weeks(1) }
+
+	milliseconds: static func (count: Double) -> This { This new(DateTime ticksPerMillisecond * count) }
+	seconds: static func (count: Double) -> This { This new(DateTime ticksPerSecond * count) }
+	minutes: static func (count: Double) -> This { This new(DateTime ticksPerMinute * count) }
+	hours: static func (count: Double) -> This { This new(DateTime ticksPerHour * count) }
+	days: static func (count: Double) -> This { This new(DateTime ticksPerDay * count) }
+	weeks: static func (count: Double) -> This { This new(DateTime ticksPerWeek * count) }
+
 	kean_base_timeSpan_new: unmangled static func (ticks: Long) -> This { This new(ticks) }
 	kean_base_timeSpan_fromData: unmangled static func (hour, minute, second, millisecond: Int) -> This { This new(hour, minute, second, millisecond) }
 	kean_base_timeSpan_fromMilliseconds: unmangled static func (count: Double) -> This { This milliseconds(count) }
