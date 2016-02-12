@@ -123,9 +123,9 @@ DateTimeTest: class extends Fixture {
 			d1 := DateTime new ~fromYearMonthDay(2000, 1, 3)
 			d2 := DateTime new ~fromYearMonthDay(2000, 1, 2)
 			span := d1 - d2
-			expect(span elapsedDays() == 1)
-			expect(span elapsedHours() == 24)
-			expect(span elapsedMinutes() == 24 * 60)
+			expect(span toDays() == 1)
+			expect(span toHours() == 24)
+			expect(span toMinutes() == 24 * 60)
 			expect(d2 + span == d1)
 			expect(d1 - span == d2)
 			span = span negate()
@@ -155,7 +155,7 @@ DateTimeTest: class extends Fixture {
 			d1 += span
 			expect(d1 - d2 == TimeSpan day())
 			d1 -= TimeSpan week()
-			expect((d2 - d1) elapsedDays() == 6)
+			expect((d2 - d1) toDays() == 6)
 		})
 		this add("toText", func {
 			date := DateTime new(1643, 12, 31, 23, 58, 59, 999)
