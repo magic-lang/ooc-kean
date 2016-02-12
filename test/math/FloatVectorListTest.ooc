@@ -23,6 +23,9 @@ FloatVectorListTest: class extends Fixture {
 			list add(-3.0f)
 			list add(4.0f)
 			expect(list sum, is equal to(2.0f) within(tolerance))
+			expect(list sum(0, list count - 1), is equal to(list sum) within(tolerance))
+			expect(list sum(0, 1), is equal to(list[0] + list[1]) within(tolerance))
+			expect(list sum(1, 3), is equal to(list[1] + list[2] + list[3]) within(tolerance))
 			list free()
 		})
 		this add("maxValue, minValue", func {

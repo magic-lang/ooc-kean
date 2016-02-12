@@ -116,6 +116,17 @@ FloatVectorList: class extends VectorList<Float> {
 		max := this maxValue
 		max != 0 ? (this / max) : this copy()
 	}
+	sum: func ~range (range: Range) -> Float {
+		this sum(range min, range max)
+	}
+	sum: func (start, end: Int) -> Float {
+		version(safe)
+			raise(start < 0 || start >= this count || end < 0 || end >= this count , "invalid range in FloatVectorList sum()")
+		result := this[start]
+		for (i in start + 1 .. end + 1)
+			result += this[i]
+		result
+	}
 	exp: func -> This {
 		result := This new(this _count)
 		for (i in 0 .. this _count)
