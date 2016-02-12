@@ -106,7 +106,7 @@ getStandardHashFunc: func <T> (T: Class) -> Func <T> (T) -> SizeT {
 		murmurHash
 }
 
-HashMap: class <K, V> extends BackIterable<V> {
+HashMap: class <K, V> {
 	_size: SizeT
 	capacity: SizeT
 	hashKey: Func <K> (K) -> SizeT
@@ -168,7 +168,9 @@ HashMap: class <K, V> extends BackIterable<V> {
 	}
 	copy: func -> This<K, V> {
 		copy := This<K, V> new()
-		this each(|k, v| copy put(k, v))
+		f := func (k: K, v: V) { copy put(k, v) }
+		this each(f)
+		(f as Closure) free()
 		copy
 	}
 	merge: func (other: This<K, V>) -> This<K, V> {
@@ -295,7 +297,7 @@ HashMap: class <K, V> extends BackIterable<V> {
 		this keys free()
 		this keys = oldKeys
 	}
-	iterator: override func -> BackIterator<V> {
+	iterator: func -> BackIterator<V> {
 		HashMapValueIterator<K, V> new(this)
 	}
 	backIterator: func -> BackIterator<V> {
@@ -311,7 +313,7 @@ HashMap: class <K, V> extends BackIterable<V> {
 	}
 	each: func ~withKeys (f: Func (K, V)) {
 		for (i in 0 .. this keys count) {
-			key := keys[i]
+			key := this keys[i]
 			f(key, get(key))
 		}
 	}
