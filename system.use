@@ -7,7 +7,6 @@ Imports: String
 Imports: types
 Imports: Buffer
 Imports: CharBuffer
-Imports: CharBufferIterator
 Imports: Format
 Imports: IO
 Imports: Iterators

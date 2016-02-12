@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-CharBuffer: class extends Iterable<Char> {
+CharBuffer: class {
 	size: Int
 	capacity: Int = 0
 	mallocAddr: Char*
@@ -493,24 +493,6 @@ CharBuffer: class extends Iterable<Char> {
 			result = strtold(this data, null)
 		}
 		result
-	}
-
-	iterator: override func -> CharBufferIterator<Char> {
-		CharBufferIterator<Char> new(this)
-	}
-
-	forward: func -> CharBufferIterator<Char> {
-		iterator()
-	}
-
-	backward: func -> BackIterator<Char> {
-		backIterator() reversed()
-	}
-
-	backIterator: func -> CharBufferIterator<Char> {
-		iter := CharBufferIterator<Char> new(this)
-		iter i = length()
-		return iter
 	}
 
 	get: final func (index: Int) -> Char {

@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-String: class extends Iterable<Char> {
+String: class {
 	// Avoid direct buffer access, as it breaks immutability.
 	_buffer: CharBuffer
 
@@ -252,22 +252,6 @@ String: class extends Iterable<Char> {
 	toFloat: func -> Float { _buffer toFloat() }
 	toDouble: func -> Double { _buffer toDouble() }
 	toLDouble: func -> LDouble { _buffer toLDouble() }
-
-	iterator: override func -> CharBufferIterator<Char> {
-		_buffer iterator()
-	}
-
-	forward: func -> CharBufferIterator<Char> {
-		_buffer forward()
-	}
-
-	backward: func -> BackIterator<Char> {
-		_buffer backward()
-	}
-
-	backIterator: func -> CharBufferIterator<Char> {
-		_buffer backIterator()
-	}
 
 	cformat: final func ~str (...) -> This {
 		list: VaList
