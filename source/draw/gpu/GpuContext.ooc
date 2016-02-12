@@ -15,7 +15,7 @@ import DrawContext
 import GpuImage, GpuCanvas, GpuMap, GpuFence, GpuYuv420Semiplanar, GpuMesh
 
 version(!gpuOff) {
-_ToRasterFuture: class extends Future<RasterImage> {
+ToRasterFuture: class extends Future<RasterImage> {
 	_result: RasterImage
 	init: func (=_result) {
 		super()
