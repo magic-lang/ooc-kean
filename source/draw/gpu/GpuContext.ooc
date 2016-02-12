@@ -55,6 +55,6 @@ GpuContext: abstract class extends DrawContext {
 		source toRasterDefault(target)
 		Promise empty
 	}
-	toRasterAsync: virtual func (source: GpuImage) -> Future<RasterImage> { raise("toRasterAsync unimplemented") }
+	toRasterAsync: virtual func (source: GpuImage) -> Future<RasterImage> { raise("toRasterAsync unimplemented"); null }
 }
 }
