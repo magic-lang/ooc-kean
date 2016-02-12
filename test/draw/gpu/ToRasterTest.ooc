@@ -42,7 +42,7 @@ ToRasterTest: class extends Fixture {
 	}
 	toRasterAsync: func (sourceImage: RasterImage) {
 		gpuImage := context createImage(sourceImage)
-		future := gpuImage toRasterAsync() as ToRasterFuture
+		future := gpuImage toRasterAsync()
 		future wait()
 		raster := future getResult(null)
 		expect(raster != null)

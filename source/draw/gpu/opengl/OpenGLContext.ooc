@@ -175,7 +175,7 @@ OpenGLContext: class extends GpuContext {
 		target canvas draw(source, map)
 	}
 	createFence: override func -> GpuFence { OpenGLFence new(this) }
-	toRasterAsync: override func (source: GpuImage) -> Future<RasterImage> { ToRasterFuture new(this toRaster(source)) }
+	toRasterAsync: override func (source: GpuImage) -> ToRasterFuture { ToRasterFuture new(this toRaster(source)) }
 	createMesh: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
 		toGL := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
 		for (i in 0 .. vertices length)
