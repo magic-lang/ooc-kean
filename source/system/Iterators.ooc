@@ -35,7 +35,6 @@ Iterable: abstract class <T> {
 
 BackIterable: abstract class <T> extends Iterable<T> {
 	iterator: abstract func -> BackIterator<T>
-	/** Returns an iterator at the back or end of the Iterable. */
 	backIterator: func -> BackIterator<T> {
 		iter := iterator()
 		while (iter hasNext())
