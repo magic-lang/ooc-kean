@@ -23,6 +23,7 @@ Imports: Time
 Imports: VarArgs
 Imports: structs/HashMap
 Imports: structs/List
+Imports: structs/Queue
 Imports: structs/Stack
 Imports: structs/Vector
 Imports: structs/VectorList
