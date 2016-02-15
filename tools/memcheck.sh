@@ -1,2 +1,8 @@
 #!/bin/bash
-valgrind --leak-check=full --log-file=memcheck.valgrindlog --num-callers=500 --time-stamp=yes ./Tests -n $@
+logFile="memcheck.valgrindlog"
+valgrind --leak-check=full --log-file=$logFile --suppressions=./tools/kean.supp --num-callers=500 ./Tests -n $@
+
+grep -A5 LEAK $logFile | grep -v LEAK
+grep -A4 Invalid $logFile
+
+exit 0
