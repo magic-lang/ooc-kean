@@ -32,10 +32,10 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0)
 		version(debugGL) { validateEnd("FramebufferObject unbind") }
 	}
-	setClearColor: override func (color: ColorBgra) {
+	setClearColor: override func (color: ColorRgba) {
 		version(debugGL) { validateStart("FramebufferObject setClearColor") }
 		tuple := color normalized
-		glClearColor(tuple c, tuple b, tuple a, tuple d)
+		glClearColor(tuple a, tuple b, tuple c, tuple d)
 		version(debugGL) { validateEnd("FramebufferObject setClearColor") }
 	}
 	readPixels: override func (buffer: ByteBuffer) {

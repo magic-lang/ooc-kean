@@ -19,7 +19,7 @@ RasterCanvasTest: class extends Fixture {
 		this add("rgb", func {
 			output := "test/draw/output/RasterCanvas_Bgr.png"
 			image := RasterBgr open(this inputFlower)
-			image canvas pen = Pen new(ColorBgr new(0, 255, 0))
+			image canvas pen = Pen new(ColorRgb new(0, 255, 0))
 			halfWidth := image size x / 2
 			halfHeight := image size y / 2
 			start := FloatPoint2D new(-halfWidth, -halfHeight)
@@ -39,7 +39,7 @@ RasterCanvasTest: class extends Fixture {
 		this add("rgba", func {
 			output := "test/draw/output/RasterCanvas_Bgra.png"
 			image := RasterBgra open(this inputFlower)
-			image canvas pen = Pen new(ColorBgr new(128, 0, 128))
+			image canvas pen = Pen new(ColorRgb new(128, 0, 128))
 			for (row in 0 .. image size y / 3)
 				for (column in 0 .. image size x / 3)
 					image canvas drawPoint(FloatPoint2D new(column * 3 - image size x / 2, row * 3 - image size y / 2))
@@ -55,7 +55,7 @@ RasterCanvasTest: class extends Fixture {
 			output := "test/draw/output/RasterCanvas_Yuv420.png"
 			image := RasterYuv420Semiplanar open(this inputFlower)
 			for (i in 0 .. 30) {
-				image canvas pen = Pen new(ColorBgr new((i % 10) * 25, (i % 5) * 50, (i % 3) * 80))
+				image canvas pen = Pen new(ColorRgb new((i % 3) * 80, (i % 5) * 50, (i % 10) * 25))
 				box := IntBox2D createAround(IntPoint2D new(0, 0), IntVector2D new(10 * i, 10 * i))
 				image canvas drawBox(FloatBox2D new(box))
 			}
@@ -70,7 +70,7 @@ RasterCanvasTest: class extends Fixture {
 		this add("monochrome", func {
 			output := "test/draw/output/RasterCanvas_Monochrome.png"
 			image := RasterMonochrome open(this inputFlower)
-			image canvas pen = Pen new(ColorBgr new(255, 255, 255))
+			image canvas pen = Pen new(ColorRgb new(255, 255, 255))
 			shiftX := image size x / 2
 			shiftY := image size y / 2
 			for (i in 0 .. image size x / 10)
@@ -88,7 +88,7 @@ RasterCanvasTest: class extends Fixture {
 		this add("monochrome with alpha", func {
 			output := "test/draw/output/RasterCanvas_MonochromeWithAlpha.png"
 			image := RasterMonochrome open(this inputFlower)
-			image canvas pen = Pen new(ColorBgra new(255, 255, 255, 100))
+			image canvas pen = Pen new(ColorRgba new(255, 255, 255, 100))
 			shiftX := image size x / 2
 			shiftY := image size y / 2
 			factor := 2

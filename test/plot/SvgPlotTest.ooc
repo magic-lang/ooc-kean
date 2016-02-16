@@ -85,9 +85,9 @@ SvgPlotTest: class extends Fixture {
 			scatterParabolaData shape = Shape Square
 			scatterParabolaData label = "" // label for the data object can be set
 			scatterParabolaData lineWidth = 4 // line width can be set, defaults to 1 if not set
-			scatterParabolaData colorBgra = ColorBgra new(255, 0, 0, 150) // color can be specified, if not specified a color map will be used
+			scatterParabolaData colorRgba = ColorRgba new(0, 0, 255, 150) // color can be specified, if not specified a color map will be used
 			lineParabolaData := LinePlotData2D new(parabola, "x²")
-			lineParabolaData colorBgra = ColorBgra new(255, 0, 0, 150)
+			lineParabolaData colorRgba = ColorRgba new(0, 0, 255, 150)
 			formatPlot := SvgPlot new(scatterParabolaData, "temporary title")
 			formatPlot addDataset(lineParabolaData)
 			formatPlot title = "Plot showing usage of various formatting options" // title can be set in this way

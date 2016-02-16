@@ -14,28 +14,28 @@ PlotData2D: abstract class {
 	label: String { get set }
 	lineWidth: Float { get set }
 	legendOffset: Float { get set }
-	colorBgra: ColorBgra { get set }
+	colorRgba: ColorRgba { get set }
 	color: String { get set }
 	opacity: Float { get set }
 	dataSeries: VectorList<FloatPoint2D> { get set }
 	init: func ~default {
 		this init(VectorList<FloatPoint2D> new())
 	}
-	init: func ~dataSeries (=dataSeries, label := "", colorBgra := ColorBgra new()) {
+	init: func ~dataSeries (=dataSeries, label := "", colorRgba := ColorRgba new()) {
 		this lineWidth = 1
 		this legendOffset = 5.0f
 		this label = label
-		this colorBgra = colorBgra
+		this colorRgba = colorRgba
 	}
-	init: func ~color (dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra) {
-		this init(dataSeries, "", colorBgra)
+	init: func ~color (dataSeries: VectorList<FloatPoint2D>, colorRgba: ColorRgba) {
+		this init(dataSeries, "", colorRgba)
 	}
-	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new()) {
+	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorRgba := ColorRgba new()) {
 		dataSeries := VectorList<FloatPoint2D> new()
 		for (i in 0 .. ySeries count) {
 			dataSeries add(FloatPoint2D new(xSeries != null ? xSeries[i] : (i + 1) as Float, ySeries[i]))
 		}
-		this init(dataSeries, label, colorBgra)
+		this init(dataSeries, label, colorRgba)
 	}
 	free: override func {
 		this dataSeries free()

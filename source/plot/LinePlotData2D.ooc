@@ -24,15 +24,15 @@ LinePlotData2D: class extends PlotData2D {
 		super()
 		this lineStyle = lineStyle
 	}
-	init: func ~dataSeries (dataSeries: VectorList<FloatPoint2D>, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
-		super(dataSeries, label, colorBgra)
+	init: func ~dataSeries (dataSeries: VectorList<FloatPoint2D>, label := "", colorRgba := ColorRgba new(), lineStyle := LineStyle Solid) {
+		super(dataSeries, label, colorRgba)
 		this lineStyle = lineStyle
 	}
-	init: func ~color (dataSeries: VectorList<FloatPoint2D>, colorBgra: ColorBgra, lineStyle := LineStyle Solid) {
-		this init(dataSeries, "", colorBgra, lineStyle)
+	init: func ~color (dataSeries: VectorList<FloatPoint2D>, colorRgba: ColorRgba, lineStyle := LineStyle Solid) {
+		this init(dataSeries, "", colorRgba, lineStyle)
 	}
-	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorBgra := ColorBgra new(), lineStyle := LineStyle Solid) {
-		super(xSeries, ySeries, label, colorBgra)
+	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorRgba := ColorRgba new(), lineStyle := LineStyle Solid) {
+		super(xSeries, ySeries, label, colorRgba)
 		this lineStyle = lineStyle
 	}
 	getSvg: override func (transform: FloatTransform2D) -> String {
