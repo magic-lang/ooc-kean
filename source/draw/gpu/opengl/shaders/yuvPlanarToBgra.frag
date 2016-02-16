@@ -16,5 +16,5 @@ void main() {
 	float y = texture(texture0, fragmentTextureCoordinate).r;
 	float u = texture(texture1, fragmentTextureCoordinate).r;
 	float v = texture(texture2, fragmentTextureCoordinate).r;
-	outColor = YuvToRgba(vec4(y, v - 0.5f, u - 0.5f, 1.0f));
+	outColor = YuvToRgba(vec4(y, u - 0.5f, v - 0.5f, 1.0f));
 }
