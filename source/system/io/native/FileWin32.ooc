@@ -262,7 +262,7 @@ version(windows) {
 					s := ffd fileName toString()
 					match T {
 						case String => result add(s)
-						case => result add(File new(this, s))
+						case => result add(File new((this path + this separator) & s))
 					}
 				}
 				running = FindNextFile(hFile, ffd&)

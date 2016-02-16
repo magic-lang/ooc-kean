@@ -273,7 +273,7 @@ File: abstract class {
 		right := full substring(left size)
 		This new(right)
 	}
-	getChild: func (childPath: String) -> This { This new(this path, childPath) }
+	getChild: func (childPath: String) -> This { This new((this path + this separator) << childPath) }
 	getChild: func ~file (file: This) -> This { this getChild(file path) }
 	toString: func -> String { "File(#{path})" }
 
@@ -291,29 +291,8 @@ File: abstract class {
 		Exception new(This, "Unsupported platform!\n") throw()
 		null
 	}
-	new: static func ~assemble (args: ...) -> This {
-		This new(This join(args))
-	}
 	getCwd: static func -> String {
 		ooc_get_cwd()
-	}
-	join: static func (args: ...) -> String {
-		first := true
-		result := CharBuffer new()
-		args each(|arg|
-			path := match arg {
-				case f: This =>
-					f path
-				case s: String =>
-					s
-			}
-			if (first)
-				first = false
-			else
-				result append(separator)
-			result append(path)
-		)
-		result toString()
 	}
 }
 

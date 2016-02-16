@@ -305,7 +305,7 @@ version (unix || apple) {
 					s := String new(entry@ name, entry@ name length())
 					match T {
 						case String => result add(s)
-						case => result add(File new(this, s))
+						case => result add(File new((this path + this separator) & s))
 					}
 				}
 				entry = readdir(dir)
