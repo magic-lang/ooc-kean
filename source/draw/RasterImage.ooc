@@ -9,7 +9,7 @@
 use geometry
 use base
 import Image
-import RasterBgra, RasterMonochrome, RasterBgr
+import RasterMonochrome, RasterBgr, RasterBgra, RasterRgb, RasterRgba
 import Color
 import StbImage
 
@@ -18,6 +18,7 @@ RasterImage: abstract class extends Image {
 	stride: UInt { get }
 	init: func ~fromRasterImage (original: This) { super(original) }
 	init: func (size: IntVector2D) { super(size) }
+	apply: abstract func ~rgb (action: Func (ColorRgb))
 	apply: abstract func ~bgr (action: Func (ColorBgr))
 	apply: abstract func ~yuv (action: Func (ColorYuv))
 	apply: abstract func ~monochrome (action: Func (ColorMonochrome))

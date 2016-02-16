@@ -35,6 +35,11 @@ RasterBgra: class extends RasterPacked {
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: override func (size: IntVector2D) -> Image { This new(size) }
 	copy: override func -> This { This new(this) }
+	apply: override func ~rgb (action: Func(ColorRgb)) {
+		convert := ColorConvert fromBgr(action)
+		this apply(convert)
+		(convert as Closure) free()
+	}
 	apply: override func ~bgr (action: Func(ColorBgr)) {
 		for (row in 0 .. this size y) {
 			source := this buffer pointer + row * this stride

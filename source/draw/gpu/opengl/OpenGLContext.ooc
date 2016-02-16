@@ -12,7 +12,7 @@ use draw
 use draw-gpu
 use collections
 use concurrent
-import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLMesh, OpenGLCanvas, _RecycleBin, OpenGLPromise
+import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLRgb, OpenGLRgba, OpenGLUv, OpenGLMesh, OpenGLCanvas, _RecycleBin, OpenGLPromise
 import OpenGLMap
 import backend/[GLContext, GLRenderer]
 
@@ -117,6 +117,30 @@ OpenGLContext: class extends GpuContext {
 			result upload(raster)
 		result
 	}
+	createRgb: override func (size: IntVector2D) -> GpuImage {
+		result := this _searchImageBin(GpuImageType Rgb, size)
+		result == null ? OpenGLRgb new(size, this) as GpuImage : result
+	}
+	_createRgb: func (raster: RasterRgb) -> GpuImage {
+		result := this _searchImageBin(GpuImageType Rgb, raster size)
+		if (result == null)
+			result = OpenGLRgb new(raster, this)
+		else
+			result upload(raster)
+		result
+	}
+	createRgba: override func (size: IntVector2D) -> GpuImage {
+		result := this _searchImageBin(GpuImageType Rgba, size)
+		result == null ? OpenGLRgba new(size, this) as GpuImage : result
+	}
+	_createRgba: func (raster: RasterRgba) -> GpuImage {
+		result := this _searchImageBin(GpuImageType Rgba, raster size)
+		if (result == null)
+			result = OpenGLRgba new(raster, this)
+		else
+			result upload(raster)
+		result
+	}
 	createBgr: override func (size: IntVector2D) -> GpuImage {
 		result := this _searchImageBin(GpuImageType Bgr, size)
 		result == null ? OpenGLBgr new(size, this) as GpuImage : result
@@ -144,6 +168,8 @@ OpenGLContext: class extends GpuContext {
 	createImage: virtual override func (rasterImage: RasterImage) -> GpuImage {
 		match (rasterImage) {
 			case image: RasterMonochrome => this _createMonochrome(image)
+			case image: RasterRgb => this _createRgb(image)
+			case image: RasterRgba => this _createRgba(image)
 			case image: RasterBgr => this _createBgr(image)
 			case image: RasterBgra => this _createBgra(image)
 			case image: RasterUv => this _createUv(image)

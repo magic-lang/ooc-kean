@@ -7,6 +7,8 @@ Requires: unit
 Requires: draw
 Requires: draw-gpu
 Imports: OpenGLPacked
+Imports: OpenGLRgb
+Imports: OpenGLRgba
 Imports: OpenGLBgr
 Imports: OpenGLBgra
 Imports: OpenGLMonochrome

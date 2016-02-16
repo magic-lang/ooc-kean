@@ -122,6 +122,11 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 				targetUvBuffer[(column - regionLeftHalf) as Int + targetStride] = thisUvBuffer[column + thisStride]
 		}
 	}
+	apply: override func ~rgb (action: Func(ColorRgb)) {
+		convert := ColorConvert fromYuv(action)
+		this apply(convert)
+		(convert as Closure) free()
+	}
 	apply: override func ~bgr (action: Func(ColorBgr)) {
 		convert := ColorConvert fromYuv(action)
 		this apply(convert)

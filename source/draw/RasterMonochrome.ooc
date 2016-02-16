@@ -53,6 +53,11 @@ RasterMonochrome: class extends RasterPacked {
 		this apply(convert)
 		(convert as Closure) free()
 	}
+	apply: override func ~rgb (action: Func(ColorRgb)) {
+		convert := ColorConvert fromMonochrome(action)
+		this apply(convert)
+		(convert as Closure) free()
+	}
 	apply: override func ~yuv (action: Func(ColorYuv)) {
 		convert := ColorConvert fromMonochrome(action)
 		this apply(convert)

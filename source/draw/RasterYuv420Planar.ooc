@@ -53,6 +53,7 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 		this v buffer copyTo(result v buffer)
 		result
 	}
+	apply: override func ~rgb (action: Func(ColorRgb)) { this apply(ColorConvert fromYuv(action)) }
 	apply: override func ~bgr (action: Func(ColorBgr)) { this apply(ColorConvert fromYuv(action)) }
 	apply: override func ~yuv (action: Func (ColorYuv)) {
 		yRow := this y buffer pointer
