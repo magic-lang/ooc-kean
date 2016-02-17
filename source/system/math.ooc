@@ -27,6 +27,8 @@ extend Short {
 }
 
 extend Long {
+	maximumValue ::= static INT64_MAX
+	minimumValue ::= static INT64_MIN
 	modulo: func (divisor: This) -> This {
 		result := this - (this / divisor) * divisor
 		result < 0 ? result + divisor : result

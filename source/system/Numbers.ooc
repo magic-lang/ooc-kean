@@ -19,6 +19,7 @@ LONG_MIN, LONG_MAX: extern static Long
 ULONG_MAX: extern static ULong
 LLONG_MIN, LLONG_MAX: extern static LLong
 ULLONG_MAX: extern static ULLong
+INT64_MAX, INT64_MIN: extern static Long
 
 LLong: cover from signed long long {
 	toString: func -> String { "%lld" formatLLong(this as LLong) }

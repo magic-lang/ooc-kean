@@ -96,6 +96,8 @@ TimeSpan: cover {
 	hour: static func -> This { This hours(1) }
 	day: static func -> This { This days(1) }
 	week: static func -> This { This weeks(1) }
+	maximumValue ::= static This new(Long maximumValue)
+	minimumValue ::= static This new(Long minimumValue)
 
 	milliseconds: static func (count: Double) -> This { This new(DateTime ticksPerMillisecond * count) }
 	seconds: static func (count: Double) -> This { This new(DateTime ticksPerSecond * count) }
