@@ -25,10 +25,10 @@ UnixWindowBase: class extends DisplayWindow {
 		super()
 	}
 	draw: override func (image: Image) {
-		if (image instanceOf(RasterBgra))
-			this _xWindow draw(image as RasterBgra)
+		if (image instanceOf(RasterRgba))
+			this _xWindow draw(image as RasterRgba)
 		else {
-			raster := RasterBgra convertFrom(image as RasterImage)
+			raster := RasterRgba convertFrom(image as RasterImage)
 			this _xWindow draw(raster)
 			raster referenceCount decrease()
 		}

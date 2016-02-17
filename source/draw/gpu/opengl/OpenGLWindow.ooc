@@ -14,17 +14,17 @@ use base
 
 version(!gpuOff) {
 OpenGLWindow: class extends OpenGLSurface {
-	_monochromeToBgra: OpenGLMap
-	_yuvSemiplanarToBgra: OpenGLMapTransform
+	_monochromeToRgba: OpenGLMap
+	_yuvSemiplanarToRgba: OpenGLMapTransform
 	init: func (windowSize: IntVector2D, display: Pointer, nativeBackend: Long) {
 		context := OpenGLContext new(display, nativeBackend)
 		super(windowSize, context, OpenGLMap new(slurp("shaders/texture.frag"), context), IntTransform2D createScaling(1, -1))
-		this _monochromeToBgra = OpenGLMap new(slurp("shaders/monochromeToBgra.frag"), context)
-		this _yuvSemiplanarToBgra = OpenGLMapTransform new(slurp("shaders/yuvSemiplanarToBgra.frag"), context)
+		this _monochromeToRgba = OpenGLMap new(slurp("shaders/monochromeToRgba.frag"), context)
+		this _yuvSemiplanarToRgba = OpenGLMapTransform new(slurp("shaders/yuvSemiplanarToRgba.frag"), context)
 	}
 	free: override func {
-		this _yuvSemiplanarToBgra free()
-		this _monochromeToBgra free()
+		this _yuvSemiplanarToRgba free()
+		this _monochromeToRgba free()
 		this _defaultMap free()
 		this _context free()
 		super()
@@ -33,10 +33,10 @@ OpenGLWindow: class extends OpenGLSurface {
 	_unbind: override func
 	_getDefaultMap: override func (image: Image) -> Map {
 		match (image class) {
-			case GpuYuv420Semiplanar => this _yuvSemiplanarToBgra
-			case RasterYuv420Semiplanar => this _yuvSemiplanarToBgra
-			case OpenGLMonochrome => this _monochromeToBgra
-			case RasterMonochrome => this _monochromeToBgra
+			case GpuYuv420Semiplanar => this _yuvSemiplanarToRgba
+			case RasterYuv420Semiplanar => this _yuvSemiplanarToRgba
+			case OpenGLMonochrome => this _monochromeToRgba
+			case RasterMonochrome => this _monochromeToRgba
 			case => this context defaultMap
 		}
 	}

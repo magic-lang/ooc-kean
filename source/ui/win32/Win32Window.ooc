@@ -42,7 +42,7 @@ Win32Window: class extends NativeWindow {
 		DestroyWindow(this backend as HWND)
 		super()
 	}
-	draw: func (image: RasterBgra) {
+	draw: func (image: RasterRgba) {
 		image swapRedBlue()
 		paintStruct: PaintStruct
 		bitmap: Bitmap
