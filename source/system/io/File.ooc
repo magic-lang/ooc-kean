@@ -23,7 +23,14 @@ import native/[FileWin32, FileUnix]
  * 'writing a String', see the FileReader and FileWriter classes
  */
 File: abstract class {
-	path: String { get set }
+	path: String {
+		get
+		set (value) {
+			if (this path)
+				this path free()
+			this path = value ? value clone() : null
+		}
+	}
 	name ::= this getName()
 	parent ::= this getParent()
 	extension ::= this getExtension()
@@ -72,11 +79,14 @@ File: abstract class {
 		idx == -1 ? trimmed : trimmed substring(idx + 1)
 	}
 	getParent: func -> This {
-		pName := parentName()
-		if (pName) return new(pName)
-		if (path != "." && !path startsWith(This separator))
-			return new(".") // return the current directory
-		return null
+		result: This
+		pName := this parentName()
+		if (pName) {
+			result = This new(pName)
+			pName free()
+		} else if (this path != "." && !this path startsWith(This separator))
+			result = This new(".")
+		result
 	}
 	getExtension: func -> String {
 		result := ""
@@ -293,6 +303,11 @@ File: abstract class {
 	}
 	getCwd: static func -> String {
 		ooc_get_cwd()
+	}
+	free: override func {
+		if (this path)
+			this path free()
+		super()
 	}
 }
 
