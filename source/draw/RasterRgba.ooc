@@ -106,7 +106,7 @@ RasterRgba: class extends RasterPacked {
 			rowEnd := row + rowLength
 			destination := row as ColorRgba*
 			f := func (color: ColorRgb) {
-				(destination as ColorRgba*)@ = ColorRgba new(color, 255)
+				destination@ = ColorRgba new(color, 255)
 				destination += 1
 				if (destination >= rowEnd) {
 					row += result stride
