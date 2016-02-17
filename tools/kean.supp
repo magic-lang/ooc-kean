@@ -1,0 +1,36 @@
+{
+   compileshader
+   Memcheck:Leak
+   ...
+   fun:backend_gles3_Gles3ShaderProgram__Gles3ShaderProgram__compileShader
+}
+{
+   fboClear
+   Memcheck:Leak
+   ...
+   fun:backend_gles3_Gles3FramebufferObject__Gles3FramebufferObject_clear
+}
+{
+   stringliteral
+   Memcheck:Leak
+   ...
+   fun:String__makeStringLiteral
+}
+{
+   mapinit
+   Memcheck:Leak
+   ...
+   fun:Map_OpenGLMap__OpenGLMapDefault_init
+}
+{
+   swapbuffers
+   Memcheck:Leak
+   ...
+   fun:eglSwapBuffers
+}
+{
+   eglInitialize
+   Memcheck:Leak
+   ...
+   fun:eglInitialize
+}
