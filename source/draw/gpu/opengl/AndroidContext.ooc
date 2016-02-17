@@ -100,7 +100,7 @@ AndroidContext: class extends OpenGLContext {
 		}
 	}
 	toRaster: override func ~target (source: GpuImage, target: RasterImage) -> Promise {
-		result: Promise
+		result: OpenGLPromise
 		if (target instanceOf(GraphicBufferYuv420Semiplanar) && source instanceOf(GpuYuv420Semiplanar)) {
 			targetImage := target as GraphicBufferYuv420Semiplanar
 			sourceImage := source as GpuYuv420Semiplanar
@@ -109,9 +109,8 @@ AndroidContext: class extends OpenGLContext {
 			padding := targetImage uvPadding % targetImage stride
 			this packToRgba(sourceImage y, targetImageRgba, IntBox2D new(0, 0, targetWidth, targetImage y size y), padding)
 			this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
-			fence := this createFence()
-			fence sync()
-			result = OpenGLPromise new(fence as OpenGLFence)
+			result = OpenGLPromise new(this)
+			result sync()
 		} else
 			super(source, target)
 		result

@@ -50,14 +50,17 @@ OpenGLFence: class extends GpuFence {
 }
 
 OpenGLPromise: class extends Promise {
-	_fence: OpenGLFence
-	init: func (=_fence) { super() }
+	_fence: GLFence
+	init: func (context: OpenGLContext) {
+		super()
+		this _fence = context backend as GLContext createFence()
+	}
 	free: override func {
 		this _fence free()
 		super()
 	}
 	sync: func { this _fence sync() }
-	wait: override func -> Bool { this _fence wait() }
-	wait: override func ~timeout (time: TimeSpan) -> Bool { this _fence wait(time) }
+	wait: override func -> Bool { this wait(TimeSpan maximumValue) }
+	wait: override func ~timeout (time: TimeSpan) -> Bool { this _fence clientWait(time toNanoseconds()) }
 }
 }
