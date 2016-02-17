@@ -63,7 +63,7 @@ AndroidContext: class extends OpenGLContext {
 		}
 		index == -1 ? EGLBgra new(size, this) : this _packers remove(index)
 	}
-	toBuffer: func (source: GpuImage, packMap: GpuMap) -> (ByteBuffer, GpuFence) {
+	toBuffer: func (source: GpuImage, packMap: Map) -> (ByteBuffer, GpuFence) {
 		channels := (source as OpenGLPacked) channels
 		packSize := IntVector2D new(source size x / (4 / channels), source size y)
 		gpuRgba := this getPacker(packSize)
@@ -140,8 +140,8 @@ AndroidContext: class extends OpenGLContext {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
 		sourceSize := source size
 		transform := FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
-		yMap: GpuMap = this _unpackRgbaToMonochrome
-		uvMap: GpuMap = this _unpackRgbaToUv
+		yMap: Map = this _unpackRgbaToMonochrome
+		uvMap: Map = this _unpackRgbaToUv
 		if (padding > 0) {
 			uvMap = this _unpackRgbaToUvPadded
 			uvMap add("paddingOffset", padding as Float / (source size x * 4) as Float)
@@ -155,7 +155,7 @@ AndroidContext: class extends OpenGLContext {
 	}
 	alignWidth: override func (width: Int, align := AlignWidth Nearest) -> Int { GraphicBuffer alignWidth(width, align) }
 	isAligned: override func (width: Int) -> Bool { GraphicBuffer isAligned(width) }
-	_unpack: static func (source: GpuImage, target: GpuImage, map: GpuMap, targetWidth: Int, transform: FloatTransform3D, scaleX: Float, scaleY: Float, startY: Float) {
+	_unpack: static func (source: GpuImage, target: GpuImage, map: Map, targetWidth: Int, transform: FloatTransform3D, scaleX: Float, scaleY: Float, startY: Float) {
 		map add("texture0", source)
 		map add("targetWidth", targetWidth)
 		map add("transform", transform)

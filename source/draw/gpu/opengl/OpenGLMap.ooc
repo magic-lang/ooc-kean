@@ -15,7 +15,7 @@ import backend/GLShaderProgram
 import OpenGLContext, OpenGLPacked, OpenGLVolumeMonochrome
 
 version(!gpuOff) {
-OpenGLMap: class extends GpuMap {
+OpenGLMap: class extends Map {
 	_vertexSource: String
 	_fragmentSource: String
 	_program: GLShaderProgram[]

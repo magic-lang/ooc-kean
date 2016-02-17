@@ -11,7 +11,7 @@ use draw
 use collections
 use base
 
-import GpuContext, GpuMap, GpuImage, GpuMesh, GpuYuv420Semiplanar
+import GpuContext, GpuImage, GpuMesh, GpuYuv420Semiplanar
 
 version(!gpuOff) {
 GpuCanvas: abstract class extends Canvas {
@@ -23,7 +23,7 @@ GpuCanvas: abstract class extends Canvas {
 	_focalLength: Float
 	_nearPlane := 1.0f
 	_farPlane := 10000.0f
-	_defaultMap: GpuMap
+	_defaultMap: Map
 	_coordinateTransform := IntTransform2D identity
 	transform: FloatTransform3D {
 		get { this _transform }
@@ -60,13 +60,13 @@ GpuCanvas: abstract class extends Canvas {
 	_createModelTransformNormalized: func (imageSize: IntVector2D, box: FloatBox2D) -> FloatTransform3D {
 		this _createModelTransform(box * imageSize toFloatVector2D())
 	}
-	_getDefaultMap: virtual func (image: Image) -> GpuMap { this _defaultMap }
+	_getDefaultMap: virtual func (image: Image) -> Map { this _defaultMap }
 	clear: func { this fill() }
 	draw: virtual func (action: Func)
-	draw: virtual func ~WithoutBind (destination: IntBox2D, map: GpuMap)
-	draw: abstract func ~GpuImage (image: GpuImage, source, destination: IntBox2D, map: GpuMap)
-	draw: func ~ImageMap (image: GpuImage, map: GpuMap) { this draw~GpuImage(image, IntBox2D new(image size), IntBox2D new(image size), map) }
-	draw: func ~ImageDestinationMap (image: GpuImage, destination: IntBox2D, map: GpuMap) { this draw~GpuImage(image, IntBox2D new(image size), destination, map) }
+	draw: virtual func ~WithoutBind (destination: IntBox2D, map: Map)
+	draw: abstract func ~GpuImage (image: GpuImage, source, destination: IntBox2D, map: Map)
+	draw: func ~ImageMap (image: GpuImage, map: Map) { this draw~GpuImage(image, IntBox2D new(image size), IntBox2D new(image size), map) }
+	draw: func ~ImageDestinationMap (image: GpuImage, destination: IntBox2D, map: Map) { this draw~GpuImage(image, IntBox2D new(image size), destination, map) }
 	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) {
 		map := this _getDefaultMap(image)
 		temporary: GpuImage = null

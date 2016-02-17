@@ -31,7 +31,7 @@ OpenGLWindow: class extends OpenGLSurface {
 	}
 	_bind: override func
 	_unbind: override func
-	_getDefaultMap: override func (image: Image) -> GpuMap {
+	_getDefaultMap: override func (image: Image) -> Map {
 		match (image class) {
 			case GpuYuv420Semiplanar => this _yuvSemiplanarToBgra
 			case RasterYuv420Semiplanar => this _yuvSemiplanarToBgra

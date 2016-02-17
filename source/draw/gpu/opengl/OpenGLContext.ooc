@@ -29,7 +29,7 @@ OpenGLContext: class extends GpuContext {
 	_recycleBin := _RecycleBin new()
 	backend ::= this _backend
 	meshShader ::= this _meshShader
-	defaultMap ::= this _transformTextureMap as GpuMap
+	defaultMap ::= this _transformTextureMap as Map
 
 	init: func ~backend (=_backend) {
 		super()
@@ -143,7 +143,7 @@ OpenGLContext: class extends GpuContext {
 	update: override func { this _backend swapBuffers() }
 	packToRgba: override func (source: GpuImage, target: GpuImage, viewport: IntBox2D, padding := 0) {
 		channels := 1
-		map: GpuMap
+		map: Map
 		if (source instanceOf(OpenGLMonochrome))
 			map = this _packMonochrome
 		else if (source instanceOf(OpenGLUv)) {
