@@ -47,7 +47,6 @@ GpuContext: abstract class extends DrawContext {
 	createMesh: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GpuMesh
 
 	update: abstract func
-	finish: func { this createFence() sync() . wait() . free() }
 
 	toRaster: virtual func (source: GpuImage) -> RasterImage { source toRasterDefault() }
 	toRaster: virtual func ~target (source: GpuImage, target: RasterImage) -> Promise {
