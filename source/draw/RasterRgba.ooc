@@ -10,6 +10,7 @@ use geometry
 use base
 import RasterPacked
 import RasterImage
+import io/File
 import StbImage
 import Image
 import Color
@@ -60,6 +61,67 @@ RasterRgba: class extends RasterPacked {
 		this apply(convert)
 		(convert as Closure) free()
 	}
+	distance: func (other: Image) -> Float {
+		result := 0.0f
+		if (!other || (this size != other size))
+			result = Float maximumValue
+		else if (!other instanceOf(This)) {
+			converted := This convertFrom(other as RasterImage)
+			result = this distance(converted)
+			converted referenceCount decrease()
+		} else {
+			for (y in 0 .. this size y)
+				for (x in 0 .. this size x) {
+					c := this[x, y]
+					o := (other as This)[x, y]
+					if (c distance(o) > 0) {
+						maximum := o
+						minimum := o
+						for (otherY in 0 maximum(y - this distanceRadius) .. (y + 1 + this distanceRadius) minimum(this size y))
+							for (otherX in 0 maximum(x - this distanceRadius) .. (x + 1 + this distanceRadius) minimum(this size x))
+								if (otherX != x || otherY != y) {
+									pixel := (other as This)[otherX, otherY]
+									if (maximum blue < pixel blue)
+										maximum blue = pixel blue
+									else if (minimum blue > pixel blue)
+										minimum blue = pixel blue
+									if (maximum green < pixel green)
+										maximum green = pixel green
+									else if (minimum green > pixel green)
+										minimum green = pixel green
+									if (maximum red < pixel red)
+										maximum red = pixel red
+									else if (minimum red > pixel red)
+										minimum red = pixel red
+									if (maximum alpha < pixel alpha)
+										maximum alpha = pixel alpha
+									else if (minimum alpha > pixel alpha)
+										minimum alpha = pixel alpha
+								}
+						distance := 0.0f
+						if (c blue < minimum blue)
+							distance += (minimum blue - c blue) as Float squared
+						else if (c blue > maximum blue)
+							distance += (c blue - maximum blue) as Float squared
+						if (c green < minimum green)
+							distance += (minimum green - c green) as Float squared
+						else if (c green > maximum green)
+							distance += (c green - maximum green) as Float squared
+						if (c red < minimum red)
+							distance += (minimum red - c red) as Float squared
+						else if (c red > maximum red)
+							distance += (c red - maximum red) as Float squared
+						if (c alpha < minimum alpha)
+							distance += (minimum alpha - c alpha) as Float squared
+						else if (c alpha > maximum alpha)
+							distance += (c alpha - maximum alpha) as Float squared
+						result += (distance) sqrt() / 4
+					}
+				}
+			result /= this size length
+		}
+		result
+	}
 	swapRedBlue: func {
 		this swapChannels(0, 2)
 	}
@@ -94,6 +156,18 @@ RasterRgba: class extends RasterPacked {
 
 	open: static func (filename: String) -> This {
 		This convertFrom(RasterBgra open(filename))
+	}
+	savePacked: func (filename: String) -> Int {
+		file := File new(filename)
+		folder := file parent . mkdirs() . free()
+		file free()
+		StbImage writePng(filename, this size x, this size y, this bytesPerPixel, this buffer pointer, this size x * this bytesPerPixel)
+	}
+	save: override func (filename: String) -> Int {
+		bgra := this redBlueSwapped()
+		result := bgra savePacked(filename)
+		bgra free()
+		result
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
