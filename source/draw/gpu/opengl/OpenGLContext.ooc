@@ -12,20 +12,20 @@ use draw
 use draw-gpu
 use collections
 use concurrent
-import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, OpenGLMesh, OpenGLCanvas, _RecycleBin
+import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, OpenGLMesh, OpenGLCanvas, _RecycleBin, OpenGLPromise
 import OpenGLMap
 import backend/[GLContext, GLRenderer]
 
 version(!gpuOff) {
 _FenceToRasterFuture: class extends ToRasterFuture {
-	_fence: GpuFence
-	init: func (result: RasterImage, =_fence) { super(result) }
+	_promise: OpenGLPromise
+	init: func (result: RasterImage, =_promise) { super(result) }
 	free: override func {
-		this _fence free()
+		this _promise free()
 		super()
 	}
-	wait: override func -> Bool { this _fence wait() }
-	wait: override func ~timeout (time: TimeSpan) -> Bool { this _fence wait(time) }
+	wait: override func -> Bool { this _promise wait() }
+	wait: override func ~timeout (time: TimeSpan) -> Bool { this _promise wait(time) }
 }
 OpenGLContext: class extends GpuContext {
 	_backend: GLContext
