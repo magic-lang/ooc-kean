@@ -20,7 +20,7 @@ GLFramebufferObject: abstract class {
 	bind: abstract func
 	unbind: abstract func
 	clear: abstract func
-	setClearColor: abstract func (color: ColorBgra)
+	setClearColor: abstract func (color: ColorRgba)
 	readPixels: abstract func (buffer: ByteBuffer)
 	invalidate: abstract func
 }

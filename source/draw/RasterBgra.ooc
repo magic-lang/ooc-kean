@@ -21,7 +21,7 @@ RasterBgraCanvas: class extends RasterPackedCanvas {
 	_drawPoint: override func (x, y: Int) {
 		position := this _map(IntPoint2D new(x, y))
 		if (this target isValidIn(position x, position y))
-			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color)
+			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toBgra())
 	}
 }
 

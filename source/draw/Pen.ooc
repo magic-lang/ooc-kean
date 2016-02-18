@@ -9,18 +9,18 @@
 import Color
 
 Pen: cover {
-	color: ColorBgra { get set }
+	color: ColorRgba { get set }
 	width: Float { get set }
 	alpha ::= this color alpha
 	alphaAsFloat ::= this alpha as Float / 255.0
 	init: func@ (=color, =width)
-	init: func@ ~color (color: ColorBgra) { this init(color, 1.0f) }
-	init: func@ ~default { this init(ColorBgra new(0, 0, 0, 255)) }
-	init: func@ ~withBgr (colorBgr: ColorBgr) { this init(colorBgr toBgra()) }
+	init: func@ ~color (color: ColorRgba) { this init(color, 1.0f) }
+	init: func@ ~default { this init(ColorRgba new(0, 0, 0, 255)) }
+	init: func@ ~withRgb (colorRgb: ColorRgb) { this init(colorRgb toRgba()) }
 	setAlpha: func@ (alpha: Byte) {
-		this color = ColorBgra new(this color toBgr(), alpha)
+		this color = ColorRgba new(this color toRgb(), alpha)
 	}
 	setAlpha: func@ ~withFloat (value: Float) {
-		this color = ColorBgra new(this color toBgr(), value * 255)
+		this color = ColorRgba new(this color toRgb(), value * 255)
 	}
 }

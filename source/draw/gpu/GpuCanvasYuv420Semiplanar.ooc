@@ -36,14 +36,14 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
 		set(value) {
 			this _pen = value
 			yuv := value color toYuv()
-			this _target y canvas pen = Pen new(ColorBgra new(yuv y, 0, 0, 255), value width)
-			this _target uv canvas pen = Pen new(ColorBgra new(yuv u, yuv v, 0, 255), value width)
+			this _target y canvas pen = Pen new(ColorRgba new(yuv y, 0, 0, 255), value width)
+			this _target uv canvas pen = Pen new(ColorRgba new(yuv u, yuv v, 0, 255), value width)
 		}
 	}
 
 	init: func (=_target, context: GpuContext) {
 		super(this _target size, context, context defaultMap, IntTransform2D identity)
-		this _target uv canvas pen = Pen new(ColorBgra new(128, 128, 128, 128))
+		this _target uv canvas pen = Pen new(ColorRgba new(128, 128, 128, 128))
 	}
 	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
 		gpuImage := image as GpuYuv420Semiplanar

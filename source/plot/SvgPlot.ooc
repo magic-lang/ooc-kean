@@ -105,10 +105,10 @@ SvgPlot: class {
 	}
 	setColor: func {
 		if (!datasets empty) {
-			noneColor := ColorBgra new(0, 0, 0, 0)
+			noneColor := ColorRgba new(0, 0, 0, 0)
 			for (j in 0 .. datasets count) {
-				if (noneColor != datasets[j] colorBgra) {
-					color := datasets[j] colorBgra
+				if (noneColor != datasets[j] colorRgba) {
+					color := datasets[j] colorRgba
 					datasets[j] color = "rgb(" clone() & color red toString() & "," clone() & color green toString() & "," clone() & color blue toString() & ")" clone()
 					datasets[j] opacity = (color alpha as Float) / 255.0f
 				} else {

@@ -40,7 +40,7 @@ OpenGLUv: class extends OpenGLPacked {
 	}
 	_createCanvas: override func -> GpuCanvas {
 		result := super()
-		result pen = Pen new(ColorBgra new(128, 128, 128, 128))
+		result pen = Pen new(ColorRgba new(128, 128, 128, 128))
 		result
 	}
 	create: override func (size: IntVector2D) -> This { this context createUv(size) as This }
