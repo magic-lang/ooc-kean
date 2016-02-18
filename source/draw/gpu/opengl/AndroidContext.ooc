@@ -116,25 +116,24 @@ AndroidContext: class extends OpenGLContext {
 			super(source, target)
 		result
 	}
-	toRasterAsync: func ~monochrome (gpuImage: OpenGLMonochrome) -> (RasterImage, GpuFence) {
+	toRasterAsync: func ~monochrome (gpuImage: OpenGLMonochrome) -> ToRasterFuture {
 		(buffer, fence) := this toBuffer(gpuImage, this _packMonochrome)
-		(RasterMonochrome new(buffer, gpuImage size), fence)
+		_FenceToRasterFuture new(RasterMonochrome new(buffer, gpuImage size), fence)
 	}
-	toRasterAsync: func ~uv (gpuImage: OpenGLUv) -> (RasterImage, GpuFence) {
+	toRasterAsync: func ~uv (gpuImage: OpenGLUv) -> ToRasterFuture {
 		(buffer, fence) := this toBuffer(gpuImage, this _packUv)
-		(RasterUv new(buffer, gpuImage size), fence)
+		_FenceToRasterFuture new(RasterUv new(buffer, gpuImage size), fence)
 	}
-	toRasterAsync: override func (gpuImage: GpuImage) -> (RasterImage, GpuFence) {
-		rasterResult: RasterImage
-		fenceResult: GpuFence
+	toRasterAsync: override func (gpuImage: GpuImage) -> ToRasterFuture {
+		result: ToRasterFuture
 		aligned := this isAligned(gpuImage size x)
 		if (aligned && gpuImage instanceOf(OpenGLMonochrome))
-			(rasterResult, fenceResult) = this toRasterAsync(gpuImage as OpenGLMonochrome)
+			result = this toRasterAsync(gpuImage as OpenGLMonochrome)
 		else if (aligned && gpuImage instanceOf(OpenGLUv))
-			(rasterResult, fenceResult) = this toRasterAsync(gpuImage as OpenGLUv)
+			result = this toRasterAsync(gpuImage as OpenGLUv)
 		else
-			(rasterResult, fenceResult) = super(gpuImage)
-		(rasterResult, fenceResult)
+			result = super(gpuImage)
+		result
 	}
 	unpackBgraToYuv420Semiplanar: func (source: GpuImage, targetSize: IntVector2D, padding := 0) -> GpuYuv420Semiplanar {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar

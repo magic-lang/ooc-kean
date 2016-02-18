@@ -15,6 +15,23 @@ import DrawContext
 import GpuImage, GpuCanvas, GpuMap, GpuFence, GpuYuv420Semiplanar, GpuMesh
 
 version(!gpuOff) {
+ToRasterFuture: class extends Future<RasterImage> {
+	_result: RasterImage
+	init: func (=_result) {
+		super()
+		this _result referenceCount increase()
+	}
+	free: override func {
+		this _result referenceCount decrease()
+		super()
+	}
+	wait: override func -> Bool { true }
+	wait: override func ~timeout (time: TimeSpan) -> Bool { true }
+	getResult: override final func (defaultValue: RasterImage) -> RasterImage {
+		this _result referenceCount increase()
+		this _result
+	}
+}
 GpuContext: abstract class extends DrawContext {
 	defaultMap ::= null as GpuMap
 	init: func
@@ -38,11 +55,6 @@ GpuContext: abstract class extends DrawContext {
 		source toRasterDefault(target)
 		Promise empty
 	}
-	toRasterAsync: virtual func (source: GpuImage) -> (RasterImage, GpuFence) {
-		result := this toRaster(source)
-		fence := this createFence()
-		fence sync()
-		(result, fence)
-	}
+	toRasterAsync: virtual func (source: GpuImage) -> ToRasterFuture { raise("toRasterAsync unimplemented"); null }
 }
 }

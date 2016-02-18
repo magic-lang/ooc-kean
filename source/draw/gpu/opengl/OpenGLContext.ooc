@@ -11,11 +11,22 @@ use geometry
 use draw
 use draw-gpu
 use collections
+use concurrent
 import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, OpenGLMesh, OpenGLCanvas, _RecycleBin
 import OpenGLMap
 import backend/[GLContext, GLRenderer]
 
 version(!gpuOff) {
+_FenceToRasterFuture: class extends ToRasterFuture {
+	_fence: GpuFence
+	init: func (result: RasterImage, =_fence) { super(result) }
+	free: override func {
+		this _fence free()
+		super()
+	}
+	wait: override func -> Bool { this _fence wait() }
+	wait: override func ~timeout (time: TimeSpan) -> Bool { this _fence wait(time) }
+}
 OpenGLContext: class extends GpuContext {
 	_backend: GLContext
 	_transformTextureMap: OpenGLMapTransform
@@ -164,6 +175,7 @@ OpenGLContext: class extends GpuContext {
 		target canvas draw(source, map)
 	}
 	createFence: override func -> GpuFence { OpenGLFence new(this) }
+	toRasterAsync: override func (source: GpuImage) -> ToRasterFuture { ToRasterFuture new(this toRaster(source)) }
 	createMesh: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
 		toGL := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
 		for (i in 0 .. vertices length)

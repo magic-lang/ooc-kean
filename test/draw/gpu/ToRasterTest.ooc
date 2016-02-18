@@ -25,14 +25,14 @@ ToRasterTest: class extends Fixture {
 		this context free()
 		super()
 	}
-	toRasterTestFunction: func (sourceImage: RasterImage) {
+	toRaster: func (sourceImage: RasterImage) {
 		gpuImage := context createImage(sourceImage)
 		raster := gpuImage toRaster()
 		expect(raster distance(sourceImage), is equal to(0.0f))
 		gpuImage free()
 		raster free()
 	}
-	toRasterTargetTestFunction: func (sourceImage: RasterImage) {
+	toRasterTarget: func (sourceImage: RasterImage) {
 		gpuImage := context createImage(sourceImage)
 		raster := sourceImage create(sourceImage size) as RasterImage
 		gpuImage toRaster(raster) wait() . free()
@@ -40,15 +40,30 @@ ToRasterTest: class extends Fixture {
 		gpuImage free()
 		raster free()
 	}
+	toRasterAsync: func (sourceImage: RasterImage) {
+		gpuImage := context createImage(sourceImage)
+		future := gpuImage toRasterAsync()
+		future wait()
+		raster := future getResult(null)
+		expect(raster != null)
+		expect(raster distance(sourceImage), is equal to(0.0f))
+		future free()
+		gpuImage free()
+		raster referenceCount decrease()
+	}
 	init: func {
 		super("ToRaster")
-		this add("toRaster bgra", || this toRasterTestFunction(bgra))
-		this add("toRaster monochrome", || this toRasterTestFunction(monochrome))
-		this add("toRaster yuv", || this toRasterTestFunction(yuv))
+		this add("toRaster bgra", || this toRaster(bgra))
+		this add("toRaster monochrome", || this toRaster(monochrome))
+		this add("toRaster yuv", || this toRaster(yuv))
 
-		this add("toRasterTarget bgra", || this toRasterTargetTestFunction(bgra))
-		this add("toRasterTarget monochrome", || this toRasterTargetTestFunction(monochrome))
-		this add("toRasterTarget yuv", || this toRasterTargetTestFunction(yuv))
+		this add("toRasterTarget bgra", || this toRasterTarget(bgra))
+		this add("toRasterTarget monochrome", || this toRasterTarget(monochrome))
+		this add("toRasterTarget yuv", || this toRasterTarget(yuv))
+
+		this add("toRasterAsync bgra", || this toRasterAsync(bgra))
+		this add("toRasterAsync monochrome", || this toRasterAsync(monochrome))
+		this add("toRasterAsync yuv", || this toRasterAsync(yuv))
 	}
 }
 ToRasterTest new() run() . free()
