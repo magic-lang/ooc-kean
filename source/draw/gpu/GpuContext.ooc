@@ -12,7 +12,7 @@ use base
 use collections
 use concurrent
 import DrawContext
-import GpuImage, GpuCanvas, GpuMap, GpuFence, GpuYuv420Semiplanar, GpuMesh
+import GpuImage, GpuCanvas, Map, GpuFence, GpuYuv420Semiplanar, GpuMesh
 
 version(!gpuOff) {
 ToRasterFuture: class extends Future<RasterImage> {
@@ -33,7 +33,7 @@ ToRasterFuture: class extends Future<RasterImage> {
 	}
 }
 GpuContext: abstract class extends DrawContext {
-	defaultMap ::= null as GpuMap
+	defaultMap ::= null as Map
 	init: func
 	createMonochrome: abstract func (size: IntVector2D) -> GpuImage
 	createBgr: abstract func (size: IntVector2D) -> GpuImage

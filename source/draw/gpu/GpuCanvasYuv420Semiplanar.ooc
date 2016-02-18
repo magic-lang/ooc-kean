@@ -10,7 +10,7 @@ use geometry
 use draw
 use base
 use collections
-import GpuImage, GpuMap, GpuCanvas, GpuContext, GpuYuv420Semiplanar, GpuMesh
+import GpuImage, Map, GpuCanvas, GpuContext, GpuYuv420Semiplanar, GpuMesh
 
 version(!gpuOff) {
 GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
@@ -45,7 +45,7 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
 		super(this _target size, context, context defaultMap, IntTransform2D identity)
 		this _target uv canvas pen = Pen new(ColorRgba new(128, 128, 128, 128))
 	}
-	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
+	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: Map) {
 		gpuImage := image as GpuYuv420Semiplanar
 		this _target y canvas draw(gpuImage y, source, destination, map)
 		this _target uv canvas draw(gpuImage uv, IntBox2D new(source leftTop / 2, source size / 2), IntBox2D new(destination leftTop / 2, destination size / 2), map)

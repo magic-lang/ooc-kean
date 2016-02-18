@@ -16,7 +16,7 @@ import backend/GLRenderer
 version(!gpuOff) {
 OpenGLSurface: abstract class extends GpuCanvas {
 	context ::= this _context as OpenGLContext
-	init: func (size: IntVector2D, context: OpenGLContext, defaultMap: GpuMap, coordinateTransform: IntTransform2D) {
+	init: func (size: IntVector2D, context: OpenGLContext, defaultMap: Map, coordinateTransform: IntTransform2D) {
 		super(size, context, defaultMap, coordinateTransform)
 	}
 	_bind: abstract func
@@ -33,7 +33,7 @@ OpenGLSurface: abstract class extends GpuCanvas {
 		action()
 		this _unbind()
 	}
-	draw: override func ~WithoutBind (destination: IntBox2D, map: GpuMap) {
+	draw: override func ~WithoutBind (destination: IntBox2D, map: Map) {
 		map model = this _createModelTransform(destination)
 		map view = this _view
 		map projection = this _projection
@@ -42,7 +42,7 @@ OpenGLSurface: abstract class extends GpuCanvas {
 		this draw(f)
 		(f as Closure) free()
 	}
-	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: GpuMap) {
+	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: Map) {
 		map textureTransform = This _createTextureTransform(image size, source)
 		this draw(destination, map)
 	}

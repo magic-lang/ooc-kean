@@ -8,7 +8,6 @@ Requires: draw
 Imports: GpuImage
 Imports: GpuYuv420Semiplanar
 Imports: GpuCanvas
-Imports: GpuMap
 Imports: GpuContext
 Imports: GpuFence
 Imports: GpuMesh
