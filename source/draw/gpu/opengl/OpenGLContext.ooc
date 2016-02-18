@@ -12,7 +12,7 @@ use draw
 use draw-gpu
 use collections
 use concurrent
-import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLFence, OpenGLMesh, OpenGLCanvas, _RecycleBin, OpenGLPromise
+import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLUv, OpenGLMesh, OpenGLCanvas, _RecycleBin, OpenGLPromise
 import OpenGLMap
 import backend/[GLContext, GLRenderer]
 
@@ -174,7 +174,6 @@ OpenGLContext: class extends GpuContext {
 		target canvas viewport = viewport
 		target canvas draw(source, map)
 	}
-	createFence: override func -> GpuFence { OpenGLFence new(this) }
 	toRasterAsync: override func (source: GpuImage) -> ToRasterFuture { ToRasterFuture new(this toRaster(source)) }
 	createMesh: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
 		toGL := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
