@@ -46,10 +46,6 @@ GpuContext: abstract class extends DrawContext {
 	createYuv420Semiplanar: override func ~fromRaster (raster: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(raster, this) }
 	createMesh: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GpuMesh
 
-	update: abstract func
-	packToRgba: abstract func (source: GpuImage, target: GpuImage, viewport: IntBox2D, padding := 0)
-	finish: func { this createFence() sync() . wait() . free() }
-
 	toRaster: virtual func (source: GpuImage) -> RasterImage { source toRasterDefault() }
 	toRaster: virtual func ~target (source: GpuImage, target: RasterImage) -> Promise {
 		source toRasterDefault(target)
