@@ -119,20 +119,20 @@ DateTime: cover {
 
 	compareTo: func (other: This) -> Order {
 		if (this ticks > other ticks)
-			Order greater
+			Order Greater
 		else if (this ticks < other ticks)
-			Order less
+			Order Less
 		else
-			Order equal
+			Order Equal
 	}
 
 	operator - (other: This) -> TimeSpan { TimeSpan new(this ticks as Long - other ticks as Long) }
-	operator == (other: This) -> Bool { this compareTo(other) == Order equal }
-	operator != (other: This) -> Bool { this compareTo(other) != Order equal }
-	operator < (other: This) -> Bool { this compareTo(other) == Order less }
-	operator <= (other: This) -> Bool { this compareTo(other) != Order greater }
-	operator > (other: This) -> Bool { this compareTo(other) == Order greater }
-	operator >= (other: This) -> Bool { this compareTo(other) != Order less }
+	operator == (other: This) -> Bool { this compareTo(other) == Order Equal }
+	operator != (other: This) -> Bool { this compareTo(other) != Order Equal }
+	operator < (other: This) -> Bool { this compareTo(other) == Order Less }
+	operator <= (other: This) -> Bool { this compareTo(other) != Order Greater }
+	operator > (other: This) -> Bool { this compareTo(other) == Order Greater }
+	operator >= (other: This) -> Bool { this compareTo(other) != Order Less }
 	operator + (span: TimeSpan) -> This { This new(this ticks as Long + span ticks) }
 	operator - (span: TimeSpan) -> This { This new(this ticks as Long - span ticks) }
 
