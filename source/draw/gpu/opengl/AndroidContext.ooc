@@ -12,7 +12,7 @@ use draw
 use geometry
 use base
 use concurrent
-import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLBgra, OpenGLBgra, OpenGLPacked, OpenGLMonochrome, OpenGLUv, OpenGLMap, OpenGLFence
+import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLBgra, OpenGLBgra, OpenGLPacked, OpenGLMonochrome, OpenGLUv, OpenGLMap, OpenGLPromise
 import threading/Thread
 
 version(!gpuOff) {
@@ -63,13 +63,13 @@ AndroidContext: class extends OpenGLContext {
 		}
 		index == -1 ? EGLBgra new(size, this) : this _packers remove(index)
 	}
-	toBuffer: func (source: GpuImage, packMap: Map) -> (ByteBuffer, GpuFence) {
+	toBuffer: func (source: GpuImage, packMap: Map) -> (ByteBuffer, OpenGLPromise) {
 		channels := (source as OpenGLPacked) channels
 		packSize := IntVector2D new(source size x / (4 / channels), source size y)
 		gpuRgba := this getPacker(packSize)
 		this packToRgba(source, gpuRgba, IntBox2D new(gpuRgba size))
-		fence := this createFence()
-		fence sync()
+		promise := OpenGLPromise new(this)
+		promise sync()
 		eglImage := gpuRgba as EGLBgra
 		sourcePointer := eglImage buffer lock(GraphicBufferUsage ReadOften) as Byte*
 		length := channels * eglImage size area
@@ -78,16 +78,16 @@ AndroidContext: class extends OpenGLContext {
 			this recyclePacker(gpuRgba)
 			false
 		}
-		(ByteBuffer new(sourcePointer, length, recover), fence)
+		(ByteBuffer new(sourcePointer, length, recover), promise)
 	}
 	toRaster: func ~monochrome (source: OpenGLMonochrome) -> RasterImage {
-		(buffer, fence) := this toBuffer(source, this _packMonochrome)
-		fence free()
+		(buffer, promise) := this toBuffer(source, this _packMonochrome)
+		promise free()
 		RasterMonochrome new(buffer, source size)
 	}
 	toRaster: func ~uv (source: OpenGLUv) -> RasterImage {
-		(buffer, fence) := this toBuffer(source, this _packUv)
-		fence free()
+		(buffer, promise) := this toBuffer(source, this _packUv)
+		promise free()
 		RasterUv new(buffer, source size)
 	}
 	toRaster: override func (source: GpuImage) -> RasterImage {
@@ -100,7 +100,7 @@ AndroidContext: class extends OpenGLContext {
 		}
 	}
 	toRaster: override func ~target (source: GpuImage, target: RasterImage) -> Promise {
-		result: Promise
+		result: OpenGLPromise
 		if (target instanceOf(GraphicBufferYuv420Semiplanar) && source instanceOf(GpuYuv420Semiplanar)) {
 			targetImage := target as GraphicBufferYuv420Semiplanar
 			sourceImage := source as GpuYuv420Semiplanar
@@ -109,20 +109,19 @@ AndroidContext: class extends OpenGLContext {
 			padding := targetImage uvPadding % targetImage stride
 			this packToRgba(sourceImage y, targetImageRgba, IntBox2D new(0, 0, targetWidth, targetImage y size y), padding)
 			this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
-			fence := this createFence()
-			fence sync()
-			result = OpenGLPromise new(fence as OpenGLFence)
+			result = OpenGLPromise new(this)
+			result sync()
 		} else
 			super(source, target)
 		result
 	}
 	toRasterAsync: func ~monochrome (gpuImage: OpenGLMonochrome) -> ToRasterFuture {
-		(buffer, fence) := this toBuffer(gpuImage, this _packMonochrome)
-		_FenceToRasterFuture new(RasterMonochrome new(buffer, gpuImage size), fence)
+		(buffer, promise) := this toBuffer(gpuImage, this _packMonochrome)
+		_FenceToRasterFuture new(RasterMonochrome new(buffer, gpuImage size), promise)
 	}
 	toRasterAsync: func ~uv (gpuImage: OpenGLUv) -> ToRasterFuture {
-		(buffer, fence) := this toBuffer(gpuImage, this _packUv)
-		_FenceToRasterFuture new(RasterUv new(buffer, gpuImage size), fence)
+		(buffer, promise) := this toBuffer(gpuImage, this _packUv)
+		_FenceToRasterFuture new(RasterUv new(buffer, gpuImage size), promise)
 	}
 	toRasterAsync: override func (gpuImage: GpuImage) -> ToRasterFuture {
 		result: ToRasterFuture

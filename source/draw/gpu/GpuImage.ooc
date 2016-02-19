@@ -10,7 +10,7 @@ use draw
 use geometry
 use base
 use concurrent
-import GpuContext, GpuFence, GpuCanvas
+import GpuContext, GpuCanvas
 
 version(!gpuOff) {
 GpuImageType: enum {
