@@ -7,7 +7,7 @@
  */
 
 Order: enum {
-	less = -1
-	equal = 0
-	greater = 1
+	Less = -1
+	Equal = 0
+	Greater = 1
 }
