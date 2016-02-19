@@ -104,8 +104,8 @@ Text: cover {
 		this _buffer = this _buffer claim()
 		this
 	}
-	slice: func (start: Int, distance := INT_MAX) -> This {
-		result := This new(this _buffer slice(start, distance == INT_MAX ? this count - start : distance))
+	slice: func (start: Int, distance := Int maximumValue) -> This {
+		result := This new(this _buffer slice(start, distance == Int maximumValue ? this count - start : distance))
 		if (this _buffer owner == Owner Receiver)
 			result = result copy()
 		this free(Owner Receiver)

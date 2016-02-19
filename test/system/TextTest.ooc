@@ -149,7 +149,7 @@ TextTest: class extends Fixture {
 			expect(Text new("654") toInt~inBase(7), is equal to(4 + 5 * 7 + 6 * 7 * 7))
 		})
 		this add("Convert to Long and ULong", func {
-			expect(Text new(INT_MAX toString()) toLong(), is equal to(INT_MAX))
+			expect(Text new(Int maximumValue toString()) toLong(), is equal to(Int maximumValue))
 			expect(Text new("0xDEADBEEF") toULong(), is equal to(3735928559))
 			expect(Text new("  -9  ") toULong(), is equal to(0))
 			expect(Text new("  -9  ") toLLong(), is equal to(-9))
