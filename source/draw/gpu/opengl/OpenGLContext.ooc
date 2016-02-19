@@ -94,11 +94,11 @@ OpenGLContext: class extends GpuContext {
 	}
 	_searchImageBin: func (type: GpuImageType, size: IntVector2D) -> GpuImage { this _recycleBin find(type, size) }
 	createMonochrome: override func (size: IntVector2D) -> GpuImage {
-		result := this _searchImageBin(GpuImageType monochrome, size)
+		result := this _searchImageBin(GpuImageType Monochrome, size)
 		result == null ? OpenGLMonochrome new(size, this) as GpuImage : result
 	}
 	_createMonochrome: func (raster: RasterMonochrome) -> GpuImage {
-		result := this _searchImageBin(GpuImageType monochrome, raster size)
+		result := this _searchImageBin(GpuImageType Monochrome, raster size)
 		if (result == null)
 			result = OpenGLMonochrome new(raster, this)
 		else
@@ -106,11 +106,11 @@ OpenGLContext: class extends GpuContext {
 		result
 	}
 	createUv: override func (size: IntVector2D) -> GpuImage {
-		result := this _searchImageBin(GpuImageType uv, size)
+		result := this _searchImageBin(GpuImageType Uv, size)
 		result == null ? OpenGLUv new(size, this) as GpuImage : result
 	}
 	_createUv: func (raster: RasterUv) -> GpuImage {
-		result := this _searchImageBin(GpuImageType uv, raster size)
+		result := this _searchImageBin(GpuImageType Uv, raster size)
 		if (result == null)
 			result = OpenGLUv new(raster, this)
 		else
@@ -118,11 +118,11 @@ OpenGLContext: class extends GpuContext {
 		result
 	}
 	createBgr: override func (size: IntVector2D) -> GpuImage {
-		result := this _searchImageBin(GpuImageType bgr, size)
+		result := this _searchImageBin(GpuImageType Bgr, size)
 		result == null ? OpenGLBgr new(size, this) as GpuImage : result
 	}
 	_createBgr: func (raster: RasterBgr) -> GpuImage {
-		result := this _searchImageBin(GpuImageType bgr, raster size)
+		result := this _searchImageBin(GpuImageType Bgr, raster size)
 		if (result == null)
 			result = OpenGLBgr new(raster, this)
 		else
@@ -130,11 +130,11 @@ OpenGLContext: class extends GpuContext {
 		result
 	}
 	createBgra: override func (size: IntVector2D) -> GpuImage {
-		result := this _searchImageBin(GpuImageType bgra, size)
+		result := this _searchImageBin(GpuImageType Bgra, size)
 		result == null ? OpenGLBgra new(size, this) as GpuImage : result
 	}
 	_createBgra: func (raster: RasterBgra) -> GpuImage {
-		result := this _searchImageBin(GpuImageType bgra, raster size)
+		result := this _searchImageBin(GpuImageType Bgra, raster size)
 		if (result == null)
 			result = OpenGLBgra new(raster, this)
 		else

@@ -83,10 +83,10 @@ _RecycleBin: class {
 	}
 	find: func (type: GpuImageType, size: IntVector2D) -> OpenGLPacked {
 		match (type) {
-			case GpuImageType monochrome => this _search(size, this _monochrome)
-			case GpuImageType uv => this _search(size, this _uv)
-			case GpuImageType bgr => this _search(size, this _bgr)
-			case GpuImageType bgra => this _search(size, this _bgra)
+			case GpuImageType Monochrome => this _search(size, this _monochrome)
+			case GpuImageType Uv => this _search(size, this _uv)
+			case GpuImageType Bgr => this _search(size, this _bgr)
+			case GpuImageType Bgra => this _search(size, this _bgra)
 			case => null
 		}
 	}

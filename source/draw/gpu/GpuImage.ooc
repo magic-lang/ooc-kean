@@ -14,15 +14,15 @@ import GpuContext, GpuFence, GpuCanvas
 
 version(!gpuOff) {
 GpuImageType: enum {
-	monochrome
-	rgba
-	rgb
-	bgr
-	bgra
-	uv
-	yuvSemiplanar
-	yuvPlanar
-	yuv422
+	Monochrome
+	Rgba
+	Rgb
+	Bgr
+	Bgra
+	Uv
+	YuvSemiplanar
+	YuvPlanar
+	Yuv422
 }
 
 GpuImage: abstract class extends Image {
