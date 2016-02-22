@@ -21,14 +21,7 @@ asin: extern (asinf) func (Float) -> Float
 atan: extern (atanf) func (Float) -> Float
 sqrt: extern (sqrtf) func (Float) -> Float
 
-extend Short {
-	minimumValue ::= static SHRT_MIN
-	maximumValue ::= static SHRT_MAX
-}
-
 extend Long {
-	maximumValue ::= static INT64_MAX
-	minimumValue ::= static INT64_MIN
 	modulo: func (divisor: This) -> This {
 		result := this - (this / divisor) * divisor
 		result < 0 ? result + divisor : result
@@ -42,11 +35,6 @@ extend ULong {
 }
 
 extend Int {
-	negativeInfinity ::= static INT_MIN
-	positiveInfinity ::= static INT_MAX
-	epsilon ::= static 1
-	minimumValue ::= static INT_MIN
-	maximumValue ::= static INT_MAX
 	pi ::= static 3
 	e ::= static 2
 	absolute ::= this >= 0 ? this : -1 * this
@@ -90,11 +78,13 @@ extend Int {
 }
 
 extend Double {
-	pi ::= static 3.14159_26535_89793_23846_26433_83279
-	e ::= static 2.718281828459045235360287471352662497757247093699959574966
+	negativeInfinity ::= static -INFINITY
+	positiveInfinity ::= static INFINITY
 	minimumValue ::= static DBL_MIN
 	maximumValue ::= static DBL_MAX
 	epsilon ::= static DBL_EPSILON
+	pi ::= static 3.14159_26535_89793_23846_26433_83279
+	e ::= static 2.718281828459045235360287471352662497757247093699959574966
 	absolute ::= this >= 0.f ? this : -1.0 * this
 	sign ::= this >= 0.0 ? 1.0 : -1.0
 	isOdd ::= this modulo(2) == 1
@@ -152,9 +142,9 @@ extend Double {
 extend Float {
 	negativeInfinity ::= static -(INFINITY as Float)
 	positiveInfinity ::= static INFINITY as Float
-	epsilon ::= static FLT_EPSILON
 	minimumValue ::= static FLT_MIN
 	maximumValue ::= static FLT_MAX
+	epsilon ::= static FLT_EPSILON
 	pi ::= static 3.14159_26535_89793_23846_26433_83279f
 	e ::= static 2.718281828459045235360287471352662497757247093699959574966f
 	absolute ::= this >= 0.f ? this : -1.f * this

@@ -31,7 +31,7 @@ FloatUniformRandomGenerator: class extends FloatRandomGenerator {
 		this setRange(min, max)
 	}
 	setRange: func (=_min, =_max) {
-		this _rangeCoefficient = (1.0f / UINT_MAX as Float) * (this _max - this _min)
+		this _rangeCoefficient = (1.0f / UInt maximumValue as Float) * (this _max - this _min)
 	}
 	setSeed: func (=_state)
 	next: override func -> Float {

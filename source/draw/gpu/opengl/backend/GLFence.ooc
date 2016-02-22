@@ -13,7 +13,7 @@ version(!gpuOff) {
 GLFence: abstract class {
 	_backend: Pointer = null
 	init: func
-	clientWait: abstract func (timeout: ULong = ULONG_MAX) -> Bool
+	clientWait: abstract func (timeout: ULong = ULong maximumValue) -> Bool
 	wait: abstract func
 	sync: abstract func
 }

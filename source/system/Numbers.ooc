@@ -11,15 +11,14 @@ version(windows || apple) {
 	include limits
 }
 
-SHRT_MIN, SHRT_MAX: extern static Short
-USHRT_MAX: extern static UShort
-INT_MIN, INT_MAX: extern static Int
-UINT_MAX: extern static UInt
-LONG_MIN, LONG_MAX: extern static Long
-ULONG_MAX: extern static ULong
-LLONG_MIN, LLONG_MAX: extern static LLong
-ULLONG_MAX: extern static ULLong
+INT8_MAX, INT8_MIN: extern static Long
+INT16_MAX, INT16_MIN: extern static Long
+INT32_MAX, INT32_MIN: extern static Long
 INT64_MAX, INT64_MIN: extern static Long
+UINT8_MAX: extern static Long
+UINT16_MAX: extern static Long
+UINT32_MAX: extern static Long
+UINT64_MAX: extern static Long
 
 LLong: cover from signed long long {
 	toString: func -> String { "%lld" formatLLong(this as LLong) }
@@ -47,15 +46,26 @@ LLong: cover from signed long long {
 	}
 }
 
-Long: cover from int64_t extends LLong
+Long: cover from int64_t extends LLong {
+	maximumValue ::= static INT64_MAX
+	minimumValue ::= static INT64_MIN
+}
 
 Int: cover from int32_t extends LLong {
+	maximumValue ::= static INT32_MAX
+	minimumValue ::= static INT32_MIN
 	toString: func -> String { "%d" formatInt(this) }
 }
 
-Short: cover from int16_t extends LLong
+Short: cover from int16_t extends LLong {
+	maximumValue ::= static INT16_MAX
+	minimumValue ::= static INT16_MIN
+}
 
-SByte: cover from int8_t extends LLong
+SByte: cover from int8_t extends LLong {
+	maximumValue ::= static INT8_MAX
+	minimumValue ::= static INT8_MIN
+}
 
 ULLong: cover from unsigned long long extends LLong {
 	toString: func -> String { "%llu" formatULLong(this as ULLong) }
@@ -64,9 +74,14 @@ ULLong: cover from unsigned long long extends LLong {
 	}
 }
 
-ULong: cover from uint64_t extends ULLong
+ULong: cover from uint64_t extends ULLong {
+	maximumValue ::= static UINT64_MAX
+	minimumValue ::= static 0
+}
 
 UInt: cover from uint32_t extends ULLong {
+	maximumValue ::= static UINT32_MAX
+	minimumValue ::= static 0
 	toString: func -> String { "%u" formatUInt(this) }
 	toText: func -> Text {
 		string := this toString()
@@ -76,13 +91,21 @@ UInt: cover from uint32_t extends ULLong {
 	}
 }
 
-UShort: cover from uint16_t extends ULLong
+UShort: cover from uint16_t extends ULLong {
+	maximumValue ::= static UINT16_MAX
+	minimumValue ::= static 0
+}
 
-Byte: cover from uint8_t extends ULLong
+Byte: cover from uint8_t extends ULLong {
+	maximumValue ::= static UINT8_MAX
+	minimumValue ::= static 0
+}
 
 FLT_MIN, FLT_MAX: extern static Float
 DBL_MIN, DBL_MAX, INFINITY, NAN: extern static Double
 LDBL_MIN, LDBL_MAX: extern static LDouble
+FLT_EPSILON: extern static Float
+DBL_EPSILON: extern static Double
 
 LDouble: cover from long double {
 	isNumber ::= this == this
