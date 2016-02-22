@@ -10,7 +10,7 @@ use geometry
 use base
 import RasterPacked
 import RasterImage
-import RasterBgr
+import RasterRgb
 import StbImage
 import Image
 import Color
@@ -128,15 +128,15 @@ RasterUv: class extends RasterPacked {
 	operator []= (x, y: Int, value: ColorUv) { ((this buffer pointer + y * this stride) as ColorUv* + x)@ = value }
 
 	save: override func (filename: String) -> Int {
-		bgr := RasterBgr convertFrom(this)
-		result := bgr save(filename)
-		bgr referenceCount decrease()
+		rgb := RasterRgb convertFrom(this)
+		result := rgb save(filename)
+		rgb referenceCount decrease()
 		result
 	}
 	open: static func (filename: String) -> This {
-		rasterBgr := RasterBgr open(filename)
-		result := This convertFrom(rasterBgr)
-		rasterBgr referenceCount decrease()
+		rasterRgb := RasterRgb open(filename)
+		result := This convertFrom(rasterRgb)
+		rasterRgb referenceCount decrease()
 		result
 	}
 	convertFrom: static func (original: RasterImage) -> This {

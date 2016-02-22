@@ -13,7 +13,7 @@ import RasterImage
 import RasterMonochrome
 import Image
 import Color
-import RasterBgr
+import RasterRgb
 import StbImage
 import io/File
 import io/FileReader
@@ -77,9 +77,9 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		(convert as Closure) free()
 	}
 	save: func (filename: String) {
-		bgr := RasterBgr convertFrom(this)
-		bgr save(filename)
-		bgr referenceCount decrease()
+		rgb := RasterRgb convertFrom(this)
+		rgb save(filename)
+		rgb referenceCount decrease()
 	}
 	saveRaw: func (filename: String) {
 		fileWriter := FileWriter new(filename)
@@ -106,9 +106,9 @@ RasterYuv422Semipacked: class extends RasterPacked {
 	}
 
 	open: static func (filename: String) -> This {
-		bgr := RasterBgr open(filename)
-		result := This convertFrom(bgr)
-		bgr referenceCount decrease()
+		rgb := RasterRgb open(filename)
+		result := This convertFrom(rgb)
+		rgb referenceCount decrease()
 		result
 	}
 	convertFrom: static func (original: RasterImage) -> This {
