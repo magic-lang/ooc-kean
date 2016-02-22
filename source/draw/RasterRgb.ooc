@@ -10,11 +10,12 @@ use geometry
 use base
 import RasterPacked
 import RasterImage
+import RasterRgba
 import io/File
 import StbImage
 import Image
 import Color
-import Canvas, RasterCanvas, RasterBgr
+import Canvas, RasterCanvas
 
 RasterRgbCanvas: class extends RasterPackedCanvas {
 	target ::= this _target as RasterRgb
@@ -143,7 +144,7 @@ RasterRgb: class extends RasterPacked {
 	operator []= (x, y: Int, value: ColorRgb) { ((this buffer pointer + y * this stride) as ColorRgb* + x)@ = value }
 
 	open: static func (filename: String) -> This {
-		This convertFrom(RasterBgr open(filename))
+		This convertFrom(RasterRgba open(filename))
 	}
 	savePacked: func (filename: String) -> Int {
 		file := File new(filename)

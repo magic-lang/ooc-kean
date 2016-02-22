@@ -155,7 +155,13 @@ RasterRgba: class extends RasterPacked {
 	}
 
 	open: static func (filename: String) -> This {
-		This convertFrom(RasterBgra open(filename))
+		x, y, imageComponents: Int
+		requiredComponents := 4
+		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
+		buffer := ByteBuffer new(data as Byte*, x * y * requiredComponents, true)
+		result := This new(buffer, IntVector2D new(x, y))
+		result swapRedBlue()
+		result
 	}
 	savePacked: func (filename: String) -> Int {
 		file := File new(filename)
