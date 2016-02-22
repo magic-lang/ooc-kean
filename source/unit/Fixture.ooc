@@ -39,7 +39,7 @@ Fixture: abstract class {
 		result := true
 		dateString := DateTime now toText(t"%hh:%mm:%ss ") + Text new(this name) + t" "
 		This _print(dateString)
-		timer := ClockTimer new() . start()
+		timer := Timer new() . start()
 		for (i in 0 .. this tests count) {
 			test := tests[i]
 			This _expectCount = 0
@@ -60,9 +60,9 @@ Fixture: abstract class {
 			This failureNames add(this name clone())
 		}
 		This _print(result ? t" done" : t" failed")
-		testTime := timer stop() / 1000.0
+		testTime := timer stop() / 1_000_000.0
 		This totalTime += testTime
-		timeString := testTime > 0.01 ? t" in %.2fs\n" format(testTime) : t"\n"
+		timeString := testTime > 0.1 ? t" in %.2fs\n" format(testTime) : t"\n"
 		This _print(timeString)
 		if (!result) {
 			for (i in 0 .. failures count) {
