@@ -9,12 +9,14 @@
 use unit
 use io
 import io/FileReader
+import io/File
 
 ProcessTest: class extends Fixture {
 	init: func {
 		super("Process")
 		this add("Basic use", func {
 			scriptName: String
+			this _createOutputDirectory()
 			version (windows)
 				scriptName = "bash test/io/input/pipeprocesstester.sh"
 			else
@@ -38,6 +40,11 @@ ProcessTest: class extends Fixture {
 			memfree(data)
 			reader close() . free()
 		})
+	}
+	_createOutputDirectory: func {
+		file := File new("test/io/output")
+		file mkdir()
+		file free()
 	}
 }
 
