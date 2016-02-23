@@ -12,37 +12,37 @@ use draw
 ColorConvertTest: class extends Fixture {
 	init: func {
 		super("ColorConvert")
-		this add("from BGR", func {
-			color := ColorBgr new(120, 100, 80)
+		this add("from RGB", func {
+			color := ColorRgb new(80, 100, 120)
 			expect(color toMonochrome() equals(ColorMonochrome new(95)), is true)
 			expect(color toYuv() equals(ColorYuv new(95, 141, 116)), is true)
-			expect(color equals(ColorBgr new(120, 100, 80)), is true)
-			expect(color toBgra() equals(ColorBgra new(120, 100, 80, 255)), is true)
+			expect(color equals(ColorRgb new(80, 100, 120)), is true)
+			expect(color toRgba() equals(ColorRgba new(80, 100, 120, 255)), is true)
 			expect(color toMonochrome() equals(ColorMonochrome new(94)), is false)
 			expect(color toYuv() equals(ColorYuv new(95, 141, 115)), is false)
-			expect(color equals(ColorBgr new(120, 100, 81)), is false)
-			expect(color toBgra() equals(ColorBgra new(120, 100, 81, 255)), is false)
+			expect(color equals(ColorRgb new(81, 100, 120)), is false)
+			expect(color toRgba() equals(ColorRgba new(81, 100, 120, 255)), is false)
 		})
-		this add("from BGRA", func {
-			color := ColorBgra new(120, 100, 80, 60)
+		this add("from RGBA", func {
+			color := ColorRgba new(80, 100, 120, 60)
 			expect(color toMonochrome() equals(ColorMonochrome new(95)), is true)
 			expect(color toYuv() equals(ColorYuv new(95, 141, 116)), is true)
-			expect(color toBgr() equals(ColorBgr new(120, 100, 80)), is true)
-			expect(color equals(ColorBgra new(120, 100, 80, 60)), is true)
+			expect(color toRgb() equals(ColorRgb new(80, 100, 120)), is true)
+			expect(color equals(ColorRgba new(80, 100, 120, 60)), is true)
 		})
 		this add("from Y", func {
 			color := ColorMonochrome new(95)
 			expect(color equals(ColorMonochrome new(95)), is true)
 			expect(color toYuv() equals(ColorYuv new(95, 128, 128)), is true)
-			expect(color toBgr() equals(ColorBgr new(95, 95, 95)), is true)
-			expect(color toBgra() equals(ColorBgra new(95, 95, 95, 255)), is true)
+			expect(color toRgb() equals(ColorRgb new(95, 95, 95)), is true)
+			expect(color toRgba() equals(ColorRgba new(95, 95, 95, 255)), is true)
 		})
 		this add("from YUV", func {
 			color := ColorYuv new(95, 141, 116)
 			expect(color toMonochrome() equals(ColorMonochrome new(95)), is true)
 			expect(color equals(ColorYuv new(95, 141, 116)), is true)
-			expect(color toBgr() equals(ColorBgr new(118, 99, 78)), is true)
-			expect(color toBgra() equals(ColorBgra new(118, 99, 78, 255)), is true)
+			expect(color toRgb() equals(ColorRgb new(78, 99, 118)), is true)
+			expect(color toRgba() equals(ColorRgba new(78, 99, 118, 255)), is true)
 		})
 	}
 }

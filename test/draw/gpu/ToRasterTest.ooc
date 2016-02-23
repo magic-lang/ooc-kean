@@ -14,12 +14,12 @@ use base
 use opengl
 
 ToRasterTest: class extends Fixture {
-	bgra := RasterBgra open("test/draw/gpu/input/Flower.png")
+	rgba := RasterRgba open("test/draw/gpu/input/Flower.png")
 	monochrome := RasterMonochrome open("test/draw/gpu/input/Flower.png")
 	yuv := RasterYuv420Semiplanar open("test/draw/gpu/input/Flower.png")
 	context := OpenGLContext new()
 	free: override func {
-		this bgra free()
+		this rgba free()
 		this monochrome free()
 		this yuv free()
 		this context free()
@@ -53,15 +53,15 @@ ToRasterTest: class extends Fixture {
 	}
 	init: func {
 		super("ToRaster")
-		this add("toRaster bgra", || this toRaster(bgra))
+		this add("toRaster rgba", || this toRaster(rgba))
 		this add("toRaster monochrome", || this toRaster(monochrome))
 		this add("toRaster yuv", || this toRaster(yuv))
 
-		this add("toRasterTarget bgra", || this toRasterTarget(bgra))
+		this add("toRasterTarget rgba", || this toRasterTarget(rgba))
 		this add("toRasterTarget monochrome", || this toRasterTarget(monochrome))
 		this add("toRasterTarget yuv", || this toRasterTarget(yuv))
 
-		this add("toRasterAsync bgra", || this toRasterAsync(bgra))
+		this add("toRasterAsync rgba", || this toRasterAsync(rgba))
 		this add("toRasterAsync monochrome", || this toRasterAsync(monochrome))
 		this add("toRasterAsync yuv", || this toRasterAsync(yuv))
 	}
