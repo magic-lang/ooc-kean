@@ -13,8 +13,6 @@ TextureType: enum {
 	Monochrome
 	Rgba
 	Rgb
-	Bgr
-	Bgra
 	Uv
 	Yv12
 }

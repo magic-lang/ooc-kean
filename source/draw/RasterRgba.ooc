@@ -14,7 +14,7 @@ import io/File
 import StbImage
 import Image
 import Color
-import Canvas, RasterCanvas, RasterBgra
+import Canvas, RasterCanvas
 
 RasterRgbaCanvas: class extends RasterPackedCanvas {
 	target ::= this _target as RasterRgba
@@ -45,11 +45,6 @@ RasterRgba: class extends RasterPacked {
 				action(color)
 			}
 		}
-	}
-	apply: override func ~bgr (action: Func(ColorBgr)) {
-		convert := ColorConvert fromRgb(action)
-		this apply(convert)
-		(convert as Closure) free()
 	}
 	apply: override func ~yuv (action: Func(ColorYuv)) {
 		convert := ColorConvert fromRgb(action)

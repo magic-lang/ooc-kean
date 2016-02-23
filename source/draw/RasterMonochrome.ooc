@@ -48,11 +48,6 @@ RasterMonochrome: class extends RasterPacked {
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: override func (size: IntVector2D) -> Image { This new(size) }
 	copy: override func -> This { This new(this) }
-	apply: override func ~bgr (action: Func(ColorBgr)) {
-		convert := ColorConvert fromMonochrome(action)
-		this apply(convert)
-		(convert as Closure) free()
-	}
 	apply: override func ~rgb (action: Func(ColorRgb)) {
 		convert := ColorConvert fromMonochrome(action)
 		this apply(convert)

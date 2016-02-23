@@ -74,14 +74,6 @@ Gles3Texture: class extends GLTexture {
 				this _internalFormat = GL_RGB8
 				this _format = GL_RGB
 				this _bytesPerPixel = 3
-			case TextureType Bgra =>
-				this _internalFormat = GL_RGBA8
-				this _format = GL_RGBA
-				this _bytesPerPixel = 4
-			case TextureType Bgr =>
-				this _internalFormat = GL_RGB8
-				this _format = GL_RGB
-				this _bytesPerPixel = 3
 			case TextureType Uv =>
 				this _internalFormat = GL_RG8
 				this _format = GL_RG

@@ -10,7 +10,7 @@ use collections
 use geometry
 use base
 use draw-gpu
-import OpenGLPacked, OpenGLMonochrome, OpenGLRgba, OpenGLRgb, OpenGLBgra, OpenGLBgr, OpenGLUv
+import OpenGLPacked, OpenGLMonochrome, OpenGLRgba, OpenGLRgb, OpenGLUv
 import threading/Mutex
 
 version(!gpuOff) {
@@ -18,8 +18,6 @@ _RecycleBin: class {
 	_monochrome := VectorList<OpenGLMonochrome> new()
 	_rgb := VectorList<OpenGLRgb> new()
 	_rgba := VectorList<OpenGLRgba> new()
-	_bgr := VectorList<OpenGLBgr> new()
-	_bgra := VectorList<OpenGLBgra> new()
 	_uv := VectorList<OpenGLUv> new()
 	_limit := 15
 	_mutex := Mutex new()
@@ -34,8 +32,6 @@ _RecycleBin: class {
 		this _monochrome free()
 		this _rgb free()
 		this _rgba free()
-		this _bgr free()
-		this _bgra free()
 		this _uv free()
 		this _mutex free()
 		super()
@@ -45,8 +41,6 @@ _RecycleBin: class {
 		This _cleanList(this _monochrome)
 		This _cleanList(this _rgb)
 		This _cleanList(this _rgba)
-		This _cleanList(this _bgr)
-		This _cleanList(this _bgra)
 		This _cleanList(this _uv)
 		this _mutex unlock()
 	}
@@ -67,8 +61,6 @@ _RecycleBin: class {
 			case (i: OpenGLMonochrome) => this _add(i, this _monochrome)
 			case (i: OpenGLRgb) => this _add(i, this _rgb)
 			case (i: OpenGLRgba) => this _add(i, this _rgba)
-			case (i: OpenGLBgr) => this _add(i, this _bgr)
-			case (i: OpenGLBgra) => this _add(i, this _bgra)
 			case (i: OpenGLUv) => this _add(i, this _uv)
 			case => Debug error("Unknown format in GpuImageBin add()")
 		}
@@ -93,8 +85,6 @@ _RecycleBin: class {
 		match (type) {
 			case GpuImageType Monochrome => this _search(size, this _monochrome)
 			case GpuImageType Uv => this _search(size, this _uv)
-			case GpuImageType Bgr => this _search(size, this _bgr)
-			case GpuImageType Bgra => this _search(size, this _bgra)
 			case GpuImageType Rgb => this _search(size, this _rgb)
 			case GpuImageType Rgba => this _search(size, this _rgba)
 			case => null

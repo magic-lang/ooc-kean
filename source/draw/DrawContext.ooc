@@ -21,8 +21,6 @@ DrawContext: abstract class {
 	createMonochrome: abstract func (size: IntVector2D) -> Image
 	createRgb: abstract func (size: IntVector2D) -> Image
 	createRgba: abstract func (size: IntVector2D) -> Image
-	createBgr: abstract func (size: IntVector2D) -> Image
-	createBgra: abstract func (size: IntVector2D) -> Image
 	createUv: abstract func (size: IntVector2D) -> Image
 	createImage: abstract func (rasterImage: RasterImage) -> Image
 	createYuv420Semiplanar: abstract func (size: IntVector2D) -> Image

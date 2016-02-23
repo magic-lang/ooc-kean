@@ -10,8 +10,6 @@ Imports: Color
 Imports: Image
 Imports: RasterRgb
 Imports: RasterRgba
-Imports: RasterBgr
-Imports: RasterBgra
 Imports: RasterUv
 Imports: RasterImage
 Imports: RasterMonochrome

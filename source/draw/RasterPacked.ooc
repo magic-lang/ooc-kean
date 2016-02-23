@@ -14,8 +14,6 @@ import StbImage
 import RasterImage
 import RasterRgb
 import RasterRgba
-import RasterBgr
-import RasterBgra
 import RasterMonochrome
 import Image
 import Canvas, RasterCanvas

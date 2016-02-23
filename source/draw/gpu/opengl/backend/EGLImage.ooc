@@ -56,7 +56,7 @@ EGLImage: class extends GLTexture {
 	create: static func (type: TextureType, size: IntVector2D, nativeBuffer: Pointer, context: GLContext) -> This {
 		if (!This _initialized)
 			This initialize()
-		(type == TextureType Rgba || type == TextureType Rgb || type == TextureType Bgr || type == TextureType Yv12) ?
+		(type == TextureType Rgba || type == TextureType Rgb || type == TextureType Yv12) ?
 		This new(type, size, nativeBuffer, context) : null
 	}
 }

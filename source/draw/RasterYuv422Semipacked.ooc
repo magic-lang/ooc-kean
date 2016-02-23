@@ -52,11 +52,6 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		this apply(convert)
 		(convert as Closure) free()
 	}
-	apply: override func ~bgr (action: Func(ColorBgr)) {
-		convert := ColorConvert fromYuv(action)
-		this apply(convert)
-		(convert as Closure) free()
-	}
 	apply: override func ~yuv (action: Func (ColorYuv)) {
 		row := this buffer pointer as Byte*
 		source := row

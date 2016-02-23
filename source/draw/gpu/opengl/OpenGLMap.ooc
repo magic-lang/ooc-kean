@@ -70,8 +70,6 @@ OpenGLMap: class extends Map {
 					case FloatTransform3D => program setUniform(key, cell as Cell<FloatTransform3D> get())
 					case ColorRgb => color := cell as Cell<ColorRgb> get(); program setUniform(key, color red as Float / 255, color green as Float / 255, color blue as Float / 255)
 					case ColorRgba => color := cell as Cell<ColorRgba> get(); program setUniform(key, color red as Float / 255, color green as Float / 255, color blue as Float / 255, color alpha as Float / 255)
-					case ColorBgr => color := cell as Cell<ColorBgr> get(); program setUniform(key, color red as Float / 255, color green as Float / 255, color blue as Float / 255)
-					case ColorBgra => color := cell as Cell<ColorBgra> get(); program setUniform(key, color red as Float / 255, color green as Float / 255, color blue as Float / 255, color alpha as Float / 255)
 					case ColorUv => color := cell as Cell<ColorUv> get(); program setUniform(key, color u as Float / 255, color v as Float / 255)
 					case ColorYuv => color := cell as Cell<ColorYuv> get(); program setUniform(key, color y as Float / 255, color u as Float / 255, color v as Float / 255)
 					case ColorYuva => color := cell as Cell<ColorYuva> get(); program setUniform(key, color y as Float / 255, color u as Float / 255, color v as Float / 255, color alpha as Float / 255)

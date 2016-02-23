@@ -9,7 +9,7 @@
 use geometry
 use base
 import Image
-import RasterMonochrome, RasterBgr, RasterBgra, RasterRgb, RasterRgba
+import RasterMonochrome, RasterRgb, RasterRgba
 import Color
 import StbImage
 
@@ -19,7 +19,6 @@ RasterImage: abstract class extends Image {
 	init: func ~fromRasterImage (original: This) { super(original) }
 	init: func (size: IntVector2D) { super(size) }
 	apply: abstract func ~rgb (action: Func (ColorRgb))
-	apply: abstract func ~bgr (action: Func (ColorBgr))
 	apply: abstract func ~yuv (action: Func (ColorYuv))
 	apply: abstract func ~monochrome (action: Func (ColorMonochrome))
 	resizeTo: override func (size: IntVector2D) -> Image {
@@ -46,7 +45,7 @@ RasterImage: abstract class extends Image {
 		this copy(size toFloatVector2D(), source, FloatPoint2D new(), FloatPoint2D new(), FloatPoint2D new())
 	}
 	copy: func ~fromMoreParams (size: FloatVector2D, source: FloatBox2D, upperLeft, upperRight, lowerLeft: FloatPoint2D) -> This {
-		result := RasterBgra new(size ceiling() toIntVector2D())
+		result := RasterRgba new(size ceiling() toIntVector2D())
 //		TODO: The stuff
 		result
 	}
@@ -66,9 +65,9 @@ RasterImage: abstract class extends Image {
 			case 1 =>
 				result = RasterMonochrome new(buffer, IntVector2D new(x, y))
 			case 3 =>
-				result = RasterBgr new(buffer, IntVector2D new(x, y))
+				result = RasterRgb new(buffer, IntVector2D new(x, y))
 			case 4 =>
-				result = RasterBgra new(buffer, IntVector2D new(x, y))
+				result = RasterRgba new(buffer, IntVector2D new(x, y))
 			case =>
 				buffer free()
 				raise("Unsupported number of channels in image")

@@ -12,7 +12,7 @@ use draw
 use draw-gpu
 use collections
 use concurrent
-import OpenGLPacked, OpenGLMonochrome, OpenGLBgr, OpenGLBgra, OpenGLRgb, OpenGLRgba, OpenGLUv, OpenGLMesh, OpenGLCanvas, _RecycleBin, OpenGLPromise
+import OpenGLPacked, OpenGLMonochrome, OpenGLRgb, OpenGLRgba, OpenGLUv, OpenGLMesh, OpenGLCanvas, _RecycleBin, OpenGLPromise
 import OpenGLMap
 import backend/[GLContext, GLRenderer]
 
@@ -141,37 +141,11 @@ OpenGLContext: class extends GpuContext {
 			result upload(raster)
 		result
 	}
-	createBgr: override func (size: IntVector2D) -> GpuImage {
-		result := this _searchImageBin(GpuImageType Bgr, size)
-		result == null ? OpenGLBgr new(size, this) as GpuImage : result
-	}
-	_createBgr: func (raster: RasterBgr) -> GpuImage {
-		result := this _searchImageBin(GpuImageType Bgr, raster size)
-		if (result == null)
-			result = OpenGLBgr new(raster, this)
-		else
-			result upload(raster)
-		result
-	}
-	createBgra: override func (size: IntVector2D) -> GpuImage {
-		result := this _searchImageBin(GpuImageType Bgra, size)
-		result == null ? OpenGLBgra new(size, this) as GpuImage : result
-	}
-	_createBgra: func (raster: RasterBgra) -> GpuImage {
-		result := this _searchImageBin(GpuImageType Bgra, raster size)
-		if (result == null)
-			result = OpenGLBgra new(raster, this)
-		else
-			result upload(raster)
-		result
-	}
 	createImage: virtual override func (rasterImage: RasterImage) -> GpuImage {
 		match (rasterImage) {
 			case image: RasterMonochrome => this _createMonochrome(image)
 			case image: RasterRgb => this _createRgb(image)
 			case image: RasterRgba => this _createRgba(image)
-			case image: RasterBgr => this _createBgr(image)
-			case image: RasterBgra => this _createBgra(image)
 			case image: RasterUv => this _createUv(image)
 			case image: RasterYuv420Semiplanar => this createYuv420Semiplanar(image)
 			case => Debug error("Unknown input format in OpenGLContext createImage"); null
