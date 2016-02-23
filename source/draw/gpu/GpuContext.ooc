@@ -38,6 +38,8 @@ GpuContext: abstract class extends DrawContext {
 	createMonochrome: abstract func (size: IntVector2D) -> GpuImage
 	createBgr: abstract func (size: IntVector2D) -> GpuImage
 	createBgra: abstract func (size: IntVector2D) -> GpuImage
+	createRgb: abstract func (size: IntVector2D) -> GpuImage
+	createRgba: abstract func (size: IntVector2D) -> GpuImage
 	createUv: abstract func (size: IntVector2D) -> GpuImage
 	createImage: abstract func (rasterImage: RasterImage) -> GpuImage
 	createYuv420Semiplanar: override func (size: IntVector2D) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(size, this) }

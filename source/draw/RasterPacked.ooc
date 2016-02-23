@@ -12,8 +12,10 @@ import io/File
 import ByteBuffer
 import StbImage
 import RasterImage
-import RasterBgra
+import RasterRgb
+import RasterRgba
 import RasterBgr
+import RasterBgra
 import RasterMonochrome
 import Image
 import Canvas, RasterCanvas

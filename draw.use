@@ -8,6 +8,8 @@ Imports: DrawContext
 Imports: CpuContext
 Imports: Color
 Imports: Image
+Imports: RasterRgb
+Imports: RasterRgba
 Imports: RasterBgr
 Imports: RasterBgra
 Imports: RasterUv

@@ -10,53 +10,54 @@ use geometry
 use base
 import RasterPacked
 import RasterImage
+import io/File
 import StbImage
 import Image
 import Color
-import Canvas, RasterCanvas
+import Canvas, RasterCanvas, RasterBgra
 
-RasterBgraCanvas: class extends RasterPackedCanvas {
-	target ::= this _target as RasterBgra
-	init: func (image: RasterBgra) { super(image) }
+RasterRgbaCanvas: class extends RasterPackedCanvas {
+	target ::= this _target as RasterRgba
+	init: func (image: RasterRgba) { super(image) }
 	_drawPoint: override func (x, y: Int) {
 		position := this _map(IntPoint2D new(x, y))
 		if (this target isValidIn(position x, position y))
-			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toBgra())
+			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color)
 	}
 }
 
-RasterBgra: class extends RasterPacked {
+RasterRgba: class extends RasterPacked {
 	bytesPerPixel ::= 4
 	init: func ~allocate (size: IntVector2D) { super~allocate(size) }
 	init: func ~allocateStride (size: IntVector2D, stride: UInt) { super(size, stride) }
 	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntVector2D, stride: UInt) { super(buffer, size, stride) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D) { this init(buffer, size, this bytesPerPixel * size x) }
-	init: func ~fromRasterBgra (original: This) { super(original) }
+	init: func ~fromRasterRgba (original: This) { super(original) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: override func (size: IntVector2D) -> Image { This new(size) }
 	copy: override func -> This { This new(this) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
-		convert := ColorConvert fromBgr(action)
-		this apply(convert)
-		(convert as Closure) free()
-	}
-	apply: override func ~bgr (action: Func(ColorBgr)) {
 		for (row in 0 .. this size y) {
 			source := this buffer pointer + row * this stride
 			for (pixel in 0 .. this size x) {
 				pixelPointer := (source + pixel * this bytesPerPixel)
-				color := (pixelPointer as ColorBgr*)@
+				color := (pixelPointer as ColorRgb*)@
 				action(color)
 			}
 		}
 	}
+	apply: override func ~bgr (action: Func(ColorBgr)) {
+		convert := ColorConvert fromRgb(action)
+		this apply(convert)
+		(convert as Closure) free()
+	}
 	apply: override func ~yuv (action: Func(ColorYuv)) {
-		convert := ColorConvert fromBgr(action)
+		convert := ColorConvert fromRgb(action)
 		this apply(convert)
 		(convert as Closure) free()
 	}
 	apply: override func ~monochrome (action: Func(ColorMonochrome)) {
-		convert := ColorConvert fromBgr(action)
+		convert := ColorConvert fromRgb(action)
 		this apply(convert)
 		(convert as Closure) free()
 	}
@@ -129,14 +130,14 @@ RasterBgra: class extends RasterPacked {
 		result swapRedBlue()
 		result
 	}
-	_createCanvas: override func -> Canvas { RasterBgraCanvas new(this) }
+	_createCanvas: override func -> Canvas { RasterRgbaCanvas new(this) }
 
-	operator [] (x, y: Int) -> ColorBgra { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorBgra* + x)@ : ColorBgra new(0, 0, 0, 0) }
-	operator []= (x, y: Int, value: ColorBgra) { ((this buffer pointer + y * this stride) as ColorBgra* + x)@ = value }
-	operator [] (point: IntPoint2D) -> ColorBgra { this[point x, point y] }
-	operator []= (point: IntPoint2D, value: ColorBgra) { this[point x, point y] = value }
-	operator [] (point: FloatPoint2D) -> ColorBgra { this [point x, point y] }
-	operator [] (x, y: Float) -> ColorBgra {
+	operator [] (x, y: Int) -> ColorRgba { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorRgba* + x)@ : ColorRgba new(0, 0, 0, 0) }
+	operator []= (x, y: Int, value: ColorRgba) { ((this buffer pointer + y * this stride) as ColorRgba* + x)@ = value }
+	operator [] (point: IntPoint2D) -> ColorRgba { this[point x, point y] }
+	operator []= (point: IntPoint2D, value: ColorRgba) { this[point x, point y] = value }
+	operator [] (point: FloatPoint2D) -> ColorRgba { this [point x, point y] }
+	operator [] (x, y: Float) -> ColorRgba {
 		left := x - x floor()
 		top := y - y floor()
 
@@ -145,10 +146,10 @@ RasterBgra: class extends RasterPacked {
 		topRight := this[x ceil() as Int, y floor() as Int]
 		bottomRight := this[x ceil() as Int, y ceil() as Int]
 
-		ColorBgra new(
-			(top * (left * topLeft blue + (1 - left) * topRight blue) + (1 - top) * (left * bottomLeft blue + (1 - left) * bottomRight blue)),
-			(top * (left * topLeft green + (1 - left) * topRight green) + (1 - top) * (left * bottomLeft green + (1 - left) * bottomRight green)),
+		ColorRgba new(
 			(top * (left * topLeft red + (1 - left) * topRight red) + (1 - top) * (left * bottomLeft red + (1 - left) * bottomRight red)),
+			(top * (left * topLeft green + (1 - left) * topRight green) + (1 - top) * (left * bottomLeft green + (1 - left) * bottomRight green)),
+			(top * (left * topLeft blue + (1 - left) * topRight blue) + (1 - top) * (left * bottomLeft blue + (1 - left) * bottomRight blue)),
 			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
 		)
 	}
@@ -158,7 +159,21 @@ RasterBgra: class extends RasterPacked {
 		requiredComponents := 4
 		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
 		buffer := ByteBuffer new(data as Byte*, x * y * requiredComponents, true)
-		This new(buffer, IntVector2D new(x, y))
+		result := This new(buffer, IntVector2D new(x, y))
+		result swapRedBlue()
+		result
+	}
+	savePacked: func (filename: String) -> Int {
+		file := File new(filename)
+		folder := file parent . mkdirs() . free()
+		file free()
+		StbImage writePng(filename, this size x, this size y, this bytesPerPixel, this buffer pointer, this size x * this bytesPerPixel)
+	}
+	save: override func (filename: String) -> Int {
+		bgra := this redBlueSwapped()
+		result := bgra savePacked(filename)
+		bgra free()
+		result
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
@@ -169,13 +184,13 @@ RasterBgra: class extends RasterPacked {
 			row := result buffer pointer as Long
 			rowLength := result stride
 			rowEnd := row + rowLength
-			destination := row as ColorBgra*
-			f := func (color: ColorBgr) {
-				destination@ = ColorBgra new(color, 255)
+			destination := row as ColorRgba*
+			f := func (color: ColorRgb) {
+				destination@ = ColorRgba new(color, 255)
 				destination += 1
 				if (destination >= rowEnd) {
 					row += result stride
-					destination = row as ColorBgra*
+					destination = row as ColorRgba*
 					rowEnd = row + rowLength
 				}
 			}
@@ -184,7 +199,7 @@ RasterBgra: class extends RasterPacked {
 		}
 		result
 	}
-	kean_draw_rasterBgra_new: static unmangled func (width, height, stride: Int, data: Void*) -> This {
+	kean_draw_rasterRgba_new: static unmangled func (width, height, stride: Int, data: Void*) -> This {
 		result := This new(IntVector2D new(width, height), stride)
 		memcpy(result buffer pointer, data, height * stride)
 		result

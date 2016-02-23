@@ -19,6 +19,8 @@ AlignWidth: enum {
 DrawContext: abstract class {
 	init: func
 	createMonochrome: abstract func (size: IntVector2D) -> Image
+	createRgb: abstract func (size: IntVector2D) -> Image
+	createRgba: abstract func (size: IntVector2D) -> Image
 	createBgr: abstract func (size: IntVector2D) -> Image
 	createBgra: abstract func (size: IntVector2D) -> Image
 	createUv: abstract func (size: IntVector2D) -> Image

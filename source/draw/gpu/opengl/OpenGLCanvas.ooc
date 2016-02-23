@@ -12,7 +12,7 @@ use collections
 use draw
 use draw-gpu
 import backend/[GLFramebufferObject, GLTexture]
-import OpenGLBgr, OpenGLMap, OpenGLBgra, OpenGLUv, OpenGLMonochrome, OpenGLContext, OpenGLPacked, OpenGLSurface
+import OpenGLMap, OpenGLBgr, OpenGLBgra, OpenGLRgb, OpenGLRgba, OpenGLUv, OpenGLMonochrome, OpenGLContext, OpenGLPacked, OpenGLSurface
 
 version(!gpuOff) {
 OpenGLCanvas: class extends OpenGLSurface {
