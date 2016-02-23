@@ -64,19 +64,19 @@ ImageFileTest: class extends Fixture {
 			}
 			expect(This _fileExists(destination))
 		})
-		this add("open png RasterBgra", func {
+		this add("open png RasterRgba", func {
 			source := "test/draw/input/Space.png"
-			destination := "test/draw/output/pngRasterBgra.png"
+			destination := "test/draw/output/pngRasterRgba.png"
 			expect(This _fileExists(source))
-			image := RasterBgra open(source)
+			image := RasterRgba open(source)
 			image save(destination)
 			expect(This _fileExists(destination))
 			image free()
 		})
-		this add("open png RasterBgr", func {
+		this add("open png RasterRgb", func {
 			source := "test/draw/input/Space.png"
-			destination := "test/draw/output/pngRasterBgr.png"
-			image := RasterBgr open(source)
+			destination := "test/draw/output/pngRasterRgb.png"
+			image := RasterRgb open(source)
 			image save(destination)
 			expect(This _fileExists(destination))
 			image free()
@@ -89,18 +89,18 @@ ImageFileTest: class extends Fixture {
 			expect(This _fileExists(destination))
 			image free()
 		})
-		this add("open jpg RasterBgra", func {
+		this add("open jpg RasterRgba", func {
 			source := "test/draw/input/Hercules.jpg"
-			destination := "test/draw/output/jpgRasterBgra.png"
-			image := RasterBgra open(source)
+			destination := "test/draw/output/jpgRasterRgba.png"
+			image := RasterRgba open(source)
 			image save(destination)
 			expect(This _fileExists(destination))
 			image free()
 		})
-		this add("open jpg RasterBgr", func {
+		this add("open jpg RasterRgb", func {
 			source := "test/draw/input/Hercules.jpg"
-			destination := "test/draw/output/jpgRasterBgr.png"
-			image := RasterBgr open(source)
+			destination := "test/draw/output/jpgRasterRgb.png"
+			image := RasterRgb open(source)
 			image save(destination)
 			expect(This _fileExists(destination))
 			image free()
@@ -113,86 +113,86 @@ ImageFileTest: class extends Fixture {
 			expect(This _fileExists(destination))
 			image free()
 		})
-		this add("convert RasterMonochrome to RasterBgra", func {
+		this add("convert RasterMonochrome to RasterRgba", func {
 			source := "test/draw/input/Space.jpg"
-			destination := "test/draw/output/RasterMonochrome-RasterBgra.png"
+			destination := "test/draw/output/RasterMonochrome-RasterRgba.png"
 			monochrome := RasterMonochrome open(source)
-			bgra := RasterBgra convertFrom(monochrome)
-			bgra save(destination)
+			rgba := RasterRgba convertFrom(monochrome)
+			rgba save(destination)
 			expect(This _fileExists(destination))
 			monochrome free()
-			bgra free()
+			rgba free()
 		})
-		this add("convert RasterBgra to RasterMonochrome", func {
+		this add("convert RasterRgba to RasterMonochrome", func {
 			source := "test/draw/input/Space.png"
-			destination := "test/draw/output/RasterBgra-RasterMonochrome.png"
-			bgra := RasterBgra open(source)
-			monochrome := RasterMonochrome convertFrom(bgra)
+			destination := "test/draw/output/RasterRgba-RasterMonochrome.png"
+			rgba := RasterRgba open(source)
+			monochrome := RasterMonochrome convertFrom(rgba)
 			monochrome save(destination)
 			expect(This _fileExists(destination))
 			monochrome free()
-			bgra free()
+			rgba free()
 		})
-		this add("convert RasterBgr to RasterMonochrome", func {
+		this add("convert RasterRgb to RasterMonochrome", func {
 			source := "test/draw/input/Hercules.png"
-			destination := "test/draw/output/RasterBgr-RasterMonochrome.png"
-			bgr := RasterBgr open(source)
-			monochrome := RasterMonochrome convertFrom(bgr)
+			destination := "test/draw/output/RasterRgb-RasterMonochrome.png"
+			rgb := RasterRgb open(source)
+			monochrome := RasterMonochrome convertFrom(rgb)
 			monochrome save(destination)
 			expect(This _fileExists(destination))
-			bgr free()
+			rgb free()
 			monochrome free()
 		})
-		this add("convert RasterMonochrome to RasterBgr", func {
+		this add("convert RasterMonochrome to RasterRgb", func {
 			source := "test/draw/input/Hercules.png"
-			destination := "test/draw/output/RasterMonochrome-RasterBgr.png"
+			destination := "test/draw/output/RasterMonochrome-RasterRgb.png"
 			monochrome := RasterMonochrome open(source)
-			bgr := RasterBgr convertFrom(monochrome)
-			bgr save(destination)
+			rgb := RasterRgb convertFrom(monochrome)
+			rgb save(destination)
 			expect(This _fileExists(destination))
-			bgr free()
+			rgb free()
 		})
-		this add("convert RasterBgr to RasterBgra", func {
+		this add("convert RasterRgb to RasterRgba", func {
 			source := "test/draw/input/Hercules.png"
-			destination := "test/draw/output/RasterBgr-RasterBgra.png"
-			bgr := RasterBgr open(source)
-			bgra := RasterBgra convertFrom(bgr)
-			bgra save(destination)
+			destination := "test/draw/output/RasterRgb-RasterRgba.png"
+			rgb := RasterRgb open(source)
+			rgba := RasterRgba convertFrom(rgb)
+			rgba save(destination)
 			expect(This _fileExists(destination))
-			bgr free()
-			bgra free()
+			rgb free()
+			rgba free()
 		})
-		this add("convert RasterBgra to RasterBgr", func {
+		this add("convert RasterRgba to RasterRgb", func {
 			source := "test/draw/input/Hercules.png"
-			destination := "test/draw/output/RasterBgra-RasterBgr.png"
-			bgra := RasterBgra open(source)
-			bgr := RasterBgr convertFrom(bgra)
-			bgr save(destination)
+			destination := "test/draw/output/RasterRgba-RasterRgb.png"
+			rgba := RasterRgba open(source)
+			rgb := RasterRgb convertFrom(rgba)
+			rgb save(destination)
 			expect(This _fileExists(destination))
-			bgr free()
-			bgra free()
+			rgb free()
+			rgba free()
 		})
-		this add("convert RasterBgra to RasterYuv420Semiplanar", func {
+		this add("convert RasterRgba to RasterYuv420Semiplanar", func {
 			source := "test/draw/input/Barn.png"
-			destination := "test/draw/output/RasterBgra-RasterYuv420Semiplanar-RasterMonochrome.png"
-			bgra := RasterBgra open(source)
-			yuv420 := RasterYuv420Semiplanar convertFrom(bgra)
+			destination := "test/draw/output/RasterRgba-RasterYuv420Semiplanar-RasterMonochrome.png"
+			rgba := RasterRgba open(source)
+			yuv420 := RasterYuv420Semiplanar convertFrom(rgba)
 			monochrome := RasterMonochrome convertFrom(yuv420)
 			monochrome save(destination)
 			expect(This _fileExists(destination))
 			monochrome free()
 			yuv420 free()
-			bgra free()
+			rgba free()
 		})
-		this add("convert RasterBgra to RasterYuv420Semiplanar and back again", func {
+		this add("convert RasterRgba to RasterYuv420Semiplanar and back again", func {
 			source := "test/draw/input/Flower.png"
-			destination := "test/draw/output/RasterBgr-RasterYuv420Semiplanar-RasterBgr.png"
-			bgr := RasterBgr open(source)
-			semiplanar := RasterYuv420Semiplanar convertFrom(bgr)
-			bgr2 := RasterBgr convertFrom(semiplanar)
-			bgr2 save(destination)
+			destination := "test/draw/output/RasterRgb-RasterYuv420Semiplanar-RasterRgb.png"
+			rgb := RasterRgb open(source)
+			semiplanar := RasterYuv420Semiplanar convertFrom(rgb)
+			rgb2 := RasterRgb convertFrom(semiplanar)
+			rgb2 save(destination)
 			expect(This _fileExists(destination))
-			bgr2 free()
+			rgb2 free()
 		})
 		this add("Open and save RasterYuv420Semiplanar", func {
 			source := "test/draw/input/Flower.png"

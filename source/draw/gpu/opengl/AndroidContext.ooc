@@ -12,7 +12,7 @@ use draw
 use geometry
 use base
 use concurrent
-import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLBgra, OpenGLBgra, OpenGLPacked, OpenGLMonochrome, OpenGLUv, OpenGLMap, OpenGLPromise
+import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLRgba, OpenGLRgba, OpenGLPacked, OpenGLMonochrome, OpenGLUv, OpenGLMap, OpenGLPromise
 import threading/Thread
 
 version(!gpuOff) {
@@ -20,7 +20,7 @@ AndroidContext: class extends OpenGLContext {
 	_unpackRgbaToMonochrome := OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToMonochrome.frag"), this)
 	_unpackRgbaToUv := OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToUv.frag"), this)
 	_unpackRgbaToUvPadded := OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToUvPadded.frag"), this)
-	_packers := VectorList<EGLBgra> new()
+	_packers := VectorList<EGLRgba> new()
 	init: func (other: This = null) {
 		if (other)
 			super(other)
@@ -52,8 +52,8 @@ AndroidContext: class extends OpenGLContext {
 		}
 		result
 	}
-	recyclePacker: func (packer: EGLBgra) { this _packers add(packer) }
-	getPacker: func (size: IntVector2D) -> EGLBgra {
+	recyclePacker: func (packer: EGLRgba) { this _packers add(packer) }
+	getPacker: func (size: IntVector2D) -> EGLRgba {
 		index := -1
 		for (i in 0 .. this _packers count) {
 			if (this _packers[i] size == size) {
@@ -61,7 +61,7 @@ AndroidContext: class extends OpenGLContext {
 				break
 			}
 		}
-		index == -1 ? EGLBgra new(size, this) : this _packers remove(index)
+		index == -1 ? EGLRgba new(size, this) : this _packers remove(index)
 	}
 	toBuffer: func (source: GpuImage, packMap: Map) -> (ByteBuffer, OpenGLPromise) {
 		channels := (source as OpenGLPacked) channels
@@ -70,7 +70,7 @@ AndroidContext: class extends OpenGLContext {
 		this packToRgba(source, gpuRgba, IntBox2D new(gpuRgba size))
 		promise := OpenGLPromise new(this)
 		promise sync()
-		eglImage := gpuRgba as EGLBgra
+		eglImage := gpuRgba as EGLRgba
 		sourcePointer := eglImage buffer lock(GraphicBufferUsage ReadOften) as Byte*
 		length := channels * eglImage size area
 		recover := func (b: ByteBuffer) -> Bool {

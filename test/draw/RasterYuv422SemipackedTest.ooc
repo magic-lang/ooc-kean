@@ -31,7 +31,7 @@ RasterYuv422SemipackedTest: class extends Fixture {
 			expect(size y, is equal to(raster height))
 			for (row in 0 .. size y)
 				for (column in 0 .. size x)
-					raster[column, row] = ColorBgr new(row, 0, column) toYuv()
+					raster[column, row] = ColorRgb new(column, 0, row) toYuv()
 			outputPath = "test/draw/output/RasterYuv422Semipacked_test2.png"
 			raster save(outputPath)
 			raster referenceCount decrease()

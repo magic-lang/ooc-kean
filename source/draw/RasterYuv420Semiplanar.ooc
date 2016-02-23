@@ -15,7 +15,7 @@ import RasterMonochrome
 import RasterUv
 import Image
 import Color
-import RasterBgr
+import RasterRgb
 import StbImage
 import io/File
 import io/FileReader
@@ -165,9 +165,9 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		(convert as Closure) free()
 	}
 	save: override func (filename: String) -> Int {
-		bgr := RasterBgr convertFrom(this)
-		result := bgr save(filename)
-		bgr free()
+		rgb := RasterRgb convertFrom(this)
+		result := rgb save(filename)
+		rgb free()
 		result
 	}
 	saveRaw: func (filename: String) {
@@ -244,9 +244,9 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		result
 	}
 	open: static func (filename: String) -> This {
-		bgr := RasterBgr open(filename)
-		result := This convertFrom(bgr)
-		bgr free()
+		rgb := RasterRgb open(filename)
+		result := This convertFrom(rgb)
+		rgb free()
 		result
 	}
 	openRaw: static func (filename: String, size: IntVector2D) -> This {

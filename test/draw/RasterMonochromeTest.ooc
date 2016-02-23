@@ -118,11 +118,11 @@ RasterMonochromeTest: class extends Fixture {
 			expect(image[0, 2] y as Int, is equal to(value as Int))
 			image referenceCount decrease()
 		})
-		/*this add("distance, convertFrom RasterBgra", func {
+		/*this add("distance, convertFrom RasterRgba", func {
 			source := this sourceFlower
-			output := "test/draw/output/RasterBgrToMonochrome.png"
+			output := "test/draw/output/RasterRgbToMonochrome.png"
 			image1 := RasterMonochrome open(source)
-			image2 := RasterMonochrome convertFrom(RasterBgra open(source))
+			image2 := RasterMonochrome convertFrom(RasterRgba open(source))
 			expect(image1 distance(image2), is equal to(0.0f))
 		})*/
 	}

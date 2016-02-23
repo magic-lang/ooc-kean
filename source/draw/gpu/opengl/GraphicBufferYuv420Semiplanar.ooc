@@ -11,7 +11,7 @@ use geometry
 use base
 use collections
 use draw-gpu
-import GraphicBuffer, AndroidContext, EGLBgra
+import GraphicBuffer, AndroidContext, EGLRgba
 import threading/Mutex
 
 version(!gpuOff) {
@@ -19,7 +19,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	_buffer: GraphicBuffer
 	_stride: Int
 	_uvOffset: Int
-	_rgba: EGLBgra = null
+	_rgba: EGLRgba = null
 	buffer ::= this _buffer
 	stride ::= this _stride
 	uvOffset ::= this _uvOffset
@@ -45,26 +45,26 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 			height := this _size y + this _size y / 2 + extraRows
 			width := this _stride / 4
 			rgbaBuffer := this buffer shallowCopy(IntVector2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget)
-			this _rgba = EGLBgra new(rgbaBuffer, context)
+			this _rgba = EGLRgba new(rgbaBuffer, context)
 			this _rgba referenceCount increase()
 		}
 		this _rgba _coordinateSystem = this coordinateSystem
 		this _rgba referenceCount increase()
 		this _rgba
 	}
-	_bin := static VectorList<EGLBgra> new()
+	_bin := static VectorList<EGLRgba> new()
 	_mutex := static Mutex new()
 	_binSize: static Int = 100
-	_recycle: static func (image: EGLBgra) {
+	_recycle: static func (image: EGLRgba) {
 		This _mutex lock()
 		This _bin add(image)
 		if (This _bin count > This _binSize)
 			This _bin remove(0) referenceCount decrease()
 		This _mutex unlock()
 	}
-	_search: static func (buffer: GraphicBuffer) -> EGLBgra {
+	_search: static func (buffer: GraphicBuffer) -> EGLRgba {
 		This _mutex lock()
-		result: EGLBgra = null
+		result: EGLRgba = null
 		for (i in 0 .. This _bin count) {
 			if (This _bin[i] buffer _handle == buffer _handle) {
 				result = This _bin remove(i)

@@ -48,7 +48,7 @@ RasterRgbaTest: class extends Fixture {
 		this add("RGBA to Monochrome", func {
 			image1 := RasterRgba open(this sourceSpace)
 			image2 := RasterMonochrome convertFrom(image1)
-			image3 := RasterMonochrome open("test/draw/input/correct/Bgra-Monochrome-Space.png")
+			image3 := RasterMonochrome open("test/draw/input/correct/Rgba-Monochrome-Space.png")
 			expect(image2 distance(image3), is equal to(0.0f))
 			image1 referenceCount decrease(); image2 referenceCount decrease(); image3 referenceCount decrease()
 		})

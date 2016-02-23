@@ -7,11 +7,11 @@
  */
 
 use geometry
-import GraphicBuffer, AndroidContext, OpenGLBgra
+import GraphicBuffer, AndroidContext, OpenGLRgba
 import backend/[GLTexture, GLContext, EGLImage]
 
 version(!gpuOff) {
-EGLBgra: class extends OpenGLBgra {
+EGLRgba: class extends OpenGLRgba {
 	_buffer: GraphicBuffer
 	buffer ::= this _buffer
 	init: func ~fromGraphicBuffer (=_buffer, context: AndroidContext) {

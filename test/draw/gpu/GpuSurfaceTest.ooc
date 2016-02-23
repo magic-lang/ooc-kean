@@ -17,11 +17,11 @@ use unit
 GpuSurfaceTest: class extends Fixture {
 	init: func {
 		super("GpuSurfaceTest")
-		sourceImage := RasterBgra open("test/draw/gpu/input/quad1.png")
+		sourceImage := RasterRgba open("test/draw/gpu/input/quad1.png")
 		sourceSize := sourceImage size
 		this add("draw red quadrant scale 1:1", func {
-			correctImage := RasterBgra open("test/draw/gpu/correct/quadrant_red.png")
-			gpuImage := gpuContext createBgra(sourceSize)
+			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_red.png")
+			gpuImage := gpuContext createRgba(sourceSize)
 			gpuImage canvas pen = Pen new(ColorRgba new())
 			viewport := gpuImage canvas viewport
 			quadrantRed := IntBox2D new(viewport left, viewport top, viewport width / 2, viewport height / 2)
@@ -32,8 +32,8 @@ GpuSurfaceTest: class extends Fixture {
 			rasterFromGpu free(); correctImage free(); gpuImage free()
 		})
 		this add("draw yellow quadrant scale 1:1", func {
-			correctImage := RasterBgra open("test/draw/gpu/correct/quadrant_yellow.png")
-			gpuImage := gpuContext createBgra(sourceSize)
+			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_yellow.png")
+			gpuImage := gpuContext createRgba(sourceSize)
 			gpuImage canvas pen = Pen new(ColorRgba new())
 			viewport := gpuImage canvas viewport
 			quadrantYellow := IntBox2D new(viewport width / 2, viewport top, viewport width / 2, viewport height / 2)
@@ -44,8 +44,8 @@ GpuSurfaceTest: class extends Fixture {
 			rasterFromGpu free(); correctImage free(); gpuImage free()
 		})
 		this add("draw blue quadrant scale 1:1", func {
-			correctImage := RasterBgra open("test/draw/gpu/correct/quadrant_blue.png")
-			gpuImage := gpuContext createBgra(sourceSize)
+			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_blue.png")
+			gpuImage := gpuContext createRgba(sourceSize)
 			gpuImage canvas pen = Pen new(ColorRgba new())
 			viewport := gpuImage canvas viewport
 			quadrantBlue := IntBox2D new(viewport left, viewport height / 2, viewport width / 2, viewport height / 2)
@@ -56,8 +56,8 @@ GpuSurfaceTest: class extends Fixture {
 			rasterFromGpu free(); correctImage free(); gpuImage free()
 		})
 		this add("draw green quadrant scale 1:1", func {
-			correctImage := RasterBgra open("test/draw/gpu/correct/quadrant_green.png")
-			gpuImage := gpuContext createBgra(sourceSize)
+			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_green.png")
+			gpuImage := gpuContext createRgba(sourceSize)
 			viewport := gpuImage canvas viewport
 			quadrantGreen := IntBox2D new(viewport width / 2, viewport height / 2, viewport width / 2, viewport height / 2)
 			gpuImage canvas clear()
@@ -67,12 +67,12 @@ GpuSurfaceTest: class extends Fixture {
 			correctImage free(); rasterFromGpu free(); gpuImage free()
 		})
 		this add("draw combined quadrants", func {
-			quadrantRed := RasterBgra open("test/draw/gpu/correct/quadrant_red.png")
-			quadrantYellow := RasterBgra open("test/draw/gpu/correct/quadrant_yellow.png")
-			quadrantBlue := RasterBgra open("test/draw/gpu/correct/quadrant_blue.png")
-			quadrantGreen := RasterBgra open("test/draw/gpu/correct/quadrant_green.png")
-			correctImage := RasterBgra open("test/draw/gpu/correct/quad.png")
-			gpuImage := gpuContext createBgra(sourceSize)
+			quadrantRed := RasterRgba open("test/draw/gpu/correct/quadrant_red.png")
+			quadrantYellow := RasterRgba open("test/draw/gpu/correct/quadrant_yellow.png")
+			quadrantBlue := RasterRgba open("test/draw/gpu/correct/quadrant_blue.png")
+			quadrantGreen := RasterRgba open("test/draw/gpu/correct/quadrant_green.png")
+			correctImage := RasterRgba open("test/draw/gpu/correct/quad.png")
+			gpuImage := gpuContext createRgba(sourceSize)
 			gpuImage canvas clear()
 			viewport := gpuImage canvas viewport
 			redBox := IntBox2D new(viewport left, viewport top, viewport width / 2, viewport height / 2)
@@ -89,8 +89,8 @@ GpuSurfaceTest: class extends Fixture {
 			correctImage free(); rasterFromGpu free(); gpuImage free()
 		})
 		this add("draw red quadrant zoomed", func {
-			correctImage := RasterBgra open("test/draw/gpu/correct/quadrant_red_zoom.png")
-			gpuImage := gpuContext createBgra(sourceSize)
+			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_red_zoom.png")
+			gpuImage := gpuContext createRgba(sourceSize)
 			gpuImage canvas clear()
 			viewport := gpuImage canvas viewport
 			redBox := IntBox2D new(viewport left, viewport top, viewport width / 2, viewport height / 2)
@@ -100,8 +100,8 @@ GpuSurfaceTest: class extends Fixture {
 			correctImage free(); rasterFromGpu free(); gpuImage free()
 		})
 		this add("draw quad 1:4 scale top left bottom right and 180deg x rotation", func {
-			correctImage := RasterBgra open("test/draw/gpu/correct/quad_scaled_top_left_bottom_right_180deg_x_rotation.png")
-			gpuImage := gpuContext createBgra(sourceSize)
+			correctImage := RasterRgba open("test/draw/gpu/correct/quad_scaled_top_left_bottom_right_180deg_x_rotation.png")
+			gpuImage := gpuContext createRgba(sourceSize)
 			gpuImage canvas clear()
 			viewport := gpuImage canvas viewport
 			quadrantTopLeft := IntBox2D new(viewport left, viewport top, viewport width / 2, viewport height / 2)

@@ -8,12 +8,12 @@
 
 use base
 
-import RasterBgra, RasterMonochrome
+import RasterRgba, RasterMonochrome
 
 CreateAlphaByteString: class {
 	init: func
 	makeAlphaString: static func (filename, name: String) -> String {
-		image := RasterBgra open(filename)
+		image := RasterRgba open(filename)
 		buf := image buffer as ByteBuffer
 		imageArray := "["
 		ip: Int*

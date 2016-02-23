@@ -23,7 +23,7 @@ Win32DisplayWindow: class extends DisplayWindow {
 		super()
 	}
 	draw: override func (image: Image) {
-		raster := RasterBgra convertFrom(image as RasterImage)
+		raster := RasterRgba convertFrom(image as RasterImage)
 		this _backend draw(raster)
 		raster referenceCount decrease()
 	}
