@@ -53,9 +53,6 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
 	apply: override func ~rgb (action: Func (ColorRgb)) {
 		this apply(ColorConvert fromYuv(action))
 	}
-	apply: override func ~bgr (action: Func (ColorBgr)) {
-		this apply(ColorConvert fromYuv(action))
-	}
 	apply: override func ~monochrome (action: Func (ColorMonochrome)) {
 		this apply(ColorConvert fromYuv(action))
 	}

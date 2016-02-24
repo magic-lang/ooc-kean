@@ -51,9 +51,6 @@ RasterUv: class extends RasterPacked {
 	apply: override func ~rgb (action: Func(ColorRgb)) {
 		this apply(ColorConvert fromYuv(action))
 	}
-	apply: override func ~bgr (action: Func(ColorBgr)) {
-		this apply(ColorConvert fromYuv(action))
-	}
 	apply: override func ~yuv (action: Func(ColorYuv)) {
 		uvRow := this buffer pointer
 		uSource := uvRow

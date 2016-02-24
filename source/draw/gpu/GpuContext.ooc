@@ -36,8 +36,6 @@ GpuContext: abstract class extends DrawContext {
 	defaultMap ::= null as Map
 	init: func
 	createMonochrome: abstract func (size: IntVector2D) -> GpuImage
-	createBgr: abstract func (size: IntVector2D) -> GpuImage
-	createBgra: abstract func (size: IntVector2D) -> GpuImage
 	createRgb: abstract func (size: IntVector2D) -> GpuImage
 	createRgba: abstract func (size: IntVector2D) -> GpuImage
 	createUv: abstract func (size: IntVector2D) -> GpuImage

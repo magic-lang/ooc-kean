@@ -57,11 +57,6 @@ RasterRgb: class extends RasterPacked {
 				action(color)
 			}
 	}
-	apply: override func ~bgr (action: Func(ColorBgr)) {
-		convert := ColorConvert fromRgb(action)
-		this apply(convert)
-		(convert as Closure) free()
-	}
 	apply: override func ~yuv (action: Func(ColorYuv)) {
 		convert := ColorConvert fromRgb(action)
 		this apply(convert)

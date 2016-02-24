@@ -41,7 +41,7 @@ AndroidContext: class extends OpenGLContext {
 			if (rasterImage instanceOf(GraphicBufferYuv420Semiplanar)) {
 				graphicBufferImage := rasterImage as GraphicBufferYuv420Semiplanar
 				rgba := graphicBufferImage toRgba(this)
-				result = this unpackBgraToYuv420Semiplanar(rgba, rasterImage size, graphicBufferImage uvPadding % graphicBufferImage stride)
+				result = this unpackRgbaToYuv420Semiplanar(rgba, rasterImage size, graphicBufferImage uvPadding % graphicBufferImage stride)
 				rgba referenceCount decrease()
 			}
 			else
@@ -134,7 +134,7 @@ AndroidContext: class extends OpenGLContext {
 			result = super(gpuImage)
 		result
 	}
-	unpackBgraToYuv420Semiplanar: func (source: GpuImage, targetSize: IntVector2D, padding := 0) -> GpuYuv420Semiplanar {
+	unpackRgbaToYuv420Semiplanar: func (source: GpuImage, targetSize: IntVector2D, padding := 0) -> GpuYuv420Semiplanar {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
 		sourceSize := source size
 		transform := FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)

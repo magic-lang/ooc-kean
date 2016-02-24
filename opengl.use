@@ -9,8 +9,6 @@ Requires: draw-gpu
 Imports: OpenGLPacked
 Imports: OpenGLRgb
 Imports: OpenGLRgba
-Imports: OpenGLBgr
-Imports: OpenGLBgra
 Imports: OpenGLMonochrome
 Imports: OpenGLUv
 Imports: OpenGLCanvas

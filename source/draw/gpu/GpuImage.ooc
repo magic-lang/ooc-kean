@@ -17,8 +17,6 @@ GpuImageType: enum {
 	Monochrome
 	Rgba
 	Rgb
-	Bgr
-	Bgra
 	Uv
 	YuvSemiplanar
 	YuvPlanar

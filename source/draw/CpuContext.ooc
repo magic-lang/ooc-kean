@@ -13,8 +13,6 @@ use geometry
 CpuContext: class extends DrawContext {
 	init: func
 	createMonochrome: override func (size: IntVector2D) -> RasterMonochrome { RasterMonochrome new(size) }
-	createBgr: override func (size: IntVector2D) -> RasterBgr { RasterBgr new(size) }
-	createBgra: override func (size: IntVector2D) -> RasterBgra { RasterBgra new(size) }
 	createRgb: override func (size: IntVector2D) -> RasterRgb { RasterRgb new(size) }
 	createRgba: override func (size: IntVector2D) -> RasterRgba { RasterRgba new(size) }
 	createUv: override func (size: IntVector2D) -> RasterUv { RasterUv new(size) }
