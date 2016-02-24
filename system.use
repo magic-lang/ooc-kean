@@ -26,3 +26,5 @@ Imports: structs/Queue
 Imports: structs/Stack
 Imports: structs/Vector
 Imports: structs/VectorList
+Additionals: source/system/string/string_literal.h
+Additionals: source/system/string/string_literal.c
