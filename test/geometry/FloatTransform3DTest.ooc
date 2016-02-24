@@ -16,6 +16,7 @@ FloatTransform3DTest: class extends Fixture {
 	transform2 := FloatTransform3D new(30, 32, 36, 58, 81, 96, -10, 14, 24, 128, 182, 216)
 	transform3 := FloatTransform3D new(0.5f, 1, -0.5f, 1, -5, 3, -0.5f, 3.66666666666666f, -2.16666666666667f, 0, 1, -2)
 	transform4 := FloatTransform3D new(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120)
+	transform5 := FloatTransform3D new(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1)
 	point0 := FloatPoint3D new(34, 10, 30)
 	point1 := FloatPoint3D new(226, 369, 444)
 	init: func {
@@ -295,6 +296,94 @@ FloatTransform3DTest: class extends Fixture {
 			text := FloatTransform3D new(1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3) toText() take()
 			expect(text, is equal to(t"1.00, 4.00, 7.00, 1.00\n2.00, 5.00, 8.00, 2.00\n3.00, 6.00, 9.00, 3.00\n0.00, 0.00, 0.00, 1.00"))
 			text free()
+		})
+		this add("setScaling", func {
+			transform := transform0 setScaling(4.0f)
+			expect(transform a, is equal to (-0.45377181f) within (this precision))
+			expect(transform b, is equal to (0.907543614f) within (this precision))
+			expect(transform c, is equal to (1.361315421f) within (this precision))
+			expect(transform d, is equal to (0.0f) within (this precision))
+
+			expect(transform e, is equal to (1.815087228f) within (this precision))
+			expect(transform f, is equal to (2.268859035f) within (this precision))
+			expect(transform g, is equal to (2.722630842f) within (this precision))
+			expect(transform h, is equal to (0.0f) within (this precision))
+
+			expect(transform i, is equal to (3.176402649f) within (this precision))
+			expect(transform j, is equal to (3.630174456f) within (this precision))
+			expect(transform k, is equal to (4.083946263f) within (this precision))
+			expect(transform l, is equal to (0.0f) within (this precision))
+
+			expect(transform m, is equal to (4.53771807f) within (this precision))
+			expect(transform n, is equal to (4.99148988f) within (this precision))
+			expect(transform o, is equal to (5.44526168f) within (this precision))
+			expect(transform p, is equal to (1.0f) within (this precision))
+		})
+		this add("setXScaling", func {
+			transform := transform0 setXScaling(4.0f)
+			expect(transform a, is equal to (-1.06904497f) within (this precision))
+			expect(transform b, is equal to (2.0f) within (this precision))
+			expect(transform c, is equal to (3.0f) within (this precision))
+			expect(transform d, is equal to (0.0f) within (this precision))
+
+			expect(transform e, is equal to (4.2761798704f) within (this precision))
+			expect(transform f, is equal to (5.0f) within (this precision))
+			expect(transform g, is equal to (6.0f) within (this precision))
+			expect(transform h, is equal to (0.0f) within (this precision))
+
+			expect(transform i, is equal to (7.4833147732f) within (this precision))
+			expect(transform j, is equal to (8.0f) within (this precision))
+			expect(transform k, is equal to (9.0f) within (this precision))
+			expect(transform l, is equal to (0.0f) within (this precision))
+
+			expect(transform m, is equal to (10.690449676f) within (this precision))
+			expect(transform n, is equal to (11.0f) within (this precision))
+			expect(transform o, is equal to (12.0f) within (this precision))
+			expect(transform p, is equal to (1.0f) within (this precision))
+		})
+		this add("setYScaling", func {
+			transform := transform0 setYScaling(4.0f)
+			expect(transform a, is equal to (-1.0f) within (this precision))
+			expect(transform b, is equal to (0.9116846116f) within (this precision))
+			expect(transform c, is equal to (3.0f) within (this precision))
+			expect(transform d, is equal to (0.0f) within (this precision))
+
+			expect(transform e, is equal to (4.0f) within (this precision))
+			expect(transform f, is equal to (2.279211529f) within (this precision))
+			expect(transform g, is equal to (6.0f) within (this precision))
+			expect(transform h, is equal to (0.0f) within (this precision))
+
+			expect(transform i, is equal to (7.0f) within (this precision))
+			expect(transform j, is equal to (3.6467384464f) within (this precision))
+			expect(transform k, is equal to (9.0f) within (this precision))
+			expect(transform l, is equal to (0.0f) within (this precision))
+
+			expect(transform m, is equal to (10.0f) within (this precision))
+			expect(transform n, is equal to (5.0142653638f) within (this precision))
+			expect(transform o, is equal to (12.0f) within (this precision))
+			expect(transform p, is equal to (1.0f) within (this precision))
+		})
+		this add("setZScaling", func {
+			transform := transform0 setZScaling(4.0f)
+			expect(transform a, is equal to (-1.0f) within (this precision))
+			expect(transform b, is equal to (2.0f) within (this precision))
+			expect(transform c, is equal to (0.8615497905f) within (this precision))
+			expect(transform d, is equal to (0.0f) within (this precision))
+
+			expect(transform e, is equal to (4.0f) within (this precision))
+			expect(transform f, is equal to (5.0f) within (this precision))
+			expect(transform g, is equal to (1.723099581f) within (this precision))
+			expect(transform h, is equal to (0.0f) within (this precision))
+
+			expect(transform i, is equal to (7.0f) within (this precision))
+			expect(transform j, is equal to (8.0f) within (this precision))
+			expect(transform k, is equal to (2.5846493715f) within (this precision))
+			expect(transform l, is equal to (0.0f) within (this precision))
+
+			expect(transform m, is equal to (10.0f) within (this precision))
+			expect(transform n, is equal to (11.0f) within (this precision))
+			expect(transform o, is equal to (3.446199162f) within (this precision))
+			expect(transform p, is equal to (1.0f) within (this precision))
 		})
 	}
 }
