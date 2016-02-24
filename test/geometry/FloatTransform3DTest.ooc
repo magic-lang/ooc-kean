@@ -451,6 +451,72 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform o, is equal to (12.0f) within (this precision))
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
+		this add("reflectX", func {
+			transform := transform0 reflectX()
+			expect(transform a, is equal to (1.0f) within (this precision))
+			expect(transform b, is equal to (2.0f) within (this precision))
+			expect(transform c, is equal to (3.0f) within (this precision))
+			expect(transform d, is equal to (0.0f) within (this precision))
+
+			expect(transform e, is equal to (-4.0f) within (this precision))
+			expect(transform f, is equal to (5.0f) within (this precision))
+			expect(transform g, is equal to (6.0f) within (this precision))
+			expect(transform h, is equal to (0.0f) within (this precision))
+
+			expect(transform i, is equal to (-7.0f) within (this precision))
+			expect(transform j, is equal to (8.0f) within (this precision))
+			expect(transform k, is equal to (9.0f) within (this precision))
+			expect(transform l, is equal to (0.0f) within (this precision))
+
+			expect(transform m, is equal to (-10.0f) within (this precision))
+			expect(transform n, is equal to (11.0f) within (this precision))
+			expect(transform o, is equal to (12.0f) within (this precision))
+			expect(transform p, is equal to (1.0f) within (this precision))
+		})
+		this add("reflectY", func {
+			transform := transform0 reflectY()
+			expect(transform a, is equal to (-1.0f) within (this precision))
+			expect(transform b, is equal to (-2.0f) within (this precision))
+			expect(transform c, is equal to (3.0f) within (this precision))
+			expect(transform d, is equal to (0.0f) within (this precision))
+
+			expect(transform e, is equal to (4.0f) within (this precision))
+			expect(transform f, is equal to (-5.0f) within (this precision))
+			expect(transform g, is equal to (6.0f) within (this precision))
+			expect(transform h, is equal to (0.0f) within (this precision))
+
+			expect(transform i, is equal to (7.0f) within (this precision))
+			expect(transform j, is equal to (-8.0f) within (this precision))
+			expect(transform k, is equal to (9.0f) within (this precision))
+			expect(transform l, is equal to (0.0f) within (this precision))
+
+			expect(transform m, is equal to (10.0f) within (this precision))
+			expect(transform n, is equal to (-11.0f) within (this precision))
+			expect(transform o, is equal to (12.0f) within (this precision))
+			expect(transform p, is equal to (1.0f) within (this precision))
+		})
+		this add("reflectZ", func {
+			transform := transform0 reflectZ()
+			expect(transform a, is equal to (-1.0f) within (this precision))
+			expect(transform b, is equal to (2.0f) within (this precision))
+			expect(transform c, is equal to (-3.0f) within (this precision))
+			expect(transform d, is equal to (0.0f) within (this precision))
+
+			expect(transform e, is equal to (4.0f) within (this precision))
+			expect(transform f, is equal to (5.0f) within (this precision))
+			expect(transform g, is equal to (-6.0f) within (this precision))
+			expect(transform h, is equal to (0.0f) within (this precision))
+
+			expect(transform i, is equal to (7.0f) within (this precision))
+			expect(transform j, is equal to (8.0f) within (this precision))
+			expect(transform k, is equal to (-9.0f) within (this precision))
+			expect(transform l, is equal to (0.0f) within (this precision))
+
+			expect(transform m, is equal to (10.0f) within (this precision))
+			expect(transform n, is equal to (11.0f) within (this precision))
+			expect(transform o, is equal to (-12.0f) within (this precision))
+			expect(transform p, is equal to (1.0f) within (this precision))
+		})
 	}
 }
 
