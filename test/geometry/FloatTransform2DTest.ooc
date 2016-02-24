@@ -10,7 +10,6 @@ use unit
 use geometry
 
 FloatTransform2DTest: class extends Fixture {
-	PI := 3.14159265f
 	precision := 1.0e-5f
 	transform0 := FloatTransform2D new(3.0f, 1.0f, 2.0f, 1.0f, 5.0f, 7.0f)
 	transform1 := FloatTransform2D new(7.0f, 4.0f, 2.0f, 5.0f, 7.0f, 6.0f)
@@ -222,7 +221,7 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform i, is equal to(1.0f) within(this precision))
 		})
 		this add("skewX", func {
-			transform := this transform0 skewX(3.14159265/6)
+			transform := this transform0 skewX(Float pi/6)
 			expect(transform a, is equal to(3.5f) within(this precision))
 			expect(transform b, is equal to(1.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
@@ -234,7 +233,7 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform i, is equal to(1.0f) within(this precision))
 		})
 		this add("skewY", func {
-			transform := this transform0 skewY(3.14159265/6)
+			transform := this transform0 skewY(Float pi/6)
 			expect(transform a, is equal to(3.0f) within(this precision))
 			expect(transform b, is equal to(2.5f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
@@ -286,7 +285,7 @@ FloatTransform2DTest: class extends Fixture {
 			expect(string, is equal to("3.123457, 1.123457, 0.000000\t0.123650, -11.524160, 0.000000\t0.000000, 1.900000, 1.000000\t"))
 		})
 		this add("createSkewingX", func {
-			skewingX := FloatTransform2D createSkewingX(4 * this PI / 3)
+			skewingX := FloatTransform2D createSkewingX(4.0f * Float pi / 3.0f)
 			expect(skewingX a, is equal to(1.0f))
 			expect(skewingX b, is equal to(0.0f))
 			expect(skewingX c, is equal to(0.0f))
@@ -298,7 +297,7 @@ FloatTransform2DTest: class extends Fixture {
 			expect(skewingX i, is equal to(1.0f))
 		})
 		this add("createSkewingY", func {
-			skewingY := FloatTransform2D createSkewingY(5 * this PI / 3)
+			skewingY := FloatTransform2D createSkewingY(5 * Float pi / 3)
 			expect(skewingY a, is equal to(1.0f))
 			expect(skewingY b, is equal to(-0.866025404f) within(this precision))
 			expect(skewingY c, is equal to(0.0f))
@@ -404,7 +403,7 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform5 isIdentity, is true)
 		})
 		this add("setRotation", func {
-			transform := transform5 setRotation(this PI/6)
+			transform := transform5 setRotation(Float pi/6)
 			expect(transform a, is equal to(0.86602540f) within(this precision))
 			expect(transform b, is equal to(0.5f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))

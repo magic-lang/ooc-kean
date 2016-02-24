@@ -385,6 +385,72 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform o, is equal to (3.446199162f) within (this precision))
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
+		this add("rotateX", func {
+			transform := transform0 rotateX(Float pi/4)
+			expect(transform a, is equal to (-1.0f) within (this precision))
+			expect(transform b, is equal to (-0.70710678f) within (this precision))
+			expect(transform c, is equal to (3.535533906f) within (this precision))
+			expect(transform d, is equal to (0.0f) within (this precision))
+
+			expect(transform e, is equal to (4.0f) within (this precision))
+			expect(transform f, is equal to (-0.70710678f) within (this precision))
+			expect(transform g, is equal to (7.7781745932f) within (this precision))
+			expect(transform h, is equal to (0.0f) within (this precision))
+
+			expect(transform i, is equal to (7.0f) within (this precision))
+			expect(transform j, is equal to (-0.70710678f) within (this precision))
+			expect(transform k, is equal to (12.0208152804f) within (this precision))
+			expect(transform l, is equal to (0.0f) within (this precision))
+
+			expect(transform m, is equal to (10.0f) within (this precision))
+			expect(transform n, is equal to (-0.70710678f) within (this precision))
+			expect(transform o, is equal to (16.2634559676f) within (this precision))
+			expect(transform p, is equal to (1.0f) within (this precision))
+		})
+		this add("rotateY", func {
+			transform := transform0 rotateY(Float pi/4)
+			expect(transform a, is equal to (1.4142135588f) within (this precision))
+			expect(transform b, is equal to (2.0f) within (this precision))
+			expect(transform c, is equal to (2.8284271236f) within (this precision))
+			expect(transform d, is equal to (0.0f) within (this precision))
+
+			expect(transform e, is equal to (7.0710678048f) within (this precision))
+			expect(transform f, is equal to (5.0f) within (this precision))
+			expect(transform g, is equal to (1.4142135672f) within (this precision))
+			expect(transform h, is equal to (0.0f) within (this precision))
+
+			expect(transform i, is equal to (11.3137084884f) within (this precision))
+			expect(transform j, is equal to (8.0f) within (this precision))
+			expect(transform k, is equal to (1.4142135708f) within (this precision))
+			expect(transform l, is equal to (0.0f) within (this precision))
+
+			expect(transform m, is equal to (15.556349172f) within (this precision))
+			expect(transform n, is equal to (11.0f) within (this precision))
+			expect(transform o, is equal to (1.4142135744f) within (this precision))
+			expect(transform p, is equal to (1.0f) within (this precision))
+		})
+		this add("rotateZ", func {
+			transform := transform0 rotateZ(Float pi/4)
+			expect(transform a, is equal to (-2.121320343f) within (this precision))
+			expect(transform b, is equal to (0.7071067814f) within (this precision))
+			expect(transform c, is equal to (3.0f) within (this precision))
+			expect(transform d, is equal to (0.0f) within (this precision))
+
+			expect(transform e, is equal to (-0.7071067802f) within (this precision))
+			expect(transform f, is equal to (6.36396103f) within (this precision))
+			expect(transform g, is equal to (6.0f) within (this precision))
+			expect(transform h, is equal to (0.0f) within (this precision))
+
+			expect(transform i, is equal to (-0.7071067796f) within (this precision))
+			expect(transform j, is equal to (10.6066017166f) within (this precision))
+			expect(transform k, is equal to (9.0f) within (this precision))
+			expect(transform l, is equal to (0.0f) within (this precision))
+
+			expect(transform m, is equal to (-0.707106779f) within (this precision))
+			expect(transform n, is equal to (14.849242403f) within (this precision))
+			expect(transform o, is equal to (12.0f) within (this precision))
+			expect(transform p, is equal to (1.0f) within (this precision))
+		})
 	}
 }
 
