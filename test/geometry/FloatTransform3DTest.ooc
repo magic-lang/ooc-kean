@@ -517,6 +517,94 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform o, is equal to (-12.0f) within (this precision))
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
+		this add("createProjection", func {
+			projection := FloatTransform3D createProjection(7.5f)
+			expect(projection a, is equal to (7.5f) within (this precision))
+			expect(projection b, is equal to (0.0f) within (this precision))
+			expect(projection c, is equal to (0.0f) within (this precision))
+			expect(projection d, is equal to (0.0f) within (this precision))
+
+			expect(projection e, is equal to (0.0f) within (this precision))
+			expect(projection f, is equal to (7.5f) within (this precision))
+			expect(projection g, is equal to (0.0f) within (this precision))
+			expect(projection h, is equal to (0.0f) within (this precision))
+
+			expect(projection i, is equal to (0.0f) within (this precision))
+			expect(projection j, is equal to (0.0f) within (this precision))
+			expect(projection k, is equal to (7.5f) within (this precision))
+			expect(projection l, is equal to (1.0f) within (this precision))
+
+			expect(projection m, is equal to (0.0f) within (this precision))
+			expect(projection n, is equal to (0.0f) within (this precision))
+			expect(projection o, is equal to (0.0f) within (this precision))
+			expect(projection p, is equal to (0.0f) within (this precision))
+		})
+		this add("createReflectionX", func {
+			reflection := FloatTransform3D createReflectionX()
+			expect(reflection a, is equal to (-1.0f) within (this precision))
+			expect(reflection b, is equal to (0.0f) within (this precision))
+			expect(reflection c, is equal to (0.0f) within (this precision))
+			expect(reflection d, is equal to (0.0f) within (this precision))
+
+			expect(reflection e, is equal to (0.0f) within (this precision))
+			expect(reflection f, is equal to (1.0f) within (this precision))
+			expect(reflection g, is equal to (0.0f) within (this precision))
+			expect(reflection h, is equal to (0.0f) within (this precision))
+
+			expect(reflection i, is equal to (0.0f) within (this precision))
+			expect(reflection j, is equal to (0.0f) within (this precision))
+			expect(reflection k, is equal to (1.0f) within (this precision))
+			expect(reflection l, is equal to (0.0f) within (this precision))
+
+			expect(reflection m, is equal to (0.0f) within (this precision))
+			expect(reflection n, is equal to (0.0f) within (this precision))
+			expect(reflection o, is equal to (0.0f) within (this precision))
+			expect(reflection p, is equal to (1.0f) within (this precision))
+		})
+		this add("createReflectionY", func {
+			reflection := FloatTransform3D createReflectionY()
+			expect(reflection a, is equal to (1.0f) within (this precision))
+			expect(reflection b, is equal to (0.0f) within (this precision))
+			expect(reflection c, is equal to (0.0f) within (this precision))
+			expect(reflection d, is equal to (0.0f) within (this precision))
+
+			expect(reflection e, is equal to (0.0f) within (this precision))
+			expect(reflection f, is equal to (-1.0f) within (this precision))
+			expect(reflection g, is equal to (0.0f) within (this precision))
+			expect(reflection h, is equal to (0.0f) within (this precision))
+
+			expect(reflection i, is equal to (0.0f) within (this precision))
+			expect(reflection j, is equal to (0.0f) within (this precision))
+			expect(reflection k, is equal to (1.0f) within (this precision))
+			expect(reflection l, is equal to (0.0f) within (this precision))
+
+			expect(reflection m, is equal to (0.0f) within (this precision))
+			expect(reflection n, is equal to (0.0f) within (this precision))
+			expect(reflection o, is equal to (0.0f) within (this precision))
+			expect(reflection p, is equal to (1.0f) within (this precision))
+		})
+		this add("createReflectionZ", func {
+			reflection := FloatTransform3D createReflectionZ()
+			expect(reflection a, is equal to (1.0f) within (this precision))
+			expect(reflection b, is equal to (0.0f) within (this precision))
+			expect(reflection c, is equal to (0.0f) within (this precision))
+			expect(reflection d, is equal to (0.0f) within (this precision))
+
+			expect(reflection e, is equal to (0.0f) within (this precision))
+			expect(reflection f, is equal to (1.0f) within (this precision))
+			expect(reflection g, is equal to (0.0f) within (this precision))
+			expect(reflection h, is equal to (0.0f) within (this precision))
+
+			expect(reflection i, is equal to (0.0f) within (this precision))
+			expect(reflection j, is equal to (0.0f) within (this precision))
+			expect(reflection k, is equal to (-1.0f) within (this precision))
+			expect(reflection l, is equal to (0.0f) within (this precision))
+
+			expect(reflection m, is equal to (0.0f) within (this precision))
+			expect(reflection n, is equal to (0.0f) within (this precision))
+			expect(reflection o, is equal to (0.0f) within (this precision))
+			expect(reflection p, is equal to (1.0f) within (this precision))
+		})
 	}
 }
 
