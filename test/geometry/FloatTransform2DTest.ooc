@@ -384,6 +384,61 @@ FloatTransform2DTest: class extends Fixture {
 		this add("isSimilarity", func {
 			expect(transform0 isSimilarity, is false)
 		})
+		this add("This create(translation, rotationZ) -> This", func {
+			arr := FloatTransform2D create(transform0 translation, transform0 rotationZ)
+			expect(arr a, is equal to (0.948683298176f) within (this precision))
+			expect(arr b, is equal to (0.316227765641f) within (this precision))
+			expect(arr c, is equal to (0.0f) within (this precision))
+			expect(arr d, is equal to (-0.316227765641f) within (this precision))
+			expect(arr e, is equal to (0.948683298176f) within (this precision))
+			expect(arr f, is equal to (0.0f) within (this precision))
+			expect(arr g, is equal to (5.0f) within (this precision))
+			expect(arr h, is equal to (7.0f) within (this precision))
+			expect(arr i, is equal to (1.0f) within (this precision))
+		})
+		this add("isEuclidian", func {
+			expect(transform0 isEuclidian, is false)
+		})
+		this add("isIdentity", func {
+			expect(transform0 isIdentity, is false)
+			expect(transform5 isIdentity, is true)
+		})
+		/*this add("set Rotation1", func {
+			transform := this transform5 setRotation(this PI/6)
+			expect(transform a, is equal to(0.99995824f) within(this precision))
+			expect(transform b, is equal to(0.00913839f) within(this precision))
+			expect(transform c, is equal to(0.0f) within(this precision))
+			expect(transform d, is equal to(-0.0091383f) within(this precision))
+			expect(transform e, is equal to(0.99995824f) within(this precision))
+			expect(transform f, is equal to(0.0f) within(this precision))
+			expect(transform g, is equal to(0.0f) within(this precision))
+			expect(transform h, is equal to(0.0f) within(this precision))
+			expect(transform i, is equal to(1.0f) within(this precision))
+		})
+		this add("set Rotation2", func {
+			transform := this transform0 setRotation(this PI/4)
+			expect(transform a, is equal to(2.99180967f) within(this precision))
+			expect(transform b, is equal to(1.02424349f) within(this precision))
+			expect(transform c, is equal to(0.0f) within(this precision))
+			expect(transform d, is equal to(1.99184242f) within(this precision))
+			expect(transform e, is equal to(1.01615141f) within(this precision))
+			expect(transform f, is equal to(0.0f) within(this precision))
+			expect(transform g, is equal to(4.94319169f) within(this precision))
+			expect(transform h, is equal to(7.04023115f) within(this precision))
+			expect(transform i, is equal to(1.0f) within(this precision))
+		})*/
+		this add("set Rotation3", func {
+			transform := this transform0 setRotation(0.321750554f)
+			expect(transform a, is equal to(3.0f) within(this precision))
+			expect(transform b, is equal to(1.0f) within(this precision))
+			expect(transform c, is equal to(0.0f) within(this precision))
+			expect(transform d, is equal to(2.0f) within(this precision))
+			expect(transform e, is equal to(1.0f) within(this precision))
+			expect(transform f, is equal to(0.0f) within(this precision))
+			expect(transform g, is equal to(5.0f) within(this precision))
+			expect(transform h, is equal to(7.0f) within(this precision))
+			expect(transform i, is equal to(1.0f) within(this precision))
+		})
 	}
 }
 
