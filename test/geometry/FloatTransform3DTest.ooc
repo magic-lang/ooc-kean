@@ -605,6 +605,101 @@ FloatTransform3DTest: class extends Fixture {
 			expect(reflection o, is equal to (0.0f) within (this precision))
 			expect(reflection p, is equal to (1.0f) within (this precision))
 		})
+		this add("referenceToNormalized ~float", func {
+			transform := transform0 referenceToNormalized(FloatVector2D new (5.0f, 8.0f))
+			expect(transform a, is equal to (-1.0f) within (this precision))
+			expect(transform b, is equal to (1.25f) within (this precision))
+			expect(transform c, is equal to (7.5f) within (this precision))
+			expect(transform d, is equal to (0.0f) within (this precision))
+
+			expect(transform e, is equal to (6.4f) within (this precision))
+			expect(transform f, is equal to (5.0f) within (this precision))
+			expect(transform g, is equal to (24.0f) within (this precision))
+			expect(transform h, is equal to (0.0f) within (this precision))
+
+			expect(transform i, is equal to (2.8f) within (this precision))
+			expect(transform j, is equal to (2.0f) within (this precision))
+			expect(transform k, is equal to (9.0f) within (this precision))
+			expect(transform l, is equal to (0.0f) within (this precision))
+
+			expect(transform m, is equal to (4.0f) within (this precision))
+			expect(transform n, is equal to (2.75f) within (this precision))
+			expect(transform o, is equal to (12.0f) within (this precision))
+			expect(transform p, is equal to (1.0f) within (this precision))
+		})
+		this add("referenceToNormalized ~int", func {
+			transform := transform0 referenceToNormalized(IntVector2D new (5, 8))
+			expect(transform a, is equal to (-1.0f) within (this precision))
+			expect(transform b, is equal to (1.25f) within (this precision))
+			expect(transform c, is equal to (7.5f) within (this precision))
+			expect(transform d, is equal to (0.0f) within (this precision))
+
+			expect(transform e, is equal to (6.4f) within (this precision))
+			expect(transform f, is equal to (5.0f) within (this precision))
+			expect(transform g, is equal to (24.0f) within (this precision))
+			expect(transform h, is equal to (0.0f) within (this precision))
+
+			expect(transform i, is equal to (2.8f) within (this precision))
+			expect(transform j, is equal to (2.0f) within (this precision))
+			expect(transform k, is equal to (9.0f) within (this precision))
+			expect(transform l, is equal to (0.0f) within (this precision))
+
+			expect(transform m, is equal to (4.0f) within (this precision))
+			expect(transform n, is equal to (2.75f) within (this precision))
+			expect(transform o, is equal to (12.0f) within (this precision))
+			expect(transform p, is equal to (1.0f) within (this precision))
+		})
+		this add("normalizedToReference ~int", func {
+			transform := transform0 normalizedToReference(IntVector2D new (5, 8))
+			expect(transform a, is equal to (-1.0f) within (this precision))
+			expect(transform b, is equal to (3.2f) within (this precision))
+			expect(transform c, is equal to (1.2f) within (this precision))
+			expect(transform d, is equal to (0.0f) within (this precision))
+
+			expect(transform e, is equal to (2.5f) within (this precision))
+			expect(transform f, is equal to (5.0f) within (this precision))
+			expect(transform g, is equal to (1.5f) within (this precision))
+			expect(transform h, is equal to (0.0f) within (this precision))
+
+			expect(transform i, is equal to (17.5f) within (this precision))
+			expect(transform j, is equal to (32.0f) within (this precision))
+			expect(transform k, is equal to (9.0f) within (this precision))
+			expect(transform l, is equal to (0.0f) within (this precision))
+
+			expect(transform m, is equal to (25.0f) within (this precision))
+			expect(transform n, is equal to (44.0f) within (this precision))
+			expect(transform o, is equal to (12.0f) within (this precision))
+			expect(transform p, is equal to (1.0f) within (this precision))
+		})
+		this add("project", func {
+			newPoint := transform0 project(point0, 5.0f)
+			expect(newPoint x, is equal to (5.66666667f) within (this precision))
+			expect(newPoint y, is equal to (1.66666667f) within (this precision))
+		})
+		this add ("transformAndProject ~FloatPoint2D (focalLength > epsilon)", func {
+			transformAndProject := transform0 transformAndProject(FloatPoint2D new(34, 10), 5.0f)
+			expect(transformAndProject x, is equal to (1.16438356f) within (this precision))
+			expect(transformAndProject y, is equal to (3.85844749f) within (this precision))
+		})
+		this add ("transformAndProject ~FloatPoint2D (focalLength < epsilon)", func {
+			transformAndProject := transform0 transformAndProject(FloatPoint2D new(34, 10), Float epsilon - (Float epsilon/2))
+			expect(transformAndProject x, is equal to (16.00000083f) within (this precision))
+			expect(transformAndProject y, is equal to (129.00000095f) within (this precision))
+		})
+		this add ("transformAndProject ~FloatBox2D (focalLength > epsilon)", func {
+			resultedBox := transform0 transformAndProject(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), 5.0f)
+			expect(resultedBox left, is equal to (3.095238095f) within (this precision))
+			expect(resultedBox top, is equal to (4.238095238f) within (this precision))
+			expect(resultedBox width, is equal to (0.515873016f) within (this precision))
+			expect(resultedBox height, is equal to (0.136904762f) within (this precision))
+		})
+		this add ("transformAndProject ~FloatBox2D (focalLength < epsilon)", func {
+			resultedBox := transform0 transformAndProject(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), Float epsilon - (Float epsilon/2))
+			expect(resultedBox left, is equal to (17.00000083447f) within (this precision))
+			expect(resultedBox top, is equal to (23.00000095368f) within (this precision))
+			expect(resultedBox width, is equal to (13.0f) within (this precision))
+			expect(resultedBox height, is equal to (26.00f) within (this precision))
+		})
 	}
 }
 
