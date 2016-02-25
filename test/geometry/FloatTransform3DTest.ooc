@@ -16,7 +16,7 @@ FloatTransform3DTest: class extends Fixture {
 	transform2 := FloatTransform3D new(30, 32, 36, 58, 81, 96, -10, 14, 24, 128, 182, 216)
 	transform3 := FloatTransform3D new(0.5f, 1, -0.5f, 1, -5, 3, -0.5f, 3.66666666666666f, -2.16666666666667f, 0, 1, -2)
 	transform4 := FloatTransform3D new(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120)
-	transform5 := FloatTransform3D new(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1)
+	transform5 := FloatTransform3D new(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
 	point0 := FloatPoint3D new(34, 10, 30)
 	point1 := FloatPoint3D new(226, 369, 444)
 	init: func {
@@ -386,7 +386,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
 		this add("rotateX", func {
-			transform := transform0 rotateX(Float pi/4)
+			transform := transform0 rotateX(Float pi / 4)
 			expect(transform a, is equal to (-1.0f) within (this precision))
 			expect(transform b, is equal to (-0.70710678f) within (this precision))
 			expect(transform c, is equal to (3.535533906f) within (this precision))
@@ -408,7 +408,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
 		this add("rotateY", func {
-			transform := transform0 rotateY(Float pi/4)
+			transform := transform0 rotateY(Float pi / 4)
 			expect(transform a, is equal to (1.4142135588f) within (this precision))
 			expect(transform b, is equal to (2.0f) within (this precision))
 			expect(transform c, is equal to (2.8284271236f) within (this precision))
@@ -430,7 +430,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
 		this add("rotateZ", func {
-			transform := transform0 rotateZ(Float pi/4)
+			transform := transform0 rotateZ(Float pi / 4)
 			expect(transform a, is equal to (-2.121320343f) within (this precision))
 			expect(transform b, is equal to (0.7071067814f) within (this precision))
 			expect(transform c, is equal to (3.0f) within (this precision))
@@ -682,7 +682,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transformAndProject y, is equal to (3.85844749f) within (this precision))
 		})
 		this add ("transformAndProject ~FloatPoint2D (focalLength < epsilon)", func {
-			transformAndProject := transform0 transformAndProject(FloatPoint2D new(34, 10), Float epsilon - (Float epsilon/2))
+			transformAndProject := transform0 transformAndProject(FloatPoint2D new(34, 10), Float epsilon - (Float epsilon / 2))
 			expect(transformAndProject x, is equal to (16.00000083f) within (this precision))
 			expect(transformAndProject y, is equal to (129.00000095f) within (this precision))
 		})
@@ -694,7 +694,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(resultedBox height, is equal to (0.136904762f) within (this precision))
 		})
 		this add ("transformAndProject ~FloatBox2D (focalLength < epsilon)", func {
-			resultedBox := transform0 transformAndProject(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), Float epsilon - (Float epsilon/2))
+			resultedBox := transform0 transformAndProject(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), Float epsilon - (Float epsilon / 2))
 			expect(resultedBox left, is equal to (17.00000083447f) within (this precision))
 			expect(resultedBox top, is equal to (23.00000095368f) within (this precision))
 			expect(resultedBox width, is equal to (13.0f) within (this precision))
@@ -712,7 +712,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(resultedVectorList[3] y, is equal to (4.259259260f) within (this precision))
 		})
 		this add("transformAndProjectCorners (focalLength < epsilon)", func {
-			resultedVectorList := transform0 transformAndProjectCorners(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), Float epsilon - (Float epsilon/2))
+			resultedVectorList := transform0 transformAndProjectCorners(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), Float epsilon - (Float epsilon / 2))
 			expect(resultedVectorList[0] x, is equal to (17.00000083447f) within (this precision))
 			expect(resultedVectorList[0] y, is equal to (23.00000095368f) within (this precision))
 			expect(resultedVectorList[1] x, is equal to (33.00000083447f) within (this precision))
