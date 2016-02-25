@@ -700,6 +700,28 @@ FloatTransform3DTest: class extends Fixture {
 			expect(resultedBox width, is equal to (13.0f) within (this precision))
 			expect(resultedBox height, is equal to (26.00f) within (this precision))
 		})
+		this add("transformAndProjectCorners (focalLength > epsilon)", func {
+			resultedVectorList := transform0 transformAndProjectCorners(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), 5.0f)
+			expect(resultedVectorList[0] x, is equal to (3.611111111f) within (this precision))
+			expect(resultedVectorList[0] y, is equal to (4.375f) within (this precision))
+			expect(resultedVectorList[1] x, is equal to (3.541666666f) within (this precision))
+			expect(resultedVectorList[1] y, is equal to (4.322916666f) within (this precision))
+			expect(resultedVectorList[2] x, is equal to (3.095238095f) within (this precision))
+			expect(resultedVectorList[2] y, is equal to (4.238095238f) within (this precision))
+			expect(resultedVectorList[3] x, is equal to (3.024691358f) within (this precision))
+			expect(resultedVectorList[3] y, is equal to (4.259259260f) within (this precision))
+		})
+		this add("transformAndProjectCorners (focalLength < epsilon)", func {
+			resultedVectorList := transform0 transformAndProjectCorners(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), Float epsilon - (Float epsilon/2))
+			expect(resultedVectorList[0] x, is equal to (17.00000083447f) within (this precision))
+			expect(resultedVectorList[0] y, is equal to (23.00000095368f) within (this precision))
+			expect(resultedVectorList[1] x, is equal to (33.00000083447f) within (this precision))
+			expect(resultedVectorList[1] y, is equal to (43.00000095367f) within (this precision))
+			expect(resultedVectorList[2] x, is equal to (30.00000083446f) within (this precision))
+			expect(resultedVectorList[2] y, is equal to (49.00000095367f) within (this precision))
+			expect(resultedVectorList[3] x, is equal to (14.00000083447f) within (this precision))
+			expect(resultedVectorList[3] y, is equal to (29.00000095367f) within (this precision))
+		})
 	}
 }
 
