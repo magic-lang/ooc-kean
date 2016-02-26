@@ -8,7 +8,6 @@
 
 use unit
 use geometry
-
 FloatTransform2DTest: class extends Fixture {
 	precision := 1.0e-5f
 	transform0 := FloatTransform2D new(3.0f, 1.0f, 2.0f, 1.0f, 5.0f, 7.0f)
@@ -416,5 +415,4 @@ FloatTransform2DTest: class extends Fixture {
 		})
 	}
 }
-
 FloatTransform2DTest new() run() . free()

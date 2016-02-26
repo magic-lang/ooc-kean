@@ -8,7 +8,6 @@
 
 use unit
 use geometry
-
 FloatTransform3DTest: class extends Fixture {
 	precision := 1.0e-5f
 	transform0 := FloatTransform3D new(-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
@@ -80,17 +79,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))
-
 			expect(transform e, is equal to(0.0f) within(this precision))
 			expect(transform f, is equal to(1.0f) within(this precision))
 			expect(transform g, is equal to(0.0f) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
-
 			expect(transform i, is equal to(0.0f) within(this precision))
 			expect(transform j, is equal to(0.0f) within(this precision))
 			expect(transform k, is equal to(1.0f) within(this precision))
 			expect(transform l, is equal to(0.0f) within(this precision))
-
 			expect(transform m, is equal to(0.0f) within(this precision))
 			expect(transform n, is equal to(0.0f) within(this precision))
 			expect(transform o, is equal to(0.0f) within(this precision))
@@ -104,17 +100,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))
-
 			expect(transform e, is equal to(0.0f) within(this precision))
 			expect(transform f, is equal to(1.0f) within(this precision))
 			expect(transform g, is equal to(0.0f) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
-
 			expect(transform i, is equal to(0.0f) within(this precision))
 			expect(transform j, is equal to(0.0f) within(this precision))
 			expect(transform k, is equal to(1.0f) within(this precision))
 			expect(transform l, is equal to(0.0f) within(this precision))
-
 			expect(transform m, is equal to(0.0f) within(this precision))
 			expect(transform n, is equal to(0.0f) within(this precision))
 			expect(transform o, is equal to(0.0f) within(this precision))
@@ -130,17 +123,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))
-
 			expect(transform e, is equal to(0.0f) within(this precision))
 			expect(transform f, is equal to(1.0f) within(this precision))
 			expect(transform g, is equal to(0.0f) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
-
 			expect(transform i, is equal to(0.0f) within(this precision))
 			expect(transform j, is equal to(0.0f) within(this precision))
 			expect(transform k, is equal to(1.0f) within(this precision))
 			expect(transform l, is equal to(0.0f) within(this precision))
-
 			expect(transform m, is equal to(0.0f) within(this precision))
 			expect(transform n, is equal to(0.0f) within(this precision))
 			expect(transform o, is equal to(0.0f) within(this precision))
@@ -153,17 +143,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))
-
 			expect(transform e, is equal to(0.0f) within(this precision))
 			expect(transform f, is equal to(angle cos()) within(this precision))
 			expect(transform g, is equal to(angle sin()) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
-
 			expect(transform i, is equal to(0.0f) within(this precision))
 			expect(transform j, is equal to((-angle) sin()) within(this precision))
 			expect(transform k, is equal to(angle cos()) within(this precision))
 			expect(transform l, is equal to(0.0f) within(this precision))
-
 			expect(transform m, is equal to(0.0f) within(this precision))
 			expect(transform n, is equal to(0.0f) within(this precision))
 			expect(transform o, is equal to(0.0f) within(this precision))
@@ -176,17 +163,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(-angle sin()) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))
-
 			expect(transform e, is equal to(0.0f) within(this precision))
 			expect(transform f, is equal to(1.0f) within(this precision))
 			expect(transform g, is equal to(0.0f) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
-
 			expect(transform i, is equal to(angle sin()) within(this precision))
 			expect(transform j, is equal to(0.0f) within(this precision))
 			expect(transform k, is equal to(angle cos()) within(this precision))
 			expect(transform l, is equal to(0.0f) within(this precision))
-
 			expect(transform m, is equal to(0.0f) within(this precision))
 			expect(transform n, is equal to(0.0f) within(this precision))
 			expect(transform o, is equal to(0.0f) within(this precision))
@@ -199,17 +183,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to(angle sin()) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))
-
 			expect(transform e, is equal to(-angle sin()) within(this precision))
 			expect(transform f, is equal to(angle cos()) within(this precision))
 			expect(transform g, is equal to(0.0f) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
-
 			expect(transform i, is equal to(0.0f) within(this precision))
 			expect(transform j, is equal to(0.0f) within(this precision))
 			expect(transform k, is equal to(1.0f) within(this precision))
 			expect(transform l, is equal to(0.0f) within(this precision))
-
 			expect(transform m, is equal to(0.0f) within(this precision))
 			expect(transform n, is equal to(0.0f) within(this precision))
 			expect(transform o, is equal to(0.0f) within(this precision))
@@ -222,17 +203,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))
-
 			expect(transform e, is equal to(0.0f) within(this precision))
 			expect(transform f, is equal to(scale) within(this precision))
 			expect(transform g, is equal to(0.0f) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
-
 			expect(transform i, is equal to(0.0f) within(this precision))
 			expect(transform j, is equal to(0.0f) within(this precision))
 			expect(transform k, is equal to(scale) within(this precision))
 			expect(transform l, is equal to(0.0f) within(this precision))
-
 			expect(transform m, is equal to(0.0f) within(this precision))
 			expect(transform n, is equal to(0.0f) within(this precision))
 			expect(transform o, is equal to(0.0f) within(this precision))
@@ -247,17 +225,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to(0.0f) within(this precision))
 			expect(transform c, is equal to(0.0f) within(this precision))
 			expect(transform d, is equal to(0.0f) within(this precision))
-
 			expect(transform e, is equal to(0.0f) within(this precision))
 			expect(transform f, is equal to(1.0f) within(this precision))
 			expect(transform g, is equal to(0.0f) within(this precision))
 			expect(transform h, is equal to(0.0f) within(this precision))
-
 			expect(transform i, is equal to(0.0f) within(this precision))
 			expect(transform j, is equal to(0.0f) within(this precision))
 			expect(transform k, is equal to(1.0f) within(this precision))
 			expect(transform l, is equal to(0.0f) within(this precision))
-
 			expect(transform m, is equal to(xDelta) within(this precision))
 			expect(transform n, is equal to(yDelta) within(this precision))
 			expect(transform o, is equal to(zDelta) within(this precision))
@@ -303,17 +278,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to (0.907543614f) within (this precision))
 			expect(transform c, is equal to (1.361315421f) within (this precision))
 			expect(transform d, is equal to (0.0f) within (this precision))
-
 			expect(transform e, is equal to (1.815087228f) within (this precision))
 			expect(transform f, is equal to (2.268859035f) within (this precision))
 			expect(transform g, is equal to (2.722630842f) within (this precision))
 			expect(transform h, is equal to (0.0f) within (this precision))
-
 			expect(transform i, is equal to (3.176402649f) within (this precision))
 			expect(transform j, is equal to (3.630174456f) within (this precision))
 			expect(transform k, is equal to (4.083946263f) within (this precision))
 			expect(transform l, is equal to (0.0f) within (this precision))
-
 			expect(transform m, is equal to (4.53771807f) within (this precision))
 			expect(transform n, is equal to (4.99148988f) within (this precision))
 			expect(transform o, is equal to (5.44526168f) within (this precision))
@@ -325,17 +297,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to (2.0f) within (this precision))
 			expect(transform c, is equal to (3.0f) within (this precision))
 			expect(transform d, is equal to (0.0f) within (this precision))
-
 			expect(transform e, is equal to (4.2761798704f) within (this precision))
 			expect(transform f, is equal to (5.0f) within (this precision))
 			expect(transform g, is equal to (6.0f) within (this precision))
 			expect(transform h, is equal to (0.0f) within (this precision))
-
 			expect(transform i, is equal to (7.4833147732f) within (this precision))
 			expect(transform j, is equal to (8.0f) within (this precision))
 			expect(transform k, is equal to (9.0f) within (this precision))
 			expect(transform l, is equal to (0.0f) within (this precision))
-
 			expect(transform m, is equal to (10.690449676f) within (this precision))
 			expect(transform n, is equal to (11.0f) within (this precision))
 			expect(transform o, is equal to (12.0f) within (this precision))
@@ -347,17 +316,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to (0.9116846116f) within (this precision))
 			expect(transform c, is equal to (3.0f) within (this precision))
 			expect(transform d, is equal to (0.0f) within (this precision))
-
 			expect(transform e, is equal to (4.0f) within (this precision))
 			expect(transform f, is equal to (2.279211529f) within (this precision))
 			expect(transform g, is equal to (6.0f) within (this precision))
 			expect(transform h, is equal to (0.0f) within (this precision))
-
 			expect(transform i, is equal to (7.0f) within (this precision))
 			expect(transform j, is equal to (3.6467384464f) within (this precision))
 			expect(transform k, is equal to (9.0f) within (this precision))
 			expect(transform l, is equal to (0.0f) within (this precision))
-
 			expect(transform m, is equal to (10.0f) within (this precision))
 			expect(transform n, is equal to (5.0142653638f) within (this precision))
 			expect(transform o, is equal to (12.0f) within (this precision))
@@ -369,17 +335,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to (2.0f) within (this precision))
 			expect(transform c, is equal to (0.8615497905f) within (this precision))
 			expect(transform d, is equal to (0.0f) within (this precision))
-
 			expect(transform e, is equal to (4.0f) within (this precision))
 			expect(transform f, is equal to (5.0f) within (this precision))
 			expect(transform g, is equal to (1.723099581f) within (this precision))
 			expect(transform h, is equal to (0.0f) within (this precision))
-
 			expect(transform i, is equal to (7.0f) within (this precision))
 			expect(transform j, is equal to (8.0f) within (this precision))
 			expect(transform k, is equal to (2.5846493715f) within (this precision))
 			expect(transform l, is equal to (0.0f) within (this precision))
-
 			expect(transform m, is equal to (10.0f) within (this precision))
 			expect(transform n, is equal to (11.0f) within (this precision))
 			expect(transform o, is equal to (3.446199162f) within (this precision))
@@ -391,17 +354,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to (-0.70710678f) within (this precision))
 			expect(transform c, is equal to (3.535533906f) within (this precision))
 			expect(transform d, is equal to (0.0f) within (this precision))
-
 			expect(transform e, is equal to (4.0f) within (this precision))
 			expect(transform f, is equal to (-0.70710678f) within (this precision))
 			expect(transform g, is equal to (7.7781745932f) within (this precision))
 			expect(transform h, is equal to (0.0f) within (this precision))
-
 			expect(transform i, is equal to (7.0f) within (this precision))
 			expect(transform j, is equal to (-0.70710678f) within (this precision))
 			expect(transform k, is equal to (12.0208152804f) within (this precision))
 			expect(transform l, is equal to (0.0f) within (this precision))
-
 			expect(transform m, is equal to (10.0f) within (this precision))
 			expect(transform n, is equal to (-0.70710678f) within (this precision))
 			expect(transform o, is equal to (16.2634559676f) within (this precision))
@@ -413,17 +373,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to (2.0f) within (this precision))
 			expect(transform c, is equal to (2.8284271236f) within (this precision))
 			expect(transform d, is equal to (0.0f) within (this precision))
-
 			expect(transform e, is equal to (7.0710678048f) within (this precision))
 			expect(transform f, is equal to (5.0f) within (this precision))
 			expect(transform g, is equal to (1.4142135672f) within (this precision))
 			expect(transform h, is equal to (0.0f) within (this precision))
-
 			expect(transform i, is equal to (11.3137084884f) within (this precision))
 			expect(transform j, is equal to (8.0f) within (this precision))
 			expect(transform k, is equal to (1.4142135708f) within (this precision))
 			expect(transform l, is equal to (0.0f) within (this precision))
-
 			expect(transform m, is equal to (15.556349172f) within (this precision))
 			expect(transform n, is equal to (11.0f) within (this precision))
 			expect(transform o, is equal to (1.4142135744f) within (this precision))
@@ -435,17 +392,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to (0.7071067814f) within (this precision))
 			expect(transform c, is equal to (3.0f) within (this precision))
 			expect(transform d, is equal to (0.0f) within (this precision))
-
 			expect(transform e, is equal to (-0.7071067802f) within (this precision))
 			expect(transform f, is equal to (6.36396103f) within (this precision))
 			expect(transform g, is equal to (6.0f) within (this precision))
 			expect(transform h, is equal to (0.0f) within (this precision))
-
 			expect(transform i, is equal to (-0.7071067796f) within (this precision))
 			expect(transform j, is equal to (10.6066017166f) within (this precision))
 			expect(transform k, is equal to (9.0f) within (this precision))
 			expect(transform l, is equal to (0.0f) within (this precision))
-
 			expect(transform m, is equal to (-0.707106779f) within (this precision))
 			expect(transform n, is equal to (14.849242403f) within (this precision))
 			expect(transform o, is equal to (12.0f) within (this precision))
@@ -457,17 +411,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to (2.0f) within (this precision))
 			expect(transform c, is equal to (3.0f) within (this precision))
 			expect(transform d, is equal to (0.0f) within (this precision))
-
 			expect(transform e, is equal to (-4.0f) within (this precision))
 			expect(transform f, is equal to (5.0f) within (this precision))
 			expect(transform g, is equal to (6.0f) within (this precision))
 			expect(transform h, is equal to (0.0f) within (this precision))
-
 			expect(transform i, is equal to (-7.0f) within (this precision))
 			expect(transform j, is equal to (8.0f) within (this precision))
 			expect(transform k, is equal to (9.0f) within (this precision))
 			expect(transform l, is equal to (0.0f) within (this precision))
-
 			expect(transform m, is equal to (-10.0f) within (this precision))
 			expect(transform n, is equal to (11.0f) within (this precision))
 			expect(transform o, is equal to (12.0f) within (this precision))
@@ -479,17 +430,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to (-2.0f) within (this precision))
 			expect(transform c, is equal to (3.0f) within (this precision))
 			expect(transform d, is equal to (0.0f) within (this precision))
-
 			expect(transform e, is equal to (4.0f) within (this precision))
 			expect(transform f, is equal to (-5.0f) within (this precision))
 			expect(transform g, is equal to (6.0f) within (this precision))
 			expect(transform h, is equal to (0.0f) within (this precision))
-
 			expect(transform i, is equal to (7.0f) within (this precision))
 			expect(transform j, is equal to (-8.0f) within (this precision))
 			expect(transform k, is equal to (9.0f) within (this precision))
 			expect(transform l, is equal to (0.0f) within (this precision))
-
 			expect(transform m, is equal to (10.0f) within (this precision))
 			expect(transform n, is equal to (-11.0f) within (this precision))
 			expect(transform o, is equal to (12.0f) within (this precision))
@@ -501,17 +449,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to (2.0f) within (this precision))
 			expect(transform c, is equal to (-3.0f) within (this precision))
 			expect(transform d, is equal to (0.0f) within (this precision))
-
 			expect(transform e, is equal to (4.0f) within (this precision))
 			expect(transform f, is equal to (5.0f) within (this precision))
 			expect(transform g, is equal to (-6.0f) within (this precision))
 			expect(transform h, is equal to (0.0f) within (this precision))
-
 			expect(transform i, is equal to (7.0f) within (this precision))
 			expect(transform j, is equal to (8.0f) within (this precision))
 			expect(transform k, is equal to (-9.0f) within (this precision))
 			expect(transform l, is equal to (0.0f) within (this precision))
-
 			expect(transform m, is equal to (10.0f) within (this precision))
 			expect(transform n, is equal to (11.0f) within (this precision))
 			expect(transform o, is equal to (-12.0f) within (this precision))
@@ -523,17 +468,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(projection b, is equal to (0.0f) within (this precision))
 			expect(projection c, is equal to (0.0f) within (this precision))
 			expect(projection d, is equal to (0.0f) within (this precision))
-
 			expect(projection e, is equal to (0.0f) within (this precision))
 			expect(projection f, is equal to (7.5f) within (this precision))
 			expect(projection g, is equal to (0.0f) within (this precision))
 			expect(projection h, is equal to (0.0f) within (this precision))
-
 			expect(projection i, is equal to (0.0f) within (this precision))
 			expect(projection j, is equal to (0.0f) within (this precision))
 			expect(projection k, is equal to (7.5f) within (this precision))
 			expect(projection l, is equal to (1.0f) within (this precision))
-
 			expect(projection m, is equal to (0.0f) within (this precision))
 			expect(projection n, is equal to (0.0f) within (this precision))
 			expect(projection o, is equal to (0.0f) within (this precision))
@@ -545,17 +487,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(reflection b, is equal to (0.0f) within (this precision))
 			expect(reflection c, is equal to (0.0f) within (this precision))
 			expect(reflection d, is equal to (0.0f) within (this precision))
-
 			expect(reflection e, is equal to (0.0f) within (this precision))
 			expect(reflection f, is equal to (1.0f) within (this precision))
 			expect(reflection g, is equal to (0.0f) within (this precision))
 			expect(reflection h, is equal to (0.0f) within (this precision))
-
 			expect(reflection i, is equal to (0.0f) within (this precision))
 			expect(reflection j, is equal to (0.0f) within (this precision))
 			expect(reflection k, is equal to (1.0f) within (this precision))
 			expect(reflection l, is equal to (0.0f) within (this precision))
-
 			expect(reflection m, is equal to (0.0f) within (this precision))
 			expect(reflection n, is equal to (0.0f) within (this precision))
 			expect(reflection o, is equal to (0.0f) within (this precision))
@@ -567,17 +506,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(reflection b, is equal to (0.0f) within (this precision))
 			expect(reflection c, is equal to (0.0f) within (this precision))
 			expect(reflection d, is equal to (0.0f) within (this precision))
-
 			expect(reflection e, is equal to (0.0f) within (this precision))
 			expect(reflection f, is equal to (-1.0f) within (this precision))
 			expect(reflection g, is equal to (0.0f) within (this precision))
 			expect(reflection h, is equal to (0.0f) within (this precision))
-
 			expect(reflection i, is equal to (0.0f) within (this precision))
 			expect(reflection j, is equal to (0.0f) within (this precision))
 			expect(reflection k, is equal to (1.0f) within (this precision))
 			expect(reflection l, is equal to (0.0f) within (this precision))
-
 			expect(reflection m, is equal to (0.0f) within (this precision))
 			expect(reflection n, is equal to (0.0f) within (this precision))
 			expect(reflection o, is equal to (0.0f) within (this precision))
@@ -589,17 +525,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(reflection b, is equal to (0.0f) within (this precision))
 			expect(reflection c, is equal to (0.0f) within (this precision))
 			expect(reflection d, is equal to (0.0f) within (this precision))
-
 			expect(reflection e, is equal to (0.0f) within (this precision))
 			expect(reflection f, is equal to (1.0f) within (this precision))
 			expect(reflection g, is equal to (0.0f) within (this precision))
 			expect(reflection h, is equal to (0.0f) within (this precision))
-
 			expect(reflection i, is equal to (0.0f) within (this precision))
 			expect(reflection j, is equal to (0.0f) within (this precision))
 			expect(reflection k, is equal to (-1.0f) within (this precision))
 			expect(reflection l, is equal to (0.0f) within (this precision))
-
 			expect(reflection m, is equal to (0.0f) within (this precision))
 			expect(reflection n, is equal to (0.0f) within (this precision))
 			expect(reflection o, is equal to (0.0f) within (this precision))
@@ -611,17 +544,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to (1.25f) within (this precision))
 			expect(transform c, is equal to (7.5f) within (this precision))
 			expect(transform d, is equal to (0.0f) within (this precision))
-
 			expect(transform e, is equal to (6.4f) within (this precision))
 			expect(transform f, is equal to (5.0f) within (this precision))
 			expect(transform g, is equal to (24.0f) within (this precision))
 			expect(transform h, is equal to (0.0f) within (this precision))
-
 			expect(transform i, is equal to (2.8f) within (this precision))
 			expect(transform j, is equal to (2.0f) within (this precision))
 			expect(transform k, is equal to (9.0f) within (this precision))
 			expect(transform l, is equal to (0.0f) within (this precision))
-
 			expect(transform m, is equal to (4.0f) within (this precision))
 			expect(transform n, is equal to (2.75f) within (this precision))
 			expect(transform o, is equal to (12.0f) within (this precision))
@@ -633,17 +563,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to (1.25f) within (this precision))
 			expect(transform c, is equal to (7.5f) within (this precision))
 			expect(transform d, is equal to (0.0f) within (this precision))
-
 			expect(transform e, is equal to (6.4f) within (this precision))
 			expect(transform f, is equal to (5.0f) within (this precision))
 			expect(transform g, is equal to (24.0f) within (this precision))
 			expect(transform h, is equal to (0.0f) within (this precision))
-
 			expect(transform i, is equal to (2.8f) within (this precision))
 			expect(transform j, is equal to (2.0f) within (this precision))
 			expect(transform k, is equal to (9.0f) within (this precision))
 			expect(transform l, is equal to (0.0f) within (this precision))
-
 			expect(transform m, is equal to (4.0f) within (this precision))
 			expect(transform n, is equal to (2.75f) within (this precision))
 			expect(transform o, is equal to (12.0f) within (this precision))
@@ -655,17 +582,14 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform b, is equal to (3.2f) within (this precision))
 			expect(transform c, is equal to (1.2f) within (this precision))
 			expect(transform d, is equal to (0.0f) within (this precision))
-
 			expect(transform e, is equal to (2.5f) within (this precision))
 			expect(transform f, is equal to (5.0f) within (this precision))
 			expect(transform g, is equal to (1.5f) within (this precision))
 			expect(transform h, is equal to (0.0f) within (this precision))
-
 			expect(transform i, is equal to (17.5f) within (this precision))
 			expect(transform j, is equal to (32.0f) within (this precision))
 			expect(transform k, is equal to (9.0f) within (this precision))
 			expect(transform l, is equal to (0.0f) within (this precision))
-
 			expect(transform m, is equal to (25.0f) within (this precision))
 			expect(transform n, is equal to (44.0f) within (this precision))
 			expect(transform o, is equal to (12.0f) within (this precision))
@@ -724,5 +648,4 @@ FloatTransform3DTest: class extends Fixture {
 		})
 	}
 }
-
 FloatTransform3DTest new() run() . free()
