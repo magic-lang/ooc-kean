@@ -40,7 +40,7 @@ OpenGLCanvas: class extends OpenGLSurface {
 			this context backend enableBlend(false)
 		if (drawState inputImage)
 			gpuMap add("texture0", drawState inputImage)
-		gpuMap use()
+		gpuMap use(this _target)
 		this _bind()
 		this context drawQuad()
 		this _unbind()
