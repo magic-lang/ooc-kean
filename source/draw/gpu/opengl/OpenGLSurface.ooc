@@ -56,7 +56,7 @@ OpenGLSurface: abstract class extends GpuCanvas {
 		this draw(f)
 		(f as Closure) free()
 	}
-	draw: override func ~mesh (image: GpuImage, mesh: GpuMesh) {
+	draw: override func ~mesh (image: GpuImage, mesh: Mesh) {
 		f := func {
 			this context meshShader add("texture0", image)
 			this context meshShader projection = this _projection

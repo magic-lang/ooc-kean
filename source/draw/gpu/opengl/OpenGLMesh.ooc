@@ -7,12 +7,13 @@
  */
 
 use geometry
+use draw
 use draw-gpu
 import OpenGLContext
 import backend/GLVertexArrayObject
 
 version(!gpuOff) {
-OpenGLMesh: class extends GpuMesh {
+OpenGLMesh: class extends Mesh {
 	_backend: GLVertexArrayObject
 	init: func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], context: OpenGLContext) {
 		this _backend = context backend createVertexArrayObject(vertices, textureCoordinates)

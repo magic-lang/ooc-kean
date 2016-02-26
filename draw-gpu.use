@@ -9,7 +9,6 @@ Imports: GpuImage
 Imports: GpuYuv420Semiplanar
 Imports: GpuCanvas
 Imports: GpuContext
-Imports: GpuMesh
 version (linux || apple || android) {
 	Libs: -lEGL
 	Libs: -lGLESv2
