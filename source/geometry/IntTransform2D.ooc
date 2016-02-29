@@ -59,9 +59,9 @@ IntTransform2D: cover {
 	reflectX: func -> This { this createReflectionX() * this }
 	reflectY: func -> This { this createReflectionY() * this }
 	toString: func -> String {
-		"#{this a toString()}, #{this b toString()}, #{this c toString()}, \
-		#{this d toString()}, #{this e toString()}, #{this f toString()}, \
-		#{this g toString()}, #{this h toString()}, #{this i toString()}"
+		"%d" formatInt(this a) >> ", " & "%d" formatInt(this b) >> ", " & "%d" formatInt(this c) >> "\t" & \
+		"%d" formatInt(this d) >> ", " & "%d" formatInt(this e) >> ", " & "%d" formatInt(this f) >> "\t" & \
+		"%d" formatInt(this g) >> ", " & "%d" formatInt(this h) >> ", " & "%d" formatInt(this i) >> "\t"
 	}
 	toText: func -> Text {
 		result: Text
