@@ -9,7 +9,6 @@
 use collections
 use concurrent
 use unit
-import threading/Thread
 
 WorkerThreadTest: class extends Fixture {
 	threads := static SynchronizedList<ThreadId> new()

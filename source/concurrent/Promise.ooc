@@ -8,7 +8,6 @@
 
 use base
 use concurrent
-import threading/Thread
 
 _PromiseState: enum {
 	Unfinished

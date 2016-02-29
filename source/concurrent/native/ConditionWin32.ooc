@@ -7,9 +7,9 @@
  */
 
 version(windows) {
-import ../[WaitCondition, Mutex, Thread]
+import ../[WaitCondition, Thread]
+import threading/Mutex, threading/native/MutexWin32
 import os/win32
-import MutexWin32
 
 include windows
 

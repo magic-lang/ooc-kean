@@ -8,7 +8,7 @@
 
 use base
 use concurrent
-import threading/[Thread, Mutex]
+import threading/Mutex
 
 SynchronizedResource: abstract class {
 	_threadAffinity: ThreadId

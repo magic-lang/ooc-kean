@@ -7,7 +7,8 @@
  */
 
 use collections
-import threading/[Thread, Mutex, WaitCondition]
+use concurrent
+import threading/Mutex
 
 SynchronizedQueue: class <T> extends Queue<T> {
 	_mutex := Mutex new()

@@ -8,7 +8,7 @@
 
 use unit
 use base
-import threading/Thread
+use concurrent
 
 TestObject: class {
 	_isAlive: Bool*

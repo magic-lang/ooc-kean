@@ -13,7 +13,6 @@ use geometry
 use base
 use concurrent
 import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLRgba, OpenGLRgba, OpenGLPacked, OpenGLMonochrome, OpenGLUv, OpenGLMap, OpenGLPromise
-import threading/Thread
 
 version(!gpuOff) {
 AndroidContext: class extends OpenGLContext {

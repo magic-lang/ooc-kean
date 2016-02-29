@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import ../[Thread]
+import ../Thread
 
 include unistd | (_POSIX_C_SOURCE=200809L)
 

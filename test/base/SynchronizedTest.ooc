@@ -8,7 +8,7 @@
 
 use base
 use unit
-import threading/Thread
+use concurrent
 
 TestClass: class {
 	data: Int

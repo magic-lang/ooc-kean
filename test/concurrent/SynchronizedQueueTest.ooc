@@ -9,7 +9,6 @@
 use base
 use concurrent
 use unit
-import threading/Thread
 
 SynchronizedQueueTest: class extends Fixture {
 	init: func {
