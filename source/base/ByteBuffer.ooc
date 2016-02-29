@@ -7,7 +7,6 @@
  */
 
 use collections
-import threading/Mutex
 import ReferenceCounter
 import Debug
 

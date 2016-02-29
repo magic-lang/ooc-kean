@@ -18,7 +18,7 @@ pthread_cond_wait: extern func (cond: PThreadCond*, mutex: PThreadMutex*) -> Int
 pthread_cond_destroy: extern func (cond: PThreadCond*) -> Int
 
 import ../WaitCondition
-import threading/Mutex, threading/native/MutexUnix
+import native/MutexUnix
 
 ConditionUnix: class extends WaitCondition {
 	_backend: PThreadCond*

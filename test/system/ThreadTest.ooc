@@ -9,7 +9,6 @@
 use unit
 use base
 use concurrent
-import threading/Mutex
 
 ThreadTest: class extends Fixture {
 	init: func {

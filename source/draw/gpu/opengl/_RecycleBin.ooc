@@ -11,7 +11,6 @@ use geometry
 use base
 use draw-gpu
 import OpenGLPacked, OpenGLMonochrome, OpenGLRgba, OpenGLRgb, OpenGLUv
-import threading/Mutex
 
 version(!gpuOff) {
 _RecycleBin: class {

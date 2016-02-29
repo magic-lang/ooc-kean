@@ -7,7 +7,6 @@
  */
 
 import native/[ConditionUnix, ConditionWin32]
-import threading/Mutex
 
 WaitCondition: abstract class {
 	wait: abstract func (mutex: Mutex) -> Bool
