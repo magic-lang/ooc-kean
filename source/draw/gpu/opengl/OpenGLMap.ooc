@@ -47,7 +47,7 @@ OpenGLMap: class extends Map {
 		this _program free()
 		super()
 	}
-	use: override func {
+	use: override func (forbiddenInput: Pointer) {
 		this _currentProgram use()
 		textureCount := 0
 		action := func (key: String, value: Object) {
@@ -78,6 +78,9 @@ OpenGLMap: class extends Map {
 			} else
 				match (value) {
 					case image: OpenGLPacked =>
+						version(safe)
+							if (forbiddenInput != null && (forbiddenInput as Pointer) == (image as Pointer))
+								raise("Input image " + key + " is also the target.")
 						image backend bind(textureCount)
 						program setUniform(key, textureCount)
 						textureCount += 1
@@ -100,20 +103,20 @@ OpenGLMap: class extends Map {
 }
 OpenGLMapMesh: class extends OpenGLMap {
 	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
-	use: override func {
+	use: override func (forbiddenInput: Pointer) {
 		this add("projection", this projection)
-		super()
+		super(forbiddenInput)
 	}
 	vertexSource: static String = slurp("shaders/mesh.vert")
 	fragmentSource: static String = slurp("shaders/mesh.frag")
 }
 OpenGLMapTransform: class extends OpenGLMap {
 	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
-	use: override func {
+	use: override func (forbiddenInput: Pointer) {
 		finalTransform := this projection * this view * this model
 		this add("transform", finalTransform)
 		this add("textureTransform", this textureTransform)
-		super()
+		super(forbiddenInput)
 	}
 	vertexSource: static String = slurp("shaders/transform.vert")
 }

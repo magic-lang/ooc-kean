@@ -68,7 +68,7 @@ Map: abstract class {
 		this _bindings free()
 		super()
 	}
-	use: virtual func
+	use: virtual func (forbiddenInput: Pointer)
 	add: func <T> (key: String, value: T) {
 		if (T inheritsFrom(Object))
 			this _bindings add(key, value as Object, false)

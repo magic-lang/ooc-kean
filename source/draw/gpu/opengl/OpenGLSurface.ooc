@@ -37,7 +37,7 @@ OpenGLSurface: abstract class extends GpuCanvas {
 		map model = this _createModelTransform(destination)
 		map view = this _view
 		map projection = this _projection
-		map use()
+		map use(null)
 		f := func { this context drawQuad() }
 		this draw(f)
 		(f as Closure) free()
@@ -60,7 +60,7 @@ OpenGLSurface: abstract class extends GpuCanvas {
 		f := func {
 			this context meshShader add("texture0", image)
 			this context meshShader projection = this _projection
-			this context meshShader use()
+			this context meshShader use(null)
 			mesh draw()
 		}
 		this draw(f)

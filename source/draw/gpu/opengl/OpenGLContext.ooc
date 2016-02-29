@@ -77,7 +77,7 @@ OpenGLContext: class extends GpuContext {
 		positions := pointList pointer as Float*
 		this _linesShader projection = projection
 		this _linesShader add("color", pen color normalized)
-		this _linesShader use()
+		this _linesShader use(null)
 		this _renderer drawLines(positions, pointList count, 2, pen width)
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen: Pen) {
@@ -85,7 +85,7 @@ OpenGLContext: class extends GpuContext {
 		this _pointsShader add("color", pen color normalized)
 		this _pointsShader add("pointSize", pen width)
 		this _pointsShader projection = projection
-		this _pointsShader use()
+		this _pointsShader use(null)
 		this _renderer drawPoints(positions, pointList count, 2)
 	}
 	recycle: virtual func (image: OpenGLPacked) {
