@@ -10,7 +10,7 @@ use geometry
 use draw
 use base
 use collections
-import GpuImage, Map, GpuCanvas, GpuContext, GpuYuv420Semiplanar, GpuMesh
+import GpuImage, Map, GpuCanvas, GpuContext, GpuYuv420Semiplanar, Mesh
 
 version(!gpuOff) {
 GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
@@ -80,7 +80,7 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
 		this _target y canvas fill()
 		this _target uv canvas fill()
 	}
-	draw: override func ~mesh (image: GpuImage, mesh: GpuMesh) {
+	draw: override func ~mesh (image: GpuImage, mesh: Mesh) {
 		if (!image instanceOf(GpuYuv420Semiplanar))
 			Debug error("Invalid input format in GpuYuv420SemiplanarCanvas::draw~mesh")
 		yuv := image as GpuYuv420Semiplanar

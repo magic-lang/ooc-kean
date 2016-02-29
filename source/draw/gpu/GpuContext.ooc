@@ -12,7 +12,7 @@ use base
 use collections
 use concurrent
 import DrawContext
-import GpuImage, GpuCanvas, Map, GpuYuv420Semiplanar, GpuMesh
+import GpuImage, GpuCanvas, Map, GpuYuv420Semiplanar, Mesh
 
 version(!gpuOff) {
 ToRasterFuture: class extends Future<RasterImage> {
@@ -43,7 +43,7 @@ GpuContext: abstract class extends DrawContext {
 	createYuv420Semiplanar: override func (size: IntVector2D) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(size, this) }
 	createYuv420Semiplanar: override func ~fromImages (y, uv: Image) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(y as GpuImage, uv as GpuImage, this) }
 	createYuv420Semiplanar: override func ~fromRaster (raster: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(raster, this) }
-	createMesh: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GpuMesh
+	createMesh: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> Mesh
 
 	toRaster: virtual func (source: GpuImage) -> RasterImage { source toRasterDefault() }
 	toRaster: virtual func ~target (source: GpuImage, target: RasterImage) -> Promise {

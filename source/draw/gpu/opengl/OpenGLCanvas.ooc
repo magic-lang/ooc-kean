@@ -20,7 +20,7 @@ OpenGLCanvas: class extends OpenGLSurface {
 	_renderTarget: GLFramebufferObject
 	context ::= this _context as OpenGLContext
 	draw: override func ~DrawState (drawState: DrawState) {
-		gpuMap: Map = drawState map as Map ?? this context defaultMap
+		gpuMap: Map = drawState map as Map ?? (drawState mesh ? this context meshShader as Map : this context defaultMap as Map)
 		viewport := (drawState viewport hasZeroArea) ? IntBox2D new(this size) : drawState viewport
 		this context backend setViewport(viewport)
 		gpuMap view = _toLocal * drawState getTransformNormalized() normalizedToReference(this size) * _toLocal
@@ -42,7 +42,10 @@ OpenGLCanvas: class extends OpenGLSurface {
 			gpuMap add("texture0", drawState inputImage)
 		gpuMap use(this _target)
 		this _bind()
-		this context drawQuad()
+		if (drawState mesh)
+			drawState mesh draw()
+		else
+			this context drawQuad()
 		this _unbind()
 	}
 	init: func (=_target, context: OpenGLContext) {

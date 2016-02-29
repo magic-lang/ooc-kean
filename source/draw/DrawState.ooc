@@ -10,6 +10,7 @@ use geometry
 import Pen
 import Image
 import Map
+import Mesh
 
 // Example
 // DrawState new(targetImage) setMap(shader) draw()
@@ -20,6 +21,7 @@ DrawState: cover {
 	target: Image = null
 	inputImage: Image = null
 	map: Map = null
+	mesh: Mesh = null
 	opacity := 1.0f
 	_transformNormalized := FloatTransform3D identity
 	viewport := IntBox2D new(0, 0, 0, 0)
@@ -33,6 +35,10 @@ DrawState: cover {
 	}
 	setMap: func (map: Map) -> This {
 		this map = map
+		this
+	}
+	setMesh: func (mesh: Mesh) -> This {
+		this mesh = mesh
 		this
 	}
 	setOpacity: func (opacity: Float) -> This {

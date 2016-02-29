@@ -11,7 +11,7 @@ use draw
 use collections
 use base
 
-import GpuContext, GpuImage, GpuMesh, GpuYuv420Semiplanar
+import GpuContext, GpuImage, Mesh, GpuYuv420Semiplanar
 
 version(!gpuOff) {
 GpuCanvas: abstract class extends Canvas {
@@ -86,7 +86,7 @@ GpuCanvas: abstract class extends Canvas {
 		if (image != temporary)
 			temporary free()
 	}
-	draw: virtual func ~mesh (image: GpuImage, mesh: GpuMesh) { Debug error("draw~mesh unimplemented!") }
+	draw: virtual func ~mesh (image: GpuImage, mesh: Mesh) { Debug error("draw~mesh unimplemented!") }
 	_createTextureTransform: static func ~LocalInt (imageSize: IntVector2D, box: IntBox2D) -> FloatTransform3D {
 		This _createTextureTransform(imageSize toFloatVector2D(), box toFloatBox2D())
 	}
