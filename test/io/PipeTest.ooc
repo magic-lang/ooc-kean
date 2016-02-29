@@ -8,12 +8,14 @@
 
 use unit
 use io
+import io/File
 
 PipeTest: class extends Fixture {
 	init: func {
 		super("Pipe")
 		this add("Basic use", func {
 			scriptName: String
+			this _createOutputDirectory()
 			version (windows)
 				scriptName = "bash test/io/input/pipeprocesstester.sh"
 			else
@@ -44,6 +46,11 @@ PipeTest: class extends Fixture {
 			pipe free()
 			process free()
 		})
+	}
+	_createOutputDirectory: func {
+		file := File new("test/io/output")
+		file mkdir()
+		file free()
 	}
 }
 
