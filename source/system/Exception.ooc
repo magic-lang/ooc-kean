@@ -135,7 +135,7 @@ Exception: class {
 	}
 	printBacktrace: func {
 		handler := BacktraceHandler get()
-		for (i in 0 .. this backtraces size)
+		for (i in 0 .. this backtraces count)
 			stderr write(handler backtraceSymbols(this backtraces peek(i)))
 	}
 	formatMessage: func -> String {

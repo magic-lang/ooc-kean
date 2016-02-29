@@ -15,7 +15,7 @@ StackTest: class extends Fixture {
 			stack := Stack<Int> new()
 			for (i in 1 .. 7)
 				stack push(i)
-			expect(stack size as Int, is equal to(6))
+			expect(stack count as Int, is equal to(6))
 			expect(stack isEmpty, is false)
 			value := stack pop()
 			expect(value, is equal to(6))
@@ -47,7 +47,7 @@ StackTest: class extends Fixture {
 			for (i in 0 .. 4999)
 				expect(stack peek(i), is equal to(4999 - i))
 			for (i in 1 .. 4999) {
-				expect(stack size as Int, is equal to(5000 - i))
+				expect(stack count as Int, is equal to(5000 - i))
 				expect(stack pop(), is equal to(5000 - i))
 			}
 			expect(stack pop(), is equal to(1))

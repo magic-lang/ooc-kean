@@ -8,10 +8,10 @@
 
 Stack: class <T> {
 	_data: T*
-	_size: SizeT = 0
+	_count: SizeT = 0
 	_capacity: SizeT = 8
-	size ::= this _size
-	isEmpty ::= this size == 0
+	count ::= this _count
+	isEmpty ::= this count == 0
 	top ::= this peek()
 	init: func {
 		this _data = calloc(this _capacity, T size)
@@ -21,25 +21,25 @@ Stack: class <T> {
 		super()
 	}
 	push: func (element: T) {
-		if (this size >= this _capacity)
+		if (this _count >= this _capacity)
 			this _grow()
-		this _data[this size] = element
-		++this _size
+		this _data[this _count] = element
+		++this _count
 	}
 	pop: func -> T {
 		version(safe)
 			raise(this isEmpty, "Trying to pop an empty stack.", This)
-		this _data[--this _size]
+		this _data[--this _count]
 	}
 	peek: func (index := 0) -> T {
 		version(safe) {
 			raise(index < 0, "Trying to peek(%d)! index must be >= 1 <= size" format(index), This)
-			raise(index >= this size, "Trying to peek(%d) a stack of size %d" format(index, this size), This)
+			raise(index >= this _count, "Trying to peek(%d) a stack of size %d" format(index, this _count), This)
 		}
-		this _data[this size - index - 1]
+		this _data[this _count - index - 1]
 	}
 	clear: func {
-		this _size = 0
+		this _count = 0
 	}
 	_grow: func {
 		if (this _capacity < 4096)
