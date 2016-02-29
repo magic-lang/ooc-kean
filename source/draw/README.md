@@ -39,3 +39,38 @@ Transforms go from zero in the center and increase with either pixels or pixels 
 * **Reference transforms** start from the center of the image and increase in pixels. X goes right and Y goes down. This allows applying rotations with automatic compensation for aspect ratio and preserving pixel density when cropping images.
 
 * **Normalized transforms** start from the center of the image and go from (-1, -1) in the top left corner to (+1, +1) in the bottom right corner. This allows using the same coordinates for multiple image resolutions. The disadvantage is that it does not preserve aspect ratio when rotating since it treats all images as squares when not knowing their size. This is the normalized version of reference coordinates.
+
+# DrawState
+Using `DrawState` you can draw things without having to call the canvas directly.
+This is convenient if you have a lot of things to draw that have settings in common.
+
+## How to use
+Create a `DrawState` with a target image as input argument.
+Continue with setters to add information.
+The setters leave no side-effects but return a clone of the state with the setting changed.
+```ooc
+DrawState new(target) setMap(shader) draw()
+```
+You can also leave it empty but then you have to call `setTarget` later.
+```ooc
+state := DrawState new() setMap(shader)
+state setTarget(target) draw()
+```
+Cloning of the `DrawState` can be used to share common settings.
+```ooc
+state := DrawState new() setMap(shader) setTransformNormalized(transform)
+state setTarget(smallTarget) draw()
+state setTarget(largeTarget) draw()
+```
+
+## Debug checklist for things we have not yet implemented safety for
+* If the application is crashing.
+	Did you forget to bind a texture to the correct name?
+
+* If you see random images, funky colors, moving clouds or tunnels.
+	Did you forget to bind a texture to the correct name?
+	Did you forget `draw()` at the end?
+
+* If the input image has sharp square pixels.
+	Did you forget to turn on interpolated sampling?
+	This is unsafe because of the poor design of OpenGL that makes it hard to make a decent interface.
