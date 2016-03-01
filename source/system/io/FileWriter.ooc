@@ -7,7 +7,7 @@
  */
 
 import io/[Writer, File]
-import io/native/FileUnix
+import native/FileUnix
 
 FileWriter: class extends Writer {
 	file: FStream
