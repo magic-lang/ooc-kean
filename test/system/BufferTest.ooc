@@ -9,7 +9,6 @@
 use base
 use unit
 use geometry
-import math
 
 BufferTest: class extends Fixture {
 	init: func {
