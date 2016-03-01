@@ -11,12 +11,6 @@
    fun:backend_gles3_Gles3FramebufferObject__Gles3FramebufferObject_clear
 }
 {
-   stringliteral
-   Memcheck:Leak
-   ...
-   fun:String__makeStringLiteral
-}
-{
    mapinit
    Memcheck:Leak
    ...
