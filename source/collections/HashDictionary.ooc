@@ -8,7 +8,7 @@
 
 HashDictionary: class {
 	_hashMap: HashMap<String, Cell<Pointer>>
-	count ::= this _hashMap size
+	count ::= this _hashMap count
 	isEmpty ::= this _hashMap isEmpty
 	init: func { init ~withCapacity(10) }
 	init: func ~withCapacity (capacity: SizeT) {

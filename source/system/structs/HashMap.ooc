@@ -107,17 +107,17 @@ getStandardHashFunc: func <T> (T: Class) -> Func <T> (T) -> SizeT {
 }
 
 HashMap: class <K, V> {
-	_size: SizeT
+	_count: SizeT
 	capacity: SizeT
 	hashKey: Func <K> (K) -> SizeT
 	buckets: HashEntry[]
 	keys: VectorList<K>
-	size ::= _size
-	isEmpty ::= keys empty
+	count ::= this _count
+	isEmpty ::= this keys empty
 
 	init: func { init(3) }
 	init: func ~withCapacity (=capacity) {
-		this _size = 0
+		this _count = 0
 		this buckets = HashEntry[capacity] new()
 		this keys = VectorList<K> new(32, false)
 		this hashKey = getStandardHashFunc(K)
@@ -219,9 +219,9 @@ HashMap: class <K, V> {
 
 				buckets[hash] = entry
 			}
-			this _size += 1
-			if ((this _size as Float / this capacity as Float) > 0.75)
-				resize(this _size * (this _size > 50000 ? 2 : 4))
+			this _count += 1
+			if ((this _count as Float / this capacity as Float) > 0.75)
+				resize(this _count * (this _count > 50000 ? 2 : 4))
 		}
 	}
 	get: func (key: K) -> V {
@@ -260,7 +260,7 @@ HashMap: class <K, V> {
 							break
 						}
 					}
-					this _size -= 1
+					this _count -= 1
 					result = true
 					break
 				}
@@ -278,7 +278,7 @@ HashMap: class <K, V> {
 		oldBuckets := this buckets
 		oldKeys := this keys copy()
 		this keys clear()
-		this _size = 0
+		this _count = 0
 		this capacity = _capacity
 		this buckets = HashEntry[capacity] new()
 		for (i in 0 .. oldCapacity) {
@@ -306,7 +306,7 @@ HashMap: class <K, V> {
 		iter
 	}
 	clear: func {
-		this _size = 0
+		this _count = 0
 		for (i in 0 .. this capacity)
 			this buckets[i] = HashEntry new()
 		this keys clear()
