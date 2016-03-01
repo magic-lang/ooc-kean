@@ -4,7 +4,6 @@ SourcePath: source/net
 Imports: Address
 Imports: berkeley
 Imports: DNS
-Imports: Exceptions
 Imports: ServerSocket
 Imports: Socket
 Imports: TCPSocket

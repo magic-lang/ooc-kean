@@ -8,7 +8,7 @@
 
 use collections
 import os/System
-import berkeley, Address, Exceptions, Socket
+import berkeley, Address, Socket
 
 /**
    Allows DNS lookups and reserve lookups
@@ -29,7 +29,7 @@ DNS: class {
 		hints ai_family = socketFamily
 		hints ai_socktype = socketType
 		if ((rv := getaddrinfo(hostname, null, hints&, info&)) != 0)
-			DNSError new(gai_strerror(rv as Int) as CString toString()) throw()
+			raise(gai_strerror(rv as Int) as CString toString())
 		HostInfo new(info)
 	}
 
@@ -55,21 +55,13 @@ DNS: class {
 	}
 	reverse: static func ~withSockAddr (sockaddr: SocketAddress) -> String {
 		hostname := CharBuffer new(1024)
-		if ((rv := getnameinfo(sockaddr addr(), sockaddr length(), hostname toCString(), 1024, null, 0, 0)) != 0) {
-			DNSError new(gai_strerror(rv as Int) as CString toString()) throw()
-		}
+		if ((rv := getnameinfo(sockaddr addr(), sockaddr length(), hostname toCString(), 1024, null, 0, 0)) != 0)
+			raise(gai_strerror(rv as Int) as CString toString())
 		hostname sizeFromData()
 		hostname toString()
 	}
 
-	/**
-		Returns the hostname of this system.
-	*/
 	hostname: static func -> String { System hostname() }
-
-	/**
-		Retreive host information about this system.
-	*/
 	localhost: static func -> HostInfo { resolve(hostname()) }
 }
 

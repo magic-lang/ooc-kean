@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import berkeley, Exceptions
+import berkeley
 
 /**
 	Common base for all socket types.
@@ -21,7 +21,7 @@ Socket: abstract class {
 	init: func ~sock (=family, =type, =protocol) {
 		this descriptor = socket(family, type, protocol)
 		if (descriptor == -1)
-			SocketError new(class, "Failed to create socket") throw()
+			raise("Failed to create socket", class)
 	}
 	init: func ~descriptor (=family, =type, =protocol, =descriptor)
 
@@ -33,17 +33,17 @@ Socket: abstract class {
 			result = close(descriptor)
 		}
 		if (result == -1)
-			SocketError new(class, "Failed to close socket") throw()
+			raise("Failed to close socket", class)
 		connected = false
 	}
 
 	ioctl: func (request: Int, arg: Pointer) {
 		version (windows) {
-			SocketError new(class, "ioctl unsupported on Windows") throw()
+			raise("ioctl unsupported on Windows", class)
 		} else {
 			rt := ioctl(descriptor, request, arg)
 			if (rt != 0)
-				SocketError new(class, "ioctl failed") throw()
+				raise("ioctl failed", class)
 		}
 	}
 
@@ -78,7 +78,7 @@ Socket: abstract class {
 		//select(descriptor + 1, descriptors&, null, null, timeout&)
 
 		if (!descriptors isSet(descriptor))
-			TimeoutError new("Wait on socket timedout.") throw()
+			raise("Wait on socket timedout.")
 
 		this available()
 	}
@@ -98,13 +98,13 @@ Socket: abstract class {
 	setNonBlocking: func -> Int {
 		result := 0
 		version (windows) {
-			SocketError new(class, "setNonBlocking unsupported on Win32") throw()
+			raise("setNonBlocking unsupported on Win32", class)
 		} else {
 			flags := currentFlags()
 			result = fcntl(descriptor, SocketControls SET_SOCKET_FLAGS, flags | SocketControls NON_BLOCKING)
 		}
 		if (result < 0)
-			SocketError new(class, "Could not set socket to non-blocking") throw()
+			raise("Could not set socket to non-blocking", class)
 		result
 	}
 
@@ -114,13 +114,13 @@ Socket: abstract class {
 	setBlocking: func -> Int {
 		result := 0
 		version (windows) {
-			SocketError new(class, "setBlocking unsupported on Win32") throw()
+			raise("setBlocking unsupported on Win32", class)
 		} else {
 			flags := currentFlags()
 			result = fcntl(descriptor, SocketControls SET_SOCKET_FLAGS, flags & ~(SocketControls NON_BLOCKING))
 		}
 		if (result < 0)
-			SocketError new(class, "Could not set socket to blocking") throw()
+			raise("Could not set socket to blocking", class)
 		result
 	}
 
@@ -130,11 +130,11 @@ Socket: abstract class {
 	currentFlags: func -> Int {
 		flags := 0
 		version (windows) {
-			SocketError new(class, "currentFlags not supported on Win32")
+			raise("currentFlags not supported on Win32", class)
 		} else {
 			flags = fcntl(descriptor, SocketControls GET_SOCKET_FLAGS, 0)
 			if (flags < 0)
-				SocketError new(class, "fcntl to get current flags failed") throw()
+				raise("fcntl to get current flags failed", class)
 		}
 		flags
 	}
