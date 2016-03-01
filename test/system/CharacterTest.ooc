@@ -10,7 +10,7 @@ use unit
 
 CharacterTest: class extends Fixture {
 	init: func {
-		super("Env")
+		super("Character")
 		this add("basic test", func {
 			(a, b, c, d, e) := ('7', 't', 'F', ' ', '9')
 			expect(a digit(), is true)
