@@ -65,18 +65,18 @@ ColorYuv: cover {
 }
 
 ColorYuva: cover {
-	y, u, v, alpha: Byte
-	normalized ::= FloatTuple4 new(this y as Float / 255, this u as Float / 255, this v as Float / 255, this alpha as Float / 255)
-	init: func@ (=y, =u, =v, =alpha)
+	y, u, v, a: Byte
+	normalized ::= FloatTuple4 new(this y as Float / 255, this u as Float / 255, this v as Float / 255, this a as Float / 255)
+	init: func@ (=y, =u, =v, =a)
 	init: func@ ~default { this init(0, 0, 0, 255) }
 	init: func@ ~yuv (yuv: ColorYuv, a: Byte) { this init(yuv y, yuv u, yuv v, a) }
 	toMonochrome: func -> ColorMonochrome { ColorMonochrome new(this y) }
 	toUv: func -> ColorUv { this toYuv() toUv() }
 	toYuv: func -> ColorYuv { ColorYuv new(this y, this u, this v) }
 	toRgb: func -> ColorRgb { this toYuv() toRgb() }
-	toRgba: func -> ColorRgba { ColorRgba new(this toRgb(), this alpha) }
-	equals: func (other: This) -> Bool { this y == other y && this u == other u && this v == other v && this alpha == other alpha }
-	blend: func (factor: Float, other: This) -> This { This new(this toYuv() blend(factor, other toYuv()), (this alpha * (1 - factor) + other alpha * factor) as Byte) }
+	toRgba: func -> ColorRgba { ColorRgba new(this toRgb(), this a) }
+	equals: func (other: This) -> Bool { this y == other y && this u == other u && this v == other v && this a == other a }
+	blend: func (factor: Float, other: This) -> This { This new(this toYuv() blend(factor, other toYuv()), (this a * (1 - factor) + other a * factor) as Byte) }
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 }
@@ -103,19 +103,19 @@ ColorRgb: cover {
 }
 
 ColorRgba: cover {
-	r, g, b, alpha: Byte
-	normalized ::= FloatTuple4 new(this r as Float / 255, this g as Float / 255, this b as Float / 255, this alpha as Float / 255)
-	init: func@ (=r, =g, =b, =alpha)
+	r, g, b, a: Byte
+	normalized ::= FloatTuple4 new(this r as Float / 255, this g as Float / 255, this b as Float / 255, this a as Float / 255)
+	init: func@ (=r, =g, =b, =a)
 	init: func@ ~default { this init(0, 0, 0, 0) }
 	init: func@ ~rgb (rgb: ColorRgb, a: Byte) { this init(rgb r, rgb g, rgb b, a) }
 	toMonochrome: func -> ColorMonochrome { this toRgb() toMonochrome() }
 	toUv: func -> ColorUv { this toYuv() toUv() }
 	toYuv: func -> ColorYuv { this toRgb() toYuv() }
-	toYuva: func -> ColorYuva { ColorYuva new(this toRgb() toYuv(), this alpha) }
+	toYuva: func -> ColorYuva { ColorYuva new(this toRgb() toYuv(), this a) }
 	toRgb: func -> ColorRgb { ColorRgb new(this r, this g, this b) }
-	equals: func (other: This) -> Bool { this r == other r && this g == other g && this b == other b && this alpha == other alpha }
-	blend: func (factor: Float, other: This) -> This { This new(this toRgb() blend(factor, other toRgb()), (this alpha * (1 - factor) + other alpha * factor) as Byte) }
-	distance: func (other: This) -> Float { (this toRgb() distance(other toRgb()) * 3.0f + (this alpha - other alpha) as Float pow(2)) / 4.0f sqrt() }
+	equals: func (other: This) -> Bool { this r == other r && this g == other g && this b == other b && this a == other a }
+	blend: func (factor: Float, other: This) -> This { This new(this toRgb() blend(factor, other toRgb()), (this a * (1 - factor) + other a * factor) as Byte) }
+	distance: func (other: This) -> Float { (this toRgb() distance(other toRgb()) * 3.0f + (this a - other a) as Float pow(2)) / 4.0f sqrt() }
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 }

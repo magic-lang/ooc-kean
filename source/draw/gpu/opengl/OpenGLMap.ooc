@@ -69,10 +69,10 @@ OpenGLMap: class extends Map {
 					case FloatTransform2D => program setUniform(key, cell as Cell<FloatTransform2D> get())
 					case FloatTransform3D => program setUniform(key, cell as Cell<FloatTransform3D> get())
 					case ColorRgb => color := cell as Cell<ColorRgb> get(); program setUniform(key, color r as Float / 255, color g as Float / 255, color b as Float / 255)
-					case ColorRgba => color := cell as Cell<ColorRgba> get(); program setUniform(key, color r as Float / 255, color g as Float / 255, color b as Float / 255, color alpha as Float / 255)
+					case ColorRgba => color := cell as Cell<ColorRgba> get(); program setUniform(key, color r as Float / 255, color g as Float / 255, color b as Float / 255, color a as Float / 255)
 					case ColorUv => color := cell as Cell<ColorUv> get(); program setUniform(key, color u as Float / 255, color v as Float / 255)
 					case ColorYuv => color := cell as Cell<ColorYuv> get(); program setUniform(key, color y as Float / 255, color u as Float / 255, color v as Float / 255)
-					case ColorYuva => color := cell as Cell<ColorYuva> get(); program setUniform(key, color y as Float / 255, color u as Float / 255, color v as Float / 255, color alpha as Float / 255)
+					case ColorYuva => color := cell as Cell<ColorYuva> get(); program setUniform(key, color y as Float / 255, color u as Float / 255, color v as Float / 255, color a as Float / 255)
 					case => Debug error("Invalid cover type in OpenGLMap use!")
 				}
 			} else

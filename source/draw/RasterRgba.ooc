@@ -88,10 +88,10 @@ RasterRgba: class extends RasterPacked {
 										maximum r = pixel r
 									else if (minimum r > pixel r)
 										minimum r = pixel r
-									if (maximum alpha < pixel alpha)
-										maximum alpha = pixel alpha
-									else if (minimum alpha > pixel alpha)
-										minimum alpha = pixel alpha
+									if (maximum a < pixel a)
+										maximum a = pixel a
+									else if (minimum a > pixel a)
+										minimum a = pixel a
 								}
 						distance := 0.0f
 						if (c b < minimum b)
@@ -106,10 +106,10 @@ RasterRgba: class extends RasterPacked {
 							distance += (minimum r - c r) as Float squared
 						else if (c r > maximum r)
 							distance += (c r - maximum r) as Float squared
-						if (c alpha < minimum alpha)
-							distance += (minimum alpha - c alpha) as Float squared
-						else if (c alpha > maximum alpha)
-							distance += (c alpha - maximum alpha) as Float squared
+						if (c a < minimum a)
+							distance += (minimum a - c a) as Float squared
+						else if (c a > maximum a)
+							distance += (c a - maximum a) as Float squared
 						result += (distance) sqrt() / 4
 					}
 				}
@@ -145,7 +145,7 @@ RasterRgba: class extends RasterPacked {
 			(top * (left * topLeft r + (1 - left) * topRight r) + (1 - top) * (left * bottomLeft r + (1 - left) * bottomRight r)),
 			(top * (left * topLeft g + (1 - left) * topRight g) + (1 - top) * (left * bottomLeft g + (1 - left) * bottomRight g)),
 			(top * (left * topLeft b + (1 - left) * topRight b) + (1 - top) * (left * bottomLeft b + (1 - left) * bottomRight b)),
-			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
+			(top * (left * topLeft a + (1 - left) * topRight a) + (1 - top) * (left * bottomLeft a + (1 - left) * bottomRight a))
 		)
 	}
 

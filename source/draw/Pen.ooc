@@ -11,7 +11,7 @@ import Color
 Pen: cover {
 	color: ColorRgba { get set }
 	width: Float { get set }
-	alpha ::= this color alpha
+	alpha ::= this color a
 	alphaAsFloat ::= this alpha as Float / 255.0
 	init: func@ (=color, =width)
 	init: func@ ~color (color: ColorRgba) { this init(color, 1.0f) }
