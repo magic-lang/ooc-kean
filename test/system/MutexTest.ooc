@@ -7,7 +7,7 @@
  */
 
 use unit
-import threading/[Thread, Mutex]
+use concurrent
 
 MutexTest: class extends Fixture {
 	init: func {

@@ -10,7 +10,6 @@ use base
 use concurrent
 use collections
 use unit
-import threading/Thread
 
 TestObject: class extends SynchronizedResource {
 	recycler := static SynchronizedResourceRecycler new()

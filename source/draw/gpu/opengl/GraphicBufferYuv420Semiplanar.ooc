@@ -12,7 +12,6 @@ use base
 use collections
 use draw-gpu
 import GraphicBuffer, AndroidContext, EGLRgba
-import threading/Mutex
 
 version(!gpuOff) {
 GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {

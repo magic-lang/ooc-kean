@@ -9,7 +9,6 @@
 use base
 use concurrent
 use unit
-import threading/Thread
 
 ThreadPoolTest: class extends Fixture {
 	init: func {

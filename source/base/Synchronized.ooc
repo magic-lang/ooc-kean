@@ -6,8 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import threading/Mutex
-
 Synchronized: class {
 	_lock: Mutex
 	init: func (lock: Mutex) { this _lock = lock }

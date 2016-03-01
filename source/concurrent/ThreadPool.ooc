@@ -9,7 +9,6 @@
 use base
 use collections
 use concurrent
-import threading/[Thread, Mutex, WaitCondition]
 
 _Task: abstract class {
 	_state := _PromiseState Unfinished

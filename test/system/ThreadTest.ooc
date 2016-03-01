@@ -8,7 +8,7 @@
 
 use unit
 use base
-import threading/[Thread, Mutex, WaitCondition]
+use concurrent
 
 ThreadTest: class extends Fixture {
 	init: func {
