@@ -27,6 +27,21 @@ DrawStateTest: class extends Fixture {
 	}
 	init: func {
 		super("DrawState")
+		this add("uniform scaling does not affect rotation", func {
+			small := FloatVector2D new(150, 100)
+			large := FloatVector2D new(300, 200)
+			rotateX45 := FloatTransform3D createRotationX(45.0f toRadians())
+			rotateX90 := FloatTransform3D createRotationX(90.0f toRadians())
+			rotateY90 := FloatTransform3D createRotationY(90.0f toRadians())
+			rotateZ90 := FloatTransform3D createRotationZ(90.0f toRadians())
+			This compareTransform(rotateX45 referenceToNormalized(small) normalizedToReference(large), rotateX45, 0.001f)
+			This compareTransform(rotateX90 referenceToNormalized(small) normalizedToReference(large), rotateX90, 0.001f)
+			This compareTransform(rotateX90 referenceToNormalized(large) normalizedToReference(small), rotateX90, 0.001f)
+			This compareTransform(rotateY90 referenceToNormalized(small) normalizedToReference(large), rotateY90, 0.001f)
+			This compareTransform(rotateY90 referenceToNormalized(large) normalizedToReference(small), rotateY90, 0.001f)
+			This compareTransform(rotateZ90 referenceToNormalized(small) normalizedToReference(large), rotateZ90, 0.001f)
+			This compareTransform(rotateZ90 referenceToNormalized(large) normalizedToReference(small), rotateZ90, 0.001f)
+		})
 		this add("transform", func {
 			imageSize := FloatVector2D new(1920, 1080)
 			referenceTransform := FloatTransform3D createTranslation(300.0f, 200.0f, 100.0f) scale(2.0f, 3.0f, 4.0f) rotateX(4.2f) rotateY(-2.6f) rotateZ(1.5f)
