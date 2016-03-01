@@ -92,32 +92,32 @@ RasterRgb: class extends RasterPacked {
 							for (otherX in 0 maximum(x - this distanceRadius) .. (x + 1 + this distanceRadius) minimum(this size x))
 								if (otherX != x || otherY != y) {
 									pixel := (other as This)[otherX, otherY]
-									if (maximum blue < pixel blue)
-										maximum blue = pixel blue
-									else if (minimum blue > pixel blue)
-										minimum blue = pixel blue
-									if (maximum green < pixel green)
-										maximum green = pixel green
-									else if (minimum green > pixel green)
-										minimum green = pixel green
-									if (maximum red < pixel red)
-										maximum red = pixel red
-									else if (minimum red > pixel red)
-										minimum red = pixel red
+									if (maximum b < pixel b)
+										maximum b = pixel b
+									else if (minimum b > pixel b)
+										minimum b = pixel b
+									if (maximum g < pixel g)
+										maximum g = pixel g
+									else if (minimum g > pixel g)
+										minimum g = pixel g
+									if (maximum r < pixel r)
+										maximum r = pixel r
+									else if (minimum r > pixel r)
+										minimum r = pixel r
 								}
 						distance := 0.0f
-						if (c blue < minimum blue)
-							distance += (minimum blue - c blue) as Float squared
-						else if (c blue > maximum blue)
-							distance += (c blue - maximum blue) as Float squared
-						if (c green < minimum green)
-							distance += (minimum green - c green) as Float squared
-						else if (c green > maximum green)
-							distance += (c green - maximum green) as Float squared
-						if (c red < minimum red)
-							distance += (minimum red - c red) as Float squared
-						else if (c red > maximum red)
-							distance += (c red - maximum red) as Float squared
+						if (c b < minimum b)
+							distance += (minimum b - c b) as Float squared
+						else if (c b > maximum b)
+							distance += (c b - maximum b) as Float squared
+						if (c g < minimum g)
+							distance += (minimum g - c g) as Float squared
+						else if (c g > maximum g)
+							distance += (c g - maximum g) as Float squared
+						if (c r < minimum r)
+							distance += (minimum r - c r) as Float squared
+						else if (c r > maximum r)
+							distance += (c r - maximum r) as Float squared
 						result += (distance) sqrt() / 3
 					}
 				}
