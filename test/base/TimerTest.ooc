@@ -10,35 +10,38 @@ use base
 use unit
 
 TimerTest: class extends Fixture {
-	timer := Timer new()
-	clockTimer := ClockTimer new()
+	wallTimer := WallTimer new()
+	cpuTimer := CpuTimer new()
 
 	init: func {
-		super("Timer")
-		this add("basic use of Timer", func {
-			fast := this timerTestFunction(1_000)
-			slow := this timerTestFunction(10_000_000)
+		super("WallTimer")
+		this add("basic use of WallTimer", func {
+			fast := this wallTimerTestFunction(1_000)
+			slow := this wallTimerTestFunction(10_000_000)
 			expect(slow > fast, is true)
 		})
-		this add("basic use of ClockTimer", func {
-			fast := this clockTimerTestFunction(1_000)
-			slow := this clockTimerTestFunction(10_000_000)
+		this add("basic use of CpuTimer", func {
+			fast := this cpuTimerTestFunction(1_000)
+			slow := this cpuTimerTestFunction(10_000_000)
 			expect(slow > fast, is true)
 		})
 	}
-
-	timerTestFunction: func (loopLength: Int) -> Double {
+	wallTimerTestFunction: func (loopLength: Int) -> Double {
 		sum := 0
-		this timer start()
+		this wallTimer start()
 		for (i in 0 .. loopLength) { sum = (sum + i) % 10 }
-		this timer stop()
+		this wallTimer stop()
 	}
-
-	clockTimerTestFunction: func (loopLength: Int) -> Double {
+	cpuTimerTestFunction: func (loopLength: Int) -> Double {
 		sum := 0
-		this clockTimer start()
+		this cpuTimer start()
 		for (i in 0 .. loopLength) { sum = (sum + i) % 10 }
-		this clockTimer stop()
+		this cpuTimer stop()
+	}
+	free: override func {
+		this wallTimer free()
+		this cpuTimer free()
+		super()
 	}
 }
 

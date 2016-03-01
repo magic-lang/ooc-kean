@@ -9,7 +9,7 @@
 clock: extern func -> LLong
 CLOCKS_PER_SEC: extern const LLong
 
-Timer: class {
+Timer: abstract class {
 	_startTime: Double
 	_endTime: Double
 	_result: Double
@@ -18,18 +18,13 @@ Timer: class {
 	_min: Double
 	_max: Double
 	_average: Double
+
 	init: func {
 		this _min = INFINITY
 		this _max = 0.0
 	}
-	// Note: On Windows, there is only millisecond precision
-	start: virtual func { this _startTime = (Time runTimeMicro() as Double) }
-	stop: virtual func -> Double {
-		this _endTime = (Time runTimeMicro() as Double)
-		this _result = this _endTime - this _startTime
-		this _update()
-		this _result
-	}
+	start: abstract func
+	stop: abstract func -> Double
 	_update: virtual func {
 		if (this _result < this _min)
 			this _min = this _result
@@ -50,7 +45,18 @@ Timer: class {
 	}
 }
 
-ClockTimer: class extends Timer {
+WallTimer: class extends Timer {
+	init: func { super() }
+	start: override func { this _startTime = (Time runTimeMicro() as Double) } // Note: Only millisecond precision on Win32
+	stop: override func -> Double {
+		this _endTime = (Time runTimeMicro() as Double)
+		this _result = this _endTime - this _startTime
+		this _update()
+		this _result
+	}
+}
+
+CpuTimer: class extends Timer {
 	init: func { super() }
 	start: override func { this _startTime = (clock() as Double) }
 	stop: override func -> Double {

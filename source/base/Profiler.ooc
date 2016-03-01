@@ -14,7 +14,7 @@ import Timer
 
 Profiler: class {
 	_name: String
-	_timer := Timer new()
+	_timer := WallTimer new()
 	init: func (=_name) { This _profilers add(this) }
 	free: override func {
 		for (i in 0 .. This _profilers count)
