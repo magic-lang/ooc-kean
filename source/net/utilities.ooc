@@ -10,7 +10,7 @@
 	Not sure if this is the best method, but it avoids inter-dependencies
 	between UDPSocket and ServerSocket.
 */
-import berkeley, translation, Socket, Address, Exceptions
+import berkeley, translation, Socket, Address
 
 /**
 	Is the IP provided valid as either IPv6 or IPv4? (Returns type, from AddressFamily)
@@ -39,9 +39,9 @@ getSocketAddress: func (ip: String, port: Int) -> SocketAddress {
 	match (Inet pton(type, ip toCString(), ai&)) {
 		case -1 =>
 			// TODO: Check errno, it should be set to EAFNOSUPPORT
-			NetError new("Invalid address family (%s)" format(ip)) throw()
+			raise("Invalid address family (%s)" format(ip))
 		case 0 =>
-			NetError new("Invalid network address (%s)" format(ip)) throw()
+			raise("Invalid network address (%s)" format(ip))
 	}
 	addr := SocketAddressIP4 new(ai, port)
 	addr
@@ -53,9 +53,9 @@ getSocketAddress6: func (ip: String, port: Int) -> SocketAddress {
 	match (Inet pton(type, ip toCString(), ai&)) {
 		case -1 =>
 			// TODO: Check errno, it should be set to EAFNOSUPPORT
-			NetError new("Invalid address family.") throw()
+			raise("Invalid address family.")
 		case 0 =>
-			NetError new("Invalid network address.") throw()
+			raise("Invalid network address.")
 	}
 	addr := SocketAddressIP6 new(ai, port)
 	addr

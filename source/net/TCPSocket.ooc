@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import Socket, Address, DNS, Exceptions
+import Socket, Address, DNS
 import io/[Reader, Writer]
 import berkeley into socket
 
@@ -79,7 +79,7 @@ TCPSocket: class extends Socket {
 	 */
 	connect: func {
 		if (socket connect(descriptor, remote addr(), remote length()) == -1)
-			SocketError new() throw()
+			raise("SocketError")
 		readerWriter = TCPReaderWriterPair new(this)
 		connected = true
 	}
@@ -96,19 +96,8 @@ TCPSocket: class extends Socket {
 		f(readerWriter)
 	}
 
-	/**
-	   :return: A reader that reads data from this socket
-	 */
-	reader: func -> TCPSocketReader {
-		TCPSocketReader new(this)
-	}
-
-	/**
-	   :return: A writer that writes data to this socket
-	 */
-	writer: func -> TCPSocketWriter {
-		TCPSocketWriter new(this)
-	}
+	reader: func -> TCPSocketReader { TCPSocketReader new(this) }
+	writer: func -> TCPSocketWriter { TCPSocketWriter new(this) }
 
 	/**
 	   Send data through this socket
@@ -129,7 +118,7 @@ TCPSocket: class extends Socket {
 			}
 
 		if (bytesSent == -1)
-			SocketError new() throw()
+			raise("SocketError")
 
 		bytesSent
 	}
@@ -190,7 +179,7 @@ TCPSocket: class extends Socket {
 		bytesRecv := socket recv(descriptor, chars, length, flags)
 		if (bytesRecv == -1) {
 			connected = false
-			SocketError new() throw()
+			raise("SocketError")
 		}
 		/* hasData? is true if there's data left (aka, if bytesRecv != 0),
 		 * and false otherwise
@@ -225,11 +214,6 @@ TCPSocket: class extends Socket {
 		c
 	}
 
-	/**
-	   Receive a byte from this socket
-
-	   :return: The byte read
-	 */
 	receiveByte: func -> Char { this receiveByte(0) }
 }
 
@@ -251,27 +235,26 @@ TCPSocketReader: class extends Reader {
 		source hasData
 	}
 	rewind: func (offset: Int) {
-		SocketError new("Sockets do not support rewind") throw()
+		raise("Sockets do not support rewind")
 	}
 	seek: override func (offset: Long, mode: SeekMode) {
-		SocketError new("Sockets do not support seek") throw()
+		raise("Sockets do not support seek")
 	}
 	mark: override func -> Long { marker }
 	reset: func (marker: Long) {
-		SocketError new("Sockets do not support reset") throw()
+		raise("Sockets do not support reset")
 	}
 }
 
 TCPSocketWriter: class extends Writer {
 	dest: TCPSocket
-
 	init: func (=dest)
 	close: override func { dest close() }
 	write: override func ~chr (chr: Char) { dest sendByte(chr) }
 	write: override func (chars: Char*, length: SizeT) -> SizeT { dest send(chars, length, 0, true) }
 }
 
-TCPReaderWriterPair: class { // I thought TCPSocketReaderWriterPair was a bit too long
+TCPReaderWriterPair: class {
 	in: TCPSocketReader
 	out: TCPSocketWriter
 	sock: TCPSocket

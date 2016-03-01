@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import berkeley, Exceptions, Socket, TCPSocket, Address, DNS, utilities
+import berkeley, Socket, TCPSocket, Address, DNS, utilities
 
 /**
 	A server based socket interface.
@@ -64,7 +64,7 @@ ServerSocket: class extends Socket {
 			if (addr)
 				this bind(addr)
 		} else
-			InvalidAddress new("Address must be a valid IPv4 or IPv6 IP.") throw()
+			raise("Address must be a valid IPv4 or IPv6 IP.")
 	}
 
 	/**
@@ -72,7 +72,7 @@ ServerSocket: class extends Socket {
 	*/
 	bind: func ~withAddr (addr: SocketAddress) {
 		if (bind(descriptor, addr addr(), addr length()) == -1)
-			SocketError new() throw()
+			raise("SocketError bind")
 	}
 
 	/**
@@ -81,7 +81,7 @@ ServerSocket: class extends Socket {
 	listen: func (backlog: Int) -> Bool {
 		ret := listen(descriptor, backlog)
 		if (ret == -1)
-			SocketError new() throw()
+			raise("SocketError listen")
 		this listening = (ret == 0)
 		this listening
 	}
@@ -105,7 +105,7 @@ ServerSocket: class extends Socket {
 		addrSize: UInt = SockAddr size
 		conn := accept(descriptor, addr&, addrSize&)
 		if (conn == -1)
-			SocketError new("Failed to accept an incoming connection.") throw()
+			raise("Failed to accept an incoming connection.")
 		sock := TCPSocket new(SocketAddress newFromSock(addr&, addrSize), conn)
 		TCPServerReaderWriterPair new(sock)
 	}
@@ -136,11 +136,7 @@ ServerSocket: class extends Socket {
 	}
 }
 
-/** This makes me sad, but it works and allows TCPReaderWriterPair to be
- *+ in net/TCPSocket
- */
+// Workaround to let TCPReaderWriterPair be in this file
 TCPServerReaderWriterPair: class extends TCPReaderWriterPair {
-	init: func (=sock) {
-		super(sock)
-	}
+	init: func (=sock) { super(sock) }
 }

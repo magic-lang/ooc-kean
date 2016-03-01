@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import berkeley, Socket, Address, DNS, Exceptions, utilities
+import berkeley, Socket, Address, DNS, utilities
 import io/[Reader, Writer]
 
 /**
@@ -41,7 +41,7 @@ UDPSocket: class extends Socket {
 	*/
 	bind: func {
 		if (bind(descriptor, remote addr(), remote length()) == -1)
-			SocketError new("Could not bind UDP socket") throw()
+			raise("Could not bind UDP socket")
 	}
 
 	/**
@@ -61,7 +61,7 @@ UDPSocket: class extends Socket {
 			}
 
 		if (bytesSent == -1)
-			SocketError new("Couldn't send an UDP datagram") throw()
+			raise("Couldn't send an UDP datagram")
 
 		bytesSent
 	}
@@ -122,7 +122,7 @@ UDPSocket: class extends Socket {
 		socketLength := remote length()
 		bytesRecv := recvFrom(descriptor, chars, length, flags, remote addr(), socketLength&)
 		if (bytesRecv == -1)
-			SocketError new("Error receiveing from UDP socket") throw()
+			raise("Error receiveing from UDP socket")
 		if (bytesRecv == 0)
 			connected = false
 		bytesRecv

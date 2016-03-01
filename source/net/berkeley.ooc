@@ -23,10 +23,6 @@ version (windows) {
 	include sys/fcntl
 }
 
-/**
-	Low level binding to Berkeley sockets API.
-*/
-
 SockAddr: cover from struct sockaddr {
 	sa_family: extern UShort // address family, AF_xxx
 	sa_data: extern Char* // 14 bytes of protocol address
@@ -186,9 +182,7 @@ WSAStartup: extern func (versionRequested: WORD, wsaData: Pointer) -> Int
 initWinsock: func {
 	data: WSADATA
 	ret := WSAStartup(MAKEWORD(2, 2), data&)
-
-	if (ret != 0)
-		raise("Could not initialize winsock 2.2")
+	raise(ret != 0, "Could not initialize winsock 2.2")
 }
 
 initWinsock()

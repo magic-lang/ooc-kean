@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import berkeley, translation, Socket, Exceptions
+import berkeley, translation, Socket
 
 /**
 	Abstract way of representing an IP address
@@ -164,10 +164,10 @@ IP4Address: class extends IPAddress {
 
 	init: func (ipAddress: String) {
 		if (ipAddress empty())
-			InvalidAddress new("Address must not be blank") throw()
+			raise("Address must not be blank")
 		family = AddressFamily IP4
 		if (Inet pton(family, ipAddress toCString(), ai&) == -1)
-			InvalidAddress new("Could not parse address") throw()
+			raise("Could not parse address")
 	}
 	init: func ~wildcard {
 		init("0.0.0.0")
@@ -191,7 +191,7 @@ IP4Address: class extends IPAddress {
 	mask: override func (mask: IPAddress) { this mask(mask, This new("0.0.0.0")) }
 	mask: override func ~withSet (mask, set: IPAddress) {
 		if (mask family != AddressFamily IP4 || set family != AddressFamily IP4)
-			NetError new("Both mask and set must be of IP4 family") throw()
+			raise("Both mask and set must be of IP4 family")
 		maskAddr := (mask as This) ai
 		setAddr := (set as This) ai
 		ai s_addr = (ai s_addr & maskAddr s_addr) | (setAddr s_addr & ~maskAddr s_addr)
@@ -220,10 +220,10 @@ IP6Address: class extends IPAddress {
 
 	init: func (ipAddress: String) {
 		if (ipAddress empty())
-			InvalidAddress new("Address must not be blank") throw()
+			raise("Address must not be blank")
 		family = AddressFamily IP6
 		if (Inet pton(family, ipAddress toCString(), ai&) == -1)
-			InvalidAddress new("Could not parse address") throw()
+			raise("Could not parse address")
 	}
 	init: func ~withAddr (addr: In6Addr) {
 		family = AddressFamily IP6
@@ -289,7 +289,7 @@ IP6Address: class extends IPAddress {
 		mask(mask, null)
 	}
 	mask: override func ~withSet (mask: IPAddress, set: IPAddress) {
-		NetError new("Mask is only supported with IP4 addresses") throw()
+		raise("Mask is only supported with IP4 addresses")
 	}
 	toString: override func -> String {
 		addrStr := CharBuffer new(128)
@@ -330,7 +330,7 @@ SocketAddress: abstract class {
 			ip6Host := host as IP6Address
 			result = SocketAddressIP6 new(ip6Host ai, nPort)
 		} else
-			NetError new("Unsupported IP Address type!") throw()
+			raise("Unsupported IP Address type!")
 		result
 	}
 	newFromSock: static func (addr: SockAddr*, len: UInt) -> This {
@@ -340,7 +340,7 @@ SocketAddress: abstract class {
 		else if (len == SockAddrIn6 size)
 			result = SocketAddressIP6 new(addr as SockAddrIn6*)
 		else
-			NetError new("Unknown SockAddr type!") throw()
+			raise("Unknown SockAddr type!")
 		result
 	}
 }

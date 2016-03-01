@@ -11,14 +11,8 @@ import berkeley, Socket, Address
 Inet: class {
 	ntop: static func (addressFamily: Int, address: Pointer, destination: CString, destinationSize: UInt) -> CString {
 		result: CString
-		//version (!windows) {
-			// use built-in!
-			// TODO: Using the built-in inet_ntop results in a gcc warning because inet_ntop returns a const char*,
-			// and the const qualifier is not supported by rock...
-			//result = inet_ntop(addressFamily, address, destination, destinationSize)
-		//} else {
-			// Roll our own implementation, based on:
-			// https://github.com/pkulchenko/luasocket/blob/5a58786a39bbef7ed4805821cc921f1d40f12068/src/inet.c#L512
+			// Using the built-in inet_ntop results in a gcc warning because return type is const char*, and rock does not support const
+			// This implementaton is based on: https://github.com/pkulchenko/luasocket/blob/5a58786a39bbef7ed4805821cc921f1d40f12068/src/inet.c#L512
 			match addressFamily {
 				case AddressFamily IP4 =>
 					in: SockAddrIn
@@ -27,7 +21,6 @@ Inet: class {
 					getnameinfo(in& as SockAddr*, SockAddrIn size, destination,
 					destinationSize, null, 0, NI_NUMERICHOST)
 					result = destination
-
 				case AddressFamily IP6 =>
 					in: SockAddrIn6
 					memset(in&, 0, SockAddrIn6 size)
@@ -35,18 +28,15 @@ Inet: class {
 					getnameinfo(in& as SockAddr*, SockAddrIn6 size, destination,
 					destinationSize, null, 0, NI_NUMERICHOST)
 					result = destination
-
 				case =>
 					result = null
 			}
-		//}
 		result
 	}
 
 	pton: static func (addressFamily: Int, address: CString, destination: Pointer) -> Int {
 		result: Int
 		version (!windows) {
-			// use built-in!
 			result = inet_pton(addressFamily, address, destination)
 		} else {
 			// roll our own version, based on:
