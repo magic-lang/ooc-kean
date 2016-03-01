@@ -82,38 +82,38 @@ ColorYuva: cover {
 }
 
 ColorRgb: cover {
-	red, green, blue: Byte
-	normalized ::= FloatTuple3 new(this red as Float / 255, this green as Float / 255, this blue as Float / 255)
-	init: func@ (=red, =green, =blue)
+	r, g, b: Byte
+	normalized ::= FloatTuple3 new(this r as Float / 255, this g as Float / 255, this b as Float / 255)
+	init: func@ (=r, =g, =b)
 	init: func@ ~default { this init(0, 0, 0) }
 	toMonochrome: func -> ColorMonochrome { ColorMonochrome new(this toYuv() y) }
 	toUv: func -> ColorUv { this toYuv() toUv() }
 	toYuv: func -> ColorYuv { ColorConvert rgbToYuv(this) }
 	toYuva: func -> ColorYuva { ColorYuva new(this toYuv(), 255) }
 	toRgba: func -> ColorRgba { ColorRgba new(this, 255) }
-	equals: func (other: This) -> Bool { this red == other red && this green == other green && this blue == other blue }
+	equals: func (other: This) -> Bool { this r == other r && this g == other g && this b == other b }
 	blend: func (factor: Float, other: This) -> This {
-		This new((this red * (1 - factor) + other red * factor) as Byte, (this green * (1 - factor) + other green * factor) as Byte, (this blue * (1 - factor) + other blue * factor) as Byte)
+		This new((this r * (1 - factor) + other r * factor) as Byte, (this g * (1 - factor) + other g * factor) as Byte, (this b * (1 - factor) + other b * factor) as Byte)
 	}
 	distance: func (other: This) -> Float {
-		((this red - other red) as Float pow(2) + (this green - other green) as Float pow(2) + (this blue - other blue) as Float pow(2)) / 3.0f sqrt()
+		((this r - other r) as Float pow(2) + (this g - other g) as Float pow(2) + (this b - other b) as Float pow(2)) / 3.0f sqrt()
 	}
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 }
 
 ColorRgba: cover {
-	red, green, blue, alpha: Byte
-	normalized ::= FloatTuple4 new(this red as Float / 255, this green as Float / 255, this blue as Float / 255, this alpha as Float / 255)
-	init: func@ (=red, =green, =blue, =alpha)
+	r, g, b, alpha: Byte
+	normalized ::= FloatTuple4 new(this r as Float / 255, this g as Float / 255, this b as Float / 255, this alpha as Float / 255)
+	init: func@ (=r, =g, =b, =alpha)
 	init: func@ ~default { this init(0, 0, 0, 0) }
-	init: func@ ~rgb (rgb: ColorRgb, a: Byte) { this init(rgb red, rgb green, rgb blue, a) }
+	init: func@ ~rgb (rgb: ColorRgb, a: Byte) { this init(rgb r, rgb g, rgb b, a) }
 	toMonochrome: func -> ColorMonochrome { this toRgb() toMonochrome() }
 	toUv: func -> ColorUv { this toYuv() toUv() }
 	toYuv: func -> ColorYuv { this toRgb() toYuv() }
 	toYuva: func -> ColorYuva { ColorYuva new(this toRgb() toYuv(), this alpha) }
-	toRgb: func -> ColorRgb { ColorRgb new(this red, this green, this blue) }
-	equals: func (other: This) -> Bool { this red == other red && this green == other green && this blue == other blue && this alpha == other alpha }
+	toRgb: func -> ColorRgb { ColorRgb new(this r, this g, this b) }
+	equals: func (other: This) -> Bool { this r == other r && this g == other g && this b == other b && this alpha == other alpha }
 	blend: func (factor: Float, other: This) -> This { This new(this toRgb() blend(factor, other toRgb()), (this alpha * (1 - factor) + other alpha * factor) as Byte) }
 	distance: func (other: This) -> Float { (this toRgb() distance(other toRgb()) * 3.0f + (this alpha - other alpha) as Float pow(2)) / 4.0f sqrt() }
 	operator == (other: This) -> Bool { this equals(other) }
@@ -132,7 +132,7 @@ ColorConvert: cover {
 	yuvToMonochrome: static func (color: ColorYuv) -> ColorMonochrome { ColorMonochrome new(color y) }
 	rgbToMonochrome: static func (color: ColorRgb) -> ColorMonochrome {
 		ColorMonochrome new(
-			((This _rgbToYuv0[color red] + This _rgbToYuv0[256 + color green] + This _rgbToYuv0[512 + color blue]) >> 8) clamp (0, 255) as Byte
+			((This _rgbToYuv0[color r] + This _rgbToYuv0[256 + color g] + This _rgbToYuv0[512 + color b]) >> 8) clamp (0, 255) as Byte
 		)
 	}
 	yuvToRgb: static func (color: ColorYuv) -> ColorRgb {
@@ -144,9 +144,9 @@ ColorConvert: cover {
 	}
 	rgbToYuv: static func (color: ColorRgb) -> ColorYuv {
 		ColorYuv new(
-			((This _rgbToYuv0[color red] + This _rgbToYuv0[256 + color green] + This _rgbToYuv0[512 + color blue]) >> 8) clamp (0, 255) as Byte,
-			(((This _rgbToYuv1[color red] + This _rgbToYuv1[256 + color green] + This _rgbToYuv1[512 + color blue]) >> 8) + 128) clamp(0, 255) as Byte,
-			(((This _rgbToYuv2[color red] + This _rgbToYuv2[256 + color green] + This _rgbToYuv2[512 + color blue]) >> 8) + 128) clamp(0, 255) as Byte
+			((This _rgbToYuv0[color r] + This _rgbToYuv0[256 + color g] + This _rgbToYuv0[512 + color b]) >> 8) clamp (0, 255) as Byte,
+			(((This _rgbToYuv1[color r] + This _rgbToYuv1[256 + color g] + This _rgbToYuv1[512 + color b]) >> 8) + 128) clamp(0, 255) as Byte,
+			(((This _rgbToYuv2[color r] + This _rgbToYuv2[256 + color g] + This _rgbToYuv2[512 + color b]) >> 8) + 128) clamp(0, 255) as Byte
 		)
 	}
 	free: static func ~all {

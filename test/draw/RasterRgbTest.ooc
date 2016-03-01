@@ -62,9 +62,9 @@ RasterRgbTest: class extends Fixture {
 				for (column in 0 .. image width) {
 					pixel1 := image[column, row]
 					pixel2 := image2[column, row]
-					expect(pixel1 red, is equal to(pixel2 blue))
-					expect(pixel1 green, is equal to(pixel2 green))
-					expect(pixel1 blue, is equal to(pixel2 red))
+					expect(pixel1 r, is equal to(pixel2 b))
+					expect(pixel1 g, is equal to(pixel2 g))
+					expect(pixel1 b, is equal to(pixel2 r))
 				}
 			image referenceCount decrease()
 			image2 referenceCount decrease()

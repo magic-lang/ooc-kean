@@ -76,36 +76,36 @@ RasterRgba: class extends RasterPacked {
 							for (otherX in 0 maximum(x - this distanceRadius) .. (x + 1 + this distanceRadius) minimum(this size x))
 								if (otherX != x || otherY != y) {
 									pixel := (other as This)[otherX, otherY]
-									if (maximum blue < pixel blue)
-										maximum blue = pixel blue
-									else if (minimum blue > pixel blue)
-										minimum blue = pixel blue
-									if (maximum green < pixel green)
-										maximum green = pixel green
-									else if (minimum green > pixel green)
-										minimum green = pixel green
-									if (maximum red < pixel red)
-										maximum red = pixel red
-									else if (minimum red > pixel red)
-										minimum red = pixel red
+									if (maximum b < pixel b)
+										maximum b = pixel b
+									else if (minimum b > pixel b)
+										minimum b = pixel b
+									if (maximum g < pixel g)
+										maximum g = pixel g
+									else if (minimum g > pixel g)
+										minimum g = pixel g
+									if (maximum r < pixel r)
+										maximum r = pixel r
+									else if (minimum r > pixel r)
+										minimum r = pixel r
 									if (maximum alpha < pixel alpha)
 										maximum alpha = pixel alpha
 									else if (minimum alpha > pixel alpha)
 										minimum alpha = pixel alpha
 								}
 						distance := 0.0f
-						if (c blue < minimum blue)
-							distance += (minimum blue - c blue) as Float squared
-						else if (c blue > maximum blue)
-							distance += (c blue - maximum blue) as Float squared
-						if (c green < minimum green)
-							distance += (minimum green - c green) as Float squared
-						else if (c green > maximum green)
-							distance += (c green - maximum green) as Float squared
-						if (c red < minimum red)
-							distance += (minimum red - c red) as Float squared
-						else if (c red > maximum red)
-							distance += (c red - maximum red) as Float squared
+						if (c b < minimum b)
+							distance += (minimum b - c b) as Float squared
+						else if (c b > maximum b)
+							distance += (c b - maximum b) as Float squared
+						if (c g < minimum g)
+							distance += (minimum g - c g) as Float squared
+						else if (c g > maximum g)
+							distance += (c g - maximum g) as Float squared
+						if (c r < minimum r)
+							distance += (minimum r - c r) as Float squared
+						else if (c r > maximum r)
+							distance += (c r - maximum r) as Float squared
 						if (c alpha < minimum alpha)
 							distance += (minimum alpha - c alpha) as Float squared
 						else if (c alpha > maximum alpha)
@@ -142,9 +142,9 @@ RasterRgba: class extends RasterPacked {
 		bottomRight := this[x ceil() as Int, y ceil() as Int]
 
 		ColorRgba new(
-			(top * (left * topLeft red + (1 - left) * topRight red) + (1 - top) * (left * bottomLeft red + (1 - left) * bottomRight red)),
-			(top * (left * topLeft green + (1 - left) * topRight green) + (1 - top) * (left * bottomLeft green + (1 - left) * bottomRight green)),
-			(top * (left * topLeft blue + (1 - left) * topRight blue) + (1 - top) * (left * bottomLeft blue + (1 - left) * bottomRight blue)),
+			(top * (left * topLeft r + (1 - left) * topRight r) + (1 - top) * (left * bottomLeft r + (1 - left) * bottomRight r)),
+			(top * (left * topLeft g + (1 - left) * topRight g) + (1 - top) * (left * bottomLeft g + (1 - left) * bottomRight g)),
+			(top * (left * topLeft b + (1 - left) * topRight b) + (1 - top) * (left * bottomLeft b + (1 - left) * bottomRight b)),
 			(top * (left * topLeft alpha + (1 - left) * topRight alpha) + (1 - top) * (left * bottomLeft alpha + (1 - left) * bottomRight alpha))
 		)
 	}
