@@ -39,7 +39,7 @@ Fixture: abstract class {
 		result := true
 		dateString := DateTime now toText(t"%hh:%mm:%ss ") + Text new(this name) + t" "
 		This _print(dateString)
-		timer := Timer new() . start()
+		timer := WallTimer new() . start()
 		for (i in 0 .. this tests count) {
 			test := tests[i]
 			This _expectCount = 0
