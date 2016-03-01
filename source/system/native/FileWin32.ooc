@@ -8,7 +8,7 @@
 
 import os/win32
 import structs/VectorList
-import ../File
+import io/File
 
 version(windows) {
 	include windows | (_WIN32_WINNT=0x0500)

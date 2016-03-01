@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import ../File
+import io/File
 include dirent
 
 /*
