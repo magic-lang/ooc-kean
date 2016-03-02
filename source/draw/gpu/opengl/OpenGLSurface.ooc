@@ -50,14 +50,18 @@ OpenGLSurface: abstract class extends GpuCanvas {
 		this draw(destination, map)
 	}
 	drawLines: override func (pointList: VectorList<FloatPoint2D>) {
-		f := func { this context drawLines(pointList, this _projection * this _toLocal, this pen) }
-		this draw(f)
-		(f as Closure) free()
+		this _bind()
+		this context backend setViewport(this viewport)
+		this context backend enableBlend(false)
+		this context drawLines(pointList, this _projection * this _toLocal, this pen)
+		this _unbind()
 	}
 	drawPoints: override func (pointList: VectorList<FloatPoint2D>) {
-		f := func { this context drawPoints(pointList, this _projection * this _toLocal, this pen) }
-		this draw(f)
-		(f as Closure) free()
+		this _bind()
+		this context backend setViewport(this viewport)
+		this context backend enableBlend(false)
+		this context drawPoints(pointList, this _projection * this _toLocal, this pen)
+		this _unbind()
 	}
 	// Deprecated! Do not use.
 	draw: override func ~mesh (image: GpuImage, mesh: Mesh) {
