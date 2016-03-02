@@ -154,7 +154,7 @@ AndroidContext: class extends OpenGLContext {
 		map add("scaleX", scaleX)
 		map add("scaleY", scaleY)
 		map add("startY", startY)
-		target canvas draw(source, map)
+		DrawState new(target) setMap(map) draw()
 	}
 }
 }
