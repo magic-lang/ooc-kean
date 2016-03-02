@@ -62,8 +62,10 @@ Canvas: abstract class {
 		positions free()
 	}
 	fill: abstract func
+	// GPU only
 	draw: virtual func ~DrawState (drawState: DrawState) { Debug error("draw~DrawState unimplemented for class " + this class name + "!") }
-	draw: abstract func ~ImageSourceDestination (image: Image, source, destination: IntBox2D)
+	// CPU only
+	draw: virtual func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) { Debug error("draw~ImageSourceDestination unimplemented for class " + this class name + "!") }
 	draw: func ~ImageDestination (image: Image, destination: IntBox2D) { this draw(image, IntBox2D new(image size), destination) }
 	draw: func ~Image (image: Image) { this draw(image, IntBox2D new(image size)) }
 	draw: func ~ImageTargetSize (image: Image, targetSize: IntVector2D) { this draw(image, IntBox2D new(targetSize)) }
