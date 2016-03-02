@@ -111,15 +111,18 @@ RasterCanvasTest: class extends Fixture {
 			outputImage := RasterRgb open(inputSpace)
 			outputImage canvas interpolationMode = InterpolationMode Smooth
 			outputImage canvas draw(imageFlower, IntBox2D new(imageFlower size), IntBox2D new(20, 30, 100, 250))
-			imageFlower _coordinateSystem = CoordinateSystem YUpward
-			outputImage canvas draw(imageFlower, IntBox2D new(imageFlower size), IntBox2D new(130, 30, 100, 250))
+			imageFlowerYUpward := RasterYuv420Semiplanar open(this inputFlower, CoordinateSystem YUpward)
+			outputImage canvas draw(imageFlowerYUpward, IntBox2D new(imageFlower size), IntBox2D new(130, 30, 100, 250))
 			outputImage canvas interpolationMode = InterpolationMode Fast
-			imageFlower _coordinateSystem = CoordinateSystem XLeftward
-			outputImage canvas draw(imageFlower, IntBox2D new(imageFlower size), IntBox2D new(240, 30, 100, 250))
-			imageFlower _coordinateSystem = CoordinateSystem XLeftward | CoordinateSystem YUpward
-			outputImage canvas draw(imageFlower, IntBox2D new(imageFlower size), IntBox2D new(350, 30, 100, 250))
+			imageFlowerXLeftward := RasterYuv420Semiplanar open(this inputFlower, CoordinateSystem XLeftward)
+			outputImage canvas draw(imageFlowerXLeftward, IntBox2D new(imageFlower size), IntBox2D new(240, 30, 100, 250))
+			imageFlowerXLeftwardYUpward := RasterYuv420Semiplanar open(this inputFlower, CoordinateSystem XLeftward | CoordinateSystem YUpward)
+			outputImage canvas draw(imageFlowerXLeftwardYUpward, IntBox2D new(imageFlower size), IntBox2D new(350, 30, 100, 250))
 			outputImage save(output)
 			imageFlower referenceCount decrease()
+			imageFlowerYUpward referenceCount decrease()
+			imageFlowerXLeftward referenceCount decrease()
+			imageFlowerXLeftwardYUpward referenceCount decrease()
 			outputImage referenceCount decrease()
 			inputSpace free()
 			output free()

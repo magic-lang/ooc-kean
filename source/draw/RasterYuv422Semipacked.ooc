@@ -100,8 +100,8 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		}
 	}
 
-	open: static func (filename: String) -> This {
-		rgb := RasterRgb open(filename)
+	open: static func (filename: String, coordinateSystem := CoordinateSystem Default) -> This {
+		rgb := RasterRgb open(filename, coordinateSystem)
 		result := This convertFrom(rgb)
 		rgb referenceCount decrease()
 		result
