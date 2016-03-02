@@ -27,6 +27,7 @@ DrawState: cover {
 	viewport := IntBox2D new(0, 0, 0, 0)
 	_destinationNormalized := FloatBox2D new(0.0f, 0.0f, 1.0f, 1.0f)
 	_sourceNormalized := FloatBox2D new(0.0f, 0.0f, 1.0f, 1.0f)
+	_focalLengthNormalized := 0.0f // Relative to image width
 	init: func@ ~default
 	init: func@ ~target (=target)
 	setTarget: func (target: Image) -> This {
@@ -45,6 +46,18 @@ DrawState: cover {
 		this opacity = opacity
 		this
 	}
+	setFocalLength: func ~Int (focalLength: Float, imageSize: IntVector2D) -> This {
+		this setFocalLength(focalLength, imageSize toFloatVector2D())
+	}
+	setFocalLength: func ~Float (focalLength: Float, imageSize: FloatVector2D) -> This {
+		this _focalLengthNormalized = focalLength / imageSize x
+		this
+	}
+	setFocalLengthNormalized: func (focalLength: Float) -> This {
+		this _focalLengthNormalized = focalLength
+		this
+	}
+	getFocalLengthNormalized: func -> Float { this _focalLengthNormalized }
 	// Local region
 	setViewport: func (viewport: IntBox2D) -> This {
 		this viewport = viewport

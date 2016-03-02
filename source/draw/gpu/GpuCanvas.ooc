@@ -45,20 +45,20 @@ GpuCanvas: abstract class extends Canvas {
 			}
 			else
 				this _projection = FloatTransform3D createScaling(2.0f / this size x, -(this _coordinateTransform e as Float) * 2.0f / this size y, 1.0f)
-			this _model = this _createModelTransform(IntBox2D new(this size))
+			this _model = this _createModelTransform(IntBox2D new(this size), this _focalLength)
 		}
 	}
 	init: func (size: IntVector2D, =_context, =_defaultMap, =_coordinateTransform) { super(size) }
-	_createModelTransform: func ~LocalInt (box: IntBox2D) -> FloatTransform3D {
-		this _createModelTransform(box toFloatBox2D())
+	_createModelTransform: func ~LocalInt (box: IntBox2D, focalLength: Float) -> FloatTransform3D {
+		this _createModelTransform(box toFloatBox2D(), focalLength)
 	}
-	_createModelTransform: func ~LocalFloat (box: FloatBox2D) -> FloatTransform3D {
+	_createModelTransform: func ~LocalFloat (box: FloatBox2D, focalLength: Float) -> FloatTransform3D {
 		toReference := FloatTransform3D createTranslation((box size x - this size x) / 2, (this size y - box size y) / 2, 0.0f)
-		translation := this _toLocal * FloatTransform3D createTranslation(box leftTop x, box leftTop y, this focalLength) * this _toLocal
+		translation := this _toLocal * FloatTransform3D createTranslation(box leftTop x, box leftTop y, focalLength) * this _toLocal
 		translation * toReference * FloatTransform3D createScaling(box size x / 2.0f, box size y / 2.0f, 1.0f)
 	}
-	_createModelTransformNormalized: func (imageSize: IntVector2D, box: FloatBox2D) -> FloatTransform3D {
-		this _createModelTransform(box * imageSize toFloatVector2D())
+	_createModelTransformNormalized: func (imageSize: IntVector2D, box: FloatBox2D, focalLength: Float) -> FloatTransform3D {
+		this _createModelTransform(box * imageSize toFloatVector2D(), focalLength)
 	}
 	_getDefaultMap: virtual func (image: Image) -> Map { this _defaultMap }
 	clear: func { this fill() }

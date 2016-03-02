@@ -34,7 +34,7 @@ OpenGLSurface: abstract class extends GpuCanvas {
 		this _unbind()
 	}
 	draw: override func ~WithoutBind (destination: IntBox2D, map: Map) {
-		map model = this _createModelTransform(destination)
+		map model = this _createModelTransform(destination, this _focalLength)
 		map view = this _view
 		map projection = this _projection
 		map use(null)
