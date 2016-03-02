@@ -114,6 +114,13 @@ FloatComplexVectorListTest: class extends Fixture {
 			text free()
 			list free()
 		})
+		this add("getZeros", func {
+			zeros := FloatComplexVectorList getZeros(7)
+			sum := zeros sum
+			expect(sum real, is equal to(0.f) within(tolerance))
+			expect(sum imaginary, is equal to(0.f) within(tolerance))
+			zeros free()
+		})
 	}
 
 	free: override func {

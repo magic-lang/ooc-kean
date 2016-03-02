@@ -75,6 +75,18 @@ FloatEuclidTransformTest: class extends Fixture {
 			expect(text, is equal to(t"Translation: 0.00, 0.00, 0.00 Rotation: Real: 1.00 Imaginary: 0.00 0.00 0.00 Scaling: 1.00"))
 			text free()
 		})
+		this add("inverse", func {
+			transform := FloatEuclidTransform new(FloatVector3D new(), FloatRotation3D createRotationZ(3))
+			inverse := transform inverse
+			first := transform * inverse
+			second := inverse * transform
+			expect(first == second, is true)
+			expect(first scaling as Float, is equal to(1.f) within(tolerance))
+
+			(translation, quaternion) := (first translation as FloatVector3D, first rotation _quaternion as Quaternion)
+			expect(translation norm, is equal to(0.f))
+			expect(quaternion isIdentity, is true)
+		})
 	}
 }
 
