@@ -21,6 +21,7 @@ OpenGLSurface: abstract class extends GpuCanvas {
 	}
 	_bind: abstract func
 	_unbind: abstract func
+	// Deprecated! Do not use.
 	draw: override func (action: Func) {
 		this _bind()
 		this context backend setViewport(this viewport)
@@ -33,6 +34,7 @@ OpenGLSurface: abstract class extends GpuCanvas {
 		action()
 		this _unbind()
 	}
+	// Deprecated! Do not use.
 	draw: override func ~WithoutBind (destination: IntBox2D, map: Map) {
 		map model = this _createModelTransform(destination, this _focalLength)
 		map view = this _view
@@ -42,6 +44,7 @@ OpenGLSurface: abstract class extends GpuCanvas {
 		this draw(f)
 		(f as Closure) free()
 	}
+	// Deprecated! Do not use.
 	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: Map) {
 		map textureTransform = This _createTextureTransform(image size, source)
 		this draw(destination, map)
@@ -56,6 +59,7 @@ OpenGLSurface: abstract class extends GpuCanvas {
 		this draw(f)
 		(f as Closure) free()
 	}
+	// Deprecated! Do not use.
 	draw: override func ~mesh (image: GpuImage, mesh: Mesh) {
 		f := func {
 			this context meshShader add("texture0", image)

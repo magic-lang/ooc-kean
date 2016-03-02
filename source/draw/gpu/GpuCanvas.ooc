@@ -16,31 +16,31 @@ import GpuContext, GpuImage, Mesh, GpuYuv420Semiplanar
 version(!gpuOff) {
 GpuCanvas: abstract class extends Canvas {
 	_context: GpuContext
-	_model: FloatTransform3D
-	_view := FloatTransform3D identity
-	_projection: FloatTransform3D
+	_model: FloatTransform3D // Deprecated! Do not use.
+	_view := FloatTransform3D identity // Deprecated! Do not use.
+	_projection: FloatTransform3D // Deprecated! Do not use.
 	_toLocal := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
-	_focalLength: Float
-	_nearPlane := 1.0f
-	_farPlane := 10000.0f
+	_focalLength: Float // Deprecated! Do not use.
 	_defaultMap: Map
 	_coordinateTransform := IntTransform2D identity
-	transform: FloatTransform3D {
+	transform: FloatTransform3D { // Deprecated! Do not use.
 		get { this _transform }
 		set(value) {
 			this _transform = value
 			this _view = this _toLocal * value * this _toLocal
 		}
 	}
-	focalLength: Float {
+	focalLength: Float { // Deprecated! Do not use.
 		get { this _focalLength }
 		set(value) {
 			this _focalLength = value
+			nearPlane := 1.0f
+			farPlane := 10000.0f
 			if (this _focalLength > 0.0f) {
 				a := 2.0f * this _focalLength / this size x
 				f := -(this _coordinateTransform e as Float) * 2.0f * this _focalLength / this size y
-				k := (this _farPlane + this _nearPlane) / (this _farPlane - this _nearPlane)
-				o := 2.0f * this _farPlane * this _nearPlane / (this _farPlane - this _nearPlane)
+				k := (farPlane + nearPlane) / (farPlane - nearPlane)
+				o := 2.0f * farPlane * nearPlane / (farPlane - nearPlane)
 				this _projection = FloatTransform3D new(a, 0.0f, 0.0f, 0.0f, 0.0f, f, 0.0f, 0.0f, 0.0f, 0.0f, k, -1.0f, 0.0f, 0.0f, o, 0.0f)
 			}
 			else
