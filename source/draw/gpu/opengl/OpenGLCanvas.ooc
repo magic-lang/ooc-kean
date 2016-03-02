@@ -24,18 +24,19 @@ OpenGLCanvas: class extends OpenGLSurface {
 		viewport := (drawState viewport hasZeroArea) ? IntBox2D new(this size) : drawState viewport
 		this context backend setViewport(viewport)
 		focalLengthPerWidth := drawState getFocalLengthNormalized()
-		aspectRatio := (this size x as Float) / (this size y as Float)
+		focalLengthPerHeight := focalLengthPerWidth * (this size x as Float) / (this size y as Float)
 		gpuMap view = _toLocal * drawState getTransformNormalized() normalizedToReference(this size) * _toLocal
+		flipY := -(this _coordinateTransform e as Float)
 		if (focalLengthPerWidth > 0.0f) {
-			nearPlane := 1.0f
+			nearPlane := 0.01f
 			farPlane := 10000.0f
 			a := 2.0f * focalLengthPerWidth
-			f := -(this _coordinateTransform e as Float) * 2.0f * focalLengthPerWidth * aspectRatio
+			f := flipY * 2.0f * focalLengthPerHeight
 			k := (farPlane + nearPlane) / (farPlane - nearPlane)
 			o := 2.0f * farPlane * nearPlane / (farPlane - nearPlane)
 			gpuMap projection = FloatTransform3D new(a, 0.0f, 0.0f, 0.0f, 0.0f, f, 0.0f, 0.0f, 0.0f, 0.0f, k, -1.0f, 0.0f, 0.0f, o, 0.0f)
 		} else
-			gpuMap projection = FloatTransform3D createScaling(2.0f / this size x, -(this _coordinateTransform e as Float) * 2.0f / this size y, 1.0f)
+			gpuMap projection = FloatTransform3D createScaling(2.0f / this size x, flipY * 2.0f / this size y, 0.0f)
 		gpuMap model = this _createModelTransformNormalized(this size, drawState getDestinationNormalized(), focalLengthPerWidth * this size x)
 		gpuMap textureTransform = This _createTextureTransform(drawState getSourceNormalized())
 		if (drawState opacity < 1.0f)
