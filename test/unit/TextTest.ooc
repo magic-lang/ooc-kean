@@ -18,10 +18,9 @@ TextTest: class extends Fixture {
 			expect(text1, is equal to(text2))
 			text1 free(); text2 free()
 		})
-		isNotEqualToText2 := is not equal to(Text new(c"cba", 3))
 		this add("Text1 is not equal to Text2", func {
 			text1 := Text new(c"abc", 3)
-			expect(text1, isNotEqualToText2)
+			expect(text1, is notEqual to(Text new(c"cba", 3)))
 			text1 free()
 		})
 	}

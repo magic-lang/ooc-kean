@@ -7,261 +7,61 @@
  */
 
 use base
+import Modifiers
 
 ComparisonType: enum {
 	Unspecified
 	Equal
+	NotEqual
 	LessThan
+	LessThanOrEqual // TODO: Implement
 	GreaterThan
+	GreaterThanOrEqual // TODO: Implement
 	Within
+	NotWithin
 }
 
-Modifier: abstract class {
-	parent: This = null
-	child: This = null
-	init: func
-	init: func ~parent (=parent)
-	free: override func {
-		if (this child) {
-			if (this child parent == this)
-				this child parent = null
-			this child free()
-		}
-		if (this parent) {
-			if (this parent child == this)
-				this parent child = null
-			this parent free()
-		}
-		super()
-	}
-	verify: func ~parent (value: Object, =child) -> Bool {
-		this parent != null ? this parent verify(value, this): this test(value)
-	}
-	verify: func (value: Object) -> Bool {
-		this verify(value, null)
-	}
-	test: virtual func (value: Object) -> Bool {
-		this testChild(value)
-	}
-	testChild: func (value: Object) -> Bool {
-		this child != null && this child test(value)
-	}
-}
-
-Constraint: abstract class extends Modifier {
-	init: func { super() }
-	init: func ~parent (parent: Modifier) { super(parent) }
-}
-
-TrueConstraint: class extends Constraint {
-	init: func { super() }
-	init: func ~parent (parent: Modifier) { super(parent) }
-	test: override func (value: Object) -> Bool {
-		value as Cell<Bool> get()
-	}
-}
-
-FalseConstraint: class extends Constraint {
-	init: func { super() }
-	init: func ~parent (parent: Modifier) { super(parent) }
-	test: override func (value: Object) -> Bool {
-		!value as Cell<Bool> get()
-	}
-}
-
-NullConstraint: class extends Constraint {
-	init: func { super() }
-	init: func ~parent (parent: Modifier) { super(parent) }
-	test: override func (value: Object) -> Bool {
-		value == null
-	}
-}
-
-EmptyConstraint: class extends Constraint {
-	init: func { super() }
-	init: func ~parent (parent: Modifier) { super(parent) }
-	test: override func (value: Object) -> Bool {
-		value != null && value instanceOf(String) && value as String empty()
-	}
-}
-
-NotModifier: class extends Modifier {
+IsConstraints: class extends ExpectModifier {
 	true ::= TrueConstraint new(this)
 	false ::= FalseConstraint new(this)
 	Null ::= NullConstraint new(this)
-	empty ::= EmptyConstraint new(this)
-	not ::= This new(this)
+	notNull ::= NotNullConstraint new(this)
 	equal ::= EqualModifier new(this)
-	less ::= LessModifier new()
-	greater ::= GreaterModifier new()
-	init: func { super() }
-	init: func ~parent (parent: Modifier) { super(parent) }
-	test: override func (value: Object) -> Bool {
-		!(this testChild(value))
-	}
+	notEqual ::= EqualModifier new(this, ComparisonType NotEqual)
+	less ::= LessModifier new(this)
+	greater ::= GreaterModifier new(this)
+	init: func
 }
 
-EqualModifier: class extends Modifier {
-	init: func { super() }
-	init: func ~parent (parent: Modifier) { super(parent) }
-	to: func ~object (correct: Object) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool {
-			match c {
-				case s: String => s == value as String
-				case => c == value
-			}
-		}
-		CompareConstraint new(this, correct, f, ComparisonType Equal)
-	}
-	to: func ~char (correct: Char) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Char> get() == c as Cell<Char> get() }
-		CompareConstraint new(this, Cell<Char> new(correct), f, ComparisonType Equal)
-	}
-	to: func ~text (correct: Text) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Text> get() == c as Cell<Text> get() }
-		CompareConstraint new(this, Cell<Text> new(correct), f, ComparisonType Equal)
-	}
-	to: func ~boolean (correct: Bool) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Bool> get() == c as Cell<Bool> get() }
-		CompareConstraint new(this, Cell<Bool> new(correct), f, ComparisonType Equal)
-	}
-	to: func ~int (correct: Int) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Int> get() == c as Cell<Int> get() }
-		CompareConstraint new(this, Cell<Int> new(correct), f, ComparisonType Equal)
-	}
-	to: func ~uint (correct: UInt) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<UInt> get() == c as Cell<UInt> get() }
-		CompareConstraint new(this, Cell<UInt> new(correct), f, ComparisonType Equal)
-	}
-	to: func ~uint8 (correct: Byte) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Byte> get() == c as Cell<Byte> get() }
-		CompareConstraint new(this, Cell<Byte> new(correct), f, ComparisonType Equal)
-	}
-	to: func ~long (correct: Long) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Long> get() == c as Cell<Long> get() }
-		CompareConstraint new(this, Cell<Long> new(correct), f, ComparisonType Equal)
-	}
-	to: func ~ulong (correct: ULong) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<ULong> get() == c as Cell<ULong> get() }
-		CompareConstraint new(this, Cell<ULong> new(correct), f, ComparisonType Equal)
-	}
-	to: func ~float (correct: Float) -> CompareWithinConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Float> get() == c as Cell<Float> get() }
-		CompareWithinConstraint new(this, Cell<Float> new(correct), f)
-	}
-	to: func ~double (correct: Double) -> CompareWithinConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Double> get() == c as Cell<Double> get() }
-		CompareWithinConstraint new(this, Cell<Double> new(correct), f)
-	}
-	to: func ~ldouble (correct: LDouble) -> CompareWithinConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<LDouble> get() == c as Cell<LDouble> get() }
-		CompareWithinConstraint new(this, Cell<LDouble> new(correct), f)
-	}
-	to: func ~llong (correct: LLong) -> CompareWithinConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<LLong> get() == c as Cell<LLong> get() }
-		CompareWithinConstraint new(this, Cell<LLong> new(correct), f)
-	}
-	to: func ~ullong (correct: ULLong) -> CompareWithinConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<ULLong> get() == c as Cell<ULLong> get() }
-		CompareWithinConstraint new(this, Cell<ULLong> new(correct), f)
-	}
+Constraint: abstract class extends ExpectModifier {
+	init: func ~parent (parent: ExpectModifier) { super(parent) }
 }
 
-LessModifier: class extends Modifier {
-	init: func { super() }
-	init: func ~parent (parent: Modifier) { super(parent) }
-	than: func ~object (right: Object) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value < c }
-		CompareConstraint new(this, right, f, ComparisonType LessThan)
-	}
-	than: func ~float (right: Float) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Float> get()) < (c as Cell<Float> get()) }
-		CompareConstraint new(this, Cell<Float> new(right), f, ComparisonType LessThan)
-	}
-	than: func ~double (right: Double) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Double> get()) < (c as Cell<Double> get()) }
-		CompareConstraint new(this, Cell<Double> new(right), f, ComparisonType LessThan)
-	}
-	than: func ~ldouble (right: LDouble) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<LDouble> get()) < (c as Cell<LDouble> get()) }
-		CompareConstraint new(this, Cell<LDouble> new(right), f, ComparisonType LessThan)
-	}
-	than: func ~int (right: Int) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Int> get()) < (c as Cell<Int> get()) }
-		CompareConstraint new(this, Cell<Int> new(right), f, ComparisonType LessThan)
-	}
-	than: func ~uint (right: UInt) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<UInt> get()) < (c as Cell<UInt> get()) }
-		CompareConstraint new(this, Cell<UInt> new(right), f, ComparisonType LessThan)
-	}
-	than: func ~long (right: Long) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Long> get()) < (c as Cell<Long> get()) }
-		CompareConstraint new(this, Cell<Long> new(right), f, ComparisonType LessThan)
-	}
-	than: func ~ulong (right: ULong) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<ULong> get()) < (c as Cell<ULong> get()) }
-		CompareConstraint new(this, Cell<ULong> new(right), f, ComparisonType LessThan)
-	}
-	than: func ~llong (right: LLong) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<LLong> get()) < (c as Cell<LLong> get()) }
-		CompareConstraint new(this, Cell<LLong> new(right), f, ComparisonType LessThan)
-	}
-	than: func ~ullong (right: ULLong) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<ULLong> get()) < (c as Cell<ULLong> get()) }
-		CompareConstraint new(this, Cell<ULLong> new(right), f, ComparisonType LessThan)
-	}
+TrueConstraint: class extends Constraint {
+	init: func ~parent (parent: ExpectModifier) { super(parent) }
+	test: override func (value: Object) -> Bool { value as Cell<Bool> get() }
 }
 
-GreaterModifier: class extends Modifier {
-	init: func { super() }
-	init: func ~parent (parent: Modifier) { super(parent) }
-	than: func ~object (right: Object) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value > c }
-		CompareConstraint new(this, right, f, ComparisonType GreaterThan)
-	}
-	than: func ~float (right: Float) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Float> get()) > (c as Cell<Float> get()) }
-		CompareConstraint new(this, Cell<Float> new(right), f, ComparisonType GreaterThan)
-	}
-	than: func ~double (right: Double) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Double> get()) > (c as Cell<Double> get()) }
-		CompareConstraint new(this, Cell<Double> new(right), f, ComparisonType GreaterThan)
-	}
-	than: func ~ldouble (right: LDouble) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<LDouble> get()) > (c as Cell<LDouble> get()) }
-		CompareConstraint new(this, Cell<LDouble> new(right), f, ComparisonType GreaterThan)
-	}
-	than: func ~int (right: Int) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Int> get()) > (c as Cell<Int> get()) }
-		CompareConstraint new(this, Cell<Int> new(right), f, ComparisonType GreaterThan)
-	}
-	than: func ~uint (right: UInt) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<UInt> get()) > (c as Cell<UInt> get()) }
-		CompareConstraint new(this, Cell<UInt> new(right), f, ComparisonType GreaterThan)
-	}
-	than: func ~long (right: Long) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Long> get()) > (c as Cell<Long> get()) }
-		CompareConstraint new(this, Cell<Long> new(right), f, ComparisonType GreaterThan)
-	}
-	than: func ~ulong (right: ULong) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<ULong> get()) > (c as Cell<ULong> get()) }
-		CompareConstraint new(this, Cell<ULong> new(right), f, ComparisonType GreaterThan)
-	}
-	than: func ~llong (right: LLong) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<LLong> get()) > (c as Cell<LLong> get()) }
-		CompareConstraint new(this, Cell<LLong> new(right), f, ComparisonType LessThan)
-	}
-	than: func ~ullong (right: ULLong) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<ULLong> get()) > (c as Cell<ULLong> get()) }
-		CompareConstraint new(this, Cell<ULLong> new(right), f, ComparisonType LessThan)
-	}
+FalseConstraint: class extends Constraint {
+	init: func ~parent (parent: ExpectModifier) { super(parent) }
+	test: override func (value: Object) -> Bool { !value as Cell<Bool> get() }
+}
+
+NullConstraint: class extends Constraint {
+	init: func ~parent (parent: ExpectModifier) { super(parent) }
+	test: override func (value: Object) -> Bool { value == null }
+}
+
+NotNullConstraint: class extends Constraint {
+	init: func ~parent (parent: ExpectModifier) { super(parent) }
+	test: override func (value: Object) -> Bool { value != null }
 }
 
 CompareConstraint: class extends Constraint {
 	comparer: Func (Object, Object) -> Bool
 	correct: Object
 	type: ComparisonType
-	init: func (parent: Modifier, =correct, =comparer, type := ComparisonType Unspecified) {
+	init: func (parent: ExpectModifier, =correct, =comparer, type := ComparisonType Unspecified) {
 		super(parent)
 		this type = type
 	}
@@ -272,46 +72,36 @@ CompareConstraint: class extends Constraint {
 		super()
 	}
 	test: override func (value: Object) -> Bool {
-		this comparer(value, this correct)
+		result := this comparer(value, this correct)
+		this type == ComparisonType NotEqual ? !result : result
 	}
 }
 
 CompareWithinConstraint: class extends CompareConstraint {
 	precision: LDouble
-	init: func (parent: Modifier, .correct, .comparer) {
-		super(parent, correct, comparer, ComparisonType Equal)
+	init: func (parent: ExpectModifier, .correct, .comparer, compareType := ComparisonType Within) {
+		super(parent, correct, comparer, compareType)
 	}
 	within: func ~float (precision: Float) -> CompareConstraint {
 		this precision = precision as LDouble
 		this comparer = func (value, correct: Object) -> Bool { this testChild(value) }
 		f := func (value, correct: Object) -> Bool { (value as Cell<Float> get() - correct as Cell<Float> get()) abs() < precision }
-		CompareConstraint new(this, Cell<Float> new(this correct as Cell<Float> get()), f, ComparisonType Within)
+		CompareConstraint new(this, Cell<Float> new(this correct as Cell<Float> get()), f, this type)
 	}
 	within: func ~double (precision: Double) -> CompareConstraint {
 		this precision = precision as Double
 		this comparer = func (value, correct: Object) -> Bool { this testChild(value) }
 		f := func (value, correct: Object) -> Bool { (value as Cell<Double> get() - correct as Cell<Double> get()) abs() < precision }
-		CompareConstraint new(this, Cell<Double> new(this correct as Cell<Double> get()), f, ComparisonType Within)
+		CompareConstraint new(this, Cell<Double> new(this correct as Cell<Double> get()), f, this type)
 	}
 	within: func ~ldouble (=precision) -> CompareConstraint {
 		this comparer = func (value, correct: Object) -> Bool { this testChild(value) }
 		f := func (value, correct: Object) -> Bool { (value as Cell<LDouble> get() - correct as Cell<LDouble> get()) abs() < precision }
-		CompareConstraint new(this, Cell<LDouble> new(this correct as Cell<LDouble> get()), f, ComparisonType Within)
+		CompareConstraint new(this, Cell<LDouble> new(this correct as Cell<LDouble> get()), f, this type)
 	}
 	test: override func (value: Object) -> Bool {
 		comparer := this comparer
-		comparer(value, this correct)
+		result := comparer(value, this correct)
+		this type == ComparisonType NotWithin ? !result : result
 	}
-}
-
-IsConstraints: class extends Modifier {
-	true ::= TrueConstraint new(this)
-	false ::= FalseConstraint new(this)
-	Null ::= NullConstraint new(this)
-	empty ::= EmptyConstraint new(this)
-	not ::= NotModifier new(this)
-	equal ::= EqualModifier new(this)
-	less ::= LessModifier new(this)
-	greater ::= GreaterModifier new(this)
-	init: func
 }
