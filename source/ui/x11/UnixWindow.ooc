@@ -55,7 +55,23 @@ UnixWindow: class extends UnixWindowBase {
 		super()
 	}
 	draw: override func (image: Image) {
-		this _openGLWindow draw(image as GpuImage)
+		map := this _openGLWindow _getDefaultMap(image)
+		if (image instanceOf(GpuYuv420Semiplanar)) {
+			yuv := image as GpuYuv420Semiplanar
+			map add("texture0", yuv y)
+			map add("texture1", yuv uv)
+		} else
+			map add("texture0", image as GpuImage)
+		map textureTransform = GpuCanvas _createTextureTransform(image size, IntBox2D new(image size))
+		map model = this _openGLWindow _createModelTransform(IntBox2D new(image size), 0.0f)
+		map view = this _openGLWindow _view
+		map projection = this _openGLWindow _projection
+		map use(null)
+		this _openGLWindow _bind()
+		this _openGLWindow context backend setViewport(IntBox2D new(image size))
+		this _openGLWindow context backend enableBlend(false)
+		this _openGLWindow context drawQuad()
+		this _openGLWindow _unbind()
 	}
 	refresh: override func {
 		this _openGLWindow refresh()
