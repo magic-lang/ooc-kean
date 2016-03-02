@@ -41,6 +41,8 @@ OpenGLCanvas: class extends OpenGLSurface {
 		gpuMap textureTransform = This _createTextureTransform(drawState getSourceNormalized())
 		if (drawState opacity < 1.0f)
 			this context backend blend(drawState opacity)
+		else if (drawState blendMode == BlendMode Add)
+			this context backend blend()
 		else
 			this context backend enableBlend(false)
 		if (drawState inputImage)
