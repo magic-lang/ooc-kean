@@ -20,10 +20,18 @@ Gles3Context: class extends GLContext {
 
 	init: func
 	free: override func {
-		eglMakeCurrent(this _eglDisplay, null, null, null)
-		eglDestroyContext(this _eglDisplay, this _eglContext)
-		eglDestroySurface(this _eglDisplay, this _eglSurface)
-		eglTerminate(this _eglDisplay)
+		status := eglMakeCurrent(this _eglDisplay, null, null, null)
+		if (status != EGL_TRUE)
+			Debug print("eglMakeCurrent failed with error code %d" format(status))
+		status = eglDestroyContext(this _eglDisplay, this _eglContext)
+		if (status != EGL_TRUE)
+			Debug print("eglDestroyContext failed with error code %d" format(status))
+		status = eglDestroySurface(this _eglDisplay, this _eglSurface)
+		if (status != EGL_TRUE)
+			Debug print("eglDestroySurface failed with error code %d" format(status))
+		status = eglTerminate(this _eglDisplay)
+		if (status != EGL_TRUE)
+			Debug print("eglTerminate failed with error code %d" format(status))
 		super()
 	}
 	makeCurrent: override func -> Bool {
