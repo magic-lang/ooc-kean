@@ -416,6 +416,36 @@ FloatVectorListTest: class extends Fixture {
 			text free()
 			list free()
 		})
+		this add("clamp", func {
+			list := FloatVectorList new()
+			list add(-4.0f) . add(2.0f) . add(-1.0f) . add(3.5f) . add(1.5f)
+			clamped := list clamp(-1.0f, 1.0f)
+			expect(clamped[0], is equal to(-1.0f) within(tolerance))
+			expect(clamped[1], is equal to(1.0f) within(tolerance))
+			expect(clamped[2], is equal to(-1.0f) within(tolerance))
+			expect(clamped[3], is equal to(1.0f) within(tolerance))
+			expect(clamped[4], is equal to(1.0f) within(tolerance))
+			list free()
+			clamped free()
+		})
+		this add("exp", func {
+			list := FloatVectorList new()
+			list add(0.0f) . add(1.0f) . add(2.0f)
+			exp := list exp()
+			expect(exp[0], is equal to(1.0f) within(tolerance))
+			expect(exp[1], is equal to(2.71828f) within(tolerance))
+			expect(exp[2], is equal to(7.38905f) within(tolerance))
+			list free()
+			exp free()
+		})
+		this add("getOnes, getZeros", func {
+			zeros := FloatVectorList getZeros(1337)
+			ones := FloatVectorList getOnes(1337)
+			expect(zeros sum, is equal to(0.f) within(tolerance))
+			expect(ones sum, is equal to(1337.f) within(tolerance))
+			zeros free()
+			ones free()
+		})
 	}
 }
 
