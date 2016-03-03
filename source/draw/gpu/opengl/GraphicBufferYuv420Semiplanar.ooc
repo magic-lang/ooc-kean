@@ -11,7 +11,7 @@ use geometry
 use base
 use collections
 use draw-gpu
-import GraphicBuffer, AndroidContext, EGLRgba
+import GraphicBuffer, OpenGLContext, EGLRgba
 
 version(!gpuOff) {
 GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
@@ -35,7 +35,7 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		this _buffer free()
 		super()
 	}
-	toRgba: func (context: AndroidContext) -> GpuImage {
+	toRgba: func (context: OpenGLContext) -> GpuImage {
 		if (this _rgba == null)
 			this _rgba = This _search(this _buffer)
 		if (this _rgba == null) {
