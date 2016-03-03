@@ -24,6 +24,7 @@ MutexTest: class extends Fixture {
 		increaser := func {
 			value set(value get() + 1)
 		}
+		increaser = ((increaser as Closure) take() as Func)
 
 		threads := Thread[threadCount] new()
 		job := func {
