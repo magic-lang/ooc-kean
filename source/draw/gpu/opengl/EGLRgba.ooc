@@ -7,17 +7,17 @@
  */
 
 use geometry
-import GraphicBuffer, AndroidContext, OpenGLRgba
+import GraphicBuffer, OpenGLContext, OpenGLRgba
 import backend/[GLTexture, GLContext, EGLImage]
 
 version(!gpuOff) {
 EGLRgba: class extends OpenGLRgba {
 	_buffer: GraphicBuffer
 	buffer ::= this _buffer
-	init: func ~fromGraphicBuffer (=_buffer, context: AndroidContext) {
+	init: func ~fromGraphicBuffer (=_buffer, context: OpenGLContext) {
 		super(EGLImage create(TextureType Rgba, this _buffer size, this _buffer nativeBuffer, context backend), context)
 	}
-	init: func ~fromSize (size: IntVector2D, context: AndroidContext) {
+	init: func ~fromSize (size: IntVector2D, context: OpenGLContext) {
 		this init(GraphicBuffer new(size, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget), context)
 	}
 	free: override func {
