@@ -17,12 +17,18 @@ import Mesh
 
 // See README.md about input arguments and coordinate systems
 
+BlendMode: enum {
+	Fill
+	Add
+}
+
 DrawState: cover {
 	target: Image = null
 	inputImage: Image = null
 	map: Map = null
 	mesh: Mesh = null
 	opacity := 1.0f
+	blendMode := BlendMode Fill
 	_transformNormalized := FloatTransform3D identity
 	viewport := IntBox2D new(0, 0, 0, 0)
 	_destinationNormalized := FloatBox2D new(0.0f, 0.0f, 1.0f, 1.0f)
@@ -44,6 +50,10 @@ DrawState: cover {
 	}
 	setOpacity: func (opacity: Float) -> This {
 		this opacity = opacity
+		this
+	}
+	setBlendMode: func (blendMode: BlendMode) -> This {
+		this blendMode = blendMode
 		this
 	}
 	setFocalLength: func ~Int (focalLength: Float, imageSize: IntVector2D) -> This {
