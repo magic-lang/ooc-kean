@@ -53,8 +53,12 @@ OpenGLContext: class extends GpuContext {
 		this _renderer = _backend createRenderer()
 		this _meshShader = OpenGLMapMesh new(this)
 	}
-	init: func { this init(GLContext createContext()) }
-	init: func ~shared (other: This) { this init(GLContext createContext(other _backend)) }
+	init: func ~shared (other: This = null) {
+		if (other != null)
+			this init(GLContext createContext(other _backend))
+		else
+			this init(GLContext createContext())
+	}
 	init: func ~window (display: Pointer, nativeBackend: Long) { this init(GLContext createContext(display, nativeBackend)) }
 	free: override func {
 		this _backend makeCurrent()

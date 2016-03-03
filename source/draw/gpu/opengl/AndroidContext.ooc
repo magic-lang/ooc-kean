@@ -20,12 +20,7 @@ AndroidContext: class extends OpenGLContext {
 	_unpackRgbaToUv := OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToUv.frag"), this)
 	_unpackRgbaToUvPadded := OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToUvPadded.frag"), this)
 	_packers := VectorList<EGLRgba> new()
-	init: func (other: This = null) {
-		if (other)
-			super(other)
-		else
-			super()
-	}
+	init: func (other: This = null) { super(other) }
 	free: override func {
 		this _backend makeCurrent()
 		this _unpackRgbaToMonochrome free()
