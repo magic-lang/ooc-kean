@@ -51,143 +51,155 @@ EqualModifier: class extends ExpectModifier {
 		CompareConstraint new(this, correct, f, this comparisonType)
 	}
 	to: func ~char (correct: Char) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Char> get() == c as Cell<Char> get() }
+		f := func (value, c: Cell<Char>) -> Bool { value get() == c get() }
 		CompareConstraint new(this, Cell<Char> new(correct), f, this comparisonType)
 	}
 	to: func ~text (correct: Text) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Text> get() == c as Cell<Text> get() }
+		f := func (value, c: Cell<Text>) -> Bool { value get() == c get() }
 		CompareConstraint new(this, Cell<Text> new(correct), f, this comparisonType)
 	}
 	to: func ~boolean (correct: Bool) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Bool> get() == c as Cell<Bool> get() }
+		f := func (value, c: Cell<Bool>) -> Bool { value get() == c get() }
 		CompareConstraint new(this, Cell<Bool> new(correct), f, this comparisonType)
 	}
 	to: func ~int (correct: Int) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Int> get() == c as Cell<Int> get() }
+		f := func (value, c: Cell<Int>) -> Bool { value get() == c get() }
 		CompareConstraint new(this, Cell<Int> new(correct), f, this comparisonType)
 	}
 	to: func ~uint (correct: UInt) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<UInt> get() == c as Cell<UInt> get() }
+		f := func (value, c: Cell<UInt>) -> Bool { value get() == c get() }
 		CompareConstraint new(this, Cell<UInt> new(correct), f, this comparisonType)
 	}
 	to: func ~uint8 (correct: Byte) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Byte> get() == c as Cell<Byte> get() }
+		f := func (value, c: Cell<Byte>) -> Bool { value get() == c get() }
 		CompareConstraint new(this, Cell<Byte> new(correct), f, this comparisonType)
 	}
 	to: func ~long (correct: Long) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Long> get() == c as Cell<Long> get() }
+		f := func (value, c: Cell<Long>) -> Bool { value get() == c get() }
 		CompareConstraint new(this, Cell<Long> new(correct), f, this comparisonType)
 	}
 	to: func ~ulong (correct: ULong) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<ULong> get() == c as Cell<ULong> get() }
+		f := func (value, c: Cell<ULong>) -> Bool { value get() == c get() }
 		CompareConstraint new(this, Cell<ULong> new(correct), f, this comparisonType)
 	}
 	to: func ~float (correct: Float) -> CompareWithinConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Float> get() == c as Cell<Float> get() }
+		f := func (value, c: Cell<Float>) -> Bool { value get() equals(c get()) }
 		CompareWithinConstraint new(this, Cell<Float> new(correct), f, this withinType)
 	}
 	to: func ~double (correct: Double) -> CompareWithinConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<Double> get() == c as Cell<Double> get() }
+		f := func (value, c: Cell<Double>) -> Bool { value get() equals(c get()) }
 		CompareWithinConstraint new(this, Cell<Double> new(correct), f, this withinType)
 	}
 	to: func ~ldouble (correct: LDouble) -> CompareWithinConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<LDouble> get() == c as Cell<LDouble> get() }
+		f := func (value, c: Cell<LDouble>) -> Bool { value get() equals(c get()) }
 		CompareWithinConstraint new(this, Cell<LDouble> new(correct), f, this withinType)
 	}
 	to: func ~llong (correct: LLong) -> CompareWithinConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<LLong> get() == c as Cell<LLong> get() }
+		f := func (value, c: Cell<LLong>) -> Bool { value get() == c get() }
 		CompareWithinConstraint new(this, Cell<LLong> new(correct), f, this withinType)
 	}
 	to: func ~ullong (correct: ULLong) -> CompareWithinConstraint {
-		f := func (value, c: Object) -> Bool { value as Cell<ULLong> get() == c as Cell<ULLong> get() }
+		f := func (value, c: Cell<ULLong>) -> Bool { value get() == c get() }
 		CompareWithinConstraint new(this, Cell<ULLong> new(correct), f, this withinType)
 	}
 }
 
 LessModifier: class extends ExpectModifier {
-	init: func ~parent (parent: ExpectModifier) { super(parent) }
+	allowEquality: Bool
+	typeToPass: ComparisonType
+	init: func ~parent (parent: ExpectModifier, allowEquals := false) {
+		super(parent)
+		this allowEquality = allowEquals
+		this typeToPass = allowEquals ? ComparisonType LessOrEqual : ComparisonType LessThan
+	}
 	than: func ~object (right: Object) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value < c }
-		CompareConstraint new(this, right, f, ComparisonType LessThan)
+		f := func (value, c: Object) -> Bool { this allowEquality ? value <= c : value < c }
+		CompareConstraint new(this, right, f, this typeToPass)
 	}
 	than: func ~float (right: Float) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Float> get()) < (c as Cell<Float> get()) }
-		CompareConstraint new(this, Cell<Float> new(right), f, ComparisonType LessThan)
+		f := func (value, c: Cell<Float>) -> Bool { this allowEquality ? value get() lessOrEqual(c get()) : value get() lessThan(c get()) }
+		CompareConstraint new(this, Cell<Float> new(right), f, this typeToPass)
 	}
 	than: func ~double (right: Double) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Double> get()) < (c as Cell<Double> get()) }
-		CompareConstraint new(this, Cell<Double> new(right), f, ComparisonType LessThan)
+		f := func (value, c: Cell<Double>) -> Bool { this allowEquality ? value get() lessOrEqual(c get()) : value get() lessThan(c get()) }
+		CompareConstraint new(this, Cell<Double> new(right), f, this typeToPass)
 	}
 	than: func ~ldouble (right: LDouble) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<LDouble> get()) < (c as Cell<LDouble> get()) }
-		CompareConstraint new(this, Cell<LDouble> new(right), f, ComparisonType LessThan)
+		f := func (value, c: Cell<LDouble>) -> Bool { this allowEquality ? value get() lessOrEqual(c get()) : value get() lessThan(c get()) }
+		CompareConstraint new(this, Cell<LDouble> new(right), f, this typeToPass)
 	}
 	than: func ~int (right: Int) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Int> get()) < (c as Cell<Int> get()) }
-		CompareConstraint new(this, Cell<Int> new(right), f, ComparisonType LessThan)
+		f := func (value, c: Cell<Int>) -> Bool { this allowEquality ? value get() <= c get() : value get() < c get() }
+		CompareConstraint new(this, Cell<Int> new(right), f, this typeToPass)
 	}
 	than: func ~uint (right: UInt) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<UInt> get()) < (c as Cell<UInt> get()) }
-		CompareConstraint new(this, Cell<UInt> new(right), f, ComparisonType LessThan)
+		f := func (value, c: Cell<UInt>) -> Bool { this allowEquality ? value get() <= c get() : value get() < c get() }
+		CompareConstraint new(this, Cell<UInt> new(right), f, this typeToPass)
 	}
 	than: func ~long (right: Long) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Long> get()) < (c as Cell<Long> get()) }
-		CompareConstraint new(this, Cell<Long> new(right), f, ComparisonType LessThan)
+		f := func (value, c: Cell<Long>) -> Bool { this allowEquality ? value get() <= c get() : value get() < c get() }
+		CompareConstraint new(this, Cell<Long> new(right), f, this typeToPass)
 	}
 	than: func ~ulong (right: ULong) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<ULong> get()) < (c as Cell<ULong> get()) }
-		CompareConstraint new(this, Cell<ULong> new(right), f, ComparisonType LessThan)
+		f := func (value, c: Cell<ULong>) -> Bool { this allowEquality ? value get() <= c get() : value get() < c get() }
+		CompareConstraint new(this, Cell<ULong> new(right), f, this typeToPass)
 	}
 	than: func ~llong (right: LLong) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<LLong> get()) < (c as Cell<LLong> get()) }
-		CompareConstraint new(this, Cell<LLong> new(right), f, ComparisonType LessThan)
+		f := func (value, c: Cell<LLong>) -> Bool { this allowEquality ? value get() <= c get() : value get() < c get() }
+		CompareConstraint new(this, Cell<LLong> new(right), f, this typeToPass)
 	}
 	than: func ~ullong (right: ULLong) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<ULLong> get()) < (c as Cell<ULLong> get()) }
-		CompareConstraint new(this, Cell<ULLong> new(right), f, ComparisonType LessThan)
+		f := func (value, c: Cell<ULLong>) -> Bool { this allowEquality ? value get() <= c get() : value get() < c get() }
+		CompareConstraint new(this, Cell<ULLong> new(right), f, this typeToPass)
 	}
 }
 
 GreaterModifier: class extends ExpectModifier {
-	init: func ~parent (parent: ExpectModifier) { super(parent) }
+	allowEquality: Bool
+	typeToPass: ComparisonType
+	init: func ~parent (parent: ExpectModifier, allowEquals := false) {
+		super(parent)
+		this allowEquality = allowEquals
+		this typeToPass = allowEquals ? ComparisonType GreaterOrEqual : ComparisonType GreaterThan
+	}
 	than: func ~object (right: Object) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { value > c }
-		CompareConstraint new(this, right, f, ComparisonType GreaterThan)
+		f := func (value, c: Object) -> Bool { this allowEquality ? value >= c : value > c }
+		CompareConstraint new(this, right, f, this typeToPass)
 	}
 	than: func ~float (right: Float) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Float> get()) > (c as Cell<Float> get()) }
-		CompareConstraint new(this, Cell<Float> new(right), f, ComparisonType GreaterThan)
+		f := func (value, c: Cell<Float>) -> Bool { this allowEquality ? value get() greaterOrEqual(c get()) : value get() greaterThan(c get()) }
+		CompareConstraint new(this, Cell<Float> new(right), f, this typeToPass)
 	}
 	than: func ~double (right: Double) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Double> get()) > (c as Cell<Double> get()) }
-		CompareConstraint new(this, Cell<Double> new(right), f, ComparisonType GreaterThan)
+		f := func (value, c: Cell<Double>) -> Bool { this allowEquality ? value get() greaterOrEqual(c get()) : value get() greaterThan(c get()) }
+		CompareConstraint new(this, Cell<Double> new(right), f, this typeToPass)
 	}
 	than: func ~ldouble (right: LDouble) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<LDouble> get()) > (c as Cell<LDouble> get()) }
-		CompareConstraint new(this, Cell<LDouble> new(right), f, ComparisonType GreaterThan)
+		f := func (value, c: Cell<LDouble>) -> Bool { this allowEquality ? value get() greaterOrEqual(c get()) : value get() greaterThan(c get()) }
+		CompareConstraint new(this, Cell<LDouble> new(right), f, this typeToPass)
 	}
 	than: func ~int (right: Int) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Int> get()) > (c as Cell<Int> get()) }
-		CompareConstraint new(this, Cell<Int> new(right), f, ComparisonType GreaterThan)
+		f := func (value, c: Cell<Int>) -> Bool { this allowEquality ? value get() >= c get() : value get() > c get() }
+		CompareConstraint new(this, Cell<Int> new(right), f, this typeToPass)
 	}
 	than: func ~uint (right: UInt) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<UInt> get()) > (c as Cell<UInt> get()) }
-		CompareConstraint new(this, Cell<UInt> new(right), f, ComparisonType GreaterThan)
+		f := func (value, c: Cell<UInt>) -> Bool { this allowEquality ? value get() >= c get() : value get() > c get() }
+		CompareConstraint new(this, Cell<UInt> new(right), f, this typeToPass)
 	}
 	than: func ~long (right: Long) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<Long> get()) > (c as Cell<Long> get()) }
-		CompareConstraint new(this, Cell<Long> new(right), f, ComparisonType GreaterThan)
+		f := func (value, c: Cell<Long>) -> Bool { this allowEquality ? value get() >= c get() : value get() > c get() }
+		CompareConstraint new(this, Cell<Long> new(right), f, this typeToPass)
 	}
 	than: func ~ulong (right: ULong) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<ULong> get()) > (c as Cell<ULong> get()) }
-		CompareConstraint new(this, Cell<ULong> new(right), f, ComparisonType GreaterThan)
+		f := func (value, c: Cell<ULong>) -> Bool { this allowEquality ? value get() >= c get() : value get() > c get() }
+		CompareConstraint new(this, Cell<ULong> new(right), f, this typeToPass)
 	}
 	than: func ~llong (right: LLong) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<LLong> get()) > (c as Cell<LLong> get()) }
-		CompareConstraint new(this, Cell<LLong> new(right), f, ComparisonType LessThan)
+		f := func (value, c: Cell<LLong>) -> Bool { this allowEquality ? value get() >= c get() : value get() > c get() }
+		CompareConstraint new(this, Cell<LLong> new(right), f, this typeToPass)
 	}
 	than: func ~ullong (right: ULLong) -> CompareConstraint {
-		f := func (value, c: Object) -> Bool { (value as Cell<ULLong> get()) > (c as Cell<ULLong> get()) }
-		CompareConstraint new(this, Cell<ULLong> new(right), f, ComparisonType LessThan)
+		f := func (value, c: Cell<ULLong>) -> Bool { this allowEquality ? value get() >= c get() : value get() > c get() }
+		CompareConstraint new(this, Cell<ULLong> new(right), f, this typeToPass)
 	}
 }

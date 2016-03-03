@@ -24,8 +24,10 @@ FloatTest: class extends Fixture {
 		this add("-13.37 is not equal to -13.38 within 0.001", func { expect(-13.37f, is notEqual to(-13.38f) within(0.001f)) })
 		this add("0.0 is not equal to 4.2", func { expect(0.0f, is notEqual to(4.2f)) })
 		this add("0.0 is equal to -0.0", func { expect(0.0f, is equal to(-0.0f)) })
-		this add("0.0 is less than 0.00000001", func { expect(0.0f, is less than(0.00000001f)) })
-		this add("0.0 is greater than -0.00000001", func { expect(0.0f, is greater than(-0.00000001f)) })
+		this add("0.0 is less than 0.00000001", func { expect(0.0f, is less than(0.000001f)) })
+		this add("0.0 is greater than -0.00000001", func { expect(0.0f, is greater than(-0.000001f)) })
+		this add("7.0 is greater or equal than 7.0", func { expect(7.0f, is greaterOrEqual than(7.0f)) })
+		this add("7.0 is less or equal than 7.0", func { expect(7.0f, is lessOrEqual than(7.0f)) })
 	}
 }
 

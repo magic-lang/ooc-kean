@@ -14,9 +14,9 @@ ComparisonType: enum {
 	Equal
 	NotEqual
 	LessThan
-	LessThanOrEqual // TODO: Implement
+	LessOrEqual
 	GreaterThan
-	GreaterThanOrEqual // TODO: Implement
+	GreaterOrEqual
 	Within
 	NotWithin
 }
@@ -29,7 +29,9 @@ IsConstraints: class extends ExpectModifier {
 	equal ::= EqualModifier new(this)
 	notEqual ::= EqualModifier new(this, ComparisonType NotEqual)
 	less ::= LessModifier new(this)
+	lessOrEqual ::= LessModifier new(this, true)
 	greater ::= GreaterModifier new(this)
+	greaterOrEqual ::= GreaterModifier new(this, true)
 	init: func
 }
 
@@ -85,18 +87,18 @@ CompareWithinConstraint: class extends CompareConstraint {
 	within: func ~float (precision: Float) -> CompareConstraint {
 		this precision = precision as LDouble
 		this comparer = func (value, correct: Object) -> Bool { this testChild(value) }
-		f := func (value, correct: Object) -> Bool { (value as Cell<Float> get() - correct as Cell<Float> get()) abs() < precision }
+		f := func (value, correct: Cell<Float>) -> Bool { correct get() equals(value get(), precision) }
 		CompareConstraint new(this, Cell<Float> new(this correct as Cell<Float> get()), f, this type)
 	}
 	within: func ~double (precision: Double) -> CompareConstraint {
 		this precision = precision as Double
 		this comparer = func (value, correct: Object) -> Bool { this testChild(value) }
-		f := func (value, correct: Object) -> Bool { (value as Cell<Double> get() - correct as Cell<Double> get()) abs() < precision }
+		f := func (value, correct: Cell<Double>) -> Bool { correct get() equals(value get(), precision) }
 		CompareConstraint new(this, Cell<Double> new(this correct as Cell<Double> get()), f, this type)
 	}
 	within: func ~ldouble (=precision) -> CompareConstraint {
 		this comparer = func (value, correct: Object) -> Bool { this testChild(value) }
-		f := func (value, correct: Object) -> Bool { (value as Cell<LDouble> get() - correct as Cell<LDouble> get()) abs() < precision }
+		f := func (value, correct: Cell<LDouble>) -> Bool { correct get() equals(value get(), precision) }
 		CompareConstraint new(this, Cell<LDouble> new(this correct as Cell<LDouble> get()), f, this type)
 	}
 	test: override func (value: Object) -> Bool {
