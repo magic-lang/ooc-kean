@@ -40,7 +40,7 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 		this _v = v
 		this _v referenceCount increase()
 	}
-	init: func ~fromYuvPlanar (original: This, y: RasterMonochrome, u: RasterMonochrome, v: RasterMonochrome) {
+	init: func ~fromYuvPlanar (original: This, y, u, v: RasterMonochrome) {
 		super(original)
 		this _y = y
 		this _y referenceCount increase()
