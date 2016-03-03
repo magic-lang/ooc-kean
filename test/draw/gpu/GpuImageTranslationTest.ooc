@@ -29,9 +29,8 @@ GpuImageTranslationTest: class extends Fixture {
 			expect(gpuImage size x, is equal to(636))
 			expect(gpuImage size y, is equal to(424))
 			gpuImage canvas pen = Pen new(ColorRgba new())
-			gpuImage canvas focalLength = focalLength
-			this translateGpuImage(gpuImage, xTranslation, 0.0f, 0.0f)
-			gpuImage canvas draw(sourceImage)
+			gpuImage canvas clear()
+			DrawState new(gpuImage) setFocalLength(focalLength, gpuImage size) setTransformReference(FloatTransform3D createTranslation(xTranslation, 0.0f, 0.0f)) setInputImage(sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 		})
@@ -39,9 +38,8 @@ GpuImageTranslationTest: class extends Fixture {
 			correctImage := RasterRgba open("test/draw/gpu/correct/translation_rgba_Y.png")
 			gpuImage := gpuContext createRgba(sourceImage size)
 			gpuImage canvas pen = Pen new(ColorRgba new())
-			gpuImage canvas focalLength = focalLength
-			this translateGpuImage(gpuImage, 0.0f, yTranslation, 0.0f)
-			gpuImage canvas draw(sourceImage)
+			gpuImage canvas clear()
+			DrawState new(gpuImage) setFocalLength(focalLength, gpuImage size) setTransformReference(FloatTransform3D createTranslation(0.0f, yTranslation, 0.0f)) setInputImage(sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 		})
@@ -49,16 +47,11 @@ GpuImageTranslationTest: class extends Fixture {
 			correctImage := RasterRgba open("test/draw/gpu/correct/translation_rgba_Z.png")
 			gpuImage := gpuContext createRgba(sourceImage size)
 			gpuImage canvas pen = Pen new(ColorRgba new())
-			gpuImage canvas focalLength = focalLength
-			this translateGpuImage(gpuImage, 0.0f, 0.0f, zTranslation)
-			gpuImage canvas draw(sourceImage)
+			gpuImage canvas clear()
+			DrawState new(gpuImage) setFocalLength(focalLength, gpuImage size) setTransformReference(FloatTransform3D createTranslation(0.0f, 0.0f, zTranslation)) setInputImage(sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f) within(3.0f))
 		})
-	}
-	translateGpuImage: func (image: GpuImage, x, y, z: Float) {
-		image canvas clear()
-		image canvas transform = FloatTransform3D createTranslation(x, y, z)
 	}
 }
 gpuContext := OpenGLContext new()
