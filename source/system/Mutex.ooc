@@ -22,6 +22,7 @@ Mutex: abstract class {
 		this lock()
 		f()
 		this unlock()
+		(f as Closure) free(Owner Receiver)
 	}
 	new: static func (mutexType := MutexType Safe) -> This {
 		result: This
