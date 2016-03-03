@@ -174,7 +174,7 @@ PFNEGLDESTROYIMAGEKHRPROC_OOC: cover from PFNEGLDESTROYIMAGEKHRPROC
 
 eglMakeCurrent: extern func (display, draw, read, context: Pointer) -> UInt
 eglDestroyContext: extern func (display, context: Pointer) -> UInt
-eglDestroySurface: extern func (display, surface: Pointer)
+eglDestroySurface: extern func (display, surface: Pointer) -> UInt
 eglGetDisplay: extern func (nativeDisplay: Pointer) -> Pointer
 eglInitialize: extern func (display: Pointer, major: Int*, minor: Int*) -> UInt
 eglBindAPI: extern func (api: UInt) -> UInt
@@ -184,6 +184,6 @@ eglCreatePbufferSurface: extern func (display: Pointer, config: Pointer, attridL
 eglCreateContext: extern func (display: Pointer, config: Pointer, sharedContext: Pointer, attribList: Int*) -> Pointer
 eglGetConfigAttrib: extern func (display: Pointer, config: Pointer, attribute: Int, value: Int*) -> UInt
 eglSwapBuffers: extern func (display, surface: Pointer)
-eglTerminate: extern func (display: Pointer) -> Pointer
+eglTerminate: extern func (display: Pointer) -> UInt
 eglGetError: extern func -> UInt
 }
