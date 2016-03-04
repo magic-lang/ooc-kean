@@ -63,9 +63,17 @@ Fixture: abstract class {
 			for (i in 0 .. failures count) {
 				f := failures[i]
 				if (f constraint instanceOf(CompareConstraint) && f value instanceOf(Cell))
-					(this createFailureMessage(f) toString()) println()
+					This _print(this createCompareFailureMessage(f) + t"\n")
+				else if (f constraint instanceOf(NullConstraint))
+					This _print(Text new("  -> %s : expected null was %p\n" format(f message, f value&)))
+				else if (f constraint instanceOf(NotNullConstraint))
+					This _print(Text new("  -> %s : expected not null was null\n" format(f message)))
+				else if (f constraint instanceOf(TrueConstraint))
+					This _print(Text new("  -> %s : expected true was false\n" format(f message)))
+				else if (f constraint instanceOf(FalseConstraint))
+					This _print(Text new("  -> %s : expected false was true\n" format(f message)))
 				else
-					This _print(t"  -> '%s' (expect: %i)\n" format(f message, f expect))
+					This _print(t"  -> %s (expect: %i)\n" format(f message, f expect))
 				f free()
 			}
 			This _testsFailed = true
@@ -74,11 +82,11 @@ Fixture: abstract class {
 		timer free()
 		result
 	}
-	createFailureMessage: func (failure: TestFailedException) -> Text {
+	createCompareFailureMessage: func (failure: TestFailedException) -> Text {
 		constraint := failure constraint as CompareConstraint
 		testedValue := failure value as Cell
 		expectedValue := constraint correct as Cell
-		result := TextBuilder new(t"  -> ")
+		result := TextBuilder new(t"  ->")
 		result append(Text new(failure message))
 		result append(t": expected")
 		match (constraint type) {
@@ -90,6 +98,10 @@ Fixture: abstract class {
 				result append(t"less than")
 			case ComparisonType GreaterThan =>
 				result append(t"greater than")
+			case ComparisonType LessOrEqual =>
+				result append(t"less than or equal to")
+			case ComparisonType GreaterOrEqual =>
+				result append(t"greater than or equal to")
 			case ComparisonType Within =>
 				result append(t"equal to")
 			case ComparisonType NotWithin =>
