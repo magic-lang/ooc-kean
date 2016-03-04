@@ -48,19 +48,21 @@ OpenGLCanvas: class extends OpenGLSurface {
 		tempImageA: GpuImage = null
 		tempImageB: GpuImage = null
 		if (drawState inputImage) {
-			if (drawState inputImage instanceOf(RasterYuv420Semiplanar)) {
-				tempImageA = this _context createImage((drawState inputImage as RasterYuv420Semiplanar) y)
-				tempImageB = this _context createImage((drawState inputImage as RasterYuv420Semiplanar) uv)
-				gpuMap add("texture0", tempImageA)
-				gpuMap add("texture1", tempImageB)
-			} else if (drawState inputImage instanceOf(RasterImage)) {
-				tempImageA = this _context createImage(drawState inputImage as RasterImage)
-				gpuMap add("texture0", tempImageA)
-			} else if (drawState inputImage instanceOf(GpuYuv420Semiplanar)) {
-				gpuMap add("texture0", (drawState inputImage as GpuYuv420Semiplanar) y)
-				gpuMap add("texture1", (drawState inputImage as GpuYuv420Semiplanar) uv)
-			} else
-				gpuMap add("texture0", drawState inputImage)
+			match (drawState inputImage) {
+				case (image: RasterYuv420Semiplanar) =>
+					tempImageA = this _context createImage(image y)
+					tempImageB = this _context createImage(image uv)
+					gpuMap add("texture0", tempImageA)
+					gpuMap add("texture1", tempImageB)
+				case (image: RasterImage) =>
+					tempImageA = this _context createImage(image)
+					gpuMap add("texture0", tempImageA)
+				case (image: GpuYuv420Semiplanar) =>
+					gpuMap add("texture0", image y)
+					gpuMap add("texture1", image uv)
+				case (image: GpuImage) =>
+					gpuMap add("texture0", image)
+			}
 		}
 		gpuMap use(this _target)
 		this _bind()
