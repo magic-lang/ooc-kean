@@ -56,12 +56,23 @@ UnixWindow: class extends UnixWindowBase {
 	}
 	draw: override func (image: Image) {
 		map := this _openGLWindow _getDefaultMap(image)
-		if (image instanceOf(GpuYuv420Semiplanar)) {
-			yuv := image as GpuYuv420Semiplanar
-			map add("texture0", yuv y)
-			map add("texture1", yuv uv)
-		} else
-			map add("texture0", image as GpuImage)
+		tempImageA: GpuImage = null
+		tempImageB: GpuImage = null
+		match (image) {
+			case (matchedImage: RasterYuv420Semiplanar) =>
+				tempImageA = this _openGLWindow context createImage(matchedImage y)
+				tempImageB = this _openGLWindow context createImage(matchedImage uv)
+				map add("texture0", tempImageA)
+				map add("texture1", tempImageB)
+			case (matchedImage: RasterImage) =>
+				tempImageA = this _openGLWindow context createImage(matchedImage)
+				map add("texture0", tempImageA)
+			case (matchedImage: GpuYuv420Semiplanar) =>
+				map add("texture0", matchedImage y)
+				map add("texture1", matchedImage uv)
+			case (matchedImage: GpuImage) =>
+				map add("texture0", matchedImage)
+		}
 		map textureTransform = GpuCanvas _createTextureTransform(image size, IntBox2D new(image size))
 		map model = this _openGLWindow _createModelTransform(IntBox2D new(image size), 0.0f)
 		map view = this _openGLWindow _view
@@ -72,6 +83,10 @@ UnixWindow: class extends UnixWindowBase {
 		this _openGLWindow context backend enableBlend(false)
 		this _openGLWindow context drawQuad()
 		this _openGLWindow _unbind()
+		if (tempImageA)
+			tempImageA free()
+		if (tempImageB)
+			tempImageB free()
 	}
 	refresh: override func {
 		this _openGLWindow refresh()
