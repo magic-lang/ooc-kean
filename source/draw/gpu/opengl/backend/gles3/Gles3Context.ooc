@@ -17,7 +17,7 @@ import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer,
 Gles3Context: class extends GLContext {
 	_eglContext: Pointer
 	_eglSurface: Pointer
-
+	_contextCount := static 0
 	init: func
 	free: override func {
 		status := eglMakeCurrent(this _eglDisplay, null, null, null)
@@ -29,9 +29,12 @@ Gles3Context: class extends GLContext {
 		status = eglDestroySurface(this _eglDisplay, this _eglSurface)
 		if (status != EGL_TRUE)
 			Debug print("eglDestroySurface failed with error code %d" format(status))
-		status = eglTerminate(this _eglDisplay)
-		if (status != EGL_TRUE)
-			Debug print("eglTerminate failed with error code %d" format(status))
+		if (This _contextCount == 1) {
+			status = eglTerminate(this _eglDisplay)
+			if (status != EGL_TRUE)
+				Debug print("eglTerminate failed with error code %d" format(status))
+		}
+		This _contextCount -= 1
 		super()
 	}
 	makeCurrent: override func -> Bool {
@@ -69,6 +72,7 @@ Gles3Context: class extends GLContext {
 		contextAttribs := [
 			EGL_CONTEXT_CLIENT_VERSION, 3,
 			EGL_NONE] as Int*
+		This _contextCount += 1
 		this _eglContext = eglCreateContext(this _eglDisplay, config, shared, contextAttribs)
 		if (this _eglContext == null) {
 			"Failed to create OpenGL ES 3 context, trying with OpenGL ES 2 instead" println()
