@@ -68,7 +68,7 @@ ThreadTest: class extends Fixture {
 	}
 	_testThreadId: static func {
 		myId := Thread currentThreadId()
-		otherId := Cell<ThreadId> new(0L)
+		otherId := Cell<ThreadId> new(0 as ThreadId)
 		job := func {
 			otherId set(Thread currentThreadId())
 		}

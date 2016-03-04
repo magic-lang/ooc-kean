@@ -48,8 +48,8 @@ WorkerThreadTest: class extends Fixture {
 		this add("Correct threading", func {
 			mainThread := Thread currentThreadId()
 			for (i in 0 .. This threads count - 1) {
-				expect(mainThread != This threads[i])
-				expect(This threads[i], is equal to(This threads[i + 1]))
+				expect(mainThread equals(This threads[i]) == false)
+				expect(This threads[i] equals(This threads[i + 1]))
 			}
 		})
 	}
