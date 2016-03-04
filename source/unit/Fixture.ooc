@@ -9,13 +9,12 @@
 use base
 use collections
 import Constraints
+import Modifiers
 
 Fixture: abstract class {
-	totalTime: static Double
-	exitHandlerRegistered: static Bool
-	failureNames: static VectorList<String>
 	name: String
 	tests := VectorList<Test> new(32, false)
+
 	init: func (=name) {
 		if (!This exitHandlerRegistered) {
 			This exitHandlerRegistered = true
@@ -27,12 +26,8 @@ Fixture: abstract class {
 		this name free()
 		super()
 	}
-	add: func (test: Test) {
-		this tests add(test)
-	}
 	add: func ~action (name: String, action: Func) {
-		test := Test new(name, action)
-		this add(test)
+		this tests add(Test new(name, action))
 	}
 	run: func -> Bool {
 		failures := VectorList<TestFailedException> new(32, false)
@@ -81,33 +76,41 @@ Fixture: abstract class {
 	}
 	createFailureMessage: func (failure: TestFailedException) -> Text {
 		constraint := failure constraint as CompareConstraint
-		// Left is the tested value, right is the correct/expected value
-		leftValue := failure value as Cell
-		rightValue := constraint correct as Cell
+		testedValue := failure value as Cell
+		expectedValue := constraint correct as Cell
 		result := TextBuilder new(t"  -> ")
 		result append(Text new(failure message))
 		result append(t": expected")
 		match (constraint type) {
 			case ComparisonType Equal =>
 				result append(t"equal to")
+			case ComparisonType NotEqual =>
+				result append(t"not equal to")
 			case ComparisonType LessThan =>
 				result append(t"less than")
 			case ComparisonType GreaterThan =>
 				result append(t"greater than")
 			case ComparisonType Within =>
 				result append(t"equal to")
+			case ComparisonType NotWithin =>
+				result append(t"not equal to")
 		}
-		result append(rightValue toText())
+		result append(expectedValue toText())
 		result append(t"was")
-		result append(leftValue toText())
+		result append(testedValue toText())
 		if (constraint type == ComparisonType Within)
 			result append(Text new(" [tolerance: %.8f]" formatDouble((constraint parent as CompareWithinConstraint) precision)))
 		result join(' ')
 	}
+
 	_testsFailed: static Bool
 	_expectCount: static Int = 0
+	totalTime: static Double
+	exitHandlerRegistered: static Bool
+	failureNames: static VectorList<String>
 	is ::= static IsConstraints new()
 	testsFailed: static Bool { get { This _testsFailed } }
+
 	printFailures: static func {
 		This _print(t"Total time: %.2f s\n" format(This totalTime))
 		if (This failureNames && (This failureNames count > 0)) {
@@ -116,6 +119,10 @@ Fixture: abstract class {
 				(This failureNames[i] + ", ") print()
 			(This failureNames[This failureNames count -1] + ']') println()
 		}
+	}
+	_print: static func (text: Text) {
+		text print()
+		fflush(stdout)
 	}
 	expect: static func (value: Object, constraint: Constraint) {
 		++This _expectCount
@@ -127,61 +134,27 @@ Fixture: abstract class {
 				(value as Cell) free()
 		}
 	}
-	expect: static func ~char (value: Char, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
-	}
-	expect: static func ~text (value: Text, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
-	}
-	expect: static func ~boolean (value: Bool, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
-	}
-	expect: static func ~int (value: Int, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
-	}
-	expect: static func ~uint (value: UInt, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
-	}
-	expect: static func ~uint8 (value: Byte, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
-	}
-	expect: static func ~long (value: Long, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
-	}
-	expect: static func ~ulong (value: ULong, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
-	}
-	expect: static func ~float (value: Float, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
-	}
-	expect: static func ~double (value: Double, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
-	}
-	expect: static func ~ldouble (value: LDouble, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
-	}
-	expect: static func ~isTrue (value: Bool) {
-		This expect(Cell new(value), is true)
-	}
-	expect: static func ~llong (value: LLong, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
-	}
-	expect: static func ~ullong (value: ULLong, constraint: Constraint) {
-		This expect(Cell new(value), constraint)
-	}
-	_print: static func (text: Text) {
-		text print()
-		fflush(stdout)
-	}
+	expect: static func ~isTrue (value: Bool) { This expect(Cell new(value), is true) }
+	expect: static func ~char (value: Char, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~text (value: Text, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~boolean (value: Bool, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~int (value: Int, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~uint (value: UInt, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~uint8 (value: Byte, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~long (value: Long, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~ulong (value: ULong, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~float (value: Float, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~double (value: Double, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~ldouble (value: LDouble, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~llong (value: LLong, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~ullong (value: ULLong, constraint: Constraint) { This expect(Cell new(value), constraint) }
 }
 
 TestFailedException: class extends Exception {
 	value: Object
 	constraint: Constraint
 	expect: Int
-	init: func (=value, =constraint, =expect, message := "") {
-		this message = message
-	}
+	init: func (=value, =constraint, =expect, message := "") { super(message) }
 }
 
 Test: class {

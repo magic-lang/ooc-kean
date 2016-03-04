@@ -17,13 +17,8 @@ BooleanTest: class extends Fixture {
 
 		this add("true", func { expect(true) })
 
-		this add("false is not true", func { expect(false, is not true) })
-		this add("true is not false", func { expect(true, is not false) })
-
-		notNotTrue := is not not true
-		this add("true is not not true", func { expect(true, notNotTrue) })
-		notNotFalse := is not not false
-		this add("false is not not false", func { expect(false, notNotFalse) })
+		this add("false is not true", func { expect(false, is notEqual to(true)) })
+		this add("true is not false", func { expect(true, is notEqual to(false)) })
 
 		this add("true is equal to true", func { expect(true, is equal to(true)) })
 		this add("false is equal to false", func { expect(false, is equal to(false)) })
