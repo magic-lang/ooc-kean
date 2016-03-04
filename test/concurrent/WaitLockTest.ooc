@@ -11,7 +11,7 @@ use unit
 
 WaitLockTest: class extends Fixture {
 	init: func {
-		super("WithLock")
+		super("WaitLock")
 		this add("_testWithMutexOwnership", This _testWithMutexOwnership)
 		this add("_testWithoutMutexOwnership", This _testWithoutMutexOwnership)
 		this add("_testWakeWithFailingCondition", This _testWakeWithFailingCondition)
@@ -32,25 +32,23 @@ WaitLockTest: class extends Fixture {
 		timesTriggeredRef := timesTriggered&
 		waitLock := WaitLock new()
 		waitingThread := Thread new(||
-			waitLock lockWhen(||
+			waitLock lockWhen(func -> Bool {
 				timesTriggeredRef@ = timesTriggeredRef@ + 1
 				false
-			)
+			})
 			waitLock unlock()
 			expect(false)
 		)
 		testThread := Thread new(||
-
 			while (true) {
 				waitLock lock()
-				if(timesTriggeredRef@ >= 1)
+				if (timesTriggeredRef@ >= 1)
 					break
 				waitLock unlock()
 				Thread yield()
 			}
 			expect(timesTriggeredRef@ == 1)
 			waitLock unlock()
-
 			waitLock wake()
 			expect(!waitingThread wait(0.05))
 			waitLock lock()
@@ -71,16 +69,16 @@ WaitLockTest: class extends Fixture {
 		timesTriggeredRef := timesTriggered&
 		waitLock := WaitLock new()
 		waitingThread := Thread new(||
-			waitLock lockWhen(||
+			waitLock lockWhen(func -> Bool {
 				timesTriggeredRef@ = timesTriggeredRef@ + 1
 				timesTriggeredRef@ == 2
-			)
+			})
 			waitLock unlock()
 		)
 		testThread := Thread new(||
 			while (true) {
 				waitLock lock()
-				if(timesTriggeredRef@ >= 1)
+				if (timesTriggeredRef@ >= 1)
 					break
 				waitLock unlock()
 				Thread yield()
@@ -90,14 +88,14 @@ WaitLockTest: class extends Fixture {
 			waitLock wake()
 			while (true) {
 				waitLock lock()
-				if(timesTriggeredRef@ >= 2)
+				if (timesTriggeredRef@ >= 2)
 					break
 				waitLock unlock()
 				Thread yield()
 			}
 			expect(timesTriggeredRef@ == 2)
 			waitLock unlock()
-			while(!waitingThread wait(0.05))
+			while (!waitingThread wait(0.05))
 				Thread yield()
 		)
 		testThread start()

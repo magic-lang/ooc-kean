@@ -48,11 +48,11 @@ SynchronizedQueue: class <T> extends Queue<T> {
 }
 
 BlockedQueue: class <T> extends SynchronizedQueue<T> {
-	_waitLock : WaitLock
+	_waitLock: WaitLock
 	_canceled := false
 	init: func {
 		super()
-		this _waitLock = WaitLock new(_mutex)
+		this _waitLock = WaitLock new(this _mutex)
 	}
 	free: override func {
 		this _waitLock free()
@@ -62,13 +62,10 @@ BlockedQueue: class <T> extends SynchronizedQueue<T> {
 		super(item)
 		this _waitLock wake()
 	}
-	cancel: func {
-		this _waitLock with(|| this _canceled = true)
-		this _waitLock wakeAll()
-	}
+	cancel: func { this _waitLock with(|| this _canceled = true) . wakeAll() }
 	wait: func (isOk := null as Bool*) -> T {
 		result: T = null
-		this _waitLock lockWhen(|| !this empty || this _canceled)
+		this _waitLock lockWhen(func -> Bool { !this empty || this _canceled })
 		if (this _canceled) {
 			if (isOk)
 				isOk@ = false

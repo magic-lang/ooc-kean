@@ -10,19 +10,14 @@ use concurrent
 
 WaitLock: class {
 	_waitCondition := WaitCondition new()
-	_mutex : Mutex
-	_ownsMutex : Bool
-	init: func {
-		this _mutex = Mutex new()
-		this _ownsMutex = true
-	}
-	init: func ~WithMutex (mutex: Mutex)
-	{
-		this _mutex = mutex
-		this _ownsMutex = false
+	_mutex: Mutex
+	_ownsMutex: Bool
+	init: func (mutex: Mutex = null) {
+		this _ownsMutex = mutex == null
+		this _mutex = this _ownsMutex ? Mutex new() : mutex
 	}
 	free: override func {
-		if(this _ownsMutex) {
+		if (this _ownsMutex) {
 			this _mutex free()
 			this _mutex = null
 		}
@@ -32,22 +27,13 @@ WaitLock: class {
 	}
 	lock: func { this _mutex lock() }
 	unlock: func { this _mutex unlock() }
-	lockWhen: func (condition: Func -> Bool)
-	{
+	lockWhen: func (condition: Func -> Bool) {
 		this lock()
 		while (!condition())
 			this _waitCondition wait(this _mutex)
 		(condition as Closure) free(Owner Receiver)
 	}
-	with: func (f: Func) {
-		this _mutex with(f)
-	}
-	wake: func -> Bool
-	{
-		this _waitCondition signal()
-	}
-	wakeAll: func -> Bool
-	{
-		this _waitCondition broadcast()
-	}
+	with: func (f: Func) { this _mutex with(f) }
+	wake: func -> Bool { this _waitCondition signal() }
+	wakeAll: func -> Bool { this _waitCondition broadcast() }
 }
