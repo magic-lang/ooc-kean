@@ -17,13 +17,13 @@ use concurrent
 GpuContextTest: class extends Fixture {
 	init: func {
 		super("OpenGLContext")
-		childThread := WorkerThread new()
 		this add("create context", func {
 			context := OpenGLContext new()
 			expect(context != null)
 			context free()
 		})
 		this add("shared context", func {
+			childThread := WorkerThread new()
 			mother := OpenGLContext new()
 			child: OpenGLContext
 			childThread wait(|| child = OpenGLContext new(mother))
@@ -39,10 +39,21 @@ GpuContextTest: class extends Fixture {
 			expect(motherRaster distance(childRaster), is equal to(0.0f))
 			motherRaster free()
 			childRaster free()
-			child free()
+			childThread wait(|| child free())
 			sharedImage free()
 			mother free()
 			childThread free()
+		})
+		this add("multiple contexts", func {
+			thread := WorkerThread new()
+			context1 := OpenGLContext new()
+			context2: OpenGLContext
+			thread wait(|| context2 = OpenGLContext new())
+			expect(context1 != null)
+			expect(context2 != null)
+			context1 free()
+			thread wait(|| context2 free())
+			thread free()
 		})
 	}
 }
