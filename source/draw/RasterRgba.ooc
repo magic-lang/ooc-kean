@@ -153,6 +153,8 @@ RasterRgba: class extends RasterPacked {
 		x, y, imageComponents: Int
 		requiredComponents := 4
 		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
+		if (data == null)
+			Exception new("Failed to load image: " + filename) throw()
 		buffer := ByteBuffer new(data as Byte*, x * y * requiredComponents, true)
 		result := This new(buffer, IntVector2D new(x, y))
 		result swapRedBlue()

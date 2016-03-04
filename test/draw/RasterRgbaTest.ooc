@@ -16,6 +16,15 @@ RasterRgbaTest: class extends Fixture {
 	sourceFlower := "test/draw/input/Flower.png"
 	init: func {
 		super("RasterRgbaTest")
+		this add("Test file not found", func {
+			try {
+				image := RasterRgba open("nonExistingFile")
+				expect(false)
+				expect(image, is equal to (null as RasterRgba))
+			} catch (e: Exception) {
+				expect(e message contains("Failed to load image: "))
+			}
+		})
 		this add("equals 1", func {
 			image1 := RasterRgba open(this sourceFlower)
 			image2 := RasterRgba open(this sourceSpace)

@@ -59,6 +59,8 @@ RasterImage: abstract class extends Image {
 	open: static func ~unknownType (filename: String) -> This {
 		x, y, imageComponents: Int
 		data := StbImage load(filename, x&, y&, imageComponents&, 0)
+		if (data == null)
+			Exception new("Failed to load image: " + filename) throw()
 		result: This
 		buffer := ByteBuffer new(data as Byte*, x * y * imageComponents, true)
 		match (imageComponents) {
