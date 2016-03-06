@@ -9,6 +9,7 @@
 use unit
 
 IntegerTest: class extends Fixture {
+	value := 0
 	init: func {
 		super("Integer")
 		this add("0 is equal to 0", func { expect(0, is equal to(0)) })
@@ -24,6 +25,13 @@ IntegerTest: class extends Fixture {
 		this add("0 is equal to -0", func { expect(0, is equal to(-0)) })
 		this add("0 is less than 1", func { expect(0, is less than(1)) })
 		this add("0.0 is greater than -1", func { expect(0, is greater than(-1)) })
+
+		this add("times", func {
+			5 times(func { this value += 1 })
+			expect(value, is equal to(5))
+			6 times(func (index: Int) { this value += index })
+			expect(value, is equal to(5 + 15))
+		})
 	}
 }
 

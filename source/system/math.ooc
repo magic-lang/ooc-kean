@@ -35,8 +35,6 @@ extend ULong {
 }
 
 extend Int {
-	pi ::= static 3
-	e ::= static 2
 	absolute ::= this >= 0 ? this : -1 * this
 	sign ::= this >= 0 ? 1 : -1
 	isOdd ::= this modulo(2) == 1
