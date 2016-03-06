@@ -73,6 +73,4 @@ ReferenceCounterTest: class extends Fixture {
 	}
 }
 
-test := ReferenceCounterTest new()
-test run()
-test free()
+ReferenceCounterTest new() run() . free()

@@ -63,6 +63,4 @@ FileTest: class extends Fixture {
 	}
 }
 
-test := FileTest new()
-test run()
-test free()
+FileTest new() run() . free()

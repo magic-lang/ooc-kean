@@ -143,6 +143,4 @@ SynchronizedQueueTest: class extends Fixture {
 	}
 }
 
-test := SynchronizedQueueTest new()
-test run()
-test free()
+SynchronizedQueueTest new() run() . free()

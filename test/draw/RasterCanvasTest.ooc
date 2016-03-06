@@ -143,6 +143,4 @@ RasterCanvasTest: class extends Fixture {
 	}
 }
 
-test := RasterCanvasTest new()
-test run()
-test free()
+RasterCanvasTest new() run() . free()
