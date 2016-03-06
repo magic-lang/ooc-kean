@@ -43,11 +43,6 @@ Vector: abstract class <T> {
 			capacity = this capacity - targetStart
 		memmove(this _backend + targetStart * T size, this _backend + sourceStart * T size, capacity * T size)
 	}
-	copy: func -> This<T> {
-		result := HeapVector<T> new(this _capacity)
-		this copy(0, result, 0)
-		result
-	}
 	copy: func ~within (sourceStart, targetStart: Int, capacity := 0) {
 		this copy(sourceStart, this as This<T>, targetStart, capacity)
 	}
@@ -72,7 +67,6 @@ Vector: abstract class <T> {
 			raise(index >= this capacity || index < 0, "Accessing Vector index out of range in get operator")
 		this _backend[index]
 	}
-
 	operator []= (index: Int, item: T) {
 		version (safe)
 			raise(index >= this capacity || index < 0, "Accessing Vector index out of range in set operator")
