@@ -8,7 +8,6 @@
 
 import ../Process
 import PipeWin32
-import os/win32
 
 version(windows) {
 include windows

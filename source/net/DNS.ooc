@@ -7,7 +7,6 @@
  */
 
 use collections
-import os/System
 import berkeley, Address, Socket
 
 /**

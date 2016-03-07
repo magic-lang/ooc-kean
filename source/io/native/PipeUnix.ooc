@@ -8,9 +8,7 @@
 
 include sys/types, sys/stat, unistd
 include fcntl
-
 import ../Pipe
-import os/unistd
 
 version(unix || apple) {
 F_SETFL, F_GETFL: extern Int

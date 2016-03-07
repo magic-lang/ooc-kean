@@ -6,7 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import os/win32
 import structs/VectorList
 import io/File
 

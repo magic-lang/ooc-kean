@@ -7,7 +7,6 @@
  */
 
 import ../Mutex
-import os/win32
 
 version(windows) {
 include windows

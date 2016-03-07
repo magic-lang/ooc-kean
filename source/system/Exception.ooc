@@ -80,14 +80,8 @@ _popStackFrame: func { exceptionContext popStackFrame() }
 _getException: func -> Exception { exceptionContext exception }
 
 version(windows) {
-	import os/win32
-
-	getOSErrorCode: func -> Int {
-		GetLastError()
-	}
-	getOSError: func -> String {
-		GetWindowsErrorMessage(GetLastError())
-	}
+	getOSErrorCode: func -> Int { GetLastError() }
+	getOSError: func -> String { GetWindowsErrorMessage(GetLastError()) }
 } else {
 	errno: extern Int
 	strerror: extern func (Int) -> CString

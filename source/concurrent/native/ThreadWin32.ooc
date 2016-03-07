@@ -7,7 +7,6 @@
  */
 
 import ../Thread
-import os/win32
 
 version(windows) {
 ThreadWin32: class extends Thread {
