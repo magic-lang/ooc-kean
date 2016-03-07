@@ -4,8 +4,6 @@ SourcePath: source/collections
 Requires: unit
 Requires: base
 Imports: Vector2D
-Imports: PointerVector
-Imports: PointerVectorList
 Imports: VectorQueue
 Imports: CircularQueue
 Imports: HashDictionary
