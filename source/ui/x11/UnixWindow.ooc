@@ -73,11 +73,11 @@ UnixWindow: class extends UnixWindowBase {
 			case (matchedImage: GpuImage) =>
 				map add("texture0", matchedImage)
 		}
-		targetSize := this _openGLWindow size toFloatVector2D()
+		sourceSize := image size toFloatVector2D()
 		map textureTransform = GpuCanvas _createTextureTransform(image size, IntBox2D new(image size))
-		map model = this _openGLWindow _createModelTransform(IntBox2D new(image size), 0.0f)
-		map view = this _openGLWindow _createView(targetSize, FloatTransform3D identity)
-		map projection = this _openGLWindow _createProjection(targetSize, 0.0f)
+		map model = FloatTransform3D createScaling(sourceSize x / 2.0f, sourceSize y / 2.0f, 0.0f)
+		map view = this _openGLWindow _createView(sourceSize, FloatTransform3D identity)
+		map projection = this _openGLWindow _createProjection(sourceSize, 0.0f)
 		map use(null)
 		this _openGLWindow _bind()
 		this _openGLWindow context backend setViewport(IntBox2D new(image size))
