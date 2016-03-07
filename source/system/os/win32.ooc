@@ -100,7 +100,7 @@ version(windows) {
 
 	BYTE: extern cover from Byte
 	WORD: extern cover from Int
-	DWORD: extern cover from Long
+	DWORD: extern cover from UInt
 	LPTSTR: extern cover from CString
 	MAKEWORD: extern func (low, high: BYTE) -> WORD
 }

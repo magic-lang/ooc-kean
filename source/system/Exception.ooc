@@ -338,7 +338,6 @@ version (windows) {
 
 	CONTEXT: extern cover
 
-	DWORD: cover from ULong
 	EXCEPTION_RECORD: extern cover {
 		ExceptionCode: DWORD
 	}

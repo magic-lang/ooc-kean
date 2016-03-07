@@ -78,6 +78,7 @@ include windows
 
 _beginthreadex: extern func (security: Pointer, stackSize: UInt, startAddress, arglist: Pointer, initflag: UInt, thrdaddr: UInt*) -> Handle
 GetCurrentThread: extern func -> Handle
+GetCurrentThreadId: extern func -> UInt
 WaitForSingleObject: extern func (...) -> Long
 SwitchToThread: extern func -> Bool
 TerminateThread: extern func (...) -> Bool

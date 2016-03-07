@@ -40,7 +40,7 @@ Thread: abstract class {
 		version (unix || apple)
 			result = pthread_self() as ThreadId
 		version (windows)
-			result = GetCurrentThread() as ThreadId
+			result = GetCurrentThreadId() as ThreadId
 		result
 	}
 	yield: static func -> Bool {
