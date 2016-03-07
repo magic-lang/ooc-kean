@@ -26,6 +26,8 @@ DoubleTest: class extends Fixture {
 		this add("0.0 is equal to -0.0", func { expect(0.0, is equal to(-0.0)) })
 		this add("0.0 is less than 0.00000001", func { expect(0.0, is less than(0.00000001)) })
 		this add("0.0 is greater than -0.00000001", func { expect(0.0, is greater than(-0.00000001)) })
+		this add("100.0L is greater than 99.9L", func { expect(100.0L, is greater than(99.9L)) })
+		this add("-123.4L is less than -123.3L", func { expect(-123.4L, is less than(123.3L)) })
 	}
 }
 
