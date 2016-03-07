@@ -136,7 +136,7 @@ UDPSocket: class extends Socket {
 		:return: Number of received bytes
 	 */
 	receive: func ~withBuffer (buffer: CharBuffer, length: SizeT) -> Int {
-		assert (length <= buffer capacity)
+		raise(length > buffer capacity, "length > buffer capacity in UDPSocket receive")
 		ret := receive(buffer data, length, 0)
 		buffer setLength(ret)
 		ret
