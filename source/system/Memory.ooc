@@ -12,6 +12,7 @@ else { include alloca }
 
 // Note: Original SDK ooc code assumes allocated memory is zeroed (calloc)
 // Consider using Buffer instead of calling these functions directly
+// note: sizeof is intentionally not here. Use `Int size` instead of `sizeof(Int)`
 malloc: extern func (SizeT) -> Pointer
 calloc: extern func (SizeT, SizeT) -> Pointer
 realloc: extern func (Pointer, SizeT) -> Pointer
@@ -22,7 +23,30 @@ memcpy: extern func (Pointer, Pointer, SizeT)
 memfree: extern (free) func (Pointer)
 alloca: extern func (SizeT) -> Pointer
 
-// note: sizeof is intentionally not here. sizeof(Int) will be translated
-// to sizeof(Int_class()), and thus will always give the same value for
-// all types. 'Int size' should be used instead, which will be translated
-// to 'Int_class()->size'
+// Used for executing any/all cleanup (free~all) functions before program exit
+GlobalCleanup: class {
+	_functionPointers: static Stack<Closure> = null
+	init: func
+	register: static func (pointer: Func) {
+		if (This _functionPointers == null)
+			This _functionPointers = Stack<Closure> new()
+		This _functionPointers push(pointer as Closure)
+	}
+	run: static func {
+		if (This _functionPointers != null) {
+			while (!This _functionPointers isEmpty) {
+				next := This _functionPointers pop()
+				(next as Func)()
+				(next) free()
+			}
+			This _functionPointers free()
+			This _functionPointers = null
+		}
+	}
+	clear: static func {
+		if (This _functionPointers != null) {
+			This _functionPointers free()
+			This _functionPointers = null
+		}
+	}
+}
