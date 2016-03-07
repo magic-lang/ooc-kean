@@ -10,6 +10,7 @@ use concurrent
 use unit
 
 WaitLockTest: class extends Fixture {
+	timesTriggered: static Int = 0
 	init: func {
 		super("WaitLock")
 		this add("_testWithMutexOwnership", This _testWithMutexOwnership)
@@ -25,84 +26,83 @@ WaitLockTest: class extends Fixture {
 		mutex := Mutex new()
 		waitLock := WaitLock new(mutex)
 		waitLock free()
+		expect(mutex, is notNull)
 		mutex free()
 	}
 	_testWakeWithFailingCondition: static func {
-		timesTriggered := 0
-		timesTriggeredRef := timesTriggered&
+		This timesTriggered = 0
 		waitLock := WaitLock new()
 		waitingThread := Thread new(||
 			waitLock lockWhen(func -> Bool {
-				timesTriggeredRef@ = timesTriggeredRef@ + 1
+				This timesTriggered = This timesTriggered + 1
 				false
 			})
 			waitLock unlock()
-			expect(false)
+			expect(false) // Should be an unreachable statement
 		)
 		testThread := Thread new(||
 			while (true) {
 				waitLock lock()
-				if (timesTriggeredRef@ >= 1)
+				if (This timesTriggered >= 1)
 					break
 				waitLock unlock()
 				Thread yield()
 			}
-			expect(timesTriggeredRef@ == 1)
+			expect(This timesTriggered, is equal to(1))
 			waitLock unlock()
 			waitLock wake()
-			expect(!waitingThread wait(0.05))
+			expect(waitingThread wait(0.05), is false)
 			waitLock lock()
-			expect(timesTriggeredRef@ == 2)
+			expect(This timesTriggered, is equal to (2))
 			waitLock unlock()
 		)
 		testThread start()
 		waitingThread start()
-		expect(testThread wait(0.1))
+		expect(testThread wait(0.1), is true)
 		testThread free()
 		waitingThread cancel()
-		expect(waitingThread wait(0.1))
+		expect(waitingThread wait(0.1), is true)
 		waitingThread free()
 		waitLock free()
 	}
 	_testWakeWithPassingCondition: static func {
-		timesTriggered := 0
-		timesTriggeredRef := timesTriggered&
+		This timesTriggered = 0
 		waitLock := WaitLock new()
 		waitingThread := Thread new(||
 			waitLock lockWhen(func -> Bool {
-				timesTriggeredRef@ = timesTriggeredRef@ + 1
-				timesTriggeredRef@ == 2
+				This timesTriggered = This timesTriggered + 1
+				This timesTriggered == 2
 			})
 			waitLock unlock()
 		)
 		testThread := Thread new(||
 			while (true) {
 				waitLock lock()
-				if (timesTriggeredRef@ >= 1)
+				if (This timesTriggered >= 1)
 					break
 				waitLock unlock()
 				Thread yield()
 			}
-			expect(timesTriggeredRef@ == 1)
+			expect(This timesTriggered, is equal to(1))
 			waitLock unlock()
 			waitLock wake()
 			while (true) {
 				waitLock lock()
-				if (timesTriggeredRef@ >= 2)
+				if (This timesTriggered >= 2)
 					break
 				waitLock unlock()
 				Thread yield()
 			}
-			expect(timesTriggeredRef@ == 2)
+			expect(This timesTriggered, is equal to(2))
 			waitLock unlock()
 			while (!waitingThread wait(0.05))
 				Thread yield()
 		)
 		testThread start()
 		waitingThread start()
-		expect(testThread wait(0.1))
+		expect(testThread wait(0.1), is true)
 		testThread free()
-		expect(!waitingThread alive())
+		expect(waitingThread alive(), is false)
 		waitingThread free()
 		waitLock free()
 	}
