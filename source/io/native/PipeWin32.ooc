@@ -7,7 +7,6 @@
  */
 
 import ../Pipe
-import os/win32
 
 version(windows) {
 PipeWin32: class extends Pipe {

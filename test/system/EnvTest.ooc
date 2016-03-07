@@ -6,7 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import os/Env
 use unit
 
 EnvTest: class extends Fixture {

@@ -6,8 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import os/unistd
-
 version(windows) {
 	include windows | (_WIN32_WINNT=0x0500)
 

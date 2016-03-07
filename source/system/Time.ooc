@@ -6,8 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import os/win32
-
 version(linux) {
 	include unistd | (__USE_BSD, _BSD_SOURCE, _DEFAULT_SOURCE)
 	include sys/time | (__USE_BSD, _BSD_SOURCE, _DEFAULT_SOURCE)
