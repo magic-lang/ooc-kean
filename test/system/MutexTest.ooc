@@ -13,6 +13,7 @@ MutexTest: class extends Fixture {
 	init: func {
 		super("Mutex")
 		this add("basic", This _testBasicUsage)
+		this add("global", This _testGlobal)
 		this add("recursive", This _testRecursive)
 	}
 	_testBasicUsage: static func {
@@ -46,6 +47,46 @@ MutexTest: class extends Fixture {
 		}
 		threads free()
 		mutex free()
+		expect(value get(), is equal to(2 * countPerThread * threadCount))
+		(job as Closure) free()
+		value free()
+	}
+	_testGlobal: static func {
+		threadCount := 4
+		countPerThread := 1_000
+		mutexes := Mutex[threadCount] new()
+		for (i in 0 .. threadCount)
+			mutexes[i] = Mutex new(MutexType Global)
+
+		value := Cell<Int> new(0)
+
+		increaser := func {
+			value set(value get() + 1)
+		}
+		increaser = ((increaser as Closure) take() as Func)
+
+		threads := Thread[threadCount] new()
+		job := func (index: Int) {
+			for (i in 0 .. countPerThread) {
+				mutexes[index] lock()
+				value set(value get() + 1)
+				mutexes[index] unlock()
+				mutexes[index] with(increaser)
+				Thread yield()
+			}
+		}
+		for (i in 0 .. threads length) {
+			threads[i] = Thread new(|| job(i))
+			expect(threads[i] start())
+		}
+		for (i in 0 .. threads length) {
+			expect(threads[i] wait())
+			threads[i] free()
+		}
+		threads free()
+		for (i in 0 .. threadCount)
+			mutexes[i] free()
+		mutexes free()
 		expect(value get(), is equal to(2 * countPerThread * threadCount))
 		(job as Closure) free()
 		value free()
