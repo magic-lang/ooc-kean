@@ -17,19 +17,50 @@ CsvWriterTest: class extends Fixture {
 		this _createOutputDirectory()
 		this add("open-write-verify", func {
 			// Read original file
-			reader := CsvReader open(Text new(c"test/io/input/3x3.csv", 21))
+			reader := CsvReader open(t"test/io/input/3x3.csv")
 			csvRecords := VectorList<VectorList<Text>> new()
 			for (row in reader)
 				csvRecords add(row)
 			reader free()
 			// Write contents of original file to a temporary file
-			outputFilename := Text new(c"test/io/output/3x3_temp.csv", 27)
+			outputFilename := t"test/io/output/3x3_temp.csv"
 			writer := CsvWriter open(outputFilename)
 			for (i in 0 .. csvRecords count)
 				writer write(csvRecords[i])
 			writer free()
 			// Open temporary file and verify content
 			reader = CsvReader open(outputFilename)
+			rowCounter := 0
+			for (row in reader) {
+				for (i in 0 .. row count) {
+					rowString := row[i] toString()
+					correctAnswer := ((i + 1) + rowCounter * 3) toString()
+					expect(rowString, is equal to(correctAnswer))
+					rowString free(); correctAnswer free()
+				}
+				row free()
+				++rowCounter
+			}
+			reader free()
+			outputFilename free()
+			csvRecords free()
+		})
+		this add("non-default delimiter", func {
+			// Read original file
+			reader := CsvReader open(t"test/io/input/semicolondelimiter.csv", ';')
+			csvRecords := VectorList<VectorList<Text>> new()
+			for (row in reader)
+				csvRecords add(row)
+			reader free()
+			// Write contents of original file to a temporary file
+			outputFilename := t"test/io/output/semicolondelimiter_temp.csv"
+			writer := CsvWriter open(outputFilename, ';')
+			for (i in 0 .. csvRecords count)
+				writer write(csvRecords[i])
+			expect(writer delimiter, is equal to(';'))
+			writer free()
+			// Open temporary file and verify content
+			reader = CsvReader open(outputFilename, ';')
 			rowCounter := 0
 			for (row in reader) {
 				for (i in 0 .. row count) {
