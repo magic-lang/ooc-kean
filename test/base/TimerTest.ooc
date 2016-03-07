@@ -25,6 +25,14 @@ TimerTest: class extends Fixture {
 			slow := this cpuTimerTestFunction(10_000_000)
 			expect(slow > fast, is true)
 		})
+		this add("reset", func {
+			expect(this wallTimer _count, is equal to(2))
+			expect(this cpuTimer _count, is equal to(2))
+			this wallTimer reset()
+			this cpuTimer reset()
+			expect(this wallTimer _count, is equal to(0))
+			expect(this cpuTimer _count, is equal to(0))
+		})
 	}
 	wallTimerTestFunction: func (loopLength: Int) -> Double {
 		sum := 0

@@ -51,7 +51,7 @@ System: class {
 		result
 	}
 	hostname: static func -> String {
-		result: String
+		result: String = null
 		version (windows) {
 			bufSize: UInt = 0
 			GetComputerNameEx(COMPUTER_NAME_FORMAT DNS_HOSTNAME, null, bufSize&)

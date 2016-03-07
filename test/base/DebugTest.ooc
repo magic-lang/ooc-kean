@@ -36,6 +36,15 @@ DebugTest: class extends Fixture {
 			Debug print("second", DebugLevel Notification)
 			expect(this outputString, is equal to("first"))
 		})
+		this add("test error", func {
+			try {
+				Debug error~text(t"first")
+				expect(false)
+			}
+			catch (e: Exception) {
+				expect(e, is notNull)
+			}
+		})
 	}
 }
 

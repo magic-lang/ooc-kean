@@ -62,6 +62,8 @@ PromiseCollectorTest: class extends Fixture {
 				promises += Promise start(func { for (i in 0 .. 50_000_000) { } })
 			expect(promises wait(TimeSpan milliseconds(10)), is false)
 			expect(promises wait(), is true)
+			promises cancel()
+			expect(promises wait(), is true)
 			promises free()
 		})
 	}

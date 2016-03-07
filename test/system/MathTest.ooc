@@ -134,6 +134,19 @@ MathTest: class extends Fixture {
 			expect(1.999999999999999 equals(2.0), is false)
 			expect(1.9999999999999999 equals(2.0), is true)
 
+			expect((-2.3) absolute, is equal to(2.3) within(doubleTolerance))
+			expect(2.3 absolute, is equal to(2.3) within(doubleTolerance))
+
+			expect((-2.3) sign, is equal to(-1.0) within(doubleTolerance))
+			expect(2.3 sign, is equal to(1.0) within(doubleTolerance))
+
+			expect((-1.2) maximum(-1.1), is equal to(-1.1) within(doubleTolerance))
+			expect((-1.2) maximum(0.0), is equal to(0.0) within(doubleTolerance))
+			expect((-1.2) minimum(-1.1), is equal to(-1.2) within(doubleTolerance))
+			expect((-1.2) minimum(0.0), is equal to(-1.2) within(doubleTolerance))
+
+			expect(10.0 squared, is equal to(100.0) within(doubleTolerance))
+
 			nearZero := (0.1 + 0.1 + 0.1) - 0.3
 			expect(nearZero equals(0.0), is true)
 			expect(nearZero lessOrEqual(0.0), is true)

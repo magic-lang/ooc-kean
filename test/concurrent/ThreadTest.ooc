@@ -67,14 +67,18 @@ ThreadTest: class extends Fixture {
 		(job as Closure) free()
 	}
 	_testThreadId: static func {
+		thisThreadInstance, otherThreadInstance: Thread
 		myId := Thread currentThreadId()
 		otherId := Cell<ThreadId> new(0 as ThreadId)
 		job := func {
 			otherId set(Thread currentThreadId())
+			otherThreadInstance = Thread currentThread()
 		}
+		thisThreadInstance = Thread currentThread()
 		thread := Thread new(job)
 		expect(thread start())
 		expect(thread wait())
+		expect(memcmp(thisThreadInstance, otherThreadInstance, Thread size) == 0)
 		thread free()
 		expect(myId equals(otherId get()) == false)
 		otherId free()

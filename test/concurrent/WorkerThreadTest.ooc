@@ -17,7 +17,6 @@ WorkerThreadTest: class extends Fixture {
 		This threads add(Thread currentThreadId())
 		Time sleepMilli(250)
 		This sum += 1
-		//">" print(); fflush(stdout)
 		Time sleepMilli(250)
 		This threads add(Thread currentThreadId())
 	}
@@ -25,7 +24,6 @@ WorkerThreadTest: class extends Fixture {
 		This threads add(Thread currentThreadId())
 		Time sleepMilli(250)
 		This sum -= 1
-		//"<" print(); fflush(stdout)
 		Time sleepMilli(250)
 		This threads add(Thread currentThreadId())
 	}
