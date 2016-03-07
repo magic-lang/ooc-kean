@@ -311,8 +311,9 @@ strArrayFromCString: func ~hack (argc: Int, argv: String*) -> String[] {
 }
 cStringPtrToStringPtr: func (cstr: CString*, len: Int) -> String* {
 	toRet: String* = calloc(len, Pointer size) // otherwise the pointers are stack-allocated
-	for (i in 0 .. len) {
+	for (i in 0 .. len)
 		toRet[i] = makeStringLiteral(cstr[i], cstr[i] length())
-	}
 	toRet
 }
+
+GlobalCleanup register(|| String free~all())

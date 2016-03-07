@@ -54,6 +54,9 @@ ByteBuffer: class {
 	}
 	free: static func ~all { _RecyclableByteBuffer _free~all() }
 }
+
+GlobalCleanup register(|| ByteBuffer free~all())
+
 _SlicedByteBuffer: class extends ByteBuffer {
 	_parent: ByteBuffer
 	_offset: Int
@@ -68,6 +71,7 @@ _SlicedByteBuffer: class extends ByteBuffer {
 		super()
 	}
 }
+
 _RecoverableByteBuffer: class extends ByteBuffer {
 	_recover: Func (ByteBuffer) -> Bool
 	init: func (pointer: Byte*, size: Int, =_recover) { super(pointer, size) }
@@ -78,6 +82,7 @@ _RecoverableByteBuffer: class extends ByteBuffer {
 		}
 	}
 }
+
 _RecyclableByteBuffer: class extends ByteBuffer {
 	init: func (pointer: Byte*, size: Int) { super(pointer, size, true) }
 	_forceFree: func {
@@ -108,13 +113,12 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		buffer: This = null
 		bin := This _getBin(size)
 		This _lock lock()
-		for (i in 0 .. bin count) {
+		for (i in 0 .. bin count)
 			if ((bin[i] size) == size) {
 				buffer = bin remove(i)
 				buffer referenceCount _count = 0
 				break
 			}
-		}
 		This _lock unlock()
 		version(debugByteBuffer) { if (buffer == null) Debug print("No RecyclableByteBuffer available in the bin; allocating a new one") }
 		buffer == null ? This new(malloc(size), size) : buffer
@@ -133,5 +137,9 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		This _smallRecycleBin free()
 		This _mediumRecycleBin free()
 		This _largeRecycleBin free()
+		if (This _lock != null) {
+			This _lock free()
+			This _lock = null
+		}
 	}
 }
