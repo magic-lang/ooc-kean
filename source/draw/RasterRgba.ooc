@@ -152,7 +152,7 @@ RasterRgba: class extends RasterPacked {
 	open: static func (filename: String) -> This {
 		requiredComponents := 4
 		(buffer, size, _) := StbImage load(filename, requiredComponents)
-		result := This new(buffer, size);
+		result := This new(buffer, size)
 		result swapRedBlue()
 		result
 	}

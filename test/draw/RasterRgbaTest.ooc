@@ -20,7 +20,7 @@ RasterRgbaTest: class extends Fixture {
 			try {
 				image := RasterRgba open("nonExistingFile")
 				expect(false) // Unreachable code since we are expecting an exception
-				expect(image, is equal to (null as RasterRgba))
+				expect(image, is Null)
 			} catch (e: Exception) {
 				expect(e message contains("Failed to load image: "))
 			}
