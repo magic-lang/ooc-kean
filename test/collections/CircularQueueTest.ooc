@@ -46,7 +46,7 @@ CircularQueueTest: class extends Fixture {
 			queue enqueue(MyClass new(4))
 			expect(queue count, is equal to(3))
 			object := queue dequeue(null)
-			expect(object != null)
+			expect(object, is notNull)
 			expect(object content, is equal to(2))
 			object free()
 			object = queue dequeue(null)

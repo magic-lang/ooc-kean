@@ -45,7 +45,7 @@ SynchronizedResourceTest: class extends Fixture {
 			counter := object objectId
 			object free()
 			recycledObjects := TestObject recycler _resources get(Thread currentThreadId())
-			expect(recycledObjects != null)
+			expect(recycledObjects, is notNull)
 			expect(recycledObjects count, is equal to(1))
 			object = TestObject new~recycled(3)
 			expect(object checkThreadAffinity())
@@ -78,7 +78,7 @@ SynchronizedResourceTest: class extends Fixture {
 				expect(object checkThreadAffinity())
 				object free()
 				localResources := TestObject recycler _resources get(Thread currentThreadId())
-				expect(localResources != null)
+				expect(localResources, is notNull)
 				expect(localResources count, is equal to((i + 1) minimum(differentObjects)))
 			}
 		}

@@ -22,7 +22,7 @@ EnvTest: class extends Fixture {
 			expect(Env get("abc"), is equal to("efg"))
 
 			Env unset("abc")
-			expect(Env get("abc") == null)
+			expect(Env get("abc"), is Null)
 		})
 	}
 }

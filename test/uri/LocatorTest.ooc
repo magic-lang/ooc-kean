@@ -47,7 +47,7 @@ LocatorTest: class extends Fixture {
 		})
 		this add("empty", func {
 			locator := Locator parse(t"")
-			expect(locator == null)
+			expect(locator, is Null)
 		})
 		this add("no scheme", func {
 			userText := Text new("name:password")
@@ -94,7 +94,7 @@ LocatorTest: class extends Fixture {
 			locator := Locator parse(locatorText)
 			expect(locator scheme == schemeText)
 			expect(locator authority toText() == endpointText)
-			expect(locator authority user == null)
+			expect(locator authority user as User, is Null)
 			expect(locator authority endpoint toText() == endpointText)
 			path := locator path
 			expect(path[0] == pathText1)
@@ -122,7 +122,7 @@ LocatorTest: class extends Fixture {
 			locatorText := (schemeText + t"://" + t"/" + pathText1 + t"/" + pathText2 + t"?" + queryText + t"#" + fragmentText) take()
 			locator := Locator parse(locatorText)
 			expect(locator scheme == schemeText)
-			expect(locator authority == null)
+			expect(locator authority as Authority, is Null)
 			path := locator path
 			expect(path[0] == pathText1)
 			expect(path[1] == pathText2)
@@ -152,7 +152,7 @@ LocatorTest: class extends Fixture {
 			expect(locator authority toText() == userText + t"@" + endpointText)
 			expect(locator authority user toText() == userText)
 			expect(locator authority endpoint toText() == endpointText)
-			expect(locator path == null)
+			expect(locator path as VectorList<Text>, is Null)
 			expect(locator query toText() == queryText)
 			expect(locator query contains(queryKey1) == true)
 			expect(locator query getValue(queryKey2) == queryValue2)
@@ -178,7 +178,7 @@ LocatorTest: class extends Fixture {
 			path := locator path
 			expect(path[0] == pathText1)
 			expect(path[1] == pathText2)
-			expect(locator query == null)
+			expect(locator query as Query, is Null)
 			expect(locator fragment == fragmentText)
 			expect(locator toText() == locatorText)
 			locatorText free(Owner Sender)
@@ -222,11 +222,11 @@ LocatorTest: class extends Fixture {
 			locatorText := (schemeText + t"://" + t"/" + pathText1 + t"/" + pathText2) take()
 			locator := Locator parse(locatorText)
 			expect(locator scheme == schemeText)
-			expect(locator authority == null)
+			expect(locator authority as Authority, is Null)
 			path := locator path
 			expect(path[0] == pathText1)
 			expect(path[1] == pathText2)
-			expect(locator query == null)
+			expect(locator query as Query, is Null)
 			expect(locator fragment == Text empty)
 			expect(locator toText() == locatorText)
 			locatorText free(Owner Sender)

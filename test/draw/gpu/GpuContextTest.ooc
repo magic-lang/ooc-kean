@@ -19,7 +19,7 @@ GpuContextTest: class extends Fixture {
 		super("OpenGLContext")
 		this add("create context", func {
 			context := OpenGLContext new()
-			expect(context != null)
+			expect(context, is notNull)
 			context free()
 		})
 		this add("shared context", func {
@@ -27,8 +27,8 @@ GpuContextTest: class extends Fixture {
 			mother := OpenGLContext new()
 			child: OpenGLContext
 			childThread wait(|| child = OpenGLContext new(mother))
-			expect(mother != null)
-			expect(child != null)
+			expect(mother, is notNull)
+			expect(child, is notNull)
 			sourceImage := RasterRgba open("test/draw/gpu/input/Flower.png")
 			sharedImage := mother createImage(sourceImage)
 			motherRaster := sharedImage toRaster()
@@ -49,8 +49,8 @@ GpuContextTest: class extends Fixture {
 			context1 := OpenGLContext new()
 			context2: OpenGLContext
 			thread wait(|| context2 = OpenGLContext new())
-			expect(context1 != null)
-			expect(context2 != null)
+			expect(context1, is notNull)
+			expect(context2, is notNull)
 			context1 free()
 			thread wait(|| context2 free())
 			thread free()

@@ -43,7 +43,7 @@ QueryTest: class extends Fixture {
 		})
 		this add("empty", func {
 			query := Query parse(t"")
-			expect(query == null)
+			expect(query, is Null)
 		})
 		this add("missing values", func {
 			one := t"one"

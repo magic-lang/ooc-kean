@@ -34,7 +34,7 @@ EndpointTest: class extends Fixture {
 		})
 		this add("empty", func {
 			endpoint := Endpoint parse(t"")
-			expect(endpoint == null)
+			expect(endpoint, is Null)
 		})
 		this add("only host", func {
 			one := t"one"
