@@ -195,13 +195,9 @@ RasterMonochrome: class extends RasterPacked {
 	}
 
 	open: static func (filename: String) -> This {
-		x, y, imageComponents: Int
 		requiredComponents := 1
-		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
-		if (data == null)
-			Exception new("Failed to load image: " + filename) throw()
-		buffer := ByteBuffer new(data as Byte*, x * y * requiredComponents, true)
-		This new(buffer, IntVector2D new(x, y))
+		(buffer, size, _) := StbImage load(filename, requiredComponents)
+		This new(buffer, size);
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
