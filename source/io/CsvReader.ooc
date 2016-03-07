@@ -26,7 +26,7 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 	}
 	remove: override func -> Bool { false }
 	iterator: func -> This { this }
-	hasNext: override func -> Bool { this _fileReader hasNext() }
+	hasNext: override func -> Bool { this _fileReader hasNext() && this _fileReader peek() != '\0' }
 	next: final override func -> VectorList<Text> {
 		result: VectorList<Text>
 		if (this hasNext()) {
