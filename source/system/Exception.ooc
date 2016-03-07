@@ -8,7 +8,7 @@
 
 import Backtrace
 
-include setjmp, assert, errno, stdint
+include setjmp, errno, stdint
 
 version(windows) {
 	include windows
@@ -17,8 +17,6 @@ version(windows) {
 	RaiseException: extern func (ULong, ULong, ULong, Pointer)
 	IsDebuggerPresent: extern func -> Pointer
 }
-
-assert: extern func (Bool)
 
 JmpBuf: cover from jmp_buf {
 	setJmp: extern (setjmp) func -> Int

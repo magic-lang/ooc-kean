@@ -271,8 +271,8 @@ version (unix || apple) {
 		 * The absolute path, e.g. "my/dir" => "/current/directory/my/dir"
 		 */
 		getAbsolutePath: override func -> String {
-			assert(path != null)
-			assert(!path empty())
+			raise(path == null, "FileUnix::getAbsolutePath: path is null")
+			raise(path empty(), "FileUnix::getAbsolutePath: path is empty")
 			actualPath := calloc(1, MAX_PATH_LENGTH) as CString
 			ret := realpath(path, actualPath)
 			if (ret == null)
