@@ -16,8 +16,7 @@ Vector: abstract class <T> {
 		this _freeContent = freeContent
 	}
 	free: override func {
-		if (!(this instanceOf(StackVector)))
-			memfree(this _backend)
+		memfree(this _backend)
 		super()
 	}
 	_free: func ~range (start, end: Int) {
@@ -43,11 +42,7 @@ Vector: abstract class <T> {
 			capacity = this capacity - targetStart
 		memmove(this _backend + targetStart * T size, this _backend + sourceStart * T size, capacity * T size)
 	}
-	copy: func -> This<T> {
-		result := HeapVector<T> new(this _capacity)
-		this copy(0, result, 0)
-		result
-	}
+	copy: abstract func -> This<T>
 	copy: func ~within (sourceStart, targetStart: Int, capacity := 0) {
 		this copy(sourceStart, this as This<T>, targetStart, capacity)
 	}
@@ -66,13 +61,11 @@ Vector: abstract class <T> {
 		else
 			memcpy(destination, source, length)
 	}
-
 	operator [] (index: Int) -> T {
 		version (safe)
 			raise(index >= this capacity || index < 0, "Accessing Vector index out of range in get operator")
 		this _backend[index]
 	}
-
 	operator []= (index: Int, item: T) {
 		version (safe)
 			raise(index >= this capacity || index < 0, "Accessing Vector index out of range in set operator")
@@ -86,22 +79,23 @@ HeapVector: class <T> extends Vector<T> {
 		this _allocate(capacity)
 		memset(this _backend, 0, capacity * T size)
 	}
-
 	_allocate: func (capacity: Int) {
 		this _backend = realloc(this _backend, capacity * T size)
 	}
-
 	resize: override func (capacity: Int) {
 		super()
 		this _allocate(capacity)
 	}
-
+	copy: override func -> This<T> {
+		result := This<T> new(this _capacity)
+		this copy(0, result, 0)
+		result
+	}
 	operator [] (index: Int) -> T {
 		version (safe)
 			raise(index >= this capacity || index < 0, "Accessing Vector index out of range in get operator")
 		this _backend[index]
 	}
-
 	operator []= (index: Int, item: T) {
 		version (safe)
 			raise(index >= this capacity || index < 0, "Accessing Vector index out of range in set operator")
@@ -111,16 +105,5 @@ HeapVector: class <T> extends Vector<T> {
 				old free()
 		}
 		this _backend[index] = item
-	}
-}
-
-StackVector: class <T> extends Vector<T> {
-	init: func (data: T*, capacity: Int) {
-		super(data, capacity)
-	}
-	resize: override func (capacity: Int) {
-		if (capacity > this capacity)
-			capacity = this capacity
-		super(capacity)
 	}
 }
