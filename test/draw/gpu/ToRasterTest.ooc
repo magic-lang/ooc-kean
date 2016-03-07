@@ -45,7 +45,7 @@ ToRasterTest: class extends Fixture {
 		future := gpuImage toRasterAsync()
 		future wait()
 		raster := future getResult(null)
-		expect(raster != null)
+		expect(raster, is notNull)
 		expect(raster distance(sourceImage), is equal to(0.0f))
 		future free()
 		gpuImage free()
