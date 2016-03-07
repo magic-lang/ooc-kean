@@ -12,7 +12,11 @@ import io/[File, FileReader]
 
 CsvReader: class extends Iterator<VectorList<Text>> {
 	_fileReader: FileReader
-	init: func (=_fileReader)
+	_delimiter: Char
+	delimiter ::= this _delimiter
+	init: func (=_fileReader, delimiter := ',') {
+		this _delimiter = delimiter
+	}
 	free: func {
 		if (this _fileReader != null) {
 			this _fileReader close()
@@ -42,7 +46,7 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		readCharacter: Char
 		for (i in 0 .. rowLength) {
 			textBuilder := TextBuilder new()
-			while (i < rowLength && ((readCharacter = row[i]) != This delimiter)) {
+			while (i < rowLength && ((readCharacter = row[i]) != this _delimiter)) {
 				++i
 				match (readCharacter) {
 					case ' ' =>
@@ -77,18 +81,17 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		textBuilder free()
 		result
 	}
-	delimiter ::= static ','
-	open: static func ~text (filename: Text) -> This {
+	open: static func ~text (filename: Text, delimiter := ',') -> This {
 		filenameString := filename toString()
-		result := This open(filenameString)
+		result := This open(filenameString, delimiter)
 		filenameString free()
 		result
 	}
-	open: static func ~string (filename: String) -> This {
+	open: static func ~string (filename: String, delimiter := ',') -> This {
 		result: This = null
 		file := File new(filename)
 		if (file exists())
-			result = This new(FileReader new(file))
+			result = This new(FileReader new(file), delimiter)
 		file free()
 		result
 	}

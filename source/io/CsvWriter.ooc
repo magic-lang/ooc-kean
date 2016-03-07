@@ -13,7 +13,11 @@ import io/[File, FileWriter]
 
 CsvWriter: class {
 	_fileWriter: FileWriter
-	init: func (=_fileWriter)
+	_delimiter: Char
+	delimiter ::= this _delimiter
+	init: func (=_fileWriter, delimiter := ',') {
+		this _delimiter = delimiter
+	}
 	free: func {
 		if (this _fileWriter != null) {
 			this _fileWriter close()
@@ -31,7 +35,7 @@ CsvWriter: class {
 					break
 				}
 			if (i < row count - 1)
-				value append(CsvReader delimiter)
+				value append(this _delimiter)
 			string := value toString()
 			this _fileWriter file write(string)
 			string free()
@@ -42,15 +46,15 @@ CsvWriter: class {
 	_isWhitespace: func (value: Char) -> Bool {
 		value == '\t' || value == ' ' || value == '\r' || value == '\n'
 	}
-	open: static func ~text (filename: Text) -> This {
+	open: static func ~text (filename: Text, delimiter := ',') -> This {
 		filenameString := filename toString()
-		result := This open(filenameString)
+		result := This open(filenameString, delimiter)
 		filenameString free()
 		result
 	}
-	open: static func ~string (filename: String) -> This {
+	open: static func ~string (filename: String, delimiter := ',') -> This {
 		file := File new(filename)
-		result := This new(FileWriter new(file))
+		result := This new(FileWriter new(file), delimiter)
 		file free()
 		result
 	}
