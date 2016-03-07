@@ -21,7 +21,7 @@ BufferTest: class extends Fixture {
 			buffer := Buffer new(4)
 			expect(buffer size, is equal to(4))
 			expect(buffer free())
-			expect(buffer pointer == null)
+			expect(buffer pointer, is Null)
 			expect(buffer size, is equal to(0))
 		})
 		this add("copy", func {
@@ -32,13 +32,13 @@ BufferTest: class extends Fixture {
 			expect(buffer pointer == p)
 			expect(buffer size, is equal to(4))
 			expect(buffer free())
-			expect(buffer pointer == null)
+			expect(buffer pointer, is Null)
 			expect(buffer size, is equal to(0))
 
 			expect(s pointer != p)
 			expect(s size, is equal to(4))
 			expect(s free())
-			expect(s pointer == null)
+			expect(s pointer, is Null)
 			expect(s size, is equal to(0))
 		})
 		this add("copyTo, moveTo", func {
@@ -60,7 +60,7 @@ BufferTest: class extends Fixture {
 		})
 		this add("extend", func {
 			buffer := Buffer new()
-			expect(buffer pointer == null)
+			expect(buffer pointer, is Null)
 			buffer resize(4)
 			expect(buffer size, is equal to(4))
 			buffer resize(2)
