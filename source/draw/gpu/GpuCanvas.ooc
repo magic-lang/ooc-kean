@@ -103,7 +103,7 @@ GpuCanvas: abstract class extends Canvas {
 	}
 	_createProjection: func (targetSize: FloatVector2D, focalLengthPerWidth: Float) -> FloatTransform3D {
 		result: FloatTransform3D
-		focalLengthPerHeight := focalLengthPerWidth * (targetSize x as Float) / (targetSize y as Float)
+		focalLengthPerHeight := focalLengthPerWidth * targetSize x / targetSize y
 		flipX := this _coordinateTransform a as Float
 		flipY := -(this _coordinateTransform e as Float)
 		if (focalLengthPerWidth > 0.0f) {
