@@ -175,8 +175,7 @@ OpenGLContext: class extends GpuContext {
 		map add("texelOffset", 1.0f / source size x)
 		map add("xOffset", (2.0f / channels - 0.5f) / source size x)
 		map add("transform", FloatTransform3D createScaling(1.0f, -1.0f, 1.0f))
-		target canvas viewport = viewport
-		target canvas draw(source, map)
+		DrawState new(target) setViewport(viewport) setMap(map) draw()
 	}
 	toRasterAsync: override func (source: GpuImage) -> ToRasterFuture { ToRasterFuture new(this toRaster(source)) }
 	createMesh: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> Mesh {

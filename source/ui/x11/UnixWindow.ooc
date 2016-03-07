@@ -55,7 +55,39 @@ UnixWindow: class extends UnixWindowBase {
 		super()
 	}
 	draw: override func (image: Image) {
-		this _openGLWindow draw(image as GpuImage)
+		map := this _openGLWindow _getDefaultMap(image)
+		tempImageA: GpuImage = null
+		tempImageB: GpuImage = null
+		match (image) {
+			case (matchedImage: RasterYuv420Semiplanar) =>
+				tempImageA = this _openGLWindow context createImage(matchedImage y)
+				tempImageB = this _openGLWindow context createImage(matchedImage uv)
+				map add("texture0", tempImageA)
+				map add("texture1", tempImageB)
+			case (matchedImage: RasterImage) =>
+				tempImageA = this _openGLWindow context createImage(matchedImage)
+				map add("texture0", tempImageA)
+			case (matchedImage: GpuYuv420Semiplanar) =>
+				map add("texture0", matchedImage y)
+				map add("texture1", matchedImage uv)
+			case (matchedImage: GpuImage) =>
+				map add("texture0", matchedImage)
+		}
+		sourceSize := image size toFloatVector2D()
+		map textureTransform = GpuCanvas _createTextureTransform(image size, IntBox2D new(image size))
+		map model = FloatTransform3D createScaling(sourceSize x / 2.0f, sourceSize y / 2.0f, 0.0f)
+		map view = this _openGLWindow _createView(sourceSize, FloatTransform3D identity)
+		map projection = this _openGLWindow _createProjection(sourceSize, 0.0f)
+		map use(null)
+		this _openGLWindow _bind()
+		this _openGLWindow context backend setViewport(IntBox2D new(image size))
+		this _openGLWindow context backend enableBlend(false)
+		this _openGLWindow context drawQuad()
+		this _openGLWindow _unbind()
+		if (tempImageA)
+			tempImageA free()
+		if (tempImageB)
+			tempImageB free()
 	}
 	refresh: override func {
 		this _openGLWindow refresh()
