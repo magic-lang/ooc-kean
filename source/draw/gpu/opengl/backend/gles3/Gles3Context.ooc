@@ -18,6 +18,7 @@ Gles3Context: class extends GLContext {
 	_eglContext: Pointer
 	_eglSurface: Pointer
 	_contextCount := static 0
+	_mutex := static Mutex new()
 	init: func
 	free: override func {
 		status := eglMakeCurrent(this _eglDisplay, null, null, null)
@@ -34,7 +35,7 @@ Gles3Context: class extends GLContext {
 			if (status != EGL_TRUE)
 				Debug print("eglTerminate failed with error code %d" format(status))
 		}
-		This _contextCount -= 1
+		This _mutex with(|| This _contextCount -= 1)
 		super()
 	}
 	makeCurrent: override func -> Bool {
@@ -72,7 +73,7 @@ Gles3Context: class extends GLContext {
 		contextAttribs := [
 			EGL_CONTEXT_CLIENT_VERSION, 3,
 			EGL_NONE] as Int*
-		This _contextCount += 1
+		This _mutex with(|| This _contextCount += 1)
 		this _eglContext = eglCreateContext(this _eglDisplay, config, shared, contextAttribs)
 		if (this _eglContext == null) {
 			"Failed to create OpenGL ES 3 context, trying with OpenGL ES 2 instead" println()
