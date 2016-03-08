@@ -11,3 +11,4 @@ Imports: RecycleBin
 Imports: WorkerThread
 Imports: Thread
 Imports: WaitCondition
+Imports: WaitLock
