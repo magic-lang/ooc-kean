@@ -25,17 +25,16 @@ ImageFileTest: class extends Fixture {
 			expect(This _fileExists(source))
 			destination := "test/draw/output/outputPNG.png"
 			requiredComponents := 4
-			x, y, n: Int
-			data := StbImage load(source, x&, y&, n&, requiredComponents)
+			(buffer, size, imageComponents) := StbImage load(source, requiredComponents)
 			version(debugTests) {
 				failureReason := StbImage failureReason()
 				println()
 				failureReason toString() println()
-				x toString() println()
-				y toString() println()
-				n toString() println()
+				size x toString() println()
+				size y toString() println()
+				imageComponents toString() println()
 			}
-			StbImage writePng(destination, x, y, 4, data, x * 4)
+			StbImage writePng(destination, size x, size y, 4, buffer pointer, size x * 4)
 			version(debugTests) {
 				failureReason = StbImage failureReason()
 				failureReason toString() println()
@@ -47,17 +46,16 @@ ImageFileTest: class extends Fixture {
 			expect(This _fileExists(source))
 			destination := "test/draw/output/outputJPEG.png"
 			requiredComponents := 4
-			x, y, n: Int
-			data := StbImage load(source, x&, y&, n&, requiredComponents)
+			(buffer, size, imageComponents) := StbImage load(source, requiredComponents)
 			version(debugTests) {
 				failureReason := StbImage failureReason()
 				println()
 				failureReason toString() println()
-				x toString() println()
-				y toString() println()
-				n toString() println()
+				size x toString() println()
+				size y toString() println()
+				imageComponents toString() println()
 			}
-			StbImage writePng(destination, x, y, 4, data, x * 4)
+			StbImage writePng(destination, size x, size y, 4, buffer pointer, size x * 4)
 			version(debugTests) {
 				failureReason = StbImage failureReason()
 				failureReason toString() println()

@@ -150,11 +150,9 @@ RasterRgba: class extends RasterPacked {
 	}
 
 	open: static func (filename: String) -> This {
-		x, y, imageComponents: Int
 		requiredComponents := 4
-		data := StbImage load(filename, x&, y&, imageComponents&, requiredComponents)
-		buffer := ByteBuffer new(data as Byte*, x * y * requiredComponents, true)
-		result := This new(buffer, IntVector2D new(x, y))
+		(buffer, size, _) := StbImage load(filename, requiredComponents)
+		result := This new(buffer, size)
 		result swapRedBlue()
 		result
 	}
