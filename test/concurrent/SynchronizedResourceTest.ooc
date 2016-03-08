@@ -70,7 +70,7 @@ SynchronizedResourceTest: class extends Fixture {
 		expect(count > 0)
 		objectFromMainThread := thisThreadResources[0]
 		threadFunc := func {
-			expect(objectFromMainThread checkThreadAffinity() == false)
+			expect(objectFromMainThread checkThreadAffinity(), is false)
 			for (i in 0 .. objectsPerThread) {
 				value := i % differentObjects
 				object := TestObject new~recycled(value)

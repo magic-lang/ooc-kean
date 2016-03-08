@@ -26,10 +26,10 @@ IntShell2DTest: class extends Fixture {
 		this add("isZero, notZero", func {
 			shellNotZero := IntShell2D new(2, 3)
 			shellZero := IntShell2D new()
-			expect(shellNotZero notZero)
-			expect(!shellNotZero isZero)
-			expect(shellZero isZero)
-			expect(!shellZero notZero)
+			expect(shellNotZero notZero, is true)
+			expect(shellNotZero isZero, is false)
+			expect(shellZero isZero, is true)
+			expect(shellZero notZero, is false)
 		})
 		this add("maximum, minimum", func {
 			first := IntShell2D new(1, 2, 3, 4)
@@ -40,8 +40,8 @@ IntShell2DTest: class extends Fixture {
 			fourthEquals := IntShell2D new(1, 2, 2, 1)
 			expect(third == thirdEquals)
 			expect(fourth == fourthEquals)
-			expect(third != fourth)
-			expect(!(third != third))
+			expect(third != fourth, is true)
+			expect(third != third, is false)
 		})
 		this add("+ and - operators", func {
 			first := IntShell2D new(4)
