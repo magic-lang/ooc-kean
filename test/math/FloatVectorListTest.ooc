@@ -446,6 +446,27 @@ FloatVectorListTest: class extends Fixture {
 			zeros free()
 			ones free()
 		})
+		this add("maximum difference", func {
+			list1 := FloatVectorList new()
+			list2 := FloatVectorList new()
+			list1 add(-1.1f)
+			list2 add(-1.1f)
+			list1 add(3.2f)
+			list2 add(3.2f)
+			list1 add(8.4f)
+			list2 add(8.4f)
+			list1 add(-21.0f)
+			list2 add(-21.0f)
+			expect(list1 maximumDifference(list2), is equal to(0.f) within(tolerance))
+			list1 insert(3, 2.1f)
+			list2 insert(3, 2.2f)
+			expect(list1 maximumDifference(list2), is equal to(0.1f) within(tolerance))
+			list1 insert(0, -3.1f)
+			list2 insert(0, 2.2f)
+			expect(list1 maximumDifference(list2), is equal to(5.3f) within(tolerance))
+			list1 free()
+			list2 free()
+		})
 	}
 }
 

@@ -498,4 +498,10 @@ FloatVectorList: class extends VectorList<Float> {
 		result[size - 1, size - 1] = 2.f
 		result
 	}
+	maximumDifference: func (other: This) -> Float {
+		maximumDifference := 0.0f
+		for (i in 0 .. (this count < other count ? this count : other count))
+			maximumDifference = maximumDifference maximum((this[i] - other[i]) absolute)
+		maximumDifference
+	}
 }
