@@ -18,7 +18,7 @@ DisplayWindow: abstract class {
 	_mouseReleaseHandler: Event1<MouseEvent>
 	_keyPressHandler: Event1<KeyboardEvent>
 	_keyReleaseHandler: Event1<KeyboardEvent>
-	init: func (size: IntVector2D, title: String)
+	init: func
 	free: override func {
 		if (this _mousePressHandler)
 			this _mousePressHandler free()
