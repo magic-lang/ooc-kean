@@ -27,10 +27,10 @@ FloatShell2DTest: class extends Fixture {
 		this add("isZero, notZero", func {
 			shellNotZero := FloatShell2D new(2.0f, 3.0f)
 			shellZero := FloatShell2D new()
-			expect(shellNotZero notZero)
-			expect(!shellNotZero isZero)
-			expect(shellZero isZero)
-			expect(!shellZero notZero)
+			expect(shellNotZero notZero, is true)
+			expect(shellNotZero isZero, is false)
+			expect(shellZero isZero, is true)
+			expect(shellZero notZero, is false)
 		})
 		this add("maximum, minimum", func {
 			first := FloatShell2D new(1.0f, 2.0f, 3.0f, 4.0f)
@@ -41,8 +41,8 @@ FloatShell2DTest: class extends Fixture {
 			fourthEquals := FloatShell2D new(1.0f, 2.0f, 2.0f, 1.0f)
 			expect(third == thirdEquals)
 			expect(fourth == fourthEquals)
-			expect(third != fourth)
-			expect(!(third != third))
+			expect(third != fourth, is true)
+			expect(third != third, is false)
 		})
 		this add("+ and - operators", func {
 			first := FloatShell2D new(4.0f)

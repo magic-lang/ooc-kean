@@ -49,7 +49,7 @@ TextLiteralTest: class extends Fixture {
 			t2 := t"test"
 			expect(t endsWith(t))
 			expect(t beginsWith(t))
-			expect(t endsWith(t2) == false)
+			expect(t endsWith(t2), is false)
 			expect(t beginsWith(t2))
 			expect(t2 beginsWith(t2))
 			expect(t[0] == 't')

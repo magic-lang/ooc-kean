@@ -93,8 +93,8 @@ IntBox2DTest: class extends Fixture {
 			box := IntBox2D new(-2, -1, 3, 3)
 			inside := IntPoint2D new(0, 1)
 			outside := FloatPoint2D new(-2.0f, 2.0f)
-			expect(box contains(inside))
-			expect(!box contains(outside))
+			expect(box contains(inside), is true)
+			expect(box contains(outside), is false)
 		})
 		this add("toString", func {
 			expect(this box0 toString() == "1, 2, 3, 4")

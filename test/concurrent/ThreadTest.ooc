@@ -80,10 +80,10 @@ ThreadTest: class extends Fixture {
 		expect(thread wait())
 		expect(memcmp(thisThreadInstance, otherThreadInstance, Thread size) == 0)
 		thread free()
-		expect(myId equals(otherId get()) == false)
+		expect(myId equals(otherId get()), is false)
 		otherId free()
 		(job as Closure) free()
-		expect(myId equals(Thread currentThreadId()) == true)
+		expect(myId equals(Thread currentThreadId()), is true)
 	}
 	_timedJoin: static func {
 		job := func {
@@ -95,8 +95,8 @@ ThreadTest: class extends Fixture {
 		}
 		thread := Thread new(job)
 		expect(thread start())
-		expect(thread wait(0.01) == false)
-		expect(thread wait(10.0) == true)
+		expect(thread wait(0.01), is false)
+		expect(thread wait(10.0), is true)
 		thread free()
 		(job as Closure) free()
 	}

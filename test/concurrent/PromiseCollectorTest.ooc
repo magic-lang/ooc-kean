@@ -37,8 +37,8 @@ PromiseCollectorTest: class extends Fixture {
 				others += Promise start(func { for (i in 0 .. 10_000_000) { } })
 			promises += others
 
-			expect(others wait())
-			expect(!promises wait())
+			expect(others wait(), is true)
+			expect(promises wait(), is false)
 
 			promises free()
 		})
@@ -48,7 +48,7 @@ PromiseCollectorTest: class extends Fixture {
 			promise2 := Promise start(func { for (i in 0 .. 10_000_000) { } })
 			promises := promise + promise2
 			expect(promises count, is equal to(2))
-			expect(!promises wait())
+			expect(promises wait(), is false)
 			promises clear()
 			expect(promises count, is equal to(0))
 			promises += Promise start(func { for (i in 0 .. 10_000_000) { } })

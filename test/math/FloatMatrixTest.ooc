@@ -24,8 +24,8 @@ FloatMatrixTest: class extends Fixture {
 		})
 
 		this add("isSquare", func {
-			expect(!this nonSquareMatrix isSquare)
-			expect(this matrix isSquare)
+			expect(this nonSquareMatrix isSquare, is false)
+			expect(this matrix isSquare, is true)
 		})
 
 		this add("order", func {
