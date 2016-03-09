@@ -9,6 +9,7 @@
 use base
 use geometry
 use collections
+use draw
 import Image
 import Pen
 import DrawState
@@ -61,7 +62,9 @@ Canvas: abstract class {
 		this drawLines(positions)
 		positions free()
 	}
-	fill: abstract func
+	fill: abstract func ~color (color: ColorRgba)
+	fill: func ~pen { this fill(this pen color) } // Deprecated
+	clear: func { this fill() } // Deprecated
 	draw: virtual func ~DrawState (drawState: DrawState) { Debug error("draw~DrawState unimplemented for class " + this class name + "!") }
 	draw: abstract func ~ImageSourceDestination (image: Image, source, destination: IntBox2D)
 	draw: func ~ImageDestination (image: Image, destination: IntBox2D) { this draw(image, IntBox2D new(image size), destination) }

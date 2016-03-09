@@ -41,6 +41,6 @@ OpenGLWindow: class extends OpenGLSurface {
 		}
 	}
 	refresh: func { this context update() }
-	fill: override func
+	fill: override func ~color (color: ColorRgba)
 }
 }
