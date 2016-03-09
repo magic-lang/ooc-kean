@@ -15,7 +15,7 @@ version(windows) {
 Win32DisplayWindow: class extends DisplayWindow {
 	_backend: Win32Window
 	init: func (size: IntVector2D, title: String) {
-		super(size, title)
+		super()
 		this _backend = Win32Window new(size, title)
 	}
 	free: override func {
