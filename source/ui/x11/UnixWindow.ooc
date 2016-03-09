@@ -17,7 +17,7 @@ version((unix || apple) && !android) {
 UnixWindowBase: class extends DisplayWindow {
 	_xWindow: X11Window
 	init: func (size: IntVector2D, title: String) {
-		super()
+		super(size, title)
 		this _xWindow = X11Window new(size, title)
 	}
 	free: override func {

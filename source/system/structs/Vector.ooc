@@ -83,7 +83,7 @@ HeapVector: class <T> extends Vector<T> {
 		this _backend = realloc(this _backend, capacity * T size)
 	}
 	resize: override func (capacity: Int) {
-		super()
+		super(capacity)
 		this _allocate(capacity)
 	}
 	copy: override func -> This<T> {

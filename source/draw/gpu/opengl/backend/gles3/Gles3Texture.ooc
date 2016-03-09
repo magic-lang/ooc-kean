@@ -18,9 +18,9 @@ Gles3Texture: class extends GLTexture {
 	_internalFormat: UInt
 	_bytesPerPixel: UInt
 
-	init: func (=_type, =_size) {
+	init: func (._type, ._size) {
 		version(debugGL) { validateStart("Texture init") }
-		super()
+		super(_type, _size)
 		_target = GL_TEXTURE_2D
 		this _setInternalFormats(this _type)
 		version(debugGL) { validateEnd("Texture init") }
