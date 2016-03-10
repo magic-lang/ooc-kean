@@ -81,15 +81,6 @@ TimeSpan: cover {
 	operator * (value: Double) -> This { This new(this ticks * value) }
 	operator / (value: Double) -> This { This new(this ticks / value) }
 
-	kean_base_timeSpan_getTicks: unmangled func -> Long { this _ticks }
-	kean_base_timeSpan_getNegated: unmangled func -> This { this negate() }
-	kean_base_timeSpan_getTotalMilliseconds: unmangled func -> Long { this toMilliseconds() }
-	kean_base_timeSpan_getTotalSeconds: unmangled func -> Long { this toSeconds() }
-	kean_base_timeSpan_getTotalMinutes: unmangled func -> Long { this toMinutes() }
-	kean_base_timeSpan_getTotalHours: unmangled func -> Long { this toHours() }
-	kean_base_timeSpan_getTotalDays: unmangled func -> Long { this toDays() }
-	kean_base_timeSpan_getTotalWeeks: unmangled func -> Long { this toWeeks() }
-
 	millisecond: static func -> This { This milliseconds(1) }
 	second: static func -> This { This seconds(1) }
 	minute: static func -> This { This minutes(1) }
@@ -105,15 +96,6 @@ TimeSpan: cover {
 	hours: static func (count: Double) -> This { This new(DateTime ticksPerHour * count) }
 	days: static func (count: Double) -> This { This new(DateTime ticksPerDay * count) }
 	weeks: static func (count: Double) -> This { This new(DateTime ticksPerWeek * count) }
-
-	kean_base_timeSpan_new: unmangled static func (ticks: Long) -> This { This new(ticks) }
-	kean_base_timeSpan_fromData: unmangled static func (hour, minute, second, millisecond: Int) -> This { This new(hour, minute, second, millisecond) }
-	kean_base_timeSpan_fromMilliseconds: unmangled static func (count: Double) -> This { This milliseconds(count) }
-	kean_base_timeSpan_fromSeconds: unmangled static func (count: Double) -> This { This seconds(count) }
-	kean_base_timeSpan_fromMinutes: unmangled static func (count: Double) -> This { This minutes(count) }
-	kean_base_timeSpan_fromHours: unmangled static func (count: Double) -> This { This hours(count) }
-	kean_base_timeSpan_fromDays: unmangled static func (count: Double) -> This { This days(count) }
-	kean_base_timeSpan_fromWeeks: unmangled static func (count: Double) -> This { This weeks(count) }
 }
 
 operator + (left: Int, right: TimeSpan) -> TimeSpan { right + left }

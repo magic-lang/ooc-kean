@@ -75,5 +75,4 @@ Image: abstract class {
 		x >= 0 && x < this size x && y >= 0 && y < this size y
 	}
 	_createCanvas: virtual func -> Canvas { null }
-	kean_draw_image_free: unmangled func { this referenceCount decrease() }
 }

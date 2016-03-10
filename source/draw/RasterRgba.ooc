@@ -192,9 +192,4 @@ RasterRgba: class extends RasterPacked {
 		}
 		result
 	}
-	kean_draw_rasterRgba_new: static unmangled func (width, height, stride: Int, data: Void*) -> This {
-		result := This new(IntVector2D new(width, height), stride)
-		memcpy(result buffer pointer, data, height * stride)
-		result
-	}
 }

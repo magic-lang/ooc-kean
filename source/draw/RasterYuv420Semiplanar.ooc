@@ -180,9 +180,6 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		this y[x, y] = ColorMonochrome new(value y)
 		this uv[x / 2, y / 2] = ColorUv new(value u, value v)
 	}
-
-	kean_draw_rasterYuv420Semiplanar_getMonochromeData: unmangled func -> Void* { this y buffer pointer }
-	kean_draw_rasterYuv420Semiplanar_getUvData: unmangled func -> Void* { this uv buffer pointer }
 	_allocate: static func (size: IntVector2D, stride: UInt, uvOffset: UInt) -> (RasterMonochrome, RasterUv) {
 		length := uvOffset + stride * (size y + 1) / 2
 		buffer := ByteBuffer new(length)
@@ -250,12 +247,6 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		fileReader read((result uv buffer pointer as Char*), 0, result uv buffer size)
 		fileReader close()
 		fileReader free()
-		result
-	}
-	kean_draw_rasterYuv420Semiplanar_new: static unmangled func (width, height, stride: Int, monochromeData, uvData: Void*) -> This {
-		result := This new(IntVector2D new(width, height), stride)
-		memcpy(result uv buffer pointer, uvData, (height / 2) * stride)
-		memcpy(result y buffer pointer, monochromeData, height * stride)
 		result
 	}
 }

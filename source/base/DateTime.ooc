@@ -136,15 +136,6 @@ DateTime: cover {
 	operator + (span: TimeSpan) -> This { This new(this ticks as Long + span ticks) }
 	operator - (span: TimeSpan) -> This { This new(this ticks as Long - span ticks) }
 
-	kean_base_dateTime_getTicks: unmangled func -> ULong { this _ticks }
-	kean_base_dateTime_getMillisecond: unmangled func -> Int { this millisecond() }
-	kean_base_dateTime_getSecond: unmangled func -> Int { this second() }
-	kean_base_dateTime_getMinute: unmangled func -> Int { this minute() }
-	kean_base_dateTime_getHour: unmangled func -> Int { this hour() }
-	kean_base_dateTime_getDay: unmangled func -> Int { this day() }
-	kean_base_dateTime_getMonth: unmangled func -> Int { this month() }
-	kean_base_dateTime_getYear: unmangled func -> Int { this year() }
-
 	daysPerYear: static Int = 365
 	daysPerFourYears: static Int = 3 * This daysPerYear + 366
 	nanosecondsPerTick: static Long = 100
@@ -240,11 +231,4 @@ DateTime: cover {
 	dateIsValid: static func (year, month, day: Int) -> Bool {
 		year >= 1 && month in(1 .. 13) && day in(1 .. This daysInMonth(year, month) + 1)
 	}
-	kean_base_dateTime_new: unmangled static func (ticks: ULong) -> This { This new(ticks) }
-	kean_base_dateTime_fromDate: unmangled static func (year, month, day: Int) -> This { This new(year, month, day) }
-	kean_base_dateTime_fromTime: unmangled static func (hour, minute, second, millisecond: Int) -> This { This new(hour, minute, second, millisecond) }
-	kean_base_dateTime_fromDateTime: unmangled static func (year, month, day, hour, minute, second, millisecond: Int) -> This {
-		This new(year, month, day, hour, minute, second, millisecond)
-	}
-	kean_base_dateTime_getNow: unmangled static func -> This { This now }
 }

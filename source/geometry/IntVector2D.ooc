@@ -64,8 +64,6 @@ IntVector2D: cover {
 		parts free()
 		result
 	}
-
-	kean_math_intVector2D_new: unmangled static func (x, y: Int) -> This { This new(x, y) }
 }
 operator * (left: Int, right: IntVector2D) -> IntVector2D { IntVector2D new(left * right x, left * right y) }
 operator / (left: Int, right: IntVector2D) -> IntVector2D { IntVector2D new(left / right x, left / right y) }

@@ -217,10 +217,6 @@ FloatTransform3D: cover {
 		)
 	}
 
-	kean_math_floatTransform3D_getTranslation: unmangled func -> FloatVector3D { this translation }
-	kean_math_floatTransform3D_getScaling: unmangled func -> FloatVector3D { FloatVector3D new(this scalingX, this scalingY, this scalingZ) }
-	kean_math_floatTransform3D_getInverse: unmangled func -> This { this inverse }
-
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f) } }
 
 	create: static func (a, b, c, d, e, f, g, h, i, j, k, l: Float) -> This { This new(a, b, c, d, e, f, g, h, i, j, k, l) }
