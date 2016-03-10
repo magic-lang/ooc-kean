@@ -26,11 +26,9 @@ ReferenceCounter: class {
 		This count += 1
 		this _target = target
 		this _lock = Mutex new(mutexType)
-//		"  RC, #{This count}, #{this _target class name}" println()
 	}
 	free: override func {
 		This count -= 1
-//		"--RC, #{This count}, #{this _target class name}" println()
 		this _lock free()
 		super()
 	}
@@ -40,7 +38,6 @@ ReferenceCounter: class {
 			target := null
 			if (!this _kill) {
 				this _count += delta
-//				("{" + _target class name + "} #{this} #{delta}") println()
 				this _kill = this _count <= 0
 				if (this _kill)
 					target = this _target
