@@ -260,3 +260,7 @@ FloatTransform3D: cover {
 		this normalizedToReference(imageSize toFloatVector2D())
 	}
 }
+
+extend Cell<FloatTransform3D> {
+	toText: func ~floattransform3d -> Text { (this val as FloatTransform3D) toText() }
+}

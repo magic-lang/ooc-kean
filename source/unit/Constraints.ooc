@@ -112,11 +112,23 @@ CompareWithinConstraint: class extends CompareConstraint {
 				f := func (value, correct: Cell<LDouble>) -> Bool { correct get() equals(value get(), precision) }
 				result = CompareConstraint new(this, Cell<LDouble> new(this correct as Cell<LDouble> get()), f, this type)
 			case FloatVector2D =>
-				f := func (value, correct: Cell<FloatVector2D>) -> Bool {
-					distance := correct get() distance(value get())
-					distance equals(0.f, precision)
-				}
+				f := func (value, correct: Cell<FloatVector2D>) -> Bool { correct get() distance(value get()) equals(0.f, precision) }
 				result = CompareConstraint new(this, Cell<FloatVector2D> new(this correct as Cell<FloatVector2D> get()), f, this type)
+			case FloatVector3D =>
+				f := func (value, correct: Cell<FloatVector3D>) -> Bool { correct get() distance(value get()) equals(0.f, precision) }
+				result = CompareConstraint new(this, Cell<FloatVector3D> new(this correct as Cell<FloatVector3D> get()), f, this type)
+			case FloatPoint2D =>
+				f := func (value, correct: Cell<FloatPoint2D>) -> Bool { correct get() distance(value get()) equals(0.f, precision) }
+				result = CompareConstraint new(this, Cell<FloatPoint2D> new(this correct as Cell<FloatPoint2D> get()), f, this type)
+			case FloatPoint3D =>
+				f := func (value, correct: Cell<FloatPoint3D>) -> Bool { correct get() distance(value get()) equals(0.f, precision) }
+				result = CompareConstraint new(this, Cell<FloatPoint3D> new(this correct as Cell<FloatPoint3D> get()), f, this type)
+			case Quaternion =>
+				f := func (value, correct: Cell<Quaternion>) -> Bool { correct get() distance(value get()) equals(0.f, precision) }
+				result = CompareConstraint new(this, Cell<Quaternion> new(this correct as Cell<Quaternion> get()), f, this type)
+			case FloatRotation3D =>
+				f := func (value, correct: Cell<FloatRotation3D>) -> Bool { correct get() _quaternion distance(value get() _quaternion) equals(0.f, precision) }
+				result = CompareConstraint new(this, Cell<FloatRotation3D> new(this correct as Cell<FloatRotation3D> get()), f, this type)
 			case =>
 				raise("Using within() for incompatible type %s in test!" format(this actualType name))
 		}

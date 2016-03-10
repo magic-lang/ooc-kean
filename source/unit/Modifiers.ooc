@@ -108,6 +108,54 @@ EqualModifier: class extends ExpectModifier {
 		f := func (value, c: Cell<FloatVector2D>) -> Bool { value get() == c get() }
 		CompareWithinConstraint new(this, Cell<FloatVector2D> new(correct), f, this withinType, FloatVector2D)
 	}
+	to: func ~floatvector3d (correct: FloatVector3D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<FloatVector3D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<FloatVector3D> new(correct), f, this withinType, FloatVector3D)
+	}
+	to: func ~floatpoint2d (correct: FloatPoint2D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<FloatPoint2D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<FloatPoint2D> new(correct), f, this withinType, FloatPoint2D)
+	}
+	to: func ~floatpoint3d (correct: FloatPoint3D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<FloatPoint3D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<FloatPoint3D> new(correct), f, this withinType, FloatPoint3D)
+	}
+	to: func ~quaternion (correct: Quaternion) -> CompareWithinConstraint {
+		f := func (value, c: Cell<Quaternion>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<Quaternion> new(correct), f, this withinType, Quaternion)
+	}
+	to: func ~floateuclidtransform (correct: FloatEuclidTransform) -> CompareWithinConstraint {
+		f := func (value, c: Cell<FloatEuclidTransform>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<FloatEuclidTransform> new(correct), f, this withinType, FloatEuclidTransform)
+	}
+	to: func ~floatrotation3d (correct: FloatRotation3D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<FloatRotation3D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<FloatRotation3D> new(correct), f, this withinType, FloatRotation3D)
+	}
+	to: func ~floattransform2d (correct: FloatTransform2D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<FloatTransform2D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<FloatTransform2D> new(correct), f, this withinType, FloatTransform2D)
+	}
+	to: func ~floattransform3d (correct: FloatTransform3D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<FloatTransform3D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<FloatTransform3D> new(correct), f, this withinType, FloatTransform3D)
+	}
+	to: func ~intvector2d (correct: IntVector2D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<IntVector2D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<IntVector2D> new(correct), f, this withinType, IntVector2D)
+	}
+	to: func ~intvector3d (correct: IntVector3D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<IntVector3D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<IntVector3D> new(correct), f, this withinType, IntVector3D)
+	}
+	to: func ~intpoint2d (correct: IntPoint2D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<IntPoint2D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<IntPoint2D> new(correct), f, this withinType, IntPoint2D)
+	}
+	to: func ~intpoint3d (correct: IntPoint3D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<IntPoint3D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<IntPoint3D> new(correct), f, this withinType, IntPoint3D)
+	}
 }
 
 LessModifier: class extends ExpectModifier {

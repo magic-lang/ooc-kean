@@ -18,6 +18,9 @@ IntPoint3DTest: class extends Fixture {
 	point3 := IntPoint3D new (10, 20, 0)
 	init: func {
 		super("IntPoint3D")
+		this add("fixture", func {
+			expect(this point0 + this point1, is equal to(this point2))
+		})
 		this add("equality", func {
 			point := IntPoint3D new()
 			expect(this point0 == this point0, is true)

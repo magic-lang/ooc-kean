@@ -26,6 +26,9 @@ FloatRotation3DTest: class extends Fixture {
 	init: func {
 		super("FloatRotation3D")
 		tolerance := 0.0001f
+		this add("fixture", func {
+			expect(this quaternion0 + this quaternion1, is equal to(this quaternion2) within(tolerance))
+		})
 		this add("identity", func {
 			rotation := FloatRotation3D identity
 			expect(rotation inverse == rotation, is true)

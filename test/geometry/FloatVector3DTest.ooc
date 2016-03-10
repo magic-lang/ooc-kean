@@ -19,6 +19,9 @@ FloatVector3DTest: class extends Fixture {
 	vector4 := FloatVector3D new (10.1f, 20.7f, 30.3f)
 	init: func {
 		super("FloatVector3D")
+		this add("fixture", func {
+			expect(this vector0 + this vector1, is equal to(this vector2) within(this precision))
+		})
 		this add("norm", func {
 			expect(this vector0 norm, is equal to(593.0f sqrt()) within(this precision))
 			expect(this vector0 norm, is equal to(this vector0 scalarProduct(this vector0) sqrt()) within(this precision))
