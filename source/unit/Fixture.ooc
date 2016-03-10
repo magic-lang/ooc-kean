@@ -8,6 +8,8 @@
 
 use base
 use collections
+use geometry
+use math
 import Constraints
 import Modifiers
 
@@ -84,32 +86,26 @@ Fixture: abstract class {
 	}
 	createCompareFailureMessage: func (failure: TestFailedException) -> Text {
 		constraint := failure constraint as CompareConstraint
-		testedValue := failure value as Cell
-		expectedValue := constraint correct as Cell
+		(testedValue, expectedValue) := (failure value as Cell, constraint correct as Cell)
 		result := TextBuilder new(t"  ->")
 		result append(Text new(failure message))
 		result append(t": expected")
 		match (constraint type) {
-			case ComparisonType Equal =>
-				result append(t"equal to")
-			case ComparisonType NotEqual =>
-				result append(t"not equal to")
-			case ComparisonType LessThan =>
-				result append(t"less than")
-			case ComparisonType GreaterThan =>
-				result append(t"greater than")
-			case ComparisonType LessOrEqual =>
-				result append(t"less than or equal to")
-			case ComparisonType GreaterOrEqual =>
-				result append(t"greater than or equal to")
-			case ComparisonType Within =>
-				result append(t"equal to")
-			case ComparisonType NotWithin =>
-				result append(t"not equal to")
+			case ComparisonType Equal => result append(t"equal to")
+			case ComparisonType NotEqual => result append(t"not equal to")
+			case ComparisonType LessThan => result append(t"less than")
+			case ComparisonType GreaterThan => result append(t"greater than")
+			case ComparisonType LessOrEqual => result append(t"less than or equal to")
+			case ComparisonType GreaterOrEqual => result append(t"greater than or equal to")
+			case ComparisonType Within => result append(t"equal to")
+			case ComparisonType NotWithin => result append(t"not equal to")
 		}
-		result append(expectedValue toText())
-		result append(t"was")
-		result append(testedValue toText())
+		expectedText, testedText: Text
+		match (expectedValue T) {
+			case FloatVector2D => (expectedText, testedText) = (expectedValue toText~floatvector2d(), testedValue toText~floatvector2d())
+			case => (expectedText, testedText) = (expectedValue toText(), testedValue toText())
+		}
+		result append(expectedText) . append(t"was") . append(testedText)
 		if (constraint type == ComparisonType Within)
 			result append(Text new(" [tolerance: %.8f]" formatDouble((constraint parent as CompareWithinConstraint) precision)))
 		result join(' ')
@@ -160,6 +156,8 @@ Fixture: abstract class {
 	expect: static func ~ldouble (value: LDouble, constraint: Constraint) { This expect(Cell new(value), constraint) }
 	expect: static func ~llong (value: LLong, constraint: Constraint) { This expect(Cell new(value), constraint) }
 	expect: static func ~ullong (value: ULLong, constraint: Constraint) { This expect(Cell new(value), constraint) }
+
+	expect: static func ~floatvector2d (value: FloatVector2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
 }
 
 TestFailedException: class extends Exception {

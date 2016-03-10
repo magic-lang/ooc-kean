@@ -6,6 +6,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use geometry
+use math
 import Constraints
 
 ExpectModifier: abstract class {
@@ -84,23 +86,27 @@ EqualModifier: class extends ExpectModifier {
 	}
 	to: func ~float (correct: Float) -> CompareWithinConstraint {
 		f := func (value, c: Cell<Float>) -> Bool { value get() equals(c get()) }
-		CompareWithinConstraint new(this, Cell<Float> new(correct), f, this withinType)
+		CompareWithinConstraint new(this, Cell<Float> new(correct), f, this withinType, Float)
 	}
 	to: func ~double (correct: Double) -> CompareWithinConstraint {
 		f := func (value, c: Cell<Double>) -> Bool { value get() equals(c get()) }
-		CompareWithinConstraint new(this, Cell<Double> new(correct), f, this withinType)
+		CompareWithinConstraint new(this, Cell<Double> new(correct), f, this withinType, Double)
 	}
 	to: func ~ldouble (correct: LDouble) -> CompareWithinConstraint {
 		f := func (value, c: Cell<LDouble>) -> Bool { value get() equals(c get()) }
-		CompareWithinConstraint new(this, Cell<LDouble> new(correct), f, this withinType)
+		CompareWithinConstraint new(this, Cell<LDouble> new(correct), f, this withinType, LDouble)
 	}
 	to: func ~llong (correct: LLong) -> CompareWithinConstraint {
 		f := func (value, c: Cell<LLong>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<LLong> new(correct), f, this withinType)
+		CompareWithinConstraint new(this, Cell<LLong> new(correct), f, this withinType, LLong)
 	}
 	to: func ~ullong (correct: ULLong) -> CompareWithinConstraint {
 		f := func (value, c: Cell<ULLong>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<ULLong> new(correct), f, this withinType)
+		CompareWithinConstraint new(this, Cell<ULLong> new(correct), f, this withinType, ULLong)
+	}
+	to: func ~floatvector2d (correct: FloatVector2D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<FloatVector2D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<FloatVector2D> new(correct), f, this withinType, FloatVector2D)
 	}
 }
 
