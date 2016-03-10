@@ -49,7 +49,7 @@ FileReader: class extends Reader {
 		this fileName free(Owner Receiver)
 		super()
 	}
-	read: override func (buffer: Char*, offset: Int, count: SizeT) -> SizeT {
+	read: override func (buffer: CString, offset: Int, count: Int) -> SizeT {
 		this file read(buffer + offset, count)
 	}
 	read: func ~fullBuffer (buffer: CharBuffer) {

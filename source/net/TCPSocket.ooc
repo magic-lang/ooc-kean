@@ -237,8 +237,9 @@ TCPSocketReader: class extends Reader {
 	rewind: func (offset: Int) {
 		raise("Sockets do not support rewind")
 	}
-	seek: override func (offset: Long, mode: SeekMode) {
+	seek: override func (offset: Long, mode: SeekMode) -> Bool {
 		raise("Sockets do not support seek")
+		false
 	}
 	mark: override func -> Long { marker }
 	reset: func (marker: Long) {
