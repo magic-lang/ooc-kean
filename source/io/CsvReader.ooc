@@ -14,21 +14,24 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 	_fileReader: FileReader
 	_delimiter: Char
 	delimiter ::= this _delimiter
-	init: func (=_fileReader, delimiter := ',') {
+
+	init: func (=_fileReader, delimiter := ',', skipHeader := false) {
 		this _delimiter = delimiter
+		if (skipHeader) {
+			readCharacter: Char
+			while (this _fileReader hasNext() && ((readCharacter = this _fileReader read()) != '\n' && readCharacter != '\0')) { }
+		}
 	}
 	free: func {
-		if (this _fileReader != null) {
-			this _fileReader close()
-			this _fileReader free()
-		}
+		if (this _fileReader != null)
+			this _fileReader close() . free()
 		super()
 	}
 	remove: override func -> Bool { false }
 	iterator: func -> This { this }
 	hasNext: override func -> Bool { this _fileReader hasNext() && this _fileReader peek() != '\0' }
 	next: final override func -> VectorList<Text> {
-		result: VectorList<Text>
+		result: VectorList<Text> = null
 		if (this hasNext()) {
 			readCharacter: Char
 			textBuilder := TextBuilder new()
@@ -81,17 +84,17 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		textBuilder free()
 		result
 	}
-	open: static func ~text (filename: Text, delimiter := ',') -> This {
+	open: static func ~text (filename: Text, delimiter := ',', skipHeader := false) -> This {
 		filenameString := filename toString()
-		result := This open(filenameString, delimiter)
+		result := This open(filenameString, delimiter, skipHeader)
 		filenameString free()
 		result
 	}
-	open: static func ~string (filename: String, delimiter := ',') -> This {
+	open: static func ~string (filename: String, delimiter := ',', skipHeader := false) -> This {
 		result: This = null
 		file := File new(filename)
 		if (file exists())
-			result = This new(FileReader new(file), delimiter)
+			result = This new(FileReader new(file), delimiter, skipHeader)
 		file free()
 		result
 	}
