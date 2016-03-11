@@ -6,6 +6,7 @@ Imports: Exception
 Imports: String
 Imports: types
 Imports: Buffer
+Imports: Cell
 Imports: CharBuffer
 Imports: Format
 Imports: IO
