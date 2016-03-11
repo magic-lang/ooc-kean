@@ -8,6 +8,7 @@
 
 use geometry
 use unit
+use math
 
 FloatEuclidTransformVectorListTest: class extends Fixture {
 	init: func {
@@ -93,6 +94,55 @@ FloatEuclidTransformVectorListTest: class extends Fixture {
 			expect(text, is equal to(t"Translation: 1.11, 2.31, 3.64 Rotation: Real: 1.21 Imaginary: 2.31 3.14 4.23 Scaling: 5.72"))
 			text free()
 			list free()
+		})
+		this add("convolve", func {
+			list := FloatEuclidTransformVectorList new()
+			kernel := FloatVectorList gaussianKernel(3)
+			translation1 := FloatVector3D new(19.11f, 20.31f, 103.64f)
+			translation2 := FloatVector3D new(-12.2f, 63.31f, -3.64f)
+			translation3 := FloatVector3D new(1.14f, 2.21f, -3.64f)
+			filteredTranslation0 := (translation1 * kernel[0] + translation1 * kernel[1] + translation2 * kernel[2])
+			filteredTranslation1 := (translation1 * kernel[0] + translation2 * kernel[1] + translation3 * kernel[2])
+			filteredTranslation2 := (translation2 * kernel[0] + translation3 * kernel[1] + translation3 * kernel[2])
+			rotation1 := FloatRotation3D createRotationZ(0.12f)
+			rotation2 := FloatRotation3D createRotationX(0.31f)
+			rotation3 := FloatRotation3D createRotationX(-0.63f)
+			quaternionList := VectorList<Quaternion> new()
+			quaternionList add(rotation1 _quaternion)
+			quaternionList add(rotation1 _quaternion)
+			quaternionList add(rotation2 _quaternion)
+			filteredRotation0 := FloatRotation3D new(Quaternion weightedMean(quaternionList, kernel))
+			quaternionList[0] = rotation1 _quaternion
+			quaternionList[1] = rotation2 _quaternion
+			quaternionList[2] = rotation3 _quaternion
+			filteredRotation1 := FloatRotation3D new(Quaternion weightedMean(quaternionList, kernel))
+			quaternionList[0] = rotation2 _quaternion
+			quaternionList[1] = rotation3 _quaternion
+			quaternionList[2] = rotation3 _quaternion
+			filteredRotation2 := FloatRotation3D new(Quaternion weightedMean(quaternionList, kernel))
+			scaling1 := 0.81f
+			scaling2 := 0.43f
+			scaling3 := 1.7f
+			filteredScaling0 := (scaling1 * kernel[0] + scaling1 * kernel[1] + scaling2 * kernel[2])
+			filteredScaling1 := (scaling1 * kernel[0] + scaling2 * kernel[1] + scaling3 * kernel[2])
+			filteredScaling2 := (scaling2 * kernel[0] + scaling3 * kernel[1] + scaling3 * kernel[2])
+			list add(FloatEuclidTransform new(translation1, rotation1, scaling1))
+			list add(FloatEuclidTransform new(translation2, rotation2, scaling2))
+			list add(FloatEuclidTransform new(translation3, rotation3, scaling3))
+			filteredList := list convolve(kernel)
+			expect(filteredList[0] translation == filteredTranslation0)
+			expect(filteredList[1] translation == filteredTranslation1)
+			expect(filteredList[2] translation == filteredTranslation2)
+			expect(filteredList[0] rotation == filteredRotation0)
+			expect(filteredList[1] rotation == filteredRotation1)
+			expect(filteredList[2] rotation == filteredRotation2)
+			expect(filteredList[0] scaling == filteredScaling0)
+			expect(filteredList[1] scaling == filteredScaling1)
+			expect(filteredList[2] scaling == filteredScaling2)
+			list free()
+			quaternionList free()
+			filteredList free()
+			kernel free()
 		})
 	}
 }

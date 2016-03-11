@@ -12,6 +12,7 @@ use math
 import FloatEuclidTransform
 import FloatRotation3D
 import FloatVector3D
+import FloatVectorList
 
 FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 	init: func ~default {
@@ -120,5 +121,20 @@ FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 	}
 	operator []= (index: Int, item: FloatEuclidTransform) {
 		this _vector[index] = item
+	}
+	convolve: func (kernel: FloatVectorList) -> This {
+		result := This new()
+		for (i in 0 .. this count)
+			result add(this convolveAt(i, kernel))
+		result
+	}
+	convolveAt: func (index: Int, kernel: FloatVectorList) -> FloatEuclidTransform {
+		halfSize := ((kernel count - 1) / 2.f) round() as Int
+		euclids := VectorList<FloatEuclidTransform> new()
+		for (kernelIndex in -halfSize .. halfSize + 1)
+			euclids add(this[(index + kernelIndex) clamp(0, this count - 1)])
+		result := FloatEuclidTransform convolveCenter(euclids, kernel)
+		euclids free()
+		result
 	}
 }
