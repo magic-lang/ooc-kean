@@ -54,3 +54,7 @@ operator * (left: Int, right: IntPoint3D) -> IntPoint3D { IntPoint3D new(left * 
 operator / (left: Int, right: IntPoint3D) -> IntPoint3D { IntPoint3D new(left / right x, left / right y, left / right z) }
 operator * (left: Float, right: IntPoint3D) -> IntPoint3D { IntPoint3D new(left * right x, left * right y, left * right z) }
 operator / (left: Float, right: IntPoint3D) -> IntPoint3D { IntPoint3D new(left / right x, left / right y, left / right z) }
+
+extend Cell<IntPoint3D> {
+	toText: func ~intpoint3d -> Text { (this val as IntPoint3D) toText() }
+}

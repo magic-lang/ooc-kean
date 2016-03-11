@@ -31,6 +31,9 @@ QuaternionTest: class extends Fixture {
 	init: func {
 		super("Quaternion")
 		tolerance := 0.0001f
+		this add("fixture", func {
+			expect(this quaternion0 + this quaternion1, is equal to(this quaternion2) within(tolerance))
+		})
 		this add("comparison", func {
 			expect(this quaternion1 == this quaternion4)
 			expect(this quaternion2 == this quaternion3, is false)

@@ -43,3 +43,7 @@ FloatRotation3D: cover {
 
 	kean_math_floatRotation3D_new: unmangled static func (quaternion: Quaternion) -> This { This new(quaternion) }
 }
+
+extend Cell<FloatRotation3D> {
+	toText: func ~floatrotation3d -> Text { (this val as FloatRotation3D) toText() }
+}

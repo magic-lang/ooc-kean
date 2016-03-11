@@ -301,3 +301,7 @@ Quaternion: cover {
 	kean_math_quaternion_new: unmangled static func (w, x, y, z: Float) -> This { This new(w, x, y, z) }
 }
 operator * (value: Float, other: Quaternion) -> Quaternion { other * value }
+
+extend Cell<Quaternion> {
+	toText: func ~quaternion -> Text { (this val as Quaternion) toText() }
+}

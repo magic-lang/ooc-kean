@@ -103,6 +103,18 @@ Fixture: abstract class {
 		expectedText, testedText: Text
 		match (expectedValue T) {
 			case FloatVector2D => (expectedText, testedText) = (expectedValue toText~floatvector2d(), testedValue toText~floatvector2d())
+			case FloatVector3D => (expectedText, testedText) = (expectedValue toText~floatvector3d(), testedValue toText~floatvector3d())
+			case FloatPoint2D => (expectedText, testedText) = (expectedValue toText~floatpoint2d(), testedValue toText~floatpoint2d())
+			case FloatPoint3D => (expectedText, testedText) = (expectedValue toText~floatpoint3d(), testedValue toText~floatpoint3d())
+			case Quaternion => (expectedText, testedText) = (expectedValue toText~quaternion(), testedValue toText~quaternion())
+			case FloatEuclidTransform => (expectedText, testedText) = (expectedValue toText~floateuclidtransform(), testedValue toText~floateuclidtransform())
+			case FloatRotation3D => (expectedText, testedText) = (expectedValue toText~floatrotation3d(), testedValue toText~floatrotation3d())
+			case FloatTransform2D => (expectedText, testedText) = (expectedValue toText~floattransform2d(), testedValue toText~floattransform2d())
+			case FloatTransform3D => (expectedText, testedText) = (expectedValue toText~floattransform3d(), testedValue toText~floattransform3d())
+			case IntVector2D => (expectedText, testedText) = (expectedValue toText~intvector2d(), testedValue toText~intvector2d())
+			case IntVector3D => (expectedText, testedText) = (expectedValue toText~intvector3d(), testedValue toText~intvector3d())
+			case IntPoint2D => (expectedText, testedText) = (expectedValue toText~intpoint2d(), testedValue toText~intpoint2d())
+			case IntPoint3D => (expectedText, testedText) = (expectedValue toText~intpoint3d(), testedValue toText~intpoint3d())
 			case => (expectedText, testedText) = (expectedValue toText(), testedValue toText())
 		}
 		result append(expectedText) . append(t"was") . append(testedText)
@@ -158,6 +170,18 @@ Fixture: abstract class {
 	expect: static func ~ullong (value: ULLong, constraint: Constraint) { This expect(Cell new(value), constraint) }
 
 	expect: static func ~floatvector2d (value: FloatVector2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~floatvector3d (value: FloatVector3D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~floatpoint2d (value: FloatPoint2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~floatpoint3d (value: FloatPoint3D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~quaternion (value: Quaternion, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~floateuclidtransform (value: FloatEuclidTransform, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~floatrotation3d (value: FloatRotation3D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~floattransform2d (value: FloatTransform2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~floattransform3d (value: FloatTransform3D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~intvector2d (value: IntVector2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~intvector3d (value: IntVector3D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~intpoint2d (value: IntPoint2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~intpoint3d (value: IntPoint3D, constraint: Constraint) { This expect(Cell new(value), constraint) }
 }
 
 TestFailedException: class extends Exception {

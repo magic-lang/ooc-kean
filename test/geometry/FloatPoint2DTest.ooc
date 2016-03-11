@@ -18,6 +18,9 @@ FloatPoint2DTest: class extends Fixture {
 	point3 := FloatPoint2D new (10.0f, 20.0f)
 	init: func {
 		super("FloatPoint2D")
+		this add("fixture", func {
+			expect(this point0 + this point1, is equal to(this point2) within(this precision))
+		})
 		this add("equality", func {
 			point := FloatPoint2D new()
 			expect(this point0 == this point0, is true)
