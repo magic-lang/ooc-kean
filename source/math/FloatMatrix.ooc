@@ -427,6 +427,20 @@ FloatMatrix: cover {
 		this free(Owner Receiver)
 		result
 	}
+	operator == (other: This) -> Bool {
+		result := true
+		for (x in 0 .. this width)
+			for (y in 0 .. this height)
+				if (!(this[x, y] equals(other[x, y]))) {
+					result = false
+					break
+				}
+		this free(Owner Receiver)
+		result
+	}
+	operator != (other: This) -> Bool {
+		!(this == other)
+	}
 	operator [] (x, y: Int) -> Float {
 		t := this take()
 		version (safe)

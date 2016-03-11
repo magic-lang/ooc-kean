@@ -34,7 +34,7 @@ FloatComplex: cover {
 	operator - (other: This) -> This { This new(this real - other real, this imaginary - other imaginary) }
 	operator * (other: This) -> This { This new(this real * other real - this imaginary * other imaginary, this real * other imaginary + this imaginary * other real) }
 	operator / (other: This) -> This { (this * other conjugate) / (other absoluteValue pow(2)) }
-	operator == (other: This) -> Bool { this real == other real && this imaginary == other imaginary }
+	operator == (other: This) -> Bool { this real equals(other real) && this imaginary equals(other imaginary) }
 	operator != (other: This) -> Bool { !(this == other) }
 	operator * (other: Float) -> This { This new(other * this real, other * this imaginary) }
 	operator / (other: Float) -> This { This new(this real / other, this imaginary / other) }
