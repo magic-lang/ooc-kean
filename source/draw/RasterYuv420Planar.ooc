@@ -123,7 +123,6 @@ RasterYuv420Planar: class extends RasterYuvPlanar {
 			uDestination := uRow
 			vRow := result v buffer pointer
 			vDestination := vRow
-			//		C#: original.Apply(color => *((Color.Bgra*)destination++) = new Color.Bgra(color, 255));
 			f := func (color: ColorYuv) {
 				(yDestination)@ = color y
 				yDestination += 1
