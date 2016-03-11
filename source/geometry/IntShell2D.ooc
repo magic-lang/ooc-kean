@@ -54,3 +54,7 @@ IntShell2D: cover {
 		result
 	}
 }
+
+extend Cell<IntShell2D> {
+	toText: func ~intshell2d -> Text { (this val as IntShell2D) toText() }
+}

@@ -156,6 +156,34 @@ EqualModifier: class extends ExpectModifier {
 		f := func (value, c: Cell<IntPoint3D>) -> Bool { value get() == c get() }
 		CompareWithinConstraint new(this, Cell<IntPoint3D> new(correct), f, this withinType, IntPoint3D)
 	}
+	to: func ~floatcomplex (correct: FloatComplex) -> CompareWithinConstraint {
+		f := func (value, c: Cell<FloatComplex>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<FloatComplex> new(correct), f, this withinType, FloatComplex)
+	}
+	to: func ~floatmatrix (correct: FloatMatrix) -> CompareWithinConstraint {
+		f := func (value, c: Cell<FloatMatrix>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<FloatMatrix> new(correct), f, this withinType, FloatMatrix)
+	}
+	to: func ~inttransform2d (correct: IntTransform2D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<IntTransform2D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<IntTransform2D> new(correct), f, this withinType, IntTransform2D)
+	}
+	to: func ~floatbox2d (correct: FloatBox2D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<FloatBox2D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<FloatBox2D> new(correct), f, this withinType, FloatBox2D)
+	}
+	to: func ~intbox2d (correct: IntBox2D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<IntBox2D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<IntBox2D> new(correct), f, this withinType, IntBox2D)
+	}
+	to: func ~floatshell2d (correct: FloatShell2D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<FloatShell2D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<FloatShell2D> new(correct), f, this withinType, FloatShell2D)
+	}
+	to: func ~intshell2d (correct: IntShell2D) -> CompareWithinConstraint {
+		f := func (value, c: Cell<IntShell2D>) -> Bool { value get() == c get() }
+		CompareWithinConstraint new(this, Cell<IntShell2D> new(correct), f, this withinType, IntShell2D)
+	}
 }
 
 LessModifier: class extends ExpectModifier {

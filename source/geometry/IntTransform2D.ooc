@@ -158,3 +158,7 @@ IntTransform2D: cover {
 	createReflectionX: static func -> This { This new(-1, 0, 0, 1, 0, 0) }
 	createReflectionY: static func -> This { This new(1, 0, 0, -1, 0, 0) }
 }
+
+extend Cell<IntTransform2D> {
+	toText: func ~inttransform2d -> Text { (this val as IntTransform2D) toText() }
+}
