@@ -17,12 +17,7 @@ Fixture: abstract class {
 	name: String
 	tests := VectorList<Test> new(32, false)
 
-	init: func (=name) {
-		if (!This exitHandlerRegistered) {
-			This exitHandlerRegistered = true
-			atexit(This printFailures)
-		}
-	}
+	init: func (=name)
 	free: override func {
 		this tests free()
 		this name free()
@@ -133,7 +128,6 @@ Fixture: abstract class {
 	_testsFailed: static Bool
 	_expectCount: static Int = 0
 	totalTime: static Double
-	exitHandlerRegistered: static Bool
 	failureNames: static VectorList<String>
 	is ::= static IsConstraints new()
 	testsFailed: static Bool { get { This _testsFailed } }

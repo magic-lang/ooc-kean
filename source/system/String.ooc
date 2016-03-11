@@ -316,4 +316,4 @@ cStringPtrToStringPtr: func (cstr: CString*, len: Int) -> String* {
 	toRet
 }
 
-GlobalCleanup register(|| String free~all())
+GlobalCleanup register(|| String free~all(), true)

@@ -25,22 +25,24 @@ alloca: extern func (SizeT) -> Pointer
 
 // Used for executing any/all cleanup (free~all) functions before program exit
 GlobalCleanup: class {
-	_functionPointers: static Stack<Closure> = null
+	_functionPointers: static VectorList<Closure> = null
 	init: func
-	register: static func (pointer: Func) {
+	register: static func (pointer: Func, last := false) {
 		if (This _functionPointers == null)
-			This _functionPointers = Stack<Closure> new()
-		This _functionPointers push(pointer as Closure)
+			This _functionPointers = VectorList<Closure> new()
+		if (last)
+			This _functionPointers insert(0, pointer as Closure)
+		else
+			This _functionPointers add(pointer as Closure)
 	}
 	run: static func {
 		if (This _functionPointers != null) {
-			while (!This _functionPointers isEmpty) {
-				next := This _functionPointers pop()
+			while (!This _functionPointers empty) {
+				next := This _functionPointers remove~atIndex(This _functionPointers count - 1)
 				(next as Func)()
 				(next) free()
 			}
-			This _functionPointers free()
-			This _functionPointers = null
+			This clear()
 		}
 	}
 	clear: static func {
@@ -50,3 +52,5 @@ GlobalCleanup: class {
 		}
 	}
 }
+
+GlobalCleanup register(|| MutexGlobal free~all()) // Must be here because rock loads Mutex.ooc before Memory.ooc
