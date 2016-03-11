@@ -23,6 +23,7 @@ Debug: class {
 	_level: static DebugLevel = DebugLevel Everything
 	_printFunction: static Func (String) = func (s: String) { println(s) }
 	initialize: static func (f: Func (String)) {
+		(This _printFunction as Closure) free()
 		This _printFunction = f
 	}
 	print: static func (string: String, level := DebugLevel Everything) {
@@ -43,8 +44,13 @@ Debug: class {
 		This error(string)
 		string free()
 	}
+	free: static func ~all {
+		(This _printFunction as Closure) free()
+	}
 	kean_base_debug_registerCallback: unmangled static func (print: Pointer) {
 		f := (print, null) as Func (Char*)
 		This initialize(func (s: String) { f(s toCString()) })
 	}
 }
+
+GlobalCleanup register(|| Debug free~all())
