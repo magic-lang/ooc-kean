@@ -62,31 +62,6 @@ GpuCanvas: abstract class extends Canvas {
 	}
 	_getDefaultMap: virtual func (image: Image) -> Map { this _defaultMap }
 	clear: func { this fill() }
-	draw: virtual func (action: Func)
-	draw: virtual func ~WithoutBind (destination: IntBox2D, map: Map)
-	draw: abstract func ~GpuImage (image: GpuImage, source, destination: IntBox2D, map: Map)
-	draw: func ~ImageMap (image: GpuImage, map: Map) { this draw~GpuImage(image, IntBox2D new(image size), IntBox2D new(image size), map) }
-	draw: func ~ImageDestinationMap (image: GpuImage, destination: IntBox2D, map: Map) { this draw~GpuImage(image, IntBox2D new(image size), destination, map) }
-	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) {
-		map := this _getDefaultMap(image)
-		temporary: GpuImage = null
-		if (image instanceOf(GpuImage))
-			temporary = image as GpuImage
-		else if (image instanceOf(RasterImage))
-			temporary = this _context createImage(image as RasterImage)
-		else
-			Debug error("Invalid image type in GpuCanvas!")
-		if (temporary instanceOf(GpuYuv420Semiplanar)) {
-			yuv := temporary as GpuYuv420Semiplanar
-			map add("texture0", yuv y)
-			map add("texture1", yuv uv)
-		} else
-			map add("texture0", temporary)
-		this draw(temporary, source, destination, map)
-		if (image != temporary)
-			temporary free()
-	}
-	draw: virtual func ~mesh (image: GpuImage, mesh: Mesh) { Debug error("draw~mesh unimplemented!") }
 	_createTextureTransform: static func ~LocalInt (imageSize: IntVector2D, box: IntBox2D) -> FloatTransform3D {
 		This _createTextureTransform(imageSize toFloatVector2D(), box toFloatBox2D())
 	}
