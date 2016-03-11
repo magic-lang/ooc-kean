@@ -7,6 +7,8 @@
  */
 
 use base
+use geometry
+use math
 import Modifiers
 
 ComparisonType: enum {
@@ -80,26 +82,45 @@ CompareConstraint: class extends Constraint {
 }
 
 CompareWithinConstraint: class extends CompareConstraint {
+	actualType: Class
 	precision: LDouble
-	init: func (parent: ExpectModifier, .correct, .comparer, compareType := ComparisonType Within) {
+	init: func (parent: ExpectModifier, .correct, .comparer, compareType := ComparisonType Within, =actualType) {
 		super(parent, correct, comparer, compareType)
 	}
 	within: func ~float (precision: Float) -> CompareConstraint {
 		this precision = precision as LDouble
-		this comparer = func (value, correct: Object) -> Bool { this testChild(value) }
-		f := func (value, correct: Cell<Float>) -> Bool { correct get() equals(value get(), precision) }
-		CompareConstraint new(this, Cell<Float> new(this correct as Cell<Float> get()), f, this type)
+		this _within()
 	}
 	within: func ~double (precision: Double) -> CompareConstraint {
 		this precision = precision as Double
-		this comparer = func (value, correct: Object) -> Bool { this testChild(value) }
-		f := func (value, correct: Cell<Double>) -> Bool { correct get() equals(value get(), precision) }
-		CompareConstraint new(this, Cell<Double> new(this correct as Cell<Double> get()), f, this type)
+		this _within()
 	}
 	within: func ~ldouble (=precision) -> CompareConstraint {
+		this _within()
+	}
+	_within: func -> CompareConstraint {
 		this comparer = func (value, correct: Object) -> Bool { this testChild(value) }
-		f := func (value, correct: Cell<LDouble>) -> Bool { correct get() equals(value get(), precision) }
-		CompareConstraint new(this, Cell<LDouble> new(this correct as Cell<LDouble> get()), f, this type)
+		result: CompareConstraint
+		match (this actualType) {
+			case Float =>
+				f := func (value, correct: Cell<Float>) -> Bool { correct get() equals(value get(), precision) }
+				result = CompareConstraint new(this, Cell<Float> new(this correct as Cell<Float> get()), f, this type)
+			case Double =>
+				f := func (value, correct: Cell<Double>) -> Bool { correct get() equals(value get(), precision) }
+				result = CompareConstraint new(this, Cell<Double> new(this correct as Cell<Double> get()), f, this type)
+			case LDouble =>
+				f := func (value, correct: Cell<LDouble>) -> Bool { correct get() equals(value get(), precision) }
+				result = CompareConstraint new(this, Cell<LDouble> new(this correct as Cell<LDouble> get()), f, this type)
+			case FloatVector2D =>
+				f := func (value, correct: Cell<FloatVector2D>) -> Bool {
+					distance := correct get() distance(value get())
+					distance equals(0.f, precision)
+				}
+				result = CompareConstraint new(this, Cell<FloatVector2D> new(this correct as Cell<FloatVector2D> get()), f, this type)
+			case =>
+				raise("Using within() for incompatible type %s in test!" format(this actualType name))
+		}
+		result
 	}
 	test: override func (value: Object) -> Bool {
 		comparer := this comparer

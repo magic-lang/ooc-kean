@@ -26,6 +26,9 @@ FloatVector2DTest: class extends Fixture {
 			expect(point == point, is true)
 			expect(point == this vector0, is false)
 		})
+		this add("fixture", func {
+			expect(this vector0 + this vector1, is equal to(this vector2) within(this precision))
+		})
 		this add("addition", func {
 			expect((this vector0 + this vector1) x, is equal to(this vector2 x))
 			expect((this vector0 + this vector1) y, is equal to(this vector2 y))
