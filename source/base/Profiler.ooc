@@ -61,3 +61,5 @@ Profiler: class {
 		(logMethod as Closure) free()
 	}
 }
+
+GlobalCleanup register(|| Profiler free~all())

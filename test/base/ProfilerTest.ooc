@@ -34,7 +34,6 @@ ProfilerTest: class extends Fixture {
 			profiler start() . stop()
 			profilerToFree := Profiler new("to free")
 			profilerToFree free()
-			Profiler free~all()
 		})
 	}
 	_createOutputDirectory: func {

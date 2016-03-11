@@ -13,7 +13,9 @@ MemoryTest: class extends Fixture {
 	init: func {
 		super("Memory")
 		this add("Global cleanup", func {
-			expect(GlobalCleanup _functionPointers, is Null)
+			// Workaround to avoid changing the GlobalCleanup stack saved from other tests
+			saveStack := GlobalCleanup _functionPointers
+			GlobalCleanup _functionPointers = null
 
 			GlobalCleanup register(func { this value -= 1 })
 			expect(GlobalCleanup _functionPointers, is notNull)
@@ -30,6 +32,9 @@ MemoryTest: class extends Fixture {
 
 			GlobalCleanup clear()
 			expect(GlobalCleanup _functionPointers, is Null)
+
+			// Return the saved stack to GlobalCleanup
+			GlobalCleanup _functionPointers = saveStack
 		})
 	}
 }
