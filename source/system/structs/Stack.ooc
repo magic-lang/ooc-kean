@@ -24,7 +24,7 @@ Stack: class <T> {
 		if (this _count >= this _capacity)
 			this _grow()
 		this _data[this _count] = element
-		++this _count
+		this _count += 1
 	}
 	pop: func -> T {
 		version(safe)

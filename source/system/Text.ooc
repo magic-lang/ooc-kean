@@ -87,7 +87,7 @@ Text: cover {
 				result = index
 				break
 			}
-			--index
+			index -= 1
 		}
 		this free(Owner Receiver)
 		result
@@ -134,9 +134,9 @@ Text: cover {
 		leftPosition := 0
 		rightPosition := this count - 1
 		while (leftPosition < this count && this _buffer[leftPosition] whitespace())
-			++leftPosition
+			leftPosition += 1
 		while (rightPosition > leftPosition && this _buffer[rightPosition] whitespace())
-			--rightPosition
+			rightPosition -= 1
 		this slice(leftPosition, rightPosition - leftPosition + 1)
 	}
 	replaceAll: func (toReplace, newValue: This) -> This {
@@ -212,12 +212,12 @@ Text: cover {
 			for (i in start .. t count) {
 				if (!This _isNumeric(t[i], base))
 					break
-				++lastValidIndex
+				lastValidIndex += 1
 			}
 			power := 1 as ULong
 			while (lastValidIndex >= 0) {
 				result += power * This _toInt(t[lastValidIndex], base)
-				--lastValidIndex
+				lastValidIndex -= 1
 				power *= base
 			}
 		}

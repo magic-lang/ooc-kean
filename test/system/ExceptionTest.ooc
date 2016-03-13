@@ -20,12 +20,12 @@ ExceptionTest: class extends Fixture {
 						raise("test exception")
 					} catch (exception: Exception) {
 						exception free()
-						++exceptionCount
+						exceptionCount += 1
 						raise("another one")
 					}
 				} catch (exception: Exception) {
 					exception free()
-					++exceptionCount
+					exceptionCount += 1
 				}
 			expect(exceptionCount, is equal to(2 * testCount))
 		})
@@ -33,7 +33,7 @@ ExceptionTest: class extends Fixture {
 			count := 0
 			for (i in 0 .. 100)
 				try { }
-				catch (Exception) { ++count }
+				catch (Exception) { count += 1 }
 			expect(count, is equal to(0))
 		})
 		this add("break from try", func {
@@ -41,7 +41,7 @@ ExceptionTest: class extends Fixture {
 			for (i in 0 .. 100)
 				try {
 					break
-				} catch (Exception) { ++count }
+				} catch (Exception) { count += 1 }
 			expect(count, is equal to(0))
 		})
 	}

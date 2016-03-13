@@ -94,7 +94,7 @@ TextBuilder: class {
 		result := this count == other count
 		i := 0
 		while (i < this count && (result &= this[i] == other[i]))
-			++i
+			i += 1
 		result
 	}
 	operator [] (index: Int) -> Char {
@@ -102,7 +102,7 @@ TextBuilder: class {
 		c := this _data[position] take() count
 		while (c <= index) {
 			index -= c
-			++position
+			position += 1
 			c = this _data[position] take() count
 		}
 		this _data[position] take()[index]
@@ -119,7 +119,7 @@ TextBuilder: class {
 		result := this count == t count
 		i := 0
 		while (i < this count && (result &= this[i] == t[i]))
-			++i
+			i += 1
 		text free(Owner Receiver)
 		result
 	}

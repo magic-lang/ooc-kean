@@ -24,7 +24,7 @@ IntRandomGeneratorTest: class extends Fixture {
 				y := generator2 next()
 				z := generator3 next()
 				if (x == z)
-					++countEqual
+					countEqual += 1
 				expect(x, is equal to(y))
 			}
 			expect(countEqual < valuesCount)

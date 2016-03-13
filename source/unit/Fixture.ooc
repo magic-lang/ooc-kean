@@ -145,7 +145,7 @@ Fixture: abstract class {
 		fflush(stdout)
 	}
 	expect: static func (value: Object, constraint: Constraint) {
-		++This _expectCount
+		This _expectCount += 1
 		if (!constraint verify(value))
 			TestFailedException new(value, constraint, This _expectCount) throw()
 		else {

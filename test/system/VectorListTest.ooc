@@ -221,8 +221,10 @@ VectorListTest: class extends Fixture {
 			sortedList := list copy()
 			sortedList sort(|v1, v2| v1 < v2)
 			count := list count
-			for (value in sortedList)
-				expect(value, is equal to(list[--count]))
+			for (value in sortedList) {
+				count -= 1
+				expect(value, is equal to(list[count]))
+			}
 		})
 		this add("VectorList fold", func {
 			list := VectorList<Int> new()
