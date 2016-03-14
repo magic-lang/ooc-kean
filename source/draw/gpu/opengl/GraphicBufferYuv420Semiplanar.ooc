@@ -79,7 +79,6 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 			This _bin remove() referenceCount decrease()
 		This _mutex unlock()
 	}
-	kean_draw_graphicBufferYuv420Semiplanar_new: unmangled static func (buffer: GraphicBuffer, size: IntVector2D, stride, uvOffset: Int) -> This { This new(buffer, size, stride, uvOffset) }
 }
 
 GlobalCleanup register(|| GraphicBufferYuv420Semiplanar free~all())

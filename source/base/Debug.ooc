@@ -47,10 +47,6 @@ Debug: class {
 	free: static func ~all {
 		(This _printFunction as Closure) free()
 	}
-	kean_base_debug_registerCallback: unmangled static func (print: Pointer) {
-		f := (print, null) as Func (Char*)
-		This initialize(func (s: String) { f(s toCString()) })
-	}
 }
 
 GlobalCleanup register(|| Debug free~all())

@@ -27,9 +27,6 @@ Promise: abstract class {
 		collector add(other)
 		collector
 	}
-	kean_concurrent_promise_wait: unmangled func { this wait() }
-	kean_concurrent_promise_waitWithTimeout: unmangled func (time: TimeSpan) { this wait(time) }
-	kean_concurrent_promise_free: unmangled func { this free() }
 	start: static func (action: Func) -> This { _ThreadPromise new(action) }
 	empty: static This { get { _EmptyPromise new() } }
 }

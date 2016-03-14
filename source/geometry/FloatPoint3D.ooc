@@ -74,8 +74,6 @@ FloatPoint3D: cover {
 	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
 		This new(ratio linearInterpolation(a x, b x), ratio linearInterpolation(a y, b y), ratio linearInterpolation(a z, b z))
 	}
-
-	kean_math_floatPoint3D_new: unmangled static func (x, y, z: Float) -> This { This new(x, y, z) }
 }
 operator - (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left - right x, left - right y, left - right z) }
 operator * (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left * right x, left * right y, left * right z) }

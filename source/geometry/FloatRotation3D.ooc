@@ -40,8 +40,6 @@ FloatRotation3D: cover {
 	createFromEulerAngles: static func (rotationX, rotationY, rotationZ: Float) -> This {
 		This new(Quaternion createFromEulerAngles(rotationX, rotationY, rotationZ))
 	}
-
-	kean_math_floatRotation3D_new: unmangled static func (quaternion: Quaternion) -> This { This new(quaternion) }
 }
 
 extend Cell<FloatRotation3D> {
