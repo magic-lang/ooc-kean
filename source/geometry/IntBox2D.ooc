@@ -156,3 +156,7 @@ IntBox2D: cover {
 		This new(xMinimum, yMinimum, xMaximum - xMinimum, yMaximum - yMinimum)
 	}
 }
+
+extend Cell<IntBox2D> {
+	toText: func ~intbox2d -> Text { (this val as IntBox2D) toText() }
+}

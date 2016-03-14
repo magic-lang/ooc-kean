@@ -115,6 +115,13 @@ Fixture: abstract class {
 			case IntVector3D => (expectedText, testedText) = (expectedValue toText~intvector3d(), testedValue toText~intvector3d())
 			case IntPoint2D => (expectedText, testedText) = (expectedValue toText~intpoint2d(), testedValue toText~intpoint2d())
 			case IntPoint3D => (expectedText, testedText) = (expectedValue toText~intpoint3d(), testedValue toText~intpoint3d())
+			case FloatComplex => (expectedText, testedText) = (expectedValue toText~floatcomplex(), testedValue toText~floatcomplex())
+			case FloatMatrix => (expectedText, testedText) = (expectedValue toText~floatmatrix(), testedValue toText~floatmatrix())
+			case IntTransform2D => (expectedText, testedText) = (expectedValue toText~inttransform2d(), testedValue toText~inttransform2d())
+			case FloatBox2D => (expectedText, testedText) = (expectedValue toText~floatbox2d(), testedValue toText~floatbox2d())
+			case IntBox2D => (expectedText, testedText) = (expectedValue toText~intbox2d(), testedValue toText~intbox2d())
+			case FloatShell2D => (expectedText, testedText) = (expectedValue toText~floatshell2d(), testedValue toText~floatshell2d())
+			case IntShell2D => (expectedText, testedText) = (expectedValue toText~intshell2d(), testedValue toText~intshell2d())
 			case => (expectedText, testedText) = (expectedValue toText(), testedValue toText())
 		}
 		result append(expectedText) . append(t"was") . append(testedText)
@@ -182,6 +189,13 @@ Fixture: abstract class {
 	expect: static func ~intvector3d (value: IntVector3D, constraint: Constraint) { This expect(Cell new(value), constraint) }
 	expect: static func ~intpoint2d (value: IntPoint2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
 	expect: static func ~intpoint3d (value: IntPoint3D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~floatcomplex (value: FloatComplex, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~floatmatrix (value: FloatMatrix, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~inttransform2d (value: IntTransform2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~floatbox2d (value: FloatBox2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~intbox2d (value: IntBox2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~floatshell2d (value: FloatShell2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
+	expect: static func ~intshell2d (value: IntShell2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
 }
 
 TestFailedException: class extends Exception {

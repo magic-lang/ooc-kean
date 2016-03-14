@@ -190,3 +190,7 @@ FloatBox2D: cover {
 		This new(FloatPoint2D linearInterpolation(a leftTop, b leftTop, ratio), FloatVector2D linearInterpolation(a size, b size, ratio))
 	}
 }
+
+extend Cell<FloatBox2D> {
+	toText: func ~floatbox2d -> Text { (this val as FloatBox2D) toText() }
+}
