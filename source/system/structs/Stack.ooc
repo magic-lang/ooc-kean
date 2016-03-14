@@ -24,12 +24,13 @@ Stack: class <T> {
 		if (this _count >= this _capacity)
 			this _grow()
 		this _data[this _count] = element
-		++this _count
+		this _count += 1
 	}
 	pop: func -> T {
 		version(safe)
 			raise(this isEmpty, "Trying to pop an empty stack.", This)
-		this _data[--this _count]
+		this _count -= 1
+		this _data[this _count]
 	}
 	peek: func (index := 0) -> T {
 		version(safe) {
