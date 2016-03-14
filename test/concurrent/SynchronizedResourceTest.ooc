@@ -18,7 +18,8 @@ TestObject: class extends SynchronizedResource {
 	value: Int { get set }
 	init: func (=value) {
 		super()
-		this objectId = ++This objectCounter
+		This objectCounter += 1
+		this objectId = This objectCounter
 	}
 	free: override func {
 		if (this _recycle)

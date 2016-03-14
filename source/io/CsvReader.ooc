@@ -50,7 +50,7 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 		for (i in 0 .. rowLength) {
 			textBuilder := TextBuilder new()
 			while (i < rowLength && ((readCharacter = row[i]) != this _delimiter)) {
-				++i
+				i += 1
 				match (readCharacter) {
 					case ' ' =>
 						continue

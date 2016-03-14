@@ -184,7 +184,7 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 		for (i in start .. end)
 			if (array[i] x < pivotValue) {
 				This _swap(array, result, i)
-				++result
+				result += 1
 			}
 		This _swap(array, result, end)
 		result

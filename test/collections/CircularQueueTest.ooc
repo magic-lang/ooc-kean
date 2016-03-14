@@ -12,11 +12,11 @@
 MyClass: class {
 	instanceCount := static 0
 	content: Int
-	init: func (=content) { ++This instanceCount }
+	init: func (=content) { This instanceCount += 1 }
 	init: func ~default { this init(0) }
 	increase: func { this content += 1 }
 	free: override func {
-		--This instanceCount
+		This instanceCount -= 1
 		super()
 	}
 }

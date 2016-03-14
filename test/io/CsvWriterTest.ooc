@@ -39,7 +39,7 @@ CsvWriterTest: class extends Fixture {
 					rowString free(); correctAnswer free()
 				}
 				row free()
-				++rowCounter
+				rowCounter += 1
 			}
 			reader free()
 			outputFilename free()
@@ -70,7 +70,7 @@ CsvWriterTest: class extends Fixture {
 					rowString free(); correctAnswer free()
 				}
 				row free()
-				++rowCounter
+				rowCounter += 1
 			}
 			reader free()
 			outputFilename free()

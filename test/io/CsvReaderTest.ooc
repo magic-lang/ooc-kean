@@ -26,7 +26,7 @@ CsvReaderTest: class extends Fixture {
 					rowString free(); correctAnswer free()
 				}
 				row free()
-				++rowCounter
+				rowCounter += 1
 			}
 			filename free()
 			reader free()
@@ -44,7 +44,7 @@ CsvReaderTest: class extends Fixture {
 				row free()
 				correctTexts[position] free()
 				textBuilder free()
-				++position
+				position += 1
 			}
 			correctTexts free()
 			filename free()
@@ -62,7 +62,7 @@ CsvReaderTest: class extends Fixture {
 					rowString free(); correctAnswer free()
 				}
 				row free()
-				++rowCounter
+				rowCounter += 1
 			}
 			expect(reader delimiter, is equal to(';'))
 			filename free()
@@ -80,7 +80,7 @@ CsvReaderTest: class extends Fixture {
 					rowString free(); correctAnswer free()
 				}
 				row free()
-				++rowCounter
+				rowCounter += 1
 			}
 			expect(reader delimiter, is equal to(';'))
 			filename free()

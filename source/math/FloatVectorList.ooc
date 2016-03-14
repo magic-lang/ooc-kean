@@ -433,7 +433,7 @@ FloatVectorList: class extends VectorList<Float> {
 		for (i in start .. end)
 			if (array[i] < pivotValue) {
 				This _swap(array, result, i)
-				++result
+				result += 1
 			}
 		This _swap(array, result, end)
 		result
