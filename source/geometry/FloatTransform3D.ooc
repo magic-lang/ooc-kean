@@ -153,22 +153,22 @@ FloatTransform3D: cover {
 		)
 	}
 	operator == (other: This) -> Bool {
-		this a == other a &&
-		this b == other b &&
-		this c == other c &&
-		this d == other d &&
-		this e == other e &&
-		this f == other f &&
-		this g == other g &&
-		this h == other h &&
-		this i == other i &&
-		this j == other j &&
-		this k == other k &&
-		this l == other l &&
-		this m == other m &&
-		this n == other n &&
-		this o == other o &&
-		this p == other p
+		this a equals(other a) &&
+		this b equals(other b) &&
+		this c equals(other c) &&
+		this d equals(other d) &&
+		this e equals(other e) &&
+		this f equals(other f) &&
+		this g equals(other g) &&
+		this h equals(other h) &&
+		this i equals(other i) &&
+		this j equals(other j) &&
+		this k equals(other k) &&
+		this l equals(other l) &&
+		this m equals(other m) &&
+		this n equals(other n) &&
+		this o equals(other o) &&
+		this p equals(other p)
 	}
 	operator != (other: This) -> Bool {
 		!(this == other)

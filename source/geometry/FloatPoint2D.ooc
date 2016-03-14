@@ -53,8 +53,8 @@ FloatPoint2D: cover {
 	operator > (other: This) -> Bool { this x > other x && this y > other y }
 	operator <= (other: This) -> Bool { this x <= other x && this y <= other y }
 	operator >= (other: This) -> Bool { this x >= other x && this y >= other y }
-	operator == (other: This) -> Bool { this x == other x && this y == other y }
-	operator != (other: This) -> Bool { this x != other x || this y != other y }
+	operator == (other: This) -> Bool { this x equals(other x) && this y equals(other y) }
+	operator != (other: This) -> Bool { !(this == other) }
 	operator + (other: FloatVector2D) -> This { This new(this x + other x, this y + other y) }
 	operator - (other: FloatVector2D) -> This { This new(this x - other x, this y - other y) }
 	operator * (other: FloatVector2D) -> This { This new(this x * other x, this y * other y) }

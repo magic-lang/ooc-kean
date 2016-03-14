@@ -41,7 +41,7 @@ FloatEuclidTransform: cover {
 	operator == (other: This) -> Bool {
 		this translation == other translation &&
 		this rotation == other rotation &&
-		this scaling == other scaling
+		this scaling equals(other scaling)
 	}
 
 	convolveCenter: static func (euclidTransforms: VectorList<This>, kernel: FloatVectorList) -> This {
