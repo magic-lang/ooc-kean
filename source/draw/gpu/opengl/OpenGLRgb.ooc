@@ -16,8 +16,7 @@ import OpenGLCanvas, OpenGLPacked, OpenGLContext
 version(!gpuOff) {
 OpenGLRgb: class extends OpenGLPacked {
 	init: func (size: IntVector2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
-		super(context _backend createTexture(TextureType Rgb, size, stride, data, true), This channelCount, context)
-		this _coordinateSystem = coordinateSystem
+		super(context _backend createTexture(TextureType Rgb, size, stride, data, true), This channelCount, context, coordinateSystem)
 	}
 	init: func ~empty (size: IntVector2D, context: OpenGLContext) {
 		this init(size, size x * This channelCount, null, CoordinateSystem YUpward, context)

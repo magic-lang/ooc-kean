@@ -16,11 +16,14 @@ import OpenGLCanvas, OpenGLPacked, OpenGLContext
 version(!gpuOff) {
 OpenGLRgba: class extends OpenGLPacked {
 	init: func ~fromPixels (size: IntVector2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
-		super(context _backend createTexture(TextureType Rgba, size, stride, data), This channelCount, context)
-		this _coordinateSystem = coordinateSystem
+		super(context _backend createTexture(TextureType Rgba, size, stride, data), This channelCount, context, coordinateSystem)
 	}
-	init: func (size: IntVector2D, context: OpenGLContext) { this init(size, size x * This channelCount, null, CoordinateSystem YUpward, context) }
-	init: func ~fromTexture (texture: GLTexture, context: OpenGLContext) { super(texture, This channelCount, context) }
+	init: func (size: IntVector2D, context: OpenGLContext) {
+		this init(size, size x * This channelCount, null, CoordinateSystem YUpward, context)
+	}
+	init: func ~fromTexture (texture: GLTexture, context: OpenGLContext, coordinateSystem := CoordinateSystem Default) {
+		super(texture, This channelCount, context, coordinateSystem)
+	}
 	init: func ~fromRaster (rasterImage: RasterRgba, context: OpenGLContext) {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
 	}

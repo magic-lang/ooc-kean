@@ -81,31 +81,39 @@ RasterRgbTest: class extends Fixture {
 			outputFast free()
 		})
 		this add("coordinate systems", func {
+			output := "test/draw/output/coordinateswap.png"
 			image := RasterRgb open(this sourceSpace)
 			image2 := image copy()
 
-			image _coordinateSystem = CoordinateSystem YUpward
+			image referenceCount decrease()
+			image = RasterRgb open(this sourceSpace, CoordinateSystem YUpward)
 			image2 canvas draw(image)
 			for (row in 0 .. image2 height)
 				for (column in 0 .. image2 width)
 					expect(image2[column, row] == image[column, image height - row - 1])
 
-			image _coordinateSystem = CoordinateSystem Default
-			image2 _coordinateSystem = CoordinateSystem XLeftward | CoordinateSystem YUpward
+			image referenceCount decrease()
+			image = RasterRgb open(this sourceSpace)
+			image2 save(output) . free()
+			image2 = RasterRgb open(output, CoordinateSystem XLeftward | CoordinateSystem YUpward)
 			image2 canvas draw(image)
 			for (row in 0 .. image2 height)
 				for (column in 0 .. image2 width)
 					expect(image2[column, row] == image[image width - column - 1, image height - row - 1])
 
-			image _coordinateSystem = CoordinateSystem XLeftward
-			image2 _coordinateSystem = CoordinateSystem Default
+			image referenceCount decrease()
+			image = RasterRgb open(this sourceSpace, CoordinateSystem XLeftward)
+			image2 save(output) . free()
+			image2 = RasterRgb open(output)
 			image2 canvas draw(image)
 			for (row in 0 .. image2 height)
 				for (column in 0 .. image2 width)
 					expect(image2[column, row] == image[image width - column - 1, row])
 
-			image _coordinateSystem = CoordinateSystem Default
-			image2 _coordinateSystem = CoordinateSystem XRightward | CoordinateSystem YDownward
+			image referenceCount decrease()
+			image = RasterRgb open(this sourceSpace)
+			image2 save(output) . free()
+			image2 = RasterRgb open(output, CoordinateSystem XRightward | CoordinateSystem YDownward)
 			image2 canvas draw(image)
 			for (row in 0 .. image2 height)
 				for (column in 0 .. image2 width)
@@ -113,6 +121,7 @@ RasterRgbTest: class extends Fixture {
 
 			image referenceCount decrease()
 			image2 referenceCount decrease()
+			output free()
 		})
 	}
 }
