@@ -27,6 +27,7 @@ _FenceToRasterFuture: class extends ToRasterFuture {
 	wait: override func -> Bool { this _promise wait() }
 	wait: override func ~timeout (time: TimeSpan) -> Bool { this _promise wait(time) }
 }
+
 OpenGLContext: class extends GpuContext {
 	_backend: GLContext
 	_transformTextureMap: OpenGLMapTransform

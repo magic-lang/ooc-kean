@@ -101,6 +101,7 @@ OpenGLMap: class extends Map {
 		(action as Closure) free()
 	}
 }
+
 OpenGLMapMesh: class extends OpenGLMap {
 	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
 	use: override func (forbiddenInput: Pointer) {
@@ -110,6 +111,7 @@ OpenGLMapMesh: class extends OpenGLMap {
 	vertexSource: static String = slurp("shaders/mesh.vert")
 	fragmentSource: static String = slurp("shaders/mesh.frag")
 }
+
 OpenGLMapTransform: class extends OpenGLMap {
 	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
 	use: override func (forbiddenInput: Pointer) {

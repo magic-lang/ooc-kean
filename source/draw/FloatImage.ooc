@@ -20,7 +20,6 @@ FloatImage : class {
 		this _size = IntVector2D new(width, height)
 		this _pointer = calloc(width * height, Float instanceSize)
 	}
-
 	free: override func {
 		memfree(this _pointer)
 		super()
@@ -30,7 +29,6 @@ FloatImage : class {
 			raise(x > _size x || y > _size y || x < 0 || y < 0, "Accessing FloatImage index out of range in get")
 		(this _pointer + (x + this _size x * y))@ as Float
 	}
-
 	operator []= (x, y: Int, value: Float) {
 		version(safe)
 			raise(x > _size x || y > _size y || x < 0 || y < 0, "Accessing FloatImage index out of range in set")
