@@ -61,7 +61,6 @@ GpuCanvas: abstract class extends Canvas {
 		this _createModelTransform(box * imageSize toFloatVector2D(), focalLength)
 	}
 	_getDefaultMap: virtual func (image: Image) -> Map { this _defaultMap }
-	clear: func { this fill() }
 	draw: virtual func (action: Func)
 	draw: virtual func ~WithoutBind (destination: IntBox2D, map: Map)
 	draw: abstract func ~GpuImage (image: GpuImage, source, destination: IntBox2D, map: Map)

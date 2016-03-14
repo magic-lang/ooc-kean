@@ -77,9 +77,9 @@ OpenGLCanvas: class extends OpenGLSurface {
 	_bind: override func { this _renderTarget bind() }
 	_unbind: override func { this _renderTarget unbind() }
 	onRecycle: func { this _renderTarget invalidate() }
-	fill: override func {
+	fill: override func ~color (color: ColorRgba) {
 		this _bind()
-		this _renderTarget setClearColor(this pen color)
+		this _renderTarget setClearColor(color)
 		this _renderTarget clear()
 		this _unbind()
 	}
