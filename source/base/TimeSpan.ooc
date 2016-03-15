@@ -25,7 +25,7 @@ TimeSpan: cover {
 	toWeeks: func -> Long { this ticks / DateTime ticksPerWeek }
 
 	defaultFormat: static Text = t"%w weeks, %d days, %h hours, %m minutes, %s seconds, %z milliseconds"
-	// supported formatting expressions:
+	// Supported formatting expressions:
 	//  %w - weeks (rounded down)
 	//  %d - days (<7)
 	//  %h - hours (<24)
@@ -81,14 +81,15 @@ TimeSpan: cover {
 	operator * (value: Double) -> This { This new(this ticks * value) }
 	operator / (value: Double) -> This { This new(this ticks / value) }
 
+	maximumValue ::= static This new(Long maximumValue)
+	minimumValue ::= static This new(Long minimumValue)
+
 	millisecond: static func -> This { This milliseconds(1) }
 	second: static func -> This { This seconds(1) }
 	minute: static func -> This { This minutes(1) }
 	hour: static func -> This { This hours(1) }
 	day: static func -> This { This days(1) }
 	week: static func -> This { This weeks(1) }
-	maximumValue ::= static This new(Long maximumValue)
-	minimumValue ::= static This new(Long minimumValue)
 
 	milliseconds: static func (count: Double) -> This { This new(DateTime ticksPerMillisecond * count) }
 	seconds: static func (count: Double) -> This { This new(DateTime ticksPerSecond * count) }

@@ -27,8 +27,7 @@ extend Time {
 				st: SystemTime
 				GetLocalTime(st&)
 				result = DateTime new(st wYear, st wMonth, st wDay, st wHour, st wMinute, st wSecond, st wMilliseconds)
-		}
-		version(!windows) {
+		} else {
 				tt := time(null)
 				val := localtime(tt&)
 				result = DateTime new(val@ tm_year + 1900, val@ tm_mon + 1, val@ tm_mday, val@ tm_hour, val@ tm_min, val@ tm_sec, 0)
@@ -61,32 +60,15 @@ DateTime: cover {
 			raise ("invalid input specified for constructor(year,month,day,hour,minute,second,ms)")
 	}
 
-	millisecond: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) millisecond
-	}
-	second: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) second
-	}
-	minute: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) minute
-	}
-	hour: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) hour
-	}
-	day: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) day
-	}
-	month: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) month
-	}
-	year: func -> Int {
-		This _ticksToDateTimeHelper(this ticks) year
-	}
+	millisecond: func -> Int { This _ticksToDateTimeHelper(this ticks) millisecond }
+	second: func -> Int { This _ticksToDateTimeHelper(this ticks) second }
+	minute: func -> Int { This _ticksToDateTimeHelper(this ticks) minute }
+	hour: func -> Int { This _ticksToDateTimeHelper(this ticks) hour }
+	day: func -> Int { This _ticksToDateTimeHelper(this ticks) day }
+	month: func -> Int { This _ticksToDateTimeHelper(this ticks) month }
+	year: func -> Int { This _ticksToDateTimeHelper(this ticks) year }
 
-	// <summary>
-	// Convert this object to string representation
-	// </summary>
-	// supported formatting expressions:
+	// Supported formatting expressions:
 	//	%yyyy - year
 	//	%yy	- year as two digit number
 	//  %MM - month with leading zero
@@ -97,7 +79,6 @@ DateTime: cover {
 	//	%mm - minute
 	//	%ss - second
 	//	%zzzz - millisecond
-	// <param name="format">output format specification</param>
 	toText: func (format := This defaultFormat) -> Text {
 		result := format copy()
 		data := This _ticksToDateTimeHelper(this ticks)
@@ -116,7 +97,6 @@ DateTime: cover {
 		result = result replaceAll(t"%zzz", t"%03d" format(data millisecond))
 		result replaceAll(t"%z", t"%d" format(data millisecond))
 	}
-
 	compareTo: func (other: This) -> Order {
 		if (this ticks > other ticks)
 			Order Greater
@@ -182,12 +162,10 @@ DateTime: cover {
 		millisecond := ticksLeft / This ticksPerMillisecond
 		DateTimeData new(year, month, days + 1, hour, minute, second, millisecond)
 	}
-
 	/* returns number of ticks for given hours, minutes and seconds */
 	timeToTicks: static func (hours, minutes, seconds, millisecond: Int) -> Long {
 		(hours * 3600 + minutes * 60 + seconds) * This ticksPerSecond + millisecond * This ticksPerMillisecond
 	}
-
 	/* returns number of ticks for given date at 0:00*/
 	dateToTicks: static func (year, month, day: Int) -> ULong {
 		result := 0 as ULong
@@ -204,15 +182,12 @@ DateTime: cover {
 		}
 		result
 	}
-
 	daysInYear: static func (year: Int) -> Int {
 		This daysPerYear + This isLeapYear(year)
 	}
-
 	ticksInYear: static func (year: Int) -> ULong {
 		This daysInYear(year) * This ticksPerDay
 	}
-
 	daysInMonth: static func (year, month: Int) -> Int {
 		if (month == 2)
 			This isLeapYear(year) ? 29 : 28
@@ -221,7 +196,6 @@ DateTime: cover {
 		else
 			month % 2 ? 30 : 31
 	}
-
 	ticksInMonth: static func (year, month: Int) -> ULong {
 		This ticksPerDay * This daysInMonth(year, month)
 	}
