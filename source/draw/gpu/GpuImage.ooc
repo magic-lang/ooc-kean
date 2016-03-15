@@ -40,7 +40,6 @@ GpuImage: abstract class extends Image {
 	copy: override func -> This { this resizeTo(this size) }
 	copy: override func ~fromParams (size: IntVector2D, transform: FloatTransform2D) -> This { raise("Using unimplemented function copy ~fromParams in GpuImage class"); null }
 	distance: override func (other: Image) -> Float { raise("Using unimplemented function distance in GpuImage class"); 0.0f }
-
 	upload: abstract func (image: RasterImage)
 	toRaster: func -> RasterImage { this _context toRaster(this) }
 	toRaster: func ~target (target: RasterImage) -> Promise { this _context toRaster(this, target) }

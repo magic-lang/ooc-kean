@@ -32,6 +32,7 @@ ToRasterFuture: class extends Future<RasterImage> {
 		this _result
 	}
 }
+
 GpuContext: abstract class extends DrawContext {
 	defaultMap ::= null as Map
 	init: func

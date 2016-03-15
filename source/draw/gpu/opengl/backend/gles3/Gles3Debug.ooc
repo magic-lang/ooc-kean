@@ -17,7 +17,6 @@ validateStart: func (location: String) {
 validateEnd: func (location: String) {
 	validate("in " + location)
 }
-
 validate: func (message: String) {
 	glError := glGetError()
 	if (glError != GL_NO_ERROR) {
