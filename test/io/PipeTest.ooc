@@ -10,6 +10,7 @@ use unit
 use io
 import io/File
 
+version (!android) {
 PipeTest: class extends Fixture {
 	init: func {
 		super("Pipe")
@@ -55,3 +56,4 @@ PipeTest: class extends Fixture {
 }
 
 PipeTest new() run() . free()
+}

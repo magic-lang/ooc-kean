@@ -11,6 +11,7 @@ use io
 import io/FileReader
 import io/File
 
+version (!android) {
 ProcessTest: class extends Fixture {
 	init: func {
 		super("Process")
@@ -49,3 +50,4 @@ ProcessTest: class extends Fixture {
 }
 
 ProcessTest new() run() . free()
+}
