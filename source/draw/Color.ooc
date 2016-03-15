@@ -83,6 +83,7 @@ ColorYuva: cover {
 	y, u, v, a: Byte
 	normalized ::= FloatTuple4 new(this y as Float / 255, this u as Float / 255, this v as Float / 255, this a as Float / 255)
 	black ::= static This new(0, 128, 128, 255)
+	transparent ::= static This new(0, 128, 128, 0)
 	white ::= static This new(255, 128, 128, 255)
 	red ::= static This new(76, 84, 255, 255)
 	green ::= static This new(149, 43, 21, 255)
@@ -133,13 +134,14 @@ ColorRgba: cover {
 	r, g, b, a: Byte
 	normalized ::= FloatTuple4 new(this r as Float / 255, this g as Float / 255, this b as Float / 255, this a as Float / 255)
 	black ::= static This new(0, 0, 0, 255)
+	transparent ::= static This new(0, 0, 0, 0)
 	white ::= static This new(255, 255, 255, 255)
 	red ::= static This new(255, 0, 0, 255)
 	green ::= static This new(0, 255, 0, 255)
 	blue ::= static This new(0, 0, 255, 255)
 
 	init: func@ (=r, =g, =b, =a)
-	init: func@ ~default { this init(0, 0, 0, 0) }
+	init: func@ ~default { this init(0, 0, 0, 255) }
 	init: func@ ~rgb (rgb: ColorRgb, a: Byte) { this init(rgb r, rgb g, rgb b, a) }
 	toMonochrome: func -> ColorMonochrome { this toRgb() toMonochrome() }
 	toUv: func -> ColorUv { this toYuv() toUv() }

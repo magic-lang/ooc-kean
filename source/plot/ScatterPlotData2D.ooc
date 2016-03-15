@@ -29,12 +29,12 @@ ScatterPlotData2D: class extends PlotData2D {
 	init: func ~default {
 		super()
 	}
-	init: func ~dataSeries (dataSeries: VectorList<FloatPoint2D>, label := "", colorRgba := ColorRgba new(), size := 5.f, shape := Shape Circle) {
+	init: func ~dataSeries (dataSeries: VectorList<FloatPoint2D>, label := "", colorRgba := ColorRgba black, size := 5.f, shape := Shape Circle) {
 		super(dataSeries, label, colorRgba)
 		this _scalingRelativeLineWidth = size
 		this _shape = shape
 	}
-	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorRgba := ColorRgba new(), size := 5.f, shape := Shape Circle) {
+	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorRgba := ColorRgba black, size := 5.f, shape := Shape Circle) {
 		super(xSeries, ySeries, label, colorRgba)
 		this _scalingRelativeLineWidth = size
 		this _shape = shape
