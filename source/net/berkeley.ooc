@@ -20,7 +20,9 @@ version (windows) {
 	include sys/select
 	include arpa/inet
 	include netdb | (__USE_POSIX)
-	include sys/fcntl
+	version(!android) {
+		include sys/fcntl
+	}
 }
 
 SockAddr: cover from struct sockaddr {
