@@ -31,11 +31,9 @@ UDPSocket: class extends Socket {
 	init: func ~ipPort (host: String, port: Int) {
 		// Ohai, IP4-specificness. TODO: Fix this
 		ip := DNS resolveOne(host, SocketType DATAGRAM, AddressFamily IP4)
-		remote = SocketAddress new(ip, port)
-		super(remote family(), SocketType DATAGRAM, 0)
-		type = AddressFamily IP4
+		init(SocketAddress new(ip, port))
 	}
-	init: func ~ip (socketAddress: SocketAddress) {
+	init: func ~socketAddress (socketAddress: SocketAddress) {
 		remote = socketAddress
 		super(remote family(), SocketType DATAGRAM, 0)
 		type = AddressFamily IP4
