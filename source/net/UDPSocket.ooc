@@ -35,6 +35,11 @@ UDPSocket: class extends Socket {
 		super(remote family(), SocketType DATAGRAM, 0)
 		type = AddressFamily IP4
 	}
+	init: func ~ip (socketAddress: SocketAddress) {
+		remote = socketAddress
+		super(remote family(), SocketType DATAGRAM, 0)
+		type = AddressFamily IP4
+	}
 
 	/**
 		Bind the socket
