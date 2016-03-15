@@ -8,6 +8,9 @@
 
 use tests
 use unit
+
 main: func {
-	exit(Fixture testsFailed ? 1 : 0)
+	result := Fixture testsFailed
+	Fixture printFailures()
+	exit(result ? 1 : 0)
 }
