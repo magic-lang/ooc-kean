@@ -8,6 +8,11 @@
 
 use tests
 use unit
+
 main: func {
-	exit(Fixture testsFailed ? 1 : 0)
+	result := Fixture testsFailed
+	Fixture printFailures()
+	if (result == 0)
+		GlobalCleanup run()
+	exit(result ? 1 : 0)
 }

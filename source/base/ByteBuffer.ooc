@@ -52,10 +52,10 @@ ByteBuffer: class {
 	new: static func ~recover (pointer: Byte*, size: Int, recover: Func (This) -> Bool) -> This {
 		_RecoverableByteBuffer new(pointer, size, recover)
 	}
-	free: static func ~all { _RecyclableByteBuffer _free~all() }
+	free: static func ~all { "\n\tByteBuffer" println(); _RecyclableByteBuffer _free~all() }
 }
 
-GlobalCleanup register(|| ByteBuffer free~all())
+GlobalCleanup register(|| ByteBuffer free~all(), true)
 
 _SlicedByteBuffer: class extends ByteBuffer {
 	_parent: ByteBuffer
@@ -86,6 +86,7 @@ _RecoverableByteBuffer: class extends ByteBuffer {
 _RecyclableByteBuffer: class extends ByteBuffer {
 	init: func (pointer: Byte*, size: Int) { super(pointer, size, true) }
 	_forceFree: func {
+		"force free" println()
 		this _size = 0
 		this free()
 	}
@@ -101,14 +102,16 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 			bin add(this)
 			This _lock unlock()
 		}
-		else
+		else {
+			"going out" println(); fflush(stdout)
 			super()
+		}
 	}
 
 	_lock := static Mutex new()
-	_smallRecycleBin := static VectorList<This> new()
-	_mediumRecycleBin := static VectorList<This> new()
-	_largeRecycleBin := static VectorList<This> new()
+	_smallRecycleBin := static VectorList<This> new(20, false)
+	_mediumRecycleBin := static VectorList<This> new(20, false)
+	_largeRecycleBin := static VectorList<This> new(20, false)
 	new: static func ~fromSize (size: Int) -> This {
 		buffer: This = null
 		bin := This _getBin(size)
@@ -121,25 +124,47 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 			}
 		This _lock unlock()
 		version(debugByteBuffer) { if (buffer == null) Debug print("No RecyclableByteBuffer available in the bin; allocating a new one") }
+		"%p" printfln(buffer)
 		buffer == null ? This new(malloc(size), size) : buffer
 	}
 	_getBin: static func (size: Int) -> VectorList<This> {
 		size < 10000 ? This _smallRecycleBin : (size < 100000 ? This _mediumRecycleBin : This _largeRecycleBin)
 	}
 	_cleanList: static func (list: VectorList<This>) {
-		while (list count > 0)
-			list remove(0) _forceFree()
+		"%p" printfln(list); fflush(stdout)
+		"list size=%d" printfln(list count); fflush(stdout)
+		while (list count > 0) {
+			temp := list remove(0)
+			// temp _forceFree()
+			"forced" println(); fflush(stdout)
+		}
+		"done" println(); fflush(stdout)
 	}
 	_free: static func ~all {
-		This _cleanList(This _smallRecycleBin)
-		This _cleanList(This _mediumRecycleBin)
-		This _cleanList(This _largeRecycleBin)
-		This _smallRecycleBin free()
-		This _mediumRecycleBin free()
-		This _largeRecycleBin free()
+		"freeing bytebuffer..." println()
+		if (This _smallRecycleBin) {
+			"small" println(); fflush(stdout)
+			//This _cleanList(This _smallRecycleBin)
+			This _smallRecycleBin free()
+			This _smallRecycleBin = null
+		}
+		if (This _mediumRecycleBin) {
+			"medium" println(); fflush(stdout)
+			//This _cleanList(This _mediumRecycleBin)
+			This _mediumRecycleBin free()
+			This _mediumRecycleBin = null
+		}
+		if (This _largeRecycleBin) {
+			"large" println(); fflush(stdout)
+			This _cleanList(This _largeRecycleBin)
+			This _largeRecycleBin free()
+			This _largeRecycleBin = null
+		}
+		"freeing lock..." println()
 		if (This _lock != null) {
 			This _lock free()
 			This _lock = null
 		}
+		"done" println()
 	}
 }

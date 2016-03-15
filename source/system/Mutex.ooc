@@ -55,9 +55,12 @@ MutexGlobal: class extends Mutex {
 	init: func
 	lock: override func { This _globalMutex lock() }
 	unlock: override func { This _globalMutex unlock() }
-	free: static func ~all { This _globalMutex free() }
-
-	GlobalCleanup register(|| This free~all())
+	free: static func ~all {
+		if (This _globalMutex) {
+			This _globalMutex free()
+			This _globalMutex = null
+		}
+	}
 }
 
 // A recursive mutex can be locked several times in a row. unlock() should be called as many times to properly unlock it
