@@ -12,5 +12,6 @@ use unit
 main: func {
 	result := Fixture testsFailed
 	Fixture printFailures()
+	GlobalCleanup run()
 	exit(result ? 1 : 0)
 }
