@@ -7,7 +7,6 @@
  */
 
 use geometry
-import Pen
 import Image
 import Map
 import Mesh

@@ -19,15 +19,15 @@ RasterCanvasTest: class extends Fixture {
 		this add("rgb", func {
 			output := "test/draw/output/RasterCanvas_Rgb.png"
 			image := RasterRgb open(this inputFlower)
-			image canvas pen = Pen new(ColorRgb new(0, 255, 0))
+			pen := Pen new(ColorRgb new(0, 255, 0))
 			halfWidth := image size x / 2
 			halfHeight := image size y / 2
 			start := FloatPoint2D new(-halfWidth, -halfHeight)
 			end := FloatPoint2D new(halfWidth, halfHeight)
-			image canvas drawLine(start, end)
+			image canvas drawLine(start, end, pen)
 			start = FloatPoint2D new(halfWidth, -halfHeight)
 			end = FloatPoint2D new(-halfWidth, halfHeight)
-			image canvas drawLine(start, end)
+			image canvas drawLine(start, end, pen)
 			image save(output)
 			original := RasterRgb open(this inputFlower)
 			//TODO: This doesn't test if correctly drawn, only if the image has been modified
@@ -39,10 +39,10 @@ RasterCanvasTest: class extends Fixture {
 		this add("rgba", func {
 			output := "test/draw/output/RasterCanvas_Rgba.png"
 			image := RasterRgba open(this inputFlower)
-			image canvas pen = Pen new(ColorRgb new(128, 0, 128))
+			pen := Pen new(ColorRgb new(128, 0, 128))
 			for (row in 0 .. image size y / 3)
 				for (column in 0 .. image size x / 3)
-					image canvas drawPoint(FloatPoint2D new(column * 3 - image size x / 2, row * 3 - image size y / 2))
+					image canvas drawPoint(FloatPoint2D new(column * 3 - image size x / 2, row * 3 - image size y / 2), pen)
 			image save(output)
 			original := RasterRgba open(this inputFlower)
 			//TODO: This doesn't test if correctly drawn, only if the image has been modified
@@ -55,9 +55,9 @@ RasterCanvasTest: class extends Fixture {
 			output := "test/draw/output/RasterCanvas_Yuv420.png"
 			image := RasterYuv420Semiplanar open(this inputFlower)
 			for (i in 0 .. 30) {
-				image canvas pen = Pen new(ColorRgb new((i % 3) * 80, (i % 5) * 50, (i % 10) * 25))
+				pen := Pen new(ColorRgb new((i % 3) * 80, (i % 5) * 50, (i % 10) * 25))
 				box := IntBox2D createAround(IntPoint2D new(0, 0), IntVector2D new(10 * i, 10 * i))
-				image canvas drawBox(FloatBox2D new(box))
+				image canvas drawBox(FloatBox2D new(box), pen)
 			}
 			image save(output)
 			original := RasterYuv420Semiplanar open(this inputFlower)
@@ -70,13 +70,13 @@ RasterCanvasTest: class extends Fixture {
 		this add("monochrome", func {
 			output := "test/draw/output/RasterCanvas_Monochrome.png"
 			image := RasterMonochrome open(this inputFlower)
-			image canvas pen = Pen new(ColorRgb new(255, 255, 255))
+			pen := Pen new(ColorRgb new(255, 255, 255))
 			shiftX := image size x / 2
 			shiftY := image size y / 2
 			for (i in 0 .. image size x / 10)
-				image canvas drawLine(FloatPoint2D new(i * 10 - shiftX, -shiftY), FloatPoint2D new(i * 10 - shiftX, shiftY))
+				image canvas drawLine(FloatPoint2D new(i * 10 - shiftX, -shiftY), FloatPoint2D new(i * 10 - shiftX, shiftY), pen)
 			for (i in 0 .. image size y / 10)
-				image canvas drawLine(FloatPoint2D new(-shiftX, i * 10 - shiftY), FloatPoint2D new(shiftX, i * 10 - shiftY))
+				image canvas drawLine(FloatPoint2D new(-shiftX, i * 10 - shiftY), FloatPoint2D new(shiftX, i * 10 - shiftY), pen)
 			image save(output)
 			original := RasterMonochrome open(this inputFlower)
 			//TODO: This doesn't test if correctly drawn, only if the image has been modified
@@ -88,14 +88,14 @@ RasterCanvasTest: class extends Fixture {
 		this add("monochrome with alpha", func {
 			output := "test/draw/output/RasterCanvas_MonochromeWithAlpha.png"
 			image := RasterMonochrome open(this inputFlower)
-			image canvas pen = Pen new(ColorRgba new(255, 255, 255, 100))
+			pen := Pen new(ColorRgba new(255, 255, 255, 100))
 			shiftX := image size x / 2
 			shiftY := image size y / 2
 			factor := 2
 			for (i in 0 .. image size x / factor)
-				image canvas drawLine(FloatPoint2D new(i * factor - shiftX, -shiftY), FloatPoint2D new(i * factor - shiftX, shiftY))
+				image canvas drawLine(FloatPoint2D new(i * factor - shiftX, -shiftY), FloatPoint2D new(i * factor - shiftX, shiftY), pen)
 			for (i in 0 .. image size y / factor)
-				image canvas drawLine(FloatPoint2D new(-shiftX, i * factor - shiftY), FloatPoint2D new(shiftX, i * factor - shiftY))
+				image canvas drawLine(FloatPoint2D new(-shiftX, i * factor - shiftY), FloatPoint2D new(shiftX, i * factor - shiftY), pen)
 			image save(output)
 			original := RasterMonochrome open(this inputFlower)
 			//TODO: This doesn't test if correctly drawn, only if the image has been modified

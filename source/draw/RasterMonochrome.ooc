@@ -14,15 +14,16 @@ import RasterImage
 import StbImage
 import Image, FloatImage
 import Color
+import Pen
 import Canvas, RasterCanvas
 
 RasterMonochromeCanvas: class extends RasterPackedCanvas {
 	target ::= this _target as RasterMonochrome
 	init: func (image: RasterMonochrome) { super(image) }
-	_drawPoint: override func (x, y: Int) {
+	_drawPoint: override func (x, y: Int, pen: Pen) {
 		position := this _map(IntPoint2D new(x, y))
 		if (this target isValidIn(position x, position y))
-			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toMonochrome())
+			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toMonochrome())
 	}
 	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) {
 		monochrome: RasterMonochrome = null

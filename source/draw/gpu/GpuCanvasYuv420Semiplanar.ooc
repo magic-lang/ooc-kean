@@ -31,19 +31,8 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
 			this _target uv canvas focalLength = value / 2
 		}
 	}
-	pen: Pen {
-		get { this _pen }
-		set(value) {
-			this _pen = value
-			yuv := value color toYuv()
-			this _target y canvas pen = Pen new(ColorRgba new(yuv y, 0, 0, 255), value width)
-			this _target uv canvas pen = Pen new(ColorRgba new(yuv u, yuv v, 0, 255), value width)
-		}
-	}
-
 	init: func (=_target, context: GpuContext) {
 		super(this _target size, context, context defaultMap, IntTransform2D identity)
-		this _target uv canvas pen = Pen new(ColorRgba new(128, 128, 128, 128))
 	}
 	draw: override func ~DrawState (drawState: DrawState) {
 		drawStateY := drawState setTarget((drawState target as GpuYuv420Semiplanar) y)
@@ -67,15 +56,16 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
 		this _target y canvas draw(gpuImage y, source, destination)
 		this _target uv canvas draw(gpuImage uv, IntBox2D new(source leftTop / 2, source size / 2), IntBox2D new(destination leftTop / 2, destination size / 2))
 	}
-	drawLines: override func (pointList: VectorList<FloatPoint2D>) {
-		this _target y canvas drawLines(pointList)
+	drawLines: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) {
+		yuv := pen color toYuv()
+		this _target y canvas drawLines(pointList, Pen new(ColorRgba new(yuv y, 0, 0, 255), pen width))
 		uvLines := VectorList<FloatPoint2D> new()
 		for (i in 0 .. pointList count)
 			uvLines add(pointList[i] / 2.0f)
-		this _target uv canvas drawLines(uvLines)
+		this _target uv canvas drawLines(uvLines, Pen new(ColorRgba new(yuv u, yuv v, 0, 255), (pen width / 2.0f) + 0.5f))
 		uvLines free()
 	}
-	drawPoints: override func (pointList: VectorList<FloatPoint2D>) { this _target y canvas drawPoints(pointList) }
+	drawPoints: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) { this _target y canvas drawPoints(pointList, pen) }
 	fill: override func (color: ColorRgba) {
 		yuv := color toYuv()
 		this _target y canvas fill(ColorRgba new(yuv y, 0, 0, 255))

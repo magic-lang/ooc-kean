@@ -21,10 +21,8 @@ InterpolationMode: enum {
 
 Canvas: abstract class {
 	_size: IntVector2D
-	_pen := Pen new()
 	_transform := FloatTransform3D identity
 	size ::= this _size
-	pen: Pen { get { this _pen } set(value) { this _pen = value } }
 	viewport: IntBox2D { get set }
 	blend: Bool { get set }
 	opacity: Float { get set }
@@ -38,28 +36,33 @@ Canvas: abstract class {
 		this opacity = 1.0f
 		this interpolationMode = InterpolationMode Fast
 	}
-	drawPoint: virtual func (position: FloatPoint2D) {
+	drawPoint: virtual func ~white (position: FloatPoint2D) { this drawPoint(position, Pen new(ColorRgba white)) }
+	drawPoint: virtual func ~explicit (position: FloatPoint2D, pen: Pen) {
 		list := VectorList<FloatPoint2D> new()
 		list add(position)
-		this drawPoints(list)
+		this drawPoints(list, pen)
 		list free()
 	}
-	drawLine: virtual func (start, end: FloatPoint2D) {
+	drawLine: virtual func ~white (start, end: FloatPoint2D) { this drawLine(start, end, Pen new(ColorRgba white)) }
+	drawLine: virtual func ~explicit (start, end: FloatPoint2D, pen: Pen) {
 		list := VectorList<FloatPoint2D> new()
 		list add(start) . add(end)
-		this drawLines(list)
+		this drawLines(list, pen)
 		list free()
 	}
-	drawPoints: abstract func (pointList: VectorList<FloatPoint2D>)
-	drawLines: abstract func (lines: VectorList<FloatPoint2D>)
-	drawBox: virtual func (box: FloatBox2D) {
+	drawPoints: func ~white (pointList: VectorList<FloatPoint2D>) { this drawPoints(pointList, Pen new(ColorRgba white)) }
+	drawPoints: abstract func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen)
+	drawLines: func ~white (pointList: VectorList<FloatPoint2D>) { this drawLines(pointList, Pen new(ColorRgba white)) }
+	drawLines: abstract func ~explicit (lines: VectorList<FloatPoint2D>, pen: Pen)
+	drawBox: virtual func ~white (box: FloatBox2D) { this drawBox(box, Pen new(ColorRgba white)) }
+	drawBox: virtual func ~explicit (box: FloatBox2D, pen: Pen) {
 		positions := VectorList<FloatPoint2D> new()
 		positions add(box leftTop)
 		positions add(box rightTop)
 		positions add(box rightBottom)
 		positions add(box leftBottom)
 		positions add(box leftTop)
-		this drawLines(positions)
+		this drawLines(positions, pen)
 		positions free()
 	}
 	fill: abstract func (color: ColorRgba)
