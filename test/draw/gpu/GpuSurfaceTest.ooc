@@ -22,8 +22,7 @@ GpuSurfaceTest: class extends Fixture {
 		this add("draw red quadrant scale 1:1", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_red.png")
 			gpuImage := gpuContext createRgba(sourceSize)
-			gpuImage canvas pen = Pen new(ColorRgba new())
-			gpuImage canvas clear()
+			gpuImage canvas fill(ColorRgba transparent)
 			quadrantRed := FloatBox2D new(0.0f, 0.0f, 0.5f, 0.5f)
 			DrawState new(gpuImage) setInputImage(sourceImage) setSourceNormalized(quadrantRed) setDestinationNormalized(quadrantRed) draw()
 			rasterFromGpu := gpuImage toRaster()
@@ -33,8 +32,7 @@ GpuSurfaceTest: class extends Fixture {
 		this add("draw yellow quadrant scale 1:1", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_yellow.png")
 			gpuImage := gpuContext createRgba(sourceSize)
-			gpuImage canvas pen = Pen new(ColorRgba new())
-			gpuImage canvas clear()
+			gpuImage canvas fill(ColorRgba transparent)
 			quadrantYellow := FloatBox2D new(0.5f, 0.0f, 0.5f, 0.5f)
 			DrawState new(gpuImage) setInputImage(sourceImage) setSourceNormalized(quadrantYellow) setDestinationNormalized(quadrantYellow) draw()
 			rasterFromGpu := gpuImage toRaster()
@@ -44,8 +42,7 @@ GpuSurfaceTest: class extends Fixture {
 		this add("draw blue quadrant scale 1:1", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_blue.png")
 			gpuImage := gpuContext createRgba(sourceSize)
-			gpuImage canvas pen = Pen new(ColorRgba new())
-			gpuImage canvas clear()
+			gpuImage canvas fill(ColorRgba transparent)
 			quadrantBlue := FloatBox2D new(0.0f, 0.5f, 0.5f, 0.5f)
 			DrawState new(gpuImage) setInputImage(sourceImage) setSourceNormalized(quadrantBlue) setDestinationNormalized(quadrantBlue) draw()
 			rasterFromGpu := gpuImage toRaster()
@@ -55,8 +52,7 @@ GpuSurfaceTest: class extends Fixture {
 		this add("draw green quadrant scale 1:1", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_green.png")
 			gpuImage := gpuContext createRgba(sourceSize)
-			gpuImage canvas pen = Pen new(ColorRgba new())
-			gpuImage canvas clear()
+			gpuImage canvas fill(ColorRgba transparent)
 			quadrantGreen := FloatBox2D new(0.5f, 0.5f, 0.5f, 0.5f)
 			DrawState new(gpuImage) setInputImage(sourceImage) setSourceNormalized(quadrantGreen) setDestinationNormalized(quadrantGreen) draw()
 			rasterFromGpu := gpuImage toRaster()
@@ -70,7 +66,7 @@ GpuSurfaceTest: class extends Fixture {
 			quadrantGreen := RasterRgba open("test/draw/gpu/correct/quadrant_green.png")
 			correctImage := RasterRgba open("test/draw/gpu/correct/quad.png")
 			gpuImage := gpuContext createRgba(sourceSize)
-			gpuImage canvas clear()
+			gpuImage canvas fill(ColorRgba transparent)
 			redBox := FloatBox2D new(0.0f, 0.0f, 0.5f, 0.5f)
 			yellowBox := FloatBox2D new(0.5f, 0.0f, 0.5f, 0.5f)
 			blueBox := FloatBox2D new(0.0f, 0.5f, 0.5f, 0.5f)
@@ -87,7 +83,7 @@ GpuSurfaceTest: class extends Fixture {
 		this add("draw red quadrant zoomed", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_red_zoom.png")
 			gpuImage := gpuContext createRgba(sourceSize)
-			gpuImage canvas clear()
+			gpuImage canvas fill(ColorRgba transparent)
 			redBox := FloatBox2D new(0.0f, 0.0f, 0.5f, 0.5f)
 			DrawState new(gpuImage) setInputImage(sourceImage) setSourceNormalized(redBox) draw()
 			rasterFromGpu := gpuImage toRaster()
@@ -97,7 +93,7 @@ GpuSurfaceTest: class extends Fixture {
 		this add("draw quad 1:4 scale top left bottom right and 180deg x rotation", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/quad_scaled_top_left_bottom_right_180deg_x_rotation.png")
 			gpuImage := gpuContext createRgba(sourceSize)
-			gpuImage canvas clear()
+			gpuImage canvas fill(ColorRgba transparent)
 			quadrantTopLeft := FloatBox2D new(0.0f, 0.0f, 0.5f, 0.5f)
 			quadrantBottomRight := FloatBox2D new(0.5f, 0.5f, 0.5f, 0.5f)
 			DrawState new(gpuImage) setInputImage(sourceImage) setDestinationNormalized(quadrantTopLeft) setTransformNormalized(FloatTransform3D createRotationX(180.0f toRadians())) draw()
@@ -109,7 +105,7 @@ GpuSurfaceTest: class extends Fixture {
 		this add("draw shapes", func {
 			correctImage := RasterMonochrome open("test/draw/gpu/correct/shapes.png")
 			gpuImage := gpuContext createMonochrome(sourceSize)
-			gpuImage canvas clear()
+			gpuImage canvas fill(ColorRgba transparent)
 			trianglePoints := VectorList<FloatPoint2D> new()
 			lineLength := 200.0f
 			trianglePoints add(FloatPoint2D new(-lineLength, lineLength / 2.0f))

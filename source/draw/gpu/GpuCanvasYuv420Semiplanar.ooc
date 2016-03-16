@@ -76,7 +76,7 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
 		uvLines free()
 	}
 	drawPoints: override func (pointList: VectorList<FloatPoint2D>) { this _target y canvas drawPoints(pointList) }
-	fill: override func ~color (color: ColorRgba) {
+	fill: override func (color: ColorRgba) {
 		yuv := color toYuv()
 		this _target y canvas fill(ColorRgba new(yuv y, 0, 0, 255))
 		this _target uv canvas fill(ColorRgba new(yuv u, yuv v, 0, 255))

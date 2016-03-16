@@ -21,7 +21,7 @@ PlotData2D: abstract class {
 	init: func ~default {
 		this init(VectorList<FloatPoint2D> new())
 	}
-	init: func ~dataSeries (=dataSeries, label := "", colorRgba := ColorRgba new()) {
+	init: func ~dataSeries (=dataSeries, label := "", colorRgba := ColorRgba black) {
 		this lineWidth = 1
 		this legendOffset = 5.0f
 		this label = label
@@ -30,7 +30,7 @@ PlotData2D: abstract class {
 	init: func ~color (dataSeries: VectorList<FloatPoint2D>, colorRgba: ColorRgba) {
 		this init(dataSeries, "", colorRgba)
 	}
-	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorRgba := ColorRgba new()) {
+	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorRgba := ColorRgba black) {
 		dataSeries := VectorList<FloatPoint2D> new()
 		for (i in 0 .. ySeries count) {
 			dataSeries add(FloatPoint2D new(xSeries != null ? xSeries[i] : (i + 1) as Float, ySeries[i]))

@@ -105,7 +105,7 @@ SvgPlot: class {
 	}
 	setColor: func {
 		if (!datasets empty) {
-			noneColor := ColorRgba new(0, 0, 0, 0)
+			noneColor := ColorRgba black
 			for (j in 0 .. datasets count) {
 				if (noneColor != datasets[j] colorRgba) {
 					color := datasets[j] colorRgba

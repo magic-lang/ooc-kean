@@ -24,14 +24,14 @@ LinePlotData2D: class extends PlotData2D {
 		super()
 		this lineStyle = lineStyle
 	}
-	init: func ~dataSeries (dataSeries: VectorList<FloatPoint2D>, label := "", colorRgba := ColorRgba new(), lineStyle := LineStyle Solid) {
+	init: func ~dataSeries (dataSeries: VectorList<FloatPoint2D>, label := "", colorRgba := ColorRgba black, lineStyle := LineStyle Solid) {
 		super(dataSeries, label, colorRgba)
 		this lineStyle = lineStyle
 	}
 	init: func ~color (dataSeries: VectorList<FloatPoint2D>, colorRgba: ColorRgba, lineStyle := LineStyle Solid) {
 		this init(dataSeries, "", colorRgba, lineStyle)
 	}
-	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorRgba := ColorRgba new(), lineStyle := LineStyle Solid) {
+	init: func ~twoFloatSeries (xSeries, ySeries: VectorList<Float>, label := "", colorRgba := ColorRgba black, lineStyle := LineStyle Solid) {
 		super(xSeries, ySeries, label, colorRgba)
 		this lineStyle = lineStyle
 	}
