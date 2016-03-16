@@ -36,9 +36,7 @@ ConditionWin32: class extends WaitCondition {
 		for (i in 0 .. this _waitingEvents count)
 			CloseHandle(this _waitingEvents[i])
 		this _mutex unlock()
-		this _waitingEvents free()
-		this _waitingForRelease free()
-		this _mutex free()
+		(this _waitingEvents, this _waitingForRelease, this _mutex) free()
 		super()
 	}
 	wait: override func (mutex: Mutex) -> Bool {

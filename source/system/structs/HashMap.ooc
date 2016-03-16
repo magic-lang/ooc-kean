@@ -125,8 +125,7 @@ HashMap: class <K, V> {
 	free: override func {
 		for (i in 0 .. this buckets length)
 			this buckets[i] free()
-		this buckets free()
-		this keys free()
+		(this buckets, this keys) free()
 		super()
 	}
 	getEntry: func (key: K, result: HashEntry*) -> Bool {

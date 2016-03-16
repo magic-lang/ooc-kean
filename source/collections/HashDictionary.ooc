@@ -23,8 +23,7 @@ HashDictionary: class {
 		iterator := this _hashMap backIterator()
 		while (iterator hasNext())
 			iterator next() free()
-		iterator free()
-		this _hashMap free()
+		(iterator, this _hashMap) free()
 		super()
 	}
 	copy: func -> This {

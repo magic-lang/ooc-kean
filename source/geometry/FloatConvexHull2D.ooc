@@ -95,9 +95,7 @@ FloatConvexHull2D: class {
 			this _findHull(leftSet, leftEndpoint, rightEndpoint)
 			this _points add(rightEndpoint)
 			this _findHull(rightSet, rightEndpoint, leftEndpoint)
-			points free()
-			leftSet free()
-			rightSet free()
+			(points, leftSet, rightSet) free()
 		}
 	}
 	_findHull: func (currentSet: VectorList<FloatPoint2D>, leftPoint, rightPoint: FloatPoint2D) {
@@ -125,8 +123,7 @@ FloatConvexHull2D: class {
 			this _findHull(outsideLeft, leftPoint, maximumDistancePoint)
 			this _points add(maximumDistancePoint)
 			this _findHull(outsideRight, maximumDistancePoint, rightPoint)
-			outsideLeft free()
-			outsideRight free()
+			(outsideLeft, outsideRight) free()
 		}
 	}
 	toString: func -> String {

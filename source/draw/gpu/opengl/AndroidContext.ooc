@@ -23,10 +23,7 @@ AndroidContext: class extends OpenGLContext {
 	init: func (other: This = null) { super(other) }
 	free: override func {
 		this _backend makeCurrent()
-		this _unpackRgbaToMonochrome free()
-		this _unpackRgbaToUv free()
-		this _unpackRgbaToUvPadded free()
-		this _packers free()
+		(this _unpackRgbaToMonochrome, this _unpackRgbaToUv, this _unpackRgbaToUvPadded, this _packers) free()
 		super()
 	}
 	createImage: override func (rasterImage: RasterImage) -> GpuImage {

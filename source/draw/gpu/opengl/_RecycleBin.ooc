@@ -28,11 +28,7 @@ _RecycleBin: class {
 	}
 	free: override func {
 		this clean()
-		this _monochrome free()
-		this _rgb free()
-		this _rgba free()
-		this _uv free()
-		this _mutex free()
+		(this _monochrome, this _rgb, this _rgba, this _uv, this _mutex) free()
 		super()
 	}
 	clean: func {

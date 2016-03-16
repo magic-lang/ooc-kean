@@ -27,8 +27,7 @@ Gles3Quad: class extends GLQuad {
 		textureCoordinates[2] = FloatPoint2D new(1.0f, 1.0f)
 		textureCoordinates[3] = FloatPoint2D new(1.0f, 0.0f)
 		this vao = Gles3VertexArrayObject new(vertices, textureCoordinates)
-		vertices free()
-		textureCoordinates free()
+		(vertices, textureCoordinates) free()
 		version(debugGL) { validateEnd("Quad init") }
 	}
 	free: override func {

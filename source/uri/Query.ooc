@@ -28,8 +28,7 @@ Query: class {
 			this _attributes[i] free(Owner Receiver)
 		for (i in 0 .. this _values count)
 			this _values[i] free(Owner Receiver)
-		this _attributes free()
-		this _values free()
+		(this _attributes, this _values) free()
 		super()
 	}
 	toText: func -> Text {

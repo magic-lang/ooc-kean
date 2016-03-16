@@ -261,12 +261,7 @@ Quaternion: cover {
 
 		result := This new(1.0f, -gibbsVector[0, 0], -gibbsVector[0, 1], -gibbsVector[0, 2])
 		result *= 1.0f / sqrt(1.0f + gibbsVectorSquaredNorm)
-		observationVectors free()
-		normalizedWeights free()
-		attitudeProfile free()
-		matrixQuantityS free()
-		vectorQuantityZ free()
-		gibbsVector free()
+		(observationVectors, normalizedWeights, attitudeProfile, matrixQuantityS, vectorQuantityZ, gibbsVector) free()
 		preRotate ? centerQuaternion * result : result
 	}
 	_approximateMaximumEigenvalueForQuest: static func (matrixQuantityS, vectorQuantityZ: FloatMatrix, initialGuess: Float, maximumIterationCount := 20) -> Float {

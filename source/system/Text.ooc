@@ -180,9 +180,8 @@ Text: cover {
 	format: func (args: ...) -> This {
 		string := this take() toString()
 		resultString := string format(args)
-		string free()
 		result := This new(resultString) copy()
-		resultString free()
+		(string, resultString) free()
 		this free(Owner Receiver)
 		result
 	}

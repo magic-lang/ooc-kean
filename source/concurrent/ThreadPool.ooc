@@ -194,9 +194,7 @@ ThreadPool: class {
 		this _tasks cancel()
 		for (i in 0 .. this _threadCount)
 			this _workers[i] free()
-		this _workers free()
-		this _tasks free()
-		this _globalMutex free()
+		(this _workers, this _tasks, this _globalMutex) free()
 		super()
 	}
 	_add: func (task: _Task) -> Void { this _tasks enqueue(task) }
