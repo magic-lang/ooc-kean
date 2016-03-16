@@ -42,8 +42,8 @@ RasterMonochrome: class extends RasterPacked {
 	bytesPerPixel ::= 1
 	init: func ~allocate (size: IntVector2D) { super~allocate(size) }
 	init: func ~allocateStride (size: IntVector2D, stride: UInt) { super(size, stride) }
-	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntVector2D, stride: UInt) { super(buffer, size, stride) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D) { this init(buffer, size, this bytesPerPixel * size x) }
+	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntVector2D, stride: UInt, coordinateSystem := CoordinateSystem Default) { super(buffer, size, stride, coordinateSystem) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D, coordinateSystem := CoordinateSystem Default) { this init(buffer, size, this bytesPerPixel * size x, coordinateSystem) }
 	init: func ~fromRasterMonochrome (original: This) { super(original) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: override func (size: IntVector2D) -> Image { This new(size) }
@@ -194,10 +194,10 @@ RasterMonochrome: class extends RasterPacked {
 		((this buffer pointer + y * this stride) as ColorMonochrome* + x)@ = value
 	}
 
-	open: static func (filename: String) -> This {
+	open: static func (filename: String, coordinateSystem := CoordinateSystem Default) -> This {
 		requiredComponents := 1
 		(buffer, size, _) := StbImage load(filename, requiredComponents)
-		This new(buffer, size)
+		This new(buffer, size, coordinateSystem)
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This

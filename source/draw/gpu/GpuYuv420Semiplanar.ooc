@@ -23,8 +23,8 @@ GpuYuv420Semiplanar: class extends GpuImage {
 			this _uv filter = value
 		}
 	}
-	init: func (=_y, =_uv, context: GpuContext) {
-		super(this _y size, context)
+	init: func (=_y, =_uv, context: GpuContext, coordinateSystem := CoordinateSystem Default) {
+		super(this _y size, context, coordinateSystem)
 		this _coordinateSystem = this _y coordinateSystem
 		this _y referenceCount increase()
 		this _uv referenceCount increase()
@@ -32,12 +32,12 @@ GpuYuv420Semiplanar: class extends GpuImage {
 	init: func ~fromRaster (rasterImage: RasterYuv420Semiplanar, context: GpuContext) {
 		y := context createImage(rasterImage y)
 		uv := context createImage(rasterImage uv)
-		this init(y, uv, context)
+		this init(y, uv, context, rasterImage coordinateSystem)
 	}
-	init: func ~empty (size: IntVector2D, context: GpuContext) {
+	init: func ~empty (size: IntVector2D, context: GpuContext, coordinateSystem := CoordinateSystem Default) {
 		y := context createMonochrome(size)
 		uv := context createUv(size / 2)
-		this init(y, uv, context)
+		this init(y, uv, context, coordinateSystem)
 	}
 	free: override func {
 		this y referenceCount decrease()

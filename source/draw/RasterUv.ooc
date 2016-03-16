@@ -130,8 +130,8 @@ RasterUv: class extends RasterPacked {
 		rgb referenceCount decrease()
 		result
 	}
-	open: static func (filename: String) -> This {
-		rasterRgb := RasterRgb open(filename)
+	open: static func (filename: String, coordinateSystem := CoordinateSystem Default) -> This {
+		rasterRgb := RasterRgb open(filename, coordinateSystem)
 		result := This convertFrom(rasterRgb)
 		rasterRgb referenceCount decrease()
 		result

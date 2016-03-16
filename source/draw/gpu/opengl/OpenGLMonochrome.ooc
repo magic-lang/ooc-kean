@@ -16,8 +16,7 @@ import backend/GLTexture
 version(!gpuOff) {
 OpenGLMonochrome: class extends OpenGLPacked {
 	init: func ~fromPixels (size: IntVector2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
-		super(context _backend createTexture(TextureType Monochrome, size, stride, data), This channelCount, context)
-		this _coordinateSystem = coordinateSystem
+		super(context _backend createTexture(TextureType Monochrome, size, stride, data), This channelCount, context, coordinateSystem)
 	}
 	init: func (size: IntVector2D, context: OpenGLContext) { this init(size, size x, null, CoordinateSystem YUpward, context) }
 	init: func ~fromTexture (texture: GLTexture, context: OpenGLContext) { super(texture, This channelCount, context) }
