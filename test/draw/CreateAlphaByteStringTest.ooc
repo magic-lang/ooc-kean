@@ -44,8 +44,7 @@ CreateAlphaByteStringTest: class extends Fixture {
 			expect(generatedFile hasNext(), is false)
 			expect(comparisonFile hasNext(), is false)
 
-			generatedFile free()
-			comparisonFile free()
+			(generatedFile, comparisonFile) free()
 		})
 	}
 }

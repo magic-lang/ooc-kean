@@ -37,9 +37,7 @@ QueryTest: class extends Fixture {
 			expect(query getValue(two) == valueTwo)
 			expect(query getValue(t"four") == Text empty)
 			queryText free(Owner Sender)
-			attributes free()
-			values free()
-			query free()
+			(attributes, values, query) free()
 		})
 		this add("empty", func {
 			query := Query parse(t"")
@@ -67,9 +65,7 @@ QueryTest: class extends Fixture {
 			expect(query getValue(two) == Text empty)
 			expect(query getValue(three) == valueThree)
 			queryText free(Owner Sender)
-			attributes free()
-			values free()
-			query free()
+			(attributes, values, query) free()
 		})
 	}
 }

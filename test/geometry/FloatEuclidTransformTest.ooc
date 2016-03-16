@@ -29,8 +29,7 @@ FloatEuclidTransformTest: class extends Fixture {
 			expect(result translation z, is equal to (euclidTransforms[2] translation z) within(this tolerance))
 			expect(result scaling, is equal to (euclidTransforms[2] scaling) within(this tolerance))
 
-			kernel free()
-			euclidTransforms free()
+			(kernel, euclidTransforms) free()
 		})
 		this add("convolveCenter translations 2", func {
 			euclidTransforms := VectorList<FloatEuclidTransform> new(5)
@@ -48,8 +47,7 @@ FloatEuclidTransformTest: class extends Fixture {
 			expect(result translation z, is equal to (expectedResult) within(this tolerance))
 			expect(result scaling, is equal to (expectedResult - 1.0f) within(this tolerance))
 
-			kernel free()
-			euclidTransforms free()
+			(kernel, euclidTransforms) free()
 		})
 		this add("convolveCenter rotations", func {
 			euclidTransforms := VectorList<FloatEuclidTransform> new(5)
@@ -65,9 +63,7 @@ FloatEuclidTransformTest: class extends Fixture {
 
 			expect(result rotation _quaternion distance(expectedRotation), is equal to (0.0f) within(this tolerance))
 
-			kernel free()
-			quaternions free()
-			euclidTransforms free()
+			(kernel, quaternions, euclidTransforms) free()
 		})
 		this add("toText", func {
 			euclidTransform := FloatEuclidTransform new()
