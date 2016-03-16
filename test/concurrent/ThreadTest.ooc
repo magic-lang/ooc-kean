@@ -14,7 +14,7 @@ ThreadTest: class extends Fixture {
 	init: func {
 		super("Thread")
 		this add("starting thread", This _testStartingThread)
-		version (!windows && !android) { this add("canceling thread", This _testCancelation) }
+		version ((!windows) && (!android)) { this add("canceling thread", This _testCancelation) }
 		this add("thread id", This _testThreadId)
 		this add("timed wait", This _timedJoin)
 	}
