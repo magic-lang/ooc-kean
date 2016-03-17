@@ -24,6 +24,7 @@ GpuImageReflectionTest: class extends Fixture {
 			DrawState new(gpuImage) setTransformNormalized(FloatTransform3D createReflectionX()) setInputImage(sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU reflection Y (RGBA)", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/reflection_rgba_Y.png")
@@ -32,6 +33,7 @@ GpuImageReflectionTest: class extends Fixture {
 			DrawState new(gpuImage) setTransformNormalized(FloatTransform3D createReflectionY()) setInputImage(sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU reflection Z (RGBA)", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/reflection_rgba_Z.png")
@@ -40,6 +42,7 @@ GpuImageReflectionTest: class extends Fixture {
 			DrawState new(gpuImage) setTransformNormalized(FloatTransform3D createReflectionZ()) setInputImage(sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 	}
 }

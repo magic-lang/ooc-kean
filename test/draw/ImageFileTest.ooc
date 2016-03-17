@@ -40,6 +40,7 @@ ImageFileTest: class extends Fixture {
 				failureReason toString() println()
 			}
 			expect(This _fileExists(destination))
+			buffer free()
 		})
 		this add("open JPEG", func {
 			source := "test/draw/input/Flower.jpg"
@@ -61,6 +62,7 @@ ImageFileTest: class extends Fixture {
 				failureReason toString() println()
 			}
 			expect(This _fileExists(destination))
+			buffer free()
 		})
 		this add("open png RasterRgba", func {
 			source := "test/draw/input/Space.png"
@@ -190,7 +192,7 @@ ImageFileTest: class extends Fixture {
 			rgb2 := RasterRgb convertFrom(semiplanar)
 			rgb2 save(destination)
 			expect(This _fileExists(destination))
-			rgb2 free()
+			(rgb, rgb2) free()
 		})
 		this add("Open and save RasterYuv420Semiplanar", func {
 			source := "test/draw/input/Flower.png"

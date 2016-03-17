@@ -139,7 +139,10 @@ RasterRgb: class extends RasterPacked {
 	operator []= (x, y: Int, value: ColorRgb) { ((this buffer pointer + y * this stride) as ColorRgb* + x)@ = value }
 
 	open: static func (filename: String, coordinateSystem := CoordinateSystem Default) -> This {
-		This convertFrom(RasterRgba open(filename, coordinateSystem))
+		rgba := RasterRgba open(filename, coordinateSystem)
+		result := This convertFrom(rgba)
+		rgba referenceCount decrease()
+		result
 	}
 	savePacked: func (filename: String) -> Int {
 		file := File new(filename)

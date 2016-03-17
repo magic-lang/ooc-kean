@@ -130,6 +130,7 @@ GpuSurfaceTest: class extends Fixture {
 			gpuImage canvas drawPoints(circlePoints)
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			(correctImage, gpuImage, rasterFromGpu, trianglePoints, circlePoints) free()
 		})
 	}
 }
