@@ -37,11 +37,6 @@ OpenGLUv: class extends OpenGLPacked {
 		(packed canvas as OpenGLCanvas) readPixels(buffer)
 		packed free()
 	}
-	_createCanvas: override func -> GpuCanvas {
-		result := super()
-		result pen = Pen new(ColorRgba new(128, 128, 128, 128))
-		result
-	}
 	create: override func (size: IntVector2D) -> This { this context createUv(size) as This }
 	channelCount: static Int = 2
 }

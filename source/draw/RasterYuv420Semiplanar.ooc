@@ -15,6 +15,7 @@ import RasterMonochrome
 import RasterUv
 import Image
 import Color
+import Pen
 import RasterRgb
 import StbImage
 import io/File
@@ -26,10 +27,10 @@ import Canvas, RasterCanvas
 RasterYuv420SemiplanarCanvas: class extends RasterCanvas {
 	target ::= this _target as RasterYuv420Semiplanar
 	init: func (image: RasterYuv420Semiplanar) { super(image) }
-	_drawPoint: override func (x, y: Int) {
+	_drawPoint: override func (x, y: Int, pen: Pen) {
 		position := this _map(IntPoint2D new(x, y))
 		if (this target isValidIn(position x, position y))
-			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toYuv())
+			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toYuv())
 	}
 }
 

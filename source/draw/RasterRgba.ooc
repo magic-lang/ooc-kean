@@ -14,15 +14,16 @@ import io/File
 import StbImage
 import Image
 import Color
+import Pen
 import Canvas, RasterCanvas
 
 RasterRgbaCanvas: class extends RasterPackedCanvas {
 	target ::= this _target as RasterRgba
 	init: func (image: RasterRgba) { super(image) }
-	_drawPoint: override func (x, y: Int) {
+	_drawPoint: override func (x, y: Int, pen: Pen) {
 		position := this _map(IntPoint2D new(x, y))
 		if (this target isValidIn(position x, position y))
-			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color)
+			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color)
 	}
 }
 

@@ -14,15 +14,16 @@ import RasterRgb
 import StbImage
 import Image
 import Color
+import Pen
 import Canvas, RasterCanvas
 
 RasterUvCanvas: class extends RasterPackedCanvas {
 	target ::= this _target as RasterUv
 	init: func (image: RasterUv) { super(image) }
-	_drawPoint: override func (x, y: Int) {
+	_drawPoint: override func (x, y: Int, pen: Pen) {
 		position := this _map(IntPoint2D new(x, y))
 		if (this target isValidIn(position x, position y))
-			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toUv())
+			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toUv())
 	}
 	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) {
 		uv: RasterUv = null

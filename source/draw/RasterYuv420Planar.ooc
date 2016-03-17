@@ -14,15 +14,16 @@ import RasterYuvPlanar
 import RasterMonochrome
 import Image
 import Color
+import Pen
 import Canvas, RasterCanvas
 
 RasterYuv420PlanarCanvas: class extends RasterCanvas {
 	target ::= this _target as RasterYuv420Planar
 	init: func (image: RasterYuv420Planar) { super(image) }
-	_drawPoint: override func (x, y: Int) {
+	_drawPoint: override func (x, y: Int, pen: Pen) {
 		position := this _map(IntPoint2D new(x, y))
 		if (this target isValidIn(position x, position y))
-			this target[position x, position y] = this target[position x, position y] blend(this pen alphaAsFloat, this pen color toYuv())
+			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toYuv())
 	}
 }
 

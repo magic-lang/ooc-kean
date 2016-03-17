@@ -21,25 +21,25 @@ RasterCanvas: abstract class extends Canvas {
 	init: func (=_target) { super(this _target size) }
 	fill: override func (color: ColorRgba) { raise("RasterCanvas fill unimplemented!") }
 	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) { Debug error("RasterCanvas draw~ImageSourceDestination unimplemented!") }
-	drawPoint: override func (point: FloatPoint2D) { this _drawPoint(point x as Int, point y as Int) }
-	_drawPoint: abstract func (x, y: Int)
-	drawPoints: override func (pointList: VectorList<FloatPoint2D>) {
+	drawPoint: override func ~explicit (point: FloatPoint2D, pen: Pen) { this _drawPoint(point x as Int, point y as Int, pen) }
+	_drawPoint: abstract func (x, y: Int, pen: Pen)
+	drawPoints: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) {
 		for (i in 0 .. pointList count)
-			this drawPoint(pointList[i])
+			this drawPoint(pointList[i], pen)
 	}
-	_drawLine: func (start, end: IntPoint2D) {
+	_drawLine: func (start, end: IntPoint2D, pen: Pen) {
 		if (start y == end y) {
 			startX := start x minimum(end x)
 			endX := start x maximum(end x)
 			for (x in startX .. endX + 1)
-				this _drawPoint(x, start y)
+				this _drawPoint(x, start y, pen)
 		} else if (start x == end x) {
 			startY := start y minimum(end y)
 			endY := start y maximum(end y)
 			for (y in startY .. endY + 1)
-				this _drawPoint(start x, y)
+				this _drawPoint(start x, y, pen)
 		} else {
-			originalPen := this pen
+			originalPen := pen
 			originalAlpha := originalPen alphaAsFloat
 			slope := (end y - start y) as Float / (end x - start x) as Float
 			startX := start x minimum(end x)
@@ -48,20 +48,19 @@ RasterCanvas: abstract class extends Canvas {
 				idealY := slope * (x - start x) + start y
 				floor := idealY floor()
 				weight := (idealY - floor) abs()
-				this pen setAlpha(originalAlpha * (1.0f - weight))
-				this _drawPoint(x, floor)
-				this pen setAlpha(originalAlpha * weight)
-				this _drawPoint(x, floor + 1)
+				pen setAlpha(originalAlpha * (1.0f - weight))
+				this _drawPoint(x, floor, pen)
+				pen setAlpha(originalAlpha * weight)
+				this _drawPoint(x, floor + 1, pen)
 			}
-			this pen = originalPen
 		}
 	}
-	drawLines: override func (lines: VectorList<FloatPoint2D>) {
+	drawLines: override func ~explicit (lines: VectorList<FloatPoint2D>, pen: Pen) {
 		if (lines count > 1)
 			for (i in 0 .. lines count - 1) {
 				start := IntPoint2D new(lines[i] x, lines[i] y)
 				end := IntPoint2D new(lines[i + 1] x, lines[i + 1] y)
-				this _drawLine(start, end)
+				this _drawLine(start, end, pen)
 			}
 	}
 	_map: func (point: IntPoint2D) -> IntPoint2D {
