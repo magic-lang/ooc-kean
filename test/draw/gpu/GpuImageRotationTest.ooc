@@ -14,66 +14,70 @@ use opengl
 use unit
 
 GpuImageRotationTest: class extends Fixture {
+	sourceImage := RasterRgba open("test/draw/gpu/input/Flower.png")
 	init: func {
 		super("GpuImageRotationTest")
-		sourceImage := RasterRgba open("test/draw/gpu/input/Flower.png")
 		focalLength := 500.0f
 		smallRotation := 10.0f toRadians()
 		flipRotation := 180.0f toRadians()
 		this add("GPU rotation flip X (RGBA)", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/rotation_flip_rgba_X.png")
-			gpuImage := gpuContext createRgba(sourceImage size)
+			gpuImage := gpuContext createRgba(this sourceImage size)
 			gpuImage canvas fill(ColorRgba transparent)
-			DrawState new(gpuImage) setTransformReference(FloatTransform3D createRotationX(flipRotation)) setInputImage(sourceImage) draw()
+			DrawState new(gpuImage) setTransformReference(FloatTransform3D createRotationX(flipRotation)) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU rotation flip Y (RGBA)", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/rotation_flip_rgba_Y.png")
-			gpuImage := gpuContext createRgba(sourceImage size)
+			gpuImage := gpuContext createRgba(this sourceImage size)
 			gpuImage canvas fill(ColorRgba transparent)
-			DrawState new(gpuImage) setTransformReference(FloatTransform3D createRotationY(flipRotation)) setInputImage(sourceImage) draw()
+			DrawState new(gpuImage) setTransformReference(FloatTransform3D createRotationY(flipRotation)) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU rotation flip Z (RGBA)", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/rotation_flip_rgba_Z.png")
-			gpuImage := gpuContext createRgba(sourceImage size)
+			gpuImage := gpuContext createRgba(this sourceImage size)
 			gpuImage canvas fill(ColorRgba transparent)
-			DrawState new(gpuImage) setTransformReference(FloatTransform3D createRotationZ(flipRotation)) setInputImage(sourceImage) draw()
+			DrawState new(gpuImage) setTransformReference(FloatTransform3D createRotationZ(flipRotation)) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU rotation small X (RGBA)", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/rotation_small_rgba_X.png")
-			gpuImage := gpuContext createRgba(sourceImage size)
+			gpuImage := gpuContext createRgba(this sourceImage size)
 			gpuImage canvas fill(ColorRgba transparent)
-			DrawState new(gpuImage) setFocalLength(focalLength, gpuImage size) setTransformReference(FloatTransform3D createRotationX(smallRotation)) setInputImage(sourceImage) draw()
+			DrawState new(gpuImage) setFocalLength(focalLength, gpuImage size) setTransformReference(FloatTransform3D createRotationX(smallRotation)) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f) within(0.005f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU rotation small Y (RGBA)", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/rotation_small_rgba_Y.png")
-			gpuImage := gpuContext createRgba(sourceImage size)
+			gpuImage := gpuContext createRgba(this sourceImage size)
 			gpuImage canvas fill(ColorRgba transparent)
-			DrawState new(gpuImage) setFocalLength(focalLength, gpuImage size) setTransformReference(FloatTransform3D createRotationY(smallRotation)) setInputImage(sourceImage) draw()
+			DrawState new(gpuImage) setFocalLength(focalLength, gpuImage size) setTransformReference(FloatTransform3D createRotationY(smallRotation)) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f) within(0.05f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU rotation small Z (RGBA)", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/rotation_small_rgba_Z.png")
-			gpuImage := gpuContext createRgba(sourceImage size)
+			gpuImage := gpuContext createRgba(this sourceImage size)
 			gpuImage canvas fill(ColorRgba transparent)
-			DrawState new(gpuImage) setFocalLength(focalLength, gpuImage size) setTransformReference(FloatTransform3D createRotationZ(smallRotation)) setInputImage(sourceImage) draw()
+			DrawState new(gpuImage) setFocalLength(focalLength, gpuImage size) setTransformReference(FloatTransform3D createRotationZ(smallRotation)) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
+	}
+	free: override func {
+		this sourceImage free()
+		super()
 	}
 }
 gpuContext := OpenGLContext new()

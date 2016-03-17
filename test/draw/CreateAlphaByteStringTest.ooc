@@ -23,22 +23,23 @@ CreateAlphaByteStringTest: class extends Fixture {
 			fw := FileWriter new(filename + "DataFile.ooc")
 			fw write(outputData)
 			fw close()
-			filename free()
+			(filename, outputData) free()
 		})
 		this add("Output check", func {
 			generated := t"test/draw/output/DataFile.ooc"
 			comparison := t"test/draw/input/DataFileComparison.ooc"
 			generatedFile := FileReader new(generated)
 			comparisonFile := FileReader new(comparison)
-			generatedBuffer := CharBuffer new()
-			comparisonBuffer := CharBuffer new()
 
 			while (generatedFile hasNext() && comparisonFile hasNext()) {
+				generatedBuffer := CharBuffer new()
+				comparisonBuffer := CharBuffer new()
 				generatedFile read(generatedBuffer)
 				comparisonFile read(comparisonBuffer)
 				generatedString := generatedBuffer toString()
 				comparisonString := comparisonBuffer toString()
 				expect(generatedString, is equal to(comparisonString))
+				(generatedString, comparisonString) free()
 			}
 
 			expect(generatedFile hasNext(), is false)

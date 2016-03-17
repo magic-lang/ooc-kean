@@ -14,36 +14,40 @@ use opengl
 use unit
 
 GpuImageReflectionTest: class extends Fixture {
+	sourceImage := RasterRgba open("test/draw/gpu/input/Flower.png")
 	init: func {
 		super("GpuImageReflectionTest")
-		sourceImage := RasterRgba open("test/draw/gpu/input/Flower.png")
 		this add("GPU reflection X (RGBA)", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/reflection_rgba_X.png")
-			gpuImage := gpuContext createRgba(sourceImage size)
+			gpuImage := gpuContext createRgba(this sourceImage size)
 			gpuImage canvas fill(ColorRgba black)
-			DrawState new(gpuImage) setTransformNormalized(FloatTransform3D createReflectionX()) setInputImage(sourceImage) draw()
+			DrawState new(gpuImage) setTransformNormalized(FloatTransform3D createReflectionX()) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU reflection Y (RGBA)", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/reflection_rgba_Y.png")
-			gpuImage := gpuContext createRgba(sourceImage size)
+			gpuImage := gpuContext createRgba(this sourceImage size)
 			gpuImage canvas fill(ColorRgba black)
-			DrawState new(gpuImage) setTransformNormalized(FloatTransform3D createReflectionY()) setInputImage(sourceImage) draw()
+			DrawState new(gpuImage) setTransformNormalized(FloatTransform3D createReflectionY()) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU reflection Z (RGBA)", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/reflection_rgba_Z.png")
-			gpuImage := gpuContext createRgba(sourceImage size)
+			gpuImage := gpuContext createRgba(this sourceImage size)
 			gpuImage canvas fill(ColorRgba black)
-			DrawState new(gpuImage) setTransformNormalized(FloatTransform3D createReflectionZ()) setInputImage(sourceImage) draw()
+			DrawState new(gpuImage) setTransformNormalized(FloatTransform3D createReflectionZ()) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
+	}
+	free: override func {
+		this sourceImage free()
+		super()
 	}
 }
 

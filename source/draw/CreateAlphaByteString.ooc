@@ -31,6 +31,7 @@ CreateAlphaByteString: class {
 		imageArray += "]"
 		result := name + "Image" + ": StaticOverlayImages\n" + name + "Image image = " + imageArray + "\n"
 		result += name + "Image size = IntVector2D new(" + image size x toString() + ", " + image size y toString() + ")\n"
+		image free()
 		result
 	}
 }
