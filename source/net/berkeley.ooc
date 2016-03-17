@@ -8,7 +8,6 @@
 
 include stdio
 include sys/types
-include unistd | (__USE_BSD)
 
 version (windows) {
 	include winsock2

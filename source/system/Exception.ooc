@@ -10,14 +10,6 @@ import Backtrace
 
 include setjmp, errno, stdint
 
-version(windows) {
-	include windows
-
-	DebugBreak: extern func
-	RaiseException: extern func (ULong, ULong, ULong, Pointer)
-	IsDebuggerPresent: extern func -> Pointer
-}
-
 JmpBuf: cover from jmp_buf {
 	setJmp: extern (setjmp) func -> Int
 	longJmp: extern (longjmp) func (value: Int)
@@ -302,10 +294,6 @@ _setupHandlers()
 
 /* ------ C interface ------ */
 
-include stdlib
-
-abort: extern func
-
 version ((linux || apple) && !android) {
 	include signal
 
@@ -313,36 +301,4 @@ version ((linux || apple) && !android) {
 
 	SIGHUP, SIGINT, SIGILL, SIGTRAP, SIGABRT, SIGFPE, SIGBUS,
 	SIGSEGV, SIGSYS, SIGPIPE, SIGALRM, SIGTERM: extern Int
-}
-
-version (windows) {
-	// Windows exception handling functions
-	include windows
-
-	SetUnhandledExceptionFilter: extern func (handler: Pointer) -> Pointer
-
-	EXCEPTION_EXECUTE_HANDLER: extern Int
-
-	EXCEPTION_POINTERS: extern cover {
-		ExceptionRecord: EXCEPTION_RECORD*
-		ContextRecord: CONTEXT*
-	}
-
-	CONTEXT: extern cover
-
-	EXCEPTION_RECORD: extern cover {
-		ExceptionCode: DWORD
-	}
-
-	// exception codes
-	EXCEPTION_ACCESS_VIOLATION, EXCEPTION_ARRAY_BOUNDS_EXCEEDED,
-	EXCEPTION_BREAKPOINT, EXCEPTION_DATATYPE_MISALIGNMENT,
-	EXCEPTION_FLT_DENORMAL_OPERAND, EXCEPTION_FLT_DIVIDE_BY_ZERO,
-	EXCEPTION_FLT_INEXACT_RESULT, EXCEPTION_FLT_INVALID_OPERATION,
-	EXCEPTION_FLT_OVERFLOW, EXCEPTION_FLT_STACK_CHECK, EXCEPTION_FLT_UNDERFLOW,
-	EXCEPTION_ILLEGAL_INSTRUCTION, EXCEPTION_IN_PAGE_ERROR,
-	EXCEPTION_INT_DIVIDE_BY_ZERO, EXCEPTION_INT_OVERFLOW,
-	EXCEPTION_INVALID_DISPOSITION, EXCEPTION_NONCONTINUABLE_EXCEPTION,
-	EXCEPTION_PRIV_INSTRUCTION, EXCEPTION_SINGLE_STEP,
-	EXCEPTION_STACK_OVERFLOW: extern DWORD
 }

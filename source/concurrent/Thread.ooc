@@ -64,8 +64,6 @@ version (unix || apple) {
 }
 
 version (windows) {
-	include windows
-
 	ThreadId: cover from DWORD {
 		equals: func (other: This) -> Bool {
 			this == other

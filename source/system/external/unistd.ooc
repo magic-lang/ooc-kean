@@ -6,7 +6,13 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include unistd | (__USE_GNU)
+version (linux) {
+	include unistd | (__USE_BSD, _BSD_SOURCE, _DEFAULT_SOURCE)
+} else {
+	include unistd
+}
+
+_SC_NPROCESSORS_ONLN: extern Int
 
 chdir: extern func (CString) -> Int
 dup2: extern func (Int, Int) -> Int
@@ -19,3 +25,5 @@ getpid: extern func -> UInt
 pipe: extern func (arg: Int*) -> Int
 isatty: extern func (fd: Int) -> Int
 gethostname: extern func (localSystemName: CString, localSystemNameLength: SizeT) -> Int
+sysconf: extern func (Int) -> Long
+usleep: extern func (UInt)

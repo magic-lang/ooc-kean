@@ -65,24 +65,4 @@ ThreadWin32: class extends Thread {
 		SwitchToThread()
 	}
 }
-
-/* C interface */
-
-include windows
-
-// CreateThread causes memory leaks, see:
-// http://stackoverflow.com/questions/331536/, and
-// http://support.microsoft.com/kb/104641/en-us
-// CreateThread: extern func (...) -> Handle
-
-_beginthreadex: extern func (security: Pointer, stackSize: UInt, startAddress, arglist: Pointer, initflag: UInt, thrdaddr: UInt*) -> Handle
-GetCurrentThread: extern func -> Handle
-GetCurrentThreadId: extern func -> UInt
-WaitForSingleObject: extern func (...) -> Long
-SwitchToThread: extern func -> Bool
-TerminateThread: extern func (...) -> Bool
-
-INFINITE: extern Long
-WAIT_OBJECT_0: extern Long
-WAIT_TIMEOUT: extern Long
 }

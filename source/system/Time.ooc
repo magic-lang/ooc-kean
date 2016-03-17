@@ -7,31 +7,13 @@
  */
 
 version(linux) {
-	include unistd | (__USE_BSD, _BSD_SOURCE, _DEFAULT_SOURCE)
 	include sys/time | (__USE_BSD, _BSD_SOURCE, _DEFAULT_SOURCE)
 	include time | (__USE_BSD, _BSD_SOURCE, _DEFAULT_SOURCE)
 } else {
-	include unistd, sys/time
-}
-version(windows) {
-	include windows
+	include sys/time
 }
 
-version(windows) {
-	SystemTime: cover from SYSTEMTIME {
-		wYear, wMonth, wDayOfWeek, wDay, wHour, wMinute, wSecond, wMilliseconds : extern UShort
-	}
-
-	GetLocalTime: extern func (SystemTime*)
-	QueryPerformanceCounter: extern func (LargeInteger*)
-	QueryPerformanceFrequency: extern func (LargeInteger*)
-	Sleep: extern func (UInt)
-
-	LocaleId: cover from LCID
-	LOCALE_USER_DEFAULT: extern LocaleId
-	GetTimeFormat: extern func (LocaleId, Long, SystemTime*, CString, CString, Int) -> Int
-	GetDateFormat: extern func (LocaleId, Long, SystemTime*, CString, CString, Int) -> Int
-} else {
+version(!windows) {
 	TimeT: cover from time_t
 	TimeZone: cover from struct timezone
 	TMStruct: cover from struct tm {
@@ -45,7 +27,6 @@ version(windows) {
 	time: extern proto func (TimeT*) -> TimeT
 	localtime: extern func (TimeT*) -> TMStruct*
 	gettimeofday: extern func (TimeVal*, TimeZone*) -> Int
-	usleep: extern func (UInt)
 	_asctime: extern (asctime) func (TMStruct*) -> CString
 
 	// An `asctime` wrapper that copies the result to a new string. Otherwise, it would be overwritten in later calls.

@@ -46,13 +46,6 @@ Dynlib: abstract class {
 }
 
 version (windows) {
-	include windows
-
-	HModule: cover from HMODULE
-	LoadLibraryA: extern func (path: CString) -> HModule
-	GetProcAddress: extern func (module: HModule, name: CString) -> Pointer
-	FreeLibrary: extern func (module: HModule) -> Bool
-
 	DynlibWin32: class extends Dynlib {
 		handle: HModule
 		init: func (=path) {

@@ -9,15 +9,6 @@
 import ../Mutex
 
 version(windows) {
-include windows
-
-CreateMutex: extern func (Pointer, Bool, Pointer) -> Handle
-ReleaseMutex: extern func (Handle)
-CloseHandle: extern func (Handle)
-
-WaitForSingleObject: extern func (...) -> Long
-INFINITE: extern Long
-
 MutexWin32: class extends Mutex {
 	_backend: Handle
 	init: func {

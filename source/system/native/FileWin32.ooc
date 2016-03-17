@@ -10,53 +10,9 @@ import structs/VectorList
 import io/File
 
 version(windows) {
-	include windows | (_WIN32_WINNT=0x0500)
-
-	// separators
 	File separator = '\\'
 	File pathDelimiter = ';'
 
-	PATHCCH_MAX_CCH: extern SizeT
-
-	/*
-	 * apparently on windows, every stat operation is a find
-	 * This makes sense, since most fs(es) on Win32 are case-insensitive
-	 */
-	FindData: cover from WIN32_FIND_DATA {
-		attr: extern (dwFileAttributes) Long // DWORD
-		fileSizeLow: extern (nFileSizeLow) Long // DWORD
-		fileSizeHigh: extern (nFileSizeHigh) Long // DWORD
-		creationTime: extern (ftCreationTime) FileTime
-		lastAccessTime: extern (ftLastAccessTime) FileTime
-		lastWriteTime: extern (ftLastWriteTime) FileTime
-		fileName: extern (cFileName) CString
-	}
-
-	/*
-	 * file attributes (incomplete list)
-	 */
-	FILE_ATTRIBUTE_DIRECTORY,
-	FILE_ATTRIBUTE_REPARSE_POINT,
-	FILE_ATTRIBUTE_NORMAL,
-	INVALID_FILE_ATTRIBUTES: extern Long // DWORD
-
-	/*
-	 * file-related functions from Win32
-	 */
-	FindFirstFile: extern (FindFirstFileA) func (CString, FindData*) -> Handle
-	FindNextFile: extern func (Handle, FindData*) -> Bool
-	FindClose: extern func (Handle)
-	GetFileAttributes: extern func (CString) -> ULong
-	CreateDirectory: extern func (CString, Pointer) -> Bool
-	GetCurrentDirectory: extern func (ULong, Pointer) -> Int
-	GetFullPathName: extern func (CString, ULong, CString, CString) -> ULong
-	GetLongPathName: extern func (CString, CString, ULong) -> ULong
-	DeleteFile: extern func (CString) -> Bool
-	RemoveDirectory: extern func (CString) -> Bool
-
-	/*
-	 * remove implementation
-	 */
 	_remove: unmangled func (file: File) -> Bool {
 		if (file dir())
 			return RemoveDirectory(file path)
