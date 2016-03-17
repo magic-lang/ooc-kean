@@ -150,7 +150,7 @@ ImageFileTest: class extends Fixture {
 			rgb := RasterRgb convertFrom(monochrome)
 			rgb save(destination)
 			expect(This _fileExists(destination))
-			rgb free()
+			(rgb, monochrome) free()
 		})
 		this add("convert RasterRgb to RasterRgba", func {
 			source := "test/draw/input/Hercules.png"
@@ -192,7 +192,7 @@ ImageFileTest: class extends Fixture {
 			rgb2 := RasterRgb convertFrom(semiplanar)
 			rgb2 save(destination)
 			expect(This _fileExists(destination))
-			(rgb, rgb2) free()
+			(rgb, rgb2, semiplanar) free()
 		})
 		this add("Open and save RasterYuv420Semiplanar", func {
 			source := "test/draw/input/Flower.png"

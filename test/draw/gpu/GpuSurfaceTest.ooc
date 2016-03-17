@@ -15,16 +15,16 @@ use opengl
 use unit
 
 GpuSurfaceTest: class extends Fixture {
+	sourceImage := RasterRgba open("test/draw/gpu/input/quad1.png")
 	init: func {
 		super("GpuSurfaceTest")
-		sourceImage := RasterRgba open("test/draw/gpu/input/quad1.png")
-		sourceSize := sourceImage size
+		sourceSize := this sourceImage size
 		this add("draw red quadrant scale 1:1", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_red.png")
 			gpuImage := gpuContext createRgba(sourceSize)
 			gpuImage canvas fill(ColorRgba transparent)
 			quadrantRed := FloatBox2D new(0.0f, 0.0f, 0.5f, 0.5f)
-			DrawState new(gpuImage) setInputImage(sourceImage) setSourceNormalized(quadrantRed) setDestinationNormalized(quadrantRed) draw()
+			DrawState new(gpuImage) setInputImage(this sourceImage) setSourceNormalized(quadrantRed) setDestinationNormalized(quadrantRed) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			rasterFromGpu free(); correctImage free(); gpuImage free()
@@ -34,7 +34,7 @@ GpuSurfaceTest: class extends Fixture {
 			gpuImage := gpuContext createRgba(sourceSize)
 			gpuImage canvas fill(ColorRgba transparent)
 			quadrantYellow := FloatBox2D new(0.5f, 0.0f, 0.5f, 0.5f)
-			DrawState new(gpuImage) setInputImage(sourceImage) setSourceNormalized(quadrantYellow) setDestinationNormalized(quadrantYellow) draw()
+			DrawState new(gpuImage) setInputImage(this sourceImage) setSourceNormalized(quadrantYellow) setDestinationNormalized(quadrantYellow) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			rasterFromGpu free(); correctImage free(); gpuImage free()
@@ -44,7 +44,7 @@ GpuSurfaceTest: class extends Fixture {
 			gpuImage := gpuContext createRgba(sourceSize)
 			gpuImage canvas fill(ColorRgba transparent)
 			quadrantBlue := FloatBox2D new(0.0f, 0.5f, 0.5f, 0.5f)
-			DrawState new(gpuImage) setInputImage(sourceImage) setSourceNormalized(quadrantBlue) setDestinationNormalized(quadrantBlue) draw()
+			DrawState new(gpuImage) setInputImage(this sourceImage) setSourceNormalized(quadrantBlue) setDestinationNormalized(quadrantBlue) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			rasterFromGpu free(); correctImage free(); gpuImage free()
@@ -54,7 +54,7 @@ GpuSurfaceTest: class extends Fixture {
 			gpuImage := gpuContext createRgba(sourceSize)
 			gpuImage canvas fill(ColorRgba transparent)
 			quadrantGreen := FloatBox2D new(0.5f, 0.5f, 0.5f, 0.5f)
-			DrawState new(gpuImage) setInputImage(sourceImage) setSourceNormalized(quadrantGreen) setDestinationNormalized(quadrantGreen) draw()
+			DrawState new(gpuImage) setInputImage(this sourceImage) setSourceNormalized(quadrantGreen) setDestinationNormalized(quadrantGreen) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			correctImage free(); rasterFromGpu free(); gpuImage free()
@@ -85,7 +85,7 @@ GpuSurfaceTest: class extends Fixture {
 			gpuImage := gpuContext createRgba(sourceSize)
 			gpuImage canvas fill(ColorRgba transparent)
 			redBox := FloatBox2D new(0.0f, 0.0f, 0.5f, 0.5f)
-			DrawState new(gpuImage) setInputImage(sourceImage) setSourceNormalized(redBox) draw()
+			DrawState new(gpuImage) setInputImage(this sourceImage) setSourceNormalized(redBox) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			correctImage free(); rasterFromGpu free(); gpuImage free()
@@ -96,8 +96,8 @@ GpuSurfaceTest: class extends Fixture {
 			gpuImage canvas fill(ColorRgba transparent)
 			quadrantTopLeft := FloatBox2D new(0.0f, 0.0f, 0.5f, 0.5f)
 			quadrantBottomRight := FloatBox2D new(0.5f, 0.5f, 0.5f, 0.5f)
-			DrawState new(gpuImage) setInputImage(sourceImage) setDestinationNormalized(quadrantTopLeft) setTransformNormalized(FloatTransform3D createRotationX(180.0f toRadians())) draw()
-			DrawState new(gpuImage) setInputImage(sourceImage) setDestinationNormalized(quadrantBottomRight) setTransformNormalized(FloatTransform3D createRotationX(180.0f toRadians())) draw()
+			DrawState new(gpuImage) setInputImage(this sourceImage) setDestinationNormalized(quadrantTopLeft) setTransformNormalized(FloatTransform3D createRotationX(180.0f toRadians())) draw()
+			DrawState new(gpuImage) setInputImage(this sourceImage) setDestinationNormalized(quadrantBottomRight) setTransformNormalized(FloatTransform3D createRotationX(180.0f toRadians())) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f) within(0.05f))
 			correctImage free(); rasterFromGpu free(); gpuImage free()
@@ -132,6 +132,10 @@ GpuSurfaceTest: class extends Fixture {
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			(correctImage, gpuImage, rasterFromGpu, trianglePoints, circlePoints) free()
 		})
+	}
+	free: override func {
+		this sourceImage free()
+		super()
 	}
 }
 gpuContext := OpenGLContext new()
