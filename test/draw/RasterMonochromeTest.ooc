@@ -56,12 +56,14 @@ RasterMonochromeTest: class extends Fixture {
 				expect(columnData count, is equal to(size y))
 				for (i in 0 .. columnData count)
 					expect(columnData[i] as Int, is equal to(i))
+				columnData free()
 			}
 			for (row in 0 .. size y) {
 				rowData := image getRow(row)
 				expect(rowData count, is equal to(size x))
 				for (i in 0 .. rowData count)
 					expect(rowData[i] as Int, is equal to(row))
+				rowData free()
 			}
 			image referenceCount decrease()
 		})
