@@ -10,7 +10,6 @@ import ../Mutex
 
 version(unix || apple) {
 	include pthread | (_XOPEN_SOURCE=500)
-	include unistd
 
 	PThreadMutex: cover from pthread_mutex_t
 	PThreadMutexAttr: cover from pthread_mutexattr_t

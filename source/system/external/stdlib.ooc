@@ -13,3 +13,4 @@ EXIT_FAILURE: extern Int
 
 exit: extern func (Int)
 atexit: extern func (Pointer)
+abort: extern func

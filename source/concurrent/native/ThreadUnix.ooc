@@ -8,8 +8,6 @@
 
 import ../Thread
 
-include unistd | (_POSIX_C_SOURCE=200809L)
-
 version(unix || apple) {
 ThreadUnix: class extends Thread {
 	pthread: PThread

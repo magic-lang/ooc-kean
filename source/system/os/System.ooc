@@ -6,35 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-version(windows) {
-	include windows | (_WIN32_WINNT=0x0500)
-
-	SystemInfo: cover from SYSTEM_INFO {
-		numberOfProcessors: extern (dwNumberOfProcessors) UInt
-	}
-
-	COMPUTER_NAME_FORMAT: enum {
-		NET_BIOS = 0
-		DNS_HOSTNAME
-		DNS_DOMAIN
-		DNS_FULLY_QUALIFIED
-		PHYSICAL_NET_BIOS
-		PHYSICAL_DNS_HOSTNAME
-		PHYSICAL_DNS_DOMAIN
-		PHYSICAL_DNS_FULLY_QUALIFIED
-		MAX
-	}
-
-	GetSystemInfo: extern func (SystemInfo*)
-	GetComputerNameEx: extern func (COMPUTER_NAME_FORMAT, CString, UInt*)
-}
-
-version(linux || apple) {
-	include unistd
-	sysconf: extern func (Int) -> Long
-	_SC_NPROCESSORS_ONLN: extern Int
-}
-
 System: class {
 	numProcessors: static func -> Int {
 		result := 1

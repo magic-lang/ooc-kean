@@ -77,21 +77,4 @@ PipeWin32: class extends Pipe {
 		SetNamedPipeHandleState(handle, flags&, null, null)
 	}
 }
-
-include windows
-
-CreatePipe: extern func (readPipe: Handle*, writePipe: Handle*, lpPipeAttributes: Pointer, nSize: Long) -> Bool
-ReadFile: extern func (hFile: Handle, buffer: Pointer, numberOfBytesToRead: Long, numberOfBytesRead: Long*, lpOverlapped: Pointer) -> Bool
-WriteFile: extern func (hFile: Handle, buffer: Pointer, numberOfBytesToWrite: Long, numberOfBytesWritten: Long*, lpOverlapped: Pointer) -> Bool
-CloseHandle: extern func (handle: Handle) -> Bool
-SetNamedPipeHandleState: extern func (handle: Handle, mode: Long*, maxCollectionCount: Long*, collectDataTimeout: Long*)
-
-PIPE_WAIT, PIPE_NOWAIT: extern ULong
-ERROR_NO_DATA: extern Long
-
-SecurityAttributes: cover from SECURITY_ATTRIBUTES {
-	length: extern (nLength) Int
-	inheritHandle: extern (bInheritHandle) Bool
-	securityDescriptor: extern (lpSecurityDescriptor) Pointer
-}
 }

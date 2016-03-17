@@ -10,14 +10,6 @@ version(windows) {
 import ../[WaitCondition, Thread]
 import native/MutexWin32
 
-include windows
-
-CreateEvent: extern func (...) -> Handle
-SetEvent: extern func (Handle) -> Bool
-CloseHandle: extern func (Handle) -> Bool
-Infinite: extern (INFINITE) Long
-WaitSuccess: extern (WAIT_OBJECT_0) Long
-
 ConditionWin32: class extends WaitCondition {
 	_mutex := Mutex new()
 	_waitingEvents := VectorList<Handle> new()
@@ -45,7 +37,7 @@ ConditionWin32: class extends WaitCondition {
 		this _waitingEvents add(eventId)
 		this _mutex unlock()
 		mutex unlock()
-		(WaitForSingleObject(eventId, Infinite) == WaitSuccess)
+		(WaitForSingleObject(eventId, INFINITE) == WaitSuccess)
 	}
 	signal: override func -> Bool {
 		result := false

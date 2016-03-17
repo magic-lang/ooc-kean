@@ -7,7 +7,7 @@
  */
 
 version(windows) {
-include windows, stdint
+include stdint
 
 LPSTR: cover from Char*
 LPMSG: cover from Msg*

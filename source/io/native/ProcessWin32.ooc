@@ -10,8 +10,6 @@ import ../Process
 import PipeWin32
 
 version(windows) {
-include windows
-
 ProcessWin32: class extends Process {
 	si: StartupInfo
 	pi: ProcessInformation
@@ -122,59 +120,4 @@ ProcessWin32: class extends Process {
 	terminate: override func { "please implement me! ProcessWin32 terminate" println() }
 	kill: override func { "please implement me! ProcessWin32 kill" println() }
 }
-
-// extern functions
-ZeroMemory: extern func (Pointer, SizeT)
-CreateProcess: extern func (CString, CString, Pointer, Pointer, Bool, Long, Pointer, CString, Pointer, Pointer) -> Bool
-WaitForSingleObject: extern func (Handle, Long) -> Int
-GetExitCodeProcess: extern func (Handle, ULong*) -> Int
-CloseHandle: extern func (Handle)
-SetHandleInformation: extern func (Handle, Long, Long) -> Bool
-HANDLE_FLAG_INHERIT: extern Long
-HANDLE_FLAG_PROTECT_FROM_CLOSE: extern Long
-WAIT_ABANDONED, WAIT_OBJECT_0, WAIT_TIMEOUT, WAIT_FAILED: extern Int
-
-// covers
-StartupInfo: cover from STARTUPINFO {
-	structSize: extern (cb) Long
-	reserved: extern (lpReserved) CString*
-	desktop: extern (lpDesktop) CString*
-	title: extern (lpTitle) CString*
-	x: extern (dwX) Long
-	y: extern (dwY) Long
-	xSize: extern (dwXSize) Long
-	ySize: extern (dwYSize) Long
-	xCountChars: extern (dwXCountChars) Long
-	yCountChars: extern (dwYCountChars) Long
-	flags: extern (dwFlags) Long
-	showWindow: extern (wShowWindow) Int
-	cbReserved2: extern Int
-	lpReserved2: extern Char* // LPBYTE
-	stdInput : extern (hStdInput) Handle
-	stdOutput: extern (hStdOutput) Handle
-	stdError : extern (hStdError) Handle
-}
-
-StartFlags: cover {
-	ForceOnFeedback : extern (STARTF_FORCEONFEEDBACK) static Long
-	ForceOffFeedback: extern (STARTF_FORCEOFFFEEDBACK) static Long
-	PreventPinning : extern (STARTF_PREVENTPINNING) static Long
-	RunFullScreen: extern (STARTF_RUNFULLSCREEN) static Long
-	TitleIsAppID: extern (STARTF_TITLEISAPPID) static Long
-	TitleIsLinkName: extern (STARTF_TITLEISLINKNAME) static Long
-	UseCountChars: extern (STARTF_USECOUNTCHARS) static Long
-	UseFillAttribute: extern (STARTF_USEFILLATTRIBUTE) static Long
-	UseHotKey: extern (STARTF_USEHOTKEY) static Long
-	UsePosition: extern (STARTF_USEPOSITION) static Long
-	UseShowWindow: extern (STARTF_USESHOWWINDOW) static Long
-	UseSize: extern (STARTF_USESIZE) static Long
-	UseStdHandles: extern (STARTF_USESTDHANDLES) static Long
-}
-
-ProcessInformation: cover from PROCESS_INFORMATION {
-	process: extern (hProcess) Handle
-	thread: extern (hThread) Handle
-	pid: extern (dwProcessId) Long
-}
-INFINITE: extern Long
 }
