@@ -16,7 +16,7 @@ TextTest: class extends Fixture {
 			text1 := Text new(c"abc", 3)
 			text2 := Text new(c"abc", 3)
 			expect(text1, is equal to(text2))
-			text1 free(); text2 free()
+			(text1, text2) free()
 		})
 		this add("Text1 is not equal to Text2", func {
 			text1 := Text new(c"abc", 3)

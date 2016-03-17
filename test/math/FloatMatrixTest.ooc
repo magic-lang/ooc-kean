@@ -115,7 +115,7 @@ FloatMatrixTest: class extends Fixture {
 			expect(columnString == "4.00; 5.00; 6.00; ")
 			aString := a toString()
 			expect(aString == "1.00, 4.00, 7.00; 2.00, 5.00, 8.00; 3.00, 6.00, 9.00; ")
-			columnString free(); aString free()
+			(columnString, aString) free()
 		})
 		this add("adjugate", func {
 			m := this createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f])
@@ -143,9 +143,7 @@ FloatMatrixTest: class extends Fixture {
 			expect(m == n, is true)
 			expect(m != o, is true)
 			expect(n == o, is false)
-			m free()
-			n free()
-			o free()
+			(m, n, o) free()
 		})
 	}
 

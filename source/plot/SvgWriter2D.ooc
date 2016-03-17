@@ -66,10 +66,8 @@ SvgWriter2D: class {
 	write: func {
 		output := prepareOutput()
 		fileWriter := FileWriter new(this file, false)
-		fileWriter write(output)
-		fileWriter close()
-		output free()
-		fileWriter free()
+		fileWriter write(output) . close()
+		(output, fileWriter) free()
 	}
 	prepareOutput: func -> String {
 		result := "<?xml version='1.0' standalone='no'?>\n"

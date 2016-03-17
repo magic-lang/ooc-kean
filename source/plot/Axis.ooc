@@ -116,8 +116,7 @@ Axis: class {
 		tempTick := tickValue toString()
 		tempTickInt := tickValue as Int toString()
 		result = result & Shapes text(position + numberOffset, (tickValue - tickValue round()) absolute < 0.001 ? tempTickInt : tempTick, this fontSize - 4, textAnchor)
-		tempTick free()
-		tempTickInt free()
+		(tempTick, tempTickInt) free()
 		result >> "</g>\n"
 	}
 	getFirstTickValue: func -> Float {

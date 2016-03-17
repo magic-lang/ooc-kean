@@ -29,8 +29,7 @@ EndpointTest: class extends Fixture {
 			expect(endpoint port == port take() toInt())
 			expect(endpoint toText() == endpointText)
 			endpointText free(Owner Sender)
-			list free()
-			endpoint free()
+			(list, endpoint) free()
 		})
 		this add("empty", func {
 			endpoint := Endpoint parse(t"")
@@ -47,8 +46,7 @@ EndpointTest: class extends Fixture {
 			expect(endpoint port == 0)
 			expect(endpoint toText() == endpointText)
 			endpointText free(Owner Sender)
-			list free()
-			endpoint free()
+			(list, endpoint) free()
 		})
 	}
 }

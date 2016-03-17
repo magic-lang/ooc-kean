@@ -230,10 +230,7 @@ FloatMatrix: cover {
 			index := length - 2 - iteration
 			result[0, index] = rhs[index] - upper[index] * result take()[0, index + 1]
 		}
-		diagonalVector free()
-		upperDiagonalVector free()
-		lowerDiagonalVector free()
-		rightHandSide free()
+		(diagonalVector, upperDiagonalVector, lowerDiagonalVector, rightHandSide) free()
 		this free(Owner Receiver)
 		y free(Owner Receiver)
 		result

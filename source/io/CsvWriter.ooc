@@ -38,8 +38,7 @@ CsvWriter: class {
 				value append(this _delimiter)
 			string := value toString()
 			this _fileWriter file write(string)
-			string free()
-			value free()
+			(string, value) free()
 		}
 		this _fileWriter write("\r\n")
 	}

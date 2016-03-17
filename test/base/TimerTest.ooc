@@ -47,8 +47,7 @@ TimerTest: class extends Fixture {
 		this cpuTimer stop()
 	}
 	free: override func {
-		this wallTimer free()
-		this cpuTimer free()
+		(this wallTimer, this cpuTimer) free()
 		super()
 	}
 }

@@ -45,9 +45,7 @@ SvgPlot: class {
 		this init(datasets, title, xAxisLabel, yAxisLabel)
 	}
 	free: override func {
-		this datasets free()
-		this xAxis free()
-		this yAxis free()
+		(this datasets, this xAxis, this yAxis) free()
 		if (this colorList)
 			this colorList free()
 		super()

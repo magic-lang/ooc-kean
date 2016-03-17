@@ -20,8 +20,7 @@ SynchronizedList: class <T> extends List<T> {
 	}
 	init: func (=_backend)
 	free: override func {
-		this _backend free()
-		this _mutex free()
+		(this _backend, this _mutex) free()
 		super()
 	}
 	add: override func (item: T) {

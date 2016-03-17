@@ -23,10 +23,7 @@ OpenGLWindow: class extends OpenGLSurface {
 		this _yuvSemiplanarToRgba = OpenGLMapTransform new(slurp("shaders/yuvSemiplanarToRgba.frag"), context)
 	}
 	free: override func {
-		this _yuvSemiplanarToRgba free()
-		this _monochromeToRgba free()
-		this _defaultMap free()
-		this _context free()
+		(this _yuvSemiplanarToRgba, this _monochromeToRgba, this _defaultMap, this _context) free()
 		super()
 	}
 	_bind: override func

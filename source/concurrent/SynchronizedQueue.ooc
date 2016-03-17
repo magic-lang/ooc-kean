@@ -19,8 +19,7 @@ SynchronizedQueue: class <T> extends Queue<T> {
 		this _backend = VectorQueue<T> new()
 	}
 	free: override func {
-		this _backend free()
-		this _mutex free()
+		(this _backend, this _mutex) free()
 		super()
 	}
 	enqueue: override func (item: T) {

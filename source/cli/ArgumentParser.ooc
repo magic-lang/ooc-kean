@@ -102,8 +102,7 @@ ArgumentParser: class {
 		}
 		for (i in 0 .. input count)
 			input[i] free(Owner Receiver)
-		parameters free()
-		arguments free()
+		(parameters, arguments) free()
 	}
 	_findArgument: func (identifier: Text) -> _Argument {
 		result: _Argument
