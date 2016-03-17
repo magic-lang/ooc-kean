@@ -6,17 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include stdlib | (_DEFAULT_SOURCE)
-
-getenv: extern func (path: CString) -> CString
-
-version (!windows) {
-	setenv: extern func (key, value: CString, overwrite: Bool) -> Int
-	unsetenv: extern func (key: CString) -> Int
-} else {
-	putenv: extern func (str: CString) -> Int
-}
-
 Env: class {
 	// returns an environment variable. if not found, it returns null
 	get: static func (variableName: String) -> String {

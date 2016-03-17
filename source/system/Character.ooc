@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include stdlib, stdint
+include stdint
 
 __LINE__: extern Int
 __FILE__: extern CString

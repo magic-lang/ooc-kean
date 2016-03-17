@@ -31,10 +31,9 @@ telldir: extern func (DIR*) -> Long
 realpath: extern func (path, resolved: CString) -> CString
 
 version (linux) {
-	include sys/stat | (__USE_BSD), sys/types | (__USE_BSD), stdlib | (__USE_BSD), limits
-}
-version (!linux) {
-	include sys/stat, sys/types, stdlib
+	include sys/stat | (__USE_BSD), sys/types | (__USE_BSD)
+} else {
+	include sys/stat, sys/types
 }
 
 version (unix || apple) {
