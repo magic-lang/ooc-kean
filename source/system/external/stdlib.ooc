@@ -8,8 +8,8 @@
 
 include stdlib
 
-exit: extern func (Int)
 EXIT_SUCCESS: extern Int
 EXIT_FAILURE: extern Int
 
+exit: extern func (Int)
 atexit: extern func (Pointer)
