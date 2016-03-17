@@ -23,6 +23,7 @@ RasterRgbaTest: class extends Fixture {
 				expect(image, is Null)
 			} catch (e: Exception) {
 				expect(e message contains("Failed to load image: "))
+				e message free()
 			}
 		})
 		this add("equals 1", func {
