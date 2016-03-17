@@ -12,7 +12,6 @@ import PipeUnix
 version(unix || apple) {
 include sys/wait
 include errno | (_POSIX_SOURCE)
-include signal | (_POSIX_SOURCE)
 
 WEXITSTATUS: extern func (Int) -> Int
 WIFEXITED: extern func (Int) -> Int

@@ -291,14 +291,3 @@ _setupHandlers: func {
 }
 
 _setupHandlers()
-
-/* ------ C interface ------ */
-
-version ((linux || apple) && !android) {
-	include signal
-
-	signal: extern func (sig: Int, f: Pointer) -> Pointer
-
-	SIGHUP, SIGINT, SIGILL, SIGTRAP, SIGABRT, SIGFPE, SIGBUS,
-	SIGSEGV, SIGSYS, SIGPIPE, SIGALRM, SIGTERM: extern Int
-}

@@ -77,7 +77,6 @@ ThreadUnix: class extends Thread {
 // C interface
 include pthread | (_POSIX_C_SOURCE=200809L)
 include sched
-include signal
 
 PThread: cover from pthread_t
 TimeT: cover from time_t

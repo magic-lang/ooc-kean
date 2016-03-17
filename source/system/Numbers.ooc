@@ -6,10 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include stdlib, stdint, stddef, float, ctype, sys/types
-version(windows || apple) {
-	include limits
-}
+include stdint, stddef, float, ctype, sys/types, limits
 
 INT8_MAX, INT8_MIN: extern static Long
 INT16_MAX, INT16_MIN: extern static Long
@@ -29,7 +26,6 @@ LLong: cover from signed long long {
 		string free()
 		result
 	}
-
 	in: func (range: Range) -> Bool {
 		this >= range min && this < range max
 	}

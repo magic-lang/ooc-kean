@@ -7,7 +7,7 @@
  */
 
 version(windows) {
-include windows | (_WIN32_WINNT=0x0500)
+include windows | (NOMINMAX, _WIN32_WINNT=0x0500)
 
 COMPUTER_NAME_FORMAT: enum {
 	NET_BIOS = 0
