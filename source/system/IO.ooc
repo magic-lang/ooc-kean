@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include stdio | (_POSIX_SOURCE), fcntl
+include stdio | (_POSIX_SOURCE)
 
 stdout, stderr, stdin: extern FStream
 
