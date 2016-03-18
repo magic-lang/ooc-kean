@@ -6,7 +6,10 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+include sched
 import ../Thread
+
+sched_yield: extern func -> Int // pthread_yield is non-standard
 
 version(unix || apple) {
 ThreadUnix: class extends Thread {
@@ -37,8 +40,6 @@ ThreadUnix: class extends Thread {
 		pthread_kill(pthread, 0) == 0
 	}
 	_yield: static func -> Bool {
-		// pthread_yield is non-standard, use sched_yield instead
-		// as a bonus, this works on OSX too.
 		result := sched_yield()
 		(result == 0)
 	}
@@ -73,17 +74,6 @@ ThreadUnix: class extends Thread {
 		thread
 	}
 }
-
-// C interface
-include sched
-
-TimeT: cover from time_t
-TimeSpec: cover from struct timespec {
-	tv_sec: extern TimeT
-	tv_nsec: extern Long
-}
-
-sched_yield: extern func -> Int
 
 version (!apple && !android) {
 	// Using proto here as defining '_GNU_SOURCE' seems to cause more trouble than anything else...

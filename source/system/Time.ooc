@@ -6,36 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-version(linux) {
-	include sys/time | (__USE_BSD, _BSD_SOURCE, _DEFAULT_SOURCE)
-	include time | (__USE_BSD, _BSD_SOURCE, _DEFAULT_SOURCE)
-} else {
-	include sys/time
-}
-
-version(!windows) {
-	TimeT: cover from time_t
-	TimeZone: cover from struct timezone
-	TMStruct: cover from struct tm {
-		tm_sec, tm_min, tm_hour, tm_mday, tm_mon, tm_year, tm_wday, tm_yday, tm_isdst : extern Int
-	}
-	TimeVal: cover from struct timeval {
-		tv_sec: extern TimeT
-		tv_usec: extern Int
-	}
-
-	time: extern proto func (TimeT*) -> TimeT
-	localtime: extern func (TimeT*) -> TMStruct*
-	gettimeofday: extern func (TimeVal*, TimeZone*) -> Int
-	_asctime: extern (asctime) func (TMStruct*) -> CString
-
-	// An `asctime` wrapper that copies the result to a new string. Otherwise, it would be overwritten in later calls.
-	asctime: func (timePtr: TMStruct*) -> String {
-		cStr := _asctime(timePtr)
-		String new(cStr, cStr length() - 1)
-	}
-}
-
 Time: class {
 	__time_microsec_base := static This runTime()
 	__time_millisec_base := static This __time_microsec_base / 1000
@@ -75,7 +45,7 @@ Time: class {
 			GetLocalTime(st&)
 			result = st wMilliseconds * 1000
 		} else {
-			tv : TimeVal
+			tv: TimeVal
 			gettimeofday(tv&, null)
 			result = tv tv_usec
 		}
@@ -96,7 +66,7 @@ Time: class {
 	runTimeMicro: static func -> UInt {
 		result: UInt
 		version(!windows) {
-			tv : TimeVal
+			tv: TimeVal
 			gettimeofday(tv&, null)
 			result = ((tv tv_usec + tv tv_sec * 1_000_000) - __time_millisec_base) as UInt
 		} else {

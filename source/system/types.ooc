@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include stddef, stdio, ctype, stdbool
+include stddef, ctype, stdbool
 include ./Array
 import Owner
 

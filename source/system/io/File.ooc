@@ -6,8 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include stdio
-
 import FileReader, FileWriter, Reader, BufferWriter, BufferReader
 import native/[FileWin32, FileUnix]
 
