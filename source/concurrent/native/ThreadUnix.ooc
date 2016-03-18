@@ -75,26 +75,18 @@ ThreadUnix: class extends Thread {
 }
 
 // C interface
-include pthread | (_POSIX_C_SOURCE=200809L)
 include sched
 
-PThread: cover from pthread_t
 TimeT: cover from time_t
 TimeSpec: cover from struct timespec {
 	tv_sec: extern TimeT
 	tv_nsec: extern Long
 }
+
+sched_yield: extern func -> Int
+
 version (!apple && !android) {
 	// Using proto here as defining '_GNU_SOURCE' seems to cause more trouble than anything else...
 	pthread_timedjoin_np: extern proto func (thread: PThread, retval: Pointer, abstime: TimeSpec*) -> Int
 }
-
-pthread_create: extern func (threadPointer: PThread*, attributePointer, startRoutine, userArgument: Pointer) -> Int
-pthread_join: extern func (thread: PThread, retval: Pointer*) -> Int
-pthread_kill: extern func (thread: PThread, signal: Int) -> Int
-pthread_self: extern func -> PThread
-pthread_cancel: extern func (thread: PThread) -> Int
-pthread_equal: extern func (thread0, thread1: PThread) -> Int
-pthread_detach: extern func (thread: PThread) -> Int
-sched_yield: extern func -> Int
 }

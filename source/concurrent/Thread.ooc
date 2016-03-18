@@ -54,8 +54,8 @@ Thread: abstract class {
 }
 
 version (unix || apple) {
-	include pthread | (_POSIX_C_SOURCE=200809L)
-
+	// This should be in external/pthread.ooc but fails for unknown reason
+	include pthread | (_XOPEN_SOURCE=500, _POSIX_C_SOURCE=200809L)
 	ThreadId: cover from PThread {
 		equals: func (other: This) -> Bool {
 			pthread_equal(this as PThread, other as PThread) != 0

@@ -7,16 +7,6 @@
  */
 
 version(unix || apple) {
-include pthread
-PThreadCond: cover from pthread_cond_t
-PThreadCondAttr: cover from pthread_condattr_t
-
-pthread_cond_init: extern func (cond: PThreadCond*, attr: PThreadCondAttr*) -> Int
-pthread_cond_signal: extern func (cond: PThreadCond*) -> Int
-pthread_cond_broadcast: extern func (cond: PThreadCond*) -> Int
-pthread_cond_wait: extern func (cond: PThreadCond*, mutex: PThreadMutex*) -> Int
-pthread_cond_destroy: extern func (cond: PThreadCond*) -> Int
-
 import ../WaitCondition
 import native/MutexUnix
 

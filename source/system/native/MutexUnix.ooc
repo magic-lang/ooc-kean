@@ -9,20 +9,6 @@
 import ../Mutex
 
 version(unix || apple) {
-	include pthread | (_XOPEN_SOURCE=500)
-
-	PThreadMutex: cover from pthread_mutex_t
-	PThreadMutexAttr: cover from pthread_mutexattr_t
-
-	pthread_mutex_lock: extern func (PThreadMutex*)
-	pthread_mutex_unlock: extern func (PThreadMutex*)
-	pthread_mutex_init: extern func (PThreadMutex*, PThreadMutexAttr*)
-	pthread_mutex_destroy: extern func (PThreadMutex*)
-	pthread_mutexattr_init: extern func (PThreadMutexAttr*)
-	pthread_mutexattr_settype: extern func (PThreadMutexAttr*, Int)
-
-	PTHREAD_MUTEX_RECURSIVE: extern Int
-
 	MutexUnix: class extends Mutex {
 		_backend: PThreadMutex
 		init: func {
