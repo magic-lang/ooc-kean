@@ -11,7 +11,7 @@ version ((linux || apple) && !android) {
 
 	signal: extern func (sig: Int, f: Pointer) -> Pointer
 
-	SIGHUP, SIGINT, SIGILL, SIGTRAP, SIGABRT, SIGFPE, SIGBUS,
+	SIGHUP, SIGINT, SIGILL, SIGKILL, SIGTRAP, SIGABRT, SIGFPE, SIGBUS,
 	SIGSEGV, SIGSYS, SIGPIPE, SIGALRM, SIGTERM: extern Int
 } else {
 	include signal
