@@ -6,7 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include stdio
 include sys/types
 
 version (windows) {

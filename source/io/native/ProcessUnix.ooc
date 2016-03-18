@@ -11,18 +11,11 @@ import PipeUnix
 
 version(unix || apple) {
 include sys/wait
-include errno | (_POSIX_SOURCE)
 
 WEXITSTATUS: extern func (Int) -> Int
 WIFEXITED: extern func (Int) -> Int
 WIFSIGNALED: extern func (Int) -> Int
 WTERMSIG: extern func (Int) -> Int
-
-errno : extern Int
-SIGTERM: extern Int
-SIGKILL: extern Int
-SIGSEGV: extern Int
-SIGABRT: extern Int
 WNOHANG: extern Int
 
 kill: extern func (Long, Int)

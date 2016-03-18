@@ -8,7 +8,7 @@
 
 import Backtrace
 
-include setjmp, errno, stdint
+include setjmp, stdint
 
 JmpBuf: cover from jmp_buf {
 	setJmp: extern (setjmp) func -> Int
@@ -73,9 +73,6 @@ version(windows) {
 	getOSErrorCode: func -> Int { GetLastError() }
 	getOSError: func -> String { GetWindowsErrorMessage(GetLastError()) }
 } else {
-	errno: extern Int
-	strerror: extern func (Int) -> CString
-
 	getOSErrorCode: func -> Int {
 		errno
 	}
