@@ -20,10 +20,10 @@ CreateAlphaByteStringTest: class extends Fixture {
 			file := File new(filename)
 			folder := file parent . mkdirs() . free()
 			file free()
-			fw := FileWriter new(filename + "DataFile.ooc")
-			fw write(outputData)
-			fw close()
-			(filename, outputData) free()
+			filename = filename >> "DataFile.ooc"
+			fw := FileWriter new(filename)
+			fw write(outputData) . close()
+			(fw, filename, outputData) free()
 		})
 		this add("Output check", func {
 			generated := t"test/draw/output/DataFile.ooc"
