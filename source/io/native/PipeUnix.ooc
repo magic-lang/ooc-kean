@@ -7,16 +7,9 @@
  */
 
 include sys/types, sys/stat
-include fcntl
 import ../Pipe
 
 version(unix || apple) {
-F_SETFL, F_GETFL: extern Int
-O_NONBLOCK: extern Int
-EAGAIN: extern Int
-
-fcntl: extern func (_FileDescriptor, Int, Int) -> Int
-
 _FileDescriptor: cover from Int {
 	write: extern (write) func (Pointer, Int) -> Int
 	read: extern (read) func (Pointer, Int) -> Int

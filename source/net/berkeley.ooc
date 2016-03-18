@@ -18,9 +18,6 @@ version (windows) {
 	include sys/select
 	include arpa/inet
 	include netdb | (__USE_POSIX)
-	version(!android) {
-		include sys/fcntl
-	}
 }
 
 SockAddr: cover from struct sockaddr {
@@ -138,7 +135,6 @@ htonl: extern func (hostlong: UInt) -> UInt
 htons: extern func (hostshort: UShort) -> UShort
 ntohl: extern func (netlong: UInt) -> UInt
 ntohs: extern func (netshort: UShort) -> UShort
-fcntl: extern func (descriptor, command, argument: Int) -> Int
 
 // getnameinfo constants
 NI_NAMEREQD: extern Int
