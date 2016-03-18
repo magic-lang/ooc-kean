@@ -91,11 +91,6 @@ FdSet: cover from fd_set {
 	zero: func@ { _zero(this&) }
 }
 
-TimeVal: cover from struct timeval {
-	tv_sec: extern Long
-	tv_usec: extern Long
-}
-
 INADDR_ANY: extern ULong
 INADDR_NONE: extern ULong
 AI_CANONNAME: extern Int

@@ -41,7 +41,6 @@ version (unix || apple) {
 	File separator = '/'
 	File pathDelimiter = ':'
 
-	TimeT: cover from time_t
 	ModeT: cover from mode_t
 	INodeT: cover from ino_t
 

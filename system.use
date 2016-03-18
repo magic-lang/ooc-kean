@@ -24,6 +24,7 @@ Imports: VarArgs
 Imports: external/pthread
 Imports: external/signal
 Imports: external/stdlib
+Imports: external/time
 Imports: external/unistd
 Imports: external/windows
 Imports: os/Dynlib
