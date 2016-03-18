@@ -22,16 +22,16 @@ CreateAlphaByteString: class {
 			ipbuffer pointer[i] = buf pointer[(i * 4) + 3]
 		ip = ipbuffer pointer as Int*
 		if (ipbuffer size > 3)
-			imageArray = imageArray >> ip[0] toString()
+			imageArray = imageArray & ip[0] toString()
 		for (i in 1 .. ipbuffer size / 4) {
 			intString := ip[i] toString()
 			imageArray = imageArray >> "," >> (i % 32 == 0 ? "\n" : " ") >> intString
 			intString free()
 		}
-		imageArray += "]"
-		result := name + "Image" + ": StaticOverlayImages\n" + name + "Image image = " + imageArray + "\n"
-		result += name + "Image size = IntVector2D new(" + image size x toString() + ", " + image size y toString() + ")\n"
-		image free()
+		imageArray = imageArray >> "]"
+		result := (name + "Image: StaticOverlayImages\n") & (name + "Image image = ") & (imageArray >> "\n")
+		result = (result >> name) & ("Image size = IntVector2D new(" << image size x toString()) & (", " << image size y toString()) >> ")\n"
+		(image , ipbuffer) free()
 		result
 	}
 }
