@@ -19,39 +19,39 @@ FloatComplexVectorListTest: class extends Fixture {
 	complexNumber3 := FloatComplex new (-2, -1)
 
 	complexNumberArray := FloatComplexVectorList new(4)
-	complexNumberArray add(complexNumber0)
-	complexNumberArray add(complexNumber1)
-	complexNumberArray add(complexNumber2)
-	complexNumberArray add(complexNumber3)
+	this complexNumberArray add(this complexNumber0)
+	this complexNumberArray add(this complexNumber1)
+	this complexNumberArray add(this complexNumber2)
+	this complexNumberArray add(this complexNumber3)
 
 	tolerance := 0.00001f
 
 	init: func {
 		super("FloatComplexVectorList")
 		this add("discrete fourier transform", func {
-			result := FloatComplexVectorList discreteFourierTransform(complexNumberArray)
+			result := FloatComplexVectorList discreteFourierTransform(this complexNumberArray)
 			result = FloatComplexVectorList inverseDiscreteFourierTransform(result)
-			for (i in 0 .. (complexNumberArray count))
-				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
+			for (i in 0 .. (this complexNumberArray count))
+				expect((result[i] - this complexNumberArray[i]) absoluteValue < this tolerance, is true)
 			result free()
 		})
 		this add("fast fourier transform", func {
-			result := FloatComplexVectorList fastFourierTransform(complexNumberArray)
-			resultInPlace := complexNumberArray copy()
+			result := FloatComplexVectorList fastFourierTransform(this complexNumberArray)
+			resultInPlace := this complexNumberArray copy()
 			FloatComplexVectorList fastFourierTransformInPlace(resultInPlace)
-			expect((result[0] - FloatComplex new(8, 5)) absoluteValue < tolerance, is true)
-			expect((result[1] - FloatComplex new(0, -7)) absoluteValue < tolerance, is true)
-			expect((result[2] - FloatComplex new(6, 3)) absoluteValue < tolerance, is true)
-			expect((result[3] - FloatComplex new(-6, 3)) absoluteValue < tolerance, is true)
+			expect((result[0] - FloatComplex new(8, 5)) absoluteValue < this tolerance, is true)
+			expect((result[1] - FloatComplex new(0, -7)) absoluteValue < this tolerance, is true)
+			expect((result[2] - FloatComplex new(6, 3)) absoluteValue < this tolerance, is true)
+			expect((result[3] - FloatComplex new(-6, 3)) absoluteValue < this tolerance, is true)
 			for (i in 0 .. result count)
-				expect((result[i] - resultInPlace[i]) absoluteValue < tolerance, is true)
+				expect((result[i] - resultInPlace[i]) absoluteValue < this tolerance, is true)
 			result = FloatComplexVectorList inverseFastFourierTransform(result)
-			for (i in 0 .. (complexNumberArray count))
-				expect((result[i] - complexNumberArray[i]) absoluteValue < tolerance, is true)
-			fftBuffer := FloatComplexVectorList createFFTBuffer(complexNumberArray count)
-			result = FloatComplexVectorList fastFourierTransform(complexNumberArray, fftBuffer)
-			for (i in 0 .. (complexNumberArray count))
-				expect((result[i] - resultInPlace[i]) absoluteValue < tolerance, is true)
+			for (i in 0 .. (this complexNumberArray count))
+				expect((result[i] - this complexNumberArray[i]) absoluteValue < this tolerance, is true)
+			fftBuffer := FloatComplexVectorList createFFTBuffer(this complexNumberArray count)
+			result = FloatComplexVectorList fastFourierTransform(this complexNumberArray, fftBuffer)
+			for (i in 0 .. (this complexNumberArray count))
+				expect((result[i] - resultInPlace[i]) absoluteValue < this tolerance, is true)
 			result free()
 		})
 		this add("sum and mean", func {
@@ -62,10 +62,10 @@ FloatComplexVectorListTest: class extends Fixture {
 			list add(FloatComplex new(-1, 8))
 			sum := list sum
 			mean := list mean
-			expect(sum real, is equal to(6.0f) within(tolerance))
-			expect(sum imaginary, is equal to(4.0f) within(tolerance))
-			expect(mean real, is equal to(1.5f) within(tolerance))
-			expect(mean imaginary, is equal to(1.0f) within(tolerance))
+			expect(sum real, is equal to(6.0f) within(this tolerance))
+			expect(sum imaginary, is equal to(4.0f) within(this tolerance))
+			expect(mean real, is equal to(1.5f) within(this tolerance))
+			expect(mean imaginary, is equal to(1.0f) within(this tolerance))
 			list free()
 		})
 		this add("real, imaginary lists", func {
@@ -75,15 +75,15 @@ FloatComplexVectorListTest: class extends Fixture {
 			list add(FloatComplex new(4, -2))
 			reals := list real
 			imaginaries := list imaginary
-			expect(reals sum, is equal to(7.0f) within(tolerance))
-			expect(imaginaries sum, is equal to(-4.0f) within(tolerance))
+			expect(reals sum, is equal to(7.0f) within(this tolerance))
+			expect(imaginaries sum, is equal to(-4.0f) within(this tolerance))
 			list free()
 		})
 		this add("createDefault", func {
 			list := FloatComplexVectorList new(3, FloatComplex new(1, 2))
 			(reals, imaginaries) := (list real, list imaginary)
-			expect(reals sum, is equal to(3.0f) within(tolerance))
-			expect(imaginaries sum, is equal to(6.0f) within(tolerance))
+			expect(reals sum, is equal to(3.0f) within(this tolerance))
+			expect(imaginaries sum, is equal to(6.0f) within(this tolerance))
 			reals free(); imaginaries free(); list free()
 		})
 		this add("addInto and operators", func {
@@ -97,10 +97,10 @@ FloatComplexVectorListTest: class extends Fixture {
 
 			added := list + single
 			subtracted := list - single
-			expect(added sum real, is equal to(10.0f) within(tolerance))
-			expect(added sum imaginary, is equal to(15.0f) within(tolerance))
-			expect(subtracted sum real, is equal to(4.0f) within(tolerance))
-			expect(subtracted sum imaginary, is equal to(9.0f) within(tolerance))
+			expect(added sum real, is equal to(10.0f) within(this tolerance))
+			expect(added sum imaginary, is equal to(15.0f) within(this tolerance))
+			expect(subtracted sum real, is equal to(4.0f) within(this tolerance))
+			expect(subtracted sum imaginary, is equal to(9.0f) within(this tolerance))
 
 			added free(); subtracted free(); list free(); other free()
 		})
@@ -117,8 +117,8 @@ FloatComplexVectorListTest: class extends Fixture {
 		this add("getZeros", func {
 			zeros := FloatComplexVectorList getZeros(7)
 			sum := zeros sum
-			expect(sum real, is equal to(0.f) within(tolerance))
-			expect(sum imaginary, is equal to(0.f) within(tolerance))
+			expect(sum real, is equal to(0.f) within(this tolerance))
+			expect(sum imaginary, is equal to(0.f) within(this tolerance))
 			zeros free()
 		})
 	}
