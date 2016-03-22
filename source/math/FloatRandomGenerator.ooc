@@ -65,7 +65,7 @@ FloatGaussianRandomGenerator: class extends FloatRandomGenerator {
 		super()
 	}
 	setRange: func (=_mu, =_sigma) {
-		_hasSecondValue = false
+		this _hasSecondValue = false
 	}
 	setSeed: func (state: UInt) {
 		this _backend setSeed(state)
