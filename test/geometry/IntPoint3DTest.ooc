@@ -40,14 +40,14 @@ IntPoint3DTest: class extends Fixture {
 			expect((this point0 - this point0) z, is equal to((IntPoint3D new()) z))
 		})
 		this add("scalar multiplication", func {
-			expect(((-1) * this point0) x, is equal to((-point0) x))
-			expect(((-1) * this point0) y, is equal to((-point0) y))
-			expect(((-1) * this point0) z, is equal to((-point0) z))
+			expect(((-1) * this point0) x, is equal to((-this point0) x))
+			expect(((-1) * this point0) y, is equal to((-this point0) y))
+			expect(((-1) * this point0) z, is equal to((-this point0) z))
 		})
 		this add("scalar division", func {
-			expect((this point0 / (-1)) x, is equal to((-point0) x))
-			expect((this point0 / (-1)) y, is equal to((-point0) y))
-			expect((this point0 / (-1)) z, is equal to((-point0) z))
+			expect((this point0 / (-1)) x, is equal to((-this point0) x))
+			expect((this point0 / (-1)) y, is equal to((-this point0) y))
+			expect((this point0 / (-1)) z, is equal to((-this point0) z))
 		})
 		this add("get values", func {
 			expect(this point0 x, is equal to(22))
@@ -62,7 +62,7 @@ IntPoint3DTest: class extends Fixture {
 			expect(IntPoint3D parse(value) z, is equal to(this point3 z))
 		})
 		this add("float casts", func {
-			point := point0 toFloatPoint3D()
+			point := this point0 toFloatPoint3D()
 			expect(point x, is equal to(22.0f) within(this precision))
 			expect(point y, is equal to(-3.0f) within(this precision))
 			expect(point z, is equal to(8.0f) within(this precision))
@@ -82,7 +82,7 @@ IntPoint3DTest: class extends Fixture {
 			expect(product, is equal to(161))
 		})
 		this add("clamp", func {
-			result := point1 clamp(point0, point2)
+			result := this point1 clamp(this point0, this point2)
 			expect(result x, is equal to(22))
 			expect(result y, is equal to(10))
 			expect(result z, is equal to(8))

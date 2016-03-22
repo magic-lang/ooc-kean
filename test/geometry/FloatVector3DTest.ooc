@@ -27,7 +27,7 @@ FloatVector3DTest: class extends Fixture {
 			expect(this vector0 norm, is equal to(this vector0 scalarProduct(this vector0) sqrt()) within(this precision))
 		})
 		this add("volume", func {
-			expect(vector3 volume, is equal to(6000.0f) within(this precision))
+			expect(this vector3 volume, is equal to(6000.0f) within(this precision))
 		})
 		this add("scalar product", func {
 			size := FloatVector3D new()

@@ -30,7 +30,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform == this transform0, is false)
 		})
 		this add("determinant", func {
-			expect(transform0 determinant, is equal to(6.0f) within(this precision))
+			expect(this transform0 determinant, is equal to(6.0f) within(this precision))
 			transform := FloatTransform3D new()
 			expect(transform determinant, is equal to(0.0f) within(this precision))
 		})
@@ -274,7 +274,7 @@ FloatTransform3DTest: class extends Fixture {
 			text free()
 		})
 		this add("setScaling", func {
-			transform := transform0 setScaling(4.0f)
+			transform := this transform0 setScaling(4.0f)
 			expect(transform a, is equal to (-0.45377181f) within (this precision))
 			expect(transform b, is equal to (0.907543614f) within (this precision))
 			expect(transform c, is equal to (1.361315421f) within (this precision))
@@ -293,7 +293,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
 		this add("setXScaling", func {
-			transform := transform0 setXScaling(4.0f)
+			transform := this transform0 setXScaling(4.0f)
 			expect(transform a, is equal to (-1.06904497f) within (this precision))
 			expect(transform b, is equal to (2.0f) within (this precision))
 			expect(transform c, is equal to (3.0f) within (this precision))
@@ -312,7 +312,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
 		this add("setYScaling", func {
-			transform := transform0 setYScaling(4.0f)
+			transform := this transform0 setYScaling(4.0f)
 			expect(transform a, is equal to (-1.0f) within (this precision))
 			expect(transform b, is equal to (0.9116846116f) within (this precision))
 			expect(transform c, is equal to (3.0f) within (this precision))
@@ -331,7 +331,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
 		this add("setZScaling", func {
-			transform := transform0 setZScaling(4.0f)
+			transform := this transform0 setZScaling(4.0f)
 			expect(transform a, is equal to (-1.0f) within (this precision))
 			expect(transform b, is equal to (2.0f) within (this precision))
 			expect(transform c, is equal to (0.8615497905f) within (this precision))
@@ -350,7 +350,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
 		this add("rotateX", func {
-			transform := transform0 rotateX(Float pi / 4)
+			transform := this transform0 rotateX(Float pi / 4)
 			expect(transform a, is equal to (-1.0f) within (this precision))
 			expect(transform b, is equal to (-0.70710678f) within (this precision))
 			expect(transform c, is equal to (3.535533906f) within (this precision))
@@ -369,7 +369,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
 		this add("rotateY", func {
-			transform := transform0 rotateY(Float pi / 4)
+			transform := this transform0 rotateY(Float pi / 4)
 			expect(transform a, is equal to (1.4142135588f) within (this precision))
 			expect(transform b, is equal to (2.0f) within (this precision))
 			expect(transform c, is equal to (2.8284271236f) within (this precision))
@@ -388,7 +388,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
 		this add("rotateZ", func {
-			transform := transform0 rotateZ(Float pi / 4)
+			transform := this transform0 rotateZ(Float pi / 4)
 			expect(transform a, is equal to (-2.121320343f) within (this precision))
 			expect(transform b, is equal to (0.7071067814f) within (this precision))
 			expect(transform c, is equal to (3.0f) within (this precision))
@@ -407,7 +407,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
 		this add("reflectX", func {
-			transform := transform0 reflectX()
+			transform := this transform0 reflectX()
 			expect(transform a, is equal to (1.0f) within (this precision))
 			expect(transform b, is equal to (2.0f) within (this precision))
 			expect(transform c, is equal to (3.0f) within (this precision))
@@ -426,7 +426,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
 		this add("reflectY", func {
-			transform := transform0 reflectY()
+			transform := this transform0 reflectY()
 			expect(transform a, is equal to (-1.0f) within (this precision))
 			expect(transform b, is equal to (-2.0f) within (this precision))
 			expect(transform c, is equal to (3.0f) within (this precision))
@@ -445,7 +445,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(transform p, is equal to (1.0f) within (this precision))
 		})
 		this add("reflectZ", func {
-			transform := transform0 reflectZ()
+			transform := this transform0 reflectZ()
 			expect(transform a, is equal to (-1.0f) within (this precision))
 			expect(transform b, is equal to (2.0f) within (this precision))
 			expect(transform c, is equal to (-3.0f) within (this precision))
@@ -540,36 +540,36 @@ FloatTransform3DTest: class extends Fixture {
 			expect(reflection p, is equal to (1.0f) within (this precision))
 		})
 		this add("project", func {
-			newPoint := transform0 project(point0, 5.0f)
+			newPoint := this transform0 project(this point0, 5.0f)
 			expect(newPoint x, is equal to (5.66666667f) within (this precision))
 			expect(newPoint y, is equal to (1.66666667f) within (this precision))
 		})
 		this add ("transformAndProject ~FloatPoint2D (focalLength > epsilon)", func {
-			transformAndProject := transform0 transformAndProject(FloatPoint2D new(34, 10), 5.0f)
+			transformAndProject := this transform0 transformAndProject(FloatPoint2D new(34, 10), 5.0f)
 			expect(transformAndProject x, is equal to (1.16438356f) within (this precision))
 			expect(transformAndProject y, is equal to (3.85844749f) within (this precision))
 		})
 		this add ("transformAndProject ~FloatPoint2D (focalLength < epsilon)", func {
-			transformAndProject := transform0 transformAndProject(FloatPoint2D new(34, 10), Float epsilon - (Float epsilon / 2))
+			transformAndProject := this transform0 transformAndProject(FloatPoint2D new(34, 10), Float epsilon - (Float epsilon / 2))
 			expect(transformAndProject x, is equal to (16.00000083f) within (this precision))
 			expect(transformAndProject y, is equal to (129.00000095f) within (this precision))
 		})
 		this add ("transformAndProject ~FloatBox2D (focalLength > epsilon)", func {
-			resultedBox := transform0 transformAndProject(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), 5.0f)
+			resultedBox := this transform0 transformAndProject(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), 5.0f)
 			expect(resultedBox left, is equal to (3.095238095f) within (this precision))
 			expect(resultedBox top, is equal to (4.238095238f) within (this precision))
 			expect(resultedBox width, is equal to (0.515873016f) within (this precision))
 			expect(resultedBox height, is equal to (0.136904762f) within (this precision))
 		})
 		this add ("transformAndProject ~FloatBox2D (focalLength < epsilon)", func {
-			resultedBox := transform0 transformAndProject(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), Float epsilon - (Float epsilon / 2))
+			resultedBox := this transform0 transformAndProject(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), Float epsilon - (Float epsilon / 2))
 			expect(resultedBox left, is equal to (17.00000083447f) within (this precision))
 			expect(resultedBox top, is equal to (23.00000095368f) within (this precision))
 			expect(resultedBox width, is equal to (13.0f) within (this precision))
 			expect(resultedBox height, is equal to (26.00f) within (this precision))
 		})
 		this add("transformAndProjectCorners (focalLength > epsilon)", func {
-			resultedVectorList := transform0 transformAndProjectCorners(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), 5.0f)
+			resultedVectorList := this transform0 transformAndProjectCorners(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), 5.0f)
 			expect(resultedVectorList[0] x, is equal to (3.611111111f) within (this precision))
 			expect(resultedVectorList[0] y, is equal to (4.375f) within (this precision))
 			expect(resultedVectorList[1] x, is equal to (3.541666666f) within (this precision))
@@ -580,7 +580,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(resultedVectorList[3] y, is equal to (4.259259260f) within (this precision))
 		})
 		this add("transformAndProjectCorners (focalLength < epsilon)", func {
-			resultedVectorList := transform0 transformAndProjectCorners(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), Float epsilon - (Float epsilon / 2))
+			resultedVectorList := this transform0 transformAndProjectCorners(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), Float epsilon - (Float epsilon / 2))
 			expect(resultedVectorList[0] x, is equal to (17.00000083447f) within (this precision))
 			expect(resultedVectorList[0] y, is equal to (23.00000095368f) within (this precision))
 			expect(resultedVectorList[1] x, is equal to (33.00000083447f) within (this precision))

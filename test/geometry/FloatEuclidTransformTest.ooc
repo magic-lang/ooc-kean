@@ -77,7 +77,7 @@ FloatEuclidTransformTest: class extends Fixture {
 			first := transform * inverse
 			second := inverse * transform
 			expect(first == second, is true)
-			expect(first scaling as Float, is equal to(1.f) within(tolerance))
+			expect(first scaling as Float, is equal to(1.f) within(this tolerance))
 
 			(translation, quaternion) := (first translation as FloatVector3D, first rotation _quaternion as Quaternion)
 			expect(translation norm, is equal to(0.f))

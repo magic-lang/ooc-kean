@@ -38,12 +38,12 @@ FloatPoint2DTest: class extends Fixture {
 			expect((this point0 - this point0) y, is equal to((FloatPoint2D new()) y))
 		})
 		this add("scalar multiplication", func {
-			expect(((-1) * this point0) x, is equal to((-point0) x))
-			expect(((-1) * this point0) y, is equal to((-point0) y))
+			expect(((-1) * this point0) x, is equal to((-this point0) x))
+			expect(((-1) * this point0) y, is equal to((-this point0) y))
 		})
 		this add("scalar division", func {
-			expect((this point0 / (-1)) x, is equal to((-point0) x))
-			expect((this point0 / (-1)) y, is equal to((-point0) y))
+			expect((this point0 / (-1)) x, is equal to((-this point0) x))
+			expect((this point0 / (-1)) y, is equal to((-this point0) y))
 		})
 		this add("get values", func {
 			expect(this point0 x, is equal to(22.221f))
@@ -86,9 +86,9 @@ FloatPoint2DTest: class extends Fixture {
 			expect(point azimuth, is equal to(Float pi))
 		})
 		this add("polar 5", func {
-			point := FloatPoint2D new(-3, 0)
-			point2 := FloatPoint2D polar(point norm, point azimuth)
-			expect(point distance(point2), is equal to(0.0f) within(this precision))
+			pointA := FloatPoint2D new(-3, 0)
+			pointB := FloatPoint2D polar(pointA norm, pointA azimuth)
+			expect(pointA distance(pointB), is equal to(0.0f) within(this precision))
 		})
 		this add("angles", func {
 			expect(FloatPoint2D basisX angle(FloatPoint2D basisX), is equal to(0.0f) within(this precision))
@@ -105,14 +105,14 @@ FloatPoint2DTest: class extends Fixture {
 			expect((this point0 maximum(this point1)) y, is equal to((this point1) y))
 		})
 		this add("int casts", func {
-			point := point3 toIntPoint2D()
+			point := this point3 toIntPoint2D()
 			expect(point x, is equal to(10))
 			expect(point y, is equal to(20))
 		})
 		this add("float casts", func {
-			vector := point3 toFloatVector2D()
-			expect(vector x, is equal to(point3 x))
-			expect(vector y, is equal to(point3 y))
+			vector := this point3 toFloatVector2D()
+			expect(vector x, is equal to(this point3 x))
+			expect(vector y, is equal to(this point3 y))
 		})
 		this add("minimum maximum", func {
 			max := this point0 maximum(this point1)
@@ -143,11 +143,11 @@ FloatPoint2DTest: class extends Fixture {
 			expect(this point0 scalarProduct(this point1), is equal to (230.95f) within(0.01f))
 		})
 		this add("distance", func {
-			distance := point0 distance(point1)
+			distance := this point0 distance(this point1)
 			expect(distance, is equal to(19.04f) within(0.01f))
 		})
 		this add("distanceSquared", func {
-			distance := point0 distanceSquared(point1)
+			distance := this point0 distanceSquared(this point1)
 			expect(distance, is equal to(362.44f) within(0.01f))
 		})
 		this add("clamp", func {

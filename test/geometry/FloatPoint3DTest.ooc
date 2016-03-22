@@ -72,7 +72,7 @@ FloatPoint3DTest: class extends Fixture {
 			expect(euclideanNorm, is equal to(24.352f) within(0.01f))
 		})
 		this add("int casts", func {
-			point := point3 toIntPoint3D()
+			point := this point3 toIntPoint3D()
 			expect(point x, is equal to(10))
 			expect(point y, is equal to(20))
 			expect(point z, is equal to(30))
@@ -108,7 +108,7 @@ FloatPoint3DTest: class extends Fixture {
 			expect(clamped z, is equal to(20.0f) within(this precision))
 		})
 		this add("distance", func {
-			distance := point0 distance(point1)
+			distance := this point0 distance(this point1)
 			expect(distance, is equal to(21.354f) within(0.01f))
 		})
 		this add("interpolation", func {

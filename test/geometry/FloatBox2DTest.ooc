@@ -38,22 +38,22 @@ FloatBox2DTest: class extends Fixture {
 			expect(size y, is equal to(4.0f) within(this precision))
 		})
 		this add("addition, union", func {
-			result := box0 + box1
+			result := this box0 + this box1
 			expect(result left, is equal to(1.0f) within(this precision))
 			expect(result top, is equal to(2.0f) within(this precision))
 			expect(result width, is equal to(5.0f) within(this precision))
 			expect(result height, is equal to(4.0f) within(this precision))
-			expect(result == box0 union(box1))
+			expect(result == this box0 union(this box1))
 		})
 		this add("subtraction, intersection", func {
-			result := box0 - box2
-			other := box2 - box0
+			result := this box0 - this box2
+			other := this box2 - this box0
 			expect(result == other)
 			expect(result top, is equal to(2.0f) within(this precision))
 			expect(result left, is equal to(2.0f) within(this precision))
 			expect(result width, is equal to(2.0f) within(this precision))
 			expect(result height, is equal to(2.0f) within(this precision))
-			expect(result == box0 intersection(box2))
+			expect(result == this box0 intersection(this box2))
 		})
 		this add("casts", func {
 			intBox := this box0 toIntBox2D()
@@ -121,7 +121,7 @@ FloatBox2DTest: class extends Fixture {
 			expect(this box0 toString() == "1.00, 2.00, 3.00, 4.00")
 		})
 		this add("toText", func {
-			text := box0 toText() take()
+			text := this box0 toText() take()
 			expect(text, is equal to(t"1.00, 2.00, 3.00, 4.00"))
 			text free()
 		})

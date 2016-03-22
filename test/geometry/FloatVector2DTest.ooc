@@ -38,12 +38,12 @@ FloatVector2DTest: class extends Fixture {
 			expect((this vector0 - this vector0) y, is equal to(FloatVector2D new() y))
 		})
 		this add("scalar multiplication", func {
-			expect(((-1) * this vector0) x, is equal to((-vector0) x))
-			expect(((-1) * this vector0) y, is equal to((-vector0) y))
+			expect(((-1) * this vector0) x, is equal to((-this vector0) x))
+			expect(((-1) * this vector0) y, is equal to((-this vector0) y))
 		})
 		this add("scalar division", func {
-			expect((this vector0 / (-1)) x, is equal to((-vector0) x))
-			expect((this vector0 / (-1)) y, is equal to((-vector0) y))
+			expect((this vector0 / (-1)) x, is equal to((-this vector0) x))
+			expect((this vector0 / (-1)) y, is equal to((-this vector0) y))
 		})
 		this add("get values", func {
 			expect(this vector0 x, is equal to(22.221f))
@@ -61,9 +61,9 @@ FloatVector2DTest: class extends Fixture {
 			expect(FloatVector2D parse(value) y, is equal to(this vector3 y))
 		})
 		this add("float casts", func {
-			point := vector3 toFloatPoint2D()
-			expect(point x, is equal to(vector3 x) within(this precision))
-			expect(point y, is equal to(vector3 y) within(this precision))
+			point := this vector3 toFloatPoint2D()
+			expect(point x, is equal to(this vector3 x) within(this precision))
+			expect(point y, is equal to(this vector3 y) within(this precision))
 		})
 		this add("polar 0", func {
 			point := FloatVector2D new()
