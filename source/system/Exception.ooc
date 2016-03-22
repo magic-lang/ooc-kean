@@ -142,7 +142,7 @@ Exception: class {
 					this printMessage()
 					DebugBreak()
 				} else
-					print()
+					this print()
 				exit(1)
 			} else {
 				this printMessage()
@@ -175,10 +175,10 @@ OSException: class extends Exception {
 	}
 	init: func ~noOrigin {
 		errorCode := getOSError()
-		if ((message != null) && (!message empty()))
-			message = message append(':') append(errorCode)
+		if ((this message != null) && (!this message empty()))
+			this message = this message append(':') append(errorCode)
 		else
-			message = errorCode
+			this message = errorCode
 	}
 }
 
@@ -187,7 +187,7 @@ OutOfBoundsException: class extends Exception {
 		init(accessOffset, elementLength)
 	}
 	init: func ~noOrigin (accessOffset, elementLength: Int) {
-		message = "Trying to access an element at offset %i, but size is %i!" format(accessOffset, elementLength)
+		this message = "Trying to access an element at offset %i, but size is %i!" format(accessOffset, elementLength)
 	}
 	kean_exception_outOfBoundsException_throw: static unmangled func (accessOffset, elementLength: Int) {
 		This new(accessOffset, elementLength) throw()
@@ -199,7 +199,7 @@ OutOfMemoryException: class extends Exception {
 		init()
 	}
 	init: func ~noOrigin {
-		message = "Failed to allocate more memory!"
+		this message = "Failed to allocate more memory!"
 	}
 }
 

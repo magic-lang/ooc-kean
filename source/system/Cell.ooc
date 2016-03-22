@@ -18,7 +18,7 @@ Cell: class <T> {
 	}
 
 	set: func (=val)
-	get: func -> T { val }
+	get: func -> T { this val }
 
 	toText: func -> Text {
 		result: Text
