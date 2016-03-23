@@ -21,18 +21,18 @@ PipeWin32: class extends Pipe {
 		saAttr inheritHandle = true
 		saAttr securityDescriptor = null
 
-		if (!CreatePipe(readFD&, writeFD&, saAttr&, 0))
+		if (!CreatePipe(this readFD&, this writeFD&, saAttr&, 0))
 			WindowsException new(This, GetLastError(), "Failed to create pipe") throw()
 	}
 	read: override func ~cstring (buf: CString, len: Int) -> Int {
 		bytesRead: ULong
 		result := -1
-		success := ReadFile(readFD, buf, len, bytesRead&, null)
+		success := ReadFile(this readFD, buf, len, bytesRead&, null)
 		if (success)
 			result = bytesRead
 		if (GetLastError() == ERROR_NO_DATA)
 			result = 0
-		eof = true
+		this eof = true
 		result
 	}
 	write: override func (data: Pointer, len: Int) -> Int {
@@ -40,7 +40,7 @@ PipeWin32: class extends Pipe {
 
 		// will either block (in blocking mode) or always return with true (in
 		// non-blocking mode) regardless of how many bytes were written.
-		success := WriteFile(writeFD, data, len as Long, bytesWritten&, null)
+		success := WriteFile(this writeFD, data, len as Long, bytesWritten&, null)
 
 		if (!success)
 			WindowsException new(This, GetLastError(), "Failed to write to pipe") throw()
@@ -49,27 +49,27 @@ PipeWin32: class extends Pipe {
 	}
 	// 'r' = close in reading, 'w' = close in writing
 	close: override func (end: Char) -> Int {
-		fd := _getFD(end)
+		fd := this _getFD(end)
 		fd && CloseHandle(fd) ? 1 : 0
 	}
 	close: override func ~both {
-		CloseHandle(readFD)
-		CloseHandle(writeFD)
+		CloseHandle(this readFD)
+		CloseHandle(this writeFD)
 	}
 	setNonBlocking: func (end: Char) {
-		fd := _getFD(end)
+		fd := this _getFD(end)
 		if (fd)
-			_setFDState(readFD, PIPE_WAIT)
+			this _setFDState(this readFD, PIPE_WAIT)
 	}
 	setBlocking: func (end: Char) {
-		fd := _getFD(end)
+		fd := this _getFD(end)
 		if (fd)
-			_setFDState(readFD, PIPE_WAIT)
+			this _setFDState(this readFD, PIPE_WAIT)
 	}
 	_getFD: func (end: Char) -> Handle {
 		match end {
-			case 'r' => readFD
-			case 'w' => writeFD
+			case 'r' => this readFD
+			case 'w' => this writeFD
 			case => null as Handle
 		}
 	}
