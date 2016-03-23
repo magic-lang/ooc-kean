@@ -21,7 +21,7 @@ Gles3Texture: class extends GLTexture {
 	init: func (._type, ._size) {
 		version(debugGL) { validateStart("Texture init") }
 		super(_type, _size)
-		_target = GL_TEXTURE_2D
+		this _target = GL_TEXTURE_2D
 		this _setInternalFormats(this _type)
 		version(debugGL) { validateEnd("Texture init") }
 	}
@@ -56,7 +56,7 @@ Gles3Texture: class extends GLTexture {
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, pixelStride)
 		glTexSubImage2D(this _target, 0, 0, 0, this size x, this size y, this _format, GL_UNSIGNED_BYTE, pixels)
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0)
-		unbind()
+		this unbind()
 		version(debugGL) { validateEnd("Texture upload") }
 	}
 	_setInternalFormats: func (type: TextureType) {

@@ -21,8 +21,8 @@ Gles3VolumeTexture: class extends GLVolumeTexture {
 
 	init: func (=_size, pixels: Byte*) {
 		version(debugGL) { validateStart("VolumeTexture init") }
-		glGenTextures(1, _backend&)
-		glBindTexture(GL_TEXTURE_3D, _backend)
+		glGenTextures(1, this _backend&)
+		glBindTexture(GL_TEXTURE_3D, this _backend)
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
@@ -33,7 +33,7 @@ Gles3VolumeTexture: class extends GLVolumeTexture {
 	}
 	free: override func {
 		version(debugGL) { validateStart("VolumeTexture free") }
-		glDeleteTextures(1, _backend&)
+		glDeleteTextures(1, this _backend&)
 		version(debugGL) { validateEnd("VolumeTexture free") }
 		super()
 	}
