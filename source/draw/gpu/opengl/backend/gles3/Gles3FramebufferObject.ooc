@@ -18,7 +18,7 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 	init: func (._size) { super(_size) }
 	free: override func {
 		version(debugGL) { validateStart("FramebufferObject free") }
-		glDeleteFramebuffers(1, _backend&)
+		glDeleteFramebuffers(1, this _backend&)
 		version(debugGL) { validateEnd("FramebufferObject free") }
 		super()
 	}

@@ -13,7 +13,7 @@ FloatImage : class {
 	// y = row
 	_size: IntVector2D
 	_pointer: Float*
-	size ::= _size
+	size ::= this _size
 	pointer ::= this _pointer
 	init: func ~IntVector2D (=_size)
 	init: func ~WidthAndHeight (width, height: Int) {
@@ -26,12 +26,12 @@ FloatImage : class {
 	}
 	operator [] (x, y: Int) -> Float {
 		version(safe)
-			raise(x > _size x || y > _size y || x < 0 || y < 0, "Accessing FloatImage index out of range in get")
+			raise(x > this _size x || y > this _size y || x < 0 || y < 0, "Accessing FloatImage index out of range in get")
 		(this _pointer + (x + this _size x * y))@ as Float
 	}
 	operator []= (x, y: Int, value: Float) {
 		version(safe)
-			raise(x > _size x || y > _size y || x < 0 || y < 0, "Accessing FloatImage index out of range in set")
+			raise(x > this _size x || y > this _size y || x < 0 || y < 0, "Accessing FloatImage index out of range in set")
 		(this _pointer + (x + this _size x * y))@ = value
 	}
 }

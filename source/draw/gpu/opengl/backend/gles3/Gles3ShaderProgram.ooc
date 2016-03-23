@@ -115,8 +115,8 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 		version(debugGL) { validateStart("ShaderProgram _compileShaders") }
 		vertexShaderID := glCreateShader(GL_VERTEX_SHADER)
 		fragmentShaderID := glCreateShader(GL_FRAGMENT_SHADER)
-		success := _compileShader(vertexSource, vertexShaderID)
-		success = success && _compileShader(fragmentSource, fragmentShaderID)
+		success := this _compileShader(vertexSource, vertexShaderID)
+		success = success && this _compileShader(fragmentSource, fragmentShaderID)
 
 		if (success) {
 			this _backend = glCreateProgram()

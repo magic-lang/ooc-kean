@@ -62,7 +62,7 @@ GraphicBuffer: class {
 	shallowCopy: func (size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat, usage: GraphicBufferUsage) -> This {
 		backend, nativeBuffer: Pointer
 		This _createFromHandle(size x, size y, format as Int, usage as Int, pixelStride, this _handle, false, backend&, nativeBuffer&)
-		This new(backend, nativeBuffer, handle, size, pixelStride, format)
+		This new(backend, nativeBuffer, this handle, size, pixelStride, format)
 	}
 	lock: func (usage: GraphicBufferUsage) -> Pointer {
 		result: Pointer = null

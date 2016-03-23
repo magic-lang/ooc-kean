@@ -30,7 +30,7 @@ Canvas: abstract class {
 	focalLength: Float { get set }
 	interpolationMode: InterpolationMode { get set }
 	init: func (=_size) {
-		this viewport = IntBox2D new(size)
+		this viewport = IntBox2D new(this size)
 		this focalLength = 0.0f
 		this blend = false
 		this opacity = 1.0f
