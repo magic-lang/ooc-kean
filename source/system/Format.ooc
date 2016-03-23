@@ -7,11 +7,11 @@
  */
 
 InvalidFormatException: class extends Exception {
-	init: func (msg: CString) { message = "invalid format string! \"" + msg == null ? "" : msg toString() + "\"" }
+	init: func (msg: CString) { this message = "invalid format string! \"" + msg == null ? "" : msg toString() + "\"" }
 }
 
 InvalidTypeException: class extends Exception {
-	init: func (T: Class) { message = "invalid type %s passed to generic function!" format(T name) }
+	init: func (T: Class) { this message = "invalid type %s passed to generic function!" format(T name) }
 }
 
 /* Text Formatting */

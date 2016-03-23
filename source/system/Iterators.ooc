@@ -9,7 +9,7 @@
 Iterable: abstract class <T> {
 	iterator: abstract func -> Iterator<T>
 	reduce: func (f: Func (T, T) -> T) -> T {
-		iter := iterator()
+		iter := this iterator()
 		acc := f(iter next(), iter next())
 		while (iter hasNext())
 			acc = f(acc, iter next())
@@ -36,13 +36,13 @@ Iterable: abstract class <T> {
 BackIterable: abstract class <T> extends Iterable<T> {
 	iterator: abstract func -> BackIterator<T>
 	backIterator: func -> BackIterator<T> {
-		iter := iterator()
+		iter := this iterator()
 		while (iter hasNext())
 			iter next()
 		iter
 	}
-	forward: func -> BackIterator<T> { iterator() }
-	backward: func -> BackIterator<T> { backIterator() reversed() }
+	forward: func -> BackIterator<T> { this iterator() }
+	backward: func -> BackIterator<T> { this backIterator() reversed() }
 }
 
 Iterator: abstract class <T> extends Iterable<T> {
@@ -69,12 +69,12 @@ BackIterator: abstract class <T> extends Iterator<T> {
 ReverseIterator: class <T> extends BackIterator<T> {
 	iterator: BackIterator<T> = null
 	init: func
-	hasNext: override func -> Bool { iterator hasPrevious() }
-	next: override func -> T { iterator prev() }
-	hasPrevious: override func -> Bool { iterator hasNext() }
-	prev: override func -> T { iterator next() }
-	remove: override func -> Bool { iterator remove() }
-	reversed: func -> BackIterator<T> { iterator }
+	hasNext: override func -> Bool { this iterator hasPrevious() }
+	next: override func -> T { this iterator prev() }
+	hasPrevious: override func -> Bool { this iterator hasNext() }
+	prev: override func -> T { this iterator next() }
+	remove: override func -> Bool { this iterator remove() }
+	reversed: func -> BackIterator<T> { this iterator }
 	iterator: func -> This<T> { this }
 }
 

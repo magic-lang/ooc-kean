@@ -30,14 +30,14 @@ VarArgs: cover {
 
 	// private api used by C code
 	init: func@ (=count, bytes: SizeT) {
-		args = calloc(1, bytes + (count * Class size))
-		argsPtr = args
+		this args = calloc(1, bytes + (this count * Class size))
+		this argsPtr = this args
 	}
 
 	each: func (f: Func <T> (T)) {
-		countdown := count
+		countdown := this count
 
-		argsPtr := args
+		argsPtr := this args
 		while (countdown > 0) {
 			// count down!
 			countdown -= 1
@@ -68,20 +68,20 @@ VarArgs: cover {
 	// Internal testing method to add arguments
 	_addValue: func@ <T> (value: T) {
 		// store the type
-		(argsPtr as Class*)@ = T
+		(this argsPtr as Class*)@ = T
 
 		// advance of one class size
-		argsPtr += Class size
+		this argsPtr += Class size
 
 		// store the arg
-		(argsPtr as T*)@ = value
+		(this argsPtr as T*)@ = value
 
 		// align on the pointer-size boundary
-		argsPtr += __pointer_align(T size)
+		this argsPtr += __pointer_align(T size)
 	}
 
 	iterator: func -> VarArgsIterator {
-		(args, count, true) as VarArgsIterator
+		(this args, this count, true) as VarArgsIterator
 	}
 }
 
@@ -96,22 +96,22 @@ VarArgsIterator: cover {
 	first: Bool
 
 	hasNext: func -> Bool {
-		countdown > 0
+		this countdown > 0
 	}
 
 	// convention: argsPtr points to type of next element when called.
 	next: func@ <T> (T: Class) -> T {
-		if (countdown <= 0)
+		if (this countdown <= 0)
 			Exception new(This, "Vararg underflow!") throw()
 
-		countdown -= 1
+		this countdown -= 1
 
-		nextType := (argsPtr as Class*)@ as Class
+		nextType := (this argsPtr as Class*)@ as Class
 		result : T*
 		version(!windows) {
 			version (!arm) {
-				result = (argsPtr + Class size) as T*
-				argsPtr += Class size + __pointer_align(nextType size)
+				result = (this argsPtr + Class size) as T*
+				this argsPtr += Class size + __pointer_align(nextType size)
 			}
 
 			version (arm) {
@@ -120,17 +120,17 @@ VarArgsIterator: cover {
 					offset = nextType size
 				}
 
-				result = (argsPtr + offset) as T*
-				argsPtr += offset + __pointer_align(nextType size)
+				result = (this argsPtr + offset) as T*
+				this argsPtr += offset + __pointer_align(nextType size)
 			}
 		}
 		version(windows) {
 			if (nextType size > Class size) {
-				result = (argsPtr + nextType size) as T*
-				argsPtr += nextType size + __pointer_align(nextType size)
+				result = (this argsPtr + nextType size) as T*
+				this argsPtr += nextType size + __pointer_align(nextType size)
 			} else {
-				result = (argsPtr + Class size) as T*
-				argsPtr += Class size + __pointer_align(nextType size)
+				result = (this argsPtr + Class size) as T*
+				this argsPtr += Class size + __pointer_align(nextType size)
 			}
 		}
 
@@ -138,8 +138,8 @@ VarArgsIterator: cover {
 	}
 
 	getNextType: func@ -> Class {
-		if (countdown < 0) Exception new(This, "Vararg underflow!") throw()
-		(argsPtr as Class*)@ as Class
+		if (this countdown < 0) Exception new(This, "Vararg underflow!") throw()
+		(this argsPtr as Class*)@ as Class
 	}
 }
 

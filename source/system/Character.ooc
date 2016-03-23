@@ -105,10 +105,10 @@ CString: cover from Char* {
 		}
 		result
 	}
-	toString: func -> String { (this == null) ? null as String : String new(this, length()) }
+	toString: func -> String { (this == null) ? null as String : String new(this, this length()) }
 	length: extern (strlen) func -> Int
-	print: func { stdout write(this, 0, length()) }
-	println: func { stdout write(this, 0, length()). write('\n') }
+	print: func { stdout write(this, 0, this length()) }
+	println: func { stdout write(this, 0, this length()). write('\n') }
 	new: static func ~withLength (length: Int) -> This {
 		result := calloc(1, length + 1) as Char*
 		result[length] = '\0'
