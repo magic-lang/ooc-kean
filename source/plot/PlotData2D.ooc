@@ -47,23 +47,23 @@ PlotData2D: abstract class {
 	getSvgLegend: abstract func (legendCount, fontSize: Int) -> String
 	minValues: func -> FloatPoint2D {
 		result: FloatPoint2D
-		if (dataSeries empty)
+		if (this dataSeries empty)
 			result = FloatPoint2D new()
 		else {
-			result = dataSeries[0]
-			for (i in 1 .. dataSeries count)
-				result = result minimum(dataSeries[i])
+			result = this dataSeries[0]
+			for (i in 1 .. this dataSeries count)
+				result = result minimum(this dataSeries[i])
 		}
 		result
 	}
 	maxValues: func -> FloatPoint2D {
 		result: FloatPoint2D
-		if (dataSeries empty)
+		if (this dataSeries empty)
 			result = FloatPoint2D new()
 		else {
-			result = dataSeries[0]
-			for (i in 1 .. dataSeries count)
-				result = result maximum(dataSeries[i])
+			result = this dataSeries[0]
+			for (i in 1 .. this dataSeries count)
+				result = result maximum(this dataSeries[i])
 		}
 		result
 	}

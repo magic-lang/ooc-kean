@@ -73,7 +73,7 @@ Axis: class {
 		while (tickValue <= this max) {
 			result = result & this getTickSvg(tickValue, radix, position, numberOffset, topTickMarkerStartOffset, tickMarkerEndOffset, "middle")
 			tickValue += this tick
-			position x += transform scalingX * tick
+			position x += transform scalingX * this tick
 		}
 		result >> "</g>\n"
 	}
@@ -93,7 +93,7 @@ Axis: class {
 		while (tickValue <= this max) {
 			result = result & this getTickSvg(tickValue, radix, position, numberOffset, rightTickMarkerStartOffset, tickMarkerEndOffset, "end")
 			tickValue += this tick
-			position y -= transform scalingY * tick
+			position y -= transform scalingY * this tick
 		}
 		result >> "</g>\n"
 	}
