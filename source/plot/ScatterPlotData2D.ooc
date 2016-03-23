@@ -49,7 +49,7 @@ ScatterPlotData2D: class extends PlotData2D {
 				match (this _shape) {
 					case Shape Circle =>
 						r := this _scalingRelativeLineWidth / 2.0f * this lineWidth
-						result = result & Shapes circle(FloatPoint2D new((transform * this dataSeries[i]) x, (transform * dataSeries[i]) y), r, this opacity, this color)
+						result = result & Shapes circle(FloatPoint2D new((transform * this dataSeries[i]) x, (transform * this dataSeries[i]) y), r, this opacity, this color)
 					case Shape Square =>
 						x := (transform * this dataSeries[i]) x - this _scalingRelativeLineWidth / 2.0f * this lineWidth
 						y := (transform * this dataSeries[i]) y - this _scalingRelativeLineWidth / 2.0f * this lineWidth
