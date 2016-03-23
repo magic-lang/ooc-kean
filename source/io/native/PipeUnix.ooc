@@ -22,34 +22,34 @@ PipeUnix: class extends Pipe {
 	init: func ~twos {
 		fds := [-1, -1] as Int*
 		raise(pipe(fds) < 0, "Couldn't create pipes")
-		readFD = fds[0]
-		writeFD = fds[1]
+		this readFD = fds[0]
+		this writeFD = fds[1]
 	}
 	read: override func ~cstring (buf: CString, len: Int) -> Int {
-		howMuch := readFD read(buf, len)
+		howMuch := this readFD read(buf, len)
 		if (howMuch <= 0) {
 			if (errno == EAGAIN)
 				howMuch = 0
 			else {
-				eof = true
+				this eof = true
 				howMuch = -1
 			}
 		}
 		howMuch
 	}
 	write: override func (data: Pointer, len: Int) -> Int {
-		writeFD write(data, len)
+		this writeFD write(data, len)
 	}
 	close: override func (end: Char) -> Int {
-		fd := _getFD(end)
+		fd := this _getFD(end)
 		fd == 0 ? 0 : fd close()
 	}
 	close: override func ~both {
-		readFD close()
-		writeFD close()
+		this readFD close()
+		this writeFD close()
 	}
 	setNonBlocking: func (end: Char) {
-		fd := _getFD(end)
+		fd := this _getFD(end)
 		if (fd != 0) {
 			flags := fcntl(fd, F_GETFL, 0)
 			flags |= O_NONBLOCK
@@ -58,7 +58,7 @@ PipeUnix: class extends Pipe {
 		}
 	}
 	setBlocking: func (end: Char) {
-		fd := _getFD(end)
+		fd := this _getFD(end)
 		if (fd != 0) {
 			flags := fcntl(fd, F_GETFL, 0)
 			flags &= ~O_NONBLOCK
@@ -68,8 +68,8 @@ PipeUnix: class extends Pipe {
 	}
 	_getFD: func (end: Char) -> _FileDescriptor {
 		match end {
-			case 'r' => readFD
-			case 'w' => writeFD
+			case 'r' => this readFD
+			case 'w' => this writeFD
 			case => 0 as _FileDescriptor
 		}
 	}

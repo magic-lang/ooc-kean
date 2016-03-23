@@ -19,78 +19,78 @@ ProcessWin32: class extends Process {
 		sb := CharBuffer new()
 		for (arg in args)
 			sb append(arg). append(' ')
-		cmdLine = sb toString()
-		ZeroMemory(si&, StartupInfo size)
-		si structSize = StartupInfo size
-		ZeroMemory(pi&, ProcessInformation size)
+		this cmdLine = sb toString()
+		ZeroMemory(this si&, StartupInfo size)
+		this si structSize = StartupInfo size
+		ZeroMemory(this pi&, ProcessInformation size)
 	}
 	_wait: func (duration: Long) -> Int {
 		// Wait until child process exits.
-		status := WaitForSingleObject(pi process, duration)
+		status := WaitForSingleObject(this pi process, duration)
 		exitCode := -1
 		if (status == WAIT_OBJECT_0) {
-			GetExitCodeProcess(pi process, exitCode&)
-			CloseHandle(pi thread)
-			CloseHandle(pi process)
+			GetExitCodeProcess(this pi process, exitCode&)
+			CloseHandle(this pi thread)
+			CloseHandle(this pi process)
 		}
 		exitCode
 	}
 	wait: override func -> Int { this _wait(INFINITE) }
 	waitNoHang: override func -> Int { this _wait(0) }
 	executeNoWait: override func -> Long {
-		if (stdIn != null || stdOut != null || stdErr != null) {
-			if (stdIn != null) {
-				si stdInput = stdIn as PipeWin32 readFD
-				SetHandleInformation(stdOut as PipeWin32 writeFD, HANDLE_FLAG_INHERIT, 0)
+		if (this stdIn != null || this stdOut != null || this stdErr != null) {
+			if (this stdIn != null) {
+				this si stdInput = this stdIn as PipeWin32 readFD
+				SetHandleInformation(this stdOut as PipeWin32 writeFD, HANDLE_FLAG_INHERIT, 0)
 			}
-			if (stdOut != null) {
-				si stdOutput = stdOut as PipeWin32 writeFD
-				SetHandleInformation(stdOut as PipeWin32 readFD, HANDLE_FLAG_INHERIT, 0)
+			if (this stdOut != null) {
+				this si stdOutput = this stdOut as PipeWin32 writeFD
+				SetHandleInformation(this stdOut as PipeWin32 readFD, HANDLE_FLAG_INHERIT, 0)
 			}
-			if (stdErr != null) {
-				si stdError = stdErr as PipeWin32 writeFD
-				SetHandleInformation(stdErr as PipeWin32 readFD, HANDLE_FLAG_INHERIT, 0)
+			if (this stdErr != null) {
+				this si stdError = this stdErr as PipeWin32 writeFD
+				SetHandleInformation(this stdErr as PipeWin32 readFD, HANDLE_FLAG_INHERIT, 0)
 			}
-			si flags |= StartFlags UseStdHandles
+			this si flags |= StartFlags UseStdHandles
 		}
 
-		envString := buildEnvironment()
+		envString := this buildEnvironment()
 
 		// Reference: http://msdn.microsoft.com/en-us/library/ms682512%28VS.85%29.aspx
 		// Start the child process.
 		if (!CreateProcess(
 			null, // No module name (use command line)
-			cmdLine toCString(), // Command line
+			this cmdLine toCString(), // Command line
 			null, // Process handle not inheritable
 			null, // Thread handle not inheritable
 			true, // Set handle inheritance to true
 			0, // No creation flags
 			envString, // Use parent's environment block
-			cwd ? cwd toCString() : null, // Use custom cwd if we have one
-			si&, // Pointer to STARTUPINFO structure
-			pi& // Pointer to PROCESS_INFORMATION structure
+			this cwd ? this cwd toCString() : null, // Use custom cwd if we have one
+			(this si)&, // Pointer to STARTUPINFO structure
+			(this pi)& // Pointer to PROCESS_INFORMATION structure
 		)) {
 			err := GetLastError()
-			raise("CreateProcess failed (error %d: %s).\n Command Line:\n %s" format(err, GetWindowsErrorMessage(err), cmdLine))
+			raise("CreateProcess failed (error %d: %s).\n Command Line:\n %s" format(err, GetWindowsErrorMessage(err), this cmdLine))
 			return -1
 		}
 
-		if (stdIn != null)
-			stdIn close('r')
-		if (stdOut != null)
-			stdOut close('w')
-		if (stdErr != null)
-			stdErr close('w')
+		if (this stdIn != null)
+			this stdIn close('r')
+		if (this stdOut != null)
+			this stdOut close('w')
+		if (this stdErr != null)
+			this stdErr close('w')
 
-		this pid = pi pid
-		pi pid
+		this pid = this pi pid
+		this pi pid
 	}
 	buildEnvironment: func -> Char* {
-		if (env == null)
+		if (this env == null)
 			return null
 
 		envLength := 1
-		env each(|k, v|
+		this env each(|k, v|
 			envLength += k size
 			envLength += v size
 			envLength += 2 // one for the =, one for the \0
@@ -98,8 +98,8 @@ ProcessWin32: class extends Process {
 
 		envString := CString new(envLength)
 		index := 0
-		for (k in env keys) {
-			v := env get(k)
+		for (k in this env keys) {
+			v := this env get(k)
 
 			memcpy(envString + index, k toCString(), k size)
 			index += k size

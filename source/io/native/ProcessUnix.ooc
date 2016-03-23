@@ -26,12 +26,12 @@ waitpid: extern func (Int, Int*, Int) -> Int
 ProcessUnix: class extends Process {
 	init: func ~unix (=args)
 	terminate: override func {
-		if (pid)
-			kill(pid, SIGTERM)
+		if (this pid)
+			kill(this pid, SIGTERM)
 	}
 	kill: override func {
-		if (pid)
-			kill(pid, SIGKILL)
+		if (this pid)
+			kill(this pid, SIGKILL)
 	}
 	wait: override func -> Int { this _wait(0) }
 	waitNoHang: override func -> Int { this _wait(WNOHANG) }
@@ -39,7 +39,7 @@ ProcessUnix: class extends Process {
 		status: Int
 		result := -1
 
-		waitpid(pid, status&, options)
+		waitpid(this pid, status&, options)
 		err := errno
 
 		if (status == -1) {
@@ -61,55 +61,55 @@ ProcessUnix: class extends Process {
 			}
 
 			message = message + "\n"
-			if (stdErr)
-				stdErr write(message)
+			if (this stdErr)
+				this stdErr write(message)
 			else
 				stderr write(message)
 		}
 
 		if (result != -1) {
-			if (stdOut != null)
-				stdOut close('w')
-			if (stdErr != null)
-				stdErr close('w')
+			if (this stdOut != null)
+				this stdOut close('w')
+			if (this stdErr != null)
+				this stdErr close('w')
 		}
 
 		result
 	}
 	executeNoWait: override func -> Long {
-		pid = fork()
-		if (pid == 0) {
-			if (stdIn != null) {
-				stdIn close('w')
-				dup2(stdIn as PipeUnix readFD, 0)
+		this pid = fork()
+		if (this pid == 0) {
+			if (this stdIn != null) {
+				this stdIn close('w')
+				dup2(this stdIn as PipeUnix readFD, 0)
 			}
-			if (stdOut != null) {
-				stdOut close('r')
-				dup2(stdOut as PipeUnix writeFD, 1)
+			if (this stdOut != null) {
+				this stdOut close('r')
+				dup2(this stdOut as PipeUnix writeFD, 1)
 			}
-			if (stdErr != null) {
-				stdErr close('r')
-				dup2(stdErr as PipeUnix writeFD, 2)
+			if (this stdErr != null) {
+				this stdErr close('r')
+				dup2(this stdErr as PipeUnix writeFD, 2)
 			}
 
-			if (env)
-				for (key in env keys)
-					Env set(key, env[key], true)
+			if (this env)
+				for (key in this env keys)
+					Env set(key, this env[key], true)
 
-			if (cwd != null)
-				chdir(cwd as CString)
+			if (this cwd != null)
+				chdir(this cwd as CString)
 
-			cArgs: CString* = calloc(args count + 1, Pointer size)
-			for (i in 0 .. args count)
-				cArgs[i] = args[i] toCString()
-			cArgs[args count] = null
+			cArgs: CString* = calloc(this args count + 1, Pointer size)
+			for (i in 0 .. this args count)
+				cArgs[i] = this args[i] toCString()
+			cArgs[this args count] = null
 
 			signal(SIGABRT, sigabrtHandler)
 
 			execvp(cArgs[0], cArgs)
 			exit(errno) // don't allow the forked process to continue if execvp fails
 		}
-		pid
+		this pid
 	}
 	sigabrtHandler: static func {
 		"Got a sigabrt" println()
