@@ -39,7 +39,7 @@ HashDictionary: class {
 	}
 	get: func <T> (key: String, defaultValue: T) -> T {
 		result := defaultValue
-		if (_hashMap contains(key)) {
+		if (this _hashMap contains(key)) {
 			storedType := this getClass(key)
 			entryValue := this getEntry(key, storedType) value
 			if (storedType inheritsFrom(Cell)) {
@@ -72,7 +72,7 @@ HashDictionary: class {
 		this _hashMap put(key, tmp)
 	}
 	add: func <T> (key: String, value: T) {
-		if (_hashMap contains(key))
+		if (this _hashMap contains(key))
 			this remove(key)
 		if (T inheritsFrom(Object))
 			this put(key, value)

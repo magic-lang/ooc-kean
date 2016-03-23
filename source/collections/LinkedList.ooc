@@ -135,7 +135,7 @@ LinkedList: class <T> {
 	removeLast: func -> Bool {
 		result := false
 		if (this _head prev != this _head) {
-			removeNode(this _head prev)
+			this removeNode(this _head prev)
 			result = true
 		}
 		result
@@ -165,7 +165,7 @@ Node: class <T> {
 	init: func ~withParams (=prev, =next, =data)
 	free: override func {
 		if (T inheritsFrom(Object))
-			memfree(data)
+			memfree(this data)
 		super()
 	}
 }

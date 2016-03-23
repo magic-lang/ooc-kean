@@ -71,7 +71,7 @@ Vector2D: class <T> {
 				sourceRowIndex = targetRowIndex - targetRowStart + sourceRowStart
 			}
 
-			memmove(_backend[T size * this _elementPosition(targetRowIndex, targetColumnStart)]&,
+			memmove(this _backend[T size * this _elementPosition(targetRowIndex, targetColumnStart)]&,
 				this _backend[T size * this _elementPosition(sourceRowIndex, sourceColumnStart)]&, columnCount * T size)
 		}
 	}
