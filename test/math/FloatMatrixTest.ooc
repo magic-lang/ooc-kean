@@ -14,9 +14,9 @@ FloatMatrixTest: class extends Fixture {
 	matrix := FloatMatrix new (3, 3) take()
 	nonSquareMatrix := FloatMatrix new (2, 3) take()
 	nullMatrix := FloatMatrix new(0, 0) take()
-	precision := 1.0e-5f
 
 	init: func {
+		tolerance := 1.0e-5f
 		super ("FloatMatrix")
 		this add("identity", func {
 			this checkAllElements(FloatMatrix identity(3), [1.0f, 0, 0, 0, 1.0f, 0, 0, 0, 1.0f])
@@ -106,7 +106,7 @@ FloatMatrixTest: class extends Fixture {
 		this add("set and get", func {
 			m := this createMatrix(3, 3, [1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f])
 			m take()[0, 0] = 42.0f
-			expect(m[0, 0], is equal to(42.0f) within(this precision))
+			expect(m[0, 0], is equal to(42.0f) within(tolerance))
 		})
 		this add("print columns", func {
 			a := this createMatrix(3, 3, [1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f])
@@ -160,10 +160,11 @@ FloatMatrixTest: class extends Fixture {
 		// 0 3
 		// 1 4
 		// 2 5
+		tolerance := 1.0e-5f
 		m := matrix take()
 		for (x in 0 .. m width)
 			for (y in 0 .. m height)
-				expect(m[x, y], is equal to(values[x * m height + y]) within(this precision))
+				expect(m[x, y], is equal to(values[x * m height + y]) within(tolerance))
 	}
 }
 
