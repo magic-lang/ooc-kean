@@ -79,7 +79,7 @@ VectorList: class <T> extends List<T>{
 		inOrder := false
 		while (!inOrder) {
 			inOrder = true
-			for (i in 0 .. count - 1)
+			for (i in 0 .. this count - 1)
 				if (greaterThan(this[i], this[i + 1])) {
 					inOrder = false
 					tmp := this[i]
@@ -115,7 +115,7 @@ VectorList: class <T> extends List<T>{
 	}
 	getFirstElements: override func (number: Int) -> List<T> {
 		result := This<T> new()
-		number = number < count ? number : count
+		number = number < this count ? number : this count
 		for (i in 0 .. number)
 			result add(this _vector[i])
 		result

@@ -47,16 +47,16 @@ version (windows) {
 	DynlibWin32: class extends Dynlib {
 		handle: HModule
 		init: func (=path) {
-			handle = LoadLibraryA(path)
-			if (!handle)
-				handle = LoadLibraryA(path + suffix)
-			success = (handle != null)
+			this handle = LoadLibraryA(path)
+			if (!this handle)
+				this handle = LoadLibraryA(path + suffix)
+			this success = (this handle != null)
 		}
 		symbol: override func (name: String) -> Pointer {
-			GetProcAddress(handle, name)
+			GetProcAddress(this handle, name)
 		}
 		close: override func -> Bool {
-			FreeLibrary(handle)
+			FreeLibrary(this handle)
 		}
 	}
 }
@@ -72,19 +72,19 @@ version (!windows) {
 	DynlibUnix: class extends Dynlib {
 		handle: Pointer
 		init: func (=path) {
-			handle = dlopen(path, RTLD_LAZY)
-			if (!handle) {
+			this handle = dlopen(path, RTLD_LAZY)
+			if (!this handle) {
 				fullPath := path + suffix
-				handle = dlopen(fullPath, RTLD_LAZY)
+				this handle = dlopen(fullPath, RTLD_LAZY)
 				fullPath free()
 			}
-			success = (handle != null)
+			this success = (this handle != null)
 		}
 		symbol: override func (name: String) -> Pointer {
-			dlsym(handle, name)
+			dlsym(this handle, name)
 		}
 		close: override func -> Bool {
-			dlclose(handle) == 0
+			dlclose(this handle) == 0
 		}
 	}
 }

@@ -97,7 +97,7 @@ version (unix || apple) {
 		 */
 		dir: override func -> Bool {
 			result: FileStat
-			res := lstat(path as CString, result&)
+			res := lstat(this path as CString, result&)
 			(res == 0 && S_ISDIR(result st_mode))
 		}
 
@@ -106,7 +106,7 @@ version (unix || apple) {
 		 */
 		file: override func -> Bool {
 			result: FileStat
-			res := lstat(path as CString, result&)
+			res := lstat(this path as CString, result&)
 			(res == 0 && S_ISREG(result st_mode))
 		}
 
@@ -115,7 +115,7 @@ version (unix || apple) {
 		 */
 		link: override func -> Bool {
 			result: FileStat
-			res := lstat(path as CString, result&)
+			res := lstat(this path as CString, result&)
 			(res == 0 && S_ISLNK(result st_mode))
 		}
 
@@ -125,7 +125,7 @@ version (unix || apple) {
 		 */
 		getSize: override func -> LLong {
 			result: FileStat
-			res := lstat(path as CString, result&)
+			res := lstat(this path as CString, result&)
 			match res {
 				case 0 => result st_size as LLong
 				case => -1
@@ -137,7 +137,7 @@ version (unix || apple) {
 		 */
 		exists: override func -> Bool {
 			result: FileStat
-			res := lstat(path as CString, result&)
+			res := lstat(this path as CString, result&)
 			(res == 0)
 		}
 
@@ -146,7 +146,7 @@ version (unix || apple) {
 		 */
 		ownerPerm: override func -> Int {
 			result: FileStat
-			res := lstat(path as CString, result&)
+			res := lstat(this path as CString, result&)
 			match res {
 				case 0 => (result st_mode & S_IRWXU) as Int >> 6
 				case => -1
@@ -158,7 +158,7 @@ version (unix || apple) {
 		 */
 		groupPerm: override func -> Int {
 			result: FileStat
-			res := lstat(path as CString, result&)
+			res := lstat(this path as CString, result&)
 			match res {
 				case 0 => (result st_mode & S_IRWXG) as Int >> 3
 				case => -1
@@ -170,7 +170,7 @@ version (unix || apple) {
 		 */
 		otherPerm: override func -> Int {
 			result: FileStat
-			res := lstat(path as CString, result&)
+			res := lstat(this path as CString, result&)
 			match res {
 				case 0 => (result st_mode & S_IRWXO) as Int
 				case => -1
@@ -182,7 +182,7 @@ version (unix || apple) {
 		 */
 		executable: override func -> Bool {
 			result: FileStat
-			res := lstat(path as CString, result&)
+			res := lstat(this path as CString, result&)
 			match res {
 				case 0 => (result st_mode & S_IXUSR) != 0
 				case => false
@@ -195,9 +195,9 @@ version (unix || apple) {
 		 */
 		setExecutable: override func (exec: Bool) -> Bool {
 			lstatResult, fstatResult: FileStat
-			res := lstat(path as CString, lstatResult&)
+			res := lstat(this path as CString, lstatResult&)
 			if (res != 0) return false // couldn't get file mode
-			fd := open(path as CString, READWRITE)
+			fd := open(this path as CString, READWRITE)
 			if (fd == -1) return false
 			res = fstat(fd, fstatResult&)
 			if (res != 0) {
@@ -226,7 +226,7 @@ version (unix || apple) {
 		 */
 		lastAccessed: override func -> Long {
 			result: FileStat
-			res := lstat(path as CString, result&)
+			res := lstat(this path as CString, result&)
 			match res {
 				case 0 => result st_atime as Long
 				case => -1
@@ -238,7 +238,7 @@ version (unix || apple) {
 		 */
 		lastModified: override func -> Long {
 			result: FileStat
-			res := lstat(path as CString, result&)
+			res := lstat(this path as CString, result&)
 			match res {
 				case 0 => result st_mtime as Long
 				case => -1
@@ -250,7 +250,7 @@ version (unix || apple) {
 		 */
 		created: override func -> Long {
 			result: FileStat
-			res := lstat(path as CString, result&)
+			res := lstat(this path as CString, result&)
 			match res {
 				case 0 => result st_ctime as Long
 				case => -1
@@ -262,19 +262,19 @@ version (unix || apple) {
 		 */
 		relative: override func -> Bool {
 			// that's a bit rough, but should work most of the time
-			!path startsWith("/")
+			!this path startsWith("/")
 		}
 
 		/**
 		 * The absolute path, e.g. "my/dir" => "/current/directory/my/dir"
 		 */
 		getAbsolutePath: override func -> String {
-			raise(path == null, "FileUnix::getAbsolutePath: path is null")
-			raise(path empty(), "FileUnix::getAbsolutePath: path is empty")
+			raise(this path == null, "FileUnix::getAbsolutePath: path is null")
+			raise(this path empty(), "FileUnix::getAbsolutePath: path is empty")
 			actualPath := calloc(1, MAX_PATH_LENGTH) as CString
-			ret := realpath(path, actualPath)
+			ret := realpath(this path, actualPath)
 			if (ret == null)
-				OSException new("failed to get absolute path for " + path) throw()
+				OSException new("failed to get absolute path for " + this path) throw()
 			actualPath toString()
 		}
 
@@ -283,18 +283,18 @@ version (unix || apple) {
 		 * @see getAbsolutePath
 		 */
 		getAbsoluteFile: func -> File {
-			actualPath := getAbsolutePath()
-			if (path != actualPath)
+			actualPath := this getAbsolutePath()
+			if (this path != actualPath)
 				return File new(actualPath)
 			return this
 		}
 
 		_getChildren: func <T> (T: Class) -> VectorList<T> {
-			if (!dir())
-				Exception new(This, "Trying to get the children of the non-directory '" + path + "'!") throw()
-			dir := opendir(path as CString)
+			if (!this dir())
+				Exception new(This, "Trying to get the children of the non-directory '" + this path + "'!") throw()
+			dir := opendir(this path as CString)
 			if (!dir)
-				Exception new(This, "Couldn't open directory '" + path + "' for reading!") throw()
+				Exception new(This, "Couldn't open directory '" + this path + "' for reading!") throw()
 
 			result := VectorList<T> new()
 			entry := readdir(dir)
@@ -313,19 +313,19 @@ version (unix || apple) {
 		}
 
 		getChildrenNames: override func -> VectorList<String> {
-			_getChildren (String)
+			this _getChildren (String)
 		}
 
 		getChildren: override func -> VectorList<File> {
-			_getChildren (File)
+			this _getChildren (File)
 		}
 
 		mkdir: override func ~withMode (mode: Int) -> Int {
-			_mkdir(path as CString, mode as ModeT)
+			_mkdir(this path as CString, mode as ModeT)
 		}
 
 		mkfifo: override func ~withMode (mode: Int) -> Int {
-			_mkfifo(path as CString, mode as ModeT)
+			_mkfifo(this path as CString, mode as ModeT)
 		}
 
 		createTempFile: static func (pattern, mode: String) -> FStream {

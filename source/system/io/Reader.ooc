@@ -26,8 +26,8 @@ Reader: abstract class {
 	readAll: func -> String {
 		in := CharBuffer new(4096)
 		out := CharBuffer new(4096)
-		while (hasNext()) {
-			readBytes := read(in)
+		while (this hasNext()) {
+			readBytes := this read(in)
 			out append(in, readBytes)
 		}
 		out toString()
@@ -35,7 +35,7 @@ Reader: abstract class {
 	readUntil: func (end: Char) -> String {
 		sb := CharBuffer new(1024)
 		while (this hasNext()) {
-			c := read()
+			c := this read()
 			if (c == end || (!this hasNext() && c == 8))
 				break
 			sb append(c)
@@ -44,10 +44,10 @@ Reader: abstract class {
 	}
 	readWhile: func ~filter (filter: Func(Char) -> Bool) -> String {
 		sb := CharBuffer new(1024)
-		while (hasNext()) {
-			c := read()
+		while (this hasNext()) {
+			c := this read()
 			if (!filter(c)) {
-				rewind(1)
+				this rewind(1)
 				break
 			}
 			sb append(c)
@@ -56,7 +56,7 @@ Reader: abstract class {
 	}
 	skipUntil: func (end: Char) {
 		while (this hasNext()) {
-			c := read()
+			c := this read()
 			if (c == end)
 				break
 		}
@@ -64,10 +64,10 @@ Reader: abstract class {
 	skipUntil: func ~str (end: String) {
 		stop := false
 		while (this hasNext() && !stop) {
-			c := read()
+			c := this read()
 			i := 0
 			while (c == end[i] && !stop) {
-				c = read()
+				c = this read()
 				i += 1
 				if (i >= end size)
 					stop = true
@@ -76,24 +76,24 @@ Reader: abstract class {
 	}
 	skipWhile: func (unwanted: Char) {
 		while (this hasNext()) {
-			c := read()
+			c := this read()
 			if (c != unwanted) {
-				rewind(1)
+				this rewind(1)
 				break
 			}
 		}
 	}
 	skipWhile: func ~filter (filter: Func(Char) -> Bool) {
 		while (this hasNext()) {
-			c := read()
+			c := this read()
 			if (!filter(c)) {
-				rewind(1)
+				this rewind(1)
 				break
 			}
 		}
 	}
 	readLine: func -> String {
-		line := readUntil('\n')
+		line := this readUntil('\n')
 		result := line trimRight('\r')
 		line free()
 		result
@@ -109,16 +109,16 @@ Reader: abstract class {
 		result
 	}
 	peek: func -> Char {
-		c := read()
-		rewind(1)
+		c := this read()
+		this rewind(1)
 		c
 	}
-	skipLine: func { skipUntil('\n') }
+	skipLine: func { this skipUntil('\n') }
 	hasNext: abstract func -> Bool
 	mark: abstract func -> Long
-	rewind: func (offset: Int) -> Bool { seek(-offset, SeekMode CUR) }
+	rewind: func (offset: Int) -> Bool { this seek(-offset, SeekMode CUR) }
 	seek: abstract func (offset: Long, mode: SeekMode) -> Bool
-	reset: func (marker: Long) { seek(marker, SeekMode SET) }
-	skip: func (offset: Int) { seek(offset, SeekMode CUR) }
+	reset: func (marker: Long) { this seek(marker, SeekMode SET) }
+	skip: func (offset: Int) { this seek(offset, SeekMode CUR) }
 	close: abstract func
 }

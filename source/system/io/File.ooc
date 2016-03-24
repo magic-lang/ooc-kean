@@ -113,9 +113,9 @@ File: abstract class {
 		(this path lastIndexOf('.') > 0) && (!this dir())
 	}
 	parentName: func -> String {
-		idx := path lastIndexOf(This separator)
+		idx := this path lastIndexOf(This separator)
 		if (idx == -1) return null
-		return path substring(0, idx)
+		return this path substring(0, idx)
 	}
 	// Create a named pipe at the path specified by this file
 	mkfifo: func -> Int { this mkfifo(0c755) }
@@ -131,7 +131,7 @@ File: abstract class {
 			p mkdirs(mode)
 			p free()
 		}
-		mkdir()
+		this mkdir()
 	}
 
 	lastAccessed: abstract func -> Long
@@ -139,8 +139,8 @@ File: abstract class {
 	created: abstract func -> Long
 	relative: abstract func -> Bool
 	getAbsolutePath: abstract func -> String
-	getLongPath: func -> String { path }
-	getAbsoluteFile: func -> This { new(getAbsolutePath()) }
+	getLongPath: func -> String { this path }
+	getAbsoluteFile: func -> This { This new(this getAbsolutePath()) }
 	getReducedPath: func -> String {
 		elems := VectorList<String> new()
 		tokens := this path split(This separator)
@@ -159,20 +159,20 @@ File: abstract class {
 			for (i in 1 .. elems count)
 				result = (result + This separator) >> elems[1]
 		}
-		if (path startsWith(This separator))
+		if (this path startsWith(This separator))
 			result = This separator + result
 		result
 	}
-	getReducedFile: func -> This { new(this getReducedPath()) }
+	getReducedFile: func -> This { This new(this getReducedPath()) }
 	getChildrenNames: abstract func -> VectorList<String>
 	getChildren: abstract func -> VectorList<This>
 	rm: func -> Bool { _remove(this) }
 	rm_rf: func -> Bool {
-		if (dir())
+		if (this dir())
 			for (child in this getChildren())
 				if (!child rm_rf())
 					return false
-		rm()
+		this rm()
 	}
 	// Searches for a file with given name until cb returns false
 	find: func (name: String, cb: Func (This) -> Bool) -> Bool {
@@ -197,12 +197,12 @@ File: abstract class {
 		result
 	}
 	findShallow: func (name: String, level: Int, cb: Func (This) -> Bool) -> Bool {
-		fName := getName()
+		fName := this getName()
 		if (fName == name)
 			if (!cb(this))
 				return true // abort if caller is happy
 
-		if (dir() && level >= 0) {
+		if (this dir() && level >= 0) {
 			if (fName == ".git")
 				return false // skip
 
@@ -273,7 +273,7 @@ File: abstract class {
 	 */
 	rebase: func (base: This) -> This {
 		left := base getReducedFile() getAbsolutePath() replaceAll(This separator, '/')
-		full := getReducedFile() getAbsolutePath() replaceAll(This separator, '/')
+		full := this getReducedFile() getAbsolutePath() replaceAll(This separator, '/')
 
 		if (!left endsWith("/")) {
 			left = left + "/"
@@ -283,7 +283,7 @@ File: abstract class {
 	}
 	getChild: func (childPath: String) -> This { This new((this path + this separator) << childPath) }
 	getChild: func ~file (file: This) -> This { this getChild(file path) }
-	toString: func -> String { "File(#{path})" }
+	toString: func -> String { "File(#{this path})" }
 
 	separator: static Char
 	pathDelimiter: static Char

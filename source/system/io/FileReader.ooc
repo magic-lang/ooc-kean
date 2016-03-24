@@ -35,10 +35,10 @@ FileReader: class extends Reader {
 	 */
 	init: func ~withMode (=fileName, mode: Text) {
 		(fileNameString, modeString) := (this fileName take() toString(), mode toString())
-		file = FStream open(fileNameString, modeString)
+		this file = FStream open(fileNameString, modeString)
 		fileNameString free()
 		modeString free()
-		if (!file) {
+		if (!this file) {
 			err := getOSError()
 			Exception new(This, "Couldn't open #{fileName} for reading: #{err}") throw()
 		}
@@ -53,17 +53,17 @@ FileReader: class extends Reader {
 		this file read(buffer + offset, count)
 	}
 	read: func ~fullBuffer (buffer: CharBuffer) {
-		count := file read(buffer data, buffer capacity)
+		count := this file read(buffer data, buffer capacity)
 		buffer size = count
 	}
 	read: override func ~char -> Char {
 		this file readChar()
 	}
 	hasNext: override func -> Bool {
-		feof(file) == 0
+		feof(this file) == 0
 	}
 	seek: override func (offset: Long, mode: SeekMode) -> Bool {
-		file seek(offset, match mode {
+		this file seek(offset, match mode {
 			case SeekMode SET => SEEK_SET
 			case SeekMode CUR => SEEK_CUR
 			case SeekMode END => SEEK_END
@@ -73,7 +73,7 @@ FileReader: class extends Reader {
 		}) == 0
 	}
 	mark: override func -> Long {
-		this marker = file tell()
+		this marker = this file tell()
 		this marker
 	}
 	close: override func {

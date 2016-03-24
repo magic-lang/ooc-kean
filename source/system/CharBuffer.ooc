@@ -63,7 +63,7 @@ CharBuffer: class {
 			if (al < 8) this capacity += al
 
 			rs := rshift
-			if (rs) shiftLeft(rs)
+			if (rs) this shiftLeft(rs)
 
 			tmp := realloc(this mallocAddr, this capacity)
 			if (!tmp) OutOfMemoryException new(This) throw()
@@ -77,7 +77,7 @@ CharBuffer: class {
 
 			this mallocAddr = tmp
 			this data = tmp
-			if (rs) shiftRight(rs)
+			if (rs) this shiftRight(rs)
 		}
 		// just to be sure to be always zero terminated
 		if (this data)
@@ -145,7 +145,7 @@ CharBuffer: class {
 
 	times: func (count: Int) {
 		origSize := this size
-		setLength(this size * count)
+		this setLength(this size * count)
 		for (i in 1 .. count) { // we start at 1, since the 0 entry is already there
 			memcpy(this data + (i * origSize), this data, origSize)
 		}
@@ -164,7 +164,7 @@ CharBuffer: class {
 	append: func ~pointer (other: CString, otherLength: Int) {
 		This _checkLength(otherLength)
 		origlen := this size
-		setLength(this size + otherLength)
+		this setLength(this size + otherLength)
 		memcpy(this data + origlen, other, otherLength)
 	}
 
@@ -196,7 +196,7 @@ CharBuffer: class {
 			memcpy(newthis data, other, otherLength)
 			memcpy(newthis data + otherLength, this data, this size)
 			newthis setLength(this size + otherLength)
-			setBuffer(newthis)
+			this setBuffer(newthis)
 		} else {
 			// seems we have enough room on the left
 			this shiftLeft(otherLength)
@@ -294,7 +294,7 @@ CharBuffer: class {
 		}
 		result := VectorList<Int> new (this size / whatSize)
 		offset := -whatSize
-		while (((offset = find(what, whatSize, offset + whatSize, searchCaseSensitive)) != -1)) result add (offset)
+		while (((offset = this find(what, whatSize, offset + whatSize, searchCaseSensitive)) != -1)) result add (offset)
 		result
 	}
 
@@ -510,23 +510,23 @@ CharBuffer: class {
 	toCString: func -> CString { this data as CString }
 
 	split: func ~withChar (c: Char, maxTokens: SSizeT) -> VectorList<This> {
-		split(c&, 1, maxTokens)
+		this split(c&, 1, maxTokens)
 	}
 
 	split: func ~withStringWithoutmaxTokens (s: This) -> VectorList<This> {
-		split(s data, s size, -1)
+		this split(s data, s size, -1)
 	}
 
 	split: func ~withCharWithoutmaxTokens (c: Char) -> VectorList<This> {
-		split(c&, 1, -1)
+		this split(c&, 1, -1)
 	}
 
 	split: func ~withBufWithEmpties (s: This, empties: Bool) -> VectorList<This> {
-		split(s data, s size, empties ? -1 : 0)
+		this split(s data, s size, empties ? -1 : 0)
 	}
 
 	split: func ~withCharWithEmpties (c: Char, empties: Bool) -> VectorList<This> {
-		split(c&, 1, empties ? -1 : 0)
+		this split(c&, 1, empties ? -1 : 0)
 	}
 
 	/**
@@ -539,11 +539,11 @@ CharBuffer: class {
 	 *   - if zero, it will return all non-empty elements
 	 */
 	split: func ~buf (delimiter: This, maxTokens: SSizeT) -> VectorList<This> {
-		split(delimiter data, delimiter size, maxTokens)
+		this split(delimiter data, delimiter size, maxTokens)
 	}
 
 	split: func ~pointer (delimiter: Char*, delimiterLength: SizeT, maxTokens: SSizeT) -> VectorList<This> {
-		findResults := findAll(delimiter, delimiterLength, true)
+		findResults := this findAll(delimiter, delimiterLength, true)
 		maxItems := ((maxTokens <= 0) || (maxTokens > findResults count + 1)) ? findResults count + 1 : maxTokens
 		result := VectorList<This> new(maxItems, false)
 		sstart: SizeT = 0 //source (this) start pos
@@ -561,7 +561,7 @@ CharBuffer: class {
 
 		if (result count < maxItems) {
 			sdist := this size - sstart // bytes to copy
-			b := new((this data + sstart) as CString, sdist)
+			b := This new((this data + sstart) as CString, sdist)
 			result add(b)
 		}
 
