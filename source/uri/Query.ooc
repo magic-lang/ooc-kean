@@ -34,7 +34,7 @@ Query: class {
 	toText: func -> Text {
 		result := Text empty
 		for (i in 0 .. this _attributes count) {
-			argument := _attributes[i] take()
+			argument := this _attributes[i] take()
 			if (this _values[i] take() != Text empty)
 				argument += t"=" + this _values[i] take()
 			result += i == 0 ? argument : t";" + argument

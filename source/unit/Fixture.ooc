@@ -33,7 +33,7 @@ Fixture: abstract class {
 		This _print(dateString)
 		timer := WallTimer new() . start()
 		for (i in 0 .. this tests count) {
-			test := tests[i]
+			test := this tests[i]
 			This _expectCount = 0
 			r := true
 			try {

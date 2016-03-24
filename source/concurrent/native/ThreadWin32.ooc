@@ -15,23 +15,23 @@ ThreadWin32: class extends Thread {
 
 	init: func ~win (=_code)
 	start: override func -> Bool {
-		handle = _beginthreadex(
+		this handle = _beginthreadex(
 			null, // default security attributes
 			0, // default stack size
-			_code as Closure thunk, // thread start address
-			_code as Closure context, // argument to thread function
+			this _code as Closure thunk, // thread start address
+			this _code as Closure context, // argument to thread function
 			0, // start thread as soon as it is created
-			threadID&) as Handle // returns the thread identifier
+			(this threadID)&) as Handle // returns the thread identifier
 
-		handle != INVALID_HANDLE_VALUE
+		this handle != INVALID_HANDLE_VALUE
 	}
 	wait: override func -> Bool {
-		result := WaitForSingleObject(handle, INFINITE)
+		result := WaitForSingleObject(this handle, INFINITE)
 		result == WAIT_OBJECT_0
 	}
 	wait: override func ~timed (seconds: Double) -> Bool {
 		millis := (seconds * 1000.0 + 0.5) as Long
-		result := WaitForSingleObject(handle, millis)
+		result := WaitForSingleObject(this handle, millis)
 
 		match result {
 			case WAIT_TIMEOUT =>
@@ -51,7 +51,7 @@ ThreadWin32: class extends Thread {
 		//TODO Find a better way to terminate Win32 threads, if any
 	}
 	alive: override func -> Bool {
-		result := WaitForSingleObject(handle, 0)
+		result := WaitForSingleObject(this handle, 0)
 		// if it's equal, it has terminated, otherwise, it's still alive
 		result != WAIT_OBJECT_0
 	}
