@@ -19,14 +19,13 @@ FloatComplexTest: class extends Fixture {
 	complexNumber3 := FloatComplex new (-2, -1)
 
 	complexNumberArray := HeapVector<FloatComplex> new(4)
-	complexNumberArray[0] = complexNumber0
-	complexNumberArray[1] = complexNumber1
-	complexNumberArray[2] = complexNumber2
-	complexNumberArray[3] = complexNumber3
-
-	tolerance := 1.0e-5f
+	this complexNumberArray[0] = this complexNumber0
+	this complexNumberArray[1] = this complexNumber1
+	this complexNumberArray[2] = this complexNumber2
+	this complexNumberArray[3] = this complexNumber3
 
 	init: func {
+		tolerance := 1.0e-5f
 		super("FloatComplex")
 		this add("addition", func {
 			expect((this complexNumber0 + this complexNumber1) real, is equal to(this complexNumber2 real))
@@ -45,12 +44,12 @@ FloatComplexTest: class extends Fixture {
 			expect((this complexNumber0 * this complexNumber1) imaginary, is equal to(7.0f) within(tolerance))
 		})
 		this add("scalar multiplication", func {
-			expect(((-1.0f) * this complexNumber0) real, is equal to((-complexNumber0) real))
-			expect(((-1.0f) * this complexNumber0) imaginary, is equal to((-complexNumber0) imaginary))
+			expect(((-1.0f) * this complexNumber0) real, is equal to((-this complexNumber0) real))
+			expect(((-1.0f) * this complexNumber0) imaginary, is equal to((-this complexNumber0) imaginary))
 		})
 		this add("division", func {
-			expect((complexNumber2 / complexNumber0) real, is equal to(2.6f) within(tolerance))
-			expect((complexNumber2 / complexNumber0) imaginary, is equal to(0.2f) within(tolerance))
+			expect((this complexNumber2 / this complexNumber0) real, is equal to(2.6f) within(tolerance))
+			expect((this complexNumber2 / this complexNumber0) imaginary, is equal to(0.2f) within(tolerance))
 		})
 		this add("equality", func {
 			expect(this complexNumber0 real, is equal to(2.0f) within(tolerance))

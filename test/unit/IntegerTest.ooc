@@ -28,9 +28,9 @@ IntegerTest: class extends Fixture {
 
 		this add("times", func {
 			5 times(func { this value += 1 })
-			expect(value, is equal to(5))
+			expect(this value, is equal to(5))
 			6 times(func (index: Int) { this value += index })
-			expect(value, is equal to(5 + 15))
+			expect(this value, is equal to(5 + 15))
 		})
 	}
 }
