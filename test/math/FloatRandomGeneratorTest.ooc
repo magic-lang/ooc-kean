@@ -25,14 +25,14 @@ FloatRandomGeneratorTest: class extends Fixture {
 				last = current
 				current = generator next()
 			}
-			expect(countEqual < valuesCount)
+			expect(countEqual, is less than(valuesCount))
 			numbers := generator next(valuesCount)
 			expect(numbers length == valuesCount)
 			countEqual = 0
 			for (i in 1 .. valuesCount)
 				if (numbers[i] == numbers[i - 1])
 					countEqual += 1
-			expect(countEqual < valuesCount)
+			expect(countEqual, is less than(valuesCount))
 			generator = FloatUniformRandomGenerator new(15.0f, 20.0f)
 			for (i in 0 .. valuesCount) {
 				result := generator next()
@@ -53,14 +53,14 @@ FloatRandomGeneratorTest: class extends Fixture {
 				last = current
 				current = generator next()
 			}
-			expect(countEqual < valuesCount)
+			expect(countEqual, is less than(valuesCount))
 			countEqual = 0
 			numbers := generator next(valuesCount)
 			expect(numbers length == valuesCount)
 			for (i in 1 .. valuesCount)
 				if (numbers[i] == numbers[i - 1])
 					countEqual += 1
-			expect(countEqual < valuesCount)
+			expect(countEqual, is less than(valuesCount))
 			numbers free()
 			generator free()
 		})
@@ -79,7 +79,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 					countEqual += 1
 				expect(x, is equal to(y))
 			}
-			expect(countEqual < valuesCount)
+			expect(countEqual, is less than(valuesCount))
 			generator1 free(); generator2 free(); generator3 free()
 		})
 		this add("uniform distribution", func {
@@ -129,10 +129,10 @@ FloatRandomGeneratorTest: class extends Fixture {
 				else if (value < uniformLowest)
 					uniformLowest = value
 			}
-			expect(uniformLowest >= uniformGenerator minimum)
-			expect(uniformHighest <= uniformGenerator maximum)
-			expect(uniformLowest >= -25_000.0f)
-			expect(uniformHighest <= 25_000.0f)
+			expect(uniformLowest, is greaterOrEqual than(uniformGenerator minimum))
+			expect(uniformHighest, is lessOrEqual than(uniformGenerator maximum))
+			expect(uniformLowest, is greaterOrEqual than(-25_000.0f))
+			expect(uniformHighest, is lessOrEqual than(25_000.0f))
 			uniformGenerator free()
 		})
 		this add("set seed", func {

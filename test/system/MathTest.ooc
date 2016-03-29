@@ -165,8 +165,8 @@ MathTest: class extends Fixture {
 			expect(0.0f sineInterpolation(), is equal to(0.0f) within(floatTolerance))
 			expect(0.5f sineInterpolation(), is equal to(0.5f) within(floatTolerance))
 			expect(1.0f sineInterpolation(), is equal to(1.0f) within(floatTolerance))
-			expect(0.25f sineInterpolation() < 0.25f, is true)
-			expect(0.75f sineInterpolation() > 0.75f, is true)
+			expect(0.25f sineInterpolation(), is less than(0.25f))
+			expect(0.75f sineInterpolation(), is greater than(0.75f))
 		})
 	}
 }

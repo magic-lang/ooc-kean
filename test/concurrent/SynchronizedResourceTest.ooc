@@ -68,7 +68,7 @@ SynchronizedResourceTest: class extends Fixture {
 		numberOfThreads := 4
 		objectsPerThread := 1024
 		differentObjects := 256
-		expect(count > 0)
+		expect(count, is greater than(0))
 		objectFromMainThread := thisThreadResources[0]
 		threadFunc := func {
 			expect(objectFromMainThread checkThreadAffinity(), is false)

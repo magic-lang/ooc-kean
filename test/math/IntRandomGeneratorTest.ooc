@@ -27,7 +27,7 @@ IntRandomGeneratorTest: class extends Fixture {
 					countEqual += 1
 				expect(x, is equal to(y))
 			}
-			expect(countEqual < valuesCount)
+			expect(countEqual, is less than(valuesCount))
 			generator1 free(); generator2 free(); generator3 free()
 		})
 		this add("uniform distribution", func {
@@ -76,10 +76,10 @@ IntRandomGeneratorTest: class extends Fixture {
 				else if (value < uniformLowest)
 					uniformLowest = value
 			}
-			expect(uniformLowest >= uniformGenerator minimum)
-			expect(uniformHighest <= uniformGenerator maximum)
-			expect(uniformLowest >= -250_000)
-			expect(uniformHighest <= 250_000)
+			expect(uniformLowest, is greaterOrEqual than(uniformGenerator minimum))
+			expect(uniformHighest, is lessOrEqual than(uniformGenerator maximum))
+			expect(uniformLowest, is greaterOrEqual than(-250_000))
+			expect(uniformHighest, is lessOrEqual than(250_000))
 			uniformGenerator free()
 		})
 		this add("set seed", func {
