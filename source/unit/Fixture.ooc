@@ -161,7 +161,7 @@ Fixture: abstract class {
 		text print()
 		fflush(stdout)
 	}
-	expect: static func (value: Object, constraint: Constraint) {
+	verify: static func (value: Object, constraint: Constraint) {
 		This _expectCount += 1
 		if (!constraint verify(value))
 			TestFailedException new(value, constraint, This _expectCount) throw()
@@ -171,41 +171,6 @@ Fixture: abstract class {
 				(value as Cell) free()
 		}
 	}
-	expect: static func ~isTrue (value: Bool) { This expect(Cell new(value), is true) }
-	expect: static func ~char (value: Char, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~text (value: Text, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~boolean (value: Bool, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~int (value: Int, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~uint (value: UInt, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~uint8 (value: Byte, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~long (value: Long, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~ulong (value: ULong, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~float (value: Float, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~double (value: Double, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~ldouble (value: LDouble, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~llong (value: LLong, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~ullong (value: ULLong, constraint: Constraint) { This expect(Cell new(value), constraint) }
-
-	expect: static func ~floatvector2d (value: FloatVector2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~floatvector3d (value: FloatVector3D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~floatpoint2d (value: FloatPoint2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~floatpoint3d (value: FloatPoint3D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~quaternion (value: Quaternion, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~floateuclidtransform (value: FloatEuclidTransform, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~floatrotation3d (value: FloatRotation3D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~floattransform2d (value: FloatTransform2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~floattransform3d (value: FloatTransform3D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~intvector2d (value: IntVector2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~intvector3d (value: IntVector3D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~intpoint2d (value: IntPoint2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~intpoint3d (value: IntPoint3D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~floatcomplex (value: FloatComplex, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~floatmatrix (value: FloatMatrix, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~inttransform2d (value: IntTransform2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~floatbox2d (value: FloatBox2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~intbox2d (value: IntBox2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~floatshell2d (value: FloatShell2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
-	expect: static func ~intshell2d (value: IntShell2D, constraint: Constraint) { This expect(Cell new(value), constraint) }
 }
 
 TestFailedException: class extends Exception {
@@ -226,3 +191,40 @@ Test: class {
 	}
 	run: func { this action() }
 }
+
+expect: func ~isTrue (value: Bool) { Fixture verify(Cell new(value), Fixture is true) }
+expect: func ~object (value: Object, constraint: Constraint) { Fixture verify(value, constraint) }
+expect: func ~char (value: Char, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~text (value: Text, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~boolean (value: Bool, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~int (value: Int, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~uint (value: UInt, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~uint8 (value: Byte, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~long (value: Long, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~ulong (value: ULong, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~float (value: Float, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~double (value: Double, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~ldouble (value: LDouble, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~llong (value: LLong, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~ullong (value: ULLong, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+
+expect: func ~floatvector2d (value: FloatVector2D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~floatvector3d (value: FloatVector3D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~floatpoint2d (value: FloatPoint2D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~floatpoint3d (value: FloatPoint3D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~quaternion (value: Quaternion, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~floateuclidtransform (value: FloatEuclidTransform, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~floatrotation3d (value: FloatRotation3D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~floattransform2d (value: FloatTransform2D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~floattransform3d (value: FloatTransform3D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~intvector2d (value: IntVector2D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~intvector3d (value: IntVector3D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~intpoint2d (value: IntPoint2D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~intpoint3d (value: IntPoint3D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~floatcomplex (value: FloatComplex, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~floatmatrix (value: FloatMatrix, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~inttransform2d (value: IntTransform2D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~floatbox2d (value: FloatBox2D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~intbox2d (value: IntBox2D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~floatshell2d (value: FloatShell2D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
+expect: func ~intshell2d (value: IntShell2D, constraint: Constraint) { Fixture verify(Cell new(value), constraint) }
