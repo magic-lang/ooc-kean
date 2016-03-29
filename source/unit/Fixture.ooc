@@ -69,6 +69,8 @@ Fixture: abstract class {
 					This _print(Text new("  -> %s : expected true was false\n" format(f message)))
 				else if (f constraint instanceOf(FalseConstraint))
 					This _print(Text new("  -> %s : expected false was true\n" format(f message)))
+				else if (f constraint instanceOf(RangeConstraint))
+					This _print(this createRangeFailureMessage(f) + t"\n")
 				else
 					This _print(t"  -> %s (expect: %i)\n" format(f message, f expect))
 				f free()
@@ -122,6 +124,20 @@ Fixture: abstract class {
 		result append(expectedText) . append(t"was") . append(testedText)
 		if (constraint type == ComparisonType Within)
 			result append(Text new(" [tolerance: %.8f]" formatDouble((constraint parent as CompareWithinConstraint) precision)))
+		result join(' ')
+	}
+	createRangeFailureMessage: func (failure: TestFailedException) -> Text {
+		constraint := failure constraint as RangeConstraint
+		testedValue := failure value as Cell
+		result := TextBuilder new(t"  ->")
+		result append(Text new(failure message))
+		result append(t": expected within")
+		match (constraint type) {
+			case 0 => result append(constraint intMin toText()) . append(t"and") . append(constraint intMax toText())
+			case 1 => result append(constraint floatMin toText()) . append(t"and") . append(constraint floatMax toText())
+		}
+		result append(t"was")
+		result append(testedValue toText())
 		result join(' ')
 	}
 

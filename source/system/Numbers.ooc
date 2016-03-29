@@ -114,6 +114,9 @@ LDouble: cover from long double {
 		string free()
 		result
 	}
+	in: func (range: Range) -> Bool {
+		this >= range min && this < range max
+	}
 }
 
 Double: cover from double extends LDouble {
@@ -142,5 +145,14 @@ Range: cover {
 		acc := f(this min, this min + 1)
 		for (i in this min + 2 .. this max) acc = f(acc, i)
 		acc
+	}
+	toString: func -> String {
+		"%d, %d" format(this min, this max)
+	}
+	toText: func -> Text {
+		string := this toString()
+		result := Text new(string) copy()
+		string free()
+		result
 	}
 }

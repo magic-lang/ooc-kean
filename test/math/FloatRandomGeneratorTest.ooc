@@ -21,7 +21,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 			for (i in 0 .. valuesCount) {
 				if (last == current)
 					countEqual += 1
-				expect(last >= 0.0f && last <= 1.0f)
+				expect(last, is within(0.f, 1.f))
 				last = current
 				current = generator next()
 			}
@@ -36,7 +36,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 			generator = FloatUniformRandomGenerator new(15.0f, 20.0f)
 			for (i in 0 .. valuesCount) {
 				result := generator next()
-				expect(result >= 15.0f && result <= 20.0f)
+				expect(result, is within(15.0f, 20.0f))
 			}
 			numbers free()
 			generator free()

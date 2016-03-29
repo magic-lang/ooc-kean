@@ -48,6 +48,8 @@ Cell: class <T> {
 			result = (this val as Double) toText()
 		else if (T inheritsFrom(LDouble))
 			result = (this val as LDouble) toText()
+		else if (T inheritsFrom(Range))
+			result = (this val as Range) toText()
 		else
 			raise("[Cell] toText() is not implemented on the specified type")
 		result

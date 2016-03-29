@@ -85,7 +85,7 @@ SynchronizedQueueTest: class extends Fixture {
 		job = func {
 			for (i in 0 .. countPerThread) {
 				value := queue dequeue(Int minimumValue)
-				expect(value >= 0 && value < countPerThread)
+				expect(value, is within(0, countPerThread))
 			}
 		}
 		for (i in 0 .. numberOfThreads) {
@@ -124,7 +124,7 @@ SynchronizedQueueTest: class extends Fixture {
 			for (i in 0 .. countPerThread) {
 				value: Cell<Int>
 				value = queue dequeue(null)
-				expect(value get() >= 0 && value get() < countPerThread)
+				expect(value get(), is within(0, countPerThread))
 				value free()
 			}
 		}
