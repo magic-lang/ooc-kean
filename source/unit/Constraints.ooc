@@ -83,7 +83,7 @@ CompareConstraint: class extends Constraint {
 
 CompareWithinConstraint: class extends CompareConstraint {
 	actualType: Class
-	precision: LDouble
+	precision: LDouble = -1.0L
 	init: func (parent: ExpectModifier, .correct, .comparer, compareType := ComparisonType Within, =actualType) {
 		super(parent, correct, comparer, compareType)
 	}

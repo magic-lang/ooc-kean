@@ -15,6 +15,9 @@ FloatShell2DTest: class extends Fixture {
 	init: func {
 		super("FloatShell2D")
 		tolerance := 0.0001f
+		this add("fixture", func {
+			expect(FloatShell2D new(1.0f, 2.0f, 3.0f, 4.0f), is equal to(FloatShell2D new(1.0f, 2.0f, 3.0f, 4.0f)))
+		})
 		this add("Size and position", func {
 			shell := FloatShell2D new(1.0f, 2.0f, 3.0f, 4.0f)
 			expect(shell size x, is equal to(3.0f) within(tolerance))

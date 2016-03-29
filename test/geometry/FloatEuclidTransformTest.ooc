@@ -15,6 +15,9 @@ FloatEuclidTransformTest: class extends Fixture {
 	init: func {
 		tolerance := 1.0e-5f
 		super("FloatEuclidTransform")
+		this add("fixture", func {
+			expect(FloatEuclidTransform new(FloatVector3D new(0, 0, 0), FloatRotation3D identity), is equal to(FloatEuclidTransform new(FloatVector3D new(0, 0, 0), FloatRotation3D identity)))
+		})
 		this add("convolveCenter translations 1", func {
 			euclidTransforms := VectorList<FloatEuclidTransform> new(5)
 			kernel := FloatVectorList new(5)

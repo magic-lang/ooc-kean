@@ -124,65 +124,65 @@ EqualModifier: class extends ExpectModifier {
 		f := func (value, c: Cell<Quaternion>) -> Bool { value get() == c get() }
 		CompareWithinConstraint new(this, Cell<Quaternion> new(correct), f, this withinType, Quaternion)
 	}
-	to: func ~floateuclidtransform (correct: FloatEuclidTransform) -> CompareWithinConstraint {
-		f := func (value, c: Cell<FloatEuclidTransform>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<FloatEuclidTransform> new(correct), f, this withinType, FloatEuclidTransform)
-	}
 	to: func ~floatrotation3d (correct: FloatRotation3D) -> CompareWithinConstraint {
 		f := func (value, c: Cell<FloatRotation3D>) -> Bool { value get() == c get() }
 		CompareWithinConstraint new(this, Cell<FloatRotation3D> new(correct), f, this withinType, FloatRotation3D)
 	}
-	to: func ~floattransform2d (correct: FloatTransform2D) -> CompareWithinConstraint {
+	to: func ~floateuclidtransform (correct: FloatEuclidTransform) -> CompareConstraint {
+		f := func (value, c: Cell<FloatEuclidTransform>) -> Bool { value get() == c get() }
+		CompareConstraint new(this, Cell<FloatEuclidTransform> new(correct), f, this comparisonType)
+	}
+	to: func ~floattransform2d (correct: FloatTransform2D) -> CompareConstraint {
 		f := func (value, c: Cell<FloatTransform2D>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<FloatTransform2D> new(correct), f, this withinType, FloatTransform2D)
+		CompareConstraint new(this, Cell<FloatTransform2D> new(correct), f, this comparisonType)
 	}
-	to: func ~floattransform3d (correct: FloatTransform3D) -> CompareWithinConstraint {
+	to: func ~floattransform3d (correct: FloatTransform3D) -> CompareConstraint {
 		f := func (value, c: Cell<FloatTransform3D>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<FloatTransform3D> new(correct), f, this withinType, FloatTransform3D)
+		CompareConstraint new(this, Cell<FloatTransform3D> new(correct), f, this comparisonType)
 	}
-	to: func ~intvector2d (correct: IntVector2D) -> CompareWithinConstraint {
+	to: func ~intvector2d (correct: IntVector2D) -> CompareConstraint {
 		f := func (value, c: Cell<IntVector2D>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<IntVector2D> new(correct), f, this withinType, IntVector2D)
+		CompareConstraint new(this, Cell<IntVector2D> new(correct), f, this comparisonType)
 	}
-	to: func ~intvector3d (correct: IntVector3D) -> CompareWithinConstraint {
+	to: func ~intvector3d (correct: IntVector3D) -> CompareConstraint {
 		f := func (value, c: Cell<IntVector3D>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<IntVector3D> new(correct), f, this withinType, IntVector3D)
+		CompareConstraint new(this, Cell<IntVector3D> new(correct), f, this comparisonType)
 	}
-	to: func ~intpoint2d (correct: IntPoint2D) -> CompareWithinConstraint {
+	to: func ~intpoint2d (correct: IntPoint2D) -> CompareConstraint {
 		f := func (value, c: Cell<IntPoint2D>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<IntPoint2D> new(correct), f, this withinType, IntPoint2D)
+		CompareConstraint new(this, Cell<IntPoint2D> new(correct), f, this comparisonType)
 	}
-	to: func ~intpoint3d (correct: IntPoint3D) -> CompareWithinConstraint {
+	to: func ~intpoint3d (correct: IntPoint3D) -> CompareConstraint {
 		f := func (value, c: Cell<IntPoint3D>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<IntPoint3D> new(correct), f, this withinType, IntPoint3D)
+		CompareConstraint new(this, Cell<IntPoint3D> new(correct), f, this comparisonType)
 	}
-	to: func ~floatcomplex (correct: FloatComplex) -> CompareWithinConstraint {
+	to: func ~floatcomplex (correct: FloatComplex) -> CompareConstraint {
 		f := func (value, c: Cell<FloatComplex>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<FloatComplex> new(correct), f, this withinType, FloatComplex)
+		CompareConstraint new(this, Cell<FloatComplex> new(correct), f, this comparisonType)
 	}
-	to: func ~floatmatrix (correct: FloatMatrix) -> CompareWithinConstraint {
+	to: func ~floatmatrix (correct: FloatMatrix) -> CompareConstraint {
 		f := func (value, c: Cell<FloatMatrix>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<FloatMatrix> new(correct), f, this withinType, FloatMatrix)
+		CompareConstraint new(this, Cell<FloatMatrix> new(correct), f, this comparisonType)
 	}
-	to: func ~inttransform2d (correct: IntTransform2D) -> CompareWithinConstraint {
+	to: func ~inttransform2d (correct: IntTransform2D) -> CompareConstraint {
 		f := func (value, c: Cell<IntTransform2D>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<IntTransform2D> new(correct), f, this withinType, IntTransform2D)
+		CompareConstraint new(this, Cell<IntTransform2D> new(correct), f, this comparisonType)
 	}
-	to: func ~floatbox2d (correct: FloatBox2D) -> CompareWithinConstraint {
+	to: func ~floatbox2d (correct: FloatBox2D) -> CompareConstraint {
 		f := func (value, c: Cell<FloatBox2D>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<FloatBox2D> new(correct), f, this withinType, FloatBox2D)
+		CompareConstraint new(this, Cell<FloatBox2D> new(correct), f, this comparisonType)
 	}
-	to: func ~intbox2d (correct: IntBox2D) -> CompareWithinConstraint {
+	to: func ~intbox2d (correct: IntBox2D) -> CompareConstraint {
 		f := func (value, c: Cell<IntBox2D>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<IntBox2D> new(correct), f, this withinType, IntBox2D)
+		CompareConstraint new(this, Cell<IntBox2D> new(correct), f, this comparisonType)
 	}
-	to: func ~floatshell2d (correct: FloatShell2D) -> CompareWithinConstraint {
+	to: func ~floatshell2d (correct: FloatShell2D) -> CompareConstraint {
 		f := func (value, c: Cell<FloatShell2D>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<FloatShell2D> new(correct), f, this withinType, FloatShell2D)
+		CompareConstraint new(this, Cell<FloatShell2D> new(correct), f, this comparisonType)
 	}
-	to: func ~intshell2d (correct: IntShell2D) -> CompareWithinConstraint {
+	to: func ~intshell2d (correct: IntShell2D) -> CompareConstraint {
 		f := func (value, c: Cell<IntShell2D>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<IntShell2D> new(correct), f, this withinType, IntShell2D)
+		CompareConstraint new(this, Cell<IntShell2D> new(correct), f, this comparisonType)
 	}
 }
 

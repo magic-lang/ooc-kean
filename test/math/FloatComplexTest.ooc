@@ -27,6 +27,9 @@ FloatComplexTest: class extends Fixture {
 	init: func {
 		tolerance := 1.0e-5f
 		super("FloatComplex")
+		this add("fixture", func {
+			expect(this complexNumber0 + this complexNumber1, is equal to(this complexNumber2 real) within(tolerance))
+		})
 		this add("addition", func {
 			expect((this complexNumber0 + this complexNumber1) real, is equal to(this complexNumber2 real))
 			expect((this complexNumber0 + this complexNumber1) imaginary, is equal to(this complexNumber2 imaginary))

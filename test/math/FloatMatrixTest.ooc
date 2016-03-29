@@ -18,6 +18,9 @@ FloatMatrixTest: class extends Fixture {
 	init: func {
 		tolerance := 1.0e-5f
 		super ("FloatMatrix")
+		this add("fixture", func {
+			expect(FloatMatrix identity(3) take(), is equal to(FloatMatrix identity(3) take()))
+		})
 		this add("identity", func {
 			this checkAllElements(FloatMatrix identity(3), [1.0f, 0, 0, 0, 1.0f, 0, 0, 0, 1.0f])
 		})

@@ -19,6 +19,9 @@ FloatBox2DTest: class extends Fixture {
 	init: func {
 		tolerance := 1.0e-5f
 		super("FloatBox2D")
+		this add("fixture", func {
+			expect(this box0, is equal to(this box0))
+		})
 		this add("equality", func {
 			box := FloatBox2D new()
 			expect(this box0 == this box0, is true)
