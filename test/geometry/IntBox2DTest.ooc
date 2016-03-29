@@ -35,22 +35,22 @@ IntBox2DTest: class extends Fixture {
 			expect(size y, is equal to(4))
 		})
 		this add("addition, union", func {
-			result := box0 + box1
+			result := this box0 + this box1
 			expect(result left, is equal to(1))
 			expect(result top, is equal to(2))
 			expect(result width, is equal to(5))
 			expect(result height, is equal to(4))
-			expect(result == box0 union(box1))
+			expect(result == this box0 union(this box1))
 		})
 		this add("subtraction, intersection", func {
-			result := box0 - box2
-			other := box2 - box0
+			result := this box0 - this box2
+			other := this box2 - this box0
 			expect(result == other)
 			expect(result top, is equal to(2))
 			expect(result left, is equal to(2))
 			expect(result width, is equal to(2))
 			expect(result height, is equal to(2))
-			expect(result == box0 intersection(box2))
+			expect(result == this box0 intersection(this box2))
 		})
 		this add("casts", func {
 			floatBox := this box0 toFloatBox2D()
