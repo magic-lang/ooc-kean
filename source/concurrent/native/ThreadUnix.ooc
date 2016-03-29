@@ -16,17 +16,17 @@ ThreadUnix: class extends Thread {
 	pthread: PThread
 
 	init: func ~unix (=_code)
-	start: override func -> Bool { pthread_create(pthread&, null, _code as Closure thunk, _code as Closure context) == 0 }
-	detach: override func -> Bool { pthread_detach(pthread) == 0 }
-	wait: override func -> Bool { pthread_join(pthread, null) == 0 }
+	start: override func -> Bool { pthread_create(this pthread&, null, this _code as Closure thunk, this _code as Closure context) == 0 }
+	detach: override func -> Bool { pthread_detach(this pthread) == 0 }
+	wait: override func -> Bool { pthread_join(this pthread, null) == 0 }
 	wait: override func ~timed (seconds: Double) -> Bool {
 		result := false
 		version (apple || android)
-			result = __fake_timedjoin(seconds)
+			result = this __fake_timedjoin(seconds)
 		else {
 			ts: TimeSpec
-			__setupTimeout(ts&, seconds)
-			result = (pthread_timedjoin_np(pthread, null, ts&) == 0)
+			this __setupTimeout(ts&, seconds)
+			result = (pthread_timedjoin_np(this pthread, null, ts&) == 0)
 		}
 		result
 	}
@@ -37,7 +37,7 @@ ThreadUnix: class extends Thread {
 		result
 	}
 	alive: override func -> Bool {
-		pthread_kill(pthread, 0) == 0
+		pthread_kill(this pthread, 0) == 0
 	}
 	_yield: static func -> Bool {
 		result := sched_yield()
@@ -63,7 +63,7 @@ ThreadUnix: class extends Thread {
 		while (seconds > 0.0 && !result) {
 			Time sleepMilli(20)
 			seconds -= 0.02
-			if (!alive())
+			if (!this alive())
 				result = true
 		}
 		result

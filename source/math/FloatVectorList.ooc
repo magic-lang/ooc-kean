@@ -465,9 +465,9 @@ FloatVectorList: class extends VectorList<Float> {
 			if (pivot == n)
 				array[n]
 			else if (n < pivot)
-				_nthElement(array, start, pivot - 1, n)
+				This _nthElement(array, start, pivot - 1, n)
 			else
-				_nthElement(array, pivot + 1, end, n)
+				This _nthElement(array, pivot + 1, end, n)
 		}
 	}
 

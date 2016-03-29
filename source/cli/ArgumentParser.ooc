@@ -108,7 +108,7 @@ ArgumentParser: class {
 		result: _Argument
 		for (i in 0 .. this _arguments count)
 			if (identifier == this _arguments[i] _longIdentifier take() || identifier == Text new(this _arguments[i] _shortIdentifier)) {
-				result = _arguments[i]
+				result = this _arguments[i]
 				break
 			}
 		result
