@@ -14,6 +14,9 @@ use unit
 IntShell2DTest: class extends Fixture {
 	init: func {
 		super("IntShell2D")
+		this add("fixture", func {
+			expect(IntShell2D new(1, 2, 3, 4), is equal to(IntShell2D new(1, 2, 3, 4)))
+		})
 		this add("Size and position", func {
 			shell := IntShell2D new(1, 2, 3, 4)
 			expect(shell size x, is equal to(3))

@@ -23,6 +23,9 @@ FloatTransform2DTest: class extends Fixture {
 	init: func {
 		tolerance := 1.0e-5f
 		super("FloatTransform2D")
+		this add("fixture", func {
+			expect(this transform0, is equal to(this transform0))
+		})
 		this add("equality", func {
 			transform := FloatTransform2D new()
 			expect(this transform0 == this transform0, is true)

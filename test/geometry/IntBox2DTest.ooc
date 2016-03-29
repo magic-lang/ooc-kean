@@ -16,6 +16,9 @@ IntBox2DTest: class extends Fixture {
 	box2 := IntBox2D new (2, 1, 4, 3)
 	init: func {
 		super("IntBox2D")
+		this add("fixture", func {
+			expect(this box0, is equal to(this box0))
+		})
 		this add("equality", func {
 			box := IntBox2D new()
 			expect(this box0 == this box0, is true)

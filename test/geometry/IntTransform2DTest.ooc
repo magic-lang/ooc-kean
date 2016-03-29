@@ -20,6 +20,9 @@ IntTransform2DTest: class extends Fixture {
 	size := IntVector2D new(10, 10)
 	init: func {
 		super("IntTransform2D")
+		this add("fixture", func {
+			expect(this transform0 * this transform1, is equal to(this transform2))
+		})
 		this add("equality", func {
 			transform := IntTransform2D new()
 			expect(this transform0 == this transform0, is true)
