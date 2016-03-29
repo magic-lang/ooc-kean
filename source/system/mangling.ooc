@@ -55,14 +55,14 @@ FullSymbol: class {
 	name := ""
 
 	init: func (=mangled) {
-		name = mangled
+		this name = mangled
 	}
 	fullName: String { get {
-		match (type size) {
+		match (this type size) {
 			case 0 =>
-				name
+				this name
 			case =>
-				"%s %s" format(type, name)
+				"%s %s" format(this type, this name)
 		}
 	} }
 }

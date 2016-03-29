@@ -29,12 +29,12 @@ FileWriter: class extends Writer {
 	}
 	init: func ~withMode (fileName, mode: String) {
 		this file = FStream open(fileName, mode)
-		if (!file)
+		if (!this file)
 			Exception new(This, "Error creating FileWriter for: " + fileName) throw()
 	}
 	init: func ~withModeAndFlags (fileName, mode: String, flags: Int) {
 		this file = FStream open(fileName, mode, flags)
-		if (!file)
+		if (!this file)
 			Exception new(This, "File not found: " + fileName) throw()
 	}
 	init: func ~withFStream (=file)
@@ -46,9 +46,9 @@ FileWriter: class extends Writer {
 	createTempFile: static func (pattern, mode: String) -> This {
 		result: This
 		version (!windows)
-			result = new(FileUnix createTempFile(pattern, mode))
+			result = This new(FileUnix createTempFile(pattern, mode))
 		else
-			result = new(mktemp(pattern) toString(), mode)
+			result = This new(mktemp(pattern) toString(), mode)
 		result
 	}
 }

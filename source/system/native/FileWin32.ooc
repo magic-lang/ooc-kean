@@ -32,12 +32,12 @@ version(windows) {
 	 */
 	FileWin32: class extends File {
 		init: func ~win32 (.path) {
-			this path = _normalizePath(path)
+			this path = this _normalizePath(path)
 		}
 
 		_getFindData: func -> (FindData, Bool) {
 			ffd: FindData
-			hFind := FindFirstFile(path toCString(), ffd&)
+			hFind := FindFirstFile(this path toCString(), ffd&)
 			if (hFind != INVALID_HANDLE_VALUE) FindClose(hFind)
 			else {
 				return (ffd, false)
@@ -49,7 +49,7 @@ version(windows) {
 		 * @return true if it's a directory (return false if it doesn't exist)
 		 */
 		dir: override func -> Bool {
-			res := GetFileAttributes(path as CString)
+			res := GetFileAttributes(this path as CString)
 			(res & FILE_ATTRIBUTE_DIRECTORY) != 0
 		}
 
@@ -59,7 +59,7 @@ version(windows) {
 		file: override func -> Bool {
 			// our definition of a file: neither a directory or a link
 			// (and no, FILE_ATTRIBUTE_NORMAL isn't true when we need it..)
-			(ffd, ok) := _getFindData()
+			(ffd, ok) := this _getFindData()
 			return (ok) &&
 				(((ffd attr) & FILE_ATTRIBUTE_DIRECTORY) == 0) &&
 				(((ffd attr) & FILE_ATTRIBUTE_REPARSE_POINT) == 0)
@@ -69,7 +69,7 @@ version(windows) {
 		 * @return true if the file is a symbolic link
 		 */
 		link: override func -> Bool {
-			(ffd, ok) := _getFindData()
+			(ffd, ok) := this _getFindData()
 			return (ok) && ((ffd attr) & FILE_ATTRIBUTE_REPARSE_POINT) != 0
 		}
 
@@ -77,7 +77,7 @@ version(windows) {
 		 * @return the size of the file, in bytes
 		 */
 		getSize: override func -> LLong {
-			(ffd, ok) := _getFindData()
+			(ffd, ok) := this _getFindData()
 			return (ok) ? toLLong(ffd fileSizeLow, ffd fileSizeHigh) : 0
 		}
 
@@ -85,7 +85,7 @@ version(windows) {
 		 * @return true if the file exists
 		 */
 		exists: override func -> Bool {
-			res := GetFileAttributes(path as CString)
+			res := GetFileAttributes(this path as CString)
 			(res != INVALID_FILE_ATTRIBUTES)
 		}
 
@@ -136,12 +136,12 @@ version(windows) {
 		}
 
 		mkdir: override func ~withMode (mode: Int) -> Int {
-			if (relative())
-				return getAbsoluteFile() mkdir()
+			if (this relative())
+				return this getAbsoluteFile() mkdir()
 
-			p := parent
-			if (!p exists()) parent mkdir()
-			CreateDirectory(path toCString(), null) ? 0 : -1
+			p := this parent
+			if (!p exists()) this parent mkdir()
+			CreateDirectory(this path toCString(), null) ? 0 : -1
 		}
 
 		mkfifo: override func ~withMode (mode: Int) -> Int {
@@ -152,7 +152,7 @@ version(windows) {
 		 * @return the time of last access
 		 */
 		lastAccessed: override func -> Long {
-			(ffd, ok) := _getFindData()
+			(ffd, ok) := this _getFindData()
 			return (ok) ? toTimestamp(ffd lastAccessTime) : -1
 		}
 
@@ -160,7 +160,7 @@ version(windows) {
 		 * @return the time of last modification
 		 */
 		lastModified: override func -> Long {
-			(ffd, ok) := _getFindData()
+			(ffd, ok) := this _getFindData()
 			return (ok) ? toTimestamp(ffd lastWriteTime) : -1
 		}
 
@@ -168,7 +168,7 @@ version(windows) {
 		 * @return the time of creation
 		 */
 		created: override func -> Long {
-			(ffd, ok) := _getFindData()
+			(ffd, ok) := this _getFindData()
 			return (ok) ? toTimestamp(ffd creationTime) : -1
 		}
 
@@ -177,7 +177,7 @@ version(windows) {
 		 */
 		relative: override func -> Bool {
 			// that's a bit rough, but should work most of the time
-			!path startsWith("/") && (path length() <= 1 || path[1] != ':')
+			!this path startsWith("/") && (this path length() <= 1 || this path[1] != ':')
 		}
 
 		/**
@@ -185,8 +185,8 @@ version(windows) {
 		 */
 		getAbsolutePath: override func -> String {
 			fullPath := CharBuffer new(File MAX_PATH_LENGTH)
-			fullPath setLength(GetFullPathName(path toCString(), File MAX_PATH_LENGTH, fullPath data, null))
-			_normalizePath(fullPath toString())
+			fullPath setLength(GetFullPathName(this path toCString(), File MAX_PATH_LENGTH, fullPath data, null))
+			this _normalizePath(fullPath toString())
 		}
 
 		/**
@@ -194,7 +194,7 @@ version(windows) {
 		 * contain the original case of the concerned folder/files.
 		 */
 		getLongPath: func -> String {
-			abs := getAbsoluteFile()
+			abs := this getAbsoluteFile()
 			if (!abs exists())
 				Exception new(class, "Called File getLongPath on non-existing file %s" format(abs path)) throw()
 			longPath := CharBuffer new(File MAX_PATH_LENGTH)
@@ -205,7 +205,7 @@ version(windows) {
 		_getChildren: func <T> (T: Class) -> VectorList<T> {
 			result := VectorList<T> new()
 			ffd: FindData
-			searchPath := path + "\\*"
+			searchPath := this path + "\\*"
 			hFile := FindFirstFile(searchPath toCString(), ffd&)
 
 			if (hFile == INVALID_HANDLE_VALUE)
@@ -231,7 +231,7 @@ version(windows) {
 		 * Works only on directories, obviously
 		 */
 		getChildrenNames: override func -> VectorList<String> {
-			_getChildren(String)
+			this _getChildren(String)
 		}
 
 		/**
@@ -239,7 +239,7 @@ version(windows) {
 		 * Works only on directories, obviously
 		 */
 		getChildren: override func -> VectorList<File> {
-			_getChildren (File)
+			this _getChildren (File)
 		}
 
 		_normalizePath: static func (in: String) -> String {

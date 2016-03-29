@@ -129,7 +129,7 @@ HashMap: class <K, V> {
 		super()
 	}
 	getEntry: func (key: K, result: HashEntry*) -> Bool {
-		hash: SizeT = hashKey(key) % capacity
+		hash: SizeT = this hashKey(key) % this capacity
 		entry := this buckets[hash]
 		success := false
 		if (entry key != null)
@@ -184,7 +184,7 @@ HashMap: class <K, V> {
 		this
 	}
 	put: func (key: K, value: V) {
-		hash: SizeT = hashKey(key) % capacity
+		hash: SizeT = this hashKey(key) % this capacity
 		entry: HashEntry
 
 		if (this getEntryForHash(key, hash, entry&))
@@ -216,11 +216,11 @@ HashMap: class <K, V> {
 
 				entry next = null
 
-				buckets[hash] = entry
+				this buckets[hash] = entry
 			}
 			this _count += 1
 			if ((this _count as Float / this capacity as Float) > 0.75)
-				resize(this _count * (this _count > 50000 ? 2 : 4))
+				this resize(this _count * (this _count > 50000 ? 2 : 4))
 		}
 	}
 	get: func (key: K) -> V {
@@ -234,7 +234,7 @@ HashMap: class <K, V> {
 		this getEntry(key, null)
 	}
 	remove: func (key: K) -> Bool {
-		hash : SizeT = hashKey(key) % capacity
+		hash : SizeT = this hashKey(key) % this capacity
 		prev: HashEntry* = null
 		entry: HashEntry* = (this buckets data as HashEntry*)[hash]&
 
@@ -252,8 +252,8 @@ HashMap: class <K, V> {
 					else
 						this buckets[hash] = HashEntry new()
 
-					for (i in 0 .. keys count) {
-						cKey := keys[i]
+					for (i in 0 .. this keys count) {
+						cKey := this keys[i]
 						if (This _keyEquals(key, cKey)) {
 							this keys removeAt(i)
 							break
@@ -279,7 +279,7 @@ HashMap: class <K, V> {
 		this keys clear()
 		this _count = 0
 		this capacity = _capacity
-		this buckets = HashEntry[capacity] new()
+		this buckets = HashEntry[this capacity] new()
 		for (i in 0 .. oldCapacity) {
 			entry := oldBuckets[i]
 			if (entry key != null) {
@@ -287,7 +287,7 @@ HashMap: class <K, V> {
 				old := entry
 				while (entry next) {
 					entry = entry next@
-					put(entry key as K, entry value as V)
+					this put(entry key as K, entry value as V)
 				}
 				old free()
 			}
@@ -313,12 +313,12 @@ HashMap: class <K, V> {
 	each: func ~withKeys (f: Func (K, V)) {
 		for (i in 0 .. this keys count) {
 			key := this keys[i]
-			f(key, get(key))
+			f(key, this get(key))
 		}
 	}
 	each: func (f: Func (V)) {
 		for (i in 0 .. this keys count)
-			f(get(this keys[i]))
+			f(this get(this keys[i]))
 	}
 	_keyEquals: static func <T> (first, second: T) -> Bool {
 		match (T) {
@@ -338,18 +338,18 @@ HashMapValueIterator: class <K, T> extends BackIterator<T> {
 	hasPrevious: override func -> Bool { this index > 0 }
 	next: override func -> T {
 		key := this map keys[this index]
-		index += 1
+		this index += 1
 		this map get(key)
 	}
 	prev: override func -> T {
-		index -= 1
+		this index -= 1
 		key := this map keys[this index]
 		this map get(key)
 	}
 	remove: override func -> Bool {
-		result := this map remove(map keys[this index])
-		if (index <= this map keys count)
-			index -= 1
+		result := this map remove(this map keys[this index])
+		if (this index <= this map keys count)
+			this index -= 1
 		result
 	}
 }

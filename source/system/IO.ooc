@@ -211,9 +211,9 @@ FStream: cover from FILE* {
 	getSize: func -> SSizeT {
 		result: SSizeT = 0
 		prev := this tell()
-		if (prev >= 0 && seek(0, SEEK_END) != -1) {
+		if (prev >= 0 && this seek(0, SEEK_END) != -1) {
 			result = this tell() as SizeT
-			if (seek(prev, SEEK_SET) == -1)
+			if (this seek(prev, SEEK_SET) == -1)
 				result = 0
 		}
 		result
@@ -249,7 +249,7 @@ FStream: cover from FILE* {
 	 * @param length The number of bytes to write, must be <= str's length.
 	 */
 	write: func ~withLength (str: String, length: SizeT) -> SizeT {
-		write(str _buffer data, 0, length)
+		this write(str _buffer data, 0, length)
 	}
 
 	/**

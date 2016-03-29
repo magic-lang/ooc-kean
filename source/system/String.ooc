@@ -40,7 +40,7 @@ String: class {
 		result
 	}
 	clone: func -> This { This new(this _buffer clone()) }
-	substring: func ~tillEnd (start: Int) -> This { substring(start, this size) }
+	substring: func ~tillEnd (start: Int) -> This { this substring(start, this size) }
 	substring: func (start, end: Int) -> This {
 		result := this _buffer clone()
 		result substring(start, end)
@@ -114,7 +114,7 @@ String: class {
 	capitalize: func -> This {
 		match (this size) {
 			case 0 => this
-			case 1 => toUpper()
+			case 1 => this toUpper()
 			case => this[0] toUpper() + this substring(1)
 		}
 	}
@@ -216,26 +216,26 @@ String: class {
 		vsnprintf(copy data, numBytes + 1, this _buffer data, list)
 		va_end(list)
 
-		new(copy)
+		This new(copy)
 	}
 	toCString: func -> CString { this _buffer data as CString }
 	split: func ~withChar (c: Char, maxTokens: SSizeT) -> VectorList<This> {
-		_bufVectorListToStrVectorList(this _buffer split(c, maxTokens))
+		this _bufVectorListToStrVectorList(this _buffer split(c, maxTokens))
 	}
 	split: func ~withStringWithoutmaxTokens (s: This) -> VectorList<This> {
-		_bufVectorListToStrVectorList(this _buffer split(s _buffer, -1))
+		this _bufVectorListToStrVectorList(this _buffer split(s _buffer, -1))
 	}
 	split: func ~withCharWithoutmaxTokens (c: Char) -> VectorList<This> {
 		bufferSplit := this _buffer split(c)
-		result := _bufVectorListToStrVectorList(bufferSplit)
+		result := this _bufVectorListToStrVectorList(bufferSplit)
 		bufferSplit free()
 		result
 	}
 	split: func ~withStringWithEmpties (s: This, empties: Bool) -> VectorList<This> {
-		_bufVectorListToStrVectorList(this _buffer split(s _buffer, empties))
+		this _bufVectorListToStrVectorList(this _buffer split(s _buffer, empties))
 	}
 	split: func ~withCharWithEmpties (c: Char, empties: Bool) -> VectorList<This> {
-		_bufVectorListToStrVectorList(this _buffer split(c, empties))
+		this _bufVectorListToStrVectorList(this _buffer split(c, empties))
 	}
 	/**
 	 * Split a string to form a list of tokens delimited by `delimiter`
@@ -247,7 +247,7 @@ String: class {
 	 *   - if zero, it will return all non-empty elements
 	 */
 	split: func ~str (delimiter: This, maxTokens: SSizeT) -> VectorList<This> {
-		_bufVectorListToStrVectorList(this _buffer split(delimiter _buffer, maxTokens))
+		this _bufVectorListToStrVectorList(this _buffer split(delimiter _buffer, maxTokens))
 	}
 	free: static func ~all {
 		string_literal_free_all()

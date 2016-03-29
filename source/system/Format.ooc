@@ -518,7 +518,7 @@ formatOne: func ~main <T> (fmt: String, arg: T) -> String {
 
 extend CharBuffer {
 	format: func (args: ...) {
-		setBuffer(format~main(this, args))
+		this setBuffer(format~main(this, args))
 	}
 }
 

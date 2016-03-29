@@ -24,18 +24,18 @@ BufferWriter: class extends Writer {
 			this buffer size = len
 	}
 	write: override func ~chr (chr: Char) {
-		_makeRoom(pos + 1)
-		buffer data[pos] = chr
+		this _makeRoom(this pos + 1)
+		this buffer data[this pos] = chr
 		this pos += 1
 	}
 	seek: func (p: Long) {
-		if (p < 0 || p > buffer size)
+		if (p < 0 || p > this buffer size)
 			Exception new("Seeking out of bounds! p = %d, size = %d" format(p, this buffer size)) throw()
 		this pos = p
 	}
 	write: override func (chars: Char*, length: SizeT) -> SizeT {
-		_makeRoom(this pos + length)
-		memcpy(this buffer data + pos, chars, length)
+		this _makeRoom(this pos + length)
+		memcpy(this buffer data + this pos, chars, length)
 		this pos += length
 		length
 	}

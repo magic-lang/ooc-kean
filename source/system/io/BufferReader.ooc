@@ -14,40 +14,40 @@ BufferReader: class extends Reader {
 	init: func ~withBuffer (=buffer)
 	init: func ~withString (string: String) { this init(string _buffer) }
 	buffer: func -> CharBuffer { this buffer }
-	mark: override func -> Long { marker }
-	peek: func -> Char { this buffer get(marker) }
-	hasNext: override func -> Bool { marker < this buffer size }
+	mark: override func -> Long { this marker }
+	peek: func -> Char { this buffer get(this marker) }
+	hasNext: override func -> Bool { this marker < this buffer size }
 	close: override func
 	read: override func (dest: Char*, destOffset: Int, maxRead: Int) -> SizeT {
-		if (marker >= this buffer size)
+		if (this marker >= this buffer size)
 			Exception new(This, "Buffer overflow! Offset is larger than buffer size.") throw()
 
-		copySize := (marker + maxRead > buffer size ? buffer size - marker : maxRead)
-		memcpy(dest, this buffer data + marker, copySize)
-		marker += copySize
+		copySize := (this marker + maxRead > this buffer size ? this buffer size - this marker : maxRead)
+		memcpy(dest, this buffer data + this marker, copySize)
+		this marker += copySize
 		copySize
 	}
 	read: override func ~char -> Char {
-		c := this buffer get(marker)
-		marker += 1
+		c := this buffer get(this marker)
+		this marker += 1
 		c
 	}
 	seek: override func (offset: Long, mode: SeekMode) -> Bool {
 		match mode {
 			case SeekMode SET =>
-				marker = offset
+				this marker = offset
 			case SeekMode CUR =>
-				marker += offset
+				this marker += offset
 			case SeekMode END =>
-				marker = this buffer size + offset
+				this marker = this buffer size + offset
 		}
 		this _clampMarker()
 		true
 	}
 	_clampMarker: func {
-		if (marker < 0)
-			marker = 0
-		if (marker >= this buffer size)
-			marker = this buffer size - 1
+		if (this marker < 0)
+			this marker = 0
+		if (this marker >= this buffer size)
+			this marker = this buffer size - 1
 	}
 }
