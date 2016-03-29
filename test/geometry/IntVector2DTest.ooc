@@ -38,12 +38,12 @@ IntVector2DTest: class extends Fixture {
 			expect((this vector0 - this vector0) y, is equal to((IntVector2D new()) y))
 		})
 		this add("scalar multiplication", func {
-			expect(((-1) * this vector0) x, is equal to((-vector0) x))
-			expect(((-1) * this vector0) y, is equal to((-vector0) y))
+			expect(((-1) * this vector0) x, is equal to((-this vector0) x))
+			expect(((-1) * this vector0) y, is equal to((-this vector0) y))
 		})
 		this add("scalar division", func {
-			expect((this vector0 / (-1)) x, is equal to((-vector0) x))
-			expect((this vector0 / (-1)) y, is equal to((-vector0) y))
+			expect((this vector0 / (-1)) x, is equal to((-this vector0) x))
+			expect((this vector0 / (-1)) y, is equal to((-this vector0) y))
 		})
 		this add("get values", func {
 			expect(this vector0 x, is equal to(22))
@@ -61,7 +61,7 @@ IntVector2DTest: class extends Fixture {
 			expect(IntVector2D parse(value) y, is equal to(this vector3 y))
 		})
 		this add("float casts", func {
-			vector := vector0 toFloatVector2D()
+			vector := this vector0 toFloatVector2D()
 			expect(vector x, is equal to(22.0f) within(this precision))
 			expect(vector y, is equal to(-3.0f) within(this precision))
 		})
@@ -69,15 +69,15 @@ IntVector2DTest: class extends Fixture {
 			expect(this vector0 scalarProduct(this vector1), is equal to (225))
 		})
 		this add("minimum maximum", func {
-			max := vector0 maximum(this vector1)
-			min := vector0 minimum(this vector1)
+			max := this vector0 maximum(this vector1)
+			min := this vector0 minimum(this vector1)
 			expect(max x, is equal to(22))
 			expect(max y, is equal to(13))
 			expect(min x, is equal to(12))
 			expect(min y, is equal to(-3))
 		})
 		this add("clamp", func {
-			result := vector1 clamp(this vector0, this vector2)
+			result := this vector1 clamp(this vector0, this vector2)
 			expect(result x, is equal to(22))
 			expect(result y, is equal to(10))
 		})

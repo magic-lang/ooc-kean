@@ -53,7 +53,7 @@ IntPoint2DTest: class extends Fixture {
 			expect(IntPoint2D parse(value) y, is equal to(this point3 y))
 		})
 		this add("float casts", func {
-			point := point0 toFloatPoint2D()
+			point := this point0 toFloatPoint2D()
 			expect(point x, is equal to(22.0f) within(this precision))
 			expect(point y, is equal to(-3.0f) within(this precision))
 		})
@@ -70,7 +70,7 @@ IntPoint2DTest: class extends Fixture {
 			expect(product, is equal to(225))
 		})
 		this add("clamp", func {
-			result := point1 clamp(this point0, this point2)
+			result := this point1 clamp(this point0, this point2)
 			expect(result x, is equal to(this point0 x))
 			expect(result y, is equal to(this point2 y))
 		})

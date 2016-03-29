@@ -40,14 +40,14 @@ IntVector3DTest: class extends Fixture {
 			expect((this vector0 - this vector0) z, is equal to((IntVector3D new()) z))
 		})
 		this add("scalar multiplication", func {
-			expect(((-1) * this vector0) x, is equal to((-vector0) x))
-			expect(((-1) * this vector0) y, is equal to((-vector0) y))
-			expect(((-1) * this vector0) z, is equal to((-vector0) z))
+			expect(((-1) * this vector0) x, is equal to((-this vector0) x))
+			expect(((-1) * this vector0) y, is equal to((-this vector0) y))
+			expect(((-1) * this vector0) z, is equal to((-this vector0) z))
 		})
 		this add("scalar division", func {
-			expect((this vector0 / (-1)) x, is equal to((-vector0) x))
-			expect((this vector0 / (-1)) y, is equal to((-vector0) y))
-			expect((this vector0 / (-1)) z, is equal to((-vector0) z))
+			expect((this vector0 / (-1)) x, is equal to((-this vector0) x))
+			expect((this vector0 / (-1)) y, is equal to((-this vector0) y))
+			expect((this vector0 / (-1)) z, is equal to((-this vector0) z))
 		})
 		this add("get values", func {
 			expect(this vector0 x, is equal to(22))
@@ -62,7 +62,7 @@ IntVector3DTest: class extends Fixture {
 			expect(IntVector3D parse(value) z, is equal to(this vector3 z))
 		})
 		this add("float casts", func {
-			vector := vector0 toFloatVector3D()
+			vector := this vector0 toFloatVector3D()
 			expect(vector x, is equal to(22.0f) within(this precision))
 			expect(vector y, is equal to(-3.0f) within(this precision))
 			expect(vector z, is equal to(8.0f) within(this precision))

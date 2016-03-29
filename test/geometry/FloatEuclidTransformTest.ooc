@@ -12,8 +12,8 @@ use geometry
 use unit
 
 FloatEuclidTransformTest: class extends Fixture {
-	tolerance := 1.0e-5f
 	init: func {
+		tolerance := 1.0e-5f
 		super("FloatEuclidTransform")
 		this add("convolveCenter translations 1", func {
 			euclidTransforms := VectorList<FloatEuclidTransform> new(5)
@@ -24,10 +24,10 @@ FloatEuclidTransformTest: class extends Fixture {
 			}
 			result := FloatEuclidTransform convolveCenter(euclidTransforms, kernel)
 
-			expect(result translation x, is equal to (euclidTransforms[2] translation x) within(this tolerance))
-			expect(result translation y, is equal to (euclidTransforms[2] translation y) within(this tolerance))
-			expect(result translation z, is equal to (euclidTransforms[2] translation z) within(this tolerance))
-			expect(result scaling, is equal to (euclidTransforms[2] scaling) within(this tolerance))
+			expect(result translation x, is equal to (euclidTransforms[2] translation x) within(tolerance))
+			expect(result translation y, is equal to (euclidTransforms[2] translation y) within(tolerance))
+			expect(result translation z, is equal to (euclidTransforms[2] translation z) within(tolerance))
+			expect(result scaling, is equal to (euclidTransforms[2] scaling) within(tolerance))
 
 			(kernel, euclidTransforms) free()
 		})
@@ -42,10 +42,10 @@ FloatEuclidTransformTest: class extends Fixture {
 			for (i in 0 .. euclidTransforms count)
 				expectedResult += kernel[i] * euclidTransforms[i] translation x
 
-			expect(result translation x, is equal to (expectedResult) within(this tolerance))
-			expect(result translation y, is equal to (expectedResult) within(this tolerance))
-			expect(result translation z, is equal to (expectedResult) within(this tolerance))
-			expect(result scaling, is equal to (expectedResult - 1.0f) within(this tolerance))
+			expect(result translation x, is equal to (expectedResult) within(tolerance))
+			expect(result translation y, is equal to (expectedResult) within(tolerance))
+			expect(result translation z, is equal to (expectedResult) within(tolerance))
+			expect(result scaling, is equal to (expectedResult - 1.0f) within(tolerance))
 
 			(kernel, euclidTransforms) free()
 		})
@@ -61,7 +61,7 @@ FloatEuclidTransformTest: class extends Fixture {
 			result := FloatEuclidTransform convolveCenter(euclidTransforms, kernel)
 			expectedRotation := Quaternion weightedMean(quaternions, kernel)
 
-			expect(result rotation _quaternion distance(expectedRotation), is equal to (0.0f) within(this tolerance))
+			expect(result rotation _quaternion distance(expectedRotation), is equal to (0.0f) within(tolerance))
 
 			(kernel, quaternions, euclidTransforms) free()
 		})
