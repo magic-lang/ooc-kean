@@ -35,6 +35,9 @@ IsConstraints: class extends ExpectModifier {
 	greater ::= GreaterModifier new(this)
 	greaterOrEqual ::= GreaterModifier new(this, true)
 	init: func
+	within: func ~range (range: Range) -> RangeConstraint { RangeConstraint new(this, range) }
+	within: func ~int (min, max: Int) -> RangeConstraint { RangeConstraint new(this, min, max) }
+	within: func ~float (min, max: Float) -> RangeConstraint { RangeConstraint new(this, min, max) }
 }
 
 Constraint: abstract class extends ExpectModifier {
@@ -59,6 +62,43 @@ NullConstraint: class extends Constraint {
 NotNullConstraint: class extends Constraint {
 	init: func ~parent (parent: ExpectModifier) { super(parent) }
 	test: override func (value: Object) -> Bool { value != null }
+}
+
+RangeConstraint: class extends Constraint {
+	type := -1
+	intMin, intMax: Int
+	floatMin, floatMax: Float
+	init: func ~range (parent: ExpectModifier, range: Range) {
+		super(parent)
+		(this intMin, this intMax, this type) = (range min, range max, 0)
+	}
+	init: func ~int (parent: ExpectModifier, min, max: Int) {
+		super(parent)
+		(this intMin, this intMax, this type) = (min, max, 0)
+	}
+	init: func ~float (parent: ExpectModifier, min, max: Float) {
+		super(parent)
+		(this floatMin, this floatMax, this type) = (min, max, 1)
+	}
+	test: override func (value: Object) -> Bool {
+		testValue, compareMin, compareMax: Double
+		match ((value as Cell) T) {
+			case Float =>
+				temp := (value as Cell<Float>) get()
+				testValue = temp as Double
+			case Int =>
+				temp := (value as Cell<Int>) get()
+				testValue = temp as Double
+			case =>
+				raise("Unknown type used with 'is within()'!")
+		}
+		match (this type) {
+			case 0 => (compareMin, compareMax) = (this intMin as Double, this intMax as Double)
+			case 1 => (compareMin, compareMax) = (this floatMin as Double, this floatMax as Double)
+			case => raise("Unknown type used with 'is within()'!")
+		}
+		testValue >= compareMin && testValue < compareMax
+	}
 }
 
 CompareConstraint: class extends Constraint {
