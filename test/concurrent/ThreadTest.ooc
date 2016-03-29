@@ -59,7 +59,7 @@ ThreadTest: class extends Fixture {
 		startedCondition wait(mutex)
 		expect(thread cancel())
 		expect(thread wait())
-		expect(value get() < expectedValue)
+		expect(value get(), is less than(expectedValue))
 		thread free()
 		startedCondition free()
 		mutex free()

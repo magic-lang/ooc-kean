@@ -30,8 +30,8 @@ BlockedQueueTest: class extends Fixture {
 		consume := func {
 			for (i in 0 .. countPerThread) {
 				value := queue wait()
-				expect(value < totalCount)
-				expect(value > 0)
+				expect(value, is less than(totalCount))
+				expect(value, is greater than(0))
 			}
 		}
 		queue enqueue(1)
@@ -70,7 +70,7 @@ BlockedQueueTest: class extends Fixture {
 		consume := func {
 			for (i in 0 .. totalCount) {
 				value := queue wait()
-				expect(value get() < totalCount)
+				expect(value get(), is less than(totalCount))
 				value free()
 			}
 		}

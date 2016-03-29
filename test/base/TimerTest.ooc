@@ -18,12 +18,12 @@ TimerTest: class extends Fixture {
 		this add("basic use of WallTimer", func {
 			fast := this wallTimerTestFunction(1_000)
 			slow := this wallTimerTestFunction(10_000_000)
-			expect(slow > fast, is true)
+			expect(slow, is greater than(fast))
 		})
 		this add("basic use of CpuTimer", func {
 			fast := this cpuTimerTestFunction(1_000)
 			slow := this cpuTimerTestFunction(10_000_000)
-			expect(slow > fast, is true)
+			expect(slow, is greater than(fast))
 		})
 		this add("reset", func {
 			expect(this wallTimer _count, is equal to(2))

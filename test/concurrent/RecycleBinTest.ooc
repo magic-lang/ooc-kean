@@ -44,10 +44,10 @@ RecycleBinTest: class extends Fixture {
 			expect(bin isFull)
 			expect(freed count, is equal to(allocationCount - binSize))
 			for (i in 0 .. freed count)
-				expect(freed[i] content == -1)
+				expect(freed[i] content, is equal to(-1))
 
 			for (i in 0 .. bin _list count)
-				expect(bin _list[i] content >= 0)
+				expect(bin _list[i] content, is greaterOrEqual than(0))
 
 			bin free()
 			expect(freed count, is equal to(MyClass allocated))
