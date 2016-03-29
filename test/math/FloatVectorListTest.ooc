@@ -11,9 +11,8 @@ use math
 use collections
 
 FloatVectorListTest: class extends Fixture {
-	tolerance := 1.0e-5f
-
 	init: func {
+		tolerance := 1.0e-5f
 		super("FloatVectorList")
 		this add("sum", func {
 			list := FloatVectorList new()
