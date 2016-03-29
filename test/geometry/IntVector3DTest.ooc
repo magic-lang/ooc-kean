@@ -11,7 +11,7 @@ use base
 use geometry
 
 IntVector3DTest: class extends Fixture {
-	precision := 1.0e-5f
+	tolerance := 1.0e-5f
 	vector0 := IntVector3D new (22, -3, 8)
 	vector1 := IntVector3D new (12, 13, -8)
 	vector2 := IntVector3D new (34, 10, 0)
@@ -63,9 +63,9 @@ IntVector3DTest: class extends Fixture {
 		})
 		this add("float casts", func {
 			vector := this vector0 toFloatVector3D()
-			expect(vector x, is equal to(22.0f) within(this precision))
-			expect(vector y, is equal to(-3.0f) within(this precision))
-			expect(vector z, is equal to(8.0f) within(this precision))
+			expect(vector x, is equal to(22.0f) within(this tolerance))
+			expect(vector y, is equal to(-3.0f) within(this tolerance))
+			expect(vector z, is equal to(8.0f) within(this tolerance))
 		})
 		this add("scalar product", func {
 			expect(this vector0 scalarProduct(this vector1), is equal to (161))
