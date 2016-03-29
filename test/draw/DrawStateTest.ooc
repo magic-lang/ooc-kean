@@ -11,19 +11,19 @@ use draw
 use geometry
 
 DrawStateTest: class extends Fixture {
-	compareTransform: static func (resultTransform, correctTransform: FloatTransform3D, precision: Float) {
-		expect(resultTransform a, is equal to(correctTransform a) within(precision))
-		expect(resultTransform b, is equal to(correctTransform b) within(precision))
-		expect(resultTransform c, is equal to(correctTransform c) within(precision))
-		expect(resultTransform d, is equal to(correctTransform d) within(precision))
-		expect(resultTransform e, is equal to(correctTransform e) within(precision))
-		expect(resultTransform f, is equal to(correctTransform f) within(precision))
-		expect(resultTransform g, is equal to(correctTransform g) within(precision))
-		expect(resultTransform h, is equal to(correctTransform h) within(precision))
-		expect(resultTransform i, is equal to(correctTransform i) within(precision))
-		expect(resultTransform j, is equal to(correctTransform j) within(precision))
-		expect(resultTransform k, is equal to(correctTransform k) within(precision))
-		expect(resultTransform l, is equal to(correctTransform l) within(precision))
+	compareTransform: static func (resultTransform, correctTransform: FloatTransform3D, tolerance: Float) {
+		expect(resultTransform a, is equal to(correctTransform a) within(tolerance))
+		expect(resultTransform b, is equal to(correctTransform b) within(tolerance))
+		expect(resultTransform c, is equal to(correctTransform c) within(tolerance))
+		expect(resultTransform d, is equal to(correctTransform d) within(tolerance))
+		expect(resultTransform e, is equal to(correctTransform e) within(tolerance))
+		expect(resultTransform f, is equal to(correctTransform f) within(tolerance))
+		expect(resultTransform g, is equal to(correctTransform g) within(tolerance))
+		expect(resultTransform h, is equal to(correctTransform h) within(tolerance))
+		expect(resultTransform i, is equal to(correctTransform i) within(tolerance))
+		expect(resultTransform j, is equal to(correctTransform j) within(tolerance))
+		expect(resultTransform k, is equal to(correctTransform k) within(tolerance))
+		expect(resultTransform l, is equal to(correctTransform l) within(tolerance))
 	}
 	init: func {
 		super("DrawState")

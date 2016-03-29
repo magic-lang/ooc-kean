@@ -11,12 +11,12 @@ use base
 use geometry
 
 IntPoint2DTest: class extends Fixture {
-	precision := 1.0e-5f
 	point0 := IntPoint2D new (22, -3)
 	point1 := IntPoint2D new (12, 13)
 	point2 := IntPoint2D new (34, 10)
 	point3 := IntPoint2D new (10, 20)
 	init: func {
+		tolerance := 1.0e-5f
 		super("IntPoint2D")
 		this add("fixture", func {
 			expect(this point0 + this point1, is equal to(this point2))
@@ -54,8 +54,8 @@ IntPoint2DTest: class extends Fixture {
 		})
 		this add("float casts", func {
 			point := this point0 toFloatPoint2D()
-			expect(point x, is equal to(22.0f) within(this precision))
-			expect(point y, is equal to(-3.0f) within(this precision))
+			expect(point x, is equal to(22.0f) within(tolerance))
+			expect(point y, is equal to(-3.0f) within(tolerance))
 		})
 		this add("minimum maximum", func {
 			max := this point0 maximum(this point1)
