@@ -402,6 +402,12 @@ QuaternionTest: class extends Fixture {
 			expect(text, is equal to(t"Real: 1.00 Imaginary: 0.00 1.00 0.00"))
 			text free()
 		})
+		this add("hamiltonProduct", func {
+			first := Quaternion new(1, 0, 1, 0)
+			second := Quaternion new(1, 0.5f, 0.5f, 0.75f)
+			product := Quaternion hamiltonProduct(first, second)
+			expect(product, is equal to(Quaternion new(0.5f, 1.25f, 1.5f, 0.25f)))
+		})
 	}
 }
 
