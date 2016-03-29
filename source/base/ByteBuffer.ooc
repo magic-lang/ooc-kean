@@ -32,7 +32,7 @@ ByteBuffer: class {
 		this _pointer = null
 		super()
 	}
-	zero: func ~whole { memset(this _pointer, 0, _size) }
+	zero: func ~whole { memset(this _pointer, 0, this _size) }
 	zero: func ~range (offset, length: Int) { memset(this _pointer + offset, 0, length) }
 	slice: func (offset, size: Int) -> This { _SlicedByteBuffer new(this, offset, size) }
 	copy: func -> This {
