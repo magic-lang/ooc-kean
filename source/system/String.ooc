@@ -115,8 +115,7 @@ String: class {
 		match (this size) {
 			case 0 => this
 			case 1 => toUpper()
-			case =>
-				this[0 .. 1] toUpper() + this[1 .. -1]
+			case => this[0] toUpper() + this substring(1)
 		}
 	}
 	indexOf: func ~char (c: Char, start: Int = 0) -> Int { this _buffer indexOf(c, start) }
