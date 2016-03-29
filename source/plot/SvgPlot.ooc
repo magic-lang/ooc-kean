@@ -71,7 +71,7 @@ SvgPlot: class {
 				this yAxis max *= aspectRatio
 			}
 		}
-		margin := FloatVector2D new(yAxis getRequiredMargin(this fontSize), xAxis getRequiredMargin(this fontSize))
+		margin := FloatVector2D new(this yAxis getRequiredMargin(this fontSize), this xAxis getRequiredMargin(this fontSize))
 		plotAreaSize := size - FloatVector2D new(2.0f * margin x, 2.0f * margin y)
 		transform := FloatTransform2D createTranslation(- this xAxis min, - this yAxis min)
 		transform = transform scale(this xAxis length() != 0.0f ? plotAreaSize x / this xAxis length() : 1.0f, this yAxis length() != 0.0f ? - plotAreaSize y / this yAxis length() : -1.0f)
@@ -88,12 +88,12 @@ SvgPlot: class {
 		result & this setLegends(size, plotAreaSize)
 	}
 	setAxesMinMax: func {
-		if (!datasets empty) {
-			min := datasets[0] minValues()
-			max := datasets[0] maxValues()
-			for (i in 0 .. datasets count) {
-				min = min minimum(datasets[i] minValues())
-				max = max maximum(datasets[i] maxValues())
+		if (!this datasets empty) {
+			min := this datasets[0] minValues()
+			max := this datasets[0] maxValues()
+			for (i in 0 .. this datasets count) {
+				min = min minimum(this datasets[i] minValues())
+				max = max maximum(this datasets[i] maxValues())
 			}
 			this xAxis min = min x
 			this xAxis max = max x
@@ -102,16 +102,16 @@ SvgPlot: class {
 		}
 	}
 	setColor: func {
-		if (!datasets empty) {
+		if (!this datasets empty) {
 			noneColor := ColorRgba black
-			for (j in 0 .. datasets count) {
-				if (noneColor != datasets[j] colorRgba) {
-					color := datasets[j] colorRgba
-					datasets[j] color = "rgb(" clone() & color r toString() & "," clone() & color g toString() & "," clone() & color b toString() & ")" clone()
-					datasets[j] opacity = (color a as Float) / 255.0f
+			for (j in 0 .. this datasets count) {
+				if (noneColor != this datasets[j] colorRgba) {
+					color := this datasets[j] colorRgba
+					this datasets[j] color = "rgb(" clone() & color r toString() & "," clone() & color g toString() & "," clone() & color b toString() & ")" clone()
+					this datasets[j] opacity = (color a as Float) / 255.0f
 				} else {
-					datasets[j] color = colorList[this _colorCount % this colorList count] clone()
-					datasets[j] opacity = 1
+					this datasets[j] color = this colorList[this _colorCount % this colorList count] clone()
+					this datasets[j] opacity = 1
 					this _colorCount += 1
 				}
 			}
@@ -136,7 +136,7 @@ SvgPlot: class {
 		for (i in 0 .. this datasets count)
 			if (this datasets[i] label != "") {
 				legendCounter += 1
-				result = result & this datasets[i] getSvgLegend(legendCounter, fontSize)
+				result = result & this datasets[i] getSvgLegend(legendCounter, this fontSize)
 			}
 		result >> "</g>\n</svg>\n"
 	}

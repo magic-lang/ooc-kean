@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include stdio | (_POSIX_SOURCE), fcntl
+include stdio | (_POSIX_SOURCE)
 
 stdout, stderr, stdin: extern FStream
 
@@ -178,14 +178,14 @@ FStream: cover from FILE* {
 	readChar: func -> Char {
 		c := '\0'
 		count := fread(c&, 1, 1, this)
-		if (count != 1 && error()) {
+		if (count != 1 && this error()) {
 			Exception new("Trying to read a char at the end of a file!") throw()
 		}
 		c
 	}
 
 	readLine: func ~defaults -> String {
-		readLine(1023)
+		this readLine(1023)
 	}
 
 	readLine: func (chunk: Int) -> String {
@@ -198,7 +198,7 @@ FStream: cover from FILE* {
 			if (c == EOF) break
 			if (c == '\n') break
 			buf append((c & 0xFF) as Char)
-			if (!hasNext()) break
+			if (!this hasNext()) break
 		}
 
 		buf toString()
@@ -210,9 +210,9 @@ FStream: cover from FILE* {
 	 */
 	getSize: func -> SSizeT {
 		result: SSizeT = 0
-		prev := tell()
+		prev := this tell()
 		if (prev >= 0 && seek(0, SEEK_END) != -1) {
-			result = tell() as SizeT
+			result = this tell() as SizeT
 			if (seek(prev, SEEK_SET) == -1)
 				result = 0
 		}

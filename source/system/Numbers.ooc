@@ -139,8 +139,8 @@ Range: cover {
 	min, max: Int
 	init: func@ (=min, =max)
 	reduce: func (f: Func (Int, Int) -> Int) -> Int {
-		acc := f(min, min + 1)
-		for (i in min + 2 .. max) acc = f(acc, i)
+		acc := f(this min, this min + 1)
+		for (i in this min + 2 .. this max) acc = f(acc, i)
 		acc
 	}
 }

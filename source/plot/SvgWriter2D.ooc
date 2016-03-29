@@ -56,15 +56,15 @@ SvgWriter2D: class {
 		this fontSize = 14
 	}
 	free: override func {
-		svgPlots free()
-		file free()
+		this svgPlots free()
+		this file free()
 		super()
 	}
 	addPlot: func (svgPlot: SvgPlot) {
 		this svgPlots add(svgPlot)
 	}
 	write: func {
-		output := prepareOutput()
+		output := this prepareOutput()
 		fileWriter := FileWriter new(this file, false)
 		fileWriter write(output) . close()
 		(output, fileWriter) free()
@@ -95,7 +95,7 @@ SvgWriter2D: class {
 				position x = plotSize x * i modulo(numPlotsX)
 				position y = plotSize y * (i / numPlotsX)
 				result = result >> "<svg desc='Plot " & (i + 1) toString() >> "' x='" & position x toString() >> "' y='" & position y toString() >> "' width='" & plotSize x toString() >> "' height='" & plotSize y toString() >> "'>\n"
-				result = result & svgPlots[i] getSvg(plotSize, fontSize)
+				result = result & this svgPlots[i] getSvg(plotSize, this fontSize)
 				result = result >> "</svg>\n"
 			}
 		}

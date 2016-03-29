@@ -13,14 +13,14 @@ Pipe: abstract class {
 	eof := false
 	read: func ~char -> Char {
 		c: Char
-		howmuch := read(c& as CString, 1)
+		howmuch := this read(c& as CString, 1)
 		if (howmuch == -1)
 			c = '\0'
 		c
 	}
 	read: func ~string (len: Int) -> String {
 		buf := CString new(len)
-		howmuch := read(buf, len)
+		howmuch := this read(buf, len)
 		result: String = null
 		if (howmuch != -1) {
 			buf[howmuch] = '\0'
@@ -29,7 +29,7 @@ Pipe: abstract class {
 		result
 	}
 	read: func ~buffer (buf: CharBuffer) -> Int {
-		bytesRead := read(buf data, buf capacity)
+		bytesRead := this read(buf data, buf capacity)
 		if (bytesRead >= 0)
 			buf setLength(bytesRead)
 		bytesRead
@@ -68,11 +68,11 @@ PipeReader: class extends Reader {
 	pipe: Pipe
 	init: func (=pipe)
 	read: override func (chars: CString, offset: Int, count: Int) -> SizeT {
-		bytesRead := pipe read(chars + offset, count)
+		bytesRead := this pipe read(chars + offset, count)
 		bytesRead >= 0 ? bytesRead : 0
 	}
 	read: override func ~char -> Char {
-		bytesRead := pipe read()
+		bytesRead := this pipe read()
 		bytesRead >= 0 ? bytesRead : 0
 	}
 	hasNext: override func -> Bool { !this pipe eof() }

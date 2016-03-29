@@ -106,7 +106,7 @@ IntBox2D: cover {
 		else if (other hasZeroArea)
 			this
 		else
-			union(other)
+			this union(other)
 	}
 	operator - (other: This) -> This { this hasZeroArea || other hasZeroArea ? This new() : this intersection(other) }
 	operator == (other: This) -> Bool { this leftTop == other leftTop && this size == other size }

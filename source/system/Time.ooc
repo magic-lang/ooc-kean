@@ -75,9 +75,9 @@ Time: class {
 		result
 	}
 	measure: static func (action: Func) -> UInt {
-		t1 := runTime()
+		t1 := This runTime()
 		action()
-		t2 := runTime()
+		t2 := This runTime()
 		t2 - t1
 	}
 	// The seconds that have elapsed in the current minute
@@ -123,10 +123,10 @@ Time: class {
 		result
 	}
 	sleepSec: static func (duration: Float) {
-		sleepMicro(duration * 1_000_000)
+		This sleepMicro(duration * 1_000_000)
 	}
 	sleepMilli: static func (duration: UInt) {
-		sleepMicro(duration * 1_000)
+		This sleepMicro(duration * 1_000)
 	}
 	sleepMicro: static func (duration: UInt) {
 		version(windows)

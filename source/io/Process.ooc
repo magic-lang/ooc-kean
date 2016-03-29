@@ -33,19 +33,19 @@ Process: abstract class {
 		this wait()
 	}
 	getOutput: func -> (String, Int) {
-		stdOut = Pipe new()
+		this stdOut = Pipe new()
 		exitCode := this execute()
-		result := PipeReader new(stdOut) readAll()
-		stdOut close()
-		stdOut = null
+		result := PipeReader new(this stdOut) readAll()
+		this stdOut close()
+		this stdOut = null
 		(result, exitCode)
 	}
 	getErrOutput: func -> (String, Int) {
-		stdErr = Pipe new()
+		this stdErr = Pipe new()
 		exitCode := this execute()
-		result := PipeReader new(stdErr) readAll()
-		stdErr close()
-		stdErr = null
+		result := PipeReader new(this stdErr) readAll()
+		this stdErr close()
+		this stdErr = null
 		(result, exitCode)
 	}
 	// Returns a representation of the command, escaped to some point.
@@ -61,7 +61,7 @@ Process: abstract class {
 			arg := args[i]
 			p add(arg)
 		}
-		new(p)
+		This new(p)
 	}
 	new: static func (.args) -> This {
 		result: This = null
@@ -74,12 +74,12 @@ Process: abstract class {
 		result
 	}
 	new: static func ~withEnvFromArray (args: String[], .env) -> This {
-		p := new(args)
+		p := This new(args)
 		p env = env
 		p
 	}
 	new: static func ~withEnv (.args, .env) -> This {
-		p := new(args)
+		p := This new(args)
 		p env = env
 		p
 	}

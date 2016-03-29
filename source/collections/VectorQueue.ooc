@@ -21,7 +21,7 @@ VectorQueue: class <T> extends Queue<T> {
 		super()
 	}
 	free: override func {
-		memfree(_backend)
+		memfree(this _backend)
 		super()
 	}
 	clear: override func {

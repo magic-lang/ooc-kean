@@ -142,7 +142,7 @@ FloatVectorList: class extends VectorList<Float> {
 	convolve: func (kernel: This) -> This {
 		result := This new(this count)
 		for (i in 0 .. this count)
-			result add(convolveAt(i, kernel))
+			result add(this convolveAt(i, kernel))
 		result
 	}
 	convolveAt: func (index: Int, kernel: This) -> Float {
