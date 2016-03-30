@@ -13,7 +13,7 @@ import Constraints
 ExpectModifier: abstract class {
 	parent: This = null
 	child: This = null
-	init: func ~parent (=parent)
+	init: func (=parent)
 	free: override func {
 		if (this child) {
 			if (this child parent == this)
@@ -27,7 +27,7 @@ ExpectModifier: abstract class {
 		}
 		super()
 	}
-	verify: func ~parent (value: Object, _child: This = null) -> Bool {
+	verify: func (value: Object, _child: This = null) -> Bool {
 		this child = _child
 		this parent != null ? this parent verify(value, this): this test(value)
 	}
@@ -38,8 +38,7 @@ ExpectModifier: abstract class {
 EqualModifier: class extends ExpectModifier {
 	comparisonType: ComparisonType
 	withinType: ComparisonType
-	init: func ~parent (parent: ExpectModifier, type := ComparisonType Equal) {
-		super(parent)
+	init: func (type := ComparisonType Equal) {
 		this comparisonType = type
 		this withinType = type == ComparisonType Equal ? ComparisonType Within : ComparisonType NotWithin
 	}
@@ -189,10 +188,9 @@ EqualModifier: class extends ExpectModifier {
 LessModifier: class extends ExpectModifier {
 	allowEquality: Bool
 	typeToPass: ComparisonType
-	init: func ~parent (parent: ExpectModifier, allowEquals := false) {
-		super(parent)
-		this allowEquality = allowEquals
-		this typeToPass = allowEquals ? ComparisonType LessOrEqual : ComparisonType LessThan
+	init: func (comparisonType := ComparisonType LessThan) {
+		this typeToPass = comparisonType
+		this allowEquality = comparisonType == ComparisonType LessOrEqual
 	}
 	than: func ~object (right: Object) -> CompareConstraint {
 		f := func (value, c: Object) -> Bool { this allowEquality ? value <= c : value < c }
@@ -239,10 +237,9 @@ LessModifier: class extends ExpectModifier {
 GreaterModifier: class extends ExpectModifier {
 	allowEquality: Bool
 	typeToPass: ComparisonType
-	init: func ~parent (parent: ExpectModifier, allowEquals := false) {
-		super(parent)
-		this allowEquality = allowEquals
-		this typeToPass = allowEquals ? ComparisonType GreaterOrEqual : ComparisonType GreaterThan
+	init: func (comparisonType := ComparisonType GreaterThan) {
+		this typeToPass = comparisonType
+		this allowEquality = comparisonType == ComparisonType GreaterOrEqual
 	}
 	than: func ~object (right: Object) -> CompareConstraint {
 		f := func (value, c: Object) -> Bool { this allowEquality ? value >= c : value > c }

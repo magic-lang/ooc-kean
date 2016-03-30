@@ -23,61 +23,50 @@ ComparisonType: enum {
 	NotWithin
 }
 
-IsConstraints: class extends ExpectModifier {
-	true ::= TrueConstraint new(this)
-	false ::= FalseConstraint new(this)
-	Null ::= NullConstraint new(this)
-	notNull ::= NotNullConstraint new(this)
-	equal ::= EqualModifier new(this)
-	notEqual ::= EqualModifier new(this, ComparisonType NotEqual)
-	less ::= LessModifier new(this)
-	lessOrEqual ::= LessModifier new(this, true)
-	greater ::= GreaterModifier new(this)
-	greaterOrEqual ::= GreaterModifier new(this, true)
+is: abstract class {
+	true ::= static TrueConstraint new()
+	false ::= static FalseConstraint new()
+	Null ::= static NullConstraint new()
+	notNull ::= static NotNullConstraint new()
+	equal ::= static EqualModifier new()
+	notEqual ::= static EqualModifier new(ComparisonType NotEqual)
+	less ::= static LessModifier new()
+	lessOrEqual ::= static LessModifier new(ComparisonType LessOrEqual)
+	greater ::= static GreaterModifier new()
+	greaterOrEqual ::= static GreaterModifier new(ComparisonType GreaterOrEqual)
+	within: static func ~range (range: Range) -> RangeConstraint { RangeConstraint new(range min, range max) }
+	within: static func ~int (min, max: Int) -> RangeConstraint { RangeConstraint new(min, max) }
+	within: static func ~float (min, max: Float) -> RangeConstraint { RangeConstraint new(min, max) }
+}
+
+TrueConstraint: class extends ExpectModifier {
 	init: func
-	within: func ~range (range: Range) -> RangeConstraint { RangeConstraint new(this, range) }
-	within: func ~int (min, max: Int) -> RangeConstraint { RangeConstraint new(this, min, max) }
-	within: func ~float (min, max: Float) -> RangeConstraint { RangeConstraint new(this, min, max) }
-}
-
-Constraint: abstract class extends ExpectModifier {
-	init: func ~parent (parent: ExpectModifier) { super(parent) }
-}
-
-TrueConstraint: class extends Constraint {
-	init: func ~parent (parent: ExpectModifier) { super(parent) }
 	test: override func (value: Object) -> Bool { value as Cell<Bool> get() }
 }
 
-FalseConstraint: class extends Constraint {
-	init: func ~parent (parent: ExpectModifier) { super(parent) }
+FalseConstraint: class extends ExpectModifier {
+	init: func
 	test: override func (value: Object) -> Bool { !value as Cell<Bool> get() }
 }
 
-NullConstraint: class extends Constraint {
-	init: func ~parent (parent: ExpectModifier) { super(parent) }
+NullConstraint: class extends ExpectModifier {
+	init: func
 	test: override func (value: Object) -> Bool { value == null }
 }
 
-NotNullConstraint: class extends Constraint {
-	init: func ~parent (parent: ExpectModifier) { super(parent) }
+NotNullConstraint: class extends ExpectModifier {
+	init: func
 	test: override func (value: Object) -> Bool { value != null }
 }
 
-RangeConstraint: class extends Constraint {
+RangeConstraint: class extends ExpectModifier {
 	type := -1
 	intMin, intMax: Int
 	floatMin, floatMax: Float
-	init: func ~range (parent: ExpectModifier, range: Range) {
-		super(parent)
-		(this intMin, this intMax, this type) = (range min, range max, 0)
-	}
-	init: func ~int (parent: ExpectModifier, min, max: Int) {
-		super(parent)
+	init: func ~int (min, max: Int) {
 		(this intMin, this intMax, this type) = (min, max, 0)
 	}
-	init: func ~float (parent: ExpectModifier, min, max: Float) {
-		super(parent)
+	init: func ~float (min, max: Float) {
 		(this floatMin, this floatMax, this type) = (min, max, 1)
 	}
 	test: override func (value: Object) -> Bool {
@@ -101,7 +90,7 @@ RangeConstraint: class extends Constraint {
 	}
 }
 
-CompareConstraint: class extends Constraint {
+CompareConstraint: class extends ExpectModifier {
 	comparer: Func (Object, Object) -> Bool
 	correct: Object
 	type: ComparisonType
