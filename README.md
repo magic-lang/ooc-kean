@@ -1,3 +1,5 @@
+# Release  X.X.X
+
 magic-sdk (formerly ooc-kean)
 ========
 This is an extended SDK for `magic`, a high-level cross-platform language which transpiles into C99.
@@ -9,6 +11,27 @@ This project was originally a fork of the [ooc project](https://github.com/faste
 To compile, you need the `magic` version of the [Rock compiler](https://github.com/magic-lang/rock). To make life easy, you might also want an editor with ooc/magic syntax highlighting support and a style enforcer. Those are available (for Ubuntu) at the [magic-tools repo](https://github.com/magic-lang/magic-tools#installation-ubuntu), which can also be used to automatically install (and update) rock.
 
 Tests can be run using the `test.sh` script.
+
+### Dependencies
+The following software is necessary to build version X.X.X of ooc-kean:
+* [rock X.X.X](https://github.com/magic-lang/rock/releases/tag/rock_X.X.X)
+* gcc 4.8.4
+
+### Linux
+ooc-kean have been built and tested on the following platforms:
+* Ubuntu 14.04
+* Android 4.4.4 KitkKat
+* Android 5.0 Lollipop
+* Android 5.1 Lollipop
+* Android 6.0 Marshmallow
+* Android 6.1 Marshmallov
+
+### Microsoft Windows
+ooc-kean have been built and tested on the following platforms:
+* Built with `MinGW` on Windows 7
+
+### OS-X
+Only experimental support.
 
 ## How to learn magic
 The above however target the original ooc language and are as such getting more and more outdated. A slightly more updated version is available [here](https://github.com/magic-lang/doc). We try our best to follow the `magic` style guide available also available there.
