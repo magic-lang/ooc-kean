@@ -6,6 +6,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+include stdint
+
 import native/[ThreadUnix, ThreadWin32]
 
 Thread: abstract class {
