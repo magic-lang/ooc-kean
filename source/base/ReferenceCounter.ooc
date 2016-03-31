@@ -23,12 +23,10 @@ ReferenceCounter: class {
 		}
 	}
 	init: func (target: Object, mutexType := MutexType Safe) {
-		This count += 1
 		this _target = target
 		this _lock = Mutex new(mutexType)
 	}
 	free: override func {
-		This count -= 1
 		this _lock free()
 		super()
 	}
@@ -53,5 +51,4 @@ ReferenceCounter: class {
 	increase: func { this update(1) }
 	decrease: func { this update(-1) }
 	toString: func -> String { "Object ID: " << this _target as Pointer toString() >> " Count: " & this _count toString() }
-	count: static Int = 0
 }
