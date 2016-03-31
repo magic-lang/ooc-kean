@@ -161,4 +161,11 @@ RasterUv: class extends RasterPacked {
 		}
 		result
 	}
+	writePixelGpu: override func (x, y: Int, color: ColorRgba) {
+		this[x, y] = ColorUv new(color r, color g)
+	}
+	readPixelGpu: override func (x, y: Int) -> ColorRgba {
+		color := this[x, y]
+		ColorRgba new(color u, color v, 0, 255)
+	}
 }

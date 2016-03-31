@@ -144,4 +144,11 @@ RasterYuv422Semipacked: class extends RasterPacked {
 		fileReader free()
 		result
 	}
+	writePixelGpu: override func (x, y: Int, color: ColorRgba) {
+		raise("writePixelGpu unimplemented for RasterYuv422Semipacked")
+	}
+	readPixelGpu: override func (x, y: Int) -> ColorRgba {
+		raise("writePixelGpu unimplemented for RasterYuv422Semipacked")
+		ColorRgba new(0, 0, 0, 255)
+	}
 }

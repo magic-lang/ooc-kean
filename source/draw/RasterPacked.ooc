@@ -8,6 +8,7 @@
 
 use geometry
 use base
+use draw
 import io/File
 import ByteBuffer
 import StbImage
@@ -21,6 +22,14 @@ import Canvas, RasterCanvas
 RasterPackedCanvas: abstract class extends RasterCanvas {
 	target ::= this _target as RasterPacked
 	init: func (image: RasterPacked) { super(image) }
+	draw: override func ~DrawState (drawState: DrawState) {
+		if (drawState map == null)
+			CpuMap render(drawState) // Default shader
+		else if (!drawState map inheritsFrom(CpuMap))
+			raise("Can not use a GPU shader on the CPU!")
+		else
+			(drawState map as CpuMap) render(drawState) // Custom shader
+	}
 	_resizePacked: func <T> (sourceBuffer: T*, source: RasterPacked, sourceBox, resultBox: IntBox2D) {
 		if (this target size == source size && this target stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0 && source coordinateSystem == this target coordinateSystem)
 			memcpy(this target buffer pointer, sourceBuffer, this target stride * this target height)
@@ -153,5 +162,22 @@ RasterPacked: abstract class extends RasterImage {
 			pointer[index + second] = value
 			index += this bytesPerPixel
 		}
+	}
+	// A simplified GPU emulation interface for balanced performance
+	writePixelGpu: abstract func (x, y: Int, color: ColorRgba) // For each pixel within viewport that is not clipped by anything
+	readPixelGpu: abstract func (x, y: Int) -> ColorRgba // Direct access from shader model 4.0 using the load instruction
+	readPixelGpuPadded: func (x, y: Int, padding: ColorRgba) -> ColorRgba {
+		if (x >= 0 && x < this size x && y >= 0 && y < this size y)
+			this readPixelGpu(x, y)
+		else
+			padding
+	}
+	readPixelGpuClamped: func (x, y: Int) -> ColorRgba {
+		this readPixelGpu(x clamp(0, this size x - 1), y clamp(0, this size y - 1))
+	}
+	samplePixelGpuClamped: func (normalizedX, normalizedY: Float) -> ColorRgba {
+		x := (normalizedX * this size x) as Int
+		y := (normalizedY * this size y) as Int
+		this readPixelGpuClamped(x, y)
 	}
 }

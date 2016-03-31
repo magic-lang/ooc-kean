@@ -181,4 +181,11 @@ RasterRgb: class extends RasterPacked {
 		}
 		result
 	}
+	writePixelGpu: override func (x, y: Int, color: ColorRgba) {
+		this[x, y] = ColorRgb new(color r, color g, color b)
+	}
+	readPixelGpu: override func (x, y: Int) -> ColorRgba {
+		color := this[x, y]
+		ColorRgba new(color r, color g, color b, 255)
+	}
 }
