@@ -55,8 +55,8 @@ _Task: abstract class {
 			this _mutex unlock()
 			this free()
 		} else {
-			this _mutex unlock()
 			this _waitCondition broadcast()
+			this _mutex unlock()
 		}
 	}
 }
