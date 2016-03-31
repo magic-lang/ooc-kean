@@ -84,8 +84,9 @@ RasterUv: class extends RasterPacked {
 			result = this distance(converted)
 			converted referenceCount decrease()
 		} else {
-			for (y in 0 .. this size y)
-				for (x in 0 .. this size x) {
+			for (y in 0 .. this size y) {
+				x := y % 2
+				while (x < this size x) {
 					c := this[x, y]
 					o := (other as This)[x, y]
 					if (c distance(o) > 0) {
@@ -115,7 +116,9 @@ RasterUv: class extends RasterPacked {
 							distance += (c v - maximum v) as Float squared
 						result += (distance) sqrt() / 3
 					}
+					x += 2
 				}
+			}
 			result /= ((this size x squared + this size y squared) as Float sqrt())
 		}
 		result
