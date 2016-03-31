@@ -206,16 +206,16 @@ RasterMonochrome: class extends RasterPacked {
 			result = (original as This) copy()
 		else {
 			result = This new(original)
-			row := result buffer pointer as Long
+			row := result buffer pointer as PtrDiff
 			rowLength := result stride
 			rowEnd := row + rowLength
-			destination := row
+			destination := row as ColorMonochrome*
 			f := func (color: ColorMonochrome) {
-				(destination as ColorMonochrome*)@ = color
+				destination@ = color
 				destination += 1
 				if (destination >= rowEnd) {
-					row += result stride
-					destination = row
+					row += result stride as PtrDiff
+					destination = row as ColorMonochrome*
 					rowEnd = row + rowLength
 				}
 			}
