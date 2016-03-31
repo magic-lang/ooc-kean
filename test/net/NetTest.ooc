@@ -10,6 +10,7 @@ use unit
 use net
 use concurrent
 
+version (!windows) {
 NetTest: class extends Fixture {
 	init: func {
 		super("Net")
@@ -68,7 +69,7 @@ NetTest: class extends Fixture {
 				buffer := serverSocket receive(128)
 				expect(buffer toString(), is equal to(expected toString()))
 			}
-	
+
 			udpClientThread wait() . free()
 			expected free()
 			serverSocket close()
@@ -77,3 +78,4 @@ NetTest: class extends Fixture {
 }
 
 NetTest new() run() . free()
+}
