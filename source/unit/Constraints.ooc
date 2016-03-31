@@ -70,7 +70,7 @@ RangeConstraint: class extends ExpectModifier {
 		(this floatMin, this floatMax, this type) = (min, max, 1)
 	}
 	test: override func (value: Object) -> Bool {
-		testValue, compareMin, compareMax: Double
+		(testValue, compareMin, compareMax) := (0.0, 0.0, 0.0)
 		match ((value as Cell) T) {
 			case Float =>
 				temp := (value as Cell<Float>) get()
