@@ -8,7 +8,6 @@
 
 use base
 use geometry
-import include/win32
 import ../[EventLoop, DisplayWindow, GuiEvent]
 
 version(windows) {
