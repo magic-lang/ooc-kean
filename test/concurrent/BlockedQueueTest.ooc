@@ -21,6 +21,8 @@ BlockedQueueTest: class extends Fixture {
 		numberOfThreads := 4
 		countPerThread := 20_000
 		totalCount := numberOfThreads * countPerThread
+		validResult := true
+		globalMutex := Mutex new(MutexType Global)
 		produce := func {
 			for (i in 1 .. totalCount + 1) {
 				queue enqueue(i)
@@ -30,8 +32,8 @@ BlockedQueueTest: class extends Fixture {
 		consume := func {
 			for (i in 0 .. countPerThread) {
 				value := queue wait()
-				expect(value, is less than(totalCount))
-				expect(value, is greater than(0))
+				if (value < 0 || value >= totalCount)
+					globalMutex with(|| validResult = false)
 			}
 		}
 		queue enqueue(1)
@@ -47,6 +49,7 @@ BlockedQueueTest: class extends Fixture {
 			threads[i] wait()
 			threads[i] free()
 		}
+		expect(validResult, is true)
 		expect(queue count, is equal to(1))
 		queue clear()
 		expect(queue count, is equal to(0))
@@ -55,6 +58,7 @@ BlockedQueueTest: class extends Fixture {
 		(produce as Closure) free()
 		(consume as Closure) free()
 		queue free()
+		globalMutex free()
 	}
 	_testWithClass: static func {
 		queue := BlockedQueue<Cell<Int>> new()

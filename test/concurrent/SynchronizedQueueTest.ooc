@@ -82,10 +82,14 @@ SynchronizedQueueTest: class extends Fixture {
 		}
 		expect(queue count, is equal to(numberOfThreads * countPerThread))
 		(job as Closure) free()
+
+		validResult := true
+		globalMutex := Mutex new(MutexType Global)
 		job = func {
 			for (i in 0 .. countPerThread) {
 				value := queue dequeue(Int minimumValue)
-				expect(value, is within(0, countPerThread))
+				if (value < 0 || value >= countPerThread)
+					globalMutex with(|| validResult = false)
 			}
 		}
 		for (i in 0 .. numberOfThreads) {
@@ -96,10 +100,12 @@ SynchronizedQueueTest: class extends Fixture {
 			threads[i] wait()
 			threads[i] free()
 		}
+		expect(validResult, is true)
 		expect(queue count, is equal to(0))
 		(job as Closure) free()
 		threads free()
 		queue free()
+		globalMutex free()
 	}
 	_testMultipleThreadsWithClass: static func {
 		numberOfThreads := 8
@@ -120,11 +126,15 @@ SynchronizedQueueTest: class extends Fixture {
 		}
 		expect(queue count, is equal to(numberOfThreads * countPerThread))
 		(job as Closure) free()
+
+		validResult := true
+		globalMutex := Mutex new(MutexType Global)
 		job = func {
 			for (i in 0 .. countPerThread) {
 				value: Cell<Int>
 				value = queue dequeue(null)
-				expect(value get(), is within(0, countPerThread))
+				if (value get() < 0 || value get() >= countPerThread)
+					globalMutex with(|| validResult = false)
 				value free()
 			}
 		}
@@ -136,10 +146,12 @@ SynchronizedQueueTest: class extends Fixture {
 			threads[i] wait()
 			threads[i] free()
 		}
+		expect(validResult, is true)
 		expect(queue count, is equal to(0))
 		(job as Closure) free()
 		threads free()
 		queue free()
+		globalMutex free()
 	}
 }
 

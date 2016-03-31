@@ -70,17 +70,19 @@ SynchronizedResourceTest: class extends Fixture {
 		differentObjects := 256
 		expect(count, is greater than(0))
 		objectFromMainThread := thisThreadResources[0]
+		validResult := true
+		globalMutex := Mutex new(MutexType Global)
 		threadFunc := func {
 			expect(objectFromMainThread checkThreadAffinity(), is false)
 			for (i in 0 .. objectsPerThread) {
 				value := i % differentObjects
 				object := TestObject new~recycled(value)
-				expect(object value, is equal to(value))
-				expect(object checkThreadAffinity())
+				if (object value != value || object checkThreadAffinity() == false)
+					globalMutex with(|| validResult = false)
 				object free()
 				localResources := TestObject recycler _resources get(Thread currentThreadId())
-				expect(localResources, is notNull)
-				expect(localResources count, is equal to((i + 1) minimum(differentObjects)))
+				if (localResources == null || localResources count != (i + 1) minimum(differentObjects))
+					globalMutex with(|| validResult = false)
 			}
 		}
 		threads: Thread[numberOfThreads]
@@ -90,10 +92,12 @@ SynchronizedResourceTest: class extends Fixture {
 		}
 		for (i in 0 .. numberOfThreads)
 			threads[i] wait() . free()
+		expect(validResult, is true)
 		expect(thisThreadResources count, is equal to(count))
 		expect(TestObject recycler _resources keys count, is equal to(numberOfThreads + 1))
 		TestObject recycler free()
 		(threadFunc as Closure) free()
+		globalMutex free()
 	}
 }
 
