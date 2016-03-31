@@ -34,6 +34,16 @@ WaitLock: class {
 		(condition as Closure) free(Owner Receiver)
 	}
 	with: func (f: Func) { this _mutex with(f) }
-	wake: func -> Bool { this _waitCondition signal() }
-	wakeAll: func -> Bool { this _waitCondition broadcast() }
+	wake: func -> Bool {
+		this lock()
+		result := this _waitCondition signal()
+		this unlock()
+		result
+	}
+	wakeAll: func -> Bool {
+		this lock()
+		result := this _waitCondition broadcast()
+		this unlock()
+		result
+	}
 }
