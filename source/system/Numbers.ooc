@@ -137,6 +137,7 @@ SizeT: cover from size_t extends ULLong
 SSizeT: cover from ssize_t extends LLong {
 	toString: func -> String { "%u" formatSSizeT(this) }
 }
+PtrDiff: cover from ptrdiff_t extends SSizeT
 
 Range: cover {
 	min, max: Int

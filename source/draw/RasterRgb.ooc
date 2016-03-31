@@ -163,15 +163,15 @@ RasterRgb: class extends RasterPacked {
 			result = (original as This) copy()
 		else {
 			result = This new(original)
-			row := result buffer pointer as Long
+			row := result buffer pointer as PtrDiff
 			rowLength := result size x
 			rowEnd := row as ColorRgb* + rowLength
 			destination := row as ColorRgb*
 			f := func (color: ColorRgb) {
-				(destination as ColorRgb*)@ = color
+				destination@ = color
 				destination += 1
 				if (destination >= rowEnd) {
-					row += result stride
+					row += result stride as PtrDiff
 					destination = row as ColorRgb*
 					rowEnd = row as ColorRgb* + rowLength
 				}
