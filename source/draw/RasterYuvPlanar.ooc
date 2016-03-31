@@ -66,8 +66,9 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 		if (!other || (this size != other size) || !other instanceOf(This))
 			result = Float maximumValue
 		else {
-			for (y in 0 .. this size y)
-				for (x in 0 .. this size x) {
+			for (y in 0 .. this size y) {
+				x := y % 2
+				while (x < this size x) {
 					c := this[x, y]
 					o := (other as This)[x, y]
 					if (c distance(o) > 0) {
@@ -105,7 +106,9 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 							distance += (c v - maximum v) as Float squared
 						result += (distance) sqrt() / 3
 					}
+					x += 2
 				}
+			}
 			result /= this size length
 		}
 	}
