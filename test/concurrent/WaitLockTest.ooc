@@ -15,7 +15,7 @@ WaitLockTest: class extends Fixture {
 		super("WaitLock")
 		this add("_testWithMutexOwnership", This _testWithMutexOwnership)
 		this add("_testWithoutMutexOwnership", This _testWithoutMutexOwnership)
-		version (!windows) { this add("_testWakeWithFailingCondition", This _testWakeWithFailingCondition) }
+		version (!windows && !android) { this add("_testWakeWithFailingCondition", This _testWakeWithFailingCondition) }
 		this add("_testWakeWithPassingCondition", This _testWakeWithPassingCondition)
 	}
 	_testWithMutexOwnership: static func {
