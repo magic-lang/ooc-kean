@@ -8,71 +8,40 @@
 
 include stdio | (_POSIX_SOURCE)
 
-stdout, stderr, stdin: extern FStream
+EAGAIN, EWOULDBLOCK, EBADF, EDESTADDRREQ, EFAULT, EFBIG, EINTR,
+EINVAL, EIO, ENOSPC, EPIPE, EOF, SEEK_CUR, SEEK_SET, SEEK_END: extern Int
 
-println: func ~withCStr (str: Char*) {
-	fputs(str, stdout)
-	println()
-}
-
-println: func ~withStr (str: String) {
-	println(str toCString())
-}
-
-println: func {
-	fputc('\n', stdout)
-}
-
-// input/output
 open: extern func (Char*, Int, ...) -> Int
 fdopen: extern func (Int, Char*) -> FStream
 mkstemp: extern func (Char*) -> Int
 mktemp: extern func (Char*) -> CString
 
 printf: extern func (Char*, ...) -> Int
-
 fprintf: extern func (FStream, Char*, ...) -> Int
 sprintf: extern func (Char*, Char*, ...) -> Int
 snprintf: extern func (Char*, Int, Char*, ...) -> Int
-
 vsnprintf: extern func (Char*, Int, Char*, VaList) -> Int
 
 fread: extern func (ptr: Pointer, size: SizeT, nmemb: SizeT, stream: FStream) -> SizeT
 fwrite: extern func (ptr: Pointer, size: SizeT, nmemb: SizeT, stream: FStream) -> SizeT
 feof: extern func (stream: FStream) -> Int
-
 fopen: extern func (Char*, Char*) -> FStream
 fclose: extern func (file: FILE*) -> Int
 fflush: extern func (file: FILE*)
-
 fputc: extern func (Char, FStream)
 fputs: extern func (Char*, FStream)
-
 scanf: extern func (format: Char*, ...) -> Int
 fscanf: extern func (stream: FStream, format: Char*, ...) -> Int
 sscanf: extern func (str, format: Char*, ...) -> Int
-
 fgets: extern func (str: Char*, length: SizeT, stream: FStream) -> Char*
 fgetc: extern func (stream: FStream) -> Int
-
-SEEK_CUR, SEEK_SET, SEEK_END: extern Int
 fseek: extern func (stream: FStream, offset: Long, origin: Int) -> Int
 ftell: extern func (stream: FStream) -> Long
-
 ferror: extern func (stream: FStream) -> Int
 
 FILE: extern cover
+stdout, stderr, stdin: extern FStream
 
-EOF: extern Int
-
-EAGAIN, EWOULDBLOCK, EBADF, EDESTADDRREQ, EFAULT, EFBIG, EINTR, EINVAL, EIO, ENOSPC, EPIPE: extern Int
-
-/**
- * Low-level interface with the C I/O API.
- *
- * FileWriter and FileReader use this cover to implement their functionality,
- * so that for non-C backends, it will be easier to reimplement them
- */
 FStream: cover from FILE* {
 	NON_BLOCKING: extern (O_NONBLOCK) static Int
 	READ_ONLY: extern (O_RDONLY) static Int
@@ -89,18 +58,13 @@ FStream: cover from FILE* {
 	 * suffix "b" = binary mode
 	 * suffix "t" = text mode (warning: tell/seek are unreliable in text mode under mingw32)
 	 */
-	open: static func (filename, mode: String) -> This {
-		fopen(filename, mode)
-	}
+	open: static func (filename, mode: String) -> This { fopen(filename, mode) }
 
 	open: static func ~withFlags (filename, mode: String, flags: Int) -> This {
 		fd := open(filename, flags)
 		fd >= 0 ? fdopen(fd, mode) : null
 	}
 
-	/**
-	 * Close this file descriptor
-	 */
 	close: extern (fclose) func -> Int
 
 	/**
@@ -127,9 +91,7 @@ FStream: cover from FILE* {
 	 *
 	 * That's how C I/O works.
 	 */
-	eof: func -> Bool {
-		feof(this) != 0
-	}
+	eof: func -> Bool { feof(this) != 0 }
 
 	/**
 	 * Sets the position of the marker in this stream to the given offset.
@@ -142,9 +104,7 @@ FStream: cover from FILE* {
 	 * @return 0 if successful. Note that some streams aren't seekable.
 	 * Local files usually are, though :)
 	 */
-	seek: func (offset: Long, origin: Int) -> Int {
-		fseek(this, offset, origin)
-	}
+	seek: func (offset: Long, origin: Int) -> Int { fseek(this, offset, origin) }
 
 	/**
 	 * @return the position of the marker in this stream
@@ -161,19 +121,7 @@ FStream: cover from FILE* {
 	 */
 	flush: extern (fflush) func
 
-	/**
-	 * Read at most `bytesToRead` bytes into `dest`.
-	 *
-	 * @param dest Pointer to a memory block large enough to hold up to
-	 * `bytesToRead` bytes.
-	 * @param bytesToRead Maximum number of bytes to be read. It might
-	 * read exactly `bytesToRead` bytes, or less, or even none.
-	 *
-	 * @return The number of bytes read.
-	 */
-	read: func (dest: Pointer, bytesToRead: SizeT) -> SizeT {
-		fread(dest, 1, bytesToRead, this)
-	}
+	read: func (dest: Pointer, bytesToRead: SizeT) -> SizeT { fread(dest, 1, bytesToRead, this) }
 
 	readChar: func -> Char {
 		c := '\0'
@@ -184,11 +132,7 @@ FStream: cover from FILE* {
 		c
 	}
 
-	readLine: func ~defaults -> String {
-		this readLine(1023)
-	}
-
-	readLine: func (chunk: Int) -> String {
+	readLine: func (chunk: Int = 1023) -> String {
 		length := 1023
 		buf := CharBuffer new (length)
 
@@ -219,46 +163,23 @@ FStream: cover from FILE* {
 		result
 	}
 
-	/**
-	 * @see eof?()
-	 */
-	hasNext: func -> Bool {
-		feof(this) == 0
-	}
+	hasNext: func -> Bool { feof(this) == 0 }
 
-	/**
-	 * Writes one byte to this stream
-	 */
-	write: func ~chr (chr: Char) {
-		fputc(chr, this)
-	}
+	write: func ~chr (chr: Char) { fputc(chr, this) }
 
-	/**
-	 * Write a string to this stream.
-	 *
-	 * @param str The string to write
-	 */
-	write: func ~str (str: String) {
-		fputs(str _buffer data, this)
-	}
+	write: func ~str (str: String) { fputs(str _buffer data, this) }
 
-	/**
-	 * Write part of a string to this stream, up to length
-	 *
-	 * @param str The string to write
-	 * @param length The number of bytes to write, must be <= str's length.
-	 */
-	write: func ~withLength (str: String, length: SizeT) -> SizeT {
-		this write(str _buffer data, 0, length)
-	}
+	write: func ~withLength (str: String, length: SizeT) -> SizeT { this write(str _buffer data, 0, length) }
 
-	/**
-	 * Write part of a string to this stream, up to length, beginning from offset
-	 *
-	 * @param str
-	 * offset + length must be <= strlen(str)
-	 */
-	write: func ~precise (str: Char*, offset: SizeT, length: SizeT) -> SizeT {
-		fwrite(str + offset, 1, length, this)
-	}
+	// Write part of a string to this stream, up to length, beginning from offset
+	write: func ~precise (str: Char*, offset: SizeT, length: SizeT) -> SizeT { fwrite(str + offset, 1, length, this) }
 }
+
+println: func ~withCStr (str: Char*) {
+	fputs(str, stdout)
+	println()
+}
+
+println: func ~withStr (str: String) { println(str toCString()) }
+
+println: func { fputc('\n', stdout) }

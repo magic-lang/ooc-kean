@@ -15,7 +15,6 @@ Imports: CharBuffer
 Imports: Dynlib
 Imports: Env
 Imports: Format
-Imports: IO
 Imports: Iterators
 Imports: Memory
 Imports: Mutex
@@ -32,6 +31,7 @@ Imports: external/errno
 Imports: external/fcntl
 Imports: external/pthread
 Imports: external/signal
+Imports: external/stdio
 Imports: external/stdlib
 Imports: external/time
 Imports: external/unistd
