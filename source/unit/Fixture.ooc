@@ -34,7 +34,6 @@ Fixture: abstract class {
 		timer := WallTimer new() . start()
 		for (i in 0 .. this tests count) {
 			test := this tests[i]
-			This _expectCount = 0
 			r := true
 			try {
 				test run()
@@ -72,7 +71,7 @@ Fixture: abstract class {
 				else if (f constraint instanceOf(RangeConstraint))
 					This _print(this createRangeFailureMessage(f) + t"\n")
 				else
-					This _print(t"  -> %s (expect: %i)\n" format(f message, f expect))
+					This _print(t"  -> %s\n" format(f message))
 				f free()
 			}
 			This _testsFailed = true
@@ -142,7 +141,6 @@ Fixture: abstract class {
 	}
 
 	_testsFailed: static Bool
-	_expectCount: static Int = 0
 	totalTime: static Double
 	failureNames: static VectorList<String>
 	testsFailed: static Bool { get { This _testsFailed } }
@@ -161,9 +159,8 @@ Fixture: abstract class {
 		fflush(stdout)
 	}
 	verify: static func (value: Object, constraint: ExpectModifier) {
-		This _expectCount += 1
 		if (!constraint verify(value))
-			TestFailedException new(value, constraint, This _expectCount) throw()
+			TestFailedException new(value, constraint) throw()
 		else {
 			constraint free()
 			if (value instanceOf(Cell))
@@ -175,8 +172,7 @@ Fixture: abstract class {
 TestFailedException: class extends Exception {
 	value: Object
 	constraint: ExpectModifier
-	expect: Int
-	init: func (=value, =constraint, =expect, message := "") { super(message) }
+	init: func (=value, =constraint, message := "") { super(message) }
 }
 
 Test: class {
