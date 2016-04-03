@@ -16,11 +16,13 @@ import berkeley, translation, Socket, Address
 	Is the IP provided valid as either IPv6 or IPv4? (Returns type, from AddressFamily)
 */
 ipType: func (ip: String) -> Int {
-	atColons := ip split(":")
-	atPeriods := ip split(".")
-	if (atColons count >= 2)
+	(atColons, atPeriods) := (ip split(":"), ip split("."))
+	(colonCount, periodCount) := (atColons count, atPeriods count)
+	(atColons, atPeriods) free()
+
+	if (colonCount >= 2)
 		AddressFamily IP6 // 2 or more colons, assume IPv6
-	else if (atPeriods count == 4 && atColons count == 1)
+	else if (periodCount == 4 && colonCount == 1)
 		AddressFamily IP4 // No colons, 4 sections separated by 3 periods, assume IPv4
 	else
 		AddressFamily UNSPEC // Who knows what was given, return UNSPEC
