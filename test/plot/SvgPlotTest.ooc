@@ -113,22 +113,19 @@ SvgPlotTest: class extends Fixture {
 			writer free()
 		})
 		this add("Output check", func {
-			generated := t"test/plot/output/example.svg"
-			comparison := t"test/plot/input/exampleComparison.svg"
-			generatedFile := FileReader new(generated)
-			comparisonFile := FileReader new(comparison)
-			generatedBuffer := CharBuffer new()
-			comparisonBuffer := CharBuffer new()
-
+			generatedFile := FileReader new(t"test/plot/output/example.svg")
+			comparisonFile := FileReader new(t"test/plot/input/exampleComparison.svg")
 			while (generatedFile hasNext() && comparisonFile hasNext()) {
-				generatedFile read(generatedBuffer)
-				comparisonFile read(comparisonBuffer)
-				expect(generatedBuffer == comparisonBuffer)
+				(generatedString, comparisonString) := (generatedFile readUntil(' '), comparisonFile readUntil(' '))
+				// If they differ, it can only be due to (small) roundoff errors
+				if (generatedString != comparisonString) {
+					(generatedFloat, comparisonFloat) := (generatedString toFloat(), comparisonString toFloat())
+					expect(generatedFloat, is equal to(comparisonFloat) within(0.05))
+				}
+				(generatedString, comparisonString) free()
 			}
-
 			expect(generatedFile hasNext(), is false)
 			expect(comparisonFile hasNext(), is false)
-
 			(generatedFile, comparisonFile) free()
 		})
 	}
