@@ -21,7 +21,7 @@ LinkedList: class <T> {
 		super()
 	}
 	add: func (data: T) {
-		node := Node<T> new(this _head prev, this _head, data&)
+		node := Node<T> new(this _head prev, this _head, data)
 		this _head prev next = node
 		this _head prev = node
 		this _size += 1
@@ -30,14 +30,14 @@ LinkedList: class <T> {
 		if (index > 0 && index < this size) {
 			prevNode := this getNode(index - 1)
 			nextNode := prevNode next
-			node := Node<T> new(prevNode, nextNode, data&)
+			node := Node<T> new(prevNode, nextNode, data)
 			prevNode next = node
 			nextNode prev = node
 			this _size += 1
 		} else if (index > 0 && index == this _size)
-			this add(data&)
+			this add(data)
 		else if (index == 0) {
-			node := Node<T> new(this _head, this _head next, data&)
+			node := Node<T> new(this _head, this _head next, data)
 			this _head next prev = node
 			this _head next = node
 			this _size += 1
@@ -45,7 +45,7 @@ LinkedList: class <T> {
 			raise("Index out of bounds in LinkedList add~withIndex")
 	}
 	get: func (index: Int) -> T {
-		this getNode(index) data@
+		this getNode(index) data
 	}
 	getNode: func (index: Int) -> Node<T> {
 		if (index < 0 || index >= this _size)
@@ -95,13 +95,13 @@ LinkedList: class <T> {
 	first: func -> T {
 		data: T = null
 		if (this _head next != this _head)
-			data = this _head next data@
+			data = this _head next data
 		data
 	}
 	last: func -> T {
 		data: T = null
 		if (this _head prev != this _head)
-			data = this _head prev data@
+			data = this _head prev data
 		data
 	}
 	removeAt: func (index: Int) -> T {
@@ -127,7 +127,7 @@ LinkedList: class <T> {
 		toRemove next prev = toRemove prev
 		toRemove prev = null
 		toRemove next = null
-		data := toRemove data@
+		data := toRemove data
 		toRemove free()
 		this _size -= 1
 		data
@@ -142,7 +142,7 @@ LinkedList: class <T> {
 	}
 	set: func (index: Int, data: T) -> T {
 		node := this getNode(index)
-		previousData := node data@
+		previousData := node data
 		node data = data
 		previousData
 	}
@@ -160,7 +160,7 @@ operator []= <T>(list: LinkedList<T>, index: Int, value: T) { list set(index, va
 Node: class <T> {
 	prev: This<T>
 	next: This<T>
-	data: T* //TODO: Auto-wrap covers in Cell<T>
+	data: __onheap__ T
 	init: func
 	init: func ~withParams (=prev, =next, =data)
 	free: override func {

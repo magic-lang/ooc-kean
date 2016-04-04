@@ -16,12 +16,15 @@ LinkedListTest: class extends Fixture {
 		this add("Basic use", func {
 			linkedlist := LinkedList<Int> new()
 			linkedlist add(2)
+			for (_ in 0 .. 10)
+				linkedlist add(42)
 			linkedlist add(5)
 			linkedlist add(7)
 			first := linkedlist first()
 			last := linkedlist last()
 			expect(first, is equal to(2))
 			expect(last, is equal to(7))
+			linkedlist free()
 		})
 		this add("Size and clear", func {
 			linkedlist := LinkedList<Int> new()
@@ -33,6 +36,7 @@ LinkedListTest: class extends Fixture {
 			expect(linkedlist size, is equal to(2))
 			linkedlist clear()
 			expect(linkedlist size, is equal to(0))
+			linkedlist free()
 		})
 		this add("Last", func {
 			linkedlist := LinkedList<Int> new()
@@ -41,6 +45,7 @@ LinkedListTest: class extends Fixture {
 			linkedlist add(7)
 			last := linkedlist last()
 			expect(last, is equal to(7))
+			linkedlist free()
 		})
 		this add("set and get", func {
 			linkedlist := LinkedList<Int> new()
@@ -51,6 +56,7 @@ LinkedListTest: class extends Fixture {
 			item := linkedlist get(0)
 			expect(old, is equal to(2))
 			expect(item, is equal to(42))
+			linkedlist free()
 		})
 		this add("operators", func {
 			linkedlist := LinkedList<Int> new()
@@ -60,6 +66,7 @@ LinkedListTest: class extends Fixture {
 			linkedlist[0] = 42
 			item := linkedlist[0]
 			expect(item, is equal to(42))
+			linkedlist free()
 		})
 	}
 }
