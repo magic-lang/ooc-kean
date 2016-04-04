@@ -12,14 +12,14 @@ use concurrent
 
 version (!windows) {
 NetTest: class extends Fixture {
+	ip := "0.0.0.0"
 	init: func {
 		super("Net")
 		this add("TCP Socket Client Server", func {
 			tcpClientThread := Thread new(func {
-				clientIpText := t"0.0.0.0"
-				ip := IP4Address new(clientIpText toString())
+				ipaddress := IP4Address new(this ip)
 				clientMessageNumber := 0
-				clientSocket := TCPSocket new(SocketAddress new(ip, 8000))
+				clientSocket := TCPSocket new(SocketAddress new(ipaddress, 8000))
 				clientSocket connect()
 				clientReceivedData: Int
 				clientSocket out write(clientMessageNumber as Char)
@@ -31,10 +31,9 @@ NetTest: class extends Fixture {
 						clientSocket out write(clientMessageNumber as Char)
 					}
 				}
-				clientSocket close()
+				clientSocket close() . free()
 			})
-			ipText := t"0.0.0.0"
-			serverSocket := ServerSocket new(ipText toString(), 8000) . listen()
+			serverSocket := ServerSocket new(this ip, 8000) . listen()
 			tcpClientThread start()
 			connection := serverSocket accept()
 			serverReceivedData: Int
@@ -47,33 +46,37 @@ NetTest: class extends Fixture {
 			}
 			expect(serverReceivedData, is equal to(9))
 			(connection, serverSocket) close()
+			(connection, serverSocket) free()
 			tcpClientThread wait() . free()
 		})
 		this add("UDP Socket Client Readlines", func {
 			udpClientThread := Thread new(func {
-				ipText := t"0.0.0.0"
-				ip := IP4Address new(ipText toString())
-				clientSocket := UDPSocket new(SocketAddress new(ip, 5000))
-				correct := t"udp is fun"
-				for (_ in 0 .. 5) {
-					clientSocket send(correct toString())
-				}
-				correct free()
+				ipaddress := IP4Address new(this ip)
+				clientSocket := UDPSocket new(SocketAddress new(ipaddress, 5000))
+				correct := "udp is fun"
+				for (_ in 0 .. 5)
+					clientSocket send(correct)
+				(ipaddress, correct) free()
 			})
-			serverIpText := t"0.0.0.0"
-			ip := IP4Address new(serverIpText toString())
+			ip := IP4Address new(this ip)
 			serverSocket := UDPSocket new(SocketAddress new(ip, 5000)) . bind()
 			udpClientThread start()
-			expected := t"udp is fun"
+			expected := "udp is fun"
 			for (_ in 0 .. 5) {
 				buffer := serverSocket receive(128)
-				expect(buffer toString(), is equal to(expected toString()))
+				bufferString := buffer toString()
+				expect(bufferString, is equal to(expected))
+				bufferString free()
 			}
 
 			udpClientThread wait() . free()
 			expected free()
-			serverSocket close()
+			serverSocket close() . free()
 		})
+	}
+	free: override func {
+		this ip free()
+		super()
 	}
 }
 

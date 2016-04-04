@@ -31,13 +31,15 @@ ServerSocket: class extends Socket {
 	*/
 	init: func ~ipPortBacklogAndListen (ip := "0.0.0.0", port: Int, bl := 100, enabled := false) {
 		backlog = bl
-		ip = DNS resolveOne(ip) toString()
+		resolved := DNS resolveOne(ip)
+		ip = resolved toString()
+		resolved free()
 		type = ipType(ip)
 		super(type, SocketType STREAM, 0)
 		this bind(ip, port)
-		if (enabled) {
+		if (enabled)
 			this listen()
-		}
+		ip free()
 	}
 
 	/**
