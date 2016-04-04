@@ -31,6 +31,8 @@ WaitLockTest: class extends Fixture {
 	}
 	_testWakeWithFailingCondition: static func {
 		This timesTriggered = 0
+		validResult := true
+		globalMutex := Mutex new(MutexType Global)
 		waitLock := WaitLock new()
 		waitingThread := Thread new(||
 			waitLock lockWhen(func -> Bool {
@@ -48,23 +50,29 @@ WaitLockTest: class extends Fixture {
 				waitLock unlock()
 				Thread yield()
 			}
-			expect(This timesTriggered, is equal to(1))
+			if (This timesTriggered != 1)
+				globalMutex with(|| validResult = false)
 			waitLock unlock()
 			waitLock wake()
-			expect(waitingThread wait(0.05), is false)
+			result := waitingThread wait(0.05)
+			if (result == true)
+				globalMutex with(|| validResult = false)
 			waitLock lock()
-			expect(This timesTriggered, is equal to (2))
+			if (This timesTriggered != 2)
+				globalMutex with(|| validResult = false)
 			waitLock unlock()
 		)
 		testThread start()
 		waitingThread start()
 		waitResult := testThread wait(1.0)
+		expect(validResult, is true)
 		expect(waitResult, is true)
 		testThread free()
 		waitingThread cancel()
 		expect(waitingThread wait(1.0), is true)
 		waitingThread free()
 		waitLock free()
+		globalMutex free()
 	}
 	_testWakeWithPassingCondition: static func {
 		This timesTriggered = 0

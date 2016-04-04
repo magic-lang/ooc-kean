@@ -73,7 +73,8 @@ SynchronizedResourceTest: class extends Fixture {
 		validResult := true
 		globalMutex := Mutex new(MutexType Global)
 		threadFunc := func {
-			expect(objectFromMainThread checkThreadAffinity(), is false)
+			if (objectFromMainThread checkThreadAffinity() == true)
+				globalMutex with(|| validResult = false)
 			for (i in 0 .. objectsPerThread) {
 				value := i % differentObjects
 				object := TestObject new~recycled(value)
