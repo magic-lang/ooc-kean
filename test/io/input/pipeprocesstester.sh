@@ -1,5 +1,5 @@
 #!/bin/bash
-rm "test/io/output/sum.txt"
+rm -f "test/io/output/sum.txt"
 echo "$1 $2" > "test/io/output/sum.txt"
 
 for i in `seq 1 16`
