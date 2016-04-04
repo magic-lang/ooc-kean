@@ -224,4 +224,183 @@ RasterMonochrome: class extends RasterPacked {
 		}
 		result
 	}
+	// TODO: Move to new module?
+	// Precondition: 0 <= value < 16
+	// 0..15 -> 0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F
+	toHexaDigit: static func (value: Byte) -> Char {
+		if (value >= 0 && value < 10)
+			'0' + value
+		else if (value >= 10 && value < 16)
+			'A' + value - 10
+		else
+			'?'
+	}
+	// Syntax: hexa <- 0..9 | A..F
+	fromHexaDigit: static func (c: Char) -> Int {
+		if (c >= '0' && c <= '9')
+			(c - '0') as Int
+		else if (c >= 'A' && c <= 'F')
+			(c - 'A' + 10) as Int
+		else if (c >= 'a' && c <= 'f')
+			(c - 'a' + 10) as Int
+		else
+			0
+	}
+	isHexadecimal: static func (c: Char) -> Bool {
+		(c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f')
+	}
+	// Serialize the image into lossless hexadecimals
+	toHexadecimals: func -> String {
+		result := CharBuffer new((((this size x * 2) + 1) * this size y) + 1)
+		for (y in 0 .. this size y) {
+			for (x in 0 .. this size x) {
+				value := this[x, y] y
+				small := value % 16
+				big := value / 16
+				result append(This toHexaDigit(big))
+				result append(This toHexaDigit(small))
+			}
+			result append('\n')
+		}
+		result append('\0')
+		String new(result)
+	}
+	// Create an image from hexadecimals
+	// Syntax: doubleHexaImage <- ((hexa hexa)+ lineBreak)+
+	fromHexadecimals: static func (content: String) -> This {
+		currentValue := 0
+		decimalCount := 0
+		x := 0
+		y := 0
+		width := 0
+		height := 0
+		// Measure dimensions
+		for (i in 0 .. (content size)) {
+			c := content[i]
+			if (c == '\0')
+				break
+			else if (This isHexadecimal(c))
+				x += 1
+			else if (c == '\n') {
+				raise(x % 2 > 0, "A corrupted 8-bit hexadecimal image had an odd number of hexadecimals per line!")
+				width = width maximum(x / 2)
+				if (x > 0)
+					height += 1
+				x = 0
+			}
+		}
+		raise(x > 0, "All hexadecimal images must end with a linebreak!")
+		x = 0
+		y = 0
+		// Allocate image
+		raise(width <= 0 || height <= 0, "A hexadecimal image had zero dimensions!")
+		result := This new(IntVector2D new(width, height))
+		// Fill pixels
+		for (i in 0 .. (content size)) {
+			c := content[i]
+			if (c == '\0')
+				break
+			else if (This isHexadecimal(c)) {
+				currentValue = (currentValue * 16) + fromHexaDigit(c)
+				decimalCount += 1
+				if (decimalCount >= 2) {
+					result[x, y] = ColorMonochrome new(currentValue)
+					currentValue = 0
+					decimalCount = 0
+					x += 1
+				}
+			} else if (c == '\n') {
+				if (x > 0)
+					y += 1
+				x = 0
+			}
+		}
+		result
+	}
+	// Serialize to a lossy ascii image using an alphabet to get almost the same bit depth for half the space
+	// It is recommended to have at least 64 characters in the alphabet
+	// Example alphabet: " .,-:;/\ivrcosa()[]#ljJtuexn%$ILCf@TFpqhdmkbDPKOgQDXGNHAEBM"
+	// Precondition: alphabet may not have a null terminator within valid range nor contain duplicate characters, '>' or '\n'
+	toAscii: func (alphabet: String) -> String {
+		result := CharBuffer new(((this size x + 3) * this size y) + 1)
+		// Generate mapping
+		alphabetMap: Char[256]
+		scale := ((alphabet size - 1) as Float) / 255.0f
+		output := 0.49f
+		for (rawValue in 0 .. 256) {
+			alphabetMap[rawValue] = alphabet[(output as Int) clamp(0, alphabet size - 1)]
+			output += scale
+		}
+		// Serialize image
+		for (y in 0 .. this size y) {
+			result append('<')
+			for (x in 0 .. this size x)
+				result append(alphabetMap[this[x, y] y])
+			result append('>')
+			result append('\n')
+		}
+		result append('\0')
+		String new(result)
+	}
+	// Parse the image using the same alphabet that was used to serialize the image.
+	fromAscii: static func (content, alphabet: String) -> This {
+		// Create alphabet inverse
+		inverseAlphabet: Byte[256]
+		for (i in 0 .. 256)
+			inverseAlphabet[i] = 0
+		for (i in 0 .. alphabet size) {
+			code := alphabet[i] as Int
+			value := ((i as Float) * (255.0f / ((alphabet size - 1) as Float))) as Int clamp(0, 255)
+			inverseAlphabet[code] = value
+		}
+		// Measure dimensions
+		x := 0
+		y := 0
+		width := 0
+		height := 0
+		inLine := false
+		for (i in 0 .. (content size)) {
+			c := content[i]
+			if (c == '\0')
+				break
+			else if (inLine) {
+				if (c == '>') {
+					inLine = false
+					width = width maximum(x)
+					if (x > 0)
+						height += 1
+					x = 0
+				} else
+					x += 1
+			} else if (c == '<')
+				inLine = true
+		}
+		raise(x > 0, "All hexadecimal images must end with a linebreak!")
+		x = 0
+		y = 0
+		inLine = false
+		// Allocate image
+		raise(width <= 0 || height <= 0, "An ascii image had zero dimensions!")
+		result := This new(IntVector2D new(width, height))
+		// Fill pixels
+		for (i in 0 .. (content size)) {
+			c := content[i]
+			if (c == '\0')
+				break
+			else if (inLine) {
+				if (c == '>') {
+					inLine = false
+					raise(x != width, "Lines in the ascii image does not have equal width on the rows.")
+					if (x > 0)
+						y += 1
+					x = 0
+				} else if (inLine) {
+					result[x, y] = ColorMonochrome new(inverseAlphabet[c as Int])
+					x += 1
+				}
+			} else if (c == '<')
+				inLine = true
+		}
+		result
+	}
 }
