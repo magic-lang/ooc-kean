@@ -22,7 +22,7 @@ PipeTest: class extends Fixture {
 			else
 				scriptName = "test/io/input/pipeprocesstester.sh"
 
-			scriptArgs := [scriptName, "10000"]
+			scriptArgs := [scriptName, "50005000"]
 			process := Process new(scriptArgs)
 			scriptArgs free()
 
@@ -31,7 +31,7 @@ PipeTest: class extends Fixture {
 			process executeNoWait()
 			reader := PipeReader new(pipe)
 
-			Time sleepMilli(50)
+			Time sleepMilli(250)
 			data: String
 			for (i in 1 .. 10) {
 				data = reader readUntil('\n')

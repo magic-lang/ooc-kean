@@ -1,15 +1,9 @@
 #!/bin/bash
-sum_to () (
-    set -- $(seq $1)
-    IFS=+
-    echo "$*" | bc
-)
+rm "test/io/output/sum.txt"
+echo "$1 $2" > "test/io/output/sum.txt"
 
 for i in `seq 1 16`
 do
-	echo $i
-	sum=$(sum_to $1)
-	echo $sum
+	echo "$i"
+	echo "$1"
 done
-
-echo "$sum $2" > "test/io/output/sum.txt"

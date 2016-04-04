@@ -23,7 +23,7 @@ ProcessTest: class extends Fixture {
 			else
 				scriptName = "test/io/input/pipeprocesstester.sh"
 
-			scriptArgs := [scriptName, "10000", "abcABC"]
+			scriptArgs := [scriptName, "50005000", "abcABC"]
 			process := Process new(scriptArgs)
 			process setStdout(Pipe new())
 			process execute()
@@ -31,6 +31,7 @@ ProcessTest: class extends Fixture {
 			process free()
 			scriptArgs free()
 
+			Time sleepMilli(250)
 			reader := FileReader new(t"test/io/output/sum.txt")
 			expect(reader hasNext())
 			data := CString new(16)
