@@ -161,16 +161,14 @@ Worker: class {
 		this _thread start()
 	}
 	free: override func {
-		this _thread wait()
-		this _thread free()
+		this _thread wait() . free()
 		(this _threadClosure as Closure) free()
 		super()
 	}
 	_threadLoop: func {
 		while (true) {
-			isOk := true
-			job := this _tasks wait(isOk&)
-			if (isOk)
+			job := this _tasks wait()
+			if (job != null)
 				job run()
 			else
 				break
