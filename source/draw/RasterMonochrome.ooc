@@ -317,13 +317,12 @@ RasterMonochrome: class extends RasterPacked {
 		}
 		result
 	}
-	// Serialize to a lossy ascii image using an alphabet to get almost the same bit depth for half the space
-	// It is recommended to have at least 64 characters in the alphabet
-	// Example alphabet: " .,-:;/\ivrcosa()[]#ljJtuexn%$ILCf@TFpqhdmkbDPKOgQDXGNHAEBM"
-	// Precondition: alphabet may not have a null terminator within valid range nor contain duplicate characters, '>' or '\n'
+	// Serialize to a lossy ascii image using an alphabet to make the string more compact
+	// Precondition: alphabet may not have extended ascii, non printable, '\', '"', '>' or linebreak
+	// Example alphabet: " .,-_':;!+~=^?*abcdefghijklmnopqrstuvwxyz()[]{}|&%@#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	toAscii: func (alphabet: String) -> String {
 		result := CharBuffer new(((this size x + 3) * this size y) + 1)
-		// Generate mapping
+		// Generate mapping from luma to character
 		alphabetMap: Char[256]
 		scale := ((alphabet size - 1) as Float) / 255.0f
 		output := 0.49f
@@ -331,6 +330,11 @@ RasterMonochrome: class extends RasterPacked {
 			alphabetMap[rawValue] = alphabet[(output as Int) clamp(0, alphabet size - 1)]
 			output += scale
 		}
+		// Store alphabet
+		result append('<')
+		result append(alphabet)
+		result append('>')
+		result append('\n')
 		// Serialize image
 		for (y in 0 .. this size y) {
 			result append('<')
@@ -343,46 +347,60 @@ RasterMonochrome: class extends RasterPacked {
 		String new(result)
 	}
 	// Parse the image using the same alphabet that was used to serialize the image.
-	fromAscii: static func (content, alphabet: String) -> This {
-		// Create alphabet inverse
-		inverseAlphabet: Byte[256]
-		for (i in 0 .. 256)
-			inverseAlphabet[i] = 0
-		for (i in 0 .. alphabet size) {
-			code := alphabet[i] as Int
-			value := ((i as Float) * (255.0f / ((alphabet size - 1) as Float))) as Int clamp(0, 255)
-			inverseAlphabet[code] = value
-		}
-		// Measure dimensions
+	fromAscii: static func (content: String) -> This {
+		// Measure dimensions and read the alphabet
+		alphabet: Char[128]
+		alphabetSize := 0
 		x := 0
-		y := 0
+		y := -1
 		width := 0
-		height := 0
 		inLine := false
 		for (i in 0 .. (content size)) {
 			c := content[i]
 			if (c == '\0')
 				break
 			else if (inLine) {
-				if (c == '>') {
-					inLine = false
-					width = width maximum(x)
-					if (x > 0)
-						height += 1
-					x = 0
-				} else
-					x += 1
+				if (y < 0) {
+					if (c == '>') {
+						inLine = false
+						y = 0
+					} else if (alphabetSize < 128) {
+						alphabet[alphabetSize] = c
+						alphabetSize += 1
+					}
+				} else {
+					if (c == '>') {
+						inLine = false
+						width = width maximum(x)
+						y += 1
+						x = 0
+					} else
+						x += 1
+				}
 			} else if (c == '<')
 				inLine = true
 		}
+		raise(alphabetSize < 2, "The alphabet needs at least two characters!")
+		height := y
 		raise(x > 0, "All hexadecimal images must end with a linebreak!")
-		x = 0
-		y = 0
-		inLine = false
+		// Create alphabet mapping from character to luma
+		alphabetMap: Byte[128]
+		for (i in 0 .. 128)
+			alphabetMap[i] = 0
+		for (i in 0 .. alphabetSize) {
+			code := alphabet[i] as Int
+			raise(code < 32 || code > 126, "Character '" + alphabet[i] + "' (" + code toString() + ") is not printable standard ascii!")
+			raise(alphabetMap[code] > 0, "Character '" + alphabet[i] + "' (" + code toString() + ") is used more than once!")
+			value := ((i as Float) * (255.0f / ((alphabetSize - 1) as Float))) as Int clamp(0, 255)
+			alphabetMap[code] = value
+		}
 		// Allocate image
 		raise(width <= 0 || height <= 0, "An ascii image had zero dimensions!")
 		result := This new(IntVector2D new(width, height))
 		// Fill pixels
+		x = 0
+		y = -1
+		inLine = false
 		for (i in 0 .. (content size)) {
 			c := content[i]
 			if (c == '\0')
@@ -390,12 +408,11 @@ RasterMonochrome: class extends RasterPacked {
 			else if (inLine) {
 				if (c == '>') {
 					inLine = false
-					raise(x != width, "Lines in the ascii image does not have equal width on the rows.")
-					if (x > 0)
-						y += 1
+					raise(y >= 0 && x != width, "Lines in the ascii image do not have the same length.")
+					y += 1
 					x = 0
-				} else if (inLine) {
-					result[x, y] = ColorMonochrome new(inverseAlphabet[c as Int])
+				} else if (y >= 0) {
+					result[x, y] = ColorMonochrome new(alphabetMap[(c as Int) clamp(0, 127)])
 					x += 1
 				}
 			} else if (c == '<')
