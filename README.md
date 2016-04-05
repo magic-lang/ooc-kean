@@ -14,7 +14,7 @@ Tests can be run using the `test.sh` script.
 
 ### Dependencies
 The following software is necessary to build version 2.0.0 of ooc-kean:
-* [rock 1.0.19-head codename Freppasaurus Rex](https://github.com/magic-lang/rock/releases/tag/rock_1.0.19)
+* [rock 1.0.18-head codename Freppasaurus Rex](https://github.com/magic-lang/rock/releases/tag/rock_1.0.18)
 * gcc 4.8.4
 
 ### Linux
