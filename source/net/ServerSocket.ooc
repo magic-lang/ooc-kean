@@ -75,6 +75,7 @@ ServerSocket: class extends Socket {
 	bind: func ~withAddr (addr: SocketAddress) {
 		if (bind(descriptor, addr addr(), addr length()) == -1)
 			raise("SocketError bind")
+		addr free()
 	}
 
 	/**
@@ -140,5 +141,5 @@ ServerSocket: class extends Socket {
 
 // Workaround to let TCPReaderWriterPair be in this file
 TCPServerReaderWriterPair: class extends TCPReaderWriterPair {
-	init: func (=sock) { super(sock) }
+	init: func (.sock) { super(sock) }
 }

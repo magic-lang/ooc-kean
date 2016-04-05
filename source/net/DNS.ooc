@@ -17,10 +17,7 @@ DNS: class {
 		Perform DNS lookup using the hostname.
 		Returns information about the host that was found.
 	*/
-	resolve: static func (hostname: String) -> HostInfo {
-		resolve(hostname, 0, 0)
-	}
-	resolve: static func ~filter (hostname: String, socketType: Int, socketFamily: Int) -> HostInfo {
+	resolve: static func ~filter (hostname: String, socketType := 0, socketFamily := 0) -> HostInfo {
 		hints: AddrInfo
 		info: AddrInfo*
 		memset(hints&, 0, hints class size)
@@ -36,13 +33,11 @@ DNS: class {
 		Perform DNS lookup using the hostname.
 		Returns the first IPAddress found for the host.
 	*/
-	resolveOne: static func (host: String) -> IPAddress {
-		info := resolve(host)
-		info addresses()[0]
-	}
-	resolveOne: static func ~filter (host: String, socketType: Int, socketFamily: Int) -> IPAddress {
+	resolveOne: static func (host: String, socketType := 0, socketFamily := 0) -> IPAddress {
 		info := resolve(host, socketType, socketFamily)
-		info addresses()[0]
+		result := info addresses()[0]
+		info free()
+		result
 	}
 
 	/**
@@ -102,6 +97,7 @@ HostInfo: class {
 
 	free: override func {
 		this addresses free()
+		this name free()
 		super()
 	}
 }

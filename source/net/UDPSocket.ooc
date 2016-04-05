@@ -39,6 +39,11 @@ UDPSocket: class extends Socket {
 		type = AddressFamily IP4
 	}
 
+	free: override func {
+		this remote free()
+		super()
+	}
+
 	/**
 		Bind the socket
 	*/

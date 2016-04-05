@@ -18,6 +18,7 @@ LinkedList: class <T> {
 	}
 	free: override func {
 		this clear()
+		this _head free()
 		super()
 	}
 	add: func (data: T) {
