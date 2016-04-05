@@ -290,8 +290,10 @@ RasterMonochrome: class extends RasterPacked {
 			alphabetMap[i] = 0
 		for (i in 0 .. alphabetSize) {
 			code := alphabet[i] as Int
-			raise(code < 32 || code > 126, "Character '" + alphabet[i] + "' (" + code toString() + ") is not printable standard ascii!")
-			raise(alphabetMap[code] > 0, "Character '" + alphabet[i] + "' (" + code toString() + ") is used more than once!")
+			if (code < 32 || code > 126)
+				raise("Character '" + alphabet[i] + "' (" + code toString() + ") is not printable standard ascii!")
+			if (alphabetMap[code] > 0)
+				raise("Character '" + alphabet[i] + "' (" + code toString() + ") is used more than once!")
 			value := ((i as Float) * (255.0f / ((alphabetSize - 1) as Float))) as Int clamp(0, 255)
 			alphabetMap[code] = value
 		}
