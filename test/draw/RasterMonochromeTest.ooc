@@ -49,7 +49,7 @@ RasterMonochromeTest: class extends Fixture {
 			image1 := RasterMonochrome open(this sourceSpace)
 			asciiImage := image1 toAscii(" .,-_':;!+~=^?*abcdefghijklmnopqrstuvwxyz()[]{}|&%@#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 			image2 := RasterMonochrome fromAscii(asciiImage)
-			expect(image1 distance(image2) < 0.01)
+			expect(image1 distance(image2) < 0.01f)
 			image1 referenceCount decrease(); image2 referenceCount decrease()
 		})
 		this add("getRow and getColumn", func {

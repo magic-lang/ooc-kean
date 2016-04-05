@@ -237,12 +237,8 @@ RasterMonochrome: class extends RasterPacked {
 			alphabetMap[rawValue] = alphabet[(output as Int) clamp(0, alphabet size - 1)]
 			output += scale
 		}
-		// Store alphabet
-		result append('<')
-		result append(alphabet)
-		result append('>')
-		result append('\n')
-		// Serialize image
+
+		result append('<') . append(alphabet) . append('>') . append('\n')
 		for (y in 0 .. this size y) {
 			result append('<')
 			for (x in 0 .. this size x)
@@ -258,37 +254,35 @@ RasterMonochrome: class extends RasterPacked {
 		// Measure dimensions and read the alphabet
 		alphabet: Char[128]
 		alphabetSize := 0
-		x := 0
-		y := -1
-		width := 0
-		inLine := false
-		for (i in 0 .. (content size)) {
-			c := content[i]
-			if (c == '\0')
-				break
-			else if (inLine) {
+		(x, y, width, height) := (0, -1, 0, 0)
+		quoted := false
+		current: Char
+		i := 0
+		while (i < content size && ((current = content[i]) != '\0')) {
+			if (quoted) {
 				if (y < 0) {
-					if (c == '>') {
-						inLine = false
+					if (current == '>') {
+						quoted = false
 						y = 0
 					} else if (alphabetSize < 128) {
-						alphabet[alphabetSize] = c
+						alphabet[alphabetSize] = current
 						alphabetSize += 1
 					}
 				} else {
-					if (c == '>') {
-						inLine = false
+					if (current == '>') {
+						quoted = false
 						width = width maximum(x)
 						y += 1
 						x = 0
 					} else
 						x += 1
 				}
-			} else if (c == '<')
-				inLine = true
+			} else if (current == '<')
+				quoted = true
+			i += 1
 		}
 		raise(alphabetSize < 2, "The alphabet needs at least two characters!")
-		height := y
+		height = y
 		raise(x > 0, "All hexadecimal images must end with a linebreak!")
 		// Create alphabet mapping from character to luma
 		alphabetMap: Byte[128]
@@ -301,29 +295,26 @@ RasterMonochrome: class extends RasterPacked {
 			value := ((i as Float) * (255.0f / ((alphabetSize - 1) as Float))) as Int clamp(0, 255)
 			alphabetMap[code] = value
 		}
-		// Allocate image
+
 		raise(width <= 0 || height <= 0, "An ascii image had zero dimensions!")
 		result := This new(IntVector2D new(width, height))
-		// Fill pixels
-		x = 0
-		y = -1
-		inLine = false
-		for (i in 0 .. (content size)) {
-			c := content[i]
-			if (c == '\0')
-				break
-			else if (inLine) {
-				if (c == '>') {
-					inLine = false
+		(x, y) = (0, -1)
+		quoted = false
+		i = 0
+		while (i < content size && ((current = content[i]) != '\0')) {
+			if (quoted) {
+				if (current == '>') {
+					quoted = false
 					raise(y >= 0 && x != width, "Lines in the ascii image do not have the same length.")
 					y += 1
 					x = 0
 				} else if (y >= 0) {
-					result[x, y] = ColorMonochrome new(alphabetMap[(c as Int) clamp(0, 127)])
+					result[x, y] = ColorMonochrome new(alphabetMap[(current as Int) clamp(0, 127)])
 					x += 1
 				}
-			} else if (c == '<')
-				inLine = true
+			} else if (current == '<')
+				quoted = true
+			i += 1
 		}
 		result
 	}
