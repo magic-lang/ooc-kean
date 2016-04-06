@@ -41,10 +41,12 @@ done
 echo "Main: ./test/Tests.ooc" >> "$TESTS_USE_FILE"
 rm -f .libs/tests-linux64.*
 rock -q +-Wall $ARGS $FLAGS $FEATURES $TESTS_USE_FILE
-if [[ $? -eq 0 && -f ./Tests ]]; then
+exitcode=$?
+if [[ $exitcode -eq 0 && -f ./Tests ]]; then
 	./Tests
+	exitcode=$?
 fi
-if [[ !( $? == 0 ) ]]
+if [[ !( $exitcode == 0 ) ]]
 then
 	exit 1
 else
