@@ -32,7 +32,8 @@ NetTest: class extends Fixture {
 					}
 				}
 				ipaddress free()
-				clientSocket close() . free()
+				clientSocket close()
+				clientSocket readerWriter free()
 			})
 			serverSocket := ServerSocket new(this ip, 8000) . listen()
 			tcpClientThread start()

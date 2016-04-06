@@ -64,7 +64,7 @@ DNS: class {
  */
 HostInfo: class {
 	name: String
-	addresses: LinkedList<IPAddress>
+	addresses: VectorList<IPAddress>
 
 	/**
 	   Create a new HostInfo from an AddrInfo chain.
@@ -73,7 +73,7 @@ HostInfo: class {
 	   get a HostInfo instance from calls to the DNS class.
 	 */
 	init: func (addrinfo: AddrInfo*) {
-		addresses = LinkedList<IPAddress> new()
+		addresses = VectorList<IPAddress> new(8, false)
 		name = addrinfo@ ai_canonname as CString toString()
 		info := addrinfo
 		while (info) {
@@ -93,9 +93,11 @@ HostInfo: class {
 	/**
 		Returns a list of IPAddress associated with this host.
 	*/
-	addresses: func -> LinkedList<IPAddress> { this addresses }
+	addresses: func -> VectorList<IPAddress> { this addresses }
 
 	free: override func {
+		for (_ in 0 .. this addresses count)
+			this addresses remove() free()
 		this addresses free()
 		this name free()
 		super()
