@@ -27,7 +27,9 @@ Promise: abstract class {
 		collector add(other)
 		collector
 	}
-	start: static func (action: Func) -> This { _ThreadPromise new(action) }
+	start: static func (action: Func, cancelable := false, cancelMutex := null as Mutex) -> This {
+		_ThreadPromise new(action, cancelable, cancelMutex)
+	}
 	empty: static This { get { _EmptyPromise new() } }
 }
 
@@ -42,7 +44,7 @@ _ThreadPromise: class extends Promise {
 	_thread: Thread
 	_threadAlive := true
 	_freeOnCompletion := false
-	init: func (task: Func) {
+	init: func (task: Func, cancelable := false, cancelMutex := null as Mutex) {
 		super()
 		this _state = _PromiseState Unfinished
 		this _action = func {
@@ -54,7 +56,7 @@ _ThreadPromise: class extends Promise {
 				this free()
 			}
 		}
-		this _thread = Thread new(this _action)
+		this _thread = Thread new(this _action, cancelable, cancelMutex)
 		this _thread start()
 	}
 	free: override func {
@@ -103,8 +105,8 @@ Future: abstract class <T> {
 	}
 	getResult: abstract func (defaultValue: T) -> T
 	cancel: virtual func -> Bool { false }
-	start: static func<S> (S: Class, action: Func -> S) -> This<S> {
-		_ThreadFuture<S> new(action)
+	start: static func<S> (S: Class, action: Func -> S, cancelable := false, cancelMutex := null as Mutex) -> This<S> {
+		_ThreadFuture<S> new(action, cancelable, cancelMutex)
 	}
 }
 
@@ -114,7 +116,7 @@ _ThreadFuture: class <T> extends Future<T> {
 	_thread: Thread
 	_threadAlive := true
 	_freeOnCompletion := false
-	init: func (task: Func -> T) {
+	init: func (task: Func -> T, cancelable := false, cancelMutex := null as Mutex) {
 		super()
 		this _state = _PromiseState Unfinished
 		this _action = func {
@@ -130,7 +132,7 @@ _ThreadFuture: class <T> extends Future<T> {
 				this free()
 			}
 		}
-		this _thread = Thread new(this _action)
+		this _thread = Thread new(this _action, cancelable, cancelMutex)
 		this _thread start()
 	}
 	free: override func {

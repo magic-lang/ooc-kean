@@ -110,7 +110,6 @@ _TaskPromise: class extends Promise {
 		status
 	}
 	cancel: override func -> Bool {
-		//TODO: Interrupt executing thread and have it move on to the next task in queue
 		this _task cancel()
 	}
 }
@@ -146,7 +145,6 @@ _TaskFuture: class <T> extends Future<T> {
 		result
 	}
 	cancel: override func -> Bool {
-		//TODO: Interrupt executing thread and have it move on to the next task in queue
 		this _task cancel()
 	}
 }
@@ -199,7 +197,6 @@ ThreadPool: class {
 	add: func (action: Func) {
 		task := _ActionTask new(action, this _globalMutex)
 		this _add(task)
-		//Enable free after completion
 		task free()
 	}
 	getPromise: func (action: Func) -> Promise {

@@ -33,7 +33,7 @@ ThreadTest: class extends Fixture {
 		threadStarted free()
 	}
 	_testCancelation: static func {
-		expectedValue := 1_000
+		expectedValue := 10
 		value := Cell<Int> new(0)
 		mutex := Mutex new()
 		startedCondition := WaitCondition new()
@@ -45,15 +45,17 @@ ThreadTest: class extends Fixture {
 				value set(value get() + 1)
 				Thread yield()
 				Time sleepMilli(1)
+				if (Thread currentThread() isCanceled())
+					break
 			}
 		}
-		thread := Thread new(job)
+		/*thread := Thread new(job)
 		expect(thread start())
 		thread wait()
 		expect(value get(), is equal to(expectedValue))
 		thread free()
-		value set(0)
-		thread = Thread new(job)
+		value set(0)*/
+		thread := Thread new(job, true)
 		mutex lock()
 		expect(thread start())
 		startedCondition wait(mutex)

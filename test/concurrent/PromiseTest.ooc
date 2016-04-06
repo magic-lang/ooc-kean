@@ -28,7 +28,7 @@ PromiseTest: class extends Fixture {
 		super("Promise")
 		this add("noresult", func {
 			promise := Promise start(this quickcounter)
-			promise2 := Promise start(this counter)
+			promise2 := Promise start(this counter, true)
 			promise3 := Promise start(this counter)
 			promise4 := Promise start(this counter)
 			promise5 := Promise start(this counter)

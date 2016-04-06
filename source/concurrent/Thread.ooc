@@ -11,20 +11,33 @@ include stdint
 import native/[ThreadUnix, ThreadWin32]
 
 Thread: abstract class {
+	counter: static Int
+	_id: Int
 	_code: Func
+	_canceled := false
+	_cancelMutex: Mutex = null
+	_ownsCancelMutex: Bool
+
+	free: override func {
+		if (this _ownsCancelMutex && this _cancelMutex != null)
+			this _cancelMutex free()
+		super()
+	}
 
 	start: abstract func -> Bool
+	cancel: abstract func -> Bool
+	isCanceled: abstract func -> Bool
 	wait: abstract func -> Bool
 	wait: abstract func ~timed (seconds: Double) -> Bool
 	detach: abstract func -> Bool
-	cancel: abstract func -> Bool
 	alive: abstract func -> Bool
-	new: static func (._code) -> This {
+
+	new: static func (._code, cancelable := false, cancelMutex := null as Mutex) -> This {
 		result: This = null
 		version (unix || apple)
-			result = ThreadUnix new(_code) as This
+			result = ThreadUnix new(_code, cancelable, cancelMutex) as This
 		version (windows)
-			result = ThreadWin32 new(_code) as This
+			result = ThreadWin32 new(_code, cancelable, cancelMutex) as This
 		if (result == null)
 			Exception new(This, "Unsupported platform!\n") throw()
 		result
