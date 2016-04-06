@@ -295,6 +295,6 @@ Quaternion: cover {
 }
 operator * (value: Float, other: Quaternion) -> Quaternion { other * value }
 
-extend Cell<Quaternion> {
+extend Cell<T> {
 	toText: func ~quaternion -> Text { (this val as Quaternion) toText() }
 }
