@@ -74,7 +74,7 @@ TCPSocket: class extends Socket {
 
 	free: override func {
 		this remote free()
-		this readerWriter free()
+		this readerWriter = null
 		super()
 	}
 
@@ -228,11 +228,6 @@ TCPSocketReader: class extends Reader {
 
 	init: func (=source) { marker = 0 }
 	close: override func { source close() }
-	free: override func {
-		this source free()
-		super()
-	}
-
 	read: override func (chars: Char*, offset: Int, count: Int) -> SizeT {
 		skip(offset - marker)
 		source receive(chars, count, 0)
@@ -260,10 +255,6 @@ TCPSocketReader: class extends Reader {
 TCPSocketWriter: class extends Writer {
 	dest: TCPSocket
 	init: func (=dest)
-	free: override func {
-		this dest close()
-		super()
-	}
 	close: override func { dest close() }
 	write: override func ~chr (chr: Char) { dest sendByte(chr) }
 	write: override func (chars: Char*, length: SizeT) -> SizeT { dest send(chars, length, 0, true) }
@@ -279,5 +270,9 @@ TCPReaderWriterPair: class {
 	}
 	close: func {
 		sock close()
+	}
+	free: func {
+		(this sock, this in, this out) free()
+		super()
 	}
 }

@@ -180,6 +180,5 @@ version (!windows) {
 		SET_SOCKET_FLAGS: extern (F_SETFL) static Int
 		GET_SOCKET_FLAGS: extern (F_GETFL) static Int
 		NON_BLOCKING: extern (O_NONBLOCK) static Int
-		ASYNCHRONOUS: extern (O_ASYNC) static Int // this probably shoulden't be implemented as it's badly supported
 	}
 }
