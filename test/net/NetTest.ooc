@@ -31,6 +31,7 @@ NetTest: class extends Fixture {
 						clientSocket out write(clientMessageNumber as Char)
 					}
 				}
+				ipaddress free()
 				clientSocket close() . free()
 			})
 			serverSocket := ServerSocket new(this ip, 8000) . listen()
@@ -47,7 +48,9 @@ NetTest: class extends Fixture {
 			expect(serverReceivedData, is equal to(9))
 			(connection, serverSocket) close()
 			(connection, serverSocket) free()
-			tcpClientThread wait() . free()
+			tcpClientThread wait()
+			(tcpClientThread _code as Closure) free()
+			tcpClientThread free()
 		})
 		this add("UDP Socket Client Readlines", func {
 			udpClientThread := Thread new(func {
@@ -56,7 +59,7 @@ NetTest: class extends Fixture {
 				correct := "udp is fun"
 				for (_ in 0 .. 5)
 					clientSocket send(correct)
-				(ipaddress, correct) free()
+				(ipaddress, correct, clientSocket) free()
 			})
 			ip := IP4Address new(this ip)
 			serverSocket := UDPSocket new(SocketAddress new(ip, 5000)) . bind()
@@ -69,8 +72,9 @@ NetTest: class extends Fixture {
 				bufferString free()
 			}
 
-			udpClientThread wait() . free()
-			expected free()
+			udpClientThread wait()
+			(udpClientThread _code as Closure) free()
+			(udpClientThread, expected, ip) free()
 			serverSocket close() . free()
 		})
 	}
