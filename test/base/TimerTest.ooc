@@ -33,6 +33,13 @@ TimerTest: class extends Fixture {
 			expect(this wallTimer _count, is equal to(0))
 			expect(this cpuTimer _count, is equal to(0))
 		})
+		this add("measure", func {
+			sum := 0
+			resultWall := this wallTimer measure(|| for (i in 0 .. 10_000_000) { sum = (sum + i) % 10 })
+			resultCpu := this cpuTimer measure(|| for (i in 0 .. 10_000_000) { sum = (sum + i) % 10 })
+			expect(resultWall, is greater than(0.01))
+			expect(resultCpu, is greater than(0.01))
+		})
 	}
 	wallTimerTestFunction: func (loopLength: Int) -> Double {
 		sum := 0
@@ -47,7 +54,8 @@ TimerTest: class extends Fixture {
 		this cpuTimer stop()
 	}
 	free: override func {
-		(this wallTimer, this cpuTimer) free()
+		this wallTimer free()
+		this cpuTimer free()
 		super()
 	}
 }

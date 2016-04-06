@@ -26,7 +26,6 @@ alloca: extern func (SizeT) -> Pointer
 // Used for executing any/all cleanup (free~all) functions before program exit
 GlobalCleanup: class {
 	_functionPointers: static VectorList<Closure> = null
-	init: func
 	register: static func (pointer: Func, last := false) {
 		if (This _functionPointers == null)
 			This _functionPointers = VectorList<Closure> new()

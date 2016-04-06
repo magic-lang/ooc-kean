@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+import mangling
 use unit
 
 ExceptionTest: class extends Fixture {
@@ -43,6 +44,12 @@ ExceptionTest: class extends Fixture {
 					break
 				} catch (Exception) { count += 1 }
 			expect(count, is equal to(0))
+		})
+		this add("demangler", func {
+			test := "Exception__Exception_throw_impl"
+			result := Demangler demangle(test)
+			expect(result fullName == "Exception throw_impl")
+			(test, result) free()
 		})
 	}
 }

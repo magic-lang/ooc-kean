@@ -20,6 +20,18 @@ CharacterTest: class extends Fixture {
 			expect(d whitespace(), is true)
 			expect(e alpha(), is false)
 			expect(e alphaNumeric(), is true)
+			expect(a toInt(), is equal to(e toInt() - 2))
+		})
+		this add("containedIn", func {
+			(a, b, c) := ('x', 'X', '?')
+			first := "xylophone?"
+			second := "XYLOPHONE!"
+			expect(a containedIn(first))
+			expect(!b containedIn(first))
+			expect(c containedIn(first))
+			expect(!a containedIn(second))
+			expect(b containedIn(second))
+			expect(!c containedIn(second))
 		})
 	}
 }
