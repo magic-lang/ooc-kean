@@ -22,7 +22,7 @@ FloatEuclidTransform: cover {
 	inverse ::= This new(-this translation, this rotation inverse, 1.0f / this scaling)
 	transform ::= FloatTransform3D createScaling(this scaling, this scaling, 1.0f) * FloatTransform3D createTranslation(this translation) * this rotation transform
 
-	init: func@ ~default { this init(FloatVector3D new(), FloatRotation3D identity, 1.0f) }
+	init: func@ ~default (scale := 1.0f) { this init(FloatVector3D new(), FloatRotation3D identity, scale) }
 	init: func@ ~translationAndRotation (translation: FloatVector3D, rotation: FloatRotation3D) { this init(translation, rotation, 1.0f) }
 	init: func@ ~full (=translation, =rotation, =scaling)
 	init: func@ ~fromTransform (transform: FloatTransform2D) {
