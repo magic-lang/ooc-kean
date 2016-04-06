@@ -224,4 +224,100 @@ RasterMonochrome: class extends RasterPacked {
 		}
 		result
 	}
+	// Serialize to a lossy ascii image using an alphabet
+	// Precondition: alphabet may not have extended ascii, non printable, '\', '"', '>' or linebreak
+	// Example alphabet: " .,-_':;!+~=^?*abcdefghijklmnopqrstuvwxyz()[]{}|&%@#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	toAscii: func (alphabet: String) -> String {
+		result := CharBuffer new(((this size x + 3) * this size y) + 1)
+		// Generate mapping from luma to character
+		alphabetMap: Char[256]
+		scale := ((alphabet size - 1) as Float) / 255.0f
+		output := 0.49f
+		for (rawValue in 0 .. 256) {
+			alphabetMap[rawValue] = alphabet[(output as Int) clamp(0, alphabet size - 1)]
+			output += scale
+		}
+
+		result append('<') . append(alphabet) . append('>') . append('\n')
+		for (y in 0 .. this size y) {
+			result append('<')
+			for (x in 0 .. this size x)
+				result append(alphabetMap[this[x, y] y])
+			result append('>')
+			result append('\n')
+		}
+		result append('\0')
+		String new(result)
+	}
+	// Parse an ascii image
+	fromAscii: static func (content: String) -> This {
+		// Measure dimensions and read the alphabet
+		alphabet: Char[128]
+		alphabetSize := 0
+		(x, y, width, height) := (0, -1, 0, 0)
+		quoted := false
+		current: Char
+		i := 0
+		while (i < content size && ((current = content[i]) != '\0')) {
+			if (quoted) {
+				if (y < 0) {
+					if (current == '>') {
+						quoted = false
+						y = 0
+					} else if (alphabetSize < 128) {
+						alphabet[alphabetSize] = current
+						alphabetSize += 1
+					}
+				} else {
+					if (current == '>') {
+						quoted = false
+						width = width maximum(x)
+						y += 1
+						x = 0
+					} else
+						x += 1
+				}
+			} else if (current == '<')
+				quoted = true
+			i += 1
+		}
+		raise(alphabetSize < 2, "The alphabet needs at least two characters!")
+		height = y
+		raise(x > 0, "All hexadecimal images must end with a linebreak!")
+		// Create alphabet mapping from character to luma
+		alphabetMap: Byte[128]
+		for (i in 0 .. 128)
+			alphabetMap[i] = 0
+		for (i in 0 .. alphabetSize) {
+			code := alphabet[i] as Int
+			if (code < 32 || code > 126)
+				raise("Character '" + alphabet[i] + "' (" + code toString() + ") is not printable standard ascii!")
+			if (alphabetMap[code] > 0)
+				raise("Character '" + alphabet[i] + "' (" + code toString() + ") is used more than once!")
+			value := ((i as Float) * (255.0f / ((alphabetSize - 1) as Float))) as Int clamp(0, 255)
+			alphabetMap[code] = value
+		}
+
+		raise(width <= 0 || height <= 0, "An ascii image had zero dimensions!")
+		result := This new(IntVector2D new(width, height))
+		(x, y) = (0, -1)
+		quoted = false
+		i = 0
+		while (i < content size && ((current = content[i]) != '\0')) {
+			if (quoted) {
+				if (current == '>') {
+					quoted = false
+					raise(y >= 0 && x != width, "Lines in the ascii image do not have the same length.")
+					y += 1
+					x = 0
+				} else if (y >= 0) {
+					result[x, y] = ColorMonochrome new(alphabetMap[(current as Int) clamp(0, 127)])
+					x += 1
+				}
+			} else if (current == '<')
+				quoted = true
+			i += 1
+		}
+		result
+	}
 }

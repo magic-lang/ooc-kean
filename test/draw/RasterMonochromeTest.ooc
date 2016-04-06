@@ -45,6 +45,14 @@ RasterMonochromeTest: class extends Fixture {
 			expect(image1 equals(image2))
 			image1 referenceCount decrease(); image2 referenceCount decrease()
 		})
+		this add("lossy ascii serialization", func {
+			image1 := RasterMonochrome open(this sourceSpace)
+			alphabet := " .,-_':;!+~=^?*abcdefghijklmnopqrstuvwxyz()[]{}|&%@#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+			asciiImage := image1 toAscii(alphabet)
+			image2 := RasterMonochrome fromAscii(asciiImage)
+			expect(image1 distance(image2) < 0.01f)
+			(image1, image2) referenceCount decrease(); (asciiImage, alphabet) free()
+		})
 		this add("getRow and getColumn", func {
 			size := IntVector2D new(500, 256)
 			image := RasterMonochrome new(size)
