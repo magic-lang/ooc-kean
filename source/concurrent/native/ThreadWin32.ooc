@@ -13,7 +13,11 @@ ThreadWin32: class extends Thread {
 	handle: Handle
 	threadID: UInt
 
-	init: func ~win (=_code)
+	init: func ~win (=_code, cancelable := false, cancelMutex := null as Mutex) {
+		this _ownsCancelMutex = cancelMutex == null
+		if (cancelable)
+			this _cancelMutex = cancelMutex != null ? cancelMutex : Mutex new()
+	}
 	start: override func -> Bool {
 		this handle = _beginthreadex(
 			null, // default security attributes
@@ -44,12 +48,26 @@ ThreadWin32: class extends Thread {
 				false
 		}
 	}
-	detach: override func -> Bool { false }
 	cancel: override func -> Bool {
-		false
-		//this alive() && TerminateThread(this handle, 0)
-		//TODO Find a better way to terminate Win32 threads, if any
+		result := false
+		if (this _cancelMutex != null) {
+			this _cancelMutex lock()
+			this _canceled = true
+			result = true
+			this _cancelMutex unlock()
+		}
+		result
 	}
+	isCanceled: override func -> Bool {
+		result := false
+		if (this _cancelMutex != null) {
+			this _cancelMutex lock()
+			result = this _canceled
+			this _cancelMutex unlock()
+		}
+		result
+	}
+	detach: override func -> Bool { false }
 	alive: override func -> Bool {
 		result := WaitForSingleObject(this handle, 0)
 		// if it's equal, it has terminated, otherwise, it's still alive

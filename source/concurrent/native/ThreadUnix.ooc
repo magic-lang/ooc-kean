@@ -15,7 +15,12 @@ version(unix || apple) {
 ThreadUnix: class extends Thread {
 	pthread: PThread
 
-	init: func ~unix (=_code)
+	init: func ~unix (=_code, cancelable := false, cancelMutex := null as Mutex) {
+		"creating thread instance" println()
+		this _ownsCancelMutex = cancelMutex == null
+		if (cancelable)
+			this _cancelMutex = cancelMutex != null ? cancelMutex : Mutex new()
+	}
 	start: override func -> Bool { pthread_create(this pthread&, null, this _code as Closure thunk, this _code as Closure context) == 0 }
 	detach: override func -> Bool { pthread_detach(this pthread) == 0 }
 	wait: override func -> Bool { pthread_join(this pthread, null) == 0 }
@@ -32,8 +37,24 @@ ThreadUnix: class extends Thread {
 	}
 	cancel: override func -> Bool {
 		result := false
-		version (!android)
-			result = this alive() && (pthread_cancel(this pthread) == 0)
+		if (this _cancelMutex != null) {
+			"cancel %d" printfln(this _id)
+			this _cancelMutex lock()
+			this _canceled = true
+			result = true
+			this _cancelMutex unlock()
+		}
+		result
+	}
+	isCanceled: override func -> Bool {
+		result := false
+		"isCanceled %d" printfln(this _id)
+		if (this _cancelMutex != null) {
+			"!!!" println()
+			this _cancelMutex lock()
+			result = this _canceled
+			this _cancelMutex unlock()
+		}
 		result
 	}
 	alive: override func -> Bool {
