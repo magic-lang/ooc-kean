@@ -35,7 +35,20 @@ ToRasterFuture: class extends Future<RasterImage> {
 
 GpuContext: abstract class extends DrawContext {
 	defaultMap ::= null as Map
+	_defaultFontGpu: GpuImage = null
+	defaultFontGpu: GpuImage {
+		get {
+			if (this _defaultFontGpu == null)
+				this _defaultFontGpu = this createImage(this defaultFontRaster)
+			this _defaultFontGpu
+		}
+	}
 	init: func
+	free: override func {
+		if (this _defaultFontGpu != null)
+			this _defaultFontGpu free()
+		super()
+	}
 	createMonochrome: abstract func (size: IntVector2D) -> GpuImage
 	createRgb: abstract func (size: IntVector2D) -> GpuImage
 	createRgba: abstract func (size: IntVector2D) -> GpuImage
@@ -52,5 +65,6 @@ GpuContext: abstract class extends DrawContext {
 		Promise empty
 	}
 	toRasterAsync: virtual func (source: GpuImage) -> ToRasterFuture { raise("toRasterAsync unimplemented"); null }
+	getDefaultFont: override func -> Image { this defaultFontGpu }
 }
 }
