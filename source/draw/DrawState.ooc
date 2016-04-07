@@ -10,6 +10,7 @@ use geometry
 import Image
 import Map
 import Mesh
+import DrawContext
 
 // Example
 // DrawState new(targetImage) setMap(shader) draw()
@@ -136,5 +137,36 @@ DrawState: cover {
 		version(safe)
 			raise(this target == null, "Can't draw without a selected target.")
 		this target canvas draw(this)
+	}
+	// Printing message from location as the upper left corner of the text in local coordinates.
+	// Example: DrawState new(result y) drawText("Hello world!", IntPoint2D new(200, 200), this graph context getDefaultFont())
+	drawText: func ~String (message: String, location: IntPoint2D, fontAtlas: Image) {
+		state := this
+		version(safe)
+			raise(state target == null, "Can't write without a selected target.")
+		state inputImage = fontAtlas
+		state blendMode = BlendMode Add
+		state _transformNormalized = FloatTransform3D identity
+		state _destinationNormalized = FloatBox2D new(0.0f, 0.0f, 1.0f, 1.0f)
+		skippedRows := 2 // Skip invisible commands
+		visibleRows := 6 // Use 6 lines of printable characters
+		columns := 16 // Use 16 characters per row
+		charSize := state inputImage size / IntVector2D new(columns, visibleRows)
+		destination := IntBox2D new(location, charSize)
+		targetOffset := IntPoint2D new(0, 0)
+		// TODO: Make a way to write multiple characters in the same draw call on the GPU.
+		for (i in 0 .. message size) {
+			charCode := message[i] as Int
+			sourceX := charCode % columns
+			sourceY := (charCode / columns) - skippedRows
+			source := FloatBox2D new((sourceX as Float) / columns, (sourceY as Float) / visibleRows, 1.0f / columns, 1.0f / visibleRows)
+			if (charCode > 32 && charCode < 127)
+				state setViewport(destination + (targetOffset * charSize)) setSourceNormalized(source) draw()
+			targetOffset x += 1
+			if (charCode == '\n') {
+				targetOffset x = 0 //Carriage return
+				targetOffset y += 1 //Line feed
+			}
+		}
 	}
 }
