@@ -45,9 +45,7 @@ AndroidContext: class extends OpenGLContext {
 	}
 	recyclePacker: func (packer: EGLRgba) { this _packers add(packer) }
 	getPacker: func (size: IntVector2D) -> EGLRgba {
-		searchFunc := func (image: EGLRgba) -> Bool { image size == size }
-		result := this _packers search(searchFunc) ?? EGLRgba new(size, this)
-		(searchFunc as Closure) free()
+		result := this _packers search(|image| image size == size) ?? EGLRgba new(size, this)
 		result
 	}
 	toBuffer: func (source: GpuImage, packMap: Map) -> (ByteBuffer, OpenGLPromise) {

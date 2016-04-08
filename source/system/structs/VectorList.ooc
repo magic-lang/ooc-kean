@@ -68,7 +68,7 @@ VectorList: class <T> extends List<T>{
 	search: override func (matches: Func (T) -> Bool) -> Int {
 		result := -1
 		for (index in 0 .. this count)
-			if (matches(this[index]&)) {
+			if (matches(this[index])) {
 				result = index
 				break
 			}
