@@ -306,6 +306,12 @@ FloatVectorList: class extends VectorList<Float> {
 			result = this copy()
 		result
 	}
+	scalarProduct: func (other: This) -> Float {
+		result := 0.f
+		for (i in 0 .. this count minimum(other count))
+			result += this[i] * other[i]
+		result
+	}
 
 	operator - -> This {
 		result := This new(this _count)
