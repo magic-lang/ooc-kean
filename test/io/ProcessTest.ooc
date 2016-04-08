@@ -27,7 +27,6 @@ ProcessTest: class extends Fixture {
 			process := Process new(scriptArgs)
 			process setStdout(Pipe new())
 			process execute()
-			process args free()
 			process free()
 			scriptArgs free()
 
