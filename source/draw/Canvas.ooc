@@ -69,9 +69,9 @@ Canvas: abstract class {
 	draw: virtual func ~DrawState (drawState: DrawState) { Debug error("draw~DrawState unimplemented for class " + this class name + "!") }
 	write: virtual func (target, fontAtlas: Image, localOrigin: IntPoint2D, message: Text) {
 		// Generic reference implementation with all inputs that are used from DrawState to simplify input space partitioning
-		skippedRows := 2 // Skip invisible commands
-		visibleRows := 6 // Use 6 lines of printable characters
-		columns := 16 // Use 16 characters per row
+		skippedRows := 2
+		visibleRows := 6
+		columns := 16
 		charSize := fontAtlas size / IntVector2D new(columns, visibleRows)
 		viewport := IntBox2D new(localOrigin, charSize)
 		targetOffset := IntPoint2D new(0, 0)

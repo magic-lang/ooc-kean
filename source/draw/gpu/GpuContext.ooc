@@ -36,13 +36,11 @@ ToRasterFuture: class extends Future<RasterImage> {
 GpuContext: abstract class extends DrawContext {
 	defaultMap ::= null as Map
 	_defaultFontGpu: GpuImage = null
-	defaultFontGpu: GpuImage {
-		get {
-			if (this _defaultFontGpu == null)
-				this _defaultFontGpu = this createImage(this defaultFontRaster)
-			this _defaultFontGpu
-		}
-	}
+	defaultFontGpu: GpuImage { get {
+		if (this _defaultFontGpu == null)
+			this _defaultFontGpu = this createImage(this defaultFontRaster)
+		this _defaultFontGpu
+	}}
 	init: func
 	free: override func {
 		if (this _defaultFontGpu != null)

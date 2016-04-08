@@ -8,8 +8,8 @@
 
 // Original typeface for printing debug messages that was crudely drawn by David Piuva in a few minutes because it was quicker than understanding the license terms of existing fonts.
 
-GlobalCleanup register(|| DefaultFontAsciiImage free())
-DefaultFontAsciiImage := "
+GlobalCleanup register(|| defaultFontAsciiImage free())
+defaultFontAsciiImage := "
 < .,-_':;!+~=^?*abcdefghijklmnopqrstuvwxyz()[]{}|&%@#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ>
 <                                                                                                                                                                                                                                                                >
 <                                                                                                                                                                                                                                                                >

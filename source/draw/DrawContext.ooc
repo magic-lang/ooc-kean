@@ -19,13 +19,11 @@ AlignWidth: enum {
 
 DrawContext: abstract class {
 	_defaultFontRaster: RasterMonochrome = null
-	defaultFontRaster: RasterMonochrome {
-		get {
-			if (this _defaultFontRaster == null)
-				this _defaultFontRaster = RasterMonochrome fromAscii(DefaultFontAsciiImage)
-			this _defaultFontRaster
-		}
-	}
+	defaultFontRaster: RasterMonochrome { get {
+		if (this _defaultFontRaster == null)
+			this _defaultFontRaster = RasterMonochrome fromAscii(defaultFontAsciiImage)
+		this _defaultFontRaster
+	}}
 	init: func
 	free: override func {
 		if (this _defaultFontRaster != null)
