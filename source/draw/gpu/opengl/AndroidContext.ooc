@@ -102,6 +102,7 @@ AndroidContext: class extends OpenGLContext {
 			this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
 			result = OpenGLPromise new(this)
 			(result as OpenGLPromise) sync()
+			targetImageRgba referenceCount decrease()
 		} else
 			result = super(source, target)
 		result
