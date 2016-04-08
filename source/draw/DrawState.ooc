@@ -10,7 +10,6 @@ use geometry
 import Image
 import Map
 import Mesh
-import DrawContext
 
 // See README.md about input arguments and coordinate systems
 
@@ -111,33 +110,26 @@ DrawState: cover {
 		this inputImage = inputImage
 		this
 	}
-	// Reference transform
 	setTransformReference: func ~TargetSize (transform: FloatTransform3D) -> This {
 		version(safe)
 			raise(this target == null, "Can't set reference transform relative to a target that does not exist.")
 		this setTransformNormalized(transform referenceToNormalized(this target size))
 	}
-	// Reference transform
 	setTransformReference: func ~ExplicitIntSize (transform: FloatTransform3D, imageSize: IntVector2D) -> This {
 		this setTransformNormalized(transform referenceToNormalized(imageSize))
 	}
-	// Reference transform
 	setTransformReference: func ~ExplicitFloatSize (transform: FloatTransform3D, imageSize: FloatVector2D) -> This {
 		this setTransformNormalized(transform referenceToNormalized(imageSize))
 	}
-	// Normalized transform
 	setTransformNormalized: func (transform: FloatTransform3D) -> This {
 		this _transformNormalized = transform
 		this
 	}
-	// Normalized transform
 	getTransformNormalized: func -> FloatTransform3D { this _transformNormalized }
-	// Reference point
 	setOrigin: func (origin: FloatPoint2D) -> This {
 		this _originReference = origin
 		this
 	}
-	// Local point
 	getOriginLocal: func -> FloatPoint2D {
 		version(safe)
 			raise(this target == null, "Can't get local origin relative to a target that does not exist.")
