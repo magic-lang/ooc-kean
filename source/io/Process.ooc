@@ -18,6 +18,10 @@ Process: abstract class {
 	cwd = null: String
 	pid = 0: Long
 
+	free: override func {
+		this args free()
+		super()
+	}
 	terminate: abstract func // Terminate with SIGTERM
 	kill: abstract func // Terminate with SIGKILL
 	setStdout: func (=stdOut)
