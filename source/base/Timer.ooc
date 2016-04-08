@@ -25,6 +25,11 @@ Timer: abstract class {
 	}
 	start: abstract func
 	stop: abstract func -> Double
+	measure: func (action: Func) -> Double {
+		this start()
+		action()
+		this stop()
+	}
 	_update: virtual func {
 		if (this _result < this _min)
 			this _min = this _result

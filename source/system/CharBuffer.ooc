@@ -111,7 +111,7 @@ CharBuffer: class {
 	clone: func -> This {
 		this clone(this size)
 	}
-	clone: func ~withMinimum (minimumLength := this size) -> This {
+	clone: func ~withMinimum (minimumLength: Int) -> This {
 		newCapa := minimumLength > this size ? minimumLength : this size
 		copy := This new(newCapa)
 		copy size = this size
@@ -251,10 +251,10 @@ CharBuffer: class {
 		}
 		result
 	}
-	findAll: func ~withCase (what : This, searchCaseSensitive := true) -> VectorList<Int> {
+	findAll: func ~withCase (what: This, searchCaseSensitive := true) -> VectorList<Int> {
 		this findAll(what data, what size, searchCaseSensitive)
 	}
-	findAll: func ~pointer (what : Char*, whatSize: Int, searchCaseSensitive := true) -> VectorList<Int> {
+	findAll: func ~pointer (what: Char*, whatSize: Int, searchCaseSensitive := true) -> VectorList<Int> {
 		result: VectorList<Int>
 		if (what == null || whatSize == 0)
 			result = VectorList<Int> new(0)
@@ -266,10 +266,10 @@ CharBuffer: class {
 		}
 		result
 	}
-	replaceAll: func ~buf (what, whit: This, searchCaseSensitive := true) {
+	replaceAll: func ~buf (what, with: This, searchCaseSensitive := true) {
 		findResults := this findAll(what, searchCaseSensitive)
 		if (findResults != null && findResults count != 0) {
-			newlen := this size + (whit size * findResults count) - (what size * findResults count)
+			newlen := this size + (with size * findResults count) - (what size * findResults count)
 			result := This new(newlen)
 			result setLength(newlen)
 
@@ -282,9 +282,9 @@ CharBuffer: class {
 				sstart += sdist
 				rstart += sdist
 
-				memcpy(result data + rstart, whit data, whit size)
+				memcpy(result data + rstart, with data, with size)
 				sstart += what size
-				rstart += whit size
+				rstart += with size
 			}
 			// copy remaining last piece of source
 			sdist := this size - sstart
@@ -321,10 +321,7 @@ CharBuffer: class {
 	indexOf: func ~buf (s: This, start := 0) -> Int { this find(s, start, false) }
 	contains: func ~char (c: Char) -> Bool { this indexOf(c) != -1 }
 	contains: func ~buf (s: This) -> Bool { this indexOf(s) != -1 }
-	trim: func ~pointer (s: Char*, sLength: Int) {
-		this trimRight(s, sLength)
-		this trimLeft(s, sLength)
-	}
+	trim: func ~pointer (s: Char*, sLength: Int) { this trimRight(s, sLength) . trimLeft(s, sLength) }
 	trim: func ~buf (s: This) { this trim(s data, s size) }
 	trim: func ~char (c: Char) { this trim(c&, 1) }
 	trim: func ~whitespace { this trim(" \r\n\t" toCString(), 4) }
@@ -370,7 +367,10 @@ CharBuffer: class {
 		result
 	}
 	count: func ~buf (what: This) -> Int {
-		this findAll(what) count
+		indices := this findAll(what)
+		result := indices count
+		indices free()
+		result
 	}
 	lastIndexOf: func (c: Char) -> Int {
 		i := this size - 1

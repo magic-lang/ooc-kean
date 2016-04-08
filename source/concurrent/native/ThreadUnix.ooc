@@ -22,10 +22,10 @@ ThreadUnix: class extends Thread {
 	wait: override func ~timed (seconds: Double) -> Bool {
 		result := false
 		version (apple || android)
-			result = this __fake_timedjoin(seconds)
+			result = this _fakeTimedJoin(seconds)
 		else {
 			ts: TimeSpec
-			this __setupTimeout(ts&, seconds)
+			this _setupTimeout(ts&, seconds)
 			result = (pthread_timedjoin_np(this pthread, null, ts&) == 0)
 		}
 		result
@@ -43,7 +43,7 @@ ThreadUnix: class extends Thread {
 		result := sched_yield()
 		(result == 0)
 	}
-	__setupTimeout: func (ts: TimeSpec@, seconds: Double) {
+	_setupTimeout: func (ts: TimeSpec@, seconds: Double) {
 		// We need an absolute number of seconds since the epoch
 		// First order of business - what time is it?
 		tv: TimeVal
@@ -58,7 +58,7 @@ ThreadUnix: class extends Thread {
 		ts tv_sec = absSeconds floor() as TimeT
 		ts tv_nsec = ((absSeconds - ts tv_sec) * 1000 + 0.5) * (1_000_000 as Long)
 	}
-	__fake_timedjoin: func (seconds: Double) -> Bool {
+	_fakeTimedJoin: func (seconds: Double) -> Bool {
 		result := false
 		while (seconds > 0.0 && !result) {
 			Time sleepMilli(20)

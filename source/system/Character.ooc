@@ -68,9 +68,6 @@ Char: cover from char {
 			}
 		result
 	}
-	compareWith: func (compareFunc: Func (Char, Char*, SizeT) -> SSizeT, target: Char*, targetSize: SizeT) -> SSizeT {
-		compareFunc(this, target, targetSize)
-	}
 	toInt: func -> Int {
 		result := -1
 		if (this digit())

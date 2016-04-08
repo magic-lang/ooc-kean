@@ -12,7 +12,7 @@ Env: class {
 		x := getenv(variableName as CString)
 		x != null ? x toString() : null
 	}
-	set: static func (key, value: String, overwrite: Bool) -> Int {
+	set: static func (key, value: String, overwrite := true) -> Int {
 		result := -1
 		if (key != null && value != null) {
 			version(windows) {
@@ -31,9 +31,6 @@ Env: class {
 				result = setenv(key toCString(), value toCString(), overwrite)
 		}
 		result
-	}
-	set: static func ~overwrite (key, value: String) -> Int {
-		This set(key, value, true)
 	}
 	unset: static func (key: String) -> Int {
 		result: Int

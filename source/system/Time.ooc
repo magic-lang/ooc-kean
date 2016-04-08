@@ -7,8 +7,8 @@
  */
 
 Time: class {
-	__time_microsec_base := static This runTime()
-	__time_millisec_base := static This __time_microsec_base / 1000
+	_timeMicrosecBase := static This runTime()
+	_timeMillisecBase := static This _timeMicrosecBase / 1000
 
 	dateTime: static func -> String {
 		result: String
@@ -57,7 +57,7 @@ Time: class {
 			counter, frequency: LargeInteger
 			QueryPerformanceCounter(counter&)
 			QueryPerformanceFrequency(frequency&)
-			result = ((counter quadPart * 1000) / frequency quadPart) - __time_millisec_base
+			result = ((counter quadPart * 1000) / frequency quadPart) - _timeMillisecBase
 		} else {
 			result = This runTimeMicro() / 1000U
 		}
@@ -68,17 +68,11 @@ Time: class {
 		version(!windows) {
 			tv: TimeVal
 			gettimeofday(tv&, null)
-			result = ((tv tv_usec + tv tv_sec * 1_000_000) - __time_millisec_base) as UInt
+			result = ((tv tv_usec + tv tv_sec * 1_000_000) - _timeMillisecBase) as UInt
 		} else {
 			result = This runTime() * 1000U
 		}
 		result
-	}
-	measure: static func (action: Func) -> UInt {
-		t1 := This runTime()
-		action()
-		t2 := This runTime()
-		t2 - t1
 	}
 	// The seconds that have elapsed in the current minute
 	sec: static func -> UInt {
