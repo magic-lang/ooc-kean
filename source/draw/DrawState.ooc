@@ -12,9 +12,6 @@ import Map
 import Mesh
 import DrawContext
 
-// Example
-// DrawState new(targetImage) setMap(shader) draw()
-
 // See README.md about input arguments and coordinate systems
 
 BlendMode: enum {
@@ -23,8 +20,12 @@ BlendMode: enum {
 }
 
 DrawState: cover {
+	// Used by all
 	target: Image = null
 	inputImage: Image = null
+	// Only used by the write function
+	_originReference := FloatPoint2D new(0.0f, 0.0f) // Start of text
+	// Only used by the draw function
 	map: Map = null
 	mesh: Mesh = null
 	opacity := 1.0f
@@ -133,40 +134,29 @@ DrawState: cover {
 	}
 	// Normalized transform
 	getTransformNormalized: func -> FloatTransform3D { this _transformNormalized }
+	// Reference point
+	setOrigin: func (origin: FloatPoint2D) -> This {
+		this _originReference = origin
+		this
+	}
+	// Local point
+	getOriginLocal: func -> FloatPoint2D {
+		version(safe)
+			raise(this target == null, "Can't get local origin relative to a target that does not exist.")
+		this _originReference + ((this target size toFloatVector2D()) / 2.0f)
+	}
+	// Example: DrawState new(targetImage) setMap(shader) draw()
 	draw: func {
 		version(safe)
-			raise(this target == null, "Can't draw without a selected target.")
+			raise(this target == null, "Can't draw without a target.")
 		this target canvas draw(this)
 	}
-	// Printing message from location as the upper left corner of the text in local coordinates.
-	// Example: DrawState new(result y) drawText("Hello world!", IntPoint2D new(200, 200), this graph context getDefaultFont())
-	drawText: func ~String (message: String, location: IntPoint2D, fontAtlas: Image) {
-		state := this
-		version(safe)
-			raise(state target == null, "Can't write without a selected target.")
-		state inputImage = fontAtlas
-		state blendMode = BlendMode Add
-		state _transformNormalized = FloatTransform3D identity
-		state _destinationNormalized = FloatBox2D new(0.0f, 0.0f, 1.0f, 1.0f)
-		skippedRows := 2 // Skip invisible commands
-		visibleRows := 6 // Use 6 lines of printable characters
-		columns := 16 // Use 16 characters per row
-		charSize := state inputImage size / IntVector2D new(columns, visibleRows)
-		destination := IntBox2D new(location, charSize)
-		targetOffset := IntPoint2D new(0, 0)
-		// TODO: Make a way to write multiple characters in the same draw call on the GPU.
-		for (i in 0 .. message size) {
-			charCode := message[i] as Int
-			sourceX := charCode % columns
-			sourceY := (charCode / columns) - skippedRows
-			source := FloatBox2D new((sourceX as Float) / columns, (sourceY as Float) / visibleRows, 1.0f / columns, 1.0f / visibleRows)
-			if (charCode > 32 && charCode < 127)
-				state setViewport(destination + (targetOffset * charSize)) setSourceNormalized(source) draw()
-			targetOffset x += 1
-			if (charCode == '\n') {
-				targetOffset x = 0 //Carriage return
-				targetOffset y += 1 //Line feed
-			}
+	// Example: DrawState new(targetImage) setOrigin(point) setInputImage(context getDefaultFont()) write(t"Hello world!")
+	write: func ~String (message: Text) {
+		version(safe) {
+			raise(this target == null, "Can't write without a target.")
+			raise(this inputImage == null, "Can't write without a font atlas.")
 		}
+		this target canvas write(this target, this inputImage, this getOriginLocal() toIntPoint2D(), message)
 	}
 }
