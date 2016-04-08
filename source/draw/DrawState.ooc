@@ -20,12 +20,10 @@ BlendMode: enum {
 }
 
 DrawState: cover {
-	// Used by all
+	// See README.MD for availability of settings for each method
 	target: Image = null
 	inputImage: Image = null
-	// Only used by the write function
 	_originReference := FloatPoint2D new(0.0f, 0.0f) // Start of text
-	// Only used by the draw function
 	map: Map = null
 	mesh: Mesh = null
 	opacity := 1.0f

@@ -44,6 +44,22 @@ Transforms go from zero in the center and increase with either pixels or pixels 
 Using `DrawState` you can draw things without having to call the canvas directly.
 This is convenient if you have a lot of things to draw that have settings in common.
 
+## Availability of settings
+| setting | draw | write |
+|-------------|------|-------|
+| target | X | X |
+| inputImage | X | X |
+| map | X |  |
+| mesh | X |  |
+| opacity | X |  |
+| blendMode | X |  |
+| transform | X |  |
+| viewport | X |  |
+| destination | X |  |
+| source | X |  |
+| focalLength | X |  |
+| origin |  | X |
+
 ## How to use
 Create a `DrawState` with a target image as input argument.
 Continue with setters to add information.
