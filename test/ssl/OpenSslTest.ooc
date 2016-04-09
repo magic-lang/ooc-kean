@@ -94,6 +94,27 @@ OpenSslTest: class extends Fixture {
 			}
 			keyLengthsToTest free()
 		})
+		this add("sha256", func {
+			expectedOutput := [ 0x9c, 0x56, 0xcc, 0x51,
+				0xb3, 0x74, 0xc3, 0xba,
+				0x18, 0x92, 0x10, 0xd5,
+				0xb6, 0xd4, 0xbf, 0x57,
+				0x79, 0x0d, 0x35, 0x1c,
+				0x96, 0xc4, 0x7c, 0x02,
+				0x19, 0x0e, 0xcf, 0x1e,
+				0x43, 0x06, 0x35, 0xab ]
+			context := EVP_MD_CTX_create()
+			expect(EVP_DigestInit(context, EVP_sha256()), is equal to(1))
+			expect(EVP_DigestUpdate(context, c"abcdefgh", 8), is equal to(1))
+			result: Byte[32]
+			outputSize: UInt
+			expect(EVP_DigestFinal(context, result[0]&, outputSize&), is equal to(1))
+			expect(outputSize, is equal to(32))
+			for (i in 0 .. outputSize)
+				expect(result[i], is equal to(expectedOutput[i] as Byte))
+			EVP_MD_CTX_destroy(context)
+			expectedOutput free()
+		})
 	}
 }
 
