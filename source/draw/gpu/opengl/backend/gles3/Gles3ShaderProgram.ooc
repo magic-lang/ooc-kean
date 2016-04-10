@@ -8,7 +8,7 @@
 
 use geometry
 use draw
-import include/gles3
+import external/gles3
 import ../GLShaderProgram
 import Gles3Debug
 

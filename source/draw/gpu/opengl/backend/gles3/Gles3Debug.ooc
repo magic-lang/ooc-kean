@@ -8,7 +8,7 @@
 
 use base
 import ../egl/egl
-import include/gles3
+import external/gles3
 
 version(!gpuOff) {
 validateStart: func (location: String) {
