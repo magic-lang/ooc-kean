@@ -19,9 +19,7 @@ BufferReader: class extends Reader {
 	hasNext: override func -> Bool { this marker < this buffer size }
 	close: override func
 	read: override func (dest: Char*, destOffset: Int, maxRead: Int) -> SizeT {
-		if (this marker >= this buffer size)
-			Exception new(This, "Buffer overflow! Offset is larger than buffer size.") throw()
-
+		raise(this marker >= this buffer size, "Buffer overflow! Offset is larger than buffer size.", This)
 		copySize := (this marker + maxRead > this buffer size ? this buffer size - this marker : maxRead)
 		memcpy(dest, this buffer data + this marker, copySize)
 		this marker += copySize

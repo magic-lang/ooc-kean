@@ -18,8 +18,7 @@ WaitCondition: abstract class {
 			result = ConditionUnix new() as This
 		version (windows)
 			result = ConditionWin32 new() as This
-		if (result == null)
-			Exception new(This, "Unsupported platform!\n") throw()
+		raise(result == null, "Unsupported platform!\n", This)
 		result
 	}
 }

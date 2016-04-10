@@ -18,7 +18,7 @@ ProcessWin32: class extends Process {
 	init: func ~win32 (=args) {
 		sb := CharBuffer new()
 		for (arg in args)
-			sb append(arg). append(' ')
+			sb append(arg) . append(' ')
 		this cmdLine = sb toString()
 		ZeroMemory(this si&, StartupInfo size)
 		this si structSize = StartupInfo size

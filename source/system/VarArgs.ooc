@@ -6,23 +6,10 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-__va_call: func <T> (f: Func <T> (T), T: Class, arg: T) {
-	f(arg)
-}
-
 // we heard, more than once: don't use sizeof in ooc! why? because it'll
 // actually be the size of the _class(), ie. the size of a pointer - which is
 // what we want, so we're fine.
-__sizeof: extern (sizeof) func (Class) -> SizeT
-
-// used to align values on the pointer-size boundary, both for performance
-// and to match the layout of structs
-__pointer_align: func (s: SizeT) -> SizeT {
-	// 'Pointer size' isn't a constant expression, but sizeof(Pointer) is.
-	ps := static __sizeof(Pointer)
-	diff := s % ps
-	diff ? s + (ps - diff) : s
-}
+_sizeof: extern (sizeof) func (Class) -> SizeT
 
 VarArgs: cover {
 	args, argsPtr: Byte* // because the size of stuff (T size) is expressed in bytes
@@ -58,10 +45,10 @@ VarArgs: cover {
 			}
 
 			// retrieve the arg and use it
-			__va_call(f, type, argsPtr@)
+			This _vaCall(f, type, argsPtr@)
 
 			// skip the size of the argument - aligned on 8 bytes, that is.
-			argsPtr += __pointer_align(type size)
+			argsPtr += This _pointerAlign(type size)
 		}
 	}
 
@@ -77,11 +64,23 @@ VarArgs: cover {
 		(this argsPtr as T*)@ = value
 
 		// align on the pointer-size boundary
-		this argsPtr += __pointer_align(T size)
+		this argsPtr += This _pointerAlign(T size)
 	}
 
 	iterator: func -> VarArgsIterator {
 		(this args, this count, true) as VarArgsIterator
+	}
+
+	// used to align values on the pointer-size boundary, both for performance
+	// and to match the layout of structs
+	_pointerAlign: static func (s: SizeT) -> SizeT {
+		// 'Pointer size' isn't a constant expression, but sizeof(Pointer) is.
+		ps := static _sizeof(Pointer)
+		diff := s % ps
+		diff ? s + (ps - diff) : s
+	}
+	_vaCall: static func <T> (f: Func <T> (T), T: Class, arg: T) {
+		f(arg)
 	}
 }
 
@@ -101,8 +100,7 @@ VarArgsIterator: cover {
 
 	// convention: argsPtr points to type of next element when called.
 	next: func@ <T> (T: Class) -> T {
-		if (this countdown <= 0)
-			Exception new(This, "Vararg underflow!") throw()
+		raise(this countdown <= 0, "Vararg underflow!", This)
 
 		this countdown -= 1
 
@@ -111,7 +109,7 @@ VarArgsIterator: cover {
 		version(!windows) {
 			version (!arm) {
 				result = (this argsPtr + Class size) as T*
-				this argsPtr += Class size + __pointer_align(nextType size)
+				this argsPtr += Class size + VarArgs _pointerAlign(nextType size)
 			}
 
 			version (arm) {
@@ -121,16 +119,16 @@ VarArgsIterator: cover {
 				}
 
 				result = (this argsPtr + offset) as T*
-				this argsPtr += offset + __pointer_align(nextType size)
+				this argsPtr += offset + VarArgs _pointerAlign(nextType size)
 			}
 		}
 		version(windows) {
 			if (nextType size > Class size) {
 				result = (this argsPtr + nextType size) as T*
-				this argsPtr += nextType size + __pointer_align(nextType size)
+				this argsPtr += nextType size + VarArgs _pointerAlign(nextType size)
 			} else {
 				result = (this argsPtr + Class size) as T*
-				this argsPtr += Class size + __pointer_align(nextType size)
+				this argsPtr += Class size + VarArgs _pointerAlign(nextType size)
 			}
 		}
 
@@ -138,7 +136,7 @@ VarArgsIterator: cover {
 	}
 
 	getNextType: func@ -> Class {
-		if (this countdown < 0) Exception new(This, "Vararg underflow!") throw()
+		raise(this countdown < 0, "Vararg underflow!", This)
 		(this argsPtr as Class*)@ as Class
 	}
 }
