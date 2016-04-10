@@ -130,7 +130,19 @@ FloatMatrixTest: class extends Fixture {
 		})
 		this add("determinant", func {
 			m := this createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f])
-			expect(m determinant(), is equal to(108.0f))
+			expect(m determinant(), is equal to(108.0f) within(tolerance))
+		})
+		this add("adjugate (4x4)", func {
+			m := this createMatrix(4, 4, [1.f, 5.f, 3.f, 2.f, 7.f, 6.f, 8.f, 9.f, 2.f, 0.f, -3.f, 4.f, 4.f, 1.f, 2.f, 3.f])
+			this checkAllElements(m adjugate(), [-43.f, 67.f, 11.f, -187.f, -105.f, 45.f, -15.f, -45.f, 50.f, -50.f, 50.f, 50.f, 59.f, -71.f, -43.f, 131.f])
+		})
+		this add("cofactors (4x4)", func {
+			m := this createMatrix(4, 4, [1.f, 5.f, 3.f, 2.f, 7.f, 6.f, 8.f, 9.f, 2.f, 0.f, -3.f, 4.f, 4.f, 1.f, 2.f, 3.f])
+			this checkAllElements(m cofactors(), [-43.f, -105.f, 50.f, 59.f, 67.f, 45.f, -50.f, -71.f, 11.f, -15.f, 50.f, -43.f, -187.f, -45.f, 50.f, 131.f])
+		})
+		this add("determinant (4x4)", func {
+			m := this createMatrix(4, 4, [1.f, 5.f, 3.f, 2.f, 7.f, 6.f, 8.f, 9.f, 2.f, 0.f, -3.f, 4.f, 4.f, 1.f, 2.f, 3.f])
+			expect(m determinant(), is equal to(-300.0f) within(tolerance))
 		})
 		this add("toText", func {
 			matrix := FloatMatrix identity(3)
