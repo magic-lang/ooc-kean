@@ -50,6 +50,8 @@ Cell: class <T> {
 			result = (this val as LDouble) toText()
 		else if (T inheritsFrom(Range))
 			result = (this val as Range) toText()
+		else if (T inheritsFrom(Byte))
+			result = (this val as Byte) toText()
 		else
 			raise("[Cell] toText() is not implemented on the specified type")
 		result

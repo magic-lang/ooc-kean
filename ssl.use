@@ -1,0 +1,6 @@
+Name: OpenSSL
+Description: Wrapper for OpenSSL and libcrypto
+SourcePath: source/ssl
+Requires: base
+Libs: -lcrypto
+Libs: -lssl
