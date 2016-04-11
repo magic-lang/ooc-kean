@@ -63,16 +63,5 @@ OpenGLSurface: abstract class extends GpuCanvas {
 		this context drawPoints(pointList, this _projection * this _toLocal, pen)
 		this _unbind()
 	}
-	// Deprecated! Do not use.
-	draw: override func ~mesh (image: GpuImage, mesh: Mesh) {
-		f := func {
-			this context meshShader add("texture0", image)
-			this context meshShader projection = this _projection
-			this context meshShader use(null)
-			mesh draw()
-		}
-		this draw(f)
-		(f as Closure) free()
-	}
 }
 }

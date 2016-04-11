@@ -85,7 +85,6 @@ GpuCanvas: abstract class extends Canvas {
 		if (image != temporary)
 			temporary free()
 	}
-	draw: virtual func ~mesh (image: GpuImage, mesh: Mesh) { Debug error("draw~mesh unimplemented!") }
 	_createTextureTransform: static func ~LocalInt (imageSize: IntVector2D, box: IntBox2D) -> FloatTransform3D {
 		This _createTextureTransform(imageSize toFloatVector2D(), box toFloatBox2D())
 	}
