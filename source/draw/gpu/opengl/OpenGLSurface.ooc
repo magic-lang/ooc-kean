@@ -21,34 +21,6 @@ OpenGLSurface: abstract class extends GpuCanvas {
 	}
 	_bind: abstract func
 	_unbind: abstract func
-	// Deprecated! Do not use.
-	draw: override func (action: Func) {
-		this _bind()
-		this context backend setViewport(this viewport)
-		if (this opacity < 1.0f)
-			this context backend blend(this opacity)
-		else if (this blend)
-			this context backend blend()
-		else
-			this context backend enableBlend(false)
-		action()
-		this _unbind()
-	}
-	// Deprecated! Do not use.
-	draw: override func ~WithoutBind (destination: IntBox2D, map: Map) {
-		map model = this _createModelTransform(destination, this _focalLength)
-		map view = this _view
-		map projection = this _projection
-		map use(null)
-		f := func { this context drawQuad() }
-		this draw(f)
-		(f as Closure) free()
-	}
-	// Deprecated! Do not use.
-	draw: override func ~GpuImage (image: GpuImage, source: IntBox2D, destination: IntBox2D, map: Map) {
-		map textureTransform = This _createTextureTransform(image size, source)
-		this draw(destination, map)
-	}
 	drawLines: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) {
 		this _bind()
 		this context backend setViewport(this viewport)
