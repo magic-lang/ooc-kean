@@ -11,9 +11,6 @@ import Image
 import Map
 import Mesh
 
-// Example
-// DrawState new(targetImage) setMap(shader) draw()
-
 // See README.md about input arguments and coordinate systems
 
 BlendMode: enum {
@@ -22,8 +19,10 @@ BlendMode: enum {
 }
 
 DrawState: cover {
+	// See README.MD for availability of settings for each method
 	target: Image = null
 	inputImage: Image = null
+	_originReference := FloatPoint2D new(0.0f, 0.0f) // Start of text
 	map: Map = null
 	mesh: Mesh = null
 	opacity := 1.0f
@@ -111,30 +110,43 @@ DrawState: cover {
 		this inputImage = inputImage
 		this
 	}
-	// Reference transform
 	setTransformReference: func ~TargetSize (transform: FloatTransform3D) -> This {
 		version(safe)
 			raise(this target == null, "Can't set reference transform relative to a target that does not exist.")
 		this setTransformNormalized(transform referenceToNormalized(this target size))
 	}
-	// Reference transform
 	setTransformReference: func ~ExplicitIntSize (transform: FloatTransform3D, imageSize: IntVector2D) -> This {
 		this setTransformNormalized(transform referenceToNormalized(imageSize))
 	}
-	// Reference transform
 	setTransformReference: func ~ExplicitFloatSize (transform: FloatTransform3D, imageSize: FloatVector2D) -> This {
 		this setTransformNormalized(transform referenceToNormalized(imageSize))
 	}
-	// Normalized transform
 	setTransformNormalized: func (transform: FloatTransform3D) -> This {
 		this _transformNormalized = transform
 		this
 	}
-	// Normalized transform
 	getTransformNormalized: func -> FloatTransform3D { this _transformNormalized }
+	setOrigin: func (origin: FloatPoint2D) -> This {
+		this _originReference = origin
+		this
+	}
+	getOriginLocal: func -> FloatPoint2D {
+		version(safe)
+			raise(this target == null, "Can't get local origin relative to a target that does not exist.")
+		this _originReference + ((this target size toFloatVector2D()) / 2.0f)
+	}
+	// Example: DrawState new(targetImage) setMap(shader) draw()
 	draw: func {
 		version(safe)
-			raise(this target == null, "Can't draw without a selected target.")
+			raise(this target == null, "Can't draw without a target.")
 		this target canvas draw(this)
+	}
+	// Example: DrawState new(targetImage) setOrigin(point) setInputImage(context getDefaultFont()) write(t"Hello world!")
+	write: func ~String (message: Text) {
+		version(safe) {
+			raise(this target == null, "Can't write without a target.")
+			raise(this inputImage == null, "Can't write without a font atlas.")
+		}
+		this target canvas write(this target, this inputImage, this getOriginLocal() toIntPoint2D(), message)
 	}
 }

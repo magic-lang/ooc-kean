@@ -9,6 +9,7 @@
 use base
 use draw
 use geometry
+import images/DefaultFont
 
 AlignWidth: enum {
 	Nearest
@@ -17,7 +18,18 @@ AlignWidth: enum {
 }
 
 DrawContext: abstract class {
+	_defaultFontRaster: RasterMonochrome = null
+	defaultFontRaster: RasterMonochrome { get {
+		if (this _defaultFontRaster == null)
+			this _defaultFontRaster = RasterMonochrome fromAscii(defaultFontAsciiImage)
+		this _defaultFontRaster
+	}}
 	init: func
+	free: override func {
+		if (this _defaultFontRaster != null)
+			this _defaultFontRaster free()
+		super()
+	}
 	createMonochrome: abstract func (size: IntVector2D) -> Image
 	createRgb: abstract func (size: IntVector2D) -> Image
 	createRgba: abstract func (size: IntVector2D) -> Image
@@ -29,4 +41,5 @@ DrawContext: abstract class {
 	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }
 	update: abstract func
 	isAligned: virtual func (width: Int) -> Bool { true }
+	getDefaultFont: virtual func -> Image { this defaultFontRaster }
 }
