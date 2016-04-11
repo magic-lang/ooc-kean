@@ -293,47 +293,92 @@ FloatMatrix: cover {
 		result
 	}
 	cofactors: func -> This {
-		// TODO: At some point, when needed, implement for the general case.
 		t := this take()
-		version(safe) {
+		version(safe)
 			raise(!t isSquare, "Matrix must be square in FloatMatrix cofactors")
-			raise(t width != 3, "Cofactors implemented only for 3x3 matrices in FloatMatrix")
-		}
 		result := t create()
-		result[0, 0] = t[1, 1] * t[2, 2] - t[2, 1] * t[1, 2]
-		result[1, 0] = - (t[0, 1] * t[2, 2] - t[2, 1] * t[0, 2])
-		result[2, 0] = t[0, 1] * t[1, 2] - t[1, 1] * t[0, 2]
-		result[0, 1] = - (t[1, 0] * t[2, 2] - t[2, 0] * t[1, 2])
-		result[1, 1] = t[0, 0] * t[2, 2] - t[2, 0] * t[0, 2]
-		result[2, 1] = - (t[0, 0] * t[1, 2] - t[1, 0] * t[0, 2])
-		result[0, 2] = t[1, 0] * t[2, 1] - t[2, 0] * t[1, 1]
-		result[1, 2] = - (t[0, 0] * t[2, 1] - t[2, 0] * t[0, 1])
-		result[2, 2] = t[0, 0] * t[1, 1] - t[1, 0] * t[0, 1]
+		matrixOrder := t order
+		if (matrixOrder == 1)
+			result[0, 0] = t[0, 0]
+		else if (matrixOrder == 2) {
+			result[0, 0] = t[1, 1]
+			result[0, 1] = -t[1, 0]
+			result[1, 0] = -t[0, 1]
+			result[1, 1] = t[0, 0]
+		}
+		else if (matrixOrder == 3) {
+			result[0, 0] = t[1, 1] * t[2, 2] - t[2, 1] * t[1, 2]
+			result[1, 0] = - (t[0, 1] * t[2, 2] - t[2, 1] * t[0, 2])
+			result[2, 0] = t[0, 1] * t[1, 2] - t[1, 1] * t[0, 2]
+			result[0, 1] = - (t[1, 0] * t[2, 2] - t[2, 0] * t[1, 2])
+			result[1, 1] = t[0, 0] * t[2, 2] - t[2, 0] * t[0, 2]
+			result[2, 1] = - (t[0, 0] * t[1, 2] - t[1, 0] * t[0, 2])
+			result[0, 2] = t[1, 0] * t[2, 1] - t[2, 0] * t[1, 1]
+			result[1, 2] = - (t[0, 0] * t[2, 1] - t[2, 0] * t[0, 1])
+			result[2, 2] = t[0, 0] * t[1, 1] - t[1, 0] * t[0, 1]
+		} else
+			for (row in 0 .. t height) {
+				sign := (row % 2 == 0) ? 1.f : -1.f
+				for (col in 0 .. t width) {
+					result[row, col] = t _assembleWithoutRowCol(row, col) determinant() * sign
+					sign = -sign
+				}
+			}
 		this free(Owner Receiver)
 		result
 	}
 	adjugate: func -> This {
-		// TODO: At some point, when needed, implement for the general case.
-		version(safe) {
+		version(safe)
 			raise(!this take() isSquare, "Matrix must be square in FloatMatrix adjugate")
-			raise(this take() width != 3, "Adjugate implemented only for 3x3 matrices in FloatMatrix")
-		}
 		result := this take() cofactors() transpose()
 		this free(Owner Receiver)
 		result
 	}
 	determinant: func -> Float {
-		// TODO: At some point, when needed, implement for the general case.
 		t := this take()
-		version(safe) {
+		version(safe)
 			raise(!t isSquare, "Matrix must be square in FloatMatrix determinant")
-			raise(t width != 3, "Determinant implemented only for 3x3 matrices in FloatMatrix")
+		result := 0.f
+		matrixOrder := t order
+		if (matrixOrder == 1)
+			result = t[0, 0]
+		else if (matrixOrder == 2)
+			result = t[0, 0] * t[1, 1] - t[0, 1] * t[1, 0]
+		else if (matrixOrder == 3)
+			result = t[0, 0] * (t[1, 1] * t[2, 2] - t[2, 1] * t[1, 2]) - t[1, 0] * (t[0, 1] * t[2, 2] - t[2, 1] * t[0, 2]) + t[2, 0] * (t[0, 1] * t[1, 2] - t[1, 1] * t[0, 2])
+		else {
+			sign := 1.f
+			for (column in 0 .. matrixOrder) {
+				value := t[0, column]
+				if (!value equals(0.f)) {
+					submatrix := t _assembleWithoutRowCol(0, column) take()
+					result += t[0, column] * sign * submatrix determinant()
+					submatrix free(Owner Sender)
+				}
+				sign = -sign
+			}
 		}
-		result := t[0, 0] * (t[1, 1] * t[2, 2] - t[2, 1] * t[1, 2]) -
-			t[1, 0] * (t[0, 1] * t[2, 2] - t[2, 1] * t[0, 2]) +
-			t[2, 0] * (t[0, 1] * t[1, 2] - t[1, 1] * t[0, 2])
 		this free(Owner Receiver)
 		result
+	}
+	_assembleWithoutRowCol: func (row, column: Int) -> This {
+		t := this take()
+		submatrix := This new(t width - 1, t height - 1) take()
+		submatrixRow := 0
+		for (_row in 0 .. t height) {
+			if (_row == row)
+				continue
+			submatrixCol := 0
+			for (_col in 0 .. t width) {
+				if (_col == column)
+					continue
+				submatrix[submatrixRow, submatrixCol] = t[_row, _col]
+				submatrixCol += 1
+			}
+			submatrixRow += 1
+		}
+		this free(Owner Receiver)
+		submatrix
 	}
 	take: func -> This { // call by value -> modifies copy of cover
 		this _elements = this _elements take()
