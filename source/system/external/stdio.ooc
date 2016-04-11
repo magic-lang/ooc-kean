@@ -126,9 +126,7 @@ FStream: cover from FILE* {
 	readChar: func -> Char {
 		c := '\0'
 		count := fread(c&, 1, 1, this)
-		if (count != 1 && this error()) {
-			Exception new("Trying to read a char at the end of a file!") throw()
-		}
+		raise(count != 1 && this error(), "Trying to read a char at the end of a file!")
 		c
 	}
 

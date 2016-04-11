@@ -32,8 +32,7 @@ Mutex: abstract class {
 					result = MutexUnix new()
 				version (windows)
 					result = MutexWin32 new()
-				if (result == null)
-					Exception new(This, "Unsupported platform!\n") throw()
+				raise(result == null, "Unsupported platform!\n", This)
 			}
 			case MutexType Unsafe =>
 				result = MutexUnsafe new()
@@ -69,8 +68,7 @@ RecursiveMutex: abstract class extends Mutex {
 			result = RecursiveMutexUnix new()
 		version (windows)
 			result = RecursiveMutexWin32 new()
-		if (result == null)
-			Exception new(This, "Unsupported platform!\n") throw()
+		raise(result == null, "Unsupported platform!\n", This)
 		result
 	}
 }

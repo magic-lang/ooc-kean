@@ -167,10 +167,10 @@ File: abstract class {
 	getChildrenNames: abstract func -> VectorList<String>
 	getChildren: abstract func -> VectorList<This>
 	rm: func -> Bool { _remove(this) }
-	rm_rf: func -> Bool {
+	rmrf: func -> Bool {
 		if (this dir())
 			for (child in this getChildren())
-				if (!child rm_rf())
+				if (!child rmrf())
 					return false
 		this rm()
 	}

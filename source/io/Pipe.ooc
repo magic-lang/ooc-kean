@@ -58,8 +58,7 @@ Pipe: abstract class {
 			result = PipeUnix new() as This
 		version(windows)
 			result = PipeWin32 new() as This
-		if (result == null)
-			Exception new(This, "Unsupported platform!\n") throw()
+		raise(result == null, "Unsupported platform!\n", This)
 		result
 	}
 }

@@ -81,8 +81,8 @@ murmurHash: func <K> (keyTagazok: K) -> SizeT {
  * @param s The string to hash
  * @return UInt
  */
-ac_X31_hash: func <K> (key: K) -> SizeT {
-	raise(key == null, "key in ac_X31_hash must be non-null!")
+acX31Hash: func <K> (key: K) -> SizeT {
+	raise(key == null, "key in acX31Hash must be non-null!")
 	s : Char* = (K == String) ? (key as String) toCString() as Char* : key as Char*
 	h = s@ : SizeT
 	if (h) {
@@ -97,7 +97,7 @@ ac_X31_hash: func <K> (key: K) -> SizeT {
 
 getStandardHashFunc: func <T> (T: Class) -> Func <T> (T) -> SizeT {
 	if (T == String)
-		ac_X31_hash
+		acX31Hash
 	else if (T size == Pointer size)
 		pointerHash
 	else if (T size == UInt size)

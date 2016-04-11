@@ -30,7 +30,7 @@ BufferWriter: class extends Writer {
 	}
 	seek: func (p: Long) {
 		if (p < 0 || p > this buffer size)
-			Exception new("Seeking out of bounds! p = %d, size = %d" format(p, this buffer size)) throw()
+			raise("Seeking out of bounds! p = %d, size = %d" format(p, this buffer size))
 		this pos = p
 	}
 	write: override func (chars: Char*, length: SizeT) -> SizeT {

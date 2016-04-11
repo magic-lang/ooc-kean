@@ -38,11 +38,12 @@ version(windows) {
 		_getFindData: func -> (FindData, Bool) {
 			ffd: FindData
 			hFind := FindFirstFile(this path toCString(), ffd&)
-			if (hFind != INVALID_HANDLE_VALUE) FindClose(hFind)
-			else {
-				return (ffd, false)
-			}
-			return (ffd, true)
+			status := true
+			if (hFind != INVALID_HANDLE_VALUE)
+				FindClose(hFind)
+			else
+				status = false
+			return (ffd, status)
 		}
 
 		/**

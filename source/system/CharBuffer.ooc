@@ -61,7 +61,7 @@ CharBuffer: class {
 			if (!tmp)
 				OutOfMemoryException new(This) throw()
 
-			// if we were coming from a string literal, copy the original data as well (gc_realloc cant work on text segment)
+			// if we were coming from a string literal, copy the original data as well (realloc cant work on text segment)
 			if (this size > 0 && this mallocAddr == null) {
 				rs = 0
 				if (tmp != null && this data != null)

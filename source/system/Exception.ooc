@@ -222,7 +222,7 @@ version ((linux || apple) && !android) {
 			case SIGTERM => "(SIGTERM) software termination signal"
 			case => "(?) unknown signal %d" format(sig)
 		}
-		stderr write(message). write('\n')
+		stderr write(message) . write('\n')
 		stderr write(Exception getCurrentBacktrace())
 		exit(sig)
 	}
@@ -254,7 +254,7 @@ version (windows) {
 			case EXCEPTION_STACK_OVERFLOW => "(STACK_OVERFLOW) the thread used up its stack"
 			case => "(?) unknown exception code %lu" format(code as ULong)
 		}
-		stderr write(message). write('\n')
+		stderr write(message) . write('\n')
 		handler := BacktraceHandler get()
 		context := exceptionInfo@ ContextRecord as Pointer
 		backtrace := handler backtraceWithContext(context)

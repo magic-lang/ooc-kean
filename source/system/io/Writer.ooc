@@ -8,10 +8,6 @@
 
 import io/Reader
 
-/**
- * The writer interface provides a medium-independent way to write
- * bytes to anything.
- */
 Writer: abstract class {
 	write: abstract func ~chr (chr: Char)
 	write: abstract func (bytes: CString, length: SizeT) -> SizeT
@@ -26,12 +22,10 @@ Writer: abstract class {
 		cursor, bytesTransfered: Int
 		cursor = 0
 		bytesTransfered = 0
-
 		while (source hasNext()) {
 			buffer setLength( source read(buffer data, cursor, bufferSize) )
 			bytesTransfered += this write(buffer data, buffer size)
 		}
-
 		buffer free()
 		bytesTransfered
 	}

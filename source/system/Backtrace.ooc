@@ -18,27 +18,27 @@ BacktraceHandler: class {
 	raw := false
 
 	backtrace: func -> Backtrace {
-		buffer := calloc(BACKTRACE_LENGTH, Pointer size)
+		buffer := calloc(backtraceLength, Pointer size)
 		result: Backtrace = null
 		if (this lib) {
 			// use fancy-backtrace, best one!
 			f := (this fancyBacktrace, null) as Func (Pointer*, Int) -> Int
-			length := f(buffer, BACKTRACE_LENGTH)
+			length := f(buffer, backtraceLength)
 			result = Backtrace new(buffer, length)
 		} else {
 			// fall back on execinfo? still informative
 			version (linux || apple) {
-				if (!This WARNED_ABOUT_FALLBACK) {
+				if (!This warnedAboutFallback) {
 					stderr write("[Backtrace] Falling back on execinfo.. (build extension if you want fancy backtraces)\n")
-					This WARNED_ABOUT_FALLBACK = true
+					This warnedAboutFallback = true
 				}
-				length := backtrace(buffer, BACKTRACE_LENGTH)
+				length := backtrace(buffer, backtraceLength)
 				result = Backtrace new(buffer, length)
 			} else {
 				// no such luck, use a debugger :(
-				if (!This WARNED_ABOUT_FALLBACK) {
+				if (!This warnedAboutFallback) {
 					stderr write("[Backtrace] No backtrace extension nor execinfo - use a debugger!\n")
-					This WARNED_ABOUT_FALLBACK = true
+					This warnedAboutFallback = true
 				}
 				memfree(buffer)
 			}
@@ -48,9 +48,9 @@ BacktraceHandler: class {
 	backtraceWithContext: func (contextPtr: Pointer) -> Backtrace {
 		result: Backtrace = null
 		version (windows) {
-			buffer := calloc(BACKTRACE_LENGTH, Pointer size) as Pointer*
+			buffer := calloc(backtraceLength, Pointer size) as Pointer*
 			f := (this fancyBacktraceWithContext, null) as Func (Pointer*, Int, Pointer) -> Int
-			length := f(buffer, BACKTRACE_LENGTH, contextPtr)
+			length := f(buffer, backtraceLength, contextPtr)
 			result = Backtrace new(buffer, length)
 		}
 		result
@@ -70,7 +70,7 @@ BacktraceHandler: class {
 				// nothing to format here, just a dumb platform-specific stack trace :/
 				buffer := CharBuffer new()
 				for (i in 0 .. trace length)
-					buffer append(lines[i]). append('\n')
+					buffer append(lines[i]) . append('\n')
 				result = buffer toString()
 			} else
 				result = "[no backtrace]"
@@ -89,7 +89,7 @@ BacktraceHandler: class {
 
 			if (this lib) {
 				this _initFuncs()
-				atexit(_cleanup_backtrace)
+				atexit(cleanupBacktrace)
 			} else
 				this fancy = false
 		}
@@ -98,7 +98,6 @@ BacktraceHandler: class {
 		if (this lib) {
 			this _getSymbol(this fancyBacktrace&, "fancy_backtrace")
 			this _getSymbol(this fancyBacktraceSymbols&, "fancy_backtrace_symbols")
-
 			version (windows)
 				this _getSymbol(this fancyBacktraceWithContext&, "fancy_backtrace_with_context")
 		}
@@ -116,8 +115,8 @@ BacktraceHandler: class {
 		if (this raw) {
 			buffer append("[raw backtrace]\n")
 			for (i in 0 .. length)
-				buffer append(lines[i]). append('\n')
-			return buffer toString()
+				buffer append(lines[i]) . append('\n')
+			buffer toString()
 		}
 
 		buffer append("[fancy backtrace]\n")
@@ -174,8 +173,8 @@ BacktraceHandler: class {
 		}
 		buffer toString()
 	}
-	BACKTRACE_LENGTH := static 128
-	WARNED_ABOUT_FALLBACK := static false
+	backtraceLength := static 128
+	warnedAboutFallback := static false
 	instance: static This
 	get: static func -> This {
 		if (!instance)
@@ -187,9 +186,7 @@ BacktraceHandler: class {
 TraceElement: class {
 	frameno: Int
 	symbol, package, file: String
-
 	init: func (=frameno, =symbol, =package, =file)
-
 	pad: static func (s: String, length: Int) -> String {
 		if (s size < length) {
 			b := CharBuffer new()
@@ -214,7 +211,7 @@ Backtrace: class {
 	}
 }
 
-_cleanup_backtrace: func {
+cleanupBacktrace: func {
 	h := BacktraceHandler get()
 	if (h lib)
 		h lib close()

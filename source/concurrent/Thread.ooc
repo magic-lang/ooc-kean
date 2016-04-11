@@ -25,8 +25,7 @@ Thread: abstract class {
 			result = ThreadUnix new(_code) as This
 		version (windows)
 			result = ThreadWin32 new(_code) as This
-		if (result == null)
-			Exception new(This, "Unsupported platform!\n") throw()
+		raise(result == null, "Unsupported platform!\n", This)
 		result
 	}
 	currentThread: static func -> This {
