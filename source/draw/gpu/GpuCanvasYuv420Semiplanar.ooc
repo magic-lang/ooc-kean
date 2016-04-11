@@ -15,22 +15,6 @@ import GpuImage, Map, GpuCanvas, GpuContext, GpuYuv420Semiplanar, Mesh
 version(!gpuOff) {
 GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
 	_target: GpuYuv420Semiplanar
-	transform: FloatTransform3D {
-		get { this _view }
-		set(value) {
-			this _view = this _toLocal * value * this _toLocal
-			this _target y canvas _view = this _view
-			this _target uv canvas _view = FloatTransform3D createTranslation(-this _view m / 2.0f, -this _view n / 2.0f, -this _view o / 2.0f) * this _view
-		}
-	}
-	focalLength: Float {
-		get { this _focalLength }
-		set(value) {
-			this _focalLength = value
-			this _target y canvas focalLength = value
-			this _target uv canvas focalLength = value / 2
-		}
-	}
 	init: func (=_target, context: GpuContext) {
 		super(this _target size, context, context defaultMap, IntTransform2D identity)
 	}

@@ -23,16 +23,16 @@ OpenGLSurface: abstract class extends GpuCanvas {
 	_unbind: abstract func
 	drawLines: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) {
 		this _bind()
-		this context backend setViewport(this viewport)
+		this context backend setViewport(IntBox2D new(this size))
 		this context backend enableBlend(false)
-		this context drawLines(pointList, this _projection * this _toLocal, pen)
+		this context drawLines(pointList, this _createProjection(this size toFloatVector2D(), 0.0f) * this _toLocal, pen)
 		this _unbind()
 	}
 	drawPoints: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) {
 		this _bind()
-		this context backend setViewport(this viewport)
+		this context backend setViewport(IntBox2D new(this size))
 		this context backend enableBlend(false)
-		this context drawPoints(pointList, this _projection * this _toLocal, pen)
+		this context drawPoints(pointList, this _createProjection(this size toFloatVector2D(), 0.0f) * this _toLocal, pen)
 		this _unbind()
 	}
 }
