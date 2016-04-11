@@ -144,6 +144,17 @@ FloatVectorListTest: class extends Fixture {
 			list1 free()
 			list2 free()
 		})
+		this add("scalar product", func {
+			list1 := FloatVectorList new()
+			list2 := FloatVectorList new()
+			list1 add(1.0f) . add(2.0f)
+			list2 add(10.0f) . add(11.0f)
+			expect(list1 scalarProduct(list2), is equal to(32.f) within(tolerance))
+			list1 add(3.0f) . add(4.0f)
+			list2 add(12.0f)
+			expect(list1 scalarProduct(list2), is equal to(68.f) within(tolerance))
+			(list1, list2) free()
+		})
 		this add("operator - (This)", func {
 			list1 := FloatVectorList new()
 			list2 := FloatVectorList new()
