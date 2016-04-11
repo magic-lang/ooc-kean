@@ -8,7 +8,7 @@
 
 use geometry
 use ui
-import include/x11
+import external/x11
 use draw
 
 version((unix || apple) && !android) {

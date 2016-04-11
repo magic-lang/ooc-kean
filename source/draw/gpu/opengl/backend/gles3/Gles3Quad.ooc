@@ -8,7 +8,7 @@
 
 use geometry
 
-import include/gles3
+import external/gles3
 import ../GLQuad
 import Gles3VertexArrayObject, Gles3Debug
 

@@ -7,7 +7,7 @@
  */
 
 import Gles3Quad
-import include/gles3
+import external/gles3
 import ../GLRenderer
 import Gles3Debug
 

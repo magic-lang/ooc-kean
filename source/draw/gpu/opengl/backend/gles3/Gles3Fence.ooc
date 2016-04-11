@@ -7,7 +7,7 @@
  */
 
 use base
-import include/gles3
+import external/gles3
 import ../GLFence
 import Gles3Debug
 

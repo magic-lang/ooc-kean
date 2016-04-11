@@ -8,7 +8,7 @@
 
 use base
 use geometry
-import include/x11
+import external/x11
 import ../[EventLoop, DisplayWindow, GuiEvent]
 import UnixWindow
 

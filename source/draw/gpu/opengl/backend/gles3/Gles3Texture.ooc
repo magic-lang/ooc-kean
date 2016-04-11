@@ -8,7 +8,7 @@
 
 use geometry
 use base
-import include/gles3
+import external/gles3
 import ../GLTexture
 import Gles3Debug
 

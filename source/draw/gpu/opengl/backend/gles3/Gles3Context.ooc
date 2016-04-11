@@ -11,7 +11,7 @@ use base
 use geometry
 import ../egl/egl
 import ../[GLContext, GLTexture, GLVertexArrayObject]
-import include/gles3
+import external/gles3
 import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture, Gles3VertexArrayObject
 
 Gles3Context: class extends GLContext {
