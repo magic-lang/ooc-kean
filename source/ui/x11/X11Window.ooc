@@ -71,7 +71,6 @@ X11Window: class extends NativeWindow {
 			this _xImage = XCreateImage(this display, CopyFromParent, this _displayDepth, ZPixmap, 0, imageData, image width, image height, 8, 0)
 			this _cacheSize = image size
 		}
-		image swapRedBlue()
 		memcpy(this _xImage@ data, image buffer pointer, image buffer size)
 		XClearWindow(this display, this backend)
 		XPutImage(this display, this backend, this _x11GraphicsContext, this _xImage, 0, 0, 0, 0, image width, image height)
