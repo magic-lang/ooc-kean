@@ -75,6 +75,10 @@ FloatMatrixTest: class extends Fixture {
 			m := this createMatrix(3, 3, [1.0f, 0, 0, 0, 2.0f, 0, 0, 0, 3.0f])
 			this checkAllElements(2.0f * m, [2.0f, 0, 0, 0, 4.0f, 0, 0, 0, 6.0f])
 		})
+		this add("division (scalar)", func {
+			m := this createMatrix(3, 3, [2.0f, 0, 0, 0, 4.0f, 0, 0, 0, 6.0f])
+			this checkAllElements(m / 2.f, [1.0f, 0, 0, 0, 2.0f, 0, 0, 0, 3.0f])
+		})
 		this add("addition", func {
 			a := this createMatrix(3, 3, [1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f]) take()
 			b := this createMatrix(3, 3, [9.0f, 8.0f, 7.0f, 6.0f, 5.0f, 4.0f, 3.0f, 2.0f, 1.0f]) take()
@@ -132,6 +136,10 @@ FloatMatrixTest: class extends Fixture {
 			m := this createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f])
 			expect(m determinant(), is equal to(108.0f) within(tolerance))
 		})
+		this add("inverse", func {
+			m := this createMatrix(3, 3, [1.f, 3.f, 7.f, 4.f, 5.f, 2.f, 3.f, 1.f, 8.f])
+			this checkAllElements(m inverse(), [-38.f / 117.f, 17.f / 117.f, 29.f / 117.f, 26.f / 117.f, 13.f / 117.f, -26.f / 117.f, 11.f / 117.f, -8.f / 117.f, 7.f / 117.f])
+		})
 		this add("adjugate (4x4)", func {
 			m := this createMatrix(4, 4, [1.f, 5.f, 3.f, 2.f, 7.f, 6.f, 8.f, 9.f, 2.f, 0.f, -3.f, 4.f, 4.f, 1.f, 2.f, 3.f])
 			this checkAllElements(m adjugate(), [-43.f, 67.f, 11.f, -187.f, -105.f, 45.f, -15.f, -45.f, 50.f, -50.f, 50.f, 50.f, 59.f, -71.f, -43.f, 131.f])
@@ -143,6 +151,10 @@ FloatMatrixTest: class extends Fixture {
 		this add("determinant (4x4)", func {
 			m := this createMatrix(4, 4, [1.f, 5.f, 3.f, 2.f, 7.f, 6.f, 8.f, 9.f, 2.f, 0.f, -3.f, 4.f, 4.f, 1.f, 2.f, 3.f])
 			expect(m determinant(), is equal to(-300.0f) within(tolerance))
+		})
+		this add("inverse (4x4)", func {
+			m := this createMatrix(4, 4, [1.f, -1.f, 2.f, -3.f, 2.f, -3.f, -3.f, 1.f, -1.f, 2.f, 3.f, 1.f, 1.f, 2.f, -1.f, 2.f])
+			this checkAllElements(m inverse(), [23.f / 68.f, 13.f / 68.f, 6.f / 68.f, 25.f / 68.f, 3.f / 68.f, -19.f / 68.f, -14.f / 68.f, 21.f / 68.f, 9.f / 68.f, 11.f / 68.f, 26.f / 68.f, -5.f / 68.f, -10.f / 68.f, 18.f / 68.f, 24.f / 68.f, -2.f / 68.f])
 		})
 		this add("toText", func {
 			matrix := FloatMatrix identity(3)
