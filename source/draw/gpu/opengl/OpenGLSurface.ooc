@@ -36,9 +36,6 @@ OpenGLSurface: abstract class extends GpuCanvas {
 		this context drawPoints(pointList, this _createProjection(this size toFloatVector2D(), 0.0f) * this _toLocal, pen)
 		this _unbind()
 	}
-	_createModelTransform: func ~LocalInt (box: IntBox2D, focalLength: Float) -> FloatTransform3D {
-		this _createModelTransform(box toFloatBox2D(), focalLength)
-	}
 	_createModelTransform: func ~LocalFloat (box: FloatBox2D, focalLength: Float) -> FloatTransform3D {
 		toReference := FloatTransform3D createTranslation((box size x - this size x) / 2, (this size y - box size y) / 2, 0.0f)
 		translation := this _toLocal * FloatTransform3D createTranslation(box leftTop x, box leftTop y, focalLength) * this _toLocal
