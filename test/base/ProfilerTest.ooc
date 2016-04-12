@@ -21,13 +21,11 @@ ProfilerTest: class extends Fixture {
 			for (i in 0 .. 10_000_000) { }
 			profiler stop()
 			Profiler logResults(outputFile)
-			profiler free()
 			file := File new(outputFile)
 			expect(file exists())
 			content := file read()
 			expect(content empty(), is equal to(false))
-			content free()
-			file free()
+			(profiler, content, file) free()
 		})
 		this add("cleanup", func {
 			profiler := Profiler new("for cleanup")

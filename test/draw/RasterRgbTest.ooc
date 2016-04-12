@@ -21,7 +21,7 @@ RasterRgbTest: class extends Fixture {
 			image2 := RasterRgb open(this sourceSpace)
 			expect(image1 equals(image1))
 			expect(image1 equals(image2), is false)
-			image1 referenceCount decrease(); image2 referenceCount decrease()
+			(image1, image2) referenceCount decrease()
 		})
 		this add("equals 2", func {
 			output := "test/draw/output/RasterRgb_test.png"
@@ -29,28 +29,28 @@ RasterRgbTest: class extends Fixture {
 			image1 save(output)
 			image2 := RasterRgb open(output)
 			expect(image1 equals(image2))
-			image1 referenceCount decrease(); image2 referenceCount decrease()
+			(image1, image2) referenceCount decrease()
 		})
 		this add("distance, same image", func {
 			image1 := RasterRgb open(this sourceSpace)
 			image2 := RasterRgb open(this sourceSpace)
 			expect(image1 distance(image1), is equal to(0.0f))
 			expect(image1 distance(image2), is equal to(0.0f))
-			image1 referenceCount decrease(); image2 referenceCount decrease()
+			(image1, image2) referenceCount decrease()
 		})
 		this add("distance, convertFrom self", func {
 			image1 := RasterRgb open(this sourceFlower)
 			image2 := RasterRgb convertFrom(image1)
 			expect(image1 distance(image2), is equal to(0.0f))
 			expect(image1 equals(image2))
-			image1 referenceCount decrease(); image2 referenceCount decrease()
+			(image1, image2) referenceCount decrease()
 		})
 		this add("RGB to Monochrome", func {
 			image1 := RasterRgb open(this sourceSpace)
 			image2 := RasterMonochrome convertFrom(image1)
 			image3 := RasterMonochrome open("test/draw/input/correct/Rgb-Monochrome-Space.png")
 			expect(image2 distance(image3), is equal to(0.0f))
-			image1 referenceCount decrease(); image2 referenceCount decrease(); image3 referenceCount decrease()
+			(image1, image2, image3) referenceCount decrease()
 		})
 		this add("swapped RB", func {
 			output := "test/draw/output/rbswapped.png"

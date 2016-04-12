@@ -160,8 +160,7 @@ FloatMatrixTest: class extends Fixture {
 			matrix := FloatMatrix identity(3)
 			text := matrix toText() take()
 			expect(text, is equal to(t"1.00, 0.00, 0.00; 0.00, 1.00, 0.00; 0.00, 0.00, 1.00; "))
-			text free()
-			matrix free()
+			(text, matrix) free()
 		})
 		this add("equality", func {
 			m := this createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f])

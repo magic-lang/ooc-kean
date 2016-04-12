@@ -176,9 +176,7 @@ HashDictionaryTest: class extends Fixture {
 			expect(dictionary3 get("Sixth", 0), is equal to(1002))
 			expect(dictionary3 get("Sixth", "null") == "null")
 
-			dictionary free()
-			dictionary2 free()
-			dictionary3 free()
+			(dictionary, dictionary2, dictionary3) free()
 		})
 		this add("Sizes", func {
 			dictionary := HashDictionary new()

@@ -42,8 +42,7 @@ LocatorTest: class extends Fixture {
 			expect(locator toText() == locatorText)
 			queryText free(Owner Sender)
 			locatorText free(Owner Sender)
-			path free()
-			locator free()
+			(path, locator) free()
 		})
 		this add("empty", func {
 			locator := Locator parse(t"")
@@ -76,8 +75,7 @@ LocatorTest: class extends Fixture {
 			expect(locator toText() == locatorText)
 			queryText free(Owner Sender)
 			locatorText free(Owner Sender)
-			path free()
-			locator free()
+			(path, locator) free()
 		})
 		this add("no user", func {
 			schemeText := Text new("http")
@@ -106,8 +104,7 @@ LocatorTest: class extends Fixture {
 			expect(locator toText() == locatorText)
 			queryText free(Owner Sender)
 			locatorText free(Owner Sender)
-			path free()
-			locator free()
+			(path, locator) free()
 		})
 		this add("no authority", func {
 			schemeText := Text new("http")
@@ -133,8 +130,7 @@ LocatorTest: class extends Fixture {
 			expect(locator toText() == locatorText)
 			queryText free(Owner Sender)
 			locatorText free(Owner Sender)
-			path free()
-			locator free()
+			(path, locator) free()
 		})
 		this add("no path", func {
 			schemeText := Text new("http")
@@ -182,8 +178,7 @@ LocatorTest: class extends Fixture {
 			expect(locator fragment == fragmentText)
 			expect(locator toText() == locatorText)
 			locatorText free(Owner Sender)
-			path free()
-			locator free()
+			(path, locator) free()
 		})
 		this add("no fragment", func {
 			schemeText := Text new("http")
@@ -212,8 +207,7 @@ LocatorTest: class extends Fixture {
 			expect(locator toText() == locatorText)
 			queryText free(Owner Sender)
 			locatorText free(Owner Sender)
-			path free()
-			locator free()
+			(path, locator) free()
 		})
 		this add("only path", func {
 			schemeText := Text new("http")
@@ -230,8 +224,7 @@ LocatorTest: class extends Fixture {
 			expect(locator fragment == Text empty)
 			expect(locator toText() == locatorText)
 			locatorText free(Owner Sender)
-			path free()
-			locator free()
+			(path, locator) free()
 		})
 	}
 }

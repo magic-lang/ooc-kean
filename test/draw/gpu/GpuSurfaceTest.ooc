@@ -27,7 +27,7 @@ GpuSurfaceTest: class extends Fixture {
 			DrawState new(gpuImage) setInputImage(this sourceImage) setSourceNormalized(quadrantRed) setDestinationNormalized(quadrantRed) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
-			rasterFromGpu free(); correctImage free(); gpuImage free()
+			(rasterFromGpu, correctImage, gpuImage) free()
 		})
 		this add("draw yellow quadrant scale 1:1", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_yellow.png")
@@ -37,7 +37,7 @@ GpuSurfaceTest: class extends Fixture {
 			DrawState new(gpuImage) setInputImage(this sourceImage) setSourceNormalized(quadrantYellow) setDestinationNormalized(quadrantYellow) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
-			rasterFromGpu free(); correctImage free(); gpuImage free()
+			(rasterFromGpu, correctImage, gpuImage) free()
 		})
 		this add("draw blue quadrant scale 1:1", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_blue.png")
@@ -47,7 +47,7 @@ GpuSurfaceTest: class extends Fixture {
 			DrawState new(gpuImage) setInputImage(this sourceImage) setSourceNormalized(quadrantBlue) setDestinationNormalized(quadrantBlue) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
-			rasterFromGpu free(); correctImage free(); gpuImage free()
+			(rasterFromGpu, correctImage, gpuImage) free()
 		})
 		this add("draw green quadrant scale 1:1", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_green.png")
@@ -57,7 +57,7 @@ GpuSurfaceTest: class extends Fixture {
 			DrawState new(gpuImage) setInputImage(this sourceImage) setSourceNormalized(quadrantGreen) setDestinationNormalized(quadrantGreen) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
-			correctImage free(); rasterFromGpu free(); gpuImage free()
+			(rasterFromGpu, correctImage, gpuImage) free()
 		})
 		this add("draw combined quadrants", func {
 			quadrantRed := RasterRgba open("test/draw/gpu/correct/quadrant_red.png")
@@ -77,8 +77,7 @@ GpuSurfaceTest: class extends Fixture {
 			DrawState new(gpuImage) setInputImage(quadrantGreen) setSourceNormalized(greenBox) setDestinationNormalized(greenBox) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
-			quadrantRed free(); quadrantYellow free(); quadrantBlue free(); quadrantGreen free()
-			correctImage free(); rasterFromGpu free(); gpuImage free()
+			(quadrantRed, quadrantYellow, quadrantBlue, quadrantGreen, rasterFromGpu, correctImage, gpuImage) free()
 		})
 		this add("draw red quadrant zoomed", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/quadrant_red_zoom.png")
@@ -88,7 +87,7 @@ GpuSurfaceTest: class extends Fixture {
 			DrawState new(gpuImage) setInputImage(this sourceImage) setSourceNormalized(redBox) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
-			correctImage free(); rasterFromGpu free(); gpuImage free()
+			(rasterFromGpu, correctImage, gpuImage) free()
 		})
 		this add("draw quad 1:4 scale top left bottom right and 180deg x rotation", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/quad_scaled_top_left_bottom_right_180deg_x_rotation.png")
@@ -100,7 +99,7 @@ GpuSurfaceTest: class extends Fixture {
 			DrawState new(gpuImage) setInputImage(this sourceImage) setDestinationNormalized(quadrantBottomRight) setTransformNormalized(FloatTransform3D createRotationX(180.0f toRadians())) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f) within(0.05f))
-			correctImage free(); rasterFromGpu free(); gpuImage free()
+			(rasterFromGpu, correctImage, gpuImage) free()
 		})
 		this add("draw shapes", func {
 			correctImage := RasterMonochrome open("test/draw/gpu/correct/shapes.png")

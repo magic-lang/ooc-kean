@@ -38,8 +38,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 				result := generator next()
 				expect(result, is within(15.0f, 20.0f))
 			}
-			numbers free()
-			generator free()
+			(numbers, generator) free()
 		})
 		this add("gaussian", func {
 			valuesCount := 100
@@ -61,8 +60,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 				if (numbers[i] == numbers[i - 1])
 					countEqual += 1
 			expect(countEqual, is less than(valuesCount))
-			numbers free()
-			generator free()
+			(numbers, generator) free()
 		})
 		this add("seeds", func {
 			valuesCount := 100_000
@@ -80,7 +78,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 				expect(x, is equal to(y))
 			}
 			expect(countEqual, is less than(valuesCount))
-			generator1 free(); generator2 free(); generator3 free()
+			(generator1, generator2, generator3) free()
 		})
 		this add("uniform distribution", func {
 			a := 2.41f
@@ -94,8 +92,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 				mean += values[i]
 			mean /= values length
 			expect((mean - expectedMean) absolute < tolerance)
-			values free()
-			floatGenerator free()
+			(values, floatGenerator) free()
 		})
 		this add("gaussian distribution", func {
 			expectedMean := -3.0f
@@ -114,8 +111,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 			deviation = sqrt(deviation / values length)
 			expect((mean - expectedMean) absolute < tolerance)
 			expect((deviation - expectedDeviation) absolute < tolerance)
-			values free()
-			generator free()
+			(values, generator) free()
 		})
 		this add("uniform range", func {
 			uniformGenerator := FloatUniformRandomGenerator new()
@@ -153,8 +149,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 			expect(generator2 next(), is equal to(5.98f) within(0.01f))
 			expect(generator2 next(), is equal to(57.96f) within(0.01f))
 			expect(generator2 next(), is equal to(8.52f) within(0.01f))
-			generator1 free()
-			generator2 free()
+			(generator1, generator2) free()
 		})
 	}
 }

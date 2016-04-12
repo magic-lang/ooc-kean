@@ -53,12 +53,9 @@ BlockedQueueTest: class extends Fixture {
 		expect(queue count, is equal to(1))
 		queue clear()
 		expect(queue count, is equal to(0))
-		producer free()
-		threads free()
+		(producer, threads, queue, globalMutex) free()
 		(produce as Closure) free()
 		(consume as Closure) free()
-		queue free()
-		globalMutex free()
 	}
 	_testWithClass: static func {
 		queue := BlockedQueue<Cell<Int>> new()
@@ -91,11 +88,9 @@ BlockedQueueTest: class extends Fixture {
 		}
 		consumer wait()
 		expect(queue count, is equal to(0))
-		consumer free()
-		threads free()
+		(consumer, threads, queue) free()
 		(produce as Closure) free()
 		(consume as Closure) free()
-		queue free()
 	}
 }
 

@@ -44,10 +44,7 @@ FileTest: class extends Fixture {
 			reader free()
 			file rm()
 			fileCopy rm()
-			file free()
-			fileCopy free()
-			path free()
-			pathCopy free()
+			(file, fileCopy, path, pathCopy) free()
 		})
 		this add("cleanup", func {
 			file := File new(this _testOutput)

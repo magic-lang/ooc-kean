@@ -68,8 +68,7 @@ ReferenceCounterTest: class extends Fixture {
 		counter decrease()
 		expect(isAlive, is false)
 		(job as Closure) free()
-		threads free()
-		counter free()
+		(threads, counter) free()
 	}
 }
 

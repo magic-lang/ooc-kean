@@ -55,8 +55,7 @@ BufferTest: class extends Fixture {
 			other moveTo(buffer)
 			for (i in 0 .. 1024)
 				expect((buffer pointer as Byte*)[i] == 128 as Byte)
-			buffer free()
-			other free()
+			(buffer, other) free()
 		})
 		this add("extend", func {
 			buffer := Buffer new()
