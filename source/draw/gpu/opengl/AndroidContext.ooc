@@ -19,7 +19,7 @@ AndroidContext: class extends OpenGLContext {
 	_unpackRgbaToMonochrome := OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToMonochrome.frag"), this)
 	_unpackRgbaToUv := OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToUv.frag"), this)
 	_unpackRgbaToUvPadded := OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToUvPadded.frag"), this)
-	_packers := VectorList<EGLRgba> new()
+	_packers := RecycleBin<EGLRgba> new(32, func (image: EGLRgba) { image free() })
 	init: func (other: This = null) { super(other) }
 	free: override func {
 		this _backend makeCurrent()
@@ -45,14 +45,8 @@ AndroidContext: class extends OpenGLContext {
 	}
 	recyclePacker: func (packer: EGLRgba) { this _packers add(packer) }
 	getPacker: func (size: IntVector2D) -> EGLRgba {
-		index := -1
-		for (i in 0 .. this _packers count) {
-			if (this _packers[i] size == size) {
-				index = i
-				break
-			}
-		}
-		index == -1 ? EGLRgba new(size, this) : this _packers remove(index)
+		result := this _packers search(|image| image size == size) ?? EGLRgba new(size, this)
+		result
 	}
 	toBuffer: func (source: GpuImage, packMap: Map) -> (ByteBuffer, OpenGLPromise) {
 		channels := (source as OpenGLPacked) channels

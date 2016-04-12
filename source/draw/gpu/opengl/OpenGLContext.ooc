@@ -12,7 +12,7 @@ use draw
 use draw-gpu
 use collections
 use concurrent
-import OpenGLPacked, OpenGLMonochrome, OpenGLRgb, OpenGLRgba, OpenGLUv, OpenGLMesh, OpenGLCanvas, _RecycleBin, OpenGLPromise
+import OpenGLPacked, OpenGLMonochrome, OpenGLRgb, OpenGLRgba, OpenGLUv, OpenGLMesh, OpenGLCanvas, OpenGLPromise
 import OpenGLMap
 import backend/[GLContext, GLRenderer]
 
@@ -38,13 +38,32 @@ OpenGLContext: class extends GpuContext {
 	_pointsShader: OpenGLMap
 	_meshShader: OpenGLMapMesh
 	_renderer: GLRenderer
-	_recycleBin := _RecycleBin new()
+	_recycleBinMonochrome: RecycleBin<OpenGLMonochrome>
+	_recycleBinRgb: RecycleBin<OpenGLRgb>
+	_recycleBinRgba: RecycleBin<OpenGLRgba>
+	_recycleBinUv: RecycleBin<OpenGLUv>
 	backend ::= this _backend
 	meshShader ::= this _meshShader
 	defaultMap ::= this _transformTextureMap as Map
 
 	init: func ~backend (=_backend) {
 		super()
+		this _recycleBinMonochrome = RecycleBin<OpenGLMonochrome> new(15, func (image: OpenGLMonochrome) {
+			image _recyclable = false
+			image free()
+		})
+		this _recycleBinRgb = RecycleBin<OpenGLRgb> new(15, func (image: OpenGLRgb) {
+			image _recyclable = false
+			image free()
+		})
+		this _recycleBinRgba = RecycleBin<OpenGLRgba> new(15, func (image: OpenGLRgba) {
+			image _recyclable = false
+			image free()
+		})
+		this _recycleBinUv = RecycleBin<OpenGLUv> new(15, func (image: OpenGLUv) {
+			image _recyclable = false
+			image free()
+		})
 		this _packMonochrome = OpenGLMap new(slurp("shaders/packMonochrome.vert"), slurp("shaders/packMonochrome.frag"), this)
 		this _packUv = OpenGLMap new(slurp("shaders/packUv.vert"), slurp("shaders/packUv.frag"), this)
 		this _packUvPadded = OpenGLMap new(slurp("shaders/packUvPadded.vert"), slurp("shaders/packUvPadded.frag"), this)
@@ -72,7 +91,10 @@ OpenGLContext: class extends GpuContext {
 		this _meshShader free()
 		this _backend free()
 		this _renderer free()
-		this _recycleBin free()
+		this _recycleBinMonochrome free()
+		this _recycleBinRgb free()
+		this _recycleBinRgba free()
+		this _recycleBinUv free()
 		super()
 	}
 	getMaxContexts: func -> Int { 1 }
@@ -95,9 +117,24 @@ OpenGLContext: class extends GpuContext {
 	}
 	recycle: virtual func (image: OpenGLPacked) {
 		(image canvas as OpenGLCanvas) onRecycle()
-		this _recycleBin add(image)
+		match (image) {
+			case (i: OpenGLMonochrome) => this _recycleBinMonochrome add(i)
+			case (i: OpenGLRgb) => this _recycleBinRgb add(i)
+			case (i: OpenGLRgba) => this _recycleBinRgba add(i)
+			case (i: OpenGLUv) => this _recycleBinUv add(i)
+			case => Debug error("Unknown format in recycle add()")
+		}
 	}
-	_searchImageBin: func (type: GpuImageType, size: IntVector2D) -> GpuImage { this _recycleBin find(type, size) }
+	_searchImageBin: func (type: GpuImageType, size: IntVector2D) -> GpuImage {
+		result := match (type) {
+			case GpuImageType Monochrome => this _recycleBinMonochrome search(|image| image size == size)
+			case GpuImageType Rgb => this _recycleBinRgb search(|image| image size == size)
+			case GpuImageType Rgba => this _recycleBinRgba search(|image| image size == size)
+			case GpuImageType Uv => this _recycleBinUv search(|image| image size == size)
+			case => null
+		}
+		result
+	}
 	createMonochrome: override func (size: IntVector2D) -> GpuImage {
 		result := this _searchImageBin(GpuImageType Monochrome, size)
 		result == null ? OpenGLMonochrome new(size, this) as GpuImage : result

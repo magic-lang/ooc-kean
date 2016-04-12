@@ -19,6 +19,7 @@ RecycleBin: class <T> {
 	free: override func {
 		this clear()
 		this _list free()
+		(this _free as Closure) free(Owner Receiver)
 		super()
 	}
 	add: func (object: T) {
