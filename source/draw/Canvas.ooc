@@ -21,19 +21,13 @@ InterpolationMode: enum {
 
 Canvas: abstract class {
 	_size: IntVector2D
-	_transform := FloatTransform3D identity
 	size ::= this _size
 	viewport: IntBox2D { get set }
-	blend: Bool { get set }
-	opacity: Float { get set }
-	transform: FloatTransform3D { get { this _transform } set(value) { this _transform = value } }
 	focalLength: Float { get set }
 	interpolationMode: InterpolationMode { get set }
 	init: func (=_size) {
 		this viewport = IntBox2D new(this size)
 		this focalLength = 0.0f
-		this blend = false
-		this opacity = 1.0f
 		this interpolationMode = InterpolationMode Fast
 	}
 	drawPoint: virtual func ~white (position: FloatPoint2D) { this drawPoint(position, Pen new(ColorRgba white)) }
