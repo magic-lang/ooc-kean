@@ -380,6 +380,13 @@ FloatMatrix: cover {
 		this free(Owner Receiver)
 		submatrix
 	}
+	inverse: func -> This {
+		version(safe)
+			raise(!this take() isSquare, "Matrix must be square in FloatMatrix inverse")
+		result := this take() cofactors() transpose() / this determinant()
+		this free(Owner Receiver)
+		result
+	}
 	take: func -> This { // call by value -> modifies copy of cover
 		this _elements = this _elements take()
 		this
