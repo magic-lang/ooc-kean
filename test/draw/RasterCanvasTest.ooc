@@ -109,11 +109,11 @@ RasterCanvasTest: class extends Fixture {
 			output := "test/draw/output/RasterCanvas_drawYUVonRGB.png"
 			imageFlower := RasterYuv420Semiplanar open(this inputFlower)
 			outputImage := RasterRgb open(inputSpace)
-			outputImage canvas interpolationMode = InterpolationMode Smooth
+			outputImage canvas interpolate = true
 			outputImage canvas draw(imageFlower, IntBox2D new(imageFlower size), IntBox2D new(20, 30, 100, 250))
 			imageFlowerYUpward := RasterYuv420Semiplanar open(this inputFlower, CoordinateSystem YUpward)
 			outputImage canvas draw(imageFlowerYUpward, IntBox2D new(imageFlower size), IntBox2D new(130, 30, 100, 250))
-			outputImage canvas interpolationMode = InterpolationMode Fast
+			outputImage canvas interpolate = false
 			imageFlowerXLeftward := RasterYuv420Semiplanar open(this inputFlower, CoordinateSystem XLeftward)
 			outputImage canvas draw(imageFlowerXLeftward, IntBox2D new(imageFlower size), IntBox2D new(240, 30, 100, 250))
 			imageFlowerXLeftwardYUpward := RasterYuv420Semiplanar open(this inputFlower, CoordinateSystem XLeftward | CoordinateSystem YUpward)

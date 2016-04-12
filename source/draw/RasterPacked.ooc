@@ -24,10 +24,10 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 	_resizePacked: func <T> (sourceBuffer: T*, source: RasterPacked, sourceBox, resultBox: IntBox2D) {
 		if (this target size == source size && this target stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0 && source coordinateSystem == this target coordinateSystem)
 			memcpy(this target buffer pointer, sourceBuffer, this target stride * this target height)
-		else if (this interpolationMode == InterpolationMode Fast)
-			This _resizeNearestNeighbour(sourceBuffer, this target buffer pointer as T*, source, this target, sourceBox, resultBox)
-		else
+		else if (this interpolate)
 			This _resizeBilinear(source, this target, sourceBox, resultBox)
+		else
+			This _resizeNearestNeighbour(sourceBuffer, this target buffer pointer as T*, source, this target, sourceBox, resultBox)
 	}
 	_transformCoordinates: static func (column, row, width, height: Int, coordinateSystem: CoordinateSystem) -> (Int, Int) {
 		if ((coordinateSystem & CoordinateSystem XLeftward) != 0)

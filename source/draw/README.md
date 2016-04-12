@@ -45,20 +45,23 @@ Using `DrawState` you can draw things without having to call the canvas directly
 This is convenient if you have a lot of things to draw that have settings in common.
 
 ## Availability of settings
-| setting | draw | write |
-|-------------|------|-------|
-| target | X | X |
-| inputImage | X | X |
-| map | X |  |
-| mesh | X |  |
-| opacity | X |  |
-| blendMode | X |  |
-| transform | X |  |
-| viewport | X |  |
-| destination | X |  |
-| source | X |  |
-| focalLength | X |  |
-| origin |  | X |
+Using destination or transform on the CPU would require a rewrite of legacy draw calls.
+
+| setting | draw(gpu) | draw(cpu) | write |
+|-|-|-|-|
+| target | X | X | X |
+| inputImage | X | X | X |
+| viewport | X | X |  |
+| source | X | X |  |
+| destination | X |  |  |
+| transform | X |  |  |
+| focalLength | X |  |  |
+| map | X |  |  |
+| mesh | X |  |  |
+| opacity | X |  |  |
+| blendMode | X |  |  |
+| interpolate |  | X |  |
+| origin |  |  | X |
 
 ## How to use
 Create a `DrawState` with a target image as input argument.

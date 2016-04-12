@@ -68,14 +68,14 @@ RasterMonochrome: class extends RasterPacked {
 			}
 	}
 	resizeTo: override func (size: IntVector2D) -> This {
-		this resizeTo(size, InterpolationMode Smooth) as This
+		this resizeTo(size, true) as This
 	}
-	resizeTo: override func ~withMethod (size: IntVector2D, method: InterpolationMode) -> This {
+	resizeTo: override func ~withMethod (size: IntVector2D, interpolate: Bool) -> This {
 		result := This new(size)
-		result canvas interpolationMode = method
+		result canvas interpolate = interpolate
 		result canvas draw(this, IntBox2D new(this size), IntBox2D new(size))
 		//TODO will be fixed by subcanvas
-		result canvas interpolationMode = InterpolationMode Fast
+		result canvas interpolate = false
 		result
 	}
 	distance: override func (other: Image) -> Float {

@@ -14,18 +14,11 @@ import Image
 import Pen
 import DrawState
 
-InterpolationMode: enum {
-	Fast // nearest neighbour
-	Smooth // bilinear
-}
-
 Canvas: abstract class {
 	_size: IntVector2D
 	size ::= this _size
-	interpolationMode: InterpolationMode { get set }
-	init: func (=_size) {
-		this interpolationMode = InterpolationMode Fast
-	}
+	interpolate := false
+	init: func (=_size)
 	drawPoint: virtual func ~white (position: FloatPoint2D) { this drawPoint(position, Pen new(ColorRgba white)) }
 	drawPoint: virtual func ~explicit (position: FloatPoint2D, pen: Pen) {
 		list := VectorList<FloatPoint2D> new()
