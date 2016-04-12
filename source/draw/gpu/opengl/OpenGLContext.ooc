@@ -94,7 +94,7 @@ OpenGLContext: class extends GpuContext {
 		this _renderer drawPoints(positions, pointList count, 2)
 	}
 	recycle: virtual func (image: OpenGLPacked) {
-		(image canvas as OpenGLCanvas) onRecycle()
+		image onRecycle()
 		this _recycleBin add(image)
 	}
 	_searchImageBin: func (type: GpuImageType, size: IntVector2D) -> GpuImage { this _recycleBin find(type, size) }

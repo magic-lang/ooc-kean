@@ -46,5 +46,9 @@ OpenGLPacked: abstract class extends GpuImage {
 		}
 	}
 	_createCanvas: override func -> GpuCanvas { OpenGLCanvas new(this, this context) }
+	onRecycle: func {
+		if (this _canvas != null)
+			(this _canvas as OpenGLCanvas) onRecycle()
+	}
 }
 }
