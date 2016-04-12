@@ -469,6 +469,7 @@ FloatMatrix: cover {
 		this free(Owner Receiver)
 		result
 	}
+	operator / (other: Float) -> This { this * (1.f / other) }
 	operator == (other: This) -> Bool {
 		result := true
 		for (x in 0 .. this width)
