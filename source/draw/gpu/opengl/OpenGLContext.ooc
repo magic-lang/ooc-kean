@@ -101,22 +101,15 @@ OpenGLContext: class extends GpuContext {
 		(image canvas as OpenGLCanvas) onRecycle()
 		this _recycleBin add(image)
 	}
-	_searchImageBin: func (type: GpuImageType, size: IntVector2D) -> GpuImage {
-		result := match (type) {
-			case GpuImageType Monochrome => this _recycleBin search(|image| image instanceOf(OpenGLMonochrome) && image size == size)
-			case GpuImageType Rgb => this _recycleBin search(|image| image instanceOf(OpenGLRgb) && image size == size)
-			case GpuImageType Rgba => this _recycleBin search(|image| image instanceOf(OpenGLRgba) && image size == size)
-			case GpuImageType Uv => this _recycleBin search(|image| image instanceOf(OpenGLUv) && image size == size)
-			case => null
-		}
-		result
+	_searchImageBin: func (type: Class, size: IntVector2D) -> GpuImage {
+		this _recycleBin search(|image| image instanceOf(type) && image size == size)
 	}
 	createMonochrome: override func (size: IntVector2D) -> GpuImage {
-		result := this _searchImageBin(GpuImageType Monochrome, size)
+		result := this _searchImageBin(OpenGLMonochrome, size)
 		result == null ? OpenGLMonochrome new(size, this) as GpuImage : result
 	}
 	_createMonochrome: func (raster: RasterMonochrome) -> GpuImage {
-		result := this _searchImageBin(GpuImageType Monochrome, raster size)
+		result := this _searchImageBin(OpenGLMonochrome, raster size)
 		if (result == null)
 			result = OpenGLMonochrome new(raster, this)
 		else
@@ -124,11 +117,11 @@ OpenGLContext: class extends GpuContext {
 		result
 	}
 	createUv: override func (size: IntVector2D) -> GpuImage {
-		result := this _searchImageBin(GpuImageType Uv, size)
+		result := this _searchImageBin(OpenGLUv, size)
 		result == null ? OpenGLUv new(size, this) as GpuImage : result
 	}
 	_createUv: func (raster: RasterUv) -> GpuImage {
-		result := this _searchImageBin(GpuImageType Uv, raster size)
+		result := this _searchImageBin(OpenGLUv, raster size)
 		if (result == null)
 			result = OpenGLUv new(raster, this)
 		else
@@ -136,11 +129,11 @@ OpenGLContext: class extends GpuContext {
 		result
 	}
 	createRgb: override func (size: IntVector2D) -> GpuImage {
-		result := this _searchImageBin(GpuImageType Rgb, size)
+		result := this _searchImageBin(OpenGLRgb, size)
 		result == null ? OpenGLRgb new(size, this) as GpuImage : result
 	}
 	_createRgb: func (raster: RasterRgb) -> GpuImage {
-		result := this _searchImageBin(GpuImageType Rgb, raster size)
+		result := this _searchImageBin(OpenGLRgb, raster size)
 		if (result == null)
 			result = OpenGLRgb new(raster, this)
 		else
@@ -148,11 +141,11 @@ OpenGLContext: class extends GpuContext {
 		result
 	}
 	createRgba: override func (size: IntVector2D) -> GpuImage {
-		result := this _searchImageBin(GpuImageType Rgba, size)
+		result := this _searchImageBin(OpenGLRgba, size)
 		result == null ? OpenGLRgba new(size, this) as GpuImage : result
 	}
 	_createRgba: func (raster: RasterRgba) -> GpuImage {
-		result := this _searchImageBin(GpuImageType Rgba, raster size)
+		result := this _searchImageBin(OpenGLRgba, raster size)
 		if (result == null)
 			result = OpenGLRgba new(raster, this)
 		else

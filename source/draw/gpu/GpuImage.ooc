@@ -13,16 +13,6 @@ use concurrent
 import GpuContext, GpuCanvas
 
 version(!gpuOff) {
-GpuImageType: enum {
-	Monochrome
-	Rgba
-	Rgb
-	Uv
-	YuvSemiplanar
-	YuvPlanar
-	Yuv422
-}
-
 GpuImage: abstract class extends Image {
 	_context: GpuContext
 	filter: Bool { get set }
