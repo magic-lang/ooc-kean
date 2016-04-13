@@ -14,22 +14,10 @@ import Image
 import Pen
 import DrawState
 
-InterpolationMode: enum {
-	Fast // nearest neighbour
-	Smooth // bilinear
-}
-
 Canvas: abstract class {
 	_size: IntVector2D
 	size ::= this _size
-	viewport: IntBox2D { get set }
-	focalLength: Float { get set }
-	interpolationMode: InterpolationMode { get set }
-	init: func (=_size) {
-		this viewport = IntBox2D new(this size)
-		this focalLength = 0.0f
-		this interpolationMode = InterpolationMode Fast
-	}
+	init: func (=_size)
 	drawPoint: virtual func ~white (position: FloatPoint2D) { this drawPoint(position, Pen new(ColorRgba white)) }
 	drawPoint: virtual func ~explicit (position: FloatPoint2D, pen: Pen) {
 		list := VectorList<FloatPoint2D> new()
@@ -85,7 +73,4 @@ Canvas: abstract class {
 		}
 		message free(Owner Receiver)
 	}
-	draw: virtual func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) { Debug error("draw~ImageSourceDestination unimplemented for class " + this class name + "!") }
-	draw: func ~ImageDestination (image: Image, destination: IntBox2D) { this draw(image, IntBox2D new(image size), destination) }
-	draw: func ~Image (image: Image) { this draw(image, IntBox2D new(image size)) }
 }

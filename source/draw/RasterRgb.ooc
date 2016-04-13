@@ -8,6 +8,7 @@
 
 use geometry
 use base
+use draw
 import RasterPacked
 import RasterImage
 import RasterRgba
@@ -26,15 +27,17 @@ RasterRgbCanvas: class extends RasterPackedCanvas {
 		if (this target isValidIn(position x, position y))
 			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toRgb())
 	}
-	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) {
+	_draw: override func (image: Image, source, destination: IntBox2D, interpolate: Bool) {
 		rgb: RasterRgb = null
-		if (image instanceOf(RasterRgb))
+		if (image == null)
+			Debug error("Null image in RgbRasterCanvas draw")
+		else if (image instanceOf(RasterRgb))
 			rgb = image as RasterRgb
 		else if (image instanceOf(RasterImage))
 			rgb = RasterRgb convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RgbRasterCanvas draw")
-		this _resizePacked(rgb buffer pointer as ColorRgb*, rgb, source, destination)
+		this _resizePacked(rgb buffer pointer as ColorRgb*, rgb, source, destination, interpolate)
 		if (rgb != image)
 			rgb referenceCount decrease()
 	}
@@ -69,8 +72,11 @@ RasterRgb: class extends RasterPacked {
 		(convert as Closure) free()
 	}
 	resizeTo: override func (size: IntVector2D) -> This {
+		this resizeTo(size, true) as This
+	}
+	resizeTo: override func ~withMethod (size: IntVector2D, interpolate: Bool) -> This {
 		result := This new(size)
-		result canvas draw(this, IntBox2D new(this size), IntBox2D new(size))
+		DrawState new(result) setInputImage(this) setInterpolate(interpolate) draw()
 		result
 	}
 	distance: func (other: Image) -> Float {

@@ -109,15 +109,13 @@ RasterCanvasTest: class extends Fixture {
 			output := "test/draw/output/RasterCanvas_drawYUVonRGB.png"
 			imageFlower := RasterYuv420Semiplanar open(this inputFlower)
 			outputImage := RasterRgb open(inputSpace)
-			outputImage canvas interpolationMode = InterpolationMode Smooth
-			outputImage canvas draw(imageFlower, IntBox2D new(imageFlower size), IntBox2D new(20, 30, 100, 250))
+			DrawState new(outputImage) setInputImage(imageFlower) setViewport(IntBox2D new(20, 30, 100, 250)) setInterpolate(true) draw()
 			imageFlowerYUpward := RasterYuv420Semiplanar open(this inputFlower, CoordinateSystem YUpward)
-			outputImage canvas draw(imageFlowerYUpward, IntBox2D new(imageFlower size), IntBox2D new(130, 30, 100, 250))
-			outputImage canvas interpolationMode = InterpolationMode Fast
+			DrawState new(outputImage) setInputImage(imageFlowerYUpward) setViewport(IntBox2D new(130, 30, 100, 250)) setInterpolate(true) draw()
 			imageFlowerXLeftward := RasterYuv420Semiplanar open(this inputFlower, CoordinateSystem XLeftward)
-			outputImage canvas draw(imageFlowerXLeftward, IntBox2D new(imageFlower size), IntBox2D new(240, 30, 100, 250))
+			DrawState new(outputImage) setInputImage(imageFlowerXLeftward) setViewport(IntBox2D new(240, 30, 100, 250)) setInterpolate(false) draw()
 			imageFlowerXLeftwardYUpward := RasterYuv420Semiplanar open(this inputFlower, CoordinateSystem XLeftward | CoordinateSystem YUpward)
-			outputImage canvas draw(imageFlowerXLeftwardYUpward, IntBox2D new(imageFlower size), IntBox2D new(350, 30, 100, 250))
+			DrawState new(outputImage) setInputImage(imageFlowerXLeftwardYUpward) setViewport(IntBox2D new(350, 30, 100, 250)) setInterpolate(false) draw()
 			outputImage save(output)
 			imageFlower referenceCount decrease()
 			imageFlowerYUpward referenceCount decrease()
@@ -132,7 +130,7 @@ RasterCanvasTest: class extends Fixture {
 			inputSpace := "test/draw/input/Space.png"
 			inputImage := RasterRgb open(this inputFlower)
 			imageToDrawOn := RasterUv open(inputSpace)
-			imageToDrawOn canvas draw(inputImage, IntBox2D new(inputImage size), IntBox2D new(130, 30, 100, 250))
+			DrawState new(imageToDrawOn) setInputImage(inputImage) setViewport(IntBox2D new(130, 30, 100, 250)) setInterpolate(true) draw()
 			imageToDrawOn save(output)
 			output free()
 			inputImage free()

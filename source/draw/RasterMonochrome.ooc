@@ -9,6 +9,7 @@
 use base
 use math
 use geometry
+use draw
 import RasterPacked
 import RasterImage
 import StbImage
@@ -25,15 +26,17 @@ RasterMonochromeCanvas: class extends RasterPackedCanvas {
 		if (this target isValidIn(position x, position y))
 			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toMonochrome())
 	}
-	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) {
+	_draw: override func (image: Image, source, destination: IntBox2D, interpolate: Bool) {
 		monochrome: RasterMonochrome = null
-		if (image instanceOf(RasterMonochrome))
+		if (image == null)
+			Debug error("Null image in RasterMonochromeCanvas draw")
+		else if (image instanceOf(RasterMonochrome))
 			monochrome = image as RasterMonochrome
 		else if (image instanceOf(RasterImage))
 			monochrome = RasterMonochrome convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RasterMonochromeCanvas draw")
-		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination)
+		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination, interpolate)
 		if (monochrome != image)
 			monochrome referenceCount decrease()
 	}
@@ -68,14 +71,11 @@ RasterMonochrome: class extends RasterPacked {
 			}
 	}
 	resizeTo: override func (size: IntVector2D) -> This {
-		this resizeTo(size, InterpolationMode Smooth) as This
+		this resizeTo(size, true) as This
 	}
-	resizeTo: override func ~withMethod (size: IntVector2D, method: InterpolationMode) -> This {
+	resizeTo: override func ~withMethod (size: IntVector2D, interpolate: Bool) -> This {
 		result := This new(size)
-		result canvas interpolationMode = method
-		result canvas draw(this, IntBox2D new(this size), IntBox2D new(size))
-		//TODO will be fixed by subcanvas
-		result canvas interpolationMode = InterpolationMode Fast
+		DrawState new(result) setInputImage(this) setInterpolate(interpolate) draw()
 		result
 	}
 	distance: override func (other: Image) -> Float {

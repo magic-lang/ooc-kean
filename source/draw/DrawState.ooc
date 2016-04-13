@@ -27,6 +27,7 @@ DrawState: cover {
 	mesh: Mesh = null
 	opacity := 1.0f
 	blendMode := BlendMode Fill
+	interpolate := true
 	_transformNormalized := FloatTransform3D identity
 	viewport := IntBox2D new(0, 0, 0, 0)
 	_destinationNormalized := FloatBox2D new(0.0f, 0.0f, 1.0f, 1.0f)
@@ -54,6 +55,10 @@ DrawState: cover {
 		this blendMode = blendMode
 		this
 	}
+	setInterpolate: func (interpolate: Bool) -> This {
+		this interpolate = interpolate
+		this
+	}
 	setFocalLength: func ~Int (focalLength: Float, imageSize: IntVector2D) -> This {
 		this setFocalLength(focalLength, imageSize toFloatVector2D())
 	}
@@ -70,6 +75,11 @@ DrawState: cover {
 	setViewport: func (viewport: IntBox2D) -> This {
 		this viewport = viewport
 		this
+	}
+	getViewport: func -> IntBox2D {
+		version(safe)
+			raise(this target == null, "Can't get local viewport relative to a target that does not exist.")
+		(this viewport hasZeroArea) ? IntBox2D new(this target size) : this viewport
 	}
 	// Local region
 	setDestination: func ~TargetSize (destination: IntBox2D) -> This {
@@ -106,6 +116,12 @@ DrawState: cover {
 	}
 	// Normalized region
 	getSourceNormalized: func -> FloatBox2D { this _sourceNormalized }
+	// Local region
+	getSourceLocal: func -> FloatBox2D {
+		version(safe)
+			raise(this inputImage == null, "Can't get local source relative to an inputImage that does not exist.")
+		this _sourceNormalized * (this inputImage size toFloatVector2D())
+	}
 	setInputImage: func (inputImage: Image) -> This {
 		this inputImage = inputImage
 		this

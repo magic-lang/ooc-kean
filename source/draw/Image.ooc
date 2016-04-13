@@ -63,7 +63,7 @@ Image: abstract class {
 		this resizeTo((this size toFloatVector2D() * restrictionFraction) toIntVector2D())
 	}
 	resizeTo: abstract func (size: IntVector2D) -> This
-	resizeTo: virtual func ~withMethod (size: IntVector2D, method: InterpolationMode) -> This {
+	resizeTo: virtual func ~withMethod (size: IntVector2D, Interpolate: Bool) -> This {
 		this resizeTo(size)
 	}
 	create: virtual func (size: IntVector2D) -> This { raise("Image::create not implemented for type: %s" format(this class name)); null }

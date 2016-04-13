@@ -21,8 +21,7 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
 	draw: override func ~DrawState (drawState: DrawState) {
 		drawStateY := drawState setTarget((drawState target as GpuYuv420Semiplanar) y)
 		drawStateUV := drawState setTarget((drawState target as GpuYuv420Semiplanar) uv)
-		if (!drawState viewport hasZeroArea)
-			drawStateUV viewport = drawState viewport / 2
+		drawStateUV viewport = drawState viewport / 2
 		if (drawState inputImage != null && drawState inputImage class == GpuYuv420Semiplanar) {
 			drawStateY inputImage = (drawState inputImage as GpuYuv420Semiplanar) y
 			drawStateUV inputImage = (drawState inputImage as GpuYuv420Semiplanar) uv
