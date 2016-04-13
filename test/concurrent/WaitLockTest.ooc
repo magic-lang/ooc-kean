@@ -67,12 +67,9 @@ WaitLockTest: class extends Fixture {
 		waitResult := testThread wait(1.0)
 		expect(validResult, is true)
 		expect(waitResult, is true)
-		testThread free()
 		waitingThread cancel()
 		expect(waitingThread wait(1.0), is true)
-		waitingThread free()
-		waitLock free()
-		globalMutex free()
+		(testThread, waitingThread, waitLock, globalMutex) free()
 	}
 	_testWakeWithPassingCondition: static func {
 		This timesTriggered = 0
@@ -110,10 +107,8 @@ WaitLockTest: class extends Fixture {
 		testThread start()
 		waitingThread start()
 		expect(testThread wait(1.0), is true)
-		testThread free()
 		expect(waitingThread alive(), is false)
-		waitingThread free()
-		waitLock free()
+		(testThread, waitingThread, waitLock) free()
 	}
 }
 

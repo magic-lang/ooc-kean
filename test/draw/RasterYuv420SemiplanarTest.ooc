@@ -111,9 +111,7 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 		})
 	}
 	free: override func {
-		this _inputPath free()
-		this _inputOddWidth free()
-		this _inputOddHeight free()
+		(this _inputPath, this _inputOddWidth, this _inputOddHeight) free()
 		super()
 	}
 }

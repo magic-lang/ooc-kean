@@ -36,14 +36,12 @@ CsvWriterTest: class extends Fixture {
 					rowString := row[i] toString()
 					correctAnswer := ((i + 1) + rowCounter * 3) toString()
 					expect(rowString, is equal to(correctAnswer))
-					rowString free(); correctAnswer free()
+					(rowString, correctAnswer) free()
 				}
 				row free()
 				rowCounter += 1
 			}
-			reader free()
-			outputFilename free()
-			csvRecords free()
+			(reader, outputFilename, csvRecords) free()
 		})
 		this add("non-default delimiter", func {
 			// Read original file
@@ -67,14 +65,12 @@ CsvWriterTest: class extends Fixture {
 					rowString := row[i] toString()
 					correctAnswer := ((i + 1) + rowCounter * 3) toString()
 					expect(rowString, is equal to(correctAnswer))
-					rowString free(); correctAnswer free()
+					(rowString, correctAnswer) free()
 				}
 				row free()
 				rowCounter += 1
 			}
-			reader free()
-			outputFilename free()
-			csvRecords free()
+			(reader, outputFilename, csvRecords) free()
 		})
 	}
 	_createOutputDirectory: func {

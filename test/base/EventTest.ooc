@@ -114,8 +114,7 @@ EventTest: class extends Fixture {
 		expect(string0, is equal to("abcd"))
 		expect(string1, is equal to("bcd"))
 		expect(string2, is equal to("d"))
-		string0 free(); string1 free(); string2 free()
-		e free()
+		(e, string0, string1, string2) free()
 	}
 }
 

@@ -35,14 +35,9 @@ GpuContextTest: class extends Fixture {
 			expect(motherRaster distance(sourceImage), is equal to(0.0f))
 			childRaster: RasterImage
 			childThread wait(|| childRaster = sharedImage toRaster())
-			sourceImage free()
 			expect(motherRaster distance(childRaster), is equal to(0.0f))
-			motherRaster free()
-			childRaster free()
 			childThread wait(|| child free())
-			sharedImage free()
-			mother free()
-			childThread free()
+			(sharedImage, mother, childThread, sourceImage, motherRaster, childRaster) free()
 		})
 		this add("multiple contexts", func {
 			thread := WorkerThread new()

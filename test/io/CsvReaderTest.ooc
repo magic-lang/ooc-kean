@@ -23,7 +23,7 @@ CsvReaderTest: class extends Fixture {
 					rowString := row[i] toString()
 					correctAnswer := ((i + 1) + rowCounter * 3) toString()
 					expect(rowString, is equal to(correctAnswer))
-					rowString free(); correctAnswer free()
+					(rowString, correctAnswer) free()
 				}
 				row free()
 				rowCounter += 1
@@ -46,9 +46,7 @@ CsvReaderTest: class extends Fixture {
 				textBuilder free()
 				position += 1
 			}
-			correctTexts free()
-			filename free()
-			reader free()
+			(correctTexts, filename, reader) free()
 		})
 		this add("non-default delimiter", func {
 			filename := t"test/io/input/semicolondelimiter.csv"
@@ -59,7 +57,7 @@ CsvReaderTest: class extends Fixture {
 					rowString := row[i] toString()
 					correctAnswer := ((i + 1) + rowCounter * 3) toString()
 					expect(rowString, is equal to(correctAnswer))
-					rowString free(); correctAnswer free()
+					(rowString, correctAnswer) free()
 				}
 				row free()
 				rowCounter += 1
@@ -77,14 +75,13 @@ CsvReaderTest: class extends Fixture {
 					rowString := row[i] toString()
 					correctAnswer := ((i + 4) + rowCounter * 3) toString()
 					expect(rowString, is equal to(correctAnswer))
-					rowString free(); correctAnswer free()
+					(rowString, correctAnswer) free()
 				}
 				row free()
 				rowCounter += 1
 			}
 			expect(reader delimiter, is equal to(';'))
-			filename free()
-			reader free()
+			(filename, reader) free()
 		})
 	}
 }

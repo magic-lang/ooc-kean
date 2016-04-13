@@ -31,7 +31,7 @@ RasterRgbaTest: class extends Fixture {
 			image2 := RasterRgba open(this sourceSpace)
 			expect(image1 equals(image1))
 			expect(image1 equals(image2), is false)
-			image1 referenceCount decrease(); image2 referenceCount decrease()
+			(image1, image2) referenceCount decrease()
 		})
 		this add("equals 2", func {
 			output := "test/draw/output/RasterRgba_test.png"
@@ -39,28 +39,28 @@ RasterRgbaTest: class extends Fixture {
 			image1 save(output)
 			image2 := RasterRgba open(output)
 			expect(image1 equals(image2))
-			image1 referenceCount decrease(); image2 referenceCount decrease()
+			(image1, image2) referenceCount decrease()
 		})
 		this add("distance, same image", func {
 			image1 := RasterRgba open(this sourceSpace)
 			image2 := RasterRgba open(this sourceSpace)
 			expect(image1 distance(image1), is equal to(0.0f))
 			expect(image1 distance(image2), is equal to(0.0f))
-			image1 referenceCount decrease(); image2 referenceCount decrease()
+			(image1, image2) referenceCount decrease()
 		})
 		this add("distance, convertFrom self", func {
 			image1 := RasterRgba open(this sourceFlower)
 			image2 := RasterRgba convertFrom(image1)
 			expect(image1 distance(image2), is equal to(0.0f))
 			expect(image1 equals(image2))
-			image1 referenceCount decrease(); image2 referenceCount decrease()
+			(image1, image2) referenceCount decrease()
 		})
 		this add("RGBA to Monochrome", func {
 			image1 := RasterRgba open(this sourceSpace)
 			image2 := RasterMonochrome convertFrom(image1)
 			image3 := RasterMonochrome open("test/draw/input/correct/Rgba-Monochrome-Space.png")
 			expect(image2 distance(image3), is equal to(0.0f))
-			image1 referenceCount decrease(); image2 referenceCount decrease(); image3 referenceCount decrease()
+			(image1, image2, image3) referenceCount decrease()
 		})
 		this add("swapped RB", func {
 			output := "test/draw/output/rbswapped_rgba.png"

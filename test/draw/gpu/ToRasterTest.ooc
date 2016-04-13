@@ -19,26 +19,21 @@ ToRasterTest: class extends Fixture {
 	yuv := RasterYuv420Semiplanar open("test/draw/gpu/input/Flower.png")
 	context := OpenGLContext new()
 	free: override func {
-		this rgba free()
-		this monochrome free()
-		this yuv free()
-		this context free()
+		(this rgba, this monochrome, this yuv, this context) free()
 		super()
 	}
 	toRaster: func (sourceImage: RasterImage) {
 		gpuImage := this context createImage(sourceImage)
 		raster := gpuImage toRaster()
 		expect(raster distance(sourceImage), is equal to(0.0f))
-		gpuImage free()
-		raster free()
+		(gpuImage, raster) free()
 	}
 	toRasterTarget: func (sourceImage: RasterImage) {
 		gpuImage := this context createImage(sourceImage)
 		raster := sourceImage create(sourceImage size) as RasterImage
 		gpuImage toRaster(raster) wait() . free()
 		expect(raster distance(sourceImage), is equal to(0.0f))
-		gpuImage free()
-		raster free()
+		(gpuImage, raster) free()
 	}
 	toRasterAsync: func (sourceImage: RasterImage) {
 		gpuImage := this context createImage(sourceImage)
@@ -47,8 +42,7 @@ ToRasterTest: class extends Fixture {
 		raster := future getResult(null)
 		expect(raster, is notNull)
 		expect(raster distance(sourceImage), is equal to(0.0f))
-		future free()
-		gpuImage free()
+		(future, gpuImage) free()
 		raster referenceCount decrease()
 	}
 	init: func {

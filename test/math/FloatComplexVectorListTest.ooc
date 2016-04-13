@@ -83,7 +83,7 @@ FloatComplexVectorListTest: class extends Fixture {
 			(reals, imaginaries) := (list real, list imaginary)
 			expect(reals sum, is equal to(3.0f) within(tolerance))
 			expect(imaginaries sum, is equal to(6.0f) within(tolerance))
-			reals free(); imaginaries free(); list free()
+			(reals, imaginaries, list) free()
 		})
 		this add("addInto and operators", func {
 			list := FloatComplexVectorList new(3, FloatComplex new(1, 2))
@@ -101,7 +101,7 @@ FloatComplexVectorListTest: class extends Fixture {
 			expect(subtracted sum real, is equal to(4.0f) within(tolerance))
 			expect(subtracted sum imaginary, is equal to(9.0f) within(tolerance))
 
-			added free(); subtracted free(); list free(); other free()
+			(added, subtracted, list, other) free()
 		})
 		this add("toText", func {
 			list := FloatComplexVectorList new()
@@ -110,8 +110,7 @@ FloatComplexVectorListTest: class extends Fixture {
 			list add(FloatComplex new(-5, 6))
 			text := list toText() take()
 			expect(text, is equal to(t"-1.00 +2.00i\n3.00 -4.00i\n-5.00 +6.00i"))
-			text free()
-			list free()
+			(text, list) free()
 		})
 		this add("getZeros", func {
 			zeros := FloatComplexVectorList getZeros(7)

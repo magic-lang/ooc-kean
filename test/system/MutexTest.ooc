@@ -45,11 +45,9 @@ MutexTest: class extends Fixture {
 			expect(threads[i] wait())
 			threads[i] free()
 		}
-		threads free()
-		mutex free()
 		expect(value get(), is equal to(2 * countPerThread * threadCount))
 		(job as Closure) free()
-		value free()
+		(threads, mutex, value) free()
 	}
 	_testGlobal: static func {
 		threadCount := 4
@@ -83,13 +81,11 @@ MutexTest: class extends Fixture {
 			expect(threads[i] wait())
 			threads[i] free()
 		}
-		threads free()
 		for (i in 0 .. threadCount)
 			mutexes[i] free()
-		mutexes free()
 		expect(value get(), is equal to(2 * countPerThread * threadCount))
 		(job as Closure) free()
-		value free()
+		(threads, mutexes, value) free()
 	}
 	_testRecursive: static func {
 		mutex := RecursiveMutex new()

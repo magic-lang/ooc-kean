@@ -44,8 +44,7 @@ PipeTest: class extends Fixture {
 
 			process wait()
 			reader close() . free()
-			pipe free()
-			process free()
+			(pipe, process) free()
 		})
 	}
 	_createOutputDirectory: func {

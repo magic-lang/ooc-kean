@@ -136,7 +136,7 @@ SynchronizedListTest: class extends Fixture {
 			expect(newList[0], is equal to("1"))
 			expect(newList[1], is equal to("2"))
 			expect(newList[2], is equal to("3"))
-			list free(); newList free()
+			(list, newList) free()
 		})
 		this add("single thread - fold", func {
 			list := SynchronizedList<Int> new()

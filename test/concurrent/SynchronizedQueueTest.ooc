@@ -103,9 +103,7 @@ SynchronizedQueueTest: class extends Fixture {
 		expect(validResult, is true)
 		expect(queue count, is equal to(0))
 		(job as Closure) free()
-		threads free()
-		queue free()
-		globalMutex free()
+		(threads, queue, globalMutex) free()
 	}
 	_testMultipleThreadsWithClass: static func {
 		numberOfThreads := 8
@@ -149,9 +147,7 @@ SynchronizedQueueTest: class extends Fixture {
 		expect(validResult, is true)
 		expect(queue count, is equal to(0))
 		(job as Closure) free()
-		threads free()
-		queue free()
-		globalMutex free()
+		(threads, queue, globalMutex) free()
 	}
 }
 

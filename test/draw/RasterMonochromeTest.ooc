@@ -21,7 +21,7 @@ RasterMonochromeTest: class extends Fixture {
 			image2 := RasterMonochrome open(this sourceSpace)
 			expect(image1 equals(image1), is true)
 			expect(image1 equals(image2), is false)
-			image1 referenceCount decrease(); image2 referenceCount decrease()
+			(image1, image2) referenceCount decrease()
 		})
 		this add("equals 2", func {
 			output := "test/draw/output/RasterMonochrome_test.png"
@@ -29,21 +29,21 @@ RasterMonochromeTest: class extends Fixture {
 			image1 save(output)
 			image2 := RasterMonochrome open(output)
 			expect(image1 equals(image2), is true)
-			image1 referenceCount decrease(); image2 referenceCount decrease()
+			(image1, image2) referenceCount decrease()
 		})
 		this add("distance, same image", func {
 			image1 := RasterMonochrome open(this sourceSpace)
 			image2 := RasterMonochrome open(this sourceSpace)
 			expect(image1 distance(image1), is equal to(0.0f))
 			expect(image1 distance(image2), is equal to(0.0f))
-			image1 referenceCount decrease(); image2 referenceCount decrease()
+			(image1, image2) referenceCount decrease()
 		})
 		this add("distance, convertFrom self", func {
 			image1 := RasterMonochrome open(this sourceFlower)
 			image2 := RasterMonochrome convertFrom(image1)
 			expect(image1 distance(image2), is equal to(0.0f))
 			expect(image1 equals(image2))
-			image1 referenceCount decrease(); image2 referenceCount decrease()
+			(image1, image2) referenceCount decrease()
 		})
 		this add("lossy ascii serialization", func {
 			image1 := RasterMonochrome open(this sourceSpace)
@@ -51,7 +51,8 @@ RasterMonochromeTest: class extends Fixture {
 			asciiImage := image1 toAscii(alphabet)
 			image2 := RasterMonochrome fromAscii(asciiImage)
 			expect(image1 distance(image2) < 0.01f)
-			(image1, image2) referenceCount decrease(); (asciiImage, alphabet) free()
+			(image1, image2) referenceCount decrease()
+			(asciiImage, alphabet) free()
 		})
 		this add("getRow and getColumn", func {
 			size := IntVector2D new(500, 256)

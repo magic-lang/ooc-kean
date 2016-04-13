@@ -37,9 +37,7 @@ FloatPoint2DVectorListTest: class extends Fixture {
 			yValues := list getY()
 			expect(xValues sum, is equal to(16.0f) within(tolerance))
 			expect(yValues sum, is equal to(1.0f) within(tolerance))
-			list free()
-			xValues free()
-			yValues free()
+			(list, xValues, yValues) free()
 		})
 		this add("+ operator", func {
 			list := FloatPoint2DVectorList new()
