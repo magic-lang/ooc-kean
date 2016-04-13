@@ -25,7 +25,7 @@ RasterMonochromeCanvas: class extends RasterPackedCanvas {
 		if (this target isValidIn(position x, position y))
 			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toMonochrome())
 	}
-	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) {
+	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D, interpolate: Bool) {
 		monochrome: RasterMonochrome = null
 		if (image instanceOf(RasterMonochrome))
 			monochrome = image as RasterMonochrome
@@ -33,7 +33,7 @@ RasterMonochromeCanvas: class extends RasterPackedCanvas {
 			monochrome = RasterMonochrome convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RasterMonochromeCanvas draw")
-		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination)
+		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination, interpolate)
 		if (monochrome != image)
 			monochrome referenceCount decrease()
 	}
@@ -72,10 +72,7 @@ RasterMonochrome: class extends RasterPacked {
 	}
 	resizeTo: override func ~withMethod (size: IntVector2D, interpolate: Bool) -> This {
 		result := This new(size)
-		result canvas interpolate = interpolate
-		result canvas draw(this, IntBox2D new(this size), IntBox2D new(size))
-		//TODO will be fixed by subcanvas
-		result canvas interpolate = false
+		result canvas draw(this, IntBox2D new(this size), IntBox2D new(size), interpolate)
 		result
 	}
 	distance: override func (other: Image) -> Float {

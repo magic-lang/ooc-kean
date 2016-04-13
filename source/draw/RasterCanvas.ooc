@@ -20,7 +20,7 @@ RasterCanvas: abstract class extends Canvas {
 	_target: RasterImage
 	init: func (=_target) { super(this _target size) }
 	fill: override func (color: ColorRgba) { raise("RasterCanvas fill unimplemented!") }
-	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D) { Debug error("RasterCanvas draw~ImageSourceDestination unimplemented!") }
+	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D, interpolate: Bool) { Debug error("RasterCanvas draw~ImageSourceDestination unimplemented!") }
 	drawPoint: override func ~explicit (point: FloatPoint2D, pen: Pen) { this _drawPoint(point x as Int, point y as Int, pen) }
 	_drawPoint: abstract func (x, y: Int, pen: Pen)
 	drawPoints: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) {
