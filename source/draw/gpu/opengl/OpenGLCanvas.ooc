@@ -21,7 +21,7 @@ OpenGLCanvas: class extends OpenGLSurface {
 	context ::= this _context as OpenGLContext
 	draw: override func ~DrawState (drawState: DrawState) {
 		gpuMap: Map = drawState map as Map ?? (drawState mesh ? this context meshShader as Map : this context defaultMap as Map)
-		viewport := (drawState viewport hasZeroArea) ? IntBox2D new(this size) : drawState viewport
+		viewport := drawState getViewport()
 		this context backend setViewport(viewport)
 		focalLengthPerWidth := drawState getFocalLengthNormalized()
 		targetSize := this size toFloatVector2D()

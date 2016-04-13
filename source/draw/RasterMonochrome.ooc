@@ -9,6 +9,7 @@
 use base
 use math
 use geometry
+use draw
 import RasterPacked
 import RasterImage
 import StbImage
@@ -27,7 +28,9 @@ RasterMonochromeCanvas: class extends RasterPackedCanvas {
 	}
 	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D, interpolate: Bool) {
 		monochrome: RasterMonochrome = null
-		if (image instanceOf(RasterMonochrome))
+		if (image == null)
+			Debug error("Null image in RasterMonochromeCanvas draw")
+		else if (image instanceOf(RasterMonochrome))
 			monochrome = image as RasterMonochrome
 		else if (image instanceOf(RasterImage))
 			monochrome = RasterMonochrome convertFrom(image as RasterImage)
@@ -72,7 +75,7 @@ RasterMonochrome: class extends RasterPacked {
 	}
 	resizeTo: override func ~withMethod (size: IntVector2D, interpolate: Bool) -> This {
 		result := This new(size)
-		result canvas draw(this, IntBox2D new(this size), IntBox2D new(size), interpolate)
+		DrawState new(result) setInputImage(this) setInterpolate(interpolate) draw()
 		result
 	}
 	distance: override func (other: Image) -> Float {

@@ -8,6 +8,7 @@
 
 use geometry
 use base
+use draw
 import RasterPacked
 import RasterImage
 import RasterRgb
@@ -27,7 +28,9 @@ RasterUvCanvas: class extends RasterPackedCanvas {
 	}
 	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D, interpolate: Bool) {
 		uv: RasterUv = null
-		if (image instanceOf(RasterUv))
+		if (image == null)
+			Debug error("Null image in RasterUvCanvas draw")
+		else if (image instanceOf(RasterUv))
 			uv = image as RasterUv
 		else if (image instanceOf(RasterImage))
 			uv = RasterUv convertFrom(image as RasterImage)
@@ -79,7 +82,7 @@ RasterUv: class extends RasterPacked {
 	}
 	resizeTo: override func ~withMethod (size: IntVector2D, interpolate: Bool) -> This {
 		result := This new(size)
-		result canvas draw(this, IntBox2D new(this size), IntBox2D new(size), interpolate)
+		DrawState new(result) setInputImage(this) setInterpolate(interpolate) draw()
 		result
 	}
 	distance: override func (other: Image) -> Float {
