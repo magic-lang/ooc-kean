@@ -73,7 +73,4 @@ Canvas: abstract class {
 		}
 		message free(Owner Receiver)
 	}
-	draw: virtual func ~ImageSourceDestination (image: Image, source, destination: IntBox2D, interpolate: Bool) { Debug error("draw~ImageSourceDestination unimplemented for class " + this class name + "!") }
-	draw: func ~ImageDestination (image: Image, destination: IntBox2D, interpolate: Bool) { this draw(image, IntBox2D new(image size), destination, interpolate) }
-	draw: func ~Image (image: Image, interpolate: Bool) { this draw(image, IntBox2D new(image size), interpolate) }
 }

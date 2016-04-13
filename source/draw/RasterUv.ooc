@@ -26,7 +26,7 @@ RasterUvCanvas: class extends RasterPackedCanvas {
 		if (this target isValidIn(position x, position y))
 			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toUv())
 	}
-	draw: override func ~ImageSourceDestination (image: Image, source, destination: IntBox2D, interpolate: Bool) {
+	_draw: override func (image: Image, source, destination: IntBox2D, interpolate: Bool) {
 		uv: RasterUv = null
 		if (image == null)
 			Debug error("Null image in RasterUvCanvas draw")
