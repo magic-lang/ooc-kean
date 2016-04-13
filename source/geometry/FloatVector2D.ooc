@@ -18,6 +18,7 @@ FloatVector2D: cover {
 	length ::= this norm
 	hasZeroArea ::= this area equals(0.0f)
 	norm ::= (this x squared + this y squared) sqrt()
+	normalized ::= this / this norm
 	azimuth ::= this y atan2(this x)
 	absolute ::= This new(this x absolute, this y absolute)
 
@@ -41,6 +42,7 @@ FloatVector2D: cover {
 	minimum: func ~Float (ceiling: Float) -> This { this minimum(This new(ceiling)) }
 	maximum: func ~Float (floor: Float) -> This { this maximum(This new(floor)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
+	limitLength: func (maximum: Float) -> This { this norm > maximum ? this normalized * maximum : this }
 	toIntVector2D: func -> IntVector2D { IntVector2D new(this x as Int, this y as Int) }
 	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x, this y) }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
