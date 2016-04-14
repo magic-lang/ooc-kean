@@ -15,19 +15,32 @@ use unit
 
 WriteTest: class extends Fixture {
 	sourceImage := RasterMonochrome open("test/draw/gpu/input/Flower.png")
-	correctImage := RasterMonochrome open("test/draw/gpu/correct/text.png")
+	message := t"Hello world!\nThis is a line.\nThis is another line.\n"
 	init: func {
 		super("WriteTest")
+		this add("Calculate visible text index bounds", func {
+			bounds := DrawContext getTextIndexBounds(t"1234\n1234567\n\n12345\n	\n \n" give())
+			expect(bounds x, is equal to(7))
+			expect(bounds y, is equal to(4))
+		})
 		this add("Write text on the GPU", func {
+			correctImage := RasterMonochrome open("test/draw/gpu/correct/text.png")
 			resultGpu := gpuContext createImage(sourceImage)
-			DrawState new(resultGpu) setInputImage(gpuContext getDefaultFont()) setOrigin(FloatPoint2D new(-150.0f, -40.0f)) write(t"Hello world!\nThis is a line.\nThis is another line." give())
+			DrawState new(resultGpu) setInputImage(gpuContext getDefaultFont()) setOrigin(FloatPoint2D new(-150.0f, -40.0f)) write(this message)
 			resultCpu := resultGpu toRaster()
 			expect(resultCpu distance(correctImage), is equal to(0.0f))
-			(resultGpu, resultCpu) free()
+			(resultGpu, resultCpu, correctImage) free()
+		})
+		this add("Write text to a buffer on the GPU", func {
+			correctImage := RasterMonochrome open("test/draw/gpu/correct/textBuffer.png")
+			resultGpu := gpuContext createImageFromTextAndFont(this message, gpuContext getDefaultFont()) as GpuImage
+			resultCpu := resultGpu toRaster()
+			expect(resultCpu distance(correctImage), is equal to(0.0f))
+			(resultGpu, resultCpu, correctImage) free()
 		})
 	}
 	free: override func {
-		(this sourceImage, this correctImage) free()
+		(this sourceImage, this message) free()
 		super()
 	}
 }

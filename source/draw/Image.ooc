@@ -8,6 +8,7 @@
 
 use geometry
 use base
+use draw
 import Canvas
 
 CoordinateSystem: enum {
@@ -75,4 +76,28 @@ Image: abstract class {
 		x >= 0 && x < this size x && y >= 0 && y < this size y
 	}
 	_createCanvas: virtual func -> Canvas { null }
+	// Writes white text on the existing image
+	write: virtual func (message: Text, fontAtlas: This, localOrigin: IntPoint2D) {
+		skippedRows := 2
+		visibleRows := 6
+		columns := 16
+		fontSize := DrawContext getFontSize(fontAtlas)
+		viewport := IntBox2D new(localOrigin, fontSize)
+		targetOffset := IntPoint2D new(0, 0)
+		characterDrawState := DrawState new(this) setInputImage(fontAtlas) setBlendMode(BlendMode Add)
+		for (i in 0 .. message count) {
+			charCode := message[i] as Int
+			sourceX := charCode % columns
+			sourceY := (charCode / columns) - skippedRows
+			source := FloatBox2D new((sourceX as Float) / columns, (sourceY as Float) / visibleRows, 1.0f / columns, 1.0f / visibleRows)
+			if (charCode > 32 && charCode < 127)
+				characterDrawState setViewport(viewport + (targetOffset * fontSize)) setSourceNormalized(source) draw()
+			targetOffset x += 1
+			if (charCode == '\n') {
+				targetOffset x = 0 // Carriage return
+				targetOffset y += 1 // Line feed
+			}
+		}
+		message free(Owner Receiver)
+	}
 }
