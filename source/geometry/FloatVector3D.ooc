@@ -45,9 +45,8 @@ FloatVector3D: cover {
 	floor: func -> This { This new(this x floor(), this y floor(), this z floor()) }
 	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y), this z minimum(ceiling z)) }
 	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y), this z maximum(floor z)) }
-	clamp: func (floor, ceiling: This) -> This {
-		This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z))
-	}
+	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
+	limitLength: func (maximum: Float) -> This { this norm > maximum ? this normalized * maximum : this }
 	toIntVector3D: func -> IntVector3D { IntVector3D new(this x as Int, this y as Int, this z as Int) }
 	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this x, this y, this z) }
 	toString: func -> String { "#{this x toString()}, #{this y toString()}, #{this z toString()}" }

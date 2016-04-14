@@ -166,6 +166,15 @@ FloatVector2DTest: class extends Fixture {
 			expect(text, is equal to(t"1.00, 2.00"))
 			text free()
 		})
+		this add("limitLength", func {
+			vector := FloatVector2D new(1.f, 1.f) limitLength(0.75f)
+			expect(vector norm, is equal to(0.75f) within(tolerance))
+			vector = vector limitLength(0.8f)
+			expect(vector norm, is equal to(0.75f) within(tolerance))
+			vector = vector * 1.88612f
+			expect(vector x, is equal to(1.f) within(0.01f))
+			expect(vector y, is equal to(1.f) within(0.01f))
+		})
 	}
 }
 
