@@ -299,14 +299,13 @@ FloatMatrix: cover {
 		result := t create()
 		matrixOrder := t order
 		if (matrixOrder == 1)
-			result[0, 0] = t[0, 0]
+			result[0, 0] = 1.f
 		else if (matrixOrder == 2) {
 			result[0, 0] = t[1, 1]
 			result[0, 1] = -t[1, 0]
 			result[1, 0] = -t[0, 1]
 			result[1, 1] = t[0, 0]
-		}
-		else if (matrixOrder == 3) {
+		} else if (matrixOrder == 3) {
 			result[0, 0] = t[1, 1] * t[2, 2] - t[2, 1] * t[1, 2]
 			result[1, 0] = - (t[0, 1] * t[2, 2] - t[2, 1] * t[0, 2])
 			result[2, 0] = t[0, 1] * t[1, 2] - t[1, 1] * t[0, 2]
