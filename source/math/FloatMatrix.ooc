@@ -299,14 +299,13 @@ FloatMatrix: cover {
 		result := t create()
 		matrixOrder := t order
 		if (matrixOrder == 1)
-			result[0, 0] = t[0, 0]
+			result[0, 0] = 1.f
 		else if (matrixOrder == 2) {
 			result[0, 0] = t[1, 1]
 			result[0, 1] = -t[1, 0]
 			result[1, 0] = -t[0, 1]
 			result[1, 1] = t[0, 0]
-		}
-		else if (matrixOrder == 3) {
+		} else if (matrixOrder == 3) {
 			result[0, 0] = t[1, 1] * t[2, 2] - t[2, 1] * t[1, 2]
 			result[1, 0] = - (t[0, 1] * t[2, 2] - t[2, 1] * t[0, 2])
 			result[2, 0] = t[0, 1] * t[1, 2] - t[1, 1] * t[0, 2]
@@ -381,9 +380,13 @@ FloatMatrix: cover {
 		submatrix
 	}
 	inverse: func -> This {
-		version(safe)
-			raise(!this take() isSquare, "Matrix must be square in FloatMatrix inverse")
-		result := this take() cofactors() transpose() / this determinant()
+		t := this take()
+		determinant := t determinant()
+		version(safe) {
+			raise(!t isSquare, "Matrix must be square in FloatMatrix inverse")
+			raise(determinant equals(0.f), "Matrix is singular in FloatMatrix inverse")
+		}
+		result := t cofactors() transpose() / determinant
 		this free(Owner Receiver)
 		result
 	}
