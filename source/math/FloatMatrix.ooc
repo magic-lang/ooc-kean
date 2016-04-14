@@ -381,11 +381,12 @@ FloatMatrix: cover {
 	}
 	inverse: func -> This {
 		t := this take()
+		determinant := t determinant()
 		version(safe) {
 			raise(!t isSquare, "Matrix must be square in FloatMatrix inverse")
-			raise(t determinant() equals(0.f), "Matrix is singular in FloatMatrix inverse")
+			raise(determinant equals(0.f), "Matrix is singular in FloatMatrix inverse")
 		}
-		result := t cofactors() transpose() / t determinant()
+		result := t cofactors() transpose() / determinant
 		this free(Owner Receiver)
 		result
 	}
