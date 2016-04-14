@@ -42,7 +42,12 @@ OpenGLContext: class extends GpuContext {
 	backend ::= this _backend
 	meshShader ::= this _meshShader
 	defaultMap ::= this _transformTextureMap as Map
-
+	_defaultFontGpu: GpuImage = null
+	defaultFontGpu: GpuImage { get {
+		if (this _defaultFontGpu == null)
+			this _defaultFontGpu = this createImage(this defaultFontRaster)
+		this _defaultFontGpu
+	}}
 	init: func ~backend (=_backend) {
 		super()
 		this _recycleBin = RecycleBin<OpenGLPacked> new(60, func (image: OpenGLPacked) {
@@ -66,6 +71,8 @@ OpenGLContext: class extends GpuContext {
 	}
 	init: func ~window (display: Pointer, nativeBackend: Long) { this init(GLContext createContext(display, nativeBackend)) }
 	free: override func {
+		if (this _defaultFontGpu != null)
+			this _defaultFontGpu free()
 		this _backend makeCurrent()
 		this _transformTextureMap free()
 		this _packMonochrome free()
@@ -191,5 +198,6 @@ OpenGLContext: class extends GpuContext {
 			vertices[i] = toGL * vertices[i]
 		OpenGLMesh new(vertices, textureCoordinates, this)
 	}
+	getDefaultFont: override func -> Image { this defaultFontGpu }
 }
 }
