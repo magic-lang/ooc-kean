@@ -54,7 +54,7 @@ OpenGLSurface: abstract class extends GpuCanvas {
 		flipY := -(this _coordinateTransform e as Float)
 		if (focalLengthPerWidth > 0.0f) {
 			nearPlane := 0.01f
-			farPlane := 10000.0f
+			farPlane := 12500.0f
 			a := flipX * 2.0f * focalLengthPerWidth
 			f := flipY * 2.0f * focalLengthPerHeight
 			k := (farPlane + nearPlane) / (farPlane - nearPlane)
