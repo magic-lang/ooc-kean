@@ -59,7 +59,7 @@ DrawContext: abstract class {
 			if (current == '\n') {
 				x = 0
 				y += 1
-			} else if (current > 32 && current < 127) {
+			} else if (current graph()) {
 				width = width maximum(x)
 				height = height maximum(y + 1)
 			}

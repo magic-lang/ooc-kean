@@ -91,7 +91,7 @@ Image: abstract class {
 			sourceX := charCode % columns
 			sourceY := (charCode / columns) - skippedRows
 			source := FloatBox2D new((sourceX as Float) / columns, (sourceY as Float) / visibleRows, 1.0f / columns, 1.0f / visibleRows)
-			if (charCode > 32 && charCode < 127)
+			if ((charCode as Char) graph())
 				characterDrawState setViewport(viewport + (targetOffset * fontSize)) setSourceNormalized(source) draw()
 			targetOffset x += 1
 			if (charCode == '\n') {
