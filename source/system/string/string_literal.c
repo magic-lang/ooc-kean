@@ -4,7 +4,7 @@
 #include <ooc/system/Mutex.h>
 
 #if defined(__WIN32__) || defined(__WIN64__)
-	typedef Handle mutex_t;
+	typedef HANDLE mutex_t;
 	#define MUTEX_INIT NULL
 	static void mutex_lock(mutex_t* m) {
 		if (*m == NULL) {
@@ -24,7 +24,7 @@
 	static void mutex_free(mutex_t*  m){ pthread_mutex_destroy(m); }
 #endif
 
-mutex_t _literalsMutex = MUTEX_INIT;
+static mutex_t _literalsMutex = MUTEX_INIT;
 static String__String** _literals = 0;
 static size_t _literalsCount = 0;
 static size_t _literalsCapacity = 0;
