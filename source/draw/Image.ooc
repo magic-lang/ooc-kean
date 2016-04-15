@@ -78,6 +78,7 @@ Image: abstract class {
 	_createCanvas: virtual func -> Canvas { null }
 	// Writes white text on the existing image
 	write: virtual func (message: Text, fontAtlas: This, localOrigin: IntPoint2D) {
+		takenMessage := message take()
 		skippedRows := 2
 		visibleRows := 6
 		columns := 16
@@ -85,8 +86,8 @@ Image: abstract class {
 		viewport := IntBox2D new(localOrigin, fontSize)
 		targetOffset := IntPoint2D new(0, 0)
 		characterDrawState := DrawState new(this) setInputImage(fontAtlas) setBlendMode(BlendMode Add)
-		for (i in 0 .. message count) {
-			charCode := message[i] as Int
+		for (i in 0 .. takenMessage count) {
+			charCode := takenMessage[i] as Int
 			sourceX := charCode % columns
 			sourceY := (charCode / columns) - skippedRows
 			source := FloatBox2D new((sourceX as Float) / columns, (sourceY as Float) / visibleRows, 1.0f / columns, 1.0f / visibleRows)
