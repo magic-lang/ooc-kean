@@ -19,8 +19,7 @@ Fixture: abstract class {
 
 	init: func (=name)
 	free: override func {
-		this tests free()
-		this name free()
+		(this tests, this name) free()
 		super()
 	}
 	add: func ~action (name: String, action: Func) {

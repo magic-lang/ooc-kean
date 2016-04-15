@@ -126,10 +126,8 @@ File: abstract class {
 	mkdirs: func { this mkdirs(0c755) }
 	mkdirs: func ~withMode (mode: Int) -> Int {
 		p := this parent
-		if (p) {
-			p mkdirs(mode)
-			p free()
-		}
+		if (p)
+			p mkdirs(mode) . free()
 		this mkdir()
 	}
 
@@ -209,11 +207,8 @@ File: abstract class {
 			dst write(buffer data, num)
 		}
 
-		buffer free()
-		dst close()
-		src close()
-		dst free()
-		src free()
+		(dst, src) close()
+		(buffer, dst, src) free()
 	}
 	read: func -> String {
 		fR := FileReader new(this)

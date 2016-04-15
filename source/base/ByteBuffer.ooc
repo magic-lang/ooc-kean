@@ -134,9 +134,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		This _cleanList(This _smallRecycleBin)
 		This _cleanList(This _mediumRecycleBin)
 		This _cleanList(This _largeRecycleBin)
-		This _smallRecycleBin free()
-		This _mediumRecycleBin free()
-		This _largeRecycleBin free()
+		(This _smallRecycleBin, This _mediumRecycleBin, This _largeRecycleBin) free()
 		if (This _lock != null) {
 			This _lock free()
 			This _lock = null

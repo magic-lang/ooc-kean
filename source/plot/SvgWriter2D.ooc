@@ -56,8 +56,7 @@ SvgWriter2D: class {
 		this fontSize = 14
 	}
 	free: override func {
-		this svgPlots free()
-		this file free()
+		(this svgPlots, this file) free()
 		super()
 	}
 	addPlot: func (svgPlot: SvgPlot) {

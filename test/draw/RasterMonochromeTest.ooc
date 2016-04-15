@@ -100,8 +100,7 @@ RasterMonochromeTest: class extends Fixture {
 			image save(outputSmooth)
 			image referenceCount decrease()
 			image2 referenceCount decrease()
-			outputFast free()
-			outputSmooth free()
+			(outputFast, outputSmooth) free()
 		})
 		this add("copy", func {
 			image := RasterMonochrome open(this sourceFlower)

@@ -98,8 +98,7 @@ HostInfo: class {
 	free: override func {
 		for (_ in 0 .. this addresses count)
 			this addresses remove() free()
-		this addresses free()
-		this name free()
+		(this addresses, this name) free()
 		super()
 	}
 }

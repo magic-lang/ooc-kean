@@ -33,26 +33,16 @@ RasterYuvPlanar: abstract class extends RasterPlanar {
 	}
 	init: func (y, u, v: RasterMonochrome) {
 		super(y size)
-		this _y = y
-		this _y referenceCount increase()
-		this _u = u
-		this _u referenceCount increase()
-		this _v = v
-		this _v referenceCount increase()
+		(this _y, this _u, this _v) = (y, u, v)
+		(this _y, this _u, this _v) referenceCount increase()
 	}
 	init: func ~fromYuvPlanar (original: This, y, u, v: RasterMonochrome) {
 		super(original)
-		this _y = y
-		this _y referenceCount increase()
-		this _u = u
-		this _u referenceCount increase()
-		this _v = v
-		this _v referenceCount increase()
+		(this _y, this _u, this _v) = (y, u, v)
+		(this _y, this _u, this _v) referenceCount increase()
 	}
 	free: override func {
-		this _y referenceCount decrease()
-		this _u referenceCount decrease()
-		this _v referenceCount decrease()
+		(this _y, this _u, this _v) referenceCount decrease()
 		super()
 	}
 	apply: override func ~rgb (action: Func (ColorRgb)) {

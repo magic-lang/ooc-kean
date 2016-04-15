@@ -24,8 +24,7 @@ SynchronizedResourceRecycler: class {
 	init: func
 	free: override func {
 		this _clear()
-		this _mutex free()
-		this _resources free()
+		(this _mutex, this _resources) free()
 	}
 	create: func -> SynchronizedResource {
 		result: SynchronizedResource = null

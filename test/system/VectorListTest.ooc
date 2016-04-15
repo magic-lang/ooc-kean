@@ -134,9 +134,7 @@ VectorListTest: class extends Fixture {
 			list getSliceInto(Range new(1, 2), sliceInto)
 			expect(sliceInto[0], is equal to(2.0f) within(tolerance))
 			expect(sliceInto[1], is equal to(3.0f) within(tolerance))
-			list free()
-			slice free()
-			sliceInto free()
+			(list, slice, sliceInto) free()
 		})
 		this add("VectorList apply", func {
 			list := VectorList<Int> new()
@@ -185,8 +183,7 @@ VectorListTest: class extends Fixture {
 			expect(reversed[1], is equal to(64))
 			expect(reversed[2], is equal to(16))
 			expect(reversed[3], is equal to(8))
-			list free()
-			reversed free()
+			(list, reversed) free()
 		})
 		this add("VectorList remove", func {
 			list := VectorList<Int> new()
@@ -252,9 +249,7 @@ VectorListTest: class extends Fixture {
 			expect(iterator hasNext(), is false)
 			secondIterator := list iterator()
 			expect(secondIterator next(), is equal to(8))
-			secondIterator free()
-			iterator free()
-			list free()
+			(secondIterator, iterator, list) free()
 		})
 		this add("VectorList search", This _testVectorListSearch)
 	}

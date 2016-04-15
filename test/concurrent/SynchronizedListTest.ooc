@@ -84,8 +84,7 @@ SynchronizedListTest: class extends Fixture {
 				expect(reversedList[999-value], is equal to(value))
 			}
 			expect(reversedList count, is equal to(1000))
-			list free()
-			reversedList free()
+			(list, reversedList) free()
 		})
 		this add("single thread - sort", func {
 			list := SynchronizedList<Int> new()
@@ -106,8 +105,7 @@ SynchronizedListTest: class extends Fixture {
 				copiedList[value] = incrementValue
 				expect(list[value], is equal to(copiedList[value] - 1))
 			}
-			list free()
-			copiedList free()
+			(list, copiedList) free()
 		})
 		this add("single thread - modify", func {
 			list := SynchronizedList<Int> new()
@@ -152,8 +150,7 @@ SynchronizedListTest: class extends Fixture {
 			expect(result count, is equal to(2))
 			expect(result[0], is equal to(list[0]))
 			expect(result[1], is equal to(list[1]))
-			result free()
-			list free()
+			(result, list) free()
 		})
 		this add("single thread - getElements", func {
 			list := SynchronizedList<Int> new()
@@ -163,9 +160,7 @@ SynchronizedListTest: class extends Fixture {
 			expect(result count, is equal to(2))
 			expect(result[0], is equal to(list[2]))
 			expect(result[1], is equal to(list[4]))
-			indicesList free()
-			result free()
-			list free()
+			(indicesList, result, list) free()
 		})
 		this add("single thread - getSlice", func {
 			list := SynchronizedList<Int> new()
@@ -181,8 +176,7 @@ SynchronizedListTest: class extends Fixture {
 			expect(interval[0], is equal to(list[1]))
 			expect(interval[1], is equal to(list[2]))
 			expect(interval[2], is equal to(list[3]))
-			interval free()
-			list free()
+			(interval, list) free()
 		})
 		this add("single thread - getSliceInto", func {
 			list := SynchronizedList<Float> new()
@@ -191,8 +185,7 @@ SynchronizedListTest: class extends Fixture {
 			list getSliceInto(Range new(1, 2), sliceInto)
 			expect(sliceInto[0], is equal to(2.0f) within(0.00001f))
 			expect(sliceInto[1], is equal to(3.0f) within(0.00001f))
-			list free()
-			sliceInto free()
+			(list, sliceInto) free()
 		})
 		this add("single thread - operators", func {
 			list := SynchronizedList<Int> new()
@@ -228,9 +221,7 @@ SynchronizedListTest: class extends Fixture {
 			expect(iterator hasNext(), is false)
 			secondIterator := list iterator()
 			expect(secondIterator next(), is equal to(8))
-			secondIterator free()
-			iterator free()
-			list free()
+			(secondIterator, iterator, list) free()
 		})
 		this add("single thread - search", This _testVectorListSearch)
 		this add("multiple threads", This _testMultipleThreads)
@@ -332,9 +323,7 @@ SynchronizedListTest: class extends Fixture {
 		expect(validResult, is true)
 		expect(list count, is equal to(0))
 		(job as Closure) free()
-		threads free()
-		list free()
-		globalMutex free()
+		(threads, list, globalMutex) free()
 	}
 }
 

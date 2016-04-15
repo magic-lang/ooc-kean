@@ -36,8 +36,7 @@ FileReader: class extends Reader {
 	init: func ~withMode (=fileName, mode: Text) {
 		(fileNameString, modeString) := (this fileName take() toString(), mode toString())
 		this file = FStream open(fileNameString, modeString)
-		fileNameString free()
-		modeString free()
+		(fileNameString, modeString) free()
 		if (!this file) {
 			err := getOSError()
 			Exception new(This, "Couldn't open #{fileName} for reading: #{err}") throw()
