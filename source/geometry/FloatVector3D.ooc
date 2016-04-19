@@ -91,6 +91,6 @@ operator / (left: Float, right: FloatVector3D) -> FloatVector3D { FloatVector3D 
 operator * (left: Int, right: FloatVector3D) -> FloatVector3D { FloatVector3D new(left * right x, left * right y, left * right z) }
 operator / (left: Int, right: FloatVector3D) -> FloatVector3D { FloatVector3D new(left / right x, left / right y, left / right z) }
 
-extend Cell<FloatVector3D> {
+extend Cell<T> {
 	toText: func ~floatvector3d -> Text { (this val as FloatVector3D) toText() }
 }

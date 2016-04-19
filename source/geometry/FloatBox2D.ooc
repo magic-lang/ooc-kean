@@ -191,6 +191,6 @@ FloatBox2D: cover {
 	}
 }
 
-extend Cell<FloatBox2D> {
+extend Cell<T> {
 	toText: func ~floatbox2d -> Text { (this val as FloatBox2D) toText() }
 }

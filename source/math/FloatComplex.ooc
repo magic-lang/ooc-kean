@@ -52,6 +52,6 @@ FloatComplex: cover {
 operator * (left: Float, right: FloatComplex) -> FloatComplex { FloatComplex new(left * right real, left * right imaginary) }
 operator / (left: Float, right: FloatComplex) -> FloatComplex { (left * right conjugate) / (right absoluteValue pow(2)) }
 
-extend Cell<FloatComplex> {
+extend Cell<T> {
 	toText: func ~floatcomplex -> Text { (this val as FloatComplex) toText() }
 }

@@ -520,6 +520,6 @@ FloatMatrix: cover {
 }
 operator * (left: Float, right: FloatMatrix) -> FloatMatrix { right * left }
 
-extend Cell<FloatMatrix> {
+extend Cell<T> {
 	toText: func ~floatmatrix -> Text { (this val as FloatMatrix) toText() }
 }
