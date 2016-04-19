@@ -38,8 +38,36 @@ DrawContext: abstract class {
 	createYuv420Semiplanar: abstract func (size: IntVector2D) -> Image
 	createYuv420Semiplanar: abstract func ~fromImages (y, uv: Image) -> Image
 	createYuv420Semiplanar: abstract func ~fromRaster (raster: RasterYuv420Semiplanar) -> Image
+	createImageFromTextAndFont: virtual func (message: Text, fontAtlas: Image) -> Image {
+		target := this createMonochrome(This getTextPixelBounds(message take(), fontAtlas))
+		target canvas fill(ColorRgba black)
+		target write(message take(), fontAtlas, IntPoint2D new(0, 0))
+		message free(Owner Receiver)
+		target
+	}
 	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }
 	update: abstract func
 	isAligned: virtual func (width: Int) -> Bool { true }
 	getDefaultFont: virtual func -> Image { this defaultFontRaster }
+	getFontSize: static func (fontAtlas: Image) -> IntVector2D { fontAtlas size / IntVector2D new(16, 6) }
+	getTextIndexBounds: static func (message: Text) -> IntVector2D {
+		takenMessage := message take()
+		(x, y, width, height) := (0, 0, 0, 0)
+		for (i in 0 .. takenMessage count) {
+			current := takenMessage[i]
+			x += 1
+			if (current == '\n') {
+				x = 0
+				y += 1
+			} else if (current graph()) {
+				width = width maximum(x)
+				height = height maximum(y + 1)
+			}
+		}
+		message free(Owner Receiver)
+		IntVector2D new(width, height)
+	}
+	getTextPixelBounds: static func (message: Text, fontAtlas: Image) -> IntVector2D {
+		This getTextIndexBounds(message) * This getFontSize(fontAtlas)
+	}
 }

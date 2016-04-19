@@ -158,11 +158,11 @@ DrawState: cover {
 		this target canvas draw(this)
 	}
 	// Example: DrawState new(targetImage) setOrigin(point) setInputImage(context getDefaultFont()) write(t"Hello world!")
-	write: func ~String (message: Text) {
+	write: func (message: Text) {
 		version(safe) {
 			raise(this target == null, "Can't write without a target.")
 			raise(this inputImage == null, "Can't write without a font atlas.")
 		}
-		this target canvas write(this target, this inputImage, this getOriginLocal() toIntPoint2D(), message)
+		this target write(message, this inputImage, this getOriginLocal() toIntPoint2D())
 	}
 }
