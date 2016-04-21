@@ -302,6 +302,12 @@ File: abstract class {
 	getCwd: static func -> String {
 		ooc_get_cwd()
 	}
+	remove: static func (path: String) -> Bool {
+		file := This new(path)
+		result := file rm()
+		file free()
+		result
+	}
 	free: override func {
 		if (this path)
 			this path free()
