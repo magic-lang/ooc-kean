@@ -299,6 +299,21 @@ File: abstract class {
 		Exception new(This, "Unsupported platform!\n") throw()
 		null
 	}
+	copy: static func (originalPath, newPath: String) {
+		originalFile := This new(originalPath)
+		newFile := This new(newPath)
+		originalFile copyTo(newFile)
+		(originalFile, newFile) free()
+	}
+	exists: static func ~file (path: String) -> Bool {
+		file := This new(path)
+		result := file exists()
+		file free()
+		result
+	}
+	rename: static func (originalPath, newPath: String) {
+		rename(originalPath toCString(), newPath toCString())
+	}
 	getCwd: static func -> String {
 		ooc_get_cwd()
 	}

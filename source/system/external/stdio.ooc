@@ -15,6 +15,7 @@ open: extern func (Char*, Int, ...) -> Int
 fdopen: extern func (Int, Char*) -> FStream
 mkstemp: extern func (Char*) -> Int
 mktemp: extern func (Char*) -> CString
+rename: extern func (Char*, Char*) -> Int
 
 printf: extern func (Char*, ...) -> Int
 fprintf: extern func (FStream, Char*, ...) -> Int
