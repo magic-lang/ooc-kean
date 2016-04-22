@@ -46,6 +46,17 @@ FileTest: class extends Fixture {
 			fileCopy rm()
 			(file, fileCopy, path, pathCopy) free()
 		})
+		this add("remove", func {
+			path := this _testOutput + "test.txt"
+			file := File new(path)
+			file write(this _testOutput)
+			expect(file exists(), is true)
+			file free()
+			File remove(path)
+			file = File new(path)
+			expect(file exists(), is false)
+			(file, path) free()
+		})
 		this add("cleanup", func {
 			file := File new(this _testOutput)
 			expect(file exists(), is true)
