@@ -114,8 +114,7 @@ File: abstract class {
 	}
 	parentName: func -> String {
 		idx := this path lastIndexOf(This separator)
-		if (idx == -1) return null
-		return this path substring(0, idx)
+		idx == -1 ? null as String : this path substring(0, idx)
 	}
 	// Create a named pipe at the path specified by this file
 	mkfifo: func -> Int { this mkfifo(0c755) }
@@ -196,32 +195,6 @@ File: abstract class {
 		)
 		result
 	}
-	findShallow: func (name: String, level: Int, cb: Func (This) -> Bool) -> Bool {
-		fName := this getName()
-		if (fName == name)
-			if (!cb(this))
-				return true // abort if caller is happy
-
-		if (this dir() && level >= 0) {
-			if (fName == ".git")
-				return false // skip
-
-			children := this getChildren()
-			for (child in children)
-				if (child findShallow(name, level - 1, cb))
-					return true // abort if caller found happiness in a sub-directory
-		}
-
-		false
-	}
-	findShallow: func ~first (name: String, level: Int) -> This {
-		result: This
-		this findShallow(name, level, |f|
-			result = f
-			false
-		)
-		result
-	}
 	copyTo: func (dstFile: This) {
 		dstParent := dstFile parent
 		dstParent mkdirs()
@@ -274,10 +247,8 @@ File: abstract class {
 	rebase: func (base: This) -> This {
 		left := base getReducedFile() getAbsolutePath() replaceAll(This separator, '/')
 		full := this getReducedFile() getAbsolutePath() replaceAll(This separator, '/')
-
-		if (!left endsWith("/")) {
+		if (!left endsWith("/"))
 			left = left + "/"
-		}
 		right := full substring(left size)
 		This new(right)
 	}
@@ -290,14 +261,13 @@ File: abstract class {
 	MAX_PATH_LENGTH := static 16383
 
 	new: static func (.path) -> This {
-		version (unix || apple) {
-			return FileUnix new(path)
-		}
-		version (windows) {
-			return FileWin32 new(path)
-		}
-		Exception new(This, "Unsupported platform!\n") throw()
-		null
+		result: This = null
+		version (unix || apple)
+			result = FileUnix new(path)
+		version (windows)
+			result = FileWin32 new(path)
+		raise(result == null, "Unsupported platform!\n", This)
+		result
 	}
 	copy: static func (originalPath, newPath: String) {
 		originalFile := This new(originalPath)
