@@ -49,7 +49,7 @@ PipeTest: class extends Fixture {
 	}
 	_createOutputDirectory: func {
 		file := File new("test/io/output")
-		file mkdir()
+		file createDirectory()
 		file free()
 	}
 }

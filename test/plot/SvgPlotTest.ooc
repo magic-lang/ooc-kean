@@ -100,7 +100,7 @@ SvgPlotTest: class extends Fixture {
 			// Write plots to file
 			filename := "test/plot/output/"
 			file := File new(filename)
-			folder := file parent . mkdirs() . free()
+			folder := file parent . createDirectories() . free()
 			file free()
 			filename = filename >> "example.svg"
 			writer := SvgWriter2D new(filename, logPlot)

@@ -18,7 +18,7 @@ CreateAlphaByteStringTest: class extends Fixture {
 			outputData := CreateAlphaByteString makeAlphaString("test/draw/input/logo.png", "logo")
 			filename := "test/draw/output/"
 			file := File new(filename)
-			folder := file parent . mkdirs() . free()
+			folder := file parent . createDirectories() . free()
 			file free()
 			filename = filename >> "DataFile.ooc"
 			fw := FileWriter new(filename)

@@ -14,7 +14,7 @@ File separator = '\\'
 File pathDelimiter = ';'
 
 _remove: unmangled func (file: File) -> Bool {
-	file dir() ? RemoveDirectory(file path) : DeleteFile(file path)
+	file isDirectory() ? RemoveDirectory(file path) : DeleteFile(file path)
 }
 
 ooc_get_cwd: unmangled func -> String {
@@ -40,17 +40,17 @@ FileWin32: class extends File {
 			status = false
 		(ffd, status)
 	}
-	dir: override func -> Bool {
+	isDirectory: override func -> Bool {
 		res := GetFileAttributes(this path as CString)
 		(res & FILE_ATTRIBUTE_DIRECTORY) != 0
 	}
-	file: override func -> Bool {
+	isFile: override func -> Bool {
 		// our definition of a file: neither a directory or a link
 		// (and no, FILE_ATTRIBUTE_NORMAL isn't true when we need it..)
 		(ffd, ok) := this _getFindData()
 		ok && ((ffd attr) & FILE_ATTRIBUTE_DIRECTORY) == 0 && ((ffd attr) & FILE_ATTRIBUTE_REPARSE_POINT) == 0
 	}
-	link: override func -> Bool {
+	isLink: override func -> Bool {
 		(ffd, ok) := this _getFindData()
 		ok && ((ffd attr) & FILE_ATTRIBUTE_REPARSE_POINT) != 0
 	}
@@ -63,20 +63,20 @@ FileWin32: class extends File {
 		(res != INVALID_FILE_ATTRIBUTES)
 	}
 	// Win32 permissions are not unix-like
-	ownerPerm: override func -> Int { 0 }
-	groupPerm: override func -> Int { 0 }
-	otherPerm: override func -> Int { 0 }
+	ownerPermissions: override func -> Int { 0 }
+	groupPermissions: override func -> Int { 0 }
+	otherPermissions: override func -> Int { 0 }
 	executable: override func -> Bool { false }
 	setExecutable: override func (exec: Bool) -> Bool { false }
-	mkdir: override func ~withMode (mode: Int) -> Int {
+	createDirectory: override func ~withMode (mode: Int) -> Int {
 		if (this relative())
-			return this getAbsoluteFile() mkdir()
+			return this getAbsoluteFile() createDirectory()
 		p := this parent
 		if (!p exists())
-			this parent mkdir()
+			this parent createDirectory()
 		CreateDirectory(this path toCString(), null) ? 0 : -1
 	}
-	mkfifo: override func ~withMode (mode: Int) -> Int {
+	makeFIFO: override func ~withMode (mode: Int) -> Int {
 		fprintf(stderr, "FileWin32: stub mkfifo")
 	}
 	lastAccessed: override func -> Long {
