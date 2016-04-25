@@ -12,7 +12,11 @@ use unit
 TimerTest: class extends Fixture {
 	wallTimer := WallTimer new()
 	cpuTimer := CpuTimer new()
-
+	measureFunc := func {
+		sum := 0
+		for (i in 0 .. 10_000_000)
+			sum = (sum + i) % 10
+	}
 	init: func {
 		super("WallTimer")
 		this add("basic use of WallTimer", func {
@@ -34,11 +38,11 @@ TimerTest: class extends Fixture {
 			expect(this cpuTimer _count, is equal to(0))
 		})
 		this add("measure", func {
-			sum := 0
-			resultWall := this wallTimer measure(|| for (i in 0 .. 10_000_000) { sum = (sum + i) % 10 })
-			resultCpu := this cpuTimer measure(|| for (i in 0 .. 10_000_000) { sum = (sum + i) % 10 })
+			resultWall := this wallTimer measure(this measureFunc)
+			resultCpu := this cpuTimer measure(this measureFunc)
 			expect(resultWall, is greater than(0.01))
 			expect(resultCpu, is greater than(0.01))
+			(this measureFunc as Closure) free()
 		})
 	}
 	wallTimerTestFunction: func (loopLength: Int) -> Double {

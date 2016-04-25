@@ -64,7 +64,9 @@ FloatVector3DTest: class extends Fixture {
 		})
 		this add("casting", func {
 			value := t"10.00, 20.00, 30.00"
-			expect(this vector3 toString(), is equal to(value toString()))
+			(valueString, string) := (value toString(), this vector3 toString())
+			expect(string, is equal to(valueString))
+			(string, valueString) free()
 			expect(FloatVector3D parse(value) x, is equal to(this vector3 x))
 			expect(FloatVector3D parse(value) y, is equal to(this vector3 y))
 			expect(FloatVector3D parse(value) z, is equal to(this vector3 z))

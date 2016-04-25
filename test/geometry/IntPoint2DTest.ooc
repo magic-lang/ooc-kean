@@ -48,7 +48,9 @@ IntPoint2DTest: class extends Fixture {
 		})
 		this add("casting", func {
 			value := t"10, 20"
-			expect(this point3 toString(), is equal to(value toString()))
+			(valueString, string) := (value toString(), this point3 toString())
+			expect(string, is equal to(valueString))
+			(string, valueString) free()
 			expect(IntPoint2D parse(value) x, is equal to(this point3 x))
 			expect(IntPoint2D parse(value) y, is equal to(this point3 y))
 		})

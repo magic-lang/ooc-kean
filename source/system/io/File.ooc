@@ -217,9 +217,11 @@ File: abstract class {
 	}
 	read: func -> String {
 		fR := FileReader new(this)
-		bW := BufferWriter new() .write(fR) .close()
-		fR close()
-		bW buffer toString()
+		bW := BufferWriter new() . write(fR) . close()
+		fR close() . free()
+		result := bW buffer toString()
+		bW free()
+		result
 	}
 	write: func ~string (str: String) {
 		FileWriter new(this) write(BufferReader new(str _buffer)) .close()

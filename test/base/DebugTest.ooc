@@ -46,6 +46,10 @@ DebugTest: class extends Fixture {
 			}
 		})
 	}
+	free: override func {
+		this outputString free()
+		super()
+	}
 }
 
 DebugTest new() run() . free()

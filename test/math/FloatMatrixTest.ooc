@@ -163,9 +163,9 @@ FloatMatrixTest: class extends Fixture {
 			(text, matrix) free()
 		})
 		this add("equality", func {
-			m := this createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f])
-			n := this createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f])
-			o := this createMatrix(3, 3, [1.f, 5.f, 3.f, 4.f, 6.f, 8.f, 9.f, 2.f, 4.f])
+			m := this createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f]) take()
+			n := this createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f]) take()
+			o := this createMatrix(3, 3, [1.f, 5.f, 3.f, 4.f, 6.f, 8.f, 9.f, 2.f, 4.f]) take()
 			expect(m == n, is true)
 			expect(m != o, is true)
 			expect(n == o, is false)
@@ -178,7 +178,7 @@ FloatMatrixTest: class extends Fixture {
 		for (x in 0 .. width)
 			for (y in 0 .. height)
 				result[x, y] = values[x * height + y]
-		result
+		result give()
 	}
 
 	checkAllElements: func (matrix: FloatMatrix, values: Float[]) {
@@ -191,6 +191,7 @@ FloatMatrixTest: class extends Fixture {
 		for (x in 0 .. m width)
 			for (y in 0 .. m height)
 				expect(m[x, y], is equal to(values[x * m height + y]) within(tolerance))
+		matrix free(Owner Receiver)
 	}
 }
 

@@ -13,13 +13,19 @@ EnvTest: class extends Fixture {
 		super("Env")
 		this add("set, get, unset", func {
 			Env set("abc", "def", true)
-			expect(Env get("abc"), is equal to("def"))
+			result := Env get("abc")
+			expect(result, is equal to("def"))
+			result free()
 
 			Env set("abc", "efg", true)
-			expect(Env get("abc"), is equal to("efg"))
+			result = Env get("abc")
+			expect(result, is equal to("efg"))
+			result free()
 
 			Env set("abc", "fgh", false)
-			expect(Env get("abc"), is equal to("efg"))
+			result = Env get("abc")
+			expect(result, is equal to("efg"))
+			result free()
 
 			Env unset("abc")
 			expect(Env get("abc"), is Null)
