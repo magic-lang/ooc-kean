@@ -271,7 +271,7 @@ TCPReaderWriterPair: class {
 	close: func {
 		sock close()
 	}
-	free: func {
+	free: override func {
 		(this sock, this in, this out) free()
 		super()
 	}

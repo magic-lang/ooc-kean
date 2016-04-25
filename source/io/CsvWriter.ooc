@@ -18,11 +18,9 @@ CsvWriter: class {
 	init: func (=_fileWriter, delimiter := ',') {
 		this _delimiter = delimiter
 	}
-	free: func {
-		if (this _fileWriter != null) {
-			this _fileWriter close()
-			this _fileWriter free()
-		}
+	free: override func {
+		if (this _fileWriter != null)
+			this _fileWriter close() . free()
 		super()
 	}
 	write: func (row: VectorList<Text>) {

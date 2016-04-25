@@ -31,7 +31,7 @@ TextBuilder: class {
 		this init()
 		this append(original)
 	}
-	free: func {
+	free: override func {
 		for (i in 0 .. this _data count)
 			this _data[i] free(Owner Receiver)
 		this _data free()
