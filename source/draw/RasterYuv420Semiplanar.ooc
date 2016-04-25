@@ -246,8 +246,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		result := This new(size)
 		fileReader read((result y buffer pointer as Char*), 0, result y buffer size)
 		fileReader read((result uv buffer pointer as Char*), 0, result uv buffer size)
-		fileReader close()
-		fileReader free()
+		fileReader close() . free()
 		result
 	}
 }

@@ -82,7 +82,7 @@ _MappingIterator: class <T, S> extends Iterator<S> {
 	_backend: Iterator<T>
 	_mapFunction: Func(T) -> S
 	init: func (=_backend, =_mapFunction)
-	free: func {
+	free: override func {
 		this _backend free()
 		super()
 	}
