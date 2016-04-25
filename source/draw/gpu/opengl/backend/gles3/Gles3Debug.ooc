@@ -11,6 +11,21 @@ import ../egl/egl
 import external/gles3
 
 version(!gpuOff) {
+getErrorMessage: func (errorCode: Int) -> String {
+	result := match (errorCode) {
+		case 36054 => "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT"
+		case 36055 => "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"
+		case 36056 => "GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS"
+		case 1280 => "GL_INVALID_ENUM"
+		case 1281 => "GL_INVALID_VALUE"
+		case 1282 => "GL_INVALID_OPERATION"
+		case 1286 => "GL_INVALID_FRAMEBUFFER_OPERATION"
+		case => "ERROR CODE: " + errorCode toString()
+	}
+	result
+}
+
+version(debugGL) {
 validateStart: func (location: String) {
 	validate("before " + location + " from unknown location")
 }
@@ -28,19 +43,6 @@ validate: func (message: String) {
 printGlError: func {
 	Debug print("OpenGL error: " + getErrorMessage(glGetError()))
 	Debug print("EGL error: " + getEglErrorMessage(eglGetError()))
-}
-getErrorMessage: func (errorCode: Int) -> String {
-	result := match (errorCode) {
-		case 36054 => "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT"
-		case 36055 => "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"
-		case 36056 => "GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS"
-		case 1280 => "GL_INVALID_ENUM"
-		case 1281 => "GL_INVALID_VALUE"
-		case 1282 => "GL_INVALID_OPERATION"
-		case 1286 => "GL_INVALID_FRAMEBUFFER_OPERATION"
-		case => "ERROR CODE: " + errorCode toString()
-	}
-	result
 }
 getEglErrorMessage: func (errorCode: Int) -> String {
 	result := match (errorCode) {
@@ -83,5 +85,6 @@ printVersionInfo: func {
 	Debug print("OpenGL vendor: %s" format(vendor))
 	Debug print("OpenGL renderer: %s" format(renderer))
 	Debug print("OpenGL version: %s" format(version))
+}
 }
 }
