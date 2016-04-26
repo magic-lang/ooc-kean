@@ -48,7 +48,9 @@ ExceptionTest: class extends Fixture {
 		this add("demangler", func {
 			test := "Exception__Exception_throw_impl"
 			result := Demangler demangle(test)
-			expect(result fullName == "Exception throw_impl")
+			name := result fullName
+			expect(name, is equal to("Exception throw_impl"))
+			name free()
 			(test, result) free()
 		})
 	}
