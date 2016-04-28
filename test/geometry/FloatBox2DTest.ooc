@@ -121,7 +121,9 @@ FloatBox2DTest: class extends Fixture {
 			expect(adapted height, is equal to(1.5f) within(tolerance))
 		})
 		this add("toString", func {
-			expect(this box0 toString() == "1.00, 2.00, 3.00, 4.00")
+			string := this box0 toString()
+			expect(string, is equal to("1.00, 2.00, 3.00, 4.00"))
+			string free()
 		})
 		this add("toText", func {
 			text := this box0 toText() take()

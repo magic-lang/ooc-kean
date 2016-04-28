@@ -54,6 +54,8 @@ SynchronizedTest: class extends Fixture {
 			expect(obj data, is equal to(1))
 			expect(This value, is equal to(1))
 
+			(thread1 _code as Closure) free()
+			(thread2 _code as Closure) free()
 			(obj, sync, thread1, thread2) free()
 		})
 	}

@@ -15,13 +15,12 @@ open: extern func (Char*, Int, ...) -> Int
 fdopen: extern func (Int, Char*) -> FStream
 mkstemp: extern func (Char*) -> Int
 mktemp: extern func (Char*) -> CString
-
+rename: extern func (Char*, Char*) -> Int
 printf: extern func (Char*, ...) -> Int
 fprintf: extern func (FStream, Char*, ...) -> Int
 sprintf: extern func (Char*, Char*, ...) -> Int
 snprintf: extern func (Char*, Int, Char*, ...) -> Int
 vsnprintf: extern func (Char*, Int, Char*, VaList) -> Int
-
 fread: extern func (ptr: Pointer, size: SizeT, nmemb: SizeT, stream: FStream) -> SizeT
 fwrite: extern func (ptr: Pointer, size: SizeT, nmemb: SizeT, stream: FStream) -> SizeT
 feof: extern func (stream: FStream) -> Int
@@ -67,58 +66,30 @@ FStream: cover from FILE* {
 
 	close: extern (fclose) func -> Int
 
-	/**
-	 * @return the file descriptor associated to this File
-	 */
+	// Returns the file descriptor associated to this File
 	no: extern (fileno) func -> Int
 
-	/**
-	 * Tests the error indicator for the stream
-	 *
-	 * @return a non-zero value if the error indicator is set
-	 */
+	// Returns a non-zero value if the error indicator is set
 	error: extern (ferror) func -> Int
 
-	/**
-	 * Tests the end-of-file indicator for the stream
-	 *
-	 * @return true if the end-of-file indicator was set, ie. if a read
-	 * was attempted and the end of the file was reached.
-	 *
-	 * It's important to understand that if you're *just* at the end of
-	 * the file, and you call eof?() it will return false. Then if you
-	 * try to read it will read 0 bytes, and *then* eof?() will return true.
-	 *
-	 * That's how C I/O works.
-	 */
+	// Returns true if the end-of-file indicator was set, ie. if a read was attempted and the end of the file was reached.
+	// It's important to understand that if you're *just* at the end of the file, and you call eof?() it will return false. Then if you
+	// try to read it will read 0 bytes, and *then* eof?() will return true.
 	eof: func -> Bool { feof(this) != 0 }
 
 	/**
 	 * Sets the position of the marker in this stream to the given offset.
-	 *
-	 * @param origin One of
-	 *   - SEEK_CUR offset is relative to current stream position, ie. -1 goes one byte back
-	 *   - SEEK_SET offset is relative to the beginning of the stream
-	 *   - SEEK_END offset is relative to the end of the stream
-	 *
-	 * @return 0 if successful. Note that some streams aren't seekable.
-	 * Local files usually are, though :)
+	 *   - origin=SEEK_CUR offset is relative to current stream position, ie. -1 goes one byte back
+	 *   - origin=SEEK_SET offset is relative to the beginning of the stream
+	 *   - origin=SEEK_END offset is relative to the end of the stream
+	 * Returns 0 if successful. Note that some streams aren't seekable.
 	 */
 	seek: func (offset: Long, origin: Int) -> Int { fseek(this, offset, origin) }
 
-	/**
-	 * @return the position of the marker in this stream
-	 */
+	// Returns the position of the marker in this stream
 	tell: extern (ftell) func -> Long
 
-	/**
-	 * Flush the buffers associated to this file descriptor.
-	 *
-	 * I/O operations are usually buffered to increase performance, ie.
-	 * they're not immediately applied, but put in a buffer and when the
-	 * buffer is full it is flushed, ie. applied. This makes sure all
-	 * operations are applied.
-	 */
+	// Flush the buffers associated to this file descriptor.
 	flush: extern (fflush) func
 
 	read: func (dest: Pointer, bytesToRead: SizeT) -> SizeT { fread(dest, 1, bytesToRead, this) }
@@ -133,23 +104,18 @@ FStream: cover from FILE* {
 	readLine: func (chunk: Int = 1023) -> String {
 		length := 1023
 		buf := CharBuffer new (length)
-
-		// while it's not '\n' it means not all the line has been read
 		while (true) {
 			c := fgetc(this)
-			if (c == EOF) break
-			if (c == '\n') break
+			if (c == EOF || c == '\n')
+				break
 			buf append((c & 0xFF) as Char)
-			if (!this hasNext()) break
+			if (!this hasNext())
+				break
 		}
-
 		buf toString()
 	}
 
-	/**
-	 * @return the size of this file descriptor, in bytes, if it can be
-	 * estimated.
-	 */
+	// Returns the size of this file descriptor, in bytes, if it can be estimated.
 	getSize: func -> SSizeT {
 		result: SSizeT = 0
 		prev := this tell()

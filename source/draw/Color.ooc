@@ -153,6 +153,34 @@ ColorRgba: cover {
 	distance: func (other: This) -> Float { (this toRgb() distance(other toRgb()) * 3.0f + (this a - other a) as Float pow(2)) / 4.0f sqrt() }
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
+
+	fromText: static func (text: Text) -> This {
+		channels := text take() split(',')
+		result: This
+		match (channels count) {
+			case 1 => // Y
+				luma := channels[0] take() toInt()
+				result = This new(ColorConvert monochromeToRgb(ColorMonochrome new(luma)), 255)
+			case 2 => // YA
+				luma := channels[0] take() toInt()
+				alpha := channels[1] take() toInt()
+				result = This new(ColorConvert monochromeToRgb(ColorMonochrome new(luma)), alpha)
+			case 3 => // RGB
+				red := channels[0] take() toInt()
+				green := channels[1] take() toInt()
+				blue := channels[2] take() toInt()
+				result = This new(red, green, blue, 255)
+			case 4 => // RGBA
+				red := channels[0] take() toInt()
+				green := channels[1] take() toInt()
+				blue := channels[2] take() toInt()
+				alpha := channels[3] take() toInt()
+				result = This new(red, green, blue, alpha)
+		}
+		channels free()
+		text free(Owner Receiver)
+		result
+	}
 }
 
 ColorConvert: cover {

@@ -30,6 +30,7 @@ Reader: abstract class {
 			readBytes := this read(in)
 			out append(in, readBytes)
 		}
+		in free()
 		out toString()
 	}
 	readUntil: func (end: Char) -> String {
