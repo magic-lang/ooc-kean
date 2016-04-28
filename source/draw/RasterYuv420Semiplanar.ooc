@@ -97,12 +97,14 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		}
 	}
 	crop: func (region: FloatBox2D) -> This {
-		size := region size toIntVector2D()
-		result := This new(size, size x + (size x isOdd ? 1 : 0)) as This
+		this crop~int(region round() toIntBox2D())
+	}
+	crop: func ~int (region: IntBox2D) -> This {
+		result := This new(region size, region size x + (region size x isOdd ? 1 : 0)) as This
 		this cropInto(region, result)
 		result
 	}
-	cropInto: func (region: FloatBox2D, target: This) {
+	cropInto: func (region: IntBox2D, target: This) {
 		thisYBuffer := this y buffer pointer
 		targetYBuffer := target y buffer pointer
 		for (row in region top .. region size y + region top) {
