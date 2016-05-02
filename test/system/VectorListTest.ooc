@@ -118,8 +118,7 @@ VectorListTest: class extends Fixture {
 			expect(newList count, is equal to(2))
 			expect(newList[0], is equal to(1))
 			expect(newList[1], is equal to(2))
-			list free()
-			indices free()
+			(list, indices, newList) free()
 		})
 		this add("VectorList getSlice", func {
 			list := VectorList<Float> new()
@@ -222,12 +221,14 @@ VectorListTest: class extends Fixture {
 				count -= 1
 				expect(value, is equal to(list[count]))
 			}
+			(list, sortedList) free()
 		})
 		this add("VectorList fold", func {
 			list := VectorList<Int> new()
 			list add(1) . add(2) . add(3)
 			sum := list fold(Int, |v1, v2| v1 + v2, 0)
 			expect(sum, is equal to(6))
+			list free()
 		})
 		this add("Iterator leak", func {
 			list := VectorList<Int> new()

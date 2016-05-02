@@ -377,7 +377,7 @@ FloatMatrix: cover {
 			submatrixRow += 1
 		}
 		this free(Owner Receiver)
-		submatrix
+		submatrix give()
 	}
 	inverse: func -> This {
 		t := this take()

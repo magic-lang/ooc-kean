@@ -73,8 +73,8 @@ IntVectorListTest: class extends Fixture {
 		this add("toText", func {
 			list := IntVectorList new()
 			list add(1) . add(2) . add(3)
-			text := list toText() take()
-			expect(text, is equal to(t"1\n2\n3"))
+			text := list toText()
+			expect(text take(), is equal to(t"1\n2\n3"))
 			text free()
 			list free()
 		})

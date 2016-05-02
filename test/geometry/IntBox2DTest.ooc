@@ -100,7 +100,9 @@ IntBox2DTest: class extends Fixture {
 			expect(box contains(outside), is false)
 		})
 		this add("toString", func {
-			expect(this box0 toString() == "1, 2, 3, 4")
+			string := this box0 toString()
+			expect(string, is equal to("1, 2, 3, 4"))
+			string free()
 		})
 		this add("parse", func {
 			box := IntBox2D parse(t"1, 2, 3, 4")

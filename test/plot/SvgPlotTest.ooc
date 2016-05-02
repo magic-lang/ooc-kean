@@ -109,8 +109,8 @@ SvgPlotTest: class extends Fixture {
 			writer addPlot(unitCirclePlot)
 			writer addPlot(symmetricUnitCirclePlot)
 			writer addPlot(formatPlot)
-			writer write()
-			writer free()
+			writer write() . free()
+			filename free()
 		})
 		this add("Output check", func {
 			generatedFile := FileReader new(t"test/plot/output/example.svg")

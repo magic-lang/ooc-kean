@@ -22,7 +22,7 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 			while (this _fileReader hasNext() && ((readCharacter = this _fileReader read()) != '\n' && readCharacter != '\0')) { }
 		}
 	}
-	free: func {
+	free: override func {
 		if (this _fileReader != null)
 			this _fileReader close() . free()
 		super()
