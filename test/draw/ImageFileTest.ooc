@@ -16,7 +16,7 @@ import StbImage
 ImageFileTest: class extends Fixture {
 	init: func {
 		super("ImageFile")
-		File new("test/draw/output") mkdir()
+		File new("test/draw/output") createDirectory()
 		this add("First", func {
 			expect(1, is equal to(1))
 		})
