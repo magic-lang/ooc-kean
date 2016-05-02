@@ -53,22 +53,13 @@ _Map: class {
 }
 
 Map: abstract class {
-	model: FloatTransform3D { get set }
-	view: FloatTransform3D { get set }
-	projection: FloatTransform3D { get set }
-	textureTransform: FloatTransform3D { get set }
 	_bindings := _Map new()
-	init: func {
-		this model = FloatTransform3D identity
-		this view = FloatTransform3D identity
-		this projection = FloatTransform3D identity
-		this textureTransform = FloatTransform3D identity
-	}
+	init: func
 	free: override func {
 		this _bindings free()
 		super()
 	}
-	use: virtual func (forbiddenInput: Pointer)
+	use: abstract func (forbiddenInput: Pointer, positionTransform, textureTransform: FloatTransform3D)
 	add: func <T> (key: String, value: T) {
 		if (T inheritsFrom(Object))
 			this _bindings add(key, value as Object, false)
