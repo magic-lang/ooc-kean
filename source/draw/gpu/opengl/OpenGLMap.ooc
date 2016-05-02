@@ -102,16 +102,6 @@ OpenGLMap: class extends Map {
 	}
 }
 
-OpenGLMapMesh: class extends OpenGLMap {
-	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
-	use: override func (forbiddenInput: Pointer) {
-		this add("projection", this projection)
-		super(forbiddenInput)
-	}
-	vertexSource: static String = slurp("shaders/mesh.vert")
-	fragmentSource: static String = slurp("shaders/mesh.frag")
-}
-
 OpenGLMapTransform: class extends OpenGLMap {
 	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
 	use: override func (forbiddenInput: Pointer) {
