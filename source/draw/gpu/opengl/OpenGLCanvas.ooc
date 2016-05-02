@@ -20,14 +20,14 @@ OpenGLCanvas: class extends OpenGLSurface {
 	_renderTarget: GLFramebufferObject
 	context ::= this _context as OpenGLContext
 	draw: override func ~DrawState (drawState: DrawState) {
-		gpuMap: Map = drawState map as Map ?? (drawState mesh ? this context meshShader as Map : this context defaultMap as Map)
+		gpuMap: Map = drawState map as Map ?? this context defaultMap as Map
 		viewport := drawState getViewport()
 		this context backend setViewport(viewport)
 		focalLengthPerWidth := drawState getFocalLengthNormalized()
 		targetSize := this size toFloatVector2D()
-		gpuMap view = this _createView(targetSize, drawState getTransformNormalized())
+		gpuMap view = (drawState mesh) ? FloatTransform3D identity : this _createView(targetSize, drawState getTransformNormalized())
 		gpuMap projection = this _createProjection(targetSize, focalLengthPerWidth)
-		gpuMap model = this _createModelTransformNormalized(this size, drawState getDestinationNormalized(), focalLengthPerWidth * this size x)
+		gpuMap model = (drawState mesh) ? FloatTransform3D identity : this _createModelTransformNormalized(this size, drawState getDestinationNormalized(), focalLengthPerWidth * this size x)
 		gpuMap textureTransform = This _createTextureTransform(drawState getSourceNormalized())
 		if (drawState opacity < 1.0f)
 			this context backend blend(drawState opacity)

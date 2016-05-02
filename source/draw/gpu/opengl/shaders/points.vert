@@ -2,8 +2,8 @@
 precision highp float;
 uniform float pointSize;
 uniform mat4 transform;
-layout(location = 0) in vec2 vertexPosition;
+layout(location = 0) in vec3 vertexPosition;
 void main() {
 	gl_PointSize = pointSize;
-	gl_Position = transform * vec4(vertexPosition.x, vertexPosition.y, 0, 1);
+	gl_Position = transform * vec4(vertexPosition, 1);
 }

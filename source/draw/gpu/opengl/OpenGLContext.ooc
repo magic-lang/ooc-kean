@@ -36,11 +36,9 @@ OpenGLContext: class extends GpuContext {
 	_packUvPadded: OpenGLMap
 	_linesShader: OpenGLMap
 	_pointsShader: OpenGLMap
-	_meshShader: OpenGLMapMesh
 	_renderer: GLRenderer
 	_recycleBin: RecycleBin<OpenGLPacked>
 	backend ::= this _backend
-	meshShader ::= this _meshShader
 	defaultMap ::= this _transformTextureMap as Map
 	_defaultFontGpu: GpuImage = null
 	defaultFontGpu: GpuImage { get {
@@ -61,7 +59,6 @@ OpenGLContext: class extends GpuContext {
 		this _pointsShader = OpenGLMap new(slurp("shaders/points.vert"), slurp("shaders/color.frag"), this)
 		this _transformTextureMap = OpenGLMapTransform new(slurp("shaders/texture.frag"), this)
 		this _renderer = _backend createRenderer()
-		this _meshShader = OpenGLMapMesh new(this)
 	}
 	init: func ~shared (other: This = null) {
 		if (other != null)
@@ -75,7 +72,7 @@ OpenGLContext: class extends GpuContext {
 			this _defaultFontGpu free()
 		this _backend makeCurrent()
 		(this _transformTextureMap, this _packMonochrome, this _packUv, this _packUvPadded, this _linesShader) free()
-		(this _pointsShader, this _meshShader, this _backend, this _renderer, this _recycleBin) free()
+		(this _pointsShader, this _backend, this _renderer, this _recycleBin) free()
 		super()
 	}
 	getMaxContexts: func -> Int { 1 }
