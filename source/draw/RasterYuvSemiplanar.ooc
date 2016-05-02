@@ -46,8 +46,7 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
 		this _uv referenceCount increase()
 	}
 	free: override func {
-		this y referenceCount decrease()
-		this uv referenceCount decrease()
+		(this y, this uv) referenceCount decrease()
 		super()
 	}
 	apply: override func ~rgb (action: Func (ColorRgb)) {

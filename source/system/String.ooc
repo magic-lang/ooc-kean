@@ -170,8 +170,7 @@ operator implicit as (c: Char*) -> String { c ? String new(c, strlen(c)) : null 
 operator implicit as (c: CString) -> String { c ? String new(c, strlen(c)) : null }
 operator & (left, right: String) -> String {
 	result := left + right
-	left free()
-	right free()
+	(left, right) free()
 	result
 }
 operator >> (left, right: String) -> String {

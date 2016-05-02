@@ -25,8 +25,7 @@ TextBuilderTest: class extends Fixture {
 			data free()
 			text = tb join(';') take()
 			expect(text == t"1;2;3")
-			tb free()
-			text free()
+			(tb, text) free()
 		})
 		this add("append", func {
 			tb := TextBuilder new()

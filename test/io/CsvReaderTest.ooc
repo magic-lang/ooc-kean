@@ -28,8 +28,7 @@ CsvReaderTest: class extends Fixture {
 				row free()
 				rowCounter += 1
 			}
-			filename free()
-			reader free()
+			(filename, reader) free()
 		})
 		this add("string literals", func {
 			filename := t"test/io/input/strings.csv"
@@ -63,8 +62,7 @@ CsvReaderTest: class extends Fixture {
 				rowCounter += 1
 			}
 			expect(reader delimiter, is equal to(';'))
-			filename free()
-			reader free()
+			(filename, reader) free()
 		})
 		this add("skip header", func {
 			filename := t"test/io/input/semicolondelimiter.csv"

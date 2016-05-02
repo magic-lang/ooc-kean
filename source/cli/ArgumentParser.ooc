@@ -73,8 +73,7 @@ ArgumentParser: class {
 		parameters := VectorList<Text> new()
 		arguments := VectorList<Text> new()
 		for (i in 0 .. input count) {
-			parameters clear()
-			arguments clear()
+			(parameters, arguments) clear()
 			current := input[i] take()
 			if (current beginsWith(t"--"))
 				arguments add(current slice(2))
