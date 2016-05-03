@@ -154,13 +154,10 @@ Gles3Context: class extends GLContext {
 		glViewport(viewport left, viewport top, viewport width, viewport height)
 		version(debugGL) { validateEnd("Context setViewport") }
 	}
-	enableBlend: override func (on: Bool) {
-		version(debugGL) { validateStart("Context enableBlend") }
-		if (on)
-			glEnable(GL_BLEND)
-		else
-			glDisable(GL_BLEND)
-		version(debugGL) { validateEnd("Context enableBlend") }
+	disableBlend: override func {
+		version(debugGL) { validateStart("Context disableBlend") }
+		glDisable(GL_BLEND)
+		version(debugGL) { validateEnd("Context disableBlend") }
 	}
 	blend: override func ~constant (factor: Float) {
 		version(debugGL) { validateStart("Context blend~constant") }
