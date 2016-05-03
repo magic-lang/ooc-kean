@@ -41,9 +41,7 @@ RasterMonochromeCanvas: class extends RasterPackedCanvas {
 			monochrome referenceCount decrease()
 	}
 	fill: override func (color: ColorRgba) {
-		for (y in 0 .. this size y)
-			for (x in 0 .. this size x)
-				this target[x, y] = ColorMonochrome new(color r)
+		this target buffer memset(color r)
 	}
 }
 
