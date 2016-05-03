@@ -37,10 +37,8 @@ AndroidContext: class extends OpenGLContext {
 			}
 			else
 				result = super(rasterImage)
-		}
-		else {
+		} else
 			result = super(rasterImage)
-		}
 		result
 	}
 	_recyclePacker: func (packer: EGLRgba) { this _packers add(packer) }
@@ -79,15 +77,14 @@ AndroidContext: class extends OpenGLContext {
 		result: RasterImage
 		version(optiGraphicbufferupload) {
 			result = match (source) {
-				case (image : OpenGLMonochrome) =>
+				case (image: OpenGLMonochrome) =>
 					this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
-				case (image : OpenGLUv) =>
+				case (image: OpenGLUv) =>
 					this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
 				case => super(source)
 			}
-		} else {
+		} else
 			result = super(source)
-		}
 		result
 	}
 	toRaster: override func ~target (source: GpuImage, target: RasterImage) -> Promise {
@@ -104,12 +101,10 @@ AndroidContext: class extends OpenGLContext {
 				result = OpenGLPromise new(this)
 				(result as OpenGLPromise) sync()
 				targetImageRgba referenceCount decrease()
-			} else {
+			} else
 				result = super(source, target)
-			}
-		} else {
+		} else
 			result = super(source, target)
-		}
 		result
 	}
 	_toRasterAsync: func ~monochrome (gpuImage: OpenGLMonochrome) -> ToRasterFuture {
@@ -130,9 +125,8 @@ AndroidContext: class extends OpenGLContext {
 				result = this _toRasterAsync(gpuImage as OpenGLUv)
 			else
 				result = super(gpuImage)
-		} else {
+		} else
 			result = super(gpuImage)
-		}
 		result
 	}
 	_unpackRgbaToYuv420Semiplanar: func (source: GpuImage, targetSize: IntVector2D, padding := 0) -> GpuYuv420Semiplanar {
