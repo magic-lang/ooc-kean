@@ -81,7 +81,7 @@ UnixWindow: class extends UnixWindowBase {
 		map use(null, projection * view * model, textureTransform)
 		this _openGLWindow _bind()
 		this _openGLWindow context backend setViewport(IntBox2D new(image size))
-		this _openGLWindow context backend enableBlend(false)
+		this _openGLWindow context backend disableBlend()
 		this _openGLWindow context drawQuad()
 		this _openGLWindow _unbind()
 		if (tempImageA)

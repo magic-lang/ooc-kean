@@ -34,7 +34,7 @@ OpenGLCanvas: class extends OpenGLSurface {
 		else if (drawState blendMode == BlendMode Add)
 			this context backend blend()
 		else
-			this context backend enableBlend(false)
+			this context backend disableBlend()
 		tempImageA: GpuImage = null
 		tempImageB: GpuImage = null
 		if (drawState inputImage) {
