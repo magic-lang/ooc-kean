@@ -32,26 +32,24 @@ AndroidContext: class extends OpenGLContext {
 			if (rasterImage instanceOf(GraphicBufferYuv420Semiplanar)) {
 				graphicBufferImage := rasterImage as GraphicBufferYuv420Semiplanar
 				rgba := graphicBufferImage toRgba(this)
-				result = this unpackRgbaToYuv420Semiplanar(rgba, rasterImage size, graphicBufferImage uvPadding % graphicBufferImage stride)
+				result = this _unpackRgbaToYuv420Semiplanar(rgba, rasterImage size, graphicBufferImage uvPadding % graphicBufferImage stride)
 				rgba referenceCount decrease()
 			}
 			else
 				result = super(rasterImage)
-		}
-		else {
+		} else
 			result = super(rasterImage)
-		}
 		result
 	}
-	recyclePacker: func (packer: EGLRgba) { this _packers add(packer) }
-	getPacker: func (size: IntVector2D) -> EGLRgba {
+	_recyclePacker: func (packer: EGLRgba) { this _packers add(packer) }
+	_getPacker: func (size: IntVector2D) -> EGLRgba {
 		result := this _packers search(|image| image size == size) ?? EGLRgba new(size, this)
 		result
 	}
-	toBuffer: func (source: GpuImage, packMap: Map) -> (ByteBuffer, OpenGLPromise) {
+	_toBuffer: func (source: GpuImage, packMap: Map) -> (ByteBuffer, OpenGLPromise) {
 		channels := (source as OpenGLPacked) channels
 		packSize := IntVector2D new(source size x / (4 / channels), source size y)
-		gpuRgba := this getPacker(packSize)
+		gpuRgba := this _getPacker(packSize)
 		this packToRgba(source, gpuRgba, IntBox2D new(gpuRgba size))
 		promise := OpenGLPromise new(this)
 		promise sync()
@@ -60,67 +58,78 @@ AndroidContext: class extends OpenGLContext {
 		length := channels * eglImage size area
 		recover := func (b: ByteBuffer) -> Bool {
 			eglImage buffer unlock()
-			this recyclePacker(gpuRgba)
+			this _recyclePacker(gpuRgba)
 			false
 		}
 		(ByteBuffer new(sourcePointer, length, recover), promise)
 	}
-	toRaster: func ~monochrome (source: OpenGLMonochrome) -> RasterImage {
-		(buffer, promise) := this toBuffer(source, this _packMonochrome)
+	_toRaster: func ~monochrome (source: OpenGLMonochrome) -> RasterImage {
+		(buffer, promise) := this _toBuffer(source, this _packMonochrome)
 		promise free()
 		RasterMonochrome new(buffer, source size)
 	}
-	toRaster: func ~uv (source: OpenGLUv) -> RasterImage {
-		(buffer, promise) := this toBuffer(source, this _packUv)
+	_toRaster: func ~uv (source: OpenGLUv) -> RasterImage {
+		(buffer, promise) := this _toBuffer(source, this _packUv)
 		promise free()
 		RasterUv new(buffer, source size)
 	}
 	toRaster: override func (source: GpuImage) -> RasterImage {
-		match (source) {
-			case (image : OpenGLMonochrome) =>
-				this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
-			case (image : OpenGLUv) =>
-				this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
-			case => super(source)
-		}
+		result: RasterImage
+		version(optiGraphicbufferupload) {
+			result = match (source) {
+				case (image: OpenGLMonochrome) =>
+					this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
+				case (image: OpenGLUv) =>
+					this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
+				case => super(source)
+			}
+		} else
+			result = super(source)
+		result
 	}
 	toRaster: override func ~target (source: GpuImage, target: RasterImage) -> Promise {
 		result: Promise
-		if (target instanceOf(GraphicBufferYuv420Semiplanar) && source instanceOf(GpuYuv420Semiplanar)) {
-			targetImage := target as GraphicBufferYuv420Semiplanar
-			sourceImage := source as GpuYuv420Semiplanar
-			targetImageRgba := targetImage toRgba(this)
-			targetWidth := sourceImage size x / 4
-			padding := targetImage uvPadding % targetImage stride
-			this packToRgba(sourceImage y, targetImageRgba, IntBox2D new(0, 0, targetWidth, targetImage y size y), padding)
-			this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
-			result = OpenGLPromise new(this)
-			(result as OpenGLPromise) sync()
-			targetImageRgba referenceCount decrease()
+		version(optiGraphicbufferupload) {
+			if (target instanceOf(GraphicBufferYuv420Semiplanar) && source instanceOf(GpuYuv420Semiplanar)) {
+				targetImage := target as GraphicBufferYuv420Semiplanar
+				sourceImage := source as GpuYuv420Semiplanar
+				targetImageRgba := targetImage toRgba(this)
+				targetWidth := sourceImage size x / 4
+				padding := targetImage uvPadding % targetImage stride
+				this packToRgba(sourceImage y, targetImageRgba, IntBox2D new(0, 0, targetWidth, targetImage y size y), padding)
+				this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
+				result = OpenGLPromise new(this)
+				(result as OpenGLPromise) sync()
+				targetImageRgba referenceCount decrease()
+			} else
+				result = super(source, target)
 		} else
 			result = super(source, target)
 		result
 	}
-	toRasterAsync: func ~monochrome (gpuImage: OpenGLMonochrome) -> ToRasterFuture {
-		(buffer, promise) := this toBuffer(gpuImage, this _packMonochrome)
+	_toRasterAsync: func ~monochrome (gpuImage: OpenGLMonochrome) -> ToRasterFuture {
+		(buffer, promise) := this _toBuffer(gpuImage, this _packMonochrome)
 		_FenceToRasterFuture new(RasterMonochrome new(buffer, gpuImage size), promise)
 	}
-	toRasterAsync: func ~uv (gpuImage: OpenGLUv) -> ToRasterFuture {
-		(buffer, promise) := this toBuffer(gpuImage, this _packUv)
+	_toRasterAsync: func ~uv (gpuImage: OpenGLUv) -> ToRasterFuture {
+		(buffer, promise) := this _toBuffer(gpuImage, this _packUv)
 		_FenceToRasterFuture new(RasterUv new(buffer, gpuImage size), promise)
 	}
 	toRasterAsync: override func (gpuImage: GpuImage) -> ToRasterFuture {
 		result: ToRasterFuture
-		aligned := this isAligned(gpuImage size x)
-		if (aligned && gpuImage instanceOf(OpenGLMonochrome))
-			result = this toRasterAsync(gpuImage as OpenGLMonochrome)
-		else if (aligned && gpuImage instanceOf(OpenGLUv))
-			result = this toRasterAsync(gpuImage as OpenGLUv)
-		else
+		version(optiGraphicbufferupload) {
+			aligned := this isAligned(gpuImage size x)
+			if (aligned && gpuImage instanceOf(OpenGLMonochrome))
+				result = this _toRasterAsync(gpuImage as OpenGLMonochrome)
+			else if (aligned && gpuImage instanceOf(OpenGLUv))
+				result = this _toRasterAsync(gpuImage as OpenGLUv)
+			else
+				result = super(gpuImage)
+		} else
 			result = super(gpuImage)
 		result
 	}
-	unpackRgbaToYuv420Semiplanar: func (source: GpuImage, targetSize: IntVector2D, padding := 0) -> GpuYuv420Semiplanar {
+	_unpackRgbaToYuv420Semiplanar: func (source: GpuImage, targetSize: IntVector2D, padding := 0) -> GpuYuv420Semiplanar {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
 		sourceSize := source size
 		transform := FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
