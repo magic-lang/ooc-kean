@@ -43,8 +43,6 @@ OpenGLWindow: class extends GpuCanvas {
 		(this _yuvSemiplanarToRgba, this _monochromeToRgba, this _defaultMap, this _context) free()
 		super()
 	}
-	_bind: virtual func
-	_unbind: virtual func
 	_getDefaultMap: override func (image: Image) -> Map {
 		match (image class) {
 			case GpuYuv420Semiplanar => this _yuvSemiplanarToRgba

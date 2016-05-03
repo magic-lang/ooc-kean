@@ -56,12 +56,12 @@ OpenGLCanvas: class extends GpuCanvas {
 			}
 		}
 		gpuMap use(this _target, projection * view * model, textureTransform)
-		this _bind()
+		this _renderTarget bind()
 		if (drawState mesh)
 			drawState mesh draw()
 		else
 			this context drawQuad()
-		this _unbind()
+		this _renderTarget unbind()
 		if (tempImageA)
 			tempImageA free()
 		if (tempImageB)
@@ -76,18 +76,18 @@ OpenGLCanvas: class extends GpuCanvas {
 		super()
 	}
 	drawLines: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) {
-		this _bind()
+		this _renderTarget bind()
 		this context backend setViewport(IntBox2D new(this size))
 		this context backend disableBlend()
 		this context drawLines(pointList, this _createProjection(this size toFloatVector2D(), 0.0f) * this _toLocal, pen)
-		this _unbind()
+		this _renderTarget unbind()
 	}
 	drawPoints: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) {
-		this _bind()
+		this _renderTarget bind()
 		this context backend setViewport(IntBox2D new(this size))
 		this context backend disableBlend()
 		this context drawPoints(pointList, this _createProjection(this size toFloatVector2D(), 0.0f) * this _toLocal, pen)
-		this _unbind()
+		this _renderTarget unbind()
 	}
 	_createModelTransform: func ~LocalFloat (box: FloatBox2D, focalLength: Float) -> FloatTransform3D {
 		toReference := FloatTransform3D createTranslation((box size x - this size x) / 2, (this size y - box size y) / 2, 0.0f)
@@ -117,14 +117,12 @@ OpenGLCanvas: class extends GpuCanvas {
 			result = FloatTransform3D createScaling(flipX * 2.0f / targetSize x, flipY * 2.0f / targetSize y, 0.0f)
 		result
 	}
-	_bind: func { this _renderTarget bind() }
-	_unbind: func { this _renderTarget unbind() }
 	onRecycle: func { this _renderTarget invalidate() }
 	fill: override func (color: ColorRgba) {
-		this _bind()
+		this _renderTarget bind()
 		this _renderTarget setClearColor(color)
 		this _renderTarget clear()
-		this _unbind()
+		this _renderTarget unbind()
 	}
 	readPixels: func (buffer: ByteBuffer) { this _renderTarget readPixels(buffer) }
 }
