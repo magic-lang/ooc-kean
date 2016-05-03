@@ -57,12 +57,11 @@ RasterCanvas: abstract class extends Canvas {
 		}
 	}
 	drawLines: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) {
-		if (pointList count > 1)
-			for (i in 0 .. pointList count - 1) {
-				start := IntPoint2D new(pointList[i] x, pointList[i] y)
-				end := IntPoint2D new(pointList[i + 1] x, pointList[i + 1] y)
-				this _drawLine(start, end, pen)
-			}
+		for (i in 0 .. pointList count - 1) {
+			start := IntPoint2D new(pointList[i] x, pointList[i] y)
+			end := IntPoint2D new(pointList[i + 1] x, pointList[i + 1] y)
+			this _drawLine(start, end, pen)
+		}
 	}
 	_map: func (point: IntPoint2D) -> IntPoint2D {
 		point + this _size / 2
