@@ -76,29 +76,41 @@ AndroidContext: class extends OpenGLContext {
 		RasterUv new(buffer, source size)
 	}
 	toRaster: override func (source: GpuImage) -> RasterImage {
-		match (source) {
-			case (image : OpenGLMonochrome) =>
-				this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
-			case (image : OpenGLUv) =>
-				this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
-			case => super(source)
+		result: RasterImage
+		version(optiGraphicbufferupload) {
+			result = match (source) {
+				case (image : OpenGLMonochrome) =>
+					this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
+				case (image : OpenGLUv) =>
+					this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
+				case => super(source)
+			}
+		} else {
+			result = super(source)
 		}
+		result
 	}
 	toRaster: override func ~target (source: GpuImage, target: RasterImage) -> Promise {
 		result: Promise
-		if (target instanceOf(GraphicBufferYuv420Semiplanar) && source instanceOf(GpuYuv420Semiplanar)) {
-			targetImage := target as GraphicBufferYuv420Semiplanar
-			sourceImage := source as GpuYuv420Semiplanar
-			targetImageRgba := targetImage toRgba(this)
-			targetWidth := sourceImage size x / 4
-			padding := targetImage uvPadding % targetImage stride
-			this packToRgba(sourceImage y, targetImageRgba, IntBox2D new(0, 0, targetWidth, targetImage y size y), padding)
-			this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
-			result = OpenGLPromise new(this)
-			(result as OpenGLPromise) sync()
-			targetImageRgba referenceCount decrease()
-		} else
+		version(optiGraphicbufferupload) {
+			if (target instanceOf(GraphicBufferYuv420Semiplanar) && source instanceOf(GpuYuv420Semiplanar)) {
+				targetImage := target as GraphicBufferYuv420Semiplanar
+				sourceImage := source as GpuYuv420Semiplanar
+				targetImageRgba := targetImage toRgba(this)
+				targetWidth := sourceImage size x / 4
+				padding := targetImage uvPadding % targetImage stride
+				this packToRgba(sourceImage y, targetImageRgba, IntBox2D new(0, 0, targetWidth, targetImage y size y), padding)
+				this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
+				result = OpenGLPromise new(this)
+				(result as OpenGLPromise) sync()
+				targetImageRgba referenceCount decrease()
+			} else {
+				result = super(source, target)
+			}
+		} else {
 			result = super(source, target)
+		}
+
 		result
 	}
 	toRasterAsync: func ~monochrome (gpuImage: OpenGLMonochrome) -> ToRasterFuture {
@@ -111,13 +123,17 @@ AndroidContext: class extends OpenGLContext {
 	}
 	toRasterAsync: override func (gpuImage: GpuImage) -> ToRasterFuture {
 		result: ToRasterFuture
-		aligned := this isAligned(gpuImage size x)
-		if (aligned && gpuImage instanceOf(OpenGLMonochrome))
-			result = this toRasterAsync(gpuImage as OpenGLMonochrome)
-		else if (aligned && gpuImage instanceOf(OpenGLUv))
-			result = this toRasterAsync(gpuImage as OpenGLUv)
-		else
+		version(optiGraphicbufferupload) {
+			aligned := this isAligned(gpuImage size x)
+			if (aligned && gpuImage instanceOf(OpenGLMonochrome))
+				result = this toRasterAsync(gpuImage as OpenGLMonochrome)
+			else if (aligned && gpuImage instanceOf(OpenGLUv))
+				result = this toRasterAsync(gpuImage as OpenGLUv)
+			else
+				result = super(gpuImage)
+		} else {
 			result = super(gpuImage)
+		}
 		result
 	}
 	unpackRgbaToYuv420Semiplanar: func (source: GpuImage, targetSize: IntVector2D, padding := 0) -> GpuYuv420Semiplanar {
