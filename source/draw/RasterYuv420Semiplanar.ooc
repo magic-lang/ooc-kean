@@ -32,6 +32,11 @@ RasterYuv420SemiplanarCanvas: class extends RasterCanvas {
 		if (this target isValidIn(position x, position y))
 			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toYuv())
 	}
+	fill: override func (color: ColorRgba) {
+		yuv := color toYuv()
+		this target y canvas fill(ColorRgba new(yuv y, 0, 0, 255))
+		this target uv canvas fill(ColorRgba new(yuv u, yuv v, 0, 255))
+	}
 }
 
 RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {

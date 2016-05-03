@@ -40,6 +40,11 @@ RasterUvCanvas: class extends RasterPackedCanvas {
 		if (uv != image)
 			uv referenceCount decrease()
 	}
+	fill: override func (color: ColorRgba) {
+		for (y in 0 .. this size y)
+			for (x in 0 .. this size x)
+				this target[x, y] = ColorUv new(color r, color g)
+	}
 }
 
 RasterUv: class extends RasterPacked {
