@@ -25,10 +25,10 @@ OpenGLCanvas: class extends OpenGLSurface {
 		this context backend setViewport(viewport)
 		focalLengthPerWidth := drawState getFocalLengthNormalized()
 		targetSize := this size toFloatVector2D()
-		gpuMap view = (drawState mesh) ? FloatTransform3D identity : this _createView(targetSize, drawState getTransformNormalized())
-		gpuMap projection = this _createProjection(targetSize, focalLengthPerWidth)
-		gpuMap model = (drawState mesh) ? FloatTransform3D identity : this _createModelTransformNormalized(this size, drawState getDestinationNormalized(), focalLengthPerWidth * this size x)
-		gpuMap textureTransform = This _createTextureTransform(drawState getSourceNormalized())
+		model := (drawState mesh) ? FloatTransform3D identity : this _createModelTransformNormalized(this size, drawState getDestinationNormalized(), focalLengthPerWidth * this size x)
+		view := (drawState mesh) ? FloatTransform3D identity : this _createView(targetSize, drawState getTransformNormalized())
+		projection := this _createProjection(targetSize, focalLengthPerWidth)
+		textureTransform := This _createTextureTransform(drawState getSourceNormalized())
 		if (drawState opacity < 1.0f)
 			this context backend blend(drawState opacity)
 		else if (drawState blendMode == BlendMode Add)
@@ -54,7 +54,7 @@ OpenGLCanvas: class extends OpenGLSurface {
 					gpuMap add("texture0", image)
 			}
 		}
-		gpuMap use(this _target)
+		gpuMap use(this _target, projection * view * model, textureTransform)
 		this _bind()
 		if (drawState mesh)
 			drawState mesh draw()
