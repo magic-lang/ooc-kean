@@ -34,8 +34,8 @@ RasterYuv420SemiplanarCanvas: class extends RasterCanvas {
 	}
 	fill: override func (color: ColorRgba) {
 		yuv := color toYuv()
-		this target y canvas fill(ColorRgba new(yuv y, 0, 0, 255))
-		this target uv canvas fill(ColorRgba new(yuv u, yuv v, 0, 255))
+		this target y fill(ColorRgba new(yuv y, 0, 0, 255))
+		this target uv fill(ColorRgba new(yuv u, yuv v, 0, 255))
 	}
 }
 

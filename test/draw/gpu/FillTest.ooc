@@ -21,7 +21,7 @@ FillTest: class extends Fixture {
 		color := ColorRgba new(134, 176, 31, 0)
 		this add("Fill RGB", func {
 			cpuImage := RasterRgb new(imageSize)
-			cpuImage canvas fill(color)
+			cpuImage fill(color)
 			for (y in 0 .. cpuImage size y)
 				for (x in 0 .. cpuImage size x)
 					expect(cpuImage[x, y] == ColorRgb new(134, 176, 31))
@@ -30,8 +30,8 @@ FillTest: class extends Fixture {
 		this add("Fill RGBA", func {
 			gpuImage := gpuContext createRgba(imageSize)
 			cpuImage := RasterRgba new(imageSize)
-			gpuImage canvas fill(color)
-			cpuImage canvas fill(color)
+			gpuImage fill(color)
+			cpuImage fill(color)
 			gpuToCpuImage := gpuImage toRaster()
 			expect(gpuToCpuImage distance(cpuImage), is equal to(0.0f))
 			expect(cpuImage[7, 7] == color)
@@ -44,8 +44,8 @@ FillTest: class extends Fixture {
 		this add("Fill YUV420Semiplanar", func {
 			gpuImage := gpuContext createYuv420Semiplanar(imageSize)
 			cpuImage := RasterYuv420Semiplanar new(imageSize)
-			gpuImage canvas fill(color)
-			cpuImage canvas fill(color)
+			gpuImage fill(color)
+			cpuImage fill(color)
 			gpuToCpuImage := gpuImage toRaster()
 			expect(gpuToCpuImage distance(cpuImage), is equal to(0.0f))
 			(gpuToCpuImage, cpuImage, gpuImage) free()

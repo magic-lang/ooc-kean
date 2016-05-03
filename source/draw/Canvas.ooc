@@ -35,7 +35,7 @@ Canvas: abstract class {
 	drawPoints: func ~white (pointList: VectorList<FloatPoint2D>) { this drawPoints(pointList, Pen new(ColorRgba white)) }
 	drawPoints: abstract func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen)
 	drawLines: func ~white (pointList: VectorList<FloatPoint2D>) { this drawLines(pointList, Pen new(ColorRgba white)) }
-	drawLines: abstract func ~explicit (lines: VectorList<FloatPoint2D>, pen: Pen)
+	drawLines: abstract func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen)
 	drawBox: virtual func ~white (box: FloatBox2D) { this drawBox(box, Pen new(ColorRgba white)) }
 	drawBox: virtual func ~explicit (box: FloatBox2D, pen: Pen) {
 		positions := VectorList<FloatPoint2D> new()
