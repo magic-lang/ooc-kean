@@ -41,6 +41,11 @@ RasterRgbCanvas: class extends RasterPackedCanvas {
 		if (rgb != image)
 			rgb referenceCount decrease()
 	}
+	fill: override func (color: ColorRgba) {
+		for (y in 0 .. this size y)
+			for (x in 0 .. this size x)
+				this target[x, y] = color toRgb()
+	}
 }
 
 RasterRgb: class extends RasterPacked {

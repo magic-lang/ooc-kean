@@ -40,6 +40,9 @@ RasterMonochromeCanvas: class extends RasterPackedCanvas {
 		if (monochrome != image)
 			monochrome referenceCount decrease()
 	}
+	fill: override func (color: ColorRgba) {
+		this target buffer memset(color r)
+	}
 }
 
 RasterMonochrome: class extends RasterPacked {
