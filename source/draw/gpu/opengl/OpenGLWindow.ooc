@@ -18,18 +18,8 @@ OpenGLWindow: class extends GpuCanvas {
 	context ::= this _context as OpenGLContext
 	drawLines: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) { raise("Cannot draw lines directly to a window.") }
 	drawPoints: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) { raise("Cannot draw lines directly to a window.") }
-	_createModelTransform: func ~LocalFloat (box: FloatBox2D, focalLength: Float) -> FloatTransform3D {
-		toReference := FloatTransform3D createTranslation((box size x - this size x) / 2, (this size y - box size y) / 2, 0.0f)
-		translation := this _toLocal * FloatTransform3D createTranslation(box leftTop x, box leftTop y, focalLength) * this _toLocal
-		translation * toReference * FloatTransform3D createScaling(box size x / 2.0f, box size y / 2.0f, 1.0f)
-	}
-	_createView: func (targetSize: FloatVector2D, normalizedView: FloatTransform3D) -> FloatTransform3D {
-		this _toLocal * normalizedView normalizedToReference(targetSize) * this _toLocal
-	}
-	_createProjection: func (targetSize: FloatVector2D, focalLengthPerWidth: Float) -> FloatTransform3D {
-		flipX := this _coordinateTransform a as Float
-		flipY := -(this _coordinateTransform e as Float)
-		FloatTransform3D createScaling(flipX * 2.0f / targetSize x, flipY * 2.0f / targetSize y, 0.0f)
+	flipMatrix: func -> FloatTransform3D {
+		FloatTransform3D createScaling(this _coordinateTransform a as Float, -(this _coordinateTransform e as Float), 0.0f)
 	}
 	_monochromeToRgba: OpenGLMap
 	_yuvSemiplanarToRgba: OpenGLMapTransform
