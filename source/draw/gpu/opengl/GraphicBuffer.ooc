@@ -35,6 +35,7 @@ GraphicBuffer: class {
 	_backend: Pointer = null
 	_nativeBuffer: Pointer = null
 	_handle: Pointer = null
+	_userData: Pointer = null
 	format ::= this _format
 	size ::= this _size
 	pixelStride ::= this _pixelStride
@@ -48,21 +49,21 @@ GraphicBuffer: class {
 	nativeBuffer ::= this _nativeBuffer
 	handle ::= this _handle
 
-	init: func (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format)
+	init: func (=_backend, =_nativeBuffer, =_handle, =_size, =_pixelStride, =_format, =_userData)
 	init: func ~allocate (size: IntVector2D, format: GraphicBufferFormat, usage: GraphicBufferUsage) {
 		backend, nativeBuffer: Pointer
 		pixelStride: Int
 		This _allocate(size x, size y, format as Int, usage as Int, backend&, nativeBuffer&, pixelStride&)
-		this init(backend, nativeBuffer, null, size, pixelStride, format)
+		this init(backend, nativeBuffer, null, size, pixelStride, format, null)
 	}
 	free: override func {
-		This _free(this _backend)
+		This _free(this _backend, this _userData)
 		super()
 	}
 	shallowCopy: func (size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat, usage: GraphicBufferUsage) -> This {
 		backend, nativeBuffer: Pointer
 		This _createFromHandle(size x, size y, format as Int, usage as Int, pixelStride, this _handle, false, backend&, nativeBuffer&)
-		This new(backend, nativeBuffer, this handle, size, pixelStride, format)
+		This new(backend, nativeBuffer, this handle, size, pixelStride, format, this _userData)
 	}
 	lock: func (usage: GraphicBufferUsage) -> Pointer {
 		result: Pointer = null
@@ -72,7 +73,7 @@ GraphicBuffer: class {
 	unlock: func { This _unlock(this _backend) }
 	_allocate: static Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
 	_createFromHandle: static Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
-	_free: static Func (Pointer)
+	_free: static Func (Pointer, Pointer)
 	_lock: static Func (Pointer, Int, Pointer*)
 	_unlock: static Func (Pointer)
 	_alignedWidth: static Int[] = Int[0] new()
