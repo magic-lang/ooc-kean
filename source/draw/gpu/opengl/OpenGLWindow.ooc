@@ -13,7 +13,14 @@ use opengl
 use base
 
 version(!gpuOff) {
-OpenGLWindow: class extends OpenGLSurface {
+OpenGLWindow: class extends GpuCanvas {
+	_toLocal := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
+	context ::= this _context as OpenGLContext
+	drawLines: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) { raise("Cannot draw lines directly to a window.") }
+	drawPoints: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) { raise("Cannot draw lines directly to a window.") }
+	flipMatrix: func -> FloatTransform3D {
+		FloatTransform3D createScaling(this _coordinateTransform a as Float, -(this _coordinateTransform e as Float), 0.0f)
+	}
 	_monochromeToRgba: OpenGLMap
 	_yuvSemiplanarToRgba: OpenGLMapTransform
 	init: func (windowSize: IntVector2D, display: Pointer, nativeBackend: Long) {
@@ -26,8 +33,6 @@ OpenGLWindow: class extends OpenGLSurface {
 		(this _yuvSemiplanarToRgba, this _monochromeToRgba, this _defaultMap, this _context) free()
 		super()
 	}
-	_bind: override func
-	_unbind: override func
 	_getDefaultMap: override func (image: Image) -> Map {
 		match (image class) {
 			case GpuYuv420Semiplanar => this _yuvSemiplanarToRgba
