@@ -15,13 +15,13 @@ import backend/GLTexture
 
 version(!gpuOff) {
 OpenGLMonochrome: class extends OpenGLPacked {
-	init: func ~fromPixels (size: IntVector2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
-		super(context _backend createTexture(TextureType Monochrome, size, stride, data), This channelCount, context, coordinateSystem)
+	init: func ~fromPixels (size: IntVector2D, stride: UInt, data: Pointer, context: OpenGLContext) {
+		super(context _backend createTexture(TextureType Monochrome, size, stride, data), This channelCount, context)
 	}
-	init: func (size: IntVector2D, context: OpenGLContext) { this init(size, size x, null, CoordinateSystem YUpward, context) }
+	init: func (size: IntVector2D, context: OpenGLContext) { this init(size, size x, null, context) }
 	init: func ~fromTexture (texture: GLTexture, context: OpenGLContext) { super(texture, This channelCount, context) }
 	init: func ~fromRaster (rasterImage: RasterMonochrome, context: OpenGLContext) {
-		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
+		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
 	}
 	toRasterDefault: override func -> RasterImage {
 		result := RasterMonochrome new(this size)

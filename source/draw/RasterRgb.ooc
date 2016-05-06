@@ -150,8 +150,8 @@ RasterRgb: class extends RasterPacked {
 	operator [] (x, y: Int) -> ColorRgb { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorRgb* + x)@ : ColorRgb new(0, 0, 0) }
 	operator []= (x, y: Int, value: ColorRgb) { ((this buffer pointer + y * this stride) as ColorRgb* + x)@ = value }
 
-	open: static func (filename: String, coordinateSystem := CoordinateSystem Default) -> This {
-		rgba := RasterRgba open(filename, coordinateSystem)
+	open: static func (filename: String) -> This {
+		rgba := RasterRgba open(filename)
 		result := This convertFrom(rgba)
 		rgba referenceCount decrease()
 		result

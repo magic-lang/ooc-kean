@@ -22,19 +22,12 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 	target ::= this _target as RasterPacked
 	init: func (image: RasterPacked) { super(image) }
 	_resizePacked: func <T> (sourceBuffer: T*, source: RasterPacked, sourceBox, resultBox: IntBox2D, interpolate: Bool) {
-		if (this target size == source size && this target stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0 && source coordinateSystem == this target coordinateSystem)
+		if (this target size == source size && this target stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0)
 			memcpy(this target buffer pointer, sourceBuffer, this target stride * this target height)
 		else if (interpolate)
 			This _resizeBilinear(source, this target, sourceBox, resultBox)
 		else
 			This _resizeNearestNeighbour(sourceBuffer, this target buffer pointer as T*, source, this target, sourceBox, resultBox)
-	}
-	_transformCoordinates: static func (column, row, width, height: Int, coordinateSystem: CoordinateSystem) -> (Int, Int) {
-		if ((coordinateSystem & CoordinateSystem XLeftward) != 0)
-			column = width - column - 1
-		if ((coordinateSystem & CoordinateSystem YUpward) != 0)
-			row = height - row - 1
-		(column, row)
 	}
 	_resizeNearestNeighbour: static func <T> (sourceBuffer, resultBuffer: T*, source, target: RasterPacked, sourceBox, resultBox: IntBox2D) {
 		bytesPerPixel := target bytesPerPixel
@@ -49,8 +42,8 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 			sourceRow := (sourceHeight * row) / resultHeight + sourceStartRow
 			for (column in 0 .. resultWidth) {
 				sourceColumn := (sourceWidth * column) / resultWidth + sourceStartColumn
-				(resultColumnTransformed, resultRowTransformed) := This _transformCoordinates(column + resultStartColumn, row + resultStartRow, target width, target height, target coordinateSystem)
-				(sourceColumnTransformed, sourceRowTransformed) := This _transformCoordinates(sourceColumn, sourceRow, source width, source height, source coordinateSystem)
+				(resultColumnTransformed, resultRowTransformed) := (column + resultStartColumn, row + resultStartRow)
+				(sourceColumnTransformed, sourceRowTransformed) := (sourceColumn, sourceRow)
 				resultBuffer[resultColumnTransformed + resultStride * resultRowTransformed] = sourceBuffer[sourceColumnTransformed + sourceStride * sourceRowTransformed]
 			}
 		}
@@ -76,8 +69,8 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 				weightRight := sourceColumn - sourceColumnLeft as Float
 				if (sourceColumnLeft + 1 >= sourceWidth)
 					weightRight = 0.0f
-				(resultColumnTransformed, resultRowTransformed) := This _transformCoordinates(column + resultStartColumn, row + resultStartRow, target width, target height, target coordinateSystem)
-				(sourceColumnLeftTransformed, sourceRowUpTransformed) := This _transformCoordinates(sourceColumnLeft, sourceRowUp, source width, source height, source coordinateSystem)
+				(resultColumnTransformed, resultRowTransformed) := (column + resultStartColumn, row + resultStartRow)
+				(sourceColumnLeftTransformed, sourceRowUpTransformed) := (sourceColumnLeft, sourceRowUp)
 				(topLeft, topRight) := ((1.0f - weightDown) * (1.0f - weightRight), (1.0f - weightDown) * weightRight)
 				(bottomLeft, bottomRight) := (weightDown * (1.0f - weightRight), weightDown * weightRight)
 				This _blendSquare(sourceBuffer, resultBuffer, sourceStride, resultStride, sourceRowUpTransformed, sourceColumnLeftTransformed, resultRowTransformed, resultColumnTransformed, topLeft, topRight, bottomLeft, bottomRight, bytesPerPixel)
@@ -102,8 +95,8 @@ RasterPacked: abstract class extends RasterImage {
 	buffer ::= this _buffer
 	stride ::= this _stride
 	bytesPerPixel: Int { get }
-	init: func (=_buffer, size: IntVector2D, =_stride, coordinateSystem := CoordinateSystem Default) {
-		super(size, coordinateSystem)
+	init: func (=_buffer, size: IntVector2D, =_stride) {
+		super(size)
 		this _buffer referenceCount increase()
 	}
 	init: func ~allocateStride (size: IntVector2D, stride: UInt) { this init(ByteBuffer new(stride * size y), size, stride) }

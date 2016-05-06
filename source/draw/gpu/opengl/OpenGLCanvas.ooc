@@ -68,7 +68,7 @@ OpenGLCanvas: class extends GpuCanvas {
 			tempImageB free()
 	}
 	init: func (=_target, context: OpenGLContext) {
-		super(this _target size, context, context defaultMap, IntTransform2D identity)
+		super(this _target size, context, context defaultMap)
 		this _renderTarget = context _backend createFramebufferObject(this _target _backend as GLTexture, this _target size)
 	}
 	free: override func {
@@ -103,8 +103,8 @@ OpenGLCanvas: class extends GpuCanvas {
 	_createProjection: func (targetSize: FloatVector2D, focalLengthPerWidth: Float) -> FloatTransform3D {
 		result: FloatTransform3D
 		focalLengthPerHeight := focalLengthPerWidth * targetSize x / targetSize y
-		flipX := this _coordinateTransform a as Float
-		flipY := -(this _coordinateTransform e as Float)
+		flipX := 1.0f
+		flipY := -1.0f
 		if (focalLengthPerWidth > 0.0f) {
 			nearPlane := 0.01f
 			farPlane := 12500.0f

@@ -17,8 +17,7 @@ version(!gpuOff) {
 GpuCanvas: abstract class extends Canvas {
 	_context: GpuContext
 	_defaultMap: Map
-	_coordinateTransform := IntTransform2D identity
-	init: func (size: IntVector2D, =_context, =_defaultMap, =_coordinateTransform) { super(size) }
+	init: func (size: IntVector2D, =_context, =_defaultMap) { super(size) }
 	_getDefaultMap: virtual func (image: Image) -> Map { this _defaultMap }
 	_createTextureTransform: static func ~LocalInt (imageSize: IntVector2D, box: IntBox2D) -> FloatTransform3D {
 		This _createTextureTransform(imageSize toFloatVector2D(), box toFloatBox2D())

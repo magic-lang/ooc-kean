@@ -123,7 +123,7 @@ AndroidContext: class extends OpenGLContext {
 	unpackRgbaToYuv420Semiplanar: func (source: GpuImage, targetSize: IntVector2D, padding := 0) -> GpuYuv420Semiplanar {
 		target := this createYuv420Semiplanar(targetSize) as GpuYuv420Semiplanar
 		sourceSize := source size
-		transform := FloatTransform3D createScaling(source transform a, -source transform e, 1.0f)
+		transform := FloatTransform3D identity
 		yMap: Map = this _unpackRgbaToMonochrome
 		uvMap: Map = this _unpackRgbaToUv
 		if (padding > 0) {

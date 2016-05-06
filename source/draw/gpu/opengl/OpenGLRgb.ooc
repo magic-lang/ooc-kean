@@ -15,14 +15,14 @@ import OpenGLCanvas, OpenGLPacked, OpenGLContext
 
 version(!gpuOff) {
 OpenGLRgb: class extends OpenGLPacked {
-	init: func (size: IntVector2D, stride: UInt, data: Pointer, coordinateSystem: CoordinateSystem, context: OpenGLContext) {
-		super(context _backend createTexture(TextureType Rgb, size, stride, data, true), This channelCount, context, coordinateSystem)
+	init: func (size: IntVector2D, stride: UInt, data: Pointer, context: OpenGLContext) {
+		super(context _backend createTexture(TextureType Rgb, size, stride, data, true), This channelCount, context)
 	}
 	init: func ~empty (size: IntVector2D, context: OpenGLContext) {
-		this init(size, size x * This channelCount, null, CoordinateSystem YUpward, context)
+		this init(size, size x * This channelCount, null, context)
 	}
 	init: func ~fromRaster (rasterImage: RasterRgb, context: OpenGLContext) {
-		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, rasterImage coordinateSystem, context)
+		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
 	}
 	toRasterDefault: override func -> RasterImage { Debug error("toRasterDefault not implemented for RGB"); null }
 	toRasterDefault: override func ~target (target: RasterImage) { Debug error("toRasterDefault~target not implemented for RGB") }

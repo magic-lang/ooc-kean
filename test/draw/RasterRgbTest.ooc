@@ -78,48 +78,6 @@ RasterRgbTest: class extends Fixture {
 			(image, image2) referenceCount decrease()
 			outputFast free()
 		})
-		this add("coordinate systems", func {
-			output := "test/draw/output/coordinateswap.png"
-			image := RasterRgb open(this sourceSpace)
-			image2 := image copy()
-
-			image referenceCount decrease()
-			image = RasterRgb open(this sourceSpace, CoordinateSystem YUpward)
-			DrawState new(image2) setInputImage(image) setInterpolate(false) draw()
-			for (row in 0 .. image2 height)
-				for (column in 0 .. image2 width)
-					expect(image2[column, row] == image[column, image height - row - 1])
-
-			image referenceCount decrease()
-			image = RasterRgb open(this sourceSpace)
-			image2 save(output) . free()
-			image2 = RasterRgb open(output, CoordinateSystem XLeftward | CoordinateSystem YUpward)
-			DrawState new(image2) setInputImage(image) setInterpolate(false) draw()
-			for (row in 0 .. image2 height)
-				for (column in 0 .. image2 width)
-					expect(image2[column, row] == image[image width - column - 1, image height - row - 1])
-
-			image referenceCount decrease()
-			image = RasterRgb open(this sourceSpace, CoordinateSystem XLeftward)
-			image2 save(output) . free()
-			image2 = RasterRgb open(output)
-			DrawState new(image2) setInputImage(image) setInterpolate(false) draw()
-			for (row in 0 .. image2 height)
-				for (column in 0 .. image2 width)
-					expect(image2[column, row] == image[image width - column - 1, row])
-
-			image referenceCount decrease()
-			image = RasterRgb open(this sourceSpace)
-			image2 save(output) . free()
-			image2 = RasterRgb open(output, CoordinateSystem XRightward | CoordinateSystem YDownward)
-			DrawState new(image2) setInputImage(image) setInterpolate(false) draw()
-			for (row in 0 .. image2 height)
-				for (column in 0 .. image2 width)
-					expect(image2[column, row] == image[column, row])
-
-			(image, image2) referenceCount decrease()
-			output free()
-		})
 	}
 }
 
