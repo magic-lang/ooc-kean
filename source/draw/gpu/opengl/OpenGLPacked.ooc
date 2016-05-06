@@ -42,6 +42,7 @@ OpenGLPacked: abstract class extends GpuImage {
 	upload: override func (image: RasterImage) {
 		if (image instanceOf(RasterPacked)) {
 			raster := image as RasterPacked
+			this _coordinateSystem = raster coordinateSystem
 			this _backend upload(raster buffer pointer, raster stride)
 		}
 	}

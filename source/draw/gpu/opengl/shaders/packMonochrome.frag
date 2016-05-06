@@ -1,4 +1,3 @@
-#version 300 es
 precision mediump float;
 uniform sampler2D texture0;
 in highp vec2 fragmentTextureCoordinate[4];

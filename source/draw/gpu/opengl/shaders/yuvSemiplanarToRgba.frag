@@ -1,7 +1,8 @@
-#version 300 es
 precision highp float;
 uniform sampler2D texture0;
+uniform vec4 flip_texture0;
 uniform sampler2D texture1;
+uniform vec4 flip_texture1;
 in vec2 fragmentTextureCoordinate;
 out vec4 outColor;
 vec4 YuvToRgba(vec4 t) {
@@ -12,7 +13,7 @@ vec4 YuvToRgba(vec4 t) {
 	return matrix * t;
 }
 void main() {
-	float y = texture(texture0, fragmentTextureCoordinate).r;
-	vec2 uv = texture(texture1, fragmentTextureCoordinate).rg;
+	float y = SAMPLE(texture0, flip_texture0, fragmentTextureCoordinate).r;
+	vec2 uv = SAMPLE(texture1, flip_texture1, fragmentTextureCoordinate).rg;
 	outColor = YuvToRgba(vec4(y, uv.r - 0.5f, uv.g - 0.5f, 1.0f));
 }
