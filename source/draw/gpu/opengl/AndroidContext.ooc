@@ -27,16 +27,14 @@ AndroidContext: class extends OpenGLContext {
 		super()
 	}
 	createImage: override func (rasterImage: RasterImage) -> GpuImage {
-		result: GpuImage
-		if (rasterImage instanceOf(GraphicBufferYuv420Semiplanar)) {
-			graphicBufferImage := rasterImage as GraphicBufferYuv420Semiplanar
-			rgba := graphicBufferImage toRgba(this)
-			result = this _unpackRgbaToYuv420Semiplanar(rgba, rasterImage size, graphicBufferImage uvPadding % graphicBufferImage stride)
-			rgba referenceCount decrease()
+		match(rasterImage) {
+			case (graphicBufferImage: GraphicBufferYuv420Semiplanar) =>
+				rgba := graphicBufferImage toRgba(this)
+				result := this _unpackRgbaToYuv420Semiplanar(rgba, rasterImage size, graphicBufferImage uvPadding % graphicBufferImage stride)
+				rgba referenceCount decrease()
+				result
+			case => super(rasterImage)
 		}
-		else
-			result = super(rasterImage)
-		result
 	}
 	_recyclePacker: func (packer: EGLRgba) { this _packers add(packer) }
 	_getPacker: func (size: IntVector2D) -> EGLRgba {
@@ -71,15 +69,13 @@ AndroidContext: class extends OpenGLContext {
 		RasterUv new(buffer, source size)
 	}
 	toRaster: override func (source: GpuImage) -> RasterImage {
-		result: RasterImage
-		result = match (source) {
+		match (source) {
 			case (image: OpenGLMonochrome) =>
 				this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
 			case (image: OpenGLUv) =>
 				this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
 			case => super(source)
 		}
-		result
 	}
 	toRaster: override func ~target (source: GpuImage, target: RasterImage) -> Promise {
 		result: Promise
