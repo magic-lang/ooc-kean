@@ -84,8 +84,8 @@ FloatBox2D: cover {
 	intersection: func (other: This) -> This {
 		left := this left maximum(other left)
 		top := this top maximum(other top)
-		width := 0 maximum(this right minimum(other right) - left)
-		height := 0 maximum(this bottom minimum(other bottom) - top)
+		width := 0.f maximum(this right minimum(other right) - left)
+		height := 0.f maximum(this bottom minimum(other bottom) - top)
 		This new(left, top, width, height)
 	}
 	union: func ~box (other: This) -> This { // Rock bug: Union without suffix cannot be used because the C name conflicts with keyword "union"
