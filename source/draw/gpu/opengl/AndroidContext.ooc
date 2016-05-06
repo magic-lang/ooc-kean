@@ -28,16 +28,13 @@ AndroidContext: class extends OpenGLContext {
 	}
 	createImage: override func (rasterImage: RasterImage) -> GpuImage {
 		result: GpuImage
-		version (optiGraphicbufferupload) {
-			if (rasterImage instanceOf(GraphicBufferYuv420Semiplanar)) {
-				graphicBufferImage := rasterImage as GraphicBufferYuv420Semiplanar
-				rgba := graphicBufferImage toRgba(this)
-				result = this _unpackRgbaToYuv420Semiplanar(rgba, rasterImage size, graphicBufferImage uvPadding % graphicBufferImage stride)
-				rgba referenceCount decrease()
-			}
-			else
-				result = super(rasterImage)
-		} else
+		if (rasterImage instanceOf(GraphicBufferYuv420Semiplanar)) {
+			graphicBufferImage := rasterImage as GraphicBufferYuv420Semiplanar
+			rgba := graphicBufferImage toRgba(this)
+			result = this _unpackRgbaToYuv420Semiplanar(rgba, rasterImage size, graphicBufferImage uvPadding % graphicBufferImage stride)
+			rgba referenceCount decrease()
+		}
+		else
 			result = super(rasterImage)
 		result
 	}
@@ -75,34 +72,28 @@ AndroidContext: class extends OpenGLContext {
 	}
 	toRaster: override func (source: GpuImage) -> RasterImage {
 		result: RasterImage
-		version(optiGraphicbufferupload) {
-			result = match (source) {
-				case (image: OpenGLMonochrome) =>
-					this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
-				case (image: OpenGLUv) =>
-					this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
-				case => super(source)
-			}
-		} else
-			result = super(source)
+		result = match (source) {
+			case (image: OpenGLMonochrome) =>
+				this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
+			case (image: OpenGLUv) =>
+				this isAligned(image channels * image size x) ? this toRaster(image) : super(image)
+			case => super(source)
+		}
 		result
 	}
 	toRaster: override func ~target (source: GpuImage, target: RasterImage) -> Promise {
 		result: Promise
-		version(optiGraphicbufferupload) {
-			if (target instanceOf(GraphicBufferYuv420Semiplanar) && source instanceOf(GpuYuv420Semiplanar)) {
-				targetImage := target as GraphicBufferYuv420Semiplanar
-				sourceImage := source as GpuYuv420Semiplanar
-				targetImageRgba := targetImage toRgba(this)
-				targetWidth := sourceImage size x / 4
-				padding := targetImage uvPadding % targetImage stride
-				this packToRgba(sourceImage y, targetImageRgba, IntBox2D new(0, 0, targetWidth, targetImage y size y), padding)
-				this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
-				result = OpenGLPromise new(this)
-				(result as OpenGLPromise) sync()
-				targetImageRgba referenceCount decrease()
-			} else
-				result = super(source, target)
+		if (target instanceOf(GraphicBufferYuv420Semiplanar) && source instanceOf(GpuYuv420Semiplanar)) {
+			targetImage := target as GraphicBufferYuv420Semiplanar
+			sourceImage := source as GpuYuv420Semiplanar
+			targetImageRgba := targetImage toRgba(this)
+			targetWidth := sourceImage size x / 4
+			padding := targetImage uvPadding % targetImage stride
+			this packToRgba(sourceImage y, targetImageRgba, IntBox2D new(0, 0, targetWidth, targetImage y size y), padding)
+			this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
+			result = OpenGLPromise new(this)
+			(result as OpenGLPromise) sync()
+			targetImageRgba referenceCount decrease()
 		} else
 			result = super(source, target)
 		result
@@ -117,15 +108,12 @@ AndroidContext: class extends OpenGLContext {
 	}
 	toRasterAsync: override func (gpuImage: GpuImage) -> ToRasterFuture {
 		result: ToRasterFuture
-		version(optiGraphicbufferupload) {
-			aligned := this isAligned(gpuImage size x)
-			if (aligned && gpuImage instanceOf(OpenGLMonochrome))
-				result = this _toRasterAsync(gpuImage as OpenGLMonochrome)
-			else if (aligned && gpuImage instanceOf(OpenGLUv))
-				result = this _toRasterAsync(gpuImage as OpenGLUv)
-			else
-				result = super(gpuImage)
-		} else
+		aligned := this isAligned(gpuImage size x)
+		if (aligned && gpuImage instanceOf(OpenGLMonochrome))
+			result = this _toRasterAsync(gpuImage as OpenGLMonochrome)
+		else if (aligned && gpuImage instanceOf(OpenGLUv))
+			result = this _toRasterAsync(gpuImage as OpenGLUv)
+		else
 			result = super(gpuImage)
 		result
 	}
