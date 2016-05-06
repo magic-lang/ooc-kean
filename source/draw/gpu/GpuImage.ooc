@@ -21,7 +21,11 @@ GpuImage: abstract class extends Image {
 			this _canvas = this _createCanvas() as GpuCanvas
 		this _canvas as GpuCanvas
 	}}
-	init: func (size: IntVector2D, =_context, coordinateSystem := CoordinateSystem Default) { super(size, coordinateSystem) }
+	souceFlip ::= FloatVector2D new(((this coordinateSystem & CoordinateSystem XLeftward) > 0) ? -1.0f : 1.0f, ((this coordinateSystem & CoordinateSystem YUpward) > 0) ? -1.0f : 1.0f)
+	souceOffset ::= FloatVector2D new(((this coordinateSystem & CoordinateSystem XLeftward) > 0) ? 1.0f : 0.0f, ((this coordinateSystem & CoordinateSystem YUpward) > 0) ? 1.0f : 0.0f)
+	init: func (size: IntVector2D, =_context, coordinateSystem := CoordinateSystem Default) {
+		super(size, coordinateSystem)
+	}
 	resizeTo: override func (size: IntVector2D) -> This {
 		result := this create(size) as This
 		DrawState new(result) setInputImage(this) draw()

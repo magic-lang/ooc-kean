@@ -31,8 +31,8 @@ OpenGLMap: class extends Map {
 	_context: OpenGLContext
 	init: func (vertexSource: String, fragmentSource: String, context: OpenGLContext) {
 		super()
-		this _vertexSource = vertexSource
-		this _fragmentSource = fragmentSource
+		this _vertexSource = "#version 300 es\n#define FLIP(TRANSFORM, UV) ((UV) * (TRANSFORM).xy) + (TRANSFORM).zw\n" + vertexSource
+		this _fragmentSource = "#version 300 es\n#define FLIP(TRANSFORM, UV) ((UV) * (TRANSFORM).xy) + (TRANSFORM).zw\n#define SAMPLE(TEXTURE, TRANSFORM, UV) texture(TEXTURE, FLIP(TRANSFORM, UV))\n" + fragmentSource
 		this _context = context
 		this _program = GLShaderProgram[context getMaxContexts()] new()
 		if (vertexSource == null || fragmentSource == null)
@@ -45,6 +45,7 @@ OpenGLMap: class extends Map {
 				this _program[i] free()
 		}
 		this _program free()
+		(this _vertexSource, this _fragmentSource) free()
 		super()
 	}
 	use: override func (forbiddenInput: Pointer, positionTransform, textureTransform: FloatTransform3D) {
@@ -83,6 +84,7 @@ OpenGLMap: class extends Map {
 								raise("Input image " + key + " is also the target.")
 						image backend bind(textureCount)
 						program setUniform(key, textureCount)
+						program setUniform("flip_" + key, image souceFlip x, image souceFlip y, image souceOffset x, image souceOffset y)
 						textureCount += 1
 					case image: OpenGLVolumeMonochrome =>
 						image _backend bind(textureCount)

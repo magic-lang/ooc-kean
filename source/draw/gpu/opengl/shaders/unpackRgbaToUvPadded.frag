@@ -1,6 +1,6 @@
-#version 300 es
 precision mediump float;
 uniform sampler2D texture0;
+uniform vec4 flip_texture0;
 uniform int targetWidth;
 uniform float rowUnit;
 uniform float paddingOffset;
@@ -12,7 +12,7 @@ void main() {
 		shiftedCoor = vec2(fract(shiftedCoor.x), shiftedCoor.y + rowUnit);
 	}
 	int pixelIndex = int(float(targetWidth) * shiftedCoor.x) % 2;
-	vec4 texel = texture(texture0, shiftedCoor.xy);
+	vec4 texel = SAMPLE(texture0, flip_texture0, shiftedCoor.xy);
 	vec2 mask = vec2(float(1 - pixelIndex), float(pixelIndex));
 	outColor = vec2(mask.x * texel.r + mask.y * texel.b, mask.x * texel.g + mask.y * texel.a);
 }

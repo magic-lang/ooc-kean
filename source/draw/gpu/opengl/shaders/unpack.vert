@@ -1,4 +1,3 @@
-#version 300 es
 precision mediump float;
 uniform float startY;
 uniform float scaleX;
