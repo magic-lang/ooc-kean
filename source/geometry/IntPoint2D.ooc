@@ -23,7 +23,7 @@ IntPoint2D: cover {
 	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
 	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x as Float, this y as Float) }
-	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
+	toString: func -> String { (this x toString() >> ", ") & this y toString() }
 	toText: func -> Text { this x toText() + t", " + this y toText() }
 
 	operator - -> This { This new(-this x, -this y) }

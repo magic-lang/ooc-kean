@@ -122,7 +122,7 @@ FloatBox2D: cover {
 		newSize := FloatVector2D linearInterpolation(this size, other size, weight)
 		This createAround(newCenter, newSize)
 	}
-	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
+	toString: func -> String { (this leftTop toString() >> ", ") & this size toString() }
 	toText: func -> Text { this leftTop toText() + t", " + this size toText() }
 	toIntBox2D: func -> IntBox2D { IntBox2D new(this left, this top, this width, this height) }
 
