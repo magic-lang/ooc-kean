@@ -53,14 +53,15 @@ SynchronizedQueueTest: class extends Fixture {
 		this add("multiple threads", This _testMultipleThreads)
 		this add("multiple threads (class)", This _testMultipleThreadsWithClass)
 		this add("clear and empty", func {
-			queue := SynchronizedQueue<Cell<ULong>> new()
+			queue := SynchronizedQueue<Int> new()
 			for (i in 0 .. 10) {
-				queue enqueue(Cell<ULong> new(i))
+				queue enqueue(i)
 				expect(queue count, is equal to(i + 1))
 			}
 			expect(queue empty, is false)
 			queue clear()
 			expect(queue empty, is true)
+			queue free()
 		})
 	}
 	_testMultipleThreads: static func {

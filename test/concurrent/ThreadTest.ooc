@@ -84,6 +84,7 @@ ThreadTest: class extends Fixture {
 		otherId free()
 		(job as Closure) free()
 		expect(myId equals(Thread currentThreadId()), is true)
+		(thisThreadInstance, otherThreadInstance) free()
 	}
 	_timedJoin: static func {
 		job := func {
