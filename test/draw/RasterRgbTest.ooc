@@ -78,6 +78,39 @@ RasterRgbTest: class extends Fixture {
 			(image, image2) referenceCount decrease()
 			outputFast free()
 		})
+		this add("flipping", func {
+			output := "test/draw/output/coordinateswap.png"
+			image := RasterRgb open(this sourceSpace)
+			image2 := image copy()
+
+			image referenceCount decrease()
+			image = RasterRgb open(this sourceSpace)
+			DrawState new(image2) setInputImage(image) setFlipSourceY(true) setInterpolate(false) draw()
+			for (row in 0 .. image2 height)
+				for (column in 0 .. image2 width)
+					expect(image2[column, row] == image[column, image height - row - 1])
+
+			image referenceCount decrease()
+			image = RasterRgb open(this sourceSpace)
+			image2 save(output) . free()
+			image2 = RasterRgb open(output)
+			DrawState new(image2) setInputImage(image) setFlipSourceX(true) setFlipSourceY(true) setInterpolate(false) draw()
+			for (row in 0 .. image2 height)
+				for (column in 0 .. image2 width)
+					expect(image2[column, row] == image[image width - column - 1, image height - row - 1])
+
+			image referenceCount decrease()
+			image = RasterRgb open(this sourceSpace)
+			image2 save(output) . free()
+			image2 = RasterRgb open(output)
+			DrawState new(image2) setInputImage(image) setFlipSourceX(true) setInterpolate(false) draw()
+			for (row in 0 .. image2 height)
+				for (column in 0 .. image2 width)
+					expect(image2[column, row] == image[image width - column - 1, row])
+
+			(image, image2) referenceCount decrease()
+			output free()
+		})
 	}
 }
 

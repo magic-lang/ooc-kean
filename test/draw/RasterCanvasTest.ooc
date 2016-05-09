@@ -99,6 +99,22 @@ RasterCanvasTest: class extends Fixture {
 			(original, image) referenceCount decrease()
 			output free()
 		})
+		this add("draw rgb image", func {
+			inputSpace := "test/draw/input/Space.png"
+			output := "test/draw/output/RasterCanvas_drawYUVonRGB.png"
+			imageFlower := RasterYuv420Semiplanar open(this inputFlower)
+			outputImage := RasterRgb open(inputSpace)
+			DrawState new(outputImage) setInputImage(imageFlower) setViewport(IntBox2D new(20, 30, 100, 250)) setInterpolate(true) draw()
+			imageFlowerYUpward := RasterYuv420Semiplanar open(this inputFlower)
+			DrawState new(outputImage) setInputImage(imageFlowerYUpward) setFlipSourceY(true) setViewport(IntBox2D new(130, 30, 100, 250)) setInterpolate(true) draw()
+			imageFlowerXLeftward := RasterYuv420Semiplanar open(this inputFlower)
+			DrawState new(outputImage) setInputImage(imageFlowerXLeftward) setFlipSourceX(true) setViewport(IntBox2D new(240, 30, 100, 250)) setInterpolate(false) draw()
+			imageFlowerXLeftwardYUpward := RasterYuv420Semiplanar open(this inputFlower)
+			DrawState new(outputImage) setInputImage(imageFlowerXLeftwardYUpward) setFlipSourceX(true) setFlipSourceY(true) setViewport(IntBox2D new(350, 30, 100, 250)) setInterpolate(false) draw()
+			outputImage save(output)
+			(imageFlower, imageFlowerYUpward, imageFlowerXLeftward, imageFlowerXLeftwardYUpward, outputImage) referenceCount decrease()
+			(inputSpace, output) free()
+		})
 		this add("draw uv image", func {
 			output := "test/draw/output/RasterCanvas_drawRGBonUV.png"
 			inputSpace := "test/draw/input/Space.png"

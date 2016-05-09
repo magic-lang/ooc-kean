@@ -44,6 +44,24 @@ GpuImageReflectionTest: class extends Fixture {
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
+		this add("GPU flip X (RGBA)", func {
+			correctImage := RasterRgba open("test/draw/gpu/correct/reflection_rgba_X.png")
+			gpuImage := gpuContext createRgba(this sourceImage size)
+			gpuImage fill(ColorRgba black)
+			DrawState new(gpuImage) setFlipSourceX(true) setInputImage(this sourceImage) draw()
+			rasterFromGpu := gpuImage toRaster()
+			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			(correctImage, gpuImage, rasterFromGpu) free()
+		})
+		this add("GPU flip Y (RGBA)", func {
+			correctImage := RasterRgba open("test/draw/gpu/correct/reflection_rgba_Y.png")
+			gpuImage := gpuContext createRgba(this sourceImage size)
+			gpuImage fill(ColorRgba black)
+			DrawState new(gpuImage) setFlipSourceY(true) setInputImage(this sourceImage) draw()
+			rasterFromGpu := gpuImage toRaster()
+			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			(correctImage, gpuImage, rasterFromGpu) free()
+		})
 	}
 	free: override func {
 		this sourceImage free()
