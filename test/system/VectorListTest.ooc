@@ -10,6 +10,8 @@ use unit
 use collections
 
 VectorListTest: class extends Fixture {
+	staticlist: static VectorList<Int>
+	count: static Int = 0
 	init: func {
 		super("VectorList")
 		tolerance := 0.00001f
@@ -95,9 +97,8 @@ VectorListTest: class extends Fixture {
 		})
 		this add("VectorList getFirstElements", func {
 			list := VectorList<Int> new()
-			list add(0)
-			list add(1)
-			list add(2)
+			list add(0) . add(1) . add(2)
+
 			firstResult := list getFirstElements(2)
 			secondResult := firstResult getFirstElements(5)
 			expect(secondResult count, is equal to(2))
@@ -107,10 +108,8 @@ VectorListTest: class extends Fixture {
 		})
 		this add("VectorList getElements", func {
 			list := VectorList<Int> new()
-			list add(0)
-			list add(1)
-			list add(2)
-			list add(3)
+			list add(0) . add(1) . add(2) . add(3)
+
 			indices := VectorList<Int> new()
 			indices add(1)
 			indices add(2)
@@ -137,34 +136,24 @@ VectorListTest: class extends Fixture {
 			(list, slice, sliceInto) free()
 		})
 		this add("VectorList apply", func {
-			list := VectorList<Int> new()
-			list add(0)
-			list add(1)
-			list add(2)
-			c := 0
-			list apply(|value|
-				expect(value, is equal to(c))
-				c += 1)
-			list free()
+			This staticlist = VectorList<Int> new()
+			This staticlist add(0) . add(1) . add(2)
+			This staticlist apply(This _applyTester)
+			This staticlist free()
 		})
 		this add("VectorList modify", func {
 			list := VectorList<Int> new()
-			list add(0)
-			list add(1)
-			list add(2)
+			list add(0) . add(1) . add(2)
 
 			list modify(|value| value += 1)
-			c := 1
-			list apply(|value|
-				expect(value, is equal to(c))
-				c += 1)
+			for (index in 0 .. list count)
+				expect(list[index], is equal to(index + 1))
 			list free()
 		})
 		this add("VectorList map", func {
 			list := VectorList<Int> new()
-			list add(0)
-			list add(1)
-			list add(2)
+			list add(0) . add(1) . add(2)
+
 			newList := list map(|value| (value + 1) toString())
 			expect(list count, is equal to(newList count))
 			expect(newList[0], is equal to("1"))
@@ -174,10 +163,8 @@ VectorListTest: class extends Fixture {
 		})
 		this add("VectorList reverse", func {
 			list := VectorList<Int> new()
-			list add(8)
-			list add(16)
-			list add(64)
-			list add(128)
+			list add(8) . add(16) . add(64) . add(128)
+
 			reversed := list reverse()
 			expect(reversed[0], is equal to(128))
 			expect(reversed[1], is equal to(64))
@@ -187,10 +174,8 @@ VectorListTest: class extends Fixture {
 		})
 		this add("VectorList remove", func {
 			list := VectorList<Int> new()
-			list add(8)
-			list add(16)
-			list add(32)
-			list add(64)
+			list add(8) . add(16) . add(32) . add(64)
+
 			expect(list empty, is false)
 			while (!list empty)
 				list removeAt(0)
@@ -199,9 +184,8 @@ VectorListTest: class extends Fixture {
 		})
 		this add("VectorList direct vector access", func {
 			list := VectorList<Int> new()
-			list add(8)
-			list add(16)
-			list add(32)
+			list add(8) . add(16) . add(32)
+
 			point := list pointer as Int*
 			expect(point[0], is equal to(list[0]))
 			expect(point[1], is equal to(list[1]))
@@ -211,14 +195,16 @@ VectorListTest: class extends Fixture {
 		this add("VectorList sort", func {
 			list := VectorList<Int> new()
 			list add(8) . add(16) . add(32)
+
 			sortedList := list copy()
 			sortedList sort(|v1, v2| v1 < v2)
 			count := list count
-			for (value in sortedList) {
+			iterator := sortedList iterator()
+			for (value in iterator) {
 				count -= 1
 				expect(value, is equal to(list[count]))
 			}
-			(list, sortedList) free()
+			(list, sortedList, iterator) free()
 		})
 		this add("VectorList fold", func {
 			list := VectorList<Int> new()
@@ -227,21 +213,10 @@ VectorListTest: class extends Fixture {
 			expect(sum, is equal to(6))
 			list free()
 		})
-		this add("Iterator leak", func {
-			list := VectorList<Int> new()
-			list add(1)
-			list add(2)
-			list add(4)
-			// Convenient, but leaks the iterator instance.
-			for ((index, item) in list)
-				expect(item, is equal to(list[index]))
-			list free()
-		})
 		this add("Iterator correct", func {
 			list := VectorList<Int> new()
-			list add(8)
-			list add(16)
-			list add(32)
+			list add(8) . add(16) . add(32)
+
 			iterator := list iterator()
 			expect(iterator hasNext(), is true)
 			for ((index, item) in iterator)
@@ -250,6 +225,10 @@ VectorListTest: class extends Fixture {
 			secondIterator := list iterator()
 			expect(secondIterator next(), is equal to(8))
 			(secondIterator, iterator, list) free()
+
+			// Note: This is convenient, but leaks the iterator instance.
+			// for ((index, item) in list)
+			// 	expect(item, is equal to(list[index]))
 		})
 		this add("VectorList search", This _testVectorListSearch)
 	}
@@ -263,6 +242,7 @@ VectorListTest: class extends Fixture {
 		expect(list search(|instance| 10 == instance), is equal to(-1))
 		list free()
 	}
+	_applyTester: static func (index: Int*) { expect(This staticlist[index@], is equal to(index@)) }
 }
 
 VectorListTest new() run() . free()
