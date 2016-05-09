@@ -87,6 +87,7 @@ TextLiteralTest: class extends Fixture {
 			expect(parts[2] == "2")
 			expect(parts[3] == "3")
 			expect(parts[4] == "4")
+			parts free()
 			t = t";;;0;;1;;;2;;3;"
 			parts = t split(";")
 			expect(parts count == 12)
@@ -95,6 +96,7 @@ TextLiteralTest: class extends Fixture {
 			expect(parts[5] == "1")
 			expect(parts[8] == "2")
 			expect(parts[10] == "3")
+			parts free()
 			t = t"</br>simple</br>text</br></br>to</br>split"
 			parts = t split(Text new(c"</br>", 5))
 			expect(parts count == 6)
@@ -104,6 +106,7 @@ TextLiteralTest: class extends Fixture {
 			expect(parts[3] == Text empty)
 			expect(parts[4] == "to")
 			expect(parts[5] == "split")
+			parts free()
 		})
 		this add("Convert to Int", func {
 			expect(t"1" toInt(), is equal to(1))
@@ -138,11 +141,13 @@ TextLiteralTest: class extends Fixture {
 			expect(t"654" toInt~inBase(7), is equal to(4 + 5 * 7 + 6 * 7 * 7))
 		})
 		this add("Convert to Long and ULong", func {
-			expect(Text new(Int maximumValue toString()) toLong(), is equal to(Int maximumValue))
+			maxValue := Int maximumValue toString()
+			expect(Text new(maxValue) toLong(), is equal to(Int maximumValue))
 			expect(t"0xDEADBEEF" toULong(), is equal to(3735928559))
 			expect(t"-9" toULong(), is equal to(0))
 			expect(t"-9" toLLong(), is equal to(-9))
 			expect(t"-9" toLong(), is equal to(-9))
+			maxValue free()
 		})
 		this add("Convert to Float", func {
 			tolerance := 0.001f

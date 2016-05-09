@@ -214,10 +214,12 @@ File: abstract class {
 		result
 	}
 	write: func ~string (str: String) {
-		FileWriter new(this) write(BufferReader new(str _buffer)) .close()
+		buffer := BufferReader new(str _buffer)
+		this write(buffer)
+		buffer free()
 	}
 	write: func ~reader (reader: Reader) {
-		FileWriter new(this) write(reader) . close()
+		FileWriter new(this) write(reader) . close() . free()
 	}
 	// Walk this directory and call `f` on all files it contains, recursively, until f returns false
 	walk: func (f: Func(This) -> Bool) -> Bool {
