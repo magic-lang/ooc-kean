@@ -356,7 +356,9 @@ QuaternionTest: class extends Fixture {
 			expect(interpolated z, is equal to(0.99080002f) within(tolerance))
 		})
 		this add("toString", func {
-			expect(this quaternion0 toString() == "Real: 33.000000 Imaginary: 10.000000 -12.000000 54.500000")
+			string := this quaternion0 toString()
+			expect(string == "Real: 33.000000 Imaginary: 10.000000 -12.000000 54.500000")
+			string free()
 		})
 		this add("weightedQuaternionMean_X", func {
 			this quaternionList clear()

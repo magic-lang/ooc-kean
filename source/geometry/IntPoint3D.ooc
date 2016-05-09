@@ -22,7 +22,7 @@ IntPoint3D: cover {
 	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y), this z maximum(floor z)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
 	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this x as Float, this y as Float, this z as Float) }
-	toString: func -> String { "#{this x toString()}, #{this y toString()}, #{this z toString()}" }
+	toString: func -> String { (this x toString() >> ", ") & (this y toString() >> ", ") & this z toString() }
 	toText: func -> Text { this x toText() + t", " + this y toText() + t", " + this z toText() }
 
 	operator - -> This { This new(-this x, -this y, -this z) }

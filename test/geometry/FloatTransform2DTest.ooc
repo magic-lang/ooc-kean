@@ -286,6 +286,7 @@ FloatTransform2DTest: class extends Fixture {
 		this add("toString", func {
 			string := FloatTransform2D new(3.123456789f, 1.123456789f, 0.12365f, -11.52416f, 0.0f, 1.9) toString()
 			expect(string, is equal to("3.123457, 1.123457, 0.000000\t0.123650, -11.524160, 0.000000\t0.000000, 1.900000, 1.000000\t"))
+			string free()
 		})
 		this add("createSkewingX", func {
 			skewingX := FloatTransform2D createSkewingX(4.0f * Float pi / 3.0f)

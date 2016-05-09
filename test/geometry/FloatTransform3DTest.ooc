@@ -266,7 +266,9 @@ FloatTransform3DTest: class extends Fixture {
 		})
 		this add("casting", func {
 			value := "10.00000000, 40.00000000, 70.00000000, 100.00000000\n20.00000000, 50.00000000, 80.00000000, 110.00000000\n30.00000000, 60.00000000, 90.00000000, 120.00000000\n0.00000000, 0.00000000, 0.00000000, 1.00000000"
-			expect(this transform4 toString(), is equal to(value))
+			string := this transform4 toString()
+			expect(string, is equal to(value))
+			string free()
 		})
 		this add("toText", func {
 			text := FloatTransform3D new(1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3) toText() take()
