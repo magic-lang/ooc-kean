@@ -81,9 +81,9 @@ FdSet: cover from fd_set {
 	_clr: extern (FD_CLR) static func (fd: Int, fdset: This *)
 	_zero: extern (FD_ZERO) static func (fdset: This *)
 
-	set: func@(fd: Int) { _set(fd, this&) }
-	isSet: func@(fd: Int) -> Bool { _isSet(fd, this&) }
-	clr: func@(fd: Int) { _clr(fd, this&) }
+	set: func@ (fd: Int) { _set(fd, this&) }
+	isSet: func@ (fd: Int) -> Bool { _isSet(fd, this&) }
+	clr: func@ (fd: Int) { _clr(fd, this&) }
 	zero: func@ { _zero(this&) }
 }
 

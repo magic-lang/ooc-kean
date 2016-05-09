@@ -10,7 +10,7 @@ import Debug
 
 FloatTuple2: cover {
 	a, b: Float
-	init: func@(=a, =b)
+	init: func@ (=a, =b)
 	operator [] (index: Int) -> Float {
 		match (index) {
 			case 0 => this a
@@ -22,7 +22,7 @@ FloatTuple2: cover {
 
 FloatTuple3: cover {
 	a, b, c: Float
-	init: func@(=a, =b, =c)
+	init: func@ (=a, =b, =c)
 	operator [] (index: Int) -> Float {
 		match (index) {
 			case 0 => this a
@@ -35,7 +35,7 @@ FloatTuple3: cover {
 
 FloatTuple4: cover {
 	a, b, c, d: Float
-	init: func@(=a, =b, =c, =d)
+	init: func@ (=a, =b, =c, =d)
 	operator [] (index: Int) -> Float {
 		match (index) {
 			case 0 => this a
