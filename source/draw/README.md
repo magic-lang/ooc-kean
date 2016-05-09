@@ -53,6 +53,8 @@ Using destination or transform on the CPU would require a rewrite of legacy draw
 | inputImage | X | X | X |
 | viewport | X | X |  |
 | source | X | X |  |
+| flipSourceX | X | X |  |
+| flipSourceY | X | X |  |
 | destination | X |  |  |
 | transform | X |  |  |
 | focalLength | X |  |  |

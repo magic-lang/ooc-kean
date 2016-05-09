@@ -26,7 +26,7 @@ RasterMonochromeCanvas: class extends RasterPackedCanvas {
 		if (this target isValidIn(position x, position y))
 			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toMonochrome())
 	}
-	_draw: override func (image: Image, source, destination: IntBox2D, interpolate: Bool) {
+	_draw: override func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) {
 		monochrome: RasterMonochrome = null
 		if (image == null)
 			Debug error("Null image in RasterMonochromeCanvas draw")
@@ -36,7 +36,7 @@ RasterMonochromeCanvas: class extends RasterPackedCanvas {
 			monochrome = RasterMonochrome convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RasterMonochromeCanvas draw")
-		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination, interpolate)
+		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination, interpolate, flipX, flipY)
 		if (monochrome != image)
 			monochrome referenceCount decrease()
 	}

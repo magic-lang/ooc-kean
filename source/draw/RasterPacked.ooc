@@ -21,15 +21,22 @@ import Canvas, RasterCanvas
 RasterPackedCanvas: abstract class extends RasterCanvas {
 	target ::= this _target as RasterPacked
 	init: func (image: RasterPacked) { super(image) }
-	_resizePacked: func <T> (sourceBuffer: T*, source: RasterPacked, sourceBox, resultBox: IntBox2D, interpolate: Bool) {
-		if (this target size == source size && this target stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0)
+	_resizePacked: func <T> (sourceBuffer: T*, source: RasterPacked, sourceBox, resultBox: IntBox2D, interpolate, flipX, flipY: Bool) {
+		if (this target size == source size && this target stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0 && !flipX && !flipY)
 			memcpy(this target buffer pointer, sourceBuffer, this target stride * this target height)
 		else if (interpolate)
-			This _resizeBilinear(source, this target, sourceBox, resultBox)
+			This _resizeBilinear(source, this target, sourceBox, resultBox, flipX, flipY)
 		else
-			This _resizeNearestNeighbour(sourceBuffer, this target buffer pointer as T*, source, this target, sourceBox, resultBox)
+			This _resizeNearestNeighbour(sourceBuffer, this target buffer pointer as T*, source, this target, sourceBox, resultBox, flipX, flipY)
 	}
-	_resizeNearestNeighbour: static func <T> (sourceBuffer, resultBuffer: T*, source, target: RasterPacked, sourceBox, resultBox: IntBox2D) {
+	_transformCoordinates: static func (column, row, width, height: Int, flipX, flipY: Bool) -> (Int, Int) {
+		if (flipX)
+			column = width - column - 1
+		if (flipY)
+			row = height - row - 1
+		(column, row)
+	}
+	_resizeNearestNeighbour: static func <T> (sourceBuffer, resultBuffer: T*, source, target: RasterPacked, sourceBox, resultBox: IntBox2D, flipX, flipY: Bool) {
 		bytesPerPixel := target bytesPerPixel
 		(resultWidth, resultHeight) := (resultBox size x, resultBox size y)
 		(sourceWidth, sourceHeight) := (sourceBox size x, sourceBox size y)
@@ -43,12 +50,12 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 			for (column in 0 .. resultWidth) {
 				sourceColumn := (sourceWidth * column) / resultWidth + sourceStartColumn
 				(resultColumnTransformed, resultRowTransformed) := (column + resultStartColumn, row + resultStartRow)
-				(sourceColumnTransformed, sourceRowTransformed) := (sourceColumn, sourceRow)
+				(sourceColumnTransformed, sourceRowTransformed) := This _transformCoordinates(sourceColumn, sourceRow, source width, source height, flipX, flipY)
 				resultBuffer[resultColumnTransformed + resultStride * resultRowTransformed] = sourceBuffer[sourceColumnTransformed + sourceStride * sourceRowTransformed]
 			}
 		}
 	}
-	_resizeBilinear: static func (source, target: RasterPacked, sourceBox, resultBox: IntBox2D) {
+	_resizeBilinear: static func (source, target: RasterPacked, sourceBox, resultBox: IntBox2D, flipX, flipY: Bool) {
 		bytesPerPixel := target bytesPerPixel
 		(resultWidth, resultHeight) := (resultBox size x, resultBox size y)
 		(sourceWidth, sourceHeight) := (sourceBox size x, sourceBox size y)
@@ -70,7 +77,7 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 				if (sourceColumnLeft + 1 >= sourceWidth)
 					weightRight = 0.0f
 				(resultColumnTransformed, resultRowTransformed) := (column + resultStartColumn, row + resultStartRow)
-				(sourceColumnLeftTransformed, sourceRowUpTransformed) := (sourceColumnLeft, sourceRowUp)
+				(sourceColumnLeftTransformed, sourceRowUpTransformed) := This _transformCoordinates(sourceColumnLeft, sourceRowUp, source width, source height, flipX, flipY)
 				(topLeft, topRight) := ((1.0f - weightDown) * (1.0f - weightRight), (1.0f - weightDown) * weightRight)
 				(bottomLeft, bottomRight) := (weightDown * (1.0f - weightRight), weightDown * weightRight)
 				This _blendSquare(sourceBuffer, resultBuffer, sourceStride, resultStride, sourceRowUpTransformed, sourceColumnLeftTransformed, resultRowTransformed, resultColumnTransformed, topLeft, topRight, bottomLeft, bottomRight, bytesPerPixel)

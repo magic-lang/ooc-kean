@@ -29,7 +29,7 @@ OpenGLCanvas: class extends GpuCanvas {
 		model := (drawState mesh) ? FloatTransform3D identity : this _createModelTransformNormalized(this size, drawState getDestinationNormalized(), focalLengthPerWidth * this size x)
 		view := (drawState mesh) ? FloatTransform3D identity : this _createView(targetSize, drawState getTransformNormalized())
 		projection := this _createProjection(targetSize, focalLengthPerWidth)
-		textureTransform := This _createTextureTransform(drawState getSourceNormalized())
+		textureTransform := This _createTextureTransform(drawState getSourceNormalized(), drawState flipSourceX, drawState flipSourceY)
 		if (drawState opacity < 1.0f)
 			this context backend blend(drawState opacity)
 		else if (drawState blendMode == BlendMode Add)
@@ -74,6 +74,13 @@ OpenGLCanvas: class extends GpuCanvas {
 	free: override func {
 		this _renderTarget free()
 		super()
+	}
+	_createTextureTransform: static func (normalizedBox: FloatBox2D, flipX, flipY: Bool) -> FloatTransform3D {
+		flipScaleX := flipX ? -1.0f : 1.0f
+		flipScaleY := flipY ? -1.0f : 1.0f
+		scaling := FloatTransform3D createScaling(normalizedBox size x * flipScaleX, normalizedBox size y * flipScaleY, 1.0f)
+		translation := FloatTransform3D createTranslation((normalizedBox leftTop x * flipScaleX) + (flipX ? 1.0f : 0.0f), (normalizedBox leftTop y * flipScaleY) + (flipY ? 1.0f : 0.0f), 0.0f)
+		translation * scaling
 	}
 	drawLines: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) {
 		this _renderTarget bind()

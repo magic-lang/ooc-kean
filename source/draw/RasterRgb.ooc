@@ -27,7 +27,7 @@ RasterRgbCanvas: class extends RasterPackedCanvas {
 		if (this target isValidIn(position x, position y))
 			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toRgb())
 	}
-	_draw: override func (image: Image, source, destination: IntBox2D, interpolate: Bool) {
+	_draw: override func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) {
 		rgb: RasterRgb = null
 		if (image == null)
 			Debug error("Null image in RgbRasterCanvas draw")
@@ -37,7 +37,7 @@ RasterRgbCanvas: class extends RasterPackedCanvas {
 			rgb = RasterRgb convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RgbRasterCanvas draw")
-		this _resizePacked(rgb buffer pointer as ColorRgb*, rgb, source, destination, interpolate)
+		this _resizePacked(rgb buffer pointer as ColorRgb*, rgb, source, destination, interpolate, flipX, flipY)
 		if (rgb != image)
 			rgb referenceCount decrease()
 	}

@@ -28,6 +28,8 @@ DrawState: cover {
 	opacity := 1.0f
 	blendMode := BlendMode Fill
 	interpolate := true
+	flipSourceX := false
+	flipSourceY := false
 	_transformNormalized := FloatTransform3D identity
 	viewport := IntBox2D new(0, 0, 0, 0)
 	_destinationNormalized := FloatBox2D new(0.0f, 0.0f, 1.0f, 1.0f)
@@ -57,6 +59,14 @@ DrawState: cover {
 	}
 	setInterpolate: func (interpolate: Bool) -> This {
 		this interpolate = interpolate
+		this
+	}
+	setFlipSourceX: func (flipSourceX: Bool) -> This {
+		this flipSourceX = flipSourceX
+		this
+	}
+	setFlipSourceY: func (flipSourceY: Bool) -> This {
+		this flipSourceY = flipSourceY
 		this
 	}
 	setFocalLength: func ~Int (focalLength: Float, imageSize: IntVector2D) -> This {
