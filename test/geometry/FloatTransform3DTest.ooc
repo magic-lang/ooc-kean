@@ -265,10 +265,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(translation z, is equal to(12.0f) within(tolerance))
 		})
 		this add("casting", func {
-			value := "10.00000000, 40.00000000, 70.00000000, 100.00000000\n" + \
-				"20.00000000, 50.00000000, 80.00000000, 110.00000000\n" + \
-				"30.00000000, 60.00000000, 90.00000000, 120.00000000\n" + \
-				"0.00000000, 0.00000000, 0.00000000, 1.00000000"
+			value := "10.00000000, 40.00000000, 70.00000000, 100.00000000\n20.00000000, 50.00000000, 80.00000000, 110.00000000\n30.00000000, 60.00000000, 90.00000000, 120.00000000\n0.00000000, 0.00000000, 0.00000000, 1.00000000"
 			expect(this transform4 toString(), is equal to(value))
 		})
 		this add("toText", func {
@@ -581,6 +578,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(resultedVectorList[2] y, is equal to (4.238095238f) within (tolerance))
 			expect(resultedVectorList[3] x, is equal to (3.024691358f) within (tolerance))
 			expect(resultedVectorList[3] y, is equal to (4.259259260f) within (tolerance))
+			resultedVectorList free()
 		})
 		this add("transformAndProjectCorners (focalLength < epsilon)", func {
 			resultedVectorList := this transform0 transformAndProjectCorners(FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f), Float epsilon - (Float epsilon / 2))
@@ -592,6 +590,7 @@ FloatTransform3DTest: class extends Fixture {
 			expect(resultedVectorList[2] y, is equal to (49.00000095367f) within (tolerance))
 			expect(resultedVectorList[3] x, is equal to (14.00000083447f) within (tolerance))
 			expect(resultedVectorList[3] y, is equal to (29.00000095367f) within (tolerance))
+			resultedVectorList free()
 		})
 	}
 }

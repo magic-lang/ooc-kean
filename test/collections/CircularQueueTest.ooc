@@ -34,7 +34,7 @@ CircularQueueTest: class extends Fixture {
 			expect(queue dequeue(0), is equal to(2))
 			expect(queue dequeue(0), is equal to(3))
 			expect(queue dequeue(0), is equal to(4))
-			expect(queue empty, is equal to(true))
+			expect(queue empty, is true)
 			queue free()
 		})
 		this add("with class", func {

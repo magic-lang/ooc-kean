@@ -100,7 +100,7 @@ FloatVectorList: class extends VectorList<Float> {
 	toString: func -> String {
 		result := ""
 		for (i in 0 .. this _count)
-			result = result >> this[i] toString() >> "\n"
+			result = (result & this[i] toString()) >> "\n"
 		result
 	}
 	toText: func -> Text {

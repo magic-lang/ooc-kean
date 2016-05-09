@@ -78,6 +78,7 @@ IntVectorList: class extends VectorList<Int> {
 		for (i in 0 .. this _count)
 			textBuilder append(this[i] toText())
 		result = textBuilder join(t"\n")
+		textBuilder free()
 		result
 	}
 
