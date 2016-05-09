@@ -91,6 +91,7 @@ IntBox2DTest: class extends Fixture {
 			expect(box top, is equal to(-2))
 			expect(box right, is equal to(1))
 			expect(box bottom, is equal to(4))
+			points free()
 		})
 		this add("contains~FloatPoint2DVectorList", func {
 			box := IntBox2D new(-2, -1, 3, 3)

@@ -33,6 +33,7 @@ FloatRandomGeneratorTest: class extends Fixture {
 				if (numbers[i] == numbers[i - 1])
 					countEqual += 1
 			expect(countEqual, is less than(valuesCount))
+			generator free()
 			generator = FloatUniformRandomGenerator new(15.0f, 20.0f)
 			for (i in 0 .. valuesCount) {
 				result := generator next()

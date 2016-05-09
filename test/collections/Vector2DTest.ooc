@@ -111,6 +111,7 @@ Vector2DTest: class extends Fixture {
 			for (row in 0 .. this vector2D rowCount)
 				for (column in 0 .. this vector2D columnCount)
 					expect(this vector2D[row, column], is equal to(0))
+			oldValues free()
 		})
 	}
 	free: override func {
