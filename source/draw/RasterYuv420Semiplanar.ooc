@@ -177,7 +177,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		fileWriter := FileWriter new(filename)
 		fileWriter write(this y buffer pointer as Char*, this y buffer size)
 		fileWriter write(this uv buffer pointer as Char*, this uv buffer size)
-		fileWriter close()
+		fileWriter close() . free()
 	}
 	_createCanvas: override func -> Canvas { RasterYuv420SemiplanarCanvas new(this) }
 
