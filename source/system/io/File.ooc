@@ -242,13 +242,12 @@ File: abstract class {
 		left := base getReducedFile() getAbsolutePath() replaceAll(This separator, '/')
 		full := this getReducedFile() getAbsolutePath() replaceAll(This separator, '/')
 		if (!left endsWith("/"))
-			left = left + "/"
+			left = left >> "/"
 		right := full substring(left size)
 		This new(right)
 	}
 	getChild: func (childPath: String) -> This { This new((this path + this separator) << childPath) }
 	getChild: func ~file (file: This) -> This { this getChild(file path) }
-	toString: func -> String { "File(#{this path})" }
 
 	separator: static Char
 	pathDelimiter: static Char
