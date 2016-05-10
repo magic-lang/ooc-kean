@@ -65,6 +65,7 @@ ThreadPoolTest: class extends Fixture {
 			comparison := t"fail"
 			result := future wait(comparison)
 			expect(result == comparison)
+			pool free()
 		})
 		this add("wait with timeout", func {
 			pool := ThreadPool new(2)

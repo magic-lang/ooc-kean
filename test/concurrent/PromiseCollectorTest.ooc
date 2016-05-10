@@ -54,7 +54,7 @@ PromiseCollectorTest: class extends Fixture {
 			promises += Promise start(func { for (i in 0 .. 10_000_000) { } })
 			promises += Promise start(func { for (i in 0 .. 10_000_000) { } })
 			expect(promises wait())
-			promises clear()
+			promises clear() . free()
 		})
 		this add("wait with timeout", func {
 			promises := PromiseCollector new()

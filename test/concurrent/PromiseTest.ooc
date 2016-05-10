@@ -78,7 +78,7 @@ PromiseTest: class extends Fixture {
 			expect(promise2 wait(), is true)
 			result := future wait(t"cancel")
 			expect(result == t"cancel")
-			(result, promise, future) free()
+			(result, promise, promise2, future) free()
 		})
 		this add("nonblocking free", func {
 			promise2 := Promise start(this counter)
