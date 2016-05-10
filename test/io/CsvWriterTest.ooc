@@ -14,7 +14,7 @@ import io/File
 CsvWriterTest: class extends Fixture {
 	init: func {
 		super("CsvWriter")
-		this _createOutputDirectory()
+		File createDirectories("test/io/output")
 		this add("open-write-verify", func {
 			// Read original file
 			reader := CsvReader open(t"test/io/input/3x3.csv")
@@ -72,11 +72,6 @@ CsvWriterTest: class extends Fixture {
 			}
 			(reader, outputFilename, csvRecords) free()
 		})
-	}
-	_createOutputDirectory: func {
-		file := File new("test/io/output")
-		file createDirectory()
-		file free()
 	}
 }
 

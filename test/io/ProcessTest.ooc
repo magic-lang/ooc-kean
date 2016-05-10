@@ -17,7 +17,7 @@ ProcessTest: class extends Fixture {
 		super("Process")
 		this add("Basic use", func {
 			scriptName: String
-			this _createOutputDirectory()
+			File createDirectories("test/io/output")
 			version (windows)
 				scriptName = "bash test/io/input/pipeprocesstester.sh"
 			else
@@ -42,11 +42,6 @@ ProcessTest: class extends Fixture {
 			memfree(data)
 			reader close() . free()
 		})
-	}
-	_createOutputDirectory: func {
-		file := File new("test/io/output")
-		file createDirectory()
-		file free()
 	}
 }
 
