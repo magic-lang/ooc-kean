@@ -58,7 +58,9 @@ RasterUv: class extends RasterPacked {
 	create: override func (size: IntVector2D) -> Image { This new(size) }
 	copy: override func -> This { This new(this) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
-		this apply(ColorConvert fromYuv(action))
+		convert := ColorConvert fromYuv(action)
+		this apply(convert)
+		(convert as Closure) free()
 	}
 	apply: override func ~yuv (action: Func(ColorYuv)) {
 		uvRow := this buffer pointer
@@ -80,7 +82,9 @@ RasterUv: class extends RasterPacked {
 		}
 	}
 	apply: override func ~monochrome (action: Func(ColorMonochrome)) {
-		this apply(ColorConvert fromYuv(action))
+		convert := ColorConvert fromYuv(action)
+		this apply(convert)
+		(convert as Closure) free()
 	}
 	resizeTo: override func (size: IntVector2D) -> This {
 		this resizeTo(size, true) as This
