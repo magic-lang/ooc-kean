@@ -14,8 +14,10 @@ import Mesh
 // See README.md about input arguments and coordinate systems
 
 BlendMode: enum {
-	Fill
-	Add
+	Fill // RGBA = srcRGBA
+	Add // RGBA = srcRGBA + dstRGBA
+	White // RGBA = srcRGBA + dstRGBA * (1 - srcRGBA)
+	Alpha // RGB = srcRGB * srcAlpha + dstRGB * (1 - srcAlpha), A = dstAlpha
 }
 
 DrawState: cover {
@@ -25,7 +27,6 @@ DrawState: cover {
 	_originReference := FloatPoint2D new(0.0f, 0.0f) // Start of text
 	map: Map = null
 	mesh: Mesh = null
-	opacity := 1.0f
 	blendMode := BlendMode Fill
 	interpolate := true
 	flipSourceX := false
@@ -47,10 +48,6 @@ DrawState: cover {
 	}
 	setMesh: func (mesh: Mesh) -> This {
 		this mesh = mesh
-		this
-	}
-	setOpacity: func (opacity: Float) -> This {
-		this opacity = opacity
 		this
 	}
 	setBlendMode: func (blendMode: BlendMode) -> This {

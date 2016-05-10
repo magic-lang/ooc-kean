@@ -79,7 +79,7 @@ Image: abstract class {
 		fontSize := DrawContext getFontSize(fontAtlas)
 		viewport := IntBox2D new(localOrigin, fontSize)
 		targetOffset := IntPoint2D new(0, 0)
-		characterDrawState := DrawState new(this) setInputImage(fontAtlas) setBlendMode(BlendMode Add)
+		characterDrawState := DrawState new(this) setInputImage(fontAtlas) setBlendMode(BlendMode White)
 		for (i in 0 .. takenMessage count) {
 			charCode := takenMessage[i] as Int
 			sourceX := charCode % columns

@@ -60,7 +60,6 @@ Using destination or transform on the CPU would require a rewrite of legacy draw
 | focalLength | X |  |  |
 | map | X |  |  |
 | mesh | X |  |  |
-| opacity | X |  |  |
 | blendMode | X |  |  |
 | interpolate |  | X |  |
 | origin |  |  | X |

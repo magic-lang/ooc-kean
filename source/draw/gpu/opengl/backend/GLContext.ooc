@@ -19,8 +19,9 @@ GLContext: abstract class {
 	swapBuffers: abstract func
 	setViewport: abstract func (viewport: IntBox2D)
 	disableBlend: abstract func
-	blend: abstract func ~constant (factor: Float)
-	blend: abstract func ~alphaMonochrome
+	blendAdd: abstract func
+	blendWhite: abstract func
+	blendAlpha: abstract func
 	createFence: abstract func -> GLFence
 	createFramebufferObject: abstract func (texture: GLTexture, size: IntVector2D) -> GLFramebufferObject
 	createQuad: abstract func -> GLQuad

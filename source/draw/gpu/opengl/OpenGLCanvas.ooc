@@ -30,12 +30,16 @@ OpenGLCanvas: class extends GpuCanvas {
 		view := (drawState mesh) ? FloatTransform3D identity : this _createView(targetSize, drawState getTransformNormalized())
 		projection := this _createProjection(targetSize, focalLengthPerWidth)
 		textureTransform := This _createTextureTransform(drawState getSourceNormalized(), drawState flipSourceX, drawState flipSourceY)
-		if (drawState opacity < 1.0f)
-			this context backend blend(drawState opacity)
-		else if (drawState blendMode == BlendMode Add)
-			this context backend blend()
-		else
-			this context backend disableBlend()
+		match (drawState blendMode) {
+			case BlendMode Add =>
+				this context backend blendAdd()
+			case BlendMode White =>
+				this context backend blendWhite()
+			case BlendMode Alpha =>
+				this context backend blendAlpha()
+			case =>
+				this context backend disableBlend()
+		}
 		tempImageA: GpuImage = null
 		tempImageB: GpuImage = null
 		if (drawState inputImage) {
