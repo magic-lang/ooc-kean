@@ -14,7 +14,7 @@ ProfilerTest: class extends Fixture {
 	init: func {
 		super("Profiler")
 		this add("log", func {
-			this _createOutputDirectory()
+			File createDirectories("test/base/output")
 			outputFile := "test/base/output/profilerTest.log"
 			profiler := Profiler new("test")
 			profiler start()
@@ -33,11 +33,6 @@ ProfilerTest: class extends Fixture {
 			profilerToFree := Profiler new("to free")
 			profilerToFree free()
 		})
-	}
-	_createOutputDirectory: func {
-		file := File new("test/base/output")
-		file createDirectory()
-		file free()
 	}
 }
 

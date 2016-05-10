@@ -16,11 +16,8 @@ CreateAlphaByteStringTest: class extends Fixture {
 		super("CreateAlphaByteString")
 		this add("CreateAlphaByteString", func {
 			outputData := CreateAlphaByteString makeAlphaString("test/draw/input/logo.png", "logo")
-			filename := "test/draw/output/"
-			file := File new(filename)
-			folder := file parent . createDirectories() . free()
-			file free()
-			filename = filename >> "DataFile.ooc"
+			File createDirectories("test/draw/output/")
+			filename := "test/draw/output/DataFile.ooc"
 			fw := FileWriter new(filename)
 			fw write(outputData) . close()
 			(fw, filename, outputData) free()

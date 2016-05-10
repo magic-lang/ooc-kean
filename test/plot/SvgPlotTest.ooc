@@ -98,11 +98,8 @@ SvgPlotTest: class extends Fixture {
 			formatPlot xAxis roundAxisEndpoints = false // defaults to true, if set to false the axis endpoints will be equal to the data's endpoints
 
 			// Write plots to file
-			filename := "test/plot/output/"
-			file := File new(filename)
-			folder := file parent . createDirectories() . free()
-			file free()
-			filename = filename >> "example.svg"
+			File createDirectories("test/plot/output")
+			filename := "test/plot/output/example.svg"
 			writer := SvgWriter2D new(filename, logPlot)
 			writer addPlot(scatterPlot)
 			writer addPlot(trigonometryPlot)

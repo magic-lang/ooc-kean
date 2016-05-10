@@ -115,7 +115,7 @@ File: abstract class {
 	createDirectory: func -> Int { this createDirectory(0c755) }
 	createDirectory: abstract func ~withMode (mode: Int) -> Int
 	// Create a directory at the path specified by this file and all the parent directories if needed
-	createDirectories: func { this createDirectories(0c755) }
+	createDirectories: func -> Int { this createDirectories(0c755) }
 	createDirectories: func ~withMode (mode: Int) -> Int {
 		p := this parent
 		if (p)
@@ -278,14 +278,27 @@ File: abstract class {
 	rename: static func (originalPath, newPath: String) {
 		rename(originalPath toCString(), newPath toCString())
 	}
-	getCwd: static func -> String {
-		ooc_get_cwd()
+	createDirectories: static func ~file (path: String) -> Int {
+		file := This new(path)
+		result := file createDirectories()
+		file free()
+		result
+	}
+	createParentDirectories: static func ~file (path: String) -> Int {
+		file := This new(path)
+		fileParent := file parent
+		result := fileParent createDirectories()
+		(fileParent, file) free()
+		result
 	}
 	remove: static func ~file (path: String) -> Bool {
 		file := This new(path)
 		result := file remove()
 		file free()
 		result
+	}
+	getCwd: static func -> String {
+		ooc_get_cwd()
 	}
 	free: override func {
 		if (this path)
