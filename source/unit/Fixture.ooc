@@ -16,10 +16,14 @@ import Modifiers
 Fixture: abstract class {
 	name: String
 	tests := VectorList<Test> new(32, false)
+	_previousDebugFunc: Func (String)
+	_hasPreviousDebugFunc := false
 
 	init: func (=name)
 	free: override func {
 		(this tests, this name) free()
+		if (this _hasPreviousDebugFunc)
+			Debug initialize(this _previousDebugFunc)
 		super()
 	}
 	add: func ~action (name: String, action: Func) {
@@ -137,6 +141,11 @@ Fixture: abstract class {
 		result append(t"was")
 		result append(testedValue toText())
 		result join(' ')
+	}
+	hideDebugOutput: func {
+		this _hasPreviousDebugFunc = true
+		this _previousDebugFunc = Debug _printFunction
+		Debug initialize(func (s: String) { })
 	}
 
 	_testsFailed: static Bool
