@@ -21,12 +21,6 @@ Promise: abstract class {
 	wait: abstract func -> Bool
 	wait: abstract func ~timeout (time: TimeSpan) -> Bool
 	cancel: virtual func -> Bool { false }
-	operator + (other: This) -> PromiseCollector {
-		collector := PromiseCollector new()
-		collector add(this)
-		collector add(other)
-		collector
-	}
 	start: static func (action: Func) -> This { _ThreadPromise new(action) }
 	empty: static This { get { _EmptyPromise new() } }
 }
