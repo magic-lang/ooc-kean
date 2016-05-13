@@ -10,6 +10,12 @@ use base
 use concurrent
 use unit
 
+applyIndex: static Int = 0
+applyTestFunc := func (value: Int*) {
+	expect(value@, is equal to(applyIndex + 1))
+	applyIndex = applyIndex + 1
+}
+
 SynchronizedListTest: class extends Fixture {
 	init: func {
 		super("SynchronizedList")
@@ -118,10 +124,7 @@ SynchronizedListTest: class extends Fixture {
 		this add("single thread - apply", func {
 			list := SynchronizedList<Int> new()
 			list add(1) . add(2) . add(3)
-			c := 1
-			list apply(|value|
-				expect(value, is equal to(c))
-				c += 1)
+			list apply(applyTestFunc)
 			list free()
 		})
 		this add("single thread - map", func {
