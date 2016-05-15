@@ -98,9 +98,7 @@ ProcessWin32: class extends Process {
 
 		envString := CString new(envLength)
 		index := 0
-		for (k in this env keys) {
-			v := this env get(k)
-
+		this env each(|k, v|
 			memcpy(envString + index, k toCString(), k size)
 			index += k size
 
@@ -112,7 +110,7 @@ ProcessWin32: class extends Process {
 
 			envString[index] = '\0'
 			index += 1
-		}
+		)
 
 		envString[index] = '\0'
 		envString
