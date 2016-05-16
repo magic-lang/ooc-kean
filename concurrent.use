@@ -5,7 +5,6 @@ Imports: Promise
 Imports: ThreadPool
 Imports: SynchronizedQueue
 Imports: SynchronizedList
-Imports: SynchronizedResource
 Imports: RecycleBin
 Imports: WorkerThread
 Imports: Thread
