@@ -12,7 +12,7 @@ import io/FileWriter
 import io/FileReader
 
 FileTest: class extends Fixture {
-	_testOutput := "test/sdk/output/"
+	_testOutput := "test/system/output/"
 	init: func {
 		super("File")
 		this add("creating directory", func {
