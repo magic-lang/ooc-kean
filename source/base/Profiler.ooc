@@ -50,6 +50,19 @@ Profiler: class {
 		This _profilers free()
 		This _profilers = null
 	}
+	benchmark: static func (task: Func, timeoutMilliseconds := 1000.0) -> Double {
+		numberOfIterations := 0
+		timer := WallTimer new()
+		totalTime := 0.0
+		while (totalTime < timeoutMilliseconds * 1000.0) {
+			numberOfIterations += 1
+			timer start()
+			task()
+			totalTime += timer stop()
+		}
+		timer free()
+		totalTime / (numberOfIterations * 1000)
+	}
 	_logResults: static func (logMethod: Func (String)) {
 		for (i in 0 .. This _profilers count) {
 			profiler := This _profilers[i]

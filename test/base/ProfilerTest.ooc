@@ -27,12 +27,19 @@ ProfilerTest: class extends Fixture {
 			expect(content empty(), is false)
 			(profiler, content, file) free()
 		})
+		this add("benchmark", This _testBenchmark)
 		this add("cleanup", func {
 			profiler := Profiler new("for cleanup")
 			profiler start() . stop()
 			profilerToFree := Profiler new("to free")
 			profilerToFree free()
 		})
+	}
+	_testBenchmark: static func {
+		slowTask := func { Time sleepMilli(1) }
+		fastTask := func
+		expect(Profiler benchmark(slowTask, 5), is greater than(Profiler benchmark(fastTask, 5)))
+		(slowTask as Closure, fastTask as Closure) free()
 	}
 }
 
