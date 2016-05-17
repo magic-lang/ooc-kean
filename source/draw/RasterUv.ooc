@@ -40,6 +40,11 @@ RasterUvCanvas: class extends RasterPackedCanvas {
 		if (uv != image)
 			uv referenceCount decrease()
 	}
+	fill: override func (color: ColorRgba) {
+		for (y in 0 .. this size y)
+			for (x in 0 .. this size x)
+				this target[x, y] = ColorUv new(color r, color g)
+	}
 }
 
 RasterUv: class extends RasterPacked {
@@ -53,7 +58,9 @@ RasterUv: class extends RasterPacked {
 	create: override func (size: IntVector2D) -> Image { This new(size) }
 	copy: override func -> This { This new(this) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
-		this apply(ColorConvert fromYuv(action))
+		convert := ColorConvert fromYuv(action)
+		this apply(convert)
+		(convert as Closure) free()
 	}
 	apply: override func ~yuv (action: Func(ColorYuv)) {
 		uvRow := this buffer pointer
@@ -75,7 +82,9 @@ RasterUv: class extends RasterPacked {
 		}
 	}
 	apply: override func ~monochrome (action: Func(ColorMonochrome)) {
-		this apply(ColorConvert fromYuv(action))
+		convert := ColorConvert fromYuv(action)
+		this apply(convert)
+		(convert as Closure) free()
 	}
 	resizeTo: override func (size: IntVector2D) -> This {
 		this resizeTo(size, true) as This

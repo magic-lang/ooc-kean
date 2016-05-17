@@ -16,7 +16,7 @@ import StbImage
 ImageFileTest: class extends Fixture {
 	init: func {
 		super("ImageFile")
-		File new("test/draw/output") mkdir()
+		File createDirectories("test/draw/output")
 		this add("First", func {
 			expect(1, is equal to(1))
 		})
@@ -120,8 +120,7 @@ ImageFileTest: class extends Fixture {
 			rgba := RasterRgba convertFrom(monochrome)
 			rgba save(destination)
 			expect(This _fileExists(destination))
-			monochrome free()
-			rgba free()
+			(monochrome, rgba) free()
 		})
 		this add("convert RasterRgba to RasterMonochrome", func {
 			source := "test/draw/input/Space.png"
@@ -130,8 +129,7 @@ ImageFileTest: class extends Fixture {
 			monochrome := RasterMonochrome convertFrom(rgba)
 			monochrome save(destination)
 			expect(This _fileExists(destination))
-			monochrome free()
-			rgba free()
+			(monochrome, rgba) free()
 		})
 		this add("convert RasterRgb to RasterMonochrome", func {
 			source := "test/draw/input/Hercules.png"
@@ -140,8 +138,7 @@ ImageFileTest: class extends Fixture {
 			monochrome := RasterMonochrome convertFrom(rgb)
 			monochrome save(destination)
 			expect(This _fileExists(destination))
-			rgb free()
-			monochrome free()
+			(rgb, monochrome) free()
 		})
 		this add("convert RasterMonochrome to RasterRgb", func {
 			source := "test/draw/input/Hercules.png"
@@ -159,8 +156,7 @@ ImageFileTest: class extends Fixture {
 			rgba := RasterRgba convertFrom(rgb)
 			rgba save(destination)
 			expect(This _fileExists(destination))
-			rgb free()
-			rgba free()
+			(rgb, rgba) free()
 		})
 		this add("convert RasterRgba to RasterRgb", func {
 			source := "test/draw/input/Hercules.png"
@@ -169,8 +165,7 @@ ImageFileTest: class extends Fixture {
 			rgb := RasterRgb convertFrom(rgba)
 			rgb save(destination)
 			expect(This _fileExists(destination))
-			rgb free()
-			rgba free()
+			(rgb, rgba) free()
 		})
 		this add("convert RasterRgba to RasterYuv420Semiplanar", func {
 			source := "test/draw/input/Barn.png"
@@ -180,9 +175,7 @@ ImageFileTest: class extends Fixture {
 			monochrome := RasterMonochrome convertFrom(yuv420)
 			monochrome save(destination)
 			expect(This _fileExists(destination))
-			monochrome free()
-			yuv420 free()
-			rgba free()
+			(monochrome, yuv420, rgba) free()
 		})
 		this add("convert RasterRgba to RasterYuv420Semiplanar and back again", func {
 			source := "test/draw/input/Flower.png"
@@ -208,8 +201,7 @@ ImageFileTest: class extends Fixture {
 			uv := RasterUv open(source)
 			uv save(destination)
 			expect(This _fileExists(destination))
-			destination free()
-			source free()
+			(destination, source) free()
 			uv referenceCount decrease()
 		})
 		this add("save to bin", func {

@@ -17,6 +17,8 @@ SystemTest: class extends Fixture {
 
 			expect(processors, is greaterOrEqual than(1))
 			expect(hostname, is notNull)
+
+			hostname free()
 		})
 	}
 }

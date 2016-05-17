@@ -39,34 +39,26 @@ File: abstract class {
 	}}
 
 	rectifySeparator: func {
-		if (this dir() && !this path endsWith(This separator)) {
+		if (this isDirectory() && !this path endsWith(This separator)) {
 			oldPath := this path
 			this path = oldPath + This separator
 			oldPath free()
 		}
-		else if (!this dir() && this path endsWith(This separator)) {
+		else if (!this isDirectory() && this path endsWith(This separator)) {
 			newPath := this path trimRight(This separator)
 			this path free()
 			this path = newPath
 		}
 	}
-	// true if it's a directory
-	dir: abstract func -> Bool
-	// true if it's a file (ie. not a directory nor a symbolic link)
-	file: abstract func -> Bool
-	// true if the file is a symbolic link
-	link: abstract func -> Bool
-	// the size of the file, in bytes
+
+	isDirectory: abstract func -> Bool
+	isFile: abstract func -> Bool
+	isLink: abstract func -> Bool
 	getSize: abstract func -> LLong
-	// true if the file exists
 	exists: abstract func -> Bool
-	// the permissions for the owner of this file
-	ownerPerm: abstract func -> Int
-	// the permissions for the group of this file
-	groupPerm: abstract func -> Int
-	// the permissions for the others
-	otherPerm: abstract func -> Int
-	// true if a file is executable by the current owner
+	ownerPermissions: abstract func -> Int
+	groupPermissions: abstract func -> Int
+	otherPermissions: abstract func -> Int
 	executable: abstract func -> Bool
 
 	setExecutable: abstract func (exec: Bool) -> Bool
@@ -88,7 +80,7 @@ File: abstract class {
 	}
 	getExtension: func -> String {
 		result := ""
-		if (!this dir()) {
+		if (!this isDirectory()) {
 			index := this path lastIndexOf('.')
 			if (index > 0)
 				result = this path substring(index + 1)
@@ -110,27 +102,25 @@ File: abstract class {
 		result
 	}
 	hasExtension: func -> Bool {
-		(this path lastIndexOf('.') > 0) && (!this dir())
+		(this path lastIndexOf('.') > 0) && (!this isDirectory())
 	}
 	parentName: func -> String {
 		idx := this path lastIndexOf(This separator)
 		idx == -1 ? null as String : this path substring(0, idx)
 	}
 	// Create a named pipe at the path specified by this file
-	mkfifo: func -> Int { this mkfifo(0c755) }
-	mkfifo: abstract func ~withMode (mode: Int) -> Int
+	makeFIFO: func -> Int { this makeFIFO(0c755) }
+	makeFIFO: abstract func ~withMode (mode: Int) -> Int
 	// Create a directory at the path specified by this file,
-	mkdir: func -> Int { this mkdir(0c755) }
-	mkdir: abstract func ~withMode (mode: Int) -> Int
+	createDirectory: func -> Int { this createDirectory(0c755) }
+	createDirectory: abstract func ~withMode (mode: Int) -> Int
 	// Create a directory at the path specified by this file and all the parent directories if needed
-	mkdirs: func { this mkdirs(0c755) }
-	mkdirs: func ~withMode (mode: Int) -> Int {
+	createDirectories: func -> Int { this createDirectories(0c755) }
+	createDirectories: func ~withMode (mode: Int) -> Int {
 		p := this parent
-		if (p) {
-			p mkdirs(mode)
-			p free()
-		}
-		this mkdir()
+		if (p)
+			p createDirectories(mode) . free()
+		this createDirectory()
 	}
 
 	lastAccessed: abstract func -> Long
@@ -165,13 +155,17 @@ File: abstract class {
 	getReducedFile: func -> This { This new(this getReducedPath()) }
 	getChildrenNames: abstract func -> VectorList<String>
 	getChildren: abstract func -> VectorList<This>
-	rm: func -> Bool { _remove(this) }
-	rmrf: func -> Bool {
-		if (this dir())
-			for (child in this getChildren())
-				if (!child rmrf())
+	remove: func -> Bool { _remove(this) }
+	removeRecursive: func -> Bool {
+		if (this isDirectory()) {
+			children := this getChildren()
+			for (i in 0 .. children count) {
+				child := children[i]
+				if (!child removeRecursive())
 					return false
-		this rm()
+			}
+		}
+		this remove()
 	}
 	// Searches for a file with given name until cb returns false
 	find: func (name: String, cb: Func (This) -> Bool) -> Bool {
@@ -179,7 +173,7 @@ File: abstract class {
 			if (!cb(this))
 				return true // abort if caller is happy
 
-		if (this dir()) {
+		if (this isDirectory()) {
 			children := this getChildren()
 			for (child in children)
 				if (child find(name, cb))
@@ -197,8 +191,7 @@ File: abstract class {
 	}
 	copyTo: func (dstFile: This) {
 		dstParent := dstFile parent
-		dstParent mkdirs()
-		dstParent free()
+		dstParent createDirectories() . free()
 		src := FileReader new(this)
 		dst := FileWriter new(dstFile)
 		max := 8192
@@ -209,11 +202,8 @@ File: abstract class {
 			dst write(buffer data, num)
 		}
 
-		buffer free()
-		dst close()
-		src close()
-		dst free()
-		src free()
+		(dst, src) close()
+		(buffer, dst, src) free()
 	}
 	read: func -> String {
 		fR := FileReader new(this)
@@ -224,18 +214,20 @@ File: abstract class {
 		result
 	}
 	write: func ~string (str: String) {
-		FileWriter new(this) write(BufferReader new(str _buffer)) .close()
+		buffer := BufferReader new(str _buffer)
+		this write(buffer)
+		buffer free()
 	}
 	write: func ~reader (reader: Reader) {
-		FileWriter new(this) write(reader) . close()
+		FileWriter new(this) write(reader) . close() . free()
 	}
 	// Walk this directory and call `f` on all files it contains, recursively, until f returns false
 	walk: func (f: Func(This) -> Bool) -> Bool {
 		result := true
-		if (this file()) {
+		if (this isFile()) {
 			if (!f(this))
 				result = false
-		} else if (this dir())
+		} else if (this isDirectory())
 			for (child in this getChildren())
 				if (!child walk(f))
 					result = false
@@ -250,13 +242,12 @@ File: abstract class {
 		left := base getReducedFile() getAbsolutePath() replaceAll(This separator, '/')
 		full := this getReducedFile() getAbsolutePath() replaceAll(This separator, '/')
 		if (!left endsWith("/"))
-			left = left + "/"
+			left = left >> "/"
 		right := full substring(left size)
 		This new(right)
 	}
 	getChild: func (childPath: String) -> This { This new((this path + this separator) << childPath) }
 	getChild: func ~file (file: This) -> This { this getChild(file path) }
-	toString: func -> String { "File(#{this path})" }
 
 	separator: static Char
 	pathDelimiter: static Char
@@ -286,14 +277,27 @@ File: abstract class {
 	rename: static func (originalPath, newPath: String) {
 		rename(originalPath toCString(), newPath toCString())
 	}
-	getCwd: static func -> String {
-		ooc_get_cwd()
-	}
-	remove: static func (path: String) -> Bool {
+	createDirectories: static func ~file (path: String) -> Int {
 		file := This new(path)
-		result := file rm()
+		result := file createDirectories()
 		file free()
 		result
+	}
+	createParentDirectories: static func ~file (path: String) -> Int {
+		file := This new(path)
+		fileParent := file parent
+		result := fileParent createDirectories()
+		(fileParent, file) free()
+		result
+	}
+	remove: static func ~file (path: String) -> Bool {
+		file := This new(path)
+		result := file remove()
+		file free()
+		result
+	}
+	getCwd: static func -> String {
+		ooc_get_cwd()
 	}
 	free: override func {
 		if (this path)

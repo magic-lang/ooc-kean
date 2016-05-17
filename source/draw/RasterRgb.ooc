@@ -41,6 +41,11 @@ RasterRgbCanvas: class extends RasterPackedCanvas {
 		if (rgb != image)
 			rgb referenceCount decrease()
 	}
+	fill: override func (color: ColorRgba) {
+		for (y in 0 .. this size y)
+			for (x in 0 .. this size x)
+				this target[x, y] = color toRgb()
+	}
 }
 
 RasterRgb: class extends RasterPacked {
@@ -152,9 +157,7 @@ RasterRgb: class extends RasterPacked {
 		result
 	}
 	savePacked: func (filename: String) -> Int {
-		file := File new(filename)
-		folder := file parent . mkdirs() . free()
-		file free()
+		File createParentDirectories(filename)
 		StbImage writePng(filename, this size x, this size y, this bytesPerPixel, this buffer pointer, this size x * this bytesPerPixel)
 	}
 	save: override func (filename: String) -> Int {

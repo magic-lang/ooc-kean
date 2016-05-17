@@ -38,7 +38,7 @@ IntShell2D: cover {
 	minimum: func (other: This) -> This {
 		This new(this left minimum(other left), this right minimum(other right), this top minimum(other top), this bottom minimum(other bottom))
 	}
-	toString: func -> String { "#{this left toString()}, #{this right toString()}, #{this top toString()}, #{this bottom toString()}" }
+	toString: func -> String { (this left toString() >> ", ") & (this right toString() >> ", ") & (this top toString() >> ", ") & (this bottom toString() >> ", ") }
 	toText: func -> Text { this left toText() + t", " + this right toText() + t", " + this top toText() + t", " + this bottom toText() }
 
 	operator + (other: This) -> This { This new(this left + other left, this right + other right, this top + other top, this bottom + other bottom) }

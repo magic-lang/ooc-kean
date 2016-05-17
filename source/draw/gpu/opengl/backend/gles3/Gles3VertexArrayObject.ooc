@@ -16,23 +16,7 @@ version(!gpuOff) {
 Gles3VertexArrayObject: class extends GLVertexArrayObject {
 	_backend: UInt
 	_vertexCount: Int
-
-	init: func ~twoDimensions (vertices, textureCoordinates: FloatPoint2D[]) {
-		vertexCount := vertices length
-		this _vertexCount = vertexCount
-		floatsPerVertex := 4
-		packedArray: Float[floatsPerVertex * vertexCount]
-		for (i in 0 .. vertexCount) {
-			//Positions
-			packedArray[floatsPerVertex * i + 0] = vertices[i] x
-			packedArray[floatsPerVertex * i + 1] = vertices[i] y
-			//Texture coordinates
-			packedArray[floatsPerVertex * i + 2] = textureCoordinates[i] x
-			packedArray[floatsPerVertex * i + 3] = textureCoordinates[i] y
-		}
-		this _generate(packedArray[0]&, 2, vertexCount)
-	}
-	init: func ~threeDimensions (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
+	init: func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
 		vertexCount := vertices length
 		this _vertexCount = vertexCount
 		floatsPerVertex := 5

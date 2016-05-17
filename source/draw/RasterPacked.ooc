@@ -137,9 +137,7 @@ RasterPacked: abstract class extends RasterImage {
 		other
 	}
 	save: override func (filename: String) -> Int {
-		file := File new(filename)
-		folder := file parent . mkdirs() . free()
-		file free()
+		File createParentDirectories(filename)
 		StbImage writePng(filename, this size x, this size y, this bytesPerPixel, this buffer pointer, this size x * this bytesPerPixel)
 	}
 	swapChannels: func (first, second: Int) {

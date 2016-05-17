@@ -66,8 +66,7 @@ RasterRgbTest: class extends Fixture {
 					expect(pixel1 g, is equal to(pixel2 g))
 					expect(pixel1 b, is equal to(pixel2 r))
 				}
-			image referenceCount decrease()
-			image2 referenceCount decrease()
+			(image, image2) referenceCount decrease()
 			output free()
 		})
 		this add("resize", func {
@@ -76,8 +75,7 @@ RasterRgbTest: class extends Fixture {
 			image2 := image resizeTo(image size * 2)
 			expect(image2 size == image size * 2)
 			image2 save(outputFast)
-			image referenceCount decrease()
-			image2 referenceCount decrease()
+			(image, image2) referenceCount decrease()
 			outputFast free()
 		})
 		this add("coordinate systems", func {
@@ -119,8 +117,7 @@ RasterRgbTest: class extends Fixture {
 				for (column in 0 .. image2 width)
 					expect(image2[column, row] == image[column, row])
 
-			image referenceCount decrease()
-			image2 referenceCount decrease()
+			(image, image2) referenceCount decrease()
 			output free()
 		})
 	}

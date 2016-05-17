@@ -19,7 +19,9 @@ FloatMatrixTest: class extends Fixture {
 		tolerance := 1.0e-5f
 		super ("FloatMatrix")
 		this add("fixture", func {
-			expect(FloatMatrix identity(3) take(), is equal to(FloatMatrix identity(3) take()))
+			identity := FloatMatrix identity(3) take()
+			expect(identity, is equal to(identity))
+			identity free()
 		})
 		this add("identity", func {
 			this checkAllElements(FloatMatrix identity(3), [1.0f, 0, 0, 0, 1.0f, 0, 0, 0, 1.0f])
@@ -89,7 +91,7 @@ FloatMatrixTest: class extends Fixture {
 			a := this createMatrix(3, 3, [1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f]) take()
 			b := this createMatrix(3, 3, [9.0f, 8.0f, 7.0f, 6.0f, 5.0f, 4.0f, 3.0f, 2.0f, 1.0f])
 			this checkAllElements(a - b, [-8.0f, -6.0f, -4.0f, -2.0f, 0.0f, 2.0f, 4.0f, 6.0f, 8.0f])
-			this checkAllElements(a - a give(), [0, 0, 0, 0, 0, 0, 0, 0, 0])
+			this checkAllElements(a give() - a, [0, 0, 0, 0, 0, 0, 0, 0, 0])
 		})
 		this add("solver (square)", func {
 			// Solve a * x = y
@@ -178,6 +180,7 @@ FloatMatrixTest: class extends Fixture {
 		for (x in 0 .. width)
 			for (y in 0 .. height)
 				result[x, y] = values[x * height + y]
+		values free()
 		result give()
 	}
 
@@ -191,7 +194,12 @@ FloatMatrixTest: class extends Fixture {
 		for (x in 0 .. m width)
 			for (y in 0 .. m height)
 				expect(m[x, y], is equal to(values[x * m height + y]) within(tolerance))
+		values free()
 		matrix free(Owner Receiver)
+	}
+	free: override func {
+		(this matrix, this nonSquareMatrix, this nullMatrix) free()
+		super()
 	}
 }
 

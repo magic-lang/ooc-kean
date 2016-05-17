@@ -45,7 +45,7 @@ FloatVector2D: cover {
 	limitLength: func (maximum: Float) -> This { this norm > maximum ? this normalized * maximum : this }
 	toIntVector2D: func -> IntVector2D { IntVector2D new(this x as Int, this y as Int) }
 	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x, this y) }
-	toString: func -> String { "#{this x toString()}, #{this y toString()}" }
+	toString: func -> String { (this x toString() >> ", ") & this y toString() }
 	toText: func -> Text { this x toText() + t", " + this y toText() }
 
 	operator - -> This { This new(-this x, -this y) }

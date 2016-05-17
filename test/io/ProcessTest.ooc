@@ -17,7 +17,7 @@ ProcessTest: class extends Fixture {
 		super("Process")
 		this add("Basic use", func {
 			scriptName: String
-			this _createOutputDirectory()
+			File createDirectories("test/io/output")
 			version (windows)
 				scriptName = "bash test/io/input/pipeprocesstester.sh"
 			else
@@ -25,7 +25,8 @@ ProcessTest: class extends Fixture {
 
 			scriptArgs := [scriptName, "50005000", "abcABC"]
 			process := Process new(scriptArgs)
-			process setStdout(Pipe new())
+			pipe := Pipe new()
+			process setStdout(pipe)
 			process execute()
 			process free()
 			scriptArgs free()
@@ -37,15 +38,10 @@ ProcessTest: class extends Fixture {
 			reader read(data, 0, 15)
 			string := data toString()
 			expect(string, is equal to("50005000 abcABC"))
-			string free()
+			(pipe, string) free()
 			memfree(data)
 			reader close() . free()
 		})
-	}
-	_createOutputDirectory: func {
-		file := File new("test/io/output")
-		file mkdir()
-		file free()
 	}
 }
 

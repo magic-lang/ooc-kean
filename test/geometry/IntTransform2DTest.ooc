@@ -158,6 +158,7 @@ IntTransform2DTest: class extends Fixture {
 		this add("toString", func {
 			string := IntTransform2D new(3, 1, 0, -11, 0, 2) toString()
 			expect(string, is equal to("3, 1, 0\t0, -11, 0\t0, 2, 1\t"))
+			string free()
 		})
 		this add("toFloatTransform2D", func {
 			transform := this transform0 toFloatTransform2D()

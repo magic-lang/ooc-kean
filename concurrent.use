@@ -2,11 +2,9 @@ Name: Concurrent
 Description: library for everything related to concurrent/parallel programming.
 SourcePath: source/concurrent
 Imports: Promise
-Imports: PromiseCollector
 Imports: ThreadPool
 Imports: SynchronizedQueue
 Imports: SynchronizedList
-Imports: SynchronizedResource
 Imports: RecycleBin
 Imports: WorkerThread
 Imports: Thread

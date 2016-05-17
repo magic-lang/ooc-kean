@@ -14,7 +14,7 @@ ProfilerTest: class extends Fixture {
 	init: func {
 		super("Profiler")
 		this add("log", func {
-			this _createOutputDirectory()
+			File createDirectories("test/base/output")
 			outputFile := "test/base/output/profilerTest.log"
 			profiler := Profiler new("test")
 			profiler start()
@@ -24,9 +24,10 @@ ProfilerTest: class extends Fixture {
 			file := File new(outputFile)
 			expect(file exists())
 			content := file read()
-			expect(content empty(), is equal to(false))
+			expect(content empty(), is false)
 			(profiler, content, file) free()
 		})
+		this add("benchmark", This _testBenchmark)
 		this add("cleanup", func {
 			profiler := Profiler new("for cleanup")
 			profiler start() . stop()
@@ -34,10 +35,11 @@ ProfilerTest: class extends Fixture {
 			profilerToFree free()
 		})
 	}
-	_createOutputDirectory: func {
-		file := File new("test/base/output")
-		file mkdir()
-		file free()
+	_testBenchmark: static func {
+		slowTask := func { Time sleepMilli(1) }
+		fastTask := func
+		expect(Profiler benchmark(slowTask, 5), is greater than(Profiler benchmark(fastTask, 5)))
+		(slowTask as Closure, fastTask as Closure) free()
 	}
 }
 

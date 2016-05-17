@@ -58,6 +58,26 @@ ByteBufferTest: class extends Fixture {
 			expect(yuv referenceCount _count, is equal to(1))
 			uv referenceCount decrease()
 		})
+		this add("memset", func {
+			buffer := ByteBuffer new(64)
+			for (i in 0 .. 64)
+				buffer pointer[i] = i
+			buffer memset(35)
+			for (i in 0 .. 64)
+				expect(buffer pointer[i] as Int, is equal to(35))
+			buffer referenceCount decrease()
+		})
+		this add("memset range", func {
+			buffer := ByteBuffer new(64)
+			for (i in 0 .. 64)
+				buffer pointer[i] = i
+			buffer memset(1, 62, 35)
+			expect(buffer pointer[0] as Int, is equal to(0))
+			for (i in 1 .. 63)
+				expect(buffer pointer[i] as Int, is equal to(35))
+			expect(buffer pointer[63] as Int, is equal to(63))
+			buffer referenceCount decrease()
+		})
 	}
 }
 

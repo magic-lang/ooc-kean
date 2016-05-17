@@ -59,6 +59,17 @@ Image: abstract class {
 		this _canvas = null
 		super()
 	}
+	drawPoint: func ~white (position: FloatPoint2D) { this canvas drawPoint~white(position) }
+	drawPoint: func ~explicit (position: FloatPoint2D, pen: Pen) { this canvas drawPoint~explicit(position, pen) }
+	drawLine: func ~white (start, end: FloatPoint2D) { this canvas drawLine~white(start, end) }
+	drawLine: func ~explicit (start, end: FloatPoint2D, pen: Pen) { this canvas drawLine~explicit(start, end, pen) }
+	drawPoints: func ~white (pointList: VectorList<FloatPoint2D>) { this canvas drawPoints~white(pointList) }
+	drawPoints: func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) { this canvas drawPoints~explicit(pointList, Pen new(ColorRgba white)) }
+	drawLines: func ~white (pointList: VectorList<FloatPoint2D>) { this canvas drawLines~white(pointList) }
+	drawLines: func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) { this canvas drawLines~explicit(pointList, Pen new(ColorRgba white)) }
+	drawBox: func ~white (box: FloatBox2D) { this canvas drawBox~white(box) }
+	drawBox: func ~explicit (box: FloatBox2D, pen: Pen) { this canvas drawBox~explicit(box, Pen new(ColorRgba white)) }
+	fill: func ~implicitCanvas (color: ColorRgba) { this canvas fill(color) }
 	resizeWithin: func (restriction: IntVector2D) -> This {
 		restrictionFraction := (restriction x as Float / this size x as Float) minimum(restriction y as Float / this size y as Float)
 		this resizeTo((this size toFloatVector2D() * restrictionFraction) toIntVector2D())
@@ -69,7 +80,6 @@ Image: abstract class {
 	}
 	create: virtual func (size: IntVector2D) -> This { raise("Image::create not implemented for type: %s" format(this class name)); null }
 	copy: abstract func -> This
-	copy: abstract func ~fromParams (size: IntVector2D, transform: FloatTransform2D) -> This
 	distance: virtual abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
 	isValidIn: func (x, y: Int) -> Bool {

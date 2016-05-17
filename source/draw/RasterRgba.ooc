@@ -25,6 +25,11 @@ RasterRgbaCanvas: class extends RasterPackedCanvas {
 		if (this target isValidIn(position x, position y))
 			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color)
 	}
+	fill: override func (color: ColorRgba) {
+		for (y in 0 .. this size y)
+			for (x in 0 .. this size x)
+				this target[x, y] = color
+	}
 }
 
 RasterRgba: class extends RasterPacked {
@@ -158,9 +163,7 @@ RasterRgba: class extends RasterPacked {
 		result
 	}
 	savePacked: func (filename: String) -> Int {
-		file := File new(filename)
-		folder := file parent . mkdirs() . free()
-		file free()
+		File createParentDirectories(filename)
 		StbImage writePng(filename, this size x, this size y, this bytesPerPixel, this buffer pointer, this size x * this bytesPerPixel)
 	}
 	save: override func (filename: String) -> Int {

@@ -36,11 +36,9 @@ OpenGLContext: class extends GpuContext {
 	_packUvPadded: OpenGLMap
 	_linesShader: OpenGLMap
 	_pointsShader: OpenGLMap
-	_meshShader: OpenGLMapMesh
 	_renderer: GLRenderer
 	_recycleBin: RecycleBin<OpenGLPacked>
 	backend ::= this _backend
-	meshShader ::= this _meshShader
 	defaultMap ::= this _transformTextureMap as Map
 	_defaultFontGpu: GpuImage = null
 	defaultFontGpu: GpuImage { get {
@@ -61,7 +59,6 @@ OpenGLContext: class extends GpuContext {
 		this _pointsShader = OpenGLMap new(slurp("shaders/points.vert"), slurp("shaders/color.frag"), this)
 		this _transformTextureMap = OpenGLMapTransform new(slurp("shaders/texture.frag"), this)
 		this _renderer = _backend createRenderer()
-		this _meshShader = OpenGLMapMesh new(this)
 	}
 	init: func ~shared (other: This = null) {
 		if (other != null)
@@ -74,16 +71,8 @@ OpenGLContext: class extends GpuContext {
 		if (this _defaultFontGpu != null)
 			this _defaultFontGpu free()
 		this _backend makeCurrent()
-		this _transformTextureMap free()
-		this _packMonochrome free()
-		this _packUv free()
-		this _packUvPadded free()
-		this _linesShader free()
-		this _pointsShader free()
-		this _meshShader free()
-		this _backend free()
-		this _renderer free()
-		this _recycleBin free()
+		(this _transformTextureMap, this _packMonochrome, this _packUv, this _packUvPadded, this _linesShader) free()
+		(this _pointsShader, this _backend, this _renderer, this _recycleBin) free()
 		super()
 	}
 	getMaxContexts: func -> Int { 1 }
@@ -91,17 +80,15 @@ OpenGLContext: class extends GpuContext {
 	drawQuad: func { this _renderer drawQuad() }
 	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen: Pen) {
 		positions := pointList pointer as Float*
-		this _linesShader projection = projection
 		this _linesShader add("color", pen color normalized)
-		this _linesShader use(null)
+		this _linesShader use(null, projection, FloatTransform3D identity)
 		this _renderer drawLines(positions, pointList count, 2, pen width)
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen: Pen) {
 		positions := pointList pointer
 		this _pointsShader add("color", pen color normalized)
 		this _pointsShader add("pointSize", pen width)
-		this _pointsShader projection = projection
-		this _pointsShader use(null)
+		this _pointsShader use(null, projection, FloatTransform3D identity)
 		this _renderer drawPoints(positions, pointList count, 2)
 	}
 	recycle: virtual func (image: OpenGLPacked) {

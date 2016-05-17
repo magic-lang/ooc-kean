@@ -40,7 +40,7 @@ DrawContext: abstract class {
 	createYuv420Semiplanar: abstract func ~fromRaster (raster: RasterYuv420Semiplanar) -> Image
 	createImageFromTextAndFont: virtual func (message: Text, fontAtlas: Image) -> Image {
 		target := this createMonochrome(This getTextPixelBounds(message take(), fontAtlas))
-		target canvas fill(ColorRgba black)
+		target fill(ColorRgba black)
 		target write(message take(), fontAtlas, IntPoint2D new(0, 0))
 		message free(Owner Receiver)
 		target
