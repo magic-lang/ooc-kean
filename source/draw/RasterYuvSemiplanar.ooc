@@ -21,6 +21,8 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
 	_uv: RasterUv
 	y ::= this _y
 	uv ::= this _uv
+	getFirstPacked: override func -> Image { this _y }
+	getSecondPacked: override func -> Image { this _uv }
 	crop: IntShell2D {
 		get
 		set (value) {

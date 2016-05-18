@@ -18,17 +18,6 @@ GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
 	init: func (=_target, context: GpuContext) {
 		super(this _target size, context, context defaultMap)
 	}
-	draw: override func ~DrawState (drawState: DrawState) {
-		drawStateY := drawState setTarget((drawState target as GpuYuv420Semiplanar) y)
-		drawStateUV := drawState setTarget((drawState target as GpuYuv420Semiplanar) uv)
-		drawStateUV viewport = drawState viewport / 2
-		if (drawState inputImage != null && drawState inputImage class == GpuYuv420Semiplanar) {
-			drawStateY inputImage = (drawState inputImage as GpuYuv420Semiplanar) y
-			drawStateUV inputImage = (drawState inputImage as GpuYuv420Semiplanar) uv
-		}
-		drawStateY draw()
-		drawStateUV draw()
-	}
 	drawLines: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) {
 		yuv := pen color toYuv()
 		this _target y canvas drawLines(pointList, Pen new(ColorRgba new(yuv y, 0, 0, 255), pen width))
