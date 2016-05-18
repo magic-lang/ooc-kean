@@ -6,10 +6,13 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+ import io/[File, FileWriter, FileReader]
+
 _HashEntry: class <K, V> {
 	_key: __onheap__ K
 	_value: __onheap__ V
 	_next: This<K, V> = null
+
 	init: func (=_key, =_value)
 	free: override func {
 		memfree(this _key)
@@ -19,6 +22,12 @@ _HashEntry: class <K, V> {
 			this _next = null
 		}
 		super()
+	}
+	freeKeyValuePair: func {
+		if (K inheritsFrom(Object))
+			(this _key as Object) free()
+		if (V inheritsFrom(Object))
+			(this _value as Object) free()
 	}
 }
 
@@ -78,6 +87,15 @@ HashMap: class <K, V> {
 		this clear()
 		this _buckets free()
 		super()
+	}
+	freeContent: func {
+		for (i in 0 .. this capacity) {
+			entry := this _buckets[i]
+			while (entry != null) {
+				entry freeKeyValuePair()
+				entry = entry _next
+			}
+		}
 	}
 	put: func (key: K, value: V) -> V {
 		if ((this _count as Float / this _capacity as Float) > 0.75f)
@@ -193,6 +211,19 @@ HashMap: class <K, V> {
 		}
 		oldBuckets free()
 	}
+	writeToFile: func (filename: String) {
+		raise(K != String || V != String, "Key and value must be of type String!")
+		File createParentDirectories(filename)
+		fileWriter := FileWriter new(filename)
+		writerFunc := func (keyPtr, valuePtr: String*) {
+			key := (keyPtr as String*)@
+			value := (valuePtr as String*)@
+			fileWriter write(key) . write(":") . write(value) . write("\n")
+		}
+		this each(writerFunc)
+		(writerFunc as Closure) free()
+		fileWriter close() . free()
+	}
 	_keyEquals: func (first, second: K) -> Bool {
 		match (K) {
 			case Int => first as Int == second as Int
@@ -200,6 +231,19 @@ HashMap: class <K, V> {
 			case Text => first as Text == second as Text
 			case => memcmp(first, second, K size) == 0
 		}
+	}
+	readFromFile: static func (filename: Text) -> This<String, String> {
+		reader := FileReader new(filename, t"r")
+		result := This<String, String> new()
+		while (reader hasNext()) {
+			string := reader readLine()
+			pair := string split(':')
+			if (pair count == 2)
+				result put(pair[0] clone(), pair[1] clone())
+			(string, pair) free()
+		}
+		reader close() . free()
+		result
 	}
 	hash: static func <K> (key: K) -> Int {
 		result := match (K) {
