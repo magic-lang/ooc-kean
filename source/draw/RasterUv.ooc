@@ -26,7 +26,7 @@ RasterUvCanvas: class extends RasterPackedCanvas {
 		if (this target isValidIn(position x, position y))
 			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toUv())
 	}
-	_draw: override func (image: Image, source, destination: IntBox2D, interpolate: Bool) {
+	_draw: override func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) {
 		uv: RasterUv = null
 		if (image == null)
 			Debug error("Null image in RasterUvCanvas draw")
@@ -36,7 +36,7 @@ RasterUvCanvas: class extends RasterPackedCanvas {
 			uv = RasterUv convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RasterUvCanvas draw")
-		this _resizePacked(uv buffer pointer as ColorUv*, uv, source, destination, interpolate)
+		this _resizePacked(uv buffer pointer as ColorUv*, uv, source, destination, interpolate, flipX, flipY)
 		if (uv != image)
 			uv referenceCount decrease()
 	}
@@ -150,8 +150,8 @@ RasterUv: class extends RasterPacked {
 		rgb referenceCount decrease()
 		result
 	}
-	open: static func (filename: String, coordinateSystem := CoordinateSystem Default) -> This {
-		rasterRgb := RasterRgb open(filename, coordinateSystem)
+	open: static func (filename: String) -> This {
+		rasterRgb := RasterRgb open(filename)
 		result := This convertFrom(rasterRgb)
 		rasterRgb referenceCount decrease()
 		result

@@ -36,8 +36,8 @@ RasterRgba: class extends RasterPacked {
 	bytesPerPixel ::= 4
 	init: func ~allocate (size: IntVector2D) { super~allocate(size) }
 	init: func ~allocateStride (size: IntVector2D, stride: UInt) { super(size, stride) }
-	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntVector2D, stride: UInt, coordinateSystem := CoordinateSystem Default) { super(buffer, size, stride, coordinateSystem) }
-	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D, coordinateSystem := CoordinateSystem Default) { this init(buffer, size, this bytesPerPixel * size x, coordinateSystem) }
+	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntVector2D, stride: UInt) { super(buffer, size, stride) }
+	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D) { this init(buffer, size, this bytesPerPixel * size x) }
 	init: func ~fromRasterRgba (original: This) { super(original) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: override func (size: IntVector2D) -> Image { This new(size) }
@@ -155,10 +155,10 @@ RasterRgba: class extends RasterPacked {
 		)
 	}
 
-	open: static func (filename: String, coordinateSystem := CoordinateSystem Default) -> This {
+	open: static func (filename: String) -> This {
 		requiredComponents := 4
 		(buffer, size, _) := StbImage load(filename, requiredComponents)
-		result := This new(buffer, size, coordinateSystem)
+		result := This new(buffer, size)
 		result swapRedBlue()
 		result
 	}
