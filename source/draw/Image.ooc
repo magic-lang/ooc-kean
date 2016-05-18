@@ -43,6 +43,8 @@ Image: abstract class {
 		this _canvas = null
 		super()
 	}
+	getFirstPacked: abstract func -> This
+	getSecondPacked: abstract func -> This
 	drawPoint: func ~white (position: FloatPoint2D) { this canvas drawPoint~white(position) }
 	drawPoint: func ~explicit (position: FloatPoint2D, pen: Pen) { this canvas drawPoint~explicit(position, pen) }
 	drawLine: func ~white (start, end: FloatPoint2D) { this canvas drawLine~white(start, end) }

@@ -127,6 +127,8 @@ RasterPacked: abstract class extends RasterImage {
 		this _buffer = null
 		super()
 	}
+	getFirstPacked: override func -> This { this }
+	getSecondPacked: override func -> This { null }
 	equals: func (other: Image) -> Bool {
 		other instanceOf(This) && this bytesPerPixel == (other as This) bytesPerPixel && this as Image equals(other)
 	}

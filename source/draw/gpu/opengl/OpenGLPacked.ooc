@@ -39,6 +39,8 @@ OpenGLPacked: abstract class extends GpuImage {
 			super()
 		}
 	}
+	getFirstPacked: override func -> This { this }
+	getSecondPacked: override func -> This { null }
 	upload: override func (image: RasterImage) {
 		if (image instanceOf(RasterPacked)) {
 			raster := image as RasterPacked

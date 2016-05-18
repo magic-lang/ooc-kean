@@ -16,6 +16,8 @@ GpuYuv420Semiplanar: class extends GpuImage {
 	_uv: GpuImage
 	y ::= this _y
 	uv ::= this _uv
+	getFirstPacked: override func -> Image { this _y }
+	getSecondPacked: override func -> Image { this _uv }
 	filter: Bool {
 		get { this _y filter }
 		set(value) {
