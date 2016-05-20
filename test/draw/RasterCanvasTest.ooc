@@ -24,10 +24,10 @@ RasterCanvasTest: class extends Fixture {
 			halfHeight := image size y / 2
 			start := FloatPoint2D new(-halfWidth, -halfHeight)
 			end := FloatPoint2D new(halfWidth, halfHeight)
-			image canvas drawLine(start, end, pen)
+			image drawLine(start, end, pen)
 			start = FloatPoint2D new(halfWidth, -halfHeight)
 			end = FloatPoint2D new(-halfWidth, halfHeight)
-			image canvas drawLine(start, end, pen)
+			image drawLine(start, end, pen)
 			image save(output)
 			original := RasterRgb open(this inputFlower)
 			//TODO: This doesn't test if correctly drawn, only if the image has been modified
@@ -41,7 +41,7 @@ RasterCanvasTest: class extends Fixture {
 			pen := Pen new(ColorRgb new(128, 0, 128))
 			for (row in 0 .. image size y / 3)
 				for (column in 0 .. image size x / 3)
-					image canvas drawPoint(FloatPoint2D new(column * 3 - image size x / 2, row * 3 - image size y / 2), pen)
+					image drawPoint(FloatPoint2D new(column * 3 - image size x / 2, row * 3 - image size y / 2), pen)
 			image save(output)
 			original := RasterRgba open(this inputFlower)
 			//TODO: This doesn't test if correctly drawn, only if the image has been modified
@@ -55,7 +55,7 @@ RasterCanvasTest: class extends Fixture {
 			for (i in 0 .. 30) {
 				pen := Pen new(ColorRgb new((i % 3) * 80, (i % 5) * 50, (i % 10) * 25))
 				box := IntBox2D createAround(IntPoint2D new(0, 0), IntVector2D new(10 * i, 10 * i))
-				image canvas drawBox(FloatBox2D new(box), pen)
+				image drawBox(FloatBox2D new(box), pen)
 			}
 			image save(output)
 			original := RasterYuv420Semiplanar open(this inputFlower)
@@ -71,9 +71,9 @@ RasterCanvasTest: class extends Fixture {
 			shiftX := image size x / 2
 			shiftY := image size y / 2
 			for (i in 0 .. image size x / 10)
-				image canvas drawLine(FloatPoint2D new(i * 10 - shiftX, -shiftY), FloatPoint2D new(i * 10 - shiftX, shiftY), pen)
+				image drawLine(FloatPoint2D new(i * 10 - shiftX, -shiftY), FloatPoint2D new(i * 10 - shiftX, shiftY), pen)
 			for (i in 0 .. image size y / 10)
-				image canvas drawLine(FloatPoint2D new(-shiftX, i * 10 - shiftY), FloatPoint2D new(shiftX, i * 10 - shiftY), pen)
+				image drawLine(FloatPoint2D new(-shiftX, i * 10 - shiftY), FloatPoint2D new(shiftX, i * 10 - shiftY), pen)
 			image save(output)
 			original := RasterMonochrome open(this inputFlower)
 			//TODO: This doesn't test if correctly drawn, only if the image has been modified
@@ -89,9 +89,9 @@ RasterCanvasTest: class extends Fixture {
 			shiftY := image size y / 2
 			factor := 2
 			for (i in 0 .. image size x / factor)
-				image canvas drawLine(FloatPoint2D new(i * factor - shiftX, -shiftY), FloatPoint2D new(i * factor - shiftX, shiftY), pen)
+				image drawLine(FloatPoint2D new(i * factor - shiftX, -shiftY), FloatPoint2D new(i * factor - shiftX, shiftY), pen)
 			for (i in 0 .. image size y / factor)
-				image canvas drawLine(FloatPoint2D new(-shiftX, i * factor - shiftY), FloatPoint2D new(shiftX, i * factor - shiftY), pen)
+				image drawLine(FloatPoint2D new(-shiftX, i * factor - shiftY), FloatPoint2D new(shiftX, i * factor - shiftY), pen)
 			image save(output)
 			original := RasterMonochrome open(this inputFlower)
 			//TODO: This doesn't test if correctly drawn, only if the image has been modified

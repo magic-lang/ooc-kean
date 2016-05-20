@@ -23,33 +23,6 @@ import io/File
 import io/FileReader
 import io/Reader
 import io/FileWriter
-import Canvas, RasterCanvas
-
-RasterYuv420SemiplanarCanvas: class extends RasterCanvas {
-	target ::= this _target as RasterYuv420Semiplanar
-	init: func (image: RasterYuv420Semiplanar) { super(image) }
-	_drawPoint: override func (x, y: Int, pen: Pen) {
-		position := this _map(IntPoint2D new(x, y))
-		if (this target isValidIn(position x, position y))
-			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toYuv())
-	}
-	fill: override func (color: ColorRgba) {
-		yuv := color toYuv()
-		this target y fill(ColorRgba new(yuv y, 0, 0, 255))
-		this target uv fill(ColorRgba new(yuv u, yuv v, 0, 255))
-	}
-	draw: override func ~DrawState (drawState: DrawState) {
-		drawStateY := drawState setTarget((drawState target as RasterYuv420Semiplanar) y)
-		drawStateUV := drawState setTarget((drawState target as RasterYuv420Semiplanar) uv)
-		drawStateUV viewport = drawState viewport / 2
-		if (drawState inputImage != null && drawState inputImage class == RasterYuv420Semiplanar) {
-			drawStateY inputImage = (drawState inputImage as RasterYuv420Semiplanar) y
-			drawStateUV inputImage = (drawState inputImage as RasterYuv420Semiplanar) uv
-		}
-		drawStateY draw()
-		drawStateUV draw()
-	}
-}
 
 RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	stride ::= this _y stride
@@ -69,6 +42,27 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		this init(yImage, uvImage)
 	}
 	create: override func (size: IntVector2D) -> Image { This new(size) }
+	_drawPoint: override func (x, y: Int, pen: Pen) {
+		position := this _map(IntPoint2D new(x, y))
+		if (this isValidIn(position x, position y))
+			this[position x, position y] = this[position x, position y] blend(pen alphaAsFloat, pen color toYuv())
+	}
+	fill: override func (color: ColorRgba) {
+		yuv := color toYuv()
+		this y fill(ColorRgba new(yuv y, 0, 0, 255))
+		this uv fill(ColorRgba new(yuv u, yuv v, 0, 255))
+	}
+	draw: override func ~DrawState (drawState: DrawState) {
+		drawStateY := drawState setTarget((drawState target as This) y)
+		drawStateUV := drawState setTarget((drawState target as This) uv)
+		drawStateUV viewport = drawState viewport / 2
+		if (drawState inputImage != null && drawState inputImage class == This) {
+			drawStateY inputImage = (drawState inputImage as This) y
+			drawStateUV inputImage = (drawState inputImage as This) uv
+		}
+		drawStateY draw()
+		drawStateUV draw()
+	}
 	copy: override func -> This {
 		result := This new(this)
 		this y buffer copyTo(result y buffer)
@@ -191,8 +185,6 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		fileWriter write(this uv buffer pointer as Char*, this uv buffer size)
 		fileWriter close() . free()
 	}
-	_createCanvas: override func -> Canvas { RasterYuv420SemiplanarCanvas new(this) }
-
 	operator [] (x, y: Int) -> ColorYuv {
 		ColorYuv new(this y[x, y] y, this uv [x / 2, y / 2] u, this uv [x / 2, y / 2] v)
 	}

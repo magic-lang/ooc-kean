@@ -16,18 +16,45 @@ import RasterRgb
 import RasterRgba
 import RasterMonochrome
 import Image
-import Canvas, RasterCanvas
 
-RasterPackedCanvas: abstract class extends RasterCanvas {
-	target ::= this _target as RasterPacked
-	init: func (image: RasterPacked) { super(image) }
-	_resizePacked: func <T> (sourceBuffer: T*, source: RasterPacked, sourceBox, resultBox: IntBox2D, interpolate, flipX, flipY: Bool) {
-		if (this target size == source size && this target stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0 && !flipX && !flipY)
-			memcpy(this target buffer pointer, sourceBuffer, this target stride * this target height)
+RasterPacked: abstract class extends RasterImage {
+	_buffer: ByteBuffer
+	_stride: Int
+	buffer ::= this _buffer
+	stride ::= this _stride
+	bytesPerPixel: Int { get }
+	init: func (=_buffer, size: IntVector2D, =_stride) {
+		super(size)
+		this _buffer referenceCount increase()
+	}
+	init: func ~allocateStride (size: IntVector2D, stride: UInt) { this init(ByteBuffer new(stride * size y), size, stride) }
+	init: func ~allocate (size: IntVector2D) {
+		stride := this bytesPerPixel * size x
+		this init(ByteBuffer new(stride * size y), size, stride)
+	}
+	init: func ~fromOriginal (original: This) {
+		super(original)
+		this _buffer = original buffer copy()
+		this _stride = original stride
+	}
+	init: func ~fromRasterImage (original: RasterImage) {
+		super(original)
+		this _stride = this bytesPerPixel * original width
+		this _buffer = ByteBuffer new(this stride * original height)
+	}
+	free: override func {
+		if (this _buffer != null)
+			this _buffer referenceCount decrease()
+		this _buffer = null
+		super()
+	}
+	_resizePacked: func <T> (sourceBuffer: T*, source: This, sourceBox, resultBox: IntBox2D, interpolate, flipX, flipY: Bool) {
+		if (this size == source size && this stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0 && !flipX && !flipY)
+			memcpy(this buffer pointer, sourceBuffer, this stride * this height)
 		else if (interpolate)
-			This _resizeBilinear(source, this target, sourceBox, resultBox, flipX, flipY)
+			This _resizeBilinear(source, this, sourceBox, resultBox, flipX, flipY)
 		else
-			This _resizeNearestNeighbour(sourceBuffer, this target buffer pointer as T*, source, this target, sourceBox, resultBox, flipX, flipY)
+			This _resizeNearestNeighbour(sourceBuffer, this buffer pointer as T*, source, this, sourceBox, resultBox, flipX, flipY)
 	}
 	_transformCoordinates: static func (column, row, width, height: Int, flipX, flipY: Bool) -> (Int, Int) {
 		if (flipX)
@@ -36,7 +63,7 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 			row = height - row - 1
 		(column, row)
 	}
-	_resizeNearestNeighbour: static func <T> (sourceBuffer, resultBuffer: T*, source, target: RasterPacked, sourceBox, resultBox: IntBox2D, flipX, flipY: Bool) {
+	_resizeNearestNeighbour: static func <T> (sourceBuffer, resultBuffer: T*, source, target: This, sourceBox, resultBox: IntBox2D, flipX, flipY: Bool) {
 		bytesPerPixel := target bytesPerPixel
 		(resultWidth, resultHeight) := (resultBox size x, resultBox size y)
 		(sourceWidth, sourceHeight) := (sourceBox size x, sourceBox size y)
@@ -55,7 +82,7 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 			}
 		}
 	}
-	_resizeBilinear: static func (source, target: RasterPacked, sourceBox, resultBox: IntBox2D, flipX, flipY: Bool) {
+	_resizeBilinear: static func (source, target: This, sourceBox, resultBox: IntBox2D, flipX, flipY: Bool) {
 		bytesPerPixel := target bytesPerPixel
 		(resultWidth, resultHeight) := (resultBox size x, resultBox size y)
 		(sourceWidth, sourceHeight) := (sourceBox size x, sourceBox size y)
@@ -93,39 +120,6 @@ RasterPackedCanvas: abstract class extends RasterCanvas {
 			finalValue += weightBottomRight > 0.0f ? weightBottomRight * sourceBuffer[(sourceColumn + 1) * bytesPerPixel + (sourceRow + 1) * sourceStride + i] : 0
 			resultBuffer[column * bytesPerPixel + row * resultStride + i] = finalValue
 		}
-	}
-}
-
-RasterPacked: abstract class extends RasterImage {
-	_buffer: ByteBuffer
-	_stride: Int
-	buffer ::= this _buffer
-	stride ::= this _stride
-	bytesPerPixel: Int { get }
-	init: func (=_buffer, size: IntVector2D, =_stride) {
-		super(size)
-		this _buffer referenceCount increase()
-	}
-	init: func ~allocateStride (size: IntVector2D, stride: UInt) { this init(ByteBuffer new(stride * size y), size, stride) }
-	init: func ~allocate (size: IntVector2D) {
-		stride := this bytesPerPixel * size x
-		this init(ByteBuffer new(stride * size y), size, stride)
-	}
-	init: func ~fromOriginal (original: This) {
-		super(original)
-		this _buffer = original buffer copy()
-		this _stride = original stride
-	}
-	init: func ~fromRasterImage (original: RasterImage) {
-		super(original)
-		this _stride = this bytesPerPixel * original width
-		this _buffer = ByteBuffer new(this stride * original height)
-	}
-	free: override func {
-		if (this _buffer != null)
-			this _buffer referenceCount decrease()
-		this _buffer = null
-		super()
 	}
 	equals: func (other: Image) -> Bool {
 		other instanceOf(This) && this bytesPerPixel == (other as This) bytesPerPixel && this as Image equals(other)

@@ -15,22 +15,6 @@ import StbImage
 import Image
 import Color
 import Pen
-import Canvas, RasterCanvas
-
-RasterRgbaCanvas: class extends RasterPackedCanvas {
-	target ::= this _target as RasterRgba
-	init: func (image: RasterRgba) { super(image) }
-	_drawPoint: override func (x, y: Int, pen: Pen) {
-		position := this _map(IntPoint2D new(x, y))
-		if (this target isValidIn(position x, position y))
-			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color)
-	}
-	fill: override func (color: ColorRgba) {
-		for (y in 0 .. this size y)
-			for (x in 0 .. this size x)
-				this target[x, y] = color
-	}
-}
 
 RasterRgba: class extends RasterPacked {
 	bytesPerPixel ::= 4
@@ -41,6 +25,16 @@ RasterRgba: class extends RasterPacked {
 	init: func ~fromRasterRgba (original: This) { super(original) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: override func (size: IntVector2D) -> Image { This new(size) }
+	_drawPoint: override func (x, y: Int, pen: Pen) {
+		position := this _map(IntPoint2D new(x, y))
+		if (this isValidIn(position x, position y))
+			this[position x, position y] = this[position x, position y] blend(pen alphaAsFloat, pen color)
+	}
+	fill: override func (color: ColorRgba) {
+		for (y in 0 .. this size y)
+			for (x in 0 .. this size x)
+				this[x, y] = color
+	}
 	copy: override func -> This { This new(this) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
 		for (row in 0 .. this size y) {
@@ -131,8 +125,6 @@ RasterRgba: class extends RasterPacked {
 		result swapRedBlue()
 		result
 	}
-	_createCanvas: override func -> Canvas { RasterRgbaCanvas new(this) }
-
 	operator [] (x, y: Int) -> ColorRgba { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorRgba* + x)@ : ColorRgba new(0, 0, 0, 0) }
 	operator []= (x, y: Int, value: ColorRgba) { ((this buffer pointer + y * this stride) as ColorRgba* + x)@ = value }
 	operator [] (point: IntPoint2D) -> ColorRgba { this[point x, point y] }

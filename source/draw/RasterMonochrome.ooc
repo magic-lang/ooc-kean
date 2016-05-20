@@ -16,34 +16,6 @@ import StbImage
 import Image, FloatImage
 import Color
 import Pen
-import Canvas, RasterCanvas
-
-RasterMonochromeCanvas: class extends RasterPackedCanvas {
-	target ::= this _target as RasterMonochrome
-	init: func (image: RasterMonochrome) { super(image) }
-	_drawPoint: override func (x, y: Int, pen: Pen) {
-		position := this _map(IntPoint2D new(x, y))
-		if (this target isValidIn(position x, position y))
-			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toMonochrome())
-	}
-	_draw: override func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) {
-		monochrome: RasterMonochrome = null
-		if (image == null)
-			Debug error("Null image in RasterMonochromeCanvas draw")
-		else if (image instanceOf(RasterMonochrome))
-			monochrome = image as RasterMonochrome
-		else if (image instanceOf(RasterImage))
-			monochrome = RasterMonochrome convertFrom(image as RasterImage)
-		else
-			Debug error("Unsupported image type in RasterMonochromeCanvas draw")
-		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination, interpolate, flipX, flipY)
-		if (monochrome != image)
-			monochrome referenceCount decrease()
-	}
-	fill: override func (color: ColorRgba) {
-		this target buffer memset(color r)
-	}
-}
 
 RasterMonochrome: class extends RasterPacked {
 	bytesPerPixel ::= 1
@@ -54,6 +26,28 @@ RasterMonochrome: class extends RasterPacked {
 	init: func ~fromRasterMonochrome (original: This) { super(original) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: override func (size: IntVector2D) -> Image { This new(size) }
+	_drawPoint: override func (x, y: Int, pen: Pen) {
+		position := this _map(IntPoint2D new(x, y))
+		if (this isValidIn(position x, position y))
+			this[position x, position y] = this[position x, position y] blend(pen alphaAsFloat, pen color toMonochrome())
+	}
+	_draw: override func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) {
+		monochrome: This = null
+		if (image == null)
+			Debug error("Null image in RasterMonochrome draw")
+		else if (image instanceOf(This))
+			monochrome = image as This
+		else if (image instanceOf(RasterImage))
+			monochrome = This convertFrom(image as RasterImage)
+		else
+			Debug error("Unsupported image type in RasterMonochrome draw")
+		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination, interpolate, flipX, flipY)
+		if (monochrome != image)
+			monochrome referenceCount decrease()
+	}
+	fill: override func (color: ColorRgba) {
+		this buffer memset(color r)
+	}
 	copy: override func -> This { This new(this) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
 		convert := ColorConvert fromMonochrome(action)
@@ -185,8 +179,6 @@ RasterMonochrome: class extends RasterPacked {
 		for (row in 0 .. this size y)
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
-	_createCanvas: override func -> Canvas { RasterMonochromeCanvas new(this) }
-
 	operator [] (x, y: Int) -> ColorMonochrome {
 		version(safe)
 			raise(!this isValidIn(x, y), "Accessing RasterMonochrome index out of range in get operator")
