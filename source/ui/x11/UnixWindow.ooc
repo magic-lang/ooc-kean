@@ -48,7 +48,7 @@ UnixWindow: class extends UnixWindowBase {
 	context ::= this _openGLWindow context
 	init: func (size: IntVector2D, title: String) {
 		super(size, title)
-		this _openGLWindow = OpenGLWindow new(this _xWindow size, this _xWindow display, this _xWindow backend)
+		this _openGLWindow = OpenGLWindow new(this _xWindow display, this _xWindow backend)
 	}
 	free: override func {
 		this _openGLWindow free()
@@ -73,7 +73,7 @@ UnixWindow: class extends UnixWindowBase {
 			case (matchedImage: GpuImage) =>
 				map add("texture0", matchedImage)
 		}
-		map use(null, this _openGLWindow flipMatrix(), FloatTransform3D identity)
+		map use(null, FloatTransform3D identity, FloatTransform3D identity)
 		this _openGLWindow context backend setViewport(IntBox2D new(image size))
 		this _openGLWindow context backend disableBlend()
 		this _openGLWindow context drawQuad()

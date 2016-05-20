@@ -16,7 +16,7 @@ version(!gpuOff) {
 GpuCanvasYuv420Semiplanar: class extends GpuCanvas {
 	_target: GpuYuv420Semiplanar
 	init: func (=_target, context: GpuContext) {
-		super(this _target size, context, context defaultMap, IntTransform2D identity)
+		super(this _target size, context, context defaultMap)
 	}
 	draw: override func ~DrawState (drawState: DrawState) {
 		drawStateY := drawState setTarget((drawState target as GpuYuv420Semiplanar) y)

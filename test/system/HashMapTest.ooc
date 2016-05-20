@@ -177,6 +177,30 @@ HashMapTest: class extends Fixture {
 
 			hashmap free()
 		})
+		this add("to and from file", func {
+			hashmap := HashMap<String, String> new()
+			hashmap put("pi", "3.14159")
+			hashmap put("e", "2.71828")
+			hashmap put("sqrt(2)", "1.41459")
+			hashmap put("primes", "2,3,5,7,11,13,17")
+			hashmap writeToFile("test/system/output/mathmap.txt")
+			hashmap free()
+
+			tolerance := 0.00001f
+			input := HashMap readFromFile(t"test/system/output/mathmap.txt")
+			expect(input, is notNull)
+			expect(input count, is equal to(4))
+			(piString, eString, sqrtTwoString, primeString) := (input get("pi"), input get("e"), input get("sqrt(2)"), input get("primes"))
+			(pi, e, sqrtTwo) := (piString, eString, sqrtTwoString) toFloat()
+			expect(pi, is equal to(3.14159f) within(tolerance))
+			expect(e, is equal to(2.71828f) within(tolerance))
+			expect(sqrtTwo, is equal to(1.41459f) within(tolerance))
+			primes := primeString split(',')
+			expect(primes count, is equal to(7))
+			primes free()
+
+			input freeContent() . free()
+		})
 	}
 }
 
