@@ -27,6 +27,8 @@ getErrorMessage: func (errorCode: Int) -> String {
 
 version(debugGL) {
 validateStart: func (location: String) {
+	if (eglGetCurrentContext() == EGL_NO_CONTEXT)
+		Debug print("Calling OpenGL function outside of valid context in %s" format(location))
 	validate("before " + location + " from unknown location")
 }
 validateEnd: func (location: String) {
