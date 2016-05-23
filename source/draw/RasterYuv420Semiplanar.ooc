@@ -72,52 +72,7 @@ RasterYuv420Semiplanar: class extends RasterImage {
 		super()
 	}
 	distance: override func (other: Image) -> Float {
-		result := 0.0f
-		if (!other || (this size != other size) || !other instanceOf(This))
-			result = Float maximumValue
-		else {
-			for (y in 0 .. this size y)
-				for (x in 0 .. this size x) {
-					c := this[x, y]
-					o := (other as This)[x, y]
-					if (c distance(o) > 0) {
-						maximum := o
-						minimum := o
-						for (otherY in 0 maximum(y - this distanceRadius) .. (y + 1 + this distanceRadius) minimum(this size y))
-							for (otherX in 0 maximum(x - this distanceRadius) .. (x + 1 + this distanceRadius) minimum(this size x))
-								if (otherX != x || otherY != y) {
-									pixel := (other as This)[otherX, otherY]
-									if (maximum y < pixel y)
-										maximum y = pixel y
-									else if (minimum y > pixel y)
-										minimum y = pixel y
-									if (maximum u < pixel u)
-										maximum u = pixel u
-									else if (minimum u > pixel u)
-										minimum u = pixel u
-									if (maximum v < pixel v)
-										maximum v = pixel v
-									else if (minimum v > pixel v)
-										minimum v = pixel v
-								}
-						distance := 0.0f
-						if (c y < minimum y)
-							distance += (minimum y - c y) as Float squared
-						else if (c y > maximum y)
-							distance += (c y - maximum y) as Float squared
-						if (c u < minimum u)
-							distance += (minimum u - c u) as Float squared
-						else if (c u > maximum u)
-							distance += (c u - maximum u) as Float squared
-						if (c v < minimum v)
-							distance += (minimum v - c v) as Float squared
-						else if (c v > maximum v)
-							distance += (c v - maximum v) as Float squared
-						result += (distance) sqrt() / 3
-					}
-				}
-			result /= this size length
-		}
+		(this y distance((other as This) y) + this uv distance((other as This) uv)) / 2.0f
 	}
 	create: override func (size: IntVector2D) -> Image { This new(size) }
 	_drawPoint: override func (x, y: Int, pen: Pen) {
