@@ -236,7 +236,7 @@ RasterYuv420Semiplanar: class extends RasterImage {
 		(RasterMonochrome new(buffer slice(0, yLength), size, stride), RasterUv new(buffer slice(uvOffset, uvLength), This _uvSize(size), stride))
 	}
 	_uvSize: static func (size: IntVector2D) -> IntVector2D {
-		IntVector2D new(size x / 2 + (size x isOdd ? 1 : 0), size y / 2 + (size y isOdd ? 1 : 0))
+		IntVector2D new((size x + 1) / 2, (size y + 1) / 2)
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
