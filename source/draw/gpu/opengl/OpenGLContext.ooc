@@ -72,7 +72,7 @@ OpenGLContext: class extends GpuContext {
 			this _defaultFontGpu free()
 		this _backend makeCurrent()
 		(this _transformTextureMap, this _packMonochrome, this _packUv, this _packUvPadded, this _linesShader) free()
-		(this _pointsShader, this _backend, this _renderer, this _recycleBin) free()
+		(this _pointsShader, this _renderer, this _recycleBin, this _backend) free()
 		super()
 	}
 	getMaxContexts: func -> Int { 1 }
