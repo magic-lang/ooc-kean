@@ -186,4 +186,5 @@ eglGetConfigAttrib: extern func (display: Pointer, config: Pointer, attribute: I
 eglSwapBuffers: extern func (display, surface: Pointer)
 eglTerminate: extern func (display: Pointer) -> UInt
 eglGetError: extern func -> UInt
+eglGetCurrentContext: extern func -> Pointer
 }

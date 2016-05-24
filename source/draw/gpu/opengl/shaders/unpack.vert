@@ -9,5 +9,5 @@ layout(location = 1) in vec2 textureCoordinate;
 out vec4 fragmentTextureCoordinate;
 void main() {
 	fragmentTextureCoordinate = vec4(scaleX * textureCoordinate.x, startY + scaleY * textureCoordinate.y, textureCoordinate);
-	gl_Position = transform * vec4(vertexPosition, 1);
+	gl_Position = transform * vec4(vertexPosition.x, -vertexPosition.y, 0, 1);
 }
