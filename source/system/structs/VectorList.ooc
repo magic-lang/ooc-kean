@@ -75,6 +75,49 @@ VectorList: class <T> extends List<T>{
 		(matches as Closure) free(Owner Receiver)
 		result
 	}
+	lowerBound: func (start, end: Int, toCompare: T, isLess: Func (T*, T*) -> Bool) -> Int {
+		version (safe)
+			if (!this isSorted(start, end, isLess))
+				raise("list must be partially sorted!")
+		count := end - start
+		while (count > 0) {
+			step := count / 2
+			compareResult: Bool
+			compareResult = isLess(this _vector[start + step]&, toCompare&)
+			if (compareResult) {
+				start = start + step + 1
+				count -= step + 1
+			} else
+				count = step
+		}
+		start >= end ? -1 : start
+	}
+	upperBound: func (start, end: Int, toCompare: T, isLess: Func (T*, T*) -> Bool) -> Int {
+		version (safe)
+			if (!this isSorted(start, end, isLess))
+				raise("list must be partially sorted!")
+		count := end - start
+		while (count > 0) {
+			step := count / 2
+			compareResult: Bool
+			compareResult = !isLess(toCompare&, this _vector[start + step]&)
+			if (compareResult) {
+				start = start + step + 1
+				count -= step + 1
+			} else
+				count = step
+		}
+		start >= end ? -1 : start
+	}
+	isSorted: func (start, end: Int, isLess: Func (T*, T*) -> Bool) -> Bool {
+		result := true
+		for (i in start .. end - 1)
+			if (isLess(this _vector[i + 1]&, this _vector[i]&)) {
+				result = false
+				break
+			}
+		result
+	}
 	sort: override func (greaterThan: Func (T, T) -> Bool) {
 		inOrder := false
 		while (!inOrder) {

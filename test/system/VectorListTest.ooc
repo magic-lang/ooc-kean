@@ -231,6 +231,7 @@ VectorListTest: class extends Fixture {
 			// 	expect(item, is equal to(list[index]))
 		})
 		this add("VectorList search", This _testVectorListSearch)
+		this add("VectorList bound search", This _testVectorListBoundSearch)
 	}
 	_testVectorListSearch: static func {
 		list := VectorList<Int> new()
@@ -241,6 +242,37 @@ VectorListTest: class extends Fixture {
 		expect(list search(|instance| 9 == instance), is equal to(9))
 		expect(list search(|instance| 10 == instance), is equal to(-1))
 		list free()
+	}
+	_testVectorListBoundSearch: static func {
+		intList := VectorList<Int> new()
+		intList add(10) . add(10) . add(10) . add(20) . add(20) . add(20) . add(30) . add(30)
+		unorderedList := VectorList<Int> new()
+		unorderedList add(2) . add(23) . add(-1)
+		intComparator := func (first, second: Int*) -> Bool {
+			first@ < second@
+		}
+		intToCompare := 20
+		expect(intList isSorted(0, intList count, intComparator), is true)
+		expect(unorderedList isSorted(0, unorderedList count, intComparator), is false)
+		expect(intList lowerBound(0, intList count, 40, intComparator), is equal to(-1))
+		expect(intList upperBound(0, intList count, 40, intComparator), is equal to(-1))
+		expect(intList lowerBound(0, intList count, intToCompare, intComparator), is equal to(3))
+		expect(intList upperBound(0, intList count, intToCompare, intComparator), is equal to(6))
+		(intList, unorderedList, intComparator as Closure) free()
+
+		stringList := VectorList<String> new()
+		stringList add("a") . add("a") . add("b") . add("ab") . add("ba") . add("bb") .add("ccc") . add("ddd")
+		stringComparator := func (first, second: String*) -> Bool {
+			first@ size < second@ size
+		}
+		stringToCompare := "aa"
+		stringNotFound := "I'm too long"
+		expect(stringList isSorted(0, stringList count, stringComparator), is true)
+		expect(stringList lowerBound(0, stringList count, stringNotFound, stringComparator), is equal to(-1))
+		expect(stringList upperBound(0, stringList count, stringNotFound, stringComparator), is equal to(-1))
+		expect(stringList lowerBound(0, stringList count, stringToCompare, stringComparator), is equal to(3))
+		expect(stringList upperBound(0, stringList count, stringToCompare, stringComparator), is equal to(6))
+		(stringList, stringToCompare, stringNotFound, stringComparator as Closure) free()
 	}
 	_applyTester: static func (index: Int*) { expect(This staticlist[index@], is equal to(index@)) }
 }
