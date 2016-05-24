@@ -16,36 +16,6 @@ import StbImage
 import Image
 import Color
 import Pen
-import Canvas, RasterCanvas
-
-RasterUvCanvas: class extends RasterPackedCanvas {
-	target ::= this _target as RasterUv
-	init: func (image: RasterUv) { super(image) }
-	_drawPoint: override func (x, y: Int, pen: Pen) {
-		position := this _map(IntPoint2D new(x, y))
-		if (this target isValidIn(position x, position y))
-			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toUv())
-	}
-	_draw: override func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) {
-		uv: RasterUv = null
-		if (image == null)
-			Debug error("Null image in RasterUvCanvas draw")
-		else if (image instanceOf(RasterUv))
-			uv = image as RasterUv
-		else if (image instanceOf(RasterImage))
-			uv = RasterUv convertFrom(image as RasterImage)
-		else
-			Debug error("Unsupported image type in RasterUvCanvas draw")
-		this _resizePacked(uv buffer pointer as ColorUv*, uv, source, destination, interpolate, flipX, flipY)
-		if (uv != image)
-			uv referenceCount decrease()
-	}
-	fill: override func (color: ColorRgba) {
-		for (y in 0 .. this size y)
-			for (x in 0 .. this size x)
-				this target[x, y] = ColorUv new(color r, color g)
-	}
-}
 
 RasterUv: class extends RasterPacked {
 	bytesPerPixel ::= 2
@@ -56,6 +26,30 @@ RasterUv: class extends RasterPacked {
 	init: func ~fromRasterUv (original: This) { super(original) }
 	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: override func (size: IntVector2D) -> Image { This new(size) }
+	_drawPoint: override func (x, y: Int, pen: Pen) {
+		position := this _map(IntPoint2D new(x, y))
+		if (this isValidIn(position x, position y))
+			this[position x, position y] = this[position x, position y] blend(pen alphaAsFloat, pen color toUv())
+	}
+	_draw: override func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) {
+		uv: This = null
+		if (image == null)
+			Debug error("Null image in RasterUv draw")
+		else if (image instanceOf(This))
+			uv = image as This
+		else if (image instanceOf(RasterImage))
+			uv = This convertFrom(image as RasterImage)
+		else
+			Debug error("Unsupported image type in RasterUv draw")
+		this _resizePacked(uv buffer pointer as ColorUv*, uv, source, destination, interpolate, flipX, flipY)
+		if (uv != image)
+			uv referenceCount decrease()
+	}
+	fill: override func (color: ColorRgba) {
+		for (y in 0 .. this size y)
+			for (x in 0 .. this size x)
+				this[x, y] = ColorUv new(color r, color g)
+	}
 	copy: override func -> This { This new(this) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
 		convert := ColorConvert fromYuv(action)
@@ -139,11 +133,8 @@ RasterUv: class extends RasterPacked {
 		}
 		result
 	}
-	_createCanvas: override func -> Canvas { RasterUvCanvas new(this) }
-
 	operator [] (x, y: Int) -> ColorUv { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorUv* + x)@ : ColorUv new(0, 0) }
 	operator []= (x, y: Int, value: ColorUv) { ((this buffer pointer + y * this stride) as ColorUv* + x)@ = value }
-
 	save: override func (filename: String) -> Int {
 		rgb := RasterRgb convertFrom(this)
 		result := rgb save(filename)

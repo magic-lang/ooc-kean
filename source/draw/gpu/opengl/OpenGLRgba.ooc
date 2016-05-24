@@ -11,7 +11,7 @@ use draw
 use draw-gpu
 use base
 import backend/GLTexture
-import OpenGLCanvas, OpenGLPacked, OpenGLContext
+import OpenGLPacked, OpenGLContext
 
 version(!gpuOff) {
 OpenGLRgba: class extends OpenGLPacked {
@@ -34,7 +34,7 @@ OpenGLRgba: class extends OpenGLPacked {
 	}
 	toRasterDefault: override func ~target (target: RasterImage) {
 		buffer := (target as RasterRgba) buffer
-		(this canvas as OpenGLCanvas) readPixels(buffer)
+		this readPixels(buffer)
 	}
 	create: override func (size: IntVector2D) -> This { this context createRgba(size) as This }
 	channelCount: static Int = 4

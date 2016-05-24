@@ -12,7 +12,7 @@ use base
 use collections
 use concurrent
 import DrawContext
-import GpuImage, GpuCanvas, Map, GpuYuv420Semiplanar, Mesh
+import GpuImage, Map, GpuYuv420Semiplanar, Mesh
 
 version(!gpuOff) {
 ToRasterFuture: class extends Future<RasterImage> {

@@ -10,18 +10,18 @@ use draw
 use geometry
 use base
 use concurrent
-import GpuContext, GpuCanvas
+import GpuContext
 
 version(!gpuOff) {
 GpuImage: abstract class extends Image {
 	_context: GpuContext
+	_defaultMap: Map
+	_getDefaultMap: virtual func (image: Image) -> Map { this _defaultMap }
 	filter: Bool { get set }
-	canvas: GpuCanvas { get {
-		if (this _canvas == null)
-			this _canvas = this _createCanvas() as GpuCanvas
-		this _canvas as GpuCanvas
-	}}
-	init: func (size: IntVector2D, =_context) { super(size) }
+	init: func (size: IntVector2D, =_context) {
+		super(size)
+		this _defaultMap = this _context defaultMap
+	}
 	resizeTo: override func (size: IntVector2D) -> This {
 		result := this create(size) as This
 		DrawState new(result) setInputImage(this) draw()

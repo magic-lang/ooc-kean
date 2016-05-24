@@ -111,8 +111,8 @@ GpuSurfaceTest: class extends Fixture {
 			trianglePoints add(FloatPoint2D new (lineLength, lineLength / 2.0f))
 			trianglePoints add(FloatPoint2D new(0.0f, -lineLength))
 			trianglePoints add(FloatPoint2D new(-lineLength, lineLength / 2.0f))
-			gpuImage canvas drawLines(trianglePoints)
-			gpuImage canvas drawBox(FloatBox2D new(-lineLength, -lineLength, lineLength * 2.0f, lineLength * 2.0f))
+			gpuImage drawLines(trianglePoints)
+			gpuImage drawBox(FloatBox2D new(-lineLength, -lineLength, lineLength * 2.0f, lineLength * 2.0f))
 			//
 			// NOTE! The circle use a point size of 1.0f (OpenGLMapPoints in OpenGLMap.ooc)
 			//
@@ -126,7 +126,7 @@ GpuSurfaceTest: class extends Fixture {
 				circlePoints add(FloatPoint2D new(origo_x + radius * theta cos(), origo_y - radius * theta sin()))
 				theta += step
 			}
-			gpuImage canvas drawPoints(circlePoints)
+			gpuImage drawPoints(circlePoints)
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			(correctImage, gpuImage, rasterFromGpu, trianglePoints, circlePoints) free()

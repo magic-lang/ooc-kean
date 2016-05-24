@@ -162,7 +162,7 @@ DrawState: cover {
 	draw: func {
 		version(safe)
 			raise(this target == null, "Can't draw without a target.")
-		this target canvas draw(this)
+		this target draw(this)
 	}
 	// Example: DrawState new(targetImage) setOrigin(point) setInputImage(context getDefaultFont()) write(t"Hello world!")
 	write: func (message: Text) {

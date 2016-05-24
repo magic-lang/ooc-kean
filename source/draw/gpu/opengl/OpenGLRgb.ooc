@@ -11,7 +11,7 @@ use geometry
 use draw
 use draw-gpu
 import backend/GLTexture
-import OpenGLCanvas, OpenGLPacked, OpenGLContext
+import OpenGLPacked, OpenGLContext
 
 version(!gpuOff) {
 OpenGLRgb: class extends OpenGLPacked {
