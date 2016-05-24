@@ -32,8 +32,7 @@ RasterCanvasTest: class extends Fixture {
 			original := RasterRgb open(this inputFlower)
 			//TODO: This doesn't test if correctly drawn, only if the image has been modified
 			expect(original distance(image) > 0.0f)
-			original referenceCount decrease()
-			image referenceCount decrease()
+			(original, image) referenceCount decrease()
 			output free()
 		})
 		this add("rgba", func {
@@ -47,8 +46,7 @@ RasterCanvasTest: class extends Fixture {
 			original := RasterRgba open(this inputFlower)
 			//TODO: This doesn't test if correctly drawn, only if the image has been modified
 			expect(original distance(image) > 0.0f)
-			original referenceCount decrease()
-			image referenceCount decrease()
+			(original, image) referenceCount decrease()
 			output free()
 		})
 		this add("yuv420", func {
@@ -63,8 +61,7 @@ RasterCanvasTest: class extends Fixture {
 			original := RasterYuv420Semiplanar open(this inputFlower)
 			//TODO: This doesn't test if correctly drawn, only if the image has been modified
 			expect(original distance(image) > 0.0f)
-			original referenceCount decrease()
-			image referenceCount decrease()
+			(original, image) referenceCount decrease()
 			output free()
 		})
 		this add("monochrome", func {
@@ -81,8 +78,7 @@ RasterCanvasTest: class extends Fixture {
 			original := RasterMonochrome open(this inputFlower)
 			//TODO: This doesn't test if correctly drawn, only if the image has been modified
 			expect(original distance(image) > 0.0f)
-			original referenceCount decrease()
-			image referenceCount decrease()
+			(original, image) referenceCount decrease()
 			output free()
 		})
 		this add("monochrome with alpha", func {
@@ -100,8 +96,7 @@ RasterCanvasTest: class extends Fixture {
 			original := RasterMonochrome open(this inputFlower)
 			//TODO: This doesn't test if correctly drawn, only if the image has been modified
 			expect(original distance(image) > 0.0f)
-			original referenceCount decrease()
-			image referenceCount decrease()
+			(original, image) referenceCount decrease()
 			output free()
 		})
 		this add("draw rgb image", func {
@@ -110,20 +105,15 @@ RasterCanvasTest: class extends Fixture {
 			imageFlower := RasterYuv420Semiplanar open(this inputFlower)
 			outputImage := RasterRgb open(inputSpace)
 			DrawState new(outputImage) setInputImage(imageFlower) setViewport(IntBox2D new(20, 30, 100, 250)) setInterpolate(true) draw()
-			imageFlowerYUpward := RasterYuv420Semiplanar open(this inputFlower, CoordinateSystem YUpward)
-			DrawState new(outputImage) setInputImage(imageFlowerYUpward) setViewport(IntBox2D new(130, 30, 100, 250)) setInterpolate(true) draw()
-			imageFlowerXLeftward := RasterYuv420Semiplanar open(this inputFlower, CoordinateSystem XLeftward)
-			DrawState new(outputImage) setInputImage(imageFlowerXLeftward) setViewport(IntBox2D new(240, 30, 100, 250)) setInterpolate(false) draw()
-			imageFlowerXLeftwardYUpward := RasterYuv420Semiplanar open(this inputFlower, CoordinateSystem XLeftward | CoordinateSystem YUpward)
-			DrawState new(outputImage) setInputImage(imageFlowerXLeftwardYUpward) setViewport(IntBox2D new(350, 30, 100, 250)) setInterpolate(false) draw()
+			imageFlowerYUpward := RasterYuv420Semiplanar open(this inputFlower)
+			DrawState new(outputImage) setInputImage(imageFlowerYUpward) setFlipSourceY(true) setViewport(IntBox2D new(130, 30, 100, 250)) setInterpolate(true) draw()
+			imageFlowerXLeftward := RasterYuv420Semiplanar open(this inputFlower)
+			DrawState new(outputImage) setInputImage(imageFlowerXLeftward) setFlipSourceX(true) setViewport(IntBox2D new(240, 30, 100, 250)) setInterpolate(false) draw()
+			imageFlowerXLeftwardYUpward := RasterYuv420Semiplanar open(this inputFlower)
+			DrawState new(outputImage) setInputImage(imageFlowerXLeftwardYUpward) setFlipSourceX(true) setFlipSourceY(true) setViewport(IntBox2D new(350, 30, 100, 250)) setInterpolate(false) draw()
 			outputImage save(output)
-			imageFlower referenceCount decrease()
-			imageFlowerYUpward referenceCount decrease()
-			imageFlowerXLeftward referenceCount decrease()
-			imageFlowerXLeftwardYUpward referenceCount decrease()
-			outputImage referenceCount decrease()
-			inputSpace free()
-			output free()
+			(imageFlower, imageFlowerYUpward, imageFlowerXLeftward, imageFlowerXLeftwardYUpward, outputImage) referenceCount decrease()
+			(inputSpace, output) free()
 		})
 		this add("draw uv image", func {
 			output := "test/draw/output/RasterCanvas_drawRGBonUV.png"
@@ -132,10 +122,7 @@ RasterCanvasTest: class extends Fixture {
 			imageToDrawOn := RasterUv open(inputSpace)
 			DrawState new(imageToDrawOn) setInputImage(inputImage) setViewport(IntBox2D new(130, 30, 100, 250)) setInterpolate(true) draw()
 			imageToDrawOn save(output)
-			output free()
-			inputImage free()
-			imageToDrawOn free()
-			inputSpace free()
+			(output, inputImage, imageToDrawOn, inputSpace) free()
 		})
 	}
 	free: override func {

@@ -84,8 +84,8 @@ FloatBox2D: cover {
 	intersection: func (other: This) -> This {
 		left := this left maximum(other left)
 		top := this top maximum(other top)
-		width := 0 maximum(this right minimum(other right) - left)
-		height := 0 maximum(this bottom minimum(other bottom) - top)
+		width := 0.f maximum(this right minimum(other right) - left)
+		height := 0.f maximum(this bottom minimum(other bottom) - top)
 		This new(left, top, width, height)
 	}
 	union: func ~box (other: This) -> This { // Rock bug: Union without suffix cannot be used because the C name conflicts with keyword "union"
@@ -122,7 +122,7 @@ FloatBox2D: cover {
 		newSize := FloatVector2D linearInterpolation(this size, other size, weight)
 		This createAround(newCenter, newSize)
 	}
-	toString: func -> String { "#{this leftTop toString()}, #{this size toString()}" }
+	toString: func -> String { (this leftTop toString() >> ", ") & this size toString() }
 	toText: func -> Text { this leftTop toText() + t", " + this size toText() }
 	toIntBox2D: func -> IntBox2D { IntBox2D new(this left, this top, this width, this height) }
 

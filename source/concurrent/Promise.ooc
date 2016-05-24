@@ -21,12 +21,6 @@ Promise: abstract class {
 	wait: abstract func -> Bool
 	wait: abstract func ~timeout (time: TimeSpan) -> Bool
 	cancel: virtual func -> Bool { false }
-	operator + (other: This) -> PromiseCollector {
-		collector := PromiseCollector new()
-		collector add(this)
-		collector add(other)
-		collector
-	}
 	start: static func (action: Func) -> This { _ThreadPromise new(action) }
 	empty: static This { get { _EmptyPromise new() } }
 }
@@ -109,7 +103,7 @@ Future: abstract class <T> {
 }
 
 _ThreadFuture: class <T> extends Future<T> {
-	_result: Object
+	_result: __onheap__ T
 	_action: Func
 	_thread: Thread
 	_threadAlive := true
@@ -119,10 +113,7 @@ _ThreadFuture: class <T> extends Future<T> {
 		this _state = _PromiseState Unfinished
 		this _action = func {
 			temporary := task()
-			if (T inheritsFrom(Object))
-				this _result = temporary
-			else
-				this _result = Cell<T> new(temporary)
+			this _result = temporary
 			if (this _state != _PromiseState Cancelled)
 				this _state = _PromiseState Finished
 			if (this _freeOnCompletion) {
@@ -138,6 +129,7 @@ _ThreadFuture: class <T> extends Future<T> {
 			this _freeOnCompletion = true
 			this _thread detach()
 		} else {
+			memfree(this _result)
 			this _thread free()
 			(this _action as Closure) free()
 			super()
@@ -158,10 +150,7 @@ _ThreadFuture: class <T> extends Future<T> {
 	getResult: override func (defaultValue: T) -> T {
 		result := defaultValue
 		if (this _state == _PromiseState Finished && this _result != null)
-			if (T inheritsFrom(Object))
-				result = this _result
-			else
-				result = (this _result as Cell<T>) get()
+			result = this _result
 		result
 	}
 	cancel: override func -> Bool {

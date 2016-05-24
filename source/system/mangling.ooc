@@ -42,6 +42,7 @@ Demangler: class {
 					}
 				}
 			result name = reader readAll()
+			reader free()
 		}
 		result
 	}

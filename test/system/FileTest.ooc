@@ -12,14 +12,14 @@ import io/FileWriter
 import io/FileReader
 
 FileTest: class extends Fixture {
-	_testOutput := "test/sdk/output/"
+	_testOutput := "test/system/output/file/"
 	init: func {
 		super("File")
 		this add("creating directory", func {
 			file := File new(this _testOutput)
-			file mkdirs()
+			file createDirectories()
 			expect(file exists(), is true)
-			expect(file dir(), is true)
+			expect(file isDirectory(), is true)
 			file free()
 		})
 		this add("copy", func {
@@ -42,8 +42,7 @@ FileTest: class extends Fixture {
 			expect(reader read(), is equal to('c'))
 			reader close()
 			reader free()
-			file rm()
-			fileCopy rm()
+			(file, fileCopy) remove()
 			(file, fileCopy, path, pathCopy) free()
 		})
 		this add("static remove, copy, exists and rename", func {
@@ -72,7 +71,7 @@ FileTest: class extends Fixture {
 		this add("cleanup", func {
 			file := File new(this _testOutput)
 			expect(file exists(), is true)
-			file rm()
+			file remove()
 			expect(file exists(), is false)
 			file free()
 		})

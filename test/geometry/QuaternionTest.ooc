@@ -356,37 +356,36 @@ QuaternionTest: class extends Fixture {
 			expect(interpolated z, is equal to(0.99080002f) within(tolerance))
 		})
 		this add("toString", func {
-			expect(this quaternion0 toString() == "Real: 33.000000 Imaginary: 10.000000 -12.000000 54.500000")
+			string := this quaternion0 toString()
+			expect(string == "Real: 33.000000 Imaginary: 10.000000 -12.000000 54.500000")
+			string free()
 		})
 		this add("weightedQuaternionMean_X", func {
 			this quaternionList clear()
 			this quaternionList add(Quaternion createRotationX(0.70f))
 			this quaternionList add(Quaternion createRotationX(0.78f))
 			this quaternionList add(Quaternion createRotationX(0.86f))
-			weights := FloatVectorList new()
-			for (i in 0 .. this quaternionList count)
-				weights add(1.0f)
+			weights := FloatVectorList getOnes(this quaternionList count)
 			expect(Quaternion weightedMean(this quaternionList, weights) rotationX, is equal to(0.78f) within(0.001f))
+			weights free()
 		})
 		this add("weightedQuaternionMean_Y", func {
 			this quaternionList clear()
 			this quaternionList add(Quaternion createRotationY(0.12f))
 			this quaternionList add(Quaternion createRotationY(0.20f))
 			this quaternionList add(Quaternion createRotationY(0.28f))
-			weights := FloatVectorList new()
-			for (i in 0 .. this quaternionList count)
-				weights add(1.0f)
+			weights := FloatVectorList getOnes(this quaternionList count)
 			expect(Quaternion weightedMean(this quaternionList, weights) rotationY, is equal to(0.20f) within(0.001f))
+			weights free()
 		})
 		this add("weightedQuaternionMean_Z", func {
 			this quaternionList clear()
 			this quaternionList add(Quaternion createRotationZ(-1.78f))
 			this quaternionList add(Quaternion createRotationZ(-1.7f))
 			this quaternionList add(Quaternion createRotationZ(-1.62f))
-			weights := FloatVectorList new()
-			for (i in 0 .. this quaternionList count)
-				weights add(1.0f)
+			weights := FloatVectorList getOnes(this quaternionList count)
 			expect(Quaternion weightedMean(this quaternionList, weights) rotationZ, is equal to(-1.7f) within(0.001f))
+			weights free()
 		})
 		this add("euler angles conversion", func {
 			x := 0.1f
@@ -402,6 +401,10 @@ QuaternionTest: class extends Fixture {
 			expect(text, is equal to(t"Real: 1.00 Imaginary: 0.00 1.00 0.00"))
 			text free()
 		})
+	}
+	free: override func {
+		this quaternionList free()
+		super()
 	}
 }
 

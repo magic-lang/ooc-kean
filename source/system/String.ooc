@@ -43,7 +43,11 @@ String: class {
 		if (!other) return this
 		(this _buffer clone(this size + other size)) append(other _buffer) . toString()
 	}
-	append: func ~char (other: Char) -> This { (this _buffer clone(this size + 1)) append(other) . toString() }
+	append: func ~char (other: Char) -> This {
+		newBuffer := (this _buffer clone(this size + 1)) . append(other)
+		this free()
+		newBuffer toString()
+	}
 	append: func ~cStr (other: CString) -> This { (this _buffer clone(this size + other length())) append(other, other length()) . toString() }
 	prepend: func ~str (other: This) -> This { (this _buffer clone()) prepend(other _buffer) . toString() }
 	prepend: func ~char (other: Char) -> This { (this _buffer clone()) prepend(other) . toString() }
@@ -170,8 +174,7 @@ operator implicit as (c: Char*) -> String { c ? String new(c, strlen(c)) : null 
 operator implicit as (c: CString) -> String { c ? String new(c, strlen(c)) : null }
 operator & (left, right: String) -> String {
 	result := left + right
-	left free()
-	right free()
+	(left, right) free()
 	result
 }
 operator >> (left, right: String) -> String {

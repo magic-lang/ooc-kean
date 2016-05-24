@@ -28,8 +28,8 @@ OpenGLPacked: abstract class extends GpuImage {
 			this _backend setMinFilter(InterpolationType Linear)
 		}
 	}
-	init: func (=_backend, =_channels, context: OpenGLContext, coordinateSystem := CoordinateSystem Default) {
-		super(this _backend size, context, coordinateSystem)
+	init: func (=_backend, =_channels, context: OpenGLContext) {
+		super(this _backend size, context)
 	}
 	free: override func {
 		if (this recyclable)

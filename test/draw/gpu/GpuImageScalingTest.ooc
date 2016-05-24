@@ -21,7 +21,7 @@ GpuImageScalingTest: class extends Fixture {
 		this add("Scaling X rotation", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/scaling_X_rotation.png")
 			gpuImage := gpuContext createRgba(IntVector2D new(200, 150))
-			gpuImage canvas fill(ColorRgba transparent)
+			gpuImage fill(ColorRgba transparent)
 			DrawState new(gpuImage) setFocalLengthNormalized(0.1f) setTransformReference(FloatTransform3D createRotationX(5.0f toRadians())) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
@@ -30,7 +30,7 @@ GpuImageScalingTest: class extends Fixture {
 		this add("Scaling Y rotation", func {
 			correctImage := RasterRgba open("test/draw/gpu/correct/scaling_Y_rotation.png")
 			gpuImage := gpuContext createRgba(IntVector2D new(100, 200))
-			gpuImage canvas fill(ColorRgba transparent)
+			gpuImage fill(ColorRgba transparent)
 			DrawState new(gpuImage) setFocalLengthNormalized(0.1f) setTransformReference(FloatTransform3D createRotationY(5.0f toRadians())) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))

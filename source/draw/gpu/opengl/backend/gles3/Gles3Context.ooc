@@ -154,26 +154,31 @@ Gles3Context: class extends GLContext {
 		glViewport(viewport left, viewport top, viewport width, viewport height)
 		version(debugGL) { validateEnd("Context setViewport") }
 	}
-	enableBlend: override func (on: Bool) {
-		version(debugGL) { validateStart("Context enableBlend") }
-		if (on)
-			glEnable(GL_BLEND)
-		else
-			glDisable(GL_BLEND)
-		version(debugGL) { validateEnd("Context enableBlend") }
+	disableBlend: override func {
+		version(debugGL) { validateStart("Context disableBlend") }
+		glDisable(GL_BLEND)
+		version(debugGL) { validateEnd("Context disableBlend") }
 	}
-	blend: override func ~constant (factor: Float) {
-		version(debugGL) { validateStart("Context blend~constant") }
+	blendAdd: override func {
+		version(debugGL) { validateStart("Context blendAdd") }
 		glEnable(GL_BLEND)
-		glBlendColor(factor, factor, factor, factor)
-		glBlendFunc(GL_CONSTANT_COLOR, GL_ONE_MINUS_CONSTANT_COLOR)
-		version(debugGL) { validateEnd("Context blend~constant") }
+		glBlendEquation(GL_FUNC_ADD)
+		glBlendFunc(GL_ONE, GL_ONE)
+		version(debugGL) { validateEnd("Context blendAdd") }
 	}
-	blend: override func ~alphaMonochrome {
-		version(debugGL) { validateStart("Context blend~alphaMonochrome") }
+	blendWhite: override func {
+		version(debugGL) { validateStart("Context blendWhite") }
 		glEnable(GL_BLEND)
+		glBlendEquation(GL_FUNC_ADD)
 		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR)
-		version(debugGL) { validateEnd("Context blend~alphaMonochrome") }
+		version(debugGL) { validateEnd("Context blendWhite") }
+	}
+	blendAlpha: override func {
+		version(debugGL) { validateStart("Context blendAlpha") }
+		glEnable(GL_BLEND)
+		glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD)
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE)
+		version(debugGL) { validateEnd("Context blendAlpha") }
 	}
 	createQuad: override func -> Gles3Quad {
 		result := Gles3Quad new()

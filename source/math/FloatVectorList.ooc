@@ -100,7 +100,7 @@ FloatVectorList: class extends VectorList<Float> {
 	toString: func -> String {
 		result := ""
 		for (i in 0 .. this _count)
-			result = result >> this[i] toString() >> "\n"
+			result = (result & this[i] toString()) >> "\n"
 		result
 	}
 	toText: func -> Text {
@@ -271,8 +271,7 @@ FloatVectorList: class extends VectorList<Float> {
 		for (index in 0 .. this count)
 			rightHandSide[0, index] = 3.f * (thisPointer[(this count - 1) minimum(index + 1)] - thisPointer[0 maximum(index - 1)])
 		constants := coefficientMatrix solveTridiagonal(rightHandSide) take()
-		coefficientMatrix free()
-		rightHandSide free()
+		(coefficientMatrix, rightHandSide) free()
 
 		for (index1 in 0 .. this count - 1) {
 			result add(this[index1])

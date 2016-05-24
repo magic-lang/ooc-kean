@@ -113,8 +113,10 @@ VectorTest: class extends Fixture {
 
 			expect(additionTable[2][4] content, is equal to(6))
 			additionTable[1][2] = MyCover new(12)
-
 			expect(additionTable[1][2] content, is equal to(12))
+
+			for (i in 0 .. sizeX)
+				additionTable[i] free()
 			additionTable free()
 		})
 		this add("nested heap vector using class", func {
@@ -130,9 +132,14 @@ VectorTest: class extends Fixture {
 			expect(additionTable[2][4] content, is equal to(6))
 			additionTable[1][2] content = 12
 			expect(additionTable[1][2] content, is equal to(12))
-
 			additionTable[1][2] increase()
 			expect(additionTable[1][2] content, is equal to(13))
+
+			for (i in 0 .. sizeX) {
+				for (j in 0 .. sizeY)
+					additionTable[i][j] free()
+				additionTable[i] free()
+			}
 			additionTable free()
 		})
 	}

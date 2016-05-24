@@ -12,10 +12,10 @@ use collections
 use base
 
 FloatBox2DTest: class extends Fixture {
-	box0 := FloatBox2D new (1.0f, 2.0f, 3.0f, 4.0f)
-	box1 := FloatBox2D new (4.0f, 3.0f, 2.0f, 1.0f)
-	box2 := FloatBox2D new (2.0f, 1.0f, 4.0f, 3.0f)
-	box3 := FloatBox2D new (2.6f, 1.2f, 4.9f, 3.01f)
+	box0 := FloatBox2D new(1.0f, 2.0f, 3.0f, 4.0f)
+	box1 := FloatBox2D new(4.0f, 3.0f, 2.0f, 1.0f)
+	box2 := FloatBox2D new(2.0f, 1.0f, 4.0f, 3.0f)
+	box3 := FloatBox2D new(2.6f, 1.2f, 4.9f, 3.01f)
 	init: func {
 		tolerance := 1.0e-5f
 		super("FloatBox2D")
@@ -77,6 +77,7 @@ FloatBox2DTest: class extends Fixture {
 			expect(inBox[0], is equal to(0))
 			expect(inBox[1], is equal to(1))
 			expect(inBox[2], is equal to(3))
+			(list, inBox) free()
 		})
 		this add("enlarge and shrink", func {
 			box := FloatBox2D new(-2.0f, -1.0f, 3.0f, 3.0f)

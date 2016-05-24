@@ -13,7 +13,6 @@ use unit
 FloatConvexHull2DTest: class extends Fixture {
 	init: func {
 		super("FloatConvexHull2D")
-
 		this add("contains, triangle", func {
 			trianglePoints := VectorList<FloatPoint2D> new()
 			trianglePoints add(FloatPoint2D new(0.0f, 0.0f))
@@ -27,7 +26,6 @@ FloatConvexHull2DTest: class extends Fixture {
 			expect(hull count, is equal to(3))
 			hull free()
 		})
-
 		this add("contains, square", func {
 			square := FloatBox2D new(1.0f, 1.0f, 3.0f, 4.0f)
 			hull := FloatConvexHull2D new(square)
@@ -39,16 +37,15 @@ FloatConvexHull2DTest: class extends Fixture {
 			expect(hull contains(FloatPoint2D new(3.9f, 5.1f)), is false)
 			hull free()
 		})
-
 		this add("hull computation", func {
 			points := VectorList<FloatPoint2D> new()
-			points add(FloatPoint2D new(1.0f, 0.0f)) //hull
-			points add(FloatPoint2D new(-1.0f, 0.0f)) //hull
+			points add(FloatPoint2D new(1.0f, 0.0f)) // hull
+			points add(FloatPoint2D new(-1.0f, 0.0f)) // hull
 			points add(FloatPoint2D new(-1.0f, -1.0f)) // hull
 			points add(FloatPoint2D new(-0.9f, -0.5f)) // inside
-			points add(FloatPoint2D new(0.0f, 1.0f)) //inside
+			points add(FloatPoint2D new(0.0f, 1.0f)) // inside
 			points add(FloatPoint2D new(0.0f, 0.0f)) // inside
-			points add(FloatPoint2D new(0.0f, -1.0f)) //hull
+			points add(FloatPoint2D new(0.0f, -1.0f)) // hull
 			points add(FloatPoint2D new(0.5f, 2.0f)) // hull
 			points add(FloatPoint2D new(-0.5f, 0)) // inside
 
@@ -60,8 +57,8 @@ FloatConvexHull2DTest: class extends Fixture {
 			expect(convexHull contains(FloatPoint2D new(-0.5f, 0.05f)), is true)
 			expect(convexHull contains(FloatPoint2D new(-0.9f, -0.9f)), is true)
 			expect(convexHull contains(FloatPoint2D new(-1.01f, -1.0f)), is false)
+			convexHull free()
 		})
-
 		this add("contains, hull", func {
 			bigSquare := FloatBox2D new(1.0f, 1.0f, 4.0f, 4.0f)
 			bigHull := FloatConvexHull2D new(bigSquare)
@@ -69,23 +66,22 @@ FloatConvexHull2DTest: class extends Fixture {
 			smallHull := FloatConvexHull2D new(smallSquare)
 			expect(bigHull contains(smallHull), is true)
 			expect(smallHull contains(bigHull), is false)
+			(smallHull, bigHull) free()
 		})
-
 		this add("toString", func {
 			square := FloatBox2D new(1.0f, 1.0f, 3.0f, 4.0f)
 			hull := FloatConvexHull2D new(square)
 			expect(hull count, is equal to(4))
-			expect(hull toString() == "(1.00, 1.00) (1.00, 5.00) (4.00, 5.00) (4.00, 1.00) ")
-			hull free()
+			string := hull toString()
+			expect(string == "(1.00, 1.00) (1.00, 5.00) (4.00, 5.00) (4.00, 1.00) ")
+			(string, hull) free()
 		})
-
 		this add("toText", func {
 			square := FloatBox2D new(1.0f, 1.0f, 3.0f, 4.0f)
 			hull := FloatConvexHull2D new(square)
 			text := hull toText() take()
 			expect(text, is equal to(t"(1.00, 1.00) (1.00, 5.00) (4.00, 5.00) (4.00, 1.00)"))
-			hull free()
-			text free()
+			(hull, text) free()
 		})
 	}
 }

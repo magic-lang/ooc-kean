@@ -14,8 +14,8 @@ version(!gpuOff) {
 EGLRgba: class extends OpenGLRgba {
 	_buffer: GraphicBuffer
 	buffer ::= this _buffer
-	init: func ~fromGraphicBuffer (=_buffer, context: OpenGLContext, coordinateSystem := CoordinateSystem Default) {
-		super(EGLImage create(TextureType Rgba, this _buffer size, this _buffer nativeBuffer, context backend), context, coordinateSystem)
+	init: func ~fromGraphicBuffer (=_buffer, context: OpenGLContext) {
+		super(EGLImage create(TextureType Rgba, this _buffer size, this _buffer nativeBuffer, context backend), context)
 	}
 	init: func ~fromSize (size: IntVector2D, context: OpenGLContext) {
 		this init(GraphicBuffer new(size, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget), context)

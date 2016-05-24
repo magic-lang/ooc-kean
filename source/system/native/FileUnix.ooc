@@ -82,17 +82,17 @@ _remove: unmangled func (file: File) -> Bool {
 FileUnix: class extends File {
 	init: func ~unix (=path)
 
-	dir: override func -> Bool {
+	isDirectory: override func -> Bool {
 		result: FileStat
 		res := lstat(this path as CString, result&)
 		(res == 0 && S_ISDIR(result st_mode))
 	}
-	file: override func -> Bool {
+	isFile: override func -> Bool {
 		result: FileStat
 		res := lstat(this path as CString, result&)
 		(res == 0 && S_ISREG(result st_mode))
 	}
-	link: override func -> Bool {
+	isLink: override func -> Bool {
 		result: FileStat
 		res := lstat(this path as CString, result&)
 		(res == 0 && S_ISLNK(result st_mode))
@@ -110,7 +110,7 @@ FileUnix: class extends File {
 		res := lstat(this path as CString, result&)
 		(res == 0)
 	}
-	ownerPerm: override func -> Int {
+	ownerPermissions: override func -> Int {
 		result: FileStat
 		res := lstat(this path as CString, result&)
 		match res {
@@ -118,7 +118,7 @@ FileUnix: class extends File {
 			case => -1
 		}
 	}
-	groupPerm: override func -> Int {
+	groupPermissions: override func -> Int {
 		result: FileStat
 		res := lstat(this path as CString, result&)
 		match res {
@@ -126,7 +126,7 @@ FileUnix: class extends File {
 			case => -1
 		}
 	}
-	otherPerm: override func -> Int {
+	otherPermissions: override func -> Int {
 		result: FileStat
 		res := lstat(this path as CString, result&)
 		match res {
@@ -212,7 +212,7 @@ FileUnix: class extends File {
 		this path != actualPath ? File new(actualPath) : this as File
 	}
 	_getChildren: func <T> (T: Class) -> VectorList<T> {
-		if (!this dir())
+		if (!this isDirectory())
 			raise("Trying to get the children of the non-directory '" + this path + "'!", This)
 		dir := opendir(this path as CString)
 		if (!dir)
@@ -235,8 +235,8 @@ FileUnix: class extends File {
 	}
 	getChildrenNames: override func -> VectorList<String> { this _getChildren (String) }
 	getChildren: override func -> VectorList<File> { this _getChildren (File) }
-	mkdir: override func ~withMode (mode: Int) -> Int { _mkdir(this path as CString, mode as ModeT) }
-	mkfifo: override func ~withMode (mode: Int) -> Int { _mkfifo(this path as CString, mode as ModeT) }
+	createDirectory: override func ~withMode (mode: Int) -> Int { _mkdir(this path as CString, mode as ModeT) }
+	makeFIFO: override func ~withMode (mode: Int) -> Int { _mkfifo(this path as CString, mode as ModeT) }
 	createTempFile: static func (pattern, mode: String) -> FStream {
 		mask := umask(S_IRUSR | S_IWUSR)
 		fd := mkstemp(pattern)

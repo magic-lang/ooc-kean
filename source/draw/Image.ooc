@@ -11,42 +11,26 @@ use base
 use draw
 import Canvas
 
-CoordinateSystem: enum {
-	Default = 0x00
-	XRightward = 0x00
-	XLeftward = 0x01
-	YDownward = 0x00
-	YUpward = 0x02
-}
-
 Image: abstract class {
 	_size: IntVector2D
 	_referenceCount: ReferenceCounter
-	_coordinateSystem: CoordinateSystem
 	_canvas: Canvas
 	size ::= this _size
 	width ::= this size x
 	height ::= this size y
-	coordinateSystem ::= this _coordinateSystem
 	crop: IntShell2D { get set }
 	wrap: Bool { get set }
 	referenceCount ::= this _referenceCount
-	transform ::= IntTransform2D createScaling(
-			(this coordinateSystem & CoordinateSystem XLeftward) == CoordinateSystem XLeftward ? -1 : 1,
-			(this coordinateSystem & CoordinateSystem YUpward) == CoordinateSystem YUpward ? -1 : 1)
-
 	canvas: Canvas { get {
 		if (this _canvas == null)
 			this _canvas = this _createCanvas()
 		this _canvas
 	}}
-	init: func (=_size, coordinateSystem := CoordinateSystem Default) {
+	init: func (=_size) {
 		this _referenceCount = ReferenceCounter new(this)
-		this _coordinateSystem = coordinateSystem
 	}
 	init: func ~fromImage (original: This) {
 		this init(original size)
-		this _coordinateSystem = original coordinateSystem
 		this crop = original crop
 		this wrap = original wrap
 	}
@@ -59,6 +43,17 @@ Image: abstract class {
 		this _canvas = null
 		super()
 	}
+	drawPoint: func ~white (position: FloatPoint2D) { this canvas drawPoint~white(position) }
+	drawPoint: func ~explicit (position: FloatPoint2D, pen: Pen) { this canvas drawPoint~explicit(position, pen) }
+	drawLine: func ~white (start, end: FloatPoint2D) { this canvas drawLine~white(start, end) }
+	drawLine: func ~explicit (start, end: FloatPoint2D, pen: Pen) { this canvas drawLine~explicit(start, end, pen) }
+	drawPoints: func ~white (pointList: VectorList<FloatPoint2D>) { this canvas drawPoints~white(pointList) }
+	drawPoints: func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) { this canvas drawPoints~explicit(pointList, Pen new(ColorRgba white)) }
+	drawLines: func ~white (pointList: VectorList<FloatPoint2D>) { this canvas drawLines~white(pointList) }
+	drawLines: func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) { this canvas drawLines~explicit(pointList, Pen new(ColorRgba white)) }
+	drawBox: func ~white (box: FloatBox2D) { this canvas drawBox~white(box) }
+	drawBox: func ~explicit (box: FloatBox2D, pen: Pen) { this canvas drawBox~explicit(box, Pen new(ColorRgba white)) }
+	fill: func ~implicitCanvas (color: ColorRgba) { this canvas fill(color) }
 	resizeWithin: func (restriction: IntVector2D) -> This {
 		restrictionFraction := (restriction x as Float / this size x as Float) minimum(restriction y as Float / this size y as Float)
 		this resizeTo((this size toFloatVector2D() * restrictionFraction) toIntVector2D())
@@ -69,7 +64,6 @@ Image: abstract class {
 	}
 	create: virtual func (size: IntVector2D) -> This { raise("Image::create not implemented for type: %s" format(this class name)); null }
 	copy: abstract func -> This
-	copy: abstract func ~fromParams (size: IntVector2D, transform: FloatTransform2D) -> This
 	distance: virtual abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
 	isValidIn: func (x, y: Int) -> Bool {
@@ -85,7 +79,7 @@ Image: abstract class {
 		fontSize := DrawContext getFontSize(fontAtlas)
 		viewport := IntBox2D new(localOrigin, fontSize)
 		targetOffset := IntPoint2D new(0, 0)
-		characterDrawState := DrawState new(this) setInputImage(fontAtlas) setBlendMode(BlendMode Add)
+		characterDrawState := DrawState new(this) setInputImage(fontAtlas) setBlendMode(BlendMode White)
 		for (i in 0 .. takenMessage count) {
 			charCode := takenMessage[i] as Int
 			sourceX := charCode % columns

@@ -26,7 +26,7 @@ RasterUvCanvas: class extends RasterPackedCanvas {
 		if (this target isValidIn(position x, position y))
 			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toUv())
 	}
-	_draw: override func (image: Image, source, destination: IntBox2D, interpolate: Bool) {
+	_draw: override func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) {
 		uv: RasterUv = null
 		if (image == null)
 			Debug error("Null image in RasterUvCanvas draw")
@@ -36,9 +36,14 @@ RasterUvCanvas: class extends RasterPackedCanvas {
 			uv = RasterUv convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RasterUvCanvas draw")
-		this _resizePacked(uv buffer pointer as ColorUv*, uv, source, destination, interpolate)
+		this _resizePacked(uv buffer pointer as ColorUv*, uv, source, destination, interpolate, flipX, flipY)
 		if (uv != image)
 			uv referenceCount decrease()
+	}
+	fill: override func (color: ColorRgba) {
+		for (y in 0 .. this size y)
+			for (x in 0 .. this size x)
+				this target[x, y] = ColorUv new(color r, color g)
 	}
 }
 
@@ -53,7 +58,9 @@ RasterUv: class extends RasterPacked {
 	create: override func (size: IntVector2D) -> Image { This new(size) }
 	copy: override func -> This { This new(this) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
-		this apply(ColorConvert fromYuv(action))
+		convert := ColorConvert fromYuv(action)
+		this apply(convert)
+		(convert as Closure) free()
 	}
 	apply: override func ~yuv (action: Func(ColorYuv)) {
 		uvRow := this buffer pointer
@@ -75,7 +82,9 @@ RasterUv: class extends RasterPacked {
 		}
 	}
 	apply: override func ~monochrome (action: Func(ColorMonochrome)) {
-		this apply(ColorConvert fromYuv(action))
+		convert := ColorConvert fromYuv(action)
+		this apply(convert)
+		(convert as Closure) free()
 	}
 	resizeTo: override func (size: IntVector2D) -> This {
 		this resizeTo(size, true) as This
@@ -141,8 +150,8 @@ RasterUv: class extends RasterPacked {
 		rgb referenceCount decrease()
 		result
 	}
-	open: static func (filename: String, coordinateSystem := CoordinateSystem Default) -> This {
-		rasterRgb := RasterRgb open(filename, coordinateSystem)
+	open: static func (filename: String) -> This {
+		rasterRgb := RasterRgb open(filename)
 		result := This convertFrom(rasterRgb)
 		rasterRgb referenceCount decrease()
 		result

@@ -45,9 +45,11 @@ FloatPoint2DVectorListTest: class extends Fixture {
 			list add(FloatPoint2D new(3.0f, 2.0f))
 			list add(FloatPoint2D new(5.0f, -2.0f))
 			added := list + FloatPoint2D new(1.0f, 1.0f)
-			expect(added getX() sum, is equal to(12.0f) within(tolerance))
-			expect(added getY() sum, is equal to(5.0f) within(tolerance))
-			list free()
+			xValues := added getX()
+			yValues := added getY()
+			expect(xValues sum, is equal to(12.0f) within(tolerance))
+			expect(yValues sum, is equal to(5.0f) within(tolerance))
+			(list, added, xValues, yValues) free()
 		})
 		this add("resampleLinear", func {
 			list := FloatPoint2DVectorList new()
@@ -68,8 +70,7 @@ FloatPoint2DVectorListTest: class extends Fixture {
 			expect(resampledList[4] y, is equal to(-4.7f) within(tolerance))
 			expect(resampledList[5] x, is equal to(1.4f) within(tolerance))
 			expect(resampledList[5] y, is equal to(-5.0f) within(tolerance))
-			list free()
-			resampledList free()
+			(list, resampledList) free()
 		})
 		this add("resampleLinear, boundary", func {
 			list := FloatPoint2DVectorList new()
@@ -84,8 +85,7 @@ FloatPoint2DVectorListTest: class extends Fixture {
 			expect(resampledList[4] y, is equal to(2.0f) within(tolerance))
 			expect(resampledList[5] y, is equal to(2.0f) within(tolerance))
 			expect(resampledList[6] y, is equal to(2.0f) within(tolerance))
-			list free()
-			resampledList free()
+			(list, resampledList) free()
 		})
 		this add("resampleLinear, duplicate points", func {
 			list := FloatPoint2DVectorList new()
@@ -97,8 +97,7 @@ FloatPoint2DVectorListTest: class extends Fixture {
 			expect(resampledList[0] y, is equal to(1.0f) within(tolerance))
 			expect(resampledList[1] y, is equal to(1.0f) within(tolerance))
 			expect(resampledList[2] y, is equal to(3.0f) within(tolerance))
-			list free()
-			resampledList free()
+			(list, resampledList) free()
 		})
 		this add("sort by x", func {
 			list := FloatPoint2DVectorList new()
@@ -133,6 +132,7 @@ FloatPoint2DVectorListTest: class extends Fixture {
 			expect(max y, is equal to(6.0f) within(tolerance))
 			expect(min x, is equal to(-3.0f) within(tolerance))
 			expect(min y, is equal to(1.0f) within(tolerance))
+			list free()
 		})
 		this add("toText", func {
 			list := FloatPoint2DVectorList new()
@@ -140,8 +140,7 @@ FloatPoint2DVectorListTest: class extends Fixture {
 			list add(FloatPoint2D new(3.0f, 4.0f))
 			text := list toText() take()
 			expect(text, is equal to(t"1.00, 2.00\n3.00, 4.00"))
-			text free()
-			list free()
+			(text, list) free()
 		})
 		this add("median and mean", func {
 			list := FloatPoint2DVectorList new()
@@ -159,6 +158,7 @@ FloatPoint2DVectorListTest: class extends Fixture {
 			mean := list getMean~indices(indices)
 			expect(mean x, is equal to(3.0f) within(tolerance))
 			expect(mean y, is equal to(2.0f) within(tolerance))
+			(list, indices) free()
 		})
 	}
 }

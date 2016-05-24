@@ -27,7 +27,7 @@ RasterRgbCanvas: class extends RasterPackedCanvas {
 		if (this target isValidIn(position x, position y))
 			this target[position x, position y] = this target[position x, position y] blend(pen alphaAsFloat, pen color toRgb())
 	}
-	_draw: override func (image: Image, source, destination: IntBox2D, interpolate: Bool) {
+	_draw: override func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) {
 		rgb: RasterRgb = null
 		if (image == null)
 			Debug error("Null image in RgbRasterCanvas draw")
@@ -37,9 +37,14 @@ RasterRgbCanvas: class extends RasterPackedCanvas {
 			rgb = RasterRgb convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RgbRasterCanvas draw")
-		this _resizePacked(rgb buffer pointer as ColorRgb*, rgb, source, destination, interpolate)
+		this _resizePacked(rgb buffer pointer as ColorRgb*, rgb, source, destination, interpolate, flipX, flipY)
 		if (rgb != image)
 			rgb referenceCount decrease()
+	}
+	fill: override func (color: ColorRgba) {
+		for (y in 0 .. this size y)
+			for (x in 0 .. this size x)
+				this target[x, y] = color toRgb()
 	}
 }
 
@@ -145,16 +150,14 @@ RasterRgb: class extends RasterPacked {
 	operator [] (x, y: Int) -> ColorRgb { this isValidIn(x, y) ? ((this buffer pointer + y * this stride) as ColorRgb* + x)@ : ColorRgb new(0, 0, 0) }
 	operator []= (x, y: Int, value: ColorRgb) { ((this buffer pointer + y * this stride) as ColorRgb* + x)@ = value }
 
-	open: static func (filename: String, coordinateSystem := CoordinateSystem Default) -> This {
-		rgba := RasterRgba open(filename, coordinateSystem)
+	open: static func (filename: String) -> This {
+		rgba := RasterRgba open(filename)
 		result := This convertFrom(rgba)
 		rgba referenceCount decrease()
 		result
 	}
 	savePacked: func (filename: String) -> Int {
-		file := File new(filename)
-		folder := file parent . mkdirs() . free()
-		file free()
+		File createParentDirectories(filename)
 		StbImage writePng(filename, this size x, this size y, this bytesPerPixel, this buffer pointer, this size x * this bytesPerPixel)
 	}
 	save: override func (filename: String) -> Int {

@@ -16,11 +16,11 @@ version(!gpuOff) {
 Gles3Quad: class extends GLQuad {
 	init: func {
 		version(debugGL) { validateStart("Quad init") }
-		vertices := FloatPoint2D[4] new()
-		vertices[0] = FloatPoint2D new(-1.0f, -1.0f)
-		vertices[1] = FloatPoint2D new(-1.0f, 1.0f)
-		vertices[2] = FloatPoint2D new(1.0f, -1.0f)
-		vertices[3] = FloatPoint2D new(1.0f, 1.0f)
+		vertices := FloatPoint3D[4] new()
+		vertices[0] = FloatPoint3D new(-1.0f, -1.0f, 0.0f)
+		vertices[1] = FloatPoint3D new(-1.0f, 1.0f, 0.0f)
+		vertices[2] = FloatPoint3D new(1.0f, -1.0f, 0.0f)
+		vertices[3] = FloatPoint3D new(1.0f, 1.0f, 0.0f)
 		textureCoordinates := FloatPoint2D[4] new()
 		textureCoordinates[0] = FloatPoint2D new(0.0f, 1.0f)
 		textureCoordinates[1] = FloatPoint2D new(0.0f, 0.0f)

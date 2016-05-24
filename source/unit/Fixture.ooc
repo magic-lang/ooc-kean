@@ -16,11 +16,14 @@ import Modifiers
 Fixture: abstract class {
 	name: String
 	tests := VectorList<Test> new(32, false)
+	_previousDebugFunc: Func (String)
+	_hasPreviousDebugFunc := false
 
 	init: func (=name)
 	free: override func {
-		this tests free()
-		this name free()
+		(this tests, this name) free()
+		if (this _hasPreviousDebugFunc)
+			Debug initialize(this _previousDebugFunc)
 		super()
 	}
 	add: func ~action (name: String, action: Func) {
@@ -39,7 +42,7 @@ Fixture: abstract class {
 				test run()
 				test free()
 			} catch (e: TestFailedException) {
-				e message = test name
+				e message = e description != null ? test name + " (" + e description + ")" : test name
 				result = r = false
 				failures add(e)
 			}
@@ -139,11 +142,16 @@ Fixture: abstract class {
 		result append(testedValue toText())
 		result join(' ')
 	}
+	hideDebugOutput: func {
+		this _hasPreviousDebugFunc = true
+		this _previousDebugFunc = Debug _printFunction
+		Debug initialize(func (s: String) { })
+	}
 
 	_testsFailed: static Bool
 	totalTime: static Double
 	failureNames: static VectorList<String>
-	testsFailed: static Bool { get { This _testsFailed } }
+	testsFailed ::= static This _testsFailed
 
 	printFailures: static func {
 		This _print(t"Total time: %.2f s\n" format(This totalTime))
@@ -158,9 +166,9 @@ Fixture: abstract class {
 		text print()
 		fflush(stdout)
 	}
-	verify: static func (value: Object, constraint: ExpectModifier) {
+	verify: static func (value: Object, constraint: ExpectModifier, description: String = null) {
 		if (!constraint verify(value))
-			TestFailedException new(value, constraint) throw()
+			TestFailedException new(value, constraint, description) throw()
 		else {
 			constraint free()
 			if (value instanceOf(Cell))
@@ -170,9 +178,10 @@ Fixture: abstract class {
 }
 
 TestFailedException: class extends Exception {
+	description: String
 	value: Object
 	constraint: ExpectModifier
-	init: func (=value, =constraint, message := "") { super(message) }
+	init: func (=value, =constraint, =description) { super(null as String) }
 }
 
 Test: class {
@@ -187,39 +196,39 @@ Test: class {
 	run: func { this action() }
 }
 
-expect: func ~isTrue (value: Bool) { Fixture verify(Cell new(value), is true) }
-expect: func ~object (value: Object, constraint: ExpectModifier) { Fixture verify(value, constraint) }
-expect: func ~char (value: Char, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~text (value: Text, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~boolean (value: Bool, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~int (value: Int, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~uint (value: UInt, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~uint8 (value: Byte, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~long (value: Long, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~ulong (value: ULong, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~float (value: Float, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~double (value: Double, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~ldouble (value: LDouble, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~llong (value: LLong, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~ullong (value: ULLong, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
+expect: func ~isTrue (value: Bool, message: String = null) { Fixture verify(Cell new(value), is true, message) }
+expect: func ~object (value: Object, constraint: ExpectModifier, message: String = null) { Fixture verify(value, constraint, message) }
+expect: func ~char (value: Char, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~text (value: Text, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~boolean (value: Bool, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~int (value: Int, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~uint (value: UInt, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~uint8 (value: Byte, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~long (value: Long, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~ulong (value: ULong, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~float (value: Float, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~double (value: Double, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~ldouble (value: LDouble, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~llong (value: LLong, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~ullong (value: ULLong, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 
-expect: func ~floatvector2d (value: FloatVector2D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~floatvector3d (value: FloatVector3D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~floatpoint2d (value: FloatPoint2D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~floatpoint3d (value: FloatPoint3D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~quaternion (value: Quaternion, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~floateuclidtransform (value: FloatEuclidTransform, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~floatrotation3d (value: FloatRotation3D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~floattransform2d (value: FloatTransform2D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~floattransform3d (value: FloatTransform3D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~intvector2d (value: IntVector2D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~intvector3d (value: IntVector3D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~intpoint2d (value: IntPoint2D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~intpoint3d (value: IntPoint3D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~floatcomplex (value: FloatComplex, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~floatmatrix (value: FloatMatrix, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~inttransform2d (value: IntTransform2D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~floatbox2d (value: FloatBox2D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~intbox2d (value: IntBox2D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~floatshell2d (value: FloatShell2D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
-expect: func ~intshell2d (value: IntShell2D, constraint: ExpectModifier) { Fixture verify(Cell new(value), constraint) }
+expect: func ~floatvector2d (value: FloatVector2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~floatvector3d (value: FloatVector3D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~floatpoint2d (value: FloatPoint2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~floatpoint3d (value: FloatPoint3D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~quaternion (value: Quaternion, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~floateuclidtransform (value: FloatEuclidTransform, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~floatrotation3d (value: FloatRotation3D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~floattransform2d (value: FloatTransform2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~floattransform3d (value: FloatTransform3D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~intvector2d (value: IntVector2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~intvector3d (value: IntVector3D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~intpoint2d (value: IntPoint2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~intpoint3d (value: IntPoint3D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~floatcomplex (value: FloatComplex, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~floatmatrix (value: FloatMatrix, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~inttransform2d (value: IntTransform2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~floatbox2d (value: FloatBox2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~intbox2d (value: IntBox2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~floatshell2d (value: FloatShell2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
+expect: func ~intshell2d (value: IntShell2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }

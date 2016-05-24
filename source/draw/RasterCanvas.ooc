@@ -20,8 +20,8 @@ RasterCanvas: abstract class extends Canvas {
 	_target: RasterImage
 	init: func (=_target) { super(this _target size) }
 	fill: override func (color: ColorRgba) { raise("RasterCanvas fill unimplemented!") }
-	draw: override func ~DrawState (drawState: DrawState) { this _draw(drawState inputImage, drawState getSourceLocal() toIntBox2D(), drawState getViewport(), drawState interpolate) }
-	_draw: virtual func (image: Image, source, destination: IntBox2D, interpolate: Bool) { Debug error("_draw unimplemented for class " + this class name + "!") }
+	draw: override func ~DrawState (drawState: DrawState) { this _draw(drawState inputImage, drawState getSourceLocal() toIntBox2D(), drawState getViewport(), drawState interpolate, drawState flipSourceX, drawState flipSourceY) }
+	_draw: virtual func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) { Debug error("_draw unimplemented for class " + this class name + "!") }
 	drawPoint: override func ~explicit (point: FloatPoint2D, pen: Pen) { this _drawPoint(point x as Int, point y as Int, pen) }
 	_drawPoint: abstract func (x, y: Int, pen: Pen)
 	drawPoints: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) {
@@ -56,13 +56,12 @@ RasterCanvas: abstract class extends Canvas {
 			}
 		}
 	}
-	drawLines: override func ~explicit (lines: VectorList<FloatPoint2D>, pen: Pen) {
-		if (lines count > 1)
-			for (i in 0 .. lines count - 1) {
-				start := IntPoint2D new(lines[i] x, lines[i] y)
-				end := IntPoint2D new(lines[i + 1] x, lines[i + 1] y)
-				this _drawLine(start, end, pen)
-			}
+	drawLines: override func ~explicit (pointList: VectorList<FloatPoint2D>, pen: Pen) {
+		for (i in 0 .. pointList count - 1) {
+			start := IntPoint2D new(pointList[i] x, pointList[i] y)
+			end := IntPoint2D new(pointList[i + 1] x, pointList[i + 1] y)
+			this _drawLine(start, end, pen)
+		}
 	}
 	_map: func (point: IntPoint2D) -> IntPoint2D {
 		point + this _size / 2

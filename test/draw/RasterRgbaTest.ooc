@@ -77,8 +77,7 @@ RasterRgbaTest: class extends Fixture {
 					expect(pixel1 b, is equal to(pixel2 r))
 					expect(pixel1 a, is equal to(pixel2 a))
 				}
-			image referenceCount decrease()
-			image2 referenceCount decrease()
+			(image, image2) referenceCount decrease()
 			output free()
 		})
 	}

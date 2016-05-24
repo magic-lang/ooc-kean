@@ -46,15 +46,18 @@ RasterYuvSemiplanar: abstract class extends RasterPlanar {
 		this _uv referenceCount increase()
 	}
 	free: override func {
-		this y referenceCount decrease()
-		this uv referenceCount decrease()
+		(this y, this uv) referenceCount decrease()
 		super()
 	}
 	apply: override func ~rgb (action: Func (ColorRgb)) {
-		this apply(ColorConvert fromYuv(action))
+		convert := ColorConvert fromYuv(action)
+		this apply(convert)
+		(convert as Closure) free()
 	}
 	apply: override func ~monochrome (action: Func (ColorMonochrome)) {
-		this apply(ColorConvert fromYuv(action))
+		convert := ColorConvert fromYuv(action)
+		this apply(convert)
+		(convert as Closure) free()
 	}
 	distance: override func (other: Image) -> Float {
 		result := 0.0f

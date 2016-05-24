@@ -60,11 +60,13 @@ ThreadPoolTest: class extends Fixture {
 		})
 		this add("threaded_result_cancel", func {
 			pool := ThreadPool new()
-			future := pool getFuture(func { for (i in 0 .. 50_000_000) { } t"pass" })
+			future := pool getFuture(func { for (i in 0 .. 5_000_000) { } t"pass" })
 			future cancel()
 			comparison := t"fail"
 			result := future wait(comparison)
 			expect(result == comparison)
+			Time sleepMilli(1000)
+			(future, pool) free()
 		})
 		this add("wait with timeout", func {
 			pool := ThreadPool new(2)

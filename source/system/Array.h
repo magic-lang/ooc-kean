@@ -1,5 +1,5 @@
-#ifndef OOC_LANG_ARRAY_H
-#define OOC_LANG_ARRAY_H
+#ifndef OOC_ARRAY_H_
+#define OOC_ARRAY_H_
 
 #define array_malloc(size) calloc(1, (size))
 #define array_free free
@@ -27,4 +27,4 @@ typedef struct {
     void* data;
 } _lang_array__Array;
 
-#endif // OOC_LANG_ARRAY_H
+#endif

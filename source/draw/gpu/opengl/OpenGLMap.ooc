@@ -47,7 +47,7 @@ OpenGLMap: class extends Map {
 		this _program free()
 		super()
 	}
-	use: override func (forbiddenInput: Pointer) {
+	use: override func (forbiddenInput: Pointer, positionTransform, textureTransform: FloatTransform3D) {
 		this _currentProgram use()
 		textureCount := 0
 		action := func (key: String, value: Object) {
@@ -102,23 +102,12 @@ OpenGLMap: class extends Map {
 	}
 }
 
-OpenGLMapMesh: class extends OpenGLMap {
-	init: func (context: OpenGLContext) { super(This vertexSource, This fragmentSource, context) }
-	use: override func (forbiddenInput: Pointer) {
-		this add("projection", this projection)
-		super(forbiddenInput)
-	}
-	vertexSource: static String = slurp("shaders/mesh.vert")
-	fragmentSource: static String = slurp("shaders/mesh.frag")
-}
-
 OpenGLMapTransform: class extends OpenGLMap {
 	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
-	use: override func (forbiddenInput: Pointer) {
-		finalTransform := this projection * this view * this model
-		this add("transform", finalTransform)
-		this add("textureTransform", this textureTransform)
-		super(forbiddenInput)
+	use: override func (forbiddenInput: Pointer, positionTransform: FloatTransform3D, textureTransform: FloatTransform3D) {
+		this add("transform", positionTransform)
+		this add("textureTransform", textureTransform)
+		super(forbiddenInput, positionTransform, textureTransform)
 	}
 	vertexSource: static String = slurp("shaders/transform.vert")
 }

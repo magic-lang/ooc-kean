@@ -47,20 +47,6 @@ DrawStateTest: class extends Fixture {
 			outputTransform := state getTransformNormalized() normalizedToReference(imageSize)
 			This compareTransform(outputTransform, referenceTransform, 0.0001f)
 		})
-		this add("syntax", func {
-			opacityA := 0.3f
-			opacityB := 0.7f
-			viewportA := IntBox2D new(2, 3, 15, 10)
-			viewportC := IntBox2D new(7, 4, 23, 27)
-			stateA := DrawState new() setOpacity(opacityA) setViewport(viewportA)
-			stateB := stateA setOpacity(opacityB)
-			stateC := stateA setViewport(viewportC)
-			expect(stateA opacity, is equal to(opacityA) within(0.0001f))
-			expect(stateB opacity, is equal to(opacityB) within(0.0001f))
-			expect(stateA viewport == viewportA)
-			expect(stateB viewport == viewportA)
-			expect(stateC viewport == viewportC)
-		})
 	}
 }
 
