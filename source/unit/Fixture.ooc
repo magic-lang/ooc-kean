@@ -116,7 +116,6 @@ Fixture: abstract class {
 			case IntPoint3D => (expectedText, testedText) = (expectedValue toText~intpoint3d(), testedValue toText~intpoint3d())
 			case FloatComplex => (expectedText, testedText) = (expectedValue toText~floatcomplex(), testedValue toText~floatcomplex())
 			case FloatMatrix => (expectedText, testedText) = (expectedValue toText~floatmatrix(), testedValue toText~floatmatrix())
-			case IntTransform2D => (expectedText, testedText) = (expectedValue toText~inttransform2d(), testedValue toText~inttransform2d())
 			case FloatBox2D => (expectedText, testedText) = (expectedValue toText~floatbox2d(), testedValue toText~floatbox2d())
 			case IntBox2D => (expectedText, testedText) = (expectedValue toText~intbox2d(), testedValue toText~intbox2d())
 			case FloatShell2D => (expectedText, testedText) = (expectedValue toText~floatshell2d(), testedValue toText~floatshell2d())
@@ -227,7 +226,6 @@ expect: func ~intpoint2d (value: IntPoint2D, constraint: ExpectModifier, message
 expect: func ~intpoint3d (value: IntPoint3D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~floatcomplex (value: FloatComplex, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~floatmatrix (value: FloatMatrix, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
-expect: func ~inttransform2d (value: IntTransform2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~floatbox2d (value: FloatBox2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~intbox2d (value: IntBox2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~floatshell2d (value: FloatShell2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
