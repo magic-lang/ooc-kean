@@ -17,7 +17,6 @@ Image: abstract class {
 	width ::= this size x
 	height ::= this size y
 	crop: IntShell2D { get set }
-	wrap: Bool { get set }
 	referenceCount ::= this _referenceCount
 	init: func (=_size) {
 		this _referenceCount = ReferenceCounter new(this)
@@ -25,7 +24,6 @@ Image: abstract class {
 	init: func ~fromImage (original: This) {
 		this init(original size)
 		this crop = original crop
-		this wrap = original wrap
 	}
 	free: override func {
 		if (this referenceCount != null)

@@ -108,7 +108,6 @@ RasterMonochromeTest: class extends Fixture {
 			expect(image size == image2 size)
 			expect(image stride, is equal to(image2 stride))
 			expect(image crop == image2 crop)
-			expect(image wrap, is equal to(image2 wrap))
 			expect(image referenceCount != image2 referenceCount)
 			image referenceCount decrease()
 			image2 referenceCount decrease()
