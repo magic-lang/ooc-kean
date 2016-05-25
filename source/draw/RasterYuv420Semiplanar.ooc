@@ -10,7 +10,6 @@ use geometry
 use base
 import RasterPacked
 import RasterImage
-import RasterYuvSemiplanar
 import RasterMonochrome
 import RasterUv
 import Image
@@ -24,9 +23,26 @@ import io/FileReader
 import io/Reader
 import io/FileWriter
 
-RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
+RasterYuv420Semiplanar: class extends RasterImage {
+	_y: RasterMonochrome
+	_uv: RasterUv
+	y ::= this _y
+	uv ::= this _uv
 	stride ::= this _y stride
-	init: func ~fromRasterImages (yImage: RasterMonochrome, uvImage: RasterUv) { super(yImage, uvImage) }
+	init: func ~fromRasterImages (yImage: RasterMonochrome, uvImage: RasterUv) {
+		super(yImage size)
+		this _y = yImage
+		this _y referenceCount increase()
+		this _uv = uvImage
+		this _uv referenceCount increase()
+	}
+	init: func ~fromYuvSemiplanar (original: This, y: RasterMonochrome, uv: RasterUv) {
+		super(original)
+		this _y = y
+		this _y referenceCount increase()
+		this _uv = uv
+		this _uv referenceCount increase()
+	}
 	init: func ~allocateOffset (size: IntVector2D, stride: UInt, uvOffset: UInt) {
 		(yImage, uvImage) := This _allocate(size, stride, uvOffset)
 		this init(yImage, uvImage)
@@ -35,11 +51,18 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 	init: func ~allocate (size: IntVector2D) { this init(size, size x) }
 	init: func ~fromThis (original: This) {
 		(yImage, uvImage) := This _allocate(original size, original stride, original stride * original size y)
-		super(original, yImage, uvImage)
+		this init(original, yImage, uvImage)
 	}
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D, stride: UInt, uvOffset: UInt) {
 		(yImage, uvImage) := This _createSubimages(buffer, size, stride, uvOffset)
 		this init(yImage, uvImage)
+	}
+	free: override func {
+		(this y, this uv) referenceCount decrease()
+		super()
+	}
+	distance: override func (other: Image) -> Float {
+		(this y distance((other as This) y) + this uv distance((other as This) uv)) / 2.0f
 	}
 	create: override func (size: IntVector2D) -> Image { This new(size) }
 	_drawPoint: override func (x, y: Int, pen: Pen) {
@@ -203,7 +226,7 @@ RasterYuv420Semiplanar: class extends RasterYuvSemiplanar {
 		(RasterMonochrome new(buffer slice(0, yLength), size, stride), RasterUv new(buffer slice(uvOffset, uvLength), This _uvSize(size), stride))
 	}
 	_uvSize: static func (size: IntVector2D) -> IntVector2D {
-		IntVector2D new(size x / 2 + (size x isOdd ? 1 : 0), size y / 2 + (size y isOdd ? 1 : 0))
+		IntVector2D new((size x + 1) / 2, (size y + 1) / 2)
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
