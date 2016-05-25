@@ -33,12 +33,12 @@ RasterPacked: abstract class extends RasterImage {
 		this init(ByteBuffer new(stride * size y), size, stride)
 	}
 	init: func ~fromOriginal (original: This) {
-		super(original)
+		super(original size)
 		this _buffer = original buffer copy()
 		this _stride = original stride
 	}
 	init: func ~fromRasterImage (original: RasterImage) {
-		super(original)
+		super(original size)
 		this _stride = this bytesPerPixel * original width
 		this _buffer = ByteBuffer new(this stride * original height)
 	}

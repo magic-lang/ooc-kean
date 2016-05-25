@@ -29,19 +29,9 @@ RasterYuv420Semiplanar: class extends RasterImage {
 	y ::= this _y
 	uv ::= this _uv
 	stride ::= this _y stride
-	init: func ~fromRasterImages (yImage: RasterMonochrome, uvImage: RasterUv) {
-		super(yImage size)
-		this _y = yImage
-		this _y referenceCount increase()
-		this _uv = uvImage
-		this _uv referenceCount increase()
-	}
-	init: func ~fromYuvSemiplanar (original: This, y: RasterMonochrome, uv: RasterUv) {
-		super(original)
-		this _y = y
-		this _y referenceCount increase()
-		this _uv = uv
-		this _uv referenceCount increase()
+	init: func ~fromRasterImages (=_y, =_uv) {
+		super(this _y size)
+		(this _y, this _uv) referenceCount increase()
 	}
 	init: func ~allocateOffset (size: IntVector2D, stride: UInt, uvOffset: UInt) {
 		(yImage, uvImage) := This _allocate(size, stride, uvOffset)
@@ -51,7 +41,7 @@ RasterYuv420Semiplanar: class extends RasterImage {
 	init: func ~allocate (size: IntVector2D) { this init(size, size x) }
 	init: func ~fromThis (original: This) {
 		(yImage, uvImage) := This _allocate(original size, original stride, original stride * original size y)
-		this init(original, yImage, uvImage)
+		this init(yImage, uvImage)
 	}
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D, stride: UInt, uvOffset: UInt) {
 		(yImage, uvImage) := This _createSubimages(buffer, size, stride, uvOffset)
