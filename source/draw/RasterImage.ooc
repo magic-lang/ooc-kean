@@ -17,7 +17,6 @@ import StbImage
 RasterImage: abstract class extends Image {
 	distanceRadius ::= 1
 	stride: UInt { get }
-	init: func ~fromRasterImage (original: This) { super(original) }
 	init: func (size: IntVector2D) { super(size) }
 	apply: abstract func ~rgb (action: Func (ColorRgb))
 	apply: abstract func ~yuv (action: Func (ColorYuv))

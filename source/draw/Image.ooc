@@ -20,9 +20,6 @@ Image: abstract class {
 	init: func (=_size) {
 		this _referenceCount = ReferenceCounter new(this)
 	}
-	init: func ~fromImage (original: This) {
-		this init(original size)
-	}
 	free: override func {
 		if (this referenceCount != null)
 			this referenceCount free()
