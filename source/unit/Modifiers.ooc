@@ -163,10 +163,6 @@ EqualModifier: class extends ExpectModifier {
 		f := func (value, c: Cell<FloatMatrix>) -> Bool { value get() == c get() }
 		CompareConstraint new(this, Cell<FloatMatrix> new(correct), f, this comparisonType)
 	}
-	to: func ~inttransform2d (correct: IntTransform2D) -> CompareConstraint {
-		f := func (value, c: Cell<IntTransform2D>) -> Bool { value get() == c get() }
-		CompareConstraint new(this, Cell<IntTransform2D> new(correct), f, this comparisonType)
-	}
 	to: func ~floatbox2d (correct: FloatBox2D) -> CompareConstraint {
 		f := func (value, c: Cell<FloatBox2D>) -> Bool { value get() == c get() }
 		CompareConstraint new(this, Cell<FloatBox2D> new(correct), f, this comparisonType)

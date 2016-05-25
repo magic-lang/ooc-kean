@@ -16,7 +16,6 @@ Imports: IntPoint2D
 Imports: IntPoint3D
 Imports: IntBox2D
 Imports: IntShell2D
-Imports: IntTransform2D
 Imports: FloatEuclidTransform
 Imports: Quaternion
 Imports: FloatRotation3D

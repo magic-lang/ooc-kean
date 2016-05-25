@@ -271,18 +271,6 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform h, is equal to(-7.0f) within(tolerance))
 			expect(transform i, is equal to(1.0f) within(tolerance))
 		})
-		this add("toIntTransform2D", func {
-			transform := this transform0 toIntTransform2D()
-			expect(transform a, is equal to(3))
-			expect(transform b, is equal to(1))
-			expect(transform c, is equal to(0))
-			expect(transform d, is equal to(2))
-			expect(transform e, is equal to(1))
-			expect(transform f, is equal to(0))
-			expect(transform g, is equal to(5))
-			expect(transform h, is equal to(7))
-			expect(transform i, is equal to(1))
-		})
 		this add("toString", func {
 			string := FloatTransform2D new(3.123456789f, 1.123456789f, 0.12365f, -11.52416f, 0.0f, 1.9) toString()
 			expect(string, is equal to("3.123457, 1.123457, 0.000000\t0.123650, -11.524160, 0.000000\t0.000000, 1.900000, 1.000000\t"))
