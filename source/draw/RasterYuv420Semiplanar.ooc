@@ -29,16 +29,6 @@ RasterYuv420Semiplanar: class extends RasterImage {
 	y ::= this _y
 	uv ::= this _uv
 	stride ::= this _y stride
-	crop: IntShell2D {
-		get
-		set (value) {
-			this crop = value
-			if (this y != null && this uv != null) {
-				this y crop = value
-				this uv crop = value / 2
-			}
-		}
-	}
 	init: func ~fromRasterImages (yImage: RasterMonochrome, uvImage: RasterUv) {
 		super(yImage size)
 		this _y = yImage
