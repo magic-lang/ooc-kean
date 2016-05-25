@@ -9,6 +9,12 @@
 use unit
 use collections
 
+_TestCover: cover {
+	_value: Int
+	value ::= this _value
+	init: func@ (=_value)
+}
+
 VectorListTest: class extends Fixture {
 	staticlist: static VectorList<Int>
 	count: static Int = 0
@@ -255,7 +261,7 @@ VectorListTest: class extends Fixture {
 		expect(intList isSorted(0, intList count, intComparator), is true)
 		expect(unorderedList isSorted(0, unorderedList count, intComparator), is false)
 		expect(intList lowerBound(0, intList count, 40, intComparator), is equal to(-1))
-		expect(intList upperBound(0, intList count, 40, intComparator), is equal to(-1))
+		expect(intList upperBound(0, intList count, 40, intComparator), is equal to(intList count))
 		expect(intList lowerBound(0, intList count, intToCompare, intComparator), is equal to(3))
 		expect(intList upperBound(0, intList count, intToCompare, intComparator), is equal to(6))
 		(intList, unorderedList, intComparator as Closure) free()
@@ -269,10 +275,25 @@ VectorListTest: class extends Fixture {
 		stringNotFound := "I'm too long"
 		expect(stringList isSorted(0, stringList count, stringComparator), is true)
 		expect(stringList lowerBound(0, stringList count, stringNotFound, stringComparator), is equal to(-1))
-		expect(stringList upperBound(0, stringList count, stringNotFound, stringComparator), is equal to(-1))
+		expect(stringList upperBound(0, stringList count, stringNotFound, stringComparator), is equal to(stringList count))
 		expect(stringList lowerBound(0, stringList count, stringToCompare, stringComparator), is equal to(3))
 		expect(stringList upperBound(0, stringList count, stringToCompare, stringComparator), is equal to(6))
 		(stringList, stringToCompare, stringNotFound, stringComparator as Closure) free()
+
+		coverList := VectorList<_TestCover> new()
+		coverList add(_TestCover new(1)) . add(_TestCover new(1)) . add(_TestCover new(1)) . add(_TestCover new(2))
+		coverList add(_TestCover new(2)) . add(_TestCover new(2)) . add(_TestCover new(3)) . add(_TestCover new(3))
+		coverComparator := func (first, second: _TestCover*) -> Bool {
+			first@ value < second@ value
+		}
+		expect(coverList isSorted(0, coverList count, coverComparator), is true)
+		coverToCompare := _TestCover new(2)
+		coverNotFound := _TestCover new(10)
+		expect(coverList lowerBound(0, coverList count, coverNotFound, coverComparator), is equal to(-1))
+		expect(coverList upperBound(0, coverList count, coverNotFound, coverComparator), is equal to(coverList count))
+		expect(coverList lowerBound(0, coverList count, coverToCompare, coverComparator), is equal to(3))
+		expect(coverList upperBound(0, coverList count, coverToCompare, coverComparator), is equal to(6))
+		(coverList, coverComparator as Closure) free()
 	}
 	_applyTester: static func (index: Int*) { expect(This staticlist[index@], is equal to(index@)) }
 }

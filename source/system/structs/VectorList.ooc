@@ -107,7 +107,7 @@ VectorList: class <T> extends List<T>{
 			} else
 				count = step
 		}
-		start >= end ? -1 : start
+		start >= end ? end : start
 	}
 	isSorted: func (start, end: Int, isLess: Func (T*, T*) -> Bool) -> Bool {
 		result := true
