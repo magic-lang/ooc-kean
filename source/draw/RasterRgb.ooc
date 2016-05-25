@@ -25,7 +25,6 @@ RasterRgb: class extends RasterPacked {
 	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntVector2D, stride: UInt) { super(buffer, size, stride) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D) { this init(buffer, size, this bytesPerPixel * size x) }
 	init: func ~fromRasterRgb (original: This) { super(original) }
-	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: override func (size: IntVector2D) -> Image { This new(size) }
 	_drawPoint: override func (x, y: Int, pen: Pen) {
 		position := this _map(IntPoint2D new(x, y))
@@ -162,7 +161,7 @@ RasterRgb: class extends RasterPacked {
 		if (original instanceOf(This))
 			result = (original as This) copy()
 		else {
-			result = This new(original)
+			result = This new(original size)
 			row := result buffer pointer as PtrDiff
 			rowLength := result size x
 			rowEnd := row as ColorRgb* + rowLength
