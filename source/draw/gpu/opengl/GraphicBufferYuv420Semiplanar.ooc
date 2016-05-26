@@ -51,17 +51,13 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		this _rgba
 	}
 	_bin := static VectorList<EGLRgba> new()
-	_mutex := static Mutex new()
 	_binSize: static Int = 100
 	_recycle: static func (image: EGLRgba) {
-		This _mutex lock()
 		This _bin add(image)
 		if (This _bin count > This _binSize)
 			This _bin remove(0) referenceCount decrease()
-		This _mutex unlock()
 	}
 	_search: static func (buffer: GraphicBuffer) -> EGLRgba {
-		This _mutex lock()
 		result: EGLRgba = null
 		for (i in 0 .. This _bin count) {
 			if (This _bin[i] buffer _handle == buffer _handle) {
@@ -69,14 +65,11 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 				break
 			}
 		}
-		This _mutex unlock()
 		result
 	}
 	free: static func ~all {
-		This _mutex lock()
 		while (!This _bin empty)
 			This _bin remove() referenceCount decrease()
-		This _mutex unlock()
 	}
 }
 
