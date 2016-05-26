@@ -78,12 +78,13 @@ DateTime: cover {
 	//	%hh - hour
 	//	%mm - minute
 	//	%ss - second
-	//	%zzzz - millisecond
+	//	%zzz - millisecond
 	toText: func (format := This defaultFormat) -> Text {
 		result := format copy()
 		data := This _ticksToDateTimeHelper(this ticks)
-		result = result replaceAll(t"%yyyy", t"%d" format(data year))
+		result = result replaceAll(t"%yyyy", t"%04d" format(data year))
 		result = result replaceAll(t"%yy", t"%02d" format(data year % 100))
+		result = result replaceAll(t"%y", t"%d" format(data year))
 		result = result replaceAll(t"%MM", t"%02d" format(data month))
 		result = result replaceAll(t"%dd", t"%02d" format(data day))
 		result = result replaceAll(t"%M", t"%d" format(data month))
@@ -126,7 +127,7 @@ DateTime: cover {
 	ticksPerDay: static Long = This ticksPerHour * 24
 	ticksPerWeek: static Long = This ticksPerDay * 7
 	ticksPerFourYears: static Long = This daysPerFourYears * This ticksPerDay
-	defaultFormat: static Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
+	defaultFormat: static Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzz"
 	now ::= static Time currentDateTime()
 
 	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
