@@ -16,24 +16,20 @@ version(!gpuOff) {
 OpenGLWindow: class {
 	_context: GpuContext
 	context ::= this _context as OpenGLContext
-	_monochromeToRgba: OpenGLMap
-	_yuvSemiplanarToRgba: OpenGLMapTransform
 	init: func (display: Pointer, nativeBackend: Long) {
 		context := OpenGLContext new(display, nativeBackend)
 		this _context = context
-		this _monochromeToRgba = OpenGLMap new(slurp("shaders/monochromeToRgba.frag"), context)
-		this _yuvSemiplanarToRgba = OpenGLMapTransform new(slurp("shaders/yuvSemiplanarToRgba.frag"), context)
 	}
 	free: override func {
-		(this _yuvSemiplanarToRgba, this _monochromeToRgba, this _context) free()
+		this _context free()
 		super()
 	}
 	_getDefaultMap: func (image: Image) -> Map {
 		match (image class) {
-			case GpuYuv420Semiplanar => this _yuvSemiplanarToRgba
-			case RasterYuv420Semiplanar => this _yuvSemiplanarToRgba
-			case OpenGLMonochrome => this _monochromeToRgba
-			case RasterMonochrome => this _monochromeToRgba
+			case GpuYuv420Semiplanar => this context _yuvSemiplanarToRgba
+			case RasterYuv420Semiplanar => this context _yuvSemiplanarToRgba
+			case OpenGLMonochrome => this context _monochromeToRgba
+			case RasterMonochrome => this context _monochromeToRgba
 			case => this context defaultMap
 		}
 	}
