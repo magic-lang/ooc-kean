@@ -195,5 +195,8 @@ OpenGLContext: class extends GpuContext {
 		OpenGLMesh new(vertices, textureCoordinates, this)
 	}
 	getDefaultFont: override func -> Image { this defaultFontGpu }
+	getYuvToRgba: override func -> Map { this _yuvSemiplanarToRgba }
+	getRgbaToY: override func -> Map { this _rgbaToYuva }
+	getRgbaToUv: override func -> Map { this _rgbaToUvaa }
 }
 }
