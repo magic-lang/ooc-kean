@@ -177,6 +177,41 @@ HashMapTest: class extends Fixture {
 
 			hashmap free()
 		})
+		this add("get keys and values (cover)", func {
+			hashmap := HashMap<Int, Float> new()
+			for (i in 0 .. 10)
+				hashmap put(i, 2.f * i)
+			keys := hashmap getKeys()
+			values := hashmap getValues()
+			(keysum, valuesum) := (0, 0.f)
+			for (i in 0 .. 10) {
+				keysum += keys[i]
+				valuesum += values[i]
+			}
+			expect(keysum, is equal to(45))
+			expect(valuesum, is equal to(90.f) within(0.00001f))
+			(keys, values, hashmap) free()
+		})
+		this add("get keys and values (class)", func {
+			hashmap := HashMap<String, String> new()
+			hashmap put("a", "A")
+			hashmap put("b", "B")
+			hashmap put("c", "C")
+			keys := hashmap getKeys()
+			values := hashmap getValues()
+			expect(keys[0], is equal to("a"))
+			expect(keys[1], is equal to("b"))
+			expect(keys[2], is equal to("c"))
+			expect(values[0], is equal to("A"))
+			expect(values[1], is equal to("B"))
+			expect(values[2], is equal to("C"))
+			(keys, values) free()
+
+			hashmap put("d", "D")
+			b := hashmap get("b")
+			expect(b, is equal to("B"))
+			hashmap free()
+		})
 		this add("to and from file", func {
 			hashmap := HashMap<String, String> new()
 			hashmap put("pi", "3.14159")
