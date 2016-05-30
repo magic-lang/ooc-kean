@@ -24,6 +24,10 @@ PipeWin32: class extends Pipe {
 		if (!CreatePipe(this readFD&, this writeFD&, saAttr&, 0))
 			WindowsException new(This, GetLastError(), "Failed to create pipe") throw()
 	}
+	free: override func {
+		this close('r') . close('w')
+		super()
+	}
 	read: override func ~cstring (buf: CString, len: Int) -> Int {
 		bytesRead: ULong
 		result := -1
@@ -47,14 +51,9 @@ PipeWin32: class extends Pipe {
 
 		bytesWritten
 	}
-	// 'r' = close in reading, 'w' = close in writing
 	close: override func (end: Char) -> Int {
 		fd := this _getFD(end)
 		fd && CloseHandle(fd) ? 1 : 0
-	}
-	close: override func ~both {
-		CloseHandle(this readFD)
-		CloseHandle(this writeFD)
 	}
 	setNonBlocking: func (end: Char) {
 		fd := this _getFD(end)

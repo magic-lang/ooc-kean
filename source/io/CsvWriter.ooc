@@ -20,7 +20,7 @@ CsvWriter: class {
 	}
 	free: override func {
 		if (this _fileWriter != null)
-			this _fileWriter close() . free()
+			this _fileWriter free()
 		super()
 	}
 	write: func (row: VectorList<Text>) {

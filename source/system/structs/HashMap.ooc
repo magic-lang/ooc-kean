@@ -244,7 +244,7 @@ HashMap: class <K, V> {
 		}
 		this each(writerFunc)
 		(writerFunc as Closure) free()
-		fileWriter close() . free()
+		fileWriter free()
 	}
 	_keyEquals: func (first, second: K) -> Bool {
 		match (K) {
@@ -264,7 +264,7 @@ HashMap: class <K, V> {
 				result put(pair[0] clone(), pair[1] clone())
 			(string, pair) free()
 		}
-		reader close() . free()
+		reader free()
 		result
 	}
 	hash: static func <K> (key: K) -> Int {

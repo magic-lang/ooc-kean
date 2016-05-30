@@ -43,8 +43,7 @@ PipeTest: class extends Fixture {
 			}
 
 			process wait()
-			reader close() . free()
-			(pipe, process) free()
+			(reader, pipe, process) free()
 		})
 	}
 }

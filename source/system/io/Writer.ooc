@@ -29,5 +29,4 @@ Writer: abstract class {
 		buffer free()
 		bytesTransfered
 	}
-	close: abstract func
 }
