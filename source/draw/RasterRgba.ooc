@@ -22,8 +22,6 @@ RasterRgba: class extends RasterPacked {
 	init: func ~allocateStride (size: IntVector2D, stride: UInt) { super(size, stride) }
 	init: func ~fromByteBufferStride (buffer: ByteBuffer, size: IntVector2D, stride: UInt) { super(buffer, size, stride) }
 	init: func ~fromByteBuffer (buffer: ByteBuffer, size: IntVector2D) { this init(buffer, size, this bytesPerPixel * size x) }
-	init: func ~fromRasterRgba (original: This) { super(original) }
-	init: func ~fromRasterImage (original: RasterImage) { super(original) }
 	create: override func (size: IntVector2D) -> Image { This new(size) }
 	_drawPoint: override func (x, y: Int, pen: Pen) {
 		position := this _map(IntPoint2D new(x, y))
@@ -35,7 +33,7 @@ RasterRgba: class extends RasterPacked {
 			for (x in 0 .. this size x)
 				this[x, y] = color
 	}
-	copy: override func -> This { This new(this) }
+	copy: override func -> This { This new(this buffer copy(), this size, this stride) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
 		for (row in 0 .. this size y) {
 			source := this buffer pointer + row * this stride
@@ -169,7 +167,7 @@ RasterRgba: class extends RasterPacked {
 		if (original instanceOf(This))
 			result = (original as This) copy()
 		else {
-			result = This new(original)
+			result = This new(original size)
 			row := result buffer pointer as PtrDiff
 			rowLength := result stride
 			rowEnd := row + rowLength
