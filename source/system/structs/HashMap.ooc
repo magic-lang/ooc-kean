@@ -194,6 +194,28 @@ HashMap: class <K, V> {
 			}
 		}
 	}
+	getKeys: func -> VectorList<K> {
+		result := VectorList<K> new(this count, false)
+		for (index in 0 .. this capacity) {
+			entry := this _buckets[index]
+			while (entry != null) {
+				result add(entry _key)
+				entry = entry _next
+			}
+		}
+		result
+	}
+	getValues: func -> VectorList<V> {
+		result := VectorList<V> new(this capacity, false)
+		for (index in 0 .. this capacity) {
+			entry := this _buckets[index]
+			while (entry != null) {
+				result add(entry _value)
+				entry = entry _next
+			}
+		}
+		result
+	}
 	resize: func (newCapacity: Int) {
 		oldCapacity := this capacity
 		oldBuckets := this _buckets
