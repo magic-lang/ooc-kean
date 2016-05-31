@@ -37,7 +37,6 @@ RasterImage: abstract class extends Image {
 				result = RasterRgb new(buffer, size)
 			case 4 =>
 				result = RasterRgba new(buffer, size)
-				(result as RasterRgba) swapRedBlue()
 			case =>
 				buffer free()
 				raise("Unsupported number of channels in image")

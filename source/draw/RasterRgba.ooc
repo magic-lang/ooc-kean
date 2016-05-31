@@ -148,19 +148,14 @@ RasterRgba: class extends RasterPacked {
 	open: static func (filename: String) -> This {
 		requiredComponents := 4
 		(buffer, size, _) := StbImage load(filename, requiredComponents)
-		result := This new(buffer, size)
-		result swapRedBlue()
-		result
+		This new(buffer, size)
 	}
 	savePacked: func (filename: String) -> Int {
 		File createParentDirectories(filename)
 		StbImage writePng(filename, this size x, this size y, this bytesPerPixel, this buffer pointer, this size x * this bytesPerPixel)
 	}
 	save: override func (filename: String) -> Int {
-		bgra := this redBlueSwapped()
-		result := bgra savePacked(filename)
-		bgra free()
-		result
+		this savePacked(filename)
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This

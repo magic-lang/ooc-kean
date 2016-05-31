@@ -150,10 +150,7 @@ RasterRgb: class extends RasterPacked {
 		StbImage writePng(filename, this size x, this size y, this bytesPerPixel, this buffer pointer, this size x * this bytesPerPixel)
 	}
 	save: override func (filename: String) -> Int {
-		bgr := this redBlueSwapped()
-		result := bgr savePacked(filename)
-		bgr free()
-		result
+		this savePacked(filename)
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
