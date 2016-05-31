@@ -32,7 +32,7 @@ Fixture: abstract class {
 	run: func -> Bool {
 		failures := VectorList<TestFailedException> new(32, false)
 		result := true
-		This _print((DateTime now toText(t"%hh:%mm:%ss ") toString() >> this name) >> " ", true)
+		This _print((DateTime now toString("%hh:%mm:%ss ") >> this name) >> " ", true)
 		timer := WallTimer new() . start()
 		for (i in 0 .. this tests count) {
 			test := this tests[i]

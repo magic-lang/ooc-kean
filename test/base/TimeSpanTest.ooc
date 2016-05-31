@@ -116,12 +116,17 @@ TimeSpanTest: class extends Fixture {
 			expect(TimeSpan weeks(2) toDays() == 14)
 			expect(TimeSpan milliseconds(13) toNanoseconds() == 13_000_000)
 		})
-		this add("toText", func {
+		this add("toString", func {
 			span := TimeSpan millisecond() + TimeSpan second() + TimeSpan minute() + TimeSpan hour() + TimeSpan day() + TimeSpan week()
-			expect(span toText() == t"1 weeks, 1 days, 1 hours, 1 minutes, 1 seconds, 1 milliseconds")
-			expect(span toText(t"%D") == t"8")
-			expect(TimeSpan day() toText(t"%H %M %S %h %m %s") == t"24 1440 86400 0 0 0")
-			expect(TimeSpan hour() toText(t"%d %D text %m %M") == t"0 0 text 0 60")
+			defaultString := span toString()
+			expect(defaultString == "1 weeks, 1 days, 1 hours, 1 minutes, 1 seconds, 1 milliseconds")
+			dayString := span toString("%D")
+			expect(dayString == "8")
+			Astring := TimeSpan day() toString("%H %M %S %h %m %s")
+			expect(Astring == "24 1440 86400 0 0 0")
+			Bstring := TimeSpan hour() toString("%d %D text %m %M")
+			expect(Bstring == "0 0 text 0 60")
+			(defaultString, dayString, Astring, Bstring) free()
 		})
 	}
 }

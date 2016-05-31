@@ -79,24 +79,43 @@ DateTime: cover {
 	//	%mm - minute
 	//	%ss - second
 	//	%zzz - millisecond
-	toText: func (format := This defaultFormat) -> Text {
-		result := format copy()
+	toString: func (format := This defaultFormat) -> String {
 		data := This _ticksToDateTimeHelper(this ticks)
-		result = result replaceAll(t"%yyyy", t"%04d" format(data year))
-		result = result replaceAll(t"%yy", t"%02d" format(data year % 100))
-		result = result replaceAll(t"%y", t"%d" format(data year))
-		result = result replaceAll(t"%MM", t"%02d" format(data month))
-		result = result replaceAll(t"%dd", t"%02d" format(data day))
-		result = result replaceAll(t"%M", t"%d" format(data month))
-		result = result replaceAll(t"%d", t"%d" format(data day))
-		result = result replaceAll(t"%hh", t"%02d" format(data hour))
-		result = result replaceAll(t"%mm", t"%02d" format(data minute))
-		result = result replaceAll(t"%ss", t"%02d" format(data second))
-		result = result replaceAll(t"%h", t"%d" format(data hour))
-		result = result replaceAll(t"%m", t"%d" format(data minute))
-		result = result replaceAll(t"%s", t"%d" format(data second))
-		result = result replaceAll(t"%zzz", t"%03d" format(data millisecond))
-		result replaceAll(t"%z", t"%d" format(data millisecond))
+		(year4String, year2String, yearString) := ("%04d" format(data year), "%02d" format(data year % 100), "%d" format(data year))
+		(month2String, monthString, day2String, dayString) := ("%02d" format(data month), "%d" format(data month), "%02d" format(data day), "%d" format(data day))
+		(hour2String, minute2String, second2String) := ("%02d" format(data hour), "%02d" format(data minute), "%02d" format(data second))
+		(hourString, minuteString, secondString) := ("%d" format(data hour), "%d" format(data minute), "%d" format(data second))
+		(millisecond3String, millisecondString) := ("%03d" format(data millisecond), "%d" format(data millisecond))
+		second := format replaceAll("%yyyy", year4String)
+		result := second replaceAll("%yy", year2String)
+		second free()
+		second = result replaceAll("%y", yearString)
+		result free()
+		result = second replaceAll("%MM", month2String)
+		second free()
+		second = result replaceAll("%dd", day2String)
+		result free()
+		result = second replaceAll("%M", monthString)
+		second free()
+		second = result replaceAll("%d", dayString)
+		result free()
+		result = second replaceAll("%hh", hour2String)
+		second free()
+		second = result replaceAll("%mm", minute2String)
+		result free()
+		result = second replaceAll("%ss", second2String)
+		second free()
+		second = result replaceAll("%h", hourString)
+		result free()
+		result = second replaceAll("%m", minuteString)
+		second free()
+		second = result replaceAll("%s", secondString)
+		result free()
+		result = second replaceAll("%zzz", millisecond3String)
+		second free()
+		second = result replaceAll("%z", millisecondString)
+		(result, year4String, year2String, yearString, month2String, monthString, day2String, dayString, hour2String, minute2String, second2String, hourString, minuteString, secondString, millisecond3String, millisecondString) free()
+		second
 	}
 	compareTo: func (other: This) -> Order {
 		if (this ticks > other ticks)
@@ -127,7 +146,7 @@ DateTime: cover {
 	ticksPerDay: static Long = This ticksPerHour * 24
 	ticksPerWeek: static Long = This ticksPerDay * 7
 	ticksPerFourYears: static Long = This daysPerFourYears * This ticksPerDay
-	defaultFormat: static Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzz"
+	defaultFormat: static String = "%yyyy-%MM-%dd %hh:%mm:%ss::%zzz"
 	now ::= static Time currentDateTime()
 
 	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
