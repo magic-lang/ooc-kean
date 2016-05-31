@@ -141,5 +141,10 @@ AndroidContext: class extends OpenGLContext {
 		map add("startY", startY)
 		DrawState new(target) setMap(map) draw()
 	}
+	preallocate: override func (resolution: IntVector2D) { GraphicBufferYuv420Semiplanar free~all() }
+	preregister: override func (image: Image) {
+		if (image instanceOf(GraphicBufferYuv420Semiplanar))
+			(image as GraphicBufferYuv420Semiplanar) toRgba(this) referenceCount decrease()
+	}
 }
 }

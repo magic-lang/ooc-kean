@@ -52,5 +52,7 @@ GpuContext: abstract class extends DrawContext {
 		Promise empty
 	}
 	toRasterAsync: virtual func (source: GpuImage) -> ToRasterFuture { raise("toRasterAsync unimplemented"); null }
+	preallocate: virtual func (resolution: IntVector2D)
+	preregister: virtual func (image: Image)
 }
 }
