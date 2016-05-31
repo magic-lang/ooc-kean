@@ -20,6 +20,7 @@ EGL_DEFAULT_DISPLAY: extern const Pointer
 EGL_NO_CONTEXT: extern const Pointer
 EGL_NO_DISPLAY: extern const Pointer
 EGL_NO_SURFACE: extern const Pointer
+EGL_NO_IMAGE_KHR: extern const Pointer
 
 /* Out-of-band attribute value */
 EGL_DONT_CARE: extern const Int

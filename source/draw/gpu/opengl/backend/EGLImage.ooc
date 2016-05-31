@@ -9,7 +9,7 @@
 use base
 use geometry
 import egl/egl
-import GLTexture, GLContext
+import GLTexture, GLContext, gles3/Gles3Debug
 
 version(!gpuOff) {
 EGLImage: class extends GLTexture {
@@ -32,9 +32,15 @@ EGLImage: class extends GLTexture {
 		super()
 	}
 	bindSibling: func {
+		version(debugGL) { validateStart("EGLImage eglCreateImageKHR") }
 		eglImageAttributes := [EGL_IMAGE_PRESERVED_KHR, EGL_FALSE, EGL_NONE] as Int*
 		this _eglBackend = This _eglCreateImageKHR(this _eglDisplay, EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID, this _nativeBuffer, eglImageAttributes)
+		version(debugGL) { validateEnd("EGLImage eglCreateImageKHR") }
+		if (this _eglBackend == EGL_NO_IMAGE_KHR)
+			Debug error("EGL_NO_IMAGE_KHR returned")
+		version(debugGL) { validateStart("EGLImage glEGLImageTargetTexture2DOES") }
 		This _glEGLImageTargetTexture2DOES(this _backendTexture _target, this _eglBackend)
+		version(debugGL) { validateEnd("EGLImage glEGLImageTargetTexture2DOES") }
 	}
 	generateMipmap: override func { this _backendTexture generateMipmap() }
 	bind: override func (unit: UInt) { this _backendTexture bind(unit) }
