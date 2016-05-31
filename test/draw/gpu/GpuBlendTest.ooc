@@ -42,6 +42,18 @@ GpuBlendTest: class extends Fixture {
 			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
 			(rasterFromGpu, gpuImage, correctImage) free()
 		})
+		this add("GPU blend alpha (RGBA to YUV)", func {
+			correctImage := RasterRgba open("test/draw/gpu/correct/blend_alpha.png")
+			gpuImageYuv := gpuContext createYuv420Semiplanar(correctImage size)
+			DrawState new(gpuImageYuv y) setMap(gpuContext getRgbaToY()) setInputImage(destinationImage) draw()
+			DrawState new(gpuImageYuv uv) setMap(gpuContext getRgbaToUv()) setInputImage(destinationImage) draw()
+			DrawState new(gpuImageYuv y) setMap(gpuContext getRgbaToY()) setBlendMode(BlendMode Alpha) setInputImage(this sourceImageAlpha) draw()
+			DrawState new(gpuImageYuv uv) setMap(gpuContext getRgbaToUv()) setBlendMode(BlendMode Alpha) setInputImage(this sourceImageAlpha) draw()
+			gpuImageRgba := gpuImageYuv toRgba()
+			rasterFromGpu := gpuImageRgba toRaster()
+			expect(rasterFromGpu distance(correctImage), is less than(40.0f))
+			(rasterFromGpu, gpuImageYuv, gpuImageRgba, correctImage) free()
+		})
 	}
 	free: override func {
 		(this destinationImage, this sourceImageAlpha, this sourceImageOpaque) free()
