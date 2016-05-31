@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 use uri
 
 Authority: class {
@@ -14,7 +15,7 @@ Authority: class {
 	user ::= this _user
 	endpoint ::= this _endpoint
 
-	init: func(=_user, =_endpoint)
+	init: func (=_user, =_endpoint)
 	free: override func {
 		if (this _user != null)
 			this _user free()
@@ -22,25 +23,35 @@ Authority: class {
 			this _endpoint free()
 		super()
 	}
-	toText: func -> Text {
-		result := Text new()
-		if (this _user != null)
-			result += this _user toText() + t"@"
-		if (this _endpoint != null)
-			result += this _endpoint toText()
+	toString: func -> String {
+		contents := StringBuilder new()
+		userString: String = null
+		endpointString: String = null
+		if (this _user != null) {
+			userString = this _user toString()
+			contents add(userString) . add("@")
+		}
+		if (this _endpoint != null) {
+			endpointString = this _endpoint toString()
+			contents add(endpointString)
+		}
+		result := contents join("")
+		contents free()
+		if (userString != null)
+			userString free()
+		if (endpointString != null)
+			endpointString free()
 		result
 	}
-	parse: static func(data: Text) -> This {
+	parse: static func (data: String) -> This {
 		result: This
-		d := data take()
-		if (!d isEmpty) {
-			splitted := d split(t"@")
-			newUser := splitted count > 1 ? User parse(splitted remove(0)) : null
-			newEndpoint := Endpoint parse(splitted remove())
+		if (!data empty()) {
+			splitted := data split('@')
+			newUser := splitted count > 1 ? User parse(splitted[0]) : null
+			newEndpoint := splitted count > 1 ? Endpoint parse(splitted[1]) : Endpoint parse(splitted[0])
 			result = This new(newUser, newEndpoint)
 			splitted free()
 		}
-		data free(Owner Receiver)
 		result
 	}
 }

@@ -444,7 +444,7 @@ CharBuffer: class {
 				break
 			sdist := findResults[item] - sstart // bytes to copy
 			if (maxTokens != 0 || sdist > 0) {
-				b := This new ((this data + sstart) as CString, sdist)
+				b := This new((this data + sstart) as CString, sdist)
 				result add(b)
 			}
 			sstart += sdist + delimiterLength

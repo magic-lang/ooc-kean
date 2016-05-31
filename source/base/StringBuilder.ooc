@@ -7,8 +7,10 @@
  */
 
 StringBuilder: class {
-	_items := VectorList<String> new()
-	init: func
+	_items: VectorList<String>
+	init: func (capacity := 32) {
+		this _items = VectorList<String> new(capacity, false)
+	}
 	free: override func {
 		this _items free()
 		super()

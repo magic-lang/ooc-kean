@@ -6,80 +6,68 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-Query: class {
-	_attributes: VectorList<Text>
-	_values: VectorList<Text>
-	attributes: VectorList<Text> { get {
-		result := VectorList<Text> new()
-		for (i in 0 .. this _attributes count)
-			result add(this _attributes[i] take())
-		result
-	}}
-	values: VectorList<Text> { get {
-		result := VectorList<Text> new()
-		for (i in 0 .. this _values count)
-			result add(this _values[i] take())
-		result
-	}}
+use base
 
-	init: func(=_attributes, =_values)
+Query: class {
+	_attributes: VectorList<String>
+	_values: VectorList<String>
+	attributes ::= this _attributes
+	values ::= this _values
+
+	init: func (=_attributes, =_values)
 	free: override func {
-		for (i in 0 .. this _attributes count)
-			this _attributes[i] free(Owner Receiver)
-		for (i in 0 .. this _values count)
-			this _values[i] free(Owner Receiver)
 		(this _attributes, this _values) free()
 		super()
 	}
-	toText: func -> Text {
-		result := Text empty
+	toString: func -> String {
+		contents := StringBuilder new()
 		for (i in 0 .. this _attributes count) {
-			argument := this _attributes[i] take()
-			if (this _values[i] take() != Text empty)
-				argument += t"=" + this _values[i] take()
-			result += i == 0 ? argument : t";" + argument
+			if (i != 0)
+				contents add(";")
+			contents add(this _attributes[i])
+			if (!this _values[i] empty())
+				contents add("=") . add(this _values[i])
 		}
+		result := contents join("")
+		contents free()
 		result
 	}
-	contains: func(attribute: Text) -> Bool {
+	contains: func (attribute: String) -> Bool {
 		result := false
 		for (i in 0 .. this _attributes count) {
-			if (this _attributes[i] take() == attribute) {
+			if (this _attributes[i] == attribute) {
 				result = true
-				i = this _attributes count
+				break
 			}
 		}
 		result
 	}
-	getValue: func(attribute: Text) -> Text {
-		result := Text empty
+	getValue: func (attribute: String) -> String {
+		result := ""
 		for (i in 0 .. this _attributes count) {
-			if (this _attributes[i] take() == attribute) {
-				result = this _values[i] take()
-				i = this _attributes count
+			if (this _attributes[i] == attribute) {
+				result = this _values[i]
+				break
 			}
 		}
 		result
 	}
-	parse: static func(data: Text) -> This {
+	parse: static func (data: String) -> This {
 		result: This
-		d := data take()
-		if (!d isEmpty) {
-			splitted := d split(t";")
-			attributes := VectorList<Text> new()
-			values := VectorList<Text> new()
+		if (!data empty()) {
+			splitted := data split(';')
+			attributes := VectorList<String> new()
+			values := VectorList<String> new()
 			for (i in 0 .. splitted count) {
-				argument := splitted[i] split(t"=")
-				values add(argument count > 1 ? argument remove() take() : Text empty)
-				attributes add(argument remove() take())
+				argument := splitted[i] split('=')
+				values add(argument count > 1 ? argument[1] clone() : "")
+				attributes add(argument[0] clone())
 				argument free()
 			}
-			if (attributes count != values count)
-				raise("Length of attributes and values vectors are not the same")
+			raise(attributes count != values count, "Length of attributes and values vectors are not the same")
 			result = This new(attributes, values)
 			splitted free()
 		}
-		data free(Owner Receiver)
 		result
 	}
 }
