@@ -85,7 +85,7 @@ GpuYuv420Semiplanar: class extends GpuImage {
 		this y fill(ColorRgba new(yuv y, 0, 0, 255))
 		this uv fill(ColorRgba new(yuv u, yuv v, 0, 255))
 	}
-	_toRgba: func (target: GpuImage) {
+	_toRgbaAuxiliary: func (target: GpuImage) {
 		shader := this _context getYuvToRgba()
 		shader add("texture0", this y)
 		shader add("texture1", this uv)
@@ -93,12 +93,12 @@ GpuYuv420Semiplanar: class extends GpuImage {
 	}
 	toRgb: func -> GpuImage {
 		target := this _context createRgb(this size)
-		this _toRgba(target)
+		this _toRgbaAuxiliary(target)
 		target
 	}
 	toRgba: func -> GpuImage {
 		target := this _context createRgba(this size)
-		this _toRgba(target)
+		this _toRgbaAuxiliary(target)
 		target
 	}
 }
