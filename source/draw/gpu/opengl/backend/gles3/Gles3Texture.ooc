@@ -21,7 +21,6 @@ Gles3Texture: class extends GLTexture {
 	init: func (._type, ._size) {
 		version(debugGL) { validateStart("Texture init") }
 		super(_type, _size)
-		this _target = GL_TEXTURE_2D
 		this _setInternalFormats(this _type)
 		version(debugGL) { validateEnd("Texture init") }
 	}
@@ -61,6 +60,7 @@ Gles3Texture: class extends GLTexture {
 	}
 	_setInternalFormats: func (type: TextureType) {
 		version(debugGL) { validateStart("Texture _setInternalFormats") }
+		this _target = GL_TEXTURE_2D
 		match type {
 			case TextureType Monochrome =>
 				this _internalFormat = GL_R8
@@ -78,7 +78,7 @@ Gles3Texture: class extends GLTexture {
 				this _internalFormat = GL_RG8
 				this _format = GL_RG
 				this _bytesPerPixel = 2
-			case TextureType Yv12 =>
+			case TextureType External =>
 				this _internalFormat = GL_R8
 				this _format = GL_RED
 				this _bytesPerPixel = 1
