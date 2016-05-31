@@ -20,20 +20,20 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			yuvImage := RasterYuv420Semiplanar new(IntVector2D new(2, 2))
 			yuvImage fill(ColorRgba new(0, 100, 200, 255))
 			yuvSample := yuvImage[0, 0]
-			expect(yuvSample distance(ColorYuv new(81, 194, 69)) < 8.0f)
+			expect(yuvSample distance(ColorYuv new(81, 194, 69)), is less than(8.0f))
 			rgbImage := RasterRgb convertFrom(yuvImage)
 			rgbSample := rgbImage[0, 0]
-			expect(rgbSample distance(ColorRgb new(0, 100, 200)) < 8.0f)
+			expect(rgbSample distance(ColorRgb new(0, 100, 200)), is less than(8.0f))
 			(yuvImage, rgbImage) free()
 		})
 		this add("yuv point", func {
 			yuvImage := RasterYuv420Semiplanar new(IntVector2D new(2, 2))
 			yuvImage _drawPoint(1, 1, Pen new(ColorRgba new(0, 100, 200, 255)))
 			yuvSample := yuvImage[0, 0]
-			expect(yuvSample distance(ColorYuv new(81, 194, 69)) < 8.0f)
+			expect(yuvSample distance(ColorYuv new(81, 194, 69)), is less than(8.0f))
 			rgbImage := RasterRgb convertFrom(yuvImage)
 			rgbSample := rgbImage[0, 0]
-			expect(rgbSample distance(ColorRgb new(0, 100, 200)) < 8.0f)
+			expect(rgbSample distance(ColorRgb new(0, 100, 200)), is less than(8.0f))
 			(yuvImage, rgbImage) free()
 		})
 		this add("resize", func {
