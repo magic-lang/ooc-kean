@@ -158,8 +158,8 @@ RasterYuv420Semiplanar: class extends RasterImage {
 		yRow := this y buffer pointer
 		ySource := yRow
 		uvRow := this uv buffer pointer
-		vSource := uvRow
-		uSource := uvRow + 1
+		uSource := uvRow
+		vSource := uvRow + 1
 		width := this size x
 		height := this size y
 
@@ -177,8 +177,8 @@ RasterYuv420Semiplanar: class extends RasterImage {
 				uvRow += this uv stride
 			}
 			ySource = yRow
-			vSource = uvRow
-			uSource = uvRow + 1
+			uSource = uvRow
+			vSource = uvRow + 1
 		}
 	}
 	apply: override func ~monochrome (action: Func(ColorMonochrome)) {
@@ -236,9 +236,9 @@ RasterYuv420Semiplanar: class extends RasterImage {
 				yDestination@ = color y
 				yDestination += 1
 				if (x % 2 == 0 && y % 2 == 0 && totalOffset < result uv buffer size) {
-					uvDestination@ = color v
-					uvDestination += 1
 					uvDestination@ = color u
+					uvDestination += 1
+					uvDestination@ = color v
 					uvDestination += 1
 					totalOffset += 2
 				}

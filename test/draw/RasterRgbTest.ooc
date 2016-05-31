@@ -16,6 +16,18 @@ RasterRgbTest: class extends Fixture {
 	sourceFlower := "test/draw/input/Flower.png"
 	init: func {
 		super("RasterRgbTest")
+		this add("color sample", func {
+			colors := RasterRgb open("test/draw/input/Colors.png")
+			expect(colors[0, 0] equals(ColorRgb new(0, 0, 0)))
+			expect(colors[1, 0] equals(ColorRgb new(255, 255, 255)))
+			expect(colors[2, 0] equals(ColorRgb new(255, 0, 0)))
+			expect(colors[3, 0] equals(ColorRgb new(255, 255, 0)))
+			expect(colors[4, 0] equals(ColorRgb new(0, 255, 0)))
+			expect(colors[5, 0] equals(ColorRgb new(0, 255, 255)))
+			expect(colors[6, 0] equals(ColorRgb new(0, 0, 255)))
+			expect(colors[7, 0] equals(ColorRgb new(255, 0, 255)))
+			colors referenceCount decrease()
+		})
 		this add("equals 1", func {
 			image1 := RasterRgb open(this sourceFlower)
 			image2 := RasterRgb open(this sourceSpace)

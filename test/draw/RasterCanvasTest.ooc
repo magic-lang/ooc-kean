@@ -37,13 +37,13 @@ RasterCanvasTest: class extends Fixture {
 		})
 		this add("yuv420", func {
 			yuvImage := RasterYuv420Semiplanar open(this inputFlower)
-			correctImage := RasterRgb open("test/draw/correct/RasterCanvas_Yuv420.png")
 			for (i in 0 .. 30) {
-				pen := Pen new(ColorRgb new((i % 3) * 80, (i % 5) * 50, (i % 10) * 25))
+				pen := Pen new(ColorRgb new(255, 0, 0))
 				box := IntBox2D createAround(IntPoint2D new(0, 0), IntVector2D new(10 * i, 10 * i))
 				yuvImage drawBox(FloatBox2D new(box), pen)
 			}
 			rgbImage := RasterRgb convertFrom(yuvImage)
+			correctImage := RasterRgb open("test/draw/correct/RasterCanvas_Yuv420.png")
 			expect(rgbImage distance(correctImage), is equal to(0.0f))
 			(yuvImage, rgbImage, correctImage) free()
 		})
