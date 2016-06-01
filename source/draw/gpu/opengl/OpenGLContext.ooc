@@ -36,6 +36,10 @@ OpenGLContext: class extends GpuContext {
 	_packUvPadded: OpenGLMap
 	_linesShader: OpenGLMap
 	_pointsShader: OpenGLMap
+	_monochromeToRgba: OpenGLMapTransform
+	_yuvSemiplanarToRgba: OpenGLMapTransform
+	_rgbaToYuva: OpenGLMapTransform
+	_rgbaToUvaa: OpenGLMapTransform
 	_renderer: GLRenderer
 	_recycleBin: RecycleBin<OpenGLPacked>
 	backend ::= this _backend
@@ -58,6 +62,10 @@ OpenGLContext: class extends GpuContext {
 		this _linesShader = OpenGLMapTransform new(slurp("shaders/color.frag"), this)
 		this _pointsShader = OpenGLMap new(slurp("shaders/points.vert"), slurp("shaders/color.frag"), this)
 		this _transformTextureMap = OpenGLMapTransform new(slurp("shaders/texture.frag"), this)
+		this _monochromeToRgba = OpenGLMapTransform new(slurp("shaders/monochromeToRgba.frag"), this)
+		this _yuvSemiplanarToRgba = OpenGLMapTransform new(slurp("shaders/yuvSemiplanarToRgba.frag"), this)
+		this _rgbaToYuva = OpenGLMapTransform new(slurp("shaders/rgbaToYuva.frag"), this)
+		this _rgbaToUvaa = OpenGLMapTransform new(slurp("shaders/rgbaToUvaa.frag"), this)
 		this _renderer = _backend createRenderer()
 	}
 	init: func ~shared (other: This = null) {
@@ -72,6 +80,7 @@ OpenGLContext: class extends GpuContext {
 			this _defaultFontGpu free()
 		this _backend makeCurrent()
 		(this _transformTextureMap, this _packMonochrome, this _packUv, this _packUvPadded, this _linesShader) free()
+		(this _monochromeToRgba, this _yuvSemiplanarToRgba, this _rgbaToYuva, this _rgbaToUvaa) free()
 		(this _pointsShader, this _renderer, this _recycleBin, this _backend) free()
 		super()
 	}
@@ -186,5 +195,8 @@ OpenGLContext: class extends GpuContext {
 		OpenGLMesh new(vertices, textureCoordinates, this)
 	}
 	getDefaultFont: override func -> Image { this defaultFontGpu }
+	getYuvToRgba: override func -> Map { this _yuvSemiplanarToRgba }
+	getRgbaToY: override func -> Map { this _rgbaToYuva }
+	getRgbaToUv: override func -> Map { this _rgbaToUvaa }
 }
 }
