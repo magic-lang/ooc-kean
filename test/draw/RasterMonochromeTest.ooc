@@ -131,6 +131,22 @@ RasterMonochromeTest: class extends Fixture {
 			image2 := RasterMonochrome convertFrom(RasterRgba open(source))
 			expect(image1 distance(image2), is equal to(0.0f))
 		})*/
+		this add("first derivative window", func {
+			image := RasterMonochrome open(this sourceFlower)
+			windowSize := IntVector2D new(30, 30)
+			derivativeX := FloatImage new(windowSize x, windowSize y)
+			derivativeY := FloatImage new(windowSize x, windowSize y)
+			derivativeXNew := FloatImage new(windowSize x, windowSize y)
+			derivativeYNew := FloatImage new(windowSize x, windowSize y)
+			image _getFirstDerivative_unoptimized(IntBox2D new(IntPoint2D new(50, 50), windowSize), derivativeX, derivativeY)
+			image _getFirstDerivative_optimized(IntBox2D new(IntPoint2D new(50, 50), windowSize), derivativeXNew, derivativeYNew)
+			for (h in 0 .. windowSize y)
+				for (w in 0 .. windowSize x) {
+					expect(derivativeX[w, h], is equal to(derivativeXNew[w, h]))
+					expect(derivativeY[w, h], is equal to(derivativeYNew[w, h]))
+				}
+			(image, derivativeX, derivativeY, derivativeXNew, derivativeYNew) free()
+		})
 	}
 }
 
