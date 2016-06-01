@@ -55,10 +55,10 @@ FloatVector2DTest: class extends Fixture {
 			expect(result y, is equal to(this vector0 x) within(tolerance))
 		})
 		this add("casting", func {
-			value := t"10.00, 20.00"
-			(valueString, string) := (value toString(), this vector3 toString())
-			expect(string, is equal to(valueString))
-			(string, valueString) free()
+			value := "10.00, 20.00"
+			string := this vector3 toString()
+			expect(string, is equal to(value))
+			string free()
 			expect(FloatVector2D parse(value) x, is equal to(this vector3 x))
 			expect(FloatVector2D parse(value) y, is equal to(this vector3 y))
 		})
@@ -162,11 +162,6 @@ FloatVector2DTest: class extends Fixture {
 			almostZero := (0.1 + 0.1 + 0.1) - 0.3
 			empty = FloatVector2D new(almostZero, 0.1f)
 			expect(empty hasZeroArea, is true)
-		})
-		this add("toText", func {
-			text := FloatVector2D new(1.0f, 2.0f) toText() take()
-			expect(text, is equal to(t"1.00, 2.00"))
-			text free()
 		})
 		this add("limitLength", func {
 			vector := FloatVector2D new(1.f, 1.f) limitLength(0.75f)

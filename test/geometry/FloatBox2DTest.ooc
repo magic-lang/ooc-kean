@@ -126,11 +126,6 @@ FloatBox2DTest: class extends Fixture {
 			expect(string, is equal to("1.00, 2.00, 3.00, 4.00"))
 			string free()
 		})
-		this add("toText", func {
-			text := this box0 toText() take()
-			expect(text, is equal to(t"1.00, 2.00, 3.00, 4.00"))
-			text free()
-		})
 		this add("bounds", func {
 			points := VectorList<FloatPoint2D> new()
 			points add(FloatPoint2D new(1.0f, 2.0f))
@@ -147,7 +142,7 @@ FloatBox2DTest: class extends Fixture {
 			points free()
 		})
 		this add("parse", func {
-			box := FloatBox2D parse(t"1.0, 2.0, 3.0, 4.0")
+			box := FloatBox2D parse("1.0, 2.0, 3.0, 4.0")
 			expect(box left, is equal to(1.0f) within(tolerance))
 			expect(box top, is equal to(2.0f) within(tolerance))
 			expect(box right, is equal to(1.0f + 3.0f) within(tolerance))

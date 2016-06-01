@@ -89,16 +89,11 @@ IntShell2DTest: class extends Fixture {
 			expect(decreased bottom, is equal to(1))
 		})
 		this add("parse", func {
-			shell := IntShell2D parse(t"1, 2, 3, 4")
+			shell := IntShell2D parse("1, 2, 3, 4")
 			expect(shell left, is equal to(1))
 			expect(shell right, is equal to(2))
 			expect(shell top, is equal to(3))
 			expect(shell bottom, is equal to(4))
-		})
-		this add("toText", func {
-			text := IntShell2D new(1) toText() take()
-			expect(text, is equal to(t"1, 1, 1, 1"))
-			text free()
 		})
 	}
 }

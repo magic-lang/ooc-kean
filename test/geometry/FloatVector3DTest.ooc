@@ -63,10 +63,10 @@ FloatVector3DTest: class extends Fixture {
 			expect(this vector0 z, is equal to(10.0f))
 		})
 		this add("casting", func {
-			value := t"10.00, 20.00, 30.00"
-			(valueString, string) := (value toString(), this vector3 toString())
-			expect(string, is equal to(valueString))
-			(string, valueString) free()
+			value := "10.00, 20.00, 30.00"
+			string := this vector3 toString()
+			expect(string, is equal to(value))
+			string free()
 			expect(FloatVector3D parse(value) x, is equal to(this vector3 x))
 			expect(FloatVector3D parse(value) y, is equal to(this vector3 y))
 			expect(FloatVector3D parse(value) z, is equal to(this vector3 z))
@@ -155,11 +155,6 @@ FloatVector3DTest: class extends Fixture {
 		this add("azimuth", func {
 			myvector := FloatVector3D new(1.0, 5.5, 0.1)
 			expect(myvector azimuth, is equal to(5.5f atan2(1.0f)) within(tolerance))
-		})
-		this add("toText", func {
-			text := FloatVector3D new(1.0f, 2.0f, 10.00f) toText() take()
-			expect(text, is equal to(t"1.00, 2.00, 10.00"))
-			text free()
 		})
 		this add("limitLength", func {
 			vector := FloatVector3D new(1.f, 1.f, 1.f) limitLength(0.75f)

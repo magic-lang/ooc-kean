@@ -106,7 +106,7 @@ IntBox2DTest: class extends Fixture {
 			string free()
 		})
 		this add("parse", func {
-			box := IntBox2D parse(t"1, 2, 3, 4")
+			box := IntBox2D parse("1, 2, 3, 4")
 			expect(box left, is equal to(1))
 			expect(box top, is equal to(2))
 			expect(box right, is equal to(1 + 3))
@@ -159,11 +159,6 @@ IntBox2DTest: class extends Fixture {
 			expect(reducedBox right, is equal to(4))
 			expect(reducedBox bottom, is equal to(4))
 			expect(notReducedBox == box, is true)
-		})
-		this add("toText", func {
-			text := IntBox2D new (1, 2, 3, 4) toText() take()
-			expect(text, is equal to(t"1, 2, 3, 4"))
-			text free()
 		})
 	}
 }

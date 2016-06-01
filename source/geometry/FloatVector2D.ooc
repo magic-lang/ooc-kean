@@ -46,7 +46,6 @@ FloatVector2D: cover {
 	toIntVector2D: func -> IntVector2D { IntVector2D new(this x as Int, this y as Int) }
 	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x, this y) }
 	toString: func -> String { (this x toString() >> ", ") & this y toString() }
-	toText: func -> Text { this x toText() + t", " + this y toText() }
 
 	operator - -> This { This new(-this x, -this y) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
@@ -72,7 +71,7 @@ FloatVector2D: cover {
 	basisY: static This { get { This new(0, 1) } }
 
 	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
-	parse: static func (input: Text) -> This {
+	parse: static func (input: String) -> This {
 		parts := input split(',')
 		result := This new (parts[0] toFloat(), parts[1] toFloat())
 		parts free()

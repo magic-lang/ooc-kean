@@ -173,9 +173,6 @@ Quaternion: cover {
 		"Real: " << "%8f" formatFloat(this real) >>
 		" Imaginary: " & "%8f" formatFloat(this imaginary x) >> " " & "%8f" formatFloat(this imaginary y) >> " " & "%8f" formatFloat(this imaginary z)
 	}
-	toText: func -> Text {
-		t"Real: " + this real toText() + t" Imaginary: " + this imaginary x toText() + t" " + this imaginary y toText() + t" " + this imaginary z toText()
-	}
 
 	operator * (other: This) -> This {
 		realResult := this real * other real - this imaginary scalarProduct(other imaginary)

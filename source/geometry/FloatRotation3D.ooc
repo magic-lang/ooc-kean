@@ -26,7 +26,6 @@ FloatRotation3D: cover {
 	}
 	angle: func (other: This) -> Float { this _quaternion angle(other _quaternion) }
 	toString: func -> String { this _quaternion toString() }
-	toText: func -> Text { this _quaternion toText() }
 
 	operator * (other: This) -> This { This new(this _quaternion * other _quaternion) }
 	operator == (other: This) -> Bool { this _quaternion == other _quaternion }
