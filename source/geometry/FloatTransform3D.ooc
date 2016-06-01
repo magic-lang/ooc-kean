@@ -258,5 +258,5 @@ FloatTransform3D: cover {
 }
 
 extend Cell<FloatTransform3D> {
-	toText: func ~floattransform3d -> Text { (this val as FloatTransform3D) toText() }
+	toString: func ~floattransform3d -> String { (this val as FloatTransform3D) toString() }
 }

@@ -53,5 +53,5 @@ operator * (left: Float, right: FloatComplex) -> FloatComplex { FloatComplex new
 operator / (left: Float, right: FloatComplex) -> FloatComplex { (left * right conjugate) / (right absoluteValue pow(2)) }
 
 extend Cell<FloatComplex> {
-	toText: func ~floatcomplex -> Text { (this val as FloatComplex) toText() }
+	toString: func ~floatcomplex -> String { (this val as FloatComplex) toString() }
 }

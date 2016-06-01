@@ -63,5 +63,5 @@ operator * (left: Float, right: IntVector3D) -> IntVector3D { IntVector3D new(le
 operator / (left: Float, right: IntVector3D) -> IntVector3D { IntVector3D new(left / right x, left / right y, left / right z) }
 
 extend Cell<IntVector3D> {
-	toText: func ~intvector3d -> Text { (this val as IntVector3D) toText() }
+	toString: func ~intvector3d -> String { (this val as IntVector3D) toString() }
 }

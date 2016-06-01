@@ -158,5 +158,5 @@ IntBox2D: cover {
 }
 
 extend Cell<IntBox2D> {
-	toText: func ~intbox2d -> Text { (this val as IntBox2D) toText() }
+	toString: func ~intbox2d -> String { (this val as IntBox2D) toString() }
 }
