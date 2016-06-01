@@ -100,7 +100,7 @@ String: class {
 	_bufVectorListToStrVectorList: func (x: VectorList<CharBuffer>) -> VectorList<This> {
 		result := VectorList<This> new(x count)
 		for (i in 0 .. x count)
-			result add (x[i] toString())
+			result add(x[i] toString())
 		result
 	}
 	capitalize: func -> This {
@@ -127,7 +127,10 @@ String: class {
 		this _bufVectorListToStrVectorList(this _buffer split(c, maxTokens))
 	}
 	split: func ~withStringWithoutmaxTokens (s: This) -> VectorList<This> {
-		this _bufVectorListToStrVectorList(this _buffer split(s _buffer, -1))
+		bufferSplit := this _buffer split(s _buffer)
+		result := this _bufVectorListToStrVectorList(bufferSplit)
+		bufferSplit free()
+		result
 	}
 	split: func ~withCharWithoutmaxTokens (c: Char) -> VectorList<This> {
 		bufferSplit := this _buffer split(c)

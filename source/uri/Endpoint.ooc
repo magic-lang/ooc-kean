@@ -6,48 +6,42 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
+
 Endpoint: class {
-	_host: VectorList<Text>
+	_host: VectorList<String>
 	_port: Int
-	host: VectorList<Text> { get {
-		result := VectorList<Text> new()
-		for (i in 0 .. this _host count)
-			result add(this _host[i] take())
-		result
-	}}
+	host ::= this _host
 	port ::= this _port
 
 	init: func (=_host, =_port)
 	free: override func {
-		for (i in 0 .. this _host count)
-			this _host[i] free(Owner Receiver)
 		this _host free()
 		super()
 	}
-	toText: func -> Text {
-		result := Text new()
-		for (i in 0 .. this _host count)
-			result += i == 0 ? this _host[i] take() : t"." + this _host[i] take()
-		if (this _port != 0) {
-			portString := this _port toString()
-			result += t":" + Text new(portString)
-			portString free()
+	toString: func -> String {
+		contents := StringBuilder new()
+		for (i in 0 .. this _host count) {
+			if (i != 0)
+				contents add(".")
+			contents add(this _host[i])
 		}
+		portString := this _port toString()
+		if (this _port != 0)
+			contents add(":") . add(portString)
+		result := contents join("")
+		(contents, portString) free()
 		result
 	}
-	parse: static func(data: Text) -> This {
+	parse: static func (data: String) -> This {
 		result: This
-		d := data take()
-		if (!d isEmpty) {
-			splitted := d split(t":")
-			newPort := splitted count > 1 ? splitted remove() toInt() : 0
-			newHost := splitted remove() split(t".")
-			for (i in 0 .. newHost count)
-				newHost[i] = newHost[i] take()
+		if (!data empty()) {
+			splitted := data split(':')
+			newPort := splitted count > 1 ? splitted[1] toInt() : 0
+			newHost := splitted[0] split('.')
 			result = This new(newHost, newPort)
 			splitted free()
 		}
-		data free(Owner Receiver)
 		result
 	}
 }
