@@ -120,6 +120,9 @@ RasterMonochrome: class extends RasterPacked {
 	}
 	// get the derivative on small window, region is window's global location on image, window is left top centered.
 	getFirstDerivative: func ~window (region: IntBox2D, imageX, imageY: FloatImage) {
+		this _getFirstDerivative_optimized(region, imageX, imageY)
+	}
+	_getFirstDerivative_unoptimized: func (region: IntBox2D, imageX, imageY: FloatImage) {
 		step := 2
 		sourceStride := this stride
 		source := this buffer pointer + region leftTop y * sourceStride // this getValue [x,y]
@@ -148,13 +151,50 @@ RasterMonochrome: class extends RasterPacked {
 			source += sourceStride
 		}
 	}
+	_getFirstDerivative_optimized: func (region: IntBox2D, imageX, imageY: FloatImage) {
+		step := 2
+		sourceStride := this stride
+		destinationX := imageX pointer
+		destinationY := imageY pointer
 
+		// create small buffer to minimize cache misses for vertical pass
+		windowCacheWidth := region width + 4 * step
+		windowCacheHeight := region height + 4 * step
+		buffer := ByteBuffer new(windowCacheHeight * windowCacheWidth)
+		windowCache := buffer pointer as Byte*
+		for (y in 0 .. windowCacheHeight) {
+			lineIndex := region leftTop y + (y - 2 * step)
+			sourceY := this buffer pointer + lineIndex * sourceStride - step * 2 + region leftTop x
+			memcpy(windowCache + y * windowCacheWidth, sourceY, windowCacheWidth)
+		}
+		windowCache += step * 2 * windowCacheWidth
+		for (y in 0 .. region height) {
+			for (x in 2 * step .. region width + 2 * step) {
+				destinationX@ = (
+					8 * windowCache[x + step] -
+					8 * windowCache[x - step] +
+					windowCache[x - 2 * step] -
+					windowCache[x + 2 * step]
+				) as Float / (12.0f * step)
+				destinationX += 1
+
+				destinationY@ = (
+					8 * windowCache[x + windowCacheWidth * step] -
+					8 * windowCache[x - windowCacheWidth * step] +
+					windowCache[x - windowCacheWidth * 2 * step] -
+					windowCache[x + windowCacheWidth * 2 * step]
+				) as Float / (12.0f * step)
+				destinationY += 1
+			}
+			windowCache += windowCacheWidth
+		}
+		buffer free()
+	}
 	getValue: func (x, y: Int) -> Byte {
 		version(safe)
 			raise(x >= this size x || y >= this size y || x < 0 || y < 0, "Accessing RasterMonochrome index out of range in getValue")
 		(this buffer pointer[y * this stride + x])
 	}
-
 	getRow: func (row: Int) -> FloatVectorList {
 		result := FloatVectorList new(this size x)
 		this getRowInto(row, result)
