@@ -65,5 +65,5 @@ FloatEuclidTransform: cover {
 }
 
 extend Cell<FloatEuclidTransform> {
-	toText: func ~floateuclidtransform -> Text { (this val as FloatEuclidTransform) toText() }
+	toString: func ~floateuclidtransform -> String { (this val as FloatEuclidTransform) toString() }
 }

@@ -57,5 +57,5 @@ operator * (left: Float, right: IntPoint2D) -> IntPoint2D { IntPoint2D new(left 
 operator / (left: Float, right: IntPoint2D) -> IntPoint2D { IntPoint2D new(left / right x, left / right y) }
 
 extend Cell<IntPoint2D> {
-	toText: func ~intpoint2d -> Text { (this val as IntPoint2D) toText() }
+	toString: func ~intpoint2d -> String { (this val as IntPoint2D) toString() }
 }

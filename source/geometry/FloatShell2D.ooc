@@ -57,5 +57,5 @@ FloatShell2D: cover {
 }
 
 extend Cell<FloatShell2D> {
-	toText: func ~floatshell2d -> Text { (this val as FloatShell2D) toText() }
+	toString: func ~floatshell2d -> String { (this val as FloatShell2D) toString() }
 }

@@ -56,14 +56,15 @@ Fixture: abstract class {
 		testTime := timer stop() / 1_000_000.0
 		This totalTime += testTime
 		if (testTime > 0.1)
-			This _print(" in %.2fs\n" format(testTime), true)
-		else
-			This _print("\n")
+			This _print(" in %.2fs" format(testTime), true)
+		This _print("\n")
 		if (!result) {
 			for (i in 0 .. failures count) {
 				f := failures[i]
 				if (f constraint instanceOf(CompareConstraint) && f value instanceOf(Cell))
 					This _print(this createCompareFailureMessage(f) + "\n")
+				else if (f constraint instanceOf(CompareConstraint) && f value instanceOf(String))
+					This _print("  -> %s : expected equal to %s was %s\n" format(f message, f value as String, (f constraint as CompareConstraint) correct as String))
 				else if (f constraint instanceOf(NullConstraint))
 					This _print("  -> %s : expected null was %p\n" format(f message, f value&))
 				else if (f constraint instanceOf(NotNullConstraint))
@@ -98,30 +99,30 @@ Fixture: abstract class {
 			case ComparisonType Within => result add("equal to")
 			case ComparisonType NotWithin => result add("not equal to")
 		}
-		expectedText, testedText: Text
+		expectedText, testedText: String
 		match (expectedValue T) {
-			case FloatVector2D => (expectedText, testedText) = (expectedValue toText~floatvector2d(), testedValue toText~floatvector2d())
-			case FloatVector3D => (expectedText, testedText) = (expectedValue toText~floatvector3d(), testedValue toText~floatvector3d())
-			case FloatPoint2D => (expectedText, testedText) = (expectedValue toText~floatpoint2d(), testedValue toText~floatpoint2d())
-			case FloatPoint3D => (expectedText, testedText) = (expectedValue toText~floatpoint3d(), testedValue toText~floatpoint3d())
-			case Quaternion => (expectedText, testedText) = (expectedValue toText~quaternion(), testedValue toText~quaternion())
-			case FloatEuclidTransform => (expectedText, testedText) = (expectedValue toText~floateuclidtransform(), testedValue toText~floateuclidtransform())
-			case FloatRotation3D => (expectedText, testedText) = (expectedValue toText~floatrotation3d(), testedValue toText~floatrotation3d())
-			case FloatTransform2D => (expectedText, testedText) = (expectedValue toText~floattransform2d(), testedValue toText~floattransform2d())
-			case FloatTransform3D => (expectedText, testedText) = (expectedValue toText~floattransform3d(), testedValue toText~floattransform3d())
-			case IntVector2D => (expectedText, testedText) = (expectedValue toText~intvector2d(), testedValue toText~intvector2d())
-			case IntVector3D => (expectedText, testedText) = (expectedValue toText~intvector3d(), testedValue toText~intvector3d())
-			case IntPoint2D => (expectedText, testedText) = (expectedValue toText~intpoint2d(), testedValue toText~intpoint2d())
-			case IntPoint3D => (expectedText, testedText) = (expectedValue toText~intpoint3d(), testedValue toText~intpoint3d())
-			case FloatComplex => (expectedText, testedText) = (expectedValue toText~floatcomplex(), testedValue toText~floatcomplex())
-			case FloatMatrix => (expectedText, testedText) = (expectedValue toText~floatmatrix(), testedValue toText~floatmatrix())
-			case FloatBox2D => (expectedText, testedText) = (expectedValue toText~floatbox2d(), testedValue toText~floatbox2d())
-			case IntBox2D => (expectedText, testedText) = (expectedValue toText~intbox2d(), testedValue toText~intbox2d())
-			case FloatShell2D => (expectedText, testedText) = (expectedValue toText~floatshell2d(), testedValue toText~floatshell2d())
-			case IntShell2D => (expectedText, testedText) = (expectedValue toText~intshell2d(), testedValue toText~intshell2d())
-			case => (expectedText, testedText) = (expectedValue toText(), testedValue toText())
+			case FloatVector2D => (expectedText, testedText) = (expectedValue toString~floatvector2d(), testedValue toString~floatvector2d())
+			case FloatVector3D => (expectedText, testedText) = (expectedValue toString~floatvector3d(), testedValue toString~floatvector3d())
+			case FloatPoint2D => (expectedText, testedText) = (expectedValue toString~floatpoint2d(), testedValue toString~floatpoint2d())
+			case FloatPoint3D => (expectedText, testedText) = (expectedValue toString~floatpoint3d(), testedValue toString~floatpoint3d())
+			case Quaternion => (expectedText, testedText) = (expectedValue toString~quaternion(), testedValue toString~quaternion())
+			case FloatEuclidTransform => (expectedText, testedText) = (expectedValue toString~floateuclidtransform(), testedValue toString~floateuclidtransform())
+			case FloatRotation3D => (expectedText, testedText) = (expectedValue toString~floatrotation3d(), testedValue toString~floatrotation3d())
+			case FloatTransform2D => (expectedText, testedText) = (expectedValue toString~floattransform2d(), testedValue toString~floattransform2d())
+			case FloatTransform3D => (expectedText, testedText) = (expectedValue toString~floattransform3d(), testedValue toString~floattransform3d())
+			case IntVector2D => (expectedText, testedText) = (expectedValue toString~intvector2d(), testedValue toString~intvector2d())
+			case IntVector3D => (expectedText, testedText) = (expectedValue toString~intvector3d(), testedValue toString~intvector3d())
+			case IntPoint2D => (expectedText, testedText) = (expectedValue toString~intpoint2d(), testedValue toString~intpoint2d())
+			case IntPoint3D => (expectedText, testedText) = (expectedValue toString~intpoint3d(), testedValue toString~intpoint3d())
+			case FloatComplex => (expectedText, testedText) = (expectedValue toString~floatcomplex(), testedValue toString~floatcomplex())
+			case FloatMatrix => (expectedText, testedText) = (expectedValue toString~floatmatrix(), testedValue toString~floatmatrix())
+			case FloatBox2D => (expectedText, testedText) = (expectedValue toString~floatbox2d(), testedValue toString~floatbox2d())
+			case IntBox2D => (expectedText, testedText) = (expectedValue toString~intbox2d(), testedValue toString~intbox2d())
+			case FloatShell2D => (expectedText, testedText) = (expectedValue toString~floatshell2d(), testedValue toString~floatshell2d())
+			case IntShell2D => (expectedText, testedText) = (expectedValue toString~intshell2d(), testedValue toString~intshell2d())
+			case => (expectedText, testedText) = (expectedValue toString(), testedValue toString())
 		}
-		result add(expectedText toString()) . add("was") . add(testedText toString())
+		result add(expectedText) . add("was") . add(testedText)
 		if (constraint type == ComparisonType Within)
 			result add(" [tolerance: %.8f]" formatDouble((constraint parent as CompareWithinConstraint) precision))
 		result join(" ")
@@ -134,7 +135,7 @@ Fixture: abstract class {
 			case 0 => result add(constraint intMin toString()) . add("and") . add(constraint intMax toString())
 			case 1 => result add(constraint floatMin toString()) . add("and") . add(constraint floatMax toString())
 		}
-		result add("was") . add(testedValue toText() toString())
+		result add("was") . add(testedValue toString())
 		result join(' ')
 	}
 	hideDebugOutput: func {

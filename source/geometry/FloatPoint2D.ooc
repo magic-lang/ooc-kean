@@ -81,5 +81,5 @@ operator * (left: Int, right: FloatPoint2D) -> FloatPoint2D { FloatPoint2D new(l
 operator / (left: Int, right: FloatPoint2D) -> FloatPoint2D { FloatPoint2D new(left / right x, left / right y) }
 
 extend Cell<FloatPoint2D> {
-	toText: func ~floatpoint2d -> Text { (this val as FloatPoint2D) toText() }
+	toString: func ~floatpoint2d -> String { (this val as FloatPoint2D) toString() }
 }
