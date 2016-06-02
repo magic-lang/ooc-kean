@@ -84,7 +84,7 @@ OpenGLPacked: abstract class extends GpuImage {
 					gpuMap add("texture0", image)
 			}
 		}
-		gpuMap use(this, projection * view * model, textureTransform)
+		gpuMap useProgram(this, projection * view * model, textureTransform)
 		this _renderTarget bind()
 		if (drawState mesh)
 			drawState mesh draw()

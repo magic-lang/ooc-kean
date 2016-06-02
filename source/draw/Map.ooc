@@ -59,7 +59,7 @@ Map: abstract class {
 		this _bindings free()
 		super()
 	}
-	use: abstract func (forbiddenInput: Pointer, positionTransform, textureTransform: FloatTransform3D)
+	useProgram: abstract func (forbiddenInput: Pointer, positionTransform, textureTransform: FloatTransform3D)
 	add: func <T> (key: String, value: T) {
 		if (T inheritsFrom(Object))
 			this _bindings add(key, value as Object, false)

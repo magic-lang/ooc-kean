@@ -23,10 +23,10 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 		version(debugGL) { validateEnd("ShaderProgram dispose") }
 		super()
 	}
-	use: override func {
-		version(debugGL) { validateStart("ShaderProgram use") }
+	useProgram: override func {
+		version(debugGL) { validateStart("ShaderProgram useProgram") }
 		glUseProgram(this _backend)
-		version(debugGL) { validateEnd("ShaderProgram use") }
+		version(debugGL) { validateEnd("ShaderProgram useProgram") }
 	}
 	setUniform: override func ~Int (name: String, x: Int) {
 		version(debugGL) { validateStart("ShaderProgram setUniform~Int") }
