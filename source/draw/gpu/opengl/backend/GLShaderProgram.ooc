@@ -11,7 +11,7 @@ use draw
 
 version(!gpuOff) {
 GLShaderProgram: abstract class {
-	use: abstract func
+	useProgram: abstract func
 	setUniform: abstract func ~Int (name: String, x: Int)
 	setUniform: abstract func ~Int2 (name: String, x, y: Int)
 	setUniform: abstract func ~Int3 (name: String, x, y, z: Int)

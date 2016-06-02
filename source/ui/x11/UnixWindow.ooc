@@ -80,7 +80,7 @@ UnixWindow: class extends UnixWindowBase {
 			case (matchedImage: GpuImage) =>
 				map add("texture0", matchedImage)
 		}
-		map use(null, FloatTransform3D identity, FloatTransform3D identity)
+		map useProgram(null, FloatTransform3D identity, FloatTransform3D identity)
 		this context backend setViewport(IntBox2D new(image size))
 		this context backend disableBlend()
 		this context drawQuad()

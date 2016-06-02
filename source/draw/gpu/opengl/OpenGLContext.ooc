@@ -90,14 +90,14 @@ OpenGLContext: class extends GpuContext {
 	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen: Pen) {
 		positions := pointList pointer as Float*
 		this _linesShader add("color", pen color normalized)
-		this _linesShader use(null, projection, FloatTransform3D identity)
+		this _linesShader useProgram(null, projection, FloatTransform3D identity)
 		this _renderer drawLines(positions, pointList count, 2, pen width)
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen: Pen) {
 		positions := pointList pointer
 		this _pointsShader add("color", pen color normalized)
 		this _pointsShader add("pointSize", pen width)
-		this _pointsShader use(null, projection, FloatTransform3D identity)
+		this _pointsShader useProgram(null, projection, FloatTransform3D identity)
 		this _renderer drawPoints(positions, pointList count, 2)
 	}
 	recycle: virtual func (image: OpenGLPacked) {
