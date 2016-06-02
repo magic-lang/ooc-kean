@@ -157,17 +157,29 @@ DateTimeTest: class extends Fixture {
 			d1 -= TimeSpan week()
 			expect((d2 - d1) toDays() == 6)
 		})
-		this add("toText", func {
+		this add("toString", func {
 			date := DateTime new(1643, 12, 31, 23, 58, 59, 999)
-			expect(date toText(t"%yyyy-%MM-%dd %hh:%mm:%ss.%zzz"), is equal to(t"1643-12-31 23:58:59.999"))
-			expect(date toText(t"%yy-%M-%d %h:%m:%s.%z"), is equal to(t"43-12-31 23:58:59.999"))
+			Astring := date toString("%yyyy-%MM-%dd %hh:%mm:%ss.%zzz")
+			Bstring := date toString("%yy-%M-%d %h:%m:%s.%z")
+			expect(Astring, is equal to("1643-12-31 23:58:59.999"))
+			expect(Bstring, is equal to("43-12-31 23:58:59.999"))
+
 			date = DateTime new(1998, 7, 18, 1, 44, 31, 742)
-			expect(date toText(t"date is : %yy, %M, %dd; hour: %hh-%mm-%ss"), is equal to(t"date is : 98, 7, 18; hour: 01-44-31"))
-			expect(date toText(t"%yyyy/%dd/%MM"), is equal to(t"1998/18/07"))
-			expect(date toText() == date toText(DateTime defaultFormat))
+			Cstring := date toString("date is : %yy, %M, %dd; hour: %hh-%mm-%ss")
+			Dstring := date toString("%yyyy/%dd/%MM")
+			Estring := date toString()
+			Estringcompare := date toString(DateTime defaultFormat)
+			expect(Cstring, is equal to("date is : 98, 7, 18; hour: 01-44-31"))
+			expect(Dstring, is equal to("1998/18/07"))
+			expect(Estring == Estringcompare)
+
 			date = DateTime new ~fromYearMonthDay(1, 1, 1)
-			expect(date toText(t"start date is: %yy %M %d, %hh-%mm-%ss-%zzz"), is equal to(t"start date is: 01 1 1, 00-00-00-000"))
-			expect(date toText(t"%h-%m-%s-%z"), is equal to(t"0-0-0-0"))
+			Fstring := date toString("start date is: %yy %M %d, %hh-%mm-%ss-%zzz")
+			Gstring := date toString("%h-%m-%s-%z")
+			expect(Fstring, is equal to("start date is: 01 1 1, 00-00-00-000"))
+			expect(Gstring, is equal to("0-0-0-0"))
+
+			(Astring, Bstring, Cstring, Dstring, Estring, Fstring, Gstring, Estringcompare) free()
 		})
 		this add("current time", func {
 			d := DateTime now
