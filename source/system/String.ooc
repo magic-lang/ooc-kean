@@ -56,7 +56,7 @@ String: class {
 	startsWith: func ~char (c: Char) -> Bool { this _buffer startsWith(c) }
 	endsWith: func (s: This) -> Bool { this _buffer endsWith(s _buffer) }
 	endsWith: func ~char (c: Char) -> Bool { this _buffer endsWith(c) }
-	find: func (what: This, offset: Int, searchCaseSensitive := true) -> Int { this _buffer find(what _buffer, offset, searchCaseSensitive) }
+	find: func (what: This, offset: Int = 0, searchCaseSensitive := true) -> Int { this _buffer find(what _buffer, offset, searchCaseSensitive) }
 	findAll: func (what: This, searchCaseSensitive := true) -> VectorList <Int> { this _buffer findAll(what _buffer, searchCaseSensitive) }
 	replaceAll: func ~str (what, with: This, searchCaseSensitive := true) -> This { (this _buffer clone()) replaceAll(what _buffer, with _buffer, searchCaseSensitive) . toString() }
 	replaceAll: func ~char (oldie, kiddo: Char) -> This { (this _buffer clone()) replaceAll~char(oldie, kiddo) . toString() }

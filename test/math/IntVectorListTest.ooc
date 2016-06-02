@@ -60,11 +60,11 @@ IntVectorListTest: class extends Fixture {
 			expect(compressed[4], is equal to(7))
 			(list, compressed) free()
 		})
-		this add("toText", func {
+		this add("toString", func {
 			list := IntVectorList new()
 			list add(1) . add(2) . add(3)
-			text := list toText()
-			expect(text take(), is equal to(t"1\n2\n3"))
+			text := list toString()
+			expect(text, is equal to("1\n2\n3"))
 			(text, list) free()
 		})
 	}
