@@ -28,7 +28,7 @@ RasterRgb: class extends RasterPacked {
 	_drawPoint: override func (x, y: Int, pen: Pen) {
 		position := this _map(IntPoint2D new(x, y))
 		if (this isValidIn(position x, position y))
-			this[position x, position y] = this[position x, position y] blend(pen alphaAsFloat, pen color toRgb())
+			this[position x, position y] = ColorRgb mix(this[position x, position y], pen color toRgb(), pen alphaAsFloat)
 	}
 	_draw: override func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) {
 		rgb: This = null

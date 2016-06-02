@@ -58,7 +58,7 @@ RasterYuv420Semiplanar: class extends RasterImage {
 	_drawPoint: override func (x, y: Int, pen: Pen) {
 		position := this _map(IntPoint2D new(x, y))
 		if (this isValidIn(position x, position y))
-			this[position x, position y] = this[position x, position y] blend(pen alphaAsFloat, pen color toYuv())
+			this[position x, position y] = ColorYuv mix(this[position x, position y], pen color toYuv(), pen alphaAsFloat)
 	}
 	fill: override func (color: ColorRgba) {
 		yuv := color toYuv()

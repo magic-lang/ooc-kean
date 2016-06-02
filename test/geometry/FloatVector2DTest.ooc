@@ -142,9 +142,9 @@ FloatVector2DTest: class extends Fixture {
 			expect(this vector0 scalarProduct(this vector1), is equal to (230.95f) within(0.01f))
 		})
 		this add("interpolation", func {
-			interpolate1 := FloatVector2D linearInterpolation(this vector0, this vector1, 0.0f)
-			interpolate2 := FloatVector2D linearInterpolation(this vector0, this vector1, 0.5f)
-			interpolate3 := FloatVector2D linearInterpolation(this vector0, this vector1, 1.0f)
+			interpolate1 := FloatVector2D mix(this vector0, this vector1, 0.0f)
+			interpolate2 := FloatVector2D mix(this vector0, this vector1, 0.5f)
+			interpolate3 := FloatVector2D mix(this vector0, this vector1, 1.0f)
 			expect(interpolate1 x, is equal to(this vector0 x) within(tolerance))
 			expect(interpolate1 y, is equal to(this vector0 y) within(tolerance))
 			expect(interpolate2 x, is equal to(17.22f) within(0.01f))

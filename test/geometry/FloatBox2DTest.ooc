@@ -227,7 +227,7 @@ FloatBox2DTest: class extends Fixture {
 		this add("interpolate", func {
 			a := FloatBox2D new(1.0f, 5.0f, 3.0f, 4.0f)
 			b := FloatBox2D new(4.0f, -1.0f, 0.0f, 1.0f)
-			interpolatedBox := FloatBox2D linearInterpolation(a, b, 1.0f / 3.0f)
+			interpolatedBox := FloatBox2D mix(a, b, 1.0f / 3.0f)
 			expect(interpolatedBox left, is equal to(2.0f) within(tolerance))
 			expect(interpolatedBox top, is equal to(3.0f) within(tolerance))
 			expect(interpolatedBox width, is equal to(2.0f) within(tolerance))

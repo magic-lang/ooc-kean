@@ -26,7 +26,7 @@ RasterRgba: class extends RasterPacked {
 	_drawPoint: override func (x, y: Int, pen: Pen) {
 		position := this _map(IntPoint2D new(x, y))
 		if (this isValidIn(position x, position y))
-			this[position x, position y] = this[position x, position y] blend(pen alphaAsFloat, pen color)
+			this[position x, position y] = ColorRgba mix(this[position x, position y], pen color, pen alphaAsFloat)
 	}
 	fill: override func (color: ColorRgba) {
 		for (y in 0 .. this size y)

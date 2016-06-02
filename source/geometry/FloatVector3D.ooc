@@ -82,8 +82,8 @@ FloatVector3D: cover {
 		parts free()
 		result
 	}
-	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
-		This new(ratio linearInterpolation(a x, b x), ratio linearInterpolation(a y, b y), ratio linearInterpolation(a z, b z))
+	mix: static func (a, b: This, ratio: Float) -> This {
+		This new(Float mix(a x, b x, ratio), Float mix(a y, b y, ratio), Float mix(a z, b z, ratio))
 	}
 }
 operator * (left: Float, right: FloatVector3D) -> FloatVector3D { FloatVector3D new(left * right x, left * right y, left * right z) }

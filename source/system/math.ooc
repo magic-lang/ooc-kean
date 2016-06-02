@@ -184,8 +184,8 @@ extend Float {
 	greaterThan: func (other: This, tolerance := This epsilon) -> Bool { this > other && !this equals(other, tolerance) }
 	lessOrEqual: func (other: This, tolerance := This epsilon) -> Bool { !this greaterThan(other, tolerance) }
 	greaterOrEqual: func (other: This, tolerance := This epsilon) -> Bool { !this lessThan(other, tolerance) }
-	linearInterpolation: func (a: This, b: This) -> This { (this * (b - a)) + a }
-	inverseLinearInterpolation: func (a: This, b: This) -> This { (this - a) / (b - a) }
+	mix: static func (a, b, ratio: This) -> This { (ratio * (b - a)) + a }
+	inverseMix: static func (a, b, ratio: This) -> This { (ratio - a) / (b - a) }
 	clamp: func (floor, ceiling: This) -> This { this > ceiling ? ceiling : (this < floor ? floor : this) }
 	toRadians: func -> This { This pi / 180.0f * this }
 	toDegrees: func -> This { 180.0f / This pi * this }

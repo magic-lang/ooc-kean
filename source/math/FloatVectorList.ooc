@@ -298,7 +298,7 @@ FloatVectorList: class extends VectorList<Float> {
 			for (index1 in 0 .. this count - 1) {
 				result add(thisPointer[index1])
 				for (index2 in 1 .. numberOfPoints + 1)
-					result add((index2 as Float / (numberOfPoints + 1) as Float) linearInterpolation(thisPointer[index1], thisPointer[index1 + 1]))
+					result add(Float mix(thisPointer[index1], thisPointer[index1 + 1], index2 as Float / (numberOfPoints + 1) as Float))
 			}
 			result add(thisPointer[this count - 1])
 		} else
