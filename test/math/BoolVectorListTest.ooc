@@ -102,6 +102,9 @@ BoolVectorListTest: class extends Fixture {
 			list := this _createFromString("101")
 			text := list toString()
 			expect(text, is equal to("true\nfalse\ntrue"))
+			text free()
+			text = list toString(", ")
+			expect(text, is equal to("true, false, true"))
 			(text, list) free()
 		})
 	}

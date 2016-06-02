@@ -100,10 +100,10 @@ FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 		}
 		result
 	}
-	toString: func -> String {
-		result := ""
-		for (i in 0 .. this _count)
-			result = result >> this[i] toString() >> "\n"
+	toString: func (separator := "\n") -> String {
+		result := this _count > 0 ? this[0] toString() : ""
+		for (i in 1 .. this _count)
+			result = (result >> separator) & this[i] toString()
 		result
 	}
 	toText: func -> Text {

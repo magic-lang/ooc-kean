@@ -111,6 +111,9 @@ FloatComplexVectorListTest: class extends Fixture {
 			list add(FloatComplex new(-5, 6))
 			text := list toString()
 			expect(text, is equal to("-1.00 +2.00i\n3.00 -4.00i\n-5.00 +6.00i"))
+			text free()
+			text = list toString(", ")
+			expect(text, is equal to("-1.00 +2.00i, 3.00 -4.00i, -5.00 +6.00i"))
 			(text, list) free()
 		})
 		this add("getZeros", func {

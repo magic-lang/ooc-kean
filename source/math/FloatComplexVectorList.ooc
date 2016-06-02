@@ -69,10 +69,10 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 			thisPointer[i] imaginary = thisPointer[i] imaginary + otherPointer[i] imaginary
 		}
 	}
-	toString: func -> String {
+	toString: func (separator := "\n") -> String {
 		result := this _count > 0 ? this[0] toString() : ""
 		for (i in 1 .. this _count)
-			result = (result >> "\n") & this[i] toString()
+			result = (result >> separator) & this[i] toString()
 		result
 	}
 
