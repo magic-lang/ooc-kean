@@ -9,8 +9,8 @@
 use draw
 use geometry
 use base
-use collections
 use draw-gpu
+use concurrent
 import GraphicBuffer, OpenGLContext, EGLRgba
 
 version(!gpuOff) {
@@ -31,13 +31,13 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	}
 	free: override func {
 		if (this _rgba != null)
-			This _recycle(this _rgba)
+			This _bin add(this _rgba)
 		this _buffer free()
 		super()
 	}
 	toRgba: func (context: OpenGLContext) -> GpuImage {
 		if (this _rgba == null)
-			this _rgba = This _search(this _buffer)
+			this _rgba = This _bin search(|image| this buffer _handle == image buffer _handle)
 		if (this _rgba == null) {
 			padding := this _uvOffset - this _stride * this _size y
 			extraRows := padding align(this _stride) / this _stride
@@ -50,34 +50,8 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		this _rgba referenceCount increase()
 		this _rgba
 	}
-	_bin := static VectorList<EGLRgba> new()
-	_mutex := static Mutex new()
-	_binSize: static Int = 100
-	_recycle: static func (image: EGLRgba) {
-		This _mutex lock()
-		This _bin add(image)
-		if (This _bin count > This _binSize)
-			This _bin remove(0) referenceCount decrease()
-		This _mutex unlock()
-	}
-	_search: static func (buffer: GraphicBuffer) -> EGLRgba {
-		This _mutex lock()
-		result: EGLRgba = null
-		for (i in 0 .. This _bin count) {
-			if (This _bin[i] buffer _handle == buffer _handle) {
-				result = This _bin remove(i)
-				break
-			}
-		}
-		This _mutex unlock()
-		result
-	}
-	free: static func ~all {
-		This _mutex lock()
-		while (!This _bin empty)
-			This _bin remove() referenceCount decrease()
-		This _mutex unlock()
-	}
+	_bin := static RecycleBin<EGLRgba> new(100, |image| image referenceCount decrease())
+	free: static func ~all { This _bin clear() }
 }
 
 GlobalCleanup register(|| GraphicBufferYuv420Semiplanar free~all())
