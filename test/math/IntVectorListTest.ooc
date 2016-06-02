@@ -67,6 +67,13 @@ IntVectorListTest: class extends Fixture {
 			expect(text, is equal to("1\n2\n3"))
 			(text, list) free()
 		})
+		this add("parse", func {
+			list := IntVectorList parse("1,2,3,4,5", ",")
+			expect(list count, is equal to(5))
+			for (i in 0 .. 5)
+				expect(list[i], is equal to(i + 1))
+			list free()
+		})
 	}
 }
 

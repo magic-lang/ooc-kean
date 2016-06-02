@@ -500,4 +500,13 @@ FloatVectorList: class extends VectorList<Float> {
 			maximumDifference = maximumDifference maximum((this[i] - other[i]) absolute)
 		maximumDifference
 	}
+
+	parse: static func (data, separator: String) -> This {
+		items := data split(separator)
+		result := This new(items count)
+		for (i in 0 .. items count)
+			result add(items[i] toFloat())
+		items free()
+		result
+	}
 }

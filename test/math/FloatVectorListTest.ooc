@@ -445,6 +445,13 @@ FloatVectorListTest: class extends Fixture {
 			expect(list1 maximumDifference(list2), is equal to(5.3f) within(tolerance))
 			(list1, list2) free()
 		})
+		this add("parse", func {
+			list := FloatVectorList parse("1.10,2.20,3.3,4.4000,5.5", ",")
+			expect(list count, is equal to(5))
+			for (i in 0 .. 5)
+				expect(list[i], is equal to(((i + 1) as Float) * 1.1f) within(0.01f))
+			list free()
+		})
 	}
 }
 
