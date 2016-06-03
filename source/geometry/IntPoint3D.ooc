@@ -23,7 +23,6 @@ IntPoint3D: cover {
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
 	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this x as Float, this y as Float, this z as Float) }
 	toString: func -> String { (this x toString() >> ", ") & (this y toString() >> ", ") & this z toString() }
-	toText: func -> Text { this x toText() + t", " + this y toText() + t", " + this z toText() }
 
 	operator - -> This { This new(-this x, -this y, -this z) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
@@ -43,7 +42,7 @@ IntPoint3D: cover {
 	operator * (other: Int) -> This { This new(this x * other, this y * other, this z * other) }
 	operator / (other: Int) -> This { This new(this x / other, this y / other, this z / other) }
 
-	parse: static func (input: Text) -> This {
+	parse: static func (input: String) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toInt(), parts[1] toInt(), parts[2] toInt())
 		parts free()

@@ -153,6 +153,17 @@ String: class {
 	split: func ~str (delimiter: This, maxTokens: SSizeT) -> VectorList<This> {
 		this _bufVectorListToStrVectorList(this _buffer split(delimiter _buffer, maxTokens))
 	}
+
+	operator + (other: Float) -> This { this << other toString() }
+	operator + (other: Double) -> This { this << other toString() }
+	operator + (other: UInt) -> This { this << other toString() }
+	operator + (other: Int) -> This { this << other toString() }
+
+	operator & (other: Float) -> This { this & other toString() }
+	operator & (other: Double) -> This { this & other toString() }
+	operator & (other: UInt) -> This { this & other toString() }
+	operator & (other: Int) -> This { this & other toString() }
+
 	free: static func ~all {
 		string_literal_free_all()
 	}

@@ -76,13 +76,6 @@ FloatConvexHull2DTest: class extends Fixture {
 			expect(string == "(1.00, 1.00) (1.00, 5.00) (4.00, 5.00) (4.00, 1.00) ")
 			(string, hull) free()
 		})
-		this add("toText", func {
-			square := FloatBox2D new(1.0f, 1.0f, 3.0f, 4.0f)
-			hull := FloatConvexHull2D new(square)
-			text := hull toText() take()
-			expect(text, is equal to(t"(1.00, 1.00) (1.00, 5.00) (4.00, 5.00) (4.00, 1.00)"))
-			(hull, text) free()
-		})
 	}
 }
 

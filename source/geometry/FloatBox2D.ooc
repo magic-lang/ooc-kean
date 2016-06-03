@@ -123,7 +123,6 @@ FloatBox2D: cover {
 		This createAround(newCenter, newSize)
 	}
 	toString: func -> String { (this leftTop toString() >> ", ") & this size toString() }
-	toText: func -> Text { this leftTop toText() + t", " + this size toText() }
 	toIntBox2D: func -> IntBox2D { IntBox2D new(this left, this top, this width, this height) }
 
 	operator + (other: This) -> This {
@@ -149,7 +148,7 @@ FloatBox2D: cover {
 	operator / (other: FloatVector2D) -> This { This new(this leftTop / other, this size / other) }
 	operator - (other: FloatVector2D) -> This { This new(this leftTop, this size - other) }
 
-	parse: static func (input: Text) -> This {
+	parse: static func (input: String) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat(), parts[3] toFloat())
 		parts free()

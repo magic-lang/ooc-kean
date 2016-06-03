@@ -98,7 +98,6 @@ IntBox2D: cover {
 	contains: func ~box (box: This) -> Bool { this intersection(box) == box }
 	toFloatBox2D: func -> FloatBox2D { FloatBox2D new(this left, this top, this width, this height) }
 	toString: func -> String { (this leftTop toString() >> ", ") & this size toString() }
-	toText: func -> Text { this leftTop toText() + t", " + this size toText() }
 
 	operator + (other: This) -> This {
 		if (this hasZeroArea)
@@ -118,7 +117,7 @@ IntBox2D: cover {
 	operator * (scale: Int) -> This { This new(this leftTop * scale, this size * scale) }
 	operator / (divisor: Int) -> This { This new(this leftTop / divisor, this size / divisor) }
 
-	parse: static func (input: Text) -> This {
+	parse: static func (input: String) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toInt(), parts[1] toInt(), parts[2] toInt(), parts[3] toInt())
 		parts free()

@@ -134,14 +134,6 @@ FloatPoint2DVectorListTest: class extends Fixture {
 			expect(min y, is equal to(1.0f) within(tolerance))
 			list free()
 		})
-		this add("toText", func {
-			list := FloatPoint2DVectorList new()
-			list add(FloatPoint2D new(1.0f, 2.0f))
-			list add(FloatPoint2D new(3.0f, 4.0f))
-			text := list toText() take()
-			expect(text, is equal to(t"1.00, 2.00\n3.00, 4.00"))
-			(text, list) free()
-		})
 		this add("median and mean", func {
 			list := FloatPoint2DVectorList new()
 			list add(FloatPoint2D new(2.0f, 1.0f))

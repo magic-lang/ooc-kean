@@ -79,12 +79,6 @@ UInt: cover from uint32_t extends ULLong {
 	maximumValue ::= static UINT32_MAX
 	minimumValue ::= static 0
 	toString: func -> String { "%u" formatUInt(this) }
-	toText: func -> Text {
-		string := this toString()
-		result := Text new(string) copy()
-		string free()
-		result
-	}
 }
 
 UShort: cover from uint16_t extends ULLong {
@@ -149,11 +143,5 @@ Range: cover {
 	}
 	toString: func -> String {
 		"%d, %d" format(this min, this max)
-	}
-	toText: func -> Text {
-		string := this toString()
-		result := Text new(string) copy()
-		string free()
-		result
 	}
 }

@@ -75,16 +75,6 @@ FloatTransform2D: cover {
 		"%8f" formatFloat(this d) >> ", " & "%8f" formatFloat(this e) >> ", " & "%8f" formatFloat(this f) >> "\t" & \
 		"%8f" formatFloat(this g) >> ", " & "%8f" formatFloat(this h) >> ", " & "%8f" formatFloat(this i) >> "\t"
 	}
-	toText: func -> Text {
-		result: Text
-		textBuilder := TextBuilder new()
-		textBuilder append(this a toText() + t", " + this b toText() + t", " + this c toText())
-		textBuilder append(this d toText() + t", " + this e toText() + t", " + this f toText())
-		textBuilder append(this g toText() + t", " + this h toText() + t", " + this i toText())
-		result = textBuilder join(t"\t")
-		textBuilder free()
-		result
-	}
 
 	operator * (other: This) -> This {
 		This new(

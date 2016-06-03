@@ -55,10 +55,10 @@ IntVector2DTest: class extends Fixture {
 			expect(result y, is equal to(this vector0 x))
 		})
 		this add("casting", func {
-			value := t"10, 20"
-			(valueString, string) := (value toString(), this vector3 toString())
-			expect(string, is equal to(valueString))
-			(string, valueString) free()
+			value := "10, 20"
+			string := this vector3 toString()
+			expect(string, is equal to(value))
+			string free()
 			expect(IntVector2D parse(value) x, is equal to(this vector3 x))
 			expect(IntVector2D parse(value) y, is equal to(this vector3 y))
 		})
@@ -98,11 +98,6 @@ IntVector2DTest: class extends Fixture {
 			expect(empty hasZeroArea, is true)
 			expect(square hasZeroArea, is false)
 			expect(empty area, is equal to(0))
-		})
-		this add("toText", func {
-			text := IntVector2D new(10, 20) toText() take()
-			expect(text, is equal to(t"10, 20"))
-			text free()
 		})
 	}
 }

@@ -83,15 +83,6 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 			result = result >> this[i] toString() >> "\n"
 		result
 	}
-	toText: func -> Text {
-		result: Text
-		textBuilder := TextBuilder new()
-		for (i in 0 .. this _count)
-			textBuilder append(this[i] toText())
-		result = textBuilder join(t"\n")
-		textBuilder free()
-		result
-	}
 	resampleLinear: func (start, end, interval: Float) -> This {
 		// Assumes list is sorted by x values.
 		resultCount := ((end - start) / interval) ceil() as Int + 1

@@ -75,16 +75,6 @@ FloatEuclidTransformVectorListTest: class extends Fixture {
 			expect(scaling[1], is equal to(scaling2) within(tolerance))
 			(list, translation, translationX, translationY, translationZ, rotation, rotationX, rotationY, rotationZ, scaling) free()
 		})
-		this add("toText", func {
-			list := FloatEuclidTransformVectorList new()
-			translation := FloatVector3D new(1.11f, 2.31f, 3.64f)
-			rotation := FloatRotation3D new(Quaternion new(1.21f, 2.31f, 3.14f, 4.23f))
-			scaling := 5.72f
-			list add(FloatEuclidTransform new(translation, rotation, scaling))
-			text := list toText() take()
-			expect(text, is equal to(t"Translation: 1.11, 2.31, 3.64 Rotation: Real: 1.21 Imaginary: 2.31 3.14 4.23 Scaling: 5.72"))
-			(text, list) free()
-		})
 		this add("convolve", func {
 			list := FloatEuclidTransformVectorList new()
 			kernel := FloatVectorList gaussianKernel(3)

@@ -106,15 +106,6 @@ FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 			result = (result >> separator) & this[i] toString()
 		result
 	}
-	toText: func -> Text {
-		result: Text
-		textBuilder := TextBuilder new()
-		for (i in 0 .. this _count)
-			textBuilder append(this[i] toText())
-		result = textBuilder join(t"\n")
-		textBuilder free()
-		result
-	}
 
 	operator [] (index: Int) -> FloatEuclidTransform {
 		this _vector[index]
