@@ -79,4 +79,13 @@ IntVectorList: class extends VectorList<Int> {
 	operator []= (index: Int, item: Int) {
 		this _vector[index] = item
 	}
+
+	parse: static func (data, separator: String) -> This {
+		items := data split(separator)
+		result := This new(items count)
+		for (i in 0 .. items count)
+			result add(items[i] toInt())
+		items free()
+		result
+	}
 }
