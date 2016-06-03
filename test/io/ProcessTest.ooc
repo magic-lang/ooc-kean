@@ -40,7 +40,7 @@ ProcessTest: class extends Fixture {
 			expect(string, is equal to("50005000 abcABC"))
 			(pipe, string) free()
 			memfree(data)
-			reader close() . free()
+			reader free()
 		})
 	}
 }

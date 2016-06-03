@@ -196,7 +196,7 @@ RasterYuv420Semiplanar: class extends RasterImage {
 		fileWriter := FileWriter new(filename)
 		fileWriter write(this y buffer pointer as Char*, this y buffer size)
 		fileWriter write(this uv buffer pointer as Char*, this uv buffer size)
-		fileWriter close() . free()
+		fileWriter free()
 	}
 	operator [] (x, y: Int) -> ColorYuv {
 		ColorYuv new(this y[x, y] y, this uv [x / 2, y / 2] u, this uv [x / 2, y / 2] v)
@@ -270,7 +270,7 @@ RasterYuv420Semiplanar: class extends RasterImage {
 		result := This new(size)
 		fileReader read((result y buffer pointer as Char*), 0, result y buffer size)
 		fileReader read((result uv buffer pointer as Char*), 0, result uv buffer size)
-		fileReader close() . free()
+		fileReader free()
 		result
 	}
 }

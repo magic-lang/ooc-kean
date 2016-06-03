@@ -16,7 +16,6 @@ BufferWriter: class extends Writer {
 	init: func ~withBuffer (=buffer)
 	buffer: func -> CharBuffer { this buffer }
 	mark: func -> Long { this pos }
-	close: override func
 	_makeRoom: func (len: Long) {
 		if (this buffer capacity < len)
 			this buffer setCapacity(len * 2)

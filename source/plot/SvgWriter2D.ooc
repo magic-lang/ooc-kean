@@ -65,7 +65,7 @@ SvgWriter2D: class {
 	write: func {
 		output := this prepareOutput()
 		fileWriter := FileWriter new(this file, false)
-		fileWriter write(output) . close()
+		fileWriter write(output)
 		(output, fileWriter) free()
 	}
 	prepareOutput: func -> String {

@@ -39,9 +39,12 @@ FileWriter: class extends Writer {
 	}
 	init: func ~withFStream (=file)
 	init: func ~withNameOverwrite (fileName: String) { this init(fileName, false) }
+	free: override func {
+		this file close()
+		super()
+	}
 	write: override func (bytes: Char*, length: SizeT) -> SizeT { this file write(bytes, 0, length) }
 	write: override func ~chr (chr: Char) { this file write(chr) }
-	close: override func { this file close() }
 
 	createTempFile: static func (pattern, mode: String) -> This {
 		result: This
