@@ -158,9 +158,9 @@ FloatPoint2DTest: class extends Fixture {
 			expect(clamped y, is equal to(this point2 y) within(tolerance))
 		})
 		this add("interpolation", func {
-			interpolate1 := FloatPoint2D linearInterpolation(this point0, this point1, 0.0f)
-			interpolate2 := FloatPoint2D linearInterpolation(this point0, this point1, 0.5f)
-			interpolate3 := FloatPoint2D linearInterpolation(this point0, this point1, 1.0f)
+			interpolate1 := FloatPoint2D mix(this point0, this point1, 0.0f)
+			interpolate2 := FloatPoint2D mix(this point0, this point1, 0.5f)
+			interpolate3 := FloatPoint2D mix(this point0, this point1, 1.0f)
 			expect(interpolate1 x, is equal to(this point0 x) within(tolerance))
 			expect(interpolate1 y, is equal to(this point0 y) within(tolerance))
 			expect(interpolate2 x, is equal to(17.22f) within(0.01f))

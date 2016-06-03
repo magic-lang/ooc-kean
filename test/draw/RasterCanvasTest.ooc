@@ -23,7 +23,7 @@ RasterCanvasTest: class extends Fixture {
 			halfSize := image size / 2
 			image drawLine(FloatPoint2D new(-halfSize x, -halfSize y), FloatPoint2D new(halfSize x, halfSize y), Pen new(ColorRgb new(0, 255, 0)))
 			image drawLine(FloatPoint2D new(halfSize x, -halfSize y), FloatPoint2D new(-halfSize x, halfSize y), Pen new(ColorRgb new(0, 255, 0)))
-			expect(image distance(correctImage), is equal to(0.0f))
+			expect(image distance(correctImage), is less than(0.01f))
 			(image, correctImage) free()
 		})
 		this add("rgba", func {
@@ -32,7 +32,7 @@ RasterCanvasTest: class extends Fixture {
 			for (row in 0 .. image size y / 3)
 				for (column in 0 .. image size x / 3)
 					image drawPoint(FloatPoint2D new(column * 3 - image size x / 2, row * 3 - image size y / 2), Pen new(ColorRgb new(128, 0, 128)))
-			expect(image distance(correctImage), is equal to(0.0f))
+			expect(image distance(correctImage), is less than(0.01f))
 			(image, correctImage) free()
 		})
 		this add("yuv420", func {
@@ -44,7 +44,7 @@ RasterCanvasTest: class extends Fixture {
 			}
 			rgbImage := RasterRgb convertFrom(yuvImage)
 			correctImage := RasterRgb open("test/draw/correct/RasterCanvas_Yuv420.png")
-			expect(rgbImage distance(correctImage), is equal to(0.0f))
+			expect(rgbImage distance(correctImage), is less than(0.01f))
 			(yuvImage, rgbImage, correctImage) free()
 		})
 		this add("monochrome", func {
@@ -57,7 +57,7 @@ RasterCanvasTest: class extends Fixture {
 				image drawLine(FloatPoint2D new(i * 10 - shiftX, -shiftY), FloatPoint2D new(i * 10 - shiftX, shiftY), pen)
 			for (i in 0 .. image size y / 10)
 				image drawLine(FloatPoint2D new(-shiftX, i * 10 - shiftY), FloatPoint2D new(shiftX, i * 10 - shiftY), pen)
-			expect(image distance(correctImage), is equal to(0.0f))
+			expect(image distance(correctImage), is less than(0.01f))
 			(image, correctImage) free()
 		})
 		this add("monochrome with alpha", func {
@@ -71,7 +71,7 @@ RasterCanvasTest: class extends Fixture {
 				image drawLine(FloatPoint2D new(i * factor - shiftX, -shiftY), FloatPoint2D new(i * factor - shiftX, shiftY), pen)
 			for (i in 0 .. image size y / factor)
 				image drawLine(FloatPoint2D new(-shiftX, i * factor - shiftY), FloatPoint2D new(shiftX, i * factor - shiftY), pen)
-			expect(image distance(correctImage), is equal to(0.0f))
+			expect(image distance(correctImage), is less than(0.01f))
 			(image, correctImage) free()
 		})
 		this add("draw rgb image", func {
@@ -85,7 +85,7 @@ RasterCanvasTest: class extends Fixture {
 			DrawState new(outputImage) setInputImage(imageFlowerXLeftward) setFlipSourceX(true) setViewport(IntBox2D new(240, 30, 100, 250)) setInterpolate(false) draw()
 			imageFlowerXLeftwardYUpward := RasterYuv420Semiplanar open(this inputFlower)
 			DrawState new(outputImage) setInputImage(imageFlowerXLeftwardYUpward) setFlipSourceX(true) setFlipSourceY(true) setViewport(IntBox2D new(350, 30, 100, 250)) setInterpolate(false) draw()
-			expect(outputImage distance(correctImage), is equal to(0.0f))
+			expect(outputImage distance(correctImage), is less than(0.01f))
 			(outputImage, correctImage, imageFlower, imageFlowerYUpward, imageFlowerXLeftward, imageFlowerXLeftwardYUpward) free()
 		})
 		this add("draw uv image", func {
@@ -94,7 +94,7 @@ RasterCanvasTest: class extends Fixture {
 			uvResult := RasterUv open(inputSpace)
 			DrawState new(uvResult) setInputImage(inputImage) setViewport(IntBox2D new(130, 30, 100, 250)) setInterpolate(true) draw()
 			rgbResult := RasterRgb convertFrom(uvResult)
-			expect(rgbResult distance(correctImage), is equal to(0.0f))
+			expect(rgbResult distance(correctImage), is less than(0.01f))
 			(inputImage, rgbResult, uvResult, correctImage) free()
 		})
 	}

@@ -118,8 +118,8 @@ FloatBox2D: cover {
 	ceiling: func -> This { This new(this leftTop ceiling(), this size ceiling()) }
 	floor: func -> This { This new(this leftTop floor(), this size floor()) }
 	adaptTo: func (other: This, weight: Float) -> This {
-		newCenter := FloatPoint2D linearInterpolation(this center, other center, weight)
-		newSize := FloatVector2D linearInterpolation(this size, other size, weight)
+		newCenter := FloatPoint2D mix(this center, other center, weight)
+		newSize := FloatVector2D mix(this size, other size, weight)
 		This createAround(newCenter, newSize)
 	}
 	toString: func -> String { (this leftTop toString() >> ", ") & this size toString() }
@@ -186,8 +186,8 @@ FloatBox2D: cover {
 		}
 		This new(xMinimum, yMinimum, xMaximum - xMinimum, yMaximum - yMinimum)
 	}
-	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
-		This new(FloatPoint2D linearInterpolation(a leftTop, b leftTop, ratio), FloatVector2D linearInterpolation(a size, b size, ratio))
+	mix: static func (a, b: This, ratio: Float) -> This {
+		This new(FloatPoint2D mix(a leftTop, b leftTop, ratio), FloatVector2D mix(a size, b size, ratio))
 	}
 }
 

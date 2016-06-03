@@ -123,9 +123,9 @@ FloatVector3DTest: class extends Fixture {
 			expect(this vector0 scalarProduct(this vector1), is equal to (425.0f) within(tolerance))
 		})
 		this add("interpolation", func {
-			interpolate1 := FloatVector3D linearInterpolation(this vector0, this vector1, 0.0f)
-			interpolate2 := FloatVector3D linearInterpolation(this vector0, this vector1, 0.5f)
-			interpolate3 := FloatVector3D linearInterpolation(this vector0, this vector1, 1.0f)
+			interpolate1 := FloatVector3D mix(this vector0, this vector1, 0.0f)
+			interpolate2 := FloatVector3D mix(this vector0, this vector1, 0.5f)
+			interpolate3 := FloatVector3D mix(this vector0, this vector1, 1.0f)
 			expect(interpolate1 x, is equal to(this vector0 x) within(tolerance))
 			expect(interpolate1 y, is equal to(this vector0 y) within(tolerance))
 			expect(interpolate1 z, is equal to(this vector0 z) within(tolerance))
