@@ -65,6 +65,9 @@ IntVectorListTest: class extends Fixture {
 			list add(1) . add(2) . add(3)
 			text := list toString()
 			expect(text, is equal to("1\n2\n3"))
+			text free()
+			text = list toString(", ")
+			expect(text, is equal to("1, 2, 3"))
 			(text, list) free()
 		})
 	}

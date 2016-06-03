@@ -396,6 +396,9 @@ FloatVectorListTest: class extends Fixture {
 			list add(1.0f) . add(2.0f) . add(3.0f)
 			text := list toString()
 			expect(text, is equal to("1.00\n2.00\n3.00"))
+			text free()
+			text = list toString(", ")
+			expect(text, is equal to("1.00, 2.00, 3.00"))
 			(text, list) free()
 		})
 		this add("clamp", func {
