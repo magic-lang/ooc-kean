@@ -64,7 +64,7 @@ Fixture: abstract class {
 				if (f constraint instanceOf(CompareConstraint) && f value instanceOf(Cell))
 					This _print(this createCompareFailureMessage(f) + "\n")
 				else if (f constraint instanceOf(CompareConstraint) && f value instanceOf(String))
-					This _print("  -> %s : expected equal to %s was %s\n" format(f message, f value as String, (f constraint as CompareConstraint) correct as String))
+					This _print("  -> %s : expected equal to %s was %s\n" format(f message, (f constraint as CompareConstraint) correct as String, f value as String))
 				else if (f constraint instanceOf(NullConstraint))
 					This _print("  -> %s : expected null was %p\n" format(f message, f value&))
 				else if (f constraint instanceOf(NotNullConstraint))

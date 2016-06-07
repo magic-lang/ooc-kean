@@ -104,11 +104,10 @@ String: class {
 		result
 	}
 	capitalize: func -> This {
-		match (this size) {
-			case 0 => this
-			case 1 => this toUpper()
-			case => this[0] toUpper() + this substring(1)
-		}
+		result := this clone()
+		if (result size > 0)
+			result _buffer[0] = result[0] toUpper()
+		result
 	}
 	cformat: final func ~str (...) -> This {
 		list: VaList
