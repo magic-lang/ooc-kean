@@ -16,7 +16,7 @@ String: class {
 	// Avoid direct buffer access, as it breaks immutability.
 	_buffer: CharBuffer
 	size ::= this _buffer size
-
+	_isLiteral := false
 	init: func ~withBuffer (=_buffer)
 	init: func ~withCStr (s: CString) { init(s, s length()) }
 	init: func ~withCStrAndLength (s: CString, length: Int) { this _buffer = CharBuffer new(s, length) }
@@ -26,6 +26,7 @@ String: class {
 		this _buffer free()
 		super()
 	}
+	safeFree: func { if (!this _isLiteral) this free() } // Will not free literals automatically
 	equals: final func (other: This) -> Bool {
 		result := false
 		if (this == null)
@@ -45,7 +46,7 @@ String: class {
 	}
 	append: func ~char (other: Char) -> This {
 		newBuffer := (this _buffer clone(this size + 1)) . append(other)
-		this free()
+		this safeFree()
 		newBuffer toString()
 	}
 	append: func ~cStr (other: CString) -> This { (this _buffer clone(this size + other length())) append(other, other length()) . toString() }
@@ -187,21 +188,22 @@ operator implicit as (c: Char*) -> String { c ? String new(c, strlen(c)) : null 
 operator implicit as (c: CString) -> String { c ? String new(c, strlen(c)) : null }
 operator & (left, right: String) -> String {
 	result := left + right
-	(left, right) free()
+	(left, right) safeFree()
 	result
 }
 operator >> (left, right: String) -> String {
 	result := left + right
-	left free()
+	left safeFree()
 	result
 }
 operator << (left, right: String) -> String {
 	result := left + right
-	right free()
+	right safeFree()
 	result
 }
 makeStringLiteral: func (str: CString, strLen: Int) -> String {
 	result := String new(CharBuffer new(str, strLen, true))
+	result _isLiteral = true
 	string_literal_new(result)
 	result
 }
