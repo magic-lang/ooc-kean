@@ -11,6 +11,21 @@ use unit
 StringTest: class extends Fixture {
 	init: func {
 		super("String")
+		this add("literals", func {
+			result: String
+			result = "ab" + "cd" // Not freeing
+			expect(result, is equal to("abcd"))
+			result free()
+			result = "ab" & "cd" // Refuse to free both
+			expect(result, is equal to("abcd"))
+			result free()
+			result = "ab" << "cd" // Refuse the free right
+			expect(result, is equal to("abcd"))
+			result free()
+			result = "ab" >> "cd" // Refuse the free left
+			expect(result, is equal to("abcd"))
+			result free()
+		})
 		this add("length", func {
 			expect("" length(), is equal to(0))
 			expect("y" length(), is equal to(1))
