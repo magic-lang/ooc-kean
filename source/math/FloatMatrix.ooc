@@ -137,19 +137,6 @@ FloatMatrix: cover {
 		this free(Owner Receiver)
 		result
 	}
-	toText: func -> Text {
-		t := this take()
-		result: Text
-		textBuilder := TextBuilder new()
-		for (y in 0 .. t height) {
-			for (x in 0 .. t width - 1)
-				textBuilder append(t[x, y] toText() + t", ")
-			textBuilder append(t[t width - 1, y] toText() + t"; ")
-		}
-		result = textBuilder toText()
-		textBuilder free()
-		result
-	}
 	// Lup decomposition of the current matrix. Recall that Lup decomposition is A = LUP,
 	// where L is lower triangular, U is upper triangular, and P is a permutation matrix.
 	// See http://en.wikipedia.org/wiki/LUP_decomposition.
@@ -521,5 +508,5 @@ FloatMatrix: cover {
 operator * (left: Float, right: FloatMatrix) -> FloatMatrix { right * left }
 
 extend Cell<FloatMatrix> {
-	toText: func ~floatmatrix -> Text { (this val as FloatMatrix) toText() }
+	toString: func ~floatmatrix -> String { (this val as FloatMatrix) toString() }
 }

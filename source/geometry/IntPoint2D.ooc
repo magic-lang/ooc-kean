@@ -24,7 +24,6 @@ IntPoint2D: cover {
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
 	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x as Float, this y as Float) }
 	toString: func -> String { (this x toString() >> ", ") & this y toString() }
-	toText: func -> Text { this x toText() + t", " + this y toText() }
 
 	operator - -> This { This new(-this x, -this y) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
@@ -44,7 +43,7 @@ IntPoint2D: cover {
 	operator * (other: Int) -> This { This new(this x * other, this y * other) }
 	operator / (other: Int) -> This { This new(this x / other, this y / other) }
 
-	parse: static func (input: Text) -> This {
+	parse: static func (input: String) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toInt(), parts[1] toInt())
 		parts free()
@@ -57,5 +56,5 @@ operator * (left: Float, right: IntPoint2D) -> IntPoint2D { IntPoint2D new(left 
 operator / (left: Float, right: IntPoint2D) -> IntPoint2D { IntPoint2D new(left / right x, left / right y) }
 
 extend Cell<IntPoint2D> {
-	toText: func ~intpoint2d -> Text { (this val as IntPoint2D) toText() }
+	toString: func ~intpoint2d -> String { (this val as IntPoint2D) toString() }
 }

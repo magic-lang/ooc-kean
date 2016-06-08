@@ -202,13 +202,12 @@ File: abstract class {
 			dst write(buffer data, num)
 		}
 
-		(dst, src) close()
 		(buffer, dst, src) free()
 	}
 	read: func -> String {
 		fR := FileReader new(this)
-		bW := BufferWriter new() . write(fR) . close()
-		fR close() . free()
+		bW := BufferWriter new() . write(fR)
+		fR free()
 		result := bW buffer toString()
 		bW free()
 		result
@@ -219,7 +218,7 @@ File: abstract class {
 		buffer free()
 	}
 	write: func ~reader (reader: Reader) {
-		FileWriter new(this) write(reader) . close() . free()
+		FileWriter new(this) write(reader) . free()
 	}
 	// Walk this directory and call `f` on all files it contains, recursively, until f returns false
 	walk: func (f: Func(This) -> Bool) -> Bool {

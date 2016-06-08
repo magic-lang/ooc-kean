@@ -11,7 +11,7 @@ use draw
 use draw-gpu
 use base
 import backend/GLTexture
-import OpenGLCanvas, OpenGLPacked, OpenGLContext, OpenGLMap
+import OpenGLPacked, OpenGLContext, OpenGLMap
 
 version(!gpuOff) {
 OpenGLUv: class extends OpenGLPacked {
@@ -34,7 +34,7 @@ OpenGLUv: class extends OpenGLPacked {
 		packed := this context createRgba(IntVector2D new(this size x / 2, this size y))
 		this context packToRgba(this, packed, IntBox2D new(packed size))
 		buffer := (target as RasterUv) buffer
-		(packed canvas as OpenGLCanvas) readPixels(buffer)
+		(packed as OpenGLPacked) readPixels(buffer)
 		packed free()
 	}
 	create: override func (size: IntVector2D) -> This { this context createUv(size) as This }

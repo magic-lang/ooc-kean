@@ -33,7 +33,6 @@ IntVector2D: cover {
 	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x as Float, this y as Float) }
 	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x, this y) }
 	toString: func -> String { (this x toString() >> ", ") & this y toString() }
-	toText: func -> Text { this x toText() + t", " + this y toText() }
 
 	operator - -> This { This new(-this x, -this y) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
@@ -58,7 +57,7 @@ IntVector2D: cover {
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
 
-	parse: static func (input: Text) -> This {
+	parse: static func (input: String) -> This {
 		parts := input split(',')
 		result := This new (parts[0] toInt(), parts[1] toInt())
 		parts free()
@@ -71,5 +70,5 @@ operator * (left: Float, right: IntVector2D) -> IntVector2D { IntVector2D new(le
 operator / (left: Float, right: IntVector2D) -> IntVector2D { IntVector2D new(left / right x, left / right y) }
 
 extend Cell<IntVector2D> {
-	toText: func ~intvector2d -> Text { (this val as IntVector2D) toText() }
+	toString: func ~intvector2d -> String { (this val as IntVector2D) toString() }
 }

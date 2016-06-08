@@ -97,19 +97,10 @@ FloatVectorList: class extends VectorList<Float> {
 		for (i in 0 .. minimumCount)
 			this[i] = this[i] + other[i]
 	}
-	toString: func -> String {
-		result := ""
-		for (i in 0 .. this _count)
-			result = (result & this[i] toString()) >> "\n"
-		result
-	}
-	toText: func -> Text {
-		result: Text
-		textBuilder := TextBuilder new()
-		for (i in 0 .. this _count)
-			textBuilder append(this[i] toText())
-		result = textBuilder join(t"\n")
-		textBuilder free()
+	toString: func (separator := "\n") -> String {
+		result := this _count > 0 ? this[0] toString() : ""
+		for (i in 1 .. this _count)
+			result = (result >> separator) & this[i] toString()
 		result
 	}
 	divideByMaxValue: func -> This {
@@ -298,7 +289,7 @@ FloatVectorList: class extends VectorList<Float> {
 			for (index1 in 0 .. this count - 1) {
 				result add(thisPointer[index1])
 				for (index2 in 1 .. numberOfPoints + 1)
-					result add((index2 as Float / (numberOfPoints + 1) as Float) linearInterpolation(thisPointer[index1], thisPointer[index1 + 1]))
+					result add(Float mix(thisPointer[index1], thisPointer[index1 + 1], index2 as Float / (numberOfPoints + 1) as Float))
 			}
 			result add(thisPointer[this count - 1])
 		} else
@@ -508,5 +499,14 @@ FloatVectorList: class extends VectorList<Float> {
 		for (i in 0 .. (this count < other count ? this count : other count))
 			maximumDifference = maximumDifference maximum((this[i] - other[i]) absolute)
 		maximumDifference
+	}
+
+	parse: static func (data, separator: String) -> This {
+		items := data split(separator)
+		result := This new(items count)
+		for (i in 0 .. items count)
+			result add(items[i] toFloat())
+		items free()
+		result
 	}
 }

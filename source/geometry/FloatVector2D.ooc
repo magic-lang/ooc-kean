@@ -46,7 +46,6 @@ FloatVector2D: cover {
 	toIntVector2D: func -> IntVector2D { IntVector2D new(this x as Int, this y as Int) }
 	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x, this y) }
 	toString: func -> String { (this x toString() >> ", ") & this y toString() }
-	toText: func -> Text { this x toText() + t", " + this y toText() }
 
 	operator - -> This { This new(-this x, -this y) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
@@ -72,14 +71,14 @@ FloatVector2D: cover {
 	basisY: static This { get { This new(0, 1) } }
 
 	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
-	parse: static func (input: Text) -> This {
+	parse: static func (input: String) -> This {
 		parts := input split(',')
 		result := This new (parts[0] toFloat(), parts[1] toFloat())
 		parts free()
 		result
 	}
-	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
-		This new(ratio linearInterpolation(a x, b x), ratio linearInterpolation(a y, b y))
+	mix: static func (a, b: This, ratio: Float) -> This {
+		This new(Float mix(a x, b x, ratio), Float mix(a y, b y, ratio))
 	}
 }
 operator * (left: Float, right: FloatVector2D) -> FloatVector2D { FloatVector2D new(left * right x, left * right y) }
@@ -88,5 +87,5 @@ operator * (left: Int, right: FloatVector2D) -> FloatVector2D { FloatVector2D ne
 operator / (left: Int, right: FloatVector2D) -> FloatVector2D { FloatVector2D new(left / right x, left / right y) }
 
 extend Cell<FloatVector2D> {
-	toText: func ~floatvector2d -> Text { (this val as FloatVector2D) toText() }
+	toString: func ~floatvector2d -> String { (this val as FloatVector2D) toString() }
 }

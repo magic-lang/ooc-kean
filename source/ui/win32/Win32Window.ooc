@@ -42,7 +42,6 @@ Win32Window: class extends NativeWindow {
 		super()
 	}
 	draw: func (image: RasterRgba) {
-		image swapRedBlue()
 		paintStruct: PaintStruct
 		bitmap: Bitmap
 		InvalidateRect(this backend as HWND, null, false)

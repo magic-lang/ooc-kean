@@ -98,17 +98,6 @@ FloatTransform3D: cover {
 		"%.8f" formatFloat(this c) >> ", " & "%.8f" formatFloat(this g) >> ", " & "%.8f" formatFloat(this k) >> ", " & "%.8f" formatFloat(this o) >> "\n" & \
 		"%.8f" formatFloat(this d) >> ", " & "%.8f" formatFloat(this h) >> ", " & "%.8f" formatFloat(this l) >> ", " & "%.8f" formatFloat(this p)
 	}
-	toText: func -> Text {
-		result: Text
-		textBuilder := TextBuilder new()
-		textBuilder append(this a toText() + t", " + this e toText() + t", " + this i toText() + t", " + this m toText())
-		textBuilder append(this b toText() + t", " + this f toText() + t", " + this j toText() + t", " + this n toText())
-		textBuilder append(this c toText() + t", " + this g toText() + t", " + this k toText() + t", " + this o toText())
-		textBuilder append(this d toText() + t", " + this h toText() + t", " + this l toText() + t", " + this p toText())
-		result = textBuilder join(t"\n")
-		textBuilder free()
-		result
-	}
 	transformAndProject: func ~FloatPoint2D (point: FloatPoint2D, focalLength: Float) -> FloatPoint2D {
 		transformedWorldPoint := this * FloatPoint3D new(point x, point y, focalLength)
 		focalLength < Float epsilon ? FloatPoint2D new(transformedWorldPoint x, transformedWorldPoint y) : this project(transformedWorldPoint, focalLength)
@@ -258,5 +247,5 @@ FloatTransform3D: cover {
 }
 
 extend Cell<FloatTransform3D> {
-	toText: func ~floattransform3d -> Text { (this val as FloatTransform3D) toText() }
+	toString: func ~floattransform3d -> String { (this val as FloatTransform3D) toString() }
 }

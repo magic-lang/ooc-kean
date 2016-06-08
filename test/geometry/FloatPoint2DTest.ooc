@@ -55,10 +55,10 @@ FloatPoint2DTest: class extends Fixture {
 			expect(result y, is equal to(this point0 x))
 		})
 		this add("casting", func {
-			value := t"10.00, 20.00"
-			(valueString, string) := (value toString(), this point3 toString())
-			expect(string, is equal to(valueString))
-			(string, valueString) free()
+			value := "10.00, 20.00"
+			string := this point3 toString()
+			expect(string, is equal to(value))
+			string free()
 			expect(FloatPoint2D parse(value) x, is equal to(this point3 x))
 			expect(FloatPoint2D parse(value) y, is equal to(this point3 y))
 		})
@@ -158,20 +158,15 @@ FloatPoint2DTest: class extends Fixture {
 			expect(clamped y, is equal to(this point2 y) within(tolerance))
 		})
 		this add("interpolation", func {
-			interpolate1 := FloatPoint2D linearInterpolation(this point0, this point1, 0.0f)
-			interpolate2 := FloatPoint2D linearInterpolation(this point0, this point1, 0.5f)
-			interpolate3 := FloatPoint2D linearInterpolation(this point0, this point1, 1.0f)
+			interpolate1 := FloatPoint2D mix(this point0, this point1, 0.0f)
+			interpolate2 := FloatPoint2D mix(this point0, this point1, 0.5f)
+			interpolate3 := FloatPoint2D mix(this point0, this point1, 1.0f)
 			expect(interpolate1 x, is equal to(this point0 x) within(tolerance))
 			expect(interpolate1 y, is equal to(this point0 y) within(tolerance))
 			expect(interpolate2 x, is equal to(17.22f) within(0.01f))
 			expect(interpolate2 y, is equal to(5.0f) within(0.01f))
 			expect(interpolate3 x, is equal to(this point1 x) within(tolerance))
 			expect(interpolate3 y, is equal to(this point1 y) within(tolerance))
-		})
-		this add("toText", func {
-			text := FloatPoint2D new (10.92f, -30.12f) toText() take()
-			expect(text, is equal to(t"10.92, -30.12"))
-			text free()
 		})
 	}
 }

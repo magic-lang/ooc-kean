@@ -91,8 +91,8 @@ MathTest: class extends Fixture {
 
 			expect(10.f squared, is equal to(100.f) within(floatTolerance))
 
-			expect(0.5f linearInterpolation(2.0f, 5.0f), is equal to(3.5f) within(floatTolerance))
-			expect(0.1f linearInterpolation(-9.0f, 1.0f), is equal to(-8.f) within(floatTolerance))
+			expect(Float mix(2.0f, 5.0f, 0.5f), is equal to(3.5f) within(floatTolerance))
+			expect(Float mix(-9.0f, 1.0f, 0.1f), is equal to(-8.f) within(floatTolerance))
 
 			nearZero := (0.1f + 0.1f + 0.1f) - 0.3f
 			expect(nearZero equals(0.0f), is true)

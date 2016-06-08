@@ -278,10 +278,6 @@ Text: cover {
 	operator [] (range: Range) -> This { this slice(range min, range count) }
 	operator == (string: String) -> Bool { this == This new(string) }
 	operator != (other: String) -> Bool { !(this == other) }
-	operator + (other: Float) -> This { this + other toText() }
-	operator + (other: Double) -> This { this + other toText() }
-	operator + (other: UInt) -> This { this + other toText() }
-	operator + (other: Int) -> This { this + other toText() }
 	operator [] (index: Int) -> Char {
 		result := this _buffer[index]
 		this free(Owner Receiver)

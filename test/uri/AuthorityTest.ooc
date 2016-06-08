@@ -15,25 +15,30 @@ AuthorityTest: class extends Fixture {
 	init: func {
 		super("Authority")
 		this add("parse", func {
-			userText := Text new("name:password")
-			endpointText := Text new("one.two:123")
-			authorityText := userText + t"@" + endpointText
-			authority := Authority parse(authorityText take())
-			expect(authority user toText(), is equal to(userText))
-			expect(authority endpoint toText(), is equal to(endpointText))
-			expect(authority toText(), is equal to(authorityText))
+			userText := "name:password"
+			endpointText := "one.two:123"
+			authorityText := "name:password@one.two:123"
+			authority := Authority parse(authorityText)
+
+			(userString, endpointString, authorityString) := (authority user, authority endpoint, authority) toString()
+			expect(userString, is equal to(userText))
+			expect(endpointString, is equal to(endpointText))
+			expect(authorityString, is equal to(authorityText))
+			(userString, endpointString, authorityString) free()
 			authority free()
 		})
 		this add("empty", func {
-			authority := Authority parse(t"")
-			expect(authority, is equal to(null))
+			authority := Authority parse("")
+			expect(authority, is Null)
 		})
 		this add("only endpoint", func {
-			endpointText := Text new("one.two:123")
-			authority := Authority parse(endpointText take())
-			expect(authority user, is equal to(null))
-			expect(authority endpoint toText(), is equal to(endpointText))
-			expect(authority toText(), is equal to(endpointText))
+			endpointText := "one.two:123"
+			authority := Authority parse(endpointText)
+			expect(authority user, is Null)
+			(endPointString, authorityString) := (authority endpoint, authority) toString()
+			expect(endPointString, is equal to(endpointText))
+			expect(authorityString, is equal to(endpointText))
+			(endPointString, authorityString) free()
 			authority free()
 		})
 	}

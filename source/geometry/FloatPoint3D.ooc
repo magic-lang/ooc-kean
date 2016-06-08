@@ -48,7 +48,6 @@ FloatPoint3D: cover {
 	toIntPoint3D: func -> IntPoint3D { IntPoint3D new(this x as Int, this y as Int, this z as Int) }
 	toFloatVector3D: func -> FloatVector3D { FloatVector3D new(this x, this y, this z) }
 	toString: func -> String { "%.8f" formatFloat(this x) >> ", " & "%.8f" formatFloat(this y) >> ", " & "%.8f" formatFloat(this z) }
-	toText: func -> Text { this x toText() + t", " + this y toText() + t", " + this z toText() }
 
 	operator - -> This { This new(-this x, -this y, -this z) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
@@ -71,14 +70,14 @@ FloatPoint3D: cover {
 	spherical: static func (radius, azimuth, elevation: Float) -> This {
 		This new(radius * (azimuth cos()) * (elevation sin()), radius * (azimuth sin()) * (elevation sin()), radius * (elevation cos()))
 	}
-	parse: static func (input: Text) -> This {
+	parse: static func (input: String) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toFloat(), parts[1] toFloat(), parts[2] toFloat())
 		parts free()
 		result
 	}
-	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
-		This new(ratio linearInterpolation(a x, b x), ratio linearInterpolation(a y, b y), ratio linearInterpolation(a z, b z))
+	mix: static func (a, b: This, ratio: Float) -> This {
+		This new(Float mix(a x, b x, ratio), Float mix(a y, b y, ratio), Float mix(a z, b z, ratio))
 	}
 }
 operator - (left: Float, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left - right x, left - right y, left - right z) }
@@ -88,5 +87,5 @@ operator * (left: Int, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(l
 operator / (left: Int, right: FloatPoint3D) -> FloatPoint3D { FloatPoint3D new(left / right x, left / right y, left / right z) }
 
 extend Cell<FloatPoint3D> {
-	toText: func ~floatpoint3d -> Text { (this val as FloatPoint3D) toText() }
+	toString: func ~floatpoint3d -> String { (this val as FloatPoint3D) toString() }
 }

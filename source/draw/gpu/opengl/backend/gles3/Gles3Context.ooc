@@ -127,7 +127,7 @@ Gles3Context: class extends GLContext {
 			EGL_ALPHA_SIZE, 8,
 			EGL_SAMPLES, 0,
 			EGL_DEPTH_SIZE, 0,
-			EGL_BIND_TO_TEXTURE_RGBA, EGL_TRUE,
+			EGL_BIND_TO_TEXTURE_RGBA, EGL_DONT_CARE,
 			EGL_NONE] as Int*
 		chosenConfig: Pointer = this _chooseConfig(configAttribs)
 

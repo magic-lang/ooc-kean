@@ -64,6 +64,7 @@ X11Window: class extends NativeWindow {
 	}
 	resize: func (size: IntVector2D) { XResizeWindow(this display, this backend, size x, size y) }
 	draw: func (image: RasterRgba) {
+		image swapRedBlue()
 		if (this _cacheSize != image size) {
 			if (this _xImage)
 				XDestroyImage(this _xImage)

@@ -11,11 +11,9 @@ Imports: OpenGLRgb
 Imports: OpenGLRgba
 Imports: OpenGLMonochrome
 Imports: OpenGLUv
-Imports: OpenGLCanvas
 Imports: OpenGLMap
 Imports: OpenGLContext
 Imports: OpenGLVolumeMonochrome
-Imports: OpenGLWindow
 Imports: AndroidContext
 Imports: EGLRgba
 Imports: GraphicBuffer

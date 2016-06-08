@@ -47,8 +47,8 @@ OpenGLMap: class extends Map {
 		this _program free()
 		super()
 	}
-	use: override func (forbiddenInput: Pointer, positionTransform, textureTransform: FloatTransform3D) {
-		this _currentProgram use()
+	useProgram: override func (forbiddenInput: Pointer, positionTransform, textureTransform: FloatTransform3D) {
+		this _currentProgram useProgram()
 		textureCount := 0
 		action := func (key: String, value: Object) {
 			program := this _currentProgram
@@ -94,7 +94,7 @@ OpenGLMap: class extends Map {
 							case Float => program setUniform(key, vector _backend as Float*, vector capacity)
 							case => Debug error("Invalid Vector type in OpenGLMap use")
 						}
-					case => Debug error("Invalid object type in OpenGLMap use: %s" format(value class name))
+					case => Debug error("Invalid object type in OpenGLMap useProgram: %s" format(value class name))
 				}
 		}
 		this apply(action)
@@ -104,7 +104,7 @@ OpenGLMap: class extends Map {
 
 OpenGLMapTransform: class extends OpenGLMap {
 	init: func (fragmentSource: String, context: OpenGLContext) { super(This vertexSource, fragmentSource, context) }
-	use: override func (forbiddenInput: Pointer, positionTransform: FloatTransform3D, textureTransform: FloatTransform3D) {
+	useProgram: override func (forbiddenInput: Pointer, positionTransform: FloatTransform3D, textureTransform: FloatTransform3D) {
 		this add("transform", positionTransform)
 		this add("textureTransform", textureTransform)
 		super(forbiddenInput, positionTransform, textureTransform)

@@ -32,8 +32,7 @@ Fixture: abstract class {
 	run: func -> Bool {
 		failures := VectorList<TestFailedException> new(32, false)
 		result := true
-		dateString := DateTime now toText(t"%hh:%mm:%ss ") + Text new(this name) + t" "
-		This _print(dateString)
+		This _print((DateTime now toString("%hh:%mm:%ss ") >> this name) >> " ", true)
 		timer := WallTimer new() . start()
 		for (i in 0 .. this tests count) {
 			test := this tests[i]
@@ -42,39 +41,42 @@ Fixture: abstract class {
 				test run()
 				test free()
 			} catch (e: TestFailedException) {
-				e message = e description != null ? test name + " (" + e description + ")" : test name
+				e message = e description != null ? ((test name >> " (") >> e description) >> ")" : test name
 				result = r = false
 				failures add(e)
 			}
-			This _print(r ? t"." : t"f")
+			This _print(r ? "." : "f")
 		}
 		if (!result) {
 			if (!This failureNames)
 				This failureNames = VectorList<String> new()
 			This failureNames add(this name clone())
 		}
-		This _print(result ? t" done" : t" failed")
+		This _print(result ? " done" : " failed")
 		testTime := timer stop() / 1_000_000.0
 		This totalTime += testTime
-		timeString := testTime > 0.1 ? t" in %.2fs\n" format(testTime) : t"\n"
-		This _print(timeString)
+		if (testTime > 0.1)
+			This _print(" in %.2fs" format(testTime), true)
+		This _print("\n")
 		if (!result) {
 			for (i in 0 .. failures count) {
 				f := failures[i]
 				if (f constraint instanceOf(CompareConstraint) && f value instanceOf(Cell))
-					This _print(this createCompareFailureMessage(f) + t"\n")
+					This _print(this createCompareFailureMessage(f) + "\n")
+				else if (f constraint instanceOf(CompareConstraint) && f value instanceOf(String))
+					This _print("  -> %s : expected equal to %s was %s\n" format(f message, (f constraint as CompareConstraint) correct as String, f value as String))
 				else if (f constraint instanceOf(NullConstraint))
-					This _print(Text new("  -> %s : expected null was %p\n" format(f message, f value&)))
+					This _print("  -> %s : expected null was %p\n" format(f message, f value&))
 				else if (f constraint instanceOf(NotNullConstraint))
-					This _print(Text new("  -> %s : expected not null was null\n" format(f message)))
+					This _print("  -> %s : expected not null was null\n" format(f message))
 				else if (f constraint instanceOf(TrueConstraint))
-					This _print(Text new("  -> %s : expected true was false\n" format(f message)))
+					This _print("  -> %s : expected true was false\n" format(f message))
 				else if (f constraint instanceOf(FalseConstraint))
-					This _print(Text new("  -> %s : expected false was true\n" format(f message)))
+					This _print("  -> %s : expected false was true\n" format(f message))
 				else if (f constraint instanceOf(RangeConstraint))
-					This _print(this createRangeFailureMessage(f) + t"\n")
+					This _print(this createRangeFailureMessage(f) + "\n")
 				else
-					This _print(t"  -> %s\n" format(f message))
+					This _print("  -> %s\n" format(f message))
 				f free()
 			}
 			This _testsFailed = true
@@ -83,63 +85,57 @@ Fixture: abstract class {
 		timer free()
 		result
 	}
-	createCompareFailureMessage: func (failure: TestFailedException) -> Text {
+	createCompareFailureMessage: func (failure: TestFailedException) -> String {
 		constraint := failure constraint as CompareConstraint
 		(testedValue, expectedValue) := (failure value as Cell, constraint correct as Cell)
-		result := TextBuilder new(t"  ->")
-		result append(Text new(failure message))
-		result append(t": expected")
+		result := StringBuilder new() . add("  ->") . add(failure message) . add(": expected")
 		match (constraint type) {
-			case ComparisonType Equal => result append(t"equal to")
-			case ComparisonType NotEqual => result append(t"not equal to")
-			case ComparisonType LessThan => result append(t"less than")
-			case ComparisonType GreaterThan => result append(t"greater than")
-			case ComparisonType LessOrEqual => result append(t"less than or equal to")
-			case ComparisonType GreaterOrEqual => result append(t"greater than or equal to")
-			case ComparisonType Within => result append(t"equal to")
-			case ComparisonType NotWithin => result append(t"not equal to")
+			case ComparisonType Equal => result add("equal to")
+			case ComparisonType NotEqual => result add("not equal to")
+			case ComparisonType LessThan => result add("less than")
+			case ComparisonType GreaterThan => result add("greater than")
+			case ComparisonType LessOrEqual => result add("less than or equal to")
+			case ComparisonType GreaterOrEqual => result add("greater than or equal to")
+			case ComparisonType Within => result add("equal to")
+			case ComparisonType NotWithin => result add("not equal to")
 		}
-		expectedText, testedText: Text
+		expectedText, testedText: String
 		match (expectedValue T) {
-			case FloatVector2D => (expectedText, testedText) = (expectedValue toText~floatvector2d(), testedValue toText~floatvector2d())
-			case FloatVector3D => (expectedText, testedText) = (expectedValue toText~floatvector3d(), testedValue toText~floatvector3d())
-			case FloatPoint2D => (expectedText, testedText) = (expectedValue toText~floatpoint2d(), testedValue toText~floatpoint2d())
-			case FloatPoint3D => (expectedText, testedText) = (expectedValue toText~floatpoint3d(), testedValue toText~floatpoint3d())
-			case Quaternion => (expectedText, testedText) = (expectedValue toText~quaternion(), testedValue toText~quaternion())
-			case FloatEuclidTransform => (expectedText, testedText) = (expectedValue toText~floateuclidtransform(), testedValue toText~floateuclidtransform())
-			case FloatRotation3D => (expectedText, testedText) = (expectedValue toText~floatrotation3d(), testedValue toText~floatrotation3d())
-			case FloatTransform2D => (expectedText, testedText) = (expectedValue toText~floattransform2d(), testedValue toText~floattransform2d())
-			case FloatTransform3D => (expectedText, testedText) = (expectedValue toText~floattransform3d(), testedValue toText~floattransform3d())
-			case IntVector2D => (expectedText, testedText) = (expectedValue toText~intvector2d(), testedValue toText~intvector2d())
-			case IntVector3D => (expectedText, testedText) = (expectedValue toText~intvector3d(), testedValue toText~intvector3d())
-			case IntPoint2D => (expectedText, testedText) = (expectedValue toText~intpoint2d(), testedValue toText~intpoint2d())
-			case IntPoint3D => (expectedText, testedText) = (expectedValue toText~intpoint3d(), testedValue toText~intpoint3d())
-			case FloatComplex => (expectedText, testedText) = (expectedValue toText~floatcomplex(), testedValue toText~floatcomplex())
-			case FloatMatrix => (expectedText, testedText) = (expectedValue toText~floatmatrix(), testedValue toText~floatmatrix())
-			case IntTransform2D => (expectedText, testedText) = (expectedValue toText~inttransform2d(), testedValue toText~inttransform2d())
-			case FloatBox2D => (expectedText, testedText) = (expectedValue toText~floatbox2d(), testedValue toText~floatbox2d())
-			case IntBox2D => (expectedText, testedText) = (expectedValue toText~intbox2d(), testedValue toText~intbox2d())
-			case FloatShell2D => (expectedText, testedText) = (expectedValue toText~floatshell2d(), testedValue toText~floatshell2d())
-			case IntShell2D => (expectedText, testedText) = (expectedValue toText~intshell2d(), testedValue toText~intshell2d())
-			case => (expectedText, testedText) = (expectedValue toText(), testedValue toText())
+			case FloatVector2D => (expectedText, testedText) = (expectedValue toString~floatvector2d(), testedValue toString~floatvector2d())
+			case FloatVector3D => (expectedText, testedText) = (expectedValue toString~floatvector3d(), testedValue toString~floatvector3d())
+			case FloatPoint2D => (expectedText, testedText) = (expectedValue toString~floatpoint2d(), testedValue toString~floatpoint2d())
+			case FloatPoint3D => (expectedText, testedText) = (expectedValue toString~floatpoint3d(), testedValue toString~floatpoint3d())
+			case Quaternion => (expectedText, testedText) = (expectedValue toString~quaternion(), testedValue toString~quaternion())
+			case FloatEuclidTransform => (expectedText, testedText) = (expectedValue toString~floateuclidtransform(), testedValue toString~floateuclidtransform())
+			case FloatRotation3D => (expectedText, testedText) = (expectedValue toString~floatrotation3d(), testedValue toString~floatrotation3d())
+			case FloatTransform2D => (expectedText, testedText) = (expectedValue toString~floattransform2d(), testedValue toString~floattransform2d())
+			case FloatTransform3D => (expectedText, testedText) = (expectedValue toString~floattransform3d(), testedValue toString~floattransform3d())
+			case IntVector2D => (expectedText, testedText) = (expectedValue toString~intvector2d(), testedValue toString~intvector2d())
+			case IntVector3D => (expectedText, testedText) = (expectedValue toString~intvector3d(), testedValue toString~intvector3d())
+			case IntPoint2D => (expectedText, testedText) = (expectedValue toString~intpoint2d(), testedValue toString~intpoint2d())
+			case IntPoint3D => (expectedText, testedText) = (expectedValue toString~intpoint3d(), testedValue toString~intpoint3d())
+			case FloatComplex => (expectedText, testedText) = (expectedValue toString~floatcomplex(), testedValue toString~floatcomplex())
+			case FloatMatrix => (expectedText, testedText) = (expectedValue toString~floatmatrix(), testedValue toString~floatmatrix())
+			case FloatBox2D => (expectedText, testedText) = (expectedValue toString~floatbox2d(), testedValue toString~floatbox2d())
+			case IntBox2D => (expectedText, testedText) = (expectedValue toString~intbox2d(), testedValue toString~intbox2d())
+			case FloatShell2D => (expectedText, testedText) = (expectedValue toString~floatshell2d(), testedValue toString~floatshell2d())
+			case IntShell2D => (expectedText, testedText) = (expectedValue toString~intshell2d(), testedValue toString~intshell2d())
+			case => (expectedText, testedText) = (expectedValue toString(), testedValue toString())
 		}
-		result append(expectedText) . append(t"was") . append(testedText)
+		result add(expectedText) . add("was") . add(testedText)
 		if (constraint type == ComparisonType Within)
-			result append(Text new(" [tolerance: %.8f]" formatDouble((constraint parent as CompareWithinConstraint) precision)))
-		result join(' ')
+			result add(" [tolerance: %.8f]" formatDouble((constraint parent as CompareWithinConstraint) precision))
+		result join(" ")
 	}
-	createRangeFailureMessage: func (failure: TestFailedException) -> Text {
+	createRangeFailureMessage: func (failure: TestFailedException) -> String {
 		constraint := failure constraint as RangeConstraint
 		testedValue := failure value as Cell
-		result := TextBuilder new(t"  ->")
-		result append(Text new(failure message))
-		result append(t": expected within")
+		result := StringBuilder new() . add("  ->") . add(failure message) . add(": expected within")
 		match (constraint type) {
-			case 0 => result append(constraint intMin toText()) . append(t"and") . append(constraint intMax toText())
-			case 1 => result append(constraint floatMin toText()) . append(t"and") . append(constraint floatMax toText())
+			case 0 => result add(constraint intMin toString()) . add("and") . add(constraint intMax toString())
+			case 1 => result add(constraint floatMin toString()) . add("and") . add(constraint floatMax toString())
 		}
-		result append(t"was")
-		result append(testedValue toText())
+		result add("was") . add(testedValue toString())
 		result join(' ')
 	}
 	hideDebugOutput: func {
@@ -154,17 +150,19 @@ Fixture: abstract class {
 	testsFailed ::= static This _testsFailed
 
 	printFailures: static func {
-		This _print(t"Total time: %.2f s\n" format(This totalTime))
+		This _print("Total time: %.2f s\n" format(This totalTime), true)
 		if (This failureNames && (This failureNames count > 0)) {
-			This _print(t"Failed tests: %i [" format(This failureNames count))
+			This _print("Failed tests: %i [" format(This failureNames count), true)
 			for (i in 0 .. This failureNames count - 1)
 				(This failureNames[i] + ", ") print()
 			(This failureNames[This failureNames count -1] + ']') println()
 		}
 	}
-	_print: static func (text: Text) {
-		text print()
+	_print: static func (message: String, free := false) {
+		message print()
 		fflush(stdout)
+		if (free)
+			message free()
 	}
 	verify: static func (value: Object, constraint: ExpectModifier, description: String = null) {
 		if (!constraint verify(value))
@@ -227,7 +225,6 @@ expect: func ~intpoint2d (value: IntPoint2D, constraint: ExpectModifier, message
 expect: func ~intpoint3d (value: IntPoint3D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~floatcomplex (value: FloatComplex, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~floatmatrix (value: FloatMatrix, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
-expect: func ~inttransform2d (value: IntTransform2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~floatbox2d (value: FloatBox2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~intbox2d (value: IntBox2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~floatshell2d (value: FloatShell2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }

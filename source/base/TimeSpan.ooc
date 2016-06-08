@@ -24,7 +24,7 @@ TimeSpan: cover {
 	toDays: func -> Long { this ticks / DateTime ticksPerDay }
 	toWeeks: func -> Long { this ticks / DateTime ticksPerWeek }
 
-	defaultFormat: static Text = t"%w weeks, %d days, %h hours, %m minutes, %s seconds, %z milliseconds"
+	defaultFormat: static String = "%w weeks, %d days, %h hours, %m minutes, %s seconds, %z milliseconds"
 	// Supported formatting expressions:
 	//  %w - weeks (rounded down)
 	//  %d - days (<7)
@@ -37,19 +37,33 @@ TimeSpan: cover {
 	//  %M - minutes (based on total ticks)
 	//  %S - seconds (based on total ticks)
 	//  %Z - milliseconds (based on total ticks)
-	toText: func (format := This defaultFormat) -> Text {
-		result := format copy()
-		result = result replaceAll(t"%w", t"%d" format(this toWeeks()))
-		result = result replaceAll(t"%D", t"%d" format(this toDays()))
-		result = result replaceAll(t"%H", t"%d" format(this toHours()))
-		result = result replaceAll(t"%M", t"%d" format(this toMinutes()))
-		result = result replaceAll(t"%S", t"%d" format(this toSeconds()))
-		result = result replaceAll(t"%Z", t"%d" format(this toMilliseconds()))
-		result = result replaceAll(t"%d", t"%d" format(this toDays() modulo(7)))
-		result = result replaceAll(t"%h", t"%d" format(this toHours() modulo(24)))
-		result = result replaceAll(t"%m", t"%d" format(this toMinutes() modulo(60)))
-		result = result replaceAll(t"%s", t"%d" format(this toSeconds() modulo(60)))
-		result replaceAll(t"%z", t"%d" format(this toMilliseconds() modulo(1000)))
+	toString: func (format := This defaultFormat) -> String {
+		(weekString, dayString, hourString) := (this toWeeks(), this toDays(), this toHours()) toString()
+		(minuteString, secondString, milliString) := (this toMinutes(), this toSeconds(), this toMilliseconds()) toString()
+		(dayModString, hourModString, minuteModString) := (this toDays() modulo(7), this toHours() modulo(24), this toMinutes() modulo(60)) toString()
+		(secondModString, milliModString) := (this toSeconds() modulo(60), this toMilliseconds() modulo(1000)) toString()
+		second := format replaceAll("%w", weekString)
+		result := second replaceAll("%D", dayString)
+		second free()
+		second = result replaceAll("%H", hourString)
+		result free()
+		result = second replaceAll("%M", minuteString)
+		second free()
+		second = result replaceAll("%S", secondString)
+		result free()
+		result = second replaceAll("%Z", milliString)
+		second free()
+		second = result replaceAll("%d", dayModString)
+		result free()
+		result = second replaceAll("%h", hourModString)
+		second free()
+		second = result replaceAll("%m", minuteModString)
+		result free()
+		result = second replaceAll("%s", secondModString)
+		second free()
+		second = result replaceAll("%z", milliModString)
+		(result, weekString, dayString, hourString, minuteString, secondString, milliString, dayModString, hourModString, minuteModString, secondModString, milliModString) free()
+		second
 	}
 	compareTo: func (other: This) -> Order {
 		if (this ticks > other ticks)

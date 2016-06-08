@@ -40,7 +40,7 @@ Process: abstract class {
 		this stdOut = Pipe new()
 		exitCode := this execute()
 		result := PipeReader new(this stdOut) readAll()
-		this stdOut close()
+		this stdOut free()
 		this stdOut = null
 		(result, exitCode)
 	}
@@ -48,7 +48,7 @@ Process: abstract class {
 		this stdErr = Pipe new()
 		exitCode := this execute()
 		result := PipeReader new(this stdErr) readAll()
-		this stdErr close()
+		this stdErr free()
 		this stdErr = null
 		(result, exitCode)
 	}

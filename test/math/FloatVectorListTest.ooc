@@ -391,11 +391,14 @@ FloatVectorListTest: class extends Fixture {
 			expect(maxValue2, is equal to(1.0f) within(tolerance))
 			(list, shiftedList0, shiftedList1, shiftedList2, crossCorrelationList0, crossCorrelationList1, crossCorrelationList2, offsetValues0, offsetValues1, offsetValues2) free()
 		})
-		this add("toText", func {
+		this add("toString", func {
 			list := FloatVectorList new()
 			list add(1.0f) . add(2.0f) . add(3.0f)
-			text := list toText() take()
-			expect(text, is equal to(t"1.00\n2.00\n3.00"))
+			text := list toString()
+			expect(text, is equal to("1.00\n2.00\n3.00"))
+			text free()
+			text = list toString(", ")
+			expect(text, is equal to("1.00, 2.00, 3.00"))
 			(text, list) free()
 		})
 		this add("clamp", func {
@@ -444,6 +447,13 @@ FloatVectorListTest: class extends Fixture {
 			list2 insert(0, 2.2f)
 			expect(list1 maximumDifference(list2), is equal to(5.3f) within(tolerance))
 			(list1, list2) free()
+		})
+		this add("parse", func {
+			list := FloatVectorList parse("1.10,2.20,3.3,4.4000,5.5", ",")
+			expect(list count, is equal to(5))
+			for (i in 0 .. 5)
+				expect(list[i], is equal to(((i + 1) as Float) * 1.1f) within(0.01f))
+			list free()
 		})
 	}
 }

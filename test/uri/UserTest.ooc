@@ -15,27 +15,28 @@ UserTest: class extends Fixture {
 	init: func {
 		super("User")
 		this add("parse", func {
-			name := t"name"
-			password := t"password"
-			userText := (name + t":" + password) take()
+			name := "name"
+			password := "password"
+			userText := "name:password"
 			user := User parse(userText)
 			expect(user name, is equal to(name))
 			expect(user password, is equal to(password))
-			expect(user toText(), is equal to(userText))
-			userText free(Owner Sender)
-			user free()
+			result := user toString()
+			expect(result, is equal to(userText))
+			(result, user) free()
 		})
 		this add("empty", func {
-			user := User parse(t"")
+			user := User parse("")
 			expect(user, is equal to(null))
 		})
 		this add("only name", func {
-			name := Text new("name")
+			name := "name"
 			user := User parse(name)
 			expect(user name, is equal to(name))
-			expect(user password, is equal to(Text empty))
-			expect(user toText(), is equal to(name))
-			user free()
+			expect(user password, is equal to(""))
+			result := user toString()
+			expect(result, is equal to(name))
+			(result, user) free()
 		})
 	}
 }

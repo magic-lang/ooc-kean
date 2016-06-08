@@ -3,9 +3,6 @@
 ## Image
 An image is responsible for storing an array of pixels in 2 or 3 dimensions on CPU or GPU.
 
-## Canvas
-An abstraction layer for drawing that is responsible for portability between underlaying versions of OpenGL using class inheritance.
-
 ## Target
 The target is the image being drawn to. The same image cannot be both input and output to the same draw call because of hardware limitations on some graphics cards.
 
@@ -41,7 +38,7 @@ Transforms go from zero in the center and increase with either pixels or pixels 
 * **Normalized transforms** start from the center of the image and go from (-1, -1) in the top left corner to (+1, +1) in the bottom right corner. This allows using the same coordinates for multiple image resolutions. The disadvantage is that it does not preserve aspect ratio when rotating since it treats all images as squares when not knowing their size. This is the normalized version of reference coordinates.
 
 # DrawState
-Using `DrawState` you can draw things without having to call the canvas directly.
+Using `DrawState` you can draw things without having to call the image directly.
 This is convenient if you have a lot of things to draw that have settings in common.
 
 ## Availability of settings

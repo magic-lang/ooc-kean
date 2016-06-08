@@ -30,7 +30,7 @@ BoolVectorListTest: class extends Fixture {
 			(list, reversed) free()
 		})
 		this add("dilation", func {
-			list := this _createFromText(t"1100 0011 1000 1110")
+			list := this _createFromString("1100 0011 1000 1110")
 			dilated := list dilation(3)
 			expect(dilated[2])
 			expect(!dilated[3])
@@ -42,7 +42,7 @@ BoolVectorListTest: class extends Fixture {
 			(list, dilated) free()
 		})
 		this add("erosion", func {
-			list := this _createFromText(t"1100 0011 1000 1110")
+			list := this _createFromString("1100 0011 1000 1110")
 			eroded := list erosion(3)
 			expect(!eroded[1])
 			expect(!eroded[2])
@@ -58,7 +58,7 @@ BoolVectorListTest: class extends Fixture {
 			(list, eroded) free()
 		})
 		this add("opening", func {
-			list := this _createFromText(t"1101 1001")
+			list := this _createFromString("1101 1001")
 			opened := list opening(3)
 			expect(opened[0])
 			expect(opened[1])
@@ -71,7 +71,7 @@ BoolVectorListTest: class extends Fixture {
 			(list, opened) free()
 		})
 		this add("closing", func {
-			list := this _createFromText(t"1101 1001")
+			list := this _createFromString("1101 1001")
 			closed := list closing(3)
 			expect(closed[0])
 			expect(closed[1])
@@ -84,8 +84,8 @@ BoolVectorListTest: class extends Fixture {
 			(list, closed) free()
 		})
 		this add("logical operators", func {
-			list := this _createFromText(t"11010")
-			other := this _createFromText(t"10001")
+			list := this _createFromString("11010")
+			other := this _createFromString("10001")
 			listAndOther := list && other
 			listOrOther := list || other
 			expect(listAndOther tally(true), is equal to(1))
@@ -93,21 +93,24 @@ BoolVectorListTest: class extends Fixture {
 			(list, other, listAndOther, listOrOther) free()
 		})
 		this add("toFloatVectorList", func {
-			list := this _createFromText(t"11001")
+			list := this _createFromString("11001")
 			floatList := list toFloatVectorList()
 			expect(floatList sum, is equal to(3.0f) within(0.01f))
 			(floatList, list) free()
 		})
-		this add("toText", func {
-			list := this _createFromText(t"101")
-			text := list toText() take()
-			expect(text, is equal to(t"true\nfalse\ntrue"))
+		this add("toString", func {
+			list := this _createFromString("101")
+			text := list toString()
+			expect(text, is equal to("true\nfalse\ntrue"))
+			text free()
+			text = list toString(", ")
+			expect(text, is equal to("true, false, true"))
 			(text, list) free()
 		})
 	}
-	_createFromText: func (content: Text) -> BoolVectorList {
+	_createFromString: func (content: String) -> BoolVectorList {
 		result := BoolVectorList new()
-		for (i in 0 .. content count) {
+		for (i in 0 .. content size) {
 			if (content[i] == '1')
 				result add(true)
 			else if (content[i] == '0')

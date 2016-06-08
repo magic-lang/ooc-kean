@@ -46,6 +46,7 @@ FileReader: class extends Reader {
 	init: func ~fromFStream (=file)
 	free: override func {
 		this fileName free(Owner Receiver)
+		this file close()
 		super()
 	}
 	read: override func (buffer: CString, offset: Int, count: Int) -> SizeT {
@@ -74,8 +75,5 @@ FileReader: class extends Reader {
 	mark: override func -> Long {
 		this marker = this file tell()
 		this marker
-	}
-	close: override func {
-		this file close()
 	}
 }

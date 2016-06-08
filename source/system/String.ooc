@@ -56,7 +56,7 @@ String: class {
 	startsWith: func ~char (c: Char) -> Bool { this _buffer startsWith(c) }
 	endsWith: func (s: This) -> Bool { this _buffer endsWith(s _buffer) }
 	endsWith: func ~char (c: Char) -> Bool { this _buffer endsWith(c) }
-	find: func (what: This, offset: Int, searchCaseSensitive := true) -> Int { this _buffer find(what _buffer, offset, searchCaseSensitive) }
+	find: func (what: This, offset: Int = 0, searchCaseSensitive := true) -> Int { this _buffer find(what _buffer, offset, searchCaseSensitive) }
 	findAll: func (what: This, searchCaseSensitive := true) -> VectorList <Int> { this _buffer findAll(what _buffer, searchCaseSensitive) }
 	replaceAll: func ~str (what, with: This, searchCaseSensitive := true) -> This { (this _buffer clone()) replaceAll(what _buffer, with _buffer, searchCaseSensitive) . toString() }
 	replaceAll: func ~char (oldie, kiddo: Char) -> This { (this _buffer clone()) replaceAll~char(oldie, kiddo) . toString() }
@@ -100,15 +100,14 @@ String: class {
 	_bufVectorListToStrVectorList: func (x: VectorList<CharBuffer>) -> VectorList<This> {
 		result := VectorList<This> new(x count)
 		for (i in 0 .. x count)
-			result add (x[i] toString())
+			result add(x[i] toString())
 		result
 	}
 	capitalize: func -> This {
-		match (this size) {
-			case 0 => this
-			case 1 => this toUpper()
-			case => this[0] toUpper() + this substring(1)
-		}
+		result := this clone()
+		if (result size > 0)
+			result _buffer[0] = result[0] toUpper()
+		result
 	}
 	cformat: final func ~str (...) -> This {
 		list: VaList
@@ -127,7 +126,10 @@ String: class {
 		this _bufVectorListToStrVectorList(this _buffer split(c, maxTokens))
 	}
 	split: func ~withStringWithoutmaxTokens (s: This) -> VectorList<This> {
-		this _bufVectorListToStrVectorList(this _buffer split(s _buffer, -1))
+		bufferSplit := this _buffer split(s _buffer)
+		result := this _bufVectorListToStrVectorList(bufferSplit)
+		bufferSplit free()
+		result
 	}
 	split: func ~withCharWithoutmaxTokens (c: Char) -> VectorList<This> {
 		bufferSplit := this _buffer split(c)
@@ -150,6 +152,17 @@ String: class {
 	split: func ~str (delimiter: This, maxTokens: SSizeT) -> VectorList<This> {
 		this _bufVectorListToStrVectorList(this _buffer split(delimiter _buffer, maxTokens))
 	}
+
+	operator + (other: Float) -> This { this << other toString() }
+	operator + (other: Double) -> This { this << other toString() }
+	operator + (other: UInt) -> This { this << other toString() }
+	operator + (other: Int) -> This { this << other toString() }
+
+	operator & (other: Float) -> This { this & other toString() }
+	operator & (other: Double) -> This { this & other toString() }
+	operator & (other: UInt) -> This { this & other toString() }
+	operator & (other: Int) -> This { this & other toString() }
+
 	free: static func ~all {
 		string_literal_free_all()
 	}

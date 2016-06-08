@@ -10,7 +10,7 @@ use geometry
 use draw
 use draw-gpu
 use base
-import OpenGLPacked, OpenGLCanvas, OpenGLMap, OpenGLContext
+import OpenGLPacked, OpenGLMap, OpenGLContext
 import backend/GLTexture
 
 version(!gpuOff) {
@@ -32,7 +32,7 @@ OpenGLMonochrome: class extends OpenGLPacked {
 		packed := this context createRgba(IntVector2D new(this size x / 4, this size y))
 		this context packToRgba(this, packed, IntBox2D new(packed size))
 		buffer := (target as RasterMonochrome) buffer
-		(packed canvas as OpenGLCanvas) readPixels(buffer)
+		(packed as OpenGLPacked) readPixels(buffer)
 		packed free()
 	}
 	create: override func (size: IntVector2D) -> This { this context createMonochrome(size) as This }

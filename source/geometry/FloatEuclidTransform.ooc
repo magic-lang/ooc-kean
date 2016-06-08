@@ -33,9 +33,6 @@ FloatEuclidTransform: cover {
 	toString: func -> String {
 		"Translation: " << this translation toString() >> " Rotation: " & this rotation toString() >> " Scaling: " & this scaling toString()
 	}
-	toText: func -> Text {
-		t"Translation: " + this translation toText() + t" Rotation: " + this rotation toText() + t" Scaling: " + this scaling toText()
-	}
 
 	operator * (other: This) -> This { This new(this translation + other translation, this rotation * other rotation, this scaling * other scaling) }
 	operator == (other: This) -> Bool {
@@ -65,5 +62,5 @@ FloatEuclidTransform: cover {
 }
 
 extend Cell<FloatEuclidTransform> {
-	toText: func ~floateuclidtransform -> Text { (this val as FloatEuclidTransform) toText() }
+	toString: func ~floateuclidtransform -> String { (this val as FloatEuclidTransform) toString() }
 }

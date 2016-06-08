@@ -194,6 +194,28 @@ HashMap: class <K, V> {
 			}
 		}
 	}
+	getKeys: func -> VectorList<K> {
+		result := VectorList<K> new(this count, false)
+		for (index in 0 .. this capacity) {
+			entry := this _buckets[index]
+			while (entry != null) {
+				result add(entry _key)
+				entry = entry _next
+			}
+		}
+		result
+	}
+	getValues: func -> VectorList<V> {
+		result := VectorList<V> new(this capacity, false)
+		for (index in 0 .. this capacity) {
+			entry := this _buckets[index]
+			while (entry != null) {
+				result add(entry _value)
+				entry = entry _next
+			}
+		}
+		result
+	}
 	resize: func (newCapacity: Int) {
 		oldCapacity := this capacity
 		oldBuckets := this _buckets
@@ -222,7 +244,7 @@ HashMap: class <K, V> {
 		}
 		this each(writerFunc)
 		(writerFunc as Closure) free()
-		fileWriter close() . free()
+		fileWriter free()
 	}
 	_keyEquals: func (first, second: K) -> Bool {
 		match (K) {
@@ -242,7 +264,7 @@ HashMap: class <K, V> {
 				result put(pair[0] clone(), pair[1] clone())
 			(string, pair) free()
 		}
-		reader close() . free()
+		reader free()
 		result
 	}
 	hash: static func <K> (key: K) -> Int {
