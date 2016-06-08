@@ -16,16 +16,19 @@ String: class {
 	// Avoid direct buffer access, as it breaks immutability.
 	_buffer: CharBuffer
 	size ::= this _buffer size
-
+	_locked := false // Only global termination may unlock and free literals
 	init: func ~withBuffer (=_buffer)
 	init: func ~withCStr (s: CString) { init(s, s length()) }
 	init: func ~withCStrAndLength (s: CString, length: Int) { this _buffer = CharBuffer new(s, length) }
 	free: override func {
-		if (this _buffer mallocAddr == 0)
-			string_literal_free(this)
-		this _buffer free()
-		super()
+		if (!this _locked) {
+			if (this _buffer mallocAddr == 0)
+				string_literal_free(this)
+			this _buffer free()
+			super()
+		}
 	}
+	_unlock: func { this _locked = false }
 	equals: final func (other: This) -> Bool {
 		result := false
 		if (this == null)
@@ -202,6 +205,7 @@ operator << (left, right: String) -> String {
 }
 makeStringLiteral: func (str: CString, strLen: Int) -> String {
 	result := String new(CharBuffer new(str, strLen, true))
+	result _locked = true
 	string_literal_new(result)
 	result
 }
