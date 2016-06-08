@@ -17,7 +17,6 @@ String: class {
 	_buffer: CharBuffer
 	size ::= this _buffer size
 	_locked := false // Only global termination may unlock and free literals
-	_unlock: func { this _locked = false }
 	init: func ~withBuffer (=_buffer)
 	init: func ~withCStr (s: CString) { init(s, s length()) }
 	init: func ~withCStrAndLength (s: CString, length: Int) { this _buffer = CharBuffer new(s, length) }
@@ -29,6 +28,7 @@ String: class {
 			super()
 		}
 	}
+	_unlock: func { this _locked = false }
 	equals: final func (other: This) -> Bool {
 		result := false
 		if (this == null)
