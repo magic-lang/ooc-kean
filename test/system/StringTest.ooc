@@ -11,6 +11,22 @@ use unit
 StringTest: class extends Fixture {
 	init: func {
 		super("String")
+		this add("literal", func {
+			// The & operand tries to free the literals but if the lock works then they should resist the attempt
+			result: String
+			for (i in 1 .. 100) {
+				result = "ab" & "cd"
+				expect(result, is equal to("abcd"))
+				result free()
+			}
+			ab := "ab"
+			cd := "cd"
+			for (i in 1 .. 100) {
+				result = ab & cd
+				expect(result, is equal to("abcd"))
+				result free()
+			}
+		})
 		this add("length", func {
 			expect("" length(), is equal to(0))
 			expect("y" length(), is equal to(1))
