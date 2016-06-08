@@ -6,7 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use base
 import io/FileWriter
 
 DebugLevel: enum {
@@ -30,19 +29,9 @@ Debug: class {
 		if (This _level == level || This _level == DebugLevel Everything)
 			This _printFunction(string)
 	}
-	print: static func ~text (text: Text, level := DebugLevel Everything) {
-		string := text toString()
-		This print(string, level)
-		string free()
-	}
 	error: static func (message: String) {
 		This print(message)
 		raise(message)
-	}
-	error: static func ~text (message: Text) {
-		string := message toString()
-		This error(string)
-		string free()
 	}
 	free: static func ~all {
 		(This _printFunction as Closure) free()
