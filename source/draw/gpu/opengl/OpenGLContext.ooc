@@ -12,7 +12,7 @@ use draw
 use draw-gpu
 use collections
 use concurrent
-import OpenGLPacked, OpenGLMonochrome, OpenGLRgb, OpenGLRgba, OpenGLUv, OpenGLMesh, OpenGLPromise
+import OpenGLPacked, OpenGLMonochrome, OpenGLRgb, OpenGLRgba, OpenGLUv, OpenGLMesh, OpenGLPromise, GraphicBufferYuv420Semiplanar, GraphicBuffer
 import OpenGLMap
 import backend/[GLContext, GLRenderer]
 
@@ -198,5 +198,13 @@ OpenGLContext: class extends GpuContext {
 	getYuvToRgba: override func -> Map { this _yuvSemiplanarToRgba }
 	getRgbaToY: override func -> Map { this _rgbaToYuva }
 	getRgbaToUv: override func -> Map { this _rgbaToUvaa }
+	toRaster: override func ~target (source: GpuImage, target: RasterImage) -> Promise {
+		if (target instanceOf(GraphicBufferYuv420Semiplanar))
+			target as GraphicBufferYuv420Semiplanar buffer lock(GraphicBufferUsage WriteOften)
+		result := super(source, target)
+		if (target instanceOf(GraphicBufferYuv420Semiplanar))
+			target as GraphicBufferYuv420Semiplanar buffer unlock()
+		result
+	}
 }
 }
