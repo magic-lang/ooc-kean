@@ -50,6 +50,12 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		this _rgba referenceCount increase()
 		this _rgba
 	}
+	copy: override func -> RasterYuv420Semiplanar {
+		this buffer lock(GraphicBufferUsage ReadOften)
+		result := super()
+		this buffer unlock()
+		result
+	}
 	_bin := static RecycleBin<EGLRgba> new(100, |image| image referenceCount decrease())
 	free: static func ~all { This _bin clear() }
 }
