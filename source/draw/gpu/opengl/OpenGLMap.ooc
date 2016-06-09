@@ -19,31 +19,26 @@ OpenGLMap: class extends Map {
 	_vertexSource: String
 	_fragmentSource: String
 	_program: GLShaderProgram = null
-	_currentProgram: GLShaderProgram { get {
-		if (this _program == null)
-			this _program = this _context _backend createShaderProgram(this _vertexSource, this _fragmentSource)
-		this _program
-	}}
 	_context: OpenGLContext
 	init: func (vertexSource: String, fragmentSource: String, context: OpenGLContext) {
 		super()
 		this _vertexSource = vertexSource
 		this _fragmentSource = fragmentSource
 		this _context = context
+		this _program = this _context _backend createShaderProgram(this _vertexSource, this _fragmentSource)
 		if (vertexSource == null || fragmentSource == null)
 			Debug error("Vertex or fragment shader source not set")
 	}
 	init: func ~defaultVertex (fragmentSource: String, context: OpenGLContext) { this init(slurp("shaders/default.vert"), fragmentSource, context) }
 	free: override func {
-		if (this _program != null)
-			this _program free()
+		this _program free()
 		super()
 	}
 	useProgram: override func (forbiddenInput: Pointer, positionTransform, textureTransform: FloatTransform3D) {
-		this _currentProgram useProgram()
+		this _program useProgram()
 		textureCount := 0
 		action := func (key: String, value: Object) {
-			program := this _currentProgram
+			program := this _program
 			if (value instanceOf(Cell)) {
 				cell := value as Cell
 				match (cell T) {
