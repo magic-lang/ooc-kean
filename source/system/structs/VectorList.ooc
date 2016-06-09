@@ -118,12 +118,12 @@ VectorList: class <T> extends List<T>{
 			}
 		result
 	}
-	sort: override func (greaterThan: Func (T, T) -> Bool) {
+	sort: override func (isLess: Func (T, T) -> Bool) {
 		inOrder := false
 		while (!inOrder) {
 			inOrder = true
 			for (i in 0 .. this count - 1)
-				if (greaterThan(this[i], this[i + 1])) {
+				if (!isLess(this[i], this[i + 1])) {
 					inOrder = false
 					tmp := this[i]
 					this[i] = this[i + 1]
