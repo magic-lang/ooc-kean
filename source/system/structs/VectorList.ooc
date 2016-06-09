@@ -123,7 +123,7 @@ VectorList: class <T> extends List<T>{
 		while (!inOrder) {
 			inOrder = true
 			for (i in 0 .. this count - 1)
-				if (!isLess(this[i], this[i + 1])) {
+				if (isLess(this[i + 1], this[i])) {
 					inOrder = false
 					tmp := this[i]
 					this[i] = this[i + 1]
