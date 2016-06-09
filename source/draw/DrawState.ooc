@@ -165,7 +165,7 @@ DrawState: cover {
 		this target draw(this)
 	}
 	// Example: DrawState new(targetImage) setOrigin(point) setInputImage(context getDefaultFont()) write(t"Hello world!")
-	write: func (message: Text) {
+	write: func (message: String) {
 		version(safe) {
 			raise(this target == null, "Can't write without a target.")
 			raise(this inputImage == null, "Can't write without a font atlas.")

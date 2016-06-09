@@ -15,11 +15,11 @@ use unit
 
 WriteTest: class extends Fixture {
 	sourceImage := RasterMonochrome open("test/draw/gpu/input/Flower.png")
-	message := t"Hello world!\nThis is a line.\nThis is another line.\n"
+	message := "Hello world!\nThis is a line.\nThis is another line.\n"
 	init: func {
 		super("WriteTest")
 		this add("Calculate visible text index bounds", func {
-			bounds := DrawContext getTextIndexBounds(t"1234\n1234567\n\n12345\n	\n \n" give())
+			bounds := DrawContext getStringIndexBounds("1234\n1234567\n\n12345\n	\n \n")
 			expect(bounds x, is equal to(7))
 			expect(bounds y, is equal to(4))
 		})
@@ -33,7 +33,7 @@ WriteTest: class extends Fixture {
 		})
 		this add("Write text to a buffer on the GPU", func {
 			correctImage := RasterMonochrome open("test/draw/gpu/correct/textBuffer.png")
-			resultGpu := gpuContext createImageFromTextAndFont(this message, gpuContext getDefaultFont()) as GpuImage
+			resultGpu := gpuContext createImageFromStringAndFont(this message, gpuContext getDefaultFont()) as GpuImage
 			resultCpu := resultGpu toRaster()
 			expect(resultCpu distance(correctImage), is equal to(0.0f))
 			(resultGpu, resultCpu, correctImage) free()
