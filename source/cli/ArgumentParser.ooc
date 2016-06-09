@@ -11,12 +11,12 @@ use base
 import Event
 
 _Argument: class {
-	_longIdentifier: Text
+	_longIdentifier: String
 	_shortIdentifier: Char
 	_parameters: Int
 	_action: Event
-	_textAction: Event1<Text>
-	_listAction: Event1<VectorList<Text>>
+	_textAction: Event1<String>
+	_listAction: Event1<VectorList<String>>
 	init: func (=_longIdentifier, =_shortIdentifier, =_parameters, =_action)
 	init: func ~noShort (=_longIdentifier, =_parameters, =_action)
 	init: func ~parameter (=_longIdentifier, =_shortIdentifier, =_parameters, =_textAction)
@@ -25,7 +25,7 @@ _Argument: class {
 	init: func ~parametersNoShort (=_longIdentifier, =_parameters, =_listAction)
 	init: func ~default (=_textAction)
 	free: override func {
-		this _longIdentifier free(Owner Receiver)
+		this _longIdentifier free()
 		if (this _action != null)
 			this _action free()
 		if (this _textAction != null)
@@ -48,39 +48,39 @@ ArgumentParser: class {
 			this _defaultArgument free()
 		super()
 	}
-	add: func (longIdentifier: Text, shortIdentifier: Char, action: Event) {
-		this _arguments add(_Argument new(longIdentifier claim(), shortIdentifier, 0, action))
+	add: func (longIdentifier: String, shortIdentifier: Char, action: Event) {
+		this _arguments add(_Argument new(longIdentifier, shortIdentifier, 0, action))
 	}
-	add: func ~noShort (longIdentifier: Text, action: Event) {
-		this _arguments add(_Argument new(longIdentifier claim(), 0, action))
+	add: func ~noShort (longIdentifier: String, action: Event) {
+		this _arguments add(_Argument new(longIdentifier, 0, action))
 	}
-	add: func ~parameter (longIdentifier: Text, shortIdentifier: Char, action: Event1<Text>) {
-		this _arguments add(_Argument new(longIdentifier claim(), shortIdentifier, 1, action))
+	add: func ~parameter (longIdentifier: String, shortIdentifier: Char, action: Event1<String>) {
+		this _arguments add(_Argument new(longIdentifier, shortIdentifier, 1, action))
 	}
-	add: func ~parameterNoShort (longIdentifier: Text, action: Event1<Text>) {
-		this _arguments add(_Argument new(longIdentifier claim(), 1, action))
+	add: func ~parameterNoShort (longIdentifier: String, action: Event1<String>) {
+		this _arguments add(_Argument new(longIdentifier, 1, action))
 	}
-	add: func ~parameters (longIdentifier: Text, shortIdentifier: Char, parameters: Int, action: Event1<VectorList<Text>>) {
-		this _arguments add(_Argument new(longIdentifier claim(), shortIdentifier, parameters, action))
+	add: func ~parameters (longIdentifier: String, shortIdentifier: Char, parameters: Int, action: Event1<VectorList<String>>) {
+		this _arguments add(_Argument new(longIdentifier, shortIdentifier, parameters, action))
 	}
-	add: func ~parametersNoShort (longIdentifier: Text, parameters: Int, action: Event1<VectorList<Text>>) {
-		this _arguments add(_Argument new(longIdentifier claim(), parameters, action))
+	add: func ~parametersNoShort (longIdentifier: String, parameters: Int, action: Event1<VectorList<String>>) {
+		this _arguments add(_Argument new(longIdentifier, parameters, action))
 	}
-	addDefault: func (action: Event1<Text>) {
+	addDefault: func (action: Event1<String>) {
 		this _defaultArgument = _Argument new(action)
 	}
-	parse: func (input: VectorList<Text>) {
-		parameters := VectorList<Text> new()
-		arguments := VectorList<Text> new()
+	parse: func (input: VectorList<String>) {
+		parameters := VectorList<String> new()
+		arguments := VectorList<String> new()
 		for (i in 0 .. input count) {
 			(parameters, arguments) clear()
-			current := input[i] take()
-			if (current beginsWith(t"--"))
-				arguments add(current slice(2))
-			else if (current beginsWith(t"-")) {
-				current = current slice(1)
-				for (j in 0 .. current count)
-					arguments add(current slice(j, 1))
+			current := input[i]
+			if (current startsWith("--"))
+				arguments add(current substring(2))
+			else if (current startsWith("-")) {
+				current = current substring(1)
+				for (j in 0 .. current size)
+					arguments add(current substring(j, 1))
 			}
 			else
 				this _defaultArgument _textAction call(current)
@@ -88,11 +88,11 @@ ArgumentParser: class {
 				if (argument := this _findArgument(arguments[k])) {
 					if (argument _parameters > 1) {
 						for (j in 0 .. argument _parameters)
-							parameters add(input[i + j + 1] take())
+							parameters add(input[i + j + 1])
 						argument _listAction call(parameters)
 					}
 					else if (argument _parameters == 1)
-						argument _textAction call(input[i + 1] take())
+						argument _textAction call(input[i + 1])
 					else
 						argument _action call()
 					i += argument _parameters
@@ -100,13 +100,13 @@ ArgumentParser: class {
 			}
 		}
 		for (i in 0 .. input count)
-			input[i] free(Owner Receiver)
+			input[i] free()
 		(parameters, arguments) free()
 	}
-	_findArgument: func (identifier: Text) -> _Argument {
+	_findArgument: func (identifier: String) -> _Argument {
 		result: _Argument
 		for (i in 0 .. this _arguments count)
-			if (identifier == this _arguments[i] _longIdentifier take() || identifier == Text new(this _arguments[i] _shortIdentifier)) {
+			if (identifier == this _arguments[i] _longIdentifier || identifier == (this _arguments[i] _shortIdentifier as String)) {
 				result = this _arguments[i]
 				break
 			}
