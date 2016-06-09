@@ -62,27 +62,26 @@ Fixture: abstract class {
 			for (i in 0 .. failures count) {
 				f := failures[i]
 				if (f constraint instanceOf(CompareConstraint) && f value instanceOf(Cell))
-					This _print(this createCompareFailureMessage(f) + "\n")
+					This _print(this createCompareFailureMessage(f) >> "\n", true)
 				else if (f constraint instanceOf(CompareConstraint) && f value instanceOf(String))
-					This _print("  -> %s : expected equal to %s was %s\n" format(f message, (f constraint as CompareConstraint) correct as String, f value as String))
+					This _print("  -> %s : expected equal to \"%s\" was \"%s\"\n" format(f message, (f constraint as CompareConstraint) correct as String, f value as String), true)
 				else if (f constraint instanceOf(NullConstraint))
-					This _print("  -> %s : expected null was %p\n" format(f message, f value&))
+					This _print("  -> %s : expected null was %p\n" format(f message, f value&), true)
 				else if (f constraint instanceOf(NotNullConstraint))
-					This _print("  -> %s : expected not null was null\n" format(f message))
+					This _print("  -> %s : expected not null was null\n" format(f message), true)
 				else if (f constraint instanceOf(TrueConstraint))
-					This _print("  -> %s : expected true was false\n" format(f message))
+					This _print("  -> %s : expected true was false\n" format(f message), true)
 				else if (f constraint instanceOf(FalseConstraint))
-					This _print("  -> %s : expected false was true\n" format(f message))
+					This _print("  -> %s : expected false was true\n" format(f message), true)
 				else if (f constraint instanceOf(RangeConstraint))
-					This _print(this createRangeFailureMessage(f) + "\n")
+					This _print(this createRangeFailureMessage(f) >> "\n", true)
 				else
-					This _print("  -> %s\n" format(f message))
+					This _print("  -> %s\n" format(f message), true)
 				f free()
 			}
 			This _testsFailed = true
 		}
-		failures free()
-		timer free()
+		(failures, timer) free()
 		result
 	}
 	createCompareFailureMessage: func (failure: TestFailedException) -> String {
