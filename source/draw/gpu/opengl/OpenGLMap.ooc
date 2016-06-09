@@ -18,15 +18,11 @@ version(!gpuOff) {
 OpenGLMap: class extends Map {
 	_vertexSource: String
 	_fragmentSource: String
-	_program: GLShaderProgram[]
+	_program: GLShaderProgram = null
 	_currentProgram: GLShaderProgram { get {
-		index := this _context getCurrentIndex()
-		result := this _program[index]
-		if (result == null) {
-			result = this _context _backend createShaderProgram(this _vertexSource, this _fragmentSource)
-			this _program[index] = result
-		}
-		result
+		if (this _program == null)
+			this _program = this _context _backend createShaderProgram(this _vertexSource, this _fragmentSource)
+		this _program
 	}}
 	_context: OpenGLContext
 	init: func (vertexSource: String, fragmentSource: String, context: OpenGLContext) {
@@ -34,17 +30,13 @@ OpenGLMap: class extends Map {
 		this _vertexSource = vertexSource
 		this _fragmentSource = fragmentSource
 		this _context = context
-		this _program = GLShaderProgram[context getMaxContexts()] new()
 		if (vertexSource == null || fragmentSource == null)
 			Debug error("Vertex or fragment shader source not set")
 	}
 	init: func ~defaultVertex (fragmentSource: String, context: OpenGLContext) { this init(slurp("shaders/default.vert"), fragmentSource, context) }
 	free: override func {
-		for (i in 0 .. this _context getMaxContexts()) {
-			if (this _program[i] != null)
-				this _program[i] free()
-		}
-		this _program free()
+		if (this _program != null)
+			this _program free()
 		super()
 	}
 	useProgram: override func (forbiddenInput: Pointer, positionTransform, textureTransform: FloatTransform3D) {
