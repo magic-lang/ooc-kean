@@ -200,7 +200,7 @@ VectorListTest: class extends Fixture {
 		})
 		this add("VectorList sort", func {
 			list := VectorList<Int> new()
-			list add(8) . add(16) . add(32)
+			list add(32) . add(16) . add(8)
 
 			sortedList := list copy()
 			sortedList sort(|v1, v2| v1 < v2)

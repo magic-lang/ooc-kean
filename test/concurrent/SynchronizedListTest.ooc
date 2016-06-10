@@ -97,7 +97,7 @@ SynchronizedListTest: class extends Fixture {
 			list add(Int minimumValue) . add(Int maximumValue) . add(0) . add(-10) . add(10)
 			list sort(|first, second| first < second)
 			for (value in 0 .. list count - 1)
-				expect(list[value], is greater than(list[value + 1]))
+				expect(list[value], is less than(list[value + 1]))
 			list free()
 		})
 		this add("single thread - copy", func {
