@@ -39,12 +39,12 @@ _Task: abstract class {
 	}
 	wait: func ~timeout (time: TimeSpan) -> Bool {
 		timer := CpuTimer new() . start()
-		seconds := time toSeconds()
+		milliseconds := time toMilliseconds()
 		status := false
-		while (timer stop() / 1000.0 < seconds && !status) {
+		while (timer stop() < milliseconds && !status) {
 			status = (this _state != _PromiseState Unfinished)
 			if (!status)
-				Time sleepMilli(seconds / 10 as Int)
+				Time sleepMilli(1)
 		}
 		timer free()
 		status
