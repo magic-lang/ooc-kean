@@ -158,31 +158,30 @@ ColorRgba: cover {
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 
-	fromText: static func (text: Text) -> This {
-		channels := text take() split(',')
+	fromString: static func (string: String) -> This {
+		channels := string split(',')
 		result: This
 		match (channels count) {
 			case 1 => // Y
-				luma := channels[0] take() toInt()
+				luma := channels[0] toInt()
 				result = This new(ColorConvert monochromeToRgb(ColorMonochrome new(luma)), 255)
 			case 2 => // YA
-				luma := channels[0] take() toInt()
-				alpha := channels[1] take() toInt()
+				luma := channels[0] toInt()
+				alpha := channels[1] toInt()
 				result = This new(ColorConvert monochromeToRgb(ColorMonochrome new(luma)), alpha)
 			case 3 => // RGB
-				red := channels[0] take() toInt()
-				green := channels[1] take() toInt()
-				blue := channels[2] take() toInt()
+				red := channels[0] toInt()
+				green := channels[1] toInt()
+				blue := channels[2] toInt()
 				result = This new(red, green, blue, 255)
 			case 4 => // RGBA
-				red := channels[0] take() toInt()
-				green := channels[1] take() toInt()
-				blue := channels[2] take() toInt()
-				alpha := channels[3] take() toInt()
+				red := channels[0] toInt()
+				green := channels[1] toInt()
+				blue := channels[2] toInt()
+				alpha := channels[3] toInt()
 				result = This new(red, green, blue, alpha)
 		}
 		channels free()
-		text free(Owner Receiver)
 		result
 	}
 }
