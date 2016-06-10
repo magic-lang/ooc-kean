@@ -15,12 +15,16 @@ _PromiseState: enum {
 	Cancelled
 }
 
-Promise: abstract class {
+_Synchronizer: abstract class {
 	_state: _PromiseState
 	init: func
 	wait: abstract func (time: TimeSpan) -> Bool
 	wait: func ~forever -> Bool { this wait(TimeSpan maximumValue) }
 	cancel: virtual func -> Bool { false }
+}
+
+Promise: abstract class extends _Synchronizer {
+	init: func { super() }
 	start: static func (action: Func) -> This { _ThreadPromise new(action) }
 	empty: static This { get { _EmptyPromise new() } }
 }
@@ -74,11 +78,8 @@ _ThreadPromise: class extends Promise {
 	}
 }
 
-Future: abstract class <T> {
-	_state: _PromiseState
-	init: func
-	wait: func ~forever -> Bool { this wait(TimeSpan maximumValue) }
-	wait: abstract func (time: TimeSpan) -> Bool
+Future: abstract class <T> extends _Synchronizer {
+	init: func { super() }
 	wait: virtual func ~default (defaultValue: T) -> T {
 		status := this wait()
 		status ? this getResult(defaultValue) : defaultValue
@@ -88,7 +89,6 @@ Future: abstract class <T> {
 		status ? this getResult(defaultValue) : defaultValue
 	}
 	getResult: abstract func (defaultValue: T) -> T
-	cancel: virtual func -> Bool { false }
 	start: static func<S> (S: Class, action: Func -> S) -> This<S> {
 		_ThreadFuture<S> new(action)
 	}
