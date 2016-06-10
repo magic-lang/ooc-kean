@@ -12,6 +12,7 @@ TimeSpan: cover {
 	_ticks: Long = 0
 	ticks ::= this _ticks
 	init: func@ (=_ticks)
+	init: func@ ~fromNanoseconds (nanoseconds: Long) { this _ticks = nanoseconds / DateTime nanosecondsPerTick }
 	init: func@ ~fromHourMinuteSec (hour, minute, second, millisecond: Int) { this _ticks = DateTime timeToTicks(hour, minute, second, millisecond) }
 	negate: func -> This { This new(-this ticks) }
 	toNanoseconds: func -> Long { this ticks * DateTime nanosecondsPerTick }

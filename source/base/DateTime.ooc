@@ -41,6 +41,7 @@ DateTime: cover {
 	_ticks: ULong = 0
 	ticks ::= this _ticks
 	init: func@ (=_ticks)
+	init: func@ ~fromNanoseconds(nanoseconds: ULong) { this _ticks = nanoseconds / This nanosecondsPerTick }
 	init: func@ ~fromYearMonthDay (year, month, day: Int) {
 		if (This dateIsValid(year, month, day))
 			this _ticks = This dateToTicks(year, month, day)
