@@ -37,6 +37,18 @@ _Task: abstract class {
 		this _mutex unlock()
 		this _state == _PromiseState Finished
 	}
+	wait: func ~timeout (time: TimeSpan) -> Bool {
+		timer := CpuTimer new() . start()
+		seconds := time toSeconds()
+		status := false
+		while (timer stop() / 1000.0 < seconds && !status) {
+			status = (this _state != _PromiseState Unfinished)
+			if (!status)
+				Time sleepMilli(seconds / 10 as Int)
+		}
+		timer free()
+		status
+	}
 	cancel: func -> Bool {
 		status := false
 		this _mutex lock()
