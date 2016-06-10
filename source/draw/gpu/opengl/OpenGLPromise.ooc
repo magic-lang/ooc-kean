@@ -23,7 +23,6 @@ OpenGLPromise: class extends Promise {
 		super()
 	}
 	sync: func { this _fence sync() }
-	wait: override func -> Bool { this wait(TimeSpan maximumValue) }
-	wait: override func ~timeout (time: TimeSpan) -> Bool { this _fence clientWait(time toNanoseconds()) }
+	wait: override func (time: TimeSpan) -> Bool { this _fence clientWait(time toNanoseconds()) }
 }
 }

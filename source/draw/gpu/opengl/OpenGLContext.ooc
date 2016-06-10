@@ -24,8 +24,7 @@ _FenceToRasterFuture: class extends ToRasterFuture {
 		this _promise free()
 		super()
 	}
-	wait: override func -> Bool { this _promise wait() }
-	wait: override func ~timeout (time: TimeSpan) -> Bool { this _promise wait(time) }
+	wait: override func (time: TimeSpan) -> Bool { this _promise wait(time) }
 }
 
 OpenGLContext: class extends GpuContext {
