@@ -55,6 +55,10 @@ VectorList: class <T> extends List<T>{
 	removeAt: func ~range (range: Range) { this removeAt(range min, range max) }
 	removeAt: func ~indices (start, end: Int) {
 		count := end - start
+		version(safe) {
+			raise(count < 0 || start > this count || end > this count,
+				"Invalid range in VectorList::removeAt: start=%d end=%d (list count=%d)" format(start, end, this count))
+		}
 		this _vector copy(end, start)
 		this _count -= count
 	}
