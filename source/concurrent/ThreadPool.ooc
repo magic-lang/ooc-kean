@@ -38,15 +38,19 @@ _Task: abstract class {
 		this _state == _PromiseState Finished
 	}
 	wait: func ~timeout (time: TimeSpan) -> Bool {
-		timer := CpuTimer new() . start()
-		seconds := time toSeconds()
 		status := false
-		while (timer stop() / 1000.0 < seconds && !status) {
-			status = (this _state != _PromiseState Unfinished)
-			if (!status)
-				Time sleepMilli(seconds / 10 as Int)
+		if (time == TimeSpan maximumValue)
+			status = this wait()
+		else {
+			timer := CpuTimer new() . start()
+			milliseconds := time toMilliseconds()
+			while (timer stop() < milliseconds && !status) {
+				status = (this _state != _PromiseState Unfinished)
+				if (!status)
+					Time sleepMilli(1)
+			}
+			timer free()
 		}
-		timer free()
 		status
 	}
 	cancel: func -> Bool {
@@ -105,8 +109,7 @@ _TaskPromise: class extends Promise {
 		this _task free()
 		super()
 	}
-	wait: override func -> Bool { this _task wait() }
-	wait: override func ~timeout (time: TimeSpan) -> Bool { this _task wait(time) }
+	wait: override func (time: TimeSpan) -> Bool { this _task wait(time) }
 	cancel: override func -> Bool {
 		//TODO: Interrupt executing thread and have it move on to the next task in queue
 		this _task cancel()
@@ -120,8 +123,7 @@ _TaskFuture: class <T> extends Future<T> {
 		this _task free()
 		super()
 	}
-	wait: override func -> Bool { this _task wait() }
-	wait: override func ~timeout (time: TimeSpan) -> Bool { this _task wait(time) }
+	wait: override func (time: TimeSpan) -> Bool { this _task wait(time) }
 	getResult: override func (defaultValue: T) -> T {
 		result := defaultValue
 		if (this _task _state == _PromiseState Finished)
