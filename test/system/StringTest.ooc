@@ -66,15 +66,20 @@ StringTest: class extends Fixture {
 			This cloneTest("0123456789ABCDEF")
 		})
 		this add("times, append, prepend", func {
-			string := "123"
+			string := "456"
 			times := string times(3)
-			expect(times, is equal to("123123123"))
-			times free()
+			expect(times, is equal to("456456456"))
 
-			prepend := string prepend("0")
-			append := prepend append("45")
-			expect(append, is equal to("012345"))
-			(prepend, append) free()
+			first := string prepend("123")
+			expect(first, is equal to("123456"))
+			second := first append("789")
+			expect(second, is equal to("123456789"))
+			third := second prepend("abc")
+			expect(third, is equal to("abc123456789"))
+			fourth := third append("def")
+			expect(fourth, is equal to("abc123456789def"))
+
+			(times, first, second, third, fourth) free()
 		})
 		this add("empty", func {
 			empty := ""
