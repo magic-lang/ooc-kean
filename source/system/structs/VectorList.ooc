@@ -52,9 +52,9 @@ VectorList: class <T> extends List<T>{
 		result
 	}
 	removeAt: override func (index: Int) { this removeRange(index, index + 1) }
-	removeRange: func (start, stop: Int) {
-		count := stop - start
-		this _vector copy(stop, start)
+	removeRange: func (start, end: Int) {
+		count := end - start
+		this _vector copy(end, start)
 		this _count -= count
 	}
 	clear: override func {
