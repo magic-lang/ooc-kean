@@ -25,7 +25,8 @@ _Argument: class {
 	init: func ~parametersNoShort (=_longIdentifier, =_parameters, =_listAction)
 	init: func ~default (=_textAction)
 	free: override func {
-		this _longIdentifier free()
+		if (this _longIdentifier != null)
+			this _longIdentifier free()
 		if (this _action != null)
 			this _action free()
 		if (this _textAction != null)
@@ -78,9 +79,9 @@ ArgumentParser: class {
 			if (current startsWith("--"))
 				arguments add(current substring(2))
 			else if (current startsWith("-")) {
-				current = current substring(1)
+				other := current substring(1, true)
 				for (j in 0 .. current size)
-					arguments add(current substring(j, 1))
+					arguments add(current[j] as String)
 			}
 			else
 				this _defaultArgument _textAction call(current)
@@ -99,8 +100,6 @@ ArgumentParser: class {
 				}
 			}
 		}
-		for (i in 0 .. input count)
-			input[i] free()
 		(parameters, arguments) free()
 	}
 	_findArgument: func (identifier: String) -> _Argument {
