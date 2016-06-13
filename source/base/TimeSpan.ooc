@@ -109,7 +109,7 @@ TimeSpan: cover {
 	hours: static func (count: Double) -> This { This new(DateTime ticksPerHour * count) }
 	days: static func (count: Double) -> This { This new(DateTime ticksPerDay * count) }
 	weeks: static func (count: Double) -> This { This new(DateTime ticksPerWeek * count) }
-	fromNanoseconds: static func (nanoseconds: Long) -> This { This new(nanoseconds / DateTime nanosecondsPerTick) }
+	nanoseconds: static func (count: Long) -> This { This new(count / DateTime nanosecondsPerTick) }
 }
 
 operator + (left: Int, right: TimeSpan) -> TimeSpan { right + left }
