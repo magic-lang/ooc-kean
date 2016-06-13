@@ -225,7 +225,7 @@ DateTime: cover {
 	dateIsValid: static func (year, month, day: Int) -> Bool {
 		year >= 1 && month in(1 .. 13) && day in(1 .. This daysInMonth(year, month) + 1)
 	}
-	fromNanoseconds: static func (nanoseconds: ULong) -> This {
+	nanoseconds: static func (nanoseconds: ULong) -> This {
 		This new(nanoseconds / This nanosecondsPerTick)
 	}
 }
