@@ -41,13 +41,13 @@ String: class {
 	clone: func -> This { This new(this _buffer clone()) }
 	substring: func ~tillEnd (start: Int, freeOriginal := false) -> This { this substring(start, this size, freeOriginal) }
 	substring: func (start, end: Int, freeOriginal := false) -> This {
-		result := (this _buffer clone()) . substring(start, end)
+		result := this _buffer clone() . substring(start, end)
 		if (freeOriginal)
 			this free()
 		result toString()
 	}
 	times: func (count: Int, freeOriginal := false) -> This {
-		result := (this _buffer clone(this size * count)) . times(count)
+		result := this _buffer clone(this size * count) . times(count)
 		if (freeOriginal)
 			this free()
 		result toString()
@@ -55,7 +55,7 @@ String: class {
 	append: func ~str (other: This, freeOriginal := false) -> This {
 		result := this
 		if (other) {
-			newBuffer := (this _buffer clone(this size + other size)) . append(other _buffer)
+			newBuffer := this _buffer clone(this size + other size) . append(other _buffer)
 			result = newBuffer toString()
 			if (freeOriginal)
 				this free()
@@ -63,13 +63,13 @@ String: class {
 		result
 	}
 	append: func ~char (other: Char, freeOriginal := false) -> This {
-		result := (this _buffer clone(this size + 1)) . append(other)
+		result := this _buffer clone(this size + 1) . append(other)
 		if (freeOriginal)
 			this free()
 		result toString()
 	}
 	append: func ~cStr (other: CString, freeOriginal := false) -> This {
-		result := (this _buffer clone(this size + other length())) . append(other, other length())
+		result := this _buffer clone(this size + other length()) . append(other, other length())
 		if (freeOriginal)
 			this free()
 		result toString()
@@ -77,7 +77,7 @@ String: class {
 	prepend: func ~str (other: This, freeOriginal := false) -> This {
 		result := this
 		if (other) {
-			newBuffer := (this _buffer clone()) . prepend(other _buffer)
+			newBuffer := this _buffer clone() . prepend(other _buffer)
 			result = newBuffer toString()
 			if (freeOriginal)
 				this free()
@@ -85,7 +85,7 @@ String: class {
 		result
 	}
 	prepend: func ~char (other: Char, freeOriginal := false) -> This {
-		result := (this _buffer clone()) . prepend(other)
+		result := this _buffer clone() . prepend(other)
 		if (freeOriginal)
 			this free()
 		result toString()
@@ -98,31 +98,31 @@ String: class {
 	find: func (what: This, offset: Int = 0, searchCaseSensitive := true) -> Int { this _buffer find(what _buffer, offset, searchCaseSensitive) }
 	findAll: func (what: This, searchCaseSensitive := true) -> VectorList <Int> { this _buffer findAll(what _buffer, searchCaseSensitive) }
 	replaceAll: func ~str (what, with: This, searchCaseSensitive := true, freeOriginal := false) -> This {
-		result := (this _buffer clone()) . replaceAll(what _buffer, with _buffer, searchCaseSensitive)
+		result := this _buffer clone() . replaceAll(what _buffer, with _buffer, searchCaseSensitive)
 		if (freeOriginal)
 			this free()
 		result toString()
 	}
 	replaceAll: func ~char (what, with: Char, freeOriginal := false) -> This {
-		result := (this _buffer clone()) . replaceAll~char(what, with)
+		result := this _buffer clone() . replaceAll~char(what, with)
 		if (freeOriginal)
 			this free()
 		result toString()
 	}
 	map: func (f: Func (Char) -> Char, freeOriginal := false) -> This {
-		result := (this _buffer clone()) . map(f)
+		result := this _buffer clone() . map(f)
 		if (freeOriginal)
 			this free()
 		result toString()
 	}
 	toLower: func (freeOriginal := false) -> This {
-		result := (this _buffer clone()) . toLower()
+		result := this _buffer clone() . toLower()
 		if (freeOriginal)
 			this free()
 		result toString()
 	}
 	toUpper: func (freeOriginal := false) -> This {
-		result := (this _buffer clone()) . toUpper()
+		result := this _buffer clone() . toUpper()
 		if (freeOriginal)
 			this free()
 		result toString()
