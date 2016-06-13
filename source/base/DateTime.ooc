@@ -125,6 +125,7 @@ DateTime: cover {
 		else
 			Order Equal
 	}
+	toNanoseconds: func -> ULong { this _ticks * This nanosecondsPerTick }
 
 	operator - (other: This) -> TimeSpan { TimeSpan new(this ticks as Long - other ticks as Long) }
 	operator == (other: This) -> Bool { this compareTo(other) == Order Equal }
