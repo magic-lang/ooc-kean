@@ -8,6 +8,8 @@
 
 StringBuilder: class {
 	_items: VectorList<String>
+	count ::= this _items count
+
 	init: func (capacity := 32) {
 		this _items = VectorList<String> new(capacity, false)
 	}
@@ -15,11 +17,17 @@ StringBuilder: class {
 		this _items free()
 		super()
 	}
-	add: func (item: String) {
+	add: func ~string (item: String) {
 		this _items add(item)
 	}
-	insert: func (index: Int, item: String) {
+	add: func ~char (item: Char) {
+		this _items add(item as String)
+	}
+	insert: func ~string (index: Int, item: String) {
 		this _items insert(index, item)
+	}
+	insert: func ~char (index: Int, item: Char) {
+		this _items insert(index, item as String)
 	}
 	join: func ~char (separator: Char) -> String {
 		stringSeparator := separator toString()
@@ -35,4 +43,7 @@ StringBuilder: class {
 			result = result & (separator + this _items[i])
 		result
 	}
+	toString: func -> String { this join("") }
+	operator [] (index: Int) -> String { this _items[index] }
+	operator []= (index: Int, item: String) { this _items[index] = item }
 }
