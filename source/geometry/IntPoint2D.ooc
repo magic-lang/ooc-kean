@@ -8,6 +8,7 @@
 
 import IntVector2D
 import FloatPoint2D
+import FloatVector2D
 use base
 use math
 
@@ -22,7 +23,9 @@ IntPoint2D: cover {
 	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y)) }
 	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
+	toIntVector2D: func -> IntVector2D { IntVector2D new(this x, this y) }
 	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x as Float, this y as Float) }
+	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x as Float, this y as Float) }
 	toString: func -> String { (this x toString() >> ", ") & this y toString() }
 
 	operator - -> This { This new(-this x, -this y) }

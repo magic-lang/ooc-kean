@@ -6,10 +6,11 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use math
-import FloatPoint2D
+import IntPoint2D
 import IntVector2D
+import FloatPoint2D
 use base
+use math
 
 FloatVector2D: cover {
 	x, y: Float
@@ -43,6 +44,7 @@ FloatVector2D: cover {
 	maximum: func ~Float (floor: Float) -> This { this maximum(This new(floor)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
 	limitLength: func (maximum: Float) -> This { this norm > maximum ? this normalized * maximum : this }
+	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x as Int, this y as Int) }
 	toIntVector2D: func -> IntVector2D { IntVector2D new(this x as Int, this y as Int) }
 	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x, this y) }
 	toString: func -> String { (this x toString() >> ", ") & this y toString() }

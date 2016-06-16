@@ -6,10 +6,11 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use math
-import FloatVector2D
 import IntPoint2D
+import IntVector2D
+import FloatVector2D
 use base
+use math
 
 FloatPoint2D: cover {
 	x, y: Float
@@ -40,6 +41,7 @@ FloatPoint2D: cover {
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
 	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
 	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x as Int, this y as Int) }
+	toIntVector2D: func -> IntVector2D { IntVector2D new(this x as Int, this y as Int) }
 	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x, this y) }
 	toString: func -> String { (this x toString() >> ", ") & this y toString() }
 
