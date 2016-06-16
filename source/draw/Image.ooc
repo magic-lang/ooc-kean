@@ -68,8 +68,7 @@ Image: abstract class {
 		x >= 0 && x < this size x && y >= 0 && y < this size y
 	}
 	// Writes white text on the existing image
-	write: virtual func (message: Text, fontAtlas: This, localOrigin: IntPoint2D) {
-		takenMessage := message take()
+	write: virtual func (message: String, fontAtlas: This, localOrigin: IntPoint2D) {
 		skippedRows := 2
 		visibleRows := 6
 		columns := 16
@@ -77,8 +76,8 @@ Image: abstract class {
 		viewport := IntBox2D new(localOrigin, fontSize)
 		targetOffset := IntPoint2D new(0, 0)
 		characterDrawState := DrawState new(this) setInputImage(fontAtlas) setBlendMode(BlendMode White)
-		for (i in 0 .. takenMessage count) {
-			charCode := takenMessage[i] as Int
+		for (i in 0 .. message size) {
+			charCode := message[i] as Int
 			sourceX := charCode % columns
 			sourceY := (charCode / columns) - skippedRows
 			source := FloatBox2D new((sourceX as Float) / columns, (sourceY as Float) / visibleRows, 1.0f / columns, 1.0f / visibleRows)
@@ -90,6 +89,5 @@ Image: abstract class {
 				targetOffset y += 1 // Line feed
 			}
 		}
-		message free(Owner Receiver)
 	}
 }

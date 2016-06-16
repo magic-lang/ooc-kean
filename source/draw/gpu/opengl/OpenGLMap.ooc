@@ -18,40 +18,27 @@ version(!gpuOff) {
 OpenGLMap: class extends Map {
 	_vertexSource: String
 	_fragmentSource: String
-	_program: GLShaderProgram[]
-	_currentProgram: GLShaderProgram { get {
-		index := this _context getCurrentIndex()
-		result := this _program[index]
-		if (result == null) {
-			result = this _context _backend createShaderProgram(this _vertexSource, this _fragmentSource)
-			this _program[index] = result
-		}
-		result
-	}}
+	_program: GLShaderProgram = null
 	_context: OpenGLContext
 	init: func (vertexSource: String, fragmentSource: String, context: OpenGLContext) {
 		super()
 		this _vertexSource = vertexSource
 		this _fragmentSource = fragmentSource
 		this _context = context
-		this _program = GLShaderProgram[context getMaxContexts()] new()
+		this _program = this _context _backend createShaderProgram(this _vertexSource, this _fragmentSource)
 		if (vertexSource == null || fragmentSource == null)
 			Debug error("Vertex or fragment shader source not set")
 	}
 	init: func ~defaultVertex (fragmentSource: String, context: OpenGLContext) { this init(slurp("shaders/default.vert"), fragmentSource, context) }
 	free: override func {
-		for (i in 0 .. this _context getMaxContexts()) {
-			if (this _program[i] != null)
-				this _program[i] free()
-		}
 		this _program free()
 		super()
 	}
 	useProgram: override func (forbiddenInput: Pointer, positionTransform, textureTransform: FloatTransform3D) {
-		this _currentProgram useProgram()
+		this _program useProgram()
 		textureCount := 0
 		action := func (key: String, value: Object) {
-			program := this _currentProgram
+			program := this _program
 			if (value instanceOf(Cell)) {
 				cell := value as Cell
 				match (cell T) {

@@ -163,17 +163,13 @@ CharBuffer: class {
 	prepend: func ~pointer (other: Char*, otherLength: Int) {
 		if (otherLength < 0)
 			raise("Negative length passed: %d" format(otherLength))
-		if (this _rshift() < otherLength) {
-			newthis := This new(this size + otherLength)
-			memcpy(newthis data, other, otherLength)
-			memcpy(newthis data + otherLength, this data, this size)
-			newthis setLength(this size + otherLength)
-			this setBuffer(newthis)
-		} else {
-			// seems we have enough room on the left
-			this shiftLeft(otherLength)
-			memcpy(this data , other, otherLength)
-		}
+		newData: Char* = calloc(Char size, this length() + otherLength + 1)
+		memcpy(newData + otherLength, this data, this size)
+		memcpy(newData, other, otherLength)
+		memfree(this data)
+		this data = newData
+		this mallocAddr = newData
+		this setLength(this size + otherLength)
 	}
 	prepend: func ~char (other: Char) { this prepend(other&, 1) }
 	empty: func -> Bool { this size == 0 }

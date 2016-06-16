@@ -83,8 +83,6 @@ OpenGLContext: class extends GpuContext {
 		(this _pointsShader, this _renderer, this _recycleBin, this _backend) free()
 		super()
 	}
-	getMaxContexts: func -> Int { 1 }
-	getCurrentIndex: func -> Int { 0 }
 	drawQuad: func { this _renderer drawQuad() }
 	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen: Pen) {
 		positions := pointList pointer as Float*

@@ -21,6 +21,9 @@ StringBuilderTest: class extends Fixture {
 			resultNone := builder join("")
 			expect(resultNone == "1234567890")
 
+			resultNone2 := builder toString()
+			expect(resultNone == resultNone2)
+
 			resultChar := builder join('x')
 			expect(resultChar == "12x34x56x78x90")
 
@@ -28,7 +31,22 @@ StringBuilderTest: class extends Fixture {
 			resultLonger := builder join("<")
 			expect(resultLonger == "12<34<56<78<90<1234")
 
-			(resultDashes, resultNone, resultChar, resultLonger, builder) free()
+			(resultDashes, resultNone, resultNone2, resultChar, resultLonger, builder) free()
+		})
+		this add("operators", func {
+			builder := StringBuilder new()
+			builder add("12") . add("34") . add("56") . add("78") . add("90")
+
+			expect(builder[1] == "34")
+			builder[1] = "45"
+			expect(builder[1] == "45")
+
+			for (i in 1 .. 4)
+				builder[i] = "Q"
+
+			result := builder toString()
+			expect(result == "12QQQ90")
+			(result, builder) free()
 		})
 	}
 }

@@ -11,6 +11,22 @@ use unit
 StringTest: class extends Fixture {
 	init: func {
 		super("String")
+		this add("literal", func {
+			// The & operand tries to free the literals but if the lock works then they should resist the attempt
+			result: String
+			for (i in 1 .. 100) {
+				result = "ab" & "cd"
+				expect(result, is equal to("abcd"))
+				result free()
+			}
+			ab := "ab"
+			cd := "cd"
+			for (i in 1 .. 100) {
+				result = ab & cd
+				expect(result, is equal to("abcd"))
+				result free()
+			}
+		})
 		this add("length", func {
 			expect("" length(), is equal to(0))
 			expect("y" length(), is equal to(1))
@@ -50,15 +66,20 @@ StringTest: class extends Fixture {
 			This cloneTest("0123456789ABCDEF")
 		})
 		this add("times, append, prepend", func {
-			string := "123"
+			string := "456"
 			times := string times(3)
-			expect(times, is equal to("123123123"))
-			times free()
+			expect(times, is equal to("456456456"))
 
-			prepend := string prepend("0")
-			append := prepend append("45")
-			expect(append, is equal to("012345"))
-			(prepend, append) free()
+			first := string prepend("123")
+			expect(first, is equal to("123456"))
+			second := first append("789")
+			expect(second, is equal to("123456789"))
+			third := second prepend("abc")
+			expect(third, is equal to("abc123456789"))
+			fourth := third append("def")
+			expect(fourth, is equal to("abc123456789def"))
+
+			(times, first, second, third, fourth) free()
 		})
 		this add("empty", func {
 			empty := ""
