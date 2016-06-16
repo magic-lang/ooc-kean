@@ -20,7 +20,7 @@ Application: class {
 			this _arguments add(String new(argv[i]))
 	}
 	free: override func {
-		// this _arguments free()
+		this _arguments free()
 		this _name free()
 		super()
 	}

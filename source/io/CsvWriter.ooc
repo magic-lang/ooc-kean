@@ -25,9 +25,9 @@ CsvWriter: class {
 	}
 	write: func (row: VectorList<String>) {
 		for (i in 0 .. row count) {
-			value := StringBuilder new() . add(row[i])
+			value := StringBuilder new() . add(row[i] clone())
 			for (k in 0 .. row[i] length())
-				if (row[i][k] whitespace()) { // TODO Looks strange
+				if (row[i][k] whitespace()) {
 					value insert(0, "\"")
 					value add("\"")
 					break
@@ -36,8 +36,8 @@ CsvWriter: class {
 				value add(this _delimiter)
 			string := value toString()
 			this _fileWriter file write(string)
-			// for (i in 0 .. value count) // TODO add freeContent() method to StringBuilder?
-			// 	value[i] free()
+			for (i in 0 .. value count)
+				value[i] free()
 			(string, value) free()
 		}
 		this _fileWriter write("\r\n")

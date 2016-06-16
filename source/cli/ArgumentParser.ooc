@@ -78,11 +78,9 @@ ArgumentParser: class {
 			current := input[i]
 			if (current startsWith("--"))
 				arguments add(current substring(2))
-			else if (current startsWith("-")) {
-				other := current substring(1, true)
-				for (j in 0 .. current size)
+			else if (current startsWith("-"))
+				for (j in 1 .. current size)
 					arguments add(current[j] as String)
-			}
 			else
 				this _defaultArgument _textAction call(current)
 			for (k in 0 .. arguments count) {
@@ -104,11 +102,15 @@ ArgumentParser: class {
 	}
 	_findArgument: func (identifier: String) -> _Argument {
 		result: _Argument
-		for (i in 0 .. this _arguments count)
-			if (identifier == this _arguments[i] _longIdentifier || identifier == (this _arguments[i] _shortIdentifier as String)) {
+		for (i in 0 .. this _arguments count) {
+			shortIdentifierAsString := this _arguments[i] _shortIdentifier as String
+			if (identifier == this _arguments[i] _longIdentifier || identifier == shortIdentifierAsString) {
 				result = this _arguments[i]
+				shortIdentifierAsString free()
 				break
 			}
+			shortIdentifierAsString free()
+		}
 		result
 	}
 }
