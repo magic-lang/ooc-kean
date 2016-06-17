@@ -66,17 +66,32 @@ RasterImage: abstract class extends Image {
 		} else {
 			originalPen := pen
 			originalAlpha := originalPen alphaAsFloat
-			slope := (end y - start y) as Float / (end x - start x) as Float
-			startX := start x minimum(end x)
-			endX := start x maximum(end x)
-			for (x in startX .. endX + 1) {
-				idealY := slope * (x - start x) + start y
-				floor := idealY floor()
-				weight := (idealY - floor) abs()
-				pen setAlpha(originalAlpha * (1.0f - weight))
-				this _drawPoint(x, floor, pen)
-				pen setAlpha(originalAlpha * weight)
-				this _drawPoint(x, floor + 1, pen)
+			if (Int abs(end x - start x) < Int abs(end y - start y)) {
+				slope := (end x - start x) as Float / (end y - start y) as Float
+				startY := start y minimum(end y)
+				endY := start y maximum(end y)
+				for (y in startY .. endY + 1) {
+					idealX := slope * (y - start y) + start x
+					floor := idealX floor()
+					weight := (idealX - floor) abs()
+					pen setAlpha(originalAlpha * (1.0f - weight))
+					this _drawPoint(floor, y, pen)
+					pen setAlpha(originalAlpha * weight)
+					this _drawPoint(floor + 1, y, pen)
+				}
+			} else {
+				slope := (end y - start y) as Float / (end x - start x) as Float
+				startX := start x minimum(end x)
+				endX := start x maximum(end x)
+				for (x in startX .. endX + 1) {
+					idealY := slope * (x - start x) + start y
+					floor := idealY floor()
+					weight := (idealY - floor) abs()
+					pen setAlpha(originalAlpha * (1.0f - weight))
+					this _drawPoint(x, floor, pen)
+					pen setAlpha(originalAlpha * weight)
+					this _drawPoint(x, floor + 1, pen)
+				}
 			}
 		}
 	}
