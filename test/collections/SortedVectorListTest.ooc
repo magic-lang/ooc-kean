@@ -16,8 +16,8 @@ SortedVectorListClassTester: class {
 	init: func (=_value)
 }
 
-sortedVectorListIntComparator := func (a, b: Int*) -> Bool { a@ > b@ }
-sortedVectorListClassComparator := func (a, b: SortedVectorListClassTester*) -> Bool { a@ value > b@ value }
+sortedVectorListIntComparator := func (a, b: Int*) -> Bool { a@ < b@ }
+sortedVectorListClassComparator := func (a, b: SortedVectorListClassTester*) -> Bool { a@ value < b@ value }
 
 SortedVectorListTest: class extends Fixture {
 	init: func {
