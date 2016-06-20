@@ -16,11 +16,16 @@ import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLRgba, Ope
 
 version(!gpuOff) {
 AndroidContext: class extends OpenGLContext {
-	_unpackRgbaToMonochrome := OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToMonochrome.frag"), this)
-	_unpackRgbaToUv := OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToUv.frag"), this)
-	_unpackRgbaToUvPadded := OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToUvPadded.frag"), this)
+	_unpackRgbaToMonochrome: OpenGLMap
+	_unpackRgbaToUv: OpenGLMap
+	_unpackRgbaToUvPadded: OpenGLMap
 	_packers := RecycleBin<EGLRgba> new(32, func (image: EGLRgba) { image free() })
-	init: func (other: This = null) { super(other) }
+	init: func (other: This = null) {
+		super(other)
+		this _unpackRgbaToMonochrome = OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToMonochrome.frag"), this)
+		this _unpackRgbaToUv = OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToUv.frag"), this)
+		this _unpackRgbaToUvPadded = OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToUvPadded.frag"), this)
+	}
 	free: override func {
 		this _backend makeCurrent()
 		(this _unpackRgbaToMonochrome, this _unpackRgbaToUv, this _unpackRgbaToUvPadded, this _packers) free()
