@@ -8,6 +8,7 @@
 
 import VectorQueue
 
+// Dequeues the buffer when maximum capacity is reached
 CircularQueue: class <T> extends Queue<T> {
 	_backend: VectorQueue<T>
 	_cleanupCallback: Func (T)

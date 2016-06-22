@@ -6,6 +6,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+// Resizes the buffer when full
+// Caller is responsible for dequeueing
 VectorQueue: class <T> extends Queue<T> {
 	_backend: T*
 	_capacity := 0
