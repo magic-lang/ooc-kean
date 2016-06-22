@@ -21,6 +21,7 @@ TimeSpan: cover {
 	toHours: func -> Long { this ticks / DateTime ticksPerHour }
 	toDays: func -> Long { this ticks / DateTime ticksPerDay }
 	toWeeks: func -> Long { this ticks / DateTime ticksPerWeek }
+	inRange: func (start, end: This) -> Bool { this >= start && this <= end }
 
 	defaultFormat: static String = "%w weeks, %d days, %h hours, %m minutes, %s seconds, %z milliseconds"
 	// Supported formatting expressions:
