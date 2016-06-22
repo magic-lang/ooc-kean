@@ -131,6 +131,13 @@ TimeSpanTest: class extends Fixture {
 			expect(negativeString, is equal to("-(24 1440 86400 0 0 0)"))
 			(defaultString, dayString, Astring, Bstring, negativeString) free()
 		})
+		this add("inRange", func {
+			span := TimeSpan milliseconds(30)
+			expect(span inRange(TimeSpan milliseconds(1), TimeSpan milliseconds(25)), is false)
+			expect(span inRange(TimeSpan milliseconds(31), TimeSpan milliseconds(50)), is false)
+			expect(span inRange(TimeSpan milliseconds(29), TimeSpan milliseconds(30)), is true)
+			expect(span inRange(TimeSpan milliseconds(30), TimeSpan milliseconds(31)), is true)
+		})
 	}
 }
 
