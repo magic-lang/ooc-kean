@@ -11,7 +11,7 @@ import VectorQueue
 CircularQueue: class <T> extends Queue<T> {
 	_backend: VectorQueue<T>
 	_cleanupCallback: Func (T)
-	_maximumCapacity: Int
+	maximumCapacity: Int
 	count ::= this _backend count
 	capacity ::= this _backend capacity
 	init: func ~defaultCallback (capacity: Int) {
@@ -25,8 +25,8 @@ CircularQueue: class <T> extends Queue<T> {
 			callback = func (t: T)
 		this init(capacity, callback)
 	}
-	init: func (=_maximumCapacity, =_cleanupCallback) {
-		this _backend = VectorQueue<T> new(this _maximumCapacity)
+	init: func (=maximumCapacity, =_cleanupCallback) {
+		this _backend = VectorQueue<T> new(this maximumCapacity)
 	}
 	free: override func {
 		this clear()
@@ -40,7 +40,7 @@ CircularQueue: class <T> extends Queue<T> {
 		this _backend clear()
 	}
 	enqueue: override func (item: T) {
-		while (this count >= this _maximumCapacity)
+		while (this count >= this maximumCapacity)
 			this _cleanupCallback(this dequeue(null))
 		this _backend enqueue(item)
 	}
