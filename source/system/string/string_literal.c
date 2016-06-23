@@ -59,8 +59,10 @@ void string_literal_free(void* ptr) {
 void string_literal_free_all() {
 	if (_literals) {
 		for (size_t i=0; i<_literalsCount; ++i)
-			if (_literals[i])
+			if (_literals[i]) {
+				String__String__unlock(_literals[i]);
 				String__String_free(_literals[i]);
+			}
 		free(_literals);
 		_literalsCapacity = 0;
 		_literalsCount = 0;

@@ -55,10 +55,10 @@ IntVector3DTest: class extends Fixture {
 			expect(this vector0 z, is equal to(8))
 		})
 		this add("casting", func {
-			value := t"10, 20, 0"
-			(valueString, string) := (value toString(), this vector3 toString())
-			expect(string, is equal to(valueString))
-			(string, valueString) free()
+			value := "10, 20, 0"
+			string := this vector3 toString()
+			expect(string, is equal to(value))
+			string free()
 			expect(IntVector3D parse(value) x, is equal to(this vector3 x))
 			expect(IntVector3D parse(value) y, is equal to(this vector3 y))
 			expect(IntVector3D parse(value) z, is equal to(this vector3 z))
@@ -94,11 +94,6 @@ IntVector3DTest: class extends Fixture {
 			expect(this vector1 hasZeroVolume, is false)
 			expect(this vector1 volume, is equal to(-1248))
 			expect(empty volume, is equal to(0))
-		})
-		this add("toText", func {
-			text := IntVector3D new(10, 20, 30) toText() take()
-			expect(text, is equal to(t"10, 20, 30"))
-			text free()
 		})
 	}
 }

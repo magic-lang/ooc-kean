@@ -170,11 +170,6 @@ FloatTransform2DTest: class extends Fixture {
 			expect(translation x, is equal to(5.0f) within(tolerance))
 			expect(translation y, is equal to(7.0f) within(tolerance))
 		})
-		this add("toText", func {
-			text := FloatTransform2D new(3.0f, 1.0f, 2.0f, 1.0f, 5.0f, 7.0f) toText() take()
-			expect(text, is equal to(t"3.00, 1.00, 0.00\t2.00, 1.00, 0.00\t5.00, 7.00, 1.00"))
-			text free()
-		})
 		this add("setTranslation", func {
 			transform := this transform0 setTranslation(FloatVector2D new(-7.0f, 3.0f))
 			expect(transform a, is equal to(3.0f) within(tolerance))
@@ -270,18 +265,6 @@ FloatTransform2DTest: class extends Fixture {
 			expect(transform g, is equal to(5.0f) within(tolerance))
 			expect(transform h, is equal to(-7.0f) within(tolerance))
 			expect(transform i, is equal to(1.0f) within(tolerance))
-		})
-		this add("toIntTransform2D", func {
-			transform := this transform0 toIntTransform2D()
-			expect(transform a, is equal to(3))
-			expect(transform b, is equal to(1))
-			expect(transform c, is equal to(0))
-			expect(transform d, is equal to(2))
-			expect(transform e, is equal to(1))
-			expect(transform f, is equal to(0))
-			expect(transform g, is equal to(5))
-			expect(transform h, is equal to(7))
-			expect(transform i, is equal to(1))
 		})
 		this add("toString", func {
 			string := FloatTransform2D new(3.123456789f, 1.123456789f, 0.12365f, -11.52416f, 0.0f, 1.9) toString()

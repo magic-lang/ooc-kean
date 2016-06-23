@@ -396,11 +396,6 @@ QuaternionTest: class extends Fixture {
 			expect(y, is equal to(quaternion rotationY) within(tolerance))
 			expect(z, is equal to(quaternion rotationZ) within(tolerance))
 		})
-		this add("toText", func {
-			text := Quaternion new(1.0f, 0.0f, 1.0f, 0.0f) toText() take()
-			expect(text, is equal to(t"Real: 1.00 Imaginary: 0.00 1.00 0.00"))
-			text free()
-		})
 	}
 	free: override func {
 		this quaternionList free()

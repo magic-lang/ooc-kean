@@ -41,7 +41,7 @@ Profiler: class {
 	logResults: static func (fileName := "profiling.txt") {
 		fileWriter := FileWriter new(fileName)
 		This _logResults(func (s: String) { fileWriter write(s) })
-		fileWriter close() . free()
+		fileWriter free()
 	}
 	resetAll: static func { This _profilers apply(func (profiler: This) { profiler reset() }) }
 	free: static func ~all {

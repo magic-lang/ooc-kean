@@ -36,11 +36,11 @@ validateEnd: func (location: String) {
 }
 validate: func (message: String) {
 	glError := glGetError()
-	if (glError != GL_NO_ERROR) {
-		errorMessage := "OpenGL error " + message + ": " + getErrorMessage(glError)
-		Debug print(errorMessage)
-		raise(errorMessage)
-	}
+	if (glError != GL_NO_ERROR)
+		Debug error("OpenGL error " + message + ": " + getErrorMessage(glError))
+	eglError := eglGetError()
+	if (eglError != EGL_SUCCESS)
+		Debug error("EGL error " + message + ": " + getEglErrorMessage(eglError))
 }
 printGlError: func {
 	Debug print("OpenGL error: " + getErrorMessage(glGetError()))

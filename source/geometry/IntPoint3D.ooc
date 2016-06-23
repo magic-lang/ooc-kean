@@ -6,9 +6,10 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import IntVector3D
 import IntPoint2D
+import IntVector3D
 import FloatPoint3D
+import FloatVector3D
 use base
 
 IntPoint3D: cover {
@@ -21,9 +22,10 @@ IntPoint3D: cover {
 	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y), this z minimum(ceiling z)) }
 	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y), this z maximum(floor z)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
+	toIntVector3D: func -> IntVector3D { IntVector3D new(this x, this y, this z) }
 	toFloatPoint3D: func -> FloatPoint3D { FloatPoint3D new(this x as Float, this y as Float, this z as Float) }
+	toFloatVector3D: func -> FloatVector3D { FloatVector3D new(this x as Float, this y as Float, this z as Float) }
 	toString: func -> String { (this x toString() >> ", ") & (this y toString() >> ", ") & this z toString() }
-	toText: func -> Text { this x toText() + t", " + this y toText() + t", " + this z toText() }
 
 	operator - -> This { This new(-this x, -this y, -this z) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
@@ -43,7 +45,7 @@ IntPoint3D: cover {
 	operator * (other: Int) -> This { This new(this x * other, this y * other, this z * other) }
 	operator / (other: Int) -> This { This new(this x / other, this y / other, this z / other) }
 
-	parse: static func (input: Text) -> This {
+	parse: static func (input: String) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toInt(), parts[1] toInt(), parts[2] toInt())
 		parts free()
@@ -56,5 +58,5 @@ operator * (left: Float, right: IntPoint3D) -> IntPoint3D { IntPoint3D new(left 
 operator / (left: Float, right: IntPoint3D) -> IntPoint3D { IntPoint3D new(left / right x, left / right y, left / right z) }
 
 extend Cell<IntPoint3D> {
-	toText: func ~intpoint3d -> Text { (this val as IntPoint3D) toText() }
+	toString: func ~intpoint3d -> String { (this val as IntPoint3D) toString() }
 }

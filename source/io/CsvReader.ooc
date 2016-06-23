@@ -24,7 +24,7 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 	}
 	free: override func {
 		if (this _fileReader != null)
-			this _fileReader close() . free()
+			this _fileReader free()
 		super()
 	}
 	remove: override func -> Bool { false }

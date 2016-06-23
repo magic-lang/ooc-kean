@@ -8,6 +8,7 @@
 
 import IntVector2D
 import FloatPoint2D
+import FloatVector2D
 use base
 use math
 
@@ -22,9 +23,10 @@ IntPoint2D: cover {
 	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y)) }
 	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
+	toIntVector2D: func -> IntVector2D { IntVector2D new(this x, this y) }
 	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x as Float, this y as Float) }
+	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x as Float, this y as Float) }
 	toString: func -> String { (this x toString() >> ", ") & this y toString() }
-	toText: func -> Text { this x toText() + t", " + this y toText() }
 
 	operator - -> This { This new(-this x, -this y) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
@@ -44,7 +46,7 @@ IntPoint2D: cover {
 	operator * (other: Int) -> This { This new(this x * other, this y * other) }
 	operator / (other: Int) -> This { This new(this x / other, this y / other) }
 
-	parse: static func (input: Text) -> This {
+	parse: static func (input: String) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toInt(), parts[1] toInt())
 		parts free()
@@ -57,5 +59,5 @@ operator * (left: Float, right: IntPoint2D) -> IntPoint2D { IntPoint2D new(left 
 operator / (left: Float, right: IntPoint2D) -> IntPoint2D { IntPoint2D new(left / right x, left / right y) }
 
 extend Cell<IntPoint2D> {
-	toText: func ~intpoint2d -> Text { (this val as IntPoint2D) toText() }
+	toString: func ~intpoint2d -> String { (this val as IntPoint2D) toString() }
 }

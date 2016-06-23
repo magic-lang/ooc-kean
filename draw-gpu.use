@@ -7,7 +7,6 @@ Requires: unit
 Requires: draw
 Imports: GpuImage
 Imports: GpuYuv420Semiplanar
-Imports: GpuCanvas
 Imports: GpuContext
 version (linux || apple || android) {
 	Libs: -lEGL

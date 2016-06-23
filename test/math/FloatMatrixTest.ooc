@@ -158,11 +158,11 @@ FloatMatrixTest: class extends Fixture {
 			m := this createMatrix(4, 4, [1.f, -1.f, 2.f, -3.f, 2.f, -3.f, -3.f, 1.f, -1.f, 2.f, 3.f, 1.f, 1.f, 2.f, -1.f, 2.f])
 			this checkAllElements(m inverse(), [23.f / 68.f, 13.f / 68.f, 6.f / 68.f, 25.f / 68.f, 3.f / 68.f, -19.f / 68.f, -14.f / 68.f, 21.f / 68.f, 9.f / 68.f, 11.f / 68.f, 26.f / 68.f, -5.f / 68.f, -10.f / 68.f, 18.f / 68.f, 24.f / 68.f, -2.f / 68.f])
 		})
-		this add("toText", func {
+		this add("toString", func {
 			matrix := FloatMatrix identity(3)
-			text := matrix toText() take()
-			expect(text, is equal to(t"1.00, 0.00, 0.00; 0.00, 1.00, 0.00; 0.00, 0.00, 1.00; "))
-			(text, matrix) free()
+			text := matrix toString()
+			expect(text, is equal to("1.00, 0.00, 0.00; 0.00, 1.00, 0.00; 0.00, 0.00, 1.00; "))
+			text free()
 		})
 		this add("equality", func {
 			m := this createMatrix(3, 3, [1.f, 5.f, 3.f, 7.f, 6.f, 8.f, 9.f, 2.f, 4.f]) take()

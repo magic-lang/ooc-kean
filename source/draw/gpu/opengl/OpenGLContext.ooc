@@ -12,7 +12,7 @@ use draw
 use draw-gpu
 use collections
 use concurrent
-import OpenGLPacked, OpenGLMonochrome, OpenGLRgb, OpenGLRgba, OpenGLUv, OpenGLMesh, OpenGLCanvas, OpenGLPromise
+import OpenGLPacked, OpenGLMonochrome, OpenGLRgb, OpenGLRgba, OpenGLUv, OpenGLMesh, OpenGLPromise, GraphicBufferYuv420Semiplanar, GraphicBuffer
 import OpenGLMap
 import backend/[GLContext, GLRenderer]
 
@@ -24,8 +24,7 @@ _FenceToRasterFuture: class extends ToRasterFuture {
 		this _promise free()
 		super()
 	}
-	wait: override func -> Bool { this _promise wait() }
-	wait: override func ~timeout (time: TimeSpan) -> Bool { this _promise wait(time) }
+	wait: override func (time: TimeSpan) -> Bool { this _promise wait(time) }
 }
 
 OpenGLContext: class extends GpuContext {
@@ -36,6 +35,10 @@ OpenGLContext: class extends GpuContext {
 	_packUvPadded: OpenGLMap
 	_linesShader: OpenGLMap
 	_pointsShader: OpenGLMap
+	_monochromeToRgba: OpenGLMapTransform
+	_yuvSemiplanarToRgba: OpenGLMapTransform
+	_rgbaToYuva: OpenGLMapTransform
+	_rgbaToUvaa: OpenGLMapTransform
 	_renderer: GLRenderer
 	_recycleBin: RecycleBin<OpenGLPacked>
 	backend ::= this _backend
@@ -58,6 +61,10 @@ OpenGLContext: class extends GpuContext {
 		this _linesShader = OpenGLMapTransform new(slurp("shaders/color.frag"), this)
 		this _pointsShader = OpenGLMap new(slurp("shaders/points.vert"), slurp("shaders/color.frag"), this)
 		this _transformTextureMap = OpenGLMapTransform new(slurp("shaders/texture.frag"), this)
+		this _monochromeToRgba = OpenGLMapTransform new(slurp("shaders/monochromeToRgba.frag"), this)
+		this _yuvSemiplanarToRgba = OpenGLMapTransform new(slurp("shaders/yuvSemiplanarToRgba.frag"), this)
+		this _rgbaToYuva = OpenGLMapTransform new(slurp("shaders/rgbaToYuva.frag"), this)
+		this _rgbaToUvaa = OpenGLMapTransform new(slurp("shaders/rgbaToUvaa.frag"), this)
 		this _renderer = _backend createRenderer()
 	}
 	init: func ~shared (other: This = null) {
@@ -72,23 +79,22 @@ OpenGLContext: class extends GpuContext {
 			this _defaultFontGpu free()
 		this _backend makeCurrent()
 		(this _transformTextureMap, this _packMonochrome, this _packUv, this _packUvPadded, this _linesShader) free()
+		(this _monochromeToRgba, this _yuvSemiplanarToRgba, this _rgbaToYuva, this _rgbaToUvaa) free()
 		(this _pointsShader, this _renderer, this _recycleBin, this _backend) free()
 		super()
 	}
-	getMaxContexts: func -> Int { 1 }
-	getCurrentIndex: func -> Int { 0 }
 	drawQuad: func { this _renderer drawQuad() }
 	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen: Pen) {
 		positions := pointList pointer as Float*
 		this _linesShader add("color", pen color normalized)
-		this _linesShader use(null, projection, FloatTransform3D identity)
+		this _linesShader useProgram(null, projection, FloatTransform3D identity)
 		this _renderer drawLines(positions, pointList count, 2, pen width)
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen: Pen) {
 		positions := pointList pointer
 		this _pointsShader add("color", pen color normalized)
 		this _pointsShader add("pointSize", pen width)
-		this _pointsShader use(null, projection, FloatTransform3D identity)
+		this _pointsShader useProgram(null, projection, FloatTransform3D identity)
 		this _renderer drawPoints(positions, pointList count, 2)
 	}
 	recycle: virtual func (image: OpenGLPacked) {
@@ -186,5 +192,16 @@ OpenGLContext: class extends GpuContext {
 		OpenGLMesh new(vertices, textureCoordinates, this)
 	}
 	getDefaultFont: override func -> Image { this defaultFontGpu }
+	getYuvToRgba: override func -> Map { this _yuvSemiplanarToRgba }
+	getRgbaToY: override func -> Map { this _rgbaToYuva }
+	getRgbaToUv: override func -> Map { this _rgbaToUvaa }
+	toRaster: override func ~target (source: GpuImage, target: RasterImage) -> Promise {
+		if (target instanceOf(GraphicBufferYuv420Semiplanar))
+			target as GraphicBufferYuv420Semiplanar buffer lock(GraphicBufferUsage WriteOften)
+		result := super(source, target)
+		if (target instanceOf(GraphicBufferYuv420Semiplanar))
+			target as GraphicBufferYuv420Semiplanar buffer unlock()
+		result
+	}
 }
 }

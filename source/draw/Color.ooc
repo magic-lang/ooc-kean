@@ -23,7 +23,7 @@ ColorMonochrome: cover {
 	toRgb: func -> ColorRgb { this toYuv() toRgb() }
 	toRgba: func -> ColorRgba { this toYuv() toRgba() }
 	equals: func (other: This) -> Bool { this y == other y }
-	blend: func (factor: Float, other: This) -> This { This new((this y * (1 - factor) + (other y * factor)) as Byte) }
+	mix: static func (a, b: This, ratio: Float) -> This { This new(Float mix(a y, b y, ratio) as Byte) }
 	distance: func (other: This) -> Float { (this y - other y) as Float abs() }
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
@@ -46,7 +46,7 @@ ColorUv: cover {
 	toRgb: func -> ColorRgb { ColorConvert yuvToRgb(this toYuv()) }
 	toRgba: func -> ColorRgba { this toYuv() toRgb() toRgba() }
 	equals: func (other: This) -> Bool { this u == other u && this v == other v }
-	blend: func (factor: Float, other: This) -> This { This new((this u * (1 - factor) + (other u * factor)) as Byte, (this v * (1 - factor) + (other v * factor)) as Byte) }
+	mix: static func (a, b: This, ratio: Float) -> This { This new(Float mix(a u, b u, ratio) as Byte, Float mix(a v, b v, ratio) as Byte) }
 	distance: func (other: This) -> Float { ((this u - other u) as Float pow(2) + (this v - other v) as Float pow(2)) / 2.0f sqrt() }
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
@@ -69,8 +69,8 @@ ColorYuv: cover {
 	toRgb: func -> ColorRgb { ColorConvert yuvToRgb(this) }
 	toRgba: func -> ColorRgba { this toRgb() toRgba() }
 	equals: func (other: This) -> Bool { this y == other y && this u == other u && this v == other v }
-	blend: func (factor: Float, other: This) -> This {
-		This new((this y * (1 - factor) + other y * factor) as Byte, (this u * (1 - factor) + other u * factor) as Byte, (this v * (1 - factor) + other v * factor) as Byte)
+	mix: static func (a, b: This, ratio: Float) -> This {
+		This new(Float mix(a y, b y, ratio) as Byte, Float mix(a u, b u, ratio), Float mix(a v, b v, ratio) as Byte)
 	}
 	distance: func (other: This) -> Float {
 		((this y - other y) as Float pow(2) + (this u - other u) as Float pow(2) + (this v - other v) as Float pow(2)) / 3.0f sqrt()
@@ -98,7 +98,9 @@ ColorYuva: cover {
 	toRgb: func -> ColorRgb { this toYuv() toRgb() }
 	toRgba: func -> ColorRgba { ColorRgba new(this toRgb(), this a) }
 	equals: func (other: This) -> Bool { this y == other y && this u == other u && this v == other v && this a == other a }
-	blend: func (factor: Float, other: This) -> This { This new(this toYuv() blend(factor, other toYuv()), (this a * (1 - factor) + other a * factor) as Byte) }
+	mix: static func (a, b: This, ratio: Float) -> This {
+		This new(Float mix(a y, b y, ratio) as Byte, Float mix(a u, b u, ratio) as Byte, Float mix(a v, b v, ratio) as Byte, Float mix(a a, b a, ratio) as Byte)
+	}
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 }
@@ -120,8 +122,8 @@ ColorRgb: cover {
 	toYuva: func -> ColorYuva { ColorYuva new(this toYuv(), 255) }
 	toRgba: func -> ColorRgba { ColorRgba new(this, 255) }
 	equals: func (other: This) -> Bool { this r == other r && this g == other g && this b == other b }
-	blend: func (factor: Float, other: This) -> This {
-		This new((this r * (1 - factor) + other r * factor) as Byte, (this g * (1 - factor) + other g * factor) as Byte, (this b * (1 - factor) + other b * factor) as Byte)
+	mix: static func (a, b: This, ratio: Float) -> This {
+		This new(Float mix(a r, b r, ratio) as Byte, Float mix(a g, b g, ratio) as Byte, Float mix(a b, b b, ratio) as Byte)
 	}
 	distance: func (other: This) -> Float {
 		((this r - other r) as Float pow(2) + (this g - other g) as Float pow(2) + (this b - other b) as Float pow(2)) / 3.0f sqrt()
@@ -149,36 +151,37 @@ ColorRgba: cover {
 	toYuva: func -> ColorYuva { ColorYuva new(this toRgb() toYuv(), this a) }
 	toRgb: func -> ColorRgb { ColorRgb new(this r, this g, this b) }
 	equals: func (other: This) -> Bool { this r == other r && this g == other g && this b == other b && this a == other a }
-	blend: func (factor: Float, other: This) -> This { This new(this toRgb() blend(factor, other toRgb()), (this a * (1 - factor) + other a * factor) as Byte) }
+	mix: static func (a, b: This, ratio: Float) -> This {
+		This new(Float mix(a r, b r, ratio) as Byte, Float mix(a g, b g, ratio) as Byte, Float mix(a b, b b, ratio) as Byte, Float mix(a a, b a, ratio) as Byte)
+	}
 	distance: func (other: This) -> Float { (this toRgb() distance(other toRgb()) * 3.0f + (this a - other a) as Float pow(2)) / 4.0f sqrt() }
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 
-	fromText: static func (text: Text) -> This {
-		channels := text take() split(',')
+	fromString: static func (string: String) -> This {
+		channels := string split(',')
 		result: This
 		match (channels count) {
 			case 1 => // Y
-				luma := channels[0] take() toInt()
+				luma := channels[0] toInt()
 				result = This new(ColorConvert monochromeToRgb(ColorMonochrome new(luma)), 255)
 			case 2 => // YA
-				luma := channels[0] take() toInt()
-				alpha := channels[1] take() toInt()
+				luma := channels[0] toInt()
+				alpha := channels[1] toInt()
 				result = This new(ColorConvert monochromeToRgb(ColorMonochrome new(luma)), alpha)
 			case 3 => // RGB
-				red := channels[0] take() toInt()
-				green := channels[1] take() toInt()
-				blue := channels[2] take() toInt()
+				red := channels[0] toInt()
+				green := channels[1] toInt()
+				blue := channels[2] toInt()
 				result = This new(red, green, blue, 255)
 			case 4 => // RGBA
-				red := channels[0] take() toInt()
-				green := channels[1] take() toInt()
-				blue := channels[2] take() toInt()
-				alpha := channels[3] take() toInt()
+				red := channels[0] toInt()
+				green := channels[1] toInt()
+				blue := channels[2] toInt()
+				alpha := channels[3] toInt()
 				result = This new(red, green, blue, alpha)
 		}
 		channels free()
-		text free(Owner Receiver)
 		result
 	}
 }

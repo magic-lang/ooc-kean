@@ -25,6 +25,10 @@ PipeUnix: class extends Pipe {
 		this readFD = fds[0]
 		this writeFD = fds[1]
 	}
+	free: override func {
+		this close('r') . close('w')
+		super()
+	}
 	read: override func ~cstring (buf: CString, len: Int) -> Int {
 		howMuch := this readFD read(buf, len)
 		if (howMuch <= 0) {
@@ -43,10 +47,6 @@ PipeUnix: class extends Pipe {
 	close: override func (end: Char) -> Int {
 		fd := this _getFD(end)
 		fd == 0 ? 0 : fd close()
-	}
-	close: override func ~both {
-		this readFD close()
-		this writeFD close()
 	}
 	setNonBlocking: func (end: Char) {
 		fd := this _getFD(end)

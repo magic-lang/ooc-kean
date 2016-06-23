@@ -78,24 +78,31 @@ DateTime: cover {
 	//	%hh - hour
 	//	%mm - minute
 	//	%ss - second
-	//	%zzzz - millisecond
-	toText: func (format := This defaultFormat) -> Text {
-		result := format copy()
+	//	%zzz - millisecond
+	toString: func (format := This defaultFormat) -> String {
 		data := This _ticksToDateTimeHelper(this ticks)
-		result = result replaceAll(t"%yyyy", t"%d" format(data year))
-		result = result replaceAll(t"%yy", t"%02d" format(data year % 100))
-		result = result replaceAll(t"%MM", t"%02d" format(data month))
-		result = result replaceAll(t"%dd", t"%02d" format(data day))
-		result = result replaceAll(t"%M", t"%d" format(data month))
-		result = result replaceAll(t"%d", t"%d" format(data day))
-		result = result replaceAll(t"%hh", t"%02d" format(data hour))
-		result = result replaceAll(t"%mm", t"%02d" format(data minute))
-		result = result replaceAll(t"%ss", t"%02d" format(data second))
-		result = result replaceAll(t"%h", t"%d" format(data hour))
-		result = result replaceAll(t"%m", t"%d" format(data minute))
-		result = result replaceAll(t"%s", t"%d" format(data second))
-		result = result replaceAll(t"%zzz", t"%03d" format(data millisecond))
-		result replaceAll(t"%z", t"%d" format(data millisecond))
+		(year4String, year2String, yearString) := ("%04d" format(data year), "%02d" format(data year % 100), "%d" format(data year))
+		(month2String, monthString, day2String, dayString) := ("%02d" format(data month), "%d" format(data month), "%02d" format(data day), "%d" format(data day))
+		(hour2String, minute2String, second2String) := ("%02d" format(data hour), "%02d" format(data minute), "%02d" format(data second))
+		(hourString, minuteString, secondString) := ("%d" format(data hour), "%d" format(data minute), "%d" format(data second))
+		(millisecond3String, millisecondString) := ("%03d" format(data millisecond), "%d" format(data millisecond))
+		result := format replaceAll("%yyyy", year4String)
+		result = result replaceAll("%yy", year2String, true, true)
+		result = result replaceAll("%y", yearString, true, true)
+		result = result replaceAll("%MM", month2String, true, true)
+		result = result replaceAll("%dd", day2String, true, true)
+		result = result replaceAll("%M", monthString, true, true)
+		result = result replaceAll("%d", dayString, true, true)
+		result = result replaceAll("%hh", hour2String, true, true)
+		result = result replaceAll("%mm", minute2String, true, true)
+		result = result replaceAll("%ss", second2String, true, true)
+		result = result replaceAll("%h", hourString, true, true)
+		result = result replaceAll("%m", minuteString, true, true)
+		result = result replaceAll("%s", secondString, true, true)
+		result = result replaceAll("%zzz", millisecond3String, true, true)
+		result = result replaceAll("%z", millisecondString, true, true)
+		(year4String, year2String, yearString, month2String, monthString, day2String, dayString, hour2String, minute2String, second2String, hourString, minuteString, secondString, millisecond3String, millisecondString) free()
+		result
 	}
 	compareTo: func (other: This) -> Order {
 		if (this ticks > other ticks)
@@ -105,6 +112,7 @@ DateTime: cover {
 		else
 			Order Equal
 	}
+	toNanoseconds: func -> ULong { this _ticks * This nanosecondsPerTick }
 
 	operator - (other: This) -> TimeSpan { TimeSpan new(this ticks as Long - other ticks as Long) }
 	operator == (other: This) -> Bool { this compareTo(other) == Order Equal }
@@ -126,7 +134,7 @@ DateTime: cover {
 	ticksPerDay: static Long = This ticksPerHour * 24
 	ticksPerWeek: static Long = This ticksPerDay * 7
 	ticksPerFourYears: static Long = This daysPerFourYears * This ticksPerDay
-	defaultFormat: static Text = t"%yyyy-%MM-%dd %hh:%mm:%ss::%zzzz"
+	defaultFormat: static String = "%yyyy-%MM-%dd %hh:%mm:%ss::%zzz"
 	now ::= static Time currentDateTime()
 
 	isLeapYear: static func (year: Int) -> Bool { (year % 100 == 0) ? (year % 400 == 0) : (year % 4 == 0) }
@@ -204,5 +212,8 @@ DateTime: cover {
 	}
 	dateIsValid: static func (year, month, day: Int) -> Bool {
 		year >= 1 && month in(1 .. 13) && day in(1 .. This daysInMonth(year, month) + 1)
+	}
+	nanoseconds: static func (nanoseconds: ULong) -> This {
+		This new(nanoseconds / This nanosecondsPerTick)
 	}
 }

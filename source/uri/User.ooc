@@ -6,37 +6,38 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-User: class {
-	_name: Text
-	_password: Text
-	name ::= this _name take()
-	password ::= this _password take()
+use base
 
-	init: func(=_name, =_password)
+User: class {
+	_name: String
+	_password: String
+	name ::= this _name
+	password ::= this _password
+
+	init: func (=_name, =_password)
 	free: override func {
-		this _name free(Owner Receiver)
-		this _password free(Owner Receiver)
+		(this _name, this _password) free()
 		super()
 	}
-	toText: func -> Text {
-		result := Text empty
-		if (!this name isEmpty)
-			result += this name
-		if (!this password isEmpty)
-			result += t":" + this password
+	toString: func -> String {
+		contents := StringBuilder new()
+		if (!this name empty())
+			contents add(this name)
+		if (!this password empty())
+			contents add(":") . add(this password)
+		result := contents join("")
+		contents free()
 		result
 	}
-	parse: static func(data: Text) -> This {
+	parse: static func (data: String) -> This {
 		result: This
-		d := data take()
-		if (!d isEmpty) {
-			splitted := d split(t":")
-			newPassword := splitted count > 1 ? splitted remove() : Text empty
-			newName := splitted remove()
-			result = This new(newName take(), newPassword take())
+		if (!data empty()) {
+			splitted := data split(':')
+			newPassword := splitted count > 1 ? splitted[1] clone() : ""
+			newName := splitted[0] clone()
+			result = This new(newName, newPassword)
 			splitted free()
 		}
-		data free(Owner Receiver)
 		result
 	}
 }

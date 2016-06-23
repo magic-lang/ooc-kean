@@ -163,17 +163,13 @@ CharBuffer: class {
 	prepend: func ~pointer (other: Char*, otherLength: Int) {
 		if (otherLength < 0)
 			raise("Negative length passed: %d" format(otherLength))
-		if (this _rshift() < otherLength) {
-			newthis := This new(this size + otherLength)
-			memcpy(newthis data, other, otherLength)
-			memcpy(newthis data + otherLength, this data, this size)
-			newthis setLength(this size + otherLength)
-			this setBuffer(newthis)
-		} else {
-			// seems we have enough room on the left
-			this shiftLeft(otherLength)
-			memcpy(this data , other, otherLength)
-		}
+		newData: Char* = calloc(Char size, this length() + otherLength + 1)
+		memcpy(newData + otherLength, this data, this size)
+		memcpy(newData, other, otherLength)
+		memfree(this data)
+		this data = newData
+		this mallocAddr = newData
+		this setLength(this size + otherLength)
 	}
 	prepend: func ~char (other: Char) { this prepend(other&, 1) }
 	empty: func -> Bool { this size == 0 }
@@ -269,28 +265,31 @@ CharBuffer: class {
 	replaceAll: func ~buf (what, with: This, searchCaseSensitive := true) {
 		findResults := this findAll(what, searchCaseSensitive)
 		if (findResults != null && findResults count != 0) {
-			newlen := this size + (with size * findResults count) - (what size * findResults count)
-			result := This new(newlen)
-			result setLength(newlen)
-
+			newlen := this size + (with size * findResults count) - (what size * findResults count) + 1
+			result := calloc(newlen, Char size) as Char*
 			sstart := 0 // source (this) start pos
 			rstart := 0 // result start pos
-
-			for (item in findResults) {
+			for (i in 0 .. findResults count) {
+				item := findResults[i]
 				sdist := item - sstart // bytes to copy
-				memcpy(result data + rstart, this data + sstart, sdist)
+				memcpy(result[rstart]&, this data + sstart, sdist)
 				sstart += sdist
 				rstart += sdist
-
-				memcpy(result data + rstart, with data, with size)
+				memcpy(result[rstart]&, with data, with size)
 				sstart += what size
 				rstart += with size
 			}
 			// copy remaining last piece of source
 			sdist := this size - sstart
-			memcpy(result data + rstart, this data + sstart, sdist + 1) // +1 to copy the trailing zero as well
-			this setBuffer(result)
+			memcpy(result[rstart]&, this data + sstart, sdist + 1) // +1 to copy the trailing zero as well
+			memfree(this data)
+			this data = result
+			this mallocAddr = result
+			this capacity = newlen
+			this size = newlen - 1
 		}
+		if (findResults != null)
+			findResults free()
 	}
 	replaceAll: func ~char (oldie, kiddo: Char) {
 		for (i in 0 .. this size)
@@ -444,7 +443,7 @@ CharBuffer: class {
 				break
 			sdist := findResults[item] - sstart // bytes to copy
 			if (maxTokens != 0 || sdist > 0) {
-				b := This new ((this data + sstart) as CString, sdist)
+				b := This new((this data + sstart) as CString, sdist)
 				result add(b)
 			}
 			sstart += sdist + delimiterLength

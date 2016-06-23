@@ -270,11 +270,6 @@ FloatTransform3DTest: class extends Fixture {
 			expect(string, is equal to(value))
 			string free()
 		})
-		this add("toText", func {
-			text := FloatTransform3D new(1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3) toText() take()
-			expect(text, is equal to(t"1.00, 4.00, 7.00, 1.00\n2.00, 5.00, 8.00, 2.00\n3.00, 6.00, 9.00, 3.00\n0.00, 0.00, 0.00, 1.00"))
-			text free()
-		})
 		this add("setScaling", func {
 			transform := this transform0 setScaling(4.0f)
 			expect(transform a, is equal to (-0.45377181f) within (tolerance))

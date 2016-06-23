@@ -74,19 +74,11 @@ BoolVectorList: class extends VectorList<Bool> {
 			result add(this[i] ? floatForTrue : floatForFalse)
 		result
 	}
-	toString: func -> String {
-		result := ""
-		for (i in 0 .. this _count)
-			result = result >> this[i] toString() >> "\n"
-		result
-	}
-	toText: func -> Text {
-		result: Text
-		textBuilder := TextBuilder new()
-		for (i in 0 .. this _count)
-			textBuilder append(this[i] toText())
-		result = textBuilder join(t"\n")
-		textBuilder free()
+	toString: func (separator := "\n") -> String {
+		result := this _count > 0 ? this[0] toString() : ""
+		result = this _count > 1 ? (result + separator) >> this[1] toString() : result
+		for (i in 2 .. this _count)
+			result = (result >> separator) >> this[i] toString()
 		result
 	}
 

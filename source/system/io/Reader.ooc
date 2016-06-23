@@ -121,5 +121,4 @@ Reader: abstract class {
 	seek: abstract func (offset: Long, mode: SeekMode) -> Bool
 	reset: func (marker: Long) { this seek(marker, SeekMode SET) }
 	skip: func (offset: Int) { this seek(offset, SeekMode CUR) }
-	close: abstract func
 }

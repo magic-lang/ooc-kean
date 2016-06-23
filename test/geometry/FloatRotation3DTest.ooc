@@ -86,12 +86,6 @@ FloatRotation3DTest: class extends Fixture {
 			expect(y, is equal to(rotation y) within(tolerance))
 			expect(z, is equal to(rotation z) within(tolerance))
 		})
-		this add("toText", func {
-			quaternion := Quaternion new(33.0f, 10.0f, -12.0f, 54.5f)
-			text := FloatRotation3D new(quaternion) toText() take()
-			expect(text, is equal to(t"Real: 33.00 Imaginary: 10.00 -12.00 54.50"))
-			text free()
-		})
 	}
 }
 

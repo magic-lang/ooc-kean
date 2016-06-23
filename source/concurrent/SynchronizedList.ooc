@@ -72,9 +72,9 @@ SynchronizedList: class <T> extends List<T> {
 		this _mutex unlock()
 		result
 	}
-	sort: override func (greaterThan: Func (T, T) -> Bool) {
+	sort: override func (isLess: Func (T, T) -> Bool) {
 		this _mutex lock()
-		this _backend sort(greaterThan)
+		this _backend sort(isLess)
 		this _mutex unlock()
 	}
 	copy: override func -> This<T> {

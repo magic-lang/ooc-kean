@@ -15,20 +15,23 @@ _PromiseState: enum {
 	Cancelled
 }
 
-Promise: abstract class {
+_Synchronizer: abstract class {
 	_state: _PromiseState
 	init: func
-	wait: abstract func -> Bool
-	wait: abstract func ~timeout (time: TimeSpan) -> Bool
+	wait: abstract func (time: TimeSpan) -> Bool
+	wait: func ~forever -> Bool { this wait(TimeSpan maximumValue) }
 	cancel: virtual func -> Bool { false }
+}
+
+Promise: abstract class extends _Synchronizer {
+	init: func { super() }
 	start: static func (action: Func) -> This { _ThreadPromise new(action) }
 	empty: static This { get { _EmptyPromise new() } }
 }
 
 _EmptyPromise: class extends Promise {
 	init: func { super() }
-	wait: override func -> Bool { true }
-	wait: override func ~timeout (time: TimeSpan) -> Bool { true }
+	wait: override func (time: TimeSpan) -> Bool { true }
 }
 
 _ThreadPromise: class extends Promise {
@@ -61,16 +64,9 @@ _ThreadPromise: class extends Promise {
 			super()
 		}
 	}
-	wait: override func -> Bool {
+	wait: override func (time: TimeSpan) -> Bool {
 		if (this _threadAlive)
-			if (this _thread wait())
-				this _threadAlive = false
-		this _state == _PromiseState Finished
-	}
-	wait: override func ~timeout (time: TimeSpan) -> Bool {
-		if (this _threadAlive)
-			if (this _thread wait(time toSeconds()))
-				this _threadAlive = false
+			this _threadAlive = time == TimeSpan maximumValue ? !this _thread wait() : !this _thread wait(time toSeconds())
 		this _state == _PromiseState Finished
 	}
 	cancel: override func -> Bool {
@@ -82,11 +78,8 @@ _ThreadPromise: class extends Promise {
 	}
 }
 
-Future: abstract class <T> {
-	_state: _PromiseState
-	init: func
-	wait: abstract func -> Bool
-	wait: abstract func ~timeout (time: TimeSpan) -> Bool
+Future: abstract class <T> extends _Synchronizer {
+	init: func { super() }
 	wait: virtual func ~default (defaultValue: T) -> T {
 		status := this wait()
 		status ? this getResult(defaultValue) : defaultValue
@@ -96,7 +89,6 @@ Future: abstract class <T> {
 		status ? this getResult(defaultValue) : defaultValue
 	}
 	getResult: abstract func (defaultValue: T) -> T
-	cancel: virtual func -> Bool { false }
 	start: static func<S> (S: Class, action: Func -> S) -> This<S> {
 		_ThreadFuture<S> new(action)
 	}
@@ -135,13 +127,7 @@ _ThreadFuture: class <T> extends Future<T> {
 			super()
 		}
 	}
-	wait: override func -> Bool {
-		if (this _threadAlive)
-			if (this _thread wait())
-				this _threadAlive = false
-		this _state == _PromiseState Finished
-	}
-	wait: override func ~timeout (time: TimeSpan) -> Bool {
+	wait: override func (time: TimeSpan) -> Bool {
 		if (this _threadAlive)
 			if (this _thread wait(time toSeconds()))
 				this _threadAlive = false

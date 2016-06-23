@@ -15,38 +15,37 @@ EndpointTest: class extends Fixture {
 	init: func {
 		super("Endpoint")
 		this add("parse", func {
-			one := t"one"
-			two := t"two"
-			three := t"three"
-			host := one + t"." + two + t"." + three
-			port := t"1232"
-			endpointText := (host + t":" + port) take()
+			one := "one"
+			two := "two"
+			three := "three"
+			port := "1232"
+			endpointText := "one.two.three:1232"
 			endpoint := Endpoint parse(endpointText)
 			list := endpoint host
 			expect(list[0] == one)
 			expect(list[1] == two)
 			expect(list[2] == three)
-			expect(endpoint port == port take() toInt())
-			expect(endpoint toText() == endpointText)
-			endpointText free(Owner Sender)
-			(list, endpoint) free()
+			expect(endpoint port == port toInt())
+			endpointString := endpoint toString()
+			expect(endpointString == endpointText)
+			(endpoint, endpointString) free()
 		})
 		this add("empty", func {
-			endpoint := Endpoint parse(t"")
+			endpoint := Endpoint parse("")
 			expect(endpoint, is Null)
 		})
-		this add("only host", func {
-			one := t"one"
-			two := t"two"
-			endpointText := (one + t"." + two) take()
+		this add("only hos", func {
+			one := "one"
+			two := "two"
+			endpointText := "one.two"
 			endpoint := Endpoint parse(endpointText)
 			list := endpoint host
 			expect(list[0] == one)
 			expect(list[1] == two)
 			expect(endpoint port == 0)
-			expect(endpoint toText() == endpointText)
-			endpointText free(Owner Sender)
-			(list, endpoint) free()
+			endpointString := endpoint toString()
+			expect(endpointString == endpointText)
+			(endpoint, endpointString) free()
 		})
 	}
 }

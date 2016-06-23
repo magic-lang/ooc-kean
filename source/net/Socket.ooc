@@ -24,7 +24,6 @@ Socket: abstract class {
 			raise("Failed to create socket", class)
 	}
 	init: func ~descriptor (=family, =type, =protocol, =descriptor)
-
 	close: func {
 		result: Int
 		version (windows) {
@@ -36,7 +35,6 @@ Socket: abstract class {
 			raise("Failed to close socket", class)
 		connected = false
 	}
-
 	ioctl: func (request: Int, arg: Pointer) {
 		version (windows) {
 			raise("ioctl unsupported on Windows", class)

@@ -31,9 +31,7 @@ NetTest: class extends Fixture {
 						clientSocket out write(clientMessageNumber as Char)
 					}
 				}
-				ipaddress free()
-				clientSocket close()
-				clientSocket readerWriter free()
+				(ipaddress, clientSocket readerWriter) free()
 			})
 			serverSocket := ServerSocket new(this ip, 8000) . listen()
 			tcpClientThread start()
@@ -47,7 +45,6 @@ NetTest: class extends Fixture {
 				serverMessageNumber = serverMessageNumber + 1
 			}
 			expect(serverReceivedData, is equal to(9))
-			(connection, serverSocket) close()
 			(connection, serverSocket) free()
 			tcpClientThread wait()
 			(tcpClientThread _code as Closure) free()
@@ -72,11 +69,9 @@ NetTest: class extends Fixture {
 				expect(bufferString, is equal to(expected))
 				bufferString free()
 			}
-
 			udpClientThread wait()
 			(udpClientThread _code as Closure) free()
-			(udpClientThread, expected, ip) free()
-			serverSocket close() . free()
+			(udpClientThread, expected, ip, serverSocket) free()
 		})
 	}
 	free: override func {

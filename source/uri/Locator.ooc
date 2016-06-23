@@ -6,91 +6,99 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 use uri
 use collections
 
 Locator: class {
-	_scheme: Text
+	_scheme: String
 	_authority: Authority
-	_path: VectorList<Text>
+	_path: VectorList<String>
 	_query: Query
-	_fragment: Text
-	scheme ::= this _scheme take()
+	_fragment: String
+	scheme ::= this _scheme
 	authority ::= this _authority
-	path: VectorList<Text> { get {
-		result: VectorList<Text>
-		if (this _path != null) {
-			result = VectorList<Text> new()
-			for (i in 0 .. this _path count)
-				result add(this _path[i] take())
-		}
-		result
-	}}
+	path ::= this _path
 	query ::= this _query
-	fragment ::= this _fragment take()
+	fragment ::= this _fragment
 
-	init: func(=_scheme, =_authority, =_path, =_query, =_fragment)
+	init: func (=_scheme, =_authority, =_path, =_query, =_fragment)
 	free: override func {
-		this _scheme free(Owner Receiver)
 		if (this _authority != null)
 			this _authority free()
-		if (this _path != null) {
-			for (i in 0 .. this _path count)
-				this _path[i] free(Owner Receiver)
+		if (this _path != null)
 			this _path free()
-		}
 		if (this _query != null)
 			this _query free()
-		this _fragment free(Owner Receiver)
+		(this _scheme, this _fragment) free()
 		super()
 	}
-	toText: func -> Text {
-		result := Text new()
-		if (!this scheme isEmpty)
-			result += this scheme + t"://"
-		if (this authority != null)
-			result += this authority toText()
+	toString: func -> String {
+		contents := StringBuilder new()
+		authorityString: String = null
+		queryString: String = null
+		if (!this scheme empty())
+			contents add(this scheme) . add("://")
+		if (this authority != null) {
+			authorityString = this authority toString()
+			contents add(authorityString)
+		}
 		if (this _path != null)
 			for (i in 0 .. this _path count)
-				result += t"/" + this _path[i] take()
-		if (this query != null)
-			result += t"?" + this query toText()
-		if (!this fragment isEmpty)
-			result += t"#" + this fragment
+				contents add("/") . add(this _path[i])
+		if (this query != null) {
+			queryString = this query toString()
+			contents add("?") . add(queryString)
+		}
+		if (!this fragment empty())
+			contents add("#") . add(this fragment)
+		result := contents join("")
+		contents free()
+		if (authorityString != null)
+			authorityString free()
+		if (queryString != null)
+			queryString free()
 		result
 	}
-	parse: static func(data: Text) -> This {
+	parse: static func (data: String) -> This {
 		result: This
-		d := data take()
-		if (!d isEmpty) {
-			splitted := d split(t"://")
-			newScheme := splitted count > 1 ? splitted remove(0) : Text empty
-			d = splitted remove()
+		if (!data empty()) {
+			splitted := data split("://")
+			newScheme := splitted count > 1 ? splitted[0] clone() : ""
+			d := splitted[splitted count > 1 ? 1 : 0] clone()
 			splitted free()
 			index: Int
-			newFragment := Text empty
-			if (!d isEmpty && (index = d lastIndexOf('#')) > -1) {
-				newFragment = d slice(index + 1)
-				d = d slice(0, index)
+			newFragment := ""
+			if (!d empty() && (index = d lastIndexOf('#')) > -1) {
+				newFragment = d substring(index + 1)
+				substring := d substring(0, index)
+				d free()
+				d = substring
 			}
 			newQuery: Query
-			if (!d isEmpty && (index = d lastIndexOf('?')) > -1) {
-				newQuery = Query parse(d slice(index + 1))
-				d = d slice(0, index)
+			if (!d empty() && (index = d lastIndexOf('?')) > -1) {
+				substring := d substring(index + 1)
+				newQuery = Query parse(substring)
+				substring free()
+				substring = d substring(0, index)
+				d free()
+				d = substring
 			}
-			newPath: VectorList<Text>
-			if (!d isEmpty && (index = d find(t"/")) > -1) {
-				newPath = d slice(index + 1) split(t"/")
-				for (i in 0 .. newPath count)
-					newPath[i] = newPath[i] take()
-				d = d slice(0, index)
+			newPath: VectorList<String>
+			if (!d empty() && (index = d find("/", 0)) > -1) {
+				substring := d substring(index + 1)
+				newPath = substring split('/')
+				substring free()
+				substring = d substring(0, index)
+				d free()
+				d = substring
 			}
-			newAuthority: Authority
-			if (!d isEmpty)
+			newAuthority: Authority = null
+			if (!d empty())
 				newAuthority = Authority parse(d)
-			result = This new(newScheme take(), newAuthority, newPath, newQuery, newFragment take())
+			d free()
+			result = This new(newScheme, newAuthority, newPath, newQuery, newFragment)
 		}
-		data free(Owner Receiver)
 		result
 	}
 }

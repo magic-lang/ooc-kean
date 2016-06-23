@@ -15,13 +15,13 @@ QueryTest: class extends Fixture {
 	init: func {
 		super("Query")
 		this add("parse", func {
-			one := t"one"
-			two := t"two"
-			three := t"three"
-			valueOne := t"1"
-			valueTwo := t"2"
-			valueThree := t"3"
-			queryText := (one + t"=" + valueOne + t";" + two + t"=" + valueTwo + t";" + three + t"=" + valueThree) take()
+			one := "one"
+			two := "two"
+			three := "three"
+			valueOne := "1"
+			valueTwo := "2"
+			valueThree := "3"
+			queryText := "one=1;two=2;three=3"
 			query := Query parse(queryText)
 			attributes := query attributes
 			values := query values
@@ -31,25 +31,25 @@ QueryTest: class extends Fixture {
 			expect(values[0] == valueOne)
 			expect(values[1] == valueTwo)
 			expect(values[2] == valueThree)
-			expect(query toText() == queryText)
+			queryString := query toString()
+			expect(queryString == queryText)
 			expect(query contains(one) as Bool, is true)
-			expect(query contains(t"non existing") as Bool, is false)
+			expect(query contains("non existing") as Bool, is false)
 			expect(query getValue(two) == valueTwo)
-			expect(query getValue(t"four") == Text empty)
-			queryText free(Owner Sender)
-			(attributes, values, query) free()
+			expect(query getValue("four") == "")
+			(queryString, query) free()
 		})
 		this add("empty", func {
-			query := Query parse(t"")
+			query := Query parse("")
 			expect(query, is Null)
 		})
 		this add("missing values", func {
-			one := t"one"
-			two := t"two"
-			three := t"three"
-			valueOne := t"1"
-			valueThree := t"3"
-			queryText := (one + t"=" + valueOne + t";" + two + t";" + three + t"=" + valueThree) take()
+			one := "one"
+			two := "two"
+			three := "three"
+			valueOne := "1"
+			valueThree := "3"
+			queryText := "one=1;two;three=3"
 			query := Query parse(queryText)
 			attributes := query attributes
 			values := query values
@@ -57,15 +57,15 @@ QueryTest: class extends Fixture {
 			expect(attributes[1] == two)
 			expect(attributes[2] == three)
 			expect(values[0] == valueOne)
-			expect(values[1] == Text empty)
+			expect(values[1] == "")
 			expect(values[2] == valueThree)
-			expect(query toText() == queryText)
+			queryString := query toString()
+			expect(queryString == queryText)
 			expect(query contains(one) as Bool, is true)
 			expect(query contains(two) as Bool, is true)
-			expect(query getValue(two) == Text empty)
+			expect(query getValue(two) == "")
 			expect(query getValue(three) == valueThree)
-			queryText free(Owner Sender)
-			(attributes, values, query) free()
+			(queryString, query) free()
 		})
 	}
 }

@@ -6,10 +6,11 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use math
-import FloatVector2D
 import IntPoint2D
+import IntVector2D
+import FloatVector2D
 use base
+use math
 
 FloatPoint2D: cover {
 	x, y: Float
@@ -40,9 +41,9 @@ FloatPoint2D: cover {
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
 	polar: static func (radius, azimuth: Float) -> This { This new(radius * cos(azimuth), radius * sin(azimuth)) }
 	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x as Int, this y as Int) }
+	toIntVector2D: func -> IntVector2D { IntVector2D new(this x as Int, this y as Int) }
 	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x, this y) }
 	toString: func -> String { (this x toString() >> ", ") & this y toString() }
-	toText: func -> Text { this x toText() + t", " + this y toText() }
 
 	operator - -> This { This new(-this x, -this y) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }
@@ -65,14 +66,14 @@ FloatPoint2D: cover {
 	basisX: static This { get { This new(1, 0) } }
 	basisY: static This { get { This new(0, 1) } }
 
-	parse: static func (input: Text) -> This {
+	parse: static func (input: String) -> This {
 		parts := input split(',')
 		result := This new(parts[0] toFloat(), parts[1] toFloat())
 		parts free()
 		result
 	}
-	linearInterpolation: static func (a, b: This, ratio: Float) -> This {
-		This new(ratio linearInterpolation(a x, b x), ratio linearInterpolation(a y, b y))
+	mix: static func (a, b: This, ratio: Float) -> This {
+		This new(Float mix(a x, b x, ratio), Float mix(a y, b y, ratio))
 	}
 }
 operator * (left: Float, right: FloatPoint2D) -> FloatPoint2D { FloatPoint2D new(left * right x, left * right y) }
@@ -81,5 +82,5 @@ operator * (left: Int, right: FloatPoint2D) -> FloatPoint2D { FloatPoint2D new(l
 operator / (left: Int, right: FloatPoint2D) -> FloatPoint2D { FloatPoint2D new(left / right x, left / right y) }
 
 extend Cell<FloatPoint2D> {
-	toText: func ~floatpoint2d -> Text { (this val as FloatPoint2D) toText() }
+	toString: func ~floatpoint2d -> String { (this val as FloatPoint2D) toString() }
 }

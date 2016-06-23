@@ -90,16 +90,11 @@ FloatShell2DTest: class extends Fixture {
 			expect(decreased bottom, is equal to(1.0f) within(tolerance))
 		})
 		this add("parse", func {
-			shell := FloatShell2D parse(t"1.0, 2.0, 3.0, 4.0")
+			shell := FloatShell2D parse("1.0, 2.0, 3.0, 4.0")
 			expect(shell left, is equal to(1.0f) within(tolerance))
 			expect(shell right, is equal to(2.0f) within(tolerance))
 			expect(shell top, is equal to(3.0f) within(tolerance))
 			expect(shell bottom, is equal to(4.0f) within(tolerance))
-		})
-		this add("toText", func {
-			text := FloatShell2D new(10.12f) toText() take()
-			expect(text, is equal to(t"10.12, 10.12, 10.12, 10.12"))
-			text free()
 		})
 	}
 }

@@ -12,7 +12,6 @@ import IntVector2D
 import FloatVector2D
 import FloatPoint2D
 import FloatBox2D
-import IntTransform2D
 import FloatEuclidTransform, FloatTransform3D, FloatPoint3D
 
 // The 2D transform is a 3x3 homogeneous coordinate matrix.
@@ -71,21 +70,10 @@ FloatTransform2D: cover {
 	skewY: func (angle: Float) -> This { This createSkewingY(angle) * this }
 	reflectX: func -> This { This createReflectionX() * this }
 	reflectY: func -> This { This createReflectionY() * this }
-	toIntTransform2D: func -> IntTransform2D { IntTransform2D new(this a, this b, this c, this d, this e, this f, this g, this h, this i) }
 	toString: func -> String {
 		"%8f" formatFloat(this a) >> ", " & "%8f" formatFloat(this b) >> ", " & "%8f" formatFloat(this c) >> "\t" & \
 		"%8f" formatFloat(this d) >> ", " & "%8f" formatFloat(this e) >> ", " & "%8f" formatFloat(this f) >> "\t" & \
 		"%8f" formatFloat(this g) >> ", " & "%8f" formatFloat(this h) >> ", " & "%8f" formatFloat(this i) >> "\t"
-	}
-	toText: func -> Text {
-		result: Text
-		textBuilder := TextBuilder new()
-		textBuilder append(this a toText() + t", " + this b toText() + t", " + this c toText())
-		textBuilder append(this d toText() + t", " + this e toText() + t", " + this f toText())
-		textBuilder append(this g toText() + t", " + this h toText() + t", " + this i toText())
-		result = textBuilder join(t"\t")
-		textBuilder free()
-		result
 	}
 
 	operator * (other: This) -> This {
@@ -202,5 +190,5 @@ FloatTransform2D: cover {
 }
 
 extend Cell<FloatTransform2D> {
-	toText: func ~floattransform2d -> Text { (this val as FloatTransform2D) toText() }
+	toString: func ~floattransform2d -> String { (this val as FloatTransform2D) toString() }
 }
