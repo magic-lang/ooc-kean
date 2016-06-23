@@ -1,5 +1,21 @@
 # ooc-kean changes by release
 
+## Release-2.4.0
+
+- **Fixed bug with multiple freeing of string literals**
+
+- **Implemented SortedVectorList**
+
+- **Major cleanup of draw namespace**
+
+- **Added function for removing range of values in a VectorList**
+
+- **Refactored Promise/Future**
+
+- **Added preallocate and preregister functions to GpuContext**
+
+- **Now using correct usage flags when uploading and downloading from GraphicBuffer**
+
 ## Release-2.3.0
 
 - **Large clean up in draw module**
