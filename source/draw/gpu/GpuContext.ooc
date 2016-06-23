@@ -25,8 +25,7 @@ ToRasterFuture: class extends Future<RasterImage> {
 		this _result referenceCount decrease()
 		super()
 	}
-	wait: override func -> Bool { true }
-	wait: override func ~timeout (time: TimeSpan) -> Bool { true }
+	wait: override func (time: TimeSpan) -> Bool { true }
 	getResult: override final func (defaultValue: RasterImage) -> RasterImage {
 		this _result referenceCount increase()
 		this _result
@@ -54,5 +53,7 @@ GpuContext: abstract class extends DrawContext {
 		Promise empty
 	}
 	toRasterAsync: virtual func (source: GpuImage) -> ToRasterFuture { raise("toRasterAsync unimplemented"); null }
+	preallocate: virtual func (resolution: IntVector2D)
+	preregister: virtual func (image: Image)
 }
 }

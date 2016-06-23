@@ -14,7 +14,7 @@ TextureType: enum {
 	Rgba
 	Rgb
 	Uv
-	Yv12
+	External
 }
 
 InterpolationType: enum {

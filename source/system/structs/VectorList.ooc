@@ -51,9 +51,15 @@ VectorList: class <T> extends List<T>{
 		this _count -= 1
 		result
 	}
-	removeAt: override func (index: Int) {
-		this _vector copy(index + 1, index)
-		this _count -= 1
+	removeAt: override func (index: Int) { this removeAt(index, index + 1) }
+	removeAt: func ~range (range: Range) { this removeAt(range min, range max) }
+	removeAt: func ~indices (start, end: Int) {
+		count := end - start
+		version(safe)
+			if (count < 0 || start > this count || end > this count)
+				raise("Invalid range in VectorList::removeAt: start=%d end=%d (list count=%d)" format(start, end, this count))
+		this _vector copy(end, start)
+		this _count -= count
 	}
 	clear: override func {
 		this _vector _free(0, this _count)
@@ -75,12 +81,55 @@ VectorList: class <T> extends List<T>{
 		(matches as Closure) free(Owner Receiver)
 		result
 	}
-	sort: override func (greaterThan: Func (T, T) -> Bool) {
+	lowerBound: func (start, end: Int, toCompare: T, isLess: Func (T*, T*) -> Bool) -> Int {
+		version (safe)
+			if (!this isSorted(start, end, isLess))
+				raise("list must be partially sorted!")
+		count := end - start
+		while (count > 0) {
+			step := count / 2
+			compareResult: Bool
+			compareResult = isLess(this _vector[start + step]&, toCompare&)
+			if (compareResult) {
+				start = start + step + 1
+				count -= step + 1
+			} else
+				count = step
+		}
+		start >= end ? -1 : start
+	}
+	upperBound: func (start, end: Int, toCompare: T, isLess: Func (T*, T*) -> Bool) -> Int {
+		version (safe)
+			if (!this isSorted(start, end, isLess))
+				raise("list must be partially sorted!")
+		count := end - start
+		while (count > 0) {
+			step := count / 2
+			compareResult: Bool
+			compareResult = !isLess(toCompare&, this _vector[start + step]&)
+			if (compareResult) {
+				start = start + step + 1
+				count -= step + 1
+			} else
+				count = step
+		}
+		start >= end ? end : start
+	}
+	isSorted: func (start, end: Int, isLess: Func (T*, T*) -> Bool) -> Bool {
+		result := true
+		for (i in start .. end - 1)
+			if (isLess(this _vector[i + 1]&, this _vector[i]&)) {
+				result = false
+				break
+			}
+		result
+	}
+	sort: override func (isLess: Func (T, T) -> Bool) {
 		inOrder := false
 		while (!inOrder) {
 			inOrder = true
 			for (i in 0 .. this count - 1)
-				if (greaterThan(this[i], this[i + 1])) {
+				if (isLess(this[i + 1], this[i])) {
 					inOrder = false
 					tmp := this[i]
 					this[i] = this[i + 1]

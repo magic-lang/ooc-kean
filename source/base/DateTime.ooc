@@ -112,6 +112,7 @@ DateTime: cover {
 		else
 			Order Equal
 	}
+	toNanoseconds: func -> ULong { this _ticks * This nanosecondsPerTick }
 
 	operator - (other: This) -> TimeSpan { TimeSpan new(this ticks as Long - other ticks as Long) }
 	operator == (other: This) -> Bool { this compareTo(other) == Order Equal }
@@ -211,5 +212,8 @@ DateTime: cover {
 	}
 	dateIsValid: static func (year, month, day: Int) -> Bool {
 		year >= 1 && month in(1 .. 13) && day in(1 .. This daysInMonth(year, month) + 1)
+	}
+	nanoseconds: static func (nanoseconds: ULong) -> This {
+		This new(nanoseconds / This nanosecondsPerTick)
 	}
 }
