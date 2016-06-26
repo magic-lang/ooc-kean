@@ -27,6 +27,7 @@ Imports: TextBuffer
 Imports: Text
 Imports: Time
 Imports: VarArgs
+Imports: external/stdatomic
 Imports: external/errno
 Imports: external/fcntl
 Imports: external/pthread
