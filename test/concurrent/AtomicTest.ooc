@@ -6,6 +6,7 @@ AtomicTest: class extends Fixture {
 	init: func {
 		super("Atomic")
 		this add("read write", This _testReadWrite)
+		this add("multithreaded swap", This _testSwap)
 	}
 	_testReadWrite: static func {
 		expect(_value get(), is equal to(0))
@@ -30,6 +31,24 @@ AtomicTest: class extends Fixture {
 			threads[i] wait() . free()
 		expect(_value get(), is equal to(range * numberOfThreads))
 		(job as Closure) free()
+	}
+	_testSwap: static func {
+		callCount := Cell<Int> new()
+		numberOfThreads := 6
+		_value set(0)
+		job := func {
+			if (_value swap(1) == 0)
+				callCount set(callCount get() + 1)
+		}
+		threads: Thread[numberOfThreads]
+		for (i in 0 .. numberOfThreads)
+			threads[i] = Thread new(job)
+		for (i in 0 .. numberOfThreads)
+			threads[i] start()
+		for (i in 0 .. numberOfThreads)
+			threads[i] wait() . free()
+		expect(callCount get(), is equal to(1))
+		(job as Closure, callCount) free()
 	}
 }
 
