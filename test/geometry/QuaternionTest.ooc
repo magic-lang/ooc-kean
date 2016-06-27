@@ -357,7 +357,7 @@ QuaternionTest: class extends Fixture {
 		})
 		this add("toString", func {
 			string := this quaternion0 toString()
-			expect(string == "Real: 33.000000 Imaginary: 10.000000 -12.000000 54.500000")
+			expect(string, is equal to("Real: 33.000000 Imaginary: 10.000000 -12.000000 54.500000"))
 			string free()
 		})
 		this add("weightedQuaternionMean_X", func {

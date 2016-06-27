@@ -25,7 +25,7 @@ FloatRotation3D: cover {
 		This new(this _quaternion sphericalLinearInterpolation(other _quaternion, factor))
 	}
 	angle: func (other: This) -> Float { this _quaternion angle(other _quaternion) }
-	toString: func -> String { this _quaternion toString() }
+	toString: func (decimals := 6) -> String { this _quaternion toString(decimals) }
 
 	operator * (other: This) -> This { This new(this _quaternion * other _quaternion) }
 	operator == (other: This) -> Bool { this _quaternion == other _quaternion }
