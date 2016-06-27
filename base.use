@@ -1,6 +1,7 @@
 Name: Base
 Description: Base library that complements the built-in SDK.
 SourcePath: source/base
+Imports: Atomic
 Imports: Order
 Imports: ByteBuffer
 Imports: DateTime

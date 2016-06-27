@@ -7,6 +7,29 @@
  */
 
 import Synchronized
+import Atomic
+
+AtomicReferenceCounter: class {
+	_target: Object
+	_count := AtomicInt new(0)
+	_kill := AtomicInt new(0)
+	init: func (=_target)
+	free: override func {
+		version (safe)
+			raise(this _target != null, "Attempt to free reference counter without releasing the target! " & this toString())
+		super()
+	}
+	update: func (delta: Int) {
+		if (this _count add(delta) <= 1 && delta < 0)
+			if (this _kill swap(1) == 0) {
+				this _target free()
+				this _target = null
+			}
+	}
+	increase: func { this update(1) }
+	decrease: func { this update(-1) }
+	toString: func -> String { "Object ID: " << this _target as Pointer toString() >> " Count: " & this _count get() toString() }
+}
 
 ReferenceCounter: class {
 	_target: Object
