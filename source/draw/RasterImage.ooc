@@ -64,8 +64,7 @@ RasterImage: abstract class extends Image {
 			for (y in startY .. endY + 1)
 				this _drawPoint(start x, y, pen)
 		} else {
-			originalPen := pen
-			originalAlpha := originalPen alphaAsFloat
+			alpha := pen alphaAsFloat
 			if (Int abs(end x - start x) < Int abs(end y - start y)) {
 				slope := (end x - start x) as Float / (end y - start y) as Float
 				startY := start y minimum(end y)
@@ -74,9 +73,9 @@ RasterImage: abstract class extends Image {
 					idealX := slope * (y - start y) + start x
 					floor := idealX floor()
 					weight := (idealX - floor) abs()
-					pen setAlpha(originalAlpha * (1.0f - weight))
+					pen setAlpha(alpha * (1.0f - weight))
 					this _drawPoint(floor, y, pen)
-					pen setAlpha(originalAlpha * weight)
+					pen setAlpha(alpha * weight)
 					this _drawPoint(floor + 1, y, pen)
 				}
 			} else {
@@ -87,9 +86,9 @@ RasterImage: abstract class extends Image {
 					idealY := slope * (x - start x) + start y
 					floor := idealY floor()
 					weight := (idealY - floor) abs()
-					pen setAlpha(originalAlpha * (1.0f - weight))
+					pen setAlpha(alpha * (1.0f - weight))
 					this _drawPoint(x, floor, pen)
-					pen setAlpha(originalAlpha * weight)
+					pen setAlpha(alpha * weight)
 					this _drawPoint(x, floor + 1, pen)
 				}
 			}
