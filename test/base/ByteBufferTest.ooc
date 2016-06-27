@@ -53,9 +53,9 @@ ByteBufferTest: class extends Fixture {
 			yuv := ByteBuffer new(30000)
 			y := yuv slice(0, 20000)
 			uv := yuv slice(20000, 10000)
-			expect(yuv referenceCount _count, is equal to(2))
+			expect(yuv referenceCount count, is equal to(2))
 			y referenceCount decrease()
-			expect(yuv referenceCount _count, is equal to(1))
+			expect(yuv referenceCount count, is equal to(1))
 			uv referenceCount decrease()
 		})
 		this add("memset", func {
