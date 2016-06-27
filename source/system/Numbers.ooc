@@ -99,8 +99,8 @@ DBL_EPSILON: extern static Double
 
 LDouble: cover from long double {
 	isNumber ::= this == this
-	toString: func -> String {
-		"%.2f" formatDouble(this)
+	toString: func (decimals := 2) -> String {
+		("%." & decimals toString() & "f") formatDouble(this)
 	}
 	toText: func -> Text {
 		string := this toString()
@@ -115,15 +115,15 @@ LDouble: cover from long double {
 
 Double: cover from double extends LDouble {
 	isNumber ::= this == this
-	toString: func -> String {
-		"%.2f" formatDouble(this)
+	toString: func (decimals := 2) -> String {
+		("%." & decimals toString() & "f") formatDouble(this)
 	}
 }
 
 Float: cover from float extends LDouble {
 	isNumber ::= this == this
-	toString: func -> String {
-		"%.2f" formatFloat(this)
+	toString: func (decimals := 2) -> String {
+		("%." & decimals toString() & "f") formatFloat(this)
 	}
 }
 
