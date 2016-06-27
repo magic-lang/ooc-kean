@@ -99,7 +99,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 				version(debugByteBuffer) { Debug print("ByteBuffer bin full; freeing one ByteBuffer") }
 				bin remove(0) _forceFree()
 			}
-			this referenceCount _count = 0
+			this referenceCount reset()
 			bin add(this)
 			This _lock unlock()
 		}
@@ -118,7 +118,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		for (i in 0 .. bin count)
 			if ((bin[i] size) == size) {
 				buffer = bin remove(i)
-				buffer referenceCount _count = 0
+				buffer referenceCount reset()
 				break
 			}
 		This _lock unlock()

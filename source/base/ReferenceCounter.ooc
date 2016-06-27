@@ -22,6 +22,7 @@ ReferenceCounter: class {
 			}
 		}
 	}
+	count ::= this _count
 	init: func (target: Object, mutexType := MutexType Safe) {
 		this _target = target
 		this _lock = Mutex new(mutexType)
@@ -50,5 +51,6 @@ ReferenceCounter: class {
 	}
 	increase: func { this update(1) }
 	decrease: func { this update(-1) }
+	reset: func { this _count = 0 }
 	toString: func -> String { "Object ID: " << this _target as Pointer toString() >> " Count: " & this _count toString() }
 }
