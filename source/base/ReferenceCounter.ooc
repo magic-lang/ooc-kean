@@ -14,9 +14,9 @@ ReferenceCounter: class {
 	_kill := false
 	_lock: Mutex
 	isSafe: Bool {
-		get { !this _lock instanceOf(MutexUnsafe) }
+		get { this _isSafe() }
 		set(value) {
-			if (this isSafe != value) {
+			if (this _isSafe() != value) {
 				this _lock free()
 				this _lock = Mutex new(value ? MutexType Safe : MutexType Unsafe)
 			}
@@ -53,4 +53,5 @@ ReferenceCounter: class {
 	decrease: func { this update(-1) }
 	reset: func { this _count = 0 }
 	toString: func -> String { "Object ID: " << this _target as Pointer toString() >> " Count: " & this _count toString() }
+	_isSafe: func -> Bool { !this _lock instanceOf(MutexUnsafe) }
 }
