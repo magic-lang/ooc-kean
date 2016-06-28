@@ -37,18 +37,11 @@ ReferenceCounterTest: class extends Fixture {
 			counter free()
 		})
 		this add("multiple threads", This _testMultipleThreads)
-		this add("benchmark", This _benchmark)
 	}
 	_testMultipleThreads: static func {
 		isAlive: Bool
 		object := TestObject new(isAlive&)
 		counter := ReferenceCounter new(object)
-		counter isSafe = true
-		expect(counter isSafe, is true)
-		counter isSafe = false
-		expect(counter isSafe, is false)
-		counter isSafe = true
-		expect(counter isSafe, is true)
 		numberOfThreads := 8
 		countPerThread := 500
 		threads := Thread[numberOfThreads] new()
@@ -75,29 +68,6 @@ ReferenceCounterTest: class extends Fixture {
 		expect(isAlive, is false)
 		(job as Closure) free()
 		(threads, counter) free()
-	}
-	_benchmark: static func {
-		iterationCount := 3000
-		atomic := func {
-			counter := AtomicReferenceCounter new(Cell<Int> new())
-			counter increase()
-			for (_ in 0 .. iterationCount) {
-				counter increase()
-				counter decrease()
-			}
-			counter free()
-		}
-		regular := func {
-			counter := ReferenceCounter new(Cell<Int> new())
-			counter increase()
-			for (_ in 0 .. iterationCount) {
-				counter increase()
-				counter decrease()
-			}
-			counter free()
-		}
-		Profiler benchmark(atomic, 10000.0) toString() println()
-		Profiler benchmark(regular, 10000.0) toString() println()
 	}
 }
 
