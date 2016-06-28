@@ -39,7 +39,7 @@ FloatShell2D: cover {
 	minimum: func (other: This) -> This {
 		This new(this left minimum(other left), this right minimum(other right), this top minimum(other top), this bottom minimum(other bottom))
 	}
-	toString: func -> String { (this left toString() >> ", ") & (this right toString() >> ", ") & (this top toString() >> ", ") & (this bottom toString() >> ", ") }
+	toString: func (decimals := 2) -> String { (this left toString(decimals) >> ", ") & (this right toString(decimals) >> ", ") & (this top toString(decimals) >> ", ") & (this bottom toString(decimals) >> ", ") }
 
 	operator + (other: This) -> This { This new(this left + other left, this right + other right, this top + other top, this bottom + other bottom) }
 	operator - (other: This) -> This { This new(this left - other left, this right - other right, this top - other top, this bottom - other bottom) }
