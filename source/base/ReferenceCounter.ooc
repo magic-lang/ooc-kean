@@ -6,18 +6,17 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import Synchronized
 import Atomic
 
 ReferenceCounter: class {
 	_target: Object
 	_count := AtomicInt new(0)
-	_kill := AtomicInt new(0)
+	_targetReleased := AtomicBool new(false)
 	count ::= this _count get()
 	init: func (=_target)
 	update: func (delta: Int) {
 		if (this _count add(delta) <= 1 && delta < 0)
-			if (this _kill swap(1) == 0)
+			if (this _targetReleased swap(true) == false)
 				this _target free()
 	}
 	increase: func { this update(1) }

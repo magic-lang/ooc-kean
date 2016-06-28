@@ -8,6 +8,18 @@ AtomicTest: class extends Fixture {
 		super("Atomic")
 		this add("read write", This _testReadWrite)
 		this add("multithreaded swap", This _testSwap)
+		this add("bool", func {
+			value := AtomicBool new(true)
+			expect(value get(), is true)
+			value set(false)
+			expect(value get(), is false)
+			value or(true)
+			expect(value get(), is true)
+			value and(false)
+			expect(value get(), is false)
+			value xor(true)
+			expect(value get(), is true)
+		})
 	}
 	_testReadWrite: static func {
 		expect(_value get(), is equal to(0))

@@ -6,20 +6,22 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-include stdatomic
-
-memory_order_relaxed: extern Int
-memory_order_consume: extern Int
-memory_order_acquire: extern Int
-memory_order_release: extern Int
-memory_order_acq_rel: extern Int
-memory_order_seq_cst: extern Int
+include ./atomic
 
 atomic_int: extern cover
+atomic_bool: extern cover
 
-atomic_init: extern func (atomic_int*, Int)
-atomic_store: extern func (atomic_int*, Int)
-atomic_load: extern func (atomic_int*) -> Int
-atomic_exchange: extern func (atomic_int*, Int) -> Int
-atomic_fetch_add: extern func (atomic_int*, Int) -> Int
-atomic_fetch_sub: extern func (atomic_int*, Int) -> Int
+atomic_init_int: extern func (atomic_int*, Int)
+atomic_store_int: extern func (atomic_int*, Int)
+atomic_load_int: extern func (atomic_int*) -> Int
+atomic_exchange_int: extern func (atomic_int*, Int) -> Int
+atomic_fetch_add_int: extern func (atomic_int*, Int) -> Int
+atomic_fetch_sub_int: extern func (atomic_int*, Int) -> Int
+
+atomic_init_bool: extern func (atomic_bool*, Bool)
+atomic_store_bool: extern func (atomic_bool*, Bool)
+atomic_load_bool: extern func (atomic_bool*) -> Bool
+atomic_exchange_bool: extern func (atomic_bool*, Bool) -> Bool
+atomic_fetch_and_bool: extern func (atomic_bool*, Bool) -> Bool
+atomic_fetch_or_bool: extern func (atomic_bool*, Bool) -> Bool
+atomic_fetch_xor_bool: extern func (atomic_bool*, Bool) -> Bool
