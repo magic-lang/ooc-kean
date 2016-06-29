@@ -6,51 +6,33 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use system
+include ./atomic
 
-AtomicBool: cover {
-	_backend: atomic_bool
-	init: func@ (value := false) {
-		atomic_init_bool(this _backend&, value)
-	}
-	get: func@ -> Bool {
-		atomic_load_bool(this _backend&)
-	}
-	set: func@ (value: Bool) {
-		atomic_store_bool(this _backend&, value)
-	}
-	swap: func@ (value: Bool) -> Bool {
-		atomic_exchange_bool(this _backend&, value)
-	}
-	and: func@ (value: Bool) -> Bool {
-		atomic_fetch_and_bool(this _backend&, value)
-	}
-	or: func@ (value: Bool) -> Bool {
-		atomic_fetch_or_bool(this _backend&, value)
-	}
-	xor: func@ (value: Bool) -> Bool {
-		atomic_fetch_xor_bool(this _backend&, value)
+AtomicBool: cover from atomic_bool {
+	init: extern (atomic_init_bool) func@ (value := false)
+	get: extern (atomic_load_bool) func@ -> Bool
+	set: extern (atomic_store_bool) func@ (value: Bool)
+	swap: extern (atomic_exchange_bool) func@ (value: Bool) -> Bool
+	and: extern (atomic_fetch_and_bool) func@ (value: Bool) -> Bool
+	or: extern (atomic_fetch_or_bool) func@ (value: Bool) -> Bool
+	xor: extern (atomic_fetch_xor_bool) func@ (value: Bool) -> Bool
+	new: static func (value := false) -> This {
+		result: This
+		result init(value)
+		result
 	}
 }
 
-AtomicInt: cover {
-	_backend: atomic_int
-	init: func@ (value := 0) {
-		atomic_init_int(this _backend&, value)
-	}
-	get: func@ -> Int {
-		atomic_load_int(this _backend&)
-	}
-	set: func@ (value: Int) {
-		atomic_store_int(this _backend&, value)
-	}
-	swap: func@ (value: Int) -> Int {
-		atomic_exchange_int(this _backend&, value)
-	}
-	add: func@ (value: Int) -> Int {
-		atomic_fetch_add_int(this _backend&, value)
-	}
-	subtract: func@ (value: Int) -> Int {
-		atomic_fetch_sub_int(this _backend&, value)
+AtomicInt: cover from atomic_int {
+	init: extern (atomic_init_int) func@ (value := 0)
+	get: extern (atomic_load_int) func@ -> Int
+	set: extern (atomic_store_int) func@ (value: Int)
+	swap: extern (atomic_exchange_int) func@ (value: Int) -> Int
+	add: extern (atomic_fetch_add_int) func@ (value: Int) -> Int
+	subtract: extern (atomic_fetch_sub_int) func@ (value: Int) -> Int
+	new: static func (value := 0) -> This {
+		result: This
+		result init(value)
+		result
 	}
 }

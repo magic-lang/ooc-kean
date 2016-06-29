@@ -27,7 +27,6 @@ Imports: TextBuffer
 Imports: Text
 Imports: Time
 Imports: VarArgs
-Imports: external/stdatomic
 Imports: external/errno
 Imports: external/fcntl
 Imports: external/pthread
@@ -44,6 +43,4 @@ Imports: structs/Stack
 Imports: structs/Vector
 Imports: structs/VectorList
 Additionals: source/system/string/string_literal.h
-Additionals: source/system/external/atomic.h
 Additionals: source/system/string/string_literal.c
-Additionals: source/system/external/atomic.c

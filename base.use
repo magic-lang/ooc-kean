@@ -14,3 +14,5 @@ Imports: Debug
 Imports: Profiler
 Imports: FloatTuple
 Imports: StringBuilder
+Additionals: source/base/atomic.h
+Additionals: source/base/atomic.c
