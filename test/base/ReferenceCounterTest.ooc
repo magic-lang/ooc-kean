@@ -43,6 +43,11 @@ ReferenceCounterTest: class extends Fixture {
 		object := TestObject new(isAlive&)
 		counter := ReferenceCounter new(object)
 		counter isSafe = true
+		expect(counter isSafe, is true)
+		counter isSafe = false
+		expect(counter isSafe, is false)
+		counter isSafe = true
+		expect(counter isSafe, is true)
 		numberOfThreads := 8
 		countPerThread := 500
 		threads := Thread[numberOfThreads] new()

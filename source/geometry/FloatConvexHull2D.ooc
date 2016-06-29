@@ -126,10 +126,10 @@ FloatConvexHull2D: class {
 			(outsideLeft, outsideRight) free()
 		}
 	}
-	toString: func -> String {
+	toString: func (decimals := 2) -> String {
 		result := ""
 		for (i in 0 .. this count)
-			result = result >> "(" & this _points[i] toString() >> ") "
+			result = result >> "(" & this _points[i] toString(decimals) >> ") "
 		result
 	}
 	_pointsLinePseudoDistance: static func (leftPoint, rightPoint, queryPoint: FloatPoint2D) -> Float {

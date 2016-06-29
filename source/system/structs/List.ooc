@@ -16,6 +16,8 @@ List: abstract class <T> {
 	remove: abstract func ~last -> T
 	remove: abstract func ~atIndex (index: Int) -> T
 	removeAt: abstract func (index: Int)
+	removeAt: abstract func ~range (range: Range)
+	removeAt: abstract func ~indices (start, end: Int)
 	clear: abstract func
 	reverse: abstract func -> This<T>
 	search: abstract func (matches: Func (T) -> Bool) -> Int
