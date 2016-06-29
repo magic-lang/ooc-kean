@@ -63,8 +63,8 @@ BlockedQueue: class <T> extends SynchronizedQueue<T> {
 	}
 	cancel: func { this _waitLock with(|| this _canceled = true) . wakeAll() }
 	wait: func -> T {
-		result: T = null
 		this _waitLock lockWhen(func -> Bool { !this empty || this _canceled })
+		result: T = null
 		if (!this _canceled)
 			result = this _backend dequeue(result)
 		this _waitLock unlock()
