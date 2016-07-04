@@ -82,17 +82,23 @@ RasterMonochrome: class extends RasterPacked {
 			result = this distance(converted)
 			converted referenceCount decrease()
 		} else {
-			for (y in 0 .. this size y)
-				for (x in 0 .. this size x) {
-					c := this[x, y]
-					o := (other as This)[x, y]
+			sizeX := this size x
+			sizeY := this size y
+			thisStride := this stride
+			otherStride := (other as This) stride
+			buffer := this buffer _pointer as ColorMonochrome*
+			otherBuffer := (other as This) buffer _pointer as ColorMonochrome*
+			for (y in 0 .. sizeY)
+				for (x in 0 .. sizeX) {
+					c := buffer[x + y * thisStride]
+					o := otherBuffer[x + y * otherStride]
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in 0 maximum(y - 2) .. (y + 3) minimum(this size y))
-							for (otherX in 0 maximum(x - 2) .. (x + 3) minimum(this size x))
+						for (otherY in 0 maximum(y - 2) .. (y + 3) minimum(sizeY))
+							for (otherX in 0 maximum(x - 2) .. (x + 3) minimum(sizeX))
 								if (otherX != x || otherY != y) {
-									pixel := (other as This)[otherX, otherY]
+									pixel := otherBuffer[otherX + otherY * otherStride]
 									if (maximum y < pixel y)
 										maximum y = pixel y
 									else if (minimum y > pixel y)
@@ -106,7 +112,7 @@ RasterMonochrome: class extends RasterPacked {
 						result += distance sqrt()
 					}
 				}
-			result /= (this size x squared + this size y squared as Float sqrt())
+			result /= (sizeX squared + sizeY squared as Float sqrt())
 		}
 		result
 	}

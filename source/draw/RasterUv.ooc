@@ -95,17 +95,24 @@ RasterUv: class extends RasterPacked {
 			result = this distance(converted)
 			converted referenceCount decrease()
 		} else {
-			for (y in 0 .. this size y)
-				for (x in 0 .. this size x) {
-					c := this[x, y]
-					o := (other as This)[x, y]
+			numberOfChannels := 2
+			sizeX := this size x
+			sizeY := this size y
+			buffer := this buffer _pointer as ColorUv*
+			otherBuffer := (other as This) buffer _pointer as ColorUv*
+			thisStride := this stride / numberOfChannels
+			otherStride := (other as This) stride / numberOfChannels
+			for (y in 0 .. sizeY)
+				for (x in 0 .. sizeX) {
+					c := buffer[x + y * thisStride]
+					o := otherBuffer[x + y * otherStride]
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in 0 maximum(y - this distanceRadius) .. (y + 1 + this distanceRadius) minimum(this size y))
-							for (otherX in 0 maximum(x - this distanceRadius) .. (x + 1 + this distanceRadius) minimum(this size x))
+						for (otherY in 0 maximum(y - this distanceRadius) .. (y + 1 + this distanceRadius) minimum(sizeY))
+							for (otherX in 0 maximum(x - this distanceRadius) .. (x + 1 + this distanceRadius) minimum(sizeX))
 								if (otherX != x || otherY != y) {
-									pixel := (other as This)[otherX, otherY]
+									pixel := otherBuffer[otherX + otherY * otherStride]
 									if (maximum u < pixel u)
 										maximum u = pixel u
 									else if (minimum u > pixel u)
@@ -127,7 +134,7 @@ RasterUv: class extends RasterPacked {
 						result += (distance) sqrt() / 3
 					}
 				}
-			result /= ((this size x squared + this size y squared) as Float sqrt())
+			result /= ((sizeX squared + sizeY squared) as Float sqrt())
 		}
 		result
 	}
