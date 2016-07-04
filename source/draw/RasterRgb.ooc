@@ -45,9 +45,14 @@ RasterRgb: class extends RasterPacked {
 			rgb referenceCount decrease()
 	}
 	fill: override func (color: ColorRgba) {
-		for (y in 0 .. this size y)
-			for (x in 0 .. this size x)
-				this[x, y] = color toRgb()
+		sizeX := this size x
+		sizeY := this size y
+		buffer := this buffer pointer as ColorRgb*
+		stride := this stride / this bytesPerPixel
+		colorRgb := color toRgb()
+		for (y in 0 .. sizeY)
+			for (x in 0 .. sizeX)
+				buffer[x + y * stride] = colorRgb
 	}
 	copy: override func -> This { This new(this buffer copy(), this size, this stride) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {

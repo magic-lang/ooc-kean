@@ -29,9 +29,13 @@ RasterRgba: class extends RasterPacked {
 			this[position x, position y] = ColorRgba mix(this[position x, position y], pen color, pen alphaAsFloat)
 	}
 	fill: override func (color: ColorRgba) {
-		for (y in 0 .. this size y)
-			for (x in 0 .. this size x)
-				this[x, y] = color
+		sizeX := this size x
+		sizeY := this size y
+		buffer := this buffer pointer as ColorRgba*
+		stride := this stride / this bytesPerPixel
+		for (y in 0 .. sizeY)
+			for (x in 0 .. sizeX)
+				buffer[x + y * stride] = color
 	}
 	copy: override func -> This { This new(this buffer copy(), this size, this stride) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
