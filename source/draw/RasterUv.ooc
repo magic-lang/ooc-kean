@@ -95,13 +95,12 @@ RasterUv: class extends RasterPacked {
 			result = this distance(converted)
 			converted referenceCount decrease()
 		} else {
-			numberOfChannels := 2
 			sizeX := this size x
 			sizeY := this size y
 			buffer := this buffer _pointer as ColorUv*
 			otherBuffer := (other as This) buffer _pointer as ColorUv*
-			thisStride := this stride / numberOfChannels
-			otherStride := (other as This) stride / numberOfChannels
+			thisStride := this stride / this bytesPerPixel
+			otherStride := (other as This) stride / this bytesPerPixel
 			for (y in 0 .. sizeY)
 				for (x in 0 .. sizeX) {
 					c := buffer[x + y * thisStride]
