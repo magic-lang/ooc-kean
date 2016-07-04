@@ -59,9 +59,12 @@ RasterMonochrome: class extends RasterPacked {
 	}
 	apply: override func ~monochrome (action: Func(ColorMonochrome)) {
 		pointer := this buffer pointer as ColorMonochrome*
-		for (row in 0 .. this size y)
-			for (column in 0 .. this size x) {
-				pixel := pointer + row * this stride + column
+		sizeX := this size x
+		sizeY := this size y
+		stride := this stride
+		for (row in 0 .. sizeY)
+			for (column in 0 .. sizeX) {
+				pixel := pointer + row * stride + column
 				action(pixel@)
 			}
 	}

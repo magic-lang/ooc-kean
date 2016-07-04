@@ -61,6 +61,7 @@ RasterUv: class extends RasterPacked {
 		vSource := vRow
 		width := this size x
 		height := this size y
+		stride := this stride
 
 		for (y in 0 .. height) {
 			for (x in 0 .. width) {
@@ -68,7 +69,7 @@ RasterUv: class extends RasterPacked {
 				uSource += 2
 				vSource += 2
 			}
-			uvRow += this stride
+			uvRow += stride
 			uSource = uvRow
 			vSource = uvRow + 1
 		}
