@@ -20,6 +20,7 @@ AndroidContext: class extends OpenGLContext {
 	_unpackRgbaToUv: OpenGLMap
 	_unpackRgbaToUvPadded: OpenGLMap
 	_packers := RecycleBin<EGLRgba> new(32, func (image: EGLRgba) { image free() })
+	_eglBin := RecycleBin<EGLRgba> new(100, |image| image _recyclable = false; image referenceCount decrease())
 	init: func (other: This = null) {
 		super(other)
 		this _unpackRgbaToMonochrome = OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToMonochrome.frag"), this)
@@ -28,6 +29,7 @@ AndroidContext: class extends OpenGLContext {
 	}
 	free: override func {
 		this _backend makeCurrent()
+		this _eglBin clear() . free()
 		(this _unpackRgbaToMonochrome, this _unpackRgbaToUv, this _unpackRgbaToUvPadded, this _packers) free()
 		super()
 	}
@@ -151,5 +153,18 @@ AndroidContext: class extends OpenGLContext {
 		if (image instanceOf(GraphicBufferYuv420Semiplanar))
 			(image as GraphicBufferYuv420Semiplanar) toRgba(this) referenceCount decrease()
 	}
+	createEGLRgba: func (source: GraphicBufferYuv420Semiplanar) -> EGLRgba {
+		result := this _eglBin search(|image| source buffer _handle == image buffer _handle)
+		if (result == null) {
+			padding := source uvOffset - source stride * source size y
+			extraRows := padding align(source stride) / source stride
+			height := source size y + source size y / 2 + extraRows
+			width := source stride / 4
+			rgbaBuffer := source buffer shallowCopy(IntVector2D new(width, height), width, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget)
+			result = EGLRgba new(rgbaBuffer, this)
+		}
+		result
+	}
+	recycle: func (image: EGLRgba) { this _eglBin add(image) }
 }
 }

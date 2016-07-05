@@ -7,7 +7,7 @@
  */
 
 use geometry
-import GraphicBuffer, OpenGLContext, OpenGLRgba
+import GraphicBuffer, OpenGLContext, OpenGLRgba, AndroidContext
 import backend/[GLTexture, GLContext, EGLImage]
 
 version(!gpuOff) {
@@ -22,8 +22,12 @@ EGLRgba: class extends OpenGLRgba {
 	}
 	free: override func {
 		this _recyclable = false
-		this _buffer free()
-		super()
+		if (this _recyclable)
+			(this context as AndroidContext) recycle(this)
+		else {
+			this _buffer free()
+			super()
+		}
 	}
 }
 }
