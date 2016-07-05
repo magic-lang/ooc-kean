@@ -157,6 +157,8 @@ RasterYuv420Semiplanar: class extends RasterImage {
 	apply: override func ~yuv (action: Func (ColorYuv)) {
 		yRow := this y buffer pointer
 		ySource := yRow
+		uvStride := this uv stride
+		yStride := this y stride
 		uvRow := this uv buffer pointer
 		uSource := uvRow
 		vSource := uvRow + 1
@@ -172,10 +174,9 @@ RasterYuv420Semiplanar: class extends RasterImage {
 					vSource += 2
 				}
 			}
-			yRow += this y stride
-			if (y % 2 == 1) {
-				uvRow += this uv stride
-			}
+			yRow += yStride
+			if (y % 2 == 1)
+				uvRow += uvStride
 			ySource = yRow
 			uSource = uvRow
 			vSource = uvRow + 1

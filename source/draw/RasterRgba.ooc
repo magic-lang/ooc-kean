@@ -29,15 +29,23 @@ RasterRgba: class extends RasterPacked {
 			this[position x, position y] = ColorRgba mix(this[position x, position y], pen color, pen alphaAsFloat)
 	}
 	fill: override func (color: ColorRgba) {
-		for (y in 0 .. this size y)
-			for (x in 0 .. this size x)
-				this[x, y] = color
+		sizeX := this size x
+		sizeY := this size y
+		thisBuffer := this buffer pointer as ColorRgba*
+		thisStride := this stride / this bytesPerPixel
+		for (y in 0 .. sizeY)
+			for (x in 0 .. sizeX)
+				thisBuffer[x + y * thisStride] = color
 	}
 	copy: override func -> This { This new(this buffer copy(), this size, this stride) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
-		for (row in 0 .. this size y) {
-			source := this buffer pointer + row * this stride
-			for (pixel in 0 .. this size x) {
+		sizeX := this size x
+		sizeY := this size y
+		thisBuffer := this buffer pointer
+		thisStride := this stride
+		for (row in 0 .. sizeY) {
+			source := thisBuffer + row * thisStride
+			for (pixel in 0 .. sizeX) {
 				pixelPointer := (source + pixel * this bytesPerPixel)
 				color := (pixelPointer as ColorRgb*)@
 				action(color)
@@ -63,17 +71,23 @@ RasterRgba: class extends RasterPacked {
 			result = this distance(converted)
 			converted referenceCount decrease()
 		} else {
-			for (y in 0 .. this size y)
-				for (x in 0 .. this size x) {
-					c := this[x, y]
-					o := (other as This)[x, y]
+			sizeX := this size x
+			sizeY := this size y
+			thisBuffer := this buffer _pointer as ColorRgba*
+			otherBuffer := (other as This) buffer _pointer as ColorRgba*
+			thisStride := this stride / this bytesPerPixel
+			otherStride := (other as This) stride / this bytesPerPixel
+			for (y in 0 .. sizeY)
+				for (x in 0 .. sizeX) {
+					c := thisBuffer[x + y * thisStride]
+					o := otherBuffer[x + y * otherStride]
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in 0 maximum(y - this distanceRadius) .. (y + 1 + this distanceRadius) minimum(this size y))
-							for (otherX in 0 maximum(x - this distanceRadius) .. (x + 1 + this distanceRadius) minimum(this size x))
+						for (otherY in 0 maximum(y - this distanceRadius) .. (y + 1 + this distanceRadius) minimum(sizeY))
+							for (otherX in 0 maximum(x - this distanceRadius) .. (x + 1 + this distanceRadius) minimum(sizeX))
 								if (otherX != x || otherY != y) {
-									pixel := (other as This)[otherX, otherY]
+									pixel := otherBuffer[otherX + otherY * otherStride]
 									if (maximum b < pixel b)
 										maximum b = pixel b
 									else if (minimum b > pixel b)
