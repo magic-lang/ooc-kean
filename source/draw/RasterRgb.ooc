@@ -47,22 +47,22 @@ RasterRgb: class extends RasterPacked {
 	fill: override func (color: ColorRgba) {
 		sizeX := this size x
 		sizeY := this size y
-		buffer := this buffer pointer as ColorRgb*
-		stride := this stride / this bytesPerPixel
+		thisBuffer := this buffer pointer as ColorRgb*
+		thisStride := this stride / this bytesPerPixel
 		colorRgb := color toRgb()
 		for (y in 0 .. sizeY)
 			for (x in 0 .. sizeX)
-				buffer[x + y * stride] = colorRgb
+				thisBuffer[x + y * thisStride] = colorRgb
 	}
 	copy: override func -> This { This new(this buffer copy(), this size, this stride) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
 		sizeX := this size x
 		sizeY := this size y
-		buffer := this buffer pointer
-		stride := this stride
+		thisBuffer := this buffer pointer
+		thisStride := this stride
 		for (row in 0 .. sizeY)
 			for (pixel in 0 .. sizeX) {
-				pointer := buffer + pixel * this bytesPerPixel + row * stride
+				pointer := thisBuffer + pixel * this bytesPerPixel + row * thisStride
 				color := (pointer as ColorRgb*)@
 				action(color)
 			}
@@ -96,13 +96,13 @@ RasterRgb: class extends RasterPacked {
 		} else {
 			sizeX := this size x
 			sizeY := this size y
-			buffer := this buffer _pointer as ColorRgb*
+			thisBuffer := this buffer _pointer as ColorRgb*
 			otherBuffer := (other as This) buffer _pointer as ColorRgb*
 			thisStride := this stride / this bytesPerPixel
 			otherStride := (other as This) stride / this bytesPerPixel
 			for (y in 0 .. sizeY)
 				for (x in 0 .. sizeX) {
-					c := buffer[x + y * thisStride]
+					c := thisBuffer[x + y * thisStride]
 					o := otherBuffer[x + y * otherStride]
 					if (c distance(o) > 0) {
 						maximum := o

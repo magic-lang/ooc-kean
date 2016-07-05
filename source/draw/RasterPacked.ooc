@@ -29,8 +29,8 @@ RasterPacked: abstract class extends RasterImage {
 	}
 	init: func ~allocateStride (size: IntVector2D, stride: UInt) { this init(ByteBuffer new(stride * size y), size, stride) }
 	init: func ~allocate (size: IntVector2D) {
-		stride := this bytesPerPixel * size x
-		this init(ByteBuffer new(stride * size y), size, stride)
+		thisStride := this bytesPerPixel * size x
+		this init(ByteBuffer new(thisStride * size y), size, thisStride)
 	}
 	free: override func {
 		if (this _buffer != null)

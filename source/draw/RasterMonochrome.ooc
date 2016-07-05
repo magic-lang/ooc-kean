@@ -61,10 +61,10 @@ RasterMonochrome: class extends RasterPacked {
 		pointer := this buffer pointer as ColorMonochrome*
 		sizeX := this size x
 		sizeY := this size y
-		stride := this stride
+		thisStride := this stride
 		for (row in 0 .. sizeY)
 			for (column in 0 .. sizeX) {
-				pixel := pointer + row * stride + column
+				pixel := pointer + row * thisStride + column
 				action(pixel@)
 			}
 	}
@@ -89,11 +89,11 @@ RasterMonochrome: class extends RasterPacked {
 			sizeY := this size y
 			thisStride := this stride
 			otherStride := (other as This) stride
-			buffer := this buffer _pointer as ColorMonochrome*
+			thisBuffer := this buffer _pointer as ColorMonochrome*
 			otherBuffer := (other as This) buffer _pointer as ColorMonochrome*
 			for (y in 0 .. sizeY)
 				for (x in 0 .. sizeX) {
-					c := buffer[x + y * thisStride]
+					c := thisBuffer[x + y * thisStride]
 					o := otherBuffer[x + y * otherStride]
 					if (c distance(o) > 0) {
 						maximum := o

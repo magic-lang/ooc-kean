@@ -175,9 +175,8 @@ RasterYuv420Semiplanar: class extends RasterImage {
 				}
 			}
 			yRow += yStride
-			if (y % 2 == 1) {
+			if (y % 2 == 1)
 				uvRow += uvStride
-			}
 			ySource = yRow
 			uSource = uvRow
 			vSource = uvRow + 1
