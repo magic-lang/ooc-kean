@@ -50,7 +50,7 @@ RasterMonochromeTest: class extends Fixture {
 			alphabet := " .,-_':;!+~=^?*abcdefghijklmnopqrstuvwxyz()[]{}|&%@#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 			asciiImage := image1 toAscii(alphabet)
 			image2 := RasterMonochrome fromAscii(asciiImage)
-			expect(image1 distance(image2), is less than(0.01f))
+			expect(image1 distance(image2), is less than(4.f))
 			(image1, image2) referenceCount decrease()
 			(asciiImage, alphabet) free()
 		})

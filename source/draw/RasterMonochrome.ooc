@@ -115,7 +115,7 @@ RasterMonochrome: class extends RasterPacked {
 						result += distance sqrt()
 					}
 				}
-			result /= (sizeX squared + sizeY squared as Float sqrt())
+			result /= this size length
 		}
 		result
 	}
