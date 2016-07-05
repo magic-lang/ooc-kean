@@ -10,30 +10,40 @@ use concurrent
 
 RecycleBin: class <T> {
 	_free: Func (T)
-	_list: SynchronizedList<T>
+	_list: VectorList<T>
 	_size: Int
 	count ::= this _list count
 	isFull ::= this count == this _size
 	isEmpty ::= this _list empty
-	init: func (=_size, =_free) { this _list = SynchronizedList<T> new(_size) }
+	_mutex := Mutex new()
+	init: func (=_size, =_free) { this _list = VectorList<T> new(_size) }
 	free: override func {
 		this clear()
 		this _list free()
 		(this _free as Closure) free(Owner Receiver)
+		this _mutex free()
 		super()
 	}
 	add: func (object: T) {
+		this _mutex lock()
 		if (this isFull)
 			this _free(this _list remove(0))
 		this _list add(object)
+		this _mutex unlock()
 	}
 	search: func (matches: Func (T) -> Bool) -> T {
-		index := this _list search(matches)
 		result: T = null
-		(index > -1) ? this _list remove(index) : result
+		this _mutex lock()
+		index := this _list search(matches)
+		if (index > -1)
+			result = this _list remove(index)
+		this _mutex unlock()
+		result
 	}
 	clear: func {
+		this _mutex lock()
 		while (!this isEmpty)
 			this _free(this _list remove())
+		this _mutex unlock()
 	}
 }
