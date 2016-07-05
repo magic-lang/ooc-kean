@@ -101,15 +101,14 @@ ArgumentParser: class {
 		(parameters, arguments) free()
 	}
 	_findArgument: func (identifier: String) -> _Argument {
-		result: _Argument
+		result: _Argument = null
 		for (i in 0 .. this _arguments count) {
 			shortIdentifierAsString := this _arguments[i] _shortIdentifier as String
-			if (identifier == this _arguments[i] _longIdentifier || identifier == shortIdentifierAsString) {
+			if (identifier == this _arguments[i] _longIdentifier || identifier == shortIdentifierAsString)
 				result = this _arguments[i]
-				shortIdentifierAsString free()
-				break
-			}
 			shortIdentifierAsString free()
+			if (result != null)
+				break
 		}
 		result
 	}

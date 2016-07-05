@@ -34,15 +34,12 @@ CsvReader: class extends Iterator<VectorList<String>> {
 		result: VectorList<String> = null
 		if (this hasNext()) {
 			readCharacter: Char
-			stringBuilder := StringBuilder new()
+			stringBuilder := StringBuilder new(32, true)
 			while (this _fileReader hasNext() && ((readCharacter = this _fileReader read()) != '\n' && readCharacter != '\0'))
 				stringBuilder add(readCharacter)
 			string := stringBuilder toString()
 			result = this _parseRow(string)
-			string free()
-			for (i in 0 .. stringBuilder count)
-				stringBuilder[i] free()
-			stringBuilder free()
+			(string, stringBuilder) free()
 		}
 		result
 	}
@@ -51,7 +48,7 @@ CsvReader: class extends Iterator<VectorList<String>> {
 		rowLength := row length()
 		readCharacter: Char
 		for (i in 0 .. rowLength) {
-			stringBuilder := StringBuilder new()
+			stringBuilder := StringBuilder new(32, true)
 			while (i < rowLength && ((readCharacter = row[i]) != this _delimiter)) {
 				i += 1
 				match (readCharacter) {
@@ -68,8 +65,6 @@ CsvReader: class extends Iterator<VectorList<String>> {
 				}
 			}
 			result add(stringBuilder toString())
-			for (i in 0 .. stringBuilder count)
-				stringBuilder[i] free()
 			stringBuilder free()
 		}
 		result
@@ -77,7 +72,7 @@ CsvReader: class extends Iterator<VectorList<String>> {
 	_extractStringLiteral: func (rowData: String, position: Int@) -> String {
 		result: String
 		readCharacter: Char
-		stringBuilder := StringBuilder new()
+		stringBuilder := StringBuilder new(32, true)
 		rowDataLength := rowData length()
 		while (position < rowDataLength && (readCharacter = rowData[position]) != '"') {
 			stringBuilder add(rowData[position])
@@ -85,8 +80,6 @@ CsvReader: class extends Iterator<VectorList<String>> {
 		}
 		position += 1
 		result = stringBuilder toString()
-		for (i in 0 .. stringBuilder count)
-			stringBuilder[i] free()
 		stringBuilder free()
 		result
 	}
