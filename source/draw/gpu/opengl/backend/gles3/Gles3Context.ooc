@@ -47,7 +47,7 @@ Gles3Context: class extends GLContext {
 		result
 	}
 	printExtensions: func {
-		extensions := eglQueryString(this _eglDisplay, EGL_EXTENSIONS)
+		extensions := eglQueryString(this _eglDisplay, EGL_EXTENSIONS) as CString
 		extensionsString := String new(extensions, extensions length())
 		array := extensionsString split(' ')
 		extensionsString free()
