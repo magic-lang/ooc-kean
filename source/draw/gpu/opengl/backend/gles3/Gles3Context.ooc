@@ -46,6 +46,16 @@ Gles3Context: class extends GLContext {
 		}
 		result
 	}
+	printExtensions: func {
+		extensions := eglQueryString(this _eglDisplay, EGL_EXTENSIONS)
+		extensionsString := String new(extensions, extensions length())
+		array := extensionsString split(' ')
+		extensionsString free()
+		Debug print("EGL Extensions: ")
+		for (i in 0 .. array count)
+			Debug print(array[i])
+		array free()
+	}
 	swapBuffers: override func { eglSwapBuffers(this _eglDisplay, this _eglSurface) }
 	_chooseConfig: func (configAttribs: Int*) -> Pointer {
 		numConfigs: Int
