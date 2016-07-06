@@ -250,7 +250,6 @@ HashMap: class <K, V> {
 		match (K) {
 			case Int => first as Int == second as Int
 			case String => first as String equals(second as String)
-			case Text => first as Text == second as Text
 			case => memcmp(first, second, K size) == 0
 		}
 	}
@@ -271,7 +270,6 @@ HashMap: class <K, V> {
 		result := match (K) {
 			case Int => key as Int
 			case String => _acX31Hash(key as String)
-			case Text => _acX31Hash(key as Text _buffer _backend)
 			case => _murmurHash(key)
 		}
 		result < 0 ? -result : result

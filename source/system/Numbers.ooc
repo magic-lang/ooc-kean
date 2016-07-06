@@ -20,12 +20,6 @@ UINT64_MAX: extern static Long
 LLong: cover from signed long long {
 	toString: func -> String { "%lld" formatLLong(this as LLong) }
 	toHexString: func -> String { "%llx" formatLLong(this as LLong) }
-	toText: func -> Text {
-		string := this toString()
-		result := Text new(string) copy()
-		string free()
-		result
-	}
 	in: func (range: Range) -> Bool {
 		this >= range min && this < range max
 	}
@@ -103,12 +97,6 @@ LDouble: cover from long double {
 		formatting := ("%." & decimals toString() & "f")
 		result := formatting formatDouble(this)
 		formatting free()
-		result
-	}
-	toText: func -> Text {
-		string := this toString()
-		result := Text new(string) copy()
-		string free()
 		result
 	}
 	in: func (range: Range) -> Bool {
