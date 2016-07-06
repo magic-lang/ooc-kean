@@ -32,9 +32,9 @@ RecycleBin: class <T> {
 		this _mutex unlock()
 	}
 	search: func (matches: Func (T) -> Bool) -> T {
-		result: T = null
 		this _mutex lock()
 		index := this _list search(matches)
+		result: T = null
 		if (index > -1)
 			result = this _list remove(index)
 		this _mutex unlock()
