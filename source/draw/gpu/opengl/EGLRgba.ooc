@@ -22,7 +22,7 @@ EGLRgba: class extends OpenGLRgba {
 	}
 	free: override func {
 		if (this _recyclable)
-			(this context as AndroidContext) recycle(this)
+			(this context as AndroidContext) recycleEGLRgba(this)
 		else {
 			this _buffer free()
 			super()
