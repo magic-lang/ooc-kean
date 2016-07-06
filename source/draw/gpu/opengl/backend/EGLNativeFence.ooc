@@ -10,4 +10,5 @@ EGLNativeFence: class {
 		GLExtensions eglDestroySyncKHR(this _display, this _backend)
 		super()
 	}
+	duplicateFileDescriptor: func -> Int { GLExtensions eglDupNativeFenceFDANDROID(this _display, this _backend) }
 }
