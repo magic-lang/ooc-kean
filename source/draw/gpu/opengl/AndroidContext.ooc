@@ -19,8 +19,8 @@ AndroidContext: class extends OpenGLContext {
 	_unpackRgbaToMonochrome: OpenGLMap
 	_unpackRgbaToUv: OpenGLMap
 	_unpackRgbaToUvPadded: OpenGLMap
-	_packers := RecycleBin<EGLRgba> new(32, func (image: EGLRgba) { image _recyclable = false; image free() })
-	_eglBin := RecycleBin<EGLRgba> new(100, |image| image _recyclable = false; image referenceCount decrease())
+	_packers := RecycleBin<EGLRgba> new(32, |image| image _recyclable = false; image free())
+	_eglBin := RecycleBin<EGLRgba> new(100, |image| image _recyclable = false; image free())
 	init: func (other: This = null) {
 		super(other)
 		this _unpackRgbaToMonochrome = OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToMonochrome.frag"), this)
@@ -38,7 +38,7 @@ AndroidContext: class extends OpenGLContext {
 			case (graphicBufferImage: GraphicBufferYuv420Semiplanar) =>
 				rgba := this createEGLRgba(graphicBufferImage)
 				result := this _unpackRgbaToYuv420Semiplanar(rgba, rasterImage size, graphicBufferImage uvPadding % graphicBufferImage stride)
-				rgba referenceCount decrease()
+				rgba free()
 				result
 			case => super(rasterImage)
 		}
@@ -96,7 +96,7 @@ AndroidContext: class extends OpenGLContext {
 			this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
 			result = OpenGLPromise new(this)
 			(result as OpenGLPromise) sync()
-			targetImageRgba referenceCount decrease()
+			targetImageRgba free()
 		} else
 			result = super(source, target)
 		result
@@ -151,7 +151,7 @@ AndroidContext: class extends OpenGLContext {
 	preallocate: override func (resolution: IntVector2D) { this _eglBin clear() }
 	preregister: override func (image: Image) {
 		if (image instanceOf(GraphicBufferYuv420Semiplanar))
-			this createEGLRgba(image as GraphicBufferYuv420Semiplanar) referenceCount decrease()
+			this createEGLRgba(image as GraphicBufferYuv420Semiplanar) free()
 	}
 	createEGLRgba: func (source: GraphicBufferYuv420Semiplanar) -> EGLRgba {
 		result := this _eglBin search(|image| source buffer _handle == image buffer _handle)
