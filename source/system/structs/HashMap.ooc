@@ -253,8 +253,8 @@ HashMap: class <K, V> {
 			case => memcmp(first, second, K size) == 0
 		}
 	}
-	readFromFile: static func (filename: Text) -> This<String, String> {
-		reader := FileReader new(filename, t"r")
+	readFromFile: static func (filename: String) -> This<String, String> {
+		reader := FileReader new(filename, "r")
 		result := This<String, String> new()
 		while (reader hasNext()) {
 			string := reader readLine()
