@@ -165,6 +165,6 @@ AndroidContext: class extends OpenGLContext {
 		}
 		result
 	}
-	recycle: func (image: EGLRgba) { this _eglBin add(image) }
+	recycleEGLRgba: func (image: EGLRgba) { this _eglBin add(image) }
 }
 }
