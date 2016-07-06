@@ -87,11 +87,6 @@ raise: func ~assert (condition: Bool, message: String, origin: Class = null) {
 	if (condition)
 		raise(message, origin)
 }
-raise: func ~textWithClass (message: Text, origin: Class = null) { raise(message toString(), origin) }
-raise: func ~textAssert (condition: Bool, message: Text, origin: Class = null) {
-	if (condition)
-		raise(message, origin)
-}
 
 Exception: class {
 	backtraces := Stack<Backtrace> new()
