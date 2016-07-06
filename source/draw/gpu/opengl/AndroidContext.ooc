@@ -19,7 +19,7 @@ AndroidContext: class extends OpenGLContext {
 	_unpackRgbaToMonochrome: OpenGLMap
 	_unpackRgbaToUv: OpenGLMap
 	_unpackRgbaToUvPadded: OpenGLMap
-	_packers := RecycleBin<EGLRgba> new(32, func (image: EGLRgba) { image free() })
+	_packers := RecycleBin<EGLRgba> new(32, func (image: EGLRgba) { image _recyclable = false; image free() })
 	_eglBin := RecycleBin<EGLRgba> new(100, |image| image _recyclable = false; image referenceCount decrease())
 	init: func (other: This = null) {
 		super(other)
@@ -29,14 +29,14 @@ AndroidContext: class extends OpenGLContext {
 	}
 	free: override func {
 		this _backend makeCurrent()
-		this _eglBin clear() . free()
+		this _eglBin free()
 		(this _unpackRgbaToMonochrome, this _unpackRgbaToUv, this _unpackRgbaToUvPadded, this _packers) free()
 		super()
 	}
 	createImage: override func (rasterImage: RasterImage) -> GpuImage {
 		match(rasterImage) {
 			case (graphicBufferImage: GraphicBufferYuv420Semiplanar) =>
-				rgba := graphicBufferImage toRgba(this)
+				rgba := this createEGLRgba(graphicBufferImage)
 				result := this _unpackRgbaToYuv420Semiplanar(rgba, rasterImage size, graphicBufferImage uvPadding % graphicBufferImage stride)
 				rgba referenceCount decrease()
 				result
@@ -89,7 +89,7 @@ AndroidContext: class extends OpenGLContext {
 		if (target instanceOf(GraphicBufferYuv420Semiplanar) && source instanceOf(GpuYuv420Semiplanar)) {
 			targetImage := target as GraphicBufferYuv420Semiplanar
 			sourceImage := source as GpuYuv420Semiplanar
-			targetImageRgba := targetImage toRgba(this)
+			targetImageRgba := this createEGLRgba(targetImage)
 			targetWidth := sourceImage size x / 4
 			padding := targetImage uvPadding % targetImage stride
 			this packToRgba(sourceImage y, targetImageRgba, IntBox2D new(0, 0, targetWidth, targetImage y size y), padding)
@@ -148,10 +148,10 @@ AndroidContext: class extends OpenGLContext {
 		map add("startY", startY)
 		DrawState new(target) setMap(map) draw()
 	}
-	preallocate: override func (resolution: IntVector2D) { GraphicBufferYuv420Semiplanar free~all() }
+	preallocate: override func (resolution: IntVector2D) { this _eglBin clear() }
 	preregister: override func (image: Image) {
 		if (image instanceOf(GraphicBufferYuv420Semiplanar))
-			(image as GraphicBufferYuv420Semiplanar) toRgba(this) referenceCount decrease()
+			this createEGLRgba(image as GraphicBufferYuv420Semiplanar) referenceCount decrease()
 	}
 	createEGLRgba: func (source: GraphicBufferYuv420Semiplanar) -> EGLRgba {
 		result := this _eglBin search(|image| source buffer _handle == image buffer _handle)
