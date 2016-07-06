@@ -170,6 +170,7 @@ EGL_IMAGE_PRESERVED_KHR: extern const UInt
 EGL_NATIVE_BUFFER_ANDROID: extern const UInt
 EGL_SYNC_NATIVE_FENCE_ANDROID: extern const UInt
 EGL_SYNC_NATIVE_FENCE_FD_ANDROID: extern const UInt
+EGL_NO_NATIVE_FENCE_FD_ANDROID: extern const UInt
 __eglMustCastToProperFunctionPointerType_OOC: cover from __eglMustCastToProperFunctionPointerType
 eglGetProcAddress: extern func (procname: CString) -> Pointer
 PFNEGLCREATEIMAGEKHRPROC_OOC: cover from PFNEGLCREATEIMAGEKHRPROC
