@@ -15,6 +15,7 @@ GLExtensions: class {
 	eglDestroyImageKHR: static Func(Pointer, Pointer)
 	glEGLImageTargetTexture2DOES: static Func(UInt, Pointer)
 	eglCreateSyncKHR: static Func(Pointer, UInt, Int*) -> Pointer
+	eglDupNativeFenceFDANDROID: static Func(Pointer, Pointer) -> Int
 	_initialized := static false
 	initialize: static func {
 		if (!This _initialized) {
@@ -22,6 +23,7 @@ GLExtensions: class {
 			This eglDestroyImageKHR = This _load("eglDestroyImageKHR") as Func(Pointer, Pointer)
 			This glEGLImageTargetTexture2DOES = This _load("glEGLImageTargetTexture2DOES") as Func(UInt, Pointer)
 			This eglCreateSyncKHR = This _load("eglCreateSyncKHR") as Func(Pointer, UInt, Int*) -> Pointer
+			This eglDupNativeFenceFDANDROID = This _load("eglDupNativeFenceFDANDROID") as Func(Pointer, Pointer) -> Int
 			This _initialized = true
 		}
 	}
