@@ -169,7 +169,7 @@ EGL_ALPHA_FORMAT_PRE: extern const UInt
 EGL_IMAGE_PRESERVED_KHR: extern const UInt
 EGL_NATIVE_BUFFER_ANDROID: extern const UInt
 __eglMustCastToProperFunctionPointerType_OOC: cover from __eglMustCastToProperFunctionPointerType
-eglGetProcAddress: extern func (procname: CString) -> Func
+eglGetProcAddress: extern func (procname: CString) -> Pointer
 PFNEGLCREATEIMAGEKHRPROC_OOC: cover from PFNEGLCREATEIMAGEKHRPROC
 PFNEGLDESTROYIMAGEKHRPROC_OOC: cover from PFNEGLDESTROYIMAGEKHRPROC
 
