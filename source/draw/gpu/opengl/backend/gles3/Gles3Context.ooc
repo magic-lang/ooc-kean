@@ -19,7 +19,7 @@ Gles3Context: class extends GLContext {
 	_eglSurface: Pointer
 	_contextCount := static 0
 	_mutex := static Mutex new()
-	init: func
+	init: func { super() }
 	free: override func {
 		status := eglMakeCurrent(this _eglDisplay, null, null, null)
 		if (status != EGL_TRUE)
