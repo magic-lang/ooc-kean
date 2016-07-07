@@ -209,7 +209,7 @@ HashMapTest: class extends Fixture {
 			hashmap free()
 
 			tolerance := 0.00001f
-			input := HashMap readFromFile(t"test/system/output/mathmap.txt")
+			input := HashMap readFromFile("test/system/output/mathmap.txt")
 			expect(input, is notNull)
 			expect(input count, is equal to(4))
 			(piString, eString, sqrtTwoString, primeString) := (input get("pi"), input get("e"), input get("sqrt(2)"), input get("primes"))
