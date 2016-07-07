@@ -23,11 +23,11 @@ GLExtensions: class {
 			This _initialized = true
 		}
 	}
-	_load: static func (name: String) -> (Pointer, Pointer) {
+	_load: static func (name: String) -> Closure {
 		result := eglGetProcAddress(name toCString())
 		if (result == null)
 			Debug print("Failed to load OpenGL extension function: " + name)
-		(result, null)
+		(result, null) as Closure
 	}
 }
 }
