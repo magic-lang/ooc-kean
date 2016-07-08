@@ -8,6 +8,7 @@
 
 import egl/egl
 import GLExtensions, GLFence
+version(!gpuOff) {
 EGLNativeFence: class extends GLFence {
 	_display: Pointer
 	init: func (=_display) { super() }
@@ -23,4 +24,5 @@ EGLNativeFence: class extends GLFence {
 	}
 	wait: override func { raise("Wait unimplemented for EGLNativeFence") }
 	duplicateFileDescriptor: func -> Int { GLExtensions eglDupNativeFenceFDANDROID(this _display, this _backend) }
+}
 }
