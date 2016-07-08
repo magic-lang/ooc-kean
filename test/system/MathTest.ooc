@@ -118,6 +118,11 @@ MathTest: class extends Fixture {
 			string free()
 			expect(123.4f roundToValueDigits(2, true), is equal to(130.f) within(floatTolerance))
 			expect(123.4f roundToValueDigits(3, false), is equal to(123.f) within(floatTolerance))
+
+			(two, three) := (123.456f toString(2), 123.456f toString(3))
+			expect(two, is equal to("123.46"))
+			expect(three, is equal to("123.456"))
+			(two, three) free()
 		})
 		this add("Double", func {
 			expect(22.3 modulo(5), is equal to(2.3) within(doubleTolerance))
@@ -162,6 +167,11 @@ MathTest: class extends Fixture {
 			expect(nearZero greaterOrEqual(0.0), is true)
 			expect(nearZero greaterThan(0.0), is false)
 			expect(nearZero lessThan(0.0), is false)
+
+			(two, three) := (123.456 toString(2), 123.456 toString(3))
+			expect(two, is equal to("123.46"))
+			expect(three, is equal to("123.456"))
+			(two, three) free()
 		})
 		this add("SineInterpolation", func {
 			expect(0.0f sineInterpolation(), is equal to(0.0f) within(floatTolerance))

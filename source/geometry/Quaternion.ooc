@@ -169,9 +169,8 @@ Quaternion: cover {
 		(axis, angle) := this toAxisAngle()
 		FloatVector3D new(axis x, axis y, axis z) * angle
 	}
-	toString: func -> String {
-		"Real: " << "%8f" formatFloat(this real) >>
-		" Imaginary: " & "%8f" formatFloat(this imaginary x) >> " " & "%8f" formatFloat(this imaginary y) >> " " & "%8f" formatFloat(this imaginary z)
+	toString: func (decimals := 6) -> String {
+		"Real: " << this real toString(decimals) >> " Imaginary: " & this imaginary x toString(decimals) >> " " & this imaginary y toString(decimals) >> " " & this imaginary z toString(decimals)
 	}
 
 	operator * (other: This) -> This {

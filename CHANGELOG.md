@@ -1,5 +1,10 @@
 # ooc-kean changes by release
 
+## Release-2.5.0
+
+- **Bug fixes in ReferenceCounter**
+- **toString() now takes number of decimals as argument**
+
 ## Release-2.4.0
 
 - **Fixed bug with multiple freeing of string literals**

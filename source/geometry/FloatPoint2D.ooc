@@ -43,7 +43,7 @@ FloatPoint2D: cover {
 	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x as Int, this y as Int) }
 	toIntVector2D: func -> IntVector2D { IntVector2D new(this x as Int, this y as Int) }
 	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x, this y) }
-	toString: func -> String { (this x toString() >> ", ") & this y toString() }
+	toString: func (decimals := 2) -> String { (this x toString(decimals) >> ", ") & this y toString(decimals) }
 
 	operator - -> This { This new(-this x, -this y) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y) }

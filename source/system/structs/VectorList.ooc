@@ -52,8 +52,8 @@ VectorList: class <T> extends List<T>{
 		result
 	}
 	removeAt: override func (index: Int) { this removeAt(index, index + 1) }
-	removeAt: func ~range (range: Range) { this removeAt(range min, range max) }
-	removeAt: func ~indices (start, end: Int) {
+	removeAt: override func ~range (range: Range) { this removeAt(range min, range max) }
+	removeAt: override func ~indices (start, end: Int) {
 		count := end - start
 		version(safe)
 			if (count < 0 || start > this count || end > this count)
