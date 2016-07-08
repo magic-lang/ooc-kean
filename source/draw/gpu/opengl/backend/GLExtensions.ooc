@@ -25,7 +25,11 @@ GLExtensions: class {
 			This glEGLImageTargetTexture2DOES = This _load("glEGLImageTargetTexture2DOES") as Func(UInt, Pointer)
 			This eglCreateSyncKHR = This _load("eglCreateSyncKHR") as Func(Pointer, UInt, Int*) -> Pointer
 			This eglDestroySyncKHR = This _load("eglDestroySyncKHR") as Func (Pointer, Pointer) -> Bool
-			This eglDupNativeFenceFDANDROID = This _load("eglDupNativeFenceFDANDROID") as Func(Pointer, Pointer) -> Int
+			version(!windows) {
+				//For some reason this function can't be loaded with eglGetProcAddress so we load it with dlsym instead
+				RTLD_DEFAULT := null //This should be defined in dlfcn.h
+				This eglDupNativeFenceFDANDROID = (dlsym(RTLD_DEFAULT, "eglDupNativeFenceFDANDROID"), null) as Func(Pointer, Pointer) -> Int
+			}
 			This _initialized = true
 		}
 	}
