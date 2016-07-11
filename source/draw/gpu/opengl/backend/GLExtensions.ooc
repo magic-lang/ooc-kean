@@ -29,8 +29,8 @@ GLExtensions: class {
 			This eglClientWaitSyncKHR = This _load("eglClientWaitSyncKHR") as Func (Pointer, Pointer, Int, ULong) -> Bool
 			version(!windows) {
 				//For some reason this function can't be loaded with eglGetProcAddress so we load it with dlsym instead
-				RTLD_DEFAULT := null //This should be defined in dlfcn.h
-				This eglDupNativeFenceFDANDROID = (dlsym(RTLD_DEFAULT, "eglDupNativeFenceFDANDROID"), null) as Func(Pointer, Pointer) -> Int
+				handle := null //This should be RTLD_DEFAULT, defined in dlfcn.h
+				This eglDupNativeFenceFDANDROID = (dlsym(handle, "eglDupNativeFenceFDANDROID"), null) as Func(Pointer, Pointer) -> Int
 			}
 			This _initialized = true
 		}
