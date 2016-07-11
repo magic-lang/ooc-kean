@@ -21,6 +21,9 @@ ReferenceCounter: class {
 	}
 	increase: func { this update(1) }
 	decrease: func { this update(-1) }
-	reset: func { this _count set(0) }
+	reset: func {
+		this _count set(0)
+		this _targetReleased set(false)
+	}
 	toString: func -> String { "Object ID: " << this _target as Pointer toString() >> " Count: " & this _count get() toString() }
 }
