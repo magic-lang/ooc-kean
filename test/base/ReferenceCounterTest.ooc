@@ -37,6 +37,17 @@ ReferenceCounterTest: class extends Fixture {
 			counter free()
 		})
 		this add("multiple threads", This _testMultipleThreads)
+		this add("multiple free", func {
+			isAlive: Bool
+			object := TestObject new(isAlive&)
+			counter := ReferenceCounter new(object)
+			counter increase()
+			counter decrease()
+			counter decrease()
+			counter decrease()
+			expect(isAlive, is false)
+			counter free()
+		})
 	}
 	_testMultipleThreads: static func {
 		isAlive: Bool
