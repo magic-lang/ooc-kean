@@ -23,3 +23,14 @@ MallocAllocator: class extends AbstractAllocator {
 	allocate: override func (size: SizeT) -> Pointer { malloc(size) }
 	deallocate: override func (pointer: Pointer) { memfree(pointer) }
 }
+
+Allocator: abstract class {
+	_defaultAllocator: static AbstractAllocator = null
+	mallocAllocator := static MallocAllocator new(Owner Sender)
+	defaultAllocator: static func -> AbstractAllocator {
+		This _defaultAllocator ?? mallocAllocator as AbstractAllocator
+	}
+	free: static func ~all {
+		This mallocAllocator free(Owner Sender)
+	}
+}
