@@ -14,12 +14,12 @@ AbstractAllocator: abstract class {
 		if (owner == this _owner)
 			this free()
 	}
-	allocate: abstract func (size: SizeT) -> Void*
-	deallocate: abstract func (pointer: Void*)
+	allocate: abstract func (size: SizeT) -> Pointer
+	deallocate: abstract func (pointer: Pointer)
 }
 
 MallocAllocator: class extends AbstractAllocator {
 	init: func (owner := Owner Receiver) { this _owner = owner }
-	allocate: override func (size: SizeT) -> Void* { malloc(size) }
-	deallocate: override func (pointer: Void*) { memfree(pointer) }
+	allocate: override func (size: SizeT) -> Pointer { malloc(size) }
+	deallocate: override func (pointer: Pointer) { memfree(pointer) }
 }

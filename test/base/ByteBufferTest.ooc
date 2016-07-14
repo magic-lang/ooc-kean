@@ -12,11 +12,11 @@ use unit
 CustomAllocator: class extends AbstractAllocator {
 	_allocCount := 0
 	init: func
-	allocate: override func (size: SizeT) -> Void* {
+	allocate: override func (size: SizeT) -> Pointer {
 		this _allocCount += 1
 		malloc(size)
 	}
-	deallocate: override func (pointer: Void*) {
+	deallocate: override func (pointer: Pointer) {
 		memfree(pointer)
 	}
 }
