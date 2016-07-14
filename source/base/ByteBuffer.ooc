@@ -33,7 +33,7 @@ ByteBuffer: class {
 		if (this _ownsMemory)
 			this _allocator deallocate(this _pointer)
 		this _pointer = null
-		this _allocator free()
+		this _allocator free(Owner Receiver)
 		super()
 	}
 	zero: func ~whole { this memset(0) }
