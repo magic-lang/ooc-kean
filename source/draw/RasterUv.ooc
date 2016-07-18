@@ -44,14 +44,18 @@ RasterUv: class extends RasterPacked {
 			uv referenceCount decrease()
 	}
 	fill: override func (color: ColorRgba) {
-		sizeY := this size y
-		sizeX := this size x
-		thisBuffer := this buffer pointer as ColorUv*
-		thisStride := this stride / this bytesPerPixel
 		colorUv := ColorUv new(color r, color g)
-		for (y in 0 .. sizeY)
-			for (x in 0 .. sizeX)
-				thisBuffer[x + y * thisStride] = colorUv
+		if (colorUv u == colorUv v)
+			this buffer memset(colorUv u)
+		else {
+			sizeY := this size y
+			sizeX := this size x
+			thisBuffer := this buffer pointer as ColorUv*
+			thisStride := this stride / this bytesPerPixel
+			for (y in 0 .. sizeY)
+				for (x in 0 .. sizeX)
+					thisBuffer[x + y * thisStride] = colorUv
+		}
 	}
 	copy: override func -> This { This new(this buffer copy(), this size, this stride) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
