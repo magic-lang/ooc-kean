@@ -120,7 +120,7 @@ OpenGLPacked: abstract class extends GpuImage {
 		flipX := 1.0f
 		flipY := -1.0f
 		if (focalLengthPerWidth > 0.0f) {
-			nearPlane := 0.01f
+			nearPlane := 100.0f
 			farPlane := 12500.0f
 			a := flipX * 2.0f * focalLengthPerWidth
 			f := flipY * 2.0f * focalLengthPerHeight
