@@ -7,6 +7,7 @@
  */
 
 use collections
+import Allocator
 import ReferenceCounter
 import Debug
 
@@ -15,21 +16,24 @@ ByteBuffer: class {
 	_size: Int
 	_referenceCount: ReferenceCounter
 	_ownsMemory: Bool
+	_allocator: AbstractAllocator
 	pointer ::= this _pointer
 	size ::= this _size
 	referenceCount ::= this _referenceCount
 
-	init: func (=_pointer, =_size, ownsMemory := false) {
+	init: func (=_pointer, =_size, ownsMemory := false, allocator := Allocator defaultAllocator()) {
 		this _referenceCount = ReferenceCounter new(this)
 		this _ownsMemory = ownsMemory
+		this _allocator = allocator
 	}
 	free: override func {
 		if (this _referenceCount != null)
 			this _referenceCount free()
 		this _referenceCount = null
 		if (this _ownsMemory)
-			memfree(this _pointer)
+			this _allocator deallocate(this _pointer)
 		this _pointer = null
+		this _allocator free(Owner Receiver)
 		super()
 	}
 	zero: func ~whole { this memset(0) }
@@ -50,14 +54,17 @@ ByteBuffer: class {
 	copyTo: func (other: This, start: Int, destination: Int, length: Int) {
 		memcpy(other pointer + destination, this pointer + start, length)
 	}
-	new: static func ~size (size: Int) -> This { _RecyclableByteBuffer new(size) }
+	new: static func ~size (size: Int, allocator := Allocator defaultAllocator()) -> This { _RecyclableByteBuffer new(size, allocator) }
 	new: static func ~recover (pointer: Byte*, size: Int, recover: Func (This) -> Bool) -> This {
 		_RecoverableByteBuffer new(pointer, size, recover)
 	}
-	free: static func ~all { _RecyclableByteBuffer _free~all() }
+	free: static func ~all {
+		_RecyclableByteBuffer _free~all()
+	}
 }
 
 GlobalCleanup register(|| ByteBuffer free~all(), true)
+GlobalCleanup register(|| Allocator free~all(), true)
 
 _SlicedByteBuffer: class extends ByteBuffer {
 	_parent: ByteBuffer
@@ -86,7 +93,7 @@ _RecoverableByteBuffer: class extends ByteBuffer {
 }
 
 _RecyclableByteBuffer: class extends ByteBuffer {
-	init: func (pointer: Byte*, size: Int) { super(pointer, size, true) }
+	init: func (pointer: Byte*, size: Int, allocator := Allocator defaultAllocator()) { super(pointer, size, true, allocator) }
 	_forceFree: func {
 		this _size = 0
 		this free()
@@ -111,7 +118,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 	_smallRecycleBin := static VectorList<This> new()
 	_mediumRecycleBin := static VectorList<This> new()
 	_largeRecycleBin := static VectorList<This> new()
-	new: static func ~fromSize (size: Int) -> This {
+	new: static func ~fromSize (size: Int, allocator := Allocator defaultAllocator()) -> This {
 		buffer: This = null
 		bin := This _getBin(size)
 		This _lock lock()
@@ -123,7 +130,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 			}
 		This _lock unlock()
 		version(debugByteBuffer) { if (buffer == null) Debug print("No RecyclableByteBuffer available in the bin; allocating a new one") }
-		buffer == null ? This new(malloc(size), size) : buffer
+		buffer == null ? This new(allocator allocate(size) as Byte*, size, allocator) : buffer
 	}
 	_getBin: static func (size: Int) -> VectorList<This> {
 		size < 10000 ? This _smallRecycleBin : (size < 100000 ? This _mediumRecycleBin : This _largeRecycleBin)

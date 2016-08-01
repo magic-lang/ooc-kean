@@ -3,6 +3,7 @@ Description: Base library that complements the built-in SDK.
 SourcePath: source/base
 Imports: Atomic
 Imports: Order
+Imports: Allocator
 Imports: ByteBuffer
 Imports: DateTime
 Imports: TimeSpan
