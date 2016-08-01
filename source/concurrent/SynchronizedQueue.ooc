@@ -44,6 +44,17 @@ SynchronizedQueue: class <T> extends Queue<T> {
 		this _backend clear()
 		this _mutex unlock()
 	}
+	operator [] (index: Int) -> T {
+		this _mutex lock()
+		result := this _backend[index]
+		this _mutex unlock()
+		result
+	}
+	operator []= (index: Int, value: T) {
+		this _mutex lock()
+		this _backend[index] = value
+		this _mutex unlock()
+	}
 }
 
 BlockedQueue: class <T> extends SynchronizedQueue<T> {

@@ -98,8 +98,11 @@ VectorQueueTest: class extends Fixture {
 		})
 		this add("Queue positive indexing", func {
 			queue := this _createQueue(10, 5)
-			for (i in 0 .. 5)
+			for (i in 0 .. 5) {
 				expect(queue[i], is equal to(i))
+				queue[i] = i + 1
+				expect(queue[i], is equal to(i + 1))
+			}
 			queue free()
 		})
 		this add("Queue negative indexing", func {

@@ -47,4 +47,5 @@ CircularQueue: class <T> extends Queue<T> {
 	dequeue: override func ~default (fallback: T) -> T { this _backend dequeue(fallback) }
 	peek: override func ~default (fallback: T) -> T { this _backend peek(fallback) }
 	operator [] (index: Int) -> T { this _backend[index] }
+	operator []= (index: Int, value: T) { this _backend[index] = value }
 }
