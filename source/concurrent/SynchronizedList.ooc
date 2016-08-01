@@ -55,9 +55,6 @@ SynchronizedList: class <T> extends List<T> {
 		this _backend removeAt(index)
 		this _mutex unlock()
 	}
-	removeAt: override func ~range (range: Range) {
-		this removeAt(range min, range max)
-	}
 	removeAt: override func ~indices (start, end: Int) {
 		this _mutex lock()
 		this _backend removeAt(start, end)
