@@ -37,17 +37,22 @@ ReferenceCounterTest: class extends Fixture {
 			counter free()
 		})
 		this add("multiple threads", This _testMultipleThreads)
+		this add("multiple free", func {
+			isAlive: Bool
+			object := TestObject new(isAlive&)
+			counter := ReferenceCounter new(object)
+			counter increase()
+			counter decrease()
+			counter decrease()
+			counter decrease()
+			expect(isAlive, is false)
+			counter free()
+		})
 	}
 	_testMultipleThreads: static func {
 		isAlive: Bool
 		object := TestObject new(isAlive&)
 		counter := ReferenceCounter new(object)
-		counter isSafe = true
-		expect(counter isSafe, is true)
-		counter isSafe = false
-		expect(counter isSafe, is false)
-		counter isSafe = true
-		expect(counter isSafe, is true)
 		numberOfThreads := 8
 		countPerThread := 500
 		threads := Thread[numberOfThreads] new()
