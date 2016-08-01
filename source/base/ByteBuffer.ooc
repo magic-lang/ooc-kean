@@ -60,11 +60,11 @@ ByteBuffer: class {
 	}
 	free: static func ~all {
 		_RecyclableByteBuffer _free~all()
-		Allocator free~all()
 	}
 }
 
 GlobalCleanup register(|| ByteBuffer free~all(), true)
+GlobalCleanup register(|| Allocator free~all(), true)
 
 _SlicedByteBuffer: class extends ByteBuffer {
 	_parent: ByteBuffer

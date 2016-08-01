@@ -11,12 +11,14 @@ use unit
 
 CustomAllocator: class extends AbstractAllocator {
 	_allocCount := 0
+	_freeCount := static 0
 	init: func
 	allocate: override func (size: SizeT) -> Pointer {
 		this _allocCount += 1
 		malloc(size)
 	}
 	deallocate: override func (pointer: Pointer) {
+		This _freeCount += 1
 		memfree(pointer)
 	}
 }
@@ -97,7 +99,8 @@ ByteBufferTest: class extends Fixture {
 		expect(allocator _allocCount, is equal to(0))
 		buffer := ByteBuffer new(128, allocator)
 		expect(allocator _allocCount, is equal to(1))
-		buffer free()
+		(buffer as _RecyclableByteBuffer) _forceFree()
+		expect(CustomAllocator _freeCount, is equal to(1))
 	}
 }
 
