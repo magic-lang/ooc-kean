@@ -72,4 +72,10 @@ VectorQueue: class <T> extends Queue<T> {
 		position := (index >= 0 ? this _head + index : this _tail + index) modulo(this _capacity)
 		this _backend[position]
 	}
+	operator []= (index: Int, value: T) {
+		version(safe)
+			raise(index < -this count || index >= this count, "Indexing in set accessor of VectorQueue outside of range.")
+		position := (index >= 0 ? this _head + index : this _tail + index) modulo(this _capacity)
+		this _backend[position] = value
+	}
 }

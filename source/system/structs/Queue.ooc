@@ -15,4 +15,6 @@ Queue: abstract class <T> {
 	enqueue: abstract func (item: T)
 	dequeue: abstract func ~default (fallback: T) -> T
 	peek: abstract func ~default (fallback: T) -> T
+	abstract operator [] (index: Int) -> T
+	abstract operator []= (index: Int, value: T)
 }
