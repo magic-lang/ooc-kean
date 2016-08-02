@@ -87,7 +87,7 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			target free()
 			cropAreaInt := IntBox2D new(IntPoint2D new(), source size)
 			target = RasterYuv420Semiplanar new(cropAreaInt size)
-			source cropInto(cropAreaInt, target)
+			source resizeInto(target, cropAreaInt)
 			expect(target distance(source), is equal to(0.0f) within(0.001f))
 			source referenceCount decrease()
 			target referenceCount decrease()

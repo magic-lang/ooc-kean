@@ -131,29 +131,8 @@ RasterYuv420Semiplanar: class extends RasterImage {
 	}
 	crop: func ~int (region: IntBox2D) -> This {
 		result := This new(region size, region size x + (region size x isOdd ? 1 : 0)) as This
-		this cropInto(region, result)
+		this resizeInto(result, region)
 		result
-	}
-	cropInto: func (region: IntBox2D, target: This) {
-		thisYBuffer := this y buffer pointer
-		targetYBuffer := target y buffer pointer
-		for (row in region top .. region size y + region top) {
-			thisStride := row * this y stride
-			targetStride := ((row - region top) as Int) * target y stride
-			for (column in region left .. region size x + region left)
-				targetYBuffer[(column - region left) as Int + targetStride] = thisYBuffer[column + thisStride]
-		}
-		regionSizeHalf := region size / 2
-		regionTopHalf := region top / 2
-		regionLeftHalf := region left / 2
-		thisUvBuffer := this uv buffer pointer as ColorUv*
-		targetUvBuffer := target uv buffer pointer as ColorUv*
-		for (row in regionTopHalf .. regionSizeHalf y + regionTopHalf) {
-			thisStride := row * this uv stride / 2
-			targetStride := ((row - regionTopHalf) as Int) * target uv stride / 2
-			for (column in regionLeftHalf .. regionSizeHalf x + regionLeftHalf)
-				targetUvBuffer[(column - regionLeftHalf) as Int + targetStride] = thisUvBuffer[column + thisStride]
-		}
 	}
 	apply: override func ~rgb (action: Func(ColorRgb)) {
 		convert := ColorConvert fromYuv(action)
