@@ -119,7 +119,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		bin := This _getBin(size)
 		This _lock lock()
 		for (i in 0 .. bin count)
-			if ((bin[i] size) == size) {
+			if (bin[i] size == size && bin[i] _allocator == allocator) {
 				buffer = bin remove(i)
 				buffer referenceCount reset()
 				break
