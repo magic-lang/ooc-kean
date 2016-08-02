@@ -51,6 +51,9 @@ VectorList: class <T> extends List<T>{
 		this _count -= 1
 		result
 	}
+	removeAt: override func (index: Int) {
+		this removeAt(index, index + 1)
+	}
 	removeAt: override func ~indices (start, end: Int) {
 		count := end - start
 		version(safe)
