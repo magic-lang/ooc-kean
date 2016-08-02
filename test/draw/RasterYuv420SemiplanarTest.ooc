@@ -122,6 +122,16 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			(resized, source) referenceCount decrease()
 			output free()
 		})
+		this add("resize (with box)", func {
+			source := RasterYuv420Semiplanar open(this _inputPath)
+			box := IntBox2D new(0, source height / 2, source width, source height / 2)
+			target := RasterYuv420Semiplanar new(source size)
+			source resizeInto(target, box)
+			output := "test/draw/output/RasterYuv420SemiplanarTest_lowerHalfResized.png"
+			target save(output)
+			(target, source) referenceCount decrease()
+			output free()
+		})
 	}
 	free: override func {
 		(this _inputPath, this _inputOddWidth, this _inputOddHeight) free()
