@@ -15,7 +15,7 @@ List: abstract class <T> {
 	insert: abstract func (index: Int, item: T)
 	remove: abstract func ~last -> T
 	remove: abstract func ~atIndex (index: Int) -> T
-	removeAt: virtual func (index: Int) { this removeAt(index, index + 1) }
+	removeAt: abstract func (index: Int)
 	removeAt: func ~range (range: Range) { this removeAt(range min, range max) }
 	removeAt: abstract func ~indices (start, end: Int)
 	clear: abstract func
