@@ -55,16 +55,12 @@ ByteBuffer: class {
 		memcpy(other pointer + destination, this pointer + start, length)
 	}
 	new: static func ~size (size: Int, allocator := Allocator defaultAllocator()) -> This { _RecyclableByteBuffer new(size, allocator) }
-	new: static func ~recover (pointer: Byte*, size: Int, recover: Func (This) -> Bool) -> This {
-		_RecoverableByteBuffer new(pointer, size, recover)
-	}
-	free: static func ~all {
-		_RecyclableByteBuffer _free~all()
-	}
+	new: static func ~recover (pointer: Byte*, size: Int, recover: Func (This) -> Bool) -> This { _RecoverableByteBuffer new(pointer, size, recover) }
+	free: static func ~all { _RecyclableByteBuffer _free~all() }
 }
 
-GlobalCleanup register(|| ByteBuffer free~all(), true)
-GlobalCleanup register(|| Allocator free~all(), true)
+GlobalCleanup register(|| ByteBuffer free~all(), 8)
+GlobalCleanup register(|| Allocator free~all(), 9)
 
 _SlicedByteBuffer: class extends ByteBuffer {
 	_parent: ByteBuffer
