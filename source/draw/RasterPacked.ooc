@@ -38,13 +38,15 @@ RasterPacked: abstract class extends RasterImage {
 		this _buffer = null
 		super()
 	}
-	_resizePacked: func <T> (sourceBuffer: T*, source: This, sourceBox, resultBox: IntBox2D, transform: FloatTransform3D, interpolate, flipX, flipY: Bool) {
-		if (this size == source size && this stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0 && !flipX && !flipY)
+	_resizePacked: func <T> (sourceBuffer: T*, source: This, sourceBox, resultBox: IntBox2D, transform: FloatTransform3D, interpolate, flipX, flipY: Bool, nullPixel: T) {
+		version(safe)
+			raise(transform determinant equals(0.0f), "invalid transform in _resizePacked!")
+		if (transform == FloatTransform3D identity && this size == source size && this stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0 && !flipX && !flipY)
 			memcpy(this buffer pointer, sourceBuffer, this stride * this height)
 		else if (interpolate)
-			This _resizeBilinear(source, this, sourceBox, resultBox, flipX, flipY)
+			This _resizeBilinear(source, this, sourceBox, resultBox, transform, flipX, flipY, nullPixel)
 		else
-			This _resizeNearestNeighbour(sourceBuffer, this buffer pointer as T*, source, this, sourceBox, resultBox, flipX, flipY)
+			This _resizeNearestNeighbour(sourceBuffer, this buffer pointer as T*, source, this, sourceBox, resultBox, transform, flipX, flipY, nullPixel)
 	}
 	_transformCoordinates: static func (column, row, width, height: Int, flipX, flipY: Bool) -> (Int, Int) {
 		if (flipX)
@@ -53,7 +55,8 @@ RasterPacked: abstract class extends RasterImage {
 			row = height - row - 1
 		(column, row)
 	}
-	_resizeNearestNeighbour: static func <T> (sourceBuffer, resultBuffer: T*, source, target: This, sourceBox, resultBox: IntBox2D, flipX, flipY: Bool) {
+	_resizeNearestNeighbour: static func <T> (sourceBuffer, resultBuffer: T*, source, target: This, sourceBox, resultBox: IntBox2D, transform: FloatTransform3D, flipX, flipY: Bool, nullPixel: T) {
+		invertedTransform := transform inverse
 		bytesPerPixel := target bytesPerPixel
 		(resultWidth, resultHeight) := (resultBox size x, resultBox size y)
 		(sourceWidth, sourceHeight) := (sourceBox size x, sourceBox size y)
@@ -62,24 +65,31 @@ RasterPacked: abstract class extends RasterImage {
 		sourceStartRow := sourceBox leftTop y
 		resultStartColumn := resultBox leftTop x
 		resultStartRow := resultBox leftTop y
+		imageBox := IntBox2D new(source size)
 		for (row in 0 .. resultHeight) {
 			sourceRow := (sourceHeight * row) / resultHeight + sourceStartRow
 			for (column in 0 .. resultWidth) {
 				sourceColumn := (sourceWidth * column) / resultWidth + sourceStartColumn
 				(resultColumnTransformed, resultRowTransformed) := (column + resultStartColumn, row + resultStartRow)
 				(sourceColumnTransformed, sourceRowTransformed) := This _transformCoordinates(sourceColumn, sourceRow, source width, source height, flipX, flipY)
-				resultBuffer[resultColumnTransformed + resultStride * resultRowTransformed] = sourceBuffer[sourceColumnTransformed + sourceStride * sourceRowTransformed]
+				mappedCoord := invertedTransform * FloatPoint3D new(sourceColumnTransformed, sourceRowTransformed, 1.0)
+				if (imageBox contains(IntPoint2D new(mappedCoord x, mappedCoord y)))
+					resultBuffer[resultColumnTransformed + resultStride * resultRowTransformed] = sourceBuffer[mappedCoord x as Int + sourceStride * mappedCoord y as Int]
+				else
+					resultBuffer[resultColumnTransformed + resultStride * resultRowTransformed] = nullPixel
 			}
 		}
 	}
-	_resizeBilinear: static func (source, target: This, sourceBox, resultBox: IntBox2D, flipX, flipY: Bool) {
+	_resizeBilinear: static func <T> (source, target: This, sourceBox, resultBox: IntBox2D, transform: FloatTransform3D, flipX, flipY: Bool, nullPixel: T) {
+		invertedTransform := transform inverse
 		bytesPerPixel := target bytesPerPixel
 		(resultWidth, resultHeight) := (resultBox size x, resultBox size y)
 		(sourceWidth, sourceHeight) := (sourceBox size x, sourceBox size y)
 		(sourceStartColumn, sourceStartRow) := (sourceBox leftTop x, sourceBox leftTop y)
 		(resultStartColumn, resultStartRow) := (resultBox leftTop x, resultBox leftTop y)
 		(sourceStride, resultStride) := (source stride, target stride)
-		(sourceBuffer, resultBuffer) := (source buffer pointer as Byte*, target buffer pointer as Byte*)
+		(sourceBuffer, resultBuffer) := (source buffer pointer as T*, target buffer pointer as T*)
+		imageBox := IntBox2D new(source size)
 		for (row in 0 .. resultHeight) {
 			sourceRow := ((sourceHeight as Float) * row) / resultHeight + sourceStartRow
 			sourceRowUp := sourceRow floor() as Int
@@ -94,10 +104,19 @@ RasterPacked: abstract class extends RasterImage {
 				if (sourceColumnLeft + 1 >= sourceWidth)
 					weightRight = 0.0f
 				(resultColumnTransformed, resultRowTransformed) := (column + resultStartColumn, row + resultStartRow)
-				(sourceColumnLeftTransformed, sourceRowUpTransformed) := This _transformCoordinates(sourceColumnLeft, sourceRowUp, source width, source height, flipX, flipY)
-				(topLeft, topRight) := ((1.0f - weightDown) * (1.0f - weightRight), (1.0f - weightDown) * weightRight)
-				(bottomLeft, bottomRight) := (weightDown * (1.0f - weightRight), weightDown * weightRight)
-				This _blendSquare(sourceBuffer, resultBuffer, sourceStride, resultStride, sourceRowUpTransformed, sourceColumnLeftTransformed, resultRowTransformed, resultColumnTransformed, topLeft, topRight, bottomLeft, bottomRight, bytesPerPixel)
+				(sourceColumnTransformed, sourceRowTransformed) := This _transformCoordinates(sourceColumn, sourceRow, source width, source height, flipX, flipY)
+				mappedCoord3D := invertedTransform * FloatPoint3D new(sourceColumnTransformed, sourceRowTransformed, 1.0)
+				mappedCoord := IntPoint2D new(mappedCoord3D x, mappedCoord3D y)
+				if (imageBox contains(mappedCoord)) {
+					if (mappedCoord x == sourceBox width - 1)
+						mappedCoord x = mappedCoord x - 1
+					if (mappedCoord y == sourceBox height - 1)
+						mappedCoord y = mappedCoord y - 1
+					(topLeft, topRight) := ((1.0f - weightDown) * (1.0f - weightRight), (1.0f - weightDown) * weightRight)
+					(bottomLeft, bottomRight) := (weightDown * (1.0f - weightRight), weightDown * weightRight)
+					This _blendSquare(sourceBuffer as Byte*, resultBuffer as Byte*, sourceStride, resultStride, mappedCoord y, mappedCoord x, resultRowTransformed, resultColumnTransformed, topLeft, topRight, bottomLeft, bottomRight, bytesPerPixel)
+				} else
+					resultBuffer[resultColumnTransformed + (resultStride / bytesPerPixel) * resultRowTransformed] = nullPixel
 			}
 		}
 	}

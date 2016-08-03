@@ -39,7 +39,7 @@ RasterMonochrome: class extends RasterPacked {
 			monochrome = This convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RasterMonochrome draw")
-		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination, normalizedTransform, interpolate, flipX, flipY)
+		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination, normalizedTransform, interpolate, flipX, flipY, ColorMonochrome new())
 		if (monochrome != image)
 			monochrome referenceCount decrease()
 	}

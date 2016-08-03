@@ -69,6 +69,8 @@ RasterYuv420Semiplanar: class extends RasterImage {
 		drawStateY := drawState setTarget((drawState target as This) y)
 		drawStateUV := drawState setTarget((drawState target as This) uv)
 		drawStateUV viewport = drawState viewport / 2
+		normalizedTransform := drawStateUV getTransformNormalized()
+		drawStateUV = drawStateUV setTransformNormalized(FloatTransform3D createScaling(0.5f, 0.5f, 1.0f) * normalizedTransform * FloatTransform3D createScaling(2.0f, 2.0f, 1.0f))
 		if (drawState inputImage != null && drawState inputImage class == This) {
 			drawStateY inputImage = (drawState inputImage as This) y
 			drawStateUV inputImage = (drawState inputImage as This) uv
