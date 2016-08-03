@@ -29,7 +29,7 @@ RasterMonochrome: class extends RasterPacked {
 		if (this isValidIn(position x, position y))
 			this[position x, position y] = ColorMonochrome mix(this[position x, position y], pen color toMonochrome(), pen alphaAsFloat)
 	}
-	_draw: override func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) {
+	_draw: override func (image: Image, source, destination: IntBox2D, normalizedTransform: FloatTransform3D, interpolate, flipX, flipY: Bool) {
 		monochrome: This = null
 		if (image == null)
 			Debug error("Null image in RasterMonochrome draw")
@@ -39,7 +39,7 @@ RasterMonochrome: class extends RasterPacked {
 			monochrome = This convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RasterMonochrome draw")
-		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination, interpolate, flipX, flipY)
+		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination, normalizedTransform, interpolate, flipX, flipY)
 		if (monochrome != image)
 			monochrome referenceCount decrease()
 	}

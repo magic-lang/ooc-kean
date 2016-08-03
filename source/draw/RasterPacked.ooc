@@ -38,7 +38,7 @@ RasterPacked: abstract class extends RasterImage {
 		this _buffer = null
 		super()
 	}
-	_resizePacked: func <T> (sourceBuffer: T*, source: This, sourceBox, resultBox: IntBox2D, interpolate, flipX, flipY: Bool) {
+	_resizePacked: func <T> (sourceBuffer: T*, source: This, sourceBox, resultBox: IntBox2D, transform: FloatTransform3D, interpolate, flipX, flipY: Bool) {
 		if (this size == source size && this stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0 && !flipX && !flipY)
 			memcpy(this buffer pointer, sourceBuffer, this stride * this height)
 		else if (interpolate)

@@ -30,7 +30,7 @@ RasterRgb: class extends RasterPacked {
 		if (this isValidIn(position x, position y))
 			this[position x, position y] = ColorRgb mix(this[position x, position y], pen color toRgb(), pen alphaAsFloat)
 	}
-	_draw: override func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) {
+	_draw: override func (image: Image, source, destination: IntBox2D, normalizedTransform: FloatTransform3D, interpolate, flipX, flipY: Bool) {
 		rgb: This = null
 		if (image == null)
 			Debug error("Null image in RasterRgb draw")
@@ -40,7 +40,7 @@ RasterRgb: class extends RasterPacked {
 			rgb = This convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RasterRgb draw")
-		this _resizePacked(rgb buffer pointer as ColorRgb*, rgb, source, destination, interpolate, flipX, flipY)
+		this _resizePacked(rgb buffer pointer as ColorRgb*, rgb, source, destination, normalizedTransform, interpolate, flipX, flipY)
 		if (rgb != image)
 			rgb referenceCount decrease()
 	}
