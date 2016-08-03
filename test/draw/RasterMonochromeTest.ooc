@@ -127,20 +127,22 @@ RasterMonochromeTest: class extends Fixture {
 		this add("rotate (Z)", func {
 			source := RasterMonochrome open(this sourceFlower)
 			target := RasterMonochrome new(source size)
-			transform := FloatTransform3D createTranslation(source width / 2, source height / 2, 0.0f) * FloatTransform3D createRotationZ(3.14 / 7) * FloatTransform3D createTranslation(-source width / 2, -source height / 2, 0.0f)
+			transform := FloatTransform3D createTranslation(source width / 2, source height / 2, 0.0f) * FloatTransform3D createRotationZ(3.14f / 7) * FloatTransform3D createTranslation(-source width / 2, -source height / 2, 0.0f)
 			DrawState new(target) setInputImage(source) setTransformNormalized(transform) setInterpolate(true) draw()
 			output := "test/draw/output/RasterMonochromeTest_rotated.png"
 			target save(output)
 			(target, source) referenceCount decrease()
 			output free()
 		})
-		/*this add("distance, convertFrom RasterRgba", func {
+		this add("distance, convertFrom RasterRgba", func {
 			source := this sourceFlower
 			output := "test/draw/output/RasterRgbToMonochrome.png"
 			image1 := RasterMonochrome open(source)
 			image2 := RasterMonochrome convertFrom(RasterRgba open(source))
-			expect(image1 distance(image2), is equal to(0.0f))
-		})*/
+			expect(image1 distance(image2), is less than(18.0f))
+			(image1, image2) referenceCount decrease()
+			output free()
+		})
 	}
 }
 
