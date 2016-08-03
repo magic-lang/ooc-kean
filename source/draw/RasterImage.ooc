@@ -44,8 +44,8 @@ RasterImage: abstract class extends Image {
 		result
 	}
 	fill: override func (color: ColorRgba) { raise("RasterImage fill unimplemented!") }
-	draw: override func ~DrawState (drawState: DrawState) { this _draw(drawState inputImage, drawState getSourceLocal() toIntBox2D(), drawState getViewport(), drawState interpolate, drawState flipSourceX, drawState flipSourceY) }
-	_draw: virtual func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) { Debug error("_draw unimplemented for class " + this class name + "!") }
+	draw: override func ~DrawState (drawState: DrawState) { this _draw(drawState inputImage, drawState getSourceLocal() toIntBox2D(), drawState getViewport(), drawState getTransformNormalized(), drawState interpolate, drawState flipSourceX, drawState flipSourceY) }
+	_draw: virtual func (image: Image, source, destination: IntBox2D, normalizedTransform: FloatTransform3D, interpolate, flipX, flipY: Bool) { Debug error("_draw unimplemented for class " + this class name + "!") }
 	drawPoint: override func (point: FloatPoint2D, pen: Pen) { this _drawPoint(point x as Int, point y as Int, pen) }
 	_drawPoint: abstract func (x, y: Int, pen: Pen)
 	drawPoints: override func (pointList: VectorList<FloatPoint2D>, pen: Pen) {
