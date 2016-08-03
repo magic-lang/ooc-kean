@@ -40,7 +40,7 @@ RasterRgb: class extends RasterPacked {
 			rgb = This convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RasterRgb draw")
-		this _resizePacked(rgb buffer pointer as ColorRgb*, rgb, source, destination, normalizedTransform, interpolate, flipX, flipY)
+		this _resizePacked(rgb buffer pointer as ColorRgb*, rgb, source, destination, normalizedTransform, interpolate, flipX, flipY, ColorRgb new())
 		if (rgb != image)
 			rgb referenceCount decrease()
 	}

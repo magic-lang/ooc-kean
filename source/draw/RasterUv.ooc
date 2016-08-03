@@ -39,7 +39,7 @@ RasterUv: class extends RasterPacked {
 			uv = This convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RasterUv draw")
-		this _resizePacked(uv buffer pointer as ColorUv*, uv, source, destination, normalizedTransform, interpolate, flipX, flipY)
+		this _resizePacked(uv buffer pointer as ColorUv*, uv, source, destination, normalizedTransform, interpolate, flipX, flipY, ColorUv new())
 		if (uv != image)
 			uv referenceCount decrease()
 	}

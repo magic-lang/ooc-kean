@@ -82,13 +82,13 @@ RasterMonochromeTest: class extends Fixture {
 			size := IntVector2D new(13, 5)
 			image := RasterMonochrome open(this sourceFlower)
 			image2 := image resizeTo(image size / 2)
-			expect(image2 size == image size / 2)
+			expect(image2 size, is equal to(image size / 2))
 			image3 := image2 resizeTo(image size)
-			expect(image3 size == image size)
-			expect(image distance(image3) < image size x / 10)
+			expect(image3 size, is equal to(image size))
+			expect(image distance(image3), is less than(image size x / 10.0))
 			image3 referenceCount decrease()
 			image3 = image2 resizeTo(size)
-			expect(image3 size == size)
+			expect(image3 size, is equal to(size))
 			image3 referenceCount decrease()
 			image2 referenceCount decrease()
 			image2 = image resizeTo(image size / 4)
@@ -105,7 +105,7 @@ RasterMonochromeTest: class extends Fixture {
 		this add("copy", func {
 			image := RasterMonochrome open(this sourceFlower)
 			image2 := image copy()
-			expect(image size == image2 size)
+			expect(image size, is equal to(image2 size))
 			expect(image stride, is equal to(image2 stride))
 			expect(image referenceCount != image2 referenceCount)
 			image referenceCount decrease()
@@ -123,6 +123,16 @@ RasterMonochromeTest: class extends Fixture {
 			expect(image[0, 1] y as Int, is equal to(value64 as Int))
 			expect(image[0, 2] y as Int, is equal to(value as Int))
 			image referenceCount decrease()
+		})
+		this add("rotate (Z)", func {
+			source := RasterMonochrome open(this sourceFlower)
+			target := RasterMonochrome new(source size)
+			transform := FloatTransform3D createTranslation(source width / 2, source height / 2, 0.0f) * FloatTransform3D createRotationZ(3.14 / 7) * FloatTransform3D createTranslation(-source width / 2, -source height / 2, 0.0f)
+			DrawState new(target) setInputImage(source) setTransformNormalized(transform) setInterpolate(true) draw()
+			output := "test/draw/output/RasterMonochromeTest_rotated.png"
+			target save(output)
+			(target, source) referenceCount decrease()
+			output free()
 		})
 		/*this add("distance, convertFrom RasterRgba", func {
 			source := this sourceFlower
