@@ -30,16 +30,16 @@ VectorQueueTest: class extends Fixture {
 
 			expect(queue count, is equal to(0))
 			expect(queue empty, is true)
-			expect(queue full, is false)
+			expect(queue isFull, is false)
 			queue enqueue(0)
 			expect(queue empty, is false)
 			queue enqueue(1)
 			queue enqueue(2)
 			expect(queue count, is equal to(3))
-			expect(queue full, is true)
+			expect(queue isFull, is true)
 			removedInt := queue dequeue(Int minimumValue)
 			expect(queue count, is equal to(2))
-			expect(queue full, is false)
+			expect(queue isFull, is false)
 			expect(removedInt, is equal to(0))
 			peekedInt: Int
 			peekedInt = queue peek(Int minimumValue)
@@ -57,7 +57,7 @@ VectorQueueTest: class extends Fixture {
 			queue enqueue(4)
 			queue enqueue(5)
 			expect(queue count, is equal to(3))
-			expect(queue full, is true)
+			expect(queue isFull, is true)
 			removedInt = queue dequeue(Int minimumValue)
 			expect(queue count, is equal to(2))
 			expect(removedInt, is equal to(3))
@@ -148,6 +148,21 @@ VectorQueueTest: class extends Fixture {
 			expect(queue empty, is true)
 			expect(queue dequeue(null), is Null)
 			(defaultValue, item, queue) free()
+		})
+		this add("First/Last properties", func {
+			queue := VectorQueue<Int> new(7)
+			queue enqueue(1) . enqueue(2) . enqueue(3)
+			expect(queue first, is equal to(1))
+			expect(queue last, is equal to(3))
+			queue first = 17
+			queue last = 19
+			expect(queue first, is equal to(17))
+			expect(queue last, is equal to(19))
+			expect(queue count, is equal to(3))
+			queue enqueue(10)
+			expect(queue last, is equal to(10))
+			expect(queue count, is equal to(4))
+			queue free()
 		})
 	}
 	_createQueue: func (capacity, fill: Int, replace := 0) -> VectorQueue<Int> {

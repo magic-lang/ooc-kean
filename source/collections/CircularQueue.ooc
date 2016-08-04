@@ -14,6 +14,8 @@ CircularQueue: class <T> extends Queue<T> {
 	_maximumCapacity: Int
 	count ::= this _backend count
 	capacity ::= this _backend capacity
+	isFull ::= this _backend isFull
+
 	init: func ~defaultCallback (capacity: Int) {
 		callback: Func (T)
 		if (T inheritsFrom(Object))
