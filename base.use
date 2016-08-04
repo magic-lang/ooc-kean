@@ -7,7 +7,6 @@ Imports: Allocator
 Imports: ByteBuffer
 Imports: DateTime
 Imports: TimeSpan
-Imports: Synchronized
 Imports: ReferenceCounter
 Imports: Event
 Imports: Timer
