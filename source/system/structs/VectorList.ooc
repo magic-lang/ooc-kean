@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-VectorList: class <T> extends List<T>{
+VectorList: class <T> extends List<T> {
 	_vector: Vector<T>
 	pointer ::= this _vector _backend as Pointer
 	init: func ~default {

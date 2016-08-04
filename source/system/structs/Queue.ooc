@@ -10,6 +10,15 @@ Queue: abstract class <T> {
 	_count := 0
 	count ::= this _count
 	empty ::= this count == 0
+	first: T {
+		get { this[0] }
+		set (value) { this[0] = value }
+	}
+	last: T {
+		get { this[-1] }
+		set (value) { this[-1] = value }
+	}
+
 	init: func
 	clear: abstract func
 	enqueue: abstract func (item: T)
