@@ -36,22 +36,27 @@ TimeSpan: cover {
 	//  %S - seconds (based on total ticks)
 	//  %Z - milliseconds (based on total ticks)
 	toString: func (format := This defaultFormat) -> String {
-		(weekString, dayString, hourString) := (this toWeeks(), this toDays(), this toHours()) toString()
-		(minuteString, secondString, milliString) := (this toMinutes(), this toSeconds(), this toMilliseconds()) toString()
-		(dayModString, hourModString, minuteModString) := (this toDays() modulo(7), this toHours() modulo(24), this toMinutes() modulo(60)) toString()
-		(secondModString, milliModString) := (this toSeconds() modulo(60), this toMilliseconds() modulo(1000)) toString()
-		result := format replaceAll("%w", weekString)
-		result = result replaceAll("%D", dayString, true, true)
-		result = result replaceAll("%H", hourString, true, true)
-		result = result replaceAll("%M", minuteString, true, true)
-		result = result replaceAll("%S", secondString, true, true)
-		result = result replaceAll("%Z", milliString, true, true)
-		result = result replaceAll("%d", dayModString, true, true)
-		result = result replaceAll("%h", hourModString, true, true)
-		result = result replaceAll("%m", minuteModString, true, true)
-		result = result replaceAll("%s", secondModString, true, true)
-		result = result replaceAll("%z", milliModString, true, true)
-		(weekString, dayString, hourString, minuteString, secondString, milliString, dayModString, hourModString, minuteModString, secondModString, milliModString) free()
+		result: String
+		if (this _ticks < 0L)
+			result = "-(" << this negate() toString(format) >> ")"
+		else {
+			(weekString, dayString, hourString) := (this toWeeks(), this toDays(), this toHours()) toString()
+			(minuteString, secondString, milliString) := (this toMinutes(), this toSeconds(), this toMilliseconds()) toString()
+			(dayModString, hourModString, minuteModString) := (this toDays() modulo(7), this toHours() modulo(24), this toMinutes() modulo(60)) toString()
+			(secondModString, milliModString) := (this toSeconds() modulo(60), this toMilliseconds() modulo(1000)) toString()
+			result = format replaceAll("%w", weekString)
+			result = result replaceAll("%D", dayString, true, true)
+			result = result replaceAll("%H", hourString, true, true)
+			result = result replaceAll("%M", minuteString, true, true)
+			result = result replaceAll("%S", secondString, true, true)
+			result = result replaceAll("%Z", milliString, true, true)
+			result = result replaceAll("%d", dayModString, true, true)
+			result = result replaceAll("%h", hourModString, true, true)
+			result = result replaceAll("%m", minuteModString, true, true)
+			result = result replaceAll("%s", secondModString, true, true)
+			result = result replaceAll("%z", milliModString, true, true)
+			(weekString, dayString, hourString, minuteString, secondString, milliString, dayModString, hourModString, minuteModString, secondModString, milliModString) free()
+		}
 		result
 	}
 	compareTo: func (other: This) -> Order {
