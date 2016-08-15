@@ -17,6 +17,9 @@ FloatRandomGenerator: abstract class {
 	}
 }
 
+version (deterministic)
+	FloatRandomGenerator permanentSeed = 73U
+
 FloatUniformRandomGenerator: class extends FloatRandomGenerator {
 	_state: UInt
 	_min, _max, _rangeCoefficient: Float

@@ -87,7 +87,7 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			target free()
 			cropAreaInt := IntBox2D new(IntPoint2D new(), source size)
 			target = RasterYuv420Semiplanar new(cropAreaInt size)
-			source cropInto(cropAreaInt, target)
+			source resizeInto(target, cropAreaInt)
 			expect(target distance(source), is equal to(0.0f) within(0.001f))
 			source referenceCount decrease()
 			target referenceCount decrease()
@@ -120,6 +120,33 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 			output := "test/draw/output/RasterYuv420SemiplanarTest_cropOddSize.png"
 			resized save(output)
 			(resized, source) referenceCount decrease()
+			output free()
+		})
+		this add("resize (with box)", func {
+			source := RasterYuv420Semiplanar open(this _inputPath)
+			box := IntBox2D new(0, source height / 2, source width, source height / 2)
+			target := RasterYuv420Semiplanar new(source size)
+			source resizeInto(target, box)
+			output := "test/draw/output/RasterYuv420SemiplanarTest_lowerHalfResized.png"
+			target save(output)
+			(target, source) referenceCount decrease()
+			output free()
+		})
+		this add("rotate (Z)", func {
+			source := RasterYuv420Semiplanar open(this _inputPath)
+			target := RasterYuv420Semiplanar new(source size)
+			translationToCenter := FloatTransform3D createTranslation(source width / 2.0f, source height / 2.0f, 0.0f)
+			transform := FloatTransform3D createTranslation(10.0f, 10.0f, 0.0f) * FloatTransform3D createScaling(0.3f, 0.6f, 1.0f) * FloatTransform3D createRotationZ(3.14f / 7)
+			transform = translationToCenter * transform * translationToCenter inverse
+			DrawState new(target) setInputImage(source) setTransformNormalized(transform) setInterpolate(false) draw()
+			output := "test/draw/output/RasterYuv420SemiplanarTest_RotatedScaledTranslated.png"
+			target save(output)
+			targetBilinear := RasterYuv420Semiplanar new(source size)
+			DrawState new(targetBilinear) setInputImage(source) setTransformNormalized(transform) setInterpolate(true) draw()
+			difference := targetBilinear distance(target)
+			expect(difference, is greater than(0.0f))
+			expect(difference, is less than(5.0f))
+			(target, targetBilinear, source) referenceCount decrease()
 			output free()
 		})
 	}

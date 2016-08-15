@@ -32,7 +32,7 @@ ProcessTest: class extends Fixture {
 			scriptArgs free()
 
 			Time sleepMilli(250)
-			reader := FileReader new(t"test/io/output/sum.txt")
+			reader := FileReader new("test/io/output/sum.txt")
 			expect(reader hasNext())
 			data := CString new(16)
 			reader read(data, 0, 15)

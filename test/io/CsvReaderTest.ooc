@@ -15,48 +15,48 @@ CsvReaderTest: class extends Fixture {
 	init: func {
 		super("CsvReader")
 		this add("verify entries", func {
-			filename := t"test/io/input/3x3.csv"
+			filename := "test/io/input/3x3.csv"
 			reader := CsvReader open(filename)
 			rowCounter := 0
 			for (row in reader) {
 				for (i in 0 .. row count) {
-					rowString := row[i] toString()
+					rowString := row[i]
 					correctAnswer := ((i + 1) + rowCounter * 3) toString()
 					expect(rowString, is equal to(correctAnswer))
-					(rowString, correctAnswer) free()
+					correctAnswer free()
 				}
 				row free()
 				rowCounter += 1
 			}
-			(filename, reader) free()
+			reader free()
 		})
 		this add("string literals", func {
-			filename := t"test/io/input/strings.csv"
+			filename := "test/io/input/strings.csv"
 			reader := CsvReader open(filename)
-			correctTexts := [t"mary had a little lamb", t"hello from row #2"]
+			correctStrings := ["mary had a little lamb", "hello from row #2"]
 			position := 0
 			for (row in reader) {
-				textBuilder := TextBuilder new()
+				stringBuilder := StringBuilder new()
 				for (i in 0 .. row count)
-					textBuilder append(row[i])
-				expect(textBuilder toText(), is equal to(correctTexts[position]))
-				row free()
-				correctTexts[position] free()
-				textBuilder free()
+					stringBuilder add(row[i])
+				result := stringBuilder join("")
+				expect(result, is equal to(correctStrings[position]))
+				(row, result, stringBuilder) free()
+				correctStrings[position] free()
 				position += 1
 			}
-			(correctTexts, filename, reader) free()
+			(correctStrings, reader) free()
 		})
 		this add("non-default delimiter", func {
-			filename := t"test/io/input/semicolondelimiter.csv"
+			filename := "test/io/input/semicolondelimiter.csv"
 			reader := CsvReader open(filename, ';')
 			rowCounter := 0
 			for (row in reader) {
 				for (i in 0 .. row count) {
-					rowString := row[i] toString()
+					rowString := row[i]
 					correctAnswer := ((i + 1) + rowCounter * 3) toString()
 					expect(rowString, is equal to(correctAnswer))
-					(rowString, correctAnswer) free()
+					correctAnswer free()
 				}
 				row free()
 				rowCounter += 1
@@ -65,21 +65,21 @@ CsvReaderTest: class extends Fixture {
 			(filename, reader) free()
 		})
 		this add("skip header", func {
-			filename := t"test/io/input/semicolondelimiter.csv"
+			filename := "test/io/input/semicolondelimiter.csv"
 			reader := CsvReader open(filename, ';', true)
 			rowCounter := 0
 			for (row in reader) {
 				for (i in 0 .. row count) {
-					rowString := row[i] toString()
+					rowString := row[i]
 					correctAnswer := ((i + 4) + rowCounter * 3) toString()
 					expect(rowString, is equal to(correctAnswer))
-					(rowString, correctAnswer) free()
+					correctAnswer free()
 				}
 				row free()
 				rowCounter += 1
 			}
 			expect(reader delimiter, is equal to(';'))
-			(filename, reader) free()
+			reader free()
 		})
 	}
 }

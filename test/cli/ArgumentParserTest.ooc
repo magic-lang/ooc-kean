@@ -15,134 +15,134 @@ ArgumentParserTest: class extends Fixture {
 	init: func {
 		super("ArgumentParser")
 		this add("No parameter", func {
-			inputList := VectorList<Text> new()
-			inputList add(t"--arga")
-			inputList add(t"-b")
+			inputList := VectorList<String> new()
+			inputList add("--arga")
+			inputList add("-b")
 			parser := ArgumentParser new()
-			argumentAValue: Text
-			argumentBValue: Text
-			parser add(t"arga", 'a', Event new(func { argumentAValue = t"a" }))
-			parser add(t"argb", 'b', Event new(func { argumentBValue = t"b" }))
+			argumentAValue: String
+			argumentBValue: String
+			parser add("arga", 'a', Event new(func { argumentAValue = "a" }))
+			parser add("argb", 'b', Event new(func { argumentBValue = "b" }))
 			parser parse(inputList)
-			expect(argumentAValue == t"a")
-			expect(argumentBValue == t"b")
+			expect(argumentAValue == "a")
+			expect(argumentBValue == "b")
 			(inputList, parser, argumentAValue, argumentBValue) free()
 		})
 		this add("With parameter", func {
-			inputList := VectorList<Text> new()
-			inputList add(t"--arga")
-			inputList add(t"1234")
-			inputList add(t"abcd")
-			inputList add(t"--argb")
-			inputList add(t"qwerty")
-			inputList add(t"-c")
-			inputList add(t"c1")
-			inputList add(t"c2")
-			inputList add(t"c3")
+			inputList := VectorList<String> new()
+			inputList add("--arga")
+			inputList add("1234")
+			inputList add("abcd")
+			inputList add("--argb")
+			inputList add("qwerty")
+			inputList add("-c")
+			inputList add("c1")
+			inputList add("c2")
+			inputList add("c3")
 			parser := ArgumentParser new()
-			argumentAFirstValue: Text
-			argumentASecondValue: Text
-			argumentBValue: Text
-			argumentCFirstValue: Text
-			argumentCSecondValue: Text
-			argumentCThirdValue: Text
-			parser add(t"arga", 'a', 2, Event1<VectorList<Text>> new(func (list: VectorList<Text>) { argumentAFirstValue = list[0]; argumentASecondValue = list[1] }))
-			parser add(t"argb", 'b', Event1<Text> new(func (parameter: Text) { argumentBValue = parameter }))
-			parser add(t"argc", 'c', 3, Event1<VectorList<Text>> new(func (list: VectorList<Text>) { argumentCFirstValue = list[0]; argumentCSecondValue = list[1]; argumentCThirdValue = list[2] }))
+			argumentAFirstValue: String
+			argumentASecondValue: String
+			argumentBValue: String
+			argumentCFirstValue: String
+			argumentCSecondValue: String
+			argumentCThirdValue: String
+			parser add("arga", 'a', 2, Event1<VectorList<String>> new(func (list: VectorList<String>) { argumentAFirstValue = list[0]; argumentASecondValue = list[1] }))
+			parser add("argb", 'b', Event1<String> new(func (parameter: String) { argumentBValue = parameter }))
+			parser add("argc", 'c', 3, Event1<VectorList<String>> new(func (list: VectorList<String>) { argumentCFirstValue = list[0]; argumentCSecondValue = list[1]; argumentCThirdValue = list[2] }))
 			parser parse(inputList)
-			expect(argumentAFirstValue == t"1234")
-			expect(argumentASecondValue == t"abcd")
-			expect(argumentBValue == t"qwerty")
-			expect(argumentCFirstValue == t"c1")
-			expect(argumentCSecondValue == t"c2")
-			expect(argumentCThirdValue == t"c3")
+			expect(argumentAFirstValue == "1234")
+			expect(argumentASecondValue == "abcd")
+			expect(argumentBValue == "qwerty")
+			expect(argumentCFirstValue == "c1")
+			expect(argumentCSecondValue == "c2")
+			expect(argumentCThirdValue == "c3")
 			(inputList, parser, argumentAFirstValue, argumentASecondValue, argumentBValue, argumentCFirstValue, argumentCSecondValue, argumentCThirdValue) free()
 		})
 		this add("Negative parameter", func {
-			inputList := VectorList<Text> new()
-			inputList add(t"-a")
-			inputList add(t"-12345")
-			inputList add(t"-b")
-			inputList add(t"--argc")
-			inputList add(t"5")
-			inputList add(t"-10")
-			inputList add(t"15")
+			inputList := VectorList<String> new()
+			inputList add("-a")
+			inputList add("-12345")
+			inputList add("-b")
+			inputList add("--argc")
+			inputList add("5")
+			inputList add("-10")
+			inputList add("15")
 			parser := ArgumentParser new()
-			argumentAValue: Text
-			argumentBValue: Text
-			argumentCFirstValue: Text
-			argumentCSecondValue: Text
-			argumentCThirdValue: Text
-			parser add(t"arga", 'a', Event1<Text> new(func (parameter: Text) { argumentAValue = parameter }))
-			parser add(t"argb", 'b', Event new(func { argumentBValue = t"b" }))
-			parser add(t"argc", 'c', 3, Event1<VectorList<Text>> new(func (list: VectorList<Text>) { argumentCFirstValue = list[0]; argumentCSecondValue = list[1]; argumentCThirdValue = list[2] }))
+			argumentAValue: String
+			argumentBValue: String
+			argumentCFirstValue: String
+			argumentCSecondValue: String
+			argumentCThirdValue: String
+			parser add("arga", 'a', Event1<String> new(func (parameter: String) { argumentAValue = parameter }))
+			parser add("argb", 'b', Event new(func { argumentBValue = "b" }))
+			parser add("argc", 'c', 3, Event1<VectorList<String>> new(func (list: VectorList<String>) { argumentCFirstValue = list[0]; argumentCSecondValue = list[1]; argumentCThirdValue = list[2] }))
 			parser parse(inputList)
-			expect(argumentAValue == t"-12345")
-			expect(argumentBValue == t"b")
-			expect(argumentCFirstValue == t"5")
-			expect(argumentCSecondValue == t"-10")
-			expect(argumentCThirdValue == t"15")
+			expect(argumentAValue == "-12345")
+			expect(argumentBValue == "b")
+			expect(argumentCFirstValue == "5")
+			expect(argumentCSecondValue == "-10")
+			expect(argumentCThirdValue == "15")
 			(inputList, parser, argumentAValue, argumentBValue, argumentCFirstValue, argumentCSecondValue, argumentCThirdValue) free()
 		})
 		this add("No shortIdentifier", func {
-			inputList := VectorList<Text> new()
-			inputList add(t"-a")
-			inputList add(t"-12345")
-			inputList add(t"-argb")
-			inputList add(t"--argc")
-			inputList add(t"5")
-			inputList add(t"-10")
-			inputList add(t"15")
-			inputList add(t"--argd")
-			inputList add(t"1")
-			inputList add(t"2")
+			inputList := VectorList<String> new()
+			inputList add("-a")
+			inputList add("-12345")
+			inputList add("-argb")
+			inputList add("--argc")
+			inputList add("5")
+			inputList add("-10")
+			inputList add("15")
+			inputList add("--argd")
+			inputList add("1")
+			inputList add("2")
 			parser := ArgumentParser new()
-			argumentAValue: Text
-			argumentAValue = t""
-			argumentBValue: Text
-			argumentBValue = t""
-			argumentCFirstValue: Text
-			argumentCSecondValue: Text
-			argumentCThirdValue: Text
-			argumentDFirstValue: Text
-			argumentDSecondValue: Text
-			parser add(t"arga", Event1<Text> new(func (parameter: Text) { argumentAValue = parameter }))
-			parser add(t"argb", Event new(func { argumentBValue = t"b" }))
-			parser add(t"argc", 'c', 3, Event1<VectorList<Text>> new(func (list: VectorList<Text>) { argumentCFirstValue = list[0]; argumentCSecondValue = list[1]; argumentCThirdValue = list[2] }))
-			parser add(t"argd", 2, Event1<VectorList<Text>> new(func (list: VectorList<Text>) { argumentDFirstValue = list[0]; argumentDSecondValue = list[1] }))
+			argumentAValue: String
+			argumentAValue = ""
+			argumentBValue: String
+			argumentBValue = ""
+			argumentCFirstValue: String
+			argumentCSecondValue: String
+			argumentCThirdValue: String
+			argumentDFirstValue: String
+			argumentDSecondValue: String
+			parser add("arga", Event1<String> new(func (parameter: String) { argumentAValue = parameter }))
+			parser add("argb", Event new(func { argumentBValue = "b" }))
+			parser add("argc", 'c', 3, Event1<VectorList<String>> new(func (list: VectorList<String>) { argumentCFirstValue = list[0]; argumentCSecondValue = list[1]; argumentCThirdValue = list[2] }))
+			parser add("argd", 2, Event1<VectorList<String>> new(func (list: VectorList<String>) { argumentDFirstValue = list[0]; argumentDSecondValue = list[1] }))
 			parser parse(inputList)
-			expect(argumentAValue == t"")
-			expect(argumentBValue == t"")
-			expect(argumentCFirstValue == t"5")
-			expect(argumentCSecondValue == t"-10")
-			expect(argumentCThirdValue == t"15")
-			expect(argumentDFirstValue == t"1")
-			expect(argumentDSecondValue == t"2")
+			expect(argumentAValue == "")
+			expect(argumentBValue == "")
+			expect(argumentCFirstValue == "5")
+			expect(argumentCSecondValue == "-10")
+			expect(argumentCThirdValue == "15")
+			expect(argumentDFirstValue == "1")
+			expect(argumentDSecondValue == "2")
 			(inputList, parser, argumentAValue, argumentBValue, argumentCFirstValue, argumentCSecondValue, argumentCThirdValue, argumentDFirstValue, argumentDSecondValue) free()
 		})
 		this add("Compact flags", func {
-			inputList := VectorList<Text> new()
-			inputList add(t"-abc")
-			inputList add(t"default")
-			inputList add(t"--argd")
-			inputList add(t"dVal")
+			inputList := VectorList<String> new()
+			inputList add("-abc")
+			inputList add("default")
+			inputList add("--argd")
+			inputList add("dVal")
 			parser := ArgumentParser new()
-			argumentAValue: Text
-			argumentBValue: Text
-			argumentCValue: Text
-			argumentDValue: Text
-			defaultArgumentValue: Text
-			parser add(t"arga", 'a', Event new(func { argumentAValue = t"a" }))
-			parser add(t"argb", 'b', Event new(func { argumentBValue = t"b" }))
-			parser add(t"argc", 'c', Event new(func { argumentCValue = t"c" }))
-			parser add(t"argd", 'd', Event1<Text> new(func (parameter: Text) { argumentDValue = parameter }))
-			parser addDefault(Event1<Text> new(func (parameter: Text) { defaultArgumentValue = parameter }))
+			argumentAValue: String
+			argumentBValue: String
+			argumentCValue: String
+			argumentDValue: String
+			defaultArgumentValue: String
+			parser add("arga", 'a', Event new(func { argumentAValue = "a" }))
+			parser add("argb", 'b', Event new(func { argumentBValue = "b" }))
+			parser add("argc", 'c', Event new(func { argumentCValue = "c" }))
+			parser add("argd", 'd', Event1<String> new(func (parameter: String) { argumentDValue = parameter }))
+			parser addDefault(Event1<String> new(func (parameter: String) { defaultArgumentValue = parameter }))
 			parser parse(inputList)
-			expect(argumentAValue == t"a")
-			expect(argumentBValue == t"b")
-			expect(argumentCValue == t"c")
-			expect(argumentDValue == t"dVal")
-			expect(defaultArgumentValue == t"default")
+			expect(argumentAValue == "a")
+			expect(argumentBValue == "b")
+			expect(argumentCValue == "c")
+			expect(argumentDValue == "dVal")
+			expect(defaultArgumentValue == "default")
 			(inputList, parser, argumentAValue, argumentBValue, argumentCValue, argumentDValue) free()
 		})
 	}

@@ -44,17 +44,32 @@ SynchronizedQueue: class <T> extends Queue<T> {
 		this _backend clear()
 		this _mutex unlock()
 	}
+	operator [] (index: Int) -> T {
+		this _mutex lock()
+		result := this _backend[index]
+		this _mutex unlock()
+		result
+	}
+	operator []= (index: Int, value: T) {
+		this _mutex lock()
+		this _backend[index] = value
+		this _mutex unlock()
+	}
 }
 
 BlockedQueue: class <T> extends SynchronizedQueue<T> {
 	_waitLock: WaitLock
 	_canceled := false
+	_lockFunc: Func -> Bool
 	init: func {
 		super()
 		this _waitLock = WaitLock new(this _mutex)
+		this _lockFunc = func -> Bool { !this empty || this _canceled }
+		this _lockFunc = ((this _lockFunc as Closure) take()) as Func -> Bool
 	}
 	free: override func {
 		this _waitLock free()
+		(this _lockFunc as Closure) give() free()
 		super()
 	}
 	enqueue: override func (item: T) {
@@ -63,8 +78,8 @@ BlockedQueue: class <T> extends SynchronizedQueue<T> {
 	}
 	cancel: func { this _waitLock with(|| this _canceled = true) . wakeAll() }
 	wait: func -> T {
+		this _waitLock lockWhen(this _lockFunc)
 		result: T = null
-		this _waitLock lockWhen(func -> Bool { !this empty || this _canceled })
 		if (!this _canceled)
 			result = this _backend dequeue(result)
 		this _waitLock unlock()

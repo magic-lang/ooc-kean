@@ -10,7 +10,7 @@ use base
 use collections
 import io/[File, FileReader]
 
-CsvReader: class extends Iterator<VectorList<Text>> {
+CsvReader: class extends Iterator<VectorList<String>> {
 	_fileReader: FileReader
 	_delimiter: Char
 	delimiter ::= this _delimiter
@@ -30,25 +30,25 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 	remove: override func -> Bool { false }
 	iterator: func -> This { this }
 	hasNext: override func -> Bool { this _fileReader hasNext() && this _fileReader peek() != '\0' }
-	next: final override func -> VectorList<Text> {
-		result: VectorList<Text> = null
+	next: final override func -> VectorList<String> {
+		result: VectorList<String> = null
 		if (this hasNext()) {
 			readCharacter: Char
-			textBuilder := TextBuilder new()
+			stringBuilder := StringBuilder new(32, true)
 			while (this _fileReader hasNext() && ((readCharacter = this _fileReader read()) != '\n' && readCharacter != '\0'))
-				textBuilder append(readCharacter)
-			result = this _parseRow(textBuilder toText())
-			textBuilder free()
+				stringBuilder add(readCharacter)
+			string := stringBuilder toString()
+			result = this _parseRow(string)
+			(string, stringBuilder) free()
 		}
 		result
 	}
-	_parseRow: func (rowData: Text) -> VectorList<Text> {
-		row := rowData take()
-		result := VectorList<Text> new()
-		rowLength := row count
+	_parseRow: func (row: String) -> VectorList<String> {
+		result := VectorList<String> new()
+		rowLength := row length()
 		readCharacter: Char
 		for (i in 0 .. rowLength) {
-			textBuilder := TextBuilder new()
+			stringBuilder := StringBuilder new(32, true)
 			while (i < rowLength && ((readCharacter = row[i]) != this _delimiter)) {
 				i += 1
 				match (readCharacter) {
@@ -59,38 +59,31 @@ CsvReader: class extends Iterator<VectorList<Text>> {
 					case '\r' =>
 						continue
 					case '"' =>
-						textBuilder append(this _extractStringLiteral(row, i&))
+						stringBuilder add(this _extractStringLiteral(row, i&))
 					case =>
-						textBuilder append(readCharacter)
+						stringBuilder add(readCharacter)
 				}
 			}
-			result add(textBuilder toText())
-			textBuilder free()
+			result add(stringBuilder toString())
+			stringBuilder free()
 		}
-		rowData free()
 		result
 	}
-	_extractStringLiteral: func (rowData: Text, position: Int@) -> Text {
-		result: Text
+	_extractStringLiteral: func (rowData: String, position: Int@) -> String {
+		result: String
 		readCharacter: Char
-		textBuilder := TextBuilder new()
-		rowDataLength := rowData count
+		stringBuilder := StringBuilder new(32, true)
+		rowDataLength := rowData length()
 		while (position < rowDataLength && (readCharacter = rowData[position]) != '"') {
-			textBuilder append(rowData[position])
+			stringBuilder add(rowData[position])
 			position += 1
 		}
 		position += 1
-		result = textBuilder toText()
-		textBuilder free()
+		result = stringBuilder toString()
+		stringBuilder free()
 		result
 	}
-	open: static func ~text (filename: Text, delimiter := ',', skipHeader := false) -> This {
-		filenameString := filename toString()
-		result := This open(filenameString, delimiter, skipHeader)
-		filenameString free()
-		result
-	}
-	open: static func ~string (filename: String, delimiter := ',', skipHeader := false) -> This {
+	open: static func (filename: String, delimiter := ',', skipHeader := false) -> This {
 		result: This = null
 		file := File new(filename)
 		if (file exists())

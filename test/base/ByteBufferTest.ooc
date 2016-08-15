@@ -9,6 +9,20 @@
 use base
 use unit
 
+CustomAllocator: class extends AbstractAllocator {
+	_allocCount := 0
+	_freeCount := static 0
+	init: func
+	allocate: override func (size: SizeT) -> Pointer {
+		this _allocCount += 1
+		malloc(size)
+	}
+	deallocate: override func (pointer: Pointer) {
+		This _freeCount += 1
+		memfree(pointer)
+	}
+}
+
 ByteBufferTest: class extends Fixture {
 	init: func {
 		super("ByteBuffer")
@@ -53,9 +67,9 @@ ByteBufferTest: class extends Fixture {
 			yuv := ByteBuffer new(30000)
 			y := yuv slice(0, 20000)
 			uv := yuv slice(20000, 10000)
-			expect(yuv referenceCount _count, is equal to(2))
+			expect(yuv referenceCount count, is equal to(2))
 			y referenceCount decrease()
-			expect(yuv referenceCount _count, is equal to(1))
+			expect(yuv referenceCount count, is equal to(1))
 			uv referenceCount decrease()
 		})
 		this add("memset", func {
@@ -78,6 +92,15 @@ ByteBufferTest: class extends Fixture {
 			expect(buffer pointer[63] as Int, is equal to(63))
 			buffer referenceCount decrease()
 		})
+		this add("custom alloc", This _testCustomAlloc)
+	}
+	_testCustomAlloc: static func {
+		allocator := CustomAllocator new()
+		expect(allocator _allocCount, is equal to(0))
+		buffer := ByteBuffer new(128, allocator)
+		expect(allocator _allocCount, is equal to(1))
+		(buffer as _RecyclableByteBuffer) _forceFree()
+		expect(CustomAllocator _freeCount, is equal to(1))
 	}
 }
 

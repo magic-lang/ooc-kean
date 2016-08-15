@@ -22,9 +22,7 @@ Cell: class <T> {
 
 	toString: func -> String {
 		result: String
-		if (T inheritsFrom(Text))
-			result = (this val as Text) take() toString()
-		else if (T inheritsFrom(String))
+		if (T inheritsFrom(String))
 			result = this val as String
 		else if (T inheritsFrom(Bool))
 			result = (this val as Bool) toString()

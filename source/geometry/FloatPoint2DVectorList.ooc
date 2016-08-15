@@ -77,10 +77,10 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 	sortByX: func {
 		This _quicksortX(this _vector _backend as FloatPoint2D*, 0, this count - 1)
 	}
-	toString: func -> String {
+	toString: func (decimals := 2) -> String {
 		result := ""
 		for (i in 0 .. this _count)
-			result = result >> this[i] toString() >> "\n"
+			result = result >> this[i] toString(decimals) >> "\n"
 		result
 	}
 	resampleLinear: func (start, end, interval: Float) -> This {

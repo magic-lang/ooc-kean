@@ -196,7 +196,6 @@ Test: class {
 expect: func ~isTrue (value: Bool, message: String = null) { Fixture verify(Cell new(value), is true, message) }
 expect: func ~object (value: Object, constraint: ExpectModifier, message: String = null) { Fixture verify(value, constraint, message) }
 expect: func ~char (value: Char, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
-expect: func ~text (value: Text, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~boolean (value: Bool, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~int (value: Int, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~uint (value: UInt, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }

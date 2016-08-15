@@ -9,7 +9,7 @@
 version (linux) {
 include pthread | (_XOPEN_SOURCE=500, _POSIX_C_SOURCE=200809L)
 
-PTHREAD_MUTEX_RECURSIVE: extern Int
+PTHREAD_MUTEX_RECURSIVE: extern (PTHREAD_MUTEX_RECURSIVE_NP) Int
 
 PThread: cover from pthread_t
 PThreadCond: cover from pthread_cond_t

@@ -1,4 +1,4 @@
-# Release  2.3.0
+# Release  2.5.0
 
 magic-sdk (formerly ooc-kean)
 ========
@@ -13,7 +13,7 @@ To compile, you need the `magic` version of the [Rock compiler](https://github.c
 Tests can be run using the `test.sh` script.
 
 ### Dependencies
-The following software is necessary to build version 2.3.0 of ooc-kean:
+The following software is necessary to build ooc-kean:
 * [rock 1.0.20](https://github.com/magic-lang/rock/releases/tag/rock_1.0.20)
 * gcc 4.8.4
 
