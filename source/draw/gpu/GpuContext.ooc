@@ -44,6 +44,7 @@ GpuContext: abstract class extends DrawContext {
 	createYuv420Semiplanar: override func ~fromImages (y, uv: Image) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(y as GpuImage, uv as GpuImage, this) }
 	createYuv420Semiplanar: override func ~fromRaster (raster: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(raster, this) }
 	createMesh: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> Mesh
+	createGrid: abstract func (size: IntVector2D, vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> Mesh
 	getYuvToRgba: abstract func -> Map
 	getRgbaToY: abstract func -> Map
 	getRgbaToUv: abstract func -> Map
