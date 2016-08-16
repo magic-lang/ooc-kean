@@ -15,6 +15,7 @@ version(!gpuOff) {
 Gles3VertexBufferObject: class {
 	_backend: UInt
 	_vertexCount: Int
+	_dimensions: Int
 	init: func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
 		vertexCount := vertices length
 		this _vertexCount = vertexCount
@@ -29,10 +30,12 @@ Gles3VertexBufferObject: class {
 			packedArray[floatsPerVertex * i + 3] = textureCoordinates[i] x
 			packedArray[floatsPerVertex * i + 4] = textureCoordinates[i] y
 		}
+		this _dimensions = 3
 		this _generate(packedArray[0]&, 3, vertexCount)
 	}
 	free: override func {
 		version(debugGL) { validateStart("Gles3VertexBufferObject free") }
+		glDeleteBuffers(1, this _backend&)
 		version(debugGL) { validateEnd("Gles3VertexBufferObject free") }
 		super()
 	}
@@ -41,33 +44,32 @@ Gles3VertexBufferObject: class {
 		glGenBuffers(1, this _backend&)
 		glBindBuffer(GL_ARRAY_BUFFER, this _backend)
 		glBufferData(GL_ARRAY_BUFFER, (2 + dimensions) * Float size * vertexCount, packedArray, GL_STATIC_DRAW)
-
+		glBindBuffer(GL_ARRAY_BUFFER, 0)
+		version(debugGL) { validateEnd("Gles3VertexBufferObject _generate") }
+	}
+	bind: func {
+		version(debugGL) { validateStart("Gles3VertexBufferObject bind") }
+		glBindBuffer(GL_ARRAY_BUFFER, this _backend)
 		positionOffset: ULong = 0
+		dimensions := this _dimensions
 		textureCoordinateOffset: ULong = Float size * dimensions
 		glVertexAttribPointer(positionLayout, dimensions, GL_FLOAT, GL_FALSE, Float size * (2 + dimensions), positionOffset as Pointer)
 		glEnableVertexAttribArray(positionLayout)
 		glVertexAttribPointer(textureCoordinateLayout, 2, GL_FLOAT, GL_FALSE, Float size * (2 + dimensions), textureCoordinateOffset as Pointer)
 		glEnableVertexAttribArray(textureCoordinateLayout)
-
-		glBindBuffer(GL_ARRAY_BUFFER, 0)
-		version(debugGL) { validateEnd("Gles3VertexBufferObject _generate") }
-	}
-	bind: override func {
-		version(debugGL) { validateStart("Gles3VertexBufferObject bind") }
-		glBindBuffer(GL_ARRAY_BUFFER, this _backend)
 		version(debugGL) { validateEnd("Gles3VertexBufferObject bind") }
 	}
-	unbind: override func {
+	unbind: func {
 		version(debugGL) { validateStart("Gles3VertexBufferObject unbind") }
 		glBindBuffer(GL_ARRAY_BUFFER, 0)
 		version(debugGL) { validateEnd("Gles3VertexBufferObject unbind") }
 	}
-	draw: override func {
-		this bind()
+	draw: func {
 		version(debugGL) { validateStart("Gles3VertexBufferObject draw") }
+		this bind()
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, this _vertexCount)
-		version(debugGL) { validateEnd("Gles3VertexBufferObject draw") }
 		this unbind()
+		version(debugGL) { validateEnd("Gles3VertexBufferObject draw") }
 	}
 	positionLayout: static UInt = 0
 	textureCoordinateLayout: static UInt = 1
