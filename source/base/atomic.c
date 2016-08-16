@@ -8,7 +8,7 @@ void atomic_store_int(atomic_int* object, int value) {
 	atomic_store(object, value);
 }
 
-int atomic_load_int(const atomic_int* object) {
+int atomic_load_int(atomic_int* object) {
 	return atomic_load(object);
 }
 
@@ -32,7 +32,7 @@ void atomic_store_bool(atomic_bool* object, bool value) {
 	atomic_store(object, value);
 }
 
-bool atomic_load_bool(const atomic_bool* object) {
+bool atomic_load_bool(atomic_bool* object) {
 	return atomic_load(object);
 }
 
