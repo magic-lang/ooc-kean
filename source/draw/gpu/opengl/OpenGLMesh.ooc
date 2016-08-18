@@ -11,17 +11,30 @@ use draw
 use draw-gpu
 import OpenGLContext
 import backend/GLVertexArrayObject
+import backend/gles3/Gles3IndexBufferObject
 
 version(!gpuOff) {
 OpenGLMesh: class extends Mesh {
-	_backend: GLVertexArrayObject
+	_backend: GLVertexArrayObject = null
+	_ibo: Gles3IndexBufferObject = null
 	init: func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], context: OpenGLContext) {
 		this _backend = context backend createVertexArrayObject(vertices, textureCoordinates)
 	}
+	init: func ~indices (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], indices: IntPoint3D[]) {
+		this _ibo = Gles3IndexBufferObject new(vertices, textureCoordinates, indices)
+	}
 	free: override func {
-		this _backend free()
+		if (this _backend != null)
+			this _backend free()
+		else
+			this _ibo free()
 		super()
 	}
-	draw: override func { this _backend draw() }
+	draw: override func {
+		if (this _backend != null)
+			this _backend draw()
+		else
+			this _ibo draw()
+	}
 }
 }
