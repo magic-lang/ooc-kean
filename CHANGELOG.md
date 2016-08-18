@@ -1,5 +1,13 @@
 # ooc-kean changes by release
 
+# Release  2.6.0
+
+- **Text completely removed in favor of String**
+- **Fixed various thread-related bugs and race conditions**
+- **Removed Synchronized class**
+- **Added support for C11 atomics**
+- **The -Ddeterministic flag automatically sets the random generator seeds to fixed values**
+
 ## Release-2.5.0
 
 - **Bug fixes in ReferenceCounter**
