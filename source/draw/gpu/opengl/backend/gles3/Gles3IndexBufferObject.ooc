@@ -20,9 +20,9 @@ Gles3IndexBufferObject: class {
 	init: func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], indices: IntPoint3D[]) {
 		this _indexCount = 3 * indices length
 		glGenBuffers(1, this _backend&)
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this _backend);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices length * IntPoint3D size, indices data, GL_STATIC_DRAW);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this _backend)
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices length * IntPoint3D size, indices data, GL_STATIC_DRAW)
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
 		this _vbo = Gles3VertexBufferObject new(vertices, textureCoordinates)
 	}
 	free: override func {
@@ -47,7 +47,7 @@ Gles3IndexBufferObject: class {
 	draw: func {
 		version(debugGL) { validateStart("Gles3IndexBufferObject draw") }
 		this bind()
-		glDrawElements(GL_TRIANGLES, this _indexCount, GL_UNSIGNED_INT, 0 as Pointer);
+		glDrawElements(GL_TRIANGLES, this _indexCount, GL_UNSIGNED_INT, 0 as Pointer)
 		this unbind()
 		version(debugGL) { validateEnd("Gles3IndexBufferObject draw") }
 	}
