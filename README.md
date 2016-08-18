@@ -1,4 +1,4 @@
-# Release  2.5.0
+# Release  2.6.0
 
 magic-sdk (formerly ooc-kean)
 ========
@@ -15,7 +15,7 @@ Tests can be run using the `test.sh` script.
 ### Dependencies
 The following software is necessary to build ooc-kean:
 * [rock 1.0.20](https://github.com/magic-lang/rock/releases/tag/rock_1.0.20)
-* gcc 4.8.4
+* gcc 4.9.3
 
 ### Linux
 ooc-kean have been built and tested on the following platforms:
