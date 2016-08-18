@@ -19,6 +19,9 @@ IntRandomGenerator: abstract class {
 	}
 }
 
+version (deterministic)
+	IntRandomGenerator permanentSeed = 73
+
 IntUniformRandomGenerator: class extends IntRandomGenerator {
 	_state, _min, _max, _range: Int
 	_shortRange: Bool

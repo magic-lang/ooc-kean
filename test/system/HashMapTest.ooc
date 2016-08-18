@@ -89,19 +89,6 @@ HashMapTest: class extends Fixture {
 			expect(hashmap contains("better"), is false)
 			hashmap free()
 		})
-		this add("basic use (text, text)", func {
-			hashmap := HashMap<Text, Text> new()
-			hashmap put(t"best", t"c++")
-			hashmap put(t"ok", t"c")
-			hashmap put(t"well", t"ooc")
-			expect(hashmap get(t"well") == t"ooc")
-			expect(hashmap get(t"ok") == t"c")
-			expect(hashmap get(t"best") == t"c++")
-			expect(hashmap get(t"nah", t"none") == t"none")
-			expect(hashmap contains(t"best"), is true)
-			expect(hashmap contains(t"better"), is false)
-			hashmap free()
-		})
 		this add("basic use (string, class)", func {
 			hashmap := HashMap<String, HashTestClass> new()
 			first := HashTestClass new(1, "String")
@@ -222,7 +209,7 @@ HashMapTest: class extends Fixture {
 			hashmap free()
 
 			tolerance := 0.00001f
-			input := HashMap readFromFile(t"test/system/output/mathmap.txt")
+			input := HashMap readFromFile("test/system/output/mathmap.txt")
 			expect(input, is notNull)
 			expect(input count, is equal to(4))
 			(piString, eString, sqrtTwoString, primeString) := (input get("pi"), input get("e"), input get("sqrt(2)"), input get("primes"))

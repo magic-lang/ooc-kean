@@ -16,7 +16,7 @@ List: abstract class <T> {
 	remove: abstract func ~last -> T
 	remove: abstract func ~atIndex (index: Int) -> T
 	removeAt: abstract func (index: Int)
-	removeAt: abstract func ~range (range: Range)
+	removeAt: func ~range (range: Range) { this removeAt(range min, range max) }
 	removeAt: abstract func ~indices (start, end: Int)
 	clear: abstract func
 	reverse: abstract func -> This<T>

@@ -13,7 +13,7 @@ VectorQueue: class <T> extends Queue<T> {
 	_tail := 0 // Index of newest element
 	_chunkCount := 32
 	capacity ::= this _capacity
-	full ::= this _count == this _capacity
+	isFull ::= this _count == this _capacity
 
 	init: func (capacity := 32) {
 		this _capacity = capacity
@@ -30,7 +30,7 @@ VectorQueue: class <T> extends Queue<T> {
 		this _count = 0
 	}
 	enqueue: override func (item: T) {
-		if (this full)
+		if (this isFull)
 			this _resize()
 		this _backend[this _tail] = item
 		this _tail = (this _tail + 1) % this _capacity
@@ -71,5 +71,11 @@ VectorQueue: class <T> extends Queue<T> {
 			raise(index < -this count || index >= this count, "Indexing in get accessor of VectorQueue outside of range.")
 		position := (index >= 0 ? this _head + index : this _tail + index) modulo(this _capacity)
 		this _backend[position]
+	}
+	operator []= (index: Int, value: T) {
+		version(safe)
+			raise(index < -this count || index >= this count, "Indexing in set accessor of VectorQueue outside of range.")
+		position := (index >= 0 ? this _head + index : this _tail + index) modulo(this _capacity)
+		this _backend[position] = value
 	}
 }

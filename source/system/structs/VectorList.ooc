@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-VectorList: class <T> extends List<T>{
+VectorList: class <T> extends List<T> {
 	_vector: Vector<T>
 	pointer ::= this _vector _backend as Pointer
 	init: func ~default {
@@ -51,8 +51,9 @@ VectorList: class <T> extends List<T>{
 		this _count -= 1
 		result
 	}
-	removeAt: override func (index: Int) { this removeAt(index, index + 1) }
-	removeAt: override func ~range (range: Range) { this removeAt(range min, range max) }
+	removeAt: override func (index: Int) {
+		this removeAt(index, index + 1)
+	}
 	removeAt: override func ~indices (start, end: Int) {
 		count := end - start
 		version(safe)

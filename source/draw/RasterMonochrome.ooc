@@ -29,7 +29,7 @@ RasterMonochrome: class extends RasterPacked {
 		if (this isValidIn(position x, position y))
 			this[position x, position y] = ColorMonochrome mix(this[position x, position y], pen color toMonochrome(), pen alphaAsFloat)
 	}
-	_draw: override func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) {
+	_draw: override func (image: Image, source, destination: IntBox2D, normalizedTransform: FloatTransform3D, interpolate, flipX, flipY: Bool) {
 		monochrome: This = null
 		if (image == null)
 			Debug error("Null image in RasterMonochrome draw")
@@ -39,7 +39,7 @@ RasterMonochrome: class extends RasterPacked {
 			monochrome = This convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RasterMonochrome draw")
-		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination, interpolate, flipX, flipY)
+		this _resizePacked(monochrome buffer pointer as ColorMonochrome*, monochrome, source, destination, normalizedTransform, interpolate, flipX, flipY, ColorMonochrome new())
 		if (monochrome != image)
 			monochrome referenceCount decrease()
 	}
@@ -59,9 +59,12 @@ RasterMonochrome: class extends RasterPacked {
 	}
 	apply: override func ~monochrome (action: Func(ColorMonochrome)) {
 		pointer := this buffer pointer as ColorMonochrome*
-		for (row in 0 .. this size y)
-			for (column in 0 .. this size x) {
-				pixel := pointer + row * this stride + column
+		sizeX := this size x
+		sizeY := this size y
+		thisStride := this stride
+		for (row in 0 .. sizeY)
+			for (column in 0 .. sizeX) {
+				pixel := pointer + row * thisStride + column
 				action(pixel@)
 			}
 	}
@@ -82,17 +85,23 @@ RasterMonochrome: class extends RasterPacked {
 			result = this distance(converted)
 			converted referenceCount decrease()
 		} else {
-			for (y in 0 .. this size y)
-				for (x in 0 .. this size x) {
-					c := this[x, y]
-					o := (other as This)[x, y]
+			sizeX := this size x
+			sizeY := this size y
+			thisStride := this stride
+			otherStride := (other as This) stride
+			thisBuffer := this buffer _pointer as ColorMonochrome*
+			otherBuffer := (other as This) buffer _pointer as ColorMonochrome*
+			for (y in 0 .. sizeY)
+				for (x in 0 .. sizeX) {
+					c := thisBuffer[x + y * thisStride]
+					o := otherBuffer[x + y * otherStride]
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in 0 maximum(y - 2) .. (y + 3) minimum(this size y))
-							for (otherX in 0 maximum(x - 2) .. (x + 3) minimum(this size x))
+						for (otherY in 0 maximum(y - 2) .. (y + 3) minimum(sizeY))
+							for (otherX in 0 maximum(x - 2) .. (x + 3) minimum(sizeX))
 								if (otherX != x || otherY != y) {
-									pixel := (other as This)[otherX, otherY]
+									pixel := otherBuffer[otherX + otherY * otherStride]
 									if (maximum y < pixel y)
 										maximum y = pixel y
 									else if (minimum y > pixel y)
@@ -106,7 +115,7 @@ RasterMonochrome: class extends RasterPacked {
 						result += distance sqrt()
 					}
 				}
-			result /= (this size x squared + this size y squared as Float sqrt())
+			result /= this size length
 		}
 		result
 	}

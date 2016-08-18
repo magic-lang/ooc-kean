@@ -9,12 +9,13 @@
 use base
 use geometry
 import gles3/Gles3Context
-import GLQuad, GLShaderProgram, GLTexture, GLFramebufferObject, GLFence, GLVolumeTexture, GLRenderer, GLVertexArrayObject
+import GLQuad, GLShaderProgram, GLTexture, GLFramebufferObject, GLFence, GLVolumeTexture, GLRenderer, GLVertexArrayObject, GLExtensions
 
 version(!gpuOff) {
 GLContext: abstract class {
 	_eglDisplay: Pointer
 
+	init: func { GLExtensions initialize() }
 	makeCurrent: abstract func -> Bool
 	swapBuffers: abstract func
 	setViewport: abstract func (viewport: IntBox2D)
