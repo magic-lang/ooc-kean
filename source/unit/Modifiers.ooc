@@ -55,10 +55,6 @@ EqualModifier: class extends ExpectModifier {
 		f := func (value, c: Cell<Char>) -> Bool { value get() == c get() }
 		CompareConstraint new(this, Cell<Char> new(correct), f, this comparisonType)
 	}
-	to: func ~text (correct: Text) -> CompareConstraint {
-		f := func (value, c: Cell<Text>) -> Bool { value get() == c get() }
-		CompareConstraint new(this, Cell<Text> new(correct), f, this comparisonType)
-	}
 	to: func ~boolean (correct: Bool) -> CompareConstraint {
 		f := func (value, c: Cell<Bool>) -> Bool { value get() == c get() }
 		CompareConstraint new(this, Cell<Bool> new(correct), f, this comparisonType)

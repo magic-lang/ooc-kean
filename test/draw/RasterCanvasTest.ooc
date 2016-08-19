@@ -85,7 +85,7 @@ RasterCanvasTest: class extends Fixture {
 			DrawState new(outputImage) setInputImage(imageFlowerXLeftward) setFlipSourceX(true) setViewport(IntBox2D new(240, 30, 100, 250)) setInterpolate(false) draw()
 			imageFlowerXLeftwardYUpward := RasterYuv420Semiplanar open(this inputFlower)
 			DrawState new(outputImage) setInputImage(imageFlowerXLeftwardYUpward) setFlipSourceX(true) setFlipSourceY(true) setViewport(IntBox2D new(350, 30, 100, 250)) setInterpolate(false) draw()
-			expect(outputImage distance(correctImage), is less than(0.01f))
+			expect(outputImage distance(correctImage), is less than(0.04f))
 			(outputImage, correctImage, imageFlower, imageFlowerYUpward, imageFlowerXLeftward, imageFlowerXLeftwardYUpward) free()
 		})
 		this add("draw uv image", func {

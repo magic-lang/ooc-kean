@@ -10,8 +10,8 @@ StringBuilder: class {
 	_items: VectorList<String>
 	count ::= this _items count
 
-	init: func (capacity := 32) {
-		this _items = VectorList<String> new(capacity, false)
+	init: func (capacity := 32, ownsMemory := false) {
+		this _items = VectorList<String> new(capacity, ownsMemory)
 	}
 	free: override func {
 		this _items free()

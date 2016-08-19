@@ -30,8 +30,8 @@ FloatEuclidTransform: cover {
 		scaling := ((transform a * transform a + transform b * transform b) sqrt() + (transform d * transform d + transform e * transform e) sqrt()) / 2.0f
 		this init(FloatVector3D new(transform g, transform h, 0.0f), FloatRotation3D createRotationZ(rotationZ), scaling)
 	}
-	toString: func -> String {
-		"Translation: " << this translation toString() >> " Rotation: " & this rotation toString() >> " Scaling: " & this scaling toString()
+	toString: func (decimals := 6) -> String {
+		"Translation: " << this translation toString(decimals) >> " Rotation: " & this rotation toString(decimals) >> " Scaling: " & this scaling toString(decimals)
 	}
 
 	operator * (other: This) -> This { This new(this translation + other translation, this rotation * other rotation, this scaling * other scaling) }

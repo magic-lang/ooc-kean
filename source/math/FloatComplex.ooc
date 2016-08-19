@@ -16,8 +16,8 @@ FloatComplex: cover {
 
 	init: func@ (=real, =imaginary)
 	init: func@ ~default { this init(0.0f, 0.0f) }
-	toString: func -> String {
-		this real toString() >> (this imaginary > 0 ? " +" : " ") & this imaginary toString() >> "i"
+	toString: func (decimals := 2) -> String {
+		this real toString(decimals) >> (this imaginary > 0 ? " +" : " ") & this imaginary toString(decimals) >> "i"
 	}
 	exponential: func -> This {
 		(this real) exp() * This new((this imaginary) cos(), (this imaginary) sin())

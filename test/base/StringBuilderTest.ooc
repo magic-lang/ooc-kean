@@ -48,6 +48,12 @@ StringBuilderTest: class extends Fixture {
 			expect(result == "12QQQ90")
 			(result, builder) free()
 		})
+		this add("owns memory", func {
+			builder := StringBuilder new(5, true)
+			temp := "78" + "90"
+			builder add("12" + "34") . add("34" + "56") . add(temp)
+			builder free()
+		})
 	}
 }
 

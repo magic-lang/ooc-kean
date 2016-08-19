@@ -9,19 +9,16 @@
 import io/[Reader, File]
 
 FileReader: class extends Reader {
-	fileName: Text
 	file: FStream
-
 	init: func ~withFile (fileObject: File) {
-		init(Text new(fileObject getPath()))
+		init(fileObject getPath())
 	}
-	init: func ~withName (fileName: Text) {
+	init: func ~withName (fileName: String) {
 		// mingw fseek/ftell are *really* unreliable with text mode
 		// if for some reason you need to open in text mode, use
 		// FileReader new(fileName, "rt")
-		init(fileName, t"rb")
+		init(fileName, "rb")
 	}
-
 	/**
 	 * Open a file for reading, given its name and the mode in which to open it.
 	 *
@@ -33,19 +30,15 @@ FileReader: class extends Reader {
 	 * suffix "b" = binary mode
 	 * suffix "t" = text mode (warning: rewind/mark are unreliable in text mode under mingw32)
 	 */
-	init: func ~withMode (=fileName, mode: Text) {
-		(fileNameString, modeString) := (this fileName take() toString(), mode toString())
-		this file = FStream open(fileNameString, modeString)
-		(fileNameString, modeString) free()
+	init: func ~withMode (fileName, mode: String) {
+		this file = FStream open(fileName, mode)
 		if (!this file) {
 			err := getOSError()
 			Exception new(This, "Couldn't open #{fileName} for reading: #{err}") throw()
 		}
 	}
-
 	init: func ~fromFStream (=file)
 	free: override func {
-		this fileName free(Owner Receiver)
 		this file close()
 		super()
 	}

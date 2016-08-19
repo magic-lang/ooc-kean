@@ -122,7 +122,7 @@ FloatBox2D: cover {
 		newSize := FloatVector2D mix(this size, other size, weight)
 		This createAround(newCenter, newSize)
 	}
-	toString: func -> String { (this leftTop toString() >> ", ") & this size toString() }
+	toString: func (decimals := 2) -> String { (this leftTop toString(decimals) >> ", ") & this size toString(decimals) }
 	toIntBox2D: func -> IntBox2D { IntBox2D new(this left, this top, this width, this height) }
 
 	operator + (other: This) -> This {

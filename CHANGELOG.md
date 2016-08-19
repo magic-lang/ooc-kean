@@ -1,5 +1,34 @@
 # ooc-kean changes by release
 
+# Release  2.6.0
+
+- **Text completely removed in favor of String**
+- **Fixed various thread-related bugs and race conditions**
+- **Removed Synchronized class**
+- **Added support for C11 atomics**
+- **The -Ddeterministic flag automatically sets the random generator seeds to fixed values**
+
+## Release-2.5.0
+
+- **Bug fixes in ReferenceCounter**
+- **toString() now takes number of decimals as argument**
+
+## Release-2.4.0
+
+- **Fixed bug with multiple freeing of string literals**
+
+- **Implemented SortedVectorList**
+
+- **Major cleanup of draw namespace**
+
+- **Added function for removing range of values in a VectorList**
+
+- **Refactored Promise/Future**
+
+- **Added preallocate and preregister functions to GpuContext**
+
+- **Now using correct usage flags when uploading and downloading from GraphicBuffer**
+
 ## Release-2.3.0
 
 - **Large clean up in draw module**
