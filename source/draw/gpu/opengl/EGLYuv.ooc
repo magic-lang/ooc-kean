@@ -22,7 +22,6 @@ EGLYuv: class extends OpenGLPacked {
 	}
 	free: override func {
 		this _recyclable = false
-		this _buffer free()
 		super()
 	}
 	toRasterDefault: override func -> RasterImage { Debug error("toRasterDefault unimplemented for EGLYuv"); null }
