@@ -17,11 +17,9 @@ import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLYuv, Open
 version(!gpuOff) {
 YuvExtensionContext: class extends OpenGLContext {
 	_yuvShader: OpenGLMapTransform
-	yuvShader ::= this _yuvShader
 	_unpackY: OpenGLMap
 	_unpackUv: OpenGLMap
 	_pack: OpenGLMap
-	defaultMap ::= this _yuvShader
 	init: func (other: This = null) {
 		super(other)
 		this _yuvShader = OpenGLMapTransform new(slurp("shaders/yuv.frag"), this)
