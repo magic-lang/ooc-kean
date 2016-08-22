@@ -16,7 +16,6 @@ _PromiseState: enum {
 }
 
 _Synchronizer: abstract class {
-	_state: _PromiseState
 	init: func
 	wait: abstract func (time: TimeSpan) -> Bool
 	wait: func ~forever -> Bool { this wait(TimeSpan maximumValue) }
@@ -35,6 +34,7 @@ _EmptyPromise: class extends Promise {
 }
 
 _ThreadPromise: class extends Promise {
+	_state: _PromiseState
 	_action: Func
 	_thread: Thread
 	_threadAlive := true
@@ -95,6 +95,7 @@ Future: abstract class <T> extends _Synchronizer {
 }
 
 _ThreadFuture: class <T> extends Future<T> {
+	_state: _PromiseState
 	_result: __onheap__ T
 	_action: Func
 	_thread: Thread
