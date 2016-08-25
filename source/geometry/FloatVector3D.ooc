@@ -22,8 +22,11 @@ FloatVector3D: cover {
 	normalized ::= this / this norm
 	isZero ::= this norm equals(0.0f)
 	azimuth ::= this y atan2(this x)
+	absolute ::= This new(this x absolute, this y absolute, this z absolute)
+	sign ::= This new(this x sign, this y sign, this z sign)
 
 	init: func@ (=x, =y, =z)
+	init: func@ ~cube (length: Float) { this x = this y = this z = length }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	pNorm: func (p: Float) -> Float {
 		(this x abs() pow(p) + this y abs() pow(p) + this z abs() pow(p)) pow(1.0f / p)

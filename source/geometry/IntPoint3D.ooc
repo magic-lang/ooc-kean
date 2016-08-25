@@ -15,9 +15,14 @@ use base
 IntPoint3D: cover {
 	x, y, z: Int
 
+	absolute ::= This new(this x absolute, this y absolute, this z absolute)
+	sign ::= This new(this x sign, this y sign, this z sign)
+
 	init: func@ (=x, =y, =z)
+	init: func@ ~cube (length: Int) { this x = this y = this z = length }
 	init: func@ ~default { this init(0, 0, 0) }
 	init: func@ ~fromPoint2D (point: IntPoint2D, z := 0) { this init(point x, point y, z) }
+	distance: func (other: This) -> Float { (this - other) toFloatPoint3D() norm }
 	scalarProduct: func (other: This) -> Int { this x * other x + this y * other y + this z * other z }
 	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y), this z minimum(ceiling z)) }
 	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y), this z maximum(floor z)) }

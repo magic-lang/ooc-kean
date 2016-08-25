@@ -19,6 +19,8 @@ FloatPoint3D: cover {
 	norm ::= (this x squared + this y squared + this z squared) sqrt()
 	normalized ::= this / this norm
 	azimuth ::= this y atan2(this x)
+	absolute ::= This new(this x absolute, this y absolute, this z absolute)
+	sign ::= This new(this x sign, this y sign, this z sign)
 	isValid ::= (this x isNumber && this y isNumber && this z isNumber)
 	elevation: Float { get {
 		r := this norm
@@ -28,6 +30,7 @@ FloatPoint3D: cover {
 	}}
 
 	init: func@ (=x, =y, =z)
+	init: func@ ~cube (length: Float) { this x = this y = this z = length }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	init: func@ ~fromPoint2D (point: FloatPoint2D, z := 0.0f) { this init(point x, point y, z) }
 	pNorm: func (p: Float) -> Float {
