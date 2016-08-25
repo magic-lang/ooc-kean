@@ -23,7 +23,19 @@ _Synchronizer: abstract class {
 		super()
 	}
 	wait: abstract func (time: TimeSpan) -> Bool
-	wait: func ~forever -> Bool { this wait(TimeSpan maximumValue) }
+	wait: func ~forever -> Bool {
+		version(debugDeadlock) {
+			timeLimit_msec := 2_000
+			timer := CpuTimer new() . start()
+			result := this wait(TimeSpan milliseconds(timeLimit_msec))
+			if (timer stop() > timeLimit_msec)
+				Debug error("Error! [" + this class name + " stalled for more than " + timeLimit_msec + " ticks and timed out]")
+			timer free()
+		}
+		else
+			result := this wait(TimeSpan maximumValue)
+		result
+	}
 	cancel: virtual func -> Bool { false }
 }
 
