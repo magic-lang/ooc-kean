@@ -17,6 +17,7 @@ FloatPoint2D: cover {
 
 	norm ::= (this x * this x + this y * this y) sqrt()
 	azimuth ::= this y atan2(this x)
+	absolute ::= This new(this x absolute, this y absolute)
 
 	init: func@ (=x, =y)
 	init: func@ ~default { this init(0.0f, 0.0f) }

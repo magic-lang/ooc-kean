@@ -14,6 +14,7 @@ use math
 
 IntPoint2D: cover {
 	x, y: Int
+	absolute ::= This new(this x absolute, this y absolute)
 
 	init: func@ (=x, =y)
 	init: func@ ~default { this init(0, 0) }
