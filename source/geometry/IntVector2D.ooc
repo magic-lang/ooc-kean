@@ -19,12 +19,14 @@ IntVector2D: cover {
 	square ::= this x == this y
 	length ::= ((this x squared + this y squared) as Float sqrt())
 	absolute ::= This new(this x absolute, this y absolute)
+	sign ::= This new(this x sign, this y sign)
 
 	init: func@ (=x, =y)
 	init: func@ ~square (length: Int) { this x = this y = length }
 	init: func@ ~default { this init(0, 0) }
 	scalarProduct: func (other: This) -> Int { this x * other x + this y * other y }
 	swap: func -> This { This new(this y, this x) }
+	distance: func (other: This) -> Float { (this - other) length }
 	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y)) }
 	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y)) }
 	minimum: func ~Int (ceiling: Int) -> This { this minimum(This new(ceiling)) }
