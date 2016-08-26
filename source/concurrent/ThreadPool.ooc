@@ -38,20 +38,16 @@ _Task: abstract class {
 		this _state == _PromiseState Finished
 	}
 	wait: func ~timeout (time: TimeSpan) -> Bool {
-		status := false
 		if (time == TimeSpan maximumValue)
-			status = this wait()
+			this wait()
 		else {
 			timer := CpuTimer new() . start()
 			milliseconds := time toMilliseconds()
-			while (timer stop() < milliseconds && !status) {
-				status = (this _state != _PromiseState Unfinished)
-				if (!status)
-					Time sleepMilli(1)
-			}
+			while (timer stop() < milliseconds && this _state == _PromiseState Unfinished)
+				Time sleepMilli(1)
 			timer free()
 		}
-		status
+		this _state == _PromiseState Finished
 	}
 	cancel: func -> Bool {
 		status := false
