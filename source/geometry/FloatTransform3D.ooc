@@ -99,8 +99,8 @@ FloatTransform3D: cover {
 		"%.8f" formatFloat(this d) >> ", " & "%.8f" formatFloat(this h) >> ", " & "%.8f" formatFloat(this l) >> ", " & "%.8f" formatFloat(this p)
 	}
 	transformAndProject: func ~FloatPoint2D (point: FloatPoint2D, focalLength: Float) -> FloatPoint2D {
-		transformedWorldPoint := this * FloatPoint3D new(point x, point y, focalLength)
-		focalLength < Float epsilon ? FloatPoint2D new(transformedWorldPoint x, transformedWorldPoint y) : this project(transformedWorldPoint, focalLength)
+		transformedPoint := this * FloatPoint3D new(point x, point y, focalLength)
+		focalLength < Float epsilon ? FloatPoint2D new(transformedPoint x, transformedPoint y) : FloatPoint2D new(transformedPoint x, transformedPoint y) * focalLength / transformedPoint z
 	}
 	transformAndProject: func ~FloatBox2D (box: FloatBox2D, focalLength: Float) -> FloatBox2D {
 		FloatBox2D new(this transformAndProject(box leftTop, focalLength), this transformAndProject(box rightBottom, focalLength))
@@ -114,8 +114,9 @@ FloatTransform3D: cover {
 		result
 	}
 	project: func (point: FloatPoint3D, focalLength: Float) -> FloatPoint2D {
-		projectedPoint := This createProjection(focalLength) * point / point z
-		FloatPoint2D new(projectedPoint x, projectedPoint y)
+		// Simplified from
+		// projectedPoint := This createProjection(focalLength) * point / point z
+		FloatPoint2D new(point x, point y) * focalLength / point z
 	}
 
 	operator * (other: This) -> This {
