@@ -110,8 +110,8 @@ SvgPlotTest: class extends Fixture {
 			filename free()
 		})
 		this add("Output check", func {
-			generatedFile := FileReader new(t"test/plot/output/example.svg")
-			comparisonFile := FileReader new(t"test/plot/input/exampleComparison.svg")
+			generatedFile := FileReader new("test/plot/output/example.svg")
+			comparisonFile := FileReader new("test/plot/input/exampleComparison.svg")
 			while (generatedFile hasNext() && comparisonFile hasNext()) {
 				(generatedString, comparisonString) := (generatedFile readUntil(' '), comparisonFile readUntil(' '))
 				// If they differ, it can only be due to (small) roundoff errors

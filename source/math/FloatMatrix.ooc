@@ -125,13 +125,13 @@ FloatMatrix: cover {
 				thisElements[i + second * t width] = buffer
 			}
 	}
-	toString: func -> String {
+	toString: func (decimals := 2) -> String {
 		t := this take()
 		result: String = ""
 		for (y in 0 .. t height) {
 			for (x in 0 .. t width - 1)
-				result = result & t[x, y] toString() >> ", "
-			result = result & t[t width - 1, y] toString()
+				result = result & t[x, y] toString(decimals) >> ", "
+			result = result & t[t width - 1, y] toString(decimals)
 			result = result >> "; "
 		}
 		this free(Owner Receiver)

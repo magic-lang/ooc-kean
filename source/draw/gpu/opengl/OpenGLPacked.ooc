@@ -158,6 +158,9 @@ OpenGLPacked: abstract class extends GpuImage {
 			this _backend upload(raster buffer pointer, raster stride)
 		}
 	}
-	onRecycle: func { this _renderTarget invalidate() }
+	onRecycle: func {
+		this referenceCount reset()
+		this _renderTarget invalidate()
+	}
 }
 }

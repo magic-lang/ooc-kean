@@ -69,6 +69,8 @@ RasterYuv420Semiplanar: class extends RasterImage {
 		drawStateY := drawState setTarget((drawState target as This) y)
 		drawStateUV := drawState setTarget((drawState target as This) uv)
 		drawStateUV viewport = drawState viewport / 2
+		normalizedTransform := drawStateUV getTransformNormalized()
+		drawStateUV = drawStateUV setTransformNormalized(FloatTransform3D createScaling(0.5f, 0.5f, 1.0f) * normalizedTransform * FloatTransform3D createScaling(2.0f, 2.0f, 1.0f))
 		if (drawState inputImage != null && drawState inputImage class == This) {
 			drawStateY inputImage = (drawState inputImage as This) y
 			drawStateUV inputImage = (drawState inputImage as This) uv
@@ -92,62 +94,21 @@ RasterYuv420Semiplanar: class extends RasterImage {
 		}
 		result
 	}
-	resizeInto: func (target: This) {
-		thisYBuffer := this y buffer pointer
-		targetYBuffer := target y buffer pointer
-		for (row in 0 .. target size y) {
-			srcRow := (this size y * row) / target size y
-			thisStride := srcRow * this y stride
-			targetStride := row * target y stride
-			for (column in 0 .. target size x) {
-				srcColumn := (this size x * column) / target size x
-				targetYBuffer[column + targetStride] = thisYBuffer[srcColumn + thisStride]
-			}
-		}
-		targetSizeHalf := target size / 2
-		thisSizeHalf := this size / 2
-		thisUvBuffer := this uv buffer pointer as ColorUv*
-		targetUvBuffer := target uv buffer pointer as ColorUv*
-		if (target size y isOdd)
-			targetSizeHalf = IntVector2D new(targetSizeHalf x, targetSizeHalf y + 1)
-		for (row in 0 .. targetSizeHalf y) {
-			srcRow := (thisSizeHalf y * row) / targetSizeHalf y
-			thisStride := srcRow * this uv stride / 2
-			targetStride := row * target uv stride / 2
-			for (column in 0 .. targetSizeHalf x) {
-				srcColumn := (thisSizeHalf x * column) / targetSizeHalf x
-				targetUvBuffer[column + targetStride] = thisUvBuffer[srcColumn + thisStride]
-			}
-		}
+	resizeInto: func (target: This, sourceBox := IntBox2D new()) {
+		if (sourceBox hasZeroArea)
+			sourceBox = IntBox2D new(this size)
+		version(safe)
+			raise(sourceBox intersection(IntBox2D new(this size)) != sourceBox, "invalid source box in RasterYuv420Semiplanar resizeInto !")
+		DrawState new(target y) setInputImage(this y) setSource(sourceBox, this y size) draw()
+		DrawState new(target uv) setInputImage(this uv) setSource(sourceBox / 2, this uv size) draw()
 	}
 	crop: func (region: FloatBox2D) -> This {
 		this crop~int(region round() toIntBox2D())
 	}
 	crop: func ~int (region: IntBox2D) -> This {
 		result := This new(region size, region size x + (region size x isOdd ? 1 : 0)) as This
-		this cropInto(region, result)
+		this resizeInto(result, region)
 		result
-	}
-	cropInto: func (region: IntBox2D, target: This) {
-		thisYBuffer := this y buffer pointer
-		targetYBuffer := target y buffer pointer
-		for (row in region top .. region size y + region top) {
-			thisStride := row * this y stride
-			targetStride := ((row - region top) as Int) * target y stride
-			for (column in region left .. region size x + region left)
-				targetYBuffer[(column - region left) as Int + targetStride] = thisYBuffer[column + thisStride]
-		}
-		regionSizeHalf := region size / 2
-		regionTopHalf := region top / 2
-		regionLeftHalf := region left / 2
-		thisUvBuffer := this uv buffer pointer as ColorUv*
-		targetUvBuffer := target uv buffer pointer as ColorUv*
-		for (row in regionTopHalf .. regionSizeHalf y + regionTopHalf) {
-			thisStride := row * this uv stride / 2
-			targetStride := ((row - regionTopHalf) as Int) * target uv stride / 2
-			for (column in regionLeftHalf .. regionSizeHalf x + regionLeftHalf)
-				targetUvBuffer[(column - regionLeftHalf) as Int + targetStride] = thisUvBuffer[column + thisStride]
-		}
 	}
 	apply: override func ~rgb (action: Func(ColorRgb)) {
 		convert := ColorConvert fromYuv(action)
@@ -157,6 +118,8 @@ RasterYuv420Semiplanar: class extends RasterImage {
 	apply: override func ~yuv (action: Func (ColorYuv)) {
 		yRow := this y buffer pointer
 		ySource := yRow
+		uvStride := this uv stride
+		yStride := this y stride
 		uvRow := this uv buffer pointer
 		uSource := uvRow
 		vSource := uvRow + 1
@@ -172,10 +135,9 @@ RasterYuv420Semiplanar: class extends RasterImage {
 					vSource += 2
 				}
 			}
-			yRow += this y stride
-			if (y % 2 == 1) {
-				uvRow += this uv stride
-			}
+			yRow += yStride
+			if (y % 2 == 1)
+				uvRow += uvStride
 			ySource = yRow
 			uSource = uvRow
 			vSource = uvRow + 1

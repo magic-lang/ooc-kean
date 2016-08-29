@@ -29,15 +29,14 @@ FloatTransform2D: cover {
 	scalingX ::= (this a * this a + this b * this b) sqrt()
 	scalingY ::= (this d * this d + this e * this e) sqrt()
 	rotationZ ::= this b atan2(this a)
-	isProjective ::= this determinant != 0.0f
-	isAffine ::= this c == 0.0f && this f == 0.0f && this i == 1.0f
+	isProjective ::= !this determinant equals(0.0f)
+	isAffine ::= this c equals(0.0f) && this f equals(0.0f) && this i equals(1.0f)
 	isSimilarity ::= this == This create(this translation, this scaling, this rotationZ)
 	isEuclidian ::= this == This create(this translation, this rotationZ)
-	isIdentity ::= (this a == 1.0f && this e == 1.0f && this i == 1.0f) && (this b == 0.0f && this c == 0.0f && this d == 0.0f && this f == 0.0f && this g == 0.0f && this h == 0.0f)
+	isIdentity ::= this a equals(1.0f) && this e equals(1.0f) && this i equals(1.0f) && this b equals(0.0f) && this c equals(0.0f) && this d equals(0.0f) && this f equals(0.0f) && this g equals(0.0f) && this h equals(0.0f)
 	inverse: This { get {
 		determinant := this determinant
-		if (determinant == 0)
-			raise("Determinant is zero in FloatTransform2D inverse()")
+		raise(determinant equals(0.0f), "Determinant is zero in FloatTransform2D inverse()")
 		This new(
 			(this e * this i - this h * this f) / determinant,
 			(this h * this c - this b * this i) / determinant,

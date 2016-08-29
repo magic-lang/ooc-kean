@@ -30,7 +30,7 @@ RasterRgb: class extends RasterPacked {
 		if (this isValidIn(position x, position y))
 			this[position x, position y] = ColorRgb mix(this[position x, position y], pen color toRgb(), pen alphaAsFloat)
 	}
-	_draw: override func (image: Image, source, destination: IntBox2D, interpolate, flipX, flipY: Bool) {
+	_draw: override func (image: Image, source, destination: IntBox2D, normalizedTransform: FloatTransform3D, interpolate, flipX, flipY: Bool) {
 		rgb: This = null
 		if (image == null)
 			Debug error("Null image in RasterRgb draw")
@@ -40,20 +40,29 @@ RasterRgb: class extends RasterPacked {
 			rgb = This convertFrom(image as RasterImage)
 		else
 			Debug error("Unsupported image type in RasterRgb draw")
-		this _resizePacked(rgb buffer pointer as ColorRgb*, rgb, source, destination, interpolate, flipX, flipY)
+		this _resizePacked(rgb buffer pointer as ColorRgb*, rgb, source, destination, normalizedTransform, interpolate, flipX, flipY, ColorRgb new())
 		if (rgb != image)
 			rgb referenceCount decrease()
 	}
 	fill: override func (color: ColorRgba) {
-		for (y in 0 .. this size y)
-			for (x in 0 .. this size x)
-				this[x, y] = color toRgb()
+		sizeX := this size x
+		sizeY := this size y
+		thisBuffer := this buffer pointer as ColorRgb*
+		thisStride := this stride / this bytesPerPixel
+		colorRgb := color toRgb()
+		for (y in 0 .. sizeY)
+			for (x in 0 .. sizeX)
+				thisBuffer[x + y * thisStride] = colorRgb
 	}
 	copy: override func -> This { This new(this buffer copy(), this size, this stride) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
-		for (row in 0 .. this size y)
-			for (pixel in 0 .. this size x) {
-				pointer := this buffer pointer + pixel * this bytesPerPixel + row * this stride
+		sizeX := this size x
+		sizeY := this size y
+		thisBuffer := this buffer pointer
+		thisStride := this stride
+		for (row in 0 .. sizeY)
+			for (pixel in 0 .. sizeX) {
+				pointer := thisBuffer + pixel * this bytesPerPixel + row * thisStride
 				color := (pointer as ColorRgb*)@
 				action(color)
 			}
@@ -85,17 +94,23 @@ RasterRgb: class extends RasterPacked {
 			result = this distance(converted)
 			converted referenceCount decrease()
 		} else {
-			for (y in 0 .. this size y)
-				for (x in 0 .. this size x) {
-					c := this[x, y]
-					o := (other as This)[x, y]
+			sizeX := this size x
+			sizeY := this size y
+			thisBuffer := this buffer _pointer as ColorRgb*
+			otherBuffer := (other as This) buffer _pointer as ColorRgb*
+			thisStride := this stride / this bytesPerPixel
+			otherStride := (other as This) stride / this bytesPerPixel
+			for (y in 0 .. sizeY)
+				for (x in 0 .. sizeX) {
+					c := thisBuffer[x + y * thisStride]
+					o := otherBuffer[x + y * otherStride]
 					if (c distance(o) > 0) {
 						maximum := o
 						minimum := o
-						for (otherY in 0 maximum(y - this distanceRadius) .. (y + 1 + this distanceRadius) minimum(this size y))
-							for (otherX in 0 maximum(x - this distanceRadius) .. (x + 1 + this distanceRadius) minimum(this size x))
+						for (otherY in 0 maximum(y - this distanceRadius) .. (y + 1 + this distanceRadius) minimum(sizeY))
+							for (otherX in 0 maximum(x - this distanceRadius) .. (x + 1 + this distanceRadius) minimum(sizeX))
 								if (otherX != x || otherY != y) {
-									pixel := (other as This)[otherX, otherY]
+									pixel := otherBuffer[otherX + otherY * otherStride]
 									if (maximum b < pixel b)
 										maximum b = pixel b
 									else if (minimum b > pixel b)

@@ -6,11 +6,12 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use math
-import FloatPoint2D
 import IntPoint3D
+import IntVector3D
+import FloatPoint2D
 import FloatVector3D
 use base
+use math
 
 FloatPoint3D: cover {
 	x, y, z: Float
@@ -46,8 +47,9 @@ FloatPoint3D: cover {
 	clamp: func ~point (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y), this z clamp(floor z, ceiling z)) }
 	clamp: func ~float (floor, ceiling: Float) -> This { This new(this x clamp(floor, ceiling), this y clamp(floor, ceiling), this z clamp(floor, ceiling)) }
 	toIntPoint3D: func -> IntPoint3D { IntPoint3D new(this x as Int, this y as Int, this z as Int) }
+	toIntVector3D: func -> IntVector3D { IntVector3D new(this x as Int, this y as Int, this z as Int) }
 	toFloatVector3D: func -> FloatVector3D { FloatVector3D new(this x, this y, this z) }
-	toString: func -> String { "%.8f" formatFloat(this x) >> ", " & "%.8f" formatFloat(this y) >> ", " & "%.8f" formatFloat(this z) }
+	toString: func (decimals := 8) -> String { this x toString(decimals) >> ", " & this y toString(decimals) >> ", " & this z toString(decimals) }
 
 	operator - -> This { This new(-this x, -this y, -this z) }
 	operator + (other: This) -> This { This new(this x + other x, this y + other y, this z + other z) }
