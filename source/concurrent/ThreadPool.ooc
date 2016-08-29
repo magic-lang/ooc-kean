@@ -42,7 +42,7 @@ _Task: abstract class {
 		if (time == TimeSpan maximumValue)
 			status = this wait()
 		else {
-			timer := CpuTimer new() . start()
+			timer := WallTimer new() . start()
 			milliseconds := time toMilliseconds()
 			while (timer stop() < milliseconds && !status) {
 				status = (this _state != _PromiseState Unfinished)
