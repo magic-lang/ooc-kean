@@ -95,7 +95,8 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		this free()
 	}
 	free: override func {
-		if (this size > 0) {
+    /*
+    if (this size > 0) {
 			This _lock lock()
 			bin := This _getBin(this size)
 			while (bin count > 20) {
@@ -108,6 +109,8 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		}
 		else
 			super()
+    */
+    super()
 	}
 
 	_lock := static Mutex new()
@@ -115,6 +118,7 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 	_mediumRecycleBin := static VectorList<This> new()
 	_largeRecycleBin := static VectorList<This> new()
 	new: static func ~fromSize (size: Int, allocator := Allocator defaultAllocator()) -> This {
+    /*
 		buffer: This = null
 		bin := This _getBin(size)
 		This _lock lock()
@@ -127,6 +131,8 @@ _RecyclableByteBuffer: class extends ByteBuffer {
 		This _lock unlock()
 		version(debugByteBuffer) { if (buffer == null) Debug print("No RecyclableByteBuffer available in the bin; allocating a new one") }
 		buffer == null ? This new(allocator allocate(size) as Byte*, size, allocator) : buffer
+    */
+    This new(allocator allocate(size) as Byte*, size, allocator)
 	}
 	_getBin: static func (size: Int) -> VectorList<This> {
 		size < 10000 ? This _smallRecycleBin : (size < 100000 ? This _mediumRecycleBin : This _largeRecycleBin)
