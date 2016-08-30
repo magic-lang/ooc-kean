@@ -9,7 +9,7 @@
 use base
 use unit
 
-CustomAllocator: class extends AbstractAllocator {
+/*CustomAllocator: class extends AbstractAllocator {
 	_allocCount := 0
 	_freeCount := static 0
 	init: func
@@ -21,7 +21,7 @@ CustomAllocator: class extends AbstractAllocator {
 		This _freeCount += 1
 		memfree(pointer)
 	}
-}
+}*/
 
 ByteBufferTest: class extends Fixture {
 	init: func {
@@ -92,16 +92,16 @@ ByteBufferTest: class extends Fixture {
 			expect(buffer pointer[63] as Int, is equal to(63))
 			buffer referenceCount decrease()
 		})
-		this add("custom alloc", This _testCustomAlloc)
+		//this add("custom alloc", This _testCustomAlloc)
 	}
-	_testCustomAlloc: static func {
+	/*_testCustomAlloc: static func {
 		allocator := CustomAllocator new()
 		expect(allocator _allocCount, is equal to(0))
 		buffer := ByteBuffer new(128, allocator)
 		expect(allocator _allocCount, is equal to(1))
 		(buffer as _RecyclableByteBuffer) _forceFree()
 		expect(CustomAllocator _freeCount, is equal to(1))
-	}
+	}*/
 }
 
 ByteBufferTest new() run() . free()
