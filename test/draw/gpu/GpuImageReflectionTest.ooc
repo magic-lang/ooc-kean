@@ -23,7 +23,7 @@ GpuImageReflectionTest: class extends Fixture {
 			gpuImage fill(ColorRgba black)
 			DrawState new(gpuImage) setTransformNormalized(FloatTransform3D createReflectionX()) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is less than(0.05f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU reflection Y (RGBA)", func {
@@ -32,7 +32,7 @@ GpuImageReflectionTest: class extends Fixture {
 			gpuImage fill(ColorRgba black)
 			DrawState new(gpuImage) setTransformNormalized(FloatTransform3D createReflectionY()) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is less than(0.05f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU reflection Z (RGBA)", func {
@@ -41,7 +41,7 @@ GpuImageReflectionTest: class extends Fixture {
 			gpuImage fill(ColorRgba black)
 			DrawState new(gpuImage) setTransformNormalized(FloatTransform3D createReflectionZ()) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is less than(0.05f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU flip X (RGBA)", func {
@@ -50,7 +50,7 @@ GpuImageReflectionTest: class extends Fixture {
 			gpuImage fill(ColorRgba black)
 			DrawState new(gpuImage) setFlipSourceX(true) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is less than(0.05f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU flip Y (RGBA)", func {
@@ -59,7 +59,7 @@ GpuImageReflectionTest: class extends Fixture {
 			gpuImage fill(ColorRgba black)
 			DrawState new(gpuImage) setFlipSourceY(true) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is less than(0.05f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 	}
