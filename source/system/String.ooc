@@ -227,43 +227,41 @@ String: class {
 	operator & (other: UInt) -> This { this & other toString() }
 	operator & (other: Int) -> This { this & other toString() }
 
+	operator == (other: This) -> Bool { this equals(other) }
+	operator != (other: This) -> Bool { !this equals(other) }
+	operator [] (index: Int) -> Char { this _buffer[index] }
+	operator [] (range: Range) -> This { this substring(range min, range max) }
+
+	operator + (other: This) -> This { this append(other) }
+	operator + (other: Char) -> This { this append(other, true) }
+	operator + (other: CString) -> This { this append(other) }
+	operator & (other: This) -> This {
+		result := this + other
+		(this, other) free()
+		result
+	}
+	operator >> (other: This) -> This {
+		result := this + other
+		this free()
+		result
+	}
+	operator << (other: This) -> This {
+		result := this + other
+		other free()
+		result
+	}
+
 	free: static func ~all {
 		string_literal_free_all()
 	}
 }
 
-operator + (left, right: String) -> String { left append(right) }
-operator == (left, right: String) -> Bool { left equals(right) }
-operator != (left, right: String) -> Bool { !left equals(right) }
-operator + (left: String, right: Char) -> String { left append(right, true) }
-operator + (left: String, right: CString) -> String { left append(right) }
-operator + (left: String, right: LLong) -> String { left append(right toString()) }
-operator + (left: String, right: LDouble) -> String { left append(right toString()) }
 operator + (left: Char, right: String) -> String { right prepend(left) }
-operator + (left: LLong, right: String) -> String { left toString() append(right) }
-operator + (left: LDouble, right: String) -> String { left toString() append(right) }
-operator * (string: String, count: Int) -> String { string times(count) }
-operator [] (string: String, index: Int) -> Char { string _buffer [index] }
-operator [] (string: String, range: Range) -> String { string substring(range min, range max) }
 operator implicit as (s: String) -> Char* { s ? s toCString() : null }
 operator implicit as (s: String) -> CString { s ? s toCString() : null }
 operator implicit as (c: Char*) -> String { c ? String new(c, strlen(c)) : null }
 operator implicit as (c: CString) -> String { c ? String new(c, strlen(c)) : null }
-operator & (left, right: String) -> String {
-	result := left + right
-	(left, right) free()
-	result
-}
-operator >> (left, right: String) -> String {
-	result := left + right
-	left free()
-	result
-}
-operator << (left, right: String) -> String {
-	result := left + right
-	right free()
-	result
-}
+
 makeStringLiteral: func (str: CString, strLen: Int) -> String {
 	result := String new(CharBuffer new(str, strLen, true))
 	result _locked = true
