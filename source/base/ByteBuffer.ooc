@@ -56,10 +56,8 @@ ByteBuffer: class {
 	}
 	new: static func ~size (size: Int, allocator := Allocator defaultAllocator()) -> This { This new(allocator allocate(size) as Byte*, size, true, allocator) }
 	new: static func ~recover (pointer: Byte*, size: Int, recover: Func (This) -> Bool) -> This { _RecoverableByteBuffer new(pointer, size, recover) }
-	free: static func ~all { /*Placeholder*/ }
 }
 
-GlobalCleanup register(|| ByteBuffer free~all(), 8)
 GlobalCleanup register(|| Allocator free~all(), 9)
 
 _SlicedByteBuffer: class extends ByteBuffer {
