@@ -25,11 +25,11 @@ _Synchronizer: abstract class {
 	wait: abstract func (time: TimeSpan) -> Bool
 	wait: func ~forever -> Bool {
 		version(debugDeadlock) {
-			timeLimit_msec := 2_000
-			timer := CpuTimer new() . start()
-			result := this wait(TimeSpan milliseconds(timeLimit_msec))
-			if (timer stop() > timeLimit_msec)
-				Debug error("Error! [" + this class name + " stalled for more than " + timeLimit_msec + " ticks and timed out]")
+			timeLimitMilliseconds := 1000
+			timer := WallTimer new() . start()
+			result := this wait(TimeSpan milliseconds(timeLimitMilliseconds))
+			if (timer stop() / 1000 > timeLimitMilliseconds)
+				Debug error("Error! [" + this class name + " stalled for more than " + timeLimitMilliseconds + " milliseconds and timed out]")
 			timer free()
 		}
 		else
