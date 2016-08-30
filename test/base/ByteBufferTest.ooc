@@ -49,10 +49,10 @@ ByteBufferTest: class extends Fixture {
 			for (i in 0 .. 1024 / 8)
 				buffer pointer[i] = i
 			buffercopy := buffer copy()
-			buffer free()
 			for (i in 0 .. 1024 / 8)
 				expect(buffercopy pointer[i] as Int, is equal to(buffer pointer[i] as Int))
-			buffercopy referenceCount decrease()
+			buffer free()
+			buffercopy free()
 		})
 		this add("slice", func {
 			buffer := ByteBuffer new(1024)
