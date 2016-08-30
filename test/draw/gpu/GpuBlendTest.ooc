@@ -23,7 +23,7 @@ GpuBlendTest: class extends Fixture {
 			gpuImage := gpuContext createImage(this destinationImage)
 			DrawState new(gpuImage) setBlendMode(BlendMode Add) setInputImage(this sourceImageOpaque) draw()
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is less than(0.05f))
 			(rasterFromGpu, gpuImage, correctImage) free()
 		})
 		this add("GPU blend white (RGBA)", func {
@@ -31,7 +31,7 @@ GpuBlendTest: class extends Fixture {
 			gpuImage := gpuContext createImage(this destinationImage)
 			DrawState new(gpuImage) setBlendMode(BlendMode White) setInputImage(this sourceImageOpaque) draw()
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is less than(0.05f))
 			(rasterFromGpu, gpuImage, correctImage) free()
 		})
 		this add("GPU blend alpha (RGBA)", func {
@@ -39,7 +39,7 @@ GpuBlendTest: class extends Fixture {
 			gpuImage := gpuContext createImage(this destinationImage)
 			DrawState new(gpuImage) setBlendMode(BlendMode Alpha) setInputImage(this sourceImageAlpha) draw()
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is less than(0.05f))
 			(rasterFromGpu, gpuImage, correctImage) free()
 		})
 		this add("GPU blend alpha (RGBA to YUV)", func {
