@@ -20,6 +20,7 @@ YuvExtensionContext: class extends OpenGLContext {
 	_unpackY: OpenGLMap
 	_unpackUv: OpenGLMap
 	_pack: OpenGLMap
+	_eglBin := RecycleBin<EGLYuv> new(100, |image| image _recyclable = false; image free())
 	init: func (other: This = null) {
 		super(other)
 		this _yuvShader = OpenGLMapTransform new(slurp("shaders/yuv.frag"), this)
@@ -29,13 +30,14 @@ YuvExtensionContext: class extends OpenGLContext {
 	}
 	free: override func {
 		this _backend makeCurrent()
+		this _eglBin free()
 		(this _yuvShader, this _unpackY, this _unpackUv, this _pack) free()
 		super()
 	}
 	createImage: override func (rasterImage: RasterImage) -> GpuImage {
 		match(rasterImage) {
 			case (graphicBufferImage: GraphicBufferYuv420Semiplanar) =>
-				yuv := EGLYuv new(graphicBufferImage buffer, this)
+				yuv := createEGLYuv(graphicBufferImage)
 				result := this createYuv420Semiplanar(rasterImage size)
 				this _unpack(yuv, result)
 				yuv free()
@@ -47,8 +49,7 @@ YuvExtensionContext: class extends OpenGLContext {
 		result: Promise
 		if (target instanceOf(GraphicBufferYuv420Semiplanar) && source instanceOf(GpuYuv420Semiplanar)) {
 			sourceImage := source as GpuYuv420Semiplanar
-			targetImage := target as GraphicBufferYuv420Semiplanar
-			targetYuv := EGLYuv new(targetImage buffer, this)
+			targetYuv := createEGLYuv(target as GraphicBufferYuv420Semiplanar)
 			this _pack add("y", sourceImage y)
 			this _pack add("uv", sourceImage uv)
 			DrawState new(targetYuv) setMap(this _pack) draw()
@@ -64,6 +65,24 @@ YuvExtensionContext: class extends OpenGLContext {
 		DrawState new(target y) setMap(this _unpackY) draw()
 		this _unpackUv add("texture0", input)
 		DrawState new(target uv) setMap(this _unpackUv) draw()
+	}
+
+	preallocate: override func (resolution: IntVector2D) { this _eglBin clear() }
+	preregister: override func (image: Image) {
+		if (image instanceOf(GraphicBufferYuv420Semiplanar))
+			this createEGLYuv(image as GraphicBufferYuv420Semiplanar) free()
+	}
+	createEGLYuv: func (source: GraphicBufferYuv420Semiplanar) -> EGLYuv {
+		result := this _eglBin search(|eglYuv| source buffer nativeBuffer == eglYuv nativeBuffer)
+		if (result == null)
+			result = EGLYuv new(source buffer, this)
+		result
+	}
+	recycle: override func (image: OpenGLPacked) {
+		match (image) {
+			case eglYuv: EGLYuv => this _eglBin add(eglYuv)
+			case => super(image)
+		}
 	}
 }
 }
