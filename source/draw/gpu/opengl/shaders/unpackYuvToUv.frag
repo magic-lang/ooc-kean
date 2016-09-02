@@ -5,5 +5,7 @@ uniform __samplerExternal2DY2YEXT texture0;
 in highp vec2 fragmentTextureCoordinate;
 out vec2 outColor;
 void main() {
-	outColor = texture(texture0, fragmentTextureCoordinate).gb;
+	float uSample = texture(texture0, fragmentTextureCoordinate).g;
+	float vSample = texture(texture0, fragmentTextureCoordinate).b;
+	outColor = vec2(uSample, vSample);
 }
