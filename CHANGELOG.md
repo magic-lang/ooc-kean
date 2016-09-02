@@ -1,6 +1,10 @@
 # ooc-kean changes by release
 
-# Release  2.6.0
+# Release  2.7.0
+
+- **Added function for checking if value is inside a certain range in TimeSpan.**
+
+## Release  2.6.0
 
 - **Text completely removed in favor of String**
 - **Fixed various thread-related bugs and race conditions**
