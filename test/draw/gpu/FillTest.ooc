@@ -33,7 +33,7 @@ FillTest: class extends Fixture {
 			gpuImage fill(color)
 			cpuImage fill(color)
 			gpuToCpuImage := gpuImage toRaster()
-			expect(gpuToCpuImage distance(cpuImage), is equal to(0.0f))
+			expect(gpuToCpuImage distance(cpuImage), is less than(0.05f))
 			expect(cpuImage[7, 7] == color)
 			expect(cpuImage[0, 0] == color)
 			expect(cpuImage[0, 15] == color)
@@ -47,7 +47,7 @@ FillTest: class extends Fixture {
 			gpuImage fill(color)
 			cpuImage fill(color)
 			gpuToCpuImage := gpuImage toRaster()
-			expect(gpuToCpuImage distance(cpuImage), is equal to(0.0f))
+			expect(gpuToCpuImage distance(cpuImage), is less than(0.05f))
 			(gpuToCpuImage, cpuImage, gpuImage) free()
 		})
 	}
