@@ -28,7 +28,8 @@ RasterYuv420SemiplanarTest: class extends Fixture {
 		})
 		this add("yuv point", func {
 			yuvImage := RasterYuv420Semiplanar new(IntVector2D new(2, 2))
-			yuvImage _drawPoint(1, 1, Pen new(ColorRgba new(0, 100, 200, 255)))
+			//_drawPoint is using reference coordinates from the center
+			yuvImage _drawPoint(-1, -1, Pen new(ColorRgba new(0, 100, 200, 255)))
 			yuvSample := yuvImage[0, 0]
 			expect(yuvSample distance(ColorYuv new(81, 194, 69)), is less than(8.0f))
 			rgbImage := RasterRgb convertFrom(yuvImage)

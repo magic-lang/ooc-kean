@@ -26,7 +26,7 @@ GpuImageRotationTest: class extends Fixture {
 			gpuImage fill(ColorRgba transparent)
 			DrawState new(gpuImage) setTransformReference(FloatTransform3D createRotationX(flipRotation)) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is less than(0.05f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU rotation flip Y (RGBA)", func {
@@ -35,7 +35,7 @@ GpuImageRotationTest: class extends Fixture {
 			gpuImage fill(ColorRgba transparent)
 			DrawState new(gpuImage) setTransformReference(FloatTransform3D createRotationY(flipRotation)) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is less than(0.05f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU rotation flip Z (RGBA)", func {
@@ -44,7 +44,7 @@ GpuImageRotationTest: class extends Fixture {
 			gpuImage fill(ColorRgba transparent)
 			DrawState new(gpuImage) setTransformReference(FloatTransform3D createRotationZ(flipRotation)) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is less than(0.05f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU rotation small X (RGBA)", func {
@@ -53,7 +53,7 @@ GpuImageRotationTest: class extends Fixture {
 			gpuImage fill(ColorRgba transparent)
 			DrawState new(gpuImage) setFocalLength(focalLength, gpuImage size) setTransformReference(FloatTransform3D createRotationX(smallRotation)) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f) within(0.005f))
+			expect(rasterFromGpu distance(correctImage), is less than(0.05f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU rotation small Y (RGBA)", func {
@@ -62,7 +62,7 @@ GpuImageRotationTest: class extends Fixture {
 			gpuImage fill(ColorRgba transparent)
 			DrawState new(gpuImage) setFocalLength(focalLength, gpuImage size) setTransformReference(FloatTransform3D createRotationY(smallRotation)) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f) within(0.05f))
+			expect(rasterFromGpu distance(correctImage), is less than(0.05f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 		this add("GPU rotation small Z (RGBA)", func {
@@ -71,7 +71,7 @@ GpuImageRotationTest: class extends Fixture {
 			gpuImage fill(ColorRgba transparent)
 			DrawState new(gpuImage) setFocalLength(focalLength, gpuImage size) setTransformReference(FloatTransform3D createRotationZ(smallRotation)) setInputImage(this sourceImage) draw()
 			rasterFromGpu := gpuImage toRaster()
-			expect(rasterFromGpu distance(correctImage), is equal to(0.0f))
+			expect(rasterFromGpu distance(correctImage), is less than(0.05f))
 			(correctImage, gpuImage, rasterFromGpu) free()
 		})
 	}
