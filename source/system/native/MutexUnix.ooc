@@ -20,11 +20,13 @@ version(unix || apple) {
 		}
 		lock: override func {
 			version(debugDeadlock) {
-				timeLimitMilliseconds := 1000 //Only whole seconds
+				timeLimitMilliseconds := 1000
 				deadline: TimeSpec
 				currentTime: TimeVal
 				gettimeofday(currentTime&, null)
-				(deadline tv_sec, deadline tv_nsec) = (currentTime tv_sec + (timeLimitMilliseconds / 1000), currentTime tv_usec * 1000)
+				(deadline tv_sec, deadline tv_nsec) = (currentTime tv_sec + timeLimitMilliseconds / 1000, currentTime tv_usec * 1000 + (timeLimitMilliseconds % 1000) * 1_000_000)
+				if (deadline tv_nsec >= 1_000_000_000)
+					(deadline tv_sec, deadline tv_nsec) = (deadline tv_sec + 1, deadline tv_nsec - 1_000_000_000)
 				if (pthread_mutex_timedlock(this _backend&, deadline&) != 0)
 					raise("Error! [" + this class name + " stalled for more than " + timeLimitMilliseconds + " milliseconds and timed out]")
 			}
