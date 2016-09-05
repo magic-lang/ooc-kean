@@ -7,8 +7,8 @@
  */
 
 version(unix || apple) {
+use base
 import ../WaitCondition
-import native/MutexUnix
 
 ConditionUnix: class extends WaitCondition {
 	_backend: PThreadCond*
