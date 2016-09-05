@@ -25,14 +25,14 @@ ToRasterTest: class extends Fixture {
 	toRaster: func (sourceImage: RasterImage) {
 		gpuImage := this context createImage(sourceImage)
 		raster := gpuImage toRaster()
-		expect(raster distance(sourceImage), is equal to(0.0f))
+		expect(raster distance(sourceImage), is less than(0.05f))
 		(gpuImage, raster) free()
 	}
 	toRasterTarget: func (sourceImage: RasterImage) {
 		gpuImage := this context createImage(sourceImage)
 		raster := sourceImage create(sourceImage size) as RasterImage
 		gpuImage toRaster(raster) wait() . free()
-		expect(raster distance(sourceImage), is equal to(0.0f))
+		expect(raster distance(sourceImage), is less than(0.05f))
 		(gpuImage, raster) free()
 	}
 	toRasterAsync: func (sourceImage: RasterImage) {
@@ -41,7 +41,7 @@ ToRasterTest: class extends Fixture {
 		future wait()
 		raster := future getResult(null)
 		expect(raster, is notNull)
-		expect(raster distance(sourceImage), is equal to(0.0f))
+		expect(raster distance(sourceImage), is less than(0.05f))
 		(future, gpuImage) free()
 		raster referenceCount decrease()
 	}
