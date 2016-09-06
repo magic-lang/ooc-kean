@@ -11,7 +11,7 @@ use draw
 use base
 use concurrent
 import GraphicBuffer, OpenGLContext, OpenGLPacked
-import backend/[GLTexture, GLContext, EGLImage]
+import backend/[GLTexture, EGLImage]
 
 version(!gpuOff) {
 EGLYuv: class extends OpenGLPacked {
@@ -19,9 +19,6 @@ EGLYuv: class extends OpenGLPacked {
 	nativeBuffer ::= this _nativeBuffer
 	init: func (_buffer: GraphicBuffer, context: OpenGLContext) {
 		super(EGLImage create(TextureType External, _buffer size, _buffer nativeBuffer, context backend), 3, context)
-	}
-	free: override func {
-		super()
 	}
 	toRasterDefault: override func -> RasterImage { Debug error("toRasterDefault unimplemented for EGLYuv"); null }
 	toRasterDefault: override func ~target (target: RasterImage) { Debug error("toRasterDefault~target unimplemented for EGLYuv"); null }

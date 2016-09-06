@@ -30,8 +30,7 @@ YuvExtensionContext: class extends OpenGLContext {
 	}
 	free: override func {
 		this _backend makeCurrent()
-		this _eglBin free()
-		(this _yuvShader, this _unpackY, this _unpackUv, this _pack) free()
+		(this _eglBin, this _yuvShader, this _unpackY, this _unpackUv, this _pack) free()
 		super()
 	}
 	createImage: override func (rasterImage: RasterImage) -> GpuImage {
@@ -73,10 +72,7 @@ YuvExtensionContext: class extends OpenGLContext {
 			this createEGLYuv(image as GraphicBufferYuv420Semiplanar) free()
 	}
 	createEGLYuv: func (source: GraphicBufferYuv420Semiplanar) -> EGLYuv {
-		result := this _eglBin search(|eglYuv| source buffer nativeBuffer == eglYuv nativeBuffer)
-		if (result == null)
-			result = EGLYuv new(source buffer, this)
-		result
+		this _eglBin search(|eglYuv| source buffer nativeBuffer == eglYuv nativeBuffer) ?? EGLYuv new(source buffer, this)
 	}
 	recycle: override func (image: OpenGLPacked) {
 		match (image) {
