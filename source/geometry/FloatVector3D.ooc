@@ -19,7 +19,7 @@ FloatVector3D: cover {
 	hasZeroVolume ::= this volume equals(0.0f)
 	length ::= this norm
 	norm ::= (this x squared + this y squared + this z squared) sqrt()
-	normalized ::= this / this norm
+	normalized ::= (this x equals(0.0f) && this y equals(0.0f) && this z equals(0.0f)) ? (this as This) : (this / this norm)
 	isZero ::= this norm equals(0.0f)
 	azimuth ::= this y atan2(this x)
 	absolute ::= This new(this x absolute, this y absolute, this z absolute)
