@@ -80,5 +80,5 @@ NetTest: class extends Fixture {
 	}
 }
 
-//NetTest new() run() . free()
+NetTest new() run() . free()
 }
