@@ -23,6 +23,7 @@ pthread_cond_broadcast: extern func (cond: PThreadCond*) -> Int
 pthread_cond_wait: extern func (cond: PThreadCond*, mutex: PThreadMutex*) -> Int
 pthread_cond_destroy: extern func (cond: PThreadCond*) -> Int
 
+pthread_mutex_timedlock: extern func (PThreadMutex*, TimeSpec*) -> Int
 pthread_mutex_lock: extern func (PThreadMutex*)
 pthread_mutex_unlock: extern func (PThreadMutex*)
 pthread_mutex_init: extern func (PThreadMutex*, PThreadMutexAttr*)
