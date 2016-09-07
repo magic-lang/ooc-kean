@@ -7,6 +7,7 @@
  */
 
 import ../Mutex
+import ../Debug
 
 version(unix || apple) {
 	MutexUnix: class extends Mutex {
@@ -28,7 +29,7 @@ version(unix || apple) {
 				if (deadline tv_nsec >= 1_000_000_000)
 					(deadline tv_sec, deadline tv_nsec) = (deadline tv_sec + 1, deadline tv_nsec - 1_000_000_000)
 				if (pthread_mutex_timedlock(this _backend&, deadline&) != 0)
-					raise("Error! [" + this class name + " stalled for more than " + timeLimitMilliseconds + " milliseconds and timed out]")
+					Debug error("Error! [" + this class name + " stalled for more than " + timeLimitMilliseconds + " milliseconds and timed out]")
 			}
 			else
 				pthread_mutex_lock(this _backend&)
