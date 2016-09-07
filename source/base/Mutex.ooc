@@ -72,3 +72,5 @@ RecursiveMutex: abstract class extends Mutex {
 		result
 	}
 }
+
+GlobalCleanup register(|| MutexGlobal free~all())

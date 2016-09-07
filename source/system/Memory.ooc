@@ -65,6 +65,3 @@ GlobalCleanup: class {
 		}
 	}
 }
-
-// Must be here because Mutex.ooc is loaded before Memory.ooc
-GlobalCleanup register(|| MutexGlobal free~all())
