@@ -8,6 +8,7 @@
 
 use unit
 use concurrent
+use base
 
 MutexTest: class extends Fixture {
 	init: func {

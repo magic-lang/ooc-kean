@@ -6,6 +6,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+ use base
+
 SynchronizedList: class <T> extends List<T> {
 	_mutex := Mutex new()
 	_backend: VectorList<T>

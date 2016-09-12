@@ -14,5 +14,8 @@ Imports: Debug
 Imports: Profiler
 Imports: FloatTuple
 Imports: StringBuilder
+Imports: Mutex
+Imports: native/MutexUnix
+Imports: native/MutexWin32
 Additionals: source/base/atomic.h
 Additionals: source/base/atomic.c
