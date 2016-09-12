@@ -1,7 +1,7 @@
 #include "string_literal.h"
 #include <assert.h>
 #include <ooc/system/String-fwd.h>
-#include <ooc/system/Mutex.h>
+#include <ooc/base/Mutex.h>
 
 #if defined(__WIN32__) || defined(__WIN64__)
 

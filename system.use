@@ -17,7 +17,6 @@ Imports: Env
 Imports: Format
 Imports: Iterators
 Imports: Memory
-Imports: Mutex
 Imports: Numbers
 Imports: math
 Imports: Owner
