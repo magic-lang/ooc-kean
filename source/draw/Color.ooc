@@ -24,6 +24,9 @@ ColorMonochrome: cover {
 	toRgba: func -> ColorRgba { this toYuv() toRgba() }
 	equals: func (other: This) -> Bool { this y == other y }
 	mix: static func (a, b: This, ratio: Float) -> This { This new(Float mix(a y, b y, ratio) as Byte) }
+	biMix: static func (delta: FloatPoint2D, bottomLeft, topLeft, bottomRight, topRight: This) -> This {
+		ColorMonochrome new((Float mix(Float mix(topLeft y as Float, topRight y as Float, delta x), Float mix(bottomLeft y as Float, bottomRight y as Float, delta x), delta y) + 0.5f) clamp(0.0f, 255.0f) as Byte)
+	}
 	distance: func (other: This) -> Float { (this y - other y) as Float abs() }
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
@@ -47,6 +50,12 @@ ColorUv: cover {
 	toRgba: func -> ColorRgba { this toYuv() toRgb() toRgba() }
 	equals: func (other: This) -> Bool { this u == other u && this v == other v }
 	mix: static func (a, b: This, ratio: Float) -> This { This new(Float mix(a u, b u, ratio) as Byte, Float mix(a v, b v, ratio) as Byte) }
+	biMix: static func (delta: FloatPoint2D, bottomLeft, topLeft, bottomRight, topRight: This) -> This {
+		result: ColorUv
+		result u = (Float mix(Float mix(topLeft u as Float, topRight u as Float, delta x), Float mix(bottomLeft u as Float, bottomRight u as Float, delta x), delta y) + 0.5f) clamp(0.0f, 255.0f) as Byte
+		result v = (Float mix(Float mix(topLeft v as Float, topRight v as Float, delta x), Float mix(bottomLeft v as Float, bottomRight v as Float, delta x), delta y) + 0.5f) clamp(0.0f, 255.0f) as Byte
+		result
+	}
 	distance: func (other: This) -> Float { ((this u - other u) as Float pow(2) + (this v - other v) as Float pow(2)) / 2.0f sqrt() }
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
