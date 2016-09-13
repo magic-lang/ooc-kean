@@ -15,7 +15,11 @@ use math
 IntPoint2D: cover {
 	x, y: Int
 
+	absolute ::= This new(this x absolute, this y absolute)
+	sign ::= This new(this x sign, this y sign)
+
 	init: func@ (=x, =y)
+	init: func@ ~square (length: Int) { this x = this y = length }
 	init: func@ ~default { this init(0, 0) }
 	scalarProduct: func (other: This) -> Int { this x * other x + this y * other y }
 	swap: func -> This { This new(this y, this x) }
