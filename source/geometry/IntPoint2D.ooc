@@ -23,6 +23,7 @@ IntPoint2D: cover {
 	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y)) }
 	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
+	mix: static func (a, b: IntPoint2D, delta: Float) -> IntPoint2D {FloatPoint2D mix(a toFloatPoint2D(), b toFloatPoint2D(), delta) round() toIntPoint2D()}
 	toIntVector2D: func -> IntVector2D { IntVector2D new(this x, this y) }
 	toFloatPoint2D: func -> FloatPoint2D { FloatPoint2D new(this x as Float, this y as Float) }
 	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x as Float, this y as Float) }
