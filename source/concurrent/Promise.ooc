@@ -46,13 +46,13 @@ Promise: abstract class extends _Synchronizer {
 }
 
 ClosurePromise: class extends Promise {
-    _wait: Func (TimeSpan) -> Bool
-    init: func (=_wait)
-    free: override func {
-        (this _wait as Closure) free(Owner Receiver)
-        super()
-    }
-    wait: override func (time: TimeSpan) -> Bool { this _wait(time) }
+	_wait: Func (TimeSpan) -> Bool
+	init: func (=_wait)
+	free: override func {
+		(this _wait as Closure) free(Owner Receiver)
+		super()
+	}
+	wait: override func (time: TimeSpan) -> Bool { this _wait(time) }
 }
 
 _EmptyPromise: class extends Promise {
