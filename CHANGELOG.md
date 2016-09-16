@@ -1,6 +1,12 @@
 # ooc-kean changes by release
 
-# Release  2.7.0
+## Release  2.8.0
+
+- **Standardized the existence of methods and properties in Vector and Point covers**
+- **Normalizing the zero vector returns a zero vector instead of NaN values**
+- **Bilinear interpolation added to ColorUv and ColorMonochrome**
+
+## Release  2.7.0
 
 - **Added function for checking if value is inside a certain range in TimeSpan.**
 
