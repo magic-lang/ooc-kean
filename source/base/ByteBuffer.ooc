@@ -54,12 +54,10 @@ ByteBuffer: class {
 	copyTo: func (other: This, start: Int, destination: Int, length: Int) {
 		memcpy(other pointer + destination, this pointer + start, length)
 	}
-	new: static func ~size (size: Int, allocator := Allocator defaultAllocator()) -> This { _RecyclableByteBuffer new(size, allocator) }
+	new: static func ~size (size: Int, allocator := Allocator defaultAllocator()) -> This { This new(allocator allocate(size) as Byte*, size, true, allocator) }
 	new: static func ~recover (pointer: Byte*, size: Int, recover: Func (This) -> Bool) -> This { _RecoverableByteBuffer new(pointer, size, recover) }
-	free: static func ~all { _RecyclableByteBuffer _free~all() }
 }
 
-GlobalCleanup register(|| ByteBuffer free~all(), 8)
 GlobalCleanup register(|| Allocator free~all(), 9)
 
 _SlicedByteBuffer: class extends ByteBuffer {
@@ -84,65 +82,6 @@ _RecoverableByteBuffer: class extends ByteBuffer {
 		if (!this _recover(this)) {
 			(this _recover as Closure) free()
 			super()
-		}
-	}
-}
-
-_RecyclableByteBuffer: class extends ByteBuffer {
-	init: func (pointer: Byte*, size: Int, allocator := Allocator defaultAllocator()) { super(pointer, size, true, allocator) }
-	_forceFree: func {
-		this _size = 0
-		this free()
-	}
-	free: override func {
-		if (this size > 0) {
-			This _lock lock()
-			bin := This _getBin(this size)
-			while (bin count > 20) {
-				version(debugByteBuffer) { Debug print("ByteBuffer bin full; freeing one ByteBuffer") }
-				bin remove(0) _forceFree()
-			}
-			this referenceCount reset()
-			bin add(this)
-			This _lock unlock()
-		}
-		else
-			super()
-	}
-
-	_lock := static Mutex new()
-	_smallRecycleBin := static VectorList<This> new()
-	_mediumRecycleBin := static VectorList<This> new()
-	_largeRecycleBin := static VectorList<This> new()
-	new: static func ~fromSize (size: Int, allocator := Allocator defaultAllocator()) -> This {
-		buffer: This = null
-		bin := This _getBin(size)
-		This _lock lock()
-		for (i in 0 .. bin count)
-			if (bin[i] size == size && bin[i] _allocator == allocator) {
-				buffer = bin remove(i)
-				buffer referenceCount reset()
-				break
-			}
-		This _lock unlock()
-		version(debugByteBuffer) { if (buffer == null) Debug print("No RecyclableByteBuffer available in the bin; allocating a new one") }
-		buffer == null ? This new(allocator allocate(size) as Byte*, size, allocator) : buffer
-	}
-	_getBin: static func (size: Int) -> VectorList<This> {
-		size < 10000 ? This _smallRecycleBin : (size < 100000 ? This _mediumRecycleBin : This _largeRecycleBin)
-	}
-	_cleanList: static func (list: VectorList<This>) {
-		while (list count > 0)
-			list remove(0) _forceFree()
-	}
-	_free: static func ~all {
-		This _cleanList(This _smallRecycleBin)
-		This _cleanList(This _mediumRecycleBin)
-		This _cleanList(This _largeRecycleBin)
-		(This _smallRecycleBin, This _mediumRecycleBin, This _largeRecycleBin) free()
-		if (This _lock != null) {
-			This _lock free()
-			This _lock = null
 		}
 	}
 }

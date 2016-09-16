@@ -7,8 +7,8 @@
  */
 
 version(windows) {
+use base
 import ../[WaitCondition, Thread]
-import native/MutexWin32
 
 ConditionWin32: class extends WaitCondition {
 	_mutex := Mutex new()

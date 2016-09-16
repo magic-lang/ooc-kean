@@ -27,7 +27,10 @@ RasterPacked: abstract class extends RasterImage {
 		super(size)
 		this _buffer referenceCount increase()
 	}
-	init: func ~allocateStride (size: IntVector2D, stride: UInt) { this init(ByteBuffer new(stride * size y), size, stride) }
+	init: func ~allocateStride (size: IntVector2D, stride: UInt) {
+		this init(ByteBuffer new(stride * size y), size, stride)
+		this _buffer zero()
+	}
 	init: func ~allocate (size: IntVector2D) {
 		thisStride := this bytesPerPixel * size x
 		this init(ByteBuffer new(thisStride * size y), size, thisStride)

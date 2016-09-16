@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 import native/[ConditionUnix, ConditionWin32]
 
 WaitCondition: abstract class {
