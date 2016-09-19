@@ -88,6 +88,16 @@ PromiseTest: class extends Fixture {
 			promise2 = Promise start(this counter)
 			promise2 wait() . free()
 		})
+		this add("ClosurePromise", func {
+			closurePromise := ClosurePromise new(|time|
+				promise := Promise start(this counter)
+				result := promise wait(time)
+				promise free()
+				result
+			)
+			expect(closurePromise wait(), is true)
+			closurePromise free()
+		})
 	}
 }
 
