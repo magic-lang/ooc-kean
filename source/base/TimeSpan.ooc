@@ -15,6 +15,7 @@ TimeSpan: cover {
 	init: func@ ~fromHourMinuteSec (hour, minute, second, millisecond: Int) { this _ticks = DateTime timeToTicks(hour, minute, second, millisecond) }
 	negate: func -> This { This new(-this ticks) }
 	toNanoseconds: func -> Long { this ticks * DateTime nanosecondsPerTick }
+	toMicroseconds: func -> Long { this ticks / DateTime ticksPerMicrosecond }
 	toMilliseconds: func -> Long { this ticks / DateTime ticksPerMillisecond }
 	toSeconds: func -> Long { this ticks / DateTime ticksPerSecond }
 	toMinutes: func -> Long { this ticks / DateTime ticksPerMinute }
@@ -93,6 +94,7 @@ TimeSpan: cover {
 	maximumValue ::= static This new(Long maximumValue)
 	minimumValue ::= static This new(Long minimumValue)
 
+	microsecond: static func -> This { This microseconds(1) }
 	millisecond: static func -> This { This milliseconds(1) }
 	second: static func -> This { This seconds(1) }
 	minute: static func -> This { This minutes(1) }
@@ -100,6 +102,7 @@ TimeSpan: cover {
 	day: static func -> This { This days(1) }
 	week: static func -> This { This weeks(1) }
 
+	microseconds: static func (count: Double) -> This { This new(DateTime ticksPerMicrosecond * count) }
 	milliseconds: static func (count: Double) -> This { This new(DateTime ticksPerMillisecond * count) }
 	seconds: static func (count: Double) -> This { This new(DateTime ticksPerSecond * count) }
 	minutes: static func (count: Double) -> This { This new(DateTime ticksPerMinute * count) }
