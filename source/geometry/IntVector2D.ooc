@@ -17,7 +17,7 @@ IntVector2D: cover {
 	area ::= this x * this y
 	hasZeroArea ::= this area == 0
 	square ::= this x == this y
-	length ::= ((this x squared + this y squared) as Float sqrt())
+	norm ::= ((this x squared + this y squared) as Float sqrt())
 	absolute ::= This new(this x absolute, this y absolute)
 	sign ::= This new(this x sign, this y sign)
 

@@ -16,7 +16,6 @@ FloatVector2D: cover {
 	x, y: Float
 
 	area ::= this x * this y
-	length ::= this norm
 	hasZeroArea ::= this area equals(0.0f)
 	norm ::= (this x squared + this y squared) sqrt()
 	normalized ::= this / this norm
