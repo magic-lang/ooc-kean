@@ -143,7 +143,7 @@ RasterUv: class extends RasterPacked {
 						result += (distance) sqrt() / 3
 					}
 				}
-			result /= this size length
+			result /= this size norm
 		}
 		result
 	}
