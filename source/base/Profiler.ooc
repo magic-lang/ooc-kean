@@ -61,7 +61,7 @@ Profiler: class {
 			totalTime += timer stop()
 		}
 		timer free()
-		totalTime toMilliseconds() as Double / (numberOfIterations * 1000)
+		totalTime toMilliseconds() / (numberOfIterations * 1000.0)
 	}
 	_logResults: static func (logMethod: Func (String)) {
 		for (i in 0 .. This _profilers count) {

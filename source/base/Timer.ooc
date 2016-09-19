@@ -40,7 +40,8 @@ Timer: abstract class {
 		this _average = this _total / this _count
 	}
 	reset: virtual func {
-		(this _min, this _max, this _startTime, this _endTime, this _result, this _total, this _count, this _average) = (Double positiveInfinity, 0, 0, 0, 0, 0, 0, 0)
+		this _min = Double positiveInfinity
+		(this _max, this _startTime, this _endTime, this _result, this _total, this _count, this _average) = (0, 0, 0, 0, 0, 0, 0)
 	}
 }
 
