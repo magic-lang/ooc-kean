@@ -17,6 +17,7 @@ IntVector3D: cover {
 	volume ::= this x * this y * this z
 	hasZeroVolume ::= this volume == 0
 	norm ::= ((this x squared + this y squared + this z squared) as Float sqrt())
+	isZero ::= this x == 0 && this y == 0 && this z == 0
 	absolute ::= This new(this x absolute, this y absolute, this z absolute)
 	sign ::= This new(this x sign, this y sign, this z sign)
 

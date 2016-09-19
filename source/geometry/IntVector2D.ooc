@@ -18,6 +18,7 @@ IntVector2D: cover {
 	hasZeroArea ::= this area == 0
 	square ::= this x == this y
 	norm ::= ((this x squared + this y squared) as Float sqrt())
+	isZero ::= this x == 0 && this y == 0
 	absolute ::= This new(this x absolute, this y absolute)
 	sign ::= This new(this x sign, this y sign)
 
