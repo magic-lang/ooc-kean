@@ -43,7 +43,7 @@ _Task: abstract class {
 			status = this wait()
 		else {
 			timer := WallTimer new() . start()
-			microseconds := time toMilliseconds() * 1000
+			microseconds := time toMicroseconds()
 			while (timer stop() < microseconds && !status) {
 				status = (this _state != _PromiseState Unfinished)
 				if (!status)
