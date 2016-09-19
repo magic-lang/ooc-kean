@@ -11,14 +11,14 @@ use collections
 use concurrent
 
 _Task: abstract class {
-	_state := _PromiseState Unfinished
+	_state := TaskState Unfinished
 	_mutex: Mutex
 	_waitCondition := WaitCondition new()
 	_freeOnCompletion := false
 	init: func (=_mutex)
 	free: override func {
 		this _mutex lock()
-		if (this _state == _PromiseState Unfinished) {
+		if (this _state == TaskState Unfinished) {
 			this _freeOnCompletion = true
 			this _mutex unlock()
 		} else {
@@ -32,10 +32,10 @@ _Task: abstract class {
 	run: abstract func
 	wait: func -> Bool {
 		this _mutex lock()
-		while (this _state == _PromiseState Unfinished)
+		while (this _state == TaskState Unfinished)
 			this _waitCondition wait(this _mutex)
 		this _mutex unlock()
-		this _state == _PromiseState Finished
+		this _state == TaskState Finished
 	}
 	wait: func ~timeout (time: TimeSpan) -> Bool {
 		status := false
@@ -45,7 +45,7 @@ _Task: abstract class {
 			timer := WallTimer new() . start()
 			microseconds := time toMilliseconds() * 1000
 			while (timer stop() < microseconds && !status) {
-				status = (this _state != _PromiseState Unfinished)
+				status = (this _state != TaskState Unfinished)
 				if (!status)
 					Time sleepMilli(1)
 			}
@@ -56,8 +56,8 @@ _Task: abstract class {
 	cancel: func -> Bool {
 		status := false
 		this _mutex lock()
-		if (this _state == _PromiseState Unfinished) {
-			this _state = _PromiseState Cancelled
+		if (this _state == TaskState Unfinished) {
+			this _state = TaskState Cancelled
 			status = true
 		}
 		this _mutex unlock()
@@ -65,8 +65,8 @@ _Task: abstract class {
 	}
 	_finishedTask: func {
 		this _mutex lock()
-		if (this _state != _PromiseState Cancelled)
-			this _state = _PromiseState Finished
+		if (this _state != TaskState Cancelled)
+			this _state = TaskState Finished
 		if (this _freeOnCompletion) {
 			this _mutex unlock()
 			this free()
@@ -126,7 +126,7 @@ _TaskFuture: class <T> extends Future<T> {
 	wait: override func (time: TimeSpan) -> Bool { this _task wait(time) }
 	getResult: override func (defaultValue: T) -> T {
 		result := defaultValue
-		if (this _task _state == _PromiseState Finished)
+		if (this _task _state == TaskState Finished)
 			result = this _task _result
 		result
 	}
