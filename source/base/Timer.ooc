@@ -19,12 +19,10 @@ Timer: abstract class {
 	_max: Double
 	_average: Double
 
-	init: func {
-		this _min = INFINITY
-		this _max = 0.0
-	}
+	init: func { this reset() }
 	start: abstract func
 	stop: abstract func -> Double
+	isRunning: virtual func -> Bool { !this _min equals(0.0) && !this _max equals(0.0) }
 	measure: func (action: Func) -> Double {
 		this start()
 		action()
@@ -40,13 +38,7 @@ Timer: abstract class {
 		this _average = this _total / this _count
 	}
 	reset: virtual func {
-		this _startTime = 0
-		this _endTime = 0
-		this _result = 0
-		this _total = 0
-		this _count = 0
-		this _min = 0
-		this _average = 0
+		(this _startTime, this _endTime, this _result, this _total, this _count, this _min, this _max, this _average) = (0, 0, 0, 0, 0, 0, 0, 0)
 	}
 }
 
