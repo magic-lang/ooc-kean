@@ -15,6 +15,8 @@ use math
 IntPoint2D: cover {
 	x, y: Int
 
+	isZero ::= this x == 0 && this y == 0
+	norm ::= ((this x squared + this y squared) as Float sqrt())
 	absolute ::= This new(this x absolute, this y absolute)
 	sign ::= This new(this x sign, this y sign)
 
