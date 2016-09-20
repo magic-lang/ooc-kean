@@ -53,7 +53,7 @@ Fixture: abstract class {
 			This failureNames add(this name clone())
 		}
 		This _print(result ? " done" : " failed")
-		testTime := timer stop() / 1_000_000.0
+		testTime := timer stop() toSeconds()
 		This totalTime += testTime
 		if (testTime > 0.1)
 			This _print(" in %.2fs" format(testTime), true)

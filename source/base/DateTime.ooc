@@ -127,6 +127,7 @@ DateTime: cover {
 	daysPerYear: static Int = 365
 	daysPerFourYears: static Int = 3 * This daysPerYear + 366
 	nanosecondsPerTick: static Long = 100
+	ticksPerMicrosecond: static Long = 1_000 / This nanosecondsPerTick
 	ticksPerMillisecond: static Long = 1_000_000 / This nanosecondsPerTick
 	ticksPerSecond: static Long = This ticksPerMillisecond * 1000
 	ticksPerMinute: static Long = This ticksPerSecond * 60

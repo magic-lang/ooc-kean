@@ -22,6 +22,7 @@ FloatVector2D: cover {
 	normalized ::= this / this norm
 	azimuth ::= this y atan2(this x)
 	absolute ::= This new(this x absolute, this y absolute)
+	sign ::= This new(this x sign, this y sign)
 
 	init: func@ (=x, =y)
 	init: func@ ~square (length: Float) { this x = this y = length }
