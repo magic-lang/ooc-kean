@@ -56,7 +56,7 @@ ColorUv: cover {
 		result v = (Float mix(Float mix(topLeft v as Float, topRight v as Float, ratio x), Float mix(bottomLeft v as Float, bottomRight v as Float, ratio x), ratio y) + 0.5f) clamp(0.0f, 255.0f) as Byte
 		result
 	}
-	distance: func (other: This) -> Float { ((this u - other u) squared + (this v - other v) squared) as Float sqrt() }
+	distance: func (other: This) -> Float { ((this u - other u) as Float squared + (this v - other v) as Float squared) sqrt() }
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 }
@@ -82,7 +82,7 @@ ColorYuv: cover {
 		This new(Float mix(a y, b y, ratio) as Byte, Float mix(a u, b u, ratio), Float mix(a v, b v, ratio) as Byte)
 	}
 	distance: func (other: This) -> Float {
-		((this y - other y) squared + (this u - other u) squared + (this v - other v) squared) as Float sqrt()
+		((this y - other y) as Float squared + (this u - other u) as Float squared + (this v - other v) as Float squared) sqrt()
 	}
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
@@ -110,7 +110,7 @@ ColorYuva: cover {
 	mix: static func (a, b: This, ratio: Float) -> This {
 		This new(Float mix(a y, b y, ratio) as Byte, Float mix(a u, b u, ratio) as Byte, Float mix(a v, b v, ratio) as Byte, Float mix(a a, b a, ratio) as Byte)
 	}
-	distance: func (other: This) -> Float { (((this y - other y) squared + (this u - other u) squared + (this v - other v) squared + (this a - other a) squared) / 4.0f) sqrt() }
+	distance: func (other: This) -> Float { ((this y - other y) as Float squared + (this u - other u) as Float squared + (this v - other v) as Float squared + (this a - other a) as Float squared) sqrt() }
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 }
@@ -136,7 +136,7 @@ ColorRgb: cover {
 		This new(Float mix(a r, b r, ratio) as Byte, Float mix(a g, b g, ratio) as Byte, Float mix(a b, b b, ratio) as Byte)
 	}
 	distance: func (other: This) -> Float {
-		((this r - other r) squared + (this g - other g) squared + (this b - other b) squared) as Float sqrt()
+		((this r - other r) as Float squared + (this g - other g) as Float squared + (this b - other b) as Float squared) sqrt()
 	}
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
@@ -164,7 +164,7 @@ ColorRgba: cover {
 	mix: static func (a, b: This, ratio: Float) -> This {
 		This new(Float mix(a r, b r, ratio) as Byte, Float mix(a g, b g, ratio) as Byte, Float mix(a b, b b, ratio) as Byte, Float mix(a a, b a, ratio) as Byte)
 	}
-	distance: func (other: This) -> Float { (((this r - other r) squared + (this g - other g) squared + (this b - other b) squared + (this a - other a) squared) / 4.0f) sqrt() }
+	distance: func (other: This) -> Float { ((this r - other r) as Float squared + (this g - other g) as Float squared + (this b - other b) as Float squared + (this a - other a) as Float squared) sqrt() }
 	operator == (other: This) -> Bool { this equals(other) }
 	operator != (other: This) -> Bool { !this equals(other) }
 
