@@ -11,9 +11,8 @@ use geometry
 use base
 use draw-gpu
 use concurrent
-import GraphicBuffer, OpenGLContext, EGLRgba
+import GraphicBuffer
 
-version(!gpuOff) {
 GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	_buffer: GraphicBuffer
 	_stride: Int
@@ -38,5 +37,4 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		this buffer unlock()
 		result
 	}
-}
 }
