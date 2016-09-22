@@ -33,9 +33,7 @@ OpenGLUv: class extends OpenGLPacked {
 	toRasterDefault: override func ~target (target: RasterImage) {
 		packed := this context createRgba(IntVector2D new(this size x / 2, this size y))
 		this context packToRgba(this, packed, IntBox2D new(packed size))
-		buffer := (target as RasterUv) buffer
-		(packed as OpenGLPacked) readPixels(buffer)
-		packed free()
+		(packed as OpenGLPacked) readPixels(target as RasterPacked) . free()
 	}
 	create: override func (size: IntVector2D) -> This { this context createUv(size) as This }
 	channelCount: static Int = 2

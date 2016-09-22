@@ -38,13 +38,17 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		glClearColor(tuple a, tuple b, tuple c, tuple d)
 		version(debugGL) { validateEnd("FramebufferObject setClearColor") }
 	}
-	readPixels: override func (buffer: ByteBuffer) {
+	readPixels: override func (target: RasterPacked) {
+		//NOTE: Hard coded to read RGBA only due to driver limitations
 		version(debugGL) { validateStart("FramebufferObject readPixels") }
-		pointer := buffer pointer
 		this bind()
 		glPixelStorei(GL_PACK_ALIGNMENT, 1)
+		pixelStride := target stride / 4
+		if (pixelStride != this size x)
+			glPixelStorei(GL_PACK_ROW_LENGTH, pixelStride)
 		glReadBuffer(GL_COLOR_ATTACHMENT0)
-		glReadPixels(0, 0, this size x, this size y, GL_RGBA, GL_UNSIGNED_BYTE, pointer)
+		glReadPixels(0, 0, this size x, this size y, GL_RGBA, GL_UNSIGNED_BYTE, target buffer pointer)
+		glPixelStorei(GL_PACK_ROW_LENGTH, 0)
 		this unbind()
 		version(debugGL) { validateEnd("FramebufferObject readPixels") }
 	}
