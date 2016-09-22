@@ -57,7 +57,7 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		result _count = this _count
 		result
 	}
-	copy: func -> This {
+	copy: override func -> This {
 		super() as This
 	}
 	addInto: func (other: This) {
