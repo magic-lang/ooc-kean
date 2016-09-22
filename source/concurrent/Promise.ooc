@@ -36,6 +36,12 @@ _Synchronizer: abstract class {
 			result := this wait(TimeSpan maximumValue)
 		result
 	}
+	wait: static func ~timed (items: VectorList<This>, time := TimeSpan maximumValue) -> Bool {
+		result := true
+		for (i in 0 .. items count)
+			result = result && (time == TimeSpan maximumValue ? items[i] wait() : items[i] wait(time))
+		result
+	}
 	cancel: virtual func -> Bool { false }
 }
 

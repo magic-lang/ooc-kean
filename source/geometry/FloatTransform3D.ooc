@@ -205,6 +205,10 @@ FloatTransform3D: cover {
 			this c * other x + this g * other y + this k * other z + this o
 		)
 	}
+	operator * (other: FloatTransform2D) -> This {
+		otherTransform3D := This new(other)
+		this * otherTransform3D
+	}
 
 	identity: static This { get { This new(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f) } }
 
