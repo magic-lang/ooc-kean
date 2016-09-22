@@ -26,7 +26,7 @@ IntVectorList: class extends VectorList<Int> {
 		for (i in 0 .. capacity)
 			this add(value)
 	}
-	copy: func -> This {
+	copy: override func -> This {
 		super() as This
 	}
 	contains: func (value: Int) -> Bool {
