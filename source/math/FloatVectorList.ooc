@@ -83,13 +83,13 @@ FloatVectorList: class extends VectorList<Float> {
 			result add(this[i] abs())
 		result
 	}
-	copy: func -> This {
+	copy: override func -> This {
 		result := This new(this _count)
 		for (i in 0 .. this _count)
 			result add(this[i])
 		result
 	}
-	reverse: func -> This {
+	reverse: override func -> This {
 		super() as This
 	}
 	addInto: func (other: This) {

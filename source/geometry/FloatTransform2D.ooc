@@ -112,6 +112,10 @@ FloatTransform2D: cover {
 	operator * (other: FloatBox2D) -> FloatBox2D {
 		FloatBox2D new(this * other leftTop, this * other rightBottom)
 	}
+	operator * (other: FloatTransform3D) -> FloatTransform3D {
+		thisTransform3D := FloatTransform3D new(this)
+		thisTransform3D * other
+	}
 	operator / (value: Float) -> This {
 		This new(
 			this a / value,

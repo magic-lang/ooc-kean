@@ -16,6 +16,8 @@ FloatPoint2D: cover {
 	x, y: Float
 
 	norm ::= (this x * this x + this y * this y) sqrt()
+	isZero ::= this norm equals(0.0f)
+	normalized ::= this isZero ? (this as This) : this / this norm
 	azimuth ::= this y atan2(this x)
 	absolute ::= This new(this x absolute, this y absolute)
 	sign ::= This new(this x sign, this y sign)
