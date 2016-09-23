@@ -22,8 +22,8 @@ Quaternion: cover {
 	z ::= this imaginary z
 
 	isValid ::= this real isNumber && this imaginary isValid
-	isIdentity ::= this real equals(1.f) && this imaginary x equals(0.f) && this imaginary y equals(0.f) && this imaginary z equals(0.f)
-	isZero ::= this real equals(0.f) && this imaginary x equals(0.f) && this imaginary y equals(0.f) && this imaginary z equals(0.f)
+	isIdentity ::= this real equals(1.f) && this imaginary isZero
+	isZero ::= this real equals(0.f) && this imaginary isZero
 	norm ::= (this real squared + this imaginary norm squared) sqrt()
 	normalized ::= this / this norm
 	conjugate ::= This new(this real, -this imaginary)

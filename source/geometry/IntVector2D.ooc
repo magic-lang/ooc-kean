@@ -17,7 +17,8 @@ IntVector2D: cover {
 	area ::= this x * this y
 	hasZeroArea ::= this area == 0
 	square ::= this x == this y
-	length ::= ((this x squared + this y squared) as Float sqrt())
+	norm ::= ((this x squared + this y squared) as Float sqrt())
+	isZero ::= this x == 0 && this y == 0
 	absolute ::= This new(this x absolute, this y absolute)
 	sign ::= This new(this x sign, this y sign)
 
@@ -26,7 +27,7 @@ IntVector2D: cover {
 	init: func@ ~default { this init(0, 0) }
 	scalarProduct: func (other: This) -> Int { this x * other x + this y * other y }
 	swap: func -> This { This new(this y, this x) }
-	distance: func (other: This) -> Float { (this - other) length }
+	distance: func (other: This) -> Float { (this - other) norm }
 	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y)) }
 	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y)) }
 	minimum: func ~Int (ceiling: Int) -> This { this minimum(This new(ceiling)) }

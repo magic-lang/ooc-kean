@@ -16,14 +16,15 @@ IntVector3D: cover {
 
 	volume ::= this x * this y * this z
 	hasZeroVolume ::= this volume == 0
-	length ::= ((this x squared + this y squared + this z squared) as Float sqrt())
+	norm ::= ((this x squared + this y squared + this z squared) as Float sqrt())
+	isZero ::= this x == 0 && this y == 0 && this z == 0
 	absolute ::= This new(this x absolute, this y absolute, this z absolute)
 	sign ::= This new(this x sign, this y sign, this z sign)
 
 	init: func@ (=x, =y, =z)
 	init: func@ ~cube (length: Int) { this x = this y = this z = length }
 	init: func@ ~default { this init(0, 0, 0) }
-	distance: func (other: This) -> Float { (this - other) length }
+	distance: func (other: This) -> Float { (this - other) norm }
 	scalarProduct: func (other: This) -> Int { this x * other x + this y * other y + this z * other z }
 	minimum: func (ceiling: This) -> This { This new(this x minimum(ceiling x), this y minimum(ceiling y), this z minimum(ceiling z)) }
 	maximum: func (floor: This) -> This { This new(this x maximum(floor x), this y maximum(floor y), this z maximum(floor z)) }

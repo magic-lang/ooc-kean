@@ -142,9 +142,9 @@ FloatVector3DTest: class extends Fixture {
 			expect(first angle(second), is equal to(2.221f) within(0.01f))
 			expect(first distance(second), is equal to(13.74f) within(0.01f))
 		})
-		this add("length, hasZeroVolume", func {
+		this add("norm, hasZeroVolume", func {
 			empty := FloatVector3D new()
-			expect(this vector0 length, is equal to(24.35f) within(0.01f))
+			expect(this vector0 norm, is equal to(24.35f) within(0.01f))
 			expect(empty hasZeroVolume, is true)
 			expect(empty volume, is equal to(0.0f) within(tolerance))
 			expect(this vector0 hasZeroVolume, is false)

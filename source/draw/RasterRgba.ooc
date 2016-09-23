@@ -125,7 +125,7 @@ RasterRgba: class extends RasterPacked {
 						result += (distance) sqrt() / 4
 					}
 				}
-			result /= this size length
+			result /= this size norm
 		}
 		result
 	}
