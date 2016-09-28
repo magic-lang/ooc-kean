@@ -26,8 +26,9 @@ Debug: class {
 		This _printFunction = f
 	}
 	print: static func (string: String, level := DebugLevel Everything) {
-		if (This _level == level || This _level == DebugLevel Everything)
-			This _printFunction(string)
+		string free()
+		/*if (This _level == level || This _level == DebugLevel Everything)
+			This _printFunction(string)*/
 	}
 	error: static func (message: String) {
 		This print(message)
