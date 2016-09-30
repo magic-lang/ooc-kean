@@ -15,7 +15,10 @@ RecycleBin: class <T> {
 	count ::= this _list count
 	isFull ::= this count == this _size
 	isEmpty ::= this _list empty
-	init: func (=_size, =_free) { this _list = SynchronizedList<T> new(_size) }
+	init: func (=_size, =_free) {
+		this _list = SynchronizedList<T> new(_size)
+		GlobalCleanup register(|| this free())
+	}
 	free: override func {
 		this clear()
 		this _list free()

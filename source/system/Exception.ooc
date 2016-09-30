@@ -61,9 +61,25 @@ ExceptionContext: class {
 	hasStackFrame: func -> Bool {
 		!this _localFrames isEmpty
 	}
+	free: override func {
+		while (!this _localFrames isEmpty) {
+			item := this _localFrames pop()
+			if (item)
+				item free()
+		}
+		this _localFrames free()
+		while (!this _stackFramesToDelete isEmpty) {
+			item := this _stackFramesToDelete pop()
+			if (item)
+				item free()
+		}
+		this _stackFramesToDelete free()
+		super()
+	}
 }
 
 exceptionContext := ExceptionContext new()
+GlobalCleanup register(|| exceptionContext free())
 
 _pushStackFrame: func -> StackFrame { exceptionContext pushStackFrame() }
 _popStackFrame: func { exceptionContext popStackFrame() }
