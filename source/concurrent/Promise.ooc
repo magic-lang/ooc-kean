@@ -61,6 +61,30 @@ ClosurePromise: class extends Promise {
 	wait: override func (time: TimeSpan) -> Bool { this _wait(time) }
 }
 
+ConditionPromise: class extends Promise {
+	_completed := false
+	_condition := WaitCondition new()
+	_mutex := Mutex new()
+	init: func { super() }
+	free: override func {
+		(this _mutex, this _condition) free()
+		super()
+	}
+	signal: func {
+		this _mutex with(||
+			this _completed = true
+			this _condition broadcast()
+		)
+	}
+	wait: override func (time: TimeSpan) -> Bool {
+		this _mutex lock()
+		if (!this _completed)
+			this _condition wait(this _mutex)
+		this _mutex unlock()
+		this _completed
+	}
+}
+
 _EmptyPromise: class extends Promise {
 	init: func { super() }
 	wait: override func (time: TimeSpan) -> Bool { true }
