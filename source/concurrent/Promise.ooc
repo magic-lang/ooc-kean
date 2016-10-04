@@ -23,7 +23,7 @@ _Synchronizer: abstract class {
 		super()
 	}
 	wait: abstract func (time: TimeSpan) -> Bool
-	wait: func ~forever -> Bool {
+	wait: virtual func ~forever -> Bool {
 		version(debugDeadlock) {
 			timeLimit := TimeSpan milliseconds(1000)
 			timer := WallTimer new() . start()
@@ -76,7 +76,8 @@ ConditionPromise: class extends Promise {
 			this _condition broadcast()
 		)
 	}
-	wait: override func (time: TimeSpan) -> Bool {
+	wait: override func (time: TimeSpan) -> Bool { Debug error("Timed wait is not supported for ConditionPromise"); false }
+	wait: override func ~forever -> Bool {
 		this _mutex lock()
 		if (!this _completed)
 			this _condition wait(this _mutex)
