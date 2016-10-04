@@ -104,6 +104,21 @@ PromiseTest: class extends Fixture {
 			expect(closurePromise wait(), is true)
 			closurePromise free()
 		})
+		this add("ConditionPromise", func {
+			promise := ConditionPromise new()
+			counter := 0
+			worker := WorkerThread new()
+			expect(counter, is equal to(0))
+			worker add(||
+				Time sleepMilli(5)
+				counter = 1
+				promise signal()
+			)
+			expect(promise wait(), is true)
+			expect(counter, is equal to(1))
+			worker free()
+			promise free()
+		})
 	}
 }
 
