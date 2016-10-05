@@ -81,12 +81,12 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 	setUniform: override func ~FloatTransform2D (name: String, value: FloatTransform2D) {
 		version(debugGL) { validateStart("ShaderProgram setUniform~FloatTransform2D") }
 		glUniformMatrix3fv(glGetUniformLocation(this _backend, name), 1, 0, value& as Float*)
-		version(debugGL) { strValue := value toString(); validateEnd("ShaderProgram setUniform~FloatTransform2D name:%s value: %s" format(strValue), true); strValue free() }
+		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatTransform2D name:%s value: " & value toString(), true) }
 	}
 	setUniform: override func ~FloatTransform3D (name: String, value: FloatTransform3D) {
 		version(debugGL) { validateStart("ShaderProgram setUniform~FloatTransform3D") }
 		glUniformMatrix4fv(glGetUniformLocation(this _backend, name), 1, 0, value& as Float*)
-		version(debugGL) { strValue := value toString(); validateEnd("ShaderProgram setUniform~FloatTransform3D name:%s value: %s" format(strValue), true); strValue free() }
+		version(debugGL) { validateEnd("ShaderProgram setUniform~FloatTransform3D name:%s value: %s" & value toString(), true) }
 	}
 	_compileShader: func (source: String, shaderID: UInt) -> Bool {
 		version(debugGL) { validateStart("ShaderProgram _compileShader") }

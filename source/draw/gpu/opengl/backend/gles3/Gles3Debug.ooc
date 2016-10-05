@@ -20,7 +20,7 @@ getErrorMessage: func (errorCode: Int) -> String {
 		case 1281 => "GL_INVALID_VALUE"
 		case 1282 => "GL_INVALID_OPERATION"
 		case 1286 => "GL_INVALID_FRAMEBUFFER_OPERATION"
-		case => "ERROR CODE: %s" format(errorCode toString())
+		case => "ERROR CODE: " & errorCode toString()
 	}
 	result
 }
@@ -60,7 +60,7 @@ getEglErrorMessage: func (errorCode: Int) -> String {
 		case 12300 => "EGL_BAD_PARAMETER"
 		case 12301 => "EGL_BAD_SURFACE"
 		case 12302 => "EGL_CONTEXT_LOST"
-		case => "Unknown ERROR CODE: %s " format(errorCode toString())
+		case => "Unknown ERROR CODE: " & errorCode toString()
 	}
 	result
 }
