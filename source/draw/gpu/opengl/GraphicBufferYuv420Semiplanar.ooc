@@ -38,8 +38,15 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		result
 	}
 	copyFrom: override func (source: RasterYuv420Semiplanar) {
-		this _buffer lock(GraphicBufferUsage WriteOften)
-		super(source)
+		pointer := this _buffer lock(GraphicBufferUsage WriteOften)
+		if (this stride == this _size x)
+			super(source)
+		else {
+			for (i in 0 .. this _size y)
+				memcpy(pointer + i * stride, source y buffer pointer + i * source stride, source stride)
+			for (i in 0 .. this _size y / 2)
+				memcpy(pointer + uvOffset + i * stride, source uv buffer pointer + i * source stride, source stride)
+		}
 		this _buffer unlock()
 	}
 }
