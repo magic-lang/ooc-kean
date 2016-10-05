@@ -37,4 +37,9 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		this buffer unlock()
 		result
 	}
+	copyFrom: override func (source: RasterYuv420Semiplanar) {
+		this _buffer lock(GraphicBufferUsage WriteOften)
+		super(source)
+		this _buffer unlock()
+	}
 }
