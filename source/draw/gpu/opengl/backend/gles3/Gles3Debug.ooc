@@ -31,12 +31,12 @@ validateStart: func (location: String) {
 		Debug error("Calling OpenGL function outside of valid context in %s" format(location))
 	validate("before %s from unknown location" format(location))
 }
+validateEnd: func (location: String) {
+	validate("in %s" format(location))
+}
 validateEnd: func ~free (location: String) {
 	validateEnd(location)
 	location free()
-}
-validateEnd: func (location: String) {
-	validate("in %d" format(location))
 }
 validate: func (message: String) {
 	glError := glGetError()
