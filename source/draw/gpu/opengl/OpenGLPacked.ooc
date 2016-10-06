@@ -151,7 +151,7 @@ OpenGLPacked: abstract class extends GpuImage {
 		this _renderTarget clear()
 		this _renderTarget unbind()
 	}
-	readPixels: func (buffer: ByteBuffer) { this _renderTarget readPixels(buffer) }
+	readPixels: func (target: RasterPacked) { this _renderTarget readPixels(target) }
 	upload: override func (image: RasterImage) {
 		if (image instanceOf(RasterPacked)) {
 			raster := image as RasterPacked

@@ -165,6 +165,11 @@ AndroidContext: class extends OpenGLContext {
 		}
 		result
 	}
-	recycleEGLRgba: func (image: EGLRgba) { this _eglBin add(image) }
+	recycle: override func (image: OpenGLPacked) {
+		match (image) {
+			case i: EGLRgba => this _eglBin add(i)
+			case => super(image)
+		}
+	}
 }
 }

@@ -59,6 +59,12 @@ FloatEuclidTransform: cover {
 		}
 		result
 	}
+	mix: func (other: This, factor: Float) -> This {
+		This new(
+			FloatVector3D mix(this translation, other translation, factor),
+			FloatRotation3D new(this rotation _quaternion sphericalLinearInterpolation(other rotation _quaternion, factor)),
+			Float mix(this scaling, other scaling, factor))
+	}
 }
 
 extend Cell<FloatEuclidTransform> {
