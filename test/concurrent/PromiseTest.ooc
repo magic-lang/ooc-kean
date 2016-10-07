@@ -88,6 +88,37 @@ PromiseTest: class extends Fixture {
 			promise2 = Promise start(this counter)
 			promise2 wait() . free()
 		})
+		this add("many promises", func {
+			list := VectorList<Promise> new()
+			list add(Promise start(this counter)) . add(Promise start(this counter)) . add(Promise start(this counter))
+			expect(Promise wait(list))
+			list free()
+		})
+		this add("ClosurePromise", func {
+			closurePromise := ClosurePromise new(|time|
+				promise := Promise start(this counter)
+				result := promise wait(time)
+				promise free()
+				result
+			)
+			expect(closurePromise wait(), is true)
+			closurePromise free()
+		})
+		this add("ConditionPromise", func {
+			promise := ConditionPromise new()
+			counter := 0
+			worker := WorkerThread new()
+			expect(counter, is equal to(0))
+			worker add(||
+				Time sleepMilli(5)
+				counter = 1
+				promise signal()
+			)
+			expect(promise wait(), is true)
+			expect(counter, is equal to(1))
+			worker free()
+			promise free()
+		})
 	}
 }
 
