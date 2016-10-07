@@ -84,6 +84,17 @@ RasterYuv420Semiplanar: class extends RasterImage {
 		this uv buffer copyTo(result uv buffer)
 		result
 	}
+	copyFrom: virtual func (source: This) {
+		if (stride == this _size x) {
+			source y buffer copyTo(this _y buffer)
+			source uv buffer copyTo(this _uv buffer)
+		} else {
+			for (i in 0 .. this _size y)
+				source y buffer copyTo(this _y buffer, i * source stride, i * stride, source stride)
+			for (i in 0 .. this _uv _size y)
+				source uv buffer copyTo(this _uv buffer, i * source stride, i * stride, source stride)
+		}
+	}
 	resizeTo: override func (size: IntVector2D) -> This {
 		result: This
 		if (this size == size)

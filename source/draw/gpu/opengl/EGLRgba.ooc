@@ -21,12 +21,9 @@ EGLRgba: class extends OpenGLRgba {
 		this init(GraphicBuffer new(size, GraphicBufferFormat Rgba8888, GraphicBufferUsage Texture | GraphicBufferUsage RenderTarget), context)
 	}
 	free: override func {
-		if (this _recyclable)
-			(this context as AndroidContext) recycleEGLRgba(this)
-		else {
+		if (!this _recyclable)
 			this _buffer free()
-			super()
-		}
+		super()
 	}
 }
 }

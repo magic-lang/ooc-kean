@@ -32,10 +32,7 @@ OpenGLRgba: class extends OpenGLPacked {
 		this toRasterDefault(result)
 		result
 	}
-	toRasterDefault: override func ~target (target: RasterImage) {
-		buffer := (target as RasterRgba) buffer
-		this readPixels(buffer)
-	}
+	toRasterDefault: override func ~target (target: RasterImage) { this readPixels(target as RasterPacked) }
 	create: override func (size: IntVector2D) -> This { this context createRgba(size) as This }
 	channelCount: static Int = 4
 }

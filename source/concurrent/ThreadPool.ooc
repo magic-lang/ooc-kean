@@ -40,7 +40,7 @@ _Task: abstract class {
 	wait: func ~timeout (time: TimeSpan) -> Bool {
 		status := false
 		if (time == TimeSpan maximumValue)
-			status = this wait()
+			this wait()
 		else {
 			timer := WallTimer new() . start()
 			while (timer stop() < time && !status) {
@@ -50,7 +50,7 @@ _Task: abstract class {
 			}
 			timer free()
 		}
-		status
+		this _state == _PromiseState Finished
 	}
 	cancel: func -> Bool {
 		status := false
