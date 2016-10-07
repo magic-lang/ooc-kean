@@ -138,7 +138,9 @@ RasterMonochromeTest: class extends Fixture {
 			source := this sourceFlower
 			output := "test/draw/output/RasterRgbToMonochrome.png"
 			image1 := RasterMonochrome open(source)
-			image2 := RasterMonochrome convertFrom(RasterRgba open(source))
+			rgba := RasterRgba open(source)
+			image2 := RasterMonochrome convertFrom(rgba)
+			rgba referenceCount decrease()
 			expect(image1 distance(image2), is less than(18.0f))
 			(image1, image2) referenceCount decrease()
 			output free()
