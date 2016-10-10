@@ -67,4 +67,6 @@ DrawContext: abstract class {
 	getStringPixelBounds: static func (message: String, fontAtlas: Image) -> IntVector2D {
 		This getStringIndexBounds(message) * This getFontSize(fontAtlas)
 	}
+	preregister: virtual func (image: Image)
+	preallocate: virtual func (resolution: IntVector2D)
 }

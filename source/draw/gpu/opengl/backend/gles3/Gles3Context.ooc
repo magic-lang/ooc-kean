@@ -30,12 +30,14 @@ Gles3Context: class extends GLContext {
 		status = eglDestroySurface(this _eglDisplay, this _eglSurface)
 		if (status != EGL_TRUE)
 			Debug print("eglDestroySurface failed with error code %d" format(status))
-		if (This _contextCount == 1) {
-			status = eglTerminate(this _eglDisplay)
-			if (status != EGL_TRUE)
-				Debug print("eglTerminate failed with error code %d" format(status))
-		}
-		This _mutex with(|| This _contextCount -= 1)
+		This _mutex with(||
+			if (This _contextCount == 1) {
+				status = eglTerminate(this _eglDisplay)
+				if (status != EGL_TRUE)
+					Debug print("eglTerminate failed with error code %d" format(status))
+			}
+			This _contextCount -= 1
+		)
 		super()
 	}
 	makeCurrent: override func -> Bool {

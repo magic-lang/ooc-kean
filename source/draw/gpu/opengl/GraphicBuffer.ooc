@@ -9,9 +9,7 @@
 use geometry
 use base
 use draw
-use draw-gpu
 
-version(!gpuOff) {
 GraphicBufferFormat: enum {
 	Rgba8888
 }
@@ -101,5 +99,4 @@ GraphicBuffer: class {
 		}
 		result
 	}
-}
 }
