@@ -1,5 +1,11 @@
 # ooc-kean changes by release
 
+## Release  2.9.0
+
+- **Added support for utilizing YUV extension in OpenGL**
+- **Fixed memory leaks in debugGL printouts**
+- **Added some new promises**
+
 ## Release  2.8.0
 
 - **Standardized the existence of methods and properties in Vector and Point covers**

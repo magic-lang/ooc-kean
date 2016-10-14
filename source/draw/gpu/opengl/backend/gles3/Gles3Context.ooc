@@ -231,4 +231,6 @@ Gles3Context: class extends GLContext {
 		result _generate(sharedContext) ? result : null
 	}
 }
+
+GlobalCleanup register(|| Gles3Context _mutex free(), 10)
 }
