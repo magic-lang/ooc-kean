@@ -17,11 +17,11 @@ Gles3IndexBufferObject: class {
 	_backend: UInt
 	_vbo: Gles3VertexBufferObject
 	_indexCount: Int
-	init: func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], indices: IntPoint3D[]) {
-		this _indexCount = 3 * indices length
+	init: func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], triangleIndices: IntPoint3D[]) {
+		this _indexCount = 3 * triangleIndices length
 		glGenBuffers(1, this _backend&)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this _backend)
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices length * IntPoint3D size, indices data, GL_STATIC_DRAW)
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangleIndices length * IntPoint3D size, triangleIndices data, GL_STATIC_DRAW)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
 		this _vbo = Gles3VertexBufferObject new(vertices, textureCoordinates)
 	}
