@@ -195,16 +195,17 @@ OpenGLContext: class extends GpuContext {
 		toGL := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
 		for (i in 0 .. vertices length)
 			vertices[i] = toGL * vertices[i]
-		triangles := IntPoint3D [2 * size area] new()
+		triangles := IntPoint3D[2 * size area] new()
 		gridSize := size
 		nodeSize := gridSize + IntVector2D new(1, 1)
-		for (i in 0 .. size y) {
-			for (j in 0 .. size x) {
-				base := i * nodeSize x + j
+		for (y in 0 .. size y) {
+			for (x in 0 .. size x) {
+				base := y * nodeSize x + x
 				evenTriangle := IntPoint3D new(base, base + 1, base + nodeSize x)
 				oddTriangle := IntPoint3D new(base + 1, base + 1 + nodeSize x, base + nodeSize x)
-				triangles[2 * i * size x + 2 * j] = evenTriangle
-				triangles[2 * i * size x + 2 * j + 1] = oddTriangle
+				index := 2 * (y * size x + x)
+				triangles[index] = evenTriangle
+				triangles[index + 1] = oddTriangle
 			}
 		}
 		OpenGLMesh new(vertices, textureCoordinates, triangles, this)
