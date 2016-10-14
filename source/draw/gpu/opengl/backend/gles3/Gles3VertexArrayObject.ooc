@@ -11,7 +11,6 @@ use geometry
 import external/gles3
 import ../GLVertexArrayObject
 import Gles3VertexBufferObject
-import Gles3IndexBufferObject
 import Gles3Debug
 
 version(!gpuOff) {
