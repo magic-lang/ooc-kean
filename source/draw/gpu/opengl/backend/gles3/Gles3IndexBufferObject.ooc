@@ -11,13 +11,15 @@ use geometry
 import external/gles3
 import Gles3Debug
 import Gles3VertexBufferObject
+import ../GLIndexBufferObject
 
 version(!gpuOff) {
-Gles3IndexBufferObject: class {
+Gles3IndexBufferObject: class extends GLIndexBufferObject {
 	_backend: UInt
 	_vbo: Gles3VertexBufferObject
 	_indexCount: Int
 	init: func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], triangleIndices: IntPoint3D[]) {
+		super()
 		this _indexCount = 3 * triangleIndices length
 		glGenBuffers(1, this _backend&)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this _backend)
@@ -32,19 +34,19 @@ Gles3IndexBufferObject: class {
 		version(debugGL) { validateEnd("Gles3IndexBufferObject free") }
 		super()
 	}
-	bind: func {
+	bind: override func {
 		version(debugGL) { validateStart("Gles3IndexBufferObject bind") }
 		this _vbo bind()
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this _backend)
 		version(debugGL) { validateEnd("Gles3IndexBufferObject bind") }
 	}
-	unbind: func {
+	unbind: override func {
 		version(debugGL) { validateStart("Gles3IndexBufferObject unbind") }
 		this _vbo unbind()
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
 		version(debugGL) { validateEnd("Gles3IndexBufferObject unbind") }
 	}
-	draw: func {
+	draw: override func {
 		version(debugGL) { validateStart("Gles3IndexBufferObject draw") }
 		this bind()
 		glDrawElements(GL_TRIANGLES, this _indexCount, GL_UNSIGNED_INT, 0 as Pointer)
