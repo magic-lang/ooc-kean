@@ -21,20 +21,23 @@ DebugLevel: enum {
 Debug: class {
 	_level: static DebugLevel = DebugLevel Everything
 	_printFunction: static Func (String) = func (s: String) { println(s) }
+	/*fileWriter := static FileWriter new("data/media/0/DCIM/Camera/debugLog.txt")*/
 	initialize: static func (f: Func (String)) {
 		(This _printFunction as Closure) free()
 		This _printFunction = f
 	}
 	print: static func (string: String, level := DebugLevel Everything) {
-		string free()
-		/*if (This _level == level || This _level == DebugLevel Everything)
-			This _printFunction(string)*/
+		/*This fileWriter write(string + "\n")*/
+		/*string free()*/
+		if (This _level == level || This _level == DebugLevel Everything)
+			This _printFunction(string)
 	}
 	error: static func (message: String) {
 		This print(message)
 		raise(message)
 	}
 	free: static func ~all {
+		/*This fileWriter free()*/
 		(This _printFunction as Closure) free()
 	}
 }
