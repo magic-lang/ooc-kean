@@ -61,8 +61,8 @@ Quaternion: cover {
 	logarithm: This { get {
 		result: This
 		norm := this norm
-		if (this imaginary norm != 0)
-			result = This new(norm log(), this imaginary normalized * ((this real / norm) acos()))
+		if (!this imaginary norm equals(0.0f))
+			result = This new(norm log(), this imaginary normalized * ((this real / norm) clamp(-1.0f, 1.0f) acos()))
 		else
 			result = This new(norm, FloatPoint3D new())
 		result
@@ -71,7 +71,7 @@ Quaternion: cover {
 		result: This
 		imaginaryNorm := this imaginary norm
 		realExponential := this real exp()
-		if (imaginaryNorm != 0)
+		if (!imaginaryNorm equals(0.0f))
 			result = This new(realExponential * imaginaryNorm cos(), realExponential * this imaginary normalized * imaginaryNorm sin())
 		else
 			result = This new(realExponential, FloatPoint3D new())
@@ -120,30 +120,34 @@ Quaternion: cover {
 	}
 	distance: func (other: This) -> Float { (this - other) norm }
 	angle: func (other: This) -> Float {
-		result := 2.0f * (this dotProduct(other) absolute) acos()
+		result := 2.0f * ((this dotProduct(other) absolute) clamp(-1.0f, 1.0f)) acos()
 		result isNumber ? result : 0.0f
 	}
 	dotProduct: func (other: This) -> Float { this w * other w + this x * other x + this y * other y + this z * other z }
 	power: func (scalar: Float) -> This { (scalar * this logarithm) exponential }
 	sphericalLinearInterpolation: func (other: This, factor: Float) -> This {
-		cosAngle := this dotProduct(other)
-		longPath := cosAngle < 0.0f
-		angle := acos(cosAngle absolute clamp(-1.0f, 1.0f))
 		result: This
-		if (angle < 1.0e-8f)
-			result = this * (1 - factor) + other * factor
+		cosAngle := this dotProduct(other)
+		if ((cosAngle abs()) >= 0.99999999f)
+			result = other
 		else {
-			thisFactor := sin((1 - factor) * angle) / sin(angle)
-			otherFactor := sin(factor * angle) / sin(angle)
-			if (longPath)
-				otherFactor = -otherFactor
-			result = this * thisFactor + other * otherFactor
+			longPath := cosAngle < 0.0f
+			angle := acos(cosAngle absolute clamp(-1.0f, 1.0f))
+			if (angle < 1.0e-8f)
+				result = (this * (1 - factor) + other * factor)
+			else {
+				thisFactor := sin((1 - factor) * angle) / sin(angle)
+				otherFactor := sin(factor * angle) / sin(angle)
+				if (longPath)
+					otherFactor = -otherFactor
+				result = this * thisFactor + other * otherFactor
+			}
 		}
 		result
 	}
 	toFloatTransform3D: func -> FloatTransform3D {
 		length := this w * this w + this x * this x + this y * this y + this z * this z
-		factor := length == 0.0f ? 0.0f : 2.0f / length
+		factor := length equals(0.0f) ? 0.0f : 2.0f / length
 		FloatTransform3D new(
 			1.0f - factor * (this y * this y + this z * this z),
 			factor * (this x * this y + this z * this w),
@@ -160,7 +164,7 @@ Quaternion: cover {
 		)
 	}
 	toAxisAngle: func -> (FloatVector3D, Float) {
-		angle := 2.f * this real acos()
+		angle := 2.f * (this real clamp(-1.0f, 1.0f)) acos()
 		factor := (1.f - this real squared) sqrt()
 		axis := factor equals(0.f) ? FloatPoint3D new(1.f, 0.f, 0.f) : this imaginary / factor
 		(FloatVector3D new(axis x, axis y, axis z), angle)
