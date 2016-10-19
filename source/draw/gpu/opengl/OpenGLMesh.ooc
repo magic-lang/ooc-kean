@@ -11,12 +11,34 @@ use draw
 use draw-gpu
 import OpenGLContext
 import backend/GLVertexArrayObject
+import backend/GLIndexBufferObject
 
 version(!gpuOff) {
-OpenGLMesh: class extends Mesh {
+OpenGLMesh: abstract class extends Mesh {
+	new: static func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], context: OpenGLContext) -> This {
+		_VAOMesh new(vertices, textureCoordinates, context)
+	}
+	new: static func ~indices (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], indices: IntPoint3D[], context: OpenGLContext) -> This {
+		_IBOMesh new(vertices, textureCoordinates, indices, context)
+	}
+}
+
+_VAOMesh: class extends OpenGLMesh {
 	_backend: GLVertexArrayObject
 	init: func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], context: OpenGLContext) {
 		this _backend = context backend createVertexArrayObject(vertices, textureCoordinates)
+	}
+	free: override func {
+		this _backend free()
+		super()
+	}
+	draw: override func { this _backend draw() }
+}
+
+_IBOMesh: class extends OpenGLMesh {
+	_backend: GLIndexBufferObject
+	init: func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], indices: IntPoint3D[], context: OpenGLContext) {
+		this _backend = context backend createIndexBufferObject(vertices, textureCoordinates, indices)
 	}
 	free: override func {
 		this _backend free()
