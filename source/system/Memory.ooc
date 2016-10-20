@@ -42,7 +42,7 @@ GlobalCleanup: class {
 	run: static func {
 		if (This _functionPointers != null) {
 			priority := 0
-			while (!This _functionPointers empty && priority < This _maxPriority) {
+			while (!This _functionPointers empty && priority <= This _maxPriority) {
 				index := This _functionPointers count - 1
 				while (index >= 0) {
 					if (This _priorities[index] == priority) {
