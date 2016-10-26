@@ -198,6 +198,20 @@ RasterYuv420Semiplanar: class extends RasterImage {
 		fileWriter write(this uv buffer pointer as Char*, this uv buffer size)
 		fileWriter free()
 	}
+	//getYCrop only for YUV422Interleaved image
+	getYCrop: func (region: IntBox2D) -> RasterMonochrome {
+		lumaY := this y buffer pointer as Byte*
+		lumaY += region leftTop x * region leftTop y * 2 + 1
+		imageCopy := RasterMonochrome new(region size)
+		for (y in 0 .. region size y) {
+			for (x in 0 .. region size x) {
+				imageCopy[x, y] = ColorMonochrome new(lumaY@)
+				lumaY += 2
+			}
+			lumaY += (this y stride - region size x) * 2
+		}
+		imageCopy
+	}
 	operator [] (x, y: Int) -> ColorYuv {
 		ColorYuv new(this y[x, y] y, this uv [x / 2, y / 2] u, this uv [x / 2, y / 2] v)
 	}
