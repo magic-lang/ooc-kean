@@ -155,6 +155,13 @@ RasterMonochrome: class extends RasterPacked {
 		(this buffer pointer[y * this stride + x])
 	}
 
+	getCrop: func (region: IntBox2D) -> This {
+		result := This new(region size)
+		for (y in 0 .. region height)
+			for (x in 0 .. region width)
+				result[x, y] = this[region leftTop x + x, region leftTop y + y]
+		result
+	}
 	getRow: func (row: Int) -> FloatVectorList {
 		result := FloatVectorList new(this size x)
 		this getRowInto(row, result)
@@ -192,6 +199,46 @@ RasterMonochrome: class extends RasterPacked {
 		requiredComponents := 1
 		(buffer, size, _) := StbImage load(filename, requiredComponents)
 		This new(buffer, size)
+	}
+	shiftX: func (shift: Float) -> This {
+		result := This new(this size)
+		if (shift > 0) {
+			for (y in 0 .. this size y)
+				result[0, y] = this[0, y]
+			for (x in 1 .. this size x)
+				for (y in 0 .. this size y) {
+					result[x, y] = ColorMonochrome new(Float mix(this[x, y] y, this[x - 1, y] y, shift))
+				}
+		}
+		else {
+			for (y in 0 .. this size y)
+				result[this size x - 1, y] = this[this size x - 1, y]
+			for (x in 0 .. this size x - 1)
+				for (y in 0 .. this size y) {
+					result[x, y] = ColorMonochrome new(Float mix(this[x, y] y, this[x + 1, y] y, -shift))
+				}
+		}
+		result
+	}
+	shiftY: func (shift: Float) -> This {
+		result := This new(this size)
+		if (shift > 0) {
+			for (x in 0 .. this size x)
+				result[x, 0] = this[x, 0]
+			for (x in 0 .. this size x)
+				for (y in 1 .. this size y) {
+					result[x, y] = ColorMonochrome new(Float mix(this[x, y] y, this[x, y - 1] y, shift))
+				}
+		}
+		else {
+			for (x in 0 .. this size x)
+				result[x, this size y - 1] = this[x, this size y - 1]
+			for (x in 0 .. this size x)
+				for (y in 0 .. this size y - 1) {
+					result[x, y] = ColorMonochrome new(Float mix(this[x, y] y, this[x, y + 1] y, -shift))
+				}
+		}
+		result
 	}
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
