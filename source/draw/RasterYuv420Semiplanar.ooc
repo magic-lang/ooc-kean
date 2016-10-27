@@ -203,10 +203,12 @@ RasterYuv420Semiplanar: class extends RasterImage {
 		lumaY := this y buffer pointer as Byte*
 		lumaY += region leftTop x * region leftTop y * 2 + 1
 		imageCopy := RasterMonochrome new(region size)
+		dst := imageCopy buffer pointer as Byte*
 		for (y in 0 .. region size y) {
 			for (x in 0 .. region size x) {
-				imageCopy[x, y] = ColorMonochrome new(lumaY@)
+				dst@ = lumaY@
 				lumaY += 2
+				dst += 1
 			}
 			lumaY += (this y stride - region size x) * 2
 		}
