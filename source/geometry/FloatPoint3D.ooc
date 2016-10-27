@@ -70,6 +70,8 @@ FloatPoint3D: cover {
 	operator - (other: FloatVector3D) -> This { This new(this x - other x, this y - other y, this z - other z) }
 	operator * (other: FloatVector3D) -> This { This new(this x * other x, this y * other y, this z * other z) }
 	operator / (other: FloatVector3D) -> This { This new(this x / other x, this y / other y, this z / other z) }
+	operator + (other: Float) -> This { This new(this x + other, this y + other, this z + other) }
+	operator - (other: Float) -> This { This new(this x - other, this y - other, this z - other) }
 	operator * (other: Float) -> This { This new(this x * other, this y * other, this z * other) }
 	operator / (other: Float) -> This { This new(this x / other, this y / other, this z / other) }
 

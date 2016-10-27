@@ -54,8 +54,12 @@ IntVector2D: cover {
 	operator - (other: IntPoint2D) -> This { This new(this x - other x, this y - other y) }
 	operator * (other: IntPoint2D) -> This { This new(this x * other x, this y * other y) }
 	operator / (other: IntPoint2D) -> This { This new(this x / other x, this y / other y) }
+	operator + (other: Float) -> This { This new(this x + other, this y + other) }
+	operator - (other: Float) -> This { This new(this x - other, this y - other) }
 	operator * (other: Float) -> This { This new(this x * other, this y * other) }
 	operator / (other: Float) -> This { This new(this x / other, this y / other) }
+	operator + (other: Int) -> This { This new(this x + other, this y + other) }
+	operator - (other: Int) -> This { This new(this x - other, this y - other) }
 	operator * (other: Int) -> This { This new(this x * other, this y * other) }
 	operator / (other: Int) -> This { This new(this x / other, this y / other) }
 
