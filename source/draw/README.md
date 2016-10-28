@@ -17,6 +17,12 @@ The destination is similar to the viewport by defining where to draw. The differ
 ## Transform
 Transform is the inverse camera matrix applied after the destination scaling.
 
+## FlatTransform
+FlatTransform is applied after the projection matrix but before the hardware depth division for performance reasons.
+Scaling will scale vertex positions from the center of the target viewport.
+Translation is applied in a centered normalized scale from -1 to +1 as the standard projection space.
+Do not touch if you do not know how a projection matrix works since this is an advanced feature.
+
 ## Source
 The source is a subregion of the input image affecting generation of texture coordinates in the shader.
 
@@ -54,6 +60,7 @@ Using destination or transform on the CPU would require a rewrite of legacy draw
 | flipSourceY | X | X |  |
 | destination | X |  |  |
 | transform | X |  |  |
+| viewTransform | X |  |  |
 | focalLength | X |  |  |
 | map | X |  |  |
 | mesh | X |  |  |

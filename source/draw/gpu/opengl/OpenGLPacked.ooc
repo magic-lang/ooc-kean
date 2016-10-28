@@ -54,6 +54,7 @@ OpenGLPacked: abstract class extends GpuImage {
 		model := (drawState mesh) ? FloatTransform3D identity : this _createModelTransformNormalized(this size, drawState getDestinationNormalized(), focalLengthPerWidth * this size x)
 		view := (drawState mesh) ? FloatTransform3D identity : this _createView(targetSize, drawState getTransformNormalized())
 		projection := this _createProjection(targetSize, focalLengthPerWidth)
+		flat := drawState getFlatTransform()
 		textureTransform := This _createTextureTransform(drawState getSourceNormalized(), drawState flipSourceX, drawState flipSourceY)
 		match (drawState blendMode) {
 			case BlendMode Add =>
@@ -84,7 +85,7 @@ OpenGLPacked: abstract class extends GpuImage {
 					gpuMap add("texture0", image)
 			}
 		}
-		gpuMap useProgram(this, projection * view * model, textureTransform)
+		gpuMap useProgram(this, flat * projection * view * model, textureTransform)
 		this _renderTarget bind()
 		if (drawState mesh)
 			drawState mesh draw()
