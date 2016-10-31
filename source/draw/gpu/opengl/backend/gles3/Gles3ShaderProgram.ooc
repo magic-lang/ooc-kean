@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 use geometry
 use draw
 import external/gles3
@@ -106,7 +107,7 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 			compileLogString println()
 			compileLogString free()
 			memfree(compileLog)
-			raise("Shader compilation failed")
+			Debug error("Shader compilation failed")
 		}
 		version(debugGL) { validateEnd("ShaderProgram _compileShader") }
 		success != 0

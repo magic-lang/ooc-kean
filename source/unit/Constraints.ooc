@@ -79,12 +79,12 @@ RangeConstraint: class extends ExpectModifier {
 				temp := (value as Cell<Int>) get()
 				testValue = temp as Double
 			case =>
-				raise("Unknown type used with 'is within()'!")
+				Debug error("Unknown type used with 'is within()'!")
 		}
 		match (this type) {
 			case 0 => (compareMin, compareMax) = (this intMin as Double, this intMax as Double)
 			case 1 => (compareMin, compareMax) = (this floatMin as Double, this floatMax as Double)
-			case => raise("Unknown type used with 'is within()'!")
+			case => Debug error("Unknown type used with 'is within()'!")
 		}
 		testValue >= compareMin && testValue < compareMax
 	}
@@ -159,7 +159,7 @@ CompareWithinConstraint: class extends CompareConstraint {
 				f := func (value, correct: Cell<FloatRotation3D>) -> Bool { correct get() _quaternion distance(value get() _quaternion) equals(0.f, this precision) }
 				result = CompareConstraint new(this, Cell<FloatRotation3D> new(this correct as Cell<FloatRotation3D> get()), f, this type)
 			case =>
-				raise("Using within() for incompatible type %s in test!" format(this actualType name))
+				Debug error("Using within() for incompatible type %s in test!" format(this actualType name))
 		}
 		result
 	}

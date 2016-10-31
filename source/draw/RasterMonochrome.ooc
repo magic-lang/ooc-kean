@@ -160,7 +160,7 @@ RasterMonochrome: class extends RasterPacked {
 
 	getValue: func (x, y: Int) -> Byte {
 		version(safe)
-			raise(x >= this size x || y >= this size y || x < 0 || y < 0, "Accessing RasterMonochrome index out of range in getValue")
+			Debug error(x >= this size x || y >= this size y || x < 0 || y < 0, "Accessing RasterMonochrome index out of range in getValue")
 		(this buffer pointer[y * this stride + x])
 	}
 
@@ -171,7 +171,7 @@ RasterMonochrome: class extends RasterPacked {
 	}
 	getRowInto: func (row: Int, vector: FloatVectorList) {
 		version(safe)
-			raise(row >= this size y || row < 0, "Accessing RasterMonochrome index out of range in getRow")
+			Debug error(row >= this size y || row < 0, "Accessing RasterMonochrome index out of range in getRow")
 		for (column in 0 .. this size x)
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
@@ -182,18 +182,18 @@ RasterMonochrome: class extends RasterPacked {
 	}
 	getColumnInto: func (column: Int, vector: FloatVectorList) {
 		version(safe)
-			raise(column >= this size x || column < 0, "Accessing RasterMonochrome index out of range in getColumn")
+			Debug error(column >= this size x || column < 0, "Accessing RasterMonochrome index out of range in getColumn")
 		for (row in 0 .. this size y)
 			vector add(this buffer pointer[row * this stride + column] as Float)
 	}
 	operator [] (x, y: Int) -> ColorMonochrome {
 		version(safe)
-			raise(!this isValidIn(x, y), "Accessing RasterMonochrome index out of range in get operator")
+			Debug error(!this isValidIn(x, y), "Accessing RasterMonochrome index out of range in get operator")
 		ColorMonochrome new(this buffer pointer[y * this stride + x])
 	}
 	operator []= (x, y: Int, value: ColorMonochrome) {
 		version(safe)
-			raise(x >= this size x || y >= this size y || x < 0 || y < 0, "Accessing RasterMonochrome index out of range in set operator")
+			Debug error(x >= this size x || y >= this size y || x < 0 || y < 0, "Accessing RasterMonochrome index out of range in set operator")
 		((this buffer pointer + y * this stride) as ColorMonochrome* + x)@ = value
 	}
 
@@ -283,9 +283,9 @@ RasterMonochrome: class extends RasterPacked {
 				quoted = true
 			i += 1
 		}
-		raise(alphabetSize < 2, "The alphabet needs at least two characters!")
+		Debug error(alphabetSize < 2, "The alphabet needs at least two characters!")
 		height = y
-		raise(x > 0, "All hexadecimal images must end with a linebreak!")
+		Debug error(x > 0, "All hexadecimal images must end with a linebreak!")
 		// Create alphabet mapping from character to luma
 		alphabetMap: Byte[128]
 		for (i in 0 .. 128)
@@ -293,14 +293,14 @@ RasterMonochrome: class extends RasterPacked {
 		for (i in 0 .. alphabetSize) {
 			code := alphabet[i] as Int
 			if (code < 32 || code > 126)
-				raise("Character '" + alphabet[i] + "' (" + code toString() + ") is not printable standard ascii!")
+				Debug error("Character '" + alphabet[i] + "' (" + code toString() + ") is not printable standard ascii!")
 			if (alphabetMap[code] > 0)
-				raise("Character '" + alphabet[i] + "' (" + code toString() + ") is used more than once!")
+				Debug error("Character '" + alphabet[i] + "' (" + code toString() + ") is used more than once!")
 			value := ((i as Float) * (255.0f / ((alphabetSize - 1) as Float))) as Int clamp(0, 255)
 			alphabetMap[code] = value
 		}
 
-		raise(width <= 0 || height <= 0, "An ascii image had zero dimensions!")
+		Debug error(width <= 0 || height <= 0, "An ascii image had zero dimensions!")
 		result := This new(IntVector2D new(width, height))
 		(x, y) = (0, -1)
 		quoted = false
@@ -309,7 +309,7 @@ RasterMonochrome: class extends RasterPacked {
 			if (quoted) {
 				if (current == '>') {
 					quoted = false
-					raise(y >= 0 && x != width, "Lines in the ascii image do not have the same length.")
+					Debug error(y >= 0 && x != width, "Lines in the ascii image do not have the same length.")
 					y += 1
 					x = 0
 				} else if (y >= 0) {

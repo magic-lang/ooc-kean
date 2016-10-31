@@ -22,7 +22,7 @@ RasterImage: abstract class extends Image {
 	apply: abstract func ~yuv (action: Func (ColorYuv))
 	apply: abstract func ~monochrome (action: Func (ColorMonochrome))
 	resizeTo: override func (size: IntVector2D) -> Image {
-		raise("resizeTo unimplemented for " + this class name)
+		Debug error("resizeTo unimplemented for " + this class name)
 		null
 	}
 	copy: abstract func -> This
@@ -39,11 +39,11 @@ RasterImage: abstract class extends Image {
 				result = RasterRgba new(buffer, size)
 			case =>
 				buffer free()
-				raise("Unsupported number of channels in image")
+				Debug error("Unsupported number of channels in image")
 		}
 		result
 	}
-	fill: override func (color: ColorRgba) { raise("RasterImage fill unimplemented!") }
+	fill: override func (color: ColorRgba) { Debug error("RasterImage fill unimplemented!") }
 	draw: override func ~DrawState (drawState: DrawState) { this _draw(drawState inputImage, drawState getSourceLocal() toIntBox2D(), drawState getViewport(), drawState getTransformNormalized(), drawState interpolate, drawState flipSourceX, drawState flipSourceY) }
 	_draw: virtual func (image: Image, source, destination: IntBox2D, normalizedTransform: FloatTransform3D, interpolate, flipX, flipY: Bool) { Debug error("_draw unimplemented for class " + this class name + "!") }
 	drawPoint: override func (point: FloatPoint2D, pen: Pen) { this _drawPoint(point x as Int, point y as Int, pen) }

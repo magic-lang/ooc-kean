@@ -8,6 +8,7 @@
 
 include stdint
 
+use base
 import native/[ThreadUnix, ThreadWin32]
 
 Thread: abstract class {
@@ -25,7 +26,7 @@ Thread: abstract class {
 			result = ThreadUnix new(_code) as This
 		version (windows)
 			result = ThreadWin32 new(_code) as This
-		raise(result == null, "Unsupported platform!\n", This)
+		Debug error(result == null, "Unsupported platform!\n", This)
 		result
 	}
 	currentThread: static func -> This {

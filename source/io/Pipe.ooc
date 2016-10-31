@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 import native/[PipeUnix, PipeWin32]
 import io/[Reader, Writer]
 
@@ -46,8 +47,8 @@ Pipe: abstract class {
 	write: func ~string (str: String) -> Int { this write(str _buffer data, str length()) }
 	write: abstract func (data: CString, len: Int) -> Int
 	close: abstract func (mode: Char) -> Int
-	setBlocking: func (end: Char) { raise("This platform doesn't support blocking pipe I/O.") }
-	setNonBlocking: func (end: Char) { raise("This platform doesn't support non-blocking pipe I/O.") }
+	setBlocking: func (end: Char) { Debug error("This platform doesn't support blocking pipe I/O.") }
+	setNonBlocking: func (end: Char) { Debug error("This platform doesn't support non-blocking pipe I/O.") }
 	eof: func -> Bool { this eof }
 	reader: func -> PipeReader { PipeReader new(this) }
 	writer: func -> PipeWriter { PipeWriter new(this) }
@@ -57,7 +58,7 @@ Pipe: abstract class {
 			result = PipeUnix new() as This
 		version(windows)
 			result = PipeWin32 new() as This
-		raise(result == null, "Unsupported platform!\n", This)
+		Debug error(result == null, "Unsupported platform!\n", This)
 		result
 	}
 }
@@ -78,8 +79,8 @@ PipeReader: class extends Reader {
 		bytesRead >= 0 ? bytesRead : 0
 	}
 	hasNext: override func -> Bool { !this pipe eof() }
-	mark: override func -> Long { raise("Seeking is not supported for this source"); -1 }
-	seek: override func (offset: Long, mode: SeekMode) -> Bool { raise("Seeking is not supported for this source"); false }
+	mark: override func -> Long { Debug error("Seeking is not supported for this source"); -1 }
+	seek: override func (offset: Long, mode: SeekMode) -> Bool { Debug error("Seeking is not supported for this source"); false }
 }
 
 PipeWriter: class extends Writer {

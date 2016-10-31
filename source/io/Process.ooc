@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 import Pipe
 import native/[ProcessUnix, ProcessWin32]
 
@@ -74,7 +75,7 @@ Process: abstract class {
 		version(windows)
 			result = ProcessWin32 new(args) as This
 		if (result == null)
-			raise("os/Process is unsupported on your platform!")
+			Debug error("os/Process is unsupported on your platform!")
 		result
 	}
 	new: static func ~withEnvFromArray (args: String[], .env) -> This {

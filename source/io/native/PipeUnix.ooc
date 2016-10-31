@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 include sys/types, sys/stat
 import ../Pipe
 
@@ -21,7 +22,7 @@ PipeUnix: class extends Pipe {
 
 	init: func ~twos {
 		fds := [-1, -1] as Int*
-		raise(pipe(fds) < 0, "Couldn't create pipes")
+		Debug error(pipe(fds) < 0, "Couldn't create pipes")
 		this readFD = fds[0]
 		this writeFD = fds[1]
 	}
@@ -54,7 +55,7 @@ PipeUnix: class extends Pipe {
 			flags := fcntl(fd, F_GETFL, 0)
 			flags |= O_NONBLOCK
 			if (fcntl(fd, F_SETFL, flags) == -1)
-				raise("can't change pipe to non-blocking mode")
+				Debug error("can't change pipe to non-blocking mode")
 		}
 	}
 	setBlocking: func (end: Char) {
@@ -63,7 +64,7 @@ PipeUnix: class extends Pipe {
 			flags := fcntl(fd, F_GETFL, 0)
 			flags &= ~O_NONBLOCK
 			if (fcntl(fd, F_SETFL, flags) == -1)
-				raise("can't change pipe to blocking mode")
+				Debug error("can't change pipe to blocking mode")
 		}
 	}
 	_getFD: func (end: Char) -> _FileDescriptor {
