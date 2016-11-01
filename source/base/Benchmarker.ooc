@@ -14,18 +14,17 @@ Benchmarker: class {
 	_name: String
 	_profilers := VectorList<Profiler> new(32, false)
 	init: func (name: String) {
-		this _instanceCounter += 1
-		this _name = name + this _instanceCounter
+		This _instanceCounter += 1
+		this _name = name + This _instanceCounter
 	}
 	registerProfiler: func (profiler: Profiler) {
 		if (profiler != null)
 			this _profilers add(profiler)
 	}
-	log: func {
-		filePath := this _name + ".txt"
+	log: func (filePath := this _name & ".txt") {
 		version (android)
 			filePath = "/data/media/0/DCIM/Camera/" + filePath
-		writer := FileWriter new(filePath)
+		writer := FileWriter new(filePath as String)
 		for (i in 0 .. this _profilers count) {
 			output := this _profilers[i] name + ">" + this _profilers[i] averageTime + "|\n"
 			writer write(output)
@@ -33,8 +32,9 @@ Benchmarker: class {
 		writer free()
 	}
 	free: override func {
-		this _instanceCounter -= 1
+		This _instanceCounter -= 1
 		this _profilers free()
+		this _name free()
 		super()
 	}
 }
