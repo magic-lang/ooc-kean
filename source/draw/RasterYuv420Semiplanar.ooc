@@ -201,7 +201,7 @@ RasterYuv420Semiplanar: class extends RasterImage {
 	//getYCrop only for YUV422Interleaved image
 	getYCrop: func (region: IntBox2D) -> RasterMonochrome {
 		lumaY := this y buffer pointer as Byte*
-		lumaY += region leftTop x * region leftTop y * 2 + 1
+		lumaY += (region leftTop x + this y stride * region leftTop y) * 2 + 1
 		imageCopy := RasterMonochrome new(region size)
 		for (y in 0 .. region size y) {
 			for (x in 0 .. region size x) {
