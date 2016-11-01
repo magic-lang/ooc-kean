@@ -33,9 +33,16 @@ Debug: class {
 		This print(string, level)
 		string free()
 	}
-	error: static func (message: String) {
-		This print(message)
-		raise(message)
+	error: static func (message: String, origin: Class = null) {
+		if (origin)
+			This print~free("%s: %s" format(origin name toCString(), message))
+		else
+			This print(message)
+		raise(message, origin)
+	}
+	error: static func ~assert (condition: Bool, message: String, origin: Class = null) {
+		if (condition)
+			This error(message, origin)
 	}
 	free: static func ~all {
 		(This _printFunction as Closure) free()
