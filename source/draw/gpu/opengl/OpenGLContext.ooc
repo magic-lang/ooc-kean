@@ -208,7 +208,9 @@ OpenGLContext: class extends GpuContext {
 				triangles[index + 1] = oddTriangle
 			}
 		}
-		OpenGLMesh new(vertices, textureCoordinates, triangles, this)
+		result := OpenGLMesh new(vertices, textureCoordinates, triangles, this)
+		triangles free()
+		result
 	}
 	getDefaultFont: override func -> Image { this defaultFontGpu }
 	getYuvToRgba: override func -> Map { this _yuvSemiplanarToRgba }
