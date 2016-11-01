@@ -36,6 +36,7 @@ DrawState: cover {
 	_destinationNormalized := FloatBox2D new(0.0f, 0.0f, 1.0f, 1.0f)
 	_sourceNormalized := FloatBox2D new(0.0f, 0.0f, 1.0f, 1.0f)
 	_focalLengthNormalized := 0.0f // Relative to image width
+	targetTransform := FloatTransform2D identity // 2D scaling done after projection matrix but before w division
 	init: func@ ~default
 	init: func@ ~target (=target)
 	setTarget: func (target: Image) -> This {
@@ -149,6 +150,19 @@ DrawState: cover {
 		this
 	}
 	getTransformNormalized: func -> FloatTransform3D { this _transformNormalized }
+	setTargetTransformNormalized: func (targetTransform: FloatTransform2D) -> This {
+		this targetTransform = targetTransform
+		this
+	}
+	setTargetTransformReference: func ~ExplicitIntSize (targetTransform: FloatTransform2D, imageSize: IntVector2D) -> This {
+		this targetTransform = targetTransform referenceToNormalized(imageSize)
+		this
+	}
+	setTargetTransformReference: func ~ExplicitFloatSize (targetTransform: FloatTransform2D, imageSize: FloatVector2D) -> This {
+		this targetTransform = targetTransform referenceToNormalized(imageSize)
+		this
+	}
+	getTargetTransformNormalized: func -> FloatTransform2D { this targetTransform }
 	setOrigin: func (origin: FloatPoint2D) -> This {
 		this _originReference = origin
 		this
