@@ -17,6 +17,11 @@ The destination is similar to the viewport by defining where to draw. The differ
 ## Transform
 Transform is the inverse camera matrix applied after the destination scaling.
 
+## TargetTransform
+TargetTransform can be used to translate and scale in image space. The difference from translating in camera space is that no parallax is applied because vertices at all depths move equally in two dimensions. The center point of TargetTransform defines the center of perspective where no geometry is stretched from the planar projection.
+
+This works as if the projection was applied after depth division by multiplying the projection matrix with a normalized translation. If we want to add a constant to something that will later be divided by depth then we simply add the constant multiplied by depth. For a perspective projection matrix, the translation will be multiplied by -Z and thereby tilt the Z axis. For an orthographic projection matrix, the translation will be multiplied by 1 as usual.
+
 ## Source
 The source is a subregion of the input image affecting generation of texture coordinates in the shader.
 
@@ -54,6 +59,7 @@ Using destination or transform on the CPU would require a rewrite of legacy draw
 | flipSourceY | X | X |  |
 | destination | X |  |  |
 | transform | X |  |  |
+| targetTransform | X |  |  |
 | focalLength | X |  |  |
 | map | X |  |  |
 | mesh | X |  |  |
