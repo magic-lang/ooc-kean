@@ -150,11 +150,19 @@ DrawState: cover {
 		this
 	}
 	getTransformNormalized: func -> FloatTransform3D { this _transformNormalized }
-	setFlatTransform: func (flatTransform: FloatTransform2D) -> This {
+	setFlatTransformNormalized: func (flatTransform: FloatTransform2D) -> This {
 		this flatTransform = flatTransform
 		this
 	}
-	getFlatTransform: func -> FloatTransform2D { this flatTransform }
+	setFlatTransformReference: func ~ExplicitIntSize (flatTransform: FloatTransform2D, imageSize: IntVector2D) -> This {
+		this flatTransform = flatTransform referenceToNormalized(imageSize)
+		this
+	}
+	setFlatTransformReference: func ~ExplicitFloatSize (flatTransform: FloatTransform2D, imageSize: FloatVector2D) -> This {
+		this flatTransform = flatTransform referenceToNormalized(imageSize)
+		this
+	}
+	getFlatTransformNormalized: func -> FloatTransform2D { this flatTransform }
 	setOrigin: func (origin: FloatPoint2D) -> This {
 		this _originReference = origin
 		this
