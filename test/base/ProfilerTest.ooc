@@ -38,7 +38,7 @@ ProfilerTest: class extends Fixture {
 	_testBenchmark: static func {
 		slowTask := func { Time sleepMilli(1) }
 		fastTask := func
-		expect(Profiler benchmark(slowTask, 5), is greater than(Profiler benchmark(fastTask, 5)))
+		expect(Profiler benchmark(slowTask, TimeSpan milliseconds(5)), is greater than(Profiler benchmark(fastTask, TimeSpan milliseconds(5))))
 		(slowTask as Closure, fastTask as Closure) free()
 	}
 }

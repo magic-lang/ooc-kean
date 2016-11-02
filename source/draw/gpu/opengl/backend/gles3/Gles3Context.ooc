@@ -10,9 +10,9 @@ version(!gpuOff) {
 use base
 use geometry
 import ../egl/egl
-import ../[GLContext, GLTexture, GLVertexArrayObject]
+import ../[GLContext, GLTexture, GLVertexArrayObject, GLIndexBufferObject]
 import external/gles3
-import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture, Gles3VertexArrayObject
+import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture, Gles3VertexArrayObject, Gles3IndexBufferObject
 
 Gles3Context: class extends GLContext {
 	_eglContext: Pointer
@@ -219,6 +219,9 @@ Gles3Context: class extends GLContext {
 	createRenderer: override func -> Gles3Renderer { Gles3Renderer new() }
 	createVertexArrayObject: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GLVertexArrayObject {
 		Gles3VertexArrayObject new(vertices, textureCoordinates)
+	}
+	createIndexBufferObject: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], indices: IntPoint3D[]) -> GLIndexBufferObject {
+		Gles3IndexBufferObject new(vertices, textureCoordinates, indices)
 	}
 	create: static func ~shared (display: Pointer, nativeBackend: Long, sharedContext: This = null) -> This {
 		version(debugGL) { Debug print("Creating OpenGL Context") }
