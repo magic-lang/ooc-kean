@@ -10,29 +10,24 @@ import Profiler
 import io/FileWriter
 
 Benchmarker: class {
-	_instanceCounter := static 0
 	_name: String
 	_profilers := VectorList<Profiler> new(32, false)
-	init: func (name: String) {
-		This _instanceCounter += 1
-		this _name = name + This _instanceCounter
-	}
+	init: func (=_name)
 	registerProfiler: func (profiler: Profiler) {
 		if (profiler != null)
 			this _profilers add(profiler)
 	}
-	log: func (filePath := this _name & ".txt") {
+	log: func (filePath := "benchmarker.log") {
 		version (android)
-			filePath = "/data/media/0/DCIM/Camera/" + filePath
-		writer := FileWriter new(filePath as String)
+			filePath = "/data/media/0/DCIM/Camera/" & this _name & ".log"
+		writer := FileWriter new(filePath)
 		for (i in 0 .. this _profilers count) {
-			output := this _profilers[i] name + ">" + this _profilers[i] averageTime + "|\n"
+			output := this _profilers[i] name & ">" & this _profilers[i] averageTime & "|\n"
 			writer write(output)
 		}
 		writer free()
 	}
 	free: override func {
-		This _instanceCounter -= 1
 		this _profilers free()
 		this _name free()
 		super()
