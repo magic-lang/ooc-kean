@@ -8,6 +8,7 @@
 
 use geometry
 use draw
+use base
 import external/gles3
 import ../GLShaderProgram
 import Gles3Debug
@@ -112,6 +113,7 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 		success != 0
 	}
 	_compileShaders: func (vertexSource, fragmentSource: String) -> Bool {
+		Debug print("_compileShaders+")
 		version(debugGL) { validateStart("ShaderProgram _compileShaders") }
 		vertexShaderID := glCreateShader(GL_VERTEX_SHADER)
 		fragmentShaderID := glCreateShader(GL_FRAGMENT_SHADER)
@@ -132,6 +134,7 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 			glDeleteShader(fragmentShaderID)
 		}
 		version(debugGL) { validateEnd("ShaderProgram _compileShaders") }
+		Debug print("_compileShaders-")
 		success
 	}
 }
