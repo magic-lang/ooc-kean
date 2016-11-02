@@ -197,7 +197,9 @@ Gles3Context: class extends GLContext {
 		(result vao != null) ? result : null
 	}
 	createShaderProgram: override func (vertexSource, fragmentSource: String) -> Gles3ShaderProgram {
+		Debug print("createShaderProgram")
 		result := Gles3ShaderProgram new()
+		Debug print("createShaderProgram1")
 		result _compileShaders(vertexSource, fragmentSource) ? result : null
 	}
 	createTexture: override func (type: TextureType, size: IntVector2D, stride: UInt, pixels := null, allocate := true) -> Gles3Texture {

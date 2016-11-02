@@ -25,7 +25,9 @@ OpenGLMap: class extends Map {
 		this _vertexSource = vertexSource
 		this _fragmentSource = fragmentSource
 		this _context = context
+		Debug print("set this _program")
 		this _program = this _context _backend createShaderProgram(this _vertexSource, this _fragmentSource)
+		Debug print("this _program set")
 		if (vertexSource == null || fragmentSource == null)
 			Debug error("Vertex or fragment shader source not set")
 	}
