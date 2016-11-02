@@ -191,6 +191,27 @@ OpenGLContext: class extends GpuContext {
 			vertices[i] = toGL * vertices[i]
 		OpenGLMesh new(vertices, textureCoordinates, this)
 	}
+	createGrid: override func (size: IntVector2D, vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> Mesh {
+		toGL := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
+		for (i in 0 .. vertices length)
+			vertices[i] = toGL * vertices[i]
+		triangles := IntPoint3D[2 * size area] new()
+		gridSize := size
+		nodeSize := gridSize + IntVector2D new(1, 1)
+		for (y in 0 .. size y) {
+			for (x in 0 .. size x) {
+				base := y * nodeSize x + x
+				evenTriangle := IntPoint3D new(base, base + 1, base + nodeSize x)
+				oddTriangle := IntPoint3D new(base + 1, base + 1 + nodeSize x, base + nodeSize x)
+				index := 2 * (y * size x + x)
+				triangles[index] = evenTriangle
+				triangles[index + 1] = oddTriangle
+			}
+		}
+		result := OpenGLMesh new(vertices, textureCoordinates, triangles, this)
+		triangles free()
+		result
+	}
 	getDefaultFont: override func -> Image { this defaultFontGpu }
 	getYuvToRgba: override func -> Map { this _yuvSemiplanarToRgba }
 	getRgbaToY: override func -> Map { this _rgbaToYuva }
