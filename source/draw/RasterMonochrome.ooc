@@ -157,9 +157,17 @@ RasterMonochrome: class extends RasterPacked {
 
 	getCrop: func (region: IntBox2D) -> This {
 		result := This new(region size)
-		for (y in 0 .. region height)
-			for (x in 0 .. region width)
-				result[x, y] = this[region leftTop x + x, region leftTop y + y]
+		destination := result buffer pointer
+		source := this buffer pointer + region top * this stride + region left
+		for (y in 0 .. region height) {
+			for (x in 0 .. region width) {
+				destination@ = source@
+				destination += 1
+				source += 1
+			}
+			destination += result stride - result width
+			source += this stride - region width
+		}
 		result
 	}
 	getRow: func (row: Int) -> FloatVectorList {
