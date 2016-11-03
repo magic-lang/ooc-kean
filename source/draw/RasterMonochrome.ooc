@@ -368,4 +368,22 @@ RasterMonochrome: class extends RasterPacked {
 		}
 		result
 	}
+	calculateImagePairScore: func (other: This, padding := 0) -> Float {
+		difference := 0.0f
+		thisBuffer := this buffer pointer + this stride * padding + padding
+		otherBuffer := other buffer pointer + other stride * padding + padding
+		for (y in padding .. this height - padding) {
+			for (x in padding .. this width - padding) {
+				difference += ((thisBuffer@ as Float - otherBuffer@ as Float) abs())
+				thisBuffer += 1
+				otherBuffer += 1
+			}
+			thisBuffer += this stride - this width + 2 * padding
+			otherBuffer += other stride - other width + 2 * padding
+		}
+		difference / ((this height - 2 * padding) * (this width - 2 * padding))
+	}
+	equals: func (other: This, threshold := 30.f) -> Bool {
+		this calculateImagePairScore(other) < threshold
+	}
 }
