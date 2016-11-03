@@ -14,7 +14,6 @@ use concurrent
 import DrawContext
 import GpuImage, Map, GpuYuv420Semiplanar, Mesh
 
-version(!gpuOff) {
 ToRasterFuture: class extends Future<RasterImage> {
 	_result: RasterImage
 	init: func (=_result) {
@@ -34,7 +33,10 @@ ToRasterFuture: class extends Future<RasterImage> {
 
 GpuContext: abstract class extends DrawContext {
 	defaultMap ::= null as Map
-	init: func
+	init: func {
+		version(gpuOff)
+			raise("Creating GpuContext without GPU")
+	}
 	createMonochrome: abstract func (size: IntVector2D) -> GpuImage
 	createRgb: abstract func (size: IntVector2D) -> GpuImage
 	createRgba: abstract func (size: IntVector2D) -> GpuImage
@@ -54,5 +56,4 @@ GpuContext: abstract class extends DrawContext {
 		Promise empty
 	}
 	toRasterAsync: virtual func (source: GpuImage) -> ToRasterFuture { raise("toRasterAsync unimplemented"); null }
-}
 }

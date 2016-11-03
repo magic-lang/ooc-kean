@@ -12,7 +12,6 @@ use base
 use concurrent
 import GpuContext
 
-version(!gpuOff) {
 GpuImage: abstract class extends Image {
 	_context: GpuContext
 	_defaultMap: Map
@@ -35,5 +34,4 @@ GpuImage: abstract class extends Image {
 	toRasterAsync: func -> ToRasterFuture { this _context toRasterAsync(this) }
 	toRasterDefault: abstract func -> RasterImage
 	toRasterDefault: abstract func ~target (target: RasterImage)
-}
 }
