@@ -88,15 +88,15 @@ Gles3Context: class extends GLContext {
 		This _mutex with(|| This _contextCount += 1)
 		this _eglContext = eglCreateContext(this _eglDisplay, config, shared, contextAttribs)
 		if (this _eglContext == null) {
-			"Failed to create OpenGL ES 3 context, trying with OpenGL ES 2 instead" println()
+			Debug print("Failed to create OpenGL ES 3 context, trying with OpenGL ES 2 instead")
 			contextAttribs = [
 				EGL_CONTEXT_CLIENT_VERSION, 2,
 				EGL_NONE] as Int*
 			this _eglContext = eglCreateContext(this _eglDisplay, config, shared, contextAttribs)
 			if (this _eglContext == null)
-				raise("Failed to create OpenGL ES 3 or OpenGL ES 2 context")
+				Debug error("Failed to create OpenGL ES 3 or OpenGL ES 2 context")
 			else
-				"WARNING: Using OpenGL ES 2" println()
+				Debug print("WARNING: Using OpenGL ES 2")
 		}
 	}
 	_generate: func (display: Pointer, nativeBackend: Long, sharedContext: This) -> Bool {
@@ -126,7 +126,7 @@ Gles3Context: class extends GLContext {
 	_generate: func ~pbuffer (sharedContext: This) -> Bool {
 		this _eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY)
 		if (this _eglDisplay == null)
-			raise("Failed to get default display")
+			Debug error("Failed to get default display")
 		eglInitialize(this _eglDisplay, null, null)
 		eglBindAPI(EGL_OPENGL_ES_API)
 

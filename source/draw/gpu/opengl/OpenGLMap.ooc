@@ -67,7 +67,7 @@ OpenGLMap: class extends Map {
 					case image: OpenGLPacked =>
 						version(safe)
 							if (forbiddenInput != null && (forbiddenInput as Pointer) == (image as Pointer))
-								raise("Input image " + key + " is also the target.")
+								Debug error("Input image " + key + " is also the target.")
 						image backend bind(textureCount)
 						program setUniform(key, textureCount)
 						textureCount += 1

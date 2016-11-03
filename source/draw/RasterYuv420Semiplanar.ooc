@@ -109,7 +109,7 @@ RasterYuv420Semiplanar: class extends RasterImage {
 		if (sourceBox hasZeroArea)
 			sourceBox = IntBox2D new(this size)
 		version(safe)
-			raise(sourceBox intersection(IntBox2D new(this size)) != sourceBox, "invalid source box in RasterYuv420Semiplanar resizeInto !")
+			Debug error(sourceBox intersection(IntBox2D new(this size)) != sourceBox, "invalid source box in RasterYuv420Semiplanar resizeInto !")
 		DrawState new(target y) setInputImage(this y) setSource(sourceBox, this y size) draw()
 		DrawState new(target uv) setInputImage(this uv) setSource(sourceBox / 2, this uv size) draw()
 	}

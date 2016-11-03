@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 import ../[Process, Pipe]
 import PipeUnix
 
@@ -44,7 +45,7 @@ ProcessUnix: class extends Process {
 
 		if (status == -1) {
 			errString := strerror(err)
-			Exception new("Process wait(): %s" format(errString toString())) throw()
+			Debug error("Process wait(): %s" format(errString toString()))
 		}
 
 		if (WIFEXITED(status))
