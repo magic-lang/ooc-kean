@@ -15,9 +15,10 @@ import backend/[GLTexture, EGLImage]
 
 version(!gpuOff) {
 EGLYuv: class extends OpenGLPacked {
-	_nativeBuffer: Pointer
-	nativeBuffer ::= this _nativeBuffer
+	_handle: Pointer
+	handle ::= this _handle
 	init: func (_buffer: GraphicBuffer, context: OpenGLContext) {
+		_handle = _buffer handle
 		super(EGLImage create(TextureType External, _buffer size, _buffer nativeBuffer, context backend), 3, context)
 	}
 	toRasterDefault: override func -> RasterImage { Debug error("toRasterDefault unimplemented for EGLYuv"); null }
