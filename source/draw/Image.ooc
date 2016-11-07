@@ -38,8 +38,8 @@ Image: abstract class {
 		this drawLines(list, pen)
 		list free()
 	}
-	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>, pen: Pen = Pen new(ColorRgba white)) { raise("drawPoints unimplemented for class %s!" format(this class name)) }
-	drawLines: virtual func (pointList: VectorList<FloatPoint2D>, pen: Pen = Pen new(ColorRgba white)) { raise("drawLines unimplemented for class %s!" format(this class name)) }
+	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>, pen: Pen = Pen new(ColorRgba white)) { Debug error("drawPoints unimplemented for class %s!" format(this class name)) }
+	drawLines: virtual func (pointList: VectorList<FloatPoint2D>, pen: Pen = Pen new(ColorRgba white)) { Debug error("drawLines unimplemented for class %s!" format(this class name)) }
 	drawBox: virtual func (box: FloatBox2D, pen: Pen = Pen new(ColorRgba white)) {
 		positions := VectorList<FloatPoint2D> new()
 		positions add(box leftTop)
@@ -50,7 +50,7 @@ Image: abstract class {
 		this drawLines(positions, pen)
 		positions free()
 	}
-	fill: virtual func (color: ColorRgba) { raise("fill unimplemented for class %s!" format(this class name)) }
+	fill: virtual func (color: ColorRgba) { Debug error("fill unimplemented for class %s!" format(this class name)) }
 	draw: virtual func ~DrawState (drawState: DrawState) { Debug error("draw~DrawState unimplemented for class %s!" format(this class name)) }
 	resizeWithin: func (restriction: IntVector2D) -> This {
 		restrictionFraction := (restriction x as Float / this size x as Float) minimum(restriction y as Float / this size y as Float)
@@ -60,7 +60,7 @@ Image: abstract class {
 	resizeTo: virtual func ~withMethod (size: IntVector2D, Interpolate: Bool) -> This {
 		this resizeTo(size)
 	}
-	create: virtual func (size: IntVector2D) -> This { raise("create unimplemented for class %s!" format(this class name)); null }
+	create: virtual func (size: IntVector2D) -> This { Debug error("create unimplemented for class %s!" format(this class name)); null }
 	copy: abstract func -> This
 	distance: virtual abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }

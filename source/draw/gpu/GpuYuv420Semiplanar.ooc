@@ -10,7 +10,6 @@ use geometry
 use draw
 import GpuContext, GpuImage
 
-version(!gpuOff) {
 GpuYuv420Semiplanar: class extends GpuImage {
 	_y: GpuImage
 	_uv: GpuImage
@@ -101,5 +100,4 @@ GpuYuv420Semiplanar: class extends GpuImage {
 		this _toRgbaAuxiliary(target)
 		target
 	}
-}
 }

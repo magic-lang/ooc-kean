@@ -36,7 +36,7 @@ FloatTransform2D: cover {
 	isIdentity ::= this a equals(1.0f) && this e equals(1.0f) && this i equals(1.0f) && this b equals(0.0f) && this c equals(0.0f) && this d equals(0.0f) && this f equals(0.0f) && this g equals(0.0f) && this h equals(0.0f)
 	inverse: This { get {
 		determinant := this determinant
-		raise(determinant equals(0.0f), "Determinant is zero in FloatTransform2D inverse()")
+		Debug error(determinant equals(0.0f), "Determinant is zero in FloatTransform2D inverse()")
 		This new(
 			(this e * this i - this h * this f) / determinant,
 			(this h * this c - this b * this i) / determinant,
@@ -132,7 +132,7 @@ FloatTransform2D: cover {
 	operator [] (x, y: Int) -> Float {
 		result := 0.0f
 		version (safe)
-			raise(x < 0 || x > 2 || y < 0 || y > 2, "Out of bounds in FloatTransform2D get operator (#{x}, #{y})")
+			Debug error(x < 0 || x > 2 || y < 0 || y > 2, "Out of bounds in FloatTransform2D get operator (#{x}, #{y})")
 		match (x) {
 			case 0 =>
 				match (y) {

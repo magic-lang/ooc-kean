@@ -43,7 +43,7 @@ RasterPacked: abstract class extends RasterImage {
 	}
 	_resizePacked: func <T> (sourceBuffer: T*, source: This, sourceBox, resultBox: IntBox2D, transform: FloatTransform3D, interpolate, flipX, flipY: Bool, nullPixel: T) {
 		version(safe)
-			raise(transform determinant equals(0.0f), "invalid transform in _resizePacked!")
+			Debug error(transform determinant equals(0.0f), "invalid transform in _resizePacked!")
 		if (transform == FloatTransform3D identity && this size == source size && this stride == source stride && sourceBox == resultBox && sourceBox size == source size && sourceBox leftTop x == 0 && sourceBox leftTop y == 0 && !flipX && !flipY)
 			memcpy(this buffer pointer, sourceBuffer, this stride * this height)
 		else if (interpolate)
@@ -148,7 +148,7 @@ RasterPacked: abstract class extends RasterImage {
 	}
 	swapChannels: func (first, second: Int) {
 		version(safe)
-			raise(first > this bytesPerPixel || second > this bytesPerPixel, "Channel number too large")
+			Debug error(first > this bytesPerPixel || second > this bytesPerPixel, "Channel number too large")
 		pointer := this buffer pointer
 		index := 0
 		while (index < this buffer size) {
