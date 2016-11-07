@@ -14,12 +14,9 @@ import GpuContext
 
 GpuImage: abstract class extends Image {
 	_context: GpuContext
-	_defaultMap: Map
-	_getDefaultMap: virtual func (image: Image) -> Map { this _defaultMap }
 	filter: Bool { get set }
 	init: func (size: IntVector2D, =_context) {
 		super(size)
-		this _defaultMap = this _context defaultMap
 	}
 	resizeTo: override func (size: IntVector2D) -> This {
 		result := this create(size) as This
