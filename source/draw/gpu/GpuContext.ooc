@@ -35,7 +35,7 @@ GpuContext: abstract class extends DrawContext {
 	defaultMap ::= null as Map
 	init: func {
 		version(gpuOff)
-			raise("Creating GpuContext without GPU")
+			Debug error("Creating GpuContext without GPU")
 	}
 	createMonochrome: abstract func (size: IntVector2D) -> GpuImage
 	createRgb: abstract func (size: IntVector2D) -> GpuImage
