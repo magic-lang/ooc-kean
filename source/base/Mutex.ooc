@@ -7,6 +7,7 @@
  */
 
 import native/[MutexUnix, MutexWin32]
+import Debug
 
 MutexType: enum {
 	Safe
@@ -32,7 +33,7 @@ Mutex: abstract class {
 					result = MutexUnix new()
 				version (windows)
 					result = MutexWin32 new()
-				raise(result == null, "Unsupported platform!\n", This)
+				Debug error(result == null, "Unsupported platform!\n", This)
 			}
 			case MutexType Unsafe =>
 				result = MutexUnsafe new()
@@ -68,7 +69,7 @@ RecursiveMutex: abstract class extends Mutex {
 			result = RecursiveMutexUnix new()
 		version (windows)
 			result = RecursiveMutexWin32 new()
-		raise(result == null, "Unsupported platform!\n", This)
+		Debug error(result == null, "Unsupported platform!\n", This)
 		result
 	}
 }

@@ -177,7 +177,7 @@ OpenGLContext: class extends GpuContext {
 				map add("paddingOffset", padding as Float / (target size x * 4))
 			}
 		} else
-			raise("invalid type of GpuImage in packToRgba")
+			Debug error("invalid type of GpuImage in packToRgba")
 		map add("texture0", source)
 		map add("texelOffset", 1.0f / source size x)
 		map add("xOffset", (2.0f / channels - 0.5f) / source size x)
@@ -208,7 +208,9 @@ OpenGLContext: class extends GpuContext {
 				triangles[index + 1] = oddTriangle
 			}
 		}
-		OpenGLMesh new(vertices, textureCoordinates, triangles, this)
+		result := OpenGLMesh new(vertices, textureCoordinates, triangles, this)
+		triangles free()
+		result
 	}
 	getDefaultFont: override func -> Image { this defaultFontGpu }
 	getYuvToRgba: override func -> Map { this _yuvSemiplanarToRgba }

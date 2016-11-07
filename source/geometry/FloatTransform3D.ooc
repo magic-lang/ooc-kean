@@ -49,7 +49,7 @@ FloatTransform3D: cover {
 		// No FloatTransform3D instance should have a determinant of 0, so
 		// throw an exception, because something has gone wrong, somewhere.
 		if (determinant == 0)
-			raise("Determinant is zero in FloatTransform3D inverse()")
+			Debug error("Determinant is zero in FloatTransform3D inverse()")
 		a := (this f * this k * this p + this j * this o * this h + this n * this g * this l - this f * this o * this l - this j * this g * this p - this n * this k * this h) / determinant
 		e := (this e * this o * this l + this i * this g * this p + this m * this k * this h - this e * this k * this p - this i * this o * this h - this m * this g * this l) / determinant
 		i := (this e * this j * this p + this i * this n * this h + this m * this f * this l - this e * this n * this l - this i * this f * this p - this m * this j * this h) / determinant
@@ -165,7 +165,7 @@ FloatTransform3D: cover {
 	operator [] (x, y: Int) -> Float {
 		result := 0.0f
 		version (safe)
-			raise(x < 0 || x > 3 || y < 0 || y > 3, "Out of bounds in FloatTransform3D get operator (#{x}, #{y})")
+			Debug error(x < 0 || x > 3 || y < 0 || y > 3, "Out of bounds in FloatTransform3D get operator (#{x}, #{y})")
 		match (x) {
 			case 0 =>
 				match (y) {

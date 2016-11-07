@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 use geometry
 
 FloatImage : class {
@@ -26,12 +27,12 @@ FloatImage : class {
 	}
 	operator [] (x, y: Int) -> Float {
 		version(safe)
-			raise(x > this _size x || y > this _size y || x < 0 || y < 0, "Accessing FloatImage index out of range in get")
+			Debug error(x > this _size x || y > this _size y || x < 0 || y < 0, "Accessing FloatImage index out of range in get")
 		(this _pointer + (x + this _size x * y))@ as Float
 	}
 	operator []= (x, y: Int, value: Float) {
 		version(safe)
-			raise(x > this _size x || y > this _size y || x < 0 || y < 0, "Accessing FloatImage index out of range in set")
+			Debug error(x > this _size x || y > this _size y || x < 0 || y < 0, "Accessing FloatImage index out of range in set")
 		(this _pointer + (x + this _size x * y))@ = value
 	}
 }
