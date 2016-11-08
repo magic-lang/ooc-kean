@@ -17,11 +17,11 @@ version(!gpuOff) {
 EGLYuv: class extends OpenGLPacked {
 	_handle: Pointer
 	handle ::= this _handle
-	init: func (_buffer: GraphicBuffer, context: OpenGLContext) {
-		_handle = _buffer handle
-		super(EGLImage create(TextureType External, _buffer size, _buffer nativeBuffer, context backend), 3, context)
+	init: func (buffer: GraphicBuffer, context: OpenGLContext) {
+		this _handle = buffer handle
+		super(EGLImage create(TextureType External, buffer size, buffer nativeBuffer, context backend), 3, context)
 	}
 	toRasterDefault: override func -> RasterImage { Debug error("toRasterDefault unimplemented for EGLYuv"); null }
-	toRasterDefault: override func ~target (target: RasterImage) { Debug error("toRasterDefault~target unimplemented for EGLYuv"); null }
+	toRasterDefault: override func ~target (target: RasterImage) { Debug error("toRasterDefault~target unimplemented for EGLYuv") }
 }
 }
