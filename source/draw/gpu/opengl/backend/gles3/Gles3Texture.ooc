@@ -133,7 +133,6 @@ Gles3Texture: class extends GLTexture {
 		true
 	}
 	_allocate: func (pixels: Pointer, stride: Int) {
-		version(debugGL) { Debug print("Allocating OpenGL Texture") }
 		version(debugGL) { validateStart("Texture _allocate") }
 		pixelStride := stride / this _bytesPerPixel
 		if (pixelStride != this size x)

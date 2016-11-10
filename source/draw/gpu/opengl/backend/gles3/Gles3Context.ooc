@@ -40,14 +40,7 @@ Gles3Context: class extends GLContext {
 		)
 		super()
 	}
-	makeCurrent: override func -> Bool {
-		result := eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0
-		version(debugGL) {
-			if (result)
-				printVersionInfo()
-		}
-		result
-	}
+	makeCurrent: override func -> Bool { eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0 }
 	printExtensions: func {
 		extensions := eglQueryString(this _eglDisplay, EGL_EXTENSIONS) as CString
 		extensionsString := String new(extensions, extensions length())
