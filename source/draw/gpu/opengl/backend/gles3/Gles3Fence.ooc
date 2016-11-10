@@ -47,7 +47,7 @@ Gles3Fence: class extends GLFence {
 		if (this _backend != null)
 			glDeleteSync(this _backend)
 		this _backend = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0)
-		version(debugGL) { if (this _backend as Int == 0) Debug print("glFenceSync failed!") }
+		version(debugGL) { if (this _backend != null) Debug print("glFenceSync failed!") }
 		version(debugGL) { validateEnd("Fence sync") }
 	}
 }
