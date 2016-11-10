@@ -50,6 +50,7 @@ OpenGLContext: class extends GpuContext {
 		this _defaultFontGpu
 	}}
 	init: func ~backend (=_backend) {
+		Debug print("OpenGLContext::init~backend+")
 		super()
 		this _recycleBin = RecycleBin<OpenGLPacked> new(60, func (image: OpenGLPacked) {
 			image _recyclable = false
@@ -66,12 +67,15 @@ OpenGLContext: class extends GpuContext {
 		this _rgbaToYuva = OpenGLMapTransform new(slurp("shaders/rgbaToYuva.frag"), this)
 		this _rgbaToUvaa = OpenGLMapTransform new(slurp("shaders/rgbaToUvaa.frag"), this)
 		this _renderer = _backend createRenderer()
+		Debug print("OpenGLContext::init~backend-")
 	}
 	init: func ~shared (other: This = null) {
+		Debug print("OpenGLContext::init~shared+")
 		if (other != null)
 			this init(GLContext createContext(other _backend))
 		else
 			this init(GLContext createContext())
+		Debug print("OpenGLContext::init~shared-")
 	}
 	init: func ~window (display: Pointer, nativeBackend: Long) { this init(GLContext createContext(display, nativeBackend)) }
 	free: override func {

@@ -33,12 +33,18 @@ GLContext: abstract class {
 	createVertexArrayObject: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GLVertexArrayObject
 	createIndexBufferObject: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], indices: IntPoint3D[]) -> GLIndexBufferObject
 	createContext: static func ~shared (display: Pointer, nativeBackend: Long, sharedContext: This = null) -> This {
+		Debug print("GLContext::createContext~shared+")
 		// This function will check whether a context creation succeeded and if not try to create a context for another OpenGL version
-		Gles3Context create(display, nativeBackend, sharedContext as Gles3Context)
+		result := Gles3Context create(display, nativeBackend, sharedContext as Gles3Context)
+		Debug print("GLContext::createContext~shared-")
+		result
 	}
 	createContext: static func ~pbufferShared (sharedContext: This = null) -> This {
 		// This function will check whether a context creation succeeded and if not try to create a context for another OpenGL version
-		Gles3Context create(sharedContext as Gles3Context)
+		Debug print("GLContext::createContext~pbufferShared+")
+		result := Gles3Context create(sharedContext as Gles3Context)
+		Debug print("GLContext::createContext~pbufferShared-")
+		result
 	}
 }
 }

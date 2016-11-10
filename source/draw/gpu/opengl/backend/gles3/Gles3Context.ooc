@@ -197,8 +197,11 @@ Gles3Context: class extends GLContext {
 		(result vao != null) ? result : null
 	}
 	createShaderProgram: override func (vertexSource, fragmentSource: String) -> Gles3ShaderProgram {
+		Debug print("Gles3Context::createShaderProgram+")
 		result := Gles3ShaderProgram new()
-		result _compileShaders(vertexSource, fragmentSource) ? result : null
+		result2 := result _compileShaders(vertexSource, fragmentSource) ? result : null
+		Debug print("Gles3Context::createShaderProgram-")
+		result2
 	}
 	createTexture: override func (type: TextureType, size: IntVector2D, stride: UInt, pixels := null, allocate := true) -> Gles3Texture {
 		result := Gles3Texture new(type, size)
@@ -224,9 +227,12 @@ Gles3Context: class extends GLContext {
 		Gles3IndexBufferObject new(vertices, textureCoordinates, indices)
 	}
 	create: static func ~shared (display: Pointer, nativeBackend: Long, sharedContext: This = null) -> This {
+		Debug print("Gles3Context::create~shared+")
 		version(debugGL) { Debug print("Creating OpenGL Context") }
 		result := This new()
-		result _generate(display, nativeBackend, sharedContext) ? result : null
+		realResult := result _generate(display, nativeBackend, sharedContext) ? result : null
+		Debug print("Gles3Context::create~shared-")
+		realResult
 	}
 	create: static func ~pbufferShared (sharedContext: This = null) -> This {
 		version(debugGL) { Debug print("Creating OpenGL Context") }
