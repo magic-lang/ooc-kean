@@ -51,9 +51,7 @@ RasterYuv420Semiplanar: class extends RasterImage {
 		(this y, this uv) referenceCount decrease()
 		super()
 	}
-	distance: override func (other: Image) -> Float {
-		(this y distance((other as This) y) + this uv distance((other as This) uv)) / 2.0f
-	}
+	distance: override func (other: Image) -> Float { (this y distance((other as This) y) + this uv distance((other as This) uv)) / 2.0f }
 	create: override func (size: IntVector2D) -> Image { This new(size) }
 	_drawPoint: override func (x, y: Int, pen: Pen) {
 		position := this _map(IntPoint2D new(x, y))
@@ -113,9 +111,7 @@ RasterYuv420Semiplanar: class extends RasterImage {
 		DrawState new(target y) setInputImage(this y) setSource(sourceBox, this y size) draw()
 		DrawState new(target uv) setInputImage(this uv) setSource(sourceBox / 2, this uv size) draw()
 	}
-	crop: func (region: FloatBox2D) -> This {
-		this crop~int(region round() toIntBox2D())
-	}
+	crop: func (region: FloatBox2D) -> This { this crop~int(region round() toIntBox2D()) }
 	crop: func ~int (region: IntBox2D) -> This {
 		result := This new(region size, region size x + (region size x isOdd ? 1 : 0)) as This
 		this resizeInto(result, region)

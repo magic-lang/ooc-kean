@@ -43,9 +43,7 @@ RasterMonochrome: class extends RasterPacked {
 		if (monochrome != image)
 			monochrome referenceCount decrease()
 	}
-	fill: override func (color: ColorRgba) {
-		this buffer memset(color r)
-	}
+	fill: override func (color: ColorRgba) { this buffer memset(color r) }
 	copy: override func -> This { This new(this buffer copy(), this size, this stride) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
 		convert := ColorConvert fromMonochrome(action)
@@ -68,9 +66,7 @@ RasterMonochrome: class extends RasterPacked {
 				action(pixel@)
 			}
 	}
-	resizeTo: override func (size: IntVector2D) -> This {
-		this resizeTo(size, true) as This
-	}
+	resizeTo: override func (size: IntVector2D) -> This { this resizeTo(size, true) as This }
 	resizeTo: override func ~withMethod (size: IntVector2D, interpolate: Bool) -> This {
 		result := This new(size)
 		DrawState new(result) setInputImage(this) setInterpolate(interpolate) draw()
