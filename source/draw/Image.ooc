@@ -17,12 +17,9 @@ Image: abstract class {
 	width ::= this size x
 	height ::= this size y
 	referenceCount ::= this _referenceCount
-	init: func (=_size) {
-		this _referenceCount = ReferenceCounter new(this)
-	}
+	init: func (=_size) { this _referenceCount = ReferenceCounter new(this) }
 	free: override func {
-		if (this referenceCount != null)
-			this referenceCount free()
+		this _referenceCount free()
 		this _referenceCount = null
 		super()
 	}
@@ -57,16 +54,12 @@ Image: abstract class {
 		this resizeTo((this size toFloatVector2D() * restrictionFraction) toIntVector2D())
 	}
 	resizeTo: abstract func (size: IntVector2D) -> This
-	resizeTo: virtual func ~withMethod (size: IntVector2D, Interpolate: Bool) -> This {
-		this resizeTo(size)
-	}
+	resizeTo: virtual func ~withMethod (size: IntVector2D, Interpolate: Bool) -> This { this resizeTo(size) }
 	create: virtual func (size: IntVector2D) -> This { Debug error("create unimplemented for class %s!" format(this class name)); null }
 	copy: abstract func -> This
 	distance: virtual abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
-	isValidIn: func (x, y: Int) -> Bool {
-		x >= 0 && x < this size x && y >= 0 && y < this size y
-	}
+	isValidIn: func (x, y: Int) -> Bool { x >= 0 && x < this size x && y >= 0 && y < this size y }
 	// Writes white text on the existing image
 	write: virtual func (message: String, fontAtlas: This, localOrigin: IntPoint2D) {
 		skippedRows := 2
