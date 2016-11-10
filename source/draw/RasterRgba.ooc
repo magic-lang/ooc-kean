@@ -129,9 +129,7 @@ RasterRgba: class extends RasterPacked {
 		}
 		result
 	}
-	swapRedBlue: func {
-		this swapChannels(0, 2)
-	}
+	swapRedBlue: func { this swapChannels(0, 2) }
 	redBlueSwapped: func -> This {
 		result := this copy()
 		result swapRedBlue()
@@ -168,9 +166,7 @@ RasterRgba: class extends RasterPacked {
 		File createParentDirectories(filename)
 		StbImage writePng(filename, this size x, this size y, this bytesPerPixel, this buffer pointer, this size x * this bytesPerPixel)
 	}
-	save: override func (filename: String) -> Int {
-		this savePacked(filename)
-	}
+	save: override func (filename: String) -> Int { this savePacked(filename) }
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
 		if (original instanceOf(This))

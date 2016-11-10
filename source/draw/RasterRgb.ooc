@@ -77,9 +77,7 @@ RasterRgb: class extends RasterPacked {
 		this apply(convert)
 		(convert as Closure) free()
 	}
-	resizeTo: override func (size: IntVector2D) -> This {
-		this resizeTo(size, true) as This
-	}
+	resizeTo: override func (size: IntVector2D) -> This { this resizeTo(size, true) as This }
 	resizeTo: override func ~withMethod (size: IntVector2D, interpolate: Bool) -> This {
 		result := This new(size)
 		DrawState new(result) setInputImage(this) setInterpolate(interpolate) draw()
@@ -144,9 +142,7 @@ RasterRgb: class extends RasterPacked {
 		}
 		result
 	}
-	swapRedBlue: func {
-		this swapChannels(0, 2)
-	}
+	swapRedBlue: func { this swapChannels(0, 2) }
 	redBlueSwapped: func -> This {
 		result := this copy()
 		result swapRedBlue()
@@ -164,9 +160,7 @@ RasterRgb: class extends RasterPacked {
 		File createParentDirectories(filename)
 		StbImage writePng(filename, this size x, this size y, this bytesPerPixel, this buffer pointer, this size x * this bytesPerPixel)
 	}
-	save: override func (filename: String) -> Int {
-		this savePacked(filename)
-	}
+	save: override func (filename: String) -> Int { this savePacked(filename) }
 	convertFrom: static func (original: RasterImage) -> This {
 		result: This
 		if (original instanceOf(This))
