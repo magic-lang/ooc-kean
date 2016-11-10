@@ -24,13 +24,13 @@ Image: abstract class {
 		super()
 	}
 	drawPoint: virtual func (position: FloatPoint2D, pen: Pen = Pen new(ColorRgba white)) {
-		list := VectorList<FloatPoint2D> new()
+		list := VectorList<FloatPoint2D> new(1)
 		list add(position)
 		this drawPoints(list, pen)
 		list free()
 	}
 	drawLine: virtual func (start, end: FloatPoint2D, pen: Pen = Pen new(ColorRgba white)) {
-		list := VectorList<FloatPoint2D> new()
+		list := VectorList<FloatPoint2D> new(2)
 		list add(start) . add(end)
 		this drawLines(list, pen)
 		list free()
@@ -38,7 +38,7 @@ Image: abstract class {
 	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>, pen: Pen = Pen new(ColorRgba white)) { Debug error("drawPoints unimplemented for class %s!" format(this class name)) }
 	drawLines: virtual func (pointList: VectorList<FloatPoint2D>, pen: Pen = Pen new(ColorRgba white)) { Debug error("drawLines unimplemented for class %s!" format(this class name)) }
 	drawBox: virtual func (box: FloatBox2D, pen: Pen = Pen new(ColorRgba white)) {
-		positions := VectorList<FloatPoint2D> new()
+		positions := VectorList<FloatPoint2D> new(5)
 		positions add(box leftTop)
 		positions add(box rightTop)
 		positions add(box rightBottom)
