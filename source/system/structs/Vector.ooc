@@ -12,9 +12,7 @@ Vector: abstract class <T> {
 	_freeContent: Bool
 	capacity ::= this _capacity
 	init: func ~preallocated (=_backend, =_capacity, freeContent := true)
-	init: func (=_capacity, freeContent := true) {
-		this _freeContent = freeContent
-	}
+	init: func (=_capacity, freeContent := true) { this _freeContent = freeContent }
 	free: override func {
 		memfree(this _backend)
 		super()
