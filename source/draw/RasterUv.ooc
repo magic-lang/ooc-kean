@@ -88,9 +88,7 @@ RasterUv: class extends RasterPacked {
 		this apply(convert)
 		(convert as Closure) free()
 	}
-	resizeTo: override func (size: IntVector2D) -> This {
-		this resizeTo(size, true) as This
-	}
+	resizeTo: override func (size: IntVector2D) -> This { this resizeTo(size, true) as This }
 	resizeTo: override func ~withMethod (size: IntVector2D, interpolate: Bool) -> This {
 		result := This new(size)
 		DrawState new(result) setInputImage(this) setInterpolate(interpolate) draw()

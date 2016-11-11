@@ -21,10 +21,7 @@ RasterImage: abstract class extends Image {
 	apply: abstract func ~rgb (action: Func (ColorRgb))
 	apply: abstract func ~yuv (action: Func (ColorYuv))
 	apply: abstract func ~monochrome (action: Func (ColorMonochrome))
-	resizeTo: override func (size: IntVector2D) -> Image {
-		Debug error("resizeTo unimplemented for " + this class name)
-		null
-	}
+	resizeTo: override func (size: IntVector2D) -> Image { Debug error("resizeTo unimplemented for " + this class name); null }
 	copy: abstract func -> This
 	save: virtual func (filename: String) -> Int { Debug error("RasterImage save unimplemented for format!"); 0 }
 	open: static func ~unknownType (filename: String) -> This {
