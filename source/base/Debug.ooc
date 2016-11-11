@@ -26,6 +26,7 @@ Debug: class {
 		(This _printFunction as Closure) free()
 		This _printFunction = f
 	}
+
 	print: static func (string: String, level := DebugLevel Everything) {
 		/*This fileWriter write(string + "\n")*/
 		string free()
