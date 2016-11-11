@@ -125,4 +125,7 @@ Closure: cover {
 		}
 		result
 	}
+	init: static func ~fromPointer (funcPtr: Pointer, owner: Owner = Owner Sender) -> This {
+		(funcPtr, null, owner) as Closure
+	}
 }
