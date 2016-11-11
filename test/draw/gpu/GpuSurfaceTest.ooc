@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use base
+/*use base
 use collections
 use geometry
 use draw-gpu
@@ -139,4 +139,4 @@ GpuSurfaceTest: class extends Fixture {
 }
 gpuContext := OpenGLContext new()
 GpuSurfaceTest new() run() . free()
-gpuContext free()
+gpuContext free()*/
