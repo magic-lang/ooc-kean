@@ -111,13 +111,17 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 		success != 0
 	}
 	_compileShaders: func (vertexSource, fragmentSource: String) -> Bool {
+		Debug print("_compileShaders+")
 		version(debugGL) { validateStart("ShaderProgram _compileShaders") }
 		vertexShaderID := glCreateShader(GL_VERTEX_SHADER)
+		Debug print("glCreateShader+")
 		fragmentShaderID := glCreateShader(GL_FRAGMENT_SHADER)
 		success := this _compileShader(vertexSource, vertexShaderID)
 		success = success && this _compileShader(fragmentSource, fragmentShaderID)
+		Debug print("glCreateShader-")
 
 		if (success) {
+			Debug print("success+")
 			this _backend = glCreateProgram()
 
 			glAttachShader(this _backend, vertexShaderID)
@@ -129,8 +133,10 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 
 			glDeleteShader(vertexShaderID)
 			glDeleteShader(fragmentShaderID)
+			Debug print("success-")
 		}
 		version(debugGL) { validateEnd("ShaderProgram _compileShaders") }
+		Debug print("_compileShaders-")
 		success
 	}
 }
