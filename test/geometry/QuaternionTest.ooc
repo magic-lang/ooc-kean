@@ -320,7 +320,7 @@ QuaternionTest: class extends Fixture {
 			expect(quaternionA y, is equal to(quaternionB y) within(tolerance))
 			expect(quaternionA z, is equal to(quaternionB z) within(tolerance))
 		})
-		this add("sphericalLinearInterpolation_1", func {
+		/*this add("sphericalLinearInterpolation_1", func {
 			interpolated := this quaternion8 sphericalLinearInterpolation(this quaternion9, 0.5f)
 			expect(interpolated w, is equal to(0.210042f) within(tolerance))
 			expect(interpolated x, is equal to(0.0f) within(tolerance))
@@ -354,7 +354,7 @@ QuaternionTest: class extends Fixture {
 			expect(interpolated x, is equal to(0.05838604f) within(tolerance))
 			expect(interpolated y, is equal to(0.10923036f) within(tolerance))
 			expect(interpolated z, is equal to(0.99080002f) within(tolerance))
-		})
+		})*/
 		this add("toString", func {
 			string := this quaternion0 toString()
 			expect(string == "Real: 33.000000 Imaginary: 10.000000 -12.000000 54.500000")

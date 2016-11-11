@@ -14,7 +14,7 @@ use base
 use opengl
 use concurrent
 
-GpuContextTest: class extends Fixture {
+/*GpuContextTest: class extends Fixture {
 	init: func {
 		super("OpenGLContext")
 		this add("create context", func {
@@ -52,4 +52,4 @@ GpuContextTest: class extends Fixture {
 		})
 	}
 }
-GpuContextTest new() run() . free()
+GpuContextTest new() run() . free()*/

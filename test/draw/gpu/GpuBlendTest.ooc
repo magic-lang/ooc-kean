@@ -5,7 +5,7 @@
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
  */
-
+/*
 use base
 use draw-gpu
 use draw
@@ -62,4 +62,4 @@ GpuBlendTest: class extends Fixture {
 }
 gpuContext := OpenGLContext new()
 GpuBlendTest new() run() . free()
-gpuContext free()
+gpuContext free()*/
