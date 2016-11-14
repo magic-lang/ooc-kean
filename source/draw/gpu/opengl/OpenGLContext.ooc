@@ -51,6 +51,8 @@ OpenGLContext: class extends GpuContext {
 	}}
 	init: func ~backend (=_backend) {
 		super()
+		if (this _backend == null)
+			Debug error("Failed to create OpenGLContext backend!")
 		this _packMonochrome = OpenGLMap new(slurp("shaders/packMonochrome.vert"), slurp("shaders/packMonochrome.frag"), this)
 		this _packUv = OpenGLMap new(slurp("shaders/packUv.vert"), slurp("shaders/packUv.frag"), this)
 		this _packUvPadded = OpenGLMap new(slurp("shaders/packUvPadded.vert"), slurp("shaders/packUvPadded.frag"), this)
