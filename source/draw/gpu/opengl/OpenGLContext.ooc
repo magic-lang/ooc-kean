@@ -63,7 +63,7 @@ OpenGLContext: class extends GpuContext {
 		this _yuvSemiplanarToRgba = OpenGLMapTransform new(slurp("shaders/yuvSemiplanarToRgba.frag"), this)
 		this _rgbaToYuva = OpenGLMapTransform new(slurp("shaders/rgbaToYuva.frag"), this)
 		this _rgbaToUvaa = OpenGLMapTransform new(slurp("shaders/rgbaToUvaa.frag"), this)
-		this _renderer = _backend createRenderer()
+		this _renderer = this _backend createRenderer()
 	}
 	init: func ~shared (other: This = null) {
 		if (other != null)
