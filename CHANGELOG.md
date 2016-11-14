@@ -1,5 +1,11 @@
 # ooc-kean changes by release
 
+## Release 2.10.0
+
+- **Various minor bugfixes to draw and system namespaces**
+- **Profiler uses TimeSpan**
+- **Using Debug error() instead of raise() in most places**
+
 ## Release  2.9.0
 
 - **Added support for utilizing YUV extension in OpenGL**
