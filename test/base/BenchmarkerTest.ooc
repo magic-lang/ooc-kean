@@ -8,11 +8,11 @@
 
 use base
 use unit
-import io/File
+import io/[File, FileWriter]
 
 BenchmarkerTest: class extends Fixture {
 	outputDir := "test/base/output"
-	outputFile := this outputDir & "/benchmarker.txt"
+	outputFile := "#{this outputDir}/benchmarker.txt"
 	init: func {
 		super("Benchmarker")
 		File createDirectories(this outputDir)
@@ -29,6 +29,37 @@ BenchmarkerTest: class extends Fixture {
 			profiler stop()
 			benchmarker log(this outputFile)
 			this _validateFile(false)
+			(benchmarker, profiler) free()
+		})
+		this add("benchmark", func {
+			quick := 0.00
+			slow := 200.0
+			exceptionCount := 0
+			benchmarker := Benchmarker new("benchmarker")
+			writer := FileWriter new(outputFile)
+			profiler := Profiler new("profiler") . start()
+			benchmarker registerProfiler(profiler)
+			writer write("#{profiler name}>#{slow}|\n")
+			profiler stop()
+			writer free()
+			try {
+				benchmarker benchmark(this outputFile)
+			} catch (exception: Exception) {
+				exceptionCount += 1
+				exception free()
+			}
+			expect(exceptionCount, is equal to(0))
+
+			writer = FileWriter new(outputFile)
+			writer write("#{profiler name}>#{quick}|\n")
+			writer free()
+			try {
+				benchmarker benchmark(this outputFile)
+			} catch (exception: Exception) {
+				exceptionCount += 1
+				exception free()
+			}
+			expect(exceptionCount, is equal to(1))
 			(benchmarker, profiler) free()
 		})
 	}
