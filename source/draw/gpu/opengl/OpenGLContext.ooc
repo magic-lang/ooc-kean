@@ -40,7 +40,7 @@ OpenGLContext: class extends GpuContext {
 	_rgbaToYuva: OpenGLMapTransform
 	_rgbaToUvaa: OpenGLMapTransform
 	_renderer: GLRenderer
-	_recycleBin: RecycleBin<OpenGLPacked>
+	_recycleBin := RecycleBin<OpenGLPacked> new(60, |image| image _recyclable = false; image free())
 	backend ::= this _backend
 	defaultMap ::= this _transformTextureMap as Map
 	_defaultFontGpu: GpuImage = null
@@ -51,10 +51,6 @@ OpenGLContext: class extends GpuContext {
 	}}
 	init: func ~backend (=_backend) {
 		super()
-		this _recycleBin = RecycleBin<OpenGLPacked> new(60, func (image: OpenGLPacked) {
-			image _recyclable = false
-			image free()
-		})
 		this _packMonochrome = OpenGLMap new(slurp("shaders/packMonochrome.vert"), slurp("shaders/packMonochrome.frag"), this)
 		this _packUv = OpenGLMap new(slurp("shaders/packUv.vert"), slurp("shaders/packUv.frag"), this)
 		this _packUvPadded = OpenGLMap new(slurp("shaders/packUvPadded.vert"), slurp("shaders/packUvPadded.frag"), this)
