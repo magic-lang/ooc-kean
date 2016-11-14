@@ -23,7 +23,7 @@ VectorList: class <T> extends List<T> {
 	}
 	add: override func (item: T) {
 		if (this _vector capacity <= this _count)
-			this _vector resize(this _vector capacity * 2)
+			this _vector grow()
 		this _vector[this _count] = item
 		this _count += 1
 	}
@@ -36,7 +36,7 @@ VectorList: class <T> extends List<T> {
 	}
 	insert: override func (index: Int, item: T) {
 		if (this _vector capacity <= this _count)
-			this _vector resize(this _vector capacity * 2)
+			this _vector grow()
 		this _vector copy(index, index + 1)
 		this _vector[index] = item
 		this _count += 1

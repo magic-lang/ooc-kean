@@ -33,6 +33,9 @@ Vector: abstract class <T> {
 		else if (capacity > this capacity)
 			this _capacity = capacity
 	}
+	grow: func {
+		this resize(this capacity < 512 ? this capacity * 2 : this capacity + 512)
+	}
 	move: func (sourceStart, targetStart: Int, capacity := 0) {
 		if (capacity < 1)
 			capacity = this capacity - sourceStart
