@@ -125,4 +125,7 @@ Closure: cover {
 		}
 		result
 	}
+	fromPointer: static func (funcPtr: Pointer, owner: Owner = Owner Sender) -> This {
+		(funcPtr, null, owner) as This
+	}
 }
