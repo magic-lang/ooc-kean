@@ -23,6 +23,8 @@ memcpy: extern func (Pointer, Pointer, SizeT)
 memfree: extern (free) func (Pointer)
 alloca: extern func (SizeT) -> Pointer
 
+Memory_unload: extern func
+
 // Used for executing any/all cleanup (free~all) functions before program exit
 // Default priority is 0 and will be executed first, then 1, 2, 3... etc.
 GlobalCleanup: class {
@@ -63,5 +65,9 @@ GlobalCleanup: class {
 			(This _functionPointers, This _priorities) free()
 			(This _functionPointers, This _priorities) = (null, null)
 		}
+	}
+	unload: static func {
+		This run()
+		Memory_unload()
 	}
 }
