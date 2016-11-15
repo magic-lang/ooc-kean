@@ -64,7 +64,7 @@ Query: class {
 				attributes add(argument[0] clone())
 				argument free()
 			}
-			raise(attributes count != values count, "Length of attributes and values vectors are not the same")
+			Debug error(attributes count != values count, "Length of attributes and values vectors are not the same")
 			result = This new(attributes, values)
 			splitted free()
 		}

@@ -84,7 +84,7 @@ Gles3Texture: class extends GLTexture {
 				this _bytesPerPixel = 1
 				this _target = GL_TEXTURE_EXTERNAL_OES
 			case =>
-				raise("Unknown texture format")
+				Debug error("Unknown texture format")
 		}
 		version(debugGL) { validateEnd("Texture _setInternalFormats") }
 	}
@@ -94,7 +94,7 @@ Gles3Texture: class extends GLTexture {
 		interpolationType := match (interpolation) {
 			case InterpolationType Nearest => GL_NEAREST
 			case InterpolationType Linear => GL_LINEAR
-			case => raise("Interpolation type not supported for MagFilter"); -1
+			case => Debug error("Interpolation type not supported for MagFilter"); -1
 		}
 		glTexParameteri(this _target, GL_TEXTURE_MAG_FILTER, interpolationType)
 		this unbind()
@@ -110,7 +110,7 @@ Gles3Texture: class extends GLTexture {
 			case InterpolationType LinearMipmapLinear => GL_LINEAR_MIPMAP_LINEAR
 			case InterpolationType NearestMipmapNearest => GL_NEAREST_MIPMAP_NEAREST
 			case InterpolationType NearestMipmapLinear => GL_NEAREST_MIPMAP_LINEAR
-			case => raise("Interpolation type not supported for MinFilter"); -1
+			case => Debug error("Interpolation type not supported for MinFilter"); -1
 		}
 		glTexParameteri(this _target, GL_TEXTURE_MIN_FILTER, interpolationType)
 		this unbind()
@@ -133,7 +133,6 @@ Gles3Texture: class extends GLTexture {
 		true
 	}
 	_allocate: func (pixels: Pointer, stride: Int) {
-		version(debugGL) { Debug print("Allocating OpenGL Texture") }
 		version(debugGL) { validateStart("Texture _allocate") }
 		pixelStride := stride / this _bytesPerPixel
 		if (pixelStride != this size x)

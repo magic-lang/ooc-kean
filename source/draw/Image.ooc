@@ -17,31 +17,28 @@ Image: abstract class {
 	width ::= this size x
 	height ::= this size y
 	referenceCount ::= this _referenceCount
-	init: func (=_size) {
-		this _referenceCount = ReferenceCounter new(this)
-	}
+	init: func (=_size) { this _referenceCount = ReferenceCounter new(this) }
 	free: override func {
-		if (this referenceCount != null)
-			this referenceCount free()
+		this _referenceCount free()
 		this _referenceCount = null
 		super()
 	}
 	drawPoint: virtual func (position: FloatPoint2D, pen: Pen = Pen new(ColorRgba white)) {
-		list := VectorList<FloatPoint2D> new()
+		list := VectorList<FloatPoint2D> new(1)
 		list add(position)
 		this drawPoints(list, pen)
 		list free()
 	}
 	drawLine: virtual func (start, end: FloatPoint2D, pen: Pen = Pen new(ColorRgba white)) {
-		list := VectorList<FloatPoint2D> new()
+		list := VectorList<FloatPoint2D> new(2)
 		list add(start) . add(end)
 		this drawLines(list, pen)
 		list free()
 	}
-	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>, pen: Pen = Pen new(ColorRgba white)) { raise("drawPoints unimplemented for class %s!" format(this class name)) }
-	drawLines: virtual func (pointList: VectorList<FloatPoint2D>, pen: Pen = Pen new(ColorRgba white)) { raise("drawLines unimplemented for class %s!" format(this class name)) }
+	drawPoints: virtual func (pointList: VectorList<FloatPoint2D>, pen: Pen = Pen new(ColorRgba white)) { Debug error("drawPoints unimplemented for class %s!" format(this class name)) }
+	drawLines: virtual func (pointList: VectorList<FloatPoint2D>, pen: Pen = Pen new(ColorRgba white)) { Debug error("drawLines unimplemented for class %s!" format(this class name)) }
 	drawBox: virtual func (box: FloatBox2D, pen: Pen = Pen new(ColorRgba white)) {
-		positions := VectorList<FloatPoint2D> new()
+		positions := VectorList<FloatPoint2D> new(5)
 		positions add(box leftTop)
 		positions add(box rightTop)
 		positions add(box rightBottom)
@@ -50,23 +47,19 @@ Image: abstract class {
 		this drawLines(positions, pen)
 		positions free()
 	}
-	fill: virtual func (color: ColorRgba) { raise("fill unimplemented for class %s!" format(this class name)) }
+	fill: virtual func (color: ColorRgba) { Debug error("fill unimplemented for class %s!" format(this class name)) }
 	draw: virtual func ~DrawState (drawState: DrawState) { Debug error("draw~DrawState unimplemented for class %s!" format(this class name)) }
 	resizeWithin: func (restriction: IntVector2D) -> This {
 		restrictionFraction := (restriction x as Float / this size x as Float) minimum(restriction y as Float / this size y as Float)
 		this resizeTo((this size toFloatVector2D() * restrictionFraction) toIntVector2D())
 	}
 	resizeTo: abstract func (size: IntVector2D) -> This
-	resizeTo: virtual func ~withMethod (size: IntVector2D, Interpolate: Bool) -> This {
-		this resizeTo(size)
-	}
-	create: virtual func (size: IntVector2D) -> This { raise("create unimplemented for class %s!" format(this class name)); null }
+	resizeTo: virtual func ~withMethod (size: IntVector2D, Interpolate: Bool) -> This { this resizeTo(size) }
+	create: virtual func (size: IntVector2D) -> This { Debug error("create unimplemented for class %s!" format(this class name)); null }
 	copy: abstract func -> This
 	distance: virtual abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
-	isValidIn: func (x, y: Int) -> Bool {
-		x >= 0 && x < this size x && y >= 0 && y < this size y
-	}
+	isValidIn: func (x, y: Int) -> Bool { x >= 0 && x < this size x && y >= 0 && y < this size y }
 	// Writes white text on the existing image
 	write: virtual func (message: String, fontAtlas: This, localOrigin: IntPoint2D) {
 		skippedRows := 2

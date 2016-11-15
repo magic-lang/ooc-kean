@@ -61,8 +61,8 @@ FloatMatrix: cover {
 	setVertical: func (xOffset, yOffset: Int, x, y, z: Float) {
 		version(safe) {
 			t := this take()
-			raise(xOffset < 0 || xOffset >= t width, "Column index out of range in FloatMatrix setVertical")
-			raise(t height - yOffset < 3, "Element positions exceed matrix dimensions in FloatMatrix setVertical")
+			Debug error(xOffset < 0 || xOffset >= t width, "Column index out of range in FloatMatrix setVertical")
+			Debug error(t height - yOffset < 3, "Element positions exceed matrix dimensions in FloatMatrix setVertical")
 		}
 		this[xOffset, yOffset] = x
 		this[xOffset, yOffset + 1] = y
@@ -71,7 +71,7 @@ FloatMatrix: cover {
 	getColumn: func (x: Int) -> This {
 		t := this take()
 		version (safe)
-			raise(x < 0 || x >= t width, "Column index out of range in FloatMatrix getColumn")
+			Debug error(x < 0 || x >= t width, "Column index out of range in FloatMatrix getColumn")
 		result := This new(1, t height)
 		for (y in 0 .. t height)
 			result[0, y] = t[x, y]
@@ -107,7 +107,7 @@ FloatMatrix: cover {
 	trace: func -> Float {
 		t := this take()
 		if (!t isSquare)
-			raise("Invalid dimensions in FloatMatrix trace")
+			Debug error("Invalid dimensions in FloatMatrix trace")
 		result := 0.0f
 		for (i in 0 .. t height)
 			result += t[i, i]
@@ -143,7 +143,7 @@ FloatMatrix: cover {
 	_lupDecomposition: func -> (This, This, This) {
 		t := this take()
 		if (!t isSquare)
-			raise("Invalid dimensions in FloatMatrix lupDecomposition")
+			Debug error("Invalid dimensions in FloatMatrix lupDecomposition")
 		order := t order
 		l := This identity(order)
 		u := t copy()
@@ -179,7 +179,7 @@ FloatMatrix: cover {
 	solve: func (y: This) -> This {
 		t := this take()
 		version (safe)
-			raise(t width > t height, "Invalid dimensions in FloatMatrix solve")
+			Debug error(t width > t height, "Invalid dimensions in FloatMatrix solve")
 		result: This
 		if (t isSquare) {
 			(l, u, p) := t _lupDecomposition()
@@ -247,7 +247,7 @@ FloatMatrix: cover {
 				if (value != 0)
 					resultElements[x + y * result take() width] = accumulator / value
 				else
-					raise("Division by zero in FloatMatrix forwardSubstitution")
+					Debug error("Division by zero in FloatMatrix forwardSubstitution")
 			}
 		if (thisElements != lowerElements)
 			lower free(Owner Receiver)
@@ -271,7 +271,7 @@ FloatMatrix: cover {
 				if (value != 0)
 					resultElements[x + y * result take() width] = accumulator / value
 				else
-					raise("Division by zero in FloatMatrix backwardSubstitution")
+					Debug error("Division by zero in FloatMatrix backwardSubstitution")
 			}
 		}
 		if (thisElements != upperElements)
@@ -282,7 +282,7 @@ FloatMatrix: cover {
 	cofactors: func -> This {
 		t := this take()
 		version(safe)
-			raise(!t isSquare, "Matrix must be square in FloatMatrix cofactors")
+			Debug error(!t isSquare, "Matrix must be square in FloatMatrix cofactors")
 		result := t create()
 		matrixOrder := t order
 		if (matrixOrder == 1)
@@ -315,7 +315,7 @@ FloatMatrix: cover {
 	}
 	adjugate: func -> This {
 		version(safe)
-			raise(!this take() isSquare, "Matrix must be square in FloatMatrix adjugate")
+			Debug error(!this take() isSquare, "Matrix must be square in FloatMatrix adjugate")
 		result := this take() cofactors() transpose()
 		this free(Owner Receiver)
 		result
@@ -323,7 +323,7 @@ FloatMatrix: cover {
 	determinant: func -> Float {
 		t := this take()
 		version(safe)
-			raise(!t isSquare, "Matrix must be square in FloatMatrix determinant")
+			Debug error(!t isSquare, "Matrix must be square in FloatMatrix determinant")
 		result := 0.f
 		matrixOrder := t order
 		if (matrixOrder == 1)
@@ -370,8 +370,8 @@ FloatMatrix: cover {
 		t := this take()
 		determinant := t determinant()
 		version(safe) {
-			raise(!t isSquare, "Matrix must be square in FloatMatrix inverse")
-			raise(determinant equals(0.f), "Matrix is singular in FloatMatrix inverse")
+			Debug error(!t isSquare, "Matrix must be square in FloatMatrix inverse")
+			Debug error(determinant equals(0.f), "Matrix is singular in FloatMatrix inverse")
 		}
 		result := t cofactors() transpose() / determinant
 		this free(Owner Receiver)
@@ -389,7 +389,7 @@ FloatMatrix: cover {
 	operator * (other: This) -> This {
 		t := this take()
 		version(safe)
-			raise(t width != other take() height, "Invalid dimensions in FloatMatrix * operator: left width must match right height!")
+			Debug error(t width != other take() height, "Invalid dimensions in FloatMatrix * operator: left width must match right height!")
 		otherWidth := other take() width
 		(thisWidth, thisHeight) := (t width, t height)
 		result := This new(otherWidth, thisHeight)
@@ -412,7 +412,7 @@ FloatMatrix: cover {
 	operator + (other: This) -> This {
 		t := this take()
 		version(safe)
-			raise(t width != other take() width || t height != other take() height, "Invalid dimensions in FloatMatrix + operator: dimensions must match!")
+			Debug error(t width != other take() width || t height != other take() height, "Invalid dimensions in FloatMatrix + operator: dimensions must match!")
 		result := t create()
 		resultElements := result elements
 		thisElements := this elements
@@ -427,7 +427,7 @@ FloatMatrix: cover {
 	operator - (other: This) -> This {
 		t := this take()
 		version(safe)
-			raise(t width != other take() width || t height != other take() height, "Invalid dimensions in FloatMatrix - operator: dimensions must match!")
+			Debug error(t width != other take() width || t height != other take() height, "Invalid dimensions in FloatMatrix - operator: dimensions must match!")
 		result := t create()
 		resultElements := result elements
 		thisElements := this elements
@@ -441,7 +441,7 @@ FloatMatrix: cover {
 	}
 	operator += (other: This) {
 		version(safe)
-			raise(this _width != other _width || this _height != other _height, "Invalid dimensions in FloatMatrix += operator: dimensions must match!")
+			Debug error(this _width != other _width || this _height != other _height, "Invalid dimensions in FloatMatrix += operator: dimensions must match!")
 		thisElements := this elements
 		otherElements := other elements
 		for (i in 0 .. this _width * this _height)
@@ -450,7 +450,7 @@ FloatMatrix: cover {
 	}
 	operator -= (other: This) {
 		version(safe)
-			raise(this _width != other _width || this _height != other _height, "Invalid dimensions in FloatMatrix -= operator: dimensions must match!")
+			Debug error(this _width != other _width || this _height != other _height, "Invalid dimensions in FloatMatrix -= operator: dimensions must match!")
 		thisElements := this elements
 		otherElements := other elements
 		for (i in 0 .. this _width * this _height)
@@ -484,7 +484,7 @@ FloatMatrix: cover {
 	operator [] (x, y: Int) -> Float {
 		t := this take()
 		version (safe)
-			raise(x < 0 || y < 0 || x >= t width || y >= t height, "Accessing matrix element out of range in get operator")
+			Debug error(x < 0 || y < 0 || x >= t width || y >= t height, "Accessing matrix element out of range in get operator")
 		result := t elements[x + y * t width]
 		this free(Owner Receiver)
 		result
@@ -492,7 +492,7 @@ FloatMatrix: cover {
 	operator []= (x, y: Int, value: Float) {
 		t := this take()
 		version (safe)
-			raise(x < 0 || y < 0 || x >= t width || y >= t height, "Accessing matrix element out of range in set operator")
+			Debug error(x < 0 || y < 0 || x >= t width || y >= t height, "Accessing matrix element out of range in set operator")
 		this elements[x + y * t width] = value
 	}
 

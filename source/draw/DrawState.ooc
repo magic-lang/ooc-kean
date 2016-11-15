@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 use geometry
 import Image
 import Map
@@ -36,6 +37,7 @@ DrawState: cover {
 	_destinationNormalized := FloatBox2D new(0.0f, 0.0f, 1.0f, 1.0f)
 	_sourceNormalized := FloatBox2D new(0.0f, 0.0f, 1.0f, 1.0f)
 	_focalLengthNormalized := 0.0f // Relative to image width
+	targetTransform := FloatTransform2D identity // 2D scaling done after projection matrix but before w division
 	init: func@ ~default
 	init: func@ ~target (=target)
 	setTarget: func (target: Image) -> This {
@@ -85,13 +87,13 @@ DrawState: cover {
 	}
 	getViewport: func -> IntBox2D {
 		version(safe)
-			raise(this target == null, "Can't get local viewport relative to a target that does not exist.")
+			Debug error(this target == null, "Can't get local viewport relative to a target that does not exist.")
 		(this viewport hasZeroArea) ? IntBox2D new(this target size) : this viewport
 	}
 	// Local region
 	setDestination: func ~TargetSize (destination: IntBox2D) -> This {
 		version(safe)
-			raise(this target == null, "Can't set local destination relative to a target that does not exist.")
+			Debug error(this target == null, "Can't set local destination relative to a target that does not exist.")
 		this setDestination(destination, this target size)
 	}
 	// Local region
@@ -126,7 +128,7 @@ DrawState: cover {
 	// Local region
 	getSourceLocal: func -> FloatBox2D {
 		version(safe)
-			raise(this inputImage == null, "Can't get local source relative to an inputImage that does not exist.")
+			Debug error(this inputImage == null, "Can't get local source relative to an inputImage that does not exist.")
 		this _sourceNormalized * (this inputImage size toFloatVector2D())
 	}
 	setInputImage: func (inputImage: Image) -> This {
@@ -135,7 +137,7 @@ DrawState: cover {
 	}
 	setTransformReference: func ~TargetSize (transform: FloatTransform3D) -> This {
 		version(safe)
-			raise(this target == null, "Can't set reference transform relative to a target that does not exist.")
+			Debug error(this target == null, "Can't set reference transform relative to a target that does not exist.")
 		this setTransformNormalized(transform referenceToNormalized(this target size))
 	}
 	setTransformReference: func ~ExplicitIntSize (transform: FloatTransform3D, imageSize: IntVector2D) -> This {
@@ -149,26 +151,39 @@ DrawState: cover {
 		this
 	}
 	getTransformNormalized: func -> FloatTransform3D { this _transformNormalized }
+	setTargetTransformNormalized: func (targetTransform: FloatTransform2D) -> This {
+		this targetTransform = targetTransform
+		this
+	}
+	setTargetTransformReference: func ~ExplicitIntSize (targetTransform: FloatTransform2D, imageSize: IntVector2D) -> This {
+		this targetTransform = targetTransform referenceToNormalized(imageSize)
+		this
+	}
+	setTargetTransformReference: func ~ExplicitFloatSize (targetTransform: FloatTransform2D, imageSize: FloatVector2D) -> This {
+		this targetTransform = targetTransform referenceToNormalized(imageSize)
+		this
+	}
+	getTargetTransformNormalized: func -> FloatTransform2D { this targetTransform }
 	setOrigin: func (origin: FloatPoint2D) -> This {
 		this _originReference = origin
 		this
 	}
 	getOriginLocal: func -> FloatPoint2D {
 		version(safe)
-			raise(this target == null, "Can't get local origin relative to a target that does not exist.")
+			Debug error(this target == null, "Can't get local origin relative to a target that does not exist.")
 		this _originReference + ((this target size toFloatVector2D()) / 2.0f)
 	}
 	// Example: DrawState new(targetImage) setMap(shader) draw()
 	draw: func {
 		version(safe)
-			raise(this target == null, "Can't draw without a target.")
+			Debug error(this target == null, "Can't draw without a target.")
 		this target draw(this)
 	}
 	// Example: DrawState new(targetImage) setOrigin(point) setInputImage(context getDefaultFont()) write(t"Hello world!")
 	write: func (message: String) {
 		version(safe) {
-			raise(this target == null, "Can't write without a target.")
-			raise(this inputImage == null, "Can't write without a font atlas.")
+			Debug error(this target == null, "Can't write without a target.")
+			Debug error(this inputImage == null, "Can't write without a font atlas.")
 		}
 		this target write(message, this inputImage, this getOriginLocal() toIntPoint2D())
 	}

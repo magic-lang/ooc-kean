@@ -10,9 +10,9 @@ version(!gpuOff) {
 use base
 use geometry
 import ../egl/egl
-import ../[GLContext, GLTexture, GLVertexArrayObject]
+import ../[GLContext, GLTexture, GLVertexArrayObject, GLIndexBufferObject]
 import external/gles3
-import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture, Gles3VertexArrayObject
+import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture, Gles3VertexArrayObject, Gles3IndexBufferObject
 
 Gles3Context: class extends GLContext {
 	_eglContext: Pointer
@@ -40,14 +40,7 @@ Gles3Context: class extends GLContext {
 		)
 		super()
 	}
-	makeCurrent: override func -> Bool {
-		result := eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0
-		version(debugGL) {
-			if (result)
-				printVersionInfo()
-		}
-		result
-	}
+	makeCurrent: override func -> Bool { eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0 }
 	printExtensions: func {
 		extensions := eglQueryString(this _eglDisplay, EGL_EXTENSIONS) as CString
 		extensionsString := String new(extensions, extensions length())
@@ -88,15 +81,15 @@ Gles3Context: class extends GLContext {
 		This _mutex with(|| This _contextCount += 1)
 		this _eglContext = eglCreateContext(this _eglDisplay, config, shared, contextAttribs)
 		if (this _eglContext == null) {
-			"Failed to create OpenGL ES 3 context, trying with OpenGL ES 2 instead" println()
+			Debug print("Failed to create OpenGL ES 3 context, trying with OpenGL ES 2 instead")
 			contextAttribs = [
 				EGL_CONTEXT_CLIENT_VERSION, 2,
 				EGL_NONE] as Int*
 			this _eglContext = eglCreateContext(this _eglDisplay, config, shared, contextAttribs)
 			if (this _eglContext == null)
-				raise("Failed to create OpenGL ES 3 or OpenGL ES 2 context")
+				Debug error("Failed to create OpenGL ES 3 or OpenGL ES 2 context")
 			else
-				"WARNING: Using OpenGL ES 2" println()
+				Debug print("WARNING: Using OpenGL ES 2")
 		}
 	}
 	_generate: func (display: Pointer, nativeBackend: Long, sharedContext: This) -> Bool {
@@ -126,7 +119,7 @@ Gles3Context: class extends GLContext {
 	_generate: func ~pbuffer (sharedContext: This) -> Bool {
 		this _eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY)
 		if (this _eglDisplay == null)
-			raise("Failed to get default display")
+			Debug error("Failed to get default display")
 		eglInitialize(this _eglDisplay, null, null)
 		eglBindAPI(EGL_OPENGL_ES_API)
 
@@ -220,6 +213,9 @@ Gles3Context: class extends GLContext {
 	createVertexArrayObject: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> GLVertexArrayObject {
 		Gles3VertexArrayObject new(vertices, textureCoordinates)
 	}
+	createIndexBufferObject: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], indices: IntPoint3D[]) -> GLIndexBufferObject {
+		Gles3IndexBufferObject new(vertices, textureCoordinates, indices)
+	}
 	create: static func ~shared (display: Pointer, nativeBackend: Long, sharedContext: This = null) -> This {
 		version(debugGL) { Debug print("Creating OpenGL Context") }
 		result := This new()
@@ -231,4 +227,6 @@ Gles3Context: class extends GLContext {
 		result _generate(sharedContext) ? result : null
 	}
 }
+
+GlobalCleanup register(|| Gles3Context _mutex free(), 10)
 }

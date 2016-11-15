@@ -67,7 +67,7 @@ DisplayWindow: abstract class {
 		version(windows)
 			result = Win32DisplayWindow new(size, title)
 		if (result == null)
-			raise("Platform not supported (DisplayWindow)")
+			Debug error("Platform not supported (DisplayWindow)")
 		result
 	}
 }

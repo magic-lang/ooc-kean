@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use base
 import ../Process
 import PipeWin32
 
@@ -71,7 +72,7 @@ ProcessWin32: class extends Process {
 			(this pi)& // Pointer to PROCESS_INFORMATION structure
 		)) {
 			err := GetLastError()
-			raise("CreateProcess failed (error %d: %s).\n Command Line:\n %s" format(err, GetWindowsErrorMessage(err), this cmdLine))
+			Debug error("CreateProcess failed (error %d: %s).\n Command Line:\n %s" format(err, GetWindowsErrorMessage(err), this cmdLine))
 			return -1
 		}
 

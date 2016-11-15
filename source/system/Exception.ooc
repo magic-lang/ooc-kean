@@ -38,6 +38,15 @@ ExceptionContext: class {
 		set (value) { this _currentException = value }
 	}
 	init: func
+	free: override func {
+		while (!this _stackFramesToDelete isEmpty)
+			this _stackFramesToDelete pop() free()
+		while (!this _localFrames isEmpty)
+			this _localFrames pop() free()
+		this _stackFramesToDelete free()
+		this _localFrames free()
+		super()
+	}
 	pushStackFrame: func -> StackFrame {
 		frame := StackFrame new()
 		this _localFrames push(frame)
@@ -64,6 +73,7 @@ ExceptionContext: class {
 }
 
 exceptionContext := ExceptionContext new()
+GlobalCleanup register(|| exceptionContext free())
 
 _pushStackFrame: func -> StackFrame { exceptionContext pushStackFrame() }
 _popStackFrame: func { exceptionContext popStackFrame() }

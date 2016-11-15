@@ -17,7 +17,7 @@ ConditionUnix: class extends WaitCondition {
 		this _backend = calloc(1, PThreadCond size) as PThreadCond*
 		result := pthread_cond_init(this _backend, null)
 		if (result != 0)
-			raise("Something went wrong when calling pthread_cond_init")
+			Debug error("Something went wrong when calling pthread_cond_init")
 	}
 	free: override func {
 		pthread_cond_destroy(this _backend)
@@ -26,7 +26,7 @@ ConditionUnix: class extends WaitCondition {
 	}
 	wait: override func (mutex: Mutex) -> Bool {
 		version(safe)
-			raise(mutex class != MutexUnix, "ConditionUnix can work only with MutexUnix")
+			Debug error(mutex class != MutexUnix, "ConditionUnix can work only with MutexUnix")
 		pthread_cond_wait(this _backend, mutex as MutexUnix _backend&) == 0
 	}
 	signal: override func -> Bool { pthread_cond_signal(this _backend) == 0 }

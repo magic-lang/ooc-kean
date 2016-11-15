@@ -19,7 +19,7 @@ StbImage: class {
 		x, y, imageComponents: Int
 		data := This _load (filename toCString(), x&, y&, imageComponents&, requiredComponents)
 		if (data == null)
-			raise("Failed to load image: " + filename, This)
+			Debug error("Failed to load image: " + filename, This)
 		buffer := ByteBuffer new(data as Byte*, x * y * (requiredComponents != 0 ? requiredComponents : imageComponents), true)
 		(buffer, IntVector2D new(x, y), imageComponents)
 	}

@@ -14,7 +14,6 @@ use concurrent
 import DrawContext
 import GpuImage, Map, GpuYuv420Semiplanar, Mesh
 
-version(!gpuOff) {
 ToRasterFuture: class extends Future<RasterImage> {
 	_result: RasterImage
 	init: func (=_result) {
@@ -34,7 +33,10 @@ ToRasterFuture: class extends Future<RasterImage> {
 
 GpuContext: abstract class extends DrawContext {
 	defaultMap ::= null as Map
-	init: func
+	init: func {
+		version(gpuOff)
+			Debug error("Creating GpuContext without GPU")
+	}
 	createMonochrome: abstract func (size: IntVector2D) -> GpuImage
 	createRgb: abstract func (size: IntVector2D) -> GpuImage
 	createRgba: abstract func (size: IntVector2D) -> GpuImage
@@ -44,6 +46,7 @@ GpuContext: abstract class extends DrawContext {
 	createYuv420Semiplanar: override func ~fromImages (y, uv: Image) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(y as GpuImage, uv as GpuImage, this) }
 	createYuv420Semiplanar: override func ~fromRaster (raster: RasterYuv420Semiplanar) -> GpuYuv420Semiplanar { GpuYuv420Semiplanar new(raster, this) }
 	createMesh: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> Mesh
+	createGrid: abstract func (size: IntVector2D, vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) -> Mesh
 	getYuvToRgba: abstract func -> Map
 	getRgbaToY: abstract func -> Map
 	getRgbaToUv: abstract func -> Map
@@ -52,6 +55,5 @@ GpuContext: abstract class extends DrawContext {
 		source toRasterDefault(target)
 		Promise empty
 	}
-	toRasterAsync: virtual func (source: GpuImage) -> ToRasterFuture { raise("toRasterAsync unimplemented"); null }
-}
+	toRasterAsync: virtual func (source: GpuImage) -> ToRasterFuture { Debug error("toRasterAsync unimplemented"); null }
 }

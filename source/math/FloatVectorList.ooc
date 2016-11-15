@@ -112,7 +112,7 @@ FloatVectorList: class extends VectorList<Float> {
 	}
 	sum: func (start, end: Int) -> Float {
 		version(safe)
-			raise(start < 0 || start >= this count || end < 0 || end >= this count , "invalid range in FloatVectorList sum()")
+			Debug error(start < 0 || start >= this count || end < 0 || end >= this count , "invalid range in FloatVectorList sum()")
 		result := this[start]
 		for (i in start + 1 .. end + 1)
 			result += this[i]
