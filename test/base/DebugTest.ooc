@@ -11,6 +11,7 @@ use unit
 
 DebugTest: class extends Fixture {
 	outputString: String = null
+	oldLevel: DebugLevel
 
 	init: func {
 		super("Debug")
@@ -19,21 +20,22 @@ DebugTest: class extends Fixture {
 				this outputString free()
 			this outputString = message clone()
 		})
-		Debug _level = DebugLevel Everything
+		this oldLevel = Debug level
+		Debug _level = DebugLevel Verbose
 
 		this add("test print", func {
-			Debug print("first", DebugLevel Everything)
+			Debug print("first", DebugLevel Verbose)
 			expect(this outputString, is equal to("first"))
 			Debug print("second", DebugLevel Warning)
 			expect(this outputString, is equal to("second"))
-			Debug print("third", DebugLevel Everything)
+			Debug print("third", DebugLevel Verbose)
 			expect(this outputString, is equal to("third"))
 		})
 		this add("higher level", func {
 			Debug _level = DebugLevel Warning
-			Debug print("first", DebugLevel Warning)
+			Debug print("first", DebugLevel Error)
 			expect(this outputString, is equal to("first"))
-			Debug print("second", DebugLevel Notification)
+			Debug print("second", DebugLevel Info)
 			expect(this outputString, is equal to("first"))
 		})
 		this add("test error", func {
@@ -48,6 +50,7 @@ DebugTest: class extends Fixture {
 		})
 	}
 	free: override func {
+		Debug level = this oldLevel
 		this outputString free()
 		super()
 	}
