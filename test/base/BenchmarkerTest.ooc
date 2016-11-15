@@ -12,7 +12,7 @@ import io/[File, FileWriter]
 
 BenchmarkerTest: class extends Fixture {
 	outputDir := "test/base/output"
-	outputFile := "#{this outputDir}/benchmarker.txt"
+	outputFile := "test/base/output/benchmarker.txt"
 	init: func {
 		super("Benchmarker")
 		File createDirectories(this outputDir)

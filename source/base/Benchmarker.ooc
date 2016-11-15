@@ -33,7 +33,7 @@ Benchmarker: class {
 		inputRows := input split("|")
 		for (i in 0 .. this _profilers count) {
 			profiler := this _profilers[i]
-			index := inputRows search(|row|	profiler name == row trim() split(">")[0] )
+			index := inputRows search(|row| profiler name == row trim() split(">")[0])
 			if (index > -1) {
 				thresholdMilliseconds := inputRows[index] trim() split(">")[1] toDouble()
 				if (profiler timer _average > thresholdMilliseconds * 1000.0f)
