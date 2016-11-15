@@ -12,6 +12,7 @@ Imports: Event
 Imports: Timer
 Imports: Debug
 Imports: Profiler
+Imports: Benchmarker
 Imports: FloatTuple
 Imports: StringBuilder
 Imports: Mutex
