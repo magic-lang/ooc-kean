@@ -25,6 +25,7 @@ typedef pthread_mutex_t mutex_t;
 static void mutex_lock(mutex_t* m) { pthread_mutex_lock(m); }
 static void mutex_unlock(mutex_t* m) { pthread_mutex_unlock(m); }
 static void mutex_free(mutex_t*  m) { pthread_mutex_destroy(m); }
+static void mutex_init(mutex_t* m) { pthread_mutex_init(m, NULL); }
 
 #endif
 
@@ -68,5 +69,8 @@ void string_literal_free_all() {
 		_literalsCount = 0;
 		_literals = 0;
 		mutex_free(&_literalsMutex);
+		// Since it is possible to put a ooc program in an unloaded state and then reinitialize it without terminating it,
+		// we must reinitialize the mutex here in order to ensure its validity *before* any modules are reloaded.
+		mutex_init(&_literalsMutex);
 	}
 }
