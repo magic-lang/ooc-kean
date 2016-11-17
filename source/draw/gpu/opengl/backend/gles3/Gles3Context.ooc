@@ -92,35 +92,37 @@ Gles3Context: class extends GLContext {
 				Debug print("WARNING: Using OpenGL ES 2")
 		}
 	}
+	_initializeDisplay: func (display: Pointer) {
+		this _eglDisplay = eglGetDisplay(display)
+		if (this _eglDisplay == EGL_NO_DISPLAY)
+			Debug error("eglGetDisplay failed")
+		status := eglInitialize(this _eglDisplay, null, null)
+		if (status != EGL_TRUE)
+			Debug error("eglInitialize failed with error %d" format(status))
+	}
 	_generate: func (display: Pointer, nativeBackend: Long, sharedContext: This) -> Bool {
 		result := false
-		this _eglDisplay = eglGetDisplay(display)
-		if (this _eglDisplay) {
-			eglInitialize(this _eglDisplay, null, null)
-			eglBindAPI(EGL_OPENGL_ES_API)
-			configAttribs := [
-				EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-				EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-				EGL_BUFFER_SIZE, 16,
-				EGL_NONE] as Int*
-			chosenConfig: Pointer = this _chooseConfig(configAttribs)
+		this _initializeDisplay(display)
+		eglBindAPI(EGL_OPENGL_ES_API)
+		configAttribs := [
+			EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+			EGL_BUFFER_SIZE, 16,
+			EGL_NONE] as Int*
+		chosenConfig: Pointer = this _chooseConfig(configAttribs)
 
-			this _eglSurface = eglCreateWindowSurface(this _eglDisplay, chosenConfig, nativeBackend, null)
-			if (this _eglSurface) {
-				shared: Pointer = null
-				if (sharedContext)
-					shared = sharedContext _eglContext
-				this _generateContext(shared, chosenConfig)
-				result = this makeCurrent()
-			}
+		this _eglSurface = eglCreateWindowSurface(this _eglDisplay, chosenConfig, nativeBackend, null)
+		if (this _eglSurface) {
+			shared: Pointer = null
+			if (sharedContext)
+				shared = sharedContext _eglContext
+			this _generateContext(shared, chosenConfig)
+			result = this makeCurrent()
 		}
 		result
 	}
 	_generate: func ~pbuffer (sharedContext: This) -> Bool {
-		this _eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY)
-		if (this _eglDisplay == null)
-			Debug error("Failed to get default display")
-		eglInitialize(this _eglDisplay, null, null)
+		this _initializeDisplay(EGL_DEFAULT_DISPLAY)
 		eglBindAPI(EGL_OPENGL_ES_API)
 
 		configAttribs := [
