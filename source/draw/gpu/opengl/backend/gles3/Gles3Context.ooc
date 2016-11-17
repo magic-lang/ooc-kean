@@ -20,14 +20,6 @@ Gles3Context: class extends GLContext {
 	_contextCount := static 0
 	_mutex := static Mutex new()
 	init: func { super() }
-	validate: static func (value, expectedValue: UInt, function: String) {
-		if (value != expectedValue)
-			Debug error(function << " failed! Expected status %u but got %u. eglError=%d" format(expectedValue, value, eglGetError()))
-	}
-	validate: static func ~expression (success: Bool, function: String) {
-		if (!success)
-			Debug error(function << " failed with eglError=%d" format(eglGetError()))
-	}
 	free: override func {
 		This validate(eglMakeCurrent(this _eglDisplay, null, null, null), EGL_TRUE, "eglMakeCurrent")
 		This validate(eglDestroyContext(this _eglDisplay, this _eglContext), EGL_TRUE, "eglDestroyContext")
@@ -201,6 +193,14 @@ Gles3Context: class extends GLContext {
 	}
 	createIndexBufferObject: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], indices: IntPoint3D[]) -> GLIndexBufferObject {
 		Gles3IndexBufferObject new(vertices, textureCoordinates, indices)
+	}
+	validate: static func (value, expectedValue: UInt, function: String) {
+		if (value != expectedValue)
+			Debug error(function << " failed! Expected status %u but got %u. eglError=%d" format(expectedValue, value, eglGetError()))
+	}
+	validate: static func ~expression (success: Bool, function: String) {
+		if (!success)
+			Debug error(function << " failed with eglError=%d" format(eglGetError()))
 	}
 	create: static func ~shared (display: Pointer, nativeBackend: Long, sharedContext: This = null) -> This {
 		version(debugGL) { Debug print("Creating OpenGL Context") }
