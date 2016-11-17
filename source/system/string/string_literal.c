@@ -7,7 +7,6 @@
 #if defined(__WIN32__) || defined(__WIN64__)
 
 typedef HANDLE mutex_t;
-#define MUTEX_INIT NULL
 static void mutex_lock(mutex_t* m) {
 	if (*m == NULL) {
 		HANDLE mutex = CreateMutex(NULL, FALSE, NULL);
