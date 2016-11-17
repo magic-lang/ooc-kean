@@ -40,7 +40,12 @@ Gles3Context: class extends GLContext {
 		)
 		super()
 	}
-	makeCurrent: override func -> Bool { eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0 }
+	makeCurrent: override func -> Bool {
+		status := eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext)
+		if (status != EGL_TRUE)
+			Debug print("eglMakeCurrent failed with error code %d" format(status))
+		status != 0
+	}
 	printExtensions: func {
 		extensions := eglQueryString(this _eglDisplay, EGL_EXTENSIONS) as CString
 		extensionsString := String new(extensions, extensions length())
@@ -152,6 +157,8 @@ Gles3Context: class extends GLContext {
 			this _generateContext(shared, chosenConfig)
 			result = this makeCurrent()
 		}
+		else
+			Debug print("Failed to create eglPbufferSurface")
 		result
 	}
 	setViewport: override func (viewport: IntBox2D) {
