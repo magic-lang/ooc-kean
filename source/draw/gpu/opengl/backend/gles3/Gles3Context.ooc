@@ -40,7 +40,11 @@ Gles3Context: class extends GLContext {
 		)
 		super()
 	}
-	makeCurrent: override func -> Bool { eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != 0 }
+	makeCurrent: override func -> Bool {
+		if (eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != EGL_TRUE)
+			Debug error("eglMakeCurrent failed")
+		true
+	}
 	printExtensions: func {
 		extensions := eglQueryString(this _eglDisplay, EGL_EXTENSIONS) as CString
 		extensionsString := String new(extensions, extensions length())
@@ -116,13 +120,11 @@ Gles3Context: class extends GLContext {
 		chosenConfig: Pointer = this _chooseConfig(configAttribs)
 
 		this _eglSurface = eglCreateWindowSurface(this _eglDisplay, chosenConfig, nativeBackend, null)
-		if (this _eglSurface) {
-			shared: Pointer = null
-			if (sharedContext)
-				shared = sharedContext _eglContext
-			this _generateContext(shared, chosenConfig)
+		if (this _eglSurface != EGL_NO_SURFACE) {
+			this _generateContext(sharedContext ? sharedContext _eglContext : null , chosenConfig)
 			result = this makeCurrent()
-		}
+		} else
+			Debug error("eglCreateWindowSurface failed")
 		result
 	}
 	_generate: func ~pbuffer (sharedContext: This) -> Bool {
@@ -148,15 +150,12 @@ Gles3Context: class extends GLContext {
 			EGL_TEXTURE_FORMAT, EGL_NO_TEXTURE,
 			EGL_NONE] as Int*
 		this _eglSurface = eglCreatePbufferSurface(this _eglDisplay, chosenConfig, pbufferAttribs)
-
 		result := false
-		if (this _eglSurface) {
-			shared: Pointer = null
-			if (sharedContext != null)
-				shared = sharedContext _eglContext
-			this _generateContext(shared, chosenConfig)
+		if (this _eglSurface != EGL_NO_SURFACE) {
+			this _generateContext(sharedContext ? sharedContext _eglContext : null, chosenConfig)
 			result = this makeCurrent()
-		}
+		} else
+			Debug error("eglCreatePbufferSurface failed")
 		result
 	}
 	setViewport: override func (viewport: IntBox2D) {
