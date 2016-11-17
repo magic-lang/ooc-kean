@@ -9,35 +9,39 @@
 import io/FileWriter
 
 DebugLevel: enum {
-	Everything
+	Verbose
 	Debug
-	Notification
+	Info
 	Warning
-	Recoverable
-	Message
-	Critical
+	Error
+	Fatal
+	Silent
 }
 
 Debug: class {
-	_level: static DebugLevel = DebugLevel Everything
+	_level: static DebugLevel = DebugLevel Verbose
+	level: static DebugLevel {
+		get { This _level }
+		set (value) { This _level = value }
+	}
 	_printFunction: static Func (String) = func (s: String) { println(s) }
 	initialize: static func (f: Func (String)) {
 		(This _printFunction as Closure) free()
 		This _printFunction = f
 	}
-	print: static func (string: String, level := DebugLevel Everything) {
-		if (This _level == level || This _level == DebugLevel Everything)
+	print: static func (string: String, level := DebugLevel Debug) {
+		if (level as Int >= This _level as Int && This _level != DebugLevel Silent)
 			This _printFunction(string)
 	}
-	print: static func ~free (string: String, level := DebugLevel Everything) {
+	print: static func ~free (string: String, level := DebugLevel Debug) {
 		This print(string, level)
 		string free()
 	}
 	error: static func (message: String, origin: Class = null) {
 		if (origin)
-			This print~free("%s: %s" format(origin name toCString(), message))
+			This print~free("%s: %s" format(origin name toCString(), message), DebugLevel Fatal)
 		else
-			This print(message)
+			This print(message, DebugLevel Fatal)
 		raise(message, origin)
 	}
 	error: static func ~assert (condition: Bool, message: String, origin: Class = null) {
