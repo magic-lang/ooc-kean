@@ -29,28 +29,18 @@ Gles3Context: class extends GLContext {
 			Debug error(function + " failed" format(eglGetError()))
 	}
 	free: override func {
-		status := eglMakeCurrent(this _eglDisplay, null, null, null)
-		if (status != EGL_TRUE)
-			Debug error("eglMakeCurrent failed with error code %d" format(status))
-		status = eglDestroyContext(this _eglDisplay, this _eglContext)
-		if (status != EGL_TRUE)
-			Debug error("eglDestroyContext failed with error code %d" format(status))
-		status = eglDestroySurface(this _eglDisplay, this _eglSurface)
-		if (status != EGL_TRUE)
-			Debug error("eglDestroySurface failed with error code %d" format(status))
+		This validate(eglMakeCurrent(this _eglDisplay, null, null, null), EGL_TRUE, "eglMakeCurrent")
+		This validate(eglDestroyContext(this _eglDisplay, this _eglContext), EGL_TRUE, "eglDestroyContext")
+		This validate(eglDestroySurface(this _eglDisplay, this _eglSurface), EGL_TRUE, "eglDestroySurface")
 		This _mutex with(||
-			if (This _contextCount == 1) {
-				status = eglTerminate(this _eglDisplay)
-				if (status != EGL_TRUE)
-					Debug error("eglTerminate failed with error code %d" format(status))
-			}
+			if (This _contextCount == 1)
+				This validate(eglTerminate(this _eglDisplay), EGL_TRUE, "eglTerminate")
 			This _contextCount -= 1
 		)
 		super()
 	}
 	makeCurrent: override func -> Bool {
-		if (eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext) != EGL_TRUE)
-			Debug error("eglMakeCurrent failed")
+		This validate(eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext), EGL_TRUE, "eglMakeCurrent")
 		true
 	}
 	printExtensions: func {
@@ -86,7 +76,7 @@ Gles3Context: class extends GLContext {
 		}
 		chosenConfig
 	}
-	_generateContext: func (shared, config: Pointer) {
+	_generateContext: func (shared, config: Pointer) -> Bool {
 		contextAttribs := [
 			EGL_CONTEXT_CLIENT_VERSION, 3,
 			EGL_NONE] as Int*
@@ -103,23 +93,16 @@ Gles3Context: class extends GLContext {
 			else
 				Debug print("WARNING: Using OpenGL ES 2")
 		}
+		this makeCurrent()
 	}
 	_initializeDisplay: func (display: Pointer) {
 		this _eglDisplay = eglGetDisplay(display)
-		if (this _eglDisplay == EGL_NO_DISPLAY)
-			Debug error("eglGetDisplay failed")
-		status := eglInitialize(this _eglDisplay, null, null)
-		if (status != EGL_TRUE)
-			Debug error("eglInitialize failed with error %d" format(status))
-	}
-	_bindAPI: func (api: UInt) {
-		if (eglBindAPI(api) != EGL_TRUE)
-			Debug error("eglBindAPI failed")
+		This validate(this _eglDisplay != EGL_NO_DISPLAY, "eglGetDisplay")
+		This validate(eglInitialize(this _eglDisplay, null, null), EGL_TRUE, "eglInitialize")
 	}
 	_generate: func (display: Pointer, nativeBackend: Long, sharedContext: This) -> Bool {
-		result := false
 		this _initializeDisplay(display)
-		this _bindAPI(EGL_OPENGL_ES_API)
+		This validate(eglBindAPI(EGL_OPENGL_ES_API), EGL_TRUE, "eglBindAPI")
 		configAttribs := [
 			EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
 			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
@@ -128,16 +111,12 @@ Gles3Context: class extends GLContext {
 		chosenConfig: Pointer = this _chooseConfig(configAttribs)
 
 		this _eglSurface = eglCreateWindowSurface(this _eglDisplay, chosenConfig, nativeBackend, null)
-		if (this _eglSurface != EGL_NO_SURFACE) {
-			this _generateContext(sharedContext ? sharedContext _eglContext : null , chosenConfig)
-			result = this makeCurrent()
-		} else
-			Debug error("eglCreateWindowSurface failed")
-		result
+		This validate(this _eglSurface != EGL_NO_SURFACE, "eglCreateWindowSurface")
+		this _generateContext(sharedContext ? sharedContext _eglContext : null , chosenConfig)
 	}
 	_generate: func ~pbuffer (sharedContext: This) -> Bool {
 		this _initializeDisplay(EGL_DEFAULT_DISPLAY)
-		this _bindAPI(EGL_OPENGL_ES_API)
+		This validate(eglBindAPI(EGL_OPENGL_ES_API), EGL_TRUE, "eglBindAPI")
 		configAttribs := [
 			EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
 			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
@@ -158,13 +137,8 @@ Gles3Context: class extends GLContext {
 			EGL_TEXTURE_FORMAT, EGL_NO_TEXTURE,
 			EGL_NONE] as Int*
 		this _eglSurface = eglCreatePbufferSurface(this _eglDisplay, chosenConfig, pbufferAttribs)
-		result := false
-		if (this _eglSurface != EGL_NO_SURFACE) {
-			this _generateContext(sharedContext ? sharedContext _eglContext : null, chosenConfig)
-			result = this makeCurrent()
-		} else
-			Debug error("eglCreatePbufferSurface failed")
-		result
+		This validate(this _eglSurface != EGL_NO_SURFACE, "eglCreatePbufferSurface")
+		this _generateContext(sharedContext ? sharedContext _eglContext : null, chosenConfig)
 	}
 	setViewport: override func (viewport: IntBox2D) {
 		version(debugGL) { validateStart("Context setViewport") }
