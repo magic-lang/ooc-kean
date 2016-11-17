@@ -20,6 +20,14 @@ Gles3Context: class extends GLContext {
 	_contextCount := static 0
 	_mutex := static Mutex new()
 	init: func { super() }
+	validate: static func (value, expectedValue: UInt, function: String) {
+		if (value != expectedValue)
+			Debug error(function + " failed! Expected status %u but got %u. eglError=%d" format(expectedValue, value, eglGetError()))
+	}
+	validate: static func ~expression (success: Bool, function: String) {
+		if (!success)
+			Debug error(function + " failed" format(eglGetError()))
+	}
 	free: override func {
 		status := eglMakeCurrent(this _eglDisplay, null, null, null)
 		if (status != EGL_TRUE)
