@@ -100,3 +100,5 @@ GraphicBuffer: class {
 		result
 	}
 }
+
+GlobalCleanup register(|| GraphicBuffer _alignedWidth free(), 10)

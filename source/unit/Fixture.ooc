@@ -40,10 +40,17 @@ Fixture: abstract class {
 			try {
 				test run()
 				test free()
-			} catch (e: TestFailedException) {
-				e message = e description != null ? ((test name >> " (") >> e description) >> ")" : test name
+			} catch (exception: Exception) {
 				result = r = false
-				failures add(e)
+				match (exception) {
+					case (e: TestFailedException) =>
+						e message = e description != null ? ((test name >> " (") >> e description) >> ")" : test name
+						failures add(e)
+					case =>
+						This _print("'%s' failed with unhandled exception \n" format(test name))
+						exception throw()
+						break
+				}
 			}
 			This _print(r ? "." : "f")
 		}
