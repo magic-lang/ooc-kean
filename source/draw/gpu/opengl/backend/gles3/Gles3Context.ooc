@@ -43,7 +43,7 @@ Gles3Context: class extends GLContext {
 	makeCurrent: override func -> Bool {
 		status := eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext)
 		if (status != EGL_TRUE)
-			Debug print("eglMakeCurrent failed with error code %d" format(status))
+			Debug print("eglMakeCurrent failed with error code %d: (#{this _eglDisplay as UInt}, #{this _eglSurface as UInt}, #{this _eglSurface as UInt}, #{this _eglContext as Int})" format(status))
 		status != 0
 	}
 	printExtensions: func {
