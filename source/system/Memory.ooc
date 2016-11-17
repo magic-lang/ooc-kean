@@ -66,6 +66,9 @@ GlobalCleanup: class {
 			(This _functionPointers, This _priorities) = (null, null)
 		}
 	}
+	// Since we want to support unload/reload of modules and Memory should be unloaded last,
+	// rock will not emit calls to Memory_unload(), so we must call it manually.
+	// GlobalCleanup unload() should be the last instruction before we enter the de-initialized state.
 	unload: static func {
 		This run()
 		Memory_unload()
