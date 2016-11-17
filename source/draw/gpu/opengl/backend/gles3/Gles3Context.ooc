@@ -23,18 +23,18 @@ Gles3Context: class extends GLContext {
 	free: override func {
 		status := eglMakeCurrent(this _eglDisplay, null, null, null)
 		if (status != EGL_TRUE)
-			Debug print("eglMakeCurrent failed with error code %d" format(status))
+			Debug error("eglMakeCurrent failed with error code %d" format(status))
 		status = eglDestroyContext(this _eglDisplay, this _eglContext)
 		if (status != EGL_TRUE)
-			Debug print("eglDestroyContext failed with error code %d" format(status))
+			Debug error("eglDestroyContext failed with error code %d" format(status))
 		status = eglDestroySurface(this _eglDisplay, this _eglSurface)
 		if (status != EGL_TRUE)
-			Debug print("eglDestroySurface failed with error code %d" format(status))
+			Debug error("eglDestroySurface failed with error code %d" format(status))
 		This _mutex with(||
 			if (This _contextCount == 1) {
 				status = eglTerminate(this _eglDisplay)
 				if (status != EGL_TRUE)
-					Debug print("eglTerminate failed with error code %d" format(status))
+					Debug error("eglTerminate failed with error code %d" format(status))
 			}
 			This _contextCount -= 1
 		)
