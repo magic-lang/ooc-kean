@@ -52,8 +52,8 @@ YuvExtensionContext: class extends OpenGLContext {
 			this _pack add("y", sourceImage y)
 			this _pack add("uv", sourceImage uv)
 			DrawState new(targetYuv) setMap(this _pack) draw()
-			result = OpenGLPromise new(this)
-			(result as OpenGLPromise) sync()
+			result = OpenGLNativeFencePromise new(this)
+			(result as OpenGLNativeFencePromise) sync()
 			targetYuv free()
 		} else
 			result = super(source, target)
