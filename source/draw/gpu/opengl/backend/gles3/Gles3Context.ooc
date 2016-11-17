@@ -26,7 +26,7 @@ Gles3Context: class extends GLContext {
 	}
 	validate: static func ~expression (success: Bool, function: String) {
 		if (!success)
-			Debug error(function + " failed" format(eglGetError()))
+			Debug error(function + " failed with eglError=%d" format(eglGetError()))
 	}
 	free: override func {
 		This validate(eglMakeCurrent(this _eglDisplay, null, null, null), EGL_TRUE, "eglMakeCurrent")
