@@ -100,10 +100,14 @@ Gles3Context: class extends GLContext {
 		if (status != EGL_TRUE)
 			Debug error("eglInitialize failed with error %d" format(status))
 	}
+	_bindAPI: func (api: UInt) {
+		if (eglBindAPI(api) != EGL_TRUE)
+			Debug error("eglBindAPI failed")
+	}
 	_generate: func (display: Pointer, nativeBackend: Long, sharedContext: This) -> Bool {
 		result := false
 		this _initializeDisplay(display)
-		eglBindAPI(EGL_OPENGL_ES_API)
+		this _bindAPI(EGL_OPENGL_ES_API)
 		configAttribs := [
 			EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
 			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
@@ -123,8 +127,7 @@ Gles3Context: class extends GLContext {
 	}
 	_generate: func ~pbuffer (sharedContext: This) -> Bool {
 		this _initializeDisplay(EGL_DEFAULT_DISPLAY)
-		eglBindAPI(EGL_OPENGL_ES_API)
-
+		this _bindAPI(EGL_OPENGL_ES_API)
 		configAttribs := [
 			EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
 			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
