@@ -7,10 +7,11 @@
 #if defined(__WIN32__) || defined(__WIN64__)
 
 typedef HANDLE mutex_t;
-static HANDLE mutex_init() { return CreateMutex(NULL, FALSE, NULL); }
+static void mutex_init(mutex_t *m) { *m = CreateMutex(NULL, FALSE, NULL); }
 static void mutex_lock(mutex_t* m) {
 	if (*m == NULL) {
-		HANDLE mutex = mutex_init();
+		HANDLE mutex = NULL;
+		mutex_init(&mutex);
 		if (InterlockedCompareExchangePointer(m, mutex, NULL) != NULL)
 			CloseHandle(mutex);
 	}
