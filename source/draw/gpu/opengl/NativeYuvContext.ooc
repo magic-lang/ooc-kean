@@ -29,7 +29,7 @@ NativeYuvContext: class extends OpenGLContext {
 		super()
 	}
 	createImage: override func (rasterImage: RasterImage) -> GpuImage {
-		match(rasterImage) {
+		match (rasterImage) {
 			case (graphicBufferImage: GraphicBufferYuv420Semiplanar) => this createEGLYuv(graphicBufferImage)
 			case => super(rasterImage)
 		}
