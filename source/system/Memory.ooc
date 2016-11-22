@@ -23,6 +23,8 @@ memcpy: extern func (Pointer, Pointer, SizeT)
 memfree: extern (free) func (Pointer)
 alloca: extern func (SizeT) -> Pointer
 
+Memory_unload: extern func
+
 // Used for executing any/all cleanup (free~all) functions before program exit
 // Default priority is 0 and will be executed first, then 1, 2, 3... etc.
 GlobalCleanup: class {
@@ -63,5 +65,12 @@ GlobalCleanup: class {
 			(This _functionPointers, This _priorities) free()
 			(This _functionPointers, This _priorities) = (null, null)
 		}
+	}
+	// Since we want to support unload/reload of modules and Memory should be unloaded last,
+	// rock will not emit calls to Memory_unload(), so we must call it manually.
+	// GlobalCleanup unload() should be the last instruction before we enter the de-initialized state.
+	unload: static func {
+		This run()
+		Memory_unload()
 	}
 }
