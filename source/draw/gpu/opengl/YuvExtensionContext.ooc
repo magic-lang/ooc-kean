@@ -34,7 +34,7 @@ YuvExtensionContext: class extends OpenGLContext {
 		super()
 	}
 	createImage: override func (rasterImage: RasterImage) -> GpuImage {
-		match(rasterImage) {
+		match (rasterImage) {
 			case (graphicBufferImage: GraphicBufferYuv420Semiplanar) =>
 				yuv := createEGLYuv(graphicBufferImage)
 				result := this createYuv420Semiplanar(rasterImage size)
