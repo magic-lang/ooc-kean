@@ -19,15 +19,17 @@ NativeYuvContext: class extends OpenGLContext {
 	defaultMap ::= this _yuvShader as Map
 	_yuvShader: OpenGLMapTransform
 	_monochromeToYuv: OpenGLMapTransform
+	_yuvLineShader: OpenGLMap
 	_eglBin := RecycleBin<EGLYuv> new(100, |image| image _recyclable = false; image free())
 	init: func (other: This = null) {
 		super(other)
 		this _yuvShader = OpenGLMapTransform new(slurp("shaders/yuv.frag"), this)
 		this _monochromeToYuv = OpenGLMapTransform new(slurp("shaders/monochromeToNativeYuv.frag"), this)
+		this _yuvLineShader = OpenGLMapTransform new(slurp("shaders/whiteToNativeYUV.frag"), this)
 	}
 	free: override func {
 		this _backend makeCurrent()
-		(this _eglBin, this _yuvShader) free()
+		(this _eglBin, this _yuvShader, this _yuvLineShader) free()
 		super()
 	}
 	createImage: override func (rasterImage: RasterImage) -> GpuImage {
@@ -60,5 +62,6 @@ NativeYuvContext: class extends OpenGLContext {
 			result = super(input, output)
 		result
 	}
+	getLineShader: override func -> OpenGLMap { this _yuvLineShader }
 }
 }
