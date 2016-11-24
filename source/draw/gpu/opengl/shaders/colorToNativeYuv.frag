@@ -4,5 +4,5 @@ precision highp float;
 uniform vec4 color;
 layout (yuv) out vec4 outColor;
 void main() {
-	outColor = vec4(color.r, color.g, color.b, 1.0f);
+	outColor = color;
 }
