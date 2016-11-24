@@ -23,5 +23,10 @@ EGLYuv: class extends OpenGLPacked {
 	}
 	toRasterDefault: override func -> RasterImage { Debug error("toRasterDefault unimplemented for EGLYuv"); null }
 	toRasterDefault: override func ~target (target: RasterImage) { Debug error("toRasterDefault~target unimplemented for EGLYuv") }
+	draw: override func ~DrawState (drawState: DrawState) {
+		// Blending is not supported for this image type, so we force it off
+		drawState blendMode = BlendMode Fill
+		super(drawState)
+	}
 }
 }
