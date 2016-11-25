@@ -46,7 +46,7 @@ OpenGLPacked: abstract class extends GpuImage {
 		}
 	}
 	draw: override func ~DrawState (drawState: DrawState) {
-		gpuMap: Map = drawState map as Map ?? this context defaultMap as Map
+		gpuMap: Map = drawState map as Map ?? this context getDefaultShader(drawState inputImage, drawState target) as Map
 		viewport := drawState getViewport()
 		this context backend setViewport(viewport)
 		focalLengthPerWidth := drawState getFocalLengthNormalized()

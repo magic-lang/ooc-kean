@@ -12,16 +12,18 @@ use draw
 use geometry
 use base
 use concurrent
-import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLYuv, OpenGLPacked, OpenGLMap, OpenGLPromise
+import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLYuv, OpenGLPacked, OpenGLMap, OpenGLPromise, OpenGLMonochrome
 
 version(!gpuOff) {
 NativeYuvContext: class extends OpenGLContext {
 	defaultMap ::= this _yuvShader as Map
 	_yuvShader: OpenGLMapTransform
+	_monochromeToYuv: OpenGLMapTransform
 	_eglBin := RecycleBin<EGLYuv> new(100, |image| image _recyclable = false; image free())
 	init: func (other: This = null) {
 		super(other)
 		this _yuvShader = OpenGLMapTransform new(slurp("shaders/yuv.frag"), this)
+		this _monochromeToYuv = OpenGLMapTransform new(slurp("shaders/monochromeToNativeYuv.frag"), this)
 	}
 	free: override func {
 		this _backend makeCurrent()
@@ -47,6 +49,16 @@ NativeYuvContext: class extends OpenGLContext {
 			case eglYuv: EGLYuv => this _eglBin add(eglYuv)
 			case => super(image)
 		}
+	}
+	getDefaultShader: override func (input, output: Image) -> OpenGLMap {
+		result: OpenGLMap
+		if (input instanceOf(EGLYuv) && output instanceOf(EGLYuv))
+			result = this _yuvShader
+		else if (output instanceOf(EGLYuv) && (input instanceOf(OpenGLMonochrome) || input instanceOf(RasterMonochrome)))
+			result = this _monochromeToYuv
+		else
+			result = super(input, output)
+		result
 	}
 }
 }
