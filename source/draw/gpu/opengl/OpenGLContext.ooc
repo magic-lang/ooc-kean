@@ -81,6 +81,7 @@ OpenGLContext: class extends GpuContext {
 		(this _pointsShader, this _renderer, this _recycleBin, this _backend) free()
 		super()
 	}
+	getDefaultShader: virtual func (input, output: Image) -> OpenGLMap { this _transformTextureMap }
 	drawQuad: func { this _renderer drawQuad() }
 	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen: Pen) {
 		positions := pointList pointer as Float*
