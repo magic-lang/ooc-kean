@@ -23,6 +23,13 @@ WriteTest: class extends Fixture {
 			expect(bounds x, is equal to(7))
 			expect(bounds y, is equal to(4))
 		})
+		this add("Write text on the CPU", func {
+			correctImage := RasterMonochrome open("test/draw/gpu/correct/text.png")
+			resultCpu := sourceImage copy()
+			DrawState new(resultCpu) setInputImage(gpuContext defaultFontRaster) setOrigin(FloatPoint2D new(-150.0f, -40.0f)) write(this message)
+			expect(resultCpu distance(correctImage), is less than(0.05f))
+			(resultCpu, correctImage) free()
+		})
 		this add("Write text on the GPU", func {
 			correctImage := RasterMonochrome open("test/draw/gpu/correct/text.png")
 			resultGpu := gpuContext createImage(sourceImage)
