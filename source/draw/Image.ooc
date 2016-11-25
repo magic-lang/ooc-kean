@@ -47,6 +47,13 @@ Image: abstract class {
 		this drawLines(positions, pen)
 		positions free()
 	}
+	blitWhiteSource: virtual func (source: This, offset: IntVector2D, sourceBox: IntBox2D) {
+		normalizedSourceBox := (sourceBox toFloatBox2D()) / (source size toFloatVector2D())
+		DrawState new(this) setBlendMode(BlendMode White) setInputImage(source) setSourceNormalized(normalizedSourceBox) setViewport(IntBox2D new(offset, sourceBox size)) draw()
+	}
+	blitWhite: func (source: This, offset: IntVector2D) {
+		this blitWhiteSource(source as This, offset, IntBox2D new(source size))
+	}
 	fill: virtual func (color: ColorRgba) { Debug error("fill unimplemented for class %s!" format(this class name)) }
 	draw: virtual func ~DrawState (drawState: DrawState) { Debug error("draw~DrawState unimplemented for class %s!" format(this class name)) }
 	resizeWithin: func (restriction: IntVector2D) -> This {
@@ -61,21 +68,18 @@ Image: abstract class {
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
 	isValidIn: func (x, y: Int) -> Bool { x >= 0 && x < this size x && y >= 0 && y < this size y }
 	// Writes white text on the existing image
-	write: virtual func (message: String, fontAtlas: This, localOrigin: IntPoint2D) {
+	write: func (message: String, fontAtlas: This, localOrigin: IntPoint2D) {
 		skippedRows := 2
-		visibleRows := 6
 		columns := 16
 		fontSize := DrawContext getFontSize(fontAtlas)
-		viewport := IntBox2D new(localOrigin, fontSize)
 		targetOffset := IntPoint2D new(0, 0)
-		characterDrawState := DrawState new(this) setInputImage(fontAtlas) setBlendMode(BlendMode White)
 		for (i in 0 .. message size) {
 			charCode := message[i] as Int
 			sourceX := charCode % columns
 			sourceY := (charCode / columns) - skippedRows
-			source := FloatBox2D new((sourceX as Float) / columns, (sourceY as Float) / visibleRows, 1.0f / columns, 1.0f / visibleRows)
+			source := IntBox2D new(sourceX * fontSize x, sourceY * fontSize y, fontSize x, fontSize y)
 			if ((charCode as Char) graph())
-				characterDrawState setViewport(viewport + (targetOffset * fontSize)) setSourceNormalized(source) draw()
+				this blitWhiteSource(fontAtlas, (localOrigin + (targetOffset * fontSize)) toIntVector2D(), source)
 			targetOffset x += 1
 			if (charCode == '\n') {
 				targetOffset x = 0 // Carriage return
