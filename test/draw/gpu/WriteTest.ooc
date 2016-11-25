@@ -38,13 +38,6 @@ WriteTest: class extends Fixture {
 			expect(resultCpu distance(correctImage), is less than(0.05f))
 			(resultGpu, resultCpu, correctImage) free()
 		})
-		this add("Write text to a buffer on the GPU", func {
-			correctImage := RasterMonochrome open("test/draw/gpu/correct/textBuffer.png")
-			resultGpu := gpuContext createImageFromStringAndFont(this message, gpuContext getDefaultFont()) as GpuImage
-			resultCpu := resultGpu toRaster()
-			expect(resultCpu distance(correctImage), is less than(0.05f))
-			(resultGpu, resultCpu, correctImage) free()
-		})
 	}
 	free: override func {
 		(this sourceImage, this message) free()
