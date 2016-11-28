@@ -74,7 +74,7 @@ RasterMonochrome: class extends RasterPacked {
 		endDstY := startDstY + sourceBox size y
 		// TODO: Clip instead of aborting the whole draw call
 		if (startSrcX >= 0 && startSrcY >= 0 && endSrcX <= source size x && endSrcY <= source size y && startDstX >= 0 && startDstY >= 0 && endDstX <= this size x && endDstY <= this size y) {
-			_blitWhiteRaw(this buffer pointer, (source as This) buffer pointer, startSrcX, startSrcY, startDstX, startDstY, endDstX - startDstX, endDstY - startDstY, this stride, (source as This) stride)
+			this _blitWhiteRaw(this buffer pointer, (source as This) buffer pointer, startSrcX, startSrcY, startDstX, startDstY, endDstX - startDstX, endDstY - startDstY, this stride, (source as This) stride)
 		}
 	}
 	fill: override func (color: ColorRgba) { this buffer memset(color r) }
