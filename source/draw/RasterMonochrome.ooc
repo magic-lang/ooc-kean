@@ -66,15 +66,31 @@ RasterMonochrome: class extends RasterPacked {
 			Debug error("Only a RasterMonochrome can be blitted on a RasterMonochrome.")
 		startSrcX := sourceBox left
 		startSrcY := sourceBox top
-		endSrcX := sourceBox right
-		endSrcY := sourceBox bottom
 		startDstX := offset x
 		startDstY := offset y
 		endDstX := startDstX + sourceBox size x
 		endDstY := startDstY + sourceBox size y
-		// TODO: Clip instead of aborting the whole draw call
+		// Clip destination to target
+		if (startDstX < 0) {
+			startSrcX -= startDstX
+			startDstX = 0
+		}
+		if (startDstY < 0) {
+			startSrcY -= startDstY
+			startDstY = 0
+		}
+		if (endDstX > this size x)
+			endDstX = this size x
+		if (endDstY > this size y)
+			endDstY = this size y
+		// Calculate source end
+		width := endDstX - startDstX
+		height := endDstY - startDstY
+		endSrcX := startSrcX + width
+		endSrcY := startSrcY + height
+		// Assert memory bounds
 		if (startSrcX >= 0 && startSrcY >= 0 && endSrcX <= source size x && endSrcY <= source size y && startDstX >= 0 && startDstY >= 0 && endDstX <= this size x && endDstY <= this size y) {
-			this _blitWhiteRaw(this buffer pointer, (source as This) buffer pointer, startSrcX, startSrcY, startDstX, startDstY, endDstX - startDstX, endDstY - startDstY, this stride, (source as This) stride)
+			this _blitWhiteRaw(this buffer pointer, (source as This) buffer pointer, startSrcX, startSrcY, startDstX, startDstY, width, height, this stride, (source as This) stride)
 		}
 	}
 	fill: override func (color: ColorRgba) { this buffer memset(color r) }
