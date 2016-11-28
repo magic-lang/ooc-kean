@@ -43,6 +43,40 @@ RasterMonochrome: class extends RasterPacked {
 		if (monochrome != image)
 			monochrome referenceCount decrease()
 	}
+	// Precondition: Do not draw out of bound
+	_blitWhiteRaw: static func (target, source: Byte*, startSrcX, startSrcY, startDstX, startDstY, width, height, targetStride, sourceStride: Int) {
+		for (y in 0 .. height) {
+			dstY := startDstY + y
+			srcY := startSrcY + y
+			writer := target + startDstX + (dstY * targetStride)
+			reader := source + startSrcX + (srcY * sourceStride)
+			for (x in 0 .. width) {
+				sourceColor: Float = reader@
+				targetColor: Float = writer@
+				blendColor: Int = (targetColor * (1.0f - (sourceColor / 255.0f))) + sourceColor // Source intensity as alpha
+				if (blendColor > 255) blendColor = 255 // Limit intensity
+				writer@ = blendColor // Write to target
+				reader += 1
+				writer += 1
+			}
+		}
+	}
+	blitWhiteSource: override func (source: Image, offset: IntVector2D, sourceBox: IntBox2D) {
+		if (!source instanceOf(This))
+			Debug error("Only a RasterMonochrome can be blitted on a RasterMonochrome.")
+		startSrcX := sourceBox left
+		startSrcY := sourceBox top
+		endSrcX := sourceBox right
+		endSrcY := sourceBox bottom
+		startDstX := offset x
+		startDstY := offset y
+		endDstX := startDstX + sourceBox size x
+		endDstY := startDstY + sourceBox size y
+		// TODO: Clip instead of aborting the whole draw call
+		if (startSrcX >= 0 && startSrcY >= 0 && endSrcX <= source size x && endSrcY <= source size y && startDstX >= 0 && startDstY >= 0 && endDstX <= this size x && endDstY <= this size y) {
+			this _blitWhiteRaw(this buffer pointer, (source as This) buffer pointer, startSrcX, startSrcY, startDstX, startDstY, endDstX - startDstX, endDstY - startDstY, this stride, (source as This) stride)
+		}
+	}
 	fill: override func (color: ColorRgba) { this buffer memset(color r) }
 	copy: override func -> This { This new(this buffer copy(), this size, this stride) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
