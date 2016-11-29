@@ -64,33 +64,22 @@ RasterMonochrome: class extends RasterPacked {
 	blitWhiteSource: override func (source: Image, offset: IntVector2D, sourceBox: IntBox2D) {
 		if (!source instanceOf(This))
 			Debug error("Only a RasterMonochrome can be blitted on a RasterMonochrome.")
-		startSrcX := sourceBox left
-		startSrcY := sourceBox top
-		startDstX := offset x
-		startDstY := offset y
-		endDstX := startDstX + sourceBox size x
-		endDstY := startDstY + sourceBox size y
-		// Clip destination to target
-		if (startDstX < 0) {
-			startSrcX -= startDstX
-			startDstX = 0
+		startSrc := sourceBox leftTop
+		startDst := offset toIntPoint2D()
+		endDst := startDst + sourceBox size
+		if (startDst x < 0) {
+			startSrc x -= startDst x
+			startDst x = 0
 		}
-		if (startDstY < 0) {
-			startSrcY -= startDstY
-			startDstY = 0
+		if (startDst y < 0) {
+			startSrc y -= startDst y
+			startDst y = 0
 		}
-		if (endDstX > this size x)
-			endDstX = this size x
-		if (endDstY > this size y)
-			endDstY = this size y
-		// Calculate source end
-		width := endDstX - startDstX
-		height := endDstY - startDstY
-		endSrcX := startSrcX + width
-		endSrcY := startSrcY + height
-		// Assert memory bounds
-		if (startSrcX >= 0 && startSrcY >= 0 && endSrcX <= source size x && endSrcY <= source size y && startDstX >= 0 && startDstY >= 0 && endDstX <= this size x && endDstY <= this size y) {
-			this _blitWhiteRaw(this buffer pointer, (source as This) buffer pointer, startSrcX, startSrcY, startDstX, startDstY, width, height, this stride, (source as This) stride)
+		endDst = endDst minimum(this size toIntPoint2D())
+		dimensions := endDst - startDst
+		endSrc := startSrc + dimensions
+		if (startSrc x >= 0 && startSrc y >= 0 && endSrc x <= source size x && endSrc y <= source size y && startDst x >= 0 && startDst y >= 0 && endDst x <= this size x && endDst y <= this size y) {
+			this _blitWhiteRaw(this buffer pointer, (source as This) buffer pointer, startSrc x, startSrc y, startDst x, startDst y, dimensions x, dimensions y, this stride, (source as This) stride)
 		}
 	}
 	fill: override func (color: ColorRgba) { this buffer memset(color r) }
