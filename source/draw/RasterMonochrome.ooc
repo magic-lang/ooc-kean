@@ -222,6 +222,36 @@ RasterMonochrome: class extends RasterPacked {
 		}
 		result
 	}
+	getCrop: func (region: IntBox2D) -> This {
+		result := This new(region size)
+		destination := result buffer pointer
+		source := this buffer pointer + region top * this stride + region left
+		for (y in 0 .. region height) {
+			for (x in 0 .. region width) {
+				destination@ = source@
+				destination += 1
+				source += 1
+			}
+			destination += result stride - result width
+			source += this stride - region width
+		}
+		result
+	}
+	averagePixelDifference: func (other: This, padding := 0) -> Float {
+		difference := 0.0f
+		thisBuffer := this buffer pointer + this stride * padding + padding
+		otherBuffer := other buffer pointer + other stride * padding + padding
+		for (y in padding .. this height - padding) {
+			for (x in padding .. this width - padding) {
+				difference += ((thisBuffer@ as Float - otherBuffer@ as Float) abs())
+				thisBuffer += 1
+				otherBuffer += 1
+			}
+			thisBuffer += this stride - this width + 2 * padding
+			otherBuffer += other stride - other width + 2 * padding
+		}
+		difference / ((this height - 2 * padding) * (this width - 2 * padding))
+	}
 	// Serialize to a lossy ascii image using an alphabet
 	// Precondition: alphabet may not have extended ascii, non printable, '\', '"', '>' or linebreak
 	// Example alphabet: " .,-_':;!+~=^?*abcdefghijklmnopqrstuvwxyz()[]{}|&%@#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
