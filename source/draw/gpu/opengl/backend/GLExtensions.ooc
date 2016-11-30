@@ -30,7 +30,7 @@ GLExtensions: class {
 			version(!windows) {
 				//For some reason this function can't be loaded with eglGetProcAddress so we load it with dlsym instead
 				handle := null //This should be RTLD_DEFAULT, defined in dlfcn.h
-				This eglDupNativeFenceFDANDROID = (dlsym(handle, "eglDupNativeFenceFDANDROID"), null) as Func(Pointer, Pointer) -> Int
+				This eglDupNativeFenceFDANDROID = Closure fromPointer(dlsym(handle, "eglDupNativeFenceFDANDROID")) as Func(Pointer, Pointer) -> Int
 			}
 			This _initialized = true
 		}
@@ -39,7 +39,7 @@ GLExtensions: class {
 		result := eglGetProcAddress(name toCString())
 		if (result == null)
 			Debug print("Failed to load OpenGL extension function: " + name)
-		(result, null) as Closure
+		Closure fromPointer(result)
 	}
 }
 }

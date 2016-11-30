@@ -22,7 +22,7 @@ BacktraceHandler: class {
 		result: Backtrace = null
 		if (this lib) {
 			// use fancy-backtrace, best one!
-			f := (this fancyBacktrace, null) as Func (Pointer*, Int) -> Int
+			f := Closure fromPointer(this fancyBacktrace) as Func (Pointer*, Int) -> Int
 			length := f(buffer, backtraceLength)
 			result = Backtrace new(buffer, length)
 		} else {
@@ -49,7 +49,7 @@ BacktraceHandler: class {
 		result: Backtrace = null
 		version (windows) {
 			buffer := calloc(backtraceLength, Pointer size) as Pointer*
-			f := (this fancyBacktraceWithContext, null) as Func (Pointer*, Int, Pointer) -> Int
+			f := Closure fromPointer(this fancyBacktraceWithContext) as Func (Pointer*, Int, Pointer) -> Int
 			length := f(buffer, backtraceLength, contextPtr)
 			result = Backtrace new(buffer, length)
 		}
@@ -60,7 +60,7 @@ BacktraceHandler: class {
 		result: String
 		if (this lib) {
 			// use fancy-backtrace
-			f := (this fancyBacktraceSymbols, null) as Func (Pointer*, Int) -> CString*
+			f := Closure fromPointer(this fancyBacktraceSymbols) as Func (Pointer*, Int) -> CString*
 			lines = f(trace buffer, trace length)
 			result = this _format(lines, trace length)
 		} else {
