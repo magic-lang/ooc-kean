@@ -26,12 +26,13 @@ OpenGLUv: class extends OpenGLPacked {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
 	}
 	toRasterDefault: override func -> RasterImage {
-		result := RasterUv new(this size)
+		stride := ((this size x * 2 + 3) / 4) * 4
+		result := RasterUv new(this size, stride)
 		this toRasterDefault(result)
 		result
 	}
 	toRasterDefault: override func ~target (target: RasterImage) {
-		packed := this context createRgba(IntVector2D new(this size x / 2, this size y))
+		packed := this context createRgba(IntVector2D new(target stride / 4, target size y))
 		this context packToRgba(this, packed, IntBox2D new(packed size))
 		(packed as OpenGLPacked) readPixels(target as RasterPacked) . free()
 	}
