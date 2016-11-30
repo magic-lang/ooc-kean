@@ -32,6 +32,8 @@ OpenGLUv: class extends OpenGLPacked {
 		result
 	}
 	toRasterDefault: override func ~target (target: RasterImage) {
+		if (target stride % 4 != 0)
+			Debug error("toRasterDefault requires a target stride in multiples of 4 bytes!")
 		packed := this context createRgba(IntVector2D new(target stride / 4, target size y))
 		this context packToRgba(this, packed, IntBox2D new(packed size))
 		(packed as OpenGLPacked) readPixels(target as RasterPacked) . free()
