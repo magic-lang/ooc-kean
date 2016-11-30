@@ -38,12 +38,6 @@ DrawContext: abstract class {
 	createYuv420Semiplanar: abstract func (size: IntVector2D) -> Image
 	createYuv420Semiplanar: abstract func ~fromImages (y, uv: Image) -> Image
 	createYuv420Semiplanar: abstract func ~fromRaster (raster: RasterYuv420Semiplanar) -> Image
-	createImageFromStringAndFont: virtual func (message: String, fontAtlas: Image) -> Image {
-		target := this createMonochrome(This getStringPixelBounds(message, fontAtlas))
-		target fill(ColorRgba black)
-		target write(message, fontAtlas, IntPoint2D new(0, 0))
-		target
-	}
 	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }
 	update: abstract func
 	isAligned: virtual func (width: Int) -> Bool { true }
