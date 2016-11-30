@@ -23,6 +23,15 @@ BlitTest: class extends Fixture {
 		<X****XXX>
 		<XXXXXXXX>"
 	)
+	unalignedSourceImage := RasterMonochrome fromAscii(
+		"< *X>
+		<XXXXXXXX  >
+		<X*    *X  >
+		<X*    *X  >
+		<X*   XXX  >
+		<X****XXX  >
+		<XXXXXXXX  >"
+	)
 	init: func {
 		super("BlitTest")
 		this add("Blit inside", func {
@@ -39,6 +48,22 @@ BlitTest: class extends Fixture {
 				<                >"
 			)
 			this testOffset(this sourceImage, correctImage, IntVector2D new(3, 2))
+			correctImage free()
+		})
+		this add("Unaligned", func {
+			correctImage := RasterMonochrome fromAscii(
+				"< *X>
+				<               >
+				<               >
+				<   XXXXXXXX    >
+				<   X*    *X    >
+				<   X*    *X    >
+				<   X*   XXX    >
+				<   X****XXX    >
+				<   XXXXXXXX    >
+				<               >"
+			)
+			this testOffset(this unalignedSourceImage, correctImage, IntVector2D new(3, 2))
 			correctImage free()
 		})
 		this add("Blit upper left", func {
@@ -80,7 +105,7 @@ BlitTest: class extends Fixture {
 		(resultCpu, resultGpu, resultCpuFromGpu) free()
 	}
 	free: override func {
-		this sourceImage free()
+		(this sourceImage, this unalignedSourceImage) free()
 		super()
 	}
 }
