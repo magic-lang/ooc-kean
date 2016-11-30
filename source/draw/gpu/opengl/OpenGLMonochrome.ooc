@@ -29,6 +29,7 @@ OpenGLMonochrome: class extends OpenGLPacked {
 		this toRasterDefault(result)
 		result
 	}
+	// Precondition: target stride is a multiple of 4 bytes to allow packing into RGBA with even rows
 	toRasterDefault: override func ~target (target: RasterImage) {
 		if (target stride % 4 != 0)
 			Debug error("toRasterDefault requires a target stride in multiples of 4 bytes!")
