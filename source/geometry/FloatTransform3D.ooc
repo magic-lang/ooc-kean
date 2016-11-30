@@ -114,8 +114,7 @@ FloatTransform3D: cover {
 		result
 	}
 	project: func (point: FloatPoint3D, focalLength: Float) -> FloatPoint2D {
-		projectedPoint := This createProjection(focalLength) * point / point z
-		FloatPoint2D new(projectedPoint x, projectedPoint y)
+		FloatPoint2D new(point x, point y) * focalLength / point z
 	}
 
 	operator * (other: This) -> This {
