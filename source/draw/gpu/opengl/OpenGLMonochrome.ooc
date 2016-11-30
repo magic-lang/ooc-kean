@@ -24,7 +24,7 @@ OpenGLMonochrome: class extends OpenGLPacked {
 		this init(rasterImage size, rasterImage stride, rasterImage buffer pointer, context)
 	}
 	toRasterDefault: override func -> RasterImage {
-		stride := ((this size x + 3) / 4) * 4
+		stride := this size x align(4)
 		result := RasterMonochrome new(this size, stride)
 		this toRasterDefault(result)
 		result
