@@ -39,7 +39,7 @@ GLExtensions: class {
 		result := eglGetProcAddress(name toCString())
 		if (result == null)
 			Debug print("Failed to load OpenGL extension function: " + name)
-		(result, null) as Closure
+		Closure fromPointer(result)
 	}
 }
 }
