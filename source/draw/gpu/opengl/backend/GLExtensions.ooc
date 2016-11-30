@@ -29,8 +29,13 @@ GLExtensions: class {
 			This eglClientWaitSyncKHR = This _load("eglClientWaitSyncKHR") as Func (Pointer, Pointer, Int, ULong) -> Bool
 			version(!windows) {
 				//For some reason this function can't be loaded with eglGetProcAddress so we load it with dlsym instead
-				handle := null //This should be RTLD_DEFAULT, defined in dlfcn.h
-				This eglDupNativeFenceFDANDROID = Closure fromPointer(dlsym(handle, "eglDupNativeFenceFDANDROID")) as Func(Pointer, Pointer) -> Int
+				//dlsym can also be called with the special flag RTLD_DEFAULT, defined in dlfcn.h
+				dynlib := Dynlib load("/system/lib/libEGL.so")
+				result := dynlib symbol("eglDupNativeFenceFDANDROID")
+				dynlib close()
+				if (result == null)
+					Debug print("Failed to load OpenGL extension function: eglDupNativeFenceFDANDROID")
+				This eglDupNativeFenceFDANDROID = Closure fromPointer(result) as Func(Pointer, Pointer) -> Int
 			}
 			This _initialized = true
 		}
