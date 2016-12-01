@@ -27,7 +27,7 @@ GLExtensions: class {
 			This eglCreateSyncKHR = This _load("eglCreateSyncKHR") as Func(Pointer, UInt, Int*) -> Pointer
 			This eglDestroySyncKHR = This _load("eglDestroySyncKHR") as Func (Pointer, Pointer) -> Bool
 			This eglClientWaitSyncKHR = This _load("eglClientWaitSyncKHR") as Func (Pointer, Pointer, Int, ULong) -> Bool
-			version(!windows) {
+			version(android) {
 				//For some reason this function can't be loaded with eglGetProcAddress so we load it with dlsym instead
 				result := dlsym(RTLD_DEFAULT, "eglDupNativeFenceFDANDROID")
 				if (result == null)
