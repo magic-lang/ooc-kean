@@ -28,7 +28,6 @@ NativeYuvContext: class extends OpenGLContext {
 		this _yuvLineShader = OpenGLMapTransform new(slurp("shaders/colorToNativeYuv.frag"), this)
 	}
 	free: override func {
-		this _backend makeCurrent()
 		(this _eglBin, this _yuvShader, this _yuvLineShader) free()
 		super()
 	}

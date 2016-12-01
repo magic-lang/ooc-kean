@@ -28,7 +28,6 @@ AndroidContext: class extends OpenGLContext {
 		this _unpackRgbaToUvPadded = OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToUvPadded.frag"), this)
 	}
 	free: override func {
-		this _backend makeCurrent()
 		this _eglBin free()
 		(this _unpackRgbaToMonochrome, this _unpackRgbaToUv, this _unpackRgbaToUvPadded, this _packers) free()
 		super()
