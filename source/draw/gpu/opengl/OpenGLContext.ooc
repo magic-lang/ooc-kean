@@ -105,6 +105,9 @@ OpenGLContext: class extends GpuContext {
 	_searchImageBin: func (type: Class, size: IntVector2D) -> GpuImage {
 		this _recycleBin search(|image| image instanceOf(type) && image size == size)
 	}
+	createFence: override func -> Promise {
+		OpenGLPromise new(this)
+	}
 	createMonochrome: override func (size: IntVector2D) -> GpuImage {
 		result := this _searchImageBin(OpenGLMonochrome, size)
 		result == null ? OpenGLMonochrome new(size, this) as GpuImage : result

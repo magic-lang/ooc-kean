@@ -12,7 +12,7 @@ use draw
 use geometry
 use base
 use concurrent
-import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLYuv, OpenGLPacked, OpenGLMap, OpenGLPromise
+import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLYuv, OpenGLPacked, OpenGLMap, OpenGLPromise, backend/GLExtensions
 
 version(!gpuOff) {
 YuvExtensionContext: class extends OpenGLContext {
@@ -32,6 +32,9 @@ YuvExtensionContext: class extends OpenGLContext {
 		this _backend makeCurrent()
 		(this _eglBin, this _yuvShader, this _unpackY, this _unpackUv, this _pack) free()
 		super()
+	}
+	createFence: override func -> Promise {
+		GLExtensions allFunctionsLoaded ? OpenGLNativeFencePromise new(this) : super()
 	}
 	createImage: override func (rasterImage: RasterImage) -> GpuImage {
 		match (rasterImage) {

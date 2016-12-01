@@ -12,7 +12,7 @@ use draw
 use geometry
 use base
 use concurrent
-import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLRgba, OpenGLRgba, OpenGLPacked, OpenGLMonochrome, OpenGLUv, OpenGLMap, OpenGLPromise
+import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLRgba, OpenGLRgba, OpenGLPacked, OpenGLMonochrome, OpenGLUv, OpenGLMap, OpenGLPromise, backend/GLExtensions
 
 version(!gpuOff) {
 AndroidContext: class extends OpenGLContext {
@@ -32,6 +32,9 @@ AndroidContext: class extends OpenGLContext {
 		this _eglBin free()
 		(this _unpackRgbaToMonochrome, this _unpackRgbaToUv, this _unpackRgbaToUvPadded, this _packers) free()
 		super()
+	}
+	createFence: override func -> Promise {
+		GLExtensions allFunctionsLoaded ? OpenGLNativeFencePromise new(this) : super()
 	}
 	createImage: override func (rasterImage: RasterImage) -> GpuImage {
 		match(rasterImage) {
