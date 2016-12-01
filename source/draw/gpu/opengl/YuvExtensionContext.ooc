@@ -29,7 +29,6 @@ YuvExtensionContext: class extends OpenGLContext {
 		this _pack = OpenGLMap new(slurp("shaders/unpackYuv.vert"), slurp("shaders/packCompositeYuvToYuv.frag"), this)
 	}
 	free: override func {
-		this _backend makeCurrent()
 		(this _eglBin, this _yuvShader, this _unpackY, this _unpackUv, this _pack) free()
 		super()
 	}

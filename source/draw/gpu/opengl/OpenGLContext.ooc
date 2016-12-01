@@ -75,7 +75,6 @@ OpenGLContext: class extends GpuContext {
 	free: override func {
 		if (this _defaultFontGpu != null)
 			this _defaultFontGpu free()
-		this _backend makeCurrent()
 		(this _transformTextureMap, this _packMonochrome, this _packUv, this _packUvPadded, this _linesShader) free()
 		(this _monochromeToRgba, this _yuvSemiplanarToRgba, this _rgbaToYuva, this _rgbaToUvaa) free()
 		(this _pointsShader, this _renderer, this _recycleBin, this _backend) free()
