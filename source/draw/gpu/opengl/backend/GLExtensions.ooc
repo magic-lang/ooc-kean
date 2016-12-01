@@ -42,7 +42,7 @@ GLExtensions: class {
 	_load: static func (name: String) -> Closure {
 		result := eglGetProcAddress(name toCString())
 		if (result == null)
-			Debug print("Failed to load OpenGL extension function: " << name)
+			Debug print~free("Failed to load OpenGL extension function: " << name)
 		Closure fromPointer(result)
 	}
 }
