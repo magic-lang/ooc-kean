@@ -14,7 +14,7 @@ use collections
 use concurrent
 import OpenGLPacked, OpenGLMonochrome, OpenGLRgb, OpenGLRgba, OpenGLUv, OpenGLMesh, OpenGLPromise, GraphicBufferYuv420Semiplanar, GraphicBuffer
 import OpenGLMap
-import backend/[GLContext, GLRenderer]
+import backend/[GLContext, GLRenderer, GLExtensions]
 
 version(!gpuOff) {
 _FenceToRasterFuture: class extends ToRasterFuture {
@@ -103,6 +103,15 @@ OpenGLContext: class extends GpuContext {
 	}
 	_searchImageBin: func (type: Class, size: IntVector2D) -> GpuImage {
 		this _recycleBin search(|image| image instanceOf(type) && image size == size)
+	}
+	createFence: override func -> Promise {
+		result: OpenGLPromise
+		if (GLExtensions nativeFenceSupported)
+			result = OpenGLNativeFencePromise new(this)
+		else
+			result = OpenGLPromise new(this)
+		result sync()
+		result
 	}
 	createMonochrome: override func (size: IntVector2D) -> GpuImage {
 		result := this _searchImageBin(OpenGLMonochrome, size)
