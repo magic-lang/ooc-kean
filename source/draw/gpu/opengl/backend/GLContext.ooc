@@ -16,7 +16,6 @@ GLContext: abstract class {
 	_eglDisplay: Pointer
 
 	init: func { GLExtensions initialize() }
-	makeCurrent: abstract func -> Bool
 	swapBuffers: abstract func
 	setViewport: abstract func (viewport: IntBox2D)
 	disableBlend: abstract func
