@@ -93,8 +93,7 @@ AndroidContext: class extends OpenGLContext {
 			padding := targetImage uvPadding % targetImage stride
 			this packToRgba(sourceImage y, targetImageRgba, IntBox2D new(0, 0, targetWidth, targetImage y size y), padding)
 			this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
-			result = OpenGLNativeFencePromise new(this)
-			(result as OpenGLNativeFencePromise) sync()
+			result = this createFence()
 			targetImageRgba free()
 		} else
 			result = super(source, target)
