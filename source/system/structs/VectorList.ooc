@@ -15,6 +15,11 @@ VectorList: class <T> extends List<T> {
 	init: func ~heap (capacity: Int, freeContent := true) {
 		this init(HeapVector<T> new(1 maximum(capacity), freeContent))
 	}
+	init: func ~array (array: T[]) {
+		this init(array length)
+		for (i in 0 .. array length)
+			this add(array[i])
+	}
 	init: func (=_vector)
 	free: override func {
 		this clear()
