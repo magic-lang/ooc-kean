@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
- use base
+use base
 
 clock: extern func -> LLong
 CLOCKS_PER_SEC: extern const LLong
