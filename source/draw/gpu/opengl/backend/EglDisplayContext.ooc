@@ -89,11 +89,11 @@ EglDisplayContext: class {
 			success: UInt
 			red, green, blue, alpha: Int
 			success = eglGetConfigAttrib(this _eglDisplay, matchingConfigs[i], EGL_RED_SIZE, red&)
-			success &= eglGetConfigAttrib(this _eglDisplay, matchingConfigs[i], EGL_BLUE_SIZE, blue&)
 			success &= eglGetConfigAttrib(this _eglDisplay, matchingConfigs[i], EGL_GREEN_SIZE, green&)
+			success &= eglGetConfigAttrib(this _eglDisplay, matchingConfigs[i], EGL_BLUE_SIZE, blue&)
 			success &= eglGetConfigAttrib(this _eglDisplay, matchingConfigs[i], EGL_ALPHA_SIZE, alpha&)
 
-			if (success && red == 8 && blue == 8 && green == 8 && alpha == 8) {
+			if (success && red == 8 && green == 8 && blue == 8 && alpha == 8) {
 				chosenConfig = matchingConfigs[i]
 				break
 			}
