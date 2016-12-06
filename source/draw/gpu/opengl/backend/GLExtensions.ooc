@@ -19,6 +19,7 @@ GLExtensions: class {
 	eglClientWaitSyncKHR: static Func (Pointer, Pointer, Int, ULong) -> Bool
 	eglDupNativeFenceFDANDROID: static Func(Pointer, Pointer) -> Int
 	_initialized := static false
+	nativeFenceSupported := static false
 	initialize: static func {
 		if (!This _initialized) {
 			This eglCreateImageKHR = This _load("eglCreateImageKHR") as Func(Pointer, Pointer, UInt, Pointer, Int*) -> Pointer
@@ -27,10 +28,13 @@ GLExtensions: class {
 			This eglCreateSyncKHR = This _load("eglCreateSyncKHR") as Func(Pointer, UInt, Int*) -> Pointer
 			This eglDestroySyncKHR = This _load("eglDestroySyncKHR") as Func (Pointer, Pointer) -> Bool
 			This eglClientWaitSyncKHR = This _load("eglClientWaitSyncKHR") as Func (Pointer, Pointer, Int, ULong) -> Bool
-			version(!windows) {
+			version(android) {
 				//For some reason this function can't be loaded with eglGetProcAddress so we load it with dlsym instead
-				handle := null //This should be RTLD_DEFAULT, defined in dlfcn.h
-				This eglDupNativeFenceFDANDROID = (dlsym(handle, "eglDupNativeFenceFDANDROID"), null) as Func(Pointer, Pointer) -> Int
+				result := dlsym(RTLD_DEFAULT, "eglDupNativeFenceFDANDROID")
+				This nativeFenceSupported = (result != null)
+				if (!This nativeFenceSupported)
+					Debug print("Failed to load OpenGL extension function: eglDupNativeFenceFDANDROID")
+				This eglDupNativeFenceFDANDROID = Closure fromPointer(result) as Func(Pointer, Pointer) -> Int
 			}
 			This _initialized = true
 		}
@@ -38,8 +42,8 @@ GLExtensions: class {
 	_load: static func (name: String) -> Closure {
 		result := eglGetProcAddress(name toCString())
 		if (result == null)
-			Debug print("Failed to load OpenGL extension function: " + name)
-		(result, null) as Closure
+			Debug print~free("Failed to load OpenGL extension function: " << name)
+		Closure fromPointer(result)
 	}
 }
 }

@@ -29,12 +29,11 @@ YuvExtensionContext: class extends OpenGLContext {
 		this _pack = OpenGLMap new(slurp("shaders/unpackYuv.vert"), slurp("shaders/packCompositeYuvToYuv.frag"), this)
 	}
 	free: override func {
-		this _backend makeCurrent()
 		(this _eglBin, this _yuvShader, this _unpackY, this _unpackUv, this _pack) free()
 		super()
 	}
 	createImage: override func (rasterImage: RasterImage) -> GpuImage {
-		match(rasterImage) {
+		match (rasterImage) {
 			case (graphicBufferImage: GraphicBufferYuv420Semiplanar) =>
 				yuv := createEGLYuv(graphicBufferImage)
 				result := this createYuv420Semiplanar(rasterImage size)
@@ -52,8 +51,7 @@ YuvExtensionContext: class extends OpenGLContext {
 			this _pack add("y", sourceImage y)
 			this _pack add("uv", sourceImage uv)
 			DrawState new(targetYuv) setMap(this _pack) draw()
-			result = OpenGLPromise new(this)
-			(result as OpenGLPromise) sync()
+			result = this createFence()
 			targetYuv free()
 		} else
 			result = super(source, target)

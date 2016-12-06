@@ -38,6 +38,8 @@ DrawState: cover {
 	_sourceNormalized := FloatBox2D new(0.0f, 0.0f, 1.0f, 1.0f)
 	_focalLengthNormalized := 0.0f // Relative to image width
 	targetTransform := FloatTransform2D identity // 2D scaling done after projection matrix but before w division
+	nearPlane: Float = 0.01f
+	farPlane: Float = 12500.0f
 	init: func@ ~default
 	init: func@ ~target (=target)
 	setTarget: func (target: Image) -> This {
@@ -80,6 +82,11 @@ DrawState: cover {
 		this
 	}
 	getFocalLengthNormalized: func -> Float { this _focalLengthNormalized }
+	setClipPlanes: func (nearPlane, farPlane: Float) -> This {
+		this nearPlane = nearPlane
+		this farPlane = farPlane
+		this
+	}
 	// Local region
 	setViewport: func (viewport: IntBox2D) -> This {
 		this viewport = viewport

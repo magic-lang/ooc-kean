@@ -15,6 +15,9 @@ import Timer
 Profiler: class {
 	_name: String
 	_timer := WallTimer new()
+	name ::= this _name
+	timer ::= this _timer
+	averageTime ::= this _timer _average
 	init: func (=_name) { This _profilers add(this) }
 	free: override func {
 		for (i in 0 .. This _profilers count)

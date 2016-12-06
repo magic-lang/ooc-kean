@@ -46,14 +46,14 @@ OpenGLPacked: abstract class extends GpuImage {
 		}
 	}
 	draw: override func ~DrawState (drawState: DrawState) {
-		gpuMap: Map = drawState map as Map ?? this context defaultMap as Map
+		gpuMap: Map = drawState map as Map ?? this context getDefaultShader(drawState inputImage, drawState target) as Map
 		viewport := drawState getViewport()
 		this context backend setViewport(viewport)
 		focalLengthPerWidth := drawState getFocalLengthNormalized()
 		targetSize := this size toFloatVector2D()
 		model := (drawState mesh) ? FloatTransform3D identity : this _createModelTransformNormalized(this size, drawState getDestinationNormalized(), focalLengthPerWidth * this size x)
 		view := (drawState mesh) ? FloatTransform3D identity : this _createView(targetSize, drawState getTransformNormalized())
-		projection := this _createProjection(targetSize, focalLengthPerWidth)
+		projection := this _createProjection(targetSize, focalLengthPerWidth, drawState nearPlane, drawState farPlane)
 		flat := drawState getTargetTransformNormalized()
 		textureTransform := This _createTextureTransform(drawState getSourceNormalized(), drawState flipSourceX, drawState flipSourceY)
 		match (drawState blendMode) {
@@ -115,14 +115,12 @@ OpenGLPacked: abstract class extends GpuImage {
 	_createView: func (targetSize: FloatVector2D, normalizedView: FloatTransform3D) -> FloatTransform3D {
 		this _toLocal * normalizedView normalizedToReference(targetSize) * this _toLocal
 	}
-	_createProjection: func (targetSize: FloatVector2D, focalLengthPerWidth: Float) -> FloatTransform3D {
+	_createProjection: func (targetSize: FloatVector2D, focalLengthPerWidth, nearPlane, farPlane: Float) -> FloatTransform3D {
 		result: FloatTransform3D
 		focalLengthPerHeight := focalLengthPerWidth * targetSize x / targetSize y
 		flipX := 1.0f
 		flipY := -1.0f
-		if (focalLengthPerWidth > 0.0f) {
-			nearPlane := 0.01f
-			farPlane := 12500.0f
+		if (focalLengthPerWidth > 0.0001f) {
 			a := flipX * 2.0f * focalLengthPerWidth
 			f := flipY * 2.0f * focalLengthPerHeight
 			k := (farPlane + nearPlane) / (farPlane - nearPlane)
@@ -136,14 +134,14 @@ OpenGLPacked: abstract class extends GpuImage {
 		this _renderTarget bind()
 		this context backend setViewport(IntBox2D new(this size))
 		this context backend disableBlend()
-		this context drawLines(pointList, this _createProjection(this size toFloatVector2D(), 0.0f) * this _toLocal, pen)
+		this context drawLines(pointList, this _createProjection(this size toFloatVector2D(), 0.0f, 0.0f, 0.0f) * this _toLocal, pen)
 		this _renderTarget unbind()
 	}
 	drawPoints: override func (pointList: VectorList<FloatPoint2D>, pen: Pen) {
 		this _renderTarget bind()
 		this context backend setViewport(IntBox2D new(this size))
 		this context backend disableBlend()
-		this context drawPoints(pointList, this _createProjection(this size toFloatVector2D(), 0.0f) * this _toLocal, pen)
+		this context drawPoints(pointList, this _createProjection(this size toFloatVector2D(), 0.0f, 0.0f, 0.0f) * this _toLocal, pen)
 		this _renderTarget unbind()
 	}
 	fill: override func (color: ColorRgba) {
@@ -159,9 +157,6 @@ OpenGLPacked: abstract class extends GpuImage {
 			this _backend upload(raster buffer pointer, raster stride)
 		}
 	}
-	onRecycle: func {
-		this referenceCount reset()
-		this _renderTarget invalidate()
-	}
+	onRecycle: func { this referenceCount reset() }
 }
 }
