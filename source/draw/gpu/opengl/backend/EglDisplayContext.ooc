@@ -56,6 +56,8 @@ EglDisplayContext: class {
 		this _generateContext(sharedContext ? sharedContext _eglContext : null, chosenConfig)
 	}
 	free: override func {
+		if (eglGetCurrentContext() == EGL_NO_CONTEXT)
+			Debug error("Trying to unbind OpenGL context from a thread without a context!")
 		This validate(eglMakeCurrent(this _eglDisplay, null, null, null), EGL_TRUE, "eglMakeCurrent")
 		This validate(eglDestroyContext(this _eglDisplay, this _eglContext), EGL_TRUE, "eglDestroyContext")
 		This validate(eglDestroySurface(this _eglDisplay, this _eglSurface), EGL_TRUE, "eglDestroySurface")
@@ -117,6 +119,8 @@ EglDisplayContext: class {
 			else
 				Debug print("WARNING: Using OpenGL ES 2")
 		}
+		if (eglGetCurrentContext() != EGL_NO_CONTEXT)
+			Debug error("Trying to bind OpenGL context to a context bound thread!")
 		This validate(eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext), EGL_TRUE, "eglMakeCurrent")
 	}
 	_initializeDisplay: func (display: Pointer) {
