@@ -1,8 +1,8 @@
 {
 	"name": "ooc-kean",
-	"release": "2.10.0",
+	"release": "2.11.0",
 	"dependencies": {
-		"rock": "https://github.com/magic-lang/rock/releases/tag/rock_1.0.20",
+		"rock": "https://github.com/magic-lang/rock/releases/tag/rock_1.0.22",
 		"gcc": "4.9.3"
 		}
 
