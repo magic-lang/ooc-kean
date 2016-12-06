@@ -29,7 +29,6 @@ YuvExtensionContext: class extends OpenGLContext {
 		this _pack = OpenGLMap new(slurp("shaders/unpackYuv.vert"), slurp("shaders/packCompositeYuvToYuv.frag"), this)
 	}
 	free: override func {
-		this _backend makeCurrent()
 		(this _eglBin, this _yuvShader, this _unpackY, this _unpackUv, this _pack) free()
 		super()
 	}
@@ -52,8 +51,7 @@ YuvExtensionContext: class extends OpenGLContext {
 			this _pack add("y", sourceImage y)
 			this _pack add("uv", sourceImage uv)
 			DrawState new(targetYuv) setMap(this _pack) draw()
-			result = OpenGLNativeFencePromise new(this)
-			(result as OpenGLNativeFencePromise) sync()
+			result = this createFence()
 			targetYuv free()
 		} else
 			result = super(source, target)
