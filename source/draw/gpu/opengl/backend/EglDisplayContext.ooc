@@ -17,7 +17,44 @@ EglDisplayContext: class {
 	_eglSurface: Pointer
 	_contextCount := static 0
 	_mutex := static Mutex new()
-	init: func
+	init: func (display: Pointer, nativeBackend: Long, sharedContext: This) {
+		this _initializeDisplay(display)
+		This validate(eglBindAPI(EGL_OPENGL_ES_API), EGL_TRUE, "eglBindAPI")
+		configAttribs := [
+			EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+			EGL_BUFFER_SIZE, 16,
+			EGL_NONE] as Int*
+		chosenConfig: Pointer = this _chooseConfig(configAttribs)
+		this _eglSurface = eglCreateWindowSurface(this _eglDisplay, chosenConfig, nativeBackend, null)
+		This validate(this _eglSurface != EGL_NO_SURFACE, "eglCreateWindowSurface")
+		this _generateContext(sharedContext ? sharedContext _eglContext : null , chosenConfig)
+	}
+	init: func ~pbuffer (sharedContext: This) {
+		this _initializeDisplay(EGL_DEFAULT_DISPLAY)
+		This validate(eglBindAPI(EGL_OPENGL_ES_API), EGL_TRUE, "eglBindAPI")
+		configAttribs := [
+			EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
+			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+			EGL_BLUE_SIZE, 8,
+			EGL_GREEN_SIZE, 8,
+			EGL_RED_SIZE, 8,
+			EGL_ALPHA_SIZE, 8,
+			EGL_SAMPLES, 0,
+			EGL_DEPTH_SIZE, 0,
+			EGL_BIND_TO_TEXTURE_RGBA, EGL_DONT_CARE,
+			EGL_NONE] as Int*
+		chosenConfig: Pointer = this _chooseConfig(configAttribs)
+		pbufferAttribs := [
+			EGL_WIDTH, 1,
+			EGL_HEIGHT, 1,
+			EGL_TEXTURE_TARGET, EGL_NO_TEXTURE,
+			EGL_TEXTURE_FORMAT, EGL_NO_TEXTURE,
+			EGL_NONE] as Int*
+		this _eglSurface = eglCreatePbufferSurface(this _eglDisplay, chosenConfig, pbufferAttribs)
+		This validate(this _eglSurface != EGL_NO_SURFACE, "eglCreatePbufferSurface")
+		this _generateContext(sharedContext ? sharedContext _eglContext : null, chosenConfig)
+	}
 	free: override func {
 		This validate(eglMakeCurrent(this _eglDisplay, null, null, null), EGL_TRUE, "eglMakeCurrent")
 		This validate(eglDestroyContext(this _eglDisplay, this _eglContext), EGL_TRUE, "eglDestroyContext")
@@ -63,7 +100,7 @@ EglDisplayContext: class {
 		}
 		chosenConfig
 	}
-	_generateContext: func (shared, config: Pointer) -> Bool {
+	_generateContext: func (shared, config: Pointer) {
 		contextAttribs := [
 			EGL_CONTEXT_CLIENT_VERSION, 3,
 			EGL_NONE] as Int*
@@ -81,50 +118,11 @@ EglDisplayContext: class {
 				Debug print("WARNING: Using OpenGL ES 2")
 		}
 		This validate(eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext), EGL_TRUE, "eglMakeCurrent")
-		true
 	}
 	_initializeDisplay: func (display: Pointer) {
 		this _eglDisplay = eglGetDisplay(display)
 		This validate(this _eglDisplay != EGL_NO_DISPLAY, "eglGetDisplay")
 		This validate(eglInitialize(this _eglDisplay, null, null), EGL_TRUE, "eglInitialize")
-	}
-	_generate: func (display: Pointer, nativeBackend: Long, sharedContext: This) -> Bool {
-		this _initializeDisplay(display)
-		This validate(eglBindAPI(EGL_OPENGL_ES_API), EGL_TRUE, "eglBindAPI")
-		configAttribs := [
-			EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-			EGL_BUFFER_SIZE, 16,
-			EGL_NONE] as Int*
-		chosenConfig: Pointer = this _chooseConfig(configAttribs)
-		this _eglSurface = eglCreateWindowSurface(this _eglDisplay, chosenConfig, nativeBackend, null)
-		This validate(this _eglSurface != EGL_NO_SURFACE, "eglCreateWindowSurface")
-		this _generateContext(sharedContext ? sharedContext _eglContext : null , chosenConfig)
-	}
-	_generate: func ~pbuffer (sharedContext: This) -> Bool {
-		this _initializeDisplay(EGL_DEFAULT_DISPLAY)
-		This validate(eglBindAPI(EGL_OPENGL_ES_API), EGL_TRUE, "eglBindAPI")
-		configAttribs := [
-			EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
-			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-			EGL_BLUE_SIZE, 8,
-			EGL_GREEN_SIZE, 8,
-			EGL_RED_SIZE, 8,
-			EGL_ALPHA_SIZE, 8,
-			EGL_SAMPLES, 0,
-			EGL_DEPTH_SIZE, 0,
-			EGL_BIND_TO_TEXTURE_RGBA, EGL_DONT_CARE,
-			EGL_NONE] as Int*
-		chosenConfig: Pointer = this _chooseConfig(configAttribs)
-		pbufferAttribs := [
-			EGL_WIDTH, 1,
-			EGL_HEIGHT, 1,
-			EGL_TEXTURE_TARGET, EGL_NO_TEXTURE,
-			EGL_TEXTURE_FORMAT, EGL_NO_TEXTURE,
-			EGL_NONE] as Int*
-		this _eglSurface = eglCreatePbufferSurface(this _eglDisplay, chosenConfig, pbufferAttribs)
-		This validate(this _eglSurface != EGL_NO_SURFACE, "eglCreatePbufferSurface")
-		this _generateContext(sharedContext ? sharedContext _eglContext : null, chosenConfig)
 	}
 	validate: static func (value, expectedValue: UInt, function: String) {
 		if (value != expectedValue)

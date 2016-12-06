@@ -14,9 +14,9 @@ import external/gles3
 import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture, Gles3VertexArrayObject, Gles3IndexBufferObject
 
 Gles3Context: class extends GLContext {
-	_displayContext := EglDisplayContext new()
+	_displayContext: EglDisplayContext
 	getDisplayContextSafely: func -> EglDisplayContext { this == null ? null : this _displayContext }
-	init: func { super() }
+	init: func (=_displayContext) { super() }
 	free: override func {
 		this _displayContext free()
 		super()
@@ -87,13 +87,11 @@ Gles3Context: class extends GLContext {
 	}
 	create: static func ~shared (display: Pointer, nativeBackend: Long, sharedContext: This = null) -> This {
 		version(debugGL) { Debug print("Creating OpenGL Context") }
-		result := This new()
-		result _displayContext _generate(display, nativeBackend, sharedContext getDisplayContextSafely()) ? result : null
+		result := This new(EglDisplayContext new(display, nativeBackend, sharedContext getDisplayContextSafely()))
 	}
 	create: static func ~pbufferShared (sharedContext: This = null) -> This {
 		version(debugGL) { Debug print("Creating OpenGL Context") }
-		result := This new()
-		result _displayContext _generate(sharedContext getDisplayContextSafely()) ? result : null
+		result := This new(EglDisplayContext new(sharedContext getDisplayContextSafely()))
 	}
 }
 }
