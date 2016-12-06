@@ -64,6 +64,8 @@ version (windows) {
 version (!windows) {
 	include dlfcn
 	RTLD_LAZY, RTLD_NOW, RTLD_GLOBAL, RTLD_LOCAL: extern Int
+	version(android)
+		RTLD_DEFAULT: extern Pointer
 
 	dlopen: extern func (path: CString, flag: Int) -> Pointer
 	dlsym: extern func (handle: Pointer, name: CString) -> Pointer

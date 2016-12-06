@@ -28,7 +28,6 @@ AndroidContext: class extends OpenGLContext {
 		this _unpackRgbaToUvPadded = OpenGLMap new(slurp("shaders/unpack.vert"), slurp("shaders/unpackRgbaToUvPadded.frag"), this)
 	}
 	free: override func {
-		this _backend makeCurrent()
 		this _eglBin free()
 		(this _unpackRgbaToMonochrome, this _unpackRgbaToUv, this _unpackRgbaToUvPadded, this _packers) free()
 		super()
@@ -94,8 +93,7 @@ AndroidContext: class extends OpenGLContext {
 			padding := targetImage uvPadding % targetImage stride
 			this packToRgba(sourceImage y, targetImageRgba, IntBox2D new(0, 0, targetWidth, targetImage y size y), padding)
 			this packToRgba(sourceImage uv, targetImageRgba, IntBox2D new(0, targetImageRgba size y - targetImage uv size y, targetWidth, targetImage uv size y), padding)
-			result = OpenGLNativeFencePromise new(this)
-			(result as OpenGLNativeFencePromise) sync()
+			result = this createFence()
 			targetImageRgba free()
 		} else
 			result = super(source, target)

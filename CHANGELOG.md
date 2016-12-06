@@ -1,5 +1,12 @@
 # ooc-kean changes by release
 
+## Release 2.11.0
+
+- **Changes to support new rock version**
+- **VectorList now resizes exponentially instead of linearly**
+- **Bugfixes and better error checking in draw and OpenGL namespaces**
+- **Made it possible to draw text on the CPU**
+
 ## Release 2.10.0
 
 - **Various minor bugfixes to draw and system namespaces**

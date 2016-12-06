@@ -31,10 +31,6 @@ Gles3Context: class extends GLContext {
 		)
 		super()
 	}
-	makeCurrent: override func -> Bool {
-		This validate(eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext), EGL_TRUE, "eglMakeCurrent")
-		true
-	}
 	printExtensions: func {
 		extensions := eglQueryString(this _eglDisplay, EGL_EXTENSIONS) as CString
 		extensionsString := String new(extensions, extensions length())
@@ -85,7 +81,8 @@ Gles3Context: class extends GLContext {
 			else
 				Debug print("WARNING: Using OpenGL ES 2")
 		}
-		this makeCurrent()
+		This validate(eglMakeCurrent(this _eglDisplay, this _eglSurface, this _eglSurface, this _eglContext), EGL_TRUE, "eglMakeCurrent")
+		true
 	}
 	_initializeDisplay: func (display: Pointer) {
 		this _eglDisplay = eglGetDisplay(display)

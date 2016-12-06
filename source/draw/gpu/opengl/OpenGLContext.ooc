@@ -14,7 +14,7 @@ use collections
 use concurrent
 import OpenGLPacked, OpenGLMonochrome, OpenGLRgb, OpenGLRgba, OpenGLUv, OpenGLMesh, OpenGLPromise, GraphicBufferYuv420Semiplanar, GraphicBuffer
 import OpenGLMap
-import backend/[GLContext, GLRenderer]
+import backend/[GLContext, GLRenderer, GLExtensions]
 
 version(!gpuOff) {
 _FenceToRasterFuture: class extends ToRasterFuture {
@@ -75,17 +75,19 @@ OpenGLContext: class extends GpuContext {
 	free: override func {
 		if (this _defaultFontGpu != null)
 			this _defaultFontGpu free()
-		this _backend makeCurrent()
 		(this _transformTextureMap, this _packMonochrome, this _packUv, this _packUvPadded, this _linesShader) free()
 		(this _monochromeToRgba, this _yuvSemiplanarToRgba, this _rgbaToYuva, this _rgbaToUvaa) free()
 		(this _pointsShader, this _renderer, this _recycleBin, this _backend) free()
 		super()
 	}
+	getDefaultShader: virtual func (input, output: Image) -> OpenGLMap { this _transformTextureMap }
+	getLineShader: virtual func -> OpenGLMap { this _linesShader }
 	drawQuad: func { this _renderer drawQuad() }
 	drawLines: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen: Pen) {
 		positions := pointList pointer as Float*
-		this _linesShader add("color", pen color normalized)
-		this _linesShader useProgram(null, projection, FloatTransform3D identity)
+		shader := this getLineShader()
+		shader add("color", pen color normalized)
+		shader useProgram(null, projection, FloatTransform3D identity)
 		this _renderer drawLines(positions, pointList count, 2, pen width)
 	}
 	drawPoints: func (pointList: VectorList<FloatPoint2D>, projection: FloatTransform3D, pen: Pen) {
@@ -101,6 +103,15 @@ OpenGLContext: class extends GpuContext {
 	}
 	_searchImageBin: func (type: Class, size: IntVector2D) -> GpuImage {
 		this _recycleBin search(|image| image instanceOf(type) && image size == size)
+	}
+	createFence: override func -> Promise {
+		result: OpenGLPromise
+		if (GLExtensions nativeFenceSupported)
+			result = OpenGLNativeFencePromise new(this)
+		else
+			result = OpenGLPromise new(this)
+		result sync()
+		result
 	}
 	createMonochrome: override func (size: IntVector2D) -> GpuImage {
 		result := this _searchImageBin(OpenGLMonochrome, size)

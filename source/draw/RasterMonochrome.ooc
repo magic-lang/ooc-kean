@@ -43,6 +43,45 @@ RasterMonochrome: class extends RasterPacked {
 		if (monochrome != image)
 			monochrome referenceCount decrease()
 	}
+	// Precondition: Do not draw out of bound
+	_blitWhiteRaw: static func (target, source: Byte*, startSrcX, startSrcY, startDstX, startDstY, width, height, targetStride, sourceStride: Int) {
+		for (y in 0 .. height) {
+			dstY := startDstY + y
+			srcY := startSrcY + y
+			writer := target + startDstX + (dstY * targetStride)
+			reader := source + startSrcX + (srcY * sourceStride)
+			for (x in 0 .. width) {
+				sourceColor: Float = reader@
+				targetColor: Float = writer@
+				blendColor: Int = (targetColor * (1.0f - (sourceColor / 255.0f))) + sourceColor // Source intensity as alpha
+				if (blendColor > 255) blendColor = 255 // Limit intensity
+				writer@ = blendColor // Write to target
+				reader += 1
+				writer += 1
+			}
+		}
+	}
+	blitWhiteSource: override func (source: Image, offset: IntVector2D, sourceBox: IntBox2D) {
+		if (!source instanceOf(This))
+			Debug error("Only a RasterMonochrome can be blitted on a RasterMonochrome.")
+		startSrc := sourceBox leftTop
+		startDst := offset toIntPoint2D()
+		endDst := startDst + sourceBox size
+		if (startDst x < 0) {
+			startSrc x -= startDst x
+			startDst x = 0
+		}
+		if (startDst y < 0) {
+			startSrc y -= startDst y
+			startDst y = 0
+		}
+		endDst = endDst minimum(this size toIntPoint2D())
+		dimensions := endDst - startDst
+		endSrc := startSrc + dimensions
+		if (startSrc x >= 0 && startSrc y >= 0 && endSrc x <= source size x && endSrc y <= source size y && startDst x >= 0 && startDst y >= 0 && endDst x <= this size x && endDst y <= this size y) {
+			this _blitWhiteRaw(this buffer pointer, (source as This) buffer pointer, startSrc x, startSrc y, startDst x, startDst y, dimensions x, dimensions y, this stride, (source as This) stride)
+		}
+	}
 	fill: override func (color: ColorRgba) { this buffer memset(color r) }
 	copy: override func -> This { This new(this buffer copy(), this size, this stride) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
