@@ -56,8 +56,11 @@ EglDisplayContext: class {
 		this _generateContext(sharedContext ? sharedContext _eglContext : null, chosenConfig)
 	}
 	free: override func {
-		if (eglGetCurrentContext() == EGL_NO_CONTEXT)
+		currentContext := eglGetCurrentContext()
+		if (currentContext == EGL_NO_CONTEXT)
 			Debug error("Trying to unbind OpenGL context from a thread without a context!")
+		else if (currentContext != this _eglContext)
+			Debug error("Trying to unbind OpenGL context from another thread!")
 		This validate(eglMakeCurrent(this _eglDisplay, null, null, null), EGL_TRUE, "eglMakeCurrent")
 		This validate(eglDestroyContext(this _eglDisplay, this _eglContext), EGL_TRUE, "eglDestroyContext")
 		This validate(eglDestroySurface(this _eglDisplay, this _eglSurface), EGL_TRUE, "eglDestroySurface")
