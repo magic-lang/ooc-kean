@@ -114,7 +114,7 @@ FloatConvexHull2D: class {
 		currentSetCount := currentSet _count
 		if (currentSetCount == 1)
 			this _points add(currentSet[0])
-		else if (currentSetCount > 1) {
+		else {
 			(maximumDistance, maximumDistanceIndex) := (Float negativeInfinity, -1)
 			pointPtr := currentSet _vector _backend as FloatPoint2D*
 			for (i in 0 .. currentSetCount) {
@@ -127,17 +127,24 @@ FloatConvexHull2D: class {
 			maximumDistancePoint := currentSet[maximumDistanceIndex]
 			outsideLeft := VectorList<FloatPoint2D> new(currentSet _count)
 			outsideRight := VectorList<FloatPoint2D> new(currentSet _count)
-			for (i in 0 .. maximumDistanceIndex)
-				if (This _isOnLeft(leftPoint, maximumDistancePoint, currentSet[i]))
-					outsideLeft add(currentSet[i])
-				else if (This _isOnLeft(maximumDistancePoint, rightPoint, currentSet[i]))
-					outsideRight add(currentSet[i])
-			for (i in maximumDistanceIndex + 1 .. currentSetCount)
-				if (This _isOnLeft(leftPoint, maximumDistancePoint, currentSet[i]))
-					outsideLeft add(currentSet[i])
-				else if (This _isOnLeft(maximumDistancePoint, rightPoint, currentSet[i]))
-					outsideRight add(currentSet[i])
-			this _findHull(outsideLeft, leftPoint, maximumDistancePoint)
+			pointPtr = currentSet _vector _backend as FloatPoint2D*
+			for (i in 0 .. maximumDistanceIndex) {
+				queryPoint := pointPtr@
+				pointPtr += 1
+				if ((maximumDistancePoint y - leftPoint y) * (queryPoint x - leftPoint x) < (maximumDistancePoint x - leftPoint x) * (queryPoint y - leftPoint y))
+					outsideLeft add(queryPoint)
+				else if ((rightPoint y - maximumDistancePoint y) * (queryPoint x - maximumDistancePoint x) < (rightPoint x - maximumDistancePoint x) * (queryPoint y - maximumDistancePoint y))
+					outsideRight add(queryPoint)
+			}
+			pointPtr += 1
+			for (i in maximumDistanceIndex + 1 .. currentSetCount) {
+				queryPoint := pointPtr@
+				pointPtr += 1
+				if ((maximumDistancePoint y - leftPoint y) * (queryPoint x - leftPoint x) < (maximumDistancePoint x - leftPoint x) * (queryPoint y - leftPoint y))
+					outsideLeft add(queryPoint)
+				else if ((rightPoint y - maximumDistancePoint y) * (queryPoint x - maximumDistancePoint x) < (rightPoint x - maximumDistancePoint x) * (queryPoint y - maximumDistancePoint y))
+					outsideRight add(queryPoint)
+			}
 			if (outsideLeft _count > 0)
 				this _findHull(outsideLeft, leftPoint, maximumDistancePoint)
 			this _points add(maximumDistancePoint)
@@ -151,8 +158,5 @@ FloatConvexHull2D: class {
 		for (i in 0 .. this count)
 			result = result >> "(" & this _points[i] toString(decimals) >> ") "
 		result
-	}
-	_isOnLeft: static func (leftPoint, rightPoint, queryPoint: FloatPoint2D) -> Bool {
-		(rightPoint y - leftPoint y) * (queryPoint x - leftPoint x) < (rightPoint x - leftPoint x) * (queryPoint y - leftPoint y)
 	}
 }
