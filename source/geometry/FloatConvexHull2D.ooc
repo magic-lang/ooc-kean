@@ -25,6 +25,7 @@ FloatConvexHull2D: class {
 			this computeHull()
 	}
 	init: func ~fromArray (array: FloatPoint2D[], computeHull := true) {
+		Debug print(" >>> Want to create array!")
 		list := VectorList<FloatPoint2D> new(array)
 		this init(list, computeHull)
 	}
