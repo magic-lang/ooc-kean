@@ -76,11 +76,11 @@ FloatConvexHull2D: class {
 			// Uses the Quickhull algorithm if more than two points, average complexity O(n log n)
 			// https://en.wikipedia.org/wiki/Quickhull
 			points := this _points
-			this _points = VectorList<FloatPoint2D> new(points _count)
 			(leftMostIndex, rightMostIndex, pointCount) := (0, 0, points _count)
 			leftEndpoint := points[0]
 			rightEndpoint := leftEndpoint
 			pointPtr := points _vector _backend as FloatPoint2D*
+			this _points = VectorList<FloatPoint2D> new(pointCount)
 			for (i in 1 .. pointCount) {
 				pointPtr += 1
 				point := pointPtr@
@@ -92,8 +92,8 @@ FloatConvexHull2D: class {
 			points removeAt(leftMostIndex)
 			points removeAt(rightMostIndex)
 			pointCount -= 2
-			leftSet := VectorList<FloatPoint2D> new(points _count)
-			rightSet := VectorList<FloatPoint2D> new(points _count)
+			leftSet := VectorList<FloatPoint2D> new(pointCount)
+			rightSet := VectorList<FloatPoint2D> new(pointCount)
 			pointPtr = points _vector _backend as FloatPoint2D*
 			for (i in 0 .. pointCount) {
 				point := pointPtr@
@@ -111,12 +111,15 @@ FloatConvexHull2D: class {
 		}
 	}
 	_findHull: func (currentSet: VectorList<FloatPoint2D>, leftPoint, rightPoint: FloatPoint2D) {
-		if (currentSet count == 1)
+		currentSetCount := currentSet _count
+		if (currentSetCount == 1)
 			this _points add(currentSet[0])
-		else if (currentSet count > 1) {
+		else if (currentSetCount > 1) {
 			(maximumDistance, maximumDistanceIndex) := (Float negativeInfinity, -1)
-			for (i in 0 .. currentSet count) {
-				queryPoint := currentSet[i]
+			pointPtr := currentSet _vector _backend as FloatPoint2D*
+			for (i in 0 .. currentSetCount) {
+				queryPoint := pointPtr@
+				pointPtr += 1
 				pseudoDistance := ((rightPoint y - leftPoint y) * (leftPoint x - queryPoint x)) - ((rightPoint x - leftPoint x) * (leftPoint y - queryPoint y))
 				if (pseudoDistance > maximumDistance)
 					(maximumDistance, maximumDistanceIndex) = (pseudoDistance, i)
@@ -129,14 +132,17 @@ FloatConvexHull2D: class {
 					outsideLeft add(currentSet[i])
 				else if (This _isOnLeft(maximumDistancePoint, rightPoint, currentSet[i]))
 					outsideRight add(currentSet[i])
-			for (i in maximumDistanceIndex + 1 .. currentSet count)
+			for (i in maximumDistanceIndex + 1 .. currentSetCount)
 				if (This _isOnLeft(leftPoint, maximumDistancePoint, currentSet[i]))
 					outsideLeft add(currentSet[i])
 				else if (This _isOnLeft(maximumDistancePoint, rightPoint, currentSet[i]))
 					outsideRight add(currentSet[i])
 			this _findHull(outsideLeft, leftPoint, maximumDistancePoint)
+			if (outsideLeft _count > 0)
+				this _findHull(outsideLeft, leftPoint, maximumDistancePoint)
 			this _points add(maximumDistancePoint)
-			this _findHull(outsideRight, maximumDistancePoint, rightPoint)
+			if (outsideRight _count > 0)
+				this _findHull(outsideRight, maximumDistancePoint, rightPoint)
 			(outsideLeft, outsideRight) free()
 		}
 	}
