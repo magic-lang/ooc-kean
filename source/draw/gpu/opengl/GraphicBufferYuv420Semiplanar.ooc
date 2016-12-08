@@ -22,10 +22,10 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 	uvOffset ::= this _uvOffset
 	uvPadding ::= (this _uvOffset - this _stride * this _size y)
 	init: func ~fromBuffer (=_buffer, size: IntVector2D, =_stride, =_uvOffset) {
-		pointer := _buffer lock(GraphicBufferUsage ReadOften)
-		_buffer unlock()
+		pointer := this _buffer lock(GraphicBufferUsage ReadOften)
+		this _buffer unlock()
 		length := 3 * this _stride * size y / 2
-		super(ByteBuffer new(pointer, length), size, _stride, _uvOffset)
+		super(ByteBuffer new(pointer, length), size, this _stride, this _uvOffset)
 	}
 	free: override func {
 		this _buffer free()
