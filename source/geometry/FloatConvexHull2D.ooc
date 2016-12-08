@@ -35,14 +35,23 @@ FloatConvexHull2D: class {
 		this _points free()
 		super()
 	}
-	contains: func ~Point (point: FloatPoint2D) -> Bool {
+	contains: func ~Point (queryPoint: FloatPoint2D) -> Bool {
 		result := true
-		for (i in 0 .. this count)
-			if (This _isOnLeft(this _points[i], this _points[(i + 1) % this count], point)) {
+		pointPtr := this _points _vector _backend as FloatPoint2D*
+		thisCount := this _points _count
+		firstPoint := pointPtr@
+		leftPoint: FloatPoint2D
+		rightPoint := firstPoint
+		for (_ in 0 .. thisCount - 1) {
+			pointPtr += 1
+			leftPoint = rightPoint
+			rightPoint = pointPtr@
+			if ((rightPoint y - leftPoint y) * (queryPoint x - leftPoint x) < (rightPoint x - leftPoint x) * (queryPoint y - leftPoint y)) {
 				result = false
 				break
 			}
-		result
+		}
+		result && !((firstPoint y - rightPoint y) * (queryPoint x - rightPoint x) < (firstPoint x - rightPoint x) * (queryPoint y - rightPoint y))
 	}
 	contains: func ~ConvexHull (other: This) -> Bool {
 		result := true
