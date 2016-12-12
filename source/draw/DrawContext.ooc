@@ -9,6 +9,7 @@
 use base
 use draw
 use geometry
+use concurrent
 import images/DefaultFont
 
 AlignWidth: enum {
@@ -38,6 +39,7 @@ DrawContext: abstract class {
 	createYuv420Semiplanar: abstract func (size: IntVector2D) -> Image
 	createYuv420Semiplanar: abstract func ~fromImages (y, uv: Image) -> Image
 	createYuv420Semiplanar: abstract func ~fromRaster (raster: RasterYuv420Semiplanar) -> Image
+	createFence: virtual func -> Promise { Promise empty }
 	alignWidth: virtual func (width: Int, align := AlignWidth Nearest) -> Int { width }
 	update: abstract func
 	isAligned: virtual func (width: Int) -> Bool { true }
