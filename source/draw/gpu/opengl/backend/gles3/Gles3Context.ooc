@@ -86,11 +86,9 @@ Gles3Context: class extends GLContext {
 		Gles3IndexBufferObject new(vertices, textureCoordinates, indices)
 	}
 	create: static func ~shared (display: Pointer, nativeBackend: Long, sharedContext: This = null) -> This {
-		version(debugGL) { Debug print("Creating OpenGL Context") }
 		result := This new(EglDisplayContext new(display, nativeBackend, sharedContext getDisplayContextSafely()))
 	}
 	create: static func ~pbufferShared (sharedContext: This = null) -> This {
-		version(debugGL) { Debug print("Creating OpenGL Context") }
 		result := This new(EglDisplayContext new(sharedContext getDisplayContextSafely()))
 	}
 }
