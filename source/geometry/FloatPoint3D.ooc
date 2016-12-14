@@ -9,6 +9,7 @@
 import IntPoint3D
 import IntVector3D
 import FloatPoint2D
+import FloatVector2D
 import FloatVector3D
 use base
 use math
@@ -34,6 +35,7 @@ FloatPoint3D: cover {
 	init: func@ ~cube (length: Float) { this x = this y = this z = length }
 	init: func@ ~default { this init(0.0f, 0.0f, 0.0f) }
 	init: func@ ~fromPoint2D (point: FloatPoint2D, z := 0.0f) { this init(point x, point y, z) }
+	init: func@ ~fromVector2D (point: FloatVector2D, z := 0.0f) { this init(point x, point y, z) }
 	pNorm: func (p: Float) -> Float {
 		(this x abs() pow(p) + this y abs() pow(p) + this z abs() pow(p)) pow(1.0f / p)
 	}
