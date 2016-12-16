@@ -26,7 +26,7 @@ OpenGLPromise: class extends Promise {
 }
 
 OpenGLNativeFencePromise: class extends OpenGLPromise {
-	init: func (context: OpenGLContext) { super(EGLNativeFence new(context backend _eglDisplay)) }
+	init: func (context: OpenGLContext) { super(EGLNativeFence new(context backend getDisplay())) }
 	getFileDescriptor: override func -> Int { this _fence as EGLNativeFence duplicateFileDescriptor() }
 }
 }

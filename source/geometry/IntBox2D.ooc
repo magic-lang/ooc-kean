@@ -58,7 +58,7 @@ IntBox2D: cover {
 	pad: func (left, right, top, bottom: Int) -> This {
 		This new(IntPoint2D new(this left - left, this top - top), IntVector2D new(this width + left + right, this height + top + bottom))
 	}
-	pad: func ~fromFloat (pad: Int) -> This { this pad(pad, pad, pad, pad) }
+	pad: func ~fromInt (pad: Int) -> This { this pad(pad, pad, pad, pad) }
 	pad: func ~fromSize (pad: IntVector2D) -> This { this pad(pad x, pad x, pad y, pad y) }
 	resizeTo: func (size: IntVector2D) -> This {
 		This createAround(this center, size)

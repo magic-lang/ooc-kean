@@ -7,7 +7,6 @@
  */
 
 import ../Mutex
-import ../Debug
 
 version(unix || apple) {
 	MutexUnix: class extends Mutex {

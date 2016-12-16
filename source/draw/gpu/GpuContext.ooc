@@ -37,7 +37,6 @@ GpuContext: abstract class extends DrawContext {
 		version(gpuOff)
 			Debug error("Creating GpuContext without GPU")
 	}
-	createFence: abstract func -> Promise
 	createMonochrome: abstract func (size: IntVector2D) -> GpuImage
 	createRgb: abstract func (size: IntVector2D) -> GpuImage
 	createRgba: abstract func (size: IntVector2D) -> GpuImage
