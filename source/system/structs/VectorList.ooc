@@ -10,12 +10,22 @@ VectorList: class <T> extends List<T> {
 	_vector: Vector<T>
 	pointer ::= this _vector _backend as Pointer
 	init: func ~default {
+		"creating ~default" println()
 		this init(32)
 	}
 	init: func ~heap (capacity: Int, freeContent := true) {
+		"creating ~heap" println()
 		this init(HeapVector<T> new(1 maximum(capacity), freeContent))
 	}
-	init: func (=_vector)
+	init: func ~array (array: T[]) {
+		"creating ~array" println()
+		this init(array length)
+		for (i in 0 .. array length)
+			this add(array[i])
+	}
+	init: func (=_vector) {
+		"creating ~vector" println()
+	}
 	free: override func {
 		this clear()
 		this _vector free()
