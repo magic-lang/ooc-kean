@@ -82,9 +82,9 @@ FloatRotation3DTest: class extends Fixture {
 			y := 0.23f
 			z := 0.04f
 			rotation := FloatRotation3D createFromEulerAngles(x, y, z)
-			expect(x, is equal to(rotation x) within(tolerance))
-			expect(y, is equal to(rotation y) within(tolerance))
-			expect(z, is equal to(rotation z) within(tolerance))
+			expect(x, is equal to(rotation eulerX) within(tolerance))
+			expect(y, is equal to(rotation eulerY) within(tolerance))
+			expect(z, is equal to(rotation eulerZ) within(tolerance))
 		})
 	}
 }

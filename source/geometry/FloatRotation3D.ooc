@@ -15,9 +15,9 @@ FloatRotation3D: cover {
 	inverse ::= This new(this _quaternion inverse)
 	normalized ::= This new(this _quaternion normalized)
 	transform ::= this _quaternion transform
-	x ::= this _quaternion rotationX
-	y ::= this _quaternion rotationY
-	z ::= this _quaternion rotationZ
+	eulerX ::= this _quaternion eulerX
+	eulerY ::= this _quaternion eulerY
+	eulerZ ::= this _quaternion eulerZ
 
 	init: func@ ~default { this init(Quaternion new(0.0f, 0.0f, 0.0f, 0.0f)) }
 	init: func@ ~fromQuaternion (=_quaternion)

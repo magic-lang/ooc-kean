@@ -72,7 +72,7 @@ FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 		result := FloatVectorList new()
 		for (i in 0 .. this _count) {
 			euclidTransform := this[i]
-			result add(euclidTransform rotation x)
+			result add(euclidTransform rotation eulerX)
 		}
 		result
 	}
@@ -80,7 +80,7 @@ FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 		result := FloatVectorList new()
 		for (i in 0 .. this _count) {
 			euclidTransform := this[i]
-			result add(euclidTransform rotation y)
+			result add(euclidTransform rotation eulerY)
 		}
 		result
 	}
@@ -88,7 +88,7 @@ FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 		result := FloatVectorList new()
 		for (i in 0 .. this _count) {
 			euclidTransform := this[i]
-			result add(euclidTransform rotation z)
+			result add(euclidTransform rotation eulerZ)
 		}
 		result
 	}
