@@ -73,26 +73,21 @@ FloatConvexHull2D: class {
 			// Uses the Quickhull algorithm if more than two points, average complexity O(n log n)
 			// https://en.wikipedia.org/wiki/Quickhull
 			points := this _points
-			this _points = VectorList<FloatPoint2D> new()
-			leftMostIndex := 0
-			rightMostIndex := 0
+			this _points = VectorList<FloatPoint2D> new(points _count)
+			(leftMostIndex, rightMostIndex) := (0, 0)
 			leftEndpoint := points[0]
 			rightEndpoint := leftEndpoint
 			for (i in 1 .. points count) {
 				point := points[i]
-				if (point x < leftEndpoint x) {
-					leftEndpoint = point
-					leftMostIndex = i
-				}
-				else if (point x > rightEndpoint x) {
-					rightEndpoint = point
-					rightMostIndex = i
-				}
+				if (point x < leftEndpoint x)
+					(leftEndpoint, leftMostIndex) = (point, i)
+				else if (point x > rightEndpoint x)
+					(rightEndpoint, rightMostIndex) = (point, i)
 			}
 			points removeAt(leftMostIndex)
 			points removeAt(rightMostIndex)
-			leftSet := VectorList<FloatPoint2D> new()
-			rightSet := VectorList<FloatPoint2D> new()
+			leftSet := VectorList<FloatPoint2D> new(points _count)
+			rightSet := VectorList<FloatPoint2D> new(points _count)
 			for (i in 0 .. points count) {
 				point := points[i]
 				(This _isOnLeft(leftEndpoint, rightEndpoint, point) ? leftSet : rightSet) add(point)
@@ -108,24 +103,26 @@ FloatConvexHull2D: class {
 		if (currentSet count == 1)
 			this _points add(currentSet[0])
 		else if (currentSet count > 1) {
-			maximumDistance := Float negativeInfinity
-			maximumDistanceIndex := -1
+			(maximumDistance, maximumDistanceIndex) := (Float negativeInfinity, -1)
 			for (i in 0 .. currentSet count) {
-				distance := This _pointsLinePseudoDistance(leftPoint, rightPoint, currentSet[i])
-				if (distance > maximumDistance) {
-					maximumDistance = distance
-					maximumDistanceIndex = i
-				}
+				queryPoint := currentSet[i]
+				pseudoDistance := ((rightPoint y - leftPoint y) * (leftPoint x - queryPoint x)) - ((rightPoint x - leftPoint x) * (leftPoint y - queryPoint y))
+				if (pseudoDistance > maximumDistance)
+					(maximumDistance, maximumDistanceIndex) = (pseudoDistance, i)
 			}
 			maximumDistancePoint := currentSet[maximumDistanceIndex]
-			outsideLeft := VectorList<FloatPoint2D> new()
-			outsideRight := VectorList<FloatPoint2D> new()
-			for (i in 0 .. currentSet count)
-				if (i != maximumDistanceIndex)
-					if (This _isOnLeft(leftPoint, maximumDistancePoint, currentSet[i]))
-						outsideLeft add(currentSet[i])
-					else if (This _isOnLeft(maximumDistancePoint, rightPoint, currentSet[i]))
-						outsideRight add(currentSet[i])
+			outsideLeft := VectorList<FloatPoint2D> new(currentSet _count)
+			outsideRight := VectorList<FloatPoint2D> new(currentSet _count)
+			for (i in 0 .. maximumDistanceIndex)
+				if (This _isOnLeft(leftPoint, maximumDistancePoint, currentSet[i]))
+					outsideLeft add(currentSet[i])
+				else if (This _isOnLeft(maximumDistancePoint, rightPoint, currentSet[i]))
+					outsideRight add(currentSet[i])
+			for (i in maximumDistanceIndex + 1 .. currentSet count)
+				if (This _isOnLeft(leftPoint, maximumDistancePoint, currentSet[i]))
+					outsideLeft add(currentSet[i])
+				else if (This _isOnLeft(maximumDistancePoint, rightPoint, currentSet[i]))
+					outsideRight add(currentSet[i])
 			this _findHull(outsideLeft, leftPoint, maximumDistancePoint)
 			this _points add(maximumDistancePoint)
 			this _findHull(outsideRight, maximumDistancePoint, rightPoint)
@@ -137,9 +134,6 @@ FloatConvexHull2D: class {
 		for (i in 0 .. this count)
 			result = result >> "(" & this _points[i] toString(decimals) >> ") "
 		result
-	}
-	_pointsLinePseudoDistance: static func (leftPoint, rightPoint, queryPoint: FloatPoint2D) -> Float {
-		((rightPoint y - leftPoint y) * (leftPoint x - queryPoint x)) - ((rightPoint x - leftPoint x) * (leftPoint y - queryPoint y))
 	}
 	_isOnLeft: static func (leftPoint, rightPoint, queryPoint: FloatPoint2D) -> Bool {
 		(rightPoint y - leftPoint y) * (queryPoint x - leftPoint x) < (rightPoint x - leftPoint x) * (queryPoint y - leftPoint y)

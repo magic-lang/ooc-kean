@@ -12,6 +12,7 @@ Imports: types
 Imports: Buffer
 Imports: Cell
 Imports: CharBuffer
+Imports: Debug
 Imports: Dynlib
 Imports: Env
 Imports: Format

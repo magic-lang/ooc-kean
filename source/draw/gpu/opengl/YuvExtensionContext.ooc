@@ -74,7 +74,9 @@ YuvExtensionContext: class extends OpenGLContext {
 	}
 	recycle: override func (image: OpenGLPacked) {
 		match (image) {
-			case eglYuv: EGLYuv => this _eglBin add(eglYuv)
+			case eglYuv: EGLYuv =>
+				eglYuv onRecycle()
+				this _eglBin add(eglYuv)
 			case => super(image)
 		}
 	}
