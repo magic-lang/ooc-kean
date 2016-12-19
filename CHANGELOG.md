@@ -1,5 +1,11 @@
 # ooc-kean changes by release
 
+## Release 2.12.0
+
+- **Simple optimizations to FloatConvexHull2D**
+- **Shader leak for nativeYuv fixed**
+- **Input to Quaternion SLERP always normalized**
+
 ## Release 2.11.0
 
 - **Changes to support new rock version**
