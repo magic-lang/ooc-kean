@@ -9,7 +9,6 @@
 use collections
 import Allocator
 import ReferenceCounter
-import Debug
 
 ByteBuffer: class {
 	_pointer: Byte*

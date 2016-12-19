@@ -7,7 +7,6 @@
  */
 
 import native/[MutexUnix, MutexWin32]
-import Debug
 
 MutexType: enum {
 	Safe

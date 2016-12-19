@@ -126,18 +126,20 @@ Quaternion: cover {
 	dotProduct: func (other: This) -> Float { this w * other w + this x * other x + this y * other y + this z * other z }
 	power: func (scalar: Float) -> This { (scalar * this logarithm) exponential }
 	sphericalLinearInterpolation: func (other: This, factor: Float) -> This {
-		cosAngle := this dotProduct(other)
+		thisNormalized := this normalized
+		otherNormalized := other normalized
+		cosAngle := thisNormalized dotProduct(otherNormalized)
 		longPath := cosAngle < 0.0f
 		angle := acos(cosAngle absolute clamp(-1.0f, 1.0f))
 		result: This
 		if (angle < 1.0e-8f)
-			result = this * (1 - factor) + other * factor
+			result = thisNormalized * (1 - factor) + otherNormalized * factor
 		else {
 			thisFactor := sin((1 - factor) * angle) / sin(angle)
 			otherFactor := sin(factor * angle) / sin(angle)
 			if (longPath)
 				otherFactor = -otherFactor
-			result = this * thisFactor + other * otherFactor
+			result = thisNormalized * thisFactor + otherNormalized * otherFactor
 		}
 		result
 	}
