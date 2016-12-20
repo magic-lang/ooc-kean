@@ -155,9 +155,6 @@ CompareWithinConstraint: class extends CompareConstraint {
 			case Quaternion =>
 				f := func (value, correct: Cell<Quaternion>) -> Bool { correct get() distance(value get()) equals(0.f, this precision) }
 				result = CompareConstraint new(this, Cell<Quaternion> new(this correct as Cell<Quaternion> get()), f, this type)
-			case FloatRotation3D =>
-				f := func (value, correct: Cell<FloatRotation3D>) -> Bool { correct get() _quaternion distance(value get() _quaternion) equals(0.f, this precision) }
-				result = CompareConstraint new(this, Cell<FloatRotation3D> new(this correct as Cell<FloatRotation3D> get()), f, this type)
 			case =>
 				Debug error("Using within() for incompatible type %s in test!" format(this actualType name))
 		}

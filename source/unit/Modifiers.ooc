@@ -119,10 +119,6 @@ EqualModifier: class extends ExpectModifier {
 		f := func (value, c: Cell<Quaternion>) -> Bool { value get() == c get() }
 		CompareWithinConstraint new(this, Cell<Quaternion> new(correct), f, this withinType, Quaternion)
 	}
-	to: func ~floatrotation3d (correct: FloatRotation3D) -> CompareWithinConstraint {
-		f := func (value, c: Cell<FloatRotation3D>) -> Bool { value get() == c get() }
-		CompareWithinConstraint new(this, Cell<FloatRotation3D> new(correct), f, this withinType, FloatRotation3D)
-	}
 	to: func ~floateuclidtransform (correct: FloatEuclidTransform) -> CompareConstraint {
 		f := func (value, c: Cell<FloatEuclidTransform>) -> Bool { value get() == c get() }
 		CompareConstraint new(this, Cell<FloatEuclidTransform> new(correct), f, this comparisonType)

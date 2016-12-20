@@ -10,7 +10,7 @@ use base
 use collections
 use math
 import FloatEuclidTransform
-import FloatRotation3D
+import Quaternion
 import FloatVector3D
 import FloatVectorList
 
@@ -60,8 +60,8 @@ FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 		}
 		result
 	}
-	getRotation: func -> VectorList<FloatRotation3D> {
-		result := VectorList<FloatRotation3D> new()
+	getRotation: func -> VectorList<Quaternion> {
+		result := VectorList<Quaternion> new()
 		for (i in 0 .. this _count) {
 			euclidTransform := this[i]
 			result add(euclidTransform rotation)
@@ -72,7 +72,7 @@ FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 		result := FloatVectorList new()
 		for (i in 0 .. this _count) {
 			euclidTransform := this[i]
-			result add(euclidTransform rotation x)
+			result add(euclidTransform rotation eulerX)
 		}
 		result
 	}
@@ -80,7 +80,7 @@ FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 		result := FloatVectorList new()
 		for (i in 0 .. this _count) {
 			euclidTransform := this[i]
-			result add(euclidTransform rotation y)
+			result add(euclidTransform rotation eulerY)
 		}
 		result
 	}
@@ -88,7 +88,7 @@ FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 		result := FloatVectorList new()
 		for (i in 0 .. this _count) {
 			euclidTransform := this[i]
-			result add(euclidTransform rotation z)
+			result add(euclidTransform rotation eulerZ)
 		}
 		result
 	}
