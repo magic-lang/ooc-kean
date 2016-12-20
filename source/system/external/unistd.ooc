@@ -27,3 +27,6 @@ isatty: extern func (fd: Int) -> Int
 gethostname: extern func (localSystemName: CString, localSystemNameLength: SizeT) -> Int
 sysconf: extern func (Int) -> Long
 usleep: extern func (UInt)
+version (unix || apple) {
+close: extern func (Int) -> Int
+}
