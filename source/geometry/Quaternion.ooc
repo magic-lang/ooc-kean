@@ -31,7 +31,7 @@ Quaternion: cover {
 	transform ::= this toFloatTransform3D()
 	direction ::= (this logarithm imaginary) normalized
 	// NOTE: Separation into parts assumes order of application X -> Y -> Z
-	rotationX: Float { get {
+	eulerX: Float { get {
 		result: Float
 		value := this w * this y - this z * this x
 		if ((value abs() - 0.5f) abs() < This precision)
@@ -40,7 +40,7 @@ Quaternion: cover {
 			result = (2.0f * (this w * this x + this y * this z)) atan2(1.0f - 2.0f * (this x squared + this y squared))
 		result
 	}}
-	rotationY: Float { get {
+	eulerY: Float { get {
 		result: Float
 		value := this w * this y - this z * this x
 		if ((value abs() - 0.5f) abs() < This precision)
@@ -49,7 +49,7 @@ Quaternion: cover {
 			result = ((2.0f * value) clamp(-1, 1)) asin()
 		result
 	}}
-	rotationZ: Float { get {
+	eulerZ: Float { get {
 		result: Float
 		value := this w * this y - this z * this x
 		if ((value abs() - 0.5f) abs() < This precision)
