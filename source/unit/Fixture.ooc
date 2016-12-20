@@ -113,7 +113,6 @@ Fixture: abstract class {
 			case FloatPoint3D => (expectedText, testedText) = (expectedValue toString~floatpoint3d(), testedValue toString~floatpoint3d())
 			case Quaternion => (expectedText, testedText) = (expectedValue toString~quaternion(), testedValue toString~quaternion())
 			case FloatEuclidTransform => (expectedText, testedText) = (expectedValue toString~floateuclidtransform(), testedValue toString~floateuclidtransform())
-			case FloatRotation3D => (expectedText, testedText) = (expectedValue toString~floatrotation3d(), testedValue toString~floatrotation3d())
 			case FloatTransform2D => (expectedText, testedText) = (expectedValue toString~floattransform2d(), testedValue toString~floattransform2d())
 			case FloatTransform3D => (expectedText, testedText) = (expectedValue toString~floattransform3d(), testedValue toString~floattransform3d())
 			case IntVector2D => (expectedText, testedText) = (expectedValue toString~intvector2d(), testedValue toString~intvector2d())
@@ -221,7 +220,6 @@ expect: func ~floatpoint2d (value: FloatPoint2D, constraint: ExpectModifier, mes
 expect: func ~floatpoint3d (value: FloatPoint3D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~quaternion (value: Quaternion, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~floateuclidtransform (value: FloatEuclidTransform, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
-expect: func ~floatrotation3d (value: FloatRotation3D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~floattransform2d (value: FloatTransform2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~floattransform3d (value: FloatTransform3D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~intvector2d (value: IntVector2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
