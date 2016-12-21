@@ -71,18 +71,19 @@ ConditionPromise: class extends Promise {
 		super()
 	}
 	signal: func {
-		this _mutex with(||
-			this _completed = true
-			this _condition broadcast()
-		)
+		this _mutex lock()
+		this _completed = true
+		this _condition broadcast()
+		this _mutex unlock()
 	}
 	wait: override func (time: TimeSpan) -> Bool { Debug error("Timed wait is not supported for ConditionPromise"); false }
 	wait: override func ~forever -> Bool {
 		this _mutex lock()
 		if (!this _completed)
 			this _condition wait(this _mutex)
+		status := this _completed
 		this _mutex unlock()
-		this _completed
+		status
 	}
 }
 
