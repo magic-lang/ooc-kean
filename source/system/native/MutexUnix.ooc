@@ -19,7 +19,17 @@ version(unix || apple) {
 			super()
 		}
 		lock: override func {
-			pthread_mutex_lock(this _backend&)
+			version(debugDeadlock) {
+				timeLimit_sec := 1
+				deadline: TimeSpec
+				currentTime: TimeVal
+				gettimeofday(currentTime&, null)
+				(deadline tv_sec, deadline tv_nsec) = (currentTime tv_sec + (timeLimit_sec as TimeT), (currentTime tv_usec * 1000) as Int)
+				if (pthread_mutex_timedlock(this _backend&, deadline&) != 0)
+					raise("Error! [" + this class name + " stalled for more than " + timeLimit_sec + " seconds and timed out]")
+			}
+			else
+				pthread_mutex_lock(this _backend&)
 		}
 		unlock: override func {
 			pthread_mutex_unlock(this _backend&)
