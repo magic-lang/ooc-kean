@@ -39,6 +39,10 @@ ConditionWin32: class extends WaitCondition {
 		mutex unlock()
 		(WaitForSingleObject(eventId, INFINITE) == WaitSuccess)
 	}
+	wait: override func ~timed (mutex: Mutex, timeout: Double) -> Bool {
+		Debug print("ConditionWin32::timed wait not implemented.")
+		this wait(mutex)
+	}
 	signal: override func -> Bool {
 		result := false
 		toSignal := 0 as Handle
