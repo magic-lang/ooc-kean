@@ -21,6 +21,7 @@ pthread_cond_init: extern func (cond: PThreadCond*, attr: PThreadCondAttr*) -> I
 pthread_cond_signal: extern func (cond: PThreadCond*) -> Int
 pthread_cond_broadcast: extern func (cond: PThreadCond*) -> Int
 pthread_cond_wait: extern func (cond: PThreadCond*, mutex: PThreadMutex*) -> Int
+pthread_cond_timedwait: extern func (cond: PThreadCond*, mutex: PThreadMutex*, TimeSpec*) -> Int
 pthread_cond_destroy: extern func (cond: PThreadCond*) -> Int
 
 pthread_mutex_timedlock: extern func (PThreadMutex*, TimeSpec*) -> Int

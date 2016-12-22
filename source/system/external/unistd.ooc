@@ -15,6 +15,7 @@ version (linux) {
 _SC_NPROCESSORS_ONLN: extern Int
 
 chdir: extern func (CString) -> Int
+dup: extern func (Int) -> Int
 dup2: extern func (Int, Int) -> Int
 execv: extern func (CString, CString*) -> Int
 execvp: extern func (CString, CString*) -> Int
@@ -27,3 +28,4 @@ isatty: extern func (fd: Int) -> Int
 gethostname: extern func (localSystemName: CString, localSystemNameLength: SizeT) -> Int
 sysconf: extern func (Int) -> Long
 usleep: extern func (UInt)
+close: extern func (Int) -> Int

@@ -24,8 +24,7 @@ ThreadUnix: class extends Thread {
 		version (apple || android)
 			result = this _fakeTimedJoin(seconds)
 		else {
-			ts: TimeSpec
-			this _setupTimeout(ts&, seconds)
+			ts := TimeSpec fromSeconds(seconds)
 			result = (pthread_timedjoin_np(this pthread, null, ts&) == 0)
 		}
 		result
@@ -42,21 +41,6 @@ ThreadUnix: class extends Thread {
 	_yield: static func -> Bool {
 		result := sched_yield()
 		(result == 0)
-	}
-	_setupTimeout: func (ts: TimeSpec@, seconds: Double) {
-		// We need an absolute number of seconds since the epoch
-		// First order of business - what time is it?
-		tv: TimeVal
-		gettimeofday(tv&, null)
-		nowSeconds: Double = tv tv_sec as Double + tv tv_usec as Double / 1_000_000.0
-
-		// Now compute the amount of seconds between January 1st, 1970 and the time
-		// we will stop waiting on our thread
-		absSeconds: Double = nowSeconds + seconds
-
-		// And store it in a timespec, converting again...
-		ts tv_sec = absSeconds floor() as TimeT
-		ts tv_nsec = ((absSeconds - ts tv_sec) * 1000 + 0.5) * (1_000_000 as Long)
 	}
 	_fakeTimedJoin: func (seconds: Double) -> Bool {
 		result := false

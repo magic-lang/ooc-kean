@@ -50,7 +50,10 @@ _Task: abstract class {
 			}
 			timer free()
 		}
-		this _state == _PromiseState Finished
+		this _mutex lock()
+		status = this _state == _PromiseState Finished
+		this _mutex unlock()
+		status
 	}
 	cancel: func -> Bool {
 		status := false

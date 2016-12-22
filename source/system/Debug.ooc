@@ -19,7 +19,7 @@ DebugLevel: enum {
 }
 
 Debug: class {
-	_level: static DebugLevel = DebugLevel Verbose
+	_level: static DebugLevel = DebugLevel Debug
 	level: static DebugLevel {
 		get { This _level }
 		set (value) { This _level = value }
@@ -54,3 +54,18 @@ Debug: class {
 }
 
 GlobalCleanup register(|| Debug free~all())
+
+version (debugLevelVerbose)
+	Debug level = DebugLevel Verbose
+version (debugLevelDebug)
+	Debug level = DebugLevel Debug
+version (debugLevelInfo)
+	Debug level = DebugLevel Info
+version (debugLevelWarning)
+	Debug level = DebugLevel Warning
+version (debugLevelError)
+	Debug level = DebugLevel Error
+version (debugLevelFatal)
+	Debug level = DebugLevel Fatal
+version (debugLevelSilent)
+	Debug level = DebugLevel Silent
