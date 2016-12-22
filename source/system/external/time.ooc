@@ -30,6 +30,24 @@ version(!windows) {
 	TimeSpec: cover from struct timespec {
 		tv_sec: extern TimeT
 		tv_nsec: extern Long
+
+		fromSeconds: static func (seconds: Double) -> This {
+			result: This
+			// We need an absolute number of seconds since the epoch
+			// First order of business - what time is it?
+			tv: TimeVal
+			gettimeofday(tv&, null)
+			nowSeconds: Double = tv tv_sec as Double + tv tv_usec as Double / 1_000_000.0
+
+			// Now compute the amount of seconds between January 1st, 1970 and the time
+			// we will stop waiting on our thread
+			absSeconds: Double = nowSeconds + seconds
+
+			// And store it in a timespec, converting again...
+			result tv_sec = absSeconds floor() as TimeT
+			result tv_nsec = ((absSeconds -result tv_sec) * 1000 + 0.5) * (1_000_000 as Long)
+			result
+		}
 	}
 
 	time: extern proto func (TimeT*) -> TimeT

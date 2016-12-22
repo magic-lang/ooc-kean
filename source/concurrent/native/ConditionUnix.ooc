@@ -29,6 +29,12 @@ ConditionUnix: class extends WaitCondition {
 			Debug error(mutex class != MutexUnix, "ConditionUnix can work only with MutexUnix")
 		pthread_cond_wait(this _backend, mutex as MutexUnix _backend&) == 0
 	}
+	wait: override func ~timed (mutex: Mutex, seconds: Double) -> Bool {
+		version(safe)
+			Debug error(mutex class != MutexUnix, "ConditionUnix can work only with MutexUnix")
+		ts := TimeSpec fromSeconds(seconds)
+		pthread_cond_timedwait(this _backend, mutex as MutexUnix _backend&, ts&) == 0
+	}
 	signal: override func -> Bool { pthread_cond_signal(this _backend) == 0 }
 	broadcast: override func -> Bool { pthread_cond_broadcast(this _backend) == 0 }
 }

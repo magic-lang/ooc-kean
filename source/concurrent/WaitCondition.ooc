@@ -11,6 +11,7 @@ import native/[ConditionUnix, ConditionWin32]
 
 WaitCondition: abstract class {
 	wait: abstract func (mutex: Mutex) -> Bool
+	wait: abstract func ~timed (mutex: Mutex, seconds: Double) -> Bool
 	signal: abstract func -> Bool
 	broadcast: abstract func -> Bool
 	new: static func -> This {
