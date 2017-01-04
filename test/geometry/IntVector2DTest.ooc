@@ -99,6 +99,31 @@ IntVector2DTest: class extends Fixture {
 			expect(square hasZeroArea, is false)
 			expect(empty area, is equal to(0))
 		})
+		this add("aspect ratio fitting", func {
+			source := IntVector2D new(1920, 1440)
+			target := IntVector2D new(1920, 1080)
+			result := source fitAspectRatio(target)
+			expect(result x, is equal to(1920))
+			expect(result y, is equal to(1080))
+
+			source = IntVector2D new(1920, 1440)
+			target = IntVector2D new(1440, 1440)
+			result = source fitAspectRatio(target)
+			expect(result x, is equal to(1440))
+			expect(result y, is equal to(1440))
+
+			source = IntVector2D new(4000, 3000)
+			target = IntVector2D new(2, 1)
+			result = source fitAspectRatio(target)
+			expect(result x, is equal to(4000))
+			expect(result y, is equal to(2000))
+
+			source = IntVector2D new(1920, 1080)
+			target = IntVector2D new(1920, 1080)
+			result = source fitAspectRatio(target)
+			expect(result x, is equal to(1920))
+			expect(result y, is equal to(1080))
+		})
 	}
 }
 
