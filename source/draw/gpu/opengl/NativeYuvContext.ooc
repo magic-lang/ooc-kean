@@ -20,6 +20,7 @@ NativeYuvContext: class extends OpenGLContext {
 	_yuvShader: OpenGLMapTransform
 	_monochromeToYuv: OpenGLMapTransform
 	_unpackY: OpenGLMap
+	_compositeYuvToNativeYuv: OpenGLMapTransform
 	_yuvLineShader: OpenGLMap
 	_eglBin := RecycleBin<EGLYuv> new(100, |image| image _recyclable = false; image free())
 	init: func (other: This = null) {
@@ -28,9 +29,10 @@ NativeYuvContext: class extends OpenGLContext {
 		this _monochromeToYuv = OpenGLMapTransform new(slurp("shaders/monochromeToNativeYuv.frag"), this)
 		this _yuvLineShader = OpenGLMapTransform new(slurp("shaders/colorToNativeYuv.frag"), this)
 		this _unpackY = OpenGLMap new(slurp("shaders/unpackYuv.vert"), slurp("shaders/unpackYuvToMonochrome.frag"), this)
+		this _compositeYuvToNativeYuv = OpenGLMapTransform new(slurp("shaders/packCompositeYuvToYuv.frag"), this)
 	}
 	free: override func {
-		(this _eglBin, this _yuvShader, this _yuvLineShader, this _monochromeToYuv, this _unpackY) free()
+		(this _eglBin, this _yuvShader, this _yuvLineShader, this _monochromeToYuv, this _unpackY, this _compositeYuvToNativeYuv) free()
 		super()
 	}
 	createImage: override func (rasterImage: RasterImage) -> GpuImage {
@@ -61,6 +63,8 @@ NativeYuvContext: class extends OpenGLContext {
 			result = this _yuvShader
 		else if (output instanceOf(EGLYuv) && (input instanceOf(OpenGLMonochrome) || input instanceOf(RasterMonochrome)))
 			result = this _monochromeToYuv
+		else if (output instanceOf(EGLYuv) && input instanceOf(GpuYuv420Semiplanar))
+			result = this _compositeYuvToNativeYuv
 		else
 			result = super(input, output)
 		result
