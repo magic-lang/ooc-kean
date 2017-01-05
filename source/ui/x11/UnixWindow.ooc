@@ -33,16 +33,8 @@ UnixWindowBase: class extends DisplayWindow {
 			raster referenceCount decrease()
 		}
 	}
-	create: static func (size: IntVector2D, title: String) -> This {
-		result: This
-		version(gpuOff)
-			result = This new(size, title)
-		else
-			result = UnixWindow new(size, title)
-		result
-	}
+	create: static func (size: IntVector2D, title: String) -> This { UnixWindow new(size, title) }
 }
-version(!gpuOff) {
 UnixWindow: class extends UnixWindowBase {
 	_context: GpuContext
 	context ::= this _context as OpenGLContext
@@ -90,6 +82,5 @@ UnixWindow: class extends UnixWindowBase {
 			tempImageB free()
 	}
 	refresh: override func { this context update() }
-}
 }
 }

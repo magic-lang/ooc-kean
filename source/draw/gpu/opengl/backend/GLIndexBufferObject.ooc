@@ -6,11 +6,9 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-version(!gpuOff) {
 GLIndexBufferObject: abstract class {
 	init: func
 	bind: abstract func
 	unbind: abstract func
 	draw: abstract func
-}
 }

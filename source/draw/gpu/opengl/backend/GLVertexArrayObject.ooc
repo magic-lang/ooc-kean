@@ -6,10 +6,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-version(!gpuOff) {
 GLVertexArrayObject: abstract class {
 	bind: abstract func
 	unbind: abstract func
 	draw: abstract func
-}
 }

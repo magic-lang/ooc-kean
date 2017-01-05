@@ -21,10 +21,6 @@ case "$1" in
 		;;
 esac
 FEATURES=""
-if [[ $1 == "nogpu" ]]
-then
-	FEATURES=$FEATURES" -DgpuOff"
-fi
 if [[ -d $TESTS ]]
 then
 	TESTS=$(find $TESTS -name "*Test.ooc")

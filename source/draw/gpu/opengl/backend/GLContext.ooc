@@ -11,7 +11,6 @@ use geometry
 import gles3/Gles3Context
 import GLQuad, GLShaderProgram, GLTexture, GLFramebufferObject, GLFence, GLVolumeTexture, GLRenderer, GLVertexArrayObject, GLExtensions, GLIndexBufferObject
 
-version(!gpuOff) {
 GLContext: abstract class {
 	init: func { GLExtensions initialize() }
 	swapBuffers: abstract func
@@ -38,5 +37,4 @@ GLContext: abstract class {
 		// This function will check whether a context creation succeeded and if not try to create a context for another OpenGL version
 		Gles3Context create(sharedContext as Gles3Context)
 	}
-}
 }

@@ -11,7 +11,6 @@ use geometry
 import egl/egl
 import GLTexture, GLContext, GLExtensions, gles3/Gles3Debug
 
-version(!gpuOff) {
 EGLImage: class extends GLTexture {
 	_eglBackend: Pointer
 	_eglDisplay: Pointer
@@ -52,5 +51,4 @@ EGLImage: class extends GLTexture {
 		(type == TextureType Rgba || type == TextureType Rgb || type == TextureType External) ?
 		This new(type, size, nativeBuffer, context) : null
 	}
-}
 }

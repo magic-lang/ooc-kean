@@ -14,7 +14,6 @@ use base
 use concurrent
 import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLYuv, OpenGLPacked, OpenGLMap, OpenGLPromise
 
-version(!gpuOff) {
 YuvExtensionContext: class extends OpenGLContext {
 	_yuvShader: OpenGLMapTransform
 	_unpackY: OpenGLMap
@@ -80,5 +79,4 @@ YuvExtensionContext: class extends OpenGLContext {
 			case => super(image)
 		}
 	}
-}
 }

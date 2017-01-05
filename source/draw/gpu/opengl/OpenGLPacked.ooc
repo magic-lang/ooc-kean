@@ -14,7 +14,6 @@ import backend/GLTexture
 import OpenGLContext
 import backend/[GLFramebufferObject, GLTexture]
 
-version(!gpuOff) {
 OpenGLPacked: abstract class extends GpuImage {
 	_filter: Bool
 	_backend: GLTexture
@@ -158,5 +157,4 @@ OpenGLPacked: abstract class extends GpuImage {
 		}
 	}
 	onRecycle: func { this referenceCount reset() }
-}
 }

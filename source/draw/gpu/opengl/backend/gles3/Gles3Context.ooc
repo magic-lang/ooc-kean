@@ -6,7 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-version(!gpuOff) {
 use base
 use geometry
 import ../[GLContext, GLTexture, GLVertexArrayObject, GLIndexBufferObject, EglDisplayContext]
@@ -91,5 +90,4 @@ Gles3Context: class extends GLContext {
 	create: static func ~pbufferShared (sharedContext: This = null) -> This {
 		result := This new(EglDisplayContext new(sharedContext getDisplayContextSafely()))
 	}
-}
 }

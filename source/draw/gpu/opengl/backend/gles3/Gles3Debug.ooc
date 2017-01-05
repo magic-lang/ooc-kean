@@ -10,7 +10,6 @@ use base
 import ../egl/egl
 import external/gles3
 
-version(!gpuOff) {
 getErrorMessage: func (errorCode: Int) -> String {
 	result := match (errorCode) {
 		case 36054 => "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT"
@@ -97,6 +96,5 @@ printVersionInfo: func {
 	Debug print~free("OpenGL vendor: %s" format(vendor))
 	Debug print~free("OpenGL renderer: %s" format(renderer))
 	Debug print~free("OpenGL version: %s" format(version))
-}
 }
 }

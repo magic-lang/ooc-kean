@@ -13,7 +13,6 @@ use draw-gpu
 import backend/GLTexture
 import OpenGLPacked, OpenGLContext
 
-version(!gpuOff) {
 OpenGLRgb: class extends OpenGLPacked {
 	init: func (size: IntVector2D, stride: UInt, data: Pointer, context: OpenGLContext) {
 		super(context _backend createTexture(TextureType Rgb, size, stride, data, true), This channelCount, context)
@@ -28,5 +27,4 @@ OpenGLRgb: class extends OpenGLPacked {
 	toRasterDefault: override func ~target (target: RasterImage) { Debug error("toRasterDefault~target not implemented for RGB") }
 	create: override func (size: IntVector2D) -> This { this context createRgb(size) as This }
 	channelCount: static Int = 3
-}
 }
