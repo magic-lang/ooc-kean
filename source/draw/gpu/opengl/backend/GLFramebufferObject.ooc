@@ -10,7 +10,6 @@ use base
 use draw
 use geometry
 
-version(!gpuOff) {
 GLFramebufferObject: abstract class {
 	_size: IntVector2D
 	_backend: UInt
@@ -23,5 +22,4 @@ GLFramebufferObject: abstract class {
 	setClearColor: abstract func (color: ColorRgba)
 	readPixels: abstract func (target: RasterPacked)
 	invalidate: abstract func
-}
 }

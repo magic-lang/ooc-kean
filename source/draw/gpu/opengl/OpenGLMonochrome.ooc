@@ -13,7 +13,6 @@ use base
 import OpenGLPacked, OpenGLMap, OpenGLContext
 import backend/GLTexture
 
-version(!gpuOff) {
 OpenGLMonochrome: class extends OpenGLPacked {
 	init: func ~fromPixels (size: IntVector2D, stride: UInt, data: Pointer, context: OpenGLContext) {
 		super(context _backend createTexture(TextureType Monochrome, size, stride, data), This channelCount, context)
@@ -39,5 +38,4 @@ OpenGLMonochrome: class extends OpenGLPacked {
 	}
 	create: override func (size: IntVector2D) -> This { this context createMonochrome(size) as This }
 	channelCount: static Int = 1
-}
 }

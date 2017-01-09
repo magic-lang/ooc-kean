@@ -10,7 +10,6 @@ use base
 import egl/egl
 import GLExtensions, GLFence, gles3/Gles3Debug, gles3/external/gles3
 
-version(!gpuOff) {
 EGLNativeFence: class extends GLFence {
 	_display: Pointer
 	init: func (=_display) { super() }
@@ -40,5 +39,4 @@ EGLNativeFence: class extends GLFence {
 		version(debugGL) { validateEnd("EGLNativeFence eglDupNativeFenceFDANDROID") }
 		result
 	}
-}
 }

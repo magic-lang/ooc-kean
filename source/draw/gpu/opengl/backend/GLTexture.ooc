@@ -8,7 +8,6 @@
 
  use geometry
 
-version(!gpuOff) {
 TextureType: enum {
 	Monochrome
 	Rgba
@@ -41,5 +40,4 @@ GLTexture: abstract class {
 	upload: abstract func (pixels: Pointer, stride: Int)
 	setMagFilter: abstract func (interpolation: InterpolationType)
 	setMinFilter: abstract func (interpolation: InterpolationType)
-}
 }

@@ -13,7 +13,6 @@ import Gles3Debug
 import Gles3VertexBufferObject
 import ../GLIndexBufferObject
 
-version(!gpuOff) {
 Gles3IndexBufferObject: class extends GLIndexBufferObject {
 	_backend: UInt
 	_vbo: Gles3VertexBufferObject
@@ -55,5 +54,4 @@ Gles3IndexBufferObject: class extends GLIndexBufferObject {
 	}
 	positionLayout: static UInt = 0
 	textureCoordinateLayout: static UInt = 1
-}
 }

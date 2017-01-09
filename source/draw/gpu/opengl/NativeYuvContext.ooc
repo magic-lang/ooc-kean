@@ -14,7 +14,6 @@ use base
 use concurrent
 import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLYuv, OpenGLPacked, OpenGLMap, OpenGLPromise, OpenGLMonochrome
 
-version(!gpuOff) {
 NativeYuvContext: class extends OpenGLContext {
 	defaultMap ::= this _yuvShader as Map
 	_yuvShader: OpenGLMapTransform
@@ -74,5 +73,4 @@ NativeYuvContext: class extends OpenGLContext {
 		this _unpackY add("texture0", input)
 		DrawState new(target) setMap(this _unpackY) draw()
 	}
-}
 }

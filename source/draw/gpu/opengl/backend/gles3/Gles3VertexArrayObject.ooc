@@ -13,7 +13,6 @@ import ../GLVertexArrayObject
 import Gles3VertexBufferObject
 import Gles3Debug
 
-version(!gpuOff) {
 Gles3VertexArrayObject: class extends GLVertexArrayObject {
 	_backend: UInt
 	_vertexCount: Int
@@ -53,5 +52,4 @@ Gles3VertexArrayObject: class extends GLVertexArrayObject {
 	}
 	positionLayout: static UInt = 0
 	textureCoordinateLayout: static UInt = 1
-}
 }

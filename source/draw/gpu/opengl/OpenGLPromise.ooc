@@ -11,7 +11,6 @@ use concurrent
 import backend/[GLFence, GLContext, EGLNativeFence]
 import OpenGLContext
 
-version(!gpuOff) {
 OpenGLPromise: class extends Promise {
 	_fence: GLFence
 	init: func (=_fence) { super() }
@@ -27,5 +26,4 @@ OpenGLPromise: class extends Promise {
 OpenGLNativeFencePromise: class extends OpenGLPromise {
 	init: func (context: OpenGLContext) { super(EGLNativeFence new(context backend getDisplay())) }
 	duplicateFileDescriptor: func -> Int { this _fence as EGLNativeFence duplicateFileDescriptor() }
-}
 }

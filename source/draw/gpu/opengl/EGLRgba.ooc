@@ -10,7 +10,6 @@ use geometry
 import GraphicBuffer, OpenGLContext, OpenGLRgba, AndroidContext
 import backend/[GLTexture, GLContext, EGLImage]
 
-version(!gpuOff) {
 EGLRgba: class extends OpenGLRgba {
 	_buffer: GraphicBuffer
 	buffer ::= this _buffer
@@ -25,5 +24,4 @@ EGLRgba: class extends OpenGLRgba {
 			this _buffer free()
 		super()
 	}
-}
 }
