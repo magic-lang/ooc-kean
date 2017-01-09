@@ -11,7 +11,6 @@ import external/gles3
 import ../GLFence
 import Gles3Debug
 
-version(!gpuOff) {
 Gles3Fence: class extends GLFence {
 	init: func { super() }
 	free: override func {
@@ -48,7 +47,8 @@ Gles3Fence: class extends GLFence {
 			glDeleteSync(this _backend)
 		this _backend = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0)
 		version(debugGL) { if (this _backend == null) Debug print("glFenceSync failed!") }
+		// Need to flush the glFenceSync command when wait is done in other context
+		glFlush()
 		version(debugGL) { validateEnd("Fence sync") }
 	}
-}
 }

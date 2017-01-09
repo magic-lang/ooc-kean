@@ -6,7 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-version(!gpuOff) {
 include EGL/egl, EGL/eglext
 
 // EGL 3
@@ -193,4 +192,3 @@ eglTerminate: extern func (display: Pointer) -> UInt
 eglGetError: extern func -> UInt
 eglGetCurrentContext: extern func -> Pointer
 eglQueryString: extern func (display: Pointer, name: UInt) -> Char*
-}

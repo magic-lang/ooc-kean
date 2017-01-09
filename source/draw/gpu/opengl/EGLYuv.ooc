@@ -13,7 +13,6 @@ use concurrent
 import GraphicBuffer, OpenGLContext, OpenGLPacked
 import backend/[GLTexture, EGLImage]
 
-version(!gpuOff) {
 EGLYuv: class extends OpenGLPacked {
 	_handle: Pointer
 	handle ::= this _handle
@@ -32,5 +31,4 @@ EGLYuv: class extends OpenGLPacked {
 		yuv := pen color toYuv()
 		super(pointList, Pen new(ColorRgba new(yuv y, yuv u, yuv v, 255), pen width))
 	}
-}
 }

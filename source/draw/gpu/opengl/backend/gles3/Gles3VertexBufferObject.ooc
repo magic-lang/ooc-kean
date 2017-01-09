@@ -11,7 +11,6 @@ use geometry
 import external/gles3
 import Gles3Debug
 
-version(!gpuOff) {
 Gles3VertexBufferObject: class {
 	_backend: UInt
 	_vertexCount: Int
@@ -70,5 +69,4 @@ Gles3VertexBufferObject: class {
 	}
 	positionLayout: static UInt = 0
 	textureCoordinateLayout: static UInt = 1
-}
 }

@@ -8,9 +8,8 @@
 
 use base
 import egl/egl
-import GLExtensions, GLFence, gles3/Gles3Debug
+import GLExtensions, GLFence, gles3/Gles3Debug, gles3/external/gles3
 
-version(!gpuOff) {
 EGLNativeFence: class extends GLFence {
 	_display: Pointer
 	init: func (=_display) { super() }
@@ -23,6 +22,8 @@ EGLNativeFence: class extends GLFence {
 	sync: override func {
 		version(debugGL) { validateStart("EGLNativeFence eglCreateSyncKHR") }
 		this _backend = GLExtensions eglCreateSyncKHR(this _display, EGL_SYNC_NATIVE_FENCE_ANDROID, null as Int*)
+		// Need to flush the eglCreateSyncKHR command when wait is done in other context
+		glFlush()
 		version(debugGL) { validateEnd("EGLNativeFence eglCreateSyncKHR") }
 	}
 	clientWait: override func (timeout: ULong = ULong maximumValue) -> Bool {
@@ -38,5 +39,4 @@ EGLNativeFence: class extends GLFence {
 		version(debugGL) { validateEnd("EGLNativeFence eglDupNativeFenceFDANDROID") }
 		result
 	}
-}
 }

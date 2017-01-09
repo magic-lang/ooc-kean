@@ -13,7 +13,6 @@ import external/gles3
 import ../GLFramebufferObject
 import Gles3Texture, Gles3Debug
 
-version(!gpuOff) {
 Gles3FramebufferObject: class extends GLFramebufferObject {
 	init: func (._size) { super(_size) }
 	free: override func {
@@ -103,5 +102,4 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		glFlush()
 		version(debugGL) { validateEnd("FramebufferObject flush") }
 	}
-}
 }

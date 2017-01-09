@@ -13,7 +13,6 @@ use base
 import backend/GLTexture
 import OpenGLPacked, OpenGLContext
 
-version(!gpuOff) {
 OpenGLRgba: class extends OpenGLPacked {
 	init: func ~fromPixels (size: IntVector2D, stride: UInt, data: Pointer, context: OpenGLContext) {
 		super(context _backend createTexture(TextureType Rgba, size, stride, data), This channelCount, context)
@@ -35,5 +34,4 @@ OpenGLRgba: class extends OpenGLPacked {
 	toRasterDefault: override func ~target (target: RasterImage) { this readPixels(target as RasterPacked) }
 	create: override func (size: IntVector2D) -> This { this context createRgba(size) as This }
 	channelCount: static Int = 4
-}
 }

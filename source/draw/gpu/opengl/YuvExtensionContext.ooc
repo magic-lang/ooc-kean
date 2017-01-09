@@ -14,7 +14,6 @@ use base
 use concurrent
 import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLYuv, OpenGLPacked, OpenGLMap, OpenGLPromise
 
-version(!gpuOff) {
 YuvExtensionContext: class extends OpenGLContext {
 	_yuvShader: OpenGLMapTransform
 	_unpackY: OpenGLMap
@@ -48,8 +47,8 @@ YuvExtensionContext: class extends OpenGLContext {
 		if (target instanceOf(GraphicBufferYuv420Semiplanar) && source instanceOf(GpuYuv420Semiplanar)) {
 			sourceImage := source as GpuYuv420Semiplanar
 			targetYuv := createEGLYuv(target as GraphicBufferYuv420Semiplanar)
-			this _pack add("y", sourceImage y)
-			this _pack add("uv", sourceImage uv)
+			this _pack add("texture0", sourceImage y)
+			this _pack add("texture1", sourceImage uv)
 			DrawState new(targetYuv) setMap(this _pack) draw()
 			result = this createFence()
 			targetYuv free()
@@ -80,5 +79,4 @@ YuvExtensionContext: class extends OpenGLContext {
 			case => super(image)
 		}
 	}
-}
 }

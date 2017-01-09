@@ -20,11 +20,6 @@ case "$1" in
 		TESTS="./test/$1"
 		;;
 esac
-FEATURES=""
-if [[ $1 == "nogpu" ]]
-then
-	FEATURES=$FEATURES" -DgpuOff"
-fi
 if [[ -d $TESTS ]]
 then
 	TESTS=$(find $TESTS -name "*Test.ooc")
@@ -43,7 +38,7 @@ done
 echo "Main: ./test/Tests.ooc" >> "$TESTS_USE_FILE"
 rm -f .libs/tests-linux64.*
 
-rock -q +-Wall $ARGS $FLAGS $FEATURES $TESTS_USE_FILE
+rock -q +-Wall $ARGS $FLAGS $TESTS_USE_FILE
 exitcode=$?
 if [[ $exitcode -eq 0 && -f ./Tests ]]
 then

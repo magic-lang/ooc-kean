@@ -6,7 +6,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-version(!gpuOff) {
 use base
 use geometry
 import egl/egl
@@ -141,4 +140,3 @@ EglDisplayContext: class {
 	}
 }
 GlobalCleanup register(|| EglDisplayContext _mutex free(), 10)
-}

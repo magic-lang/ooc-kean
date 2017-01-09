@@ -16,7 +16,6 @@ import OpenGLPacked, OpenGLMonochrome, OpenGLRgb, OpenGLRgba, OpenGLUv, OpenGLMe
 import OpenGLMap
 import backend/[GLContext, GLRenderer, GLExtensions]
 
-version(!gpuOff) {
 _FenceToRasterFuture: class extends ToRasterFuture {
 	_promise: OpenGLPromise
 	init: func (result: RasterImage, =_promise) { super(result) }
@@ -233,5 +232,4 @@ OpenGLContext: class extends GpuContext {
 			target as GraphicBufferYuv420Semiplanar buffer unlock()
 		result
 	}
-}
 }
