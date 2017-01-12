@@ -14,7 +14,7 @@ use base
 use concurrent
 import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLYuv, OpenGLPacked, OpenGLMap, OpenGLPromise
 
-YuvExtensionContext: class extends OpenGLContext {
+YuvContext: class extends OpenGLContext {
 	_yuvShader: OpenGLMapTransform
 	_unpackY: OpenGLMap
 	_unpackUv: OpenGLMap

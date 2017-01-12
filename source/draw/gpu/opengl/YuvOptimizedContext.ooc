@@ -14,7 +14,7 @@ use base
 use concurrent
 import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLYuv, OpenGLPacked, OpenGLMap, OpenGLPromise, OpenGLMonochrome
 
-NativeYuvContext: class extends OpenGLContext {
+YuvOptimizedContext: class extends OpenGLContext {
 	defaultMap ::= this _yuvShader as Map
 	_yuvShader: OpenGLMapTransform
 	_monochromeToYuv: OpenGLMapTransform

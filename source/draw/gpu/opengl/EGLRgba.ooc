@@ -7,7 +7,7 @@
  */
 
 use geometry
-import GraphicBuffer, OpenGLContext, OpenGLRgba, AndroidContext
+import GraphicBuffer, OpenGLContext, OpenGLRgba, OpenGLOptimizedContext
 import backend/[GLTexture, GLContext, EGLImage]
 
 EGLRgba: class extends OpenGLRgba {
