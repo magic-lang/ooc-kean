@@ -7,8 +7,10 @@
  */
 
 use base
-import egl/egl
-import GLExtensions, GLFence, gles3/Gles3Debug, gles3/external/gles3
+import egl
+import ../[GLExtensions, GLFence]
+import ../gles3/Gles3Debug
+import ../gles3/external/gles3
 
 EGLNativeFence: class extends GLFence {
 	_display: Pointer

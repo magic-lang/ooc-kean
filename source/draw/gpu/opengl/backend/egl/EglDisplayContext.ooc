@@ -8,7 +8,7 @@
 
 use base
 use geometry
-import egl/egl
+import egl
 
 EglDisplayContext: class {
 	_eglDisplay: Pointer

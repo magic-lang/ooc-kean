@@ -8,7 +8,8 @@
 
 use base
 use concurrent
-import backend/[GLFence, GLContext, EGLNativeFence]
+import backend/[GLFence, GLContext]
+import backend/egl/EGLNativeFence
 import OpenGLContext
 
 OpenGLPromise: class extends Promise {

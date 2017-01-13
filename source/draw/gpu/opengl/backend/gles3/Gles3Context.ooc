@@ -8,7 +8,8 @@
 
 use base
 use geometry
-import ../[GLContext, GLTexture, GLVertexArrayObject, GLIndexBufferObject, EglDisplayContext]
+import ../egl/EglDisplayContext
+import ../[GLContext, GLTexture, GLVertexArrayObject, GLIndexBufferObject]
 import external/gles3
 import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture, Gles3VertexArrayObject, Gles3IndexBufferObject
 
