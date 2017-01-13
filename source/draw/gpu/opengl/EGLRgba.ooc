@@ -8,7 +8,8 @@
 
 use geometry
 import GraphicBuffer, OpenGLContext, OpenGLRgba, OpenGLOptimizedContext
-import backend/[GLTexture, GLContext, EGLImage]
+import backend/[GLTexture, GLContext]
+import backend/egl/EGLImage
 
 EGLRgba: class extends OpenGLRgba {
 	_buffer: GraphicBuffer

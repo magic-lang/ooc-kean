@@ -11,7 +11,8 @@ use draw
 use base
 use concurrent
 import GraphicBuffer, OpenGLContext, OpenGLPacked
-import backend/[GLTexture, EGLImage]
+import backend/GLTexture
+import backend/egl/EGLImage
 
 EGLYuv: class extends OpenGLPacked {
 	_handle: Pointer

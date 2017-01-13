@@ -8,8 +8,9 @@
 
 use base
 use geometry
-import egl/egl
-import GLTexture, GLContext, GLExtensions, gles3/Gles3Debug
+import egl
+import ../gles3/Gles3Debug
+import ../[GLTexture, GLContext, GLExtensions]
 
 EGLImage: class extends GLTexture {
 	_eglBackend: Pointer
