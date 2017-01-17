@@ -9,7 +9,6 @@
 use base
 import egl/egl
 
-version(!gpuOff) {
 GLExtensions: class {
 	eglCreateImageKHR: static Func(Pointer, Pointer, UInt, Pointer, Int*) -> Pointer
 	eglDestroyImageKHR: static Func(Pointer, Pointer)
@@ -45,5 +44,4 @@ GLExtensions: class {
 			Debug print~free("Failed to load OpenGL extension function: " << name)
 		Closure fromPointer(result)
 	}
-}
 }

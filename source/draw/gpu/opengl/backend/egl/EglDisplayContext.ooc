@@ -6,12 +6,12 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-version(!gpuOff) {
 use base
 use geometry
-import egl/egl
+import egl
+import ../../DisplayContext
 
-EglDisplayContext: class {
+EglDisplayContext: class extends DisplayContext {
 	_eglDisplay: Pointer
 	_eglContext: Pointer
 	_eglSurface: Pointer
@@ -71,8 +71,8 @@ EglDisplayContext: class {
 		)
 		super()
 	}
-	getDisplay: func -> Pointer { this _eglDisplay }
-	printExtensions: func {
+	getDisplay: override func -> Pointer { this _eglDisplay }
+	printExtensions: override func {
 		extensions := eglQueryString(this _eglDisplay, EGL_EXTENSIONS) as CString
 		extensionsString := String new(extensions, extensions length())
 		array := extensionsString split(' ')
@@ -82,7 +82,7 @@ EglDisplayContext: class {
 			Debug print(array[i])
 		array free()
 	}
-	swapBuffers: func { eglSwapBuffers(this _eglDisplay, this _eglSurface) }
+	swapBuffers: override func { eglSwapBuffers(this _eglDisplay, this _eglSurface) }
 	_chooseConfig: func (configAttribs: Int*) -> Pointer {
 		numConfigs: Int
 		eglChooseConfig(this _eglDisplay, configAttribs, null, 10, numConfigs&)
@@ -141,4 +141,3 @@ EglDisplayContext: class {
 	}
 }
 GlobalCleanup register(|| EglDisplayContext _mutex free(), 10)
-}

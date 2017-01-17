@@ -14,8 +14,7 @@ use base
 use concurrent
 import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLRgba, OpenGLRgba, OpenGLPacked, OpenGLMonochrome, OpenGLUv, OpenGLMap, OpenGLPromise
 
-version(!gpuOff) {
-AndroidContext: class extends OpenGLContext {
+OpenGLOptimizedContext: class extends OpenGLContext {
 	_unpackRgbaToMonochrome: OpenGLMap
 	_unpackRgbaToUv: OpenGLMap
 	_unpackRgbaToUvPadded: OpenGLMap
@@ -171,5 +170,4 @@ AndroidContext: class extends OpenGLContext {
 			case => super(image)
 		}
 	}
-}
 }

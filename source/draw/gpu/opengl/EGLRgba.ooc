@@ -7,10 +7,10 @@
  */
 
 use geometry
-import GraphicBuffer, OpenGLContext, OpenGLRgba, AndroidContext
-import backend/[GLTexture, GLContext, EGLImage]
+import GraphicBuffer, OpenGLContext, OpenGLRgba, OpenGLOptimizedContext
+import backend/[GLTexture, GLContext]
+import backend/egl/EGLImage
 
-version(!gpuOff) {
 EGLRgba: class extends OpenGLRgba {
 	_buffer: GraphicBuffer
 	buffer ::= this _buffer
@@ -25,5 +25,4 @@ EGLRgba: class extends OpenGLRgba {
 			this _buffer free()
 		super()
 	}
-}
 }

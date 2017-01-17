@@ -6,11 +6,11 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-import GLQuad
+use base
+import backend/[GLFence, GLContext]
 
-GLRenderer: abstract class {
-	_quad: GLQuad
-	drawQuad: abstract func
-	drawLines: abstract func (positions: Float*, count: Int, dimensions: Int, lineWidth: Float)
-	drawPoints: abstract func (positions: Float*, count: Int, dimensions: Int)
+DisplayContext: abstract class {
+	getDisplay: abstract func -> Pointer
+	printExtensions: abstract func
+	swapBuffers: abstract func
 }

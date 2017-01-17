@@ -12,7 +12,6 @@ use draw-gpu
 import backend/[GLVolumeTexture, GLContext]
 import OpenGLContext
 
-version(!gpuOff) {
 OpenGLVolumeMonochrome: class {
 	_backend: GLVolumeTexture
 	init: func (size: IntVector3D, pixels: Byte* = null, context: OpenGLContext) {
@@ -23,5 +22,4 @@ OpenGLVolumeMonochrome: class {
 		super()
 	}
 	upload: func (pixels: Byte*) { this _backend upload(pixels) }
-}
 }

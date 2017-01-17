@@ -14,7 +14,6 @@ use collections
 import backend/GLShaderProgram
 import OpenGLContext, OpenGLPacked, OpenGLVolumeMonochrome
 
-version(!gpuOff) {
 OpenGLMap: class extends Map {
 	_vertexSource: String
 	_fragmentSource: String
@@ -94,5 +93,4 @@ OpenGLMapTransform: class extends OpenGLMap {
 		super(forbiddenInput, positionTransform, textureTransform)
 	}
 	vertexSource: static String = slurp("shaders/transform.vert")
-}
 }

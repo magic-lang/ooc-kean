@@ -142,13 +142,13 @@ QuaternionTest: class extends Fixture {
 		this add("power", func {
 			quaternion := Quaternion createRotationX(Float pi / 2.f)
 			halfQuaternion := quaternion power(0.5f)
-			expect(halfQuaternion rotationX, is equal to(Float pi / 4.f) within(tolerance))
+			expect(halfQuaternion eulerX, is equal to(Float pi / 4.f) within(tolerance))
 			quaternion = Quaternion createRotationY(Float pi / 2.f)
 			quarterQuaternion := quaternion power(0.25f)
-			expect(quarterQuaternion rotationY, is equal to(Float pi / 8.f) within(tolerance))
+			expect(quarterQuaternion eulerY, is equal to(Float pi / 8.f) within(tolerance))
 			quaternion = Quaternion createRotationZ(Float pi / 2.f)
 			doubleQuaternion := quaternion power(2.0f)
-			expect(doubleQuaternion rotationZ, is equal to(Float pi) within(tolerance))
+			expect(doubleQuaternion eulerZ, is equal to(Float pi) within(tolerance))
 		})
 		this add("toFloatTransform3D_1", func {
 			// Results from http://www.energid.com/resources/quaternion-calculator/
@@ -366,7 +366,7 @@ QuaternionTest: class extends Fixture {
 			this quaternionList add(Quaternion createRotationX(0.78f))
 			this quaternionList add(Quaternion createRotationX(0.86f))
 			weights := FloatVectorList getOnes(this quaternionList count)
-			expect(Quaternion weightedMean(this quaternionList, weights) rotationX, is equal to(0.78f) within(0.001f))
+			expect(Quaternion weightedMean(this quaternionList, weights) eulerX, is equal to(0.78f) within(0.001f))
 			weights free()
 		})
 		this add("weightedQuaternionMean_Y", func {
@@ -375,7 +375,7 @@ QuaternionTest: class extends Fixture {
 			this quaternionList add(Quaternion createRotationY(0.20f))
 			this quaternionList add(Quaternion createRotationY(0.28f))
 			weights := FloatVectorList getOnes(this quaternionList count)
-			expect(Quaternion weightedMean(this quaternionList, weights) rotationY, is equal to(0.20f) within(0.001f))
+			expect(Quaternion weightedMean(this quaternionList, weights) eulerY, is equal to(0.20f) within(0.001f))
 			weights free()
 		})
 		this add("weightedQuaternionMean_Z", func {
@@ -384,7 +384,7 @@ QuaternionTest: class extends Fixture {
 			this quaternionList add(Quaternion createRotationZ(-1.7f))
 			this quaternionList add(Quaternion createRotationZ(-1.62f))
 			weights := FloatVectorList getOnes(this quaternionList count)
-			expect(Quaternion weightedMean(this quaternionList, weights) rotationZ, is equal to(-1.7f) within(0.001f))
+			expect(Quaternion weightedMean(this quaternionList, weights) eulerZ, is equal to(-1.7f) within(0.001f))
 			weights free()
 		})
 		this add("euler angles conversion", func {
@@ -392,9 +392,9 @@ QuaternionTest: class extends Fixture {
 			y := 0.23f
 			z := 0.04f
 			quaternion := Quaternion createFromEulerAngles(x, y, z)
-			expect(x, is equal to(quaternion rotationX) within(tolerance))
-			expect(y, is equal to(quaternion rotationY) within(tolerance))
-			expect(z, is equal to(quaternion rotationZ) within(tolerance))
+			expect(x, is equal to(quaternion eulerX) within(tolerance))
+			expect(y, is equal to(quaternion eulerY) within(tolerance))
+			expect(z, is equal to(quaternion eulerZ) within(tolerance))
 		})
 	}
 	free: override func {

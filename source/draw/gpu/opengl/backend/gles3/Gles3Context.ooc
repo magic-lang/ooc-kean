@@ -6,16 +6,17 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-version(!gpuOff) {
 use base
 use geometry
-import ../[GLContext, GLTexture, GLVertexArrayObject, GLIndexBufferObject, EglDisplayContext]
+import ../../DisplayContext
+import ../egl/EglDisplayContext
+import ../[GLContext, GLFence, GLTexture, GLVertexArrayObject, GLIndexBufferObject]
 import external/gles3
 import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture, Gles3VertexArrayObject, Gles3IndexBufferObject
 
 Gles3Context: class extends GLContext {
-	_displayContext: EglDisplayContext
-	getDisplayContextSafely: func -> EglDisplayContext { this == null ? null : this _displayContext }
+	_displayContext: DisplayContext
+	getDisplayContextSafely: func -> DisplayContext { this == null ? null : this _displayContext }
 	init: func (=_displayContext) { super() }
 	free: override func {
 		this _displayContext free()
@@ -86,10 +87,9 @@ Gles3Context: class extends GLContext {
 		Gles3IndexBufferObject new(vertices, textureCoordinates, indices)
 	}
 	create: static func ~shared (display: Pointer, nativeBackend: Long, sharedContext: This = null) -> This {
-		result := This new(EglDisplayContext new(display, nativeBackend, sharedContext getDisplayContextSafely()))
+		result := This new(EglDisplayContext new(display, nativeBackend, sharedContext getDisplayContextSafely() as EglDisplayContext))
 	}
 	create: static func ~pbufferShared (sharedContext: This = null) -> This {
-		result := This new(EglDisplayContext new(sharedContext getDisplayContextSafely()))
+		result := This new(EglDisplayContext new(sharedContext getDisplayContextSafely() as EglDisplayContext))
 	}
-}
 }

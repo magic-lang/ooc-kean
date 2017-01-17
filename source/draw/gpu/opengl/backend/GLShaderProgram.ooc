@@ -9,7 +9,6 @@
 use geometry
 use draw
 
-version(!gpuOff) {
 GLShaderProgram: abstract class {
 	useProgram: abstract func
 	setUniform: abstract func ~Int (name: String, x: Int)
@@ -24,5 +23,4 @@ GLShaderProgram: abstract class {
 	setUniform: abstract func ~FloatArray (name: String, values: Float*, count: Int)
 	setUniform: abstract func ~FloatTransform2D (name: String, value: FloatTransform2D)
 	setUniform: abstract func ~FloatTransform3D (name: String, value: FloatTransform3D)
-}
 }

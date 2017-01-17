@@ -18,7 +18,6 @@ Imports: IntBox2D
 Imports: IntShell2D
 Imports: FloatEuclidTransform
 Imports: Quaternion
-Imports: FloatRotation3D
 Imports: FloatPoint2DVectorList
 Imports: FloatEuclidTransformVectorList
 Imports: FloatConvexHull2D

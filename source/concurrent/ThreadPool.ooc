@@ -44,13 +44,16 @@ _Task: abstract class {
 		else {
 			timer := WallTimer new() . start()
 			while (timer stop() < time && !status) {
-				status = (this _state != _PromiseState Unfinished)
+				this _mutex with(|| status = (this _state != _PromiseState Unfinished))
 				if (!status)
 					Time sleepMilli(1)
 			}
 			timer free()
 		}
-		this _state == _PromiseState Finished
+		this _mutex lock()
+		status = this _state == _PromiseState Finished
+		this _mutex unlock()
+		status
 	}
 	cancel: func -> Bool {
 		status := false

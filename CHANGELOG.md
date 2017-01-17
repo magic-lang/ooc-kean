@@ -1,5 +1,11 @@
 # ooc-kean changes by release
 
+## Release 2.13.0
+
+- **The gpuOff version flag was removed to reduce code bloat**
+- **Added timedWait for WaitCondition**
+- **Fixed race conditions in Promise and ThreadPool**
+
 ## Release 2.12.0
 
 - **Simple optimizations to FloatConvexHull2D**

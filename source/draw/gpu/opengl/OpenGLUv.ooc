@@ -13,7 +13,6 @@ use base
 import backend/GLTexture
 import OpenGLPacked, OpenGLContext, OpenGLMap
 
-version(!gpuOff) {
 OpenGLUv: class extends OpenGLPacked {
 	init: func ~fromPixels (size: IntVector2D, stride: UInt, data: Pointer, context: OpenGLContext) {
 		super(context _backend createTexture(TextureType Uv, size, stride, data), This channelCount, context)
@@ -41,5 +40,4 @@ OpenGLUv: class extends OpenGLPacked {
 	}
 	create: override func (size: IntVector2D) -> This { this context createUv(size) as This }
 	channelCount: static Int = 2
-}
 }

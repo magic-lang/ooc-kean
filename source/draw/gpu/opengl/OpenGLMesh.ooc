@@ -13,7 +13,6 @@ import OpenGLContext
 import backend/GLVertexArrayObject
 import backend/GLIndexBufferObject
 
-version(!gpuOff) {
 OpenGLMesh: abstract class extends Mesh {
 	new: static func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], context: OpenGLContext) -> This {
 		_VAOMesh new(vertices, textureCoordinates, context)
@@ -45,5 +44,4 @@ _IBOMesh: class extends OpenGLMesh {
 		super()
 	}
 	draw: override func { this _backend draw() }
-}
 }

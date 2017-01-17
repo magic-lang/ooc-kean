@@ -12,7 +12,6 @@ import external/gles3
 import ../GLTexture
 import Gles3Debug
 
-version(!gpuOff) {
 Gles3Texture: class extends GLTexture {
 	_format: UInt
 	_internalFormat: UInt
@@ -142,5 +141,4 @@ Gles3Texture: class extends GLTexture {
 		version(debugGL) { validateEnd("Texture _allocate") }
 		true
 	}
-}
 }

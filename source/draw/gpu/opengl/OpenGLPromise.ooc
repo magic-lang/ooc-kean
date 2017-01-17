@@ -8,10 +8,10 @@
 
 use base
 use concurrent
-import backend/[GLFence, GLContext, EGLNativeFence]
+import backend/[GLFence, GLContext]
+import backend/egl/EGLNativeFence
 import OpenGLContext
 
-version(!gpuOff) {
 OpenGLPromise: class extends Promise {
 	_fence: GLFence
 	init: func (=_fence) { super() }
@@ -22,11 +22,9 @@ OpenGLPromise: class extends Promise {
 	}
 	sync: func { this _fence sync() }
 	wait: override func (time: TimeSpan) -> Bool { this _fence clientWait(time toNanoseconds()) }
-	getFileDescriptor: virtual func -> Int { -1 }
 }
 
 OpenGLNativeFencePromise: class extends OpenGLPromise {
 	init: func (context: OpenGLContext) { super(EGLNativeFence new(context backend getDisplay())) }
-	getFileDescriptor: override func -> Int { this _fence as EGLNativeFence duplicateFileDescriptor() }
-}
+	duplicateFileDescriptor: func -> Int { this _fence as EGLNativeFence duplicateFileDescriptor() }
 }

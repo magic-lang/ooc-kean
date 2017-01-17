@@ -62,7 +62,6 @@ lstat: extern func (CString, FileStat*) -> Int
 fstat: extern func (Int, FileStat*) -> Int
 chmod: extern func (CString, ModeT) -> Int
 fchmod: extern func (Int, ModeT) -> Int
-close: extern func (Int) -> Int
 _mkdir: extern (mkdir) func (CString, ModeT) -> Int
 _mkfifo: extern (mkfifo) func (CString, ModeT) -> Int
 umask: extern func (ModeT) -> ModeT
