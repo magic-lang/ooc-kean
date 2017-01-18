@@ -107,8 +107,8 @@ BlitTest: class extends Fixture {
 				<               >
 				<               >"
 			)
-			this testBlend(this sourceImage, correctImage, IntVector2D new(0, 0), IntVector2D new(5, 4), BlendMode Add)
-			this testBlend(this sourceImage, correctImage, IntVector2D new(0, 0), IntVector2D new(5, 4), BlendMode White)
+			this testBlend(this sourceImage, correctImage, IntVector2D new(0, 0), IntVector2D new(5, 4), BlendMode Add, 0) // Bit exact
+			this testBlend(this sourceImage, correctImage, IntVector2D new(0, 0), IntVector2D new(5, 4), BlendMode White, 16) // Approximated
 			correctImage free()
 		})
 		this add("Blit fill", func {
@@ -125,16 +125,16 @@ BlitTest: class extends Fixture {
 				<              >
 				<              >"
 			)
-			this testBlend(this sourceImage, correctImage, IntVector2D new(0, 0), IntVector2D new(5, 4), BlendMode Fill)
+			this testBlend(this sourceImage, correctImage, IntVector2D new(0, 0), IntVector2D new(4, 2), BlendMode Fill, 0) // Bit exact
 			correctImage free()
 		})
 	}
 	testOffset: func (source, expected: RasterMonochrome, offset: IntVector2D) {
-		this testOffsetMode(source, expected, offset, BlendMode Fill)
-		this testOffsetMode(source, expected, offset, BlendMode Add)
-		this testOffsetMode(source, expected, offset, BlendMode White)
+		this testOffsetMode(source, expected, offset, BlendMode Fill, 0) // Bit exact
+		this testOffsetMode(source, expected, offset, BlendMode Add, 0) // Bit exact
+		this testOffsetMode(source, expected, offset, BlendMode White, 16) // Approximated
 	}
-	testOffsetMode: func (source, expected: RasterMonochrome, offset: IntVector2D, blendMode: BlendMode) {
+	testOffsetMode: func (source, expected: RasterMonochrome, offset: IntVector2D, blendMode: BlendMode, cpuTolerance: Int) {
 		resultCpu := RasterMonochrome new(expected size)
 		resultCpu fill(ColorRgba black)
 		resultCpu blit(this sourceImage, offset, blendMode)
@@ -142,11 +142,11 @@ BlitTest: class extends Fixture {
 		resultGpu fill(ColorRgba black)
 		resultGpu blit(this sourceImage, offset, blendMode)
 		resultCpuFromGpu := resultGpu toRaster()
-		expect(resultCpu distance(expected), is less than(0.05f))
-		expect(resultCpuFromGpu distance(expected), is less than(0.05f))
+		expect(resultCpu exactDistance(expected), is less than(cpuTolerance + 1))
+		expect(resultCpuFromGpu distance(expected), is less than(0.05))
 		(resultCpu, resultGpu, resultCpuFromGpu) free()
 	}
-	testBlend: func (source, expected: RasterMonochrome, offsetA: IntVector2D, offsetB: IntVector2D, blendModeB: BlendMode) {
+	testBlend: func (source, expected: RasterMonochrome, offsetA: IntVector2D, offsetB: IntVector2D, blendModeB: BlendMode, cpuTolerance: Int) {
 		resultCpu := RasterMonochrome new(expected size)
 		resultCpu fill(ColorRgba black)
 		resultCpu blit(this sourceImage, offsetA, BlendMode Fill)
@@ -156,8 +156,8 @@ BlitTest: class extends Fixture {
 		resultGpu blit(this sourceImage, offsetA, BlendMode Fill)
 		resultGpu blit(this sourceImage, offsetB, blendModeB)
 		resultCpuFromGpu := resultGpu toRaster()
-		expect(resultCpu distance(expected), is less than(0.05f))
-		expect(resultCpuFromGpu distance(expected), is less than(0.05f))
+		expect(resultCpu exactDistance(expected), is less than(cpuTolerance + 1))
+		expect(resultCpuFromGpu distance(expected), is less than(0.05))
 		(resultCpu, resultGpu, resultCpuFromGpu) free()
 	}
 	free: override func {

@@ -113,6 +113,33 @@ RasterMonochrome: class extends RasterPacked {
 			this _blitRaw(this buffer pointer, (source as This) buffer pointer, startSrc x, startSrc y, startDst x, startDst y, dimensions x, dimensions y, this stride, (source as This) stride, blendMode)
 		}
 	}
+	exactDistance: func (other: This) -> Int {
+		if (this size != other size)
+			return Int maximumValue;
+		else {
+			result := 0
+			thisUpperLeft := this buffer pointer
+			otherUpperLeft := other buffer pointer
+			thisStride := this stride
+			otherStride := other stride
+			thisLineStart := thisUpperLeft
+			otherLineStart := otherUpperLeft
+			for (y in 0 .. this size y) {
+				thisPixel := thisLineStart
+				otherPixel := otherLineStart
+				for (x in 0 .. this size x) {
+					thisColor: Int = thisPixel@
+					otherColor: Int = otherPixel@
+					result += thisColor > otherColor ? thisColor - otherColor : otherColor - thisColor
+					thisPixel += 1
+					otherPixel += 1
+				}
+				thisLineStart += thisStride
+				otherLineStart += otherStride
+			}
+			return result;
+		}
+	}
 	fill: override func (color: ColorRgba) { this buffer memset(color r) }
 	copy: override func -> This { This new(this buffer copy(), this size, this stride) }
 	apply: override func ~rgb (action: Func(ColorRgb)) {
