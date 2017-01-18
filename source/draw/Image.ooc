@@ -47,12 +47,12 @@ Image: abstract class {
 		this drawLines(positions, pen)
 		positions free()
 	}
-	blitWhiteSource: virtual func (source: This, offset: IntVector2D, sourceBox: IntBox2D) {
+	blitSource: virtual func (source: This, offset: IntVector2D, sourceBox: IntBox2D, blendMode: BlendMode) {
 		normalizedSourceBox := (sourceBox toFloatBox2D()) / (source size toFloatVector2D())
-		DrawState new(this) setBlendMode(BlendMode White) setInputImage(source) setSourceNormalized(normalizedSourceBox) setViewport(IntBox2D new(offset, sourceBox size)) draw()
+		DrawState new(this) setBlendMode(blendMode) setInputImage(source) setSourceNormalized(normalizedSourceBox) setViewport(IntBox2D new(offset, sourceBox size)) draw()
 	}
-	blitWhite: func (source: This, offset: IntVector2D) {
-		this blitWhiteSource(source as This, offset, IntBox2D new(source size))
+	blit: func (source: This, offset: IntVector2D, blendMode: BlendMode) {
+		this blitSource(source as This, offset, IntBox2D new(source size), blendMode)
 	}
 	fill: virtual func (color: ColorRgba) { Debug error("fill unimplemented for class %s!" format(this class name)) }
 	draw: virtual func ~DrawState (drawState: DrawState) { Debug error("draw~DrawState unimplemented for class %s!" format(this class name)) }
@@ -67,8 +67,8 @@ Image: abstract class {
 	distance: virtual abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
 	isValidIn: func (x, y: Int) -> Bool { x >= 0 && x < this size x && y >= 0 && y < this size y }
-	// Writes white text on the existing image
-	write: func (message: String, fontAtlas: This, localOrigin: IntPoint2D) {
+	// Writes white text on the existing image (with black background if solid is true)
+	write: func (message: String, fontAtlas: This, localOrigin: IntPoint2D, blendMode: BlendMode = BlendMode White) {
 		skippedRows := 2
 		columns := 16
 		fontSize := DrawContext getFontSize(fontAtlas)
@@ -78,8 +78,8 @@ Image: abstract class {
 			sourceX := charCode % columns
 			sourceY := (charCode / columns) - skippedRows
 			source := IntBox2D new(sourceX * fontSize x, sourceY * fontSize y, fontSize x, fontSize y)
-			if ((charCode as Char) graph())
-				this blitWhiteSource(fontAtlas, (localOrigin + (targetOffset * fontSize)) toIntVector2D(), source)
+			if (blendMode == BlendMode Fill || (charCode as Char) graph())
+				this blitSource(fontAtlas, (localOrigin + (targetOffset * fontSize)) toIntVector2D(), source, blendMode)
 			targetOffset x += 1
 			if (charCode == '\n') {
 				targetOffset x = 0 // Carriage return
