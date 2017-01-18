@@ -58,9 +58,11 @@ RasterMonochrome: class extends RasterPacked {
 						writer := writerLineStart
 						reader := readerLineStart
 						for (x in 0 .. width) {
+							// White function
 							sourceColor: Float = reader@
 							targetColor: Float = writer@
 							blendColor: Int = (targetColor * (1.0f - (sourceColor / 255.0f))) + sourceColor // Source intensity as alpha
+
 							if (blendColor > 255) blendColor = 255 // Limit intensity
 							writer@ = blendColor // Write to target
 							reader += 1
@@ -74,7 +76,9 @@ RasterMonochrome: class extends RasterPacked {
 						writer := writerLineStart
 						reader := readerLineStart
 						for (x in 0 .. width) {
+							// Add function
 							blendColor: Int = reader@ + writer@ // Simple addition
+
 							if (blendColor > 255) blendColor = 255 // Limit intensity
 							writer@ = blendColor // Write to target
 							reader += 1
