@@ -119,7 +119,7 @@ RasterMonochrome: class extends RasterPacked {
 	}
 	exactDistance: func (other: This) -> Int {
 		if (this size != other size)
-			return Int maximumValue;
+			Int maximumValue
 		else {
 			result := 0
 			thisUpperLeft := this buffer pointer
@@ -141,7 +141,7 @@ RasterMonochrome: class extends RasterPacked {
 				thisLineStart += thisStride
 				otherLineStart += otherStride
 			}
-			return result;
+			result
 		}
 	}
 	fill: override func (color: ColorRgba) { this buffer memset(color r) }
