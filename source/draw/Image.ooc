@@ -67,7 +67,7 @@ Image: abstract class {
 	distance: virtual abstract func (other: This) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
 	isValidIn: func (x, y: Int) -> Bool { x >= 0 && x < this size x && y >= 0 && y < this size y }
-	// Writes white text on the existing image (with black background if solid is true)
+	// Writes white text on the existing image (with black background if blendMode is Fill)
 	write: func (message: String, fontAtlas: This, localOrigin: IntPoint2D, blendMode: BlendMode = BlendMode White) {
 		skippedRows := 2
 		columns := 16
