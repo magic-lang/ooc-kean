@@ -6,11 +6,13 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+// Resizes the buffer when full
+// Caller is responsible for dequeueing
 VectorQueue: class <T> extends Queue<T> {
 	_backend: T*
 	_capacity := 0
-	_head := 0 // Index of oldest element
-	_tail := 0 // Index of newest element
+	_head := 0 // Index at oldest element
+	_tail ::= (this _head + this _count) % this _capacity // Index behind newest element in modulo
 	_chunkCount := 32
 	capacity ::= this _capacity
 	isFull ::= this _count == this _capacity
@@ -26,14 +28,12 @@ VectorQueue: class <T> extends Queue<T> {
 	}
 	clear: override func {
 		this _head = 0
-		this _tail = 0
 		this _count = 0
 	}
 	enqueue: override func (item: T) {
 		if (this isFull)
 			this _resize()
 		this _backend[this _tail] = item
-		this _tail = (this _tail + 1) % this _capacity
 		this _count += 1
 	}
 	dequeue: override func ~default (fallback: T) -> T {
