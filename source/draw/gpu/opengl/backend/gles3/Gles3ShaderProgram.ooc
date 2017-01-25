@@ -5,7 +5,7 @@
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
  */
-
+version(!gpuOff) {
 use base
 use geometry
 use draw
@@ -132,4 +132,5 @@ Gles3ShaderProgram: class extends GLShaderProgram {
 		version(debugGL) { validateEnd("ShaderProgram _compileShaders") }
 		success
 	}
+}
 }

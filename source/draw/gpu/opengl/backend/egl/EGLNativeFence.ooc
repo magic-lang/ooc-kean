@@ -5,14 +5,23 @@
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
  */
-
 use base
 import egl
 import ../[GLExtensions, GLFence]
 import ../gles3/Gles3Debug
 import ../gles3/external/gles3
 
-EGLNativeFence: class extends GLFence {
+EGLNativeFence: abstract class {
+	create: static func (display: Pointer) -> GLFence {
+		result: GLFence = null
+		version (!gpuOff)
+			result = _EGLNativeFence new(display)
+		result
+	}
+}
+
+version(!gpuOff) {
+_EGLNativeFence: class extends GLFence {
 	_display: Pointer
 	init: func (=_display) { super() }
 	free: override func {
@@ -41,4 +50,5 @@ EGLNativeFence: class extends GLFence {
 		version(debugGL) { validateEnd("EGLNativeFence eglDupNativeFenceFDANDROID") }
 		result
 	}
+}
 }

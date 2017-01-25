@@ -30,11 +30,19 @@ GLContext: abstract class {
 	createIndexBufferObject: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], indices: IntPoint3D[]) -> GLIndexBufferObject
 	getDisplay: abstract func -> Pointer
 	createContext: static func ~shared (display: Pointer, nativeBackend: Long, sharedContext: This = null) -> This {
-		// This function will check whether a context creation succeeded and if not try to create a context for another OpenGL version
-		Gles3Context create(display, nativeBackend, sharedContext as Gles3Context)
+		result: This = null
+		version (!gpuOff) {
+			// This function will check whether a context creation succeeded and if not try to create a context for another OpenGL version
+			result = Gles3Context create(display, nativeBackend, sharedContext as Gles3Context)
+		}
+		result
 	}
 	createContext: static func ~pbufferShared (sharedContext: This = null) -> This {
-		// This function will check whether a context creation succeeded and if not try to create a context for another OpenGL version
-		Gles3Context create(sharedContext as Gles3Context)
+		result: This = null
+		version (!gpuOff) {
+			// This function will check whether a context creation succeeded and if not try to create a context for another OpenGL version
+			result = Gles3Context create(sharedContext as Gles3Context)
+		}
+		result
 	}
 }

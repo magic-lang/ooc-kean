@@ -30,10 +30,12 @@ Debug: class {
 		This _printFunction = f
 	}
 	print: static func (string: String, level := DebugLevel Debug) {
+		println("NON FREE")
 		if (level as Int >= This _level as Int && This _level != DebugLevel Silent)
 			This _printFunction(string)
 	}
 	print: static func ~free (string: String, level := DebugLevel Debug) {
+		println("FREE")
 		This print(string, level)
 		string free()
 	}
