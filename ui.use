@@ -13,6 +13,3 @@ Imports: win32/Win32DisplayWindow
 version(windows) {
 	Libs: -lgdi32
 }
-version(linux) {
-	Libs: -lX11
-}
