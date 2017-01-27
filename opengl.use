@@ -23,4 +23,4 @@ Imports: EGLYuv
 Imports: GraphicBuffer
 Imports: GraphicBufferYuv420Semiplanar
 version (linux || apple || android)
-	Libs: -lEGL
+	Libs: -lEGL_adreno

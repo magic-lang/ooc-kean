@@ -9,6 +9,6 @@ Imports: GpuImage
 Imports: GpuYuv420Semiplanar
 Imports: GpuContext
 version (linux || apple || android) {
-	Libs: -lEGL
-	Libs: -lGLESv2
+	Libs: -lEGL_adreno
+	Libs: -lGLESv2_adreno
 }
