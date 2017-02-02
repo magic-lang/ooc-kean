@@ -7,7 +7,6 @@ Imports: FloatVector3D
 Imports: FloatPoint2D
 Imports: FloatPoint3D
 Imports: FloatBox2D
-Imports: FloatShell2D
 Imports: FloatTransform2D
 Imports: FloatTransform3D
 Imports: IntVector2D
@@ -15,7 +14,6 @@ Imports: IntVector3D
 Imports: IntPoint2D
 Imports: IntPoint3D
 Imports: IntBox2D
-Imports: IntShell2D
 Imports: FloatEuclidTransform
 Imports: Quaternion
 Imports: FloatPoint2DVectorList

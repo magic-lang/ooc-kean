@@ -123,8 +123,6 @@ Fixture: abstract class {
 			case FloatMatrix => (expectedText, testedText) = (expectedValue toString~floatmatrix(), testedValue toString~floatmatrix())
 			case FloatBox2D => (expectedText, testedText) = (expectedValue toString~floatbox2d(), testedValue toString~floatbox2d())
 			case IntBox2D => (expectedText, testedText) = (expectedValue toString~intbox2d(), testedValue toString~intbox2d())
-			case FloatShell2D => (expectedText, testedText) = (expectedValue toString~floatshell2d(), testedValue toString~floatshell2d())
-			case IntShell2D => (expectedText, testedText) = (expectedValue toString~intshell2d(), testedValue toString~intshell2d())
 			case => (expectedText, testedText) = (expectedValue toString(), testedValue toString())
 		}
 		result add(expectedText) . add("was") . add(testedText)
@@ -230,5 +228,3 @@ expect: func ~floatcomplex (value: FloatComplex, constraint: ExpectModifier, mes
 expect: func ~floatmatrix (value: FloatMatrix, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~floatbox2d (value: FloatBox2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
 expect: func ~intbox2d (value: IntBox2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
-expect: func ~floatshell2d (value: FloatShell2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
-expect: func ~intshell2d (value: IntShell2D, constraint: ExpectModifier, message: String = null) { Fixture verify(Cell new(value), constraint, message) }
