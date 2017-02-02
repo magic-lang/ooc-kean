@@ -74,17 +74,19 @@ FloatConvexHull2D: class {
 			// https://en.wikipedia.org/wiki/Quickhull
 			points := this _points
 			this _points = VectorList<FloatPoint2D> new(points _count)
-			(leftMostIndex, rightMostIndex) := (0, 0)
-			leftEndpoint := points[0]
-			rightEndpoint := leftEndpoint
+			(leftMostIndex, leftEndpoint) := (0, points[0])
 			for (i in 1 .. points count) {
 				point := points[i]
 				if (point x < leftEndpoint x)
 					(leftEndpoint, leftMostIndex) = (point, i)
-				else if (point x > rightEndpoint x)
-					(rightEndpoint, rightMostIndex) = (point, i)
 			}
 			points removeAt(leftMostIndex)
+			(rightMostIndex, rightEndpoint) := (0, points[0])
+			for (i in 1 .. points count) {
+				point := points[i]
+				if (point x > rightEndpoint x)
+					(rightEndpoint, rightMostIndex) = (point, i)
+			}
 			points removeAt(rightMostIndex)
 			leftSet := VectorList<FloatPoint2D> new(points _count)
 			rightSet := VectorList<FloatPoint2D> new(points _count)
