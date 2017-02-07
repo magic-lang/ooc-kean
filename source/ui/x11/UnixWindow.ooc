@@ -13,7 +13,7 @@ use opengl
 import DisplayWindow
 import X11Window
 
-version((unix || apple) && !android) {
+version((unix || apple) && !android && !uiOff) {
 UnixWindowBase: class extends DisplayWindow {
 	_xWindow: X11Window
 	init: func (size: IntVector2D, title: String) {
