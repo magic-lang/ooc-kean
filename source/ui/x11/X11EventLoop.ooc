@@ -12,7 +12,7 @@ import external/x11
 import ../[EventLoop, DisplayWindow, GuiEvent]
 import UnixWindow
 
-version((unix || apple) && !android) {
+version((unix || apple) && !android && !uiOff) {
 X11EventLoop: class extends EventLoop {
 	init: func
 	processEvents: override func (receiver: DisplayWindow) {

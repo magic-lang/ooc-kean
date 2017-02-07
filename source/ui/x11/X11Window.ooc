@@ -12,7 +12,7 @@ use ui
 import external/x11
 use draw
 
-version((unix || apple) && !android) {
+version((unix || apple) && !android && !uiOff) {
 X11Window: class extends NativeWindow {
 	_x11GraphicsContext: GraphicsContextX11
 	_defaultScreen := 0

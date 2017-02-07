@@ -62,7 +62,7 @@ DisplayWindow: abstract class {
 	}
 	create: static func (size: IntVector2D, title: String) -> This {
 		result: This = null
-		version((unix || apple) && !android)
+		version((unix || apple) && !android && !uiOff)
 			result = UnixWindow create(size, title)
 		version(windows)
 			result = Win32DisplayWindow new(size, title)

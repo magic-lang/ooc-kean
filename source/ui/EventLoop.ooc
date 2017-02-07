@@ -16,7 +16,7 @@ EventLoop: abstract class {
 	processEvents: abstract func (receiver: DisplayWindow)
 	create: static func -> This {
 		result: This
-		version((unix || apple) && !android)
+		version((unix || apple) && !android && !uiOff)
 			result = X11EventLoop new()
 		version(windows)
 			result = Win32EventLoop new()
