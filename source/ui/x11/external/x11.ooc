@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-version((unix || apple) && !android) {
+version((unix || apple) && !android && !uiOff) {
 include X11/Xlib
 include X11/Xatom
 include X11/Xutil
