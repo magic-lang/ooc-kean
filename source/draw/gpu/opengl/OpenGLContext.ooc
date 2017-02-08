@@ -56,7 +56,7 @@ OpenGLContext: class extends GpuContext {
 		this _packMonochrome = OpenGLMap new(slurp("shaders/packMonochrome.vert"), slurp("shaders/packMonochrome.frag"), this)
 		this _packUv = OpenGLMap new(slurp("shaders/packUv.vert"), slurp("shaders/packUv.frag"), this)
 		this _packUvPadded = OpenGLMap new(slurp("shaders/packUvPadded.vert"), slurp("shaders/packUvPadded.frag"), this)
-		this _linesShader = OpenGLMapTransform new(slurp("shaders/color.frag"), this)
+		this _linesShader = OpenGLMap new(slurp("shaders/lines.vert"), slurp("shaders/color.frag"), this)
 		this _pointsShader = OpenGLMap new(slurp("shaders/points.vert"), slurp("shaders/color.frag"), this)
 		this _transformTextureMap = OpenGLMapTransform new(slurp("shaders/texture.frag"), this)
 		this _monochromeToRgba = OpenGLMapTransform new(slurp("shaders/monochromeToRgba.frag"), this)
@@ -87,6 +87,7 @@ OpenGLContext: class extends GpuContext {
 		positions := pointList pointer as Float*
 		shader := this getLineShader()
 		shader add("color", pen color normalized)
+		shader add("transform", projection)
 		shader useProgram(null, projection, FloatTransform3D identity)
 		this _renderer drawLines(positions, pointList count, 2, pen width)
 	}
