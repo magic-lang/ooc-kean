@@ -61,9 +61,9 @@ YuvOptimizedContext: class extends OpenGLContext {
 		result: OpenGLMap
 		if (input instanceOf(EGLYuv) && output instanceOf(EGLYuv))
 			result = this _yuvShader
-		else if (output instanceOf(EGLYuv) && (input instanceOf(OpenGLMonochrome) || input instanceOf(RasterMonochrome)))
+		else if ((input instanceOf(OpenGLMonochrome) || input instanceOf(RasterMonochrome)) && output instanceOf(EGLYuv))
 			result = this _monochromeToYuv
-		else if (output instanceOf(EGLYuv) && input instanceOf(GpuYuv420Semiplanar))
+		else if (input instanceOf(GpuYuv420Semiplanar) && output instanceOf(EGLYuv))
 			result = this _compositeYuvToNativeYuv
 		else if (input instanceOf(EGLYuv) && output instanceOf(OpenGLMonochrome))
 			result = this _unpackY
