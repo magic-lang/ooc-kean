@@ -26,7 +26,7 @@ YuvOptimizedContext: class extends OpenGLContext {
 		super(other)
 		this _yuvShader = OpenGLMapTransform new(slurp("shaders/yuv.frag"), this)
 		this _monochromeToYuv = OpenGLMapTransform new(slurp("shaders/monochromeToNativeYuv.frag"), this)
-		this _yuvLineShader = OpenGLMapTransform new(slurp("shaders/colorToNativeYuv.frag"), this)
+		this _yuvLineShader = OpenGLMap new(slurp("shaders/lines.vert"), slurp("shaders/colorToNativeYuv.frag"), this)
 		this _unpackY = OpenGLMap new(slurp("shaders/unpackYuv.vert"), slurp("shaders/unpackYuvToMonochrome.frag"), this)
 		this _compositeYuvToNativeYuv = OpenGLMapTransform new(slurp("shaders/packCompositeYuvToYuv.frag"), this)
 	}
