@@ -25,7 +25,6 @@ OpenGLMap: class extends Map {
 			Debug error("Vertex or fragment shader source not set")
 		this _program = this _context _backend createShaderProgram(this _vertexSource, this _fragmentSource)
 	}
-	init: func ~defaultVertex (fragmentSource: String, context: OpenGLContext) { this init(slurp("shaders/default.vert"), fragmentSource, context) }
 	free: override func {
 		this _program free()
 		super()
@@ -83,6 +82,7 @@ OpenGLMap: class extends Map {
 		this apply(action)
 		(action as Closure) free()
 	}
+	new: static func ~default (fragmentSource: String, context: OpenGLContext) -> This { OpenGLMapTransform new(fragmentSource, context) }
 }
 
 OpenGLMapTransform: class extends OpenGLMap {
