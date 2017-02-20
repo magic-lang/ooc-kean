@@ -455,6 +455,21 @@ FloatVectorListTest: class extends Fixture {
 				expect(list[i], is equal to(((i + 1) as Float) * 1.1f) within(0.01f))
 			list free()
 		})
+		this add("Half gaussian", func {
+			list := FloatVectorList halfGaussianKernel(11, 3)
+			expect(list[0], is equal to(0.2348357290f) within(tolerance))
+			expect(list[1], is equal to(0.2221450806f) within(tolerance))
+			expect(list[2], is equal to(0.1880417466f) within(tolerance))
+			expect(list[3], is equal to(0.1424350739f) within(tolerance))
+			expect(list[4], is equal to(0.0965438560f) within(tolerance))
+			expect(list[5], is equal to(0.0585568137f) within(tolerance))
+			expect(list[6], is equal to(0.0317815617f) within(tolerance))
+			expect(list[7], is equal to(0.0154354051f) within(tolerance))
+			expect(list[8], is equal to(0.0067082006f) within(tolerance))
+			expect(list[9], is equal to(0.0026087898f) within(tolerance))
+			expect(list[10], is equal to(0.0009078565f) within(tolerance))
+			list free()
+		})
 	}
 }
 
