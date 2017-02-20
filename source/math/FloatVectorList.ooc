@@ -393,6 +393,16 @@ FloatVectorList: class extends VectorList<Float> {
 	forwardGaussianKernel: static func ~defaultSigma (size: Int) -> This {
 		This forwardGaussianKernel(size, size as Float / 3.0f)
 	}
+	halfGaussianKernel: static func (size: Int, sigma: Float) -> This {
+		result := This new(size)
+		factor := 1.0f / (sqrt(2.0f * Float pi) * sigma)
+		for (i in 0 .. size)
+			result add((factor * (Float e pow(-0.5f * (i squared) / (sigma squared)))) as Float)
+		sum := result sum
+		for (i in 0 .. size)
+			result[i] = result[i] / sum
+		result
+	}
 	forwardGaussianKernel: static func ~full (size: Int, sigma: Float) -> This {
 		result := This gaussianKernel(size, sigma)
 		for (i in 0 .. (size - 1) / 2)
