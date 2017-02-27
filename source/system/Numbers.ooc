@@ -100,7 +100,7 @@ LDouble: cover from long double {
 		result
 	}
 	in: func (range: Range) -> Bool {
-		this >= range min && this < range max
+		this as Int >= range min && this as Int < range max
 	}
 }
 
