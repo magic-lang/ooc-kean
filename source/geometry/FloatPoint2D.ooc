@@ -80,6 +80,9 @@ FloatPoint2D: cover {
 	mix: static func (a, b: This, ratio: Float) -> This {
 		This new(Float mix(a x, b x, ratio), Float mix(a y, b y, ratio))
 	}
+	isOnLeft: static func (leftPoint, rightPoint, queryPoint: This) -> Bool {
+		(rightPoint y - leftPoint y) * (queryPoint x - leftPoint x) < (rightPoint x - leftPoint x) * (queryPoint y - leftPoint y)
+	}
 }
 operator * (left: Float, right: FloatPoint2D) -> FloatPoint2D { FloatPoint2D new(left * right x, left * right y) }
 operator / (left: Float, right: FloatPoint2D) -> FloatPoint2D { FloatPoint2D new(left / right x, left / right y) }
