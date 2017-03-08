@@ -1,5 +1,12 @@
 # ooc-kean changes by release
 
+## Release 2.14.0
+
+- **Fixed bugs in ConvexHull2D and Range**
+- **Removed Shell2D classes**
+- **Now supports drawing from EGLYuv to OpenGLMonochrome and OpenGLUv**
+- **Fixed line shader for native YUV**
+
 ## Release 2.13.0
 
 - **The gpuOff version flag was removed to reduce code bloat**
