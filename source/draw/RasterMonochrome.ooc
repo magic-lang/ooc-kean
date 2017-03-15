@@ -43,25 +43,60 @@ RasterMonochrome: class extends RasterPacked {
 		if (monochrome != image)
 			monochrome referenceCount decrease()
 	}
-	// Precondition: Do not draw out of bound
-	_blitWhiteRaw: static func (target, source: Byte*, startSrcX, startSrcY, startDstX, startDstY, width, height, targetStride, sourceStride: Int) {
-		for (y in 0 .. height) {
-			dstY := startDstY + y
-			srcY := startSrcY + y
-			writer := target + startDstX + (dstY * targetStride)
-			reader := source + startSrcX + (srcY * sourceStride)
-			for (x in 0 .. width) {
-				sourceColor: Float = reader@
-				targetColor: Float = writer@
-				blendColor: Int = (targetColor * (1.0f - (sourceColor / 255.0f))) + sourceColor // Source intensity as alpha
-				if (blendColor > 255) blendColor = 255 // Limit intensity
-				writer@ = blendColor // Write to target
-				reader += 1
-				writer += 1
+	// Preconditions:
+	//   Do not draw out of bound.
+	//   Do not let the target region overlap the source region.
+	_blitRaw: static func (target, source: Byte*, startSrcX, startSrcY, startDstX, startDstY, width, height, targetStride, sourceStride: Int, blendMode: BlendMode) {
+		if (width > 0) {
+			upperLeftTarget := target + startDstX + (startDstY * targetStride)
+			upperLeftSource := source + startSrcX + (startSrcY * sourceStride)
+			writerLineStart := upperLeftTarget
+			readerLineStart := upperLeftSource
+			match (blendMode) {
+				case BlendMode White =>
+					for (y in 0 .. height) {
+						writer := writerLineStart
+						reader := readerLineStart
+						for (x in 0 .. width) {
+							// White function
+							sourceColor: Float = reader@
+							targetColor: Float = writer@
+							blendColor: Int = (targetColor * (1.0f - (sourceColor / 255.0f))) + sourceColor // Source intensity as alpha
+
+							if (blendColor > 255) blendColor = 255 // Limit intensity
+							writer@ = blendColor // Write to target
+							reader += 1
+							writer += 1
+						}
+						writerLineStart += targetStride
+						readerLineStart += sourceStride
+					}
+				case BlendMode Add =>
+					for (y in 0 .. height) {
+						writer := writerLineStart
+						reader := readerLineStart
+						for (x in 0 .. width) {
+							// Add function
+							blendColor: Int = reader@ + writer@ // Simple addition
+
+							if (blendColor > 255) blendColor = 255 // Limit intensity
+							writer@ = blendColor // Write to target
+							reader += 1
+							writer += 1
+						}
+						writerLineStart += targetStride
+						readerLineStart += sourceStride
+					}
+				case => // Fill or unhandled
+					for (y in 0 .. height) {
+						memcpy(writerLineStart, readerLineStart, width) // Direct memory copy
+						writerLineStart += targetStride
+						readerLineStart += sourceStride
+					}
 			}
 		}
 	}
-	blitWhiteSource: override func (source: Image, offset: IntVector2D, sourceBox: IntBox2D) {
+	blitSource: override func (source: Image, offset: IntVector2D, sourceBox: IntBox2D, blendMode: BlendMode) {
 		if (!source instanceOf(This))
 			Debug error("Only a RasterMonochrome can be blitted on a RasterMonochrome.")
 		startSrc := sourceBox leftTop
@@ -79,7 +114,34 @@ RasterMonochrome: class extends RasterPacked {
 		dimensions := endDst - startDst
 		endSrc := startSrc + dimensions
 		if (startSrc x >= 0 && startSrc y >= 0 && endSrc x <= source size x && endSrc y <= source size y && startDst x >= 0 && startDst y >= 0 && endDst x <= this size x && endDst y <= this size y) {
-			this _blitWhiteRaw(this buffer pointer, (source as This) buffer pointer, startSrc x, startSrc y, startDst x, startDst y, dimensions x, dimensions y, this stride, (source as This) stride)
+			this _blitRaw(this buffer pointer, (source as This) buffer pointer, startSrc x, startSrc y, startDst x, startDst y, dimensions x, dimensions y, this stride, (source as This) stride, blendMode)
+		}
+	}
+	exactDistance: func (other: This) -> Int {
+		if (this size != other size)
+			Int maximumValue
+		else {
+			result := 0
+			thisUpperLeft := this buffer pointer
+			otherUpperLeft := other buffer pointer
+			thisStride := this stride
+			otherStride := other stride
+			thisLineStart := thisUpperLeft
+			otherLineStart := otherUpperLeft
+			for (y in 0 .. this size y) {
+				thisPixel := thisLineStart
+				otherPixel := otherLineStart
+				for (x in 0 .. this size x) {
+					thisColor: Int = thisPixel@
+					otherColor: Int = otherPixel@
+					result += thisColor > otherColor ? thisColor - otherColor : otherColor - thisColor
+					thisPixel += 1
+					otherPixel += 1
+				}
+				thisLineStart += thisStride
+				otherLineStart += otherStride
+			}
+			result
 		}
 	}
 	fill: override func (color: ColorRgba) { this buffer memset(color r) }

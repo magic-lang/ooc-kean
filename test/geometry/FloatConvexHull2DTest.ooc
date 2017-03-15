@@ -18,7 +18,7 @@ FloatConvexHull2DTest: class extends Fixture {
 			trianglePoints add(FloatPoint2D new(0.0f, 0.0f))
 			trianglePoints add(FloatPoint2D new(0.0f, 1.0f))
 			trianglePoints add(FloatPoint2D new(1.0f, 0.0f))
-			hull := FloatConvexHull2D new(trianglePoints, false)
+			hull := FloatConvexHull2D new(trianglePoints)
 			expect(hull contains(FloatPoint2D new(0.1f, 0.1f)), is true)
 			expect(hull contains(FloatPoint2D new(0.7f, 0.7f)), is false)
 			expect(hull contains(FloatPoint2D new(0.9f, 0.01f)), is true)
