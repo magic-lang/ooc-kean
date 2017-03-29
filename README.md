@@ -25,7 +25,7 @@ ooc-kean has been built and tested on the following platforms:
 * Android 5.0 Lollipop
 * Android 5.1 Lollipop
 * Android 6.0 Marshmallow
-* Android 6.1 Marshmallov
+* Android 6.1 Marshmallow
 
 ### Microsoft Windows
 ooc-kean has been built and tested on the following platforms:
