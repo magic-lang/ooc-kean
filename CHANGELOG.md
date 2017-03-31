@@ -1,5 +1,9 @@
 # ooc-kean changes by release
 
+## Release 2.15.0
+
+- **License copyright year bumped to 2017**
+
 ## Release 2.14.0
 
 - **Fixed bugs in ConvexHull2D and Range**
