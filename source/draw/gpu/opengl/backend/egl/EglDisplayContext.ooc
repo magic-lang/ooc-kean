@@ -35,6 +35,14 @@ EglDisplayContext: class extends DisplayContext {
 		This validate(eglBindAPI(EGL_OPENGL_ES_API), EGL_TRUE, "eglBindAPI")
 		configAttribs := [
 			EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
+			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+			EGL_BLUE_SIZE, 8,
+			EGL_GREEN_SIZE, 8,
+			EGL_RED_SIZE, 8,
+			EGL_ALPHA_SIZE, 8,
+			EGL_SAMPLES, 0,
+			EGL_DEPTH_SIZE, 0,
+			EGL_BIND_TO_TEXTURE_RGBA, EGL_DONT_CARE,
 			EGL_NONE] as Int*
 		chosenConfig: Pointer = this _chooseConfig(configAttribs)
 		pbufferAttribs := [
@@ -87,6 +95,7 @@ EglDisplayContext: class extends DisplayContext {
 			success &= eglGetConfigAttrib(this _eglDisplay, matchingConfigs[i], EGL_GREEN_SIZE, green&)
 			success &= eglGetConfigAttrib(this _eglDisplay, matchingConfigs[i], EGL_BLUE_SIZE, blue&)
 			success &= eglGetConfigAttrib(this _eglDisplay, matchingConfigs[i], EGL_ALPHA_SIZE, alpha&)
+
 			if (success && red == 8 && green == 8 && blue == 8 && alpha == 8) {
 				chosenConfig = matchingConfigs[i]
 				break
