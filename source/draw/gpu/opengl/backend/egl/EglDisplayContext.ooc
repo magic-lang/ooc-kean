@@ -48,8 +48,6 @@ EglDisplayContext: class extends DisplayContext {
 		pbufferAttribs := [
 			EGL_WIDTH, 1,
 			EGL_HEIGHT, 1,
-			EGL_TEXTURE_TARGET, EGL_NO_TEXTURE,
-			EGL_TEXTURE_FORMAT, EGL_NO_TEXTURE,
 			EGL_NONE] as Int*
 		this _eglSurface = eglCreatePbufferSurface(this _eglDisplay, chosenConfig, pbufferAttribs)
 		This validate(this _eglSurface != EGL_NO_SURFACE, "eglCreatePbufferSurface")
