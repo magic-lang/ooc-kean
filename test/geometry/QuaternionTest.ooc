@@ -13,7 +13,6 @@ use math
 use geometry
 
 QuaternionTest: class extends Fixture {
-	Debug initialize(func (s: String) { println(s) })
 	quaternion0 := Quaternion new(33.0f, 10.0f, -12.0f, 54.5f)
 	quaternion1 := Quaternion new(10.0f, 17.0f, -10.0f, 14.5f)
 	quaternion2 := Quaternion new(43.0f, 27.0f, -22.0f, 69.0f)
