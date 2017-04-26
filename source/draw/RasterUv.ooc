@@ -94,7 +94,7 @@ RasterUv: class extends RasterPacked {
 		DrawState new(result) setInputImage(this) setInterpolate(interpolate) draw()
 		result
 	}
-	distance: override func (other: Image) -> Float {
+	distance: override func (other: Image, cropBox := FloatBox2D new()) -> Float {
 		result := 0.0f
 		if (!other || (this size != other size))
 			result = Float maximumValue
@@ -103,14 +103,19 @@ RasterUv: class extends RasterPacked {
 			result = this distance(converted)
 			converted referenceCount decrease()
 		} else {
+			hasCropBox := !cropBox hasZeroArea
+			startX := hasCropBox ? cropBox left : 0
+			startY := hasCropBox ? cropBox top : 0
+			endX := hasCropBox ? cropBox right : this size x
+			endY := hasCropBox ? cropBox bottom : this size y
 			sizeX := this size x
 			sizeY := this size y
 			thisBuffer := this buffer _pointer as ColorUv*
 			otherBuffer := (other as This) buffer _pointer as ColorUv*
 			thisStride := this stride / this bytesPerPixel
 			otherStride := (other as This) stride / this bytesPerPixel
-			for (y in 0 .. sizeY)
-				for (x in 0 .. sizeX) {
+			for (y in startY .. endY)
+				for (x in startX .. endX) {
 					c := thisBuffer[x + y * thisStride]
 					o := otherBuffer[x + y * otherStride]
 					if (c distance(o) > 0) {
@@ -141,7 +146,7 @@ RasterUv: class extends RasterPacked {
 						result += (distance) sqrt() / 3
 					}
 				}
-			result /= this size norm
+			result /= hasCropBox ? cropBox size norm : this size norm
 		}
 		result
 	}
