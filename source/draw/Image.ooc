@@ -64,7 +64,7 @@ Image: abstract class {
 	resizeTo: virtual func ~withMethod (size: IntVector2D, Interpolate: Bool) -> This { this resizeTo(size) }
 	create: virtual func (size: IntVector2D) -> This { Debug error("create unimplemented for class %s!" format(this class name)); null }
 	copy: abstract func -> This
-	distance: virtual abstract func (other: This) -> Float
+	distance: virtual abstract func (other: This, cropBox := FloatBox2D new()) -> Float
 	equals: func (other: This) -> Bool { this size == other size && this distance(other) < 10 * Float epsilon }
 	isValidIn: func (x, y: Int) -> Bool { x >= 0 && x < this size x && y >= 0 && y < this size y }
 	// Writes white text on the existing image (with black background if blendMode is Fill)
