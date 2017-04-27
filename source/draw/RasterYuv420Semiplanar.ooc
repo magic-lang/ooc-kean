@@ -54,7 +54,7 @@ RasterYuv420Semiplanar: class extends RasterImage {
 	blitSource: override func (source: Image, offset: IntVector2D, sourceBox: IntBox2D, blendMode: BlendMode) {
 		this y blitSource(source, offset, sourceBox, blendMode)
 	}
-	distance: override func (other: Image, cropBox := FloatBox2D new()) -> Float { (this y distance((other as This) y, cropBox) + this uv distance((other as This) uv, cropBox)) / 2.0f }
+	distance: override func (other: Image, cropBox := IntBox2D new()) -> Float { (this y distance((other as This) y, cropBox) + this uv distance((other as This) uv, cropBox / 2)) / 2.0f }
 	create: override func (size: IntVector2D) -> Image { This new(size) }
 	_drawPoint: override func (x, y: Int, pen: Pen) {
 		position := this _map(IntPoint2D new(x, y))
