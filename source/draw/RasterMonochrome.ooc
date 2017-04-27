@@ -173,7 +173,7 @@ RasterMonochrome: class extends RasterPacked {
 		DrawState new(result) setInputImage(this) setInterpolate(interpolate) draw()
 		result
 	}
-	distance: override func (other: Image, cropBox := FloatBox2D new()) -> Float {
+	distance: override func (other: Image, cropBox := IntBox2D new()) -> Float {
 		result := 0.0f
 		if (!other || (this size != other size))
 			result = Float maximumValue
