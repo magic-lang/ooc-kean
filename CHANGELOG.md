@@ -1,5 +1,10 @@
 # ooc-kean changes by release
 
+## Release 2.16.0
+
+- **Removed flags to EGL for compatibility with new computers**
+- **Added crop box argument for image distance function**
+
 ## Release 2.15.0
 
 - **License copyright year bumped to 2017**

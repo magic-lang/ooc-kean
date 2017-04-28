@@ -12,9 +12,11 @@ use unit
 DebugTest: class extends Fixture {
 	outputString: String = null
 	oldLevel: DebugLevel
+	oldPrintFunction: Func (String)
 
 	init: func {
 		super("Debug")
+		this oldPrintFunction = Debug _printFunction
 		Debug initialize(func (message: String) {
 			if (this outputString != null)
 				this outputString free()
@@ -52,6 +54,7 @@ DebugTest: class extends Fixture {
 	free: override func {
 		Debug level = this oldLevel
 		this outputString free()
+		Debug _printFunction = oldPrintFunction
 		super()
 	}
 }
