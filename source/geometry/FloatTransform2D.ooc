@@ -10,6 +10,7 @@ use base
 use math
 import IntVector2D
 import FloatVector2D
+import FloatVector3D
 import FloatPoint2D
 import FloatBox2D
 import FloatEuclidTransform, FloatTransform3D, FloatPoint3D
@@ -108,6 +109,9 @@ FloatTransform2D: cover {
 	}
 	operator * (other: FloatPoint3D) -> FloatPoint3D {
 		FloatPoint3D new(this a * other x + this d * other y + this g * other z, this b * other x + this e * other y + this h * other z, this c * other x + this f * other y + this i * other z)
+	}
+	operator * (other: FloatVector3D) -> FloatVector3D {
+		FloatVector3D new(this a * other x + this d * other y + this g * other z, this b * other x + this e * other y + this h * other z, this c * other x + this f * other y + this i * other z)
 	}
 	operator * (other: FloatBox2D) -> FloatBox2D {
 		FloatBox2D new(this * other leftTop, this * other rightBottom)
