@@ -42,4 +42,17 @@ GraphicBufferYuv420Semiplanar: class extends RasterYuv420Semiplanar {
 		super(source)
 		this _buffer unlock()
 	}
+	draw: override func ~DrawState (drawState: DrawState) {
+		inputImage := drawState inputImage
+		outputImage := drawState target
+		if (inputImage instanceOf(This))
+			inputImage as This buffer lock(GraphicBufferUsage ReadOften)
+		if (outputImage instanceOf(This))
+			outputImage as This buffer lock(GraphicBufferUsage WriteOften)
+		super(drawState)
+		if (outputImage instanceOf(This))
+			outputImage as This buffer unlock()
+		if (inputImage instanceOf(This))
+			inputImage as This buffer unlock()
+	}
 }
