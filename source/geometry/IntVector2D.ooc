@@ -33,6 +33,16 @@ IntVector2D: cover {
 	minimum: func ~Int (ceiling: Int) -> This { this minimum(This new(ceiling)) }
 	maximum: func ~Int (floor: Int) -> This { this maximum(This new(floor)) }
 	clamp: func (floor, ceiling: This) -> This { This new(this x clamp(floor x, ceiling x), this y clamp(floor y, ceiling y)) }
+	fitAspectRatio: func (other: This) -> This {
+		currentAspectRatio := this x as Float / this y
+		targetAspectRatio := other x as Float / other y
+		aspectRatioScale := FloatVector2D new(1.0f, 1.0f)
+		if (targetAspectRatio > currentAspectRatio)
+			aspectRatioScale y = currentAspectRatio / targetAspectRatio
+		else if (targetAspectRatio < currentAspectRatio)
+			aspectRatioScale x = targetAspectRatio / currentAspectRatio
+		(aspectRatioScale * this toFloatVector2D()) toIntVector2D()
+	}
 	polar: static func (radius, azimuth: Float) -> This { This new((radius * cos(azimuth)) as Int, (radius * sin(azimuth)) as Int) }
 	toIntPoint2D: func -> IntPoint2D { IntPoint2D new(this x, this y) }
 	toFloatVector2D: func -> FloatVector2D { FloatVector2D new(this x as Float, this y as Float) }
