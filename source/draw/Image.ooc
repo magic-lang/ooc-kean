@@ -9,7 +9,7 @@
 use geometry
 use base
 use draw
-
+// Test
 Image: abstract class {
 	_size: IntVector2D
 	_referenceCount: ReferenceCounter
