@@ -12,7 +12,17 @@ import egl
 import ../gles3/Gles3Debug
 import ../[GLTexture, GLContext, GLExtensions]
 
-EGLImage: class extends GLTexture {
+EGLImage: abstract class {
+	create: static func (type: TextureType, size: IntVector2D, nativeBuffer: Pointer, context: GLContext) -> GLTexture {
+		result: GLTexture = null
+		version (!gpuOff)
+			result = _EGLImage new(type, size, nativeBuffer, context)
+		result
+	}
+}
+
+version (!gpuOff) {
+_EGLImage: class extends GLTexture {
 	_eglBackend: Pointer
 	_eglDisplay: Pointer
 	_nativeBuffer: Pointer
@@ -52,4 +62,5 @@ EGLImage: class extends GLTexture {
 		(type == TextureType Rgba || type == TextureType Rgb || type == TextureType External) ?
 		This new(type, size, nativeBuffer, context) : null
 	}
+}
 }

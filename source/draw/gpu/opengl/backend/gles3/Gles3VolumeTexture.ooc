@@ -5,7 +5,7 @@
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
  */
-
+version(!gpuOff) {
 use geometry
 use base
 import external/gles3
@@ -54,4 +54,5 @@ Gles3VolumeTexture: class extends GLVolumeTexture {
 		this unbind()
 		version(debugGL) { validateEnd("VolumeTexture upload") }
 	}
+}
 }

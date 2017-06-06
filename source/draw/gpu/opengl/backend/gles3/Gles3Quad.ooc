@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+version(!gpuOff) {
 use geometry
 
 import external/gles3
@@ -40,4 +41,5 @@ Gles3Quad: class extends GLQuad {
 		this vao unbind()
 		version(debugGL) { validateEnd("Quad draw") }
 	}
+}
 }

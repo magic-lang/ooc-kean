@@ -5,7 +5,7 @@
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
  */
-
+version(!gpuOff) {
 import Gles3Quad
 import external/gles3
 import ../GLRenderer
@@ -37,4 +37,5 @@ Gles3Renderer: class extends GLRenderer {
 		glDisableVertexAttribArray(0)
 		version(debugGL) { validateEnd("Renderer drawPoints") }
 	}
+}
 }

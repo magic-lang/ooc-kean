@@ -22,9 +22,8 @@ OpenGLPromise: class extends Promise {
 	}
 	sync: func { this _fence sync() }
 	wait: override func (time: TimeSpan) -> Bool { this _fence clientWait(time toNanoseconds()) }
+	duplicateFileDescriptor: func -> Int { this _fence duplicateFileDescriptor() }
 }
-
 OpenGLNativeFencePromise: class extends OpenGLPromise {
-	init: func (context: OpenGLContext) { super(EGLNativeFence new(context backend getDisplay())) }
-	duplicateFileDescriptor: func -> Int { this _fence as EGLNativeFence duplicateFileDescriptor() }
+	init: func (context: OpenGLContext) { super(EGLNativeFence create(context backend getDisplay())) }
 }

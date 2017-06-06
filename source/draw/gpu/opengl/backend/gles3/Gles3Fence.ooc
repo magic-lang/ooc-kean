@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+version(!gpuOff) {
 use base
 import external/gles3
 import ../GLFence
@@ -51,4 +52,5 @@ Gles3Fence: class extends GLFence {
 		glFlush()
 		version(debugGL) { validateEnd("Fence sync") }
 	}
+}
 }

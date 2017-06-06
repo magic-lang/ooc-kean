@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+version(!gpuOff) {
 use base
 import ../egl/egl
 import external/gles3
@@ -96,5 +97,6 @@ printVersionInfo: func {
 	Debug print~free("OpenGL vendor: %s" format(vendor))
 	Debug print~free("OpenGL renderer: %s" format(renderer))
 	Debug print~free("OpenGL version: %s" format(version))
+}
 }
 }

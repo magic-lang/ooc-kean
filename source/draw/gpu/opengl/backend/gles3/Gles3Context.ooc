@@ -14,6 +14,7 @@ import ../[GLContext, GLFence, GLTexture, GLVertexArrayObject, GLIndexBufferObje
 import external/gles3
 import Gles3Debug, Gles3Fence, Gles3FramebufferObject, Gles3Quad, Gles3Renderer, Gles3ShaderProgram, Gles3Texture, Gles3VolumeTexture, Gles3VertexArrayObject, Gles3IndexBufferObject
 
+version(!gpuOff) {
 Gles3Context: class extends GLContext {
 	_displayContext: DisplayContext
 	getDisplayContextSafely: func -> DisplayContext { this == null ? null : this _displayContext }
@@ -92,4 +93,5 @@ Gles3Context: class extends GLContext {
 	create: static func ~pbufferShared (sharedContext: This = null) -> This {
 		result := This new(EglDisplayContext new(sharedContext getDisplayContextSafely() as EglDisplayContext))
 	}
+}
 }

@@ -15,4 +15,5 @@ GLFence: abstract class {
 	clientWait: abstract func (timeout: ULong = ULong maximumValue) -> Bool
 	wait: abstract func
 	sync: abstract func
+	duplicateFileDescriptor: virtual func -> Int { -1 }
 }

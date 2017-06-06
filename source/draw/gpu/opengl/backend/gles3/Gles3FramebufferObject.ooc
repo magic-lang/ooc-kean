@@ -6,6 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+version(!gpuOff) {
 use base
 use geometry
 use draw
@@ -102,4 +103,5 @@ Gles3FramebufferObject: class extends GLFramebufferObject {
 		glFlush()
 		version(debugGL) { validateEnd("FramebufferObject flush") }
 	}
+}
 }
