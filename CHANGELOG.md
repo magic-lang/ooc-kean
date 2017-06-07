@@ -1,5 +1,10 @@
 # ooc-kean changes by release
 
+## Release 2.17.0
+
+- **Added transform of FloatVector3D**
+- **Improved CPU drawing for GraphicBufferYuv420Semiplanar**
+
 ## Release 2.16.0
 
 - **Removed flags to EGL for compatibility with new computers**
