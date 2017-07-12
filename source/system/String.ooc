@@ -250,6 +250,13 @@ String: class {
 		other free()
 		result
 	}
+	operator ^ (other: This) -> This {
+		Debug error(other size == 0, "Size of input must be greater than zero")
+		result := ""
+		for (i in 0 .. this _buffer size)
+			result += this[i] ^ other[i % other size]
+		result
+	}
 
 	free: static func ~all {
 		string_literal_free_all()
