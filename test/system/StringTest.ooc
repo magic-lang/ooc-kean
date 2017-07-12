@@ -213,6 +213,17 @@ StringTest: class extends Fixture {
 			expect(decdabbc, is equal to("decdabbc"))
 			(bc, cd, decdabbc) free()
 		})
+		this add("xor", func {
+			key := "!98đsv"
+			input := "void main() {
+					result := true
+				}"
+
+			alteredInput := input ^ key
+			expect(alteredInput, is notEqual to(input))
+			restoredInput := alteredInput ^ key
+			expect(restoredInput, is equal to(input))
+		})
 		this add("reverse", func {
 			This reverseTest("", "")
 			This reverseTest(" ", " ")
