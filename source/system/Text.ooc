@@ -21,7 +21,12 @@ Text: cover {
 	init: func@ ~empty { this init(TextBuffer new()) }
 	init: func@ (=_buffer)
 	init: func@ ~fromStringLiteral (string: CString) { this init(string, strlen(string)) }
-	init: func@ ~fromString (string: String) { this init(string _buffer data, string length(), Owner Unknown) }
+	init: func@ ~fromString (string: String) {
+		if (string != null)
+			this init(string _buffer data, string length(), Owner Unknown)
+		else
+			raise("Null string in text")
+	}
 	init: func@ ~fromCharacter (character: Char) {
 		this init(character&, 1, Owner Stack)
 		this = this claim()
