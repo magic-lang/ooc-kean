@@ -5,6 +5,7 @@
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
  */
+import Debug
 
 Text: cover {
 	_buffer: TextBuffer
@@ -22,10 +23,12 @@ Text: cover {
 	init: func@ (=_buffer)
 	init: func@ ~fromStringLiteral (string: CString) { this init(string, strlen(string)) }
 	init: func@ ~fromString (string: String) {
-		if (string != null)
+		if (string != null && string _buffer != null)
 			this init(string _buffer data, string length(), Owner Unknown)
-		else
+		else {
+			Debug print("Null string in text")
 			raise("Null string in text")
+		}
 	}
 	init: func@ ~fromCharacter (character: Char) {
 		this init(character&, 1, Owner Stack)
