@@ -73,6 +73,14 @@ FloatVector3D: cover {
 	operator / (other: Float) -> This { This new(this x / other, this y / other, this z / other) }
 	operator * (other: Int) -> This { This new(this x * other, this y * other, this z * other) }
 	operator / (other: Int) -> This { This new(this x / other, this y / other, this z / other) }
+	operator [] (index: Int) -> Float {
+		match (index) {
+			case 0 => this x
+			case 1 => this y
+			case 2 => this z
+			case => Debug error("Index out of bounds in FloatVector3D"); 0
+		}
+	}
 
 	basisX: static This { get { This new(1, 0, 0) } }
 	basisY: static This { get { This new(0, 1, 0) } }
