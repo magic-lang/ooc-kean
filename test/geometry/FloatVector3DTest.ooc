@@ -166,6 +166,11 @@ FloatVector3DTest: class extends Fixture {
 			expect(vector y, is equal to(1.f) within(0.01f))
 			expect(vector z, is equal to(1.f) within(0.01f))
 		})
+		this add("bracketOperator", func {
+			expect(this vector0[0], is equal to(this vector0 x))
+			expect(this vector0[1], is equal to(this vector0 y))
+			expect(this vector0[2], is equal to(this vector0 z))
+		})
 	}
 }
 
