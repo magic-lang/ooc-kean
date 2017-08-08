@@ -23,6 +23,7 @@ Image: abstract class {
 		this _referenceCount = null
 		super()
 	}
+	save: virtual func (filename: String) -> Int { Debug error("Image save unimplemented for format!"); 0 }
 	drawPoint: virtual func (position: FloatPoint2D, pen: Pen = Pen new(ColorRgba white)) {
 		list := VectorList<FloatPoint2D> new(1)
 		list add(position)
