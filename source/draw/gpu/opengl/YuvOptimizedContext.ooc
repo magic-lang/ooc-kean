@@ -41,7 +41,7 @@ YuvOptimizedContext: class extends OpenGLContext {
 			case => super(rasterImage)
 		}
 	}
-	preallocate: override func (resolution: IntVector2D) { this _eglBin clear() }
+	invalidateBuffers: override func { this _eglBin clear() }
 	preregister: override func (image: Image) {
 		if (image instanceOf(GraphicBufferYuv420Semiplanar))
 			this createEGLYuv(image as GraphicBufferYuv420Semiplanar) free()
