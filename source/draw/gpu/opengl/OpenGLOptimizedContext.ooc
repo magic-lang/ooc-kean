@@ -145,7 +145,7 @@ OpenGLOptimizedContext: class extends OpenGLContext {
 		map add("startY", startY)
 		DrawState new(target) setMap(map) draw()
 	}
-	preallocate: override func (resolution: IntVector2D) { this _eglBin clear() }
+	invalidateBuffers: override func { this _eglBin clear() }
 	preregister: override func (image: Image) {
 		if (image instanceOf(GraphicBufferYuv420Semiplanar))
 			this createEGLRgba(image as GraphicBufferYuv420Semiplanar) free()
