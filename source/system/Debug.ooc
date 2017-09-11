@@ -51,6 +51,12 @@ Debug: class {
 	free: static func ~all {
 		(This _printFunction as Closure) free()
 	}
+	vidhance_debug_set_level: static unmangled func (level: DebugLevel) {
+		This _level = level
+	}
+	vidhance_debug_get_level: static unmangled func -> DebugLevel {
+		This _level
+	}
 }
 
 GlobalCleanup register(|| Debug free~all())
