@@ -25,7 +25,7 @@ YuvOptimizedContext: class extends OpenGLContext {
 	_eglBin := RecycleBin<EGLYuv> new(100, |image| image _recyclable = false; image free())
 	init: func (other: This = null) {
 		super(other)
-		Debug error(!queryExtension("GL_EXT_YUV_target"), "vidhance_render_mode_t::VIDHANCE_RENDER_MODE_OPENGL_YUV_OPTIMIZED is not supported on this device")
+		Debug error(!queryExtension("GL_EXT_YUV_target"), "RENDER_MODE_OPENGL_YUV_OPTIMIZED is not supported on this device")
 		this _yuvShader = OpenGLMapTransform new(slurp("shaders/yuv.frag"), this)
 		this _monochromeToYuv = OpenGLMapTransform new(slurp("shaders/monochromeToNativeYuv.frag"), this)
 		this _yuvLineShader = OpenGLMap new(slurp("shaders/lines.vert"), slurp("shaders/colorToNativeYuv.frag"), this)
