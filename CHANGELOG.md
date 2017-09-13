@@ -1,5 +1,10 @@
 # ooc-kean changes by release
 
+## Release 2.18.0
+
+- **Minor redesign and error assertions added in Image classes**
+- **Added []-operators for FloatVector3D**
+
 ## Release 2.17.0
 
 - **Added transform of FloatVector3D**
