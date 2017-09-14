@@ -13,6 +13,7 @@ use geometry
 use base
 use concurrent
 import OpenGLContext, GraphicBuffer, GraphicBufferYuv420Semiplanar, EGLYuv, OpenGLPacked, OpenGLMap, OpenGLPromise, OpenGLMonochrome, OpenGLUv
+import backend/gles3/Gles3Debug
 
 YuvOptimizedContext: class extends OpenGLContext {
 	defaultMap ::= this _yuvShader as Map
@@ -24,6 +25,7 @@ YuvOptimizedContext: class extends OpenGLContext {
 	_eglBin := RecycleBin<EGLYuv> new(100, |image| image _recyclable = false; image free())
 	init: func (other: This = null) {
 		super(other)
+		Debug error(!queryExtension("GL_EXT_YUV_target"), "RENDER_MODE_OPENGL_YUV_OPTIMIZED is not supported on this device")
 		this _yuvShader = OpenGLMapTransform new(slurp("shaders/yuv.frag"), this)
 		this _monochromeToYuv = OpenGLMapTransform new(slurp("shaders/monochromeToNativeYuv.frag"), this)
 		this _yuvLineShader = OpenGLMap new(slurp("shaders/lines.vert"), slurp("shaders/colorToNativeYuv.frag"), this)
@@ -41,7 +43,7 @@ YuvOptimizedContext: class extends OpenGLContext {
 			case => super(rasterImage)
 		}
 	}
-	preallocate: override func (resolution: IntVector2D) { this _eglBin clear() }
+	invalidateBuffers: override func { this _eglBin clear() }
 	preregister: override func (image: Image) {
 		if (image instanceOf(GraphicBufferYuv420Semiplanar))
 			this createEGLYuv(image as GraphicBufferYuv420Semiplanar) free()

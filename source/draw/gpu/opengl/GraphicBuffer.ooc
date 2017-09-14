@@ -99,6 +99,13 @@ GraphicBuffer: class {
 		}
 		result
 	}
+	registerCallbacks: static func (allocate, create_from_handle, free, lock, unlock: Pointer) {
+		This _allocate = Closure fromPointer(allocate) as Func (Int, Int, Int, Int, Pointer*, Pointer*, Int*)
+		This _createFromHandle = Closure fromPointer(create_from_handle) as Func (Int, Int, Int, Int, Int, Pointer, Bool, Pointer*, Pointer*)
+		This _free = Closure fromPointer(free) as Func (Pointer, Pointer)
+		This _lock = Closure fromPointer(lock) as Func (Pointer, Int, Pointer*)
+		This _unlock = Closure fromPointer(unlock) as Func (Pointer)
+	}
 }
 
 GlobalCleanup register(|| GraphicBuffer _alignedWidth free(), 10)

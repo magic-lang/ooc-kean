@@ -23,6 +23,16 @@ getErrorMessage: func (errorCode: Int) -> String {
 	}
 	result
 }
+getExtensions: func -> String {
+	result: CString = glGetString(GL_EXTENSIONS) as CString
+	String new(result, result length())
+}
+queryExtension: func (extension: String) -> Bool {
+	string := getExtensions()
+	result := string contains(extension)
+	string free()
+	result
+}
 
 version(debugGL) {
 validateStart: func (location: String) {
@@ -65,19 +75,9 @@ getEglErrorMessage: func (errorCode: Int) -> String {
 	}
 	result
 }
-getExtensions: func -> String {
-	result: CString = glGetString(GL_EXTENSIONS) as CString
-	String new(result, result length())
-}
 getExtensionList: func -> VectorList<String> {
 	string := getExtensions()
 	result := string split(' ')
-	string free()
-	result
-}
-queryExtension: func (extension: String) -> Bool {
-	string := getExtensions()
-	result := string contains(extension)
 	string free()
 	result
 }

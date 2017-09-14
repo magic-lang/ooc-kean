@@ -64,5 +64,5 @@ DrawContext: abstract class {
 		This getStringIndexBounds(message) * This getFontSize(fontAtlas)
 	}
 	preregister: virtual func (image: Image)
-	preallocate: virtual func (resolution: IntVector2D)
+	invalidateBuffers: virtual func
 }
