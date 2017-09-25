@@ -253,7 +253,32 @@ VectorListTest: class extends Fixture {
 		})
 		this add("VectorList search", This _testVectorListSearch)
 		this add("VectorList bound search", This _testVectorListBoundSearch)
+		this add("All search", This _testVectorListAll)
+		this add("Exists search", This _testVectorListExists)
 	}
+
+	_testVectorListAll: static func {
+		list := VectorList<Int> new()
+		expect(list all(|instance| 5 < instance), is true)
+		for (i in 0 .. 10)
+			list add(i)
+		expect(list all(|instance| 1 < instance), is false)
+		expect(list all(|instance| 9 < instance), is false)
+		expect(list all(|instance| 10 < instance), is false)
+		list free()
+	}
+
+	_testVectorListExists: static func {
+		list := VectorList<Int> new()
+		expect(list exists(|instance| 1 == instance), is false)
+		for (i in 0 .. 10)
+			list add(i)
+		expect(list exists(|instance| 1 == instance), is true)
+		expect(list exists(|instance| 9 == instance), is true)
+		expect(list exists(|instance| 10 == instance), is false)
+		list free()
+	}
+
 	_testVectorListSearch: static func {
 		list := VectorList<Int> new()
 		expect(list search(|instance| 1 == instance), is equal to(-1))
