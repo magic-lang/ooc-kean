@@ -256,7 +256,6 @@ VectorListTest: class extends Fixture {
 		this add("All search", This _testVectorListAll)
 		this add("Exists search", This _testVectorListExists)
 	}
-
 	_testVectorListAll: static func {
 		list := VectorList<Int> new()
 		expect(list all(|instance| 5 < instance), is true)
@@ -267,7 +266,6 @@ VectorListTest: class extends Fixture {
 		expect(list all(|instance| 10 < instance), is false)
 		list free()
 	}
-
 	_testVectorListExists: static func {
 		list := VectorList<Int> new()
 		expect(list exists(|instance| 1 == instance), is false)
@@ -278,7 +276,6 @@ VectorListTest: class extends Fixture {
 		expect(list exists(|instance| 10 == instance), is false)
 		list free()
 	}
-
 	_testVectorListSearch: static func {
 		list := VectorList<Int> new()
 		expect(list search(|instance| 1 == instance), is equal to(-1))
