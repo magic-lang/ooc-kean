@@ -126,7 +126,7 @@ extend Double {
 	toRadians: func -> This { This pi / 180.0 * this }
 	toDegrees: func -> This { 180.0 / This pi * this }
 	clamp: func (floor, ceiling: This) -> This { this > ceiling ? ceiling : (this < floor ? floor : this) }
-	equals: func (other: This, tolerance := This epsilon) -> Bool { (this - other) abs() < tolerance }
+	equals: func (other: This, tolerance := This epsilon) -> Bool { (this - other) abs() <= tolerance }
 	lessThan: func (other: This, tolerance := This epsilon) -> Bool { this < other && !this equals(other, tolerance) }
 	greaterThan: func (other: This, tolerance := This epsilon) -> Bool { this > other && !this equals(other, tolerance) }
 	lessOrEqual: func (other: This, tolerance := This epsilon) -> Bool { !this greaterThan(other, tolerance) }
@@ -179,7 +179,7 @@ extend Float {
 	floor: extern (floorf) func -> This
 	truncate: extern (truncf) func -> This
 
-	equals: func (other: This, tolerance := This epsilon) -> Bool { (this - other) abs() < tolerance }
+	equals: func (other: This, tolerance := This epsilon) -> Bool { (this - other) abs() <= tolerance }
 	lessThan: func (other: This, tolerance := This epsilon) -> Bool { this < other && !this equals(other, tolerance) }
 	greaterThan: func (other: This, tolerance := This epsilon) -> Bool { this > other && !this equals(other, tolerance) }
 	lessOrEqual: func (other: This, tolerance := This epsilon) -> Bool { !this greaterThan(other, tolerance) }
@@ -272,7 +272,7 @@ extend LDouble {
 	floor: extern (floorl) func -> This
 	truncate: extern (truncl) func -> This
 
-	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() < tolerance }
+	equals: func (other: This, tolerance := This defaultTolerance) -> Bool { (this - other) abs() <= tolerance }
 	lessThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this < other && !this equals(other, tolerance) }
 	greaterThan: func (other: This, tolerance := This defaultTolerance) -> Bool { this > other && !this equals(other, tolerance) }
 	lessOrEqual: func (other: This, tolerance := This defaultTolerance) -> Bool { !this greaterThan(other, tolerance) }
