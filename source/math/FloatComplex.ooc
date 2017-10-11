@@ -12,7 +12,7 @@ FloatComplex: cover {
 	real, imaginary: Float
 
 	conjugate ::= This new(this real, - this imaginary)
-	absoluteValue ::= (this real pow(2) + this imaginary pow(2)) sqrt()
+	absoluteValue ::= (this real squared + this imaginary squared) sqrt()
 
 	init: func@ (=real, =imaginary)
 	init: func@ ~default { this init(0.0f, 0.0f) }
@@ -30,7 +30,7 @@ FloatComplex: cover {
 	operator + (other: This) -> This { This new(this real + other real, this imaginary + other imaginary) }
 	operator - (other: This) -> This { This new(this real - other real, this imaginary - other imaginary) }
 	operator * (other: This) -> This { This new(this real * other real - this imaginary * other imaginary, this real * other imaginary + this imaginary * other real) }
-	operator / (other: This) -> This { (this * other conjugate) / (other absoluteValue pow(2)) }
+	operator / (other: This) -> This { (this * other conjugate) / (other absoluteValue squared) }
 	operator == (other: This) -> Bool { this real equals(other real) && this imaginary equals(other imaginary) }
 	operator != (other: This) -> Bool { !(this == other) }
 	operator * (other: Float) -> This { This new(other * this real, other * this imaginary) }
@@ -47,7 +47,7 @@ FloatComplex: cover {
 	}
 }
 operator * (left: Float, right: FloatComplex) -> FloatComplex { FloatComplex new(left * right real, left * right imaginary) }
-operator / (left: Float, right: FloatComplex) -> FloatComplex { (left * right conjugate) / (right absoluteValue pow(2)) }
+operator / (left: Float, right: FloatComplex) -> FloatComplex { (left * right conjugate) / (right absoluteValue squared) }
 
 extend Cell<FloatComplex> {
 	toString: func ~floatcomplex -> String { (this val as FloatComplex) toString() }

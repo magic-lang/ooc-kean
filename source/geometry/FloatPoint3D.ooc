@@ -18,6 +18,7 @@ FloatPoint3D: cover {
 	x, y, z: Float
 
 	norm ::= (this x squared + this y squared + this z squared) sqrt()
+	squaredNorm ::= (this x squared + this y squared + this z squared)
 	isZero ::= this norm equals(0.0f)
 	normalized ::= this isZero ? (this as This) : (this / this norm)
 	azimuth ::= this y atan2(this x)
