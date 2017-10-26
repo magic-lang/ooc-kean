@@ -63,6 +63,7 @@ Image: abstract class {
 	}
 	resizeTo: abstract func (size: IntVector2D) -> This
 	resizeTo: virtual func ~withMethod (size: IntVector2D, Interpolate: Bool) -> This { this resizeTo(size) }
+	create: func ~sameSize -> This { this create(this size) }
 	create: virtual func (size: IntVector2D) -> This { Debug error("create unimplemented for class %s!" format(this class name)); null }
 	copy: abstract func -> This
 	distance: virtual abstract func (other: This, cropBox := IntBox2D new()) -> Float

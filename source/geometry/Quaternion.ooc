@@ -24,10 +24,11 @@ Quaternion: cover {
 	isValid ::= this real isNumber && this imaginary isValid
 	isIdentity ::= this real equals(1.f) && this imaginary isZero
 	isZero ::= this real equals(0.f) && this imaginary isZero
-	norm ::= (this real squared + this imaginary norm squared) sqrt()
+	norm ::= (this real squared + this imaginary squaredNorm) sqrt()
+	squaredNorm ::= this real squared + this imaginary squaredNorm
 	normalized ::= this / this norm
 	conjugate ::= This new(this real, -this imaginary)
-	inverse ::= this conjugate / (this real squared + this imaginary norm squared)
+	inverse ::= this conjugate / squaredNorm
 	transform ::= this toFloatTransform3D()
 	direction ::= (this logarithm imaginary) normalized
 	// NOTE: Separation into parts assumes order of application X -> Y -> Z

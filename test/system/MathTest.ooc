@@ -75,8 +75,8 @@ MathTest: class extends Fixture {
 			expect(13.0f clamp(9.0f, 11.0f), is equal to(11.0f) within(floatTolerance))
 			expect((-2.0f) clamp(-1.9f, 5.0f), is equal to(-1.9f) within(floatTolerance)) // (-2.0f) with parentheses because of bug in rock
 
-			expect(1.9999999f equals(2.0f), is false)
-			expect(1.99999999f equals(2.0f), is true)
+			expect(1.999999f equals(2.0f), is false)
+			expect(1.9999999f equals(2.0f), is true)
 
 			expect((-2.3f) absolute, is equal to(2.3f) within(floatTolerance))
 			expect(2.3f absolute, is equal to(2.3f) within(floatTolerance))

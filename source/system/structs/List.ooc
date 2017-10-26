@@ -36,4 +36,17 @@ List: abstract class <T> {
 	iterator: abstract func -> Iterator<T>
 	abstract operator [] (index: Int) -> T
 	abstract operator []= (index: Int, item: T)
+	exists: func (predicate: Func (T) -> Bool) -> Bool {
+		this search(predicate) > -1
+	}
+	all: func (predicate: Func (T) -> Bool) -> Bool {
+		result := true
+		for (index in 0 .. this count)
+			if (!predicate(this[index])) {
+				result = false
+				break
+			}
+		(predicate as Closure) free(Owner Receiver)
+		result
+	}
 }

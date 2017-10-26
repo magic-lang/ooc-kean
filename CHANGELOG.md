@@ -1,5 +1,12 @@
 # ooc-kean changes by release
 
+## Release 2.19.0
+
+- **Added create() function to create Image of the same size**
+- **Added exists() and all() methods for List**
+- **Bugfix to floating point equals() function**
+- **Bugfixes in geometry classes to reduce floating point roundoff**
+
 ## Release 2.18.0
 
 - **Minor redesign and error assertions added in Image classes**
