@@ -1,5 +1,9 @@
 # ooc-kean changes by release
 
+## Release 2.20.0
+
+- **Added FloatVector2DCircularBuffer**
+
 ## Release 2.19.0
 
 - **Added create() function to create Image of the same size**

@@ -19,3 +19,4 @@ Imports: Quaternion
 Imports: FloatPoint2DVectorList
 Imports: FloatEuclidTransformVectorList
 Imports: FloatConvexHull2D
+Imports: FloatVector2DCircularBuffer
