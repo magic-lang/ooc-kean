@@ -27,10 +27,7 @@ OpenGLPacked: abstract class extends GpuImage {
 	_toLocal := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
 	filter: Bool {
 		get { this _filter }
-		set(value) {
-			this _backend setMagFilter(InterpolationType Linear)
-			this _backend setMinFilter(InterpolationType Linear)
-		}
+		set(value) { this _backend setFilter(value ? InterpolationType Linear : InterpolationType Nearest) }
 	}
 	init: func (=_backend, =_channels, context: OpenGLContext) {
 		super(this _backend size, context)
