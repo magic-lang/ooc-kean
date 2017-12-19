@@ -6,9 +6,12 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+ use geometry
+
 GLIndexBufferObject: abstract class {
 	init: func
 	bind: abstract func
 	unbind: abstract func
 	draw: abstract func
+	update: abstract func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[])
 }
