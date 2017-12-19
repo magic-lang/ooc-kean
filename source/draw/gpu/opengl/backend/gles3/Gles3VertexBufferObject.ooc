@@ -45,11 +45,9 @@ Gles3VertexBufferObject: class {
 		this _dimensions = 3
 		glBindBuffer(GL_ARRAY_BUFFER, this _backend)
 		if (allocate) {
-			glBufferData(GL_ARRAY_BUFFER, (2 + this _dimensions) * Float size * vertexCount, packedArray[0]&, GL_STATIC_DRAW)
-		}
-		else {
+			glBufferData(GL_ARRAY_BUFFER, (2 + this _dimensions) * Float size * vertexCount, packedArray[0]&, GL_DYNAMIC_DRAW)
+		} else {
 			glBufferSubData(GL_ARRAY_BUFFER, 0, (2 + this _dimensions) * Float size * vertexCount, packedArray[0]&)
-			Debug print("Updating VBO")
 		}
 		glBindBuffer(GL_ARRAY_BUFFER, 0)
 		version(debugGL) { validateEnd("Gles3VertexBufferObject update") }

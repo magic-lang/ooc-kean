@@ -44,4 +44,10 @@ _IBOMesh: class extends OpenGLMesh {
 		super()
 	}
 	draw: override func { this _backend draw() }
+	update: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
+		toGL := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
+		for (i in 0 .. vertices length)
+			vertices[i] = toGL * vertices[i]
+		this _backend update(vertices, textureCoordinates)
+	}
 }
