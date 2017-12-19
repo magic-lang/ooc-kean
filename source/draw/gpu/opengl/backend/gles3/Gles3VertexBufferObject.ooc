@@ -17,6 +17,18 @@ Gles3VertexBufferObject: class {
 	_dimensions: Int
 	init: func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
 		version(debugGL) { validateStart("Gles3VertexBufferObject init") }
+		glGenBuffers(1, this _backend&)
+		this update(vertices, textureCoordinates, true)
+		version(debugGL) { validateEnd("Gles3VertexBufferObject init") }
+	}
+	free: override func {
+		version(debugGL) { validateStart("Gles3VertexBufferObject free") }
+		glDeleteBuffers(1, this _backend&)
+		version(debugGL) { validateEnd("Gles3VertexBufferObject free") }
+		super()
+	}
+	update: func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[], allocate := false) {
+		version(debugGL) { validateStart("Gles3VertexBufferObject update") }
 		vertexCount := vertices length
 		this _vertexCount = vertexCount
 		floatsPerVertex := 5
@@ -31,17 +43,16 @@ Gles3VertexBufferObject: class {
 			packedArray[floatsPerVertex * i + 4] = textureCoordinates[i] y
 		}
 		this _dimensions = 3
-		glGenBuffers(1, this _backend&)
 		glBindBuffer(GL_ARRAY_BUFFER, this _backend)
-		glBufferData(GL_ARRAY_BUFFER, (2 + this _dimensions) * Float size * vertexCount, packedArray[0]&, GL_STATIC_DRAW)
+		if (allocate) {
+			glBufferData(GL_ARRAY_BUFFER, (2 + this _dimensions) * Float size * vertexCount, packedArray[0]&, GL_STATIC_DRAW)
+		}
+		else {
+			glBufferSubData(GL_ARRAY_BUFFER, 0, (2 + this _dimensions) * Float size * vertexCount, packedArray[0]&)
+			Debug print("Updating VBO")
+		}
 		glBindBuffer(GL_ARRAY_BUFFER, 0)
-		version(debugGL) { validateEnd("Gles3VertexBufferObject init") }
-	}
-	free: override func {
-		version(debugGL) { validateStart("Gles3VertexBufferObject free") }
-		glDeleteBuffers(1, this _backend&)
-		version(debugGL) { validateEnd("Gles3VertexBufferObject free") }
-		super()
+		version(debugGL) { validateEnd("Gles3VertexBufferObject update") }
 	}
 	bind: func {
 		version(debugGL) { validateStart("Gles3VertexBufferObject bind") }
