@@ -1,0 +1,19 @@
+pipeline {
+	environment {
+		ANDROID_HOME = '/opt/imint/android-sdk'
+		ANDROID_NDK_HOME = '/home/jenkins/android-ndk-r15c'
+		DISPLAY = ':0'
+	}
+	agent none // Force stages to specify agent
+	stages {
+		stage('pc-tests') {
+			agent { label 'ooc' }
+			steps {
+				sh 'echo ">>>> Agent: " `hostname`'
+				sh 'magic'
+				sh './test.sh all -x -DdebugGL -Dsafe +-Werror'
+				sh './test.sh all -DdebugGL +-Werror'
+			}
+		}
+	}
+}
