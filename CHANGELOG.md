@@ -1,5 +1,12 @@
 # ooc-kean changes by release
 
+## Release 2.21.0
+
+- **Now possible to set both min/mag filter in a single call**
+- **Now possible to update existing mesh**
+- **Added methods to create a FloatBox2D from different corners/edges**
+- **Added jenkins file for automatic testing**
+
 ## Release 2.20.0
 
 - **Added FloatVector2DCircularBuffer**
