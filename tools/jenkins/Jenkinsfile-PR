@@ -1,0 +1,35 @@
+pipeline {
+	environment {
+		ANDROID_HOME = '/opt/imint/android-sdk'
+		ANDROID_NDK_HOME = '/home/jenkins/android-ndk-r15c'
+		DISPLAY = ':0'
+	}
+	agent { label 'ooc' }
+	stages {
+		stage('pc-tests') {
+			steps {
+				sh 'echo ">>>> Agent: " `hostname`'
+				sh 'magic'
+				sh './test.sh all -x -DdebugGL -Dsafe +-Werror'
+				sh './test.sh all -DdebugGL +-Werror'
+			}
+			post {
+				success {
+				// See https://jenkins.io/doc/pipeline/steps/slack/
+					slackSend(channel: 'jenkins', color: 'good', message: "PR: success `${env.JOB_NAME}` (<${env.BUILD_URL}|#${env.BUILD_NUMBER}>)")
+				}
+				unstable {
+					slackSend(channel: 'jenkins', color: 'warning', message: "PR: *UNSTABLE* `${env.JOB_NAME}` (<${env.BUILD_URL}|#${env.BUILD_NUMBER}>)")
+				}
+				failure {
+					slackSend(channel: 'jenkins', color: 'danger', message: "PR: *FAILURE* `${env.JOB_NAME}` (<${env.BUILD_URL}|#${env.BUILD_NUMBER}>)")
+				}
+				aborted {
+					echo '#### Aborted job!'
+					slackSend(channel: 'jenkins', color: '#727171', message: "PR: *ABORTED* `${env.JOB_NAME}` (<${env.BUILD_URL}|#${env.BUILD_NUMBER}>)")
+				}
+				// keywords "changed" and "always" are also available
+			}
+		}
+	}
+}

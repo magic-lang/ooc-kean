@@ -87,6 +87,19 @@ Gles3Texture: class extends GLTexture {
 		}
 		version(debugGL) { validateEnd("Texture _setInternalFormats") }
 	}
+	setFilter: override func (interpolation: InterpolationType) {
+		version(debugGL) { validateStart("Texture setFilter") }
+		this bind(0)
+		interpolationType := match (interpolation) {
+			case InterpolationType Nearest => GL_NEAREST
+			case InterpolationType Linear => GL_LINEAR
+			case => Debug error("Interpolation type not supported for MagFilter"); -1
+		}
+		glTexParameteri(this _target, GL_TEXTURE_MAG_FILTER, interpolationType)
+		glTexParameteri(this _target, GL_TEXTURE_MIN_FILTER, interpolationType)
+		this unbind()
+		version(debugGL) { validateEnd("Texture setFilter") }
+	}
 	setMagFilter: override func (interpolation: InterpolationType) {
 		version(debugGL) { validateStart("Texture setMagFilter") }
 		this bind(0)

@@ -48,6 +48,7 @@ EGLImage: class extends GLTexture {
 	upload: override func (pixels: Pointer, stride: Int) { this _backendTexture upload(pixels, stride) }
 	setMagFilter: override func (interpolation: InterpolationType) { this _backendTexture setMagFilter(interpolation) }
 	setMinFilter: override func (interpolation: InterpolationType) { this _backendTexture setMinFilter(interpolation) }
+	setFilter: override func (interpolation: InterpolationType) { this _backendTexture setFilter(interpolation) }
 	create: static func (type: TextureType, size: IntVector2D, nativeBuffer: Pointer, context: GLContext) -> This {
 		(type == TextureType Rgba || type == TextureType Rgb || type == TextureType External) ?
 		This new(type, size, nativeBuffer, context) : null
