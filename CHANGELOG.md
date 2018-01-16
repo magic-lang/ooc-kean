@@ -1,5 +1,9 @@
 # ooc-kean changes by release
 
+## Release 2.22.0
+
+- **...**
+
 ## Release 2.21.0
 
 - **Now possible to set both min/mag filter in a single call**
