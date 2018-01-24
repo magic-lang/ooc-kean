@@ -23,7 +23,7 @@ OpenGLPacked: abstract class extends GpuImage {
 	channels ::= this _channels
 	context ::= this _context as OpenGLContext
 	recyclable ::= this _recyclable
-	_frameBufferObjectHandle: GLFramebufferObject
+	_frameBufferObjectHandle: GLFramebufferObject = null
 	_renderTarget: GLFramebufferObject {
 		get {
 			if (!_frameBufferObjectHandle)
