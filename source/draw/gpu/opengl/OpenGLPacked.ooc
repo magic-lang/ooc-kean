@@ -24,13 +24,11 @@ OpenGLPacked: abstract class extends GpuImage {
 	context ::= this _context as OpenGLContext
 	recyclable ::= this _recyclable
 	_frameBufferObjectHandle: GLFramebufferObject = null
-	_renderTarget: GLFramebufferObject {
-		get {
-			if (!_frameBufferObjectHandle)
-				this _frameBufferObjectHandle = this _context as OpenGLContext _backend createFramebufferObject(this _backend, this size)
-			this _frameBufferObjectHandle
-		}
-	}
+	_renderTarget: GLFramebufferObject { get {
+		if (!this _frameBufferObjectHandle)
+			this _frameBufferObjectHandle = this _context as OpenGLContext _backend createFramebufferObject(this _backend, this size)
+		this _frameBufferObjectHandle
+	}}
 	_toLocal := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
 	filter: Bool {
 		get { this _filter }
