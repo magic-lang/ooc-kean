@@ -23,7 +23,12 @@ OpenGLPacked: abstract class extends GpuImage {
 	channels ::= this _channels
 	context ::= this _context as OpenGLContext
 	recyclable ::= this _recyclable
-	_renderTarget: GLFramebufferObject
+	_frameBufferObjectHandle: GLFramebufferObject = null
+	_renderTarget: GLFramebufferObject { get {
+		if (!this _frameBufferObjectHandle)
+			this _frameBufferObjectHandle = this _context as OpenGLContext _backend createFramebufferObject(this _backend, this size)
+		this _frameBufferObjectHandle
+	}}
 	_toLocal := FloatTransform3D createScaling(1.0f, -1.0f, -1.0f)
 	filter: Bool {
 		get { this _filter }
@@ -31,13 +36,14 @@ OpenGLPacked: abstract class extends GpuImage {
 	}
 	init: func (=_backend, =_channels, context: OpenGLContext) {
 		super(this _backend size, context)
-		this _renderTarget = context _backend createFramebufferObject(this _backend as GLTexture, this size)
 	}
 	free: override func {
 		if (this recyclable)
 			this context recycle(this)
 		else {
-			(this _backend, this _renderTarget) free()
+			if (this _frameBufferObjectHandle)
+				this _frameBufferObjectHandle free()
+			this _backend free()
 			super()
 		}
 	}

@@ -1,4 +1,4 @@
-# Release  2.21.0
+# Release  2.22.0
 
 magic-sdk (formerly ooc-kean)
 ========

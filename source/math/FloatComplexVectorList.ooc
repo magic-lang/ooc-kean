@@ -35,6 +35,12 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 		}
 		result
 	}}
+	absolute: FloatVectorList { get {
+		result := FloatVectorList new(this _count)
+		for (i in 0 .. this _count)
+			result add(this[i] absoluteValue)
+		result
+	}}
 
 	init: func ~default {
 		super()
