@@ -2,7 +2,8 @@
 
 ## Release 2.22.0
 
-- **...**
+- **DateTime now() works with millisecond precision**
+- **Added lazy creation of framebufferobject**
 
 ## Release 2.21.0
 
