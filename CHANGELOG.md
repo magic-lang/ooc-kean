@@ -1,5 +1,9 @@
 # ooc-kean changes by release
 
+## Release 2.23.0
+
+- **...**
+
 ## Release 2.22.0
 
 - **DateTime now() works with millisecond precision**
