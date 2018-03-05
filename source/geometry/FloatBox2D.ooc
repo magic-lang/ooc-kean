@@ -161,7 +161,7 @@ FloatBox2D: cover {
 	createFromLeft: static func (leftCenter: FloatPoint2D, size: FloatVector2D) -> This { This new(FloatPoint2D new(leftCenter x, leftCenter y - size y / 2.0f), size) }
 	createFromRight: static func (rightCenter: FloatPoint2D, size: FloatVector2D) -> This { This new(FloatPoint2D new(rightCenter x - size x, rightCenter y - size y / 2.0f), size) }
 	createFromTop: static func (topCenter: FloatPoint2D, size: FloatVector2D) -> This { This new(FloatPoint2D new(topCenter x - size x / 2.0f, topCenter y), size) }
-	createFromBottom: static func (bottomCenter: FloatPoint2D, size: FloatVector2D) -> This { This new(FloatPoint2D new(bottomCenter x - size x / 2.0f, bottomCenter y), size) }
+	createFromBottom: static func (bottomCenter: FloatPoint2D, size: FloatVector2D) -> This { This new(FloatPoint2D new(bottomCenter x - size x / 2.0f, bottomCenter y - size y), size) }
 	bounds: static func (left, right, top, bottom: Float) -> This { This new(left, top, right - left, bottom - top) }
 	bounds: static func ~fromArray (points: FloatPoint2D[]) -> This { This bounds(points data, points length) }
 	bounds: static func ~fromList (points: VectorList<FloatPoint2D>) -> This { This bounds(points pointer as FloatPoint2D*, points count) }
