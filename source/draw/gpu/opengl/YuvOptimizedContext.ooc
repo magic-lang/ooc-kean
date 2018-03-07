@@ -49,7 +49,7 @@ YuvOptimizedContext: class extends OpenGLContext {
 			this createEGLYuv(image as GraphicBufferYuv420Semiplanar) free()
 	}
 	createEGLYuv: func (source: GraphicBufferYuv420Semiplanar) -> EGLYuv {
-		this _eglBin search(|eglYuv| source buffer handle == eglYuv handle) ?? EGLYuv new(source buffer, this)
+		this _eglBin search(|eglYuv| source buffer identifier == eglYuv identifier) ?? EGLYuv new(source buffer, this)
 	}
 	recycle: override func (image: OpenGLPacked) {
 		match (image) {
