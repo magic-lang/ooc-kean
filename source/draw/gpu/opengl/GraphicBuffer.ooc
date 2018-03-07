@@ -47,7 +47,7 @@ GraphicBuffer: class {
 	length ::= this stride * this size y
 	nativeBuffer ::= this _nativeBuffer
 	handle ::= this _handle
-	identifier ::= this _identifier ?? this _handle
+	identifier ::= this _identifier
 
 	init: func (backend, nativeBuffer, handle: Pointer, size: IntVector2D, pixelStride: Int, format: GraphicBufferFormat, userData: Pointer) {
 		this init(backend, nativeBuffer, handle, size, pixelStride, format, userData, handle)

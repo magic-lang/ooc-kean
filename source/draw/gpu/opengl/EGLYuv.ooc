@@ -18,7 +18,7 @@ EGLYuv: class extends OpenGLPacked {
 	_handle: Pointer
 	_identifier: Pointer
 	handle ::= this _handle
-	identifier ::= this _identifier ?? this _handle
+	identifier ::= this _identifier
 	init: func (buffer: GraphicBuffer, context: OpenGLContext) {
 		this _handle = buffer handle
 		this _identifier = buffer identifier
