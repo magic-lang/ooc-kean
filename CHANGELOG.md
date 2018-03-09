@@ -2,7 +2,7 @@
 
 ## Release 2.23.0
 
-- **...**
+- **Fixed bug in FloatBox2D::createFromBottom**
 
 ## Release 2.22.0
 
