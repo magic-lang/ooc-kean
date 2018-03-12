@@ -56,6 +56,8 @@ YuvOptimizedContext: class extends OpenGLContext {
 			case eglYuv: EGLYuv =>
 				eglYuv onRecycle()
 				this _eglBin add(eglYuv)
+				if (this _eglBin isFull)
+					Debug print("EGLImage recycle bin is full!", DebugLevel Warning)
 			case => super(image)
 		}
 	}
