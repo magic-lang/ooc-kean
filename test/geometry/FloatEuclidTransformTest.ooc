@@ -18,6 +18,14 @@ FloatEuclidTransformTest: class extends Fixture {
 		this add("fixture", func {
 			expect(FloatEuclidTransform new(FloatVector3D new(0, 0, 0), Quaternion identity), is equal to(FloatEuclidTransform new(FloatVector3D new(0, 0, 0), Quaternion identity)))
 		})
+		this add("to FloatTransform3D", func {
+			scaling := 2.0f
+			translation := FloatVector3D new(5, 10, 20)
+			rotation := Quaternion createRotationZ(30)
+			euclidTransform := FloatEuclidTransform new(translation, rotation, scaling)
+			transform3D := FloatTransform3D createScaling(scaling, scaling, 1.0f) * FloatTransform3D createTranslation(translation) * rotation transform
+			expect(euclidTransform transform, is equal to(transform3D))
+		})
 		this add("convolveCenter translations 1", func {
 			euclidTransforms := VectorList<FloatEuclidTransform> new(5)
 			kernel := FloatVectorList new(5)
