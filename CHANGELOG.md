@@ -2,7 +2,7 @@
 
 ## Release 2.24.0
 
-- **...**
+- **Added warning when EGL recycle bin becomes full**
 
 ## Release 2.23.0
 
