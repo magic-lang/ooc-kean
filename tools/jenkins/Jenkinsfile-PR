@@ -1,7 +1,7 @@
 pipeline {
 	environment {
 		ANDROID_HOME = '/opt/imint/android-sdk'
-		ANDROID_NDK_HOME = '/home/jenkins/android-ndk-r15c'
+		ANDROID_NDK_HOME = '/opt/imint/dev/sdk/android-ndk-r16b'
 		DISPLAY = ':0'
 	}
 	agent { label 'ooc' }
