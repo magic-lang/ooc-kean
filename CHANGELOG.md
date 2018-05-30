@@ -1,5 +1,33 @@
 # ooc-kean changes by release
 
+## Release 2.25.0
+
+- **...**
+
+## Release 2.24.0
+
+- **Added warning when EGL recycle bin becomes full**
+
+## Release 2.23.0
+
+- **Fixed bug in FloatBox2D::createFromBottom**
+
+## Release 2.22.0
+
+- **DateTime now() works with millisecond precision**
+- **Added lazy creation of framebufferobject**
+
+## Release 2.21.0
+
+- **Now possible to set both min/mag filter in a single call**
+- **Now possible to update existing mesh**
+- **Added methods to create a FloatBox2D from different corners/edges**
+- **Added jenkins file for automatic testing**
+
+## Release 2.20.0
+
+- **Added FloatVector2DCircularBuffer**
+
 ## Release 2.19.0
 
 - **Added create() function to create Image of the same size**

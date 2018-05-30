@@ -68,16 +68,18 @@ FloatComplexVectorListTest: class extends Fixture {
 			expect(mean imaginary, is equal to(1.0f) within(tolerance))
 			list free()
 		})
-		this add("real, imaginary lists", func {
+		this add("real, imaginary, absolute lists", func {
 			list := FloatComplexVectorList new()
 			list add(FloatComplex new(1, 1))
 			list add(FloatComplex new(2, -3))
 			list add(FloatComplex new(4, -2))
 			reals := list real
 			imaginaries := list imaginary
+			absolutes := list absolute
 			expect(reals sum, is equal to(7.0f) within(tolerance))
 			expect(imaginaries sum, is equal to(-4.0f) within(tolerance))
-			(reals, imaginaries, list) free()
+			expect(absolutes sum, is equal to(9.49190f) within(tolerance))
+			(reals, imaginaries, absolutes, list) free()
 		})
 		this add("createDefault", func {
 			list := FloatComplexVectorList new(3, FloatComplex new(1, 2))

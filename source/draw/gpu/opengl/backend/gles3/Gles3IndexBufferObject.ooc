@@ -33,6 +33,11 @@ Gles3IndexBufferObject: class extends GLIndexBufferObject {
 		version(debugGL) { validateEnd("Gles3IndexBufferObject free") }
 		super()
 	}
+	update: override func (vertices: FloatPoint3D[], textureCoordinates: FloatPoint2D[]) {
+		version(debugGL) { validateStart("Gles3IndexBufferObject update") }
+		this _vbo update(vertices, textureCoordinates)
+		version(debugGL) { validateEnd("Gles3IndexBufferObject update") }
+	}
 	bind: override func {
 		version(debugGL) { validateStart("Gles3IndexBufferObject bind") }
 		this _vbo bind()

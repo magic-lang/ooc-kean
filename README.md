@@ -1,4 +1,4 @@
-# Release  2.19.0
+# Release  2.25.0
 
 magic-sdk (formerly ooc-kean)
 ========
@@ -20,12 +20,7 @@ The following software is necessary to build ooc-kean:
 ### Linux
 ooc-kean has been built and tested on the following platforms:
 * Ubuntu 16.04
-* Ubuntu 14.04
-* Android 4.4.4 KitKat
-* Android 5.0 Lollipop
-* Android 5.1 Lollipop
-* Android 6.0 Marshmallow
-* Android 6.1 Marshmallow
+* Android 5.0 - 8.1
 
 ### Microsoft Windows
 ooc-kean has been built and tested on the following platforms:

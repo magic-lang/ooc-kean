@@ -28,9 +28,9 @@ extend Time {
 				GetLocalTime(st&)
 				result = DateTime new(st wYear, st wMonth, st wDay, st wHour, st wMinute, st wSecond, st wMilliseconds)
 		} else {
-				tt := time(null)
-				val := localtime(tt&)
-				result = DateTime new(val@ tm_year + 1900, val@ tm_mon + 1, val@ tm_mday, val@ tm_hour, val@ tm_min, val@ tm_sec, 0)
+				tv: TimeVal
+				gettimeofday(tv&, null)
+				result = DateTime new(1970, 1, 1) + TimeSpan microseconds(tv tv_usec + tv tv_sec * 1_000_000)
 		}
 		result
 	}
