@@ -48,20 +48,10 @@ FloatComplexVectorList: class extends VectorList<FloatComplex> {
 	init: func ~capacity (capacity: Int) {
 		super(capacity)
 	}
-	init: func ~fromVectorList (other: VectorList<FloatComplex>) {
-		super(other _vector)
-		this _count = other count
-	}
 	init: func ~withValue (capacity: Int, value: FloatComplex) {
 		super(capacity)
 		for (i in 0 .. capacity)
 			this add(value)
-	}
-	toVectorList: func -> VectorList<FloatComplex> {
-		result := VectorList<FloatComplex> new()
-		result _vector = this _vector
-		result _count = this _count
-		result
 	}
 	copy: override func -> This {
 		super() as This
