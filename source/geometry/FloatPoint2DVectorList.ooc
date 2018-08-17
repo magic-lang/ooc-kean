@@ -16,16 +16,6 @@ FloatPoint2DVectorList: class extends VectorList<FloatPoint2D> {
 	init: func ~default {
 		super()
 	}
-	init: func ~fromVectorList (other: VectorList<FloatPoint2D>) {
-		super(other _vector)
-		this _count = other count
-	}
-	toVectorList: func -> VectorList<FloatPoint2D> {
-		result := VectorList<FloatPoint2D> new()
-		result _vector = this _vector
-		result _count = this _count
-		result
-	}
 	sum: func -> FloatPoint2D {
 		result := FloatPoint2D new()
 		for (i in 0 .. this _count)

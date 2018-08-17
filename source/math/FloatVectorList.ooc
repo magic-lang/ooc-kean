@@ -50,20 +50,10 @@ FloatVectorList: class extends VectorList<Float> {
 	init: func ~heap (capacity: Int) {
 		super(capacity)
 	}
-	init: func ~fromVectorList (other: VectorList<Float>) {
-		super(other _vector)
-		this _count = other count
-	}
 	init: func ~withValue (capacity: Int, value: Float) {
 		super(capacity)
 		for (i in 0 .. capacity)
 			this add(value)
-	}
-	toVectorList: func -> VectorList<Float> {
-		result := VectorList<Float> new(this count)
-		result _vector = this _vector
-		result _count = this count
-		result
 	}
 	sort: func {
 		This _quicksort(this _vector _backend as Float*, 0, this count - 1)
