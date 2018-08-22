@@ -18,16 +18,6 @@ FloatEuclidTransformVectorList: class extends VectorList<FloatEuclidTransform> {
 	init: func ~default {
 		super()
 	}
-	init: func ~fromVectorList (other: VectorList<FloatEuclidTransform>) {
-		super(other _vector)
-		this _count = other count
-	}
-	toVectorList: func -> VectorList<FloatEuclidTransform> {
-		result := VectorList<FloatEuclidTransform> new()
-		result _vector = this _vector
-		result _count = this _count
-		result
-	}
 	getTranslation: func -> VectorList<FloatVector3D> {
 		result := VectorList<FloatVector3D> new()
 		for (i in 0 .. this _count) {
