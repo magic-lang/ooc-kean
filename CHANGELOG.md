@@ -1,8 +1,12 @@
 # ooc-kean changes by release
 
+## Release 2.26.0
+
+- **Removed unsafe vector sharing in VectorList**
+
 ## Release 2.25.0
 
-- **...**
+- **Added generic graphic buffer identifier**
 
 ## Release 2.24.0
 
