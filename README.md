@@ -19,7 +19,7 @@ The following software is necessary to build ooc-kean:
 
 ### Linux
 ooc-kean has been built and tested on the following platforms:
-* Ubuntu 16.04
+* Ubuntu 16.04 (an obstacle for using Ubuntu 18 is the supported gcc versions - rock does not seem to work with gcc 5.5, and it is hard to install gcc 5.4 on Ubuntu 18)
 * Android 5.0 - 8.1
 
 ### Microsoft Windows
