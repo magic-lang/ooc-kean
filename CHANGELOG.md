@@ -1,5 +1,9 @@
 # ooc-kean changes by release
 
+## Release 2.27.0
+
+- **No changes**
+
 ## Release 2.26.0
 
 - **Removed unsafe vector sharing in VectorList**
